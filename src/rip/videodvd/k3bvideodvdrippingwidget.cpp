@@ -32,7 +32,7 @@
 #include <qspinbox.h>
 #include <qlabel.h>
 #include <qtimer.h>
-#include <q3whatsthis.h>
+
 #include <q3widgetstack.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>

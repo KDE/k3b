@@ -147,7 +147,7 @@ K3bDataDoc::MultiSessionMode K3bDataMultiSessionParameterJob::WorkThread::determ
         // Since one never closes a DVD+RW we only differ between CONTINUE and START
         //
 
-        kDebug() << "(K3bDataMultiSessionParameterJob) found overwrite medium." << endl;
+        kDebug() << "(K3bDataMultiSessionParameterJob) found overwrite medium.";
 
         // try to check the filesystem size
         K3bIso9660 iso( m_doc->burner() );
@@ -168,7 +168,7 @@ K3bDataDoc::MultiSessionMode K3bDataMultiSessionParameterJob::WorkThread::determ
         //  4. the project does fit and does not fill up the CD -> continue multisession
         //
 
-        kDebug() << "(K3bDataMultiSessionParameterJob) found appendable medium." << endl;
+        kDebug() << "(K3bDataMultiSessionParameterJob) found appendable medium.";
 
         if( m_doc->size() > info.remainingSize().mode1Bytes() &&
             m_doc->importedSession() < 0 ) {
@@ -192,7 +192,7 @@ K3bDataDoc::MultiSessionMode K3bDataMultiSessionParameterJob::WorkThread::determ
         // 2. Special case for the 4GB boundary which seems to be enforced by a linux kernel issue
         //
 
-        kDebug() << "(K3bDataMultiSessionParameterJob) found empty or complete medium." << endl;
+        kDebug() << "(K3bDataMultiSessionParameterJob) found empty or complete medium.";
 
         if( m_doc->size() >= info.capacity().mode1Bytes()*9/10 ||
             m_doc->writingMode() == K3b::DAO ) {

@@ -203,7 +203,7 @@ void K3bMd5Job::slotUpdate()
       readSize = qMin( readSize, d->maxSize - d->readData );
 
     if( readSize <= 0 ) {
-      //      kDebug() << "(K3bMd5Job) reached max size of " << d->maxSize << ". Stopping." << endl;
+      //      kDebug() << "(K3bMd5Job) reached max size of " << d->maxSize << ". Stopping.";
       emit debuggingOutput( "K3bMd5Job", QString("Reached max read of %1. Stopping after %2 bytes.").arg(d->maxSize).arg(d->readData) );
       stopAll();
       emit percent( 100 );
@@ -257,7 +257,7 @@ void K3bMd5Job::slotUpdate()
 	jobFinished(false);
       }
       else if( read == 0 ) {
-	//	kDebug() << "(K3bMd5Job) read all data. Total size: " << d->readData << ". Stopping." << endl;
+	//	kDebug() << "(K3bMd5Job) read all data. Total size: " << d->readData << ". Stopping.";
 	emit debuggingOutput( "K3bMd5Job", QString("All data read. Stopping after %1 bytes.").arg(d->readData) );
 	stopAll();
 	emit percent( 100 );

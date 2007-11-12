@@ -107,19 +107,19 @@ bool K3bMad::fillStreamBuffer()
     // Fill-in the buffer. 
     Q_LONG result = m_inputFile.readBlock( (char*)readStart, readSize );
     if( result < 0 ) {
-      kDebug() << "(K3bMad) read error on bitstream)" << endl;
+      kDebug() << "(K3bMad) read error on bitstream)";
       m_bInputError = true;
       return false;
     }
     else if( result == 0 ) {
-      kDebug() << "(K3bMad) end of input stream" << endl;
+      kDebug() << "(K3bMad) end of input stream";
       return false;
     }
     else {
       readStart += result;
 
       if( eof() ) {
-	kDebug() << "(K3bMad::fillStreamBuffer) MAD_BUFFER_GUARD" << endl;
+	kDebug() << "(K3bMad::fillStreamBuffer) MAD_BUFFER_GUARD";
 	memset( readStart, 0, MAD_BUFFER_GUARD );
 	result += MAD_BUFFER_GUARD;
       }
@@ -165,7 +165,7 @@ bool K3bMad::skipTag()
     if( footer )
       offset += 10;
 
-    kDebug() << "(K3bMad) skipping past ID3 tag to " << offset << endl;
+    kDebug() << "(K3bMad) skipping past ID3 tag to " << offset;
 
     // skip the id3 tag
     if( !m_inputFile.at(offset) ) {
@@ -205,7 +205,7 @@ bool K3bMad::seekFirstHeader()
     int bytesToFrame = madStream->this_frame - madStream->buffer;
     m_inputFile.at( m_inputFile.at() - streamSize + bytesToFrame );
 
-    kDebug() << "(K3bMad) found first header at " << m_inputFile.at() << endl;
+    kDebug() << "(K3bMad) found first header at " << m_inputFile.at();
   }
 
   // reset the stream to make sure mad really starts decoding at out seek position
@@ -294,7 +294,7 @@ bool K3bMad::findNextHeader()
       return findNextHeader();
     }
     else
-      kDebug() << "(K3bMad::findNextHeader) error: " << mad_stream_errorstr( madStream ) << endl;
+      kDebug() << "(K3bMad::findNextHeader) error: " << mad_stream_errorstr( madStream );
 
     // FIXME probably we should not do this here since we don't do it
     // in the frame decoding

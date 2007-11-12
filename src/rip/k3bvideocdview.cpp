@@ -419,7 +419,7 @@ void K3bVideoCdView::startRip()
         if ( m_videooptions ->getVideoCdRipSequences() )
             videocdsize += m_videocdmpegsize;
 
-        kDebug() << QString("(K3bVideoCdView::startRip())  m_videooptions ->setVideoCdSize( %1)").arg( videocdsize ) << endl;
+        kDebug() << QString("(K3bVideoCdView::startRip())  m_videooptions ->setVideoCdSize( %1)").arg( videocdsize );
         m_videooptions ->setVideoCdSize( videocdsize );
         K3bVideoCdRippingDialog rip( m_videooptions, this );
         rip.exec();

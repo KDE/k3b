@@ -100,13 +100,13 @@ bool K3bMpcWrapper::open( const QString& filename )
   if( m_input->open( QIODevice::ReadOnly ) ) {
     mpc_streaminfo_init( m_info );
     if( mpc_streaminfo_read( m_info, m_reader ) != ERROR_CODE_OK ) {
-      kDebug() << "(K3bMpcWrapper) Not a valid musepack file: \"" << filename << "\"" << endl;
+      kDebug() << "(K3bMpcWrapper) Not a valid musepack file: \"" << filename << "\"";
       return false;
     }
     else {
       mpc_decoder_setup( m_decoder, m_reader );
       if( !mpc_decoder_initialize( m_decoder, m_info ) ) {
-	kDebug() << "(K3bMpcWrapper) failed to initialize the Musepack decoder." << endl;
+	kDebug() << "(K3bMpcWrapper) failed to initialize the Musepack decoder.";
 	close();
 	return false;
       }
@@ -136,7 +136,7 @@ int K3bMpcWrapper::decode( char* data, int max )
   unsigned int samples = mpc_decoder_decode( m_decoder, sample_buffer, 0, 0 );
 
   if( samples*channels()*2 > (unsigned int)max ) {
-    kDebug() << "(K3bMpcWrapper) buffer not big enough." << endl;
+    kDebug() << "(K3bMpcWrapper) buffer not big enough.";
     return -1;
   }
 

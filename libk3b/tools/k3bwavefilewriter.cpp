@@ -148,7 +148,7 @@ void K3bWaveFileWriter::updateHeader()
       m_outputStream.writeRawBytes( c, 4 );
     }
     else
-      kDebug() << "(K3bWaveFileWriter) unable to seek in file: " << m_outputFile.name() << endl;
+      kDebug() << "(K3bWaveFileWriter) unable to seek in file: " << m_outputFile.name();
 
     if( m_outputFile.at( 40 ) ) {
       c[0] = (dataSize   >> 0 ) & 0xff;
@@ -158,7 +158,7 @@ void K3bWaveFileWriter::updateHeader()
       m_outputStream.writeRawBytes( c, 4 );
     }
     else
-      kDebug() << "(K3bWaveFileWriter) unable to seek in file: " << m_outputFile.name() << endl;
+      kDebug() << "(K3bWaveFileWriter) unable to seek in file: " << m_outputFile.name();
 
     // jump back to the end
     m_outputFile.at( m_outputFile.size() );
@@ -170,7 +170,7 @@ void K3bWaveFileWriter::padTo2352()
 { 
   int bytesToPad = ( m_outputFile.at() - 44 ) % 2352;
   if( bytesToPad > 0 ) {
-    kDebug() << "(K3bWaveFileWriter) padding wave file with " << bytesToPad << " bytes." << endl;
+    kDebug() << "(K3bWaveFileWriter) padding wave file with " << bytesToPad << " bytes.";
 
     char* c = new char[bytesToPad];
     memset( c, 0, bytesToPad );

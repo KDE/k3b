@@ -203,7 +203,7 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
   d->flags = lame_init();
 
   if( d->flags == 0 ) {
-    kDebug() << "(K3bLameEncoder) lame_init failed." << endl;
+    kDebug() << "(K3bLameEncoder) lame_init failed.";
     return false;
   }
 
@@ -275,7 +275,7 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
     if( q < 0 ) q = 0;
     if( q > 9 ) q = 9;
 
-    kDebug() << "(K3bLameEncoder) setting preset encoding value to " << q << endl;
+    kDebug() << "(K3bLameEncoder) setting preset encoding value to " << q;
 
     if ( q < 2 || q > 8 ) {
         lame_set_VBR( d->flags, vbr_abr );
@@ -334,7 +334,7 @@ long K3bLameEncoder::encodeInternal( const char* data, Q_ULONG len )
 					     (unsigned char*)d->buffer,
 					     8000 );
   if( size < 0 ) {
-    kDebug() << "(K3bLameEncoder) lame_encode_buffer_interleaved failed." << endl;
+    kDebug() << "(K3bLameEncoder) lame_encode_buffer_interleaved failed.";
     return -1;
   }
 
@@ -363,7 +363,7 @@ void K3bLameEncoder::setMetaDataInternal( K3bAudioEncoder::MetaDataField f, cons
   // FIXME: when we use the codec we only get garbage. Why?
   QTextCodec* codec = 0;//QTextCodec::codecForName( "ISO8859-1" );
 //  if( !codec )
-//    kDebug() << "(K3bLameEncoder) could not find codec ISO8859-1." << endl;
+//    kDebug() << "(K3bLameEncoder) could not find codec ISO8859-1.";
 
   switch( f ) {
   case META_TRACK_TITLE:
@@ -386,14 +386,14 @@ void K3bLameEncoder::setMetaDataInternal( K3bAudioEncoder::MetaDataField f, cons
     break;
   case META_GENRE:
     if( id3tag_set_genre( d->flags, codec ? codec->fromUnicode(value).data() : value.latin1() ) )
-      kDebug() << "(K3bLameEncoder) unable to set genre." << endl;
+      kDebug() << "(K3bLameEncoder) unable to set genre.";
     break;
   default:
     return;
   }
 
   if( lame_init_params( d->flags ) < 0 )
-    kDebug() << "(K3bLameEncoder) lame_init_params failed." << endl;
+    kDebug() << "(K3bLameEncoder) lame_init_params failed.";
 }
 
 

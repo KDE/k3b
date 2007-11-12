@@ -32,12 +32,12 @@ void K3bThread::waitUntilFinished()
 {
   Q3PtrListIterator<K3bThread> it( s_threads );
   while( it.current() ) {
-    kDebug() << "Waiting for thread " << it.current() << endl;
+    kDebug() << "Waiting for thread " << it.current();
     it.current()->wait();
     ++it;
   }
 
-  kDebug() << "Thread waiting done." << endl;
+  kDebug() << "Thread waiting done.";
 }
 
 
@@ -120,7 +120,7 @@ void K3bThread::emitInfoMessage( const QString& msg, int type )
     QApplication::postEvent( d->eventHandler,
 			     new K3bProgressInfoEvent( K3bProgressInfoEvent::InfoMessage, msg, QString::null, type ) );
   else
-    kWarning() << "(K3bThread) call to emitInfoMessage() without eventHandler." << endl;
+    kWarning() << "(K3bThread) call to emitInfoMessage() without eventHandler.";
 }
 
 void K3bThread::emitPercent( int p )
@@ -129,7 +129,7 @@ void K3bThread::emitPercent( int p )
     QApplication::postEvent( d->eventHandler,
 			     new K3bProgressInfoEvent( K3bProgressInfoEvent::Progress, p ) );
   else
-    kWarning() << "(K3bThread) call to emitPercent() without eventHandler." << endl;
+    kWarning() << "(K3bThread) call to emitPercent() without eventHandler.";
 }
 
 void K3bThread::emitSubPercent( int p )
@@ -138,7 +138,7 @@ void K3bThread::emitSubPercent( int p )
     QApplication::postEvent( d->eventHandler,
 			     new K3bProgressInfoEvent( K3bProgressInfoEvent::SubProgress, p ) );
   else
-    kWarning() << "(K3bThread) call to emitSubPercent() without eventHandler." << endl;
+    kWarning() << "(K3bThread) call to emitSubPercent() without eventHandler.";
 }
 
 void K3bThread::emitStarted()
@@ -146,7 +146,7 @@ void K3bThread::emitStarted()
   if( d->eventHandler )
     QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::Started ) );
   else
-    kWarning() << "(K3bThread) call to emitStarted() without eventHandler." << endl;
+    kWarning() << "(K3bThread) call to emitStarted() without eventHandler.";
 }
 
 void K3bThread::emitCanceled()
@@ -154,7 +154,7 @@ void K3bThread::emitCanceled()
   if( d->eventHandler )
     QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::Canceled ) );
   else
-    kWarning() << "(K3bThread) call to emitCanceled() without eventHandler." << endl;
+    kWarning() << "(K3bThread) call to emitCanceled() without eventHandler.";
 }
 
 void K3bThread::emitFinished( bool success )
@@ -162,7 +162,7 @@ void K3bThread::emitFinished( bool success )
   if( d->eventHandler )
     QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::Finished, success ) );
   else
-    kWarning() << "(K3bThread) call to emitFinished() without eventHandler." << endl;
+    kWarning() << "(K3bThread) call to emitFinished() without eventHandler.";
 }
 
 void K3bThread::emitProcessedSize( int p, int size )
@@ -170,7 +170,7 @@ void K3bThread::emitProcessedSize( int p, int size )
   if( d->eventHandler )
     QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::ProcessedSize, p, size ) );
   else
-    kWarning() << "(K3bThread) call to emitProcessedSize() without eventHandler." << endl;
+    kWarning() << "(K3bThread) call to emitProcessedSize() without eventHandler.";
 }
 
 void K3bThread::emitProcessedSubSize( int p, int size )
@@ -178,7 +178,7 @@ void K3bThread::emitProcessedSubSize( int p, int size )
   if( d->eventHandler )
     QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::ProcessedSubSize, p, size ) );
   else
-    kWarning() << "(K3bThread) call to emitProcessedSubSize() without eventHandler." << endl;
+    kWarning() << "(K3bThread) call to emitProcessedSubSize() without eventHandler.";
 }
 
 void K3bThread::emitNewTask( const QString& job )
@@ -186,7 +186,7 @@ void K3bThread::emitNewTask( const QString& job )
   if( d->eventHandler )
     QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::NewTask, job ) );
   else
-    kWarning() << "(K3bThread) call to emitNewTask() without eventHandler." << endl;
+    kWarning() << "(K3bThread) call to emitNewTask() without eventHandler.";
 }
 
 void K3bThread::emitNewSubTask( const QString& job )
@@ -194,7 +194,7 @@ void K3bThread::emitNewSubTask( const QString& job )
   if( d->eventHandler )
     QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::NewSubTask, job ) );
   else
-    kWarning() << "(K3bThread) call to emitNewSubTask() without eventHandler." << endl;
+    kWarning() << "(K3bThread) call to emitNewSubTask() without eventHandler.";
 }
 
 void K3bThread::emitDebuggingOutput(const QString& group, const QString& text)
@@ -202,7 +202,7 @@ void K3bThread::emitDebuggingOutput(const QString& group, const QString& text)
   if( d->eventHandler )
     QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::DebuggingOutput, group, text ) );
   else
-    kWarning() << "(K3bThread) call to emitDebuggingOutput() without eventHandler." << endl;
+    kWarning() << "(K3bThread) call to emitDebuggingOutput() without eventHandler.";
 }
 
 
@@ -211,7 +211,7 @@ void K3bThread::emitNextTrack( int t, int n )
   if( d->eventHandler )
     QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::NextTrack, t, n ) );
   else
-    kWarning() << "(K3bThread) call to emitNextTrack() without eventHandler." << endl;
+    kWarning() << "(K3bThread) call to emitNextTrack() without eventHandler.";
 }
 
 
@@ -230,7 +230,7 @@ int K3bThread::waitForMedia( K3bDevice::Device* device,
         return event->intResult();
     }
     else {
-        kWarning() << "(K3bThread) call to waitForMedium() without eventHandler." << endl;
+        kWarning() << "(K3bThread) call to waitForMedium() without eventHandler.";
         return 0;
     }
 }
@@ -251,7 +251,7 @@ bool K3bThread::questionYesNo( const QString& text,
         return event->boolResult();
     }
     else {
-        kWarning() << "(K3bThread) call to questionYesNo() without eventHandler." << endl;
+        kWarning() << "(K3bThread) call to questionYesNo() without eventHandler.";
         return false;
     }
 }
@@ -267,6 +267,6 @@ void K3bThread::blockingInformation( const QString& text,
         event->wait();
     }
     else {
-        kWarning() << "(K3bThread) call to blockingInformation() without eventHandler." << endl;
+        kWarning() << "(K3bThread) call to blockingInformation() without eventHandler.";
     }
 }

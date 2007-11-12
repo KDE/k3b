@@ -166,15 +166,15 @@ int K3bLibDvdCss::readWrapped( void* buffer, int firstSector, int sectors )
     else if( inTitle )
       flags = DVDCSS_SEEK_MPEG;
 
-    kDebug() << "(K3bLibDvdCss) need to seek from " << d->currentSector << " to " << firstSector << " with " << flags << endl;
+    kDebug() << "(K3bLibDvdCss) need to seek from " << d->currentSector << " to " << firstSector << " with " << flags;
 
     d->currentSector = seek( firstSector, flags );
     if( d->currentSector != firstSector ) {
-      kDebug() << "(K3bLibDvdCss) seek failed: " << d->currentSector << endl;
+      kDebug() << "(K3bLibDvdCss) seek failed: " << d->currentSector;
       return -1;
     }
 
-    kDebug() << "(K3bLibDvdCss) seek done: " << d->currentSector << endl;
+    kDebug() << "(K3bLibDvdCss) seek done: " << d->currentSector;
   }
 
 
@@ -197,14 +197,14 @@ bool K3bLibDvdCss::crackAllKeys()
   //
   // Loop over all titles and crack the keys (inspired by libdvdread)
   //
-  kDebug() << "(K3bLibDvdCss) cracking all keys." << endl;
+  kDebug() << "(K3bLibDvdCss) cracking all keys.";
 
   d->titleOffsets.clear();
 
   K3bIso9660 iso( new K3bIso9660DeviceBackend( d->device ) );
   iso.setPlainIso9660( true );
   if( !iso.open() ) {
-    kDebug() << "(K3bLibDvdCss) could not open iso9660 fs." << endl;
+    kDebug() << "(K3bLibDvdCss) could not open iso9660 fs.";
     return false;
   }
 
@@ -227,9 +227,9 @@ bool K3bLibDvdCss::crackAllKeys()
     const K3bIso9660File* file = dynamic_cast<const K3bIso9660File*>( dir->entry( filename ) );
     if( file && file->size() > 0 ) {
       d->titleOffsets.append( qMakePair( (int)file->startSector(), (int)(file->size() / 2048U) ) );
-      kDebug() << "(K3bLibDvdCss) Get key for /" << filename << " at " << file->startSector() << endl;
+      kDebug() << "(K3bLibDvdCss) Get key for /" << filename << " at " << file->startSector();
       if( seek( (int)file->startSector(), DVDCSS_SEEK_KEY ) < 0 ) {
-        kDebug() << "(K3bLibDvdCss) failed to crash key for " << filename << " at " << file->startSector() << endl;
+        kDebug() << "(K3bLibDvdCss) failed to crash key for " << filename << " at " << file->startSector();
       }
     }
 
@@ -245,9 +245,9 @@ bool K3bLibDvdCss::crackAllKeys()
 	  if( vob == 1 ) {
 	    p.first = file->startSector();
 	    p.second = file->size() / 2048;
-	    kDebug() << "(K3bLibDvdCss) Get key for /" << filename << " at " << file->startSector() << endl;
+	    kDebug() << "(K3bLibDvdCss) Get key for /" << filename << " at " << file->startSector();
 	    if( seek( (int)file->startSector(), DVDCSS_SEEK_KEY ) < 0 ) {
-                kDebug() << "(K3bLibDvdCss) failed to crash key for " << filename << " at " << file->startSector() << endl;
+                kDebug() << "(K3bLibDvdCss) failed to crash key for " << filename << " at " << file->startSector();
 	    }
 	  }
 	  else {
@@ -265,14 +265,14 @@ bool K3bLibDvdCss::crackAllKeys()
       if( vob == 0 )
 	break;
 
-      kDebug() << "(K3bLibDvdCss) Title " << title << " " << vob << " vobs with length " << p.second << endl;
+      kDebug() << "(K3bLibDvdCss) Title " << title << " " << vob << " vobs with length " << p.second;
       d->titleOffsets.append( p );
     }
   }
 
   --title;
 
-  kDebug() << "(K3bLibDvdCss) found " << title << " titles." << endl;
+  kDebug() << "(K3bLibDvdCss) found " << title << " titles.";
 
   return (title > 0);
 }
@@ -289,13 +289,13 @@ K3bLibDvdCss* K3bLibDvdCss::create()
       k3b_dvdcss_read = (int (*)( dvdcss_t, void*, int, int ))dlsym( s_libDvdCss, "dvdcss_read" );
 
       if( !k3b_dvdcss_open || !k3b_dvdcss_close || !k3b_dvdcss_seek || !k3b_dvdcss_read ) {
-	kDebug() << "(K3bLibDvdCss) unable to resolve libdvdcss." << endl;
+	kDebug() << "(K3bLibDvdCss) unable to resolve libdvdcss.";
 	dlclose( s_libDvdCss );
 	s_libDvdCss = 0;
       }
     }
     else
-      kDebug() << "(K3bLibDvdCss) unable to load libdvdcss." << endl;
+      kDebug() << "(K3bLibDvdCss) unable to load libdvdcss.";
   }
 
   if( s_libDvdCss )

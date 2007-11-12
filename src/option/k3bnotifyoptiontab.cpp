@@ -49,7 +49,7 @@ void K3bNotifyOptionTab::readSettings()
   if( app )
     m_notifyWidget->addVisibleApp(app);
   else
-    kDebug() << "(K3bNotifyOptionTab) could not find K3b eventsrc." << endl;
+    kDebug() << "(K3bNotifyOptionTab) could not find K3b eventsrc.";
 }
 
 

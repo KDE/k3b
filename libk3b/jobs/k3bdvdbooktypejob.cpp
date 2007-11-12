@@ -161,7 +161,7 @@ void K3bDvdBooktypeJob::cancel()
       d->process->kill();
   }
   else {
-    kDebug() << "(K3bDvdBooktypeJob) not running." << endl;
+    kDebug() << "(K3bDvdBooktypeJob) not running.";
   }
 }
 

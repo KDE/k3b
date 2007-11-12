@@ -132,7 +132,7 @@ void K3bMixedView::slotBurn()
       delete dlg;
     }
     else {
-      kDebug() << "(K3bDoc) Error: no burndialog available." << endl;
+      kDebug() << "(K3bDoc) Error: no burndialog available.";
     }
   }
 }

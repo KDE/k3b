@@ -55,7 +55,7 @@ void K3bVideoCdInfo::cancelAll()
 void K3bVideoCdInfo::info( const QString& device )
 {
     if ( !k3bcore ->externalBinManager() ->foundBin( "vcdxrip" ) ) {
-        kDebug() << "(K3bVideoCdInfo::info) could not find vcdxrip executable" << endl;
+        kDebug() << "(K3bVideoCdInfo::info) could not find vcdxrip executable";
         emit infoFinished( false );
         return ;
     }
@@ -75,7 +75,7 @@ void K3bVideoCdInfo::info( const QString& device )
              this, SLOT( slotInfoFinished() ) );
 
     if ( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) {
-        kDebug() << "(K3bVideoCdInfo::info) could not start vcdxrip" << endl;
+        kDebug() << "(K3bVideoCdInfo::info) could not start vcdxrip";
         cancelAll();
         emit infoFinished( false );
     }
@@ -96,7 +96,7 @@ void K3bVideoCdInfo::slotParseOutput( K3Process*, char* output, int len )
         if ( m_isXml )
             m_xmlData += *str;
         else
-            kDebug() << "(K3bVideoCdInfo::slotParseOutput) " << *str << endl;
+            kDebug() << "(K3bVideoCdInfo::slotParseOutput) " << *str;
 
         if ( ( *str ).contains( "</videocd>" ) )
             m_isXml = false;
@@ -177,7 +177,7 @@ void K3bVideoCdInfo::parseXmlData()
                                  );
             }
         } else {
-            kDebug() << QString( "(K3bVideoCdInfo::parseXmlData) tagName '%1' not used" ).arg( tagName ) << endl;
+            kDebug() << QString( "(K3bVideoCdInfo::parseXmlData) tagName '%1' not used" ).arg( tagName );
         }
     }
 }
@@ -203,7 +203,7 @@ const K3bVideoCdInfoResultEntry& K3bVideoCdInfoResult::entry( unsigned int numbe
                 return m_emptyEntry;
             return m_sequenceEntry[ number ];
         default:
-            kDebug() << "(K3bVideoCdInfoResult::entry) not supported entrytype." << endl;
+            kDebug() << "(K3bVideoCdInfoResult::entry) not supported entrytype.";
     }
 
     return m_emptyEntry;
@@ -224,7 +224,7 @@ void K3bVideoCdInfoResult::addEntry( const K3bVideoCdInfoResultEntry& entry, int
             m_sequenceEntry.append( entry );
             break;
         default:
-            kDebug() << "(K3bVideoCdInfoResult::addEntry) not supported entrytype." << endl;
+            kDebug() << "(K3bVideoCdInfoResult::addEntry) not supported entrytype.";
     }
 }
 
@@ -238,7 +238,7 @@ int K3bVideoCdInfoResult::foundEntries( int type ) const
         case K3bVideoCdInfoResult::SEQUENCE:
             return m_sequenceEntry.count();
         default:
-            kDebug() << "(K3bVideoCdInfoResult::addEntry) not supported entrytype." << endl;
+            kDebug() << "(K3bVideoCdInfoResult::addEntry) not supported entrytype.";
     }
     return 0;
 }

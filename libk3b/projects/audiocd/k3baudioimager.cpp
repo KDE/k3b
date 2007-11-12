@@ -116,7 +116,7 @@ void K3bAudioImager::WorkThread::run()
       }
       else {
 	if( ::write( m_fd, reinterpret_cast<void*>(buffer), read ) != read ) {
-	  kDebug() << "(K3bAudioImager::WorkThread) writing to fd " << m_fd << " failed." << endl;
+	  kDebug() << "(K3bAudioImager::WorkThread) writing to fd " << m_fd << " failed.";
 	  lastError = K3bAudioImager::ERROR_FD_WRITE;
 	  emitFinished(false);
 	  return;

@@ -28,7 +28,7 @@
 #include <qtoolbutton.h>
 #include <qsizepolicy.h>
 #include <qlayout.h>
-#include <q3whatsthis.h>
+
 #include <qtooltip.h>
 #include <qlabel.h>
 #include <q3vbox.h>
@@ -120,7 +120,7 @@ KToolBarButton* K3bToolBox::addButton( const QString& text, const QString& icon,
                                        bool forceText )
 {
     KToolBarButton* button = getButton( idAt( insertButton( icon, -1, 0, receiver, slot, true, text ) ) );
-    Q3WhatsThis::add( button, whatsthis );
+    button->setWhatsThis( whatsthis );
     QToolTip::add( button, tooltip );
     if ( forceText ) {
         button->setUsesTextLabel( true );

@@ -160,7 +160,7 @@ void K3bSoxEncoder::finishEncoderInternal()
 void K3bSoxEncoder::slotSoxFinished( K3Process* p )
 {
   if( !p->normalExit() || p->exitStatus() != 0 )
-    kDebug() << "(K3bSoxEncoder) sox exited with error." << endl;
+    kDebug() << "(K3bSoxEncoder) sox exited with error.";
 }
 
 
@@ -235,19 +235,19 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension )
 
     *d->process << d->fileName;
 
-    kDebug() << "***** sox parameters:" << endl;
+    kDebug() << "***** sox parameters:";
     const Q3ValueList<Q3CString>& args = d->process->args();
     QString s;
     for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
       s += *it + " ";
     }
-    kDebug() << s << flush << endl;
+    kDebug() << s << flush;
 
 
     return d->process->start( K3Process::NotifyOnExit, K3Process::All );
   }
   else {
-    kDebug() << "(K3bSoxEncoder) could not find sox bin." << endl;
+    kDebug() << "(K3bSoxEncoder) could not find sox bin.";
     return false;
   }
 }
@@ -268,7 +268,7 @@ long K3bSoxEncoder::encodeInternal( const char* data, Q_ULONG len )
 
 void K3bSoxEncoder::slotSoxOutputLine( const QString& line )
 {
-  kDebug() << "(sox) " << line << endl;
+  kDebug() << "(sox) " << line;
 }
 
 

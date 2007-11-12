@@ -207,7 +207,7 @@ bool K3bGrowisofsWriter::prepareProcess()
   if( d->trackSize > 0 && d->growisofsBin->version < K3bVersion( 5, 20 ) ) {
     if( d->trackSize % 16 ) {
       trackSizePadding = (16 - d->trackSize%16);
-      kDebug() << "(K3bGrowisofsWriter) need to pad " << trackSizePadding << " blocks." << endl;
+      kDebug() << "(K3bGrowisofsWriter) need to pad " << trackSizePadding << " blocks.";
     }
   }
 
@@ -366,7 +366,7 @@ void K3bGrowisofsWriter::start()
     for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
       s += *it + " ";
     }
-    kDebug() << s << flush << endl;
+    kDebug() << s << flush;
     emit debuggingOutput( d->growisofsBin->name() + " command:", s);
 
 
@@ -389,7 +389,7 @@ void K3bGrowisofsWriter::start()
     if( !d->process->start( K3Process::NotifyOnExit, K3Process::All ) ) {
       // something went wrong when starting the program
       // it "should" be the executable
-      kDebug() << "(K3bGrowisofsWriter) could not start " << d->growisofsBin->path << endl;
+      kDebug() << "(K3bGrowisofsWriter) could not start " << d->growisofsBin->path;
       emit infoMessage( i18n("Could not start %1.").arg(d->growisofsBin->name()), K3bJob::ERROR );
       jobFinished(false);
     }

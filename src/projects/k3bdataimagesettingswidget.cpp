@@ -25,7 +25,7 @@
 #include <qlineedit.h>
 #include <qcombobox.h>
 #include <qpushbutton.h>
-#include <q3whatsthis.h>
+
 #include <qlayout.h>
 
 #include <kmessagebox.h>
@@ -187,7 +187,7 @@ K3bDataImageSettingsWidget::K3bDataImageSettingsWidget( QWidget* parent, const c
   if( !s_fsPresetsInitialized )
     initializePresets();
 
-  Q3WhatsThis::add( m_comboFilesystems,
+  m_comboFilesystems->setWhatsThis(
 		   i18n("<p><b>File System Presets</b>"
 			"<p>K3b provides the following file system Presets which allow for a quick selection "
 			"of the most frequently used settings.")
@@ -274,7 +274,7 @@ void K3bDataImageSettingsWidget::slotFilesystemsChanged()
   m_customFsDlg->w->save( o );
   for( int i = 0; i < FS_CUSTOM; ++i ) {
     if( compareAdvancedOptions( o, s_fsPresets[i] ) ) {
-      kDebug() << "(K3bDataImageSettingsWidget) found preset settings: " << s_fsPresetNames[i] << endl;
+      kDebug() << "(K3bDataImageSettingsWidget) found preset settings: " << s_fsPresetNames[i];
       m_comboFilesystems->setCurrentItem( i );
       break;
     }

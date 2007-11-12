@@ -87,7 +87,7 @@ KoStore* KoStore::createStore( const QString& fileName, Mode mode, const Q3CStri
 //   case Directory:
 //     return new KoDirectoryStore( fileName /* should be a dir name.... */, mode );
   default:
-    kWarning(s_area) << "Unsupported backend requested for KoStore : " << backend << endl;
+    kWarning(s_area) << "Unsupported backend requested for KoStore : " << backend;
     return 0L;
   }
 }
@@ -115,7 +115,7 @@ KoStore* KoStore::createStore( QIODevice *device, Mode mode, const Q3CString & a
   case Zip:
     return new KoZipStore( device, mode, appIdentification );
   default:
-    kWarning(s_area) << "Unsupported backend requested for KoStore : " << backend << endl;
+    kWarning(s_area) << "Unsupported backend requested for KoStore : " << backend;
     return 0L;
   }
 }
@@ -158,7 +158,7 @@ KoStore* KoStore::createStore( QWidget* window, const KUrl& url, Mode mode, cons
   case Zip:
     return new KoZipStore( window, url, tmpFile, mode, appIdentification );
   default:
-    kWarning(s_area) << "Unsupported backend requested for KoStore (KUrl) : " << backend << endl;
+    kWarning(s_area) << "Unsupported backend requested for KoStore (KUrl) : " << backend;
     KMessageBox::sorry( window,
         i18n("The directory mode is not supported for remote locations."),
         i18n("KOffice Storage"));
@@ -195,7 +195,7 @@ bool KoStore::open( const QString & _name )
 
   if ( m_bIsOpen )
   {
-    kWarning(s_area) << "KoStore: File is already opened" << endl;
+    kWarning(s_area) << "KoStore: File is already opened";
     //return KIO::ERR_INTERNAL;
     return false;
   }
@@ -209,10 +209,10 @@ bool KoStore::open( const QString & _name )
 
   if ( m_mode == Write )
   {
-    kDebug(s_area) << "KoStore: opening for writing '" << m_sName << "'" << endl;
+    kDebug(s_area) << "KoStore: opening for writing '" << m_sName << "'";
     if ( m_strFiles.findIndex( m_sName ) != -1 ) // just check if it's there
     {
-      kWarning(s_area) << "KoStore: Duplicate filename " << m_sName << endl;
+      kWarning(s_area) << "KoStore: Duplicate filename " << m_sName;
       //return KIO::ERR_FILE_ALREADY_EXIST;
       return false;
     }
@@ -225,7 +225,7 @@ bool KoStore::open( const QString & _name )
   }
   else if ( m_mode == Read )
   {
-    kDebug(s_area) << "Opening for reading '" << m_sName << "'" << endl;
+    kDebug(s_area) << "Opening for reading '" << m_sName << "'";
     if ( !openRead( m_sName ) )
       return false;
   }
@@ -244,11 +244,11 @@ bool KoStore::isOpen() const
 
 bool KoStore::close()
 {
-  kDebug(s_area) << "KoStore: Closing" << endl;
+  kDebug(s_area) << "KoStore: Closing";
 
   if ( !m_bIsOpen )
   {
-    kWarning(s_area) << "KoStore: You must open before closing" << endl;
+    kWarning(s_area) << "KoStore: You must open before closing";
     //return KIO::ERR_INTERNAL;
     return false;
   }
@@ -264,9 +264,9 @@ bool KoStore::close()
 QIODevice* KoStore::device() const
 {
   if ( !m_bIsOpen )
-    kWarning(s_area) << "KoStore: You must open before asking for a device" << endl;
+    kWarning(s_area) << "KoStore: You must open before asking for a device";
   if ( m_mode != Read )
-    kWarning(s_area) << "KoStore: Can not get device from store that is opened for writing" << endl;
+    kWarning(s_area) << "KoStore: Can not get device from store that is opened for writing";
   return m_stream;
 }
 
@@ -276,7 +276,7 @@ QByteArray KoStore::read( unsigned long int max )
 
   if ( !m_bIsOpen )
   {
-    kWarning(s_area) << "KoStore: You must open before reading" << endl;
+    kWarning(s_area) << "KoStore: You must open before reading";
     data.resize( 0 );
     return data;
   }
@@ -363,12 +363,12 @@ QIODevice::Offset KoStore::size() const
 {
   if ( !m_bIsOpen )
   {
-    kWarning(s_area) << "KoStore: You must open before asking for a size" << endl;
+    kWarning(s_area) << "KoStore: You must open before asking for a size";
     return static_cast<QIODevice::Offset>(-1);
   }
   if ( m_mode != Read )
   {
-    kWarning(s_area) << "KoStore: Can not get size from store that is opened for writing" << endl;
+    kWarning(s_area) << "KoStore: Can not get size from store that is opened for writing";
     return static_cast<QIODevice::Offset>(-1);
   }
   return m_iSize;
@@ -376,7 +376,7 @@ QIODevice::Offset KoStore::size() const
 
 bool KoStore::enterDirectory( const QString& directory )
 {
-  //kDebug(s_area) << "KoStore::enterDirectory " << directory << endl;
+  //kDebug(s_area) << "KoStore::enterDirectory " << directory;
   int pos;
   bool success = true;
   QString tmp( directory );

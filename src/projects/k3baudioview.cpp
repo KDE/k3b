@@ -77,7 +77,7 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
   toolBox()->addSeparator();
 
 #ifdef HAVE_MUSICBRAINZ
-  kDebug() << "(K3bAudioView) m_songlist->actionCollection()->actions().count() " << m_songlist->actionCollection()->actions().count() << endl;
+  kDebug() << "(K3bAudioView) m_songlist->actionCollection()->actions().count() " << m_songlist->actionCollection()->actions().count();
   toolBox()->addButton( m_songlist->actionCollection()->action( "project_audio_musicbrainz" ) );
   toolBox()->addSeparator();
 #endif

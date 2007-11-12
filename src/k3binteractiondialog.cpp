@@ -29,7 +29,7 @@
 #include <qtoolbutton.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+
 #include <qstring.h>
 #include <qpoint.h>
 #include <qfont.h>
@@ -246,9 +246,9 @@ void K3bInteractionDialog::initToolTipsAndWhatsThis()
 
     // What's This info
     // -------------------------------------------------------------------------
-    Q3WhatsThis::add( m_buttonLoadSettings, i18n("<p>Load a set of settings either from the default K3b settings, "
+    m_buttonLoadSettings->setWhatsThis( i18n("<p>Load a set of settings either from the default K3b settings, "
 						"settings saved before, or the last used ones.") );
-    Q3WhatsThis::add( m_buttonSaveSettings, i18n("<p>Saves the current settings of the action dialog."
+    m_buttonSaveSettings->setWhatsThis( i18n("<p>Saves the current settings of the action dialog."
 						"<p>These settings can be loaded with the <em>Load saved settings</em> "
 						"button."
 						"<p><b>The K3b defaults are not overwritten by this.</b>") );
@@ -455,7 +455,7 @@ void K3bInteractionDialog::setButtonText( int button,
     QToolTip::remove( b );
     Q3WhatsThis::remove( b );
     QToolTip::add( b, tooltip );
-    Q3WhatsThis::add( b, whatsthis );
+    b->setWhatsThis( whatsthis );
   }
 }
 
@@ -489,7 +489,7 @@ void K3bInteractionDialog::setStartButtonText( const QString& text,
     QToolTip::remove( m_buttonStart );
     Q3WhatsThis::remove( m_buttonStart );
     QToolTip::add( m_buttonStart, tooltip );
-    Q3WhatsThis::add( m_buttonStart, whatsthis );
+    m_buttonStart->setWhatsThis( whatsthis );
   }
 }
 
@@ -503,7 +503,7 @@ void K3bInteractionDialog::setCancelButtonText( const QString& text,
     QToolTip::remove( m_buttonCancel );
     Q3WhatsThis::remove( m_buttonCancel );
     QToolTip::add( m_buttonCancel, tooltip );
-    Q3WhatsThis::add( m_buttonCancel, whatsthis );
+    m_buttonCancel->setWhatsThis( whatsthis );
   }
 }
 
@@ -517,7 +517,7 @@ void K3bInteractionDialog::setSaveButtonText( const QString& text,
     QToolTip::remove( m_buttonSave );
     Q3WhatsThis::remove( m_buttonSave );
     QToolTip::add( m_buttonSave, tooltip );
-    Q3WhatsThis::add( m_buttonSave, whatsthis );
+    m_buttonSave->setWhatsThis( whatsthis );
   }
 }
 

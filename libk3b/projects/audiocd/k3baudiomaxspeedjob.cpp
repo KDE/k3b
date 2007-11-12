@@ -70,7 +70,7 @@ K3bAudioMaxSpeedJob::WorkThread::~WorkThread()
 
 void K3bAudioMaxSpeedJob::WorkThread::run()
 {
-  kDebug() << k_funcinfo << endl;
+  kDebug() << k_funcinfo;
   m_canceled = false;
 
   emitStarted();
@@ -91,7 +91,7 @@ void K3bAudioMaxSpeedJob::WorkThread::run()
 
   while( it.current() && !m_canceled ) {
     if( !it.current()->seek(0) ) {
-      kDebug() << "(K3bAudioMaxSpeedJob) seek failed." << endl;
+      kDebug() << "(K3bAudioMaxSpeedJob) seek failed.";
       success = false;
       break;
     }
@@ -120,7 +120,7 @@ void K3bAudioMaxSpeedJob::WorkThread::run()
   }
 
   if( success )
-    kDebug() << "(K3bAudioMaxSpeedJob) max speed: " << maxSpeed << endl;
+    kDebug() << "(K3bAudioMaxSpeedJob) max speed: " << maxSpeed;
 
   emitFinished( success );
 }
@@ -139,7 +139,7 @@ int K3bAudioMaxSpeedJob::WorkThread::speedTest( K3bAudioDataSource* source )
       cdts->setDevice( dev );
     }
     else {
-      kDebug() << "(K3bAudioMaxSpeedJob) ignoring audio cd track source." << endl;
+      kDebug() << "(K3bAudioMaxSpeedJob) ignoring audio cd track source.";
       return 0;
     }
   }
@@ -160,7 +160,7 @@ int K3bAudioMaxSpeedJob::WorkThread::speedTest( K3bAudioDataSource* source )
   int usedT = t.elapsed();
 
   if( r < 0 ) {
-    kDebug() << "(K3bAudioMaxSpeedJob) read failure." << endl;
+    kDebug() << "(K3bAudioMaxSpeedJob) read failure.";
     return -1;
   }
 
@@ -176,7 +176,7 @@ int K3bAudioMaxSpeedJob::WorkThread::speedTest( K3bAudioDataSource* source )
 
 void K3bAudioMaxSpeedJob::WorkThread::cancel()
 {
-  kDebug() << k_funcinfo << endl;
+  kDebug() << k_funcinfo;
   m_canceled = true;
 }
 
@@ -196,7 +196,7 @@ int K3bAudioMaxSpeedJob::WorkThread::maxSpeedByMedia() const
       
     // this is the first valid speed or the lowest supported one
     s = *it;
-    kDebug() << "(K3bAudioMaxSpeedJob) using speed factor: " << (s/175) << endl;
+    kDebug() << "(K3bAudioMaxSpeedJob) using speed factor: " << (s/175);
   }
 
   return s;

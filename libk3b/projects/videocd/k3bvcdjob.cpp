@@ -134,7 +134,7 @@ void K3bVcdJob::cancelAll()
 
 void K3bVcdJob::start()
 {
-    kDebug() << "(K3bVcdJob) starting job" << endl;
+    kDebug() << "(K3bVcdJob) starting job";
 
     jobStarted();
     emit burning( false );
@@ -165,7 +165,7 @@ void K3bVcdJob::xmlGen()
     K3bVcdXmlView xmlView( m_doc );
 
     if ( !xmlView.write( m_xmlFile ) ) {
-        kDebug() << "(K3bVcdJob) could not write xmlfile." << endl;
+        kDebug() << "(K3bVcdJob) could not write xmlfile.";
         emit infoMessage( i18n( "Could not write correct XML-file." ), K3bJob::ERROR );
         cancelAll();
         jobFinished( false );
@@ -190,7 +190,7 @@ void K3bVcdJob::vcdxBuild()
     emit infoMessage( i18n( "Creating Cue/Bin files ..." ), K3bJob::INFO );
     const K3bExternalBin* bin = k3bcore ->externalBinManager() ->binObject( "vcdxbuild" );
     if ( !bin ) {
-        kDebug() << "(K3bVcdJob) could not find vcdxbuild executable" << endl;
+        kDebug() << "(K3bVcdJob) could not find vcdxbuild executable";
         emit infoMessage( i18n( "Could not find %1 executable." ).arg( "vcdxbuild" ), K3bJob::ERROR );
         emit infoMessage( i18n( "To create VideoCDs you must install VcdImager Version %1." ).arg( ">= 0.7.12" ), K3bJob::INFO );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3bJob::INFO );
@@ -200,7 +200,7 @@ void K3bVcdJob::vcdxBuild()
     }
 
     if ( bin->version < K3bVersion( "0.7.12" ) ) {
-        kDebug() << "(K3bVcdJob) vcdxbuild executable too old!" << endl;
+        kDebug() << "(K3bVcdJob) vcdxbuild executable too old!";
         emit infoMessage( i18n( "%1 executable too old: need version %2 or greater." ).arg( "Vcdxbuild" ).arg( "0.7.12" ), K3bJob::ERROR );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3bJob::INFO );
         cancelAll();
@@ -220,7 +220,7 @@ void K3bVcdJob::vcdxBuild()
 
 
     if ( vcdDoc() ->vcdOptions() ->Sector2336() ) {
-        kDebug() << "(K3bVcdJob) Write 2336 Sectors = on" << endl;
+        kDebug() << "(K3bVcdJob) Write 2336 Sectors = on";
         *m_process << "--sector-2336";
     }
 
@@ -240,18 +240,18 @@ void K3bVcdJob::vcdxBuild()
              this, SLOT( slotVcdxBuildFinished() ) );
 
     // vcdxbuild commandline parameters
-    kDebug() << "***** vcdxbuild parameters:" << endl;
+    kDebug() << "***** vcdxbuild parameters:";
     ;
     const Q3ValueList<Q3CString>& args = m_process->args();
     QString s;
     for ( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
         s += *it + " ";
     }
-    kDebug() << s << flush << endl;
+    kDebug() << s << flush;
     emit debuggingOutput( "vcdxbuild command:", s );
 
     if ( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) {
-        kDebug() << "(K3bVcdJob) could not start vcdxbuild" << endl;
+        kDebug() << "(K3bVcdJob) could not start vcdxbuild";
         emit infoMessage( i18n( "Could not start %1." ).arg( "vcdxbuild" ), K3bJob::ERROR );
         cancelAll();
         jobFinished( false );
@@ -331,15 +331,15 @@ void K3bVcdJob::slotParseVcdxBuildOutput( K3Process*, char* output, int len )
                 if ( tel.isText() ) {
                     const QString text = tel.data();
                     if ( m_stage == stageWrite && level == "information" )
-                        kDebug() << QString( "(K3bVcdJob) VcdxBuild information, %1" ).arg( text ) << endl;
+                        kDebug() << QString( "(K3bVcdJob) VcdxBuild information, %1" ).arg( text );
                     if ( ( text ).startsWith( "writing track" ) )
                         emit newSubTask( i18n( "Creating Image for track %1" ).arg( ( text ).mid( 14 ) ) );
                     else {
                         if ( level != "error" ) {
-                            kDebug() << QString( "(K3bVcdJob) vcdxbuild warning, %1" ).arg( text ) << endl;
+                            kDebug() << QString( "(K3bVcdJob) vcdxbuild warning, %1" ).arg( text );
                             parseInformation( text );
                         } else {
-                            kDebug() << QString( "(K3bVcdJob) vcdxbuild error, %1" ).arg( text ) << endl;
+                            kDebug() << QString( "(K3bVcdJob) vcdxbuild error, %1" ).arg( text );
                             emit infoMessage( text, K3bJob::ERROR );
                         }
                     }
@@ -379,7 +379,7 @@ void K3bVcdJob::slotVcdxBuildFinished()
         QFile::remove
             ( m_xmlFile );
 
-    kDebug() << QString( "(K3bVcdJob) create only image: %1" ).arg( vcdDoc() ->onlyCreateImages() ) << endl;
+    kDebug() << QString( "(K3bVcdJob) create only image: %1" ).arg( vcdDoc() ->onlyCreateImages() );
     if ( !vcdDoc() ->onlyCreateImages() )
         startWriterjob();
     else
@@ -388,7 +388,7 @@ void K3bVcdJob::slotVcdxBuildFinished()
 
 void K3bVcdJob::startWriterjob()
 {
-    kDebug() << QString( "(K3bVcdJob) writing copy %1 of %2" ).arg( m_currentcopy ).arg( m_doc->copies() ) << endl;
+    kDebug() << QString( "(K3bVcdJob) writing copy %1 of %2" ).arg( m_currentcopy ).arg( m_doc->copies() );
     if ( prepareWriterJob() ) {
         if ( waitForMedia( m_doc->burner() ) < 0 ) {
             cancel();

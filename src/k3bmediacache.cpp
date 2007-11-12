@@ -319,7 +319,7 @@ QString K3bMediaCache::mediumString( K3bDevice::Device* device, bool useContent 
 
 void K3bMediaCache::clearDeviceList()
 {
-  kDebug() << k_funcinfo << endl;
+  kDebug() << k_funcinfo;
 
   // make all the threads stop
   for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = d->deviceMap.begin();
@@ -330,7 +330,7 @@ void K3bMediaCache::clearDeviceList()
   // and remove them
   for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = d->deviceMap.begin();
        it != d->deviceMap.end(); ++it ) {
-    kDebug() << k_funcinfo << " waiting for info thread " << it.key()->blockDeviceName() << " to finish" << endl;
+    kDebug() << k_funcinfo << " waiting for info thread " << it.key()->blockDeviceName() << " to finish";
     it.data()->thread->wait();
     delete it.data();
   }

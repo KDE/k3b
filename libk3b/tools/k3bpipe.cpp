@@ -48,7 +48,7 @@ bool K3bPipe::open()
     return true;
   }
   else {
-    kDebug() << "(K3bPipe) failed to setup socket pair." << endl;
+    kDebug() << "(K3bPipe) failed to setup socket pair.";
     return false;
   }
 }

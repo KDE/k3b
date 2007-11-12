@@ -63,7 +63,7 @@ protected:
       if( len > 0 ) {
 	if( m_server->m_pluginInitialized ) {
 	  if( write( buffer, len ) < 0 ) {
-	    kDebug() << "Audio Streaming failed: " << m_server->m_usedOutputPlugin->lastErrorMessage() << endl;
+	    kDebug() << "Audio Streaming failed: " << m_server->m_usedOutputPlugin->lastErrorMessage();
 	    emitInfoMessage( m_server->m_usedOutputPlugin->lastErrorMessage(), 0 );
 	    return;
 	  }
@@ -148,7 +148,7 @@ void K3bAudioServer::attachClient( K3bAudioClient* c )
 {
   // for now we simply allow only one client and stop the old one
   if( m_client ) {
-    kDebug() << "(K3bAudioServer) leaving old client hanging. :(" << endl;
+    kDebug() << "(K3bAudioServer) leaving old client hanging. :(";
     detachClient( m_client );
   }
 
@@ -164,7 +164,7 @@ void K3bAudioServer::attachClient( K3bAudioClient* c )
       m_pluginInitialized = true;
   }
   else
-    kDebug() << "(K3bAudioServer::attachClient) no output plugin selected. Using null output." << endl;
+    kDebug() << "(K3bAudioServer::attachClient) no output plugin selected. Using null output.";
 
   // start the streaming
   d->start();
@@ -200,7 +200,7 @@ K3bAudioOutputPlugin* K3bAudioServer::findOutputPlugin( const Q3CString& name )
     }
   }
 
-  kDebug() << "(K3bAudioServer::findOutputPlugin) could not find output plugin " << name << endl;
+  kDebug() << "(K3bAudioServer::findOutputPlugin) could not find output plugin " << name;
 
   return 0;
 }

@@ -63,7 +63,7 @@ bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
   //
   dvd_reader_t* dvdReaderT = DVDOpen( QFile::encodeName(dev->blockDeviceName()) );
   if( !dvdReaderT ) {
-    kDebug() << "(K3bVideoDVD) Could not open device " << dev->blockDeviceName() << endl;
+    kDebug() << "(K3bVideoDVD) Could not open device " << dev->blockDeviceName();
     return false;
   }
 
@@ -73,7 +73,7 @@ bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
   char v[33];
   if( DVDUDFVolumeInfo( dvdReaderT, v, 33, 0, 0 ) != 0 &&
       DVDISOVolumeInfo( dvdReaderT, v, 33, 0, 0 ) != 0 ) {
-    kDebug() << "(K3bVideoDVD) Could not read volume info." << endl;
+    kDebug() << "(K3bVideoDVD) Could not read volume info.";
     DVDClose( dvdReaderT );
     return false;
   }
@@ -84,7 +84,7 @@ bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
   //
   ifo_handle_t* vmg = ifoOpen( dvdReaderT, 0 );
   if( !vmg ) {
-    kDebug() << "(K3bVideoDVD) Can't open VMG info." << endl;
+    kDebug() << "(K3bVideoDVD) Can't open VMG info.";
     DVDClose( dvdReaderT );
     return false;
   }
@@ -112,7 +112,7 @@ bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
     //
     ifo_handle_t* titleIfo = ifoOpen( dvdReaderT, vmg->tt_srpt->title[i].title_set_nr );
     if( !titleIfo ) {
-      kDebug() << "(K3bVideoDVD) Can't open Title ifo." << endl;
+      kDebug() << "(K3bVideoDVD) Can't open Title ifo.";
       ifoClose( vmg );
       DVDClose( dvdReaderT );
       return false;
@@ -235,7 +235,7 @@ void K3bVideoDVD::VideoDVD::debug() const
       kDebug() << "      " << title(i).audioStream(j).langCode() << ": " 
 		<< audioFormatString( title(i).audioStream(j).format() ) << ", "
 		<< audioCodeExtensionString( title(i).audioStream(j).codeExtension() ) << endl;
-    kDebug() << "   SubPicture Streams:" << endl;
+    kDebug() << "   SubPicture Streams:";
     for( unsigned int j = 0; j < title(i).numSubPictureStreams(); ++j )
       kDebug() << "      " << title(i).subPictureStream(j).langCode() << ": " 
 		<< subPictureCodeModeString( title(i).subPictureStream(j).codeMode() ) << ", "

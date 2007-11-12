@@ -95,21 +95,21 @@ K3bCdrecordProgram::K3bCdrecordProgram( bool dvdPro )
 static QString& debianWeirdnessHack( QString& path )
 {
   if( QFile::exists( path + ".mmap" ) ) {
-    kDebug() << "(K3bCdrecordProgram) checking for Debian cdrecord wrapper script." << endl;
+    kDebug() << "(K3bCdrecordProgram) checking for Debian cdrecord wrapper script.";
     if( QFileInfo( path ).size() < 1024 ) {
-      kDebug() << "(K3bCdrecordProgram) Debian Wrapper script size fits. Checking file." << endl;
+      kDebug() << "(K3bCdrecordProgram) Debian Wrapper script size fits. Checking file.";
       QFile f( path );
       f.open( QIODevice::ReadOnly );
       QString s = Q3TextStream( &f ).read();
       if( s.contains( "cdrecord.mmap" ) && s.contains( "cdrecord.shm" ) ) {
-	kDebug() << "(K3bCdrecordProgram) Found Debian Wrapper script." << endl;
+	kDebug() << "(K3bCdrecordProgram) Found Debian Wrapper script.";
 	QString ext;
 	if( K3b::kernelVersion().versionString().left(3) > "2.2" )
 	  ext = ".mmap";
 	else
 	  ext = ".shm";
 
-	kDebug() << "(K3bCdrecordProgram) Using cdrecord" << ext << endl;
+	kDebug() << "(K3bCdrecordProgram) Using cdrecord" << ext;
 
 	path += ext;
       }
@@ -189,7 +189,7 @@ bool K3bCdrecordProgram::scan( const QString& p )
     bin->copyright = QString::fromLatin1( out.output().mid( pos, endPos-pos ).local8Bit() ).trimmed();
   }
   else {
-    kDebug() << "(K3bCdrecordProgram) could not start " << path << endl;
+    kDebug() << "(K3bCdrecordProgram) could not start " << path;
     return false;
   }
 
@@ -235,7 +235,7 @@ bool K3bCdrecordProgram::scan( const QString& p )
     }
   }
   else {
-    kDebug() << "(K3bCdrecordProgram) could not start " << bin->path << endl;
+    kDebug() << "(K3bCdrecordProgram) could not start " << bin->path;
     delete bin;
     return false;
   }
@@ -330,7 +330,7 @@ bool K3bMkisofsProgram::scan( const QString& p )
       bin->addFeature( "genisoimage" );
   }
   else {
-    kDebug() << "(K3bMkisofsProgram) could not start " << path << endl;
+    kDebug() << "(K3bMkisofsProgram) could not start " << path;
     return false;
   }
 
@@ -360,7 +360,7 @@ bool K3bMkisofsProgram::scan( const QString& p )
     }
   }
   else {
-    kDebug() << "(K3bMkisofsProgram) could not start " << bin->path << endl;
+    kDebug() << "(K3bMkisofsProgram) could not start " << bin->path;
     delete bin;
     return false;
   }
@@ -444,7 +444,7 @@ bool K3bReadcdProgram::scan( const QString& p )
       bin->addFeature( "readom" );
   }
   else {
-    kDebug() << "(K3bMkisofsProgram) could not start " << path << endl;
+    kDebug() << "(K3bMkisofsProgram) could not start " << path;
     return false;
   }
 
@@ -466,7 +466,7 @@ bool K3bReadcdProgram::scan( const QString& p )
     }
   }
   else {
-    kDebug() << "(K3bReadcdProgram) could not start " << bin->path << endl;
+    kDebug() << "(K3bReadcdProgram) could not start " << bin->path;
     delete bin;
     return false;
   }
@@ -532,7 +532,7 @@ bool K3bCdrdaoProgram::scan( const QString& p )
     bin->copyright = out.output().mid( pos, endPos-pos );
   }
   else {
-    kDebug() << "(K3bCdrdaoProgram) could not start " << path << endl;
+    kDebug() << "(K3bCdrdaoProgram) could not start " << path;
     return false;
   }
 
@@ -559,7 +559,7 @@ bool K3bCdrdaoProgram::scan( const QString& p )
     }
   }
   else {
-    kDebug() << "(K3bCdrdaoProgram) could not start " << bin->path << endl;
+    kDebug() << "(K3bCdrdaoProgram) could not start " << bin->path;
     delete bin;
     return false;
   }
@@ -624,7 +624,7 @@ bool K3bTranscodeProgram::scan( const QString& p )
     bin->version = out.output().mid( pos, endPos-pos );
   }
   else {
-    kDebug() << "(K3bTranscodeProgram) could not start " << appPath << endl;
+    kDebug() << "(K3bTranscodeProgram) could not start " << appPath;
     return false;
   }
 
@@ -702,7 +702,7 @@ bool K3bVcdbuilderProgram::scan( const QString& p )
     bin->copyright = out.output().mid( pos, endPos-pos ).trimmed();
   }
   else {
-    kDebug() << "(K3bVcdbuilderProgram) could not start " << path << endl;
+    kDebug() << "(K3bVcdbuilderProgram) could not start " << path;
     return false;
   }
 
@@ -762,7 +762,7 @@ bool K3bNormalizeProgram::scan( const QString& p )
     bin->copyright = out.output().mid( pos, endPos-pos ).trimmed();
   }
   else {
-    kDebug() << "(K3bCdrecordProgram) could not start " << path << endl;
+    kDebug() << "(K3bCdrecordProgram) could not start " << path;
     return false;
   }
 
@@ -817,7 +817,7 @@ bool K3bGrowisofsProgram::scan( const QString& p )
     bin->version = out.output().mid( pos, endPos-pos );
   }
   else {
-    kDebug() << "(K3bGrowisofsProgram) could not start " << path << endl;
+    kDebug() << "(K3bGrowisofsProgram) could not start " << path;
     return false;
   }
 
@@ -902,7 +902,7 @@ bool K3bDvdformatProgram::scan( const QString& p )
     bin->version = out.output().mid( pos, endPos-pos );
   }
   else {
-    kDebug() << "(K3bDvdformatProgram) could not start " << path << endl;
+    kDebug() << "(K3bDvdformatProgram) could not start " << path;
     return false;
   }
 
@@ -960,7 +960,7 @@ bool K3bDvdBooktypeProgram::scan( const QString& p )
     bin->version = K3bVersion( 1, 0, 0 );
   }
   else {
-    kDebug() << "(K3bDvdBooktypeProgram) could not start " << path << endl;
+    kDebug() << "(K3bDvdBooktypeProgram) could not start " << path;
     return false;
   }
 
@@ -1032,7 +1032,7 @@ bool K3bCdda2wavProgram::scan( const QString& p )
       bin->addFeature( "dev" ); // otherwise use the -B option
   }
   else {
-    kDebug() << "(K3bCdda2wavProgram) could not start " << path << endl;
+    kDebug() << "(K3bCdda2wavProgram) could not start " << path;
     return false;
   }
 

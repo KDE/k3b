@@ -24,7 +24,7 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+
 #include <q3widgetstack.h>
 #include <q3groupbox.h>
 #include <qtabwidget.h>
@@ -45,7 +45,7 @@ K3bAudioTrackWidget::K3bAudioTrackWidget( const Q3PtrList<K3bAudioTrack>& tracks
   m_labelPostGap->setBuddy( m_editPostGap );
 
   QToolTip::add( m_labelPostGap, QToolTip::textFor( m_editPostGap ) );
-  Q3WhatsThis::add( m_labelPostGap, Q3WhatsThis::textFor( m_editPostGap ) );
+  m_labelPostGap->setWhatsThis( Q3WhatsThis::textFor( m_editPostGap ) );
 
   // no post-gap for the last track
   m_editPostGap->setDisabled( tracks.count() == 1 && !tracks.getFirst()->next() );

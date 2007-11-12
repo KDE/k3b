@@ -302,7 +302,7 @@ void K3bReadcdReader::slotStdLine( const QString& line )
   }
 
   else {
-    kDebug() << "(readcd) " << line << endl;
+    kDebug() << "(readcd) " << line;
   }
 }
 

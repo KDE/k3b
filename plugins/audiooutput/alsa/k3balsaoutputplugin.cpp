@@ -216,7 +216,7 @@ bool K3bAlsaOutputPlugin::setupHwParams()
     return false;
   }
 
-  kDebug() << "(K3bAlsaOutputPlugin) samplerate set to " << d->sampleRate << endl;
+  kDebug() << "(K3bAlsaOutputPlugin) samplerate set to " << d->sampleRate;
 
   if( (err = snd_pcm_hw_params_set_channels( d->pcm_playback, hw_params, 2)) < 0) {
     d->lastErrorMessage = i18n("Could not set channel count (%1).").arg(snd_strerror(err));

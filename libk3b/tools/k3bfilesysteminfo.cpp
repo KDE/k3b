@@ -74,7 +74,7 @@ public:
       statDone = true;
     }
     else {
-      kDebug() << "(K3bFileSystemInfo) statfs failed: " << ::strerror(errno) << endl;
+      kDebug() << "(K3bFileSystemInfo) statfs failed: " << ::strerror(errno);
     }
   }
 };

@@ -141,7 +141,7 @@ bool K3bAudioCdTrackSource::initParanoia()
       k3bcore->unblockDevice( m_lastUsedDevice );
 
       m_initialized = true;
-      kDebug() << "(K3bAudioCdTrackSource) initialized." << endl;
+      kDebug() << "(K3bAudioCdTrackSource) initialized.";
     }
   }
 
@@ -160,7 +160,7 @@ void K3bAudioCdTrackSource::closeParanoia()
 
 K3bDevice::Device* K3bAudioCdTrackSource::searchForAudioCD() const
 {
-  kDebug() << "(K3bAudioCdTrackSource::searchForAudioCD()" << endl;
+  kDebug() << "(K3bAudioCdTrackSource::searchForAudioCD()";
   // first try the saved device
   if( m_lastUsedDevice && searchForAudioCD( m_lastUsedDevice ) )
     return m_lastUsedDevice;
@@ -172,7 +172,7 @@ K3bDevice::Device* K3bAudioCdTrackSource::searchForAudioCD() const
     }
   }
 
-  kDebug() << "(K3bAudioCdTrackSource::searchForAudioCD) failed." << endl;
+  kDebug() << "(K3bAudioCdTrackSource::searchForAudioCD) failed.";
 
   return 0;
 }
@@ -180,7 +180,7 @@ K3bDevice::Device* K3bAudioCdTrackSource::searchForAudioCD() const
 
 bool K3bAudioCdTrackSource::searchForAudioCD( K3bDevice::Device* dev ) const
 {
-  kDebug() << "(K3bAudioCdTrackSource::searchForAudioCD(" << dev->description() << ")" << endl;
+  kDebug() << "(K3bAudioCdTrackSource::searchForAudioCD(" << dev->description() << ")";
   K3bDevice::Toc toc = dev->readToc();
   return ( toc.discId() == m_discId );
 }

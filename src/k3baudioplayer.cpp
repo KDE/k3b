@@ -348,14 +348,14 @@ void K3bAudioPlayer::play()
     if( m_playObject.isNull() ) {
       Arts::PlayObjectFactory factory = Arts::Reference("global:Arts_PlayObjectFactory");
       if( factory.isNull() ) {
-	kDebug() << "(K3bAudioPlayer) could not create PlayObjectFactory. Possibly no artsd running." << endl;
+	kDebug() << "(K3bAudioPlayer) could not create PlayObjectFactory. Possibly no artsd running.";
 	m_labelFilename->setText( i18n("No running aRtsd found") );
 	return;
       }
 
       m_playObject = factory.createPlayObject( string(QFile::encodeName(m_currentItem->filename()) ) );
       if( m_playObject.isNull() ) {
-	kDebug() << "(K3bAudioPlayer) no aRts module available for: " << m_currentItem->filename() << endl;
+	kDebug() << "(K3bAudioPlayer) no aRts module available for: " << m_currentItem->filename();
 	m_labelFilename->setText( i18n("Unknown file format") );
 
 	// play the next if there is any

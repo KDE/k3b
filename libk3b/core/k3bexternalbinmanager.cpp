@@ -314,7 +314,7 @@ void K3bExternalBinManager::search()
   const K3bExternalBin* bin = program("cdrecord")->defaultBin();
 
   if( !bin ) {
-    kDebug() << "(K3bExternalBinManager) Probing cdrecord failed" << endl;
+    kDebug() << "(K3bExternalBinManager) Probing cdrecord failed";
   }
   else {
     kDebug() << "(K3bExternalBinManager) Cdrecord " << bin->version << " features: "

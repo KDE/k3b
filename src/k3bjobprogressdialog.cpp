@@ -359,7 +359,7 @@ void K3bJobProgressDialog::slotInfoMessage( const QString& infoString, int type 
 
 void K3bJobProgressDialog::slotFinished( bool success )
 {
-  kDebug() << "(K3bJobProgressDialog) received finished signal!" << endl;
+  kDebug() << "(K3bJobProgressDialog) received finished signal!";
 
   m_logFile.close();
 

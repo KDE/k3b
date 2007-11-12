@@ -410,7 +410,7 @@ bool K3bApplication::Core::internalBlockDevice( K3bDevice::Device* dev )
 
 #ifdef HAVE_HAL
     if( K3bDevice::HalConnection::instance()->lock( dev ) != K3bDevice::HalConnection::org_freedesktop_Hal_Success )
-      kDebug() << "(K3bInterferingSystemsHandler) HAL lock failed." << endl;
+      kDebug() << "(K3bInterferingSystemsHandler) HAL lock failed.";
 #endif
 
     //

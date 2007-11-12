@@ -389,7 +389,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 	m_tocFile->close();
       }
       else {
-	kDebug() << "(K3bDataJob) could not write tocfile." << endl;
+	kDebug() << "(K3bDataJob) could not write tocfile.";
 	emit infoMessage( i18n("IO Error"), ERROR );
 	return false;
       }

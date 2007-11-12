@@ -454,7 +454,7 @@ void K3bCdImageWritingDialog::slotStartClicked()
     break;
 
   default:
-    kDebug() << "(K3bCdImageWritingDialog) this should really not happen!" << endl;
+    kDebug() << "(K3bCdImageWritingDialog) this should really not happen!";
     break;
   }
 

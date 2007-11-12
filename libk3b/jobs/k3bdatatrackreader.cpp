@@ -133,7 +133,7 @@ void K3bDataTrackReader::WorkThread::run()
       // close the device for libdvdcss
       m_device->close();
 
-      kDebug() << "(K3bDataTrackReader::WorkThread) found encrypted dvd. using libdvdcss." << endl;
+      kDebug() << "(K3bDataTrackReader::WorkThread) found encrypted dvd. using libdvdcss.";
 
       // open the libdvdcss stuff
       if( !m_libcss )
@@ -244,7 +244,7 @@ void K3bDataTrackReader::WorkThread::run()
     return;
   }
 
-  kDebug() << "(K3bDataTrackReader) using buffer size of " << s_bufferSizeSectors << " blocks." << endl;
+  kDebug() << "(K3bDataTrackReader) using buffer size of " << s_bufferSizeSectors << " blocks.";
   emitDebuggingOutput( "K3bDataTrackReader", QString("using buffer size of %1 blocks.").arg( s_bufferSizeSectors ) );
 
   // 2. get it on
@@ -437,7 +437,7 @@ bool K3bDataTrackReader::WorkThread::setErrorRecovery( K3bDevice::Device* dev, i
 
   // in MMC1 the page has 8 bytes (12 in MMC4 but we only need the first 3 anyway)
   if( dataLen < 8+8 ) {
-    kDebug() << "(K3bDataTrackReader) modepage 0x01 data too small: " << dataLen << endl;
+    kDebug() << "(K3bDataTrackReader) modepage 0x01 data too small: " << dataLen;
     delete [] data;
     return false;
   }
@@ -446,7 +446,7 @@ bool K3bDataTrackReader::WorkThread::setErrorRecovery( K3bDevice::Device* dev, i
   data[8+2] = code;
 
   if( m_oldErrorRecoveryMode != code )
-    kDebug() << "(K3bDataTrackReader) changing data recovery mode from " << m_oldErrorRecoveryMode << " to " << code << endl;
+    kDebug() << "(K3bDataTrackReader) changing data recovery mode from " << m_oldErrorRecoveryMode << " to " << code;
 
   bool success = dev->modeSelect( data, dataLen, true, false );
 

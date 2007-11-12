@@ -82,7 +82,7 @@ void K3bAudioNormalizeJob::start()
   if( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) {
     // something went wrong when starting the program
     // it "should" be the executable
-    kDebug() << "(K3bAudioNormalizeJob) could not start normalize" << endl;
+    kDebug() << "(K3bAudioNormalizeJob) could not start normalize";
     emit infoMessage( i18n("Could not start normalize."), K3bJob::ERROR );
     jobFinished(false);
   }

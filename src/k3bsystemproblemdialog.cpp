@@ -567,20 +567,20 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
   }
 
 
-  kDebug() << "(K3bCore) System problems:" << endl;
+  kDebug() << "(K3bCore) System problems:";
   for( Q3ValueList<K3bSystemProblem>::const_iterator it = problems.begin();
        it != problems.end(); ++it ) {
     const K3bSystemProblem& p = *it;
 
     switch( p.type ) {
     case K3bSystemProblem::CRITICAL:
-      kDebug() << " CRITICAL" << endl;
+      kDebug() << " CRITICAL";
       break;
     case K3bSystemProblem::NON_CRITICAL:
-      kDebug() << " NON_CRITICAL" << endl;
+      kDebug() << " NON_CRITICAL";
       break;
     case K3bSystemProblem::WARNING:
-      kDebug() << " WARNING" << endl;
+      kDebug() << " WARNING";
       break;
     }
     kDebug() << " PROBLEM:  " << p.problem << endl
@@ -589,7 +589,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 
   }
   if( problems.isEmpty() ) {
-    kDebug() << "          - none - " << endl;
+    kDebug() << "          - none - ";
     K3bPassivePopup::showPopup( i18n("No problems found in system configuration."), i18n("System configured properly") );
   }
   else {

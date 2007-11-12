@@ -39,7 +39,7 @@ public:
   }
 
   void run() {
-    kDebug() << "(K3bActivePipe) started thread." << endl;
+    kDebug() << "(K3bActivePipe) started thread.";
     bytesRead = bytesWritten = 0;
     buffer.resize( 10*2048 );
     ssize_t r = 0;
@@ -56,13 +56,13 @@ public:
 	  bytesWritten += ww;
 	}
 	else {
-	  kDebug() << "(K3bActivePipe) write failed." << endl;
+	  kDebug() << "(K3bActivePipe) write failed.";
 	  close( closeWhenDone );
 	  return;
 	}
       }
     }
-    //    kDebug() << "(K3bActivePipe) thread done: " << r << " (total bytes read/written: " << bytesRead << "/" << bytesWritten << ")" << endl;
+    //    kDebug() << "(K3bActivePipe) thread done: " << r << " (total bytes read/written: " << bytesRead << "/" << bytesWritten << ")";
     close( closeWhenDone );
   }
 
@@ -158,7 +158,7 @@ bool K3bActivePipe::open( bool closeWhenDone )
     return false;
   }
 
-  kDebug() << "(K3bActivePipe) successfully opened pipe." << endl;
+  kDebug() << "(K3bActivePipe) successfully opened pipe.";
 
   d->start();
   return true;

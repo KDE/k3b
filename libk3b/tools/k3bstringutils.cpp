@@ -31,7 +31,7 @@ QString K3b::cutToWidth( const QFontMetrics& fm, const QString& fullText, int cu
   }
 
   if( fm.width(fullText.right(1) + "..." ) > cutWidth ) {
-    kDebug() << "(K3b::cutToWidth) not able to cut text to " << cutWidth << "!" << endl;
+    kDebug() << "(K3b::cutToWidth) not able to cut text to " << cutWidth << "!";
     return fullText.right(1) + "...";
   }
 

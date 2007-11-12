@@ -268,7 +268,7 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3Li
   // user would be confused otherwise
   //
   if( m_dropTrackParent && !m_trackItemMap[m_dropTrackParent]->showingSources() ) {
-    kDebug() << "(K3bAudioTrackView) dropped after track which does not show it's sources." << endl;
+    kDebug() << "(K3bAudioTrackView) dropped after track which does not show it's sources.";
     m_dropTrackAfter = m_dropTrackParent;
     m_dropTrackParent = 0;
   }
@@ -363,7 +363,7 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3Li
     }
   }
   else if( K3bAudioCdTrackDrag::canDecode( e ) ) {
-    kDebug() << "(K3bAudioTrackView) audiocdtrack dropped." << endl;
+    kDebug() << "(K3bAudioTrackView) audiocdtrack dropped.";
     K3bDevice::Toc toc;
     K3bDevice::Device* dev = 0;
     K3bCddbResultEntry cddb;
@@ -423,7 +423,7 @@ void K3bAudioTrackView::slotAddUrls()
 
 void K3bAudioTrackView::slotChanged()
 {
-  kDebug() << "(K3bAudioTrackView::slotChanged)" << endl;
+  kDebug() << "(K3bAudioTrackView::slotChanged)";
   // we only need to add new items here. Everything else is done in the
   // specific slots below
   K3bAudioTrack* track = m_doc->firstTrack();
@@ -443,7 +443,7 @@ void K3bAudioTrackView::slotChanged()
 
   header()->setShown( m_doc->numOfTracks() > 0 );
 
-  kDebug() << "(K3bAudioTrackView::slotChanged) finished" << endl;
+  kDebug() << "(K3bAudioTrackView::slotChanged) finished";
 }
 
 
@@ -451,7 +451,7 @@ K3bAudioTrackViewItem* K3bAudioTrackView::getTrackViewItem( K3bAudioTrack* track
 {
   QMap<K3bAudioTrack*, K3bAudioTrackViewItem*>::iterator itemIt = m_trackItemMap.find(track);
   if( itemIt == m_trackItemMap.end() ) {
-    kDebug() << "(K3bAudioTrackView) new track " << track << endl;
+    kDebug() << "(K3bAudioTrackView) new track " << track;
     K3bAudioTrackViewItem* prevItem = 0;
     if( track->prev() && m_trackItemMap.contains( track->prev() ) )
       prevItem = m_trackItemMap[track->prev()];
@@ -482,7 +482,7 @@ K3bAudioTrackViewItem* K3bAudioTrackView::getTrackViewItem( K3bAudioTrack* track
 
 void K3bAudioTrackView::slotTrackChanged( K3bAudioTrack* track )
 {
-  kDebug() << "(K3bAudioTrackView::slotTrackChanged( " << track << " )" << endl;
+  kDebug() << "(K3bAudioTrackView::slotTrackChanged( " << track << " )";
 
   //
   // There may be some tracks around that have not been added to the list yet
@@ -513,13 +513,13 @@ void K3bAudioTrackView::slotTrackChanged( K3bAudioTrack* track )
 
     showAllSources();
   }
-  kDebug() << "(K3bAudioTrackView::slotTrackChanged( " << track << " ) finished" << endl;
+  kDebug() << "(K3bAudioTrackView::slotTrackChanged( " << track << " ) finished";
 }
 
 
 void K3bAudioTrackView::slotTrackRemoved( K3bAudioTrack* track )
 {
-  kDebug() << "(K3bAudioTrackView::slotTrackRemoved( " << track << " )" << endl;
+  kDebug() << "(K3bAudioTrackView::slotTrackRemoved( " << track << " )";
   if ( m_playerItemAnimator->item() == m_trackItemMap[track] ) {
       m_playerItemAnimator->stop();
   }
@@ -622,7 +622,7 @@ K3bAudioTrackViewItem* K3bAudioTrackView::findTrackItem( const QPoint& pos ) con
 void K3bAudioTrackView::resizeColumns()
 {
   if( m_updatingColumnWidths ) {
-    kDebug() << "(K3bAudioTrackView) already updating column widths." << endl;
+    kDebug() << "(K3bAudioTrackView) already updating column widths.";
     return;
   }
 

@@ -93,7 +93,7 @@ K3bMovixDoc* K3bMovixDocPreparer::doc() const
 
 void K3bMovixDocPreparer::start()
 {
-  kDebug() << k_funcinfo << endl;
+  kDebug() << k_funcinfo;
   jobStarted();
 
   bool success = true;
@@ -114,7 +114,7 @@ void K3bMovixDocPreparer::cancel()
 
 bool K3bMovixDocPreparer::createMovixStructures()
 {
-  kDebug() << k_funcinfo << endl;
+  kDebug() << k_funcinfo;
   removeMovixStructures();
 
   if( doc() ) {
@@ -142,7 +142,7 @@ bool K3bMovixDocPreparer::createMovixStructures()
 
 void K3bMovixDocPreparer::removeMovixStructures()
 {
-  kDebug() << k_funcinfo << endl;
+  kDebug() << k_funcinfo;
   // remove movix files from doc
   // the dataitems do the cleanup in the doc
   delete d->movixDir;

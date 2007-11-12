@@ -57,7 +57,7 @@ bool K3bAudioEncoder::openFile( const QString& ext, const QString& filename, con
     return initEncoder( ext, length );
   }
   else {
-    kDebug() << "(K3bAudioEncoder) unable to open file " << filename << endl;
+    kDebug() << "(K3bAudioEncoder) unable to open file " << filename;
     closeFile();
     return false;
   }
@@ -112,7 +112,7 @@ long K3bAudioEncoder::encode( const char* data, Q_ULONG len )
 bool K3bAudioEncoder::initEncoder( const QString& ext, const K3b::Msf& length )
 {
   if( !isOpen() ) {
-    kDebug() << "(K3bAudioEncoder) call to initEncoder without openFile!" << endl;
+    kDebug() << "(K3bAudioEncoder) call to initEncoder without openFile!";
     return false;
   }
 
@@ -126,7 +126,7 @@ Q_LONG K3bAudioEncoder::writeData( const char* data, Q_ULONG len )
     return d->outputFile->writeBlock( data, len );
   }
   else {
-    kDebug() << "(K3bAudioEncoder) call to writeData without opening a file first." << endl;
+    kDebug() << "(K3bAudioEncoder) call to writeData without opening a file first.";
     return -1;
   }
 }

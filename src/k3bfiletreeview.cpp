@@ -481,7 +481,7 @@ void K3bFileTreeView::addDefaultBranches()
 
 void K3bFileTreeView::addCdDeviceBranches( K3bDevice::DeviceManager* dm )
 {
-  kDebug() << "(K3bFileTreeView::addCdDeviceBranches)" << endl;
+  kDebug() << "(K3bFileTreeView::addCdDeviceBranches)";
 
   // remove all previous added device branches
   for( QMap<KFileTreeBranch*, K3bDevice::Device*>::Iterator it = d->branchDeviceMap.begin();
@@ -520,7 +520,7 @@ void K3bFileTreeView::addCdDeviceBranches( K3bDevice::DeviceManager* dm )
     d->currentDeviceBranch->setCurrent( true );
   }
 
-  kDebug() << "(K3bFileTreeView::addCdDeviceBranches) done" << endl;
+  kDebug() << "(K3bFileTreeView::addCdDeviceBranches) done";
 }
 
 
@@ -547,7 +547,7 @@ void K3bFileTreeView::addDeviceBranch( K3bDevice::Device* dev )
   // if there is more than one equal device they have been updated after
   // adding the last one so there is no need to update more than two
   if( equalCnt > 0 ) {
-    kDebug() << "(K3bFileTreeView) equal branch" << endl;
+    kDebug() << "(K3bFileTreeView) equal branch";
     newBranch->showBlockDeviceName(true);
     equalBranch->showBlockDeviceName(true);
   }
@@ -637,7 +637,7 @@ void K3bFileTreeView::slotContextMenu( K3ListView*, Q3ListViewItem* item, const 
       emit contextMenu( treeItem->url(), p );
   }
   else
-    kWarning() << "(K3bFileTreeView) found viewItem that is no K3FileTreeViewItem!" << endl;
+    kWarning() << "(K3bFileTreeView) found viewItem that is no K3FileTreeViewItem!";
 }
 
 

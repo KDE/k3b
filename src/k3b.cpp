@@ -580,7 +580,7 @@ void K3bMainWindow::readOptions()
   if( configVersion >= K3bVersion("0.12") )
     manager()->readConfig( config(), "Docking Config" );
   else
-    kDebug() << "(K3bMainWindow) ignoring docking config from K3b version " << configVersion << endl;
+    kDebug() << "(K3bMainWindow) ignoring docking config from K3b version " << configVersion;
 
   applyMainWindowSettings( config(), "main_window_settings" );
 
@@ -685,7 +685,7 @@ void K3bMainWindow::readProperties( KConfig* c )
       doc->setSaved( saved );
     }
     else
-      kDebug() << "(K3bMainWindow) could not open session saved doc " << url.path() << endl;
+      kDebug() << "(K3bMainWindow) could not open session saved doc " << url.path();
 
     // remove the temp file
     if( !saved || modified )
@@ -717,7 +717,7 @@ bool K3bMainWindow::queryClose()
     // while a job i running
     return false;
 
-//     kDebug() << "(K3bMainWindow::queryClose) jobs running." << endl;
+//     kDebug() << "(K3bMainWindow::queryClose) jobs running.";
 //     K3bJob* job = k3bcore->runningJobs().getFirst();
 
 //     // now search for the major job (to be on the safe side although for now no subjobs register with the k3bcore)
@@ -727,12 +727,12 @@ bool K3bMainWindow::queryClose()
 //       jh = job->jobHandler();
 //     }
 
-//     kDebug() << "(K3bMainWindow::queryClose) main job found: " << job->jobDescription() << endl;
+//     kDebug() << "(K3bMainWindow::queryClose) main job found: " << job->jobDescription();
 
 //     // now job is the major job and jh should be a widget
 //     QWidget* progressDialog = dynamic_cast<QWidget*>( jh );
 
-//     kDebug() << "(K3bMainWindow::queryClose) job active: " << job->active() << endl;
+//     kDebug() << "(K3bMainWindow::queryClose) job active: " << job->active();
 
 //     // now ask the user if he/she really wants to cancel this job
 //     if( job->active() ) {
@@ -740,16 +740,16 @@ bool K3bMainWindow::queryClose()
 // 				      i18n("Do you really want to cancel?"),
 // 				      i18n("Cancel") ) == KMessageBox::Yes ) {
 // 	// cancel the job
-// 	kDebug() << "(K3bMainWindow::queryClose) canceling job." << endl;
+// 	kDebug() << "(K3bMainWindow::queryClose) canceling job.";
 // 	job->cancel();
 
 // 	// wait for the job to finish
-// 	kDebug() << "(K3bMainWindow::queryClose) waiting for job to finish." << endl;
+// 	kDebug() << "(K3bMainWindow::queryClose) waiting for job to finish.";
 // 	K3bSignalWaiter::waitForJob( job );
 
 // 	// close the progress dialog
 // 	if( progressDialog ) {
-// 	  kDebug() << "(K3bMainWindow::queryClose) closing progress dialog." << endl;
+// 	  kDebug() << "(K3bMainWindow::queryClose) closing progress dialog.";
 // 	  progressDialog->close();
 // 	  //
 // 	  // now here we have the problem that due to the whole Qt event thing the exec call (or
@@ -762,7 +762,7 @@ bool K3bMainWindow::queryClose()
 // 	  progressDialog->reparent( 0, QPoint(0,0) );
 // 	}
 
-// 	kDebug() << "(K3bMainWindow::queryClose) job cleanup done." << endl;
+// 	kDebug() << "(K3bMainWindow::queryClose) job cleanup done.";
 //       }
 //       else
 // 	return false;
@@ -1138,7 +1138,7 @@ void K3bMainWindow::slotCurrentDocChanged()
       d->lastDoc = v->doc();
     }
     else
-      kDebug() << "(K3bMainWindow) ERROR: could not get KXMLGUIFactory instance." << endl;
+      kDebug() << "(K3bMainWindow) ERROR: could not get KXMLGUIFactory instance.";
   }
   else
     k3bappcore->projectManager()->setActive( 0L );

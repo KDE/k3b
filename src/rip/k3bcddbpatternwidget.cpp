@@ -24,7 +24,7 @@
 
 #include <qregexp.h>
 #include <qvalidator.h>
-#include <q3whatsthis.h>
+
 #include <qcheckbox.h>
 #include <qlayout.h>
 //Added by qt3to4:

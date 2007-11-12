@@ -76,7 +76,7 @@ bool K3bFFMpegFile::open()
   // open the file
   int err = av_open_input_file( &d->formatContext, m_filename.local8Bit(), 0, 0, 0 );
   if( err < 0 ) {
-    kDebug() << "(K3bFFMpegFile) unable to open " << m_filename << " with error " << err << endl;
+    kDebug() << "(K3bFFMpegFile) unable to open " << m_filename << " with error " << err;
     return false;
   }
 
@@ -85,7 +85,7 @@ bool K3bFFMpegFile::open()
 
   // we only handle files containing one audio stream
   if( d->formatContext->nb_streams != 1 ) {
-    kDebug() << "(K3bFFMpegFile) more than one stream in " << m_filename << endl;
+    kDebug() << "(K3bFFMpegFile) more than one stream in " << m_filename;
     return false;
   }
 
@@ -96,21 +96,21 @@ bool K3bFFMpegFile::open()
   AVCodecContext* codecContext =  d->formatContext->streams[0]->codec;
 #endif
   if( codecContext->codec_type != CODEC_TYPE_AUDIO ) {
-    kDebug() << "(K3bFFMpegFile) not a simple audio stream: " << m_filename << endl;
+    kDebug() << "(K3bFFMpegFile) not a simple audio stream: " << m_filename;
     return false;
   }
 
   // get the codec
   d->codec = avcodec_find_decoder(codecContext->codec_id);
   if( !d->codec ) {
-    kDebug() << "(K3bFFMpegFile) no codec found for " << m_filename << endl;
+    kDebug() << "(K3bFFMpegFile) no codec found for " << m_filename;
     return false;
   }
 
   // open the codec on our context
-  kDebug() << "(K3bFFMpegFile) found codec for " << m_filename << endl;
+  kDebug() << "(K3bFFMpegFile) found codec for " << m_filename;
   if( avcodec_open( codecContext, d->codec ) < 0 ) {
-    kDebug() << "(K3bFFMpegDecoderFactory) could not open codec." << endl;
+    kDebug() << "(K3bFFMpegDecoderFactory) could not open codec.";
     return false;
   }
 
@@ -118,7 +118,7 @@ bool K3bFFMpegFile::open()
   d->length = K3b::Msf::fromSeconds( (double)d->formatContext->duration / (double)AV_TIME_BASE );
 
   if( d->length == 0 ) {
-    kDebug() << "(K3bFFMpegDecoderFactory) invalid length." << endl;
+    kDebug() << "(K3bFFMpegDecoderFactory) invalid length.";
     return false;
   }
 

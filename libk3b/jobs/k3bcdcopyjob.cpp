@@ -244,11 +244,11 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 	if( m_readerDevice->read10( buffer, 2048, (*it).lastSector().lba(), 1 ) ||
 	    m_readerDevice->read10( buffer, 2048, (*it).lastSector().lba(), 1 ) ) {
 	  d->dataSessionProbablyTAORecorded.append(false);
-	  kDebug() << "(K3bCdCopyJob) track " << i << " probably DAO recorded." << endl;
+	  kDebug() << "(K3bCdCopyJob) track " << i << " probably DAO recorded.";
 	}
 	else {
 	  d->dataSessionProbablyTAORecorded.append(true);
-	  kDebug() << "(K3bCdCopyJob) track " << i << " probably TAO recorded." << endl;
+	  kDebug() << "(K3bCdCopyJob) track " << i << " probably TAO recorded.";
 	}
       }
 
@@ -496,7 +496,7 @@ void K3bCdCopyJob::cancel()
 
 bool K3bCdCopyJob::prepareImageFiles()
 {
-  kDebug() << "(K3bCdCopyJob) prepareImageFiles()" << endl;
+  kDebug() << "(K3bCdCopyJob) prepareImageFiles()";
 
   d->imageNames.clear();
   d->infNames.clear();
@@ -529,7 +529,7 @@ bool K3bCdCopyJob::prepareImageFiles()
     if( !tempDirReady ) {
       QDir dir( m_tempPath );
       m_tempPath = K3b::findUniqueFilePrefix( "k3bCdCopy", m_tempPath );
-      kDebug() << "(K3bCdCopyJob) creating temp dir: " << m_tempPath << endl;
+      kDebug() << "(K3bCdCopyJob) creating temp dir: " << m_tempPath;
       if( !dir.mkdir( m_tempPath, true ) ) {
 	emit infoMessage( i18n("Unable to create temporary directory '%1'.").arg(m_tempPath), ERROR );
 	return false;
@@ -552,9 +552,9 @@ bool K3bCdCopyJob::prepareImageFiles()
       ++i;
     }
 
-    kDebug() << "(K3bCdCopyJob) created image filenames:" << endl;
+    kDebug() << "(K3bCdCopyJob) created image filenames:";
     for( unsigned int i = 0; i < d->imageNames.count(); ++i )
-      kDebug() << "(K3bCdCopyJob) " << d->imageNames[i] << endl;
+      kDebug() << "(K3bCdCopyJob) " << d->imageNames[i];
 
     return true;
   }

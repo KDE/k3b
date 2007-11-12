@@ -186,7 +186,7 @@ QStringList K3bProcess::splitOutput( char* data, int len,
     lines.first().prepend( unfinishedLine );
     unfinishedLine.truncate(0);
 
-    kDebug() << "(K3bProcess)           joined line: '" << (lines.first()) << "'" << endl;
+    kDebug() << "(K3bProcess)           joined line: '" << (lines.first()) << "'";
   }
 
   QStringList::iterator it;
@@ -196,8 +196,8 @@ QStringList K3bProcess::splitOutput( char* data, int len,
   QChar c = buffer.right(1).at(0);
   bool hasUnfinishedLine = ( c != '\n' && c != '\r' && c != QChar(46) );  // What is unicode 46?? It is printed as a point
   if( hasUnfinishedLine ) {
-    kDebug() << "(K3bProcess) found unfinished line: '" << lines.last() << "'" << endl;
-    kDebug() << "(K3bProcess)             last char: '" << buffer.right(1) << "'" << endl;
+    kDebug() << "(K3bProcess) found unfinished line: '" << lines.last() << "'";
+    kDebug() << "(K3bProcess)             last char: '" << buffer.right(1) << "'";
     unfinishedLine = lines.last();
     it = lines.end();
     --it;
@@ -286,26 +286,26 @@ int K3bProcess::commSetupDoneC()
     // to d->dupStdoutFd
     //
     if( ::dup2( d->dupStdoutFd, STDOUT_FILENO ) < 0 ) {
-      kDebug() << "(K3bProcess) Error while dup( " << d->dupStdoutFd << ", " << STDOUT_FILENO << endl;
+      kDebug() << "(K3bProcess) Error while dup( " << d->dupStdoutFd << ", " << STDOUT_FILENO;
       ok = 0;
     }
   }
   else if( d->rawStdout ) {
     if( ::dup2( d->out[1], STDOUT_FILENO ) < 0 ) {
-      kDebug() << "(K3bProcess) Error while dup( " << d->out[1] << ", " << STDOUT_FILENO << endl;
+      kDebug() << "(K3bProcess) Error while dup( " << d->out[1] << ", " << STDOUT_FILENO;
       ok = 0;
     }
   }
 
   if( d->dupStdinFd != -1 ) {
     if( ::dup2( d->dupStdinFd, STDIN_FILENO ) < 0 ) {
-      kDebug() << "(K3bProcess) Error while dup( " << d->dupStdinFd << ", " << STDIN_FILENO << endl;
+      kDebug() << "(K3bProcess) Error while dup( " << d->dupStdinFd << ", " << STDIN_FILENO;
       ok = 0;
     }
   }
   else if( d->rawStdin ) {
     if( ::dup2( d->in[0], STDIN_FILENO ) < 0 ) {
-      kDebug() << "(K3bProcess) Error while dup( " << d->in[0] << ", " << STDIN_FILENO << endl;
+      kDebug() << "(K3bProcess) Error while dup( " << d->in[0] << ", " << STDIN_FILENO;
       ok = 0;
     }
   }

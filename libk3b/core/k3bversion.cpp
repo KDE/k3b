@@ -57,7 +57,7 @@ void K3bVersion::setVersion( const QString& v )
       suffix = suffix.mid( 1 );
       splitVersionString( suffix, m_minorVersion, suffix );
       if( m_minorVersion < 0 ) {
-	kDebug() << "(K3bVersion) suffix must not start with a dot!" << endl;
+	kDebug() << "(K3bVersion) suffix must not start with a dot!";
 	m_majorVersion = -1;
 	m_minorVersion = -1;
 	m_patchLevel = -1;
@@ -68,7 +68,7 @@ void K3bVersion::setVersion( const QString& v )
 	  suffix = suffix.mid( 1 );
 	  splitVersionString( suffix, m_patchLevel, suffix );
 	  if( m_patchLevel < 0 ) {
-	    kDebug() << "(K3bVersion) suffix must not start with a dot!" << endl;
+	    kDebug() << "(K3bVersion) suffix must not start with a dot!";
 	    m_majorVersion = -1;
 	    m_minorVersion = -1;
 	    m_patchLevel = -1;

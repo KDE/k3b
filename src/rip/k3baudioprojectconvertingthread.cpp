@@ -263,7 +263,7 @@ bool K3bAudioProjectConvertingThread::convertTrack( K3bAudioTrack* track, const 
       }
 
       if( d->encoder->encode( buffer, readLength ) < 0 ) {
-	kDebug() << "(K3bAudioProjectConvertingThread) error while encoding." << endl;
+	kDebug() << "(K3bAudioProjectConvertingThread) error while encoding.";
 	emitInfoMessage( d->encoder->lastErrorString(), K3bJob::ERROR );
 	emitInfoMessage( i18n("Error while encoding track %1.").arg(d->currentTrackIndex+1), K3bJob::ERROR );
 	return false;
@@ -363,7 +363,7 @@ bool K3bAudioProjectConvertingThread::writePlaylist()
   }
   else {
     emitInfoMessage( i18n("Unable to open '%1' for writing.").arg(m_playlistFilename), K3bJob::ERROR );
-    kDebug() << "(K3bAudioProjectConvertingThread) could not open file " << m_playlistFilename << " for writing." << endl;
+    kDebug() << "(K3bAudioProjectConvertingThread) could not open file " << m_playlistFilename << " for writing.";
     return false;
   }
 }

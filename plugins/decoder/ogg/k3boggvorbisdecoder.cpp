@@ -69,7 +69,7 @@ bool K3bOggVorbisDecoder::openOggVorbisFile()
   if( !d->isOpen ) {
     FILE* file = fopen( QFile::encodeName(filename()), "r" );
     if( !file ) {
-      kDebug() << "(K3bOggVorbisDecoder) Could not open file " << filename() << endl;
+      kDebug() << "(K3bOggVorbisDecoder) Could not open file " << filename();
       return false;
     }
     else if( ov_open( file, &d->oggVorbisFile, 0, 0 ) ) {
@@ -93,7 +93,7 @@ bool K3bOggVorbisDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate
     // check length of track
     double seconds = ov_time_total( &d->oggVorbisFile, -1 );
     if( seconds == OV_EINVAL ) {
-      kDebug() << "(K3bOggVorbisDecoder) Could not determine length of file " << filename() << endl;
+      kDebug() << "(K3bOggVorbisDecoder) Could not determine length of file " << filename();
       cleanup();
       return false;
     }
@@ -161,23 +161,23 @@ int K3bOggVorbisDecoder::decodeInternal( char* data, int maxLen )
 			    &bitStream );        // current bitstream
 
   if( bitStream != 0 ) {
-    kDebug() << "(K3bOggVorbisDecoder) bitstream != 0. Multible bitstreams not supported." << endl;
+    kDebug() << "(K3bOggVorbisDecoder) bitstream != 0. Multible bitstreams not supported.";
     return -1;
   }
   
   else if( bytesRead == OV_HOLE ) {
-    kDebug() << "(K3bOggVorbisDecoder) OV_HOLE" << endl;
+    kDebug() << "(K3bOggVorbisDecoder) OV_HOLE";
     // recursive new try
     return decodeInternal( data, maxLen );
   }
 
   else if( bytesRead < 0 ) {
-    kDebug() << "(K3bOggVorbisDecoder) Error: " << bytesRead << endl;
+    kDebug() << "(K3bOggVorbisDecoder) Error: " << bytesRead;
     return -1;
   }
 
   else if( bytesRead == 0 ) {
-    kDebug() << "(K3bOggVorbisDecoder) successfully finished decoding." << endl;
+    kDebug() << "(K3bOggVorbisDecoder) successfully finished decoding.";
     return 0;
   }
 
@@ -231,7 +231,7 @@ bool K3bOggVorbisDecoderFactory::canDecode( const KUrl& url )
 {
   FILE* file = fopen( QFile::encodeName(url.path()), "r" );
   if( !file ) {
-    kDebug() << "(K3bOggVorbisDecoder) Could not open file " << url.path() << endl;
+    kDebug() << "(K3bOggVorbisDecoder) Could not open file " << url.path();
     return false;
   }
 
@@ -239,7 +239,7 @@ bool K3bOggVorbisDecoderFactory::canDecode( const KUrl& url )
 
   if( ov_open( file, &of, 0, 0 ) ) {
     fclose( file );
-    kDebug() << "(K3bOggVorbisDecoder) not an Ogg-Vorbis file: " << url.path() << endl;
+    kDebug() << "(K3bOggVorbisDecoder) not an Ogg-Vorbis file: " << url.path();
     return false;
   }
 

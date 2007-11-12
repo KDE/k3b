@@ -90,7 +90,7 @@ void K3bVideoDVDRippingPreview::generatePreview( const K3bVideoDVD::VideoDVD& dv
   if( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) { // we use AllOutput to not pollute stdout
     // something went wrong when starting the program
     // it "should" be the executable
-    kDebug() << "(K3bVideoDVDRippingPreview) Could not start transcode." << endl;
+    kDebug() << "(K3bVideoDVDRippingPreview) Could not start transcode.";
     delete m_process;
     delete m_tempDir;
     m_process = 0;
@@ -113,7 +113,7 @@ void K3bVideoDVDRippingPreview::slotTranscodeFinished( K3Process* )
 {
   // read the image
   QString filename = m_tempDir->name() + "000000.ppm";// + tempQDir->entryList( QDir::Files ).first();
-  kDebug() << "(K3bVideoDVDRippingPreview) reading from file " << filename << endl;
+  kDebug() << "(K3bVideoDVDRippingPreview) reading from file " << filename;
   m_preview = QImage( filename );
   bool success = !m_preview.isNull() && !m_canceled;
 

@@ -15,7 +15,7 @@
 
 #include "k3bintmapcombobox.h"
 
-#include <q3whatsthis.h>
+
 #include <qmap.h>
 #include <q3valuevector.h>
 
@@ -101,7 +101,7 @@ void K3bIntMapComboBox::updateWhatsThis()
   }  
   ws += "<p>" + d->bottomWhatsThis;
 
-  Q3WhatsThis::add( this, ws );
+  this->setWhatsThis( ws );
 }
 
 

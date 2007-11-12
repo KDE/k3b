@@ -80,7 +80,7 @@ void K3bThreadJob::start()
       m_thread->start();
     }
     else
-      kDebug() << "(K3bThreadJob) thread not finished yet." << endl;
+      kDebug() << "(K3bThreadJob) thread not finished yet.";
   }
   else {
     kError() << "(K3bThreadJob) no job set." << endl;
@@ -156,9 +156,9 @@ void K3bThreadJob::customEvent( QCustomEvent* e )
             // although this may be dangerous if some thread
             // emits the finished signal although it has not finished yet
             // but makes a lot stuff easier.
-            kDebug() << "(K3bThreadJob) waiting for the thread to finish." << endl;
+            kDebug() << "(K3bThreadJob) waiting for the thread to finish.";
             m_thread->wait();
-            kDebug() << "(K3bThreadJob) thread finished." << endl;
+            kDebug() << "(K3bThreadJob) thread finished.";
             cleanupJob( be->firstValue() );
             m_running = false;
             jobFinished( be->firstValue() );

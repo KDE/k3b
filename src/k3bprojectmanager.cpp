@@ -100,7 +100,7 @@ const Q3PtrList<K3bDoc>& K3bProjectManager::projects() const
 void K3bProjectManager::addProject( K3bDoc* doc )
 {
   if( !d->projects.containsRef( doc ) ) {
-    kDebug() << "(K3bProjectManager) adding doc " << doc->URL().path() << endl;
+    kDebug() << "(K3bProjectManager) adding doc " << doc->URL().path();
 
     d->projects.append(doc);
 
@@ -136,7 +136,7 @@ void K3bProjectManager::removeProject( K3bDoc* doc )
       return;
     }
   }
-  kDebug() << "(K3bProjectManager) unable to find doc: " << doc->URL().path() << endl;
+  kDebug() << "(K3bProjectManager) unable to find doc: " << doc->URL().path();
 }
 
 
@@ -488,14 +488,14 @@ K3bDoc* K3bProjectManager::openProject( const KUrl& url )
       char test[5];
       if( f.readBlock( test, 5 ) ) {
 	if( ::strncmp( test, "<?xml", 5 ) ) {
-	  kDebug() << "(K3bDoc) " << url.path() << " seems to be no xml file." << endl;
+	  kDebug() << "(K3bDoc) " << url.path() << " seems to be no xml file.";
 	  QApplication::restoreOverrideCursor();
 	  return 0;
 	}
 	f.reset();
       }
       else {
-	kDebug() << "(K3bDoc) could not read from file." << endl;
+	kDebug() << "(K3bDoc) could not read from file.";
 	QApplication::restoreOverrideCursor();
 	return 0;
       }
@@ -509,7 +509,7 @@ K3bDoc* K3bProjectManager::openProject( const KUrl& url )
   KIO::NetAccess::removeTempFile( tmpfile );
 
   if( !success ) {
-    kDebug() << "(K3bDoc) could not open file " << url.path() << endl;
+    kDebug() << "(K3bDoc) could not open file " << url.path();
     QApplication::restoreOverrideCursor();
     return 0;
   }
@@ -533,7 +533,7 @@ K3bDoc* K3bProjectManager::openProject( const KUrl& url )
   else if( xmlDoc.doctype().name() == "k3b_video_dvd_project" )
     type = K3bDoc::VIDEODVD;
   else {
-    kDebug() << "(K3bDoc) unknown doc type: " << xmlDoc.doctype().name() << endl;
+    kDebug() << "(K3bDoc) unknown doc type: " << xmlDoc.doctype().name();
     QApplication::restoreOverrideCursor();
     return 0;
   }
@@ -557,7 +557,7 @@ K3bDoc* K3bProjectManager::openProject( const KUrl& url )
     //        that the doc is not changed
     emit projectSaved( newDoc );
 
-    kDebug() << "(K3bProjectManager) loading project done." << endl;
+    kDebug() << "(K3bProjectManager) loading project done.";
   }
   else {
     delete newDoc;

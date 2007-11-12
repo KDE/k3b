@@ -43,7 +43,7 @@
 #include <q3groupbox.h>
 #include <qlabel.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+
 #include <qpair.h>
 #include <q3valuelist.h>
 #include <qlayout.h>
@@ -117,7 +117,7 @@ K3bAudioMetainfoRenamerPluginWidget::K3bAudioMetainfoRenamerPluginWidget( K3bDoc
   connect( d->scanButton, SIGNAL(clicked()), this, SLOT(slotScanClicked()) );
 
   QToolTip::add( d->scanButton, i18n("Scan for renamable files") );
-  Q3WhatsThis::add( d->comboPattern, i18n("<qt>This specifies how the files should be renamed. "
+  d->comboPattern->setWhatsThis( i18n("<qt>This specifies how the files should be renamed. "
 					 "Currently only the special strings <em>%a</em> (Artist), "
 					 "<em>%n</em> (Track number), and <em>%t</em> (Title) ,"
 					 "are supported.") );
@@ -201,7 +201,7 @@ void K3bAudioMetainfoRenamerPluginWidget::slotScanClicked()
 
 void K3bAudioMetainfoRenamerPluginWidget::scanDir( K3bDirItem* dir, Q3ListViewItem* viewRoot )
 {
-  kDebug() << "(K3bAudioMetainfoRenamerPluginWidget) scanning dir " << dir->k3bName() << endl;
+  kDebug() << "(K3bAudioMetainfoRenamerPluginWidget) scanning dir " << dir->k3bName();
 
   d->dirItemDict.insert( dir, viewRoot );
 

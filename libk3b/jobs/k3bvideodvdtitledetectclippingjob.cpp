@@ -177,7 +177,7 @@ void K3bVideoDVDTitleDetectClippingJob::startTranscode( int chapter )
   for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
   }
-  kDebug() << s << flush << endl;
+  kDebug() << s << flush;
   emit debuggingOutput( d->usedTranscodeBin->name() + " command:", s);
 
   // start the process
@@ -247,7 +247,7 @@ void K3bVideoDVDTitleDetectClippingJob::slotTranscodeStderr( const QString& line
       m_clippingRight = qMin( m_clippingRight, values[3].toInt() );
     }
     else
-      kDebug() << "(K3bVideoDVDTitleDetectClippingJob) failed to parse line: " << line << endl;
+      kDebug() << "(K3bVideoDVDTitleDetectClippingJob) failed to parse line: " << line;
   }
 }
 

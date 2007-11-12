@@ -68,7 +68,7 @@ const K3bExternalBin* K3bMkisofsHandler::initMkisofs()
     d->readError = false;
   }
   else {
-    kDebug() << "(K3bMkisofsHandler) could not find mkisofs executable" << endl;
+    kDebug() << "(K3bMkisofsHandler) could not find mkisofs executable";
     handleMkisofsInfoMessage( i18n("Mkisofs executable not found."), K3bJob::ERROR );
   }
 
@@ -118,7 +118,7 @@ void K3bMkisofsHandler::parseMkisofsOutput( const QString& line )
       d->readError = true;
     }
     else {
-      kDebug() << "(mkisofs) " << line << endl;
+      kDebug() << "(mkisofs) " << line;
     }
   }
 }
@@ -138,7 +138,7 @@ int K3bMkisofsHandler::parseMkisofsProgress( const QString& line )
   bool ok;
   double p = perStr.toDouble( &ok );
   if( !ok ) {
-    kDebug() << "(K3bMkisofsHandler) Parsing did not work for " << perStr << endl;
+    kDebug() << "(K3bMkisofsHandler) Parsing did not work for " << perStr;
     return -1;
   }
   else {

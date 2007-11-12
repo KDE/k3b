@@ -84,7 +84,7 @@ bool K3bLsofWrapper::checkDevice( K3bDevice::Device* dev )
     int pid = (*it).mid(1).toInt();
     QString app = (*(++it)).mid(1);
 
-    kDebug() << "(K3bLsofWrapper) matched: app: " << app << " pid: " << pid << endl;
+    kDebug() << "(K3bLsofWrapper) matched: app: " << app << " pid: " << pid;
 
     // we don't care about ourselves using the device ;)
     if( pid != (int)::getpid() )

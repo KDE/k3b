@@ -662,12 +662,12 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
                 // try to get the last track's datamode
                 // we already asked for an appendable cdr when fetching
                 // the ms info
-                kDebug() << "(K3bDataJob) determining last track's datamode..." << endl;
+                kDebug() << "(K3bDataJob) determining last track's datamode...";
 
                 // FIXME: use the DeviceHandler
                 K3bDevice::Toc toc = d->doc->burner()->readToc();
                 if( toc.isEmpty() ) {
-                    kDebug() << "(K3bDataJob) could not retrieve toc." << endl;
+                    kDebug() << "(K3bDataJob) could not retrieve toc.";
                     emit infoMessage( i18n("Unable to determine the last track's datamode. Using default."), ERROR );
                     d->usedDataMode = K3b::MODE2;
                 }
@@ -1023,7 +1023,7 @@ bool K3bDataJob::setupCdrdaoJob()
         d->tocFile->close();
     }
     else {
-        kDebug() << "(K3bDataJob) could not write tocfile." << endl;
+        kDebug() << "(K3bDataJob) could not write tocfile.";
         emit infoMessage( i18n("IO Error"), ERROR );
         cancelAll();
         return false;

@@ -283,7 +283,7 @@ void K3bMovixListView::slotDropped( K3ListView*, QDropEvent* e, Q3ListViewItem* 
 	itemAfter = item;
       }
       else
-	kDebug() << "(K3bMovixListView) I don't move subtitle items!" << endl;
+	kDebug() << "(K3bMovixListView) I don't move subtitle items!";
 
       ++it;
     }

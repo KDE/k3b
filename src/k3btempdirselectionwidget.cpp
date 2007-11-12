@@ -24,7 +24,7 @@
 #include <qtimer.h>
 #include <q3hbox.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+
 #include <qfileinfo.h>
 
 #include <kconfig.h>
@@ -78,7 +78,7 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
 
   // What's This info
   // --------------------------------------------------------------------------------
-  Q3WhatsThis::add( m_editDirectory, i18n("<p>This is the directory in which K3b will save the <em>image files</em>."
+  m_editDirectory->setWhatsThis( i18n("<p>This is the directory in which K3b will save the <em>image files</em>."
 					 "<p>Please make sure that it resides on a partition that has enough free space.") );
 }
 

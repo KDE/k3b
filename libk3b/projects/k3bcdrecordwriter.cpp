@@ -349,7 +349,7 @@ void K3bCdrecordWriter::start()
   for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
   }
-  kDebug() << s << flush << endl;
+  kDebug() << s << flush;
   emit debuggingOutput( m_cdrecordBinObject->name() + " command:", s);
 
   m_currentTrack = 0;
@@ -378,7 +378,7 @@ void K3bCdrecordWriter::start()
   if( !m_process->start( K3Process::NotifyOnExit, K3Process::All ) ) {
     // something went wrong when starting the program
     // it "should" be the executable
-    kDebug() << "(K3bCdrecordWriter) could not start " << m_cdrecordBinObject->name() << endl;
+    kDebug() << "(K3bCdrecordWriter) could not start " << m_cdrecordBinObject->name();
     emit infoMessage( i18n("Could not start %1.").arg(m_cdrecordBinObject->name()), K3bJob::ERROR );
     jobFinished(false);
   }
@@ -620,14 +620,14 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     m_currentTrack++;
 
     if( m_currentTrack > d->tracks.count() ) {
-      kDebug() << "(K3bCdrecordWriter) need to add dummy track struct." << endl;
+      kDebug() << "(K3bCdrecordWriter) need to add dummy track struct.";
       struct Private::Track t;
       t.size = 1;
       t.audio = false;
       d->tracks.append(t);
     }
 
-    kDebug() << "(K3bCdrecordWriter) writing track " << m_currentTrack << " of " << m_totalTracks << " tracks." << endl;
+    kDebug() << "(K3bCdrecordWriter) writing track " << m_currentTrack << " of " << m_totalTracks << " tracks.";
     emit nextTrack( m_currentTrack, m_totalTracks );
   }
   else if( line.startsWith( "Fixating" ) ) {
@@ -685,7 +685,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   }
   else {
     // debugging
-    kDebug() << "(" << m_cdrecordBinObject->name() << ") " << line << endl;
+    kDebug() << "(" << m_cdrecordBinObject->name() << ") " << line;
   }
 }
 
@@ -726,7 +726,7 @@ void K3bCdrecordWriter::slotProcessExited( K3Process* p )
       break;
 
     default:
-      kDebug() << "(K3bCdrecordWriter) error: " << p->exitStatus() << endl;
+      kDebug() << "(K3bCdrecordWriter) error: " << p->exitStatus();
 
       if( m_cdrecordError == UNKNOWN && m_lastFifoValue <= 3 )
 	m_cdrecordError = BUFFER_UNDERRUN;

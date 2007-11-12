@@ -31,7 +31,7 @@
 #include <qfont.h>
 #include <qpainter.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+
 #include <qcursor.h>
 #include <qapplication.h>
 #include <qbitmap.h>
@@ -122,7 +122,7 @@ K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWid
   m_programView = new K3bListView( programTab );
   m_defaultButton = new QPushButton( i18n("Set Default"), programTab );
   QToolTip::add( m_defaultButton, i18n("Change the versions K3b should use.") );
-  Q3WhatsThis::add( m_defaultButton, i18n("<p>If K3b found more than one installed version of a program "
+  m_defaultButton->setWhatsThis( i18n("<p>If K3b found more than one installed version of a program "
 					 "it will choose one as the <em>default</em> which will be used "
 					 "to do the work. If you want to change the default select the "
 					 "wanted version and press this button.") );

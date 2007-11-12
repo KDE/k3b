@@ -37,7 +37,7 @@
 #include <q3groupbox.h>
 #include <qtooltip.h>
 #include <qtoolbutton.h>
-#include <q3whatsthis.h>
+
 #include <qmap.h>
 #include <q3ptrvector.h>
 #include <qcursor.h>
@@ -181,10 +181,10 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent, const char 
   QToolTip::add( m_comboSpeed, i18n("The speed at which to burn the medium") );
   QToolTip::add( m_comboWritingApp, i18n("The external application to actually burn the medium") );
 
-  Q3WhatsThis::add( m_comboMedium, i18n("<p>Select the medium that you want to use for burning."
+  m_comboMedium->setWhatsThis( i18n("<p>Select the medium that you want to use for burning."
 				       "<p>In most cases there will only be one medium available which "
 				       "does not leave much choice.") );
-  Q3WhatsThis::add( m_comboSpeed, i18n("<p>Select the speed with which you want to burn."
+  m_comboSpeed->setWhatsThis( i18n("<p>Select the speed with which you want to burn."
 				      "<p><b>Auto</b><br>"
 				      "This will choose the maximum writing speed possible with the used "
 				      "medium. "
@@ -195,7 +195,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent, const char 
 				      "<p>1x refers to 175 KB/s for CD, 1385 KB/s for DVD, and 4496 KB/s for Blu-ray.</p>"
 				      "<p><b>Caution:</b> Make sure your system is able to send the data "
 				      "fast enough to prevent buffer underruns.") );
-  Q3WhatsThis::add( m_comboWritingApp, i18n("<p>K3b uses the command line tools cdrecord, growisofs, and cdrdao "
+  m_comboWritingApp->setWhatsThis( i18n("<p>K3b uses the command line tools cdrecord, growisofs, and cdrdao "
 					   "to actually write a CD or DVD."
 					   "<p>Normally K3b chooses the best "
 					   "suited application for every task automatically but in some cases it "

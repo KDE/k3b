@@ -57,7 +57,7 @@ public:
       const KUrl& url = *it;
 
       if( !url.isLocalFile() ) {
-	kDebug() << "(K3bDirSizeJob) no remote support." << endl;
+	kDebug() << "(K3bDirSizeJob) no remote support.";
 	emitFinished( false );
 	return;
       }

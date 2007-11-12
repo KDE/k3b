@@ -165,7 +165,7 @@ bool K3bMadDecoder::initDecoderInternal()
 
 unsigned long K3bMadDecoder::countFrames()
 {
-  kDebug() << "(K3bMadDecoder::countFrames)" << endl;
+  kDebug() << "(K3bMadDecoder::countFrames)";
 
   unsigned long frames = 0;
   bool error = false;
@@ -199,12 +199,12 @@ unsigned long K3bMadDecoder::countFrames()
     float seconds = (float)d->handle->madTimer->seconds + 
       (float)d->handle->madTimer->fraction/(float)MAD_TIMER_RESOLUTION;
     frames = (unsigned long)ceil(seconds * 75.0);
-    kDebug() << "(K3bMadDecoder) length of track " << seconds << endl;
+    kDebug() << "(K3bMadDecoder) length of track " << seconds;
   }
 
   cleanup();
 
-  kDebug() << "(K3bMadDecoder::countFrames) end" << endl;
+  kDebug() << "(K3bMadDecoder::countFrames) end";
 
   return frames;
 }
@@ -274,7 +274,7 @@ bool K3bMadDecoder::createPcmSamples( mad_synth* synth )
   // this should not happen since we only decode if the
   // output buffer has enough free space
   if( d->outputBufferEnd - d->outputPointer < nsamples*4 ) {
-    kDebug() <<  "(K3bMadDecoder) buffer overflow!" << endl;
+    kDebug() <<  "(K3bMadDecoder) buffer overflow!";
     return false;
   }
 
@@ -534,7 +534,7 @@ bool K3bMadDecoderFactory::canDecode( const KUrl& url )
     }
   }
 
-  kDebug() << "(K3bMadDecoder) unsupported format: " << url.path() << endl;
+  kDebug() << "(K3bMadDecoder) unsupported format: " << url.path();
 
   return false;
 }

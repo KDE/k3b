@@ -34,7 +34,7 @@
 #include <qstring.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+
 #include <qlayout.h>
 #include <q3vbox.h>
 #include <qcheckbox.h>
@@ -244,7 +244,7 @@ void K3bProjectBurnDialog::slotStartClicked()
 
   dlg->startJob(m_job);
 
-  kDebug() << "(K3bProjectBurnDialog) job done. cleaning up." << endl;
+  kDebug() << "(K3bProjectBurnDialog) job done. cleaning up.";
 
   delete m_job;
   m_job = 0;

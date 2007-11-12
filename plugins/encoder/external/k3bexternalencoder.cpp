@@ -67,7 +67,7 @@ static K3bExternalEncoderCommand commandByExtension( const QString& extension )
     if( (*it).extension == extension )
       return *it;
 
-  kDebug() << "(K3bExternalEncoder) could not find command for extension " << extension << endl;
+  kDebug() << "(K3bExternalEncoder) could not find command for extension " << extension;
 
   return K3bExternalEncoderCommand();
 }
@@ -167,7 +167,7 @@ void K3bExternalEncoder::finishEncoderInternal()
 void K3bExternalEncoder::slotExternalProgramFinished( K3Process* p )
 {
   if( !p->normalExit() || p->exitStatus() != 0 )
-    kDebug() << "(K3bExternalEncoder) program exited with error." << endl;
+    kDebug() << "(K3bExternalEncoder) program exited with error.";
 }
 
 
@@ -236,13 +236,13 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension )
   }
 
 
-  kDebug() << "***** external parameters:" << endl;
+  kDebug() << "***** external parameters:";
   const Q3ValueList<Q3CString>& args = d->process->args();
   QString s;
   for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
   }
-  kDebug() << s << flush << endl;
+  kDebug() << s << flush;
 
   // set one general error message
   setLastError( i18n("Command failed: %1").arg( s ) );
@@ -265,11 +265,11 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension )
 
 bool K3bExternalEncoder::writeWaveHeader()
 {
-  kDebug() << "(K3bExternalEncoder) writing wave header" << endl;
+  kDebug() << "(K3bExternalEncoder) writing wave header";
 
   // write the RIFF thing
   if( ::write( d->process->stdinFd(), s_riffHeader, 4 ) != 4 ) {
-    kDebug() << "(K3bExternalEncoder) failed to write riff header." << endl;
+    kDebug() << "(K3bExternalEncoder) failed to write riff header.";
     return false;
   }
   
@@ -284,13 +284,13 @@ bool K3bExternalEncoder::writeWaveHeader()
   c[3] = (wavSize   >> 24) & 0xff;
   
   if( ::write( d->process->stdinFd(), c, 4 ) != 4 ) {
-    kDebug() << "(K3bExternalEncoder) failed to write wave size." << endl;
+    kDebug() << "(K3bExternalEncoder) failed to write wave size.";
     return false;
   }
 
   // write static part of the header
   if( ::write( d->process->stdinFd(), s_riffHeader+8, 32 ) != 32 ) {
-    kDebug() << "(K3bExternalEncoder) failed to write wave header." << endl;
+    kDebug() << "(K3bExternalEncoder) failed to write wave header.";
     return false;
   }
 
@@ -300,7 +300,7 @@ bool K3bExternalEncoder::writeWaveHeader()
   c[3] = (dataSize   >> 24) & 0xff;
 
   if( ::write( d->process->stdinFd(), c, 4 ) != 4 ) {
-    kDebug() << "(K3bExternalEncoder) failed to write data size." << endl;
+    kDebug() << "(K3bExternalEncoder) failed to write data size.";
     return false;
   }
 
@@ -352,7 +352,7 @@ long K3bExternalEncoder::encodeInternal( const char* data, Q_ULONG len )
 
 void K3bExternalEncoder::slotExternalProgramOutputLine( const QString& line )
 {
-  kDebug() << "(" << d->cmd.name << ") " << line << endl;
+  kDebug() << "(" << d->cmd.name << ") " << line;
 }
 
 

@@ -85,7 +85,7 @@ int K3bMusicBrainz::query( const Q3CString& trm )
   else {
     char buffer[256];
     mb_GetQueryError( d->mb, buffer, 256 );
-    kDebug() << "(K3bMusicBrainz) query error: " << buffer << endl;
+    kDebug() << "(K3bMusicBrainz) query error: " << buffer;
     return 0;
   }
 }

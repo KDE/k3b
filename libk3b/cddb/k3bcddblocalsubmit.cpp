@@ -47,7 +47,7 @@ void K3bCddbLocalSubmit::doSubmit()
     path.append( "/" );
 
   if( !QFile::exists( path ) && !QDir().mkdir( path ) ) {
-    kDebug() << "(K3bCddbLocalSubmit) could not create directory: " << path << endl;
+    kDebug() << "(K3bCddbLocalSubmit) could not create directory: " << path;
     setError( IO_ERROR );
     emit submitFinished( this );
     return;
@@ -61,7 +61,7 @@ void K3bCddbLocalSubmit::doSubmit()
 
     if( !QFile::exists( path ) ) {
       if( !QDir().mkdir( path ) ) {
-	kDebug() << "(K3bCddbLocalSubmit) could not create directory: " << path << endl;
+	kDebug() << "(K3bCddbLocalSubmit) could not create directory: " << path;
 	setError( IO_ERROR );
 	emit submitFinished( this );
 	return;
@@ -72,16 +72,16 @@ void K3bCddbLocalSubmit::doSubmit()
     path += "/" + resultEntry().discid;
     QFile entryFile( path );
     if( entryFile.exists() ) {
-      kDebug() << "(K3bCddbLocalSubmit) file already exists: " << path << endl;
+      kDebug() << "(K3bCddbLocalSubmit) file already exists: " << path;
     }
     
     if( !entryFile.open( QIODevice::WriteOnly ) ) {
-      kDebug() << "(K3bCddbLocalSubmit) could not create file: " << path << endl;
+      kDebug() << "(K3bCddbLocalSubmit) could not create file: " << path;
       setError( IO_ERROR );
       emit submitFinished( this );
     }
     else {
-      kDebug() << "(K3bCddbLocalSubmit) creating file: " << path << endl;
+      kDebug() << "(K3bCddbLocalSubmit) creating file: " << path;
       Q3TextStream entryStream( &entryFile );
       entryStream.setEncoding( Q3TextStream::UnicodeUTF8 );
       entryStream << resultEntry().rawData;
@@ -92,7 +92,7 @@ void K3bCddbLocalSubmit::doSubmit()
     }
   }
   else {
-    kDebug() << "(K3bCddbLocalSubmit) could not find directory: " << path << endl;
+    kDebug() << "(K3bCddbLocalSubmit) could not find directory: " << path;
     setError( IO_ERROR );
     emit infoMessage( i18n("Could not find directory: %1").arg(path) );
     emit submitFinished( this );

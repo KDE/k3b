@@ -41,7 +41,7 @@
 #include <q3frame.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+
 //Added by qt3to4:
 #include <Q3GridLayout>
 
@@ -90,7 +90,7 @@ K3bMediaFormattingDialog::K3bMediaFormattingDialog( QWidget* parent, const char*
 
 // FIXME: check if we need Blu-ray comments here
   QToolTip::add( m_checkForce, i18n("Force formatting of empty DVDs") );
-  Q3WhatsThis::add( m_checkForce, i18n("<p>If this option is checked K3b will format a "
+  m_checkForce->setWhatsThis( i18n("<p>If this option is checked K3b will format a "
 				      "DVD-RW even if it is empty. It may also be used to "
 				      "force K3b to format a DVD+RW or a DVD-RW in restricted "
 				      "overwrite mode."
@@ -101,7 +101,7 @@ K3bMediaFormattingDialog::K3bMediaFormattingDialog( QWidget* parent, const char*
 				      "restricted overwrite mode.") );
 
   QToolTip::add( m_checkQuickFormat, i18n("Try to perform quick formatting") );
-  Q3WhatsThis::add( m_checkQuickFormat, i18n("<p>If this option is checked K3b will tell the writer "
+  m_checkQuickFormat->setWhatsThis( i18n("<p>If this option is checked K3b will tell the writer "
 					    "to perform a quick format."
 					    "<p>Erasing a rewritable medium completely can take a very long "
 					    "time and some writers perform a full format even if "

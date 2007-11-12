@@ -639,7 +639,7 @@ bool K3bMixedJob::prepareWriter()
       ( m_currentAction == WRITING_AUDIO_IMAGE && m_usedAudioWritingApp == K3b::CDRECORD ) )  {
 
     if( !writeInfFiles() ) {
-      kDebug() << "(K3bMixedJob) could not write inf-files." << endl;
+      kDebug() << "(K3bMixedJob) could not write inf-files.";
       emit infoMessage( i18n("IO Error"), ERROR );
 
       return false;
@@ -680,7 +680,7 @@ bool K3bMixedJob::prepareWriter()
   }
   else {
     if( !writeTocFile() ) {
-      kDebug() << "(K3bDataJob) could not write tocfile." << endl;
+      kDebug() << "(K3bDataJob) could not write tocfile.";
       emit infoMessage( i18n("IO Error"), ERROR );
 
       return false;

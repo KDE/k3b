@@ -47,7 +47,7 @@ void K3bAudioTrackPlayerSeekAction::setValue( int v )
             static_cast<QSlider*>( w )->setValue( v );
         }
         else
-            kDebug() << "(K3bAudioTrackPlayerSeekAction::setValue) no widget found for container " << container( i ) << endl;
+            kDebug() << "(K3bAudioTrackPlayerSeekAction::setValue) no widget found for container " << container( i );
     }
 }
 
@@ -61,7 +61,7 @@ void K3bAudioTrackPlayerSeekAction::setMaxValue( int v )
             static_cast<QSlider*>( w )->setMaxValue( v );
         }
         else
-            kDebug() << "(K3bAudioTrackPlayerSeekAction::setMaxValue) no widget found for container " << container( i ) << endl;
+            kDebug() << "(K3bAudioTrackPlayerSeekAction::setMaxValue) no widget found for container " << container( i );
     }
 }
 

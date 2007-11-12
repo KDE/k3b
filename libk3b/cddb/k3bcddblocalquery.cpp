@@ -56,7 +56,7 @@ void K3bCddbLocalQuery::doQuery()
       
       QFile f( file );
       if( !f.open( QIODevice::ReadOnly ) ) {
-	kDebug() << "(K3bCddbLocalQuery) Could not open file" << endl;
+	kDebug() << "(K3bCddbLocalQuery) Could not open file";
       }
       else {
 	Q3TextStream t( &f );
@@ -72,7 +72,7 @@ void K3bCddbLocalQuery::doQuery()
       }
     }
     else {
-      kDebug() << "(K3bCddbLocalQuery) Could not find local entry in category " << *it << endl;
+      kDebug() << "(K3bCddbLocalQuery) Could not find local entry in category " << *it;
     }
   }
 
@@ -98,7 +98,7 @@ void K3bCddbLocalQuery::doMatchQuery()
 
   QFile f( path );
   if( !f.open( QIODevice::ReadOnly ) ) {
-    kDebug() << "(K3bCddbLocalQuery) Could not open file" << endl;
+    kDebug() << "(K3bCddbLocalQuery) Could not open file";
     setError( READ_ERROR );
   }
   else {

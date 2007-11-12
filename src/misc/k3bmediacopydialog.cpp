@@ -53,7 +53,7 @@
 #include <qlabel.h>
 #include <qtooltip.h>
 #include <qtabwidget.h>
-#include <q3whatsthis.h>
+
 #include <q3hbox.h>
 #include <qpushbutton.h>
 #include <q3buttongroup.h>
@@ -212,18 +212,18 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
   QToolTip::add( m_checkNoCorrection, i18n("Disable the source drive's error correction") );
   QToolTip::add( m_checkReadCdText, i18n("Copy CD-Text from the source CD if available.") );
 
-  Q3WhatsThis::add( m_checkNoCorrection, i18n("<p>If this option is checked K3b will disable the "
+  m_checkNoCorrection->setWhatsThis( i18n("<p>If this option is checked K3b will disable the "
 					     "source drive's ECC/EDC error correction. This way sectors "
 					     "that are unreadable by intention can be read."
 					     "<p>This may be useful for cloning CDs with copy "
 					     "protection based on corrupted sectors.") );
-  Q3WhatsThis::add( m_checkReadCdText, i18n("<p>If this option is checked K3b will search for CD-Text on the source CD. "
+  m_checkReadCdText->setWhatsThis( i18n("<p>If this option is checked K3b will search for CD-Text on the source CD. "
 					   "Disable it if your CD drive has problems with reading CD-Text or you want "
 					   "to stick to Cddb info.") );
-  Q3WhatsThis::add( m_checkIgnoreDataReadErrors, i18n("<p>If this option is checked and K3b is not able to read a data sector from the "
+  m_checkIgnoreDataReadErrors->setWhatsThis( i18n("<p>If this option is checked and K3b is not able to read a data sector from the "
 						     "source medium it will be replaced with zeros on the resulting copy.") );
 
-  Q3WhatsThis::add( m_comboCopyMode,
+  m_comboCopyMode->setWhatsThis(
 		   "<p><b>" + i18n("Normal Copy") + "</b>"
 		   + i18n("<p>This is the normal copy mode for DVD, Blu-ray, and most CD media types. "
 			  "It allows copying Audio CDs, multi and single session Data Media, and "

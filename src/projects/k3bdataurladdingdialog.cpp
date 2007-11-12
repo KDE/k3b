@@ -613,10 +613,10 @@ void K3bDataUrlAddingDialog::slotCopyMoveItems()
 
 
   if( dir == item->parent() ) {
-    kDebug() << "(K3bDataUrlAddingDialog) trying to move an item into its own parent dir." << endl;
+    kDebug() << "(K3bDataUrlAddingDialog) trying to move an item into its own parent dir.";
   }
   else if( dir == item ) {
-    kDebug() << "(K3bDataUrlAddingDialog) trying to move an item into itselft." << endl;
+    kDebug() << "(K3bDataUrlAddingDialog) trying to move an item into itselft.";
   }
   else {
     //

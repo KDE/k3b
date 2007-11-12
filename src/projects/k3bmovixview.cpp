@@ -139,7 +139,7 @@ void K3bMovixView::slotRemoveItems()
   Q3PtrListIterator<Q3ListViewItem> it(list);
 
   if( list.isEmpty() )
-    kDebug() << "nothing to remove" << endl;
+    kDebug() << "nothing to remove";
 
   for( ; it.current(); ++it ) {
     K3bMovixListViewItem* vi = static_cast<K3bMovixListViewItem*>(*it);
@@ -157,7 +157,7 @@ void K3bMovixView::slotRemoveSubTitleItems()
   Q3PtrListIterator<Q3ListViewItem> it(list);
 
   if( list.isEmpty() )
-    kDebug() << "nothing to remove" << endl;
+    kDebug() << "nothing to remove";
 
   for( ; it.current(); ++it ) {
     K3bMovixListViewItem* vi = static_cast<K3bMovixListViewItem*>(*it);

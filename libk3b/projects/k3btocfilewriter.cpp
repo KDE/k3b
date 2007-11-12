@@ -37,7 +37,7 @@ bool K3bTocFileWriter::save( const QString& filename )
   QFile f( filename );
 
   if( !f.open( QIODevice::WriteOnly ) ) {
-    kDebug() << "(K3bCueFileWriter) could not open file " << f.name() << endl;
+    kDebug() << "(K3bCueFileWriter) could not open file " << f.name();
     return false;
   }
 
@@ -141,7 +141,7 @@ bool K3bTocFileWriter::save( Q3TextStream& t )
     dataStart = m_toc[trackIndex].firstSector();
   }
 
-  kDebug() << "(K3bTocFileWriter) using offset of: " << dataStart.toString() << endl;
+  kDebug() << "(K3bTocFileWriter) using offset of: " << dataStart.toString();
 
   while( trackIndex < m_toc.count() ) {
     if( m_toc[trackIndex].session() == 0 || m_toc[trackIndex].session() == m_sessionToWrite )

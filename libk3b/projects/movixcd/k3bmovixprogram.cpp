@@ -63,7 +63,7 @@ bool K3bMovixProgram::scan( const QString& p )
     }
   }
   else {
-    kDebug() << "(K3bMovixProgram) could not start " << path << "movix-version" << endl;
+    kDebug() << "(K3bMovixProgram) could not start " << path << "movix-version";
     return false;
   }
 
@@ -106,22 +106,22 @@ bool K3bMovixProgram::scanOldEMovix( K3bMovixBin* bin, const QString& path )
   QDir dir( bin->movixDataDir() );
   QStringList subdirs = dir.entryList( QDir::Dirs );
   if( !subdirs.contains( "boot-messages" ) ) {
-    kDebug() << "(K3bMovixProgram) could not find subdir 'boot-messages'" << endl;
+    kDebug() << "(K3bMovixProgram) could not find subdir 'boot-messages'";
     delete bin;
     return false;
   }
   if( !subdirs.contains( "isolinux" ) ) {
-    kDebug() << "(K3bMovixProgram) could not find subdir 'isolinux'" << endl;
+    kDebug() << "(K3bMovixProgram) could not find subdir 'isolinux'";
     delete bin;
     return false;
   }
   if( !subdirs.contains( "movix" ) ) {
-    kDebug() << "(K3bMovixProgram) could not find subdir 'movix'" << endl;
+    kDebug() << "(K3bMovixProgram) could not find subdir 'movix'";
     delete bin;
     return false;
   }
   if( !subdirs.contains( "mplayer-fonts" ) ) {
-    kDebug() << "(K3bMovixProgram) could not find subdir 'mplayer-fonts'" << endl;
+    kDebug() << "(K3bMovixProgram) could not find subdir 'mplayer-fonts'";
     delete bin;
     return false;
   }
@@ -167,7 +167,7 @@ bool K3bMovixProgram::scanOldEMovix( K3bMovixBin* bin, const QString& path )
   for( QStringList::const_iterator it = bin->m_isolinuxFiles.begin();
        it != bin->m_isolinuxFiles.end(); ++it ) {
     if( !QFile::exists( bin->movixDataDir() + "/isolinux/" + *it ) ) {
-      kDebug() << "(K3bMovixProgram) Could not find file " << *it << endl;
+      kDebug() << "(K3bMovixProgram) Could not find file " << *it;
       delete bin;
       return false;
     }
@@ -219,7 +219,7 @@ QStringList K3bMovixProgram::determineSupportedBootLabels( const QString& isoCon
 
   QFile f( isoConfigFile );
   if( !f.open( QIODevice::ReadOnly ) ) {
-    kDebug() << "(K3bMovixProgram) could not open file '" << f.name() << "'" << endl;
+    kDebug() << "(K3bMovixProgram) could not open file '" << f.name() << "'";
   }
   else {
     Q3TextStream fs( &f );

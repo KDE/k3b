@@ -173,12 +173,12 @@ void K3bVcdDoc::slotWorkUrlQueue()
             lastAddedPosition = m_tracks->count();
 
         if ( !item->url.isLocalFile() ) {
-            kDebug() << item->url.path() << " no local file" << endl;
+            kDebug() << item->url.path() << " no local file";
             return ;
         }
 
         if ( !QFile::exists( item->url.path() ) ) {
-            kDebug() << "(K3bVcdDoc) file not found: " << item->url.path() << endl;
+            kDebug() << "(K3bVcdDoc) file not found: " << item->url.path();
             m_notFoundFiles.append( item->url.path() );
             return ;
         }
@@ -314,7 +314,7 @@ void K3bVcdDoc::addTrack( const KUrl& url, uint position )
 void K3bVcdDoc::addTrack( K3bVcdTrack* track, uint position )
 {
     if ( m_tracks->count() >= 98 ) {
-        kDebug() << "(K3bVcdDoc) VCD Green Book only allows 98 tracks." << endl;
+        kDebug() << "(K3bVcdDoc) VCD Green Book only allows 98 tracks.";
         // TODO: show some messagebox
         delete track;
         return ;
@@ -457,7 +457,7 @@ void K3bVcdDoc::setPbcTracks()
 
     if ( m_tracks ) {
         int count = m_tracks->count();
-        kDebug() << QString( "K3bVcdDoc::setPbcTracks() - we have %1 tracks in list." ).arg( count ) << endl;
+        kDebug() << QString( "K3bVcdDoc::setPbcTracks() - we have %1 tracks in list." ).arg( count );
 
         Q3PtrListIterator<K3bVcdTrack> iterTrack( *m_tracks );
         K3bVcdTrack* track;
@@ -583,7 +583,7 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
         QDomNode item = vcdNodes.item( i );
         QString name = item.nodeName();
 
-        kDebug() << QString( "(K3bVcdDoc::loadDocumentData) nodeName = '%1'" ).arg( name ) << endl;
+        kDebug() << QString( "(K3bVcdDoc::loadDocumentData) nodeName = '%1'" ).arg( name );
 
         if ( name == "volumeId" )
             vcdOptions() ->setVolumeId( item.toElement().text() );

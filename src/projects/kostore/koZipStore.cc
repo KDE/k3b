@@ -47,7 +47,7 @@ KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const Q3CString &
     QDir dir( QFileInfo( _filename ).dir() );
     if (_mode == Write && !QFileInfo( dir.path() ).isWritable()  )
     {
-        kWarning(s_area) << dir.path() << " isn't writable" << endl;
+        kWarning(s_area) << dir.path() << " isn't writable";
         m_bGood = false;
         m_currentDir = 0;
         KoStore::init( _mode );
@@ -93,7 +93,7 @@ KoZipStore::KoZipStore( QWidget* window, const KUrl & _url, const QString & _fil
 
 KoZipStore::~KoZipStore()
 {
-    kDebug(s_area) << "KoZipStore::~KoZipStore" << endl;
+    kDebug(s_area) << "KoZipStore::~KoZipStore";
     m_pZip->close();
     delete m_pZip;
 
@@ -119,7 +119,7 @@ bool KoZipStore::init( Mode _mode, const Q3CString& appIdentification )
         good = m_pZip->directory() != 0;
     else if ( good && _mode == Write )
     {
-        //kDebug(s_area) << "KoZipStore::init writing mimetype " << appIdentification << endl;
+        //kDebug(s_area) << "KoZipStore::init writing mimetype " << appIdentification;
 
         m_pZip->setCompression( KZip::NoCompression );
         m_pZip->setExtraField( KZip::NoExtraField );
@@ -149,13 +149,13 @@ bool KoZipStore::openRead( const QString& name )
     const KArchiveEntry * entry = m_pZip->directory()->entry( name );
     if ( entry == 0L )
     {
-        //kWarning(s_area) << "Unknown filename " << name << endl;
+        //kWarning(s_area) << "Unknown filename " << name;
         //return KIO::ERR_DOES_NOT_EXIST;
         return false;
     }
     if ( entry->isDirectory() )
     {
-        kWarning(s_area) << name << " is a directory !" << endl;
+        kWarning(s_area) << name << " is a directory !";
         //return KIO::ERR_IS_DIRECTORY;
         return false;
     }
@@ -170,7 +170,7 @@ bool KoZipStore::openRead( const QString& name )
 Q_LONG KoZipStore::write( const char* _data, Q_ULONG _len )
 {
   if ( _len == 0L ) return 0;
-  //kDebug(s_area) << "KoZipStore::write " << _len << endl;
+  //kDebug(s_area) << "KoZipStore::write " << _len;
 
   if ( !m_bIsOpen )
   {
@@ -196,7 +196,7 @@ bool KoZipStore::closeWrite()
     return m_pZip->doneWriting( m_iSize );
 #if 0
     if ( !m_pZip->writeFile( m_sName , "user", "group", m_iSize, m_byteArray.data() ) )
-        kWarning( s_area ) << "Failed to write " << m_sName << endl;
+        kWarning( s_area ) << "Failed to write " << m_sName;
     m_byteArray.resize( 0 ); // save memory
     return true;
 #endif

@@ -27,7 +27,7 @@
 #include <q3frame.h>
 #include <qcheckbox.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+
 #include <qtabwidget.h>
 #include <qvalidator.h>
 //Added by qt3to4:
@@ -166,21 +166,21 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const Q3ValueList<K3bDataItem*
   QToolTip::add( m_checkHideOnRockRidge, i18n("Hide this file in the RockRidge filesystem") );
   QToolTip::add( m_checkHideOnJoliet, i18n("Hide this file in the Joliet filesystem") );
   QToolTip::add( m_editSortWeight, i18n("Modify the physical sorting") );
-  Q3WhatsThis::add( m_checkHideOnRockRidge, i18n("<p>If this option is checked, the file or directory "
+  m_checkHideOnRockRidge->setWhatsThis( i18n("<p>If this option is checked, the file or directory "
 						"(and its entire contents) will be hidden on the "
 						"ISO9660 and RockRidge filesystem.</p>"
 						"<p>This is useful, for example, for having different README "
 						"files for RockRidge and Joliet, which can be managed "
 						"by hiding README.joliet on RockRidge and README.rr "
 						"on the Joliet filesystem.</p>") );
-  Q3WhatsThis::add( m_checkHideOnJoliet, i18n("<p>If this option is checked, the file or directory "
+  m_checkHideOnJoliet->setWhatsThis( i18n("<p>If this option is checked, the file or directory "
 					     "(and its entire contents) will be hidden on the "
 					     "Joliet filesystem.</p>"
 					     "<p>This is useful, for example, for having different README "
 					     "files for RockRidge and Joliet, which can be managed "
 					     "by hiding README.joliet on RockRidge and README.rr "
 					     "on the Joliet filesystem.</p>") );
-  Q3WhatsThis::add( m_editSortWeight, i18n("<p>This value modifies the physical sort order of the files "
+  m_editSortWeight->setWhatsThis( i18n("<p>This value modifies the physical sort order of the files "
 					  "in the ISO9660 filesystem. A higher weighting means that the "
 					  "file will be located closer to the beginning of the image "
 					  "(and the disk)."

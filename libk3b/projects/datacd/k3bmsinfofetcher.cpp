@@ -55,14 +55,14 @@ void K3bMsInfoFetcher::start()
   emit infoMessage( i18n("Searching previous session"), K3bJob::INFO );
 
   if( !k3bcore->externalBinManager()->foundBin( "cdrecord" ) ) {
-    kDebug() << "(K3bMsInfoFetcher) could not find cdrecord executable" << endl;
+    kDebug() << "(K3bMsInfoFetcher) could not find cdrecord executable";
     emit infoMessage( i18n("Could not find %1 executable.").arg("cdrecord"), K3bJob::ERROR );
     jobFinished(false);
     return;
   }
 
   if( m_device == 0 ) {
-    kDebug() << "(K3bMsInfoFetcher) internal error: No device set!" << endl;
+    kDebug() << "(K3bMsInfoFetcher) internal error: No device set!";
     jobFinished(false);
     return;
   }
@@ -115,7 +115,7 @@ void K3bMsInfoFetcher::getMsInfo()
     for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
       s += *it + " ";
     }
-    kDebug() << s << flush << endl;
+    kDebug() << s << flush;
     emit debuggingOutput( "msinfo command:", s );
 
 
@@ -190,7 +190,7 @@ void K3bMsInfoFetcher::slotProcessExited()
   if( m_canceled )
     return;
 
-  kDebug() << "(K3bMsInfoFetcher) msinfo fetched" << endl;
+  kDebug() << "(K3bMsInfoFetcher) msinfo fetched";
 
   // now parse the output
   QString firstLine = m_collectedOutput.left( m_collectedOutput.find("\n") );
@@ -208,7 +208,7 @@ void K3bMsInfoFetcher::slotProcessExited()
     m_msInfo = QString::null;
   }
 
-  kDebug() << "(K3bMsInfoFetcher) msinfo parsed: " << m_msInfo << endl;
+  kDebug() << "(K3bMsInfoFetcher) msinfo parsed: " << m_msInfo;
 
   if( m_msInfo.isEmpty() ) {
     emit infoMessage( i18n("Could not retrieve multisession information from disk."), K3bJob::ERROR );

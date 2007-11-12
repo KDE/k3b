@@ -160,7 +160,7 @@ void K3bIsoImager::handleMkisofsInfoMessage( const QString& line, int type )
 
 void K3bIsoImager::slotProcessExited( K3Process* p )
 {
-  kDebug() << k_funcinfo << endl;
+  kDebug() << k_funcinfo;
 
   m_processExited = true;
 
@@ -397,7 +397,7 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
   // if m_collectedMkisofsPrintSizeStdout is not empty we have a recent version of
   // mkisofs and parsing is very easy (s.o.)
   if( !m_collectedMkisofsPrintSizeStdout.isEmpty() ) {
-    kDebug() << "(K3bIsoImager) iso size: " << m_collectedMkisofsPrintSizeStdout << endl;
+    kDebug() << "(K3bIsoImager) iso size: " << m_collectedMkisofsPrintSizeStdout;
     m_mkisofsPrintSizeResult = m_collectedMkisofsPrintSizeStdout.toInt( &success );
   }
   else {
@@ -424,7 +424,7 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
   }
   else {
     m_mkisofsPrintSizeResult = 0;
-    kDebug() << "(K3bIsoImager) Parsing mkisofs -print-size failed: " << m_collectedMkisofsPrintSizeStdout << endl;
+    kDebug() << "(K3bIsoImager) Parsing mkisofs -print-size failed: " << m_collectedMkisofsPrintSizeStdout;
     emit infoMessage( i18n("Could not determine size of resulting image file."), ERROR );
     jobFinished( false );
   }
@@ -534,7 +534,7 @@ void K3bIsoImager::start()
   if( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput) ) {
     // something went wrong when starting the program
     // it "should" be the executable
-    kDebug() << "(K3bIsoImager) could not start mkisofs" << endl;
+    kDebug() << "(K3bIsoImager) could not start mkisofs";
     emit infoMessage( i18n("Could not start %1.").arg("mkisofs"), K3bJob::ERROR );
     jobFinished( false );
     cleanup();
@@ -841,7 +841,7 @@ int K3bIsoImager::writePathSpec()
 int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, Q3TextStream& stream )
 {
   if( !m_noDeepDirectoryRelocation && dirItem->depth() > 7 ) {
-    kDebug() << "(K3bIsoImager) found directory depth > 7. Enabling no deep directory relocation." << endl;
+    kDebug() << "(K3bIsoImager) found directory depth > 7. Enabling no deep directory relocation.";
     m_noDeepDirectoryRelocation = true;
   }
 
@@ -1171,7 +1171,7 @@ QString K3bIsoImager::dummyDir( K3bDirItem* dir )
 
   if( !_appDir.cd( name ) ) {
 
-    kDebug() << "(K3bIsoImager) creating dummy dir: " << _appDir.absPath() << "/" << name << endl;
+    kDebug() << "(K3bIsoImager) creating dummy dir: " << _appDir.absPath() << "/" << name;
 
     _appDir.mkdir( name );
     _appDir.cd( name );

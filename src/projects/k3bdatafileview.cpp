@@ -143,7 +143,7 @@ void K3bDataFileView::slotItemAdded( K3bDataItem* item )
     else if( item->isFromOldSession() )
       vi = new K3bSessionImportViewItem( static_cast<K3bSessionImportItem*>(item), this );
     else
-      kDebug() << "(K3bDataFileView) ERROR: unknown data item type" << endl;
+      kDebug() << "(K3bDataFileView) ERROR: unknown data item type";
 
     if( vi )
       m_itemMap[item] = vi;
@@ -196,7 +196,7 @@ Q3DragObject* K3bDataFileView::dragObject()
       urls.append( KUrl::fromPathOrUrl(dataViewItem->dataItem()->localPath()) );
     }
     else
-      kDebug() << "no dataviewitem" << endl;
+      kDebug() << "no dataviewitem";
   }
 
   if( urls.isEmpty() )
@@ -273,7 +273,7 @@ void K3bDataFileView::slotDropped( QDropEvent* e, Q3ListViewItem*, Q3ListViewIte
 	if( dataViewItem )
 	  selectedDataItems.append( dataViewItem->dataItem() );
 	else
-	  kDebug() << "no dataviewitem" << endl;
+	  kDebug() << "no dataviewitem";
       }
 
       K3bDataUrlAddingDialog::copyMoveItems( selectedDataItems, m_addParentDir, this, e->action() == QDropEvent::Copy );

@@ -126,11 +126,11 @@ void K3bCueFileParser::readFile()
 		  << track.firstSector().toString() << " - " << track.lastSector().toString() << endl;
       }
       
-      kDebug() << "------------------------------------------------" << endl;
+      kDebug() << "------------------------------------------------";
     }
   }
   else {
-    kDebug() << "(K3bCueFileParser) could not open file " << filename() << endl;
+    kDebug() << "(K3bCueFileParser) could not open file " << filename();
     setValid(false);
   }
 }
@@ -181,7 +181,7 @@ bool K3bCueFileParser::parseLine( QString& line )
     setValid( findImageFileName( fileRx.cap(1) ) );
     
     if( d->inFile ) {
-      kDebug() << "(K3bCueFileParser) only one FILE statement allowed." << endl;
+      kDebug() << "(K3bCueFileParser) only one FILE statement allowed.";
       return false;
     }
     d->inFile = true;
@@ -196,13 +196,13 @@ bool K3bCueFileParser::parseLine( QString& line )
   //
   else if( trackRx.exactMatch( line ) ) {
     if( !d->inFile ) {
-      kDebug() << "(K3bCueFileParser) TRACK statement before FILE." << endl;
+      kDebug() << "(K3bCueFileParser) TRACK statement before FILE.";
       return false;
     }
 
     // check if we had index1 for the last track
     if( d->inTrack && !d->haveIndex1 ) {
-      kDebug() << "(K3bCueFileParser) TRACK without INDEX 1." << endl;
+      kDebug() << "(K3bCueFileParser) TRACK without INDEX 1.";
       return false;
     }
 
@@ -235,7 +235,7 @@ bool K3bCueFileParser::parseLine( QString& line )
 	d->rawData = (trackRx.cap(2) == "MODE2/2352");
       }
       else {
-	kDebug() << "(K3bCueFileParser) unsupported track type: " << trackRx.cap(2) << endl;
+	kDebug() << "(K3bCueFileParser) unsupported track type: " << trackRx.cap(2);
 	return false;
       }
     }
@@ -253,7 +253,7 @@ bool K3bCueFileParser::parseLine( QString& line )
   //
   else if( flagsRx.exactMatch( line ) ) {
     if( !d->inTrack ) {
-      kDebug() << "(K3bCueFileParser) FLAGS statement without TRACK." << endl;
+      kDebug() << "(K3bCueFileParser) FLAGS statement without TRACK.";
       return false;
     }
 
@@ -267,7 +267,7 @@ bool K3bCueFileParser::parseLine( QString& line )
   //
   else if( indexRx.exactMatch( line ) ) {
     if( !d->inTrack ) {
-      kDebug() << "(K3bCueFileParser) INDEX statement without TRACK." << endl;
+      kDebug() << "(K3bCueFileParser) INDEX statement without TRACK.";
       return false;
     }
 
@@ -279,7 +279,7 @@ bool K3bCueFileParser::parseLine( QString& line )
       d->index0 = indexStart;
 
       if( d->currentParsedTrack < 2 && indexStart > 0 ) {
-	kDebug() << "(K3bCueFileParser) first track is not allowed to have a pregap > 0." << endl;
+	kDebug() << "(K3bCueFileParser) first track is not allowed to have a pregap > 0.";
 	return false;
       }
     }
@@ -319,7 +319,7 @@ bool K3bCueFileParser::parseLine( QString& line )
       return true;
     }
     else {
-      kDebug() << "(K3bCueFileParser) ISRC without TRACK." << endl;
+      kDebug() << "(K3bCueFileParser) ISRC without TRACK.";
       return false;
     }
   }
@@ -354,7 +354,7 @@ bool K3bCueFileParser::parseLine( QString& line )
   }
 
   else {
-    kDebug() << "(K3bCueFileParser) unknown Cue line: '" << line << "'" << endl;
+    kDebug() << "(K3bCueFileParser) unknown Cue line: '" << line << "'";
     return false;
   }
 }
@@ -410,14 +410,14 @@ bool K3bCueFileParser::findImageFileName( const QString& dataFile )
   // try the filename in the cue's directory
   if( QFileInfo( K3b::parentDir(filename()) + dataFile.section( '/', -1 ) ).isFile() ) {
     setImageFilename( K3b::parentDir(filename()) + dataFile.section( '/', -1 ) );
-    kDebug() << "(K3bCueFileParser) found image file: " << imageFilename() << endl;
+    kDebug() << "(K3bCueFileParser) found image file: " << imageFilename();
     return true;
   }
 
   // try the filename ignoring case
   if( QFileInfo( K3b::parentDir(filename()) + dataFile.section( '/', -1 ).lower() ).isFile() ) {
     setImageFilename( K3b::parentDir(filename()) + dataFile.section( '/', -1 ).lower() );
-    kDebug() << "(K3bCueFileParser) found image file: " << imageFilename() << endl;
+    kDebug() << "(K3bCueFileParser) found image file: " << imageFilename();
     return true;
   }
 
@@ -426,7 +426,7 @@ bool K3bCueFileParser::findImageFileName( const QString& dataFile )
   // try removing the ending from the cue file (image.bin.cue and image.bin)
   if( QFileInfo( filename().left( filename().length()-4 ) ).isFile() ) {
     setImageFilename( filename().left( filename().length()-4 ) );
-    kDebug() << "(K3bCueFileParser) found image file: " << imageFilename() << endl;
+    kDebug() << "(K3bCueFileParser) found image file: " << imageFilename();
     return true;
   }
 
@@ -438,7 +438,7 @@ bool K3bCueFileParser::findImageFileName( const QString& dataFile )
   QDir parentDir( K3b::parentDir(filename()) );
   QString filenamePrefix = filename().section( '/', -1 );
   filenamePrefix.truncate( filenamePrefix.length() - 3 ); // remove cue extension
-  kDebug() << "(K3bCueFileParser) checking folder " << parentDir.path() << " for files: " << filenamePrefix << "*" << endl;
+  kDebug() << "(K3bCueFileParser) checking folder " << parentDir.path() << " for files: " << filenamePrefix << "*";
 
   //
   // we cannot use the nameFilter in QDir because of the spaces that may occur in filenames

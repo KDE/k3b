@@ -21,7 +21,7 @@
 #include <qradiobutton.h>
 #include <q3buttongroup.h>
 #include <q3header.h>
-#include <q3whatsthis.h>
+
 #include <qpoint.h>
 #include <qpainter.h>
 #include <qpalette.h>
@@ -48,7 +48,7 @@ public:
     Q3ListViewItem* i2 = w->m_viewIsoSettings->itemAt( p ); // dies funktioniert nur bei action whatsthis
 
     if( i2 != 0 )
-      kDebug() << "at p " << i2->text(0) << endl;
+      kDebug() << "at p " << i2->text(0);
 
     if( i == w->m_checkAllowUntranslatedFilenames )
       return i18n( "Force all options below" );

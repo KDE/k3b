@@ -211,7 +211,7 @@ void K3bAudioCueFileWritingJob::importCueInProject()
   K3bCueFileParser parser( m_cueFile );
   if( parser.isValid() && parser.toc().contentType() == K3bDevice::AUDIO ) {
 
-    kDebug() << "(K3bAudioCueFileWritingJob::importCueFile) parsed with image: " << parser.imageFilename() << endl;
+    kDebug() << "(K3bAudioCueFileWritingJob::importCueFile) parsed with image: " << parser.imageFilename();
 
     // global cd-text
     m_audioDoc->setTitle( parser.cdText().title() );

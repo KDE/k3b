@@ -22,7 +22,7 @@
 #include <qlineedit.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+
 #include <q3grid.h>
 #include <qtoolbutton.h>
 #include <qfileinfo.h>

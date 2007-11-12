@@ -107,7 +107,7 @@ void K3bView::slotBurn()
       delete dlg;
     }
     else {
-      kDebug() << "(K3bDoc) Error: no burndialog available." << endl;
+      kDebug() << "(K3bDoc) Error: no burndialog available.";
     }
   }
 }
@@ -121,7 +121,7 @@ void K3bView::slotProperties()
     delete dlg;
   }
   else {
-    kDebug() << "(K3bDoc) Error: no burndialog available." << endl;
+    kDebug() << "(K3bDoc) Error: no burndialog available.";
   }
 }
 

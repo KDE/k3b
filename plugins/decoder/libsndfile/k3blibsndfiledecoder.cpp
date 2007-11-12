@@ -89,7 +89,7 @@ bool K3bLibsndfileDecoder::openFile()
     d->sndinfo.format = 0;
     d->sndfile = sf_open (QFile::encodeName(filename()), SFM_READ, &d->sndinfo);
     if ( !d->sndfile ) {
-      kDebug() << "(K3bLibsndfileDecoder::openLibsndfileFile) : " << sf_strerror(d->sndfile) << endl;
+      kDebug() << "(K3bLibsndfileDecoder::openLibsndfileFile) : " << sf_strerror(d->sndfile);
       return false;
     }
     else {
@@ -98,7 +98,7 @@ bool K3bLibsndfileDecoder::openFile()
       sf_command (d->sndfile, SFC_GET_FORMAT_INFO, &d->format_info, sizeof (SF_FORMAT_INFO)) ;
       
       d->isOpen = true;
-      kDebug() << "(K3bLibsndfileDecoder::openLibsndfileFile) " << d->format_info.name << " file opened " << endl;
+      kDebug() << "(K3bLibsndfileDecoder::openLibsndfileFile) " << d->format_info.name << " file opened ";
       return true;
     }
   }
@@ -131,7 +131,7 @@ bool K3bLibsndfileDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerat
       samplerate = d->sndinfo.samplerate;
       ch = d->sndinfo.channels;
 
-      kDebug() << "(K3bLibsndfileDecoder) successfully analysed file: " << frames << " frames." << endl;
+      kDebug() << "(K3bLibsndfileDecoder) successfully analysed file: " << frames << " frames.";
 
       cleanup();
       return true;
@@ -163,15 +163,15 @@ int K3bLibsndfileDecoder::decodeInternal( char* data, int maxLen )
   read = read * 2;
   
   if( read < 0 ) {
-    kDebug() << "(K3bLibsndfileDecoder::decodeInternal) Error: " << read << endl;
+    kDebug() << "(K3bLibsndfileDecoder::decodeInternal) Error: " << read;
     return -1;
   }
   else if( read == 0 ) {
-    kDebug() << "(K3bLibsndfileDecoder::decodeInternal) successfully finished decoding." << endl;
+    kDebug() << "(K3bLibsndfileDecoder::decodeInternal) successfully finished decoding.";
     return 0;
   }
   else if( read != maxLen ) {
-    kDebug() << "(K3bLibsndfileDecoder::decodeInternal) read:" << read << " expected:" << maxLen << endl;
+    kDebug() << "(K3bLibsndfileDecoder::decodeInternal) read:" << read << " expected:" << maxLen;
     return -1;
   }
   else 
@@ -191,7 +191,7 @@ bool K3bLibsndfileDecoder::seekInternal( const K3b::Msf& pos)
 void K3bLibsndfileDecoder::cleanup()
 {
   if( d->isOpen ) {
-    kDebug() << "(K3bLibsndfileDecoder) cleaning up." << endl;
+    kDebug() << "(K3bLibsndfileDecoder) cleaning up.";
     sf_close( d->sndfile );
     d->isOpen = false;
   }
@@ -228,7 +228,7 @@ bool K3bLibsndfileDecoderFactory::canDecode( const KUrl& url )
   
   //is it supported by libsndfile?
   if ( !sndfile ) {
-    kDebug() << "(K3bLibsndfileDecoder) " << sf_strerror(sndfile) << endl;
+    kDebug() << "(K3bLibsndfileDecoder) " << sf_strerror(sndfile);
     return false;
   }
   //we exclude only WAVE as there is another plugin for this
@@ -239,12 +239,12 @@ bool K3bLibsndfileDecoderFactory::canDecode( const KUrl& url )
     format_info.format = infos.format & SF_FORMAT_TYPEMASK ;
     sf_command (sndfile, SFC_GET_FORMAT_INFO, &format_info, sizeof (format_info)) ;
     
-    kDebug() << "(K3bLibsndfileDecoder) " << format_info.name << " file === OK === "  << endl;
+    kDebug() << "(K3bLibsndfileDecoder) " << format_info.name << " file === OK === ";
     sf_close( sndfile );
     return true;
   }
   else {
-    kDebug() << "(K3bLibsndfileDecoder) " << url.path() << "not supported" << endl;
+    kDebug() << "(K3bLibsndfileDecoder) " << url.path() << "not supported";
     sf_close( sndfile );
     return false;
   }

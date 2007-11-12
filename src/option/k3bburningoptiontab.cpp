@@ -30,7 +30,7 @@
 #include <q3buttongroup.h>
 #include <qspinbox.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+
 //Added by qt3to4:
 #include <Q3GridLayout>
 
@@ -107,7 +107,7 @@ void K3bBurningOptionTab::setupGui()
   QToolTip::add( m_checkEject, i18n("Do not eject the burn medium after a completed burn process") );
   QToolTip::add( m_checkForceUnsafeOperations, i18n("Force K3b to continue some operations otherwise deemed as unsafe") );
 
-  Q3WhatsThis::add( m_checkAllowWritingAppSelection, i18n("<p>If this option is checked K3b gives "
+  m_checkAllowWritingAppSelection->setWhatsThis( i18n("<p>If this option is checked K3b gives "
                                                          "the possibility to choose between cdrecord "
                                                          "and cdrdao when writing a cd."
                                                          "<p>This may be useful if one of the programs "
@@ -115,7 +115,7 @@ void K3bBurningOptionTab::setupGui()
                                                          "<p><b>Be aware that K3b does not support both "
                                                          "programs in all project types.</b>") );
 
-  Q3WhatsThis::add( m_checkOverburn, i18n("<p>Each medium has an official maximum capacity which is stored in a read-only "
+  m_checkOverburn->setWhatsThis( i18n("<p>Each medium has an official maximum capacity which is stored in a read-only "
 					 "area of the medium and is guaranteed by the vendor. However, this official "
 					 "maximum is not always the actual maximum. Many media have an "
 					 "actual total capacity that is slightly larger than the official amount."
@@ -126,23 +126,23 @@ void K3bBurningOptionTab::setupGui()
 					 "makes sense to first determine the actual maximum capacity of the media brand "
 					 "with a simulated burn.") );
 
-  Q3WhatsThis::add( m_checkAutoErasingRewritable, i18n("<p>If this option is checked K3b will automatically "
+  m_checkAutoErasingRewritable->setWhatsThis( i18n("<p>If this option is checked K3b will automatically "
                                                       "erase CD-RWs and format DVD-RWs if one is found instead "
                                                       "of an empty media before writing.") );
 
-  Q3WhatsThis::add( m_checkManualWritingBufferSize, i18n("<p>K3b uses a software buffer during the burning process to "
+  m_checkManualWritingBufferSize->setWhatsThis( i18n("<p>K3b uses a software buffer during the burning process to "
 							"avoid gaps in the data stream due to high system load. The default "
 							"sizes used are %1 MB for CD and %2 MB for DVD burning."
 							"<p>If this option is checked the value specified will be used for both "
 							"CD and DVD burning.").arg(4).arg(32) );
 
-  Q3WhatsThis::add( m_checkEject, i18n("<p>If this option is checked K3b will not eject the medium once the burn process "
+  m_checkEject->setWhatsThis( i18n("<p>If this option is checked K3b will not eject the medium once the burn process "
 				      "finishes. This can be helpful in case one leaves the computer after starting the "
 				      "burning and does not want the tray to be open all the time."
 				      "<p>However, on Linux systems a freshly burned medium has to be reloaded. Otherwise "
 				      "the system will not detect the changes and still treat it as an empty medium.") );
 
-  Q3WhatsThis::add( m_checkForceUnsafeOperations, i18n("<p>If this option is checked K3b will continue in some situations "
+  m_checkForceUnsafeOperations->setWhatsThis( i18n("<p>If this option is checked K3b will continue in some situations "
 						      "which would otherwise be deemed as unsafe."
 						      "<p>This setting for example disables the check for medium speed "
 						      "verification. Thus, one can force K3b to burn a high speed medium on "

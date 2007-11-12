@@ -33,7 +33,7 @@
 #include <qcheckbox.h>
 #include <q3cstring.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+
 #include <qlabel.h>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
@@ -186,7 +186,7 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
   }
 
   if( ret ) {
-    kDebug() << "(K3bOggVorbisEncoder) vorbis_encode_init failed: " << ret << endl;
+    kDebug() << "(K3bOggVorbisEncoder) vorbis_encode_init failed: " << ret;
     cleanup();
     return false;
   }
@@ -218,11 +218,11 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
 bool K3bOggVorbisEncoder::writeOggHeaders()
 {
   if( !d->oggStream ) {
-    kDebug() << "(K3bOggVorbisEncoder) call to writeOggHeaders without init." << endl;
+    kDebug() << "(K3bOggVorbisEncoder) call to writeOggHeaders without init.";
     return false;
   }
   if( d->headersWritten ) {
-    kDebug() << "(K3bOggVorbisEncoder) headers already written." << endl;
+    kDebug() << "(K3bOggVorbisEncoder) headers already written.";
     return true;
   }
 
@@ -326,7 +326,7 @@ void K3bOggVorbisEncoder::finishEncoderInternal()
     flushVorbis();
   }
   else
-    kDebug() << "(K3bOggVorbisEncoder) call to finishEncoderInternal without init." << endl;
+    kDebug() << "(K3bOggVorbisEncoder) call to finishEncoderInternal without init.";
 }
 
 
@@ -364,7 +364,7 @@ void K3bOggVorbisEncoder::setMetaDataInternal( K3bAudioEncoder::MetaDataField f,
     vorbis_comment_add_tag( d->vorbisComment, key.data(), value.utf8().data() );
   }
   else
-    kDebug() << "(K3bOggVorbisEncoder) call to setMetaDataInternal without init." << endl;
+    kDebug() << "(K3bOggVorbisEncoder) call to setMetaDataInternal without init.";
 }
 
 
@@ -447,9 +447,9 @@ K3bOggVorbisEncoderSettingsWidget::K3bOggVorbisEncoderSettingsWidget( QWidget* p
   QToolTip::add( w->m_radioQualityLevel, ttQuality );
   QToolTip::add( w->m_labelQualityLevel, ttQuality );
   QToolTip::add( w->m_slideQualityLevel, ttQuality );
-  Q3WhatsThis::add( w->m_radioQualityLevel, wsQuality );
-  Q3WhatsThis::add( w->m_labelQualityLevel, wsQuality );
-  Q3WhatsThis::add( w->m_slideQualityLevel, wsQuality );
+  w->m_radioQualityLevel->setWhatsThis( wsQuality );
+  w->m_labelQualityLevel->setWhatsThis( wsQuality );
+  w->m_slideQualityLevel->setWhatsThis( wsQuality );
 
 
   Q3HBoxLayout* lay = new Q3HBoxLayout( this );

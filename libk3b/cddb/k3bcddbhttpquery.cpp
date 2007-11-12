@@ -76,7 +76,7 @@ void K3bCddbHttpQuery::performCommand( const QString& cmd )
 
   m_data.truncate(0);
 
-  kDebug() << "(K3bCddbHttpQuery) getting url: " << url.prettyUrl() << endl;
+  kDebug() << "(K3bCddbHttpQuery) getting url: " << url.prettyUrl();
 
   KIO::TransferJob* job = KIO::get( url, KIO::NoReload, KIO::HideProgressInfo );
 
@@ -118,7 +118,7 @@ void K3bCddbHttpQuery::slotResult( KIO::Job* job )
   for( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it ) {
     QString line = *it;
 
-    //    kDebug() << "(K3bCddbHttpQuery) line: " << line << endl;
+    //    kDebug() << "(K3bCddbHttpQuery) line: " << line;
 
     switch( m_state ) {
 
@@ -133,7 +133,7 @@ void K3bCddbHttpQuery::slotResult( KIO::Job* job )
 
       else if( getCode( line ) == 210 ) {
 	// TODO: perhaps add an "exact" field to K3bCddbEntry
-	kDebug() << "(K3bCddbHttpQuery) Found multiple exact matches" << endl;
+	kDebug() << "(K3bCddbHttpQuery) Found multiple exact matches";
 
 	emit infoMessage( i18n("Found multiple exact matches") );
 
@@ -141,7 +141,7 @@ void K3bCddbHttpQuery::slotResult( KIO::Job* job )
       }
 
       else if( getCode( line ) == 211 ) {
-	kDebug() << "(K3bCddbHttpQuery) Found inexact matches" << endl;
+	kDebug() << "(K3bCddbHttpQuery) Found inexact matches";
 
 	emit infoMessage( i18n("Found inexact matches") );
 
@@ -149,7 +149,7 @@ void K3bCddbHttpQuery::slotResult( KIO::Job* job )
       }
 
       else if( getCode( line ) == 202 ) {
-	kDebug() << "(K3bCddbHttpQuery) no match found" << endl;
+	kDebug() << "(K3bCddbHttpQuery) no match found";
 	emit infoMessage( i18n("No match found") );
 	setError(NO_ENTRY_FOUND);
 	m_state = FINISHED;
@@ -158,7 +158,7 @@ void K3bCddbHttpQuery::slotResult( KIO::Job* job )
       }
 
       else {
-	kDebug() << "(K3bCddbHttpQuery) Error while querying: " << line << endl;
+	kDebug() << "(K3bCddbHttpQuery) Error while querying: " << line;
 	emit infoMessage( i18n("Error while querying") );
 	setError(QUERY_ERROR);
 	m_state = FINISHED;
@@ -178,7 +178,7 @@ void K3bCddbHttpQuery::slotResult( KIO::Job* job )
 	emit inexactMatches( this );
       }
       else {
-	kDebug() << "(K3bCddbHttpQuery) inexact match: " << line << endl;
+	kDebug() << "(K3bCddbHttpQuery) inexact match: " << line;
 
 	// create a new resultHeader
 	K3bCddbResultHeader header;
@@ -206,11 +206,11 @@ void K3bCddbHttpQuery::slotResult( KIO::Job* job )
 
     case READ_DATA:
 
-      //      kDebug() << "parsing line: " << line << endl;
+      //      kDebug() << "parsing line: " << line;
 
       if( line.startsWith( "." ) ) {
 	
-	kDebug() << "(K3bCddbHttpQuery query finished." << endl;
+	kDebug() << "(K3bCddbHttpQuery query finished.";
 
 	Q3TextStream strStream( m_parsingBuffer, QIODevice::ReadOnly );
 	parseEntry( strStream, result() );

@@ -335,7 +335,7 @@ void K3bVideoDVDTitleTranscodingJob::startTranscode( int pass )
   for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
   }
-  kDebug() << s << flush << endl;
+  kDebug() << s << flush;
   emit debuggingOutput( d->usedTranscodeBin->name() + " command:", s);
 
   // start the process

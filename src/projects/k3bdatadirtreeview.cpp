@@ -192,7 +192,7 @@ void K3bDataDirTreeView::slotDropped( QDropEvent* e, Q3ListViewItem*, Q3ListView
 	if( dataViewItem )
 	  selectedDataItems.append( dataViewItem->dataItem() );
 	else
-	  kDebug() << "no dataviewitem" << endl;
+	  kDebug() << "no dataviewitem";
       }
 
       K3bDataUrlAddingDialog::copyMoveItems( selectedDataItems, d->addParentDir, this, e->action() == QDropEvent::Copy );
@@ -278,7 +278,7 @@ void K3bDataDirTreeView::setCurrentDir( K3bDirItem* dirItem )
       it.data()->parent()->setOpen(true);
   }
   else {
-    kDebug() << "Tried to set unknown dirItem to current" << endl;
+    kDebug() << "Tried to set unknown dirItem to current";
   }
 }
 

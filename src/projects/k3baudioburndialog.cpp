@@ -40,7 +40,7 @@
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
+
 #include <q3grid.h>
 #include <qtoolbutton.h>
 #include <q3ptrlist.h>
@@ -117,7 +117,7 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
 
   // What's This info
   // -------------------------------------------------------------------------
-  Q3WhatsThis::add( m_checkHideFirstTrack,
+  m_checkHideFirstTrack->setWhatsThis(
 		   i18n("<p>If this option is checked K3b will <em>hide</em> the first track."
 			"<p>The audio CD standard uses pregaps before every track on the CD. "
 			"By default these last for 2 seconds and are silent. In DAO mode it "

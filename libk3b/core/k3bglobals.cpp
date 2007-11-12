@@ -233,7 +233,7 @@ K3bVersion K3b::kernelVersion()
   utsname unameinfo;
   if( ::uname(&unameinfo) == 0 ) {
     v = QString::fromLocal8Bit( unameinfo.release );
-    kDebug() << "kernel version: " << v << endl;
+    kDebug() << "kernel version: " << v;
   }
   else
     kError() << "could not determine kernel version." << endl;
@@ -448,7 +448,7 @@ QString K3b::resolveLink( const QString& file )
       p.prepend( f.dirPath(true) + "/" );
     f.setFile( p );
     if( steps.contains( f.absoluteFilePath() ) ) {
-      kDebug() << "(K3b) symlink loop detected." << endl;
+      kDebug() << "(K3b) symlink loop detected.";
       break;
     }
     else
@@ -461,7 +461,7 @@ QString K3b::resolveLink( const QString& file )
 K3bDevice::Device* K3b::urlToDevice( const KUrl& deviceUrl )
 {
   if( deviceUrl.protocol() == "media" || deviceUrl.protocol() == "system" ) {
-    kDebug() << "(K3b) Asking mediamanager for " << deviceUrl.fileName() << endl;
+    kDebug() << "(K3b) Asking mediamanager for " << deviceUrl.fileName();
     DCOPRef mediamanager("kded", "mediamanager");
     DCOPReply reply = mediamanager.call("properties(QString)", deviceUrl.fileName());
     QStringList properties = reply;
@@ -470,7 +470,7 @@ K3bDevice::Device* K3b::urlToDevice( const KUrl& deviceUrl )
       return 0;
     }
     else {
-      kDebug() << "(K3b) Reply from mediamanager " << properties[5] << endl;
+      kDebug() << "(K3b) Reply from mediamanager " << properties[5];
       return k3bcore->deviceManager()->findDevice( properties[5] );
     }
   }
