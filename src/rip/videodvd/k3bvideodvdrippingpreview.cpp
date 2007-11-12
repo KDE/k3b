@@ -60,7 +60,7 @@ void K3bVideoDVDRippingPreview::generatePreview( const K3bVideoDVD::VideoDVD& dv
   // auto-select a chapter
   // choose the center chapter, but not the first or last if possible
   if( chapter == 0 )
-    chapter = QMIN( QMAX( dvd[title-1].numChapters()/2, 2 ), QMAX( dvd[title-1].numChapters() - 1, 1 ) );
+    chapter = qMin( qMax( dvd[title-1].numChapters()/2, 2 ), qMax( dvd[title-1].numChapters() - 1, 1 ) );
 
   // select a frame number
   unsigned int frame = 30;

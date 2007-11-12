@@ -76,7 +76,7 @@ bool K3bDevice::Device::getFeature( unsigned char** data, unsigned int& dataLen,
   cmd[7] = dataLen>>8;
   cmd[8] = dataLen;
   if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-    dataLen = QMIN( dataLen, from4Byte( *data ) + 4 );
+    dataLen = qMin( dataLen, from4Byte( *data ) + 4 );
     return true;
   }
   else {
@@ -231,7 +231,7 @@ bool K3bDevice::Device::getPerformance( unsigned char** data, unsigned int& data
   cmd[8] = numDesc>>8;
   cmd[9] = numDesc;
   if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-    dataLen = QMIN( dataLen, from4Byte( *data ) + 4 );
+    dataLen = qMin( dataLen, from4Byte( *data ) + 4 );
     return true;
   }
   else {
@@ -330,7 +330,7 @@ bool K3bDevice::Device::readTrackInformation( unsigned char** data, unsigned int
   cmd[7] = dataLen>>8;
   cmd[8] = dataLen;
   if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-    dataLen = QMIN( dataLen, from2Byte( *data ) + 2u );
+    dataLen = qMin( dataLen, from2Byte( *data ) + 2u );
     return true;
   }
   else {
@@ -530,7 +530,7 @@ bool K3bDevice::Device::readSubChannel( unsigned char** data, unsigned int& data
   cmd[7] = dataLen>>8;
   cmd[8] = dataLen;
   if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-    dataLen = QMIN( dataLen, from2Byte( (*data)+2 ) + 4u );
+    dataLen = qMin( dataLen, from2Byte( (*data)+2 ) + 4u );
     return true;
   }
   else {
@@ -610,7 +610,7 @@ bool K3bDevice::Device::readTocPmaAtip( unsigned char** data, unsigned int& data
   cmd[7] = dataLen>>8;
   cmd[8] = dataLen;
   if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-    dataLen = QMIN( dataLen, from2Byte( *data ) + 2u );
+    dataLen = qMin( dataLen, from2Byte( *data ) + 2u );
     if( (dataLen-4) % descLen || dataLen < 4+descLen ) {
         // useless length
         delete [] *data;
@@ -667,7 +667,7 @@ bool K3bDevice::Device::mechanismStatus( unsigned char** data, unsigned int& dat
   cmd[8] = dataLen>>8;
   cmd[9] = dataLen;
   if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-    dataLen = QMIN( dataLen, from4Byte( (*data)+6 ) + 8 );
+    dataLen = qMin( dataLen, from4Byte( (*data)+6 ) + 8 );
     return true;
   }
   else {
@@ -716,7 +716,7 @@ bool K3bDevice::Device::modeSense( unsigned char** pageData, unsigned int& pageL
   cmd[7] = pageLen>>8;
   cmd[8] = pageLen;
   if( cmd.transport( TR_DIR_READ, *pageData, pageLen ) == 0 ) {
-    pageLen = QMIN( pageLen, from2Byte( *pageData ) + 2u );
+    pageLen = qMin( pageLen, from2Byte( *pageData ) + 2u );
     return true;
   }
   else {
@@ -815,7 +815,7 @@ bool K3bDevice::Device::readFormatCapacity( int wantedFormat, K3b::Msf& r,
 
       if( format == wantedFormat ) {
 	// found the descriptor
-	r = QMAX( (int)from4Byte( &buffer[i] ), r.lba() );
+	r = qMax( (int)from4Byte( &buffer[i] ), r.lba() );
 	success = true;
       }
     }
@@ -853,7 +853,7 @@ bool K3bDevice::Device::readDiscInformation( unsigned char** data, unsigned int&
   cmd[7] = dataLen>>8;
   cmd[8] = dataLen;
   if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-    dataLen = QMIN( dataLen, from2Byte( *data ) + 2u );
+    dataLen = qMin( dataLen, from2Byte( *data ) + 2u );
     return true;
   }
   else {
@@ -909,7 +909,7 @@ bool K3bDevice::Device::readDiscStructure( unsigned char** data, unsigned int& d
     cmd[8] = dataLen>>8;
     cmd[9] = dataLen;
     if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-      dataLen = QMIN( dataLen, from2Byte( *data ) + 2u );
+      dataLen = qMin( dataLen, from2Byte( *data ) + 2u );
       return true;
     }
     else {

@@ -757,7 +757,7 @@ void K3bCdImageWritingDialog::createAudioCueItems( const K3bCueFileParser& cp )
 
     K3bListViewItem* trackItem =
       new K3bListViewItem( trackParent, m_infoView->lastItem(),
-			   i18n("Track") + " " + QString::number(i).rightJustify( 2, '0' ),
+			   i18n("Track") + " " + QString::number(i).rightJustified( 2, '0' ),
 			   "    " + ( i < cp.toc().count()
 				      ? (*it).length().toString()
 				      : QString("??:??:??") ) );

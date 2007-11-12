@@ -196,7 +196,7 @@ bool K3bVcdXmlView::write( const QString& fname )
     Q3PtrListIterator<K3bVcdTrack> it( *m_doc->tracks() );
     for ( ; it.current(); ++it ) {
         if ( !it.current() ->isSegment() ) {
-            QString seqId = QString::number( it.current() ->index() ).rightJustify( 3, '0' );
+            QString seqId = QString::number( it.current() ->index() ).rightJustified( 3, '0' );
 
             elemsequenceItem = addSubElement( xmlDoc, elemsequenceItems, "sequence-item" );
             elemsequenceItem.setAttribute( "src", QString( "%1" ).arg( QFile::encodeName( it.current() ->absPath() ) ) );
@@ -211,7 +211,7 @@ bool K3bVcdXmlView::write( const QString& fname )
             // sequence-items element needs at least one segment to fit the XML
             elemsegmentItem = addSubElement( xmlDoc, elemsegmentItems, "segment-item" );
             elemsegmentItem.setAttribute( "src", QString( "%1" ).arg( QFile::encodeName( it.current() ->absPath() ) ) );
-            elemsegmentItem.setAttribute( "id", QString( "segment-%1" ).arg( QString::number( it.current() ->index() ).rightJustify( 3, '0' ) ) );
+            elemsegmentItem.setAttribute( "id", QString( "segment-%1" ).arg( QString::number( it.current() ->index() ).rightJustified( 3, '0' ) ) );
 
         }
     }
@@ -296,7 +296,7 @@ void K3bVcdXmlView::doPbc( QDomDocument& doc, QDomElement& parent, K3bVcdTrack* 
     QString ref = ( track->isSegment() ) ? "segment" : "sequence";
 
     QDomElement elemSelection = addSubElement( doc, parent, "selection" );
-    elemSelection.setAttribute( "id", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( track->index() ).rightJustify( 3, '0' ) ) );
+    elemSelection.setAttribute( "id", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( track->index() ).rightJustified( 3, '0' ) ) );
 
     setNumkeyBSN( doc, elemSelection, track );
 
@@ -310,24 +310,24 @@ void K3bVcdXmlView::doPbc( QDomDocument& doc, QDomElement& parent, K3bVcdTrack* 
             switch ( i ) {
                 case K3bVcdTrack::PREVIOUS:
                     elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "prev" );
-                    elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustify( 3, '0' ) ) );
+                    elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
                     break;
                 case K3bVcdTrack::NEXT:
                     elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "next" );
-                    elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustify( 3, '0' ) ) );
+                    elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
                     break;
                 case K3bVcdTrack::RETURN:
                     elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "return" );
-                    elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustify( 3, '0' ) ) );
+                    elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
                     break;
                 case K3bVcdTrack::DEFAULT:
                     elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "default" );
-                    elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustify( 3, '0' ) ) );
+                    elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
                     break;
                 case K3bVcdTrack::AFTERTIMEOUT:
                     if ( track->getWaitTime() >= 0 ) {
                         elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "timeout" );
-                        elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustify( 3, '0' ) ) );
+                        elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
                     }
                     break;
             }
@@ -369,7 +369,7 @@ void K3bVcdXmlView::doPbc( QDomDocument& doc, QDomElement& parent, K3bVcdTrack* 
     else
         loop.setAttribute( "jump-timing", "immediate" );
 
-    addSubElement( doc, elemSelection, "play-item" ).setAttribute( "ref", QString( "%1-%2" ).arg( ref ).arg( QString::number( track->index() ).rightJustify( 3, '0' ) ) );
+    addSubElement( doc, elemSelection, "play-item" ).setAttribute( "ref", QString( "%1-%2" ).arg( ref ).arg( QString::number( track->index() ).rightJustified( 3, '0' ) ) );
 
     setNumkeySEL( doc, elemSelection, track );
 }
@@ -413,7 +413,7 @@ void K3bVcdXmlView::setNumkeySEL( QDomDocument& doc, QDomElement& parent, K3bVcd
                 kdDebug() << QString( "trackIt key: %1 none: %2" ).arg( trackIt.key() ).arg( none ) << endl;
                 while ( none < trackIt.key() ) {
                     elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );
-                    elemPbcSelectionNumKeySEL.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( track->index() ).rightJustify( 3, '0' ) ) );
+                    elemPbcSelectionNumKeySEL.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( track->index() ).rightJustified( 3, '0' ) ) );
                     addComment( doc, parent, QString( "key %1 -> %2 (normal none)" ).arg( none ).arg( QFile::encodeName( track->absPath() ) ) );
                     none++;
                 }
@@ -421,7 +421,7 @@ void K3bVcdXmlView::setNumkeySEL( QDomDocument& doc, QDomElement& parent, K3bVcd
                 if ( trackIt.data() ) {
                     QString ref = ( trackIt.data() ->isSegment() ) ? "segment" : "sequence";
                     elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );
-                    elemPbcSelectionNumKeySEL.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( trackIt.data() ->index() ).rightJustify( 3, '0' ) ) );
+                    elemPbcSelectionNumKeySEL.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( trackIt.data() ->index() ).rightJustified( 3, '0' ) ) );
                     addComment( doc, parent, QString( "key %1 -> %2" ).arg( trackIt.key() ).arg( QFile::encodeName( trackIt.data() ->absPath() ) ) );
                 } else {
                     elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );
@@ -433,7 +433,7 @@ void K3bVcdXmlView::setNumkeySEL( QDomDocument& doc, QDomElement& parent, K3bVcd
         } else {
             // default reference to itSelf
             elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );
-            elemPbcSelectionNumKeySEL.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( track->index() ).rightJustify( 3, '0' ) ) );
+            elemPbcSelectionNumKeySEL.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( track->index() ).rightJustified( 3, '0' ) ) );
         }
     }
 }

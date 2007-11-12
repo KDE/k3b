@@ -57,7 +57,7 @@ K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent, const char* name 
 				    0, this, SLOT(showPropertiesDialog()),
 				    actionCollection(), "movix_show_props" );
   m_actionRemove = new KAction( i18n( "Remove" ), "editdelete",
-				Key_Delete, this, SLOT(slotRemoveItems()),
+				Qt::Key_Delete, this, SLOT(slotRemoveItems()),
 				actionCollection(), "movix_remove_item" );
   m_actionRemoveSubTitle = new KAction( i18n( "Remove Subtitle File" ), "editdelete",
 					0, this, SLOT(slotRemoveSubTitleItems()),

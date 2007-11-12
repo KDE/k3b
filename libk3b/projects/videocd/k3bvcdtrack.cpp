@@ -425,10 +425,10 @@ QString K3bVcdTrack::SecsToHMS( double duration )
     byte mins = ( byte ) ( ( duration / 60 ) - ( hours * 60 ) );
     float secs = duration - 60 * mins - 3600 * hours;
     if ( hours != 0 ) {
-        return QString( "%1:" ).arg( hours ).rightJustify( 3, ' ' ) + QString( "%1:" ).arg( mins ).rightJustify( 3, '0' ) + QString::number( secs, 'f', 2 );
+        return QString( "%1:" ).arg( hours ).rightJustified( 3, ' ' ) + QString( "%1:" ).arg( mins ).rightJustified( 3, '0' ) + QString::number( secs, 'f', 2 );
     }
     if ( mins != 0 ) {
-        return QString( "%1:" ).arg( mins ).rightJustify( 3, '0' ) + QString::number( secs, 'f', 2 );
+        return QString( "%1:" ).arg( mins ).rightJustified( 3, '0' ) + QString::number( secs, 'f', 2 );
     }
     return QString::number( secs, 'f', 2 );
 }

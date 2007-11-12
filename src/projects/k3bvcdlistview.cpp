@@ -97,7 +97,7 @@ void K3bVcdListView::setupActions()
 {
     m_actionCollection = new KActionCollection( this );
     m_actionProperties = new KAction( i18n( "Properties" ), "misc", 0, this, SLOT( showPropertiesDialog() ), actionCollection() );
-    m_actionRemove = new KAction( i18n( "Remove" ), "editdelete", Key_Delete, this, SLOT( slotRemoveTracks() ), actionCollection() );
+    m_actionRemove = new KAction( i18n( "Remove" ), "editdelete", Qt::Key_Delete, this, SLOT( slotRemoveTracks() ), actionCollection() );
 
     // disabled by default
     m_actionRemove->setEnabled( false );

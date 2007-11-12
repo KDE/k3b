@@ -121,7 +121,7 @@ void K3bVideoDVDTitleTranscodingJob::start()
     // let's see if the directory exists and we can write to it
     QFileInfo fileInfo( m_filename );
     QFileInfo dirInfo( fileInfo.dirPath() );
-    if( !dirInfo.exists() && !KStandardDirs::makeDir( dirInfo.absFilePath() ) ) {
+    if( !dirInfo.exists() && !KStandardDirs::makeDir( dirInfo.absoluteFilePath() ) ) {
       emit infoMessage( i18n("Unable to create folder '%1'").arg(dirInfo.filePath()), ERROR );
       return;
     }
@@ -470,7 +470,7 @@ void K3bVideoDVDTitleTranscodingJob::setClipping( int top, int left, int bottom,
   //
   // transcode seems unable to handle different clipping values for left and right
   //
-  m_clippingLeft = m_clippingRight = QMIN( m_clippingRight, m_clippingLeft );
+  m_clippingLeft = m_clippingRight = qMin( m_clippingRight, m_clippingLeft );
 }
 
 

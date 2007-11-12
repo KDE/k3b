@@ -652,7 +652,7 @@ void K3bWriterSelectionWidget::slotManualSpeed()
                                              &ok,
                                              this ) * speedFactor;
     if( ok ) {
-        writerDevice()->setMaxWriteSpeed( QMAX( newSpeed, writerDevice()->maxWriteSpeed() ) );
+        writerDevice()->setMaxWriteSpeed( qMax( newSpeed, writerDevice()->maxWriteSpeed() ) );
         if ( haveSpeeds ) {
             //
             // Hack: insert the new speed item. This is ugly and

@@ -38,7 +38,7 @@ class K3bProjectTabWidget : public QTabWidget
   Q_OBJECT
 
  public: 
-  K3bProjectTabWidget( QWidget *parent = 0, const char *name = 0, WFlags = 0 );
+  K3bProjectTabWidget( QWidget *parent = 0, const char *name = 0, Qt::WFlags = 0 );
   ~K3bProjectTabWidget();
 
   void insertTab( K3bDoc* );

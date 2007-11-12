@@ -425,7 +425,7 @@ QString K3bVideoDVDRippingDialog::createFilename( const K3bVideoDVDRippingJob::T
 
       switch( c ) {
       case PATTERN_TITLE_NUMBER:
-	f.append( QString::number(info.title).rightJustify( 2, '0' ) );
+	f.append( QString::number(info.title).rightJustified( 2, '0' ) );
 	break;
       case PATTERN_VOLUME_ID:
 	f.append( m_dvd.volumeIdentifier() );

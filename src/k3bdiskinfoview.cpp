@@ -271,7 +271,7 @@ void K3bDiskInfoView::reloadMedium()
 	  else
 	    text = i18n("Data");
         }
-        item->setText( 0, i18n("%1 (%2)").arg( QString::number(index).rightJustify( 2, ' ' )).arg(text) );
+        item->setText( 0, i18n("%1 (%2)").arg( QString::number(index).rightJustified( 2, ' ' )).arg(text) );
 	item->setText( 1, QString( "%1/%2" )
 		       .arg( track.copyPermitted() ? i18n("copy") : i18n("no copy") )
 		       .arg( track.type() == K3bTrack::AUDIO
@@ -322,7 +322,7 @@ void K3bDiskInfoView::reloadMedium()
       int index = 1;
       for( unsigned int i = 0; i < medium().cdText().count(); ++i ) {
         item = new KListViewItem( cdTextHeaderItem, item );
-	item->setText( 0, QString::number(index).rightJustify( 2, ' ' ) + " " +
+	item->setText( 0, QString::number(index).rightJustified( 2, ' ' ) + " " +
 		       medium().cdText().at(i).performer() );
 	item->setText( 1, medium().cdText().at(i).title() );
 	item->setText( 2, medium().cdText().at(i).songwriter() );

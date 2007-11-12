@@ -122,13 +122,13 @@ bool K3bMiscOptionTab::saveSettings()
   QFileInfo fi( tempDir );
 
   if( fi.isRelative() ) {
-    fi.setFile( fi.absFilePath() );
+    fi.setFile( fi.absoluteFilePath() );
   }
 
   if( !fi.exists() ) {
     if( KMessageBox::questionYesNo( this, i18n("Directory (%1) does not exist. Create?").arg(tempDir),
 				    i18n("Create Directory"), i18n("Create"), KStdGuiItem::cancel() ) == KMessageBox::Yes ) {
-      if( !KStandardDirs::makeDir( fi.absFilePath() ) ) {
+      if( !KStandardDirs::makeDir( fi.absoluteFilePath() ) ) {
 	KMessageBox::error( this, i18n("Unable to create directory %1").arg(tempDir) );
 	return false;
       }
@@ -149,11 +149,11 @@ bool K3bMiscOptionTab::saveSettings()
 
   // check for writing permission
   if( !fi.isWritable() ) {
-    KMessageBox::error( this, i18n("You do not have permission to write to %1.").arg(fi.absFilePath()) );
+    KMessageBox::error( this, i18n("You do not have permission to write to %1.").arg(fi.absoluteFilePath()) );
     return false;
   }
 
-  m_editTempDir->setURL( fi.absFilePath() );
+  m_editTempDir->setURL( fi.absoluteFilePath() );
 
   c->writePathEntry( "Temp Dir", m_editTempDir->url() );
 

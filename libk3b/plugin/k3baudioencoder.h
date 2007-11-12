@@ -180,7 +180,7 @@ class LIBK3B_EXPORT K3bAudioEncoder : public K3bPlugin
    * Should return the amount of actually written bytes (may be 0) and -1
    * on error.
    */
-  // TODO: use Q_INT16* instead of char*
+  // TODO: use qint16* instead of char*
   // FIXME: why little endian while CDs use big endian???
   virtual long encodeInternal( const char*, Q_ULONG len ) = 0;
 

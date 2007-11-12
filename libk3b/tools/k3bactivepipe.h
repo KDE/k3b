@@ -75,14 +75,14 @@ class LIBK3B_EXPORT K3bActivePipe
 
   /**
    * Read from a QIODevice instead of a file descriptor.
-   * The device will be opened IO_ReadOnly and closed
+   * The device will be opened QIODevice::ReadOnly and closed
    * afterwards.
    */
   void readFromIODevice( QIODevice* dev );
 
   /**
    * Write to a QIODevice instead of a file descriptor.
-   * The device will be opened IO_WriteOnly and closed
+   * The device will be opened QIODevice::WriteOnly and closed
    * afterwards.
    */
   void writeToIODevice( QIODevice* dev );
@@ -102,12 +102,12 @@ class LIBK3B_EXPORT K3bActivePipe
   /**
    * The number of bytes that have been read.
    */
-  Q_UINT64 bytesRead() const;
+  quint64 bytesRead() const;
 
   /**
    * The number of bytes that have been written.
    */
-  Q_UINT64 bytesWritten() const;
+  quint64 bytesWritten() const;
 
  protected:
   /**

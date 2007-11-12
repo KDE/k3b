@@ -57,9 +57,9 @@ bool K3bMovixProgram::scan( const QString& p )
     // movix-version just gives us the version number on stdout
     if( !vout.output().isEmpty() && !dout.output().isEmpty() ) {
       bin = new K3bMovixBin( this );
-      bin->version = vout.output().stripWhiteSpace();
+      bin->version = vout.output().trimmed();
       bin->path = path;
-      bin->m_movixPath = dout.output().stripWhiteSpace();
+      bin->m_movixPath = dout.output().trimmed();
     }
   }
   else {
@@ -226,7 +226,7 @@ QStringList K3bMovixProgram::determineSupportedBootLabels( const QString& isoCon
     QString line = fs.readLine();
     while( !line.isNull() ) {
       if( line.startsWith( "label" ) )
-	list.append( line.mid( 5 ).stripWhiteSpace() );
+	list.append( line.mid( 5 ).trimmed() );
       
       line = fs.readLine();
     }

@@ -58,7 +58,7 @@ public:
 
 
 
-K3bProjectTabWidget::K3bProjectTabWidget( QWidget *parent, const char *name, WFlags f )
+K3bProjectTabWidget::K3bProjectTabWidget( QWidget *parent, const char *name, Qt::WFlags f )
   : QTabWidget( parent, name, f )
 {
   tabBar()->setAcceptDrops(true);

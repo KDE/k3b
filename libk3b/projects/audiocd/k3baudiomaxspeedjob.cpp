@@ -108,7 +108,7 @@ void K3bAudioMaxSpeedJob::WorkThread::run()
     }
     else if( speed > 0 ) {
       // update the max speed
-      maxSpeed = QMIN( maxSpeed, speed );
+      maxSpeed = qMin( maxSpeed, speed );
     }
       
     it.next();

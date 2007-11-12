@@ -52,7 +52,7 @@ K3bDirOperator::K3bDirOperator(const KURL& url, QWidget* parent, const char* nam
   m_bmPopup = new KActionMenu( i18n("Bookmarks"), "bookmark", this, "bookmarks" );
   m_bmMenu = new KBookmarkMenu( bmMan, this, m_bmPopup->popupMenu(), actionCollection(), true );
 
-  (void)new KAction( i18n("&Add to Project"), SHIFT+Key_Return, 
+  (void)new KAction( i18n("&Add to Project"), SHIFT+Qt::Key_Return, 
 		     this, SLOT(slotAddFilesToProject()), 
 		     actionCollection(), "add_file_to_project");
 }

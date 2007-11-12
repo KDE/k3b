@@ -64,7 +64,7 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
 			const char* name = 0, 
 			bool showSubProgress = true, 
 			bool modal = FALSE, 
-			WFlags fl = 0 );
+			Qt::WFlags fl = 0 );
   virtual ~K3bJobProgressDialog();
 
   virtual void setJob( K3bJob* job );

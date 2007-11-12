@@ -530,7 +530,7 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
     }
     else
       kdDebug() << "(K3bGrowisofsWriter) progress parsing failed: '"
-		<< line.mid( pos+1, line.find( "(", pos ) - pos - 1 ).stripWhiteSpace() << "'" << endl;
+		<< line.mid( pos+1, line.find( "(", pos ) - pos - 1 ).trimmed() << "'" << endl;
   }
 
   //  else

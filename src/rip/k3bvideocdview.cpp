@@ -156,7 +156,7 @@ K3bVideoCdView::K3bVideoCdView( QWidget* parent, const char *name )
     QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
     toolBoxLayout->addItem( spacer );
     m_labelLength = new QLabel( mainWidget() );
-    m_labelLength->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+    m_labelLength->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
     toolBoxLayout->addWidget( m_labelLength );
 
     // the track view

@@ -40,9 +40,9 @@ void K3bCddbLocalSubmit::doSubmit()
 {
   QString path = m_cddbDir;
   if( path.startsWith( "~" ) )
-    path.replace( 0, 1, QDir::homeDirPath() + "/" );
+    path.replace( 0, 1, QDir::homePath() + "/" );
   else if( !path.startsWith( "/" ) )
-    path.prepend( QDir::homeDirPath() + "/" );
+    path.prepend( QDir::homePath() + "/" );
   if( path[path.length()-1] != '/' )
     path.append( "/" );
 

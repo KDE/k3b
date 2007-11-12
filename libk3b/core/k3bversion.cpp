@@ -51,7 +51,7 @@ K3bVersion::K3bVersion( int majorVersion,
 void K3bVersion::setVersion( const QString& v )
 {
   QString suffix;
-  splitVersionString( v.stripWhiteSpace(), m_majorVersion, suffix );
+  splitVersionString( v.trimmed(), m_majorVersion, suffix );
   if( m_majorVersion >= 0 ) {
     if( suffix.startsWith(".") ) {
       suffix = suffix.mid( 1 );

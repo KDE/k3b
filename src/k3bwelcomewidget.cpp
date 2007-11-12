@@ -149,7 +149,7 @@ static void calculateButtons( int width, int numActions, int buttonWidth, int& c
 {
   // always try to avoid horizontal scrollbars
   int wa = width - 40;
-  cols = QMAX( 1, QMIN( wa / (buttonWidth+4), numActions ) );
+  cols = qMax( 1, qMin( wa / (buttonWidth+4), numActions ) );
   rows = numActions/cols;
   int over = numActions%cols;
   if( over ) {
@@ -254,7 +254,7 @@ int K3bWelcomeWidget::Display::heightForWidth( int w ) const
 
 QSize K3bWelcomeWidget::Display::minimumSizeHint() const
 {
-  QSize size( QMAX(40+m_header->widthUsed(), 40+m_buttonSize.width()),
+  QSize size( qMax(40+m_header->widthUsed(), 40+m_buttonSize.width()),
 	      20 + m_header->height() + 20 + 10 + m_buttonSize.height() + 10 + m_infoText->height() + 20 );
 
   return size;
@@ -304,7 +304,7 @@ void K3bWelcomeWidget::Display::paintEvent( QPaintEvent* )
     p.drawTiledPixmap( rect(), m_bgPixmap );
 
     // rect around the header
-    QRect rect( 10, 10, QMAX( m_header->widthUsed() + 20, width() - 20 ), m_header->height() + 20 );
+    QRect rect( 10, 10, qMax( m_header->widthUsed() + 20, width() - 20 ), m_header->height() + 20 );
     p.fillRect( rect, theme->backgroundColor() );
     p.drawRect( rect );
 
@@ -315,13 +315,13 @@ void K3bWelcomeWidget::Display::paintEvent( QPaintEvent* )
     QColorGroup grp( colorGroup() );
     grp.setColor( QColorGroup::Text, theme->foregroundColor() );
     int pos = 20;
-    pos += QMAX( (width()-40-m_header->widthUsed())/2, 0 );
+    pos += qMax( (width()-40-m_header->widthUsed())/2, 0 );
     m_header->draw( &p, pos, 20, QRect(), grp );
 
     // draw the info box
     //    int boxWidth = 20 + m_infoText->widthUsed();
     int boxHeight = 10 + m_infoText->height();
-    QRect infoBoxRect( 10/*QMAX( (width()-20-m_infoText->widthUsed())/2, 10 )*/,
+    QRect infoBoxRect( 10/*qMax( (width()-20-m_infoText->widthUsed())/2, 10 )*/,
 		       height()-10-boxHeight,
 		       width()-20/*boxWidth*/,
 		       boxHeight );
@@ -415,8 +415,8 @@ void K3bWelcomeWidget::showEvent( QShowEvent* e )
 void K3bWelcomeWidget::fixSize()
 {
   QSize s = contentsRect().size();
-  s.setWidth( QMAX( main->minimumSizeHint().width(), s.width() ) );
-  s.setHeight( QMAX( main->heightForWidth(s.width()), s.height() ) );
+  s.setWidth( qMax( main->minimumSizeHint().width(), s.width() ) );
+  s.setHeight( qMax( main->heightForWidth(s.width()), s.height() ) );
 
   main->resize( s );
   viewport()->resize( s );
@@ -425,7 +425,7 @@ void K3bWelcomeWidget::fixSize()
 
 void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
 {
-  if( e->button() == QMouseEvent::RightButton ) {
+  if( e->button() == Qt::RightButton ) {
     QMap<int, KAction*> map;
     KPopupMenu addPop;
 

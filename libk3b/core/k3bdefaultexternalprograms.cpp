@@ -186,7 +186,7 @@ bool K3bCdrecordProgram::scan( const QString& p )
     endPos = out.output().find( "\n", pos );
 
     // cdrecord does not use local encoding for the copyright statement but plain latin1
-    bin->copyright = QString::fromLatin1( out.output().mid( pos, endPos-pos ).local8Bit() ).stripWhiteSpace();
+    bin->copyright = QString::fromLatin1( out.output().mid( pos, endPos-pos ).local8Bit() ).trimmed();
   }
   else {
     kdDebug() << "(K3bCdrecordProgram) could not start " << path << endl;
@@ -636,7 +636,7 @@ bool K3bTranscodeProgram::scan( const QString& p )
   modp << modInfoBin << "-p";
   out.setProcess( &modp );
   if( modp.start( KProcess::Block, KProcess::AllOutput ) ) {
-    QString modPath = out.output().stripWhiteSpace();
+    QString modPath = out.output().trimmed();
     QDir modDir( modPath );
     if( !modDir.entryList( "*export_xvid*", QDir::Files ).isEmpty() )
       bin->addFeature( "xvid" );
@@ -695,11 +695,11 @@ bool K3bVcdbuilderProgram::scan( const QString& p )
 
     bin = new K3bExternalBin( this );
     bin->path = path;
-    bin->version = out.output().mid( pos, endPos-pos ).stripWhiteSpace();
+    bin->version = out.output().mid( pos, endPos-pos ).trimmed();
 
     pos = out.output().find( "Copyright" ) + 14;
     endPos = out.output().find( "\n", pos );
-    bin->copyright = out.output().mid( pos, endPos-pos ).stripWhiteSpace();
+    bin->copyright = out.output().mid( pos, endPos-pos ).trimmed();
   }
   else {
     kdDebug() << "(K3bVcdbuilderProgram) could not start " << path << endl;
@@ -759,7 +759,7 @@ bool K3bNormalizeProgram::scan( const QString& p )
 
     pos = out.output().find( "Copyright" )+14;
     endPos = out.output().find( "\n", pos );
-    bin->copyright = out.output().mid( pos, endPos-pos ).stripWhiteSpace();
+    bin->copyright = out.output().mid( pos, endPos-pos ).trimmed();
   }
   else {
     kdDebug() << "(K3bCdrecordProgram) could not start " << path << endl;

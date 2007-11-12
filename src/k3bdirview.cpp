@@ -349,7 +349,7 @@ void K3bDirView::slotDirActivated( const KURL& url )
 
 void K3bDirView::home()
 {
-  slotDirActivated( QDir::homeDirPath() );
+  slotDirActivated( QDir::homePath() );
 }
 
 

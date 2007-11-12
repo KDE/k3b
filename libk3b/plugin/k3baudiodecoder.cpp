@@ -304,7 +304,7 @@ int K3bAudioDecoder::decode( char* _data, int maxLen )
 
 
   // clear out the decoding buffer
-  read = QMIN( maxLen, d->decodingBufferFill );
+  read = qMin( maxLen, d->decodingBufferFill );
   ::memcpy( _data, d->decodingBufferPos, read );
   d->decodingBufferPos += read;
   d->decodingBufferFill -= read;
@@ -377,7 +377,7 @@ void K3bAudioDecoder::from16bitBeSignedToFloat( char* src, float* dest, int samp
 {
   while( samples ) {
     samples--;
-    dest[samples] = static_cast<float>( Q_INT16(((src[2*samples]<<8)&0xff00)|(src[2*samples+1]&0x00ff)) / 32768.0 );
+    dest[samples] = static_cast<float>( qint16(((src[2*samples]<<8)&0xff00)|(src[2*samples+1]&0x00ff)) / 32768.0 );
   }
 }
 
@@ -388,7 +388,7 @@ void K3bAudioDecoder::fromFloatTo16BitBeSigned( float* src, char* dest, int samp
     samples--;
 
     float scaled = src[samples] * 32768.0;
-    Q_INT16 val = 0;
+    qint16 val = 0;
 
     // clipping
     if( scaled >= ( 1.0 * 0x7FFF ) )
@@ -409,8 +409,8 @@ void K3bAudioDecoder::from8BitTo16BitBeSigned( char* src, char* dest, int sample
   while( samples ) {
     samples--;
 
-    float scaled = static_cast<float>(Q_UINT8(src[samples])-128) / 128.0 * 32768.0;
-    Q_INT16 val = 0;
+    float scaled = static_cast<float>(quint8(src[samples])-128) / 128.0 * 32768.0;
+    qint16 val = 0;
       
     // clipping
     if( scaled >= ( 1.0 * 0x7FFF ) )
@@ -464,7 +464,7 @@ bool K3bAudioDecoder::seek( const K3b::Msf& pos )
     kdDebug() << "(K3bAudioDecoder) seeking " << bytesToDecode << " bytes." << endl;
     char buffi[10*2352];
     while( bytesToDecode > 0 ) {
-      int read = decode( buffi, QMIN(10*2352, bytesToDecode) );
+      int read = decode( buffi, qMin(10*2352, bytesToDecode) );
       if( read <= 0 )
 	return false;
       

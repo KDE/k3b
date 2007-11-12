@@ -88,7 +88,7 @@ public:
 K3bJobProgressDialog::K3bJobProgressDialog( QWidget* parent,
 					    const char* name,
 					    bool showSubProgress,
-					    bool modal, WFlags fl )
+					    bool modal, Qt::WFlags fl )
   : KDialog( parent, name, modal, fl ),
     in_loop(false),
     m_osd(0)
@@ -149,12 +149,12 @@ void K3bJobProgressDialog::setupGUI()
   m_labelJob_font.setPointSize( m_labelJob_font.pointSize() + 2 );
   m_labelJob_font.setBold( true );
   m_labelJob->setFont( m_labelJob_font );
-  m_labelJob->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+  m_labelJob->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
   frame4Layout->addWidget( m_labelJob );
 
   m_labelJobDetails = new K3bThemedLabel( frame4 );
   m_labelJobDetails->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 0, 1, m_labelJobDetails->sizePolicy().hasHeightForWidth() ) );
-  m_labelJobDetails->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+  m_labelJobDetails->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
   frame4Layout->addWidget( m_labelJobDetails );
   headerLayout->addWidget( frame4 );
 
@@ -211,7 +211,7 @@ void K3bJobProgressDialog::setupGUI()
   layout3->addWidget( m_labelSubTask );
 
   m_labelSubProcessedSize = new QLabel( this, "m_labelSubProcessedSize" );
-  m_labelSubProcessedSize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+  m_labelSubProcessedSize->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
   layout3->addWidget( m_labelSubProcessedSize );
   mainLayout->addLayout( layout3 );
 
@@ -224,7 +224,7 @@ void K3bJobProgressDialog::setupGUI()
   layout4->addWidget( textLabel5 );
 
   m_labelProcessedSize = new QLabel( this, "m_labelProcessedSize" );
-  m_labelProcessedSize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+  m_labelProcessedSize->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
   layout4->addWidget( m_labelProcessedSize );
   mainLayout->addLayout( layout4 );
 
@@ -576,13 +576,13 @@ void K3bJobProgressDialog::keyPressEvent( QKeyEvent *e )
   e->accept();
 
   switch ( e->key() ) {
-  case Key_Enter:
-  case Key_Return:
+  case Qt::Key_Enter:
+  case Qt::Key_Return:
     // if the process finished this closes the dialog
     if( m_buttonClose->isVisible() )
       close();
     break;
-  case Key_Escape:
+  case Qt::Key_Escape:
     // simulate button clicks
     if( m_buttonCancel->isVisible() && m_buttonCancel->isEnabled() )
       slotCancelButtonPressed();

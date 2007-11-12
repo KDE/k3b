@@ -43,7 +43,7 @@
 static QString audioStreamString( const K3bVideoDVD::Title& title, unsigned int maxLines = 9999, bool includeExtInfo = true )
 {
   QString s = "<p>";
-  for( unsigned int i = 0; i < QMIN( title.numAudioStreams(), maxLines ); ++i ) {
+  for( unsigned int i = 0; i < qMin( title.numAudioStreams(), maxLines ); ++i ) {
     if( i > 0 )
       s += "<br>";
     s += QString::number(i+1) + ": " 
@@ -67,7 +67,7 @@ static QString audioStreamString( const K3bVideoDVD::Title& title, unsigned int 
 static QString subpictureStreamString( const K3bVideoDVD::Title& title, unsigned int maxLines = 9999, bool includeExtInfo = true )
 {
   QString s = "<p>";
-  for( unsigned int i = 0; i < QMIN( title.numSubPictureStreams(), maxLines ); ++i ) {
+  for( unsigned int i = 0; i < qMin( title.numSubPictureStreams(), maxLines ); ++i ) {
     if( i > 0 )
       s += "<br>";
     s += QString::number(i+1) + ": " 
@@ -118,7 +118,7 @@ public:
     for( int c = 1; c <= 4; ++c ) {
       Q3SimpleRichText rt( text(c), listView()->font() );
       rt.setWidth( 600 ); // way to big to avoid line breaks
-      maxH = QMAX( maxH, rt.height() );
+      maxH = qMax( maxH, rt.height() );
     }
 
     setHeight( maxH + 2*marginVertical() );

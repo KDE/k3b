@@ -270,7 +270,7 @@ void K3bVcdJob::slotParseVcdxBuildOutput( KProcess*, char* output, int len )
 
     // do every line
     for ( QStringList::Iterator str = lines.begin(); str != lines.end(); ++str ) {
-        *str = ( *str ).stripWhiteSpace();
+        *str = ( *str ).trimmed();
 
         emit debuggingOutput( "vcdxbuild", *str );
 
@@ -525,7 +525,7 @@ void K3bVcdJob::parseInformation( const QString &text )
     if ( text.contains( "mpeg user scan data: one or more BCD fields out of range for" ) ) {
         int index = text.find( " for" );
 
-        emit infoMessage( i18n( "One or more BCD fields out of range for %1" ).arg( text.mid( index + 4 ).stripWhiteSpace() ), K3bJob::WARNING );
+        emit infoMessage( i18n( "One or more BCD fields out of range for %1" ).arg( text.mid( index + 4 ).trimmed() ), K3bJob::WARNING );
 
     } else if ( text.contains( "mpeg user scan data: from now on, scan information data errors will not be reported anymore" ) ) {
         emit infoMessage( i18n( "From now on, scan information data errors will not be reported anymore" ), K3bJob::INFO );
@@ -536,7 +536,7 @@ void K3bVcdJob::parseInformation( const QString &text )
         int index2 = text.find( ", last seen pts" );
         int index3 = text.find( ") -- ignoring this aps" );
 
-        emit infoMessage( i18n( "APS' pts seems out of order (actual pts %1, last seen pts %2)" ).arg( text.mid( index + 12, index2 - index - 12 ).stripWhiteSpace() ).arg( text.mid( index2 + 14, index3 - index2 - 14 ).stripWhiteSpace() ), K3bJob::WARNING );
+        emit infoMessage( i18n( "APS' pts seems out of order (actual pts %1, last seen pts %2)" ).arg( text.mid( index + 12, index2 - index - 12 ).trimmed() ).arg( text.mid( index2 + 14, index3 - index2 - 14 ).trimmed() ), K3bJob::WARNING );
         emit infoMessage( i18n( "Ignoring this aps" ), K3bJob::INFO );
 
     } else if ( text.contains( "bad packet at packet" ) ) {
@@ -545,8 +545,8 @@ void K3bVcdJob::parseInformation( const QString &text )
         int index3 = text.find( ") -- remaining " );
         int index4 = text.find( "bytes of stream will be ignored" );
 
-        emit infoMessage( i18n( "Bad packet at packet #%1 (stream byte offset %2)" ).arg( text.mid( index + 11, index2 - index - 11 ).stripWhiteSpace() ).arg( text.mid( index2 + 19, index3 - index2 - 19 ).stripWhiteSpace() ), K3bJob::WARNING );
-        emit infoMessage( i18n( "Remaining %1 bytes of stream will be ignored." ).arg( text.mid( index3 + 15, index4 - index3 - 15 ).stripWhiteSpace() ), K3bJob::WARNING );
+        emit infoMessage( i18n( "Bad packet at packet #%1 (stream byte offset %2)" ).arg( text.mid( index + 11, index2 - index - 11 ).trimmed() ).arg( text.mid( index2 + 19, index3 - index2 - 19 ).trimmed() ), K3bJob::WARNING );
+        emit infoMessage( i18n( "Remaining %1 bytes of stream will be ignored." ).arg( text.mid( index3 + 15, index4 - index3 - 15 ).trimmed() ), K3bJob::WARNING );
     }
 }
 

@@ -414,7 +414,7 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
   emit debuggingOutput( "K3bIsoImager",
 			QString("mkisofs print size result: %1 (%2 bytes)")
 			.arg(m_mkisofsPrintSizeResult)
-			.arg(Q_UINT64(m_mkisofsPrintSizeResult)*2048ULL) );
+			.arg(quint64(m_mkisofsPrintSizeResult)*2048ULL) );
 
   cleanup();
 

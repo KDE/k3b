@@ -78,7 +78,7 @@ int K3bIso9660DeviceBackend::read( unsigned int sector, char* data, int len )
     int sectorsRead = 0;
     int retries = 10;  // TODO: no fixed value
     while( retries ) {
-      int read = QMIN(len-sectorsRead, maxReadSectors);
+      int read = qMin(len-sectorsRead, maxReadSectors);
       if( !m_device->read10( (unsigned char*)(data+sectorsRead*2048),
 			     read*2048,
 			     sector+sectorsRead,

@@ -132,7 +132,7 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
                 : s );
             break;
           case NUMBER:
-            dir.append( QString::number(trackNumber).rightJustify( 2, '0' ) );
+            dir.append( QString::number(trackNumber).rightJustified( 2, '0' ) );
             break;
           case YEAR:
             dir.append( QString::number( entry.year ) );

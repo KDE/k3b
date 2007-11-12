@@ -278,10 +278,10 @@ QString K3bAudioMetainfoRenamerPluginWidget::createNewName( K3bFileItem* item )
       KFileMetaInfoItem trackItem = metaInfo.item( "Tracknumber" );
       
       if( artistItem.isValid() )
-	artist = artistItem.string().stripWhiteSpace();
+	artist = artistItem.string().trimmed();
       
       if( titleItem.isValid() )
-	title = titleItem.string().stripWhiteSpace();
+	title = titleItem.string().trimmed();
       
       if( trackItem.isValid() )
 	track = track.sprintf("%02d",trackItem.string().toInt());
@@ -324,7 +324,7 @@ QString K3bAudioMetainfoRenamerPluginWidget::createNewName( K3bFileItem* item )
     }
 
     // remove white spaces from end and beginning
-    newName = newName.stripWhiteSpace();
+    newName = newName.trimmed();
 
     QString extension = item->k3bName().mid( item->k3bName().findRev(".") );
 

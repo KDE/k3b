@@ -61,7 +61,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 					    int defaultButton,
 					    const QString& configGroup,
 					    bool modal,
-					    WFlags fl )
+					    Qt::WFlags fl )
   : KDialog( parent, name, modal, fl ),
     m_mainWidget(0),
     m_defaultButton(defaultButton),
@@ -390,8 +390,8 @@ bool K3bInteractionDialog::eventFilter( QObject* o, QEvent* ev )
     QKeyEvent* kev = dynamic_cast<QKeyEvent*>(ev);
 
     switch ( kev->key() ) {
-    case Key_Enter:
-    case Key_Return:
+    case Qt::Key_Enter:
+    case Qt::Key_Return:
       // if the process finished this closes the dialog
       if( m_defaultButton == START_BUTTON ) {
 	if( m_buttonStart->isEnabled() )
@@ -407,7 +407,7 @@ bool K3bInteractionDialog::eventFilter( QObject* o, QEvent* ev )
       }
       return true;
 
-    case Key_Escape:
+    case Qt::Key_Escape:
       // simulate button clicks
       if( m_buttonCancel ) {
 	if( m_buttonCancel->isEnabled() )

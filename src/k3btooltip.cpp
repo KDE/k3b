@@ -91,7 +91,7 @@ void K3bToolTip::tip( const QRect& rect, QWidget* w, int effect )
 
   // make sure the widget is displayed correcly
   w->reparent( QApplication::desktop()->screen( scr ),
-	       WStyle_StaysOnTop | WStyle_Customize | WStyle_NoBorder | WStyle_Tool | WX11BypassWM,
+	       Qt::WStyle_StaysOnTop | Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool | WX11BypassWM,
 	       QPoint( 0, 0 ), false );
   w->polish();
   w->adjustSize();

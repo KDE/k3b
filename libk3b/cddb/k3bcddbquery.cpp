@@ -233,7 +233,7 @@ QString K3bCddbQuery::handshakeString() const
 QString K3bCddbQuery::queryString() const
 {
   QString query = "cddb query " 
-    + QString::number( m_toc.discId(), 16 ).rightJustify( 8, '0' ) 
+    + QString::number( m_toc.discId(), 16 ).rightJustified( 8, '0' ) 
     + " "
     + QString::number( (unsigned int)m_toc.count() );
   
@@ -256,8 +256,8 @@ bool K3bCddbQuery::parseMatchHeader( const QString& line, K3bCddbResultHeader& h
   header.title = line.mid( header.category.length() + header.discid.length() + 2 );
   int slashPos = header.title.find( "/" );
   if( slashPos > 0 ) {
-    header.artist = header.title.left(slashPos).stripWhiteSpace();
-    header.title = header.title.mid( slashPos+1 ).stripWhiteSpace();
+    header.artist = header.title.left(slashPos).trimmed();
+    header.title = header.title.mid( slashPos+1 ).trimmed();
   }
   return true;
 }

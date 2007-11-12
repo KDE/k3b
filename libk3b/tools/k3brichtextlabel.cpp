@@ -22,6 +22,7 @@
 #include <QLabel>
 
 #include <kglobalsettings.h>
+#include <QTextDocument>
 
 static QString qrichtextify( const QString& text )
 {
@@ -31,7 +32,7 @@ static QString qrichtextify( const QString& text )
   QStringList lines = QStringList::split('\n', text);
   for(QStringList::Iterator it = lines.begin(); it != lines.end(); ++it)
   {
-    *it = Q3StyleSheet::convertFromPlainText( *it, Q3StyleSheetItem::WhiteSpaceNormal );
+    *it = Qt::convertFromPlainText( *it, Qt::WhiteSpaceNormal );
   }
 
   return lines.join(QString::null);
@@ -39,15 +40,15 @@ static QString qrichtextify( const QString& text )
 
 K3bRichTextLabel::K3bRichTextLabel( const QString &text , QWidget *parent, const char *name )
  : QLabel ( parent, name ) {
-  m_defaultWidth = QMIN(400, KGlobalSettings::desktopGeometry(this).width()*2/5);
-  setAlignment( Qt::WordBreak );
+  m_defaultWidth = qMin(400, KGlobalSettings::desktopGeometry(this).width()*2/5);
+  setAlignment( Qt::TextWordWrap );
   setText(text);
 }
 
 K3bRichTextLabel::K3bRichTextLabel( QWidget *parent, const char *name )
  : QLabel ( parent, name ) {
-  m_defaultWidth = QMIN(400, KGlobalSettings::desktopGeometry(this).width()*2/5);
-  setAlignment( Qt::WordBreak );
+  m_defaultWidth = qMin(400, KGlobalSettings::desktopGeometry(this).width()*2/5);
+  setAlignment( Qt::TextWordWrap );
 }
 
 void K3bRichTextLabel::setDefaultWidth(int defaultWidth)

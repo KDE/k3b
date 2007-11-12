@@ -200,7 +200,7 @@ void K3bMd5Job::slotUpdate()
     // determine bytes to read
     unsigned int readSize = K3bMd5JobPrivate::BUFFERSIZE;
     if( d->maxSize > 0 )
-      readSize = QMIN( readSize, d->maxSize - d->readData );
+      readSize = qMin( readSize, d->maxSize - d->readData );
 
     if( readSize <= 0 ) {
       //      kdDebug() << "(K3bMd5Job) reached max size of " << d->maxSize << ". Stopping." << endl;
@@ -228,13 +228,13 @@ void K3bMd5Job::slotUpdate()
 	// Only the last sector may not be used completely.
 	//
 	unsigned long sector = d->readData/2048;
-	unsigned int sectorCnt = QMAX( readSize/2048, 1 );
+	unsigned int sectorCnt = qMax( readSize/2048, 1 );
 	read = -1;
 	if( d->device->read10( reinterpret_cast<unsigned char*>(d->data),
 			       sectorCnt*2048,
 			       sector,
 			       sectorCnt ) )
-	  read = QMIN( readSize, sectorCnt*2048 );
+	  read = qMin( readSize, sectorCnt*2048 );
       }
 
       //

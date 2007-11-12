@@ -216,7 +216,7 @@ QSize K3bAudioEditorWidget::minimumSizeHint() const
 
   int maxWidth = QApplication::desktop()->width()*2/3;
   int wantedWidth = 2*m_margin + 2*frameWidth() + (m_length.totalFrames()/75/60 + 1) * fontMetrics().width( "000" );
-  return QSize( QMIN( maxWidth, wantedWidth ), 
+  return QSize( qMin( maxWidth, wantedWidth ), 
 		2*m_margin + 12 + 6 /*12 for the tickmarks and 6 for the markers */ + fontMetrics().height() + 2*frameWidth() );
 }
 
@@ -430,7 +430,7 @@ void K3bAudioEditorWidget::setMaxNumberOfMarkers( int i )
   m_maxMarkers = i;
 
   // remove last markers
-  while( m_markers.count() > QMAX( 1, m_maxMarkers ) ) {
+  while( m_markers.count() > qMax( 1, m_maxMarkers ) ) {
     removeMarker( m_markers.getLast()->id );
   }
 }
@@ -475,8 +475,8 @@ bool K3bAudioEditorWidget::moveMarker( int identifier, const K3b::Msf& pos )
   if( pos < m_length )
     if( Marker* m = getMarker( identifier ) ) {
       QRect rect = contentsRect();
-      rect.setLeft( QMIN( msfToPos( pos ), msfToPos( m->pos ) ) );
-      rect.setRight( QMAX( msfToPos( pos ), msfToPos( m->pos ) ) );
+      rect.setLeft( qMin( msfToPos( pos ), msfToPos( m->pos ) ) );
+      rect.setRight( qMax( msfToPos( pos ), msfToPos( m->pos ) ) );
 
       m->pos = pos;
 
@@ -726,7 +726,7 @@ void K3bAudioEditorWidget::mouseMoveEvent( QMouseEvent* e )
   if( e->state() & Qt::LeftButton ) {
     if( m_draggedRange ) {
       // determine the position the range's end was dragged to and its other end
-      K3b::Msf msfPos = QMAX( 0, QMIN( posToMsf( e->pos().x() ), m_length-1 ) );
+      K3b::Msf msfPos = qMax( 0, qMin( posToMsf( e->pos().x() ), m_length-1 ) );
       K3b::Msf otherEnd = ( m_draggingRangeEnd ? m_draggedRange->start : m_draggedRange->end );
 
       // move it to the new pos
@@ -866,7 +866,7 @@ K3bAudioEditorWidget::Marker* K3bAudioEditorWidget::findMarker( const QPoint& p 
 K3b::Msf K3bAudioEditorWidget::posToMsf( int p ) const
 {
   int w = contentsRect().width() - 2*m_margin;
-  int x = QMIN( p-frameWidth()-m_margin, w );
+  int x = qMin( p-frameWidth()-m_margin, w );
   return ( (int)((double)(m_length.lba()-1) / (double)w * (double)x) );
 }
 
@@ -876,7 +876,7 @@ int K3bAudioEditorWidget::msfToPos( const K3b::Msf& msf ) const
 {
   int w = contentsRect().width() - 2*m_margin;
   int pos = (int)((double)w / (double)(m_length.lba()-1) * (double)msf.lba());
-  return frameWidth() + m_margin + QMIN( pos, w-1 );
+  return frameWidth() + m_margin + qMin( pos, w-1 );
 }
 
 

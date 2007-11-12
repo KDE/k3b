@@ -49,7 +49,7 @@ public:
 
   QString buildFileName( int counter ) {
     if( counter > 0 )
-      return filename + '.' + QString::number(counter).rightJustify( 3, '0' );
+      return filename + '.' + QString::number(counter).rightJustified( 3, '0' );
     else
       return filename;
   }
@@ -207,7 +207,7 @@ Q_LONG K3bFileSplitter::readBlock( char *data, Q_ULONG maxlen )
 Q_LONG K3bFileSplitter::writeBlock( const char *data, Q_ULONG len )
 {
   // We cannot rely on QFile::at since it uses long on most copmpilations
-  Q_ULONG max = (Q_ULONG)QMIN( (KIO::filesize_t)len, d->maxFileSize - d->currentFilePos );
+  Q_ULONG max = (Q_ULONG)qMin( (KIO::filesize_t)len, d->maxFileSize - d->currentFilePos );
 
   Q_LONG r = d->file.writeBlock( data, max );
 

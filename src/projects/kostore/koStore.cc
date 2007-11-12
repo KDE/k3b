@@ -272,7 +272,7 @@ QIODevice* KoStore::device() const
 
 QByteArray KoStore::read( unsigned long int max )
 {
-  QByteArray data; // Data is a QArray<char>
+  QByteArray data; // Data is a Q3MemArray<char>
 
   if ( !m_bIsOpen )
   {

@@ -71,7 +71,7 @@ public:
   bool countDir( const QString& dir ) {
     const QString& dot = KGlobal::staticQString( "." );
     const QString& dotdot = KGlobal::staticQString( ".." );
-    QStringList l = QDir(dir).entryList( QDir::All|QDir::Hidden|QDir::System );
+    QStringList l = QDir(dir).entryList( QDir::TypeMask|QDir::Hidden|QDir::System );
     l.remove( dot );
     l.remove( dotdot );
 

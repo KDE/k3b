@@ -38,7 +38,7 @@ static QString readLine( QFile* f )
   Q_LONG r = f->readLine( s, 1024 );
   if( r >= 0 ) {
     // remove the trailing newline
-    return s.stripWhiteSpace();
+    return s.trimmed();
   }
   else {
     // end of file or error
@@ -166,7 +166,7 @@ bool K3bCueFileParser::parseLine( QString& line )
 
 
   // simplify all white spaces except those in filenames and CD-TEXT
-  simplifyWhiteSpace( line );
+  simplified( line );
 
   // skip comments and empty lines
   if( line.startsWith("REM") || line.startsWith("#") || line.isEmpty() )
@@ -360,9 +360,9 @@ bool K3bCueFileParser::parseLine( QString& line )
 }
 
 
-void K3bCueFileParser::simplifyWhiteSpace( QString& s )
+void K3bCueFileParser::simplified( QString& s )
 {
-  s = s.stripWhiteSpace();
+  s = s.trimmed();
 
   unsigned int i = 0;
   bool insideQuote = false;
@@ -403,7 +403,7 @@ bool K3bCueFileParser::findImageFileName( const QString& dataFile )
 
   // first try filename as a hole (absolut)
   if( QFile::exists( dataFile ) ) {
-    setImageFilename( QFileInfo(dataFile).absFilePath() );
+    setImageFilename( QFileInfo(dataFile).absoluteFilePath() );
     return true;
   }
 

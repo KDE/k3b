@@ -49,7 +49,7 @@ QString K3bVcdListViewItem::text( int i ) const
 
     switch ( i ) {
             case 0:
-            return QString::number( m_track->index() + 1 ).rightJustify( 2, ' ' ) + "  ";
+            return QString::number( m_track->index() + 1 ).rightJustified( 2, ' ' ) + "  ";
             case 1:
             return m_track->title();
             case 2:

@@ -141,7 +141,7 @@ void K3bCddb::slotQueryFinished( K3bCddbQuery* query )
     m_lastResult = m_lastUsedQuery->result();
 
     // make sure the result has the requested discid since otherwise local saving does not make much sense
-    m_lastResult.discid = QString::number( m_toc.discId(), 16 ).rightJustify( 8, '0' );
+    m_lastResult.discid = QString::number( m_toc.discId(), 16 ).rightJustified( 8, '0' );
 
     emit queryFinished( K3bCddbQuery::SUCCESS );
   }

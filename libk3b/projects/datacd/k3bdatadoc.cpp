@@ -153,7 +153,7 @@ void K3bDataDoc::addUrls( const KURL::List& l, K3bDirItem* dir )
   for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
     const KURL& url = *it;
     QFileInfo f( url.path() );
-    QString k3bname = f.absFilePath().section( "/", -1 );
+    QString k3bname = f.absoluteFilePath().section( "/", -1 );
 
     // filenames cannot end in backslashes (mkisofs problem. See comments in k3bisoimager.cpp (escapeGraftPoint()))
     while( k3bname[k3bname.length()-1] == '\\' )
@@ -200,12 +200,12 @@ void K3bDataDoc::addUrls( const KURL::List& l, K3bDirItem* dir )
       }
 
       // recursively add all the files in the directory
-      QStringList dlist = QDir( f.absFilePath() ).entryList( QDir::All|QDir::System|QDir::Hidden );
+      QStringList dlist = QDir( f.absoluteFilePath() ).entryList( QDir::TypeMask|QDir::System|QDir::Hidden );
       dlist.remove(".");
       dlist.remove("..");
       KURL::List newUrls;
       for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it )
-	newUrls.append( KURL::fromPathOrURL( f.absFilePath() + "/" + *it ) );
+	newUrls.append( KURL::fromPathOrURL( f.absoluteFilePath() + "/" + *it ) );
       addUrls( newUrls, newDirItem );
     }
     else if( f.isSymLink() || f.isFile() )

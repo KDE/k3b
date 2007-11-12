@@ -104,8 +104,8 @@ void K3bAudioJobTempData::prepareTempFileNames( const QString& path )
   QString prefix = K3b::findUniqueFilePrefix( "k3b_audio_", path ) + "_";
 
   for( int i = 0; i < d->doc->numOfTracks(); i++ ) {
-    d->bufferFiles.append( prefix + QString::number( i+1 ).rightJustify( 2, '0' ) + ".wav" );
-    d->infFiles.append( prefix + QString::number( i+1 ).rightJustify( 2, '0' ) + ".inf" );
+    d->bufferFiles.append( prefix + QString::number( i+1 ).rightJustified( 2, '0' ) + ".wav" );
+    d->infFiles.append( prefix + QString::number( i+1 ).rightJustified( 2, '0' ) + ".inf" );
   }
 
   d->tocFile = prefix + ".toc";

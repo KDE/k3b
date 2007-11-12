@@ -390,7 +390,7 @@ void K3bVcdTrackDialog::prepareGui()
 
     m_displayFileName = new KCutLabel( groupFileInfo );
     m_displayFileName->setText( i18n( "Filename" ) );
-    m_displayFileName->setAlignment( int( QLabel::AlignTop | QLabel::AlignLeft ) );
+    m_displayFileName->setAlignment( int( QLabel::Qt::AlignTop | QLabel::Qt::AlignLeft ) );
 
     QLabel* labelSize = new QLabel( i18n( "Size:" ), groupFileInfo, "labelSize" );
     QLabel* labelLength = new QLabel( i18n( "Length:" ), groupFileInfo, "labelLength" );
@@ -398,15 +398,15 @@ void K3bVcdTrackDialog::prepareGui()
 
     m_displaySize = new QLabel( groupFileInfo, "m_displaySize" );
     m_displaySize->setText( "0.0 MB" );
-    m_displaySize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+    m_displaySize->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
 
     m_displayLength = new QLabel( groupFileInfo, "m_displayLength" );
     m_displayLength->setText( "0:0:0" );
-    m_displayLength->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+    m_displayLength->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
 
     m_muxrate = new QLabel( groupFileInfo, "m_muxrate" );
     m_muxrate->setText( i18n( "%1 bit/s" ).arg( 0 ) );
-    m_muxrate->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+    m_muxrate->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
 
     Q3Frame* fileInfoLine = new Q3Frame( groupFileInfo );
     fileInfoLine->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
@@ -747,9 +747,9 @@ QString K3bVcdTrackDialog::displayName( K3bVcdTrack * track )
         return i18n( "ItSelf" );
 
     if ( track->isSegment() )
-        return i18n( "Segment-%1 - %2" ).arg( QString::number( track->index() + 1 ).rightJustify( 3, '0' ) ).arg( track->title() );
+        return i18n( "Segment-%1 - %2" ).arg( QString::number( track->index() + 1 ).rightJustified( 3, '0' ) ).arg( track->title() );
 
-    return i18n( "Sequence-%1 - %2" ).arg( QString::number( track->index() + 1 ).rightJustify( 3, '0' ) ).arg( track->title() );
+    return i18n( "Sequence-%1 - %2" ).arg( QString::number( track->index() + 1 ).rightJustified( 3, '0' ) ).arg( track->title() );
 }
 
 void K3bVcdTrackDialog::slotPlayTimeChanged( int value )

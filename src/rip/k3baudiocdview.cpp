@@ -71,7 +71,7 @@ public:
 		      const K3b::Msf& length) 
     : K3bCheckListViewItem( parent, after ) {
 
-    setText( 1, QString::number(_trackNumber).rightJustify( 2, ' ' ) );
+    setText( 1, QString::number(_trackNumber).rightJustified( 2, ' ' ) );
     setText( 3, i18n("Track %1").arg(_trackNumber) );
     setText( 4, " " + length.toString() + " " );
     setText( 5, " " + KIO::convertSize( length.audioBytes() ) + " " );
@@ -116,7 +116,7 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
   QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
   toolBoxLayout->addItem( spacer );
   m_labelLength = new QLabel( mainWidget() );
-  m_labelLength->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+  m_labelLength->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
   toolBoxLayout->addWidget( m_labelLength );
 
 
@@ -364,7 +364,7 @@ void K3bAudioCdView::slotEditTrackCddb()
     grid->setRowStretch( 4, 1 );
 
     d.setMainWidget(w);
-    d.resize( QMAX( QMAX(d.sizeHint().height(), d.sizeHint().width()), 300), d.sizeHint().height() );
+    d.resize( qMax( qMax(d.sizeHint().height(), d.sizeHint().width()), 300), d.sizeHint().height() );
 
     if( d.exec() == QDialog::Accepted ) {
       m_cddbInfo.titles[a->trackNumber-1] = editTitle->text();
@@ -420,7 +420,7 @@ void K3bAudioCdView::slotEditAlbumCddb()
   grid->setRowStretch( 7, 1 );
 
   d.setMainWidget(w);
-  d.resize( QMAX( QMAX(d.sizeHint().height(), d.sizeHint().width()), 300), d.sizeHint().height() );
+  d.resize( qMax( qMax(d.sizeHint().height(), d.sizeHint().width()), 300), d.sizeHint().height() );
 
   if( d.exec() == QDialog::Accepted ) {
     m_cddbInfo.cdTitle = editTitle->text();

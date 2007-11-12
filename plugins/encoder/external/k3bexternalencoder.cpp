@@ -274,8 +274,8 @@ bool K3bExternalEncoder::writeWaveHeader()
   }
   
   // write the wave size
-  Q_INT32 dataSize( d->length.audioBytes() );
-  Q_INT32 wavSize( dataSize + 44 - 8 );
+  qint32 dataSize( d->length.audioBytes() );
+  qint32 wavSize( dataSize + 44 - 8 );
   char c[4];
 
   c[0] = (wavSize   >> 0 ) & 0xff;

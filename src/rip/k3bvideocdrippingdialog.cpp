@@ -83,7 +83,7 @@ void K3bVideoCdRippingDialog::setupGui()
 
     QLabel* rippathLabel = new QLabel( i18n( "Rip files to:" ), groupDirectory );
     m_editDirectory = new KURLRequester( groupDirectory, "m_editDirectory" );
-    m_editDirectory->setURL( QDir::homeDirPath() );
+    m_editDirectory->setURL( QDir::homePath() );
     m_editDirectory->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
     rippathLabel->setBuddy( m_editDirectory );
@@ -92,13 +92,13 @@ void K3bVideoCdRippingDialog::setupGui()
     freeSpaceBox->setSpacing( KDialog::spacingHint() );
     ( void ) new QLabel( i18n( "Free space in directory:" ), freeSpaceBox, "FreeSpaceLabel" );
     m_labelFreeSpace = new QLabel( "                       ", freeSpaceBox, "m_labelFreeSpace" );
-    m_labelFreeSpace->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+    m_labelFreeSpace->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
 
     Q3HBox* necessarySizeBox = new Q3HBox( groupDirectory );
     necessarySizeBox->setSpacing( KDialog::spacingHint() );
     ( void ) new QLabel( i18n( "Necessary storage size:" ), necessarySizeBox, "StorSize" );
     m_labelNecessarySize = new QLabel( "                        ", necessarySizeBox, "m_labelNecessarySize" );
-    m_labelNecessarySize->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignRight ) );
+    m_labelNecessarySize->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
 
 
     groupDirectoryLayout->addWidget( rippathLabel, 0, 0 );
@@ -233,7 +233,7 @@ void K3bVideoCdRippingDialog::slotUpdateFreeSpace()
 
 void K3bVideoCdRippingDialog::loadK3bDefaults()
 {
-    m_editDirectory->setURL( QDir::homeDirPath() );
+    m_editDirectory->setURL( QDir::homePath() );
     m_ignoreExt ->setChecked( false );
     m_sector2336 ->setChecked( false );
     m_extractXML ->setChecked( false );
@@ -243,7 +243,7 @@ void K3bVideoCdRippingDialog::loadK3bDefaults()
 
 void K3bVideoCdRippingDialog::loadUserDefaults( KConfigBase* c )
 {
-    m_editDirectory ->setURL( c->readPathEntry( "last ripping directory", QDir::homeDirPath() ) );
+    m_editDirectory ->setURL( c->readPathEntry( "last ripping directory", QDir::homePath() ) );
     m_ignoreExt ->setChecked( c->readBoolEntry( "ignore ext", false ) );
     m_sector2336 ->setChecked( c->readBoolEntry( "sector 2336", false ) );
     m_extractXML ->setChecked( c->readBoolEntry( "extract xml", false ) );

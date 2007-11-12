@@ -112,9 +112,9 @@ namespace K3b
   LIBK3B_EXPORT QString framesToString( int h, bool showFrames = true );
   /*LIBK3B_EXPORT QString sizeToTime( long size );*/
 
-  LIBK3B_EXPORT Q_INT16 swapByteOrder( const Q_INT16& i );
-  LIBK3B_EXPORT Q_INT32 swapByteOrder( const Q_INT32& i );
-  LIBK3B_EXPORT Q_INT64 swapByteOrder( const Q_INT64& i );
+  LIBK3B_EXPORT qint16 swapByteOrder( const qint16& i );
+  LIBK3B_EXPORT qint32 swapByteOrder( const qint32& i );
+  LIBK3B_EXPORT qint64 swapByteOrder( const qint64& i );
 
   int round( double );
 
@@ -229,9 +229,9 @@ namespace K3b
   LIBK3B_EXPORT KURL convertToLocalUrl( const KURL& url );
   LIBK3B_EXPORT KURL::List convertToLocalUrls( const KURL::List& l );
 
-  LIBK3B_EXPORT Q_INT16 fromLe16( char* );
-  LIBK3B_EXPORT Q_INT32 fromLe32( char* );
-  LIBK3B_EXPORT Q_INT64 fromLe64( char* );
+  LIBK3B_EXPORT qint16 fromLe16( char* );
+  LIBK3B_EXPORT qint32 fromLe32( char* );
+  LIBK3B_EXPORT qint64 fromLe64( char* );
 
   LIBK3B_EXPORT bool isMounted( K3bDevice::Device* );
 

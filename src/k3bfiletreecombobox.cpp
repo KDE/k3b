@@ -68,7 +68,7 @@ K3bFileTreeComboBox::K3bFileTreeComboBox( QWidget* parent, const char* name )
 
   m_fileTreeView = new K3bFileTreeView( this );
   m_fileTreeView->hide();
-  m_fileTreeView->reparent( this, WType_Popup, QPoint(0,0), false );
+  m_fileTreeView->reparent( this, Qt::WType_Popup, QPoint(0,0), false );
   m_fileTreeView->header()->hide();
   m_fileTreeView->installEventFilter(this);
 
@@ -159,7 +159,7 @@ void K3bFileTreeComboBox::popup()
   // code mainly from qcombobox.cpp
 
   m_fileTreeView->triggerUpdate();
-  int w = QMAX( m_fileTreeView->sizeHint().width(), width() );
+  int w = qMax( m_fileTreeView->sizeHint().width(), width() );
   int h = m_fileTreeView->sizeHint().height();
   QRect screen = QApplication::desktop()->availableGeometry( this );
   int sx = screen.x();				// screen pos
@@ -250,7 +250,7 @@ void K3bFileTreeComboBox::slotGoUrl()
   }
 
   // now replace the unmatched tildes with our home dir
-  p.replace( "~", K3b::prepareDir( QDir::homeDirPath() ) );
+  p.replace( "~", K3b::prepareDir( QDir::homePath() ) );
 
 
   lineEdit()->setText( p );
@@ -285,7 +285,7 @@ bool K3bFileTreeComboBox::eventFilter( QObject* o, QEvent* e )
 	
 	// Correction for motif style, where arrow is smaller
 	// and thus has a rect that doesn't fit the button.
-	arrowRect.setHeight( QMAX(  height() - (2 * arrowRect.y()), arrowRect.height() ) );
+	arrowRect.setHeight( qMax(  height() - (2 * arrowRect.y()), arrowRect.height() ) );
 
 	if ( arrowRect.contains( mapFromGlobal(me->globalPos()) ) ) {
 	  d->ignoreNextMouseClick = true;  // in the case we hit the arrow button
@@ -319,7 +319,7 @@ void K3bFileTreeComboBox::mousePressEvent( QMouseEvent* e )
 
   // Correction for motif style, where arrow is smaller
   // and thus has a rect that doesn't fit the button.
-  arrowRect.setHeight( QMAX(  height() - (2 * arrowRect.y()), arrowRect.height() ) );
+  arrowRect.setHeight( qMax(  height() - (2 * arrowRect.y()), arrowRect.height() ) );
 
   if ( arrowRect.contains( e->pos() ) ) {
     popup();

@@ -45,7 +45,7 @@ class LIBK3B_EXPORT K3bCueFileParser : public K3bImageFileReader
  private:
   void readFile();
   bool parseLine( QString& line );
-  void simplifyWhiteSpace( QString& s );
+  void simplified( QString& s );
   bool findImageFileName( const QString& fileEntry );
 
   bool m_imageFilenameInCue;

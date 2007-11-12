@@ -200,7 +200,7 @@ void K3bMsInfoFetcher::slotProcessExited()
     m_lastSessionStart = list.first().toInt( &ok1 );
     m_nextSessionStart = list[1].toInt( &ok2 );
     if( ok1 && ok2 )
-      m_msInfo = firstLine.stripWhiteSpace();
+      m_msInfo = firstLine.trimmed();
     else
       m_msInfo = QString::null;
   }

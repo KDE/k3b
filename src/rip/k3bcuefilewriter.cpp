@@ -64,7 +64,7 @@ bool K3bCueFileWriter::save( Q3TextStream& t )
 
     const K3bDevice::Track& track = *it;
 
-    t << "  TRACK " << QString::number(i+1).rightJustify( 2, '0' ) << " AUDIO" << endl;
+    t << "  TRACK " << QString::number(i+1).rightJustified( 2, '0' ) << " AUDIO" << endl;
 
     if( m_cdText.count() > i && !m_cdText[i].isEmpty() ) {
       t << "    PERFORMER \"" << m_cdText[i].performer() << "\"" << endl;

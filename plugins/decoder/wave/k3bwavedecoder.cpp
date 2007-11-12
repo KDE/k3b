@@ -216,7 +216,7 @@ int K3bWaveDecoder::decodeInternal( char* _data, int maxLen )
 {
   int read = 0;
 
-  maxLen = QMIN( maxLen, (int)(d->size - d->alreadyRead) );
+  maxLen = qMin( maxLen, (int)(d->size - d->alreadyRead) );
 
   if( d->sampleSize == 16 ) {
     read = d->file->readBlock( _data, maxLen );
@@ -243,7 +243,7 @@ int K3bWaveDecoder::decodeInternal( char* _data, int maxLen )
       d->bufferSize = maxLen/2;
     }
 
-    read = d->file->readBlock( d->buffer, QMIN(maxLen/2, d->bufferSize) );
+    read = d->file->readBlock( d->buffer, qMin(maxLen/2, d->bufferSize) );
     d->alreadyRead += read;
 
     // stretch samples to 16 bit

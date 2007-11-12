@@ -289,12 +289,12 @@ void K3bDataDirTreeView::setupActions()
 
   m_actionProperties = new KAction( i18n("Properties"), "misc", 0, this, SLOT(slotProperties()),
 				    actionCollection(), "properties" );
-  m_actionNewDir = new KAction( i18n("New Directory..."), "folder_new", CTRL+Key_N, this, SLOT(slotNewDir()),
+  m_actionNewDir = new KAction( i18n("New Directory..."), "folder_new", CTRL+Qt::Key_N, this, SLOT(slotNewDir()),
 				actionCollection(), "new_dir" );
-  m_actionRemove = new KAction( i18n("Remove"), "editdelete", Key_Delete, this, SLOT(slotRemoveItem()),
+  m_actionRemove = new KAction( i18n("Remove"), "editdelete", Qt::Key_Delete, this, SLOT(slotRemoveItem()),
 				actionCollection(), "remove" );
-  KShortcut renameShortCut( Key_F2 );
-  renameShortCut.append( KShortcut(CTRL+Key_R) ); // backwards compatibility
+  KShortcut renameShortCut( Qt::Key_F2 );
+  renameShortCut.append( KShortcut(CTRL+Qt::Key_R) ); // backwards compatibility
   m_actionRename = new KAction( i18n("Rename"), "edit", renameShortCut, this, SLOT(slotRenameItem()),
 				actionCollection(), "rename" );
 

@@ -73,9 +73,9 @@ int K3bMusicBrainz::query( const Q3CString& trm )
     while( mb_Select(d->mb, (char*)MBS_Rewind) && mb_Select1( d->mb, (char*)MBS_SelectTrack, i ) ) {
       Q3CString data(256);
       mb_GetResultData( d->mb, (char*)MBE_TrackGetArtistName, data.data(), 256 );
-      d->artists.append( QString::fromUtf8( data ).stripWhiteSpace() );
+      d->artists.append( QString::fromUtf8( data ).trimmed() );
       mb_GetResultData( d->mb, (char*)MBE_TrackGetTrackName, data.data(), 256 );
-      d->titles.append( QString::fromUtf8( data ).stripWhiteSpace() );
+      d->titles.append( QString::fromUtf8( data ).trimmed() );
 
       ++i;
     }

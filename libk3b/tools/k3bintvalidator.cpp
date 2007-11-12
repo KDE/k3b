@@ -50,7 +50,7 @@ QValidator::State K3bIntValidator::validate ( QString &str, int & ) const
   int  val = 0;
   QString newStr;
 
-  newStr = str.stripWhiteSpace();
+  newStr = str.trimmed();
   newStr = newStr.upper();
 
   if( newStr.length() ) {

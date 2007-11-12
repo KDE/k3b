@@ -258,7 +258,7 @@ void K3bSetup2::updatePrograms()
 	    wantedPerm = 0000755;
 	}
 
-	bi->setText( 3, QString::number( perm, 8 ).rightJustify( 4, '0' ) + " " + fi.owner() + "." + fi.group() );
+	bi->setText( 3, QString::number( perm, 8 ).rightJustified( 4, '0' ) + " " + fi.owner() + "." + fi.group() );
 	if( perm != wantedPerm ||
 	    fi.owner() != "root" ||
 	    fi.group() != wantedGroup ) {
@@ -324,7 +324,7 @@ Q3CheckListItem* K3bSetup2::createDeviceItem( const QString& deviceNode )
 
     int perm = s.st_mode & 0000777;
 
-    bi->setText( 2, QString::number( perm, 8 ).rightJustify( 3, '0' ) + " " + fi.owner() + "." + fi.group() );
+    bi->setText( 2, QString::number( perm, 8 ).rightJustified( 3, '0' ) + " " + fi.owner() + "." + fi.group() );
     if( w->m_checkUseBurningGroup->isChecked() ) {
       // we ignore the device's owner here
       if( perm != 0000660 ||

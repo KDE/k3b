@@ -106,7 +106,7 @@ void K3bFlatButton::leaveEvent( QEvent* )
 
 void K3bFlatButton::mousePressEvent( QMouseEvent* e )
 {
-  if( e->button() == QMouseEvent::LeftButton ) {
+  if( e->button() == Qt::LeftButton ) {
     emit pressed();
     m_pressed = true;
   }
@@ -117,7 +117,7 @@ void K3bFlatButton::mousePressEvent( QMouseEvent* e )
 
 void K3bFlatButton::mouseReleaseEvent( QMouseEvent* e )
 {
-  if( e->button() == QMouseEvent::LeftButton ) {
+  if( e->button() == Qt::LeftButton ) {
     if( m_pressed  )
       emit clicked();
     m_pressed = false;
@@ -147,7 +147,7 @@ QSize K3bFlatButton::sizeHint() const
 {
   // height: pixmap + 5 spacing + font height + frame width
   // width: max( pixmap, text) + frame width
-  return QSize( QMAX( m_pixmap.width(), fontMetrics().width( m_text ) ) + frameWidth()*2, 
+  return QSize( qMax( m_pixmap.width(), fontMetrics().width( m_text ) ) + frameWidth()*2, 
 		m_pixmap.height() + fontMetrics().height() + 5 + frameWidth()*2 );
 }
 
@@ -168,15 +168,15 @@ void K3bFlatButton::drawContents( QPainter* p )
   p->save();
 
   QRect textRect = fontMetrics().boundingRect( m_text );
-  int textX = QMAX( 0, ( rect.width() - textRect.width() ) / 2 );
+  int textX = qMax( 0, ( rect.width() - textRect.width() ) / 2 );
   int textY = textRect.height();
 
   if( !m_pixmap.isNull() ) {
     p->translate( rect.left(), rect.top() );
-    textX = QMAX( textX, (m_pixmap.width() - textRect.width()) / 2 );
+    textX = qMax( textX, (m_pixmap.width() - textRect.width()) / 2 );
     textY += 5 + m_pixmap.height();
 
-    int pixX = QMAX( QMAX( 0, (textRect.width() - m_pixmap.width()) / 2 ), 
+    int pixX = qMax( qMax( 0, (textRect.width() - m_pixmap.width()) / 2 ), 
 		     ( rect.width() - m_pixmap.width() ) / 2 );
     p->drawPixmap( pixX, 0, m_pixmap );
     p->drawText( textX, textY, m_text ); 

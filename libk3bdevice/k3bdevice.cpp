@@ -243,9 +243,9 @@ bool K3bDevice::Device::init( bool bCheckWritingModes )
         return false;
     }
     else {
-        m_vendor = QString::fromLatin1( (char*)(inq->vendor), 8 ).stripWhiteSpace();
-        m_description = QString::fromLatin1( (char*)(inq->product), 16 ).stripWhiteSpace();
-        m_version = QString::fromLatin1( (char*)(inq->revision), 4 ).stripWhiteSpace();
+        m_vendor = QString::fromLatin1( (char*)(inq->vendor), 8 ).trimmed();
+        m_description = QString::fromLatin1( (char*)(inq->product), 16 ).trimmed();
+        m_version = QString::fromLatin1( (char*)(inq->revision), 4 ).trimmed();
     }
 
     if( m_vendor.isEmpty() )
@@ -3111,7 +3111,7 @@ int K3bDevice::Device::determineMaximalWriteSpeed() const
     Q3ValueList<int> list = determineSupportedWriteSpeeds();
     if( !list.isEmpty() ) {
         for( Q3ValueList<int>::const_iterator it = list.constBegin(); it != list.constEnd(); ++it )
-            ret = QMAX( ret, *it );
+            ret = qMax( ret, *it );
     }
 
     if( ret > 0 )

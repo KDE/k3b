@@ -42,7 +42,7 @@ namespace K3bDevice
    */
 
   typedef struct disc_info {
-    Q_UINT16 length;
+    quint16 length;
 #ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
     unsigned char reserved1 : 3;
     unsigned char erasable  : 1;
@@ -86,7 +86,7 @@ namespace K3bDevice
     unsigned char n_sessions_m;
     unsigned char first_track_m;
     unsigned char last_track_m;
-    Q_UINT32 disc_id;
+    quint32 disc_id;
 
     /*
      * Last session lead-in start time

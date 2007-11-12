@@ -198,7 +198,7 @@ void K3bVideoCdRip::slotParseVcdXRipOutput( KProcess*, char* output, int len )
     // do every line
     QStringList::Iterator end( lines.end());
     for ( QStringList::Iterator str = lines.begin(); str != end; ++str ) {
-        *str = ( *str ).stripWhiteSpace();
+        *str = ( *str ).trimmed();
 
         emit debuggingOutput( "vcdxrip", *str );
 
@@ -311,13 +311,13 @@ void K3bVideoCdRip::parseInformation( QString text )
             int index = text.find( "(start lsn" );
             int end = text.find( " (+" );
             if ( end > 0) {
-                m_subPosition = text.mid( index + 11, end - index - 11 ).stripWhiteSpace().toLong();
+                m_subPosition = text.mid( index + 11, end - index - 11 ).trimmed().toLong();
             }
             else {
                 // found segment here we can get only the start lsn :)
                 // extracting item0001.mpg... (start lsn 225, 1 segments)
                 int end = text.find(  ",", index );
-                int overallPos = text.mid( index + 11, end - index - 11 ).stripWhiteSpace().toLong();
+                int overallPos = text.mid( index + 11, end - index - 11 ).trimmed().toLong();
                 double relOverallWritten = ( ( double ) overallPos  * 2352 ) / ( double ) m_videooptions ->getVideoCdSize()  ;
                 int newpercent =  ( int ) ( 100 * relOverallWritten );
                 if ( newpercent > m_oldpercent ) {
@@ -329,17 +329,17 @@ void K3bVideoCdRip::parseInformation( QString text )
 
             index = 11;
             end = text.find( "(start lsn" );
-            emit newSubTask( i18n( "Extracting %1" ).arg( text.mid( index, end - index ).stripWhiteSpace() ) );
+            emit newSubTask( i18n( "Extracting %1" ).arg( text.mid( index, end - index ).trimmed() ) );
         }
         // parse extracting files info
         // extracting CDI/CDI_IMAG.RTF to _cdi_cdi_imag.rtf (lsn 258, size 1315168, raw 1)
         else if ( text.contains( "(lsn" ) && text.contains( "size" ) ) {
             int index = 11;
             int end = text.find( "to" );
-            QString extractFileName = text.mid( index, end - index ).stripWhiteSpace();
+            QString extractFileName = text.mid( index, end - index ).trimmed();
             index = text.find( " to " );
             end = text.find( " (lsn" );
-            QString toFileName = text.mid( index + 4, end - index - 4 ).stripWhiteSpace();
+            QString toFileName = text.mid( index + 4, end - index - 4 ).trimmed();
             emit newSubTask( i18n( "Extracting %1 to %2" ).arg( extractFileName ).arg( toFileName ) );
         }
     }

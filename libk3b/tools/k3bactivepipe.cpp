@@ -117,8 +117,8 @@ public:
 
   QByteArray buffer;
 
-  Q_UINT64 bytesRead;
-  Q_UINT64 bytesWritten;
+  quint64 bytesRead;
+  quint64 bytesWritten;
 };
 
 
@@ -243,13 +243,13 @@ bool K3bActivePipe::pumpSync()
 }
 
 
-Q_UINT64 K3bActivePipe::bytesRead() const
+quint64 K3bActivePipe::bytesRead() const
 {
   return d->bytesRead;
 }
 
 
-Q_UINT64 K3bActivePipe::bytesWritten() const
+quint64 K3bActivePipe::bytesWritten() const
 {
   return d->bytesWritten;
 }

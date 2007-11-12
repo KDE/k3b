@@ -135,8 +135,8 @@ void K3bWaveFileWriter::updateHeader()
 
     m_outputFile.flush();
 
-    Q_INT32 dataSize( m_outputFile.at() - 44 );
-    Q_INT32 wavSize(dataSize + 44 - 8);
+    qint32 dataSize( m_outputFile.at() - 44 );
+    qint32 wavSize(dataSize + 44 - 8);
     char c[4];
 
     // jump to the wavSize position in the header

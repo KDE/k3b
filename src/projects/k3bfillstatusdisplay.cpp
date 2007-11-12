@@ -213,7 +213,7 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
     overSizeText = i18n("Available: %1 of %2")
       .arg( d->showTime
 	    ? i18n("%1 min").arg((K3b::Msf( cdSize*60*75 ) - d->doc->length()).toString(false))
-	    : KIO::convertSize( QMAX( (cdSize * 1024LL * 1024LL) - (long long)d->doc->size(), 0LL ) ) )
+	    : KIO::convertSize( qMax( (cdSize * 1024LL * 1024LL) - (long long)d->doc->size(), 0LL ) ) )
       .arg( d->showTime
 	    ? i18n("%1 min").arg(K3b::Msf( cdSize*60*75 ).toString(false))
 	    : KIO::convertSizeFromKB( cdSize * 1024 ) );
@@ -246,14 +246,14 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 
     // make sure the text does not cross the medium size marker
     if( docSizeTextPos <= mediumSizeMarkerPos && mediumSizeMarkerPos <= docSizeTextPos + docSizeTextLength )
-      docSizeTextPos = QMAX( crect.left() + 5, mediumSizeMarkerPos - docSizeTextLength - 5 );
+      docSizeTextPos = qMax( crect.left() + 5, mediumSizeMarkerPos - docSizeTextLength - 5 );
   }
   // ====================================================================================
 
   // draw the over size text
   // ====================================================================================
   QFont fnt(font());
-  fnt.setPointSize( QMAX( 8, fnt.pointSize()-4 ) );
+  fnt.setPointSize( qMax( 8, fnt.pointSize()-4 ) );
   fnt.setBold(false);
 
   QRect overSizeTextRect( rect() );
@@ -268,7 +268,7 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 
   // make sure the two text do not overlap (this does not cover all cases though)
   if( overSizeTextRect.left() < docSizeTextPos + docSizeTextLength )
-    docSizeTextPos = QMAX( crect.left() + 5, QMIN( overSizeTextRect.left() - docSizeTextLength - 5, mediumSizeMarkerPos - docSizeTextLength - 5 ) );
+    docSizeTextPos = qMax( crect.left() + 5, qMin( overSizeTextRect.left() - docSizeTextLength - 5, mediumSizeMarkerPos - docSizeTextLength - 5 ) );
 
   QRect docTextRect( rect() );
   docTextRect.setLeft( docSizeTextPos );

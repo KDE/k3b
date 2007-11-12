@@ -113,21 +113,21 @@ QString K3b::framesToString( int h, bool showFrames )
 }*/
 
 
-Q_INT16 K3b::swapByteOrder( const Q_INT16& i )
+qint16 K3b::swapByteOrder( const qint16& i )
 {
   return bswap_16( i );
   //((i << 8) & 0xff00) | ((i >> 8 ) & 0xff);
 }
 
 
-Q_INT32 K3b::swapByteOrder( const Q_INT32& i )
+qint32 K3b::swapByteOrder( const qint32& i )
 {
   //return ((i << 24) & 0xff000000) | ((i << 8) & 0xff0000) | ((i >> 8) & 0xff00) | ((i >> 24) & 0xff );
   return bswap_32( i );
 }
 
 
-Q_INT64 K3b::swapByteOrder( const Q_INT64& i )
+qint64 K3b::swapByteOrder( const qint64& i )
 {
   return bswap_64( i );
 }
@@ -153,7 +153,7 @@ QString K3b::findUniqueFilePrefix( const QString& _prefix, const QString& path )
 
   // now create the unique prefix
   QDir dir( url );
-  QStringList entries = dir.entryList( QDir::DefaultFilter, QDir::Name );
+  QStringList entries = dir.entryList( QDir::NoFilter, QDir::Name );
   int i = 0;
   for( QStringList::iterator it = entries.begin();
        it != entries.end(); ++it ) {
@@ -303,8 +303,8 @@ KIO::filesize_t K3b::imageFilesize( const KURL& url )
 {
   KIO::filesize_t size = K3b::filesize( url );
   int cnt = 0;
-  while( KIO::NetAccess::exists( KURL::fromPathOrURL( url.url() + '.' + QString::number(cnt).rightJustify( 3, '0' ) ), true ) )
-    size += K3b::filesize( KURL::fromPathOrURL( url.url() + '.' + QString::number(cnt++).rightJustify( 3, '0' ) ) );
+  while( KIO::NetAccess::exists( KURL::fromPathOrURL( url.url() + '.' + QString::number(cnt).rightJustified( 3, '0' ) ), true ) )
+    size += K3b::filesize( KURL::fromPathOrURL( url.url() + '.' + QString::number(cnt++).rightJustified( 3, '0' ) ) );
   return size;
 }
 
@@ -441,20 +441,20 @@ QString K3b::writingModeString( int mode )
 QString K3b::resolveLink( const QString& file )
 {
   QFileInfo f( file );
-  QStringList steps( f.absFilePath() );
+  QStringList steps( f.absoluteFilePath() );
   while( f.isSymLink() ) {
     QString p = f.readLink();
     if( !p.startsWith( "/" ) )
       p.prepend( f.dirPath(true) + "/" );
     f.setFile( p );
-    if( steps.contains( f.absFilePath() ) ) {
+    if( steps.contains( f.absoluteFilePath() ) ) {
       kdDebug() << "(K3b) symlink loop detected." << endl;
       break;
     }
     else
-      steps.append( f.absFilePath() );
+      steps.append( f.absoluteFilePath() );
   }
-  return f.absFilePath();
+  return f.absoluteFilePath();
 }
 
 
@@ -514,32 +514,32 @@ KURL::List K3b::convertToLocalUrls( const KURL::List& urls )
 }
 
 
-Q_INT16 K3b::fromLe16( char* data )
+qint16 K3b::fromLe16( char* data )
 {
 #ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
-  return swapByteOrder( *((Q_INT16*)data) );
+  return swapByteOrder( *((qint16*)data) );
 #else
-  return *((Q_INT16*)data);
+  return *((qint16*)data);
 #endif
 }
 
 
-Q_INT32 K3b::fromLe32( char* data )
+qint32 K3b::fromLe32( char* data )
 {
 #ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
-  return swapByteOrder( *((Q_INT32*)data) );
+  return swapByteOrder( *((qint32*)data) );
 #else
-  return *((Q_INT32*)data);
+  return *((qint32*)data);
 #endif
 }
 
 
-Q_INT64 K3b::fromLe64( char* data )
+qint64 K3b::fromLe64( char* data )
 {
 #ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
-  return swapByteOrder( *((Q_INT64*)data) );
+  return swapByteOrder( *((qint64*)data) );
 #else
-  return *((Q_INT64*)data);
+  return *((qint64*)data);
 #endif
 }
 

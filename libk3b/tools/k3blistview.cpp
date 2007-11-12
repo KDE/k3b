@@ -1024,7 +1024,7 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
 {
   if( e->type() == QEvent::KeyPress ) { 
      QKeyEvent* ke = static_cast<QKeyEvent*>(e);
-     if( ke->key() == Key_Tab ) {
+     if( ke->key() == Qt::Key_Tab ) {
        if( o == m_editorLineEdit || 
 	   o == d->msfEditLineEdit || 
 	   o == d->spinBoxLineEdit ) {
@@ -1065,7 +1065,7 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
 	 return true;
        }
      }
-     if( ke->key() == Key_Return ) {
+     if( ke->key() == Qt::Key_Return ) {
        if( o == m_editorLineEdit || 
 	   o == d->msfEditLineEdit || 
 	   o == d->spinBoxLineEdit ) {
@@ -1085,7 +1085,7 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
 	 return true;
        }
      }
-     else if( ke->key() == Key_Escape ) {
+     else if( ke->key() == Qt::Key_Escape ) {
        if( o == m_editorLineEdit || 
 	   o == d->msfEditLineEdit || 
 	   o == d->spinBoxLineEdit ) {
@@ -1115,7 +1115,7 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
       }
     }
 
-    if( me->button() == QMouseEvent::LeftButton ) {
+    if( me->button() == Qt::LeftButton ) {
       if( item != m_currentEditItem || m_currentEditColumn != col ) {
 	doRename();
 	if( K3bListViewItem* k3bItem = dynamic_cast<K3bListViewItem*>(item) ) {
@@ -1181,7 +1181,7 @@ void K3bListView::viewportResizeEvent( QResizeEvent* e )
 
     if( bgPix.width() < m_backgroundPixmap.width() ||
 	bgPix.height() < m_backgroundPixmap.height() ) {
-      QPixmap newBgPix( m_backgroundPixmap.convertToImage().scale( bgPix.size(), QImage::ScaleMin ) );
+      QPixmap newBgPix( m_backgroundPixmap.convertToImage().scale( bgPix.size(), Qt::ScaleMin ) );
       if( m_backgroundPixmapPosition == TOP_LEFT )
 	bitBlt( &bgPix, 0, 0, 
 		&newBgPix, 0, 0, 

@@ -101,7 +101,7 @@ void K3bMovixDoc::addMovixFile( const KURL& _url, int pos )
       return;
   }
 
-  K3bMovixFileItem* newK3bItem = new K3bMovixFileItem( f.absFilePath(), this, root(), newName );
+  K3bMovixFileItem* newK3bItem = new K3bMovixFileItem( f.absoluteFilePath(), this, root(), newName );
   if( pos < 0 || pos > (int)m_movixFiles.count() )
     pos = m_movixFiles.count();
 
@@ -421,7 +421,7 @@ void K3bMovixDoc::addSubTitleItem( K3bMovixFileItem* item, const KURL& url )
     return;
   }
 
-  K3bFileItem* subItem = new K3bFileItem( f.absFilePath(), this, root(), name );
+  K3bFileItem* subItem = new K3bFileItem( f.absoluteFilePath(), this, root(), name );
   item->setSubTitleItem( subItem );
 
   emit newMovixFileItems();

@@ -544,11 +544,11 @@ bool K3bCdCopyJob::prepareImageFiles()
     int i = 1;
     for( K3bDevice::Toc::const_iterator it = d->toc.begin(); it != d->toc.end(); ++it ) {
       if( (*it).type() == K3bDevice::Track::AUDIO ) {
-	d->imageNames.append( m_tempPath + QString("Track%1.wav").arg(QString::number(i).rightJustify(2, '0')) );
-	d->infNames.append( m_tempPath + QString("Track%1.inf").arg(QString::number(i).rightJustify(2, '0')) );
+	d->imageNames.append( m_tempPath + QString("Track%1.wav").arg(QString::number(i).rightJustified(2, '0')) );
+	d->infNames.append( m_tempPath + QString("Track%1.inf").arg(QString::number(i).rightJustified(2, '0')) );
       }
       else
-	d->imageNames.append( m_tempPath + QString("Track%1.iso").arg(QString::number(i).rightJustify(2, '0')) );
+	d->imageNames.append( m_tempPath + QString("Track%1.iso").arg(QString::number(i).rightJustified(2, '0')) );
       ++i;
     }
 

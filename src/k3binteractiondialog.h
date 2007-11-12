@@ -62,7 +62,7 @@ class K3bInteractionDialog : public KDialog
 			int defaultButton = START_BUTTON,
 			const QString& configgroup = QString::null,
 			bool modal = true, 
-			WFlags fl = 0 );
+			Qt::WFlags fl = 0 );
   virtual ~K3bInteractionDialog();
 
   void setMainWidget( QWidget* w );

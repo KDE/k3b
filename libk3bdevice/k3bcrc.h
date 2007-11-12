@@ -24,7 +24,7 @@ namespace K3bDevice
 
   // bool check( unsigned char* message, unsigned int len, unsigned char* crc, unsigned int crcLen );
 
-  Q_UINT16 calcX25( unsigned char* message, unsigned int len, Q_UINT16 start = 0x0000 );
+  quint16 calcX25( unsigned char* message, unsigned int len, quint16 start = 0x0000 );
 
   /**
    * subdata is 12 bytes in long.

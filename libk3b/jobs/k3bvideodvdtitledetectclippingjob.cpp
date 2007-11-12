@@ -128,9 +128,9 @@ void K3bVideoDVDTitleDetectClippingJob::startTranscode( int chapter )
   // use the whole chapter
   //
   if( d->totalChapters == 1 )
-    d->currentFrames = QMIN( 3000, QMAX( 1, m_dvd[m_titleNumber-1][d->currentChapter-1].playbackTime().totalFrames() ) );
+    d->currentFrames = qMin( 3000, qMax( 1, m_dvd[m_titleNumber-1][d->currentChapter-1].playbackTime().totalFrames() ) );
   else
-    d->currentFrames = QMIN( 200, QMAX( 1, m_dvd[m_titleNumber-1][d->currentChapter-1].playbackTime().totalFrames() ) );
+    d->currentFrames = qMin( 200, qMax( 1, m_dvd[m_titleNumber-1][d->currentChapter-1].playbackTime().totalFrames() ) );
 
   //
   // prepare the process
@@ -241,10 +241,10 @@ void K3bVideoDVDTitleDetectClippingJob::slotTranscodeStderr( const QString& line
     int pos = line.find( "-j" );
     if( pos > 0 ) {
       QStringList values = QStringList::split( ',', line.mid( pos+3 ) );
-      m_clippingTop = QMIN( m_clippingTop, values[0].toInt() );
-      m_clippingLeft = QMIN( m_clippingLeft, values[1].toInt() );
-      m_clippingBottom = QMIN( m_clippingBottom, values[2].toInt() );
-      m_clippingRight = QMIN( m_clippingRight, values[3].toInt() );
+      m_clippingTop = qMin( m_clippingTop, values[0].toInt() );
+      m_clippingLeft = qMin( m_clippingLeft, values[1].toInt() );
+      m_clippingBottom = qMin( m_clippingBottom, values[2].toInt() );
+      m_clippingRight = qMin( m_clippingRight, values[3].toInt() );
     }
     else
       kdDebug() << "(K3bVideoDVDTitleDetectClippingJob) failed to parse line: " << line << endl;

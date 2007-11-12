@@ -72,7 +72,7 @@ void K3bDataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column,
     QFontMetrics fm = p->fontMetrics();
 
     if( dataItem()->hideOnRockRidge() ) {
-      int tw = QMAX( fm.width( "rr" ) + 2*listView()->itemMargin(), height() );
+      int tw = qMax( fm.width( "rr" ) + 2*listView()->itemMargin(), height() );
       p->fillRect( width-tw, 0, tw, height(), isSelected() ? _cg.highlight() : _cg.brush(QColorGroup::Base) );
       p->setPen( isSelected() ? _cg.highlightedText() : red );
       p->drawEllipse( width-tw, 0, tw, height() );
@@ -81,7 +81,7 @@ void K3bDataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column,
     }
 
     if( dataItem()->hideOnJoliet() ) {
-      int tw = QMAX( fm.width( "j" ) + 2*listView()->itemMargin(), height() );
+      int tw = qMax( fm.width( "j" ) + 2*listView()->itemMargin(), height() );
       p->fillRect( width-tw, 0, tw, height(), isSelected() ? _cg.highlight() : _cg.brush(QColorGroup::Base) );
       p->setPen( isSelected() ? _cg.highlightedText() : blue );
       p->drawEllipse( width-tw, 0, tw, height() );
@@ -121,10 +121,10 @@ QString K3bDataViewItem::key( int col, bool a ) const
 
     if( a )
       return ( dataItem()->isDir() ? QString("0") : QString("1") )
-	+ QString::number( dataItem()->size() ).rightJustify( 16, '0' );
+	+ QString::number( dataItem()->size() ).rightJustified( 16, '0' );
     else
       return ( dataItem()->isDir() ? QString("1") : QString("0") )
-	+ QString::number( dataItem()->size() ).rightJustify( 16, '0' );
+	+ QString::number( dataItem()->size() ).rightJustified( 16, '0' );
   }
 
   if( a )

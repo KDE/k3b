@@ -514,7 +514,7 @@ QString K3bMediaSelectionComboBox::noMediumMessage() const
       mediumString = i18n("CD-ROM");
 
   if ( mediumString.isEmpty() ) {
-      stateString = stateString.replace( "%1", "" ).simplifyWhiteSpace();
+      stateString = stateString.replace( "%1", "" ).simplified();
   }
 
   if ( stateString.contains( "%1" ) )

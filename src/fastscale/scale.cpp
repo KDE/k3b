@@ -86,8 +86,8 @@
 namespace ImageUtils {
 
 
-#define Max QMAX
-#define Min QMIN
+#define Max qMax
+#define Min qMin
 
 // mustn't be less than used precision (i.e. 1/fastfloat::RATIO)
 #define MagickEpsilon 0.0002
@@ -1913,7 +1913,7 @@ void MImageScale::mimageScaleAARGB(MImageScaleInfo *isi, unsigned int *dest,
 // 	// Imlib2/Mosfet scale - I have really no idea how many pixels it needs
 // 	if( filter == Box && blur == 1.0 ) return int( 3 / zoom + 1 );
 // // This is support size for ImageMagick's scaling.
-// 	double scale=blur*QMAX(1.0/zoom,1.0);
+// 	double scale=blur*qMax(1.0/zoom,1.0);
 // 	double support=scale* filtersupport;
 // 	if (support <= 0.5) support=0.5+0.000001;
 // 	return int( support + 1 );

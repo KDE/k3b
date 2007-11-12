@@ -44,12 +44,12 @@ void K3bCddbLocalQuery::doQuery()
   QString path = preparePath( m_cddbDir );
 
   kdDebug() << "(K3bCddbLocalQuery) searching in dir " << path << " for " 
-	    << QString::number( toc().discId(), 16 ).rightJustify( 8, '0' ) << endl;
+	    << QString::number( toc().discId(), 16 ).rightJustified( 8, '0' ) << endl;
 
   for( QStringList::const_iterator it = categories().begin();
        it != categories().end(); ++it ) {
 
-    QString file = path + *it + "/" +  QString::number( toc().discId(), 16 ).rightJustify( 8, '0' );
+    QString file = path + *it + "/" +  QString::number( toc().discId(), 16 ).rightJustified( 8, '0' );
 
     if( QFile::exists( file ) ) {
       // found file
@@ -64,7 +64,7 @@ void K3bCddbLocalQuery::doQuery()
 	K3bCddbResultEntry entry;
 	parseEntry( t, entry );
 	K3bCddbResultHeader header;
-	header.discid = QString::number( toc().discId(), 16 ).rightJustify( 8, '0' );
+	header.discid = QString::number( toc().discId(), 16 ).rightJustified( 8, '0' );
 	header.category = *it;
 	header.title = entry.cdTitle;
 	header.artist = entry.cdArtist;
@@ -117,9 +117,9 @@ QString K3bCddbLocalQuery::preparePath( const QString& p )
 {
   QString path = p;
   if( path.startsWith( "~" ) )
-    path.replace( 0, 1, QDir::homeDirPath() );
+    path.replace( 0, 1, QDir::homePath() );
   else if( !path.startsWith( "/" ) )
-    path.prepend( QDir::homeDirPath() );
+    path.prepend( QDir::homePath() );
   if( path[path.length()-1] != '/' )
     path.append( "/" );
 

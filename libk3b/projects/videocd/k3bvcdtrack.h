@@ -40,7 +40,7 @@ class LIBK3B_EXPORT K3bVcdTrack
         }
         QString absPath() const
         {
-            return QFileInfo( m_file ).absFilePath();
+            return QFileInfo( m_file ).absoluteFilePath();
         }
         KIO::filesize_t size() const;
         int index() const;

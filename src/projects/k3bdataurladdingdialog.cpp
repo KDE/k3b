@@ -268,13 +268,13 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   m_urlQueue.remove( m_urlQueue.begin() );
   //
   // HINT:
-  // we only use QFileInfo::absFilePath() and QFileInfo::isHidden()
+  // we only use QFileInfo::absoluteFilePath() and QFileInfo::isHidden()
   // both do not cause QFileInfo to stat, thus no speed improvement
   // can come from removing QFileInfo usage here.
   //
   QFileInfo info(url.path());
-  QString absFilePath( info.absFilePath() );
-  QString resolved( absFilePath );
+  QString absoluteFilePath( info.absFilePath() );
+  QString resolved( absoluteFilePath );
 
   bool valid = true;
   k3b_struct_stat statBuf, resolvedStatBuf;
@@ -301,7 +301,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
     m_nonLocalFiles.append( url.path() );
   }
 
-  else if( k3b_lstat( QFile::encodeName(absFilePath), &statBuf ) != 0 ) {
+  else if( k3b_lstat( QFile::encodeName(absoluteFilePath), &statBuf ) != 0 ) {
     valid = false;
     m_notFoundFiles.append( url.path() );
   }
@@ -319,13 +319,13 @@ void K3bDataUrlAddingDialog::slotAddUrls()
     // symlinks are always readable and can always be added to a project
     // but we need to know if the symlink points to a directory
     if( isSymLink ) {
-      resolved = K3b::resolveLink( absFilePath );
+      resolved = K3b::resolveLink( absoluteFilePath );
       k3b_stat( QFile::encodeName(resolved), &resolvedStatBuf );
       isDir = S_ISDIR(resolvedStatBuf.st_mode);
     }
 
     else {
-      if( ::access( QFile::encodeName( absFilePath ), R_OK ) != 0 ) {
+      if( ::access( QFile::encodeName( absoluteFilePath ), R_OK ) != 0 ) {
 	valid = false;
 	m_unreadableFiles.append( url.path() );
       }
@@ -487,7 +487,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
     // let's see if this link starts a loop
     // that means if it points to some folder above this one
     // if so we cannot follow it anyway
-    if( isDir && isSymLink && !absFilePath.startsWith( resolved ) ) {
+    if( isDir && isSymLink && !absoluteFilePath.startsWith( resolved ) ) {
       bool followLink = dir->doc()->isoOptions().followSymbolicLinks() || m_bFolderLinksFollowAll;
       if( !followLink && !m_bFolderLinksAddAll ) {
 	switch( K3bMultiChoiceDialog::choose( i18n("Adding link to folder"),
@@ -497,7 +497,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 						   "K3b project cannot be resolved."
 						   "<p><b>If you do not intend to enable the option <em>follow symbolic links</em> you may safely "
 						   "ignore this warning and choose to add the link to the project.</b>")
-					      .arg(absFilePath)
+					      .arg(absoluteFilePath)
 					      .arg(resolved ),
 					      QMessageBox::Warning,
 					      this,
@@ -525,15 +525,15 @@ void K3bDataUrlAddingDialog::slotAddUrls()
       }
 
       if( followLink ) {
-	absFilePath = resolved;
+	absoluteFilePath = resolved;
 	isSymLink = false;
 
 	// count the files in the followed dir
 	if( m_dirSizeJob->active() )
-	  m_dirSizeQueue.append( KURL::fromPathOrURL(absFilePath) );
+	  m_dirSizeQueue.append( KURL::fromPathOrURL(absoluteFilePath) );
 	else {
 	  m_progressWidget->setTotalSteps( 0 );
-	  m_dirSizeJob->setUrls( KURL::fromPathOrURL(absFilePath) );
+	  m_dirSizeJob->setUrls( KURL::fromPathOrURL(absoluteFilePath) );
 	  m_dirSizeJob->start();
 	}
       }
@@ -562,8 +562,8 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 	newDirItem->setLocalPath( url.path() ); // HACK: see k3bdiritem.h
       }
 
-      QDir newDir( absFilePath );
-      int dirFilter = QDir::All|QDir::Hidden|QDir::System;
+      QDir newDir( absoluteFilePath );
+      int dirFilter = QDir::TypeMask|QDir::Hidden|QDir::System;
 
       QStringList dlist = newDir.entryList( dirFilter );
       const QString& dot = KGlobal::staticQString( "." );
@@ -572,7 +572,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
       dlist.remove( dotdot );
 
       for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it ) {
-	m_urlQueue.append( qMakePair( KURL::fromPathOrURL(absFilePath + '/' + *it), newDirItem ) );
+	m_urlQueue.append( qMakePair( KURL::fromPathOrURL(absoluteFilePath + '/' + *it), newDirItem ) );
       }
     }
     else {

@@ -386,7 +386,7 @@ void K3bAudioRippingDialog::refresh()
 						   m_patternWidget->blankReplaceString() ) + "." + extension;
       }
       else {
-	filename = i18n("Track%1").arg( QString::number( *it ).rightJustify( 2, '0' ) ) + "." + extension;
+	filename = i18n("Track%1").arg( QString::number( *it ).rightJustified( 2, '0' ) ) + "." + extension;
       }
 
       filename = d->fsInfo.fixupPath( filename );

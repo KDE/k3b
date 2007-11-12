@@ -37,7 +37,7 @@
 
 
 K3bJobProgressOSD::K3bJobProgressOSD( QWidget* parent, const char* name )
-  : QWidget( parent, name, WType_TopLevel | WNoAutoErase | WStyle_Customize | WX11BypassWM | WStyle_StaysOnTop ),
+  : QWidget( parent, name, Qt::WType_TopLevel | WNoAutoErase | Qt::WStyle_Customize | WX11BypassWM | Qt::WStyle_StaysOnTop ),
     m_dirty(true),
     m_progress(0),
     m_dragging(false),
@@ -126,8 +126,8 @@ void K3bJobProgressOSD::renderOSD()
     int textWidth = fontMetrics().width( m_text );
 
     // do not change the size every time the text changes, just in case we are too small
-    QSize newSize( QMAX( QMAX( 2*margin + icon.width() + margin + textWidth, 100 ), width() ),
-		   QMAX( 2*margin + icon.height(), 2*margin + fontMetrics().height()*2 ) );
+    QSize newSize( qMax( qMax( 2*margin + icon.width() + margin + textWidth, 100 ), width() ),
+		   qMax( 2*margin + icon.height(), 2*margin + fontMetrics().height()*2 ) );
     
     m_osdBuffer.resize( newSize );
     QPainter p( &m_osdBuffer );

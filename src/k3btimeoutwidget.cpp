@@ -102,7 +102,7 @@ QSize K3bTimeoutWidget::minimumSizeHint() const
   int fw = fontMetrics().width( QString::number( d->timeout/1000 ) );
   int fh = fontMetrics().height();
 
-  int diam = QMAX( fw, fh ) + 2*d->margin;
+  int diam = qMax( fw, fh ) + 2*d->margin;
 
   return QSize( diam, diam );
 }

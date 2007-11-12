@@ -740,12 +740,12 @@ bool K3bIso9660::isOpen() const
 
 void K3bIso9660::createSimplePrimaryDesc( struct iso_primary_descriptor* desc )
 {
-  d->primaryDesc.volumeId = QString::fromLocal8Bit( desc->volume_id, 32 ).stripWhiteSpace();
-  d->primaryDesc.systemId = QString::fromLocal8Bit( desc->system_id, 32 ).stripWhiteSpace();
-  d->primaryDesc.volumeSetId = QString::fromLocal8Bit( desc->volume_set_id, 128 ).stripWhiteSpace();
-  d->primaryDesc.publisherId = QString::fromLocal8Bit( desc->publisher_id, 128 ).stripWhiteSpace();
-  d->primaryDesc.preparerId = QString::fromLocal8Bit( desc->preparer_id, 128 ).stripWhiteSpace();
-  d->primaryDesc.applicationId = QString::fromLocal8Bit( desc->application_id, 128 ).stripWhiteSpace();
+  d->primaryDesc.volumeId = QString::fromLocal8Bit( desc->volume_id, 32 ).trimmed();
+  d->primaryDesc.systemId = QString::fromLocal8Bit( desc->system_id, 32 ).trimmed();
+  d->primaryDesc.volumeSetId = QString::fromLocal8Bit( desc->volume_set_id, 128 ).trimmed();
+  d->primaryDesc.publisherId = QString::fromLocal8Bit( desc->publisher_id, 128 ).trimmed();
+  d->primaryDesc.preparerId = QString::fromLocal8Bit( desc->preparer_id, 128 ).trimmed();
+  d->primaryDesc.applicationId = QString::fromLocal8Bit( desc->application_id, 128 ).trimmed();
   d->primaryDesc.volumeSetSize = isonum_723(desc->volume_set_size);
   d->primaryDesc.volumeSetNumber = isonum_723(desc->volume_set_size);
   d->primaryDesc.logicalBlockSize = isonum_723(desc->logical_block_size);

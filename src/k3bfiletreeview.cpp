@@ -237,7 +237,7 @@ void K3bDeviceBranchViewItem::paintCell( QPainter* p, const QColorGroup& cg, int
   // from QListViewItem
   if( isOpen() && childCount() ) {
     int textheight = fm.size( align, text(0) ).height() + 2 * listView()->itemMargin();
-    textheight = QMAX( textheight, QApplication::globalStrut().height() );
+    textheight = qMax( textheight, QApplication::globalStrut().height() );
     if ( textheight % 2 > 0 )
       textheight++;
     if ( textheight < height() ) {
@@ -265,7 +265,7 @@ int K3bDeviceBranchViewItem::widthHint() const
   f.setItalic( true );
   f.setBold( false );
   f.setPointSize( f.pointSize() - 2 );
-  w = QMAX( w, QFontMetrics(f).width( text(0).mid( text(0).find('\n')+1 ) ) );
+  w = qMax( w, QFontMetrics(f).width( text(0).mid( text(0).find('\n')+1 ) ) );
 
   w++; // see paintCell
 
@@ -470,7 +470,7 @@ void K3bFileTreeView::initActions()
 
 void K3bFileTreeView::addDefaultBranches()
 {
-  KURL home = KURL::fromPathOrURL( QDir::homeDirPath() );
+  KURL home = KURL::fromPathOrURL( QDir::homePath() );
   KURL root = KURL( "file:/" );
 
   KFileTreeBranch* treeBranch = addBranch( new K3bFileTreeBranch( this, root, i18n("Root"), SmallIcon("folder_red") ) );
@@ -722,7 +722,7 @@ void K3bFileTreeView::updateMinimumWidth()
   int w = 0;
   for( QMap<KFileTreeBranch*, K3bDevice::Device*>::Iterator it = d->branchDeviceMap.begin();
        it != d->branchDeviceMap.end(); ++it ) {
-    w = QMAX( w, static_cast<K3bDeviceBranchViewItem*>( it.key()->root() )->widthHint() );
+    w = qMax( w, static_cast<K3bDeviceBranchViewItem*>( it.key()->root() )->widthHint() );
   }
 
   // width of the items + scrollbar width + the frame + a little eyecandy spacing

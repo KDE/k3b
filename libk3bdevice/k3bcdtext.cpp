@@ -88,7 +88,7 @@ namespace K3bDevice {
 // 	       pack[i].data[10] == '\0' ? '°' : pack[i].data[10],
 // 	       pack[i].data[11] == '\0' ? '°' : pack[i].data[11] );
 //       s += QString( " %1 |" ).arg( "'" + QCString(str,13) + "'", 14 );
-//       Q_UINT16 crc = pack[i].crc[0]<<8|pack[i].crc[1];
+//       quint16 crc = pack[i].crc[0]<<8|pack[i].crc[1];
 //       s += QString( " %1 |" ).arg( crc );
       k3bDebug() << s << endl;
     }
@@ -177,7 +177,7 @@ void K3bDevice::CdText::setRawPackData( const unsigned char* data, int len )
       pack[i].crc[0] ^= 0xff;
       pack[i].crc[1] ^= 0xff;
 
-      Q_UINT16 crc = calcX25( reinterpret_cast<unsigned char*>(&pack[i]), 18 );
+      quint16 crc = calcX25( reinterpret_cast<unsigned char*>(&pack[i]), 18 );
 
       pack[i].crc[0] ^= 0xff;
       pack[i].crc[1] ^= 0xff;
@@ -403,7 +403,7 @@ QByteArray K3bDevice::CdText::createPackData( int packType, unsigned int& packCo
     //
     // Copy as many bytes as possible into the pack
     //
-    int copyBytes = QMIN( 12-packPos, text.length()-textPos );
+    int copyBytes = qMin( 12-packPos, text.length()-textPos );
     ::memcpy( reinterpret_cast<char*>(&pack.data[packPos]), &text.data()[textPos], copyBytes );
     textPos += copyBytes;
     packPos += copyBytes;
@@ -462,7 +462,7 @@ QByteArray K3bDevice::CdText::createPackData( int packType, unsigned int& packCo
 void K3bDevice::CdText::savePack( cdtext_pack* pack, QByteArray& data, unsigned int& dataFill ) const
 {
   // create CRC
-  Q_UINT16 crc = calcX25( reinterpret_cast<unsigned char*>(pack), sizeof(cdtext_pack)-2 );
+  quint16 crc = calcX25( reinterpret_cast<unsigned char*>(pack), sizeof(cdtext_pack)-2 );
 
   // invert for Redbook compliance
   crc ^= 0xffff;

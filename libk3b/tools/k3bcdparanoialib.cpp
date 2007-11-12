@@ -710,7 +710,7 @@ char* K3bCdparanoiaLib::read( int* statusCode, unsigned int* track, bool littleE
   //
   d->updateParanoiaMode();
 
-  Q_INT16* data = d->data->paranoiaRead( paranoiaCallback, d->maxRetries );
+  qint16* data = d->data->paranoiaRead( paranoiaCallback, d->maxRetries );
 
   char* charData = reinterpret_cast<char*>(data);
 

@@ -110,7 +110,7 @@ QString K3bAudioTrackViewItem::text(int i) const
   switch( i )
     {
     case 0:
-      return QString::number( m_track->trackNumber() ).rightJustify( 2, ' ' );
+      return QString::number( m_track->trackNumber() ).rightJustified( 2, ' ' );
     case 1:
       return m_track->performer();
     case 2:

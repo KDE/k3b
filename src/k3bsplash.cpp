@@ -35,12 +35,12 @@
 
 K3bSplash::K3bSplash( QWidget* parent, const char* name )
   : Q3VBox( parent, name, 
-	   WStyle_Customize|
+	   Qt::WStyle_Customize|
 	   WDestructiveClose|
-	   /*	   WStyle_Splash|*/
+	   /*	   Qt::WStyle_Splash|*/
 	   WX11BypassWM|
-	   WStyle_NoBorder|
-	   WStyle_StaysOnTop )
+	   Qt::WStyle_NoBorder|
+	   Qt::WStyle_StaysOnTop )
 {
   setMargin( 0 );
   setSpacing( 0 );
@@ -49,7 +49,7 @@ K3bSplash::K3bSplash( QWidget* parent, const char* name )
   copyrightLabel->setMargin( 5 );
   copyrightLabel->setPaletteBackgroundColor( black );
   copyrightLabel->setPaletteForegroundColor( white );
-  copyrightLabel->setAlignment( AlignRight );
+  copyrightLabel->setAlignment( Qt::AlignRight );
 
   QLabel* picLabel = new QLabel( this );
   if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
@@ -119,7 +119,7 @@ void K3bSplash::addInfo( const QString& s )
 //   QRect rect3 = fm.boundingRect( line3 );
 
 //   int textH = rect1.height() + rect2.height() + rect3.height() + 2 * fm.leading() + 2 + rect2.height() /*hack because the boundingRect method seems not to work properly! :-(*/;
-//   int textW = QMAX( rect1.width(), QMAX( rect2.width(), rect3.width() ) ) + 2;
+//   int textW = qMax( rect1.width(), qMax( rect2.width(), rect3.width() ) ) + 2;
 
 //   int startX = 10;
 //   int startY = height() - 10 - textH;

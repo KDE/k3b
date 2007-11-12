@@ -196,7 +196,7 @@ void K3bDataTrackReader::WorkThread::run()
 		       .arg( m_lastSector.lba() )
 		       .arg( m_usedSectorSize )
 		       .arg( m_lastSector.lba() - m_firstSector.lba() + 1 )
-		       .arg( Q_UINT64(m_usedSectorSize) * (Q_UINT64)(m_lastSector.lba() - m_firstSector.lba() + 1) ) );
+		       .arg( quint64(m_usedSectorSize) * (quint64)(m_lastSector.lba() - m_firstSector.lba() + 1) ) );
 
   QFile file;
   if( m_fd == -1 ) {
@@ -259,7 +259,7 @@ void K3bDataTrackReader::WorkThread::run()
   int bufferLen = s_bufferSizeSectors*m_usedSectorSize;
   while( !m_canceled && currentSector <= m_lastSector ) {
 
-    int maxReadSectors = QMIN( bufferLen/m_usedSectorSize, m_lastSector.lba()-currentSector.lba()+1 );
+    int maxReadSectors = qMin( bufferLen/m_usedSectorSize, m_lastSector.lba()-currentSector.lba()+1 );
 
     int readSectors = read( buffer,
 			    currentSector.lba(),
@@ -338,7 +338,7 @@ void K3bDataTrackReader::WorkThread::run()
   emitDebuggingOutput( "K3bDataTrackReader",
 		       QString("Read a total of %1 sectors (%2 bytes)")
 		       .arg(totalReadSectors.lba())
-		       .arg((Q_UINT64)totalReadSectors.lba()*(Q_UINT64)m_usedSectorSize) );
+		       .arg((quint64)totalReadSectors.lba()*(quint64)m_usedSectorSize) );
 
   if( m_canceled )
     emitCanceled();

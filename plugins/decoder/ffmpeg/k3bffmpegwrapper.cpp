@@ -48,7 +48,7 @@ public:
   char* outputBufferPos;
   int outputBufferSize;
   AVPacket packet;
-  Q_UINT8* packetData;
+  quint8* packetData;
   int packetSize;
 };
 
@@ -237,7 +237,7 @@ QString K3bFFMpegFile::comment() const
 int K3bFFMpegFile::read( char* buf, int bufLen )
 {
   if( fillOutputBuffer() > 0 ) {
-    int len = QMIN(bufLen, d->outputBufferSize);
+    int len = qMin(bufLen, d->outputBufferSize);
     ::memcpy( buf, d->outputBufferPos, len );
 
     // TODO: only swap if needed
@@ -316,7 +316,7 @@ bool K3bFFMpegFile::seek( const K3b::Msf& msf )
   d->packetSize = 0;
 
   double seconds = (double)msf.totalFrames()/75.0;
-  Q_UINT64 timestamp = (Q_UINT64)(seconds * (double)AV_TIME_BASE);
+  quint64 timestamp = (quint64)(seconds * (double)AV_TIME_BASE);
 
   // FIXME: do we really need the start_time and why?
 #if LIBAVFORMAT_BUILD >= 4619

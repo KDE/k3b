@@ -80,7 +80,7 @@ QString K3bMovixFileViewItem::text( int col ) const
   switch( col ) {
   case 0:
     // allowing 999 files to be added. 
-    return QString::number( doc()->indexOf( fileItem() ) ).rightJustify( 3, ' ' );
+    return QString::number( doc()->indexOf( fileItem() ) ).rightJustified( 3, ' ' );
   case 1:
     return fileItem()->k3bName();
   case 2:
@@ -113,7 +113,7 @@ void K3bMovixFileViewItem::setText( int col, const QString& text )
 
 QString K3bMovixFileViewItem::key( int, bool ) const
 {
-  return QString::number( doc()->indexOf( fileItem() ) ).rightJustify( 10, '0' );
+  return QString::number( doc()->indexOf( fileItem() ) ).rightJustified( 10, '0' );
 }
 
 

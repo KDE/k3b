@@ -168,7 +168,7 @@ void K3bAudioTrackView::setupActions()
 				    KShortcut(), this, SLOT(slotProperties()), 
 				    actionCollection(), "track_properties" );
   m_actionRemove = new KAction( i18n( "Remove" ), "editdelete",
-				Key_Delete, this, SLOT(slotRemove()), 
+				Qt::Key_Delete, this, SLOT(slotRemove()), 
 				actionCollection(), "track_remove" );
 
   m_actionAddSilence = new KAction( i18n("Add Silence") + "...", "misc",
@@ -639,11 +639,11 @@ void K3bAudioTrackView::resizeColumns()
   int filenameWidth = header()->fontMetrics().width( header()->label(5) );
 
   for( Q3ListViewItemIterator it( this ); it.current(); ++it ) {
-    artistWidth = QMAX( artistWidth, it.current()->width( fontMetrics(), this, 1 ) );
-    titleWidth = QMAX( titleWidth, it.current()->width( fontMetrics(), this, 2 ) );
-    typeWidth = QMAX( typeWidth, it.current()->width( fontMetrics(), this, 3 ) );
-    lengthWidth = QMAX( lengthWidth, it.current()->width( fontMetrics(), this, 4 ) );
-    filenameWidth = QMAX( filenameWidth, it.current()->width( fontMetrics(), this, 5 ) );
+    artistWidth = qMax( artistWidth, it.current()->width( fontMetrics(), this, 1 ) );
+    titleWidth = qMax( titleWidth, it.current()->width( fontMetrics(), this, 2 ) );
+    typeWidth = qMax( typeWidth, it.current()->width( fontMetrics(), this, 3 ) );
+    lengthWidth = qMax( lengthWidth, it.current()->width( fontMetrics(), this, 4 ) );
+    filenameWidth = qMax( filenameWidth, it.current()->width( fontMetrics(), this, 5 ) );
   }
 
   // add a margin

@@ -156,7 +156,7 @@ public:
 
     // give ourselves a reasonable size
     QSize s = sizeHint();
-    s.setWidth( QMAX(s.width(), 300) );
+    s.setWidth( qMax(s.width(), 300) );
     resize( s );
   }
 

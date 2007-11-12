@@ -173,8 +173,8 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
 
   m_viewPlayList = new K3bPlayListView( this );
 
-  m_labelOverallTime->setAlignment( AlignHCenter | AlignVCenter );
-  m_labelCurrentTime->setAlignment( AlignHCenter | AlignVCenter );
+  m_labelOverallTime->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
+  m_labelCurrentTime->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
   m_labelOverallTime->setFrameStyle( Q3Frame::StyledPanel | Q3Frame::Plain );
   m_labelCurrentTime->setFrameStyle( Q3Frame::StyledPanel | Q3Frame::Plain );
   m_labelFilename->setFrameStyle( Q3Frame::StyledPanel | Q3Frame::Plain );
@@ -227,7 +227,7 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
   // actions
   // ------------------------------------------------------------------------
   m_actionRemove = new KAction( i18n( "Remove" ), "editdelete",
-				Key_Delete, this, SLOT(slotRemoveSelected()),
+				Qt::Key_Delete, this, SLOT(slotRemoveSelected()),
 				this, "audioplayer_remove" );
   m_actionClear = new KAction( i18n( "Clear List" ), "editclear",
 			       0, this, SLOT(clear()),
