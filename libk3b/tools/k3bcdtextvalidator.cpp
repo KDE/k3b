@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -16,8 +16,8 @@
 
 #include "k3bcdtextvalidator.h"
 
-K3bCdTextValidator::K3bCdTextValidator(QObject *parent, const char *name)
-  : K3bLatin1Validator(parent, name)
+K3bCdTextValidator::K3bCdTextValidator(QObject *parent)
+  : K3bLatin1Validator(parent)
 {
 }
 
@@ -33,7 +33,7 @@ QValidator::State K3bCdTextValidator::validate( QString& input, int& pos ) const
     return Invalid;
 
   // forbid some characters that might introduce problems
-  for( unsigned int i = 0; i < input.length(); ++i ) {
+  for( int i = 0; i < input.length(); ++i ) {
     if( input[i] == '/' || input[i] == '"' || input[i] == '\\' )
       return Invalid;
   }

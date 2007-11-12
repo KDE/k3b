@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -26,17 +26,17 @@
 
 
 
-K3bMsfValidator::K3bMsfValidator( QObject* parent, const char* name )
-  : QRegExpValidator( K3b::Msf::regExp(), parent, name )
+K3bMsfValidator::K3bMsfValidator( QObject* parent )
+  : QRegExpValidator( K3b::Msf::regExp(), parent )
 {
 }
 
 
 
-K3bMsfEdit::K3bMsfEdit( QWidget* parent, const char* name )
-  : QSpinBox( parent, name )
+K3bMsfEdit::K3bMsfEdit( QWidget* parent )
+  : QSpinBox( parent )
 {
-  setValidator( new K3bMsfValidator( this ) );
+//  setValidator( new K3bMsfValidator( this ) );
   setMinValue( 0 );
   // some very high value (10000 minutes)
   setMaxValue( 10000*60*75 );
@@ -48,23 +48,6 @@ K3bMsfEdit::K3bMsfEdit( QWidget* parent, const char* name )
 
 K3bMsfEdit::~K3bMsfEdit()
 {}
-
-
-QSize K3bMsfEdit::sizeHint() const
-{
-  // more or less copied from QSpinBox
-  constPolish();
-  QSize sz = editor()->sizeHint();
-  int h = sz.height();
-  QFontMetrics fm( font() );
-  int w = fm.width( "00:00:00" );
-  int wx = fm.width( ' ' )*2;
-  int frame = style().pixelMetric( QStyle::PM_SpinBoxFrameWidth );
-  return style().sizeFromContents(QStyle::CT_SpinBox, this,
-				  QSize( w + wx + downRect().width() + frame*2,
-					 h + frame*2).
-				  expandedTo( QApplication::globalStrut() ));
-}
 
 
 QString K3bMsfEdit::mapValueToText( int value )
@@ -79,6 +62,13 @@ K3b::Msf K3bMsfEdit::msfValue() const
 }
 
 
+void K3bMsfEdit::setText( const QString& str )
+{
+  bool ok;
+  setValue( mapTextToValue( &ok) );
+}
+
+
 void K3bMsfEdit::setMsfValue( const K3b::Msf& msf )
 {
   setValue( msf.totalFrames() );
@@ -90,59 +80,33 @@ int K3bMsfEdit::mapTextToValue( bool* ok )
   return K3b::Msf::fromString( text(), ok ).lba();
 }
 
+// void K3bMsfEdit::stepUp()
+// {
+//   setValue( value() + currentStepValue() );
+// }
 
-void K3bMsfEdit::setText( const QString& str )
-{
-  bool ok;
-  editor()->setText( str );
-  setValue( mapTextToValue( &ok) );
-}
+// void K3bMsfEdit::stepDown()
+// {
+//   setValue( value() - currentStepValue() );
+// }
 
+// int K3bMsfEdit::currentStepValue() const
+// {
+//   int val = 1;
 
-void K3bMsfEdit::setFrameStyle( int style )
-{
-  editor()->setFrameStyle( style );
-}
+//   // look if we are currently editing minutes or seconds
+//   QString text = editor()->text();
+//   if( text.length() == 8 ) {
+//     text = text.mid( editor()->cursorPosition() );
+//     int num = text.contains( ':' );
+//     if( num == 1 )
+//       val = 75;
+//     else if( num == 2 )
+//       val = 60*75;
+//   }
 
-void K3bMsfEdit::setLineWidth( int v )
-{
-  editor()->setLineWidth( v );
-}
-
-void K3bMsfEdit::setValue( int v )
-{
-  int i = editor()->cursorPosition();
-  QSpinBox::setValue( v );
-  editor()->setCursorPosition( i );
-}
-
-void K3bMsfEdit::stepUp()
-{
-  setValue( value() + currentStepValue() );
-}
-
-void K3bMsfEdit::stepDown()
-{
-  setValue( value() - currentStepValue() );
-}
-
-int K3bMsfEdit::currentStepValue() const
-{
-  int val = 1;
-
-  // look if we are currently editing minutes or seconds
-  QString text = editor()->text();
-  if( text.length() == 8 ) {
-    text = text.mid( editor()->cursorPosition() );
-    int num = text.contains( ':' );
-    if( num == 1 )
-      val = 75;
-    else if( num == 2 )
-      val = 60*75;
-  }
-
-  return val;
-}
+//   return val;
+// }
 
 
 void K3bMsfEdit::slotValueChanged( int v )

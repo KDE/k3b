@@ -17,14 +17,14 @@
 #ifndef _K3B_PROGRESS_DIALOG_H_
 #define _K3B_PROGRESS_DIALOG_H_
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include "k3b_export.h"
 //Added by qt3to4:
 #include <QLabel>
 
 class K3bBusyWidget;
 class QLabel;
-class KProgress;
+class QProgressBar;
 class Q3WidgetStack;
 
 
@@ -33,15 +33,14 @@ class Q3WidgetStack;
  * bar or a moving dot for tasks that do not provide any progress
  * information.
  */
-class LIBK3B_EXPORT  K3bProgressDialog : public KDialogBase
+class LIBK3B_EXPORT  K3bProgressDialog : public KDialog
 {
   Q_OBJECT
 
  public:
   K3bProgressDialog( const QString& text = QString::null,
 		     QWidget* parent = 0, 
-		     const QString& caption = QString::null,
-		     const char* name = 0 );
+		     const QString& caption = QString::null );
   ~K3bProgressDialog();
 
   int exec( bool showProgress );
@@ -58,7 +57,7 @@ class LIBK3B_EXPORT  K3bProgressDialog : public KDialogBase
   QLabel* m_label;
   Q3WidgetStack* m_stack;
   K3bBusyWidget* m_busyWidget;
-  KProgress* m_progressBar;
+  QProgressBar* m_progressBar;
 };
 
 

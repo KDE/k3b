@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -20,37 +20,37 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <q3frame.h>
 #include <q3widgetstack.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
 
 #include <klocale.h>
-#include <kprogress.h>
+#include <QtGui/QProgressBar>
 
 
 K3bProgressDialog::K3bProgressDialog( const QString& text,
-				      QWidget* parent, 
-				      const QString& caption,
-				      const char* name ) 
-  : KDialogBase( parent, name, true, caption, Cancel|Ok, Ok, true )
+				      QWidget* parent,
+				      const QString& caption )
+  : KDialog( parent )
 {
-  QFrame* main = makeMainWidget();
-  Q3GridLayout* mainLayout = new Q3GridLayout( main );
-  mainLayout->setMargin( marginHint() );
-  mainLayout->setSpacing( spacingHint() );
+    setCaption( caption );
 
-  m_label = new QLabel( text, main );
-  m_stack = new Q3WidgetStack( main );
-  m_progressBar = new KProgress( m_stack );
-  m_busyWidget = new K3bBusyWidget( m_stack );
-  m_stack->addWidget( m_progressBar );
-  m_stack->addWidget( m_busyWidget );
+    QWidget* main = mainWidget();
+    Q3GridLayout* mainLayout = new Q3GridLayout( main );
+    mainLayout->setMargin( marginHint() );
+    mainLayout->setSpacing( spacingHint() );
 
-  mainLayout->addWidget( m_label, 0, 0 );
-  mainLayout->addWidget( m_stack, 1, 0 );
+    m_label = new QLabel( text, main );
+    m_stack = new Q3WidgetStack( main );
+    m_progressBar = new QProgressBar( m_stack );
+    m_busyWidget = new K3bBusyWidget( m_stack );
+    m_stack->addWidget( m_progressBar );
+    m_stack->addWidget( m_busyWidget );
 
-  showButtonOK( false );
+    mainLayout->addWidget( m_label, 0, 0 );
+    mainLayout->addWidget( m_stack, 1, 0 );
+
+    setButtons( Cancel );
 }
 
 
@@ -60,50 +60,49 @@ K3bProgressDialog::~K3bProgressDialog()
 
 int K3bProgressDialog::exec( bool progress )
 {
-  if( progress )
-    m_stack->raiseWidget( m_progressBar );
-  else
-    m_stack->raiseWidget( m_busyWidget );
+    if( progress )
+        m_stack->raiseWidget( m_progressBar );
+    else
+        m_stack->raiseWidget( m_busyWidget );
 
-  m_busyWidget->showBusy( !progress );
+    m_busyWidget->showBusy( !progress );
 
-  actionButton( Cancel )->setEnabled(true);
+    enableButtonCancel( true );
 
-  return KDialogBase::exec();
+    return KDialog::exec();
 }
 
 
 void K3bProgressDialog::setText( const QString& text )
 {
-  m_label->setText( text );
+    m_label->setText( text );
 }
 
 
 void K3bProgressDialog::slotFinished( bool success )
 {
-  m_busyWidget->showBusy( false );
+    m_busyWidget->showBusy( false );
 
-  showButtonOK( true );
-  showButtonCancel( false );
+    setButtons( Ok );
 
-  if( success )
-    m_label->setText( i18n("Disk successfully erased. Please reload the disk.") );
-  else
-    m_label->setText( i18n("K3b was unable to erase the disk.") );
+    if( success )
+        m_label->setText( i18n("Disk successfully erased. Please reload the disk.") );
+    else
+        m_label->setText( i18n("K3b was unable to erase the disk.") );
 }
 
 
 void K3bProgressDialog::slotCancel()
 {
-  emit cancelClicked();
-  // we simply forbid to click cancel twice
-  actionButton( Cancel )->setEnabled(false);
+    emit cancelClicked();
+    // we simply forbid to click cancel twice
+    enableButtonCancel( false );
 }
 
 
 void K3bProgressDialog::setProgress( int p )
 {
-  m_progressBar->setProgress( p );
+    m_progressBar->setValue( p );
 }
 
 #include "k3bprogressdialog.moc"

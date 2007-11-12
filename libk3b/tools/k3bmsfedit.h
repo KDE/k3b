@@ -28,22 +28,18 @@
 class K3bMsfValidator : public QRegExpValidator
 {
  public:
-  K3bMsfValidator( QObject* parent = 0, const char* name = 0 );
+  K3bMsfValidator( QObject* parent = 0 );
 };
 
 
+#warning FIXME: make this a proper MSF edit again by subclassing from QAbtractSpinBox
 class LIBK3B_EXPORT K3bMsfEdit : public QSpinBox
 {
   Q_OBJECT
 
  public:
-  K3bMsfEdit( QWidget* parent = 0, const char* name = 0 );
+  K3bMsfEdit( QWidget* parent = 0 );
   ~K3bMsfEdit();
-
-  QSize sizeHint() const;
-
-  void setFrameStyle( int style );
-  void setLineWidth(int);
 
   K3b::Msf msfValue() const;
 
@@ -51,11 +47,8 @@ class LIBK3B_EXPORT K3bMsfEdit : public QSpinBox
   void valueChanged( const K3b::Msf& );
 
  public slots:
-  void setValue( int v );
   void setText( const QString& );
   void setMsfValue( const K3b::Msf& );
-  void stepUp();
-  void stepDown();
 
  protected:
   QString mapValueToText( int );
