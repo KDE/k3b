@@ -1,5 +1,4 @@
 add_subdirectory( option )
-add_subdirectory( misc )
 add_subdirectory( rip )
 add_subdirectory( projects )
 add_subdirectory( fastscale )
@@ -12,7 +11,70 @@ add_subdirectory( sounds )
 
 ########### next target ###############
 
-set(k3b_bin_SRCS 
+set(k3b_rip_SRCS
+  rip/k3bpatternparser.cpp 
+  rip/k3baudiorippingdialog.cpp 
+  rip/k3baudioripthread.cpp 
+  rip/k3baudiocdview.cpp 
+  rip/k3bcddbpatternwidget.cpp 
+  rip/k3bvideocdinfo.cpp 
+  rip/k3bvideocdview.cpp 
+  rip/k3bvideocdrip.cpp 
+  rip/k3bvideocdrippingdialog.cpp 
+  rip/k3bcuefilewriter.cpp 
+  rip/k3baudioconvertingoptionwidget.cpp 
+  rip/k3baudiocdlistview.cpp 
+  rip/k3baudioprojectconvertingdialog.cpp 
+  rip/k3baudioprojectconvertingthread.cpp 
+  rip/k3baudioripjob.cpp
+)
+
+set(k3b_videodvd_SRCS
+  rip/videodvd/k3bvideodvdrippingview.cpp 
+  rip/videodvd/k3bvideodvdrippingtitlelistview.cpp 
+  rip/videodvd/k3bvideodvdrippingjob.cpp 
+  rip/videodvd/k3bvideodvdrippingwidget.cpp 
+  rip/videodvd/k3bvideodvdrippingdialog.cpp 
+  rip/videodvd/k3bvideodvdrippingpreview.cpp
+)
+
+kde4_add_ui3_files(k3b_videodvd_SRCS
+  rip/videodvd/base_k3bvideodvdrippingwidget.ui)
+
+kde4_add_ui3_files(k3b_rip_SRCS
+  rip/base_k3baudiorippingoptionwidget.ui 
+  rip/base_k3bcddbpatternwidget.ui 
+)
+
+set(k3b_option_SRCS
+  option/k3bmiscoptiontab.cpp 
+  option/k3bexternalbinoptiontab.cpp 
+  option/k3bcddboptiontab.cpp 
+  option/k3bburningoptiontab.cpp 
+  option/k3boptiondialog.cpp 
+  option/k3bdeviceoptiontab.cpp 
+  option/k3bnotifyoptiontab.cpp 
+  option/k3bpluginoptiontab.cpp 
+  option/k3bthemeoptiontab.cpp 
+  option/k3bdevicewidget.cpp 
+  option/k3bexternalbinwidget.cpp
+)
+
+kde4_add_ui3_files(k3b_option_SRCS
+  option/base_k3bcddboptiontab.ui
+  option/base_k3bmiscoptiontab.ui
+  option/base_k3bpluginoptiontab.ui
+  option/base_k3bthemeoptiontab.ui
+)
+
+set(k3b_misc_SRCS
+  misc/k3bcdimagewritingdialog.cpp 
+  misc/k3bisoimagewritingdialog.cpp
+  misc/k3bmediacopydialog.cpp 
+  misc/k3bmediaformattingdialog.cpp
+)
+
+set(k3b_bin_SRCS  ${k3b_rip_SRCS} ${k3b_option_SRCS} ${k3b_misc_SRCS} ${k3b_videodvd_SRCS}
    k3bwelcomewidget.cpp 
    k3bapplication.cpp 
    k3bdiroperator.cpp 
@@ -83,7 +145,7 @@ MESSAGE(STATUS "DCOP stuff was remove into kde4, convert it to dbus please.kde4_
 kde4_add_executable(k3b_bin ${k3b_bin_SRCS})
 set_target_properties(k3b_bin PROPERTIES OUTPUT_NAME k3b)
 
-target_link_libraries(k3b_bin  ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS} option rip projects k3bdevice k3b misc fastscale )
+target_link_libraries(k3b_bin  ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS} projects k3bdevice k3b  fastscale )
 
 install(TARGETS k3b_bin DESTINATION ${BIN_INSTALL_DIR})
 
