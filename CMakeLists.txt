@@ -16,6 +16,8 @@ ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/libk3bdevice
 ${CMAKE_CURRENT_BINARY_DIR}/libk3bdevice )
 
 configure_file (config-k3b.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-k3b.h )
+option(K3BSETUP_BUILD "Build k3bsetup")
+
 
 add_subdirectory( libk3bdevice )
 add_subdirectory( libk3b )
@@ -24,8 +26,9 @@ add_subdirectory( kioslaves )
 add_subdirectory( plugins )
 # TODO port to strigi
 #add_subdirectory( kfile-plugins )
-
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(K3BSETUPDIR)")
+if(K3BSETUP_BUILD)
+   add_subdirectory(k3bsetup)
+endif(K3BSETUP_BUILD)
 
 ########### install files ###############
 
