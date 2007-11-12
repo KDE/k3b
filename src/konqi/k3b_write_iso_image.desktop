@@ -1,7 +1,7 @@
 [Desktop Entry]
 Actions=WriteCdImage;
 Encoding=UTF-8
-ServiceTypes=application/x-iso,inode/ISO-image
+ServiceTypes=KonqPopupMenu/Plugin;application/x-iso;inode/ISO-image;
 
 [Desktop Action WriteCdImage]
 Exec=k3b --image %F

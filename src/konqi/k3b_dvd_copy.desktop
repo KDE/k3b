@@ -1,5 +1,5 @@
 [Desktop Entry]
-ServiceTypes=media/dvdrom_unmounted,media/dvdwriter_unmounted,media/dvdvideo
+ServiceTypes=KonqPopupMenu/Plugin;media/dvdrom_unmounted;media/dvdwriter_unmounted;media/dvdvideo;
 Actions=K3bDVDCopy;
 X-KDE-Priority=TopLevel
 

@@ -1,5 +1,5 @@
 [Desktop Entry]
-ServiceTypes=media/dvdvideo
+ServiceTypes=KonqPopupMenu/Plugin;media/dvdvideo;
 Actions=K3bRip;
 X-KDE-Priority=TopLevel
 

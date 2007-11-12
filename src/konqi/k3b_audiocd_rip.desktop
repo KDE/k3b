@@ -1,5 +1,5 @@
 [Desktop Entry]
-ServiceTypes=media/audiocd,media/mixedcd
+ServiceTypes=KonqPopupMenu/Plugin;media/audiocd;media/mixedcd;
 Actions=K3bRip;
 X-KDE-Priority=TopLevel
 

@@ -1,7 +1,7 @@
 [Desktop Entry]
 Actions=CreateK3bVcdProject;
 Encoding=UTF-8
-ServiceTypes=video/mpeg
+ServiceTypes=KonqPopupMenu/Plugin;video/mpeg
 
 [Desktop Action CreateK3bVcdProject]
 Exec=k3b --videocd %F

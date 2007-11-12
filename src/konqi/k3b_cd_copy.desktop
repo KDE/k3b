@@ -1,5 +1,5 @@
 [Desktop Entry]
-ServiceTypes=media/cdrom_unmounted,media/cdwriter_unmounted,media/audiocd
+ServiceTypes=KonqPopupMenu/Plugin;media/cdrom_unmounted;media/cdwriter_unmounted;media/audiocd;
 Actions=K3bCDCopy;
 X-KDE-Priority=TopLevel
 

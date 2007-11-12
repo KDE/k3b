@@ -1,5 +1,5 @@
 [Desktop Entry]
-ServiceTypes=media/blankdvd
+ServiceTypes=KonqPopupMenu/Plugin;media/blankdvd;
 Actions=K3bDataProject;
 X-KDE-Priority=TopLevel
 
