@@ -181,7 +181,7 @@ bool K3bExternalBinManager::readConfig( KConfig* c )
     KConfigGroup grp = c->group( "External Programs" );
 
     if( grp.hasKey( "search path" ) ) {
-//        setSearchPath( grp.readPathEntry( QString( "search path" ), QStringList() ) );
+        setSearchPath( grp.readPathEntry( QString( "search path" ), QStringList() ) );
     }
 
     search();

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id: sourceheader 511311 2006-02-19 14:51:05Z trueg $
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
@@ -17,10 +17,11 @@
 #include "k3bapplication.h"
 
 K3bThemedLabel::K3bThemedLabel( QWidget* parent )
-  : KCutLabel( parent ),
+  : KSqueezedTextLabel( parent ),
     m_themePixmapCode( -1 )
 {
   slotThemeChanged();
+  setTextElideMode( Qt::ElideRight );
 
   connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
 	   this, SLOT(slotThemeChanged()) );
@@ -30,10 +31,11 @@ K3bThemedLabel::K3bThemedLabel( QWidget* parent )
 
 
 K3bThemedLabel::K3bThemedLabel( const QString& text, QWidget* parent )
-  : KCutLabel( text, parent ),
+  : KSqueezedTextLabel( text, parent ),
     m_themePixmapCode( -1 )
 {
   slotThemeChanged();
+  setTextElideMode( Qt::ElideRight );
 
   connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
 	   this, SLOT(slotThemeChanged()) );
@@ -43,9 +45,10 @@ K3bThemedLabel::K3bThemedLabel( const QString& text, QWidget* parent )
 
 
 K3bThemedLabel::K3bThemedLabel( K3bTheme::PixmapType pix, QWidget* parent )
-  : KCutLabel( parent )
+  : KSqueezedTextLabel( parent )
 {
   setThemePixmap( pix );
+  setTextElideMode( Qt::ElideRight );
 
   connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
 	   this, SLOT(slotThemeChanged()) );

@@ -16,7 +16,6 @@
 
 #include "k3baudioplayer.h"
 #include <k3bmsf.h>
-#include "kcutlabel.h"
 
 #include <qlabel.h>
 #include <qtoolbutton.h>
@@ -42,6 +41,7 @@
 #include <klocale.h>
 #include <kurl.h>
 #include <kaction.h>
+#include <ksqueezedtextlabel.h>
 
 #include <string.h>
 
@@ -167,7 +167,8 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
     m_currentItem = 0L;
   // initialize
   // ------------------------------------------------------------------------
-  m_labelFilename    = new KCutLabel( i18n("no file"), this );
+  m_labelFilename    = new KSqueezedTextLabelLabel( i18n("no file"), this );
+  m_labelFilename->setTextElideMode( Qt::ElideRight );
   m_labelOverallTime = new QLabel( "00:00", this );
   m_labelCurrentTime = new QLabel( "00:00", this );
 
@@ -393,7 +394,7 @@ void K3bAudioPlayer::stop()
     m_playObject.halt();
     m_playObject = Arts::PlayObject::null();
     m_bLengthReady = false;
- 
+
     emit stopped();
   }
 #endif

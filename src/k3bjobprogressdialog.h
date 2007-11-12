@@ -47,7 +47,7 @@ class KProgress;
 class QPushButton;
 class QTimer;
 class K3bJob;
-class KCutLabel;
+class KSqueezedTextLabel;
 class QCloseEvent;
 class Q3GridLayout;
 class QKeyEvent;
@@ -143,7 +143,7 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
   K3ListView* m_viewInfo;
   K3bThemedLabel* m_labelTask;
   K3bThemedLabel* m_labelElapsedTime;
-  KCutLabel* m_labelSubTask;
+  KSqueezedTextLabel* m_labelSubTask;
   QLabel* m_labelSubProcessedSize;
   KProgress* m_progressSubPercent;
   QLabel* m_labelProcessedSize;

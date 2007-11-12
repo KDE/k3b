@@ -25,34 +25,34 @@
 #include <klocale.h>
 
 
-QCheckBox* K3bStdGuiItems::simulateCheckbox( QWidget* parent, const char* name )
+QCheckBox* K3bStdGuiItems::simulateCheckbox( QWidget* parent )
 {
-  QCheckBox* c = new QCheckBox( i18n("Simulate"), parent, name );
+  QCheckBox* c = new QCheckBox( i18n("Simulate"), parent );
   c->setWhatsThis( i18n("<p>If this option is checked K3b will perform all writing steps with the "
 			   "laser turned off."
 			   "<p>This is useful, for example, to test a higher writing speed "
 			   "or whether your system is able to write on-the-fly."
 			   "<p><b>Caution:</b> DVD+R(W) does not support simulated writing.") );
-  QToolTip::add( c, i18n("Only simulate the writing process") );
+  c->setToolTip( i18n("Only simulate the writing process") );
   return c;
 }
 
-QCheckBox* K3bStdGuiItems::daoCheckbox( QWidget* parent, const char* name )
+QCheckBox* K3bStdGuiItems::daoCheckbox( QWidget* parent )
 {
-  QCheckBox* c = new QCheckBox( i18n("Disk at once"), parent, name );
+  QCheckBox* c = new QCheckBox( i18n("Disk at once"), parent );
   c->setWhatsThis( i18n("<p>If this option is checked, K3b will write the CD in 'disk at once' mode as "
 			   "compared to 'track at once' (TAO)."
 			   "<p>It is always recommended to use DAO where possible."
 			   "<p><b>Caution:</b> Track pregaps with a length other than 2 seconds are only supported "
 			   "in DAO mode.") );
-  QToolTip::add( c, i18n("Write in disk at once mode") );
+  c->setToolTip( i18n("Write in disk at once mode") );
   return c;
 }
 
-QCheckBox* K3bStdGuiItems::burnproofCheckbox( QWidget* parent, const char* name )
+QCheckBox* K3bStdGuiItems::burnproofCheckbox( QWidget* parent )
 {
-  QCheckBox* c = new QCheckBox( i18n("Use Burnfree"), parent, name );
-  QToolTip::add( c, i18n("Enable Burnfree (or Just Link) to avoid buffer underruns") );
+  QCheckBox* c = new QCheckBox( i18n("Use Burnfree"), parent );
+  c->setToolTip( i18n("Enable Burnfree (or Just Link) to avoid buffer underruns") );
   c->setWhatsThis( i18n("<p>If this option is checked, K3b enables <em>Burnfree</em> "
 			   "(or <em>Just Link</em>). This is "
 			   "a feature of the CD writer which avoids buffer underruns."
@@ -70,56 +70,56 @@ QCheckBox* K3bStdGuiItems::burnproofCheckbox( QWidget* parent, const char* name 
   return c;
 }
 
-QCheckBox* K3bStdGuiItems::onlyCreateImagesCheckbox( QWidget* parent, const char* name )
+QCheckBox* K3bStdGuiItems::onlyCreateImagesCheckbox( QWidget* parent )
 {
-  QCheckBox* c = new QCheckBox( i18n("Only create image"), parent, name );
+  QCheckBox* c = new QCheckBox( i18n("Only create image"), parent );
   c->setWhatsThis( i18n("<p>If this option is checked, K3b will only create an "
 			   "image and not do any actual writing."
 			   "<p>The image can later be written to a CD/DVD with most current writing "
 			   "programs (including K3b of course).") );
-  QToolTip::add( c, i18n("Only create an image") );
+  c->setToolTip( i18n("Only create an image") );
   return c;
 }
 
-QCheckBox* K3bStdGuiItems::createCacheImageCheckbox( QWidget* parent, const char* name )
+QCheckBox* K3bStdGuiItems::createCacheImageCheckbox( QWidget* parent )
 {
-  QCheckBox* c = new QCheckBox( i18n("Create image"), parent, name );
+  QCheckBox* c = new QCheckBox( i18n("Create image"), parent );
   c->setWhatsThis( i18n("<p>If this option is checked, K3b will create an image before writing "
 			   "the files to the CD/DVD. Otherwise the data will be written <em>on-the-fly</em>, "
 			   "i.e. no intermediate image will be created."
 			   "<p><b>Caution:</b> Although writing on-the-fly should work on most systems, make sure "
 			   "the data is sent to the writer fast enough.")
 		   + i18n("<p>It is recommended to try a simulation first.") );
-  QToolTip::add( c, i18n("Cache the data to be written on the harddisk") );
+  c->setToolTip( i18n("Cache the data to be written on the harddisk") );
   return c;
 }
 
-QCheckBox* K3bStdGuiItems::removeImagesCheckbox( QWidget* parent, const char* name )
+QCheckBox* K3bStdGuiItems::removeImagesCheckbox( QWidget* parent )
 {
-  QCheckBox* c = new QCheckBox( i18n("Remove image"), parent, name );
+  QCheckBox* c = new QCheckBox( i18n("Remove image"), parent );
   c->setWhatsThis( i18n("<p>If this option is checked, K3b will remove any created images after the "
 			   "writing has finished."
 			   "<p>Uncheck this if you want to keep the images.") );
-  QToolTip::add( c, i18n("Remove images from disk when finished") );
+  c->setToolTip( i18n("Remove images from disk when finished") );
   return c;
 }
 
-QCheckBox* K3bStdGuiItems::onTheFlyCheckbox( QWidget* parent, const char* name )
+QCheckBox* K3bStdGuiItems::onTheFlyCheckbox( QWidget* parent )
 {
-  QCheckBox* c = new QCheckBox( i18n("On the fly"), parent, name );
+  QCheckBox* c = new QCheckBox( i18n("On the fly"), parent );
   c->setWhatsThis( i18n("<p>If this option is checked, K3b will not create an image first but write "
 			   "the files directly to the CD/DVD."
 			   "<p><b>Caution:</b> Although this should work on most systems, make sure "
 			   "the data is sent to the writer fast enough.")
 		   + i18n("<p>It is recommended to try a simulation first.") );
-  QToolTip::add( c, i18n("Write files directly to CD/DVD without creating an image") );
+  c->setToolTip( i18n("Write files directly to CD/DVD without creating an image") );
   return c;
 }
 
-QCheckBox* K3bStdGuiItems::cdTextCheckbox( QWidget* parent, const char* name )
+QCheckBox* K3bStdGuiItems::cdTextCheckbox( QWidget* parent )
 {
-  QCheckBox* c = new QCheckBox( i18n("Write CD-TEXT"), parent, name );
-  QToolTip::add( c, i18n("Create CD-TEXT entries") );
+  QCheckBox* c = new QCheckBox( i18n("Write CD-TEXT"), parent );
+  c->setToolTip( i18n("Create CD-TEXT entries") );
   c->setWhatsThis( i18n("<p>If this option is checked K3b uses some otherwise-unused space on the audio "
 			   "CD to store additional information, like the artist or the CD title."
 			   "<p>CD-TEXT is an extension to the audio CD standard introduced by Sony."
@@ -131,15 +131,15 @@ QCheckBox* K3bStdGuiItems::cdTextCheckbox( QWidget* parent, const char* name )
 }
 
 
-QComboBox* K3bStdGuiItems::paranoiaModeComboBox( QWidget* parent, const char* name )
+QComboBox* K3bStdGuiItems::paranoiaModeComboBox( QWidget* parent )
 {
-  QComboBox* c = new QComboBox( parent, name );
-  c->insertItem( "0" );
-  c->insertItem( "1" );
-  c->insertItem( "2" );
-  c->insertItem( "3" );
-  c->setCurrentItem( 3 );
-  QToolTip::add( c, i18n("Set the paranoia level for reading audio CDs") );
+  QComboBox* c = new QComboBox( parent );
+  c->addItem( "0" );
+  c->addItem( "1" );
+  c->addItem( "2" );
+  c->addItem( "3" );
+  c->setCurrentIndex( 3 );
+  c->setToolTip( i18n("Set the paranoia level for reading audio CDs") );
   c->setWhatsThis( i18n("<p>Sets the correction mode for digital audio extraction."
 			   "<ul><li>0: No checking, data is copied directly from the drive. "
 			   "<li>1: Perform overlapped reading to avoid jitter.</li>"
@@ -150,10 +150,10 @@ QComboBox* K3bStdGuiItems::paranoiaModeComboBox( QWidget* parent, const char* na
 }
 
 
-QCheckBox* K3bStdGuiItems::startMultisessionCheckBox( QWidget* parent, const char* name )
+QCheckBox* K3bStdGuiItems::startMultisessionCheckBox( QWidget* parent )
 {
-  QCheckBox* c = new QCheckBox( i18n("Start multisession CD"), parent, name );
-  QToolTip::add( c, i18n("Do not close the disk to allow additional sessions to be added later") );
+  QCheckBox* c = new QCheckBox( i18n("Start multisession CD"), parent );
+  c->setToolTip( i18n("Do not close the disk to allow additional sessions to be added later") );
   c->setWhatsThis( i18n("<p>If this option is checked K3b will not close the CD, and will write "
 			   "a temporary table of contents.</p>"
 			   "<p>This allows further sessions to be appended to the CD later.</p>") );
@@ -161,10 +161,10 @@ QCheckBox* K3bStdGuiItems::startMultisessionCheckBox( QWidget* parent, const cha
 }
 
 
-QCheckBox* K3bStdGuiItems::normalizeCheckBox( QWidget* parent, const char* name )
+QCheckBox* K3bStdGuiItems::normalizeCheckBox( QWidget* parent )
 {
-  QCheckBox* c = new QCheckBox( i18n("Normalize volume levels"), parent, name );
-  QToolTip::add( c, i18n("Adjust the volume levels of all tracks") );
+  QCheckBox* c = new QCheckBox( i18n("Normalize volume levels"), parent );
+  c->setToolTip( i18n("Adjust the volume levels of all tracks") );
   c->setWhatsThis( i18n("<p>If this option is checked K3b will adjust the volume of all tracks "
 			   "to a standard level. This is useful for things like creating mixes, "
 			   "where different recording levels on different albums can cause the volume "
@@ -175,10 +175,10 @@ QCheckBox* K3bStdGuiItems::normalizeCheckBox( QWidget* parent, const char* name 
 }
 
 
-QCheckBox* K3bStdGuiItems::verifyCheckBox( QWidget* parent, const char* name )
+QCheckBox* K3bStdGuiItems::verifyCheckBox( QWidget* parent )
 {
-  QCheckBox* c = new QCheckBox( i18n("Verify written data"), parent, name );
-  QToolTip::add( c, i18n("Compare original with written data") );
+  QCheckBox* c = new QCheckBox( i18n("Verify written data"), parent );
+  c->setToolTip( i18n("Compare original with written data") );
   c->setWhatsThis( i18n("<p>If this option is checked, then after successfully "
 			   "writing the disk K3b will compare the original source data "
 			   "with the written data to verify that the disk has been written "
@@ -187,10 +187,10 @@ QCheckBox* K3bStdGuiItems::verifyCheckBox( QWidget* parent, const char* name )
 }
 
 
-QCheckBox* K3bStdGuiItems::ignoreAudioReadErrorsCheckBox( QWidget* parent, const char* name )
+QCheckBox* K3bStdGuiItems::ignoreAudioReadErrorsCheckBox( QWidget* parent )
 {
-  QCheckBox* c = new QCheckBox( i18n("Ignore read errors"), parent, name );
-  QToolTip::add( c, i18n("Skip unreadable audio sectors") );
+  QCheckBox* c = new QCheckBox( i18n("Ignore read errors"), parent );
+  c->setToolTip( i18n("Skip unreadable audio sectors") );
   c->setWhatsThis( i18n("<p>If this option is checked and K3b is not able to read an "
 			   "audio sector from the source CD it will be replaced with zeros "
 			   "on the resulting copy."
@@ -200,16 +200,16 @@ QCheckBox* K3bStdGuiItems::ignoreAudioReadErrorsCheckBox( QWidget* parent, const
 }
 
 
-Q3Frame* K3bStdGuiItems::horizontalLine( QWidget* parent, const char* name )
+Q3Frame* K3bStdGuiItems::horizontalLine( QWidget* parent )
 {
-  Q3Frame* line = new Q3Frame( parent, name );
+  Q3Frame* line = new Q3Frame( parent );
   line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
   return line;
 }
 
-Q3Frame* K3bStdGuiItems::verticalLine( QWidget* parent, const char* name )
+Q3Frame* K3bStdGuiItems::verticalLine( QWidget* parent )
 {
-  Q3Frame* line = new Q3Frame( parent, name );
+  Q3Frame* line = new Q3Frame( parent );
   line->setFrameStyle( Q3Frame::VLine | Q3Frame::Sunken );
   return line;
 }

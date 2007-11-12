@@ -82,8 +82,8 @@ set(k3b_core_SRCS
 
 set(k3b_tools_SRCS
       tools/k3bwavefilewriter.cpp tools/k3bbusywidget.cpp tools/k3bdeviceselectiondialog.cpp 
-      tools/k3bmd5job.cpp tools/k3btitlelabel.cpp
-      tools/k3bstringutils.cpp tools/k3bdevicecombobox.cpp tools/kcutlabel.cpp 
+      tools/k3bmd5job.cpp tools/k3btitlelabel.cpp tools/k3bdevicelistmodel.cpp
+      tools/k3bstringutils.cpp tools/k3bdevicecombobox.cpp 
       tools/k3bstdguiitems.cpp tools/k3bvalidators.cpp tools/k3bthroughputestimator.cpp 
       tools/k3biso9660.cpp tools/k3bmultichoicedialog.cpp tools/k3bdevicehandler.cpp 
       tools/k3bcdparanoialib.cpp tools/k3blistview.cpp tools/k3bmsfedit.cpp 

@@ -23,7 +23,6 @@
 #include "k3bjobinterface.h"
 #include "k3bthemedlabel.h"
 #include <k3bjob.h>
-#include <kcutlabel.h>
 #include <k3bdevice.h>
 #include <k3bdevicemanager.h>
 #include <k3bdeviceglobals.h>
@@ -73,7 +72,7 @@
 #include <kmainwindow.h>
 #include <kstdguiitem.h>
 #include <kpushbutton.h>
-
+#include <ksqueezedtextlabel.h>
 
 
 
@@ -207,7 +206,8 @@ void K3bJobProgressDialog::setupGUI()
 
   Q3HBoxLayout* layout3 = new Q3HBoxLayout( 0, 0, 6, "layout3");
 
-  m_labelSubTask = new KCutLabel( this, "m_labelSubTask" );
+  m_labelSubTask = new KSqueezedTextLabel( this, "m_labelSubTask" );
+  m_labelSubTask->setTextElideMode( Qt::ElideRight );
   layout3->addWidget( m_labelSubTask );
 
   m_labelSubProcessedSize = new QLabel( this, "m_labelSubProcessedSize" );

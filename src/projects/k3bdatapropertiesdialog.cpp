@@ -18,7 +18,6 @@
 
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
-#include <kcutlabel.h>
 #include <k3bvalidators.h>
 
 #include <qpushbutton.h>
@@ -41,7 +40,7 @@
 #include <kurl.h>
 #include <kio/global.h>
 #include <kfileitem.h>
-
+#include <ksqueezedtextlabel.h>
 
 
 K3bDataPropertiesDialog::K3bDataPropertiesDialog( const Q3ValueList<K3bDataItem*>& dataItems, QWidget* parent, const char* name )
@@ -54,15 +53,15 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const Q3ValueList<K3bDataItem*
       m_editName = new KLineEdit( plainPage() );
       m_editName->setValidator( K3bValidators::iso9660Validator( false, this ) );
       m_labelType = new QLabel( plainPage() );
-      m_labelLocalName = new KCutLabel( plainPage() );
-      m_labelLocalLocation = new KCutLabel( plainPage() );
+      m_labelLocalName = new KSqueezedTextLabelLabel( plainPage() );
+      m_labelLocalLocation = new KSqueezedTextLabelLabel( plainPage() );
       m_extraInfoLabel = new QLabel( plainPage() );
   }
   else {
       m_multiSelectionLabel = new QLabel( plainPage() );
   }
 
-  m_labelLocation = new KCutLabel( plainPage() );
+  m_labelLocation = new KSqueezedTextLabelLabel( plainPage() );
   m_labelSize = new QLabel( plainPage() );
   m_labelBlocks = new QLabel( plainPage() );
 

@@ -16,11 +16,11 @@
 #ifndef _K3B_THEMED_LABEL_H_
 #define _K3B_THEMED_LABEL_H_
 
-#include <kcutlabel.h>
+#include <ksqueezedtextlabel.h>
 #include <k3bthememanager.h>
 
 
-class K3bThemedLabel : public KCutLabel
+class K3bThemedLabel : public KSqueezedTextLabel
 {
   Q_OBJECT
 

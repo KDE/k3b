@@ -27,21 +27,21 @@ class Q3Frame;
 
 namespace K3bStdGuiItems
 {
-  LIBK3B_EXPORT QCheckBox* simulateCheckbox( QWidget* parent = 0, const char* name = 0 );
-  LIBK3B_EXPORT QCheckBox* daoCheckbox( QWidget* parent = 0, const char* name = 0 );
-  LIBK3B_EXPORT QCheckBox* burnproofCheckbox( QWidget* parent = 0, const char* name = 0 );
-  LIBK3B_EXPORT QCheckBox* onlyCreateImagesCheckbox( QWidget* parent = 0, const char* name = 0 );
-  LIBK3B_EXPORT QCheckBox* createCacheImageCheckbox( QWidget* parent = 0, const char* name = 0 );
-  LIBK3B_EXPORT QCheckBox* removeImagesCheckbox( QWidget* parent = 0, const char* name = 0 );
-  LIBK3B_EXPORT QCheckBox* onTheFlyCheckbox( QWidget* parent = 0, const char* name = 0 );
-  LIBK3B_EXPORT QCheckBox* cdTextCheckbox( QWidget* parent = 0, const char* name = 0);
-  LIBK3B_EXPORT QComboBox* paranoiaModeComboBox( QWidget* parent = 0, const char* name = 0 );
-  LIBK3B_EXPORT QCheckBox* startMultisessionCheckBox( QWidget* parent = 0, const char* name = 0 );
-  LIBK3B_EXPORT QCheckBox* normalizeCheckBox( QWidget* parent = 0, const char* name = 0 );
-  LIBK3B_EXPORT QCheckBox* verifyCheckBox( QWidget* parent = 0, const char* name = 0 );
-  LIBK3B_EXPORT QCheckBox* ignoreAudioReadErrorsCheckBox( QWidget* parent = 0, const char* name = 0 );
-  LIBK3B_EXPORT Q3Frame* horizontalLine( QWidget* parent = 0, const char* name = 0 );
-  LIBK3B_EXPORT Q3Frame* verticalLine( QWidget* parent = 0, const char* name = 0 );
+  LIBK3B_EXPORT QCheckBox* simulateCheckbox( QWidget* parent = 0 );
+  LIBK3B_EXPORT QCheckBox* daoCheckbox( QWidget* parent = 0 );
+  LIBK3B_EXPORT QCheckBox* burnproofCheckbox( QWidget* parent = 0 );
+  LIBK3B_EXPORT QCheckBox* onlyCreateImagesCheckbox( QWidget* parent = 0 );
+  LIBK3B_EXPORT QCheckBox* createCacheImageCheckbox( QWidget* parent = 0 );
+  LIBK3B_EXPORT QCheckBox* removeImagesCheckbox( QWidget* parent = 0 );
+  LIBK3B_EXPORT QCheckBox* onTheFlyCheckbox( QWidget* parent = 0 );
+  LIBK3B_EXPORT QCheckBox* cdTextCheckbox( QWidget* parent = 0);
+  LIBK3B_EXPORT QComboBox* paranoiaModeComboBox( QWidget* parent = 0 );
+  LIBK3B_EXPORT QCheckBox* startMultisessionCheckBox( QWidget* parent = 0 );
+  LIBK3B_EXPORT QCheckBox* normalizeCheckBox( QWidget* parent = 0 );
+  LIBK3B_EXPORT QCheckBox* verifyCheckBox( QWidget* parent = 0 );
+  LIBK3B_EXPORT QCheckBox* ignoreAudioReadErrorsCheckBox( QWidget* parent = 0 );
+  LIBK3B_EXPORT Q3Frame* horizontalLine( QWidget* parent = 0 );
+  LIBK3B_EXPORT Q3Frame* verticalLine( QWidget* parent = 0 );
 }
 
 #endif

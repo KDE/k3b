@@ -40,11 +40,11 @@
 #include <kmimetype.h>
 #include <knuminput.h>
 #include <kurl.h>
+#include <ksqueezedtextlabel.h>
 
 // K3b Includes
 #include "k3bvcdtrackdialog.h"
 #include "k3bvcdtrack.h"
-#include <kcutlabel.h>
 #include <k3bmsf.h>
 #include <k3bglobals.h>
 
@@ -387,7 +387,7 @@ void K3bVcdTrackDialog::prepareGui()
 
     m_labelMimeType = new QLabel( groupFileInfo, "m_labelMimeType" );
 
-    m_displayFileName = new KCutLabel( groupFileInfo );
+    m_displayFileName = new KSqueezedTextLabelLabel( groupFileInfo );
     m_displayFileName->setText( i18n( "Filename" ) );
     m_displayFileName->setAlignment( int( QLabel::Qt::AlignTop | QLabel::Qt::AlignLeft ) );
 

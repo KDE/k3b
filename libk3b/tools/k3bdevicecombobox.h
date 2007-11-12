@@ -54,11 +54,9 @@ public Q_SLOTS:
     void refreshDevices( const QList<K3bDevice::Device*>& );
     void removeDevice( K3bDevice::Device* );
     void setSelectedDevice( K3bDevice::Device* );
-    void clear();
 
 private Q_SLOTS:
     void slotActivated( int );
-    void slotDeviceManagerChanged( K3bDevice::DeviceManager* dm );
 
 private:
     class Private;
