@@ -18,7 +18,7 @@
 
 #include <k3baudiodecoder.h>
 
-class KURL;
+class KUrl;
 
 
 class K3bFLACDecoderFactory : public K3bAudioDecoderFactory
@@ -29,7 +29,7 @@ class K3bFLACDecoderFactory : public K3bAudioDecoderFactory
   K3bFLACDecoderFactory( QObject* parent = 0, const char* name = 0 );
   ~K3bFLACDecoderFactory();
 
-  bool canDecode( const KURL& filename );
+  bool canDecode( const KUrl& filename );
 
   int pluginSystemVersion() const { return 3; }
 

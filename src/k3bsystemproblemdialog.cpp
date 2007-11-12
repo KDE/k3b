@@ -52,7 +52,7 @@
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <kglobal.h>
 
 #ifdef HAVE_ICONV_H
@@ -166,7 +166,7 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const Q3ValueList<K3bSystemProbl
 void K3bSystemProblemDialog::closeEvent( QCloseEvent* e )
 {
   if( m_checkDontShowAgain->isChecked() ) {
-    KConfigGroup grp( kapp->config(), "General Options" );
+    KConfigGroup grp( KGlobal::config(), "General Options" );
     grp.writeEntry( "check system config", false );
   }
 
@@ -567,29 +567,29 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
   }
 
 
-  kdDebug() << "(K3bCore) System problems:" << endl;
+  kDebug() << "(K3bCore) System problems:" << endl;
   for( Q3ValueList<K3bSystemProblem>::const_iterator it = problems.begin();
        it != problems.end(); ++it ) {
     const K3bSystemProblem& p = *it;
 
     switch( p.type ) {
     case K3bSystemProblem::CRITICAL:
-      kdDebug() << " CRITICAL" << endl;
+      kDebug() << " CRITICAL" << endl;
       break;
     case K3bSystemProblem::NON_CRITICAL:
-      kdDebug() << " NON_CRITICAL" << endl;
+      kDebug() << " NON_CRITICAL" << endl;
       break;
     case K3bSystemProblem::WARNING:
-      kdDebug() << " WARNING" << endl;
+      kDebug() << " WARNING" << endl;
       break;
     }
-    kdDebug() << " PROBLEM:  " << p.problem << endl
+    kDebug() << " PROBLEM:  " << p.problem << endl
 	      << " DETAILS:  " << p.details << endl
 	      << " SOLUTION: " << p.solution << endl << endl;
 
   }
   if( problems.isEmpty() ) {
-    kdDebug() << "          - none - " << endl;
+    kDebug() << "          - none - " << endl;
     K3bPassivePopup::showPopup( i18n("No problems found in system configuration."), i18n("System configured properly") );
   }
   else {
@@ -609,9 +609,9 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 
 void K3bSystemProblemDialog::slotK3bSetup()
 {
-  KProcess p;
+  K3Process p;
   p << "kdesu" << "kcmshell k3bsetup2 --lang " + KGlobal::locale()->language();
-  if( !p.start( KProcess::DontCare ) )
+  if( !p.start( K3Process::DontCare ) )
     KMessageBox::error( 0, i18n("Unable to start K3bSetup2.") );
 }
 
@@ -625,7 +625,7 @@ int K3bSystemProblemDialog::dmaActivated( K3bDevice::Device* dev )
   K3bProcess p;
   K3bProcessOutputCollector out( &p );
   p << hdparm << "-d" << dev->blockDeviceName();
-  if( !p.start( KProcess::Block, KProcess::AllOutput ) )
+  if( !p.start( K3Process::Block, K3Process::AllOutput ) )
     return -1;
 
   // output is something like:

@@ -90,7 +90,7 @@ K3bAudioTrackAddingDialog::~K3bAudioTrackAddingDialog()
 }
 
 
-int K3bAudioTrackAddingDialog::addUrls( const KURL::List& urls, 
+int K3bAudioTrackAddingDialog::addUrls( const KUrl::List& urls, 
 					K3bAudioDoc* doc,
 					K3bAudioTrack* afterTrack,
 					K3bAudioTrack* parentTrack,
@@ -151,7 +151,7 @@ void K3bAudioTrackAddingDialog::slotAddUrls()
     return;
   }
 
-  KURL url = m_urls.first();
+  KUrl url = m_urls.first();
   bool valid = true;
 
   if( url.path().right(3).lower() == "cue" ) {
@@ -160,7 +160,7 @@ void K3bAudioTrackAddingDialog::slotAddUrls()
     if( parser.isValid() && parser.toc().contentType() == K3bDevice::AUDIO ) {
       // remember cue url and set the new audio file url
       m_cueUrl = url;
-      url = m_urls[0] = KURL::fromPathOrURL( parser.imageFilename() );
+      url = m_urls[0] = KUrl::fromPathOrUrl( parser.imageFilename() );
     }
   }
 
@@ -215,13 +215,13 @@ void K3bAudioTrackAddingDialog::slotAnalysingFinished( bool /*success*/ )
     return;
   }
 
-  KURL url = m_urls.first();
+  KUrl url = m_urls.first();
   m_urls.remove( m_urls.begin() );
 
   if( m_cueUrl.isValid() ) {
     // import the cue file
     m_doc->importCueFile( m_cueUrl.path(), m_trackAfter, m_analyserThread->m_decoder );
-    m_cueUrl = KURL();
+    m_cueUrl = KUrl();
   }
   else {
     // create the track and source items
@@ -265,14 +265,14 @@ void K3bAudioTrackAddingDialog::slotCancel()
 }
 
 
-KURL::List K3bAudioTrackAddingDialog::extractUrlList( const KURL::List& urls )
+KUrl::List K3bAudioTrackAddingDialog::extractUrlList( const KUrl::List& urls )
 {
-  KURL::List allUrls = urls;
-  KURL::List urlsFromPlaylist;
-  KURL::List::iterator it = allUrls.begin();
+  KUrl::List allUrls = urls;
+  KUrl::List urlsFromPlaylist;
+  KUrl::List::iterator it = allUrls.begin();
   while( it != allUrls.end() ) {
 
-    const KURL& url = *it;
+    const KUrl& url = *it;
     QFileInfo fi( url.path() );
 
     if( fi.isDir() ) {
@@ -280,17 +280,17 @@ KURL::List K3bAudioTrackAddingDialog::extractUrlList( const KURL::List& urls )
       // add all files in the dir
       QDir dir(fi.filePath());
       QStringList entries = dir.entryList( QDir::Files );
-      KURL::List::iterator oldIt = it;
+      KUrl::List::iterator oldIt = it;
       // add all files into the list after the current item
       for( QStringList::iterator dirIt = entries.begin();
 	   dirIt != entries.end(); ++dirIt )
-	it = allUrls.insert( oldIt, KURL::fromPathOrURL( dir.absPath() + "/" + *dirIt ) );
+	it = allUrls.insert( oldIt, KUrl::fromPathOrUrl( dir.absPath() + "/" + *dirIt ) );
     }
     else if( K3bAudioDoc::readPlaylistFile( url, urlsFromPlaylist ) ) {
       it = allUrls.remove( it );
-      KURL::List::iterator oldIt = it;
+      KUrl::List::iterator oldIt = it;
       // add all files into the list after the current item
-      for( KURL::List::iterator dirIt = urlsFromPlaylist.begin();
+      for( KUrl::List::iterator dirIt = urlsFromPlaylist.begin();
 	   dirIt != urlsFromPlaylist.end(); ++dirIt )
 	it = allUrls.insert( oldIt, *dirIt );
     }

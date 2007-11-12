@@ -113,8 +113,9 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   Q3HBoxLayout* layout5 = new Q3HBoxLayout( 0, 0, spacingHint(), "layout5");
 
   if( buttonMask & START_BUTTON ) {
-    KGuiItem startItem = KStdGuiItem::ok();
-    m_buttonStart = new KPushButton( startItem, this, "m_buttonStart" );
+    KGuiItem startItem = KStandardGuiItem::ok();
+    m_buttonStart = new KPushButton( startItem, this );
+    m_buttonStart->setObjectName( "m_buttonStart" );
     // refine the button text
     setButtonText( START_BUTTON,
 		   i18n("Start"),
@@ -127,7 +128,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
     m_buttonStart = 0;
 
   if( buttonMask & SAVE_BUTTON ) {
-    m_buttonSave = new KPushButton( KStdGuiItem::save(), this, "m_buttonSave" );
+    m_buttonSave = new KPushButton( KStandardGuiItem::save(), this, "m_buttonSave" );
   }
   else
     m_buttonSave = 0;
@@ -135,8 +136,8 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   if( buttonMask & CANCEL_BUTTON ) {
     m_buttonCancel = new KPushButton( KConfigGroup( k3bcore->config(), "General Options" )
 				      .readBoolEntry( "keep action dialogs open", false )
-				      ? KStdGuiItem::close()
-				      : KStdGuiItem::cancel(),
+				      ? KStandardGuiItem::close()
+				      : KStandardGuiItem::cancel(),
 				      this,
 				      "m_buttonCancel" );
   }
@@ -570,7 +571,7 @@ int K3bInteractionDialog::exec( bool returnOnHide )
   // the following code is mainly taken from QDialog::exec
 
   if( m_inLoop ) {
-    kdError() << "(K3bInteractionDialog::exec) Recursive call detected." << endl;
+    kError() << "(K3bInteractionDialog::exec) Recursive call detected." << endl;
     return -1;
   }
 

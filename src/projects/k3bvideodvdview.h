@@ -32,7 +32,7 @@ class K3bVideoDvdView : public K3bView
   K3bVideoDvdView( K3bVideoDvdDoc* doc, QWidget *parent = 0, const char *name = 0 );
   ~K3bVideoDvdView();
 
-   void addUrls( const KURL::List& );
+   void addUrls( const KUrl::List& );
 
  protected:
   virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );

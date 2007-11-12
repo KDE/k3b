@@ -389,7 +389,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 	m_tocFile->close();
       }
       else {
-	kdDebug() << "(K3bDataJob) could not write tocfile." << endl;
+	kDebug() << "(K3bDataJob) could not write tocfile." << endl;
 	emit infoMessage( i18n("IO Error"), ERROR );
 	return false;
       }
@@ -455,7 +455,7 @@ QString K3bIso9660ImageWritingJob::jobDescription() const
 
 QString K3bIso9660ImageWritingJob::jobDetails() const
 {
-  return m_imagePath.section("/", -1) + QString( " (%1)" ).arg(KIO::convertSize(K3b::filesize(KURL::fromPathOrURL(m_imagePath))));
+  return m_imagePath.section("/", -1) + QString( " (%1)" ).arg(KIO::convertSize(K3b::filesize(KUrl::fromPathOrUrl(m_imagePath))));
 }
 
 

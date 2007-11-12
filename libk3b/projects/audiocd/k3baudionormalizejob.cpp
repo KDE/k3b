@@ -50,7 +50,7 @@ void K3bAudioNormalizeJob::start()
 
   m_process = new K3bProcess();
   connect( m_process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
-  connect( m_process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*)) );
+  connect( m_process, SIGNAL(processExited(K3Process*)), this, SLOT(slotProcessExited(K3Process*)) );
 
   const K3bExternalBin* bin = k3bcore->externalBinManager()->binObject( "normalize" );
 
@@ -79,10 +79,10 @@ void K3bAudioNormalizeJob::start()
     *m_process << m_files[i];
 
   // now start the process
-  if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
+  if( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) {
     // something went wrong when starting the program
     // it "should" be the executable
-    kdDebug() << "(K3bAudioNormalizeJob) could not start normalize" << endl;
+    kDebug() << "(K3bAudioNormalizeJob) could not start normalize" << endl;
     emit infoMessage( i18n("Could not start normalize."), K3bJob::ERROR );
     jobFinished(false);
   }
@@ -130,7 +130,7 @@ void K3bAudioNormalizeJob::slotStdLine( const QString& line )
   else if( line.contains( "--% done") ) {
     if( m_currentAction == ADJUSTING_LEVELS ) {
       emit newTask( i18n("Adjusting volume level for track %1 of %2").arg(m_currentTrack).arg(m_files.count()) );
-      kdDebug() << "(K3bAudioNormalizeJob) adjusting level for track " 
+      kDebug() << "(K3bAudioNormalizeJob) adjusting level for track " 
 		<< m_currentTrack
 		<< " "
 		<< m_files.at(m_currentTrack-1)
@@ -138,7 +138,7 @@ void K3bAudioNormalizeJob::slotStdLine( const QString& line )
     }
     else {
       emit newTask( i18n("Computing level for track %1 of %2").arg(m_currentTrack).arg(m_files.count()) );
-      kdDebug() << "(K3bAudioNormalizeJob) computing level for track " 
+      kDebug() << "(K3bAudioNormalizeJob) computing level for track " 
 		<< m_currentTrack
 		<< " "
 		<< m_files.at(m_currentTrack-1)
@@ -158,7 +158,7 @@ void K3bAudioNormalizeJob::slotStdLine( const QString& line )
     if( ok )
       emit subPercent( p );
     else
-      kdDebug() << "(K3bAudioNormalizeJob) subPercent parsing error at pos " 
+      kDebug() << "(K3bAudioNormalizeJob) subPercent parsing error at pos " 
 		<< 19 << " in line '" << line.mid( 19, 3 ) << "'" << endl;
 
     // batch progress starts at position 50 in version 0.7.6
@@ -168,14 +168,14 @@ void K3bAudioNormalizeJob::slotStdLine( const QString& line )
     else if( ok && m_currentAction == ADJUSTING_LEVELS )
       emit percent( 50 + (int)((double)p/2.0) );
     else
-      kdDebug() << "(K3bAudioNormalizeJob) percent parsing error at pos " 
+      kDebug() << "(K3bAudioNormalizeJob) percent parsing error at pos " 
 		<< 50 << " in line '" << line.mid( 50, 3 ) << "'" << endl;
 
   }
 }
 
 
-void K3bAudioNormalizeJob::slotProcessExited( KProcess* p )
+void K3bAudioNormalizeJob::slotProcessExited( K3Process* p )
 {
   if( p->normalExit() ) {
     switch( p->exitStatus() ) {

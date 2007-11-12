@@ -180,7 +180,7 @@ void K3bDvdFormattingJob::cancel()
       d->process->kill();
   }
   else {
-    kdDebug() << "(K3bDvdFormattingJob) not running." << endl;
+    kDebug() << "(K3bDvdFormattingJob) not running." << endl;
   }
 }
 
@@ -245,13 +245,13 @@ void K3bDvdFormattingJob::slotStderrLine( const QString& line )
       emit percent( progress );
     }
     else {
-      kdDebug() << "(K3bDvdFormattingJob) parsing error: '" << line.mid( pos, endPos - pos ) << "'" << endl;
+      kDebug() << "(K3bDvdFormattingJob) parsing error: '" << line.mid( pos, endPos - pos ) << "'" << endl;
     }
   }
 }
 
 
-void K3bDvdFormattingJob::slotProcessFinished( KProcess* p )
+void K3bDvdFormattingJob::slotProcessFinished( K3Process* p )
 {
   if( d->canceled ) {
     emit canceled();
@@ -470,7 +470,7 @@ void K3bDvdFormattingJob::startFormatting( const K3bDevice::DiskInfo& diskInfo )
     d->process->setRunPrivileged(true);
     //      d->process->setSuppressEmptyLines(false);
     connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStderrLine(const QString&)) );
-    connect( d->process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessFinished(KProcess*)) );
+    connect( d->process, SIGNAL(processExited(K3Process*)), this, SLOT(slotProcessFinished(K3Process*)) );
 
     d->dvdFormatBin = k3bcore->externalBinManager()->binObject( "dvd+rw-format" );
     if( !d->dvdFormatBin ) {
@@ -506,19 +506,19 @@ void K3bDvdFormattingJob::startFormatting( const K3bDevice::DiskInfo& diskInfo )
     for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
       *d->process << *it;
 
-    kdDebug() << "***** dvd+rw-format parameters:\n";
+    kDebug() << "***** dvd+rw-format parameters:\n";
     const Q3ValueList<Q3CString>& args = d->process->args();
     QString s;
     for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
       s += *it + " ";
     }
-    kdDebug() << s << endl << flush;
+    kDebug() << s << endl << flush;
     emit debuggingOutput( "dvd+rw-format command:", s );
 
-    if( !d->process->start( KProcess::NotifyOnExit, KProcess::All ) ) {
+    if( !d->process->start( K3Process::NotifyOnExit, K3Process::All ) ) {
       // something went wrong when starting the program
       // it "should" be the executable
-      kdDebug() << "(K3bDvdFormattingJob) could not start " << d->dvdFormatBin->path << endl;
+      kDebug() << "(K3bDvdFormattingJob) could not start " << d->dvdFormatBin->path << endl;
       emit infoMessage( i18n("Could not start %1.").arg(d->dvdFormatBin->name()), K3bJob::ERROR );
       d->running = false;
       jobFinished(false);

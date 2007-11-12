@@ -35,7 +35,7 @@ class K3bDirOperator : public KDirOperator, public KBookmarkOwner
   Q_OBJECT
 
  public: 
-  K3bDirOperator( const KURL& urlName = KURL(), QWidget* parent = 0, const char* name = 0 );
+  K3bDirOperator( const KUrl& urlName = KUrl(), QWidget* parent = 0, const char* name = 0 );
   ~K3bDirOperator();
 
   /**

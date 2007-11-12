@@ -222,14 +222,14 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
   Q3ValueList<K3bDataItem*> findItemByLocalPath( const QString& path ) const;
 
  public slots:
-  virtual void addUrls( const KURL::List& urls );
+  virtual void addUrls( const KUrl::List& urls );
 
   /**
    * Add urls syncroneously
    * This method adds files recursively including symlinks, hidden, and system files.
    * If a file already exists the new file's name will be appended a number.
    */
-  virtual void addUrls( const KURL::List& urls, K3bDirItem* dir );
+  virtual void addUrls( const KUrl::List& urls, K3bDirItem* dir );
 
   void clearImportedSession();
 

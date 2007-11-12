@@ -177,7 +177,7 @@ void K3bAudioConvertingOptionWidget::slotUpdateFreeTempSpace()
 
   unsigned long size, avail;
   if( K3b::kbFreeOnFs( path, size, avail ) ) {
-    m_labelFreeSpace->setText( KIO::convertSizeFromKB(avail) );
+    m_labelFreeSpace->setText( KIO::convertSizeFromKiB(avail) );
     if( avail < d->neededSize/1024 )
       m_labelNeededSpace->setPaletteForegroundColor( Qt::red );
     else

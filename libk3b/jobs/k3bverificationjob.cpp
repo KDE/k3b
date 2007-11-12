@@ -370,7 +370,7 @@ K3b::Msf K3bVerificationJob::trackLength( int trackIndex )
       if( !d->device->read10( buffer, 2048, track.lastSector().lba(), 1 ) &&
 	  !d->device->read10( buffer, 2048, track.lastSector().lba(), 1 ) ) {
 	trackSize -= 2;
-	kdDebug() << "(K3bCdCopyJob) track " << trackNum << " probably TAO recorded." << endl;
+	kDebug() << "(K3bCdCopyJob) track " << trackNum << " probably TAO recorded." << endl;
       }
     }
   }

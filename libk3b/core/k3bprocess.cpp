@@ -56,7 +56,7 @@ public:
 
 
 K3bProcess::K3bProcess()
-  : KProcess(),
+  : K3Process(),
     m_bSplitStdout(false)
 {
   d = new Data();
@@ -80,25 +80,25 @@ K3bProcess& K3bProcess::operator<<( const K3bExternalBin* bin )
 
 K3bProcess& K3bProcess::operator<<( const QString& arg )
 {
-  static_cast<KProcess*>(this)->operator<<( arg );
+  static_cast<K3Process*>(this)->operator<<( arg );
   return *this;
 }
 
 K3bProcess& K3bProcess::operator<<( const char* arg )
 {
-  static_cast<KProcess*>(this)->operator<<( arg );
+  static_cast<K3Process*>(this)->operator<<( arg );
   return *this;
 }
 
 K3bProcess& K3bProcess::operator<<( const Q3CString& arg )
 {
-  static_cast<KProcess*>(this)->operator<<( arg );
+  static_cast<K3Process*>(this)->operator<<( arg );
   return *this;
 }
 
 K3bProcess& K3bProcess::operator<<( const QStringList& args )
 {
-  static_cast<KProcess*>(this)->operator<<( args );
+  static_cast<K3Process*>(this)->operator<<( args );
   return *this;
 }
 
@@ -106,19 +106,19 @@ K3bProcess& K3bProcess::operator<<( const QStringList& args )
 bool K3bProcess::start( RunMode run, Communication com )
 {
   if( com & Stderr ) {
-    connect( this, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	     this, SLOT(slotSplitStderr(KProcess*, char*, int)) );
+    connect( this, SIGNAL(receivedStderr(K3Process*, char*, int)),
+	     this, SLOT(slotSplitStderr(K3Process*, char*, int)) );
   }
   if( com & Stdout ) {
-    connect( this, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	     this, SLOT(slotSplitStdout(KProcess*, char*, int)) );
+    connect( this, SIGNAL(receivedStdout(K3Process*, char*, int)),
+	     this, SLOT(slotSplitStdout(K3Process*, char*, int)) );
   }
 
-  return KProcess::start( run, com );
+  return K3Process::start( run, com );
 }
 
 
-void K3bProcess::slotSplitStdout( KProcess*, char* data, int len )
+void K3bProcess::slotSplitStdout( K3Process*, char* data, int len )
 {
   if( m_bSplitStdout ) {
     QStringList lines = splitOutput( data, len, d->unfinishedStdoutLine, d->suppressEmptyLines );
@@ -136,7 +136,7 @@ void K3bProcess::slotSplitStdout( KProcess*, char* data, int len )
 }
 
 
-void K3bProcess::slotSplitStderr( KProcess*, char* data, int len )
+void K3bProcess::slotSplitStderr( K3Process*, char* data, int len )
 {
   QStringList lines = splitOutput( data, len, d->unfinishedStderrLine, d->suppressEmptyLines );
 
@@ -186,7 +186,7 @@ QStringList K3bProcess::splitOutput( char* data, int len,
     lines.first().prepend( unfinishedLine );
     unfinishedLine.truncate(0);
 
-    kdDebug() << "(K3bProcess)           joined line: '" << (lines.first()) << "'" << endl;
+    kDebug() << "(K3bProcess)           joined line: '" << (lines.first()) << "'" << endl;
   }
 
   QStringList::iterator it;
@@ -196,8 +196,8 @@ QStringList K3bProcess::splitOutput( char* data, int len,
   QChar c = buffer.right(1).at(0);
   bool hasUnfinishedLine = ( c != '\n' && c != '\r' && c != QChar(46) );  // What is unicode 46?? It is printed as a point
   if( hasUnfinishedLine ) {
-    kdDebug() << "(K3bProcess) found unfinished line: '" << lines.last() << "'" << endl;
-    kdDebug() << "(K3bProcess)             last char: '" << buffer.right(1) << "'" << endl;
+    kDebug() << "(K3bProcess) found unfinished line: '" << lines.last() << "'" << endl;
+    kDebug() << "(K3bProcess)             last char: '" << buffer.right(1) << "'" << endl;
     unfinishedLine = lines.last();
     it = lines.end();
     --it;
@@ -210,7 +210,7 @@ QStringList K3bProcess::splitOutput( char* data, int len,
 
 int K3bProcess::setupCommunication( Communication comm )
 {
-  if( KProcess::setupCommunication( comm ) ) {
+  if( K3Process::setupCommunication( comm ) ) {
 
     //
     // Setup our own socketpair
@@ -257,13 +257,13 @@ void K3bProcess::commClose()
     d->out[0] = -1;
   }
 
-  KProcess::commClose();
+  K3Process::commClose();
 }
 
 
 int K3bProcess::commSetupDoneP()
 {
-  int ok = KProcess::commSetupDoneP();
+  int ok = K3Process::commSetupDoneP();
 
   if( d->rawStdin )
     close(d->in[0]);
@@ -278,7 +278,7 @@ int K3bProcess::commSetupDoneP()
 
 int K3bProcess::commSetupDoneC()
 {
-  int ok = KProcess::commSetupDoneC();
+  int ok = K3Process::commSetupDoneC();
 
   if( d->dupStdoutFd != -1 ) {
     //
@@ -286,26 +286,26 @@ int K3bProcess::commSetupDoneC()
     // to d->dupStdoutFd
     //
     if( ::dup2( d->dupStdoutFd, STDOUT_FILENO ) < 0 ) {
-      kdDebug() << "(K3bProcess) Error while dup( " << d->dupStdoutFd << ", " << STDOUT_FILENO << endl;
+      kDebug() << "(K3bProcess) Error while dup( " << d->dupStdoutFd << ", " << STDOUT_FILENO << endl;
       ok = 0;
     }
   }
   else if( d->rawStdout ) {
     if( ::dup2( d->out[1], STDOUT_FILENO ) < 0 ) {
-      kdDebug() << "(K3bProcess) Error while dup( " << d->out[1] << ", " << STDOUT_FILENO << endl;
+      kDebug() << "(K3bProcess) Error while dup( " << d->out[1] << ", " << STDOUT_FILENO << endl;
       ok = 0;
     }
   }
 
   if( d->dupStdinFd != -1 ) {
     if( ::dup2( d->dupStdinFd, STDIN_FILENO ) < 0 ) {
-      kdDebug() << "(K3bProcess) Error while dup( " << d->dupStdinFd << ", " << STDIN_FILENO << endl;
+      kDebug() << "(K3bProcess) Error while dup( " << d->dupStdinFd << ", " << STDIN_FILENO << endl;
       ok = 0;
     }
   }
   else if( d->rawStdin ) {
     if( ::dup2( d->in[0], STDIN_FILENO ) < 0 ) {
-      kdDebug() << "(K3bProcess) Error while dup( " << d->in[0] << ", " << STDIN_FILENO << endl;
+      kDebug() << "(K3bProcess) Error while dup( " << d->in[0] << ", " << STDIN_FILENO << endl;
       ok = 0;
     }
   }
@@ -398,7 +398,7 @@ bool K3bProcess::closeStdin()
     return true;
   }
   else
-    return KProcess::closeStdin();
+    return K3Process::closeStdin();
 }
 
 
@@ -410,27 +410,27 @@ bool K3bProcess::closeStdout()
     return true;
   }
   else
-    return KProcess::closeStdout();
+    return K3Process::closeStdout();
 }
 
 
-K3bProcessOutputCollector::K3bProcessOutputCollector( KProcess* p )
+K3bProcessOutputCollector::K3bProcessOutputCollector( K3Process* p )
   : m_process(0)
 {
   setProcess( p );
 }
 
-void K3bProcessOutputCollector::setProcess( KProcess* p )
+void K3bProcessOutputCollector::setProcess( K3Process* p )
 {
   if( m_process )
     m_process->disconnect( this );
 
   m_process = p;
   if( p ) {
-    connect( p, SIGNAL(receivedStdout(KProcess*, char*, int)), 
-	     this, SLOT(slotGatherStdout(KProcess*, char*, int)) );
-    connect( p, SIGNAL(receivedStderr(KProcess*, char*, int)), 
-	     this, SLOT(slotGatherStderr(KProcess*, char*, int)) );
+    connect( p, SIGNAL(receivedStdout(K3Process*, char*, int)), 
+	     this, SLOT(slotGatherStdout(K3Process*, char*, int)) );
+    connect( p, SIGNAL(receivedStderr(K3Process*, char*, int)), 
+	     this, SLOT(slotGatherStderr(K3Process*, char*, int)) );
   }
 
   m_gatheredOutput.truncate( 0 );
@@ -438,13 +438,13 @@ void K3bProcessOutputCollector::setProcess( KProcess* p )
   m_stdoutOutput.truncate( 0 );
 }
 
-void K3bProcessOutputCollector::slotGatherStderr( KProcess*, char* data, int len )
+void K3bProcessOutputCollector::slotGatherStderr( K3Process*, char* data, int len )
 {
   m_gatheredOutput.append( QString::fromLocal8Bit( data, len ) );
   m_stderrOutput.append( QString::fromLocal8Bit( data, len ) );
 }
 
-void K3bProcessOutputCollector::slotGatherStdout( KProcess*, char* data, int len )
+void K3bProcessOutputCollector::slotGatherStdout( K3Process*, char* data, int len )
 {
   m_gatheredOutput.append( QString::fromLocal8Bit( data, len ) );
   m_stdoutOutput.append( QString::fromLocal8Bit( data, len ) );

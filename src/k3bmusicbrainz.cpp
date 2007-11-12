@@ -59,7 +59,7 @@ int K3bMusicBrainz::query( const Q3CString& trm )
   d->artists.clear();
 
   if( KProtocolManager::useProxy() ) {
-    KURL proxy = KProtocolManager::proxyFor("http");
+    KUrl proxy = KProtocolManager::proxyFor("http");
     mb_SetProxy( d->mb, const_cast<char*>(proxy.host().latin1()), short(proxy.port()) );
   }
 
@@ -85,7 +85,7 @@ int K3bMusicBrainz::query( const Q3CString& trm )
   else {
     char buffer[256];
     mb_GetQueryError( d->mb, buffer, 256 );
-    kdDebug() << "(K3bMusicBrainz) query error: " << buffer << endl;
+    kDebug() << "(K3bMusicBrainz) query error: " << buffer << endl;
     return 0;
   }
 }

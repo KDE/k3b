@@ -115,13 +115,13 @@ public:
     InodeInfo& inodeInfo = inodeMap[item->localId(followSymlinks)];
     
     if( inodeInfo.items.findRef( item ) == -1 ) {
-      kdError() << "(K3bFileCompilationSizeHandler) " 
+      kError() << "(K3bFileCompilationSizeHandler) " 
 		<< item->localPath()
 		<< " has been removed without being added!" << endl;
     }
     else {
       if( item->itemSize(followSymlinks) != inodeInfo.savedSize ) {
-	kdError() << "(K3bFileCompilationSizeHandler) savedSize differs!" << endl;
+	kError() << "(K3bFileCompilationSizeHandler) savedSize differs!" << endl;
       }
       
       inodeInfo.items.removeRef( item );
@@ -137,7 +137,7 @@ public:
     // special files do not have a corresponding local file
     // so we just substract their k3bSize
     if( specialItems.findRef( item ) == -1 ) {
-      kdError() << "(K3bFileCompilationSizeHandler) Special item "
+      kError() << "(K3bFileCompilationSizeHandler) Special item "
 		<< item->k3bName()
 		<< " has been removed without being added!" << endl;
     }

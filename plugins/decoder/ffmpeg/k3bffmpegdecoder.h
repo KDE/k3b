@@ -29,7 +29,7 @@ class K3bFFMpegDecoderFactory : public K3bAudioDecoderFactory
   K3bFFMpegDecoderFactory( QObject* parent = 0, const char* name = 0 );
   ~K3bFFMpegDecoderFactory();
 
-  bool canDecode( const KURL& filename );
+  bool canDecode( const KUrl& filename );
 
   int pluginSystemVersion() const { return 3; }
 

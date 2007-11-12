@@ -67,8 +67,8 @@ K3bVideoDVDRippingView::K3bVideoDVDRippingView( QWidget* parent, const char * na
   // ----------------------------------------------------------------------------------
   m_titleView = new K3bVideoDVDRippingTitleListView( mainWidget() );
 
-  connect( m_titleView, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
-	   this, SLOT(slotContextMenu(KListView*, Q3ListViewItem*, const QPoint&)) );
+  connect( m_titleView, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)),
+	   this, SLOT(slotContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)) );
 
   // general layout
   // ----------------------------------------------------------------------------------
@@ -181,7 +181,7 @@ void K3bVideoDVDRippingView::slotStartRipping()
 }
 
 
-void K3bVideoDVDRippingView::slotContextMenu( KListView*, Q3ListViewItem*, const QPoint& p )
+void K3bVideoDVDRippingView::slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& p )
 {
   m_popupMenu->popup(p);
 }

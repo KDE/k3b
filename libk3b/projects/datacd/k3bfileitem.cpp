@@ -77,7 +77,7 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
     m_id.device = 0;
     m_bSymLink = false;
 
-    kdError() << "(KFileItem) lstat failed: " << strerror(errno) << endl;
+    kError() << "(KFileItem) lstat failed: " << strerror(errno) << endl;
 
     // since we have no proper inode info, disable the inode caching in the doc
     if( doc ) {

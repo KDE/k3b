@@ -21,7 +21,7 @@
 #include "k3b_export.h"
 
 /**
- * A K3bWidgetFactoryAction behaves just like a KWidgetAction except that
+ * A K3bWidgetFactoryAction behaves just like a K3WidgetAction except that
  * for each plug operation a new widget is created. Thus, it can be plugged into
  * multiple containers at the same time.
  */

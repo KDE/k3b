@@ -23,7 +23,7 @@
 #include <Q3VBoxLayout>
 #include <Q3ValueList>
 
-#include <klistbox.h>
+#include <k3listbox.h>
 #include <klocale.h>
 
 
@@ -31,7 +31,7 @@
 K3bCddbMultiEntriesDialog::K3bCddbMultiEntriesDialog( QWidget* parent, const char* name )
   : KDialogBase( Plain, i18n("CDDB Database Entry"), Ok|Cancel, Ok, parent, name )
 {
-  Q3Frame* frame = plainPage();
+  QFrame* frame = plainPage();
   Q3VBoxLayout* layout = new Q3VBoxLayout( frame );
   layout->setAutoAdd( true );
   layout->setSpacing( spacingHint() );
@@ -40,7 +40,7 @@ K3bCddbMultiEntriesDialog::K3bCddbMultiEntriesDialog( QWidget* parent, const cha
   QLabel* infoLabel = new QLabel( i18n("K3b found multiple or inexact CDDB entries. Please select one."), frame );
   infoLabel->setAlignment( WordBreak );
 
-  m_listBox = new KListBox( frame, "list_box");
+  m_listBox = new K3ListBox( frame, "list_box");
 
   setMinimumSize( 280, 200 );
 }

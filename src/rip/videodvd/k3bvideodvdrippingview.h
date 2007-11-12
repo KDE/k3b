@@ -27,7 +27,7 @@ class K3bToolBox;
 class QLabel;
 class KActionCollection;
 class KActionMenu;
-class KListView;
+class K3ListView;
 class Q3ListViewItem;
 
 class K3bVideoDVDRippingView : public K3bMediaContentsView
@@ -43,7 +43,7 @@ class K3bVideoDVDRippingView : public K3bMediaContentsView
  private slots:
   void slotStartRipping();
 
-  void slotContextMenu( KListView*, Q3ListViewItem*, const QPoint& );
+  void slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& );
 
   void slotCheckAll();
   void slotUncheckAll();

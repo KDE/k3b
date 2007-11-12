@@ -20,7 +20,7 @@
 
 #include <k3baudiodecoder.h>
 
-class KURL;
+class KUrl;
 
 
 class K3bOggVorbisDecoderFactory : public K3bAudioDecoderFactory
@@ -31,7 +31,7 @@ class K3bOggVorbisDecoderFactory : public K3bAudioDecoderFactory
   K3bOggVorbisDecoderFactory( QObject* parent = 0, const char* name = 0 );
   ~K3bOggVorbisDecoderFactory();
 
-  bool canDecode( const KURL& filename );
+  bool canDecode( const KUrl& filename );
 
   int pluginSystemVersion() const { return 3; }
 

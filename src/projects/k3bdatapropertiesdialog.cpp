@@ -81,7 +81,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const Q3ValueList<K3bDataItem*
   }
   int row = 1;
 
-  m_spacerLine = new Q3Frame( plainPage() );
+  m_spacerLine = new QFrame( plainPage() );
   m_spacerLine->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
   grid->addMultiCellWidget( m_spacerLine, row, row, 0, 2 );
   ++row;
@@ -97,7 +97,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const Q3ValueList<K3bDataItem*
   grid->addWidget( new QLabel( i18n("Used blocks:"), plainPage() ), row, 0 );
   grid->addWidget( m_labelBlocks, row++, 2 );
 
-  m_spacerLine = new Q3Frame( plainPage() );
+  m_spacerLine = new QFrame( plainPage() );
   m_spacerLine->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
   grid->addMultiCellWidget( m_spacerLine, row, row, 0, 2 );
   ++row;
@@ -118,7 +118,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const Q3ValueList<K3bDataItem*
   // OPTIONS
   // /////////////////////////////////////////////////
   QTabWidget* optionTab = new QTabWidget( plainPage() );
-  m_spacerLine = new Q3Frame( plainPage() );
+  m_spacerLine = new QFrame( plainPage() );
   m_spacerLine->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
 
   grid->addMultiCellWidget( m_spacerLine, 10, 10, 0, 2 );
@@ -201,7 +201,7 @@ K3bDataPropertiesDialog::~K3bDataPropertiesDialog()
 void K3bDataPropertiesDialog::loadItemProperties( K3bDataItem* dataItem )
 {
   if( K3bFileItem* fileItem = dynamic_cast<K3bFileItem*>(dataItem) ) {
-    KFileItem kFileItem( KFileItem::Unknown, KFileItem::Unknown, KURL::fromPathOrURL(fileItem->localPath()) );
+    KFileItem kFileItem( KFileItem::Unknown, KFileItem::Unknown, KUrl::fromPathOrUrl(fileItem->localPath()) );
     m_labelIcon->setPixmap( kFileItem.pixmap(KIcon::SizeLarge) );
     if( fileItem->isSymLink() )
       m_labelType->setText( i18n("Link to %1").arg(kFileItem.mimeComment()) );
@@ -214,7 +214,7 @@ void K3bDataPropertiesDialog::loadItemProperties( K3bDataItem* dataItem )
     m_labelSize->setText( KIO::convertSize(dataItem->size()) );
   }
   else if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>(dataItem) ) {
-    m_labelIcon->setPixmap( KMimeType::pixmapForURL( KURL( "/" )) );
+    m_labelIcon->setPixmap( KMimeType::pixmapForURL( KUrl( "/" )) );
     m_labelType->setText( i18n("Directory") );
     m_labelLocalNameText->hide();
     m_labelLocalLocationText->hide();

@@ -54,7 +54,7 @@ public:
   bool poppedUp;
   bool ignoreNextMouseClick; // used when the view was hidden with the arrow button
 
-  KURLCompletion* urlCompletion;
+  KUrlCompletion* urlCompletion;
 };
 
 
@@ -63,7 +63,7 @@ K3bFileTreeComboBox::K3bFileTreeComboBox( QWidget* parent, const char* name )
 {
   d = new Private;
 
-  d->urlCompletion = new KURLCompletion();
+  d->urlCompletion = new KUrlCompletion();
   setCompletionObject( d->urlCompletion );
 
   m_fileTreeView = new K3bFileTreeView( this );
@@ -80,8 +80,8 @@ K3bFileTreeComboBox::K3bFileTreeComboBox( QWidget* parent, const char* name )
 
   connect( m_fileTreeView, SIGNAL(deviceExecuted(K3bDevice::Device*)),
 	   this, SLOT(slotDeviceExecuted(K3bDevice::Device*)) );
-  connect( m_fileTreeView, SIGNAL(urlExecuted(const KURL&)),
-	   this, SLOT(slotUrlExecuted(const KURL&)) );
+  connect( m_fileTreeView, SIGNAL(urlExecuted(const KUrl&)),
+	   this, SLOT(slotUrlExecuted(const KUrl&)) );
 
   connect( lineEdit(), SIGNAL(returnPressed()),
 	   this, SLOT(slotGoUrl()) );
@@ -105,14 +105,14 @@ void K3bFileTreeComboBox::slotDeviceExecuted( K3bDevice::Device* dev )
 }
 
 
-void K3bFileTreeComboBox::slotUrlExecuted( const KURL& url )
+void K3bFileTreeComboBox::slotUrlExecuted( const KUrl& url )
 {
   setUrl( url );
   emit urlExecuted( url );
 }
 
 
-void K3bFileTreeComboBox::setUrl( const KURL& url )
+void K3bFileTreeComboBox::setUrl( const KUrl& url )
 {
   setEditText( SmallIcon("folder"), K3b::convertToLocalUrl(url).path() );
   popdown();
@@ -254,7 +254,7 @@ void K3bFileTreeComboBox::slotGoUrl()
 
 
   lineEdit()->setText( p );
-  KURL url;
+  KUrl url;
   url.setPath( p );
   emit urlExecuted( url );
 }

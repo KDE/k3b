@@ -31,7 +31,7 @@
 
 class KAction;
 class KToggleAction;
-class KWidgetAction;
+class K3WidgetAction;
 class Q3GridLayout;
 class Q3PopupMenu;
 class QResizeEvent;
@@ -53,7 +53,7 @@ class LIBK3B_EXPORT K3bToolBox : public KToolBar
   KToolBarButton* addToggleButton( KToggleAction* );
 
   KToolBarButton* addButton( KAction* action, bool forceText = false );
-  void addWidgetAction( KWidgetAction* );
+  void addWidgetAction( K3WidgetAction* );
 
   /**
    * Be aware that the toolbox will take ownership of the widget

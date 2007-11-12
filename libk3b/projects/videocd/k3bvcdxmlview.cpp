@@ -232,7 +232,7 @@ bool K3bVcdXmlView::write( const QString& fname )
     }
 
     m_xmlstring = xmlDoc.toString();
-    kdDebug() << QString( "(K3bVcdXmlView) Write Data to %1:" ).arg( fname ) << endl;
+    kDebug() << QString( "(K3bVcdXmlView) Write Data to %1:" ).arg( fname ) << endl;
 
     QFile xmlFile( fname );
     if ( xmlFile.open( QIODevice::WriteOnly ) ) {
@@ -410,7 +410,7 @@ void K3bVcdXmlView::setNumkeySEL( QDomDocument& doc, QDomElement& parent, K3bVcd
 
             for ( trackIt = numKeyMap.begin(); trackIt != numKeyMap.end(); ++trackIt ) {
 
-                kdDebug() << QString( "trackIt key: %1 none: %2" ).arg( trackIt.key() ).arg( none ) << endl;
+                kDebug() << QString( "trackIt key: %1 none: %2" ).arg( trackIt.key() ).arg( none ) << endl;
                 while ( none < trackIt.key() ) {
                     elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );
                     elemPbcSelectionNumKeySEL.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( track->index() ).rightJustified( 3, '0' ) ) );

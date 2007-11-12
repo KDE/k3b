@@ -38,13 +38,13 @@ public:
   kio_videodvdProtocol(const Q3CString &pool_socket, const Q3CString &app_socket);
   ~kio_videodvdProtocol();
 
-  void mimetype( const KURL& url );
-  void stat( const KURL& url );
-  void get( const KURL& url );
-  void listDir( const KURL& url );
+  void mimetype( const KUrl& url );
+  void stat( const KUrl& url );
+  void get( const KUrl& url );
+  void listDir( const KUrl& url );
 
 private:
-  K3bIso9660* openIso( const KURL&, QString& plainIsoPath );
+  K3bIso9660* openIso( const KUrl&, QString& plainIsoPath );
   KIO::UDSEntry createUDSEntry( const K3bIso9660Entry* e ) const;
   void listVideoDVDs();
 

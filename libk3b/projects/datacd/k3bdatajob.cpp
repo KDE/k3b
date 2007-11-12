@@ -38,7 +38,7 @@
 #include <k3bdeviceglobals.h>
 #include <k3bgrowisofswriter.h>
 
-#include <kprocess.h>
+#include <k3process.h>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -662,12 +662,12 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
                 // try to get the last track's datamode
                 // we already asked for an appendable cdr when fetching
                 // the ms info
-                kdDebug() << "(K3bDataJob) determining last track's datamode..." << endl;
+                kDebug() << "(K3bDataJob) determining last track's datamode..." << endl;
 
                 // FIXME: use the DeviceHandler
                 K3bDevice::Toc toc = d->doc->burner()->readToc();
                 if( toc.isEmpty() ) {
-                    kdDebug() << "(K3bDataJob) could not retrieve toc." << endl;
+                    kDebug() << "(K3bDataJob) could not retrieve toc." << endl;
                     emit infoMessage( i18n("Unable to determine the last track's datamode. Using default."), ERROR );
                     d->usedDataMode = K3b::MODE2;
                 }
@@ -677,7 +677,7 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
                     else
                         d->usedDataMode = K3b::MODE2;
 
-                    kdDebug() << "(K3bDataJob) using datamode: "
+                    kDebug() << "(K3bDataJob) using datamode: "
                               << (d->usedDataMode == K3b::MODE1 ? "mode1" : "mode2")
                               << endl;
                 }
@@ -1023,7 +1023,7 @@ bool K3bDataJob::setupCdrdaoJob()
         d->tocFile->close();
     }
     else {
-        kdDebug() << "(K3bDataJob) could not write tocfile." << endl;
+        kDebug() << "(K3bDataJob) could not write tocfile." << endl;
         emit infoMessage( i18n("IO Error"), ERROR );
         cancelAll();
         return false;

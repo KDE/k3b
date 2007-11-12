@@ -64,7 +64,7 @@ class K3bDataDirTreeView : public K3bListView
   void setCurrentDir( K3bDirItem* );
 
  signals:
-  //  void urlsDropped( const KURL::List&, QListViewItem* parent );
+  //  void urlsDropped( const KUrl::List&, QListViewItem* parent );
   void dirSelected( K3bDirItem* );
 
  protected:
@@ -105,7 +105,7 @@ class K3bDataDirTreeView : public K3bListView
  private slots:
   void slotExecuted( Q3ListViewItem* );
   void slotDataItemRemoved( K3bDataItem* );
-  void showPopupMenu( KListView*, Q3ListViewItem* _item, const QPoint& );
+  void showPopupMenu( K3ListView*, Q3ListViewItem* _item, const QPoint& );
   void slotRenameItem();
   void slotRemoveItem();
   void slotNewDir();

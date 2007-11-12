@@ -135,7 +135,7 @@ void K3bAudioSessionReadingJob::WorkThread::run()
 
     if( fd > 0 ) {
       if( ::write( fd, buffer, CD_FRAMESIZE_RAW ) != CD_FRAMESIZE_RAW ) {
-	kdDebug() << "(K3bAudioSessionCopyJob::WorkThread) error while writing to fd " << fd << endl;
+	kDebug() << "(K3bAudioSessionCopyJob::WorkThread) error while writing to fd " << fd << endl;
 	writeError = true;
 	break;
       }
@@ -148,7 +148,7 @@ void K3bAudioSessionReadingJob::WorkThread::run()
 	  waveFileWriter = new K3bWaveFileWriter();
 
 	if( filenames.count() < currentTrack ) {
-	  kdDebug() << "(K3bAudioSessionCopyJob) not enough image filenames given: " << currentTrack << endl;
+	  kDebug() << "(K3bAudioSessionCopyJob) not enough image filenames given: " << currentTrack << endl;
 	  writeError = true;
 	  break;
 	}

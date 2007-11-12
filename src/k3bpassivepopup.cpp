@@ -26,7 +26,7 @@
 #include <kiconloader.h>
 #include <kguiitem.h>
 #include <kpushbutton.h>
-#include <kactivelabel.h>
+#include <k3activelabel.h>
 
 #include <qtimer.h>
 #include <qlayout.h>
@@ -78,7 +78,7 @@ static QPixmap themedMessageBoxIcon( K3bPassivePopup::MessageType mt )
     break;
   }
 
-  QPixmap ret = KApplication::kApplication()->iconLoader()->loadIcon(icon_name, KIcon::NoGroup, KIcon::SizeMedium, KIcon::DefaultState, 0, true);
+  QPixmap ret = KApplication::kApplication()->iconLoader()->loadIcon(icon_name, KIconLoader::NoGroup, KIcon::SizeMedium, KIcon::DefaultState, 0, true);
   
   if( ret.isNull() )
     return QMessageBox::standardIcon( qIcon );
@@ -95,7 +95,7 @@ public:
 
   K3bTimeoutWidget* timeoutWidget;
   QLabel* titleLabel;
-  KActiveLabel* messageLabel;
+  K3ActiveLabel* messageLabel;
   QLabel* pixmapLabel;
   K3bMiniButton* closeButton;
   K3bMiniButton* stickyButton;
@@ -127,7 +127,7 @@ K3bPassivePopup::K3bPassivePopup( QWidget* parent )
   fnt.setBold( true );
   d->titleLabel->setFont( fnt );
 
-  d->messageLabel = new KActiveLabel( this );
+  d->messageLabel = new K3ActiveLabel( this );
 
   d->pixmapLabel = new QLabel( this );
   d->pixmapLabel->setAlignment( Qt::AlignTop );

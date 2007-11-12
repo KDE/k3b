@@ -27,7 +27,7 @@ class K3b<name>DecoderFactory : public K3bAudioDecoderFactory
   K3b<name>DecoderFactory( QObject* parent = 0, const char* name = 0 );
   ~K3b<name>DecoderFactory();
 
-  bool canDecode( const KURL& filename );
+  bool canDecode( const KUrl& filename );
 
   int pluginSystemVersion() const { return 3; }
 

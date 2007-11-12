@@ -185,7 +185,7 @@ void K3bAudioMetainfoRenamerPluginWidget::slotScanClicked()
 //     d->progressCounter = 0;
 
     // create root item
-    KListViewItem* rootItem = new KListViewItem( d->viewFiles, "/" );
+    K3ListViewItem* rootItem = new K3ListViewItem( d->viewFiles, "/" );
 
     //  d->progressDialog->show();
     scanDir( dir, rootItem );
@@ -201,7 +201,7 @@ void K3bAudioMetainfoRenamerPluginWidget::slotScanClicked()
 
 void K3bAudioMetainfoRenamerPluginWidget::scanDir( K3bDirItem* dir, Q3ListViewItem* viewRoot )
 {
-  kdDebug() << "(K3bAudioMetainfoRenamerPluginWidget) scanning dir " << dir->k3bName() << endl;
+  kDebug() << "(K3bAudioMetainfoRenamerPluginWidget) scanning dir " << dir->k3bName() << endl;
 
   d->dirItemDict.insert( dir, viewRoot );
 
@@ -231,7 +231,7 @@ void K3bAudioMetainfoRenamerPluginWidget::scanDir( K3bDirItem* dir, Q3ListViewIt
     }
     else if( item->isDir() ) {
       // create dir item
-      KListViewItem* dirViewItem = new KListViewItem( viewRoot, item->k3bName() );
+      K3ListViewItem* dirViewItem = new K3ListViewItem( viewRoot, item->k3bName() );
       scanDir( (K3bDirItem*)item, dirViewItem );
       dirViewItem->setOpen(true);
     }
@@ -333,7 +333,7 @@ QString K3bAudioMetainfoRenamerPluginWidget::createNewName( K3bFileItem* item )
       // Check if files with that name exists and if so append number
       //
       if( existsOtherItemWithSameName( item, newName + extension ) ) {
-	kdDebug() << "(K3bAudioMetainfoRenamerPluginWidget) file with name " 
+	kDebug() << "(K3bAudioMetainfoRenamerPluginWidget) file with name " 
 		  << newName << extension << " already exists" << endl;
 	int i = 1;
 	while( existsOtherItemWithSameName( item, newName + QString( " (%1)").arg(i) + extension ) )

@@ -38,7 +38,7 @@
 K3bDebuggingOutputDialog::K3bDebuggingOutputDialog( QWidget* parent )
   : KDialogBase( parent, "debugViewDialog", true, i18n("Debugging Output"), Close|User1|User2, Close,
 		 false,
-		 KStdGuiItem::saveAs(),
+		 KStandardGuiItem::saveAs(),
 		 KGuiItem( i18n("Copy"), "editcopy" ) )
 {
   setButtonTip( User1, i18n("Save to file") );

@@ -117,14 +117,14 @@ void K3bDataItem::setK3bName( const QString& name ) {
     if ( name != m_k3bName ) {
         // test for not-allowed characters
         if( name.contains('/') ) {
-            kdDebug() << "(K3bDataItem) name contained invalid characters!" << endl;
+            kDebug() << "(K3bDataItem) name contained invalid characters!" << endl;
             return;
         }
 
         if( parent() ) {
             K3bDataItem* item = parent()->find( name );
             if( item && item != this ) {
-                kdDebug() << "(K3bDataItem) item with that name already exists." << endl;
+                kDebug() << "(K3bDataItem) item with that name already exists." << endl;
                 return;
             }
         }

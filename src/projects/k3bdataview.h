@@ -58,7 +58,7 @@ class K3bDataView : public K3bView
 
    void slotDocChanged();
 
-   void addUrls( const KURL::List& );
+   void addUrls( const KUrl::List& );
 
  protected:
    K3bDataDirTreeView* m_dataDirTree;

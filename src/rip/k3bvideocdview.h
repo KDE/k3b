@@ -29,7 +29,7 @@
 
 class KActionCollection;
 class KActionMenu;
-class KListView;
+class K3ListView;
 
 class QLabel;
 class Q3ListViewItem;
@@ -60,7 +60,7 @@ class K3bVideoCdView : public K3bMediaContentsView
         }
 
     private slots:
-        void slotContextMenu( KListView*, Q3ListViewItem*, const QPoint& );
+        void slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& );
         void slotTrackSelectionChanged( Q3ListViewItem* );
         void slotStateChanged( Q3ListViewItem* );
         void slotVideoCdInfoFinished( bool );

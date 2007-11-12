@@ -274,7 +274,7 @@ void K3bDataImageSettingsWidget::slotFilesystemsChanged()
   m_customFsDlg->w->save( o );
   for( int i = 0; i < FS_CUSTOM; ++i ) {
     if( compareAdvancedOptions( o, s_fsPresets[i] ) ) {
-      kdDebug() << "(K3bDataImageSettingsWidget) found preset settings: " << s_fsPresetNames[i] << endl;
+      kDebug() << "(K3bDataImageSettingsWidget) found preset settings: " << s_fsPresetNames[i] << endl;
       m_comboFilesystems->setCurrentItem( i );
       break;
     }

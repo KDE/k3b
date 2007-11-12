@@ -18,7 +18,7 @@
 #define K3BLISTVIEW_H
 
 
-#include <klistview.h>
+#include <k3listview.h>
 #include "k3b_export.h"
 #include <q3ptrvector.h>
 #include <q3ptrlist.h>
@@ -44,7 +44,7 @@ class K3bMsfEdit;
 class K3bListView;
 
 
-class LIBK3B_EXPORT K3bListViewItem : public KListViewItem
+class LIBK3B_EXPORT K3bListViewItem : public K3ListViewItem
 {
  public:
   K3bListViewItem(Q3ListView *parent);
@@ -79,7 +79,7 @@ class LIBK3B_EXPORT K3bListViewItem : public KListViewItem
   virtual ~K3bListViewItem();
 
   /**
-   * reimplemented from KListViewItem
+   * reimplemented from K3ListViewItem
    */
   void setup();
 
@@ -158,7 +158,7 @@ class LIBK3B_EXPORT K3bCheckListViewItem : public K3bListViewItem
 
 
 
-class LIBK3B_EXPORT K3bListView : public KListView
+class LIBK3B_EXPORT K3bListView : public K3ListView
 {
   friend class K3bListViewItem;
 
@@ -238,7 +238,7 @@ class LIBK3B_EXPORT K3bListView : public KListView
 
  protected:
   /**
-   * calls KListView::drawContentsOffset
+   * calls K3ListView::drawContentsOffset
    * and paints a the noItemText if no item is in the list
    */
   virtual void drawContentsOffset ( QPainter * p, int ox, int oy, int cx, int cy, int cw, int ch );

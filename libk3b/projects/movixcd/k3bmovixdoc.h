@@ -23,7 +23,7 @@
 #include <q3ptrlist.h>
 #include "k3b_export.h"
 //class K3bView;
-class KURL;
+class KUrl;
 class QDomElement;
 class K3bFileItem;
 class K3bMovixFileItem;
@@ -86,10 +86,10 @@ class LIBK3B_EXPORT K3bMovixDoc : public K3bDataDoc
   void subTitleItemRemoved( K3bMovixFileItem* );
 
  public slots:
-  void addUrls( const KURL::List& urls );
-  void addMovixFile( const KURL& url, int pos = -1 );
+  void addUrls( const KUrl::List& urls );
+  void addMovixFile( const KUrl& url, int pos = -1 );
   void moveMovixItem( K3bMovixFileItem* item, K3bMovixFileItem* itemAfter );
-  void addSubTitleItem( K3bMovixFileItem*, const KURL& );
+  void addSubTitleItem( K3bMovixFileItem*, const KUrl& );
   void removeSubTitleItem( K3bMovixFileItem* );
 
  protected:

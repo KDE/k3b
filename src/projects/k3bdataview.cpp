@@ -33,7 +33,7 @@
 #include <klocale.h>
 #include <kurl.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kaction.h>
 #include <kmessagebox.h>
 #include <kio/global.h>
@@ -183,7 +183,7 @@ void K3bDataView::slotDocChanged()
 }
 
 
-void K3bDataView::addUrls( const KURL::List& urls )
+void K3bDataView::addUrls( const KUrl::List& urls )
 {
   K3bDataUrlAddingDialog::addUrls( urls, m_dataFileView->currentDir() );
 }

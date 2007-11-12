@@ -141,7 +141,7 @@ void K3bVideoDVDTitleDetectClippingJob::startTranscode( int chapter )
   d->process->setSplitStdout(true);
   //  connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotTranscodeStderr(const QString&)) );
   connect( d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotTranscodeStderr(const QString&)) );
-  connect( d->process, SIGNAL(processExited(KProcess*)), this, SLOT(slotTranscodeExited(KProcess*)) );
+  connect( d->process, SIGNAL(processExited(K3Process*)), this, SLOT(slotTranscodeExited(K3Process*)) );
 
   // the executable
   *d->process << d->usedTranscodeBin;
@@ -171,17 +171,17 @@ void K3bVideoDVDTitleDetectClippingJob::startTranscode( int chapter )
     *d->process << *it;
 
   // produce some debugging output
-  kdDebug() << "***** transcode parameters:\n";
+  kDebug() << "***** transcode parameters:\n";
   const Q3ValueList<Q3CString>& args = d->process->args();
   QString s;
   for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
   }
-  kdDebug() << s << flush << endl;
+  kDebug() << s << flush << endl;
   emit debuggingOutput( d->usedTranscodeBin->name() + " command:", s);
 
   // start the process
-  if( !d->process->start( KProcess::NotifyOnExit, KProcess::All ) ) {
+  if( !d->process->start( K3Process::NotifyOnExit, K3Process::All ) ) {
     // something went wrong when starting the program
     // it "should" be the executable
     emit infoMessage( i18n("Could not start %1.").arg(d->usedTranscodeBin->name()), K3bJob::ERROR );
@@ -247,12 +247,12 @@ void K3bVideoDVDTitleDetectClippingJob::slotTranscodeStderr( const QString& line
       m_clippingRight = qMin( m_clippingRight, values[3].toInt() );
     }
     else
-      kdDebug() << "(K3bVideoDVDTitleDetectClippingJob) failed to parse line: " << line << endl;
+      kDebug() << "(K3bVideoDVDTitleDetectClippingJob) failed to parse line: " << line << endl;
   }
 }
 
 
-void K3bVideoDVDTitleDetectClippingJob::slotTranscodeExited( KProcess* p )
+void K3bVideoDVDTitleDetectClippingJob::slotTranscodeExited( K3Process* p )
 {
   switch( p->exitStatus() ) {
   case 0:

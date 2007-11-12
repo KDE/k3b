@@ -48,7 +48,7 @@ K3bProjectFilePlugin::K3bProjectFilePlugin( QObject *parent, const char *name,
 bool K3bProjectFilePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
 {
   if( !info.url().isLocalFile() ) {
-    kdDebug() << "(K3bProjectFilePluginInfo) no local file." << endl;
+    kDebug() << "(K3bProjectFilePluginInfo) no local file." << endl;
     return false;
   }
 
@@ -67,7 +67,7 @@ bool K3bProjectFilePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
     store->close();
   }
   else
-    kdDebug() << "(K3bProjectFilePluginInfo) failed to open the store." << endl;
+    kDebug() << "(K3bProjectFilePluginInfo) failed to open the store." << endl;
 
   if( success ) {
     // check the documents DOCTYPE
@@ -89,7 +89,7 @@ bool K3bProjectFilePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
     else if( xmlDoc.doctype().name() == "k3b_video_dvd_project" )
       type = K3bDoc::VIDEODVD;
     else {
-      kdDebug() << "(K3bDoc) unknown doc type: " << xmlDoc.doctype().name() << endl;
+      kDebug() << "(K3bDoc) unknown doc type: " << xmlDoc.doctype().name() << endl;
       success = false;
     }
 

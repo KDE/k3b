@@ -21,7 +21,7 @@
 
 
 class K3bProcess;
-class KProcess;
+class K3Process;
 class K3bExternalBin;
 namespace K3bDevice {
   class Device;
@@ -70,7 +70,7 @@ class K3bReadcdReader : public K3bJob
 
  private slots:
   void slotStdLine( const QString& line );
-  void slotProcessExited(KProcess*);
+  void slotProcessExited(K3Process*);
 
  private:
   bool m_noCorr;

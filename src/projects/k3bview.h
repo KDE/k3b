@@ -74,12 +74,12 @@ class K3bView : public QWidget, public KXMLGUIClient
    * Add an url to the doc. The default implementation simply calls 
    * addUrls.
    */
-  virtual void addUrl( const KURL& );
+  virtual void addUrl( const KUrl& );
 
   /**
    * Add urls to the doc. The default implementation calls doc()->addUrls.
    */
-  virtual void addUrls( const KURL::List& );
+  virtual void addUrls( const KUrl::List& );
 
  protected:
   /**

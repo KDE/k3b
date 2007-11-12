@@ -68,7 +68,7 @@ void K3bCddbpQuery::doMatchQuery()
   m_state = READ;
   m_parsingBuffer = "";
   
-  kdDebug() <<  "(K3bCddbpQuery) Read: " << read << endl;
+  kDebug() <<  "(K3bCddbpQuery) Read: " << read << endl;
 
   m_stream << read << endl << flush;
 }
@@ -105,7 +105,7 @@ void K3bCddbpQuery::slotReadyRead()
   while( m_socket->canReadLine() ) {
     QString line = m_stream.readLine();
 
-    //    kdDebug() << "(K3bCddbpQuery) line: " << line << endl;
+    //    kDebug() << "(K3bCddbpQuery) line: " << line << endl;
 
     switch( m_state ) {
     case GREETING:
@@ -142,7 +142,7 @@ void K3bCddbpQuery::slotReadyRead()
     case PROTO:
       {
 	if( getCode( line ) == 501 ) {
-	  kdDebug() << "(K3bCddbpQuery) illigal protocol level!" << endl;
+	  kDebug() << "(K3bCddbpQuery) illigal protocol level!" << endl;
 	}
 	
 	// just ignore the reply since it's not important for the functionality
@@ -165,7 +165,7 @@ void K3bCddbpQuery::slotReadyRead()
 
       else if( getCode( line ) == 210 ) {
 	// TODO: perhaps add an "exact" field to K3bCddbEntry
-	kdDebug() << "(K3bCddbpQuery) Found multiple exact matches" << endl;
+	kDebug() << "(K3bCddbpQuery) Found multiple exact matches" << endl;
 
 	emit infoMessage( i18n("Found multiple exact matches") );
 
@@ -173,7 +173,7 @@ void K3bCddbpQuery::slotReadyRead()
       }
 
       else if( getCode( line ) == 211 ) {
-	kdDebug() << "(K3bCddbpQuery) Found inexact matches" << endl;
+	kDebug() << "(K3bCddbpQuery) Found inexact matches" << endl;
 
 	emit infoMessage( i18n("Found inexact matches") );
 
@@ -181,14 +181,14 @@ void K3bCddbpQuery::slotReadyRead()
       }
 
       else if( getCode( line ) == 202 ) {
-	kdDebug() << "(K3bCddbpQuery) no match found" << endl;
+	kDebug() << "(K3bCddbpQuery) no match found" << endl;
 	emit infoMessage( i18n("No match found") );
 	setError( NO_ENTRY_FOUND );
 	cddbpQuit();
       }
 
       else {
-	kdDebug() << "(K3bCddbpQuery) Error while querying: " << line << endl;
+	kDebug() << "(K3bCddbpQuery) Error while querying: " << line << endl;
 	emit infoMessage( i18n("Error while querying") );
 	setError( QUERY_ERROR );
 	cddbpQuit();
@@ -204,7 +204,7 @@ void K3bCddbpQuery::slotReadyRead()
 	return;
       }
       else {
-	kdDebug() << "(K3bCddbpQuery) inexact match: " << line << endl;
+	kDebug() << "(K3bCddbpQuery) inexact match: " << line << endl;
 	K3bCddbResultHeader header;
 	parseMatchHeader( line, header );
 	m_inexactMatches.append( header );
@@ -228,11 +228,11 @@ void K3bCddbpQuery::slotReadyRead()
 
     case READ_DATA:
 
-      //      kdDebug() << "(K3bCddbpQuery) parsing line: " << line << endl;
+      //      kDebug() << "(K3bCddbpQuery) parsing line: " << line << endl;
 
       if( line.startsWith( "." ) ) {
 	
-	kdDebug() << "(K3bCddbpQuery) query finished." << endl;
+	kDebug() << "(K3bCddbpQuery) query finished." << endl;
 
 	Q3TextStream strStream( m_parsingBuffer, QIODevice::ReadOnly );
 	parseEntry( strStream, result() );
@@ -258,15 +258,15 @@ void K3bCddbpQuery::slotError( int e )
 {
   switch(e) {
   case Q3Socket::ErrConnectionRefused:
-    kdDebug() <<  i18n("Connection to %1 refused").arg( m_server ) << endl;
+    kDebug() <<  i18n("Connection to %1 refused").arg( m_server ) << endl;
     emit infoMessage( i18n("Connection to %1 refused").arg( m_server ) );
     break;
   case Q3Socket::ErrHostNotFound:
-    kdDebug() <<  i18n("Could not find host %1").arg( m_server ) << endl;
+    kDebug() <<  i18n("Could not find host %1").arg( m_server ) << endl;
     emit infoMessage( i18n("Could not find host %1").arg( m_server ) );
     break;
   case Q3Socket::ErrSocketRead:
-    kdDebug() <<  i18n("Error while reading from %1").arg( m_server ) << endl;
+    kDebug() <<  i18n("Error while reading from %1").arg( m_server ) << endl;
     emit infoMessage( i18n("Error while reading from %1").arg( m_server ) );
     break;
   }

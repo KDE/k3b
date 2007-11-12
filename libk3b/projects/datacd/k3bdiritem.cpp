@@ -94,7 +94,7 @@ K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
   // check if we are a subdir of item
   if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>(item) ) {
     if( dirItem->isSubItem( this ) ) {
-      kdDebug() << "(K3bDirItem) trying to move a dir item down in it's own tree." << endl;
+      kDebug() << "(K3bDirItem) trying to move a dir item down in it's own tree." << endl;
       return this;
     }
   }

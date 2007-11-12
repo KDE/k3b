@@ -49,12 +49,12 @@ class LIBK3B_EXPORT K3bMultiChoiceDialog : public KDialog
 		     QWidget* parent = 0, 
 		     const char* name = 0,
 		     int buttonCount = 2,
-		     const KGuiItem& b1 = KStdGuiItem::yes(),
-		     const KGuiItem& b2 = KStdGuiItem::no(),
-		     const KGuiItem& b3 = KStdGuiItem::no(),
-		     const KGuiItem& b4 = KStdGuiItem::no(),
-		     const KGuiItem& b5 = KStdGuiItem::no(),
-		     const KGuiItem& b6 = KStdGuiItem::no() );
+		     const KGuiItem& b1 = KStandardGuiItem::yes(),
+		     const KGuiItem& b2 = KStandardGuiItem::no(),
+		     const KGuiItem& b3 = KStandardGuiItem::no(),
+		     const KGuiItem& b4 = KStandardGuiItem::no(),
+		     const KGuiItem& b5 = KStandardGuiItem::no(),
+		     const KGuiItem& b6 = KStandardGuiItem::no() );
 		     
  public slots:
   /**

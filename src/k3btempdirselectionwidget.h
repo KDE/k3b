@@ -24,7 +24,7 @@
 
 class QTimer;
 class QLabel;
-class KURLRequester;
+class KUrlRequester;
 class KConfigBase;
 
 
@@ -80,7 +80,7 @@ class K3bTempDirSelectionWidget : public Q3GroupBox
 
  private slots:
   void slotUpdateFreeTempSpace();
-  void slotTempDirButtonPressed( KURLRequester* );
+  void slotTempDirButtonPressed( KUrlRequester* );
   void slotFixTempPath();
 
  private:
@@ -89,7 +89,7 @@ class K3bTempDirSelectionWidget : public Q3GroupBox
   QLabel* m_imageFileLabel;
   QLabel* m_labelCdSize;
   QLabel* m_labelFreeSpace;
-  KURLRequester* m_editDirectory;
+  KUrlRequester* m_editDirectory;
 
   mutable unsigned long m_freeTempSpace;
   unsigned long m_requestedSize;

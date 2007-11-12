@@ -47,7 +47,7 @@
 #include <QPaintEvent>
 
 #include <kaction.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <klocale.h>
 #include <kinputdialog.h>
 #include <kconfig.h>
@@ -216,7 +216,7 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 	    : KIO::convertSize( qMax( (cdSize * 1024LL * 1024LL) - (long long)d->doc->size(), 0LL ) ) )
       .arg( d->showTime
 	    ? i18n("%1 min").arg(K3b::Msf( cdSize*60*75 ).toString(false))
-	    : KIO::convertSizeFromKB( cdSize * 1024 ) );
+	    : KIO::convertSizeFromKiB( cdSize * 1024 ) );
   else
     overSizeText = i18n("Capacity exceeded by %1")
       .arg( d->showTime
@@ -328,7 +328,7 @@ public:
     KAction* actionSaveUserDefaults;
     KAction* actionLoadUserDefaults;
 
-    KPopupMenu* popup;
+    KMenu* popup;
 
     QToolButton* buttonMenu;
 
@@ -388,7 +388,7 @@ void K3bFillStatusDisplay::setupPopupMenu()
   d->actionCollection = new KActionCollection( this );
 
   // we use a nother popup for the dvd sizes
-  d->popup = new KPopupMenu( this, "popup" );
+  d->popup = new KMenu( this, "popup" );
 
   d->actionShowMinutes = new KRadioAction( i18n("Minutes"), 0, this, SLOT(showTime()),
 					   d->actionCollection, "fillstatus_show_minutes" );
@@ -406,14 +406,14 @@ void K3bFillStatusDisplay::setupPopupMenu()
 				     d->actionCollection, "fillstatus_80minutes" );
   d->action100Min = new KRadioAction( i18n("%1 MB").arg(880), 0, this, SLOT(slot100Minutes()),
 				      d->actionCollection, "fillstatus_100minutes" );
-  d->actionDvd4_7GB = new KRadioAction( KIO::convertSizeFromKB((int)(4.4*1024.0*1024.0)), 0, this, SLOT(slotDvd4_7GB()),
+  d->actionDvd4_7GB = new KRadioAction( KIO::convertSizeFromKiB((int)(4.4*1024.0*1024.0)), 0, this, SLOT(slotDvd4_7GB()),
 					d->actionCollection, "fillstatus_dvd_4_7gb" );
-  d->actionDvdDoubleLayer = new KRadioAction( KIO::convertSizeFromKB((int)(8.0*1024.0*1024.0)),
+  d->actionDvdDoubleLayer = new KRadioAction( KIO::convertSizeFromKiB((int)(8.0*1024.0*1024.0)),
 					      0, this, SLOT(slotDvdDoubleLayer()),
 					      d->actionCollection, "fillstatus_dvd_double_layer" );
-  d->actionBD25 = new KRadioAction( KIO::convertSizeFromKB( 25*1024*1024 ), 0, this, SLOT( slotBD25() ),
+  d->actionBD25 = new KRadioAction( KIO::convertSizeFromKiB( 25*1024*1024 ), 0, this, SLOT( slotBD25() ),
                                           d->actionCollection, "fillstatus_bd_25" );
-  d->actionBD50 = new KRadioAction( KIO::convertSizeFromKB( 50*1024*1024 ), 0, this, SLOT( slotBD50() ),
+  d->actionBD50 = new KRadioAction( KIO::convertSizeFromKiB( 50*1024*1024 ), 0, this, SLOT( slotBD50() ),
                                           d->actionCollection, "fillstatus_bd_50" );
 
   d->actionCustomSize = new K3bRadioAction( i18n("Custom..."), 0, this, SLOT(slotCustomSize()),

@@ -49,11 +49,11 @@ bool K3bMovixProgram::scan( const QString& p )
   //
   // probe version and data dir
   //
-  KProcess vp, dp;
+  K3Process vp, dp;
   vp << path + "movix-version";
   dp << path + "movix-conf";
   K3bProcessOutputCollector vout( &vp ), dout( &dp );
-  if( vp.start( KProcess::Block, KProcess::AllOutput ) && dp.start( KProcess::Block, KProcess::AllOutput ) ) {
+  if( vp.start( K3Process::Block, K3Process::AllOutput ) && dp.start( K3Process::Block, K3Process::AllOutput ) ) {
     // movix-version just gives us the version number on stdout
     if( !vout.output().isEmpty() && !dout.output().isEmpty() ) {
       bin = new K3bMovixBin( this );
@@ -63,7 +63,7 @@ bool K3bMovixProgram::scan( const QString& p )
     }
   }
   else {
-    kdDebug() << "(K3bMovixProgram) could not start " << path << "movix-version" << endl;
+    kDebug() << "(K3bMovixProgram) could not start " << path << "movix-version" << endl;
     return false;
   }
 
@@ -106,22 +106,22 @@ bool K3bMovixProgram::scanOldEMovix( K3bMovixBin* bin, const QString& path )
   QDir dir( bin->movixDataDir() );
   QStringList subdirs = dir.entryList( QDir::Dirs );
   if( !subdirs.contains( "boot-messages" ) ) {
-    kdDebug() << "(K3bMovixProgram) could not find subdir 'boot-messages'" << endl;
+    kDebug() << "(K3bMovixProgram) could not find subdir 'boot-messages'" << endl;
     delete bin;
     return false;
   }
   if( !subdirs.contains( "isolinux" ) ) {
-    kdDebug() << "(K3bMovixProgram) could not find subdir 'isolinux'" << endl;
+    kDebug() << "(K3bMovixProgram) could not find subdir 'isolinux'" << endl;
     delete bin;
     return false;
   }
   if( !subdirs.contains( "movix" ) ) {
-    kdDebug() << "(K3bMovixProgram) could not find subdir 'movix'" << endl;
+    kDebug() << "(K3bMovixProgram) could not find subdir 'movix'" << endl;
     delete bin;
     return false;
   }
   if( !subdirs.contains( "mplayer-fonts" ) ) {
-    kdDebug() << "(K3bMovixProgram) could not find subdir 'mplayer-fonts'" << endl;
+    kDebug() << "(K3bMovixProgram) could not find subdir 'mplayer-fonts'" << endl;
     delete bin;
     return false;
   }
@@ -133,10 +133,10 @@ bool K3bMovixProgram::scanOldEMovix( K3bMovixBin* bin, const QString& path )
   if( QFile::exists( path + "movix-files" ) ) {
     bin->addFeature( "files" );
 
-    KProcess p;
+    K3Process p;
     K3bProcessOutputCollector out( &p );
     p << bin->path + "movix-files";
-    if( p.start( KProcess::Block, KProcess::AllOutput ) ) {
+    if( p.start( K3Process::Block, K3Process::AllOutput ) ) {
       bin->m_movixFiles = QStringList::split( "\n", out.output() );
     }
   }
@@ -167,7 +167,7 @@ bool K3bMovixProgram::scanOldEMovix( K3bMovixBin* bin, const QString& path )
   for( QStringList::const_iterator it = bin->m_isolinuxFiles.begin();
        it != bin->m_isolinuxFiles.end(); ++it ) {
     if( !QFile::exists( bin->movixDataDir() + "/isolinux/" + *it ) ) {
-      kdDebug() << "(K3bMovixProgram) Could not find file " << *it << endl;
+      kDebug() << "(K3bMovixProgram) Could not find file " << *it << endl;
       delete bin;
       return false;
     }
@@ -219,7 +219,7 @@ QStringList K3bMovixProgram::determineSupportedBootLabels( const QString& isoCon
 
   QFile f( isoConfigFile );
   if( !f.open( QIODevice::ReadOnly ) ) {
-    kdDebug() << "(K3bMovixProgram) could not open file '" << f.name() << "'" << endl;
+    kDebug() << "(K3bMovixProgram) could not open file '" << f.name() << "'" << endl;
   }
   else {
     Q3TextStream fs( &f );
@@ -300,10 +300,10 @@ QStringList K3bMovixBin::supportedCodecs() const
 
 QStringList K3bMovixBin::supported( const QString& type ) const
 {
-  KProcess p;
+  K3Process p;
   K3bProcessOutputCollector out( &p );
   p << path + "movix-conf" << "--supported=" + type;
-  if( p.start( KProcess::Block, KProcess::AllOutput ) )
+  if( p.start( K3Process::Block, K3Process::AllOutput ) )
     return QStringList::split( "\n", out.output() );
   else
     return QStringList();
@@ -316,7 +316,7 @@ QStringList K3bMovixBin::files( const QString& kbd,
 				const QString& lang,
 				const QStringList& codecs ) const
 {
-  KProcess p;
+  K3Process p;
   K3bProcessOutputCollector out( &p );
   p << path + "movix-conf" << "--files";
 
@@ -332,7 +332,7 @@ QStringList K3bMovixBin::files( const QString& kbd,
   if( !codecs.isEmpty() )
     p << "--codecs" << codecs.join( "," );
 
-  if( p.start( KProcess::Block, KProcess::AllOutput ) )
+  if( p.start( K3Process::Block, K3Process::AllOutput ) )
     return QStringList::split( "\n", out.output() );
   else
     return QStringList();

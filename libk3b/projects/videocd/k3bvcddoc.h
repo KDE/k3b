@@ -135,9 +135,9 @@ class LIBK3B_EXPORT K3bVcdDoc : public K3bDoc
          * the process is finished and check error()
          * to know about the result.
          **/
-        void addUrls( const KURL::List& );
-        void addTrack( const KURL&, uint );
-        void addTracks( const KURL::List&, uint );
+        void addUrls( const KUrl::List& );
+        void addTrack( const KUrl&, uint );
+        void addTracks( const KUrl::List&, uint );
         /** adds a track without any testing */
         void addTrack( K3bVcdTrack* track, uint position = 0 );
 
@@ -163,7 +163,7 @@ class LIBK3B_EXPORT K3bVcdDoc : public K3bDoc
         QString typeString() const;
 
     private:
-        K3bVcdTrack* createTrack( const KURL& url );
+        K3bVcdTrack* createTrack( const KUrl& url );
         void informAboutNotFoundFiles();
 
         QStringList m_notFoundFiles;
@@ -172,10 +172,10 @@ class LIBK3B_EXPORT K3bVcdDoc : public K3bDoc
         class PrivateUrlToAdd
         {
             public:
-                PrivateUrlToAdd( const KURL& u, int _pos )
+                PrivateUrlToAdd( const KUrl& u, int _pos )
                         : url( u ), position( _pos )
                 {}
-                KURL url;
+                KUrl url;
                 int position;
         };
 
@@ -187,7 +187,7 @@ class LIBK3B_EXPORT K3bVcdDoc : public K3bDoc
         KIO::filesize_t calcTotalSize() const;
         KIO::filesize_t ISOsize() const;
 
-        bool isImage( const KURL& url );
+        bool isImage( const KUrl& url );
 
         K3bVcdTrack* m_lastAddedTrack;
         K3bVcdOptions* m_vcdOptions;

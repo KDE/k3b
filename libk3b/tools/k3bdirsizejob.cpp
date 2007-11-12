@@ -52,12 +52,12 @@ public:
     emitStarted();
 
     QStringList l;
-    for( KURL::List::const_iterator it = urls.begin();
+    for( KUrl::List::const_iterator it = urls.begin();
 	 it != urls.end(); ++it ) {
-      const KURL& url = *it;
+      const KUrl& url = *it;
 
       if( !url.isLocalFile() ) {
-	kdDebug() << "(K3bDirSizeJob) no remote support." << endl;
+	kDebug() << "(K3bDirSizeJob) no remote support." << endl;
 	emitFinished( false );
 	return;
       }
@@ -118,7 +118,7 @@ public:
     wait();
   }
 
-  KURL::List urls;
+  KUrl::List urls;
   bool followSymlinks;
 
   KIO::filesize_t totalSize;
@@ -170,7 +170,7 @@ KIO::filesize_t K3bDirSizeJob::totalSymlinks() const
 }
 
 
-void K3bDirSizeJob::setUrls( const KURL::List& urls )
+void K3bDirSizeJob::setUrls( const KUrl::List& urls )
 {
   d->urls = urls;
 }

@@ -167,10 +167,10 @@ void K3bMedium::update()
     d->diskInfo = d->device->diskInfo();
 
     if( d->diskInfo.diskState() != K3bDevice::STATE_NO_MEDIA ) {
-        kdDebug() << "(K3bMedium) found medium: (" << d->device->blockDeviceName() << ')' << endl
+        kDebug() << "(K3bMedium) found medium: (" << d->device->blockDeviceName() << ')' << endl
                   << "=====================================================" << endl;
         d->diskInfo.debug();
-        kdDebug() << "=====================================================" << endl;
+        kDebug() << "=====================================================" << endl;
     }
 
     if( diskInfo().diskState() == K3bDevice::STATE_COMPLETE ||
@@ -210,7 +210,7 @@ void K3bMedium::analyseContent()
 
   // analyze filesystem
   if( d->content & CONTENT_DATA ) {
-    //kdDebug() << "(K3bMedium) Checking file system." << endl;
+    //kDebug() << "(K3bMedium) Checking file system." << endl;
 
     unsigned long startSec = 0;
 
@@ -231,7 +231,7 @@ void K3bMedium::analyseContent()
       startSec = (*it).firstSector().lba();
     }
 
-    //kdDebug() << "(K3bMedium) Checking file system at " << startSec << endl;
+    //kDebug() << "(K3bMedium) Checking file system at " << startSec << endl;
 
     // force the backend since we don't need decryption
     // which just slows down the whole process
@@ -240,7 +240,7 @@ void K3bMedium::analyseContent()
     iso.setPlainIso9660( true );
     if( iso.open() ) {
       d->isoDesc = iso.primaryDescriptor();
-      kdDebug() << "(K3bMedium) found volume id from start sector " << startSec
+      kDebug() << "(K3bMedium) found volume id from start sector " << startSec
 		<< ": '" << d->isoDesc.volumeId << "'" << endl;
 
       if( diskInfo().isDvdMedia() ) {
@@ -249,19 +249,19 @@ void K3bMedium::analyseContent()
 	  d->content |= CONTENT_VIDEO_DVD;
       }
       else {
-	kdDebug() << "(K3bMedium) checking for VCD." << endl;
+	kDebug() << "(K3bMedium) checking for VCD." << endl;
 
 	// check for VCD
 	const K3bIso9660Entry* vcdEntry = iso.firstIsoDirEntry()->entry( "VCD/INFO.VCD" );
 	const K3bIso9660Entry* svcdEntry = iso.firstIsoDirEntry()->entry( "SVCD/INFO.SVD" );
 	const K3bIso9660File* vcdInfoFile = 0;
 	if( vcdEntry ) {
-	  kdDebug() << "(K3bMedium) found vcd entry." << endl;
+	  kDebug() << "(K3bMedium) found vcd entry." << endl;
 	  if( vcdEntry->isFile() )
 	    vcdInfoFile = static_cast<const K3bIso9660File*>(vcdEntry);
 	}
 	if( svcdEntry && !vcdInfoFile ) {
-	  kdDebug() << "(K3bMedium) found svcd entry." << endl;
+	  kDebug() << "(K3bMedium) found svcd entry." << endl;
 	  if( svcdEntry->isFile() )
 	    vcdInfoFile = static_cast<const K3bIso9660File*>(svcdEntry);
 	}

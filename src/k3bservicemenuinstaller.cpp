@@ -68,7 +68,7 @@ bool K3bServiceInstaller::allInstalled() const
 
   for( unsigned int i = 0; i < d->allServiceMenuFiles.count(); ++i )
     if( !KIO::NetAccess::exists( d->konqiServicemenusFolder + d->allServiceMenuFiles[i], true, 0 ) ) {
-      kdDebug() << "(K3bServiceInstaller) service menu " << d->konqiServicemenusFolder << d->allServiceMenuFiles[i]
+      kDebug() << "(K3bServiceInstaller) service menu " << d->konqiServicemenusFolder << d->allServiceMenuFiles[i]
 		<< " does not exist." << endl;
       return false;
     }
@@ -85,8 +85,8 @@ bool K3bServiceInstaller::install( QWidget* parent )
 
   // simply link all the globally installed K3b service menus to the local konqi service menu folder
   for( unsigned int i = 0; i < d->allServiceMenus.count(); ++i )
-    if( !KIO::NetAccess::file_copy( KURL::fromPathOrURL( d->allServiceMenus[i] ), 
-				    KURL::fromPathOrURL( d->konqiServicemenusFolder + d->allServiceMenuFiles[i] ), -1, 
+    if( !KIO::NetAccess::file_copy( KUrl::fromPathOrUrl( d->allServiceMenus[i] ), 
+				    KUrl::fromPathOrUrl( d->konqiServicemenusFolder + d->allServiceMenuFiles[i] ), -1, 
 				    true, false, parent ) )
       success = false;
 

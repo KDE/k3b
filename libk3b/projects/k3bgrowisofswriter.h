@@ -23,7 +23,7 @@ namespace K3bDevice {
   class Device;
   class DeviceHandler;
 }
-class KProcess;
+class K3Process;
 
 
 
@@ -90,7 +90,7 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
 
  protected slots:
   void slotReceivedStderr( const QString& );
-  void slotProcessExited( KProcess* );
+  void slotProcessExited( K3Process* );
   void slotThroughput( int t );
   void slotFlushingCache();
   void slotRingBufferFinished( bool );

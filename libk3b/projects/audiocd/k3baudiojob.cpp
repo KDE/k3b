@@ -505,7 +505,7 @@ bool K3bAudioJob::prepareWriter()
   if( m_usedWritingApp == K3b::CDRECORD ) {
 
     if( !writeInfFiles() ) {
-      kdDebug() << "(K3bAudioJob) could not write inf-files." << endl;
+      kDebug() << "(K3bAudioJob) could not write inf-files." << endl;
       emit infoMessage( i18n("IO Error. Most likely no space left on harddisk."), ERROR );
 
       return false;
@@ -554,7 +554,7 @@ bool K3bAudioJob::prepareWriter()
   }
   else {
     if( !writeTocFile() ) {
-      kdDebug() << "(K3bDataJob) could not write tocfile." << endl;
+      kDebug() << "(K3bDataJob) could not write tocfile." << endl;
       emit infoMessage( i18n("IO Error"), ERROR );
 
       return false;

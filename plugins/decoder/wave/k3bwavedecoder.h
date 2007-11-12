@@ -34,7 +34,7 @@ class LIBK3B_EXPORT K3bWaveDecoderFactory : public K3bAudioDecoderFactory
   K3bWaveDecoderFactory( QObject* parent = 0, const char* name = 0 );
   ~K3bWaveDecoderFactory();
 
-  bool canDecode( const KURL& filename );
+  bool canDecode( const KUrl& filename );
 
   int pluginSystemVersion() const { return 3; }
 

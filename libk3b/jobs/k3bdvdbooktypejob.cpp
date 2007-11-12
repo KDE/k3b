@@ -161,7 +161,7 @@ void K3bDvdBooktypeJob::cancel()
       d->process->kill();
   }
   else {
-    kdDebug() << "(K3bDvdBooktypeJob) not running." << endl;
+    kDebug() << "(K3bDvdBooktypeJob) not running." << endl;
   }
 }
 
@@ -179,7 +179,7 @@ void K3bDvdBooktypeJob::slotStderrLine( const QString& line )
 }
 
 
-void K3bDvdBooktypeJob::slotProcessFinished( KProcess* p )
+void K3bDvdBooktypeJob::slotProcessFinished( K3Process* p )
 {
   if( d->canceled ) {
     emit canceled();
@@ -283,7 +283,7 @@ void K3bDvdBooktypeJob::startBooktypeChange()
   d->process->setRunPrivileged(true);
   d->process->setSuppressEmptyLines(true);
   connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStderrLine(const QString&)) );
-  connect( d->process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessFinished(KProcess*)) );
+  connect( d->process, SIGNAL(processExited(K3Process*)), this, SLOT(slotProcessFinished(K3Process*)) );
 
   d->dvdBooktypeBin = k3bcore->externalBinManager()->binObject( "dvd+rw-booktype" );
   if( !d->dvdBooktypeBin ) {
@@ -327,17 +327,17 @@ void K3bDvdBooktypeJob::startBooktypeChange()
 
   *d->process << d->device->blockDeviceName();
 
-  kdDebug() << "***** dvd+rw-booktype parameters:\n";
+  kDebug() << "***** dvd+rw-booktype parameters:\n";
   const Q3ValueList<Q3CString>& args = d->process->args();
   QString s;
   for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
   }
-  kdDebug() << s << endl << flush;
+  kDebug() << s << endl << flush;
   emit debuggingOutput( "dvd+rw-booktype command:", s );
 
 
-  if( !d->process->start( KProcess::NotifyOnExit, KProcess::All ) ) {
+  if( !d->process->start( K3Process::NotifyOnExit, K3Process::All ) ) {
     // something went wrong when starting the program
     // it "should" be the executable
     emit infoMessage( i18n("Could not start %1.").arg(d->dvdBooktypeBin->name()), K3bJob::ERROR );

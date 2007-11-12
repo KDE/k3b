@@ -18,13 +18,13 @@
 #include <k3bthememanager.h>
 #include <k3bapplication.h>
 
-#include <kwin.h>
+#include <kwindowsystem.h>
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kcursor.h>
 #include <kconfig.h>
 #include <klocale.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 
 #include <qpixmap.h>
 #include <qpainter.h>
@@ -51,7 +51,7 @@ K3bJobProgressOSD::K3bJobProgressOSD( QWidget* parent, const char* name )
   resize( 20, 20 );
 
   // make sure we are always visible
-  KWin::setOnAllDesktops( winId(), true );
+  KWindowSystem::setOnAllDesktops( winId(), true );
 
   connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
 	   this, SLOT(refresh()) );
@@ -121,7 +121,7 @@ void K3bJobProgressOSD::renderOSD()
 
   // calculate needed size 
   if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-    QPixmap icon = KGlobal::iconLoader()->loadIcon( "k3b", KIcon::NoGroup, 32 );
+    QPixmap icon = KIconLoader::global()->loadIcon( "k3b", KIconLoader::NoGroup, 32 );
     int margin = 10;
     int textWidth = fontMetrics().width( m_text );
 
@@ -215,11 +215,11 @@ void K3bJobProgressOSD::mousePressEvent( QMouseEvent* e )
   m_dragOffset = e->pos();
 
   if( e->button() == LeftButton && !m_dragging ) {
-    grabMouse( KCursor::sizeAllCursor() );
+    grabMouse( Qt::SizeAllCursor );
     m_dragging = true;
   }
   else if( e->button() == RightButton ) {
-    KPopupMenu m;
+    KMenu m;
     if( m.insertItem( i18n("Hide OSD") ) == m.exec( e->globalPos() ) )
       hide();
   }

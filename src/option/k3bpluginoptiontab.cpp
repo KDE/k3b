@@ -39,7 +39,7 @@
 class K3bPluginOptionTab::PluginViewItem : public K3bListViewItem
 {
 public:
-  PluginViewItem( K3bPlugin* p, KListViewItem* parent )
+  PluginViewItem( K3bPlugin* p, K3ListViewItem* parent )
     : K3bListViewItem( parent ),
       plugin(p) {
     const K3bPluginInfo& info = p->pluginInfo();

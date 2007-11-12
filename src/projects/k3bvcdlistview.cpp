@@ -30,7 +30,7 @@
 #include <kurldrag.h>
 #include <klocale.h>
 #include <kaction.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kdialog.h>
 
 // K3b Includes
@@ -48,7 +48,7 @@ K3bVcdListView::K3bVcdListView( K3bView* view, K3bVcdDoc* doc, QWidget *parent, 
     setDropVisualizer( true );
     setAllColumnsShowFocus( true );
     setDragEnabled( true );
-    setSelectionModeExt( KListView::Extended );
+    setSelectionModeExt( K3ListView::Extended );
     setItemsMovable( false );
 
     setNoItemText( i18n( "Use drag'n'drop to add MPEG video files to the project." ) + "\n"
@@ -62,10 +62,10 @@ K3bVcdListView::K3bVcdListView( K3bView* view, K3bVcdDoc* doc, QWidget *parent, 
     setupColumns();
     header() ->setClickEnabled( false );
 
-    connect( this, SIGNAL( dropped( KListView*, QDropEvent*, Q3ListViewItem* ) ),
-             this, SLOT( slotDropped( KListView*, QDropEvent*, Q3ListViewItem* ) ) );
-    connect( this, SIGNAL( contextMenu( KListView*, Q3ListViewItem*, const QPoint& ) ),
-             this, SLOT( showPopupMenu( KListView*, Q3ListViewItem*, const QPoint& ) ) );
+    connect( this, SIGNAL( dropped( K3ListView*, QDropEvent*, Q3ListViewItem* ) ),
+             this, SLOT( slotDropped( K3ListView*, QDropEvent*, Q3ListViewItem* ) ) );
+    connect( this, SIGNAL( contextMenu( K3ListView*, Q3ListViewItem*, const QPoint& ) ),
+             this, SLOT( showPopupMenu( K3ListView*, Q3ListViewItem*, const QPoint& ) ) );
     connect( this, SIGNAL( doubleClicked( Q3ListViewItem*, const QPoint&, int ) ),
              this, SLOT( showPropertiesDialog() ) );
 
@@ -106,7 +106,7 @@ void K3bVcdListView::setupActions()
 
 void K3bVcdListView::setupPopupMenu()
 {
-    m_popupMenu = new KPopupMenu( this, "VcdViewPopupMenu" );
+    m_popupMenu = new KMenu( this, "VcdViewPopupMenu" );
     m_actionRemove->plug( m_popupMenu );
     m_popupMenu->insertSeparator();
     m_actionProperties->plug( m_popupMenu );
@@ -118,7 +118,7 @@ void K3bVcdListView::setupPopupMenu()
 bool K3bVcdListView::acceptDrag( QDropEvent* e ) const
 {
     // the first is for built-in item moving, the second for dropping urls
-    return ( KListView::acceptDrag( e ) || KURLDrag::canDecode( e ) );
+    return ( K3ListView::acceptDrag( e ) || K3URLDrag::canDecode( e ) );
 }
 
 
@@ -130,16 +130,16 @@ Q3DragObject* K3bVcdListView::dragObject()
         return 0;
 
     Q3PtrListIterator<Q3ListViewItem> it( list );
-    KURL::List urls;
+    KUrl::List urls;
 
     for ( ; it.current(); ++it )
-        urls.append( KURL( ( ( K3bVcdListViewItem* ) it.current() ) ->vcdTrack() ->absPath() ) );
+        urls.append( KUrl( ( ( K3bVcdListViewItem* ) it.current() ) ->vcdTrack() ->absPath() ) );
 
-    return KURLDrag::newDrag( urls, viewport() );
+    return K3URLDrag::newDrag( urls, viewport() );
 }
 
 
-void K3bVcdListView::slotDropped( KListView*, QDropEvent* e, Q3ListViewItem* after )
+void K3bVcdListView::slotDropped( K3ListView*, QDropEvent* e, Q3ListViewItem* after )
 {
     if ( !e->isAccepted() )
         return ;
@@ -161,8 +161,8 @@ void K3bVcdListView::slotDropped( KListView*, QDropEvent* e, Q3ListViewItem* aft
             ++it;
         }
     } else {
-        KURL::List urls;
-        KURLDrag::decode( e, urls );
+        KUrl::List urls;
+        K3URLDrag::decode( e, urls );
 
         m_doc->addTracks( urls, pos );
     }
@@ -174,7 +174,7 @@ void K3bVcdListView::slotDropped( KListView*, QDropEvent* e, Q3ListViewItem* aft
 
 void K3bVcdListView::insertItem( Q3ListViewItem* item )
 {
-    KListView::insertItem( item );
+    K3ListView::insertItem( item );
 
     // make sure at least one item is selected
     if ( selectedItems().isEmpty() ) {
@@ -182,7 +182,7 @@ void K3bVcdListView::insertItem( Q3ListViewItem* item )
     }
 }
 
-void K3bVcdListView::showPopupMenu( KListView*, Q3ListViewItem* _item, const QPoint& _point )
+void K3bVcdListView::showPopupMenu( K3ListView*, Q3ListViewItem* _item, const QPoint& _point )
 {
     if ( _item ) {
         m_actionRemove->setEnabled( true );

@@ -17,7 +17,7 @@
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <ksimpleconfig.h>
@@ -143,7 +143,7 @@ int main( int argc, char* argv[] )
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     if( args->isSet("lang") )
       if( !KGlobal::locale()->setLanguage(args->getOption("lang")) )
-	kdDebug() << "Unable to set to language " << args->getOption("lang")
+	kDebug() << "Unable to set to language " << args->getOption("lang")
 		  << " current is: " << KGlobal::locale()->language() << endl;
 
     K3bApplication app;

@@ -61,7 +61,7 @@ public:
   QPixmap beforeAniPixmap;
 
   // used for the urladdingdialog hack
-  KURL::List addUrls;
+  KUrl::List addUrls;
   K3bDirItem* addParentDir;
 
   QString lastUpdateVolumeId;
@@ -101,8 +101,8 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget*
   connect( this, SIGNAL(selectionChanged(Q3ListViewItem*)), this, SLOT(slotExecuted(Q3ListViewItem*)) );
   connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), this, SLOT(slotDataItemRemoved(K3bDataItem*)) );
   connect( m_doc, SIGNAL(itemAdded(K3bDataItem*)), this, SLOT(slotItemAdded(K3bDataItem*)) );
-  connect( this, SIGNAL(contextMenu(KListView*,Q3ListViewItem*, const QPoint&)),
-	   this, SLOT(showPopupMenu(KListView*,Q3ListViewItem*, const QPoint&)) );
+  connect( this, SIGNAL(contextMenu(K3ListView*,Q3ListViewItem*, const QPoint&)),
+	   this, SLOT(showPopupMenu(K3ListView*,Q3ListViewItem*, const QPoint&)) );
   connect( this, SIGNAL(dropped(QDropEvent*, Q3ListViewItem*, Q3ListViewItem*)),
 	   this, SLOT(slotDropped(QDropEvent*, Q3ListViewItem*, Q3ListViewItem*)) );
 
@@ -124,7 +124,7 @@ void K3bDataDirTreeView::slotExecuted( Q3ListViewItem* item )
 
 
 bool K3bDataDirTreeView::acceptDrag(QDropEvent* e) const{
-  return ( e->source() == viewport() || KURLDrag::canDecode(e) ||
+  return ( e->source() == viewport() || K3URLDrag::canDecode(e) ||
 	   ( m_fileView && e->source() == m_fileView->viewport() ) );
 }
 
@@ -192,7 +192,7 @@ void K3bDataDirTreeView::slotDropped( QDropEvent* e, Q3ListViewItem*, Q3ListView
 	if( dataViewItem )
 	  selectedDataItems.append( dataViewItem->dataItem() );
 	else
-	  kdDebug() << "no dataviewitem" << endl;
+	  kDebug() << "no dataviewitem" << endl;
       }
 
       K3bDataUrlAddingDialog::copyMoveItems( selectedDataItems, d->addParentDir, this, e->action() == QDropEvent::Copy );
@@ -208,7 +208,7 @@ void K3bDataDirTreeView::slotDropped( QDropEvent* e, Q3ListViewItem*, Q3ListView
     else {
       // seems that new items have been dropped
       d->addUrls.clear();
-      if( KURLDrag::decode( e, d->addUrls ) ) {
+      if( K3URLDrag::decode( e, d->addUrls ) ) {
 	//
 	// This is a small (not to ugly) hack to circumvent problems with the
 	// event queues: the url adding dialog will be non-modal regardless of
@@ -278,7 +278,7 @@ void K3bDataDirTreeView::setCurrentDir( K3bDirItem* dirItem )
       it.data()->parent()->setOpen(true);
   }
   else {
-    kdDebug() << "Tried to set unknown dirItem to current" << endl;
+    kDebug() << "Tried to set unknown dirItem to current" << endl;
   }
 }
 
@@ -309,7 +309,7 @@ void K3bDataDirTreeView::setupActions()
 }
 
 
-void K3bDataDirTreeView::showPopupMenu( KListView*, Q3ListViewItem* item, const QPoint& point )
+void K3bDataDirTreeView::showPopupMenu( K3ListView*, Q3ListViewItem* item, const QPoint& point )
 {
   if( item ) {
     if( K3bDataViewItem* di = dynamic_cast<K3bDataViewItem*>(item) ) {

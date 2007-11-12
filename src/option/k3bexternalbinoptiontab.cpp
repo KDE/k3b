@@ -22,7 +22,7 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <kiconloader.h>
-#include <klistview.h>
+#include <k3listview.h>
 
 #include <q3groupbox.h>
 #include <qlabel.h>

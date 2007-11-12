@@ -23,7 +23,7 @@
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <kaction.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 
 #include <qlabel.h>
 #include <q3frame.h>
@@ -42,7 +42,7 @@ K3bAudioTrackSplitDialog::K3bAudioTrackSplitDialog( K3bAudioTrack* track, QWidge
 		 KDialogBase::Ok, parent, name ),
     m_track(track)
 {
-  Q3Frame* frame = plainPage();
+  QFrame* frame = plainPage();
   
   m_editorWidget = new K3bAudioEditorWidget( frame );
   m_msfEditStart = new K3bMsfEdit( frame );
@@ -97,7 +97,7 @@ K3bAudioTrackSplitDialog::~K3bAudioTrackSplitDialog()
 void K3bAudioTrackSplitDialog::setupActions()
 {
   m_actionCollection = new KActionCollection( this );
-  m_popupMenu = new KPopupMenu( this );
+  m_popupMenu = new KMenu( this );
 
   KAction* actionSplitHere = new KAction( i18n("Split Here"), 0,
 					  KShortcut(), this, SLOT(slotSplitHere()),

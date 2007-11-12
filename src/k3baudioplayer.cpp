@@ -54,7 +54,7 @@
 using namespace std;
 
 K3bPlayListViewItem::K3bPlayListViewItem( const QString& filename, Q3ListView* parent )
-  : KListViewItem( parent ), m_filename( filename )
+  : K3ListViewItem( parent ), m_filename( filename )
 {
   m_length = 0;
   m_bActive = false;
@@ -62,7 +62,7 @@ K3bPlayListViewItem::K3bPlayListViewItem( const QString& filename, Q3ListView* p
 
 
 K3bPlayListViewItem::K3bPlayListViewItem( const QString& filename, Q3ListView* parent, Q3ListViewItem* after )
-  : KListViewItem( parent, after ), m_filename( filename )
+  : K3ListViewItem( parent, after ), m_filename( filename )
 {
   m_length = 0;
   m_bActive = false;
@@ -107,15 +107,15 @@ void K3bPlayListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int c, 
     newCg.setColor( QColorGroup::Highlight, red );
     newCg.setColor( QColorGroup::HighlightedText, white );
 
-    KListViewItem::paintCell( p, newCg, c, w, a );
+    K3ListViewItem::paintCell( p, newCg, c, w, a );
   }
   else
-    KListViewItem::paintCell( p, cg, c, w, a );
+    K3ListViewItem::paintCell( p, cg, c, w, a );
 }
 
 
 K3bPlayListView::K3bPlayListView( QWidget* parent, const char* name )
-  : KListView( parent, name )
+  : K3ListView( parent, name )
 {
   addColumn( i18n("Filename") );
   addColumn( i18n("Length") );
@@ -136,8 +136,8 @@ K3bPlayListView::~K3bPlayListView()
 
 bool K3bPlayListView::acceptDrag( QDropEvent* e ) const
 {
-  // we accept textdrag (urls) and moved items (supported by KListView)
-  return KURLDrag::canDecode(e) || KListView::acceptDrag(e);
+  // we accept textdrag (urls) and moved items (supported by K3ListView)
+  return K3URLDrag::canDecode(e) || K3ListView::acceptDrag(e);
 }
 
 
@@ -149,12 +149,12 @@ Q3DragObject* K3bPlayListView::dragObject()
     return 0;
 
   Q3PtrListIterator<Q3ListViewItem> it(list);
-  KURL::List urls;
+  KUrl::List urls;
 
   for( ; it.current(); ++it )
-    urls.append( KURL( ((K3bPlayListViewItem*)it.current())->filename() ) );
+    urls.append( KUrl( ((K3bPlayListViewItem*)it.current())->filename() ) );
 
-  return KURLDrag::newDrag( urls, viewport() );
+  return K3URLDrag::newDrag( urls, viewport() );
 }
 
 
@@ -241,8 +241,8 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
 
   // connections
   // ------------------------------------------------------------------------
-  connect( m_viewPlayList, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
-	   this, SLOT(slotShowContextMenu(KListView*, Q3ListViewItem*, const QPoint&)) );
+  connect( m_viewPlayList, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)),
+	   this, SLOT(slotShowContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)) );
 
   connect( m_buttonPlay, SIGNAL(clicked()), this, SLOT(play()) );
   connect( m_buttonStop, SIGNAL(clicked()), this, SLOT(stop()) );
@@ -348,14 +348,14 @@ void K3bAudioPlayer::play()
     if( m_playObject.isNull() ) {
       Arts::PlayObjectFactory factory = Arts::Reference("global:Arts_PlayObjectFactory");
       if( factory.isNull() ) {
-	kdDebug() << "(K3bAudioPlayer) could not create PlayObjectFactory. Possibly no artsd running." << endl;
+	kDebug() << "(K3bAudioPlayer) could not create PlayObjectFactory. Possibly no artsd running." << endl;
 	m_labelFilename->setText( i18n("No running aRtsd found") );
 	return;
       }
 
       m_playObject = factory.createPlayObject( string(QFile::encodeName(m_currentItem->filename()) ) );
       if( m_playObject.isNull() ) {
-	kdDebug() << "(K3bAudioPlayer) no aRts module available for: " << m_currentItem->filename() << endl;
+	kDebug() << "(K3bAudioPlayer) no aRts module available for: " << m_currentItem->filename() << endl;
 	m_labelFilename->setText( i18n("Unknown file format") );
 
 	// play the next if there is any
@@ -630,10 +630,10 @@ void K3bAudioPlayer::slotDropped( QDropEvent* e, Q3ListViewItem* after )
   if( !after )
     after = m_viewPlayList->lastChild();
 
-  KURL::List urls;
-  KURLDrag::decode( e, urls );
+  KUrl::List urls;
+  K3URLDrag::decode( e, urls );
 
-  for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
+  for( KUrl::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
     if( QFile::exists( (*it).path() ) ) {
       Q3ListViewItem* newItem = new K3bPlayListViewItem( (*it).path(), m_viewPlayList, after );
       after = newItem;
@@ -653,7 +653,7 @@ void K3bAudioPlayer::slotRemoveSelected()
 }
 
 
-void K3bAudioPlayer::slotShowContextMenu( KListView*, Q3ListViewItem* item, const QPoint& p )
+void K3bAudioPlayer::slotShowContextMenu( K3ListView*, Q3ListViewItem* item, const QPoint& p )
 {
   if( item )
     m_actionRemove->setEnabled( true );

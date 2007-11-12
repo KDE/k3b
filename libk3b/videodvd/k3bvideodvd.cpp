@@ -63,7 +63,7 @@ bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
   //
   dvd_reader_t* dvdReaderT = DVDOpen( QFile::encodeName(dev->blockDeviceName()) );
   if( !dvdReaderT ) {
-    kdDebug() << "(K3bVideoDVD) Could not open device " << dev->blockDeviceName() << endl;
+    kDebug() << "(K3bVideoDVD) Could not open device " << dev->blockDeviceName() << endl;
     return false;
   }
 
@@ -73,7 +73,7 @@ bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
   char v[33];
   if( DVDUDFVolumeInfo( dvdReaderT, v, 33, 0, 0 ) != 0 &&
       DVDISOVolumeInfo( dvdReaderT, v, 33, 0, 0 ) != 0 ) {
-    kdDebug() << "(K3bVideoDVD) Could not read volume info." << endl;
+    kDebug() << "(K3bVideoDVD) Could not read volume info." << endl;
     DVDClose( dvdReaderT );
     return false;
   }
@@ -84,7 +84,7 @@ bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
   //
   ifo_handle_t* vmg = ifoOpen( dvdReaderT, 0 );
   if( !vmg ) {
-    kdDebug() << "(K3bVideoDVD) Can't open VMG info." << endl;
+    kDebug() << "(K3bVideoDVD) Can't open VMG info." << endl;
     DVDClose( dvdReaderT );
     return false;
   }
@@ -112,7 +112,7 @@ bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
     //
     ifo_handle_t* titleIfo = ifoOpen( dvdReaderT, vmg->tt_srpt->title[i].title_set_nr );
     if( !titleIfo ) {
-      kdDebug() << "(K3bVideoDVD) Can't open Title ifo." << endl;
+      kDebug() << "(K3bVideoDVD) Can't open Title ifo." << endl;
       ifoClose( vmg );
       DVDClose( dvdReaderT );
       return false;
@@ -221,23 +221,23 @@ const K3bVideoDVD::Title& K3bVideoDVD::VideoDVD::operator[]( unsigned int num ) 
 
 void K3bVideoDVD::VideoDVD::debug() const
 {
-  kdDebug() << "VideoDVD information:" << endl
+  kDebug() << "VideoDVD information:" << endl
 	    << "=====================" << endl
 	    << "Volume ID: " << volumeIdentifier() << endl << endl;
 
   for( unsigned int i = 0; i < numTitles(); ++i ) {
-    kdDebug() << "Title " << title(i).titleNumber() << " (" << title(i).playbackTime().toString() << ")" << endl
+    kDebug() << "Title " << title(i).titleNumber() << " (" << title(i).playbackTime().toString() << ")" << endl
 	      << "   Chapters: " << title(i).numPTTs() << endl
 	      << "   Angles:   " << title(i).numAngles() << endl
 	      << "   VTS,TTN:  " << title(i).titleSet() << "," << title(i).ttn() << endl
 	      << "   Audio Streams:" << endl;
     for( unsigned int j = 0; j < title(i).numAudioStreams(); ++j )
-      kdDebug() << "      " << title(i).audioStream(j).langCode() << ": " 
+      kDebug() << "      " << title(i).audioStream(j).langCode() << ": " 
 		<< audioFormatString( title(i).audioStream(j).format() ) << ", "
 		<< audioCodeExtensionString( title(i).audioStream(j).codeExtension() ) << endl;
-    kdDebug() << "   SubPicture Streams:" << endl;
+    kDebug() << "   SubPicture Streams:" << endl;
     for( unsigned int j = 0; j < title(i).numSubPictureStreams(); ++j )
-      kdDebug() << "      " << title(i).subPictureStream(j).langCode() << ": " 
+      kDebug() << "      " << title(i).subPictureStream(j).langCode() << ": " 
 		<< subPictureCodeModeString( title(i).subPictureStream(j).codeMode() ) << ", "
 		<< subPictureCodeExtensionString( title(i).subPictureStream(j).codeExtension() ) << endl;
   }

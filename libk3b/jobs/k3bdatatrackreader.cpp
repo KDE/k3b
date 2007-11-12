@@ -133,7 +133,7 @@ void K3bDataTrackReader::WorkThread::run()
       // close the device for libdvdcss
       m_device->close();
 
-      kdDebug() << "(K3bDataTrackReader::WorkThread) found encrypted dvd. using libdvdcss." << endl;
+      kDebug() << "(K3bDataTrackReader::WorkThread) found encrypted dvd. using libdvdcss." << endl;
 
       // open the libdvdcss stuff
       if( !m_libcss )
@@ -228,11 +228,11 @@ void K3bDataTrackReader::WorkThread::run()
   s_bufferSizeSectors = 128;
   unsigned char* buffer = new unsigned char[m_usedSectorSize*s_bufferSizeSectors];
   while( s_bufferSizeSectors > 0 && read( buffer, m_firstSector.lba(), s_bufferSizeSectors ) < 0 ) {
-    kdDebug() << "(K3bDataTrackReader) determine max read sectors: "
+    kDebug() << "(K3bDataTrackReader) determine max read sectors: "
 	      << s_bufferSizeSectors << " too high." << endl;
     s_bufferSizeSectors--;
   }
-  kdDebug() << "(K3bDataTrackReader) determine max read sectors: "
+  kDebug() << "(K3bDataTrackReader) determine max read sectors: "
 	    << s_bufferSizeSectors << " is max." << endl;
 
   //    s_bufferSizeSectors = K3bDevice::determineMaxReadingBufferSize( m_device, m_firstSector );
@@ -244,7 +244,7 @@ void K3bDataTrackReader::WorkThread::run()
     return;
   }
 
-  kdDebug() << "(K3bDataTrackReader) using buffer size of " << s_bufferSizeSectors << " blocks." << endl;
+  kDebug() << "(K3bDataTrackReader) using buffer size of " << s_bufferSizeSectors << " blocks." << endl;
   emitDebuggingOutput( "K3bDataTrackReader", QString("using buffer size of %1 blocks.").arg( s_bufferSizeSectors ) );
 
   // 2. get it on
@@ -281,7 +281,7 @@ void K3bDataTrackReader::WorkThread::run()
 
     if( m_fd != -1 ) {
       if( ::write( m_fd, reinterpret_cast<void*>(buffer), readBytes ) != readBytes ) {
-	kdDebug() << "(K3bDataTrackReader::WorkThread) error while writing to fd " << m_fd
+	kDebug() << "(K3bDataTrackReader::WorkThread) error while writing to fd " << m_fd
 		  << " current sector: " << (currentSector.lba()-m_firstSector.lba()) << endl;
 	emitDebuggingOutput( "K3bDataTrackReader",
 			     QString("Error while writing to fd %1. Current sector is %2.")
@@ -292,7 +292,7 @@ void K3bDataTrackReader::WorkThread::run()
     }
     else {
       if( file.writeBlock( reinterpret_cast<char*>(buffer), readBytes ) != readBytes ) {
-	kdDebug() << "(K3bDataTrackReader::WorkThread) error while writing to file " << m_imagePath
+	kDebug() << "(K3bDataTrackReader::WorkThread) error while writing to file " << m_imagePath
 		  << " current sector: " << (currentSector.lba()-m_firstSector.lba()) << endl;
 	emitDebuggingOutput( "K3bDataTrackReader",
 			     QString("Error while writing to file %1. Current sector is %2.")
@@ -437,7 +437,7 @@ bool K3bDataTrackReader::WorkThread::setErrorRecovery( K3bDevice::Device* dev, i
 
   // in MMC1 the page has 8 bytes (12 in MMC4 but we only need the first 3 anyway)
   if( dataLen < 8+8 ) {
-    kdDebug() << "(K3bDataTrackReader) modepage 0x01 data too small: " << dataLen << endl;
+    kDebug() << "(K3bDataTrackReader) modepage 0x01 data too small: " << dataLen << endl;
     delete [] data;
     return false;
   }
@@ -446,7 +446,7 @@ bool K3bDataTrackReader::WorkThread::setErrorRecovery( K3bDevice::Device* dev, i
   data[8+2] = code;
 
   if( m_oldErrorRecoveryMode != code )
-    kdDebug() << "(K3bDataTrackReader) changing data recovery mode from " << m_oldErrorRecoveryMode << " to " << code << endl;
+    kDebug() << "(K3bDataTrackReader) changing data recovery mode from " << m_oldErrorRecoveryMode << " to " << code << endl;
 
   bool success = dev->modeSelect( data, dataLen, true, false );
 

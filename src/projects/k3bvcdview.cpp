@@ -62,7 +62,7 @@ K3bProjectBurnDialog* K3bVcdView::newBurnDialog( QWidget * parent, const char * 
 void K3bVcdView::init()
 {
   if( !k3bcore->externalBinManager()->foundBin( "vcdxbuild" ) ) {
-    kdDebug() << "(K3bVcdView) could not find vcdxbuild executable" << endl;
+    kDebug() << "(K3bVcdView) could not find vcdxbuild executable" << endl;
     KMessageBox::information( this,
 			      i18n( "Could not find VcdImager executable. "
 				    "To create VideoCD's you must install VcdImager >= 0.7.12. "

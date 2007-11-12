@@ -48,7 +48,7 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
   layout()->setMargin( KDialog::marginHint() );
 
   m_imageFileLabel = new QLabel( this );
-  m_editDirectory = new KURLRequester( this, "m_editDirectory" );
+  m_editDirectory = new KUrlRequester( this, "m_editDirectory" );
 
   m_imageFileLabel->setBuddy( m_editDirectory );
 
@@ -59,8 +59,8 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
   m_labelFreeSpace->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
 
 
-  connect( m_editDirectory, SIGNAL(openFileDialog(KURLRequester*)),
-	   this, SLOT(slotTempDirButtonPressed(KURLRequester*)) );
+  connect( m_editDirectory, SIGNAL(openFileDialog(KUrlRequester*)),
+	   this, SLOT(slotTempDirButtonPressed(KUrlRequester*)) );
   connect( m_editDirectory, SIGNAL(textChanged(const QString&)),
 	   this, SLOT(slotUpdateFreeTempSpace()) );
   connect( m_editDirectory->lineEdit(), SIGNAL(lostFocus()),
@@ -107,7 +107,7 @@ void K3bTempDirSelectionWidget::slotUpdateFreeTempSpace()
   // update the temp space
   freeTempSpace();
 
-  m_labelFreeSpace->setText( KIO::convertSizeFromKB(m_freeTempSpace) );
+  m_labelFreeSpace->setText( KIO::convertSizeFromKiB(m_freeTempSpace) );
 
   if( m_labelCdSize ) {
     if( m_freeTempSpace < m_requestedSize/1024 )
@@ -119,7 +119,7 @@ void K3bTempDirSelectionWidget::slotUpdateFreeTempSpace()
 }
 
 
-void K3bTempDirSelectionWidget::slotTempDirButtonPressed( KURLRequester* r )
+void K3bTempDirSelectionWidget::slotTempDirButtonPressed( KUrlRequester* r )
 {
   // set the correct mode for the filedialog
   if( m_mode == DIR ) {

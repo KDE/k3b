@@ -29,7 +29,7 @@ class QDragEnterEvent;
 class Q3DragObject;
 class QDropEvent;
 class QTimer;
-class KPopupMenu;
+class KMenu;
 class KAction;
 class K3bVcdDoc;
 class K3bView;
@@ -48,7 +48,7 @@ class K3bVcdListView : public K3bListView
         ~K3bVcdListView();
 
         /**
-         * reimplemented from KListView
+         * reimplemented from K3ListView
          */
         void insertItem( Q3ListViewItem* );
 
@@ -74,14 +74,14 @@ class K3bVcdListView : public K3bListView
         KAction* m_actionRemove;
         KActionCollection* m_actionCollection;
 
-        KPopupMenu* m_popupMenu;
+        KMenu* m_popupMenu;
 
         QMap<K3bVcdTrack*, K3bVcdListViewItem*> m_itemMap;
 
     private slots:
-        void slotDropped( KListView*, QDropEvent* e, Q3ListViewItem* after );
+        void slotDropped( K3ListView*, QDropEvent* e, Q3ListViewItem* after );
         void slotUpdateItems();
-        void showPopupMenu( KListView*, Q3ListViewItem* item, const QPoint& );
+        void showPopupMenu( K3ListView*, Q3ListViewItem* item, const QPoint& );
         void showPropertiesDialog();
         void slotRemoveTracks();
         void slotTrackRemoved( K3bVcdTrack* );

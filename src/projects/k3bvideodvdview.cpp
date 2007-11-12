@@ -74,7 +74,7 @@ void K3bVideoDvdView::init()
 }
 
 
-void K3bVideoDvdView::addUrls( const KURL::List& urls )
+void K3bVideoDvdView::addUrls( const KUrl::List& urls )
 {
   K3bDataUrlAddingDialog::addUrls( urls, m_dataFileView->currentDir() );
 }

@@ -169,17 +169,17 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
             emit infoMessage( i18n("Found encrypted DVD."), WARNING );
             // check for libdvdcss
             bool haveLibdvdcss = false;
-            kdDebug() << "(K3bDvdCopyJob) trying to open libdvdcss." << endl;
+            kDebug() << "(K3bDvdCopyJob) trying to open libdvdcss." << endl;
             if( K3bLibDvdCss* libcss = K3bLibDvdCss::create() ) {
-                kdDebug() << "(K3bDvdCopyJob) succeeded." << endl;
-                kdDebug() << "(K3bDvdCopyJob) dvdcss_open(" << m_readerDevice->blockDeviceName() << ") = "
+                kDebug() << "(K3bDvdCopyJob) succeeded." << endl;
+                kDebug() << "(K3bDvdCopyJob) dvdcss_open(" << m_readerDevice->blockDeviceName() << ") = "
                           << libcss->open(m_readerDevice) << endl;
                 haveLibdvdcss = true;
 
                 delete libcss;
             }
             else
-                kdDebug() << "(K3bDvdCopyJob) failed." << endl;
+                kDebug() << "(K3bDvdCopyJob) failed." << endl;
 
             if( !haveLibdvdcss ) {
                 emit infoMessage( i18n("Cannot copy encrypted DVDs."), ERROR );
@@ -396,7 +396,7 @@ void K3bDvdCopyJob::cancel()
         d->imageFile.close();
     }
     else {
-        kdDebug() << "(K3bDvdCopyJob) not running." << endl;
+        kDebug() << "(K3bDvdCopyJob) not running." << endl;
     }
 }
 

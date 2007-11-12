@@ -238,7 +238,7 @@ bool K3bDevice::Device::init( bool bCheckWritingModes )
     cmd[4] = sizeof(buf);
     cmd[5] = 0;
     if( cmd.transport( TR_DIR_READ, buf, sizeof(buf) ) ) {
-        kdError() << "(K3bDevice::Device) Unable to do inquiry." << endl;
+        kError() << "(K3bDevice::Device) Unable to do inquiry." << endl;
         close();
         return false;
     }

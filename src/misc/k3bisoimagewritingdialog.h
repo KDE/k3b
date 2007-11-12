@@ -27,15 +27,15 @@
 class QCheckBox;
 class K3bWriterSelectionWidget;
 class QLabel;
-class KURL;
+class KUrl;
 class K3bMd5Job;
 class K3bWritingModeWidget;
-class KURLRequester;
+class KUrlRequester;
 class K3bListView;
 class QSpinBox;
 class QDragEnterEvent;
 class QDropEvent;
-class KListView;
+class K3ListView;
 class Q3ListViewItem;
 class QPoint;
 
@@ -51,7 +51,7 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
   K3bIsoImageWritingDialog( QWidget* = 0, const char* = 0, bool = true );
   ~K3bIsoImageWritingDialog();
 
-  void setImage( const KURL& url );
+  void setImage( const KUrl& url );
 
  protected slots:
   void slotStartClicked();
@@ -59,7 +59,7 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
   void slotWriterChanged();
   void slotMd5JobPercent( int );
   void slotMd5JobFinished( bool );
-  void slotContextMenu( KListView*, Q3ListViewItem*, const QPoint& pos );
+  void slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& pos );
 
  protected:
   void loadUserDefaults( KConfigBase* );
@@ -84,7 +84,7 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
   QSpinBox* m_spinCopies;
   K3bWritingModeWidget* m_writingModeWidget;
 
-  KURLRequester* m_editImagePath;
+  KUrlRequester* m_editImagePath;
   K3bListView* m_infoView;
 
   class Private;

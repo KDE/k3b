@@ -67,7 +67,7 @@ void K3bCddb::readConfig( KConfig* c )
   // new config
   m_cddbServer = c->readListEntry( "cddb server" );
 
-  m_localCddbDirs = c->readPathListEntry( "local cddb dirs" );
+  m_localCddbDirs = c->readPathEntry( "local cddb dirs", QStringList() );
 
   m_bUseManualCgiPath = c->readBoolEntry( "use manual cgi path", false );
   m_cgiPath = c->readEntry( "cgi path", "/~cddb/cddb.cgi" );

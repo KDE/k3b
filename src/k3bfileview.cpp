@@ -30,11 +30,11 @@
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 
-#include <kfiledetailview.h>
-#include <klistview.h>
+#include <k3filedetailview.h>
+#include <k3listview.h>
 #include <kaction.h>
 #include <ktoolbar.h>
-#include <ktoolbarbutton.h>
+
 #include <kurl.h>
 #include <kurldrag.h>
 #include <kfilefiltercombo.h>
@@ -69,7 +69,7 @@ void K3bFileView::setupGUI()
   Q3VBoxLayout* layout = new Q3VBoxLayout( this );
   //  layout->setAutoAdd( true );
 
-  m_dirOp = new K3bDirOperator( KURL::fromPathOrURL(QDir::home().absPath()), this );
+  m_dirOp = new K3bDirOperator( KUrl::fromPathOrUrl(QDir::home().absPath()), this );
   m_toolBox = new K3bToolBox( this, "file_view_toolbox" );
 
   layout->addWidget( m_toolBox );
@@ -114,7 +114,7 @@ void K3bFileView::setupGUI()
   connect( m_filterWidget, SIGNAL(filterChanged()), SLOT(slotFilterChanged()) );
 
   connect( m_dirOp, SIGNAL(fileHighlighted(const KFileItem*)), this, SLOT(slotFileHighlighted(const KFileItem*)) );
-  connect( m_dirOp, SIGNAL(urlEntered(const KURL&)), this, SIGNAL(urlEntered(const KURL&)) );
+  connect( m_dirOp, SIGNAL(urlEntered(const KUrl&)), this, SIGNAL(urlEntered(const KUrl&)) );
   connect( m_dirOp, SIGNAL(fileSelected(const KFileItem*)), m_dirOp, SLOT(slotAddFilesToProject()) );
 
   slotFileHighlighted(0);
@@ -122,18 +122,18 @@ void K3bFileView::setupGUI()
 
 void K3bFileView::setDir( const QString& dir )
 {
-  KURL url;
+  KUrl url;
   url.setPath(dir);
   setUrl( url );
 }
 
 
-void K3bFileView::setUrl(const KURL& url, bool forward)
+void K3bFileView::setUrl(const KUrl& url, bool forward)
 {
   m_dirOp->setURL( url, forward );
 }
 
-KURL K3bFileView::url()
+KUrl K3bFileView::url()
 {
   return m_dirOp->url();
 }

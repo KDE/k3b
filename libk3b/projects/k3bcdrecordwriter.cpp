@@ -141,13 +141,13 @@ void K3bCdrecordWriter::prepareProcess()
   if( m_process ) delete m_process;  // kdelibs want this!
   m_process = new K3bProcess();
   m_process->setRunPrivileged(true);
-  //  m_process->setPriority( KProcess::PrioHighest );
+  //  m_process->setPriority( K3Process::PrioHighest );
   m_process->setSplitStdout(true);
   m_process->setSuppressEmptyLines(true);
   m_process->setRawStdin(true);  // we only use stdin when writing on-the-fly
   connect( m_process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
   connect( m_process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
-  connect( m_process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*)) );
+  connect( m_process, SIGNAL(processExited(K3Process*)), this, SLOT(slotProcessExited(K3Process*)) );
 
   m_cdrecordBinObject = k3bcore->externalBinManager()->binObject("cdrecord");
 
@@ -343,13 +343,13 @@ void K3bCdrecordWriter::start()
 		      .arg(m_cdrecordBinObject->copyright), INFO );
 
 
-  kdDebug() << "***** " << m_cdrecordBinObject->name() << " parameters:\n";
+  kDebug() << "***** " << m_cdrecordBinObject->name() << " parameters:\n";
   const Q3ValueList<Q3CString>& args = m_process->args();
   QString s;
   for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
   }
-  kdDebug() << s << flush << endl;
+  kDebug() << s << flush << endl;
   emit debuggingOutput( m_cdrecordBinObject->name() + " command:", s);
 
   m_currentTrack = 0;
@@ -375,10 +375,10 @@ void K3bCdrecordWriter::start()
   burnDevice()->close();
   burnDevice()->usageLock();
 
-  if( !m_process->start( KProcess::NotifyOnExit, KProcess::All ) ) {
+  if( !m_process->start( K3Process::NotifyOnExit, K3Process::All ) ) {
     // something went wrong when starting the program
     // it "should" be the executable
-    kdDebug() << "(K3bCdrecordWriter) could not start " << m_cdrecordBinObject->name() << endl;
+    kDebug() << "(K3bCdrecordWriter) could not start " << m_cdrecordBinObject->name() << endl;
     emit infoMessage( i18n("Could not start %1.").arg(m_cdrecordBinObject->name()), K3bJob::ERROR );
     jobFinished(false);
   }
@@ -452,11 +452,11 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 	  m_totalSize += track.size;
 	}
 	else
-	  kdDebug() << "(K3bCdrecordWriter) track number parse error: "
+	  kDebug() << "(K3bCdrecordWriter) track number parse error: "
 		    << line.mid( sizeStart, sizeEnd-sizeStart ) << endl;
       }
       else
-	kdDebug() << "(K3bCdrecordWriter) track number parse error: "
+	kDebug() << "(K3bCdrecordWriter) track number parse error: "
 		  << line.mid( 6, 2 ) << endl;
     }
 
@@ -485,7 +485,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 	size = d->tracks[m_currentTrack-1].size;
       }
       else {
-	kdError() << "(K3bCdrecordWriter) Did not parse all tracks sizes!" << endl;
+	kError() << "(K3bCdrecordWriter) Did not parse all tracks sizes!" << endl;
       }
 
       if( size > 0 ) {
@@ -612,7 +612,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
       if( d->tracks.count() > m_currentTrack-1 )
 	m_alreadyWritten += d->tracks[m_currentTrack-1].size;
       else
-	kdError() << "(K3bCdrecordWriter) Did not parse all tracks sizes!" << endl;
+	kError() << "(K3bCdrecordWriter) Did not parse all tracks sizes!" << endl;
     }
     else
       emit infoMessage( i18n("Starting disc write"), INFO );
@@ -620,14 +620,14 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     m_currentTrack++;
 
     if( m_currentTrack > d->tracks.count() ) {
-      kdDebug() << "(K3bCdrecordWriter) need to add dummy track struct." << endl;
+      kDebug() << "(K3bCdrecordWriter) need to add dummy track struct." << endl;
       struct Private::Track t;
       t.size = 1;
       t.audio = false;
       d->tracks.append(t);
     }
 
-    kdDebug() << "(K3bCdrecordWriter) writing track " << m_currentTrack << " of " << m_totalTracks << " tracks." << endl;
+    kDebug() << "(K3bCdrecordWriter) writing track " << m_currentTrack << " of " << m_totalTracks << " tracks." << endl;
     emit nextTrack( m_currentTrack, m_totalTracks );
   }
   else if( line.startsWith( "Fixating" ) ) {
@@ -685,12 +685,12 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
   }
   else {
     // debugging
-    kdDebug() << "(" << m_cdrecordBinObject->name() << ") " << line << endl;
+    kDebug() << "(" << m_cdrecordBinObject->name() << ") " << line << endl;
   }
 }
 
 
-void K3bCdrecordWriter::slotProcessExited( KProcess* p )
+void K3bCdrecordWriter::slotProcessExited( K3Process* p )
 {
   // remove temporary cdtext file
   delete d->cdTextFile;
@@ -726,7 +726,7 @@ void K3bCdrecordWriter::slotProcessExited( KProcess* p )
       break;
 
     default:
-      kdDebug() << "(K3bCdrecordWriter) error: " << p->exitStatus() << endl;
+      kDebug() << "(K3bCdrecordWriter) error: " << p->exitStatus() << endl;
 
       if( m_cdrecordError == UNKNOWN && m_lastFifoValue <= 3 )
 	m_cdrecordError = BUFFER_UNDERRUN;

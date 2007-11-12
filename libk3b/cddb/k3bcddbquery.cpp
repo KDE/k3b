@@ -112,9 +112,9 @@ bool K3bCddbQuery::parseEntry( Q3TextStream& stream, K3bCddbResultEntry& entry )
       bool ok;
       uint trackNum = (uint)line.mid( 6, eqSgnPos - 6 ).toInt( &ok );
       if( !ok )
-	kdDebug() << "(K3bCddbQuery) !!! PARSE ERROR: " << line << endl;
+	kDebug() << "(K3bCddbQuery) !!! PARSE ERROR: " << line << endl;
       else {
-	//	kdDebug() << "(K3bCddbQuery) Track title for track " << trackNum << endl;
+	//	kDebug() << "(K3bCddbQuery) Track title for track " << trackNum << endl;
 	
 	// make sure the list is big enough
 	while( entry.titles.count() <= trackNum )
@@ -133,9 +133,9 @@ bool K3bCddbQuery::parseEntry( Q3TextStream& stream, K3bCddbResultEntry& entry )
       bool ok;
       uint trackNum = (uint)line.mid( 4, eqSgnPos - 4 ).toInt( &ok );
       if( !ok )
-	kdDebug() << "(K3bCddbQuery) !!! PARSE ERROR: " << line << endl;
+	kDebug() << "(K3bCddbQuery) !!! PARSE ERROR: " << line << endl;
       else {
-	//	kdDebug() << "(K3bCddbQuery) Track extr track " << trackNum << endl;
+	//	kDebug() << "(K3bCddbQuery) Track extr track " << trackNum << endl;
 
 	// make sure the list is big enough
 	while( entry.extInfos.count() <= trackNum )
@@ -146,11 +146,11 @@ bool K3bCddbQuery::parseEntry( Q3TextStream& stream, K3bCddbResultEntry& entry )
     }
     
     else if( line.startsWith( "#" ) ) {
-      //      kdDebug() <<  "(K3bCddbQuery) comment: " << line << endl;
+      //      kDebug() <<  "(K3bCddbQuery) comment: " << line << endl;
     }
     
     else {
-      kdDebug() <<  "(K3bCddbQuery) Unknown field: " << line << endl;
+      kDebug() <<  "(K3bCddbQuery) Unknown field: " << line << endl;
     }
   }
 

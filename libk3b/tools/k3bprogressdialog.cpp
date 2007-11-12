@@ -35,7 +35,7 @@ K3bProgressDialog::K3bProgressDialog( const QString& text,
 				      const char* name ) 
   : KDialogBase( parent, name, true, caption, Cancel|Ok, Ok, true )
 {
-  Q3Frame* main = makeMainWidget();
+  QFrame* main = makeMainWidget();
   Q3GridLayout* mainLayout = new Q3GridLayout( main );
   mainLayout->setMargin( marginHint() );
   mainLayout->setSpacing( spacingHint() );

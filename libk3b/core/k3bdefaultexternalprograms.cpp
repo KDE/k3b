@@ -95,21 +95,21 @@ K3bCdrecordProgram::K3bCdrecordProgram( bool dvdPro )
 static QString& debianWeirdnessHack( QString& path )
 {
   if( QFile::exists( path + ".mmap" ) ) {
-    kdDebug() << "(K3bCdrecordProgram) checking for Debian cdrecord wrapper script." << endl;
+    kDebug() << "(K3bCdrecordProgram) checking for Debian cdrecord wrapper script." << endl;
     if( QFileInfo( path ).size() < 1024 ) {
-      kdDebug() << "(K3bCdrecordProgram) Debian Wrapper script size fits. Checking file." << endl;
+      kDebug() << "(K3bCdrecordProgram) Debian Wrapper script size fits. Checking file." << endl;
       QFile f( path );
       f.open( QIODevice::ReadOnly );
       QString s = Q3TextStream( &f ).read();
       if( s.contains( "cdrecord.mmap" ) && s.contains( "cdrecord.shm" ) ) {
-	kdDebug() << "(K3bCdrecordProgram) Found Debian Wrapper script." << endl;
+	kDebug() << "(K3bCdrecordProgram) Found Debian Wrapper script." << endl;
 	QString ext;
 	if( K3b::kernelVersion().versionString().left(3) > "2.2" )
 	  ext = ".mmap";
 	else
 	  ext = ".shm";
 
-	kdDebug() << "(K3bCdrecordProgram) Using cdrecord" << ext << endl;
+	kDebug() << "(K3bCdrecordProgram) Using cdrecord" << ext << endl;
 
 	path += ext;
       }
@@ -148,11 +148,11 @@ bool K3bCdrecordProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  KProcess vp;
+  K3Process vp;
   K3bProcessOutputCollector out( &vp );
 
   vp << path << "-version";
-  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
     int pos = -1;
     if( wodim ) {
       pos = out.output().find( "Wodim" );
@@ -189,7 +189,7 @@ bool K3bCdrecordProgram::scan( const QString& p )
     bin->copyright = QString::fromLatin1( out.output().mid( pos, endPos-pos ).local8Bit() ).trimmed();
   }
   else {
-    kdDebug() << "(K3bCdrecordProgram) could not start " << path << endl;
+    kDebug() << "(K3bCdrecordProgram) could not start " << path << endl;
     return false;
   }
 
@@ -199,10 +199,10 @@ bool K3bCdrecordProgram::scan( const QString& p )
   }
 
   // probe features
-  KProcess fp;
+  K3Process fp;
   out.setProcess( &fp );
   fp << path << "-help";
-  if( fp.start( KProcess::Block, KProcess::AllOutput ) ) {
+  if( fp.start( K3Process::Block, K3Process::AllOutput ) ) {
     if( out.output().contains( "gracetime" ) )
       bin->addFeature( "gracetime" );
     if( out.output().contains( "-overburn" ) )
@@ -235,7 +235,7 @@ bool K3bCdrecordProgram::scan( const QString& p )
     }
   }
   else {
-    kdDebug() << "(K3bCdrecordProgram) could not start " << bin->path << endl;
+    kDebug() << "(K3bCdrecordProgram) could not start " << bin->path << endl;
     delete bin;
     return false;
   }
@@ -301,10 +301,10 @@ bool K3bMkisofsProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  KProcess vp;
+  K3Process vp;
   vp << path << "-version";
   K3bProcessOutputCollector out( &vp );
-  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
     int pos = -1;
     if( genisoimage )
       pos = out.output().find( "genisoimage" );
@@ -330,17 +330,17 @@ bool K3bMkisofsProgram::scan( const QString& p )
       bin->addFeature( "genisoimage" );
   }
   else {
-    kdDebug() << "(K3bMkisofsProgram) could not start " << path << endl;
+    kDebug() << "(K3bMkisofsProgram) could not start " << path << endl;
     return false;
   }
 
 
 
   // probe features
-  KProcess fp;
+  K3Process fp;
   fp << path << "-help";
   out.setProcess( &fp );
-  if( fp.start( KProcess::Block, KProcess::AllOutput ) ) {
+  if( fp.start( K3Process::Block, K3Process::AllOutput ) ) {
     if( out.output().contains( "-udf" ) )
       bin->addFeature( "udf" );
     if( out.output().contains( "-dvd-video" ) )
@@ -360,7 +360,7 @@ bool K3bMkisofsProgram::scan( const QString& p )
     }
   }
   else {
-    kdDebug() << "(K3bMkisofsProgram) could not start " << bin->path << endl;
+    kDebug() << "(K3bMkisofsProgram) could not start " << bin->path << endl;
     delete bin;
     return false;
   }
@@ -416,10 +416,10 @@ bool K3bReadcdProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  KProcess vp;
+  K3Process vp;
   vp << path << "-version";
   K3bProcessOutputCollector out( &vp );
-  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
     int pos = -1;
     if( readom )
       pos = out.output().find( "readom" );
@@ -444,17 +444,17 @@ bool K3bReadcdProgram::scan( const QString& p )
       bin->addFeature( "readom" );
   }
   else {
-    kdDebug() << "(K3bMkisofsProgram) could not start " << path << endl;
+    kDebug() << "(K3bMkisofsProgram) could not start " << path << endl;
     return false;
   }
 
 
 
   // probe features
-  KProcess fp;
+  K3Process fp;
   fp << path << "-help";
   out.setProcess( &fp );
-  if( fp.start( KProcess::Block, KProcess::AllOutput ) ) {
+  if( fp.start( K3Process::Block, K3Process::AllOutput ) ) {
     if( out.output().contains( "-clone" ) )
       bin->addFeature( "clone" );
 
@@ -466,7 +466,7 @@ bool K3bReadcdProgram::scan( const QString& p )
     }
   }
   else {
-    kdDebug() << "(K3bReadcdProgram) could not start " << bin->path << endl;
+    kDebug() << "(K3bReadcdProgram) could not start " << bin->path << endl;
     delete bin;
     return false;
   }
@@ -507,10 +507,10 @@ bool K3bCdrdaoProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  KProcess vp;
+  K3Process vp;
   vp << path ;
   K3bProcessOutputCollector out( &vp );
-  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
     int pos = out.output().find( "Cdrdao version" );
     if( pos < 0 )
       return false;
@@ -532,17 +532,17 @@ bool K3bCdrdaoProgram::scan( const QString& p )
     bin->copyright = out.output().mid( pos, endPos-pos );
   }
   else {
-    kdDebug() << "(K3bCdrdaoProgram) could not start " << path << endl;
+    kDebug() << "(K3bCdrdaoProgram) could not start " << path << endl;
     return false;
   }
 
 
 
   // probe features
-  KProcess fp;
+  K3Process fp;
   fp << path << "write" << "-h";
   out.setProcess( &fp );
-  if( fp.start( KProcess::Block, KProcess::AllOutput ) ) {
+  if( fp.start( K3Process::Block, K3Process::AllOutput ) ) {
     if( out.output().contains( "--overburn" ) )
       bin->addFeature( "overburn" );
     if( out.output().contains( "--multi" ) )
@@ -559,7 +559,7 @@ bool K3bCdrdaoProgram::scan( const QString& p )
     }
   }
   else {
-    kdDebug() << "(K3bCdrdaoProgram) could not start " << bin->path << endl;
+    kDebug() << "(K3bCdrdaoProgram) could not start " << bin->path << endl;
     delete bin;
     return false;
   }
@@ -605,10 +605,10 @@ bool K3bTranscodeProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  KProcess vp;
+  K3Process vp;
   vp << appPath << "-v";
   K3bProcessOutputCollector out( &vp );
-  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
     int pos = out.output().find( "transcode v" );
     if( pos < 0 )
       return false;
@@ -624,7 +624,7 @@ bool K3bTranscodeProgram::scan( const QString& p )
     bin->version = out.output().mid( pos, endPos-pos );
   }
   else {
-    kdDebug() << "(K3bTranscodeProgram) could not start " << appPath << endl;
+    kDebug() << "(K3bTranscodeProgram) could not start " << appPath << endl;
     return false;
   }
 
@@ -632,10 +632,10 @@ bool K3bTranscodeProgram::scan( const QString& p )
   // Check features
   //
   QString modInfoBin = path + "tcmodinfo";
-  KProcess modp;
+  K3Process modp;
   modp << modInfoBin << "-p";
   out.setProcess( &modp );
-  if( modp.start( KProcess::Block, KProcess::AllOutput ) ) {
+  if( modp.start( K3Process::Block, K3Process::AllOutput ) ) {
     QString modPath = out.output().trimmed();
     QDir modDir( modPath );
     if( !modDir.entryList( "*export_xvid*", QDir::Files ).isEmpty() )
@@ -679,10 +679,10 @@ bool K3bVcdbuilderProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  KProcess vp;
+  K3Process vp;
   vp << path << "-V";
   K3bProcessOutputCollector out( &vp );
-  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
     int pos = out.output().find( "GNU VCDImager" );
     if( pos < 0 )
       return false;
@@ -702,7 +702,7 @@ bool K3bVcdbuilderProgram::scan( const QString& p )
     bin->copyright = out.output().mid( pos, endPos-pos ).trimmed();
   }
   else {
-    kdDebug() << "(K3bVcdbuilderProgram) could not start " << path << endl;
+    kDebug() << "(K3bVcdbuilderProgram) could not start " << path << endl;
     return false;
   }
 
@@ -736,11 +736,11 @@ bool K3bNormalizeProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  KProcess vp;
+  K3Process vp;
   K3bProcessOutputCollector out( &vp );
 
   vp << path << "--version";
-  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
     int pos = out.output().find( "normalize" );
     if( pos < 0 )
       return false;
@@ -762,7 +762,7 @@ bool K3bNormalizeProgram::scan( const QString& p )
     bin->copyright = out.output().mid( pos, endPos-pos ).trimmed();
   }
   else {
-    kdDebug() << "(K3bCdrecordProgram) could not start " << path << endl;
+    kDebug() << "(K3bCdrecordProgram) could not start " << path << endl;
     return false;
   }
 
@@ -795,11 +795,11 @@ bool K3bGrowisofsProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  KProcess vp;
+  K3Process vp;
   K3bProcessOutputCollector out( &vp );
 
   vp << path << "-version";
-  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
     int pos = out.output().find( "growisofs" );
     if( pos < 0 )
       return false;
@@ -817,7 +817,7 @@ bool K3bGrowisofsProgram::scan( const QString& p )
     bin->version = out.output().mid( pos, endPos-pos );
   }
   else {
-    kdDebug() << "(K3bGrowisofsProgram) could not start " << path << endl;
+    kDebug() << "(K3bGrowisofsProgram) could not start " << path << endl;
     return false;
   }
 
@@ -875,11 +875,11 @@ bool K3bDvdformatProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  KProcess vp;
+  K3Process vp;
   K3bProcessOutputCollector out( &vp );
 
   vp << path;
-  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
     // different locales make searching for the +- char difficult
     // so we simply ignore it.
     int pos = out.output().find( QRegExp("DVD.*RW(/-RAM)? format utility") );
@@ -902,7 +902,7 @@ bool K3bDvdformatProgram::scan( const QString& p )
     bin->version = out.output().mid( pos, endPos-pos );
   }
   else {
-    kdDebug() << "(K3bDvdformatProgram) could not start " << path << endl;
+    kDebug() << "(K3bDvdformatProgram) could not start " << path << endl;
     return false;
   }
 
@@ -945,11 +945,11 @@ bool K3bDvdBooktypeProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  KProcess vp;
+  K3Process vp;
   K3bProcessOutputCollector out( &vp );
 
   vp << path;
-  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
     int pos = out.output().find( "dvd+rw-booktype" );
     if( pos < 0 )
       return false;
@@ -960,7 +960,7 @@ bool K3bDvdBooktypeProgram::scan( const QString& p )
     bin->version = K3bVersion( 1, 0, 0 );
   }
   else {
-    kdDebug() << "(K3bDvdBooktypeProgram) could not start " << path << endl;
+    kDebug() << "(K3bDvdBooktypeProgram) could not start " << path << endl;
     return false;
   }
 
@@ -994,11 +994,11 @@ bool K3bCdda2wavProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  KProcess vp;
+  K3Process vp;
   K3bProcessOutputCollector out( &vp );
 
   vp << path << "-h";
-  if( vp.start( KProcess::Block, KProcess::AllOutput ) ) {
+  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
     int pos = out.output().find( "cdda2wav" );
     if( pos < 0 )
       return false;
@@ -1032,7 +1032,7 @@ bool K3bCdda2wavProgram::scan( const QString& p )
       bin->addFeature( "dev" ); // otherwise use the -B option
   }
   else {
-    kdDebug() << "(K3bCdda2wavProgram) could not start " << path << endl;
+    kDebug() << "(K3bCdda2wavProgram) could not start " << path << endl;
     return false;
   }
 

@@ -20,7 +20,7 @@
 #include <k3bintvalidator.h>
 
 #include <klocale.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kfiledialog.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -36,17 +36,17 @@
 
 
 
-class K3bBootImageView::PrivateBootImageViewItem : public KListViewItem
+class K3bBootImageView::PrivateBootImageViewItem : public K3ListViewItem
 {
 public:
   PrivateBootImageViewItem( K3bBootItem* image, Q3ListView* parent ) 
-    : KListViewItem( parent ), 
+    : K3ListViewItem( parent ), 
       m_image( image ) {
 
   }
 
   PrivateBootImageViewItem( K3bBootItem* image, Q3ListView* parent, Q3ListViewItem* after )
-    : KListViewItem( parent, after ),
+    : K3ListViewItem( parent, after ),
       m_image( image ) {
 
   }
@@ -246,10 +246,10 @@ void K3bBootImageView::slotOptionsChanged()
       bool ok = true;
       i->setLoadSegment( K3bIntValidator::toInt( m_editLoadSegment->text(), &ok ) );
       if( !ok )
-	kdDebug() << "(K3bBootImageView) parsing number failed: " << m_editLoadSegment->text().lower() << endl;
+	kDebug() << "(K3bBootImageView) parsing number failed: " << m_editLoadSegment->text().lower() << endl;
       i->setLoadSize( K3bIntValidator::toInt( m_editLoadSize->text(), &ok ) );
       if( !ok )
-	kdDebug() << "(K3bBootImageView) parsing number failed: " << m_editLoadSize->text().lower() << endl;
+	kDebug() << "(K3bBootImageView) parsing number failed: " << m_editLoadSize->text().lower() << endl;
 
       if( m_radioFloppy->isChecked() )
 	i->setImageType( K3bBootItem::FLOPPY );

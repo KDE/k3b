@@ -44,7 +44,7 @@ class K3bMixedView : public K3bView
 
  public slots:
   void slotBurn();
-  void addUrls( const KURL::List& );
+  void addUrls( const KUrl::List& );
 
  protected:
   K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );

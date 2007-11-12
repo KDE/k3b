@@ -52,7 +52,7 @@ static QString audioStreamString( const K3bVideoDVD::Title& title, unsigned int 
       .arg( title.audioStream(i).channels() )
       .arg( title.audioStream(i).langCode().isEmpty()
 	    ? i18n("unknown language")
-	    : KGlobal::locale()->twoAlphaToLanguageName( title.audioStream(i).langCode() ) )
+	    : KGlobal::locale()->languageCodeToName( title.audioStream(i).langCode() ) )
       .arg( includeExtInfo && title.audioStream(i).codeExtension() != K3bVideoDVD::AUDIO_CODE_EXT_UNSPECIFIED 
 	    ? QString(" ") + K3bVideoDVD::audioCodeExtensionString( title.audioStream(i).codeExtension() )
 	    : QString::null );
@@ -77,7 +77,7 @@ static QString subpictureStreamString( const K3bVideoDVD::Title& title, unsigned
 	    : i18n("Extended") )
       .arg( title.subPictureStream(i).langCode().isEmpty()
 	    ? i18n("unknown language")
-	    : KGlobal::locale()->twoAlphaToLanguageName( title.subPictureStream(i).langCode() ) )
+	    : KGlobal::locale()->languageCodeToName( title.subPictureStream(i).langCode() ) )
       .arg( includeExtInfo && title.subPictureStream(i).codeExtension() != K3bVideoDVD::SUBPIC_CODE_EXT_UNSPECIFIED 
 	    ? QString(" ") + K3bVideoDVD::subPictureCodeExtensionString( title.subPictureStream(i).codeExtension() )
 	    : QString::null );
@@ -196,7 +196,7 @@ protected:
 	  preW = h*16/9;
 
 	p->drawRect( ( w - preW ) / 2, ( height() - h ) / 2, preW, h );
-	QPixmap noIcon = KApplication::kApplication()->iconLoader()->loadIcon( "no", KIcon::NoGroup, KIcon::SizeSmall, KIcon::DefaultState, 0, true );
+	QPixmap noIcon = KApplication::kApplication()->iconLoader()->loadIcon( "no", KIconLoader::NoGroup, KIcon::SizeSmall, KIcon::DefaultState, 0, true );
 	p->drawPixmap( ( w - noIcon.width() ) / 2, ( height() - noIcon.height() ) / 2, noIcon );
       }
       else {

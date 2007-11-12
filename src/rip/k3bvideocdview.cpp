@@ -22,7 +22,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 
 // qt includes
 #include <qfont.h>
@@ -176,8 +176,8 @@ K3bVideoCdView::K3bVideoCdView( QWidget* parent, const char *name )
     m_trackView->setItemsRenameable( false );
     m_trackView->setRootIsDecorated( true );
 
-    connect( m_trackView, SIGNAL( contextMenu( KListView*, Q3ListViewItem*, const QPoint& ) ),
-             this, SLOT( slotContextMenu( KListView*, Q3ListViewItem*, const QPoint& ) ) );
+    connect( m_trackView, SIGNAL( contextMenu( K3ListView*, Q3ListViewItem*, const QPoint& ) ),
+             this, SLOT( slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& ) ) );
     connect( m_trackView, SIGNAL( selectionChanged( Q3ListViewItem* ) ),
              this, SLOT( slotTrackSelectionChanged( Q3ListViewItem* ) ) );
     connect( m_trackView, SIGNAL( clicked( Q3ListViewItem* ) ),
@@ -325,9 +325,9 @@ void K3bVideoCdView::initActions()
 {
     m_actionCollection = new KActionCollection( this );
 
-    KAction* actionSelectAll = KStdAction::selectAll( this, SLOT( slotSelectAll() ),
+    KAction* actionSelectAll = KStandardAction::selectAll( this, SLOT( slotSelectAll() ),
                                m_actionCollection, "select_all" );
-    KAction* actionDeselectAll = KStdAction::deselect( this, SLOT( slotDeselectAll() ),
+    KAction* actionDeselectAll = KStandardAction::deselect( this, SLOT( slotDeselectAll() ),
                                  m_actionCollection, "deselect_all" );
     actionDeselectAll->setText( i18n( "Dese&lect All" ) );
     KAction* actionSelect = new KAction( i18n( "Select Track" ), 0, 0, this,
@@ -357,7 +357,7 @@ void K3bVideoCdView::initActions()
 }
 
 
-void K3bVideoCdView::slotContextMenu( KListView*, Q3ListViewItem*, const QPoint& p )
+void K3bVideoCdView::slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& p )
 {
     m_popupMenu->popup( p );
 }
@@ -419,7 +419,7 @@ void K3bVideoCdView::startRip()
         if ( m_videooptions ->getVideoCdRipSequences() )
             videocdsize += m_videocdmpegsize;
 
-        kdDebug() << QString("(K3bVideoCdView::startRip())  m_videooptions ->setVideoCdSize( %1)").arg( videocdsize ) << endl;
+        kDebug() << QString("(K3bVideoCdView::startRip())  m_videooptions ->setVideoCdSize( %1)").arg( videocdsize ) << endl;
         m_videooptions ->setVideoCdSize( videocdsize );
         K3bVideoCdRippingDialog rip( m_videooptions, this );
         rip.exec();

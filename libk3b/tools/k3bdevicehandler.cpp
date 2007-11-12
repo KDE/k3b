@@ -34,7 +34,7 @@ public:
 
 
     void run() {
-        kdDebug() << "(K3bDevice::DeviceHandler) starting command: " << command << endl;
+        kDebug() << "(K3bDevice::DeviceHandler) starting command: " << command << endl;
 
         success = false;
         m_bCanceled = false;
@@ -82,7 +82,7 @@ public:
                         cdTextRaw.assign( reinterpret_cast<char*>(data), dataLen );
                     }
                     else {
-                        kdDebug() << "(K3bDevice::DeviceHandler) invalid CD-TEXT length: " << dataLen << endl;
+                        kDebug() << "(K3bDevice::DeviceHandler) invalid CD-TEXT length: " << dataLen << endl;
                         delete [] data;
                         success = false;
                     }
@@ -120,7 +120,7 @@ public:
             dev->close();
         }
 
-        kdDebug() << "(K3bDevice::DeviceHandler) finished command: " << command << endl;
+        kDebug() << "(K3bDevice::DeviceHandler) finished command: " << command << endl;
 
         //
         // This thread only gets cancelled if a new request was started.
@@ -270,7 +270,7 @@ void K3bDevice::DeviceHandler::sendCommand( int command )
   // That's why we do not use K3bThreadJob::start() becasue otherwise we would be registered twice.
   //
   if( m_thread->running() ) {
-    kdDebug() << "(K3bDevice::DeviceHandler) thread already running. canceling thread..." << endl;
+    kDebug() << "(K3bDevice::DeviceHandler) thread already running. canceling thread..." << endl;
     m_thread->cancel();
     m_thread->wait();
   }
@@ -334,11 +334,11 @@ void K3bDevice::DeviceHandler::customEvent( QCustomEvent* e )
   if( (int)e->type() == K3bProgressInfoEvent::Finished ) {
     emit finished( this );
     if( m_selfDelete ) {
-      kdDebug() << "(K3bDevice::DeviceHandler) thread emitted finished. Waiting for thread actually finishing" << endl;
-      kdDebug() << "(K3bDevice::DeviceHandler) success: " << m_thread->success << endl;
+      kDebug() << "(K3bDevice::DeviceHandler) thread emitted finished. Waiting for thread actually finishing" << endl;
+      kDebug() << "(K3bDevice::DeviceHandler) success: " << m_thread->success << endl;
       // wait for the thread to finish
       m_thread->wait();
-      kdDebug() << "(K3bDevice::DeviceHandler) deleting thread." << endl;
+      kDebug() << "(K3bDevice::DeviceHandler) deleting thread." << endl;
       deleteLater();
     }
   }

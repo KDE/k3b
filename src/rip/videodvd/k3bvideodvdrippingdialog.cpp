@@ -24,7 +24,7 @@
 #include <k3bfilesysteminfo.h>
 
 #include <klocale.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kurlrequester.h>
@@ -229,7 +229,7 @@ void K3bVideoDVDRippingDialog::populateTitleView( const Q3ValueList<int>& titles
 	.arg( m_dvd[*it-1].audioStream(i).channels() )
 	.arg( m_dvd[*it-1].audioStream(i).langCode().isEmpty()
 	      ? i18n("unknown language")
-	      : KGlobal::locale()->twoAlphaToLanguageName( m_dvd[*it-1].audioStream(i).langCode() ) )
+	      : KGlobal::locale()->languageCodeToName( m_dvd[*it-1].audioStream(i).langCode() ) )
 	.arg( m_dvd[*it-1].audioStream(i).codeExtension() != K3bVideoDVD::AUDIO_CODE_EXT_UNSPECIFIED
 	      ? QString(" ") + K3bVideoDVD::audioCodeExtensionString( m_dvd[*it-1].audioStream(i).codeExtension() )
 	      : QString::null );
@@ -439,7 +439,7 @@ QString K3bVideoDVDRippingDialog::createFilename( const K3bVideoDVDRippingJob::T
 	break;
       case PATTERN_LANGUAGE_NAME:
 	if( title.numAudioStreams() > 0 )
-	  f.append( KGlobal::locale()->twoAlphaToLanguageName( title.audioStream( info.audioStream ).langCode() ) );
+	  f.append( KGlobal::locale()->languageCodeToName( title.audioStream( info.audioStream ).langCode() ) );
 	break;
       case PATTERN_AUDIO_FORMAT:
 	// FIXME: what about MPEG audio streams?
@@ -585,7 +585,7 @@ void K3bVideoDVDRippingDialog::slotStartClicked()
     if( KMessageBox::questionYesNoList( this,
 					i18n("Do you want to overwrite these files?"),
 					filesToOverwrite,
-					i18n("Files Exist"), i18n("Overwrite"), KStdGuiItem::cancel() ) == KMessageBox::No )
+					i18n("Files Exist"), i18n("Overwrite"), KStandardGuiItem::cancel() ) == KMessageBox::No )
       return;
 
 

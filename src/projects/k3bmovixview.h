@@ -23,7 +23,7 @@
 class K3bMovixDoc;
 class K3bMovixListView;
 class KAction;
-class KPopupMenu;
+class KMenu;
 class Q3ListViewItem;
 class QPoint;
 class QLineEdit;
@@ -57,7 +57,7 @@ class K3bMovixView : public K3bView
   KAction* m_actionRemove;
   KAction* m_actionRemoveSubTitle;
   KAction* m_actionAddSubTitle;
-  KPopupMenu* m_popupMenu;
+  KMenu* m_popupMenu;
 
   QLineEdit* m_volumeIDEdit;
 };

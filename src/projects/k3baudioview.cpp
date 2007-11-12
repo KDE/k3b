@@ -77,7 +77,7 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
   toolBox()->addSeparator();
 
 #ifdef HAVE_MUSICBRAINZ
-  kdDebug() << "(K3bAudioView) m_songlist->actionCollection()->actions().count() " << m_songlist->actionCollection()->actions().count() << endl;
+  kDebug() << "(K3bAudioView) m_songlist->actionCollection()->actions().count() " << m_songlist->actionCollection()->actions().count() << endl;
   toolBox()->addButton( m_songlist->actionCollection()->action( "project_audio_musicbrainz" ) );
   toolBox()->addSeparator();
 #endif
@@ -128,7 +128,7 @@ void K3bAudioView::slotAudioConversion()
 }
 
 
-void K3bAudioView::addUrls( const KURL::List& urls )
+void K3bAudioView::addUrls( const KUrl::List& urls )
 {
   K3bAudioTrackAddingDialog::addUrls( urls, m_doc, 0, 0, 0, this );
 }

@@ -33,7 +33,7 @@
 // include files for KDE
 #include <kapplication.h>
 #include <kparts/dockmainwindow.h>
-#include <kdockwidget.h>
+#include <k3dockwidget.h>
 #include <kaction.h>
 #include <kurl.h>
 
@@ -73,7 +73,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   ~K3bMainWindow();
 
   /** opens a file specified by commandline option */
-  K3bDoc* openDocument( const KURL& url = KURL() );
+  K3bDoc* openDocument( const KUrl& url = KUrl() );
 
   K3bDevice::DeviceManager*      deviceManager() const;
   K3bExternalBinManager* externalBinManager() const;
@@ -114,9 +114,9 @@ class K3bMainWindow : public KParts::DockMainWindow
   void slotClearProject();
 
   void slotWriteCdImage();
-  void slotWriteCdImage( const KURL& url );
+  void slotWriteCdImage( const KUrl& url );
   void slotWriteDvdIsoImage();
-  void slotWriteDvdIsoImage( const KURL& url );
+  void slotWriteDvdIsoImage( const KUrl& url );
   void formatMedium( K3bDevice::Device* );
   void slotFormatMedium();
   void mediaCopy( K3bDevice::Device* );
@@ -136,7 +136,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   void slotShowTips();
   void slotCheckSystem();
 
-  void addUrls( const KURL::List& urls );
+  void addUrls( const KUrl::List& urls );
 
  signals:
   void initializationInfo( const QString& );
@@ -183,7 +183,7 @@ class K3bMainWindow : public KParts::DockMainWindow
   /** open a file and load it into the document*/
   void slotFileOpen();
   /** opens a file from the recent files menu */
-  void slotFileOpenRecent(const KURL& url);
+  void slotFileOpenRecent(const KUrl& url);
   /** save a document */
   void slotFileSave();
   /** save a document by a new filename*/
@@ -258,7 +258,7 @@ class K3bMainWindow : public KParts::DockMainWindow
    */
   void initStatusBar();
 
-  bool isCdDvdImageAndIfSoOpenDialog( const KURL& url );
+  bool isCdDvdImageAndIfSoOpenDialog( const KUrl& url );
 
   /** the configuration object of the application */
   KConfig *m_config;

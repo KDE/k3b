@@ -20,7 +20,7 @@
 #include <k3brichtextlabel.h>
 #include <k3bintmapcombobox.h>
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <klocale.h>
 #include <kurlrequester.h>
 #include <kio/global.h>
@@ -135,7 +135,7 @@ K3bVideoDVDRippingWidget::K3bVideoDVDRippingWidget( QWidget* parent )
 
   connect( m_comboAudioCodec, SIGNAL(valueChanged(int)),
 	   this, SLOT(slotAudioCodecChanged(int)) );
-  connect( m_specialStringsLabel, SIGNAL(leftClickedURL()),
+  connect( m_specialStringsLabel, SIGNAL(leftClickedUrl()),
 	   this, SLOT(slotSeeSpecialStrings()) );
   connect( m_buttonCustomPictureSize, SIGNAL(clicked()),
 	   this, SLOT(slotCustomPictureSize()) );
@@ -255,7 +255,7 @@ void K3bVideoDVDRippingWidget::slotUpdateFreeTempSpace()
 
   unsigned long size, avail;
   if( K3b::kbFreeOnFs( path, size, avail ) ) {
-    m_labelFreeSpace->setText( KIO::convertSizeFromKB(avail) );
+    m_labelFreeSpace->setText( KIO::convertSizeFromKiB(avail) );
     if( avail < m_neededSize/1024 )
       m_labelNeededSpace->setPaletteForegroundColor( Qt::red );
     else

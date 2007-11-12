@@ -53,9 +53,9 @@
 #include <Q3Frame>
 
 
-K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice::Device* dev, KFileTreeViewItem* item )
+K3bDeviceBranch::K3bDeviceBranch( K3FileTreeView* view, K3bDevice::Device* dev, K3FileTreeViewItem* item )
   : KFileTreeBranch( view,
-		     KURL( "media:/" + dev->blockDeviceName() ),
+		     KUrl( "media:/" + dev->blockDeviceName() ),
 		     QString("%1 - %2").arg(dev->vendor()).arg(dev->description()),
 		     ( dev->burner()
 		       ? SmallIcon("cdwriter_unmount")
@@ -76,7 +76,7 @@ K3bDeviceBranch::K3bDeviceBranch( KFileTreeView* view, K3bDevice::Device* dev, K
 }
 
 
-bool K3bDeviceBranch::populate( const KURL& url,  KFileTreeViewItem *currItem )
+bool K3bDeviceBranch::populate( const KUrl& url,  K3FileTreeViewItem *currItem )
 {
   // FIXME: we somehow need to "unpopulate" once the medium is unmounted
 
@@ -137,12 +137,12 @@ void K3bDeviceBranch::showBlockDeviceName( bool b )
 }
 
 
-K3bFileTreeBranch::K3bFileTreeBranch( KFileTreeView* view,
-				      const KURL& url,
+K3bFileTreeBranch::K3bFileTreeBranch( K3FileTreeView* view,
+				      const KUrl& url,
 				      const QString& name,
 				      const QPixmap& pix,
 				      bool showHidden,
-				      KFileTreeViewItem* item )
+				      K3FileTreeViewItem* item )
   : KFileTreeBranch( view, url, name, pix, showHidden,
 		     item == 0
 		     ? new K3bFileTreeViewItem( view,
@@ -155,11 +155,11 @@ K3bFileTreeBranch::K3bFileTreeBranch( KFileTreeView* view,
 
 
 
-K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( KFileTreeViewItem* parent,
+K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( K3FileTreeViewItem* parent,
 						  K3bDevice::Device* dev,
 						  K3bDeviceBranch* branch )
-  : KFileTreeViewItem( parent,
-		       new KFileItem( KURL( "media:/" + dev->blockDeviceName() ),
+  : K3FileTreeViewItem( parent,
+		       new KFileItem( KUrl( "media:/" + dev->blockDeviceName() ),
 				      "inode/directory",
 				      S_IFDIR  ),
 		       branch ),
@@ -169,11 +169,11 @@ K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( KFileTreeViewItem* parent,
 }
 
 
-K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( KFileTreeView* parent,
+K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( K3FileTreeView* parent,
 						  K3bDevice::Device* dev,
 						  K3bDeviceBranch* branch )
-  : KFileTreeViewItem( parent,
-		       new KFileItem( KURL( "media:/" + dev->blockDeviceName() ),
+  : K3FileTreeViewItem( parent,
+		       new KFileItem( KUrl( "media:/" + dev->blockDeviceName() ),
 				      "inode/directory",
 				      S_IFDIR  ),
 		       branch ),
@@ -278,26 +278,26 @@ int K3bDeviceBranchViewItem::widthHint() const
 
 QString K3bDeviceBranchViewItem::key( int column, bool ascending ) const
 {
-  return "0" + KFileTreeViewItem::key( column, ascending );
+  return "0" + K3FileTreeViewItem::key( column, ascending );
 }
 
 
 
-K3bFileTreeViewItem::K3bFileTreeViewItem( KFileTreeViewItem* parent, KFileItem* item, KFileTreeBranch* branch )
-  : KFileTreeViewItem( parent, item, branch )
+K3bFileTreeViewItem::K3bFileTreeViewItem( K3FileTreeViewItem* parent, KFileItem* item, KFileTreeBranch* branch )
+  : K3FileTreeViewItem( parent, item, branch )
 {
 }
 
 
-K3bFileTreeViewItem::K3bFileTreeViewItem( KFileTreeView* parent, KFileItem* item, KFileTreeBranch* branch )
-  : KFileTreeViewItem( parent, item, branch )
+K3bFileTreeViewItem::K3bFileTreeViewItem( K3FileTreeView* parent, KFileItem* item, KFileTreeBranch* branch )
+  : K3FileTreeViewItem( parent, item, branch )
 {
 }
 
 
 QString K3bFileTreeViewItem::key( int column, bool ascending ) const
 {
-  return "1" + KFileTreeViewItem::key( column, ascending );
+  return "1" + K3FileTreeViewItem::key( column, ascending );
 }
 
 
@@ -401,7 +401,7 @@ public:
 };
 
 K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
-  : KFileTreeView( parent,  name )
+  : K3FileTreeView( parent,  name )
 {
   d = new Private();
 
@@ -419,11 +419,11 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
 
   connect( this, SIGNAL(executed(Q3ListViewItem*)), this, SLOT(slotItemExecuted(Q3ListViewItem*)) );
   connect( this, SIGNAL(returnPressed(Q3ListViewItem*)), this, SLOT(slotItemExecuted(Q3ListViewItem*)) );
-  connect( this, SIGNAL(contextMenu(KListView*, Q3ListViewItem* , const QPoint& )),
-	   this, SLOT(slotContextMenu(KListView*, Q3ListViewItem* , const QPoint& )) );
+  connect( this, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem* , const QPoint& )),
+	   this, SLOT(slotContextMenu(K3ListView*, Q3ListViewItem* , const QPoint& )) );
 
   // we always simulate the single click
-  slotSettingsChangedK3b(KApplication::SETTINGS_MOUSE);
+  slotSettingsChangedK3b(KGlobalSettings::SETTINGS_MOUSE);
   if( kapp )
     connect( kapp, SIGNAL(settingsChanged(int)), SLOT(slotSettingsChangedK3b(int)) );
 
@@ -439,7 +439,7 @@ K3bFileTreeView::~K3bFileTreeView()
 
 void K3bFileTreeView::clear()
 {
-  KFileTreeView::clear();
+  K3FileTreeView::clear();
   if( d->deviceManager )
     d->deviceManager->disconnect( this );
   d->deviceManager = 0;
@@ -470,8 +470,8 @@ void K3bFileTreeView::initActions()
 
 void K3bFileTreeView::addDefaultBranches()
 {
-  KURL home = KURL::fromPathOrURL( QDir::homePath() );
-  KURL root = KURL( "file:/" );
+  KUrl home = KUrl::fromPathOrUrl( QDir::homePath() );
+  KUrl root = KUrl( "file:/" );
 
   KFileTreeBranch* treeBranch = addBranch( new K3bFileTreeBranch( this, root, i18n("Root"), SmallIcon("folder_red") ) );
   treeBranch = addBranch( new K3bFileTreeBranch( this, home, i18n("Home"), SmallIcon("folder_home") ) );
@@ -481,7 +481,7 @@ void K3bFileTreeView::addDefaultBranches()
 
 void K3bFileTreeView::addCdDeviceBranches( K3bDevice::DeviceManager* dm )
 {
-  kdDebug() << "(K3bFileTreeView::addCdDeviceBranches)" << endl;
+  kDebug() << "(K3bFileTreeView::addCdDeviceBranches)" << endl;
 
   // remove all previous added device branches
   for( QMap<KFileTreeBranch*, K3bDevice::Device*>::Iterator it = d->branchDeviceMap.begin();
@@ -520,7 +520,7 @@ void K3bFileTreeView::addCdDeviceBranches( K3bDevice::DeviceManager* dm )
     d->currentDeviceBranch->setCurrent( true );
   }
 
-  kdDebug() << "(K3bFileTreeView::addCdDeviceBranches) done" << endl;
+  kDebug() << "(K3bFileTreeView::addCdDeviceBranches) done" << endl;
 }
 
 
@@ -547,7 +547,7 @@ void K3bFileTreeView::addDeviceBranch( K3bDevice::Device* dev )
   // if there is more than one equal device they have been updated after
   // adding the last one so there is no need to update more than two
   if( equalCnt > 0 ) {
-    kdDebug() << "(K3bFileTreeView) equal branch" << endl;
+    kDebug() << "(K3bFileTreeView) equal branch" << endl;
     newBranch->showBlockDeviceName(true);
     equalBranch->showBlockDeviceName(true);
   }
@@ -562,7 +562,7 @@ void K3bFileTreeView::addDeviceBranch( K3bDevice::Device* dev )
 
 KFileTreeBranch* K3bFileTreeView::addBranch( KFileTreeBranch* branch )
 {
-  KFileTreeBranch* newBranch = KFileTreeView::addBranch( branch );
+  KFileTreeBranch* newBranch = K3FileTreeView::addBranch( branch );
   newBranch->setChildRecurse( false );
   setDirOnlyMode( newBranch, m_dirOnlyMode );
 
@@ -570,9 +570,9 @@ KFileTreeBranch* K3bFileTreeView::addBranch( KFileTreeBranch* branch )
 }
 
 
-KFileTreeBranch* K3bFileTreeView::addBranch( const KURL& url, const QString& name, const QPixmap& pix, bool showHidden )
+KFileTreeBranch* K3bFileTreeView::addBranch( const KUrl& url, const QString& name, const QPixmap& pix, bool showHidden )
 {
-  KFileTreeBranch* newBranch = KFileTreeView::addBranch( url, name, pix, showHidden );
+  KFileTreeBranch* newBranch = K3FileTreeView::addBranch( url, name, pix, showHidden );
   newBranch->setChildRecurse( false );
   setDirOnlyMode( newBranch, m_dirOnlyMode );
 
@@ -582,7 +582,7 @@ KFileTreeBranch* K3bFileTreeView::addBranch( const KURL& url, const QString& nam
 
 void K3bFileTreeView::slotItemExecuted( Q3ListViewItem* item )
 {
-  KFileTreeViewItem* treeItem = static_cast<KFileTreeViewItem*>(item);
+  K3FileTreeViewItem* treeItem = static_cast<K3FileTreeViewItem*>(item);
   if( d->branchDeviceMap.contains( treeItem->branch() ) &&
       treeItem == treeItem->branch()->root() ) {
     K3bDevice::Device* dev = d->branchDeviceMap[treeItem->branch()];
@@ -600,13 +600,13 @@ void K3bFileTreeView::setTreeDirOnlyMode( bool b )
 }
 
 
-void K3bFileTreeView::followUrl( const KURL& url )
+void K3bFileTreeView::followUrl( const KUrl& url )
 {
   // TODO: first try the current branch
   KFileTreeBranchIterator it( branches() );
   for( ; *it; ++it ) {
     if( !d->branchDeviceMap.contains( *it ) )
-      if( KFileTreeViewItem* item = (*it)->findTVIByURL( url ) ) {
+      if( K3FileTreeViewItem* item = (*it)->findTVIByURL( url ) ) {
 	setCurrentItem( item );
 	setSelected(item, true);
 	ensureItemVisible( item );
@@ -616,9 +616,9 @@ void K3bFileTreeView::followUrl( const KURL& url )
 }
 
 
-void K3bFileTreeView::slotContextMenu( KListView*, Q3ListViewItem* item, const QPoint& p )
+void K3bFileTreeView::slotContextMenu( K3ListView*, Q3ListViewItem* item, const QPoint& p )
 {
-  KFileTreeViewItem* treeItem = dynamic_cast<KFileTreeViewItem*>(item);
+  K3FileTreeViewItem* treeItem = dynamic_cast<K3FileTreeViewItem*>(item);
   if( treeItem ) {
     K3bDevice::Device* device = 0;
     QMap<KFileTreeBranch*, K3bDevice::Device*>::iterator devIt =
@@ -637,13 +637,13 @@ void K3bFileTreeView::slotContextMenu( KListView*, Q3ListViewItem* item, const Q
       emit contextMenu( treeItem->url(), p );
   }
   else
-    kdWarning() << "(K3bFileTreeView) found viewItem that is no KFileTreeViewItem!" << endl;
+    kWarning() << "(K3bFileTreeView) found viewItem that is no K3FileTreeViewItem!" << endl;
 }
 
 
 K3bDevice::Device* K3bFileTreeView::selectedDevice() const
 {
-  KFileTreeViewItem* treeItem = dynamic_cast<KFileTreeViewItem*>(selectedItem());
+  K3FileTreeViewItem* treeItem = dynamic_cast<K3FileTreeViewItem*>(selectedItem());
   if( treeItem ) {
     if( d->branchDeviceMap.contains( treeItem->branch() ) )
       return d->branchDeviceMap[treeItem->branch()];
@@ -652,14 +652,14 @@ K3bDevice::Device* K3bFileTreeView::selectedDevice() const
 }
 
 
-KURL K3bFileTreeView::selectedUrl() const
+KUrl K3bFileTreeView::selectedUrl() const
 {
-  KFileTreeViewItem* treeItem = dynamic_cast<KFileTreeViewItem*>(selectedItem());
+  K3FileTreeViewItem* treeItem = dynamic_cast<K3FileTreeViewItem*>(selectedItem());
   if( treeItem ) {
     if( !d->branchDeviceMap.contains( treeItem->branch() ) )
       return treeItem->url();
   }
-  return KURL();
+  return KUrl();
 }
 
 
@@ -694,9 +694,9 @@ K3bDeviceBranch* K3bFileTreeView::branch( K3bDevice::Device* dev )
 
 void K3bFileTreeView::slotSettingsChangedK3b(int category)
 {
-  // we force single click like konqueror does. This really should be done in KFileTreeView
+  // we force single click like konqueror does. This really should be done in K3FileTreeView
 
-  if( category == KApplication::SETTINGS_MOUSE ) {
+  if( category == KGlobalSettings::SETTINGS_MOUSE ) {
     disconnect(this, SIGNAL(mouseButtonClicked(int, Q3ListViewItem*, const QPoint &, int)),
 	       this, SLOT(slotMouseButtonClickedK3b(int, Q3ListViewItem*, const QPoint &, int)));
 

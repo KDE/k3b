@@ -26,7 +26,7 @@
 #include "k3bdevice_export.h"
 #include <kdebug.h>
 
-class KProcess;
+class K3Process;
 class KConfig;
 class K3bExternalBin;
 

@@ -76,7 +76,7 @@ void K3bCloneTocReader::readFile()
   // now get rid of the ".toc" extension
   QString imageFileName = d->tocFile.left( d->tocFile.length()-4 );
   if( !QFile::exists( imageFileName ) ) {
-    kdDebug() << "(K3bCloneTocReader) could not find image file " << imageFileName << endl;
+    kDebug() << "(K3bCloneTocReader) could not find image file " << imageFileName << endl;
     return;
   }
 
@@ -94,7 +94,7 @@ void K3bCloneTocReader::readFile()
     f.close();
 
     if( read == 2048 ) {
-      kdDebug() << "(K3bCloneTocReader) TOC too large." << endl;
+      kDebug() << "(K3bCloneTocReader) TOC too large." << endl;
       return;
     }
 
@@ -109,7 +109,7 @@ void K3bCloneTocReader::readFile()
     int dataLen = K3bDevice::from2Byte( th->len ) + 2;  // the len field does not include it's own length
 
     if( th->first != 1 ) {
-      kdDebug() << "(K3bCloneTocReader) first session != 1" << endl;
+      kDebug() << "(K3bCloneTocReader) first session != 1" << endl;
       return;
     }
 
@@ -138,7 +138,7 @@ void K3bCloneTocReader::readFile()
       struct ftrackdesc* ft = (struct ftrackdesc*)&buffer[i];
       
       if( ft->sess_number != 1 ) {
-	kdDebug() << "(K3bCloneTocReader} session number != 1" << endl;
+	kDebug() << "(K3bCloneTocReader} session number != 1" << endl;
 	return;
       }
 
@@ -147,7 +147,7 @@ void K3bCloneTocReader::readFile()
 	if( ft->adr == 1 ) {
 	  // check track starttime
 	  if( ft->psec > 60 || ft->pframe > 75 ) {
-	    kdDebug() << "(K3bCloneTocReader) invalid track start: " 
+	    kDebug() << "(K3bCloneTocReader) invalid track start: " 
 		      << (int)ft->pmin << "." 
 		      << (int)ft->psec << "."
 		      << (int)ft->pframe << endl;
@@ -159,46 +159,46 @@ void K3bCloneTocReader::readFile()
 	switch( ft->point ) {
 	case 0xa0:
 	  if( ft->adr != 1 ) {
-	    kdDebug() << "(K3bCloneTocReader) adr != 1" << endl;
+	    kDebug() << "(K3bCloneTocReader) adr != 1" << endl;
 	    return;
 	  }
 
 	  // disk type in psec
 	  if( ft->psec != 0x00 && ft->psec != 0x10 && ft->psec != 0x20 ) {
-	    kdDebug() << "(K3bCloneTocReader) invalid disktype: " << ft->psec << endl;
+	    kDebug() << "(K3bCloneTocReader) invalid disktype: " << ft->psec << endl;
 	    return;
 	  }
 
 	  if( ft->pmin != 1 ) {
-	    kdDebug() << "(K3bCloneTocReader) first track number != 1 " << endl;
+	    kDebug() << "(K3bCloneTocReader) first track number != 1 " << endl;
 	    return;
 	  }
 
 	  if( ft->pframe != 0x0 ) {
-	    kdDebug() << "(K3bCloneTocReader) found data when there should be 0x0" << endl;
+	    kDebug() << "(K3bCloneTocReader) found data when there should be 0x0" << endl;
 	    return;
 	  }
 	  break;
 
 	case  0xa1:
 	  if( ft->adr != 1 ) {
-	    kdDebug() << "(K3bCloneTocReader) adr != 1" << endl;
+	    kDebug() << "(K3bCloneTocReader) adr != 1" << endl;
 	    return;
 	  }
 
 	  if( !(ft->pmin >= 1) ) {
-	    kdDebug() << "(K3bCloneTocReader) last track number needs to be >= 1." << endl;
+	    kDebug() << "(K3bCloneTocReader) last track number needs to be >= 1." << endl;
 	    return;
 	  }
 	  if( ft->psec != 0x0 || ft->pframe != 0x0 ) {
-	    kdDebug() << "(K3bCloneTocReader) found data when there should be 0x0" << endl;
+	    kDebug() << "(K3bCloneTocReader) found data when there should be 0x0" << endl;
 	    return;
 	  }
 	  break;
 
 	case 0xa2:
 	  if( ft->adr != 1 ) {
-	    kdDebug() << "(K3bCloneTocReader) adr != 1" << endl;
+	    kDebug() << "(K3bCloneTocReader) adr != 1" << endl;
 	    return;
 	  }
 
@@ -213,7 +213,7 @@ void K3bCloneTocReader::readFile()
 
 	default:
 	  if( ft->adr != 5 ) {
-	    kdDebug() << "(K3bCloneTocReader) adr != 5" << endl;
+	    kDebug() << "(K3bCloneTocReader) adr != 5" << endl;
 	    return;
 	  }
 	  break;
@@ -222,7 +222,7 @@ void K3bCloneTocReader::readFile()
     }
 
     if( d->size.rawBytes() != K3b::filesize( imageFileName ) ) {
-      kdDebug() << "(K3bCloneTocReader) image file size invalid." << endl;
+      kDebug() << "(K3bCloneTocReader) image file size invalid." << endl;
       return;
     }
     
@@ -230,6 +230,6 @@ void K3bCloneTocReader::readFile()
     setValid(true);
   }
   else {
-    kdDebug() << "(K3bCloneTocReader) could not open file " << d->tocFile << endl;
+    kDebug() << "(K3bCloneTocReader) could not open file " << d->tocFile << endl;
   }
 }

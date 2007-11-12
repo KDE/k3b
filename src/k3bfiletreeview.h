@@ -18,7 +18,7 @@
 #define K3BFILETREEVIEW_H
 
 
-#include <kfiletreeview.h>
+#include <k3filetreeview.h>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QDragEnterEvent>
@@ -46,7 +46,7 @@ class K3bDeviceBranch : public KFileTreeBranch
   Q_OBJECT
 
  public:
-  K3bDeviceBranch( KFileTreeView*, K3bDevice::Device* dev, KFileTreeViewItem* item = 0 );
+  K3bDeviceBranch( K3FileTreeView*, K3bDevice::Device* dev, K3FileTreeViewItem* item = 0 );
 
   K3bDevice::Device* device() const { return m_device; }
 
@@ -58,7 +58,7 @@ class K3bDeviceBranch : public KFileTreeBranch
  public slots:
   void setCurrent( bool );
 
-  bool populate( const KURL& url,  KFileTreeViewItem *currItem );
+  bool populate( const KUrl& url,  K3FileTreeViewItem *currItem );
 
  private slots:
   void slotMediumChanged( K3bDevice::Device* );
@@ -74,20 +74,20 @@ class K3bDeviceBranch : public KFileTreeBranch
 class K3bFileTreeBranch : public KFileTreeBranch
 {
  public:
-  K3bFileTreeBranch( KFileTreeView*,
-		     const KURL& url,
+  K3bFileTreeBranch( K3FileTreeView*,
+		     const KUrl& url,
 		     const QString& name,
 		     const QPixmap& pix,
 		     bool showHidden = false,
-		     KFileTreeViewItem* item = 0 );
+		     K3FileTreeViewItem* item = 0 );
 };
 
 
-class K3bDeviceBranchViewItem : public KFileTreeViewItem
+class K3bDeviceBranchViewItem : public K3FileTreeViewItem
 {
  public:
-  K3bDeviceBranchViewItem( KFileTreeViewItem*, K3bDevice::Device*, K3bDeviceBranch* );
-  K3bDeviceBranchViewItem( KFileTreeView*, K3bDevice::Device*, K3bDeviceBranch* );
+  K3bDeviceBranchViewItem( K3FileTreeViewItem*, K3bDevice::Device*, K3bDeviceBranch* );
+  K3bDeviceBranchViewItem( K3FileTreeView*, K3bDevice::Device*, K3bDeviceBranch* );
 
   QString key( int column, bool ascending ) const;
 
@@ -104,11 +104,11 @@ class K3bDeviceBranchViewItem : public KFileTreeViewItem
 };
 
 
-class K3bFileTreeViewItem : public KFileTreeViewItem
+class K3bFileTreeViewItem : public K3FileTreeViewItem
 {
  public:
-  K3bFileTreeViewItem( KFileTreeViewItem*, KFileItem*, KFileTreeBranch* );
-  K3bFileTreeViewItem( KFileTreeView *, KFileItem*, KFileTreeBranch* );
+  K3bFileTreeViewItem( K3FileTreeViewItem*, KFileItem*, KFileTreeBranch* );
+  K3bFileTreeViewItem( K3FileTreeView *, KFileItem*, KFileTreeBranch* );
 
   QString key( int column, bool ascending ) const;
 };
@@ -117,7 +117,7 @@ class K3bFileTreeViewItem : public KFileTreeViewItem
 /**
   *@author Sebastian Trueg
   */
-class K3bFileTreeView : public KFileTreeView
+class K3bFileTreeView : public K3FileTreeView
 {
   Q_OBJECT
 
@@ -127,7 +127,7 @@ class K3bFileTreeView : public KFileTreeView
 
 
   virtual KFileTreeBranch* addBranch( KFileTreeBranch* );
-  virtual KFileTreeBranch* addBranch( const KURL& url, const QString& name, const QPixmap& , bool showHidden = false );
+  virtual KFileTreeBranch* addBranch( const KUrl& url, const QString& name, const QPixmap& , bool showHidden = false );
 
   K3bDeviceBranch* branch( K3bDevice::Device* dev );
 
@@ -139,7 +139,7 @@ class K3bFileTreeView : public KFileTreeView
   /** 
    * returnes an empty url if no url is selected
    */
-  KURL selectedUrl() const;
+  KUrl selectedUrl() const;
 
  public slots:
   /**
@@ -161,7 +161,7 @@ class K3bFileTreeView : public KFileTreeView
    */
   void setSelectedDevice( K3bDevice::Device* dev );
 
-  void followUrl( const KURL& url );
+  void followUrl( const KUrl& url );
   void setTreeDirOnlyMode( bool b );
   void enablePopupMenu( bool b ) { m_menuEnabled = b; }
 
@@ -173,17 +173,17 @@ class K3bFileTreeView : public KFileTreeView
   void updateMinimumWidth();
 
  signals:
-  void urlExecuted( const KURL& url );
+  void urlExecuted( const KUrl& url );
   void deviceExecuted( K3bDevice::Device* dev );
 
   /** only gets emitted if the menu is disabled */
   void contextMenu( K3bDevice::Device*, const QPoint& );
   /** only gets emitted if the menu is disabled */
-  void contextMenu( const KURL& url, const QPoint& );
+  void contextMenu( const KUrl& url, const QPoint& );
   
  private slots:
   void slotItemExecuted( Q3ListViewItem* item );
-  void slotContextMenu( KListView*, Q3ListViewItem*, const QPoint& );
+  void slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& );
   void slotSettingsChangedK3b(int category);
   void slotMouseButtonClickedK3b( int btn, Q3ListViewItem *item, const QPoint &pos, int c );
 

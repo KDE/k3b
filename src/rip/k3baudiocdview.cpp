@@ -38,7 +38,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kaction.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kmessagebox.h>
 #include <kconfig.h>
 #include <klineedit.h>
@@ -126,8 +126,8 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
 
   connect( m_trackView, SIGNAL(itemRenamed(Q3ListViewItem*, const QString&, int)),
 	   this, SLOT(slotItemRenamed(Q3ListViewItem*, const QString&, int)) );
-  connect( m_trackView, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
-	   this, SLOT(slotContextMenu(KListView*, Q3ListViewItem*, const QPoint&)) );
+  connect( m_trackView, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)),
+	   this, SLOT(slotContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)) );
 //   connect( m_trackView, SIGNAL(selectionChanged(QListViewItem*)), 
 // 	   this, SLOT(slotTrackSelectionChanged(QListViewItem*)) );
 
@@ -284,7 +284,7 @@ void K3bAudioCdView::initActions()
 }
 
 
-void K3bAudioCdView::slotContextMenu( KListView*, Q3ListViewItem*, const QPoint& p )
+void K3bAudioCdView::slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& p )
 {
   m_popupMenu->popup(p);
 }

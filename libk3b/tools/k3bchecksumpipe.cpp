@@ -15,7 +15,7 @@
 
 #include "k3bchecksumpipe.h"
 
-#include <kmdcodec.h>
+#include <kcodecs.h>
 #include <kdebug.h>
 
 #include <unistd.h>

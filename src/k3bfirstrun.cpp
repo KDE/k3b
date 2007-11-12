@@ -63,7 +63,7 @@ K3bFirstRun::K3bFirstRun( QWidget* parent )
   setButtonOK( i18n("Enable Konqueror integration") );
   setButtonCancel( i18n("No Konqueror integration") );
 
-  Q3Frame* plain = plainPage();
+  QFrame* plain = plainPage();
   QLabel* label = new QLabel( i18n("<p>K3b can integrate itself into Konqueror. This integration "
 				   "allows to start K3b from the context menu in the file manager."
 				   "<p><em>The Konqueror integration can always be disabled and "

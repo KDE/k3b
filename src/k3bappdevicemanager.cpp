@@ -28,7 +28,7 @@
 #include <kio/job.h>
 #include <klocale.h>
 #include <kio/global.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 
 
 K3bAppDeviceManager::K3bAppDeviceManager( QObject* parent, const char* name )

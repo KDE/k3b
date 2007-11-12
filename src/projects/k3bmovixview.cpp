@@ -28,7 +28,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kaction.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kurl.h>
@@ -66,7 +66,7 @@ K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent, const char* name 
 				     0, this, SLOT(slotAddSubTitleFile()),
 				     actionCollection(), "movix_add_subtitle" );
 
-  m_popupMenu = new KPopupMenu( this );
+  m_popupMenu = new KMenu( this );
   m_actionRemove->plug( m_popupMenu );
   m_actionRemoveSubTitle->plug( m_popupMenu );
   m_actionAddSubTitle->plug( m_popupMenu );
@@ -139,7 +139,7 @@ void K3bMovixView::slotRemoveItems()
   Q3PtrListIterator<Q3ListViewItem> it(list);
 
   if( list.isEmpty() )
-    kdDebug() << "nothing to remove" << endl;
+    kDebug() << "nothing to remove" << endl;
 
   for( ; it.current(); ++it ) {
     K3bMovixListViewItem* vi = static_cast<K3bMovixListViewItem*>(*it);
@@ -157,7 +157,7 @@ void K3bMovixView::slotRemoveSubTitleItems()
   Q3PtrListIterator<Q3ListViewItem> it(list);
 
   if( list.isEmpty() )
-    kdDebug() << "nothing to remove" << endl;
+    kDebug() << "nothing to remove" << endl;
 
   for( ; it.current(); ++it ) {
     K3bMovixListViewItem* vi = static_cast<K3bMovixListViewItem*>(*it);
@@ -171,7 +171,7 @@ void K3bMovixView::slotAddSubTitleFile()
   Q3ListViewItem* item = m_listView->selectedItems().first();
   if( K3bMovixListViewItem* vi = dynamic_cast<K3bMovixListViewItem*>(item) ) {
 
-    KURL url = KFileDialog::getOpenURL();
+    KUrl url = KFileDialog::getOpenUrl();
     if( url.isValid() ) {
       if( url.isLocalFile() )
 	m_doc->addSubTitleItem( vi->fileItem(), url );

@@ -156,7 +156,7 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
   int ret = 0;
 
   if( d->manualBitrate ) {
-    kdDebug() << "(K3bOggVorbisEncoder) calling: "
+    kDebug() << "(K3bOggVorbisEncoder) calling: "
 	      << "vorbis_encode_init( d->vorbisInfo, 2, 44100, "
 	      << (d->bitrateUpper != -1 ? d->bitrateUpper*1000 : -1) << ", "
 	      << (d->bitrateNominal != -1 ? d->bitrateNominal*1000 : -1)  << ", "
@@ -175,7 +175,7 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
     else if( d->qualityLevel > 10 )
       d->qualityLevel = 10;
 
-    kdDebug() << "(K3bOggVorbisEncoder) calling: "
+    kDebug() << "(K3bOggVorbisEncoder) calling: "
 	      << "vorbis_encode_init_vbr( d->vorbisInfo, 2, 44100, "
 	      << (float)d->qualityLevel/10.0 << ");" << endl;
 
@@ -186,7 +186,7 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
   }
 
   if( ret ) {
-    kdDebug() << "(K3bOggVorbisEncoder) vorbis_encode_init failed: " << ret << endl;
+    kDebug() << "(K3bOggVorbisEncoder) vorbis_encode_init failed: " << ret << endl;
     cleanup();
     return false;
   }
@@ -218,11 +218,11 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
 bool K3bOggVorbisEncoder::writeOggHeaders()
 {
   if( !d->oggStream ) {
-    kdDebug() << "(K3bOggVorbisEncoder) call to writeOggHeaders without init." << endl;
+    kDebug() << "(K3bOggVorbisEncoder) call to writeOggHeaders without init." << endl;
     return false;
   }
   if( d->headersWritten ) {
-    kdDebug() << "(K3bOggVorbisEncoder) headers already written." << endl;
+    kDebug() << "(K3bOggVorbisEncoder) headers already written." << endl;
     return true;
   }
 
@@ -326,7 +326,7 @@ void K3bOggVorbisEncoder::finishEncoderInternal()
     flushVorbis();
   }
   else
-    kdDebug() << "(K3bOggVorbisEncoder) call to finishEncoderInternal without init." << endl;
+    kDebug() << "(K3bOggVorbisEncoder) call to finishEncoderInternal without init." << endl;
 }
 
 
@@ -364,7 +364,7 @@ void K3bOggVorbisEncoder::setMetaDataInternal( K3bAudioEncoder::MetaDataField f,
     vorbis_comment_add_tag( d->vorbisComment, key.data(), value.utf8().data() );
   }
   else
-    kdDebug() << "(K3bOggVorbisEncoder) call to setMetaDataInternal without init." << endl;
+    kDebug() << "(K3bOggVorbisEncoder) call to setMetaDataInternal without init." << endl;
 }
 
 

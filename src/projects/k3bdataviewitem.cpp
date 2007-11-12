@@ -208,11 +208,11 @@ void K3bDataFileViewItem::init( K3bFileItem* file )
   m_fileItem = file;
 
   // determine the mimetype
-  m_pMimeType = KMimeType::findByURL( KURL::fromPathOrURL(file->localPath()) );
+  m_pMimeType = KMimeType::findByUrl( KUrl::fromPathOrUrl(file->localPath()) );
   if( !m_pMimeType )
     setPixmap( 0, DesktopIcon( "unknown", 16, KIcon::DefaultState ) );
   else
-    setPixmap( 0, m_pMimeType->pixmap( KURL::fromPathOrURL(file->localPath()), KIcon::Desktop, 16, KIcon::DefaultState ) );
+    setPixmap( 0, m_pMimeType->pixmap( KUrl::fromPathOrUrl(file->localPath()), KIcon::Desktop, 16, KIcon::DefaultState ) );
 }
 
 
@@ -223,7 +223,7 @@ QString K3bDataFileViewItem::text( int index ) const
     return m_fileItem->k3bName();
   case 1:
     {
-      QString comment = m_pMimeType->comment( KURL::fromPathOrURL(m_fileItem->localPath()), true );
+      QString comment = m_pMimeType->comment( KUrl::fromPathOrUrl(m_fileItem->localPath()), true );
       if( comment.isEmpty() )
 	comment = m_pMimeType->name();
 

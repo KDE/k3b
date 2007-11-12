@@ -32,6 +32,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
+#include <kglobal.h>
 
 
 K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
@@ -80,7 +81,7 @@ void K3bDeviceOptionTab::saveDevices()
   m_deviceWidget->apply();
 
   // save the config
-  k3bcore->deviceManager()->saveConfig( kapp->config() );
+  k3bcore->deviceManager()->saveConfig( KGlobal::config() );
 }
 
 

@@ -237,7 +237,7 @@ class LIBK3B_EXPORT K3bAudioDecoderFactory : public K3bPlugin
    * be called with urls to every kind of files and if it returns true
    * a decoder of this type is used for the file.
    */
-  virtual bool canDecode( const KURL& filename ) = 0;
+  virtual bool canDecode( const KUrl& filename ) = 0;
 
   virtual K3bAudioDecoder* createDecoder( QObject* parent = 0, const char* name = 0 ) const = 0;
 
@@ -248,7 +248,7 @@ class LIBK3B_EXPORT K3bAudioDecoderFactory : public K3bPlugin
    *
    * @returns a newly created decoder on success and 0 when no decoder could be found.
    */
-  static K3bAudioDecoder* createDecoder( const KURL& url );
+  static K3bAudioDecoder* createDecoder( const KUrl& url );
 };
 
 #endif

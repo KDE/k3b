@@ -24,7 +24,7 @@
 #include <k3bmedium.h>
 
 class QSplitter;
-class KURL;
+class KUrl;
 class K3bAudioCdView;
 class K3bVideoCdView;
 class K3bFileView;
@@ -62,11 +62,11 @@ class K3bDirView : public Q3VBox
  public slots:
   void saveConfig( KConfig* c );
   void readConfig( KConfig* c );
-  void showUrl( const KURL& );
+  void showUrl( const KUrl& );
   void showDevice( K3bDevice::Device* );
   
  protected slots:
-  void slotDirActivated( const KURL& );
+  void slotDirActivated( const KUrl& );
   void slotDirActivated( const QString& );
   void slotMountFinished( const QString& );
   void slotUnmountFinished( bool );
@@ -76,7 +76,7 @@ class K3bDirView : public Q3VBox
   void slotFileTreeContextMenu( K3bDevice::Device* dev, const QPoint& p );
 
  signals:
-  void urlEntered( const KURL& );
+  void urlEntered( const KUrl& );
   void deviceSelected( K3bDevice::Device* );
 
  private:

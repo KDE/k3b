@@ -50,6 +50,7 @@
 #include <kio/netaccess.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kglobal.h>
 
 
 class K3bProjectManager::Private
@@ -99,7 +100,7 @@ const Q3PtrList<K3bDoc>& K3bProjectManager::projects() const
 void K3bProjectManager::addProject( K3bDoc* doc )
 {
   if( !d->projects.containsRef( doc ) ) {
-    kdDebug() << "(K3bProjectManager) adding doc " << doc->URL().path() << endl;
+    kDebug() << "(K3bProjectManager) adding doc " << doc->URL().path() << endl;
 
     d->projects.append(doc);
 
@@ -135,11 +136,11 @@ void K3bProjectManager::removeProject( K3bDoc* doc )
       return;
     }
   }
-  kdDebug() << "(K3bProjectManager) unable to find doc: " << doc->URL().path() << endl;
+  kDebug() << "(K3bProjectManager) unable to find doc: " << doc->URL().path() << endl;
 }
 
 
-K3bDoc* K3bProjectManager::findByUrl( const KURL& url )
+K3bDoc* K3bProjectManager::findByUrl( const KUrl& url )
 {
   for( Q3PtrListIterator<K3bDoc> it( d->projects );
        it.current(); ++it ) {
@@ -228,7 +229,7 @@ K3bDoc* K3bProjectManager::createEmptyProject( K3bDoc::DocType type )
   }
   }
 
-  KURL url;
+  KUrl url;
   url.setFileName(fileName);
   doc->setURL(url);
 
@@ -255,7 +256,7 @@ K3bDoc* K3bProjectManager::createProject( K3bDoc::DocType type )
 
 void K3bProjectManager::loadDefaults( K3bDoc* doc )
 {
-  KConfig* c = kapp->config();
+  KConfig* c = KGlobal::config();
 
   QString oldGroup = c->group();
 
@@ -446,7 +447,7 @@ K3bProjectInterface* K3bProjectManager::dcopInterface( K3bDoc* doc )
 }
 
 
-K3bDoc* K3bProjectManager::openProject( const KURL& url )
+K3bDoc* K3bProjectManager::openProject( const KUrl& url )
 {
   QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 
@@ -487,14 +488,14 @@ K3bDoc* K3bProjectManager::openProject( const KURL& url )
       char test[5];
       if( f.readBlock( test, 5 ) ) {
 	if( ::strncmp( test, "<?xml", 5 ) ) {
-	  kdDebug() << "(K3bDoc) " << url.path() << " seems to be no xml file." << endl;
+	  kDebug() << "(K3bDoc) " << url.path() << " seems to be no xml file." << endl;
 	  QApplication::restoreOverrideCursor();
 	  return 0;
 	}
 	f.reset();
       }
       else {
-	kdDebug() << "(K3bDoc) could not read from file." << endl;
+	kDebug() << "(K3bDoc) could not read from file." << endl;
 	QApplication::restoreOverrideCursor();
 	return 0;
       }
@@ -508,7 +509,7 @@ K3bDoc* K3bProjectManager::openProject( const KURL& url )
   KIO::NetAccess::removeTempFile( tmpfile );
 
   if( !success ) {
-    kdDebug() << "(K3bDoc) could not open file " << url.path() << endl;
+    kDebug() << "(K3bDoc) could not open file " << url.path() << endl;
     QApplication::restoreOverrideCursor();
     return 0;
   }
@@ -532,7 +533,7 @@ K3bDoc* K3bProjectManager::openProject( const KURL& url )
   else if( xmlDoc.doctype().name() == "k3b_video_dvd_project" )
     type = K3bDoc::VIDEODVD;
   else {
-    kdDebug() << "(K3bDoc) unknown doc type: " << xmlDoc.doctype().name() << endl;
+    kDebug() << "(K3bDoc) unknown doc type: " << xmlDoc.doctype().name() << endl;
     QApplication::restoreOverrideCursor();
     return 0;
   }
@@ -556,7 +557,7 @@ K3bDoc* K3bProjectManager::openProject( const KURL& url )
     //        that the doc is not changed
     emit projectSaved( newDoc );
 
-    kdDebug() << "(K3bProjectManager) loading project done." << endl;
+    kDebug() << "(K3bProjectManager) loading project done." << endl;
   }
   else {
     delete newDoc;
@@ -569,7 +570,7 @@ K3bDoc* K3bProjectManager::openProject( const KURL& url )
 }
 
 
-bool K3bProjectManager::saveProject( K3bDoc* doc, const KURL& url )
+bool K3bProjectManager::saveProject( K3bDoc* doc, const KUrl& url )
 {
   QString tmpfile;
   KIO::NetAccess::download( url, tmpfile, 0L );

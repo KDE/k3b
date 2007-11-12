@@ -87,7 +87,7 @@ K3bDevice::Device* K3bMediaSelectionDialog::selectedDevice() const
 
 void K3bMediaSelectionDialog::slotSelectionChanged( K3bDevice::Device* dev )
 {
-  enableButtonOK( dev != 0 );
+  enableButtonOk( dev != 0 );
 }
 
 

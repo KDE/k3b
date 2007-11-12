@@ -26,12 +26,12 @@
 #include <kaction.h>
 #include <kbookmarkmenu.h>
 #include <kstandarddirs.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 
 #include <qdir.h>
 
 
-K3bDirOperator::K3bDirOperator(const KURL& url, QWidget* parent, const char* name )
+K3bDirOperator::K3bDirOperator(const KUrl& url, QWidget* parent, const char* name )
   : KDirOperator( url, parent, name )
 {
   setViewConfig( k3bcore->config(), "file view" );
@@ -85,7 +85,7 @@ void K3bDirOperator::readConfig( KConfig* cfg, const QString& group )
       lastUrl = urlUp;
   }
 
-  setURL( KURL::fromPathOrURL(lastUrl), true );
+  setURL( KUrl::fromPathOrUrl(lastUrl), true );
 
   cfg->setGroup( oldGroup );
 
@@ -107,7 +107,7 @@ void K3bDirOperator::writeConfig( KConfig* cfg, const QString& group )
 
 void K3bDirOperator::openBookmarkURL( const QString& url )
 {
-  setURL( KURL::fromPathOrURL( url ), true );
+  setURL( KUrl::fromPathOrUrl( url ), true );
 }
 
 
@@ -147,7 +147,7 @@ void K3bDirOperator::activatedMenu( const KFileItem*, const QPoint& pos )
 
 void K3bDirOperator::slotAddFilesToProject()
 {
-  KURL::List files;
+  KUrl::List files;
   for( Q3PtrListIterator<KFileItem> it( *(selectedItems()) ); it.current(); ++it ) {
     files.append( it.current()->url() );
   }    

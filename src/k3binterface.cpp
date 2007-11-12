@@ -113,7 +113,7 @@ DCOPRef K3bInterface::currentProject()
     return DCOPRef();
 }
 
-DCOPRef K3bInterface::openProject( const KURL& url )
+DCOPRef K3bInterface::openProject( const KUrl& url )
 {
   K3bDoc* doc = k3bappcore->projectManager()->openProject( url );
   if( doc )
@@ -133,33 +133,33 @@ Q3ValueList<DCOPRef> K3bInterface::projects()
   return lst;
 }
 
-void K3bInterface::addUrls( const KURL::List& urls )
+void K3bInterface::addUrls( const KUrl::List& urls )
 {
   m_main->addUrls( urls );
 }
 
-void K3bInterface::addUrl( const KURL& url )
+void K3bInterface::addUrl( const KUrl& url )
 {
-  KURL::List l;
+  KUrl::List l;
   l.append(url);
   addUrls( l );
 }
 
 
-void K3bInterface::copyCd( const KURL& dev )
+void K3bInterface::copyCd( const KUrl& dev )
 {
     // backward compatibility
     copyMedium( dev );
 }
 
 
-void K3bInterface::copyDvd( const KURL& dev )
+void K3bInterface::copyDvd( const KUrl& dev )
 {
     // backward compatibility
     copyMedium( dev );
 }
 
-void K3bInterface::copyMedium( const KURL& dev )
+void K3bInterface::copyMedium( const KUrl& dev )
 {
     m_main->mediaCopy( K3b::urlToDevice( dev ) );
 }
@@ -207,13 +207,13 @@ void K3bInterface::formatMedium()
 }
 
 
-void K3bInterface::burnCdImage( const KURL& url )
+void K3bInterface::burnCdImage( const KUrl& url )
 {
   m_main->slotWriteCdImage( url );
 }
 
 
-void K3bInterface::burnDvdImage( const KURL& url )
+void K3bInterface::burnDvdImage( const KUrl& url )
 {
   m_main->slotWriteDvdIsoImage( url );
 }
@@ -225,7 +225,7 @@ bool K3bInterface::blocked() const
 }
 
 
-void K3bInterface::cddaRip( const KURL& dev )
+void K3bInterface::cddaRip( const KUrl& dev )
 {
   m_main->cddaRip( K3b::urlToDevice( dev ) );
 }

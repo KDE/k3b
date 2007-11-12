@@ -93,7 +93,7 @@ K3bMovixDoc* K3bMovixDocPreparer::doc() const
 
 void K3bMovixDocPreparer::start()
 {
-  kdDebug() << k_funcinfo << endl;
+  kDebug() << k_funcinfo << endl;
   jobStarted();
 
   bool success = true;
@@ -114,7 +114,7 @@ void K3bMovixDocPreparer::cancel()
 
 bool K3bMovixDocPreparer::createMovixStructures()
 {
-  kdDebug() << k_funcinfo << endl;
+  kDebug() << k_funcinfo << endl;
   removeMovixStructures();
 
   if( doc() ) {
@@ -142,7 +142,7 @@ bool K3bMovixDocPreparer::createMovixStructures()
 
 void K3bMovixDocPreparer::removeMovixStructures()
 {
-  kdDebug() << k_funcinfo << endl;
+  kDebug() << k_funcinfo << endl;
   // remove movix files from doc
   // the dataitems do the cleanup in the doc
   delete d->movixDir;
@@ -472,7 +472,7 @@ K3bDirItem* K3bMovixDocPreparer::createDir( const QString& docPath )
     else if( next->isDir() )
       dir = static_cast<K3bDirItem*>( next );
     else {
-      kdError() << "(K3bMovixDocPreparer) found non-dir item where a dir was needed." << endl;
+      kError() << "(K3bMovixDocPreparer) found non-dir item where a dir was needed." << endl;
       return 0;
     }
   }

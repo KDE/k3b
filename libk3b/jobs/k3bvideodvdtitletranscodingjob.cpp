@@ -199,7 +199,7 @@ void K3bVideoDVDTitleTranscodingJob::startTranscode( int pass )
   d->process->setSplitStdout(true);
   connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotTranscodeStderr(const QString&)) );
   connect( d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotTranscodeStderr(const QString&)) );
-  connect( d->process, SIGNAL(processExited(KProcess*)), this, SLOT(slotTranscodeExited(KProcess*)) );
+  connect( d->process, SIGNAL(processExited(K3Process*)), this, SLOT(slotTranscodeExited(K3Process*)) );
 
   // the executable
   *d->process << d->usedTranscodeBin;
@@ -329,17 +329,17 @@ void K3bVideoDVDTitleTranscodingJob::startTranscode( int pass )
     *d->process << *it;
 
   // produce some debugging output
-  kdDebug() << "***** transcode parameters:\n";
+  kDebug() << "***** transcode parameters:\n";
   const Q3ValueList<Q3CString>& args = d->process->args();
   QString s;
   for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
   }
-  kdDebug() << s << flush << endl;
+  kDebug() << s << flush << endl;
   emit debuggingOutput( d->usedTranscodeBin->name() + " command:", s);
 
   // start the process
-  if( !d->process->start( KProcess::NotifyOnExit, KProcess::All ) ) {
+  if( !d->process->start( K3Process::NotifyOnExit, K3Process::All ) ) {
     // something went wrong when starting the program
     // it "should" be the executable
     emit infoMessage( i18n("Could not start %1.").arg(d->usedTranscodeBin->name()), K3bJob::ERROR );
@@ -417,7 +417,7 @@ void K3bVideoDVDTitleTranscodingJob::slotTranscodeStderr( const QString& line )
 }
 
 
-void K3bVideoDVDTitleTranscodingJob::slotTranscodeExited( KProcess* p )
+void K3bVideoDVDTitleTranscodingJob::slotTranscodeExited( K3Process* p )
 {
   if( d->canceled ) {
     emit canceled();

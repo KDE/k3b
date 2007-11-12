@@ -29,7 +29,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
-#include <ktoolbarbutton.h>
+
 
 // application specific includes
 #include "k3bview.h"
@@ -107,7 +107,7 @@ void K3bView::slotBurn()
       delete dlg;
     }
     else {
-      kdDebug() << "(K3bDoc) Error: no burndialog available." << endl;
+      kDebug() << "(K3bDoc) Error: no burndialog available." << endl;
     }
   }
 }
@@ -121,7 +121,7 @@ void K3bView::slotProperties()
     delete dlg;
   }
   else {
-    kdDebug() << "(K3bDoc) Error: no burndialog available." << endl;
+    kDebug() << "(K3bDoc) Error: no burndialog available." << endl;
   }
 }
 
@@ -164,14 +164,14 @@ void K3bView::slotPluginButtonClicked()
 }
 
 
-void K3bView::addUrl( const KURL& url )
+void K3bView::addUrl( const KUrl& url )
 {
-  KURL::List urls(url);
+  KUrl::List urls(url);
   addUrls( urls );
 }
 
 
-void K3bView::addUrls( const KURL::List& urls )
+void K3bView::addUrls( const KUrl::List& urls )
 {
   doc()->addUrls( urls );
 }

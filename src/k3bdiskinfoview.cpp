@@ -42,7 +42,7 @@
 
 #include <kdialog.h>
 #include <klocale.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -50,55 +50,55 @@
 
 
 // FIXME: use K3bListViewItem instead
-class K3bDiskInfoView::HeaderViewItem : public KListViewItem
+class K3bDiskInfoView::HeaderViewItem : public K3ListViewItem
 {
 public:
   HeaderViewItem( Q3ListView* parent )
-      : KListViewItem( parent ) {}
+      : K3ListViewItem( parent ) {}
   HeaderViewItem( Q3ListViewItem* parent )
-      : KListViewItem( parent ) {}
+      : K3ListViewItem( parent ) {}
   HeaderViewItem( Q3ListView* parent, Q3ListViewItem* after )
-      : KListViewItem( parent, after ) {}
+      : K3ListViewItem( parent, after ) {}
   HeaderViewItem( Q3ListViewItem* parent, Q3ListViewItem* after )
-      : KListViewItem( parent, after ) {}
+      : K3ListViewItem( parent, after ) {}
   HeaderViewItem( Q3ListView* parent, const QString& t1 )
-      : KListViewItem( parent, t1 ) {}
+      : K3ListViewItem( parent, t1 ) {}
   HeaderViewItem( Q3ListViewItem* parent, const QString& t1 )
-      : KListViewItem( parent, t1 ) {}
+      : K3ListViewItem( parent, t1 ) {}
   HeaderViewItem( Q3ListView* parent, Q3ListViewItem* after, const QString& t1 )
-      : KListViewItem( parent, after, t1 ) {}
+      : K3ListViewItem( parent, after, t1 ) {}
   HeaderViewItem( Q3ListViewItem* parent, Q3ListViewItem* after, const QString& t1 )
-      : KListViewItem( parent, after, t1 ) {}
+      : K3ListViewItem( parent, after, t1 ) {}
 
   void paintCell( QPainter* p, const QColorGroup & cg, int column, int width, int align )
   {
     QFont f ( p->font() );
     f.setBold( true );
     p->setFont( f );
-    KListViewItem::paintCell( p, cg, column, width, align );
+    K3ListViewItem::paintCell( p, cg, column, width, align );
   }
 };
 
 
-class K3bDiskInfoView::TwoColumnViewItem : public KListViewItem
+class K3bDiskInfoView::TwoColumnViewItem : public K3ListViewItem
 {
 public:
   TwoColumnViewItem( Q3ListView* parent )
-      : KListViewItem( parent ) {}
+      : K3ListViewItem( parent ) {}
   TwoColumnViewItem( Q3ListViewItem* parent )
-      : KListViewItem( parent ) {}
+      : K3ListViewItem( parent ) {}
   TwoColumnViewItem( Q3ListView* parent, Q3ListViewItem* after )
-      : KListViewItem( parent, after ) {}
+      : K3ListViewItem( parent, after ) {}
   TwoColumnViewItem( Q3ListViewItem* parent, Q3ListViewItem* after )
-      : KListViewItem( parent, after ) {}
+      : K3ListViewItem( parent, after ) {}
   TwoColumnViewItem( Q3ListView* parent, const QString& t1 )
-      : KListViewItem( parent, t1 ) {}
+      : K3ListViewItem( parent, t1 ) {}
   TwoColumnViewItem( Q3ListViewItem* parent, const QString& t1 )
-      : KListViewItem( parent, t1 ) {}
+      : K3ListViewItem( parent, t1 ) {}
   TwoColumnViewItem( Q3ListView* parent, Q3ListViewItem* after, const QString& t1 )
-      : KListViewItem( parent, after, t1 ) {}
+      : K3ListViewItem( parent, after, t1 ) {}
   TwoColumnViewItem( Q3ListViewItem* parent, Q3ListViewItem* after, const QString& t1 )
-      : KListViewItem( parent, after, t1 ) {}
+      : K3ListViewItem( parent, after, t1 ) {}
 
   void paintCell( QPainter* p, const QColorGroup & cg, int column, int width, int align )
   {
@@ -118,9 +118,9 @@ public:
       //       p->setClipRect( r );
       p->setClipping( false );
 
-      KListViewItem::paintCell( p, cg, column, newWidth, align );
+      K3ListViewItem::paintCell( p, cg, column, newWidth, align );
     } else if( column == 0 )
-      KListViewItem::paintCell( p, cg, column, width, align );
+      K3ListViewItem::paintCell( p, cg, column, width, align );
   }
 };
 
@@ -133,13 +133,13 @@ K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
 			  K3bDevice::STATE_EMPTY|K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_COMPLETE|K3bDevice::STATE_UNKNOWN,
 			  parent, name )
 {
-  m_infoView = new KListView( this );
+  m_infoView = new K3ListView( this );
   setMainWidget( m_infoView );
 
   m_infoView->setSorting( -1 );
   m_infoView->setAllColumnsShowFocus( true );
   m_infoView->setSelectionMode( Q3ListView::NoSelection );
-  m_infoView->setResizeMode( KListView::AllColumns );
+  m_infoView->setResizeMode( K3ListView::AllColumns );
   m_infoView->setAlternateBackground( QColor() );
 
   m_infoView->addColumn( "1" );
@@ -204,7 +204,7 @@ void K3bDiskInfoView::reloadMedium()
     // iso9660 info
     // /////////////////////////////////////////////////////////////////////////////////////
     if( medium().content() & K3bMedium::CONTENT_DATA ) {
-      (void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
+      (void)new K3ListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
       createIso9660InfoItems( medium().iso9660Descriptor() );
     }
 
@@ -213,12 +213,12 @@ void K3bDiskInfoView::reloadMedium()
     if( !medium().toc().isEmpty() ) {
 
       if( m_infoView->childCount() )
-	(void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
+	(void)new K3ListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
 
-      KListViewItem* trackHeaderItem = new HeaderViewItem( m_infoView, m_infoView->lastChild(), i18n("Tracks") );
+      K3ListViewItem* trackHeaderItem = new HeaderViewItem( m_infoView, m_infoView->lastChild(), i18n("Tracks") );
 
       // create header item
-      KListViewItem* item = new KListViewItem( trackHeaderItem,
+      K3ListViewItem* item = new K3ListViewItem( trackHeaderItem,
 					       i18n("Type"),
 					       i18n("Attributes"),
 					       i18n("First-Last Sector"),
@@ -231,7 +231,7 @@ void K3bDiskInfoView::reloadMedium()
       int lastSession = 0;
 
       // if we have multiple sessions we create a header item for every session
-      KListViewItem* trackItem = 0;
+      K3ListViewItem* trackItem = 0;
       if( medium().diskInfo().numSessions() > 1 && medium().toc()[0].session() > 0 ) {
 	trackItem = new HeaderViewItem( trackHeaderItem, item, i18n("Session %1").arg(1) );
 	lastSession = 1;
@@ -253,7 +253,7 @@ void K3bDiskInfoView::reloadMedium()
 					  i18n("Session %1").arg(lastSession) );
 	}
 
-        item = new KListViewItem( trackItem, item );
+        item = new K3ListViewItem( trackItem, item );
         QString text;
         if( track.type() == K3bTrack::AUDIO ) {
           item->setPixmap( 0, SmallIcon( "sound" ) );
@@ -300,19 +300,19 @@ void K3bDiskInfoView::reloadMedium()
     if( !medium().cdText().isEmpty() ) {
       medium().cdText().debug();
       if( m_infoView->childCount() )
-	(void)new KListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
+	(void)new K3ListViewItem( m_infoView, m_infoView->lastChild() ); // empty spacer item
 
-      KListViewItem* cdTextHeaderItem = new HeaderViewItem( m_infoView,
+      K3ListViewItem* cdTextHeaderItem = new HeaderViewItem( m_infoView,
 							    m_infoView->lastChild(),
 							    i18n("CD-TEXT (excerpt)") );
 
       // create header item
-      KListViewItem* item = new KListViewItem( cdTextHeaderItem,
+      K3ListViewItem* item = new K3ListViewItem( cdTextHeaderItem,
 					       i18n("Performer"),
 					       i18n("Title"),
 					       i18n("Songwriter"),
 					       i18n("Composer") );
-      item = new KListViewItem( cdTextHeaderItem, item );
+      item = new K3ListViewItem( cdTextHeaderItem, item );
       item->setText( 0, i18n("CD:") + " " +
 		     medium().cdText().performer() );
       item->setText( 1, medium().cdText().title() );
@@ -321,7 +321,7 @@ void K3bDiskInfoView::reloadMedium()
 
       int index = 1;
       for( unsigned int i = 0; i < medium().cdText().count(); ++i ) {
-        item = new KListViewItem( cdTextHeaderItem, item );
+        item = new K3ListViewItem( cdTextHeaderItem, item );
 	item->setText( 0, QString::number(index).rightJustified( 2, ' ' ) + " " +
 		       medium().cdText().at(i).performer() );
 	item->setText( 1, medium().cdText().at(i).title() );
@@ -340,57 +340,57 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bMedium& medium )
 {
   const K3bDevice::DiskInfo& info = medium.diskInfo();
 
-  KListViewItem* atipItem = new HeaderViewItem( m_infoView, m_infoView->lastItem(), i18n("Medium") );
+  K3ListViewItem* atipItem = new HeaderViewItem( m_infoView, m_infoView->lastItem(), i18n("Medium") );
   QString typeStr;
   if( info.mediaType() != K3bDevice::MEDIA_UNKNOWN )
     typeStr = K3bDevice::mediaTypeString( info.mediaType() );
   else
     typeStr = i18n("Unknown (probably CD-ROM)");
 
-  KListViewItem* atipChild = new KListViewItem( atipItem, i18n("Type:"), typeStr );
+  K3ListViewItem* atipChild = new K3ListViewItem( atipItem, i18n("Type:"), typeStr );
 
   if( info.isDvdMedia() )
-    atipChild = new KListViewItem( atipItem, atipChild,
+    atipChild = new K3ListViewItem( atipItem, atipChild,
 				   i18n("Media ID:"),
 				   !info.mediaId().isEmpty() ? QString::fromLatin1( info.mediaId() ) : i18n("unknown") );
 
 
-  atipChild = new KListViewItem( atipItem, atipChild,
+  atipChild = new K3ListViewItem( atipItem, atipChild,
 				 i18n("Capacity:"),
 				 i18n("%1 min").arg(info.capacity().toString()),
 				 KIO::convertSize(info.capacity().mode1Bytes()) );
 
   if( !info.empty() )
-    atipChild = new KListViewItem( atipItem, atipChild,
+    atipChild = new K3ListViewItem( atipItem, atipChild,
 				   i18n("Used Capacity:"),
 				   i18n("%1 min").arg(info.size().toString()),
 				   KIO::convertSize(info.size().mode1Bytes()) );
 
   if( info.appendable() )
-    atipChild = new KListViewItem( atipItem, atipChild,
+    atipChild = new K3ListViewItem( atipItem, atipChild,
 				   i18n("Remaining:"),
 				   i18n("%1 min").arg( info.remainingSize().toString() ),
 				   KIO::convertSize(info.remainingSize().mode1Bytes()) );
 
-  atipChild = new KListViewItem( atipItem, atipChild,
+  atipChild = new K3ListViewItem( atipItem, atipChild,
 				 i18n("Rewritable:"),
 				 info.rewritable() ? i18n("yes") : i18n("no") );
 
-  atipChild = new KListViewItem( atipItem, atipChild,
+  atipChild = new K3ListViewItem( atipItem, atipChild,
 				 i18n("Appendable:"),
 				 info.appendable() ? i18n("yes") : i18n("no") );
 
-  atipChild = new KListViewItem( atipItem, atipChild,
+  atipChild = new K3ListViewItem( atipItem, atipChild,
 				 i18n("Empty:"),
 				 info.empty() ? i18n("yes") : i18n("no") );
 
   if( K3bDevice::isDvdMedia( info.mediaType() ) )
-    atipChild = new KListViewItem( atipItem, atipChild,
+    atipChild = new K3ListViewItem( atipItem, atipChild,
 				   i18n("Layers:"),
 				   QString::number( info.numLayers() ) );
 
   if( info.mediaType() == K3bDevice::MEDIA_DVD_PLUS_RW ) {
-    atipChild = new KListViewItem( atipItem, atipChild,
+    atipChild = new K3ListViewItem( atipItem, atipChild,
 				   i18n("Background Format:") );
     switch( info.bgFormatState() ) {
     case K3bDevice::BG_FORMAT_NONE:
@@ -408,12 +408,12 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bMedium& medium )
     }
   }
 
-  atipChild = new KListViewItem( atipItem, atipChild,
+  atipChild = new K3ListViewItem( atipItem, atipChild,
 				 i18n("Sessions:"),
 				 QString::number( info.numSessions() ) );
 
   if( info.mediaType() & K3bDevice::MEDIA_WRITABLE ) {
-    atipChild = new KListViewItem( atipItem, atipChild,
+    atipChild = new K3ListViewItem( atipItem, atipChild,
 				   i18n("Supported writing speeds:") );
     QString s;
     if( medium.writingSpeeds().isEmpty() )
@@ -443,41 +443,41 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bMedium& medium )
 
 void K3bDiskInfoView::createIso9660InfoItems( const K3bIso9660SimplePrimaryDescriptor& iso )
 {
-  KListViewItem* iso9660Item = new HeaderViewItem( m_infoView, m_infoView->lastChild(),
+  K3ListViewItem* iso9660Item = new HeaderViewItem( m_infoView, m_infoView->lastChild(),
 						   i18n("ISO9660 Filesystem Info") );
-  KListViewItem* iso9660Child = 0;
+  K3ListViewItem* iso9660Child = 0;
 
-  iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
+  iso9660Child = new K3ListViewItem( iso9660Item, iso9660Child,
 				    i18n("System Id:"),
 				    iso.systemId.isEmpty()
 				    ? QString("-")
 				    : iso.systemId );
-  iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
+  iso9660Child = new K3ListViewItem( iso9660Item, iso9660Child,
 				    i18n("Volume Id:"),
 				    iso.volumeId.isEmpty()
 				    ? QString("-")
 				    : iso.volumeId );
-  iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
+  iso9660Child = new K3ListViewItem( iso9660Item, iso9660Child,
 				    i18n("Volume Set Id:"),
 				    iso.volumeSetId.isEmpty()
 				    ? QString("-")
 				    : iso.volumeSetId );
-  iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
+  iso9660Child = new K3ListViewItem( iso9660Item, iso9660Child,
 				    i18n("Publisher Id:"),
 				    iso.publisherId.isEmpty()
 				    ? QString("-")
 				    : iso.publisherId );
-  iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
+  iso9660Child = new K3ListViewItem( iso9660Item, iso9660Child,
 				    i18n("Preparer Id:"),
 				    iso.preparerId.isEmpty()
 				    ? QString("-")
 				    : iso.preparerId );
-  iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
+  iso9660Child = new K3ListViewItem( iso9660Item, iso9660Child,
 				    i18n("Application Id:"),
 				    iso.applicationId.isEmpty()
 				    ? QString("-")
 				    : iso.applicationId );
-//   iso9660Child = new KListViewItem( iso9660Item, iso9660Child,
+//   iso9660Child = new K3ListViewItem( iso9660Item, iso9660Child,
 // 				    i18n("Volume Size:"),
 // 				    QString( "%1 (%2*%3)" )
 // 				    .arg(iso.logicalBlockSize

@@ -59,9 +59,9 @@ void K3bArtsOutputPlugin::cleanup()
 {
   if( m_initialized ) {
     arts_close_stream( m_stream );
-    kdDebug() << "(K3bArtsOutputPlugin::cleanup) arts_free()" << endl;
+    kDebug() << "(K3bArtsOutputPlugin::cleanup) arts_free()" << endl;
     arts_free();
-    kdDebug() << "(K3bArtsOutputPlugin::cleanup) arts_free() done" << endl;
+    kDebug() << "(K3bArtsOutputPlugin::cleanup) arts_free() done" << endl;
     m_initialized = false;
   }
 }
@@ -69,12 +69,12 @@ void K3bArtsOutputPlugin::cleanup()
 
 bool K3bArtsOutputPlugin::init()
 {
-  kdDebug() << "(K3bArtsOutputPlugin::init)" << endl;
+  kDebug() << "(K3bArtsOutputPlugin::init)" << endl;
   if( !m_initialized ) {
-    kdDebug() << "(K3bArtsOutputPlugin::init) arts_init()" << endl;
+    kDebug() << "(K3bArtsOutputPlugin::init) arts_init()" << endl;
     m_lastErrorCode = arts_init();
     m_initialized = ( m_lastErrorCode == 0 );
-    kdDebug() << "(K3bArtsOutputPlugin::init) arts_init() done: " << m_lastErrorCode << endl;
+    kDebug() << "(K3bArtsOutputPlugin::init) arts_init() done: " << m_lastErrorCode << endl;
     if( m_initialized )
       m_stream = arts_play_stream( 44100, 16, 2, "K3bArtsOutputPlugin" );
   }

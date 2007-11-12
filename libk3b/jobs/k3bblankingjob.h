@@ -18,7 +18,7 @@
 
 #include <k3bjob.h>
 #include "k3b_export.h"
-class KProcess;
+class K3Process;
 class QString;
 class K3bDevice::Device;
 class K3bAbstractWriter;

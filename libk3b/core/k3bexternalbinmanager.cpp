@@ -16,7 +16,7 @@
 #include "k3bexternalbinmanager.h"
 
 #include <kdebug.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <kconfig.h>
 #include <kdeversion.h>
 
@@ -180,7 +180,7 @@ bool K3bExternalBinManager::readConfig( KConfig* c )
   c->setGroup( "External Programs" );
 
   if( c->hasKey( "search path" ) )
-    setSearchPath( c->readPathListEntry( "search path" ) );
+    setSearchPath( c->readPathEntry( "search path", QStringList() ) );
 
   search();
 
@@ -314,19 +314,19 @@ void K3bExternalBinManager::search()
   const K3bExternalBin* bin = program("cdrecord")->defaultBin();
 
   if( !bin ) {
-    kdDebug() << "(K3bExternalBinManager) Probing cdrecord failed" << endl;
+    kDebug() << "(K3bExternalBinManager) Probing cdrecord failed" << endl;
   }
   else {
-    kdDebug() << "(K3bExternalBinManager) Cdrecord " << bin->version << " features: "
+    kDebug() << "(K3bExternalBinManager) Cdrecord " << bin->version << " features: "
 	      << bin->features().join( ", " ) << endl;
 
     if( bin->version >= K3bVersion("1.11a02") )
-      kdDebug() << "(K3bExternalBinManager) "
+      kDebug() << "(K3bExternalBinManager) "
 		<< bin->version.majorVersion() << " " << bin->version.minorVersion() << " " << bin->version.patchLevel()
 		<< " " << bin->version.suffix()
 		<< " seems to be cdrecord version >= 1.11a02, using burnfree instead of burnproof" << endl;
     if( bin->version >= K3bVersion("1.11a31") )
-      kdDebug() << "(K3bExternalBinManager) seems to be cdrecord version >= 1.11a31, support for Just Link via burnfree "
+      kDebug() << "(K3bExternalBinManager) seems to be cdrecord version >= 1.11a31, support for Just Link via burnfree "
 		<< "driveroption" << endl;
   }
 }

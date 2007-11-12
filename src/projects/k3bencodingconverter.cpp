@@ -45,7 +45,7 @@ K3bEncodingConverter::K3bEncodingConverter()
 #ifdef HAVE_ICONV_H
   char* codec = nl_langinfo( CODESET );
   d->localEncoding = QString::fromLocal8Bit( codec );
-  kdDebug() << "(K3bDataUrlAddingDialog) using locale codec: " << codec << endl;
+  kDebug() << "(K3bDataUrlAddingDialog) using locale codec: " << codec << endl;
   d->ic = ::iconv_open( "UCS-2BE", codec );
 #endif
 }

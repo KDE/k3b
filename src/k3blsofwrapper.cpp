@@ -64,7 +64,7 @@ bool K3bLsofWrapper::checkDevice( K3bDevice::Device* dev )
     return false;
 
   // run lsof
-  KProcess p;
+  K3Process p;
   K3bProcessOutputCollector out( &p );
 
   //
@@ -74,7 +74,7 @@ bool K3bLsofWrapper::checkDevice( K3bDevice::Device* dev )
   //
   p << d->lsofBin << "-Fpc" << dev->blockDeviceName();
 
-  if( !p.start( KProcess::Block, KProcess::Stdout ) )
+  if( !p.start( K3Process::Block, K3Process::Stdout ) )
     return false;
 
   //
@@ -84,7 +84,7 @@ bool K3bLsofWrapper::checkDevice( K3bDevice::Device* dev )
     int pid = (*it).mid(1).toInt();
     QString app = (*(++it)).mid(1);
 
-    kdDebug() << "(K3bLsofWrapper) matched: app: " << app << " pid: " << pid << endl;
+    kDebug() << "(K3bLsofWrapper) matched: app: " << app << " pid: " << pid << endl;
 
     // we don't care about ourselves using the device ;)
     if( pid != (int)::getpid() )

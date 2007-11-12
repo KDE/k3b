@@ -17,7 +17,7 @@
 #ifndef K3BAUDIOPLAYER_H
 #define K3BAUDIOPLAYER_H
 
-#include <klistview.h>
+#include <k3listview.h>
 
 #include <config.h>
 //Added by qt3to4:
@@ -45,7 +45,7 @@ class KActionMenu;
  * Special ListViewItem for the K3bAudioPlayer playlist
  * @author Sebastian Trueg
  */
-class K3bPlayListViewItem : public KListViewItem
+class K3bPlayListViewItem : public K3ListViewItem
 {
  public:
   K3bPlayListViewItem( const QString&, Q3ListView* parent );
@@ -85,7 +85,7 @@ class K3bPlayListViewItem : public KListViewItem
  * Playlistview just needed to accept 
  * url drags
  */ 
-class K3bPlayListView : public KListView
+class K3bPlayListView : public K3ListView
 {
 Q_OBJECT
 
@@ -173,7 +173,7 @@ Q_OBJECT
    */
   void setCurrentItem( Q3ListViewItem* item );
   void slotRemoveSelected();
-  void slotShowContextMenu( KListView*, Q3ListViewItem* item, const QPoint& p );
+  void slotShowContextMenu( K3ListView*, Q3ListViewItem* item, const QPoint& p );
 
  private:
 #ifdef WITH_ARTS

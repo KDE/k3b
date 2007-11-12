@@ -90,7 +90,7 @@ void K3bPluginManager::loadPlugin( const QString& fileName )
 
   QString libName = c.readEntry( "Lib" );
   if( libName.isEmpty() ) {
-    kdDebug() << "(K3bPluginManager) no Lib specified in " << fileName << endl;
+    kDebug() << "(K3bPluginManager) no Lib specified in " << fileName << endl;
     return;
   }
 
@@ -102,7 +102,7 @@ void K3bPluginManager::loadPlugin( const QString& fileName )
       // FIXME: improve this versioning stuff
       if( plugin->pluginSystemVersion() != K3B_PLUGIN_SYSTEM_VERSION ) {
 	delete plugin;
-	kdDebug() << "(K3bPluginManager) plugin system does not fit lib " << libName << endl;
+	kDebug() << "(K3bPluginManager) plugin system does not fit lib " << libName << endl;
       }
       else {
 	plugin->m_pluginInfo = K3bPluginInfo( libName,
@@ -135,10 +135,10 @@ void K3bPluginManager::loadPlugin( const QString& fileName )
       }
     }
     else
-      kdDebug() << "(K3bPluginManager) lib " << libName << " not a K3b plugin" << endl;
+      kDebug() << "(K3bPluginManager) lib " << libName << " not a K3b plugin" << endl;
   }
   else
-    kdDebug() << "(K3bPluginManager) lib " << libName << " not found" << endl;
+    kDebug() << "(K3bPluginManager) lib " << libName << " not found" << endl;
 }
 
 

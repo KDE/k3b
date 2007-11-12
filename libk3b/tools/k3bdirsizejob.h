@@ -56,7 +56,7 @@ class LIBK3B_EXPORT K3bDirSizeJob : public K3bThreadJob
   KIO::filesize_t totalSymlinks() const;
 
  public slots:
-  void setUrls( const KURL::List& urls );
+  void setUrls( const KUrl::List& urls );
   void setFollowSymlinks( bool );
 
  private:

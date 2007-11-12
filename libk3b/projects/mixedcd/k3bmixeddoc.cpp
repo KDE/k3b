@@ -71,7 +71,7 @@ QString K3bMixedDoc::name() const
 }
 
 
-void K3bMixedDoc::setURL( const KURL& url )
+void K3bMixedDoc::setURL( const KUrl& url )
 {
   K3bDoc::setURL( url );
   m_audioDoc->setURL( url );
@@ -115,7 +115,7 @@ K3bBurnJob* K3bMixedDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
 }
 
 
-void K3bMixedDoc::addUrls( const KURL::List& urls )
+void K3bMixedDoc::addUrls( const KUrl::List& urls )
 {
   dataDoc()->addUrls( urls );
 }

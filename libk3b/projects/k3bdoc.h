@@ -139,10 +139,10 @@ class LIBK3B_EXPORT K3bDoc : public QObject
    */
   virtual bool saveDocumentData( QDomElement* docElem ) = 0;
 
-  /** returns the KURL of the document */
-  const KURL& URL() const;
+  /** returns the KUrl of the document */
+  const KUrl& URL() const;
   /** sets the URL of the document */
-  virtual void setURL( const KURL& url );
+  virtual void setURL( const KUrl& url );
 
   int writingMode() const { return m_writingMode; }
   bool dummy() const { return m_dummy; }
@@ -206,8 +206,8 @@ class LIBK3B_EXPORT K3bDoc : public QObject
    * the default implementation just calls addUrls with
    * list containing the url
    */
-  virtual void addUrl( const KURL& url );
-  virtual void addUrls( const KURL::List& urls ) = 0;
+  virtual void addUrl( const KUrl& url );
+  virtual void addUrls( const KUrl::List& urls ) = 0;
 
  protected:
   int m_docType;
@@ -222,7 +222,7 @@ class LIBK3B_EXPORT K3bDoc : public QObject
  private:
   /** the modified flag of the current document */
   bool m_modified;
-  KURL doc_url;
+  KUrl doc_url;
 
   QWidget* m_view;
 

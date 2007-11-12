@@ -36,7 +36,7 @@
 #include <kio/netaccess.h>
 #include <kurl.h>
 #include <dcopref.h>
-#include <kprocess.h>
+#include <k3process.h>
 
 #include <qdatastream.h>
 #include <qdir.h>
@@ -175,10 +175,10 @@ QString K3b::findTempFile( const QString& ending, const QString& d )
 
 QString K3b::defaultTempPath()
 {
-  QString oldGroup = kapp->config()->group();
-  kapp->config()->setGroup( "General Options" );
-  QString url = kapp->config()->readPathEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
-  kapp->config()->setGroup( oldGroup );
+  QString oldGroup = KGlobal::config()->group();
+  KGlobal::config()->setGroup( "General Options" );
+  QString url = KGlobal::config()->readPathEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
+  KGlobal::config()->setGroup( oldGroup );
   return prepareDir(url);
 }
 
@@ -233,10 +233,10 @@ K3bVersion K3b::kernelVersion()
   utsname unameinfo;
   if( ::uname(&unameinfo) == 0 ) {
     v = QString::fromLocal8Bit( unameinfo.release );
-    kdDebug() << "kernel version: " << v << endl;
+    kDebug() << "kernel version: " << v << endl;
   }
   else
-    kdError() << "could not determine kernel version." << endl;
+    kError() << "could not determine kernel version." << endl;
   return v;
 }
 
@@ -255,7 +255,7 @@ QString K3b::systemName()
     v = QString::fromLocal8Bit( unameinfo.sysname );
   }
   else
-    kdError() << "could not determine system name." << endl;
+    kError() << "could not determine system name." << endl;
   return v;
 }
 
@@ -276,7 +276,7 @@ bool K3b::kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& a
 }
 
 
-KIO::filesize_t K3b::filesize( const KURL& url )
+KIO::filesize_t K3b::filesize( const KUrl& url )
 {
   KIO::filesize_t fSize = 0;
   if( url.isLocalFile() ) {
@@ -299,12 +299,12 @@ KIO::filesize_t K3b::filesize( const KURL& url )
 }
 
 
-KIO::filesize_t K3b::imageFilesize( const KURL& url )
+KIO::filesize_t K3b::imageFilesize( const KUrl& url )
 {
   KIO::filesize_t size = K3b::filesize( url );
   int cnt = 0;
-  while( KIO::NetAccess::exists( KURL::fromPathOrURL( url.url() + '.' + QString::number(cnt).rightJustified( 3, '0' ) ), true ) )
-    size += K3b::filesize( KURL::fromPathOrURL( url.url() + '.' + QString::number(cnt++).rightJustified( 3, '0' ) ) );
+  while( KIO::NetAccess::exists( KUrl::fromPathOrUrl( url.url() + '.' + QString::number(cnt).rightJustified( 3, '0' ) ), true ) )
+    size += K3b::filesize( KUrl::fromPathOrUrl( url.url() + '.' + QString::number(cnt++).rightJustified( 3, '0' ) ) );
   return size;
 }
 
@@ -448,7 +448,7 @@ QString K3b::resolveLink( const QString& file )
       p.prepend( f.dirPath(true) + "/" );
     f.setFile( p );
     if( steps.contains( f.absoluteFilePath() ) ) {
-      kdDebug() << "(K3b) symlink loop detected." << endl;
+      kDebug() << "(K3b) symlink loop detected." << endl;
       break;
     }
     else
@@ -458,19 +458,19 @@ QString K3b::resolveLink( const QString& file )
 }
 
 
-K3bDevice::Device* K3b::urlToDevice( const KURL& deviceUrl )
+K3bDevice::Device* K3b::urlToDevice( const KUrl& deviceUrl )
 {
   if( deviceUrl.protocol() == "media" || deviceUrl.protocol() == "system" ) {
-    kdDebug() << "(K3b) Asking mediamanager for " << deviceUrl.fileName() << endl;
+    kDebug() << "(K3b) Asking mediamanager for " << deviceUrl.fileName() << endl;
     DCOPRef mediamanager("kded", "mediamanager");
     DCOPReply reply = mediamanager.call("properties(QString)", deviceUrl.fileName());
     QStringList properties = reply;
     if( !reply.isValid() || properties.count() < 6 ) {
-      kdError() << "(K3b) Invalid reply from mediamanager" << endl;
+      kError() << "(K3b) Invalid reply from mediamanager" << endl;
       return 0;
     }
     else {
-      kdDebug() << "(K3b) Reply from mediamanager " << properties[5] << endl;
+      kDebug() << "(K3b) Reply from mediamanager " << properties[5] << endl;
       return k3bcore->deviceManager()->findDevice( properties[5] );
     }
   }
@@ -479,7 +479,7 @@ K3bDevice::Device* K3b::urlToDevice( const KURL& deviceUrl )
 }
 
 
-KURL K3b::convertToLocalUrl( const KURL& url )
+KUrl K3b::convertToLocalUrl( const KUrl& url )
 {
   if( !url.isLocalFile() ) {
 #if KDE_IS_VERSION(3,4,91)
@@ -495,7 +495,7 @@ KURL K3b::convertToLocalUrl( const KURL& url )
       const KIO::UDSEntry::ConstIterator end = e.end();
       for( KIO::UDSEntry::ConstIterator it = e.begin(); it != end; ++it ) {
 	if( (*it).m_uds == UDS_LOCAL_PATH && !(*it).m_str.isEmpty() )
-	  return KURL::fromPathOrURL( (*it).m_str );
+	  return KUrl::fromPathOrUrl( (*it).m_str );
       }
     }
 #endif
@@ -505,10 +505,10 @@ KURL K3b::convertToLocalUrl( const KURL& url )
 }
 
 
-KURL::List K3b::convertToLocalUrls( const KURL::List& urls )
+KUrl::List K3b::convertToLocalUrls( const KUrl::List& urls )
 {
-  KURL::List r;
-  for( KURL::List::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it )
+  KUrl::List r;
+  for( KUrl::List::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it )
     r.append( convertToLocalUrl( *it ) );
   return r;
 }
@@ -586,11 +586,11 @@ bool K3b::unmount( K3bDevice::Device* dev )
 
   QString umountBin = K3b::findExe( "umount" );
   if( !umountBin.isEmpty() ) {
-    KProcess p;
+    K3Process p;
     p << umountBin;
     p << "-l"; // lazy unmount
     p << mntPath;
-    p.start( KProcess::Block );
+    p.start( K3Process::Block );
     if( !p.exitStatus() )
       return true;
   }
@@ -598,11 +598,11 @@ bool K3b::unmount( K3bDevice::Device* dev )
   // now try pmount
   QString pumountBin = K3b::findExe( "pumount" );
   if( !pumountBin.isEmpty() ) {
-    KProcess p;
+    K3Process p;
     p << pumountBin;
     p << "-l"; // lazy unmount
     p << mntPath;
-    p.start( KProcess::Block );
+    p.start( K3Process::Block );
     return !p.exitStatus();
   }
   else {
@@ -636,20 +636,20 @@ bool K3b::mount( K3bDevice::Device* dev )
   // now try pmount
   QString pmountBin = K3b::findExe( "pmount" );
   if( !pmountBin.isEmpty() ) {
-    KProcess p;
+    K3Process p;
     p << pmountBin;
     p << mntDev;
-    p.start( KProcess::Block );
+    p.start( K3Process::Block );
     return !p.exitStatus();
   }
 
   // and the most simple one
   QString mountBin = K3b::findExe( "mount" );
   if( !mountBin.isEmpty() ) {
-    KProcess p;
+    K3Process p;
     p << mountBin;
     p << mntDev;
-    p.start( KProcess::Block );
+    p.start( K3Process::Block );
     return !p.exitStatus();
   }
 

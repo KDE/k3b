@@ -306,7 +306,7 @@ int K3bDevice::HalConnection::lock( Device* dev )
   dbus_error_init( &error );
   reply = dbus_connection_send_with_reply_and_block( d->connection, dmesg, -1, &error );
   if( dbus_error_is_set( &error ) ) {
-    kdError() << "(K3bDevice::HalConnection) lock failed for " << udi << ": " << error.name << " - " << error.message << endl;
+    kError() << "(K3bDevice::HalConnection) lock failed for " << udi << ": " << error.name << " - " << error.message << endl;
     if( !strcmp(error.name, "org.freedesktop.Hal.NoSuchDevice" ) )
       ret = org_freedesktop_Hal_NoSuchDevice;
     else if( !strcmp(error.name, "org.freedesktop.Hal.DeviceAlreadyLocked" ) )
@@ -362,7 +362,7 @@ int K3bDevice::HalConnection::unlock( Device* dev )
   dbus_error_init( &error );
   reply = dbus_connection_send_with_reply_and_block( d->connection, dmesg, -1, &error );
   if( dbus_error_is_set( &error ) ) {
-    kdError() << "(K3bDevice::HalConnection) unlock failed for " << udi << ": " << error.name << " - " << error.message << endl;
+    kError() << "(K3bDevice::HalConnection) unlock failed for " << udi << ": " << error.name << " - " << error.message << endl;
     if( !strcmp(error.name, "org.freedesktop.Hal.NoSuchDevice" ) )
       ret = org_freedesktop_Hal_NoSuchDevice;
     else if( !strcmp(error.name, "org.freedesktop.Hal.DeviceAlreadyLocked" ) )
@@ -434,7 +434,7 @@ int K3bDevice::HalConnection::mount( K3bDevice::Device* dev,
   dbus_error_init( &error );
   reply = dbus_connection_send_with_reply_and_block( d->connection, dmesg, -1, &error );
   if( dbus_error_is_set( &error ) ) {
-    kdError() << "(K3bDevice::HalConnection) mount failed for " << mediumUdi << ": " << error.name << " - " << error.message << endl;
+    kError() << "(K3bDevice::HalConnection) mount failed for " << mediumUdi << ": " << error.name << " - " << error.message << endl;
     if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.NoSuchDevice" ) )
       ret = org_freedesktop_Hal_Device_Volume_NoSuchDevice;
     else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.PermissionDenied" ) )
@@ -509,7 +509,7 @@ int K3bDevice::HalConnection::unmount( K3bDevice::Device* dev,
   dbus_error_init( &error );
   reply = dbus_connection_send_with_reply_and_block( d->connection, dmesg, -1, &error );
   if( dbus_error_is_set( &error ) ) {
-    kdError() << "(K3bDevice::HalConnection) unmount failed for " << mediumUdi << ": " << error.name << " - " << error.message << endl;
+    kError() << "(K3bDevice::HalConnection) unmount failed for " << mediumUdi << ": " << error.name << " - " << error.message << endl;
     if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.NoSuchDevice" ) )
       ret = org_freedesktop_Hal_Device_Volume_NoSuchDevice;
     else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.PermissionDenied" ) )
@@ -580,7 +580,7 @@ int K3bDevice::HalConnection::eject( K3bDevice::Device* dev,
   dbus_error_init( &error );
   reply = dbus_connection_send_with_reply_and_block( d->connection, dmesg, -1, &error );
   if( dbus_error_is_set( &error ) ) {
-    kdError() << "(K3bDevice::HalConnection) eject failed for " << mediumUdi << ": " << error.name << " - " << error.message << endl;
+    kError() << "(K3bDevice::HalConnection) eject failed for " << mediumUdi << ": " << error.name << " - " << error.message << endl;
     if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.NoSuchDevice" ) )
       ret = org_freedesktop_Hal_Device_Volume_NoSuchDevice;
     else if( !strcmp(error.name, "org.freedesktop.Hal.Device.Volume.PermissionDenied" ) )

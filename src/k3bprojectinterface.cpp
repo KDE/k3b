@@ -52,12 +52,12 @@ K3bProjectInterface::~K3bProjectInterface()
 
 void K3bProjectInterface::addUrls( const QStringList& urls )
 {
-  m_doc->addUrls( KURL::List(urls) );
+  m_doc->addUrls( KUrl::List(urls) );
 }
 
 void K3bProjectInterface::addUrl( const QString& url )
 {
-  m_doc->addUrl( KURL(url) );
+  m_doc->addUrl( KUrl(url) );
 }
 
 void K3bProjectInterface::burn()

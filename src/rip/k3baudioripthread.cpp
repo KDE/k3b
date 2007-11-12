@@ -369,7 +369,7 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
 	  if( d->encoder ) {
 	    if( d->encoder->encode( buf, 
 				    CD_FRAMESIZE_RAW ) < 0 ) {
-	      kdDebug() << "(K3bAudioRipThread) error while encoding." << endl;
+	      kDebug() << "(K3bAudioRipThread) error while encoding." << endl;
 	      emitInfoMessage( d->encoder->lastErrorString(), K3bJob::ERROR );
 	      emitInfoMessage( i18n("Error while encoding track %1.").arg(track), K3bJob::ERROR );
 	      return false;
@@ -506,7 +506,7 @@ bool K3bAudioRipThread::writePlaylist()
   }
   else {
     emitInfoMessage( i18n("Unable to open '%1' for writing.").arg(m_playlistFilename), K3bJob::ERROR );
-    kdDebug() << "(K3bAudioRipThread) could not open file " << m_playlistFilename << " for writing." << endl;
+    kDebug() << "(K3bAudioRipThread) could not open file " << m_playlistFilename << " for writing." << endl;
     return false;
   }
 }

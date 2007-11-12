@@ -27,7 +27,7 @@
 #include <QLabel>
 
 class K3bListView;
-class KListView;
+class K3ListView;
 class Q3ListViewItem;
 class QPoint;
 class KActionCollection;
@@ -62,7 +62,7 @@ class K3bAudioCdView : public K3bMediaContentsView
   void queryCddb();
 
  private slots:
-  void slotContextMenu( KListView*, Q3ListViewItem*, const QPoint& );
+  void slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& );
   void slotItemRenamed( Q3ListViewItem*, const QString&, int );
   void slotCddbQueryFinished( int );
   void slotTrackSelectionChanged( Q3ListViewItem* );

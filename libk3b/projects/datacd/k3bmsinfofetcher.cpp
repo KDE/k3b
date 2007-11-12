@@ -24,7 +24,7 @@
 #include <k3biso9660.h>
 
 #include <klocale.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <kdebug.h>
 
 #include <qstringlist.h>
@@ -55,14 +55,14 @@ void K3bMsInfoFetcher::start()
   emit infoMessage( i18n("Searching previous session"), K3bJob::INFO );
 
   if( !k3bcore->externalBinManager()->foundBin( "cdrecord" ) ) {
-    kdDebug() << "(K3bMsInfoFetcher) could not find cdrecord executable" << endl;
+    kDebug() << "(K3bMsInfoFetcher) could not find cdrecord executable" << endl;
     emit infoMessage( i18n("Could not find %1 executable.").arg("cdrecord"), K3bJob::ERROR );
     jobFinished(false);
     return;
   }
 
   if( m_device == 0 ) {
-    kdDebug() << "(K3bMsInfoFetcher) internal error: No device set!" << endl;
+    kDebug() << "(K3bMsInfoFetcher) internal error: No device set!" << endl;
     jobFinished(false);
     return;
   }
@@ -82,7 +82,7 @@ void K3bMsInfoFetcher::start()
 void K3bMsInfoFetcher::getMsInfo()
 {
   delete m_process;
-  m_process = new KProcess();
+  m_process = new K3Process();
 
   const K3bExternalBin* bin = 0;
   if( m_dvd ) {
@@ -109,28 +109,28 @@ void K3bMsInfoFetcher::getMsInfo()
     for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
       *m_process << *it;
 
-    kdDebug() << "***** " << bin->name() << " parameters:\n";
+    kDebug() << "***** " << bin->name() << " parameters:\n";
     const Q3ValueList<Q3CString>& args = m_process->args();
     QString s;
     for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
       s += *it + " ";
     }
-    kdDebug() << s << flush << endl;
+    kDebug() << s << flush << endl;
     emit debuggingOutput( "msinfo command:", s );
 
 
-    //   connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-    // 	   this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
-    connect( m_process, SIGNAL(receivedStdout(KProcess*, char*, int)),
-	     this, SLOT(slotCollectOutput(KProcess*, char*, int)) );
-    connect( m_process, SIGNAL(processExited(KProcess*)),
+    //   connect( m_process, SIGNAL(receivedStderr(K3Process*, char*, int)),
+    // 	   this, SLOT(slotCollectOutput(K3Process*, char*, int)) );
+    connect( m_process, SIGNAL(receivedStdout(K3Process*, char*, int)),
+	     this, SLOT(slotCollectOutput(K3Process*, char*, int)) );
+    connect( m_process, SIGNAL(processExited(K3Process*)),
 	     this, SLOT(slotProcessExited()) );
 
     m_msInfo = QString::null;
     m_collectedOutput = QString::null;
     m_canceled = false;
 
-    if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
+    if( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) {
       emit infoMessage( i18n("Could not start %1.").arg(bin->name()), K3bJob::ERROR );
       jobFinished(false);
     }
@@ -190,7 +190,7 @@ void K3bMsInfoFetcher::slotProcessExited()
   if( m_canceled )
     return;
 
-  kdDebug() << "(K3bMsInfoFetcher) msinfo fetched" << endl;
+  kDebug() << "(K3bMsInfoFetcher) msinfo fetched" << endl;
 
   // now parse the output
   QString firstLine = m_collectedOutput.left( m_collectedOutput.find("\n") );
@@ -208,7 +208,7 @@ void K3bMsInfoFetcher::slotProcessExited()
     m_msInfo = QString::null;
   }
 
-  kdDebug() << "(K3bMsInfoFetcher) msinfo parsed: " << m_msInfo << endl;
+  kDebug() << "(K3bMsInfoFetcher) msinfo parsed: " << m_msInfo << endl;
 
   if( m_msInfo.isEmpty() ) {
     emit infoMessage( i18n("Could not retrieve multisession information from disk."), K3bJob::ERROR );
@@ -221,7 +221,7 @@ void K3bMsInfoFetcher::slotProcessExited()
 }
 
 
-void K3bMsInfoFetcher::slotCollectOutput( KProcess*, char* output, int len )
+void K3bMsInfoFetcher::slotCollectOutput( K3Process*, char* output, int len )
 {
   emit debuggingOutput( "msinfo", QString::fromLocal8Bit( output, len ) );
 

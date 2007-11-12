@@ -20,7 +20,7 @@
 #include <k3bjob.h>
 #include <k3bvideodvd.h>
 
-class KProcess;
+class K3Process;
 
 /**
  * Job to detect the clipping values for a Video DVD title.
@@ -83,7 +83,7 @@ class LIBK3B_EXPORT K3bVideoDVDTitleDetectClippingJob : public K3bJob
 
  private slots:
   void slotTranscodeStderr( const QString& );
-  void slotTranscodeExited( KProcess* );
+  void slotTranscodeExited( K3Process* );
 
  private:
   void startTranscode( int chapter );

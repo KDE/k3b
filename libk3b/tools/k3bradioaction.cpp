@@ -15,7 +15,7 @@
 
 #include "k3bradioaction.h"
 
-#include <ktoolbarbutton.h>
+
 
 K3bRadioAction::K3bRadioAction( const QString& text, const KShortcut& cut,
 				QObject* parent, const char* name )

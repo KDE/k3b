@@ -63,26 +63,26 @@ class K3bInterface : public DCOPObject
    */
   DCOPRef currentProject();
 
-  DCOPRef openProject( const KURL& url );
+  DCOPRef openProject( const KUrl& url );
 
   Q3ValueList<DCOPRef> projects();
 
   void copyMedium();
   void copyCd();
   void copyDvd();
-  void copyMedium( const KURL& dev );
-  void copyCd( const KURL& dev );
-  void copyDvd( const KURL& dev );
+  void copyMedium( const KUrl& dev );
+  void copyCd( const KUrl& dev );
+  void copyDvd( const KUrl& dev );
   void formatMedium();
   void eraseCdrw();
   void formatDvd();
-  void burnCdImage( const KURL& url );
-  void burnDvdImage( const KURL& url );
+  void burnCdImage( const KUrl& url );
+  void burnDvdImage( const KUrl& url );
 
   /**
    * Open the audio ripping window for the specified device.
    */
-  void cddaRip( const KURL& dev );
+  void cddaRip( const KUrl& dev );
   
   /**
    * Add URLs to the current active project.
@@ -90,8 +90,8 @@ class K3bInterface : public DCOPObject
    * project will be created depending on the type
    * of the first file.
    */
-  void addUrls( const KURL::List& urls );
-  void addUrl( const KURL& url );
+  void addUrls( const KUrl::List& urls );
+  void addUrl( const KUrl& url );
 
   /**
    * @return true if currently some job is running.

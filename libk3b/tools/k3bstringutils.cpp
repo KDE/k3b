@@ -31,7 +31,7 @@ QString K3b::cutToWidth( const QFontMetrics& fm, const QString& fullText, int cu
   }
 
   if( fm.width(fullText.right(1) + "..." ) > cutWidth ) {
-    kdDebug() << "(K3b::cutToWidth) not able to cut text to " << cutWidth << "!" << endl;
+    kDebug() << "(K3b::cutToWidth) not able to cut text to " << cutWidth << "!" << endl;
     return fullText.right(1) + "...";
   }
 
@@ -101,7 +101,7 @@ QString K3b::squeezeTextToWidth( const QFontMetrics& fm, const QString& fullText
     }
 
     if (letters == 2)
-      kdDebug() << "(K3b::squeezeTextToWidth) WARNING: unable to squeeze text to width " 
+      kDebug() << "(K3b::squeezeTextToWidth) WARNING: unable to squeeze text to width " 
 		<< cutWidth << endl;
     
     return squeezedText;

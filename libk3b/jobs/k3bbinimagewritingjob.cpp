@@ -88,7 +88,7 @@ bool K3bBinImageWritingJob::prepareWriter()
 
     // IMPROVEME: check if it's a cdrdao toc-file
     if( m_tocFile.right(4) == ".toc" ) {
-      kdDebug() << "(K3bBinImageWritingJob) imagefile has ending toc." << endl;
+      kDebug() << "(K3bBinImageWritingJob) imagefile has ending toc." << endl;
       usedWritingApp = K3b::CDRDAO;
     }
     else {
@@ -99,13 +99,13 @@ bool K3bBinImageWritingJob::prepareWriter()
       if( f.open( QIODevice::ReadOnly ) ) {
 	Q3TextStream fStr( &f );
 	if( fStr.read().contains( "MODE1/2352" ) ) {
-	  kdDebug() << "(K3bBinImageWritingJob) cuefile contains MODE1/2352 track. using cdrdao." << endl;
+	  kDebug() << "(K3bBinImageWritingJob) cuefile contains MODE1/2352 track. using cdrdao." << endl;
 	  usedWritingApp = K3b::CDRDAO;
 	}
 	f.close();
       }
       else
-	kdDebug() << "(K3bBinImageWritingJob) could not open file " << m_tocFile << endl;
+	kDebug() << "(K3bBinImageWritingJob) could not open file " << m_tocFile << endl;
     }
   }
   else

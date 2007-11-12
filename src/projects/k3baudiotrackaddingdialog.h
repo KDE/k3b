@@ -64,7 +64,7 @@ class K3bAudioTrackAddingDialog : public KDialogBase, public K3bJobHandler
   /**
    * \return \see QDialog::exec()
    */
-  static int addUrls( const KURL::List& urls, 
+  static int addUrls( const KUrl::List& urls, 
 		      K3bAudioDoc* doc,
 		      K3bAudioTrack* afterTrack = 0,
 		      K3bAudioTrack* parentTrack = 0,
@@ -79,7 +79,7 @@ class K3bAudioTrackAddingDialog : public KDialogBase, public K3bJobHandler
  private:
   K3bAudioTrackAddingDialog( QWidget* parent = 0, const char* name = 0 );
 
-  static KURL::List extractUrlList( const KURL::List& urls );
+  static KUrl::List extractUrlList( const KUrl::List& urls );
 
   K3bBusyWidget* m_busyWidget;
   QLabel* m_infoLabel;
@@ -89,14 +89,14 @@ class K3bAudioTrackAddingDialog : public KDialogBase, public K3bJobHandler
   QStringList m_nonLocalFiles;
   QStringList m_unsupportedFiles;
 
-  KURL::List m_urls;
+  KUrl::List m_urls;
 
   K3bAudioDoc* m_doc;
   K3bAudioTrack* m_trackAfter;
   K3bAudioTrack* m_parentTrack;
   K3bAudioDataSource* m_sourceAfter;
 
-  KURL m_cueUrl;
+  KUrl m_cueUrl;
 
   bool m_bCanceled;
 

@@ -19,7 +19,7 @@
 #include <k3bexternalbinmanager.h>
 #include <k3bdevice.h>
 
-#include <kprocess.h>
+#include <k3process.h>
 #include <ktempdir.h>
 #include <kdebug.h>
 
@@ -74,7 +74,7 @@ void K3bVideoDVDRippingPreview::generatePreview( const K3bVideoDVD::VideoDVD& dv
   m_tempDir = new KTempDir();
   m_tempDir->setAutoDelete( true );
 
-  m_process = new KProcess();
+  m_process = new K3Process();
   *m_process << bin->path;
   *m_process << "-i" << dvd.device()->blockDeviceName();
   *m_process << "-T" << QString("%1,%2").arg(title).arg(chapter);
@@ -85,12 +85,12 @@ void K3bVideoDVDRippingPreview::generatePreview( const K3bVideoDVD::VideoDVD& dv
   *m_process << "-Z" << "x200";
   *m_process << "-o" << m_tempDir->name();
 
-  connect( m_process, SIGNAL(processExited(KProcess*)),
-	   this, SLOT(slotTranscodeFinished(KProcess*)) );
-  if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) { // we use AllOutput to not pollute stdout
+  connect( m_process, SIGNAL(processExited(K3Process*)),
+	   this, SLOT(slotTranscodeFinished(K3Process*)) );
+  if( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) { // we use AllOutput to not pollute stdout
     // something went wrong when starting the program
     // it "should" be the executable
-    kdDebug() << "(K3bVideoDVDRippingPreview) Could not start transcode." << endl;
+    kDebug() << "(K3bVideoDVDRippingPreview) Could not start transcode." << endl;
     delete m_process;
     delete m_tempDir;
     m_process = 0;
@@ -109,11 +109,11 @@ void K3bVideoDVDRippingPreview::cancel()
 }
 
 
-void K3bVideoDVDRippingPreview::slotTranscodeFinished( KProcess* )
+void K3bVideoDVDRippingPreview::slotTranscodeFinished( K3Process* )
 {
   // read the image
   QString filename = m_tempDir->name() + "000000.ppm";// + tempQDir->entryList( QDir::Files ).first();
-  kdDebug() << "(K3bVideoDVDRippingPreview) reading from file " << filename << endl;
+  kDebug() << "(K3bVideoDVDRippingPreview) reading from file " << filename << endl;
   m_preview = QImage( filename );
   bool success = !m_preview.isNull() && !m_canceled;
 

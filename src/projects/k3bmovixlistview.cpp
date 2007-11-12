@@ -63,7 +63,7 @@ K3bMovixFileViewItem::K3bMovixFileViewItem( K3bMovixDoc* doc,
 					    Q3ListView* parent, 
 					    Q3ListViewItem* after )
   : K3bMovixListViewItem( doc, item, parent, after ),
-    KFileItem( 0, 0, KURL::fromPathOrURL(item->localPath()) )
+    KFileItem( 0, 0, KUrl::fromPathOrUrl(item->localPath()) )
 {
   setPixmap( 1, KFileItem::pixmap( 16, KIcon::DefaultState ) );
   setEditor( 1, LINE );
@@ -123,7 +123,7 @@ K3bMovixSubTitleViewItem::K3bMovixSubTitleViewItem( K3bMovixDoc* doc,
 						    K3bMovixFileItem* item, 
 						    K3bMovixListViewItem* parent )
   : K3bMovixListViewItem( doc, item, parent ),
-    KFileItem( 0, 0, KURL::fromPathOrURL(item->subTitleItem()->localPath()) )
+    KFileItem( 0, 0, KUrl::fromPathOrUrl(item->subTitleItem()->localPath()) )
 {
 }
 
@@ -184,7 +184,7 @@ K3bMovixListView::K3bMovixListView( K3bMovixDoc* doc, QWidget* parent, const cha
   setAllColumnsShowFocus( true );
   setDragEnabled( true );
   setItemsMovable( false );
-  setSelectionModeExt( KListView::Extended );
+  setSelectionModeExt( K3ListView::Extended );
   setSorting(0);
 
   setNoItemText( i18n("Use drag'n'drop to add files to the project.") +"\n"
@@ -195,8 +195,8 @@ K3bMovixListView::K3bMovixListView( K3bMovixDoc* doc, QWidget* parent, const cha
   connect( m_doc, SIGNAL(newMovixFileItems()), this, SLOT(slotNewFileItems()) );
   connect( m_doc, SIGNAL(movixItemRemoved(K3bMovixFileItem*)), this, SLOT(slotFileItemRemoved(K3bMovixFileItem*)) );
   connect( m_doc, SIGNAL(subTitleItemRemoved(K3bMovixFileItem*)), this, SLOT(slotSubTitleItemRemoved(K3bMovixFileItem*)) );
-  connect( this, SIGNAL(dropped(KListView*, QDropEvent*, Q3ListViewItem*)),
-	   this, SLOT(slotDropped(KListView*, QDropEvent*, Q3ListViewItem*)) );
+  connect( this, SIGNAL(dropped(K3ListView*, QDropEvent*, Q3ListViewItem*)),
+	   this, SLOT(slotDropped(K3ListView*, QDropEvent*, Q3ListViewItem*)) );
 
   // let's see what the doc already has
   slotNewFileItems();
@@ -212,7 +212,7 @@ K3bMovixListView::~K3bMovixListView()
 bool K3bMovixListView::acceptDrag(QDropEvent* e) const
 {
   // the first is for built-in item moving, the second for dropping urls
-  return ( K3bListView::acceptDrag(e) || KURLDrag::canDecode(e) );
+  return ( K3bListView::acceptDrag(e) || K3URLDrag::canDecode(e) );
 }
 
 
@@ -260,7 +260,7 @@ void K3bMovixListView::slotSubTitleItemRemoved( K3bMovixFileItem* item )
 }
 
 
-void K3bMovixListView::slotDropped( KListView*, QDropEvent* e, Q3ListViewItem* after )
+void K3bMovixListView::slotDropped( K3ListView*, QDropEvent* e, Q3ListViewItem* after )
 {
   if( !e->isAccepted() )
     return;
@@ -283,7 +283,7 @@ void K3bMovixListView::slotDropped( KListView*, QDropEvent* e, Q3ListViewItem* a
 	itemAfter = item;
       }
       else
-	kdDebug() << "(K3bMovixListView) I don't move subtitle items!" << endl;
+	kDebug() << "(K3bMovixListView) I don't move subtitle items!" << endl;
 
       ++it;
     }
@@ -291,10 +291,10 @@ void K3bMovixListView::slotDropped( KListView*, QDropEvent* e, Q3ListViewItem* a
     sort();  // This is so lame!
   }
   else {
-    KURL::List urls;
-    KURLDrag::decode( e, urls );
+    KUrl::List urls;
+    K3URLDrag::decode( e, urls );
 
-    for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
+    for( KUrl::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
       m_doc->addMovixFile( *it, pos++ );
     }
   }
@@ -312,12 +312,12 @@ Q3DragObject* K3bMovixListView::dragObject()
     return 0;
 
   Q3PtrListIterator<Q3ListViewItem> it(list);
-  KURL::List urls;
+  KUrl::List urls;
 
   for( ; it.current(); ++it )
-    urls.append( KURL( ((K3bMovixListViewItem*)it.current())->fileItem()->localPath() ) );
+    urls.append( KUrl( ((K3bMovixListViewItem*)it.current())->fileItem()->localPath() ) );
 
-  return KURLDrag::newDrag( urls, viewport() );
+  return K3URLDrag::newDrag( urls, viewport() );
 }
 
 

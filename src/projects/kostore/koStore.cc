@@ -87,7 +87,7 @@ KoStore* KoStore::createStore( const QString& fileName, Mode mode, const Q3CStri
 //   case Directory:
 //     return new KoDirectoryStore( fileName /* should be a dir name.... */, mode );
   default:
-    kdWarning(s_area) << "Unsupported backend requested for KoStore : " << backend << endl;
+    kWarning(s_area) << "Unsupported backend requested for KoStore : " << backend << endl;
     return 0L;
   }
 }
@@ -110,17 +110,17 @@ KoStore* KoStore::createStore( QIODevice *device, Mode mode, const Q3CString & a
 //   case Tar:
 //     return new KoTarStore( device, mode, appIdentification );
 //   case Directory:
-//     kdError(s_area) << "Can't create a Directory store for a memory buffer!" << endl;
+//     kError(s_area) << "Can't create a Directory store for a memory buffer!" << endl;
     // fallback
   case Zip:
     return new KoZipStore( device, mode, appIdentification );
   default:
-    kdWarning(s_area) << "Unsupported backend requested for KoStore : " << backend << endl;
+    kWarning(s_area) << "Unsupported backend requested for KoStore : " << backend << endl;
     return 0L;
   }
 }
 
-KoStore* KoStore::createStore( QWidget* window, const KURL& url, Mode mode, const Q3CString & appIdentification, Backend backend )
+KoStore* KoStore::createStore( QWidget* window, const KUrl& url, Mode mode, const Q3CString & appIdentification, Backend backend )
 {
   if ( url.isLocalFile() )
     return createStore(url.path(), mode,  appIdentification, backend );
@@ -138,7 +138,7 @@ KoStore* KoStore::createStore( QWidget* window, const KURL& url, Mode mode, cons
 
     if (!downloaded)
     {
-      kdError(s_area) << "Could not download file!" << endl;
+      kError(s_area) << "Could not download file!" << endl;
       backend = DefaultFormat; // will create a "bad" store (bad()==true)
     }
     else if ( backend == Auto )
@@ -158,7 +158,7 @@ KoStore* KoStore::createStore( QWidget* window, const KURL& url, Mode mode, cons
   case Zip:
     return new KoZipStore( window, url, tmpFile, mode, appIdentification );
   default:
-    kdWarning(s_area) << "Unsupported backend requested for KoStore (KURL) : " << backend << endl;
+    kWarning(s_area) << "Unsupported backend requested for KoStore (KUrl) : " << backend << endl;
     KMessageBox::sorry( window,
         i18n("The directory mode is not supported for remote locations."),
         i18n("KOffice Storage"));
@@ -195,24 +195,24 @@ bool KoStore::open( const QString & _name )
 
   if ( m_bIsOpen )
   {
-    kdWarning(s_area) << "KoStore: File is already opened" << endl;
+    kWarning(s_area) << "KoStore: File is already opened" << endl;
     //return KIO::ERR_INTERNAL;
     return false;
   }
 
   if ( m_sName.length() > 512 )
   {
-      kdError(s_area) << "KoStore: Filename " << m_sName << " is too long" << endl;
+      kError(s_area) << "KoStore: Filename " << m_sName << " is too long" << endl;
       //return KIO::ERR_MALFORMED_URL;
       return false;
   }
 
   if ( m_mode == Write )
   {
-    kdDebug(s_area) << "KoStore: opening for writing '" << m_sName << "'" << endl;
+    kDebug(s_area) << "KoStore: opening for writing '" << m_sName << "'" << endl;
     if ( m_strFiles.findIndex( m_sName ) != -1 ) // just check if it's there
     {
-      kdWarning(s_area) << "KoStore: Duplicate filename " << m_sName << endl;
+      kWarning(s_area) << "KoStore: Duplicate filename " << m_sName << endl;
       //return KIO::ERR_FILE_ALREADY_EXIST;
       return false;
     }
@@ -225,7 +225,7 @@ bool KoStore::open( const QString & _name )
   }
   else if ( m_mode == Read )
   {
-    kdDebug(s_area) << "Opening for reading '" << m_sName << "'" << endl;
+    kDebug(s_area) << "Opening for reading '" << m_sName << "'" << endl;
     if ( !openRead( m_sName ) )
       return false;
   }
@@ -244,11 +244,11 @@ bool KoStore::isOpen() const
 
 bool KoStore::close()
 {
-  kdDebug(s_area) << "KoStore: Closing" << endl;
+  kDebug(s_area) << "KoStore: Closing" << endl;
 
   if ( !m_bIsOpen )
   {
-    kdWarning(s_area) << "KoStore: You must open before closing" << endl;
+    kWarning(s_area) << "KoStore: You must open before closing" << endl;
     //return KIO::ERR_INTERNAL;
     return false;
   }
@@ -264,9 +264,9 @@ bool KoStore::close()
 QIODevice* KoStore::device() const
 {
   if ( !m_bIsOpen )
-    kdWarning(s_area) << "KoStore: You must open before asking for a device" << endl;
+    kWarning(s_area) << "KoStore: You must open before asking for a device" << endl;
   if ( m_mode != Read )
-    kdWarning(s_area) << "KoStore: Can not get device from store that is opened for writing" << endl;
+    kWarning(s_area) << "KoStore: Can not get device from store that is opened for writing" << endl;
   return m_stream;
 }
 
@@ -276,13 +276,13 @@ QByteArray KoStore::read( unsigned long int max )
 
   if ( !m_bIsOpen )
   {
-    kdWarning(s_area) << "KoStore: You must open before reading" << endl;
+    kWarning(s_area) << "KoStore: You must open before reading" << endl;
     data.resize( 0 );
     return data;
   }
   if ( m_mode != Read )
   {
-    kdError(s_area) << "KoStore: Can not read from store that is opened for writing" << endl;
+    kError(s_area) << "KoStore: Can not read from store that is opened for writing" << endl;
     data.resize( 0 );
     return data;
   }
@@ -317,12 +317,12 @@ Q_LONG KoStore::read( char *_buffer, Q_ULONG _len )
 {
   if ( !m_bIsOpen )
   {
-    kdError(s_area) << "KoStore: You must open before reading" << endl;
+    kError(s_area) << "KoStore: You must open before reading" << endl;
     return -1;
   }
   if ( m_mode != Read )
   {
-    kdError(s_area) << "KoStore: Can not read from store that is opened for writing" << endl;
+    kError(s_area) << "KoStore: Can not read from store that is opened for writing" << endl;
     return -1;
   }
 
@@ -343,12 +343,12 @@ Q_LONG KoStore::write( const char* _data, Q_ULONG _len )
 
   if ( !m_bIsOpen )
   {
-    kdError(s_area) << "KoStore: You must open before writing" << endl;
+    kError(s_area) << "KoStore: You must open before writing" << endl;
     return 0L;
   }
   if ( m_mode != Write  )
   {
-    kdError(s_area) << "KoStore: Can not write to store that is opened for reading" << endl;
+    kError(s_area) << "KoStore: Can not write to store that is opened for reading" << endl;
     return 0L;
   }
 
@@ -363,12 +363,12 @@ QIODevice::Offset KoStore::size() const
 {
   if ( !m_bIsOpen )
   {
-    kdWarning(s_area) << "KoStore: You must open before asking for a size" << endl;
+    kWarning(s_area) << "KoStore: You must open before asking for a size" << endl;
     return static_cast<QIODevice::Offset>(-1);
   }
   if ( m_mode != Read )
   {
-    kdWarning(s_area) << "KoStore: Can not get size from store that is opened for writing" << endl;
+    kWarning(s_area) << "KoStore: Can not get size from store that is opened for writing" << endl;
     return static_cast<QIODevice::Offset>(-1);
   }
   return m_iSize;
@@ -376,7 +376,7 @@ QIODevice::Offset KoStore::size() const
 
 bool KoStore::enterDirectory( const QString& directory )
 {
-  //kdDebug(s_area) << "KoStore::enterDirectory " << directory << endl;
+  //kDebug(s_area) << "KoStore::enterDirectory " << directory << endl;
   int pos;
   bool success = true;
   QString tmp( directory );

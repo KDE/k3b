@@ -39,11 +39,11 @@ QWidget* K3bWidgetFactoryAction::widget( QWidget* container )
             return toolBar->getWidget( itemId( index ) );
         }
         else {
-            kdDebug() << "(K3bWidgetFactoryAction) container is no KToolBar: " << container << endl;
+            kDebug() << "(K3bWidgetFactoryAction) container is no KToolBar: " << container << endl;
         }
     }
     else {
-        kdDebug() << "(K3bWidgetFactoryAction) could not find container " << container << endl;
+        kDebug() << "(K3bWidgetFactoryAction) could not find container " << container << endl;
     }
 
     return 0;
@@ -64,7 +64,7 @@ int K3bWidgetFactoryAction::plug( QWidget* container, int index )
         addContainer( container, id );
         connect( toolBar, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
 
-        kdDebug() << "(K3bWidgetFactoryAction) added widget " << widget << " for container " << container << " with id " << id << endl;
+        kDebug() << "(K3bWidgetFactoryAction) added widget " << widget << " for container " << container << " with id " << id << endl;
 
         return containerCount() - 1;
     }

@@ -18,8 +18,8 @@
 #include <k3bcore.h>
 
 #include <kaction.h>
-#include <kpopupmenu.h>
-#include <ktoolbarbutton.h>
+#include <kmenu.h>
+
 #include <kiconloader.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -68,13 +68,13 @@ public:
           m_contextMenu( 0 ) {
     }
 
-    KPopupMenu* contextMenu();
+    KMenu* contextMenu();
 
     Q3ValueList<int> iconSizes;
 
 private:
     K3bToolBox* m_parent;
-    KPopupMenu* m_contextMenu;
+    KMenu* m_contextMenu;
 };
 
 static int s_toolboxCnt = 0;
@@ -86,7 +86,7 @@ K3bToolBox::K3bToolBox( QWidget* parent, const char* name )
     setMovingEnabled(false);
     setFlat(true);
     setIconSize( 16 );
-    setEnableContextMenu( false );
+    setContextMenuEnabled( false );
 
     loadSettings();
 }
@@ -168,7 +168,7 @@ KToolBarButton* K3bToolBox::addToggleButton( KToggleAction* action )
 }
 
 
-void K3bToolBox::addWidgetAction( KWidgetAction* action )
+void K3bToolBox::addWidgetAction( K3WidgetAction* action )
 {
   addWidget( action->widget() );
 }
@@ -180,26 +180,26 @@ void K3bToolBox::clear()
 
 
 // copied mostly from ktoolbar.cpp
-KPopupMenu* K3bToolBox::Private::contextMenu()
+KMenu* K3bToolBox::Private::contextMenu()
 {
   if ( m_contextMenu )
     return m_contextMenu;
 
   // Construct our contextMenu popup menu. Name it qt_dockwidget_internal so it
   // won't be deleted by QToolBar::clear().
-  m_contextMenu = new KPopupMenu( m_parent, "qt_dockwidget_internal" );
+  m_contextMenu = new KMenu( m_parent, "qt_dockwidget_internal" );
   m_contextMenu->insertTitle(i18n("Toolbox Menu"));
 
-  KPopupMenu *mode = new KPopupMenu( m_contextMenu, "mode" );
+  KMenu *mode = new KMenu( m_contextMenu, "mode" );
   mode->insertItem( i18n("Icons Only"), CONTEXT_ICONS );
   mode->insertItem( i18n("Text Only"), CONTEXT_TEXT );
   mode->insertItem( i18n("Text Alongside Icons"), CONTEXT_TEXTRIGHT );
   mode->insertItem( i18n("Text Under Icons"), CONTEXT_TEXTUNDER );
 
-  KPopupMenu *size = new KPopupMenu( m_contextMenu, "size" );
+  KMenu *size = new KMenu( m_contextMenu, "size" );
   size->insertItem( i18n("Default"), CONTEXT_ICONSIZES );
   // Query the current theme for available sizes
-  KIconTheme *theme = KGlobal::instance()->iconLoader()->theme();
+  KIconTheme *theme = KIconLoader::global()->theme();
   Q3ValueList<int> avSizes;
   if (theme) {
       avSizes = theme->querySizes( KIcon::Toolbar);

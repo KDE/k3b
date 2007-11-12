@@ -21,7 +21,7 @@
 #include <QLabel>
 
 class K3bTimeoutWidget;
-class KActiveLabel;
+class K3ActiveLabel;
 class KPushButton;
 class QLabel;
 

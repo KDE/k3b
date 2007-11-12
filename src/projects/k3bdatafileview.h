@@ -71,7 +71,7 @@ class K3bDataFileView : public K3bListView
   void slotDataItemRemoved( K3bDataItem* );
   void slotExecuted( Q3ListViewItem* );
   void slotDropped( QDropEvent* e, Q3ListViewItem* after, Q3ListViewItem* parent );
-  void showPopupMenu( KListView*, Q3ListViewItem* _item, const QPoint& );
+  void showPopupMenu( K3ListView*, Q3ListViewItem* _item, const QPoint& );
   void slotRenameItem();
   void slotRemoveItem();
   void slotNewDir();
@@ -112,7 +112,7 @@ class K3bDataFileView : public K3bListView
   QMap<K3bDataItem*, K3bDataViewItem*> m_itemMap;
 
   // used for the urladdingdialog hack
-  KURL::List m_addUrls;
+  KUrl::List m_addUrls;
   K3bDirItem* m_addParentDir;
 };
 

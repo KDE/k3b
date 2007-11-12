@@ -27,7 +27,7 @@
 #include <Q3PtrList>
 
 // KDE-includes
-#include <kprocess.h>
+#include <k3process.h>
 #include <kurl.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
@@ -140,22 +140,22 @@ K3b::Msf K3bVcdDoc::length() const
 }
 
 
-bool K3bVcdDoc::isImage( const KURL& url )
+bool K3bVcdDoc::isImage( const KUrl& url )
 {
     QImage p;
     return p.load( QFile::encodeName( url.path() ) );
 }
 
-void K3bVcdDoc::addUrls( const KURL::List& urls )
+void K3bVcdDoc::addUrls( const KUrl::List& urls )
 {
     // make sure we add them at the end even if urls are in the queue
     addTracks( urls, 99 );
 }
 
-void K3bVcdDoc::addTracks( const KURL::List& urls, uint position )
+void K3bVcdDoc::addTracks( const KUrl::List& urls, uint position )
 {
-    KURL::List::ConstIterator end( urls.end() );
-    for ( KURL::List::ConstIterator it = urls.begin(); it != end; ++it ) {
+    KUrl::List::ConstIterator end( urls.end() );
+    for ( KUrl::List::ConstIterator it = urls.begin(); it != end; ++it ) {
         urlsToAdd.enqueue( new PrivateUrlToAdd( K3b::convertToLocalUrl(*it), position++ ) );
     }
 
@@ -173,12 +173,12 @@ void K3bVcdDoc::slotWorkUrlQueue()
             lastAddedPosition = m_tracks->count();
 
         if ( !item->url.isLocalFile() ) {
-            kdDebug() << item->url.path() << " no local file" << endl;
+            kDebug() << item->url.path() << " no local file" << endl;
             return ;
         }
 
         if ( !QFile::exists( item->url.path() ) ) {
-            kdDebug() << "(K3bVcdDoc) file not found: " << item->url.path() << endl;
+            kDebug() << "(K3bVcdDoc) file not found: " << item->url.path() << endl;
             m_notFoundFiles.append( item->url.path() );
             return ;
         }
@@ -201,7 +201,7 @@ void K3bVcdDoc::slotWorkUrlQueue()
     }
 }
 
-K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
+K3bVcdTrack* K3bVcdDoc::createTrack( const KUrl& url )
 {
     char filename[ 255 ];
     QString error_string = "";
@@ -238,7 +238,7 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
                                                       + i18n( "Note: Forcing MPEG2 as VCD is not supported by "
                                                               "some standalone DVD players." ),
                                                       i18n( "Information" ),
-                                                      KStdGuiItem::ok().text(),
+                                                      KStandardGuiItem::ok().text(),
                                                       i18n( "Forcing VCD" ) ) == KMessageBox::No );
                 if ( force ) {
                     setVcdType( vcdTypes( 1 ) );
@@ -303,7 +303,7 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KURL& url )
     return 0;
 }
 
-void K3bVcdDoc::addTrack( const KURL& url, uint position )
+void K3bVcdDoc::addTrack( const KUrl& url, uint position )
 {
     urlsToAdd.enqueue( new PrivateUrlToAdd( url, position ) );
 
@@ -314,7 +314,7 @@ void K3bVcdDoc::addTrack( const KURL& url, uint position )
 void K3bVcdDoc::addTrack( K3bVcdTrack* track, uint position )
 {
     if ( m_tracks->count() >= 98 ) {
-        kdDebug() << "(K3bVcdDoc) VCD Green Book only allows 98 tracks." << endl;
+        kDebug() << "(K3bVcdDoc) VCD Green Book only allows 98 tracks." << endl;
         // TODO: show some messagebox
         delete track;
         return ;
@@ -457,7 +457,7 @@ void K3bVcdDoc::setPbcTracks()
 
     if ( m_tracks ) {
         int count = m_tracks->count();
-        kdDebug() << QString( "K3bVcdDoc::setPbcTracks() - we have %1 tracks in list." ).arg( count ) << endl;
+        kDebug() << QString( "K3bVcdDoc::setPbcTracks() - we have %1 tracks in list." ).arg( count ) << endl;
 
         Q3PtrListIterator<K3bVcdTrack> iterTrack( *m_tracks );
         K3bVcdTrack* track;
@@ -583,7 +583,7 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
         QDomNode item = vcdNodes.item( i );
         QString name = item.nodeName();
 
-        kdDebug() << QString( "(K3bVcdDoc::loadDocumentData) nodeName = '%1'" ).arg( name ) << endl;
+        kDebug() << QString( "(K3bVcdDoc::loadDocumentData) nodeName = '%1'" ).arg( name ) << endl;
 
         if ( name == "volumeId" )
             vcdOptions() ->setVolumeId( item.toElement().text() );
@@ -648,7 +648,7 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
         if ( !QFile::exists( url ) )
             m_notFoundFiles.append( url );
         else {
-            KURL k;
+            KUrl k;
             k.setPath( url );
             if ( K3bVcdTrack * track = createTrack( k ) ) {
                 track ->setPlayTime( trackElem.attribute( "playtime", "1" ).toInt() );

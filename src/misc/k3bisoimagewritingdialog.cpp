@@ -140,7 +140,7 @@ void K3bIsoImageWritingDialog::init()
     // last written image because that's what most users want
     KConfig* c = k3bcore->config();
     c->setGroup( configGroup() );
-    QString image = c->readPathEntry( "last written image" );
+    QString image = c->readPathEntry( "last written image", QString() );
     if( QFile::exists( image ) )
       m_editImagePath->setURL( image );
   }
@@ -154,7 +154,7 @@ void K3bIsoImageWritingDialog::setupGui()
   // image
   // -----------------------------------------------------------------------
   Q3GroupBox* groupImageUrl = new Q3GroupBox( 1, Qt::Horizontal, i18n("Image to Burn"), frame );
-  m_editImagePath = new KURLRequester( groupImageUrl );
+  m_editImagePath = new KUrlRequester( groupImageUrl );
   m_editImagePath->setMode( KFile::File|KFile::ExistingOnly );
   m_editImagePath->setCaption( i18n("Choose Image File") );
   m_editImagePath->setFilter( i18n("*.iso *.ISO|ISO9660 Image Files") + "\n"
@@ -174,8 +174,8 @@ void K3bIsoImageWritingDialog::setupGui()
   m_infoView->setFullWidth(true);
   m_infoView->setSelectionMode( Q3ListView::NoSelection );
 
-  connect( m_infoView, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
-	   this, SLOT(slotContextMenu(KListView*, Q3ListViewItem*, const QPoint&)) );
+  connect( m_infoView, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)),
+	   this, SLOT(slotContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)) );
 
   m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
 
@@ -248,7 +248,7 @@ void K3bIsoImageWritingDialog::slotStartClicked()
 
   K3bIso9660 isoFs( imagePath() );
   if( isoFs.open() ) {
-    if( K3b::imageFilesize( KURL::fromPathOrURL( imagePath() ) ) < (KIO::filesize_t)(isoFs.primaryDescriptor().volumeSpaceSize*2048) ) {
+    if( K3b::imageFilesize( KUrl::fromPathOrUrl( imagePath() ) ) < (KIO::filesize_t)(isoFs.primaryDescriptor().volumeSpaceSize*2048) ) {
       if( KMessageBox::questionYesNo( this, 
 				      i18n("<p>This image has an invalid file size."
 					   "If it has been downloaded make sure the download is complete."
@@ -265,7 +265,7 @@ void K3bIsoImageWritingDialog::slotStartClicked()
   // save the path
   KConfig* c = k3bcore->config();
   c->setGroup( configGroup() );
-  if( c->readPathEntry( "last written image" ).isEmpty() )
+  if( c->readPathEntry( "last written image", QString() ).isEmpty() )
     c->writePathEntry( "last written image", imagePath() );
 
   // create a progresswidget
@@ -311,7 +311,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
   QFileInfo info( path );
   if( info.isFile() ) {
 
-    KIO::filesize_t imageSize = K3b::filesize( KURL::fromPathOrURL(path) );
+    KIO::filesize_t imageSize = K3b::filesize( KUrl::fromPathOrUrl(path) );
 
     // ------------------------------------------------
     // Test for iso9660 image
@@ -426,7 +426,7 @@ void K3bIsoImageWritingDialog::slotWriterChanged()
 }
 
 
-void K3bIsoImageWritingDialog::setImage( const KURL& url )
+void K3bIsoImageWritingDialog::setImage( const KUrl& url )
 {
   d->imageForced = true;
 #if KDE_IS_VERSION(3,4,0)
@@ -485,7 +485,7 @@ void K3bIsoImageWritingDialog::slotMd5JobFinished( bool success )
 }
 
 
-void K3bIsoImageWritingDialog::slotContextMenu( KListView*, Q3ListViewItem*, const QPoint& pos )
+void K3bIsoImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& pos )
 {
   if( !d->haveMd5Sum )
     return;
@@ -528,7 +528,7 @@ void K3bIsoImageWritingDialog::loadUserDefaults( KConfigBase* c )
   m_writerSelectionWidget->loadConfig( c );
 
   if( !d->imageForced ) {
-    QString image = c->readPathEntry( "image path", c->readPathEntry( "last written image" ) );
+    QString image = c->readPathEntry( "image path", c->readPathEntry( "last written image", QString() ) );
     if( QFile::exists( image ) )
       m_editImagePath->setURL( image );
   }
@@ -560,20 +560,20 @@ void K3bIsoImageWritingDialog::loadK3bDefaults()
 
 QString K3bIsoImageWritingDialog::imagePath() const
 {
-  return K3b::convertToLocalUrl( KURL::fromPathOrURL( m_editImagePath->url() ) ).path();
+  return K3b::convertToLocalUrl( KUrl::fromPathOrUrl( m_editImagePath->url() ) ).path();
 }
 
 
 void K3bIsoImageWritingDialog::dragEnterEvent( QDragEnterEvent* e )
 {
-  e->accept( KURLDrag::canDecode(e) );
+  e->accept( K3URLDrag::canDecode(e) );
 }
 
 
 void K3bIsoImageWritingDialog::dropEvent( QDropEvent* e )
 {
-  KURL::List urls;
-  KURLDrag::decode( e, urls );
+  KUrl::List urls;
+  K3URLDrag::decode( e, urls );
 #if KDE_IS_VERSION(3,4,0)
   m_editImagePath->setKURL( urls.first() );
 #else

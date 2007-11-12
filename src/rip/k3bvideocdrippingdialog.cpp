@@ -82,7 +82,7 @@ void K3bVideoCdRippingDialog::setupGui()
     groupDirectoryLayout->setAlignment( Qt::AlignTop );
 
     QLabel* rippathLabel = new QLabel( i18n( "Rip files to:" ), groupDirectory );
-    m_editDirectory = new KURLRequester( groupDirectory, "m_editDirectory" );
+    m_editDirectory = new KUrlRequester( groupDirectory, "m_editDirectory" );
     m_editDirectory->setURL( QDir::homePath() );
     m_editDirectory->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
@@ -180,7 +180,7 @@ void K3bVideoCdRippingDialog::slotStartClicked()
         if( KMessageBox::questionYesNoList( this,
                                 i18n("Continue although the folder is not empty?"),
                                 filesExists,
-                                i18n("Files Exist"),KStdGuiItem::cont(),KStdGuiItem::cancel() ) == KMessageBox::No )
+                                i18n("Files Exist"),KStandardGuiItem::cont(),KStandardGuiItem::cancel() ) == KMessageBox::No )
         return;
 
     m_videooptions ->setVideoCdIgnoreExt( m_ignoreExt ->isChecked() );
@@ -204,7 +204,7 @@ void K3bVideoCdRippingDialog::slotFreeSpace(const QString&,
 						  unsigned long,
 						  unsigned long kbAvail)
 {
-    m_labelFreeSpace->setText( KIO::convertSizeFromKB(kbAvail) );
+    m_labelFreeSpace->setText( KIO::convertSizeFromKiB(kbAvail) );
 
     m_freeSpace = kbAvail;
 

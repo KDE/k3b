@@ -244,11 +244,11 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 	if( m_readerDevice->read10( buffer, 2048, (*it).lastSector().lba(), 1 ) ||
 	    m_readerDevice->read10( buffer, 2048, (*it).lastSector().lba(), 1 ) ) {
 	  d->dataSessionProbablyTAORecorded.append(false);
-	  kdDebug() << "(K3bCdCopyJob) track " << i << " probably DAO recorded." << endl;
+	  kDebug() << "(K3bCdCopyJob) track " << i << " probably DAO recorded." << endl;
 	}
 	else {
 	  d->dataSessionProbablyTAORecorded.append(true);
-	  kdDebug() << "(K3bCdCopyJob) track " << i << " probably TAO recorded." << endl;
+	  kDebug() << "(K3bCdCopyJob) track " << i << " probably TAO recorded." << endl;
 	}
       }
 
@@ -496,7 +496,7 @@ void K3bCdCopyJob::cancel()
 
 bool K3bCdCopyJob::prepareImageFiles()
 {
-  kdDebug() << "(K3bCdCopyJob) prepareImageFiles()" << endl;
+  kDebug() << "(K3bCdCopyJob) prepareImageFiles()" << endl;
 
   d->imageNames.clear();
   d->infNames.clear();
@@ -529,7 +529,7 @@ bool K3bCdCopyJob::prepareImageFiles()
     if( !tempDirReady ) {
       QDir dir( m_tempPath );
       m_tempPath = K3b::findUniqueFilePrefix( "k3bCdCopy", m_tempPath );
-      kdDebug() << "(K3bCdCopyJob) creating temp dir: " << m_tempPath << endl;
+      kDebug() << "(K3bCdCopyJob) creating temp dir: " << m_tempPath << endl;
       if( !dir.mkdir( m_tempPath, true ) ) {
 	emit infoMessage( i18n("Unable to create temporary directory '%1'.").arg(m_tempPath), ERROR );
 	return false;
@@ -552,9 +552,9 @@ bool K3bCdCopyJob::prepareImageFiles()
       ++i;
     }
 
-    kdDebug() << "(K3bCdCopyJob) created image filenames:" << endl;
+    kDebug() << "(K3bCdCopyJob) created image filenames:" << endl;
     for( unsigned int i = 0; i < d->imageNames.count(); ++i )
-      kdDebug() << "(K3bCdCopyJob) " << d->imageNames[i] << endl;
+      kDebug() << "(K3bCdCopyJob) " << d->imageNames[i] << endl;
 
     return true;
   }
@@ -1104,7 +1104,7 @@ void K3bCdCopyJob::cleanup()
 
     // remove the tempdir created in prepareImageFiles()
     if( d->deleteTempDir ) {
-      KIO::NetAccess::del( KURL::fromPathOrURL(m_tempPath), 0 );
+      KIO::NetAccess::del( KUrl::fromPathOrUrl(m_tempPath), 0 );
       d->deleteTempDir = false;
     }
   }

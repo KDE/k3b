@@ -48,7 +48,7 @@
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kdebug.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kaboutdata.h>
 #include <kactionclasses.h>
 
@@ -334,14 +334,14 @@ void K3bWelcomeWidget::Display::paintEvent( QPaintEvent* )
 
 void K3bWelcomeWidget::Display::dragEnterEvent( QDragEnterEvent* event )
 {
-  event->accept( KURLDrag::canDecode(event) );
+  event->accept( K3URLDrag::canDecode(event) );
 }
 
 
 void K3bWelcomeWidget::Display::dropEvent( QDropEvent* e )
 {
-  KURL::List urls;
-  KURLDrag::decode( e, urls );
+  KUrl::List urls;
+  K3URLDrag::decode( e, urls );
   emit dropped( urls );
 }
 
@@ -354,7 +354,7 @@ K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent, const ch
   main = new Display( this );
   addChild( main );
 
-  connect( main, SIGNAL(dropped(const KURL::List&)), m_mainWindow, SLOT(addUrls(const KURL::List&)) );
+  connect( main, SIGNAL(dropped(const KUrl::List&)), m_mainWindow, SLOT(addUrls(const KUrl::List&)) );
 
   connect( kapp, SIGNAL(appearanceChanged()), main, SLOT(update()) );
 }
@@ -427,7 +427,7 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
 {
   if( e->button() == Qt::RightButton ) {
     QMap<int, KAction*> map;
-    KPopupMenu addPop;
+    KMenu addPop;
 
     for ( int i = 0; s_allActions[i]; ++i ) {
         if ( s_allActions[i][0] != '_' ) {
@@ -445,7 +445,7 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
 
     QWidget* widgetAtPos = viewport()->childAt(e->pos());
     if( widgetAtPos && widgetAtPos->inherits( "K3bFlatButton" ) ) {
-      KPopupMenu pop;
+      KMenu pop;
       removeAction = pop.insertItem( SmallIcon("remove"), i18n("Remove Button") );
       if ( addPop.count() > 0 )
           pop.insertItem( i18n("Add Button"), &addPop );
@@ -472,7 +472,7 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
 
 void K3bWelcomeWidget::slotMoreActions()
 {
-  KPopupMenu popup;
+  KMenu popup;
 
   for ( int i = 0; s_allActions[i]; ++i ) {
       if ( s_allActions[i][0] == '_' ) {

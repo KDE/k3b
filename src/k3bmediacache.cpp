@@ -33,6 +33,7 @@
 #include <QCustomEvent>
 #include <Q3ValueList>
 #include <Q3PtrList>
+#include <krandom.h>
 
 
 // ////////////////////////////////////////////////////////////////////////////////
@@ -197,7 +198,7 @@ int K3bMediaCache::blockDevice( K3bDevice::Device* dev )
       e->mutex.lock();
 
       // create (hopefully) unique id
-      e->blockedId = KApplication::random();
+      e->blockedId = KRandom::random();
 
       // let the info go
       e->mutex.unlock();
@@ -318,7 +319,7 @@ QString K3bMediaCache::mediumString( K3bDevice::Device* device, bool useContent 
 
 void K3bMediaCache::clearDeviceList()
 {
-  kdDebug() << k_funcinfo << endl;
+  kDebug() << k_funcinfo << endl;
 
   // make all the threads stop
   for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = d->deviceMap.begin();
@@ -329,7 +330,7 @@ void K3bMediaCache::clearDeviceList()
   // and remove them
   for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = d->deviceMap.begin();
        it != d->deviceMap.end(); ++it ) {
-    kdDebug() << k_funcinfo << " waiting for info thread " << it.key()->blockDeviceName() << " to finish" << endl;
+    kDebug() << k_funcinfo << " waiting for info thread " << it.key()->blockDeviceName() << " to finish" << endl;
     it.data()->thread->wait();
     delete it.data();
   }

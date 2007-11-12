@@ -18,7 +18,7 @@
 #define K3B_PROCESS_H
 
 
-#include <kprocess.h>
+#include <k3process.h>
 #include <qstring.h>
 //Added by qt3to4:
 #include <Q3CString>
@@ -28,7 +28,7 @@ class K3bExternalBin;
 
 
 /**
- * This is an enhanced KProcess.
+ * This is an enhanced K3Process.
  * It splits the stderr output to lines making sure the client gets every line as it 
  * was written by the process.
  * Aditionally one may set raw stdout and stdin handling using the stdin() and stdout() methods
@@ -37,7 +37,7 @@ class K3bExternalBin;
  * K3bProcesses like used in K3bDataJob to duplicate mkisofs' stdout to the stdin of the writer 
  * (cdrecord or cdrdao)
  */
-class LIBK3B_EXPORT K3bProcess : public KProcess
+class LIBK3B_EXPORT K3bProcess : public K3Process
 {
   Q_OBJECT
     
@@ -136,8 +136,8 @@ class LIBK3B_EXPORT K3bProcess : public KProcess
   bool closeStdout();
 
  private slots:
-  void slotSplitStderr( KProcess*, char*, int );
-  void slotSplitStdout( KProcess*, char*, int );
+  void slotSplitStderr( K3Process*, char*, int );
+  void slotSplitStdout( K3Process*, char*, int );
 
  signals:
   void stderrLine( const QString& line );
@@ -151,22 +151,22 @@ class LIBK3B_EXPORT K3bProcess : public KProcess
 
  protected:
   /**
-   * reimplemeted from KProcess
+   * reimplemeted from K3Process
    */
   int commSetupDoneP();
 
   /**
-   * reimplemeted from KProcess
+   * reimplemeted from K3Process
    */
   int commSetupDoneC();
 
   /**
-   * reimplemeted from KProcess
+   * reimplemeted from K3Process
    */
   int setupCommunication( Communication comm );
 
   /**
-   * reimplemeted from KProcess
+   * reimplemeted from K3Process
    */
   void commClose();
 
@@ -184,22 +184,22 @@ class LIBK3B_EXPORT K3bProcessOutputCollector: public QObject
   Q_OBJECT
     
  public:
-  K3bProcessOutputCollector( KProcess* );
-  void setProcess( KProcess* );
+  K3bProcessOutputCollector( K3Process* );
+  void setProcess( K3Process* );
   
   const QString& output() const { return m_gatheredOutput; }
   const QString& stderrOutput() const { return m_stderrOutput; }
   const QString& stdoutOutput() const { return m_stdoutOutput; }
   
  private slots:
-  void slotGatherStderr( KProcess*, char*, int );
-  void slotGatherStdout( KProcess*, char*, int );
+  void slotGatherStderr( K3Process*, char*, int );
+  void slotGatherStdout( K3Process*, char*, int );
   
  private:
   QString m_gatheredOutput;
   QString m_stderrOutput;
   QString m_stdoutOutput;
-  KProcess* m_process;
+  K3Process* m_process;
 };
 
 

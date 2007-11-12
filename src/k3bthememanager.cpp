@@ -65,7 +65,7 @@ const QPixmap& K3bTheme::pixmap( const QString& name ) const
   if( QFile::exists( m_path + name ) )
     return *m_pixmapMap.insert( name, QPixmap( m_path + name ) );
 
-  kdDebug() << "(K3bTheme) " << m_name << ": could not load image " << name << endl;
+  kDebug() << "(K3bTheme) " << m_name << ": could not load image " << name << endl;
 
   return m_emptyPixmap;
 }
@@ -276,7 +276,7 @@ void K3bThemeManager::loadThemes()
 	// check for all nessessary pixmaps (this is a little evil hacking)
 	for( int i = 0; i <= K3bTheme::WELCOME_BG; ++i ) {
 	  if( !QFile::exists( themeDir + K3bTheme::filenameForPixmapType( (K3bTheme::PixmapType)i ) ) ) {
-	    kdDebug() << "(K3bThemeManager) theme misses pixmap: " << K3bTheme::filenameForPixmapType( (K3bTheme::PixmapType)i ) << endl;
+	    kDebug() << "(K3bThemeManager) theme misses pixmap: " << K3bTheme::filenameForPixmapType( (K3bTheme::PixmapType)i ) << endl;
 	    themeValid = false;
 	    break;
 	  }

@@ -23,7 +23,7 @@
 #include <q3valuevector.h>
 
 class K3bProcess;
-class KProcess;
+class K3Process;
 
 
 class K3bAudioNormalizeJob : public K3bJob
@@ -42,7 +42,7 @@ class K3bAudioNormalizeJob : public K3bJob
 
  private slots:
   void slotStdLine( const QString& line );
-  void slotProcessExited( KProcess* p );
+  void slotProcessExited( K3Process* p );
 
  private:
   K3bProcess* m_process;

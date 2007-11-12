@@ -106,25 +106,25 @@ public:
 
 
 K3bListViewItem::K3bListViewItem(Q3ListView *parent)
-  : KListViewItem( parent )
+  : K3ListViewItem( parent )
 { 
   init();
 }
 
 K3bListViewItem::K3bListViewItem(Q3ListViewItem *parent)
-  : KListViewItem( parent )
+  : K3ListViewItem( parent )
 { 
   init();
 }
 
 K3bListViewItem::K3bListViewItem(Q3ListView *parent, Q3ListViewItem *after)
-  : KListViewItem( parent, after )
+  : K3ListViewItem( parent, after )
 { 
   init();
 }
 
 K3bListViewItem::K3bListViewItem(Q3ListViewItem *parent, Q3ListViewItem *after)
-  : KListViewItem( parent, after )
+  : K3ListViewItem( parent, after )
 { 
   init();
 }
@@ -135,7 +135,7 @@ K3bListViewItem::K3bListViewItem(Q3ListView *parent,
 				 const QString& s3, const QString& s4,
 				 const QString& s5, const QString& s6,
 				 const QString& s7, const QString& s8)
-  : KListViewItem( parent, s1, s2, s3, s4, s5, s6, s7, s8 )
+  : K3ListViewItem( parent, s1, s2, s3, s4, s5, s6, s7, s8 )
 { 
   init();
 }
@@ -146,7 +146,7 @@ K3bListViewItem::K3bListViewItem(Q3ListViewItem *parent,
 				 const QString& s3, const QString& s4,
 				 const QString& s5, const QString& s6,
 				 const QString& s7, const QString& s8)
-  : KListViewItem( parent, s1, s2, s3, s4, s5, s6, s7, s8 )
+  : K3ListViewItem( parent, s1, s2, s3, s4, s5, s6, s7, s8 )
 { 
   init();
 }
@@ -157,7 +157,7 @@ K3bListViewItem::K3bListViewItem(Q3ListView *parent, Q3ListViewItem *after,
 				 const QString& s3, const QString& s4,
 				 const QString& s5, const QString& s6,
 				 const QString& s7, const QString& s8)
-  : KListViewItem( parent, after, s1, s2, s3, s4, s5, s6, s7, s8 )
+  : K3ListViewItem( parent, after, s1, s2, s3, s4, s5, s6, s7, s8 )
 { 
   init();
 }
@@ -168,7 +168,7 @@ K3bListViewItem::K3bListViewItem(Q3ListViewItem *parent, Q3ListViewItem *after,
 				 const QString& s3, const QString& s4,
 				 const QString& s5, const QString& s6,
 				 const QString& s7, const QString& s8)
-  : KListViewItem( parent, after, s1, s2, s3, s4, s5, s6, s7, s8 )
+  : K3ListViewItem( parent, after, s1, s2, s3, s4, s5, s6, s7, s8 )
 { 
   init();
 }
@@ -194,7 +194,7 @@ void K3bListViewItem::init()
 
 int K3bListViewItem::width( const QFontMetrics& fm, const Q3ListView* lv, int c ) const
 {
-  return KListViewItem::width( fm, lv, c ) + getColumnInfo(c)->margin*2;
+  return K3ListViewItem::width( fm, lv, c ) + getColumnInfo(c)->margin*2;
 }
 
 
@@ -351,7 +351,7 @@ int K3bListViewItem::marginVertical() const
 
 void K3bListViewItem::setup()
 {
-  KListViewItem::setup();
+  K3ListViewItem::setup();
 
   setHeight( height() + 2*m_vMargin );
 }
@@ -382,7 +382,7 @@ void K3bListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int col, in
     p->fillRect( width-info->margin, 0, info->margin, height(),
 		 cgh.brush( QColorGroup::Highlight ) );
   }
-  else { // in case we use the KListView alternate color stuff
+  else { // in case we use the K3ListView alternate color stuff
     p->fillRect( 0, 0, info->margin, height(),
 		 cgh.brush( QColorGroup::Base ) );
     p->fillRect( width-info->margin, 0, info->margin, height(),
@@ -554,7 +554,7 @@ public:
 
 
 K3bListView::K3bListView( QWidget* parent, const char* name )
-  : KListView( parent, name ),
+  : K3ListView( parent, name ),
     m_noItemVMargin( 20 ),
     m_noItemHMargin( 20 )
 {
@@ -600,7 +600,7 @@ QWidget* K3bListView::editor( K3bListViewItem::EditorType t ) const
 void K3bListView::clear()
 {
   hideEditor();
-  KListView::clear();
+  K3ListView::clear();
 }
 
 
@@ -814,7 +814,7 @@ void K3bListView::setCurrentItem( Q3ListViewItem* i )
 //   doRename();
 //   hideEditor();
 //   m_currentEditItem = 0;
-  KListView::setCurrentItem( i );
+  K3ListView::setCurrentItem( i );
 }
 
 
@@ -827,14 +827,14 @@ void K3bListView::setNoItemText( const QString& text )
 
 void K3bListView::viewportPaintEvent( QPaintEvent* e )
 {
-  KListView::viewportPaintEvent( e );
+  K3ListView::viewportPaintEvent( e );
 }
 
 
 // FIXME: move this to viewportPaintEvent
 void K3bListView::drawContentsOffset( QPainter * p, int ox, int oy, int cx, int cy, int cw, int ch )
 {
-  KListView::drawContentsOffset( p, ox, oy, cx, cy, cw, ch );
+  K3ListView::drawContentsOffset( p, ox, oy, cx, cy, cw, ch );
 
   if( childCount() == 0 && !m_noItemText.isEmpty()) {
 
@@ -854,7 +854,7 @@ void K3bListView::drawContentsOffset( QPainter * p, int ox, int oy, int cx, int 
 
 void K3bListView::paintEmptyArea( QPainter* p, const QRect& rect )
 {
-  KListView::paintEmptyArea( p, rect );
+  K3ListView::paintEmptyArea( p, rect );
 
 //   if( childCount() == 0 && !m_noItemText.isEmpty()) {
 
@@ -877,7 +877,7 @@ void K3bListView::paintEmptyArea( QPainter* p, const QRect& rect )
 
 void K3bListView::resizeEvent( QResizeEvent* e )
 {
-  KListView::resizeEvent( e );
+  K3ListView::resizeEvent( e );
   updateEditorSize();
 }
 
@@ -1157,7 +1157,7 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
     }
   }
 
-  return KListView::eventFilter( o, e );
+  return K3ListView::eventFilter( o, e );
 }
 
 
@@ -1209,7 +1209,7 @@ void K3bListView::viewportResizeEvent( QResizeEvent* e )
     viewport()->setPaletteBackgroundPixmap( bgPix );
   }
 
-  KListView::viewportResizeEvent( e );
+  K3ListView::viewportResizeEvent( e );
 }
 
 

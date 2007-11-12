@@ -27,7 +27,7 @@ class K3bAudioTrack;
 class K3bAudioEditorWidget;
 class K3bMsfEdit;
 class KActionCollection;
-class KPopupMenu;
+class KMenu;
 
 
 /**
@@ -66,7 +66,7 @@ class K3bAudioTrackSplitDialog : public KDialogBase
   K3bMsfEdit* m_msfEditEnd;
   K3bAudioTrack* m_track;
   KActionCollection* m_actionCollection;
-  KPopupMenu* m_popupMenu;
+  KMenu* m_popupMenu;
   QPoint m_lastClickPosition;
 };
 

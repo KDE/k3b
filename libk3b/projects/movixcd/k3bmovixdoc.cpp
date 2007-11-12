@@ -32,6 +32,7 @@
 
 #include <qdom.h>
 #include <qfileinfo.h>
+#include <kglobal.h>
 
 
 K3bMovixDoc::K3bMovixDoc( QObject* parent )
@@ -65,9 +66,9 @@ bool K3bMovixDoc::newDocument()
 }
 
 
-void K3bMovixDoc::addUrls( const KURL::List& urls )
+void K3bMovixDoc::addUrls( const KUrl::List& urls )
 {
-  for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
+  for( KUrl::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
     addMovixFile( *it );
   }
 
@@ -75,9 +76,9 @@ void K3bMovixDoc::addUrls( const KURL::List& urls )
 }
 
 
-void K3bMovixDoc::addMovixFile( const KURL& _url, int pos )
+void K3bMovixDoc::addMovixFile( const KUrl& _url, int pos )
 {
-  KURL url = K3b::convertToLocalUrl( _url );
+  KUrl url = K3b::convertToLocalUrl( _url );
 
   QFileInfo f( url.path() );
   if( !f.isFile() || !url.isLocalFile() )
@@ -85,8 +86,8 @@ void K3bMovixDoc::addMovixFile( const KURL& _url, int pos )
 
   QString newName = f.fileName();
   if( nameAlreadyInDir( newName, root() ) ) {
-    kapp->config()->setGroup("Data project settings");
-    bool dropDoubles = kapp->config()->readBoolEntry( "Drop doubles", false );
+    KGlobal::config()->setGroup("Data project settings");
+    bool dropDoubles = KGlobal::config()->readBoolEntry( "Drop doubles", false );
     if( dropDoubles )
       return;
     
@@ -121,7 +122,7 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
   QDomNodeList nodes = rootElem->childNodes();
 
   if( nodes.item(0).nodeName() != "general" ) {
-    kdDebug() << "(K3bMovixDoc) could not find 'general' section." << endl;
+    kDebug() << "(K3bMovixDoc) could not find 'general' section." << endl;
     return false;
   }
   if( !readGeneralDocumentData( nodes.item(0).toElement() ) )
@@ -131,7 +132,7 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
   // parse options
   // -----------------------------------------------------------------
   if( nodes.item(1).nodeName() != "data_options" ) {
-    kdDebug() << "(K3bMovixDoc) could not find 'data_options' section." << endl;
+    kDebug() << "(K3bMovixDoc) could not find 'data_options' section." << endl;
     return false;
   }
   if( !loadDocumentDataOptions( nodes.item(1).toElement() ) )
@@ -143,7 +144,7 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
   // parse header
   // -----------------------------------------------------------------
   if( nodes.item(2).nodeName() != "data_header" ) {
-    kdDebug() << "(K3bMovixDoc) could not find 'data_header' section." << endl;
+    kDebug() << "(K3bMovixDoc) could not find 'data_header' section." << endl;
     return false;
   }
   if( !loadDocumentDataHeader( nodes.item(2).toElement() ) )
@@ -155,7 +156,7 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
   // parse movix options
   // -----------------------------------------------------------------
   if( nodes.item(3).nodeName() != "movix_options" ) {
-    kdDebug() << "(K3bMovixDoc) could not find 'movix_options' section." << endl;
+    kDebug() << "(K3bMovixDoc) could not find 'movix_options' section." << endl;
     return false;
   }
 
@@ -196,14 +197,14 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
     else if( e.nodeName() == "loop_playlist")
       setLoopPlaylist( e.text().toInt() );
     else
-      kdDebug() << "(K3bMovixDoc) unknown movix option: " << e.nodeName() << endl;
+      kDebug() << "(K3bMovixDoc) unknown movix option: " << e.nodeName() << endl;
   }
   // -----------------------------------------------------------------
 
   // parse files
   // -----------------------------------------------------------------
   if( nodes.item(4).nodeName() != "movix_files" ) {
-    kdDebug() << "(K3bMovixDoc) could not find 'movix_files' section." << endl;
+    kDebug() << "(K3bMovixDoc) could not find 'movix_files' section." << endl;
     return false;
   }
 
@@ -217,13 +218,13 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
 
     if( e.nodeName() == "file" ) {
       if( !e.hasAttribute( "name" ) ) {
-	kdDebug() << "(K3bMovixDoc) found file tag without name attribute." << endl;
+	kDebug() << "(K3bMovixDoc) found file tag without name attribute." << endl;
 	return false;
       }
 
       QDomElement urlElem = e.firstChild().toElement();
       if( urlElem.isNull() ) {
-	kdDebug() << "(K3bMovixDoc) found file tag without url child." << endl;
+	kDebug() << "(K3bMovixDoc) found file tag without url child." << endl;
 	return false;
       }
 
@@ -239,7 +240,7 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
       if( !subTitleElem.isNull() && subTitleElem.nodeName() == "subtitle_file" ) {
 	urlElem = subTitleElem.firstChild().toElement();
 	if( urlElem.isNull() ) {
-	  kdDebug() << "(K3bMovixDoc) found subtitle_file tag without url child." << endl;
+	  kDebug() << "(K3bMovixDoc) found subtitle_file tag without url child." << endl;
 	  return false;
 	}
 
@@ -249,7 +250,7 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
       }
     }
     else {
-      kdDebug() << "(K3bMovixDoc) found " << e.nodeName() << " node where 'file' was expected." << endl;
+      kDebug() << "(K3bMovixDoc) found " << e.nodeName() << " node where 'file' was expected." << endl;
       return false;
     }
   }
@@ -404,7 +405,7 @@ void K3bMovixDoc::moveMovixItem( K3bMovixFileItem* item, K3bMovixFileItem* itemA
 }
 
 
-void K3bMovixDoc::addSubTitleItem( K3bMovixFileItem* item, const KURL& url )
+void K3bMovixDoc::addSubTitleItem( K3bMovixFileItem* item, const KUrl& url )
 {
   if( item->subTitleItem() )
     removeSubTitleItem( item );

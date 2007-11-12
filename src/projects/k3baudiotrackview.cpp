@@ -64,7 +64,7 @@
 #include <kurldrag.h>
 #include <klocale.h>
 #include <kaction.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
@@ -89,8 +89,8 @@ K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent, const c
   setDropVisualizer( true );
   setAllColumnsShowFocus( true );
   setDragEnabled( true );
-  //  setSelectionModeExt( KListView::Konqueror ); // FileManager in KDE3
-  setSelectionModeExt( KListView::Extended );
+  //  setSelectionModeExt( K3ListView::Konqueror ); // FileManager in KDE3
+  setSelectionModeExt( K3ListView::Extended );
   setItemsMovable( false );
   setAlternateBackground( QColor() ); // disable alternate colors
 
@@ -110,8 +110,8 @@ K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent, const c
 
   connect( this, SIGNAL(dropped(QDropEvent*, Q3ListViewItem*, Q3ListViewItem*)),
 	   this, SLOT(slotDropped(QDropEvent*, Q3ListViewItem*, Q3ListViewItem*)) );
-  connect( this, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
-	   this, SLOT(showPopupMenu(KListView*, Q3ListViewItem*, const QPoint&)) );
+  connect( this, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)),
+	   this, SLOT(showPopupMenu(K3ListView*, Q3ListViewItem*, const QPoint&)) );
   connect( this, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)),
 	   this, SLOT(slotProperties()) );
 
@@ -162,7 +162,7 @@ void K3bAudioTrackView::setupColumns()
 void K3bAudioTrackView::setupActions()
 {
   m_actionCollection = new KActionCollection( this );
-  m_popupMenu = new KPopupMenu( this );
+  m_popupMenu = new KMenu( this );
 
   m_actionProperties = new KAction( i18n("Properties"), "misc",
 				    KShortcut(), this, SLOT(slotProperties()), 
@@ -201,7 +201,7 @@ void K3bAudioTrackView::setupActions()
 bool K3bAudioTrackView::acceptDrag(QDropEvent* e) const
 {
   // the first is for built-in item moving, the second for dropping urls, the third for dropping audio tracks
-  return ( KListView::acceptDrag(e) || KURLDrag::canDecode(e) || K3bAudioCdTrackDrag::canDecode(e) );
+  return ( K3ListView::acceptDrag(e) || K3URLDrag::canDecode(e) || K3bAudioCdTrackDrag::canDecode(e) );
 }
 
 
@@ -212,7 +212,7 @@ Q3DragObject* K3bAudioTrackView::dragObject()
   if( list.isEmpty() )
     return 0;
 
-  KURL::List urls;
+  KUrl::List urls;
 
   for( Q3PtrListIterator<Q3ListViewItem> it(list); it.current(); ++it ) {
     Q3ListViewItem* item = *it;
@@ -222,21 +222,21 @@ Q3DragObject* K3bAudioTrackView::dragObject()
     if( !item->isOpen() && ( !parentItem || parentItem->isOpen() ) ) {
       if( K3bAudioDataSourceViewItem* sourceItem = dynamic_cast<K3bAudioDataSourceViewItem*>( item ) ) {
 	if( K3bAudioFile* file = dynamic_cast<K3bAudioFile*>( sourceItem->source() ) )
-	  urls.append( KURL::fromPathOrURL(file->filename()) );
+	  urls.append( KUrl::fromPathOrUrl(file->filename()) );
       }
       else {
 	K3bAudioTrackViewItem* trackItem = static_cast<K3bAudioTrackViewItem*>( item );
 	K3bAudioDataSource* source = trackItem->track()->firstSource();
 	while( source ) {
 	  if( K3bAudioFile* file = dynamic_cast<K3bAudioFile*>( source ) )
-	    urls.append( KURL::fromPathOrURL(file->filename()) );
+	    urls.append( KUrl::fromPathOrUrl(file->filename()) );
 	  source = source->next();
 	}
       }
     }
   }
 
-  return new KURLDrag( urls, viewport() );
+  return new K3URLDrag( urls, viewport() );
 }
 
 
@@ -268,7 +268,7 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3Li
   // user would be confused otherwise
   //
   if( m_dropTrackParent && !m_trackItemMap[m_dropTrackParent]->showingSources() ) {
-    kdDebug() << "(K3bAudioTrackView) dropped after track which does not show it's sources." << endl;
+    kDebug() << "(K3bAudioTrackView) dropped after track which does not show it's sources." << endl;
     m_dropTrackAfter = m_dropTrackParent;
     m_dropTrackParent = 0;
   }
@@ -363,7 +363,7 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3Li
     }
   }
   else if( K3bAudioCdTrackDrag::canDecode( e ) ) {
-    kdDebug() << "(K3bAudioTrackView) audiocdtrack dropped." << endl;
+    kDebug() << "(K3bAudioTrackView) audiocdtrack dropped." << endl;
     K3bDevice::Toc toc;
     K3bDevice::Device* dev = 0;
     K3bCddbResultEntry cddb;
@@ -398,7 +398,7 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3Li
   }
   else{
     m_dropUrls.clear();
-    if( KURLDrag::decode( e, m_dropUrls ) ) {
+    if( K3URLDrag::decode( e, m_dropUrls ) ) {
       //
       // This is a small (not to ugly) hack to circumvent problems with the
       // event queues: the url adding dialog will be non-modal regardless of
@@ -423,7 +423,7 @@ void K3bAudioTrackView::slotAddUrls()
 
 void K3bAudioTrackView::slotChanged()
 {
-  kdDebug() << "(K3bAudioTrackView::slotChanged)" << endl;
+  kDebug() << "(K3bAudioTrackView::slotChanged)" << endl;
   // we only need to add new items here. Everything else is done in the
   // specific slots below
   K3bAudioTrack* track = m_doc->firstTrack();
@@ -443,7 +443,7 @@ void K3bAudioTrackView::slotChanged()
 
   header()->setShown( m_doc->numOfTracks() > 0 );
 
-  kdDebug() << "(K3bAudioTrackView::slotChanged) finished" << endl;
+  kDebug() << "(K3bAudioTrackView::slotChanged) finished" << endl;
 }
 
 
@@ -451,7 +451,7 @@ K3bAudioTrackViewItem* K3bAudioTrackView::getTrackViewItem( K3bAudioTrack* track
 {
   QMap<K3bAudioTrack*, K3bAudioTrackViewItem*>::iterator itemIt = m_trackItemMap.find(track);
   if( itemIt == m_trackItemMap.end() ) {
-    kdDebug() << "(K3bAudioTrackView) new track " << track << endl;
+    kDebug() << "(K3bAudioTrackView) new track " << track << endl;
     K3bAudioTrackViewItem* prevItem = 0;
     if( track->prev() && m_trackItemMap.contains( track->prev() ) )
       prevItem = m_trackItemMap[track->prev()];
@@ -482,7 +482,7 @@ K3bAudioTrackViewItem* K3bAudioTrackView::getTrackViewItem( K3bAudioTrack* track
 
 void K3bAudioTrackView::slotTrackChanged( K3bAudioTrack* track )
 {
-  kdDebug() << "(K3bAudioTrackView::slotTrackChanged( " << track << " )" << endl;
+  kDebug() << "(K3bAudioTrackView::slotTrackChanged( " << track << " )" << endl;
 
   //
   // There may be some tracks around that have not been added to the list yet
@@ -513,13 +513,13 @@ void K3bAudioTrackView::slotTrackChanged( K3bAudioTrack* track )
 
     showAllSources();
   }
-  kdDebug() << "(K3bAudioTrackView::slotTrackChanged( " << track << " ) finished" << endl;
+  kDebug() << "(K3bAudioTrackView::slotTrackChanged( " << track << " ) finished" << endl;
 }
 
 
 void K3bAudioTrackView::slotTrackRemoved( K3bAudioTrack* track )
 {
-  kdDebug() << "(K3bAudioTrackView::slotTrackRemoved( " << track << " )" << endl;
+  kDebug() << "(K3bAudioTrackView::slotTrackRemoved( " << track << " )" << endl;
   if ( m_playerItemAnimator->item() == m_trackItemMap[track] ) {
       m_playerItemAnimator->stop();
   }
@@ -622,7 +622,7 @@ K3bAudioTrackViewItem* K3bAudioTrackView::findTrackItem( const QPoint& pos ) con
 void K3bAudioTrackView::resizeColumns()
 {
   if( m_updatingColumnWidths ) {
-    kdDebug() << "(K3bAudioTrackView) already updating column widths." << endl;
+    kDebug() << "(K3bAudioTrackView) already updating column widths." << endl;
     return;
   }
 
@@ -878,7 +878,7 @@ void K3bAudioTrackView::slotEditSource()
 }
 
 
-void K3bAudioTrackView::showPopupMenu( KListView*, Q3ListViewItem* item, const QPoint& pos )
+void K3bAudioTrackView::showPopupMenu( K3ListView*, Q3ListViewItem* item, const QPoint& pos )
 {
   Q3PtrList<K3bAudioTrack> tracks;
   Q3PtrList<K3bAudioDataSource> sources;

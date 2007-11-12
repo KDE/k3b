@@ -41,7 +41,7 @@
 #include <q3semaphore.h>
 
 // KDE-includes
-#include <kprocess.h>
+#include <k3process.h>
 #include <kurl.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
@@ -84,9 +84,9 @@ K3bAudioDoc::~K3bAudioDoc()
   int i = 1;
   int cnt = numOfTracks();
   while( m_firstTrack ) {
-    kdDebug() << "(K3bAudioDoc::~K3bAudioDoc) deleting track " << i << " of " << cnt << endl;
+    kDebug() << "(K3bAudioDoc::~K3bAudioDoc) deleting track " << i << " of " << cnt << endl;
     delete m_firstTrack->take();
-    kdDebug() << "(K3bAudioDoc::~K3bAudioDoc) deleted." << endl;
+    kDebug() << "(K3bAudioDoc::~K3bAudioDoc) deleted." << endl;
     ++i;
   }
 
@@ -170,19 +170,19 @@ K3b::Msf K3bAudioDoc::length() const
 }
 
 
-void K3bAudioDoc::addUrls( const KURL::List& urls )
+void K3bAudioDoc::addUrls( const KUrl::List& urls )
 {
   // make sure we add them at the end even if urls are in the queue
   addTracks( urls, 99 );
 }
 
 
-void K3bAudioDoc::addTracks( const KURL::List& urls, uint position )
+void K3bAudioDoc::addTracks( const KUrl::List& urls, uint position )
 {
-  KURL::List allUrls = extractUrlList( K3b::convertToLocalUrls(urls) );
-  KURL::List::iterator end( allUrls.end());
-  for( KURL::List::iterator it = allUrls.begin(); it != end; it++, position++ ) {
-    KURL& url = *it;
+  KUrl::List allUrls = extractUrlList( K3b::convertToLocalUrls(urls) );
+  KUrl::List::iterator end( allUrls.end());
+  for( KUrl::List::iterator it = allUrls.begin(); it != end; it++, position++ ) {
+    KUrl& url = *it;
     if( url.path().right(3).lower() == "cue" ) {
       // try adding a cue file
       if( K3bAudioTrack* newAfter = importCueFile( url.path(), getTrack(position) ) ) {
@@ -209,24 +209,24 @@ void K3bAudioDoc::addTracks( const KURL::List& urls, uint position )
 }
 
 
-KURL::List K3bAudioDoc::extractUrlList( const KURL::List& urls )
+KUrl::List K3bAudioDoc::extractUrlList( const KUrl::List& urls )
 {
-  KURL::List allUrls = urls;
-  KURL::List urlsFromPlaylist;
-  KURL::List::iterator it = allUrls.begin();
+  KUrl::List allUrls = urls;
+  KUrl::List urlsFromPlaylist;
+  KUrl::List::iterator it = allUrls.begin();
   while( it != allUrls.end() ) {
 
-    const KURL& url = *it;
+    const KUrl& url = *it;
     QFileInfo fi( url.path() );
 
     if( !url.isLocalFile() ) {
-      kdDebug() << url.path() << " no local file" << endl;
+      kDebug() << url.path() << " no local file" << endl;
       it = allUrls.remove( it );
       m_notFoundFiles.append( url );
     }
     else if( !fi.exists() ) {
       it = allUrls.remove( it );
-      kdDebug() << url.path() << " not found" << endl;
+      kDebug() << url.path() << " not found" << endl;
       m_notFoundFiles.append( url );
     }
     else if( fi.isDir() ) {
@@ -234,17 +234,17 @@ KURL::List K3bAudioDoc::extractUrlList( const KURL::List& urls )
       // add all files in the dir
       QDir dir(fi.filePath());
       QStringList entries = dir.entryList( QDir::Files );
-      KURL::List::iterator oldIt = it;
+      KUrl::List::iterator oldIt = it;
       // add all files into the list after the current item
       for( QStringList::iterator dirIt = entries.begin();
 	   dirIt != entries.end(); ++dirIt )
-	it = allUrls.insert( oldIt, KURL::fromPathOrURL( dir.absPath() + "/" + *dirIt ) );
+	it = allUrls.insert( oldIt, KUrl::fromPathOrUrl( dir.absPath() + "/" + *dirIt ) );
     }
     else if( readPlaylistFile( url, urlsFromPlaylist ) ) {
       it = allUrls.remove( it );
-      KURL::List::iterator oldIt = it;
+      KUrl::List::iterator oldIt = it;
       // add all files into the list after the current item
-      for( KURL::List::iterator dirIt = urlsFromPlaylist.begin();
+      for( KUrl::List::iterator dirIt = urlsFromPlaylist.begin();
 	   dirIt != urlsFromPlaylist.end(); ++dirIt )
 	it = allUrls.insert( oldIt, *dirIt );
     }
@@ -256,7 +256,7 @@ KURL::List K3bAudioDoc::extractUrlList( const KURL::List& urls )
 }
 
 
-bool K3bAudioDoc::readPlaylistFile( const KURL& url, KURL::List& playlist )
+bool K3bAudioDoc::readPlaylistFile( const KUrl& url, KUrl::List& playlist )
 {
   // check if the file is a m3u playlist
   // and if so add all listed files
@@ -278,7 +278,7 @@ bool K3bAudioDoc::readPlaylistFile( const KURL& url, KURL::List& playlist )
   while( !t.atEnd() ) {
     QString line = t.readLine();
     if( line[0] != '#' ) {
-      KURL mp3url;
+      KUrl mp3url;
       // relative paths
       if( line[0] != '/' )
         mp3url.setPath( url.directory(false) + line );
@@ -294,15 +294,15 @@ bool K3bAudioDoc::readPlaylistFile( const KURL& url, KURL::List& playlist )
 
 
 void K3bAudioDoc::addSources( K3bAudioTrack* parent,
-			      const KURL::List& urls,
+			      const KUrl::List& urls,
 			      K3bAudioDataSource* sourceAfter )
 {
-  kdDebug() << "(K3bAudioDoc::addSources( " << parent << ", "
+  kDebug() << "(K3bAudioDoc::addSources( " << parent << ", "
 	    << urls.first().path() << ", "
 	    << sourceAfter << " )" << endl;
-  KURL::List allUrls = extractUrlList( urls );
-  KURL::List::const_iterator end(allUrls.end());
-  for( KURL::List::const_iterator it = allUrls.begin(); it != end; ++it ) {
+  KUrl::List allUrls = extractUrlList( urls );
+  KUrl::List::const_iterator end(allUrls.end());
+  for( KUrl::List::const_iterator it = allUrls.begin(); it != end; ++it ) {
     if( K3bAudioFile* file = createAudioFile( *it ) ) {
       if( sourceAfter )
 	file->moveAfter( sourceAfter );
@@ -313,7 +313,7 @@ void K3bAudioDoc::addSources( K3bAudioTrack* parent,
   }
 
   informAboutNotFoundFiles();
-  kdDebug() << "(K3bAudioDoc::addSources) finished." << endl;
+  kDebug() << "(K3bAudioDoc::addSources) finished." << endl;
 }
 
 
@@ -322,11 +322,11 @@ K3bAudioTrack* K3bAudioDoc::importCueFile( const QString& cuefile, K3bAudioTrack
   if( !after )
     after = m_lastTrack;
 
-  kdDebug() << "(K3bAudioDoc::importCueFile( " << cuefile << ", " << after << ")" << endl;
+  kDebug() << "(K3bAudioDoc::importCueFile( " << cuefile << ", " << after << ")" << endl;
   K3bCueFileParser parser( cuefile );
   if( parser.isValid() && parser.toc().contentType() == K3bDevice::AUDIO ) {
 
-    kdDebug() << "(K3bAudioDoc::importCueFile) parsed with image: " << parser.imageFilename() << endl;
+    kDebug() << "(K3bAudioDoc::importCueFile) parsed with image: " << parser.imageFilename() << endl;
 
     // global cd-text
     if( !parser.cdText().title().isEmpty() )
@@ -336,7 +336,7 @@ K3bAudioTrack* K3bAudioDoc::importCueFile( const QString& cuefile, K3bAudioTrack
 
     bool reused = true;
     if( !decoder )
-      decoder = getDecoderForUrl( KURL::fromPathOrURL(parser.imageFilename()), &reused );
+      decoder = getDecoderForUrl( KUrl::fromPathOrUrl(parser.imageFilename()), &reused );
 
     if( decoder ) {
       if( !reused )
@@ -382,7 +382,7 @@ K3bAudioTrack* K3bAudioDoc::importCueFile( const QString& cuefile, K3bAudioTrack
 }
 
 
-K3bAudioDecoder* K3bAudioDoc::getDecoderForUrl( const KURL& url, bool* reused )
+K3bAudioDecoder* K3bAudioDoc::getDecoderForUrl( const KUrl& url, bool* reused )
 {
   K3bAudioDecoder* decoder = 0;
 
@@ -392,7 +392,7 @@ K3bAudioDecoder* K3bAudioDoc::getDecoderForUrl( const KURL& url, bool* reused )
     *reused = true;
   }
   else if( (decoder = K3bAudioDecoderFactory::createDecoder( url )) ) {
-    kdDebug() << "(K3bAudioDoc) using " << decoder->className()
+    kDebug() << "(K3bAudioDoc) using " << decoder->className()
 	      << " for decoding of " << url.path() << endl;
 
     decoder->setFilename( url.path() );
@@ -403,11 +403,11 @@ K3bAudioDecoder* K3bAudioDoc::getDecoderForUrl( const KURL& url, bool* reused )
 }
 
 
-K3bAudioFile* K3bAudioDoc::createAudioFile( const KURL& url )
+K3bAudioFile* K3bAudioDoc::createAudioFile( const KUrl& url )
 {
   if( !QFile::exists( url.path() ) ) {
     m_notFoundFiles.append( url.path() );
-    kdDebug() << "(K3bAudioDoc) could not find file " << url.path() << endl;
+    kDebug() << "(K3bAudioDoc) could not find file " << url.path() << endl;
     return 0;
   }
 
@@ -420,15 +420,15 @@ K3bAudioFile* K3bAudioDoc::createAudioFile( const KURL& url )
   }
   else {
     m_unknownFileFormatFiles.append( url.path() );
-    kdDebug() << "(K3bAudioDoc) unknown file type in file " << url.path() << endl;
+    kDebug() << "(K3bAudioDoc) unknown file type in file " << url.path() << endl;
     return 0;
   }
 }
 
 
-K3bAudioTrack* K3bAudioDoc::createTrack( const KURL& url )
+K3bAudioTrack* K3bAudioDoc::createTrack( const KUrl& url )
 {
-  kdDebug() << "(K3bAudioDoc::createTrack( " << url.path() << " )" << endl;
+  kDebug() << "(K3bAudioDoc::createTrack( " << url.path() << " )" << endl;
   if( K3bAudioFile* file = createAudioFile( url ) ) {
     K3bAudioTrack* newTrack = new K3bAudioTrack( this );
     newTrack->setFirstSource( file );
@@ -439,9 +439,9 @@ K3bAudioTrack* K3bAudioDoc::createTrack( const KURL& url )
 }
 
 
-void K3bAudioDoc::addTrack( const KURL& url, uint position )
+void K3bAudioDoc::addTrack( const KUrl& url, uint position )
 {
-  addTracks( KURL::List(url), position );
+  addTracks( KUrl::List(url), position );
 }
 
 
@@ -463,7 +463,7 @@ K3bAudioTrack* K3bAudioDoc::getTrack( unsigned int trackNum )
 
 void K3bAudioDoc::addTrack( K3bAudioTrack* track, uint position )
 {
-  kdDebug() << "(K3bAudioDoc::addTrack( " << track << ", " << position << " )" << endl;
+  kDebug() << "(K3bAudioDoc::addTrack( " << track << ", " << position << " )" << endl;
   track->m_parent = this;
   if( !m_firstTrack )
     m_firstTrack = m_lastTrack = track;
@@ -590,7 +590,7 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 	QDomAttr oldUrlAttr = trackElem.attributeNode( "url" );
 	if( !oldUrlAttr.isNull() ) {
 	  if( K3bAudioFile* file =
-	      createAudioFile( KURL::fromPathOrURL( oldUrlAttr.value() ) ) ) {
+	      createAudioFile( KUrl::fromPathOrUrl( oldUrlAttr.value() ) ) ) {
 	    track->addSource( file );
 	  }
 	}
@@ -606,7 +606,7 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 	      QDomElement sourceElem = sourcesNodes.item(sourcesIndex).toElement();
 	      if( sourceElem.nodeName() == "file" ) {
 		if( K3bAudioFile* file =
-		    createAudioFile( KURL::fromPathOrURL( sourceElem.attributeNode( "url" ).value() ) ) ) {
+		    createAudioFile( KUrl::fromPathOrUrl( sourceElem.attributeNode( "url" ).value() ) ) ) {
 		  file->setStartOffset( K3b::Msf::fromString( sourceElem.attributeNode( "start_offset" ).value() ) );
 		  file->setEndOffset( K3b::Msf::fromString( sourceElem.attributeNode( "end_offset" ).value() ) );
 		  track->addSource( file );
@@ -649,12 +649,12 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 		  track->addSource( cdtrack );
 		}
 		else {
-		  kdDebug() << "(K3bAudioDoc) invalid cdtrack source." << endl;
+		  kDebug() << "(K3bAudioDoc) invalid cdtrack source." << endl;
 		  return false;
 		}
 	      }
 	      else {
-		kdDebug() << "(K3bAudioDoc) unknown source type: " << sourceElem.nodeName() << endl;
+		kDebug() << "(K3bAudioDoc) unknown source type: " << sourceElem.nodeName() << endl;
 		return false;
 	      }
 	    }
@@ -704,7 +704,7 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 	if( track->numberSources() > 0 )
 	  addTrack( track, 99 ); // append to the end // TODO improve
 	else {
-	  kdDebug() << "(K3bAudioDoc) no sources. deleting track " << track << endl;
+	  kDebug() << "(K3bAudioDoc) no sources. deleting track " << track << endl;
 	  delete track;
 	}
       }
@@ -850,7 +850,7 @@ bool K3bAudioDoc::saveDocumentData( QDomElement* docElem )
 	sourcesParent.appendChild( sourceElem );
       }
       else {
-	kdError() << "(K3bAudioDoc) saving sources other than file or zero not supported yet." << endl;
+	kError() << "(K3bAudioDoc) saving sources other than file or zero not supported yet." << endl;
 	return false;
       }
     }
@@ -931,7 +931,7 @@ void K3bAudioDoc::informAboutNotFoundFiles()
 {
   if( !m_notFoundFiles.isEmpty() ) {
     QStringList l;
-    for( KURL::List::const_iterator it = m_notFoundFiles.begin();
+    for( KUrl::List::const_iterator it = m_notFoundFiles.begin();
 	 it != m_notFoundFiles.end(); ++it )
       l.append( (*it).path() );
     KMessageBox::informationList( qApp->activeWindow(),
@@ -943,7 +943,7 @@ void K3bAudioDoc::informAboutNotFoundFiles()
   }
   if( !m_unknownFileFormatFiles.isEmpty() ) {
     QStringList l;
-    for( KURL::List::const_iterator it = m_unknownFileFormatFiles.begin();
+    for( KUrl::List::const_iterator it = m_unknownFileFormatFiles.begin();
 	 it != m_unknownFileFormatFiles.end(); ++it )
       l.append( (*it).path() );
     KMessageBox::informationList( qApp->activeWindow(),
@@ -976,7 +976,7 @@ void K3bAudioDoc::removeCorruptTracks()
 
 void K3bAudioDoc::slotTrackChanged( K3bAudioTrack* track )
 {
-  kdDebug() << "(K3bAudioDoc::slotTrackChanged " << track << endl;
+  kDebug() << "(K3bAudioDoc::slotTrackChanged " << track << endl;
   setModified( true );
   // if the track is empty now we simply delete it
   if( track->firstSource() ) {
@@ -984,10 +984,10 @@ void K3bAudioDoc::slotTrackChanged( K3bAudioTrack* track )
     emit changed();
   }
   else {
-    kdDebug() << "(K3bAudioDoc::slotTrackChanged) track " << track << " empty. Deleting." << endl;
+    kDebug() << "(K3bAudioDoc::slotTrackChanged) track " << track << " empty. Deleting." << endl;
     delete track; // this will emit the proper signal
   }
-  kdDebug() << "(K3bAudioDoc::slotTrackChanged done" << track << endl;
+  kDebug() << "(K3bAudioDoc::slotTrackChanged done" << track << endl;
 }
 
 
@@ -1001,14 +1001,14 @@ void K3bAudioDoc::slotTrackRemoved( K3bAudioTrack* track )
 
 void K3bAudioDoc::increaseDecoderUsage( K3bAudioDecoder* decoder )
 {
-  kdDebug() << "(K3bAudioDoc::increaseDecoderUsage)" << endl;
+  kDebug() << "(K3bAudioDoc::increaseDecoderUsage)" << endl;
   if( !m_decoderUsageCounterMap.contains( decoder ) ) {
     m_decoderUsageCounterMap[decoder] = 1;
     m_decoderPresenceMap[decoder->filename()] = decoder;
   }
   else
     m_decoderUsageCounterMap[decoder]++;
-  kdDebug() << "(K3bAudioDoc::increaseDecoderUsage) finished" << endl;
+  kDebug() << "(K3bAudioDoc::increaseDecoderUsage) finished" << endl;
 }
 
 

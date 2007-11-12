@@ -65,7 +65,7 @@ class LIBK3B_EXPORT K3bMixedDoc : public K3bDoc
   int mixedType() const { return m_mixedType; }
   int type() const { return MIXED; }
 
-  void setURL( const KURL& url );
+  void setURL( const KUrl& url );
 
   /**
    * Represent the structure of the doc as CD Table of Contents.
@@ -80,7 +80,7 @@ class LIBK3B_EXPORT K3bMixedDoc : public K3bDoc
 
  public slots:
   void setMixedType( MixedType t ) { m_mixedType = t; }
-  void addUrls( const KURL::List& urls );
+  void addUrls( const KUrl::List& urls );
 
  protected:
   bool loadDocumentData( QDomElement* );

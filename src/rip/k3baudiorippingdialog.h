@@ -31,7 +31,7 @@ namespace K3bDevice {
 }
 
 
-class KListView;
+class K3ListView;
 class QCheckBox;
 class QSpinBox;
 class QComboBox;
@@ -67,7 +67,7 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   K3bCddbResultEntry m_cddbEntry;
   Q3ValueList<int> m_trackNumbers;
 
-  KListView*    m_viewTracks;
+  K3ListView*    m_viewTracks;
 
   QComboBox* m_comboParanoiaMode;
   QSpinBox* m_spinRetries;

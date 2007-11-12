@@ -60,7 +60,7 @@
 // KDE-includes
 #include <kmimetype.h>
 #include <kcursor.h>
-#include <kfiledetailview.h>
+#include <k3filedetailview.h>
 #include <ktoolbar.h>
 #include <kiconloader.h>
 #include <kurl.h>
@@ -69,13 +69,13 @@
 #include <kio/file.h>
 #include <kio/global.h>
 #include <krun.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <kio/job.h>
 #include <kcombobox.h>
-#include <kfiletreeview.h>
+#include <k3filetreeview.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kconfig.h>
 #include <kaction.h>
 #include <kinputdialog.h>
@@ -135,8 +135,8 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
     m_mainSplitter->setSizes( sizes );
   }
 
-  connect( m_fileTreeView, SIGNAL(urlExecuted(const KURL&)),
-	   this, SLOT(slotDirActivated(const KURL&)) );
+  connect( m_fileTreeView, SIGNAL(urlExecuted(const KUrl&)),
+	   this, SLOT(slotDirActivated(const KUrl&)) );
   connect( m_fileTreeView, SIGNAL(deviceExecuted(K3bDevice::Device*)),
 	   this, SLOT(showDevice(K3bDevice::Device*)) );
   connect( m_fileTreeView, SIGNAL(deviceExecuted(K3bDevice::Device*)),
@@ -144,8 +144,8 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
   connect( m_fileTreeView, SIGNAL(contextMenu(K3bDevice::Device*, const QPoint&)),
 	   this, SLOT(slotFileTreeContextMenu(K3bDevice::Device*, const QPoint&)) );
 
-  connect( m_fileView, SIGNAL(urlEntered(const KURL&)), m_fileTreeView, SLOT(followUrl(const KURL&)) );
-  connect( m_fileView, SIGNAL(urlEntered(const KURL&)), this, SIGNAL(urlEntered(const KURL&)) );
+  connect( m_fileView, SIGNAL(urlEntered(const KUrl&)), m_fileTreeView, SLOT(followUrl(const KUrl&)) );
+  connect( m_fileView, SIGNAL(urlEntered(const KUrl&)), this, SIGNAL(urlEntered(const KUrl&)) );
 
   connect( k3bappcore->appDeviceManager(), SIGNAL(mountFinished(const QString&)),
 	   this, SLOT(slotMountFinished(const QString&)) );
@@ -161,7 +161,7 @@ K3bDirView::~K3bDirView()
 }
 
 
-void K3bDirView::showUrl( const KURL& url )
+void K3bDirView::showUrl( const KUrl& url )
 {
   slotDirActivated( url );
 }
@@ -334,11 +334,11 @@ void K3bDirView::slotFileTreeContextMenu( K3bDevice::Device* /*dev*/, const QPoi
 void K3bDirView::slotDirActivated( const QString& url )
 {
 //   m_urlCombo->insertItem( url, 0 );
-  slotDirActivated( KURL::fromPathOrURL(url) );
+  slotDirActivated( KUrl::fromPathOrUrl(url) );
 }
 
 
-void K3bDirView::slotDirActivated( const KURL& url )
+void K3bDirView::slotDirActivated( const KUrl& url )
 {
   m_fileView->setUrl(url, true);
 //   m_urlCombo->setEditText( url.path() );

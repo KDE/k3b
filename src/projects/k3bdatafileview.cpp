@@ -79,7 +79,7 @@ K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView
   addColumn( i18n("Local Path") );
   addColumn( i18n("Link") );
 
-  setSelectionModeExt( KListView::Extended );
+  setSelectionModeExt( K3ListView::Extended );
 
   m_doc = doc;
   m_currentDir = doc->root();
@@ -89,8 +89,8 @@ K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView
   connect( m_doc, SIGNAL(itemRemoved(K3bDataItem*)), this, SLOT(slotDataItemRemoved(K3bDataItem*)) );
   connect( m_doc, SIGNAL(itemAdded(K3bDataItem*)), this, SLOT(slotItemAdded(K3bDataItem*)) );
   connect( this, SIGNAL(executed(Q3ListViewItem*)), this, SLOT(slotExecuted(Q3ListViewItem*)) );
-  connect( this, SIGNAL(contextMenu(KListView*, Q3ListViewItem*, const QPoint&)),
-	   this, SLOT(showPopupMenu(KListView*, Q3ListViewItem*, const QPoint&)) );
+  connect( this, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)),
+	   this, SLOT(showPopupMenu(K3ListView*, Q3ListViewItem*, const QPoint&)) );
   connect( this, SIGNAL(dropped(QDropEvent*, Q3ListViewItem*, Q3ListViewItem*)),
 	   this, SLOT(slotDropped(QDropEvent*, Q3ListViewItem*, Q3ListViewItem*)) );
   connect( this, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)),
@@ -143,7 +143,7 @@ void K3bDataFileView::slotItemAdded( K3bDataItem* item )
     else if( item->isFromOldSession() )
       vi = new K3bSessionImportViewItem( static_cast<K3bSessionImportItem*>(item), this );
     else
-      kdDebug() << "(K3bDataFileView) ERROR: unknown data item type" << endl;
+      kDebug() << "(K3bDataFileView) ERROR: unknown data item type" << endl;
 
     if( vi )
       m_itemMap[item] = vi;
@@ -189,27 +189,27 @@ void K3bDataFileView::checkForNewItems()
 Q3DragObject* K3bDataFileView::dragObject()
 {
   Q3PtrList<Q3ListViewItem> selectedViewItems = selectedItems();
-  KURL::List urls;
+  KUrl::List urls;
   for( Q3PtrListIterator<Q3ListViewItem> it( selectedViewItems ); it.current(); ++it ) {
     K3bDataViewItem* dataViewItem = dynamic_cast<K3bDataViewItem*>( it.current() );
     if( dataViewItem ) {
-      urls.append( KURL::fromPathOrURL(dataViewItem->dataItem()->localPath()) );
+      urls.append( KUrl::fromPathOrUrl(dataViewItem->dataItem()->localPath()) );
     }
     else
-      kdDebug() << "no dataviewitem" << endl;
+      kDebug() << "no dataviewitem" << endl;
   }
 
   if( urls.isEmpty() )
     return 0;
 
-  return KURLDrag::newDrag( urls, viewport() );
+  return K3URLDrag::newDrag( urls, viewport() );
 }
 
 
 bool K3bDataFileView::acceptDrag(QDropEvent* e) const
 {
   return ( e->source() == viewport() ||
-	   KURLDrag::canDecode(e) ||
+	   K3URLDrag::canDecode(e) ||
 	   e->source() == m_treeView->viewport() );
 }
 
@@ -273,7 +273,7 @@ void K3bDataFileView::slotDropped( QDropEvent* e, Q3ListViewItem*, Q3ListViewIte
 	if( dataViewItem )
 	  selectedDataItems.append( dataViewItem->dataItem() );
 	else
-	  kdDebug() << "no dataviewitem" << endl;
+	  kDebug() << "no dataviewitem" << endl;
       }
 
       K3bDataUrlAddingDialog::copyMoveItems( selectedDataItems, m_addParentDir, this, e->action() == QDropEvent::Copy );
@@ -289,7 +289,7 @@ void K3bDataFileView::slotDropped( QDropEvent* e, Q3ListViewItem*, Q3ListViewIte
     else {
       // seems that new items have been dropped
       m_addUrls.clear();
-      if( KURLDrag::decode( e, m_addUrls ) ) {
+      if( K3URLDrag::decode( e, m_addUrls ) ) {
 	//
 	// This is a small (not to ugly) hack to circumvent problems with the
 	// event queues: the url adding dialog will be non-modal regardless of
@@ -355,7 +355,7 @@ void K3bDataFileView::setupActions()
 }
 
 
-void K3bDataFileView::showPopupMenu( KListView*, Q3ListViewItem* item, const QPoint& point )
+void K3bDataFileView::showPopupMenu( K3ListView*, Q3ListViewItem* item, const QPoint& point )
 {
   if( item ) {
     K3bDataItem* di = static_cast<K3bDataViewItem*>(item)->dataItem();
@@ -465,16 +465,16 @@ void K3bDataFileView::slotOpen()
       K3bDataFileViewItem* fvi = static_cast<K3bDataFileViewItem*>( viewItem );
       if( fvi->mimeType() &&
 #if KDE_IS_VERSION(3,3,0)
-	  !KRun::isExecutableFile( KURL::fromPathOrURL(item->localPath()),
+	  !KRun::isExecutableFile( KUrl::fromPathOrUrl(item->localPath()),
 				   fvi->mimeType()->name() )
 #else
 	  !QFileInfo( item->localPath() ).isExecutable()
 #endif
 	  )
-	KRun::runURL( KURL::fromPathOrURL(item->localPath()),
+	KRun::runURL( KUrl::fromPathOrUrl(item->localPath()),
 		      fvi->mimeType()->name() );
       else
-	KRun::displayOpenWithDialog( KURL::fromPathOrURL(item->localPath()) );
+	KRun::displayOpenWithDialog( KUrl::fromPathOrUrl(item->localPath()) );
     }
   }
 }

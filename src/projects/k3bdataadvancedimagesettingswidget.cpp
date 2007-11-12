@@ -28,7 +28,7 @@
 #include <qvalidator.h>
 #include <qregexp.h>
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <kcombobox.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -48,7 +48,7 @@ public:
     Q3ListViewItem* i2 = w->m_viewIsoSettings->itemAt( p ); // dies funktioniert nur bei action whatsthis
 
     if( i2 != 0 )
-      kdDebug() << "at p " << i2->text(0) << endl;
+      kDebug() << "at p " << i2->text(0) << endl;
 
     if( i == w->m_checkAllowUntranslatedFilenames )
       return i18n( "Force all options below" );

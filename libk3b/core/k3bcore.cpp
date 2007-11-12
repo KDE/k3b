@@ -185,8 +185,8 @@ const K3bVersion& K3bCore::version() const
 KConfig* K3bCore::config() const
 {
   if( !d->config ) {
-    kdDebug() << "(K3bCore) opening k3b config file." << endl;
-    kdDebug() << "(K3bCore) while I am a " << className() << endl;
+    kDebug() << "(K3bCore) opening k3b config file." << endl;
+    kDebug() << "(K3bCore) while I am a " << className() << endl;
     d->deleteConfig = true;
     d->config = new KConfig( "k3brc" );
   }

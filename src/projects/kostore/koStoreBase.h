@@ -42,7 +42,7 @@ protected:
      * original URL of the remote file
      * (undefined for a local file)
      */
-    KURL m_url;
+    KUrl m_url;
     FileMode m_fileMode;
     QString m_localFileName;
     QWidget* m_window;

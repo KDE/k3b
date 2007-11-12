@@ -50,16 +50,16 @@ class K3bFileTreeComboBox : public KComboBox
 
  public slots:
   void setDevice( K3bDevice::Device* );
-  void setUrl( const KURL& url );
+  void setUrl( const KUrl& url );
   void slotGoUrl();
 
  signals:
-  void urlExecuted( const KURL& url );
+  void urlExecuted( const KUrl& url );
   void deviceExecuted( K3bDevice::Device* dev );
 
  private slots:
   void slotDeviceExecuted( K3bDevice::Device* );
-  void slotUrlExecuted( const KURL& url );
+  void slotUrlExecuted( const KUrl& url );
 
  protected:
   bool eventFilter( QObject*, QEvent* );

@@ -28,7 +28,7 @@ class QWidget;
 class K3bVcdDoc;
 class K3bVcdTrack;
 class Q3ListViewItem;
-class KListView;
+class K3ListView;
 class K3bVcdBurnDialog;
 class K3bProjectBurnDialog;
 

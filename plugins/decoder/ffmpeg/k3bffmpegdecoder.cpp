@@ -49,7 +49,7 @@ K3bAudioDecoder* K3bFFMpegDecoderFactory::createDecoder( QObject* parent,
 }
 
 
-bool K3bFFMpegDecoderFactory::canDecode( const KURL& url )
+bool K3bFFMpegDecoderFactory::canDecode( const KUrl& url )
 {
   K3bFFMpegFile* file = K3bFFMpegWrapper::instance()->open( url.path() );
   if( file ) {

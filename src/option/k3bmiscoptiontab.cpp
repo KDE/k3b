@@ -38,6 +38,7 @@
 #include <kmessagebox.h>
 #include <kurlrequester.h>
 #include <kcombobox.h>
+#include <kglobal.h>
 
 
 K3bMiscOptionTab::K3bMiscOptionTab(QWidget *parent, const char *name )
@@ -71,7 +72,7 @@ K3bMiscOptionTab::~K3bMiscOptionTab()
 
 void K3bMiscOptionTab::readSettings()
 {
-  KConfig* c = kapp->config();
+  KConfig* c = KGlobal::config();
   c->setGroup( "General Options" );
   m_checkSaveOnExit->setChecked( c->readBoolEntry( "ask_for_saving_changes_on_exit", true ) );
   m_checkShowSplash->setChecked( c->readBoolEntry("Show splash", true) );
@@ -108,7 +109,7 @@ void K3bMiscOptionTab::readSettings()
 
 bool K3bMiscOptionTab::saveSettings()
 {
-  KConfig* c = kapp->config();
+  KConfig* c = KGlobal::config();
   c->setGroup( "General Options" );
   c->writeEntry( "ask_for_saving_changes_on_exit", m_checkSaveOnExit->isChecked() );
   c->writeEntry( "Show splash", m_checkShowSplash->isChecked() );
@@ -127,7 +128,7 @@ bool K3bMiscOptionTab::saveSettings()
 
   if( !fi.exists() ) {
     if( KMessageBox::questionYesNo( this, i18n("Directory (%1) does not exist. Create?").arg(tempDir),
-				    i18n("Create Directory"), i18n("Create"), KStdGuiItem::cancel() ) == KMessageBox::Yes ) {
+				    i18n("Create Directory"), i18n("Create"), KStandardGuiItem::cancel() ) == KMessageBox::Yes ) {
       if( !KStandardDirs::makeDir( fi.absoluteFilePath() ) ) {
 	KMessageBox::error( this, i18n("Unable to create directory %1").arg(tempDir) );
 	return false;

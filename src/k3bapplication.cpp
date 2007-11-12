@@ -58,6 +58,7 @@
 #include <qtimer.h>
 #include <q3valuelist.h>
 #include <q3cstring.h>
+#include <kglobal.h>
 
 
 K3bApplication::Core* K3bApplication::Core::s_k3bAppCore = 0;
@@ -69,8 +70,8 @@ K3bApplication::K3bApplication()
     m_needToInit(true)
 {
   // insert library i18n data
-  KGlobal::locale()->insertCatalogue( "libk3bdevice" );
-  KGlobal::locale()->insertCatalogue( "libk3b" );
+  KGlobal::locale()->insertCatalog( "libk3bdevice" );
+  KGlobal::locale()->insertCatalog( "libk3b" );
 
   m_core = new Core( this );
 
@@ -213,7 +214,7 @@ bool K3bApplication::processCmdLineArgs()
 
   // if we created a doc the urls are used to populate it
   if( doc ) {
-    KURL::List urls;
+    KUrl::List urls;
     for( int i = 0; i < args->count(); i++ )
       urls.append( args->url(i) );
     dynamic_cast<K3bView*>( doc->view() )->addUrls( urls );
@@ -230,20 +231,20 @@ bool K3bApplication::processCmdLineArgs()
     showTips = false;
     dialogOpen = true;
     if( k3bcore->jobsRunning() == 0 ) {
-      m_mainWindow->slotWriteCdImage( KURL::fromPathOrURL( QFile::decodeName( args->getOption( "cdimage" ) ) ) );
+      m_mainWindow->slotWriteCdImage( KUrl::fromPathOrUrl( QFile::decodeName( args->getOption( "cdimage" ) ) ) );
     }
   }
   else if( args->isSet( "dvdimage" ) ) {
     showTips = false;
     dialogOpen = true;
     if( k3bcore->jobsRunning() == 0 ) {
-      m_mainWindow->slotWriteDvdIsoImage( KURL::fromPathOrURL( QFile::decodeName( args->getOption( "dvdimage" ) ) ) );
+      m_mainWindow->slotWriteDvdIsoImage( KUrl::fromPathOrUrl( QFile::decodeName( args->getOption( "dvdimage" ) ) ) );
     }
   }
   else if( args->isSet( "image" ) ) {
     showTips = false;
     dialogOpen = true;
-    KURL url = KURL::fromPathOrURL( QFile::decodeName( args->getOption( "image" ) ) );
+    KUrl url = KUrl::fromPathOrUrl( QFile::decodeName( args->getOption( "image" ) ) );
     if( k3bcore->jobsRunning() == 0 ) {
       if( K3b::filesize( url ) > 1000*1024*1024 )
 	m_mainWindow->slotWriteDvdIsoImage( url );
@@ -256,25 +257,25 @@ bool K3bApplication::processCmdLineArgs()
            args->isSet("copydvd")) {
     showTips = false;
     dialogOpen = true;
-    m_mainWindow->mediaCopy( K3b::urlToDevice( KURL::fromPathOrURL( QFile::decodeName( args->getOption( "copycd" ) ) ) ) );
+    m_mainWindow->mediaCopy( K3b::urlToDevice( KUrl::fromPathOrUrl( QFile::decodeName( args->getOption( "copycd" ) ) ) ) );
   }
   else if( args->isSet("erasecd") ||
            args->isSet("formatdvd") ||
            args->isSet("format")) {
     showTips = false;
     dialogOpen = true;
-    m_mainWindow->formatMedium( K3b::urlToDevice( KURL::fromPathOrURL( QFile::decodeName( args->getOption( "erasecd" ) ) ) ) );
+    m_mainWindow->formatMedium( K3b::urlToDevice( KUrl::fromPathOrUrl( QFile::decodeName( args->getOption( "erasecd" ) ) ) ) );
   }
 
   // no dialog used here
   if( args->isSet( "cddarip" ) ) {
-    m_mainWindow->cddaRip( K3b::urlToDevice( KURL::fromPathOrURL( QFile::decodeName( args->getOption( "cddarip" ) ) ) ) );
+    m_mainWindow->cddaRip( K3b::urlToDevice( KUrl::fromPathOrUrl( QFile::decodeName( args->getOption( "cddarip" ) ) ) ) );
   }
   else if( args->isSet( "videodvdrip" ) ) {
-    m_mainWindow->videoDvdRip( K3b::urlToDevice( KURL::fromPathOrURL( QFile::decodeName( args->getOption( "videodvdrip" ) ) ) ) );
+    m_mainWindow->videoDvdRip( K3b::urlToDevice( KUrl::fromPathOrUrl( QFile::decodeName( args->getOption( "videodvdrip" ) ) ) ) );
   }
   else if( args->isSet( "videocdrip" ) ) {
-    m_mainWindow->videoCdRip( K3b::urlToDevice( KURL::fromPathOrURL( QFile::decodeName( args->getOption( "videocdrip" ) ) ) ) );
+    m_mainWindow->videoCdRip( K3b::urlToDevice( KUrl::fromPathOrUrl( QFile::decodeName( args->getOption( "videocdrip" ) ) ) ) );
   }
 
   if( !dialogOpen && args->isSet( "burn" ) ) {
@@ -353,7 +354,7 @@ K3bDevice::DeviceManager* K3bApplication::Core::deviceManager() const
 
 KConfig* K3bApplication::Core::config() const
 {
-  return kapp->config();
+  return KGlobal::config();
 }
 
 
@@ -409,7 +410,7 @@ bool K3bApplication::Core::internalBlockDevice( K3bDevice::Device* dev )
 
 #ifdef HAVE_HAL
     if( K3bDevice::HalConnection::instance()->lock( dev ) != K3bDevice::HalConnection::org_freedesktop_Hal_Success )
-      kdDebug() << "(K3bInterferingSystemsHandler) HAL lock failed." << endl;
+      kDebug() << "(K3bInterferingSystemsHandler) HAL lock failed." << endl;
 #endif
 
     //

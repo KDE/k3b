@@ -31,7 +31,7 @@ class K3bDoc;
 class KToggleAction;
 class KAction;
 class KActionCollection;
-class KPopupMenu;
+class KMenu;
 class QToolButton;
 
 namespace K3bDevice {

@@ -128,7 +128,7 @@ QString K3bAudioTrackViewItem::text(int i) const
       else
 	return m_track->firstSource()->sourceComment();
     default:
-      return KListViewItem::text(i);
+      return K3ListViewItem::text(i);
     }
 }
 
@@ -152,7 +152,7 @@ void K3bAudioTrackViewItem::setText( int col, const QString& text )
       m_track->setTitle( text );
   }
 
-  KListViewItem::setText( col, text );
+  K3ListViewItem::setText( col, text );
 }
 
 

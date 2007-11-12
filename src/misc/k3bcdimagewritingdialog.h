@@ -27,13 +27,13 @@
 class QCheckBox;
 class K3bWriterSelectionWidget;
 class QLabel;
-class KURL;
-class KActiveLabel;
+class KUrl;
+class K3ActiveLabel;
 class KProgress;
 class K3bDataModeWidget;
 class K3bWritingModeWidget;
 class K3bTempDirSelectionWidget;
-class KURLRequester;
+class KUrlRequester;
 class K3bListView;
 class QSpinBox;
 class QComboBox;
@@ -41,7 +41,7 @@ class K3bIso9660;
 class K3bCueFileParser;
 class QDragEnterEvent;
 class QDropEvent;
-class KListView;
+class K3ListView;
 class Q3ListViewItem;
 class QPoint;
 class KComboBox;
@@ -58,14 +58,14 @@ class K3bCdImageWritingDialog : public K3bInteractionDialog
   K3bCdImageWritingDialog( QWidget* = 0, const char* = 0, bool = true );
   ~K3bCdImageWritingDialog();
 
-  void setImage( const KURL& url );
+  void setImage( const KUrl& url );
 
  protected slots:
   void slotStartClicked();
 
   void slotMd5JobPercent( int );
   void slotMd5JobFinished( bool );
-  void slotContextMenu( KListView*, Q3ListViewItem*, const QPoint& pos );
+  void slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& pos );
 
   void slotUpdateImage( const QString& );
 
@@ -108,7 +108,7 @@ class K3bCdImageWritingDialog : public K3bInteractionDialog
   K3bWritingModeWidget* m_writingModeWidget;
   QSpinBox* m_spinCopies;
 
-  KURLRequester* m_editImagePath;
+  KUrlRequester* m_editImagePath;
   KComboBox* m_comboRecentImages;
   QComboBox* m_comboImageType;
 

@@ -69,17 +69,17 @@ int K3bVcdTrack::index() const
 {
     int i = m_parent->find( this );
     if ( i < 0 )
-        kdDebug() << "(K3bVcdTrack) I'm not part of my parent!" << endl;
+        kDebug() << "(K3bVcdTrack) I'm not part of my parent!" << endl;
     return i;
 }
 
 void K3bVcdTrack::addToRevRefList( K3bVcdTrack* revreftrack )
 {
-    kdDebug() << "K3bVcdTrack::addToRevRefList: track = " << revreftrack << endl;
+    kDebug() << "K3bVcdTrack::addToRevRefList: track = " << revreftrack << endl;
 
     m_revreflist->append( revreftrack );
 
-    kdDebug() << "K3bVcdTrack::hasRevRef count = " << m_revreflist->count() << " empty = " << m_revreflist->isEmpty() << endl;
+    kDebug() << "K3bVcdTrack::hasRevRef count = " << m_revreflist->count() << " empty = " << m_revreflist->isEmpty() << endl;
 }
 
 void K3bVcdTrack::delFromRevRefList( K3bVcdTrack* revreftrack )
@@ -99,7 +99,7 @@ void K3bVcdTrack::delRefToUs()
 {
     for ( K3bVcdTrack * track = m_revreflist->first(); track; track = m_revreflist->next() ) {
         for ( int i = 0; i < K3bVcdTrack::_maxPbcTracks; i++ ) {
-            kdDebug() << "K3bVcdTrack::delRefToUs count = " << m_revreflist->count() << " empty = " << m_revreflist->isEmpty() << " track = " << track << " this = " << this << endl;
+            kDebug() << "K3bVcdTrack::delRefToUs count = " << m_revreflist->count() << " empty = " << m_revreflist->isEmpty() << " track = " << track << " this = " << this << endl;
             if ( this == track->getPbcTrack( i ) ) {
                 track->setPbcTrack( i );
                 track->setUserDefined( i, false );
@@ -120,13 +120,13 @@ void K3bVcdTrack::delRefFromUs()
 
 void K3bVcdTrack::setPbcTrack( int which, K3bVcdTrack* pbctrack )
 {
-    kdDebug() << "K3bVcdTrack::setPbcTrack " << which << ", " << pbctrack << endl;
+    kDebug() << "K3bVcdTrack::setPbcTrack " << which << ", " << pbctrack << endl;
     m_pbctrackmap.replace( which, pbctrack );
 }
 
 void K3bVcdTrack::setPbcNonTrack( int which, int type )
 {
-    kdDebug() << "K3bVcdTrack::setNonPbcTrack " << which << ", " << type << endl;
+    kDebug() << "K3bVcdTrack::setNonPbcTrack " << which << ", " << type << endl;
     m_pbcnontrackmap.replace( which, type );
 }
 
@@ -231,7 +231,7 @@ const QString K3bVcdTrack::video_format()
                     case 5 :
                     default:
                         return i18n( "Unspecified" );
-                        kdDebug() << "K3bVcdTrack::video_format() :" << mpeg_info->video[ i ].video_format << endl;
+                        kDebug() << "K3bVcdTrack::video_format() :" << mpeg_info->video[ i ].video_format << endl;
                         break;
                 }
             }
@@ -378,7 +378,7 @@ const int K3bVcdTrack::mpegType( )
 
 const QString K3bVcdTrack::audio_type2str( unsigned int version, unsigned int audio_mode, unsigned int audio_type )
 {
-    kdDebug() << "K3bVcdTrack::audio_type2str() version:" << version << " audio_mode:" << audio_mode << " audio_type:" << audio_type << endl;
+    kDebug() << "K3bVcdTrack::audio_type2str() version:" << version << " audio_mode:" << audio_mode << " audio_type:" << audio_type << endl;
 
     QString audio_types[ 3 ][ 5 ] = {
                                         {
@@ -436,23 +436,23 @@ QString K3bVcdTrack::SecsToHMS( double duration )
 void K3bVcdTrack::PrintInfo()
 {
 
-    kdDebug() << "K3bVcdTrack::PrintInfo() ....................." << endl;
-    kdDebug() << "  version          : MPEG" << version() << endl;
-    kdDebug() << "  duration         : " << duration() << endl;
-    kdDebug() << "  muxrate          : " << muxrate() << endl;
-    kdDebug() << "  video ......................................" << endl;
-    kdDebug() << "    type           : " << mpegTypeS() << endl;
-    kdDebug() << "    resolution     : " << resolution() << endl;
-    kdDebug() << "    high resolution: " << highresolution() << endl;
-    kdDebug() << "    frate          : " << video_frate() << endl;
-    kdDebug() << "    bitrate        : " << video_bitrate() << endl;
-    kdDebug() << "    format         : " << video_format( ) << endl;
-    kdDebug() << "    chroma         : " << video_chroma( ) << endl;
-    kdDebug() << "  audio ......................................" << endl;
-    kdDebug() << "    type           : " << mpegTypeS( true ) << endl;
-    kdDebug() << "    mode           : " << audio_mode() << endl;
-    kdDebug() << "    layer          : " << audio_layer() << endl;
-    kdDebug() << "    bitrate        : " << audio_bitrate() << endl;
-    kdDebug() << "    sampfreq       : " << audio_sampfreq() << endl;
+    kDebug() << "K3bVcdTrack::PrintInfo() ....................." << endl;
+    kDebug() << "  version          : MPEG" << version() << endl;
+    kDebug() << "  duration         : " << duration() << endl;
+    kDebug() << "  muxrate          : " << muxrate() << endl;
+    kDebug() << "  video ......................................" << endl;
+    kDebug() << "    type           : " << mpegTypeS() << endl;
+    kDebug() << "    resolution     : " << resolution() << endl;
+    kDebug() << "    high resolution: " << highresolution() << endl;
+    kDebug() << "    frate          : " << video_frate() << endl;
+    kDebug() << "    bitrate        : " << video_bitrate() << endl;
+    kDebug() << "    format         : " << video_format( ) << endl;
+    kDebug() << "    chroma         : " << video_chroma( ) << endl;
+    kDebug() << "  audio ......................................" << endl;
+    kDebug() << "    type           : " << mpegTypeS( true ) << endl;
+    kDebug() << "    mode           : " << audio_mode() << endl;
+    kDebug() << "    layer          : " << audio_layer() << endl;
+    kDebug() << "    bitrate        : " << audio_bitrate() << endl;
+    kDebug() << "    sampfreq       : " << audio_sampfreq() << endl;
 
 }

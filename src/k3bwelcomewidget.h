@@ -93,7 +93,7 @@ class K3bWelcomeWidget::Display : public QWidget
   void rebuildGui( const Q3PtrList<KAction>& );
 
  signals:
-  void dropped( const KURL::List& );
+  void dropped( const KUrl::List& );
 
  protected:
   void resizeEvent( QResizeEvent* );

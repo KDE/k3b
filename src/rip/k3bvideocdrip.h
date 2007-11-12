@@ -21,7 +21,7 @@
 #include "k3bvideocdrippingoptions.h"
 
 class QString;
-class KProcess;
+class K3Process;
 class QDataStream;
 
 class K3bVideoCdRip : public K3bJob
@@ -46,7 +46,7 @@ class K3bVideoCdRip : public K3bJob
 
     protected slots:
         void slotVcdXRipFinished();
-        void slotParseVcdXRipOutput( KProcess*, char* output, int len );
+        void slotParseVcdXRipOutput( K3Process*, char* output, int len );
 
     private:
         void vcdxRip();
@@ -67,7 +67,7 @@ class K3bVideoCdRip : public K3bJob
 
         bool m_canceled;
 
-        KProcess* m_process;
+        K3Process* m_process;
 
 };
 

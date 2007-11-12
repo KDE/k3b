@@ -40,7 +40,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <keditlistbox.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kglobalsettings.h>
 #include <kdeversion.h>
 

@@ -24,7 +24,7 @@
 
 
 class QStringList;
-class KListBox;
+class K3ListBox;
 
 /**
   *@author Sebastian Trueg
@@ -42,7 +42,7 @@ class K3bCddbMultiEntriesDialog : public KDialogBase
   K3bCddbMultiEntriesDialog( QWidget* parent = 0, const char* name = 0);
 
  private:
-  KListBox *m_listBox;
+  K3ListBox *m_listBox;
 };
 
 #endif

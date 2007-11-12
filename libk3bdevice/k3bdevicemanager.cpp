@@ -29,7 +29,7 @@
 #include <qfileinfo.h>
 #include <qregexp.h>
 
-#include <kprocess.h>
+#include <k3process.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <ktempfile.h>
@@ -296,7 +296,7 @@ void K3bDevice::DeviceManager::LinuxDeviceScan()
     info.close();
   }
   else {
-    kdError() << "(K3bDevice::DeviceManager) could not open /proc/sys/dev/cdrom/info" << endl;
+    kError() << "(K3bDevice::DeviceManager) could not open /proc/sys/dev/cdrom/info" << endl;
   }
 
   //

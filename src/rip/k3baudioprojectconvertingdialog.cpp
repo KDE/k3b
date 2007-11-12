@@ -34,7 +34,7 @@
 #include <kcombobox.h>
 #include <klocale.h>
 #include <kconfig.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kurlrequester.h>
 #include <kfiledialog.h>
 #include <kio/global.h>
@@ -243,7 +243,7 @@ void K3bAudioProjectConvertingDialog::refresh()
 					       m_patternWidget->blankReplaceString() );
 
 
-    (void)new KListViewItem( m_viewTracks,
+    (void)new K3ListViewItem( m_viewTracks,
 			     m_viewTracks->lastItem(),
 			     filename + "." + extension,
 			     m_doc->length().toString(),
@@ -253,7 +253,7 @@ void K3bAudioProjectConvertingDialog::refresh()
 
     if( m_optionWidget->createCueFile() ) {
       d->cueFilename = K3b::fixupPath( baseDir + "/" + filename + ".cue" );
-      (void)new KListViewItem( m_viewTracks,
+      (void)new K3ListViewItem( m_viewTracks,
 			       m_viewTracks->lastItem(),
 			       filename + ".cue",
 			       "-",
@@ -281,7 +281,7 @@ void K3bAudioProjectConvertingDialog::refresh()
 							 m_patternWidget->replaceBlanks(),
 							 m_patternWidget->blankReplaceString() ) + "." + extension;
 
-      (void)new KListViewItem( m_viewTracks,
+      (void)new K3ListViewItem( m_viewTracks,
 			       m_viewTracks->lastItem(),
 			       filename,
 			       track->length().toString(),
@@ -301,7 +301,7 @@ void K3bAudioProjectConvertingDialog::refresh()
 						       m_patternWidget->replaceBlanks(),
 						       m_patternWidget->blankReplaceString() ) + ".m3u";
 
-    (void)new KListViewItem( m_viewTracks,
+    (void)new K3ListViewItem( m_viewTracks,
 			     m_viewTracks->lastItem(),
 			     filename,
 			     "-",

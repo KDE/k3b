@@ -193,12 +193,12 @@ bool K3bIso9660LibDvdCssBackend::open()
       
       if( !m_libDvdCss->open( m_device ) ||
 	  !m_libDvdCss->crackAllKeys() ) {
-	kdDebug() << "(K3bIso9660LibDvdCssBackend) Failed to retrieve all CSS keys." << endl;
+	kDebug() << "(K3bIso9660LibDvdCssBackend) Failed to retrieve all CSS keys." << endl;
 	close();
       }
     }
     else
-      kdDebug() << "(K3bIso9660LibDvdCssBackend) failed to open libdvdcss." << endl;
+      kDebug() << "(K3bIso9660LibDvdCssBackend) failed to open libdvdcss." << endl;
   }
 
   return ( m_libDvdCss != 0 );

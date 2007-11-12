@@ -77,12 +77,12 @@ K3bProjectBurnDialog::K3bProjectBurnDialog( K3bDoc* doc, QWidget *parent, const 
   setDelayedInitialization( true );
 
   setButtonGui( SAVE_BUTTON,
-		KStdGuiItem::close() );
+		KStandardGuiItem::close() );
   setButtonText( SAVE_BUTTON,
 		i18n("Close"),
 		i18n("Save Settings and close"),
 		i18n("Saves the settings to the project and closes the dialog.") );
-  setButtonGui( CANCEL_BUTTON, KStdGuiItem::cancel() );
+  setButtonGui( CANCEL_BUTTON, KStandardGuiItem::cancel() );
   setButtonText( CANCEL_BUTTON,
 		 i18n("Cancel"),
 		 i18n("Discard all changes and close"),
@@ -244,7 +244,7 @@ void K3bProjectBurnDialog::slotStartClicked()
 
   dlg->startJob(m_job);
 
-  kdDebug() << "(K3bProjectBurnDialog) job done. cleaning up." << endl;
+  kDebug() << "(K3bProjectBurnDialog) job done. cleaning up." << endl;
 
   delete m_job;
   m_job = 0;

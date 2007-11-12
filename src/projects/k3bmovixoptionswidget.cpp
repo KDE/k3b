@@ -46,7 +46,7 @@ public:
       if( *it == i18n("default") )
 	m_box->insertItem( *it );
       else {
-	QString lang = KGlobal::locale()->twoAlphaToLanguageName( *it );
+	QString lang = KGlobal::locale()->languageCodeToName( *it );
 	if( lang.isEmpty() )
 	  lang = *it;
 

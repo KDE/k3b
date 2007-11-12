@@ -61,7 +61,7 @@ void K3bDataProjectInterface::addUrls( const QStringList& urls, const QString& p
 {
   K3bDataItem* p = m_dataDoc->root()->findByPath( parent );
   if( p && p->isDir() )
-    m_dataDoc->addUrls( KURL::List(urls), static_cast<K3bDirItem*>(p) );
+    m_dataDoc->addUrls( KUrl::List(urls), static_cast<K3bDirItem*>(p) );
 }
 
 

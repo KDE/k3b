@@ -109,7 +109,7 @@ void K3bCdda2wavReader::start( bool onlyInfo )
   d->process->setWorkingDirectory( m_imagePath );
   connect( d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotProcessLine(const QString&)) );
   connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotProcessLine(const QString&)) );
-  connect( d->process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*)) );
+  connect( d->process, SIGNAL(processExited(K3Process*)), this, SLOT(slotProcessExited(K3Process*)) );
 
   // create the command line
   *d->process << d->cdda2wavBin->path;
@@ -130,10 +130,10 @@ void K3bCdda2wavReader::start( bool onlyInfo )
     *d->process << *it;
 
   // start the thing
-  if( !d->process->start( KProcess::NotifyOnExit, KProcess::All ) ) {
+  if( !d->process->start( K3Process::NotifyOnExit, K3Process::All ) ) {
     // something went wrong when starting the program
     // it "should" be the executable
-    kdDebug() << "(K3bCdda2wavReader) could not start cdda2wav" << endl;
+    kDebug() << "(K3bCdda2wavReader) could not start cdda2wav" << endl;
     emit infoMessage( i18n("Could not start %1.").arg("cdda2wav"), K3bJob::ERROR );
     d->running = false;
     jobFinished(false);
@@ -189,7 +189,7 @@ void K3bCdda2wavReader::slotProcessLine( const QString& line )
     if( ok )
       d->trackOffsets.append( offset );
     else
-      kdDebug() << "(K3bCdda2wavReader) track offset parsing error: '" << line.mid( pos, endpos-pos ) << "'" << endl;
+      kDebug() << "(K3bCdda2wavReader) track offset parsing error: '" << line.mid( pos, endpos-pos ) << "'" << endl;
   }
 
   else if( line.startsWith( "percent_done" ) ) {
@@ -217,12 +217,12 @@ void K3bCdda2wavReader::slotProcessLine( const QString& line )
       emit percent( overall*100/d->trackOffsets[d->trackOffsets.count()-1] );
     }
     else
-      kdDebug() << "(K3bCdda2wavReader) track progress parsing error: '" << line.left(3) << "'" << endl;
+      kDebug() << "(K3bCdda2wavReader) track progress parsing error: '" << line.left(3) << "'" << endl;
   }
 }
 
 
-void K3bCdda2wavReader::slotProcessExited( KProcess* p )
+void K3bCdda2wavReader::slotProcessExited( K3Process* p )
 {
   d->running = false;
 

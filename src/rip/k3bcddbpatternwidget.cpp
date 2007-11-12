@@ -66,9 +66,9 @@ K3bCddbPatternWidget::K3bCddbPatternWidget( QWidget* parent, const char* name )
 	   this, SIGNAL(changed()) );
   connect( m_checkBlankReplace, SIGNAL(toggled(bool)),
 	   this, SIGNAL(changed()) );
-  connect( m_specialStringsLabel, SIGNAL(leftClickedURL()),
+  connect( m_specialStringsLabel, SIGNAL(leftClickedUrl()),
 	   this, SLOT(slotSeeSpecialStrings()) );
-  connect( m_conditionalInclusionLabel, SIGNAL(leftClickedURL()),
+  connect( m_conditionalInclusionLabel, SIGNAL(leftClickedUrl()),
 	   this, SLOT(slotSeeConditionalInclusion()) );
 }
 

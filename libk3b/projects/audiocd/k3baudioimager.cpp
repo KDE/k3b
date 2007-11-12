@@ -116,7 +116,7 @@ void K3bAudioImager::WorkThread::run()
       }
       else {
 	if( ::write( m_fd, reinterpret_cast<void*>(buffer), read ) != read ) {
-	  kdDebug() << "(K3bAudioImager::WorkThread) writing to fd " << m_fd << " failed." << endl;
+	  kDebug() << "(K3bAudioImager::WorkThread) writing to fd " << m_fd << " failed." << endl;
 	  lastError = K3bAudioImager::ERROR_FD_WRITE;
 	  emitFinished(false);
 	  return;
@@ -143,7 +143,7 @@ void K3bAudioImager::WorkThread::run()
 
     if( read < 0 ) {
       emitInfoMessage( i18n("Error while decoding track %1.").arg(trackNumber), K3bJob::ERROR );
-      kdDebug() << "(K3bAudioImager::WorkThread) read error on track " << trackNumber
+      kDebug() << "(K3bAudioImager::WorkThread) read error on track " << trackNumber
 		<< " at pos " << K3b::Msf(trackRead/2352) << endl;
       lastError = K3bAudioImager::ERROR_DECODING_TRACK;
       emitFinished(false);

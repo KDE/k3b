@@ -89,7 +89,7 @@ void K3bAudioTrackDialog::slotApply()
 
 void K3bAudioTrackDialog::setupGui()
 {
-  Q3Frame* frame = plainPage();
+  QFrame* frame = plainPage();
 
   Q3GridLayout* mainLayout = new Q3GridLayout( frame );
   mainLayout->setSpacing( spacingHint() );

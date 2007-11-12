@@ -44,7 +44,7 @@ class K3bDataUrlAddingDialog : public KDialogBase
   /**
    * \return \see QDialog::exec()
    */
-  static int addUrls( const KURL::List& urls, K3bDirItem* dir = 0,
+  static int addUrls( const KUrl::List& urls, K3bDirItem* dir = 0,
 		      QWidget* parent = 0 );
 
   static int moveItems( const Q3ValueList<K3bDataItem*>& items, K3bDirItem* dir,
@@ -78,12 +78,12 @@ class K3bDataUrlAddingDialog : public KDialogBase
   QLabel* m_counterLabel;
   K3bEncodingConverter* m_encodingConverter;
 
-  KURL::List m_urls;
-  Q3ValueList< QPair<KURL, K3bDirItem*> > m_urlQueue;
+  KUrl::List m_urls;
+  Q3ValueList< QPair<KUrl, K3bDirItem*> > m_urlQueue;
 
   Q3ValueList< QPair<K3bDataItem*, K3bDirItem*> > m_items;
 
-  Q3ValueList<KURL> m_dirSizeQueue;
+  Q3ValueList<KUrl> m_dirSizeQueue;
 
   bool m_bExistingItemsReplaceAll;
   bool m_bExistingItemsIgnoreAll;

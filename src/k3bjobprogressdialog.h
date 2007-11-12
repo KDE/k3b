@@ -38,7 +38,7 @@
 class Q3VBoxLayout;
 class Q3HBoxLayout;
 class Q3GridLayout;
-class KListView;
+class K3ListView;
 class Q3Frame;
 class Q3GroupBox;
 class QLabel;
@@ -140,7 +140,7 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
 	
   K3bThemedLabel* m_labelJob;
   K3bThemedLabel* m_labelJobDetails;
-  KListView* m_viewInfo;
+  K3ListView* m_viewInfo;
   K3bThemedLabel* m_labelTask;
   K3bThemedLabel* m_labelElapsedTime;
   KCutLabel* m_labelSubTask;

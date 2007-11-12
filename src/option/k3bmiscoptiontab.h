@@ -20,7 +20,7 @@
 #include "base_k3bmiscoptiontab.h"
 
 class QCheckBox;
-class KURLRequester;
+class KUrlRequester;
 
 /**
   *@author Sebastian Trueg

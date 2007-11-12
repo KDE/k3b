@@ -25,13 +25,13 @@
 #include <k3bdiskinfo.h>
 #include "k3bvideocdrippingoptions.h"
 
-class KListView;
+class K3ListView;
 class QCheckBox;
 class QLabel;
 class QSpinBox;
 class QComboBox;
 class QToolButton;
-class KURLRequester;
+class KUrlRequester;
 class K3bTempDirSelectionWidget;
 
 class K3bVideoCdRippingDialog : public K3bInteractionDialog
@@ -52,7 +52,7 @@ class K3bVideoCdRippingDialog : public K3bInteractionDialog
   
   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
 
-  KURLRequester* m_editDirectory;
+  KUrlRequester* m_editDirectory;
 
   QLabel* m_labelFreeSpace;
   QLabel* m_labelNecessarySize;

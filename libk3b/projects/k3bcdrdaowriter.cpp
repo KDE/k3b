@@ -156,7 +156,7 @@ K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice::Device* dev, K3bJobHandler* hdl,
 
   if( socketpair(AF_UNIX,SOCK_STREAM,0,m_cdrdaoComm) )
   {
-    kdDebug() << "(K3bCdrdaoWriter) could not open socketpair for cdrdao remote messages" << endl;
+    kDebug() << "(K3bCdrdaoWriter) could not open socketpair for cdrdao remote messages" << endl;
   }
   else
   {
@@ -229,7 +229,7 @@ void K3bCdrdaoWriter::prepareArgumentList()
     if ( m_sourceDevice->cdrdaoDriver() != "auto" )
       *m_process << "--driver" << m_sourceDevice->cdrdaoDriver();
     else if( defaultToGenericMMC( m_sourceDevice, false ) ) {
-      kdDebug() << "(K3bCdrdaoWriter) defaulting to generic-mmc driver for " << m_sourceDevice->blockDeviceName() << endl;
+      kDebug() << "(K3bCdrdaoWriter) defaulting to generic-mmc driver for " << m_sourceDevice->blockDeviceName() << endl;
       *m_process << "--driver" << "generic-mmc";
     }
     setReadArguments();
@@ -258,7 +258,7 @@ void K3bCdrdaoWriter::setWriteArguments()
       *m_process << burnDevice()->cdrdaoDriver();
   }
   else if( defaultToGenericMMC( burnDevice(), true ) ) {
-    kdDebug() << "(K3bCdrdaoWriter) defaulting to generic-mmc driver for " << burnDevice()->blockDeviceName() << endl;
+    kDebug() << "(K3bCdrdaoWriter) defaulting to generic-mmc driver for " << burnDevice()->blockDeviceName() << endl;
     *m_process << "--driver" << "generic-mmc:0x00000010";
   }
 
@@ -367,7 +367,7 @@ void K3bCdrdaoWriter::setCopyArguments()
   if ( m_sourceDevice->cdrdaoDriver() != "auto" )
     *m_process << "--source-driver" << m_sourceDevice->cdrdaoDriver();
   else if( defaultToGenericMMC( m_sourceDevice, false ) ) {
-    kdDebug() << "(K3bCdrdaoWriter) defaulting to generic-mmc driver for " << m_sourceDevice->blockDeviceName() << endl;
+    kDebug() << "(K3bCdrdaoWriter) defaulting to generic-mmc driver for " << m_sourceDevice->blockDeviceName() << endl;
     *m_process << "--source-driver" << "generic-mmc";
   }
 
@@ -391,7 +391,7 @@ void K3bCdrdaoWriter::setBlankArguments()
       *m_process << burnDevice()->cdrdaoDriver();
   }
   else if( defaultToGenericMMC( burnDevice(), true ) ) {
-    kdDebug() << "(K3bCdrdaoWriter) defaulting to generic-mmc driver for " << burnDevice()->blockDeviceName() << endl;
+    kDebug() << "(K3bCdrdaoWriter) defaulting to generic-mmc driver for " << burnDevice()->blockDeviceName() << endl;
     *m_process << "--driver" << "generic-mmc";
   }
 
@@ -466,8 +466,8 @@ void K3bCdrdaoWriter::start()
   m_process->setRawStdin(true);
   connect( m_process, SIGNAL(stderrLine(const QString&)),
            this, SLOT(slotStdLine(const QString&)) );
-  connect( m_process, SIGNAL(processExited(KProcess*)),
-           this, SLOT(slotProcessExited(KProcess*)) );
+  connect( m_process, SIGNAL(processExited(K3Process*)),
+           this, SLOT(slotProcessExited(K3Process*)) );
 
   m_canceled = false;
   m_knownError = false;
@@ -516,9 +516,9 @@ void K3bCdrdaoWriter::start()
 	    m_backupTocFile = m_tocFile + ".k3bbak";
 
 	    // workaround, cdrdao deletes the tocfile when --remote parameter is set
-	    if ( !KIO::NetAccess::copy(KURL(m_tocFile),KURL(m_backupTocFile), (QWidget*) 0) )
+	    if ( !KIO::NetAccess::copy(KUrl(m_tocFile),KUrl(m_backupTocFile), (QWidget*) 0) )
 	      {
-		kdDebug() << "(K3bCdrdaoWriter) could not backup " << m_tocFile << " to " << m_backupTocFile << endl;
+		kDebug() << "(K3bCdrdaoWriter) could not backup " << m_tocFile << " to " << m_backupTocFile << endl;
 		emit infoMessage( i18n("Could not backup tocfile."), ERROR );
 		jobFinished(false);
 		return;
@@ -534,14 +534,14 @@ void K3bCdrdaoWriter::start()
   // set working dir to dir part of toc file (to allow rel names in toc-file)
   m_process->setWorkingDirectory(Q3Url(m_tocFile).dirPath());
 
-  kdDebug() << "***** cdrdao parameters:\n";
+  kDebug() << "***** cdrdao parameters:\n";
   const Q3ValueList<Q3CString>& args = m_process->args();
   QString s;
   for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it )
     {
       s += *it + " ";
     }
-  kdDebug() << s << flush << endl;
+  kDebug() << s << flush << endl;
   emit debuggingOutput("cdrdao command:", s);
 
   m_currentTrack = 0;
@@ -577,11 +577,11 @@ void K3bCdrdaoWriter::start()
   burnDevice()->close();
   burnDevice()->usageLock();
 
-  if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) )
+  if( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) )
     {
       // something went wrong when starting the program
       // it "should" be the executable
-      kdDebug() << "(K3bCdrdaoWriter) could not start cdrdao" << endl;
+      kDebug() << "(K3bCdrdaoWriter) could not start cdrdao" << endl;
       emit infoMessage( i18n("Could not start %1.").arg("cdrdao"), K3bJob::ERROR );
       jobFinished(false);
     }
@@ -676,8 +676,8 @@ bool K3bCdrdaoWriter::cueSheet()
                 line = line.mid( pos, endPos-pos );
                 QFileInfo fi( QFileInfo( m_tocFile ).dirPath() + "/" + QFileInfo( line ).fileName() );
                 QString binpath = fi.filePath();
-                kdDebug() << QString("K3bCdrdaoWriter::cueSheet() BinFilePath from CueFile: %1").arg( line ) << endl;
-                kdDebug() << QString("K3bCdrdaoWriter::cueSheet() absolute BinFilePath: %1").arg( binpath ) << endl;
+                kDebug() << QString("K3bCdrdaoWriter::cueSheet() BinFilePath from CueFile: %1").arg( line ) << endl;
+                kDebug() << QString("K3bCdrdaoWriter::cueSheet() absolute BinFilePath: %1").arg( binpath ) << endl;
 
                 if ( !fi.exists() )
                     return false;
@@ -691,8 +691,8 @@ bool K3bCdrdaoWriter::cueSheet()
                 if ( symlink(QFile::encodeName( m_tocFile ), QFile::encodeName( tempFile + ".cue") ) == -1 )
                     return false;
 
-                kdDebug() << QString("K3bCdrdaoWriter::cueSheet() symlink BinFileName: %1.bin").arg( tempFile ) << endl;
-                kdDebug() << QString("K3bCdrdaoWriter::cueSheet() symlink CueFileName: %1.cue").arg( tempFile ) << endl;
+                kDebug() << QString("K3bCdrdaoWriter::cueSheet() symlink BinFileName: %1.bin").arg( tempFile ) << endl;
+                kDebug() << QString("K3bCdrdaoWriter::cueSheet() symlink CueFileName: %1.cue").arg( tempFile ) << endl;
                 m_binFileLnk = tempFile + ".bin";
                 m_cueFileLnk = tempFile + ".cue";
                 return true;
@@ -709,7 +709,7 @@ void K3bCdrdaoWriter::slotStdLine( const QString& line )
 }
 
 
-void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
+void K3bCdrdaoWriter::slotProcessExited( K3Process* p )
 {
   // release the device within this process
   burnDevice()->usageUnlock();
@@ -722,22 +722,22 @@ void K3bCdrdaoWriter::slotProcessExited( KProcess* p )
   case WRITE:
   case COPY:
     if ( !m_binFileLnk.isEmpty() ) {
-        KIO::NetAccess::del(KURL::fromPathOrURL(m_cueFileLnk), (QWidget*) 0);
-        KIO::NetAccess::del(KURL::fromPathOrURL(m_binFileLnk), (QWidget*) 0);
+        KIO::NetAccess::del(KUrl::fromPathOrUrl(m_cueFileLnk), (QWidget*) 0);
+        KIO::NetAccess::del(KUrl::fromPathOrUrl(m_binFileLnk), (QWidget*) 0);
     }
-    else if( (!QFile::exists( m_tocFile ) || K3b::filesize( KURL::fromPathOrURL(m_tocFile) ) == 0 ) && !m_onTheFly )
+    else if( (!QFile::exists( m_tocFile ) || K3b::filesize( KUrl::fromPathOrUrl(m_tocFile) ) == 0 ) && !m_onTheFly )
     {
       // cdrdao removed the tocfile :(
       // we need to recover it
-      if ( !KIO::NetAccess::copy(KURL::fromPathOrURL(m_backupTocFile), KURL::fromPathOrURL(m_tocFile), (QWidget*) 0) )
+      if ( !KIO::NetAccess::copy(KUrl::fromPathOrUrl(m_backupTocFile), KUrl::fromPathOrUrl(m_tocFile), (QWidget*) 0) )
       {
-        kdDebug() << "(K3bCdrdaoWriter) restoring tocfile " << m_tocFile << " failed." << endl;
+        kDebug() << "(K3bCdrdaoWriter) restoring tocfile " << m_tocFile << " failed." << endl;
         emit infoMessage( i18n("Due to a bug in cdrdao the toc/cue file %1 has been deleted. "
                                "K3b was unable to restore it from the backup %2.").arg(m_tocFile).arg(m_backupTocFile), ERROR );
       }
-      else if ( !KIO::NetAccess::del(KURL::fromPathOrURL(m_backupTocFile), (QWidget*) 0) )
+      else if ( !KIO::NetAccess::del(KUrl::fromPathOrUrl(m_backupTocFile), (QWidget*) 0) )
       {
-        kdDebug() << "(K3bCdrdaoWriter) delete tocfile backkup " << m_backupTocFile << " failed." << endl;
+        kDebug() << "(K3bCdrdaoWriter) delete tocfile backkup " << m_backupTocFile << " failed." << endl;
       }
     }
     break;
@@ -828,7 +828,7 @@ void K3bCdrdaoWriter::reinitParser()
 void K3bCdrdaoWriter::parseCdrdaoLine( const QString& str )
 {
   emit debuggingOutput( "cdrdao", str );
-  //  kdDebug() << "(cdrdaoparse)" << str << endl;
+  //  kDebug() << "(cdrdaoparse)" << str << endl;
   // find some messages from cdrdao
   // -----------------------------------------------------------------------------------------
   if( (str).startsWith( "Warning" ) || (str).startsWith( "WARNING" ) || (str).startsWith( "ERROR" ) )
@@ -947,7 +947,7 @@ void K3bCdrdaoWriter::parseCdrdaoMessage()
     // move the read-index forward to the beginnig of the most recent message
     count = ( msgs-1 ) * ( sizeof(msgSync)+d->progressMsgSize );
     m_comSock->at(count);
-    kdDebug() << "(K3bCdrdaoParser) " << msgs-1 << " message(s) skipped" << endl;
+    kDebug() << "(K3bCdrdaoParser) " << msgs-1 << " message(s) skipped" << endl;
   }
 
   while( count < avail ) {
@@ -959,7 +959,7 @@ void K3bCdrdaoWriter::parseCdrdaoMessage()
       buf = m_comSock->getch();
       ++count;
       if( count == avail ) {
-	//        kdDebug() << "(K3bCdrdaoParser) remote message sync not found (" << count << ")" << endl;
+	//        kDebug() << "(K3bCdrdaoParser) remote message sync not found (" << count << ")" << endl;
         return;
       }
 
@@ -970,7 +970,7 @@ void K3bCdrdaoWriter::parseCdrdaoMessage()
     }
 
     if( (avail - count) < d->progressMsgSize ) {
-      kdDebug() << "(K3bCdrdaoParser) could not read complete remote message." << endl;
+      kDebug() << "(K3bCdrdaoParser) could not read complete remote message." << endl;
       return;
     }
 
@@ -978,7 +978,7 @@ void K3bCdrdaoWriter::parseCdrdaoMessage()
     ::memset( &d->newMsg, 0, d->progressMsgSize );
     int size = m_comSock->readBlock( (char*)&d->newMsg, d->progressMsgSize);
     if( size == -1 ) {
-      kdDebug() << "(K3bCdrdaoParser) read error" << endl;
+      kDebug() << "(K3bCdrdaoParser) read error" << endl;
       return;
     }
     count += size;
@@ -1048,7 +1048,7 @@ QString K3bCdrdaoWriter::findDriverFile( const K3bExternalBin* bin )
   if( QFile::exists(path) )
     return path;
   else {
-    kdDebug() << "(K3bCdrdaoWriter) could not find cdrdao driver table." << endl;
+    kDebug() << "(K3bCdrdaoWriter) could not find cdrdao driver table." << endl;
     return QString::null;
   }
 }
@@ -1089,7 +1089,7 @@ bool K3bCdrdaoWriter::defaultToGenericMMC( K3bDevice::Device* dev, bool writer )
       return true;
     }
     else {
-      kdDebug() << "(K3bCdrdaoWriter) could not open driver table " << driverTable << endl;
+      kDebug() << "(K3bCdrdaoWriter) could not open driver table " << driverTable << endl;
       return false;
     }
   }

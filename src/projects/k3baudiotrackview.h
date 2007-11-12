@@ -42,7 +42,7 @@ class QFocusEvent;
 class QMouseEvent;
 class QDragMoveEvent;
 class QTimer;
-class KPopupMenu;
+class KMenu;
 class QPainter;
 class K3bListViewItemAnimator;
 class K3bAudioTrackPlayer;
@@ -95,7 +95,7 @@ class K3bAudioTrackView : public K3bListView
   QTimer* m_autoOpenTrackTimer;
   QTimer* m_animationTimer;
 
-  KPopupMenu* m_popupMenu;
+  KMenu* m_popupMenu;
 
   K3bAudioTrackPlayer* m_player;
 
@@ -106,7 +106,7 @@ class K3bAudioTrackView : public K3bListView
   K3bListViewItemAnimator* m_playerItemAnimator;
 
   // used for the drop-event hack
-  KURL::List m_dropUrls;
+  KUrl::List m_dropUrls;
   K3bAudioTrack* m_dropTrackAfter;
   K3bAudioTrack* m_dropTrackParent;
   K3bAudioDataSource* m_dropSourceAfter;
@@ -125,7 +125,7 @@ class K3bAudioTrackView : public K3bListView
   void slotMergeTracks();
   void slotSplitSource();
   void slotSplitTrack();
-  void showPopupMenu( KListView*, Q3ListViewItem* item, const QPoint& pos );
+  void showPopupMenu( K3ListView*, Q3ListViewItem* item, const QPoint& pos );
   void slotProperties();
   void slotPlayTrack();
   void slotQueryMusicBrainz();

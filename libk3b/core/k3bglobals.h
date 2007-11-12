@@ -188,7 +188,7 @@ namespace K3b
 
   QString systemName();
 
-  LIBK3B_EXPORT KIO::filesize_t filesize( const KURL& );
+  LIBK3B_EXPORT KIO::filesize_t filesize( const KUrl& );
 
   /**
    * Calculate the total size of an image file. This also includes
@@ -196,7 +196,7 @@ namespace K3b
    *
    * \returns the total size of the image file at url
    */
-  LIBK3B_EXPORT KIO::filesize_t imageFilesize( const KURL& url );
+  LIBK3B_EXPORT KIO::filesize_t imageFilesize( const KUrl& url );
 
   /**
    * true if the kernel supports ATAPI devices without SCSI emulation.
@@ -221,13 +221,13 @@ namespace K3b
    * Convert an url pointing to a local device to a K3bDevice.
    * Supports media:// and system::// urls.
    */
-  LIBK3B_EXPORT K3bDevice::Device* urlToDevice( const KURL& deviceUrl );
+  LIBK3B_EXPORT K3bDevice::Device* urlToDevice( const KUrl& deviceUrl );
 
   /**
    * Tries to convert urls from local protocols != "file" to file (for now supports media:/)
    */
-  LIBK3B_EXPORT KURL convertToLocalUrl( const KURL& url );
-  LIBK3B_EXPORT KURL::List convertToLocalUrls( const KURL::List& l );
+  LIBK3B_EXPORT KUrl convertToLocalUrl( const KUrl& url );
+  LIBK3B_EXPORT KUrl::List convertToLocalUrls( const KUrl::List& l );
 
   LIBK3B_EXPORT qint16 fromLe16( char* );
   LIBK3B_EXPORT qint32 fromLe32( char* );

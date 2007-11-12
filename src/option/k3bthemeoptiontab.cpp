@@ -23,7 +23,7 @@
 #include <kconfig.h>
 #include <kmessagebox.h>
 #include <kurlrequester.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kio/global.h>
 #include <kio/netaccess.h>
 #include <kio/job.h>
@@ -45,11 +45,11 @@ public:
 };
 
 
-class ThemeViewItem : public KListViewItem 
+class ThemeViewItem : public K3ListViewItem 
 {
 public:
   ThemeViewItem( K3bTheme* theme_, Q3ListView* parent, Q3ListViewItem* after )
-    : KListViewItem( parent, after ),
+    : K3ListViewItem( parent, after ),
       theme(theme_) {
     setText( 0, theme->name() );
     setText( 1, theme->author() );
@@ -133,7 +133,7 @@ void K3bThemeOptionTab::selectionChanged()
 
 void K3bThemeOptionTab::slotInstallTheme()
 {
-  KURL themeURL = KURLRequesterDlg::getURL( QString::null, this,
+  KUrl themeURL = KUrlRequesterDlg::getURL( QString::null, this,
 					    i18n("Drag or Type Theme URL") );
 
   if( themeURL.url().isEmpty() )
@@ -149,7 +149,7 @@ void K3bThemeOptionTab::slotInstallTheme()
     else
        sorryText = i18n("Unable to download the icon theme archive.\n"
                         "Please check that address %1 is correct.");
-    KMessageBox::sorry( this, sorryText.arg(themeURL.prettyURL()) );
+    KMessageBox::sorry( this, sorryText.arg(themeURL.prettyUrl()) );
     return;
   }
 
@@ -229,7 +229,7 @@ void K3bThemeOptionTab::slotRemoveTheme()
     readSettings();
 
     // delete the theme data itself
-    KIO::del( path, false, false );
+    KIO::del( path, KIO::HideProgressInfo );
   }
 }
 

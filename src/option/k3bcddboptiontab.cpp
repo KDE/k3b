@@ -32,13 +32,14 @@
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <krun.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <klineedit.h>
 #include <klocale.h>
 #include <knuminput.h>
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kdeversion.h>
+#include <kglobal.h>
 
 
 K3bCddbOptionTab::K3bCddbOptionTab( QWidget* parent,  const char* name )
@@ -130,7 +131,7 @@ K3bCddbOptionTab::~K3bCddbOptionTab()
 
 void K3bCddbOptionTab::readSettings()
 {
-  KConfig* c = kapp->config();
+  KConfig* c = KGlobal::config();
 
   c->setGroup( "Cddb" );
 
@@ -141,7 +142,7 @@ void K3bCddbOptionTab::readSettings()
   // new config
   QStringList cddbServer = c->readListEntry( "cddb server" );
 
-  QStringList localCddbDirs = c->readPathListEntry( "local cddb dirs" );
+  QStringList localCddbDirs = c->readPathEntry( "local cddb dirs", QStringList() );
 
   m_checkRemoteCddb->setChecked( c->readBoolEntry( "use remote cddb", true ) );
   m_checkUseLocalCddb->setChecked( c->readBoolEntry( "use local cddb query", true ) );
@@ -153,7 +154,7 @@ void K3bCddbOptionTab::readSettings()
     localCddbDirs.append( "~/.cddb/" );
 
   for( QStringList::const_iterator it = localCddbDirs.begin(); it != localCddbDirs.end(); ++it )
-    (void)new KListViewItem( m_viewLocalDir, m_viewLocalDir->lastItem(), *it );
+    (void)new K3ListViewItem( m_viewLocalDir, m_viewLocalDir->lastItem(), *it );
 
 
   // old config <= 0.7.3
@@ -177,9 +178,9 @@ void K3bCddbOptionTab::readSettings()
     QString server = buf[0];
     int port = buf[1].toInt();
     if( s.startsWith("Http") )
-      (void)new KListViewItem( m_viewCddbServer, m_viewCddbServer->lastItem(), "Http", server, QString::number(port) );
+      (void)new K3ListViewItem( m_viewCddbServer, m_viewCddbServer->lastItem(), "Http", server, QString::number(port) );
     else
-      (void)new KListViewItem( m_viewCddbServer, m_viewCddbServer->lastItem(), "Cddbp", server, QString::number(port) );
+      (void)new K3ListViewItem( m_viewCddbServer, m_viewCddbServer->lastItem(), "Cddbp", server, QString::number(port) );
   }
 
   enDisableButtons();
@@ -188,7 +189,7 @@ void K3bCddbOptionTab::readSettings()
 
 void K3bCddbOptionTab::apply()
 {
-  KConfig* c = kapp->config();
+  KConfig* c = KGlobal::config();
 
   c->setGroup( "Cddb" );
 
@@ -236,7 +237,7 @@ void K3bCddbOptionTab::slotLocalDirAdd()
               return;
           ++it;
       }
-    (void)new KListViewItem( m_viewLocalDir, m_viewLocalDir->lastItem(),
+    (void)new K3ListViewItem( m_viewLocalDir, m_viewLocalDir->lastItem(),
 			     localDir );
 
     enDisableButtons();
@@ -256,7 +257,7 @@ void K3bCddbOptionTab::slotLocalDirRemove()
 void K3bCddbOptionTab::slotCddbServerAdd()
 {
   if( !m_editCddbServer->text().isEmpty() ) {
-    (void)new KListViewItem( m_viewCddbServer, m_viewCddbServer->lastItem(),
+    (void)new K3ListViewItem( m_viewCddbServer, m_viewCddbServer->lastItem(),
 			     m_comboCddbType->currentText(),
 			     m_editCddbServer->text(),
 			     QString::number( m_editCddbPort->value() ) );

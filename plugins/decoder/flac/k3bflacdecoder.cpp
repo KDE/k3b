@@ -272,7 +272,7 @@ bool K3bFLACDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int
 
   // add meta info
   if( d->comments != 0 ) {
-    kdDebug() << "(K3bFLACDecoder) unpacking Vorbis tags" << endl;
+    kDebug() << "(K3bFLACDecoder) unpacking Vorbis tags" << endl;
     for( unsigned int i = 0; i < d->comments->get_num_comments(); ++i ) {
       QString key = QString::fromUtf8( d->comments->get_comment(i).get_field_name(),
                                        d->comments->get_comment(i).get_field_name_length() );
@@ -290,7 +290,7 @@ bool K3bFLACDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int
 #ifdef HAVE_TAGLIB
   if ((d->comments == 0) || (d->comments->get_num_comments() == 0)) {
     // no Vorbis comments, check for ID3 tags
-    kdDebug() << "(K3bFLACDecoder) using taglib to read tag" << endl;
+    kDebug() << "(K3bFLACDecoder) using taglib to read tag" << endl;
     TagLib::FLAC::File f( QFile::encodeName(filename()) );
     if( f.isOpen() ) {
       addMetaInfo( META_TITLE, TStringToQString( f.tag()->title() ) );
@@ -422,7 +422,7 @@ K3bAudioDecoder* K3bFLACDecoderFactory::createDecoder( QObject* parent,
 }
 
 
-bool K3bFLACDecoderFactory::canDecode( const KURL& url )
+bool K3bFLACDecoderFactory::canDecode( const KUrl& url )
 {
   // buffer large enough to read an ID3 tag header
   char buf[10];
@@ -432,36 +432,36 @@ bool K3bFLACDecoderFactory::canDecode( const KURL& url )
   QFile file(url.path());
 
   if(!file.open(QIODevice::ReadOnly)) {
-    kdDebug() << "(K3bFLACDecoder) Could not open file " << url.path() << endl;
+    kDebug() << "(K3bFLACDecoder) Could not open file " << url.path() << endl;
     return false;
   }
 
   // look for a fLaC magic number or ID3 tag header
   if(10 != file.readBlock(buf, 10)) {
-    kdDebug() << "(K3bFLACDecorder) File " << url.path()
+    kDebug() << "(K3bFLACDecorder) File " << url.path()
               << " is too small to be a FLAC file" << endl;
     return false;
   }
 
   if(0 == memcmp(buf, "ID3", 3)) {
     // Found ID3 tag, try and seek past it.
-    kdDebug() << "(K3bFLACDecorder) File " << url.path() << ": found ID3 tag" << endl;
+    kDebug() << "(K3bFLACDecorder) File " << url.path() << ": found ID3 tag" << endl;
 
     // See www.id3.org for details of the header, note that the size field
     // unpacks to 7-bit bytes, then the +10 is for the header itself.
     int pos;
     pos = ((buf[6]<<21)|(buf[7]<<14)|(buf[8]<<7)|buf[9]) + 10;
 
-    kdDebug() << "(K3bFLACDecoder) " << url.path() << ": seeking to " 
+    kDebug() << "(K3bFLACDecoder) " << url.path() << ": seeking to " 
               << pos << endl;
     if(!file.at(pos)) {
-      kdDebug() << "(K3bFLACDecoder) " << url.path() << ": couldn't seek to " 
+      kDebug() << "(K3bFLACDecoder) " << url.path() << ": couldn't seek to " 
                 << pos << endl;
       return false;
     }else{
       // seek was okay, try and read magic number into buf
       if(4 != file.readBlock(buf, 4)) {
-        kdDebug() << "(K3bFLACDecorder) File " << url.path()
+        kDebug() << "(K3bFLACDecorder) File " << url.path()
                   << " has ID3 tag but naught else!" << endl;
         return false;
       }
@@ -469,7 +469,7 @@ bool K3bFLACDecoderFactory::canDecode( const KURL& url )
   }
 
   if(memcmp(buf, "fLaC", 4) != 0) {
-    kdDebug() << "(K3bFLACDecoder) " << url.path() << ": not a FLAC file" << endl;
+    kDebug() << "(K3bFLACDecoder) " << url.path() << ": not a FLAC file" << endl;
     return false;
   }
 
@@ -480,7 +480,7 @@ bool K3bFLACDecoderFactory::canDecode( const KURL& url )
      (info.get_bits_per_sample() <= 16)) {
     return true;
   } else {
-    kdDebug() << "(K3bFLACDecoder) " << url.path() << ": wrong format:" << endl
+    kDebug() << "(K3bFLACDecoder) " << url.path() << ": wrong format:" << endl
               << "                channels:    " 
               << QString::number(info.get_channels()) << endl
               << "                samplerate:  "

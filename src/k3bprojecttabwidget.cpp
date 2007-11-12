@@ -198,14 +198,14 @@ bool K3bProjectTabWidget::eventFilter( QObject* o, QEvent* e )
 
     else if( e->type() == QEvent::DragMove ) {
       QDragMoveEvent* de = static_cast<QDragMoveEvent*>(e);
-      de->accept( KURLDrag::canDecode(de) && projectAt(de->pos()) );
+      de->accept( K3URLDrag::canDecode(de) && projectAt(de->pos()) );
       return true;
     }
 
     else if( e->type() == QEvent::Drop ) {
       QDropEvent* de = static_cast<QDropEvent*>(e);
-      KURL::List l;
-      if( KURLDrag::decode( de, l ) ) {
+      KUrl::List l;
+      if( K3URLDrag::decode( de, l ) ) {
 	if( K3bDoc* doc = projectAt( de->pos() ) )
 	  dynamic_cast<K3bView*>(doc->view())->addUrls( l );
       }

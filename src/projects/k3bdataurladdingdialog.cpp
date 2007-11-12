@@ -110,7 +110,7 @@ K3bDataUrlAddingDialog::~K3bDataUrlAddingDialog()
 }
 
 
-int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
+int K3bDataUrlAddingDialog::addUrls( const KUrl::List& urls,
 				     K3bDirItem* dir,
 				     QWidget* parent )
 {
@@ -144,7 +144,7 @@ int K3bDataUrlAddingDialog::addUrls( const KURL::List& urls,
 
   K3bDataUrlAddingDialog dlg( dir->doc(), parent );
   dlg.m_urls = urls;
-  for( KURL::List::ConstIterator it = urls.begin(); it != urls.end(); ++it )
+  for( KUrl::List::ConstIterator it = urls.begin(); it != urls.end(); ++it )
     dlg.m_urlQueue.append( qMakePair( K3b::convertToLocalUrl(*it), dir ) );
 
   dlg.slotAddUrls();
@@ -263,7 +263,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
     return;
 
   // add next url
-  KURL url = m_urlQueue.first().first;
+  KUrl url = m_urlQueue.first().first;
   K3bDirItem* dir = m_urlQueue.first().second;
   m_urlQueue.remove( m_urlQueue.begin() );
   //
@@ -450,7 +450,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 					      KGuiItem( i18n("Rename"),
 							QString::null,
 							i18n("Rename the new file") ),
-					      KStdGuiItem::cancel() ) ) {
+					      KStandardGuiItem::cancel() ) ) {
 	case 2: // replace all
 	  m_bExistingItemsReplaceAll = true;
 	  // fallthrough
@@ -507,7 +507,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 					      i18n("Always follow links"),
 					      i18n("Add link to project"),
 					      i18n("Always add links"),
-					      KStdGuiItem::cancel() ) ) {
+					      KStandardGuiItem::cancel() ) ) {
 	case 2:
 	  m_bFolderLinksFollowAll = true;
 	case 1:
@@ -530,10 +530,10 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 
 	// count the files in the followed dir
 	if( m_dirSizeJob->active() )
-	  m_dirSizeQueue.append( KURL::fromPathOrURL(absoluteFilePath) );
+	  m_dirSizeQueue.append( KUrl::fromPathOrUrl(absoluteFilePath) );
 	else {
 	  m_progressWidget->setTotalSteps( 0 );
-	  m_dirSizeJob->setUrls( KURL::fromPathOrURL(absoluteFilePath) );
+	  m_dirSizeJob->setUrls( KUrl::fromPathOrUrl(absoluteFilePath) );
 	  m_dirSizeJob->start();
 	}
       }
@@ -572,7 +572,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
       dlist.remove( dotdot );
 
       for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it ) {
-	m_urlQueue.append( qMakePair( KURL::fromPathOrURL(absoluteFilePath + '/' + *it), newDirItem ) );
+	m_urlQueue.append( qMakePair( KUrl::fromPathOrUrl(absoluteFilePath + '/' + *it), newDirItem ) );
       }
     }
     else {
@@ -613,10 +613,10 @@ void K3bDataUrlAddingDialog::slotCopyMoveItems()
 
 
   if( dir == item->parent() ) {
-    kdDebug() << "(K3bDataUrlAddingDialog) trying to move an item into its own parent dir." << endl;
+    kDebug() << "(K3bDataUrlAddingDialog) trying to move an item into its own parent dir." << endl;
   }
   else if( dir == item ) {
-    kdDebug() << "(K3bDataUrlAddingDialog) trying to move an item into itselft." << endl;
+    kDebug() << "(K3bDataUrlAddingDialog) trying to move an item into itselft." << endl;
   }
   else {
     //
@@ -686,7 +686,7 @@ void K3bDataUrlAddingDialog::slotCopyMoveItems()
 					      KGuiItem( i18n("Rename"),
 							QString::null,
 							i18n("Rename the new file") ),
-					      KStdGuiItem::cancel() ) ) {
+					      KStandardGuiItem::cancel() ) ) {
 	case 2: // replace all
 	  m_bExistingItemsReplaceAll = true;
 	  // fallthrough

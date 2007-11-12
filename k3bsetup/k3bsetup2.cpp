@@ -31,7 +31,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kgenericfactory.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <keditlistbox.h>
 #include <kmessagebox.h>
 #include <kinputdialog.h>
@@ -224,7 +224,7 @@ void K3bSetup2::updatePrograms()
       // we need the uid bit which is not supported by QFileInfo
       struct stat s;
       if( ::stat( QFile::encodeName(b->path), &s ) ) {
-	kdDebug() << "(K3bSetup2) unable to stat " << b->path << endl;
+	kDebug() << "(K3bSetup2) unable to stat " << b->path << endl;
       }
       else {
 	// create a checkviewitem
@@ -308,7 +308,7 @@ Q3CheckListItem* K3bSetup2::createDeviceItem( const QString& deviceNode )
   QFileInfo fi( deviceNode );
   struct stat s;
   if( ::stat( QFile::encodeName(deviceNode), &s ) ) {
-    kdDebug() << "(K3bSetup2) unable to stat " << deviceNode << endl;
+    kDebug() << "(K3bSetup2) unable to stat " << deviceNode << endl;
     return 0;
   }
   else {

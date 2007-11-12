@@ -77,8 +77,8 @@ void K3bMixedDirTreeView::slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3
 
   Q3ListViewItem* droppedItem = itemAt(e->pos());
   if( droppedItem == m_audioRootItem ) {
-    KURL::List urls;
-    if( KURLDrag::decode( e, urls ) ) {
+    KUrl::List urls;
+    if( K3URLDrag::decode( e, urls ) ) {
       K3bAudioTrackAddingDialog::addUrls( urls, m_doc->audioDoc(), 0, 0, 0, this );
     }
   }

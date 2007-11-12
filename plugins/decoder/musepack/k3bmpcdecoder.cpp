@@ -44,7 +44,7 @@ K3bAudioDecoder* K3bMpcDecoderFactory::createDecoder( QObject* parent,
 }
 
 
-bool K3bMpcDecoderFactory::canDecode( const KURL& url )
+bool K3bMpcDecoderFactory::canDecode( const KUrl& url )
 {
   K3bMpcWrapper w;
   return w.open( url.path() );

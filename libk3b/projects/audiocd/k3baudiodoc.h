@@ -84,7 +84,7 @@ class LIBK3B_EXPORT K3bAudioDoc : public K3bDoc
   /**
    * Creates a new audiofile inside this doc which has no track yet.
    */
-  K3bAudioFile* createAudioFile( const KURL& url );
+  K3bAudioFile* createAudioFile( const KUrl& url );
 
   /** get the current size of the project */
   KIO::filesize_t size() const;
@@ -147,14 +147,14 @@ class LIBK3B_EXPORT K3bAudioDoc : public K3bDoc
    * \param reused If not null this variable is set to true if the decoder is already in
    *               use and K3bAudioDecoder::analyseFile() does not have to be called anymore.
    */
-  K3bAudioDecoder* getDecoderForUrl( const KURL& url, bool* reused = 0 );
+  K3bAudioDecoder* getDecoderForUrl( const KUrl& url, bool* reused = 0 );
 
-  static bool readPlaylistFile( const KURL& url, KURL::List& playlist );
+  static bool readPlaylistFile( const KUrl& url, KUrl::List& playlist );
 
  public slots:
-  void addUrls( const KURL::List& );
-  void addTrack( const KURL&, uint );
-  void addTracks( const KURL::List&, uint );
+  void addUrls( const KUrl::List& );
+  void addTrack( const KUrl&, uint );
+  void addTracks( const KUrl::List&, uint );
   /** 
    * Adds a track without any testing 
    *
@@ -162,7 +162,7 @@ class LIBK3B_EXPORT K3bAudioDoc : public K3bDoc
    */
   void addTrack( K3bAudioTrack* track, uint position = 0 );
 
-  void addSources( K3bAudioTrack* parent, const KURL::List& urls, K3bAudioDataSource* sourceAfter = 0 );
+  void addSources( K3bAudioTrack* parent, const KUrl::List& urls, K3bAudioDataSource* sourceAfter = 0 );
 
   void removeTrack( K3bAudioTrack* );
   void moveTrack( K3bAudioTrack* track, K3bAudioTrack* after );
@@ -208,12 +208,12 @@ class LIBK3B_EXPORT K3bAudioDoc : public K3bDoc
  private:
   // the stuff for adding files
   // ---------------------------------------------------------
-  K3bAudioTrack* createTrack( const KURL& url );
+  K3bAudioTrack* createTrack( const KUrl& url );
 
   /**
    * Handle directories and M3u files
    */
-  KURL::List extractUrlList( const KURL::List& urls );
+  KUrl::List extractUrlList( const KUrl::List& urls );
   // ---------------------------------------------------------
 
   /**
@@ -237,8 +237,8 @@ class LIBK3B_EXPORT K3bAudioDoc : public K3bDoc
   bool m_hideFirstTrack;
   bool m_normalize;
 
-  KURL::List m_notFoundFiles;
-  KURL::List m_unknownFileFormatFiles;
+  KUrl::List m_notFoundFiles;
+  KUrl::List m_unknownFileFormatFiles;
 
   // CD-Text
   // --------------------------------------------------

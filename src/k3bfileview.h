@@ -23,7 +23,7 @@
 
 class K3bDirOperator;
 class Q3DragObject;
-class KURL;
+class KUrl;
 class KFileFilterCombo;
 class KFileItem;
 class KActionCollection;
@@ -42,15 +42,15 @@ class K3bFileView : public K3bContentsView
   K3bFileView(QWidget *parent=0, const char *name=0);
   ~K3bFileView();
 
-  void setUrl( const KURL &url, bool forward = true );
-  KURL url();
+  void setUrl( const KUrl &url, bool forward = true );
+  KUrl url();
 
   KActionCollection* actionCollection() const;
 
   void reload();
 
  signals:
-  void urlEntered( const KURL& url );
+  void urlEntered( const KUrl& url );
 
  public slots:
   void setDir( const QString& );

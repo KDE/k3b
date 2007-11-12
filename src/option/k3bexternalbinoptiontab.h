@@ -23,7 +23,7 @@
 
 class QPushButton;
 class Q3ListViewItem;
-class KListView;
+class K3ListView;
 class K3bExternalBinManager;
 class K3bExternalBinWidget;
 

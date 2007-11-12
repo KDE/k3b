@@ -158,9 +158,9 @@ void K3bIsoImager::handleMkisofsInfoMessage( const QString& line, int type )
 }
 
 
-void K3bIsoImager::slotProcessExited( KProcess* p )
+void K3bIsoImager::slotProcessExited( K3Process* p )
 {
-  kdDebug() << k_funcinfo << endl;
+  kDebug() << k_funcinfo << endl;
 
   m_processExited = true;
 
@@ -321,13 +321,13 @@ void K3bIsoImager::startSizeCalculation()
   // ??? Seems it is not needed after all. At least mkisofs 1.14 and above don't need it. ???
   //  *m_process << dummyDir();
 
-  kdDebug() << "***** mkisofs calculate size parameters:\n";
+  kDebug() << "***** mkisofs calculate size parameters:\n";
   const Q3ValueList<Q3CString>& args = m_process->args();
   QString s;
   for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
   }
-  kdDebug() << s << endl << flush;
+  kDebug() << s << endl << flush;
   emit debuggingOutput("mkisofs calculate size command:", s);
 
   // since output changed during mkisofs version changes we grab both
@@ -343,11 +343,11 @@ void K3bIsoImager::startSizeCalculation()
 
   // TODO: use K3bProcess::OutputCollector instead iof our own two slots.
 
-  connect( m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-	   this, SLOT(slotCollectMkisofsPrintSizeStderr(KProcess*, char*, int)) );
+  connect( m_process, SIGNAL(receivedStderr(K3Process*, char*, int)),
+	   this, SLOT(slotCollectMkisofsPrintSizeStderr(K3Process*, char*, int)) );
   connect( m_process, SIGNAL(stdoutLine(const QString&)),
 	   this, SLOT(slotCollectMkisofsPrintSizeStdout(const QString&)) );
-  connect( m_process, SIGNAL(processExited(KProcess*)),
+  connect( m_process, SIGNAL(processExited(K3Process*)),
 	   this, SLOT(slotMkisofsPrintSizeFinished()) );
 
   // we also want error messages
@@ -358,7 +358,7 @@ void K3bIsoImager::startSizeCalculation()
   m_collectedMkisofsPrintSizeStderr = QString::null;
   m_mkisofsPrintSizeResult = 0;
 
-  if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput ) ) {
+  if( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) {
     emit infoMessage( i18n("Could not start %1.").arg("mkisofs"), K3bJob::ERROR );
     cleanup();
 
@@ -368,7 +368,7 @@ void K3bIsoImager::startSizeCalculation()
 }
 
 
-void K3bIsoImager::slotCollectMkisofsPrintSizeStderr(KProcess*, char* data , int len)
+void K3bIsoImager::slotCollectMkisofsPrintSizeStderr(K3Process*, char* data , int len)
 {
   emit debuggingOutput( "mkisofs", QString::fromLocal8Bit( data, len ) );
   m_collectedMkisofsPrintSizeStderr.append( QString::fromLocal8Bit( data, len ) );
@@ -397,7 +397,7 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
   // if m_collectedMkisofsPrintSizeStdout is not empty we have a recent version of
   // mkisofs and parsing is very easy (s.o.)
   if( !m_collectedMkisofsPrintSizeStdout.isEmpty() ) {
-    kdDebug() << "(K3bIsoImager) iso size: " << m_collectedMkisofsPrintSizeStdout << endl;
+    kDebug() << "(K3bIsoImager) iso size: " << m_collectedMkisofsPrintSizeStdout << endl;
     m_mkisofsPrintSizeResult = m_collectedMkisofsPrintSizeStdout.toInt( &success );
   }
   else {
@@ -424,7 +424,7 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
   }
   else {
     m_mkisofsPrintSizeResult = 0;
-    kdDebug() << "(K3bIsoImager) Parsing mkisofs -print-size failed: " << m_collectedMkisofsPrintSizeStdout << endl;
+    kDebug() << "(K3bIsoImager) Parsing mkisofs -print-size failed: " << m_collectedMkisofsPrintSizeStdout << endl;
     emit infoMessage( i18n("Could not determine size of resulting image file."), ERROR );
     jobFinished( false );
   }
@@ -488,8 +488,8 @@ void K3bIsoImager::start()
     return;
   }
 
-  connect( m_process, SIGNAL(processExited(KProcess*)),
-	   this, SLOT(slotProcessExited(KProcess*)) );
+  connect( m_process, SIGNAL(processExited(K3Process*)),
+	   this, SLOT(slotProcessExited(K3Process*)) );
 
   connect( m_process, SIGNAL(stderrLine( const QString& )),
 	   this, SLOT(slotReceivedStderr( const QString& )) );
@@ -522,19 +522,19 @@ void K3bIsoImager::start()
   m_process->writeToFd( d->pipe->in() );
 
 
-  kdDebug() << "***** mkisofs parameters:\n";
+  kDebug() << "***** mkisofs parameters:\n";
   const Q3ValueList<Q3CString>& args = m_process->args();
   QString s;
   for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
   }
-  kdDebug() << s << endl << flush;
+  kDebug() << s << endl << flush;
   emit debuggingOutput("mkisofs command:", s);
 
-  if( !m_process->start( KProcess::NotifyOnExit, KProcess::AllOutput) ) {
+  if( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput) ) {
     // something went wrong when starting the program
     // it "should" be the executable
-    kdDebug() << "(K3bIsoImager) could not start mkisofs" << endl;
+    kDebug() << "(K3bIsoImager) could not start mkisofs" << endl;
     emit infoMessage( i18n("Could not start %1.").arg("mkisofs"), K3bJob::ERROR );
     jobFinished( false );
     cleanup();
@@ -651,7 +651,7 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
   int volsetSize = m_doc->isoOptions().volumeSetSize();
   int volsetSeqNo = m_doc->isoOptions().volumeSetNumber();
   if( volsetSeqNo > volsetSize ) {
-    kdDebug() << "(K3bIsoImager) invalid volume set sequence number: " << volsetSeqNo
+    kDebug() << "(K3bIsoImager) invalid volume set sequence number: " << volsetSeqNo
 	      << " with volume set size: " << volsetSize << endl;
     volsetSeqNo = volsetSize;
   }
@@ -841,7 +841,7 @@ int K3bIsoImager::writePathSpec()
 int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, Q3TextStream& stream )
 {
   if( !m_noDeepDirectoryRelocation && dirItem->depth() > 7 ) {
-    kdDebug() << "(K3bIsoImager) found directory depth > 7. Enabling no deep directory relocation." << endl;
+    kDebug() << "(K3bIsoImager) found directory depth > 7. Enabling no deep directory relocation." << endl;
     m_noDeepDirectoryRelocation = true;
   }
 
@@ -927,7 +927,7 @@ void K3bIsoImager::writePathSpecForFile( K3bFileItem* item, Q3TextStream& stream
     QString tempPath = temp.name();
     temp.unlink();
 
-    if( !KIO::NetAccess::copy( KURL(item->localPath()), KURL::fromPathOrURL(tempPath) ) ) {
+    if( !KIO::NetAccess::copy( KUrl(item->localPath()), KUrl::fromPathOrUrl(tempPath) ) ) {
       emit infoMessage( i18n("Failed to backup boot image file %1").arg(item->localPath()), ERROR );
       return;
     }
@@ -1171,7 +1171,7 @@ QString K3bIsoImager::dummyDir( K3bDirItem* dir )
 
   if( !_appDir.cd( name ) ) {
 
-    kdDebug() << "(K3bIsoImager) creating dummy dir: " << _appDir.absPath() << "/" << name << endl;
+    kDebug() << "(K3bIsoImager) creating dummy dir: " << _appDir.absPath() << "/" << name << endl;
 
     _appDir.mkdir( name );
     _appDir.cd( name );

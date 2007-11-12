@@ -70,7 +70,7 @@ K3bAudioMaxSpeedJob::WorkThread::~WorkThread()
 
 void K3bAudioMaxSpeedJob::WorkThread::run()
 {
-  kdDebug() << k_funcinfo << endl;
+  kDebug() << k_funcinfo << endl;
   m_canceled = false;
 
   emitStarted();
@@ -91,7 +91,7 @@ void K3bAudioMaxSpeedJob::WorkThread::run()
 
   while( it.current() && !m_canceled ) {
     if( !it.current()->seek(0) ) {
-      kdDebug() << "(K3bAudioMaxSpeedJob) seek failed." << endl;
+      kDebug() << "(K3bAudioMaxSpeedJob) seek failed." << endl;
       success = false;
       break;
     }
@@ -120,7 +120,7 @@ void K3bAudioMaxSpeedJob::WorkThread::run()
   }
 
   if( success )
-    kdDebug() << "(K3bAudioMaxSpeedJob) max speed: " << maxSpeed << endl;
+    kDebug() << "(K3bAudioMaxSpeedJob) max speed: " << maxSpeed << endl;
 
   emitFinished( success );
 }
@@ -139,7 +139,7 @@ int K3bAudioMaxSpeedJob::WorkThread::speedTest( K3bAudioDataSource* source )
       cdts->setDevice( dev );
     }
     else {
-      kdDebug() << "(K3bAudioMaxSpeedJob) ignoring audio cd track source." << endl;
+      kDebug() << "(K3bAudioMaxSpeedJob) ignoring audio cd track source." << endl;
       return 0;
     }
   }
@@ -160,13 +160,13 @@ int K3bAudioMaxSpeedJob::WorkThread::speedTest( K3bAudioDataSource* source )
   int usedT = t.elapsed();
 
   if( r < 0 ) {
-    kdDebug() << "(K3bAudioMaxSpeedJob) read failure." << endl;
+    kDebug() << "(K3bAudioMaxSpeedJob) read failure." << endl;
     return -1;
   }
 
   // KB/sec (add 1 millisecond to avoid division by 0)
   int throughput = (dataRead*1000+usedT)/(usedT+1)/1024;
-  kdDebug() << "(K3bAudioMaxSpeedJob) throughput: " << throughput 
+  kDebug() << "(K3bAudioMaxSpeedJob) throughput: " << throughput 
 	    << " (" << dataRead << "/" << usedT << ")" << endl;
 
 
@@ -176,7 +176,7 @@ int K3bAudioMaxSpeedJob::WorkThread::speedTest( K3bAudioDataSource* source )
 
 void K3bAudioMaxSpeedJob::WorkThread::cancel()
 {
-  kdDebug() << k_funcinfo << endl;
+  kDebug() << k_funcinfo << endl;
   m_canceled = true;
 }
 
@@ -196,7 +196,7 @@ int K3bAudioMaxSpeedJob::WorkThread::maxSpeedByMedia() const
       
     // this is the first valid speed or the lowest supported one
     s = *it;
-    kdDebug() << "(K3bAudioMaxSpeedJob) using speed factor: " << (s/175) << endl;
+    kDebug() << "(K3bAudioMaxSpeedJob) using speed factor: " << (s/175) << endl;
   }
 
   return s;

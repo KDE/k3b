@@ -62,7 +62,7 @@
 #include <kprogress.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kiconloader.h>
 #include <kconfig.h>
 #include <kdebug.h>
@@ -162,7 +162,7 @@ void K3bJobProgressDialog::setupGUI()
   // ------------------------------------------------------------------------------------------
 
 
-  m_viewInfo = new KListView( this, "m_viewInfo" );
+  m_viewInfo = new K3ListView( this, "m_viewInfo" );
   m_viewInfo->addColumn( "" );
   m_viewInfo->addColumn( i18n( "Message" ) );
   m_viewInfo->setFullWidth( true );
@@ -248,9 +248,9 @@ void K3bJobProgressDialog::setupGUI()
   QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
   layout5->addItem( spacer );
 
-  m_buttonCancel = new KPushButton( KStdGuiItem::cancel(), this, "m_buttonCancel" );
+  m_buttonCancel = new KPushButton( KStandardGuiItem::cancel(), this, "m_buttonCancel" );
   layout5->addWidget( m_buttonCancel );
-  m_buttonClose = new KPushButton( KStdGuiItem::close(), this );
+  m_buttonClose = new KPushButton( KStandardGuiItem::close(), this );
   layout5->addWidget( m_buttonClose );
   m_buttonShowDebug = new QPushButton( i18n("Show Debugging Output"), this );
   layout5->addWidget( m_buttonShowDebug );
@@ -303,7 +303,7 @@ void K3bJobProgressDialog::closeEvent( QCloseEvent* e )
 
     if( m_osd ) {
       m_osd->hide();
-      m_osd->saveSettings( kapp->config() );
+      m_osd->saveSettings( KGlobal::config() );
     }
   }
   else
@@ -359,7 +359,7 @@ void K3bJobProgressDialog::slotInfoMessage( const QString& infoString, int type 
 
 void K3bJobProgressDialog::slotFinished( bool success )
 {
-  kdDebug() << "(K3bJobProgressDialog) received finished signal!" << endl;
+  kDebug() << "(K3bJobProgressDialog) received finished signal!" << endl;
 
   m_logFile.close();
 
@@ -612,14 +612,14 @@ int K3bJobProgressDialog::startJob( K3bJob* job )
     k3bappcore->jobInterface()->setJob( job );
   }
   else if( !m_job ) {
-    kdError() << "(K3bJobProgressDialog) null job!" << endl;
+    kError() << "(K3bJobProgressDialog) null job!" << endl;
     return -1;
   }
 
   // the following code is mainly taken from QDialog::exec
 
   if ( in_loop ) {
-    kdError() << "(K3bJobProgressDialog::startJob) Recursive call detected." << endl;
+    kError() << "(K3bJobProgressDialog::startJob) Recursive call detected." << endl;
     return -1;
   }
 
@@ -684,8 +684,8 @@ bool K3bJobProgressDialog::questionYesNo( const QString& text,
   return ( KMessageBox::questionYesNo( this,
 				       text,
 				       caption,
-				       yesText.isEmpty() ? KStdGuiItem::yes() : KGuiItem(yesText),
-				       noText.isEmpty() ? KStdGuiItem::no() : KGuiItem(noText) ) == KMessageBox::Yes );
+				       yesText.isEmpty() ? KStandardGuiItem::yes() : KGuiItem(yesText),
+				       noText.isEmpty() ? KStandardGuiItem::no() : KGuiItem(noText) ) == KMessageBox::Yes );
 }
 
 

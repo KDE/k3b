@@ -41,7 +41,7 @@ K3bAudioDecoder* K3b<name>DecoderFactory::createDecoder( QObject* parent,
 }
 
 
-bool K3b<name>DecoderFactory::canDecode( const KURL& url )
+bool K3b<name>DecoderFactory::canDecode( const KUrl& url )
 {
   // PUT YOUR CODE HERE
   return false;

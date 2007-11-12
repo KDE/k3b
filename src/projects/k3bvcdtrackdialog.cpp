@@ -96,13 +96,13 @@ void K3bVcdTrackDialog::slotOk()
 void K3bVcdTrackDialog::setPbcTrack( K3bVcdTrack* selected, K3bCutComboBox* box, int which )
 {
     // TODO: Unset Userdefined on default settings
-    kdDebug() << QString( "K3bVcdTrackDialog::setPbcTrack: currentItem = %1, count = %2" ).arg( box->currentItem() ).arg( m_tracks.count() ) << endl;
+    kDebug() << QString( "K3bVcdTrackDialog::setPbcTrack: currentItem = %1, count = %2" ).arg( box->currentItem() ).arg( m_tracks.count() ) << endl;
 
     int count = m_tracks.count();
 
     if ( selected->getPbcTrack( which ) == m_tracks.at( box->currentItem() ) ) {
         if ( selected->getNonPbcTrack( which ) == ( int ) ( box->currentItem() - count ) ) {
-            kdDebug() << "K3bVcdTrackDialog::setPbcTrack: not changed, return" << endl;
+            kDebug() << "K3bVcdTrackDialog::setPbcTrack: not changed, return" << endl;
             return ;
         }
     }
@@ -155,7 +155,7 @@ void K3bVcdTrackDialog::slotApply()
 
                 if ( startkey > 0 )
                     for ( ; skiped > 0; skiped-- )
-                        kdDebug() << "Key " << it.current() ->text( 0 ).toInt() - skiped << " Playing: " << displayName( selectedTrack ) << " (normaly none)" << endl;
+                        kDebug() << "Key " << it.current() ->text( 0 ).toInt() - skiped << " Playing: " << displayName( selectedTrack ) << " (normaly none)" << endl;
                 else {
                     skiped = 0;
                     startkey = it.current() ->text( 0 ).toInt();
@@ -166,17 +166,17 @@ void K3bVcdTrackDialog::slotApply()
                 if ( mit != m_numkeysmap.end() )
                     if ( mit.data() ) {
                         selectedTrack->setDefinedNumKey( it.current() ->text( 0 ).toInt(), mit.data() );
-                        kdDebug() << "Key " << it.current() ->text( 0 ).toInt() << " Playing: " << it.current() ->text( 1 ) << "Track: " << mit.data() << endl;
+                        kDebug() << "Key " << it.current() ->text( 0 ).toInt() << " Playing: " << it.current() ->text( 1 ) << "Track: " << mit.data() << endl;
                     } else {
                         selectedTrack->setDefinedNumKey( it.current() ->text( 0 ).toInt(), 0L );
-                        kdDebug() << "Key " << it.current() ->text( 0 ).toInt() << " Playing: " << it.current() ->text( 1 ) << endl;
+                        kDebug() << "Key " << it.current() ->text( 0 ).toInt() << " Playing: " << it.current() ->text( 1 ) << endl;
                     }
             }
             ++it;
         }
     } else {
         selectedTrack->setDefinedNumKey( 1, selectedTrack );
-        kdDebug() << "Key 1" << " Playing: (default) " << displayName( selectedTrack ) << "Track: " << selectedTrack << endl;
+        kDebug() << "Key 1" << " Playing: (default) " << displayName( selectedTrack ) << "Track: " << selectedTrack << endl;
     }
 }
 
@@ -366,7 +366,7 @@ void K3bVcdTrackDialog::fillPbcGui()
 
 void K3bVcdTrackDialog::prepareGui()
 {
-    Q3Frame * frame = plainPage();
+    QFrame * frame = plainPage();
 
     Q3GridLayout* mainLayout = new Q3GridLayout( frame );
     mainLayout->setSpacing( spacingHint() );

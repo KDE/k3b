@@ -104,7 +104,7 @@ void K3bSidePanel::addButton( Q3Frame* frame, KAction* a )
     grid->addWidget( b, grid->numRows(), 0 );
   }
   else
-    kdDebug() << "(K3bSidePanel) null action." << endl;
+    kDebug() << "(K3bSidePanel) null action." << endl;
 }
 
 #include "k3bsidepanel.moc"

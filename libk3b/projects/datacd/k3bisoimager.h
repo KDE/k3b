@@ -30,7 +30,7 @@ class K3bDataItem;
 class K3bFileItem;
 class Q3TextStream;
 class K3bProcess;
-class KProcess;
+class K3Process;
 class K3bDevice::Device;
 class KTempFile;
 
@@ -150,10 +150,10 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
 
  protected slots:
   virtual void slotReceivedStderr( const QString& );
-  virtual void slotProcessExited( KProcess* );
+  virtual void slotProcessExited( K3Process* );
 
  private slots:
-  void slotCollectMkisofsPrintSizeStderr(KProcess*, char*, int);
+  void slotCollectMkisofsPrintSizeStderr(K3Process*, char*, int);
   void slotCollectMkisofsPrintSizeStdout( const QString& );
   void slotMkisofsPrintSizeFinished();
   void slotDataPreparationDone( bool success );

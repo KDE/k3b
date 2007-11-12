@@ -184,12 +184,12 @@ bool K3bGrowisofsWriter::prepareProcess()
   delete d->process;
   d->process = new K3bProcess();
   d->process->setRunPrivileged(true);
-  //  d->process->setPriority( KProcess::PrioHighest );
+  //  d->process->setPriority( K3Process::PrioHighest );
   d->process->setSplitStdout(true);
   d->process->setRawStdin(true);
   connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotReceivedStderr(const QString&)) );
   connect( d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotReceivedStderr(const QString&)) );
-  connect( d->process, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*)) );
+  connect( d->process, SIGNAL(processExited(K3Process*)), this, SLOT(slotProcessExited(K3Process*)) );
 
 
   //
@@ -207,7 +207,7 @@ bool K3bGrowisofsWriter::prepareProcess()
   if( d->trackSize > 0 && d->growisofsBin->version < K3bVersion( 5, 20 ) ) {
     if( d->trackSize % 16 ) {
       trackSizePadding = (16 - d->trackSize%16);
-      kdDebug() << "(K3bGrowisofsWriter) need to pad " << trackSizePadding << " blocks." << endl;
+      kDebug() << "(K3bGrowisofsWriter) need to pad " << trackSizePadding << " blocks." << endl;
     }
   }
 
@@ -360,13 +360,13 @@ void K3bGrowisofsWriter::start()
   }
   else {
 
-    kdDebug() << "***** " << d->growisofsBin->name() << " parameters:\n";
+    kDebug() << "***** " << d->growisofsBin->name() << " parameters:\n";
     const Q3ValueList<Q3CString>& args = d->process->args();
     QString s;
     for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
       s += *it + " ";
     }
-    kdDebug() << s << flush << endl;
+    kDebug() << s << flush << endl;
     emit debuggingOutput( d->growisofsBin->name() + " command:", s);
 
 
@@ -386,10 +386,10 @@ void K3bGrowisofsWriter::start()
     burnDevice()->close();
     burnDevice()->usageLock();
 
-    if( !d->process->start( KProcess::NotifyOnExit, KProcess::All ) ) {
+    if( !d->process->start( K3Process::NotifyOnExit, K3Process::All ) ) {
       // something went wrong when starting the program
       // it "should" be the executable
-      kdDebug() << "(K3bGrowisofsWriter) could not start " << d->growisofsBin->path << endl;
+      kDebug() << "(K3bGrowisofsWriter) could not start " << d->growisofsBin->path << endl;
       emit infoMessage( i18n("Could not start %1.").arg(d->growisofsBin->name()), K3bJob::ERROR );
       jobFinished(false);
     }
@@ -521,7 +521,7 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
 	  d->lastWritingSpeed = speed;
 	}
 	else
-	  kdDebug() << "(K3bGrowisofsWriter) speed parsing failed: '"
+	  kDebug() << "(K3bGrowisofsWriter) speed parsing failed: '"
 		    << line.mid( pos, line.find( 'x', pos ) - pos ) << "'" << endl;
       }
       else {
@@ -529,7 +529,7 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
       }
     }
     else
-      kdDebug() << "(K3bGrowisofsWriter) progress parsing failed: '"
+      kDebug() << "(K3bGrowisofsWriter) progress parsing failed: '"
 		<< line.mid( pos+1, line.find( "(", pos ) - pos - 1 ).trimmed() << "'" << endl;
   }
 
@@ -540,7 +540,7 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
 }
 
 
-void K3bGrowisofsWriter::slotProcessExited( KProcess* p )
+void K3bGrowisofsWriter::slotProcessExited( K3Process* p )
 {
   d->inputFile.close();
 

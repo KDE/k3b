@@ -21,7 +21,7 @@
 #include <k3bdoc.h>
 
 
-class KURL;
+class KUrl;
 class K3bProjectInterface;
 
 
@@ -45,16 +45,16 @@ class K3bProjectManager : public QObject
    * Opens a K3b project.
    * \return 0 if url does not point to a valid k3b project file, the new project otherwise.
    */
-  K3bDoc* openProject( const KURL &url );
+  K3bDoc* openProject( const KUrl &url );
 
   /**
    * saves the document under filename and format.
    */
-  bool saveProject( K3bDoc*, const KURL &url );
+  bool saveProject( K3bDoc*, const KUrl &url );
 
   K3bDoc* activeDoc() const { return activeProject(); }
   K3bDoc* activeProject() const;
-  K3bDoc* findByUrl( const KURL& url );
+  K3bDoc* findByUrl( const KUrl& url );
   bool isEmpty() const;
 
   /**

@@ -180,7 +180,7 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
 			.arg((int)(speed*1385.0))
 			.arg(KGlobal::locale()->formatNumber(speed)), K3bJob::INFO );
     else
-      kdDebug() << "(K3bGrowisofsHandler) parsing error: '" << line.mid( pos, endPos-pos ) << "'" << endl;
+      kDebug() << "(K3bGrowisofsHandler) parsing error: '" << line.mid( pos, endPos-pos ) << "'" << endl;
   }
   else if( (pos = line.find( "RBU" )) > 0 ) {
 
@@ -214,11 +214,11 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
       }
     }
     else
-      kdDebug() << "(K3bGrowisofsHandler) failed to parse ring buffer fill from '" << line.mid( pos, endPos-pos ) << "'" << endl;
+      kDebug() << "(K3bGrowisofsHandler) failed to parse ring buffer fill from '" << line.mid( pos, endPos-pos ) << "'" << endl;
   }
 
   else {
-    kdDebug() << "(growisofs) " << line << endl;
+    kDebug() << "(growisofs) " << line << endl;
   }
 }
 
@@ -311,7 +311,7 @@ void K3bGrowisofsHandler::slotCheckBufferStatusDone( K3bDevice::DeviceHandler* d
     QTimer::singleShot( 500, this, SLOT(slotCheckBufferStatus()) );
   }
   else {
-    kdDebug() << "(K3bGrowisofsHandler) stopping buffer check." << endl;
+    kDebug() << "(K3bGrowisofsHandler) stopping buffer check." << endl;
   }
 }
 

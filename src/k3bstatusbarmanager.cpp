@@ -124,8 +124,8 @@ void K3bStatusBarManager::slotFreeTempSpace(const QString&,
 					    unsigned long,
 					    unsigned long kbAvail)
 {
-  m_labelFreeTemp->setText(KIO::convertSizeFromKB(kbAvail)  + "/" +
-	                   KIO::convertSizeFromKB(kbSize)  );
+  m_labelFreeTemp->setText(KIO::convertSizeFromKiB(kbAvail)  + "/" +
+	                   KIO::convertSizeFromKiB(kbSize)  );
 
   // if we have less than 640 MB that is not good
   if( kbAvail < 655360 )

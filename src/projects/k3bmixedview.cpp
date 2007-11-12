@@ -132,7 +132,7 @@ void K3bMixedView::slotBurn()
       delete dlg;
     }
     else {
-      kdDebug() << "(K3bDoc) Error: no burndialog available." << endl;
+      kDebug() << "(K3bDoc) Error: no burndialog available." << endl;
     }
   }
 }
@@ -144,7 +144,7 @@ K3bProjectBurnDialog* K3bMixedView::newBurnDialog( QWidget* parent, const char* 
 }
 
 
-void K3bMixedView::addUrls( const KURL::List& urls )
+void K3bMixedView::addUrls( const KUrl::List& urls )
 {
   if( m_widgetStack->visibleWidget() == m_dataFileView )
     K3bDataUrlAddingDialog::addUrls( urls, currentDir() );

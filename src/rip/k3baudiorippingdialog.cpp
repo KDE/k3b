@@ -33,7 +33,7 @@
 #include <klocale.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kurlrequester.h>
 #include <kfiledialog.h>
 #include <kio/global.h>
@@ -126,7 +126,7 @@ void K3bAudioRippingDialog::setupGui()
   Form1Layout->setSpacing( KDialog::spacingHint() );
   Form1Layout->setMargin( 0 );
 
-  m_viewTracks = new KListView( frame, "m_viewTracks" );
+  m_viewTracks = new K3ListView( frame, "m_viewTracks" );
   m_viewTracks->addColumn(i18n( "Filename") );
   m_viewTracks->addColumn(i18n( "Length") );
   m_viewTracks->addColumn(i18n( "File Size") );
@@ -244,7 +244,7 @@ void K3bAudioRippingDialog::slotStartClicked()
     if( KMessageBox::questionYesNoList( this, 
 					i18n("Do you want to overwrite these files?"),
 					filesToOverwrite,
-					i18n("Files Exist"), i18n("Overwrite"), KStdGuiItem::cancel() ) == KMessageBox::No )
+					i18n("Files Exist"), i18n("Overwrite"), KStandardGuiItem::cancel() ) == KMessageBox::No )
       return;
 
 
@@ -280,7 +280,7 @@ void K3bAudioRippingDialog::slotStartClicked()
   hide();
   ripDialog.startJob(job);
 
-  kdDebug() << "(K3bAudioRippingDialog) deleting ripjob." << endl;
+  kDebug() << "(K3bAudioRippingDialog) deleting ripjob." << endl;
   delete job;
 
   close();
@@ -333,7 +333,7 @@ void K3bAudioRippingDialog::refresh()
 
     filename = d->fsInfo.fixupPath( filename );
 
-    (void)new KListViewItem( m_viewTracks,
+    (void)new K3ListViewItem( m_viewTracks,
 			     m_viewTracks->lastItem(),
 			     filename + "." + extension,
 			     K3b::Msf(length).toString(),
@@ -342,7 +342,7 @@ void K3bAudioRippingDialog::refresh()
     d->filenames.append( baseDir + "/" + filename + "." + extension );
 
     if( m_optionWidget->createCueFile() )
-      (void)new KListViewItem( m_viewTracks,
+      (void)new K3ListViewItem( m_viewTracks,
 			       m_viewTracks->lastItem(),
 			       filename + ".cue",
 			       "-",
@@ -391,7 +391,7 @@ void K3bAudioRippingDialog::refresh()
 
       filename = d->fsInfo.fixupPath( filename );
 
-      (void)new KListViewItem( m_viewTracks,
+      (void)new K3ListViewItem( m_viewTracks,
 			       m_viewTracks->lastItem(),
 			       filename,
 			       trackLength.toString(),
@@ -409,7 +409,7 @@ void K3bAudioRippingDialog::refresh()
 						       m_patternWidget->replaceBlanks(),
 						       m_patternWidget->blankReplaceString() ) + ".m3u";
 
-    (void)new KListViewItem( m_viewTracks,
+    (void)new K3ListViewItem( m_viewTracks,
 			     m_viewTracks->lastItem(),
 			     filename,
 			     "-",
