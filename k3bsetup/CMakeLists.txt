@@ -12,8 +12,7 @@ install(TARGETS kcm_k3bsetup2 DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
-
-install( FILES  k3bsetup DESTINATION  )
+install( FILES  k3bsetup DESTINATION ${BIN_INSTALL_DIR} )
 install( FILES  k3bsetup2.desktop DESTINATION ${APPLNK_INSTALL_DIR}/Settings/System )
 
 
