@@ -19,8 +19,6 @@
 #include <qiodevice.h>
 #include <qstring.h>
 
-#include <kio/global.h>
-
 #include <k3b_export.h>
 
 
@@ -41,68 +39,65 @@
  */
 class LIBK3B_EXPORT K3bFileSplitter : public QIODevice
 {
- public:
-  K3bFileSplitter();
-  K3bFileSplitter( const QString& filename );
-  ~K3bFileSplitter();
+public:
+    K3bFileSplitter();
+    K3bFileSplitter( const QString& filename );
+    ~K3bFileSplitter();
 
-  /**
-   * Set the maximum file size. If this is set to 0
-   * (the default) the max filesize is determined based on 
-   * the filesystem type.
-   *
-   * Be aware that setName will reset the max file size.
-   */
-  void setMaxFileSize( KIO::filesize_t size );
+    /**
+     * Set the maximum file size. If this is set to 0
+     * (the default) the max filesize is determined based on 
+     * the filesystem type.
+     *
+     * Be aware that setName will reset the max file size.
+     */
+    void setMaxFileSize( qint64 size );
 
-  const QString& name() const;
+    const QString& name() const;
 
-  void setName( const QString& filename );
+    void setName( const QString& filename );
 
-  virtual bool open( int mode );
+    virtual bool open( OpenMode mode );
 
-  virtual void close();
+    virtual void close();
 
-  /**
-   * File descriptor to read from and write to.
-   * Not implemented yet!
-   */
-  int handle() const;
+    /**
+     * File descriptor to read from and write to.
+     * Not implemented yet!
+     */
+    int handle() const;
 
-  virtual void flush();
+    virtual void flush();
 
-  /**
-   * Not implemented
-   */
-  virtual Offset size() const;
+    /**
+     * Not implemented
+     */
+    virtual qint64 size() const;
 
-  /**
-   * Not implemented
-   */
-  virtual Offset at() const;
+    /**
+     * Not implemented
+     */
+    virtual qint64 pos() const;
 
-  /**
-   * Not implemented
-   */
-  virtual bool at( Offset );
+    /**
+     * Not implemented
+     */
+    virtual bool seek( qint64 );
 
-  virtual bool atEnd() const;
-  virtual Q_LONG readBlock( char *data, Q_ULONG maxlen );
-  virtual Q_LONG writeBlock( const char *data, Q_ULONG len );
-  virtual int getch();
-  virtual int putch( int );
-  virtual int ungetch( int );
+    virtual bool atEnd() const;
+    virtual qint64 readData( char *data, qint64 maxlen );
+    virtual qint64 writeData( const char *data, qint64 len );
 
-  /**
-   * Deletes all the splitted files.
-   * Caution: Does remove all files that fit the naming scheme without any 
-   * additional checks.
-   */
-  void remove();
+    /**
+     * Deletes all the splitted files.
+     * Caution: Does remove all files that fit the naming scheme without any 
+     * additional checks.
+     */
+    void remove();
 
- private:
-  class Private;
-  Private* d;
+private:
+    class Private;
+    Private* d;
 };
 
 #endif

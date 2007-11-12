@@ -22,7 +22,7 @@
 #include "k3b_export.h"
 
 namespace K3bDevice {
-  class Device;
+    class Device;
 }
 
 class K3bIso9660File;
@@ -30,63 +30,63 @@ class K3bIso9660File;
 
 class LIBK3B_EXPORT K3bMd5Job : public K3bJob
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bMd5Job( K3bJobHandler* jh , QObject* parent = 0, const char* name = 0 );
-  ~K3bMd5Job();
+public:
+    K3bMd5Job( K3bJobHandler* jh , QObject* parent = 0 );
+    ~K3bMd5Job();
 
-  Q3CString hexDigest();
-  Q3CString base64Digest();
+    Q3CString hexDigest();
+    Q3CString base64Digest();
 
- public slots:
-  void start();
-  void stop();
-  void cancel();
+public Q_SLOTS:
+    void start();
+    void stop();
+    void cancel();
 
-  // FIXME: read from QIODevice and thus add K3bFileSplitter support
+    // FIXME: read from QIODevice and thus add K3bFileSplitter support
 
-  /**
-   * read from a file.
-   *
-   * Be aware that the K3bMd5Job uses K3bFileSplitter to read splitted
-   * images. In the future this will be changed with the introduction
-   * of a setIODevice method.
-   */
-  void setFile( const QString& filename );
+    /**
+     * read from a file.
+     *
+     * Be aware that the K3bMd5Job uses K3bFileSplitter to read splitted
+     * images. In the future this will be changed with the introduction
+     * of a setIODevice method.
+     */
+    void setFile( const QString& filename );
 
-  /**
-   * read from an iso9660 file
-   */
-  void setFile( const K3bIso9660File* );
+    /**
+     * read from an iso9660 file
+     */
+    void setFile( const K3bIso9660File* );
 
-  /**
-   * read from a device
-   * This should be used in combination with setMaxReadSize
-   */
-  void setDevice( K3bDevice::Device* dev );
+    /**
+     * read from a device
+     * This should be used in combination with setMaxReadSize
+     */
+    void setDevice( K3bDevice::Device* dev );
 
-  /**
-   * read from the opened file descriptor.
-   * One needs to set the max read length or call stop()
-   * to finish calculation.
-   */
-  void setFd( int fd );
+    /**
+     * read from the opened file descriptor.
+     * One needs to set the max read length or call stop()
+     * to finish calculation.
+     */
+    void setFd( int fd );
 
-  /**
-   * Set the maximum bytes to read.
-   */
-  void setMaxReadSize( unsigned long long );
+    /**
+     * Set the maximum bytes to read.
+     */
+    void setMaxReadSize( qint64 );
 
- private slots:
-  void slotUpdate();
+private Q_SLOTS:
+    void slotUpdate();
 
- private:
-  void setupFdNotifier();
-  void stopAll();
+private:
+    void setupFdNotifier();
+    void stopAll();
 
-  class K3bMd5JobPrivate;
-  K3bMd5JobPrivate* d;
+    class K3bMd5JobPrivate;
+    K3bMd5JobPrivate* d;
 };
 
 #endif

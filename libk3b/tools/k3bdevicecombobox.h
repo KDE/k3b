@@ -19,12 +19,11 @@
 
 #include <kcombobox.h>
 #include "k3b_export.h"
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QtCore/QList>
 
 namespace K3bDevice {
-  class Device;
-  class DeviceManager;
+    class Device;
+    class DeviceManager;
 }
 
 
@@ -35,35 +34,35 @@ namespace K3bDevice {
  */
 class LIBK3B_EXPORT K3bDeviceComboBox : public KComboBox
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bDeviceComboBox( QWidget* parent = 0, const char* name = 0 );
-  ~K3bDeviceComboBox();
+public:
+    K3bDeviceComboBox( QWidget* parent = 0 );
+    ~K3bDeviceComboBox();
 
-  K3bDevice::Device* selectedDevice() const;
+    K3bDevice::Device* selectedDevice() const;
 
- signals:
-  void selectionChanged( K3bDevice::Device* );
+signals:
+    void selectionChanged( K3bDevice::Device* );
 
- public slots:
-  void addDevice( K3bDevice::Device* );
-  void addDevices( const Q3PtrList<K3bDevice::Device>& );
-  /**
-   * Clears the device combo and tries to keep the current selection
-   */
-  void refreshDevices( const Q3PtrList<K3bDevice::Device>& );
-  void removeDevice( K3bDevice::Device* );
-  void setSelectedDevice( K3bDevice::Device* );
-  void clear();
+public Q_SLOTS:
+    void addDevice( K3bDevice::Device* );
+    void addDevices( const QList<K3bDevice::Device*>& );
+    /**
+     * Clears the device combo and tries to keep the current selection
+     */
+    void refreshDevices( const QList<K3bDevice::Device*>& );
+    void removeDevice( K3bDevice::Device* );
+    void setSelectedDevice( K3bDevice::Device* );
+    void clear();
 
- private slots:
-  void slotActivated( int );
-  void slotDeviceManagerChanged( K3bDevice::DeviceManager* dm );
+private Q_SLOTS:
+    void slotActivated( int );
+    void slotDeviceManagerChanged( K3bDevice::DeviceManager* dm );
 
- private:
-  class Private;
-  Private* d;
+private:
+    class Private;
+    Private* d;
 };
 
 #endif

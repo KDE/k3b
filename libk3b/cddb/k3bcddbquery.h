@@ -34,7 +34,7 @@ class LIBK3B_EXPORT K3bCddbQuery : public QObject
   Q_OBJECT
 
  public:
-  K3bCddbQuery( QObject* parent = 0, const char* name = 0 );
+  K3bCddbQuery( QObject* parent = 0 );
   virtual ~K3bCddbQuery();
 
   void query( const K3bDevice::Toc& );

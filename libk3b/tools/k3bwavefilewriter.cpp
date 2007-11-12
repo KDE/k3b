@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -33,7 +33,7 @@ bool K3bWaveFileWriter::open( const QString& filename )
 {
   close();
 
-  m_outputFile.setName( filename );
+  m_outputFile.setFileName( filename );
 
   if( m_outputFile.open( QIODevice::ReadWrite ) ) {
     m_filename = filename;
@@ -51,7 +51,7 @@ bool K3bWaveFileWriter::open( const QString& filename )
 void K3bWaveFileWriter::close()
 {
   if( isOpen() ) {
-    if( m_outputFile.at() > 0 ) {
+    if( m_outputFile.pos() > 0 ) {
       padTo2352();
 
       // update wave header
@@ -75,7 +75,7 @@ bool K3bWaveFileWriter::isOpen()
 }
 
 
-const QString& K3bWaveFileWriter::filename() const 
+const QString& K3bWaveFileWriter::filename() const
 {
   return m_filename;
 }
@@ -85,7 +85,7 @@ void K3bWaveFileWriter::write( const char* data, int len, Endianess e )
 {
   if( isOpen() ) {
     if( e == LittleEndian ) {
-      m_outputStream.writeRawBytes( data, len );
+      m_outputStream.writeRawData( data, len );
     }
     else {
       if( len % 2 > 0 ) {
@@ -100,7 +100,7 @@ void K3bWaveFileWriter::write( const char* data, int len, Endianess e )
 	buffer[i] = data[i+1];
 	buffer[i+1] = data[i];
       }
-      m_outputStream.writeRawBytes( buffer, len );
+      m_outputStream.writeRawData( buffer, len );
 
       delete [] buffer;
     }
@@ -125,7 +125,7 @@ void K3bWaveFileWriter::writeEmptyHeader()
     0x00, 0x00, 0x00, 0x00  // 40 byteCount
   };
 
-  m_outputStream.writeRawBytes( riffHeader, 44 );
+  m_outputStream.writeRawData( riffHeader, 44 );
 }
 
 
@@ -135,46 +135,46 @@ void K3bWaveFileWriter::updateHeader()
 
     m_outputFile.flush();
 
-    qint32 dataSize( m_outputFile.at() - 44 );
+    qint32 dataSize( m_outputFile.pos() - 44 );
     qint32 wavSize(dataSize + 44 - 8);
     char c[4];
 
     // jump to the wavSize position in the header
-    if( m_outputFile.at( 4 ) ) {
+    if( m_outputFile.seek( 4 ) ) {
       c[0] = (wavSize   >> 0 ) & 0xff;
       c[1] = (wavSize   >> 8 ) & 0xff;
       c[2] = (wavSize   >> 16) & 0xff;
       c[3] = (wavSize   >> 24) & 0xff;
-      m_outputStream.writeRawBytes( c, 4 );
+      m_outputStream.writeRawData( c, 4 );
     }
     else
-      kDebug() << "(K3bWaveFileWriter) unable to seek in file: " << m_outputFile.name();
+      kDebug() << "(K3bWaveFileWriter) unable to seek in file: " << m_outputFile.fileName();
 
-    if( m_outputFile.at( 40 ) ) {
+    if( m_outputFile.seek( 40 ) ) {
       c[0] = (dataSize   >> 0 ) & 0xff;
       c[1] = (dataSize   >> 8 ) & 0xff;
       c[2] = (dataSize   >> 16) & 0xff;
       c[3] = (dataSize   >> 24) & 0xff;
-      m_outputStream.writeRawBytes( c, 4 );
+      m_outputStream.writeRawData( c, 4 );
     }
     else
-      kDebug() << "(K3bWaveFileWriter) unable to seek in file: " << m_outputFile.name();
+      kDebug() << "(K3bWaveFileWriter) unable to seek in file: " << m_outputFile.fileName();
 
     // jump back to the end
-    m_outputFile.at( m_outputFile.size() );
+    m_outputFile.seek( m_outputFile.size() );
   }
 }
 
 
 void K3bWaveFileWriter::padTo2352()
-{ 
-  int bytesToPad = ( m_outputFile.at() - 44 ) % 2352;
+{
+  int bytesToPad = ( m_outputFile.pos() - 44 ) % 2352;
   if( bytesToPad > 0 ) {
     kDebug() << "(K3bWaveFileWriter) padding wave file with " << bytesToPad << " bytes.";
 
     char* c = new char[bytesToPad];
     memset( c, 0, bytesToPad );
-    m_outputStream.writeRawBytes( c, bytesToPad );
+    m_outputStream.writeRawData( c, bytesToPad );
     delete [] c;
   }
 }

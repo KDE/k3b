@@ -47,7 +47,6 @@
 #include <kcutlabel.h>
 #include <k3bmsf.h>
 #include <k3bglobals.h>
-#include <k3bcutcombobox.h>
 
 
 K3bVcdTrackDialog::K3bVcdTrackDialog( K3bVcdDoc* _doc, Q3PtrList<K3bVcdTrack>& tracks, Q3PtrList<K3bVcdTrack>& selectedTracks, QWidget* parent, const char* name )

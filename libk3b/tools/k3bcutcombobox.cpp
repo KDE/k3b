@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -44,16 +44,17 @@ public:
 };
 
 
-K3bCutComboBox::K3bCutComboBox( QWidget* parent, const char* name )
-  : KComboBox( parent, name )
+#warning Use user data to store the full strings or a custom item delegate to paint the items
+K3bCutComboBox::K3bCutComboBox( QWidget* parent )
+  : KComboBox( parent )
 {
   d = new Private();
   //  setSizePolicy( QSizePolicy::Maximum, sizePolicy().horData(), sizePolicy().hasHeightForWidth() );
 }
 
 
-K3bCutComboBox::K3bCutComboBox( int method, QWidget* parent, const char* name )
-  : KComboBox( parent, name )
+K3bCutComboBox::K3bCutComboBox( int method, QWidget* parent )
+  : KComboBox( parent )
 {
   d = new Private();
   d->method = method;
@@ -78,7 +79,7 @@ QSize K3bCutComboBox::sizeHint() const
 //   QSize s(KComboBox::sizeHint());
 
 //   for( int i = 0; i < count(); i++ ) {
-//     int w = fontMetrics().width(d->originalItems[i]) + 
+//     int w = fontMetrics().width(d->originalItems[i]) +
 //       ( d->pixmaps[i].isNull() ? 0 : d->pixmaps[i].width() + 4);
 //     if( w > s.width() )
 //       s.setWidth( w );
@@ -100,10 +101,10 @@ void K3bCutComboBox::setCurrentText( const QString& s )
     if ( d->originalItems[i] == s )
       break;
   if ( i < count() ) {
-    setCurrentItem(i);
+    setCurrentIndex(i);
   }
   else if( !d->originalItems.isEmpty() ) {
-    d->originalItems[currentItem()] = s;
+    d->originalItems[currentIndex()] = s;
     cutText();
   }
 }
@@ -132,12 +133,12 @@ void K3bCutComboBox::insertStrList( const char**, int, int)
 
 void K3bCutComboBox::insertItem( const QString& text, int index )
 {
-  insertItem( QPixmap(), text, index );
+  insertItem( index, QPixmap(), text );
 }
 
 void K3bCutComboBox::insertItem( const QPixmap& pix, int i )
 {
-  insertItem( pix, "", i );
+  insertItem( i, pix, "" );
 }
 
 void K3bCutComboBox::insertItem( const QPixmap& pixmap, const QString& text, int index )
@@ -148,9 +149,9 @@ void K3bCutComboBox::insertItem( const QPixmap& pixmap, const QString& text, int
     d->originalItems.append( text );
 
   if( !pixmap.isNull() )
-    KComboBox::insertItem( pixmap, "xx", index );
+    KComboBox::insertItem( index, pixmap, "xx" );
   else
-    KComboBox::insertItem( "xx", index );
+    KComboBox::insertItem( index, "xx" );
 
   cutText();
 }

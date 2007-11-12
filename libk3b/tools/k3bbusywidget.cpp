@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -98,7 +98,7 @@ void K3bBusyWidget::drawContents( QPainter* p )
 
   //  p->eraseRect( rect );
   if( m_bBusy )
-    p->fillRect( pos, (rect.height() - squareSize)/2, squareSize, squareSize, KGlobalSettings::highlightColor() );
+    p->fillRect( pos, (rect.height() - squareSize)/2, squareSize, squareSize, palette().highlight() );
 }
 
 

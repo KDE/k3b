@@ -33,8 +33,9 @@ class Q3GroupBox;
 class QRadioButton;
 class Q3ButtonGroup;
 class KCutLabel;
-class K3bCutComboBox;
 
+#warning We need a simple replacement for K3bCutComboBox
+typdef KComboBox K3bCutComboBox;
 
 class K3bVcdTrackDialog : public KDialogBase
 {

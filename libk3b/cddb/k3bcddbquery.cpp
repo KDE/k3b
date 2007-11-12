@@ -24,6 +24,9 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 
+#include <KComponentData>
+#include <KAboutData>
+#include <KGlobal>
 
 #include <q3textstream.h>
 #include <qstringlist.h>
@@ -35,8 +38,8 @@
 
 
 
-K3bCddbQuery::K3bCddbQuery( QObject* parent, const char* name )
-  : QObject(parent, name)
+K3bCddbQuery::K3bCddbQuery( QObject* parent )
+  : QObject(parent)
 {
   m_bQueryFinishedEmited = false;
 }
@@ -70,8 +73,8 @@ void K3bCddbQuery::queryMatch( const K3bCddbResultHeader& header )
 
 const QStringList& K3bCddbQuery::categories()
 {
-  static QStringList s_cat = QStringList::split( ",", "rock,blues,misc,classical,"
-						 "country,data,folk,jazz,newage,reggae,soundtrack" );
+  static QStringList s_cat = QString( "rock,blues,misc,classical,"
+                                      "country,data,folk,jazz,newage,reggae,soundtrack" ).split( ',' );
   return s_cat;
 }
 
@@ -88,7 +91,7 @@ bool K3bCddbQuery::parseEntry( Q3TextStream& stream, K3bCddbResultEntry& entry )
     entry.rawData.append(line + "\n");
 
     // !all fields may be splitted into several lines!
-  
+
     if( line.startsWith( "DISCID" ) ) {
       // TODO: this could be several discids separated by comma!
     }
@@ -98,7 +101,7 @@ bool K3bCddbQuery::parseEntry( Q3TextStream& stream, K3bCddbResultEntry& entry )
       if( year.length() == 4 )
 	entry.year = year.toInt();
     }
-    
+
     else if( line.startsWith( "DGENRE" ) ) {
       entry.genre = line.mid( 7 );
     }
@@ -106,30 +109,30 @@ bool K3bCddbQuery::parseEntry( Q3TextStream& stream, K3bCddbResultEntry& entry )
     else if( line.startsWith( "DTITLE" ) ) {
       entry.cdTitle += line.mid( 7 );
     }
-    
+
     else if( line.startsWith( "TTITLE" ) ) {
-      int eqSgnPos = line.find( "=" );
+      int eqSgnPos = line.indexOf( "=" );
       bool ok;
       uint trackNum = (uint)line.mid( 6, eqSgnPos - 6 ).toInt( &ok );
       if( !ok )
 	kDebug() << "(K3bCddbQuery) !!! PARSE ERROR: " << line;
       else {
 	//	kDebug() << "(K3bCddbQuery) Track title for track " << trackNum;
-	
+
 	// make sure the list is big enough
 	while( entry.titles.count() <= trackNum )
 	  entry.titles.append( "" );
-	
+
 	entry.titles[trackNum] += line.mid( eqSgnPos+1 );
       }
     }
-    
+
     else if( line.startsWith( "EXTD" ) ) {
       entry.cdExtInfo += line.mid( 5 );
     }
-    
+
     else if( line.startsWith( "EXTT" ) ) {
-      int eqSgnPos = line.find( "=" );
+      int eqSgnPos = line.indexOf( "=" );
       bool ok;
       uint trackNum = (uint)line.mid( 4, eqSgnPos - 4 ).toInt( &ok );
       if( !ok )
@@ -140,25 +143,25 @@ bool K3bCddbQuery::parseEntry( Q3TextStream& stream, K3bCddbResultEntry& entry )
 	// make sure the list is big enough
 	while( entry.extInfos.count() <= trackNum )
 	  entry.extInfos.append( "" );
-	
+
 	entry.extInfos[trackNum] += line.mid( eqSgnPos+1 );
       }
     }
-    
+
     else if( line.startsWith( "#" ) ) {
       //      kDebug() <<  "(K3bCddbQuery) comment: " << line;
     }
-    
+
     else {
       kDebug() <<  "(K3bCddbQuery) Unknown field: " << line;
     }
   }
 
-  // now split the titles in the last added match 
+  // now split the titles in the last added match
   // if no " / " delimiter is present title and artist are the same
   // -------------------------------------------------------------------
   QString fullTitle = entry.cdTitle;
-  int splitPos = fullTitle.find( " / " );
+  int splitPos = fullTitle.indexOf( " / " );
   if( splitPos < 0 )
     entry.cdArtist = fullTitle;
   else {
@@ -171,7 +174,7 @@ bool K3bCddbQuery::parseEntry( Q3TextStream& stream, K3bCddbResultEntry& entry )
   for( QStringList::iterator it = entry.titles.begin();
        it != entry.titles.end(); ++it ) {
     QString fullTitle = *it;
-    int splitPos = fullTitle.find( " / " );
+    int splitPos = fullTitle.indexOf( " / " );
     if( splitPos < 0 )
       entry.artists.append( entry.cdArtist );
     else {
@@ -225,24 +228,27 @@ QString K3bCddbQuery::handshakeString() const
     user = "kde-user";
   if( host.isEmpty() )
     host = "kde-host";
-  
-  return QString("%1 %2 K3b %3").arg(user).arg(host).arg(kapp->aboutData()->version());
+
+  return QString("%1 %2 K3b %3")
+      .arg(user)
+      .arg(host)
+      .arg( KGlobal::mainComponent().aboutData()->version() );
 }
 
 
 QString K3bCddbQuery::queryString() const
 {
-  QString query = "cddb query " 
-    + QString::number( m_toc.discId(), 16 ).rightJustified( 8, '0' ) 
+  QString query = "cddb query "
+    + QString::number( m_toc.discId(), 16 ).rightJustified( 8, '0' )
     + " "
     + QString::number( (unsigned int)m_toc.count() );
-  
+
   for( K3bDevice::Toc::const_iterator it = m_toc.begin(); it != m_toc.end(); ++it ) {
     query.append( QString( " %1" ).arg( (*it).firstSector().lba() ) );
   }
-  
+
   query.append( QString( " %1" ).arg( m_toc.length().lba() / 75 ) );
-  
+
   return query;
 }
 
@@ -254,7 +260,7 @@ bool K3bCddbQuery::parseMatchHeader( const QString& line, K3bCddbResultHeader& h
   header.category = line.section( ' ', 0, 0 );
   header.discid = line.section( ' ', 1, 1 );
   header.title = line.mid( header.category.length() + header.discid.length() + 2 );
-  int slashPos = header.title.find( "/" );
+  int slashPos = header.title.indexOf( "/" );
   if( slashPos > 0 ) {
     header.artist = header.title.left(slashPos).trimmed();
     header.title = header.title.mid( slashPos+1 ).trimmed();

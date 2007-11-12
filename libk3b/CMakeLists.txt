@@ -20,7 +20,6 @@ add_subdirectory( core )
 add_subdirectory( plugin )
 add_subdirectory( tools )
 add_subdirectory( projects )
-add_subdirectory( cddb )
 add_subdirectory( jobs )
 
 
@@ -43,20 +42,9 @@ set(k3b_core_SRCS
       core/k3bthreadjobcommunicationevent.cpp)
 
 
-set(k3b_cddb_SRCS 
-      cddb/k3bcddbquery.cpp 
-      cddb/k3bcddb.cpp 
-      cddb/k3bcddbresult.cpp 
-      cddb/k3bcddbhttpquery.cpp 
-      cddb/k3bcddbpquery.cpp 
-      cddb/k3bcddblocalquery.cpp 
-      cddb/k3bcddbsubmit.cpp 
-      cddb/k3bcddblocalsubmit.cpp 
-      cddb/k3bcddbmultientriesdialog.cpp)
-
 set(k3b_tools_SRCS
       tools/k3bwavefilewriter.cpp tools/k3bbusywidget.cpp tools/k3bdeviceselectiondialog.cpp 
-      tools/k3bmd5job.cpp tools/k3btitlelabel.cpp tools/k3bcutcombobox.cpp 
+      tools/k3bmd5job.cpp tools/k3btitlelabel.cpp
       tools/k3bstringutils.cpp tools/k3bdevicecombobox.cpp tools/kcutlabel.cpp 
       tools/k3bstdguiitems.cpp tools/k3bvalidators.cpp tools/k3bthroughputestimator.cpp 
       tools/k3biso9660.cpp tools/k3bmultichoicedialog.cpp tools/k3bdevicehandler.cpp 
@@ -94,7 +82,7 @@ set(k3b_project_SRCS
     projects/k3bcuefileparser.cpp 
     projects/k3bpipebuffer.cpp)
 
-set(k3b_LIB_SRCS ${k3b_core_SRCS} ${k3b_cddb_SRCS} ${k3b_tools_SRCS} ${k3b_plugin_SRCS} ${k3b_project_SRCS})
+set(k3b_LIB_SRCS ${k3b_core_SRCS} ${k3b_tools_SRCS} ${k3b_plugin_SRCS} ${k3b_project_SRCS})
 
 kde4_add_library(k3b SHARED ${k3b_LIB_SRCS})
 

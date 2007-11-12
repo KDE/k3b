@@ -27,44 +27,46 @@ class QResizeEvent;
 
 class LIBK3B_EXPORT K3bTitleLabel : public Q3Frame
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bTitleLabel( QWidget* parent = 0, const char* name = 0 );
-  ~K3bTitleLabel();
+public:
+    K3bTitleLabel( QWidget* parent = 0 );
+    ~K3bTitleLabel();
 
-  QSize sizeHint() const;
-  QSize minimumSizeHint() const;
+    QSize sizeHint() const;
+    QSize minimumSizeHint() const;
 
- public slots:
-   /**
-    * default: 2
-    */
-  void setMargin( int );
+    bool event( QEvent* event );
 
-  void setTitle( const QString& title, const QString& subTitle = QString::null );
-  void setSubTitle( const QString& subTitle );
+public Q_SLOTS:
+    /**
+     * default: 2
+     */
+    void setMargin( int );
 
-  /**
-   * The title label only supports alignments left, hcenter, and right
-   *
-   * Default alignment is left.
-   */
-  // FIXME: honor right-to-left languages
-  void setAlignment( int align );
+    void setTitle( const QString& title, const QString& subTitle = QString::null );
+    void setSubTitle( const QString& subTitle );
 
- protected:
-  void resizeEvent( QResizeEvent* );
-  void drawContents( QPainter* p );
+    /**
+     * The title label only supports alignments left, hcenter, and right
+     *
+     * Default alignment is left.
+     */
+    // FIXME: honor right-to-left languages
+    void setAlignment( int align );
 
- private:
-  void updatePositioning();
+protected:
+    void resizeEvent( QResizeEvent* );
+    void drawContents( QPainter* p );
 
-  class ToolTip;
-  ToolTip* m_toolTip;
+private:
+    void updatePositioning();
 
-  class Private;
-  Private* d;
+    class ToolTip;
+    ToolTip* m_toolTip;
+
+    class Private;
+    Private* d;
 };
 
 #endif

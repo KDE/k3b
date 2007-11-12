@@ -21,7 +21,6 @@
 #include <k3bmedium.h>
 
 #include <k3btoc.h>
-#include <k3bcddbresult.h>
 #include <k3bcdtext.h>
 //Added by qt3to4:
 #include <QLabel>
@@ -87,8 +86,6 @@ class K3bAudioCdView : public K3bMediaContentsView
   K3bDevice::Toc m_toc;
   K3bDevice::Device* m_device;
 
-  K3bCddbResultEntry m_cddbInfo;
-
   KActionCollection* m_actionCollection;
   KActionMenu* m_popupMenu;
 
@@ -97,8 +94,6 @@ class K3bAudioCdView : public K3bMediaContentsView
   QLabel* m_labelLength;
 
   class AudioTrackViewItem;
-
-  K3bCddb* m_cddb;
 
   K3bDevice::CdText m_cdText;
 

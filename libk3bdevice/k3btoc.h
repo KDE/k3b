@@ -17,7 +17,7 @@
 #ifndef K3BTOC_H
 #define K3BTOC_H
 
-#include <q3valuelist.h>
+#include <qlist.h>
 #include <q3cstring.h>
 
 #include <k3bmsf.h>
@@ -42,7 +42,7 @@ namespace K3bDevice
    * The Toc deletes all its tracks when it is deleted and
    * deletes removed tracks.
    */
-  class LIBK3BDEVICE_EXPORT Toc : public Q3ValueList<K3bTrack>
+  class LIBK3BDEVICE_EXPORT Toc : public QList<K3bTrack>
   {
   public:
     Toc();
