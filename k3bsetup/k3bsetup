@@ -17,4 +17,4 @@
 
 #TODO: if kdesu not found and not currently root use kdialog to display an error message
 
-kdesu kcmshell k3bsetup2
+kdesu kcmshell4 k3bsetup2

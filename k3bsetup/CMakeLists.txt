@@ -1,7 +1,3 @@
-
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
-
-
 ########### next target ###############
 
 set(kcm_k3bsetup2_PART_SRCS k3bsetup2.cpp )
@@ -10,7 +6,7 @@ kde4_add_ui3_files(kcm_k3bsetup2_PART_SRCS base_k3bsetup2.ui )
 
 kde4_add_plugin(kcm_k3bsetup2 ${kcm_k3bsetup2_PART_SRCS})
 
-target_link_libraries(kcm_k3bsetup2  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} k3b )
+target_link_libraries(kcm_k3bsetup2  ${KDE4_KDEUI_LIBS} k3b )
 
 install(TARGETS kcm_k3bsetup2 DESTINATION ${PLUGIN_INSTALL_DIR} )
 
