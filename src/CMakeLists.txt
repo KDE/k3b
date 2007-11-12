@@ -1,6 +1,3 @@
-
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
-
 add_subdirectory( option )
 add_subdirectory( misc )
 add_subdirectory( rip )
@@ -9,7 +6,7 @@ add_subdirectory( fastscale )
 add_subdirectory( pics )
 add_subdirectory( icons )
 add_subdirectory( konqi )
-add_subdirectory( mimetypes )
+#add_subdirectory( mimetypes )
 add_subdirectory( sounds )
 
 
