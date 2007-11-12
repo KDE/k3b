@@ -76,11 +76,12 @@ class LIBK3B_EXPORT K3bVersion
    */
   void setVersion( int majorVersion, int minorVersion = -1, int patchlevel = -1, const QString& suffix = QString::null );
 
-  const QString& versionString() const { return m_versionString; }
+  QString toString() const { return m_versionString; }
+  QString versionString() const { return m_versionString; }
   int majorVersion() const { return m_majorVersion; }
   int minorVersion() const { return m_minorVersion; }
   int patchLevel() const { return m_patchLevel; }
-  const QString& suffix() const { return m_suffix; }
+  QString suffix() const { return m_suffix; }
 
   /**
    * just to make it possible to use as a QString

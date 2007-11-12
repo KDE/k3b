@@ -19,15 +19,14 @@
 #include <qevent.h>
 #include <qstring.h>
 #include <qwaitcondition.h>
-//Added by qt3to4:
-#include <QCustomEvent>
+#include <QEvent>
 
 namespace K3bDevice {
     class Device;
 }
 
 
-class K3bThreadJobCommunicationEvent : public QCustomEvent
+class K3bThreadJobCommunicationEvent : public QEvent
 {
  public:
     ~K3bThreadJobCommunicationEvent();

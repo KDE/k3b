@@ -14,12 +14,12 @@
  */
 
 #include "k3bthreadjobcommunicationevent.h"
-//Added by qt3to4:
-#include <QCustomEvent>
+
+#include <QtCore/QMutex>
 
 
 K3bThreadJobCommunicationEvent::K3bThreadJobCommunicationEvent( int type )
-    : QCustomEvent( type ),
+    : QEvent( QEvent::User ),
       m_type( type ),
       m_device( 0 ),
       m_wantedMediaState( 0 ),
@@ -102,7 +102,10 @@ bool K3bThreadJobCommunicationEvent::boolResult() const
 
 void K3bThreadJobCommunicationEvent::wait()
 {
-    m_threadBlocker.wait();
+    QMutex mutex;
+    mutex.lock();
+    m_threadBlocker.wait( &mutex );
+    mutex.unlock();
 }
 
 

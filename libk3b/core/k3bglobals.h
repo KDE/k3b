@@ -128,7 +128,7 @@ namespace K3b
   /**
    * Cut a filename preserving the extension
    */
-  LIBK3B_EXPORT QString cutFilename( const QString& name, unsigned int len );
+  LIBK3B_EXPORT QString cutFilename( const QString& name, int len );
 
   LIBK3B_EXPORT QString removeFilenameExtension( const QString& name );
 

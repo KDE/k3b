@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -34,8 +34,8 @@ public:
 const char* K3bJob::DEFAULT_SIGNAL_CONNECTION = "K3bJobDefault";
 
 
-K3bJob::K3bJob( K3bJobHandler* handler, QObject* parent, const char* name )
-  : QObject( parent, name ),
+K3bJob::K3bJob( K3bJobHandler* handler, QObject* parent )
+  : QObject( parent ),
     m_jobHandler( handler ),
     m_canceled(false),
     m_active(false)
@@ -137,11 +137,11 @@ void K3bJob::connectSubJob( K3bJob* subJob,
   connect( subJob, SIGNAL(finished(bool)), this, finishedSlot );
 
   if( connectProgress ) {
-    connect( subJob, SIGNAL(percent(int)), 
+    connect( subJob, SIGNAL(percent(int)),
 	       this, progressSlot != 0 ? progressSlot : SIGNAL(subPercent(int)) );
     if( subProgressSlot )
       connect( subJob, SIGNAL(subPercent(int)), this, subProgressSlot );
-    connect( subJob, SIGNAL(processedSize(int, int)), 
+    connect( subJob, SIGNAL(processedSize(int, int)),
 	     this, processedSizeSlot != 0 ? processedSizeSlot : SIGNAL(processedSubSize(int, int)) );
     if( processedSubSizeSlot )
       connect( subJob, SIGNAL(processedSubSize(int, int)), this, processedSubSizeSlot );
@@ -200,7 +200,7 @@ void K3bJob::connectSubJob( K3bJob* subJob,
 
 unsigned int K3bJob::numRunningSubJobs() const
 {
-  return m_runningSubJobs.count(); 
+  return m_runningSubJobs.count();
 }
 
 
@@ -231,8 +231,8 @@ public:
 
 
 
-K3bBurnJob::K3bBurnJob( K3bJobHandler* handler, QObject* parent, const char* name )
-  : K3bJob( handler, parent, name ),
+K3bBurnJob::K3bBurnJob( K3bJobHandler* handler, QObject* parent )
+  : K3bJob( handler, parent ),
     m_writeMethod( K3b::DEFAULT )
 {
   d = new Private;

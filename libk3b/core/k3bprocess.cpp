@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -125,7 +125,7 @@ void K3bProcess::slotSplitStdout( K3Process*, char* data, int len )
 
     for( QStringList::iterator it = lines.begin(); it != lines.end(); ++it ) {
       QString& str = *it;
-      
+
       // just to be sure since something in splitOutput does not do this right
       if( d->suppressEmptyLines && str.isEmpty() )
 	continue;
@@ -152,7 +152,7 @@ void K3bProcess::slotSplitStderr( K3Process*, char* data, int len )
 }
 
 
-QStringList K3bProcess::splitOutput( char* data, int len, 
+QStringList K3bProcess::splitOutput( char* data, int len,
 				     QString& unfinishedLine, bool suppressEmptyLines )
 {
   //
@@ -175,7 +175,7 @@ QStringList K3bProcess::splitOutput( char* data, int len,
       buffer += data[i];
   }
 
-  QStringList lines = QStringList::split( '\n', buffer, !suppressEmptyLines );
+  QStringList lines = buffer.split( '\n', suppressEmptyLines ? QString::SkipEmptyParts : QString::KeepEmptyParts );
 
   // in case we suppress empty lines we need to handle the following separately
   // to make sure we join unfinished lines correctly
@@ -198,10 +198,7 @@ QStringList K3bProcess::splitOutput( char* data, int len,
   if( hasUnfinishedLine ) {
     kDebug() << "(K3bProcess) found unfinished line: '" << lines.last() << "'";
     kDebug() << "(K3bProcess)             last char: '" << buffer.right(1) << "'";
-    unfinishedLine = lines.last();
-    it = lines.end();
-    --it;
-    lines.remove(it);
+    unfinishedLine = lines.takeLast();
   }
 
   return lines;
@@ -427,9 +424,9 @@ void K3bProcessOutputCollector::setProcess( K3Process* p )
 
   m_process = p;
   if( p ) {
-    connect( p, SIGNAL(receivedStdout(K3Process*, char*, int)), 
+    connect( p, SIGNAL(receivedStdout(K3Process*, char*, int)),
 	     this, SLOT(slotGatherStdout(K3Process*, char*, int)) );
-    connect( p, SIGNAL(receivedStderr(K3Process*, char*, int)), 
+    connect( p, SIGNAL(receivedStderr(K3Process*, char*, int)),
 	     this, SLOT(slotGatherStderr(K3Process*, char*, int)) );
   }
 

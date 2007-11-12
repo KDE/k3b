@@ -18,7 +18,7 @@
 #define _K3B_CORE_H_
 
 #include <qobject.h>
-#include <q3valuelist.h>
+#include <qlist.h>
 //Added by qt3to4:
 #include <QCustomEvent>
 
@@ -63,10 +63,10 @@ class LIBK3B_EXPORT K3bCore : public QObject
    * Although K3bCore is a singlelton it's constructor is not private to make inheritance
    * possible. Just make sure to only create one instance.
    */
-  K3bCore( QObject* parent = 0, const char* name = 0 );
+  K3bCore( QObject* parent = 0 );
   virtual ~K3bCore();
 
-  const Q3ValueList<K3bJob*>& runningJobs() const;
+  const QList<K3bJob*>& runningJobs() const;
 
   /**
    * Equals to !runningJobs().isEmpty()
@@ -171,7 +171,7 @@ class LIBK3B_EXPORT K3bCore : public QObject
   virtual void initDeviceManager();
   virtual void initPluginManager();
 
-  virtual void customEvent( QCustomEvent* e );
+  virtual void customEvent( QEvent* e );
 
  private:
   class Private;

@@ -210,7 +210,7 @@ class LIBK3B_EXPORT K3bJob : public QObject, public K3bJobHandler
    * \see runningSubJobs()
    * \see numRunningSubJobs()
    */
-  K3bJob( K3bJobHandler* hdl, QObject* parent = 0, const char* name = 0 );
+  K3bJob( K3bJobHandler* hdl, QObject* parent = 0 );
 
   /**
    * Call this in start() to properly register the job and emit the started() signal.
@@ -257,7 +257,7 @@ class LIBK3B_EXPORT K3bBurnJob : public K3bJob
   Q_OBJECT
 	
  public:
-  K3bBurnJob( K3bJobHandler* hdl, QObject* parent = 0, const char* name = 0 );
+  K3bBurnJob( K3bJobHandler* hdl, QObject* parent = 0 );
   virtual ~K3bBurnJob();
 
   /**

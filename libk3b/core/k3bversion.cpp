@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -40,9 +40,9 @@ K3bVersion::K3bVersion( const QString& version )
   setVersion( version );
 }
 
-K3bVersion::K3bVersion( int majorVersion, 
-			int minorVersion, 
-			int patchlevel, 
+K3bVersion::K3bVersion( int majorVersion,
+			int minorVersion,
+			int patchlevel,
 			const QString& suffix )
 {
   setVersion( majorVersion, minorVersion, patchlevel, suffix );
@@ -101,7 +101,7 @@ void K3bVersion::setVersion( const QString& v )
 // suffix = s and num = -1 is returned
 void K3bVersion::splitVersionString( const QString& s, int& num, QString& suffix )
 {
-  int pos = s.find( QRegExp("\\D") );
+  int pos = s.indexOf( QRegExp("\\D") );
   if( pos < 0 ) {
     num = s.toInt();
     suffix = "";
@@ -123,9 +123,9 @@ bool K3bVersion::isValid() const
 }
 
 
-void K3bVersion::setVersion( int majorVersion, 
-			     int minorVersion, 
-			     int patchlevel, 
+void K3bVersion::setVersion( int majorVersion,
+			     int minorVersion,
+			     int patchlevel,
 			     const QString& suffix )
 {
   m_majorVersion = majorVersion;
@@ -148,20 +148,20 @@ K3bVersion K3bVersion::simplify() const
   return v;
 }
 
-QString K3bVersion::createVersionString( int majorVersion, 
-					 int minorVersion, 
-					 int patchlevel, 
+QString K3bVersion::createVersionString( int majorVersion,
+					 int minorVersion,
+					 int patchlevel,
 					 const QString& suffix )
 {
   if( majorVersion >= 0 ) {
     QString s = QString::number(majorVersion);
-    
+
     if( minorVersion > -1 ) {
       s.append( QString(".%1").arg(minorVersion) );
       if( patchlevel > -1 )
 	s.append( QString(".%1").arg(patchlevel) );
     }
-    
+
     if( !suffix.isNull() )
       s.append( suffix );
 
@@ -269,7 +269,7 @@ bool operator<( const K3bVersion& v1, const K3bVersion& v2 )
 	||
 	( v1.minorVersion() == -1 && v2.minorVersion() == 0 )
 	||
-	( v2.minorVersion() == -1 && v1.minorVersion() == 0 ) 
+	( v2.minorVersion() == -1 && v1.minorVersion() == 0 )
 	)
       {
 	// 1.0 == 1.0.0
@@ -288,7 +288,7 @@ bool operator<( const K3bVersion& v1, const K3bVersion& v2 )
     else
       return ( v1.minorVersion() < v2.minorVersion() );
   }
-  else 
+  else
     return ( v1.majorVersion() < v2.majorVersion() );
 }
 

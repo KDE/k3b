@@ -116,7 +116,7 @@ class LIBK3B_EXPORT K3bExternalBinManager : public QObject
   Q_OBJECT
 
  public:
-  K3bExternalBinManager( QObject* parent = 0, const char* name = 0 );
+  K3bExternalBinManager( QObject* parent = 0 );
   ~K3bExternalBinManager();
 
   void search();

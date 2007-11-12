@@ -25,15 +25,15 @@
 
 
 
-K3bThreadJob::K3bThreadJob( K3bJobHandler* jh, QObject* parent, const char* name )
-  : K3bJob( jh, parent, name ),
+K3bThreadJob::K3bThreadJob( K3bJobHandler* jh, QObject* parent )
+  : K3bJob( jh, parent ),
     m_running(false)
 {
 }
 
 
-K3bThreadJob::K3bThreadJob( K3bThread* thread, K3bJobHandler* jh, QObject* parent, const char* name )
-  : K3bJob( jh, parent, name ),
+K3bThreadJob::K3bThreadJob( K3bThread* thread, K3bJobHandler* jh, QObject* parent )
+  : K3bJob( jh, parent ),
     m_running(false)
 {
   setThread(thread);
@@ -103,7 +103,7 @@ void K3bThreadJob::cleanupJob( bool success )
 }
 
 
-void K3bThreadJob::customEvent( QCustomEvent* e )
+void K3bThreadJob::customEvent( QEvent* e )
 {
     if( K3bThreadJobCommunicationEvent* ce = dynamic_cast<K3bThreadJobCommunicationEvent*>(e) ) {
         int result = 0;

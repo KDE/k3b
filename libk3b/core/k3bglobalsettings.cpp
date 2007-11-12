@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
@@ -16,46 +16,41 @@
 #include "k3bglobalsettings.h"
 
 #include <kconfig.h>
+#include <kconfiggroup.h>
 
 
 K3bGlobalSettings::K3bGlobalSettings()
-  : m_eject(true),
-    m_burnfree(true),
-    m_overburn(false),
-    m_useManualBufferSize(false),
-    m_bufferSize(4),
-    m_force(false)
+    : m_eject(true),
+      m_burnfree(true),
+      m_overburn(false),
+      m_useManualBufferSize(false),
+      m_bufferSize(4),
+      m_force(false)
 {
 }
 
 
 void K3bGlobalSettings::readSettings( KConfig* c )
 {
-  QString lastG = c->group();
-  c->setGroup( "General Options" );
+    KConfigGroup globalSettings = c->group( "General Options" );
 
-  m_eject = !c->readBoolEntry( "No cd eject", false );
-  m_burnfree = c->readBoolEntry( "burnfree", true );
-  m_overburn = c->readBoolEntry( "Allow overburning", false );
-  m_useManualBufferSize = c->readBoolEntry( "Manual buffer size", false );
-  m_bufferSize = c->readNumEntry( "Fifo buffer", 4 );
-  m_force = c->readBoolEntry( "Force unsafe operations", false );
-
-  c->setGroup( lastG );
+    m_eject = !globalSettings.readEntry( "No cd eject", false );
+    m_burnfree = globalSettings.readEntry( "burnfree", true );
+    m_overburn = globalSettings.readEntry( "Allow overburning", false );
+    m_useManualBufferSize = globalSettings.readEntry( "Manual buffer size", false );
+    m_bufferSize = globalSettings.readEntry( "Fifo buffer", 4 );
+    m_force = globalSettings.readEntry( "Force unsafe operations", false );
 }
 
 
 void K3bGlobalSettings::saveSettings( KConfig* c )
 {
-  QString lastG = c->group();
-  c->setGroup( "General Options" );
+    KConfigGroup globalSettings = c->group( "General Options" );
 
-  c->writeEntry( "No cd eject", !m_eject );
-  c->writeEntry( "burnfree", m_burnfree );
-  c->writeEntry( "Allow overburning", m_overburn );
-  c->writeEntry( "Manual buffer size", m_useManualBufferSize );
-  c->writeEntry( "Fifo buffer", m_bufferSize );
-  c->writeEntry( "Force unsafe operations", m_force );
-
-  c->setGroup( lastG );
+    globalSettings.writeEntry( "No cd eject", !m_eject );
+    globalSettings.writeEntry( "burnfree", m_burnfree );
+    globalSettings.writeEntry( "Allow overburning", m_overburn );
+    globalSettings.writeEntry( "Manual buffer size", m_useManualBufferSize );
+    globalSettings.writeEntry( "Fifo buffer", m_bufferSize );
+    globalSettings.writeEntry( "Force unsafe operations", m_force );
 }

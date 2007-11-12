@@ -155,23 +155,23 @@ bool K3bCdrecordProgram::scan( const QString& p )
   if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
     int pos = -1;
     if( wodim ) {
-      pos = out.output().find( "Wodim" );
+      pos = out.output().indexOf( "Wodim" );
     }
     else if( m_dvdPro ) {
-      pos = out.output().find( "Cdrecord-ProDVD" );
+      pos = out.output().indexOf( "Cdrecord-ProDVD" );
     }
     else {
-      pos = out.output().find( "Cdrecord" );
+      pos = out.output().indexOf( "Cdrecord" );
     }
 
     if( pos < 0 )
       return false;
 
-    pos = out.output().find( QRegExp("[0-9]"), pos );
+    pos = out.output().indexOf( QRegExp("[0-9]"), pos );
     if( pos < 0 )
       return false;
 
-    int endPos = out.output().find( QRegExp("\\s"), pos+1 );
+    int endPos = out.output().indexOf( QRegExp("\\s"), pos+1 );
     if( endPos < 0 )
       return false;
 
@@ -182,11 +182,11 @@ bool K3bCdrecordProgram::scan( const QString& p )
     if( wodim )
       bin->addFeature( "wodim" );
 
-    pos = out.output().find( "Copyright") + 14;
-    endPos = out.output().find( "\n", pos );
+    pos = out.output().indexOf( "Copyright") + 14;
+    endPos = out.output().indexOf( "\n", pos );
 
     // cdrecord does not use local encoding for the copyright statement but plain latin1
-    bin->copyright = QString::fromLatin1( out.output().mid( pos, endPos-pos ).local8Bit() ).trimmed();
+    bin->copyright = QString::fromLatin1( out.output().mid( pos, endPos-pos ).toLocal8Bit() ).trimmed();
   }
   else {
     kDebug() << "(K3bCdrecordProgram) could not start " << path;
@@ -307,18 +307,18 @@ bool K3bMkisofsProgram::scan( const QString& p )
   if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
     int pos = -1;
     if( genisoimage )
-      pos = out.output().find( "genisoimage" );
+      pos = out.output().indexOf( "genisoimage" );
     else
-      pos = out.output().find( "mkisofs" );
+      pos = out.output().indexOf( "mkisofs" );
 
     if( pos < 0 )
       return false;
 
-    pos = out.output().find( QRegExp("[0-9]"), pos );
+    pos = out.output().indexOf( QRegExp("[0-9]"), pos );
     if( pos < 0 )
       return false;
 
-    int endPos = out.output().find( ' ', pos+1 );
+    int endPos = out.output().indexOf( ' ', pos+1 );
     if( endPos < 0 )
       return false;
 
@@ -422,17 +422,17 @@ bool K3bReadcdProgram::scan( const QString& p )
   if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
     int pos = -1;
     if( readom )
-      pos = out.output().find( "readom" );
+      pos = out.output().indexOf( "readom" );
     else
-      pos = out.output().find( "readcd" );
+      pos = out.output().indexOf( "readcd" );
     if( pos < 0 )
       return false;
 
-    pos = out.output().find( QRegExp("[0-9]"), pos );
+    pos = out.output().indexOf( QRegExp("[0-9]"), pos );
     if( pos < 0 )
       return false;
 
-    int endPos = out.output().find( ' ', pos+1 );
+    int endPos = out.output().indexOf( ' ', pos+1 );
     if( endPos < 0 )
       return false;
 
@@ -511,15 +511,15 @@ bool K3bCdrdaoProgram::scan( const QString& p )
   vp << path ;
   K3bProcessOutputCollector out( &vp );
   if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
-    int pos = out.output().find( "Cdrdao version" );
+    int pos = out.output().indexOf( "Cdrdao version" );
     if( pos < 0 )
       return false;
 
-    pos = out.output().find( QRegExp("[0-9]"), pos );
+    pos = out.output().indexOf( QRegExp("[0-9]"), pos );
     if( pos < 0 )
       return false;
 
-    int endPos = out.output().find( ' ', pos+1 );
+    int endPos = out.output().indexOf( ' ', pos+1 );
     if( endPos < 0 )
       return false;
 
@@ -527,8 +527,8 @@ bool K3bCdrdaoProgram::scan( const QString& p )
     bin->path = path;
     bin->version = out.output().mid( pos, endPos-pos );
 
-    pos = out.output().find( "(C)", endPos+1 ) + 4;
-    endPos = out.output().find( '\n', pos );
+    pos = out.output().indexOf( "(C)", endPos+1 ) + 4;
+    endPos = out.output().indexOf( '\n', pos );
     bin->copyright = out.output().mid( pos, endPos-pos );
   }
   else {
@@ -609,13 +609,13 @@ bool K3bTranscodeProgram::scan( const QString& p )
   vp << appPath << "-v";
   K3bProcessOutputCollector out( &vp );
   if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
-    int pos = out.output().find( "transcode v" );
+    int pos = out.output().indexOf( "transcode v" );
     if( pos < 0 )
       return false;
 
     pos += 11;
 
-    int endPos = out.output().find( QRegExp("[\\s\\)]"), pos+1 );
+    int endPos = out.output().indexOf( QRegExp("[\\s\\)]"), pos+1 );
     if( endPos < 0 )
       return false;
 
@@ -638,13 +638,13 @@ bool K3bTranscodeProgram::scan( const QString& p )
   if( modp.start( K3Process::Block, K3Process::AllOutput ) ) {
     QString modPath = out.output().trimmed();
     QDir modDir( modPath );
-    if( !modDir.entryList( "*export_xvid*", QDir::Files ).isEmpty() )
+    if( !modDir.entryList( QStringList() << "*export_xvid*", QDir::Files ).isEmpty() )
       bin->addFeature( "xvid" );
-    if( !modDir.entryList( "*export_lame*", QDir::Files ).isEmpty() )
+    if( !modDir.entryList( QStringList() << "*export_lame*", QDir::Files ).isEmpty() )
       bin->addFeature( "lame" );
-    if( !modDir.entryList( "*export_ffmpeg*", QDir::Files ).isEmpty() )
+    if( !modDir.entryList( QStringList() << "*export_ffmpeg*", QDir::Files ).isEmpty() )
       bin->addFeature( "ffmpeg" );
-    if( !modDir.entryList( "*export_ac3*", QDir::Files ).isEmpty() )
+    if( !modDir.entryList( QStringList() << "*export_ac3*", QDir::Files ).isEmpty() )
       bin->addFeature( "ac3" );
   }
 
@@ -683,13 +683,13 @@ bool K3bVcdbuilderProgram::scan( const QString& p )
   vp << path << "-V";
   K3bProcessOutputCollector out( &vp );
   if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
-    int pos = out.output().find( "GNU VCDImager" );
+    int pos = out.output().indexOf( "GNU VCDImager" );
     if( pos < 0 )
       return false;
 
     pos += 14;
 
-    int endPos = out.output().find( QRegExp("[\\n\\)]"), pos+1 );
+    int endPos = out.output().indexOf( QRegExp("[\\n\\)]"), pos+1 );
     if( endPos < 0 )
       return false;
 
@@ -697,8 +697,8 @@ bool K3bVcdbuilderProgram::scan( const QString& p )
     bin->path = path;
     bin->version = out.output().mid( pos, endPos-pos ).trimmed();
 
-    pos = out.output().find( "Copyright" ) + 14;
-    endPos = out.output().find( "\n", pos );
+    pos = out.output().indexOf( "Copyright" ) + 14;
+    endPos = out.output().indexOf( "\n", pos );
     bin->copyright = out.output().mid( pos, endPos-pos ).trimmed();
   }
   else {
@@ -741,15 +741,15 @@ bool K3bNormalizeProgram::scan( const QString& p )
 
   vp << path << "--version";
   if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
-    int pos = out.output().find( "normalize" );
+    int pos = out.output().indexOf( "normalize" );
     if( pos < 0 )
       return false;
 
-    pos = out.output().find( QRegExp("\\d"), pos );
+    pos = out.output().indexOf( QRegExp("\\d"), pos );
     if( pos < 0 )
       return false;
 
-    int endPos = out.output().find( QRegExp("\\s"), pos+1 );
+    int endPos = out.output().indexOf( QRegExp("\\s"), pos+1 );
     if( endPos < 0 )
       return false;
 
@@ -757,8 +757,8 @@ bool K3bNormalizeProgram::scan( const QString& p )
     bin->path = path;
     bin->version = out.output().mid( pos, endPos-pos );
 
-    pos = out.output().find( "Copyright" )+14;
-    endPos = out.output().find( "\n", pos );
+    pos = out.output().indexOf( "Copyright" )+14;
+    endPos = out.output().indexOf( "\n", pos );
     bin->copyright = out.output().mid( pos, endPos-pos ).trimmed();
   }
   else {
@@ -800,15 +800,15 @@ bool K3bGrowisofsProgram::scan( const QString& p )
 
   vp << path << "-version";
   if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
-    int pos = out.output().find( "growisofs" );
+    int pos = out.output().indexOf( "growisofs" );
     if( pos < 0 )
       return false;
 
-    pos = out.output().find( QRegExp("\\d"), pos );
+    pos = out.output().indexOf( QRegExp("\\d"), pos );
     if( pos < 0 )
       return false;
 
-    int endPos = out.output().find( ",", pos+1 );
+    int endPos = out.output().indexOf( ",", pos+1 );
     if( endPos < 0 )
       return false;
 
@@ -882,18 +882,18 @@ bool K3bDvdformatProgram::scan( const QString& p )
   if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
     // different locales make searching for the +- char difficult
     // so we simply ignore it.
-    int pos = out.output().find( QRegExp("DVD.*RW(/-RAM)? format utility") );
+    int pos = out.output().indexOf( QRegExp("DVD.*RW(/-RAM)? format utility") );
     if( pos < 0 )
       return false;
 
-    pos = out.output().find( "version", pos );
+    pos = out.output().indexOf( "version", pos );
     if( pos < 0 )
       return false;
 
     pos += 8;
 
     // the version ends in a dot.
-    int endPos = out.output().find( QRegExp("\\.\\D"), pos );
+    int endPos = out.output().indexOf( QRegExp("\\.\\D"), pos );
     if( endPos < 0 )
       return false;
 
@@ -950,7 +950,7 @@ bool K3bDvdBooktypeProgram::scan( const QString& p )
 
   vp << path;
   if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
-    int pos = out.output().find( "dvd+rw-booktype" );
+    int pos = out.output().indexOf( "dvd+rw-booktype" );
     if( pos < 0 )
       return false;
 
@@ -999,18 +999,18 @@ bool K3bCdda2wavProgram::scan( const QString& p )
 
   vp << path << "-h";
   if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
-    int pos = out.output().find( "cdda2wav" );
+    int pos = out.output().indexOf( "cdda2wav" );
     if( pos < 0 )
       return false;
 
-    pos = out.output().find( "Version", pos );
+    pos = out.output().indexOf( "Version", pos );
     if( pos < 0 )
       return false;
 
     pos += 8;
 
     // the version does not end in a space but the kernel info
-    int endPos = out.output().find( QRegExp("[^\\d\\.]"), pos );
+    int endPos = out.output().indexOf( QRegExp("[^\\d\\.]"), pos );
     if( endPos < 0 )
       return false;
 
@@ -1020,15 +1020,15 @@ bool K3bCdda2wavProgram::scan( const QString& p )
 
     // features (we do this since the cdda2wav help says that the short
     //           options will disappear soon)
-    if( out.output().find( "-info-only" ) )
+    if( out.output().indexOf( "-info-only" ) )
       bin->addFeature( "info-only" ); // otherwise use the -J option
-    if( out.output().find( "-no-infofile" ) )
+    if( out.output().indexOf( "-no-infofile" ) )
       bin->addFeature( "no-infofile" ); // otherwise use the -H option
-    if( out.output().find( "-gui" ) )
+    if( out.output().indexOf( "-gui" ) )
       bin->addFeature( "gui" ); // otherwise use the -g option
-    if( out.output().find( "-bulk" ) )
+    if( out.output().indexOf( "-bulk" ) )
       bin->addFeature( "bulk" ); // otherwise use the -B option
-    if( out.output().find( "dev=" ) )
+    if( out.output().indexOf( "dev=" ) )
       bin->addFeature( "dev" ); // otherwise use the -B option
   }
   else {

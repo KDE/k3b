@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -19,9 +19,6 @@
 #include "k3bjob.h"
 
 #include <k3bdevicemanager.h>
-#ifdef HAVE_HAL
-#include <k3bhalconnection.h>
-#endif
 #include <k3bexternalbinmanager.h>
 #include <k3bdefaultexternalprograms.h>
 #include <k3bglobals.h>
@@ -33,6 +30,7 @@
 
 #include <klocale.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kaboutdata.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
@@ -41,12 +39,10 @@
 #include <qthread.h>
 #include <qmutex.h>
 //Added by qt3to4:
-#include <QCustomEvent>
-#include <Q3ValueList>
 #include <QEvent>
 
 
-static Qt::HANDLE s_guiThreadHandle = QThread::currentThread();
+static QThread* s_guiThreadHandle = 0;
 
 // We cannot use QWaitCondition here since the event might be handled faster
 // than the thread starts the waiting
@@ -77,11 +73,12 @@ private:
   bool m_done;
 };
 
-class DeviceBlockingEvent : public QCustomEvent
+#warning FIXME: how do we define a user event type? Or just replace the whole event stuff with signals
+class DeviceBlockingEvent : public QEvent
 {
 public:
   DeviceBlockingEvent( bool block_, K3bDevice::Device* dev, DeviceBlockingEventDoneCondition* cond_, bool* success_ )
-    : QCustomEvent( QEvent::User + 33 ),
+    : QEvent( QEvent::User ),
       block(block_),
       device(dev),
       cond(cond_),
@@ -115,8 +112,8 @@ public:
   K3bPluginManager* pluginManager;
   K3bGlobalSettings* globalSettings;
 
-  Q3ValueList<K3bJob*> runningJobs;
-  Q3ValueList<K3bDevice::Device*> blockedDevices;
+  QList<K3bJob*> runningJobs;
+  QList<K3bDevice::Device*> blockedDevices;
 };
 
 
@@ -125,14 +122,17 @@ K3bCore* K3bCore::s_k3bCore = 0;
 
 
 
-K3bCore::K3bCore( QObject* parent, const char* name )
-  : QObject( parent, name )
+K3bCore::K3bCore( QObject* parent )
+  : QObject( parent )
 {
   d = new Private();
 
   if( s_k3bCore )
     qFatal("ONLY ONE INSTANCE OF K3BCORE ALLOWED!");
   s_k3bCore = this;
+
+  // ew are probably constructed in the GUi thread :(
+  s_guiThreadHandle = QThread::currentThread();
 
   // create the thread widget instance in the GUI thread
   K3bThreadWidget::instance();
@@ -185,8 +185,6 @@ const K3bVersion& K3bCore::version() const
 KConfig* K3bCore::config() const
 {
   if( !d->config ) {
-    kDebug() << "(K3bCore) opening k3b config file.";
-    kDebug() << "(K3bCore) while I am a " << className();
     d->deleteConfig = true;
     d->config = new KConfig( "k3brc" );
   }
@@ -208,20 +206,7 @@ void K3bCore::init()
 
   externalBinManager()->search();
 
-#ifdef HAVE_HAL
-  connect( K3bDevice::HalConnection::instance(), SIGNAL(deviceAdded(const QString&)),
-	   deviceManager(), SLOT(addDevice(const QString&)) );
-  connect( K3bDevice::HalConnection::instance(), SIGNAL(deviceRemoved(const QString&)),
-	   deviceManager(), SLOT(removeDevice(const QString&)) );
-  QStringList devList = K3bDevice::HalConnection::instance()->devices();
-  if( devList.isEmpty() )
-    deviceManager()->scanBus();
-  else
-    for( unsigned int i = 0; i < devList.count(); ++i )
-      deviceManager()->addDevice( devList[i] );
-#else
   deviceManager()->scanBus();
-#endif
 }
 
 
@@ -261,13 +246,9 @@ void K3bCore::readSettings( KConfig* cnf )
   if( !c )
     c = config();
 
-  QString oldGrp = c->group();
-
   globalSettings()->readSettings( c );
   deviceManager()->readConfig( c );
   externalBinManager()->readConfig( c );
-
-  c->setGroup( oldGrp );
 }
 
 
@@ -277,16 +258,11 @@ void K3bCore::saveSettings( KConfig* cnf )
   if( !c )
     c = config();
 
-  QString oldGrp = c->group();
-
-  c->setGroup( "General Options" );
-  c->writeEntry( "config version", version() );
+  c->group( "General Options" ).writeEntry( "config version", version().toString() );
 
   deviceManager()->saveConfig( c );
   externalBinManager()->saveConfig( c );
   d->globalSettings->saveSettings( c );
-
-  c->setGroup( oldGrp );
 }
 
 
@@ -301,7 +277,7 @@ void K3bCore::registerJob( K3bJob* job )
 
 void K3bCore::unregisterJob( K3bJob* job )
 {
-  d->runningJobs.remove( job );
+  d->runningJobs.removeAll( job );
   emit jobFinished( job );
   if( K3bBurnJob* bj = dynamic_cast<K3bBurnJob*>( job ) )
     emit burnJobFinished( bj );
@@ -314,7 +290,7 @@ bool K3bCore::jobsRunning() const
 }
 
 
-const Q3ValueList<K3bJob*>& K3bCore::runningJobs() const
+const QList<K3bJob*>& K3bCore::runningJobs() const
 {
   return d->runningJobs;
 }
@@ -361,11 +337,11 @@ bool K3bCore::internalBlockDevice( K3bDevice::Device* dev )
 
 void K3bCore::internalUnblockDevice( K3bDevice::Device* dev )
 {
-  d->blockedDevices.remove( dev );
+  d->blockedDevices.removeAll( dev );
 }
 
 
-void K3bCore::customEvent( QCustomEvent* e )
+void K3bCore::customEvent( QEvent* e )
 {
   if( DeviceBlockingEvent* de = dynamic_cast<DeviceBlockingEvent*>(e) ) {
     if( de->block )

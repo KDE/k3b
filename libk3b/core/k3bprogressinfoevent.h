@@ -18,8 +18,8 @@
 
 #include <qevent.h>
 #include <qstring.h>
-//Added by qt3to4:
-#include <QCustomEvent>
+
+#include <QEvent>
 
 
 /**
@@ -28,17 +28,17 @@
  * in that case it's not possible to emit signals that directly
  * change the GUI (see QThread docu).
  */
-class K3bProgressInfoEvent : public QCustomEvent
+class K3bProgressInfoEvent : public QEvent
 {
  public:
   K3bProgressInfoEvent( int type )
-    : QCustomEvent( type ),
+      : QEvent( QEvent::User ),
     m_type(type)
     {}
 
   K3bProgressInfoEvent( int type, const QString& v1, const QString& v2 = QString::null, 
 			int value1 = 0, int value2 = 0 )
-    : QCustomEvent( type ),
+      : QEvent( QEvent::User ),
     m_type( type),
     m_firstValue(value1),
     m_secondValue(value2),
@@ -47,7 +47,7 @@ class K3bProgressInfoEvent : public QCustomEvent
     {}
 
   K3bProgressInfoEvent( int type, int value1, int value2 = 0 )
-    : QCustomEvent( type ),
+    : QEvent( QEvent::User ),
     m_type( type),
     m_firstValue(value1),
     m_secondValue(value2)

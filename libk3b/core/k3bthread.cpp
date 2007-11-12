@@ -62,16 +62,6 @@ K3bThread::K3bThread( QObject* eventHandler )
 }
 
 
-K3bThread::K3bThread( unsigned int stackSize, QObject* eventHandler )
-  : QThread( stackSize )
-{
-  d = new Private;
-  d->eventHandler = eventHandler;
-
-  s_threads.append(this);
-}
-
-
 K3bThread::~K3bThread()
 {
   s_threads.removeRef(this);
@@ -104,7 +94,7 @@ void K3bThread::init()
 
 void K3bThread::cancel()
 {
-  if( running() ) {
+  if( isRunning() ) {
     terminate();
     if( d->eventHandler ) {
       emitCanceled();

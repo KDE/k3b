@@ -42,7 +42,6 @@ class LIBK3B_EXPORT K3bThread : public QThread
 {
  public:
   K3bThread( QObject* eventHandler = 0 );
-  K3bThread( unsigned int stackSize, QObject* eventHandler = 0  );
   virtual ~K3bThread();
 
   void setProgressInfoEventHandler( QObject* eventHandler );
