@@ -165,7 +165,7 @@ class LIBK3B_EXPORT K3bListView : public K3ListView
   Q_OBJECT
 
  public:
-  K3bListView (QWidget *parent = 0, const char *name = 0);
+  K3bListView (QWidget *parent = 0 );
   virtual ~K3bListView();
 
   virtual void setCurrentItem( Q3ListViewItem* );

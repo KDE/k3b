@@ -51,14 +51,14 @@ namespace K3bDevice
       Q_OBJECT
 
      public:
-      DeviceHandler( Device*, QObject* parent = 0, const char* name = 0 );
-      DeviceHandler( QObject* parent = 0, const char* name = 0 );
+      DeviceHandler( Device*, QObject* parent = 0 );
+      DeviceHandler( QObject* parent = 0 );
 
       /**
        * This constructor is used by the global "quick" methods and should not be used
        * otherwise except for the same usage.
        */
-      DeviceHandler( int command, Device*, const char* name = 0 );
+      DeviceHandler( int command, Device* );
 
       ~DeviceHandler();
 

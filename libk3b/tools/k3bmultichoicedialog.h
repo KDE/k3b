@@ -35,7 +35,7 @@ class LIBK3B_EXPORT K3bMultiChoiceDialog : public KDialog
   K3bMultiChoiceDialog( const QString& caption,
 			const QString& text,
 			QMessageBox::Icon = QMessageBox::Information,
-			QWidget* parent = 0, const char* name = 0 );
+			QWidget* parent = 0 );
   ~K3bMultiChoiceDialog();
 
   /**
@@ -47,7 +47,6 @@ class LIBK3B_EXPORT K3bMultiChoiceDialog : public KDialog
 		     const QString& text,
 		     QMessageBox::Icon = QMessageBox::Information,
 		     QWidget* parent = 0, 
-		     const char* name = 0,
 		     int buttonCount = 2,
 		     const KGuiItem& b1 = KStandardGuiItem::yes(),
 		     const KGuiItem& b2 = KStandardGuiItem::no(),

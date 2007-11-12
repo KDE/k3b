@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -51,40 +51,42 @@ public:
 
 
 // from kmessagebox.cpp
-static QPixmap themedMessageBoxIcon(QMessageBox::Icon icon)
+static QIcon themedMessageBoxIcon(QMessageBox::Icon icon)
 {
-  QString icon_name;
- 
-  switch(icon) {
-  case QMessageBox::NoIcon:
-    return QPixmap();
-    break;
-  case QMessageBox::Information:
-    icon_name = "messagebox_info";
-    break;
-  case QMessageBox::Warning:
-    icon_name = "messagebox_warning";
-    break;
-  case QMessageBox::Critical:
-    icon_name = "messagebox_critical";
-    break;
-  default:
-    break;
-  }
- 
-  QPixmap ret = KApplication::kApplication()->iconLoader()->loadIcon(icon_name, KIconLoader::NoGroup, KIconLoader::SizeMedium, KIconLoader::DefaultState, 0, true);
- 
-  if (ret.isNull())
-    return QMessageBox::standardIcon(icon);
-  else
-    return ret;
+    QString icon_name;
+
+    switch (icon) {
+    case QMessageBox::NoIcon:
+        return QPixmap();
+        break;
+    case QMessageBox::Information:
+        icon_name = "dialog-information";
+        break;
+    case QMessageBox::Warning:
+        icon_name = "dialog-warning";
+        break;
+    case QMessageBox::Critical:
+        icon_name = "dialog-error";
+        break;
+    default:
+        break;
+    }
+
+    QIcon ret = KIconLoader::global()->loadIcon(icon_name, KIconLoader::NoGroup, KIconLoader::SizeLarge, KIconLoader::DefaultState, QStringList(), 0, true);
+
+    if (ret.isNull()) {
+        return QMessageBox::standardIcon(icon);
+    } else {
+        return ret;
+    }
 }
+
 
 K3bMultiChoiceDialog::K3bMultiChoiceDialog( const QString& caption,
 					    const QString& text,
 					    QMessageBox::Icon icon,
-					    QWidget* parent, const char* name )
-  : KDialog( parent, name )
+					    QWidget* parent )
+  : KDialog( parent )
 {
   d = new Private();
   d->mapper = new QSignalMapper( this );
@@ -101,7 +103,8 @@ K3bMultiChoiceDialog::K3bMultiChoiceDialog( const QString& caption,
   contents->setMargin( 0 );
 
   QLabel* pixLabel = new QLabel( contents );
-  pixLabel->setPixmap( themedMessageBoxIcon( icon ) );
+  int size = IconSize(KIconLoader::Dialog);
+  pixLabel->setPixmap( themedMessageBoxIcon( icon ).pixmap( size, size ) );
   pixLabel->setScaledContents( false );
   QLabel* label = new K3bRichTextLabel( text, contents );
   contents->setStretchFactor( label, 1 );
@@ -166,8 +169,7 @@ void K3bMultiChoiceDialog::closeEvent( QCloseEvent* e )
 int K3bMultiChoiceDialog::choose( const QString& caption,
 				  const QString& text,
 				  QMessageBox::Icon icon,
-				  QWidget* parent, 
-				  const char* name,
+				  QWidget* parent,
 				  int buttonCount,
 				  const KGuiItem& b1,
 				  const KGuiItem& b2,
@@ -176,7 +178,7 @@ int K3bMultiChoiceDialog::choose( const QString& caption,
 				  const KGuiItem& b5,
 				  const KGuiItem& b6 )
 {
-  K3bMultiChoiceDialog dlg( caption, text, icon, parent, name );
+  K3bMultiChoiceDialog dlg( caption, text, icon, parent );
   dlg.addButton( b1 );
   if( buttonCount > 1 )
     dlg.addButton( b2 );
@@ -192,5 +194,5 @@ int K3bMultiChoiceDialog::choose( const QString& caption,
   return dlg.exec();
 }
 
-		     
+
 #include "k3bmultichoicedialog.moc"

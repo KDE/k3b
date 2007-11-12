@@ -19,8 +19,6 @@
 #include <k3bthread.h>
 #include <k3bdevice.h>
 #include <k3bcdtext.h>
-//Added by qt3to4:
-#include <QCustomEvent>
 
 
 
@@ -79,7 +77,7 @@ public:
                 if( dev->readTocPmaAtip( &data, dataLen, 5, false, 0 ) ) {
                     // we need more than the header and a multiple of 18 bytes to have valid CD-TEXT
                     if( dataLen > 4 && dataLen%18 == 4 ) {
-                        cdTextRaw.assign( reinterpret_cast<char*>(data), dataLen );
+                        cdTextRaw = QByteArray::fromRawData( reinterpret_cast<char*>(data), dataLen );
                     }
                     else {
                         kDebug() << "(K3bDevice::DeviceHandler) invalid CD-TEXT length: " << dataLen;
@@ -148,107 +146,107 @@ public:
     K3b::Msf nextWritableAddress;
 
 private:
-  bool m_bCanceled;
+    bool m_bCanceled;
 };
 
 
-K3bDevice::DeviceHandler::DeviceHandler( Device* dev, QObject* parent, const char* name )
-  : K3bThreadJob( 0, parent, name ),
-    m_selfDelete(false)
+K3bDevice::DeviceHandler::DeviceHandler( Device* dev, QObject* parent )
+    : K3bThreadJob( 0, parent ),
+      m_selfDelete(false)
 {
-  m_thread = new DeviceHandlerThread();
-  m_thread->dev = dev;
-  setThread( m_thread );
+    m_thread = new DeviceHandlerThread();
+    m_thread->dev = dev;
+    setThread( m_thread );
 }
 
 
-K3bDevice::DeviceHandler::DeviceHandler( QObject* parent, const char* name )
-  : K3bThreadJob( 0, parent, name ),
-    m_selfDelete(false)
+K3bDevice::DeviceHandler::DeviceHandler( QObject* parent )
+    : K3bThreadJob( 0, parent ),
+      m_selfDelete(false)
 {
-  m_thread = new DeviceHandlerThread();
-  setThread( m_thread );
+    m_thread = new DeviceHandlerThread();
+    setThread( m_thread );
 }
 
 
-K3bDevice::DeviceHandler::DeviceHandler( int command, Device* dev, const char* name )
-  : K3bThreadJob( 0, 0, name ),
-    m_selfDelete(true)
+K3bDevice::DeviceHandler::DeviceHandler( int command, Device* dev )
+    : K3bThreadJob( 0, 0, 0 ),
+      m_selfDelete(true)
 {
-  m_thread = new DeviceHandlerThread();
-  setThread( m_thread );
-  m_thread->dev = dev;
-  sendCommand(command);
+    m_thread = new DeviceHandlerThread();
+    setThread( m_thread );
+    m_thread->dev = dev;
+    sendCommand(command);
 }
 
 K3bDevice::DeviceHandler::~DeviceHandler()
 {
-  delete m_thread;
+    delete m_thread;
 }
 
 
 int K3bDevice::DeviceHandler::errorCode() const
 {
-  return m_thread->errorCode;
+    return m_thread->errorCode;
 }
 
 bool K3bDevice::DeviceHandler::success() const
 {
-  return m_thread->success;
+    return m_thread->success;
 }
 
 
 const K3bDevice::DiskInfo& K3bDevice::DeviceHandler::diskInfo() const
 {
-  return m_thread->ngInfo;
+    return m_thread->ngInfo;
 }
 
 
 const K3bDevice::Toc& K3bDevice::DeviceHandler::toc() const
 {
-  return m_thread->toc;
+    return m_thread->toc;
 }
 
 const K3bDevice::CdText& K3bDevice::DeviceHandler::cdText() const
 {
-  return m_thread->cdText;
+    return m_thread->cdText;
 }
 
 
 const QByteArray& K3bDevice::DeviceHandler::cdTextRaw() const
 {
-  return m_thread->cdTextRaw;
+    return m_thread->cdTextRaw;
 }
 
 
 K3b::Msf K3bDevice::DeviceHandler::diskSize() const
 {
-  return m_thread->ngInfo.capacity();
+    return m_thread->ngInfo.capacity();
 }
 
 K3b::Msf K3bDevice::DeviceHandler::remainingSize() const
 {
-  return m_thread->ngInfo.remainingSize();
+    return m_thread->ngInfo.remainingSize();
 }
 
 int K3bDevice::DeviceHandler::tocType() const
 {
-  return m_thread->toc.contentType();
+    return m_thread->toc.contentType();
 }
 
 int K3bDevice::DeviceHandler::numSessions() const
 {
-  return m_thread->ngInfo.numSessions();
+    return m_thread->ngInfo.numSessions();
 }
 
 long long K3bDevice::DeviceHandler::bufferCapacity() const
 {
-  return m_thread->bufferCapacity;
+    return m_thread->bufferCapacity;
 }
 
 long long K3bDevice::DeviceHandler::availableBufferCapacity() const
 {
-  return m_thread->availableBufferCapacity;
+    return m_thread->availableBufferCapacity;
 }
 
 K3b::Msf K3bDevice::DeviceHandler::nextWritableAddress() const
@@ -258,90 +256,90 @@ K3b::Msf K3bDevice::DeviceHandler::nextWritableAddress() const
 
 void K3bDevice::DeviceHandler::setDevice( Device* dev )
 {
-  m_thread->dev = dev;
+    m_thread->dev = dev;
 }
 
 
 
 void K3bDevice::DeviceHandler::sendCommand( int command )
 {
-  //
-  // We do not want the finished signal emitted in case the devicehandler was cancelled. This is a special case.
-  // That's why we do not use K3bThreadJob::start() becasue otherwise we would be registered twice.
-  //
-  if( m_thread->running() ) {
-    kDebug() << "(K3bDevice::DeviceHandler) thread already running. canceling thread...";
-    m_thread->cancel();
-    m_thread->wait();
-  }
-  else
-    jobStarted();
+    //
+    // We do not want the finished signal emitted in case the devicehandler was cancelled. This is a special case.
+    // That's why we do not use K3bThreadJob::start() becasue otherwise we would be registered twice.
+    //
+    if( m_thread->running() ) {
+        kDebug() << "(K3bDevice::DeviceHandler) thread already running. canceling thread...";
+        m_thread->cancel();
+        m_thread->wait();
+    }
+    else
+        jobStarted();
 
-  m_thread->command = command;
-  m_thread->start();
+    m_thread->command = command;
+    m_thread->start();
 }
 
 void K3bDevice::DeviceHandler::getToc()
 {
-  sendCommand(DeviceHandler::TOC);
+    sendCommand(DeviceHandler::TOC);
 }
 
 void K3bDevice::DeviceHandler::getDiskInfo()
 {
-  sendCommand(DeviceHandler::DISKINFO);
+    sendCommand(DeviceHandler::DISKINFO);
 }
 
 void K3bDevice::DeviceHandler::getDiskSize()
 {
-  sendCommand(DeviceHandler::DISKSIZE);
+    sendCommand(DeviceHandler::DISKSIZE);
 }
 
 void K3bDevice::DeviceHandler::getRemainingSize()
 {
-  sendCommand(DeviceHandler::REMAININGSIZE);
+    sendCommand(DeviceHandler::REMAININGSIZE);
 }
 
 void K3bDevice::DeviceHandler::getTocType()
 {
-  sendCommand(DeviceHandler::TOCTYPE);
+    sendCommand(DeviceHandler::TOCTYPE);
 }
 
 void K3bDevice::DeviceHandler::getNumSessions()
 {
-  sendCommand(DeviceHandler::NUMSESSIONS);
+    sendCommand(DeviceHandler::NUMSESSIONS);
 }
 
 
 void K3bDevice::DeviceHandler::block( bool b )
 {
-  sendCommand(b ? DeviceHandler::BLOCK : DeviceHandler::UNBLOCK);
+    sendCommand(b ? DeviceHandler::BLOCK : DeviceHandler::UNBLOCK);
 }
 
 void K3bDevice::DeviceHandler::eject()
 {
-  sendCommand(DeviceHandler::EJECT);
+    sendCommand(DeviceHandler::EJECT);
 }
 
 K3bDevice::DeviceHandler* K3bDevice::sendCommand( int command, Device* dev )
 {
-  return new DeviceHandler( command, dev, "DeviceHandler" );
+    return new DeviceHandler( command, dev );
 }
 
 void K3bDevice::DeviceHandler::customEvent( QCustomEvent* e )
 {
-  K3bThreadJob::customEvent(e);
+    K3bThreadJob::customEvent(e);
 
-  if( (int)e->type() == K3bProgressInfoEvent::Finished ) {
-    emit finished( this );
-    if( m_selfDelete ) {
-      kDebug() << "(K3bDevice::DeviceHandler) thread emitted finished. Waiting for thread actually finishing";
-      kDebug() << "(K3bDevice::DeviceHandler) success: " << m_thread->success;
-      // wait for the thread to finish
-      m_thread->wait();
-      kDebug() << "(K3bDevice::DeviceHandler) deleting thread.";
-      deleteLater();
+    if( (int)e->type() == K3bProgressInfoEvent::Finished ) {
+        emit finished( this );
+        if( m_selfDelete ) {
+            kDebug() << "(K3bDevice::DeviceHandler) thread emitted finished. Waiting for thread actually finishing";
+            kDebug() << "(K3bDevice::DeviceHandler) success: " << m_thread->success;
+            // wait for the thread to finish
+            m_thread->wait();
+            kDebug() << "(K3bDevice::DeviceHandler) deleting thread.";
+            deleteLater();
+        }
     }
-  }
 }
 
 
