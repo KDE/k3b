@@ -356,7 +356,7 @@ K3bFillStatusDisplay::K3bFillStatusDisplay( K3bDoc* doc, QWidget *parent, const 
 //   d->buttonMenu = new QToolButton( this );
 //   d->buttonMenu->setIconSet( SmallIconSet("cdrom_unmount") );
 //   d->buttonMenu->setAutoRaise(true);
-//   QToolTip::add( d->buttonMenu, i18n("Fill display properties") );
+//   d->buttonMenu->setToolTip( i18n("Fill display properties") );
 //   connect( d->buttonMenu, SIGNAL(clicked()), this, SLOT(slotMenuButtonClicked()) );
 
   Q3GridLayout* layout = new Q3GridLayout( this );

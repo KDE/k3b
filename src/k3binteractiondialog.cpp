@@ -241,8 +241,8 @@ void K3bInteractionDialog::initToolTipsAndWhatsThis()
   if( !m_configGroup.isEmpty() ) {
     // ToolTips
     // -------------------------------------------------------------------------
-    QToolTip::add( m_buttonLoadSettings, i18n("Load default or saved settings") );
-    QToolTip::add( m_buttonSaveSettings, i18n("Save current settings to reuse them later") );
+    m_buttonLoadSettings->setToolTip( i18n("Load default or saved settings") );
+    m_buttonSaveSettings->setToolTip( i18n("Save current settings to reuse them later") );
 
     // What's This info
     // -------------------------------------------------------------------------
@@ -454,7 +454,7 @@ void K3bInteractionDialog::setButtonText( int button,
     b->setText( text );
     QToolTip::remove( b );
     Q3WhatsThis::remove( b );
-    QToolTip::add( b, tooltip );
+    b->setToolTip( tooltip );
     b->setWhatsThis( whatsthis );
   }
 }
@@ -488,7 +488,7 @@ void K3bInteractionDialog::setStartButtonText( const QString& text,
     m_buttonStart->setText( text );
     QToolTip::remove( m_buttonStart );
     Q3WhatsThis::remove( m_buttonStart );
-    QToolTip::add( m_buttonStart, tooltip );
+    m_buttonStart->setToolTip( tooltip );
     m_buttonStart->setWhatsThis( whatsthis );
   }
 }
@@ -502,7 +502,7 @@ void K3bInteractionDialog::setCancelButtonText( const QString& text,
     m_buttonCancel->setText( text );
     QToolTip::remove( m_buttonCancel );
     Q3WhatsThis::remove( m_buttonCancel );
-    QToolTip::add( m_buttonCancel, tooltip );
+    m_buttonCancel->setToolTip( tooltip );
     m_buttonCancel->setWhatsThis( whatsthis );
   }
 }
@@ -516,7 +516,7 @@ void K3bInteractionDialog::setSaveButtonText( const QString& text,
     m_buttonSave->setText( text );
     QToolTip::remove( m_buttonSave );
     Q3WhatsThis::remove( m_buttonSave );
-    QToolTip::add( m_buttonSave, tooltip );
+    m_buttonSave->setToolTip( tooltip );
     m_buttonSave->setWhatsThis( whatsthis );
   }
 }

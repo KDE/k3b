@@ -44,7 +44,7 @@ K3bAudioTrackWidget::K3bAudioTrackWidget( const Q3PtrList<K3bAudioTrack>& tracks
 {
   m_labelPostGap->setBuddy( m_editPostGap );
 
-  QToolTip::add( m_labelPostGap, QToolTip::textFor( m_editPostGap ) );
+  m_labelPostGap->setToolTip( QToolTip::textFor( m_editPostGap ) );
   m_labelPostGap->setWhatsThis( Q3WhatsThis::textFor( m_editPostGap ) );
 
   // no post-gap for the last track
