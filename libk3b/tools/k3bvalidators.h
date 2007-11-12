@@ -26,7 +26,7 @@
 class LIBK3B_EXPORT K3bCharValidator : public QValidator
 {
  public:
-  K3bCharValidator( QObject* parent = 0, const char* name = 0 );
+  K3bCharValidator( QObject* parent = 0 );
 
   virtual State validateChar( const QChar& ) const = 0;
 
@@ -50,7 +50,7 @@ class LIBK3B_EXPORT K3bCharValidator : public QValidator
 class LIBK3B_EXPORT K3bLatin1Validator : public K3bCharValidator
 {
  public:
-  K3bLatin1Validator( QObject* parent = 0, const char* name = 0 );
+  K3bLatin1Validator( QObject* parent = 0 );
 
   virtual State validateChar( const QChar& ) const;
 };
@@ -59,7 +59,7 @@ class LIBK3B_EXPORT K3bLatin1Validator : public K3bCharValidator
 class LIBK3B_EXPORT K3bAsciiValidator : public K3bLatin1Validator
 {
  public:
-  K3bAsciiValidator( QObject* parent = 0, const char* name = 0 );
+  K3bAsciiValidator( QObject* parent = 0 );
 
   virtual State validateChar( const QChar& ) const;
 };
@@ -74,8 +74,8 @@ class LIBK3B_EXPORT K3bAsciiValidator : public K3bLatin1Validator
 class LIBK3B_EXPORT K3bValidator : public QRegExpValidator
 {
  public:
-  K3bValidator( QObject* parent, const char * name = 0 );
-  K3bValidator( const QRegExp& rx, QObject* parent, const char* name = 0 );
+  K3bValidator( QObject* parent );
+  K3bValidator( const QRegExp& rx, QObject* parent );
 
   void setReplaceChar( const QChar& s ) { m_replaceChar = s; }
   const QChar& replaceChar() const { return m_replaceChar; }
@@ -105,13 +105,13 @@ namespace K3bValidators
    * <li>S: serial number (digits)</li>
    * </ul>
    */
-  LIBK3B_EXPORT K3bValidator* isrcValidator( QObject* parent = 0, const char* name = 0 );
+  LIBK3B_EXPORT K3bValidator* isrcValidator( QObject* parent = 0 );
   
   /**
    * This needs to be replaced by something better in the future...
    * Even the name sucks!
    */
-  LIBK3B_EXPORT K3bValidator* iso9660Validator( bool allowEmpty = true, QObject* parent = 0, const char* name = 0 );
+  LIBK3B_EXPORT K3bValidator* iso9660Validator( bool allowEmpty = true, QObject* parent = 0 );
 
   /**
    * (1) d-characters are: A-Z, 0-9, _ (see ISO-9660:1988, Annex A, Table 15)
@@ -125,7 +125,7 @@ namespace K3bValidators
 
   LIBK3B_EXPORT K3bValidator* iso646Validator( int type = Iso646_a, 
 				 bool AllowLowerCase = false, 
-				 QObject* parent = 0, const char* name = 0 );
+				 QObject* parent = 0 );
 }
 
 #endif

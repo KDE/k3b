@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
@@ -19,8 +19,8 @@
 #include <ctype.h>
 
 
-K3bCharValidator::K3bCharValidator( QObject* parent, const char* name )
-  : QValidator( parent, name ),
+K3bCharValidator::K3bCharValidator( QObject* parent )
+  : QValidator( parent ),
     m_replaceChar( '_' )
 {
 }
@@ -49,23 +49,23 @@ void K3bCharValidator::fixup( QString& s ) const
 }
 
 
-K3bLatin1Validator::K3bLatin1Validator( QObject* parent, const char* name )
-  : K3bCharValidator( parent, name )
+K3bLatin1Validator::K3bLatin1Validator( QObject* parent )
+  : K3bCharValidator( parent )
 {
 }
 
 
 QValidator::State K3bLatin1Validator::validateChar( const QChar& c ) const
 {
-  if( !c.latin1() )
+  if( !c.toLatin1() )
     return Invalid;
   else
     return Acceptable;
 }
 
 
-K3bAsciiValidator::K3bAsciiValidator( QObject* parent, const char* name )
-  : K3bLatin1Validator( parent, name )
+K3bAsciiValidator::K3bAsciiValidator( QObject* parent )
+  : K3bLatin1Validator( parent )
 {
 }
 
@@ -74,7 +74,7 @@ QValidator::State K3bAsciiValidator::validateChar( const QChar& c ) const
 {
   if( K3bLatin1Validator::validateChar( c ) == Invalid )
     return Invalid;
-  else if( !isascii( c.latin1() ) )
+  else if( !isascii( c.toLatin1() ) )
     return Invalid;
   else
     return Acceptable;
@@ -82,15 +82,15 @@ QValidator::State K3bAsciiValidator::validateChar( const QChar& c ) const
 
 
 
-K3bValidator::K3bValidator( QObject* parent, const char* name )
-  : QRegExpValidator( parent, name ),
+K3bValidator::K3bValidator( QObject* parent )
+  : QRegExpValidator( parent ),
     m_replaceChar('_')
 {
 }
 
 
-K3bValidator::K3bValidator( const QRegExp& rx, QObject* parent, const char* name )
-  : QRegExpValidator( rx, parent, name ),
+K3bValidator::K3bValidator( const QRegExp& rx, QObject* parent )
+  : QRegExpValidator( rx, parent ),
     m_replaceChar('_')
 {
 }
@@ -116,22 +116,22 @@ QString K3bValidators::fixup( const QString& input, const QRegExp& rx, const QCh
 }
 
 
-K3bValidator* K3bValidators::isrcValidator( QObject* parent, const char* name )
+K3bValidator* K3bValidators::isrcValidator( QObject* parent )
 {
-  return new K3bValidator( QRegExp("^[A-Z\\d]{2,2}-[A-Z\\d]{3,3}-\\d{2,2}-\\d{5,5}$"), parent, name );
+  return new K3bValidator( QRegExp("^[A-Z\\d]{2,2}-[A-Z\\d]{3,3}-\\d{2,2}-\\d{5,5}$"), parent );
 }
 
 
-K3bValidator* K3bValidators::iso9660Validator( bool allowEmpty, QObject* parent, const char* name )
+K3bValidator* K3bValidators::iso9660Validator( bool allowEmpty, QObject* parent )
 {
   if( allowEmpty )
-    return new K3bValidator( QRegExp( "[^/]*" ), parent, name );
+    return new K3bValidator( QRegExp( "[^/]*" ), parent );
   else
-    return new K3bValidator( QRegExp( "[^/]+" ), parent, name );
+    return new K3bValidator( QRegExp( "[^/]+" ), parent );
 }
 
 
-K3bValidator* K3bValidators::iso646Validator( int type, bool AllowLowerCase, QObject* parent, const char* name )
+K3bValidator* K3bValidators::iso646Validator( int type, bool AllowLowerCase, QObject* parent )
 {
   QRegExp rx;
   switch ( type ) {
@@ -142,7 +142,7 @@ K3bValidator* K3bValidators::iso646Validator( int type, bool AllowLowerCase, QOb
       rx = QRegExp( "[A-Z0-9_]*" );
     break;
   case Iso646_a:
-  default: 
+  default:
     if ( AllowLowerCase )
       rx = QRegExp( "[a-zA-Z0-9!\"\\s%&'\\(\\)\\*\\+,\\-\\./:;<=>\\?_]*" );
     else
@@ -150,5 +150,5 @@ K3bValidator* K3bValidators::iso646Validator( int type, bool AllowLowerCase, QOb
     break;
   }
 
-  return new K3bValidator( rx, parent, name );
+  return new K3bValidator( rx, parent );
 }

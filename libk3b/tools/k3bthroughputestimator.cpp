@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -38,8 +38,8 @@ public:
 };
 
 
-K3bThroughputEstimator::K3bThroughputEstimator( QObject* parent, const char* name )
-  : QObject( parent, name )
+K3bThroughputEstimator::K3bThroughputEstimator( QObject* parent )
+  : QObject( parent )
 {
   d = new Private();
 }

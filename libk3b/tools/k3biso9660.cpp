@@ -115,11 +115,11 @@ int K3bIso9660::isofs_callback( struct iso_directory_record *idr, void *udata )
 	path = isoPath;
 
 	// remove the version field
-	int pos = path.find( ';' );
+	int pos = path.indexOf( ';' );
 	if( pos > 0 )
 	  path.truncate( pos );
       }
-      if (path.endsWith(".")) path.setLength(path.length()-1);
+      if (path.endsWith(".")) path.truncate(path.length()-1);
     }
   }
 
@@ -273,7 +273,7 @@ bool K3bIso9660File::copyTo( const QString& url ) const
     unsigned int pos = 0;
     int r = 0;
     while( ( r = read( pos, buffer, 2048*10 ) ) > 0 ) {
-      of.writeBlock( buffer, r );
+      of.write( buffer, r );
       pos += r;
     }
 
@@ -367,11 +367,11 @@ K3bIso9660Entry* K3bIso9660Directory::entry( const QString& n )
     name.truncate( name.length()-1 );
   }
 
-  int pos = name.find( '/' );
+  int pos = name.indexOf( '/' );
   while( pos == 0 ) {
     if( name.length() > 1 ) {
       name = name.mid( 1 ); // remove leading slash
-      pos = name.find( '/' ); // look again
+      pos = name.indexOf( '/' ); // look again
     }
     else // "/"
       return this;
@@ -405,11 +405,11 @@ K3bIso9660Entry* K3bIso9660Directory::iso9660Entry( const QString& n )
     name.truncate( name.length()-1 );
   }
 
-  int pos = name.find( '/' );
+  int pos = name.indexOf( '/' );
   while( pos == 0 ) {
     if( name.length() > 1 ) {
       name = name.mid( 1 ); // remove leading slash
-      pos = name.find( '/' ); // look again
+      pos = name.indexOf( '/' ); // look again
     }
     else // "/"
       return this;
