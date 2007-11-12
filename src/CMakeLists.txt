@@ -11,6 +11,74 @@ add_subdirectory( sounds )
 
 ########### next target ###############
 
+set(k3b_project_SRCS
+projects/k3baudioburndialog.cpp 
+projects/k3baudiocdtextwidget.cpp 
+projects/k3baudiodatasourceviewitem.cpp 
+projects/k3baudioeditorwidget.cpp 
+projects/k3baudiotrackdialog.cpp 
+projects/k3baudiotrackwidget.cpp 
+projects/k3baudiotrackplayer.cpp 
+projects/k3baudiotracksplitdialog.cpp 
+projects/k3baudiotrackview.cpp 
+projects/k3baudiotrackviewitem.cpp 
+projects/k3baudioview.cpp 
+projects/k3bmixedburndialog.cpp 
+projects/k3bmixeddirtreeview.cpp 
+projects/k3bmixedview.cpp 
+projects/k3bdataadvancedimagesettingswidget.cpp 
+projects/k3bdatadirtreeview.cpp 
+projects/k3bdatafileview.cpp 
+projects/k3bdataimagesettingswidget.cpp 
+projects/k3bdatapropertiesdialog.cpp 
+projects/k3bdataview.cpp 
+projects/k3bdataviewitem.cpp 
+projects/k3bdatavolumedescwidget.cpp 
+projects/k3bdataburndialog.cpp 
+projects/k3bbootimagedialog.cpp 
+projects/k3bbootimageview.cpp 
+projects/k3bmovixburndialog.cpp 
+projects/k3bmovixlistview.cpp 
+projects/k3bmovixoptionswidget.cpp 
+projects/k3bmovixview.cpp 
+projects/k3bvideodvdburndialog.cpp 
+projects/k3bvideodvdview.cpp 
+projects/k3bvcdburndialog.cpp 
+projects/k3bvcdlistview.cpp 
+projects/k3bvcdlistviewitem.cpp 
+projects/k3bvcdtrackdialog.cpp 
+projects/k3bvcdview.cpp 
+projects/k3bfillstatusdisplay.cpp 
+projects/k3bview.cpp 
+projects/k3bprojectburndialog.cpp 
+projects/k3bprojectplugindialog.cpp 
+projects/k3baudiotracktrmlookupdialog.cpp 
+projects/k3bdatamultisessioncombobox.cpp 
+projects/k3bmusicbrainzjob.cpp 
+projects/k3bdataurladdingdialog.cpp 
+projects/k3baudiodatasourceeditwidget.cpp 
+projects/k3baudiotrackaddingdialog.cpp 
+projects/k3bencodingconverter.cpp 
+projects/k3bdatamultisessionimportdialog.cpp
+)
+
+kde4_add_ui3_files(k3b_project_SRCS
+projects/base_k3baudiocdtextwidget.ui 
+projects/base_k3baudiocdtextallfieldswidget.ui 
+projects/base_k3baudiotrackwidget.ui 
+projects/base_k3badvanceddataimagesettings.ui 
+projects/base_k3bbootimageview.ui 
+projects/base_k3bdataimagesettings.ui 
+projects/base_k3bdatavolumedescwidget.ui 
+projects/base_k3bmovixoptionswidget.ui
+)
+
+set(k3b_kostore_SRCS
+  projects/kostore/koStore.cc 
+  projects/kostore/koZipStore.cc 
+  projects/kostore/koStoreBase.cc
+)
+
 set(k3b_rip_SRCS
   rip/k3bpatternparser.cpp 
   rip/k3baudiorippingdialog.cpp 
@@ -74,7 +142,8 @@ set(k3b_misc_SRCS
   misc/k3bmediaformattingdialog.cpp
 )
 
-set(k3b_bin_SRCS  ${k3b_rip_SRCS} ${k3b_option_SRCS} ${k3b_misc_SRCS} ${k3b_videodvd_SRCS}
+set(k3b_bin_SRCS  ${k3b_rip_SRCS} ${k3b_option_SRCS} ${k3b_misc_SRCS}
+${k3b_videodvd_SRCS} ${k3b_project_SRCS} ${k3b_kostore_SRCS}
    k3bwelcomewidget.cpp 
    k3bapplication.cpp 
    k3bdiroperator.cpp 

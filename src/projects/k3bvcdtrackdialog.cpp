@@ -72,7 +72,7 @@ K3bVcdTrackDialog::K3bVcdTrackDialog( K3bVcdDoc* _doc, Q3PtrList<K3bVcdTrack>& t
         m_displayFileName->setText( selectedTrack->fileName() );
         m_displayLength->setText( selectedTrack->duration() );
         m_displaySize->setText( KIO::convertSize( selectedTrack->size() ) );
-        m_muxrate->setText( i18n( "%1 bit/s" ).arg( selectedTrack->muxrate() ) );
+        m_muxrate->setText( i18n( "%1 bit/s", selectedTrack->muxrate() ) );
 
         if ( selectedTrack->isSegment() )
             m_labelMimeType->setPixmap( SmallIcon( "image", KIcon::SizeMedium ) );
@@ -404,7 +404,7 @@ void K3bVcdTrackDialog::prepareGui()
     m_displayLength->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
 
     m_muxrate = new QLabel( groupFileInfo, "m_muxrate" );
-    m_muxrate->setText( i18n( "%1 bit/s" ).arg( 0 ) );
+    m_muxrate->setText( i18n( "%1 bit/s" ,QString::number( 0 ) ));
     m_muxrate->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
 
     Q3Frame* fileInfoLine = new Q3Frame( groupFileInfo );
@@ -746,9 +746,9 @@ QString K3bVcdTrackDialog::displayName( K3bVcdTrack * track )
         return i18n( "ItSelf" );
 
     if ( track->isSegment() )
-        return i18n( "Segment-%1 - %2" ).arg( QString::number( track->index() + 1 ).rightJustified( 3, '0' ) ).arg( track->title() );
+        return i18n( "Segment-%1 - %2" , QString::number( track->index() + 1 ).rightJustified( 3, '0' ) , track->title() );
 
-    return i18n( "Sequence-%1 - %2" ).arg( QString::number( track->index() + 1 ).rightJustified( 3, '0' ) ).arg( track->title() );
+    return i18n( "Sequence-%1 - %2" , QString::number( track->index() + 1 ).rightJustified( 3, '0' ) , track->title() );
 }
 
 void K3bVcdTrackDialog::slotPlayTimeChanged( int value )

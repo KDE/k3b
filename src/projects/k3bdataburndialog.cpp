@@ -73,7 +73,7 @@ K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const ch
 {
   prepareGui();
 
-  setTitle( i18n("Data Project"), i18n("Size: %1").arg( KIO::convertSize(_doc->size()) ) );
+  setTitle( i18n("Data Project"), i18n("Size: %1", KIO::convertSize(_doc->size()) ) );
 
   // for now we just put the verify checkbox on the main page...
   m_checkVerify = K3bStdGuiItems::verifyCheckBox( m_optionGroup );
@@ -185,7 +185,7 @@ void K3bDataBurnDialog::slotStartClicked()
 
     if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
       if( KMessageBox::warningContinueCancel( this,
-					      i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
+					      i18n("Do you want to overwrite %1?",m_tempDirSelectionWidget->tempPath()),
 					      i18n("File Exists"), i18n("Overwrite") )
 	  == KMessageBox::Continue ) {
 	// delete the file here to avoid problems with free space in K3bProjectBurnDialog::slotStartClicked

@@ -204,7 +204,7 @@ void K3bDataPropertiesDialog::loadItemProperties( K3bDataItem* dataItem )
     KFileItem kFileItem( KFileItem::Unknown, KFileItem::Unknown, KUrl::fromPathOrUrl(fileItem->localPath()) );
     m_labelIcon->setPixmap( kFileItem.pixmap(KIcon::SizeLarge) );
     if( fileItem->isSymLink() )
-      m_labelType->setText( i18n("Link to %1").arg(kFileItem.mimeComment()) );
+      m_labelType->setText( i18n("Link to %1",kFileItem.mimeComment()) );
     else
       m_labelType->setText( kFileItem.mimeComment() );
     m_labelLocalName->setText( kFileItem.name() );
