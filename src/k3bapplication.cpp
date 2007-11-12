@@ -289,7 +289,7 @@ bool K3bApplication::processCmdLineArgs()
   // FIXME: seems not like the right place...
   if( args->isSet( "ao" ) )
     if( !m_audioServer->setOutputMethod( args->getOption( "ao" ) ) )
-      K3bPassivePopup::showPopup( i18n("Could not find Audio Output plugin '%1'").arg( args->getOption("ao") ),
+      K3bPassivePopup::showPopup( i18n("Could not find Audio Output plugin '%1'",args->getOption("ao") ),
 				  i18n("Initialization Problem"),
 				  K3bPassivePopup::Warning );
 

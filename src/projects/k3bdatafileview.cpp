@@ -464,12 +464,8 @@ void K3bDataFileView::slotOpen()
     if( item->isFile() ) {
       K3bDataFileViewItem* fvi = static_cast<K3bDataFileViewItem*>( viewItem );
       if( fvi->mimeType() &&
-#if KDE_IS_VERSION(3,3,0)
 	  !KRun::isExecutableFile( KUrl::fromPathOrUrl(item->localPath()),
 				   fvi->mimeType()->name() )
-#else
-	  !QFileInfo( item->localPath() ).isExecutable()
-#endif
 	  )
 	KRun::runURL( KUrl::fromPathOrUrl(item->localPath()),
 		      fvi->mimeType()->name() );

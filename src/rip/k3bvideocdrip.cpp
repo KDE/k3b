@@ -100,8 +100,8 @@ void K3bVideoCdRip::vcdxRip()
 
     if ( !bin ) {
         kDebug() << "(K3bVideoCdRip) could not find vcdxrip executable";
-        emit infoMessage( i18n( "Could not find %1 executable." ).arg( "vcdxrip" ), K3bJob::ERROR );
-        emit infoMessage( i18n( "To rip VideoCD's you must install VcdImager Version %1." ).arg( ">= 0.7.12" ), K3bJob::INFO );
+        emit infoMessage( i18n( "Could not find %1 executable." , "vcdxrip" ), K3bJob::ERROR );
+        emit infoMessage( i18n( "To rip VideoCD's you must install VcdImager Version %1." , QString(">= 0.7.12") ), K3bJob::INFO );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3bJob::INFO );
         cancelAll();
         jobFinished( false );
@@ -110,7 +110,7 @@ void K3bVideoCdRip::vcdxRip()
 
     if( bin->version < K3bVersion("0.7.12") ) {
         kDebug() << "(K3bVideoCdRip) vcdxrip executable too old!";
-        emit infoMessage( i18n( "%1 executable too old! Need version %2 or greater" ).arg( "Vcdxrip" ).arg( "0.7.12" ), K3bJob::ERROR );
+        emit infoMessage( i18n( "%1 executable too old! Need version %2 or greater" , "Vcdxrip" , "0.7.12" ), K3bJob::ERROR );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3bJob::INFO );
         cancelAll();
         jobFinished( false );
@@ -118,7 +118,7 @@ void K3bVideoCdRip::vcdxRip()
     }
         
     if ( !bin->copyright.isEmpty() )
-        emit infoMessage( i18n( "Using %1 %2 - Copyright (C) %3" ).arg( bin->name() ).arg( bin->version ).arg( bin->copyright ), INFO );
+        emit infoMessage( i18n( "Using %1 %2 - Copyright (C) %3" , bin->name() , bin->version , bin->copyright ), INFO );
 
 
     *m_process << k3bcore ->externalBinManager() ->binPath( "vcdxrip" );
@@ -175,11 +175,11 @@ void K3bVideoCdRip::vcdxRip()
 
     emit newTask( i18n( "Extracting" ) );
     emit infoMessage( i18n( "Start extracting." ), K3bJob::INFO );
-    emit infoMessage( i18n( "Extract files from %1 to %2." ).arg( m_videooptions ->getVideoCdSource() ).arg( m_videooptions ->getVideoCdDestination() ), K3bJob::INFO );
+    emit infoMessage( i18n( "Extract files from %1 to %2." , m_videooptions ->getVideoCdSource() , m_videooptions ->getVideoCdDestination() ), K3bJob::INFO );
             
     if ( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) {
         kDebug() << "(K3bVideoCdRip) could not start vcdxrip";
-        emit infoMessage( i18n( "Could not start %1." ).arg( "vcdxrip" ), K3bJob::ERROR );
+        emit infoMessage( i18n( "Could not start %1." , "vcdxrip" ), K3bJob::ERROR );
         cancelAll();
         jobFinished( false );
     }
@@ -279,7 +279,7 @@ void K3bVideoCdRip::slotVcdXRipFinished()
                 return ;
         }
     } else {
-        emit infoMessage( i18n( "%1 did not exit cleanly." ).arg( "Vcdxrip" ), K3bJob::ERROR );
+        emit infoMessage( i18n( "%1 did not exit cleanly." , "Vcdxrip" ), K3bJob::ERROR );
         cancelAll();
         jobFinished( false );
         return ;
@@ -293,7 +293,7 @@ void K3bVideoCdRip::parseInformation( QString text )
     // parse warning
     if ( text.contains( "encountered non-form2 sector" ) ) {
         // I think this is an error not a warning. Finish ripping with invalid mpegs.
-        emit infoMessage( i18n( "%1 encountered non-form2 sector" ).arg("Vcdxrip"), K3bJob::ERROR );
+        emit infoMessage( i18n( "%1 encountered non-form2 sector" ,"Vcdxrip"), K3bJob::ERROR );
         emit infoMessage( i18n( "leaving loop" ), K3bJob::ERROR );
         cancelAll();
         jobFinished( false );
@@ -329,7 +329,7 @@ void K3bVideoCdRip::parseInformation( QString text )
 
             index = 11;
             end = text.find( "(start lsn" );
-            emit newSubTask( i18n( "Extracting %1" ).arg( text.mid( index, end - index ).trimmed() ) );
+            emit newSubTask( i18n( "Extracting %1" , text.mid( index, end - index ).trimmed() ) );
         }
         // parse extracting files info
         // extracting CDI/CDI_IMAG.RTF to _cdi_cdi_imag.rtf (lsn 258, size 1315168, raw 1)
@@ -340,14 +340,14 @@ void K3bVideoCdRip::parseInformation( QString text )
             index = text.find( " to " );
             end = text.find( " (lsn" );
             QString toFileName = text.mid( index + 4, end - index - 4 ).trimmed();
-            emit newSubTask( i18n( "Extracting %1 to %2" ).arg( extractFileName ).arg( toFileName ) );
+            emit newSubTask( i18n( "Extracting %1 to %2" , extractFileName ,toFileName ) );
         }
     }
 }
 
 QString K3bVideoCdRip::jobDescription() const
 {
-    return i18n( "Extracting %1" ).arg( m_videooptions ->getVideoCdDescription() );
+    return i18n( "Extracting %1" , m_videooptions ->getVideoCdDescription() );
 }
 
 QString K3bVideoCdRip::jobDetails() const

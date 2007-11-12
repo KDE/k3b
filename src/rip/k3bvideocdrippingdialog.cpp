@@ -134,7 +134,7 @@ void K3bVideoCdRippingDialog::setupGui()
 
 void K3bVideoCdRippingDialog::setupContextHelp()
 {
-    QToolTip::add( m_labelFreeSpace, i18n("Free space on destination directory: %1").arg( m_editDirectory ->url() ) );
+    QToolTip::add( m_labelFreeSpace, i18n("Free space on destination directory: %1", m_editDirectory ->url() ) );
 
     QToolTip::add( m_labelNecessarySize, i18n("Necessary space for extracted files") );
 
@@ -159,10 +159,10 @@ void K3bVideoCdRippingDialog::slotStartClicked()
     QDir d;
     d.setPath( m_editDirectory ->url() );
     if( !d.exists() ) {
-      if( KMessageBox::warningYesNo( this, i18n("Image folder '%1' does not exist. Do you want K3b to create it?").arg( m_editDirectory->url() ) )
+      if( KMessageBox::warningYesNo( this, i18n("Image folder '%1' does not exist. Do you want K3b to create it?", m_editDirectory->url() ) )
 	  == KMessageBox::Yes ) {
 	if( !KStandardDirs::makeDir( m_editDirectory->url() ) ) {
-	  KMessageBox::error( this, i18n("Failed to create folder '%1'.").arg( m_editDirectory->url() ) );
+	  KMessageBox::error( this, i18n("Failed to create folder '%1'.", m_editDirectory->url() ) );
 	  return;
 	}
       }

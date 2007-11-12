@@ -63,9 +63,7 @@ public:
 K3bPluginOptionTab::K3bPluginOptionTab( QWidget* parent, const char* name )
   : base_K3bPluginOptionTab( parent, name )
 {
-#if KDE_IS_VERSION(3,4,0)
   m_viewPlugins->setShadeSortColumn( false );
-#endif
   m_viewPlugins->addColumn( i18n("Name") );
   m_viewPlugins->addColumn( i18n("Author") );
   m_viewPlugins->addColumn( i18n("Version") );

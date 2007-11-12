@@ -139,9 +139,7 @@ K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWid
   m_programView->setAllColumnsShowFocus(true);
   m_programView->setFullWidth(true);
   m_programView->setAlternateBackground( QColor() );
-#if KDE_IS_VERSION(3,4,0)
   m_programView->setShadeSortColumn( false );
-#endif
   m_mainTabWidget->addTab( programTab, i18n("Programs") );
 
 

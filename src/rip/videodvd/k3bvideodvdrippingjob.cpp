@@ -143,10 +143,10 @@ void K3bVideoDVDRippingJob::slotTranscodingJobFinished( bool success )
   }
   else {
     if( success )
-      emit infoMessage( i18n("Successfully ripped title %1").arg(m_titleRipInfos[d->currentTitleInfoIndex].title), SUCCESS );
+      emit infoMessage( i18n("Successfully ripped title %1",m_titleRipInfos[d->currentTitleInfoIndex].title), SUCCESS );
     else {
       d->failedTitles++;
-      emit infoMessage( i18n("Failed to rip title %1").arg(m_titleRipInfos[d->currentTitleInfoIndex].title), ERROR );
+      emit infoMessage( i18n("Failed to rip title %1",m_titleRipInfos[d->currentTitleInfoIndex].title), ERROR );
     }
 
     ++d->currentTitleInfoIndex ;
@@ -176,7 +176,7 @@ void K3bVideoDVDRippingJob::slotDetectClippingJobFinished( bool success )
     m_titleRipInfos[d->currentTitleInfoIndex].clipRight = 0;
 
     if( success ) {
-      emit infoMessage( i18n("Determined clipping values for title %1").arg(m_titleRipInfos[d->currentTitleInfoIndex].title), SUCCESS );
+      emit infoMessage( i18n("Determined clipping values for title %1",m_titleRipInfos[d->currentTitleInfoIndex].title), SUCCESS );
       emit infoMessage( i18n("Top: %1, Bottom: %2")
 			.arg(m_detectClippingJob->clippingTop()).arg(m_detectClippingJob->clippingBottom()), INFO );
       emit infoMessage( i18n("Left: %1, Right: %2")
@@ -197,7 +197,7 @@ void K3bVideoDVDRippingJob::slotDetectClippingJobFinished( bool success )
       }
     }
     else
-      emit infoMessage( i18n("Failed to determine clipping values for title %1").arg(m_titleRipInfos[d->currentTitleInfoIndex].title), ERROR );
+      emit infoMessage( i18n("Failed to determine clipping values for title %1",m_titleRipInfos[d->currentTitleInfoIndex].title), ERROR );
 
     startTranscoding( d->currentTitleInfoIndex );
   }

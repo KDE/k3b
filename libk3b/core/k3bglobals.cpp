@@ -557,11 +557,9 @@ bool K3b::unmount( K3bDevice::Device* dev )
 
     QString mntDev = dev->blockDeviceName();
 
-#if KDE_IS_VERSION(3,4,0)
     // first try to unmount it the standard way
     if( KIO::NetAccess::synchronousRun( KIO::unmount( mntDev, false ), 0 ) )
         return true;
-#endif
 
 #warning FIXME: we need a replacement for KIO::findDeviceMountPoint
 //     QString mntPath = KIO::findDeviceMountPoint( dev->blockDeviceName() );
@@ -605,11 +603,9 @@ bool K3b::mount( K3bDevice::Device* dev )
 
     QString mntDev = dev->blockDeviceName();
 
-#if KDE_IS_VERSION(3,4,0)
     // first try to mount it the standard way
     if( KIO::NetAccess::synchronousRun( KIO::mount( true, 0, mntDev, false ), 0 ) )
         return true;
-#endif
 
 #warning Use SOlid to mount?
 

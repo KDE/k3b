@@ -429,11 +429,7 @@ void K3bIsoImageWritingDialog::slotWriterChanged()
 void K3bIsoImageWritingDialog::setImage( const KUrl& url )
 {
   d->imageForced = true;
-#if KDE_IS_VERSION(3,4,0)
-  m_editImagePath->setKURL( url );
-#else
-  m_editImagePath->setURL( url.path() );
-#endif
+  m_editImagePath->setUrl( url );
 }
 
 
@@ -574,11 +570,7 @@ void K3bIsoImageWritingDialog::dropEvent( QDropEvent* e )
 {
   KUrl::List urls;
   K3URLDrag::decode( e, urls );
-#if KDE_IS_VERSION(3,4,0)
-  m_editImagePath->setKURL( urls.first() );
-#else
-  m_editImagePath->setURL( urls.first().path() );
-#endif
+  m_editImagePath->setUrl( urls.first() );
 }
 
 #include "k3bisoimagewritingdialog.moc"
