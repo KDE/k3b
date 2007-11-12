@@ -1,5 +1,9 @@
+project(k3b)
 
 find_package(KDE4 REQUIRED)
+
+set( CMAKE_MODULE_PATH    ${CMAKE_MODULE_PATH}
+                          ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules )
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
