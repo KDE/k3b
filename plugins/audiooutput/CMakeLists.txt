@@ -1,2 +1,5 @@
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(ALSADIR)")
+FIND_PACKAGE(Alsa)
+if(ALSA_FOUND)
+  add_subdirectory(alsa) 
+endif(ALSA_FOUND)
 
