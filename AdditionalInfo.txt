@@ -1,0 +1,17 @@
+.h.in-Files
+
+.in.in-Files
+configure.in.in
+plugins/encoder/lame/configure.in.in
+plugins/decoder/libsndfile/configure.in.in
+plugins/decoder/mp3/configure.in.in
+plugins/decoder/musepack/configure.in.in
+plugins/decoder/ogg/configure.in.in
+plugins/decoder/ffmpeg/configure.in.in
+plugins/decoder/flac/configure.in.in
+plugins/audiooutput/alsa/configure.in.in
+libk3b/configure.in.in
+libk3b/videodvd/configure.in.in
+libk3b/plugin/libsamplerate/configure.in.in
+libk3bdevice/configure.in.in
+src/fastscale/configure.in.in
