@@ -130,7 +130,7 @@
                         </size>
                     </property>
                 </spacer>
-                <widget class="KURLLabel">
+                <widget class="KUrlLabel">
                     <property name="name">
                         <cstring>m_specialStringsLabel</cstring>
                     </property>
@@ -141,7 +141,7 @@
                         <set>AlignVCenter|AlignRight</set>
                     </property>
                 </widget>
-                <widget class="KURLLabel">
+                <widget class="KUrlLabel">
                     <property name="name">
                         <cstring>m_conditionalInclusionLabel</cstring>
                     </property>

@@ -502,7 +502,7 @@
                             </widget>
                         </hbox>
                     </widget>
-                    <widget class="KURLLabel">
+                    <widget class="KUrlLabel">
                         <property name="name">
                             <cstring>m_specialStringsLabel</cstring>
                         </property>
