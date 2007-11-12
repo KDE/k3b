@@ -97,63 +97,37 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
 
     // ToolTips
     // -------------------------------------------------------------------------
-    QToolTip::add
-        ( m_radioVcd11, i18n( "Select Video CD type %1" ).arg( "(VCD 1.1)" ) );
-    QToolTip::add
-        ( m_radioVcd20, i18n( "Select Video CD type %1" ).arg( "(VCD 2.0)" ) );
-    QToolTip::add
-        ( m_radioSvcd10, i18n( "Select Video CD type %1" ).arg( "(SVCD 1.0)" ) );
-    QToolTip::add
-        ( m_radioHqVcd10, i18n( "Select Video CD type %1" ).arg( "(HQ-VCD 1.0)" ) );
-    QToolTip::add
-        ( m_checkAutoDetect, i18n( "Automatic video type recognition." ) );
-    QToolTip::add
-        ( m_checkNonCompliant, i18n( "Non-compliant compatibility mode for broken devices" ) );
-    QToolTip::add
-        ( m_checkVCD30interpretation, i18n( "Chinese VCD3.0 track interpretation" ) );
-    QToolTip::add
-        ( m_check2336, i18n( "Use 2336 byte sectors for output" ) );
+    m_radioVcd11->setToolTip( i18n( "Select Video CD type %1" ).arg( "(VCD 1.1)" ) );
+    m_radioVcd20->setToolTip( i18n( "Select Video CD type %1" ).arg( "(VCD 2.0)" ) );
+    m_radioSvcd10->setToolTip( i18n( "Select Video CD type %1" ).arg( "(SVCD 1.0)" ) );
+    m_radioHqVcd10->setToolTip( i18n( "Select Video CD type %1" ).arg( "(HQ-VCD 1.0)" ) );
+    m_checkAutoDetect->setToolTip( i18n( "Automatic video type recognition." ) );
+    m_checkNonCompliant->setToolTip( i18n( "Non-compliant compatibility mode for broken devices" ) );
+    m_checkVCD30interpretation->setToolTip( i18n( "Chinese VCD3.0 track interpretation" ) );
+    m_check2336->setToolTip( i18n( "Use 2336 byte sectors for output" ) );
 
-    QToolTip::add
-        ( m_editVolumeId, i18n( "Specify ISO volume label for Video CD" ) );
-    QToolTip::add
-        ( m_editAlbumId, i18n( "Specify album id for VideoCD set" ) );
-    QToolTip::add
-        ( m_spinVolumeNumber, i18n( "Specify album set sequence number ( <= volume-count )" ) );
-    QToolTip::add
-        ( m_spinVolumeCount, i18n( "Specify number of volumes in album set" ) );
+    m_editVolumeId->setToolTip( i18n( "Specify ISO volume label for Video CD" ) );
+    m_editAlbumId->setToolTip( i18n( "Specify album id for VideoCD set" ) );
+    m_spinVolumeNumber->setToolTip( i18n( "Specify album set sequence number ( <= volume-count )" ) );
+    m_spinVolumeCount->setToolTip( i18n( "Specify number of volumes in album set" ) );
+    m_checkCdiSupport->setToolTip( i18n( "Enable CD-i Application Support for VideoCD Type 1.1 & 2.0" ) );
+    m_editCdiCfg->setToolTip( i18n( "Configuration parameters (only for VCD 2.0)" ) );
 
-    QToolTip::add
-        ( m_checkCdiSupport, i18n( "Enable CD-i Application Support for VideoCD Type 1.1 & 2.0" ) );
-    QToolTip::add
-        ( m_editCdiCfg, i18n( "Configuration parameters (only for VCD 2.0)" ) );
+    m_checkPbc->setToolTip( i18n( "Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats." ) );
+    m_checkSegmentFolder->setToolTip( i18n( "Add always an empty `/SEGMENT' directory" ) );
+    m_checkRelaxedAps->setToolTip( i18n( "This controls whether APS constraints are strict or relaxed. " ) );
+    m_checkUpdateScanOffsets->setToolTip( i18n( "This controls whether to update the scan data information contained in the MPEG-2 video streams." ) );
+    m_labelRestriction->setToolTip( i18n( "This element allows to set viewing restrictions which may be interpreted by the playing device." ) );
 
-    QToolTip::add
-        ( m_checkPbc, i18n( "Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats." ) );
-    QToolTip::add
-        ( m_checkSegmentFolder, i18n( "Add always an empty `/SEGMENT' directory" ) );
-    QToolTip::add
-        ( m_checkRelaxedAps, i18n( "This controls whether APS constraints are strict or relaxed. " ) );
-    QToolTip::add
-        ( m_checkUpdateScanOffsets, i18n( "This controls whether to update the scan data information contained in the MPEG-2 video streams." ) );
-    QToolTip::add
-        ( m_labelRestriction, i18n( "This element allows to set viewing restrictions which may be interpreted by the playing device." ) );
-
-    QToolTip::add
-        ( m_checkGaps, i18n( "This option allows customization of Gaps and Margins." ) );
-    QToolTip::add
-        ( m_labelPreGapLeadout, i18n( "Used to set the number of empty sectors added before the lead-out area begins." ) );
-    QToolTip::add
-        ( m_labelPreGapTrack, i18n( "Used to set the track pre-gap for all tracks in sectors globally." ) );
-    QToolTip::add
-        ( m_labelFrontMarginTrack, i18n( "Sets the front margin for sequence items." ) );
-    QToolTip::add
-        ( m_labelRearMarginTrack, i18n( "Sets the rear margin for sequence items." ) );
+    m_checkGaps->setToolTip( i18n( "This option allows customization of Gaps and Margins." ) );
+    m_labelPreGapLeadout->setToolTip( i18n( "Used to set the number of empty sectors added before the lead-out area begins." ) );
+    m_labelPreGapTrack->setToolTip( i18n( "Used to set the track pre-gap for all tracks in sectors globally." ) );
+    m_labelFrontMarginTrack->setToolTip( i18n( "Sets the front margin for sequence items." ) );
+    m_labelRearMarginTrack->setToolTip( i18n( "Sets the rear margin for sequence items." ) );
 
     // What's This info
     // -------------------------------------------------------------------------
-    Q3WhatsThis::add
-        ( m_radioVcd11, i18n( "<p>This is the most basic <b>Video CD</b> specification dating back to 1993, which has the following characteristics:"
+    m_radioVcd11->setWhatsThis( i18n( "<p>This is the most basic <b>Video CD</b> specification dating back to 1993, which has the following characteristics:"
                               "<ul><li>One mode2 mixed form ISO-9660 track containing file pointers to the information areas.</li>"
                               "<li>Up to 98 multiplex-ed MPEG-1 audio/video streams or CD-DA audio tracks.</li>"
                               "<li>Up to 500 MPEG sequence entry points used as chapter divisions.</li></ul>"
@@ -164,8 +138,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
                               "<p>The CBR MPEG-1, layer II audio stream is fixed at 224 kbps with 1 stereo or 2 mono channels."
                               "<p><b>It is recommended to keep the video bit-rate under 1151929.1 bps.</b>" ) );
 
-    Q3WhatsThis::add
-        ( m_radioVcd20, i18n( "<p>About two years after the Video CD 1.1 specification came out, an improved <b>Video CD 2.0</b> standard was published in 1995."
+    m_radioVcd20->setWhatsThis( i18n( "<p>About two years after the Video CD 1.1 specification came out, an improved <b>Video CD 2.0</b> standard was published in 1995."
                               "<p>This one added the following items to the features already available in the Video CD 1.1 specification:"
                               "<ul><li>Support for MPEG segment play items (<b>\"SPI\"</b>), consisting of still pictures, motion pictures and/or audio (only) streams was added.</li>"
                               "<li>Note Segment Items::.</li>"
@@ -183,8 +156,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
                               "<p>Also the possibility to have audio only streams and still pictures was provided."
                               "<p><b>The bit-rate of multiplex-ed streams should be kept under 174300 bytes/sec (except for single still picture items) in order to accommodate single speed drives.</b>" ) );
 
-    Q3WhatsThis::add
-        ( m_radioSvcd10, i18n( "<p>With the upcoming of the DVD-V media, a new VCD standard had to be published in order to be able to keep up with technology, so the Super Video CD specification was called into life 1999."
+    m_radioSvcd10->setWhatsThis( i18n( "<p>With the upcoming of the DVD-V media, a new VCD standard had to be published in order to be able to keep up with technology, so the Super Video CD specification was called into life 1999."
                                "<p>In the midst of 2000 a full subset of this <b>Super Video CD</b> specification was published as <b>IEC-62107</b>."
                                "<p>As the most notable change over Video CD 2.0 is a switch from MPEG-1 CBR to MPEG-2 VBR encoding for the video stream was performed."
                                "<p>The following new features--building upon the Video CD 2.0 specification--are:"
@@ -197,94 +169,77 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
                                "<ul><li>480 x 480 @ 29.97 Hz (NTSC 2/3 D-2).</li>"
                                "<li>480 x 576 @ 25 Hz (PAL 2/3 D-2).</li></ul>" ) );
 
-    Q3WhatsThis::add
-        ( m_radioHqVcd10, i18n( "<p>This is actually just a minor variation defined in IEC-62107 on the Super Video CD 1.0 format for compatibility with current products in the market."
+    m_radioHqVcd10->setWhatsThis( i18n( "<p>This is actually just a minor variation defined in IEC-62107 on the Super Video CD 1.0 format for compatibility with current products in the market."
                                 "<p>It differs from the Super Video CD 1.0 format in the following items:"
                                 "<ul><li>The system profile tag field in <b>/SVCD/INFO.SVD</b> is set to <b>1</b> instead of <b>0</b>.</li>"
                                 "<li>The system identification field value in <b>/SVCD/INFO.SVD</b> is set to <b>HQ-VCD</b> instead of <b>SUPERVCD</b>.</li>"
                                 "<li><b>/EXT/SCANDATA.DAT</b> is mandatory instead of being optional.</li>"
                                 "<li><b>/SVCD/SEARCH.DAT</b> is optional instead of being mandatory.</li></ul>" ) );
 
-    Q3WhatsThis::add
-        ( m_checkAutoDetect, i18n( "<p>If Autodetect is:</p>"
+    m_checkAutoDetect->setWhatsThis( i18n( "<p>If Autodetect is:</p>"
                                    "<ul><li>ON then K3b will set the correct VideoCD type.</li>"
                                    "<li>OFF then the correct VideoCD type needs to be set by the user.</li></ul>"
                                    "<p>If you are not sure about the correct VideoCD type, it is best to turn Autodetect ON.</p>"
                                    "<p>If you want to force the VideoCD type, you must turn Autodetect OFF. This is useful for some standalone DVD players without SVCD support.</p>" ) );
 
-    Q3WhatsThis::add
-        ( m_checkNonCompliant, i18n( "<ul><li>Rename <b>\"/MPEG2\"</b> folder on SVCDs to (non-compliant) \"/MPEGAV\".</li>"
+    m_checkNonCompliant->setWhatsThis( i18n( "<ul><li>Rename <b>\"/MPEG2\"</b> folder on SVCDs to (non-compliant) \"/MPEGAV\".</li>"
                                      "<li>Enables the use of the (deprecated) signature <b>\"ENTRYSVD\"</b> instead of <b>\"ENTRYVCD\"</b> for the file <b>\"/SVCD/ENTRY.SVD\"</b>.</li></ul>" ) );
-    Q3WhatsThis::add
-        ( m_checkVCD30interpretation, i18n( "<ul><li>Enables the use of the (deprecated) Chinese <b>\"/SVCD/TRACKS.SVD\"</b> format which differs from the format defined in the <b>IEC-62107</b> specification.</li></ul>"
+    m_checkVCD30interpretation->setWhatsThis( i18n( "<ul><li>Enables the use of the (deprecated) Chinese <b>\"/SVCD/TRACKS.SVD\"</b> format which differs from the format defined in the <b>IEC-62107</b> specification.</li></ul>"
                                             "<p><b>The differences are most exposed on SVCDs containing more than one video track.</b>" ) );
 
-    Q3WhatsThis::add
-        ( m_check2336, i18n( "<p>though most devices will have problems with such an out-of-specification media."
+    m_check2336->setWhatsThis( i18n( "<p>though most devices will have problems with such an out-of-specification media."
                              "<p><b>You may want use this option for images longer than 80 minutes</b>" ) );
 
-    Q3WhatsThis::add
-        ( m_checkCdiSupport, i18n( "<p>To allow the play of Video-CDs on a CD-i player, the Video-CD standard requires that a CD-i application program must be present."
+    m_checkCdiSupport->setWhatsThis( i18n( "<p>To allow the play of Video-CDs on a CD-i player, the Video-CD standard requires that a CD-i application program must be present."
                                    "<p>This program is designed to:"
                                    "<ul><li>provide full play back control as defined in the PSD of the standard</l>"
                                    "<li>be extremely simple to use and easy-to-learn for the end-user</li></ul>"
                                    "<p>The program runs on CD-i players equipped with the CDRTOS 1.1(.1) operating system and a Digital Video extension cartridge." ) );
 
-    Q3WhatsThis::add
-        ( m_editCdiCfg, i18n( "<p>Configuration parameters only available for VideoCD 2.0"
+    m_editCdiCfg->setWhatsThis( i18n( "<p>Configuration parameters only available for VideoCD 2.0"
                               "<p>The engine works perfectly well when used as-is."
                               "<p>You have the option to configure the VCD application."
                               "<p>You can adapt the color and/or the shape of the cursor and lots more." ) );
 
 
-    Q3WhatsThis::add
-        ( m_checkPbc, i18n( "<p>Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats."
+    m_checkPbc->setWhatsThis( i18n( "<p>Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats."
                             "<p>PBC allows control of the playback of play items and the possibility of interaction with the user through the remote control or some other input device available." ) );
 
-    Q3WhatsThis::add
-        ( m_checkSegmentFolder, i18n( "<p>Here you can specify that the folder <b>SEGMENT</b> should always be present."
+    m_checkSegmentFolder->setWhatsThis( i18n( "<p>Here you can specify that the folder <b>SEGMENT</b> should always be present."
                                       "<p>Some DVD players need the folder to give a faultless rendition." ) );
 
-    Q3WhatsThis::add
-        ( m_checkRelaxedAps, i18n( "<p>An Access Point Sector, APS, is an MPEG video sector on the VCD/SVCD which is suitable to be jumped to directly."
+    m_checkRelaxedAps->setWhatsThis( i18n( "<p>An Access Point Sector, APS, is an MPEG video sector on the VCD/SVCD which is suitable to be jumped to directly."
                                    "<p>APS are required for entry points and scantables. APS have to fulfil the requirement to precede every I-frame by a GOP header which shall be preceded by a sequence header in its turn."
                                    "<p>The start codes of these 3 items are required to be contained all in the same MPEG pack/sector, thus forming a so-called access point sector."
                                    "<p>This requirement can be relaxed by enabling the relaxed aps option, i.e. every sector containing an I-frame will be regarded as an APS."
                                    "<p><b>Warning:</b> The sequence header is needed for a playing device to figure out display parameters, such as display resolution and frame rate, relaxing the aps requirement may lead to non-working entry points." ) );
 
-    Q3WhatsThis::add
-        ( m_checkUpdateScanOffsets, i18n( "<p>According to the specification, it is mandatory for Super Video CDs to encode scan information data into user data blocks in the picture layer of all intra coded picture."
+    m_checkUpdateScanOffsets->setWhatsThis( i18n( "<p>According to the specification, it is mandatory for Super Video CDs to encode scan information data into user data blocks in the picture layer of all intra coded picture."
                                           "<p>It can be used by playing devices for implementing fast forward & fast reverse scanning."
                                           "<p>The already existing scan information data can be updated by enabling the update scan offsets option." ) );
 
-    Q3WhatsThis::add
-        ( m_labelRestriction, i18n( "<p>Viewing Restriction may be interpreted by the playing device."
+    m_labelRestriction->setWhatsThis( i18n( "<p>Viewing Restriction may be interpreted by the playing device."
                                     "<p>The allowed range goes from 0 to 3."
                                     "<ul><li>0 = unrestricted, free to view for all</li>"
                                     "<li>3 = restricted, content not suitable for ages under 18</li></ul>"
                                     "<p>Actually, the exact meaning is not defined and is player dependant."
                                     "<p><b>Most players ignore that value.<b>" ) );
 
-    Q3WhatsThis::add
-        ( m_checkGaps, i18n( "<p>This option allows customization of Gaps and Margins." ) );
-    Q3WhatsThis::add
-        ( m_labelPreGapLeadout, i18n( "<p>This option allows to set the number of empty sectors added before the lead-out area begins, i.e. the number of post-gap sectors."
+    m_checkGaps->setWhatsThis( i18n( "<p>This option allows customization of Gaps and Margins." ) );
+    m_labelPreGapLeadout->setWhatsThis( i18n( "<p>This option allows to set the number of empty sectors added before the lead-out area begins, i.e. the number of post-gap sectors."
                                       "<p>The ECMA-130 specification requires the last data track before the lead-out to carry a post-gap of at least 150 sectors, which is used as default for this parameter."
                                       "<p>Some operating systems may encounter I/O errors due to read-ahead issues when reading the last MPEG track if this parameter is set too low."
                                       "<p>Allowed value content: [0..300]. Default: 150." ) );
 
-    Q3WhatsThis::add
-        ( m_labelPreGapTrack, i18n( "<p>Used to set the track pre-gap for all tracks in sectors globally."
+    m_labelPreGapTrack->setWhatsThis( i18n( "<p>Used to set the track pre-gap for all tracks in sectors globally."
                                     "<p>The specification requires the pre-gaps to be at least 150 sectors long."
                                     "<p>Allowed value content: [0..300]. Default: 150." ) );
 
-    Q3WhatsThis::add
-        ( m_labelFrontMarginTrack, i18n( "Margins are used to compensate for inaccurate sector-addressing issues on CD-ROM media. Interestingly, they have been abandoned for Super Video CDs."
+    m_labelFrontMarginTrack->setWhatsThis( i18n( "Margins are used to compensate for inaccurate sector-addressing issues on CD-ROM media. Interestingly, they have been abandoned for Super Video CDs."
                                          "<p>For Video CD 1.0/1.1/2.0 this margin should be at least 15 sectors long."
                                          "<p>Allowed value content: [0..150]. Default: 30 for Video CD 1.0/1.1/2.0, otherwise (i.e. Super Video CD 1.0 and HQ-VCD 1.0) 0." ) );
 
-    Q3WhatsThis::add
-        ( m_labelRearMarginTrack, i18n( "<p>Margins are used to compensate for inaccurate sector-addressing issues on CD-ROM media. Interestingly, they have been abandoned for Super Video CDs."
+    m_labelRearMarginTrack->setWhatsThis( i18n( "<p>Margins are used to compensate for inaccurate sector-addressing issues on CD-ROM media. Interestingly, they have been abandoned for Super Video CDs."
                                         "<p>For Video CD 1.0/1.1/2.0 this margin should be at least 15 sectors long."
                                         "<p>Allowed value content: [0..150]. Default: 45 for Video CD 1.0/1.1/2.0, otherwise 0." ) );
 

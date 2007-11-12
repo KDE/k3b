@@ -200,51 +200,32 @@ void K3bVcdTrackDialog::fillGui()
     fillPbcGui();
 
 
-    QToolTip::add
-        ( m_pbc_previous, i18n( "May also look like | << on the remote control. " ) );
-    QToolTip::add
-        ( m_pbc_next, i18n( "May also look like >> | on the remote control." ) );
-    QToolTip::add
-        ( m_pbc_return, i18n( "This key may be mapped to the STOP key." ) );
-    QToolTip::add
-        ( m_pbc_default, i18n( "This key is usually mapped to the > or PLAY key." ) );
-    QToolTip::add
-        ( m_comboAfterTimeout, i18n( "Target to be jumped to on time-out of <wait>." ) );
-    QToolTip::add
-        ( m_check_reactivity, i18n( "Delay reactivity of keys." ) );
-    QToolTip::add
-        ( m_check_pbc, i18n( "Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats." ) );
-    QToolTip::add
-        ( m_check_usekeys, i18n( "Activate the use of numeric keys." ) );
-    QToolTip::add
-        ( m_check_overwritekeys, i18n( "Overwrite default numeric keys." ) );
-    QToolTip::add
-        ( m_list_keys, i18n( "Numeric keys." ) );
-    QToolTip::add
-        ( m_spin_times, i18n( "Times to repeat the playback of 'play track'." ) );
-    QToolTip::add
-        ( m_spin_waittime, i18n( "Time in seconds to wait after playback of 'play track'." ) );
+    m_pbc_previous->setToolTip( i18n( "May also look like | << on the remote control. " ) );
+    m_pbc_next->setToolTip( i18n( "May also look like >> | on the remote control." ) );
+    m_pbc_return->setToolTip( i18n( "This key may be mapped to the STOP key." ) );
+    m_pbc_default->setToolTip( i18n( "This key is usually mapped to the > or PLAY key." ) );
+    m_comboAfterTimeout->setToolTip( i18n( "Target to be jumped to on time-out of <wait>." ) );
+    m_check_reactivity->setToolTip( i18n( "Delay reactivity of keys." ) );
+    m_check_pbc->setToolTip( i18n( "Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats." ) );
+    m_check_usekeys->setToolTip( i18n( "Activate the use of numeric keys." ) );
+    m_check_overwritekeys->setToolTip( i18n( "Overwrite default numeric keys." ) );
+    m_list_keys->setToolTip( i18n( "Numeric keys." ) );
+    m_spin_times->setToolTip( i18n( "Times to repeat the playback of 'play track'." ) );
+    m_spin_waittime->setToolTip( i18n( "Time in seconds to wait after playback of 'play track'." ) );
 
-    Q3WhatsThis::add
-        ( m_comboAfterTimeout, i18n( "<p>Target to be jumped to on time-out of <wait>."
+    m_comboAfterTimeout->setWhatsThis( i18n( "<p>Target to be jumped to on time-out of <wait>."
                                      "<p>If omitted (and <wait> is not set to an infinite time) one of the targets is selected at random." ) );
-    Q3WhatsThis::add
-        ( m_check_reactivity, i18n( "<p>When reactivity is set to delayed, it is recommended that the length of the referenced 'play track' is not more than 5 seconds."
+    m_check_reactivity->setWhatsThis( i18n( "<p>When reactivity is set to delayed, it is recommended that the length of the referenced 'play track' is not more than 5 seconds."
                                     "<p>The recommended setting for a play item consisting of one still picture and no audio is to loop once and have a delayed reactivity." ) );
-    Q3WhatsThis::add
-        ( m_check_pbc, i18n( "<p>Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats."
+    m_check_pbc->setWhatsThis( i18n( "<p>Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats."
                              "<p>PBC allows control of the playback of play items and the possibility of interaction with the user through the remote control or some other input device available." ) );
-    Q3WhatsThis::add
-        ( m_check_usekeys, i18n( "These are actually pseudo keys, representing the numeric keys 0, 1, ..., 9." ) );
-    Q3WhatsThis::add
-        ( m_check_overwritekeys, i18n( "<p>If numeric keys enabled, you can overwrite the default settings." ) );
-    Q3WhatsThis::add
-        ( m_spin_times, i18n( "<p>Times to repeat the playback of 'play track'."
+    m_check_usekeys->setWhatsThis( i18n( "These are actually pseudo keys, representing the numeric keys 0, 1, ..., 9." ) );
+    m_check_overwritekeys->setWhatsThis( i18n( "<p>If numeric keys enabled, you can overwrite the default settings." ) );
+    m_spin_times->setWhatsThis( i18n( "<p>Times to repeat the playback of 'play track'."
                               "<p>The reactivity attribute controls whether the playback of 'play track' is finished, thus delayed, before executing user triggered action or an immediate jump is performed."
                               "<p>After the specified number of repetitions have completed, the <wait> time begins to count down, unless set to an infinite wait time."
                               "<p>If this element is omitted, a default of `1' is used, i.e. the 'play track' will be displayed once." ) );
-    Q3WhatsThis::add
-        ( m_spin_waittime, i18n( "Time in seconds to wait after playback of 'play track' before triggering the <timeout> action (unless the user triggers some action before time ran up)." ) );
+    m_spin_waittime->setWhatsThis( i18n( "Time in seconds to wait after playback of 'play track' before triggering the <timeout> action (unless the user triggers some action before time ran up)." ) );
 
 }
 
