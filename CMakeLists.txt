@@ -9,9 +9,7 @@ add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
 include(ConvenienceLibs.cmake)
 
-include(ManualStuff.cmake)
-
-include(ConfigureChecks.cmake)
+#include(ConfigureChecks.cmake)
 
 include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 

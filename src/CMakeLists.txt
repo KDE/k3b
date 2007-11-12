@@ -15,7 +15,7 @@ add_subdirectory( sounds )
 
 ########### next target ###############
 
-set(k3b_SRCS 
+set(k3b_bin_SRCS 
    k3bwelcomewidget.cpp 
    k3bapplication.cpp 
    k3bdiroperator.cpp 
@@ -76,18 +76,19 @@ set(k3b_SRCS
 #kde4_add_dcop_skels(k3b_SRCS );
 MESSAGE(STATUS "DCOP stuff was remove into kde4, convert it to dbus please.kde4_add_dcop_skels macro doesn't exist now. We keep it just to remember to port to dbus")
 
-   k3binterface.h 
-   k3bjobinterface.h 
-   k3bprojectinterface.h 
-   k3bdataprojectinterface.h 
-   k3baudioprojectinterface.h 
-   k3bmixedprojectinterface.h )
+   #k3binterface.h 
+   #k3bjobinterface.h 
+   #k3bprojectinterface.h 
+   #k3bdataprojectinterface.h 
+   #k3baudioprojectinterface.h 
+   #k3bmixedprojectinterface.h )
 
-kde4_add_executable(k3b ${k3b_SRCS})
+kde4_add_executable(k3b_bin ${k3b_bin_SRCS})
+set_target_properties(k3b_bin PROPERTIES OUTPUT_NAME k3b)
 
-target_link_libraries(k3b  ${KDE4_KDECORE_LIBS} option rip projects k3bdevice k3b misc fastscale kio kparts )
+target_link_libraries(k3b_bin  ${KDE4_KDECORE_LIBS} option rip projects k3bdevice k3b misc fastscale kio kparts )
 
-install(TARGETS k3b DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS k3b_bin DESTINATION ${BIN_INSTALL_DIR})
 
 
 ########### install files ###############
