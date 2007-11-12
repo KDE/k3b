@@ -13,6 +13,8 @@ include(ConvenienceLibs.cmake)
 
 include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
+configure_file (config-k3b.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-k3b.h )
+
 add_subdirectory( libk3bdevice )
 add_subdirectory( libk3b )
 add_subdirectory( src )
