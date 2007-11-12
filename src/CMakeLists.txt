@@ -83,7 +83,7 @@ MESSAGE(STATUS "DCOP stuff was remove into kde4, convert it to dbus please.kde4_
 kde4_add_executable(k3b_bin ${k3b_bin_SRCS})
 set_target_properties(k3b_bin PROPERTIES OUTPUT_NAME k3b)
 
-target_link_libraries(k3b_bin  ${KDE4_KDECORE_LIBS} option rip projects k3bdevice k3b misc fastscale kio kparts )
+target_link_libraries(k3b_bin  ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS} option rip projects k3bdevice k3b misc fastscale )
 
 install(TARGETS k3b_bin DESTINATION ${BIN_INSTALL_DIR})
 
