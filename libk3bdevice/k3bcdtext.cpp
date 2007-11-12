@@ -195,7 +195,7 @@ void K3bDevice::CdText::setRawPackData( const unsigned char* data, int len )
 
       char* nullPos = (char*)pack[i].data - 1;
 
-      unsigned int trackNo = pack[i].id2;
+      int trackNo = pack[i].id2;
 
       while( nullPos ) {
 	if( count() < ( int )trackNo )
@@ -285,7 +285,7 @@ void K3bDevice::CdText::setRawPackData( const unsigned char* data, int len )
     }
 
     // remove empty fields at the end
-    unsigned int i = count();
+    int i = count();
     while( i > 0 && at(i-1).isEmpty() )
       --i;
     resize( i );
@@ -304,8 +304,8 @@ QByteArray K3bDevice::CdText::rawPackData() const
 {
   // FIXME: every pack block may only consist of up to 255 packs.
 
-  unsigned int pc = 0;
-  unsigned int alreadyCountedPacks = 0;
+  int pc = 0;
+  int alreadyCountedPacks = 0;
 
 
   //
@@ -345,7 +345,7 @@ QByteArray K3bDevice::CdText::rawPackData() const
   //
   // create the size info packs
   //
-  unsigned int dataFill = data.size();
+  int dataFill = data.size();
   data.resize( data.size() + 3 * sizeof(cdtext_pack) );
   for( int i = 0; i < 3; ++i ) {
     cdtext_pack pack;
@@ -372,21 +372,21 @@ QByteArray K3bDevice::CdText::rawPackData() const
 
 void K3bDevice::CdText::appendByteArray( QByteArray& a, const QByteArray& b ) const
 {
-  unsigned int oldSize = a.size();
+  int oldSize = a.size();
   a.resize( oldSize + b.size() );
   ::memcpy( &a.data()[oldSize], b.data(), b.size() );
 }
 
 
 // this method also creates completely empty packs
-QByteArray K3bDevice::CdText::createPackData( int packType, unsigned int& packCount ) const
+QByteArray K3bDevice::CdText::createPackData( int packType, int& packCount ) const
 {
   QByteArray data;
-  unsigned int dataFill = 0;
+  int dataFill = 0;
   Q3CString text = encodeCdText( textForPackType( packType, 0 ) );
-  unsigned int currentTrack = 0;
-  unsigned int textPos = 0;
-  unsigned int packPos = 0;
+  int currentTrack = 0;
+  int textPos = 0;
+  int packPos = 0;
 
   //
   // initialize the first pack
@@ -459,7 +459,7 @@ QByteArray K3bDevice::CdText::createPackData( int packType, unsigned int& packCo
 }
 
 
-void K3bDevice::CdText::savePack( cdtext_pack* pack, QByteArray& data, unsigned int& dataFill ) const
+void K3bDevice::CdText::savePack( cdtext_pack* pack, QByteArray& data, int& dataFill ) const
 {
   // create CRC
   quint16 crc = calcX25( reinterpret_cast<unsigned char*>(pack), sizeof(cdtext_pack)-2 );
@@ -472,7 +472,7 @@ void K3bDevice::CdText::savePack( cdtext_pack* pack, QByteArray& data, unsigned 
 
 
   // append the pack to data
-  if( data.size() < dataFill + sizeof(cdtext_pack) )
+  if( data.size() < dataFill + ( int )sizeof(cdtext_pack) )
     data.resize( dataFill + sizeof(cdtext_pack) );
 
   ::memcpy( &data.data()[dataFill], reinterpret_cast<char*>( pack ), sizeof(cdtext_pack) );
@@ -482,7 +482,7 @@ void K3bDevice::CdText::savePack( cdtext_pack* pack, QByteArray& data, unsigned 
 
 
 // track 0 means global cdtext
-QString K3bDevice::CdText::textForPackType( int packType, unsigned int track ) const
+QString K3bDevice::CdText::textForPackType( int packType, int track ) const
 {
   switch( packType ) {
   default:
@@ -544,9 +544,9 @@ QString K3bDevice::CdText::textForPackType( int packType, unsigned int track ) c
 
 
 // count the overall length of a certain packtype texts
-unsigned int K3bDevice::CdText::textLengthForPackType( int packType ) const
+int K3bDevice::CdText::textLengthForPackType( int packType ) const
 {
-  unsigned int len = 0;
+  int len = 0;
   for( int i = 0; i <= count(); ++i )
     len += encodeCdText( textForPackType( packType, i ) ).length();
   return len;
@@ -636,7 +636,7 @@ void K3bDevice::CdText::debug() const
 	    << "  Message:    '" << message() << "'" << endl
 	    << "  Disc ID:    '" << discId() << "'" << endl
 	    << "  Upc Ean:    '" << upcEan() << "'" << endl;
-  for( unsigned int i = 0; i < count(); ++i ) {
+  for( int i = 0; i < count(); ++i ) {
     kDebug() << "Track " << (i+1) << ":" << endl
 	      << "  Title:      '" << at(i).title() << "'" << endl
 	      << "  Performer:  '" << at(i).performer() << "'" << endl

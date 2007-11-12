@@ -181,10 +181,10 @@ namespace K3bDevice
       // TODO: remove this (see above)
       void fixup( QString& s ) { s.replace( '/', "_" ); s.replace( '\"', "_" ); }
 
-      QString textForPackType( int packType, unsigned int track ) const;
-      unsigned int textLengthForPackType( int packType ) const;
-      QByteArray createPackData( int packType, unsigned int& ) const;
-      void savePack( cdtext_pack* pack, QByteArray& data, unsigned int& dataFill ) const;
+      QString textForPackType( int packType, int track ) const;
+      int textLengthForPackType( int packType ) const;
+      QByteArray createPackData( int packType, int& ) const;
+      void savePack( cdtext_pack* pack, QByteArray& data, int& dataFill ) const;
       void appendByteArray( QByteArray& a, const QByteArray& b ) const;
 
       QString m_title;
