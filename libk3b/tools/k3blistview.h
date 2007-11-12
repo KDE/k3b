@@ -28,7 +28,6 @@
 #include <QResizeEvent>
 #include <QPixmap>
 #include <QEvent>
-#include <kpixmap.h>
 
 class QPainter;
 class QPushButton;
@@ -184,11 +183,6 @@ class LIBK3B_EXPORT K3bListView : public K3ListView
    * @param pos position on the viewport.
    */
   void setK3bBackgroundPixmap( const QPixmap&, int pos = CENTER );
-
-  /**
-   * Create a faded pixmap showing the items.
-   */
-  KPixmap createDragPixmap( const Q3PtrList<Q3ListViewItem>& items );
 
   /**
    * Searches for the first item above @p i which is one level higher.
