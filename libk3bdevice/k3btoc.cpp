@@ -15,7 +15,7 @@
 
 
 #include "k3btoc.h"
-#include "k3bdebug.h"
+#include "kdebug.h"
 
 #include <qstring.h>
 //Added by qt3to4:
@@ -135,16 +135,16 @@ void K3bDevice::Toc::clear()
 
 void K3bDevice::Toc::debug() const
 {
-  k3bDebug() << count() << " in " << sessions() << " sessions" << endl;
+  kDebug() << count() << " in " << sessions() << " sessions" << endl;
   int sessionN = 0;
   int trackN = 0;
   for( Toc::const_iterator it = begin(); it != end(); ++it ) {
     ++trackN;
     if( sessionN != (*it).session() ) {
       sessionN = (*it).session();
-      k3bDebug() << "Session Number " << sessionN << endl;
+      kDebug() << "Session Number " << sessionN << endl;
     }
-    k3bDebug() << "  Track " << trackN << ( (*it).type() == Track::AUDIO ? " AUDIO" : " DATA" )
+    kDebug() << "  Track " << trackN << ( (*it).type() == Track::AUDIO ? " AUDIO" : " DATA" )
 	      << " " << (*it).firstSector().lba() << " - " << (*it).lastSector().lba()
 	      << " (" << (*it).length().lba() << ")" << endl;
   }

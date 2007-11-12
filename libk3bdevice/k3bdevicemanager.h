@@ -55,7 +55,7 @@ namespace K3bDevice {
       /**
        * Creates a new DeviceManager
        */
-      DeviceManager( QObject* parent = 0, const char* name = 0 );
+      DeviceManager( QObject* parent = 0 );
       virtual ~DeviceManager();
 
       /**
@@ -183,9 +183,6 @@ namespace K3bDevice {
 
       /**
        * Scan the system for devices. Call this to initialize all devices.
-       * 
-       * If the system uses the HAL device deamon it is possible to use
-       * HalConnection instead of calling this method.
        *
        * \return Number of found devices.
        **/

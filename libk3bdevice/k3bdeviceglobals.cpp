@@ -18,7 +18,7 @@
 #include "k3bdevice.h"
 
 #include <klocale.h>
-#include <k3bdebug.h>
+#include <kdebug.h>
 
 #include <qstringlist.h>
 
@@ -187,7 +187,7 @@ void K3bDevice::debugBitfield( unsigned char* data, long len )
     index.sprintf( "%4i", i );
     for( int bp = 7; bp >= 0; --bp )
       bitString[7-bp] = ( data[i] & (1<<bp) ? '1' : '0' );
-    k3bDebug() << index << " - " << bitString << " - " << (int)data[i] << endl;
+    kDebug() << index << " - " << bitString << " - " << (int)data[i] << endl;
   }
 }
 
@@ -236,11 +236,11 @@ int K3bDevice::determineMaxReadingBufferSize( K3bDevice::Device* dev, const K3b:
   int bufferSizeSectors = 128;
   unsigned char buffer[2048*128];
   while( !dev->read10( buffer, 2048*bufferSizeSectors, firstSector.lba(), bufferSizeSectors ) ) {
-    k3bDebug() << "(K3bDataTrackReader) determine max read sectors: "
+    kDebug() << "(K3bDataTrackReader) determine max read sectors: "
 	      << bufferSizeSectors << " too high." << endl;
     bufferSizeSectors--;
   }
-  k3bDebug() << "(K3bDataTrackReader) determine max read sectors: " 
+  kDebug() << "(K3bDataTrackReader) determine max read sectors: " 
 	    << bufferSizeSectors << " is max." << endl;
 
   return bufferSizeSectors;

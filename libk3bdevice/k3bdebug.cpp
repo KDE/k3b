@@ -13,7 +13,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include "k3bdebug.h"
+#include "kdebug.h"
 
 #include <stdio.h>
 //Added by qt3to4:
@@ -119,7 +119,7 @@ K3bDebug& K3bDebug::operator<<( K3BDBGFUNC f )
 }
 
 
-K3bDebug& K3bDebug::k3bDebug()
+K3bDebug& K3bDebug::kDebug()
 {
   static K3bDebug s_debug;
   return s_debug;
@@ -127,9 +127,9 @@ K3bDebug& K3bDebug::k3bDebug()
 
 
 
-K3bDebug& k3bDebug()
+K3bDebug& kDebug()
 {
-  return K3bDebug::k3bDebug();
+  return K3bDebug::kDebug();
 }
 
 

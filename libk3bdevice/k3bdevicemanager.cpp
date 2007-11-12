@@ -20,7 +20,7 @@
 #include "k3bdeviceglobals.h"
 #include "k3bscsicommand.h"
 #include "k3bmmc.h"
-#include "k3bdebug.h"
+#include "kdebug.h"
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -32,6 +32,7 @@
 #include <k3process.h>
 #include <kapplication.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <ktemporaryfile.h>
 
 #include <iostream>
@@ -119,8 +120,8 @@ public:
 
 
 
-K3bDevice::DeviceManager::DeviceManager( QObject* parent, const char* name )
-  : QObject( parent, name )
+K3bDevice::DeviceManager::DeviceManager( QObject* parent )
+  : QObject( parent )
 {
   d = new Private;
 }
@@ -165,7 +166,7 @@ K3bDevice::Device* K3bDevice::DeviceManager::findDevice( int bus, int id, int lu
 K3bDevice::Device* K3bDevice::DeviceManager::findDevice( const QString& devicename )
 {
   if( devicename.isEmpty() ) {
-    k3bDebug() << "(K3bDevice::DeviceManager) request for empty device!" << endl;
+    kDebug() << "(K3bDevice::DeviceManager) request for empty device!" << endl;
     return 0;
   }
   Q3PtrListIterator<K3bDevice::Device> it( d->allDevices );
@@ -263,46 +264,47 @@ void K3bDevice::DeviceManager::LinuxDeviceScan()
   }
 #endif
 
-  QFile info("/proc/sys/dev/cdrom/info");
-  QString line,devstring;
-  if( info.open(QIODevice::ReadOnly) ) {
-    info.readLine(line,80); // CD-ROM information, Id: cdrom.c 3.12 2000/10/18
-    info.readLine(line,80); //
+  #warning Use Solid
+//   QFile info("/proc/sys/dev/cdrom/info");
+//   QString line,devstring;
+//   if( info.open(QIODevice::ReadOnly) ) {
+//     info.readLine(line,80); // CD-ROM information, Id: cdrom.c 3.12 2000/10/18
+//     info.readLine(line,80); //
 
-    QRegExp re("[\t\n:]+");
-    while( info.readLine( line, 80 ) > 0 ) {
-      if( line.contains("drive name") > 0 ) {
-	int i = 1;
-	QString dev;
-	while( !(dev = line.section(re, i, i)).isEmpty() ) {
-	  if( addDevice( QString("/dev/%1").arg(dev) ) ) {
-	    devstring += dev + "|";
-	  }
-	  // according to the LINUX ALLOCATED DEVICES document (http://www.lanana.org/docs/device-list/),
-	  // the official device names for SCSI-CDROM's (block major 11) are /dev/sr*, the
-	  // prefix /dev/scd instead of /dev/sr has been used as well, and might make more sense.
-	  // Since there should be one and only one device node (and maybe several symbolic links) for
-	  // each physical device the next line should be better
-	  //      else if ( dev.startsWith("sr") )
-	  if ( dev.startsWith("sr") ) {
-	    if( addDevice(QString("/dev/%1").arg(dev.replace(QRegExp("r"),"cd"))) )
-	      devstring += dev + "|";
-	  }
-	  ++i;
-	}
-      }
-      break;
-    }
-    info.close();
-  }
-  else {
-    kError() << "(K3bDevice::DeviceManager) could not open /proc/sys/dev/cdrom/info" << endl;
-  }
+//     QRegExp re("[\t\n:]+");
+//     while( info.readLine( line, 80 ) > 0 ) {
+//       if( line.contains("drive name") > 0 ) {
+// 	int i = 1;
+// 	QString dev;
+// 	while( !(dev = line.section(re, i, i)).isEmpty() ) {
+// 	  if( addDevice( QString("/dev/%1").arg(dev) ) ) {
+// 	    devstring += dev + "|";
+// 	  }
+// 	  // according to the LINUX ALLOCATED DEVICES document (http://www.lanana.org/docs/device-list/),
+// 	  // the official device names for SCSI-CDROM's (block major 11) are /dev/sr*, the
+// 	  // prefix /dev/scd instead of /dev/sr has been used as well, and might make more sense.
+// 	  // Since there should be one and only one device node (and maybe several symbolic links) for
+// 	  // each physical device the next line should be better
+// 	  //      else if ( dev.startsWith("sr") )
+// 	  if ( dev.startsWith("sr") ) {
+// 	    if( addDevice(QString("/dev/%1").arg(dev.replace(QRegExp("r"),"cd"))) )
+// 	      devstring += dev + "|";
+// 	  }
+// 	  ++i;
+// 	}
+//       }
+//       break;
+//     }
+//     info.close();
+//   }
+//   else {
+//     kError() << "(K3bDevice::DeviceManager) could not open /proc/sys/dev/cdrom/info" << endl;
+//   }
 
   //
   // Scan the generic devices if we have scsi devices
   //
-  k3bDebug() << "(K3bDevice::DeviceManager) SCANNING FOR GENERIC DEVICES." << endl;
+  kDebug() << "(K3bDevice::DeviceManager) SCANNING FOR GENERIC DEVICES." << endl;
   for( int i = 0; i < 16; i++ ) {
     QString sgDev = resolveSymLink( QString("/dev/sg%1").arg(i) );
     int bus = -1, id = -1, lun = -1;
@@ -361,7 +363,7 @@ void K3bDevice::DeviceManager::BSDDeviceScan()
 
   if ((fd = open(XPT_DEVICE, O_RDWR)) == -1)
     {
-      k3bDebug() << "couldn't open %s " << XPT_DEVICE << endl;
+      kDebug() << "couldn't open %s " << XPT_DEVICE << endl;
       return;
     }
 
@@ -376,16 +378,16 @@ void K3bDevice::DeviceManager::BSDDeviceScan()
   ccb.cdm.pattern_buf_len = 0;
   do {
     if (ioctl(fd, CAMIOCOMMAND, &ccb) == -1) {
-      k3bDebug() << "(BSDDeviceScan) error sending CAMIOCOMMAND ioctl: " << errno << endl;
+      kDebug() << "(BSDDeviceScan) error sending CAMIOCOMMAND ioctl: " << errno << endl;
       break;
     }
 
     if ((ccb.ccb_h.status != CAM_REQ_CMP)
 	|| ((ccb.cdm.status != CAM_DEV_MATCH_LAST) && (ccb.cdm.status != CAM_DEV_MATCH_MORE))) {
-      k3bDebug() << "(BSDDeviceScan) got CAM error " << ccb.ccb_h.status << ", CDM error %d" << ccb.cdm.status << endl;
+      kDebug() << "(BSDDeviceScan) got CAM error " << ccb.ccb_h.status << ", CDM error %d" << ccb.cdm.status << endl;
       break;
     }
-    k3bDebug() << "(BSDDeviceScan) number of matches " << (int)ccb.cdm.num_matches << endl;
+    kDebug() << "(BSDDeviceScan) number of matches " << (int)ccb.cdm.num_matches << endl;
     for (int i = 0; i < (int)ccb.cdm.num_matches; i++) {
       switch (ccb.cdm.matches[i].type) {
       case DEV_MATCH_DEVICE: {
@@ -417,7 +419,7 @@ void K3bDevice::DeviceManager::BSDDeviceScan()
 	      device->m_target = target;
 	      device->m_lun = lun;
 	      device->m_passDevice = "/dev/" + pass;
-	      k3bDebug() << "(BSDDeviceScan) add device " << dev << ":" << bus << ":" << target << ":" << lun << endl;
+	      kDebug() << "(BSDDeviceScan) add device " << dev << ":" << bus << ":" << target << ":" << lun << endl;
 	      addDevice(device);
 	    }
 	    need_close = 0;
@@ -476,7 +478,7 @@ void K3bDevice::DeviceManager::BSDDeviceScan()
         device->m_target = target;
         device->m_lun = lun;
         device->m_passDevice = "/dev/" + pass;
-        k3bDebug() << "(BSDDeviceScan) add device " << dev << ":" << bus << ":" << target << ":" << lun << endl;
+        kDebug() << "(BSDDeviceScan) add device " << dev << ":" << bus << ":" << target << ":" << lun << endl;
         addDevice(device);
       }
     }
@@ -487,12 +489,12 @@ void K3bDevice::DeviceManager::BSDDeviceScan()
 
 void K3bDevice::DeviceManager::printDevices()
 {
-  k3bDebug() << "Devices:" << endl
+  kDebug() << "Devices:" << endl
 	    << "------------------------------" << endl;
   Q3PtrListIterator<Device> it( allDevices() );
   for( ; *it; ++it ) {
     Device* dev = *it;
-    k3bDebug() << "Blockdevice:    " << dev->blockDeviceName() << endl
+    kDebug() << "Blockdevice:    " << dev->blockDeviceName() << endl
 	      << "Generic device: " << dev->genericDevice() << endl
 	      << "Vendor:         " << dev->vendor() << endl
 	      << "Description:    " << dev->description() << endl
@@ -530,19 +532,19 @@ void K3bDevice::DeviceManager::clear()
 }
 
 
-bool K3bDevice::DeviceManager::readConfig( KConfig* c )
+bool K3bDevice::DeviceManager::readConfig( KConfig* c_ )
 {
   //
   // New configuration format since K3b 0.11.94
   // for details see saveConfig()
   //
 
-  if( !c->hasGroup( "Devices" ) )
+  if( !c_->hasGroup( "Devices" ) )
     return false;
 
-  c->setGroup( "Devices" );
+  KConfigGroup c = c_->group( "Devices" );
 
-  QStringList deviceSearchPath = c->readListEntry( "device_search_path" );
+  QStringList deviceSearchPath = c.readEntry( "device_search_path", QStringList() );
   for( QStringList::const_iterator it = deviceSearchPath.constBegin();
        it != deviceSearchPath.constEnd(); ++it )
     addDevice( *it );
@@ -554,9 +556,9 @@ bool K3bDevice::DeviceManager::readConfig( KConfig* c )
     K3bDevice::Device* dev = *it;
 
     QString configEntryName = dev->vendor() + " " + dev->description();
-    QStringList list = c->readListEntry( configEntryName );
+    QStringList list = c.readEntry( configEntryName, QStringList() );
     if( !list.isEmpty() ) {
-      k3bDebug() << "(K3bDevice::DeviceManager) found config entry for devicetype: " << configEntryName << endl;
+      kDebug() << "(K3bDevice::DeviceManager) found config entry for devicetype: " << configEntryName << endl;
 
       dev->setMaxReadSpeed( list[0].toInt() );
       if( list.count() > 1 )
@@ -572,7 +574,7 @@ bool K3bDevice::DeviceManager::readConfig( KConfig* c )
 }
 
 
-bool K3bDevice::DeviceManager::saveConfig( KConfig* c )
+bool K3bDevice::DeviceManager::saveConfig( KConfig* c_ )
 {
   //
   // New configuration format since K3b 0.11.94
@@ -586,8 +588,9 @@ bool K3bDevice::DeviceManager::saveConfig( KConfig* c )
   // This also makes sure device settings are kept between sessions
   //
 
-  c->setGroup( "Devices" );
-  QStringList deviceSearchPath = c->readListEntry( "device_search_path" );
+  KConfigGroup c = c_->group( "Devices" );
+
+  QStringList deviceSearchPath = c.readEntry( "device_search_path", QStringList() );
   // remove duplicate entries (caused by buggy old implementations)
   QStringList saveDeviceSearchPath;
   for( QStringList::const_iterator it = deviceSearchPath.constBegin(); it != deviceSearchPath.constEnd(); ++it )
@@ -613,12 +616,12 @@ bool K3bDevice::DeviceManager::saveConfig( KConfig* c )
     else
       list << "auto";
 
-    c->writeEntry( configEntryName, list );
+    c.writeEntry( configEntryName, list );
   }
 
-  c->writeEntry( "device_search_path", saveDeviceSearchPath );
+  c.writeEntry( "device_search_path", saveDeviceSearchPath );
 
-  c->sync();
+  c.sync();
 
   return true;
 }
@@ -632,9 +635,9 @@ bool K3bDevice::DeviceManager::testForCdrom( const QString& devicename )
 #endif
 #if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
   bool ret = false;
-  int cdromfd = K3bDevice::openDevice( devicename.ascii() );
+  int cdromfd = K3bDevice::openDevice( QFile::encodeName( devicename ).data() );
   if (cdromfd < 0) {
-    k3bDebug() << "could not open device " << devicename << " (" << strerror(errno) << ")" << endl;
+    kDebug() << "could not open device " << devicename << " (" << strerror(errno) << ")" << endl;
     return ret;
   }
 
@@ -645,10 +648,10 @@ bool K3bDevice::DeviceManager::testForCdrom( const QString& devicename )
   }
 
   if( !S_ISBLK( cdromStat.st_mode) ) {
-    k3bDebug() << devicename << " is no block device" << endl;
+    kDebug() << devicename << " is no block device" << endl;
   }
   else {
-    k3bDebug() << devicename << " is block device (" << (int)(cdromStat.st_rdev & 0xFF) << ")" << endl;
+    kDebug() << devicename << " is block device (" << (int)(cdromStat.st_rdev & 0xFF) << ")" << endl;
 #if defined(Q_OS_NETBSD)
   }
   {
@@ -665,14 +668,14 @@ bool K3bDevice::DeviceManager::testForCdrom( const QString& devicename )
     cmd[5] = 0;
 
     if( cmd.transport( TR_DIR_READ, buf, sizeof(buf) ) ) {
-      k3bDebug() << "(K3bDevice::Device) Unable to do inquiry. " << devicename << " is not a cdrom device" << endl;
+      kDebug() << "(K3bDevice::Device) Unable to do inquiry. " << devicename << " is not a cdrom device" << endl;
     }
     else if( (inq->p_device_type&0x1f) != 0x5 ) {
-      k3bDebug() << devicename << " seems not to be a cdrom device: " << strerror(errno) << endl;
+      kDebug() << devicename << " seems not to be a cdrom device: " << strerror(errno) << endl;
     }
     else {
       ret = true;
-      k3bDebug() << devicename << " seems to be cdrom" << endl;
+      kDebug() << devicename << " seems to be cdrom" << endl;
     }
   }
 
@@ -691,10 +694,10 @@ K3bDevice::Device* K3bDevice::DeviceManager::addDevice( const QString& devicenam
 
   // resolve all symlinks
   QString resolved = resolveSymLink( devicename );
-  k3bDebug() << devicename << " resolved to " << resolved << endl;
+  kDebug() << devicename << " resolved to " << resolved << endl;
 
   if ( K3bDevice::Device* oldDev = findDevice(resolved) ) {
-    k3bDebug() << "(K3bDevice::DeviceManager) dev " << resolved  << " already found" << endl;
+    kDebug() << "(K3bDevice::DeviceManager) dev " << resolved  << " already found" << endl;
     oldDev->addDeviceNode( devicename );
     return 0;
   }
@@ -717,7 +720,7 @@ K3bDevice::Device* K3bDevice::DeviceManager::addDevice( const QString& devicenam
   bool scsi = determineBusIdLun( resolved, bus, target, lun );
   if(scsi) {
     if ( K3bDevice::Device* oldDev = findDevice(bus, target, lun) ) {
-      k3bDebug() << "(K3bDevice::DeviceManager) dev " << resolved  << " already found" << endl;
+      kDebug() << "(K3bDevice::DeviceManager) dev " << resolved  << " already found" << endl;
       oldDev->addDeviceNode( devicename );
       return 0;
     }
@@ -739,7 +742,7 @@ K3bDevice::Device* K3bDevice::DeviceManager::addDevice( K3bDevice::Device* devic
   const QString devicename = device->devicename();
 
   if( !device->init() ) {
-    k3bDebug() << "Could not initialize device " << devicename << endl;
+    kDebug() << "Could not initialize device " << devicename << endl;
     delete device;
     return 0;
   }
@@ -764,7 +767,7 @@ K3bDevice::Device* K3bDevice::DeviceManager::addDevice( K3bDevice::Device* devic
 
     if( device->writesCd() ) {
       // default to max write speed
-      k3bDebug() << "(K3bDevice::DeviceManager) setting current write speed of device "
+      kDebug() << "(K3bDevice::DeviceManager) setting current write speed of device "
 		<< device->blockDeviceName()
 		<< " to " << device->maxWriteSpeed() << endl;
       device->setCurrentWriteSpeed( device->maxWriteSpeed() );
@@ -811,7 +814,7 @@ bool K3bDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus, 
 #ifdef Q_OS_NETBSD
   int cdromfd = K3bDevice::openDevice ( dev.ascii() );
   if (cdromfd < 0) {
-    k3bDebug() << "could not open device " << dev << " (" << strerror(errno) << ")" << endl;
+    kDebug() << "could not open device " << dev << " (" << strerror(errno) << ")" << endl;
     return false;
   }
 
@@ -819,7 +822,7 @@ bool K3bDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus, 
 
   if (::ioctl(cdromfd, SCIOCIDENTIFY, &my_addr))
   {
-    k3bDebug() << "ioctl(SCIOCIDENTIFY) failed on device " << dev << " (" << strerror(errno) << ")" << endl;
+    kDebug() << "ioctl(SCIOCIDENTIFY) failed on device " << dev << " (" << strerror(errno) << ")" << endl;
 
     ::close(cdromfd);
     return false;
@@ -848,7 +851,7 @@ bool K3bDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus, 
 
 #ifdef Q_OS_LINUX
   int ret = false;
-  int cdromfd = K3bDevice::openDevice( dev.ascii() );
+  int cdromfd = K3bDevice::openDevice( QFile::encodeName( dev ).data() );
   if (cdromfd < 0) {
     return false;
   }
@@ -870,13 +873,13 @@ bool K3bDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus, 
     // in kernel 2.2 SCSI_IOCTL_GET_IDLUN does not contain the bus id
     if ( (::ioctl( cdromfd, SCSI_IOCTL_GET_IDLUN, &idLun ) < 0) ||
          (::ioctl( cdromfd, SCSI_IOCTL_GET_BUS_NUMBER, &bus ) < 0) ) {
-        k3bDebug() << "(K3bDevice::DeviceManager) no SCSI device: " << dev << endl;
+        kDebug() << "(K3bDevice::DeviceManager) no SCSI device: " << dev << endl;
         ret = false;
     }
     else {
       id  = idLun.id & 0xff;
       lun = (idLun.id >> 8) & 0xff;
-      k3bDebug() << "bus: " << bus << ", id: " << id << ", lun: " << lun << endl;
+      kDebug() << "bus: " << bus << ", id: " << id << ", lun: " << lun << endl;
       ret = true;
     }
   }
@@ -892,7 +895,7 @@ QString K3bDevice::DeviceManager::resolveSymLink( const QString& path )
   char resolved[PATH_MAX];
   if( !realpath( QFile::encodeName(path), resolved ) )
   {
-    k3bDebug() << "Could not resolve " << path << endl;
+    kDebug() << "Could not resolve " << path << endl;
     return path;
   }
 

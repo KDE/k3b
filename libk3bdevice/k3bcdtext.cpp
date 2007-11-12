@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
@@ -18,7 +18,7 @@
 #include "k3bcdtext.h"
 #include "k3bcrc.h"
 
-#include <k3bdebug.h>
+#include <kdebug.h>
 
 #include <qtextcodec.h>
 //Added by qt3to4:
@@ -61,10 +61,10 @@ namespace K3bDevice {
 
   void debugRawTextPackData( const unsigned char* data, int dataLen )
   {
-    k3bDebug() << endl << " id1    | id2    | id3    | charps | blockn | dbcc | data           | crc |" << endl;
-  
+    kDebug() << endl << " id1    | id2    | id3    | charps | blockn | dbcc | data           | crc |" << endl;
+
     cdtext_pack* pack = (cdtext_pack*)data;
-  
+
     for( int i = 0; i < dataLen/18; ++i ) {
       QString s;
       s += QString( " %1 |" ).arg( pack[i].id1, 6, 16 );
@@ -90,7 +90,7 @@ namespace K3bDevice {
 //       s += QString( " %1 |" ).arg( "'" + QCString(str,13) + "'", 14 );
 //       quint16 crc = pack[i].crc[0]<<8|pack[i].crc[1];
 //       s += QString( " %1 |" ).arg( crc );
-      k3bDebug() << s << endl;
+      kDebug() << s << endl;
     }
   }
 
@@ -139,14 +139,14 @@ void K3bDevice::CdText::clear()
 {
   Q3ValueVector<TrackCdText>::clear();
 
-  m_title.setLength(0);
-  m_performer.setLength(0);
-  m_songwriter.setLength(0);
-  m_composer.setLength(0);
-  m_arranger.setLength(0);
-  m_message.setLength(0);
-  m_discId.setLength(0);
-  m_upcEan.setLength(0);
+  m_title.clear();
+  m_performer.clear();
+  m_songwriter.clear();
+  m_composer.clear();
+  m_arranger.clear();
+  m_message.clear();
+  m_discId.clear();
+  m_upcEan.clear();
 }
 
 
@@ -156,7 +156,7 @@ void K3bDevice::CdText::setRawPackData( const unsigned char* data, int len )
 
   int r = len%18;
   if( r > 0 && r != 4 ) {
-    k3bDebug() << "(K3bDevice::CdText) invalid cdtext size: " << len << endl;
+    kDebug() << "(K3bDevice::CdText) invalid cdtext size: " << len << endl;
   }
   else if( len-r > 0 ) {
     debugRawTextPackData( &data[r], len-r );
@@ -167,7 +167,7 @@ void K3bDevice::CdText::setRawPackData( const unsigned char* data, int len )
     for( int i = 0; i < (len-r)/18; ++i ) {
 
       if( pack[i].dbcc ) {
-	k3bDebug() << "(K3bDevice::CdText) Double byte code not supported" << endl;
+	kDebug() << "(K3bDevice::CdText) Double byte code not supported" << endl;
 	return;
       }
 
@@ -183,7 +183,7 @@ void K3bDevice::CdText::setRawPackData( const unsigned char* data, int len )
       pack[i].crc[1] ^= 0xff;
 
       if( crc != 0x0000 )
-	k3bDebug() << "(K3bDevice::CdText) CRC invalid!" << endl;
+	kDebug() << "(K3bDevice::CdText) CRC invalid!" << endl;
 
 
       //
@@ -194,20 +194,20 @@ void K3bDevice::CdText::setRawPackData( const unsigned char* data, int len )
       //
 
       char* nullPos = (char*)pack[i].data - 1;
-	
+
       unsigned int trackNo = pack[i].id2;
 
       while( nullPos ) {
-	if( count() < trackNo )
+	if( count() < ( int )trackNo )
 	  resize( trackNo );
 
 	char* nextNullPos = (char*)::memchr( nullPos+1, '\0', 11 - (nullPos - (char*)pack[i].data) );
-	QString txtstr;	    
+	QString txtstr;
 	if( nextNullPos ) // take all chars up to the next null
 	  txtstr = QString::fromLatin1( (char*)nullPos+1, nextNullPos - nullPos - 1 );
 	else // take all chars to the end of the pack data (12 bytes)
 	  txtstr = QString::fromLatin1( (char*)nullPos+1, 11 - (nullPos - (char*)pack[i].data) );
-	  
+
 	//
 	// a tab character means to use the same as for the previous track
 	//
@@ -271,14 +271,14 @@ void K3bDevice::CdText::setRawPackData( const unsigned char* data, int len )
 	  break;
 
 	  // TODO: support for binary data
-	  // 0x88: TOC 
+	  // 0x88: TOC
 	  // 0x89: second TOC
 	  // 0x8f: Size information
 
 	default:
 	  break;
 	}
-	  
+
 	trackNo++;
 	nullPos = nextNullPos;
       }
@@ -291,7 +291,7 @@ void K3bDevice::CdText::setRawPackData( const unsigned char* data, int len )
     resize( i );
   }
   else
-    k3bDebug() << "(K3bDevice::CdText) zero-sized CD-TEXT: " << len << endl; 
+    kDebug() << "(K3bDevice::CdText) zero-sized CD-TEXT: " << len << endl;
 }
 
 
@@ -301,7 +301,7 @@ void K3bDevice::CdText::setRawPackData( const QByteArray& b )
 }
 
 QByteArray K3bDevice::CdText::rawPackData() const
-{ 
+{
   // FIXME: every pack block may only consist of up to 255 packs.
 
   unsigned int pc = 0;
@@ -360,7 +360,7 @@ QByteArray K3bDevice::CdText::rawPackData() const
   //
   // add MMC header
   //
-  QByteArray a( 4 );
+  QByteArray a( 4, 0 );
   a[0] = (data.size()+2)>>8 & 0xff;
   a[1] = (data.size()+2) & 0xff;
   a[2] = a[3] = 0;
@@ -471,9 +471,9 @@ void K3bDevice::CdText::savePack( cdtext_pack* pack, QByteArray& data, unsigned 
   pack->crc[1] = crc & 0xff;
 
 
-  // append the pack to data  
+  // append the pack to data
   if( data.size() < dataFill + sizeof(cdtext_pack) )
-    data.resize( dataFill + sizeof(cdtext_pack), Q3GArray::SpeedOptim );
+    data.resize( dataFill + sizeof(cdtext_pack) );
 
   ::memcpy( &data.data()[dataFill], reinterpret_cast<char*>( pack ), sizeof(cdtext_pack) );
 
@@ -482,7 +482,7 @@ void K3bDevice::CdText::savePack( cdtext_pack* pack, QByteArray& data, unsigned 
 
 
 // track 0 means global cdtext
-const QString& K3bDevice::CdText::textForPackType( int packType, unsigned int track ) const
+QString K3bDevice::CdText::textForPackType( int packType, unsigned int track ) const
 {
   switch( packType ) {
   default:
@@ -525,8 +525,8 @@ const QString& K3bDevice::CdText::textForPackType( int packType, unsigned int tr
   case 0x86:
     if( track == 0 )
       return discId();
-    else 
-      return QString::null;
+    else
+      return QString();
 
 //   case 0x87:
 //     if( track == 0 )
@@ -547,7 +547,7 @@ const QString& K3bDevice::CdText::textForPackType( int packType, unsigned int tr
 unsigned int K3bDevice::CdText::textLengthForPackType( int packType ) const
 {
   unsigned int len = 0;
-  for( unsigned int i = 0; i <= count(); ++i )
+  for( int i = 0; i <= count(); ++i )
     len += encodeCdText( textForPackType( packType, i ) ).length();
   return len;
 }
@@ -567,14 +567,14 @@ Q3CString K3bDevice::encodeCdText( const QString& s, bool* illegalChars )
   else {
     Q3CString r(s.length()+1);
 
-    for( unsigned int i = 0; i < s.length(); ++i ) {
-      if( s[i].latin1() == 0 ) { // non-ASCII character
+    for( int i = 0; i < s.length(); ++i ) {
+      if( s[i].toLatin1() == 0 ) { // non-ASCII character
 	r[i] = ' ';
 	if( illegalChars )
 	  *illegalChars = true;
       }
       else
-	r[i] = s[i].latin1();
+	r[i] = s[i].toLatin1();
     }
 
     return r;
@@ -592,7 +592,7 @@ bool K3bDevice::CdText::checkCrc( const unsigned char* data, int len )
 {
   int r = len%18;
   if( r > 0 && r != 4 ) {
-    k3bDebug() << "(K3bDevice::CdText) invalid cdtext size: " << len << endl;
+    kDebug() << "(K3bDevice::CdText) invalid cdtext size: " << len << endl;
     return false;
   }
   else {
@@ -626,7 +626,7 @@ bool K3bDevice::CdText::checkCrc( const unsigned char* data, int len )
 void K3bDevice::CdText::debug() const
 {
   // debug the stuff
-  k3bDebug() << "CD-TEXT data:" << endl
+  kDebug() << "CD-TEXT data:" << endl
 	    << "Global:" << endl
 	    << "  Title:      '" << title() << "'" << endl
 	    << "  Performer:  '" << performer() << "'" << endl
@@ -637,7 +637,7 @@ void K3bDevice::CdText::debug() const
 	    << "  Disc ID:    '" << discId() << "'" << endl
 	    << "  Upc Ean:    '" << upcEan() << "'" << endl;
   for( unsigned int i = 0; i < count(); ++i ) {
-    k3bDebug() << "Track " << (i+1) << ":" << endl
+    kDebug() << "Track " << (i+1) << ":" << endl
 	      << "  Title:      '" << at(i).title() << "'" << endl
 	      << "  Performer:  '" << at(i).performer() << "'" << endl
 	      << "  Songwriter: '" << at(i).songwriter() << "'" << endl

@@ -133,7 +133,7 @@ namespace K3bDevice
 	if( !m_upcEan.isEmpty() )
 	  return false;
 	
-	for( unsigned int i = 0; i < count(); ++i )
+	for( int i = 0; i < count(); ++i )
 	  if( !at(i).isEmpty() )
 	    return false;
 
@@ -146,14 +146,14 @@ namespace K3bDevice
 
       void clear();
 
-      const QString& title() const { return m_title; }
-      const QString& performer() const { return m_performer; }
-      const QString& songwriter() const { return m_songwriter; }
-      const QString& composer() const { return m_composer; }
-      const QString& arranger() const { return m_arranger; }
-      const QString& message() const { return m_message; }
-      const QString& discId() const { return m_discId; }
-      const QString& upcEan() const { return m_upcEan; }
+      QString title() const { return m_title; }
+      QString performer() const { return m_performer; }
+      QString songwriter() const { return m_songwriter; }
+      QString composer() const { return m_composer; }
+      QString arranger() const { return m_arranger; }
+      QString message() const { return m_message; }
+      QString discId() const { return m_discId; }
+      QString upcEan() const { return m_upcEan; }
 
       // TODO: use the real CD-TEXT charset (a modified ISO8859-1)
       void setTitle( const QString& s ) { m_title = s; fixup(m_title); }
@@ -181,7 +181,7 @@ namespace K3bDevice
       // TODO: remove this (see above)
       void fixup( QString& s ) { s.replace( '/', "_" ); s.replace( '\"', "_" ); }
 
-      const QString& textForPackType( int packType, unsigned int track ) const;
+      QString textForPackType( int packType, unsigned int track ) const;
       unsigned int textLengthForPackType( int packType ) const;
       QByteArray createPackData( int packType, unsigned int& ) const;
       void savePack( cdtext_pack* pack, QByteArray& data, unsigned int& dataFill ) const;

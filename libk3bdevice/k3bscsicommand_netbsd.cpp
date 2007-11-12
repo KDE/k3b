@@ -17,7 +17,7 @@
 #include "k3bscsicommand.h"
 #include "k3bdevice.h"
 
-#include <k3bdebug.h>
+#include <kdebug.h>
 
 #include <sys/ioctl.h>
 #include <sys/scsiio.h>

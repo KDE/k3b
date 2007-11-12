@@ -19,7 +19,7 @@
 #include <k3bmsf.h>
 
 #include <klocale.h>
-#include <k3bdebug.h>
+#include <kdebug.h>
 #include <kio/global.h>
 
 #include <qstringlist.h>
@@ -162,7 +162,7 @@ K3b::Msf K3bDevice::DiskInfo::firstLayerSize() const
 
 void K3bDevice::DiskInfo::debug() const
 {
-  k3bDebug() << "DiskInfo:" << endl
+  kDebug() << "DiskInfo:" << endl
 	    << "Mediatype:       " << K3bDevice::mediaTypeString( mediaType() ) << endl
 	    << "Current Profile: " << K3bDevice::mediaTypeString( currentProfile() ) << endl
 	    << "Disk state:      " << ( diskState() == K3bDevice::STATE_EMPTY ?
@@ -193,7 +193,7 @@ void K3bDevice::DiskInfo::debug() const
 	    << ") (" << size().mode1Bytes() << " Bytes)" << endl;
 
   if( mediaType() == K3bDevice::MEDIA_DVD_PLUS_RW )
-    k3bDebug() << "Bg Format:       " << ( bgFormatState() == BG_FORMAT_NONE ?
+    kDebug() << "Bg Format:       " << ( bgFormatState() == BG_FORMAT_NONE ?
 					  "none" :
 					  ( bgFormatState() == BG_FORMAT_INCOMPLETE ?
 					    "incomplete" :
