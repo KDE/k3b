@@ -219,7 +219,7 @@ file will contain all tracks one after the other.
                         <string>Free space in directory:</string>
                     </property>
                 </widget>
-                <widget class="KURLRequester" row="0" column="0" rowspan="1" colspan="2">
+                <widget class="KUrlRequester" row="0" column="0" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>m_editBaseDir</cstring>
                     </property>

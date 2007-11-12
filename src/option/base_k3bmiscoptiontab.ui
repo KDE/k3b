@@ -49,7 +49,7 @@
                                 <string>Default Temporary Directory:</string>
                             </property>
                         </widget>
-                        <widget class="KURLRequester">
+                        <widget class="KUrlRequester">
                             <property name="name">
                                 <cstring>m_editTempDir</cstring>
                             </property>

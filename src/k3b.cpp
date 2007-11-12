@@ -804,7 +804,7 @@ bool K3bMainWindow::canCloseDocument( K3bDoc* doc )
     return true;
 
   switch ( KMessageBox::warningYesNoCancel( this,
-					    i18n("%1 has unsaved data.").arg( doc->URL().fileName() ),
+					    i18n("%1 has unsaved data.", doc->URL().fileName() ),
 					    i18n("Closing Project"),
 					    KStandardGuiItem::save(),
 					    KGuiItem( i18n("&Discard"), "editshred" ) ) )
@@ -918,7 +918,7 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
       bool exists = KIO::NetAccess::exists( url, false, 0 );
       if( !exists ||
 	  ( exists &&
-	    KMessageBox::warningContinueCancel( this, i18n("Do you want to overwrite %1?").arg( url.prettyUrl() ),
+	    KMessageBox::warningContinueCancel( this, i18n("Do you want to overwrite %1?", url.prettyUrl() ),
 						i18n("File Exists"), i18n("Overwrite") )
 	    == KMessageBox::Continue ) ) {
 
