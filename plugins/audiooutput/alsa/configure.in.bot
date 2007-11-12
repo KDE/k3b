@@ -1,7 +1,0 @@
-echo ""
-
-if test "x$have_alsa" = xyes; then
-	echo "K3b - Audioplayer available (alsa)           yes"
-else
-	echo "K3b - Audioplayer available (alsa)            no"
-fi
