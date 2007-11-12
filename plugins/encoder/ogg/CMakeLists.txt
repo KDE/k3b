@@ -6,7 +6,7 @@ include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 set(k3boggvorbisencoder_PART_SRCS k3boggvorbisencoder.cpp )
 
-kde4_add_ui_files(k3boggvorbisencoder_PART_SRCS base_k3boggvorbisencodersettingswidget.ui )
+kde4_add_ui3_files(k3boggvorbisencoder_PART_SRCS base_k3boggvorbisencodersettingswidget.ui )
 
 kde4_add_plugin(k3boggvorbisencoder WITH_PREFIX ${k3boggvorbisencoder_PART_SRCS})
 

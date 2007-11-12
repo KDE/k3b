@@ -1,7 +1,4 @@
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
-
-
 ########### next target ###############
 
 set(kfile_k3b_PART_SRCS kfile_k3bprojectfileplugin.cpp )

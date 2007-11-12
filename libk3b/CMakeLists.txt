@@ -1,6 +1,3 @@
-
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
-
 add_subdirectory( core )
 add_subdirectory( plugin )
 add_subdirectory( tools )

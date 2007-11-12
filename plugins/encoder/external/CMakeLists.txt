@@ -6,7 +6,7 @@ include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 set(k3bexternalencoder_PART_SRCS k3bexternalencoder.cpp k3bexternalencoderconfigwidget.cpp k3bexternalencodercommand.cpp )
 
-kde4_add_ui_files(k3bexternalencoder_PART_SRCS base_k3bexternalencoderconfigwidget.ui base_k3bexternalencodereditwidget.ui )
+kde4_add_ui3_files(k3bexternalencoder_PART_SRCS base_k3bexternalencoderconfigwidget.ui base_k3bexternalencodereditwidget.ui )
 
 kde4_add_plugin(k3bexternalencoder WITH_PREFIX ${k3bexternalencoder_PART_SRCS})
 
