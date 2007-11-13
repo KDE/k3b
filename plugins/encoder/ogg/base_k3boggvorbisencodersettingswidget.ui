@@ -343,8 +343,14 @@
         </widget>
     </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
+ <customwidgets>
+  <customwidget>
+   <class>KIntNumInput</class>
+   <extends>QWidget</extends>
+   <header>knuminput.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
 <connections>
     <connection>
         <sender>m_radioManual</sender>
@@ -385,8 +391,6 @@
 </connections>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
 </includehints>
 </UI>

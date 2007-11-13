@@ -29,7 +29,7 @@ class K3bOggVorbisEncoder : public K3bAudioEncoder
   Q_OBJECT
 
  public:
-  K3bOggVorbisEncoder( QObject* parent = 0, const char* name = 0 );
+  K3bOggVorbisEncoder( QObject* parent = 0 );
   ~K3bOggVorbisEncoder();
 
   QStringList extensions() const { return QStringList("ogg"); }
@@ -40,8 +40,7 @@ class K3bOggVorbisEncoder : public K3bAudioEncoder
 
   int pluginSystemVersion() const { return 3; }
 
-  K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0, 
-					     const char* name = 0 ) const;
+  K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0) const; 
 
  private:
   void loadConfig();
@@ -64,7 +63,7 @@ class K3bOggVorbisEncoderSettingsWidget : public K3bPluginConfigWidget
   Q_OBJECT
 
  public:
-  K3bOggVorbisEncoderSettingsWidget( QWidget* parent = 0, const char* name = 0 );
+  K3bOggVorbisEncoderSettingsWidget( QWidget* parent = 0 );
   ~K3bOggVorbisEncoderSettingsWidget();
 
  public slots:

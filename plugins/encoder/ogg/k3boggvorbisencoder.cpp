@@ -127,8 +127,8 @@ public:
 };
 
 
-K3bOggVorbisEncoder::K3bOggVorbisEncoder( QObject* parent, const char* name )
-  : K3bAudioEncoder( parent, name )
+K3bOggVorbisEncoder::K3bOggVorbisEncoder( QObject* parent)
+  : K3bAudioEncoder( parent )
 {
   d = new Private();
 }
@@ -417,10 +417,10 @@ void K3bOggVorbisEncoder::loadConfig()
   KConfig* c = k3bcore->config();
   KConfigGroup grp(c, "K3bOggVorbisEncoderPlugin" );
 
-  d->manualBitrate = grp.readBoolEntry( "manual bitrate", false );
+  d->manualBitrate = grp.readEntry( "manual bitrate", false );
   d->qualityLevel = grp.readEntry( "quality level", 4 );
   d->bitrateUpper = grp.readEntry( "bitrate upper", -1 );
-  d->bitrateNominal = grp/readEntry( "bitrate nominal", -1 );
+  d->bitrateNominal = grp.readEntry( "bitrate nominal", -1 );
   d->bitrateLower = grp.readEntry( "bitrate lower", -1 );
   //  d->sampleRate = c->readEntry( "samplerate", 44100 );
 }
@@ -428,8 +428,8 @@ void K3bOggVorbisEncoder::loadConfig()
 
 
 
-K3bOggVorbisEncoderSettingsWidget::K3bOggVorbisEncoderSettingsWidget( QWidget* parent, const char* name )
-  : K3bPluginConfigWidget( parent, name )
+K3bOggVorbisEncoderSettingsWidget::K3bOggVorbisEncoderSettingsWidget( QWidget* parent)
+  : K3bPluginConfigWidget( parent)
 {
   w = new base_K3bOggVorbisEncoderSettingsWidget( this );
 
@@ -547,10 +547,9 @@ long long K3bOggVorbisEncoder::fileSize( const QString&, const K3b::Msf& msf ) c
 }
 
 
-K3bPluginConfigWidget* K3bOggVorbisEncoder::createConfigWidget( QWidget* parent, 
-								const char* name ) const
+K3bPluginConfigWidget* K3bOggVorbisEncoder::createConfigWidget( QWidget* parent ) const
 {
-  return new K3bOggVorbisEncoderSettingsWidget( parent, name );
+  return new K3bOggVorbisEncoderSettingsWidget( parent );
 }
 
 
