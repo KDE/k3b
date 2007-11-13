@@ -18,7 +18,7 @@
 #define _K3B_PLUGIN_FACTORY_H_
 
 #include <klibloader.h>
-#include <kinstance.h>
+#include <KComponentData>
 #include <kglobal.h>
 #include <klocale.h>
 //Added by qt3to4:

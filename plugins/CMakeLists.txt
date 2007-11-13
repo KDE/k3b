@@ -1,3 +1,4 @@
+include_directories(../libk3b/plugin/ ../libk3b/core/)
 add_subdirectory( decoder )
 add_subdirectory( encoder )
 add_subdirectory( audiooutput )
