@@ -21,7 +21,7 @@
 #include <q3ptrlist.h>
 
 #include <kdebug.h>
-#include <kinstance.h>
+#include <KComponentData>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kurl.h>
@@ -42,7 +42,7 @@ extern "C"
 {
   LIBK3B_EXPORT int kdemain( int argc, char **argv )
   {
-    KInstance instance( "kio_videodvd" );
+    KComponentData componentData( "kio_videodvd" );
 
     kDebug(7101) << "*** Starting kio_videodvd ";
 
@@ -96,52 +96,27 @@ kio_videodvdProtocol::~kio_videodvdProtocol()
 KIO::UDSEntry kio_videodvdProtocol::createUDSEntry( const K3bIso9660Entry* e ) const
 {
   KIO::UDSEntry uds;
-  KIO::UDSAtom a;
-
-  a.m_uds = KIO::UDSEntry::UDS_NAME;
-  a.m_str = e->name();
-  uds.append( a );
-
-  a.m_uds = KIO::UDSEntry::UDS_ACCESS;
-  a.m_long = e->permissions();
-  uds.append( a );
-
-  a.m_uds = KIO::UDSEntry::UDS_CREATION_TIME;
-  a.m_long = e->date();
-  uds.append( a );
-
-  a.m_uds = KIO::UDSEntry::UDS_MODIFICATION_TIME;
-  a.m_long = e->date();
-  uds.append( a );
+  uds.insert(KIO::UDSEntry::UDS_NAME,e->name());
+  uds.insert(KIO::UDSEntry::UDS_ACCESS, e->permissions());
+  uds.insert(KIO::UDSEntry::UDS_CREATION_TIME, e->date());
+  uds.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME,e->date());
 
   if( e->isDirectory() )
   {
-    a.m_uds = KIO::UDSEntry::UDS_FILE_TYPE;
-    a.m_long = S_IFDIR;
-    uds.append( a );
-
-    a.m_uds = KIO::UDSEntry::UDS_MIME_TYPE;
-    a.m_str = "inode/directory";
-    uds.append( a );
+    uds.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFDIR);
+    uds.insert(KIO::UDSEntry::UDS_MIME_TYPE, "inode/directory");
   }
   else
   {
     const K3bIso9660File* file = static_cast<const K3bIso9660File*>( e );
-
-    a.m_uds = KIO::UDSEntry::UDS_SIZE;
-    a.m_long = file->size();
-    uds.append( a );
-
-    a.m_uds = KIO::UDSEntry::UDS_FILE_TYPE;
-    a.m_long = S_IFREG;
-    uds.append( a );
-
-    a.m_uds = KIO::UDSEntry::UDS_MIME_TYPE;
+    uds.insert(KIO::UDSEntry::UDS_SIZE,file->size());
+    uds.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFREG);
+    QString iconName;
     if( e->name().endsWith( "VOB" ) )
-      a.m_str = "video/mpeg";
+      iconName = "video/mpeg";
     else
-      a.m_str = "unknown";
-    uds.append( a );
+      iconName = "unknown";
+    uds.insert(KIO::UDSEntry::UDS_MIME_TYPE, iconName);
   }
 
   return uds;
@@ -286,24 +261,11 @@ void kio_videodvdProtocol::listVideoDVDs()
 	// FIXME: cache the entry for speedup
 
         UDSEntryList udsl;
-	KIO::UDSEntry uds;
-	KIO::UDSAtom a;
-	
-	a.m_uds = KIO::UDSEntry::UDS_NAME;
-	a.m_str = iso.primaryDescriptor().volumeId;
-	uds.append( a );
-
-	a.m_uds = KIO::UDSEntry::UDS_FILE_TYPE;
-	a.m_long = S_IFDIR;
-	uds.append( a );
-	
-	a.m_uds = KIO::UDSEntry::UDS_MIME_TYPE;
-	a.m_str = "inode/directory";
-	uds.append( a );
-
-	a.m_uds = KIO::UDSEntry::UDS_ICON_NAME;
-	a.m_str = "dvd_unmount";
-	uds.append( a );
+	UDSEntry uds;
+        uds.insert(KIO::UDSEntry::UDS_NAME,iso.primaryDescriptor().volumeId);
+        uds.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFDIR);
+        uds.insert(KIO::UDSEntry::UDS_MIME_TYPE, "inode/directory");
+        uds.insert(KIO::UDSEntry::UDS_ICON_NAME, "dvd_unmount");
 
 	udsl.append( uds );
 
@@ -328,19 +290,9 @@ void kio_videodvdProtocol::stat( const KUrl& url )
     // stat the root path
     //
     KIO::UDSEntry uds;
-    KIO::UDSAtom a;
-    
-    a.m_uds = KIO::UDSEntry::UDS_NAME;
-    a.m_str = "/";
-    uds.append( a );
-    
-    a.m_uds = KIO::UDSEntry::UDS_FILE_TYPE;
-    a.m_long = S_IFDIR;
-    uds.append( a );
-
-    a.m_uds = KIO::UDSEntry::UDS_MIME_TYPE;
-    a.m_str = "inode/directory";
-    uds.append( a );
+    uds.insert(KIO::UDSEntry::UDS_NAME,"/"); 
+    uds.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFDIR); 
+    uds.insert(KIO::UDSEntry::UDS_MIME_TYPE, "inode/directory");
 
     statEntry( uds );
     finished();
