@@ -106,21 +106,22 @@ public:
   KConfig* config;
 };
 
+K_PLUGIN_FACTORY(K3bSetup2Factory, registerPlugin<K3bSetup2>();)
+K_EXPORT_PLUGIN(K3bSetup2Factory("k3bsetup"))
 
 
-K3bSetup2::K3bSetup2( QWidget *parent, const char *, const QStringList& )
-  : KCModule( parent, "k3bsetup" )
+
+K3bSetup2::K3bSetup2( QWidget *parent, const QVariantList& )
+  : KCModule( K3bSetup2Factory::componentData(),parent )
 {
   d = new Private();
   d->config = new KConfig( "k3bsetup2rc" );
 
   m_aboutData = new KAboutData("k3bsetup2",
 			       "K3bSetup 2",
-			       0, 0, KAboutData::License_GPL,
-			       "(C) 2003-2007 Sebastian Trueg");
-  m_aboutData->addAuthor("Sebastian Trueg", 0, "trueg@k3b.org");
-
-  setButtons( KCModule::Apply|KCModule::Cancel|KCModule::Ok|KCModule::Default );
+			       KLocalizedString(), KLocalizedString(), KAboutData::License_GPL,
+			       ki18n("(C) 2003-2007 Sebastian Trueg"), ki18n(0L));
+  m_aboutData->addAuthor(ki18n("Sebastian Trueg"), KLocalizedString(), "trueg@k3b.org");
 
   Q3HBoxLayout* box = new Q3HBoxLayout( this );
   box->setAutoAdd(true);
@@ -175,7 +176,7 @@ K3bSetup2::K3bSetup2( QWidget *parent, const char *, const QStringList& )
   //
   QTimer::singleShot( 0, this, SLOT(updateViews()) );
 
-  if( getuid() != 0 || !d->config->checkConfigFilesWritable( true ) )
+  if( getuid() != 0 /*|| !d->config->isConfigWritable()*/ )
     makeReadOnly();
 }
 
@@ -286,7 +287,7 @@ void K3bSetup2::updateDevices()
   d->listDeviceMap.clear();
   d->deviceListMap.clear();
 
-  Q3PtrListIterator<K3bDevice::Device> it( d->deviceManager->allDevices() );
+  QListIterator<K3bDevice::Device> it( *d->deviceManager->allDevices() );
   for( ; it.current(); ++it ) {
     K3bDevice::Device* device = *it;
     // check the item on first insertion or if it was checked before
@@ -354,18 +355,12 @@ Q3CheckListItem* K3bSetup2::createDeviceItem( const QString& deviceNode )
 
 void K3bSetup2::load()
 {
-  if( d->config->hasGroup("External Programs") ) {
-    d->config->setGroup( "External Programs" );
-    d->externalBinManager->readConfig( d->config );
-  }
-  if( d->config->hasGroup("Devices") ) {
-    d->config->setGroup( "Devices" );
-    d->deviceManager->readConfig( d->config );
-  }
+  d->externalBinManager->readConfig( d->config );
+  d->deviceManager->readConfig( d->config );
 
-  d->config->setGroup( "General Settings" );
-  w->m_checkUseBurningGroup->setChecked( d->config->readBoolEntry( "use burning group", false ) );
-  w->m_editBurningGroup->setText( d->config->readEntry( "burning group", "burning" ) );
+  KConfigGroup grp(d->config, "General Settings" );
+  w->m_checkUseBurningGroup->setChecked( grp.readEntry( "use burning group", false ) );
+  w->m_editBurningGroup->setText( grp.readEntry( "burning group", "burning" ) );
 
 
   // load search path
@@ -391,12 +386,12 @@ void K3bSetup2::defaults()
 
 void K3bSetup2::save()
 {
-  d->config->setGroup( "General Settings" );
-  d->config->writeEntry( "use burning group", w->m_checkUseBurningGroup->isChecked() );
-  d->config->writeEntry( "burning group", burningGroup() );
-  d->config->setGroup( "External Programs");
+  KConfigGroup grp(d->config, "General Settings" );
+  grp.writeEntry( "use burning group", w->m_checkUseBurningGroup->isChecked() );
+  grp.writeEntry( "burning group", burningGroup() );
+  KConfigGroup grpExt(d->config, "External Programs");
+  //TODO fix me.
   d->externalBinManager->saveConfig( d->config );
-  d->config->setGroup( "Devices");
   d->deviceManager->saveConfig( d->config );
 
 
@@ -553,10 +548,6 @@ void K3bSetup2::makeReadOnly()
   w->m_viewPrograms->setEnabled( false );
   w->m_editSearchPath->setEnabled( false );
 }
-
-
-typedef KGenericFactory<K3bSetup2, QWidget> K3bSetup2Factory;
-K_EXPORT_COMPONENT_FACTORY( kcm_k3bsetup2, K3bSetup2Factory("k3bsetup") )
 
 
 #include "k3bsetup2.moc"

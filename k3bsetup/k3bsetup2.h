@@ -30,7 +30,7 @@ class K3bSetup2: public KCModule
   Q_OBJECT
 
  public:
-  K3bSetup2( QWidget* parent = 0, const char* name = 0, const QStringList& args = QStringList() );
+  K3bSetup2( QWidget* parent = 0, const QVariantList& args = QVariantList() );
   ~K3bSetup2();
 
   QString quickHelp() const;

@@ -135,7 +135,7 @@
                                 <string>Check the devices whose permissions you want to be changed</string>
                             </property>
                         </widget>
-                        <widget class="KListView">
+                        <widget class="K3ListView">
                             <column>
                                 <property name="text">
                                     <string>Device</string>
@@ -255,7 +255,7 @@
                                             <string>Check the programs whose permissions you want to be changed</string>
                                         </property>
                                     </widget>
-                                    <widget class="KListView">
+                                    <widget class="K3ListView">
                                         <column>
                                             <property name="text">
                                                 <string>Program</string>
@@ -372,8 +372,7 @@
 </connections>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>klistview.h</includehint>
-    <includehint>klistview.h</includehint>
+    <includehint>k3listview.h</includehint>
     <includehint>keditlistbox.h</includehint>
     <includehint>klineedit.h</includehint>
 </includehints>
