@@ -124,8 +124,85 @@ set(k3b_project_SRCS
     projects/k3bcuefileparser.cpp 
     projects/k3bpipebuffer.cpp)
 
-set(k3b_LIB_SRCS ${k3b_core_SRCS} ${k3b_tools_SRCS} ${k3b_plugin_SRCS}
-${k3b_project_SRCS} ${k3b_jobs_SRCS} ${k3b_libisofs_SRCS})
+set(k3b_project_audiocd_SRCS
+    projects/audiocd/k3baudiojob.cpp 
+    projects/audiocd/k3baudiotrack.cpp 
+    projects/audiocd/k3baudiodoc.cpp 
+    projects/audiocd/k3baudiofile.cpp 
+    projects/audiocd/k3baudiozerodata.cpp 
+    projects/audiocd/k3baudiodatasource.cpp 
+    projects/audiocd/k3baudionormalizejob.cpp 
+    projects/audiocd/k3baudiojobtempdata.cpp 
+    projects/audiocd/k3baudioimager.cpp 
+    projects/audiocd/k3baudiomaxspeedjob.cpp 
+    projects/audiocd/k3baudiocdtracksource.cpp 
+    projects/audiocd/k3baudiocdtrackdrag.cpp 
+    projects/audiocd/k3baudiodatasourceiterator.cpp
+)
+
+set(k3b_project_datacd
+    projects/datacd/k3bdatajob.cpp 
+    projects/datacd/k3bdatadoc.cpp 
+    projects/datacd/k3bdataitem.cpp 
+    projects/datacd/k3bdiritem.cpp 
+    projects/datacd/k3bfileitem.cpp 
+    projects/datacd/k3bisoimager.cpp 
+    projects/datacd/k3bbootitem.cpp 
+    projects/datacd/k3bisooptions.cpp 
+    projects/datacd/k3bfilecompilationsizehandler.cpp 
+    projects/datacd/k3bsessionimportitem.cpp 
+    projects/datacd/k3bmkisofshandler.cpp 
+    projects/datacd/k3bdatapreparationjob.cpp 
+    projects/datacd/k3bmsinfofetcher.cpp 
+    projects/datacd/k3bdatamultisessionparameterjob.cpp
+)
+
+set(k3b_project_mixedcd
+    projects/mixedcd/k3bmixeddoc.cpp
+    projects/mixedcd/k3bmixedjob.cpp
+)
+
+set(k3b_project_movixcd
+    projects/movixcd/k3bmovixprogram.cpp 
+    projects/movixcd/k3bmovixdoc.cpp 
+    projects/movixcd/k3bmovixjob.cpp 
+    projects/movixcd/k3bmovixfileitem.cpp 
+    projects/movixcd/k3bmovixdocpreparer.cpp
+)
+
+set(k3b_project_videocd
+    projects/videocd/k3bvcddoc.cpp 
+    projects/videocd/k3bvcdtrack.cpp 
+    projects/videocd/k3bvcdjob.cpp 
+    projects/videocd/k3bvcdoptions.cpp 
+    projects/videocd/k3bvcdxmlview.cpp
+)
+
+set(k3b_project_mpeg_info
+    projects/videocd/mpeginfo/k3bmpeginfo.cpp
+)
+
+set(k3b_project_videodvd
+   projects/videodvd/k3bvideodvddoc.cpp 
+   projects/videodvd/k3bvideodvdjob.cpp 
+   projects/videodvd/k3bvideodvdimager.cpp
+)
+
+set(k3b_LIB_SRCS 
+      ${k3b_core_SRCS} 
+      ${k3b_tools_SRCS} 
+      ${k3b_plugin_SRCS}
+      ${k3b_project_SRCS} 
+      ${k3b_jobs_SRCS} 
+      ${k3b_libisofs_SRCS}
+      ${k3b_project_audiocd_SRCS} 
+      ${k3b_project_datacd} 
+      ${k3b_project_mixedcd}
+      ${k3b_project_movixcd} 
+      ${k3b_project_videocd} 
+      ${k3b_project_mpeg_info}
+      ${k3b_project_videodvd}
+) 
 
 kde4_add_library(k3b SHARED ${k3b_LIB_SRCS})
 
