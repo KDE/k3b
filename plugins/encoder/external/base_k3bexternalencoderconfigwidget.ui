@@ -20,7 +20,7 @@
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="KActiveLabel">
+        <widget class="K3ActiveLabel">
             <property name="name">
                 <cstring>kActiveLabel1</cstring>
             </property>
@@ -143,6 +143,6 @@
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>kactivelabel.h</includehint>
+    <includehint>k3activelabel.h</includehint>
 </includehints>
 </UI>

@@ -70,7 +70,7 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="KActiveLabel">
+                <widget class="K3ActiveLabel">
                     <property name="name">
                         <cstring>kActiveLabel2</cstring>
                     </property>
@@ -158,7 +158,7 @@ Please insert the command used to encode the audio data. The command has to read
 <includehints>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
-    <includehint>kactivelabel.h</includehint>
+    <includehint>k3activelabel.h</includehint>
     <includehint>klineedit.h</includehint>
 </includehints>
 </UI>
