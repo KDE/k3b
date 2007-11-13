@@ -2,3 +2,7 @@
 #cmakedefine K3B_DEBUG 1
 
 #cmakedefine HAVE_MUSICBRAINZ 1
+
+#define SIZEOF_INT ${SIZEOF_INT}
+
+#define SIZEOF_LONG ${SIZEOF_LONG}
