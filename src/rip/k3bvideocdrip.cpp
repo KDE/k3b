@@ -165,9 +165,9 @@ void K3bVideoCdRip::vcdxRip()
     // vcdxrip commandline parameters
     kDebug() << "***** vcdxrip parameters:";
     ;
-    const Q3ValueList<Q3CString>& args = m_process->args();
+    const QList<QByteArray>& args = m_process->args();
     QString s;
-    for ( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+    for ( QList<QByteArray>::const_iterator it = args.begin(); it != args.end(); ++it ) {
         s += *it + " ";
     }
     kDebug() << s << flush;
