@@ -73,7 +73,7 @@ class K3bAbstractWriter : public K3bJob
 
  protected:
   K3bAbstractWriter( K3bDevice::Device* dev, K3bJobHandler* hdl, 
-		     QObject* parent = 0, const char* name = 0 );
+		     QObject* parent = 0 );
 
   bool wasSourceUnreadable() const { return m_sourceUnreadable; }
 

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -82,7 +82,7 @@ public:
     else
       usedInFd = inFdPair[0];
 
-    kDebug() << "(K3bPipeBuffer::WorkThread) reading from " << usedInFd 
+    kDebug() << "(K3bPipeBuffer::WorkThread) reading from " << usedInFd
 	      << " and writing to " << outFd << endl;
     kDebug() << "(K3bPipeBuffer::WorkThread) using buffer size of " << bufSize;
 
@@ -131,7 +131,7 @@ public:
 	  unsigned int maxLen = qMin(bufSize - bufPos, dataLen);
 
 	  ret = ::write( outFd, &buffer[bufPos], maxLen );
-	  
+
 	  if( ret < 0 ) {
 	    if( (errno != EINTR) && (errno != EAGAIN) ) {
 	      kDebug() << "(K3bPipeBuffer::WorkThread) error while writing to " << outFd;
@@ -159,7 +159,7 @@ public:
 	  //
 	  // never read more than xxx bytes
 	  // This is some tuning to prevent the reading from blocking the whole thread
-	  // 
+	  //
 	  if( maxLen > MAX_BUFFER_READ ) // some dummy value below 1 MB
 	    maxLen = MAX_BUFFER_READ;
 	  ret = ::read( usedInFd, &buffer[readPos], maxLen );
@@ -168,7 +168,7 @@ public:
 	      kDebug() << "(K3bPipeBuffer::WorkThread) error while reading from " << usedInFd;
 	      error = true;
 	    }
-	  } 
+	  }
 	  else if( ret == 0 ) {
 	    kDebug() << "(K3bPipeBuffer::WorkThread) end of input.";
 	    eof = true;
@@ -179,7 +179,7 @@ public:
 	    percent = (int)((double)dataLen*100.0/(double)bufSize);
 	  }
 	}
- 
+
 	// A little hack to keep the buffer display from flickering
 	if( percent == 99 )
 	  percent = 100;
@@ -221,8 +221,8 @@ public:
 };
 
 
-K3bPipeBuffer::K3bPipeBuffer( K3bJobHandler* jh, QObject* parent, const char* name )
-  : K3bThreadJob( jh, parent, name )
+K3bPipeBuffer::K3bPipeBuffer( K3bJobHandler* jh, QObject* parent )
+  : K3bThreadJob( jh, parent )
 {
   m_thread = new WorkThread();
   setThread( m_thread );
@@ -238,7 +238,7 @@ K3bPipeBuffer::~K3bPipeBuffer()
 void K3bPipeBuffer::start()
 {
   //
-  // Create the socketpair in the gui thread to be sure it's available after 
+  // Create the socketpair in the gui thread to be sure it's available after
   // this method returns.
   //
   if( !m_thread->initFds() )

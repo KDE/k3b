@@ -126,8 +126,8 @@ public:
 
 
 K3bCdrdaoWriter::K3bCdrdaoWriter( K3bDevice::Device* dev, K3bJobHandler* hdl,
-				  QObject* parent, const char* name )
-  : K3bAbstractWriter( dev, hdl, parent, name ),
+				  QObject* parent )
+  : K3bAbstractWriter( dev, hdl, parent ),
     m_command(WRITE),
     m_blankMode(MINIMAL),
     m_sourceDevice(0),

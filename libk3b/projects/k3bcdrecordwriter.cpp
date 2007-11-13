@@ -72,8 +72,8 @@ public:
 
 
 K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice::Device* dev, K3bJobHandler* hdl,
-				      QObject* parent, const char* name )
-  : K3bAbstractWriter( dev, hdl, parent, name ),
+				      QObject* parent )
+  : K3bAbstractWriter( dev, hdl, parent ),
     m_clone(false),
     m_cue(false)
 {
@@ -344,10 +344,10 @@ void K3bCdrecordWriter::start()
 
 
   kDebug() << "***** " << m_cdrecordBinObject->name() << " parameters:\n";
-  const Q3ValueList<Q3CString>& args = m_process->args();
+  QList<QByteArray> args = m_process->args();
   QString s;
-  for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-    s += *it + " ";
+  Q_FOREACH( QByteArray arg, args ) {
+      s += QString::fromLocal8Bit( arg ) + " ";
   }
   kDebug() << s << flush;
   emit debuggingOutput( m_cdrecordBinObject->name() + " command:", s);
@@ -669,13 +669,13 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
     bool ok;
     int num = s_burnfreeCounterRx.cap(1).toInt(&ok);
     if( ok )
-      emit infoMessage( i18n("Burnfree was used 1 time.", "Burnfree was used %n times.", num), INFO );
+      emit infoMessage( i18np("Burnfree was used 1 time.", "Burnfree was used %n times.", num), INFO );
   }
   else if( s_burnfreeCounterRxPredict.search( line ) ) {
     bool ok;
     int num = s_burnfreeCounterRxPredict.cap(1).toInt(&ok);
     if( ok )
-      emit infoMessage( i18n("Buffer was low 1 time.", "Buffer was low %n times.", num), INFO );
+      emit infoMessage( i18np("Buffer was low 1 time.", "Buffer was low %n times.", num), INFO );
   }
   else if( line.contains("Medium Error") ) {
     m_cdrecordError = MEDIUM_ERROR;

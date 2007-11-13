@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -30,19 +30,19 @@
 
 
 // avoid usage of QTextStream since K3b often
-// tries to open big files (iso images) in a 
+// tries to open big files (iso images) in a
 // cue file parser to test it.
 static QString readLine( QFile* f )
 {
-  QString s;
-  Q_LONG r = f->readLine( s, 1024 );
+  QByteArray s( 1024, 0 );
+  qint64 r = f->readLine( s.data(), s.size() );
   if( r >= 0 ) {
     // remove the trailing newline
-    return s.trimmed();
+      return QString::fromLatin1( s ).trimmed();
   }
   else {
     // end of file or error
-    return QString::null;
+    return QString();
   }
 }
 
@@ -98,7 +98,7 @@ void K3bCueFileParser::readFile()
   if( f.open( QIODevice::ReadOnly ) ) {
     QString line = readLine( &f );
     while( !line.isNull() ) {
-      
+
       if( !parseLine(line) ) {
 	setValid(false);
 	break;
@@ -110,22 +110,22 @@ void K3bCueFileParser::readFile()
     if( isValid() ) {
       // save last parsed track for which we do not have the proper length :(
       if( d->currentParsedTrack > 0 ) {
-	d->toc.append( K3bDevice::Track( d->currentDataPos, 
+	d->toc.append( K3bDevice::Track( d->currentDataPos,
 					   d->currentDataPos,
 					   d->trackType,
 					   d->trackMode ) );
       }
-      
+
       // debug the toc
       kDebug() << "(K3bCueFileParser) successfully parsed cue file." << endl
 		<< "------------------------------------------------" << endl;
       for( unsigned int i = 0; i < d->toc.count(); ++i ) {
 	K3bDevice::Track& track = d->toc[i];
-	kDebug() << "Track " << (i+1) 
+	kDebug() << "Track " << (i+1)
 		  << " (" << ( track.type() == K3bDevice::Track::AUDIO ? "audio" : "data" ) << ") "
 		  << track.firstSector().toString() << " - " << track.lastSector().toString() << endl;
       }
-      
+
       kDebug() << "------------------------------------------------";
     }
   }
@@ -179,7 +179,7 @@ bool K3bCueFileParser::parseLine( QString& line )
   if( fileRx.exactMatch( line ) ) {
 
     setValid( findImageFileName( fileRx.cap(1) ) );
-    
+
     if( d->inFile ) {
       kDebug() << "(K3bCueFileParser) only one FILE statement allowed.";
       return false;
@@ -209,7 +209,7 @@ bool K3bCueFileParser::parseLine( QString& line )
     // save last track
     // TODO: use d->rawData in some way
     if( d->currentParsedTrack > 0 ) {
-      d->toc.append( K3bDevice::Track( d->currentDataPos, 
+      d->toc.append( K3bDevice::Track( d->currentDataPos,
 				       d->currentDataPos,
 				       d->trackType,
 				       d->trackMode ) );
@@ -454,7 +454,7 @@ bool K3bCueFileParser::findImageFileName( const QString& dataFile )
   }
 
   //
-  // we only do this if there is one unique file which fits the requirements. 
+  // we only do this if there is one unique file which fits the requirements.
   // Otherwise we cannot be certain to have the right file.
   //
   return ( cnt == 1 && QFileInfo( imageFilename() ).isFile() );

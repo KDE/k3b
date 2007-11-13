@@ -102,8 +102,8 @@ public:
 
 
 K3bGrowisofsWriter::K3bGrowisofsWriter( K3bDevice::Device* dev, K3bJobHandler* hdl,
-					QObject* parent, const char* name )
-  : K3bAbstractWriter( dev, hdl, parent, name )
+					QObject* parent )
+  : K3bAbstractWriter( dev, hdl, parent )
 {
   d = new Private;
   d->speedEst = new K3bThroughputEstimator( this );
@@ -361,10 +361,10 @@ void K3bGrowisofsWriter::start()
   else {
 
     kDebug() << "***** " << d->growisofsBin->name() << " parameters:\n";
-    const Q3ValueList<Q3CString>& args = d->process->args();
+    QList<QByteArray> args = d->process->args();
     QString s;
-    for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-      s += *it + " ";
+    Q_FOREACH( QByteArray arg, args ) {
+        s += QString::fromLocal8Bit( arg ) + " ";
     }
     kDebug() << s << flush;
     emit debuggingOutput( d->growisofsBin->name() + " command:", s);

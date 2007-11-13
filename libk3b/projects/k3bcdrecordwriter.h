@@ -34,7 +34,7 @@ class K3bCdrecordWriter : public K3bAbstractWriter
 
  public:
   K3bCdrecordWriter( K3bDevice::Device*, K3bJobHandler* hdl, 
-		     QObject* parent = 0, const char* name = 0 );
+		     QObject* parent = 0 );
   ~K3bCdrecordWriter();
 
   bool active() const;
@@ -97,7 +97,7 @@ class K3bCdrecordWriter : public K3bAbstractWriter
   QStringList m_arguments;
 
  private:  
-  unsigned int m_currentTrack;
+  int m_currentTrack;
   int m_totalTracks;
   int m_totalSize;
   int m_alreadyWritten;

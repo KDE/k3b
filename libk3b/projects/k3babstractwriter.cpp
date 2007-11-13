@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -26,8 +26,8 @@
 
 
 
-K3bAbstractWriter::K3bAbstractWriter( K3bDevice::Device* dev, K3bJobHandler* jh, QObject* parent, const char* name )
-  : K3bJob( jh, parent, name ),
+K3bAbstractWriter::K3bAbstractWriter( K3bDevice::Device* dev, K3bJobHandler* jh, QObject* parent )
+  : K3bJob( jh, parent ),
     m_burnDevice(dev),
     m_burnSpeed(1),
     m_simulate(false),
@@ -44,9 +44,9 @@ K3bAbstractWriter::~K3bAbstractWriter()
 K3bDevice::Device* K3bAbstractWriter::burnDevice()
 {
   if( m_burnDevice )
-    return m_burnDevice; 
+    return m_burnDevice;
   else
-    return k3bcore->deviceManager()->burningDevices().getFirst();
+    return k3bcore->deviceManager()->burningDevices()[0];
 }
 
 

@@ -116,7 +116,7 @@ set(k3b_project_SRCS
     projects/k3bgrowisofswriter.cpp 
     projects/k3bgrowisofshandler.cpp 
     projects/k3bdoc.cpp 
-    projects/k3bcdrdaowriter.cpp 
+#    projects/k3bcdrdaowriter.cpp 
     projects/k3bcdrecordwriter.cpp 
     projects/k3binffilewriter.cpp 
     projects/k3btocfilewriter.cpp 
