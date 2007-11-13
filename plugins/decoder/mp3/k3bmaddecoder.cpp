@@ -50,8 +50,8 @@
 #endif
 
 
-K_EXPORT_COMPONENT_FACTORY( libk3bmaddecoder, KPluginFactory<K3bMadDecoderFactory>( "k3bmaddecoder" ) )
-
+//K_EXPORT_COMPONENT_FACTORY( libk3bmaddecoder, KPluginFactory<K3bMadDecoderFactory>( "k3bmaddecoder" ) )
+K_EXPORT_PLUGIN(K3bMadDecoderFactory)
 
 int K3bMadDecoder::MaxAllowedRecoverableErrors = 10;
 

@@ -27,11 +27,11 @@ extern "C" {
 #include <math.h>
 
 
-K_EXPORT_COMPONENT_FACTORY( libk3bffmpegdecoder, KPluginFactory<K3bFFMpegDecoderFactory>( "k3bffmpegdecoder" ) )
+//K_EXPORT_COMPONENT_FACTORY( libk3bffmpegdecoder, KPluginFactory<K3bFFMpegDecoderFactory>( "k3bffmpegdecoder" ) )
+K_EXPORT_PLUGIN(K3bFFMpegDecoderFactory)
 
-
-K3bFFMpegDecoderFactory::K3bFFMpegDecoderFactory( QObject* parent,  )
-  : K3bAudioDecoderFactory( parent, name )
+K3bFFMpegDecoderFactory::K3bFFMpegDecoderFactory( QObject* parent  )
+  : K3bAudioDecoderFactory( parent )
 {
 }
 
@@ -41,10 +41,9 @@ K3bFFMpegDecoderFactory::~K3bFFMpegDecoderFactory()
 }
 
 
-K3bAudioDecoder* K3bFFMpegDecoderFactory::createDecoder( QObject* parent, 
-							  ) const
+K3bAudioDecoder* K3bFFMpegDecoderFactory::createDecoder( QObject* parent ) const
 {
-  return new K3bFFMpegDecoder( parent, name );
+  return new K3bFFMpegDecoder( parent);
 }
 
 

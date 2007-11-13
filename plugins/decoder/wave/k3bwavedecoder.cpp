@@ -26,8 +26,8 @@
 
 
 
-K_EXPORT_COMPONENT_FACTORY( libk3bwavedecoder, KPluginFactory<K3bWaveDecoderFactory>( "libk3bwavedecoder" ) )
-
+//K_EXPORT_COMPONENT_FACTORY( libk3bwavedecoder, KPluginFactory<K3bWaveDecoderFactory>( "libk3bwavedecoder" ) )
+K_EXPORT_PLUGIN(K3bWaveDecoderFactory)
 
 static unsigned short le_a_to_u_short( unsigned char* a ) {
   return ((unsigned short) 

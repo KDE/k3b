@@ -31,7 +31,9 @@
 #include <vorbis/vorbisfile.h>
 
 
-K_EXPORT_COMPONENT_FACTORY( libk3boggvorbisdecoder, KPluginFactory<K3bOggVorbisDecoderFactory>( "libk3boggvorbisdecoder" ) )
+//K_EXPORT_COMPONENT_FACTORY( libk3boggvorbisdecoder, KPluginFactory<K3bOggVorbisDecoderFactory>( "libk3boggvorbisdecoder" ) )
+
+K_EXPORT_PLUGIN(K3bOggVorbisDecoderFactory);
 
 
 class K3bOggVorbisDecoder::Private

@@ -239,8 +239,8 @@ FLAC__StreamDecoderWriteStatus K3bFLACDecoder::Private::write_callback(const FLA
   return FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
 }
 
-K3bFLACDecoder::K3bFLACDecoder( QObject* parent,  )
-  : K3bAudioDecoder( parent, name )
+K3bFLACDecoder::K3bFLACDecoder( QObject* parent  )
+  : K3bAudioDecoder( parent)
 {
   d = 0;
 }

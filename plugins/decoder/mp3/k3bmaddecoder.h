@@ -36,8 +36,7 @@ class K3bMadDecoderFactory : public K3bAudioDecoderFactory
 
   int pluginSystemVersion() const { return 3; }
 
-  K3bAudioDecoder* createDecoder( QObject* parent = 0, 
-				   ) const;
+  K3bAudioDecoder* createDecoder( QObject* parent = 0 ) const;
 };
 
 
@@ -46,7 +45,7 @@ class K3bMadDecoder : public K3bAudioDecoder
   Q_OBJECT
 
  public:
-  K3bMadDecoder( QObject* parent = 0,  );
+  K3bMadDecoder( QObject* parent = 0 );
   ~K3bMadDecoder();
 
   QString metaInfo( MetaDataField );

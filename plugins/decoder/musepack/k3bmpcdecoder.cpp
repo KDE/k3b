@@ -22,8 +22,8 @@
 #include <klocale.h>
 
 
-K_EXPORT_COMPONENT_FACTORY( libk3bmpcdecoder, KPluginFactory<K3bMpcDecoderFactory>( "libk3bmpcdecoder" ) )
-
+//K_EXPORT_COMPONENT_FACTORY( libk3bmpcdecoder, KPluginFactory<K3bMpcDecoderFactory>( "libk3bmpcdecoder" ) )
+K_EXPORT_PLUGIN(K3bMpcDecoderFactory)
 
 K3bMpcDecoderFactory::K3bMpcDecoderFactory( QObject* parent  )
   : K3bAudioDecoderFactory( parent )

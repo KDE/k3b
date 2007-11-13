@@ -27,7 +27,7 @@ class K3bLibsndfileDecoderFactory : public K3bAudioDecoderFactory
   Q_OBJECT
 
  public:
-  K3bLibsndfileDecoderFactory( QObject* parent = 0,  );
+  K3bLibsndfileDecoderFactory( QObject* parent = 0  );
   ~K3bLibsndfileDecoderFactory();
 
   bool canDecode( const KUrl& filename );
@@ -36,8 +36,7 @@ class K3bLibsndfileDecoderFactory : public K3bAudioDecoderFactory
 
   bool multiFormatDecoder() const { return true; }
 
-  K3bAudioDecoder* createDecoder( QObject* parent = 0, 
-				   ) const;
+  K3bAudioDecoder* createDecoder( QObject* parent = 0 ) const;
 };
 
 
@@ -46,7 +45,7 @@ class K3bLibsndfileDecoder : public K3bAudioDecoder
   Q_OBJECT
 
  public:
-  K3bLibsndfileDecoder( QObject* parent = 0,  );
+  K3bLibsndfileDecoder( QObject* parent = 0  );
   ~K3bLibsndfileDecoder();
   void cleanup();
   QString fileType() const;
