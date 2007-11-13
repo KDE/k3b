@@ -535,12 +535,11 @@ void K3bCdrdaoWriter::start()
   m_process->setWorkingDirectory(Q3Url(m_tocFile).dirPath());
 
   kDebug() << "***** cdrdao parameters:\n";
-  const Q3ValueList<Q3CString>& args = m_process->args();
+  QList<QByteArray> args = m_process->args();
   QString s;
-  for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it )
-    {
-      s += *it + " ";
-    }
+  Q_FOREACH( QByteArray arg, args ) {
+      s += QString::fromLocal8Bit( arg ) + " ";
+  }
   kDebug() << s << flush;
   emit debuggingOutput("cdrdao command:", s);
 
@@ -660,43 +659,41 @@ bool K3bCdrdaoWriter::cueSheet()
     if ( m_tocFile.lower().endsWith( ".cue" ) ) {
         QFile f( m_tocFile );
         if ( f.open( QIODevice::ReadOnly ) ) {
-            Q3TextStream ts( &f );
-            if ( !ts.eof() ) {
-                QString line = ts.readLine();
-                f.close();
-                int pos = line.find( "FILE \"" );
-                if( pos < 0 )
-                    return false;
+            QTextStream ts( &f );
+            QString line = ts.readLine();
+            f.close();
+            int pos = line.find( "FILE \"" );
+            if( pos < 0 )
+                return false;
 
-                pos += 6;
-                int endPos = line.find( "\" BINARY", pos+1 );
-                if( endPos < 0 )
-                    return false;
+            pos += 6;
+            int endPos = line.find( "\" BINARY", pos+1 );
+            if( endPos < 0 )
+                return false;
 
-                line = line.mid( pos, endPos-pos );
-                QFileInfo fi( QFileInfo( m_tocFile ).dirPath() + "/" + QFileInfo( line ).fileName() );
-                QString binpath = fi.filePath();
-                kDebug() << QString("K3bCdrdaoWriter::cueSheet() BinFilePath from CueFile: %1").arg( line );
-                kDebug() << QString("K3bCdrdaoWriter::cueSheet() absolute BinFilePath: %1").arg( binpath );
+            line = line.mid( pos, endPos-pos );
+            QFileInfo fi( QFileInfo( m_tocFile ).dirPath() + "/" + QFileInfo( line ).fileName() );
+            QString binpath = fi.filePath();
+            kDebug() << QString("K3bCdrdaoWriter::cueSheet() BinFilePath from CueFile: %1").arg( line );
+            kDebug() << QString("K3bCdrdaoWriter::cueSheet() absolute BinFilePath: %1").arg( binpath );
 
-                if ( !fi.exists() )
-                    return false;
+            if ( !fi.exists() )
+                return false;
 
-                KTempFile tempF;
-                QString tempFile = tempF.name();
-                tempF.unlink();
+            KTemporaryFile tempF;
+            QString tempFile = tempF.name();
+            tempF.remove();
 
-                if ( symlink(QFile::encodeName( binpath ), QFile::encodeName( tempFile + ".bin") ) == -1 )
-                    return false;
-                if ( symlink(QFile::encodeName( m_tocFile ), QFile::encodeName( tempFile + ".cue") ) == -1 )
-                    return false;
+            if ( symlink(QFile::encodeName( binpath ), QFile::encodeName( tempFile + ".bin") ) == -1 )
+                return false;
+            if ( symlink(QFile::encodeName( m_tocFile ), QFile::encodeName( tempFile + ".cue") ) == -1 )
+                return false;
 
-                kDebug() << QString("K3bCdrdaoWriter::cueSheet() symlink BinFileName: %1.bin").arg( tempFile );
-                kDebug() << QString("K3bCdrdaoWriter::cueSheet() symlink CueFileName: %1.cue").arg( tempFile );
-                m_binFileLnk = tempFile + ".bin";
-                m_cueFileLnk = tempFile + ".cue";
-                return true;
-            }
+            kDebug() << QString("K3bCdrdaoWriter::cueSheet() symlink BinFileName: %1.bin").arg( tempFile );
+            kDebug() << QString("K3bCdrdaoWriter::cueSheet() symlink CueFileName: %1.cue").arg( tempFile );
+            m_binFileLnk = tempFile + ".bin";
+            m_cueFileLnk = tempFile + ".cue";
+            return true;
         }
     }
 
@@ -1064,7 +1061,7 @@ bool K3bCdrdaoWriter::defaultToGenericMMC( K3bDevice::Device* dev, bool writer )
     if( f.open( QIODevice::ReadOnly ) ) {
       // read all drivers
       QStringList drivers;
-      Q3TextStream fStr( &f );
+      QTextStream fStr( &f );
       while( !fStr.atEnd() ) {
 	QString line = fStr.readLine();
 	if( line.isEmpty() )
