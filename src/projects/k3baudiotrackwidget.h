@@ -42,6 +42,7 @@ class K3bAudioTrackWidget : public base_K3bAudioTrackWidget
   void save();
   void load();
 
+private:
   Q3PtrList<K3bAudioTrack> m_tracks;
 };
 
