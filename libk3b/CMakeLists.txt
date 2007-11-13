@@ -23,11 +23,11 @@ add_subdirectory( projects )
 add_subdirectory( jobs )
 
 
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(VIDEODVDDIR)")
-
 ########### next target ###############
-#TODO verify it
-if(videodvdrip)
+if(DVDREAD_FOUND)
+
+  add_subdirectory(videodvd)
+
 set(k3b_jobs_SRCS
   jobs/k3bdatatrackreader.cpp 
   jobs/k3breadcdreader.cpp 
@@ -46,7 +46,7 @@ set(k3b_jobs_SRCS
   jobs/k3bverificationjob.cpp 
   jobs/k3bdvdbooktypejob.cpp
 )
-endif(videodvdrip)
+else(DVDREAD_FOUND)
 
 set(k3b_jobs_SRCS
   jobs/k3bdatatrackreader.cpp 
@@ -64,6 +64,7 @@ set(k3b_jobs_SRCS
   jobs/k3bverificationjob.cpp 
   jobs/k3bdvdbooktypejob.cpp
 )
+endif(DVDREAD_FOUND)
 
 set(k3b_core_SRCS 
       core/k3bcore.cpp 
@@ -97,6 +98,9 @@ set(k3b_tools_SRCS
       tools/k3bfilesysteminfo.cpp tools/k3bwidgetfactoryaction.cpp
 )
 
+set(k3b_libisofs_SRCS tools/libisofs/isofs.cpp)
+
+
 set(k3b_plugin_SRCS
     plugin/k3bplugin.cpp 
     plugin/k3bpluginconfigwidget.cpp 
@@ -121,48 +125,15 @@ set(k3b_project_SRCS
     projects/k3bpipebuffer.cpp)
 
 set(k3b_LIB_SRCS ${k3b_core_SRCS} ${k3b_tools_SRCS} ${k3b_plugin_SRCS}
-${k3b_project_SRCS} ${k3b_jobs_SRCS})
+${k3b_project_SRCS} ${k3b_jobs_SRCS} ${k3b_libisofs_SRCS})
 
 kde4_add_library(k3b SHARED ${k3b_LIB_SRCS})
 
 target_link_libraries(k3b  ${KDE4_KDECORE_LIBS}  k3bdevice )
 
+if(DVDREAD_FOUND)
+  target_link_libraries(k3b ${DVDREAD_LIBRARIES})
+endif(DVDREAD_FOUND)
+
 set_target_properties(k3b PROPERTIES VERSION 3.0.0 SOVERSION 3 )
 install(TARGETS k3b DESTINATION ${LIB_INSTALL_DIR} )
-
-
-########### install files ###############
-
-
-
-
-#original Makefile.am contents follow:
-
-#if include_videodvdrip
-#VIDEODVDDIR = videodvd
-#VIDEODVDLIB = videodvd/libvideodvd.la
-#endif
-#
-#
-#lib_LTLIBRARIES = libk3b.la
-#
-#libk3b_la_SOURCES = dummy.cpp
-#
-#libk3b_la_LIBADD = core/libk3bcore.la \
-#	cddb/libcddb.la \
-#	projects/libk3bproject.la \
-#	plugin/libk3bplugin.la \
-#	tools/libk3btools.la \
-#	jobs/libjobs.la \
-#	$(VIDEODVDLIB) \
-#	../libk3bdevice/libk3bdevice.la
-#
-#libk3b_la_LDFLAGS = $(all_libraries) -version-info 3:0:0 -no-undefined
-#
-#SUBDIRS = core plugin tools projects cddb jobs $(VIDEODVDDIR)
-#
-##pkgconfigdir = $(libdir)/pkgconfig
-##pkgconfig_DATA = libk3b.pc
-#
-#messages:
-#	$(XGETTEXT) `find -name "*.cpp" -o -name "*.h"` -o $(podir)/libk3b.pot
