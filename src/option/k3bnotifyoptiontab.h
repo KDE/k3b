@@ -20,9 +20,6 @@
 
 #include <qwidget.h>
 
-namespace KNotify {
-  class KNotifyWidget;
-}
 
 
 class K3bNotifyOptionTab : public QWidget
@@ -37,7 +34,6 @@ class K3bNotifyOptionTab : public QWidget
   bool saveSettings();
 
  private:
-  KNotify::KNotifyWidget* m_notifyWidget;
 };
 
 #endif

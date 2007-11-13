@@ -37,7 +37,7 @@ class K3bExternalBinWidget : public QWidget
   Q_OBJECT
 
  public:
-  K3bExternalBinWidget( K3bExternalBinManager*, QWidget* parent = 0, const char* name = 0 );
+  K3bExternalBinWidget( K3bExternalBinManager*, QWidget* parent = 0 );
   ~K3bExternalBinWidget();
 
   class K3bExternalBinViewItem;

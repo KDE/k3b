@@ -38,8 +38,8 @@
 
 
 
-K3bExternalBinOptionTab::K3bExternalBinOptionTab( K3bExternalBinManager* manager, QWidget* parent, const char* name )
-  : QWidget( parent, name )
+K3bExternalBinOptionTab::K3bExternalBinOptionTab( K3bExternalBinManager* manager, QWidget* parent )
+  : QWidget( parent )
 {
   m_manager = manager;
 

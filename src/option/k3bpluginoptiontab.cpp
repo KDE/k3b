@@ -25,15 +25,12 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
-#include <kdialogbase.h>
 #include <kconfig.h>
 #include <kglobalsettings.h>
 #include <kdeversion.h>
 
 #include <qstringlist.h>
 #include <qpushbutton.h>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 
 class K3bPluginOptionTab::PluginViewItem : public K3bListViewItem
@@ -59,9 +56,9 @@ public:
 };
 
 
-
-K3bPluginOptionTab::K3bPluginOptionTab( QWidget* parent, const char* name )
-  : base_K3bPluginOptionTab( parent, name )
+#warning Use KUtils::PluginPage to nicely display the plugin list
+K3bPluginOptionTab::K3bPluginOptionTab( QWidget* parent )
+  : base_K3bPluginOptionTab( parent )
 {
   m_viewPlugins->setShadeSortColumn( false );
   m_viewPlugins->addColumn( i18n("Name") );
@@ -97,16 +94,16 @@ void K3bPluginOptionTab::readSettings()
     QFont f( font() );
     f.setBold(true);
     groupViewItem->setFont( 0, f );
-    groupViewItem->setBackgroundColor( 0, KGlobalSettings::alternateBackgroundColor() );
-    groupViewItem->setBackgroundColor( 1, KGlobalSettings::alternateBackgroundColor() );
-    groupViewItem->setBackgroundColor( 2, KGlobalSettings::alternateBackgroundColor() );
-    groupViewItem->setBackgroundColor( 3, KGlobalSettings::alternateBackgroundColor() );
-    groupViewItem->setBackgroundColor( 4, KGlobalSettings::alternateBackgroundColor() );
+//     groupViewItem->setBackgroundColor( 0, KGlobalSettings::alternateBackgroundColor() );
+//     groupViewItem->setBackgroundColor( 1, KGlobalSettings::alternateBackgroundColor() );
+//     groupViewItem->setBackgroundColor( 2, KGlobalSettings::alternateBackgroundColor() );
+//     groupViewItem->setBackgroundColor( 3, KGlobalSettings::alternateBackgroundColor() );
+//     groupViewItem->setBackgroundColor( 4, KGlobalSettings::alternateBackgroundColor() );
     groupViewItem->setSelectable( false );
 
-    Q3PtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( group );
-    for( Q3PtrListIterator<K3bPlugin> fit( fl ); fit.current(); ++fit )
-      (void)new PluginViewItem( fit.current(), groupViewItem );
+    QList<K3bPlugin*> fl = k3bcore->pluginManager()->plugins( group );
+    Q_FOREACH( K3bPlugin* plugin, fl )
+      (void)new PluginViewItem( plugin, groupViewItem );
 
     groupViewItem->setOpen(true);
   }

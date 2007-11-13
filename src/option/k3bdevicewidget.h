@@ -18,8 +18,6 @@
 #define K3BDEVICEWIDGET_H
 
 #include <qwidget.h>
-#include <q3ptrlist.h>
-//Added by qt3to4:
 #include <Q3Frame>
 #include <QLabel>
 #include "k3bdevice.h"
@@ -47,7 +45,7 @@ class K3bDeviceWidget : public QWidget
   Q_OBJECT
 
  public:
-  K3bDeviceWidget( K3bDevice::DeviceManager*, QWidget *parent = 0, const char *name = 0 );
+  K3bDeviceWidget( K3bDevice::DeviceManager*, QWidget *parent = 0 );
   ~K3bDeviceWidget();
 
  public slots:

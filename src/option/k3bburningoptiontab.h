@@ -37,7 +37,7 @@ class K3bBurningOptionTab : public QWidget
 Q_OBJECT
 
  public:
-  K3bBurningOptionTab( QWidget* parent = 0, const char* name = 0 );
+  K3bBurningOptionTab( QWidget* parent = 0 );
   ~K3bBurningOptionTab();
 
   void saveSettings();

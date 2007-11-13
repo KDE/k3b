@@ -31,7 +31,7 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="KListView">
+                <widget class="K3ListView">
                     <column>
                         <property name="text">
                             <string>Theme</string>
@@ -203,6 +203,6 @@
 </customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>klistview.h</includehint>
+    <includehint>k3listview.h</includehint>
 </includehints>
 </UI>

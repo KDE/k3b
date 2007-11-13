@@ -10,14 +10,12 @@ ${libk3b_SOURCE_DIR}/projects/audiocd
 ${libk3b_SOURCE_DIR}/projects/datacd
 ${libk3b_SOURCE_DIR}/projects/videocd
 ${libk3b_SOURCE_DIR}/projects/mixedcd
-${libk3b_SOURCE_DIR}/cddb
 ${libk3b_SOURCE_DIR}/jobs
 ${libk3b_SOURCE_DIR}/videodvd
 ${libk3b_BINARY_DIR}/core
 ${libk3b_BINARY_DIR}/plugin
 ${libk3b_BINARY_DIR}/tools
 ${libk3b_BINARY_DIR}/projects
-${libk3b_BINARY_DIR}/cddb
 ${libk3b_BINARY_DIR}/jobs
 )
 
@@ -140,7 +138,6 @@ kde4_add_ui3_files(k3b_rip_SRCS
 set(k3b_option_SRCS
   option/k3bmiscoptiontab.cpp 
   option/k3bexternalbinoptiontab.cpp 
-  option/k3bcddboptiontab.cpp 
   option/k3bburningoptiontab.cpp 
   option/k3boptiondialog.cpp 
   option/k3bdeviceoptiontab.cpp 
@@ -152,7 +149,6 @@ set(k3b_option_SRCS
 )
 
 kde4_add_ui3_files(k3b_option_SRCS
-  option/base_k3bcddboptiontab.ui
   option/base_k3bmiscoptiontab.ui
   option/base_k3bpluginoptiontab.ui
   option/base_k3bthemeoptiontab.ui

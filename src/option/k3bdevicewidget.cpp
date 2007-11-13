@@ -146,17 +146,18 @@ private:
 
 
 
-K3bDeviceWidget::K3bDeviceWidget( K3bDevice::DeviceManager* manager, QWidget *parent, const char *name )
-  : QWidget( parent, name ), m_deviceManager( manager )
+K3bDeviceWidget::K3bDeviceWidget( K3bDevice::DeviceManager* manager, QWidget *parent )
+  : QWidget( parent ),
+    m_deviceManager( manager )
 {
-  Q3GridLayout* frameLayout = new Q3GridLayout( this );
+  QGridLayout* frameLayout = new QGridLayout( this );
   frameLayout->setSpacing( KDialog::spacingHint() );
   frameLayout->setMargin( 0 );
 
 
   // buttons
   // ------------------------------------------------
-  Q3GridLayout* refreshButtonGrid = new Q3GridLayout;
+  QGridLayout* refreshButtonGrid = new QGridLayout;
   refreshButtonGrid->setSpacing( KDialog::spacingHint() );
   refreshButtonGrid->setMargin(0);
   m_buttonRefreshDevices = new QPushButton( i18n( "Refresh" ), this, "m_buttonRefreshDevices" );
@@ -175,7 +176,7 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDevice::DeviceManager* manager, QWidget *pa
   groupDevices->layout()->setSpacing( KDialog::spacingHint() );
   groupDevices->layout()->setMargin( KDialog::marginHint() );
 
-  m_viewDevices = new K3bListView( groupDevices, "m_viewDevicesReader" );
+  m_viewDevices = new K3bListView( groupDevices );
   m_viewDevices->addColumn( "V" );
   m_viewDevices->addColumn( "D" );
   m_viewDevices->setAllColumnsShowFocus( true );
@@ -220,8 +221,8 @@ void K3bDeviceWidget::init()
   m_tempDevices.clear();
 
   // add the reading devices
-  for( Q3PtrListIterator<K3bDevice::Device> it( m_deviceManager->allDevices() ); *it; ++it )
-    m_tempDevices.append( new PrivateTempDevice( *it ) );
+  Q_FOREACH( K3bDevice::Device* dev, m_deviceManager->allDevices() )
+    m_tempDevices.append( new PrivateTempDevice( dev ) );
 
   updateDeviceListViews();
 }

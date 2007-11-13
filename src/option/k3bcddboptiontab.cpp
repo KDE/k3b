@@ -42,8 +42,8 @@
 #include <kglobal.h>
 
 
-K3bCddbOptionTab::K3bCddbOptionTab( QWidget* parent,  const char* name )
-    : base_K3bCddbOptionTab( parent, name )
+K3bCddbOptionTab::K3bCddbOptionTab( QWidget* parent )
+    : QWidget( parent )
 {
   // fix all the margins and spacings that have been corrupted by QDesigner ;-)
   // -----------------------------------------------------------------------------

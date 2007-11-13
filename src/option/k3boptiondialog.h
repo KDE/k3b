@@ -17,9 +17,8 @@
 #ifndef K3BOPTIONDIALOG_H
 #define K3BOPTIONDIALOG_H
 
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 
-class K3bCddbOptionTab;
 class K3bDeviceOptionTab;
 class K3bBurningOptionTab;
 class K3bExternalBinOptionTab;
@@ -32,12 +31,12 @@ class K3bThemeOptionTab;
 /**
   *@author Sebastian Trueg
   */
-class K3bOptionDialog : public KDialogBase
+class K3bOptionDialog : public KPageDialog
 {
   Q_OBJECT
 
  public:
-  K3bOptionDialog(QWidget *parent=0, const char *name=0, bool modal = true);
+  K3bOptionDialog(QWidget *parent=0);
   ~K3bOptionDialog();
 
   enum m_configPageIndex { Burning = 0, Devices = 1, Programs = 2, Cddb = 3 };
@@ -66,10 +65,6 @@ class K3bOptionDialog : public KDialogBase
   // burning tab
   void setupBurningPage();
   K3bBurningOptionTab* m_burningOptionTab;
-
-  // cddb tabs
-  K3bCddbOptionTab *m_cddbOptionTab;
-  void setupCddbPage();
 
   // misc options
   K3bMiscOptionTab* m_miscOptionTab;

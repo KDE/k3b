@@ -52,9 +52,9 @@ K3bExternalBinWidget::K3bExternalProgramViewItem::K3bExternalProgramViewItem( K3
   QFont f( listView()->font() );
   f.setBold(true);
   setFont( 0, f );
-  setBackgroundColor( 0, KGlobalSettings::alternateBackgroundColor() );
-  setBackgroundColor( 1, KGlobalSettings::alternateBackgroundColor() );
-  setBackgroundColor( 2, KGlobalSettings::alternateBackgroundColor() );
+  setBackgroundColor( 0, parent->palette().alternateBase() );
+  setBackgroundColor( 1, parent->palette().alternateBase() );
+  setBackgroundColor( 2, parent->palette().alternateBase() );
   setText( 0, p->name() );
   setSelectable( false );
 }
@@ -66,7 +66,7 @@ K3bExternalBinWidget::K3bExternalBinViewItem::K3bExternalBinViewItem( K3bExterna
   setText( 0, bin->path );
   setText( 1, bin->version );
   setText( 2, bin->features().join(", ") );
-  
+
   setDefault(false);
 }
 
@@ -92,14 +92,14 @@ void K3bExternalBinWidget::K3bExternalBinViewItem::setDefault( bool b )
 
 
 // ///////////////////////////////////////////////////////////
-// 
+//
 // K3BEXTERNALBINWIDGET
 //
 // //////////////////////////////////////////////////////////
 
 
-K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWidget* parent, const char* name )
-  : QWidget( parent, name ), m_manager( manager )
+K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWidget* parent )
+  : QWidget( parent ), m_manager( manager )
 {
   Q3GridLayout* mainGrid = new Q3GridLayout( this );
   mainGrid->setMargin( 0 );
@@ -128,7 +128,7 @@ K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWid
 					 "wanted version and press this button.") );
   programTabLayout->addMultiCellWidget( m_programView, 1, 1, 0, 1 );
   programTabLayout->addWidget( m_defaultButton, 0, 1 );
-  programTabLayout->addWidget( new QLabel( i18n("Use the 'Default' button to change the versions K3b should use."), 
+  programTabLayout->addWidget( new QLabel( i18n("Use the 'Default' button to change the versions K3b should use."),
 					   programTab ), 0, 0 );
   programTabLayout->setColStretch( 0, 1 );
   programTabLayout->setRowStretch( 1, 1 );
@@ -223,7 +223,7 @@ void K3bExternalBinWidget::load()
     Q3PtrListIterator<K3bExternalBin> binIt( p->bins() );
     for( ; binIt.current(); ++binIt ) {
       K3bExternalBin* b = *binIt;
-      
+
       K3bExternalBinViewItem* bV = new K3bExternalBinViewItem( b, pV );
       if( b == p->defaultBin() )
 	bV->setDefault(true);

@@ -30,7 +30,7 @@ class K3bDeviceOptionTab : public QWidget
 Q_OBJECT
 
  public:
-  K3bDeviceOptionTab( QWidget*, const char* name = 0 );
+  K3bDeviceOptionTab( QWidget* = 0 );
   ~K3bDeviceOptionTab();
 
   void readDevices();

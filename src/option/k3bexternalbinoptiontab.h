@@ -33,7 +33,7 @@ class K3bExternalBinOptionTab : public QWidget
 Q_OBJECT
 
  public:
-  K3bExternalBinOptionTab( K3bExternalBinManager*, QWidget*, const char* name = 0 );
+  K3bExternalBinOptionTab( K3bExternalBinManager*, QWidget* = 0 );
   ~K3bExternalBinOptionTab();
 
   void readSettings();

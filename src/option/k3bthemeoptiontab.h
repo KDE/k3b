@@ -28,7 +28,7 @@ class K3bThemeOptionTab : public base_K3bThemeOptionTab
   Q_OBJECT
 
  public:
-  K3bThemeOptionTab( QWidget* parent = 0, const char* name = 0 );
+  K3bThemeOptionTab( QWidget* parent = 0 );
   ~K3bThemeOptionTab();
 
   void readSettings();

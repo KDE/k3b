@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -18,22 +18,16 @@
 
 #include "k3bnotifyoptiontab.h"
 
-#include <knotifydialog.h>
 #include <kdebug.h>
 
 #include <qlayout.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
 
 
 
 K3bNotifyOptionTab::K3bNotifyOptionTab( QWidget* parent, const char* name )
   : QWidget( parent, name )
 {
-  m_notifyWidget = new KNotify::KNotifyWidget( this );
-
-  Q3HBoxLayout* box = new Q3HBoxLayout( this );
-  box->addWidget( m_notifyWidget );
+#warning Get the KNotification KCModule and show it here.
 }
 
 
@@ -44,18 +38,18 @@ K3bNotifyOptionTab::~K3bNotifyOptionTab()
 
 void K3bNotifyOptionTab::readSettings()
 {
-  m_notifyWidget->clear();
-  KNotify::Application* app = m_notifyWidget->addApplicationEvents( "k3b/eventsrc" );
-  if( app )
-    m_notifyWidget->addVisibleApp(app);
-  else
-    kDebug() << "(K3bNotifyOptionTab) could not find K3b eventsrc.";
+//   m_notifyWidget->clear();
+//   KNotify::Application* app = m_notifyWidget->addApplicationEvents( "k3b/eventsrc" );
+//   if( app )
+//     m_notifyWidget->addVisibleApp(app);
+//   else
+//     kDebug() << "(K3bNotifyOptionTab) could not find K3b eventsrc.";
 }
 
 
 bool K3bNotifyOptionTab::saveSettings()
 {
-  m_notifyWidget->save();
+//   m_notifyWidget->save();
 
   return true;
 }

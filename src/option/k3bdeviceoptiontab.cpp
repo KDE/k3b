@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -24,8 +24,6 @@
 #include <qlayout.h>
 #include <qcursor.h>
 #include <qapplication.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
 
 #include <kapplication.h>
 #include <kdialog.h>
@@ -35,10 +33,10 @@
 #include <kglobal.h>
 
 
-K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
-  : QWidget( parent, name )
+K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent )
+  : QWidget( parent )
 {
-  Q3GridLayout* frameLayout = new Q3GridLayout( this );
+  QGridLayout* frameLayout = new QGridLayout( this );
   frameLayout->setSpacing( KDialog::spacingHint() );
   frameLayout->setMargin( 0 );
 
@@ -46,7 +44,7 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent, const char* name )
   // Info Label
   // ------------------------------------------------
   m_labelDevicesInfo = new QLabel( this, "m_labelDevicesInfo" );
-  m_labelDevicesInfo->setAlignment( int( QLabel::WordBreak | QLabel::Qt::AlignVCenter | QLabel::Qt::AlignLeft ) );
+  m_labelDevicesInfo->setAlignment( Qt::WordBreak | Qt::AlignVCenter | Qt::AlignLeft );
   m_labelDevicesInfo->setText( i18n( "K3b tries to detect all your devices properly. "
 				     "You can add devices that have not been detected and change "
 				     "the black values by clicking in the list. If K3b is unable "
@@ -81,7 +79,7 @@ void K3bDeviceOptionTab::saveDevices()
   m_deviceWidget->apply();
 
   // save the config
-  k3bcore->deviceManager()->saveConfig( KGlobal::config() );
+  k3bcore->deviceManager()->saveConfig( k3bcore->config() );
 }
 
 
