@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id: sourceheader 511311 2006-02-19 14:51:05Z trueg $
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
@@ -24,6 +24,9 @@
 #include <qregexp.h>
 
 #include <kdebug.h>
+
+#warning Remove this line once the statfs cmake check is done
+#define HAVE_SYS_VFS_H
 
 #ifdef Q_OS_FREEBSD
 #include <sys/param.h>

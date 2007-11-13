@@ -1,7 +1,7 @@
 /* 
  *
  * $Id: sourceheader 511311 2006-02-19 14:51:05Z trueg $
- * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -18,6 +18,7 @@
 
 #include <k3bthreadjob.h>
 #include <kio/global.h>
+#include <kurl.h>
 
 #include <k3b_export.h>
 

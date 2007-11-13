@@ -267,7 +267,7 @@ class K3bInteractionDialog : public KDialog
   KPushButton* m_buttonCancel;
   QWidget* m_mainWidget;
 
-  QButton* m_buttonLoadSettings;
+  QToolButton* m_buttonLoadSettings;
   QButton* m_buttonSaveSettings;
 
   Q3GridLayout* mainGrid;

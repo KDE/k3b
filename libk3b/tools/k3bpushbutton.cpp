@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
@@ -24,12 +24,13 @@
 #include <kglobalsettings.h>
 #include <kapplication.h>
 
+#include <QtGui/QDesktopWidget>
 
 
 class K3bPushButton::Private
 {
 public:
-  Private() 
+  Private()
     : popupTimer(0) {
   }
 
@@ -39,33 +40,33 @@ public:
 
 
 
-K3bPushButton::K3bPushButton( QWidget* parent, const char* name )
-  : KPushButton( parent, name )
+K3bPushButton::K3bPushButton( QWidget* parent )
+  : KPushButton( parent )
 {
   d = new Private();
   installEventFilter(this);
 }
 
 
-K3bPushButton::K3bPushButton( const QString& text, QWidget* parent, const char* name )
-  : KPushButton( text, parent, name )
+K3bPushButton::K3bPushButton( const QString& text, QWidget* parent )
+  : KPushButton( text, parent )
 {
   d = new Private();
   installEventFilter(this);
 }
 
 
-K3bPushButton::K3bPushButton( const QIcon& icon, const QString& text,
-			      QWidget* parent, const char* name )
-  : KPushButton( icon, text, parent, name )
-{
-  d = new Private();
-  installEventFilter(this);
-}
+// K3bPushButton::K3bPushButton( const QIcon& icon, const QString& text,
+// 			      QWidget* parent )
+//   : KPushButton( icon, text, parent )
+// {
+//   d = new Private();
+//   installEventFilter(this);
+// }
 
 
-K3bPushButton::K3bPushButton( const KGuiItem& item, QWidget* parent, const char* name )
-  : KPushButton( item, parent, name )
+K3bPushButton::K3bPushButton( const KGuiItem& item, QWidget* parent )
+  : KPushButton( item, parent )
 {
   d = new Private();
   installEventFilter(this);

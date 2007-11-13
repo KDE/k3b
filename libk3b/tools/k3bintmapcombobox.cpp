@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id: k3bwritingmodewidget.cpp 554512 2006-06-24 07:25:39Z trueg $
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
@@ -31,8 +31,8 @@ public:
 };
 
 
-K3bIntMapComboBox::K3bIntMapComboBox( QWidget* parent, const char* name )
-  : KComboBox( parent, name )
+K3bIntMapComboBox::K3bIntMapComboBox( QWidget* parent )
+  : KComboBox( parent )
 {
   d = new Private;
   connect( this, SIGNAL(highlighted(int)),
@@ -60,7 +60,7 @@ int K3bIntMapComboBox::selectedValue() const
 void K3bIntMapComboBox::setSelectedValue( int value )
 {
   if( d->valueIndexMap.contains( value ) )
-    KComboBox::setCurrentItem( d->valueIndexMap[value] );
+    KComboBox::setCurrentIndex( d->valueIndexMap[value] );
 }
 
 
@@ -95,10 +95,10 @@ bool K3bIntMapComboBox::insertItem( int value, const QString& text, const QStrin
 void K3bIntMapComboBox::updateWhatsThis()
 {
   QString ws( d->topWhatsThis );
-  for( unsigned int i = 0; i < d->indexValueDescriptionMap.count(); ++i ) {
+  for( int i = 0; i < d->indexValueDescriptionMap.count(); ++i ) {
     ws += "<p><b>" + KComboBox::text( i ) + "</b><br>";
     ws += d->indexValueDescriptionMap[i].second;
-  }  
+  }
   ws += "<p>" + d->bottomWhatsThis;
 
   this->setWhatsThis( ws );

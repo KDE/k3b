@@ -69,12 +69,11 @@ public:
         file.close();
         file.setFileName( buildFileName( counter ) );
         currentFilePos = 0;
-        if( file.open( m_splitter->mode() ) ) {
-            m_splitter->setState( IO_Open );
+        if( file.open( m_splitter->openMode() ) ) {
             return true;
         }
         else {
-            m_splitter->setState( ~IO_Open );
+            m_splitter->close();
             return false;
         }
     }
@@ -187,7 +186,7 @@ bool K3bFileSplitter::atEnd() const
 
 qint64 K3bFileSplitter::readData( char *data, qint64 maxlen )
 {
-    qint64 r = d->file.readData( data, maxlen );
+    qint64 r = d->file.read( data, maxlen );
     if( r == 0 ) {
         if( atEnd() ) {
             return r;

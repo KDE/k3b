@@ -32,7 +32,7 @@ class LIBK3B_EXPORT K3bIntMapComboBox : public KComboBox
   Q_OBJECT
 
  public:
-  K3bIntMapComboBox( QWidget* parent = 0, const char* name = 0 );
+  K3bIntMapComboBox( QWidget* parent = 0 );
   ~K3bIntMapComboBox();
 
   int selectedValue() const;

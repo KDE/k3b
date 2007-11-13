@@ -22,7 +22,6 @@
 #include "k3bthemedheader.h"
 #include "k3bthememanager.h"
 #include <k3bapplication.h>
-#include <k3btoolbutton.h>
 #include <k3bmultichoicedialog.h>
 
 #include <qlabel.h>
@@ -87,14 +86,14 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   // ---------------------------------------------------------------------------------------------------
   if( !m_configGroup.isEmpty() ) {
     Q3HBoxLayout* layout2 = new Q3HBoxLayout( 0, 0, spacingHint(), "layout2");
-    m_buttonLoadSettings = new K3bToolButton( /*i18n("User Defaults"), */this );
-    ((K3bToolButton*)m_buttonLoadSettings)->setIconSet( SmallIconSet( "revert" ) );
+    m_buttonLoadSettings = new QToolButton( /*i18n("User Defaults"), */this );
+    m_buttonLoadSettings->setIconSet( SmallIconSet( "revert" ) );
+    m_buttonLoadSettings->setPopupMode( QToolButton::MenuButtonPopup );
     Q3PopupMenu* userDefaultsPopup = new Q3PopupMenu( m_buttonLoadSettings );
     userDefaultsPopup->insertItem( i18n("Load default settings"), this, SLOT(slotLoadK3bDefaults()) );
     userDefaultsPopup->insertItem( i18n("Load saved settings"), this, SLOT(slotLoadUserDefaults()) );
     userDefaultsPopup->insertItem( i18n("Load last used settings"), this, SLOT(slotLoadLastSettings()) );
-    ((QToolButton*)m_buttonLoadSettings)->setPopup( userDefaultsPopup );
-    ((K3bToolButton*)m_buttonLoadSettings)->setInstantMenu( true );
+    m_buttonLoadSettings)->setMenu( userDefaultsPopup );
     layout2->addWidget( m_buttonLoadSettings );
 
     m_buttonSaveSettings = new QToolButton( /*i18n("Save User Defaults"), */this, "m_buttonSaveSettings" );

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
@@ -16,79 +16,42 @@
 #include "k3bradioaction.h"
 
 
-
-K3bRadioAction::K3bRadioAction( const QString& text, const KShortcut& cut,
-				QObject* parent, const char* name )
-  : KToggleAction( text, cut, parent, name ),
+K3bRadioAction::K3bRadioAction( const QString& text, QObject* parent )
+  : KToggleAction( text, parent ),
     m_alwaysEmit(false)
 {
 }
 
-K3bRadioAction::K3bRadioAction( const QString& text, const KShortcut& cut,
-				const QObject* receiver, const char* slot,
-				QObject* parent, const char* name )
-  : KToggleAction( text, cut, receiver, slot, parent, name ),
+K3bRadioAction::K3bRadioAction( const KIcon& icon, const QString& text, QObject* parent )
+  : KToggleAction( icon, text, parent ),
     m_alwaysEmit(false)
 {
 }
 
-K3bRadioAction::K3bRadioAction( const QString& text, const QIcon& pix,
-				const KShortcut& cut,
-				QObject* parent, const char* name )
-  : KToggleAction( text, pix, cut, parent, name ),
+K3bRadioAction::K3bRadioAction( QObject* parent )
+  : KToggleAction( parent ),
     m_alwaysEmit(false)
 {
 }
 
-K3bRadioAction::K3bRadioAction( const QString& text, const QString& pix,
-				const KShortcut& cut,
-				QObject* parent, const char* name )
-  : KToggleAction( text, pix, cut, parent, name ),
-    m_alwaysEmit(false)
-{
-}
 
-K3bRadioAction::K3bRadioAction( const QString& text, const QIcon& pix,
-				const KShortcut& cut,
-				const QObject* receiver, const char* slot,
-				QObject* parent, const char* name )
-  : KToggleAction( text, pix, cut, receiver, slot, parent, name ),
-    m_alwaysEmit(false)
-{
-}
+// void K3bRadioAction::slotActivated()
+// {
+//   if( isChecked() ) {
+//     if( m_alwaysEmit )
+//       emit activated();
 
-K3bRadioAction::K3bRadioAction( const QString& text, const QString& pix,
-				const KShortcut& cut,
-				const QObject* receiver, const char* slot,
-				QObject* parent, const char* name )
-  : KToggleAction( text, pix, cut, receiver, slot, parent, name ),
-    m_alwaysEmit(false)
-{
-}
+//     const QObject *senderObj = sender();
 
-K3bRadioAction::K3bRadioAction( QObject* parent, const char* name )
-  : KToggleAction( parent, name ),
-    m_alwaysEmit(false)
-{
-}
+//     if ( !senderObj || !::qt_cast<const KToolBarButton *>( senderObj ) )
+//       return;
 
-void K3bRadioAction::slotActivated()
-{
-  if( isChecked() ) {
-    if( m_alwaysEmit )
-      emit activated();
+//     const_cast<KToolBarButton *>( static_cast<const KToolBarButton *>( senderObj ) )->on( true );
 
-    const QObject *senderObj = sender();
-    
-    if ( !senderObj || !::qt_cast<const KToolBarButton *>( senderObj ) )
-      return;
-    
-    const_cast<KToolBarButton *>( static_cast<const KToolBarButton *>( senderObj ) )->on( true );
-    
-    return;
-  }
+//     return;
+//   }
 
-  KToggleAction::slotActivated();
-}
+//   KToggleAction::slotActivated();
+// }
 
 #include "k3bradioaction.moc"

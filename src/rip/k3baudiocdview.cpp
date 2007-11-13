@@ -22,10 +22,7 @@
 #include <k3bdiskinfo.h>
 #include <k3bdevicehandler.h>
 #include <k3blistview.h>
-#include <k3bcddbresult.h>
 #include <k3bmsf.h>
-#include <k3bcddb.h>
-#include <k3bcddbquery.h>
 #include <k3btoolbox.h>
 #include <kcutlabel.h>
 #include <k3bstdguiitems.h>
@@ -65,10 +62,10 @@
 class K3bAudioCdView::AudioTrackViewItem : public K3bCheckListViewItem
 {
 public:
-  AudioTrackViewItem( Q3ListView* parent, 
+  AudioTrackViewItem( Q3ListView* parent,
 		      Q3ListViewItem* after,
 		      int _trackNumber,
-		      const K3b::Msf& length) 
+		      const K3b::Msf& length)
     : K3bCheckListViewItem( parent, after ) {
 
     setText( 1, QString::number(_trackNumber).rightJustified( 2, ' ' ) );
@@ -86,21 +83,22 @@ public:
 
   void setup() {
     K3bCheckListViewItem::setup();
-    
+
     setHeight( height() + 4 );
   }
 
   int trackNumber;
 
-  void updateCddbData( const K3bCddbResultEntry& entry ) {
-    setText( 2, entry.artists[trackNumber-1] );
-    setText( 3, entry.titles[trackNumber-1] );
-  }
+#warning Use kcddb from kdemultimedia
+//   void updateCddbData( const K3bCddbResultEntry& entry ) {
+//     setText( 2, entry.artists[trackNumber-1] );
+//     setText( 3, entry.titles[trackNumber-1] );
+//   }
 };
 
 
 K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
-  : K3bMediaContentsView( true, 
+  : K3bMediaContentsView( true,
 			  K3bMedium::CONTENT_AUDIO,
 			  K3bDevice::MEDIA_CD_ALL,
 			  K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_COMPLETE,
@@ -128,17 +126,11 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
 	   this, SLOT(slotItemRenamed(Q3ListViewItem*, const QString&, int)) );
   connect( m_trackView, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)),
 	   this, SLOT(slotContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)) );
-//   connect( m_trackView, SIGNAL(selectionChanged(QListViewItem*)), 
+//   connect( m_trackView, SIGNAL(selectionChanged(QListViewItem*)),
 // 	   this, SLOT(slotTrackSelectionChanged(QListViewItem*)) );
 
   mainGrid->addLayout( toolBoxLayout, 0, 0 );
   mainGrid->addWidget( m_trackView, 1, 0 );
-
-
-  m_cddb = new K3bCddb( this );
-
-  connect( m_cddb, SIGNAL(queryFinished(int)),
-	   this, SLOT(slotCddbQueryFinished(int)) );
 
   initActions();
   //  slotTrackSelectionChanged(0);
@@ -163,22 +155,23 @@ void K3bAudioCdView::reloadMedium()
   m_toc = medium().toc();
   m_device = medium().device();
 
+#warning Use kccdb
   // initialize cddb info for editing
-  m_cddbInfo = K3bCddbResultEntry();
-  m_cddbInfo.discid = QString::number( medium().toc().discId(), 16 );
+//   m_cddbInfo = K3bCddbResultEntry();
+//   m_cddbInfo.discid = QString::number( medium().toc().discId(), 16 );
 
-  for( int i = 0; i < (int)m_toc.count(); ++i ) {
-    m_cddbInfo.titles.append("");
-    m_cddbInfo.artists.append("");
-    m_cddbInfo.extInfos.append("");
-  }
+//   for( int i = 0; i < (int)m_toc.count(); ++i ) {
+//     m_cddbInfo.titles.append("");
+//     m_cddbInfo.artists.append("");
+//     m_cddbInfo.extInfos.append("");
+//   }
 
   m_trackView->clear();
   showBusyLabel(true);
 
   // create a listviewItem for every audio track
   int index = 1;
-  for( K3bDevice::Toc::const_iterator it = m_toc.begin(); 
+  for( K3bDevice::Toc::const_iterator it = m_toc.begin();
        it != m_toc.end(); ++it ) {
 
     // for now skip data tracks since we are not able to rip them to iso
@@ -194,35 +187,36 @@ void K3bAudioCdView::reloadMedium()
   }
 
   m_cdText = medium().cdText();
-      
-  // simulate a cddb entry with the cdtext data
-  m_cddbInfo.cdTitle = m_cdText.title();
-  m_cddbInfo.cdArtist = m_cdText.performer();
-  m_cddbInfo.cdExtInfo = m_cdText.message();
 
-  for( unsigned int i = 0; i < m_cdText.count(); ++i ) {
-    m_cddbInfo.titles[i] = m_cdText[i].title();
-    m_cddbInfo.artists[i] = m_cdText[i].performer();
-    m_cddbInfo.extInfos[i] = m_cdText[i].message();
-  }
+#warning Use kccdb
+  // simulate a cddb entry with the cdtext data
+//   m_cddbInfo.cdTitle = m_cdText.title();
+//   m_cddbInfo.cdArtist = m_cdText.performer();
+//   m_cddbInfo.cdExtInfo = m_cdText.message();
+
+//   for( unsigned int i = 0; i < m_cdText.count(); ++i ) {
+//     m_cddbInfo.titles[i] = m_cdText[i].title();
+//     m_cddbInfo.artists[i] = m_cdText[i].performer();
+//     m_cddbInfo.extInfos[i] = m_cdText[i].message();
+//   }
 
   updateDisplay();
 
-  KConfig* c = k3bcore->config();
-  c->setGroup("Cddb");
-  bool useCddb = ( c->readBoolEntry( "use local cddb query", true ) || 
-		   c->readBoolEntry( "use remote cddb", false ) );
+//   KConfig* c = k3bcore->config();
+//   c->setGroup("Cddb");
+//   bool useCddb = ( c->readBoolEntry( "use local cddb query", true ) ||
+// 		   c->readBoolEntry( "use remote cddb", false ) );
 
-  if( useCddb &&
-      ( m_cdText.isEmpty() ||
-	KMessageBox::questionYesNo( this, 
-				    i18n("Found Cd-Text. Do you want to use it instead of querying CDDB?"),
-				    i18n("Found Cd-Text"), 
-				    i18n("Use CD-Text"),
-				    i18n("Query CDDB"),
-				    "prefereCdTextOverCddb" ) == KMessageBox::No ) )
-    queryCddb();
-  else
+//   if( useCddb &&
+//       ( m_cdText.isEmpty() ||
+// 	KMessageBox::questionYesNo( this,
+// 				    i18n("Found Cd-Text. Do you want to use it instead of querying CDDB?"),
+// 				    i18n("Found Cd-Text"),
+// 				    i18n("Use CD-Text"),
+// 				    i18n("Query CDDB"),
+// 				    "prefereCdTextOverCddb" ) == KMessageBox::No ) )
+//     queryCddb();
+//   else
     showBusyLabel(false);
 }
 
@@ -293,12 +287,13 @@ void K3bAudioCdView::slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint
 void K3bAudioCdView::slotItemRenamed( Q3ListViewItem* item, const QString& str, int col )
 {
   AudioTrackViewItem* a = (AudioTrackViewItem*)item;
-  if( col == 2 )
-    m_cddbInfo.artists[a->trackNumber-1] = str;
-  else if( col == 3 )
-    m_cddbInfo.titles[a->trackNumber-1] = str;
-  else if( col == 6 )
-    m_cddbInfo.extInfos[a->trackNumber-1] = str;
+#warning Use kccdb
+//   if( col == 2 )
+//     m_cddbInfo.artists[a->trackNumber-1] = str;
+//   else if( col == 3 )
+//     m_cddbInfo.titles[a->trackNumber-1] = str;
+//   else if( col == 6 )
+//     m_cddbInfo.extInfos[a->trackNumber-1] = str;
 }
 
 
@@ -325,9 +320,9 @@ void K3bAudioCdView::startRip()
   }
   else {
     K3bAudioRippingDialog rip( m_toc,
-			       m_device, 
-			       m_cddbInfo, 
-			       trackNumbers, 
+			       m_device,
+			       m_cddbInfo,
+			       trackNumbers,
 			       this );
     rip.exec();
   }
@@ -442,11 +437,11 @@ void K3bAudioCdView::queryCddb()
 
   m_cddb->readConfig( c );
 
-  if( c->readBoolEntry( "use local cddb query", true ) || 
+  if( c->readBoolEntry( "use local cddb query", true ) ||
       c->readBoolEntry( "use remote cddb", false ) ) {
 
     showBusyLabel(true);
- 
+
     m_cddb->query( m_toc );
   }
 }
@@ -487,7 +482,7 @@ void K3bAudioCdView::slotSaveCddbLocally()
     KMessageBox::sorry( this, i18n("Please set the category before saving.") );
     return;
   }
-    
+
   if( m_cddbInfo.cdTitle.isEmpty() || m_cddbInfo.cdArtist.isEmpty() ) {
     KMessageBox::sorry( this, i18n("Please set CD artist and title before saving.") );
     return;
@@ -504,7 +499,7 @@ void K3bAudioCdView::slotSaveCddbLocally()
     if( !m_cddbInfo.artists[i].isEmpty() )
       allTrackArtistsEmpty = false;
   }
-  
+
   if( missingTitle ||
       ( missingArtist && !allTrackArtistsEmpty ) ) {
     KMessageBox::sorry( this, i18n("Please set at least artist and title on all tracks before saving.") );
@@ -572,8 +567,8 @@ void K3bAudioCdView::updateDisplay()
   else
     setTitle( i18n("Audio CD") );
 
-  m_labelLength->setText( i18n("1 track (%1)", 
-			       "%n tracks (%1)", 
+  m_labelLength->setText( i18n("1 track (%1)",
+			       "%n tracks (%1)",
 			       m_toc.count()).arg(K3b::Msf(m_toc.length()).toString()) );
 }
 
@@ -621,8 +616,8 @@ Q3DragObject* K3bAudioCdView::dragObject()
     tracks.append( static_cast<AudioTrackViewItem*>(it.current())->trackNumber );
 
   if( !items.isEmpty() ) {
-    Q3DragObject* drag = new K3bAudioCdTrackDrag( m_toc, 
-						 tracks, 
+    Q3DragObject* drag = new K3bAudioCdTrackDrag( m_toc,
+						 tracks,
 						 m_cddbInfo,
 						 m_device,
 						 this );

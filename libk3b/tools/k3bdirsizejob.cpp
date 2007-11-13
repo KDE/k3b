@@ -1,7 +1,7 @@
-/* 
+/*
  *
  * $Id: sourceheader 511311 2006-02-19 14:51:05Z trueg $
- * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -67,7 +67,7 @@ public:
 
     emitFinished( countFiles( l, QString() ) );
   }
-  
+
   bool countDir( const QString& dir ) {
     const QString& dot = KGlobal::staticQString( "." );
     const QString& dotdot = KGlobal::staticQString( ".." );
@@ -88,13 +88,13 @@ public:
 
       k3b_struct_stat s;
       if( k3b_lstat( QFile::encodeName( dir + *it ), &s ) )
-	return false;	
+	return false;
 
       if( S_ISLNK( s.st_mode ) ) {
 	++totalSymlinks;
 	if( followSymlinks ) {
 	  if( k3b_stat( QFile::encodeName( dir + *it ), &s ) )
-	    return false;	
+	    return false;
 	}
       }
 

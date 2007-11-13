@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id: sourceheader 380067 2005-01-19 13:03:46Z trueg $
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
@@ -19,44 +19,50 @@
 #include <qeventloop.h>
 #include <qapplication.h>
 
+class K3bSignalWaiter::Private
+{
+public:
+    QEventLoop loop;
+};
+
 
 K3bSignalWaiter::K3bSignalWaiter()
-  : QObject(),
-    m_inLoop(true)
+    : QObject(),
+      d( new Private() )
 {
 }
 
 
 K3bSignalWaiter::~K3bSignalWaiter()
 {
+    delete d;
 }
 
 
 void K3bSignalWaiter::waitForSignal( QObject* o, const char* signal )
 {
-  K3bSignalWaiter w;
-  connect( o, signal,
-	   &w, SLOT(slotSignal()) );
+    K3bSignalWaiter w;
+    connect( o, signal,
+             &w, SLOT(slotSignal()) );
 
-  QApplication::eventLoop()->enterLoop();
+    w.d->loop.exec();
 }
 
 
 void K3bSignalWaiter::waitForJob( K3bJob* job )
 {
-  if( !job->active() )
-    return;
+    if( !job->active() )
+        return;
 
-  waitForSignal( job, SIGNAL(finished(bool)) );
+    waitForSignal( job, SIGNAL(finished(bool)) );
 }
 
 
 void K3bSignalWaiter::slotSignal()
 {
-  if( m_inLoop ) {
-    m_inLoop = false;
-    QApplication::eventLoop()->exitLoop();
-  }
+    if( d->loop.isRunning() ) {
+        d->loop.exit();
+    }
 }
 
 #include "k3bsignalwaiter.moc"

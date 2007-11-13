@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
@@ -20,8 +20,9 @@
 #include <qevent.h>
 #include <qapplication.h>
 #include <qwaitcondition.h>
-//Added by qt3to4:
-#include <QCustomEvent>
+
+#include <QEvent>
+#include <QtCore/QMutex>
 
 
 class K3bThreadWidget::Data
@@ -33,11 +34,11 @@ public:
 };
 
 
-class K3bThreadWidget::DeviceSelectionEvent : public QCustomEvent
+class K3bThreadWidget::DeviceSelectionEvent : public QEvent
 {
 public:
   DeviceSelectionEvent( QWidget* parent, const QString& text, int id )
-    : QCustomEvent( QEvent::User + 22 ),
+    : QEvent( QEvent::User ),
       m_parent(parent),
       m_text(text),
       m_id(id) {
@@ -104,7 +105,7 @@ K3bThreadWidget* K3bThreadWidget::instance()
 
 
 // static
-K3bDevice::Device* K3bThreadWidget::selectDevice( QWidget* parent, 
+K3bDevice::Device* K3bThreadWidget::selectDevice( QWidget* parent,
 						  const QString& text )
 {
   // request a new data set
@@ -115,7 +116,10 @@ K3bDevice::Device* K3bThreadWidget::selectDevice( QWidget* parent,
 			   new K3bThreadWidget::DeviceSelectionEvent( parent, text, data->id ) );
 
   // wait for the result to be ready
-  data->con.wait();
+  QMutex mutex;
+  mutex.lock();
+  data->con.wait( &mutex );
+  mutex.unlock();
 
   K3bDevice::Device* dev = static_cast<K3bDevice::Device*>( data->data );
 
@@ -126,7 +130,7 @@ K3bDevice::Device* K3bThreadWidget::selectDevice( QWidget* parent,
 }
 
 
-void K3bThreadWidget::customEvent( QCustomEvent* e )
+void K3bThreadWidget::customEvent( QEvent* e )
 {
   if( DeviceSelectionEvent* dse = dynamic_cast<DeviceSelectionEvent*>(e) ) {
     // create dialog

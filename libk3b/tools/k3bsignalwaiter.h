@@ -45,7 +45,8 @@ class K3bSignalWaiter : public QObject
   K3bSignalWaiter();
   ~K3bSignalWaiter();
 
-  bool m_inLoop;
+  class Private;
+  Private* const d;
 };
 
 #endif

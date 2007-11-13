@@ -16,8 +16,10 @@
 #ifndef _K3B_RADIO_ACTION_H_
 #define _K3B_RADIO_ACTION_H_
 
-#include <kactionclasses.h>
+#include <ktoggleaction.h>
 #include "k3b_export.h"
+
+#include <KIcon>
 
 /**
  * This differs from KRadioAction only in the boolean 
@@ -31,80 +33,11 @@ class LIBK3B_EXPORT K3bRadioAction : public KToggleAction
   Q_OBJECT
 
  public:
-  /**
-   * Constructs a radio action with text and potential keyboard
-   * accelerator but nothing else. Use this only if you really
-   * know what you are doing.
-   *
-   * @param text The text that will be displayed.
-   * @param cut The corresponding keyboard accelerator (shortcut).
-   * @param parent This action's parent.
-   * @param name An internal name for this action.
-   */
-  K3bRadioAction( const QString& text, const KShortcut& cut = KShortcut(), QObject* parent = 0, const char* name = 0 );
+  K3bRadioAction( QObject* parent );
+  K3bRadioAction( const QString& text, QObject* parent = 0 );
+  K3bRadioAction( const KIcon& icon, const QString& text, QObject* parent = 0 );
 
-  /**
-   *  @param text The text that will be displayed.
-   *  @param cut The corresponding keyboard accelerator (shortcut).
-   *  @param receiver The SLOT's parent.
-   *  @param slot The SLOT to invoke to execute this action.
-   *  @param parent This action's parent.
-   *  @param name An internal name for this action.
-   */
-  K3bRadioAction( const QString& text, const KShortcut& cut,
-                  const QObject* receiver, const char* slot, QObject* parent, const char* name = 0 );
-
-  /**
-   *  @param text The text that will be displayed.
-   *  @param pix The icons that go with this action.
-   *  @param cut The corresponding keyboard accelerator (shortcut).
-   *  @param parent This action's parent.
-   *  @param name An internal name for this action.
-   */
-  K3bRadioAction( const QString& text, const QIcon& pix, const KShortcut& cut = KShortcut(),
-                  QObject* parent = 0, const char* name = 0 );
-
-  /**
-   *  @param text The text that will be displayed.
-   *  @param pix The dynamically loaded icon that goes with this action.
-   *  @param cut The corresponding keyboard accelerator (shortcut).
-   *  @param parent This action's parent.
-   *  @param name An internal name for this action.
-   */
-  K3bRadioAction( const QString& text, const QString& pix, const KShortcut& cut = KShortcut(),
-                  QObject* parent = 0, const char* name = 0 );
-
-  /**
-   *  @param text The text that will be displayed.
-   *  @param pix The icons that go with this action.
-   *  @param cut The corresponding keyboard accelerator (shortcut).
-   *  @param receiver The SLOT's parent.
-   *  @param slot The SLOT to invoke to execute this action.
-   *  @param parent This action's parent.
-   *  @param name An internal name for this action.
-   */
-  K3bRadioAction( const QString& text, const QIcon& pix, const KShortcut& cut,
-                  const QObject* receiver, const char* slot, QObject* parent, const char* name = 0 );
-
-  /**
-   *  @param text The text that will be displayed.
-   *  @param pix The dynamically loaded icon that goes with this action.
-   *  @param cut The corresponding keyboard accelerator (shortcut).
-   *  @param receiver The SLOT's parent.
-   *  @param slot The SLOT to invoke to execute this action.
-   *  @param parent This action's parent.
-   *  @param name An internal name for this action.
-   */
-  K3bRadioAction( const QString& text, const QString& pix, const KShortcut& cut,
-                  const QObject* receiver, const char* slot,
-                  QObject* parent, const char* name = 0 );
-
-  /**
-   *  @param parent This action's parent.
-   *  @param name An internal name for this action.
-   */
-  K3bRadioAction( QObject* parent = 0, const char* name = 0 );
-
+#warning Make this work again (always emit signal)
   /**
    * @param b if true the action will always emit the activated signal
    *          even if the toggled state did not change. The default is false.
@@ -113,7 +46,7 @@ class LIBK3B_EXPORT K3bRadioAction : public KToggleAction
   void setAlwaysEmitActivated( bool b ) { m_alwaysEmit = b; }
 
  protected:
-  virtual void slotActivated();
+//  virtual void slotActivated();
 
  private:
   bool m_alwaysEmit;

@@ -53,7 +53,7 @@ class K3bThreadWidget : public QObject
   /**
    * communication between the threads
    */
-  void customEvent( QCustomEvent* );
+  void customEvent( QEvent* );
 
  private:
   /**
