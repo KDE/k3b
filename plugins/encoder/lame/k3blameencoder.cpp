@@ -46,8 +46,8 @@
 #include <lame/lame.h>
 
 
-K_EXPORT_COMPONENT_FACTORY( libk3blameencoder, KPluginFactory<K3bLameEncoder>( "libk3blameencoder" ) )
-
+//K_EXPORT_COMPONENT_FACTORY( libk3blameencoder, KPluginFactory<K3bLameEncoder>( "libk3blameencoder" ) )
+K_EXPORT_PLUGIN(K3bLameEncoder)
 
 static const int s_lame_bitrates[] = {
   32,
@@ -143,8 +143,8 @@ public:
 
 
 
-K3bLameEncoder::K3bLameEncoder( QObject* parent, const char* name )
-  : K3bAudioEncoder( parent, name )
+K3bLameEncoder::K3bLameEncoder( QObject* parent )
+  : K3bAudioEncoder( parent )
 {
   d = new Private();
 }
@@ -197,7 +197,7 @@ const QString& K3bLameEncoder::filename() const
 bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length )
 {
   KConfig* c = k3bcore->config();
-  c->setGroup( "K3bLameEncoderPlugin" );
+  KConfigGroup grp(c, "K3bLameEncoderPlugin" );
 
   d->flags = lame_init();
 
@@ -223,11 +223,11 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
   //
   // Choose the quality level
   //
-  if( c->readBoolEntry( "Manual Bitrate Settings", false ) ) {
+  if( grp.readEntry( "Manual Bitrate Settings", false ) ) {
     //
     // Mode
     //
-    QString mode = c->readEntry( "Mode", "stereo" );
+    QString mode = grp.readEntry( "Mode", "stereo" );
     if( mode == "stereo" )
       lame_set_mode( d->flags, STEREO );
     else if( mode == "joint" )
@@ -238,21 +238,21 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
     //
     // Variable Bitrate
     //
-    if( c->readBoolEntry( "VBR", false ) ) {
+    if( grp.readEntry( "VBR", false ) ) {
       // we use the default algorithm here
       lame_set_VBR( d->flags, vbr_default );
 
-      if( c->readBoolEntry( "Use Maximum Bitrate", false ) ) {
-	lame_set_VBR_max_bitrate_kbps( d->flags, c->readEntry( "Maximum Bitrate", 224 ) );
+      if( grp.readEntry( "Use Maximum Bitrate", false ) ) {
+	lame_set_VBR_max_bitrate_kbps( d->flags, grp.readEntry( "Maximum Bitrate", 224 ) );
       }
-      if( c->readBoolEntry( "Use Minimum Bitrate", false ) ) {
-	lame_set_VBR_min_bitrate_kbps( d->flags, c->readEntry( "Minimum Bitrate", 32 ) );
+      if( grp.readEntry( "Use Minimum Bitrate", false ) ) {
+	lame_set_VBR_min_bitrate_kbps( d->flags, grp.readEntry( "Minimum Bitrate", 32 ) );
 
 	// TODO: lame_set_hard_min
       }
-      if( c->readBoolEntry( "Use Average Bitrate", true ) ) {
+      if( grp.readEntry( "Use Average Bitrate", true ) ) {
 	lame_set_VBR( d->flags, vbr_abr );
-	lame_set_VBR_mean_bitrate_kbps( d->flags, c->readEntry( "Average Bitrate", 128 ) );
+	lame_set_VBR_mean_bitrate_kbps( d->flags, grp.readEntry( "Average Bitrate", 128 ) );
       }
     }
 
@@ -261,7 +261,7 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
     //
     else {
       lame_set_VBR( d->flags, vbr_off );
-      lame_set_brate( d->flags, c->readEntry( "Constant Bitrate", 128 ) );
+      lame_set_brate( d->flags, grp.readEntry( "Constant Bitrate", 128 ) );
     }
   }
 
@@ -270,7 +270,7 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
     // In lame 0 is the highest quality. Since that is just confusing for the user
     // if we call the setting "Quality" we simply invert the value.
     //
-    int q = c->readEntry( "Quality Level", 5 );
+    int q = grp.readEntry( "Quality Level", 5 );
     if( q < 0 ) q = 0;
     if( q > 9 ) q = 9;
 
@@ -292,10 +292,10 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
   //
   // file options
   //
-  lame_set_copyright( d->flags, c->readBoolEntry( "Copyright", false ) );
-  lame_set_original( d->flags, c->readBoolEntry( "Original", true ) );
-  lame_set_strict_ISO( d->flags, c->readBoolEntry( "ISO compliance", false ) );
-  lame_set_error_protection( d->flags, c->readBoolEntry( "Error Protection", false ) );
+  lame_set_copyright( d->flags, grp.readEntry( "Copyright", false ) );
+  lame_set_original( d->flags, grp.readEntry( "Original", true ) );
+  lame_set_strict_ISO( d->flags, grp.readEntry( "ISO compliance", false ) );
+  lame_set_error_protection( d->flags, grp.readEntry( "Error Protection", false ) );
 
 
   //
@@ -308,7 +308,7 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
   // In lame 0 is the highest quality. Since that is just confusing for the user
   // if we call the setting "Quality" we simply invert the value.
   //
-  int q = c->readEntry( "Encoder Quality", 7 );
+  int q = grp.readEntry( "Encoder Quality", 7 );
   if( q < 0 ) q = 0;
   if( q > 9 ) q = 9;
   lame_set_quality( d->flags, 9-q );
@@ -412,13 +412,13 @@ K3bLameEncoderSettingsWidget::K3bLameEncoderSettingsWidget( QWidget* parent, con
   m_manualSettingsDlg->setMainWidget( m_brW );
 
   for( int i = 0; s_lame_bitrates[i]; ++i )
-    m_brW->m_comboMaximumBitrate->insertItem( i18n("%1 kbps" ).arg(s_lame_bitrates[i]) );
+    m_brW->m_comboMaximumBitrate->insertItem( i18n("%1 kbps" ,s_lame_bitrates[i]) );
 
   for( int i = 0; s_lame_bitrates[i]; ++i )
-    m_brW->m_comboMinimumBitrate->insertItem( i18n("%1 kbps" ).arg(s_lame_bitrates[i]) );
+    m_brW->m_comboMinimumBitrate->insertItem( i18n("%1 kbps" ,s_lame_bitrates[i]) );
 
   for( int i = 0; s_lame_bitrates[i]; ++i )
-    m_brW->m_comboConstantBitrate->insertItem( i18n("%1 kbps" ).arg(s_lame_bitrates[i]) );
+    m_brW->m_comboConstantBitrate->insertItem( i18n("%1 kbps" ,s_lame_bitrates[i]) );
 
 
   Q3HBoxLayout* lay = new Q3HBoxLayout( this );
@@ -487,9 +487,9 @@ void K3bLameEncoderSettingsWidget::slotQualityLevelChanged( int val )
 void K3bLameEncoderSettingsWidget::loadConfig()
 {
   KConfig* c = k3bcore->config();
-  c->setGroup( "K3bLameEncoderPlugin" );
+  KConfigGroup grp(c, "K3bLameEncoderPlugin" );
 
-  QString mode = c->readEntry( "Mode", "stereo" );
+  QString mode = grp.readEntry( "Mode", "stereo" );
   if( mode == "stereo" )
     m_brW->m_comboMode->setCurrentItem( 0 );
   else if( mode == "joint" )
@@ -497,35 +497,35 @@ void K3bLameEncoderSettingsWidget::loadConfig()
   else // mono
     m_brW->m_comboMode->setCurrentItem( 2 );
 
-  bool manual = c->readBoolEntry( "Manual Bitrate Settings", false );
+  bool manual = grp.readEntry( "Manual Bitrate Settings", false );
   if( manual )
     m_w->m_radioManual->setChecked(true);
   else
     m_w->m_radioQualityLevel->setChecked(true);
 
-  if( c->readBoolEntry( "VBR", false ) )
+  if(grp.readEntry( "VBR", false ) )
     m_brW->m_radioVariableBitrate->setChecked( true );
   else
     m_brW->m_radioConstantBitrate->setChecked( true );
 
-  m_brW->m_comboConstantBitrate->setCurrentItem( i18n("%1 kbps").arg(c->readEntry( "Constant Bitrate", 128 )) );
-  m_brW->m_comboMaximumBitrate->setCurrentItem( i18n("%1 kbps").arg(c->readEntry( "Maximum Bitrate", 224 )) );
-  m_brW->m_comboMinimumBitrate->setCurrentItem( i18n("%1 kbps").arg(c->readEntry( "Minimum Bitrate", 32 )) );
-  m_brW->m_spinAverageBitrate->setValue( c->readEntry( "Average Bitrate", 128) );
+  m_brW->m_comboConstantBitrate->setCurrentItem( i18n("%1 kbps",grp.readEntry( "Constant Bitrate", 128 )) );
+  m_brW->m_comboMaximumBitrate->setCurrentItem( i18n("%1 kbps",grp.readEntry( "Maximum Bitrate", 224 )) );
+  m_brW->m_comboMinimumBitrate->setCurrentItem( i18n("%1 kbps",grp.readEntry( "Minimum Bitrate", 32 )) );
+  m_brW->m_spinAverageBitrate->setValue( grp.readEntry( "Average Bitrate", 128) );
 
-  m_brW->m_checkBitrateMaximum->setChecked( c->readBoolEntry( "Use Maximum Bitrate", false ) );
-  m_brW->m_checkBitrateMinimum->setChecked( c->readBoolEntry( "Use Minimum Bitrate", false ) );
-  m_brW->m_checkBitrateAverage->setChecked( c->readBoolEntry( "Use Average Bitrate", true ) );
+  m_brW->m_checkBitrateMaximum->setChecked( grp.readEntry( "Use Maximum Bitrate", false ) );
+  m_brW->m_checkBitrateMinimum->setChecked( grp.readEntry( "Use Minimum Bitrate", false ) );
+  m_brW->m_checkBitrateAverage->setChecked( grp.readEntry( "Use Average Bitrate", true ) );
 
-  m_w->m_sliderQuality->setValue( c->readEntry( "Quality Level", 5 ) );
+  m_w->m_sliderQuality->setValue( grp.readEntry( "Quality Level", 5 ) );
 
-  m_w->m_checkCopyright->setChecked( c->readBoolEntry( "Copyright", false ) );
-  m_w->m_checkOriginal->setChecked( c->readBoolEntry( "Original", true ) );
-  m_w->m_checkISO->setChecked( c->readBoolEntry( "ISO compliance", false ) );
-  m_w->m_checkError->setChecked( c->readBoolEntry( "Error Protection", false ) );
+  m_w->m_checkCopyright->setChecked( grp.readEntry( "Copyright", false ) );
+  m_w->m_checkOriginal->setChecked( grp.readEntry( "Original", true ) );
+  m_w->m_checkISO->setChecked( grp.readEntry( "ISO compliance", false ) );
+  m_w->m_checkError->setChecked( grp.readEntry( "Error Protection", false ) );
 
   // default to 2 which is the same as the -h lame option
-  m_w->m_spinEncoderQuality->setValue( c->readEntry( "Encoder Quality", 7 ) );
+  m_w->m_spinEncoderQuality->setValue( grp.readEntry( "Encoder Quality", 7 ) );
 
   updateManualSettingsLabel();
 }
@@ -534,7 +534,7 @@ void K3bLameEncoderSettingsWidget::loadConfig()
 void K3bLameEncoderSettingsWidget::saveConfig()
 {
   KConfig* c = k3bcore->config();
-  c->setGroup( "K3bLameEncoderPlugin" );
+  KConfigGroup grp(c, "K3bLameEncoderPlugin" );
 
   QString mode;
   switch( m_brW->m_comboMode->currentItem() ) {
@@ -548,29 +548,29 @@ void K3bLameEncoderSettingsWidget::saveConfig()
     mode = "mono";
     break;
   }
-  c->writeEntry( "Mode", mode );
+  grp.writeEntry( "Mode", mode );
 
-  c->writeEntry( "Manual Bitrate Settings", m_w->m_radioManual->isChecked() );
+  grp.writeEntry( "Manual Bitrate Settings", m_w->m_radioManual->isChecked() );
 
-  c->writeEntry( "VBR", !m_brW->m_radioConstantBitrate->isChecked() );
-  c->writeEntry( "Constant Bitrate", m_brW->m_comboConstantBitrate->currentText().left(3).toInt() );
-  c->writeEntry( "Maximum Bitrate", m_brW->m_comboMaximumBitrate->currentText().left(3).toInt() );
-  c->writeEntry( "Minimum Bitrate", m_brW->m_comboMinimumBitrate->currentText().left(3).toInt() );
-  c->writeEntry( "Average Bitrate", m_brW->m_spinAverageBitrate->value() );
+  grp.writeEntry( "VBR", !m_brW->m_radioConstantBitrate->isChecked() );
+  grp.writeEntry( "Constant Bitrate", m_brW->m_comboConstantBitrate->currentText().left(3).toInt() );
+  grp.writeEntry( "Maximum Bitrate", m_brW->m_comboMaximumBitrate->currentText().left(3).toInt() );
+  grp.writeEntry( "Minimum Bitrate", m_brW->m_comboMinimumBitrate->currentText().left(3).toInt() );
+  grp.writeEntry( "Average Bitrate", m_brW->m_spinAverageBitrate->value() );
 
-  c->writeEntry( "Use Maximum Bitrate", m_brW->m_checkBitrateMaximum->isChecked() );
-  c->writeEntry( "Use Minimum Bitrate", m_brW->m_checkBitrateMinimum->isChecked() );
-  c->writeEntry( "Use Average Bitrate", m_brW->m_checkBitrateAverage->isChecked() );
+  grp.writeEntry( "Use Maximum Bitrate", m_brW->m_checkBitrateMaximum->isChecked() );
+  grp.writeEntry( "Use Minimum Bitrate", m_brW->m_checkBitrateMinimum->isChecked() );
+  grp.writeEntry( "Use Average Bitrate", m_brW->m_checkBitrateAverage->isChecked() );
 
-  c->writeEntry( "Quality Level", m_w->m_sliderQuality->value() );
+  grp.writeEntry( "Quality Level", m_w->m_sliderQuality->value() );
 
-  c->writeEntry( "Copyright", m_w->m_checkCopyright->isChecked() );
-  c->writeEntry( "Original", m_w->m_checkOriginal->isChecked() );
-  c->writeEntry( "ISO compliance", m_w->m_checkISO->isChecked() );
-  c->writeEntry( "Error Protection", m_w->m_checkError->isChecked() );
+  grp.writeEntry( "Copyright", m_w->m_checkCopyright->isChecked() );
+  grp.writeEntry( "Original", m_w->m_checkOriginal->isChecked() );
+  grp.writeEntry( "ISO compliance", m_w->m_checkISO->isChecked() );
+  grp.writeEntry( "Error Protection", m_w->m_checkError->isChecked() );
 
   // default to 2 which is the same as the -h lame option
-  c->writeEntry( "Encoder Quality", m_w->m_spinEncoderQuality->value() );
+  grp.writeEntry( "Encoder Quality", m_w->m_spinEncoderQuality->value() );
 }
 
 
@@ -590,25 +590,25 @@ QString K3bLameEncoder::fileTypeComment( const QString& ) const
 long long K3bLameEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 {
   KConfig* c = k3bcore->config();
-  c->setGroup( "K3bLameEncoderPlugin" );
+  KConfigGroup grp(c, "K3bLameEncoderPlugin" );
   int bitrate = 0;
-  if( c->readBoolEntry( "Manual Bitrate Settings", false ) ) {
-    if( c->readBoolEntry( "VBR", false ) ) {
-      if( c->readBoolEntry( "Use Maximum Bitrate", false ) )
-	bitrate = c->readEntry( "Maximum Bitrate", 224 );
-      if( c->readBoolEntry( "Use Minimum Bitrate", false ) )
+  if( grp.readEntry( "Manual Bitrate Settings", false ) ) {
+    if( grp.readEntry( "VBR", false ) ) {
+      if( grp.readEntry( "Use Maximum Bitrate", false ) )
+	bitrate = grp.readEntry( "Maximum Bitrate", 224 );
+      if( grp.readEntry( "Use Minimum Bitrate", false ) )
 	bitrate = ( bitrate > 0
-		    ? (bitrate - c->readEntry( "Minimum Bitrate", 32 )) / 2
-		    : c->readEntry( "Minimum Bitrate", 32 ) );
-      if( c->readBoolEntry( "Use Average Bitrate", true ) )
-	bitrate = c->readEntry( "Average Bitrate", 128 );
+		    ? (bitrate - grp.readEntry( "Minimum Bitrate", 32 )) / 2
+		    : grp.readEntry( "Minimum Bitrate", 32 ) );
+      if( grp.readEntry( "Use Average Bitrate", true ) )
+	bitrate = grp.readEntry( "Average Bitrate", 128 );
     }
     else {
-      bitrate = c->readEntry( "Constant Bitrate", 128 );
+      bitrate = grp.readEntry( "Constant Bitrate", 128 );
     }
   }
   else {
-    int q = c->readEntry( "Quality Level", 5 );
+    int q = grp.readEntry( "Quality Level", 5 );
     if( q < 0 ) q = 0;
     if( q > 9 ) q = 9;
     bitrate = s_lame_preset_approx_bitrates[q];

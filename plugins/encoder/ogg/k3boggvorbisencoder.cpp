@@ -44,7 +44,9 @@
 #include <time.h>
 
 
-K_EXPORT_COMPONENT_FACTORY( libk3boggvorbisencoder, KPluginFactory<K3bOggVorbisEncoder>( "libk3boggvorbisencoder" ) )
+//K_EXPORT_COMPONENT_FACTORY( libk3boggvorbisencoder, KPluginFactory<K3bOggVorbisEncoder>( "libk3boggvorbisencoder" ) )
+
+K_EXPORT_PLUGIN(K3bOggVorbisEncoder)
 
 // quality levels -1 to 10 map to 0 to 11
 static const int s_rough_average_quality_level_bitrates[] = {
@@ -413,14 +415,13 @@ void K3bOggVorbisEncoder::cleanup()
 void K3bOggVorbisEncoder::loadConfig()
 {
   KConfig* c = k3bcore->config();
+  KConfigGroup grp(c, "K3bOggVorbisEncoderPlugin" );
 
-  c->setGroup( "K3bOggVorbisEncoderPlugin" );
-
-  d->manualBitrate = c->readBoolEntry( "manual bitrate", false );
-  d->qualityLevel = c->readEntry( "quality level", 4 );
-  d->bitrateUpper = c->readEntry( "bitrate upper", -1 );
-  d->bitrateNominal = c->readEntry( "bitrate nominal", -1 );
-  d->bitrateLower = c->readEntry( "bitrate lower", -1 );
+  d->manualBitrate = grp.readBoolEntry( "manual bitrate", false );
+  d->qualityLevel = grp.readEntry( "quality level", 4 );
+  d->bitrateUpper = grp.readEntry( "bitrate upper", -1 );
+  d->bitrateNominal = grp/readEntry( "bitrate nominal", -1 );
+  d->bitrateLower = grp.readEntry( "bitrate lower", -1 );
   //  d->sampleRate = c->readEntry( "samplerate", 44100 );
 }
 
@@ -471,7 +472,7 @@ K3bOggVorbisEncoderSettingsWidget::~K3bOggVorbisEncoderSettingsWidget()
 void K3bOggVorbisEncoderSettingsWidget::slotQualityLevelChanged( int val )
 {
   w->m_labelQualityLevel->setText( QString::number(val) + " " 
-				   + i18n("(targetted VBR of %1)").arg(s_rough_average_quality_level_bitrates[val+1]) );
+				   + i18n("(targetted VBR of %1)",s_rough_average_quality_level_bitrates[val+1]) );
 }
 
 
@@ -479,19 +480,19 @@ void K3bOggVorbisEncoderSettingsWidget::loadConfig()
 {
   KConfig* c = k3bcore->config();
 
-  c->setGroup( "K3bOggVorbisEncoderPlugin" );
+  KConfigGroup grp(c, "K3bOggVorbisEncoderPlugin" );
 
-  if( c->readBoolEntry( "manual bitrate", false ) )
+  if( grp.readEntry( "manual bitrate", false ) )
     w->m_radioManual->setChecked(true);
   else
     w->m_radioQualityLevel->setChecked(true);
-  w->m_slideQualityLevel->setValue( c->readEntry( "quality level", 4 ) );
-  w->m_inputBitrateUpper->setValue( c->readEntry( "bitrate upper", -1 ) );
-  w->m_checkBitrateUpper->setChecked( c->readEntry( "bitrate upper", -1 ) != -1 );
-  w->m_inputBitrateNominal->setValue( c->readEntry( "bitrate nominal", -1 ) );
-  w->m_checkBitrateNominal->setChecked( c->readEntry( "bitrate nominal", -1 ) != -1 );
-  w->m_inputBitrateLower->setValue( c->readEntry( "bitrate lower", -1 ) );
-  w->m_checkBitrateLower->setChecked( c->readEntry( "bitrate lower", -1 ) != -1 );
+  w->m_slideQualityLevel->setValue( grp.readEntry( "quality level", 4 ) );
+  w->m_inputBitrateUpper->setValue( grp.readEntry( "bitrate upper", -1 ) );
+  w->m_checkBitrateUpper->setChecked( grp.readEntry( "bitrate upper", -1 ) != -1 );
+  w->m_inputBitrateNominal->setValue( grp.readEntry( "bitrate nominal", -1 ) );
+  w->m_checkBitrateNominal->setChecked( grp.readEntry( "bitrate nominal", -1 ) != -1 );
+  w->m_inputBitrateLower->setValue( grp.readEntry( "bitrate lower", -1 ) );
+  w->m_checkBitrateLower->setChecked( grp.readEntry( "bitrate lower", -1 ) != -1 );
   //  w->m_inputSamplerate->setValue( c->readEntry( "samplerate", 44100 ) );
 }
 
@@ -500,13 +501,13 @@ void K3bOggVorbisEncoderSettingsWidget::saveConfig()
 {
   KConfig* c = k3bcore->config();
 
-  c->setGroup( "K3bOggVorbisEncoderPlugin" );
+  KConfigGroup grp(c,"K3bOggVorbisEncoderPlugin" );
 
-  c->writeEntry( "manual bitrate", w->m_radioManual->isChecked() );
-  c->writeEntry( "quality level", w->m_slideQualityLevel->value() );
-  c->writeEntry( "bitrate upper", w->m_checkBitrateUpper->isChecked() ? w->m_inputBitrateUpper->value() : -1 );
-  c->writeEntry( "bitrate nominal", w->m_checkBitrateNominal->isChecked() ? w->m_inputBitrateNominal->value() : -1 );
-  c->writeEntry( "bitrate lower", w->m_checkBitrateLower->isChecked() ? w->m_inputBitrateLower->value() : -1 );
+  grp.writeEntry( "manual bitrate", w->m_radioManual->isChecked() );
+  grp.writeEntry( "quality level", w->m_slideQualityLevel->value() );
+  grp.writeEntry( "bitrate upper", w->m_checkBitrateUpper->isChecked() ? w->m_inputBitrateUpper->value() : -1 );
+  grp.writeEntry( "bitrate nominal", w->m_checkBitrateNominal->isChecked() ? w->m_inputBitrateNominal->value() : -1 );
+  grp.writeEntry( "bitrate lower", w->m_checkBitrateLower->isChecked() ? w->m_inputBitrateLower->value() : -1 );
   //  c->writeEntry( "samplerate", w->m_inputSamplerate->value() );
 }
 
@@ -520,19 +521,19 @@ QString K3bOggVorbisEncoder::fileTypeComment( const QString& ) const
 long long K3bOggVorbisEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 {
   KConfig* c = k3bcore->config();
-  c->setGroup( "K3bOggVorbisEncoderPlugin" );
+  KConfigGroup grp(c, "K3bOggVorbisEncoderPlugin" );
 
   // the following code is based on the size estimation from the audiocd kioslave
   // TODO: reimplement.
 
-  if( !c->readBoolEntry( "manual bitrate", false ) ) {
+  if( !grp.readEntry( "manual bitrate", false ) ) {
     // Estimated numbers based on the Vorbis FAQ:
     // http://www.xiph.org/archives/vorbis-faq/200203/0030.html
     
 //     static long vorbis_q_bitrate[] = { 45, 60,  74,  86,  106, 120, 152,
 // 				       183, 207, 239, 309, 440 };
 
-    int qualityLevel = c->readEntry( "quality level", 4 );
+    int qualityLevel = grp.readEntry( "quality level", 4 );
 
     if( qualityLevel < -1 )
       qualityLevel = -1;
@@ -541,7 +542,7 @@ long long K3bOggVorbisEncoder::fileSize( const QString&, const K3b::Msf& msf ) c
     return ( (msf.totalFrames()/75) * s_rough_average_quality_level_bitrates[qualityLevel+1] * 1000 ) / 8;
   }
   else {
-    return (msf.totalFrames()/75) * c->readEntry( "bitrate nominal", 160 ) * 1000 / 8;
+    return (msf.totalFrames()/75) * grp.readEntry( "bitrate nominal", 160 ) * 1000 / 8;
   }
 }
 

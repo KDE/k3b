@@ -37,8 +37,8 @@
 #include <sys/wait.h>
 
 
-K_EXPORT_COMPONENT_FACTORY( libk3bexternalencoder, KPluginFactory<K3bExternalEncoder>( "libk3bexternalencoder" ) )
-
+//K_EXPORT_COMPONENT_FACTORY( libk3bexternalencoder, KPluginFactory<K3bExternalEncoder>( "libk3bexternalencoder" ) )
+K_EXPORT_PLUGIN(K3bExternalEncoder)
 
 static const char s_riffHeader[] =
 {
@@ -101,8 +101,8 @@ public:
 };
 
 
-K3bExternalEncoder::K3bExternalEncoder( QObject* parent, const char* name )
-  : K3bAudioEncoder( parent, name )
+K3bExternalEncoder::K3bExternalEncoder( QObject* parent )
+  : K3bAudioEncoder( parent)
 {
   d = new Private();
 }
@@ -244,7 +244,7 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension )
   kDebug() << s << flush;
 
   // set one general error message
-  setLastError( i18n("Command failed: %1").arg( s ) );
+  setLastError( i18n("Command failed: %1", s ) );
   
   if( d->process->start( K3Process::NotifyOnExit, K3Process::All ) ) {
     if( d->cmd.writeWaveHeader )
@@ -255,7 +255,7 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension )
   else {
     QString commandName = d->cmd.command.section( QRegExp("\\s+"), 0 );
     if( !KStandardDirs::findExe( commandName ).isEmpty() )
-      setLastError( i18n("Could not find program '%1'").arg(commandName) );
+      setLastError( i18n("Could not find program '%1'",commandName) );
 
     return false;
   }
