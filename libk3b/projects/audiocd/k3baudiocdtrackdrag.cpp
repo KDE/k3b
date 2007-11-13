@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
@@ -28,9 +28,9 @@
 
 
 // FIXME: multiple tracks
-K3bAudioCdTrackDrag::K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, const Q3ValueList<int>& cdTrackNumbers, 
+K3bAudioCdTrackDrag::K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, const Q3ValueList<int>& cdTrackNumbers,
 					  const K3bCddbResultEntry& cddb,
-					  K3bDevice::Device* lastDev, QWidget* dragSource, const char* name )
+					  K3bDevice::Device* lastDev, QWidget* dragSource )
     : Q3StoredDrag( "k3b/audio_track_drag", dragSource, name ),
     m_toc(toc),
     m_cdTrackNumbers(cdTrackNumbers),
@@ -68,8 +68,8 @@ K3bAudioCdTrackDrag::K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, const Q3Val
 }
 
 
-bool K3bAudioCdTrackDrag::decode( const QMimeSource* e, 
-				  K3bDevice::Toc& toc, Q3ValueList<int>& trackNumbers, 
+bool K3bAudioCdTrackDrag::decode( const QMimeSource* e,
+				  K3bDevice::Toc& toc, Q3ValueList<int>& trackNumbers,
 				  K3bCddbResultEntry& cddb, K3bDevice::Device** dev )
 {
   QByteArray data = e->encodedData( "k3b/audio_track_drag" );

@@ -22,12 +22,10 @@
 #include <k3bcdtext.h>
 #include <k3btoc.h>
 
-#include <q3ptrlist.h>
 #include <qfile.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qdatetime.h>
-#include <q3textstream.h>
 #include "k3b_export.h"
 #include <kurl.h>
 
@@ -92,14 +90,14 @@ class LIBK3B_EXPORT K3bAudioDoc : public K3bDoc
 	
   // CD-Text
   bool cdText() const { return m_cdText; }
-  const QString& title() const { return m_cdTextData.title(); }
-  const QString& artist() const { return m_cdTextData.performer(); }
-  const QString& disc_id() const { return m_cdTextData.discId(); }
-  const QString& arranger() const { return m_cdTextData.arranger(); }
-  const QString& songwriter() const { return m_cdTextData.songwriter(); }
-  const QString& composer() const { return m_cdTextData.composer(); }
-  const QString& upc_ean() const { return m_cdTextData.upcEan(); }
-  const QString& cdTextMessage() const { return m_cdTextData.message(); }
+  QString title() const { return m_cdTextData.title(); }
+  QString artist() const { return m_cdTextData.performer(); }
+  QString disc_id() const { return m_cdTextData.discId(); }
+  QString arranger() const { return m_cdTextData.arranger(); }
+  QString songwriter() const { return m_cdTextData.songwriter(); }
+  QString composer() const { return m_cdTextData.composer(); }
+  QString upc_ean() const { return m_cdTextData.upcEan(); }
+  QString cdTextMessage() const { return m_cdTextData.message(); }
 
   /**
    * Create complete CD-Text including the tracks' data.

@@ -51,10 +51,10 @@
 
 
 
-static QString createNonExistingFilesString( const Q3ValueList<K3bAudioFile*>& items, unsigned int max )
+static QString createNonExistingFilesString( const Q3ValueList<K3bAudioFile*>& items, int max )
 {
   QString s;
-  unsigned int cnt = 0;
+  int cnt = 0;
   for( Q3ValueList<K3bAudioFile*>::const_iterator it = items.begin();
        it != items.end(); ++it ) {
 
@@ -862,11 +862,11 @@ QString K3bAudioJob::jobDescription() const
 
 QString K3bAudioJob::jobDetails() const
 {
-  return ( i18n( "1 track (%1 minutes)",
+  return ( i18np( "1 track (%1 minutes)",
 		 "%n tracks (%1 minutes)",
 		 m_doc->numOfTracks() ).arg(m_doc->length().toString())
 	   + ( m_doc->copies() > 1 && !m_doc->dummy()
-	       ? i18n(" - %n copy", " - %n copies", m_doc->copies())
+	       ? i18np(" - %n copy", " - %n copies", m_doc->copies())
 	       : QString::null ) );
 }
 

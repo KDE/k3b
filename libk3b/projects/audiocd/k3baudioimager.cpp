@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
@@ -66,7 +66,7 @@ void K3bAudioImager::WorkThread::run()
   lastError = K3bAudioImager::ERROR_UNKNOWN;
 
   //
-  // 
+  //
   //
   QStringList::iterator imageFileIt = m_imageNames.begin();
   K3bWaveFileWriter waveFileWriter;
@@ -134,7 +134,7 @@ void K3bAudioImager::WorkThread::run()
       //
       totalRead += read;
       trackRead += read;
-	
+
       emitSubPercent( 100*trackRead/track->length().audioBytes() );
       emitPercent( 100*totalRead/totalSize );
       emitProcessedSubSize( trackRead/1024/1024, track->length().audioBytes()/1024/1024 );
@@ -167,8 +167,8 @@ void K3bAudioImager::WorkThread::cancel()
 
 
 
-K3bAudioImager::K3bAudioImager( K3bAudioDoc* doc, K3bJobHandler* jh, QObject* parent, const char* name )
-  : K3bThreadJob( jh, parent, name ),
+K3bAudioImager::K3bAudioImager( K3bAudioDoc* doc, K3bJobHandler* jh, QObject* parent )
+  : K3bThreadJob( jh, parent ),
     m_doc(doc)
 {
   m_thread = new WorkThread(doc);

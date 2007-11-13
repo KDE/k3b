@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -23,8 +23,8 @@
 #include <klocale.h>
 
 
-K3bAudioNormalizeJob::K3bAudioNormalizeJob( K3bJobHandler* hdl, QObject* parent, const char* name )
-  : K3bJob( hdl, parent, name ),
+K3bAudioNormalizeJob::K3bAudioNormalizeJob( K3bJobHandler* hdl, QObject* parent )
+  : K3bJob( hdl, parent ),
     m_process(0)
 {
 }
@@ -42,7 +42,7 @@ void K3bAudioNormalizeJob::start()
   m_canceled = false;
   m_currentAction = COMPUTING_LEVELS;
   m_currentTrack = 1;
-    
+
   jobStarted();
 
   if( m_process )
@@ -120,7 +120,7 @@ void K3bAudioNormalizeJob::slotStdLine( const QString& line )
       m_currentAction = ADJUSTING_LEVELS;
     }
   }
-  
+
   else if( line.contains( "already normalized" ) ) {
     // no normalization necessary for the current track
     emit infoMessage( i18n("Track %1 is already normalized.").arg(m_currentTrack), INFO );
@@ -130,7 +130,7 @@ void K3bAudioNormalizeJob::slotStdLine( const QString& line )
   else if( line.contains( "--% done") ) {
     if( m_currentAction == ADJUSTING_LEVELS ) {
       emit newTask( i18n("Adjusting volume level for track %1 of %2").arg(m_currentTrack).arg(m_files.count()) );
-      kDebug() << "(K3bAudioNormalizeJob) adjusting level for track " 
+      kDebug() << "(K3bAudioNormalizeJob) adjusting level for track "
 		<< m_currentTrack
 		<< " "
 		<< m_files.at(m_currentTrack-1)
@@ -138,7 +138,7 @@ void K3bAudioNormalizeJob::slotStdLine( const QString& line )
     }
     else {
       emit newTask( i18n("Computing level for track %1 of %2").arg(m_currentTrack).arg(m_files.count()) );
-      kDebug() << "(K3bAudioNormalizeJob) computing level for track " 
+      kDebug() << "(K3bAudioNormalizeJob) computing level for track "
 		<< m_currentTrack
 		<< " "
 		<< m_files.at(m_currentTrack-1)
@@ -147,7 +147,7 @@ void K3bAudioNormalizeJob::slotStdLine( const QString& line )
 
     m_currentTrack++;
   }
-  
+
   else if( int pos = line.find( "% done" ) > 0 ) {
     // parse progress: "XXX% done" and "batch XXX% done"
     pos -= 3;
@@ -158,7 +158,7 @@ void K3bAudioNormalizeJob::slotStdLine( const QString& line )
     if( ok )
       emit subPercent( p );
     else
-      kDebug() << "(K3bAudioNormalizeJob) subPercent parsing error at pos " 
+      kDebug() << "(K3bAudioNormalizeJob) subPercent parsing error at pos "
 		<< 19 << " in line '" << line.mid( 19, 3 ) << "'" << endl;
 
     // batch progress starts at position 50 in version 0.7.6
@@ -168,7 +168,7 @@ void K3bAudioNormalizeJob::slotStdLine( const QString& line )
     else if( ok && m_currentAction == ADJUSTING_LEVELS )
       emit percent( 50 + (int)((double)p/2.0) );
     else
-      kDebug() << "(K3bAudioNormalizeJob) percent parsing error at pos " 
+      kDebug() << "(K3bAudioNormalizeJob) percent parsing error at pos "
 		<< 50 << " in line '" << line.mid( 50, 3 ) << "'" << endl;
 
   }
@@ -185,7 +185,7 @@ void K3bAudioNormalizeJob::slotProcessExited( K3Process* p )
       break;
     default:
       if( !m_canceled ) {
-	emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("normalize").arg(p->exitStatus()), 
+	emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("normalize").arg(p->exitStatus()),
 			  K3bJob::ERROR );
 	emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
 	emit infoMessage( i18n("Error while normalizing tracks."), ERROR );

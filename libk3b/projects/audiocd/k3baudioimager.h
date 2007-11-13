@@ -25,7 +25,7 @@ class K3bAudioImager : public K3bThreadJob
   Q_OBJECT
 
  public:
-  K3bAudioImager( K3bAudioDoc*, K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
+  K3bAudioImager( K3bAudioDoc*, K3bJobHandler*, QObject* parent = 0 );
   ~K3bAudioImager();
 
   /**

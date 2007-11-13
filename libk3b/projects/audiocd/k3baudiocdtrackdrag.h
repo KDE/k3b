@@ -29,7 +29,7 @@ class LIBK3B_EXPORT K3bAudioCdTrackDrag : public Q3StoredDrag
 {
  public:
   K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, const Q3ValueList<int>& cdTrackNumbers, const K3bCddbResultEntry& cddb,
-		       K3bDevice::Device* lastDev = 0, QWidget* dragSource = 0, const char* name = 0 );
+		       K3bDevice::Device* lastDev = 0, QWidget* dragSource = 0 );
 
   const K3bDevice::Toc& toc() const { return m_toc; }
   const Q3ValueList<int>& cdTrackNumbers() const { return m_cdTrackNumbers; }

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
@@ -95,7 +95,7 @@ void K3bAudioMaxSpeedJob::WorkThread::run()
       success = false;
       break;
     }
-      
+
     // read some data
     int speed = speedTest( it.current() );
 
@@ -110,7 +110,7 @@ void K3bAudioMaxSpeedJob::WorkThread::run()
       // update the max speed
       maxSpeed = qMin( maxSpeed, speed );
     }
-      
+
     it.next();
   }
 
@@ -166,7 +166,7 @@ int K3bAudioMaxSpeedJob::WorkThread::speedTest( K3bAudioDataSource* source )
 
   // KB/sec (add 1 millisecond to avoid division by 0)
   int throughput = (dataRead*1000+usedT)/(usedT+1)/1024;
-  kDebug() << "(K3bAudioMaxSpeedJob) throughput: " << throughput 
+  kDebug() << "(K3bAudioMaxSpeedJob) throughput: " << throughput
 	    << " (" << dataRead << "/" << usedT << ")" << endl;
 
 
@@ -184,7 +184,7 @@ void K3bAudioMaxSpeedJob::WorkThread::cancel()
 int K3bAudioMaxSpeedJob::WorkThread::maxSpeedByMedia() const
 {
   int s = 0;
-    
+
   Q3ValueList<int> speeds = m_doc->burner()->determineSupportedWriteSpeeds();
   // simply use what we have and let the writer decide if the speeds are empty
   if( !speeds.isEmpty() ) {
@@ -193,7 +193,7 @@ int K3bAudioMaxSpeedJob::WorkThread::maxSpeedByMedia() const
     --it;
     while( *it > maxSpeed && it != speeds.begin() )
       --it;
-      
+
     // this is the first valid speed or the lowest supported one
     s = *it;
     kDebug() << "(K3bAudioMaxSpeedJob) using speed factor: " << (s/175);
@@ -205,8 +205,8 @@ int K3bAudioMaxSpeedJob::WorkThread::maxSpeedByMedia() const
 
 
 
-K3bAudioMaxSpeedJob::K3bAudioMaxSpeedJob( K3bAudioDoc* doc, K3bJobHandler* jh, QObject* parent, const char* name )
-  : K3bThreadJob( jh, parent, name )
+K3bAudioMaxSpeedJob::K3bAudioMaxSpeedJob( K3bAudioDoc* doc, K3bJobHandler* jh, QObject* parent )
+  : K3bThreadJob( jh, parent )
 {
   m_thread = new WorkThread( doc );
   setThread( m_thread );

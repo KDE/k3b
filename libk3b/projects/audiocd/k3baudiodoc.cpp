@@ -37,8 +37,7 @@
 #include <qdir.h>
 #include <qdom.h>
 #include <qdatetime.h>
-#include <q3textstream.h>
-#include <q3semaphore.h>
+#include <qtextstream.h>
 
 // KDE-includes
 #include <k3process.h>
@@ -238,7 +237,7 @@ KUrl::List K3bAudioDoc::extractUrlList( const KUrl::List& urls )
       // add all files into the list after the current item
       for( QStringList::iterator dirIt = entries.begin();
 	   dirIt != entries.end(); ++dirIt )
-	it = allUrls.insert( oldIt, KUrl::fromPathOrUrl( dir.absPath() + "/" + *dirIt ) );
+	it = allUrls.insert( oldIt, KUrl( dir.absPath() + "/" + *dirIt ) );
     }
     else if( readPlaylistFile( url, urlsFromPlaylist ) ) {
       it = allUrls.remove( it );
@@ -265,11 +264,12 @@ bool K3bAudioDoc::readPlaylistFile( const KUrl& url, KUrl::List& playlist )
   if( !f.open( QIODevice::ReadOnly ) )
     return false;
 
-  Q3TextStream t( &f );
-  char buf[7];
-  t.readRawBytes( buf, 7 );
-  if( QString::fromLatin1( buf, 7 ) != "#EXTM3U" )
+  QByteArray buf = f.read( 7 );
+  if( buf.size() != 7 || QString::fromLatin1( buf ) != "#EXTM3U" )
     return false;
+  f.seek( 0 );
+
+  QTextStream t( &f );
 
   // skip the first line
   t.readLine();
@@ -508,7 +508,7 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 
   QDomNodeList nodes = root->childNodes();
 
-  for( uint i = 0; i < nodes.count(); i++ ) {
+  for( int i = 0; i < nodes.count(); i++ ) {
 
     QDomElement e = nodes.item(i).toElement();
 
@@ -590,7 +590,7 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 	QDomAttr oldUrlAttr = trackElem.attributeNode( "url" );
 	if( !oldUrlAttr.isNull() ) {
 	  if( K3bAudioFile* file =
-	      createAudioFile( KUrl::fromPathOrUrl( oldUrlAttr.value() ) ) ) {
+	      createAudioFile( KUrl( oldUrlAttr.value() ) ) ) {
 	    track->addSource( file );
 	  }
 	}
@@ -606,7 +606,7 @@ bool K3bAudioDoc::loadDocumentData( QDomElement* root )
 	      QDomElement sourceElem = sourcesNodes.item(sourcesIndex).toElement();
 	      if( sourceElem.nodeName() == "file" ) {
 		if( K3bAudioFile* file =
-		    createAudioFile( KUrl::fromPathOrUrl( sourceElem.attributeNode( "url" ).value() ) ) ) {
+		    createAudioFile( KUrl( sourceElem.attributeNode( "url" ).value() ) ) ) {
 		  file->setStartOffset( K3b::Msf::fromString( sourceElem.attributeNode( "start_offset" ).value() ) );
 		  file->setEndOffset( K3b::Msf::fromString( sourceElem.attributeNode( "end_offset" ).value() ) );
 		  track->addSource( file );
