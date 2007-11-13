@@ -29,7 +29,7 @@ class K3bSoxEncoder : public K3bAudioEncoder
   Q_OBJECT
 
  public:
-  K3bSoxEncoder( QObject* parent = 0, const char* name = 0 );
+  K3bSoxEncoder( QObject* parent = 0 );
   ~K3bSoxEncoder();
 
   QStringList extensions() const;
@@ -40,8 +40,7 @@ class K3bSoxEncoder : public K3bAudioEncoder
 
   int pluginSystemVersion() const { return 3; }
 
-  K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0, 
-					     const char* name = 0 ) const;
+  K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0) const;
 
   /**
    * reimplemented since sox writes the file itself
@@ -68,7 +67,7 @@ class K3bSoxEncoderSettingsWidget : public K3bPluginConfigWidget
   Q_OBJECT
 
  public:
-  K3bSoxEncoderSettingsWidget( QWidget* parent = 0, const char* name = 0 );
+  K3bSoxEncoderSettingsWidget( QWidget* parent = 0 );
   ~K3bSoxEncoderSettingsWidget();
 
  public slots:

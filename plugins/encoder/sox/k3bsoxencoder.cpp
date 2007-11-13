@@ -125,8 +125,8 @@ public:
 };
 
 
-K3bSoxEncoder::K3bSoxEncoder( QObject* parent, const char* name )
-  : K3bAudioEncoder( parent, name )
+K3bSoxEncoder::K3bSoxEncoder( QObject* parent )
+  : K3bAudioEncoder( parent )
 {
   if( k3bcore->externalBinManager()->program( "sox" ) == 0 )
     k3bcore->externalBinManager()->addProgram( new K3bSoxProgram() );
@@ -205,15 +205,15 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension )
     *d->process << "-t" << extension;
 
     KConfig* c = k3bcore->config();
-    c->setGroup( "K3bSoxEncoderPlugin" );
-    if( c->readBoolEntry( "manual settings", false ) ) {
-      *d->process << "-r" << QString::number( c->readNumEntry( "samplerate", 44100 ) )
-		  << "-c" << QString::number( c->readNumEntry( "channels", 2 ) );
+    KConfigGroup grp(c,"K3bSoxEncoderPlugin" );
+    if( grp.readEntry( "manual settings", false ) ) {
+      *d->process << "-r" << QString::number( grp.readEntry( "samplerate", 44100 ) )
+		  << "-c" << QString::number( grp.readEntry( "channels", 2 ) );
 
-      int size = c->readNumEntry( "data size", 16 );
+      int size = grp.readEntry( "data size", 16 );
       *d->process << ( size == 8 ? QString("-b") : ( size == 32 ? QString("-l") : QString("-w") ) );
 
-      QString encoding = c->readEntry( "data encoding", "signed" );
+      QString encoding = grp.readEntry( "data encoding", "signed" );
       if( encoding == "unsigned" )
 	*d->process << "-u";
       else if( encoding == "u-law" )
@@ -235,9 +235,9 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension )
     *d->process << d->fileName;
 
     kDebug() << "***** sox parameters:";
-    const Q3ValueList<Q3CString>& args = d->process->args();
+    const QList<QByteArray> args = d->process->args();
     QString s;
-    for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+    for( QList<QByteArray>::const_iterator it = args.begin(); it != args.end(); ++it ) {
       s += *it + " ";
     }
     kDebug() << s << flush;
@@ -352,11 +352,11 @@ long long K3bSoxEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 {
   // for now we make a rough assumption based on the settings
     KConfig* c = k3bcore->config();
-    c->setGroup( "K3bSoxEncoderPlugin" );
-    if( c->readBoolEntry( "manual settings", false ) ) {
-      int sr =  c->readNumEntry( "samplerate", 44100 );
-      int ch = c->readNumEntry( "channels", 2 );
-      int wsize = c->readNumEntry( "data size", 16 );
+    KConfigGroup grp(c, "K3bSoxEncoderPlugin" );
+    if( grp.readEntry( "manual settings", false ) ) {
+      int sr =  grp.readEntry( "samplerate", 44100 );
+      int ch = grp.readEntry( "channels", 2 );
+      int wsize = grp.readEntry( "data size", 16 );
 
       return msf.totalFrames()*sr*ch*wsize/75;
     }
@@ -367,16 +367,15 @@ long long K3bSoxEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 }
 
 
-K3bPluginConfigWidget* K3bSoxEncoder::createConfigWidget( QWidget* parent,
-							  const char* name ) const
+K3bPluginConfigWidget* K3bSoxEncoder::createConfigWidget( QWidget* parent ) const
 {
-  return new K3bSoxEncoderSettingsWidget( parent, name );
+  return new K3bSoxEncoderSettingsWidget( parent );
 }
 
 
 
-K3bSoxEncoderSettingsWidget::K3bSoxEncoderSettingsWidget( QWidget* parent, const char* name )
-  : K3bPluginConfigWidget( parent, name )
+K3bSoxEncoderSettingsWidget::K3bSoxEncoderSettingsWidget( QWidget* parent )
+  : K3bPluginConfigWidget( parent )
 {
   w = new base_K3bSoxEncoderConfigWidget( this );
   w->m_editSamplerate->setValidator( new QIntValidator( w->m_editSamplerate ) );
@@ -396,17 +395,16 @@ K3bSoxEncoderSettingsWidget::~K3bSoxEncoderSettingsWidget()
 void K3bSoxEncoderSettingsWidget::loadConfig()
 {
   KConfig* c = k3bcore->config();
+  KConfigGroup grp(c, "K3bSoxEncoderPlugin" );
 
-  c->setGroup( "K3bSoxEncoderPlugin" );
+  w->m_checkManual->setChecked( grp.readEntry( "manual settings", false ) );
 
-  w->m_checkManual->setChecked( c->readBoolEntry( "manual settings", false ) );
-
-  int channels = c->readNumEntry( "channels", 2 );
+  int channels = grp.readEntry( "channels", 2 );
   w->m_comboChannels->setCurrentItem( channels == 4 ? 2 : channels-1 );
 
-  w->m_editSamplerate->setText( QString::number( c->readNumEntry( "samplerate", 44100 ) ) );
+  w->m_editSamplerate->setText( QString::number( grp.readEntry( "samplerate", 44100 ) ) );
 
-  QString encoding = c->readEntry( "data encoding", "signed" );
+  QString encoding = grp.readEntry( "data encoding", "signed" );
   if( encoding == "unsigned" )
     w->m_comboEncoding->setCurrentItem(1);
   else if( encoding == "u-law" )
@@ -424,7 +422,7 @@ void K3bSoxEncoderSettingsWidget::loadConfig()
   else
     w->m_comboEncoding->setCurrentItem(0);
 
-  int size = c->readNumEntry( "data size", 16 );
+  int size = grp.readEntry( "data size", 16 );
   w->m_comboSize->setCurrentItem( size == 8 ? 0 : ( size == 32 ? 2 : 1 ) );
 }
 
@@ -433,23 +431,23 @@ void K3bSoxEncoderSettingsWidget::saveConfig()
 {
   KConfig* c = k3bcore->config();
 
-  c->setGroup( "K3bSoxEncoderPlugin" );
+  KConfigGroup grp (c, "K3bSoxEncoderPlugin" );
 
-  c->writeEntry( "manual settings", w->m_checkManual->isChecked() );
+  grp.writeEntry( "manual settings", w->m_checkManual->isChecked() );
 
-  c->writeEntry( "channels", w->m_comboChannels->currentItem() == 0
+  grp.writeEntry( "channels", w->m_comboChannels->currentItem() == 0
 		 ? 1
 		 : ( w->m_comboChannels->currentItem() == 2
 		     ? 4
 		     : 2 ) );
 
-  c->writeEntry( "data size", w->m_comboSize->currentItem() == 0
+  grp.writeEntry( "data size", w->m_comboSize->currentItem() == 0
 		 ? 8
 		 : ( w->m_comboSize->currentItem() == 2
 		     ? 32
 		     : 16 ) );
 
-  c->writeEntry( "samplerate", w->m_editSamplerate->text().toInt() );
+  grp.writeEntry( "samplerate", w->m_editSamplerate->text().toInt() );
 
   QString enc;
   switch( w->m_comboEncoding->currentItem() ) {
@@ -478,7 +476,7 @@ void K3bSoxEncoderSettingsWidget::saveConfig()
     enc = "signed";
     break;
   }
-  c->writeEntry( "data encoding", enc );
+  grp.writeEntry( "data encoding", enc );
 }
 
 

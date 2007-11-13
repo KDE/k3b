@@ -417,11 +417,11 @@ void K3bOggVorbisEncoder::loadConfig()
   c->setGroup( "K3bOggVorbisEncoderPlugin" );
 
   d->manualBitrate = c->readBoolEntry( "manual bitrate", false );
-  d->qualityLevel = c->readNumEntry( "quality level", 4 );
-  d->bitrateUpper = c->readNumEntry( "bitrate upper", -1 );
-  d->bitrateNominal = c->readNumEntry( "bitrate nominal", -1 );
-  d->bitrateLower = c->readNumEntry( "bitrate lower", -1 );
-  //  d->sampleRate = c->readNumEntry( "samplerate", 44100 );
+  d->qualityLevel = c->readEntry( "quality level", 4 );
+  d->bitrateUpper = c->readEntry( "bitrate upper", -1 );
+  d->bitrateNominal = c->readEntry( "bitrate nominal", -1 );
+  d->bitrateLower = c->readEntry( "bitrate lower", -1 );
+  //  d->sampleRate = c->readEntry( "samplerate", 44100 );
 }
 
 
@@ -485,14 +485,14 @@ void K3bOggVorbisEncoderSettingsWidget::loadConfig()
     w->m_radioManual->setChecked(true);
   else
     w->m_radioQualityLevel->setChecked(true);
-  w->m_slideQualityLevel->setValue( c->readNumEntry( "quality level", 4 ) );
-  w->m_inputBitrateUpper->setValue( c->readNumEntry( "bitrate upper", -1 ) );
-  w->m_checkBitrateUpper->setChecked( c->readNumEntry( "bitrate upper", -1 ) != -1 );
-  w->m_inputBitrateNominal->setValue( c->readNumEntry( "bitrate nominal", -1 ) );
-  w->m_checkBitrateNominal->setChecked( c->readNumEntry( "bitrate nominal", -1 ) != -1 );
-  w->m_inputBitrateLower->setValue( c->readNumEntry( "bitrate lower", -1 ) );
-  w->m_checkBitrateLower->setChecked( c->readNumEntry( "bitrate lower", -1 ) != -1 );
-  //  w->m_inputSamplerate->setValue( c->readNumEntry( "samplerate", 44100 ) );
+  w->m_slideQualityLevel->setValue( c->readEntry( "quality level", 4 ) );
+  w->m_inputBitrateUpper->setValue( c->readEntry( "bitrate upper", -1 ) );
+  w->m_checkBitrateUpper->setChecked( c->readEntry( "bitrate upper", -1 ) != -1 );
+  w->m_inputBitrateNominal->setValue( c->readEntry( "bitrate nominal", -1 ) );
+  w->m_checkBitrateNominal->setChecked( c->readEntry( "bitrate nominal", -1 ) != -1 );
+  w->m_inputBitrateLower->setValue( c->readEntry( "bitrate lower", -1 ) );
+  w->m_checkBitrateLower->setChecked( c->readEntry( "bitrate lower", -1 ) != -1 );
+  //  w->m_inputSamplerate->setValue( c->readEntry( "samplerate", 44100 ) );
 }
 
 
@@ -532,7 +532,7 @@ long long K3bOggVorbisEncoder::fileSize( const QString&, const K3b::Msf& msf ) c
 //     static long vorbis_q_bitrate[] = { 45, 60,  74,  86,  106, 120, 152,
 // 				       183, 207, 239, 309, 440 };
 
-    int qualityLevel = c->readNumEntry( "quality level", 4 );
+    int qualityLevel = c->readEntry( "quality level", 4 );
 
     if( qualityLevel < -1 )
       qualityLevel = -1;
@@ -541,7 +541,7 @@ long long K3bOggVorbisEncoder::fileSize( const QString&, const K3b::Msf& msf ) c
     return ( (msf.totalFrames()/75) * s_rough_average_quality_level_bitrates[qualityLevel+1] * 1000 ) / 8;
   }
   else {
-    return (msf.totalFrames()/75) * c->readNumEntry( "bitrate nominal", 160 ) * 1000 / 8;
+    return (msf.totalFrames()/75) * c->readEntry( "bitrate nominal", 160 ) * 1000 / 8;
   }
 }
 
