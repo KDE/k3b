@@ -29,7 +29,7 @@
 #include <k3bdevicehandler.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bcdrecordwriter.h>
-#include <k3bcdrdaowriter.h>
+//#include <k3bcdrdaowriter.h>
 #include <k3bglobalsettings.h>
 #include <k3bactivepipe.h>
 #include <k3bfilesplitter.h>
@@ -174,9 +174,9 @@ void K3bDataJob::prepareWriting()
           d->multiSessionParameterJob->usedMultiSessionMode() == K3bDataDoc::FINISH ) ) {
         unsigned int nextSessionStart = d->multiSessionParameterJob->nextSessionStart();
         // for some reason cdrdao needs 150 additional sectors in the ms info
-        if( writingApp() == K3b::CDRDAO ) {
-            nextSessionStart += 150;
-        }
+//         if( writingApp() == K3b::CDRDAO ) {
+//             nextSessionStart += 150;
+//         }
         m_isoImager->setMultiSessionInfo( QString().sprintf( "%u,%u",
                                                              d->multiSessionParameterJob->previousSessionStart(),
                                                              nextSessionStart ),
@@ -581,11 +581,11 @@ bool K3bDataJob::prepareWriterJob()
             return false;
         }
     }
-    else if ( d->usedWritingApp == K3b::CDRDAO ) {
-        if ( !setupCdrdaoJob() ) {
-            return false;
-        }
-    }
+//     else if ( d->usedWritingApp == K3b::CDRDAO ) {
+//         if ( !setupCdrdaoJob() ) {
+//             return false;
+//         }
+//     }
     else {
         if ( !setupGrowisofsJob() ) {
             return false;
@@ -711,11 +711,11 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
         // cdrecord seems to have problems writing xa 1 disks in dao mode? At least on my system!
         if( writingApp() == K3b::DEFAULT ) {
             if( d->usedWritingMode == K3b::DAO ) {
-                if( usedMultiSessionMode() != K3bDataDoc::NONE )
-                    d->usedWritingApp = K3b::CDRDAO;
-                else if( d->usedDataMode == K3b::MODE2 )
-                    d->usedWritingApp = K3b::CDRDAO;
-                else
+//                 if( usedMultiSessionMode() != K3bDataDoc::NONE )
+//                     d->usedWritingApp = K3b::CDRDAO;
+//                 else if( d->usedDataMode == K3b::MODE2 )
+//                     d->usedWritingApp = K3b::CDRDAO;
+//                 else
                     d->usedWritingApp = K3b::CDRECORD;
             }
             else
@@ -904,9 +904,9 @@ QString K3bDataJob::jobDetails() const
         !d->doc->dummy() &&
         !(d->doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
           d->doc->multiSessionMode() == K3bDataDoc::FINISH) )
-        return i18n("ISO9660 Filesystem (Size: %1) - %n copy",
-                    "ISO9660 Filesystem (Size: %1) - %n copies",
-                    d->doc->copies() )
+        return i18np("ISO9660 Filesystem (Size: %1) - %n copy",
+                     "ISO9660 Filesystem (Size: %1) - %n copies",
+                     d->doc->copies() )
             .arg(KIO::convertSize( d->doc->size() ));
     else
         return i18n("ISO9660 Filesystem (Size: %1)")
@@ -992,48 +992,42 @@ bool K3bDataJob::setupCdrecordJob()
 
 bool K3bDataJob::setupCdrdaoJob()
 {
-    // create cdrdao job
-    K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( d->doc->burner(), this, this );
-    writer->setCommand( K3bCdrdaoWriter::WRITE );
-    writer->setSimulate( d->doc->dummy() );
-    writer->setBurnSpeed( d->doc->speed() );
-    // multisession
-    writer->setMulti( usedMultiSessionMode() == K3bDataDoc::START ||
-		      usedMultiSessionMode() == K3bDataDoc::CONTINUE );
+//     // create cdrdao job
+//     K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( d->doc->burner(), this, this );
+//     writer->setCommand( K3bCdrdaoWriter::WRITE );
+//     writer->setSimulate( d->doc->dummy() );
+//     writer->setBurnSpeed( d->doc->speed() );
+//     // multisession
+//     writer->setMulti( usedMultiSessionMode() == K3bDataDoc::START ||
+// 		      usedMultiSessionMode() == K3bDataDoc::CONTINUE );
 
-    // now write the tocfile
-    if( d->tocFile ) delete d->tocFile;
-    d->tocFile = new KTemporaryFile( QString::null, "toc" );
-    d->tocFile->setAutoDelete(true);
+//     // now write the tocfile
+//     if( d->tocFile ) delete d->tocFile;
+// #warning I think we need a toc extension for the KTemporaryFile here
+//     d->tocFile = new KTemporaryFile();
+//     d->tocFile->setAutoRemove(true);
 
-    if( Q3TextStream* s = d->tocFile->textStream() ) {
-        if( d->usedDataMode == K3b::MODE1 ) {
-            *s << "CD_ROM" << "\n";
-            *s << "\n";
-            *s << "TRACK MODE1" << "\n";
-        }
-        else {
-            *s << "CD_ROM_XA" << "\n";
-            *s << "\n";
-            *s << "TRACK MODE2_FORM1" << "\n";
-        }
+//     QTextStream stream( d->tocFile );
+//     if( d->usedDataMode == K3b::MODE1 ) {
+//         s << "CD_ROM" << "\n";
+//         s << "\n";
+//         s << "TRACK MODE1" << "\n";
+//     }
+//     else {
+//         s << "CD_ROM_XA" << "\n";
+//         s << "\n";
+//         s << "TRACK MODE2_FORM1" << "\n";
+//     }
 
-        *s << "DATAFILE \"-\" " << m_isoImager->size()*2048 << "\n";
+//     s << "DATAFILE \"-\" " << m_isoImager->size()*2048 << "\n";
 
-        d->tocFile->close();
-    }
-    else {
-        kDebug() << "(K3bDataJob) could not write tocfile.";
-        emit infoMessage( i18n("IO Error"), ERROR );
-        cancelAll();
-        return false;
-    }
+//     d->tocFile->close();
 
-    writer->setTocFile( d->tocFile->name() );
+//     writer->setTocFile( d->tocFile->name() );
 
-    setWriterJob( writer );
+//     setWriterJob( writer );
 
-    return true;
+//     return true;
 }
 
 

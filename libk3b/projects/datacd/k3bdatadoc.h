@@ -22,11 +22,9 @@
 
 #include "k3bisooptions.h"
 
-#include <q3ptrlist.h>
 #include <qfileinfo.h>
 #include <qstringlist.h>
 //Added by qt3to4:
-#include <Q3ValueList>
 
 #include <kurl.h>
 #include <kio/global.h>
@@ -119,7 +117,7 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
    * Simply calls reparent.
    */
   void moveItem( K3bDataItem* item, K3bDirItem* newParent );
-  void moveItems( Q3PtrList<K3bDataItem> itemList, K3bDirItem* newParent );
+  void moveItems( const QList<K3bDataItem*>& itemList, K3bDirItem* newParent );
 
   K3bDirItem* addEmptyDir( const QString& name, K3bDirItem* parent );
 	
@@ -146,7 +144,7 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
   const K3bIsoOptions& isoOptions() const { return m_isoOptions; }
   void setIsoOptions( const K3bIsoOptions& );
 
-  const Q3PtrList<K3bBootItem>& bootImages() { return m_bootImages; }
+  QList<K3bBootItem*> bootImages() { return m_bootImages; }
   K3bDataItem* bootCataloge() { return m_bootCataloge; }
 
   K3bDirItem* bootImageDir();
@@ -189,7 +187,7 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
    */
   bool needToCutFilenames() const { return m_needToCutFilenames; }
 
-  const Q3ValueList<K3bDataItem*>& needToCutFilenameItems() const { return m_needToCutFilenameItems; }
+  QList<K3bDataItem*> needToCutFilenameItems() const { return m_needToCutFilenameItems; }
 
   /**
    * Imports a session into the project. This will create K3bSessionImportItems
@@ -219,7 +217,7 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
    *
    * \return The items that correspond to the specified local path.
    */
-  Q3ValueList<K3bDataItem*> findItemByLocalPath( const QString& path ) const;
+  QList<K3bDataItem*> findItemByLocalPath( const QString& path ) const;
 
  public slots:
   virtual void addUrls( const KUrl::List& urls );
@@ -294,18 +292,18 @@ class LIBK3B_EXPORT K3bDataDoc : public K3bDoc
   K3bIsoOptions m_isoOptions;
 
   MultiSessionMode m_multisessionMode;
-  Q3PtrList<K3bDataItem> m_oldSession;
+  QList<K3bDataItem*> m_oldSession;
   int m_importedSession;
 
   // boot cd stuff
   K3bDataItem* m_bootCataloge;
-  Q3PtrList<K3bBootItem> m_bootImages;
+  QList<K3bBootItem*> m_bootImages;
 
   bool m_bExistingItemsReplaceAll;
   bool m_bExistingItemsIgnoreAll;
 
   bool m_needToCutFilenames;
-  Q3ValueList<K3bDataItem*> m_needToCutFilenameItems;
+  QList<K3bDataItem*> m_needToCutFilenameItems;
 
   friend class K3bMixedDoc;
   friend class K3bDirItem;

@@ -40,9 +40,9 @@ public:
 
   K3bDataDoc* doc;
 
-  Q3ValueList<K3bDataItem*> nonExistingItems;
+  QList<K3bDataItem*> nonExistingItems;
   QString listOfRenamedItems;
-  Q3ValueList<K3bDataItem*> folderSymLinkItems;
+  QList<K3bDataItem*> folderSymLinkItems;
 
   K3bThreadJob* threadJob;
 
@@ -71,9 +71,10 @@ void K3bDataPreparationJob::Private::run()
   // create the message string for the renamed files
   if( doc->needToCutFilenames() ) {
     int maxlines = 10;
-    Q3ValueList<K3bDataItem*>::const_iterator it;
-    for( it = doc->needToCutFilenameItems().begin();
-	 maxlines > 0 && it != doc->needToCutFilenameItems().end();
+    QList<K3bDataItem*>::const_iterator it;
+    QList<K3bDataItem*> items = doc->needToCutFilenameItems();
+    for( it = items.begin();
+	 maxlines > 0 && it != items.end();
 	 ++it, --maxlines ) {
       K3bDataItem* item = *it;
       listOfRenamedItems += i18n("<em>%1</em> renamed to <em>%2</em>")
@@ -81,7 +82,7 @@ void K3bDataPreparationJob::Private::run()
 	.arg( KStringHandler::csqueeze( item->writtenName(), 30 ) );
       listOfRenamedItems += "<br>";
     }
-    if( it != doc->needToCutFilenameItems().end() )
+    if( it != items.end() )
       listOfRenamedItems += "...";
   }
 
@@ -126,11 +127,11 @@ void K3bDataPreparationJob::Private::cancel()
 
 
 
-static QString createItemsString( const Q3ValueList<K3bDataItem*>& items, unsigned int max )
+static QString createItemsString( const QList<K3bDataItem*>& items, unsigned int max )
 {
   QString s;
-  unsigned int cnt = 0;
-  for( Q3ValueList<K3bDataItem*>::const_iterator it = items.begin();
+  int cnt = 0;
+  for( QList<K3bDataItem*>::const_iterator it = items.begin();
        it != items.end(); ++it ) {
 
     s += KStringHandler::csqueeze( (*it)->localPath(), 60 );
@@ -228,7 +229,7 @@ void K3bDataPreparationJob::slotWorkDone( bool success )
 			 i18n("Warning"),
 			 i18n("Remove missing files and continue"),
 			 i18n("Cancel and go back") ) ) {
-	for( Q3ValueList<K3bDataItem*>::const_iterator it = d->nonExistingItems.begin();
+	for( QList<K3bDataItem*>::const_iterator it = d->nonExistingItems.begin();
 	     it != d->nonExistingItems.end(); ++it ) {
 	  delete *it;
 	}

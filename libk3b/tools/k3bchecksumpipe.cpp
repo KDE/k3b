@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id: sourceheader 511311 2006-02-19 14:51:05Z trueg $
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
@@ -19,8 +19,6 @@
 #include <kdebug.h>
 
 #include <unistd.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 
 class K3bChecksumPipe::Private
@@ -83,14 +81,14 @@ bool K3bChecksumPipe::open( Type type, bool closeWhenDone )
 }
 
 
-Q3CString K3bChecksumPipe::checksum() const
+QByteArray K3bChecksumPipe::checksum() const
 {
   switch( d->checksumType ) {
   case MD5:
     return d->md5.hexDigest();
   }
 
-  return Q3CString();
+  return QByteArray();
 }
 
 

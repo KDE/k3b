@@ -18,8 +18,7 @@
 
 #include <qstring.h>
 #include "k3b_export.h"
-
-class KConfigBase;
+#include <kconfiggroup.h>
 
 
 class LIBK3B_EXPORT K3bIsoOptions
@@ -120,9 +119,9 @@ class LIBK3B_EXPORT K3bIsoOptions
   bool doNotImportSession() const { return m_doNotImportSession; }
   void setDoNotImportSession( bool b ) { m_doNotImportSession = b; }
   
-  void save( KConfigBase* c, bool saveVolumeDesc = true );
+  void save( KConfigGroup& c, bool saveVolumeDesc = true );
 
-  static K3bIsoOptions load( KConfigBase* c, bool loadVolumeDesc = true );
+  static K3bIsoOptions load( const KConfigGroup& c, bool loadVolumeDesc = true );
   static K3bIsoOptions defaults();
 
  private:

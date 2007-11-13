@@ -33,8 +33,8 @@
 #include <Q3ValueList>
 
 
-K3bMsInfoFetcher::K3bMsInfoFetcher( K3bJobHandler* jh, QObject* parent, const char* name )
-  : K3bJob( jh, parent, name ),
+K3bMsInfoFetcher::K3bMsInfoFetcher( K3bJobHandler* jh, QObject* parent )
+  : K3bJob( jh, parent ),
     m_process(0),
     m_device(0),
     m_dvd(false)
@@ -90,7 +90,7 @@ void K3bMsInfoFetcher::getMsInfo()
   }
   else {
     bin = k3bcore->externalBinManager()->binObject( "cdrecord" );
- 
+
     if( !bin ) {
       emit infoMessage( i18n("Could not find %1 executable.").arg( m_dvd ? "dvdrecord" : "cdrecord" ), ERROR );
       jobFinished(false);
@@ -110,10 +110,10 @@ void K3bMsInfoFetcher::getMsInfo()
       *m_process << *it;
 
     kDebug() << "***** " << bin->name() << " parameters:\n";
-    const Q3ValueList<Q3CString>& args = m_process->args();
+    QList<QByteArray> args = m_process->args();
     QString s;
-    for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-      s += *it + " ";
+    Q_FOREACH( QByteArray arg, args ) {
+        s += QString::fromLocal8Bit( arg ) + " ";
     }
     kDebug() << s << flush;
     emit debuggingOutput( "msinfo command:", s );
@@ -160,7 +160,7 @@ void K3bMsInfoFetcher::slotMediaDetectionFinished( K3bDevice::DeviceHandler* h )
         nextSession *= 16;
 	m_msInfo.sprintf( "16,%llu", nextSession );
 
-	jobFinished( true );	
+	jobFinished( true );
       }
       else {
 	emit infoMessage( i18n("Could not open Iso9660 filesystem in %1.")

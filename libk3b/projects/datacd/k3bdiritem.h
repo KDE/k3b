@@ -19,7 +19,7 @@
 
 
 #include <qstring.h>
-#include <q3ptrlist.h>
+#include <qlist.h>
 
 #include <kio/global.h>
 
@@ -48,7 +48,7 @@ class LIBK3B_EXPORT K3bDirItem : public K3bDataItem
 	
   K3bDirItem* getDirItem() const;
 
-  const Q3PtrList<K3bDataItem>& children() const { return m_children; }
+  QList<K3bDataItem*> children() const { return m_children; }
   K3bDirItem* addDataItem( K3bDataItem* item );
   K3bDataItem* takeDataItem( K3bDataItem* item );
 	
@@ -121,7 +121,7 @@ class LIBK3B_EXPORT K3bDirItem : public K3bDataItem
    */
   void updateFiles( long files, long dirs );
 
-  mutable Q3PtrList<K3bDataItem> m_children;
+  mutable QList<K3bDataItem*> m_children;
 
   // size of the items simply added
   KIO::filesize_t m_size;

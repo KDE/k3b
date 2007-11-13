@@ -21,14 +21,12 @@
 
 #include <q3ptrqueue.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 class K3bDataDoc;
 class K3bDirItem;
 class K3bDataItem;
 class K3bFileItem;
-class Q3TextStream;
+class QTextStream;
 class K3bProcess;
 class K3Process;
 class K3bDevice::Device;
@@ -40,7 +38,7 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
  Q_OBJECT
 
  public:
-  K3bIsoImager( K3bDataDoc*, K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
+  K3bIsoImager( K3bDataDoc*, K3bJobHandler*, QObject* parent = 0 );
   virtual ~K3bIsoImager();
 
   virtual bool active() const;
@@ -52,7 +50,7 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
   /**
    * Get the checksum calculated during the creation of the image.
    */
-  Q3CString checksum() const;
+  QByteArray checksum() const;
 
  public slots:
   /**
@@ -134,8 +132,8 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
   bool writeSortWeightFile();
 
   // used by writePathSpec
-  virtual int writePathSpecForDir( K3bDirItem* dirItem, Q3TextStream& stream );
-  virtual void writePathSpecForFile( K3bFileItem*, Q3TextStream& stream );
+  virtual int writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
+  virtual void writePathSpecForFile( K3bFileItem*, QTextStream& stream );
   QString escapeGraftPoint( const QString& str );
 
   KTemporaryFile* m_pathSpecFile;

@@ -43,10 +43,6 @@
 #include <qregexp.h>
 #include <qdir.h>
 #include <qapplication.h>
-#include <q3valuestack.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3CString>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -88,8 +84,8 @@ public:
 };
 
 
-K3bIsoImager::K3bIsoImager( K3bDataDoc* doc, K3bJobHandler* hdl, QObject* parent, const char* name )
-  : K3bJob( hdl, parent, name ),
+K3bIsoImager::K3bIsoImager( K3bDataDoc* doc, K3bJobHandler* hdl, QObject* parent )
+  : K3bJob( hdl, parent ),
     m_pathSpecFile(0),
     m_rrHideFile(0),
     m_jolietHideFile(0),
@@ -322,10 +318,10 @@ void K3bIsoImager::startSizeCalculation()
   //  *m_process << dummyDir();
 
   kDebug() << "***** mkisofs calculate size parameters:\n";
-  const Q3ValueList<Q3CString>& args = m_process->args();
+  QList<QByteArray> args = m_process->args();
   QString s;
-  for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-    s += *it + " ";
+  Q_FOREACH( QByteArray arg, args ) {
+      s += QString::fromLocal8Bit( arg ) + " ";
   }
   kDebug() << s << endl << flush;
   emit debuggingOutput("mkisofs calculate size command:", s);
@@ -523,10 +519,10 @@ void K3bIsoImager::start()
 
 
   kDebug() << "***** mkisofs parameters:\n";
-  const Q3ValueList<Q3CString>& args = m_process->args();
+  QList<QByteArray> args = m_process->args();
   QString s;
-  for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-    s += *it + " ";
+  Q_FOREACH( QByteArray arg, args ) {
+      s += QString::fromLocal8Bit( arg ) + " ";
   }
   kDebug() << s << endl << flush;
   emit debuggingOutput("mkisofs command:", s);
@@ -580,7 +576,7 @@ K3bDevice::Device* K3bIsoImager::multiSessionImportDevice() const
 // and the charset
 static void truncateTheHardWay( QString& s, int max )
 {
-  Q3CString cs = s.utf8();
+  QByteArray cs = s.toUtf8();
   cs.truncate(max);
   s = QString::fromUtf8( cs );
 }
@@ -771,18 +767,16 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
   }
   *m_process << "-iso-level" << QString::number( isoLevel );
 
-  *m_process << "-path-list" << QFile::encodeName(m_pathSpecFile->name());
+  *m_process << "-path-list" << m_pathSpecFile->name();
 
 
   // boot stuff
   if( !m_doc->bootImages().isEmpty() ) {
     bool first = true;
-    for( Q3PtrListIterator<K3bBootItem> it( m_doc->bootImages() );
-	 *it; ++it ) {
+    QList<K3bBootItem*> bootItems = m_doc->bootImages();
+    Q_FOREACH( K3bBootItem* bootItem, bootItems ) {
       if( !first )
 	*m_process << "-eltorito-alt-boot";
-
-      K3bBootItem* bootItem = *it;
 
       *m_process << "-eltorito-boot";
       *m_process << bootItem->writtenPath();
@@ -823,22 +817,19 @@ int K3bIsoImager::writePathSpec()
 {
   delete m_pathSpecFile;
   m_pathSpecFile = new KTemporaryFile();
-  m_pathSpecFile->setAutoDelete(true);
+  m_pathSpecFile->setAutoRemove(true);
 
-  if( Q3TextStream* t = m_pathSpecFile->textStream() ) {
-    // recursive path spec writing
-    int num = writePathSpecForDir( m_doc->root(), *t );
+  QTextStream s( m_pathSpecFile );
+  // recursive path spec writing
+  int num = writePathSpecForDir( m_doc->root(), s );
 
-    m_pathSpecFile->close();
+  m_pathSpecFile->close();
 
-    return num;
-  }
-  else
-    return -1;
+  return num;
 }
 
 
-int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, Q3TextStream& stream )
+int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
 {
   if( !m_noDeepDirectoryRelocation && dirItem->depth() > 7 ) {
     kDebug() << "(K3bIsoImager) found directory depth > 7. Enabling no deep directory relocation.";
@@ -847,8 +838,7 @@ int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, Q3TextStream& stream
 
   // now create the graft points
   int num = 0;
-  for( Q3PtrListIterator<K3bDataItem> it( dirItem->children() ); it.current(); ++it ) {
-    K3bDataItem* item = it.current();
+  Q_FOREACH( K3bDataItem* item, dirItem->children() ) {
     bool writeItem = item->writeToCd();
 
     if( item->isSymLink() ) {
@@ -915,19 +905,19 @@ int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, Q3TextStream& stream
 }
 
 
-void K3bIsoImager::writePathSpecForFile( K3bFileItem* item, Q3TextStream& stream )
+void K3bIsoImager::writePathSpecForFile( K3bFileItem* item, QTextStream& stream )
 {
   stream << escapeGraftPoint( item->writtenPath() )
 	 << "=";
 
-  if( m_doc->bootImages().containsRef( dynamic_cast<K3bBootItem*>(item) ) ) { // boot-image-backup-hack
+  if( m_doc->bootImages().contains( dynamic_cast<K3bBootItem*>(item) ) ) { // boot-image-backup-hack
 
     // create temp file
     KTemporaryFile temp;
     QString tempPath = temp.name();
-    temp.unlink();
+    temp.remove();
 
-    if( !KIO::NetAccess::copy( KUrl(item->localPath()), KUrl::fromPathOrUrl(tempPath) ) ) {
+    if( !KIO::NetAccess::copy( KUrl(item->localPath()), tempPath ) ) {
       emit infoMessage( i18n("Failed to backup boot image file %1").arg(item->localPath()), ERROR );
       return;
     }
@@ -948,24 +938,21 @@ bool K3bIsoImager::writeRRHideFile()
 {
   delete m_rrHideFile;
   m_rrHideFile = new KTemporaryFile();
-  m_rrHideFile->setAutoDelete(true);
+  m_rrHideFile->setAutoRemove(true);
 
-  if( Q3TextStream* t = m_rrHideFile->textStream() ) {
+  QTextStream s( m_rrHideFile );
 
-    K3bDataItem* item = m_doc->root();
-    while( item ) {
+  K3bDataItem* item = m_doc->root();
+  while( item ) {
       if( item->hideOnRockRidge() ) {
-	if( !item->isDir() )  // hiding directories does not work (all dirs point to the dummy-dir)
-	  *t << escapeGraftPoint( item->localPath() ) << endl;
+          if( !item->isDir() )  // hiding directories does not work (all dirs point to the dummy-dir)
+              s << escapeGraftPoint( item->localPath() ) << endl;
       }
       item = item->nextSibling();
-    }
-
-    m_rrHideFile->close();
-    return true;
   }
-  else
-    return false;
+
+  m_rrHideFile->close();
+  return true;
 }
 
 
@@ -973,34 +960,32 @@ bool K3bIsoImager::writeJolietHideFile()
 {
   delete m_jolietHideFile;
   m_jolietHideFile = new KTemporaryFile();
-  m_jolietHideFile->setAutoDelete(true);
+  m_jolietHideFile->setAutoRemove(true);
 
-  if( Q3TextStream* t = m_jolietHideFile->textStream() ) {
+  QTextStream s( m_jolietHideFile );
 
-    K3bDataItem* item = m_doc->root();
-    while( item ) {
+  K3bDataItem* item = m_doc->root();
+  while( item ) {
       if( item->hideOnRockRidge() ) {
-	if( !item->isDir() )  // hiding directories does not work (all dirs point to the dummy-dir but we could introduce a second hidden dummy dir)
-	  *t << escapeGraftPoint( item->localPath() ) << endl;
+          if( !item->isDir() )  // hiding directories does not work (all dirs point to the dummy-dir but we could introduce a second hidden dummy dir)
+              s << escapeGraftPoint( item->localPath() ) << endl;
       }
       item = item->nextSibling();
-    }
-
-    m_jolietHideFile->close();
-    return true;
   }
-  else
-    return false;
+
+  m_jolietHideFile->close();
+  return true;
 }
 
 
 bool K3bIsoImager::writeSortWeightFile()
 {
-  delete m_sortWeightFile;
-  m_sortWeightFile = new KTemporaryFile();
-  m_sortWeightFile->setAutoDelete(true);
+    delete m_sortWeightFile;
+    m_sortWeightFile = new KTemporaryFile();
+    m_sortWeightFile->setAutoRemove(true);
 
-  if( Q3TextStream* t = m_sortWeightFile->textStream() ) {
+    QTextStream s( m_sortWeightFile );
+
     //
     // We need to write the local path in combination with the sort weight
     // mkisofs will take care of multiple entries for one local file and always
@@ -1008,27 +993,24 @@ bool K3bIsoImager::writeSortWeightFile()
     //
     K3bDataItem* item = m_doc->root();
     while( (item = item->nextSibling()) ) {  // we skip the root here
-      if( item->sortWeight() != 0 ) {
-	if( m_doc->bootImages().containsRef( dynamic_cast<K3bBootItem*>(item) ) ) { // boot-image-backup-hack
-	  *t << escapeGraftPoint( static_cast<K3bBootItem*>(item)->tempPath() ) << " " << item->sortWeight() << endl;
-	}
-	else if( item->isDir() ) {
-	  //
-	  // Since we use dummy dirs for all directories in the filesystem and mkisofs uses the local path
-	  // for sorting we need to create a different dummy dir for every sort weight value.
-	  //
-	  *t << escapeGraftPoint( dummyDir( static_cast<K3bDirItem*>(item) ) ) << " " << item->sortWeight() << endl;
-	}
-	else
-	  *t << escapeGraftPoint( item->localPath() ) << " " << item->sortWeight() << endl;
-      }
+        if( item->sortWeight() != 0 ) {
+            if( m_doc->bootImages().contains( dynamic_cast<K3bBootItem*>(item) ) ) { // boot-image-backup-hack
+                s << escapeGraftPoint( static_cast<K3bBootItem*>(item)->tempPath() ) << " " << item->sortWeight() << endl;
+            }
+            else if( item->isDir() ) {
+                //
+                // Since we use dummy dirs for all directories in the filesystem and mkisofs uses the local path
+                // for sorting we need to create a different dummy dir for every sort weight value.
+                //
+                s << escapeGraftPoint( dummyDir( static_cast<K3bDirItem*>(item) ) ) << " " << item->sortWeight() << endl;
+            }
+            else
+                s << escapeGraftPoint( item->localPath() ) << " " << item->sortWeight() << endl;
+        }
     }
 
     m_sortWeightFile->close();
     return true;
-  }
-  else
-    return false;
 }
 
 
@@ -1057,7 +1039,7 @@ QString K3bIsoImager::escapeGraftPoint( const QString& str )
   // time critical. :)
   //
 
-  unsigned int pos = 0;
+  int pos = 0;
   while( pos < enc.length() ) {
     // escape every equal sign with one backslash
     if( enc[pos] == '=' ) {
@@ -1133,7 +1115,7 @@ QString K3bIsoImager::dummyDir( K3bDirItem* dir )
   // permissions we create different dummy dirs to be passed to mkisofs
   //
 
-  QDir _appDir( locateLocal( "appdata", "temp/" ) );
+    QDir _appDir( KStandardDirs::locateLocal( "appdata", "temp/" ) );
 
   //
   // create a unique isoimager session id
@@ -1192,7 +1174,7 @@ QString K3bIsoImager::dummyDir( K3bDirItem* dir )
 void K3bIsoImager::clearDummyDirs()
 {
   QString jobId = qApp->sessionId() + "_" + QString::number( m_sessionNumber );
-  QDir appDir( locateLocal( "appdata", "temp/" ) );
+  QDir appDir( KStandardDirs::locateLocal( "appdata", "temp/" ) );
   if( appDir.cd( jobId ) ) {
     QStringList dummyDirEntries = appDir.entryList( "dummydir*", QDir::Dirs );
     for( QStringList::iterator it = dummyDirEntries.begin(); it != dummyDirEntries.end(); ++it )
@@ -1203,12 +1185,12 @@ void K3bIsoImager::clearDummyDirs()
 }
 
 
-Q3CString K3bIsoImager::checksum() const
+QByteArray K3bIsoImager::checksum() const
 {
   if( K3bChecksumPipe* p = dynamic_cast<K3bChecksumPipe*>( d->pipe ) )
     return p->checksum();
   else
-    return Q3CString();
+    return QByteArray();
 }
 
 

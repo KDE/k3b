@@ -42,9 +42,6 @@
 #include <q3textstream.h>
 #include <qtimer.h>
 #include <qdom.h>
-#include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include <kstandarddirs.h>
 #include <kurl.h>
@@ -54,7 +51,6 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <kglobal.h>
-#include <kprogress.h>
 #include <kconfig.h>
 #include <kapplication.h>
 
@@ -110,8 +106,8 @@ void K3bDataDoc::clear()
   m_oldSessionSize = 0;
   m_bootCataloge = 0;
   if( m_root ) {
-    while( m_root->children().getFirst() )
-      removeItem( m_root->children().getFirst() );
+    while( !m_root->children().isEmpty() )
+      removeItem( m_root->children().first() );
   }
   m_sizeHandler->clear();
 }
@@ -205,7 +201,7 @@ void K3bDataDoc::addUrls( const KUrl::List& l, K3bDirItem* dir )
       dlist.remove("..");
       KUrl::List newUrls;
       for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it )
-	newUrls.append( KUrl::fromPathOrUrl( f.absoluteFilePath() + "/" + *it ) );
+	newUrls.append( KUrl( f.absoluteFilePath() + "/" + *it ) );
       addUrls( newUrls, newDirItem );
     }
     else if( f.isSymLink() || f.isFile() )
@@ -325,7 +321,7 @@ bool K3bDataDoc::loadDocumentData( QDomElement* rootElem )
     m_root = new K3bRootItem( this );
 
   QDomNodeList filesList = nodes.item(3).childNodes();
-  for( uint i = 0; i < filesList.count(); i++ ) {
+  for( int i = 0; i < filesList.count(); i++ ) {
 
     QDomElement e = filesList.item(i).toElement();
     if( !loadDataItem( e, root() ) )
@@ -352,7 +348,7 @@ bool K3bDataDoc::loadDocumentData( QDomElement* rootElem )
 bool K3bDataDoc::loadDocumentDataOptions( QDomElement elem )
 {
   QDomNodeList headerList = elem.childNodes();
-  for( uint i = 0; i < headerList.count(); i++ ) {
+  for( int i = 0; i < headerList.count(); i++ ) {
 
     QDomElement e = headerList.item(i).toElement();
     if( e.isNull() )
@@ -475,7 +471,7 @@ bool K3bDataDoc::loadDocumentDataOptions( QDomElement elem )
 bool K3bDataDoc::loadDocumentDataHeader( QDomElement headerElem )
 {
   QDomNodeList headerList = headerElem.childNodes();
-  for( uint i = 0; i < headerList.count(); i++ ) {
+  for( int i = 0; i < headerList.count(); i++ ) {
 
     QDomElement e = headerList.item(i).toElement();
     if( e.isNull() )
@@ -580,7 +576,7 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
     if( !newDirItem )
       newDirItem = new K3bDirItem( elem.attributeNode( "name" ).value(), this, parent );
     QDomNodeList childNodes = elem.childNodes();
-    for( uint i = 0; i < childNodes.count(); i++ ) {
+    for( int i = 0; i < childNodes.count(); i++ ) {
 
       QDomElement e = childNodes.item(i).toElement();
       if( !loadDataItem( e, newDirItem ) )
@@ -626,9 +622,8 @@ bool K3bDataDoc::saveDocumentData( QDomElement* docElem )
   // ----------------------------------------------------------------------
   QDomElement topElem = doc.createElement( "files" );
 
-  Q3PtrListIterator<K3bDataItem> it( root()->children() );
-  for( ; it.current(); ++it ) {
-    saveDataItem( it.current(), &doc, &topElem );
+  Q_FOREACH( K3bDataItem* item, root()->children() ) {
+      saveDataItem( item, &doc, &topElem );
   }
 
   docElem->appendChild( topElem );
@@ -877,9 +872,8 @@ void K3bDataDoc::saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement
     if( item->sortWeight() != 0 )
       topElem.setAttribute( "sort_weight", QString::number(item->sortWeight()) );
 
-    Q3PtrListIterator<K3bDataItem> it( dirItem->children() );
-    for( ; it.current(); ++it ) {
-      saveDataItem( it.current(), doc, &topElem );
+    Q_FOREACH( K3bDataItem* item, dirItem->children() ) {
+      saveDataItem( item, doc, &topElem );
     }
 
     parent->appendChild( topElem );
@@ -908,7 +902,7 @@ void K3bDataDoc::itemRemovedFromDir( K3bDirItem*, K3bDataItem* removedItem )
 
   // update the boot item list
   if( removedItem->isBootItem() ) {
-    m_bootImages.removeRef( static_cast<K3bBootItem*>( removedItem ) );
+    m_bootImages.removeAll( static_cast<K3bBootItem*>( removedItem ) );
     if( m_bootImages.isEmpty() ) {
       delete m_bootCataloge;
       m_bootCataloge = 0;
@@ -951,24 +945,23 @@ void K3bDataDoc::moveItem( K3bDataItem* item, K3bDirItem* newParent )
 }
 
 
-void K3bDataDoc::moveItems( Q3PtrList<K3bDataItem> itemList, K3bDirItem* newParent )
+void K3bDataDoc::moveItems( const QList<K3bDataItem*>& itemList, K3bDirItem* newParent )
 {
   if( !newParent ) {
     kDebug() << "(K3bDataDoc) tried to move items to nowhere...!";
     return;
   }
 
-  Q3PtrListIterator<K3bDataItem> it( itemList );
-  for( ; it.current(); ++it ) {
+  Q_FOREACH( K3bDataItem* item, itemList ) {
     // check if newParent is subdir of item
-    if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( it.current() ) ) {
+    if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( item ) ) {
       if( dirItem->isSubItem( newParent ) ) {
 	continue;
       }
     }
 
-    if( it.current()->isMoveable() )
-      it.current()->reparent( newParent );
+    if( item->isMoveable() )
+      item->reparent( newParent );
   }
 }
 
@@ -1000,7 +993,7 @@ QString K3bDataDoc::treatWhitespace( const QString& path )
     }
     else if( isoOptions().whiteSpaceTreatment() == K3bIsoOptions::extended ) {
       result.truncate(0);
-      for( uint i = 0; i < path.length(); i++ ) {
+      for( int i = 0; i < path.length(); i++ ) {
 	if( path[i] == ' ' ) {
 	  if( path[i+1] != ' ' )
 	    result.append( path[++i].upper() );
@@ -1033,7 +1026,7 @@ void K3bDataDoc::prepareFilenames()
   //
 
   K3bDataItem* item = root();
-  unsigned int maxlen = ( isoOptions().jolietLong() ? 103 : 64 );
+  int maxlen = ( isoOptions().jolietLong() ? 103 : 64 );
   while( (item = item->nextSibling()) ) {
     item->setWrittenName( treatWhitespace( item->k3bName() ) );
 
@@ -1055,57 +1048,55 @@ void K3bDataDoc::prepareFilenames()
 
 void K3bDataDoc::prepareFilenamesInDir( K3bDirItem* dir )
 {
-  if( !dir )
-    return;
+    if( !dir )
+        return;
 
-  Q3PtrList<K3bDataItem> sortedChildren;
-  Q3PtrListIterator<K3bDataItem> it( dir->children() );
+    QList<K3bDataItem*> sortedChildren;
+    QList<K3bDataItem*> children( dir->children() );
+    QList<K3bDataItem*>::const_iterator it = children.end();
+    while ( it != children.begin() ) {
+        --it;
+        K3bDataItem* item = *it;
 
-  for( it.toLast(); it.current(); --it ) {
-    K3bDataItem* item = it.current();
+        if( item->isDir() )
+            prepareFilenamesInDir( dynamic_cast<K3bDirItem*>( item ) );
 
-    if( item->isDir() )
-      prepareFilenamesInDir( dynamic_cast<K3bDirItem*>( item ) );
+        // insertion sort
+        int i = 0;
+        while( i < sortedChildren.count() && item->writtenName() > sortedChildren.at(i)->writtenName() )
+            ++i;
 
-    // insertion sort
-    unsigned int i = 0;
-    while( i < sortedChildren.count() && item->writtenName() > sortedChildren.at(i)->writtenName() )
-      ++i;
-
-    sortedChildren.insert( i, item );
-  }
-
-
-  if( isoOptions().createJoliet() || isoOptions().createRockRidge() ) {
-    Q3PtrList<K3bDataItem> sameNameList;
-    while( !sortedChildren.isEmpty() ) {
-
-      sameNameList.clear();
-
-      do {
-	sameNameList.append( sortedChildren.first() );
-	sortedChildren.removeFirst();
-      } while( !sortedChildren.isEmpty() &&
-	       sortedChildren.first()->writtenName() == sameNameList.first()->writtenName() );
-
-      if( sameNameList.count() > 1 ) {
-	// now we need to rename the items
-	unsigned int maxlen = 255;
-	if( isoOptions().createJoliet() ) {
-	  if( isoOptions().jolietLong() )
-	    maxlen = 103;
-	  else
-	    maxlen = 64;
-	}
-
-	int cnt = 1;
-	for( Q3PtrListIterator<K3bDataItem> it( sameNameList );
-	     it.current(); ++it ) {
-	  it.current()->setWrittenName( K3b::appendNumberToFilename( it.current()->writtenName(), cnt++, maxlen ) );
-	}
-      }
+        sortedChildren.insert( i, item );
     }
-  }
+
+    if( isoOptions().createJoliet() || isoOptions().createRockRidge() ) {
+        QList<K3bDataItem*> sameNameList;
+        while( !sortedChildren.isEmpty() ) {
+
+            sameNameList.clear();
+
+            do {
+                sameNameList.append( sortedChildren.takeFirst() );
+            } while( !sortedChildren.isEmpty() &&
+                     sortedChildren.first()->writtenName() == sameNameList.first()->writtenName() );
+
+            if( sameNameList.count() > 1 ) {
+                // now we need to rename the items
+                unsigned int maxlen = 255;
+                if( isoOptions().createJoliet() ) {
+                    if( isoOptions().jolietLong() )
+                        maxlen = 103;
+                    else
+                        maxlen = 64;
+                }
+
+                int cnt = 1;
+                Q_FOREACH( K3bDataItem* item, sameNameList ) {
+                    item->setWrittenName( K3b::appendNumberToFilename( item->writtenName(), cnt++, maxlen ) );
+                }
+            }
+        }
+    }
 }
 
 
@@ -1263,49 +1254,42 @@ void K3bDataDoc::createSessionImportItems( const K3bIso9660Directory* importDir,
 
 void K3bDataDoc::clearImportedSession()
 {
-  //  m_oldSessionSizeHandler->clear();
-  m_oldSessionSize = 0;
-  m_oldSession.setAutoDelete(false);
-  K3bDataItem* item = m_oldSession.first();
-  while( !m_oldSession.isEmpty() ) {
-    if( item == 0 )
-      item = m_oldSession.first();
+    //  m_oldSessionSizeHandler->clear();
+    m_oldSessionSize = 0;
 
-    if( item->isDir() ) {
-      K3bDirItem* dir = (K3bDirItem*)item;
-      if( dir->numDirs() + dir->numFiles() == 0 ) {
-	// this imported dir is not needed anymore
-	// since it is empty
-	m_oldSession.remove();
-	delete dir;
-      }
-      else {
-	for( Q3PtrListIterator<K3bDataItem> it( dir->children() ); it.current(); ++it ) {
-	  if( !m_oldSession.contains(it.current()) ) {
-	    m_oldSession.remove();
-	    // now the dir becomes a totally normal dir
-	    dir->setRemoveable(true);
-	    dir->setRenameable(true);
-	    dir->setMoveable(true);
-	    dir->setHideable(true);
-	    dir->setWriteToCd(true);
-	    dir->setExtraInfo( "" );
-	    break;
-	  }
-	}
-      }
-    }
-    else {
-      m_oldSession.remove();
-      delete item;
+    while( !m_oldSession.isEmpty() ) {
+        K3bDataItem* item = m_oldSession.takeFirst();
+
+        if( item->isDir() ) {
+            K3bDirItem* dir = (K3bDirItem*)item;
+            if( dir->numDirs() + dir->numFiles() == 0 ) {
+                // this imported dir is not needed anymore
+                // since it is empty
+                delete item;
+            }
+            else {
+                Q_FOREACH( K3bDataItem* item, dir->children() ) {
+                    if( !m_oldSession.contains( item ) ) {
+                        // now the dir becomes a totally normal dir
+                        dir->setRemoveable(true);
+                        dir->setRenameable(true);
+                        dir->setMoveable(true);
+                        dir->setHideable(true);
+                        dir->setWriteToCd(true);
+                        dir->setExtraInfo( "" );
+                        break;
+                    }
+                }
+            }
+        }
+        else {
+            delete item;
+        }
     }
 
-    item = m_oldSession.next();
-  }
+    m_multisessionMode = AUTO;
 
-  m_multisessionMode = AUTO;
-
-  emit changed();
+    emit changed();
 }
 
 
@@ -1364,10 +1348,10 @@ K3bDataItem* K3bDataDoc::createBootCatalogeItem( K3bDirItem* dir )
 }
 
 
-Q3ValueList<K3bDataItem*> K3bDataDoc::findItemByLocalPath( const QString& path ) const
+QList<K3bDataItem*> K3bDataDoc::findItemByLocalPath( const QString& path ) const
 {
   Q_UNUSED( path );
-  return Q3ValueList<K3bDataItem*>();
+  return QList<K3bDataItem*>();
 }
 
 
