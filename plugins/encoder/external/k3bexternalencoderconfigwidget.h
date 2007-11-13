@@ -21,10 +21,10 @@
 #include "k3bexternalencodercommand.h"
 
 #include <k3bpluginconfigwidget.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 
-class K3bExternalEncoderEditDialog : public KDialogBase
+class K3bExternalEncoderEditDialog : public KDialog
 {
   Q_OBJECT
   

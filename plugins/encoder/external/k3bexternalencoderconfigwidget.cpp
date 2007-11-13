@@ -34,14 +34,15 @@
 
 
 K3bExternalEncoderEditDialog::K3bExternalEncoderEditDialog( QWidget* parent )
-  : KDialog( Swallow,
-		 i18n("Editing external audio encoder"),
-		 Ok|Cancel,
-		 Ok,
-		 parent )
+  : KDialog( parent)
 {
+   setModal( true );
+   setCaption( i18n("Editing external audio encoder") );
+   setButtons( Ok | Cancel );
+
   m_editW = new base_K3bExternalEncoderEditWidget( this );
   setMainWidget( m_editW );
+  connect(this, SIGNAL(okClicked()),this,SLOT(slotOk()));
 }
 
 
@@ -96,7 +97,7 @@ void K3bExternalEncoderEditDialog::slotOk()
   }
   // FIXME: check for name and extension uniqueness
   else {
-    KDialogBase::slotOk();
+    KDialog::slotOk();
   }
 }
 

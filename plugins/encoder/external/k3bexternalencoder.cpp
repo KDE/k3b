@@ -236,9 +236,9 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension )
 
 
   kDebug() << "***** external parameters:";
-  const Q3ValueList<Q3CString>& args = d->process->args();
+  const QList<QByteArray>& args = d->process->args();
   QString s;
-  for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+  for( QList<QByteArray>::const_iterator it = args.begin(); it != args.end(); ++it ) {
     s += *it + " ";
   }
   kDebug() << s << flush;
