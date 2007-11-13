@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -116,7 +116,7 @@ void K3bDvdBooktypeJob::start()
   if( m_action == SET_MEDIA_DVD_ROM ||
       m_action == SET_MEDIA_DVD_R_W ) {
     emit newSubTask( i18n("Waiting for media") );
-    if( waitForMedia( d->device,  
+    if( waitForMedia( d->device,
 		      K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_EMPTY,
 		      K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_PLUS_R,
 		      i18n("Please insert an empty DVD+R or a DVD+RW medium into drive<p><b>%1 %2 (%3)</b>.")
@@ -130,9 +130,9 @@ void K3bDvdBooktypeJob::start()
     emit infoMessage( i18n("Checking media..."), INFO );
     emit newTask( i18n("Checking media") );
 
-    connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::NG_DISKINFO, d->device ), 
+    connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::NG_DISKINFO, d->device ),
 	     SIGNAL(finished(K3bDevice::DeviceHandler*)),
-	     this, 
+	     this,
 	     SLOT(slotDeviceHandlerFinished(K3bDevice::DeviceHandler*)) );
   }
   else {
@@ -191,15 +191,15 @@ void K3bDvdBooktypeJob::slotProcessFinished( K3Process* p )
       d->success = true;
     }
     else {
-      emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg(d->dvdBooktypeBin->name()).arg(p->exitStatus()), 
+      emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg(d->dvdBooktypeBin->name()).arg(p->exitStatus()),
 			K3bJob::ERROR );
       emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
-      
+
       d->success = false;
     }
   }
   else {
-    emit infoMessage( i18n("%1 did not exit cleanly.").arg(d->dvdBooktypeBin->name()), 
+    emit infoMessage( i18n("%1 did not exit cleanly.").arg(d->dvdBooktypeBin->name()),
 		      ERROR );
     d->success = false;
   }
@@ -217,9 +217,9 @@ void K3bDvdBooktypeJob::slotProcessFinished( K3Process* p )
     }
     else {
       emit infoMessage( i18n("Ejecting DVD..."), INFO );
-      connect( K3bDevice::eject( d->device ), 
+      connect( K3bDevice::eject( d->device ),
 	       SIGNAL(finished(K3bDevice::DeviceHandler*)),
-	       this, 
+	       this,
 	       SLOT(slotEjectingFinished(K3bDevice::DeviceHandler*)) );
     }
   }
@@ -328,10 +328,10 @@ void K3bDvdBooktypeJob::startBooktypeChange()
   *d->process << d->device->blockDeviceName();
 
   kDebug() << "***** dvd+rw-booktype parameters:\n";
-  const Q3ValueList<Q3CString>& args = d->process->args();
+  QList<QByteArray> args = d->process->args();
   QString s;
-  for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-    s += *it + " ";
+  Q_FOREACH( QByteArray arg, args ) {
+      s += QString::fromLocal8Bit( arg ) + " ";
   }
   kDebug() << s << endl << flush;
   emit debuggingOutput( "dvd+rw-booktype command:", s );

@@ -330,10 +330,10 @@ void K3bVideoDVDTitleTranscodingJob::startTranscode( int pass )
 
   // produce some debugging output
   kDebug() << "***** transcode parameters:\n";
-  const Q3ValueList<Q3CString>& args = d->process->args();
+  QList<QByteArray> args = d->process->args();
   QString s;
-  for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-    s += *it + " ";
+  Q_FOREACH( QByteArray arg, args ) {
+      s += QString::fromLocal8Bit( arg ) + " ";
   }
   kDebug() << s << flush;
   emit debuggingOutput( d->usedTranscodeBin->name() + " command:", s);

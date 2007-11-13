@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id: sourceheader 511311 2006-02-19 14:51:05Z trueg $
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
@@ -128,9 +128,9 @@ void K3bVideoDVDTitleDetectClippingJob::startTranscode( int chapter )
   // use the whole chapter
   //
   if( d->totalChapters == 1 )
-    d->currentFrames = qMin( 3000, qMax( 1, m_dvd[m_titleNumber-1][d->currentChapter-1].playbackTime().totalFrames() ) );
+    d->currentFrames = qMin( 3000, qMax( 1, ( int )m_dvd[m_titleNumber-1][d->currentChapter-1].playbackTime().totalFrames() ) );
   else
-    d->currentFrames = qMin( 200, qMax( 1, m_dvd[m_titleNumber-1][d->currentChapter-1].playbackTime().totalFrames() ) );
+    d->currentFrames = qMin( 200, qMax( 1, ( int )m_dvd[m_titleNumber-1][d->currentChapter-1].playbackTime().totalFrames() ) );
 
   //
   // prepare the process
@@ -172,10 +172,10 @@ void K3bVideoDVDTitleDetectClippingJob::startTranscode( int chapter )
 
   // produce some debugging output
   kDebug() << "***** transcode parameters:\n";
-  const Q3ValueList<Q3CString>& args = d->process->args();
+  QList<QByteArray> args = d->process->args();
   QString s;
-  for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-    s += *it + " ";
+  Q_FOREACH( QByteArray arg, args ) {
+      s += QString::fromLocal8Bit( arg ) + " ";
   }
   kDebug() << s << flush;
   emit debuggingOutput( d->usedTranscodeBin->name() + " command:", s);
@@ -263,7 +263,7 @@ void K3bVideoDVDTitleDetectClippingJob::slotTranscodeExited( K3Process* p )
       //
       if( m_clippingTop == s_unrealisticHighClippingValue )
 	m_clippingTop = m_clippingLeft = m_clippingBottom = m_clippingRight = 0;
-      
+
       if( d->totalChapters < m_dvd[m_titleNumber-1].numPTTs() )
 	emit infoMessage( i18n("Ignoring last chapter due to its short playback time."), INFO );
 
@@ -273,7 +273,7 @@ void K3bVideoDVDTitleDetectClippingJob::slotTranscodeExited( K3Process* p )
       startTranscode( d->currentChapter );
     }
     break;
-    
+
   default:
     // FIXME: error handling
 
@@ -282,7 +282,7 @@ void K3bVideoDVDTitleDetectClippingJob::slotTranscodeExited( K3Process* p )
     }
     else {
       emit infoMessage( i18n("%1 returned an unknown error (code %2).")
-			.arg(d->usedTranscodeBin->name()).arg(p->exitStatus()), 
+			.arg(d->usedTranscodeBin->name()).arg(p->exitStatus()),
 			K3bJob::ERROR );
       emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
     }

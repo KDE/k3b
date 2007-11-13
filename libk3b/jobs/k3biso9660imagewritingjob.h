@@ -21,7 +21,7 @@
 #include "k3b_export.h"
 class QString;
 class K3bAbstractWriter;
-class KTempFile;
+class KTemporaryFile;
 namespace K3bDevice {
   class Device;
 }
@@ -81,7 +81,7 @@ class LIBK3B_EXPORT K3bIso9660ImageWritingJob : public K3bBurnJob
   QString m_imagePath;
 
   K3bAbstractWriter* m_writer;
-  KTempFile* m_tocFile;
+  KTemporaryFile* m_tocFile;
 
   bool m_canceled;
   bool m_finished;

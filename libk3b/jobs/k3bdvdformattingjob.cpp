@@ -507,10 +507,10 @@ void K3bDvdFormattingJob::startFormatting( const K3bDevice::DiskInfo& diskInfo )
       *d->process << *it;
 
     kDebug() << "***** dvd+rw-format parameters:\n";
-    const Q3ValueList<Q3CString>& args = d->process->args();
+    QList<QByteArray> args = d->process->args();
     QString s;
-    for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-      s += *it + " ";
+    Q_FOREACH( QByteArray arg, args ) {
+        s += QString::fromLocal8Bit( arg ) + " ";
     }
     kDebug() << s << endl << flush;
     emit debuggingOutput( "dvd+rw-format command:", s );

@@ -32,7 +32,6 @@
 #include <k3bglobalsettings.h>
 
 #include <kdebug.h>
-#include <kconfig.h>
 #include <klocale.h>
 #include <ktemporaryfile.h>
 #include <kio/global.h>
@@ -170,7 +169,6 @@ void K3bIso9660ImageWritingJob::slotVerificationFinished( bool success )
     return;
   }
 
-  k3bcore->config()->setGroup("General Options");
   if( k3bcore->globalSettings()->ejectMedia() )
     K3bDevice::eject( m_device );
 
@@ -369,30 +367,25 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 
       // now write the tocfile
       delete m_tocFile;
-      m_tocFile = new KTempFile( QString::null, "toc" );
-      m_tocFile->setAutoDelete(true);
+#warning FIXME: I think we need a toc extension here
+      m_tocFile = new KTemporaryFile();
+      m_tocFile->setAutoRemove(true);
 
-      if( Q3TextStream* s = m_tocFile->textStream() ) {
-	if( (m_dataMode == K3b::DATA_MODE_AUTO && m_noFix) ||
-	    m_dataMode == K3b::MODE2 ) {
-	  *s << "CD_ROM_XA" << "\n";
-	  *s << "\n";
-	  *s << "TRACK MODE2_FORM1" << "\n";
-	}
-	else {
-	  *s << "CD_ROM" << "\n";
-	  *s << "\n";
-	  *s << "TRACK MODE1" << "\n";
-	}
-	*s << "DATAFILE \"-\" " << QString::number( K3b::imageFilesize( m_imagePath ) ) << "\n";
-
-	m_tocFile->close();
+      QTextStream s( m_tocFile );
+      if( (m_dataMode == K3b::DATA_MODE_AUTO && m_noFix) ||
+          m_dataMode == K3b::MODE2 ) {
+	  s << "CD_ROM_XA" << "\n";
+	  s << "\n";
+	  s << "TRACK MODE2_FORM1" << "\n";
       }
       else {
-	kDebug() << "(K3bDataJob) could not write tocfile.";
-	emit infoMessage( i18n("IO Error"), ERROR );
-	return false;
+	  s << "CD_ROM" << "\n";
+	  s << "\n";
+	  s << "TRACK MODE1" << "\n";
       }
+      s << "DATAFILE \"-\" " << QString::number( K3b::imageFilesize( m_imagePath ) ) << "\n";
+
+      m_tocFile->close();
 
       writer->setTocFile( m_tocFile->name() );
 
@@ -448,14 +441,14 @@ QString K3bIso9660ImageWritingJob::jobDescription() const
   else
     return ( i18n("Burning ISO9660 Image")
 	     + ( m_copies > 1
-		 ? i18n(" - %n Copy", " - %n Copies", m_copies)
+		 ? i18np(" - %n Copy", " - %n Copies", m_copies)
 		 : QString::null ) );
 }
 
 
 QString K3bIso9660ImageWritingJob::jobDetails() const
 {
-  return m_imagePath.section("/", -1) + QString( " (%1)" ).arg(KIO::convertSize(K3b::filesize(KUrl::fromPathOrUrl(m_imagePath))));
+  return m_imagePath.section("/", -1) + QString( " (%1)" ).arg(KIO::convertSize(K3b::filesize(m_imagePath)));
 }
 
 

@@ -197,7 +197,7 @@ void K3bBinImageWritingJob::writerFinished(bool ok)
         if ( k3bcore->globalSettings()->ejectMedia() ) {
             K3bDevice::eject( m_device );
         }
-        emit infoMessage( i18n("%n copy successfully created", "%n copies successfully created", m_copies),K3bJob::INFO );
+        emit infoMessage( i18np("%n copy successfully created", "%n copies successfully created", m_copies),K3bJob::INFO );
         jobFinished( true );
     }
     else {
@@ -221,7 +221,7 @@ QString K3bBinImageWritingJob::jobDescription() const
 {
   return ( i18n("Writing cue/bin Image")
 	   + ( m_copies > 1
-	       ? i18n(" - %n Copy", " - %n Copies", m_copies)
+	       ? i18np(" - %n Copy", " - %n Copies", m_copies)
 	       : QString::null ) );
 }
 
