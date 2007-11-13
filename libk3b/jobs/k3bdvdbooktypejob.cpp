@@ -63,8 +63,8 @@ public:
 };
 
 
-K3bDvdBooktypeJob::K3bDvdBooktypeJob( K3bJobHandler* jh, QObject* parent, const char* name )
-  : K3bJob( jh, parent, name ),
+K3bDvdBooktypeJob::K3bDvdBooktypeJob( K3bJobHandler* jh, QObject* parent )
+  : K3bJob( jh, parent ),
     m_action(0)
 {
   d = new Private;

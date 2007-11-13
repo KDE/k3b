@@ -36,7 +36,7 @@ class K3bDvdBooktypeJob : public K3bJob
   Q_OBJECT
 
  public:
-  K3bDvdBooktypeJob( K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
+  K3bDvdBooktypeJob( K3bJobHandler*, QObject* parent = 0 );
   ~K3bDvdBooktypeJob();
 
   QString jobDescription() const;

@@ -32,7 +32,7 @@ class LIBK3B_EXPORT K3bDvdCopyJob : public K3bBurnJob
   Q_OBJECT
 
  public:
-  K3bDvdCopyJob( K3bJobHandler* hdl, QObject* parent = 0, const char* name = 0 );
+  K3bDvdCopyJob( K3bJobHandler* hdl, QObject* parent = 0 );
   ~K3bDvdCopyJob();
 
   K3bDevice::Device* writer() const { return m_onlyCreateImage ? 0 : m_writerDevice; }

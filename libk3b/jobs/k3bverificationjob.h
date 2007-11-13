@@ -49,7 +49,7 @@ class K3bVerificationJob : public K3bJob
   Q_OBJECT
 
  public:
-  K3bVerificationJob( K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
+  K3bVerificationJob( K3bJobHandler*, QObject* parent = 0 );
   ~K3bVerificationJob();
 
  public slots:

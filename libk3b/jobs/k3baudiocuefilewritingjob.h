@@ -32,7 +32,7 @@ class LIBK3B_EXPORT K3bAudioCueFileWritingJob : public K3bBurnJob
   Q_OBJECT
 
  public:
-  K3bAudioCueFileWritingJob( K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
+  K3bAudioCueFileWritingJob( K3bJobHandler*, QObject* parent = 0 );
   ~K3bAudioCueFileWritingJob();
 
   K3bDevice::Device* writer() const;

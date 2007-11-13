@@ -404,17 +404,19 @@ void K3bCdCopyJob::queryCddb()
 
   d->haveCddb = false;
 
-  if( !d->cddb ) {
-    d->cddb = new K3bCddb( this );
-    connect( d->cddb, SIGNAL(queryFinished(int)),
-	     this, SLOT(slotCddbQueryFinished(int)) );
-  }
+#warning Use KCddb
+  startCopy();
+//   if( !d->cddb ) {
+//     d->cddb = new K3bCddb( this );
+//     connect( d->cddb, SIGNAL(queryFinished(int)),
+// 	     this, SLOT(slotCddbQueryFinished(int)) );
+//   }
 
-  KConfig* c = k3bcore->config();
-  c->setGroup("Cddb");
+//   KConfig* c = k3bcore->config();
+//   c->setGroup("Cddb");
 
-  d->cddb->readConfig( c );
-  d->cddb->query( d->toc );
+//   d->cddb->readConfig( c );
+//   d->cddb->query( d->toc );
 }
 
 

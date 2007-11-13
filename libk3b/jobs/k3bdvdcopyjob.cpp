@@ -85,8 +85,8 @@ public:
 };
 
 
-K3bDvdCopyJob::K3bDvdCopyJob( K3bJobHandler* hdl, QObject* parent, const char* name )
-    : K3bBurnJob( hdl, parent, name ),
+K3bDvdCopyJob::K3bDvdCopyJob( K3bJobHandler* hdl, QObject* parent )
+    : K3bBurnJob( hdl, parent ),
       m_writerDevice(0),
       m_readerDevice(0),
       m_onTheFly(false),

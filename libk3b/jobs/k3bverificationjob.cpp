@@ -89,8 +89,8 @@ public:
 };
 
 
-K3bVerificationJob::K3bVerificationJob( K3bJobHandler* hdl, QObject* parent, const char* name )
-  : K3bJob( hdl, parent, name )
+K3bVerificationJob::K3bVerificationJob( K3bJobHandler* hdl, QObject* parent )
+  : K3bJob( hdl, parent )
 {
   d = new Private();
 

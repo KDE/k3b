@@ -52,8 +52,8 @@ public:
 };
 
 
-K3bCdda2wavReader::K3bCdda2wavReader( QObject* parent, const char* name )
-  : K3bJob( parent, name )
+K3bCdda2wavReader::K3bCdda2wavReader( QObject* parent )
+  : K3bJob( parent )
 {
   d = new Private();
 }

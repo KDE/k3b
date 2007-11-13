@@ -34,7 +34,7 @@ class K3bCdda2wavReader : public K3bJob
   Q_OBJECT
 
  public:
-  K3bCdda2wavReader( QObject* parent = 0, const char* name = 0 );
+  K3bCdda2wavReader( QObject* parent = 0 );
   ~K3bCdda2wavReader();
 
   bool active() const;

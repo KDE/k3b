@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -40,7 +40,7 @@
 class K3bReadcdReader::Private
 {
 public:
-  Private() 
+  Private()
     : process(0),
       fdToWriteTo(-1),
       canceled(false) {
@@ -63,8 +63,8 @@ public:
 
 
 
-K3bReadcdReader::K3bReadcdReader( K3bJobHandler* jh, QObject* parent, const char* name )
-  : K3bJob( jh, parent, name ),
+K3bReadcdReader::K3bReadcdReader( K3bJobHandler* jh, QObject* parent )
+  : K3bJob( jh, parent ),
     m_noCorr(false),
     m_clone(false),
     m_noError(false),
@@ -151,7 +151,7 @@ void K3bReadcdReader::start()
   *d->process << "-v";
 
   // Again we assume the device to be set!
-  *d->process << QString("dev=%1").arg(K3b::externalBinDeviceParameter(m_readDevice, 
+  *d->process << QString("dev=%1").arg(K3b::externalBinDeviceParameter(m_readDevice,
 									      d->readcdBinObject));
   if( m_speed > 0 )
     *d->process << QString("speed=%1").arg(m_speed);
@@ -196,10 +196,10 @@ void K3bReadcdReader::start()
 
 
   kDebug() << "***** readcd parameters:\n";
-  const Q3ValueList<Q3CString>& args = d->process->args();
+  QList<QByteArray> args = d->process->args();
   QString s;
-  for( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-    s += *it + " ";
+  Q_FOREACH( QByteArray arg, args ) {
+      s += QString::fromLocal8Bit( arg ) + " ";
   }
   kDebug() << s << endl << flush;
 
@@ -220,7 +220,7 @@ void K3bReadcdReader::start()
 void K3bReadcdReader::cancel()
 {
   if( d->process ) {
-    if( d->process->isRunning() ) {  
+    if( d->process->isRunning() ) {
       d->canceled = true;
       d->process->kill();
     }
@@ -240,7 +240,7 @@ void K3bReadcdReader::slotStdLine( const QString& line )
     if( d->firstSector < d->lastSector )
       d->blocksToRead -= d->firstSector.lba();
     if( !ok )
-      kError() << "(K3bReadcdReader) blocksToRead parsing error in line: " 
+      kError() << "(K3bReadcdReader) blocksToRead parsing error in line: "
 		<< line.mid(4) << endl;
   }
 
@@ -262,7 +262,7 @@ void K3bReadcdReader::slotStdLine( const QString& line )
       }
     }
     else
-      kError() << "(K3bReadcdReader) currentReadBlock parsing error in line: " 
+      kError() << "(K3bReadcdReader) currentReadBlock parsing error in line: "
 		<< line.mid( 6, line.find("cnt")-7 ) << endl;
   }
 
@@ -276,7 +276,7 @@ void K3bReadcdReader::slotStdLine( const QString& line )
     bool ok;
     int problemSector = line.mid( pos, line.find( QRegExp("\\D"), pos )-pos ).toInt(&ok);
     if( !ok ) {
-      kError() << "(K3bReadcdReader) problemSector parsing error in line: " 
+      kError() << "(K3bReadcdReader) problemSector parsing error in line: "
 		<< line.mid( pos, line.find( QRegExp("\\D"), pos )-pos ) << endl;
     }
     emit infoMessage( i18n("Retrying from sector %1.").arg(problemSector), INFO );
@@ -289,7 +289,7 @@ void K3bReadcdReader::slotStdLine( const QString& line )
     bool ok;
     int problemSector = line.mid( pos, line.find( QRegExp("\\D"), pos )-pos ).toInt(&ok);
     if( !ok ) {
-      kError() << "(K3bReadcdReader) problemSector parsing error in line: " 
+      kError() << "(K3bReadcdReader) problemSector parsing error in line: "
 		<< line.mid( pos, line.find( QRegExp("\\D"), pos )-pos ) << endl;
     }
 
