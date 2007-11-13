@@ -468,7 +468,7 @@ void K3bCdImageWritingDialog::slotStartClicked()
 
     delete job;
 
-    if( KConfigGroup( k3bcore->config(), "General Options" ).readBoolEntry( "keep action dialogs open", false ) &&
+    if( KConfigGroup( k3bcore->config(), "General Options" ).readEntry( "keep action dialogs open", false ) &&
 	!exitLoopOnHide() )
       show();
     else
@@ -940,15 +940,15 @@ void K3bCdImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, con
 void K3bCdImageWritingDialog::loadUserDefaults( KConfigBase* c )
 {
   m_writingModeWidget->loadConfig( c );
-  m_checkDummy->setChecked( c->readBoolEntry("simulate", false ) );
-  m_checkNoFix->setChecked( c->readBoolEntry("multisession", false ) );
-  m_checkCacheImage->setChecked( !c->readBoolEntry("on_the_fly", true ) );
+  m_checkDummy->setChecked( c->readEntry("simulate", false ) );
+  m_checkNoFix->setChecked( c->readEntry("multisession", false ) );
+  m_checkCacheImage->setChecked( !c->readEntry("on_the_fly", true ) );
 
   m_dataModeWidget->loadConfig(c);
 
-  m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
+  m_spinCopies->setValue( c->readEntry( "copies", 1 ) );
 
-  m_checkVerify->setChecked( c->readBoolEntry( "verify_data", false ) );
+  m_checkVerify->setChecked( c->readEntry( "verify_data", false ) );
 
   m_writerSelectionWidget->loadConfig( c );
 

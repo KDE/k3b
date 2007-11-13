@@ -380,7 +380,7 @@ void K3bMediaCopyDialog::slotStartClicked()
     delete dlg;
     delete burnJob;
 
-    if( KConfigGroup( k3bcore->config(), "General Options" ).readBoolEntry( "keep action dialogs open", false ) &&
+    if( KConfigGroup( k3bcore->config(), "General Options" ).readEntry( "keep action dialogs open", false ) &&
         !exitLoopOnHide() )
         show();
     else
@@ -554,14 +554,14 @@ void K3bMediaCopyDialog::loadUserDefaults( KConfigBase* c )
   m_writerSelectionWidget->loadConfig( c );
   m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "source_device" ) ) );
   m_writingModeWidget->loadConfig( c );
-  m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );
-  m_checkCacheImage->setChecked( !c->readBoolEntry( "on_the_fly", false ) );
-  m_checkDeleteImages->setChecked( c->readBoolEntry( "delete_images", true ) );
-  m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
-  m_comboParanoiaMode->setCurrentItem( c->readNumEntry( "paranoia_mode", 0 ) );
-  m_checkVerifyData->setChecked( c->readBoolEntry( "verify data", false ) );
+  m_checkSimulate->setChecked( c->readEntry( "simulate", false ) );
+  m_checkCacheImage->setChecked( !c->readEntry( "on_the_fly", false ) );
+  m_checkDeleteImages->setChecked( c->readEntry( "delete_images", true ) );
+  m_checkOnlyCreateImage->setChecked( c->readEntry( "only_create_image", false ) );
+  m_comboParanoiaMode->setCurrentItem( c->readEntry( "paranoia_mode", 0 ) );
+  m_checkVerifyData->setChecked( c->readEntry( "verify data", false ) );
 
-  m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
+  m_spinCopies->setValue( c->readEntry( "copies", 1 ) );
 
   m_tempDirSelectionWidget->readConfig( c );
 
@@ -570,13 +570,13 @@ void K3bMediaCopyDialog::loadUserDefaults( KConfigBase* c )
   else
     m_comboCopyMode->setCurrentItem( 1 );
 
-  m_checkReadCdText->setChecked( c->readBoolEntry( "copy cdtext", true ) );
-  m_checkIgnoreDataReadErrors->setChecked( c->readBoolEntry( "ignore data read errors", false ) );
-  m_checkIgnoreAudioReadErrors->setChecked( c->readBoolEntry( "ignore audio read errors", true ) );
-  m_checkNoCorrection->setChecked( c->readBoolEntry( "no correction", false ) );
+  m_checkReadCdText->setChecked( c->readEntry( "copy cdtext", true ) );
+  m_checkIgnoreDataReadErrors->setChecked( c->readEntry( "ignore data read errors", false ) );
+  m_checkIgnoreAudioReadErrors->setChecked( c->readEntry( "ignore audio read errors", true ) );
+  m_checkNoCorrection->setChecked( c->readEntry( "no correction", false ) );
 
-  m_spinDataRetries->setValue( c->readNumEntry( "data retries", 128 ) );
-  m_spinAudioRetries->setValue( c->readNumEntry( "audio retries", 5 ) );
+  m_spinDataRetries->setValue( c->readEntry( "data retries", 128 ) );
+  m_spinAudioRetries->setValue( c->readEntry( "audio retries", 5 ) );
 
   slotToggleAll();
 }

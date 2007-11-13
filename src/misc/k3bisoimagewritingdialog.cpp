@@ -292,7 +292,7 @@ void K3bIsoImageWritingDialog::slotStartClicked()
 
   delete job;
 
-  if( KConfigGroup( k3bcore->config(), "General Options" ).readBoolEntry( "keep action dialogs open", false ) &&
+  if( KConfigGroup( k3bcore->config(), "General Options" ).readEntry( "keep action dialogs open", false ) &&
       !exitLoopOnHide() )
     show();
   else
@@ -517,9 +517,9 @@ void K3bIsoImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, co
 void K3bIsoImageWritingDialog::loadUserDefaults( KConfigBase* c )
 {
   m_writingModeWidget->loadConfig( c );
-  m_checkDummy->setChecked( c->readBoolEntry("simulate", false ) );
-  m_checkVerify->setChecked( c->readBoolEntry( "verify_data", false ) );
-  m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
+  m_checkDummy->setChecked( c->readEntry("simulate", false ) );
+  m_checkVerify->setChecked( c->readEntry( "verify_data", false ) );
+  m_spinCopies->setValue( c->readEntry( "copies", 1 ) );
 
   m_writerSelectionWidget->loadConfig( c );
 
