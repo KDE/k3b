@@ -4,7 +4,10 @@ add_subdirectory( sox )
 add_subdirectory( external )
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(ENCLAMEDIR)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(ENCOGGDIR)")
+
+if(OGGVORBIS_FOUND)
+   add_subdirectory(ogg)
+endif(OGGVORBIS_FOUND)
 
 ########### install files ###############
 

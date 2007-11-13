@@ -1,4 +1,3 @@
-macro_optional_find_package(OggVorbis)
 macro_optional_find_package(FFmpeg)
 macro_optional_find_package(Flac)
 macro_optional_find_package(Mad)
