@@ -17,9 +17,7 @@
 #ifndef K3BDOC_H
 #define K3BDOC_H
 
-#ifdef HAVE_CONFIG_H
 #include <config-k3b.h>
-#endif
 
 // include files for QT
 #include <qobject.h>
