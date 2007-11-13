@@ -26,7 +26,7 @@ class K3b<name>Encoder : public K3bAudioEncoder
   Q_OBJECT
 
  public:
-  K3b<name>Encoder( QObject* parent = 0, const char* name = 0 );
+  K3b<name>Encoder( QObject* parent = 0 );
   ~K3b<name>Encoder();
 
   QStringList extensions() const;
@@ -37,8 +37,7 @@ class K3b<name>Encoder : public K3bAudioEncoder
 
   int pluginSystemVersion() const { return 3; }
 
-  K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0, 
-					     const char* name = 0 ) const;
+  K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0 ) const;
 
  private:
   void finishEncoderInternal();
@@ -53,7 +52,7 @@ class K3b<name>EncoderSettingsWidget : public K3bPluginConfigWidget
   Q_OBJECT
 
  public:
-  K3b<name>EncoderSettingsWidget( QWidget* parent = 0, const char* name = 0 );
+  K3b<name>EncoderSettingsWidget( QWidget* parent = 0 );
   ~K3b<name>EncoderSettingsWidget();
 
  public slots:

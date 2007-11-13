@@ -83,16 +83,15 @@ long long K3b<name>Encoder::fileSize( const QString&, const K3b::Msf& msf ) cons
 }
 
 
-K3bPluginConfigWidget* K3b<name>Encoder::createConfigWidget( QWidget* parent, 
-							     const char* name ) const
+K3bPluginConfigWidget* K3b<name>Encoder::createConfigWidget( QWidget* parent ) const 
 {
   return new K3b<name>EncoderSettingsWidget( parent, name );
 }
 
 
 
-K3b<name>EncoderSettingsWidget::K3b<name>EncoderSettingsWidget( QWidget* parent, const char* name )
-  : K3bPluginConfigWidget( parent, name )
+K3b<name>EncoderSettingsWidget::K3b<name>EncoderSettingsWidget( QWidget* parent )
+  : K3bPluginConfigWidget( parent )
 {
 }
 
