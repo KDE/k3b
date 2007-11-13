@@ -50,8 +50,8 @@ public:
 };
 
 
-K3bOggVorbisDecoder::K3bOggVorbisDecoder( QObject* parent, const char* name )
-  : K3bAudioDecoder( parent, name )
+K3bOggVorbisDecoder::K3bOggVorbisDecoder( QObject* parent )
+  : K3bAudioDecoder( parent )
 {
   d = new Private();
 }
@@ -208,8 +208,8 @@ QString K3bOggVorbisDecoder::fileType() const
 }
 
 
-K3bOggVorbisDecoderFactory::K3bOggVorbisDecoderFactory( QObject* parent, const char* name )
-  : K3bAudioDecoderFactory( parent, name )
+K3bOggVorbisDecoderFactory::K3bOggVorbisDecoderFactory( QObject* parent )
+  : K3bAudioDecoderFactory( parent )
 {
 }
 
@@ -219,10 +219,9 @@ K3bOggVorbisDecoderFactory::~K3bOggVorbisDecoderFactory()
 }
 
 
-K3bAudioDecoder* K3bOggVorbisDecoderFactory::createDecoder( QObject* parent, 
-							    const char* name ) const
+K3bAudioDecoder* K3bOggVorbisDecoderFactory::createDecoder( QObject* parent ) const
 {
-  return new K3bOggVorbisDecoder( parent, name );
+  return new K3bOggVorbisDecoder( parent );
 }
 
 

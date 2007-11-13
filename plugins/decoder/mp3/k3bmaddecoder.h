@@ -29,7 +29,7 @@ class K3bMadDecoderFactory : public K3bAudioDecoderFactory
   Q_OBJECT
 
  public:
-  K3bMadDecoderFactory( QObject* parent = 0, const char* name = 0 );
+  K3bMadDecoderFactory( QObject* parent = 0,  );
   ~K3bMadDecoderFactory();
 
   bool canDecode( const KUrl& filename );
@@ -37,7 +37,7 @@ class K3bMadDecoderFactory : public K3bAudioDecoderFactory
   int pluginSystemVersion() const { return 3; }
 
   K3bAudioDecoder* createDecoder( QObject* parent = 0, 
-				  const char* name = 0 ) const;
+				   ) const;
 };
 
 
@@ -46,7 +46,7 @@ class K3bMadDecoder : public K3bAudioDecoder
   Q_OBJECT
 
  public:
-  K3bMadDecoder( QObject* parent = 0, const char* name = 0 );
+  K3bMadDecoder( QObject* parent = 0,  );
   ~K3bMadDecoder();
 
   QString metaInfo( MetaDataField );

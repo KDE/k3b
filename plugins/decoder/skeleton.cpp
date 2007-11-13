@@ -22,7 +22,7 @@
 K_EXPORT_COMPONENT_FACTORY( libk3b<name>decoder, KPluginFactory<K3b<name>DecoderFactory>( "libk3b<name>decoder" ) )
 
 
-K3b<name>DecoderFactory::K3b<name>DecoderFactory( QObject* parent, const char* name )
+K3b<name>DecoderFactory::K3b<name>DecoderFactory( QObject* parent,  )
   : K3bAudioDecoderFactory( parent, name )
 {
 }
@@ -34,7 +34,7 @@ K3b<name>DecoderFactory::~K3b<name>DecoderFactory()
 
 
 K3bAudioDecoder* K3b<name>DecoderFactory::createDecoder( QObject* parent, 
-							 const char* name ) const
+							  ) const
 {
   return new K3b<name>Decoder( parent, name );
 }
@@ -51,7 +51,7 @@ bool K3b<name>DecoderFactory::canDecode( const KUrl& url )
 
 
 
-K3b<name>Decoder::K3b<name>Decoder( QObject* parent, const char* name )
+K3b<name>Decoder::K3b<name>Decoder( QObject* parent,  )
   : K3bAudioDecoder( parent, name )
 {
 }

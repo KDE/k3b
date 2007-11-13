@@ -26,7 +26,7 @@ class K3bFFMpegDecoderFactory : public K3bAudioDecoderFactory
   Q_OBJECT
 
  public:
-  K3bFFMpegDecoderFactory( QObject* parent = 0, const char* name = 0 );
+  K3bFFMpegDecoderFactory( QObject* parent = 0,  );
   ~K3bFFMpegDecoderFactory();
 
   bool canDecode( const KUrl& filename );
@@ -36,7 +36,7 @@ class K3bFFMpegDecoderFactory : public K3bAudioDecoderFactory
   bool multiFormatDecoder() const { return true; }
 
   K3bAudioDecoder* createDecoder( QObject* parent = 0, 
-				  const char* name = 0 ) const;
+				   ) const;
 };
 
 
@@ -45,7 +45,7 @@ class K3bFFMpegDecoder : public K3bAudioDecoder
   Q_OBJECT
 
  public:
-  K3bFFMpegDecoder( QObject* parent = 0, const char* name = 0 );
+  K3bFFMpegDecoder( QObject* parent = 0,  );
   ~K3bFFMpegDecoder();
 
   QString fileType() const;

@@ -28,15 +28,14 @@ class K3bOggVorbisDecoderFactory : public K3bAudioDecoderFactory
   Q_OBJECT
 
  public:
-  K3bOggVorbisDecoderFactory( QObject* parent = 0, const char* name = 0 );
+  K3bOggVorbisDecoderFactory( QObject* parent = 0 );
   ~K3bOggVorbisDecoderFactory();
 
   bool canDecode( const KUrl& filename );
 
   int pluginSystemVersion() const { return 3; }
 
-  K3bAudioDecoder* createDecoder( QObject* parent = 0, 
-				  const char* name = 0 ) const;
+  K3bAudioDecoder* createDecoder( QObject* parent = 0) const;
 };
 
 
@@ -48,7 +47,7 @@ class K3bOggVorbisDecoder : public K3bAudioDecoder
   Q_OBJECT
 
  public: 
-  K3bOggVorbisDecoder( QObject* parent = 0, const char* name = 0 );
+  K3bOggVorbisDecoder( QObject* parent = 0 );
   ~K3bOggVorbisDecoder();
 
   void cleanup();

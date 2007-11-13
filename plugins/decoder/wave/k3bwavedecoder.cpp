@@ -196,7 +196,7 @@ public:
 };
 
 
-K3bWaveDecoder::K3bWaveDecoder( QObject* parent, const char* name )
+K3bWaveDecoder::K3bWaveDecoder( QObject* parent,  )
   : K3bAudioDecoder( parent, name )
 {
   d = new Private();
@@ -357,7 +357,7 @@ QString K3bWaveDecoder::technicalInfo( const QString& name ) const
 }
 
 
-K3bWaveDecoderFactory::K3bWaveDecoderFactory( QObject* parent, const char* name )
+K3bWaveDecoderFactory::K3bWaveDecoderFactory( QObject* parent,  )
   : K3bAudioDecoderFactory( parent, name )
 {
 }
@@ -369,7 +369,7 @@ K3bWaveDecoderFactory::~K3bWaveDecoderFactory()
 
 
 K3bAudioDecoder* K3bWaveDecoderFactory::createDecoder( QObject* parent, 
-						       const char* name ) const
+						        ) const
 {
   return new K3bWaveDecoder( parent, name );
 }
