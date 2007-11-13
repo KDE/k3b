@@ -55,8 +55,8 @@ public:
 };
 
 
-K3bAlsaOutputPlugin::K3bAlsaOutputPlugin( QObject* parent, const char* name )
-  : K3bAudioOutputPlugin( parent, name )
+K3bAlsaOutputPlugin::K3bAlsaOutputPlugin( QObject* parent )
+  : K3bAudioOutputPlugin( parent )
 {
   d = new Private;
 }
@@ -175,20 +175,20 @@ bool K3bAlsaOutputPlugin::setupHwParams()
   int err = 0;
 
   if( ( err = snd_pcm_hw_params_malloc( &hw_params ) ) < 0 ) {
-    d->lastErrorMessage = i18n("Could not allocate hardware parameter structure (%1)").arg(snd_strerror(err));
+    d->lastErrorMessage = i18n("Could not allocate hardware parameter structure (%1)",snd_strerror(err));
     d->error = true;
     return false;
   }
                                  
   if( (err = snd_pcm_hw_params_any( d->pcm_playback, hw_params )) < 0) {
-    d->lastErrorMessage = i18n("Could not initialize hardware parameter structure (%1).").arg(snd_strerror(err));
+    d->lastErrorMessage = i18n("Could not initialize hardware parameter structure (%1).",snd_strerror(err));
     snd_pcm_hw_params_free( hw_params );
     d->error = true;
     return false;
   }
         
   if( (err = snd_pcm_hw_params_set_access( d->pcm_playback, hw_params, SND_PCM_ACCESS_RW_INTERLEAVED)) < 0) {
-    d->lastErrorMessage = i18n("Could not set access type (%1).").arg(snd_strerror(err));
+    d->lastErrorMessage = i18n("Could not set access type (%1).",snd_strerror(err));
     snd_pcm_hw_params_free( hw_params );
     d->error = true;
     return false;
@@ -196,7 +196,7 @@ bool K3bAlsaOutputPlugin::setupHwParams()
 
   if( (err = snd_pcm_hw_params_set_format( d->pcm_playback, hw_params, SND_PCM_FORMAT_S16_BE)) < 0) {
     if( (err = snd_pcm_hw_params_set_format( d->pcm_playback, hw_params, SND_PCM_FORMAT_S16_LE)) < 0) {
-      d->lastErrorMessage = i18n("Could not set sample format (%1).").arg(snd_strerror(err));
+      d->lastErrorMessage = i18n("Could not set sample format (%1).",snd_strerror(err));
       snd_pcm_hw_params_free( hw_params );
       d->error = true;
       return false;
@@ -209,7 +209,7 @@ bool K3bAlsaOutputPlugin::setupHwParams()
 
   d->sampleRate = 44100;
   if( (err = snd_pcm_hw_params_set_rate_near( d->pcm_playback, hw_params, &d->sampleRate, 0)) < 0) {
-    d->lastErrorMessage = i18n("Could not set sample rate (%1).").arg(snd_strerror(err));
+    d->lastErrorMessage = i18n("Could not set sample rate (%1).",snd_strerror(err));
     snd_pcm_hw_params_free( hw_params );
     d->error = true;
     return false;
@@ -218,14 +218,14 @@ bool K3bAlsaOutputPlugin::setupHwParams()
   kDebug() << "(K3bAlsaOutputPlugin) samplerate set to " << d->sampleRate;
 
   if( (err = snd_pcm_hw_params_set_channels( d->pcm_playback, hw_params, 2)) < 0) {
-    d->lastErrorMessage = i18n("Could not set channel count (%1).").arg(snd_strerror(err));
+    d->lastErrorMessage = i18n("Could not set channel count (%1).",snd_strerror(err));
     snd_pcm_hw_params_free( hw_params );
     d->error = true;
     return false;
   }
 
   if( (err = snd_pcm_hw_params( d->pcm_playback, hw_params )) < 0) {
-    d->lastErrorMessage = i18n("Could not set parameters (%1).").arg(snd_strerror(err));
+    d->lastErrorMessage = i18n("Could not set parameters (%1).",snd_strerror(err));
     snd_pcm_hw_params_free( hw_params );
     d->error = true;
     return false;
@@ -243,16 +243,15 @@ QString K3bAlsaOutputPlugin::lastErrorMessage() const
 }
 
 
-K3bPluginConfigWidget* K3bAlsaOutputPlugin::createConfigWidget( QWidget* parent, 
-								const char* name ) const
+K3bPluginConfigWidget* K3bAlsaOutputPlugin::createConfigWidget( QWidget* parent ) const
 {
-  return new K3bAlsaOutputPluginConfigWidget( parent, name );
+  return new K3bAlsaOutputPluginConfigWidget( parent );
 }
 
 
 
-K3bAlsaOutputPluginConfigWidget::K3bAlsaOutputPluginConfigWidget( QWidget* parent, const char* name )
-  : K3bPluginConfigWidget( parent, name )
+K3bAlsaOutputPluginConfigWidget::K3bAlsaOutputPluginConfigWidget( QWidget* parent )
+  : K3bPluginConfigWidget( parent )
 {
   Q3HBoxLayout* l = new Q3HBoxLayout( this );
   l->setSpacing( KDialog::spacingHint() );

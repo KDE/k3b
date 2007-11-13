@@ -34,7 +34,7 @@
 
 
 K3bExternalEncoderEditDialog::K3bExternalEncoderEditDialog( QWidget* parent )
-  : KDialogBase( Swallow,
+  : KDialog( Swallow,
 		 i18n("Editing external audio encoder"),
 		 Ok|Cancel,
 		 Ok,
