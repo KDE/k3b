@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -108,8 +108,8 @@ public:
 
 
 
-K3bAudioDecoder::K3bAudioDecoder( QObject* parent, const char* name )
-  : QObject( parent, name )
+K3bAudioDecoder::K3bAudioDecoder( QObject* parent )
+  : QObject( parent )
 {
   d = new Private();
 }
@@ -238,7 +238,7 @@ int K3bAudioDecoder::decode( char* _data, int maxLen )
 	  d->inBufferFill = read/2;
 	  d->inBufferPos = d->inBuffer;
 	  from16bitBeSignedToFloat( d->decodingBuffer, d->inBuffer, d->inBufferFill );
-      
+
 	  read = resample( d->decodingBuffer, DECODING_BUFFER_SIZE );
 	}
       }
@@ -263,7 +263,7 @@ int K3bAudioDecoder::decode( char* _data, int maxLen )
 	  d->decoderFinished = true;
       }
     }
-  
+
     if( read < 0 ) {
       return -1;
     }
@@ -274,14 +274,14 @@ int K3bAudioDecoder::decode( char* _data, int maxLen )
 	kDebug() << "(K3bAudioDecoder) track length: " << lengthToDecode
 		  << "; decoded module data: " << d->alreadyDecoded
 		  << "; we need to pad " << bytesToPad << " bytes." << endl;
-	
+
 	if( DECODING_BUFFER_SIZE < bytesToPad )
 	  bytesToPad = DECODING_BUFFER_SIZE;
-	
+
 	::memset( d->decodingBuffer, 0, bytesToPad );
-	
+
 	kDebug() << "(K3bAudioDecoder) padded " << bytesToPad << " bytes.";
-	
+
 	read = bytesToPad;
       }
       else {
@@ -290,10 +290,10 @@ int K3bAudioDecoder::decode( char* _data, int maxLen )
       }
     }
     else {
-      
+
       // check if we decoded too much
       if( d->alreadyDecoded + read > lengthToDecode ) {
-	kDebug() << "(K3bAudioDecoder) we decoded too much. Cutting output by " 
+	kDebug() << "(K3bAudioDecoder) we decoded too much. Cutting output by "
 		  << (read + d->alreadyDecoded - lengthToDecode) << endl;
 	read = lengthToDecode - d->alreadyDecoded;
       }
@@ -318,8 +318,8 @@ int K3bAudioDecoder::decode( char* _data, int maxLen )
 
 
 // resample data in d->inBufferPos and save the result to data
-// 
-// 
+//
+//
 int K3bAudioDecoder::resample( char* data, int maxLen )
 {
   if( !d->resampleState ) {
@@ -359,7 +359,7 @@ int K3bAudioDecoder::resample( char* data, int maxLen )
       fromFloatTo16BitBeSigned( &d->outBuffer[i], &data[4*i+2], 1 );
     }
   }
-   
+
   d->inBufferPos += d->resampleData->input_frames_used*d->channels;
   d->inBufferFill -= d->resampleData->input_frames_used*d->channels;
   if( d->inBufferFill <= 0 ) {
@@ -411,7 +411,7 @@ void K3bAudioDecoder::from8BitTo16BitBeSigned( char* src, char* dest, int sample
 
     float scaled = static_cast<float>(quint8(src[samples])-128) / 128.0 * 32768.0;
     qint16 val = 0;
-      
+
     // clipping
     if( scaled >= ( 1.0 * 0x7FFF ) )
       val = 32767;
@@ -453,21 +453,21 @@ bool K3bAudioDecoder::seek( const K3b::Msf& pos )
   // between the current position and the seek position is less than some fixed
   // value we simply decode up to the seek position.
   //
-  if( ( pos > d->currentPos || 
+  if( ( pos > d->currentPos ||
 	( pos == d->currentPos && d->currentPosOffset == 0 ) )
       &&
       ( pos - d->currentPos < K3b::Msf(0,10,0) ) ) {  // < 10 seconds is ok
     kDebug() << "(K3bAudioDecoder) performing perfect seek from " << d->currentPos.toString()
 	      << " to " << pos.toString() << ". :)" << endl;
-   
-    unsigned long bytesToDecode = pos.audioBytes() - d->currentPos.audioBytes() - d->currentPosOffset;
+
+    qint64 bytesToDecode = pos.audioBytes() - d->currentPos.audioBytes() - d->currentPosOffset;
     kDebug() << "(K3bAudioDecoder) seeking " << bytesToDecode << " bytes.";
     char buffi[10*2352];
     while( bytesToDecode > 0 ) {
-      int read = decode( buffi, qMin(10*2352, bytesToDecode) );
+      int read = decode( buffi, qMin(( qint64 )( 10*2352 ), bytesToDecode) );
       if( read <= 0 )
 	return false;
-      
+
       bytesToDecode -= read;
     }
 
@@ -487,7 +487,7 @@ bool K3bAudioDecoder::seek( const K3b::Msf& pos )
     // And also reset the decoding buffer to not return any garbage from previous decoding.
     //
     d->decodingBufferFill = 0;
-    
+
     success = seekInternal( pos );
   }
 
@@ -535,7 +535,7 @@ QString K3bAudioDecoder::metaInfo( MetaDataField f )
 
     KFileMetaInfoItem item = d->metaInfo->item( tag );
     if( item.isValid() )
-      return item.string();
+      return item.value().toString();
   }
 
   return QString::null;
@@ -576,18 +576,18 @@ void K3bAudioDecoder::addTechnicalInfo( const QString& key, const QString& value
 K3bAudioDecoder* K3bAudioDecoderFactory::createDecoder( const KUrl& url )
 {
   kDebug() << "(K3bAudioDecoderFactory::createDecoder( " << url.path() << " )";
-  Q3PtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( "AudioDecoder" );
+  QList<K3bPlugin*> fl = k3bcore->pluginManager()->plugins( "AudioDecoder" );
 
   // first search for a single format decoder
-  for( Q3PtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
-    K3bAudioDecoderFactory* f = dynamic_cast<K3bAudioDecoderFactory*>( it.current() );
+  Q_FOREACH( K3bPlugin* plugin, fl ) {
+    K3bAudioDecoderFactory* f = dynamic_cast<K3bAudioDecoderFactory*>( plugin );
     if( f && !f->multiFormatDecoder() && f->canDecode( url ) ) {
       kDebug() << "1"; return f->createDecoder();}
   }
-  
+
   // no single format decoder. Search for a multi format decoder
-  for( Q3PtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
-    K3bAudioDecoderFactory* f = dynamic_cast<K3bAudioDecoderFactory*>( it.current() );
+  Q_FOREACH( K3bPlugin* plugin, fl ) {
+    K3bAudioDecoderFactory* f = dynamic_cast<K3bAudioDecoderFactory*>( plugin );
     if( f && f->multiFormatDecoder() && f->canDecode( url ) ) {
       kDebug() << "2"; return f->createDecoder();}
   }
@@ -595,7 +595,7 @@ K3bAudioDecoder* K3bAudioDecoderFactory::createDecoder( const KUrl& url )
   kDebug() << "(K3bAudioDecoderFactory::createDecoder( " << url.path() << " ) no success";
 
   // nothing found
-  return 0;  
+  return 0;
 }
 
 #include "k3baudiodecoder.moc"

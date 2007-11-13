@@ -25,7 +25,7 @@ class LIBK3B_EXPORT K3bPluginConfigWidget : public QWidget
   Q_OBJECT
 
  public:
-  K3bPluginConfigWidget( QWidget* parent = 0, const char* name = 0 );
+  K3bPluginConfigWidget( QWidget* parent = 0 );
   virtual ~K3bPluginConfigWidget();
 
  public slots:

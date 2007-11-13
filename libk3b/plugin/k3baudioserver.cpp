@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
@@ -130,14 +130,14 @@ void K3bAudioServer::setOutputPlugin( K3bAudioOutputPlugin* p )
       d->stop();
       d->wait();
     }
-    
+
     if( m_usedOutputPlugin ) {
-      m_usedOutputPlugin->cleanup();    
+      m_usedOutputPlugin->cleanup();
       m_pluginInitialized = false;
     }
-    
+
     m_usedOutputPlugin = p;
-    
+
     if( restart )
       d->start();
   }
@@ -175,11 +175,11 @@ void K3bAudioServer::detachClient( K3bAudioClient* c )
 {
   if( m_client == c ) {
     m_client = 0;
-    
+
     // stop the streaming
     d->stop();
     d->wait();
-    
+
     if( m_usedOutputPlugin && m_pluginInitialized ) {
       m_usedOutputPlugin->cleanup();
       m_pluginInitialized = false;
@@ -190,10 +190,10 @@ void K3bAudioServer::detachClient( K3bAudioClient* c )
 
 K3bAudioOutputPlugin* K3bAudioServer::findOutputPlugin( const Q3CString& name )
 {
-  Q3PtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( "AudioOutput" );
-  
-  for( Q3PtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
-    K3bAudioOutputPlugin* f = dynamic_cast<K3bAudioOutputPlugin*>( it.current() );
+  QList<K3bPlugin*> fl = k3bcore->pluginManager()->plugins( "AudioOutput" );
+
+  Q_FOREACH( K3bPlugin* plugin, fl ) {
+    K3bAudioOutputPlugin* f = dynamic_cast<K3bAudioOutputPlugin*>( plugin );
 
     if( f && f->soundSystem() == name ) {
       return f;

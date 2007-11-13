@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -14,16 +14,10 @@
  */
 
 #include "k3bpluginconfigwidget.h"
-#include "k3bpluginfactory.h"
-
-#include <k3bcore.h>
-
-#include <kinstance.h>
-#include <kdebug.h>
 
 
-K3bPluginConfigWidget::K3bPluginConfigWidget( QWidget* parent, const char* name )
-  : QWidget( parent, name )
+K3bPluginConfigWidget::K3bPluginConfigWidget( QWidget* parent )
+  : QWidget( parent )
 {
 }
 
