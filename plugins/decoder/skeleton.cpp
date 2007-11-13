@@ -19,7 +19,7 @@
 
 
 
-K_EXPORT_COMPONENT_FACTORY( libk3b<name>decoder, K3bPluginFactory<K3b<name>DecoderFactory>( "libk3b<name>decoder" ) )
+K_EXPORT_COMPONENT_FACTORY( libk3b<name>decoder, KPluginFactory<K3b<name>DecoderFactory>( "libk3b<name>decoder" ) )
 
 
 K3b<name>DecoderFactory::K3b<name>DecoderFactory( QObject* parent, const char* name )

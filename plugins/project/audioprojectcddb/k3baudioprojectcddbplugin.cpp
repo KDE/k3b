@@ -40,7 +40,7 @@
 #include <qstring.h>
 
 
-K_EXPORT_COMPONENT_FACTORY( libk3baudioprojectcddbplugin, K3bPluginFactory<K3bAudioProjectCddbPlugin>( "libk3baudioprojectcddbplugin" ) )
+K_EXPORT_COMPONENT_FACTORY( libk3baudioprojectcddbplugin, KPluginFactory<K3bAudioProjectCddbPlugin>( "libk3baudioprojectcddbplugin" ) )
 
 
 K3bAudioProjectCddbPlugin::K3bAudioProjectCddbPlugin( QObject* parent, 

@@ -33,7 +33,7 @@
 #include <alsa/pcm.h>
 
 
-K_EXPORT_COMPONENT_FACTORY( libk3balsaoutputplugin, K3bPluginFactory<K3bAlsaOutputPlugin>( "k3balsaoutputplugin" ) )
+K_EXPORT_COMPONENT_FACTORY( libk3balsaoutputplugin, KPluginFactory<K3bAlsaOutputPlugin>( "k3balsaoutputplugin" ) )
 
 
 class K3bAlsaOutputPlugin::Private

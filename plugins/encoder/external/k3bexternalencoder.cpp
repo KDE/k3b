@@ -37,7 +37,7 @@
 #include <sys/wait.h>
 
 
-K_EXPORT_COMPONENT_FACTORY( libk3bexternalencoder, K3bPluginFactory<K3bExternalEncoder>( "libk3bexternalencoder" ) )
+K_EXPORT_COMPONENT_FACTORY( libk3bexternalencoder, KPluginFactory<K3bExternalEncoder>( "libk3bexternalencoder" ) )
 
 
 static const char s_riffHeader[] =

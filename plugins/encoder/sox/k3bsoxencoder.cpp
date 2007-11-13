@@ -42,7 +42,7 @@
 #include <sys/wait.h>
 
 
-K_EXPORT_COMPONENT_FACTORY( libk3bsoxencoder, K3bPluginFactory<K3bSoxEncoder>( "libk3bsoxencoder" ) )
+K_EXPORT_COMPONENT_FACTORY( libk3bsoxencoder, KPluginFactory<K3bSoxEncoder>( "libk3bsoxencoder" ) )
 
 
 // the sox external program

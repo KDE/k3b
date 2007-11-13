@@ -44,7 +44,7 @@
 #include <time.h>
 
 
-K_EXPORT_COMPONENT_FACTORY( libk3boggvorbisencoder, K3bPluginFactory<K3bOggVorbisEncoder>( "libk3boggvorbisencoder" ) )
+K_EXPORT_COMPONENT_FACTORY( libk3boggvorbisencoder, KPluginFactory<K3bOggVorbisEncoder>( "libk3boggvorbisencoder" ) )
 
 // quality levels -1 to 10 map to 0 to 11
 static const int s_rough_average_quality_level_bitrates[] = {

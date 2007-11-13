@@ -52,7 +52,7 @@
 
 
 
-K_EXPORT_COMPONENT_FACTORY( libk3baudiometainforenamerplugin, K3bPluginFactory<K3bAudioMetainfoRenamerPlugin>("libk3baudiometainforenamerplugin") )
+K_EXPORT_COMPONENT_FACTORY( libk3baudiometainforenamerplugin, KPluginFactory<K3bAudioMetainfoRenamerPlugin>("libk3baudiometainforenamerplugin") )
 
 
 class K3bAudioMetainfoRenamerPluginWidget::Private

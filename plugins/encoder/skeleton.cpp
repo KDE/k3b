@@ -22,7 +22,7 @@
 #include <kdebug.h>
 
 
-K_EXPORT_COMPONENT_FACTORY( libk3b<name>encoder, K3bPluginFactory<K3b<name>Encoder>( "libk3b<name>encoder" ) )
+K_EXPORT_COMPONENT_FACTORY( libk3b<name>encoder, KPluginFactory<K3b<name>Encoder>( "libk3b<name>encoder" ) )
 
 
 K3b<name>Encoder::K3b<name>Encoder( QObject* parent, const char* name )

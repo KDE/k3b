@@ -46,7 +46,7 @@
 #include <lame/lame.h>
 
 
-K_EXPORT_COMPONENT_FACTORY( libk3blameencoder, K3bPluginFactory<K3bLameEncoder>( "libk3blameencoder" ) )
+K_EXPORT_COMPONENT_FACTORY( libk3blameencoder, KPluginFactory<K3bLameEncoder>( "libk3blameencoder" ) )
 
 
 static const int s_lame_bitrates[] = {

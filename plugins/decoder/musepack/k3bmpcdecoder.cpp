@@ -22,7 +22,7 @@
 #include <klocale.h>
 
 
-K_EXPORT_COMPONENT_FACTORY( libk3bmpcdecoder, K3bPluginFactory<K3bMpcDecoderFactory>( "libk3bmpcdecoder" ) )
+K_EXPORT_COMPONENT_FACTORY( libk3bmpcdecoder, KPluginFactory<K3bMpcDecoderFactory>( "libk3bmpcdecoder" ) )
 
 
 K3bMpcDecoderFactory::K3bMpcDecoderFactory( QObject* parent, const char* name )

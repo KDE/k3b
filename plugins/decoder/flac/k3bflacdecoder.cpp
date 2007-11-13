@@ -40,7 +40,7 @@
 #undef LEGACY_FLAC
 #endif
 
-K_EXPORT_COMPONENT_FACTORY( libk3bflacdecoder, K3bPluginFactory<K3bFLACDecoderFactory>( "libk3bflacdecoder" ) )
+K_EXPORT_COMPONENT_FACTORY( libk3bflacdecoder, KPluginFactory<K3bFLACDecoderFactory>( "libk3bflacdecoder" ) )
 
 
 class K3bFLACDecoder::Private

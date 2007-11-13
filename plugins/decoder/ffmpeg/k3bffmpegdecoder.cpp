@@ -27,7 +27,7 @@ extern "C" {
 #include <math.h>
 
 
-K_EXPORT_COMPONENT_FACTORY( libk3bffmpegdecoder, K3bPluginFactory<K3bFFMpegDecoderFactory>( "k3bffmpegdecoder" ) )
+K_EXPORT_COMPONENT_FACTORY( libk3bffmpegdecoder, KPluginFactory<K3bFFMpegDecoderFactory>( "k3bffmpegdecoder" ) )
 
 
 K3bFFMpegDecoderFactory::K3bFFMpegDecoderFactory( QObject* parent, const char* name )

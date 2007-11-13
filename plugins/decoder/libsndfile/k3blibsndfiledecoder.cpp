@@ -33,7 +33,7 @@
 #include <sndfile.h>
 
 
-K_EXPORT_COMPONENT_FACTORY( libk3blibsndfiledecoder, K3bPluginFactory<K3bLibsndfileDecoderFactory>( "libk3blibsndfiledecoder" ) )
+K_EXPORT_COMPONENT_FACTORY( libk3blibsndfiledecoder, KPluginFactory<K3bLibsndfileDecoderFactory>( "libk3blibsndfiledecoder" ) )
 
 
 class K3bLibsndfileDecoder::Private
