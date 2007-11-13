@@ -18,7 +18,6 @@
 #include "k3bmpcdecoder.h"
 #include "k3bmpcwrapper.h"
 
-#include <k3bpluginfactory.h>
 
 #include <klocale.h>
 

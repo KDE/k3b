@@ -16,7 +16,6 @@
 #include <config-k3b.h>
 
 #include "k3balsaoutputplugin.h"
-#include <k3bpluginfactory.h>
 #include <k3bcore.h>
 
 #include <kdebug.h>

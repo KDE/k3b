@@ -18,7 +18,6 @@
 
 #include "k3blibsndfiledecoder.h"
 
-#include <k3bpluginfactory.h>
 
 #include <qfile.h>
 #include <qstringlist.h>

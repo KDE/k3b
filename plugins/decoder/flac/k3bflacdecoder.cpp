@@ -15,7 +15,6 @@
 
 #include "k3bflacdecoder.h"
 
-#include <k3bpluginfactory.h>
 
 #include <qbuffer.h>
 #include <qfile.h>

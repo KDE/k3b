@@ -23,7 +23,6 @@
 #include <k3bdiritem.h>
 #include <k3bfileitem.h>
 #include <k3blistview.h>
-#include <k3bpluginfactory.h>
 
 #include <kdebug.h>
 #include <kinstance.h>

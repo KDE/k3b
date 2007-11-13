@@ -17,7 +17,6 @@
 
 #include "k3boggvorbisdecoder.h"
 
-#include <k3bpluginfactory.h>
 
 #include <qfile.h>
 #include <qstringlist.h>

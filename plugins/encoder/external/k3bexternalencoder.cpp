@@ -19,7 +19,6 @@
 #include "k3bexternalencodercommand.h"
 #include "k3bexternalencoderconfigwidget.h"
 
-#include <k3bpluginfactory.h>
 #include <k3bprocess.h>
 #include <k3bcore.h>
 

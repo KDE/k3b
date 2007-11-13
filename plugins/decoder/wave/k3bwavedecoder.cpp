@@ -17,7 +17,6 @@
 
 #include "k3bwavedecoder.h"
 
-#include <k3bpluginfactory.h>
 
 #include <qfile.h>
 #include <q3cstring.h>

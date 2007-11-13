@@ -29,7 +29,6 @@
 #include <k3bcddbresult.h>
 #include <k3bcddbquery.h>
 #include <k3bprogressdialog.h>
-#include <k3bpluginfactory.h>
 
 #include <kdebug.h>
 #include <kaction.h>

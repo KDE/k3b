@@ -21,7 +21,6 @@
 #include <k3bprocess.h>
 #include <k3bcore.h>
 #include <k3bexternalbinmanager.h>
-#include <k3bpluginfactory.h>
 
 #include <kdebug.h>
 #include <kconfig.h>

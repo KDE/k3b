@@ -17,7 +17,6 @@
 
 #include "k3b<name>decoder.h"
 
-#include <k3bpluginfactory.h>
 
 
 K_EXPORT_COMPONENT_FACTORY( libk3b<name>decoder, K3bPluginFactory<K3b<name>DecoderFactory>( "libk3b<name>decoder" ) )

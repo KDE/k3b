@@ -29,7 +29,6 @@
 #include "k3bmaddecoder.h"
 #include "k3bmad.h"
 
-#include <k3bpluginfactory.h>
 
 #include <kurl.h>
 #include <kdebug.h>

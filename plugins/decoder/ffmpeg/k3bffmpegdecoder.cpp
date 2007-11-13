@@ -19,7 +19,6 @@
 #include "k3bffmpegwrapper.h"
 
 #include <kdebug.h>
-#include <k3bpluginfactory.h>
 
 extern "C" {
 #include <ffmpeg/avcodec.h>

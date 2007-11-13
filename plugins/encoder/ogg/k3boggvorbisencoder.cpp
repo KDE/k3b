@@ -19,7 +19,6 @@
 #include "base_k3boggvorbisencodersettingswidget.h"
 
 #include <k3bcore.h>
-#include <k3bpluginfactory.h>
 
 #include <klocale.h>
 #include <kconfig.h>
