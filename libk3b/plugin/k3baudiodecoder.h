@@ -239,7 +239,7 @@ class LIBK3B_EXPORT K3bAudioDecoderFactory : public K3bPlugin
    */
   virtual bool canDecode( const KUrl& filename ) = 0;
 
-  virtual K3bAudioDecoder* createDecoder( QObject* parent = 0, const char* name = 0 ) const = 0;
+  virtual K3bAudioDecoder* createDecoder( QObject* parent = 0 ) const = 0;
 
   /**
    * Searching for an audiodecoder for @p filename.
