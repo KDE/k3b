@@ -33,7 +33,7 @@ class K3bVcdJob : public K3bBurnJob
         Q_OBJECT
 
     public:
-        K3bVcdJob( K3bVcdDoc*, K3bJobHandler*, QObject* parent = 0, const char* name = 0 );
+        K3bVcdJob( K3bVcdDoc*, K3bJobHandler*, QObject* parent = 0 );
         ~K3bVcdJob();
 
         K3bDoc* doc() const;

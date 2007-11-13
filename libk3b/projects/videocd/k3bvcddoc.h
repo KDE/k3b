@@ -18,15 +18,12 @@
 #define K3BVCDDOC_H
 
 // Qt Includes
-#include <q3ptrqueue.h>
 #include <qfile.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qdatetime.h>
-#include <q3textstream.h>
 #include <qimage.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qqueue.h>
 
 // Kde Includes
 #include <kurl.h>
@@ -81,32 +78,32 @@ class LIBK3B_EXPORT K3bVcdDoc : public K3bDoc
             m_vcdImage = s;
         }
 
-        K3bVcdTrack* first()
-        {
-            return m_tracks->first();
-        }
-        K3bVcdTrack* current() const
-        {
-            return m_tracks->current();
-        }
-        K3bVcdTrack* next()
-        {
-            return m_tracks->next();
-        }
-        K3bVcdTrack* prev()
-        {
-            return m_tracks->prev();
-        }
+/*         K3bVcdTrack* first() */
+/*         { */
+/*             return m_tracks->first(); */
+/*         } */
+/*         K3bVcdTrack* current() const */
+/*         { */
+/*             return m_tracks->current(); */
+/*         } */
+/*         K3bVcdTrack* next() */
+/*         { */
+/*             return m_tracks->next(); */
+/*         } */
+/*         K3bVcdTrack* prev() */
+/*         { */
+/*             return m_tracks->prev(); */
+/*         } */
         K3bVcdTrack* at( uint i )
         {
             return m_tracks->at( i );
         }
-        K3bVcdTrack* take( uint i )
-        {
-            return m_tracks->take( i );
-        }
+/*         K3bVcdTrack* take( uint i ) */
+/*         { */
+/*             return m_tracks->take( i ); */
+/*         } */
 
-        const Q3PtrList<K3bVcdTrack>* tracks() const
+	const QList<K3bVcdTrack*>* tracks() const
         {
             return m_tracks;
         }
@@ -143,7 +140,7 @@ class LIBK3B_EXPORT K3bVcdDoc : public K3bDoc
 
         // --- TODO: this should read: removeTrack( K3bVcdTrack* )
         void removeTrack( K3bVcdTrack* );
-        void moveTrack( const K3bVcdTrack* track, const K3bVcdTrack* after );
+        void moveTrack( K3bVcdTrack* track, K3bVcdTrack* after );
 
     protected slots:
         /** processes queue "urlsToAdd" **/
@@ -180,10 +177,10 @@ class LIBK3B_EXPORT K3bVcdDoc : public K3bDoc
         };
 
         /** Holds all the urls that have to be added to the list of tracks. **/
-        Q3PtrQueue<PrivateUrlToAdd> urlsToAdd;
+        QQueue<PrivateUrlToAdd*> urlsToAdd;
         QTimer* m_urlAddingTimer;
 
-        Q3PtrList<K3bVcdTrack>* m_tracks;
+        QList<K3bVcdTrack*>* m_tracks;
         KIO::filesize_t calcTotalSize() const;
         KIO::filesize_t ISOsize() const;
 
@@ -193,7 +190,7 @@ class LIBK3B_EXPORT K3bVcdDoc : public K3bDoc
         K3bVcdOptions* m_vcdOptions;
 
         int m_vcdType;
-        uint lastAddedPosition;
+        int lastAddedPosition;
 };
 
 #endif

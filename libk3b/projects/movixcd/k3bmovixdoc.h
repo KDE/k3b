@@ -20,8 +20,9 @@
 
 #include <k3bdatadoc.h>
 
-#include <q3ptrlist.h>
+#include <qlist.h>
 #include "k3b_export.h"
+
 //class K3bView;
 class KUrl;
 class QDomElement;
@@ -45,7 +46,7 @@ class LIBK3B_EXPORT K3bMovixDoc : public K3bDataDoc
 
   bool newDocument();
 
-  const Q3PtrList<K3bMovixFileItem>& movixFileItems() const { return m_movixFiles; }
+  QList<K3bMovixFileItem*> movixFileItems() const { return m_movixFiles; }
 
   int indexOf( K3bMovixFileItem* );
 
@@ -104,7 +105,7 @@ class LIBK3B_EXPORT K3bMovixDoc : public K3bDataDoc
   void slotDataItemRemoved( K3bDataItem* );
 
  private:
-  Q3PtrList<K3bMovixFileItem> m_movixFiles;
+  QList<K3bMovixFileItem*> m_movixFiles;
 
   bool m_shutdown;
   bool m_reboot;

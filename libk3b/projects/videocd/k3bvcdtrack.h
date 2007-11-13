@@ -20,7 +20,6 @@
 #include <qstring.h>
 #include <qfileinfo.h>
 #include <qfile.h>
-#include <q3ptrlist.h>
 
 // Kde Includes
 #include <kio/global.h>
@@ -28,10 +27,11 @@
 // K3b Includes
 #include "mpeginfo/k3bmpeginfo.h"
 #include "k3b_export.h"
+
 class LIBK3B_EXPORT K3bVcdTrack
 {
     public:
-        K3bVcdTrack( Q3PtrList<K3bVcdTrack>* parent, const QString& filename );
+        K3bVcdTrack( QList<K3bVcdTrack*>* parent, const QString& filename );
         ~K3bVcdTrack();
 
         QString fileName() const
@@ -137,15 +137,15 @@ class LIBK3B_EXPORT K3bVcdTrack
         }
 
         // Mpeg Infos
-        const QString resolution();
-        const QString highresolution();
-        const QString video_frate();
-        const QString video_bitrate();
-        const QString audio_layer();
-        const QString audio_bitrate();
-        const QString audio_sampfreq();
+        QString resolution();
+        QString highresolution();
+        QString video_frate();
+        QString video_bitrate();
+        QString audio_layer();
+        QString audio_bitrate();
+        QString audio_sampfreq();
 
-        const QString duration()
+        QString duration()
         {
             return SecsToHMS( mpeg_info->playing_time );
         };
@@ -157,11 +157,11 @@ class LIBK3B_EXPORT K3bVcdTrack
         {
             return mpeg_info->muxrate;
         };
-        const QString video_format( );
-        const QString video_chroma( );
-        const QString audio_mode( );
-        const QString audio_copyright( );
-        const QString mpegTypeS( bool audio = false );
+        QString video_format( );
+        QString video_chroma( );
+        QString audio_mode( );
+        QString audio_copyright( );
+        QString mpegTypeS( bool audio = false );
         const int mpegType();
 
         void PrintInfo();
@@ -170,13 +170,13 @@ class LIBK3B_EXPORT K3bVcdTrack
 
     protected:
 
-        const QString audio_type2str( unsigned int , unsigned int, unsigned int );
+        QString audio_type2str( unsigned int , unsigned int, unsigned int );
         QString SecsToHMS( double );
 
-        Q3PtrList<K3bVcdTrack>* m_parent;
+        QList<K3bVcdTrack*>* m_parent;
 
         // PBC
-        Q3PtrList<K3bVcdTrack>* m_revreflist;          // List of Tracks which points to us
+        QList<K3bVcdTrack*> m_revreflist;          // List of Tracks which points to us
         QMap<int, K3bVcdTrack*> m_pbctrackmap;        // Pbc Tracks (Previous, Next, ...)
         QMap<int, int> m_pbcnontrackmap;              // Pbc NON Track types (Previous, Next, ...)
         QMap<int, bool> m_pbcusrdefmap;               // Pbc is userdefined or defaults (Previous, Next, ...)

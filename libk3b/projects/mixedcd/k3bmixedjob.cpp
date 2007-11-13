@@ -46,8 +46,6 @@
 #include <qfile.h>
 #include <qdatastream.h>
 #include <qapplication.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -57,11 +55,11 @@
 #include <kstringhandler.h>
 
 
-static QString createNonExistingFilesString( const Q3ValueList<K3bAudioFile*>& items, unsigned int max )
+static QString createNonExistingFilesString( const QList<K3bAudioFile*>& items, unsigned int max )
 {
   QString s;
-  unsigned int cnt = 0;
-  for( Q3ValueList<K3bAudioFile*>::const_iterator it = items.begin();
+  int cnt = 0;
+  for( QList<K3bAudioFile*>::const_iterator it = items.begin();
        it != items.end(); ++it ) {
 
     s += KStringHandler::csqueeze( (*it)->filename(), 60 );
@@ -170,7 +168,7 @@ void K3bMixedJob::start()
   //
   // Check if all files exist
   //
-  Q3ValueList<K3bAudioFile*> nonExistingFiles;
+  QList<K3bAudioFile*> nonExistingFiles;
   K3bAudioTrack* track = m_doc->audioDoc()->firstTrack();
   while( track ) {
     K3bAudioDataSource* source = track->firstSource();
@@ -190,7 +188,7 @@ void K3bMixedJob::start()
 		       i18n("Warning"),
 		       i18n("Remove missing files and continue"),
 		       i18n("Cancel and go back") ) ) {
-      for( Q3ValueList<K3bAudioFile*>::const_iterator it = nonExistingFiles.begin();
+      for( QList<K3bAudioFile*>::const_iterator it = nonExistingFiles.begin();
 	   it != nonExistingFiles.end(); ++it ) {
 	delete *it;
       }
@@ -742,14 +740,15 @@ bool K3bMixedJob::writeInfFiles()
 
 bool K3bMixedJob::writeTocFile()
 {
-  // FIXME: create the tocfile in the same directory like all the other files.
+    // FIXME: create the tocfile in the same directory like all the other files.
 
-  if( m_tocFile ) delete m_tocFile;
-  m_tocFile = new KTemporaryFile( QString::null, "toc" );
-  m_tocFile->setAutoDelete(true);
+    if( m_tocFile ) delete m_tocFile;
+#warning We probably need a toc extensdion here
+    m_tocFile = new KTemporaryFile();
+    m_tocFile->setAutoRemove(true);
 
-  // write the toc-file
-  if( Q3TextStream* s = m_tocFile->textStream() ) {
+    // write the toc-file
+    QTextStream s( m_tocFile );
 
     K3bTocFileWriter tocFileWriter;
 
@@ -767,12 +766,12 @@ bool K3bMixedJob::writeTocFile()
     // CD-Text
     //
     if( m_doc->audioDoc()->cdText() ) {
-      K3bDevice::CdText text = m_doc->audioDoc()->cdTextData();
-      // if data in first track we need to add a dummy cdtext
-      if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK )
-	text.insert( text.begin(), K3bDevice::TrackCdText() );
+        K3bDevice::CdText text = m_doc->audioDoc()->cdTextData();
+        // if data in first track we need to add a dummy cdtext
+        if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK )
+            text.insert( text.begin(), K3bDevice::TrackCdText() );
 
-      tocFileWriter.setCdText( text );
+        tocFileWriter.setCdText( text );
     }
 
     //
@@ -785,21 +784,21 @@ bool K3bMixedJob::writeTocFile()
     // image filenames
     //
     if( !m_doc->onTheFly() ) {
-      QStringList files;
-      K3bAudioTrack* track = m_doc->audioDoc()->firstTrack();
-      while( track ) {
-	files += m_tempData->bufferFileName( track );
-	track = track->next();
-      }
-      if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK )
-	files.prepend( m_isoImageFilePath );
-      else
-	files.append( m_isoImageFilePath );
+        QStringList files;
+        K3bAudioTrack* track = m_doc->audioDoc()->firstTrack();
+        while( track ) {
+            files += m_tempData->bufferFileName( track );
+            track = track->next();
+        }
+        if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK )
+            files.prepend( m_isoImageFilePath );
+        else
+            files.append( m_isoImageFilePath );
 
-      tocFileWriter.setFilenames( files );
+        tocFileWriter.setFilenames( files );
     }
 
-    bool success = tocFileWriter.save( *s );
+    bool success = tocFileWriter.save( s );
 
     m_tocFile->close();
 
@@ -808,9 +807,6 @@ bool K3bMixedJob::writeTocFile()
 //    KIO::NetAccess::copy( m_tocFile->name(), "/tmp/trueg/tocfile_debug_backup.toc",0L );
 
     return success;
-  }
-  else
-    return false;
 }
 
 
@@ -1250,7 +1246,7 @@ void K3bMixedJob::normalizeFiles()
   }
 
   // add all the files
-  Q3ValueVector<QString> files;
+  QList<QString> files;
   K3bAudioTrack* track = m_doc->audioDoc()->firstTrack();
   while( track ) {
     files.append( m_tempData->bufferFileName(track) );
@@ -1343,7 +1339,7 @@ QString K3bMixedJob::jobDetails() const
 	   .arg(m_doc->audioDoc()->length().toString())
 	   .arg(KIO::convertSize(m_doc->dataDoc()->size()))
 	   + ( m_doc->copies() > 1 && !m_doc->dummy()
-	       ? i18n(" - %n copy", " - %n copies", m_doc->copies())
+	       ? i18np(" - %n copy", " - %n copies", m_doc->copies())
 	       : QString::null ) );
 }
 

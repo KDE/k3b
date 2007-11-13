@@ -6,6 +6,8 @@ ${CMAKE_CURRENT_SOURCE_DIR}/tools
 ${CMAKE_CURRENT_SOURCE_DIR}/projects
 ${CMAKE_CURRENT_SOURCE_DIR}/projects/audiocd
 ${CMAKE_CURRENT_SOURCE_DIR}/projects/datacd
+${CMAKE_CURRENT_SOURCE_DIR}/projects/videocd
+${CMAKE_CURRENT_SOURCE_DIR}/projects/mixedcd
 ${CMAKE_CURRENT_SOURCE_DIR}/cddb
 ${CMAKE_CURRENT_SOURCE_DIR}/jobs
 ${CMAKE_CURRENT_SOURCE_DIR}/videodvd
@@ -103,6 +105,10 @@ set(k3b_tools_SRCS
 
 set(k3b_libisofs_SRCS tools/libisofs/isofs.cpp)
 
+set(k3b_videodvd_SRCS 
+  videodvd/k3bvideodvd.cpp
+  videodvd/k3bvideodvdtime.cpp
+  videodvd/k3bvideodvdvideostream.cpp)
 
 set(k3b_plugin_SRCS
     plugin/k3bplugin.cpp 
@@ -198,6 +204,7 @@ set(k3b_LIB_SRCS
       ${k3b_project_SRCS} 
       ${k3b_jobs_SRCS} 
       ${k3b_libisofs_SRCS}
+      ${k3b_videodvd_SRCS}
       ${k3b_project_audiocd_SRCS} 
       ${k3b_project_datacd} 
       ${k3b_project_mixedcd}
@@ -209,7 +216,10 @@ set(k3b_LIB_SRCS
 
 kde4_add_library(k3b SHARED ${k3b_LIB_SRCS})
 
-target_link_libraries(k3b  ${KDE4_KDECORE_LIBS}  k3bdevice )
+target_link_libraries(k3b
+  ${KDE4_KDECORE_LIBS}
+  ${KDE4_KDE3SUPPORT_LIBS}
+  k3bdevice )
 
 if(DVDREAD_FOUND)
   target_link_libraries(k3b ${DVDREAD_LIBRARIES})

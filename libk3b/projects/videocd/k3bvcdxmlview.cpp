@@ -146,15 +146,15 @@ bool K3bVcdXmlView::write( const QString& fname )
     if ( m_doc->vcdOptions() ->CdiSupport() ) {
         QDomElement elemFolder = addFolderElement( xmlDoc, elemFileSystem, "CDI" );
 
-        addFileElement( xmlDoc, elemFolder, locate( "data", "k3b/cdi/cdi_imag.rtf" ), "CDI_IMAG.RTF", true );
-        addFileElement( xmlDoc, elemFolder, locate( "data", "k3b/cdi/cdi_text.fnt" ), "CDI_TEXT.FNT" );
-        addFileElement( xmlDoc, elemFolder, locate( "data", "k3b/cdi/cdi_vcd.app" ), "CDI_VCD.APP" );
+        addFileElement( xmlDoc, elemFolder, KStandardDirs::locate( "data", "k3b/cdi/cdi_imag.rtf" ), "CDI_IMAG.RTF", true );
+        addFileElement( xmlDoc, elemFolder, KStandardDirs::locate( "data", "k3b/cdi/cdi_text.fnt" ), "CDI_TEXT.FNT" );
+        addFileElement( xmlDoc, elemFolder, KStandardDirs::locate( "data", "k3b/cdi/cdi_vcd.app" ), "CDI_VCD.APP" );
 
-        QString usercdicfg = locateLocal( "appdata", "cdi/cdi_vcd.cfg" );
+        QString usercdicfg = KStandardDirs::locateLocal( "appdata", "cdi/cdi_vcd.cfg" );
         if ( QFile::exists( usercdicfg ) )
             addFileElement( xmlDoc, elemFolder, usercdicfg, "CDI_VCD.CFG" );
         else
-            addFileElement( xmlDoc, elemFolder, locate( "data", "k3b/cdi/cdi_vcd.cfg" ), "CDI_VCD.CFG" );
+            addFileElement( xmlDoc, elemFolder, KStandardDirs::locate( "data", "k3b/cdi/cdi_vcd.cfg" ), "CDI_VCD.CFG" );
     }
 
     // sequence-items element & segment-items element
@@ -175,12 +175,12 @@ bool K3bVcdXmlView::write( const QString& fname )
     if ( !m_doc->vcdOptions()->haveSequence() )  {
             QString filename;
             if  ( m_doc->vcdOptions()->mpegVersion() == 1 )
-                filename = locate( "data", "k3b/extra/k3bphotovcd.mpg" );
+                filename = KStandardDirs::locate( "data", "k3b/extra/k3bphotovcd.mpg" );
             else
-                filename = locate( "data", "k3b/extra/k3bphotosvcd.mpg" );
+                filename = KStandardDirs::locate( "data", "k3b/extra/k3bphotosvcd.mpg" );
 
             elemsequenceItem = addSubElement( xmlDoc, elemsequenceItems, "sequence-item" );
-            elemsequenceItem.setAttribute( "src", QString( "%1" ).arg( QFile::encodeName(  filename ) ) );
+            elemsequenceItem.setAttribute( "src", filename );
             elemsequenceItem.setAttribute( "id", "sequence-000"  );
             // default entry
             QDomElement elemdefaultEntry;
@@ -193,13 +193,12 @@ bool K3bVcdXmlView::write( const QString& fname )
     QDomElement elemPbc;
 
     // Add Tracks to XML
-    Q3PtrListIterator<K3bVcdTrack> it( *m_doc->tracks() );
-    for ( ; it.current(); ++it ) {
-        if ( !it.current() ->isSegment() ) {
-            QString seqId = QString::number( it.current() ->index() ).rightJustified( 3, '0' );
+    Q_FOREACH( K3bVcdTrack* track,  *m_doc->tracks() ) {
+        if ( !track ->isSegment() ) {
+            QString seqId = QString::number( track ->index() ).rightJustified( 3, '0' );
 
             elemsequenceItem = addSubElement( xmlDoc, elemsequenceItems, "sequence-item" );
-            elemsequenceItem.setAttribute( "src", QString( "%1" ).arg( QFile::encodeName( it.current() ->absPath() ) ) );
+            elemsequenceItem.setAttribute( "src", track ->absPath() );
             elemsequenceItem.setAttribute( "id", QString( "sequence-%1" ).arg( seqId ) );
 
             // default entry
@@ -210,18 +209,17 @@ bool K3bVcdXmlView::write( const QString& fname )
         } else {
             // sequence-items element needs at least one segment to fit the XML
             elemsegmentItem = addSubElement( xmlDoc, elemsegmentItems, "segment-item" );
-            elemsegmentItem.setAttribute( "src", QString( "%1" ).arg( QFile::encodeName( it.current() ->absPath() ) ) );
-            elemsegmentItem.setAttribute( "id", QString( "segment-%1" ).arg( QString::number( it.current() ->index() ).rightJustified( 3, '0' ) ) );
+            elemsegmentItem.setAttribute( "src", track ->absPath() );
+            elemsegmentItem.setAttribute( "id", QString( "segment-%1" ).arg( QString::number( track ->index() ).rightJustified( 3, '0' ) ) );
 
         }
     }
-    for ( it.toFirst(); it.current(); ++it ) {
-
+    Q_FOREACH( K3bVcdTrack* track,  *m_doc->tracks() ) {
         if ( m_doc->vcdOptions() ->PbcEnabled() ) {
             if ( elemPbc.isNull() )
                 elemPbc = addSubElement( xmlDoc, root, "pbc" );
 
-            doPbc( xmlDoc, elemPbc, it.current() );
+            doPbc( xmlDoc, elemPbc, track );
         }
     }
 
@@ -236,7 +234,7 @@ bool K3bVcdXmlView::write( const QString& fname )
 
     QFile xmlFile( fname );
     if ( xmlFile.open( QIODevice::WriteOnly ) ) {
-        Q3TextStream ts( & xmlFile );
+        QTextStream ts( & xmlFile );
         ts << m_xmlstring;
         xmlFile.close();
         return true;
@@ -414,7 +412,7 @@ void K3bVcdXmlView::setNumkeySEL( QDomDocument& doc, QDomElement& parent, K3bVcd
                 while ( none < trackIt.key() ) {
                     elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );
                     elemPbcSelectionNumKeySEL.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( track->index() ).rightJustified( 3, '0' ) ) );
-                    addComment( doc, parent, QString( "key %1 -> %2 (normal none)" ).arg( none ).arg( QFile::encodeName( track->absPath() ) ) );
+                    addComment( doc, parent, QString( "key %1 -> %2 (normal none)" ).arg( none ).arg( track->absPath() ) );
                     none++;
                 }
 
@@ -422,7 +420,7 @@ void K3bVcdXmlView::setNumkeySEL( QDomDocument& doc, QDomElement& parent, K3bVcd
                     QString ref = ( trackIt.data() ->isSegment() ) ? "segment" : "sequence";
                     elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );
                     elemPbcSelectionNumKeySEL.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( trackIt.data() ->index() ).rightJustified( 3, '0' ) ) );
-                    addComment( doc, parent, QString( "key %1 -> %2" ).arg( trackIt.key() ).arg( QFile::encodeName( trackIt.data() ->absPath() ) ) );
+                    addComment( doc, parent, QString( "key %1 -> %2" ).arg( trackIt.key() ).arg( trackIt.data() ->absPath() ) );
                 } else {
                     elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );
                     elemPbcSelectionNumKeySEL.setAttribute( "ref", "end" );

@@ -22,9 +22,6 @@
 #include <qdom.h>
 #include <qdatetime.h>
 #include <qtimer.h>
-#include <q3textstream.h>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 // KDE-includes
 #include <k3process.h>
@@ -72,7 +69,7 @@ K3bVcdDoc::K3bVcdDoc( QObject* parent )
 K3bVcdDoc::~K3bVcdDoc()
 {
     if ( m_tracks ) {
-        m_tracks->setAutoDelete( true );
+        qDeleteAll( *m_tracks );
         delete m_tracks;
     }
 
@@ -83,8 +80,7 @@ bool K3bVcdDoc::newDocument()
 {
     clear();
     if ( !m_tracks )
-        m_tracks = new Q3PtrList<K3bVcdTrack>;
-    m_tracks->setAutoDelete( false );
+        m_tracks = new QList<K3bVcdTrack*>;
 
     return K3bDoc::newDocument();
 }
@@ -108,7 +104,7 @@ KIO::filesize_t K3bVcdDoc::calcTotalSize() const
 {
     unsigned long long sum = 0;
     if ( m_tracks ) {
-        for ( K3bVcdTrack * track = m_tracks->first(); track; track = m_tracks->next() ) {
+        Q_FOREACH( K3bVcdTrack* track, *m_tracks ) {
             sum += track->size();
         }
     }
@@ -227,19 +223,18 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KUrl& url )
             } else if ( vcdType() == NONE ) {
                 m_urlAddingTimer->stop();
                 vcdOptions() ->setMpegVersion( mpegVersion );
-                bool force = false;
-                force = ( KMessageBox::questionYesNo( kapp->mainWidget(),
-                                                      i18n( "K3b will create a %1 image from the given MPEG "
-                                                            "files, but these files must already be in %2 "
-                                                            "format. K3b does not yet resample MPEG files." )
-                                                      .arg( i18n( "SVCD" ) )
-                                                      .arg( i18n( "SVCD" ) )
-                                                      + "\n\n"
-                                                      + i18n( "Note: Forcing MPEG2 as VCD is not supported by "
-                                                              "some standalone DVD players." ),
-                                                      i18n( "Information" ),
-                                                      KStandardGuiItem::ok().text(),
-                                                      i18n( "Forcing VCD" ) ) == KMessageBox::No );
+                bool force = KMessageBox::questionYesNo( kapp->mainWidget(),
+                                                         i18n( "K3b will create a %1 image from the given MPEG "
+                                                               "files, but these files must already be in %2 "
+                                                               "format. K3b does not yet resample MPEG files." )
+                                                         .arg( i18n( "SVCD" ) )
+                                                         .arg( i18n( "SVCD" ) )
+                                                         + "\n\n"
+                                                         + i18n( "Note: Forcing MPEG2 as VCD is not supported by "
+                                                                 "some standalone DVD players." ),
+                                                         i18n( "Information" ),
+                                                         KGuiItem( i18n( "Force VCD" ) ),
+                                                         KGuiItem( i18n( "Do not force VCD" ) ) ) == KMessageBox::Yes;
                 if ( force ) {
                     setVcdType( vcdTypes( 1 ) );
                     vcdOptions() ->setAutoDetect( false );
@@ -322,10 +317,7 @@ void K3bVcdDoc::addTrack( K3bVcdTrack* track, uint position )
 
     lastAddedPosition = position;
 
-    if ( !m_tracks->insert( position, track ) ) {
-        lastAddedPosition = m_tracks->count();
-        m_tracks->insert( m_tracks->count(), track );
-    }
+    m_tracks->insert( position, track );
 
     if ( track->isSegment() )
         vcdOptions() ->increaseSegments( );
@@ -345,9 +337,9 @@ void K3bVcdDoc::removeTrack( K3bVcdTrack* track )
     }
 
     // set the current item to track
-    if ( m_tracks->findRef( track ) >= 0 ) {
+    if ( m_tracks->lastIndexOf( track ) >= 0 ) {
         // take the current item
-        track = m_tracks->take();
+        track = m_tracks->takeAt( m_tracks->lastIndexOf( track ) );
 
         // remove all pbc references to us?
         if ( track->hasRevRef() )
@@ -377,18 +369,16 @@ void K3bVcdDoc::removeTrack( K3bVcdTrack* track )
     }
 }
 
-void K3bVcdDoc::moveTrack( const K3bVcdTrack* track, const K3bVcdTrack* after )
+void K3bVcdDoc::moveTrack( K3bVcdTrack* track, K3bVcdTrack* after )
 {
     if ( track == after )
         return ;
 
-    // set the current item to track
-    m_tracks->findRef( track );
     // take the current item
-    track = m_tracks->take();
+    m_tracks->removeAll( track );
 
-    // if after == 0 findRef returnes -1
-    int pos = m_tracks->findRef( after );
+    // if after == 0 lastIndexOf returnes -1
+    int pos = m_tracks->lastIndexOf( after );
     m_tracks->insert( pos + 1, track );
 
     // reorder pbc tracks
@@ -459,10 +449,7 @@ void K3bVcdDoc::setPbcTracks()
         int count = m_tracks->count();
         kDebug() << QString( "K3bVcdDoc::setPbcTracks() - we have %1 tracks in list." ).arg( count );
 
-        Q3PtrListIterator<K3bVcdTrack> iterTrack( *m_tracks );
-        K3bVcdTrack* track;
-        while ( ( track = iterTrack.current() ) != 0 ) {
-            ++iterTrack;
+        Q_FOREACH( K3bVcdTrack* track, *m_tracks ) {
             for ( int i = 0; i < K3bVcdTrack::_maxPbcTracks; i++ ) {
                 // do not change userdefined tracks
                 if ( !track->isPbcUserDefined( i ) ) {
@@ -478,7 +465,7 @@ void K3bVcdDoc::setPbcTracks()
                             case K3bVcdTrack::PREVIOUS:
                                 // we are not alone :)
                                 if ( count > 1 ) {
-                                    t = at( index - 1 );
+                                    t = m_tracks->at( index - 1 );
                                     t->addToRevRefList( track );
                                     track->setPbcTrack( i, t );
                                 } else {
@@ -510,7 +497,7 @@ void K3bVcdDoc::setPbcTracks()
                                 break;
                             case K3bVcdTrack::AFTERTIMEOUT:
                             case K3bVcdTrack::NEXT:
-                                t = at( index + 1 );
+                                t = m_tracks->at( index + 1 );
                                 t->addToRevRefList( track );
                                 track->setPbcTrack( i, t );
                                 break;
@@ -528,13 +515,13 @@ void K3bVcdDoc::setPbcTracks()
                     else {
                         switch ( i ) {
                             case K3bVcdTrack::PREVIOUS:
-                                t = at( index - 1 );
+                                t = m_tracks->at( index - 1 );
                                 t->addToRevRefList( track );
                                 track->setPbcTrack( i, t );
                                 break;
                             case K3bVcdTrack::AFTERTIMEOUT:
                             case K3bVcdTrack::NEXT:
-                                t = at( index + 1 );
+                                t = m_tracks->at( index + 1 );
                                 t->addToRevRefList( track );
                                 track->setPbcTrack( i, t );
                                 break;
@@ -579,7 +566,7 @@ bool K3bVcdDoc::loadDocumentData( QDomElement* root )
     // vcd Label
     QDomNodeList vcdNodes = nodes.item( 1 ).childNodes();
 
-    for ( uint i = 0; i < vcdNodes.count(); i++ ) {
+    for ( int i = 0; i < vcdNodes.count(); i++ ) {
         QDomNode item = vcdNodes.item( i );
         QString name = item.nodeName();
 
@@ -843,12 +830,7 @@ bool K3bVcdDoc::saveDocumentData( QDomElement * docElem )
     // -------------------------------------------------------------
     QDomElement contentsElem = doc.createElement( "contents" );
 
-    Q3PtrListIterator<K3bVcdTrack> iterTrack( *m_tracks );
-    K3bVcdTrack* track;
-
-    while ( ( track = iterTrack.current() ) != 0 ) {
-        ++iterTrack;
-
+    Q_FOREACH( K3bVcdTrack* track, *m_tracks ) {
         QDomElement trackElem = doc.createElement( "track" );
         trackElem.setAttribute( "url", KIO::decodeFileName( track->absPath() ) );
         trackElem.setAttribute( "playtime", track->getPlayTime() );

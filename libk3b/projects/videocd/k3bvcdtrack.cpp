@@ -18,8 +18,6 @@
 
 #include <qstring.h>
 #include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 #include <stdio.h>
 #include <sys/types.h>
@@ -32,15 +30,13 @@
 #include "k3bvcdtrack.h"
 #include <k3bglobals.h>
 
-K3bVcdTrack::K3bVcdTrack( Q3PtrList<K3bVcdTrack>* parent, const QString& filename )
+K3bVcdTrack::K3bVcdTrack( QList<K3bVcdTrack*>* parent, const QString& filename )
         : m_pbcnumkeys( true ),
         m_pbcnumkeysuserdefined( false ),
         m_file( filename )
 {
     m_parent = parent;
     m_title = QFileInfo( m_file ).baseName( true );
-
-    m_revreflist = new Q3PtrList<K3bVcdTrack>;
 
     for ( int i = 0; i < K3bVcdTrack::_maxPbcTracks; i++ ) {
         m_pbctrackmap.insert( i, 0L );
@@ -67,7 +63,8 @@ KIO::filesize_t K3bVcdTrack::size() const
 
 int K3bVcdTrack::index() const
 {
-    int i = m_parent->find( this );
+    // (trueg): I have no idea why I need to const cast here!
+    int i = m_parent->indexOf( const_cast<K3bVcdTrack*>( this ) );
     if ( i < 0 )
         kDebug() << "(K3bVcdTrack) I'm not part of my parent!";
     return i;
@@ -77,29 +74,26 @@ void K3bVcdTrack::addToRevRefList( K3bVcdTrack* revreftrack )
 {
     kDebug() << "K3bVcdTrack::addToRevRefList: track = " << revreftrack;
 
-    m_revreflist->append( revreftrack );
+    m_revreflist.append( revreftrack );
 
-    kDebug() << "K3bVcdTrack::hasRevRef count = " << m_revreflist->count() << " empty = " << m_revreflist->isEmpty();
+    kDebug() << "K3bVcdTrack::hasRevRef count = " << m_revreflist.count() << " empty = " << m_revreflist.isEmpty();
 }
 
 void K3bVcdTrack::delFromRevRefList( K3bVcdTrack* revreftrack )
 {
-    if ( !m_revreflist->isEmpty() ) {
-        m_revreflist->remove
-        ( revreftrack );
-    }
+    m_revreflist.removeAll( revreftrack );
 }
 
 bool K3bVcdTrack::hasRevRef()
 {
-    return !m_revreflist->isEmpty() ;
+    return !m_revreflist.isEmpty() ;
 }
 
 void K3bVcdTrack::delRefToUs()
 {
-    for ( K3bVcdTrack * track = m_revreflist->first(); track; track = m_revreflist->next() ) {
+    Q_FOREACH( K3bVcdTrack* track, m_revreflist ) {
         for ( int i = 0; i < K3bVcdTrack::_maxPbcTracks; i++ ) {
-            kDebug() << "K3bVcdTrack::delRefToUs count = " << m_revreflist->count() << " empty = " << m_revreflist->isEmpty() << " track = " << track << " this = " << this;
+            kDebug() << "K3bVcdTrack::delRefToUs count = " << m_revreflist.count() << " empty = " << m_revreflist.isEmpty() << " track = " << track << " this = " << this;
             if ( this == track->getPbcTrack( i ) ) {
                 track->setPbcTrack( i );
                 track->setUserDefined( i, false );
@@ -156,7 +150,7 @@ bool K3bVcdTrack::isPbcUserDefined( int which )
     return m_pbcusrdefmap[ which ];
 }
 
-const QString K3bVcdTrack::resolution()
+QString K3bVcdTrack::resolution()
 {
     if ( mpeg_info->has_video ) {
         for ( int i = 0; i < 2; i++ ) {
@@ -169,7 +163,7 @@ const QString K3bVcdTrack::resolution()
     return i18n( "n/a" );
 }
 
-const QString K3bVcdTrack::highresolution()
+QString K3bVcdTrack::highresolution()
 {
     if ( mpeg_info->has_video ) {
         if ( mpeg_info->video[ 2 ].seen ) {
@@ -179,7 +173,7 @@ const QString K3bVcdTrack::highresolution()
     return i18n( "n/a" );
 }
 
-const QString K3bVcdTrack::video_frate()
+QString K3bVcdTrack::video_frate()
 {
     if ( mpeg_info->has_video ) {
         for ( int i = 0; i < 2; i++ ) {
@@ -192,7 +186,7 @@ const QString K3bVcdTrack::video_frate()
     return i18n( "n/a" );
 }
 
-const QString K3bVcdTrack::video_bitrate()
+QString K3bVcdTrack::video_bitrate()
 {
     if ( mpeg_info->has_video ) {
         for ( int i = 0; i < 2; i++ ) {
@@ -207,7 +201,7 @@ const QString K3bVcdTrack::video_bitrate()
 
 
 
-const QString K3bVcdTrack::video_format()
+QString K3bVcdTrack::video_format()
 {
     if ( mpeg_info->has_video ) {
         for ( int i = 0; i < 2; i++ ) {
@@ -240,7 +234,7 @@ const QString K3bVcdTrack::video_format()
     return i18n( "n/a" );
 }
 
-const QString K3bVcdTrack::video_chroma()
+QString K3bVcdTrack::video_chroma()
 {
     if ( mpeg_info->has_video ) {
         // MPEG1 only supports 4:2:0 Format
@@ -268,7 +262,7 @@ const QString K3bVcdTrack::video_chroma()
     return i18n( "n/a" );
 }
 
-const QString K3bVcdTrack::audio_layer()
+QString K3bVcdTrack::audio_layer()
 {
     if ( mpeg_info->has_audio ) {
         for ( int i = 0; i < 2; i++ ) {
@@ -281,7 +275,7 @@ const QString K3bVcdTrack::audio_layer()
     return i18n( "n/a" );
 }
 
-const QString K3bVcdTrack::audio_bitrate()
+QString K3bVcdTrack::audio_bitrate()
 {
     if ( mpeg_info->has_audio ) {
         for ( int i = 0; i < 2; i++ ) {
@@ -294,7 +288,7 @@ const QString K3bVcdTrack::audio_bitrate()
     return i18n( "n/a" );
 }
 
-const QString K3bVcdTrack::audio_sampfreq()
+QString K3bVcdTrack::audio_sampfreq()
 {
     if ( mpeg_info->has_audio ) {
         for ( int i = 0; i < 2; i++ ) {
@@ -307,7 +301,7 @@ const QString K3bVcdTrack::audio_sampfreq()
     return i18n( "n/a" );
 }
 
-const QString K3bVcdTrack::audio_mode( )
+QString K3bVcdTrack::audio_mode( )
 {
     if ( mpeg_info->has_audio ) {
         for ( int i = 2; i >= 0; i-- )
@@ -319,7 +313,7 @@ const QString K3bVcdTrack::audio_mode( )
     return i18n( "n/a" );
 }
 
-const QString K3bVcdTrack::audio_copyright( )
+QString K3bVcdTrack::audio_copyright( )
 {
     if ( mpeg_info->has_audio ) {
         for ( int i = 2; i >= 0; i-- )
@@ -333,7 +327,7 @@ const QString K3bVcdTrack::audio_copyright( )
     return i18n( "n/a" );
 }
 
-const QString K3bVcdTrack::mpegTypeS( bool audio )
+QString K3bVcdTrack::mpegTypeS( bool audio )
 {
     if ( mpeg_info->has_video && !audio ) {
         for ( int i = 0; i < 3; i++ )
@@ -376,7 +370,7 @@ const int K3bVcdTrack::mpegType( )
     return -1; // MPEG_UNKNOWN;
 }
 
-const QString K3bVcdTrack::audio_type2str( unsigned int version, unsigned int audio_mode, unsigned int audio_type )
+QString K3bVcdTrack::audio_type2str( unsigned int version, unsigned int audio_mode, unsigned int audio_type )
 {
     kDebug() << "K3bVcdTrack::audio_type2str() version:" << version << " audio_mode:" << audio_mode << " audio_type:" << audio_type;
 

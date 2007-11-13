@@ -65,76 +65,76 @@ K3bVcdOptions::K3bVcdOptions()
 bool K3bVcdOptions::checkCdiFiles()
 {
     m_cdisize = 0;
-    if ( !QFile::exists( locate( "data", "k3b/cdi/cdi_imag.rtf" ) ) )
+    if ( !QFile::exists( KStandardDirs::locate( "data", "k3b/cdi/cdi_imag.rtf" ) ) )
         return false;
-    if ( !QFile::exists( locate( "data", "k3b/cdi/cdi_text.fnt" ) ) )
+    if ( !QFile::exists( KStandardDirs::locate( "data", "k3b/cdi/cdi_text.fnt" ) ) )
         return false;
-    if ( !QFile::exists( locate( "data", "k3b/cdi/cdi_vcd.app" ) ) )
+    if ( !QFile::exists( KStandardDirs::locate( "data", "k3b/cdi/cdi_vcd.app" ) ) )
         return false;
-    if ( !QFile::exists( locate( "data", "k3b/cdi/cdi_vcd.cfg" ) ) )
+    if ( !QFile::exists( KStandardDirs::locate( "data", "k3b/cdi/cdi_vcd.cfg" ) ) )
         return false;
 
-    m_cdisize += QFile( locate( "data", "k3b/cdi/cdi_imag.rtf" ) ).size();
-    m_cdisize += QFile( locate( "data", "k3b/cdi/cdi_text.fnt" ) ).size();
-    m_cdisize += QFile( locate( "data", "k3b/cdi/cdi_vcd.app" ) ).size();
-    m_cdisize += QFile( locate( "data", "k3b/cdi/cdi_vcd.cfg" ) ).size();
+    m_cdisize += QFile( KStandardDirs::locate( "data", "k3b/cdi/cdi_imag.rtf" ) ).size();
+    m_cdisize += QFile( KStandardDirs::locate( "data", "k3b/cdi/cdi_text.fnt" ) ).size();
+    m_cdisize += QFile( KStandardDirs::locate( "data", "k3b/cdi/cdi_vcd.app" ) ).size();
+    m_cdisize += QFile( KStandardDirs::locate( "data", "k3b/cdi/cdi_vcd.cfg" ) ).size();
 
     return true;
 }
 
-void K3bVcdOptions::save( KConfigBase* c )
+void K3bVcdOptions::save( KConfigGroup& c )
 {
-    c->writeEntry( "volume_id", m_volumeID );
-    c->writeEntry( "album_id", m_albumID );
-    c->writeEntry( "volume_set_id", m_volumeSetId );
-    c->writeEntry( "preparer", m_preparer );
-    c->writeEntry( "publisher", m_publisher );
-    c->writeEntry( "volume_count", m_volumeCount );
-    c->writeEntry( "volume_number", m_volumeNumber );
-    c->writeEntry( "autodetect", m_autodetect );
-    c->writeEntry( "cdi_support", m_cdisupport );
-    c->writeEntry( "broken_svcd_mode", m_brokensvcdmode );
-    c->writeEntry( "VCD30interpretation", m_VCD30interpretation );
-    c->writeEntry( "2336_sectors", m_sector2336 );
-    c->writeEntry( "UpdateScanOffsets", m_updatescanoffsets );
-    c->writeEntry( "RelaxedAps", m_relaxedaps );
-    c->writeEntry( "PbcEnabled", m_pbcenabled );
-    c->writeEntry( "SegmentFolder", m_segmentfolder );
-    c->writeEntry( "Restriction", m_restriction );
-    c->writeEntry( "PreGapLeadout", m_pregapleadout );
-    c->writeEntry( "PreGapTrack", m_pregaptrack );
-    c->writeEntry( "FrontMarginTrack", m_frontmargintrack );
-    c->writeEntry( "RearMarginTrack", m_rearmargintrack );
-    c->writeEntry( "UseGaps", m_usegaps );
+    c.writeEntry( "volume_id", m_volumeID );
+    c.writeEntry( "album_id", m_albumID );
+    c.writeEntry( "volume_set_id", m_volumeSetId );
+    c.writeEntry( "preparer", m_preparer );
+    c.writeEntry( "publisher", m_publisher );
+    c.writeEntry( "volume_count", m_volumeCount );
+    c.writeEntry( "volume_number", m_volumeNumber );
+    c.writeEntry( "autodetect", m_autodetect );
+    c.writeEntry( "cdi_support", m_cdisupport );
+    c.writeEntry( "broken_svcd_mode", m_brokensvcdmode );
+    c.writeEntry( "VCD30interpretation", m_VCD30interpretation );
+    c.writeEntry( "2336_sectors", m_sector2336 );
+    c.writeEntry( "UpdateScanOffsets", m_updatescanoffsets );
+    c.writeEntry( "RelaxedAps", m_relaxedaps );
+    c.writeEntry( "PbcEnabled", m_pbcenabled );
+    c.writeEntry( "SegmentFolder", m_segmentfolder );
+    c.writeEntry( "Restriction", m_restriction );
+    c.writeEntry( "PreGapLeadout", m_pregapleadout );
+    c.writeEntry( "PreGapTrack", m_pregaptrack );
+    c.writeEntry( "FrontMarginTrack", m_frontmargintrack );
+    c.writeEntry( "RearMarginTrack", m_rearmargintrack );
+    c.writeEntry( "UseGaps", m_usegaps );
 }
 
 
-K3bVcdOptions K3bVcdOptions::load( KConfigBase* c )
+K3bVcdOptions K3bVcdOptions::load( const KConfigGroup& c )
 {
     K3bVcdOptions options;
 
-    options.setVolumeId( c->readEntry( "volume_id", options.volumeId() ) );
-    options.setAlbumId( c->readEntry( "album_id", options.albumId() ) );
-    options.setVolumeSetId( c->readEntry( "volume_set_id", options.volumeSetId() ) );
-    options.setPreparer( c->readEntry( "preparer", options.preparer() ) );
-    options.setPublisher( c->readEntry( "publisher", options.publisher() ) );
-    options.setVolumeCount( c->readNumEntry( "volume_count", options.volumeCount() ) );
-    options.setVolumeNumber( c->readNumEntry( "volume_number", options.volumeNumber() ) );
-    options.setAutoDetect( c->readBoolEntry( "autodetect", options.AutoDetect() ) );
-    options.setCdiSupport( c->readBoolEntry( "cdi_support", options.CdiSupport() ) );
-    options.setNonCompliantMode( c->readBoolEntry( "broken_svcd_mode", options.NonCompliantMode() ) );
-    options.setVCD30interpretation( c->readBoolEntry( "VCD30interpretation", options.VCD30interpretation() ) );
-    options.setSector2336( c->readBoolEntry( "2336_sectors", options.Sector2336() ) );
-    options.setUpdateScanOffsets( c->readBoolEntry( "UpdateScanOffsets", options.UpdateScanOffsets() ) );
-    options.setRelaxedAps( c->readBoolEntry( "RelaxedAps", options.RelaxedAps() ) );
-    options.setPbcEnabled( c->readBoolEntry( "PbcEnabled", options.PbcEnabled() ) );
-    options.setSegmentFolder( c->readBoolEntry( "SegmentFolder", options.SegmentFolder() ) );
-    options.setRestriction( c->readNumEntry( "Restriction", options.Restriction() ) );
-    options.setPreGapLeadout( c->readNumEntry( "PreGapLeadout", options.PreGapLeadout() ) );
-    options.setPreGapTrack( c->readNumEntry( "PreGapTrack", options.PreGapTrack() ) );
-    options.setFrontMarginTrack( c->readNumEntry( "FrontMarginTrack", options.FrontMarginTrack() ) );
-    options.setRearMarginTrack( c->readNumEntry( "RearMarginTrack", options.RearMarginTrack() ) );
-    options.setUseGaps( c->readBoolEntry( "UseGaps", options.UseGaps() ) );
+    options.setVolumeId( c.readEntry( "volume_id", options.volumeId() ) );
+    options.setAlbumId( c.readEntry( "album_id", options.albumId() ) );
+    options.setVolumeSetId( c.readEntry( "volume_set_id", options.volumeSetId() ) );
+    options.setPreparer( c.readEntry( "preparer", options.preparer() ) );
+    options.setPublisher( c.readEntry( "publisher", options.publisher() ) );
+    options.setVolumeCount( c.readEntry( "volume_count", options.volumeCount() ) );
+    options.setVolumeNumber( c.readEntry( "volume_number", options.volumeNumber() ) );
+    options.setAutoDetect( c.readEntry( "autodetect", options.AutoDetect() ) );
+    options.setCdiSupport( c.readEntry( "cdi_support", options.CdiSupport() ) );
+    options.setNonCompliantMode( c.readEntry( "broken_svcd_mode", options.NonCompliantMode() ) );
+    options.setVCD30interpretation( c.readEntry( "VCD30interpretation", options.VCD30interpretation() ) );
+    options.setSector2336( c.readEntry( "2336_sectors", options.Sector2336() ) );
+    options.setUpdateScanOffsets( c.readEntry( "UpdateScanOffsets", options.UpdateScanOffsets() ) );
+    options.setRelaxedAps( c.readEntry( "RelaxedAps", options.RelaxedAps() ) );
+    options.setPbcEnabled( c.readEntry( "PbcEnabled", options.PbcEnabled() ) );
+    options.setSegmentFolder( c.readEntry( "SegmentFolder", options.SegmentFolder() ) );
+    options.setRestriction( c.readEntry( "Restriction", options.Restriction() ) );
+    options.setPreGapLeadout( c.readEntry( "PreGapLeadout", options.PreGapLeadout() ) );
+    options.setPreGapTrack( c.readEntry( "PreGapTrack", options.PreGapTrack() ) );
+    options.setFrontMarginTrack( c.readEntry( "FrontMarginTrack", options.FrontMarginTrack() ) );
+    options.setRearMarginTrack( c.readEntry( "RearMarginTrack", options.RearMarginTrack() ) );
+    options.setUseGaps( c.readEntry( "UseGaps", options.UseGaps() ) );
 
     return options;
 }

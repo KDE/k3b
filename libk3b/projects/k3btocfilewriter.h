@@ -16,7 +16,7 @@
 #ifndef _K3B_TOC_FILE_WRITER_H_
 #define _K3B_TOC_FILE_WRITER_H_
 
-#include <q3textstream.h>
+#include <qtextstream.h>
 #include <qstringlist.h>
 
 #include <k3btoc.h>
@@ -31,7 +31,7 @@ class K3bTocFileWriter
  public:
   K3bTocFileWriter();
 
-  bool save( Q3TextStream& );
+  bool save( QTextStream& );
   bool save( const QString& filename );
 
   void setData( const K3bDevice::Toc& toc ) { m_toc = toc; }
@@ -45,11 +45,11 @@ class K3bTocFileWriter
   void setSession( int s ) { m_sessionToWrite = s; }
 
  private:
-  void writeHeader( Q3TextStream& t );
-  void writeGlobalCdText( Q3TextStream& t );
-  void writeTrackCdText( const K3bDevice::TrackCdText& track, Q3TextStream& t );
-  void writeTrack( unsigned int index, const K3b::Msf& offset, Q3TextStream& t );
-  void writeDataSource( unsigned int trackNumber, Q3TextStream& t );
+  void writeHeader( QTextStream& t );
+  void writeGlobalCdText( QTextStream& t );
+  void writeTrackCdText( const K3bDevice::TrackCdText& track, QTextStream& t );
+  void writeTrack( unsigned int index, const K3b::Msf& offset, QTextStream& t );
+  void writeDataSource( unsigned int trackNumber, QTextStream& t );
   bool readFromStdin() const;
 
   K3bDevice::Toc m_toc;

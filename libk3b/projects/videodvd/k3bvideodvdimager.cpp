@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2004-2007 Sebastian Trueg <trueg@k3b.org>
@@ -26,10 +26,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <q3textstream.h>
+#include <qtextstream.h>
 #include <qdir.h>
 #include <qfile.h>
-#include <q3ptrlist.h>
+#include <qlist.h>
 
 
 
@@ -42,8 +42,8 @@ public:
 };
 
 
-K3bVideoDvdImager::K3bVideoDvdImager( K3bVideoDvdDoc* doc, K3bJobHandler* jh, QObject* parent, const char* name )
-  : K3bIsoImager( doc, jh, parent, name )
+K3bVideoDvdImager::K3bVideoDvdImager( K3bVideoDvdDoc* doc, K3bJobHandler* jh, QObject* parent )
+  : K3bIsoImager( doc, jh, parent )
 {
   d = new Private;
   d->doc = doc;
@@ -76,14 +76,14 @@ void K3bVideoDvdImager::fixVideoDVDSettings()
   // will be overwritten in the burn dialog unless we create some K3bVideoDVDIsoOptions
   // class with different defaults. But since the whole Video DVD project is a hack we
   // go the easy road.
-  K3bIsoOptions o = d->doc->isoOptions(); 
-  o.setISOLevel(1); 
-  o.setISOallow31charFilenames(false); 
-  o.setCreateJoliet(false); 
-  o.setJolietLong(false); 
-  o.setCreateRockRidge(false); 
-  o.setCreateUdf(true); 
-  d->doc->setIsoOptions( o ); 
+  K3bIsoOptions o = d->doc->isoOptions();
+  o.setISOLevel(1);
+  o.setISOallow31charFilenames(false);
+  o.setCreateJoliet(false);
+  o.setJolietLong(false);
+  o.setCreateRockRidge(false);
+  o.setCreateUdf(true);
+  d->doc->setIsoOptions( o );
 }
 
 
@@ -97,7 +97,7 @@ void K3bVideoDvdImager::calculateSize()
 int K3bVideoDvdImager::writePathSpec()
 {
   //
-  // Create a temp dir and link all contents of the VIDEO_TS dir to make mkisofs 
+  // Create a temp dir and link all contents of the VIDEO_TS dir to make mkisofs
   // able to handle the VideoDVD stuff.
   //
   // mkisofs is not able to create VideoDVDs from graft-points.
@@ -117,16 +117,16 @@ int K3bVideoDvdImager::writePathSpec()
     emit infoMessage( i18n("Unable to create temporary directory '%1'.").arg(d->tempPath + "/VIDEO_TS"), ERROR );
     return -1;
   }
-  
-  for( Q3PtrListIterator<K3bDataItem> it( d->doc->videoTsDir()->children() ); *it; ++it ) {
-    if( (*it)->isDir() ) {
-      emit infoMessage( i18n("Found invalid entry in the VIDEO_TS folder (%1).").arg((*it)->k3bName()), ERROR );
+
+  Q_FOREACH( K3bDataItem* item, d->doc->videoTsDir()->children() ) {
+    if( item->isDir() ) {
+      emit infoMessage( i18n("Found invalid entry in the VIDEO_TS folder (%1).").arg(item->k3bName()), ERROR );
       return -1;
     }
 
     // convert to upper case names
-    if( ::symlink( QFile::encodeName( (*it)->localPath() ), 
-		   QFile::encodeName( d->tempPath + "/VIDEO_TS/" + (*it)->k3bName().upper() ) ) == -1 ) {
+    if( ::symlink( QFile::encodeName( item->localPath() ),
+		   QFile::encodeName( d->tempPath + "/VIDEO_TS/" + item->k3bName().upper() ) ) == -1 ) {
       emit infoMessage( i18n("Unable to link temporary file in folder %1.").arg( d->tempPath ), ERROR );
       return -1;
     }
@@ -137,10 +137,10 @@ int K3bVideoDvdImager::writePathSpec()
 }
 
 
-int K3bVideoDvdImager::writePathSpecForDir( K3bDirItem* dirItem, Q3TextStream& stream )
+int K3bVideoDvdImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream )
 {
   //
-  // We handle the VIDEO_TS dir differently since otherwise mkisofs is not able to 
+  // We handle the VIDEO_TS dir differently since otherwise mkisofs is not able to
   // open the VideoDVD structures (see addMkisofsParameters)
   //
   if( dirItem == d->doc->videoTsDir() ) {
@@ -148,10 +148,9 @@ int K3bVideoDvdImager::writePathSpecForDir( K3bDirItem* dirItem, Q3TextStream& s
   }
 
   int num = 0;
-  for( Q3PtrListIterator<K3bDataItem> it( dirItem->children() ); it.current(); ++it ) {
-    K3bDataItem* item = it.current();
+  Q_FOREACH( K3bDataItem* item, dirItem->children() ) {
     num++;
-      
+
     if( item->isDir() ) {
       // we cannot add the video_ts dir twice
       if( item != d->doc->videoTsDir() ) {
@@ -177,7 +176,7 @@ int K3bVideoDvdImager::writePathSpecForDir( K3bDirItem* dirItem, Q3TextStream& s
 
 bool K3bVideoDvdImager::addMkisofsParameters( bool printSize )
 {
-  // Here is another bad design: we assume that K3bIsoImager::start does not add additional 
+  // Here is another bad design: we assume that K3bIsoImager::start does not add additional
   // parameters to the process. :(
   if( K3bIsoImager::addMkisofsParameters( printSize ) ) {
     *m_process << "-dvd-video";
@@ -195,8 +194,8 @@ void K3bVideoDvdImager::cleanup()
   if( QFile::exists( d->tempPath ) ) {
     QDir dir( d->tempPath );
     dir.cd( "VIDEO_TS" );
-    for( Q3PtrListIterator<K3bDataItem> it( d->doc->videoTsDir()->children() ); *it; ++it )
-      dir.remove( (*it)->k3bName().upper() );
+    Q_FOREACH( K3bDataItem* item, d->doc->videoTsDir()->children() )
+      dir.remove( item->k3bName().upper() );
     dir.cdUp();
     dir.rmdir( "VIDEO_TS" );
     dir.cdUp();
@@ -214,7 +213,7 @@ void K3bVideoDvdImager::slotReceivedStderr( const QString& line )
     emit infoMessage( i18n("The project does not contain all necessary VideoDVD files."), WARNING );
     emit infoMessage( i18n("The resulting DVD will most likely not be playable on a Hifi DVD player."), WARNING );
   }
-  else 
+  else
     K3bIsoImager::slotReceivedStderr( line );
 }
 

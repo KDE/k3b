@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
@@ -41,13 +41,13 @@ bool K3bTocFileWriter::save( const QString& filename )
     return false;
   }
 
-  Q3TextStream s( &f );
+  QTextStream s( &f );
 
   return save( s );
 }
 
 
-bool K3bTocFileWriter::save( Q3TextStream& t )
+bool K3bTocFileWriter::save( QTextStream& t )
 {
   writeHeader(t);
 
@@ -72,7 +72,7 @@ bool K3bTocFileWriter::save( Q3TextStream& t )
   // We also can only hide the first track in the first session.
   //
   bool hideFirstTrack = m_hideFirstTrack;
-  if( m_toc.count() < 2 || 
+  if( m_toc.count() < 2 ||
       m_toc[0].type() != K3bDevice::Track::AUDIO ||
       m_toc[1].type() != K3bDevice::Track::AUDIO ||
       (sessions > 1 && m_sessionToWrite != 1 ) )
@@ -153,7 +153,7 @@ bool K3bTocFileWriter::save( Q3TextStream& t )
 }
 
 
-void K3bTocFileWriter::writeHeader( Q3TextStream& t )
+void K3bTocFileWriter::writeHeader( QTextStream& t )
 {
   // little comment
   t << "// TOC-file to use with cdrdao created by K3b " << k3bcore->version()
@@ -193,7 +193,7 @@ void K3bTocFileWriter::writeHeader( Q3TextStream& t )
 }
 
 
-void K3bTocFileWriter::writeTrack( unsigned int index, const K3b::Msf& offset, Q3TextStream& t )
+void K3bTocFileWriter::writeTrack( unsigned int index, const K3b::Msf& offset, QTextStream& t )
 {
   const K3bDevice::Track& track = m_toc[index];
 
@@ -219,7 +219,7 @@ void K3bTocFileWriter::writeTrack( unsigned int index, const K3b::Msf& offset, Q
     // cdrdao sees the pregap as part of the current track and not as part of
     // the previous like it really is.
     //
-    
+
     if( index == 0 ) {
       if( (track.firstSector()-offset) > 0 ) {
 	//
@@ -234,7 +234,7 @@ void K3bTocFileWriter::writeTrack( unsigned int index, const K3b::Msf& offset, Q
     }
     else {
       const K3bDevice::Track& lastTrack = m_toc[index-1];
-      
+
       //
       // the pregap data
       //
@@ -275,7 +275,7 @@ void K3bTocFileWriter::writeTrack( unsigned int index, const K3b::Msf& offset, Q
       t << "TRACK MODE2_FORM2" << endl;
     else
       t << "TRACK MODE1" << endl;
-    
+
     if( !m_cdText.isEmpty() && !m_toc.contentType() != K3bDevice::DATA ) {
       //
       // insert fake cdtext
@@ -305,7 +305,7 @@ void K3bTocFileWriter::writeTrack( unsigned int index, const K3b::Msf& offset, Q
 }
 
 
-void K3bTocFileWriter::writeGlobalCdText( Q3TextStream& t )
+void K3bTocFileWriter::writeGlobalCdText( QTextStream& t )
 {
   t << "CD_TEXT {" << endl;
   t << "  LANGUAGE_MAP { 0: EN }" << endl;
@@ -325,7 +325,7 @@ void K3bTocFileWriter::writeGlobalCdText( Q3TextStream& t )
 }
 
 
-void K3bTocFileWriter::writeTrackCdText( const K3bDevice::TrackCdText& track, Q3TextStream& t )
+void K3bTocFileWriter::writeTrackCdText( const K3bDevice::TrackCdText& track, QTextStream& t )
 {
   t << "CD_TEXT {" << endl;
   t << "  LANGUAGE 0 {" << endl;
@@ -341,7 +341,7 @@ void K3bTocFileWriter::writeTrackCdText( const K3bDevice::TrackCdText& track, Q3
 }
 
 
-void K3bTocFileWriter::writeDataSource( unsigned int trackIndex, Q3TextStream& t )
+void K3bTocFileWriter::writeDataSource( unsigned int trackIndex, QTextStream& t )
 {
   if( readFromStdin() )
     t << "\"-\" ";

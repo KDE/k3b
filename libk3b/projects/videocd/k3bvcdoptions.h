@@ -19,6 +19,8 @@
 #include <qstring.h>
 #include "k3b_export.h"
 
+#include <kconfiggroup.h>
+
 class KConfigBase;
 
 class LIBK3B_EXPORT K3bVcdOptions
@@ -242,9 +244,9 @@ class LIBK3B_EXPORT K3bVcdOptions
         }
 
         bool checkCdiFiles();
-        void save( KConfigBase* c );
+        void save( KConfigGroup& c );
 
-        static K3bVcdOptions load( KConfigBase* c );
+        static K3bVcdOptions load( const KConfigGroup& c );
         static K3bVcdOptions defaults();
 
         void setPbcEnabled( const bool& b )

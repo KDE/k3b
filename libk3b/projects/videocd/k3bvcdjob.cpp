@@ -1,18 +1,18 @@
 /*
-*
-* $Id$
-* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
-* Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
-*
-* This file is part of the K3b project.
-* Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-* See the file "COPYING" for the exact licensing terms.
-*/
+ *
+ * $Id$
+ * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
+ * Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -50,8 +50,8 @@
 #include <k3bdevicehandler.h>
 
 
-K3bVcdJob::K3bVcdJob( K3bVcdDoc* doc, K3bJobHandler* jh, QObject* parent, const char* name )
-        : K3bBurnJob( jh, parent, name )
+K3bVcdJob::K3bVcdJob( K3bVcdDoc* doc, K3bJobHandler* jh, QObject* parent )
+    : K3bBurnJob( jh, parent )
 {
     m_doc = doc;
     m_doc->setCopies( m_doc->dummy() || m_doc->onlyCreateImages() ? 1 : m_doc->copies() );
@@ -83,10 +83,10 @@ K3bDoc* K3bVcdJob::doc() const
 
 K3bDevice::Device* K3bVcdJob::writer() const
 {
-  if( doc()->onlyCreateImages() )
-    return 0;
-  else
-    return doc() ->burner();
+    if( doc()->onlyCreateImages() )
+        return 0;
+    else
+        return doc() ->burner();
 }
 
 void K3bVcdJob::cancel()
@@ -160,7 +160,7 @@ void K3bVcdJob::xmlGen()
 
     KTemporaryFile tempF;
     m_xmlFile = tempF.name();
-    tempF.unlink();
+    tempF.remove();
 
     K3bVcdXmlView xmlView( m_doc );
 
@@ -230,7 +230,7 @@ void K3bVcdJob::vcdxBuild()
 
     *m_process << QString( "--bin-file=%1" ).arg( m_doc->vcdImage() );
 
-    *m_process << QString( "%1" ).arg( QFile::encodeName( m_xmlFile ) );
+    *m_process << m_xmlFile;
 
     connect( m_process, SIGNAL( receivedStderr( K3Process*, char*, int ) ),
              this, SLOT( slotParseVcdxBuildOutput( K3Process*, char*, int ) ) );
@@ -241,11 +241,10 @@ void K3bVcdJob::vcdxBuild()
 
     // vcdxbuild commandline parameters
     kDebug() << "***** vcdxbuild parameters:";
-    ;
-    const Q3ValueList<Q3CString>& args = m_process->args();
+    QList<QByteArray> args = m_process->args();
     QString s;
-    for ( Q3ValueList<Q3CString>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-        s += *it + " ";
+    Q_FOREACH( QByteArray arg, args ) {
+        s += QString::fromLocal8Bit( arg ) + " ";
     }
     kDebug() << s << flush;
     emit debuggingOutput( "vcdxbuild command:", s );
@@ -355,17 +354,17 @@ void K3bVcdJob::slotVcdxBuildFinished()
     if ( m_process->normalExit() ) {
         // TODO: check the process' exitStatus()
         switch ( m_process->exitStatus() ) {
-            case 0:
-                emit infoMessage( i18n( "Cue/Bin files successfully created." ), K3bJob::SUCCESS );
-                m_imageFinished = true;
-                break;
-            default:
-                emit infoMessage( i18n( "%1 returned an unknown error (code %2)." ).arg( "vcdxbuild" ).arg( m_process->exitStatus() ),
-                                  K3bJob::ERROR );
-                emit infoMessage( i18n( "Please send me an email with the last output." ), K3bJob::ERROR );
-                cancelAll();
-                jobFinished( false );
-                return ;
+        case 0:
+            emit infoMessage( i18n( "Cue/Bin files successfully created." ), K3bJob::SUCCESS );
+            m_imageFinished = true;
+            break;
+        default:
+            emit infoMessage( i18n( "%1 returned an unknown error (code %2)." ).arg( "vcdxbuild" ).arg( m_process->exitStatus() ),
+                              K3bJob::ERROR );
+            emit infoMessage( i18n( "Please send me an email with the last output." ), K3bJob::ERROR );
+            cancelAll();
+            jobFinished( false );
+            return ;
         }
     } else {
         emit infoMessage( i18n( "%1 did not exit cleanly." ).arg( "Vcdxbuild" ), K3bJob::ERROR );
@@ -553,27 +552,27 @@ void K3bVcdJob::parseInformation( const QString &text )
 QString K3bVcdJob::jobDescription() const
 {
     switch ( m_doc->vcdType() ) {
-        case K3bVcdDoc::VCD11:
-            return i18n( "Writing Video CD (Version 1.1)" );
-        case K3bVcdDoc::VCD20:
-            return i18n( "Writing Video CD (Version 2.0)" );
-        case K3bVcdDoc::SVCD10:
-            return i18n( "Writing Super Video CD" );
-        case K3bVcdDoc::HQVCD:
-            return i18n( "Writing High-Quality Video CD" );
-        default:
-            return i18n( "Writing Video CD" );
+    case K3bVcdDoc::VCD11:
+        return i18n( "Writing Video CD (Version 1.1)" );
+    case K3bVcdDoc::VCD20:
+        return i18n( "Writing Video CD (Version 2.0)" );
+    case K3bVcdDoc::SVCD10:
+        return i18n( "Writing Super Video CD" );
+    case K3bVcdDoc::HQVCD:
+        return i18n( "Writing High-Quality Video CD" );
+    default:
+        return i18n( "Writing Video CD" );
     }
 }
 
 
 QString K3bVcdJob::jobDetails() const
 {
-    return ( i18n( "1 MPEG (%1)",
-                   "%n MPEGs (%1)",
-                   m_doc->tracks() ->count() ).arg( KIO::convertSize( m_doc->size() ) )
+    return ( i18np( "1 MPEG (%1)",
+                    "%n MPEGs (%1)",
+                    m_doc->tracks() ->count() ).arg( KIO::convertSize( m_doc->size() ) )
              + ( m_doc->copies() > 1
-                 ? i18n( " - %n copy", " - %n copies", m_doc->copies() )
+                 ? i18np( " - %n copy", " - %n copies", m_doc->copies() )
                  : QString::null ) );
 }
 
