@@ -36,7 +36,7 @@ class K3bInfFileWriter
  public:
   K3bInfFileWriter();
 
-  bool save( Q3TextStream& );
+  bool save( QTextStream& );
   bool save( const QString& filename );
 
   /**

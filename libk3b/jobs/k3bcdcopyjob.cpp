@@ -422,24 +422,25 @@ void K3bCdCopyJob::queryCddb()
 
 void K3bCdCopyJob::slotCddbQueryFinished( int error )
 {
-  if( error == K3bCddbQuery::SUCCESS ) {
-    d->cddbInfo = d->cddb->result();
-    d->haveCddb = true;
+#warning Use KCddb
+//   if( error == K3bCddbQuery::SUCCESS ) {
+//     d->cddbInfo = d->cddb->result();
+//     d->haveCddb = true;
 
-    emit infoMessage( i18n("Found Cddb entry (%1 - %2).").arg(d->cddbInfo.cdArtist).arg(d->cddbInfo.cdTitle), SUCCESS );
+//     emit infoMessage( i18n("Found Cddb entry (%1 - %2).").arg(d->cddbInfo.cdArtist).arg(d->cddbInfo.cdTitle), SUCCESS );
 
     // save the entry locally
-    KConfig* c = k3bcore->config();
-    c->setGroup( "Cddb" );
-    if( c->readBoolEntry( "save cddb entries locally", true ) )
-      d->cddb->saveEntry( d->cddbInfo );
-  }
-  else if( error == K3bCddbQuery::NO_ENTRY_FOUND ) {
-    emit infoMessage( i18n("No Cddb entry found."), WARNING );
-  }
-  else {
-    emit infoMessage( i18n("Cddb error (%1).").arg(d->cddb->errorString()), ERROR );
-  }
+//     KConfig* c = k3bcore->config();
+//     c->setGroup( "Cddb" );
+//     if( c->readBoolEntry( "save cddb entries locally", true ) )
+//       d->cddb->saveEntry( d->cddbInfo );
+//   }
+//   else if( error == K3bCddbQuery::NO_ENTRY_FOUND ) {
+//     emit infoMessage( i18n("No Cddb entry found."), WARNING );
+//   }
+//   else {
+//     emit infoMessage( i18n("Cddb error (%1).").arg(d->cddb->errorString()), ERROR );
+//   }
 
   startCopy();
 }
@@ -780,9 +781,11 @@ bool K3bCdCopyJob::writeNextSession()
 	  // It is important that the files have the ending inf because
 	  // cdrecord only checks this
 
-	  KTempFile tmp( QString::null, ".inf" );
-	  d->infNames.append( tmp.name() );
-	  bool success = d->infFileWriter->save( *tmp.textStream() );
+#warning Make sure the temp files have the extension inf. Otherwise cdrecord wont use them
+	  KTemporaryFile tmp;
+	  d->infNames.append( tmp.fileName() );
+          QTextStream stream( &tmp );
+	  bool success = d->infFileWriter->save( stream );
 	  tmp.close();
 	  if( !success )
 	    return false;
@@ -1106,7 +1109,7 @@ void K3bCdCopyJob::cleanup()
 
     // remove the tempdir created in prepareImageFiles()
     if( d->deleteTempDir ) {
-      KIO::NetAccess::del( KUrl::fromPathOrUrl(m_tempPath), 0 );
+      KIO::NetAccess::del( m_tempPath, 0 );
       d->deleteTempDir = false;
     }
   }
@@ -1208,9 +1211,9 @@ QString K3bCdCopyJob::jobDescription() const
 
 QString K3bCdCopyJob::jobDetails() const
 {
-  return i18n("Creating 1 copy",
-	      "Creating %n copies",
-	      (m_simulate||m_onlyCreateImages) ? 1 : m_copies );
+  return i18np("Creating 1 copy",
+               "Creating %n copies",
+               (m_simulate||m_onlyCreateImages) ? 1 : m_copies );
 }
 
 

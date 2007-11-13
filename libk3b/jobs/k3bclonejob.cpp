@@ -372,9 +372,9 @@ QString K3bCloneJob::jobDescription() const
 
 QString K3bCloneJob::jobDetails() const
 {
-  return i18n("Creating 1 clone copy",
-	      "Creating %n clone copies",
-	      (m_simulate||m_onlyCreateImage) ? 1 : m_copies );
+    return i18np("Creating 1 clone copy",
+                 "Creating %n clone copies",
+                 (m_simulate||m_onlyCreateImage) ? 1 : m_copies );
 }
 
 #include "k3bclonejob.moc"

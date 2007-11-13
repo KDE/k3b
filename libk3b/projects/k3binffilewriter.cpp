@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -48,18 +48,18 @@ bool K3bInfFileWriter::save( const QString& filename )
     return false;
   }
 
-  Q3TextStream s( &f );
+  QTextStream s( &f );
 
   return save( s );
 }
 
 
-bool K3bInfFileWriter::save( Q3TextStream& s )
+bool K3bInfFileWriter::save( QTextStream& s )
 {
   // now write the inf data
   // ----------------------
   // header
-  s << "# Cdrecord-Inf-File written by K3b " << k3bcore->version() 
+  s << "# Cdrecord-Inf-File written by K3b " << k3bcore->version()
     << ", " << QDateTime::currentDateTime().toString() << endl
     << "#" << endl;
 
@@ -69,15 +69,15 @@ bool K3bInfFileWriter::save( Q3TextStream& s )
   // CD-Text
   s << "Albumperformer=\t" << "'" << m_albumPerformer << "'" << endl;
   s << "Albumtitle=\t" << "'" << m_albumTitle << "'" << endl;
-    
+
   s << "Performer=\t" << "'" << m_trackPerformer << "'" << endl;
   s << "Songwriter=\t" << "'" << m_trackSongwriter << "'" << endl;
   s << "Composer=\t" << "'" << m_trackComposer << "'" << endl;
   s << "Arranger=\t" << "'" << m_trackArranger << "'" << endl;
   s << "Message=\t" << "'" << m_trackMessage << "'" << endl;
-    
+
   s << "Tracktitle=\t" << "'" << m_trackTitle << "'" << endl;
-    
+
   s << "Tracknumber=\t" << m_trackNumber << endl;
 
   // track start
