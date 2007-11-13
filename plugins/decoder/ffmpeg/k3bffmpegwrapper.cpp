@@ -298,7 +298,7 @@ int K3bFFMpegFile::fillOutputBuffer()
     d->packetSize -= len;
     d->packetData += len;
 
-    if( d->packetSize <= 0 )
+    if( d->packetSize <= 0  )
       av_free_packet( &d->packet );
   }
 

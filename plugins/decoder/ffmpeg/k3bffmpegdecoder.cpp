@@ -65,8 +65,8 @@ bool K3bFFMpegDecoderFactory::canDecode( const KUrl& url )
 
 
 
-K3bFFMpegDecoder::K3bFFMpegDecoder( QObject* parent,  )
-  : K3bAudioDecoder( parent, name ),
+K3bFFMpegDecoder::K3bFFMpegDecoder( QObject* parent  )
+  : K3bAudioDecoder( parent ),
     m_file(0)
 {
 }
