@@ -64,7 +64,7 @@ public:
 
   Q3ValueList<Track> tracks;
 
-  KTempFile* cdTextFile;
+  KTemporaryFile* cdTextFile;
 
   int burnedMediaType;
   int usedSpeedFactor;
@@ -270,8 +270,8 @@ void K3bCdrecordWriter::prepareProcess()
   if( m_rawCdText.size() > 0 ) {
     delete d->cdTextFile;
     d->cdTextFile = new K3bTempFile( QString::null, ".dat" );
-    d->cdTextFile->setAutoDelete(true);
-    d->cdTextFile->file()->writeBlock( m_rawCdText );
+    d->cdTextFile->setAutoRemove(true);
+    d->cdTextFile->write( m_rawCdText );
     d->cdTextFile->close();
 
     *m_process << "textfile=" + d->cdTextFile->name();

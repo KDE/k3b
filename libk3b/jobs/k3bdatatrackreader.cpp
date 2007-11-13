@@ -71,8 +71,8 @@ private:
 };
 
 
-K3bDataTrackReader::K3bDataTrackReader( K3bJobHandler* jh, QObject* parent, const char* name )
-  : K3bThreadJob( jh, parent, name )
+K3bDataTrackReader::K3bDataTrackReader( K3bJobHandler* jh, QObject* parent )
+  : K3bThreadJob( jh, parent )
 {
   m_thread = new WorkThread();
   setThread( m_thread );
