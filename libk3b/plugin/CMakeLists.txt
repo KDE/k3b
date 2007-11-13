@@ -1,6 +1,7 @@
 
-
-add_subdirectory( libsamplerate )
+if(NOT SAMPLERATE_FOUND)
+  add_subdirectory( libsamplerate )
+endif(NOT SAMPLERATE_FOUND)
 
 
 ########### next target ###############

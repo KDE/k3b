@@ -20,7 +20,7 @@
 #include	<stdlib.h>
 #include	<string.h>
 
-#include	"config.h"
+#include	"config-k3b.h"
 
 #include	"samplerate.h"
 #include	"common.h"

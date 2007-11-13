@@ -28,6 +28,8 @@ add_subdirectory( projects )
 add_subdirectory( jobs )
 
 
+macro_optional_find_package(Samplerate)
+
 ########### next target ###############
 if(DVDREAD_FOUND)
 
@@ -219,6 +221,12 @@ target_link_libraries(k3b
   ${KDE4_KDE3SUPPORT_LIBS}
   k3bdevice
   dl )
+
+if(NOT SAMPLERATE_FOUND)
+  target_link_libraries(k3b k3b_sameplrate)
+else(NOT SAMPLERATE_FOUND)
+  target_link_libraries(k3b ${SAMPLERATE_LIBRARIES})
+endif(NOT SAMPLERATE_FOUND)
 
 if(DVDREAD_FOUND)
   target_link_libraries(k3b ${DVDREAD_LIBRARIES})
