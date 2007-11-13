@@ -148,12 +148,12 @@ void K3bJobProgressDialog::setupGUI()
   m_labelJob_font.setPointSize( m_labelJob_font.pointSize() + 2 );
   m_labelJob_font.setBold( true );
   m_labelJob->setFont( m_labelJob_font );
-  m_labelJob->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
+  m_labelJob->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
   frame4Layout->addWidget( m_labelJob );
 
   m_labelJobDetails = new K3bThemedLabel( frame4 );
   m_labelJobDetails->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 0, 1, m_labelJobDetails->sizePolicy().hasHeightForWidth() ) );
-  m_labelJobDetails->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
+  m_labelJobDetails->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
   frame4Layout->addWidget( m_labelJobDetails );
   headerLayout->addWidget( frame4 );
 
@@ -211,7 +211,7 @@ void K3bJobProgressDialog::setupGUI()
   layout3->addWidget( m_labelSubTask );
 
   m_labelSubProcessedSize = new QLabel( this, "m_labelSubProcessedSize" );
-  m_labelSubProcessedSize->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
+  m_labelSubProcessedSize->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
   layout3->addWidget( m_labelSubProcessedSize );
   mainLayout->addLayout( layout3 );
 
@@ -224,7 +224,7 @@ void K3bJobProgressDialog::setupGUI()
   layout4->addWidget( textLabel5 );
 
   m_labelProcessedSize = new QLabel( this, "m_labelProcessedSize" );
-  m_labelProcessedSize->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
+  m_labelProcessedSize->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
   layout4->addWidget( m_labelProcessedSize );
   mainLayout->addLayout( layout4 );
 

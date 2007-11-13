@@ -56,7 +56,7 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
   freeTempSpaceBox->setSpacing( KDialog::spacingHint() );
   (void)new QLabel( i18n( "Free space in temporary directory:" ), freeTempSpaceBox, "TextLabel2" );
   m_labelFreeSpace = new QLabel( "                       ",freeTempSpaceBox, "m_labelFreeSpace" );
-  m_labelFreeSpace->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
+  m_labelFreeSpace->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
 
 
   connect( m_editDirectory, SIGNAL(openFileDialog(KUrlRequester*)),
@@ -212,7 +212,7 @@ void K3bTempDirSelectionWidget::setNeededSize( KIO::filesize_t bytes )
     cdSizeBox->setSpacing( KDialog::spacingHint() );
     (void)new QLabel( i18n( "Size of project:" ), cdSizeBox, "TextLabel4" );
     m_labelCdSize = new QLabel( KIO::convertSize(bytes), cdSizeBox, "m_labelCdSize" );
-    m_labelCdSize->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
+    m_labelCdSize->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
   }
   m_labelCdSize->setText( KIO::convertSize(bytes) );
 }

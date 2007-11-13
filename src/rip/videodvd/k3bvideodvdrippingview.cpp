@@ -59,7 +59,7 @@ K3bVideoDVDRippingView::K3bVideoDVDRippingView( QWidget* parent, const char * na
   QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
   toolBoxLayout->addItem( spacer );
   m_labelLength = new QLabel( mainWidget() );
-  m_labelLength->setAlignment( int( QLabel::Qt::AlignVCenter | QLabel::Qt::AlignRight ) );
+  m_labelLength->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
   toolBoxLayout->addWidget( m_labelLength );
 
 
