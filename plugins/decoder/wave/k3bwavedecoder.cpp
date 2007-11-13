@@ -349,9 +349,9 @@ QString K3bWaveDecoder::technicalInfo( const QString& name ) const
   if( name == i18n("Channels") )
     return QString::number(d->channels);
   else if( name == i18n("Sampling Rate") )
-    return i18n("%1 Hz").arg(d->sampleRate);
+    return i18n("%1 Hz",d->sampleRate);
   else if( name == i18n("Sample Size") )
-    return i18n("%1 bits").arg(d->sampleSize);
+    return i18n("%1 bits",d->sampleSize);
   else
     return QString::null;
 }

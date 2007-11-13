@@ -121,13 +121,13 @@ bool K3bOggVorbisDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate
       // add technical infos
       addTechnicalInfo( i18n("Version"), QString::number(d->vInfo->version) );
       addTechnicalInfo( i18n("Channels"), QString::number(d->vInfo->channels) );
-      addTechnicalInfo( i18n("Sampling Rate"), i18n("%1 Hz").arg(d->vInfo->rate) );
+      addTechnicalInfo( i18n("Sampling Rate"), i18n("%1 Hz",d->vInfo->rate) );
       if( d->vInfo->bitrate_upper > 0 )
-	addTechnicalInfo( i18n("Bitrate Upper"), i18n( "%1 bps" ).arg(d->vInfo->bitrate_upper) );
+	addTechnicalInfo( i18n("Bitrate Upper"), i18n( "%1 bps" ,d->vInfo->bitrate_upper) );
       if( d->vInfo->bitrate_nominal > 0 )
-	addTechnicalInfo( i18n("Bitrate Nominal"), i18n( "%1 bps" ).arg(d->vInfo->bitrate_nominal) );
+	addTechnicalInfo( i18n("Bitrate Nominal"), i18n( "%1 bps" ,d->vInfo->bitrate_nominal) );
       if( d->vInfo->bitrate_lower > 0 )
-	addTechnicalInfo( i18n("Bitrate Lower"), i18n( "%1 bps" ).arg(d->vInfo->bitrate_lower) );
+	addTechnicalInfo( i18n("Bitrate Lower"), i18n( "%1 bps",d->vInfo->bitrate_lower) );
 
       frames = K3b::Msf::fromSeconds(seconds);
       samplerate = d->vInfo->rate;

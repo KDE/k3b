@@ -124,7 +124,7 @@ bool K3bLibsndfileDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerat
       addMetaInfo( META_COMMENT, sf_get_string(d->sndfile, SF_STR_COMMENT) );
       
       addTechnicalInfo( i18n("Channels"), QString::number(d->sndinfo.channels) );
-      addTechnicalInfo( i18n("Sampling Rate"), i18n("%1 Hz").arg(d->sndinfo.samplerate) );
+      addTechnicalInfo( i18n("Sampling Rate"), i18n("%1 Hz",d->sndinfo.samplerate) );
       
       frames = (unsigned long)ceil(d->sndinfo.frames / d->sndinfo.samplerate * 75.0); 
       samplerate = d->sndinfo.samplerate;

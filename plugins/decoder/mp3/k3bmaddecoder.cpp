@@ -414,12 +414,12 @@ QString K3bMadDecoder::technicalInfo( const QString& name ) const
     }
   }
   else if( name == i18n("Sampling Rate") )
-    return i18n("%1 Hz").arg(d->firstHeader.samplerate);
+    return i18n("%1 Hz",d->firstHeader.samplerate);
   else if( name == i18n("Bitrate") ) {
     if( d->vbr )
       return i18n("VBR");
     else
-      return i18n("%1 bps").arg(d->firstHeader.bitrate);
+      return i18n("%1 bps",d->firstHeader.bitrate);
   }
   else if(  name == i18n("Layer") ){
     switch( d->firstHeader.layer ) {
