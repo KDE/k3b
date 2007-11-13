@@ -117,9 +117,9 @@ K3bSetup2::K3bSetup2( QWidget *parent, const QVariantList& )
   d = new Private();
   d->config = new KConfig( "k3bsetup2rc" );
 
-  m_aboutData = new KAboutData("k3bsetup2",
-			       "K3bSetup 2",
-			       KLocalizedString(), KLocalizedString(), KAboutData::License_GPL,
+  m_aboutData = new KAboutData("k3bsetup2", 0,
+			       ki18n("K3bSetup 2"), "1.0",
+			       KLocalizedString(), KAboutData::License_GPL,
 			       ki18n("(C) 2003-2007 Sebastian Trueg"), ki18n(0L));
   m_aboutData->addAuthor(ki18n("Sebastian Trueg"), KLocalizedString(), "trueg@k3b.org");
 
@@ -287,8 +287,9 @@ void K3bSetup2::updateDevices()
   d->listDeviceMap.clear();
   d->deviceListMap.clear();
 
-  QListIterator<K3bDevice::Device> it( *d->deviceManager->allDevices() );
-  for( ; it.current(); ++it ) {
+  QList<K3bDevice::Device*> items(d->deviceManager->allDevices());
+  for( QList<K3bDevice::Device *>::const_iterator it = items.begin();
+       it != items.end(); ++it ) {
     K3bDevice::Device* device = *it;
     // check the item on first insertion or if it was checked before
     Q3CheckListItem* item = createDeviceItem( device->blockDeviceName() );
