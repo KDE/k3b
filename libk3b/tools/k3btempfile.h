@@ -16,7 +16,7 @@
 #ifndef _K3B_TEMP_FILE_H_
 #define _K3B_TEMP_FILE_H_
 
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 
 #include <k3b_export.h>
 
@@ -31,7 +31,7 @@
  * dir is mounted via NFS root has no read permissions htere and cdrecord
  * fails to read the temp files.
  */
-class LIBK3B_EXPORT K3bTempFile : public KTempFile
+class LIBK3B_EXPORT K3bTempFile : public KTemporaryFile
 {
  public:
   K3bTempFile( const QString& filePrefix = QString::null, 

@@ -20,7 +20,7 @@
 #include <k3bprocess.h>
 #include <k3bglobals.h>
 
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>

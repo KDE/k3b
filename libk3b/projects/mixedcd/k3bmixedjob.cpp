@@ -51,7 +51,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kio/netaccess.h>
 #include <kio/global.h>
 #include <kstringhandler.h>

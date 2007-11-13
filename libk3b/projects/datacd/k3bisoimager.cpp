@@ -33,7 +33,7 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kio/netaccess.h>
 #include <kio/global.h>
 #include <kio/job.h>

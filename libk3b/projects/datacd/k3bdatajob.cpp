@@ -42,7 +42,7 @@
 #include <kapplication.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kio/global.h>
 #include <kio/job.h>
 

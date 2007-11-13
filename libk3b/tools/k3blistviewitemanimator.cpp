@@ -20,8 +20,6 @@
 //Added by qt3to4:
 #include <QPixmap>
 
-#include <kpixmap.h>
-#include <kpixmapeffect.h>
 
 
 K3bListViewItemAnimator::K3bListViewItemAnimator( QObject* parent, const char* name )
@@ -113,9 +111,14 @@ void K3bListViewItemAnimator::slotAnimate()
   if( m_item->isVisible() ) {
     double val = (double)m_animationStep;
     val /= 10.0;
+#ifdef __GNUC__
+#warning "Need to port qimageblitz"
+#endif
+#if 0
     // we need a temp pixmap since KPixmapEffect changes our pixmap
     KPixmap pix( m_pixmap );
     m_item->setPixmap( m_column, KPixmapEffect::fade( pix, val, m_fadeColor ) );;
+#endif
   }
   
   if( m_animationBack ) {

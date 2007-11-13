@@ -18,7 +18,7 @@
 #include <kconfig.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kio/global.h>
 
 #include <qstring.h>

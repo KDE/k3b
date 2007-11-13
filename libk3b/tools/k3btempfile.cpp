@@ -39,10 +39,11 @@ static inline QString defaultTempDir()
 K3bTempFile::K3bTempFile( const QString& filePrefix, 
 			  const QString& fileExtension, 
 			  int mode )
-  : KTempFile( filePrefix.isEmpty() ? defaultTempDir() : filePrefix,
+  : KTemporaryFile( /*filePrefix.isEmpty() ? defaultTempDir() : filePrefix,
 	       fileExtension,
-	       mode )
+	       mode*/ )
 {
+  setPrefix(filePrefix.isEmpty() ? defaultTempDir() : filePrefix);
 }
 
 

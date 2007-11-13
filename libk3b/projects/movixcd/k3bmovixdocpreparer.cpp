@@ -28,7 +28,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kio/global.h>
 
 #include <q3textstream.h>

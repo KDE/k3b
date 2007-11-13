@@ -46,7 +46,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kstringhandler.h>
 
 

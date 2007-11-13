@@ -34,7 +34,7 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <klocale.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kio/global.h>
 
 #include <qstring.h>

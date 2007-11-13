@@ -18,7 +18,7 @@
 #include <kio/global.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kurl.h>
 
 #include <qdatetime.h>

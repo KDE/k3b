@@ -44,7 +44,7 @@
 #include <kdebug.h>
 #include <kio/netaccess.h>
 #include <kstandarddirs.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 
 #include <sys/types.h>
 #include <sys/socket.h>
