@@ -19,7 +19,6 @@
 
 #include <k3bvideodvd.h>
 #include <k3bvideodvdtitletranscodingjob.h>
-#include <k3btoolbox.h>
 #include <k3bthememanager.h>
 #include <k3bglobals.h>
 #include <k3blibdvdcss.h>
@@ -40,7 +39,7 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kconfig.h>
-
+#include <KActionMenu>
 
 K3bVideoDVDRippingView::K3bVideoDVDRippingView( QWidget* parent, const char * name )
   : K3bMediaContentsView( true,
