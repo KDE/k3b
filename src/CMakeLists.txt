@@ -1,3 +1,26 @@
+include_directories(
+${CMAKE_CURRENT_BINARY_DIR}
+${CMAKE_CURRENT_SOURCE_DIR}
+${libk3b_BINARY_DIR}
+${libk3b_SOURCE_DIR}/core
+${libk3b_SOURCE_DIR}/plugin
+${libk3b_SOURCE_DIR}/tools
+${libk3b_SOURCE_DIR}/projects
+${libk3b_SOURCE_DIR}/projects/audiocd
+${libk3b_SOURCE_DIR}/projects/datacd
+${libk3b_SOURCE_DIR}/projects/videocd
+${libk3b_SOURCE_DIR}/projects/mixedcd
+${libk3b_SOURCE_DIR}/cddb
+${libk3b_SOURCE_DIR}/jobs
+${libk3b_SOURCE_DIR}/videodvd
+${libk3b_BINARY_DIR}/core
+${libk3b_BINARY_DIR}/plugin
+${libk3b_BINARY_DIR}/tools
+${libk3b_BINARY_DIR}/projects
+${libk3b_BINARY_DIR}/cddb
+${libk3b_BINARY_DIR}/jobs
+)
+
 add_subdirectory( option )
 add_subdirectory( rip )
 add_subdirectory( projects )
@@ -142,8 +165,13 @@ set(k3b_misc_SRCS
   misc/k3bmediaformattingdialog.cpp
 )
 
-set(k3b_bin_SRCS  ${k3b_rip_SRCS} ${k3b_option_SRCS} ${k3b_misc_SRCS}
-${k3b_videodvd_SRCS} ${k3b_project_SRCS} ${k3b_kostore_SRCS}
+set(k3b_bin_SRCS 
+  ${k3b_option_SRCS}
+  ${k3b_misc_SRCS}
+  ${k3b_videodvd_SRCS}
+  ${k3b_project_SRCS}
+  ${k3b_kostore_SRCS}
+  ${k3b_rip_SRCS}
    k3bwelcomewidget.cpp 
    k3bapplication.cpp 
    k3bdiroperator.cpp 

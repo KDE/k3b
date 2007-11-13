@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -54,7 +54,7 @@ K3bExternalBinOptionTab::K3bExternalBinOptionTab( K3bExternalBinManager* manager
   m_labelInfo->setText( i18n( "Specify the paths to the external programs that K3b needs to work properly, "
 			      "or press \"Search\" to let K3b search for the programs." ) );
   m_labelInfo->setScaledContents( false );
-  m_labelInfo->setAlignment( int( QLabel::WordBreak | QLabel::Qt::AlignVCenter | QLabel::Qt::AlignLeft ) );
+  m_labelInfo->setAlignment( int( Qt::WordBreak | Qt::AlignVCenter | Qt::AlignLeft ) );
 
   frameLayout->addWidget( m_labelInfo, 0, 0 );
 }

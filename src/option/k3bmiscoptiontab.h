@@ -30,14 +30,11 @@ class K3bMiscOptionTab : public base_K3bMiscOptionTab
    Q_OBJECT
 
  public: 
-  K3bMiscOptionTab(QWidget *parent=0, const char *name=0);
+  K3bMiscOptionTab(QWidget *parent=0);
   ~K3bMiscOptionTab();
 
   void readSettings();
   bool saveSettings();
-
- private slots:
-  void slotConfigureAudioOutput();
 };
 
 #endif

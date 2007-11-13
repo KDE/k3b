@@ -23,13 +23,14 @@
 #include <QLabel>
 
 
-class Q3GridLayout;
+class QGridLayout;
 class QLabel;
 class KPushButton;
 class QButton;
 class K3bThemedHeader;
 class KConfigBase;
 class KGuiItem;
+class QToolButton;
 
 
 /**
@@ -270,7 +271,7 @@ class K3bInteractionDialog : public KDialog
   QToolButton* m_buttonLoadSettings;
   QButton* m_buttonSaveSettings;
 
-  Q3GridLayout* mainGrid;
+  QGridLayout* mainGrid;
   int m_defaultButton;
   QString m_configGroup;
 

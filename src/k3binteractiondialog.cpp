@@ -36,9 +36,8 @@
 #include <qeventloop.h>
 #include <qapplication.h>
 #include <qtimer.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
+
+#include <QGridLayout>
 #include <QKeyEvent>
 #include <QEvent>
 
@@ -72,7 +71,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 {
   installEventFilter( this );
 
-  mainGrid = new Q3GridLayout( this );
+  mainGrid = new QGridLayout( this );
   mainGrid->setSpacing( spacingHint() );
   mainGrid->setMargin( marginHint() );
 
