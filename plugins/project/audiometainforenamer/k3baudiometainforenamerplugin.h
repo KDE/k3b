@@ -41,8 +41,8 @@ class K3bAudioMetainfoRenamerPluginWidget : public QWidget, public K3bProjectPlu
   QString subTitle() const;
 
   void loadDefaults();
-  void readSettings( KConfigBase* );
-  void saveSettings( KConfigBase* );
+  void readSettings( const KConfigGroup& );
+  void saveSettings( KConfigGroup & );
 
   void activate();
 

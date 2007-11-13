@@ -147,15 +147,15 @@ void K3bAudioMetainfoRenamerPluginWidget::loadDefaults()
 }
 
 
-void K3bAudioMetainfoRenamerPluginWidget::readSettings( KConfigBase* c )
+void K3bAudioMetainfoRenamerPluginWidget::readSettings( const KConfigGroup& grp )
 {
-  d->comboPattern->setEditText( c->readEntry( "rename pattern", "%a - %t" ) );
+  d->comboPattern->setEditText( grp.readEntry( "rename pattern", "%a - %t" ) );
 }
 
 
-void K3bAudioMetainfoRenamerPluginWidget::saveSettings( KConfigBase* c )
+void K3bAudioMetainfoRenamerPluginWidget::saveSettings( KConfigGroup &grp )
 {
-  c->writeEntry( "rename pattern", d->comboPattern->currentText() );
+  grp.writeEntry( "rename pattern", d->comboPattern->currentText() );
 }
 
 
