@@ -4,6 +4,8 @@ set( CMAKE_MODULE_PATH    ${CMAKE_MODULE_PATH}
                           ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules )
 
 find_package(KDE4 REQUIRED)
+include (KDE4Defaults)
+include (MacroLibrary)
 macro_optional_find_package(DvdRead)
 macro_optional_find_package(MusicBrainz)
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
