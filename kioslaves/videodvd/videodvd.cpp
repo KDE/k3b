@@ -132,9 +132,12 @@ K3bIso9660* kio_videodvdProtocol::openIso( const KUrl& url, QString& plainIsoPat
 
   kDebug() << "(kio_videodvdProtocol) searching for Video dvd: " << volumeId;
 
+
   // now search the devices for this volume id
   // FIXME: use the cache created in listVideoDVDs
-  for( Q3PtrListIterator<K3bDevice::Device> it( s_deviceManager->dvdReader() ); *it; ++it ) {
+  QList<K3bDevice::Device *> items(s_deviceManager->dvdReader());
+  for( QList<K3bDevice::Device *>::const_iterator it = items.begin();
+       it != items.end(); ++it ) {
     K3bDevice::Device* dev = *it;
     K3bDevice::DiskInfo di = dev->diskInfo();
 
@@ -244,7 +247,9 @@ void kio_videodvdProtocol::listVideoDVDs()
 {
   int cnt = 0;
 
-  for( Q3PtrListIterator<K3bDevice::Device> it( s_deviceManager->dvdReader() ); *it; ++it ) {
+  QList<K3bDevice::Device *> items(s_deviceManager->dvdReader());
+  for( QList<K3bDevice::Device *>::const_iterator it = items.begin();
+       it != items.end(); ++it ) {
     K3bDevice::Device* dev = *it;
     K3bDevice::DiskInfo di = dev->diskInfo();
 
@@ -334,7 +339,7 @@ void kio_videodvdProtocol::mimetype( const KUrl& url )
         mimeType( "inode/directory" );
       else if( e->name().endsWith( ".VOB" ) )
       {
-        mimetype( "video/mpeg" );
+        mimetype( KUrl("video/mpeg") );
       }
       else
       {
