@@ -28,7 +28,6 @@
 #include <k3bdevice.h>
 #include <k3bwriterselectionwidget.h>
 #include <k3bburnprogressdialog.h>
-#include <kcutlabel.h>
 #include <k3bstdguiitems.h>
 #include <k3bmd5job.h>
 #include <k3bdatamodewidget.h>
@@ -53,7 +52,6 @@
 #include <kio/global.h>
 #include <kurl.h>
 #include <kinputdialog.h>
-#include <kurldrag.h>
 #include <kcombobox.h>
 
 #include <q3header.h>
@@ -183,7 +181,7 @@ void K3bCdImageWritingDialog::init()
         // last written image because that's what most users want
         QString image = c.readPathEntry( "last written image", QString() );
         if( QFile::exists( image ) )
-            m_editImagePath->setURL( image );
+            m_editImagePath->setUrl( image );
     }
 
     m_comboRecentImages->clear();
@@ -262,7 +260,7 @@ void K3bCdImageWritingDialog::setupGui()
   optionTabLayout->setSpacing( spacingHint() );
   optionTabLayout->setMargin( marginHint() );
 
-  Q3GroupBox* writingModeGroup = new Q3GroupBox( 1, Vertical, i18n("Writing Mode"), optionTab );
+  Q3GroupBox* writingModeGroup = new Q3GroupBox( 1, Qt::Vertical, i18n("Writing Mode"), optionTab );
   writingModeGroup->setInsideMargin( marginHint() );
   m_writingModeWidget = new K3bWritingModeWidget( writingModeGroup );
 
@@ -279,7 +277,7 @@ void K3bCdImageWritingDialog::setupGui()
   m_spinCopies->setMaxValue( 999 );
   // -------- copies
 
-  Q3GroupBox* optionGroup = new Q3GroupBox( 3, Vertical, i18n("Settings"), optionTab );
+  Q3GroupBox* optionGroup = new Q3GroupBox( 3, Qt::Vertical, i18n("Settings"), optionTab );
   optionGroup->setInsideMargin( marginHint() );
   optionGroup->setInsideSpacing( spacingHint() );
   m_checkDummy = K3bStdGuiItems::simulateCheckbox( optionGroup );
@@ -359,8 +357,8 @@ void K3bCdImageWritingDialog::slotStartClicked()
 
   // save the path
   KConfig* c = k3bcore->config();
-  c->setGroup( configGroup() );
-  c->writePathEntry( "last written image", imagePath() );
+  KConfigGroup grp(c, configGroup() );
+  grp.writePathEntry( "last written image", imagePath() );
 
   if( d->imageFile.isEmpty() )
     d->imageFile = imagePath();
@@ -742,7 +740,7 @@ void K3bCdImageWritingDialog::createAudioCueItems( const K3bCueFileParser& cp )
   rootItem->setPixmap( 0, SmallIcon( "sound") );
 
   K3bListViewItem* trackParent = new K3bListViewItem( rootItem,
-						      i18n("%n track", "%n tracks", cp.toc().count() ),
+						      i18np("%n track", "%n tracks", cp.toc().count() ),
 						      cp.toc().length().toString() );
   if( !cp.cdText().isEmpty() )
     trackParent->setText( 1,
@@ -955,7 +953,7 @@ void K3bCdImageWritingDialog::loadUserDefaults( KConfigBase* c )
   if( !d->imageForced ) {
     QString image = c->readPathEntry( "image path", c->readPathEntry( "last written image", QString() ) );
     if( QFile::exists( image ) )
-      m_editImagePath->setURL( image );
+      m_editImagePath->setUrl( image );
   }
 
   QString imageType = c->readEntry( "image type", "auto" );
