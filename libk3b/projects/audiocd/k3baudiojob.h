@@ -25,7 +25,7 @@ class K3bAudioImager;
 class QFile;
 class QDataStream;
 class K3bAbstractWriter;
-class KTempFile;
+class KTemporaryFile;
 class K3bCdrecordWriter;
 class K3bAudioNormalizeJob;
 class K3bAudioJobTempData;
@@ -90,7 +90,7 @@ class K3bAudioJob : public K3bBurnJob
   K3bAudioJobTempData* m_tempData;
   K3bAudioMaxSpeedJob* m_maxSpeedJob;
 
-  KTempFile* m_tocFile;
+  KTemporaryFile* m_tocFile;
 
   bool m_canceled;
   bool m_errorOccuredAndAlreadyReported;

@@ -55,9 +55,9 @@ public:
   K3bMovixDoc* doc;
   const K3bMovixBin* eMovixBin;
 
-  KTempFile* playlistFile;
-  KTempFile* isolinuxConfigFile;
-  KTempFile* movixRcFile;
+  KTemporaryFile* playlistFile;
+  KTemporaryFile* isolinuxConfigFile;
+  KTemporaryFile* movixRcFile;
 
   K3bDirItem* isolinuxDir;
   K3bDirItem* movixDir;
@@ -174,7 +174,7 @@ void K3bMovixDocPreparer::removeMovixStructures()
 bool K3bMovixDocPreparer::writePlaylistFile()
 {
   delete d->playlistFile;
-  d->playlistFile = new KTempFile();
+  d->playlistFile = new KTemporaryFile();
   d->playlistFile->setAutoDelete(true);
 
   if( Q3TextStream* s = d->playlistFile->textStream() ) {
@@ -201,7 +201,7 @@ bool K3bMovixDocPreparer::writePlaylistFile()
 bool K3bMovixDocPreparer::writeIsolinuxConfigFile( const QString& originalPath )
 {
   delete d->isolinuxConfigFile;
-  d->isolinuxConfigFile = new KTempFile();
+  d->isolinuxConfigFile = new KTemporaryFile();
   d->isolinuxConfigFile->setAutoDelete(true);
 
   if( Q3TextStream* s = d->isolinuxConfigFile->textStream() ) {
@@ -240,7 +240,7 @@ bool K3bMovixDocPreparer::writeIsolinuxConfigFile( const QString& originalPath )
 bool K3bMovixDocPreparer::writeMovixRcFile()
 {
   delete d->movixRcFile;
-  d->movixRcFile = new KTempFile();
+  d->movixRcFile = new KTemporaryFile();
   d->movixRcFile->setAutoDelete(true);
 
   if( Q3TextStream* s = d->movixRcFile->textStream() ) {

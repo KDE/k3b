@@ -26,7 +26,7 @@ class QString;
 class QDataStream;
 class K3bAbstractWriter;
 class K3bIsoImager;
-class KTempFile;
+class KTemporaryFile;
 
 namespace K3bDevice {
   class DeviceHandler;

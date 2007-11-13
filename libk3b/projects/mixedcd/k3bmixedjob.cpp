@@ -745,7 +745,7 @@ bool K3bMixedJob::writeTocFile()
   // FIXME: create the tocfile in the same directory like all the other files.
 
   if( m_tocFile ) delete m_tocFile;
-  m_tocFile = new KTempFile( QString::null, "toc" );
+  m_tocFile = new KTemporaryFile( QString::null, "toc" );
   m_tocFile->setAutoDelete(true);
 
   // write the toc-file

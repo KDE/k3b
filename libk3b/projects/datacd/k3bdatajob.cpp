@@ -69,7 +69,7 @@ public:
     bool imageFinished;
     bool canceled;
 
-    KTempFile* tocFile;
+    KTemporaryFile* tocFile;
 
     int usedDataMode;
     int usedWritingApp;
@@ -1003,7 +1003,7 @@ bool K3bDataJob::setupCdrdaoJob()
 
     // now write the tocfile
     if( d->tocFile ) delete d->tocFile;
-    d->tocFile = new KTempFile( QString::null, "toc" );
+    d->tocFile = new KTemporaryFile( QString::null, "toc" );
     d->tocFile->setAutoDelete(true);
 
     if( Q3TextStream* s = d->tocFile->textStream() ) {

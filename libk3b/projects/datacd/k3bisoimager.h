@@ -32,7 +32,7 @@ class Q3TextStream;
 class K3bProcess;
 class K3Process;
 class K3bDevice::Device;
-class KTempFile;
+class KTemporaryFile;
 
 
 class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
@@ -138,10 +138,10 @@ class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
   virtual void writePathSpecForFile( K3bFileItem*, Q3TextStream& stream );
   QString escapeGraftPoint( const QString& str );
 
-  KTempFile* m_pathSpecFile;
-  KTempFile* m_rrHideFile;
-  KTempFile* m_jolietHideFile;
-  KTempFile* m_sortWeightFile;
+  KTemporaryFile* m_pathSpecFile;
+  KTemporaryFile* m_rrHideFile;
+  KTemporaryFile* m_jolietHideFile;
+  KTemporaryFile* m_sortWeightFile;
 
   K3bProcess* m_process;
 

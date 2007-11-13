@@ -158,7 +158,7 @@ void K3bVcdJob::start()
 void K3bVcdJob::xmlGen()
 {
 
-    KTempFile tempF;
+    KTemporaryFile tempF;
     m_xmlFile = tempF.name();
     tempF.unlink();
 

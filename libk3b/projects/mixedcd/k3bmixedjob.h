@@ -27,7 +27,7 @@ class QFile;
 class QDataStream;
 class K3bAbstractWriter;
 class K3bWaveFileWriter;
-class KTempFile;
+class KTemporaryFile;
 class K3bCdrecordWriter;
 class K3bMsInfoFetcher;
 class K3bAudioNormalizeJob;
@@ -111,7 +111,7 @@ class K3bMixedJob : public K3bBurnJob
 
   QString m_isoImageFilePath;
 
-  KTempFile* m_tocFile;
+  KTemporaryFile* m_tocFile;
 
   enum Action { INITIALIZING_IMAGER,
 		PREPARING_DATA,

@@ -822,7 +822,7 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
 int K3bIsoImager::writePathSpec()
 {
   delete m_pathSpecFile;
-  m_pathSpecFile = new KTempFile();
+  m_pathSpecFile = new KTemporaryFile();
   m_pathSpecFile->setAutoDelete(true);
 
   if( Q3TextStream* t = m_pathSpecFile->textStream() ) {
@@ -923,7 +923,7 @@ void K3bIsoImager::writePathSpecForFile( K3bFileItem* item, Q3TextStream& stream
   if( m_doc->bootImages().containsRef( dynamic_cast<K3bBootItem*>(item) ) ) { // boot-image-backup-hack
 
     // create temp file
-    KTempFile temp;
+    KTemporaryFile temp;
     QString tempPath = temp.name();
     temp.unlink();
 
@@ -947,7 +947,7 @@ void K3bIsoImager::writePathSpecForFile( K3bFileItem* item, Q3TextStream& stream
 bool K3bIsoImager::writeRRHideFile()
 {
   delete m_rrHideFile;
-  m_rrHideFile = new KTempFile();
+  m_rrHideFile = new KTemporaryFile();
   m_rrHideFile->setAutoDelete(true);
 
   if( Q3TextStream* t = m_rrHideFile->textStream() ) {
@@ -972,7 +972,7 @@ bool K3bIsoImager::writeRRHideFile()
 bool K3bIsoImager::writeJolietHideFile()
 {
   delete m_jolietHideFile;
-  m_jolietHideFile = new KTempFile();
+  m_jolietHideFile = new KTemporaryFile();
   m_jolietHideFile->setAutoDelete(true);
 
   if( Q3TextStream* t = m_jolietHideFile->textStream() ) {
@@ -997,7 +997,7 @@ bool K3bIsoImager::writeJolietHideFile()
 bool K3bIsoImager::writeSortWeightFile()
 {
   delete m_sortWeightFile;
-  m_sortWeightFile = new KTempFile();
+  m_sortWeightFile = new KTemporaryFile();
   m_sortWeightFile->setAutoDelete(true);
 
   if( Q3TextStream* t = m_sortWeightFile->textStream() ) {
