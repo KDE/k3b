@@ -116,8 +116,6 @@ set(k3b_plugin_SRCS
     plugin/k3bpluginmanager.cpp 
     plugin/k3baudiodecoder.cpp 
     plugin/k3baudioencoder.cpp 
-    plugin/k3baudioclient.cpp 
-    plugin/k3baudioserver.cpp
 )
 
 set(k3b_project_SRCS
@@ -219,7 +217,8 @@ kde4_add_library(k3b SHARED ${k3b_LIB_SRCS})
 target_link_libraries(k3b
   ${KDE4_KDECORE_LIBS}
   ${KDE4_KDE3SUPPORT_LIBS}
-  k3bdevice )
+  k3bdevice
+  dl )
 
 if(DVDREAD_FOUND)
   target_link_libraries(k3b ${DVDREAD_LIBRARIES})
