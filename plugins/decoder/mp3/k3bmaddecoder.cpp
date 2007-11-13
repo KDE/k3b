@@ -85,8 +85,8 @@ public:
 
 
 
-K3bMadDecoder::K3bMadDecoder( QObject* parent,  )
-  : K3bAudioDecoder( parent, name )
+K3bMadDecoder::K3bMadDecoder( QObject* parent  )
+  : K3bAudioDecoder( parent )
 {
   d = new MadDecoderPrivate();
   d->handle = new K3bMad();
@@ -456,8 +456,8 @@ QString K3bMadDecoder::technicalInfo( const QString& name ) const
 }
 
 
-K3bMadDecoderFactory::K3bMadDecoderFactory( QObject* parent,  )
-  : K3bAudioDecoderFactory( parent, name )
+K3bMadDecoderFactory::K3bMadDecoderFactory( QObject* parent  )
+  : K3bAudioDecoderFactory( parent )
 {
 }
 
@@ -467,10 +467,9 @@ K3bMadDecoderFactory::~K3bMadDecoderFactory()
 }
 
 
-K3bAudioDecoder* K3bMadDecoderFactory::createDecoder( QObject* parent, 
-						       ) const
+K3bAudioDecoder* K3bMadDecoderFactory::createDecoder( QObject* parent) const
 {
-  return new K3bMadDecoder( parent, name );
+  return new K3bMadDecoder( parent );
 }
 
 

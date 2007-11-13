@@ -25,8 +25,8 @@
 K_EXPORT_COMPONENT_FACTORY( libk3bmpcdecoder, KPluginFactory<K3bMpcDecoderFactory>( "libk3bmpcdecoder" ) )
 
 
-K3bMpcDecoderFactory::K3bMpcDecoderFactory( QObject* parent,  )
-  : K3bAudioDecoderFactory( parent, name )
+K3bMpcDecoderFactory::K3bMpcDecoderFactory( QObject* parent  )
+  : K3bAudioDecoderFactory( parent )
 {
 }
 
@@ -36,10 +36,10 @@ K3bMpcDecoderFactory::~K3bMpcDecoderFactory()
 }
 
 
-K3bAudioDecoder* K3bMpcDecoderFactory::createDecoder( QObject* parent, 
+K3bAudioDecoder* K3bMpcDecoderFactory::createDecoder( QObject* parent
 							  ) const
 {
-  return new K3bMpcDecoder( parent, name );
+  return new K3bMpcDecoder( parent );
 }
 
 
@@ -54,8 +54,8 @@ bool K3bMpcDecoderFactory::canDecode( const KUrl& url )
 
 
 
-K3bMpcDecoder::K3bMpcDecoder( QObject* parent,  )
-  : K3bAudioDecoder( parent, name )
+K3bMpcDecoder::K3bMpcDecoder( QObject* parent  )
+  : K3bAudioDecoder( parent )
 {
   m_mpc = new K3bMpcWrapper();
 }

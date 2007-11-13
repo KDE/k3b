@@ -29,7 +29,7 @@ class K3bMadDecoderFactory : public K3bAudioDecoderFactory
   Q_OBJECT
 
  public:
-  K3bMadDecoderFactory( QObject* parent = 0,  );
+  K3bMadDecoderFactory( QObject* parent = 0  );
   ~K3bMadDecoderFactory();
 
   bool canDecode( const KUrl& filename );

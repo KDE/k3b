@@ -395,7 +395,7 @@ QString K3bFLACDecoder::technicalInfo( const QString& info ) const
     else if( info == i18n("Sampling Rate") )
       return i18n("%1 Hz").arg(d->rate);
     else if( info == i18n("Sample Size") )
-      return i18n("%1 bits").arg(d->bitsPerSample);
+      return i18n("%1 bits",d->bitsPerSample);
   }
 
   return QString::null;
@@ -403,8 +403,8 @@ QString K3bFLACDecoder::technicalInfo( const QString& info ) const
 
 
 
-K3bFLACDecoderFactory::K3bFLACDecoderFactory( QObject* parent,  )
-  : K3bAudioDecoderFactory( parent, name )
+K3bFLACDecoderFactory::K3bFLACDecoderFactory( QObject* parent )
+  : K3bAudioDecoderFactory( parent )
 {
 }
 
@@ -414,10 +414,9 @@ K3bFLACDecoderFactory::~K3bFLACDecoderFactory()
 }
 
 
-K3bAudioDecoder* K3bFLACDecoderFactory::createDecoder( QObject* parent, 
-						  ) const
+K3bAudioDecoder* K3bFLACDecoderFactory::createDecoder( QObject* parent) const
 {
-  return new K3bFLACDecoder( parent, name );
+  return new K3bFLACDecoder( parent );
 }
 
 

@@ -196,8 +196,8 @@ public:
 };
 
 
-K3bWaveDecoder::K3bWaveDecoder( QObject* parent,  )
-  : K3bAudioDecoder( parent, name )
+K3bWaveDecoder::K3bWaveDecoder( QObject* parent  )
+  : K3bAudioDecoder( parent )
 {
   d = new Private();
   d->file = new QFile();
@@ -357,8 +357,8 @@ QString K3bWaveDecoder::technicalInfo( const QString& name ) const
 }
 
 
-K3bWaveDecoderFactory::K3bWaveDecoderFactory( QObject* parent,  )
-  : K3bAudioDecoderFactory( parent, name )
+K3bWaveDecoderFactory::K3bWaveDecoderFactory( QObject* parent )
+  : K3bAudioDecoderFactory( parent )
 {
 }
 
@@ -368,10 +368,9 @@ K3bWaveDecoderFactory::~K3bWaveDecoderFactory()
 }
 
 
-K3bAudioDecoder* K3bWaveDecoderFactory::createDecoder( QObject* parent, 
-						        ) const
+K3bAudioDecoder* K3bWaveDecoderFactory::createDecoder( QObject* parent ) const
 {
-  return new K3bWaveDecoder( parent, name );
+  return new K3bWaveDecoder( parent );
 }
 
 
