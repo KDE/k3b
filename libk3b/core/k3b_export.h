@@ -1,33 +1,40 @@
-/* 
- *
- * $Id: sourceheader 511311 2006-02-19 14:51:05Z trueg $
- * Copyright (c) 2005 Laurent Montel <montel@kde.org>
- * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
- *
- * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * See the file "COPYING" for the exact licensing terms.
- */
+/*  This file is part of the KDE project
+    Copyright (C) 2007 David Faure <faure@kde.org>
 
-#ifndef _K3B_EXPORT_H_
-#define _K3B_EXPORT_H_
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
 
-#ifdef HAVE_CONFIG_H
-#include <config-k3b.h>
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
+*/
+
+#ifndef K3B_EXPORT_H
+#define K3B_EXPORT_H
+
+/* needed for KDE_EXPORT and KDE_IMPORT macros */
+#include <kdemacros.h>
+
+#ifndef LIBK3B_EXPORT
+# if defined(MAKE_K3B_LIB)
+   /* We are building this library */ 
+#  define LIBK3B_EXPORT KDE_EXPORT
+# else
+   /* We are using this library */ 
+#  define LIBK3B_EXPORT KDE_IMPORT
+# endif
 #endif
 
-#ifdef __KDE_HAVE_GCC_VISIBILITY
-#define LIBK3B_NO_EXPORT __attribute__ ((visibility("hidden")))
-#define LIBK3B_EXPORT __attribute__ ((visibility("default")))
-#else
-#define LIBK3B_NO_EXPORT
-#define LIBK3B_EXPORT
-#endif
- 
-#endif
+# ifndef LIBK3B_EXPORT_DEPRECATED
+#  define LIBK3B_EXPORT_DEPRECATED KDE_DEPRECATED LIBK3B_EXPORT
+# endif
 
+#endif
