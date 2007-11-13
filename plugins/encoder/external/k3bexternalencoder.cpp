@@ -372,10 +372,9 @@ QString K3bExternalEncoder::fileTypeComment( const QString& ext ) const
 }
 
 
-K3bPluginConfigWidget* K3bExternalEncoder::createConfigWidget( QWidget* parent, 
-							       const char* name ) const
+K3bPluginConfigWidget* K3bExternalEncoder::createConfigWidget( QWidget* parent ) const
 {
-  return new K3bExternalEncoderSettingsWidget( parent, name );
+  return new K3bExternalEncoderSettingsWidget( parent );
 }
 
 

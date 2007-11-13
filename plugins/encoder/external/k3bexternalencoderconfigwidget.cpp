@@ -97,7 +97,7 @@ void K3bExternalEncoderEditDialog::slotOk()
   }
   // FIXME: check for name and extension uniqueness
   else {
-    KDialog::slotOk();
+    accept();
   }
 }
 
@@ -113,8 +113,8 @@ public:
 };
 
 
-K3bExternalEncoderSettingsWidget::K3bExternalEncoderSettingsWidget( QWidget* parent, const char* name )
-  : K3bPluginConfigWidget( parent, name )
+K3bExternalEncoderSettingsWidget::K3bExternalEncoderSettingsWidget( QWidget* parent )
+  : K3bPluginConfigWidget( parent )
 {
   d = new Private();
 
@@ -208,8 +208,8 @@ void K3bExternalEncoderSettingsWidget::loadConfig()
 void K3bExternalEncoderSettingsWidget::saveConfig()
 {
   KConfig* c = k3bcore->config();
-  c->deleteGroup( "K3bExternalEncoderPlugin", true );
-  c->setGroup( "K3bExternalEncoderPlugin" );
+  c->deleteGroup( "K3bExternalEncoderPlugin");
+  KConfigGroup grp(c, "K3bExternalEncoderPlugin" );
 
   QStringList cmdNames;
   for( QMapIterator<Q3ListViewItem*, K3bExternalEncoderCommand> it = d->commands.begin();
@@ -220,10 +220,10 @@ void K3bExternalEncoderSettingsWidget::saveConfig()
       cmd << "swap";
     if( it.data().writeWaveHeader )
       cmd << "wave";
-    c->writeEntry( "command_" + it.data().name, cmd );
+    grp.writeEntry( "command_" + it.data().name, cmd );
     cmdNames << it.data().name;
   }
-  c->writeEntry( "commands", cmdNames );
+  grp.writeEntry( "commands", cmdNames );
 }
 
 

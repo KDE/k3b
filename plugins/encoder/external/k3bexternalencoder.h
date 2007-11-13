@@ -29,7 +29,7 @@ class K3bExternalEncoder : public K3bAudioEncoder
   Q_OBJECT
 
  public:
-  K3bExternalEncoder( QObject* parent = 0, const char* name = 0 );
+  K3bExternalEncoder( QObject* parent = 0 );
   ~K3bExternalEncoder();
 
   QStringList extensions() const;
@@ -38,8 +38,7 @@ class K3bExternalEncoder : public K3bAudioEncoder
 
   int pluginSystemVersion() const { return 3; }
 
-  K3bPluginConfigWidget* createConfigWidget( QWidget* parent, 
-					     const char* name ) const;
+  K3bPluginConfigWidget* createConfigWidget( QWidget* parent ) const;
 
   /**
    * reimplemented since the external program is intended to write the file

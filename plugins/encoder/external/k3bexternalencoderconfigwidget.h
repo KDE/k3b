@@ -48,7 +48,7 @@ class K3bExternalEncoderSettingsWidget : public K3bPluginConfigWidget
   Q_OBJECT
 
  public:
-  K3bExternalEncoderSettingsWidget( QWidget* parent = 0, const char* name = 0 );
+  K3bExternalEncoderSettingsWidget( QWidget* parent = 0 );
   ~K3bExternalEncoderSettingsWidget();
 
  public slots:
