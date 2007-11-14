@@ -832,19 +832,19 @@ bool K3bAudioDoc::saveDocumentData( QDomElement* docElem )
 	sourceElem.appendChild( subElem );
 
 	subElem = doc.createElement( "title" );
-	subElem.appendChild( doc.createTextNode( cdTrack->metaInfo().titles[cdTrack->cdTrackNumber()-1] ) );
+	subElem.appendChild( doc.createTextNode( cdTrack->title() ) );
 	sourceElem.appendChild( subElem );
 
 	subElem = doc.createElement( "artist" );
-	subElem.appendChild( doc.createTextNode( cdTrack->metaInfo().artists[cdTrack->cdTrackNumber()-1] ) );
+	subElem.appendChild( doc.createTextNode( cdTrack->artist() ) );
 	sourceElem.appendChild( subElem );
 
 	subElem = doc.createElement( "cdtitle" );
-	subElem.appendChild( doc.createTextNode( cdTrack->metaInfo().cdTitle ) );
+	subElem.appendChild( doc.createTextNode( cdTrack->cdTitle() ) );
 	sourceElem.appendChild( subElem );
 
 	subElem = doc.createElement( "cdartist" );
-	subElem.appendChild( doc.createTextNode( cdTrack->metaInfo().cdArtist ) );
+	subElem.appendChild( doc.createTextNode( cdTrack->cdArtist() ) );
 	sourceElem.appendChild( subElem );
 
 	sourcesParent.appendChild( sourceElem );

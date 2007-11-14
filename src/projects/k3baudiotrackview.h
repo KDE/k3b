@@ -1,7 +1,7 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2004-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -50,101 +50,99 @@ class K3bAudioTrackPlayer;
 
 class K3bAudioTrackView : public K3bListView
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bAudioTrackView( K3bAudioDoc*, QWidget* parent );
-  ~K3bAudioTrackView();
+public:
+    K3bAudioTrackView( K3bAudioDoc*, QWidget* parent );
+    ~K3bAudioTrackView();
 
-  KActionCollection* actionCollection() const { return m_actionCollection; }
+    KActionCollection* actionCollection() const { return m_actionCollection; }
 
-  K3bAudioTrackPlayer* player() const { return m_player; }
+    K3bAudioTrackPlayer* player() const { return m_player; }
 
-  void getSelectedItems( Q3PtrList<K3bAudioTrack>& tracks, 
-			 Q3PtrList<K3bAudioDataSource>& sources );
+    void getSelectedItems( Q3PtrList<K3bAudioTrack>& tracks, 
+			   Q3PtrList<K3bAudioDataSource>& sources );
 
- public slots:
-  void showPlayerIndicator( K3bAudioTrack* );
-  void togglePauseIndicator( bool b );
-  void removePlayerIndicator();
+public slots:
+    void showPlayerIndicator( K3bAudioTrack* );
+    void togglePauseIndicator( bool b );
+    void removePlayerIndicator();
 
- private:
-  void setupColumns();
-  void setupActions();
-  void showAllSources();
-  K3bAudioTrackViewItem* findTrackItem( const QPoint& pos ) const;
-  K3bAudioTrackViewItem* getTrackViewItem( K3bAudioTrack* track, bool* isNew = 0 );
+private:
+    void setupColumns();
+    void setupActions();
+    void showAllSources();
+    K3bAudioTrackViewItem* findTrackItem( const QPoint& pos ) const;
+    K3bAudioTrackViewItem* getTrackViewItem( K3bAudioTrack* track, bool* isNew = 0 );
 
-  K3bAudioDoc* m_doc;
+    K3bAudioDoc* m_doc;
 
-  KAction* m_actionProperties;
-  KAction* m_actionRemove;
-  KAction* m_actionAddSilence;
-  KAction* m_actionMergeTracks;
-  KAction* m_actionSplitSource;
-  KAction* m_actionSplitTrack;
-  KAction* m_actionEditSource;
-  KAction* m_actionPlayTrack;
-  KActionCollection* m_actionCollection;
+    KAction* m_actionProperties;
+    KAction* m_actionRemove;
+    KAction* m_actionAddSilence;
+    KAction* m_actionMergeTracks;
+    KAction* m_actionSplitSource;
+    KAction* m_actionSplitTrack;
+    KAction* m_actionEditSource;
+    KAction* m_actionPlayTrack;
+    KActionCollection* m_actionCollection;
 
-  bool m_updatingColumnWidths;
+    bool m_updatingColumnWidths;
 
-  QMap<K3bAudioTrack*, K3bAudioTrackViewItem*> m_trackItemMap;
+    QMap<K3bAudioTrack*, K3bAudioTrackViewItem*> m_trackItemMap;
 
-  K3bAudioTrackViewItem* m_currentMouseOverItem;
-  QTimer* m_autoOpenTrackTimer;
-  QTimer* m_animationTimer;
+    K3bAudioTrackViewItem* m_currentMouseOverItem;
+    QTimer* m_autoOpenTrackTimer;
+    QTimer* m_animationTimer;
 
-  KMenu* m_popupMenu;
+    K3bAudioTrackPlayer* m_player;
 
-  K3bAudioTrackPlayer* m_player;
+    // used for the audiotrackplayer indicator
+    K3bAudioTrack* m_currentlyPlayingTrack;
 
-  // used for the audiotrackplayer indicator
-  K3bAudioTrack* m_currentlyPlayingTrack;
+    // to animate the player icon
+    K3bListViewItemAnimator* m_playerItemAnimator;
 
-  // to animate the player icon
-  K3bListViewItemAnimator* m_playerItemAnimator;
+    // used for the drop-event hack
+    KUrl::List m_dropUrls;
+    K3bAudioTrack* m_dropTrackAfter;
+    K3bAudioTrack* m_dropTrackParent;
+    K3bAudioDataSource* m_dropSourceAfter;
 
-  // used for the drop-event hack
-  KUrl::List m_dropUrls;
-  K3bAudioTrack* m_dropTrackAfter;
-  K3bAudioTrack* m_dropTrackParent;
-  K3bAudioDataSource* m_dropSourceAfter;
+private slots:
+    void slotAnimation();
+    void slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3ListViewItem* after );
+    void slotChanged();
+    void slotTrackChanged( K3bAudioTrack* );
+    void slotTrackRemoved( K3bAudioTrack* );
+    void slotDragTimeout();
 
- private slots:
-  void slotAnimation();
-  void slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3ListViewItem* after );
-  void slotChanged();
-  void slotTrackChanged( K3bAudioTrack* );
-  void slotTrackRemoved( K3bAudioTrack* );
-  void slotDragTimeout();
+    // action slots
+    void slotAddSilence();
+    void slotRemove();
+    void slotMergeTracks();
+    void slotSplitSource();
+    void slotSplitTrack();
+    void showPopupMenu( K3ListView*, Q3ListViewItem* item, const QPoint& pos );
+    void slotProperties();
+    void slotPlayTrack();
+    void slotQueryMusicBrainz();
+    void slotEditSource();
 
-  // action slots
-  void slotAddSilence();
-  void slotRemove();
-  void slotMergeTracks();
-  void slotSplitSource();
-  void slotSplitTrack();
-  void showPopupMenu( K3ListView*, Q3ListViewItem* item, const QPoint& pos );
-  void slotProperties();
-  void slotPlayTrack();
-  void slotQueryMusicBrainz();
-  void slotEditSource();
+    // drop-event hack slot
+    void slotAddUrls();
 
-  // drop-event hack slot
-  void slotAddUrls();
-
- protected:
-  void keyPressEvent( QKeyEvent* e );
-  void keyReleaseEvent( QKeyEvent* e );
-  void focusOutEvent( QFocusEvent* e );
-  void contentsMouseMoveEvent( QMouseEvent* e );
-  void contentsDragMoveEvent( QDragMoveEvent* e );
-  void contentsDragLeaveEvent( QDragLeaveEvent* e );
-  void resizeEvent( QResizeEvent* e );
-  void resizeColumns();
-  bool acceptDrag(QDropEvent* e) const;
-  Q3DragObject* dragObject();
+protected:
+    void keyPressEvent( QKeyEvent* e );
+    void keyReleaseEvent( QKeyEvent* e );
+    void focusOutEvent( QFocusEvent* e );
+    void contentsMouseMoveEvent( QMouseEvent* e );
+    void contentsDragMoveEvent( QDragMoveEvent* e );
+    void contentsDragLeaveEvent( QDragLeaveEvent* e );
+    void resizeEvent( QResizeEvent* e );
+    void resizeColumns();
+    bool acceptDrag(QDropEvent* e) const;
+    Q3DragObject* dragObject();
 };
 
 #endif

@@ -1,7 +1,7 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -19,7 +19,6 @@
 #include "k3baudiodatasource.h"
 
 #include <k3btoc.h>
-#include <k3bcddbresult.h>
 
 #include "k3b_export.h"
 
@@ -30,6 +29,7 @@ namespace K3bDevice {
 class K3bCdparanoiaLib;
 
 
+#warning FIXME: move K3bMedium into libk3b, then add KCddb info to K3bMedium, and use K3bMedium for the K3bAudioCdTrackSource
 /**
  * Audio data source which reads it's data directly from an audio CD.
  *
@@ -43,7 +43,10 @@ class LIBK3B_EXPORT K3bAudioCdTrackSource : public K3bAudioDataSource
   /**
    * Default constructor to create a new source.
    */
-  K3bAudioCdTrackSource( const K3bDevice::Toc& toc, int cdTrackNumber, const K3bCddbResultEntry& cddb, 
+  K3bAudioCdTrackSource( const K3bDevice::Toc& toc, 
+			 int cdTrackNumber,
+			 const QString& artist, const QString& title,
+			 const QString& cdartist, const QString& cdtitle, 
 			 K3bDevice::Device* dev = 0 );
 
   /**
@@ -57,7 +60,11 @@ class LIBK3B_EXPORT K3bAudioCdTrackSource : public K3bAudioDataSource
 
   unsigned int discId() const { return m_discId; }
   int cdTrackNumber() const { return m_cdTrackNumber; }
-  const K3bCddbResultEntry& metaInfo() const { return m_cddbEntry; }
+
+  QString artist() const { return m_artist; }
+  QString title() const { return m_title; }
+  QString cdArtist() const { return m_cdArtist; }
+  QString cdTitle() const { return m_cdTitle; }
 
   K3b::Msf originalLength() const;
   bool seek( const K3b::Msf& );
@@ -86,7 +93,11 @@ class LIBK3B_EXPORT K3bAudioCdTrackSource : public K3bAudioDataSource
   K3b::Msf m_length;
   K3bDevice::Toc m_toc;
   int m_cdTrackNumber;
-  K3bCddbResultEntry m_cddbEntry;
+
+  QString m_artist;
+  QString m_title;
+  QString m_cdArtist;
+  QString m_cdTitle;
 
   // ripping
   // we only save the device we last saw the CD in

@@ -26,30 +26,30 @@ class K3bAudioCdTextWidget : public base_K3bAudioCdTextWidget
 {
   Q_OBJECT
 
- public:
-  K3bAudioCdTextWidget( QWidget* parent = 0 );
-  ~K3bAudioCdTextWidget();
+public:
+    K3bAudioCdTextWidget( QWidget* parent = 0 );
+    ~K3bAudioCdTextWidget();
 
-  bool isChecked() const;
+    bool isChecked() const;
 
- public slots:
-  void setChecked( bool );
-  void load( K3bAudioDoc* );
-  void save( K3bAudioDoc* );
+public slots:
+    void setChecked( bool );
+    void load( K3bAudioDoc* );
+    void save( K3bAudioDoc* );
 
- private slots:
-  void slotCopyTitle();
-  void slotCopyPerformer();
-  void slotCopyArranger();
-  void slotCopySongwriter();
-  void slotCopyComposer();
-  void slotMoreFields();
+private slots:
+    void slotCopyTitle();
+    void slotCopyPerformer();
+    void slotCopyArranger();
+    void slotCopySongwriter();
+    void slotCopyComposer();
+    void slotMoreFields();
 
- private:
-  K3bAudioDoc* m_doc;
+private:
+    K3bAudioDoc* m_doc;
 
-  class AllFieldsDialog;
-  AllFieldsDialog* m_allFieldsDlg;
+    class AllFieldsDialog;
+    AllFieldsDialog* m_allFieldsDlg;
 };
 
 #endif

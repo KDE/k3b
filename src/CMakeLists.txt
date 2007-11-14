@@ -1,3 +1,5 @@
+project(k3b_src)
+
 include_directories(
 ${CMAKE_CURRENT_BINARY_DIR}
 ${CMAKE_CURRENT_SOURCE_DIR}
@@ -43,7 +45,7 @@ projects/k3baudiodatasourceviewitem.cpp
 projects/k3baudioeditorwidget.cpp 
 projects/k3baudiotrackdialog.cpp 
 projects/k3baudiotrackwidget.cpp 
-projects/k3baudiotrackplayer.cpp 
+#projects/k3baudiotrackplayer.cpp 
 projects/k3baudiotracksplitdialog.cpp 
 projects/k3baudiotrackview.cpp 
 projects/k3baudiotrackviewitem.cpp 
@@ -224,13 +226,14 @@ set(k3b_SRCS
    k3bfirstrun.cpp )
 
 set(k3b_bin_SRCS 
-  ${k3b_SRCS}
   ${k3b_option_SRCS}
   ${k3b_misc_SRCS}
   ${k3b_videodvd_SRCS}
   ${k3b_project_SRCS}
   ${k3b_kostore_SRCS}
-  ${k3b_rip_SRCS})
+  ${k3b_rip_SRCS}
+  ${k3b_SRCS}
+)
 
 #kde4_add_dcop_skels(k3b_SRCS );
 MESSAGE(STATUS "DCOP stuff was remove into kde4, convert it to dbus please.kde4_add_dcop_skels macro doesn't exist now. We keep it just to remember to port to dbus")
