@@ -50,7 +50,7 @@
 
 
 K3bVcdTrackDialog::K3bVcdTrackDialog( K3bVcdDoc* _doc, Q3PtrList<K3bVcdTrack>& tracks, Q3PtrList<K3bVcdTrack>& selectedTracks, QWidget* parent )
-        : KDialog( KDialogBase::Plain, i18n( "Video Track Properties" ), KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply,
+        : KDialog( KDialog::Plain, i18n( "Video Track Properties" ), KDialog::Ok | KDialog::Cancel | KDialog::Apply,
                        KDialog::Ok, parent )
 {
     prepareGui();

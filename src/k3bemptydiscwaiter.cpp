@@ -87,8 +87,8 @@ public:
 
 
 K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice::Device* device, QWidget* parent )
-  : KDialog( KDialogBase::Plain, i18n("Waiting for Disk"),
-		 KDialog::Cancel|KDialogBase::User1|KDialogBase::User2|KDialogBase::User3,
+  : KDialog( KDialog::Plain, i18n("Waiting for Disk"),
+		 KDialog::Cancel|KDialog::User1|KDialog::User2|KDialog::User3,
 		 KDialog::User3, parent, true, true, i18n("Force"), i18n("Eject"), i18n("Load") )
 {
   d = new Private();

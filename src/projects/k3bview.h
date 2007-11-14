@@ -32,9 +32,8 @@ class K3bDoc;
 class KActionCollection;
 class K3bFillStatusDisplay;
 class K3bProjectBurnDialog;
-class K3bToolBox;
 class K3bProjectPlugin;
-
+class KToolBar;
 
 /** 
  *
@@ -96,7 +95,7 @@ class K3bView : public QWidget, public KXMLGUIClient
   void addPluginButtons( int projectType );
 
   K3bFillStatusDisplay* fillStatusDisplay() const { return m_fillStatusDisplay; }
-  K3bToolBox* toolBox() const { return m_toolBox; }
+  KToolBar* toolBox() const { return m_toolBox; }
 
  private slots:
   void slotPluginButtonClicked();
@@ -104,7 +103,7 @@ class K3bView : public QWidget, public KXMLGUIClient
  private:
   K3bDoc* m_doc;
   K3bFillStatusDisplay* m_fillStatusDisplay;
-  K3bToolBox* m_toolBox;
+  KToolBar* m_toolBox;
 
   Q3PtrDict<K3bProjectPlugin> m_plugins;
 };

@@ -27,7 +27,6 @@
 #include <k3bfillstatusdisplay.h>
 #include <k3bcore.h>
 #include <k3bprojectplugin.h>
-#include <k3btoolbox.h>
 #include <k3bvalidators.h>
 
 #include <klocale.h>
@@ -39,6 +38,7 @@
 #include <kio/global.h>
 #include <kio/job.h>
 #include <kdialog.h>
+#include <ktoolbar.h>
 
 #include <qpixmap.h>
 #include <qsplitter.h>
@@ -87,11 +87,11 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
   actionClearSession->setToolTip( i18n("Remove the imported items from a previous session") );
   actionEditBootImages->setToolTip( i18n("Modify the bootable settings of the current project") );
 
-  toolBox()->addButton( actionImportSession );
-  toolBox()->addButton( actionClearSession );
-  toolBox()->addButton( actionEditBootImages );
+  toolBox()->addAction( actionImportSession );
+  toolBox()->addAction( actionClearSession );
+  toolBox()->addAction( actionEditBootImages );
   toolBox()->addSeparator();
-  toolBox()->addButton( m_dataFileView->actionCollection()->action("parent_dir") );
+  toolBox()->addAction( m_dataFileView->actionCollection()->action("parent_dir") );
   toolBox()->addSeparator();
 
   addPluginButtons( K3bProjectPlugin::DATA_CD );
@@ -147,8 +147,8 @@ void K3bDataView::clearImportedSession()
 
 void K3bDataView::editBootImages()
 {
-  KDialog* d = new KDialogBase( this, "", true, i18n("Edit Boot Images"),
-				    KDialog::Ok, KDialogBase::Ok, true );
+  KDialog* d = new KDialog( this, "", true, i18n("Edit Boot Images"),
+				    KDialog::Ok, KDialog::Ok, true );
   d->setMainWidget( new K3bBootImageView( m_doc, d ) );
   d->exec();
   delete d;

@@ -23,7 +23,6 @@
 #include <k3bfillstatusdisplay.h>
 #include <k3bdatapropertiesdialog.h>
 #include <k3bprojectplugin.h>
-#include <k3btoolbox.h>
 
 #include <klocale.h>
 #include <kdebug.h>

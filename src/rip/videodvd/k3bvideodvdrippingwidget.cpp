@@ -333,9 +333,9 @@ void K3bVideoDVDRippingWidget::slotVideoSizeChanged( int sizeIndex )
 
 void K3bVideoDVDRippingWidget::slotCustomPictureSize()
 {
-  KDialog dlg( KDialogBase::Plain,
+  KDialog dlg( KDialog::Plain,
 		   i18n("Video Picture Size"),
-		   KDialog::Ok|KDialogBase::Cancel,
+		   KDialog::Ok|KDialog::Cancel,
 		   KDialog::Ok,
 		   this,
 		   0,

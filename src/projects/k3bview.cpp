@@ -37,7 +37,6 @@
 #include "k3bfillstatusdisplay.h"
 #include "k3bprojectburndialog.h"
 #include "k3bprojectplugindialog.h"
-#include <k3btoolbox.h>
 #include <k3bpluginmanager.h>
 #include <k3bprojectplugin.h>
 #include <k3bcore.h>
@@ -49,7 +48,7 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent )
 {
   Q3GridLayout* grid = new Q3GridLayout( this );
 
-  m_toolBox = new K3bToolBox( this );
+  m_toolBox = new KToolBar( this );
   m_fillStatusDisplay = new K3bFillStatusDisplay( m_doc, this );
 
   grid->addMultiCellWidget( m_toolBox, 0, 0, 0, 1 );

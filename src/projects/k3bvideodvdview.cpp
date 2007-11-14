@@ -21,7 +21,6 @@
 #include "k3bdataurladdingdialog.h"
 #include <k3bfillstatusdisplay.h>
 #include <k3bdatafileview.h>
-#include <k3btoolbox.h>
 #include <k3bprojectplugin.h>
 
 #include <klocale.h>

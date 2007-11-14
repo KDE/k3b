@@ -28,7 +28,6 @@
 #include <k3bdatadoc.h>
 #include <k3baudiotrackview.h>
 #include <k3bfillstatusdisplay.h>
-#include <k3btoolbox.h>
 #include <k3bprojectplugin.h>
 
 #include <q3widgetstack.h>
@@ -63,18 +62,18 @@ K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent )
 
   m_widgetStack->raiseWidget( m_dataFileView );
 
-  toolBox()->addButton( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_PLAY ) );
-  toolBox()->addButton( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_PAUSE ) );
-  toolBox()->addButton( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_STOP ) );
+  toolBox()->addAction( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_PLAY ) );
+  toolBox()->addAction( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_PAUSE ) );
+  toolBox()->addAction( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_STOP ) );
   toolBox()->addSpacing();
-  toolBox()->addButton( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_PREV ) );
-  toolBox()->addButton( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_NEXT ) );
+  toolBox()->addAction( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_PREV ) );
+  toolBox()->addAction( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_NEXT ) );
   toolBox()->addSpacing();
   m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_SEEK )->plug( toolBox() );
   toolBox()->addSeparator();
 
 #ifdef HAVE_MUSICBRAINZ
-  toolBox()->addButton( m_audioListView->actionCollection()->action( "project_audio_musicbrainz" ) );
+  toolBox()->addAction( m_audioListView->actionCollection()->action( "project_audio_musicbrainz" ) );
   toolBox()->addSeparator();
 #endif
 

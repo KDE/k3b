@@ -45,7 +45,7 @@
 
 
 K3bAudioTrackTRMLookupDialog::K3bAudioTrackTRMLookupDialog( QWidget* parent )
-  : KDialog( KDialogBase::Plain, 
+  : KDialog( KDialog::Plain, 
 		 i18n("MusicBrainz Query"), 
 		 KDialog::Cancel,
 		 KDialog::Cancel,

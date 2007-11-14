@@ -335,7 +335,7 @@ void K3bAudioCdView::slotEditTrackCddb()
     AudioTrackViewItem* a = static_cast<AudioTrackViewItem*>(items.first());
 
     KDialog d( this, "trackCddbDialog", true, i18n("Cddb Track %1").arg(a->trackNumber),
-		   KDialog::Ok|KDialogBase::Cancel, KDialogBase::Ok, true);
+		   KDialog::Ok|KDialog::Cancel, KDialog::Ok, true);
     QWidget* w = new QWidget( &d );
 
     KLineEdit* editTitle = new KLineEdit( m_cddbInfo.titles[a->trackNumber-1], w );
@@ -373,7 +373,7 @@ void K3bAudioCdView::slotEditTrackCddb()
 void K3bAudioCdView::slotEditAlbumCddb()
 {
   KDialog d( this, "trackCddbDialog", true, i18n("Album Cddb"),
-		 KDialog::Ok|KDialogBase::Cancel, KDialogBase::Ok, true);
+		 KDialog::Ok|KDialog::Cancel, KDialog::Ok, true);
   QWidget* w = new QWidget( &d );
 
   KLineEdit* editTitle = new KLineEdit( m_cddbInfo.cdTitle, w );

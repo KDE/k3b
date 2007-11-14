@@ -30,7 +30,7 @@ K3bMediaSelectionDialog::K3bMediaSelectionDialog( QWidget* parent,
 						  const QString& title, 
 						  const QString& text, 
 						  bool modal )
-  : KDialog( KDialogBase::Plain, 
+  : KDialog( KDialog::Plain, 
 		 title.isEmpty() ? i18n("Medium Selection") : title, 
 		 Ok|Cancel, 
 		 Ok,

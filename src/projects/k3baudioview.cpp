@@ -33,7 +33,6 @@
 
 #include <k3bfillstatusdisplay.h>
 #include <k3bmsf.h>
-#include <k3btoolbox.h>
 #include <kactionclasses.h>
 #include <k3bprojectplugin.h>
 
@@ -63,22 +62,22 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name
 					   actionCollection(), "project_audio_convert" );
   conversionAction->setToolTip( i18n("Convert audio tracks to other audio formats." ) );
 
-  toolBox()->addButton( conversionAction );
+  toolBox()->addAction( conversionAction );
   toolBox()->addSeparator();
 
-  toolBox()->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PLAY ) );
-  toolBox()->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PAUSE ) );
-  toolBox()->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_STOP ) );
+  toolBox()->addAction( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PLAY ) );
+  toolBox()->addAction( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PAUSE ) );
+  toolBox()->addAction( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_STOP ) );
   toolBox()->addSpacing();
-  toolBox()->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PREV ) );
-  toolBox()->addButton( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_NEXT ) );
+  toolBox()->addAction( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PREV ) );
+  toolBox()->addAction( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_NEXT ) );
   toolBox()->addSpacing();
   m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_SEEK )->plug( toolBox() );
   toolBox()->addSeparator();
 
 #ifdef HAVE_MUSICBRAINZ
   kDebug() << "(K3bAudioView) m_songlist->actionCollection()->actions().count() " << m_songlist->actionCollection()->actions().count();
-  toolBox()->addButton( m_songlist->actionCollection()->action( "project_audio_musicbrainz" ) );
+  toolBox()->addAction( m_songlist->actionCollection()->action( "project_audio_musicbrainz" ) );
   toolBox()->addSeparator();
 #endif
 
