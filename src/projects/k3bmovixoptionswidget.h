@@ -36,8 +36,8 @@ class K3bMovixOptionsWidget : public base_K3bMovixOptionsWidget
   void init( const K3bMovixBin* );
   void readSettings( K3bMovixDoc* );
   void saveSettings( K3bMovixDoc* );
-  void loadConfig( KConfigBase* c );
-  void saveConfig( KConfigBase* c );
+  void loadConfig( const KConfigGroup & c );
+  void saveConfig( KConfigGroup &c );
   void loadDefaults();
 
  private:

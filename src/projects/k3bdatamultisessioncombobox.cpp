@@ -99,7 +99,7 @@ K3bDataDoc::MultiSessionMode K3bDataMultiSessionCombobox::multiSessionMode() con
 }
 
 
-void K3bDataMultiSessionCombobox::saveConfig( KConfigBase* c )
+void K3bDataMultiSessionCombobox::saveConfig( KConfigGroup& c )
 {
   QString s;
   switch( currentItem() ) {
@@ -124,7 +124,7 @@ void K3bDataMultiSessionCombobox::saveConfig( KConfigBase* c )
 }
 
 
-void K3bDataMultiSessionCombobox::loadConfig( KConfigBase* c )
+void K3bDataMultiSessionCombobox::loadConfig( const KConfigGroup& c )
 {
   QString s = c.readEntry( "multisession mode" );
   if( s == "none" )

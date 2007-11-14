@@ -27,8 +27,6 @@
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kurl.h>
-#include <kpixmapeffect.h>
-#include <kpixmap.h>
 
 #include <qpainter.h>
 #include <qpalette.h>
@@ -74,7 +72,7 @@ void K3bDataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column,
     if( dataItem()->hideOnRockRidge() ) {
       int tw = qMax( fm.width( "rr" ) + 2*listView()->itemMargin(), height() );
       p->fillRect( width-tw, 0, tw, height(), isSelected() ? _cg.highlight() : _cg.brush(QColorGroup::Base) );
-      p->setPen( isSelected() ? _cg.highlightedText() : red );
+      p->setPen( isSelected() ? _cg.highlightedText() : Qt::red );
       p->drawEllipse( width-tw, 0, tw, height() );
       p->drawText( width-tw, 0, tw, height(), Qt::AlignCenter, "rr" );
       width -= tw;
@@ -83,7 +81,7 @@ void K3bDataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column,
     if( dataItem()->hideOnJoliet() ) {
       int tw = qMax( fm.width( "j" ) + 2*listView()->itemMargin(), height() );
       p->fillRect( width-tw, 0, tw, height(), isSelected() ? _cg.highlight() : _cg.brush(QColorGroup::Base) );
-      p->setPen( isSelected() ? _cg.highlightedText() : blue );
+      p->setPen( isSelected() ? _cg.highlightedText() : Qt::blue );
       p->drawEllipse( width-tw, 0, tw, height() );
       p->drawText( width-tw, 0, tw, height(), Qt::AlignCenter, "j" );
       width -= tw;
@@ -180,10 +178,12 @@ void K3bDataDirViewItem::highlightIcon( bool b )
 {
   if( m_pixmap.isNull() )
     m_pixmap = *pixmap(0);
-
+//TODO port me kde4
+#if 0
   if( b )
     setPixmap( 0, KPixmapEffect::selectedPixmap( m_pixmap, listView()->colorGroup().highlight() ) );
   else
+#endif
     setPixmap( 0, m_pixmap );
 }
 

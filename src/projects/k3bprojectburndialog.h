@@ -43,7 +43,7 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
    Q_OBJECT
 
  public:
-   K3bProjectBurnDialog( K3bDoc* doc, QWidget *parent=0, const char *name=0, 
+   K3bProjectBurnDialog( K3bDoc* doc, QWidget *parent=0, 
 			 bool modal = true, bool dvd = false );
    ~K3bProjectBurnDialog();
 
