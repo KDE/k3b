@@ -445,7 +445,7 @@ void K3bAudioRippingDialog::loadK3bDefaults()
   refresh();
 }
 
-void K3bAudioRippingDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& c )
+void K3bAudioRippingDialog::loadUserDefaults( const KConfigGroup& c )
 {
   m_comboParanoiaMode->setCurrentItem( c->readEntry( "paranoia_mode", 0 ) );
   m_spinRetries->setValue( c->readEntry( "read_retries", 5 ) );

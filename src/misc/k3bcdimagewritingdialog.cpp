@@ -934,28 +934,28 @@ void K3bCdImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, con
 }
 
 
-void K3bCdImageWritingDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& c )
+void K3bCdImageWritingDialog::loadUserDefaults( const KConfigGroup& c )
 {
   m_writingModeWidget->loadConfig( c );
-  m_checkDummy->setChecked( c->readEntry("simulate", false ) );
-  m_checkNoFix->setChecked( c->readEntry("multisession", false ) );
-  m_checkCacheImage->setChecked( !c->readEntry("on_the_fly", true ) );
+  m_checkDummy->setChecked( c.readEntry("simulate", false ) );
+  m_checkNoFix->setChecked( c.readEntry("multisession", false ) );
+  m_checkCacheImage->setChecked( !c.readEntry("on_the_fly", true ) );
 
   m_dataModeWidget->loadConfig(c);
 
-  m_spinCopies->setValue( c->readEntry( "copies", 1 ) );
+  m_spinCopies->setValue( c.readEntry( "copies", 1 ) );
 
-  m_checkVerify->setChecked( c->readEntry( "verify_data", false ) );
+  m_checkVerify->setChecked( c.readEntry( "verify_data", false ) );
 
   m_writerSelectionWidget->loadConfig( c );
 
   if( !d->imageForced ) {
-    QString image = c->readPathEntry( "image path", c->readPathEntry( "last written image", QString() ) );
+    QString image = c.readPathEntry( "image path", c.readPathEntry( "last written image", QString() ) );
     if( QFile::exists( image ) )
       m_editImagePath->setUrl( image );
   }
 
-  QString imageType = c->readEntry( "image type", "auto" );
+  QString imageType = c.readEntry( "image type", "auto" );
   int x = 0;
   if( imageType == "iso9660" )
     x = d->imageTypeSelectionMapRev[IMAGE_ISO];
@@ -979,18 +979,18 @@ void K3bCdImageWritingDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults
 void K3bCdImageWritingDialog::saveUserDefaults( KConfigGroup& c )
 {
   m_writingModeWidget->saveConfig( c ),
-  c->writeEntry( "simulate", m_checkDummy->isChecked() );
-  c->writeEntry( "multisession", m_checkNoFix->isChecked() );
-  c->writeEntry( "on_the_fly", !m_checkCacheImage->isChecked() );
+  c.writeEntry( "simulate", m_checkDummy->isChecked() );
+  c.writeEntry( "multisession", m_checkNoFix->isChecked() );
+  c.writeEntry( "on_the_fly", !m_checkCacheImage->isChecked() );
   m_dataModeWidget->saveConfig(c);
 
-  c->writeEntry( "verify_data", m_checkVerify->isChecked() );
+  c.writeEntry( "verify_data", m_checkVerify->isChecked() );
 
   m_writerSelectionWidget->saveConfig( c );
 
-  c->writePathEntry( "image path", imagePath() );
+  c.writePathEntry( "image path", imagePath() );
 
-  c->writeEntry( "copies", m_spinCopies->value() );
+  c.writeEntry( "copies", m_spinCopies->value() );
 
   QString imageType;
   if( m_comboImageType->currentItem() == 0 )
@@ -1014,7 +1014,7 @@ void K3bCdImageWritingDialog::saveUserDefaults( KConfigGroup& c )
       break;
     }
   }
-  c->writeEntry( "image type", imageType );
+  c.writeEntry( "image type", imageType );
 
   if( m_tempDirSelectionWidget->isEnabled() )
     m_tempDirSelectionWidget->saveConfig();

@@ -54,7 +54,7 @@ void K3bProjectPluginDialog::saveUserDefaults( KConfigGroup& config )
 }
 
 
-void K3bProjectPluginDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& config )
+void K3bProjectPluginDialog::loadUserDefaults( const KConfigGroup& config )
 {
   m_pluginGui->readSettings( config );
 }

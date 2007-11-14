@@ -166,33 +166,33 @@ void K3bWritingModeWidget::updateModes()
 }
 
 
-void K3bWritingModeWidget::saveConfig( KConfigBase* c )
+void K3bWritingModeWidget::saveConfig( KConfigGroup& c )
 {
   switch( writingMode() ) {
   case K3b::DAO:
-    c->writeEntry( "writing_mode", "dao" );
+    c.writeEntry( "writing_mode", "dao" );
     break;
   case K3b::TAO:
-    c->writeEntry( "writing_mode", "tao" );
+    c.writeEntry( "writing_mode", "tao" );
     break;
   case K3b::RAW:
-    c->writeEntry( "writing_mode", "raw" );
+    c.writeEntry( "writing_mode", "raw" );
     break;
   case K3b::WRITING_MODE_INCR_SEQ:
-    c->writeEntry( "writing_mode", "incremental" );
+    c.writeEntry( "writing_mode", "incremental" );
     break;
   case K3b::WRITING_MODE_RES_OVWR:
-    c->writeEntry( "writing_mode", "overwrite" );
+    c.writeEntry( "writing_mode", "overwrite" );
     break;
   default:
-    c->writeEntry( "writing_mode", "auto" );
+    c.writeEntry( "writing_mode", "auto" );
     break;
   }
 }
 
-void K3bWritingModeWidget::loadConfig( KConfigBase* c )
+void K3bWritingModeWidget::loadConfig( const KConfigGroup& c )
 {
-  QString mode = c->readEntry( "writing_mode" );
+  QString mode = c.readEntry( "writing_mode" );
   if ( mode == "dao" )
     setWritingMode( K3b::DAO );
   else if( mode == "tao" )

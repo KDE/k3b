@@ -216,7 +216,7 @@ void K3bMixedBurnDialog::loadK3bDefaults()
 }
 
 
-void K3bMixedBurnDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& c )
+void K3bMixedBurnDialog::loadUserDefaults( const KConfigGroup& c )
 {
   K3bProjectBurnDialog::loadUserDefaults( c );
 

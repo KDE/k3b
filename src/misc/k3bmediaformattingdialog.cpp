@@ -186,7 +186,7 @@ void K3bMediaFormattingDialog::toggleAll()
 }
 
 
-void K3bMediaFormattingDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& c )
+void K3bMediaFormattingDialog::loadUserDefaults( const KConfigGroup& c )
 {
     m_checkForce->setChecked( c->readEntry( "force", false ) );
     m_checkQuickFormat->setChecked( c->readEntry( "quick format", true ) );

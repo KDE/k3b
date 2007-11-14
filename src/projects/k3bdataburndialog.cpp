@@ -224,7 +224,7 @@ void K3bDataBurnDialog::loadK3bDefaults()
 }
 
 
-void K3bDataBurnDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& c )
+void K3bDataBurnDialog::loadUserDefaults( const KConfigGroup& c )
 {
   K3bProjectBurnDialog::loadUserDefaults(c);
 

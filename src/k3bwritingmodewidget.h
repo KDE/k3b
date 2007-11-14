@@ -18,10 +18,9 @@
 #define _K3B_WRITING_MODE_WIDGET_H_
 
 #include <k3bintmapcombobox.h>
-
 #include <k3bmedium.h>
 
-class KConfigBase;
+#include <kconfiggroup.h>
 
 
 /**
@@ -38,11 +37,12 @@ class K3bWritingModeWidget : public K3bIntMapComboBox
 
   int writingMode() const;
 
-  void saveConfig( KConfigBase* );
+  void saveConfig( KConfigGroup& );
+
   /**
    * This will not emit the writingModeChanged signal
    */
-  void loadConfig( KConfigBase* );
+  void loadConfig( const KConfigGroup& );
 
  public slots:
   /**

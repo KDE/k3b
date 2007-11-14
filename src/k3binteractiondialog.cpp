@@ -522,7 +522,7 @@ void K3bInteractionDialog::saveUserDefaults( KConfigGroup& )
 }
 
 
-void K3bInteractionDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& )
+void K3bInteractionDialog::loadUserDefaults( const KConfigGroup& )
 {
 }
 

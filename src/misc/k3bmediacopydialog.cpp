@@ -549,7 +549,7 @@ void K3bMediaCopyDialog::updateOverrideDevice()
 }
 
 
-void K3bMediaCopyDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& c )
+void K3bMediaCopyDialog::loadUserDefaults( const KConfigGroup& c )
 {
   m_writerSelectionWidget->loadConfig( c );
   m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "source_device" ) ) );

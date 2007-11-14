@@ -332,7 +332,7 @@ void K3bAudioProjectConvertingDialog::loadK3bDefaults()
   refresh();
 }
 
-void K3bAudioProjectConvertingDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& c )
+void K3bAudioProjectConvertingDialog::loadUserDefaults( const KConfigGroup& c )
 {
   m_optionWidget->loadConfig( c );
   m_patternWidget->loadConfig( c );

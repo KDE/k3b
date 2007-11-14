@@ -131,7 +131,7 @@ void K3bMovixBurnDialog::loadK3bDefaults()
 }
 
 
-void K3bMovixBurnDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& c )
+void K3bMovixBurnDialog::loadUserDefaults( const KConfigGroup& c )
 {
   K3bProjectBurnDialog::loadUserDefaults(c);
 

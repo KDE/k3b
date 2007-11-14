@@ -146,7 +146,7 @@ void K3bVideoDvdBurnDialog::loadK3bDefaults()
 }
 
 
-void K3bVideoDvdBurnDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& c )
+void K3bVideoDvdBurnDialog::loadUserDefaults( const KConfigGroup& c )
 {
   K3bProjectBurnDialog::loadUserDefaults( c );
 
