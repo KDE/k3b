@@ -32,6 +32,7 @@
 
 #include <kurl.h>
 #include <kaction.h>
+#include <kconfiggroup.h>
 
 class K3bMainWindow;
 class QDropEvent;
@@ -53,8 +54,8 @@ class K3bWelcomeWidget : public Q3ScrollView
   K3bWelcomeWidget( K3bMainWindow*, QWidget* parent = 0 );
   ~K3bWelcomeWidget();
 
-  void loadConfig( KConfigBase* c );
-  void saveConfig( KConfigBase* c );
+  void loadConfig( const KConfigGroup& c );
+  void saveConfig( KConfigGroup& c );
 
   class Display;
 

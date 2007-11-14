@@ -1,7 +1,7 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -17,7 +17,7 @@
 #define _K3B_PROJECT_MANAGER_H_
 
 #include <qobject.h>
-#include <q3ptrlist.h>
+#include <qlist.h>
 #include <k3bdoc.h>
 
 
@@ -27,63 +27,63 @@ class K3bProjectInterface;
 
 class K3bProjectManager : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bProjectManager( QObject* parent = 0 );
-  virtual ~K3bProjectManager();
+public:
+    K3bProjectManager( QObject* parent = 0 );
+    virtual ~K3bProjectManager();
 
-  const Q3PtrList<K3bDoc>& projects() const;
+    QList<K3bDoc*> projects() const;
 
-  /**
-   * Create a new project including loading user defaults and creating
-   * the dcop interface.
-   */
-  K3bDoc* createProject( K3bDoc::DocType type );
+    /**
+     * Create a new project including loading user defaults and creating
+     * the dcop interface.
+     */
+    K3bDoc* createProject( K3bDoc::DocType type );
 
-  /**
-   * Opens a K3b project.
-   * \return 0 if url does not point to a valid k3b project file, the new project otherwise.
-   */
-  K3bDoc* openProject( const KUrl &url );
+    /**
+     * Opens a K3b project.
+     * \return 0 if url does not point to a valid k3b project file, the new project otherwise.
+     */
+    K3bDoc* openProject( const KUrl &url );
 
-  /**
-   * saves the document under filename and format.
-   */
-  bool saveProject( K3bDoc*, const KUrl &url );
+    /**
+     * saves the document under filename and format.
+     */
+    bool saveProject( K3bDoc*, const KUrl &url );
 
-  K3bDoc* activeDoc() const { return activeProject(); }
-  K3bDoc* activeProject() const;
-  K3bDoc* findByUrl( const KUrl& url );
-  bool isEmpty() const;
+    K3bDoc* activeDoc() const { return activeProject(); }
+    K3bDoc* activeProject() const;
+    K3bDoc* findByUrl( const KUrl& url );
+    bool isEmpty() const;
 
-  /**
-   * Will create if none exists.
-   */
-  K3bProjectInterface* dcopInterface( K3bDoc* doc );
+    /**
+     * Will create if none exists.
+     */
+    K3bProjectInterface* dcopInterface( K3bDoc* doc );
 
- public slots:
-  void addProject( K3bDoc* );
-  void removeProject( K3bDoc* );
-  void setActive( K3bDoc* );
-  void loadDefaults( K3bDoc* );
+public slots:
+    void addProject( K3bDoc* );
+    void removeProject( K3bDoc* );
+    void setActive( K3bDoc* );
+    void loadDefaults( K3bDoc* );
 
- signals:
-  void newProject( K3bDoc* );
-  void projectSaved( K3bDoc* );
-  void closingProject( K3bDoc* );
-  void projectChanged( K3bDoc* doc );
-  void activeProjectChanged( K3bDoc* );
+signals:
+    void newProject( K3bDoc* );
+    void projectSaved( K3bDoc* );
+    void closingProject( K3bDoc* );
+    void projectChanged( K3bDoc* doc );
+    void activeProjectChanged( K3bDoc* );
 
- private slots:
-  void slotProjectChanged( K3bDoc* doc );
+    private slots:
+    void slotProjectChanged( K3bDoc* doc );
 
- private:
-  // used internal
-  K3bDoc* createEmptyProject( K3bDoc::DocType );
+private:
+    // used internal
+    K3bDoc* createEmptyProject( K3bDoc::DocType );
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 };
 
 #endif

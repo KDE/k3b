@@ -165,13 +165,7 @@ set(k3b_misc_SRCS
   misc/k3bmediaformattingdialog.cpp
 )
 
-set(k3b_bin_SRCS 
-  ${k3b_option_SRCS}
-  ${k3b_misc_SRCS}
-  ${k3b_videodvd_SRCS}
-  ${k3b_project_SRCS}
-  ${k3b_kostore_SRCS}
-  ${k3b_rip_SRCS}
+set(k3b_SRCS
    k3bwelcomewidget.cpp 
    k3bapplication.cpp 
    k3bdiroperator.cpp 
@@ -228,6 +222,15 @@ set(k3b_bin_SRCS
    k3blsofwrapperdialog.cpp 
    k3bservicemenuinstaller.cpp 
    k3bfirstrun.cpp )
+
+set(k3b_bin_SRCS 
+  ${k3b_SRCS}
+  ${k3b_option_SRCS}
+  ${k3b_misc_SRCS}
+  ${k3b_videodvd_SRCS}
+  ${k3b_project_SRCS}
+  ${k3b_kostore_SRCS}
+  ${k3b_rip_SRCS})
 
 #kde4_add_dcop_skels(k3b_SRCS );
 MESSAGE(STATUS "DCOP stuff was remove into kde4, convert it to dbus please.kde4_add_dcop_skels macro doesn't exist now. We keep it just to remember to port to dbus")
