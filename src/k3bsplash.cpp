@@ -27,6 +27,7 @@
 #include <qpainter.h>
 //Added by qt3to4:
 #include <QMouseEvent>
+#include <QDesktopWidget>
 
 #include <kstandarddirs.h>
 #include <kapplication.h>
@@ -47,8 +48,8 @@ K3bSplash::K3bSplash( QWidget* parent )
 
   QLabel* copyrightLabel = new QLabel( kapp->aboutData()->copyrightStatement(), this );
   copyrightLabel->setMargin( 5 );
-  copyrightLabel->setPaletteBackgroundColor( black );
-  copyrightLabel->setPaletteForegroundColor( white );
+  copyrightLabel->setPaletteBackgroundColor( Qt::black );
+  copyrightLabel->setPaletteForegroundColor( Qt::white );
   copyrightLabel->setAlignment( Qt::AlignRight );
 
   QLabel* picLabel = new QLabel( this );
@@ -59,8 +60,8 @@ K3bSplash::K3bSplash( QWidget* parent )
 
   m_infoBox = new QLabel( this );
   m_infoBox->setMargin( 5 );
-  m_infoBox->setPaletteBackgroundColor( black );
-  m_infoBox->setPaletteForegroundColor( white );
+  m_infoBox->setPaletteBackgroundColor( Qt::black );
+  m_infoBox->setPaletteForegroundColor( Qt::white );
 
   // Set geometry, with support for Xinerama systems
   QRect r;

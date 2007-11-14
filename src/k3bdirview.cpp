@@ -34,7 +34,8 @@
 #include <k3bmediacache.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bpassivepopup.h>
-
+#include <KActionMenu>
+#include <kactioncollection.h>
 #include <unistd.h>
 // QT-includes
 #include <qdir.h>
@@ -247,7 +248,7 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
       else {
 	if( KMessageBox::questionYesNo( this,
 					i18n("Found %1. Do you want K3b to mount the data part "
-					     "or show all the tracks?").arg( i18n("Video CD") ),
+					     "or show all the tracks?", i18n("Video CD") ),
 					i18n("Video CD"),
 					i18n("Mount CD"),
 					i18n("Show Video Tracks") ) == KMessageBox::No ) {
@@ -260,7 +261,7 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
     else if( medium.content() & K3bMedium::CONTENT_AUDIO ) {
       if( KMessageBox::questionYesNo( this,
 				      i18n("Found %1. Do you want K3b to mount the data part "
-					   "or show all the tracks?").arg( i18n("Audio CD") ),
+					   "or show all the tracks?", i18n("Audio CD") ),
 				      i18n("Audio CD"),
 				      i18n("Mount CD"),
 				      i18n("Show Audio Tracks") ) == KMessageBox::No ) {

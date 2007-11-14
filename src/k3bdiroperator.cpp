@@ -27,7 +27,7 @@
 #include <kbookmarkmenu.h>
 #include <kstandarddirs.h>
 #include <kmenu.h>
-
+#include <kactioncollection.h>
 #include <qdir.h>
 
 
@@ -52,7 +52,7 @@ K3bDirOperator::K3bDirOperator(const KUrl& url, QWidget* parent )
   m_bmPopup = new KActionMenu( i18n("Bookmarks"), "bookmark", this, "bookmarks" );
   m_bmMenu = new KBookmarkMenu( bmMan, this, m_bmPopup->popupMenu(), actionCollection(), true );
 
-  (void)new KAction( i18n("&Add to Project"), SHIFT+Qt::Key_Return, 
+  (void)new KAction( i18n("&Add to Project"), Qt::SHIFT+Qt::Key_Return, 
 		     this, SLOT(slotAddFilesToProject()), 
 		     actionCollection(), "add_file_to_project");
 }
@@ -85,7 +85,7 @@ void K3bDirOperator::readConfig( KConfig* cfg, const QString& group )
       lastUrl = urlUp;
   }
 
-  setURL( KUrl(lastUrl), true );
+  setUrl( KUrl(lastUrl), true );
 
   cfg->setGroup( oldGroup );
 
@@ -107,7 +107,7 @@ void K3bDirOperator::writeConfig( KConfig* cfg, const QString& group )
 
 void K3bDirOperator::openBookmarkURL( const QString& url )
 {
-  setURL( KUrl( url ), true );
+  setUrl( KUrl( url ), true );
 }
 
 

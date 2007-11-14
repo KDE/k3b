@@ -27,6 +27,7 @@
 #include <kdebug.h>
 #include <k3urldrag.h>
 #include <klocale.h>
+#include <kactionmenu.h>
 
 #include <qevent.h>
 #include <qtabbar.h>

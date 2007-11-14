@@ -28,8 +28,7 @@ class KFileFilterCombo;
 class KFileItem;
 class KActionCollection;
 class KConfig;
-class K3bToolBox;
-
+class KToolBar;
 
 /**
   *@author Sebastian Trueg
@@ -59,7 +58,7 @@ class K3bFileView : public K3bContentsView
   void setAutoUpdate( bool );
 
  private:
-  K3bToolBox* m_toolBox;
+  KToolBar* m_toolBox;
   K3bDirOperator* m_dirOp;
   KFileFilterCombo* m_filterWidget;
 

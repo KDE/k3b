@@ -34,6 +34,7 @@
 #include <k3listview.h>
 #include <kaction.h>
 #include <ktoolbar.h>
+#include <kactioncollection.h>
 
 #include <kurl.h>
 #include <k3urldrag.h>
@@ -70,7 +71,7 @@ void K3bFileView::setupGUI()
   //  layout->setAutoAdd( true );
 
   m_dirOp = new K3bDirOperator( KUrl(QDir::home().absPath()), this );
-  m_toolBox = new K3bToolBox( this, "file_view_toolbox" );
+  m_toolBox = new KToolBar( this);
 
   layout->addWidget( m_toolBox );
   layout->addWidget( m_dirOp );
@@ -130,7 +131,7 @@ void K3bFileView::setDir( const QString& dir )
 
 void K3bFileView::setUrl(const KUrl& url, bool forward)
 {
-  m_dirOp->setURL( url, forward );
+  m_dirOp->setUrl( url, forward );
 }
 
 KUrl K3bFileView::url()

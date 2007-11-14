@@ -65,7 +65,7 @@
 #include <kio/global.h>
 #include <kio/netaccess.h>
 #include <krecentdocument.h>
-
+#include <ktoggleaction.h>
 #include <stdlib.h>
 
 // application specific includes
