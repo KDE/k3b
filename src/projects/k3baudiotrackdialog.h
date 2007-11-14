@@ -18,7 +18,7 @@
 #define K3BAUDIOTRACKDIALOG_H
 
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include <k3bmsf.h>
 
@@ -31,7 +31,7 @@ class K3bAudioTrackWidget;
   *@author Sebastian Trueg
   */
 
-class K3bAudioTrackDialog : public KDialogBase
+class K3bAudioTrackDialog : public KDialog
 {
   Q_OBJECT
 

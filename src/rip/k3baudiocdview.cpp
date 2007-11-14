@@ -24,7 +24,6 @@
 #include <k3blistview.h>
 #include <k3bmsf.h>
 #include <k3btoolbox.h>
-#include <kcutlabel.h>
 #include <k3bstdguiitems.h>
 #include <k3bapplication.h>
 #include <k3bthememanager.h>

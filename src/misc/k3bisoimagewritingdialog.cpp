@@ -21,7 +21,6 @@
 #include <k3bdevice.h>
 #include <k3bwriterselectionwidget.h>
 #include <k3bburnprogressdialog.h>
-#include <kcutlabel.h>
 #include <k3bstdguiitems.h>
 #include <k3bmd5job.h>
 #include <k3bglobals.h>

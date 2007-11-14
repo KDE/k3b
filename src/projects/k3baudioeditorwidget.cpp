@@ -115,7 +115,7 @@ public:
       return 0;
   }
 };
-
+#if 0
 class K3bAudioEditorWidget::ToolTip : public QToolTip
 {
 public:
@@ -150,6 +150,7 @@ private:
   K3bAudioEditorWidget* m_editorWidget;
 };
 
+#endif
 
 class K3bAudioEditorWidget::Private
 {
@@ -191,8 +192,8 @@ K3bAudioEditorWidget::K3bAudioEditorWidget( QWidget* parent )
   setCursor( Qt::PointingHandCursor );
 
   m_margin = 5;
-
-  m_toolTip = new ToolTip( this );
+  //TODO port me
+  //m_toolTip = new ToolTip( this );
 }
 
 
@@ -313,7 +314,7 @@ int K3bAudioEditorWidget::addRange( const K3b::Msf& start, const K3b::Msf& end,
     return -1;
 
   Range* r = new Range( m_idCnt++, start, end, startFixed, endFixed, toolTip,
-			brush.style() != QBrush::NoBrush ? brush : QBrush(colorGroup().background()) );
+			brush.style() != Qt::NoBrush ? brush : QBrush(colorGroup().background()) );
   d->ranges.inSort( r );
 
   // only update the changed range

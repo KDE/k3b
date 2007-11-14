@@ -29,21 +29,19 @@
 
 #include <klineedit.h>
 #include <klocale.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kiconloader.h>
 
 
-class K3bAudioCdTextWidget::AllFieldsDialog : public KDialogBase
+class K3bAudioCdTextWidget::AllFieldsDialog : public KDialog
 {
 public:
   AllFieldsDialog( QWidget* parent )
-    : KDialogBase( parent,
-		   "cdtext_allfields_dialog",
-		   true,
-		   i18n("CD-Text"),
-		   Ok|Cancel,
-		   Ok,
-		   true ) {
+    : KDialog( parent) {
+    setModal(true);
+    setCaption(i18n("CD-Text"));
+    setButtons(Ok|Cancel);
+    setDefaultButton(Ok);
     w = new base_K3bAudioCdTextAllFieldsWidget( this );
     setMainWidget( w );
   }
