@@ -38,7 +38,7 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3PtrList>
-
+#include <KToolBar>
 
 K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent )
   : K3bView( doc, parent ),
