@@ -44,7 +44,7 @@
 
 
 K3bDataPropertiesDialog::K3bDataPropertiesDialog( const Q3ValueList<K3bDataItem*>& dataItems, QWidget* parent )
-  : KDialogBase( Plain, i18n("File Properties"), Ok|Cancel, Ok, parent, true, false )
+  : KDialog( Plain, i18n("File Properties"), Ok|Cancel, Ok, parent, true, false )
 {
   m_dataItems = dataItems;
 
@@ -365,7 +365,7 @@ void K3bDataPropertiesDialog::slotOk()
             item->setSortWeight( m_editSortWeight->text().toInt() );
     }
 
-    KDialogBase::slotOk();
+    KDialog::slotOk();
 }
 
 

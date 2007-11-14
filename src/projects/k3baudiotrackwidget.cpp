@@ -43,9 +43,9 @@ K3bAudioTrackWidget::K3bAudioTrackWidget( const Q3PtrList<K3bAudioTrack>& tracks
     m_tracks(tracks)
 {
   m_labelPostGap->setBuddy( m_editPostGap );
-
-  m_labelPostGap->setToolTip( QToolTip::textFor( m_editPostGap ) );
-  m_labelPostGap->setWhatsThis( Q3WhatsThis::textFor( m_editPostGap ) );
+  //TODO kde4 port me
+  //m_labelPostGap->setToolTip( QToolTip::textFor( m_editPostGap ) );
+  //m_labelPostGap->setWhatsThis( Q3WhatsThis::textFor( m_editPostGap ) );
 
   // no post-gap for the last track
   m_editPostGap->setDisabled( tracks.count() == 1 && !tracks.getFirst()->next() );
@@ -151,10 +151,10 @@ void K3bAudioTrackWidget::save()
     if( m_editMessage->isModified() )
       track->setCdTextMessage( m_editMessage->text() );
 
-    if( m_checkCopyPermitted->state() != QButton::NoChange )
+    if( m_checkCopyPermitted->state() != QCheckBox::NoChange )
       track->setCopyProtection( !m_checkCopyPermitted->isChecked() );
 
-    if( m_checkPreemphasis->state() != QButton::NoChange )
+    if( m_checkPreemphasis->state() != QCheckBox::NoChange )
       track->setPreEmp( m_checkPreemphasis->isChecked() );
 
     track->setIndex0( track->length() - m_editPostGap->msfValue() );

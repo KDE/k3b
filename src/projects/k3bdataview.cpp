@@ -38,7 +38,7 @@
 #include <kmessagebox.h>
 #include <kio/global.h>
 #include <kio/job.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include <qpixmap.h>
 #include <qsplitter.h>
@@ -147,8 +147,8 @@ void K3bDataView::clearImportedSession()
 
 void K3bDataView::editBootImages()
 {
-  KDialogBase* d = new KDialogBase( this, "", true, i18n("Edit Boot Images"),
-				    KDialogBase::Ok, KDialogBase::Ok, true );
+  KDialog* d = new KDialogBase( this, "", true, i18n("Edit Boot Images"),
+				    KDialog::Ok, KDialogBase::Ok, true );
   d->setMainWidget( new K3bBootImageView( m_doc, d ) );
   d->exec();
   delete d;

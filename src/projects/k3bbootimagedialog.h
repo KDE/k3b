@@ -17,13 +17,13 @@
 #ifndef K3BBOOTIMAGE_DIALOG_H
 #define K3BBOOTIMAGE_DIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class K3bBootImageView;
 class K3bDataDoc;
 
 
-class K3bBootImageDialog : public KDialogBase
+class K3bBootImageDialog : public KDialog
 {
   Q_OBJECT
 

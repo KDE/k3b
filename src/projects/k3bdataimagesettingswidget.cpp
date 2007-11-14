@@ -30,7 +30,7 @@
 
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kdebug.h>
 
 
@@ -121,11 +121,11 @@ static void initializePresets()
 
 
 
-class K3bDataImageSettingsWidget::CustomFilesystemsDialog : public KDialogBase
+class K3bDataImageSettingsWidget::CustomFilesystemsDialog : public KDialog
 {
 public:
   CustomFilesystemsDialog( QWidget* parent )
-    : KDialogBase( parent,
+    : KDialog( parent,
 		   "custom_filesystems_dialog",
 		   true,
 		   i18n("Custom Data Project Filesystems"),
@@ -140,11 +140,11 @@ public:
 };
 
 
-class K3bDataImageSettingsWidget::VolumeDescDialog : public KDialogBase
+class K3bDataImageSettingsWidget::VolumeDescDialog : public KDialog
 {
 public:
   VolumeDescDialog( QWidget* parent )
-    : KDialogBase( parent,
+    : KDialog( parent,
 		   "voldesc_dialog",
 		   true,
 		   i18n("Volume Descriptor"),

@@ -57,7 +57,7 @@ public:
 
 
 K3bAudioTrackAddingDialog::K3bAudioTrackAddingDialog( QWidget* parent )
-  : KDialogBase( Plain,
+  : KDialog( Plain,
 		 i18n("Please be patient..."),
 		 Cancel,
 		 Cancel,
@@ -261,7 +261,7 @@ void K3bAudioTrackAddingDialog::slotCancel()
 {
   m_bCanceled = true;
   m_analyserJob->cancel();
-  KDialogBase::slotCancel();
+  KDialog::slotCancel();
 }
 
 

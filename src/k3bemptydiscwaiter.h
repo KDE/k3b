@@ -17,7 +17,7 @@
 #ifndef K3BEMPTYDISCWAITER_H
 #define K3BEMPTYDISCWAITER_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <k3bjobhandler.h>
 
 #include <k3bdiskinfo.h>
@@ -37,7 +37,7 @@ namespace K3bDevice {
  *
  * @author Sebastian Trueg
  */
-class K3bEmptyDiscWaiter : public KDialogBase, public K3bJobHandler
+class K3bEmptyDiscWaiter : public KDialog, public K3bJobHandler
 {
  Q_OBJECT
 

@@ -16,7 +16,7 @@
 #ifndef _K3B_MEDIA_SELECTION_DIALOG_H_
 #define _K3B_MEDIA_SELECTION_DIALOG_H_
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <k3bmedium.h>
 
 class K3bMediaSelectionComboBox;
@@ -24,7 +24,7 @@ namespace K3bDevice {
   class Device;
 }
 
-class K3bMediaSelectionDialog : public KDialogBase
+class K3bMediaSelectionDialog : public KDialog
 {
   Q_OBJECT
 

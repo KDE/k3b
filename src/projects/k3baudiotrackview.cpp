@@ -68,7 +68,7 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 
 K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent )
@@ -772,10 +772,10 @@ void K3bAudioTrackView::slotAddSilence()
     //
     // create a simple dialog for asking the length of the silence
     //
-    KDialogBase dlg( KDialogBase::Plain, 
+    KDialog dlg( KDialogBase::Plain, 
 		     i18n("Add Silence"),
-		     KDialogBase::Ok|KDialogBase::Cancel,
-		     KDialogBase::Ok,
+		     KDialog::Ok|KDialogBase::Cancel,
+		     KDialog::Ok,
 		     this );
     Q3HBoxLayout* dlgLayout = new Q3HBoxLayout( dlg.plainPage(), 0, KDialog::spacingHint() );
     dlgLayout->setAutoAdd( true );
@@ -858,10 +858,10 @@ void K3bAudioTrackView::slotEditSource()
     source = tv->track()->firstSource();
 
   if( source ) {
-    KDialogBase dlg( KDialogBase::Plain,
+    KDialog dlg( KDialogBase::Plain,
 		     i18n("Edit Audio Track Source"),
-		     KDialogBase::Ok|KDialogBase::Cancel,
-		     KDialogBase::Ok,
+		     KDialog::Ok|KDialogBase::Cancel,
+		     KDialog::Ok,
 		     this,
 		     0,
 		     true,

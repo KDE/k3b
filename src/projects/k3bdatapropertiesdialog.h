@@ -17,7 +17,7 @@
 #ifndef K3BDATAPROPERTIESDIALOG_H
 #define K3BDATAPROPERTIESDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include <q3valuelist.h>
 //Added by qt3to4:
@@ -35,7 +35,7 @@ class QCheckBox;
 /**
   *@author Sebastian Trueg
   */
-class K3bDataPropertiesDialog : public KDialogBase  
+class K3bDataPropertiesDialog : public KDialog  
 {
 Q_OBJECT
 

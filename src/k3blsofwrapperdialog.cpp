@@ -42,7 +42,7 @@ static QString joinProcessNames( const Q3ValueList<K3bLsofWrapper::Process>& app
 
 
 K3bLsofWrapperDialog::K3bLsofWrapperDialog( QWidget* parent )
-  : KDialogBase( KDialogBase::Swallow,
+  : KDialog( KDialogBase::Swallow,
 		 i18n("Device in use"),
 		 Close|User1|User2,
 		 Close,

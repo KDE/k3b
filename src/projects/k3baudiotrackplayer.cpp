@@ -20,6 +20,7 @@
 
 #include <kactionclasses.h>
 #include <klocale.h>
+#include <kaction.h>
 
 #include <qslider.h>
 #include <qtimer.h>

@@ -16,12 +16,12 @@
 #ifndef _K3B_DEBUGGING_OUTPUT_DIALOG_H_
 #define _K3B_DEBUGGING_OUTPUT_DIALOG_H_
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <qmap.h>
 
 class Q3TextEdit;
 
-class K3bDebuggingOutputDialog : public KDialogBase
+class K3bDebuggingOutputDialog : public KDialog
 {
   Q_OBJECT
 

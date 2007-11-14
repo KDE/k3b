@@ -16,7 +16,7 @@
 #ifndef K3BVCDTRACKDIALOG_H
 #define K3BVCDTRACKDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <q3ptrlist.h>
 #include <qtabwidget.h>
 //Added by qt3to4:
@@ -37,7 +37,7 @@ class KCutLabel;
 #warning We need a simple replacement for K3bCutComboBox
 typdef KComboBox K3bCutComboBox;
 
-class K3bVcdTrackDialog : public KDialogBase
+class K3bVcdTrackDialog : public KDialog
 {
         Q_OBJECT
 

@@ -40,7 +40,7 @@
 #include <klineedit.h>
 #include <kcombobox.h>
 #include <kstandarddirs.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include <qlayout.h>
 #include <q3header.h>
@@ -334,8 +334,8 @@ void K3bAudioCdView::slotEditTrackCddb()
   if( !items.isEmpty() ) {
     AudioTrackViewItem* a = static_cast<AudioTrackViewItem*>(items.first());
 
-    KDialogBase d( this, "trackCddbDialog", true, i18n("Cddb Track %1").arg(a->trackNumber),
-		   KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, true);
+    KDialog d( this, "trackCddbDialog", true, i18n("Cddb Track %1").arg(a->trackNumber),
+		   KDialog::Ok|KDialogBase::Cancel, KDialogBase::Ok, true);
     QWidget* w = new QWidget( &d );
 
     KLineEdit* editTitle = new KLineEdit( m_cddbInfo.titles[a->trackNumber-1], w );
@@ -372,8 +372,8 @@ void K3bAudioCdView::slotEditTrackCddb()
 
 void K3bAudioCdView::slotEditAlbumCddb()
 {
-  KDialogBase d( this, "trackCddbDialog", true, i18n("Album Cddb"),
-		 KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, true);
+  KDialog d( this, "trackCddbDialog", true, i18n("Album Cddb"),
+		 KDialog::Ok|KDialogBase::Cancel, KDialogBase::Ok, true);
   QWidget* w = new QWidget( &d );
 
   KLineEdit* editTitle = new KLineEdit( m_cddbInfo.cdTitle, w );

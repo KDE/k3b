@@ -17,7 +17,7 @@
 #define _K3B_AUDIO_TRACK_ADDING_DIALOG_H_
 
 #include <k3bjobhandler.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kurl.h>
 #include <qstringlist.h>
 //Added by qt3to4:
@@ -32,7 +32,7 @@ class K3bThreadJob;
 class K3bAudioDoc;
 
 
-class K3bAudioTrackAddingDialog : public KDialogBase, public K3bJobHandler
+class K3bAudioTrackAddingDialog : public KDialog, public K3bJobHandler
 {
   Q_OBJECT
 

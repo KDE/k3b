@@ -16,14 +16,14 @@
 #ifndef _K3B_LSOF_WRAPPER_DIALOG_H_
 #define _K3B_LSOF_WRAPPER_DIALOG_H_
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class K3bRichTextLabel;
 namespace K3bDevice {
   class Device;
 }
 
-class K3bLsofWrapperDialog : public KDialogBase
+class K3bLsofWrapperDialog : public KDialog
 {
   Q_OBJECT
 

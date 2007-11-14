@@ -87,9 +87,9 @@ public:
 
 
 K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice::Device* device, QWidget* parent )
-  : KDialogBase( KDialogBase::Plain, i18n("Waiting for Disk"),
-		 KDialogBase::Cancel|KDialogBase::User1|KDialogBase::User2|KDialogBase::User3,
-		 KDialogBase::User3, parent, true, true, i18n("Force"), i18n("Eject"), i18n("Load") )
+  : KDialog( KDialogBase::Plain, i18n("Waiting for Disk"),
+		 KDialog::Cancel|KDialogBase::User1|KDialogBase::User2|KDialogBase::User3,
+		 KDialog::User3, parent, true, true, i18n("Force"), i18n("Eject"), i18n("Load") )
 {
   d = new Private();
   d->device = device;
@@ -122,7 +122,7 @@ K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice::Device* device, QWidget* pare
   connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3bDevice::Device*)),
 	   this, SLOT(slotMediumChanged(K3bDevice::Device*)) );
 
-  actionButton(KDialogBase::User1)->setToolTip(
+  actionButton(KDialog::User1)->setToolTip(
 		 i18n("Force K3b to continue if it seems not to detect your empty CD/DVD.") );
 }
 

@@ -16,7 +16,7 @@
 #ifndef _K3B_DATA_URL_ADDING_DIALOG_H_
 #define _K3B_DATA_URL_ADDING_DIALOG_H_
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kurl.h>
 #include <qstringlist.h>
 #include <qpair.h>
@@ -34,7 +34,7 @@ class K3bDirSizeJob;
 class K3bDataDoc;
 
 
-class K3bDataUrlAddingDialog : public KDialogBase
+class K3bDataUrlAddingDialog : public KDialog
 {
   Q_OBJECT
 

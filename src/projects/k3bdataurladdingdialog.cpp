@@ -60,7 +60,7 @@
 
 
 K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent )
-  : KDialogBase( Plain,
+  : KDialog( Plain,
 		 i18n("Adding files to project '%1'").arg(doc->URL().fileName()),
 		 Cancel,
 		 Cancel,
@@ -253,7 +253,7 @@ void K3bDataUrlAddingDialog::slotCancel()
 {
   m_bCanceled = true;
   m_dirSizeJob->cancel();
-  KDialogBase::slotCancel();
+  KDialog::slotCancel();
 }
 
 

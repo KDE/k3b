@@ -40,7 +40,6 @@
 #include "k3baudiotrackwidget.h"
 #include "k3baudiotrack.h"
 #include <k3bvalidators.h>
-#include <kcutlabel.h>
 #include <k3bmsf.h>
 #include <k3bcdtextvalidator.h>
 #include <k3baudiodecoder.h>
@@ -58,11 +57,17 @@
 
 
 K3bAudioTrackDialog::K3bAudioTrackDialog( Q3PtrList<K3bAudioTrack>& tracks, QWidget *parent, const char *name )
-  : KDialogBase( KDialogBase::Plain, i18n("Audio Track Properties"), 
-		 KDialogBase::Ok|KDialogBase::Cancel|KDialogBase::Apply,
-		 KDialogBase::Ok, parent )
+  : KDialog( parent)
 {
   m_tracks = tracks;
+
+  setCaption(i18n("Audio Track Properties"));
+  setButtons(Ok|Cancel|Apply);
+  setDefaultButton(Ok);
+  setModal(true);
+  connect(this,SIGNAL(okClicked()), this, SLOT(slotOk()));
+  connect(this,SIGNAL(applyClicked()),this,SLOT(slotApply()));
+
 
   setupGui();
   setupConnections();
@@ -89,7 +94,9 @@ void K3bAudioTrackDialog::slotApply()
 
 void K3bAudioTrackDialog::setupGui()
 {
-  QFrame* frame = plainPage();
+  QFrame* frame = new QFrame();
+  setMainWidget( frame );
+
 
   Q3GridLayout* mainLayout = new Q3GridLayout( frame );
   mainLayout->setSpacing( spacingHint() );

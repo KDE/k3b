@@ -25,7 +25,7 @@
 #include <kurlrequester.h>
 #include <kio/global.h>
 #include <kurllabel.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <klineedit.h>
 
 #include <qcombobox.h>
@@ -333,10 +333,10 @@ void K3bVideoDVDRippingWidget::slotVideoSizeChanged( int sizeIndex )
 
 void K3bVideoDVDRippingWidget::slotCustomPictureSize()
 {
-  KDialogBase dlg( KDialogBase::Plain,
+  KDialog dlg( KDialogBase::Plain,
 		   i18n("Video Picture Size"),
-		   KDialogBase::Ok|KDialogBase::Cancel,
-		   KDialogBase::Ok,
+		   KDialog::Ok|KDialogBase::Cancel,
+		   KDialog::Ok,
 		   this,
 		   0,
 		   true,

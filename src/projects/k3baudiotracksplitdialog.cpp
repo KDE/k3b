@@ -37,9 +37,9 @@
 
 
 K3bAudioTrackSplitDialog::K3bAudioTrackSplitDialog( K3bAudioTrack* track, QWidget* parent )
-  : KDialogBase( KDialogBase::Plain, i18n("Split Audio Track"), 
-		 KDialogBase::Ok|KDialogBase::Cancel,
-		 KDialogBase::Ok, parent ),
+  : KDialog( KDialogBase::Plain, i18n("Split Audio Track"), 
+		 KDialog::Ok|KDialogBase::Cancel,
+		 KDialog::Ok, parent ),
     m_track(track)
 {
   QFrame* frame = plainPage();
@@ -182,7 +182,7 @@ bool K3bAudioTrackSplitDialog::eventFilter( QObject* o, QEvent* e )
     }
   }
 
-  return KDialogBase::eventFilter( o, e );
+  return KDialog::eventFilter( o, e );
 }
 
 

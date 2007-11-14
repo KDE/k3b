@@ -16,10 +16,10 @@
 #ifndef _K3B_FIRST_RUN_H_
 #define _K3B_FIRST_RUN_H_
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 
-class K3bFirstRun : public KDialogBase
+class K3bFirstRun : public KDialog
 {
   Q_OBJECT
 

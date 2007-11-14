@@ -16,7 +16,7 @@
 #ifndef _K3B_AUDIOTRACK_TRM_LOOKUP_DIALOG_H_
 #define _K3B_AUDIOTRACK_TRM_LOOKUP_DIALOG_H_
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <QLabel>
@@ -27,7 +27,7 @@ class K3bMusicBrainzJob;
 class K3bBusyWidget;
 
 
-class K3bAudioTrackTRMLookupDialog : public KDialogBase
+class K3bAudioTrackTRMLookupDialog : public KDialog
 {
   Q_OBJECT
 

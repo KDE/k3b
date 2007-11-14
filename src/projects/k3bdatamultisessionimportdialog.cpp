@@ -124,7 +124,7 @@ void K3bDataMultisessionImportDialog::slotOk()
 
 void K3bDataMultisessionImportDialog::slotCancel()
 {
-    KDialogBase::slotCancel();
+    KDialog::slotCancel();
 }
 
 
@@ -258,10 +258,10 @@ void K3bDataMultisessionImportDialog::showSessionInfo( K3bDevice::Device* dev, i
 
 
 K3bDataMultisessionImportDialog::K3bDataMultisessionImportDialog( QWidget* parent )
-  : KDialogBase( KDialogBase::Plain,
+  : KDialog( KDialogBase::Plain,
                  i18n("Session Import"),
-		 KDialogBase::Ok|KDialogBase::Cancel,
-		 KDialogBase::Ok,
+		 KDialog::Ok|KDialogBase::Cancel,
+		 KDialog::Ok,
                  parent,
 		 "session_import_dialog",
 		 true,

@@ -36,7 +36,7 @@
 
 
 K3bDebuggingOutputDialog::K3bDebuggingOutputDialog( QWidget* parent )
-  : KDialogBase( parent, "debugViewDialog", true, i18n("Debugging Output"), Close|User1|User2, Close,
+  : KDialog( parent, "debugViewDialog", true, i18n("Debugging Output"), Close|User1|User2, Close,
 		 false,
 		 KStandardGuiItem::saveAs(),
 		 KGuiItem( i18n("Copy"), "editcopy" ) )

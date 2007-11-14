@@ -16,7 +16,7 @@
 #ifndef _K3B_DATA_MULTISESSION_IMPORT_DIALOG_H_
 #define _K3B_DATA_MULTISESSION_IMPORT_DIALOG_H_
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class K3bDataDoc;
 class K3bListView;
@@ -25,7 +25,7 @@ namespace K3bDevice {
     class Device;
 }
 
-class K3bDataMultisessionImportDialog : public KDialogBase
+class K3bDataMultisessionImportDialog : public KDialog
 {
     Q_OBJECT
 

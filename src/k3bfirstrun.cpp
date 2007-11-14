@@ -51,7 +51,7 @@ void K3bFirstRun::run( QWidget* parent )
 
 
 K3bFirstRun::K3bFirstRun( QWidget* parent )
-  : KDialogBase( Plain,
+  : KDialog( Plain,
 		 i18n("First Run"),
 		 Ok|Cancel,
 		 Ok,
