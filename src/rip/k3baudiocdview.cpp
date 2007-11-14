@@ -41,7 +41,7 @@
 #include <kcombobox.h>
 #include <kstandarddirs.h>
 #include <kdialog.h>
-
+#include <kactioncollection.h>
 #include <qlayout.h>
 #include <q3header.h>
 #include <qlabel.h>
@@ -566,9 +566,9 @@ void K3bAudioCdView::updateDisplay()
   else
     setTitle( i18n("Audio CD") );
 
-  m_labelLength->setText( i18n("1 track (%1)",
+  m_labelLength->setText( i18np("1 track (%1)",
 			       "%n tracks (%1)",
-			       m_toc.count()).arg(K3b::Msf(m_toc.length()).toString()) );
+			       m_toc.count(),K3b::Msf(m_toc.length()).toString()) );
 }
 
 
