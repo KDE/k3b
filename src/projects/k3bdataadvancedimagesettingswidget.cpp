@@ -32,7 +32,7 @@
 #include <kcombobox.h>
 #include <klocale.h>
 #include <kdebug.h>
-
+#include <Q3WhatsThis>
 
 
 class K3bDataAdvancedImageSettingsWidget::PrivateIsoWhatsThis : public Q3WhatsThis

@@ -43,6 +43,7 @@
 #include <Q3PtrList>
 #include <QPixmap>
 #include <Q3Frame>
+#include <Q3WhatsThis>
 #include <QMouseEvent>
 #include <QPaintEvent>
 

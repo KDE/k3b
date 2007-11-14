@@ -29,7 +29,7 @@
 #include <qlayout.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
-
+#include <Q3WhatsThis>
 
 K3bCddbPatternWidget::K3bCddbPatternWidget( QWidget* parent )
   : base_K3bCddbPatternWidget( parent )
