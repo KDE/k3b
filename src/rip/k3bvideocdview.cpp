@@ -22,6 +22,9 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kstandardaction.h>
+#include <KActionMenu>
+#include <KActionCollection>
+#include <KToolBar>
 
 // qt includes
 #include <qfont.h>
@@ -45,7 +48,6 @@
 #include <k3bcore.h>
 #include <k3blistview.h>
 #include <k3bstdguiitems.h>
-#include <k3btoolbox.h>
 
 
 class K3bVideoCdView::VideoTrackViewItem : public Q3ListViewItem
@@ -150,7 +152,7 @@ K3bVideoCdView::K3bVideoCdView( QWidget* parent, const char *name )
     // toolbox
     // ----------------------------------------------------------------------------------
     Q3HBoxLayout* toolBoxLayout = new Q3HBoxLayout( 0, 0, 0, "toolBoxLayout" );
-    m_toolBox = new K3bToolBox( mainWidget() );
+    m_toolBox = new KToolBar( mainWidget() );
     toolBoxLayout->addWidget( m_toolBox );
     QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
     toolBoxLayout->addItem( spacer );
@@ -316,7 +318,7 @@ void K3bVideoCdView::updateDisplay()
     else
         setTitle( i18n( "Video CD" ) );
 
-    m_labelLength->setText( i18n( "1 track (%1)", "%n tracks (%1)", m_toc.count() ).arg( K3b::Msf( m_toc.length() ).toString() ) );
+    m_labelLength->setText( i18np( "1 track (%1)", "%n tracks (%1)", m_toc.count(), K3b::Msf( m_toc.length() ).toString() ) );
 }
 
 

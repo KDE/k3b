@@ -17,7 +17,6 @@
 #include "k3bfileview.h"
 #include "k3b.h"
 #include "k3bdiroperator.h"
-#include "k3btoolbox.h"
 #include "k3bapplication.h"
 
 #include <qwidget.h>

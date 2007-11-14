@@ -33,7 +33,7 @@ class KActionCollection;
 class KActionMenu;
 class K3bCddb;
 class QLabel;
-class K3bToolBox;
+class KToolBar;
 class Q3DragObject;
 
 
@@ -90,7 +90,7 @@ class K3bAudioCdView : public K3bMediaContentsView
   KActionMenu* m_popupMenu;
 
   K3bListView* m_trackView;
-  K3bToolBox* m_toolBox;
+  KToolBar* m_toolBox;
   QLabel* m_labelLength;
 
   class AudioTrackViewItem;

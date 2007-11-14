@@ -23,13 +23,13 @@
 #include <k3bdevicehandler.h>
 #include <k3blistview.h>
 #include <k3bmsf.h>
-#include <k3btoolbox.h>
 #include <k3bstdguiitems.h>
 #include <k3bapplication.h>
 #include <k3bthememanager.h>
 #include <k3baudiocdtrackdrag.h>
 #include <k3bthemedlabel.h>
 
+#include <ktoolbar.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -108,7 +108,7 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
   // toolbox
   // ----------------------------------------------------------------------------------
   Q3HBoxLayout* toolBoxLayout = new Q3HBoxLayout( 0, 0, 0, "toolBoxLayout" );
-  m_toolBox = new K3bToolBox( mainWidget() );
+  m_toolBox = new KToolBar( mainWidget() );
   toolBoxLayout->addWidget( m_toolBox );
   QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
   toolBoxLayout->addItem( spacer );

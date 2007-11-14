@@ -33,9 +33,8 @@ class K3ListView;
 
 class QLabel;
 class Q3ListViewItem;
-
+class KToolBar;
 class K3bListView;
-class K3bToolBox;
 class K3bVideoCdRippingOptions;
 
 namespace K3bDevice
@@ -93,7 +92,7 @@ class K3bVideoCdView : public K3bMediaContentsView
         K3bVideoCdRippingOptions* m_videooptions;
 
         K3bListView* m_trackView;
-        K3bToolBox* m_toolBox;
+        KToolBar* m_toolBox;
         QLabel* m_labelLength;
 
         QDomDocument domTree;
