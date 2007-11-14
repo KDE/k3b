@@ -43,7 +43,7 @@
 #include <kio/global.h>
 #include <kurl.h>
 #include <kinputdialog.h>
-#include <kurldrag.h>
+#include <k3urldrag.h>
 #include <klineedit.h>
 
 #include <q3header.h>

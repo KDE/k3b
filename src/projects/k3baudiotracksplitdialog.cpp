@@ -37,12 +37,14 @@
 
 
 K3bAudioTrackSplitDialog::K3bAudioTrackSplitDialog( K3bAudioTrack* track, QWidget* parent )
-  : KDialog( KDialogBase::Plain, i18n("Split Audio Track"), 
-		 KDialog::Ok|KDialogBase::Cancel,
-		 KDialog::Ok, parent ),
+  : KDialog( parent),
     m_track(track)
 {
-  QFrame* frame = plainPage();
+  QFrame* frame = new QFrame();
+  setMainWidget(frame);
+  setCaption(i18n("Split Audio Track"));
+  setButtons(Ok|Cancel);
+  setDefaultButton(Ok);
   
   m_editorWidget = new K3bAudioEditorWidget( frame );
   m_msfEditStart = new K3bMsfEdit( frame );

@@ -36,7 +36,7 @@
 #include <ktoolbar.h>
 
 #include <kurl.h>
-#include <kurldrag.h>
+#include <k3urldrag.h>
 #include <kfilefiltercombo.h>
 #include <klocale.h>
 #include <kfileitem.h>

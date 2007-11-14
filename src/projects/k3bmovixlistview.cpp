@@ -22,7 +22,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kio/global.h>
-#include <kurldrag.h>
+#include <k3urldrag.h>
 
 #include <q3dragobject.h>
 #include <q3ptrlist.h>

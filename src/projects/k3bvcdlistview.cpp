@@ -27,7 +27,7 @@
 
 #include <kiconloader.h>
 #include <kurl.h>
-#include <kurldrag.h>
+#include <k3urldrag.h>
 #include <klocale.h>
 #include <kaction.h>
 #include <kmenu.h>

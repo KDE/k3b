@@ -45,7 +45,7 @@
 
 #include <klocale.h>
 #include <kaction.h>
-#include <kurldrag.h>
+#include <k3urldrag.h>
 #include <kinputdialog.h>
 #include <kdebug.h>
 #include <kshortcut.h>

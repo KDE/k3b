@@ -39,7 +39,7 @@
 
 #include <klocale.h>
 #include <kaction.h>
-#include <kurldrag.h>
+#include <k3urldrag.h>
 #include <kinputdialog.h>
 #include <kiconloader.h>
 #include <kshortcut.h>

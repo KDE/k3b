@@ -28,7 +28,7 @@
 
 #include <kdebug.h>
 #include <kiconloader.h>
-#include <kurldrag.h>
+#include <k3urldrag.h>
 #include <klocale.h>
 
 

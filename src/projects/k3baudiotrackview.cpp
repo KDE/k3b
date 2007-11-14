@@ -61,7 +61,7 @@
 #include <Q3VBoxLayout>
 
 #include <kurl.h>
-#include <kurldrag.h>
+#include <k3urldrag.h>
 #include <klocale.h>
 #include <kaction.h>
 #include <kmenu.h>
@@ -69,7 +69,8 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <kdialog.h>
-
+#include <K3URLDrag>
+#include <kactioncollection.h>
 
 K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent )
   : K3bListView( parent ),
@@ -772,15 +773,17 @@ void K3bAudioTrackView::slotAddSilence()
     //
     // create a simple dialog for asking the length of the silence
     //
-    KDialog dlg( KDialogBase::Plain, 
-		     i18n("Add Silence"),
-		     KDialog::Ok|KDialogBase::Cancel,
-		     KDialog::Ok,
-		     this );
-    Q3HBoxLayout* dlgLayout = new Q3HBoxLayout( dlg.plainPage(), 0, KDialog::spacingHint() );
+    KDialog dlg( this);
+    QWidget * widget = new QWidget();
+    dlg.setMainWidget(widget);
+    dlg.setButtons(KDialog::Ok|KDialog::Cancel);
+    dlg.setDefaultButton(KDialog::Ok);
+    dlg.setCaption(i18n("Add Silence"));
+    
+    Q3HBoxLayout* dlgLayout = new Q3HBoxLayout( widget, 0, KDialog::spacingHint() );
     dlgLayout->setAutoAdd( true );
-    (void)new QLabel( i18n("Length of silence:"), dlg.plainPage() );
-    K3bMsfEdit* msfEdit = new K3bMsfEdit( dlg.plainPage() );
+    (void)new QLabel( i18n("Length of silence:"), widget );
+    K3bMsfEdit* msfEdit = new K3bMsfEdit( widget );
     msfEdit->setValue( 150 ); // 2 seconds default
     msfEdit->setFocus();
 
@@ -858,15 +861,14 @@ void K3bAudioTrackView::slotEditSource()
     source = tv->track()->firstSource();
 
   if( source ) {
-    KDialog dlg( KDialogBase::Plain,
-		     i18n("Edit Audio Track Source"),
-		     KDialog::Ok|KDialogBase::Cancel,
-		     KDialog::Ok,
-		     this,
-		     0,
-		     true,
-		     true );
-    Q3VBoxLayout* lay = new Q3VBoxLayout( dlg.plainPage() );
+    KDialog dlg( this);
+    QWidget *widget = new QWidget();
+    dlg.setMainWidget(widget);
+    dlg.setCaption(i18n("Edit Audio Track Source"));
+    dlg.setButtons(Ok|Cancel);
+    dlg.setDefaultButton(Ok);
+    dlg.setModal(true);
+    Q3VBoxLayout* lay = new Q3VBoxLayout( widget );
     lay->setMargin( 0 );
     lay->setSpacing( KDialog::spacingHint() );
     lay->setAutoAdd( true );

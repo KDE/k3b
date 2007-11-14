@@ -25,7 +25,7 @@
 #include <kaction.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-#include <kurldrag.h>
+#include <k3urldrag.h>
 #include <klocale.h>
 
 #include <qevent.h>

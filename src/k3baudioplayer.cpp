@@ -35,7 +35,7 @@
 #include <QDropEvent>
 #include <Q3GridLayout>
 #include <Q3Frame>
-#include <kurldrag.h>
+#include <k3urldrag.h>
 
 #include <kiconloader.h>
 #include <klocale.h>

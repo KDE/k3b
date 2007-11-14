@@ -40,7 +40,7 @@
 #include <QDragEnterEvent>
 
 #include <kurl.h>
-#include <kurldrag.h>
+#include <k3urldrag.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
