@@ -22,8 +22,8 @@
 #include <Q3PtrList>
 
 
-K3bDataProjectInterface::K3bDataProjectInterface( K3bDataDoc* doc, const char* name )
-  : K3bProjectInterface( doc, name ),
+K3bDataProjectInterface::K3bDataProjectInterface( K3bDataDoc* doc )
+  : K3bProjectInterface( doc ),
     m_dataDoc(doc)
 {
 }

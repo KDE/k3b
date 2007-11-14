@@ -75,7 +75,7 @@ class K3bVideoCdInfo : public QObject
         Q_OBJECT
 
     public:
-        K3bVideoCdInfo( QObject* parent = 0, const char* name = 0 );
+        K3bVideoCdInfo( QObject* parent = 0 );
         ~K3bVideoCdInfo();
 
         /**

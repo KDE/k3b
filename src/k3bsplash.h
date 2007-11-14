@@ -34,7 +34,7 @@ class K3bSplash : public Q3VBox
 Q_OBJECT
 
  public:
-  K3bSplash( QWidget* parent = 0, const char* name = 0 );
+  K3bSplash( QWidget* parent = 0 );
   ~K3bSplash();
 
  public slots:

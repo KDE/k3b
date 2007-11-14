@@ -65,7 +65,7 @@ class K3bDataView : public K3bView
    K3bDataFileView* m_dataFileView;
    QLineEdit* m_volumeIDEdit;
 
-   virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
+   virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
 		
  private:
    K3bDataDoc* m_doc;

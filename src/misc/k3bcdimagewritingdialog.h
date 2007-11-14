@@ -55,7 +55,7 @@ class K3bCdImageWritingDialog : public K3bInteractionDialog
   Q_OBJECT
 
  public: 
-  K3bCdImageWritingDialog( QWidget* = 0, const char* = 0, bool = true );
+  K3bCdImageWritingDialog( QWidget* = 0 );
   ~K3bCdImageWritingDialog();
 
   void setImage( const KUrl& url );

@@ -44,8 +44,8 @@
 #include <kactionclasses.h>
 
 
-K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent, const char* name )
-  : K3bView( doc, parent, name ), m_doc(doc)
+K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent )
+  : K3bView( doc, parent ), m_doc(doc)
 {
   QSplitter* splitter = new QSplitter( this );
   m_mixedDirTreeView = new K3bMixedDirTreeView( this, doc, splitter );
@@ -138,9 +138,9 @@ void K3bMixedView::slotBurn()
 }
 
 
-K3bProjectBurnDialog* K3bMixedView::newBurnDialog( QWidget* parent, const char* name )
+K3bProjectBurnDialog* K3bMixedView::newBurnDialog( QWidget* parent )
 {
-  return new K3bMixedBurnDialog( m_doc, parent, name, true );
+  return new K3bMixedBurnDialog( m_doc, parent, true );
 }
 
 

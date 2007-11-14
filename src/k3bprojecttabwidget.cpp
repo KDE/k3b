@@ -59,7 +59,7 @@ public:
 
 
 K3bProjectTabWidget::K3bProjectTabWidget( QWidget *parent, const char *name, Qt::WFlags f )
-  : QTabWidget( parent, name, f )
+  : QTabWidget( parent, f )
 {
   tabBar()->setAcceptDrops(true);
   tabBar()->installEventFilter( this );

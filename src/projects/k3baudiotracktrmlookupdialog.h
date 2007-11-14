@@ -32,7 +32,7 @@ class K3bAudioTrackTRMLookupDialog : public KDialogBase
   Q_OBJECT
 
  public:
-  K3bAudioTrackTRMLookupDialog( QWidget* parent = 0, const char* name = 0 );
+  K3bAudioTrackTRMLookupDialog( QWidget* parent = 0 );
   ~K3bAudioTrackTRMLookupDialog();
 
   /**

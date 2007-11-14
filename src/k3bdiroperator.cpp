@@ -31,8 +31,8 @@
 #include <qdir.h>
 
 
-K3bDirOperator::K3bDirOperator(const KUrl& url, QWidget* parent, const char* name )
-  : KDirOperator( url, parent, name )
+K3bDirOperator::K3bDirOperator(const KUrl& url, QWidget* parent )
+  : KDirOperator( url, parent )
 {
   setViewConfig( k3bcore->config(), "file view" );
   setMode( KFile::Files );

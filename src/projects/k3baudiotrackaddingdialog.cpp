@@ -56,7 +56,7 @@ public:
 };
 
 
-K3bAudioTrackAddingDialog::K3bAudioTrackAddingDialog( QWidget* parent, const char* name )
+K3bAudioTrackAddingDialog::K3bAudioTrackAddingDialog( QWidget* parent )
   : KDialogBase( Plain,
 		 i18n("Please be patient..."),
 		 Cancel,

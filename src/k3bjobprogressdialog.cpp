@@ -88,7 +88,7 @@ K3bJobProgressDialog::K3bJobProgressDialog( QWidget* parent,
 					    const char* name,
 					    bool showSubProgress,
 					    bool modal, Qt::WFlags fl )
-  : KDialog( parent, name, modal, fl ),
+  : KDialog( parent, modal, fl ),
     in_loop(false),
     m_osd(0)
 {

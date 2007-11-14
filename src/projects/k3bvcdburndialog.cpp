@@ -51,7 +51,7 @@
 #include <k3bvalidators.h>
 
 K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char *name, bool modal )
-        : K3bProjectBurnDialog( _doc, parent, name, modal )
+        : K3bProjectBurnDialog( _doc, parent, modal )
 {
     m_vcdDoc = _doc;
 

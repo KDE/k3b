@@ -27,7 +27,7 @@
 K3bContentsView::K3bContentsView( bool withHeader,
 				  QWidget* parent, 
 				  const char* name )
-  : QWidget( parent, name ),
+  : QWidget( parent ),
     m_header(0),
     m_centerWidget(0)
 {

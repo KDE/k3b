@@ -33,7 +33,7 @@ class K3bAudioEditorWidget : public Q3Frame
   Q_OBJECT
 
  public:
-  K3bAudioEditorWidget( QWidget* parent = 0, const char* name = 0 );
+  K3bAudioEditorWidget( QWidget* parent = 0 );
   ~K3bAudioEditorWidget();
 
   QSize sizeHint() const;

@@ -38,7 +38,7 @@ class K3bAudioTrackSplitDialog : public KDialogBase
   Q_OBJECT
 
  public:
-  K3bAudioTrackSplitDialog( K3bAudioTrack*, QWidget* parent = 0, const char* name = 0 );
+  K3bAudioTrackSplitDialog( K3bAudioTrack*, QWidget* parent = 0 );
   ~K3bAudioTrackSplitDialog();
 
   bool eventFilter( QObject* o, QEvent* e );
@@ -48,7 +48,7 @@ class K3bAudioTrackSplitDialog : public KDialogBase
   /**
    * if this method returns true val is filled with the user selected value.
    */
-  static void splitTrack( K3bAudioTrack* track, QWidget* parent = 0, const char* name = 0 );
+  static void splitTrack( K3bAudioTrack* track, QWidget* parent = 0 );
 
  private slots:
   void slotRangeModified( int, const K3b::Msf& start, const K3b::Msf& );

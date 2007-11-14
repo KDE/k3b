@@ -32,8 +32,8 @@ class K3bWritingModeWidget : public K3bIntMapComboBox
   Q_OBJECT
 
  public:
-  K3bWritingModeWidget( QWidget* parent = 0, const char* name = 0 );
-  K3bWritingModeWidget( int modes, QWidget* parent = 0, const char* name = 0 );
+  K3bWritingModeWidget( QWidget* parent = 0 );
+  K3bWritingModeWidget( int modes, QWidget* parent = 0 );
   ~K3bWritingModeWidget();
 
   int writingMode() const;

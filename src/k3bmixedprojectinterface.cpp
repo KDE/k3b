@@ -25,8 +25,8 @@
 #include <k3baudiodoc.h>
 
 
-K3bMixedProjectInterface::K3bMixedProjectInterface( K3bMixedDoc* doc, const char* name )
-  : K3bProjectInterface( doc, name ),
+K3bMixedProjectInterface::K3bMixedProjectInterface( K3bMixedDoc* doc )
+  : K3bProjectInterface( doc ),
     m_mixedDoc( doc )
 {
   m_dataInterface = new K3bDataProjectInterface( doc->dataDoc(), objId() + "-datapart" );

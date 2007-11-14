@@ -78,7 +78,7 @@ class K3bMovixListView : public K3bListView
   Q_OBJECT
 
  public:
-  K3bMovixListView( K3bMovixDoc* doc, QWidget* parent = 0, const char* name = 0 );
+  K3bMovixListView( K3bMovixDoc* doc, QWidget* parent = 0 );
   ~K3bMovixListView();
 
   Q3DragObject* dragObject();

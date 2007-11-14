@@ -86,10 +86,10 @@ public:
 
 
 
-K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice::Device* device, QWidget* parent, const char* name )
+K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice::Device* device, QWidget* parent )
   : KDialogBase( KDialogBase::Plain, i18n("Waiting for Disk"),
 		 KDialogBase::Cancel|KDialogBase::User1|KDialogBase::User2|KDialogBase::User3,
-		 KDialogBase::User3, parent, name, true, true, i18n("Force"), i18n("Eject"), i18n("Load") )
+		 KDialogBase::User3, parent, true, true, i18n("Force"), i18n("Eject"), i18n("Load") )
 {
   d = new Private();
   d->device = device;

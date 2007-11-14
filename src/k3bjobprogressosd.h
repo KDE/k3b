@@ -36,7 +36,7 @@ class K3bJobProgressOSD : public QWidget
   Q_OBJECT
 
  public:
-  K3bJobProgressOSD( QWidget* parent = 0, const char* name = 0 );
+  K3bJobProgressOSD( QWidget* parent = 0 );
   ~K3bJobProgressOSD();
 
   int screen() const { return m_screen; }

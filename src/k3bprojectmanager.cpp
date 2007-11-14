@@ -71,8 +71,8 @@ public:
 
 
 
-K3bProjectManager::K3bProjectManager( QObject* parent, const char* name )
-  : QObject( parent, name )
+K3bProjectManager::K3bProjectManager( QObject* parent )
+  : QObject( parent )
 {
   d = new Private();
   d->activeProject = 0;

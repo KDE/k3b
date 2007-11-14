@@ -27,8 +27,8 @@
 #include <qtooltip.h>
 
 
-K3bAudioTrackPlayerSeekAction::K3bAudioTrackPlayerSeekAction( K3bAudioTrackPlayer* player, QObject* parent, const char* name )
-    : K3bWidgetFactoryAction( parent, name ),
+K3bAudioTrackPlayerSeekAction::K3bAudioTrackPlayerSeekAction( K3bAudioTrackPlayer* player, QObject* parent )
+    : K3bWidgetFactoryAction( parent ),
       m_player( player )
 {
 }
@@ -98,8 +98,8 @@ public:
 };
 
 
-K3bAudioTrackPlayer::K3bAudioTrackPlayer( K3bAudioDoc* doc, QObject* parent, const char* name )
-  : QObject( parent, name ),
+K3bAudioTrackPlayer::K3bAudioTrackPlayer( K3bAudioDoc* doc, QObject* parent )
+  : QObject( parent ),
     K3bAudioClient(),
     m_doc( doc ),
     m_currentTrack( 0 )

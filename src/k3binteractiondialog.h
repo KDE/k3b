@@ -56,14 +56,11 @@ class K3bInteractionDialog : public KDialog
    * @param configgroup The config group used for the loadUserDefaults and saveUserDefaults methods
    */
   K3bInteractionDialog( QWidget* parent = 0, 
-			const char* name = 0, 
 			const QString& title = QString::null,
 			const QString& subTitle = QString::null,
 			int buttonMask = START_BUTTON|CANCEL_BUTTON,
 			int defaultButton = START_BUTTON,
-			const QString& configgroup = QString::null,
-			bool modal = true, 
-			Qt::WFlags fl = 0 );
+			const QString& configgroup = QString::null );
   virtual ~K3bInteractionDialog();
 
   void setMainWidget( QWidget* w );
@@ -98,6 +95,7 @@ class K3bInteractionDialog : public KDialog
 
   inline bool close() { return close( false ); }
 
+#warning K3bInteractionDialog::mainWidget clashes with KDialog::MainWidget. We need to rename it and update all the subclasses
   /**
    * If no mainWidget has been set a plain page will be created.
    */

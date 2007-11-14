@@ -33,7 +33,7 @@ class K3bAudioTrackPlayer : public QObject, public K3bAudioClient
   Q_OBJECT
 
  public:
-  K3bAudioTrackPlayer( K3bAudioDoc* doc, QObject* parent = 0, const char* name = 0 );
+  K3bAudioTrackPlayer( K3bAudioDoc* doc, QObject* parent = 0 );
   ~K3bAudioTrackPlayer();
 
   K3bAudioTrack* currentPlayingTrack() const { return m_currentTrack; }
@@ -89,7 +89,7 @@ class K3bAudioTrackPlayer : public QObject, public K3bAudioClient
 class K3bAudioTrackPlayerSeekAction : public K3bWidgetFactoryAction
 {
  public:
-    K3bAudioTrackPlayerSeekAction( K3bAudioTrackPlayer* player, QObject* parent, const char* name );
+    K3bAudioTrackPlayerSeekAction( K3bAudioTrackPlayer* player, QObject* parent );
     ~K3bAudioTrackPlayerSeekAction();
 
     void setValue( int v );

@@ -31,8 +31,8 @@
 #include <Q3GridLayout>
 
 
-K3bCddbPatternWidget::K3bCddbPatternWidget( QWidget* parent, const char* name )
-  : base_K3bCddbPatternWidget( parent, name )
+K3bCddbPatternWidget::K3bCddbPatternWidget( QWidget* parent )
+  : base_K3bCddbPatternWidget( parent )
 {
   // fix the layout
   ((Q3GridLayout*)layout())->setRowStretch( 4, 1 );

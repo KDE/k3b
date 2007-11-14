@@ -86,7 +86,7 @@ K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bDevice::Toc& toc,
 					     const K3bCddbResultEntry& entry, 
 					     const Q3ValueList<int>& tracks,
 					     QWidget *parent, const char *name )
-  : K3bInteractionDialog( parent, name,
+  : K3bInteractionDialog( parent,
 			  QString::null,
 			  QString::null,
 			  START_BUTTON|CANCEL_BUTTON,

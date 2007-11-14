@@ -37,7 +37,7 @@ class K3bDiskInfoView : public K3bMediaContentsView
   Q_OBJECT
 
  public:
-  K3bDiskInfoView( QWidget* parent = 0, const char* name = 0 );
+  K3bDiskInfoView( QWidget* parent = 0 );
   ~K3bDiskInfoView();
 
   void enableInteraction( bool enable );

@@ -43,7 +43,7 @@ class K3bWriterSelectionWidget : public QWidget
   /**
    * Creates a writerselectionwidget
    */
-  K3bWriterSelectionWidget( QWidget* parent = 0, const char* name = 0 );
+  K3bWriterSelectionWidget( QWidget* parent = 0 );
   ~K3bWriterSelectionWidget();
 
   int writerSpeed() const;

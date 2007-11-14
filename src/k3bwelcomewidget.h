@@ -50,7 +50,7 @@ class K3bWelcomeWidget : public Q3ScrollView
   Q_OBJECT
 
  public:
-  K3bWelcomeWidget( K3bMainWindow*, QWidget* parent = 0, const char* name = 0 );
+  K3bWelcomeWidget( K3bMainWindow*, QWidget* parent = 0 );
   ~K3bWelcomeWidget();
 
   void loadConfig( KConfigBase* c );

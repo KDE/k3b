@@ -126,12 +126,12 @@ public:
 
 
 
-K3bDiskInfoView::K3bDiskInfoView( QWidget* parent, const char* name )
+K3bDiskInfoView::K3bDiskInfoView( QWidget* parent )
   : K3bMediaContentsView( true,
 			  K3bMedium::CONTENT_ALL,
 			  K3bDevice::MEDIA_ALL|K3bDevice::MEDIA_UNKNOWN,
 			  K3bDevice::STATE_EMPTY|K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_COMPLETE|K3bDevice::STATE_UNKNOWN,
-			  parent, name )
+			  parent )
 {
   m_infoView = new K3ListView( this );
   setMainWidget( m_infoView );

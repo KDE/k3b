@@ -58,8 +58,8 @@ public:
 };
 
 
-K3bFileTreeComboBox::K3bFileTreeComboBox( QWidget* parent, const char* name )
-  : KComboBox( true, parent, name )
+K3bFileTreeComboBox::K3bFileTreeComboBox( QWidget* parent )
+  : KComboBox( true, parent )
 {
   d = new Private;
 

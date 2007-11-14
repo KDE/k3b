@@ -33,8 +33,8 @@
 #include <kaboutdata.h>
 
 
-K3bSplash::K3bSplash( QWidget* parent, const char* name )
-  : Q3VBox( parent, name, 
+K3bSplash::K3bSplash( QWidget* parent )
+  : Q3VBox( parent, 
 	   Qt::WStyle_Customize|
 	   WDestructiveClose|
 	   /*	   Qt::WStyle_Splash|*/

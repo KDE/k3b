@@ -38,8 +38,8 @@
 
 
 K3bAudioTrackWidget::K3bAudioTrackWidget( const Q3PtrList<K3bAudioTrack>& tracks, 
-					  QWidget* parent, const char* name )
-  : base_K3bAudioTrackWidget( parent, name ),
+					  QWidget* parent )
+  : base_K3bAudioTrackWidget( parent ),
     m_tracks(tracks)
 {
   m_labelPostGap->setBuddy( m_editPostGap );

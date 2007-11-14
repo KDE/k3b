@@ -35,7 +35,7 @@ class K3bMixedView : public K3bView
   Q_OBJECT
 
  public:
-  K3bMixedView( K3bMixedDoc* doc, QWidget* parent = 0, const char* name = 0 );
+  K3bMixedView( K3bMixedDoc* doc, QWidget* parent = 0 );
   ~K3bMixedView();
 
   K3bDirItem* currentDir() const;
@@ -47,7 +47,7 @@ class K3bMixedView : public K3bView
   void addUrls( const KUrl::List& );
 
  protected:
-  K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
+  K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
 
  private slots:
   void slotAudioTreeSelected();

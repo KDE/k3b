@@ -43,8 +43,8 @@
 #include <ksqueezedtextlabel.h>
 
 
-K3bDataPropertiesDialog::K3bDataPropertiesDialog( const Q3ValueList<K3bDataItem*>& dataItems, QWidget* parent, const char* name )
-  : KDialogBase( Plain, i18n("File Properties"), Ok|Cancel, Ok, parent, name, true, false )
+K3bDataPropertiesDialog::K3bDataPropertiesDialog( const Q3ValueList<K3bDataItem*>& dataItems, QWidget* parent )
+  : KDialogBase( Plain, i18n("File Properties"), Ok|Cancel, Ok, parent, true, false )
 {
   m_dataItems = dataItems;
 

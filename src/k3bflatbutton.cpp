@@ -32,7 +32,7 @@
 
 
 K3bFlatButton::K3bFlatButton( QWidget *parent, const char *name )
-  : Q3Frame( parent, name/*, WNoAutoErase*/ ),
+  : Q3Frame( parent/*, WNoAutoErase*/ ),
     m_pressed(false)
 {
   init();
@@ -40,7 +40,7 @@ K3bFlatButton::K3bFlatButton( QWidget *parent, const char *name )
 
 
 K3bFlatButton::K3bFlatButton( const QString& text, QWidget *parent, const char *name )
-  : Q3Frame( parent, name/*, WNoAutoErase*/ ),
+  : Q3Frame( parent/*, WNoAutoErase*/ ),
     m_pressed(false)
 {
   init();
@@ -49,7 +49,7 @@ K3bFlatButton::K3bFlatButton( const QString& text, QWidget *parent, const char *
 
 
 K3bFlatButton::K3bFlatButton( KAction* a, QWidget *parent, const char *name )
-  : Q3Frame( parent, name/*, WNoAutoErase*/ ),
+  : Q3Frame( parent/*, WNoAutoErase*/ ),
     m_pressed(false)
 {
   init();

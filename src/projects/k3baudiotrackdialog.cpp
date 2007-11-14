@@ -60,7 +60,7 @@
 K3bAudioTrackDialog::K3bAudioTrackDialog( Q3PtrList<K3bAudioTrack>& tracks, QWidget *parent, const char *name )
   : KDialogBase( KDialogBase::Plain, i18n("Audio Track Properties"), 
 		 KDialogBase::Ok|KDialogBase::Cancel|KDialogBase::Apply,
-		 KDialogBase::Ok, parent, name )
+		 KDialogBase::Ok, parent )
 {
   m_tracks = tracks;
 

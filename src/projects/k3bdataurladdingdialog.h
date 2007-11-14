@@ -64,7 +64,7 @@ class K3bDataUrlAddingDialog : public KDialogBase
   void updateProgress();
 
  private:
-  K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent = 0, const char* name = 0 );
+  K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent = 0 );
 
   bool getNewName( const QString& oldName, K3bDirItem* dir, QString& newName );
 

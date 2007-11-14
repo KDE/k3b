@@ -32,7 +32,7 @@
 
 
 K3bVideoDvdView::K3bVideoDvdView( K3bVideoDvdDoc* doc, QWidget *parent, const char *name )
-  : K3bView( doc, parent, name ),
+  : K3bView( doc, parent ),
     m_doc(doc)
 {
   // --- setup GUI ---------------------------------------------------
@@ -56,9 +56,9 @@ K3bVideoDvdView::~K3bVideoDvdView()
 }
 
 
-K3bProjectBurnDialog* K3bVideoDvdView::newBurnDialog( QWidget* parent, const char* name )
+K3bProjectBurnDialog* K3bVideoDvdView::newBurnDialog( QWidget* parent )
 {
-  return new K3bVideoDvdBurnDialog( m_doc, parent, name, true );
+  return new K3bVideoDvdBurnDialog( m_doc, parent, true );
 }
 
 

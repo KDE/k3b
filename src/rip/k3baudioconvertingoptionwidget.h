@@ -33,7 +33,7 @@ class K3bAudioConvertingOptionWidget : public base_K3bAudioRippingOptionWidget
   Q_OBJECT
 
  public:
-  K3bAudioConvertingOptionWidget( QWidget* parent, const char* name = 0 );
+  K3bAudioConvertingOptionWidget( QWidget* parent );
   ~K3bAudioConvertingOptionWidget();
 
   void setBaseDir( const QString& path );

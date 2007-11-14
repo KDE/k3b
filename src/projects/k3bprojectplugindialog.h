@@ -29,7 +29,7 @@ class K3bProjectPluginDialog : public K3bInteractionDialog
   Q_OBJECT
 
  public:
-  K3bProjectPluginDialog( K3bProjectPlugin*, K3bDoc*, QWidget*, const char* name = 0 );
+  K3bProjectPluginDialog( K3bProjectPlugin*, K3bDoc*, QWidget* );
   ~K3bProjectPluginDialog();
   
  protected slots:

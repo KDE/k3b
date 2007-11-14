@@ -117,7 +117,7 @@ public:
 
 
 K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent, const char *name )
-  : QWidget( parent, name )
+  : QWidget( parent )
 {
   d = new Private;
   d->forceAutoSpeed = false;

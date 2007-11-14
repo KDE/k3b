@@ -33,7 +33,7 @@ class K3bProjectInterface : public DCOPObject
   K_DCOP
 
  public:
-  K3bProjectInterface( K3bDoc*, const char* name = 0 );
+  K3bProjectInterface( K3bDoc* );
   virtual ~K3bProjectInterface();
 
   // Generate a name for this interface. Automatically used if name=0 is

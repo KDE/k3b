@@ -67,7 +67,7 @@ public:
 
 
 K3bAudioProjectConvertingDialog::K3bAudioProjectConvertingDialog( K3bAudioDoc* doc, QWidget *parent, const char *name )
-  : K3bInteractionDialog( parent, name,
+  : K3bInteractionDialog( parent,
 			  QString::null,
 			  QString::null,
 			  START_BUTTON|CANCEL_BUTTON,

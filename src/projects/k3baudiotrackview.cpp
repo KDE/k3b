@@ -71,8 +71,8 @@
 #include <kdialogbase.h>
 
 
-K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent, const char* name )
-  : K3bListView( parent, name ),
+K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent )
+  : K3bListView( parent ),
     m_doc(doc),
     m_updatingColumnWidths(false),
     m_currentMouseOverItem(0),

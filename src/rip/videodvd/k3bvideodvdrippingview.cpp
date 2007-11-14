@@ -47,7 +47,7 @@ K3bVideoDVDRippingView::K3bVideoDVDRippingView( QWidget* parent, const char * na
 			  K3bMedium::CONTENT_VIDEO_DVD,
 			  K3bDevice::MEDIA_DVD_ALL,
 			  K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_COMPLETE,
-			  parent, name )
+			  parent )
 {
   Q3GridLayout* mainGrid = new Q3GridLayout( mainWidget() );
 

@@ -113,7 +113,7 @@ class K3bThemeManager : public QObject
   Q_OBJECT
 
  public:
-  K3bThemeManager( QObject* parent = 0, const char* name = 0 );
+  K3bThemeManager( QObject* parent = 0 );
   ~K3bThemeManager();
 
   const Q3ValueList<K3bTheme*>& themes() const;

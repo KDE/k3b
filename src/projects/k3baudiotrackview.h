@@ -53,7 +53,7 @@ class K3bAudioTrackView : public K3bListView
   Q_OBJECT
 
  public:
-  K3bAudioTrackView( K3bAudioDoc*, QWidget* parent, const char* name = 0 );
+  K3bAudioTrackView( K3bAudioDoc*, QWidget* parent );
   ~K3bAudioTrackView();
 
   KActionCollection* actionCollection() const { return m_actionCollection; }

@@ -27,7 +27,7 @@ class K3bAudioProjectInterface : public K3bProjectInterface
   K_DCOP
 
  public:
-  K3bAudioProjectInterface( K3bAudioDoc*, const char* name = 0 );
+  K3bAudioProjectInterface( K3bAudioDoc* );
 
  k_dcop:
   int trackCount() const;

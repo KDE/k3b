@@ -47,8 +47,8 @@
 #include <Q3GridLayout>
 
 
-K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent, const char* name, bool modal )
-  : K3bProjectBurnDialog( doc, parent, name, modal ),
+K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent, bool modal )
+  : K3bProjectBurnDialog( doc, parent, modal ),
     m_doc(doc)
 {
   prepareGui();

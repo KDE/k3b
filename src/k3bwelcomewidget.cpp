@@ -347,8 +347,8 @@ void K3bWelcomeWidget::Display::dropEvent( QDropEvent* e )
 
 
 
-K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent, const char* name )
-  : Q3ScrollView( parent, name ),
+K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent )
+  : Q3ScrollView( parent ),
     m_mainWindow( mw )
 {
   main = new Display( this );

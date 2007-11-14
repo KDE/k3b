@@ -149,8 +149,8 @@ public:
 
 K3bVideoDVDRippingDialog::K3bVideoDVDRippingDialog( const K3bVideoDVD::VideoDVD& dvd,
 						    const Q3ValueList<int>& titles,
-						    QWidget* parent, const char* name )
-  : K3bInteractionDialog( parent, name,
+						    QWidget* parent )
+  : K3bInteractionDialog( parent,
 			  i18n("Video DVD Ripping"),
 			  QString::null,
 			  START_BUTTON|CANCEL_BUTTON,

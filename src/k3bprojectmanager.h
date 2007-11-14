@@ -30,7 +30,7 @@ class K3bProjectManager : public QObject
   Q_OBJECT
 
  public:
-  K3bProjectManager( QObject* parent = 0, const char* name = 0 );
+  K3bProjectManager( QObject* parent = 0 );
   virtual ~K3bProjectManager();
 
   const Q3PtrList<K3bDoc>& projects() const;

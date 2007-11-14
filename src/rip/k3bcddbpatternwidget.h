@@ -27,7 +27,7 @@ class K3bCddbPatternWidget : public base_K3bCddbPatternWidget
   Q_OBJECT
 
  public:
-  K3bCddbPatternWidget( QWidget* parent = 0, const char* name = 0 );
+  K3bCddbPatternWidget( QWidget* parent = 0 );
   ~K3bCddbPatternWidget();
 
   QString filenamePattern() const;

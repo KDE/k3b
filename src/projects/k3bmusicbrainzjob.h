@@ -45,7 +45,7 @@ class K3bMusicBrainzJob : public K3bJob
    * \param parent since we do not use this job with a normal progressdialog we need a widget
    *        as parent
    */
-  K3bMusicBrainzJob( QWidget* parent = 0, const char* name = 0 );
+  K3bMusicBrainzJob( QWidget* parent = 0 );
   ~K3bMusicBrainzJob();
 
   bool hasBeenCanceled() const { return m_canceled; }

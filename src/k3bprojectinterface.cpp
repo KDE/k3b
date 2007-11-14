@@ -39,7 +39,7 @@ Q3CString K3bProjectInterface::newIfaceName()
 }
 
 
-K3bProjectInterface::K3bProjectInterface( K3bDoc* doc, const char* name )
+K3bProjectInterface::K3bProjectInterface( K3bDoc* doc )
   : DCOPObject( name ? Q3CString(name) : newIfaceName() ),
     m_doc( doc )
 {

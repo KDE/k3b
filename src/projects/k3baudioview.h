@@ -45,7 +45,7 @@ class K3bAudioView : public K3bView
   void addUrls( const KUrl::List& );
 
  protected:
-  K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
+  K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
 
   void init();
 

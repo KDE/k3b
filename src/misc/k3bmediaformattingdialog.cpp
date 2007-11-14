@@ -46,8 +46,8 @@
 #include <Q3GridLayout>
 
 
-K3bMediaFormattingDialog::K3bMediaFormattingDialog( QWidget* parent, const char* name, bool modal )
-  : K3bInteractionDialog( parent, name,
+K3bMediaFormattingDialog::K3bMediaFormattingDialog( QWidget* parent, bool modal )
+  : K3bInteractionDialog( parent,
 			  i18n("Format and Erase"),
 			  i18n( "CD-RW" ) + '/' + i18n("DVD%1RW").arg("±") + '/' + i18n( "BD-RW" ),
 			  START_BUTTON|CANCEL_BUTTON,

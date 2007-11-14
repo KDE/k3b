@@ -854,7 +854,7 @@ QImage SampleImage(const QImage& image,const int columns,
  * Finally I ported Imlib's MMX version and it ran in less than half the
  * time as my MMX algorithm, (taking only a quarter of the time Qt does).
  *
- * Changes include formatting, namespaces and other C++'ings, removal of old
+ * Changes include formattingspaces and other C++'ings, removal of old
  * #ifdef'ed code, and removal of unneeded border calculation code.
  *
  * Imlib2 is (C) Carsten Haitzler and various contributors. The MMX code

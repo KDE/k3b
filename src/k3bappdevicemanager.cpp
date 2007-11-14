@@ -31,8 +31,8 @@
 #include <kmenu.h>
 
 
-K3bAppDeviceManager::K3bAppDeviceManager( QObject* parent, const char* name )
-  : K3bDevice::DeviceManager( parent, name ),
+K3bAppDeviceManager::K3bAppDeviceManager( QObject* parent )
+  : K3bDevice::DeviceManager( parent ),
     m_currentDevice(0),
     m_ejectRequested(false)
 {

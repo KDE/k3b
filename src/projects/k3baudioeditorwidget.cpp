@@ -174,8 +174,8 @@ public:
 };
 
 
-K3bAudioEditorWidget::K3bAudioEditorWidget( QWidget* parent, const char* name )
-  : Q3Frame( parent, name, Qt::WNoAutoErase ),
+K3bAudioEditorWidget::K3bAudioEditorWidget( QWidget* parent )
+  : Q3Frame( parent, Qt::WNoAutoErase ),
     m_maxMarkers(1),
     m_idCnt(1),
     m_mouseAt(true),

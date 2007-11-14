@@ -168,8 +168,8 @@ QString K3bMovixSubTitleViewItem::text( int c ) const
 
 
 
-K3bMovixListView::K3bMovixListView( K3bMovixDoc* doc, QWidget* parent, const char* name )
-  : K3bListView( parent, name ),
+K3bMovixListView::K3bMovixListView( K3bMovixDoc* doc, QWidget* parent )
+  : K3bListView( parent ),
     m_doc(doc)
 {
   addColumn( i18n("No.") );

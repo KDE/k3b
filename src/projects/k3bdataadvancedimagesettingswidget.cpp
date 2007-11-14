@@ -101,8 +101,8 @@ protected:
 };
 
 
-K3bDataAdvancedImageSettingsWidget::K3bDataAdvancedImageSettingsWidget( QWidget* parent, const char* name )
-  : base_K3bAdvancedDataImageSettings( parent, name )
+K3bDataAdvancedImageSettingsWidget::K3bDataAdvancedImageSettingsWidget( QWidget* parent )
+  : base_K3bAdvancedDataImageSettings( parent )
 {
   m_viewIsoSettings->header()->hide();
   m_viewIsoSettings->setSorting( -1 );

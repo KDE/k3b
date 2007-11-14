@@ -90,7 +90,7 @@ class K3bPlayListView : public K3ListView
 Q_OBJECT
 
  public:
-  K3bPlayListView( QWidget* parent = 0, const char* name = 0 );
+  K3bPlayListView( QWidget* parent = 0 );
   ~K3bPlayListView();
 
  protected:
@@ -109,7 +109,7 @@ class K3bAudioPlayer : public QWidget
 Q_OBJECT
 
  public: 
-  K3bAudioPlayer( QWidget* parent = 0, const char* name = 0 );
+  K3bAudioPlayer( QWidget* parent = 0 );
   ~K3bAudioPlayer();
 
   bool supportsMimetype( const QString& mimetype );

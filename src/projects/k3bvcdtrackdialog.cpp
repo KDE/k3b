@@ -49,9 +49,9 @@
 #include <k3bglobals.h>
 
 
-K3bVcdTrackDialog::K3bVcdTrackDialog( K3bVcdDoc* _doc, Q3PtrList<K3bVcdTrack>& tracks, Q3PtrList<K3bVcdTrack>& selectedTracks, QWidget* parent, const char* name )
+K3bVcdTrackDialog::K3bVcdTrackDialog( K3bVcdDoc* _doc, Q3PtrList<K3bVcdTrack>& tracks, Q3PtrList<K3bVcdTrack>& selectedTracks, QWidget* parent )
         : KDialogBase( KDialogBase::Plain, i18n( "Video Track Properties" ), KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply,
-                       KDialogBase::Ok, parent, name )
+                       KDialogBase::Ok, parent )
 {
     prepareGui();
 

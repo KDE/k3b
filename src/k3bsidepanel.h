@@ -31,7 +31,7 @@ class K3bSidePanel : public QToolBox
   Q_OBJECT
 
  public:
-  K3bSidePanel( K3bMainWindow*, QWidget* parent = 0, const char* name = 0 );
+  K3bSidePanel( K3bMainWindow*, QWidget* parent = 0 );
   ~K3bSidePanel();
 
   /**

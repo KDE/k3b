@@ -22,8 +22,8 @@
 #include <qtooltip.h>
 
 
-K3bAudioCdListView::K3bAudioCdListView( K3bAudioCdView* view, QWidget* parent, const char* name )
-  : K3bListView( parent, name ),
+K3bAudioCdListView::K3bAudioCdListView( K3bAudioCdView* view, QWidget* parent )
+  : K3bListView( parent ),
     m_view(view)
 {
   setFullWidth(true);

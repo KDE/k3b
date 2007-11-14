@@ -77,7 +77,7 @@ class K3bAudioTrackAddingDialog : public KDialogBase, public K3bJobHandler
   void slotCancel();
 
  private:
-  K3bAudioTrackAddingDialog( QWidget* parent = 0, const char* name = 0 );
+  K3bAudioTrackAddingDialog( QWidget* parent = 0 );
 
   static KUrl::List extractUrlList( const KUrl::List& urls );
 

@@ -41,8 +41,8 @@
 #include <Q3PtrList>
 
 
-K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent, const char* name )
-  : K3bView( doc, parent, name ),
+K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent )
+  : K3bView( doc, parent ),
     m_doc(doc)
 {
   m_listView = new K3bMovixListView( m_doc, this );
@@ -182,9 +182,9 @@ void K3bMovixView::slotAddSubTitleFile()
 }
 
 
-K3bProjectBurnDialog* K3bMovixView::newBurnDialog( QWidget* parent, const char* name )
+K3bProjectBurnDialog* K3bMovixView::newBurnDialog( QWidget* parent )
 {
-  return new K3bMovixBurnDialog( m_doc, parent, name, true );
+  return new K3bMovixBurnDialog( m_doc, parent, true );
 }
 
 

@@ -42,7 +42,7 @@
 #include <k3bview.h>
 
 K3bVcdListView::K3bVcdListView( K3bView* view, K3bVcdDoc* doc, QWidget *parent, const char *name )
-        : K3bListView( parent, name ), m_doc( doc ), m_view( view )
+        : K3bListView( parent ), m_doc( doc ), m_view( view )
 {
     setAcceptDrops( true );
     setDropVisualizer( true );

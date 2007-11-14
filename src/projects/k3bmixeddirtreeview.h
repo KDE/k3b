@@ -33,7 +33,7 @@ class K3bMixedDirTreeView : public K3bDataDirTreeView
   Q_OBJECT
 
  public:
-  K3bMixedDirTreeView( K3bView* view, K3bMixedDoc* doc, QWidget* parent = 0, const char* name = 0 );
+  K3bMixedDirTreeView( K3bView* view, K3bMixedDoc* doc, QWidget* parent = 0 );
   ~K3bMixedDirTreeView();
 
  signals:

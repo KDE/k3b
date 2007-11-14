@@ -52,15 +52,12 @@
 
 
 K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
-					    const char* name,
 					    const QString& title,
 					    const QString& subTitle,
 					    int buttonMask,
 					    int defaultButton,
-					    const QString& configGroup,
-					    bool modal,
-					    Qt::WFlags fl )
-  : KDialog( parent, name, modal, fl ),
+					    const QString& configGroup )
+  : KDialog( parent ),
     m_mainWidget(0),
     m_defaultButton(defaultButton),
     m_configGroup(configGroup),
@@ -71,13 +68,13 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 {
   installEventFilter( this );
 
-  mainGrid = new QGridLayout( this );
+  mainGrid = new QGridLayout( mainWidget() );
   mainGrid->setSpacing( spacingHint() );
   mainGrid->setMargin( marginHint() );
 
   // header
   // ---------------------------------------------------------------------------------------------------
-  m_dialogHeader = new K3bThemedHeader( this );
+  m_dialogHeader = new K3bThemedHeader( mainWidget() );
   mainGrid->addMultiCellWidget( m_dialogHeader, 0, 0, 0, 2 );
 
 
@@ -85,7 +82,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   // ---------------------------------------------------------------------------------------------------
   if( !m_configGroup.isEmpty() ) {
     Q3HBoxLayout* layout2 = new Q3HBoxLayout( 0, 0, spacingHint(), "layout2");
-    m_buttonLoadSettings = new QToolButton( /*i18n("User Defaults"), */this );
+    m_buttonLoadSettings = new QToolButton( /*i18n("User Defaults"), */mainWidget() );
     m_buttonLoadSettings->setIconSet( SmallIconSet( "revert" ) );
     m_buttonLoadSettings->setPopupMode( QToolButton::MenuButtonPopup );
     Q3PopupMenu* userDefaultsPopup = new Q3PopupMenu( m_buttonLoadSettings );
@@ -95,7 +92,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
     m_buttonLoadSettings)->setMenu( userDefaultsPopup );
     layout2->addWidget( m_buttonLoadSettings );
 
-    m_buttonSaveSettings = new QToolButton( /*i18n("Save User Defaults"), */this, "m_buttonSaveSettings" );
+    m_buttonSaveSettings = new QToolButton( /*i18n("Save User Defaults"), */mainWidget(), "m_buttonSaveSettings" );
     ((QToolButton*)m_buttonSaveSettings)->setIconSet( SmallIconSet( "filesave" ) );
     layout2->addWidget( m_buttonSaveSettings );
 
@@ -112,7 +109,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 
   if( buttonMask & START_BUTTON ) {
     KGuiItem startItem = KStandardGuiItem::ok();
-    m_buttonStart = new KPushButton( startItem, this );
+    m_buttonStart = new KPushButton( startItem, mainWidget() );
     m_buttonStart->setObjectName( "m_buttonStart" );
     // refine the button text
     setButtonText( START_BUTTON,
@@ -126,7 +123,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
     m_buttonStart = 0;
 
   if( buttonMask & SAVE_BUTTON ) {
-    m_buttonSave = new KPushButton( KStandardGuiItem::save(), this, "m_buttonSave" );
+    m_buttonSave = new KPushButton( KStandardGuiItem::save(), mainWidget(), "m_buttonSave" );
   }
   else
     m_buttonSave = 0;
@@ -136,7 +133,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 				      .readBoolEntry( "keep action dialogs open", false )
 				      ? KStandardGuiItem::close()
 				      : KStandardGuiItem::cancel(),
-				      this,
+				      mainWidget(),
 				      "m_buttonCancel" );
   }
   else

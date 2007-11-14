@@ -59,7 +59,7 @@
 #include <unistd.h>
 
 
-K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent, const char* name )
+K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent )
   : KDialogBase( Plain,
 		 i18n("Adding files to project '%1'").arg(doc->URL().fileName()),
 		 Cancel,

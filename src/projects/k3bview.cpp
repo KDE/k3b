@@ -43,8 +43,8 @@
 #include <k3bcore.h>
 
 
-K3bView::K3bView( K3bDoc* pDoc, QWidget *parent, const char* name )
-  : QWidget( parent, name ),
+K3bView::K3bView( K3bDoc* pDoc, QWidget *parent )
+  : QWidget( parent ),
     m_doc( pDoc )
 {
   Q3GridLayout* grid = new Q3GridLayout( this );

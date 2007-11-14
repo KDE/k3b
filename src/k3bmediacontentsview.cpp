@@ -42,7 +42,7 @@ K3bMediaContentsView::K3bMediaContentsView( bool withHeader,
 					    int mediumState,
 					    QWidget* parent,
 					    const char* name )
-  : K3bContentsView( withHeader, parent, name )
+  : K3bContentsView( withHeader, parent )
 {
   d = new Private;
   d->supportedMediumContent = mediumContent;

@@ -20,8 +20,8 @@
 #include <qwidget.h>
 
 
-K3bProjectPluginDialog::K3bProjectPluginDialog( K3bProjectPlugin* plugin, K3bDoc* doc, QWidget* parent, const char* name )
-  : K3bInteractionDialog( parent, name,
+K3bProjectPluginDialog::K3bProjectPluginDialog( K3bProjectPlugin* plugin, K3bDoc* doc, QWidget* parent )
+  : K3bInteractionDialog( parent,
 			  QString::null,
 			  QString::null,
 			  START_BUTTON|CANCEL_BUTTON,

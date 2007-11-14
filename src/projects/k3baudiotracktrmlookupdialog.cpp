@@ -44,7 +44,7 @@
 #include <Q3PtrList>
 
 
-K3bAudioTrackTRMLookupDialog::K3bAudioTrackTRMLookupDialog( QWidget* parent, const char* name )
+K3bAudioTrackTRMLookupDialog::K3bAudioTrackTRMLookupDialog( QWidget* parent )
   : KDialogBase( KDialogBase::Plain, 
 		 i18n("MusicBrainz Query"), 
 		 KDialogBase::Cancel,

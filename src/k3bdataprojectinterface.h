@@ -29,7 +29,7 @@ class K3bDataProjectInterface : public K3bProjectInterface
   K_DCOP
 
  public:
-  K3bDataProjectInterface( K3bDataDoc*, const char* name = 0 );
+  K3bDataProjectInterface( K3bDataDoc* );
   ~K3bDataProjectInterface();
 
  k_dcop:

@@ -19,8 +19,8 @@
 #include <k3baudiotrack.h>
 
 
-K3bAudioProjectInterface::K3bAudioProjectInterface( K3bAudioDoc* doc, const char* name )
-  : K3bProjectInterface( doc, name ),
+K3bAudioProjectInterface::K3bAudioProjectInterface( K3bAudioDoc* doc )
+  : K3bProjectInterface( doc ),
     m_audioDoc(doc)
 {
 }

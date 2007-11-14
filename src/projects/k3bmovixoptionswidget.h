@@ -29,7 +29,7 @@ class K3bMovixOptionsWidget : public base_K3bMovixOptionsWidget
   Q_OBJECT
 
  public:
-  K3bMovixOptionsWidget( QWidget* parent = 0, const char* name = 0 );
+  K3bMovixOptionsWidget( QWidget* parent = 0 );
   ~K3bMovixOptionsWidget();
 
  public slots:

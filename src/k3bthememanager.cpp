@@ -166,8 +166,8 @@ public:
 
 
 
-K3bThemeManager::K3bThemeManager( QObject* parent, const char* name )
-  : QObject( parent, name )
+K3bThemeManager::K3bThemeManager( QObject* parent )
+  : QObject( parent )
 {
   d = new Private();
   d->emptyTheme.m_name = "Empty Theme";

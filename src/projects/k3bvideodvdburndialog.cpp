@@ -41,7 +41,7 @@
 
 
 K3bVideoDvdBurnDialog::K3bVideoDvdBurnDialog( K3bVideoDvdDoc* doc, QWidget *parent, const char *name, bool modal )
-  : K3bProjectBurnDialog( doc, parent, name, modal, true ),
+  : K3bProjectBurnDialog( doc, parent, modal, true ),
     m_doc( doc )
 {
   prepareGui();

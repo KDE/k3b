@@ -59,7 +59,7 @@
 
 
 K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const char *name, bool modal )
-  : K3bProjectBurnDialog( _doc, parent, name, modal ),
+  : K3bProjectBurnDialog( _doc, parent, modal ),
     m_doc(_doc)
 {
   prepareGui();

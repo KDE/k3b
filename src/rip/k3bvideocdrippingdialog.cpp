@@ -47,8 +47,8 @@
 #include <k3bglobals.h>
 #include <k3bstdguiitems.h>
 
-K3bVideoCdRippingDialog::K3bVideoCdRippingDialog( K3bVideoCdRippingOptions* options, QWidget* parent, const char* name )
-  : K3bInteractionDialog( parent, name,
+K3bVideoCdRippingDialog::K3bVideoCdRippingDialog( K3bVideoCdRippingOptions* options, QWidget* parent )
+  : K3bInteractionDialog( parent,
 			  i18n( "Video CD Ripping" ),
 			  QString::null,
 			  START_BUTTON|CANCEL_BUTTON,

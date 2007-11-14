@@ -26,7 +26,7 @@
 
 
 K3bMiniButton::K3bMiniButton( QWidget *parent, const char * name )
-  :QPushButton( parent, name ),
+  :QPushButton( parent ),
    m_mouseOver( false )
 {
   setFocusPolicy( NoFocus );

@@ -40,7 +40,7 @@ class K3bDataPropertiesDialog : public KDialogBase
 Q_OBJECT
 
  public: 
-  K3bDataPropertiesDialog( const Q3ValueList<K3bDataItem*>&, QWidget* parent = 0, const char* name = 0 );
+  K3bDataPropertiesDialog( const Q3ValueList<K3bDataItem*>&, QWidget* parent = 0 );
   ~K3bDataPropertiesDialog();
 
  protected slots:

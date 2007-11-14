@@ -31,7 +31,7 @@ class K3bMixedProjectInterface : public K3bProjectInterface
   K_DCOP
 
  public:
-  K3bMixedProjectInterface( K3bMixedDoc*, const char* name = 0 );
+  K3bMixedProjectInterface( K3bMixedDoc* );
 
  k_dcop:
   DCOPRef dataPart() const;

@@ -62,7 +62,7 @@
 
 
 K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, const char *name, bool modal )
-  : K3bProjectBurnDialog( doc, parent, name, modal ), m_doc(doc)
+  : K3bProjectBurnDialog( doc, parent, modal ), m_doc(doc)
 {
   prepareGui();
 

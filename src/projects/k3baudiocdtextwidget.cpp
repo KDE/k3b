@@ -52,8 +52,8 @@ public:
 };
 
 
-K3bAudioCdTextWidget::K3bAudioCdTextWidget( QWidget* parent, const char* name )
-  : base_K3bAudioCdTextWidget( parent, name ),
+K3bAudioCdTextWidget::K3bAudioCdTextWidget( QWidget* parent )
+  : base_K3bAudioCdTextWidget( parent ),
     m_doc(0)
 {
   m_allFieldsDlg = new AllFieldsDialog( this );

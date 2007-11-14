@@ -69,7 +69,7 @@
 
 
 K3bDataBurnDialog::K3bDataBurnDialog(K3bDataDoc* _doc, QWidget *parent, const char *name, bool modal )
-  : K3bProjectBurnDialog( _doc, parent, name, modal )
+  : K3bProjectBurnDialog( _doc, parent, modal )
 {
   prepareGui();
 

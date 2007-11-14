@@ -114,8 +114,8 @@ void K3bPlayListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int c, 
 }
 
 
-K3bPlayListView::K3bPlayListView( QWidget* parent, const char* name )
-  : K3ListView( parent, name )
+K3bPlayListView::K3bPlayListView( QWidget* parent )
+  : K3ListView( parent )
 {
   addColumn( i18n("Filename") );
   addColumn( i18n("Length") );
@@ -158,8 +158,8 @@ Q3DragObject* K3bPlayListView::dragObject()
 }
 
 
-K3bAudioPlayer::K3bAudioPlayer( QWidget* parent, const char* name )
-  : QWidget( parent, name )
+K3bAudioPlayer::K3bAudioPlayer( QWidget* parent )
+  : QWidget( parent )
 #ifdef WITH_ARTS
 , m_playObject( Arts::PlayObject::null() )
 #endif

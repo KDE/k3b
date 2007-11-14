@@ -27,7 +27,7 @@ class K3bDataMultiSessionCombobox : public QComboBox
   Q_OBJECT
 
  public:
-  K3bDataMultiSessionCombobox( QWidget* parent = 0, const char* name = 0 );
+  K3bDataMultiSessionCombobox( QWidget* parent = 0 );
   ~K3bDataMultiSessionCombobox();
 
   /**

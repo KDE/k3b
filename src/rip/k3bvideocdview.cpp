@@ -72,7 +72,7 @@ class K3bVideoCdView::VideoTrackViewItem : public Q3ListViewItem
                 : Q3ListViewItem( parent )
         {
             setText( 0, QString( "%1. %2" ).arg( _trackNumber ).arg( id ) );
-            setText( 1, name );
+            setText( 1 );
             if ( length > 0 ) {
                 setText( 2, length.toString() );
                 setText( 3, KIO::convertSize( length.mode2Form2Bytes() ) );
@@ -144,7 +144,7 @@ K3bVideoCdView::K3bVideoCdView( QWidget* parent, const char *name )
 				K3bMedium::CONTENT_VIDEO_CD,
 				K3bDevice::MEDIA_CD_ALL,
 				K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_COMPLETE,
-				parent, name )
+				parent )
 {
     Q3GridLayout * mainGrid = new Q3GridLayout( mainWidget() );
 

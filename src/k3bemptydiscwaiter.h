@@ -114,7 +114,7 @@ class K3bEmptyDiscWaiter : public KDialogBase, public K3bJobHandler
   /**
    * Use the static wait methods.
    */
-  explicit K3bEmptyDiscWaiter( K3bDevice::Device* device, QWidget* parent = 0, const char* name = 0 );
+  explicit K3bEmptyDiscWaiter( K3bDevice::Device* device, QWidget* parent = 0 );
 
   int waitForDisc( int mediaState = K3bDevice::STATE_EMPTY,
 		   int mediaType = K3bDevice::MEDIA_WRITABLE_CD,

@@ -79,8 +79,8 @@ private:
 };
 
 
-K3bMovixOptionsWidget::K3bMovixOptionsWidget( QWidget* parent, const char* name )
-  : base_K3bMovixOptionsWidget( parent, name )
+K3bMovixOptionsWidget::K3bMovixOptionsWidget( QWidget* parent )
+  : base_K3bMovixOptionsWidget( parent )
 {
   m_keyboardLangHelper = new LanguageSelectionHelper( m_comboKeyboardLayout );
   m_helpLangHelper = new LanguageSelectionHelper( m_comboBootMessageLanguage );

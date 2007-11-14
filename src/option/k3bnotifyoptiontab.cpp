@@ -24,8 +24,8 @@
 
 
 
-K3bNotifyOptionTab::K3bNotifyOptionTab( QWidget* parent, const char* name )
-  : QWidget( parent, name )
+K3bNotifyOptionTab::K3bNotifyOptionTab( QWidget* parent )
+  : QWidget( parent )
 {
 #warning Get the KNotification KCModule and show it here.
 }

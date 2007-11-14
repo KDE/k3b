@@ -34,7 +34,7 @@ class K3bMovixView : public K3bView
   Q_OBJECT
 
  public:
-  K3bMovixView( K3bMovixDoc* doc, QWidget* parent = 0, const char* name = 0 );
+  K3bMovixView( K3bMovixDoc* doc, QWidget* parent = 0 );
   virtual ~K3bMovixView();
 
  private slots:
@@ -46,7 +46,7 @@ class K3bMovixView : public K3bView
   void slotDocChanged();
 
  protected:
-  virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0, const char* name = 0 );
+  virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
 
   K3bMovixListView* m_listView;
 

@@ -165,8 +165,8 @@ public:
 
 
 
-K3bDataImageSettingsWidget::K3bDataImageSettingsWidget( QWidget* parent, const char* name )
-  : base_K3bDataImageSettings( parent, name ),
+K3bDataImageSettingsWidget::K3bDataImageSettingsWidget( QWidget* parent )
+  : base_K3bDataImageSettings( parent ),
     m_fileSystemOptionsShown(true)
 {
   layout()->setMargin( KDialog::marginHint() );

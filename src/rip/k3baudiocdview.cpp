@@ -102,7 +102,7 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
 			  K3bMedium::CONTENT_AUDIO,
 			  K3bDevice::MEDIA_CD_ALL,
 			  K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_COMPLETE,
-			  parent, name )
+			  parent )
 {
   Q3GridLayout* mainGrid = new Q3GridLayout( mainWidget() );
 

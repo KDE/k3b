@@ -75,8 +75,8 @@ private:
 };
 
 
-K3bBootImageView::K3bBootImageView( K3bDataDoc* doc, QWidget* parent, const char* name )
-  : base_K3bBootImageView( parent, name ),
+K3bBootImageView::K3bBootImageView( K3bDataDoc* doc, QWidget* parent )
+  : base_K3bBootImageView( parent ),
     m_doc(doc)
 {
   connect( m_buttonNew, SIGNAL(clicked()), 

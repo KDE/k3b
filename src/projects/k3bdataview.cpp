@@ -155,9 +155,9 @@ void K3bDataView::editBootImages()
 }
 
 
-K3bProjectBurnDialog* K3bDataView::newBurnDialog( QWidget* parent, const char* name )
+K3bProjectBurnDialog* K3bDataView::newBurnDialog( QWidget* parent )
 {
-  return new K3bDataBurnDialog( m_doc, parent, name, true );
+  return new K3bDataBurnDialog( m_doc, parent, true );
 }
 
 

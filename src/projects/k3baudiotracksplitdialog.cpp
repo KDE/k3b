@@ -36,10 +36,10 @@
 #include <QContextMenuEvent>
 
 
-K3bAudioTrackSplitDialog::K3bAudioTrackSplitDialog( K3bAudioTrack* track, QWidget* parent, const char* name )
+K3bAudioTrackSplitDialog::K3bAudioTrackSplitDialog( K3bAudioTrack* track, QWidget* parent )
   : KDialogBase( KDialogBase::Plain, i18n("Split Audio Track"), 
 		 KDialogBase::Ok|KDialogBase::Cancel,
-		 KDialogBase::Ok, parent, name ),
+		 KDialogBase::Ok, parent ),
     m_track(track)
 {
   QFrame* frame = plainPage();
@@ -202,7 +202,7 @@ void K3bAudioTrackSplitDialog::splitTrack( K3bAudioTrack* track,
 					   QWidget* parent, 
 					   const char* name )
 {
-  K3bAudioTrackSplitDialog d( track, parent, name );
+  K3bAudioTrackSplitDialog d( track, parent );
   if( d.exec() == QDialog::Accepted ) {
     Q3ValueList<int> ranges = d.m_editorWidget->allRanges();
     // we split the track at all range ends and just delete those that relate to the gaps in between

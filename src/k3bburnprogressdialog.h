@@ -34,7 +34,7 @@ class K3bBurnProgressDialog : public K3bJobProgressDialog  {
   Q_OBJECT
 
  public:
-  K3bBurnProgressDialog( QWidget* parent = 0, const char* name = 0, bool showSubProgress = true, 
+  K3bBurnProgressDialog( QWidget* parent = 0, bool showSubProgress = true, 
 			 bool modal = true, Qt::WFlags = 0 );
   ~K3bBurnProgressDialog();
 

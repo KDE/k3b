@@ -113,12 +113,12 @@ void K3bDeviceBranch::updateLabel()
 
   if( k3bappcore->mediaCache() ) {
     root()->setMultiLinesEnabled( true );
-    root()->setText( 0, name() + "\n" + k3bappcore->mediaCache()->mediumString( m_device ) );
+    root()->setText( 0() + "\n" + k3bappcore->mediaCache()->mediumString( m_device ) );
     static_cast<K3bFileTreeView*>( root()->listView() )->updateMinimumWidth();
   }
   else {
     root()->setMultiLinesEnabled( false );
-    root()->setText( 0, name() );
+    root()->setText( 0() );
   }
 }
 
@@ -143,7 +143,7 @@ K3bFileTreeBranch::K3bFileTreeBranch( K3FileTreeView* view,
 				      const QPixmap& pix,
 				      bool showHidden,
 				      K3FileTreeViewItem* item )
-  : KFileTreeBranch( view, url, name, pix, showHidden,
+  : KFileTreeBranch( view, url, pix, showHidden,
 		     item == 0
 		     ? new K3bFileTreeViewItem( view,
 						new KFileItem( url, "inode/directory",
@@ -572,7 +572,7 @@ KFileTreeBranch* K3bFileTreeView::addBranch( KFileTreeBranch* branch )
 
 KFileTreeBranch* K3bFileTreeView::addBranch( const KUrl& url, const QString& name, const QPixmap& pix, bool showHidden )
 {
-  KFileTreeBranch* newBranch = K3FileTreeView::addBranch( url, name, pix, showHidden );
+  KFileTreeBranch* newBranch = K3FileTreeView::addBranch( url, pix, showHidden );
   newBranch->setChildRecurse( false );
   setDirOnlyMode( newBranch, m_dirOnlyMode );
 
