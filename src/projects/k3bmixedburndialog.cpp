@@ -220,13 +220,13 @@ void K3bMixedBurnDialog::loadUserDefaults( const KConfigGroup& c )
 {
   K3bProjectBurnDialog::loadUserDefaults( c );
 
-  m_cdtextWidget->setChecked( c->readEntry( "cd_text", false ) );
-  m_checkNormalize->setChecked( c->readEntry( "normalize", false ) );
+  m_cdtextWidget->setChecked( c.readEntry( "cd_text", false ) );
+  m_checkNormalize->setChecked( c.readEntry( "normalize", false ) );
 
   // load mixed type
-  if( c->readEntry( "mixed_type" ) == "last_track" )
+  if( c.readEntry( "mixed_type" ) == "last_track" )
     m_comboMixedModeType->setSelectedValue( K3bMixedDoc::DATA_LAST_TRACK );
-  else if( c->readEntry( "mixed_type" ) == "first_track" )
+  else if( c.readEntry( "mixed_type" ) == "first_track" )
     m_comboMixedModeType->setSelectedValue( K3bMixedDoc::DATA_FIRST_TRACK );
   else
     m_comboMixedModeType->setSelectedValue( K3bMixedDoc::DATA_SECOND_SESSION );
@@ -244,19 +244,19 @@ void K3bMixedBurnDialog::saveUserDefaults( KConfigGroup& c )
 {
   K3bProjectBurnDialog::saveUserDefaults(c);
 
-  c->writeEntry( "cd_text", m_cdtextWidget->isChecked() );
-  c->writeEntry( "normalize", m_checkNormalize->isChecked() );
+  c.writeEntry( "cd_text", m_cdtextWidget->isChecked() );
+  c.writeEntry( "normalize", m_checkNormalize->isChecked() );
 
   // save mixed type
   switch( m_comboMixedModeType->selectedValue() ) {
   case K3bMixedDoc::DATA_LAST_TRACK:
-   c->writeEntry( "mixed_type", "last_track" );
+   c.writeEntry( "mixed_type", "last_track" );
    break;
   case K3bMixedDoc::DATA_FIRST_TRACK:
-    c->writeEntry( "mixed_type", "first_track" );
+    c.writeEntry( "mixed_type", "first_track" );
     break;
   default:
-   c->writeEntry( "mixed_type", "second_session" );
+   c.writeEntry( "mixed_type", "second_session" );
   }
 
   m_dataModeWidget->saveConfig(c);

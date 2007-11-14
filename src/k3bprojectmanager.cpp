@@ -273,7 +273,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
 
   c->setGroup( cg );
 
-  QString mode = c->readEntry( "writing_mode" );
+  QString mode = c.readEntry( "writing_mode" );
   if ( mode == "dao" )
     doc->setWritingMode( K3b::DAO );
   else if( mode == "tao" )
@@ -283,26 +283,26 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
   else
     doc->setWritingMode( K3b::WRITING_MODE_AUTO );
 
-  doc->setDummy( c->readEntry( "simulate", false ) );
-  doc->setOnTheFly( c->readEntry( "on_the_fly", true ) );
-  doc->setRemoveImages( c->readEntry( "remove_image", true ) );
-  doc->setOnlyCreateImages( c->readEntry( "only_create_image", false ) );
-  doc->setBurner( k3bcore->deviceManager()->findDevice( c->readEntry( "writer_device" ) ) );
+  doc->setDummy( c.readEntry( "simulate", false ) );
+  doc->setOnTheFly( c.readEntry( "on_the_fly", true ) );
+  doc->setRemoveImages( c.readEntry( "remove_image", true ) );
+  doc->setOnlyCreateImages( c.readEntry( "only_create_image", false ) );
+  doc->setBurner( k3bcore->deviceManager()->findDevice( c.readEntry( "writer_device" ) ) );
   // Default = 0 (Auto)
-  doc->setSpeed( c->readEntry( "writing_speed", 0 ) );
-  doc->setWritingApp( K3b::writingAppFromString( c->readEntry( "writing_app" ) ) );
+  doc->setSpeed( c.readEntry( "writing_speed", 0 ) );
+  doc->setWritingApp( K3b::writingAppFromString( c.readEntry( "writing_app" ) ) );
 
 
   switch( doc->type() ) {
   case K3bDoc::AUDIO: {
     K3bAudioDoc* audioDoc = static_cast<K3bAudioDoc*>(doc);
 
-    audioDoc->writeCdText( c->readEntry( "cd_text", true ) );
-    audioDoc->setHideFirstTrack( c->readEntry( "hide_first_track", false ) );
-    audioDoc->setNormalize( c->readEntry( "normalize", false ) );
-    audioDoc->setAudioRippingParanoiaMode( c->readEntry( "paranoia mode", 0 ) );
-    audioDoc->setAudioRippingRetries( c->readEntry( "read retries", 128 ) );
-    audioDoc->setAudioRippingIgnoreReadErrors( c->readEntry( "ignore read errors", false ) );
+    audioDoc->writeCdText( c.readEntry( "cd_text", true ) );
+    audioDoc->setHideFirstTrack( c.readEntry( "hide_first_track", false ) );
+    audioDoc->setNormalize( c.readEntry( "normalize", false ) );
+    audioDoc->setAudioRippingParanoiaMode( c.readEntry( "paranoia mode", 0 ) );
+    audioDoc->setAudioRippingRetries( c.readEntry( "read retries", 128 ) );
+    audioDoc->setAudioRippingIgnoreReadErrors( c.readEntry( "ignore read errors", false ) );
 
     break;
   }
@@ -310,21 +310,21 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
   case K3bDoc::MOVIX: {
     K3bMovixDoc* movixDoc = static_cast<K3bMovixDoc*>(doc);
 
-    movixDoc->setSubtitleFontset( c->readEntry("subtitle_fontset") );
+    movixDoc->setSubtitleFontset( c.readEntry("subtitle_fontset") );
 
-    movixDoc->setLoopPlaylist( c->readEntry("loop", 1 ) );
-    movixDoc->setAdditionalMPlayerOptions( c->readEntry( "additional_mplayer_options" ) );
-    movixDoc->setUnwantedMPlayerOptions( c->readEntry( "unwanted_mplayer_options" ) );
+    movixDoc->setLoopPlaylist( c.readEntry("loop", 1 ) );
+    movixDoc->setAdditionalMPlayerOptions( c.readEntry( "additional_mplayer_options" ) );
+    movixDoc->setUnwantedMPlayerOptions( c.readEntry( "unwanted_mplayer_options" ) );
 
-    movixDoc->setBootMessageLanguage( c->readEntry("boot_message_language") );
+    movixDoc->setBootMessageLanguage( c.readEntry("boot_message_language") );
 
-    movixDoc->setDefaultBootLabel( c->readEntry( "default_boot_label" ) );
+    movixDoc->setDefaultBootLabel( c.readEntry( "default_boot_label" ) );
 
-    movixDoc->setShutdown( c->readEntry( "shutdown", false) );
-    movixDoc->setReboot( c->readEntry( "reboot", false ) );
-    movixDoc->setEjectDisk( c->readEntry( "eject", false ) );
-    movixDoc->setRandomPlay( c->readEntry( "random_play", false ) );
-    movixDoc->setNoDma( c->readEntry( "no_dma", false ) );
+    movixDoc->setShutdown( c.readEntry( "shutdown", false) );
+    movixDoc->setReboot( c.readEntry( "reboot", false ) );
+    movixDoc->setEjectDisk( c.readEntry( "eject", false ) );
+    movixDoc->setRandomPlay( c.readEntry( "random_play", false ) );
+    movixDoc->setNoDma( c.readEntry( "no_dma", false ) );
     // fallthrough
   }
 
@@ -333,7 +333,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
 
     dataDoc->setIsoOptions( K3bIsoOptions::load( c, false ) );
 
-    QString datamode = c->readEntry( "data_track_mode" );
+    QString datamode = c.readEntry( "data_track_mode" );
     if( datamode == "mode1" )
       dataDoc->setDataMode( K3b::MODE1 );
     else if( datamode == "mode2" )
@@ -341,9 +341,9 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
     else
       dataDoc->setDataMode( K3b::DATA_MODE_AUTO );
 
-    dataDoc->setVerifyData( c->readEntry( "verify data", false ) );
+    dataDoc->setVerifyData( c.readEntry( "verify data", false ) );
 
-    QString s = c->readEntry( "multisession mode" );
+    QString s = c.readEntry( "multisession mode" );
     if( s == "none" )
       dataDoc->setMultiSessionMode( K3bDataDoc::NONE );
     else if( s == "start" )
@@ -362,25 +362,25 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
     // the only defaults we need here are the volume id and stuff
     K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>(doc);
     dataDoc->setIsoOptions( K3bIsoOptions::load( c, false ) );
-    dataDoc->setVerifyData( c->readEntry( "verify data", false ) );
+    dataDoc->setVerifyData( c.readEntry( "verify data", false ) );
     break;
   }
 
   case K3bDoc::MIXED: {
     K3bMixedDoc* mixedDoc = static_cast<K3bMixedDoc*>(doc);
 
-    mixedDoc->audioDoc()->writeCdText( c->readEntry( "cd_text", true ) );
-    mixedDoc->audioDoc()->setNormalize( c->readEntry( "normalize", false ) );
+    mixedDoc->audioDoc()->writeCdText( c.readEntry( "cd_text", true ) );
+    mixedDoc->audioDoc()->setNormalize( c.readEntry( "normalize", false ) );
 
     // load mixed type
-    if( c->readEntry( "mixed_type" ) == "last_track" )
+    if( c.readEntry( "mixed_type" ) == "last_track" )
       mixedDoc->setMixedType( K3bMixedDoc::DATA_LAST_TRACK );
-    else if( c->readEntry( "mixed_type" ) == "first_track" )
+    else if( c.readEntry( "mixed_type" ) == "first_track" )
       mixedDoc->setMixedType( K3bMixedDoc::DATA_FIRST_TRACK );
     else
       mixedDoc->setMixedType( K3bMixedDoc::DATA_SECOND_SESSION );
 
-    QString datamode = c->readEntry( "data_track_mode" );
+    QString datamode = c.readEntry( "data_track_mode" );
     if( datamode == "mode1" )
       mixedDoc->dataDoc()->setDataMode( K3b::MODE1 );
     else if( datamode == "mode2" )
@@ -401,10 +401,10 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
 
     // FIXME: I think we miss a lot here!
 
-    vcdDoc->vcdOptions()->setPbcEnabled( c->readEntry( "Use Playback Control", false ) );
-    vcdDoc->vcdOptions()->setPbcNumkeysEnabled( c->readEntry( "Use numeric keys to navigate chapters", false ) );
-    vcdDoc->vcdOptions()->setPbcPlayTime( c->readEntry( "Play each Sequence/Segment", 1 ) );
-    vcdDoc->vcdOptions()->setPbcWaitTime( c->readEntry( "Time to wait after each Sequence/Segment", 2 ) );
+    vcdDoc->vcdOptions()->setPbcEnabled( c.readEntry( "Use Playback Control", false ) );
+    vcdDoc->vcdOptions()->setPbcNumkeysEnabled( c.readEntry( "Use numeric keys to navigate chapters", false ) );
+    vcdDoc->vcdOptions()->setPbcPlayTime( c.readEntry( "Play each Sequence/Segment", 1 ) );
+    vcdDoc->vcdOptions()->setPbcWaitTime( c.readEntry( "Time to wait after each Sequence/Segment", 2 ) );
 
     if( vcdDoc->vcdOptions()->volumeId().isEmpty() )
       vcdDoc->vcdOptions()->setVolumeId( doc->URL().fileName() );

@@ -153,7 +153,7 @@ void K3bVideoDvdBurnDialog::loadUserDefaults( const KConfigGroup& c )
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_imageSettingsWidget->load( o );
 
-  m_checkVerify->setChecked( c->readEntry( "verify data", false ) );
+  m_checkVerify->setChecked( c.readEntry( "verify data", false ) );
 
   toggleAll();
 }
@@ -167,7 +167,7 @@ void K3bVideoDvdBurnDialog::saveUserDefaults( KConfigGroup& c )
   m_imageSettingsWidget->save( o );
   o.save( c );
 
-  c->writeEntry( "verify data", m_checkVerify->isChecked() );
+  c.writeEntry( "verify data", m_checkVerify->isChecked() );
 }
 
 

@@ -447,10 +447,10 @@ void K3bAudioRippingDialog::loadK3bDefaults()
 
 void K3bAudioRippingDialog::loadUserDefaults( const KConfigGroup& c )
 {
-  m_comboParanoiaMode->setCurrentItem( c->readEntry( "paranoia_mode", 0 ) );
-  m_spinRetries->setValue( c->readEntry( "read_retries", 5 ) );
-  m_checkIgnoreReadErrors->setChecked( !c->readEntry( "never_skip", true ) );
-  m_checkUseIndex0->setChecked( c->readEntry( "use_index0", false ) );
+  m_comboParanoiaMode->setCurrentItem( c.readEntry( "paranoia_mode", 0 ) );
+  m_spinRetries->setValue( c.readEntry( "read_retries", 5 ) );
+  m_checkIgnoreReadErrors->setChecked( !c.readEntry( "never_skip", true ) );
+  m_checkUseIndex0->setChecked( c.readEntry( "use_index0", false ) );
 
   m_optionWidget->loadConfig( c );
   m_patternWidget->loadConfig( c );
@@ -460,10 +460,10 @@ void K3bAudioRippingDialog::loadUserDefaults( const KConfigGroup& c )
 
 void K3bAudioRippingDialog::saveUserDefaults( KConfigGroup& c )
 {
-  c->writeEntry( "paranoia_mode", m_comboParanoiaMode->currentText().toInt() );
-  c->writeEntry( "read_retries", m_spinRetries->value() );
-  c->writeEntry( "never_skip", !m_checkIgnoreReadErrors->isChecked() );
-  c->writeEntry( "use_index0", m_checkUseIndex0->isChecked() );
+  c.writeEntry( "paranoia_mode", m_comboParanoiaMode->currentText().toInt() );
+  c.writeEntry( "read_retries", m_spinRetries->value() );
+  c.writeEntry( "never_skip", !m_checkIgnoreReadErrors->isChecked() );
+  c.writeEntry( "use_index0", m_checkUseIndex0->isChecked() );
 
   m_optionWidget->saveConfig( c );
   m_patternWidget->saveConfig( c );

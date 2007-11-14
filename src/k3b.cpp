@@ -608,7 +608,7 @@ void K3bMainWindow::saveProperties( KConfig* c )
   // ----------------------------------------------------------
 
   const Q3PtrList<K3bDoc>& docs = k3bappcore->projectManager()->projects();
-  c->writeEntry( "Number of projects", docs.count() );
+  c.writeEntry( "Number of projects", docs.count() );
 
   int cnt = 1;
   for( Q3PtrListIterator<K3bDoc> it( docs ); *it; ++it ) {
@@ -616,10 +616,10 @@ void K3bMainWindow::saveProperties( KConfig* c )
     c->writePathEntry( QString("%1 url").arg(cnt), (*it)->URL().url() );
 
     // is the doc modified
-    c->writeEntry( QString("%1 modified").arg(cnt), (*it)->isModified() );
+    c.writeEntry( QString("%1 modified").arg(cnt), (*it)->isModified() );
 
     // has the doc already been saved?
-    c->writeEntry( QString("%1 saved").arg(cnt), (*it)->isSaved() );
+    c.writeEntry( QString("%1 saved").arg(cnt), (*it)->isSaved() );
 
     // where does the session management save it? If it's not modified and saved this is
     // the same as the url
@@ -662,7 +662,7 @@ void K3bMainWindow::readProperties( KConfig* c )
   c->setGroup( "Saved Session" );
   // ----------------------------------------------------------
 
-  int cnt = c->readEntry( "Number of projects", 0 );
+  int cnt = c.readEntry( "Number of projects", 0 );
   kDebug() << "(K3bMainWindow::readProperties) number of projects from last session in " << saveDir << ": " << cnt << endl
 	    << "                                read from config group " << c->group() << endl;
 
@@ -670,9 +670,9 @@ void K3bMainWindow::readProperties( KConfig* c )
     // in this case the constructor works since we saved as url()
     KUrl url = c->readPathEntry( QString("%1 url", QString()).arg(i) );
 
-    bool modified = c->readEntry( QString("%1 modified").arg(i) );
+    bool modified = c.readEntry( QString("%1 modified").arg(i) );
 
-    bool saved = c->readEntry( QString("%1 saved").arg(i) );
+    bool saved = c.readEntry( QString("%1 saved").arg(i) );
 
     KUrl saveUrl = c->readPathEntry( QString("%1 saveurl", QString()).arg(i) );
 

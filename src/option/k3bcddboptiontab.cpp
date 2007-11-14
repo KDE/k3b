@@ -144,11 +144,11 @@ void K3bCddbOptionTab::readSettings()
 
   QStringList localCddbDirs = c->readPathEntry( "local cddb dirs", QStringList() );
 
-  m_checkRemoteCddb->setChecked( c->readEntry( "use remote cddb", true ) );
-  m_checkUseLocalCddb->setChecked( c->readEntry( "use local cddb query", true ) );
-  m_checkSaveLocalEntries->setChecked( c->readEntry( "save cddb entries locally", true ) );
-  m_checkManualCgiPath->setChecked( c->readEntry( "use manual cgi path", false ) );
-  m_editManualCgiPath->setText( c->readEntry( "cgi path", "/~cddb/cddb.cgi" ) );
+  m_checkRemoteCddb->setChecked( c.readEntry( "use remote cddb", true ) );
+  m_checkUseLocalCddb->setChecked( c.readEntry( "use local cddb query", true ) );
+  m_checkSaveLocalEntries->setChecked( c.readEntry( "save cddb entries locally", true ) );
+  m_checkManualCgiPath->setChecked( c.readEntry( "use manual cgi path", false ) );
+  m_editManualCgiPath->setText( c.readEntry( "cgi path", "/~cddb/cddb.cgi" ) );
 
   if( localCddbDirs.isEmpty() )
     localCddbDirs.append( "~/.cddb/" );
@@ -193,11 +193,11 @@ void K3bCddbOptionTab::apply()
 
   c->setGroup( "Cddb" );
 
-  c->writeEntry( "use remote cddb", m_checkRemoteCddb->isChecked() );
-  c->writeEntry( "use local cddb query", m_checkUseLocalCddb->isChecked() );
-  c->writeEntry( "save cddb entries locally", m_checkSaveLocalEntries->isChecked() );
-  c->writeEntry( "use manual cgi path", m_checkManualCgiPath->isChecked() );
-  c->writeEntry( "cgi path", m_editManualCgiPath->text() );
+  c.writeEntry( "use remote cddb", m_checkRemoteCddb->isChecked() );
+  c.writeEntry( "use local cddb query", m_checkUseLocalCddb->isChecked() );
+  c.writeEntry( "save cddb entries locally", m_checkSaveLocalEntries->isChecked() );
+  c.writeEntry( "use manual cgi path", m_checkManualCgiPath->isChecked() );
+  c.writeEntry( "cgi path", m_editManualCgiPath->text() );
 
   QStringList cddbServer;
   QStringList localCddbDirs;
@@ -215,7 +215,7 @@ void K3bCddbOptionTab::apply()
   }
 
   // new config
-  c->writeEntry( "cddb server", cddbServer );
+  c.writeEntry( "cddb server", cddbServer );
 
   // old config <= 0.7.3
   if( c->hasKey( "http server" ) )

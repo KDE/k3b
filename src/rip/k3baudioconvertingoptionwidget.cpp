@@ -226,13 +226,13 @@ void K3bAudioConvertingOptionWidget::loadConfig( KConfigBase* c )
 {
   m_editBaseDir->setURL( c->readPathEntry( "last ripping directory", QDir::homePath() ) );
 
-  m_checkSingleFile->setChecked( c->readEntry( "single_file", false ) );
-  m_checkWriteCueFile->setChecked( c->readEntry( "write_cue_file", false ) );
+  m_checkSingleFile->setChecked( c.readEntry( "single_file", false ) );
+  m_checkWriteCueFile->setChecked( c.readEntry( "write_cue_file", false ) );
 
-  m_checkCreatePlaylist->setChecked( c->readEntry( "create_playlist", false ) );
-  m_checkPlaylistRelative->setChecked( c->readEntry( "relative_path_in_playlist", false ) );
+  m_checkCreatePlaylist->setChecked( c.readEntry( "create_playlist", false ) );
+  m_checkPlaylistRelative->setChecked( c.readEntry( "relative_path_in_playlist", false ) );
 
-  QString filetype = c->readEntry( "filetype", d->extensionMap[d->getDefaultFormat()] );
+  QString filetype = c.readEntry( "filetype", d->extensionMap[d->getDefaultFormat()] );
   if( filetype == "wav" )
     m_comboFileType->setCurrentItem(0);
   else {
@@ -253,16 +253,16 @@ void K3bAudioConvertingOptionWidget::saveConfig( KConfigBase* c )
 {
   c->writePathEntry( "last ripping directory", m_editBaseDir->url() );
 
-  c->writeEntry( "single_file", m_checkSingleFile->isChecked() );
-  c->writeEntry( "write_cue_file", m_checkWriteCueFile->isChecked() );
+  c.writeEntry( "single_file", m_checkSingleFile->isChecked() );
+  c.writeEntry( "write_cue_file", m_checkWriteCueFile->isChecked() );
 
-  c->writeEntry( "create_playlist", m_checkCreatePlaylist->isChecked() );
-  c->writeEntry( "relative_path_in_playlist", m_checkPlaylistRelative->isChecked() );
+  c.writeEntry( "create_playlist", m_checkCreatePlaylist->isChecked() );
+  c.writeEntry( "relative_path_in_playlist", m_checkPlaylistRelative->isChecked() );
 
   if( d->extensionMap.contains(m_comboFileType->currentItem()) )
-    c->writeEntry( "filetype", d->extensionMap[m_comboFileType->currentItem()] );
+    c.writeEntry( "filetype", d->extensionMap[m_comboFileType->currentItem()] );
   else
-    c->writeEntry( "filetype", "wav" );
+    c.writeEntry( "filetype", "wav" );
 }
 
 #include "k3baudioconvertingoptionwidget.moc"

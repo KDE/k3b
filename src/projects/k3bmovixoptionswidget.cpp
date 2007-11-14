@@ -165,78 +165,78 @@ void K3bMovixOptionsWidget::loadDefaults()
 
 void K3bMovixOptionsWidget::loadConfig( KConfigBase* c )
 {
-  QString s = c->readEntry("subtitle_fontset");
+  QString s = c.readEntry("subtitle_fontset");
   if( !s.isEmpty() && s != "none" && m_comboSubtitleFontset->contains(s) )
     m_comboSubtitleFontset->setCurrentItem( s, false );
   else
     m_comboSubtitleFontset->setCurrentItem( 0 ); // none
 
-  m_spinLoop->setValue( c->readEntry("loop", 1 ) );
-  m_editAdditionalMplayerOptions->setText( c->readEntry( "additional_mplayer_options" ) );
-  m_editUnwantedMplayerOptions->setText( c->readEntry( "unwanted_mplayer_options" ) );
+  m_spinLoop->setValue( c.readEntry("loop", 1 ) );
+  m_editAdditionalMplayerOptions->setText( c.readEntry( "additional_mplayer_options" ) );
+  m_editUnwantedMplayerOptions->setText( c.readEntry( "unwanted_mplayer_options" ) );
 
-  s = c->readEntry("boot_message_language");
+  s = c.readEntry("boot_message_language");
   m_helpLangHelper->setLanguage( s == "default" ? QString::null : s );
 
-  s = c->readEntry( "default_boot_label" );
+  s = c.readEntry( "default_boot_label" );
   if( !s.isEmpty() && s != "default" && m_comboDefaultBootLabel->contains(s) )
     m_comboDefaultBootLabel->setCurrentItem( s, false );
   else
     m_comboDefaultBootLabel->setCurrentItem( 0 );  // default
 
-  s = c->readEntry("audio_background");
+  s = c.readEntry("audio_background");
   if( !s.isEmpty() && s != "default" && m_comboAudioBackground->contains(s) )
     m_comboAudioBackground->setCurrentItem( s, false );
   else
     m_comboAudioBackground->setCurrentItem( 0 ); // default
 
-  s = c->readEntry("keyboard_layout");
+  s = c.readEntry("keyboard_layout");
   m_keyboardLangHelper->setLanguage( s == "default" ? QString::null : s );
 
-  m_checkShutdown->setChecked( c->readEntry( "shutdown", false) );
-  m_checkReboot->setChecked( c->readEntry( "reboot", false ) );
-  m_checkEject->setChecked( c->readEntry( "eject", false ) );
-  m_checkRandomPlay->setChecked( c->readEntry( "random_play", false ) );
-  m_checkNoDma->setChecked( c->readEntry( "no_dma", false ) );
+  m_checkShutdown->setChecked( c.readEntry( "shutdown", false) );
+  m_checkReboot->setChecked( c.readEntry( "reboot", false ) );
+  m_checkEject->setChecked( c.readEntry( "eject", false ) );
+  m_checkRandomPlay->setChecked( c.readEntry( "random_play", false ) );
+  m_checkNoDma->setChecked( c.readEntry( "no_dma", false ) );
 }
 
 
 void K3bMovixOptionsWidget::saveConfig( KConfigBase* c )
 {
   if( m_comboSubtitleFontset->currentItem() == 0 )
-    c->writeEntry( "subtitle_fontset", "none" );
+    c.writeEntry( "subtitle_fontset", "none" );
   else
-    c->writeEntry( "subtitle_fontset", m_comboSubtitleFontset->currentText() );
+    c.writeEntry( "subtitle_fontset", m_comboSubtitleFontset->currentText() );
 
-  c->writeEntry( "loop", m_spinLoop->value() );
-  c->writeEntry( "additional_mplayer_options", m_editAdditionalMplayerOptions->text() );
-  c->writeEntry( "unwanted_mplayer_options", m_editUnwantedMplayerOptions->text() );
+  c.writeEntry( "loop", m_spinLoop->value() );
+  c.writeEntry( "additional_mplayer_options", m_editAdditionalMplayerOptions->text() );
+  c.writeEntry( "unwanted_mplayer_options", m_editUnwantedMplayerOptions->text() );
 
   if( m_comboBootMessageLanguage->currentItem() == 0 )
-    c->writeEntry( "boot_message_language", "default" );
+    c.writeEntry( "boot_message_language", "default" );
   else
-    c->writeEntry( "boot_message_language", m_helpLangHelper->selectedLanguage() );
+    c.writeEntry( "boot_message_language", m_helpLangHelper->selectedLanguage() );
 
   if( m_comboDefaultBootLabel->currentItem() == 0 )
-    c->writeEntry( "default_boot_label", "default" );
+    c.writeEntry( "default_boot_label", "default" );
   else
-    c->writeEntry( "default_boot_label", m_comboDefaultBootLabel->currentText() );
+    c.writeEntry( "default_boot_label", m_comboDefaultBootLabel->currentText() );
 
   if( m_comboAudioBackground->currentItem() == 0 )
-    c->writeEntry( "audio_background", "default" );
+    c.writeEntry( "audio_background", "default" );
   else
-    c->writeEntry( "audio_background", m_comboAudioBackground->currentText() );
+    c.writeEntry( "audio_background", m_comboAudioBackground->currentText() );
 
   if( m_comboKeyboardLayout->currentItem() == 0 )
-    c->writeEntry( "keyboard_layout", "default" );
+    c.writeEntry( "keyboard_layout", "default" );
   else
-    c->writeEntry( "keyboard_layout", m_keyboardLangHelper->selectedLanguage() );
+    c.writeEntry( "keyboard_layout", m_keyboardLangHelper->selectedLanguage() );
 
-  c->writeEntry( "shutdown", m_checkShutdown->isChecked() );
-  c->writeEntry( "reboot", m_checkReboot->isChecked() );
-  c->writeEntry( "eject", m_checkEject->isChecked() );
-  c->writeEntry( "random_play", m_checkRandomPlay->isChecked() );
-  c->writeEntry( "no_dma", m_checkNoDma->isChecked() );
+  c.writeEntry( "shutdown", m_checkShutdown->isChecked() );
+  c.writeEntry( "reboot", m_checkReboot->isChecked() );
+  c.writeEntry( "eject", m_checkEject->isChecked() );
+  c.writeEntry( "random_play", m_checkRandomPlay->isChecked() );
+  c.writeEntry( "no_dma", m_checkNoDma->isChecked() );
 }
 
 #include "k3bmovixoptionswidget.moc"

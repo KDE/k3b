@@ -203,8 +203,8 @@ void K3bAudioCdView::reloadMedium()
 
 //   KConfig* c = k3bcore->config();
 //   c->setGroup("Cddb");
-//   bool useCddb = ( c->readEntry( "use local cddb query", true ) ||
-// 		   c->readEntry( "use remote cddb", false ) );
+//   bool useCddb = ( c.readEntry( "use local cddb query", true ) ||
+// 		   c.readEntry( "use remote cddb", false ) );
 
 //   if( useCddb &&
 //       ( m_cdText.isEmpty() ||
@@ -436,8 +436,8 @@ void K3bAudioCdView::queryCddb()
 
   m_cddb->readConfig( c );
 
-  if( c->readEntry( "use local cddb query", true ) ||
-      c->readEntry( "use remote cddb", false ) ) {
+  if( c.readEntry( "use local cddb query", true ) ||
+      c.readEntry( "use remote cddb", false ) ) {
 
     showBusyLabel(true);
 
@@ -454,7 +454,7 @@ void K3bAudioCdView::slotCddbQueryFinished( int error )
     // save the entry locally
     KConfig* c = k3bcore->config();
     c->setGroup( "Cddb" );
-    if( c->readEntry( "save cddb entries locally", true ) )
+    if( c.readEntry( "save cddb entries locally", true ) )
       m_cddb->saveEntry( m_cddbInfo );
 
     updateDisplay();

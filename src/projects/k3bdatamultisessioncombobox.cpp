@@ -120,13 +120,13 @@ void K3bDataMultiSessionCombobox::saveConfig( KConfigBase* c )
     break;
   }
 
-  c->writeEntry( "multisession mode", s );
+  c.writeEntry( "multisession mode", s );
 }
 
 
 void K3bDataMultiSessionCombobox::loadConfig( KConfigBase* c )
 {
-  QString s = c->readEntry( "multisession mode" );
+  QString s = c.readEntry( "multisession mode" );
   if( s == "none" )
     setMultiSessionMode( K3bDataDoc::NONE );
   else if( s == "start" )

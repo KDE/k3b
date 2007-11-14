@@ -244,9 +244,9 @@ void K3bVideoCdRippingDialog::loadK3bDefaults()
 void K3bVideoCdRippingDialog::loadUserDefaults( const KConfigGroup& c )
 {
     m_editDirectory ->setURL( c->readPathEntry( "last ripping directory", QDir::homePath() ) );
-    m_ignoreExt ->setChecked( c->readEntry( "ignore ext", false ) );
-    m_sector2336 ->setChecked( c->readEntry( "sector 2336", false ) );
-    m_extractXML ->setChecked( c->readEntry( "extract xml", false ) );
+    m_ignoreExt ->setChecked( c.readEntry( "ignore ext", false ) );
+    m_sector2336 ->setChecked( c.readEntry( "sector 2336", false ) );
+    m_extractXML ->setChecked( c.readEntry( "extract xml", false ) );
 
     slotUpdateFreeSpace();
 }
@@ -254,9 +254,9 @@ void K3bVideoCdRippingDialog::loadUserDefaults( const KConfigGroup& c )
 void K3bVideoCdRippingDialog::saveUserDefaults( KConfigGroup& c )
 {
     c->writePathEntry( "last ripping directory", m_editDirectory->url() );
-    c->writeEntry( "ignore ext", m_ignoreExt ->isChecked( ) );
-    c->writeEntry( "sector 2336", m_sector2336 ->isChecked( ) );
-    c->writeEntry( "extract xml", m_extractXML ->isChecked( ) );
+    c.writeEntry( "ignore ext", m_ignoreExt ->isChecked( ) );
+    c.writeEntry( "sector 2336", m_sector2336 ->isChecked( ) );
+    c.writeEntry( "extract xml", m_extractXML ->isChecked( ) );
 }
 
 #include "k3bvideocdrippingdialog.moc"

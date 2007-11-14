@@ -519,36 +519,36 @@ void K3bVideoDVDRippingDialog::loadK3bDefaults()
 
 void K3bVideoDVDRippingDialog::loadUserDefaults( const KConfigGroup& c )
 {
-  m_w->m_spinVideoBitrate->setValue( c->readEntry( "video bitrate", 1200 ) );
-  m_w->m_checkTwoPassEncoding->setChecked( c->readEntry( "two pass encoding", true ) );
-  m_w->m_checkAudioResampling->setChecked( c->readEntry( "audio resampling", false ) );
-  m_w->m_checkAutoClipping->setChecked( c->readEntry( "auto clipping", false ) );
-  m_w->m_checkLowPriority->setChecked( c->readEntry( "low priority", true ) );
-  m_w->m_checkAudioVBR->setChecked( c->readEntry( "vbr audio", true ) );
-  m_w->setSelectedAudioBitrate( c->readEntry( "audio bitrate", 128 ) );
-  m_w->setSelectedVideoCodec( videoCodecFromId( c->readEntry( "video codec", videoCodecId( K3bVideoDVDTitleTranscodingJob::VIDEO_CODEC_FFMPEG_MPEG4 ) ) ) );
-  m_w->setSelectedAudioCodec( audioCodecFromId( c->readEntry( "audio codec", audioCodecId( K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_MP3 ) ) ) );
-  m_w->m_checkBlankReplace->setChecked( c->readEntry( "replace blanks", false ) );
-  m_w->m_editBlankReplace->setText( c->readEntry( "blank replace string", "_" ) );
-  m_w->m_comboFilenamePattern->setEditText( c->readEntry( "filename pattern", m_w->m_comboFilenamePattern->text(0) ) );
+  m_w->m_spinVideoBitrate->setValue( c.readEntry( "video bitrate", 1200 ) );
+  m_w->m_checkTwoPassEncoding->setChecked( c.readEntry( "two pass encoding", true ) );
+  m_w->m_checkAudioResampling->setChecked( c.readEntry( "audio resampling", false ) );
+  m_w->m_checkAutoClipping->setChecked( c.readEntry( "auto clipping", false ) );
+  m_w->m_checkLowPriority->setChecked( c.readEntry( "low priority", true ) );
+  m_w->m_checkAudioVBR->setChecked( c.readEntry( "vbr audio", true ) );
+  m_w->setSelectedAudioBitrate( c.readEntry( "audio bitrate", 128 ) );
+  m_w->setSelectedVideoCodec( videoCodecFromId( c.readEntry( "video codec", videoCodecId( K3bVideoDVDTitleTranscodingJob::VIDEO_CODEC_FFMPEG_MPEG4 ) ) ) );
+  m_w->setSelectedAudioCodec( audioCodecFromId( c.readEntry( "audio codec", audioCodecId( K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_MP3 ) ) ) );
+  m_w->m_checkBlankReplace->setChecked( c.readEntry( "replace blanks", false ) );
+  m_w->m_editBlankReplace->setText( c.readEntry( "blank replace string", "_" ) );
+  m_w->m_comboFilenamePattern->setEditText( c.readEntry( "filename pattern", m_w->m_comboFilenamePattern->text(0) ) );
   m_w->m_editBaseDir->setURL( c->readPathEntry( "base dir", K3b::defaultTempPath() ) );
 }
 
 
 void K3bVideoDVDRippingDialog::saveUserDefaults( KConfigGroup& c )
 {
-  c->writeEntry( "video bitrate", m_w->m_spinVideoBitrate->value() );
-  c->writeEntry( "two pass encoding", m_w->m_checkTwoPassEncoding->isChecked() );
-  c->writeEntry( "audio resampling", m_w->m_checkAudioResampling->isChecked() );
-  c->writeEntry( "auto clipping", m_w->m_checkAutoClipping->isChecked() );
-  c->writeEntry( "low priority", m_w->m_checkLowPriority->isChecked() );
-  c->writeEntry( "vbr audio", m_w->m_checkAudioVBR->isChecked() );
-  c->writeEntry( "audio bitrate", m_w->selectedAudioBitrate() );
-  c->writeEntry( "video codec", videoCodecId( m_w->selectedVideoCodec() ) );
-  c->writeEntry( "audio codec", audioCodecId( m_w->selectedAudioCodec() ) );
-  c->writeEntry( "replace blanks", m_w->m_checkBlankReplace->isChecked() );
-  c->writeEntry( "blank replace string", m_w->m_editBlankReplace->text() );
-  c->writeEntry( "filename pattern", m_w->m_comboFilenamePattern->currentText() );
+  c.writeEntry( "video bitrate", m_w->m_spinVideoBitrate->value() );
+  c.writeEntry( "two pass encoding", m_w->m_checkTwoPassEncoding->isChecked() );
+  c.writeEntry( "audio resampling", m_w->m_checkAudioResampling->isChecked() );
+  c.writeEntry( "auto clipping", m_w->m_checkAutoClipping->isChecked() );
+  c.writeEntry( "low priority", m_w->m_checkLowPriority->isChecked() );
+  c.writeEntry( "vbr audio", m_w->m_checkAudioVBR->isChecked() );
+  c.writeEntry( "audio bitrate", m_w->selectedAudioBitrate() );
+  c.writeEntry( "video codec", videoCodecId( m_w->selectedVideoCodec() ) );
+  c.writeEntry( "audio codec", audioCodecId( m_w->selectedAudioCodec() ) );
+  c.writeEntry( "replace blanks", m_w->m_checkBlankReplace->isChecked() );
+  c.writeEntry( "blank replace string", m_w->m_editBlankReplace->text() );
+  c.writeEntry( "filename pattern", m_w->m_comboFilenamePattern->currentText() );
   c->writePathEntry( "base dir", m_w->m_editBaseDir->url() );
 }
 

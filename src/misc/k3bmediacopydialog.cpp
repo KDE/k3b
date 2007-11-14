@@ -552,31 +552,31 @@ void K3bMediaCopyDialog::updateOverrideDevice()
 void K3bMediaCopyDialog::loadUserDefaults( const KConfigGroup& c )
 {
   m_writerSelectionWidget->loadConfig( c );
-  m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "source_device" ) ) );
+  m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c.readEntry( "source_device" ) ) );
   m_writingModeWidget->loadConfig( c );
-  m_checkSimulate->setChecked( c->readEntry( "simulate", false ) );
-  m_checkCacheImage->setChecked( !c->readEntry( "on_the_fly", false ) );
-  m_checkDeleteImages->setChecked( c->readEntry( "delete_images", true ) );
-  m_checkOnlyCreateImage->setChecked( c->readEntry( "only_create_image", false ) );
-  m_comboParanoiaMode->setCurrentItem( c->readEntry( "paranoia_mode", 0 ) );
-  m_checkVerifyData->setChecked( c->readEntry( "verify data", false ) );
+  m_checkSimulate->setChecked( c.readEntry( "simulate", false ) );
+  m_checkCacheImage->setChecked( !c.readEntry( "on_the_fly", false ) );
+  m_checkDeleteImages->setChecked( c.readEntry( "delete_images", true ) );
+  m_checkOnlyCreateImage->setChecked( c.readEntry( "only_create_image", false ) );
+  m_comboParanoiaMode->setCurrentItem( c.readEntry( "paranoia_mode", 0 ) );
+  m_checkVerifyData->setChecked( c.readEntry( "verify data", false ) );
 
-  m_spinCopies->setValue( c->readEntry( "copies", 1 ) );
+  m_spinCopies->setValue( c.readEntry( "copies", 1 ) );
 
   m_tempDirSelectionWidget->readConfig( c );
 
-  if( c->readEntry( "copy mode", "normal" ) == "normal" )
+  if( c.readEntry( "copy mode", "normal" ) == "normal" )
     m_comboCopyMode->setCurrentItem( 0 );
   else
     m_comboCopyMode->setCurrentItem( 1 );
 
-  m_checkReadCdText->setChecked( c->readEntry( "copy cdtext", true ) );
-  m_checkIgnoreDataReadErrors->setChecked( c->readEntry( "ignore data read errors", false ) );
-  m_checkIgnoreAudioReadErrors->setChecked( c->readEntry( "ignore audio read errors", true ) );
-  m_checkNoCorrection->setChecked( c->readEntry( "no correction", false ) );
+  m_checkReadCdText->setChecked( c.readEntry( "copy cdtext", true ) );
+  m_checkIgnoreDataReadErrors->setChecked( c.readEntry( "ignore data read errors", false ) );
+  m_checkIgnoreAudioReadErrors->setChecked( c.readEntry( "ignore audio read errors", true ) );
+  m_checkNoCorrection->setChecked( c.readEntry( "no correction", false ) );
 
-  m_spinDataRetries->setValue( c->readEntry( "data retries", 128 ) );
-  m_spinAudioRetries->setValue( c->readEntry( "audio retries", 5 ) );
+  m_spinDataRetries->setValue( c.readEntry( "data retries", 128 ) );
+  m_spinAudioRetries->setValue( c.readEntry( "audio retries", 5 ) );
 
   slotToggleAll();
 }
@@ -585,32 +585,32 @@ void K3bMediaCopyDialog::loadUserDefaults( const KConfigGroup& c )
 void K3bMediaCopyDialog::saveUserDefaults( KConfigGroup& c )
 {
   m_writingModeWidget->saveConfig( c );
-  c->writeEntry( "simulate", m_checkSimulate->isChecked() );
-  c->writeEntry( "on_the_fly", !m_checkCacheImage->isChecked() );
-  c->writeEntry( "delete_images", m_checkDeleteImages->isChecked() );
-  c->writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
-  c->writeEntry( "paranoia_mode", m_comboParanoiaMode->currentText().toInt() );
-  c->writeEntry( "copies", m_spinCopies->value() );
-  c->writeEntry( "verify data", m_checkVerifyData->isChecked() );
+  c.writeEntry( "simulate", m_checkSimulate->isChecked() );
+  c.writeEntry( "on_the_fly", !m_checkCacheImage->isChecked() );
+  c.writeEntry( "delete_images", m_checkDeleteImages->isChecked() );
+  c.writeEntry( "only_create_image", m_checkOnlyCreateImage->isChecked() );
+  c.writeEntry( "paranoia_mode", m_comboParanoiaMode->currentText().toInt() );
+  c.writeEntry( "copies", m_spinCopies->value() );
+  c.writeEntry( "verify data", m_checkVerifyData->isChecked() );
 
   m_writerSelectionWidget->saveConfig( c );
   m_tempDirSelectionWidget->saveConfig( c );
 
-  c->writeEntry( "source_device", m_comboSourceDevice->selectedDevice() ? m_comboSourceDevice->selectedDevice()->devicename() : QString() );
+  c.writeEntry( "source_device", m_comboSourceDevice->selectedDevice() ? m_comboSourceDevice->selectedDevice()->devicename() : QString() );
 
-  c->writeEntry( "copy cdtext", m_checkReadCdText->isChecked() );
-  c->writeEntry( "ignore data read errors", m_checkIgnoreDataReadErrors->isChecked() );
-  c->writeEntry( "ignore audio read errors", m_checkIgnoreAudioReadErrors->isChecked() );
-  c->writeEntry( "no correction", m_checkNoCorrection->isChecked() );
-  c->writeEntry( "data retries", m_spinDataRetries->value() );
-  c->writeEntry( "audio retries", m_spinAudioRetries->value() );
+  c.writeEntry( "copy cdtext", m_checkReadCdText->isChecked() );
+  c.writeEntry( "ignore data read errors", m_checkIgnoreDataReadErrors->isChecked() );
+  c.writeEntry( "ignore audio read errors", m_checkIgnoreAudioReadErrors->isChecked() );
+  c.writeEntry( "no correction", m_checkNoCorrection->isChecked() );
+  c.writeEntry( "data retries", m_spinDataRetries->value() );
+  c.writeEntry( "audio retries", m_spinAudioRetries->value() );
 
   QString s;
   if( m_comboCopyMode->currentItem() == 1 )
     s = "clone";
   else
     s = "normal";
-  c->writeEntry( "copy mode", s );
+  c.writeEntry( "copy mode", s );
 }
 
 

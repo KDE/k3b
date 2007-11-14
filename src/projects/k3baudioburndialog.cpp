@@ -201,13 +201,13 @@ void K3bAudioBurnDialog::loadUserDefaults( const KConfigGroup& c )
 {
   K3bProjectBurnDialog::loadUserDefaults( c );
 
-  m_cdtextWidget->setChecked( c->readEntry( "cd_text", true ) );
-  m_checkHideFirstTrack->setChecked( c->readEntry( "hide_first_track", false ) );
-  m_checkNormalize->setChecked( c->readEntry( "normalize", false ) );
+  m_cdtextWidget->setChecked( c.readEntry( "cd_text", true ) );
+  m_checkHideFirstTrack->setChecked( c.readEntry( "hide_first_track", false ) );
+  m_checkNormalize->setChecked( c.readEntry( "normalize", false ) );
 
-  m_comboParanoiaMode->setCurrentItem( c->readEntry( "paranoia mode", 0 ) );
-  m_checkAudioRippingIgnoreReadErrors->setChecked( c->readEntry( "ignore read errors", true ) );
-  m_spinAudioRippingReadRetries->setValue( c->readEntry( "read retries", 5 ) );
+  m_comboParanoiaMode->setCurrentItem( c.readEntry( "paranoia mode", 0 ) );
+  m_checkAudioRippingIgnoreReadErrors->setChecked( c.readEntry( "ignore read errors", true ) );
+  m_spinAudioRippingReadRetries->setValue( c.readEntry( "read retries", 5 ) );
 
   toggleAll();
 }
@@ -217,13 +217,13 @@ void K3bAudioBurnDialog::saveUserDefaults( KConfigGroup& c )
 {
   K3bProjectBurnDialog::saveUserDefaults( c );
 
-  c->writeEntry( "cd_text", m_cdtextWidget->isChecked() );
-  c->writeEntry( "hide_first_track", m_checkHideFirstTrack->isChecked() );
-  c->writeEntry( "normalize", m_checkNormalize->isChecked() );
+  c.writeEntry( "cd_text", m_cdtextWidget->isChecked() );
+  c.writeEntry( "hide_first_track", m_checkHideFirstTrack->isChecked() );
+  c.writeEntry( "normalize", m_checkNormalize->isChecked() );
 
-  c->writeEntry( "paranoia mode", m_comboParanoiaMode->currentText() );
-  c->writeEntry( "ignore read errors", m_checkAudioRippingIgnoreReadErrors->isChecked() );
-  c->writeEntry( "read retries", m_spinAudioRippingReadRetries->value() );
+  c.writeEntry( "paranoia mode", m_comboParanoiaMode->currentText() );
+  c.writeEntry( "ignore read errors", m_checkAudioRippingIgnoreReadErrors->isChecked() );
+  c.writeEntry( "read retries", m_spinAudioRippingReadRetries->value() );
 }
 
 void K3bAudioBurnDialog::toggleAll()
