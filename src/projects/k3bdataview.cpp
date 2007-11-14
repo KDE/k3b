@@ -1,7 +1,7 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -28,6 +28,7 @@
 #include <k3bcore.h>
 #include <k3bprojectplugin.h>
 #include <k3bvalidators.h>
+#include <k3baction.h>
 
 #include <klocale.h>
 #include <kurl.h>
@@ -45,81 +46,78 @@
 #include <qlayout.h>
 #include <q3dragobject.h>
 #include <q3header.h>
-#include <q3ptrlist.h>
+#include <qlist.h>
 #include <qlineedit.h>
 
 #include <assert.h>
 #include <kdebug.h>
 
 
-K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent, const char *name )
-  : K3bView(doc, parent,name)
+K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent )
+    : K3bView(doc, parent)
 {
-  m_doc = doc;
+    m_doc = doc;
 
-  // --- setup GUI ---------------------------------------------------
-  QSplitter* mainSplitter = new QSplitter( this );
-  m_dataDirTree = new K3bDataDirTreeView( this, doc, mainSplitter );
-  m_dataFileView = new K3bDataFileView( this, m_dataDirTree, doc, mainSplitter );
-  m_dataDirTree->setFileView( m_dataFileView );
-  setMainWidget( mainSplitter );
-
-
-  connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)),
-	   m_dataDirTree, SLOT(setCurrentDir(K3bDirItem*)) );
-  connect( m_doc, SIGNAL(changed()), this, SLOT(slotDocChanged()) );
-
-  m_dataDirTree->checkForNewItems();
-  m_dataFileView->checkForNewItems();
+    // --- setup GUI ---------------------------------------------------
+    QSplitter* mainSplitter = new QSplitter( this );
+    m_dataDirTree = new K3bDataDirTreeView( this, doc, mainSplitter );
+    m_dataFileView = new K3bDataFileView( this, m_dataDirTree, doc, mainSplitter );
+    m_dataDirTree->setFileView( m_dataFileView );
+    setMainWidget( mainSplitter );
 
 
-  // the data actions
-  KAction* actionImportSession = new KAction(i18n("&Import Session..."), "gear", 0, this, SLOT(importSession()),
-					     actionCollection(), "project_data_import_session" );
-  KAction* actionClearSession = new KAction(i18n("&Clear Imported Session"), "gear", 0, this,
-					    SLOT(clearImportedSession()), actionCollection(),
-					    "project_data_clear_imported_session" );
-  KAction* actionEditBootImages = new KAction(i18n("&Edit Boot Images..."), "cdtrack", 0, this,
-					      SLOT(editBootImages()), actionCollection(),
-					      "project_data_edit_boot_images" );
+    connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)),
+             m_dataDirTree, SLOT(setCurrentDir(K3bDirItem*)) );
+    connect( m_doc, SIGNAL(changed()), this, SLOT(slotDocChanged()) );
 
-  actionImportSession->setToolTip( i18n("Import a previously burned session into the current project") );
-  actionClearSession->setToolTip( i18n("Remove the imported items from a previous session") );
-  actionEditBootImages->setToolTip( i18n("Modify the bootable settings of the current project") );
+    m_dataDirTree->checkForNewItems();
+    m_dataFileView->checkForNewItems();
 
-  toolBox()->addAction( actionImportSession );
-  toolBox()->addAction( actionClearSession );
-  toolBox()->addAction( actionEditBootImages );
-  toolBox()->addSeparator();
-  toolBox()->addAction( m_dataFileView->actionCollection()->action("parent_dir") );
-  toolBox()->addSeparator();
 
-  addPluginButtons( K3bProjectPlugin::DATA_CD );
+    // the data actions
+    KAction* actionImportSession = K3b::createAction( this, i18n("&Import Session..."), "gear", 0, this, SLOT(importSession()),
+                                                      actionCollection(), "project_data_import_session" );
+    KAction* actionClearSession = K3b::createAction( this, i18n("&Clear Imported Session"), "gear", 0, this,
+                                                     SLOT(clearImportedSession()), actionCollection(),
+                                                     "project_data_clear_imported_session" );
+    KAction* actionEditBootImages = K3b::createAction( this, i18n("&Edit Boot Images..."), "cdtrack", 0, this,
+                                                       SLOT(editBootImages()), actionCollection(),
+                                                       "project_data_edit_boot_images" );
 
-  toolBox()->addStretch();
+    actionImportSession->setToolTip( i18n("Import a previously burned session into the current project") );
+    actionClearSession->setToolTip( i18n("Remove the imported items from a previous session") );
+    actionEditBootImages->setToolTip( i18n("Modify the bootable settings of the current project") );
 
-  m_volumeIDEdit = new QLineEdit( doc->isoOptions().volumeID(), toolBox() );
-  m_volumeIDEdit->setValidator( new K3bLatin1Validator( m_volumeIDEdit ) );
-  toolBox()->addLabel( i18n("Volume Name:") );
-  toolBox()->addSpacing();
-  toolBox()->addWidget( m_volumeIDEdit );
-  connect( m_volumeIDEdit, SIGNAL(textChanged(const QString&)),
-	   m_doc,
-	   SLOT(setVolumeID(const QString&)) );
+    toolBox()->addAction( actionImportSession );
+    toolBox()->addAction( actionClearSession );
+    toolBox()->addAction( actionEditBootImages );
+    toolBox()->addSeparator();
+    toolBox()->addAction( m_dataFileView->actionCollection()->action("parent_dir") );
+    toolBox()->addSeparator();
 
-  // this is just for testing (or not?)
-  // most likely every project type will have it's rc file in the future
-  // we only add the additional actions since K3bView already added the default actions
-  setXML( "<!DOCTYPE kpartgui SYSTEM \"kpartgui.dtd\">"
-	  "<kpartgui name=\"k3bproject\" version=\"1\">"
-	  "<MenuBar>"
-	  " <Menu name=\"project\"><text>&amp;Project</text>"
-	  "  <Action name=\"project_data_import_session\"/>"
-	  "  <Action name=\"project_data_clear_imported_session\"/>"
-	  "  <Action name=\"project_data_edit_boot_images\"/>"
-	  " </Menu>"
-	  "</MenuBar>"
-	  "</kpartgui>", true );
+    addPluginButtons( K3bProjectPlugin::DATA_CD );
+
+    m_volumeIDEdit = new QLineEdit( doc->isoOptions().volumeID(), toolBox() );
+    m_volumeIDEdit->setValidator( new K3bLatin1Validator( m_volumeIDEdit ) );
+    toolBox()->addWidget( new QLabel( i18n("Volume Name:"), toolBox() ) );
+    toolBox()->addWidget( m_volumeIDEdit );
+    connect( m_volumeIDEdit, SIGNAL(textChanged(const QString&)),
+             m_doc,
+             SLOT(setVolumeID(const QString&)) );
+
+    // this is just for testing (or not?)
+    // most likely every project type will have it's rc file in the future
+    // we only add the additional actions since K3bView already added the default actions
+    setXML( "<!DOCTYPE kpartgui SYSTEM \"kpartgui.dtd\">"
+            "<kpartgui name=\"k3bproject\" version=\"1\">"
+            "<MenuBar>"
+            " <Menu name=\"project\"><text>&amp;Project</text>"
+            "  <Action name=\"project_data_import_session\"/>"
+            "  <Action name=\"project_data_clear_imported_session\"/>"
+            "  <Action name=\"project_data_edit_boot_images\"/>"
+            " </Menu>"
+            "</MenuBar>"
+            "</kpartgui>", true );
 }
 
 
@@ -129,63 +127,64 @@ K3bDataView::~K3bDataView(){
 
 K3bDirItem* K3bDataView::currentDir() const
 {
-  return m_dataFileView->currentDir();
+    return m_dataFileView->currentDir();
 }
 
 
 void K3bDataView::importSession()
 {
-  K3bDataMultisessionImportDialog::importSession( m_doc, this );
+    K3bDataMultisessionImportDialog::importSession( m_doc, this );
 }
 
 
 void K3bDataView::clearImportedSession()
 {
-  m_doc->clearImportedSession();
+    m_doc->clearImportedSession();
 }
 
 
 void K3bDataView::editBootImages()
 {
-  KDialog* d = new KDialog( this, "", true, i18n("Edit Boot Images"),
-				    KDialog::Ok, KDialog::Ok, true );
-  d->setMainWidget( new K3bBootImageView( m_doc, d ) );
-  d->exec();
-  delete d;
+    KDialog dlg( this );
+    dlg.setCaption( i18n("Edit Boot Images") );
+    dlg.setButtons( KDialog::Ok );
+    dlg.setDefaultButton( KDialog::Ok );
+    dlg.setMainWidget( new K3bBootImageView( m_doc, &dlg ) );
+    dlg.exec();
 }
 
 
 K3bProjectBurnDialog* K3bDataView::newBurnDialog( QWidget* parent )
 {
-  return new K3bDataBurnDialog( m_doc, parent, true );
+    return new K3bDataBurnDialog( m_doc, parent );
 }
 
 
 void K3bDataView::slotBurn()
 {
-  if( m_doc->burningSize() == 0 ) {
-    KMessageBox::information( this, i18n("Please add files to your project first."),
-			      i18n("No Data to Burn"), QString::null, false );
-  }
-  else {
-    K3bProjectBurnDialog* dlg = newBurnDialog( this );
-    dlg->execBurnDialog(true);
-    delete dlg;
-  }
+    if( m_doc->burningSize() == 0 ) {
+        KMessageBox::information( this, i18n("Please add files to your project first."),
+                                  i18n("No Data to Burn"), QString::null, false );
+    }
+    else {
+        K3bProjectBurnDialog* dlg = newBurnDialog( this );
+        dlg->execBurnDialog(true);
+        delete dlg;
+    }
 }
 
 
 void K3bDataView::slotDocChanged()
 {
-  // do not update the editor in case it changed the volume id itself
-  if( m_doc->isoOptions().volumeID() != m_volumeIDEdit->text() )
-    m_volumeIDEdit->setText( m_doc->isoOptions().volumeID() );
+    // do not update the editor in case it changed the volume id itself
+    if( m_doc->isoOptions().volumeID() != m_volumeIDEdit->text() )
+        m_volumeIDEdit->setText( m_doc->isoOptions().volumeID() );
 }
 
 
 void K3bDataView::addUrls( const KUrl::List& urls )
 {
-  K3bDataUrlAddingDialog::addUrls( urls, m_dataFileView->currentDir() );
+    K3bDataUrlAddingDialog::addUrls( urls, m_dataFileView->currentDir() );
 }
 
 #include "k3bdataview.moc"

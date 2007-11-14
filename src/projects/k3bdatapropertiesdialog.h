@@ -1,7 +1,7 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -19,10 +19,10 @@
 
 #include <kdialog.h>
 
-#include <q3valuelist.h>
 //Added by qt3to4:
 #include <Q3Frame>
 #include <QLabel>
+#include <QList>
 
 class K3bDataItem;
 
@@ -33,44 +33,44 @@ class QCheckBox;
 
 
 /**
-  *@author Sebastian Trueg
-  */
+ *@author Sebastian Trueg
+ */
 class K3bDataPropertiesDialog : public KDialog  
 {
-Q_OBJECT
+    Q_OBJECT
 
- public: 
-  K3bDataPropertiesDialog( const Q3ValueList<K3bDataItem*>&, QWidget* parent = 0 );
-  ~K3bDataPropertiesDialog();
+public: 
+    K3bDataPropertiesDialog( const QList<K3bDataItem*>&, QWidget* parent = 0 );
+    ~K3bDataPropertiesDialog();
 
- protected slots:
-  void slotOk();
+protected slots:
+    void slotOk();
 
- private:
-  KLineEdit* m_editName;
-  QLabel* m_multiSelectionLabel;
-  QLabel* m_labelIcon;
-  QLabel* m_labelType;
-  QLabel* m_labelLocation;
-  QLabel* m_labelSize;
-  QLabel* m_labelBlocks;
-  QLabel* m_extraInfoLabel;
+private:
+    KLineEdit* m_editName;
+    QLabel* m_multiSelectionLabel;
+    QLabel* m_labelIcon;
+    QLabel* m_labelType;
+    QLabel* m_labelLocation;
+    QLabel* m_labelSize;
+    QLabel* m_labelBlocks;
+    QLabel* m_extraInfoLabel;
 
-  Q3Frame* m_spacerLine;
+    Q3Frame* m_spacerLine;
 
-  QLabel* m_labelLocalNameText;
-  QLabel* m_labelLocalLocationText;
-  QLabel* m_labelLocalName;
-  QLabel* m_labelLocalLocation;
+    QLabel* m_labelLocalNameText;
+    QLabel* m_labelLocalLocationText;
+    QLabel* m_labelLocalName;
+    QLabel* m_labelLocalLocation;
 
-  QCheckBox* m_checkHideOnRockRidge;
-  QCheckBox* m_checkHideOnJoliet;
-  KLineEdit* m_editSortWeight;
+    QCheckBox* m_checkHideOnRockRidge;
+    QCheckBox* m_checkHideOnJoliet;
+    KLineEdit* m_editSortWeight;
 
-  Q3ValueList<K3bDataItem*> m_dataItems;
+    QList<K3bDataItem*> m_dataItems;
 
-  void loadItemProperties( K3bDataItem* );
-  void loadListProperties( const Q3ValueList<K3bDataItem*>& );
+    void loadItemProperties( K3bDataItem* );
+    void loadListProperties( const QList<K3bDataItem*>& );
 };
 
 #endif

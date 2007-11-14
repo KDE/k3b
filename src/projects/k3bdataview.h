@@ -1,7 +1,7 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -29,49 +29,49 @@ class QLineEdit;
 
 
 namespace KIO {
-  class Job;
+    class Job;
 }
 namespace K3bDevice {
-  class Device;
+    class Device;
 }
 
 
 
 /**
-  *@author Sebastian Trueg
-  */
+ *@author Sebastian Trueg
+ */
 class K3bDataView : public K3bView
 {
-   Q_OBJECT
+    Q_OBJECT
 
- public:
-   K3bDataView(K3bDataDoc* doc, QWidget *parent=0, const char *name=0);
-   virtual ~K3bDataView();
+public:
+    K3bDataView(K3bDataDoc* doc, QWidget *parent=0);
+    virtual ~K3bDataView();
 	
-   K3bDirItem* currentDir() const;
+    K3bDirItem* currentDir() const;
 
- public slots:
-   void slotBurn();
-   void importSession();
-   void clearImportedSession();
-   void editBootImages();
+public slots:
+    void slotBurn();
+    void importSession();
+    void clearImportedSession();
+    void editBootImages();
 
-   void slotDocChanged();
+    void slotDocChanged();
 
-   void addUrls( const KUrl::List& );
+    void addUrls( const KUrl::List& );
 
- protected:
-   K3bDataDirTreeView* m_dataDirTree;
-   K3bDataFileView* m_dataFileView;
-   QLineEdit* m_volumeIDEdit;
+protected:
+    K3bDataDirTreeView* m_dataDirTree;
+    K3bDataFileView* m_dataFileView;
+    QLineEdit* m_volumeIDEdit;
 
-   virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
+    virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
 		
- private:
-   K3bDataDoc* m_doc;
+private:
+    K3bDataDoc* m_doc;
 
-   // used for mounting when importing old session
-   K3bDevice::Device* m_device;
+    // used for mounting when importing old session
+    K3bDevice::Device* m_device;
 };
 
 
