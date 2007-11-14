@@ -231,20 +231,20 @@ bool K3bApplication::processCmdLineArgs()
     showTips = false;
     dialogOpen = true;
     if( k3bcore->jobsRunning() == 0 ) {
-      m_mainWindow->slotWriteCdImage( KUrl::fromPathOrUrl( QFile::decodeName( args->getOption( "cdimage" ) ) ) );
+      m_mainWindow->slotWriteCdImage( KUrl( QFile::decodeName( args->getOption( "cdimage" ) ) ) );
     }
   }
   else if( args->isSet( "dvdimage" ) ) {
     showTips = false;
     dialogOpen = true;
     if( k3bcore->jobsRunning() == 0 ) {
-      m_mainWindow->slotWriteDvdIsoImage( KUrl::fromPathOrUrl( QFile::decodeName( args->getOption( "dvdimage" ) ) ) );
+      m_mainWindow->slotWriteDvdIsoImage( KUrl( QFile::decodeName( args->getOption( "dvdimage" ) ) ) );
     }
   }
   else if( args->isSet( "image" ) ) {
     showTips = false;
     dialogOpen = true;
-    KUrl url = KUrl::fromPathOrUrl( QFile::decodeName( args->getOption( "image" ) ) );
+    KUrl url = KUrl( QFile::decodeName( args->getOption( "image" ) ) );
     if( k3bcore->jobsRunning() == 0 ) {
       if( K3b::filesize( url ) > 1000*1024*1024 )
 	m_mainWindow->slotWriteDvdIsoImage( url );
@@ -257,25 +257,25 @@ bool K3bApplication::processCmdLineArgs()
            args->isSet("copydvd")) {
     showTips = false;
     dialogOpen = true;
-    m_mainWindow->mediaCopy( K3b::urlToDevice( KUrl::fromPathOrUrl( QFile::decodeName( args->getOption( "copycd" ) ) ) ) );
+    m_mainWindow->mediaCopy( K3b::urlToDevice( KUrl( QFile::decodeName( args->getOption( "copycd" ) ) ) ) );
   }
   else if( args->isSet("erasecd") ||
            args->isSet("formatdvd") ||
            args->isSet("format")) {
     showTips = false;
     dialogOpen = true;
-    m_mainWindow->formatMedium( K3b::urlToDevice( KUrl::fromPathOrUrl( QFile::decodeName( args->getOption( "erasecd" ) ) ) ) );
+    m_mainWindow->formatMedium( K3b::urlToDevice( KUrl( QFile::decodeName( args->getOption( "erasecd" ) ) ) ) );
   }
 
   // no dialog used here
   if( args->isSet( "cddarip" ) ) {
-    m_mainWindow->cddaRip( K3b::urlToDevice( KUrl::fromPathOrUrl( QFile::decodeName( args->getOption( "cddarip" ) ) ) ) );
+    m_mainWindow->cddaRip( K3b::urlToDevice( KUrl( QFile::decodeName( args->getOption( "cddarip" ) ) ) ) );
   }
   else if( args->isSet( "videodvdrip" ) ) {
-    m_mainWindow->videoDvdRip( K3b::urlToDevice( KUrl::fromPathOrUrl( QFile::decodeName( args->getOption( "videodvdrip" ) ) ) ) );
+    m_mainWindow->videoDvdRip( K3b::urlToDevice( KUrl( QFile::decodeName( args->getOption( "videodvdrip" ) ) ) ) );
   }
   else if( args->isSet( "videocdrip" ) ) {
-    m_mainWindow->videoCdRip( K3b::urlToDevice( KUrl::fromPathOrUrl( QFile::decodeName( args->getOption( "videocdrip" ) ) ) ) );
+    m_mainWindow->videoCdRip( K3b::urlToDevice( KUrl( QFile::decodeName( args->getOption( "videocdrip" ) ) ) ) );
   }
 
   if( !dialogOpen && args->isSet( "burn" ) ) {

@@ -223,14 +223,14 @@ Q3DragObject* K3bAudioTrackView::dragObject()
     if( !item->isOpen() && ( !parentItem || parentItem->isOpen() ) ) {
       if( K3bAudioDataSourceViewItem* sourceItem = dynamic_cast<K3bAudioDataSourceViewItem*>( item ) ) {
 	if( K3bAudioFile* file = dynamic_cast<K3bAudioFile*>( sourceItem->source() ) )
-	  urls.append( KUrl::fromPathOrUrl(file->filename()) );
+	  urls.append( KUrl(file->filename()) );
       }
       else {
 	K3bAudioTrackViewItem* trackItem = static_cast<K3bAudioTrackViewItem*>( item );
 	K3bAudioDataSource* source = trackItem->track()->firstSource();
 	while( source ) {
 	  if( K3bAudioFile* file = dynamic_cast<K3bAudioFile*>( source ) )
-	    urls.append( KUrl::fromPathOrUrl(file->filename()) );
+	    urls.append( KUrl(file->filename()) );
 	  source = source->next();
 	}
       }

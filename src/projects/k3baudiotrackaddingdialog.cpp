@@ -160,7 +160,7 @@ void K3bAudioTrackAddingDialog::slotAddUrls()
     if( parser.isValid() && parser.toc().contentType() == K3bDevice::AUDIO ) {
       // remember cue url and set the new audio file url
       m_cueUrl = url;
-      url = m_urls[0] = KUrl::fromPathOrUrl( parser.imageFilename() );
+      url = m_urls[0] = KUrl( parser.imageFilename() );
     }
   }
 
@@ -284,7 +284,7 @@ KUrl::List K3bAudioTrackAddingDialog::extractUrlList( const KUrl::List& urls )
       // add all files into the list after the current item
       for( QStringList::iterator dirIt = entries.begin();
 	   dirIt != entries.end(); ++dirIt )
-	it = allUrls.insert( oldIt, KUrl::fromPathOrUrl( dir.absPath() + "/" + *dirIt ) );
+	it = allUrls.insert( oldIt, KUrl( dir.absPath() + "/" + *dirIt ) );
     }
     else if( K3bAudioDoc::readPlaylistFile( url, urlsFromPlaylist ) ) {
       it = allUrls.remove( it );

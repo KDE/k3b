@@ -85,7 +85,7 @@ void K3bDirOperator::readConfig( KConfig* cfg, const QString& group )
       lastUrl = urlUp;
   }
 
-  setURL( KUrl::fromPathOrUrl(lastUrl), true );
+  setURL( KUrl(lastUrl), true );
 
   cfg->setGroup( oldGroup );
 
@@ -107,7 +107,7 @@ void K3bDirOperator::writeConfig( KConfig* cfg, const QString& group )
 
 void K3bDirOperator::openBookmarkURL( const QString& url )
 {
-  setURL( KUrl::fromPathOrUrl( url ), true );
+  setURL( KUrl( url ), true );
 }
 
 

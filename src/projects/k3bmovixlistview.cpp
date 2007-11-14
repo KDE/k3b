@@ -63,7 +63,7 @@ K3bMovixFileViewItem::K3bMovixFileViewItem( K3bMovixDoc* doc,
 					    Q3ListView* parent, 
 					    Q3ListViewItem* after )
   : K3bMovixListViewItem( doc, item, parent, after ),
-    KFileItem( 0, 0, KUrl::fromPathOrUrl(item->localPath()) )
+    KFileItem( 0, 0, KUrl(item->localPath()) )
 {
   setPixmap( 1, KFileItem::pixmap( 16, KIconLoader::DefaultState ) );
   setEditor( 1, LINE );
@@ -123,7 +123,7 @@ K3bMovixSubTitleViewItem::K3bMovixSubTitleViewItem( K3bMovixDoc* doc,
 						    K3bMovixFileItem* item, 
 						    K3bMovixListViewItem* parent )
   : K3bMovixListViewItem( doc, item, parent ),
-    KFileItem( 0, 0, KUrl::fromPathOrUrl(item->subTitleItem()->localPath()) )
+    KFileItem( 0, 0, KUrl(item->subTitleItem()->localPath()) )
 {
 }
 

@@ -245,7 +245,7 @@ void K3bIsoImageWritingDialog::slotStartClicked()
 
     K3bIso9660 isoFs( imagePath() );
     if( isoFs.open() ) {
-        if( K3b::imageFilesize( KUrl::fromPathOrUrl( imagePath() ) ) < (KIO::filesize_t)(isoFs.primaryDescriptor().volumeSpaceSize*2048) ) {
+        if( K3b::imageFilesize( KUrl( imagePath() ) ) < (KIO::filesize_t)(isoFs.primaryDescriptor().volumeSpaceSize*2048) ) {
             if( KMessageBox::questionYesNo( this,
                                             i18n("<p>This image has an invalid file size."
                                                  "If it has been downloaded make sure the download is complete."
@@ -307,7 +307,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
     QFileInfo info( path );
     if( info.isFile() ) {
 
-        KIO::filesize_t imageSize = K3b::filesize( KUrl::fromPathOrUrl(path) );
+        KIO::filesize_t imageSize = K3b::filesize( KUrl(path) );
 
         // ------------------------------------------------
         // Test for iso9660 image

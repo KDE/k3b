@@ -530,10 +530,10 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 
 	// count the files in the followed dir
 	if( m_dirSizeJob->active() )
-	  m_dirSizeQueue.append( KUrl::fromPathOrUrl(absoluteFilePath) );
+	  m_dirSizeQueue.append( KUrl(absoluteFilePath) );
 	else {
 	  m_progressWidget->setTotalSteps( 0 );
-	  m_dirSizeJob->setUrls( KUrl::fromPathOrUrl(absoluteFilePath) );
+	  m_dirSizeJob->setUrls( KUrl(absoluteFilePath) );
 	  m_dirSizeJob->start();
 	}
       }
@@ -572,7 +572,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
       dlist.remove( dotdot );
 
       for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it ) {
-	m_urlQueue.append( qMakePair( KUrl::fromPathOrUrl(absoluteFilePath + '/' + *it), newDirItem ) );
+	m_urlQueue.append( qMakePair( KUrl(absoluteFilePath + '/' + *it), newDirItem ) );
       }
     }
     else {

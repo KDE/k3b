@@ -193,7 +193,7 @@ Q3DragObject* K3bDataFileView::dragObject()
   for( Q3PtrListIterator<Q3ListViewItem> it( selectedViewItems ); it.current(); ++it ) {
     K3bDataViewItem* dataViewItem = dynamic_cast<K3bDataViewItem*>( it.current() );
     if( dataViewItem ) {
-      urls.append( KUrl::fromPathOrUrl(dataViewItem->dataItem()->localPath()) );
+      urls.append( KUrl(dataViewItem->dataItem()->localPath()) );
     }
     else
       kDebug() << "no dataviewitem";
@@ -464,13 +464,13 @@ void K3bDataFileView::slotOpen()
     if( item->isFile() ) {
       K3bDataFileViewItem* fvi = static_cast<K3bDataFileViewItem*>( viewItem );
       if( fvi->mimeType() &&
-	  !KRun::isExecutableFile( KUrl::fromPathOrUrl(item->localPath()),
+	  !KRun::isExecutableFile( KUrl(item->localPath()),
 				   fvi->mimeType()->name() )
 	  )
-	KRun::runURL( KUrl::fromPathOrUrl(item->localPath()),
+	KRun::runURL( KUrl(item->localPath()),
 		      fvi->mimeType()->name() );
       else
-	KRun::displayOpenWithDialog( KUrl::fromPathOrUrl(item->localPath()) );
+	KRun::displayOpenWithDialog( KUrl(item->localPath()) );
     }
   }
 }

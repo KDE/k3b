@@ -625,7 +625,7 @@ void K3bMainWindow::saveProperties( KConfig* c )
     // the same as the url
     KUrl saveUrl = (*it)->URL();
     if( !(*it)->isSaved() || (*it)->isModified() )
-      saveUrl = KUrl::fromPathOrUrl( saveDir + QString::number(cnt) );
+      saveUrl = KUrl( saveDir + QString::number(cnt) );
     c->writePathEntry( QString("%1 saveurl").arg(cnt), saveUrl.url() );
 
     // finally save it
@@ -693,7 +693,7 @@ void K3bMainWindow::readProperties( KConfig* c )
   }
 
   // and now remove the temp dir
-  KIO::del( KUrl::fromPathOrUrl(saveDir), KIO::HideProgressInfo );
+  KIO::del( KUrl(saveDir), KIO::HideProgressInfo );
 
   // FIXME: for some reason the config entries are not properly stored when using the default
   //        KMainWindow session config. Since I was not able to find the bug I use another config object

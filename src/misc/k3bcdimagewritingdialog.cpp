@@ -422,7 +422,7 @@ void K3bCdImageWritingDialog::slotStartClicked()
     {
         K3bIso9660 isoFs( d->imageFile );
         if( isoFs.open() ) {
-            if( K3b::filesize( KUrl::fromPathOrUrl(d->imageFile) ) < (KIO::filesize_t)(isoFs.primaryDescriptor().volumeSpaceSize*2048) ) {
+            if( K3b::filesize( KUrl(d->imageFile) ) < (KIO::filesize_t)(isoFs.primaryDescriptor().volumeSpaceSize*2048) ) {
                 if( KMessageBox::questionYesNo( this,
                                                 i18n("<p>This image has an invalid file size."
                                                      "If it has been downloaded make sure the download is complete."
@@ -617,7 +617,7 @@ void K3bCdImageWritingDialog::createIso9660InfoItems( K3bIso9660* isoF )
     isoRootItem->setForegroundColor( 0, palette().disabled().foreground() );
     isoRootItem->setPixmap( 0, SmallIcon( "cdimage") );
 
-    KIO::filesize_t size = K3b::filesize( KUrl::fromPathOrUrl(isoF->fileName()) );
+    KIO::filesize_t size = K3b::filesize( KUrl(isoF->fileName()) );
     K3bListViewItem* item = new K3bListViewItem( isoRootItem, m_infoView->lastItem(),
                                                  i18n("Filesize:"),
                                                  KIO::convertSize( size ) );
@@ -683,7 +683,7 @@ void K3bCdImageWritingDialog::createCdrecordCloneItems( const QString& tocFile, 
     isoRootItem->setPixmap( 0, SmallIcon( "cdimage") );
 
     K3bListViewItem* item = new K3bListViewItem( isoRootItem, m_infoView->lastItem(),
-                                                 i18n("Filesize:"), KIO::convertSize( K3b::filesize(KUrl::fromPathOrUrl(imageFile)) ) );
+                                                 i18n("Filesize:"), KIO::convertSize( K3b::filesize(KUrl(imageFile)) ) );
     item->setForegroundColor( 0, palette().disabled().foreground() );
 
     item = new K3bListViewItem( isoRootItem,
@@ -711,7 +711,7 @@ void K3bCdImageWritingDialog::createCueBinItems( const QString& cueFile, const Q
     isoRootItem->setPixmap( 0, SmallIcon( "cdimage") );
 
     K3bListViewItem* item = new K3bListViewItem( isoRootItem, m_infoView->lastItem(),
-                                                 i18n("Filesize:"), KIO::convertSize( K3b::filesize(KUrl::fromPathOrUrl(imageFile)) ) );
+                                                 i18n("Filesize:"), KIO::convertSize( K3b::filesize(KUrl(imageFile)) ) );
     item->setForegroundColor( 0, palette().disabled().foreground() );
 
     item = new K3bListViewItem( isoRootItem,

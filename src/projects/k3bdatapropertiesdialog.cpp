@@ -200,7 +200,7 @@ K3bDataPropertiesDialog::~K3bDataPropertiesDialog()
 void K3bDataPropertiesDialog::loadItemProperties( K3bDataItem* dataItem )
 {
   if( K3bFileItem* fileItem = dynamic_cast<K3bFileItem*>(dataItem) ) {
-    KFileItem kFileItem( KFileItem::Unknown, KFileItem::Unknown, KUrl::fromPathOrUrl(fileItem->localPath()) );
+    KFileItem kFileItem( KFileItem::Unknown, KFileItem::Unknown, KUrl(fileItem->localPath()) );
     m_labelIcon->setPixmap( kFileItem.pixmap(KIconLoader::SizeLarge) );
     if( fileItem->isSymLink() )
       m_labelType->setText( i18n("Link to %1",kFileItem.mimeComment()) );
