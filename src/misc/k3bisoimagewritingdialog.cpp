@@ -513,7 +513,7 @@ void K3bIsoImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, co
 }
 
 
-void K3bIsoImageWritingDialog::loadUserDefaults( KConfigBase* c )
+void K3bIsoImageWritingDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& c )
 {
   m_writingModeWidget->loadConfig( c );
   m_checkDummy->setChecked( c->readEntry("simulate", false ) );
@@ -530,7 +530,7 @@ void K3bIsoImageWritingDialog::loadUserDefaults( KConfigBase* c )
 }
 
 
-void K3bIsoImageWritingDialog::saveUserDefaults( KConfigBase* c )
+void K3bIsoImageWritingDialog::saveUserDefaults( KConfigGroup& c )
 {
   m_writingModeWidget->saveConfig( c ),
   c->writeEntry( "simulate", m_checkDummy->isChecked() );

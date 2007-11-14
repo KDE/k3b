@@ -226,11 +226,11 @@ void K3bAudioConvertingOptionWidget::loadConfig( KConfigBase* c )
 {
   m_editBaseDir->setURL( c->readPathEntry( "last ripping directory", QDir::homePath() ) );
 
-  m_checkSingleFile->setChecked( c->readBoolEntry( "single_file", false ) );
-  m_checkWriteCueFile->setChecked( c->readBoolEntry( "write_cue_file", false ) );
+  m_checkSingleFile->setChecked( c->readEntry( "single_file", false ) );
+  m_checkWriteCueFile->setChecked( c->readEntry( "write_cue_file", false ) );
 
-  m_checkCreatePlaylist->setChecked( c->readBoolEntry( "create_playlist", false ) );
-  m_checkPlaylistRelative->setChecked( c->readBoolEntry( "relative_path_in_playlist", false ) );
+  m_checkCreatePlaylist->setChecked( c->readEntry( "create_playlist", false ) );
+  m_checkPlaylistRelative->setChecked( c->readEntry( "relative_path_in_playlist", false ) );
 
   QString filetype = c->readEntry( "filetype", d->extensionMap[d->getDefaultFormat()] );
   if( filetype == "wav" )

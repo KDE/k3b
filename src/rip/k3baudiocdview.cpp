@@ -203,8 +203,8 @@ void K3bAudioCdView::reloadMedium()
 
 //   KConfig* c = k3bcore->config();
 //   c->setGroup("Cddb");
-//   bool useCddb = ( c->readBoolEntry( "use local cddb query", true ) ||
-// 		   c->readBoolEntry( "use remote cddb", false ) );
+//   bool useCddb = ( c->readEntry( "use local cddb query", true ) ||
+// 		   c->readEntry( "use remote cddb", false ) );
 
 //   if( useCddb &&
 //       ( m_cdText.isEmpty() ||
@@ -436,8 +436,8 @@ void K3bAudioCdView::queryCddb()
 
   m_cddb->readConfig( c );
 
-  if( c->readBoolEntry( "use local cddb query", true ) ||
-      c->readBoolEntry( "use remote cddb", false ) ) {
+  if( c->readEntry( "use local cddb query", true ) ||
+      c->readEntry( "use remote cddb", false ) ) {
 
     showBusyLabel(true);
 
@@ -454,13 +454,13 @@ void K3bAudioCdView::slotCddbQueryFinished( int error )
     // save the entry locally
     KConfig* c = k3bcore->config();
     c->setGroup( "Cddb" );
-    if( c->readBoolEntry( "save cddb entries locally", true ) )
+    if( c->readEntry( "save cddb entries locally", true ) )
       m_cddb->saveEntry( m_cddbInfo );
 
     updateDisplay();
   }
   else if( error == K3bCddbQuery::NO_ENTRY_FOUND ) {
-    if( !KConfigGroup( k3bcore->config(), "Cddb" ).readBoolEntry( "use remote cddb", false ) )
+    if( !KConfigGroup( k3bcore->config(), "Cddb" ).readEntry( "use remote cddb", false ) )
       K3bPassivePopup::showPopup( i18n("<p>No CDDB entry found. Enable remote CDDB queries in the K3b settings to get access "
 				       "to more entries through the internet."), i18n("CDDB") );
     else

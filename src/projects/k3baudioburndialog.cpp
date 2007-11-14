@@ -197,23 +197,23 @@ void K3bAudioBurnDialog::loadK3bDefaults()
 }
 
 
-void K3bAudioBurnDialog::loadUserDefaults( KConfigBase* c )
+void K3bAudioBurnDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& c )
 {
   K3bProjectBurnDialog::loadUserDefaults( c );
 
-  m_cdtextWidget->setChecked( c->readBoolEntry( "cd_text", true ) );
-  m_checkHideFirstTrack->setChecked( c->readBoolEntry( "hide_first_track", false ) );
-  m_checkNormalize->setChecked( c->readBoolEntry( "normalize", false ) );
+  m_cdtextWidget->setChecked( c->readEntry( "cd_text", true ) );
+  m_checkHideFirstTrack->setChecked( c->readEntry( "hide_first_track", false ) );
+  m_checkNormalize->setChecked( c->readEntry( "normalize", false ) );
 
-  m_comboParanoiaMode->setCurrentItem( c->readNumEntry( "paranoia mode", 0 ) );
-  m_checkAudioRippingIgnoreReadErrors->setChecked( c->readBoolEntry( "ignore read errors", true ) );
-  m_spinAudioRippingReadRetries->setValue( c->readNumEntry( "read retries", 5 ) );
+  m_comboParanoiaMode->setCurrentItem( c->readEntry( "paranoia mode", 0 ) );
+  m_checkAudioRippingIgnoreReadErrors->setChecked( c->readEntry( "ignore read errors", true ) );
+  m_spinAudioRippingReadRetries->setValue( c->readEntry( "read retries", 5 ) );
 
   toggleAll();
 }
 
 
-void K3bAudioBurnDialog::saveUserDefaults( KConfigBase* c )
+void K3bAudioBurnDialog::saveUserDefaults( KConfigGroup& c )
 {
   K3bProjectBurnDialog::saveUserDefaults( c );
 

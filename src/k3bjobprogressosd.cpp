@@ -291,7 +291,7 @@ void K3bJobProgressOSD::readSettings( KConfigBase* c )
   KConfigGroup grp( c, "OSD Position" );
 
   setPosition( grp.readPointEntry( "Position", 0 ) );
-  setScreen( grp.readNumEntry( "Screen", 0 ) );
+  setScreen( grp.readEntry( "Screen", 0 ) );
 }
 
 

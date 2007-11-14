@@ -120,8 +120,7 @@ K3bCdImageWritingDialog::K3bCdImageWritingDialog( QWidget* parent )
 			  "iso cue toc",
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
-			  "image writing", // config group
-			  modal )
+			  "image writing" ) // config group
 {
   d = new Private();
 
@@ -429,8 +428,8 @@ void K3bCdImageWritingDialog::slotStartClicked()
 					       "If it has been downloaded make sure the download is complete."
 					       "<p>Only continue if you know what you are doing."),
 					  i18n("Warning"),
-					  i18n("Continue"),
-					  i18n("Cancel") ) == KMessageBox::No )
+					  KGuiItem( i18n("Continue") ),
+					  KGuiItem( i18n("Cancel") ) ) == KMessageBox::No )
 	    return;
 	}
       }
@@ -921,7 +920,7 @@ void K3bCdImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, con
 						     &ok,
 						     this );
     if( ok ) {
-      if( md5sumToCompare.lower().utf8() == d->md5Job->hexDigest().lower() )
+      if( md5sumToCompare.toLower().utf8() == d->md5Job->hexDigest().toLower() )
 	KMessageBox::information( this, i18n("The MD5 Sum of %1 equals the specified.",imagePath()),
 				  i18n("MD5 Sums Equal") );
       else
@@ -935,7 +934,7 @@ void K3bCdImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, con
 }
 
 
-void K3bCdImageWritingDialog::loadUserDefaults( KConfigBase* c )
+void K3bCdImageWritingDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& c )
 {
   m_writingModeWidget->loadConfig( c );
   m_checkDummy->setChecked( c->readEntry("simulate", false ) );
@@ -977,7 +976,7 @@ void K3bCdImageWritingDialog::loadUserDefaults( KConfigBase* c )
 }
 
 
-void K3bCdImageWritingDialog::saveUserDefaults( KConfigBase* c )
+void K3bCdImageWritingDialog::saveUserDefaults( KConfigGroup& c )
 {
   m_writingModeWidget->saveConfig( c ),
   c->writeEntry( "simulate", m_checkDummy->isChecked() );

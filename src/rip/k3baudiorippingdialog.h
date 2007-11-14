@@ -81,8 +81,8 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   void setupContextHelp();
 
   void loadK3bDefaults();
-  void loadUserDefaults( KConfigBase* );
-  void saveUserDefaults( KConfigBase* );
+  void loadUserDefaults( const KConfigGroup& );
+  void saveUserDefaults( KConfigGroup& );
 
   class Private;
   Private* d;

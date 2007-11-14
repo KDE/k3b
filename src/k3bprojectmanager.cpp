@@ -264,7 +264,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
 
   // earlier K3b versions loaded the saved settings
   // so that is what we do as a default
-  int i = KConfigGroup( c, "General Options" ).readNumEntry( "action dialog startup settings",
+  int i = KConfigGroup( c, "General Options" ).readEntry( "action dialog startup settings",
 							     K3bInteractionDialog::LOAD_SAVED_SETTINGS );
   if( i == K3bInteractionDialog::LOAD_K3B_DEFAULTS )
     return; // the default k3b settings are the ones everyone starts with
@@ -283,13 +283,13 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
   else
     doc->setWritingMode( K3b::WRITING_MODE_AUTO );
 
-  doc->setDummy( c->readBoolEntry( "simulate", false ) );
-  doc->setOnTheFly( c->readBoolEntry( "on_the_fly", true ) );
-  doc->setRemoveImages( c->readBoolEntry( "remove_image", true ) );
-  doc->setOnlyCreateImages( c->readBoolEntry( "only_create_image", false ) );
+  doc->setDummy( c->readEntry( "simulate", false ) );
+  doc->setOnTheFly( c->readEntry( "on_the_fly", true ) );
+  doc->setRemoveImages( c->readEntry( "remove_image", true ) );
+  doc->setOnlyCreateImages( c->readEntry( "only_create_image", false ) );
   doc->setBurner( k3bcore->deviceManager()->findDevice( c->readEntry( "writer_device" ) ) );
   // Default = 0 (Auto)
-  doc->setSpeed( c->readNumEntry( "writing_speed", 0 ) );
+  doc->setSpeed( c->readEntry( "writing_speed", 0 ) );
   doc->setWritingApp( K3b::writingAppFromString( c->readEntry( "writing_app" ) ) );
 
 
@@ -297,12 +297,12 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
   case K3bDoc::AUDIO: {
     K3bAudioDoc* audioDoc = static_cast<K3bAudioDoc*>(doc);
 
-    audioDoc->writeCdText( c->readBoolEntry( "cd_text", true ) );
-    audioDoc->setHideFirstTrack( c->readBoolEntry( "hide_first_track", false ) );
-    audioDoc->setNormalize( c->readBoolEntry( "normalize", false ) );
-    audioDoc->setAudioRippingParanoiaMode( c->readNumEntry( "paranoia mode", 0 ) );
-    audioDoc->setAudioRippingRetries( c->readNumEntry( "read retries", 128 ) );
-    audioDoc->setAudioRippingIgnoreReadErrors( c->readBoolEntry( "ignore read errors", false ) );
+    audioDoc->writeCdText( c->readEntry( "cd_text", true ) );
+    audioDoc->setHideFirstTrack( c->readEntry( "hide_first_track", false ) );
+    audioDoc->setNormalize( c->readEntry( "normalize", false ) );
+    audioDoc->setAudioRippingParanoiaMode( c->readEntry( "paranoia mode", 0 ) );
+    audioDoc->setAudioRippingRetries( c->readEntry( "read retries", 128 ) );
+    audioDoc->setAudioRippingIgnoreReadErrors( c->readEntry( "ignore read errors", false ) );
 
     break;
   }
@@ -312,7 +312,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
 
     movixDoc->setSubtitleFontset( c->readEntry("subtitle_fontset") );
 
-    movixDoc->setLoopPlaylist( c->readNumEntry("loop", 1 ) );
+    movixDoc->setLoopPlaylist( c->readEntry("loop", 1 ) );
     movixDoc->setAdditionalMPlayerOptions( c->readEntry( "additional_mplayer_options" ) );
     movixDoc->setUnwantedMPlayerOptions( c->readEntry( "unwanted_mplayer_options" ) );
 
@@ -320,11 +320,11 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
 
     movixDoc->setDefaultBootLabel( c->readEntry( "default_boot_label" ) );
 
-    movixDoc->setShutdown( c->readBoolEntry( "shutdown", false) );
-    movixDoc->setReboot( c->readBoolEntry( "reboot", false ) );
-    movixDoc->setEjectDisk( c->readBoolEntry( "eject", false ) );
-    movixDoc->setRandomPlay( c->readBoolEntry( "random_play", false ) );
-    movixDoc->setNoDma( c->readBoolEntry( "no_dma", false ) );
+    movixDoc->setShutdown( c->readEntry( "shutdown", false) );
+    movixDoc->setReboot( c->readEntry( "reboot", false ) );
+    movixDoc->setEjectDisk( c->readEntry( "eject", false ) );
+    movixDoc->setRandomPlay( c->readEntry( "random_play", false ) );
+    movixDoc->setNoDma( c->readEntry( "no_dma", false ) );
     // fallthrough
   }
 
@@ -341,7 +341,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
     else
       dataDoc->setDataMode( K3b::DATA_MODE_AUTO );
 
-    dataDoc->setVerifyData( c->readBoolEntry( "verify data", false ) );
+    dataDoc->setVerifyData( c->readEntry( "verify data", false ) );
 
     QString s = c->readEntry( "multisession mode" );
     if( s == "none" )
@@ -362,15 +362,15 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
     // the only defaults we need here are the volume id and stuff
     K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>(doc);
     dataDoc->setIsoOptions( K3bIsoOptions::load( c, false ) );
-    dataDoc->setVerifyData( c->readBoolEntry( "verify data", false ) );
+    dataDoc->setVerifyData( c->readEntry( "verify data", false ) );
     break;
   }
 
   case K3bDoc::MIXED: {
     K3bMixedDoc* mixedDoc = static_cast<K3bMixedDoc*>(doc);
 
-    mixedDoc->audioDoc()->writeCdText( c->readBoolEntry( "cd_text", true ) );
-    mixedDoc->audioDoc()->setNormalize( c->readBoolEntry( "normalize", false ) );
+    mixedDoc->audioDoc()->writeCdText( c->readEntry( "cd_text", true ) );
+    mixedDoc->audioDoc()->setNormalize( c->readEntry( "normalize", false ) );
 
     // load mixed type
     if( c->readEntry( "mixed_type" ) == "last_track" )
@@ -401,10 +401,10 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
 
     // FIXME: I think we miss a lot here!
 
-    vcdDoc->vcdOptions()->setPbcEnabled( c->readBoolEntry( "Use Playback Control", false ) );
-    vcdDoc->vcdOptions()->setPbcNumkeysEnabled( c->readBoolEntry( "Use numeric keys to navigate chapters", false ) );
-    vcdDoc->vcdOptions()->setPbcPlayTime( c->readNumEntry( "Play each Sequence/Segment", 1 ) );
-    vcdDoc->vcdOptions()->setPbcWaitTime( c->readNumEntry( "Time to wait after each Sequence/Segment", 2 ) );
+    vcdDoc->vcdOptions()->setPbcEnabled( c->readEntry( "Use Playback Control", false ) );
+    vcdDoc->vcdOptions()->setPbcNumkeysEnabled( c->readEntry( "Use numeric keys to navigate chapters", false ) );
+    vcdDoc->vcdOptions()->setPbcPlayTime( c->readEntry( "Play each Sequence/Segment", 1 ) );
+    vcdDoc->vcdOptions()->setPbcWaitTime( c->readEntry( "Time to wait after each Sequence/Segment", 2 ) );
 
     if( vcdDoc->vcdOptions()->volumeId().isEmpty() )
       vcdDoc->vcdOptions()->setVolumeId( doc->URL().fileName() );

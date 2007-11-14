@@ -106,7 +106,7 @@ void K3bCddbPatternWidget::loadConfig( KConfigBase* c )
 {
   m_comboPlaylistPattern->setEditText( c->readEntry( "playlist pattern", m_comboPlaylistPattern->text(0) ) );
   m_comboFilenamePattern->setEditText( c->readEntry( "filename pattern", m_comboFilenamePattern->text(0) ) );
-  m_checkBlankReplace->setChecked( c->readBoolEntry( "replace blanks", false ) );
+  m_checkBlankReplace->setChecked( c->readEntry( "replace blanks", false ) );
   m_editBlankReplace->setText( c->readEntry( "blank replace string", "_" ) );
 }
 

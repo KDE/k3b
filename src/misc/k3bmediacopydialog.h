@@ -54,8 +54,8 @@ class K3bMediaCopyDialog : public K3bInteractionDialog
   void init();
 
  private:
-  void loadUserDefaults( KConfigBase* );
-  void saveUserDefaults( KConfigBase* );
+  void loadUserDefaults( const KConfigGroup& );
+  void saveUserDefaults( KConfigGroup& );
   void loadK3bDefaults();
 
   KIO::filesize_t neededSize() const;

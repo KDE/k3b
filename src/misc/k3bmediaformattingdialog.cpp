@@ -166,7 +166,7 @@ void K3bMediaFormattingDialog::slotStartClicked()
 
     delete theJob;
 
-    if( KConfigGroup( k3bcore->config(), "General Options" ).readBoolEntry( "keep action dialogs open", false ) &&
+    if( KConfigGroup( k3bcore->config(), "General Options" ).readEntry( "keep action dialogs open", false ) &&
         !exitLoopOnHide() )
         show();
     else
@@ -186,16 +186,16 @@ void K3bMediaFormattingDialog::toggleAll()
 }
 
 
-void K3bMediaFormattingDialog::loadUserDefaults( KConfigBase* c )
+void K3bMediaFormattingDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& c )
 {
-    m_checkForce->setChecked( c->readBoolEntry( "force", false ) );
-    m_checkQuickFormat->setChecked( c->readBoolEntry( "quick format", true ) );
+    m_checkForce->setChecked( c->readEntry( "force", false ) );
+    m_checkQuickFormat->setChecked( c->readEntry( "quick format", true ) );
     m_writerSelectionWidget->loadConfig( c );
     m_writingModeWidget->loadConfig( c );
 }
 
 
-void K3bMediaFormattingDialog::saveUserDefaults( KConfigBase* c )
+void K3bMediaFormattingDialog::saveUserDefaults( KConfigGroup& c )
 {
     c->writeEntry( "force", m_checkForce->isChecked() );
     c->writeEntry( "quick format", m_checkQuickFormat->isChecked() );

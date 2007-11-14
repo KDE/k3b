@@ -100,7 +100,7 @@ void K3bApplication::init()
   if( !isRestored() ) {
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-    if( generalOptions.readBoolEntry("Show splash", true) && args->isSet( "splash" ) ) {
+    if( generalOptions.readEntry("Show splash", true) && args->isSet( "splash" ) ) {
       // we need the correct splash pic
       m_core->m_themeManager->readConfig( config() );
 

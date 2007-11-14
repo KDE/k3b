@@ -131,11 +131,11 @@ void K3bMovixBurnDialog::loadK3bDefaults()
 }
 
 
-void K3bMovixBurnDialog::loadUserDefaults( KConfigBase* c )
+void K3bMovixBurnDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& c )
 {
   K3bProjectBurnDialog::loadUserDefaults(c);
 
-  m_checkStartMultiSesssion->setChecked( c->readBoolEntry( "start_multisession", false ) );
+  m_checkStartMultiSesssion->setChecked( c->readEntry( "start_multisession", false ) );
 
   m_dataModeWidget->loadConfig(c);
 
@@ -144,13 +144,13 @@ void K3bMovixBurnDialog::loadUserDefaults( KConfigBase* c )
 
   m_movixOptionsWidget->loadConfig(c);
 
-  m_checkVerify->setChecked( c->readBoolEntry( "verify data", false ) );
+  m_checkVerify->setChecked( c->readEntry( "verify data", false ) );
 
   toggleAll();
 }
 
 
-void K3bMovixBurnDialog::saveUserDefaults( KConfigBase* c )
+void K3bMovixBurnDialog::saveUserDefaults( KConfigGroup& c )
 {
   K3bProjectBurnDialog::saveUserDefaults(c);
 

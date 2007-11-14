@@ -130,7 +130,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 
   if( buttonMask & CANCEL_BUTTON ) {
     m_buttonCancel = new KPushButton( KConfigGroup( k3bcore->config(), "General Options" )
-				      .readBoolEntry( "keep action dialogs open", false )
+				      .readEntry( "keep action dialogs open", false )
 				      ? KStandardGuiItem::close()
 				      : KStandardGuiItem::cancel(),
 				      mainWidget(),
@@ -311,7 +311,7 @@ void K3bInteractionDialog::slotStartClickedInternal()
   saveLastSettings();
 
   KConfigGroup c( k3bcore->config(), "General Options" );
-  if( !c.readNumEntry( "action dialog startup settings", 0 ) ) {
+  if( !c.readEntry( "action dialog startup settings", 0 ) ) {
     // first time saving last used settings
     switch( K3bMultiChoiceDialog::choose( i18n("Action Dialog Settings"),
 					  i18n("<p>K3b handles three sets of settings in action dialogs: "
@@ -517,12 +517,12 @@ void K3bInteractionDialog::setSaveButtonText( const QString& text,
 }
 
 
-void K3bInteractionDialog::saveUserDefaults( KConfigBase* )
+void K3bInteractionDialog::saveUserDefaults( KConfigGroup& )
 {
 }
 
 
-void K3bInteractionDialog::loadUserDefaults( KConfigBase* )
+void K3bInteractionDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& )
 {
 }
 
@@ -538,7 +538,7 @@ void K3bInteractionDialog::loadStartupSettings()
 
   // earlier K3b versions loaded the saved settings
   // so that is what we do as a default
-  int i = c.readNumEntry( "action dialog startup settings", LOAD_SAVED_SETTINGS );
+  int i = c.readEntry( "action dialog startup settings", LOAD_SAVED_SETTINGS );
   switch( i ) {
   case LOAD_K3B_DEFAULTS:
     slotLoadK3bDefaults();

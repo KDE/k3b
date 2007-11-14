@@ -655,12 +655,12 @@ void K3bFillStatusDisplay::slotLoadUserDefaults()
   c->setGroup( "default " + d->doc->typeString() + " settings" );
 
   // defaults to megabytes
-  d->showTime = c->readBoolEntry( "show minutes", false );
+  d->showTime = c->readEntry( "show minutes", false );
   d->displayWidget->setShowTime(d->showTime);
   d->actionShowMegs->setChecked( !d->showTime );
   d->actionShowMinutes->setChecked( d->showTime );
 
-  long size = c->readNumEntry( "default media size", 0 );
+  long size = c->readEntry( "default media size", 0 );
 
   switch( size ) {
   case 0:

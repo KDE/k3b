@@ -569,7 +569,7 @@ void K3bMainWindow::readOptions()
 {
   KConfigGroup grp( m_config, "General Options" );
 
-  bool bViewDocumentHeader = grp.readBoolEntry("Show Document Header", true);
+  bool bViewDocumentHeader = grp.readEntry("Show Document Header", true);
   actionViewDocumentHeader->setChecked(bViewDocumentHeader);
 
   // initialize the recent file list
@@ -662,7 +662,7 @@ void K3bMainWindow::readProperties( KConfig* c )
   c->setGroup( "Saved Session" );
   // ----------------------------------------------------------
 
-  int cnt = c->readNumEntry( "Number of projects", 0 );
+  int cnt = c->readEntry( "Number of projects", 0 );
   kDebug() << "(K3bMainWindow::readProperties) number of projects from last session in " << saveDir << ": " << cnt << endl
 	    << "                                read from config group " << c->group() << endl;
 
@@ -670,9 +670,9 @@ void K3bMainWindow::readProperties( KConfig* c )
     // in this case the constructor works since we saved as url()
     KUrl url = c->readPathEntry( QString("%1 url", QString()).arg(i) );
 
-    bool modified = c->readBoolEntry( QString("%1 modified").arg(i) );
+    bool modified = c->readEntry( QString("%1 modified").arg(i) );
 
-    bool saved = c->readBoolEntry( QString("%1 saved").arg(i) );
+    bool saved = c->readEntry( QString("%1 saved").arg(i) );
 
     KUrl saveUrl = c->readPathEntry( QString("%1 saveurl", QString()).arg(i) );
 
@@ -800,7 +800,7 @@ bool K3bMainWindow::canCloseDocument( K3bDoc* doc )
   if( !doc->isModified() )
     return true;
 
-  if( !KConfigGroup( config(), "General Options" ).readBoolEntry( "ask_for_saving_changes_on_exit", true ) )
+  if( !KConfigGroup( config(), "General Options" ).readEntry( "ask_for_saving_changes_on_exit", true ) )
     return true;
 
   switch ( KMessageBox::warningYesNoCancel( this,
@@ -1174,7 +1174,7 @@ void K3bMainWindow::slotNewToolBarConfig()
 bool K3bMainWindow::eject()
 {
   KConfigGroup c( config(), "General Options" );
-  return !c.readBoolEntry( "No cd eject", false );
+  return !c.readEntry( "No cd eject", false );
 }
 
 

@@ -146,20 +146,20 @@ void K3bVideoDvdBurnDialog::loadK3bDefaults()
 }
 
 
-void K3bVideoDvdBurnDialog::loadUserDefaults( KConfigBase* c )
+void K3bVideoDvdBurnDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& c )
 {
   K3bProjectBurnDialog::loadUserDefaults( c );
 
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_imageSettingsWidget->load( o );
 
-  m_checkVerify->setChecked( c->readBoolEntry( "verify data", false ) );
+  m_checkVerify->setChecked( c->readEntry( "verify data", false ) );
 
   toggleAll();
 }
 
 
-void K3bVideoDvdBurnDialog::saveUserDefaults( KConfigBase* c )
+void K3bVideoDvdBurnDialog::saveUserDefaults( KConfigGroup& c )
 {
   K3bProjectBurnDialog::saveUserDefaults(c);
 

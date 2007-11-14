@@ -686,7 +686,7 @@ bool K3bSystemProblemDialog::readCheckSystemConfig()
   if( configVersion < k3bcore->version() )
     cfgGrp.writeEntry( "check system config", true );
 
-  return cfgGrp.readBoolEntry( "check system config", true );
+  return cfgGrp.readEntry( "check system config", true );
 }
 
 #include "k3bsystemproblemdialog.moc"

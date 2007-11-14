@@ -65,8 +65,8 @@ class K3bVideoDVDRippingDialog : public K3bInteractionDialog
   QString createFilename( const K3bVideoDVDRippingJob::TitleRipInfo& info, const QString& pattern ) const;
 
   void loadK3bDefaults();
-  void loadUserDefaults( KConfigBase* );
-  void saveUserDefaults( KConfigBase* );
+  void loadUserDefaults( const KConfigGroup& );
+  void saveUserDefaults( KConfigGroup& );
 
   K3bVideoDVDRippingWidget* m_w;
 

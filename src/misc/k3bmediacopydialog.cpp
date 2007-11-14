@@ -549,7 +549,7 @@ void K3bMediaCopyDialog::updateOverrideDevice()
 }
 
 
-void K3bMediaCopyDialog::loadUserDefaults( KConfigBase* c )
+void K3bMediaCopyDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& c )
 {
   m_writerSelectionWidget->loadConfig( c );
   m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "source_device" ) ) );
@@ -582,7 +582,7 @@ void K3bMediaCopyDialog::loadUserDefaults( KConfigBase* c )
 }
 
 
-void K3bMediaCopyDialog::saveUserDefaults( KConfigBase* c )
+void K3bMediaCopyDialog::saveUserDefaults( KConfigGroup& c )
 {
   m_writingModeWidget->saveConfig( c );
   c->writeEntry( "simulate", m_checkSimulate->isChecked() );

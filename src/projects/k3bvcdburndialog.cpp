@@ -751,7 +751,7 @@ void K3bVcdBurnDialog::readSettings()
     loadCdiConfig();
 }
 
-void K3bVcdBurnDialog::loadUserDefaults( KConfigBase* c )
+void K3bVcdBurnDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& c )
 {
     K3bProjectBurnDialog::loadUserDefaults( c );
 
@@ -803,7 +803,7 @@ void K3bVcdBurnDialog::loadUserDefaults( KConfigBase* c )
 }
 
 
-void K3bVcdBurnDialog::saveUserDefaults( KConfigBase* c )
+void K3bVcdBurnDialog::saveUserDefaults( KConfigGroup& c )
 {
     K3bProjectBurnDialog::saveUserDefaults( c );
 

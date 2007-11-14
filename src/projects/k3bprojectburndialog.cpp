@@ -375,7 +375,7 @@ void K3bProjectBurnDialog::readSettings()
 }
 
 
-void K3bProjectBurnDialog::saveUserDefaults( KConfigBase* c )
+void K3bProjectBurnDialog::saveUserDefaults( KConfigGroup& c )
 {
   m_writingModeWidget->saveConfig( c );
   c->writeEntry( "simulate", m_checkSimulate->isChecked() );
@@ -389,14 +389,14 @@ void K3bProjectBurnDialog::saveUserDefaults( KConfigBase* c )
 }
 
 
-void K3bProjectBurnDialog::loadUserDefaults( KConfigBase* c )
+void K3bProjectBurnDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& c )
 {
   m_writingModeWidget->loadConfig( c );
-  m_checkSimulate->setChecked( c->readBoolEntry( "simulate", false ) );
-  m_checkCacheImage->setChecked( !c->readBoolEntry( "on_the_fly", true ) );
-  m_checkRemoveBufferFiles->setChecked( c->readBoolEntry( "remove_image", true ) );
-  m_checkOnlyCreateImage->setChecked( c->readBoolEntry( "only_create_image", false ) );
-  m_spinCopies->setValue( c->readNumEntry( "copies", 1 ) );
+  m_checkSimulate->setChecked( c->readEntry( "simulate", false ) );
+  m_checkCacheImage->setChecked( !c->readEntry( "on_the_fly", true ) );
+  m_checkRemoveBufferFiles->setChecked( c->readEntry( "remove_image", true ) );
+  m_checkOnlyCreateImage->setChecked( c->readEntry( "only_create_image", false ) );
+  m_spinCopies->setValue( c->readEntry( "copies", 1 ) );
 
   m_tempDirSelectionWidget->readConfig( c );
   m_writerSelectionWidget->loadConfig( c );

@@ -108,7 +108,7 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
     *   <li>writing speed</li>
     * </ul>
     */
-   virtual void loadUserDefaults( KConfigBase* );
+   virtual void loadUserDefaults( const KConfigGroup& );
 
    /**
     * The default implementation saves the following settings to the KConfig.
@@ -123,7 +123,7 @@ class K3bProjectBurnDialog : public K3bInteractionDialog
     *   <li>writing speed</li>
     * </ul>
     */
-   virtual void saveUserDefaults( KConfigBase* );
+   virtual void saveUserDefaults( KConfigGroup& );
 
    /**
     * The default implementation saves the following settings to the doc and may be called 

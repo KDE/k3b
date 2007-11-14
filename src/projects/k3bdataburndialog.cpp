@@ -224,7 +224,7 @@ void K3bDataBurnDialog::loadK3bDefaults()
 }
 
 
-void K3bDataBurnDialog::loadUserDefaults( KConfigBase* c )
+void K3bDataBurnDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& c )
 {
   K3bProjectBurnDialog::loadUserDefaults(c);
 
@@ -234,13 +234,13 @@ void K3bDataBurnDialog::loadUserDefaults( KConfigBase* c )
   K3bIsoOptions o = K3bIsoOptions::load( c );
   m_imageSettingsWidget->load( o );
 
-  m_checkVerify->setChecked( c->readBoolEntry( "verify data", false ) );
+  m_checkVerify->setChecked( c->readEntry( "verify data", false ) );
 
   toggleAll();
 }
 
 
-void K3bDataBurnDialog::saveUserDefaults( KConfigBase* c )
+void K3bDataBurnDialog::saveUserDefaults( KConfigGroup& c )
 {
   K3bProjectBurnDialog::saveUserDefaults(c);
 

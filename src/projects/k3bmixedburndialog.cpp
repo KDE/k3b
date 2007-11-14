@@ -216,12 +216,12 @@ void K3bMixedBurnDialog::loadK3bDefaults()
 }
 
 
-void K3bMixedBurnDialog::loadUserDefaults( KConfigBase* c )
+void K3bMixedBurnDialog::loadUserDefaults(loadUserDefaults(loadUserDefaults( const KConfigGroup& c )
 {
   K3bProjectBurnDialog::loadUserDefaults( c );
 
-  m_cdtextWidget->setChecked( c->readBoolEntry( "cd_text", false ) );
-  m_checkNormalize->setChecked( c->readBoolEntry( "normalize", false ) );
+  m_cdtextWidget->setChecked( c->readEntry( "cd_text", false ) );
+  m_checkNormalize->setChecked( c->readEntry( "normalize", false ) );
 
   // load mixed type
   if( c->readEntry( "mixed_type" ) == "last_track" )
@@ -240,7 +240,7 @@ void K3bMixedBurnDialog::loadUserDefaults( KConfigBase* c )
 }
 
 
-void K3bMixedBurnDialog::saveUserDefaults( KConfigBase* c )
+void K3bMixedBurnDialog::saveUserDefaults( KConfigGroup& c )
 {
   K3bProjectBurnDialog::saveUserDefaults(c);
 

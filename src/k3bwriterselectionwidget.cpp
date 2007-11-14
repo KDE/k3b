@@ -243,7 +243,7 @@ int K3bWriterSelectionWidget::wantedMediumState() const
 void K3bWriterSelectionWidget::slotConfigChanged( KConfigBase* c )
 {
   KConfigGroup g( c, "General Options" );
-  if( g.readBoolEntry( "Manual writing app selection", false ) ) {
+  if( g.readEntry( "Manual writing app selection", false ) ) {
     m_comboWritingApp->show();
     m_writingAppLabel->show();
   }
@@ -461,7 +461,7 @@ int K3bWriterSelectionWidget::writerSpeed() const
 int K3bWriterSelectionWidget::writingApp() const
 {
   KConfigGroup g( k3bcore->config(), "General Options" );
-  if( g.readBoolEntry( "Manual writing app selection", false ) ) {
+  if( g.readEntry( "Manual writing app selection", false ) ) {
     return selectedWritingApp();
   }
   else
@@ -551,7 +551,7 @@ void K3bWriterSelectionWidget::slotRefreshWritingApps()
 void K3bWriterSelectionWidget::loadConfig( KConfigBase* c )
 {
   setWriterDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "writer_device" ) ) );
-  setSpeed( c->readNumEntry( "writing_speed",  0 ) );
+  setSpeed( c->readEntry( "writing_speed",  0 ) );
   setWritingApp( K3b::writingAppFromString( c->readEntry( "writing_app" ) ) );
 }
 

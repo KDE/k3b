@@ -171,7 +171,7 @@ void K3bMovixOptionsWidget::loadConfig( KConfigBase* c )
   else
     m_comboSubtitleFontset->setCurrentItem( 0 ); // none
 
-  m_spinLoop->setValue( c->readNumEntry("loop", 1 ) );
+  m_spinLoop->setValue( c->readEntry("loop", 1 ) );
   m_editAdditionalMplayerOptions->setText( c->readEntry( "additional_mplayer_options" ) );
   m_editUnwantedMplayerOptions->setText( c->readEntry( "unwanted_mplayer_options" ) );
 
@@ -193,11 +193,11 @@ void K3bMovixOptionsWidget::loadConfig( KConfigBase* c )
   s = c->readEntry("keyboard_layout");
   m_keyboardLangHelper->setLanguage( s == "default" ? QString::null : s );
 
-  m_checkShutdown->setChecked( c->readBoolEntry( "shutdown", false) );
-  m_checkReboot->setChecked( c->readBoolEntry( "reboot", false ) );
-  m_checkEject->setChecked( c->readBoolEntry( "eject", false ) );
-  m_checkRandomPlay->setChecked( c->readBoolEntry( "random_play", false ) );
-  m_checkNoDma->setChecked( c->readBoolEntry( "no_dma", false ) );
+  m_checkShutdown->setChecked( c->readEntry( "shutdown", false) );
+  m_checkReboot->setChecked( c->readEntry( "reboot", false ) );
+  m_checkEject->setChecked( c->readEntry( "eject", false ) );
+  m_checkRandomPlay->setChecked( c->readEntry( "random_play", false ) );
+  m_checkNoDma->setChecked( c->readEntry( "no_dma", false ) );
 }
 
 

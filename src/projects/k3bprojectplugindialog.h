@@ -34,8 +34,8 @@ class K3bProjectPluginDialog : public K3bInteractionDialog
   
  protected slots:
   void slotStartClicked();
-  void saveUserDefaults( KConfigBase* config );
-  void loadUserDefaults( KConfigBase* config );
+  void saveUserDefaults( KConfigGroup& config );
+  void loadUserDefaults( const KConfigGroup& config );
   void loadK3bDefaults();
 
  private:

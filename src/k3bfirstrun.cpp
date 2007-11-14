@@ -31,7 +31,7 @@
 
 void K3bFirstRun::run( QWidget* parent )
 {
-  if( !k3bcore->config()->readBoolEntry( "First run", true ) )
+  if( !k3bcore->config()->readEntry( "First run", true ) )
     return;
 
   k3bcore->config()->writeEntry( "First run", false );
