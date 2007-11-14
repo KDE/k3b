@@ -20,9 +20,9 @@
 #ifndef koZipStore_h
 #define koZipStore_h
 
-#include "koStoreBase.h"
+#include "KoStoreBase.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 class KZip;
 class KArchiveDirectory;
@@ -31,19 +31,19 @@ class KUrl;
 class KoZipStore : public KoStoreBase
 {
 public:
-    KoZipStore( const QString & _filename, Mode _mode, const Q3CString & appIdentification );
-    KoZipStore( QIODevice *dev, Mode mode, const Q3CString & appIdentification );
+    KoZipStore( const QString & _filename, Mode _mode, const QByteArray & appIdentification );
+    KoZipStore( QIODevice *dev, Mode mode, const QByteArray & appIdentification );
     /**
      * KUrl-constructor
      * @todo saving not completely implemented (fixed temporary file)
-     * @since 1.4
      */
-    KoZipStore( QWidget* window, const KUrl& _url, const QString & _filename, Mode _mode, const Q3CString & appIdentification );
+    KoZipStore( QWidget* window, const KUrl& _url, const QString & _filename, Mode _mode, const QByteArray & appIdentification );
     ~KoZipStore();
 
-    virtual Q_LONG write( const char* _data, Q_ULONG _len );
+    virtual qint64 write( const char* _data, qint64 _len );
 protected:
-    virtual bool init( Mode _mode, const Q3CString& appIdentification );
+    virtual bool init( Mode _mode, const QByteArray& appIdentification );
+    virtual bool doFinalize();
     virtual bool openWrite( const QString& name );
     virtual bool openRead( const QString& name );
     virtual bool closeWrite();

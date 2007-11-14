@@ -20,8 +20,8 @@ ${libk3b_BINARY_DIR}/jobs
 ${libk3b_SOURCE_DIR}/projects/movixcd/
 ${CMAKE_CURRENT_SOURCE_DIR}/projects
 ${libk3b_SOURCE_DIR}/projects/videodvd/
+${CMAKE_CURRENT_SOURCE_DIR}/projects/kostore/
 )
-
 
 add_subdirectory( option )
 add_subdirectory( rip )
@@ -99,9 +99,9 @@ projects/base_k3bmovixoptionswidget.ui
 )
 
 set(k3b_kostore_SRCS
-  projects/kostore/koStore.cc 
-  projects/kostore/koZipStore.cc 
-  projects/kostore/koStoreBase.cc
+  projects/kostore/KoStore.cpp
+  projects/kostore/KoZipStore.cpp 
+  projects/kostore/KoStoreBase.cpp
 )
 
 set(k3b_rip_SRCS

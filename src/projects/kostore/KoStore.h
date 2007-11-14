@@ -21,16 +21,12 @@
 #ifndef __koStore_h_
 #define __koStore_h_
 
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qiodevice.h>
-#include <q3valuestack.h>
-//Added by qt3to4:
-#include <Q3CString>
-//#include <koffice_export.h>
-#include <kdemacros.h>
-
-#define KOSTORE_EXPORT KDE_EXPORT
+#include <QString>
+#include <QStringList>
+#include <QIODevice>
+#include <QStack>
+#include <QByteArray>
+#include <kostore_export.h>
 
 class QWidget;
 
@@ -42,12 +38,12 @@ class KUrl;
  * We call a "store" the file on the hard disk (the one the users sees)
  * and call a "file" a file inside the store.
  */
-class KoStore
+class KOSTORE_EXPORT KoStore
 {
 public:
 
   enum Mode { Read, Write };
-  enum Backend { Auto, Tar, Zip, Directory };
+  enum Backend { Auto, Tar, Zip, Directory, Encrypted };
 
   /**
    * Open a store (i.e. the representation on disk of a KOffice document).
@@ -63,14 +59,14 @@ public:
    * to be written in the file for "mime-magic" identification.
    * Only meaningful if mode is Write, and if backend!=Directory.
    */
-  static KoStore* createStore( const QString& fileName, Mode mode, const Q3CString & appIdentification = "", Backend backend = Auto );
+  static KoStore* createStore( const QString& fileName, Mode mode, const QByteArray & appIdentification = "", Backend backend = Auto );
 
   /**
    * Create a store for any kind of QIODevice: file, memory buffer...
    * KoStore will take care of opening the QIODevice.
    * This method doesn't support the Directory store!
    */
-  static KoStore* createStore( QIODevice *device, Mode mode, const Q3CString & appIdentification = "", Backend backend = Auto );
+  static KoStore* createStore( QIODevice *device, Mode mode, const QByteArray & appIdentification = "", Backend backend = Auto );
 
   /**
    * Open a store (i.e. the representation on disk of a KOffice document).
@@ -89,10 +85,9 @@ public:
    *
    * If the file is remote, the backend Directory cannot be used!
    *
-   * @since 1.4
    * @bug saving not completely implemented (fixed temporary file)
    */
-  static KoStore* createStore( QWidget* window, const KUrl& url, Mode mode, const Q3CString & appIdentification = "", Backend backend = Auto );
+  static KoStore* createStore( QWidget* window, const KUrl& url, Mode mode, const QByteArray & appIdentification = "", Backend backend = Auto );
 
   /**
    * Destroys the store (i.e. closes the file on the hard disk)
@@ -131,32 +126,32 @@ public:
    * Read data from the currently opened file. You can also use the streams
    * for this.
    */
-  QByteArray read( unsigned long int max );
+  QByteArray read( qint64 max );
 
   /**
    * Write data into the currently opened file. You can also use the streams
    * for this.
    */
-  Q_LONG write( const QByteArray& _data );
+  qint64 write( const QByteArray& _data );
 
   /**
    * Read data from the currently opened file. You can also use the streams
    * for this.
    * @return size of data read, -1 on error
    */
-  Q_LONG read( char *_buffer, Q_ULONG _len );
+  qint64 read( char *_buffer, qint64 _len );
 
   /**
    * Write data into the currently opened file. You can also use the streams
    * for this.
    */
-  virtual Q_LONG write( const char* _data, Q_ULONG _len );
+  virtual qint64 write( const char* _data, qint64 _len );
 
   /**
    * @return the size of the currently opened file, -1 on error.
    * Can be used as an argument for the read methods, for instance
    */
-  QIODevice::Offset size() const;
+  qint64 size() const;
 
   /**
    * @return true if an error occurred
@@ -225,6 +220,13 @@ public:
   bool addLocalFile( const QString &fileName, const QString &destName );
 
   /**
+   * Imports data into a store
+   * @param buffer data
+   * @param destName file in the store
+   */
+  bool addDataToFile( QByteArray &buffer, const QString &destName );
+
+  /**
    * Imports a local directory
    * @param dirPath path to the directory on a disk
    * @param dest path in the store where the directory should get saved
@@ -240,10 +242,17 @@ public:
    */
   bool extractFile( const QString &srcName, const QString &fileName );
 
+  /**
+   * Extracts a file out of the store to a buffer
+   * @param srcName file in the store
+   * @param data memory buffer
+   */
+  bool extractFile( const QString &srcName, QByteArray &data );
+
   //@{
   /// See QIODevice
-  bool at( QIODevice::Offset pos );
-  QIODevice::Offset at() const;
+  bool seek( qint64 pos );
+  qint64 pos() const;
   bool atEnd() const;
   //@}
 
@@ -254,15 +263,62 @@ public:
    */
   void disallowNameExpansion( void );
 
+  /**
+   * Call this before destroying the store, to be able to catch errors
+   * (e.g. from ksavefile)
+   */
+  bool finalize();
+
+  /**
+   * Sets the password to be used for decryption or encryption of the store.
+   * Use of this function is optional: an encryptable store should make
+   * a best effort in obtaining a password if it wasn't supplied.
+   *
+   * This method only works before opening a file. It might fail when a file
+   * has already been opened before calling this method.
+   * 
+   * This method will not function for any store that is not encrypted or
+   * can't be encrypted when saving.
+   *
+   * @param   password    A non-empty password.
+   *
+   * @return  True if the password was set.
+   */
+  virtual bool setPassword( const QString& password );
+
+  /**
+   * Retrieves the password used to encrypt or decrypt the store. Note that
+   * QString() will returned if no password has been given or the store is
+   * not encrypted.
+   *
+   * @return  The password this store is encrypted with.
+   */
+  virtual QString password( );
+
+  /**
+   * Returns whether a store opened for reading is encrypted or a store opened
+   * for saving will be encrypted.
+   *
+   * @return  True if the store is encrypted.
+   */
+  virtual bool isEncrypted( );
+
 protected:
 
-  KoStore() {}
+  KoStore();
 
   /**
    * Init store - called by constructor.
    * @return true on success
    */
   virtual bool init( Mode mode );
+
+  /**
+   * Finalize store - called by finalize.
+   * @return true on success
+   */
+  virtual bool doFinalize() { return true; }
+
   /**
    * Open the file @p name in the store, for writing
    * On success, this method must set m_stream to a stream in which we can write.
@@ -326,13 +382,13 @@ private:
   /**
    *  Expands a full path name for a stream (directories+filename)
    */
-  QString expandEncodedPath( QString intern ) const;
+  QString expandEncodedPath( const QString& intern ) const;
 
   /**
    * Expands only directory names(!)
    * Needed for the path handling code, as we only operate on internal names
    */
-  QString expandEncodedDirectory( QString intern ) const;
+  QString expandEncodedDirectory( const QString& intern ) const;
 
   mutable enum
   {
@@ -347,6 +403,8 @@ private:
    */
   bool enterDirectoryInternal( const QString& directory );
 
+  bool extractFile( const QString &srcName, QIODevice &buffer );
+
 protected:
 
   Mode m_mode;
@@ -357,13 +415,10 @@ protected:
   /// The "current directory" (path)
   QStringList m_currentPath;
 
-  /// Used to push/pop directories to make it easy to save/restore the state
-  Q3ValueStack<QString> m_directoryStack;
-
   /// Current filename (between an open() and a close())
   QString m_sName;
   /// Current size of the file named m_sName
-  QIODevice::Offset m_iSize;
+  qint64 m_iSize;
 
   /// The stream for the current read or write operation
   QIODevice * m_stream;
@@ -371,16 +426,17 @@ protected:
   bool m_bIsOpen;
   /// Must be set by the constructor.
   bool m_bGood;
+  bool m_bFinalized;
 
   static const int s_area;
 
 private:
+  /// Used to push/pop directories to make it easy to save/restore the state
+  QStack<QString> m_directoryStack;
+
+private:
   KoStore( const KoStore& store );  ///< don't copy
   KoStore& operator=( const KoStore& store );  ///< don't assign
-
-  class Private;
-  Private * d;
-
 };
 
 #endif
