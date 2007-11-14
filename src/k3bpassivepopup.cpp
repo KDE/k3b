@@ -110,7 +110,6 @@ K3bPassivePopup::K3bPassivePopup( QWidget* parent )
   d->showEffect = 0;
 
   setFrameStyle( Q3Frame::StyledPanel | Q3Frame::Raised );
-  //  setWFlags( Qt::WX11BypassWM );
 
   Q3VBoxLayout* mainLay = new Q3VBoxLayout( this );
   mainLay->setMargin( frameWidth() );

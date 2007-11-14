@@ -26,6 +26,7 @@
 #include <qcursor.h>
 #include <qfile.h>
 #include <qclipboard.h>
+#include <Q3TextStream>
 
 #include <klocale.h>
 #include <kstdguiitem.h>

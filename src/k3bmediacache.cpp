@@ -20,7 +20,6 @@
 #include <k3bdeviceglobals.h>
 #include <k3bscsicommand.h>
 #include <k3bcore.h>
-#include <k3bcddb.h>
 
 #include <kdebug.h>
 #include <kapplication.h>
@@ -349,8 +348,9 @@ void K3bMediaCache::buildDeviceList( K3bDevice::DeviceManager* dm )
 
   clearDeviceList();
 
-  const Q3PtrList<K3bDevice::Device>& devices = dm->allDevices();
-  for( Q3PtrListIterator<K3bDevice::Device> it( devices ); *it; ++it ) {
+  QList<K3bDevice::Device *> items(dm->allDevices());
+  for( QList<K3bDevice::Device *>::const_iterator it = items.begin();
+       it != items.end(); ++it ) {
     d->deviceMap.insert( *it, new DeviceEntry( this, *it ) );
     QMap<K3bDevice::Device*, int>::const_iterator bi_it = blockedIds.find( *it );
     if( bi_it != blockedIds.end() )

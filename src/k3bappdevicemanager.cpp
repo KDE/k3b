@@ -29,7 +29,8 @@
 #include <klocale.h>
 #include <kio/global.h>
 #include <kmenu.h>
-
+#include <kactioncollection.h>
+#include <kactionmenu.h>
 
 K3bAppDeviceManager::K3bAppDeviceManager( QObject* parent )
   : K3bDevice::DeviceManager( parent ),

@@ -110,7 +110,8 @@ void K3bWidgetShowEffect::dissolveMask()
     m_dissolveSize += m_dissolveDelta;
 
     if( m_dissolveSize > 0 ) {
-      maskPainter.setRasterOp( Qt::EraseROP );
+     //FIXME kde4
+      //maskPainter.setRasterOp( Qt::EraseROP );
 
       int x, y, s;
       const int size = 16;

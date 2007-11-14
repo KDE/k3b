@@ -38,7 +38,7 @@
 
 
 K3bJobProgressOSD::K3bJobProgressOSD( QWidget* parent )
-  : QWidget( parent, Qt::WType_TopLevel | WNoAutoErase | Qt::WStyle_Customize | WX11BypassWM | Qt::WStyle_StaysOnTop ),
+  : QWidget( parent, Qt::WType_TopLevel | WNoAutoErase | Qt::WStyle_Customize | Qt::X11BypassWindowManagerHint | Qt::WStyle_StaysOnTop ),
     m_dirty(true),
     m_progress(0),
     m_dragging(false),

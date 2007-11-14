@@ -366,20 +366,20 @@ QString K3bMedium::longString() const
 
   if( diskInfo().diskState() == K3bDevice::STATE_COMPLETE ||
       diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE  ) {
-    s += "<br>" + i18n("%1 in %n track", "%1 in %n tracks", toc().count() )
+    s += "<br>" + i18np("%1 in %n track", "%1 in %n tracks", toc().count() )
       .arg( KIO::convertSize(diskInfo().size().mode1Bytes() ) );
     if( diskInfo().numSessions() > 1 )
-      s += i18n(" and %n session", " and %n sessions", diskInfo().numSessions() );
+      s += i18np(" and %n session", " and %n sessions", diskInfo().numSessions() );
   }
 
   if( diskInfo().diskState() == K3bDevice::STATE_EMPTY ||
       diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE  )
-    s += "<br>" + i18n("Free space: %1")
-      .arg( KIO::convertSize( diskInfo().remainingSize().mode1Bytes() ) );
+    s += "<br>" + i18n("Free space: %1",
+      KIO::convertSize( diskInfo().remainingSize().mode1Bytes() ) );
 
   if( !diskInfo().empty() && diskInfo().rewritable() )
-    s += "<br>" + i18n("Capacity: %1")
-      .arg( KIO::convertSize( diskInfo().capacity().mode1Bytes() ) );
+    s += "<br>" + i18n("Capacity: %1",
+       KIO::convertSize( diskInfo().capacity().mode1Bytes() ) );
 
   return s;
 }

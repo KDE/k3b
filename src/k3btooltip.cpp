@@ -26,6 +26,7 @@
 #include <QPixmap>
 #include <QEvent>
 #include <QMouseEvent>
+#include <QDesktopWidget>
 
 #include <kdebug.h>
 #include <fixx11h.h>
@@ -91,7 +92,7 @@ void K3bToolTip::tip( const QRect& rect, QWidget* w, int effect )
 
   // make sure the widget is displayed correcly
   w->reparent( QApplication::desktop()->screen( scr ),
-	       Qt::WStyle_StaysOnTop | Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool | WX11BypassWM,
+	       Qt::WStyle_StaysOnTop | Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool | Qt::X11BypassWindowManagerHint,
 	       QPoint( 0, 0 ), false );
   w->polish();
   w->adjustSize();
