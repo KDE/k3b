@@ -23,8 +23,6 @@
 #include <ksimpleconfig.h>
 #include <kstdguiitem.h>
 #include <kdebug.h>
-#include <dcopclient.h>
-#include <dcopref.h>
 #include <kurl.h>
 
 #include <qfile.h>
@@ -83,9 +81,9 @@ int main( int argc, char* argv[] )
   KAboutData aboutData( "k3b", "K3b",
 			LIBK3B_VERSION, description, KAboutData::License_GPL,
 			"(c) 1999 - 2007, Sebastian Trüg", 0, "http://www.k3b.org" );
-  aboutData.addAuthor("Sebastian Trüg",I18N_NOOP("Maintainer and Lead Developer"), "trueg@k3b.org");
-  aboutData.addAuthor("Christian Kvasny",I18N_NOOP("VideoCD Project and VideoCD ripping"), "chris@k3b.org");
-  aboutData.addCredit("Klaus-Dieter Krannich", I18N_NOOP("Advanced Cdrdao integration"), "kd@k3b.org" );
+  aboutData.addAuthor(KLocalizedString("Sebastian Trüg"),I18N_NOOP("Maintainer and Lead Developer"), "trueg@k3b.org");
+  aboutData.addAuthor(KLocalizedString("Christian Kvasny"),I18N_NOOP("VideoCD Project and VideoCD ripping"), "chris@k3b.org");
+  aboutData.addCredit(KLocalizedString("Klaus-Dieter Krannich"), I18N_NOOP("Advanced Cdrdao integration"), "kd@k3b.org" );
 
   aboutData.addCredit("Thomas Froescher",
 		      I18N_NOOP("VideoDVD ripping and video encoding in pre-1.0 versions."),

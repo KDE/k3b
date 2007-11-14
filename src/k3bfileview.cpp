@@ -29,7 +29,6 @@
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 
-#include <k3filedetailview.h>
 #include <k3listview.h>
 #include <kaction.h>
 #include <ktoolbar.h>
@@ -77,25 +76,25 @@ void K3bFileView::setupGUI()
   layout->setStretchFactor( m_dirOp, 1 );
 
   // setup actions
-  KAction* actionHome = m_dirOp->actionCollection()->action("home");
-  KAction* actionBack = m_dirOp->actionCollection()->action("back");
-  KAction* actionUp = m_dirOp->actionCollection()->action("up");
-  KAction* actionReload = m_dirOp->actionCollection()->action("reload");
+  QAction* actionHome = m_dirOp->actionCollection()->action("home");
+  QAction* actionBack = m_dirOp->actionCollection()->action("back");
+  QAction* actionUp = m_dirOp->actionCollection()->action("up");
+  QAction* actionReload = m_dirOp->actionCollection()->action("reload");
 
-  m_toolBox->addButton( actionUp );
-  m_toolBox->addButton( actionBack );
-  m_toolBox->addButton( actionHome );
-  m_toolBox->addButton( actionReload );
+  m_toolBox->addAction( actionUp );
+  m_toolBox->addAction( actionBack );
+  m_toolBox->addAction( actionHome );
+  m_toolBox->addAction( actionReload );
   m_toolBox->addSpacing();
-  m_toolBox->addButton( m_dirOp->actionCollection()->action("short view") );
-  m_toolBox->addButton( m_dirOp->actionCollection()->action("detailed view") );
+  m_toolBox->addAction( m_dirOp->actionCollection()->action("short view") );
+  m_toolBox->addAction( m_dirOp->actionCollection()->action("detailed view") );
   m_toolBox->addSpacing();
   m_toolBox->addButton( m_dirOp->bookmarkMenu() );
   m_toolBox->addSpacing();
 
   // create filter selection combobox
   m_toolBox->addSpacing();
-  m_toolBox->addLabel( i18n("Filter:") );
+  m_toolBox->addAction( i18n("Filter:") );
   m_toolBox->addSpacing();
   m_filterWidget = new KFileFilterCombo( m_toolBox, "filterwidget" );
   m_toolBox->addWidget( m_filterWidget );

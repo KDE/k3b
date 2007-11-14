@@ -67,6 +67,7 @@
 #include <ktoggleaction.h>
 #include <stdlib.h>
 #include <KRecentFilesAction>
+#include <kactionmenu.h>
 
 // application specific includes
 #include "k3b.h"

@@ -111,7 +111,7 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const Q3ValueList<K3bSystemProbl
   // ---------------------------------------------------------------------------------------------------
   KTextEdit* view = new KTextEdit( this );
   view->setReadOnly(true);
-  view->setTextFormat(RichText);
+  view->setTextFormat(Qt::RichText);
 
 
   // layout everything
@@ -349,9 +349,9 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
   QList<K3bDevice::Device *> items(k3bcore->deviceManager()->readingDevices());
   for( QList<K3bDevice::Device *>::const_iterator it = items.begin();
        it != items.end(); ++it ) {
-    if( it.current()->interfaceType() == K3bDevice::IDE )
+    if( (*it)->interfaceType() == K3bDevice::IDE )
       atapiReader = true;
-    if( it.current()->type() & K3bDevice::DEVICE_DVD_R_DL )
+    if( (*it)->type() & K3bDevice::DEVICE_DVD_R_DL )
       dvd_r_dl = true;
   }
 
@@ -362,7 +362,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
        it != automountedDevices.end(); ++it ) {
     problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
 				       i18n("Device %1 - %2 is automounted.",
-				       it.current()->vendor(),it.current()->description()),
+				       (*it)->vendor(),(*it)->description()),
 				       i18n("K3b is not able to unmount automounted devices. Thus, especially "
 					    "DVD+RW rewriting might fail. There is no need to report this as "
 					    "a bug or feature wish; it is not possible to solve this problem "
@@ -449,10 +449,10 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					 false ) );
   }
 
-  QList<K3bDevice::Device *> items(k3bcore->deviceManager()->allDevices());
-  for( QList<K3bDevice::Device *>::const_iterator it = items.begin();
-       it != items.end(); ++it ) {
-    K3bDevice::Device* dev = it.current();
+  QList<K3bDevice::Device *> items2(k3bcore->deviceManager()->allDevices());
+  for( QList<K3bDevice::Device *>::const_iterator it = items2.begin();
+       it != items2.end(); ++it ) {
+    K3bDevice::Device* dev = (*it);
 
     if( !QFileInfo( dev->blockDeviceName() ).isWritable() )
       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,

@@ -61,13 +61,11 @@
 // KDE-includes
 #include <kmimetype.h>
 #include <kcursor.h>
-#include <k3filedetailview.h>
 #include <ktoolbar.h>
 #include <kiconloader.h>
 #include <kurl.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kio/file.h>
 #include <kio/global.h>
 #include <krun.h>
 #include <k3process.h>
@@ -114,7 +112,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
   m_fileView     = new K3bFileView(m_viewStack, "fileView");
   m_cdView       = new K3bAudioCdView(m_viewStack, "cdview");
   m_videoView    = new K3bVideoCdView(m_viewStack, "videoview");
-  m_infoView     = new K3bDiskInfoView(m_viewStack, "infoView");
+  m_infoView     = new K3bDiskInfoView(m_viewStack);
 #ifdef HAVE_LIBDVDREAD
   m_movieView    = new K3bVideoDVDRippingView(m_viewStack, "movieview");
 #endif
@@ -250,8 +248,8 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
 					i18n("Found %1. Do you want K3b to mount the data part "
 					     "or show all the tracks?", i18n("Video CD") ),
 					i18n("Video CD"),
-					i18n("Mount CD"),
-					i18n("Show Video Tracks") ) == KMessageBox::No ) {
+					KGuiItem(i18n("Mount CD")),
+					KGuiItem(i18n("Show Video Tracks")) ) == KMessageBox::No ) {
 	  mount = false;
 	  m_viewStack->raiseWidget( m_videoView );
 	  m_videoView->reload( medium );
@@ -263,8 +261,8 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
 				      i18n("Found %1. Do you want K3b to mount the data part "
 					   "or show all the tracks?", i18n("Audio CD") ),
 				      i18n("Audio CD"),
-				      i18n("Mount CD"),
-				      i18n("Show Audio Tracks") ) == KMessageBox::No ) {
+				      KGuiItem(i18n("Mount CD")),
+				      KGuiItem(i18n("Show Audio Tracks")) ) == KMessageBox::No ) {
 	mount = false;
 	m_viewStack->raiseWidget( m_cdView );
 	m_cdView->reload( medium );
@@ -326,7 +324,7 @@ void K3bDirView::slotUnmountFinished( bool success )
 
 void K3bDirView::slotFileTreeContextMenu( K3bDevice::Device* /*dev*/, const QPoint& p )
 {
-  KAction* a = k3bappcore->appDeviceManager()->actionCollection()->action( "device_popup" );
+  QAction* a = k3bappcore->appDeviceManager()->actionCollection()->action( "device_popup" );
   if( KActionMenu* m = dynamic_cast<KActionMenu*>(a) )
     m->popup( p );
 }

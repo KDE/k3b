@@ -180,10 +180,10 @@ set(k3b_SRCS
    main.cpp 
    k3bstatusbarmanager.cpp 
    k3bfiletreecombobox.cpp 
-   k3binterface.cpp 
-   k3bjobinterface.cpp 
-   k3bprojectinterface.cpp 
-   k3bdataprojectinterface.cpp 
+   #k3binterface.cpp 
+   #k3bjobinterface.cpp 
+   #k3bprojectinterface.cpp 
+   #k3bdataprojectinterface.cpp 
    k3bsystemproblemdialog.cpp 
    k3bmediacontentsview.cpp 
    k3bsidepanel.cpp 
