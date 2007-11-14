@@ -1,7 +1,7 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -34,7 +34,7 @@ class K3bDirItem;
 class K3bDataItem;
 class K3bDataFileView;
 class KActionCollection;
-class KActionMenu;
+class KMenu;
 class KAction;
 class K3bView;
 class QDragMoveEvent;
@@ -73,7 +73,7 @@ class K3bDataDirTreeView : public K3bListView
   void contentsDragLeaveEvent( QDragLeaveEvent* e );
 
   KActionCollection* m_actionCollection;
-  KActionMenu* m_popupMenu;
+  KMenu* m_popupMenu;
   KAction* m_actionRemove;
   KAction* m_actionRename;
   KAction* m_actionNewDir;

@@ -1,7 +1,7 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -21,7 +21,7 @@
 #include "k3baudiotrackaddingdialog.h"
 #include "k3bdataurladdingdialog.h"
 
-#include <k3baudiotrackplayer.h>
+//#include <k3baudiotrackplayer.h>
 #include <k3baudiodoc.h>
 #include <k3bdataviewitem.h>
 #include <k3bdatafileview.h>
@@ -40,8 +40,10 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
-#include <kactionclasses.h>
 #include <kaction.h>
+#include <kactioncollection.h>
+#include <KToolBar>
+
 
 K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent )
   : K3bView( doc, parent ), m_doc(doc)
@@ -62,15 +64,16 @@ K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent )
 
   m_widgetStack->raiseWidget( m_dataFileView );
 
-  toolBox()->addAction( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_PLAY ) );
-  toolBox()->addAction( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_PAUSE ) );
-  toolBox()->addAction( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_STOP ) );
-  toolBox()->addSpacing();
-  toolBox()->addAction( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_PREV ) );
-  toolBox()->addAction( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_NEXT ) );
-  toolBox()->addSpacing();
-  m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_SEEK )->plug( toolBox() );
-  toolBox()->addSeparator();
+#warning enable player once ported to Phonon
+//   toolBox()->addAction( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_PLAY ) );
+//   toolBox()->addAction( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_PAUSE ) );
+//   toolBox()->addAction( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_STOP ) );
+//   toolBox()->addSpacing();
+//   toolBox()->addAction( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_PREV ) );
+//   toolBox()->addAction( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_NEXT ) );
+//   toolBox()->addSpacing();
+//   m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_SEEK )->plug( toolBox() );
+//   toolBox()->addSeparator();
 
 #ifdef HAVE_MUSICBRAINZ
   toolBox()->addAction( m_audioListView->actionCollection()->action( "project_audio_musicbrainz" ) );
@@ -78,8 +81,6 @@ K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent )
 #endif
 
   addPluginButtons( K3bProjectPlugin::MIXED_CD );
-
-  toolBox()->addStretch();
 
   m_mixedDirTreeView->checkForNewItems();
   m_dataFileView->checkForNewItems();
@@ -139,7 +140,7 @@ void K3bMixedView::slotBurn()
 
 K3bProjectBurnDialog* K3bMixedView::newBurnDialog( QWidget* parent )
 {
-  return new K3bMixedBurnDialog( m_doc, parent, true );
+  return new K3bMixedBurnDialog( m_doc, parent );
 }
 
 

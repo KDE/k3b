@@ -33,7 +33,7 @@
 #include <k3bexternalbinmanager.h>
 #include <k3bversion.h>
 #include <k3bcore.h>
-#include <k3baudiotrackplayer.h>
+//#include <k3baudiotrackplayer.h>
 #include <k3bintmapcombobox.h>
 
 #include <qtabwidget.h>
@@ -61,8 +61,9 @@
 #include <kmessagebox.h>
 
 
-K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent, bool modal )
-  : K3bProjectBurnDialog( doc, parent, modal ), m_doc(doc)
+K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent )
+  : K3bProjectBurnDialog( doc, parent ),
+    m_doc(doc)
 {
   prepareGui();
 
@@ -135,7 +136,7 @@ void K3bMixedBurnDialog::setupSettingsPage()
 						     "be played on a hifi audio CD player."
 						     "<br>It could lead to problems with some older "
 						     "hifi audio CD players that try to play the data track.") );
-				    
+
   Q3GridLayout* grid = new Q3GridLayout( w );
   grid->setMargin( marginHint() );
   grid->setSpacing( spacingHint() );
@@ -151,7 +152,7 @@ void K3bMixedBurnDialog::setupSettingsPage()
 void K3bMixedBurnDialog::slotStartClicked()
 {
   // FIXME: this should not be done via the doc. So remove all gui stuff from the doc
-  static_cast<K3bMixedView*>(m_doc->view())->player()->stop();
+//  static_cast<K3bMixedView*>(m_doc->view())->player()->stop();
   K3bProjectBurnDialog::slotStartClicked();
 }
 
@@ -292,13 +293,13 @@ void K3bMixedBurnDialog::toggleAll()
     cdText = cdrecordCdText;
   }
 
-  m_checkCacheImage->setEnabled( !m_checkOnlyCreateImage->isChecked() && 
+  m_checkCacheImage->setEnabled( !m_checkOnlyCreateImage->isChecked() &&
 				 onTheFly );
   if( !onTheFly )
     m_checkCacheImage->setChecked( true );
 
   m_cdtextWidget->setEnabled( !m_checkOnlyCreateImage->isChecked() &&
-			      cdText && 
+			      cdText &&
 			      m_writingModeWidget->writingMode() != K3b::TAO );
   if( !cdText || m_writingModeWidget->writingMode() == K3b::TAO  )
     m_cdtextWidget->setChecked( false );
@@ -321,8 +322,8 @@ void K3bMixedBurnDialog::slotNormalizeToggled( bool on )
 						"The external program used for this task only supports normalizing a set "
 						"of audio files."),
 				     QString::null,
-				     i18n("Disable normalization"),
-				     i18n("Disable on-the-fly burning"),
+				     KGuiItem( i18n("Disable normalization") ),
+				     KGuiItem( i18n("Disable on-the-fly burning") ),
 				     "audioProjectNormalizeOrOnTheFly" ) == KMessageBox::Yes )
 	m_checkNormalize->setChecked( false );
       else
@@ -340,8 +341,8 @@ void K3bMixedBurnDialog::slotCacheImageToggled( bool on )
 						"The external program used for this task only supports normalizing a set "
 						"of audio files."),
 				     QString::null,
-				     i18n("Disable normalization"),
-				     i18n("Disable on-the-fly burning"),
+				     KGuiItem( i18n("Disable normalization") ),
+				     KGuiItem( i18n("Disable on-the-fly burning") ),
 				     "audioProjectNormalizeOrOnTheFly" ) == KMessageBox::Yes )
 	m_checkNormalize->setChecked( false );
       else
