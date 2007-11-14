@@ -35,9 +35,9 @@
 
 
 K3bSplash::K3bSplash( QWidget* parent )
-  : Q3VBox( parent, 
+  : Q3VBox( parent,"", 
 	   Qt::WStyle_Customize|
-	   WDestructiveClose|
+	   Qt::WDestructiveClose|
 	   /*	   Qt::WStyle_Splash|*/
 	   Qt::X11BypassWindowManagerHint|
 	   Qt::WStyle_NoBorder|

@@ -31,11 +31,13 @@
 
 void K3bFirstRun::run( QWidget* parent )
 {
+  //TODO port me kde4
+#if 0
   if( !k3bcore->config()->readEntry( "First run", true ) )
     return;
 
   k3bcore->config()->writeEntry( "First run", false );
-    
+#endif
   // for now the first run dialog only asks for
   // the konqui integration. So in case it is 
   // already installed there is no need to show the
@@ -51,19 +53,18 @@ void K3bFirstRun::run( QWidget* parent )
 
 
 K3bFirstRun::K3bFirstRun( QWidget* parent )
-  : KDialog( Plain,
-		 i18n("First Run"),
-		 Ok|Cancel,
-		 Ok,
-		 parent,
-		 0,
-		 true,
-		 true )
+  : KDialog( parent)
 {
-  setButtonOK( i18n("Enable Konqueror integration") );
-  setButtonCancel( i18n("No Konqueror integration") );
-
-  QFrame* plain = plainPage();
+  setCaption(i18n("First Run"));
+  setModal(true);
+  setButtons(Ok|Cancel);
+  setDefaultButton(Ok);
+  
+  setButtonText(Ok, i18n("Enable Konqueror integration") );
+  setButtonText(Cancel, i18n("No Konqueror integration") );
+  
+  QFrame* plain = new QFrame();
+  setMainWidget(plain);
   QLabel* label = new QLabel( i18n("<p>K3b can integrate itself into Konqueror. This integration "
 				   "allows to start K3b from the context menu in the file manager."
 				   "<p><em>The Konqueror integration can always be disabled and "

@@ -78,7 +78,7 @@ static QPixmap themedMessageBoxIcon( K3bPassivePopup::MessageType mt )
     break;
   }
 
-  QPixmap ret = KApplication::kApplication()->iconLoader()->loadIcon(icon_name, KIconLoader::NoGroup, KIconLoader::SizeMedium, KIconLoader::DefaultState, 0, true);
+  QPixmap ret = KIconLoader::global()->loadIcon(icon_name, KIconLoader::NoGroup, KIconLoader::SizeMedium, KIconLoader::DefaultState, QStringList(), 0,true);
   
   if( ret.isNull() )
     return QMessageBox::standardIcon( qIcon );
@@ -115,7 +115,7 @@ K3bPassivePopup::K3bPassivePopup( QWidget* parent )
   mainLay->setMargin( frameWidth() );
   mainLay->setSpacing( 0 );
 
-  Q3GridLayout* grid = new Q3GridLayout;
+  QGridLayout* grid = new QGridLayout;
   grid->setMargin( 9 );
   grid->setSpacing( 6 );
 
@@ -135,7 +135,8 @@ K3bPassivePopup::K3bPassivePopup( QWidget* parent )
   connect( d->timeoutWidget, SIGNAL(timeout()), this, SLOT(slotClose()) );
 
   d->closeButton = new K3bMiniButton( d->titleLabel );
-  d->closeButton->setPixmap( style().stylePixmap( QStyle::SP_TitleBarCloseButton, this ) );
+  //TODO port me kde4
+  //d->closeButton->setPixmap( style().stylePixmap( QStyle::SP_TitleBarCloseButton, this ) );
   d->closeButton->setFixedSize( d->closeButton->pixmap()->width(), d->closeButton->pixmap()->height() );
   d->closeButton->setToolTip( i18n("Close") );
   connect( d->closeButton, SIGNAL(clicked()), this, SLOT(slotClose()) );
