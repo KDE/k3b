@@ -44,7 +44,7 @@ K3bDirOperator::K3bDirOperator(const KUrl& url, QWidget* parent )
     aDelete->setShortcut( 0 );
 
   // add the bookmark stuff
-  KBookmarkManager* bmMan = KBookmarkManager::managerForFile( locateLocal( "data", "k3b/bookmarks.xml" ), false );
+  KBookmarkManager* bmMan = KBookmarkManager::managerForFile( KStandardDirs::locateLocal( "data", "k3b/bookmarks.xml" ), false );
   bmMan->setEditorOptions( i18n("K3b Bookmarks"), false );
   bmMan->setUpdate( true );
   bmMan->setShowNSBookmarks( false );

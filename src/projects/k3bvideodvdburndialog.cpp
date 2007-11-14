@@ -40,7 +40,7 @@
 #include <q3whatsthis.h>
 
 
-K3bVideoDvdBurnDialog::K3bVideoDvdBurnDialog( K3bVideoDvdDoc* doc, QWidget *parent, const char *name, bool modal )
+K3bVideoDvdBurnDialog::K3bVideoDvdBurnDialog( K3bVideoDvdDoc* doc, QWidget *parent, bool modal )
   : K3bProjectBurnDialog( doc, parent, modal, true ),
     m_doc( doc )
 {
@@ -182,7 +182,7 @@ void K3bVideoDvdBurnDialog::slotStartClicked()
     if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
       if( KMessageBox::warningContinueCancel( this,
 					      i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
-					      i18n("File Exists"), i18n("Overwrite") )
+					      i18n("File Exists"), KGuiItem(i18n("Overwrite")) )
 	  == KMessageBox::Continue ) {
 	// delete the file here to avoid problems with free space in K3bProjectBurnDialog::slotStartClicked
 	QFile::remove( m_tempDirSelectionWidget->tempPath() );

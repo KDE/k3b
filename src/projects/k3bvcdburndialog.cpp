@@ -29,6 +29,7 @@
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3Frame>
+#include <Q3TextStream>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -71,8 +72,8 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, const char
             vcdType = i18n( "Video CD" );
     }
 
-    setTitle( vcdType, i18n( "1 MPEG (%1)", "%n MPEGs (%1)",
-                             m_vcdDoc->tracks() ->count() ).arg( KIO::convertSize( m_vcdDoc->size() ) ) );
+    setTitle( vcdType, i18np( "1 MPEG (%1)", "%n MPEGs (%1)",
+                             m_vcdDoc->tracks() ->count() , KIO::convertSize( m_vcdDoc->size() ) ) );
 
     const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager() ->binObject( "cdrecord" );
     if ( cdrecordBin && cdrecordBin->hasFeature( "cuefile" ) )
@@ -538,7 +539,7 @@ void K3bVcdBurnDialog::slotStartClicked()
 {
 
     if ( QFile::exists( vcdDoc() ->vcdImage() ) ) {
-        if ( KMessageBox::warningContinueCancel( this, i18n( "Do you want to overwrite %1" ).arg( vcdDoc() ->vcdImage() ), i18n( "File Exists" ), i18n("Overwrite") )
+        if ( KMessageBox::warningContinueCancel( this, i18n( "Do you want to overwrite %1" , vcdDoc() ->vcdImage() ), i18n( "File Exists" ), KGuiItem(i18n("Overwrite")) )
                 != KMessageBox::Continue )
             return ;
     }
@@ -840,7 +841,7 @@ void K3bVcdBurnDialog::saveUserDefaults( KConfigGroup& c )
 void K3bVcdBurnDialog::saveCdiConfig()
 {
 
-    QString filename = locateLocal( "appdata", "cdi/cdi_vcd.cfg" );
+    QString filename = KStandardDirs::locateLocal( "appdata", "cdi/cdi_vcd.cfg" );
     if ( QFile::exists( filename ) )
         QFile::remove
             ( filename );
@@ -862,7 +863,7 @@ void K3bVcdBurnDialog::saveCdiConfig()
 
 void K3bVcdBurnDialog::loadCdiConfig()
 {
-    QString filename = locateLocal( "appdata", "cdi/cdi_vcd.cfg" );
+    QString filename = KStandardDirs::locateLocal( "appdata", "cdi/cdi_vcd.cfg" );
     if ( QFile::exists( filename ) ) {
         QFile cdi( filename );
         if ( !cdi.open( QIODevice::ReadOnly ) ) {
@@ -888,7 +889,7 @@ void K3bVcdBurnDialog::loadCdiConfig()
 
 void K3bVcdBurnDialog::loadDefaultCdiConfig()
 {
-    QString filename = locate( "data", "k3b/cdi/cdi_vcd.cfg" );
+    QString filename = KStandardDirs::locate( "data", "k3b/cdi/cdi_vcd.cfg" );
     if ( QFile::exists( filename ) ) {
         QFile cdi( filename );
         if ( !cdi.open( QIODevice::ReadOnly ) ) {
