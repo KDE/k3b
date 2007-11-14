@@ -42,7 +42,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kactionclasses.h>
-
+#include <kaction.h>
 
 K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent )
   : K3bView( doc, parent ), m_doc(doc)

@@ -37,7 +37,7 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="KListView">
+                <widget class="K3ListView">
                     <column>
                         <property name="text">
                             <string>ISO9660 Filesystem</string>
@@ -157,6 +157,6 @@
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>klistview.h</includehint>
+    <includehint>k3listview.h</includehint>
 </includehints>
 </UI>

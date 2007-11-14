@@ -28,7 +28,7 @@
                 <string>Please select the audio streams you want to include in every ripped title</string>
             </property>
         </widget>
-        <widget class="KListView">
+        <widget class="K3ListView">
             <property name="name">
                 <cstring>m_titleView</cstring>
             </property>
@@ -708,7 +708,7 @@
 </connections>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>klistview.h</includehint>
+    <includehint>k3listview.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>

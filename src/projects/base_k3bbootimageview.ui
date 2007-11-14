@@ -60,7 +60,7 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="KListView">
+        <widget class="K3ListView">
             <column>
                 <property name="text">
                     <string>Emulation Type</string>
@@ -389,6 +389,6 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>klistview.h</includehint>
+    <includehint>k3listview.h</includehint>
 </includehints>
 </UI>

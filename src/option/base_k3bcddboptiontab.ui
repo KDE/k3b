@@ -102,7 +102,7 @@
                                     <string>Directory:</string>
                                 </property>
                             </widget>
-                            <widget class="KListView" row="1" column="0" rowspan="4" colspan="2">
+                            <widget class="K3ListView" row="1" column="0" rowspan="4" colspan="2">
                                 <column>
                                     <property name="text">
                                         <string>Directory</string>
@@ -256,7 +256,7 @@
                                     <cstring>m_comboCddbType</cstring>
                                 </property>
                             </widget>
-                            <widget class="KListView" row="1" column="0" rowspan="4" colspan="4">
+                            <widget class="K3ListView" row="1" column="0" rowspan="4" colspan="4">
                                 <column>
                                     <property name="text">
                                         <string>Type</string>
@@ -559,7 +559,7 @@
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>klistview.h</includehint>
-    <includehint>klistview.h</includehint>
+    <includehint>k3listview.h</includehint>
+    <includehint>k3listview.h</includehint>
 </includehints>
 </UI>

@@ -19,9 +19,8 @@
 #include <qobject.h>
 
 #include <k3baudioclient.h>
-#include <k3bwidgetfactoryaction.h>
 
-#include <k3bmsf.h>
+include <k3bmsf.h>
 
 class K3bAudioDoc;
 class K3bAudioTrack;

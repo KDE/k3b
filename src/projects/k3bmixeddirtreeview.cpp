@@ -54,7 +54,7 @@ public:
 };
 
 
-K3bMixedDirTreeView::K3bMixedDirTreeView( K3bView* view, K3bMixedDoc* doc, QWidget* parent, const char* )
+K3bMixedDirTreeView::K3bMixedDirTreeView( K3bView* view, K3bMixedDoc* doc, QWidget* parent )
   : K3bDataDirTreeView( view, doc->dataDoc(), parent ), m_doc(doc)
 {
   m_audioRootItem = new PrivateAudioRootViewItem( doc, this, root() );
