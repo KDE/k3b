@@ -89,7 +89,7 @@ K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent
   m_counterLabel = new QLabel( page );
   m_infoLabel = new KSqueezedTextLabel( i18n("Adding files to project '%1'")
 					.arg(doc->URL().fileName()) + "...", page );
-  m_progressWidget = new KProgress( 0, page );
+  m_progressWidget = new QProgressBar( 0, page );
 
   grid->addWidget( m_counterLabel, 0, 1 );
   grid->addWidget( m_infoLabel, 0, 0 );

@@ -25,7 +25,7 @@
 #include <QLabel>
 #include <Q3ValueList>
 
-class KProgress;
+class QProgressBar;
 class QLabel;
 class K3bDataItem;
 class K3bDirItem;
@@ -73,7 +73,7 @@ class K3bDataUrlAddingDialog : public KDialog
 
   QString resultMessage() const;
 
-  KProgress* m_progressWidget;
+  QProgressBar* m_progressWidget;
   QLabel* m_infoLabel;
   QLabel* m_counterLabel;
   K3bEncodingConverter* m_encodingConverter;

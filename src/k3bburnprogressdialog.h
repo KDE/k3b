@@ -22,7 +22,7 @@
 #include <QLabel>
 
 class K3bBurnJob;
-class KProgress;
+class QProgressBar;
 class QLabel;
 
 
@@ -49,8 +49,8 @@ class K3bBurnProgressDialog : public K3bJobProgressDialog  {
 
  protected:
   QLabel* m_labelWriter;
-  KProgress* m_progressWritingBuffer;
-  KProgress* m_progressDeviceBuffer;
+  QProgressBar* m_progressWritingBuffer;
+  QProgressBar* m_progressDeviceBuffer;
   QLabel* m_labelWritingSpeed;
 };
 

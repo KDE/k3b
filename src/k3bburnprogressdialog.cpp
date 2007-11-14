@@ -56,10 +56,10 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, const char *name,
   m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Software buffer:"), m_frameExtraInfo ), 1, 2 );
   m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Device buffer:"), m_frameExtraInfo ), 2, 2 );
 
-  m_progressWritingBuffer = new KProgress( m_frameExtraInfo, "m_progressWritingBuffer" );
+  m_progressWritingBuffer = new QProgressBar( m_frameExtraInfo, "m_progressWritingBuffer" );
   m_frameExtraInfoLayout->addWidget( m_progressWritingBuffer, 1, 3 );
 
-  m_progressDeviceBuffer = new KProgress( m_frameExtraInfo );
+  m_progressDeviceBuffer = new QProgressBar( m_frameExtraInfo );
   m_frameExtraInfoLayout->addWidget( m_progressDeviceBuffer, 2, 3 );
   m_frameExtraInfoLayout->addMultiCellWidget( K3bStdGuiItems::verticalLine( m_frameExtraInfo ), 1, 2, 1, 1 );
 }

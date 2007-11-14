@@ -215,7 +215,7 @@ void K3bJobProgressDialog::setupGUI()
   layout3->addWidget( m_labelSubProcessedSize );
   mainLayout->addLayout( layout3 );
 
-  m_progressSubPercent = new KProgress( this, "m_progressSubPercent" );
+  m_progressSubPercent = new QProgressBar( this, "m_progressSubPercent" );
   mainLayout->addWidget( m_progressSubPercent );
 
   Q3HBoxLayout* layout4 = new Q3HBoxLayout( 0, 0, 6, "layout4");
@@ -228,7 +228,7 @@ void K3bJobProgressDialog::setupGUI()
   layout4->addWidget( m_labelProcessedSize );
   mainLayout->addLayout( layout4 );
 
-  m_progressPercent = new KProgress( this, "m_progressPercent" );
+  m_progressPercent = new QProgressBar( this, "m_progressPercent" );
   mainLayout->addWidget( m_progressPercent );
 
   m_frameExtraInfo = new Q3Frame( this, "m_frameExtraInfo" );
