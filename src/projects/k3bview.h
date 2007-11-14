@@ -1,7 +1,7 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -40,72 +40,72 @@ class KToolBar;
  */
 class K3bView : public QWidget, public KXMLGUIClient
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  /** 
-   *
-   */
-  K3bView( K3bDoc* pDoc, QWidget* parent );
-  virtual ~K3bView();
+public:
+    /** 
+     *
+     */
+    K3bView( K3bDoc* pDoc, QWidget* parent );
+    virtual ~K3bView();
 	
-  /** 
-   * returns a pointer to the document connected to the view
-   * @deprecated use doc()
-   */
-  K3bDoc* getDocument() const { return m_doc; }
-  K3bDoc* doc() const { return m_doc; }
+    /** 
+     * returns a pointer to the document connected to the view
+     * @deprecated use doc()
+     */
+    K3bDoc* getDocument() const { return m_doc; }
+    K3bDoc* doc() const { return m_doc; }
 
-  void setMainWidget( QWidget* );
+    void setMainWidget( QWidget* );
 
- public slots:
-  /**
-   * Default impl. brings up the burnDialog via newBurnDialog() with writing
-   */
-  virtual void slotBurn();
+public slots:
+    /**
+     * Default impl. brings up the burnDialog via newBurnDialog() with writing
+     */
+    virtual void slotBurn();
 
-  /**
-   * Default impl. brings up the burnDialog via newBurnDialog() without writing
-   */
-  virtual void slotProperties();
+    /**
+     * Default impl. brings up the burnDialog via newBurnDialog() without writing
+     */
+    virtual void slotProperties();
 
-  /**
-   * Add an url to the doc. The default implementation simply calls 
-   * addUrls.
-   */
-  virtual void addUrl( const KUrl& );
+    /**
+     * Add an url to the doc. The default implementation simply calls 
+     * addUrls.
+     */
+    virtual void addUrl( const KUrl& );
 
-  /**
-   * Add urls to the doc. The default implementation calls doc()->addUrls.
-   */
-  virtual void addUrls( const KUrl::List& );
+    /**
+     * Add urls to the doc. The default implementation calls doc()->addUrls.
+     */
+    virtual void addUrls( const KUrl::List& );
 
- protected:
-  /**
-   * Protected since the BurnDialog is not part of the API.
-   */
-  virtual K3bProjectBurnDialog* newBurnDialog( QWidget* = 0, const char* = 0 ) = 0;
+protected:
+    /**
+     * Protected since the BurnDialog is not part of the API.
+     */
+    virtual K3bProjectBurnDialog* newBurnDialog( QWidget* = 0, const char* = 0 ) = 0;
 
-  /**
-   * Call this to add the projectplugin buttons to the toolbox. It is not called 
-   * automatically to make it possible to add other buttons before.
-   *
-   * @param projectType the type of the project (@see K3bProjectPlugin)
-   */
-  void addPluginButtons( int projectType );
+    /**
+     * Call this to add the projectplugin buttons to the toolbox. It is not called 
+     * automatically to make it possible to add other buttons before.
+     *
+     * @param projectType the type of the project (@see K3bProjectPlugin)
+     */
+    void addPluginButtons( int projectType );
 
-  K3bFillStatusDisplay* fillStatusDisplay() const { return m_fillStatusDisplay; }
-  KToolBar* toolBox() const { return m_toolBox; }
+    K3bFillStatusDisplay* fillStatusDisplay() const { return m_fillStatusDisplay; }
+    KToolBar* toolBox() const { return m_toolBox; }
 
- private slots:
-  void slotPluginButtonClicked();
+    private slots:
+    void slotPluginButtonClicked();
 
- private:
-  K3bDoc* m_doc;
-  K3bFillStatusDisplay* m_fillStatusDisplay;
-  KToolBar* m_toolBox;
+private:
+    K3bDoc* m_doc;
+    K3bFillStatusDisplay* m_fillStatusDisplay;
+    KToolBar* m_toolBox;
 
-  Q3PtrDict<K3bProjectPlugin> m_plugins;
+    Q3PtrDict<K3bProjectPlugin> m_plugins;
 };
 
 #endif // K3BVIEW_H

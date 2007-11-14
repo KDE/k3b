@@ -1,7 +1,7 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -29,33 +29,33 @@ class K3bAudioTrackView;
 
 
 /**
-  *@author Sebastian Trueg
-  */
+ *@author Sebastian Trueg
+ */
 class K3bAudioView : public K3bView
 {
-  Q_OBJECT
+    Q_OBJECT
 	
- public: 
-  K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent, const char *name = 0 );
-  ~K3bAudioView();
+public: 
+    K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent );
+    ~K3bAudioView();
 
-  K3bAudioTrackPlayer* player() const { return m_songlist->player(); }
+    K3bAudioTrackPlayer* player() const { return m_songlist->player(); }
 
- public slots:
-  void addUrls( const KUrl::List& );
+public slots:
+    void addUrls( const KUrl::List& );
 
- protected:
-  K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
+protected:
+    K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
 
-  void init();
+    void init();
 
- private slots:
-  void slotAudioConversion();
+    private slots:
+    void slotAudioConversion();
 
- private:
-  K3bAudioDoc* m_doc;
+private:
+    K3bAudioDoc* m_doc;
 	
-  K3bAudioTrackView* m_songlist;
+    K3bAudioTrackView* m_songlist;
 };
 
 #endif
