@@ -1,7 +1,7 @@
 /* 
  *
  * $Id: sourceheader 511311 2006-02-19 14:51:05Z trueg $
- * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -25,7 +25,7 @@
 
 
 namespace K3bDevice {
-  class Device;
+    class Device;
 }
 
 /**
@@ -44,48 +44,48 @@ namespace K3bDevice {
  */
 namespace K3bVideoDVD
 {
-  /**
-   * libdvdread wrapper class
-   */
-  class LIBK3B_EXPORT VideoDVD
+    /**
+     * libdvdread wrapper class
+     */
+    class LIBK3B_EXPORT VideoDVD
     {
     public:
-      VideoDVD();
-      ~VideoDVD();
+	VideoDVD();
+	~VideoDVD();
       
-      /**
-       * \return true if a Video DVD was successfully opened via open()
-       */
-      bool valid() const;
+	/**
+	 * \return true if a Video DVD was successfully opened via open()
+	 */
+	bool valid() const;
       
-      /**
-       * Open a video dvd and parse it's contents. The device will be closed after this
-       * method returns, regardless of it's success.
-       */
-      bool open( K3bDevice::Device* dev );
+	/**
+	 * Open a video dvd and parse it's contents. The device will be closed after this
+	 * method returns, regardless of it's success.
+	 */
+	bool open( K3bDevice::Device* dev );
       
-      K3bDevice::Device* device() const { return m_device; }
-      const QString& volumeIdentifier() const { return m_volumeIdentifier; }
-      unsigned int numTitles() const { return m_titles.count(); }
+	K3bDevice::Device* device() const { return m_device; }
+	const QString& volumeIdentifier() const { return m_volumeIdentifier; }
+	unsigned int numTitles() const { return m_titles.count(); }
       
-      /**
-       * Get a title from the Video DVD. Index starts at 0.
-       */
-      const Title& title( unsigned int num ) const;
-      const Title& operator[]( unsigned int num ) const;
+	/**
+	 * Get a title from the Video DVD. Index starts at 0.
+	 */
+	const Title& title( unsigned int num ) const;
+	const Title& operator[]( unsigned int num ) const;
       
-      void debug() const;
+	void debug() const;
       
     private:
-      K3bDevice::Device* m_device;
-      Q3ValueVector<Title> m_titles;
-      QString m_volumeIdentifier;
+	K3bDevice::Device* m_device;
+	Q3ValueVector<Title> m_titles;
+	QString m_volumeIdentifier;
     };
 
-  LIBK3B_EXPORT QString audioFormatString( int format );
-  LIBK3B_EXPORT QString audioCodeExtensionString( int ext );
-  LIBK3B_EXPORT QString subPictureCodeModeString( int mode );
-  LIBK3B_EXPORT QString subPictureCodeExtensionString( int ext );
+    LIBK3B_EXPORT QString audioFormatString( int format );
+    LIBK3B_EXPORT QString audioCodeExtensionString( int ext );
+    LIBK3B_EXPORT QString subPictureCodeModeString( int mode );
+    LIBK3B_EXPORT QString subPictureCodeExtensionString( int ext );
 }
 
 #endif

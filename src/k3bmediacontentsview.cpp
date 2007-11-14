@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -40,8 +40,7 @@ K3bMediaContentsView::K3bMediaContentsView( bool withHeader,
 					    int mediumContent,
 					    int mediumTypes,
 					    int mediumState,
-					    QWidget* parent,
-					    const char* name )
+					    QWidget* parent )
   : K3bContentsView( withHeader, parent )
 {
   d = new Private;

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id: sourceheader 511311 2006-02-19 14:51:05Z trueg $
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
@@ -30,7 +30,6 @@
 #include <qpainter.h>
 #include <q3header.h>
 #include <qtooltip.h>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QHideEvent>
 
@@ -46,14 +45,14 @@ static QString audioStreamString( const K3bVideoDVD::Title& title, unsigned int 
   for( unsigned int i = 0; i < qMin( title.numAudioStreams(), maxLines ); ++i ) {
     if( i > 0 )
       s += "<br>";
-    s += QString::number(i+1) + ": " 
+    s += QString::number(i+1) + ": "
       + i18n("%1 %2Ch (%3<em>%4</em>)")
       .arg( K3bVideoDVD::audioFormatString( title.audioStream(i).format() ) )
       .arg( title.audioStream(i).channels() )
       .arg( title.audioStream(i).langCode().isEmpty()
 	    ? i18n("unknown language")
 	    : KGlobal::locale()->languageCodeToName( title.audioStream(i).langCode() ) )
-      .arg( includeExtInfo && title.audioStream(i).codeExtension() != K3bVideoDVD::AUDIO_CODE_EXT_UNSPECIFIED 
+      .arg( includeExtInfo && title.audioStream(i).codeExtension() != K3bVideoDVD::AUDIO_CODE_EXT_UNSPECIFIED
 	    ? QString(" ") + K3bVideoDVD::audioCodeExtensionString( title.audioStream(i).codeExtension() )
 	    : QString::null );
   }
@@ -70,15 +69,15 @@ static QString subpictureStreamString( const K3bVideoDVD::Title& title, unsigned
   for( unsigned int i = 0; i < qMin( title.numSubPictureStreams(), maxLines ); ++i ) {
     if( i > 0 )
       s += "<br>";
-    s += QString::number(i+1) + ": " 
+    s += QString::number(i+1) + ": "
       + QString("%1 (%2<em>%3</em>)")
-      .arg( title.subPictureStream(i).codeMode() == K3bVideoDVD::SUBPIC_CODE_MODE_RLE 
+      .arg( title.subPictureStream(i).codeMode() == K3bVideoDVD::SUBPIC_CODE_MODE_RLE
 	    ? i18n("RLE")
 	    : i18n("Extended") )
       .arg( title.subPictureStream(i).langCode().isEmpty()
 	    ? i18n("unknown language")
 	    : KGlobal::locale()->languageCodeToName( title.subPictureStream(i).langCode() ) )
-      .arg( includeExtInfo && title.subPictureStream(i).codeExtension() != K3bVideoDVD::SUBPIC_CODE_EXT_UNSPECIFIED 
+      .arg( includeExtInfo && title.subPictureStream(i).codeExtension() != K3bVideoDVD::SUBPIC_CODE_EXT_UNSPECIFIED
 	    ? QString(" ") + K3bVideoDVD::subPictureCodeExtensionString( title.subPictureStream(i).codeExtension() )
 	    : QString::null );
   }
@@ -93,7 +92,7 @@ static QString subpictureStreamString( const K3bVideoDVD::Title& title, unsigned
 class K3bVideoDVDRippingTitleListView::TitleViewItem : public K3bCheckListViewItem
 {
 public:
-  TitleViewItem( K3bVideoDVDRippingTitleListView* parent, Q3ListViewItem* after, const K3bVideoDVD::Title& title ) 
+  TitleViewItem( K3bVideoDVDRippingTitleListView* parent, Q3ListViewItem* after, const K3bVideoDVD::Title& title )
     : K3bCheckListViewItem( parent, after ),
       m_title( title ) {
 
@@ -111,7 +110,7 @@ public:
   const K3bVideoDVD::Title& videoDVDTitle() const { return m_title; }
 
   void setup() {
-    widthChanged();    
+    widthChanged();
 
     // set a valid height
     int maxH = 0;
@@ -162,7 +161,7 @@ protected:
 	p->setPen( cg.highlightedText() );
       }
       else {
-	p->fillRect( 0, 0, w, height(), cg.base() ); 
+	p->fillRect( 0, 0, w, height(), cg.base() );
 	p->setPen( cg.text() );
       }
 
@@ -196,7 +195,7 @@ protected:
 	  preW = h*16/9;
 
 	p->drawRect( ( w - preW ) / 2, ( height() - h ) / 2, preW, h );
-	QPixmap noIcon = KApplication::kApplication()->iconLoader()->loadIcon( "no", KIconLoader::NoGroup, KIconLoader::SizeSmall, KIconLoader::DefaultState, 0, true );
+	QPixmap noIcon = KIconLoader::global()->loadIcon( "no", KIconLoader::NoGroup, KIconLoader::SizeSmall );
 	p->drawPixmap( ( w - noIcon.width() ) / 2, ( height() - noIcon.height() ) / 2, noIcon );
       }
       else {
@@ -215,14 +214,14 @@ protected:
 	  cg1.setColor( QColorGroup::Text, cg.highlightedText() );
 	}
 	else {
-	  p->fillRect( 0, 0, w, height(), cg.base() ); 
+	  p->fillRect( 0, 0, w, height(), cg.base() );
 	}
 
 	// paint using QSimpleRichText
 	Q3SimpleRichText rt( text(col), listView()->font() );
 	rt.setWidth( 600 ); // way to big to avoid line breaks
 	// normally we would have to clip the height to height()-2*marginVertical(). But if we do that
-	// some characters are cut (such as p or q). It seems as if QSimpleRichText does not properly 
+	// some characters are cut (such as p or q). It seems as if QSimpleRichText does not properly
 	// calculate it's height...
 	rt.draw( p, 0, marginVertical(), QRect( 0, 0, w, height() ), cg1 );
       }
@@ -248,7 +247,7 @@ private:
 		  "%3")
 	.arg( m_title.titleNumber(), 2 )
 	.arg( m_title.playbackTime().toString( false ) )
-	.arg( i18n("%n chapter", "%n chapters", m_title.numPTTs() ) );
+	.arg( i18np("%n chapter", "%n chapters", m_title.numPTTs() ) );
 
     case 3:
       // video stream info
@@ -257,8 +256,8 @@ private:
 	.arg( m_title.videoStream().pictureWidth() )
 	.arg( m_title.videoStream().pictureHeight() )
 	.arg( m_title.videoStream().displayAspectRatio() == K3bVideoDVD::VIDEO_ASPECT_RATIO_4_3 ? "4:3" : "16:9" )
-	.arg( m_title.videoStream().letterboxed() ? QString(" - <em>") + i18n("letterboxed") + QString("</em>"): 
-	      m_title.videoStream().permittedDf() == K3bVideoDVD::VIDEO_PERMITTED_DF_LETTERBOXED 
+	.arg( m_title.videoStream().letterboxed() ? QString(" - <em>") + i18n("letterboxed") + QString("</em>"):
+	      m_title.videoStream().permittedDf() == K3bVideoDVD::VIDEO_PERMITTED_DF_LETTERBOXED
 	      ? QString(" - <em>") + i18n("anamorph") + QString("</em>") : QString::null );
 
     case 4:

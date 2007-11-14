@@ -1,7 +1,7 @@
 /* 
  *
  * $Id: sourceheader 511311 2006-02-19 14:51:05Z trueg $
- * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -34,7 +34,7 @@ class K3bVideoDVDRippingDialog : public K3bInteractionDialog
  public: 
   K3bVideoDVDRippingDialog( const K3bVideoDVD::VideoDVD& dvd, 
 			    const Q3ValueList<int>& titles,
-			    QWidget *parent = 0, const char *name = 0 );
+			    QWidget *parent = 0 );
   ~K3bVideoDVDRippingDialog();
 
   void setBaseDir( const QString& path );
@@ -60,7 +60,7 @@ class K3bVideoDVDRippingDialog : public K3bInteractionDialog
   void slotUpdateVideoSizes();
 
  private:
-  void populateTitleView( const Q3ValueList<int>& titles );
+  void populateTitleView( const QList<int>& titles );
 
   QString createFilename( const K3bVideoDVDRippingJob::TitleRipInfo& info, const QString& pattern ) const;
 

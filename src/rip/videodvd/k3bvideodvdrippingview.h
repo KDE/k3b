@@ -19,14 +19,14 @@
 #include <k3bmediacontentsview.h>
 #include <k3bmedium.h>
 #include <k3bvideodvd.h>
-//Added by qt3to4:
+
 #include <QLabel>
 
 class K3bVideoDVDRippingTitleListView;
-class K3bToolBox;
+class KToolBar;
 class QLabel;
 class KActionCollection;
-class KActionMenu;
+class KMenu;
 class K3ListView;
 class Q3ListViewItem;
 
@@ -35,7 +35,7 @@ class K3bVideoDVDRippingView : public K3bMediaContentsView
   Q_OBJECT
 
  public:
-  K3bVideoDVDRippingView( QWidget* parent = 0, const char * name = 0 );
+  K3bVideoDVDRippingView( QWidget* parent = 0 );
   ~K3bVideoDVDRippingView();
 
   KActionCollection* actionCollection() const { return m_actionCollection; }
@@ -56,9 +56,9 @@ class K3bVideoDVDRippingView : public K3bMediaContentsView
   void initActions();
 
   KActionCollection* m_actionCollection;
-  KActionMenu* m_popupMenu;
+  KMenu* m_popupMenu;
 
-  K3bToolBox* m_toolBox;
+  KToolBar* m_toolBox;
   QLabel* m_labelLength;
   K3bVideoDVDRippingTitleListView* m_titleView;  
 

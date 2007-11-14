@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id: k3bcdcontentsview.cpp 582796 2006-09-10 15:31:38Z trueg $
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -25,8 +25,7 @@
 
 
 K3bContentsView::K3bContentsView( bool withHeader,
-				  QWidget* parent, 
-				  const char* name )
+				  QWidget* parent )
   : QWidget( parent ),
     m_header(0),
     m_centerWidget(0)

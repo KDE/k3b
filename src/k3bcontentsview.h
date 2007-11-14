@@ -32,8 +32,7 @@ class K3bContentsView : public QWidget
 
  protected:
   K3bContentsView( bool withHeader,
-		   QWidget* parent = 0, 
-		   const char* name = 0 );
+		   QWidget* parent = 0 );
 
   QWidget* mainWidget();
   void setMainWidget( QWidget* );

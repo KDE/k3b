@@ -292,7 +292,7 @@
                                         <property name="margin">
                                             <number>0</number>
                                         </property>
-                                        <widget class="KActiveLabel">
+                                        <widget class="K3ActiveLabel">
                                             <property name="name">
                                                 <cstring>m_labelNoAudioSettings</cstring>
                                             </property>
@@ -712,7 +712,7 @@
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
-    <includehint>kactivelabel.h</includehint>
+    <includehint>k3activelabel.h</includehint>
     <includehint>k3bintmapcombobox.h</includehint>
     <includehint>k3bintmapcombobox.h</includehint>
     <includehint>kurllabel.h</includehint>

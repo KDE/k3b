@@ -31,30 +31,30 @@
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
-#include <Q3ValueList>
-#include <Q3PtrList>
 
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kaction.h>
 #include <kconfig.h>
-#include <KActionMenu>
+#include <KMenu>
 #include <KActionCollection>
+#include <KToolBar>
 
-K3bVideoDVDRippingView::K3bVideoDVDRippingView( QWidget* parent, const char * name )
+
+K3bVideoDVDRippingView::K3bVideoDVDRippingView( QWidget* parent )
   : K3bMediaContentsView( true,
 			  K3bMedium::CONTENT_VIDEO_DVD,
 			  K3bDevice::MEDIA_DVD_ALL,
 			  K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_COMPLETE,
 			  parent )
 {
-  Q3GridLayout* mainGrid = new Q3GridLayout( mainWidget() );
+  QGridLayout* mainGrid = new QGridLayout( mainWidget() );
 
   // toolbox
   // ----------------------------------------------------------------------------------
-  Q3HBoxLayout* toolBoxLayout = new Q3HBoxLayout( 0, 0, 0, "toolBoxLayout" );
-  m_toolBox = new K3bToolBox( mainWidget() );
+  Q3HBoxLayout* toolBoxLayout = new Q3HBoxLayout( 0, 0, 0 );
+  m_toolBox = new KToolBar( mainWidget(), true, true );
   toolBoxLayout->addWidget( m_toolBox );
   QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
   toolBoxLayout->addItem( spacer );
@@ -78,7 +78,7 @@ K3bVideoDVDRippingView::K3bVideoDVDRippingView( QWidget* parent, const char * na
 
   initActions();
 
-  m_toolBox->addButton( actionCollection()->action("start_rip"), true );
+  m_toolBox->addAction( actionCollection()->action("start_rip") );
 
   setLeftPixmap( K3bTheme::MEDIA_LEFT );
   setRightPixmap( K3bTheme::MEDIA_VIDEO );
@@ -164,7 +164,7 @@ void K3bVideoDVDRippingView::reloadMedium()
 
 void K3bVideoDVDRippingView::slotStartRipping()
 {
-  Q3ValueList<int> titles;
+  QList<int> titles;
   int i = 1;
   for( Q3ListViewItemIterator it( m_titleView ); *it; ++it, ++i )
     if( static_cast<K3bCheckListViewItem*>( *it )->isChecked() )
@@ -203,19 +203,17 @@ void K3bVideoDVDRippingView::slotUncheckAll()
 
 void K3bVideoDVDRippingView::slotCheck()
 {
-  Q3PtrList<Q3ListViewItem> items( m_titleView->selectedItems() );
-  for( Q3PtrListIterator<Q3ListViewItem> it( items );
-       it.current(); ++it )
-    dynamic_cast<K3bCheckListViewItem*>(it.current())->setChecked(true);
+  QList<Q3ListViewItem*> items( m_titleView->selectedItems() );
+  Q_FOREACH( Q3ListViewItem* item, items )
+    dynamic_cast<K3bCheckListViewItem*>(item)->setChecked(true);
 }
 
 
 void K3bVideoDVDRippingView::slotUncheck()
 {
-  Q3PtrList<Q3ListViewItem> items( m_titleView->selectedItems() );
-  for( Q3PtrListIterator<Q3ListViewItem> it( items );
-       it.current(); ++it )
-    dynamic_cast<K3bCheckListViewItem*>(it.current())->setChecked(false);
+  QList<Q3ListViewItem*> items( m_titleView->selectedItems() );
+  Q_FOREACH( Q3ListViewItem* item, items )
+    dynamic_cast<K3bCheckListViewItem*>(item)->setChecked(false);
 }
 
 
@@ -223,32 +221,41 @@ void K3bVideoDVDRippingView::initActions()
 {
   m_actionCollection = new KActionCollection( this );
 
-  KAction* actionSelectAll = new KAction( i18n("Check All"), 0, 0, this,
-					  SLOT(slotCheckAll()), actionCollection(),
-					  "check_all" );
-  KAction* actionDeselectAll = new KAction( i18n("Uncheck All"), 0, 0, this,
-					    SLOT(slotUncheckAll()), actionCollection(),
-					    "uncheck_all" );
-  KAction* actionSelect = new KAction( i18n("Check Track"), 0, 0, this,
-				       SLOT(slotCheck()), actionCollection(),
-				       "select_track" );
-  KAction* actionDeselect = new KAction( i18n("Uncheck Track"), 0, 0, this,
-					 SLOT(slotUncheck()), actionCollection(),
-					 "deselect_track" );
-  KAction* actionStartRip = new KAction( i18n("Start Ripping"), "gear", 0, this,
-					 SLOT(slotStartRipping()), m_actionCollection, "start_rip" );
+  KAction* actionSelectAll = new KAction( this );
+  actionSelectAll->setText( i18n("Check All") );
+  connect( actionSelectAll, SIGNAL( triggered() ), this, SLOT( slotCheckAll() ) );
+  actionCollection()->addAction( "check_all", actionSelectAll );
 
+  KAction* actionDeselectAll = new KAction( this );
+  actionDeselectAll->setText( i18n("Uncheck All") );
+  connect( actionDeselectAll, SIGNAL( triggered() ), this, SLOT( slotUncheckAll() ) );
+  actionCollection()->addAction( "uncheck_all", actionSelectAll );
+
+  KAction* actionSelect = new KAction( this );
+  actionSelect->setText( i18n("Check Track") );
+  connect( actionSelect, SIGNAL( triggered() ), this, SLOT( slotCheck() ) );
+  actionCollection()->addAction( "select_track", actionSelect );
+
+  KAction* actionDeselect = new KAction( this );
+  actionDeselect->setText( i18n("Uncheck Track") );
+  connect( actionDeselect, SIGNAL( triggered() ), this, SLOT( slotUncheck() ) );
+  actionCollection()->addAction( "deselect_track", actionDeselect );
+
+  KAction* actionStartRip = new KAction( this );
+  actionStartRip->setText( i18n("Start Ripping") );
+  actionStartRip->setIcon( KIcon( "gear" ) );
   actionStartRip->setToolTip( i18n("Open the Video DVD ripping dialog") );
+  connect( actionStartRip, SIGNAL( triggered() ), this, SLOT( slotStartRipping() ) );
+  actionCollection()->addAction( "start_rip", actionStartRip );
 
   // setup the popup menu
-  m_popupMenu = new KActionMenu( actionCollection(), "popup_menu" );
-  KAction* separator = new KActionSeparator( actionCollection(), "separator" );
-  m_popupMenu->insert( actionSelect );
-  m_popupMenu->insert( actionDeselect );
-  m_popupMenu->insert( actionSelectAll );
-  m_popupMenu->insert( actionDeselectAll );
-  m_popupMenu->insert( separator );
-  m_popupMenu->insert( actionStartRip );
+  m_popupMenu = new KMenu( this );
+  m_popupMenu->addAction( actionSelect );
+  m_popupMenu->addAction( actionDeselect );
+  m_popupMenu->addAction( actionSelectAll );
+  m_popupMenu->addAction( actionDeselectAll );
+  m_popupMenu->addSeparator();
+  m_popupMenu->addAction( actionStartRip );
 }
 
 

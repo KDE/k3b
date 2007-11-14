@@ -90,8 +90,7 @@ class K3bMediaContentsView : public K3bContentsView
 			int mediumContent,
 			int mediumTypes,
 			int mediumState,
-			QWidget* parent = 0, 
-			const char* name = 0 );
+			QWidget* parent = 0 );
 
   /**
    * Changes the medium without reloading the contents.
