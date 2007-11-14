@@ -450,7 +450,7 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
             r = pop.exec( e->globalPos() );
         }
         else {
-            addPop.insertTitle( i18n("Add Button"), -1, 0 );
+            addPop.addTitle( i18n("Add Button"), -1, 0 );
             addPop.insertSeparator();
             r = addPop.exec( e->globalPos() );
         }

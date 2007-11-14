@@ -308,7 +308,7 @@ void K3bFileTreeComboBox::mousePressEvent( QMouseEvent* e )
 {
   // mainly from qcombobox.cpp
 
-  if ( e->button() != LeftButton )
+  if ( e->button() != Qt::LeftButton )
     return;
   if ( d->ignoreNextMouseClick ) {
     d->ignoreNextMouseClick = FALSE;

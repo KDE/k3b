@@ -105,9 +105,9 @@ class K3bApplication::Core : public K3bCore
 
   K3bMainWindow* k3bMainWindow() const { return m_mainWindow; }
 
-  K3bInterface* interface() const { return m_interface; }
+  //K3bInterface* interface() const { return m_interface; }
 
-  K3bJobInterface* jobInterface() const { return m_jobInterface; }
+  //K3bJobInterface* jobInterface() const { return m_jobInterface; }
 
   static Core* k3bAppCore() { return s_k3bAppCore; }
 
@@ -137,8 +137,8 @@ class K3bApplication::Core : public K3bCore
   bool internalBlockDevice( K3bDevice::Device* );
   void internalUnblockDevice( K3bDevice::Device* );
 
-  K3bInterface* m_interface;
-  K3bJobInterface* m_jobInterface;
+  //K3bInterface* m_interface;
+  //K3bJobInterface* m_jobInterface;
 
   K3bThemeManager* m_themeManager;
   K3bMainWindow* m_mainWindow;

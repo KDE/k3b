@@ -18,8 +18,8 @@
 #include "k3b.h"
 #include "k3bsplash.h"
 #include "k3baudioserver.h"
-#include "k3binterface.h"
-#include "k3bjobinterface.h"
+//#include "k3binterface.h"
+//#include "k3bjobinterface.h"
 #include "k3bprojectmanager.h"
 #include "k3bappdevicemanager.h"
 #include "k3bmediacache.h"
@@ -49,7 +49,6 @@
 #include <kconfig.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
-#include <dcopclient.h>
 #include <kstandarddirs.h>
 #include <kstartupinfo.h>
 #include <kmessagebox.h>
@@ -318,9 +317,9 @@ K3bApplication::Core::Core( QObject* parent )
   // we need the themes on startup (loading them is fast anyway :)
   m_themeManager->loadThemes();
 
-  m_jobInterface = new K3bJobInterface( this );
-  m_interface = new K3bInterface();
-  dcopClient()->setDefaultObject( m_interface->objId() );
+  //m_jobInterface = new K3bJobInterface( this );
+  //m_interface = new K3bInterface();
+  //dcopClient()->setDefaultObject( m_interface->objId() );
 }
 
 

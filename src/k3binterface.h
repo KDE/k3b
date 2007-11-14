@@ -17,8 +17,6 @@
 #ifndef _K3B_INTERFACE_H_
 #define _K3B_INTERFACE_H_
 
-#include <dcopobject.h>
-#include <dcopref.h>
 #include <q3valuelist.h>
 
 #include <kurl.h>

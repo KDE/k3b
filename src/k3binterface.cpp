@@ -25,7 +25,6 @@
 
 #include <k3bglobals.h>
 
-#include <dcopclient.h>
 #include <q3ptrlist.h>
 #include <qtimer.h>
 //Added by qt3to4:

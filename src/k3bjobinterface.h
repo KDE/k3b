@@ -17,7 +17,6 @@
 #define _K3B_JOB_INTERFACE_H_
 
 #include <qobject.h>
-#include <dcopobject.h>
 
 class K3bJob;
 

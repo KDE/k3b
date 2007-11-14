@@ -143,7 +143,7 @@ QString K3bAudioConvertingOptionWidget::baseDir() const
 
 void K3bAudioConvertingOptionWidget::setBaseDir( const QString& path )
 {
-  m_editBaseDir->setURL( path );
+  m_editBaseDir->setUrl( path );
 }
 
 
@@ -211,7 +211,7 @@ QString K3bAudioConvertingOptionWidget::extension() const
 
 void K3bAudioConvertingOptionWidget::loadDefaults()
 {
-  m_editBaseDir->setURL( QDir::homePath() );
+  m_editBaseDir->setUrl( QDir::homePath() );
   m_checkSingleFile->setChecked( false );
   m_checkWriteCueFile->setChecked( false );
   m_comboFileType->setCurrentItem( d->getDefaultFormat() );

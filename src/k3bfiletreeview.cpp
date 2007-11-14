@@ -710,7 +710,7 @@ void K3bFileTreeView::slotSettingsChangedK3b(int category)
 
 void K3bFileTreeView::slotMouseButtonClickedK3b( int btn, Q3ListViewItem *item, const QPoint &pos, int c )
 {
-  if( (btn == LeftButton) && item )
+  if( (btn == Qt::LeftButton) && item )
     emitExecute(item, pos, c);
 }
 
