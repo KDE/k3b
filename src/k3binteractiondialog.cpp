@@ -16,7 +16,6 @@
 
 #include "k3binteractiondialog.h"
 #include "k3btitlelabel.h"
-#include "kcutlabel.h"
 #include "k3bstdguiitems.h"
 #include "k3bpushbutton.h"
 #include "k3bthemedheader.h"
@@ -40,6 +39,7 @@
 #include <QGridLayout>
 #include <QKeyEvent>
 #include <QEvent>
+#include <Q3WhatsThis>
 
 #include <klocale.h>
 #include <kdebug.h>

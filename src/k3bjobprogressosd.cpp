@@ -25,6 +25,7 @@
 #include <kconfig.h>
 #include <klocale.h>
 #include <kmenu.h>
+#include <KConfigGroup>
 
 #include <qpixmap.h>
 #include <qpainter.h>
@@ -32,7 +33,7 @@
 //Added by qt3to4:
 #include <QPaintEvent>
 #include <QMouseEvent>
-
+#include <QDesktopWidget>
 #include <X11/Xlib.h>
 
 
@@ -44,8 +45,8 @@ K3bJobProgressOSD::K3bJobProgressOSD( QWidget* parent )
     m_screen(0),
     m_position(s_outerMargin, s_outerMargin)
 {
-  setFocusPolicy( NoFocus );
-  setBackgroundMode( NoBackground );
+  setFocusPolicy( Qt::NoFocus );
+  setBackgroundMode( Qt::NoBackground );
 
   // dummy size
   resize( 20, 20 );
@@ -214,11 +215,11 @@ void K3bJobProgressOSD::mousePressEvent( QMouseEvent* e )
 {
   m_dragOffset = e->pos();
 
-  if( e->button() == LeftButton && !m_dragging ) {
+  if( e->button() == Qt::LeftButton && !m_dragging ) {
     grabMouse( Qt::SizeAllCursor );
     m_dragging = true;
   }
-  else if( e->button() == RightButton ) {
+  else if( e->button() == Qt::RightButton ) {
     KMenu m;
     if( m.insertItem( i18n("Hide OSD") ) == m.exec( e->globalPos() ) )
       hide();
@@ -290,7 +291,7 @@ void K3bJobProgressOSD::readSettings( KConfigBase* c )
 {
   KConfigGroup grp( c, "OSD Position" );
 
-  setPosition( grp.readPointEntry( "Position", 0 ) );
+  setPosition( grp.readEntry( "Position", QPoint() ) );
   setScreen( grp.readEntry( "Screen", 0 ) );
 }
 

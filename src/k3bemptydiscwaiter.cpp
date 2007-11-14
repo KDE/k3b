@@ -386,11 +386,11 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
 	    !hasIso ||
 	    KMessageBox::warningContinueCancel( parentWidgetToUse(),
 						i18n("Found %1 media in %2 - %3. "
-						     "Should it be overwritten?")
-						.arg("DVD+RW")
-						.arg(d->device->vendor())
-						.arg(d->device->description()),
-						i18n("Found %1").arg("DVD+RW"),i18n("Overwrite") ) == KMessageBox::Continue ) {
+						     "Should it be overwritten?",
+						"DVD+RW",
+						d->device->vendor(),
+						d->device->description()),
+						i18n("Found %1","DVD+RW"),KGuiItem(i18n("Overwrite")) ) == KMessageBox::Continue ) {
 	  finishWaiting( K3bDevice::MEDIA_DVD_PLUS_RW );
 	}
 	else {
@@ -456,11 +456,11 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
 	    !hasIso ||
 	    KMessageBox::warningContinueCancel( parentWidgetToUse(),
 						i18n("Found %1 media in %2 - %3. "
-						     "Should it be overwritten?")
-						.arg(K3bDevice::mediaTypeString(medium.diskInfo().mediaType()))
-						.arg(d->device->vendor())
-						.arg(d->device->description()),
-						i18n("Found %1").arg("DVD-RW"),i18n("Overwrite") ) == KMessageBox::Continue ) {
+						     "Should it be overwritten?",
+						K3bDevice::mediaTypeString(medium.diskInfo().mediaType()),
+						d->device->vendor(),
+						d->device->description()),
+						i18n("Found %1","DVD-RW"),KGuiItem(i18n("Overwrite")) ) == KMessageBox::Continue ) {
 	  finishWaiting( K3bDevice::MEDIA_DVD_RW_OVWR );
 	}
 	else {
@@ -513,11 +513,11 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
       if( formatWithoutAsking ||
 	  KMessageBox::warningContinueCancel( parentWidgetToUse(),
 					      i18n("Found %1 media in %2 - %3. "
-						   "Should it be formatted?")
-					      .arg( K3bDevice::mediaTypeString(medium.diskInfo().mediaType()) )
-					      .arg(d->device->vendor())
-					      .arg(d->device->description()),
-					      i18n("Found %1").arg("DVD-RW"), i18n("Format") ) == KMessageBox::Continue ) {
+						   "Should it be formatted?",
+					      K3bDevice::mediaTypeString(medium.diskInfo().mediaType()),
+					      d->device->vendor(),
+					      d->device->description()),
+					      i18n("Found %1","DVD-RW"), KGuiItem(i18n("Format")) ) == KMessageBox::Continue ) {
 
 	kDebug() << "(K3bEmptyDiscWaiter) ------ formatting DVD-RW.";
 

@@ -47,7 +47,7 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
     layout()->setMargin( KDialog::marginHint() );
 
     m_imageFileLabel = new QLabel( this );
-    m_editDirectory = new KUrlRequester( this, "m_editDirectory" );
+    m_editDirectory = new KUrlRequester( this );
 
     m_imageFileLabel->setBuddy( m_editDirectory );
 

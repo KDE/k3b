@@ -22,6 +22,7 @@
 #include <ksimpleconfig.h>
 #include <kdebug.h>
 #include <kglobal.h>
+#include <KConfigGroup>
 
 #include <qpixmap.h>
 #include <qfile.h>
@@ -308,13 +309,14 @@ void K3bThemeManager::loadTheme( const QString& name )
     t->m_local = fi.isWritable();
 
     // load the stuff
-    KSimpleConfig cfg( path, true );
-    t->m_author = cfg.readEntry( "Author" );
-    t->m_comment = cfg.readEntry( "Comment" );
-    t->m_version = cfg.readEntry( "Version" );
-    t->m_bgColor = cfg.readColorEntry( "Backgroundcolor" );
-    t->m_fgColor = cfg.readColorEntry( "Foregroundcolor" );
-    t->m_bgMode = ( cfg.readEntry( "BackgroundMode" ) == "Scaled" ? K3bTheme::BG_SCALE : K3bTheme::BG_TILE );
+    KConfig cfg( path );
+    KConfigGroup group(&cfg,"");
+    t->m_author = group.readEntry( "Author" );
+    t->m_comment = group.readEntry( "Comment" );
+    t->m_version = group.readEntry( "Version" );
+    t->m_bgColor = group.readEntry( "Backgroundcolor",QColor() );
+    t->m_fgColor = group.readEntry( "Foregroundcolor",QColor() );
+    t->m_bgMode = ( group.readEntry( "BackgroundMode" ) == "Scaled" ? K3bTheme::BG_SCALE : K3bTheme::BG_TILE );
 
     d->themes.append( t );
   }

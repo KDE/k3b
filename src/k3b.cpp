@@ -141,7 +141,7 @@ public:
 
 
 K3bMainWindow::K3bMainWindow()
-    : KXMLGuiWindow()
+    : KXmlGuiWindow()
 {
     //setup splitter behavior
     manager()->setSplitterHighResolution(true);

@@ -61,7 +61,7 @@ namespace K3bDevice {
 }
 
 
-class K3bMainWindow : public KXMLGuiWindow
+class K3bMainWindow : public KXmlGuiWindow
 {
     Q_OBJECT
 

@@ -37,6 +37,8 @@
 #include <QPixmap>
 #include <QMouseEvent>
 #include <QKeyEvent>
+#include <QDesktopWidget>
+#include <QLineEdit>
 
 #include <kdebug.h>
 #include <kiconloader.h>

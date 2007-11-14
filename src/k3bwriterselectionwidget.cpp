@@ -112,7 +112,7 @@ public:
 };
 
 
-K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent, const char *name )
+K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent )
   : QWidget( parent )
 {
   d = new Private;
@@ -135,7 +135,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent, const char 
 
   m_comboSpeed = new KComboBox( false, groupWriter );
   m_comboSpeed->setObjectName( "m_comboSpeed" );
-  m_comboSpeed->setAutoMask( false );
+  //m_comboSpeed->setAutoMask( false );
   m_comboSpeed->setDuplicatesEnabled( false );
 
   m_comboMedium = new MediaSelectionComboBox( groupWriter );
@@ -408,11 +408,11 @@ void K3bWriterSelectionWidget::setSpeed( int s )
   d->lastSetSpeed = -1;
 
   if( d->haveIgnoreSpeed && s < 0 )
-    m_comboSpeed->setCurrentItem( 1 ); // Ignore
+    m_comboSpeed->setCurrentIndex( 1 ); // Ignore
   else if( d->speedIndexMap.contains( s ) )
-    m_comboSpeed->setCurrentItem( d->speedIndexMap[s] );
+    m_comboSpeed->setCurrentIndex( d->speedIndexMap[s] );
   else {
-    m_comboSpeed->setCurrentItem( 0 ); // Auto
+    m_comboSpeed->setCurrentIndex( 0 ); // Auto
     d->lastSetSpeed = s; // remember last set speed
   }
 }

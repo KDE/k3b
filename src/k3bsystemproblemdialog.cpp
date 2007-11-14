@@ -96,7 +96,7 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const Q3ValueList<K3bSystemProbl
   // ---------------------------------------------------------------------------------------------------
   K3bThemedHeader* titleFrame = new K3bThemedHeader( this );
   titleFrame->setTitle( i18n("System Configuration Problems"),
-			i18n("1 problem", "%n problems", problems.count() ) );
+			i18np("1 problem", "%n problems", problems.count() ) );
 
   m_closeButton = new QPushButton( i18n("Close"), this );
   connect( m_closeButton, SIGNAL(clicked()), this, SLOT(close()) );
@@ -604,7 +604,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 
   // remember which version of K3b checked the system the last time
   KConfigGroup cfg( k3bcore->config(), "General Options" );
-  cfg.writeEntry( "Last system check version", k3bcore->version() );
+  cfg.writeEntry( "Last system check version", QString(k3bcore->version()) );
 }
 
 void K3bSystemProblemDialog::slotK3bSetup()
