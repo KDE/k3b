@@ -1,7 +1,7 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -26,23 +26,23 @@ class K3bDataFileView;
 
 class K3bVideoDvdView : public K3bView
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bVideoDvdView( K3bVideoDvdDoc* doc, QWidget *parent = 0, const char *name = 0 );
-  ~K3bVideoDvdView();
+public:
+    K3bVideoDvdView( K3bVideoDvdDoc* doc, QWidget *parent = 0 );
+    ~K3bVideoDvdView();
 
-   void addUrls( const KUrl::List& );
+    void addUrls( const KUrl::List& );
 
- protected:
-  virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
+protected:
+    virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
 
-  void init();
+    void init();
 
- private:
-  K3bVideoDvdDoc* m_doc;
-  K3bDataDirTreeView* m_dataDirTree;
-  K3bDataFileView* m_dataFileView;
+private:
+    K3bVideoDvdDoc* m_doc;
+    K3bDataDirTreeView* m_dataDirTree;
+    K3bDataFileView* m_dataFileView;
 };
 
 #endif

@@ -1,7 +1,7 @@
 /*
  *
  * $Id$
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -30,23 +30,23 @@
 #include <qsplitter.h>
 
 
-K3bVideoDvdView::K3bVideoDvdView( K3bVideoDvdDoc* doc, QWidget *parent, const char *name )
-  : K3bView( doc, parent ),
-    m_doc(doc)
+K3bVideoDvdView::K3bVideoDvdView( K3bVideoDvdDoc* doc, QWidget *parent )
+    : K3bView( doc, parent ),
+      m_doc(doc)
 {
-  // --- setup GUI ---------------------------------------------------
-  QSplitter* mainSplitter = new QSplitter( this );
-  m_dataDirTree = new K3bDataDirTreeView( this, doc, mainSplitter );
-  m_dataFileView = new K3bDataFileView( this, m_dataDirTree, doc, mainSplitter );
-  m_dataDirTree->setFileView( m_dataFileView );
-  setMainWidget( mainSplitter );
+    // --- setup GUI ---------------------------------------------------
+    QSplitter* mainSplitter = new QSplitter( this );
+    m_dataDirTree = new K3bDataDirTreeView( this, doc, mainSplitter );
+    m_dataFileView = new K3bDataFileView( this, m_dataDirTree, doc, mainSplitter );
+    m_dataDirTree->setFileView( m_dataFileView );
+    setMainWidget( mainSplitter );
 
-  connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)), m_dataDirTree, SLOT(setCurrentDir(K3bDirItem*)) );
+    connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)), m_dataDirTree, SLOT(setCurrentDir(K3bDirItem*)) );
 
-  m_dataDirTree->checkForNewItems();
-  m_dataFileView->checkForNewItems();
+    m_dataDirTree->checkForNewItems();
+    m_dataFileView->checkForNewItems();
 
-  addPluginButtons( K3bProjectPlugin::VIDEO_DVD );
+    addPluginButtons( K3bProjectPlugin::VIDEO_DVD );
 }
 
 
@@ -57,25 +57,25 @@ K3bVideoDvdView::~K3bVideoDvdView()
 
 K3bProjectBurnDialog* K3bVideoDvdView::newBurnDialog( QWidget* parent )
 {
-  return new K3bVideoDvdBurnDialog( m_doc, parent, true );
+    return new K3bVideoDvdBurnDialog( m_doc, parent );
 }
 
 
 void K3bVideoDvdView::init()
 {
-  KMessageBox::information( this,
-			    i18n("Be aware that you need to provide the complete Video DVD filestructure. "
-				 "K3b does not support video transcoding and preparation of video object "
-				 "files yet. That means you need to already have the VTS_X_YY.VOB "
-				 "and VTS_X_YY.IFO files."),
-			    i18n("K3b Video DVD Restrictions"),
-			    "video_dvd_restrictions" );
+    KMessageBox::information( this,
+                              i18n("Be aware that you need to provide the complete Video DVD filestructure. "
+                                   "K3b does not support video transcoding and preparation of video object "
+                                   "files yet. That means you need to already have the VTS_X_YY.VOB "
+                                   "and VTS_X_YY.IFO files."),
+                              i18n("K3b Video DVD Restrictions"),
+                              "video_dvd_restrictions" );
 }
 
 
 void K3bVideoDvdView::addUrls( const KUrl::List& urls )
 {
-  K3bDataUrlAddingDialog::addUrls( urls, m_dataFileView->currentDir() );
+    K3bDataUrlAddingDialog::addUrls( urls, m_dataFileView->currentDir() );
 }
 
 #include "k3bvideodvdview.moc"

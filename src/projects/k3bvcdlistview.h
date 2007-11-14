@@ -23,7 +23,7 @@
 //Added by qt3to4:
 #include <QDropEvent>
 #include <QDragEnterEvent>
-#include <Q3PtrList>
+#include <QList>
 
 class QDragEnterEvent;
 class Q3DragObject;
@@ -44,7 +44,7 @@ class K3bVcdListView : public K3bListView
         Q_OBJECT
 
     public:
-        K3bVcdListView( K3bView*, K3bVcdDoc*, QWidget *parent = 0, const char *name = 0 );
+        K3bVcdListView( K3bView*, K3bVcdDoc*, QWidget *parent = 0 );
         ~K3bVcdListView();
 
         /**
@@ -57,7 +57,7 @@ class K3bVcdListView : public K3bListView
             return m_actionCollection;
         }
 
-        Q3PtrList<K3bVcdTrack> selectedTracks();
+        QList<K3bVcdTrack*> selectedTracks();
 
     signals:
         void lengthReady();

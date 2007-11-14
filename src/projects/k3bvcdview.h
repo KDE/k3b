@@ -17,7 +17,6 @@
 #define K3BVCDVIEW_H
 
 #include <qstringlist.h>
-#include <q3ptrlist.h>
 
 // K3b Includes
 #include <k3bview.h>
@@ -38,7 +37,7 @@ class K3bVcdView : public K3bView
   Q_OBJECT
   
  public:
-  K3bVcdView( K3bVcdDoc* pDoc, QWidget* parent, const char *name = 0 );
+  K3bVcdView( K3bVcdDoc* pDoc, QWidget* parent );
   ~K3bVcdView();
   
  protected:

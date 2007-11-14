@@ -51,8 +51,8 @@
 #include <k3bexternalbinmanager.h>
 #include <k3bvalidators.h>
 
-K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent, bool modal )
-        : K3bProjectBurnDialog( _doc, parent, modal )
+K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent )
+        : K3bProjectBurnDialog( _doc, parent )
 {
     m_vcdDoc = _doc;
 

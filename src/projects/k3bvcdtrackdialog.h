@@ -17,13 +17,15 @@
 #define K3BVCDTRACKDIALOG_H
 
 #include <kdialog.h>
-#include <q3ptrlist.h>
+#include <qlist.h>
 #include <qtabwidget.h>
 //Added by qt3to4:
 #include <QLabel>
 
 #include <k3bvcddoc.h>
 #include <k3blistview.h>
+
+#include <KComboBox>
 
 class K3bVcdTrack;
 class QLabel;
@@ -32,17 +34,17 @@ class QComboBox;
 class Q3GroupBox;
 class QRadioButton;
 class Q3ButtonGroup;
-class KCutLabel;
+class KSqueezedTextLabel;
 
 #warning We need a simple replacement for K3bCutComboBox
-typdef KComboBox K3bCutComboBox;
+typedef KComboBox K3bCutComboBox;
 
 class K3bVcdTrackDialog : public KDialog
 {
         Q_OBJECT
 
     public:
-        K3bVcdTrackDialog( K3bVcdDoc*, Q3PtrList<K3bVcdTrack>& tracks, Q3PtrList<K3bVcdTrack>& selectedTracks, QWidget* parent = 0 );
+        K3bVcdTrackDialog( K3bVcdDoc*, QList<K3bVcdTrack*>& tracks, QList<K3bVcdTrack*>& selectedTracks, QWidget* parent = 0 );
         ~K3bVcdTrackDialog();
 
     protected slots:
@@ -59,12 +61,12 @@ class K3bVcdTrackDialog : public KDialog
 
     private:
         K3bVcdDoc* m_vcdDoc;
-        Q3PtrList<K3bVcdTrack> m_tracks;
-        Q3PtrList<K3bVcdTrack> m_selectedTracks;
+        QList<K3bVcdTrack*> m_tracks;
+        QList<K3bVcdTrack*> m_selectedTracks;
         QMap<QString, K3bVcdTrack*> m_numkeysmap;
         QTabWidget* m_mainTabbed;
 
-        KCutLabel* m_displayFileName;
+        KSqueezedTextLabel* m_displayFileName;
         QLabel* m_labelMimeType;
         QLabel* m_displaySize;
         QLabel* m_displayLength;

@@ -40,7 +40,7 @@ class K3bVcdBurnDialog : public K3bProjectBurnDialog
         Q_OBJECT
 
     public:
-        K3bVcdBurnDialog( K3bVcdDoc* doc, QWidget *parent = 0, bool modal = true );
+        K3bVcdBurnDialog( K3bVcdDoc* doc, QWidget *parent = 0 );
         ~K3bVcdBurnDialog();
 
         K3bVcdDoc* vcdDoc() const
