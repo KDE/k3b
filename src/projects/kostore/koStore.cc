@@ -499,7 +499,7 @@ QStringList KoStore::addLocalDirectory( const QString &dirPath, const QString &d
 
   QDir dir(dirPath);
   if ( !dir.exists() )
-    return 0;
+    return QStringList();
 
   QStringList files = dir.entryList();
   for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it )

@@ -40,6 +40,7 @@
 #include <kaction.h>
 #include <kconfig.h>
 #include <KActionMenu>
+#include <KActionCollection>
 
 K3bVideoDVDRippingView::K3bVideoDVDRippingView( QWidget* parent, const char * name )
   : K3bMediaContentsView( true,
@@ -121,7 +122,7 @@ void K3bVideoDVDRippingView::reloadMedium()
 
   if( m_dvd.open( device() ) ) {
     setTitle( medium().beautifiedVolumeId() + " (" + i18n("Video DVD") + ")" );
-    m_labelLength->setText( i18n("%n title", "%n titles", m_dvd.numTitles() ) );
+    m_labelLength->setText( i18np("%n title", "%n titles", m_dvd.numTitles() ) );
     m_titleView->setVideoDVD( m_dvd );
     QApplication::restoreOverrideCursor();
 

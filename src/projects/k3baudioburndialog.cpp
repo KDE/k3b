@@ -65,7 +65,7 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent, const
   prepareGui();
 
   setTitle( i18n("Audio Project"),
-	    i18n("1 track (%1 minutes)", "%n tracks (%1 minutes)",
+	    i18np("1 track (%1 minutes)", "%n tracks (%1 minutes)",
 		 m_doc->numOfTracks() ).arg(m_doc->length().toString()) );
 
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
