@@ -17,7 +17,11 @@ ${libk3b_BINARY_DIR}/plugin
 ${libk3b_BINARY_DIR}/tools
 ${libk3b_BINARY_DIR}/projects
 ${libk3b_BINARY_DIR}/jobs
+${libk3b_SOURCE_DIR}/projects/movixcd/
+${CMAKE_CURRENT_SOURCE_DIR}/projects
+${libk3b_SOURCE_DIR}/projects/videodvd/
 )
+
 
 add_subdirectory( option )
 add_subdirectory( rip )
