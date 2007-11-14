@@ -18,12 +18,11 @@
 #define K3BWRITERSELECTIONWIDGET_H
 
 #include <qwidget.h>
-//Added by qt3to4:
 #include <QLabel>
-#include <Q3ValueList>
+
+#include <kconfiggroup.h>
 
 class KComboBox;
-class KConfigBase;
 class QLabel;
 class K3bMediaSelectionComboBox;
 namespace K3bDevice {
@@ -49,7 +48,7 @@ class K3bWriterSelectionWidget : public QWidget
   int writerSpeed() const;
   K3bDevice::Device* writerDevice() const;
 
-  Q3ValueList<K3bDevice::Device*> allDevices() const;
+  QList<K3bDevice::Device*> allDevices() const;
 
   /**
    * returns K3b::WritingApp
@@ -60,8 +59,8 @@ class K3bWriterSelectionWidget : public QWidget
   int wantedMediumState() const;
 
   void loadDefaults();
-  void loadConfig( KConfigBase* );
-  void saveConfig( KConfigBase* );
+  void loadConfig( const KConfigGroup& );
+  void saveConfig( KConfigGroup& );
 
  public slots:
   void setWriterDevice( K3bDevice::Device* );

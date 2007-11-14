@@ -39,12 +39,8 @@
 #include <qtoolbutton.h>
 
 #include <qmap.h>
-#include <q3ptrvector.h>
 #include <qcursor.h>
 #include <qapplication.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3ValueList>
 
 
 #include <stdlib.h>
@@ -129,7 +125,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent, const char 
   groupWriter->setColumnLayout(0, Qt::Vertical );
   groupWriter->layout()->setSpacing( 0 );
 
-  Q3GridLayout* groupWriterLayout = new Q3GridLayout( groupWriter->layout() );
+  QGridLayout* groupWriterLayout = new QGridLayout( groupWriter->layout() );
   groupWriterLayout->setAlignment( Qt::AlignTop );
   groupWriterLayout->setSpacing( KDialog::spacingHint() );
   groupWriterLayout->setMargin( 0 );
@@ -155,7 +151,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent, const char 
   groupWriterLayout->setColStretch( 0, 1 );
 
 
-  Q3GridLayout* mainLayout = new Q3GridLayout( this );
+  QGridLayout* mainLayout = new QGridLayout( this );
   mainLayout->setAlignment( Qt::AlignTop );
   mainLayout->setSpacing( KDialog::spacingHint() );
   mainLayout->setMargin( 0 );
@@ -257,7 +253,7 @@ void K3bWriterSelectionWidget::slotConfigChanged( KConfigBase* c )
 void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 {
   if( writerDevice() ) {
-    Q3ValueList<int> speeds = k3bappcore->mediaCache()->writingSpeeds( writerDevice() );
+    QList<int> speeds = k3bappcore->mediaCache()->writingSpeeds( writerDevice() );
 
     int lastSpeed = writerSpeed();
 
@@ -298,7 +294,7 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 	}
       }
       else {
-	for( Q3ValueList<int>::iterator it = speeds.begin(); it != speeds.end(); ++it )
+	for( QList<int>::iterator it = speeds.begin(); it != speeds.end(); ++it )
 	  insertSpeedItem( *it );
       }
     }
@@ -395,7 +391,7 @@ K3bDevice::Device* K3bWriterSelectionWidget::writerDevice() const
 }
 
 
-Q3ValueList<K3bDevice::Device*> K3bWriterSelectionWidget::allDevices() const
+QList<K3bDevice::Device*> K3bWriterSelectionWidget::allDevices() const
 {
   return m_comboMedium->allDevices();
 }
@@ -548,19 +544,19 @@ void K3bWriterSelectionWidget::slotRefreshWritingApps()
 }
 
 
-void K3bWriterSelectionWidget::loadConfig( KConfigBase* c )
+void K3bWriterSelectionWidget::loadConfig( const KConfigGroup& c )
 {
-  setWriterDevice( k3bcore->deviceManager()->findDevice( c->readEntry( "writer_device" ) ) );
-  setSpeed( c->readEntry( "writing_speed",  0 ) );
-  setWritingApp( K3b::writingAppFromString( c->readEntry( "writing_app" ) ) );
+  setWriterDevice( k3bcore->deviceManager()->findDevice( c.readEntry( "writer_device" ) ) );
+  setSpeed( c.readEntry( "writing_speed",  0 ) );
+  setWritingApp( K3b::writingAppFromString( c.readEntry( "writing_app" ) ) );
 }
 
 
-void K3bWriterSelectionWidget::saveConfig( KConfigBase* c )
+void K3bWriterSelectionWidget::saveConfig( KConfigGroup& c )
 {
-  c->writeEntry( "writing_speed", writerSpeed() );
-  c->writeEntry( "writer_device", writerDevice() ? writerDevice()->devicename() : QString::null );
-  c->writeEntry( "writing_app", m_comboWritingApp->currentText() );
+  c.writeEntry( "writing_speed", writerSpeed() );
+  c.writeEntry( "writer_device", writerDevice() ? writerDevice()->devicename() : QString::null );
+  c.writeEntry( "writing_app", m_comboWritingApp->currentText() );
 }
 
 void K3bWriterSelectionWidget::loadDefaults()

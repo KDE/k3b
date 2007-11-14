@@ -18,9 +18,8 @@
 #define _K3B_DATAMODE_WIDGET_H_
 
 #include <qcombobox.h>
+#include <kconfiggroup.h>
 
-
-class KConfigBase;
 
 
 class K3bDataModeWidget : public QComboBox
@@ -36,8 +35,8 @@ class K3bDataModeWidget : public QComboBox
    */
   int dataMode() const;
 
-  void saveConfig( KConfigBase* );
-  void loadConfig( KConfigBase* );
+  void saveConfig( KConfigGroup& );
+  void loadConfig( const KConfigGroup& );
 
  public slots:
   void setDataMode( int );

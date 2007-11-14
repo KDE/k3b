@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -79,7 +79,7 @@ void K3bDataModeWidget::setDataMode( int mode )
 }
 
 
-void K3bDataModeWidget::saveConfig( KConfigBase* c )
+void K3bDataModeWidget::saveConfig( KConfigGroup& c )
 {
   QString datamode;
   if( dataMode() == K3b::MODE1 )
@@ -88,13 +88,13 @@ void K3bDataModeWidget::saveConfig( KConfigBase* c )
     datamode = "mode2";
   else
     datamode = "auto";
-  c->writeEntry( "data_track_mode", datamode );
+  c.writeEntry( "data_track_mode", datamode );
 }
 
 
-void K3bDataModeWidget::loadConfig( KConfigBase* c )
+void K3bDataModeWidget::loadConfig( const KConfigGroup& c )
 {
-  QString datamode = c->readEntry( "data_track_mode" );
+  QString datamode = c.readEntry( "data_track_mode" );
   if( datamode == "mode1" )
     setDataMode( K3b::MODE1 );
   else if( datamode == "mode2" )
