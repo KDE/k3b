@@ -267,7 +267,7 @@ void K3bMediaSelectionComboBox::updateMedia()
   bool rwOnly = !( wantedMediumType() & (K3bDevice::MEDIA_CD_ROM|K3bDevice::MEDIA_DVD_ROM) );
   bool dvdOnly = !( wantedMediumType() & (K3bDevice::MEDIA_CD_ROM|K3bDevice::MEDIA_WRITABLE_CD) );
 
-  Q3PtrList<K3bDevice::Device> devices = k3bcore->deviceManager()->allDevices();
+  QList<K3bDevice::Device *> devices(k3bcore->deviceManager()->allDevices());
   if( dvdOnly ) {
     if( rwOnly )
       devices = k3bcore->deviceManager()->dvdWriter();
@@ -279,7 +279,8 @@ void K3bMediaSelectionComboBox::updateMedia()
   else
     devices = k3bcore->deviceManager()->cdReader();
 
-  for( Q3PtrListIterator<K3bDevice::Device> it( devices ); *it; ++it ) {
+  for( QList<K3bDevice::Device *>::const_iterator it = devices.begin();
+       it != devices.end(); ++it ) {
       if ( d->ignoreDevice == *it ) {
           continue;
       }

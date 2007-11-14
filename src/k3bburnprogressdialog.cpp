@@ -24,7 +24,7 @@
 #include <k3bthememanager.h>
 
 #include <kglobal.h>
-#include <kprogress.h>
+#include <kprogressdialog.h>
 #include <klocale.h>
 
 #include <q3groupbox.h>

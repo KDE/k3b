@@ -492,8 +492,9 @@ void K3bFileTreeView::addCdDeviceBranches( K3bDevice::DeviceManager* dm )
   // clear the maps
   d->branchDeviceMap.clear();
   d->deviceBranchDict.clear();
-
-  for( Q3PtrListIterator<K3bDevice::Device> it( dm->allDevices() ); *it; ++it )
+  QList<K3bDevice::Device *> items(dm->allDevices());
+  for( QList<K3bDevice::Device *>::const_iterator it = items.begin();
+       it != items.end(); ++it )
     addDeviceBranch( *it );
 
   if( dm != d->deviceManager ) {

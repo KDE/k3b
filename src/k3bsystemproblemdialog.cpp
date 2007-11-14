@@ -346,8 +346,9 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
   bool atapiReader = false;
   bool atapiWriter = false;
   bool dvd_r_dl = false;
-  for( Q3PtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->readingDevices() );
-       it.current(); ++it ) {
+  QList<K3bDevice::Device *> items(k3bcore->deviceManager()->readingDevices());
+  for( QList<K3bDevice::Device *>::const_iterator it = items.begin();
+       it != items.end(); ++it ) {
     if( it.current()->interfaceType() == K3bDevice::IDE )
       atapiReader = true;
     if( it.current()->type() & K3bDevice::DEVICE_DVD_R_DL )
@@ -356,12 +357,12 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 
 
   // check automounted devices
-  Q3PtrList<K3bDevice::Device> automountedDevices = checkForAutomounting();
-  for( Q3PtrListIterator<K3bDevice::Device> it( automountedDevices );
-       it.current(); ++it ) {
+  QList<K3bDevice::Device*> automountedDevices = checkForAutomounting();
+  for( QList<K3bDevice::Device *>::const_iterator it = automountedDevices.begin();
+       it != automountedDevices.end(); ++it ) {
     problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
-				       i18n("Device %1 - %2 is automounted.")
-				       .arg(it.current()->vendor()).arg(it.current()->description()),
+				       i18n("Device %1 - %2 is automounted.",
+				       it.current()->vendor(),it.current()->description()),
 				       i18n("K3b is not able to unmount automounted devices. Thus, especially "
 					    "DVD+RW rewriting might fail. There is no need to report this as "
 					    "a bug or feature wish; it is not possible to solve this problem "
@@ -448,8 +449,9 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
 					 false ) );
   }
 
-  for( Q3PtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->allDevices() );
-       it.current(); ++it ) {
+  QList<K3bDevice::Device *> items(k3bcore->deviceManager()->allDevices());
+  for( QList<K3bDevice::Device *>::const_iterator it = items.begin();
+       it != items.end(); ++it ) {
     K3bDevice::Device* dev = it.current();
 
     if( !QFileInfo( dev->blockDeviceName() ).isWritable() )

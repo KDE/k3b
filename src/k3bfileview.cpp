@@ -43,7 +43,7 @@
 #include <kfileitem.h>
 #include <kmessagebox.h>
 #include <kdirlister.h>
-#include <kprogress.h>
+#include <kprogressdialog.h>
 #include <ktoolbar.h>
 
 

@@ -58,7 +58,7 @@
 #include <Q3VBoxLayout>
 #include <QCloseEvent>
 
-#include <kprogress.h>
+#include <kprogressdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <k3listview.h>
@@ -525,7 +525,7 @@ void K3bJobProgressDialog::slotUpdateTime()
 
     QString s = i18n("Elapsed time") + ": ";
     if ( elapsedDays > 0 ) {
-        s += i18n( "1 Day", "%n Days", elapsedDays ) + ", ";
+        s += i18np( "1 Day", "%n Days", elapsedDays ) + ", ";
     }
     s += QTime().addSecs(elapsedSecs).toString();
 

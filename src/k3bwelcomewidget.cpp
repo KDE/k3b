@@ -53,7 +53,7 @@
 
 #include <KActionMenu>
 #include <KToggleAction>
-
+#include <KActionCollection>
 
 static const char* s_allActions[] = {
     "file_new_data",
@@ -137,7 +137,7 @@ void K3bWelcomeWidget::Display::removeButton( K3bFlatButton* b )
 }
 
 
-void K3bWelcomeWidget::Display::rebuildGui( const Q3PtrList<KAction>& actions )
+void K3bWelcomeWidget::Display::rebuildGui( const Q3PtrList<QAction>& actions )
 {
     m_actions = actions;
     rebuildGui();
@@ -374,9 +374,9 @@ void K3bWelcomeWidget::loadConfig( const KConfigGroup& c )
         sl.append( "tools_copy_medium" );
     }
 
-    Q3PtrList<KAction> actions;
+    Q3PtrList<QAction> actions;
     for( QStringList::const_iterator it = sl.begin(); it != sl.end(); ++it )
-        if( KAction* a = m_mainWindow->actionCollection()->action( (*it).latin1() ) )
+        if( QAction* a = m_mainWindow->actionCollection()->action( (*it).latin1() ) )
             actions.append(a);
 
     main->rebuildGui( actions );
@@ -428,7 +428,7 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
 
         for ( int i = 0; s_allActions[i]; ++i ) {
             if ( s_allActions[i][0] != '_' ) {
-                KAction* a = m_mainWindow->actionCollection()->action( s_allActions[i] );
+                QAction* a = m_mainWindow->actionCollection()->action( s_allActions[i] );
                 if ( a && !main->m_actions.containsRef(a) ) {
                     map.insert( addPop.insertItem( a->iconSet(), a->text() ), a );
                 }

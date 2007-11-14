@@ -54,7 +54,7 @@
 #include <kstdguiitem.h>
 #include <kconfig.h>
 #include <ksqueezedtextlabel.h>
-#include <kprogress.h>
+#include <kprogressdialog.h>
 
 #include <unistd.h>
 
