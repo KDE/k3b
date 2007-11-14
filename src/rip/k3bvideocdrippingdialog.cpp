@@ -209,7 +209,7 @@ void K3bVideoCdRippingDialog::slotFreeSpace(const QString&,
     m_freeSpace = kbAvail;
 
     if( m_freeSpace < m_videooptions ->getVideoCdSize() /1024 )
-        m_labelNecessarySize->setPaletteForegroundColor( red );
+        m_labelNecessarySize->setPaletteForegroundColor( Qt::red );
     else
         m_labelNecessarySize->setPaletteForegroundColor( m_labelFreeSpace->paletteForegroundColor() );
 

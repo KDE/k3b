@@ -47,7 +47,6 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kstandardaction.h>
-#include <klineeditdlg.h>
 #include <kstandarddirs.h>
 #include <k3process.h>
 #include <kurl.h>
@@ -67,6 +66,7 @@
 #include <krecentdocument.h>
 #include <ktoggleaction.h>
 #include <stdlib.h>
+#include <KRecentFilesAction>
 
 // application specific includes
 #include "k3b.h"

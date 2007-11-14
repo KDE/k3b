@@ -61,7 +61,6 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
 
  public:
   K3bJobProgressDialog( QWidget* parent = 0, 
-			const char* name = 0, 
 			bool showSubProgress = true, 
 			bool modal = FALSE, 
 			Qt::WFlags fl = 0 );

@@ -89,7 +89,7 @@ K3bTempDirSelectionWidget::~K3bTempDirSelectionWidget()
 
 unsigned long K3bTempDirSelectionWidget::freeTempSpace() const
 {
-    QString path = m_editDirectory->url();
+    QString path = m_editDirectory->url().url();
 
     if( !QFile::exists( path ) )
         path.truncate( path.findRev('/') );
@@ -110,7 +110,7 @@ void K3bTempDirSelectionWidget::slotUpdateFreeTempSpace()
 
     if( m_labelCdSize ) {
         if( m_freeTempSpace < m_requestedSize/1024 )
-            m_labelCdSize->setPaletteForegroundColor( red );
+            m_labelCdSize->setPaletteForegroundColor( Qt::red );
         else
             m_labelCdSize->setPaletteForegroundColor( m_labelFreeSpace->paletteForegroundColor() );
     }
@@ -141,7 +141,7 @@ void K3bTempDirSelectionWidget::setTempPath( const QString& dir )
 
 QString K3bTempDirSelectionWidget::tempPath() const
 {
-    QFileInfo fi( m_editDirectory->url() );
+    QFileInfo fi( m_editDirectory->url().url() );
 
     if( fi.exists() ) {
         if( m_mode == DIR ) {
@@ -165,13 +165,13 @@ QString K3bTempDirSelectionWidget::tempPath() const
 
 QString K3bTempDirSelectionWidget::plainTempPath() const
 {
-    return m_editDirectory->url();
+    return m_editDirectory->url().url();
 }
 
 
 QString K3bTempDirSelectionWidget::tempDirectory() const
 {
-    QString td( m_editDirectory->url() );
+    QString td( m_editDirectory->url().url() );
 
     // remove a trailing slash
     while( !td.isEmpty() && td[td.length()-1] == '/' )

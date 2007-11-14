@@ -37,17 +37,20 @@
 
 
 K3bDebuggingOutputDialog::K3bDebuggingOutputDialog( QWidget* parent )
-  : KDialog( parent, "debugViewDialog", true, i18n("Debugging Output"), Close|User1|User2, Close,
-		 false,
-		 KStandardGuiItem::saveAs(),
-		 KGuiItem( i18n("Copy"), "editcopy" ) )
+  : KDialog( parent)
 {
-  setButtonTip( User1, i18n("Save to file") );
-  setButtonTip( User2, i18n("Copy to clipboard") );
+  setModal(true);
+  setCaption(i18n("Debugging Output"));
+  setButtons(Close|User1|User2);
+  setDefaultButton(Close);
+  setButtonGuiItem(User1, KStandardGuiItem::saveAs());
+  setButtonGuiItem(User2, KGuiItem( i18n("Copy"), "editcopy" ));
+  setButtonToolTip( User1, i18n("Save to file") );
+  setButtonToolTip( User2, i18n("Copy to clipboard") );
 
   debugView = new Q3TextEdit( this );
   debugView->setReadOnly(true);
-  debugView->setTextFormat( Q3TextEdit::PlainText );
+  debugView->setTextFormat( Qt::PlainText );
   debugView->setCurrentFont( KGlobalSettings::fixedFont() );
   debugView->setWordWrap( Q3TextEdit::NoWrap );
 
@@ -74,8 +77,8 @@ void K3bDebuggingOutputDialog::slotUser1()
   if( !filename.isEmpty() ) {
     QFile f( filename );
     if( !f.exists() || KMessageBox::warningContinueCancel( this,
-						  i18n("Do you want to overwrite %1?").arg(filename),
-						  i18n("File Exists"), i18n("Overwrite") )
+						  i18n("Do you want to overwrite %1?",filename),
+						  i18n("File Exists"), KGuiItem(i18n("Overwrite")) )
 	== KMessageBox::Continue ) {
 
       if( f.open( QIODevice::WriteOnly ) ) {

@@ -533,7 +533,7 @@ void K3bJobProgressDialog::slotUpdateTime()
         int rem = m_startTime.secsTo( m_lastProgressUpdateTime ) * (100-d->lastProgress) / d->lastProgress;
         s += " / " + i18n("Remaining" ) + ": ";
         if ( rem >= 24*60*60 ) {
-            s += i18n( "1 Day", "%n Days", rem/(24*60*60) ) + ", ";
+            s += i18np( "1 Day", "%n Days", rem/(24*60*60) ) + ", ";
         }
         s += QTime().addSecs(rem%(24*60*60)).toString();
     }

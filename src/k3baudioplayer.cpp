@@ -103,9 +103,9 @@ void K3bPlayListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int c, 
     QColorGroup newCg( cg );
 
     // we assume the user has not configured a very dark color as base color
-    newCg.setColor( QColorGroup::Text, red );
-    newCg.setColor( QColorGroup::Highlight, red );
-    newCg.setColor( QColorGroup::HighlightedText, white );
+    newCg.setColor( QColorGroup::Text, Qt::red );
+    newCg.setColor( QColorGroup::Highlight, Qt::red );
+    newCg.setColor( QColorGroup::HighlightedText, Qt::white );
 
     K3ListViewItem::paintCell( p, newCg, c, w, a );
   }
