@@ -1,7 +1,7 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -33,70 +33,70 @@ class K3bFileItem;
 
 class K3bMovixListViewItem : public K3bListViewItem
 {
- public:
-  K3bMovixListViewItem( K3bMovixDoc* doc, K3bMovixFileItem*, Q3ListView* parent, Q3ListViewItem* after );
-  K3bMovixListViewItem( K3bMovixDoc* doc, K3bMovixFileItem*, Q3ListViewItem* parent );
-  ~K3bMovixListViewItem();
+public:
+    K3bMovixListViewItem( K3bMovixDoc* doc, K3bMovixFileItem*, Q3ListView* parent, Q3ListViewItem* after );
+    K3bMovixListViewItem( K3bMovixDoc* doc, K3bMovixFileItem*, Q3ListViewItem* parent );
+    ~K3bMovixListViewItem();
 
-  K3bMovixFileItem* fileItem() const { return m_fileItem; }
-  K3bMovixDoc* doc() const { return m_doc; }
+    K3bMovixFileItem* fileItem() const { return m_fileItem; }
+    K3bMovixDoc* doc() const { return m_doc; }
 
-  virtual bool isMovixFileItem() const { return true; }
+    virtual bool isMovixFileItem() const { return true; }
 
- private:
-  K3bMovixDoc* m_doc;
-  K3bMovixFileItem* m_fileItem;
+private:
+    K3bMovixDoc* m_doc;
+    K3bMovixFileItem* m_fileItem;
 };
 
 
 class K3bMovixFileViewItem : public K3bMovixListViewItem, public KFileItem
 {
- public:
-  K3bMovixFileViewItem( K3bMovixDoc* doc, K3bMovixFileItem*, Q3ListView* parent, Q3ListViewItem* );
+public:
+    K3bMovixFileViewItem( K3bMovixDoc* doc, K3bMovixFileItem*, Q3ListView* parent, Q3ListViewItem* );
 
-  QString text( int ) const;
-  void setText(int col, const QString& text );
+    QString text( int ) const;
+    void setText(int col, const QString& text );
 
-  /** always sort according to the playlist order */
-  QString key( int, bool ) const;
+    /** always sort according to the playlist order */
+    QString key( int, bool ) const;
 };
 
 class K3bMovixSubTitleViewItem : public K3bMovixListViewItem, public KFileItem
 {
- public:
-  K3bMovixSubTitleViewItem( K3bMovixDoc*, K3bMovixFileItem* item, K3bMovixListViewItem* parent );
-  ~K3bMovixSubTitleViewItem();
+public:
+    K3bMovixSubTitleViewItem( K3bMovixDoc*, K3bMovixFileItem* item, K3bMovixListViewItem* parent );
+    ~K3bMovixSubTitleViewItem();
 
-  QString text( int ) const;
+    QString text( int ) const;
 
-  bool isMovixFileItem() const { return false; }
+    bool isMovixFileItem() const { return false; }
 };
 
 
 class K3bMovixListView : public K3bListView
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bMovixListView( K3bMovixDoc* doc, QWidget* parent = 0 );
-  ~K3bMovixListView();
+public:
+    K3bMovixListView( K3bMovixDoc* doc, QWidget* parent = 0 );
+    ~K3bMovixListView();
 
-  Q3DragObject* dragObject();
+    Q3DragObject* dragObject();
 
- protected:
-  bool acceptDrag(QDropEvent* e) const;
+protected:
+    bool acceptDrag(QDropEvent* e) const;
 
- private slots:
-  void slotNewFileItems();
-  void slotFileItemRemoved( K3bMovixFileItem* );
-  void slotSubTitleItemRemoved( K3bMovixFileItem* );
-  void slotDropped( K3ListView*, QDropEvent* e, Q3ListViewItem* after );
-  void slotChanged();
+    private slots:
+    void slotNewFileItems();
+    void slotFileItemRemoved( K3bMovixFileItem* );
+    void slotSubTitleItemRemoved( K3bMovixFileItem* );
+    void slotDropped( K3ListView*, QDropEvent* e, Q3ListViewItem* after );
+    void slotChanged();
 
- private:
-  K3bMovixDoc* m_doc;
+private:
+    K3bMovixDoc* m_doc;
 
-  QMap<K3bFileItem*, K3bMovixFileViewItem*> m_itemMap;
+    QMap<K3bFileItem*, K3bMovixFileViewItem*> m_itemMap;
 };
 
 #endif

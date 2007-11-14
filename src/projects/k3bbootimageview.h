@@ -1,7 +1,7 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -25,33 +25,33 @@ class K3bBootItem;
 
 class K3bBootImageView : public base_K3bBootImageView
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  K3bBootImageView( K3bDataDoc* doc, QWidget* parent = 0 );
-  ~K3bBootImageView();
+    K3bBootImageView( K3bDataDoc* doc, QWidget* parent = 0 );
+    ~K3bBootImageView();
 
- private slots:
-  void slotNewBootImage();
-  void slotDeleteBootImage();
-  void slotToggleOptions();
-  void slotSelectionChanged();
+private slots:
+    void slotNewBootImage();
+    void slotDeleteBootImage();
+    void slotToggleOptions();
+    void slotSelectionChanged();
 
-  /* reimplemeted from base_...*/
-  void slotOptionsChanged();
+    /* reimplemeted from base_...*/
+    void slotOptionsChanged();
 
-  void slotNoEmulationToggled( bool );
+    void slotNoEmulationToggled( bool );
 
- private:
-  void updateBootImages();
-  void showAdvancedOptions( bool );
-  void loadBootItemSettings( K3bBootItem* );
+private:
+    void updateBootImages();
+    void showAdvancedOptions( bool );
+    void loadBootItemSettings( K3bBootItem* );
 
-  class PrivateBootImageViewItem;
+    class PrivateBootImageViewItem;
 
-  K3bDataDoc* m_doc;
+    K3bDataDoc* m_doc;
 
-  bool m_loadingItem;
+    bool m_loadingItem;
 };
 
 #endif

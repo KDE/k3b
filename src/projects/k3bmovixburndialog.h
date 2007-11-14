@@ -1,7 +1,7 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -29,34 +29,34 @@ class K3bDataModeWidget;
 
 class K3bMovixBurnDialog : public K3bProjectBurnDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent = 0, bool modal = true );
-  ~K3bMovixBurnDialog();
+public:
+    K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent = 0 );
+    ~K3bMovixBurnDialog();
 
- protected slots:
-  void slotStartClicked();
+protected slots:
+    void slotStartClicked();
 
- protected:
-  void saveSettings();
-  void readSettings();
-  void loadK3bDefaults();
-  void loadUserDefaults( const KConfigGroup& );
-  void saveUserDefaults( KConfigGroup& );
-  void toggleAll();
+protected:
+    void saveSettings();
+    void readSettings();
+    void loadK3bDefaults();
+    void loadUserDefaults( const KConfigGroup& );
+    void saveUserDefaults( KConfigGroup& );
+    void toggleAll();
 
- private:
-  void setupSettingsPage();
+private:
+    void setupSettingsPage();
 
-  K3bMovixDoc* m_doc;
-  K3bMovixOptionsWidget* m_movixOptionsWidget;
-  K3bDataImageSettingsWidget* m_imageSettingsWidget;
+    K3bMovixDoc* m_doc;
+    K3bMovixOptionsWidget* m_movixOptionsWidget;
+    K3bDataImageSettingsWidget* m_imageSettingsWidget;
 
-  QCheckBox* m_checkStartMultiSesssion;
-  K3bDataModeWidget* m_dataModeWidget;
+    QCheckBox* m_checkStartMultiSesssion;
+    K3bDataModeWidget* m_dataModeWidget;
 
-  QCheckBox* m_checkVerify;
+    QCheckBox* m_checkVerify;
 };
 
 

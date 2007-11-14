@@ -1,7 +1,7 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -38,40 +38,40 @@ class K3bDataMultiSessionCombobox;
 
 
 /**
-  *@author Sebastian Trueg
-  */
+ *@author Sebastian Trueg
+ */
 
 class K3bDataBurnDialog : public K3bProjectBurnDialog
 {
- Q_OBJECT
+    Q_OBJECT
 
- public:
-   K3bDataBurnDialog(K3bDataDoc*, QWidget *parent=0, const char *name=0, bool modal = true );
-   ~K3bDataBurnDialog();
+public:
+    K3bDataBurnDialog(K3bDataDoc*, QWidget *parent=0 );
+    ~K3bDataBurnDialog();
 
- protected:
-   void setupSettingsTab();
-   void loadK3bDefaults();
-   void loadUserDefaults( const KConfigGroup& );
-   void saveUserDefaults( KConfigGroup& );
-   void toggleAll();
+protected:
+    void setupSettingsTab();
+    void loadK3bDefaults();
+    void loadUserDefaults( const KConfigGroup& );
+    void saveUserDefaults( KConfigGroup& );
+    void toggleAll();
 
-   // --- settings tab ---------------------------
-   K3bDataImageSettingsWidget* m_imageSettingsWidget;
-   // ----------------------------------------------
+    // --- settings tab ---------------------------
+    K3bDataImageSettingsWidget* m_imageSettingsWidget;
+    // ----------------------------------------------
 	
-   Q3GroupBox* m_groupDataMode;
-   K3bDataModeWidget* m_dataModeWidget;
-   K3bDataMultiSessionCombobox* m_comboMultisession;
+    Q3GroupBox* m_groupDataMode;
+    K3bDataModeWidget* m_dataModeWidget;
+    K3bDataMultiSessionCombobox* m_comboMultisession;
 
-   QCheckBox* m_checkVerify;
+    QCheckBox* m_checkVerify;
 
- protected slots:
-   void slotStartClicked();
-   void saveSettings();
-   void readSettings();
+    protected slots:
+    void slotStartClicked();
+    void saveSettings();
+    void readSettings();
 
-   void slotMultiSessionModeChanged();
+    void slotMultiSessionModeChanged();
 };
 
 #endif

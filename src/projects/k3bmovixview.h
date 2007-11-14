@@ -1,7 +1,7 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -31,35 +31,35 @@ class QLineEdit;
 
 class K3bMovixView : public K3bView
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bMovixView( K3bMovixDoc* doc, QWidget* parent = 0 );
-  virtual ~K3bMovixView();
+public:
+    K3bMovixView( K3bMovixDoc* doc, QWidget* parent = 0 );
+    virtual ~K3bMovixView();
 
- private slots:
-  void slotContextMenuRequested(Q3ListViewItem*, const QPoint& , int );
-  void slotRemoveItems();
-  void slotRemoveSubTitleItems();
-  void showPropertiesDialog();
-  void slotAddSubTitleFile();
-  void slotDocChanged();
+private slots:
+    void slotContextMenuRequested(Q3ListViewItem*, const QPoint& , int );
+    void slotRemoveItems();
+    void slotRemoveSubTitleItems();
+    void showPropertiesDialog();
+    void slotAddSubTitleFile();
+    void slotDocChanged();
 
- protected:
-  virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
+protected:
+    virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
 
-  K3bMovixListView* m_listView;
+    K3bMovixListView* m_listView;
 
- private:
-  K3bMovixDoc* m_doc;
+private:
+    K3bMovixDoc* m_doc;
 
-  KAction* m_actionProperties;
-  KAction* m_actionRemove;
-  KAction* m_actionRemoveSubTitle;
-  KAction* m_actionAddSubTitle;
-  KMenu* m_popupMenu;
+    KAction* m_actionProperties;
+    KAction* m_actionRemove;
+    KAction* m_actionRemoveSubTitle;
+    KAction* m_actionAddSubTitle;
+    KMenu* m_popupMenu;
 
-  QLineEdit* m_volumeIDEdit;
+    QLineEdit* m_volumeIDEdit;
 };
 
 #endif
