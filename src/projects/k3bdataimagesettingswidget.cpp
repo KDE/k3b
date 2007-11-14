@@ -125,13 +125,11 @@ class K3bDataImageSettingsWidget::CustomFilesystemsDialog : public KDialog
 {
 public:
   CustomFilesystemsDialog( QWidget* parent )
-    : KDialog( parent,
-		   "custom_filesystems_dialog",
-		   true,
-		   i18n("Custom Data Project Filesystems"),
-		   Ok|Cancel,
-		   Ok,
-		   true ) {
+    : KDialog( parent) {
+    setButtons(Ok|Cancel);
+    setDefaultButton(Ok);
+    setCaption(i18n("Custom Data Project Filesystems"));
+    setModal(true);
     w = new K3bDataAdvancedImageSettingsWidget( this );
     setMainWidget( w );
   }
@@ -144,13 +142,11 @@ class K3bDataImageSettingsWidget::VolumeDescDialog : public KDialog
 {
 public:
   VolumeDescDialog( QWidget* parent )
-    : KDialog( parent,
-		   "voldesc_dialog",
-		   true,
-		   i18n("Volume Descriptor"),
-		   Ok|Cancel,
-		   Ok,
-		   true ) {
+    : KDialog( parent) {
+    setButtons(Ok|Cancel);
+    setDefaultButton(Ok);
+    setCaption(i18n("Volume Descriptor"));
+    setModal(true);
     w = new K3bDataVolumeDescWidget( this );
     setMainWidget( w );
 

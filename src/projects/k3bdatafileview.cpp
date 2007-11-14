@@ -51,7 +51,8 @@
 #include <kshortcut.h>
 #include <krun.h>
 #include <kdeversion.h>
-
+#include <kactioncollection.h>
+#include <kactionmenu.h>
 
 K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDirTreeView* dirTreeView, K3bDataDoc* doc, QWidget* parent )
   : K3bListView( parent ),
@@ -327,12 +328,12 @@ void K3bDataFileView::setupActions()
 
   m_actionProperties = new KAction( i18n("Properties"), "misc", 0, this, SLOT(slotProperties()),
 				    actionCollection(), "properties" );
-  m_actionNewDir = new KAction( i18n("New Directory..."), "folder_new", CTRL+Qt::Key_N, this, SLOT(slotNewDir()),
+  m_actionNewDir = new KAction( i18n("New Directory..."), "folder_new", Qt::CTRL+Qt::Key_N, this, SLOT(slotNewDir()),
 				actionCollection(), "new_dir" );
   m_actionRemove = new KAction( i18n("Remove"), "editdelete", Qt::Key_Delete, this, SLOT(slotRemoveItem()),
 				actionCollection(), "remove" );
   KShortcut renameShortCut( Qt::Key_F2 );
-  renameShortCut.append( KShortcut(CTRL+Qt::Key_R) ); // backwards compatibility
+  renameShortCut.append( KShortcut(Qt::CTRL+Qt::Key_R) ); // backwards compatibility
   m_actionRename = new KAction( i18n("Rename"), "edit", renameShortCut, this, SLOT(slotRenameItem()),
 				actionCollection(), "rename" );
   m_actionParentDir = new KAction( i18n("Parent Directory"), "up", 0, this, SLOT(slotParentDir()),
@@ -467,7 +468,7 @@ void K3bDataFileView::slotOpen()
 	  !KRun::isExecutableFile( KUrl(item->localPath()),
 				   fvi->mimeType()->name() )
 	  )
-	KRun::runURL( KUrl(item->localPath()),
+	KRun::runUrl( KUrl(item->localPath()),
 		      fvi->mimeType()->name() );
       else
 	KRun::displayOpenWithDialog( KUrl(item->localPath()) );

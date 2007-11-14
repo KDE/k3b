@@ -43,7 +43,7 @@
 #include <kinputdialog.h>
 #include <kiconloader.h>
 #include <kshortcut.h>
-
+#include <kactioncollection.h>
 #include <kdebug.h>
 
 
@@ -289,12 +289,12 @@ void K3bDataDirTreeView::setupActions()
 
   m_actionProperties = new KAction( i18n("Properties"), "misc", 0, this, SLOT(slotProperties()),
 				    actionCollection(), "properties" );
-  m_actionNewDir = new KAction( i18n("New Directory..."), "folder_new", CTRL+Qt::Key_N, this, SLOT(slotNewDir()),
+  m_actionNewDir = new KAction( i18n("New Directory..."), "folder_new", Qt::CTRL+Qt::Key_N, this, SLOT(slotNewDir()),
 				actionCollection(), "new_dir" );
   m_actionRemove = new KAction( i18n("Remove"), "editdelete", Qt::Key_Delete, this, SLOT(slotRemoveItem()),
 				actionCollection(), "remove" );
   KShortcut renameShortCut( Qt::Key_F2 );
-  renameShortCut.append( KShortcut(CTRL+Qt::Key_R) ); // backwards compatibility
+  renameShortCut.append( KShortcut(Qt::CTRL+Qt::Key_R) ); // backwards compatibility
   m_actionRename = new KAction( i18n("Rename"), "edit", renameShortCut, this, SLOT(slotRenameItem()),
 				actionCollection(), "rename" );
 

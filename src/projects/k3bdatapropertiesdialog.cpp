@@ -221,8 +221,8 @@ void K3bDataPropertiesDialog::loadItemProperties( K3bDataItem* dataItem )
     m_labelLocalLocation->hide();
     m_spacerLine->hide();
     m_labelSize->setText( KIO::convertSize(dataItem->size()) + "\n(" +
-			  i18n("in 1 file", "in %n files", dirItem->numFiles()) + " " +
-			  i18n("and 1 directory", "and %n directories", dirItem->numDirs()) + ")" );
+			  i18np("in 1 file", "in %n files", dirItem->numFiles()) + " " +
+			  i18np("and 1 directory", "and %n directories", dirItem->numDirs()) + ")" );
   }
   else {
     m_labelIcon->setPixmap( DesktopIcon("unknown", KIconLoader::SizeLarge) );
@@ -288,15 +288,15 @@ void K3bDataPropertiesDialog::loadListProperties( const Q3ValueList<K3bDataItem*
         blocks += item->blocks();
         size += item->size();
     }
-    QString s = i18n( "1 Item", "%n Items", items.count() );
+    QString s = i18np( "1 Item", "%n Items", items.count() );
     s += " - ";
     if ( files > 0 )
-        s += i18n( "1 File", "%n Files", files );
+        s += i18np( "1 File", "%n Files", files );
     else
         s += "No Files";
     s += " - ";
     if ( folders > 0 )
-        s += i18n( "1 Folder", "%n Folders", folders );
+        s += i18np( "1 Folder", "%n Folders", folders );
     else
         s += "No Folders";
     m_multiSelectionLabel->setText( s );
