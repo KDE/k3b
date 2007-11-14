@@ -20,8 +20,8 @@
 #include <kio/global.h>
 
 namespace K3bDevice {
-  class Device;
-  class DeviceManager;
+    class Device;
+    class DeviceManager;
 }
 
 class K3bWriterSelectionWidget;
@@ -36,51 +36,51 @@ class Q3GroupBox;
 
 class K3bMediaCopyDialog : public K3bInteractionDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public: 
-  K3bMediaCopyDialog( QWidget *parent = 0 );
-  ~K3bMediaCopyDialog();
+public: 
+    K3bMediaCopyDialog( QWidget *parent = 0 );
+    ~K3bMediaCopyDialog();
 
-  void setReadingDevice( K3bDevice::Device* );
-  K3bDevice::Device* readingDevice() const;
+    void setReadingDevice( K3bDevice::Device* );
+    K3bDevice::Device* readingDevice() const;
 
- private slots:
-  void slotStartClicked();
-  void updateOverrideDevice();
+private slots:
+    void slotStartClicked();
+    void updateOverrideDevice();
 
- protected:
-  void toggleAll();
-  void init();
+protected:
+    void toggleAll();
+    void init();
 
- private:
-  void loadUserDefaults( const KConfigGroup& );
-  void saveUserDefaults( KConfigGroup& );
-  void loadK3bDefaults();
+private:
+    void loadUserDefaults( const KConfigGroup& );
+    void saveUserDefaults( KConfigGroup& );
+    void loadK3bDefaults();
 
-  KIO::filesize_t neededSize() const;
+    KIO::filesize_t neededSize() const;
 
-  K3bWriterSelectionWidget* m_writerSelectionWidget;
-  K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
-  QCheckBox* m_checkSimulate;
-  QCheckBox* m_checkCacheImage;
-  QCheckBox* m_checkDeleteImages;
-  QCheckBox* m_checkOnlyCreateImage;
-  QCheckBox* m_checkReadCdText;
-  QCheckBox* m_checkIgnoreDataReadErrors;
-  QCheckBox* m_checkIgnoreAudioReadErrors;
-  QCheckBox* m_checkNoCorrection;
-  QCheckBox* m_checkVerifyData;
-  K3bMediaSelectionComboBox* m_comboSourceDevice;
-  QComboBox* m_comboParanoiaMode;
-  QSpinBox* m_spinCopies;
-  QSpinBox* m_spinDataRetries;
-  QSpinBox* m_spinAudioRetries;
-  K3bWritingModeWidget* m_writingModeWidget;
-  QComboBox* m_comboCopyMode;
+    K3bWriterSelectionWidget* m_writerSelectionWidget;
+    K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
+    QCheckBox* m_checkSimulate;
+    QCheckBox* m_checkCacheImage;
+    QCheckBox* m_checkDeleteImages;
+    QCheckBox* m_checkOnlyCreateImage;
+    QCheckBox* m_checkReadCdText;
+    QCheckBox* m_checkIgnoreDataReadErrors;
+    QCheckBox* m_checkIgnoreAudioReadErrors;
+    QCheckBox* m_checkNoCorrection;
+    QCheckBox* m_checkVerifyData;
+    K3bMediaSelectionComboBox* m_comboSourceDevice;
+    QComboBox* m_comboParanoiaMode;
+    QSpinBox* m_spinCopies;
+    QSpinBox* m_spinDataRetries;
+    QSpinBox* m_spinAudioRetries;
+    K3bWritingModeWidget* m_writingModeWidget;
+    QComboBox* m_comboCopyMode;
 
-  Q3GroupBox* m_groupAdvancedDataOptions;
-  Q3GroupBox* m_groupAdvancedAudioOptions;
+    Q3GroupBox* m_groupAdvancedDataOptions;
+    Q3GroupBox* m_groupAdvancedAudioOptions;
 };
 
 #endif

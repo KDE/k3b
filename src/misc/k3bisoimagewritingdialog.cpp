@@ -186,7 +186,7 @@ void K3bIsoImageWritingDialog::setupGui()
     optionTabLayout->setSpacing( spacingHint() );
     optionTabLayout->setMargin( marginHint() );
 
-    Q3GroupBox* writingModeGroup = new Q3GroupBox( 1, Vertical, i18n("Writing Mode"), optionTab );
+    Q3GroupBox* writingModeGroup = new Q3GroupBox( 1, Qt::Vertical, i18n("Writing Mode"), optionTab );
     writingModeGroup->setInsideMargin( marginHint() );
     m_writingModeWidget = new K3bWritingModeWidget( writingModeGroup );
 
@@ -203,7 +203,7 @@ void K3bIsoImageWritingDialog::setupGui()
     m_spinCopies->setMaxValue( 999 );
     // -------- copies
 
-    Q3GroupBox* optionGroup = new Q3GroupBox( 3, Vertical, i18n("Settings"), optionTab );
+    Q3GroupBox* optionGroup = new Q3GroupBox( 3, Qt::Vertical, i18n("Settings"), optionTab );
     optionGroup->setInsideMargin( marginHint() );
     optionGroup->setInsideSpacing( spacingHint() );
     m_checkDummy = K3bStdGuiItems::simulateCheckbox( optionGroup );
@@ -251,8 +251,8 @@ void K3bIsoImageWritingDialog::slotStartClicked()
                                                  "If it has been downloaded make sure the download is complete."
                                                  "<p>Only continue if you know what you are doing."),
                                             i18n("Warning"),
-                                            i18n("Continue"),
-                                            i18n("Cancel") ) == KMessageBox::No )
+                                            KGuiItem( i18n("Continue") ),
+                                            KGuiItem( i18n("Cancel") ) ) == KMessageBox::No )
                 return;
         }
     }

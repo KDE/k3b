@@ -1,7 +1,7 @@
-/* 
+/*
  *
  * $Id$
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -26,50 +26,49 @@
 #include <kglobalsettings.h>
 #include <kapplication.h>
 
-#include <q3textstream.h>
+#include <qtextstream.h>
 
 
 K3bDebuggingOutputFile::K3bDebuggingOutputFile()
-  : QFile( locateLocal( "appdata", "lastlog.log", true ) )
+    : QFile( KStandardDirs::locateLocal( "appdata", "lastlog.log", true ) )
 {
 }
 
 
 bool K3bDebuggingOutputFile::open()
 {
-  if( !QFile::open( QIODevice::WriteOnly ) )
-    return false;
+    if( !QFile::open( QIODevice::WriteOnly ) )
+        return false;
 
-  addOutput( "System", "K3b Version: " + k3bcore->version() );
-  addOutput( "System", "KDE Version: " + QString(KDE::versionString()) );
-  addOutput( "System", "QT Version:  " + QString(qVersion()) );
-  addOutput( "System", "Kernel:      " + K3b::kernelVersion() );
-  
-  // devices in the logfile
-  for( Q3PtrListIterator<K3bDevice::Device> it( k3bcore->deviceManager()->allDevices() ); *it; ++it ) {
-    K3bDevice::Device* dev = *it;
-    addOutput( "Devices", 
-	       QString( "%1 (%2, %3) [%5] [%6] [%7]" )
-	       .arg( dev->vendor() + " " + dev->description() + " " + dev->version() )
-	       .arg( dev->blockDeviceName() )
-	       .arg( dev->genericDevice() )
-	       .arg( K3bDevice::deviceTypeString( dev->type() ) )
-	       .arg( K3bDevice::mediaTypeString( dev->supportedProfiles() ) )
-	       .arg( K3bDevice::writingModeString( dev->writingModes() ) ) );
-  }
+    addOutput( "System", "K3b Version: " + k3bcore->version() );
+    addOutput( "System", "KDE Version: " + QString(KDE::versionString()) );
+    addOutput( "System", "QT Version:  " + QString(qVersion()) );
+    addOutput( "System", "Kernel:      " + K3b::kernelVersion() );
 
-  return true;
+    // devices in the logfile
+    Q_FOREACH( K3bDevice::Device* dev, k3bcore->deviceManager()->allDevices() ) {
+        addOutput( "Devices",
+                   QString( "%1 (%2, %3) [%5] [%6] [%7]" )
+                   .arg( dev->vendor() + " " + dev->description() + " " + dev->version() )
+                   .arg( dev->blockDeviceName() )
+                   .arg( dev->genericDevice() )
+                   .arg( K3bDevice::deviceTypeString( dev->type() ) )
+                   .arg( K3bDevice::mediaTypeString( dev->supportedProfiles() ) )
+                   .arg( K3bDevice::writingModeString( dev->writingModes() ) ) );
+    }
+
+    return true;
 }
 
 
 void K3bDebuggingOutputFile::addOutput( const QString& app, const QString& msg )
 {
-  if( !isOpen() )
-    open();
+    if( !isOpen() )
+        open();
 
-  Q3TextStream s( this );
-  s << "[" << app << "] " << msg << endl;
-  flush();
+    QTextStream s( this );
+    s << "[" << app << "] " << msg << endl;
+    flush();
 }
 
 #include "k3bdebuggingoutputfile.moc"

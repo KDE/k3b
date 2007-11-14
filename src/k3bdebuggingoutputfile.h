@@ -1,7 +1,7 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -19,7 +19,7 @@
 #include <qfile.h>
 #include <qobject.h>
 
-class K3bDebuggingOutputFile : public QObject, public QFile
+class K3bDebuggingOutputFile : public QFile
 {
   Q_OBJECT
 
