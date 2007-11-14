@@ -100,7 +100,7 @@ void K3bVideoCdRip::vcdxRip()
 
     if ( !bin ) {
         kDebug() << "(K3bVideoCdRip) could not find vcdxrip executable";
-        emit infoMessage( i18n( "Could not find %1 executable." , "vcdxrip" ), K3bJob::ERROR );
+        emit infoMessage( i18n( "Could not find %1 executable." , QString("vcdxrip") ), K3bJob::ERROR );
         emit infoMessage( i18n( "To rip VideoCD's you must install VcdImager Version %1." , QString(">= 0.7.12") ), K3bJob::INFO );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3bJob::INFO );
         cancelAll();
@@ -110,7 +110,7 @@ void K3bVideoCdRip::vcdxRip()
 
     if( bin->version < K3bVersion("0.7.12") ) {
         kDebug() << "(K3bVideoCdRip) vcdxrip executable too old!";
-        emit infoMessage( i18n( "%1 executable too old! Need version %2 or greater" , "Vcdxrip" , "0.7.12" ), K3bJob::ERROR );
+        emit infoMessage( i18n( "%1 executable too old! Need version %2 or greater" , QString("Vcdxrip") , QString("0.7.12") ), K3bJob::ERROR );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3bJob::INFO );
         cancelAll();
         jobFinished( false );
@@ -179,7 +179,7 @@ void K3bVideoCdRip::vcdxRip()
             
     if ( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) {
         kDebug() << "(K3bVideoCdRip) could not start vcdxrip";
-        emit infoMessage( i18n( "Could not start %1." , "vcdxrip" ), K3bJob::ERROR );
+        emit infoMessage( i18n( "Could not start %1." , QString("vcdxrip") ), K3bJob::ERROR );
         cancelAll();
         jobFinished( false );
     }
