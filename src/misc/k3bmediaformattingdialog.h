@@ -31,7 +31,7 @@ class K3bMediaFormattingDialog : public K3bInteractionDialog
   Q_OBJECT
 
  public:
-  K3bMediaFormattingDialog( QWidget* = 0, const char* = 0, bool modal = true );
+  K3bMediaFormattingDialog( QWidget* = 0 );
   ~K3bMediaFormattingDialog();
 
  public slots:

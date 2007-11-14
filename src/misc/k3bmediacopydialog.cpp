@@ -66,7 +66,9 @@
 
 
 K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
-    : K3bInteractionDialog( parent, 0, i18n("Disk Copy"), i18n("and CD Cloning"),
+    : K3bInteractionDialog( parent,
+                            i18n("Disk Copy"),
+                            i18n("and CD Cloning"),
                             START_BUTTON|CANCEL_BUTTON,
                             START_BUTTON,
                             "Disk Copy" )
@@ -296,7 +298,8 @@ void K3bMediaCopyDialog::slotStartClicked()
         if( QFileInfo( m_tempDirSelectionWidget->tempPath() ).isFile() ) {
             if( KMessageBox::warningContinueCancel( this,
                                                     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
-                                                    i18n("File Exists"), i18n("Overwrite") )
+                                                    i18n("File Exists"),
+                                                    KStandardGuiItem::overwrite() )
                 != KMessageBox::Continue )
                 return;
         }
@@ -304,7 +307,8 @@ void K3bMediaCopyDialog::slotStartClicked()
         if( QFileInfo( m_tempDirSelectionWidget->tempPath() + ".toc" ).isFile() ) {
             if( KMessageBox::warningContinueCancel( this,
                                                     i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath() + ".toc"),
-                                                    i18n("File Exists"), i18n("Overwrite") )
+                                                    i18n("File Exists"),
+                                                    KStandardGuiItem::overwrite() )
                 != KMessageBox::Continue )
                 return;
         }

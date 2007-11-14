@@ -38,22 +38,18 @@
 #include <q3groupbox.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
-#include <q3frame.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
 
-//Added by qt3to4:
-#include <Q3GridLayout>
 
 
-K3bMediaFormattingDialog::K3bMediaFormattingDialog( QWidget* parent, bool modal )
+K3bMediaFormattingDialog::K3bMediaFormattingDialog( QWidget* parent )
   : K3bInteractionDialog( parent,
 			  i18n("Format and Erase"),
 			  i18n( "CD-RW" ) + '/' + i18n("DVD%1RW").arg("±") + '/' + i18n( "BD-RW" ),
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
-			  "Formatting and Erasing", // config group
-			  modal )
+			  "Formatting and Erasing" ) // config group
 {
   QWidget* frame = mainWidget();
 
@@ -79,7 +75,7 @@ K3bMediaFormattingDialog::K3bMediaFormattingDialog( QWidget* parent, bool modal 
   m_checkForce = new QCheckBox( i18n("Force"), groupOptions );
   m_checkQuickFormat = new QCheckBox( i18n("Quick format"), groupOptions );
 
-  Q3GridLayout* grid = new Q3GridLayout( frame );
+  QGridLayout* grid = new QGridLayout( frame );
   grid->setMargin( 0 );
   grid->setSpacing( spacingHint() );
 
