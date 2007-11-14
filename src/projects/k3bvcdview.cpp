@@ -53,7 +53,7 @@ K3bVcdView::~K3bVcdView()
 {}
 
 
-K3bProjectBurnDialog* K3bVcdView::newBurnDialog( QWidget * parent, const char * name )
+K3bProjectBurnDialog* K3bVcdView::newBurnDialog( QWidget * parent)
 {
   return new K3bVcdBurnDialog( m_doc, parent, true );
 }

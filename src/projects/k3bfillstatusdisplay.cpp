@@ -496,9 +496,9 @@ void K3bFillStatusDisplay::showTime()
 {
   d->actionShowMinutes->setChecked( true );
 
-  d->action74Min->setText( i18n("unused", "%n minutes", 74) );
-  d->action80Min->setText( i18n("unused", "%n minutes", 80) );
-  d->action100Min->setText( i18n("unused", "%n minutes", 100) );
+  d->action74Min->setText( i18np("unused", "%n minutes", 74) );
+  d->action80Min->setText( i18np("unused", "%n minutes", 80) );
+  d->action100Min->setText( i18np("unused", "%n minutes", 100) );
 
   d->showTime = true;
   d->displayWidget->setShowTime(true);

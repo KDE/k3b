@@ -32,6 +32,7 @@
 #include <kaction.h>
 #include <kmenu.h>
 #include <kdialog.h>
+#include <kactioncollection.h>
 
 // K3b Includes
 #include "k3bvcdlistview.h"

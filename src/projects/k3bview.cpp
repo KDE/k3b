@@ -29,7 +29,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
-
+#include <ktoolbar.h>
 
 // application specific includes
 #include "k3bview.h"

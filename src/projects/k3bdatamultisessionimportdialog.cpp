@@ -124,7 +124,7 @@ void K3bDataMultisessionImportDialog::slotOk()
 
 void K3bDataMultisessionImportDialog::slotCancel()
 {
-    KDialog::slotCancel();
+    reject();
 }
 
 
@@ -206,7 +206,7 @@ void K3bDataMultisessionImportDialog::addMedium( const K3bMedium& medium )
                     ++numAudioTracks;
                 }
                 --it;
-                sessionInfo = i18n( "%n audio tracks", "1 audio track", numAudioTracks );
+                sessionInfo = i18np( "%n audio tracks", "1 audio track", numAudioTracks );
             }
 
             sessionItem = new K3bListViewItem( mediumItem,
@@ -258,22 +258,21 @@ void K3bDataMultisessionImportDialog::showSessionInfo( K3bDevice::Device* dev, i
 
 
 K3bDataMultisessionImportDialog::K3bDataMultisessionImportDialog( QWidget* parent )
-  : KDialog( KDialog::Plain,
-                 i18n("Session Import"),
-		 KDialog::Ok|KDialog::Cancel,
-		 KDialog::Ok,
-                 parent,
-		 "session_import_dialog",
-		 true,
-                 false ),
+  : KDialog( parent),
     d( new Private() )
 {
-    Q3VBoxLayout* layout = new Q3VBoxLayout( plainPage() );
+    QWidget *widget = new QWidget();
+    setMainWidget(widget);
+    setButtons(Ok|Cancel);
+    setDefaultButton(Ok);
+    setModal(true);
+    setCaption(i18n("Session Import"));
+    Q3VBoxLayout* layout = new Q3VBoxLayout( widget );
     layout->setMargin( 0 );
     layout->setAutoAdd( true );
 
-    ( void )new QLabel( i18n( "Please select a session to import." ), plainPage() );
-    d->sessionView = new K3bListView( plainPage() );
+    ( void )new QLabel( i18n( "Please select a session to import." ), widget );
+    d->sessionView = new K3bListView( widget );
     d->sessionView->addColumn( "1" );
     d->sessionView->header()->hide();
     d->sessionView->setFullWidth( true );

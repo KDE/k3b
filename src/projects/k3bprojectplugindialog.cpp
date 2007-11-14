@@ -50,13 +50,14 @@ void K3bProjectPluginDialog::slotStartClicked()
 
 void K3bProjectPluginDialog::saveUserDefaults( KConfigGroup& config )
 {
-  m_pluginGui->saveSettings( config );
+  m_pluginGui->saveSettings( config.config() );
 }
 
 
 void K3bProjectPluginDialog::loadUserDefaults( const KConfigGroup& config )
 {
-  m_pluginGui->readSettings( config );
+//TODO fix me kde4
+  //m_pluginGui->readSettings( cfg );
 }
 
 

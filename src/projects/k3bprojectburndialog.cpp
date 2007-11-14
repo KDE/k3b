@@ -45,7 +45,7 @@
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3VBoxLayout>
-
+#include <Q3WhatsThis>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kmessagebox.h>

@@ -33,7 +33,9 @@
 class K3bEncodingConverter::Private
 {
  public:
+#ifdef HAVE_ICONV_H
   iconv_t ic;
+#endif
   QString localEncoding;
   QString lastEncoding;
 };

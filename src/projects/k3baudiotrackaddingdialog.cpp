@@ -57,17 +57,15 @@ public:
 
 
 K3bAudioTrackAddingDialog::K3bAudioTrackAddingDialog( QWidget* parent )
-  : KDialog( Plain,
-		 i18n("Please be patient..."),
-		 Cancel,
-		 Cancel,
-		 parent,
-		 name,
-		 true,
-		 true ),
+  : KDialog( parent),
     m_bCanceled(false)
 {
-  QWidget* page = plainPage();
+  QWidget* page = new QWidget();
+  setMainWidget(page);
+  setButtons(Cancel);
+  setDefaultButton(Cancel);
+  setModal(true);
+  setCaption(i18n("Please be patient..."));
   Q3GridLayout* grid = new Q3GridLayout( page );
   grid->setSpacing( spacingHint() );
   grid->setMargin( marginHint() );
@@ -261,7 +259,7 @@ void K3bAudioTrackAddingDialog::slotCancel()
 {
   m_bCanceled = true;
   m_analyserJob->cancel();
-  KDialog::slotCancel();
+  reject();
 }
 
 
