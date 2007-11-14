@@ -29,7 +29,7 @@ K3bMiniButton::K3bMiniButton( QWidget *parent, const char * name )
   :QPushButton( parent ),
    m_mouseOver( false )
 {
-  setFocusPolicy( NoFocus );
+  setFocusPolicy( Qt::NoFocus );
 }
 
 K3bMiniButton::~K3bMiniButton()
@@ -39,10 +39,12 @@ K3bMiniButton::~K3bMiniButton()
 
 void K3bMiniButton::drawButton( QPainter* p )
 {
+ //TODO port me kde4
+#if 0
   p->fillRect( 0,0, width(), height(), QBrush(colorGroup().brush(QColorGroup::Background)) );
   p->drawPixmap( (width() - pixmap()->width()) / 2, (height() - pixmap()->height()) / 2, *pixmap() );
   if( m_mouseOver && !isDown() ){
-    p->setPen( white );
+    p->setPen( Qt::white );
     p->moveTo( 0, height() - 1 );
     p->lineTo( 0, 0 );
     p->lineTo( width() - 1, 0 );
@@ -57,10 +59,11 @@ void K3bMiniButton::drawButton( QPainter* p )
     p->lineTo( 0, 0 );
     p->lineTo( width() - 1, 0 );
 
-    p->setPen( white );
+    p->setPen( Qt::white );
     p->lineTo( width() - 1, height() - 1 );
     p->lineTo( 0, height() - 1 );
   }
+#endif
 }
 
 void K3bMiniButton::enterEvent( QEvent * )

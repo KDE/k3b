@@ -42,17 +42,14 @@ static QString joinProcessNames( const Q3ValueList<K3bLsofWrapper::Process>& app
 
 
 K3bLsofWrapperDialog::K3bLsofWrapperDialog( QWidget* parent )
-  : KDialog( KDialog::Swallow,
-		 i18n("Device in use"),
-		 Close|User1|User2,
-		 Close,
-		 parent,
-		 0,
-		 true,
-		 true,
-		 KGuiItem( i18n("Quit the other applications") ),
-		 KGuiItem( i18n("Check again") ) )
+  : KDialog( parent)
 {
+  setCaption(i18n("Device in use"));
+  setButtons (Close|User1|User2);
+  setDefaultButton(Close);
+  setModal(true);
+  setButtonText(User1,i18n("Quit the other applications"));
+  setButtonText(User2,i18n("Check again"));
   setButtonText( Close, i18n("Continue") );
 
   m_label = new K3bRichTextLabel( this );

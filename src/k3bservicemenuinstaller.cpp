@@ -32,6 +32,8 @@ public:
   QString konqiServicemenusFolder;
 
   void update() {
+  //TODO port me kde4
+#if 0
     // the list of installable servicemenus the application provides
     allServiceMenus = KGlobal::dirs()->findAllResources( "data",
 							 "k3b/servicemenus/*.desktop",
@@ -45,6 +47,7 @@ public:
 
     // the local konqueror servicemenu folder (we just create it here to be on the safe side)
     konqiServicemenusFolder = KGlobal::dirs()->saveLocation( "data", "konqueror/servicemenus/", true );
+#endif
   }
 };
 

@@ -30,18 +30,18 @@ K3bMediaSelectionDialog::K3bMediaSelectionDialog( QWidget* parent,
 						  const QString& title, 
 						  const QString& text, 
 						  bool modal )
-  : KDialog( KDialog::Plain, 
-		 title.isEmpty() ? i18n("Medium Selection") : title, 
-		 Ok|Cancel, 
-		 Ok,
-		 parent,
-		 0,
-		 modal )
+  : KDialog( parent)
 {
-  Q3GridLayout* lay = new Q3GridLayout( plainPage() );
+  QWidget *widget = new QWidget();
+  setMainWidget(widget);
+  setCaption(title.isEmpty() ? i18n("Medium Selection") : title);
+  setButtons (Ok|Cancel);
+  setModal(modal);
+  setDefaultButton(Ok);
+  Q3GridLayout* lay = new Q3GridLayout( widget );
 
-  QLabel* label = new QLabel( text.isEmpty() ? i18n("Please select a medium:") : text, plainPage() );
-  m_combo = new K3bMediaSelectionComboBox( plainPage() );
+  QLabel* label = new QLabel( text.isEmpty() ? i18n("Please select a medium:") : text, widget );
+  m_combo = new K3bMediaSelectionComboBox( widget );
 
   //  lay->setMargin( marginHint() );
   lay->setSpacing( spacingHint() );
