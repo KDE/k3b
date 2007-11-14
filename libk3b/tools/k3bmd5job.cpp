@@ -26,7 +26,6 @@
 #include <kio/netaccess.h>
 
 #include <qtimer.h>
-#include <q3cstring.h>
 #include <qsocketnotifier.h>
 
 #include <unistd.h>
@@ -282,7 +281,7 @@ void K3bMd5Job::slotUpdate()
 }
 
 
-Q3CString K3bMd5Job::hexDigest()
+QByteArray K3bMd5Job::hexDigest()
 {
     if( d->finished )
         return d->md5.hexDigest();
@@ -291,7 +290,7 @@ Q3CString K3bMd5Job::hexDigest()
 }
 
 
-Q3CString K3bMd5Job::base64Digest()
+QByteArray K3bMd5Job::base64Digest()
 {
     if( d->finished )
         return d->md5.base64Digest();

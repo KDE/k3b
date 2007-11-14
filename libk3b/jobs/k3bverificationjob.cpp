@@ -29,9 +29,8 @@
 #include <kio/job.h>
 #include <kio/netaccess.h>
 
-#include <q3cstring.h>
 #include <qapplication.h>
-#include <q3valuelist.h>
+#include <qlist.h>
 #include <qpair.h>
 
 
@@ -42,14 +41,14 @@ public:
     : trackNumber(0) {
   }
 
-  K3bVerificationJobTrackEntry( int tn, const Q3CString& cs, const K3b::Msf& msf )
+  K3bVerificationJobTrackEntry( int tn, const QByteArray& cs, const K3b::Msf& msf )
     : trackNumber(tn),
       checksum(cs),
       length(msf) {
   }
 
   int trackNumber;
-  Q3CString checksum;
+  QByteArray checksum;
   K3b::Msf length;
 };
 
@@ -69,7 +68,7 @@ public:
 
   K3b::Msf grownSessionSize;
 
-  Q3ValueList<K3bVerificationJobTrackEntry> tracks;
+  QList<K3bVerificationJobTrackEntry> tracks;
   int currentTrackIndex;
 
   K3bDevice::DiskInfo diskInfo;
@@ -118,7 +117,7 @@ void K3bVerificationJob::cancel()
 }
 
 
-void K3bVerificationJob::addTrack( int trackNum, const Q3CString& checksum, const K3b::Msf& length )
+void K3bVerificationJob::addTrack( int trackNum, const QByteArray& checksum, const K3b::Msf& length )
 {
   d->tracks.append( K3bVerificationJobTrackEntry( trackNum, checksum, length ) );
 }
@@ -186,7 +185,7 @@ void K3bVerificationJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 
   // just to be sure check if we actually have all the tracks
   int i = 0;
-  for( Q3ValueList<K3bVerificationJobTrackEntry>::iterator it = d->tracks.begin();
+  for( QList<K3bVerificationJobTrackEntry>::iterator it = d->tracks.begin();
        it != d->tracks.end(); ++i, ++it ) {
 
     // 0 means "last track"
