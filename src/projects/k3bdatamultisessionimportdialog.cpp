@@ -141,10 +141,11 @@ void K3bDataMultisessionImportDialog::updateMedia()
     d->sessionView->clear();
     d->sessions.clear();
 
-    Q3PtrList<K3bDevice::Device> devices = k3bcore->deviceManager()->allDevices();
+    QList<K3bDevice::Device*> devices = k3bcore->deviceManager()->allDevices();
 
     bool haveMedium = false;
-    for( Q3PtrListIterator<K3bDevice::Device> it( devices ); *it; ++it ) {
+    for( QList<K3bDevice::Device *>::const_iterator it = devices.begin();
+       it != devices.end(); ++it ) {
         K3bMedium medium = k3bappcore->mediaCache()->medium( *it );
 
         if ( medium.diskInfo().mediaType() & K3bDevice::MEDIA_WRITABLE &&

@@ -85,9 +85,9 @@ K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent
   grid->setMargin( 0 );
 
   m_counterLabel = new QLabel( page );
-  m_infoLabel = new KSqueezedTextLabel( i18n("Adding files to project '%1'")
+  m_infoLabel = new KSqueezedTextLabel( i18n("Adding files to project '%1'"
 					,doc->URL().fileName()) + "...", page );
-  m_progressWidget = new QProgressBar( 0, page );
+  m_progressWidget = new QProgressBar( page );
 
   grid->addWidget( m_counterLabel, 0, 1 );
   grid->addWidget( m_infoLabel, 0, 0 );
@@ -128,8 +128,8 @@ int K3bDataUrlAddingDialog::addUrls( const KUrl::List& urls,
 					 "system.<br>"
 					 "Are you sure you want to add this file to the project?"),
 				    i18n("Adding image file to project"),
-				    i18n("Add the file to the project"),
-				    i18n("Burn the image directly") ) == KMessageBox::No ) {
+				    KGuiItem(i18n("Add the file to the project")),
+				    KGuiItem(i18n("Burn the image directly")) ) == KMessageBox::No ) {
        // very rough dvd image size test
        if( K3b::filesize( urls.first() ) > 1000*1024*1024 )
 	 k3bappcore->k3bMainWindow()->slotWriteDvdIsoImage( urls.first() );
@@ -183,7 +183,7 @@ QString K3bDataUrlAddingDialog::resultMessage() const
       .arg( m_unreadableFiles.join( "<br>" ) );
   if( !m_tooBigFiles.isEmpty() )
     message += QString("<p><b>%1:</b><br>%2")
-      .arg( i18n("To burn files bigger than %1 please use %2").arg(KIO::convertSize(0xFFFFFFFF)).arg( "mkisofs >= 2.01.01a33 / genisoimage >= 1.1.4" ) )
+      .arg( i18n("To burn files bigger than %1 please use %2",KIO::convertSize(0xFFFFFFFF), QString("mkisofs >= 2.01.01a33 / genisoimage >= 1.1.4") ) )
       .arg( m_tooBigFiles.join( "<br>" ) );
   if( !m_mkisofsLimitationRenamedFiles.isEmpty() )
     message += QString("<p><b>%1:</b><br>%2")
@@ -224,7 +224,7 @@ int K3bDataUrlAddingDialog::copyMoveItems( const Q3ValueList<K3bDataItem*>& item
     return 0;
 
   K3bDataUrlAddingDialog dlg( dir->doc(), parent );
-  dlg.m_infoLabel->setText( i18n("Moving files to project \"%1\"...").arg(dir->doc()->URL().fileName()) );
+  dlg.m_infoLabel->setText( i18n("Moving files to project \"%1\"...",dir->doc()->URL().fileName()) );
   dlg.m_copyItems = copy;
 
   for( Q3ValueList<K3bDataItem*>::const_iterator it = items.begin(); it != items.end(); ++it ) {
@@ -239,7 +239,7 @@ int K3bDataUrlAddingDialog::copyMoveItems( const Q3ValueList<K3bDataItem*>& item
   dlg.slotCopyMoveItems();
   int ret = QDialog::Accepted;
   if( !dlg.m_items.isEmpty() ) {
-    dlg.m_progressWidget->setTotalSteps( dlg.m_totalFiles );
+    dlg.m_progressWidget->setMaximum( dlg.m_totalFiles );
     ret = dlg.exec();
   }
 
@@ -426,12 +426,11 @@ void K3bDataUrlAddingDialog::slotAddUrls()
       else {
 	switch( K3bMultiChoiceDialog::choose( i18n("File already exists"),
 					      i18n("<p>File <em>%1</em> already exists in "
-						   "project folder <em>%2</em>.")
-					      .arg(newName)
-					      .arg('/' + dir->k3bPath()),
+						   "project folder <em>%2</em>."
+					      ,newName
+					      ,QString('/' + dir->k3bPath())),
 					      QMessageBox::Warning,
 					      this,
-					      0,
 					      6,
 					      KGuiItem( i18n("Replace"),
 							QString::null,
@@ -494,18 +493,17 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 						   "since K3b will not be able to do so afterwards because symbolic links to folders inside a "
 						   "K3b project cannot be resolved."
 						   "<p><b>If you do not intend to enable the option <em>follow symbolic links</em> you may safely "
-						   "ignore this warning and choose to add the link to the project.</b>")
-					      .arg(absoluteFilePath)
-					      .arg(resolved ),
+						   "ignore this warning and choose to add the link to the project.</b>"
+					      ,absoluteFilePath
+					      ,resolved) ,
 					      QMessageBox::Warning,
 					      this,
-					      0,
 					      5,
-					      i18n("Follow link now"),
-					      i18n("Always follow links"),
-					      i18n("Add link to project"),
-					      i18n("Always add links"),
-					      KStandardGuiItem::cancel() ) ) {
+					      KGuiItem(i18n("Follow link now")),
+					      KGuiItem(i18n("Always follow links")),
+					      KGuiItem(i18n("Add link to project")),
+					      KGuiItem(i18n("Always add links")),
+					      KStandardGuiItem::cancel())  ) {
 	case 2:
 	  m_bFolderLinksFollowAll = true;
 	case 1:
@@ -530,7 +528,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 	if( m_dirSizeJob->active() )
 	  m_dirSizeQueue.append( KUrl(absoluteFilePath) );
 	else {
-	  m_progressWidget->setTotalSteps( 0 );
+	  m_progressWidget->setMaximum( 0 );
 	  m_dirSizeJob->setUrls( KUrl(absoluteFilePath) );
 	  m_dirSizeJob->start();
 	}
@@ -561,9 +559,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
       }
 
       QDir newDir( absoluteFilePath );
-      int dirFilter = QDir::TypeMask|QDir::Hidden|QDir::System;
-
-      QStringList dlist = newDir.entryList( dirFilter );
+      QStringList dlist = newDir.entryList( QDir::TypeMask|QDir::Hidden|QDir::System );
       const QString& dot = KGlobal::staticQString( "." );
       const QString& dotdot = KGlobal::staticQString( ".." );
       dlist.remove( dot );
@@ -580,7 +576,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 
   if( m_urlQueue.isEmpty() ) {
     m_dirSizeJob->cancel();
-    m_progressWidget->setValue( 100 );
+    m_progressWidget->setMaximum( 100 );
     accept();
   }
   else {
@@ -625,8 +621,9 @@ void K3bDataUrlAddingDialog::slotCopyMoveItems()
       // reuse an existing dir: move all child items into the old dir
       //
       if( oldItem->isDir() && item->isDir() ) {
-	const Q3PtrList<K3bDataItem>& cl = dynamic_cast<K3bDirItem*>( item )->children();
-	for( Q3PtrListIterator<K3bDataItem> it( cl ); *it; ++it )
+	QList<K3bDataItem*> cl = dynamic_cast<K3bDirItem*>( item )->children();
+        for( QList<K3bDataItem*>::const_iterator it = cl.begin();
+           it != cl.end(); ++it ) 
 	  m_items.append( qMakePair( *it, dynamic_cast<K3bDirItem*>( oldItem ) ) );
 
 	// FIXME: we need to remove the old dir item
@@ -667,7 +664,6 @@ void K3bDataUrlAddingDialog::slotCopyMoveItems()
 					      .arg("/" + dir->k3bPath()),
 					      QMessageBox::Warning,
 					      this,
-					      0,
 					      6,
 					      KGuiItem( i18n("Replace"),
 							QString::null,
@@ -751,7 +747,7 @@ bool K3bDataUrlAddingDialog::getNewName( const QString& oldName, K3bDirItem* dir
   do {
     newName = KInputDialog::getText( i18n("Enter New Filename"),
 				     i18n("A file with that name already exists. Please enter a new name:"),
-				     newName, &ok, this, "renamedialog", validator );
+				     newName, &ok, this, validator );
 
   } while( ok && dir->find( newName ) );
 
@@ -767,7 +763,7 @@ bool K3bDataUrlAddingDialog::addHiddenFiles()
     // FIXME: the isVisible() stuff makes the static addUrls method not return (same below)
     if( KMessageBox::questionYesNo( /*isVisible() ? */this/* : parentWidget()*/,
 				    i18n("Do you also want to add hidden files?"),
-				    i18n("Hidden Files"), i18n("Add"), i18n("Do Not Add") ) == KMessageBox::Yes )
+				    i18n("Hidden Files"), KGuiItem(i18n("Add")), KGuiItem(i18n("Do Not Add")) ) == KMessageBox::Yes )
       m_iAddHiddenFiles = 1;
     else
       m_iAddHiddenFiles = -1;
@@ -783,7 +779,7 @@ bool K3bDataUrlAddingDialog::addSystemFiles()
     if( KMessageBox::questionYesNo( /*isVisible() ? */this/* : parentWidget()*/,
 				    i18n("Do you also want to add system files "
 					 "(FIFOs, sockets, device files, and broken symlinks)?"),
-				    i18n("System Files"), i18n("Add"), i18n("Do Not Add") ) == KMessageBox::Yes )
+				    i18n("System Files"), KGuiItem(i18n("Add")), KGuiItem(i18n("Do Not Add")) ) == KMessageBox::Yes )
       m_iAddSystemFiles = 1;
     else
       m_iAddSystemFiles = -1;
@@ -798,7 +794,7 @@ void K3bDataUrlAddingDialog::slotDirSizeDone( bool success )
   if( success ) {
     m_totalFiles += m_dirSizeJob->totalFiles() + m_dirSizeJob->totalDirs();
     if( m_dirSizeQueue.isEmpty() ) {
-      m_progressWidget->setTotalSteps( 100 );
+      m_progressWidget->setValue( 100 );
       updateProgress();
     }
     else {
