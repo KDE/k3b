@@ -324,17 +324,17 @@ void K3bInteractionDialog::slotStartClickedInternal()
 					  this,
 					  0,
 					  3,
-					  i18n("Default Settings"),
-					  i18n("Saved Settings"),
-					  i18n("Last Used Settings") ) ) {
+					  KGuiItem(i18n("Default Settings")),
+					  KGuiItem(i18n("Saved Settings")),
+					  KGuiItem(i18n("Last Used Settings")) ) ) {
     case 1:
-      c.writeEntry( "action dialog startup settings", LOAD_K3B_DEFAULTS );
+      c.writeEntry( "action dialog startup settings", int(LOAD_K3B_DEFAULTS) );
       break;
     case 2:
-      c.writeEntry( "action dialog startup settings", LOAD_SAVED_SETTINGS );
+      c.writeEntry( "action dialog startup settings", int(LOAD_SAVED_SETTINGS) );
       break;
     case 3:
-      c.writeEntry( "action dialog startup settings", LOAD_LAST_SETTINGS );
+      c.writeEntry( "action dialog startup settings", int(LOAD_LAST_SETTINGS) );
       break;
     }
   }
@@ -538,7 +538,7 @@ void K3bInteractionDialog::loadStartupSettings()
 
   // earlier K3b versions loaded the saved settings
   // so that is what we do as a default
-  int i = c.readEntry( "action dialog startup settings", LOAD_SAVED_SETTINGS );
+  int i = c.readEntry( "action dialog startup settings", int(LOAD_SAVED_SETTINGS) );
   switch( i ) {
   case LOAD_K3B_DEFAULTS:
     slotLoadK3bDefaults();

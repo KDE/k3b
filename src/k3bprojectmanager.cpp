@@ -15,12 +15,6 @@
 
 #include "k3bprojectmanager.h"
 
-#include "k3bprojectinterface.h"
-#include "k3bdataprojectinterface.h"
-#include "k3baudioprojectinterface.h"
-#include "k3bmixedprojectinterface.h"
-#include "kostore/koStore.h"
-#include "kostore/koStoreDevice.h"
 #include "k3bapplication.h"
 #include "k3binteractiondialog.h"
 
@@ -35,7 +29,8 @@
 #include <k3bglobals.h>
 #include <k3bisooptions.h>
 #include <k3bdevicemanager.h>
-
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 #include <qlist.h>
 #include <qmap.h>
 #include <qtextstream.h>
@@ -261,7 +256,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
     // earlier K3b versions loaded the saved settings
     // so that is what we do as a default
     int i = KConfigGroup( c, "General Options" ).readEntry( "action dialog startup settings",
-                                                            K3bInteractionDialog::LOAD_SAVED_SETTINGS );
+                                                            int(K3bInteractionDialog::LOAD_SAVED_SETTINGS) );
     if( i == K3bInteractionDialog::LOAD_K3B_DEFAULTS )
         return; // the default k3b settings are the ones everyone starts with
     else if( i == K3bInteractionDialog::LOAD_LAST_SETTINGS )
