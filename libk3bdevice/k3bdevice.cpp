@@ -47,6 +47,7 @@
 #include <sys/stat.h>
 #include <math.h>
 #include <stdarg.h>
+#include <limits.h>
 
 
 #ifdef Q_OS_LINUX
