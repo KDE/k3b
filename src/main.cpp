@@ -72,66 +72,65 @@ static KCmdLineOptions options[] =
 	{ "nosplash", I18N_NOOP("Disable the splash screen"), 0 },
 	{ "ao <method>", I18N_NOOP("Set the audio output method (like arts or alsa depending on the installed plugins)"), 0 },
         { "device <device>", I18N_NOOP( "Set the device to be used for new projects (This option has no effect. "
-                                        "Its main purpose is to enable handling of empty media from the KDE Media Manager)." ), 0 },
-        KCmdLineLastOption
+                                        "Its main purpose is to enable handling of empty media from the KDE Media Manager)." ), 0 }
     };
 
 int main( int argc, char* argv[] )
 {
-  KAboutData aboutData( "k3b", "K3b",
+  KAboutData aboutData( "k3b", ki18n("K3b"),
 			LIBK3B_VERSION, description, KAboutData::License_GPL,
-			"(c) 1999 - 2007, Sebastian Trüg", 0, "http://www.k3b.org" );
-  aboutData.addAuthor(KLocalizedString("Sebastian Trüg"),I18N_NOOP("Maintainer and Lead Developer"), "trueg@k3b.org");
-  aboutData.addAuthor(KLocalizedString("Christian Kvasny"),I18N_NOOP("VideoCD Project and VideoCD ripping"), "chris@k3b.org");
-  aboutData.addCredit(KLocalizedString("Klaus-Dieter Krannich"), I18N_NOOP("Advanced Cdrdao integration"), "kd@k3b.org" );
+			ki18n("(c) 1999 - 2007, Sebastian Trüg"), KLocalizedString(), I18N_NOOP("http://www.k3b.org" ));
+  aboutData.addAuthor(ki18n("Sebastian Trüg"),ki18n("Maintainer and Lead Developer"), "trueg@k3b.org");
+  aboutData.addAuthor(ki18n("Christian Kvasny"),ki18n("VideoCD Project and VideoCD ripping"), "chris@k3b.org");
+  aboutData.addCredit(ki18n("Klaus-Dieter Krannich"), ki18n("Advanced Cdrdao integration"), "kd@k3b.org" );
 
-  aboutData.addCredit("Thomas Froescher",
-		      I18N_NOOP("VideoDVD ripping and video encoding in pre-1.0 versions."),
+  aboutData.addCredit(ki18n("Thomas Froescher"),
+		      ki18n("VideoDVD ripping and video encoding in pre-1.0 versions."),
 		      "tfroescher@k3b.org");
-  aboutData.addCredit("Alexis Younes aka Ayo",
-		      I18N_NOOP("For his bombastic artwork."),
+  aboutData.addCredit(ki18n("Alexis Younes aka Ayo"),
+		      ki18n("For his bombastic artwork."),
 		      "73lab@free.fr" );
-  aboutData.addCredit("Christoph Thielecke",
-		      I18N_NOOP("For extensive testing and the first German translation."),
+  aboutData.addCredit(ki18n("Christoph Thielecke"),
+		      ki18n("For extensive testing and the first German translation."),
 		      "crissi99@gmx.de");
-  aboutData.addCredit("Andy Polyakov",
-		      I18N_NOOP("For the great dvd+rw-tools and the nice cooperation."),
+  aboutData.addCredit(ki18n("Andy Polyakov"),
+		      ki18n("For the great dvd+rw-tools and the nice cooperation."),
 		      "appro@fy.chalmers.se" );
-  aboutData.addCredit("Roberto De Leo",
-		      I18N_NOOP("For the very cool eMovix package and his accommodating work."),
+  aboutData.addCredit(ki18n("Roberto De Leo"),
+		      ki18n("For the very cool eMovix package and his accommodating work."),
 		      "peggish@users.sf.net" );
-  aboutData.addCredit("John Steele Scott",
-		      I18N_NOOP("For the flac decoding plugin."),
+  aboutData.addCredit(ki18n("John Steele Scott"),
+		      ki18n("For the flac decoding plugin."),
 		      "toojays@toojays.net" );
-  aboutData.addCredit("György Szombathelyi",
-		      I18N_NOOP("For the very useful isofslib."),
+  aboutData.addCredit(ki18n("György Szombathelyi"),
+		      ki18n("For the very useful isofslib."),
 		      "gyurco@users.sourceforge.net" );
-  aboutData.addCredit("Erik de Castro Lopo",
-		      I18N_NOOP("For libsamplerate which is used for generic resampling in the audio decoder framework."),
+  aboutData.addCredit(ki18n("Erik de Castro Lopo"),
+		      ki18n("For libsamplerate which is used for generic resampling in the audio decoder framework."),
 		      "erikd@mega-nerd.com" );
-  aboutData.addCredit("Jakob Petsovits",
-		      I18N_NOOP("For the very cool conditional audio ripping pattern."),
+  aboutData.addCredit(ki18n("Jakob Petsovits"),
+		      ki18n("For the very cool conditional audio ripping pattern."),
 		      "jpetso@gmx.at" );
-  aboutData.addCredit("Heiner Eichmann",
-		      I18N_NOOP("For his work on the BSD port and some great patches."),
+  aboutData.addCredit(ki18n("Heiner Eichmann"),
+		      ki18n("For his work on the BSD port and some great patches."),
 		      "h.eichmann@gmx.de" );
-  aboutData.addCredit("Adriaan De Groot",
-		      I18N_NOOP("For his work on the BSD port."),
+  aboutData.addCredit(ki18n("Adriaan De Groot"),
+		      ki18n("For his work on the BSD port."),
 		      "" );
-  aboutData.addCredit("Thiago Macieira",
-		      I18N_NOOP("For his help with the many invalid k3b entries on bugs.kde.org."),
+  aboutData.addCredit(ki18n("Thiago Macieira"),
+		      ki18n("For his help with the many invalid k3b entries on bugs.kde.org."),
 		      "thiago@kde.org" );
-  aboutData.addCredit("Marcel Dierkes",
-		      I18N_NOOP("For the great K3b icon eyecandy."),
+  aboutData.addCredit(ki18n("Marcel Dierkes"),
+		      ki18n("For the great K3b icon eyecandy."),
 		      "marcel.dierkes@gmx.de" );
-  aboutData.addCredit("Christoph Burger-Scheidlin",
-		      I18N_NOOP("For his neverending help cleaning out the K3b bug database."),
+  aboutData.addCredit(ki18n("Christoph Burger-Scheidlin"),
+		      ki18n("For his neverending help cleaning out the K3b bug database."),
 		      "andersin@freenet.de" );
-  aboutData.addCredit( "Robert Wadley",
-                       I18N_NOOP( "Rob created a great theme and came up with the idea for transparent themes." ),
+  aboutData.addCredit( ki18n("Robert Wadley"),
+                       ki18n( "Rob created a great theme and came up with the idea for transparent themes." ),
                        "rob@robntina.fastmail.us" );
-  aboutData.addCredit( "Dmitry Novikov",
-                       I18N_NOOP( "For the amazing K3b 1.0 theme." ),
+  aboutData.addCredit( ki18n("Dmitry Novikov"),
+                       ki18n( "For the amazing K3b 1.0 theme." ),
                        "quant@trktvs.ru" );
 
   KCmdLineArgs::init( argc, argv, &aboutData );
@@ -140,10 +139,13 @@ int main( int argc, char* argv[] )
   if( K3bApplication::start() ) {
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     if( args->isSet("lang") )
-      if( !KGlobal::locale()->setLanguage(args->getOption("lang")) )
+    {
+      QStringList lst;
+      lst << args->getOption("lang");
+      if( !KGlobal::locale()->setLanguage(lst) )
 	kDebug() << "Unable to set to language " << args->getOption("lang")
 		  << " current is: " << KGlobal::locale()->language() << endl;
-
+    }
     K3bApplication app;
 
     // we need a running app for the init method
