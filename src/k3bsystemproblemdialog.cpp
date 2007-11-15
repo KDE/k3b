@@ -158,7 +158,8 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const Q3ValueList<K3bSystemProbl
   text.append( "</html>" );
 
   view->setText(text);
-  view->setCursorPosition(0,0);
+  //TODO port me kde4
+  //view->setCursorPosition(0,0);
   view->ensureCursorVisible();
 }
 
@@ -508,10 +509,11 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent,
   // Way too many users are complaining about K3b not being able to decode mp3 files. So just warn them about
   // the legal restrictions with many distros
   //
-  Q3PtrList<K3bPlugin> plugins = k3bcore->pluginManager()->plugins( "AudioDecoder" );
+  QList<K3bPlugin*> plugins = k3bcore->pluginManager()->plugins( "AudioDecoder" );
   bool haveMp3Decoder = false;
-  for( Q3PtrListIterator<K3bPlugin> it( plugins ); *it; ++it ) {
-    if( it.current()->pluginInfo().name() == "K3b MAD Decoder" ) {
+  for( QList<K3bPlugin*>::const_iterator it = plugins.begin();
+       it != plugins.end(); ++it ) {
+    if( (*it)->pluginInfo().name() == "K3b MAD Decoder" ) {
       haveMp3Decoder = true;
       break;
     }
@@ -646,9 +648,9 @@ int K3bSystemProblemDialog::dmaActivated( K3bDevice::Device* dev )
 }
 
 
-Q3PtrList<K3bDevice::Device> K3bSystemProblemDialog::checkForAutomounting()
+QList<K3bDevice::Device*> K3bSystemProblemDialog::checkForAutomounting()
 {
-  Q3PtrList<K3bDevice::Device> l;
+  QList<K3bDevice::Device *> l;
 
   ::setfsent();
 

@@ -94,7 +94,7 @@ class K3bSystemProblemDialog : public KDialog
 			  QWidget* parent = 0, 
 			  const char* name = 0 );
   static int dmaActivated( K3bDevice::Device* );
-  static Q3PtrList<K3bDevice::Device> checkForAutomounting();
+  static QList<K3bDevice::Device*> checkForAutomounting();
 
   QPushButton* m_closeButton;
   QPushButton* m_k3bsetupButton;

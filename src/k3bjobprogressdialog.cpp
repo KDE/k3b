@@ -206,16 +206,16 @@ void K3bJobProgressDialog::setupGUI()
 
   Q3HBoxLayout* layout3 = new Q3HBoxLayout( 0, 0, 6, "layout3");
 
-  m_labelSubTask = new KSqueezedTextLabel( this, "m_labelSubTask" );
+  m_labelSubTask = new KSqueezedTextLabel( this );
   m_labelSubTask->setTextElideMode( Qt::ElideRight );
   layout3->addWidget( m_labelSubTask );
 
-  m_labelSubProcessedSize = new QLabel( this, "m_labelSubProcessedSize" );
+  m_labelSubProcessedSize = new QLabel( this );
   m_labelSubProcessedSize->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
   layout3->addWidget( m_labelSubProcessedSize );
   mainLayout->addLayout( layout3 );
 
-  m_progressSubPercent = new QProgressBar( this, "m_progressSubPercent" );
+  m_progressSubPercent = new QProgressBar( this );
   mainLayout->addWidget( m_progressSubPercent );
 
   Q3HBoxLayout* layout4 = new Q3HBoxLayout( 0, 0, 6, "layout4");
@@ -223,15 +223,15 @@ void K3bJobProgressDialog::setupGUI()
   QLabel* textLabel5 = new QLabel( i18n("Overall progress:"), this, "textLabel5" );
   layout4->addWidget( textLabel5 );
 
-  m_labelProcessedSize = new QLabel( this, "m_labelProcessedSize" );
+  m_labelProcessedSize = new QLabel( this );
   m_labelProcessedSize->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
   layout4->addWidget( m_labelProcessedSize );
   mainLayout->addLayout( layout4 );
 
-  m_progressPercent = new QProgressBar( this, "m_progressPercent" );
+  m_progressPercent = new QProgressBar( this );
   mainLayout->addWidget( m_progressPercent );
 
-  m_frameExtraInfo = new Q3Frame( this, "m_frameExtraInfo" );
+  m_frameExtraInfo = new Q3Frame( this );
   m_frameExtraInfo->setFrameShape( Q3Frame::NoFrame );
   m_frameExtraInfo->setFrameShadow( Q3Frame::Raised );
   m_frameExtraInfoLayout = new Q3GridLayout( m_frameExtraInfo );
