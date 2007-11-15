@@ -27,7 +27,9 @@
 K3bNotifyOptionTab::K3bNotifyOptionTab( QWidget* parent )
   : QWidget( parent )
 {
+#ifdef __GNUC__
 #warning Get the KNotification KCModule and show it here.
+#endif
 }
 
 

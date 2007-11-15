@@ -29,7 +29,9 @@ namespace K3bDevice {
 class K3bCdparanoiaLib;
 
 
+#ifdef __GNUC__
 #warning FIXME: move K3bMedium into libk3b, then add KCddb info to K3bMedium, and use K3bMedium for the K3bAudioCdTrackSource
+#endif
 /**
  * Audio data source which reads it's data directly from an audio CD.
  *

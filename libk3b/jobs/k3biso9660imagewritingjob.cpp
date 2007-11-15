@@ -367,7 +367,9 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 
       // now write the tocfile
       delete m_tocFile;
+#ifdef __GNUC__
 #warning FIXME: I think we need a toc extension here
+#endif
       m_tocFile = new KTemporaryFile();
       m_tocFile->setAutoRemove(true);
 

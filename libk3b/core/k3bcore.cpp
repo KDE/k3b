@@ -73,7 +73,9 @@ private:
   bool m_done;
 };
 
+#ifdef __GNUC__
 #warning FIXME: how do we define a user event type? Or just replace the whole event stuff with signals
+#endif
 class DeviceBlockingEvent : public QEvent
 {
 public:

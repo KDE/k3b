@@ -95,7 +95,9 @@ class K3bInteractionDialog : public KDialog
 
   inline bool close() { return close( false ); }
 
+#ifdef __GNUC__
 #warning K3bInteractionDialog::mainWidget clashes with KDialog::MainWidget. We need to rename it and update all the subclasses
+#endif
   /**
    * If no mainWidget has been set a plain page will be created.
    */

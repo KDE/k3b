@@ -64,7 +64,9 @@ K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent )
 
   m_widgetStack->raiseWidget( m_dataFileView );
 
+#ifdef __GNUC__
 #warning enable player once ported to Phonon
+#endif
 //   toolBox()->addAction( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_PLAY ) );
 //   toolBox()->addAction( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_PAUSE ) );
 //   toolBox()->addAction( m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_STOP ) );

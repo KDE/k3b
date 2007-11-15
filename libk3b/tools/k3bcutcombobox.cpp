@@ -44,7 +44,9 @@ public:
 };
 
 
+#ifdef __GNUC__
 #warning Use user data to store the full strings or a custom item delegate to paint the items
+#endif
 K3bCutComboBox::K3bCutComboBox( QWidget* parent )
   : KComboBox( parent )
 {

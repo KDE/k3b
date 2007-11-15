@@ -69,7 +69,9 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent )
     toolBox()->addAction( conversionAction );
     toolBox()->addSeparator();
 
+#ifdef __GNUC__
 #warning enable player once ported to Phonon
+#endif
 //     toolBox()->addAction( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PLAY ) );
 //     toolBox()->addAction( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PAUSE ) );
 //     toolBox()->addAction( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_STOP ) );

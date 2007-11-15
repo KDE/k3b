@@ -404,7 +404,9 @@ void K3bCdCopyJob::queryCddb()
 
   d->haveCddb = false;
 
+#ifdef __GNUC__
 #warning Use KCddb
+#endif
   startCopy();
 //   if( !d->cddb ) {
 //     d->cddb = new K3bCddb( this );
@@ -422,7 +424,9 @@ void K3bCdCopyJob::queryCddb()
 
 void K3bCdCopyJob::slotCddbQueryFinished( int error )
 {
+#ifdef __GNUC__
 #warning Use KCddb
+#endif
 //   if( error == K3bCddbQuery::SUCCESS ) {
 //     d->cddbInfo = d->cddb->result();
 //     d->haveCddb = true;
@@ -781,7 +785,9 @@ bool K3bCdCopyJob::writeNextSession()
 	  // It is important that the files have the ending inf because
 	  // cdrecord only checks this
 
+#ifdef __GNUC__
 #warning Make sure the temp files have the extension inf. Otherwise cdrecord wont use them
+#endif
 	  KTemporaryFile tmp;
 	  d->infNames.append( tmp.fileName() );
           QTextStream stream( &tmp );

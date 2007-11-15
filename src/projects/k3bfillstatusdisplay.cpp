@@ -174,7 +174,9 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
     p.fillRect( crect, Qt::green );
 
     QRect oversizeRect(crect);
+#ifdef __GNUC__
 #warning draw a nice fill state bar again
+#endif
 #if 0
     // draw yellow if cdSize - tolerance < docSize
     if( docSize > cdSize - tolerance ) {
@@ -397,7 +399,9 @@ void K3bFillStatusDisplay::setupPopupMenu()
 
     d->actionCustomSize = K3b::createAction( this, i18n("Custom..."), 0, 0, this, SLOT(slotCustomSize()),
                                              d->actionCollection, "fillstatus_custom_size" );
+#ifdef __GNUC__
 #warning setAlwaysEmitActivated
+#endif
     //    d->actionCustomSize->setAlwaysEmitActivated(true);
     d->actionDetermineSize = K3b::createAction( this, i18n("From Medium..."), "cdrom_unmount", 0,
                                                  this, SLOT(slotDetermineSize()),

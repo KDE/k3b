@@ -743,7 +743,9 @@ bool K3bMixedJob::writeTocFile()
     // FIXME: create the tocfile in the same directory like all the other files.
 
     if( m_tocFile ) delete m_tocFile;
+#ifdef __GNUC__
 #warning We probably need a toc extensdion here
+#endif
     m_tocFile = new KTemporaryFile();
     m_tocFile->setAutoRemove(true);
 

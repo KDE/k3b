@@ -259,7 +259,9 @@ QString K3b::systemName()
 
 bool K3b::kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& avail )
 {
+#ifdef __GNUC__
 #warning enable once cmake check for statvfs is done
+#endif
 #if 0
     struct statvfs fs;
     if( ::statvfs( QFile::encodeName(path), &fs ) == 0 ) {
@@ -456,7 +458,9 @@ QString K3b::resolveLink( const QString& file )
 
 K3bDevice::Device* K3b::urlToDevice( const KUrl& deviceUrl )
 {
+#ifdef __GNUC__
 #warning kded mediamanager: is that now solid?
+#endif
 #if 0
     if( deviceUrl.protocol() == "media" || deviceUrl.protocol() == "system" ) {
         kDebug() << "(K3b) Asking mediamanager for " << deviceUrl.fileName();
@@ -544,7 +548,9 @@ bool K3b::isMounted( K3bDevice::Device* dev )
 {
     if( !dev )
         return false;
+#ifdef __GNUC__
 #warning FIXME: we need a replacement for KIO::findDeviceMountPoint
+#endif
 //    return !KIO::findDeviceMountPoint( dev->blockDeviceName() ).isEmpty();
     return false;
 }
@@ -561,7 +567,9 @@ bool K3b::unmount( K3bDevice::Device* dev )
     if( KIO::NetAccess::synchronousRun( KIO::unmount( mntDev, false ), 0 ) )
         return true;
 
+#ifdef __GNUC__
 #warning FIXME: we need a replacement for KIO::findDeviceMountPoint
+#endif
 //     QString mntPath = KIO::findDeviceMountPoint( dev->blockDeviceName() );
 //     if ( mntPath.isEmpty() ) {
 //         mntPath = dev->blockDeviceName();
@@ -590,7 +598,9 @@ bool K3b::unmount( K3bDevice::Device* dev )
         return !p.exitStatus();
     }
     else {
+#ifdef __GNUC__
 #warning Use SOlid to unmount?
+#endif
         return false;
     }
 }
@@ -607,7 +617,9 @@ bool K3b::mount( K3bDevice::Device* dev )
     if( KIO::NetAccess::synchronousRun( KIO::mount( true, 0, mntDev, false ), 0 ) )
         return true;
 
+#ifdef __GNUC__
 #warning Use SOlid to mount?
+#endif
 
     // now try pmount
     QString pmountBin = K3b::findExe( "pmount" );
@@ -635,7 +647,9 @@ bool K3b::mount( K3bDevice::Device* dev )
 
 bool K3b::eject( K3bDevice::Device* dev )
 {
+#ifdef __GNUC__
 #warning Use Solid to eject?
+#endif
     if( K3b::isMounted( dev ) )
         K3b::unmount( dev );
 

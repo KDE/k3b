@@ -56,7 +56,9 @@ public:
 };
 
 
+#ifdef __GNUC__
 #warning Use KUtils::PluginPage to nicely display the plugin list
+#endif
 K3bPluginOptionTab::K3bPluginOptionTab( QWidget* parent )
   : base_K3bPluginOptionTab( parent )
 {

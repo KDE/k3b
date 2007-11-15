@@ -188,7 +188,9 @@
 
 #else
 	#ifndef __sgi
+#ifdef __GNUC__
 	#warning "Don't have the functions lrint() and lrintf()."
+#endif
 	#warning "Replacing these functions with a standard C cast."
 	#endif
 

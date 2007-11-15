@@ -20,6 +20,7 @@
 
 
 #include "k3babstractwriter.h"
+#include "k3b_export.h"
 
 class K3bExternalBin;
 class K3bProcess;
@@ -29,7 +30,7 @@ class Q3Socket;
 
 
 
-class K3bCdrdaoWriter : public K3bAbstractWriter
+class LIBK3B_EXPORT K3bCdrdaoWriter : public K3bAbstractWriter
 {
   Q_OBJECT
 

@@ -79,7 +79,9 @@ K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent )
       m_currentMouseOverItem(0),
       m_currentlyPlayingTrack(0)
 {
+#ifdef __GNUC__
 #warning Port the Audio player to Phonon
+#endif
 //    m_player = new K3bAudioTrackPlayer( m_doc, this );
 //     connect( m_player, SIGNAL(playingTrack(K3bAudioTrack*)), this,
 //              SLOT(showPlayerIndicator(K3bAudioTrack*)) );
@@ -221,7 +223,9 @@ void K3bAudioTrackView::setupActions()
 
 bool K3bAudioTrackView::acceptDrag(QDropEvent* e) const
 {
+#ifdef __GNUC__
 #warning re-enable audio cd source drags once they are ported.
+#endif
     // the first is for built-in item moving, the second for dropping urls, the third for dropping audio tracks
     return ( K3ListView::acceptDrag(e) ||
              K3URLDrag::canDecode(e) /*||
@@ -385,7 +389,9 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3Li
             }
         }
     }
+#ifdef __GNUC__
 #warning FIXME: K3bAudioCdTrackDrag
+#endif
 //     else if( K3bAudioCdTrackDrag::canDecode( e ) ) {
 //         kDebug() << "(K3bAudioTrackView) audiocdtrack dropped.";
 //         K3bDevice::Toc toc;

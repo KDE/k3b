@@ -32,7 +32,9 @@ class K3bMsfValidator : public QRegExpValidator
 };
 
 
+#ifdef __GNUC__
 #warning FIXME: make this a proper MSF edit again by subclassing from QAbtractSpinBox
+#endif
 class LIBK3B_EXPORT K3bMsfEdit : public QSpinBox
 {
   Q_OBJECT

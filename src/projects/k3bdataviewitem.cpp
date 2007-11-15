@@ -69,7 +69,9 @@ void K3bDataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column,
 
     if( column == 0 ) {
         QFontMetrics fm = p->fontMetrics();
+#ifdef __GNUC__
 #warning Paint nicer thingies for rockridge and joliet hiding
+#endif
 //         if( dataItem()->hideOnRockRidge() ) {
 //             int tw = qMax( fm.width( "rr" ) + 2*listView()->itemMargin(), height() );
 //             p->fillRect( width-tw, 0, tw, height(), isSelected() ? _cg.highlight() : _cg.brush(QColorGroup::Base) );
@@ -179,7 +181,9 @@ void K3bDataDirViewItem::highlightIcon( bool b )
 {
     if( m_pixmap.isNull() )
         m_pixmap = *pixmap(0);
+#ifdef __GNUC__
 #warning TODO port me to kde4
+#endif
 #if 0
     if( b )
         setPixmap( 0, KPixmapEffect::selectedPixmap( m_pixmap, listView()->colorGroup().highlight() ) );

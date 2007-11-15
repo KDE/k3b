@@ -1003,7 +1003,9 @@ bool K3bDataJob::setupCdrdaoJob()
 
     // now write the tocfile
     if( d->tocFile ) delete d->tocFile;
+#ifdef __GNUC__
 #warning I think we need a toc extension for the KTemporaryFile here
+#endif
     d->tocFile = new KTemporaryFile();
     d->tocFile->setAutoRemove(true);
 

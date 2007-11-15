@@ -36,7 +36,9 @@ class QRadioButton;
 class Q3ButtonGroup;
 class KSqueezedTextLabel;
 
+#ifdef __GNUC__
 #warning We need a simple replacement for K3bCutComboBox
+#endif
 typedef KComboBox K3bCutComboBox;
 
 class K3bVcdTrackDialog : public KDialog

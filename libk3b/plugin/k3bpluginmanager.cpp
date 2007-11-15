@@ -82,7 +82,9 @@ QList<K3bPlugin*> K3bPluginManager::plugins( const QString& group ) const
 
 void K3bPluginManager::loadPlugin( const QString& fileName )
 {
+#ifdef __GNUC__
 #warning Port plugin loading to KDE 4
+#endif
 //   KSimpleConfig c( fileName, true );
 //   c.setGroup( "K3b Plugin" );
 

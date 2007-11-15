@@ -88,7 +88,9 @@ public:
 
   int trackNumber;
 
+#ifdef __GNUC__
 #warning Use kcddb from kdemultimedia
+#endif
 //   void updateCddbData( const K3bCddbResultEntry& entry ) {
 //     setText( 2, entry.artists[trackNumber-1] );
 //     setText( 3, entry.titles[trackNumber-1] );
@@ -154,7 +156,9 @@ void K3bAudioCdView::reloadMedium()
   m_toc = medium().toc();
   m_device = medium().device();
 
+#ifdef __GNUC__
 #warning Use kccdb
+#endif
   // initialize cddb info for editing
 //   m_cddbInfo = K3bCddbResultEntry();
 //   m_cddbInfo.discid = QString::number( medium().toc().discId(), 16 );
@@ -187,7 +191,9 @@ void K3bAudioCdView::reloadMedium()
 
   m_cdText = medium().cdText();
 
+#ifdef __GNUC__
 #warning Use kccdb
+#endif
   // simulate a cddb entry with the cdtext data
 //   m_cddbInfo.cdTitle = m_cdText.title();
 //   m_cddbInfo.cdArtist = m_cdText.performer();
@@ -286,7 +292,9 @@ void K3bAudioCdView::slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint
 void K3bAudioCdView::slotItemRenamed( Q3ListViewItem* item, const QString& str, int col )
 {
   AudioTrackViewItem* a = (AudioTrackViewItem*)item;
+#ifdef __GNUC__
 #warning Use kccdb
+#endif
 //   if( col == 2 )
 //     m_cddbInfo.artists[a->trackNumber-1] = str;
 //   else if( col == 3 )

@@ -25,7 +25,9 @@
 
 #include <kdebug.h>
 
+#ifdef __GNUC__
 #warning Remove this line once the statfs cmake check is done
+#endif
 #define HAVE_SYS_VFS_H
 
 #ifdef Q_OS_FREEBSD

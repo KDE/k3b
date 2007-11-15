@@ -55,7 +55,9 @@ K3bDeviceComboBox::~K3bDeviceComboBox()
 
 K3bDevice::Device* K3bDeviceComboBox::selectedDevice() const
 {
+#ifdef __GNUC__
 #warning FIXME: implement K3bDeviceComboBox::selectedDevice
+#endif
 //     if ( count() > 0 )
 //         return d->devices[currentIndex()];
 //     else
@@ -88,7 +90,9 @@ void K3bDeviceComboBox::refreshDevices( const QList<K3bDevice::Device*>& list )
 
 void K3bDeviceComboBox::setSelectedDevice( K3bDevice::Device* dev )
 {
+#ifdef __GNUC__
 #warning FIXME: implement K3bDeviceComboBox::setSelectedDevice
+#endif
 //     if( dev ) {
 //         if( d->deviceIndexMap.contains(dev->devicename()) ) {
 //             setCurrentItem( d->deviceIndexMap[dev->devicename()] );

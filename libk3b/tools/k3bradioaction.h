@@ -37,7 +37,9 @@ class LIBK3B_EXPORT K3bRadioAction : public KToggleAction
   K3bRadioAction( const QString& text, QObject* parent = 0 );
   K3bRadioAction( const KIcon& icon, const QString& text, QObject* parent = 0 );
 
+#ifdef __GNUC__
 #warning Make this work again (always emit signal)
+#endif
   /**
    * @param b if true the action will always emit the activated signal
    *          even if the toggled state did not change. The default is false.

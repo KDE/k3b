@@ -512,7 +512,9 @@ void K3bCheckListViewItem::setChecked( bool checked )
 void K3bCheckListViewItem::paintK3bCell( QPainter* p, const QColorGroup& cg, int col, int width, int align )
 {
   K3bListViewItem::paintK3bCell( p, cg, col, width, align );
+#ifdef __GNUC__
 #warning FIXME: draw check mark
+#endif
 //   if( col == 0 ) {
 //     if( m_checked ) {
 //       QRect r( 0, marginVertical(), width, /*listView()->style().pixelMetric( QStyle::PM_CheckListButtonSize )*/height()-2*marginVertical() );
