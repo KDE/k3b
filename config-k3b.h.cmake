@@ -6,3 +6,7 @@
 #define SIZEOF_INT ${SIZEOF_INT}
 
 #define SIZEOF_LONG ${SIZEOF_LONG}
+
+#cmakedefine HAVE_LRINT 1
+
+#cmakedefine HAVE_LRINTF 1

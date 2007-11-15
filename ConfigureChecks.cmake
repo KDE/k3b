@@ -13,3 +13,6 @@ macro_bool_to_01(MUSICBRAINZ_FOUND HAVE_MUSICBRAINZ)
 check_type_size("int" SIZEOF_INT)
 check_type_size("long" SIZEOF_LONG)
 
+
+check_function_exists(lrint HAVE_LRINT)
+check_function_exists(lrintf HAVE_LRINTF)
