@@ -60,14 +60,7 @@
 
 
 K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent )
-  : KDialog( Plain,
-		 i18n("Adding files to project '%1'").arg(doc->URL().fileName()),
-		 Cancel,
-		 Cancel,
-		 parent,
-		 name,
-		 true,
-		 true ),
+  : KDialog( parent),
     m_bExistingItemsReplaceAll(false),
     m_bExistingItemsIgnoreAll(false),
     m_bFolderLinksFollowAll(false),
@@ -81,14 +74,19 @@ K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent
 {
   m_encodingConverter = new K3bEncodingConverter();
 
-  QWidget* page = plainPage();
+  QWidget* page = new QWidget();
+  setMainWidget(page);
+  setButtons(Cancel);
+  setDefaultButton(Cancel);
+  setCaption(i18n("Adding files to project '%1'",doc->URL().fileName()));
+  setModal(true);
   Q3GridLayout* grid = new Q3GridLayout( page );
   grid->setSpacing( spacingHint() );
   grid->setMargin( 0 );
 
   m_counterLabel = new QLabel( page );
   m_infoLabel = new KSqueezedTextLabel( i18n("Adding files to project '%1'")
-					.arg(doc->URL().fileName()) + "...", page );
+					,doc->URL().fileName()) + "...", page );
   m_progressWidget = new QProgressBar( 0, page );
 
   grid->addWidget( m_counterLabel, 0, 1 );
@@ -253,7 +251,7 @@ void K3bDataUrlAddingDialog::slotCancel()
 {
   m_bCanceled = true;
   m_dirSizeJob->cancel();
-  KDialog::slotCancel();
+  reject();
 }
 
 
@@ -582,7 +580,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 
   if( m_urlQueue.isEmpty() ) {
     m_dirSizeJob->cancel();
-    m_progressWidget->setProgress( 100 );
+    m_progressWidget->setValue( 100 );
     accept();
   }
   else {
@@ -818,12 +816,12 @@ void K3bDataUrlAddingDialog::updateProgress()
     unsigned int p = 100*m_filesHandled/m_totalFiles;
     if( p > m_lastProgress ) {
       m_lastProgress = p;
-      m_progressWidget->setProgress( p );
+      m_progressWidget->setValue( p );
     }
   }
   else {
     // make sure the progress bar shows something
-    m_progressWidget->setProgress( m_filesHandled );
+    m_progressWidget->setValue( m_filesHandled );
   }
 }
 

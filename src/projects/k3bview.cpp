@@ -40,6 +40,7 @@
 #include <k3bpluginmanager.h>
 #include <k3bprojectplugin.h>
 #include <k3bcore.h>
+#include "k3baction.h"
 
 
 K3bView::K3bView( K3bDoc* pDoc, QWidget *parent )
@@ -59,14 +60,14 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent )
   grid->setSpacing( 5 );
   grid->setMargin( 2 );
 
-  KAction* burnAction = new KAction( i18n("&Burn"), "cdburn", Qt::CTRL + Qt::Key_B, this, SLOT(slotBurn()),
+  KAction* burnAction = K3b::createAction(this,i18n("&Burn"), "cdburn", Qt::CTRL + Qt::Key_B, this, SLOT(slotBurn()),
 				     actionCollection(), "project_burn");
   burnAction->setToolTip( i18n("Open the burn dialog for the current project") );
-  KAction* propAction = new KAction( i18n("&Properties"), "edit", Qt::CTRL + Qt::Key_P, this, SLOT(slotProperties()),
+  KAction* propAction = K3b::createAction(this, i18n("&Properties"), "edit", Qt::CTRL + Qt::Key_P, this, SLOT(slotProperties()),
 				     actionCollection(), "project_properties");
   propAction->setToolTip( i18n("Open the properties dialog") );
 
-  m_toolBox->addButton( burnAction, true );
+  m_toolBox->addAction( burnAction/*, true*/ );
   m_toolBox->addSeparator();
 
   // this is just for testing (or not?)
@@ -133,16 +134,17 @@ void K3bView::slotProperties()
 
 void K3bView::addPluginButtons( int projectType )
 {
-  Q3PtrList<K3bPlugin> pl = k3bcore->pluginManager()->plugins( "ProjectPlugin" );
-  for( Q3PtrListIterator<K3bPlugin> it( pl ); *it; ++it ) {
+  QList<K3bPlugin*> pl = k3bcore->pluginManager()->plugins( "ProjectPlugin" );
+  for( QList<K3bPlugin*>::const_iterator it = pl.begin();
+       it != pl.end(); ++it ) {
     K3bProjectPlugin* pp = dynamic_cast<K3bProjectPlugin*>( *it );
     if( pp && (pp->type() & projectType) ) {
-      QToolButton* button = toolBox()->addButton( pp->text(),
-						  pp->icon(),
-						  pp->toolTip(),
-						  pp->whatsThis(),
+      QAction* button = toolBox()->addAction(     pp->text(),
 						  this,
 						  SLOT(slotPluginButtonClicked()) );
+      button->setIcon(QIcon(pp->icon()));
+      button->setToolTip (pp->toolTip());
+      button->setWhatsThis(pp->whatsThis());
       m_plugins.insert( static_cast<void*>(button), pp );
     }
   }
