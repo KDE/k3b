@@ -36,6 +36,7 @@
 #include <k3bpassivepopup.h>
 #include <KActionMenu>
 #include <kactioncollection.h>
+#include <kmenu.h>
 #include <unistd.h>
 // QT-includes
 #include <qdir.h>
@@ -326,7 +327,7 @@ void K3bDirView::slotFileTreeContextMenu( K3bDevice::Device* /*dev*/, const QPoi
 {
   QAction* a = k3bappcore->appDeviceManager()->actionCollection()->action( "device_popup" );
   if( KActionMenu* m = dynamic_cast<KActionMenu*>(a) )
-    m->popup( p );
+    m->menu()->exec( p );
 }
 
 

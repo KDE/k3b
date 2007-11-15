@@ -21,8 +21,6 @@
 #include <k3b.h>
 #include <k3bcore.h>
 
-#include <kcombiview.h>
-#include <kfilepreview.h>
 #include <kaction.h>
 #include <kbookmarkmenu.h>
 #include <kstandarddirs.h>
@@ -39,7 +37,7 @@ K3bDirOperator::K3bDirOperator(const KUrl& url, QWidget* parent )
 
   // disable the del-key since we still have a focus problem and users keep
   // deleting files when they want to remove project entries
-  KAction* aDelete = actionCollection()->action("delete");
+  QAction* aDelete = actionCollection()->action("delete");
   if( aDelete )
     aDelete->setShortcut( 0 );
 
