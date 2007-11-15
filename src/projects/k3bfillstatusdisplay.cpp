@@ -58,7 +58,6 @@
 #include <kio/global.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
-#include <kpixmapeffect.h>
 
 
 static const int DEFAULT_CD_SIZE_74 = 74*60*75;
