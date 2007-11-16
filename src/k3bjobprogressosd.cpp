@@ -38,7 +38,7 @@
 
 
 K3bJobProgressOSD::K3bJobProgressOSD( QWidget* parent )
-  : QWidget( parent, Qt::WType_TopLevel | WNoAutoErase | Qt::WStyle_Customize | Qt::X11BypassWindowManagerHint | Qt::WStyle_StaysOnTop ),
+  : QWidget( parent, Qt::WType_TopLevel | Qt::WNoAutoErase | Qt::WStyle_Customize | Qt::X11BypassWindowManagerHint | Qt::WStyle_StaysOnTop ),
     m_dirty(true),
     m_progress(0),
     m_dragging(false),
@@ -221,8 +221,11 @@ void K3bJobProgressOSD::mousePressEvent( QMouseEvent* e )
   }
   else if( e->button() == Qt::RightButton ) {
     KMenu m;
+    //TODO port me kde4
+#if 0
     if( m.insertItem( i18n("Hide OSD") ) == m.exec( e->globalPos() ) )
       hide();
+#endif
   }
 }
 

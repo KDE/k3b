@@ -31,6 +31,7 @@
 #include <kmenu.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
+#include <k3baction.h>
 
 K3bAppDeviceManager::K3bAppDeviceManager( QObject* parent )
   : K3bDevice::DeviceManager( parent ),
@@ -43,21 +44,21 @@ K3bAppDeviceManager::K3bAppDeviceManager( QObject* parent )
 
   // setup actions
   KActionMenu* devicePopupMenu = new KActionMenu( m_actionCollection, "device_popup" );
-  m_actionDiskInfo = new KAction( i18n("Media &Info"), "info", 0, this, SLOT(diskInfo()),
+  m_actionDiskInfo = K3b::createAction(this, i18n("Media &Info"), "info", 0, this, SLOT(diskInfo()),
 				  m_actionCollection, "device_diskinfo");
-  m_actionUnmount = new KAction( i18n("&Unmount"), "cdrom_unmount", 0, this, SLOT(unmountDisk()),
+  m_actionUnmount = K3b::createAction(this,  i18n("&Unmount"), "cdrom_unmount", 0, this, SLOT(unmountDisk()),
 				 m_actionCollection, "device_unmount");
-  m_actionMount = new KAction( i18n("&Mount"), "cdrom_mount", 0, this, SLOT(mountDisk()),
+  m_actionMount = K3b::createAction(this, i18n("&Mount"), "cdrom_mount", 0, this, SLOT(mountDisk()),
 			       m_actionCollection, "device_mount");
-  m_actionEject = new KAction( i18n("&Eject"), "", 0, this, SLOT(ejectDisk()),
+  m_actionEject = K3b::createAction(this, i18n("&Eject"), "", 0, this, SLOT(ejectDisk()),
 			       m_actionCollection, "device_eject");
-  m_actionLoad = new KAction( i18n("L&oad"), "", 0, this, SLOT(loadDisk()),
+  m_actionLoad = K3b::createAction(this, i18n("L&oad"), "", 0, this, SLOT(loadDisk()),
 			      m_actionCollection, "device_load");
 //   KAction* actionUnlock = new KAction( i18n("Un&lock"), "", 0, this, SLOT(unlockDevice()),
 // 				       m_actionCollection, "device_unlock" );
 //   KAction* actionlock = new KAction( i18n("Loc&k"), "", 0, this, SLOT(lockDevice()),
 // 				     m_actionCollection, "device_lock" );
-  m_actionSetReadSpeed = new KAction( i18n("Set Read Speed..."), "", 0, this, SLOT(setReadSpeed()),
+  m_actionSetReadSpeed = K3b::createAction(this, i18n("Set Read Speed..."), "", 0, this, SLOT(setReadSpeed()),
 				      m_actionCollection, "device_set_read_speed" );
 
   m_actionDiskInfo->setToolTip( i18n("Display generic medium information") );
