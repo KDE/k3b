@@ -33,25 +33,21 @@
 class K3bDataItem;
 class K3bRootItem;
 class K3bDirItem;
-class K3bFileItem;
 class K3bJob;
 class K3bBootItem;
 class K3bFileCompilationSizeHandler;
 
-class KProgressDialog;
 //class K3bView;
 class KConfig;
 class QString;
 class QStringList;
-class QWidget;
 class QDomDocument;
 class QDomElement;
 class K3bIso9660Directory;
 
 namespace K3bDevice {
   class Device;
-  class DeviceHandler;
-}
+  }
 
 
 /**

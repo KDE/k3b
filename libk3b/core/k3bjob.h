@@ -22,7 +22,6 @@
 #include "k3bjobhandler.h"
 #include "k3b_export.h"
 
-class K3bDoc;
 namespace K3bDevice {
   class Device;
 }

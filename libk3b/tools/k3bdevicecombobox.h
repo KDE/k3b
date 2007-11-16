@@ -23,8 +23,7 @@
 
 namespace K3bDevice {
     class Device;
-    class DeviceManager;
-}
+    }
 
 
 /**

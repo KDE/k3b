@@ -31,6 +31,7 @@ class K3bAudioNormalizeJob;
 class K3bAudioJobTempData;
 class K3bDevice::Device;
 class K3bAudioMaxSpeedJob;
+class K3bDoc;
 
 /**
   *@author Sebastian Trueg

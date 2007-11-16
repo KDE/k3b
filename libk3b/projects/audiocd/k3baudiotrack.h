@@ -30,7 +30,6 @@
 #include <k3btrack.h>
 #include "k3b_export.h"
 
-class K3bAudioDecoder;
 class K3bAudioDataSource;
 class K3bAudioDoc;
 

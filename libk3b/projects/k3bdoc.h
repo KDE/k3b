@@ -31,13 +31,8 @@
 #include "k3b_export.h"
 
 // forward declaration of the K3b classes
-class QTimer;
-class KTempFile;
 class K3bBurnJob;
-class QDomDocument;
 class QDomElement;
-class KConfig;
-class KActionCollection;
 class K3bJobHandler;
 
 

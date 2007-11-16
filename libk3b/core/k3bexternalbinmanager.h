@@ -25,7 +25,6 @@
 #include "k3bversion.h"
 
 class KConfig;
-class K3Process;
 
 
 class K3bExternalProgram;

@@ -23,7 +23,6 @@
 #include "k3b_export.h"
 
 class K3bAudioDecoder;
-class K3bAudioTrack;
 
 
 /**

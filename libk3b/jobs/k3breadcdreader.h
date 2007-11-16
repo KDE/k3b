@@ -20,9 +20,7 @@
 #include <k3bjob.h>
 
 
-class K3bProcess;
 class K3Process;
-class K3bExternalBin;
 namespace K3bDevice {
   class Device;
 }

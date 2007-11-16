@@ -22,11 +22,8 @@
 class K3bMovixDoc;
 class K3bDevice::Device;
 class K3bDataJob;
-class KTemporaryFile;
-class K3bMovixInstallation;
 class K3bMovixDocPreparer;
-class K3bDirItem;
-class K3bFileItem;
+class K3bDoc;
 
 class K3bMovixJob : public K3bBurnJob
 {

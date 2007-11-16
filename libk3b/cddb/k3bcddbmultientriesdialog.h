@@ -23,7 +23,6 @@
 #include "k3bcddbresult.h"
 
 
-class QStringList;
 class K3ListBox;
 
 /**

@@ -23,15 +23,11 @@
 #include <qfile.h>
 
 class QString;
-class QDataStream;
 class K3bAbstractWriter;
 class K3bIsoImager;
-class KTemporaryFile;
 
 namespace K3bDevice {
-  class DeviceHandler;
-  class DiskInfo;
-}
+    }
 
 /**
   *@author Sebastian Trueg

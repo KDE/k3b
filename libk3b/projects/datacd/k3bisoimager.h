@@ -24,7 +24,6 @@
 
 class K3bDataDoc;
 class K3bDirItem;
-class K3bDataItem;
 class K3bFileItem;
 class QTextStream;
 class K3bProcess;

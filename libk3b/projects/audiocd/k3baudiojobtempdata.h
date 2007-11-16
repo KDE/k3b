@@ -22,7 +22,6 @@
 
 class K3bAudioTrack;
 class K3bAudioDoc;
-class Q3TextStream;
 
 
 class K3bAudioJobTempData : public QObject

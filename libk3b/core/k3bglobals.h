@@ -26,7 +26,6 @@
 #include <k3bdevicetypes.h>
 #include "k3b_export.h"
 
-class KConfig;
 class K3bVersion;
 class K3bExternalBin;
 

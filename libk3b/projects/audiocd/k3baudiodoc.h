@@ -29,14 +29,8 @@
 #include "k3b_export.h"
 #include <kurl.h>
 
-class K3bApp;
 class K3bAudioTrack;
-class QWidget;
-class QTimer;
-class QDomDocument;
 class QDomElement;
-class K3bThreadJob;
-class KConfig;
 class K3bAudioDataSource;
 class K3bAudioDecoder;
 class K3bAudioFile;

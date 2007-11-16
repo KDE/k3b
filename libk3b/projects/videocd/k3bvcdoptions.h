@@ -21,7 +21,6 @@
 
 #include <kconfiggroup.h>
 
-class KConfigBase;
 
 class LIBK3B_EXPORT K3bVcdOptions
 {

@@ -23,10 +23,9 @@ class K3bVcdTrack;
 class QString;
 class K3bProcess;
 class K3Process;
-class QDataStream;
 class K3bAbstractWriter;
 class K3bDevice::Device;
-
+class K3bDoc;
 
 class K3bVcdJob : public K3bBurnJob
 {

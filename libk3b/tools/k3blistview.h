@@ -31,7 +31,6 @@
 
 class QPainter;
 class QPushButton;
-class QIcon;
 class QResizeEvent;
 class QComboBox;
 class QSpinBox;

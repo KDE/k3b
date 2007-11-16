@@ -33,15 +33,10 @@
 #include "mpeginfo/k3bmpeginfo.h"
 #include <k3bdoc.h>
 #include "k3b_export.h"
-class K3bApp;
 class K3bVcdTrack;
-class K3bVcdJob;
 //class K3bView;
-class QWidget;
 class QTimer;
-class QDomDocument;
 class QDomElement;
-class KConfig;
 
 
 

@@ -23,7 +23,6 @@
 
 #include <k3bvcddoc.h>
 
-class K3bVcdOptions;
 class K3bVcdTrack;
 
 

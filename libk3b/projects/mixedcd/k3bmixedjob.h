@@ -23,8 +23,6 @@
 class K3bMixedDoc;
 class K3bIsoImager;
 class K3bAudioImager;
-class QFile;
-class QDataStream;
 class K3bAbstractWriter;
 class K3bWaveFileWriter;
 class KTemporaryFile;
@@ -33,6 +31,7 @@ class K3bMsInfoFetcher;
 class K3bAudioNormalizeJob;
 class K3bAudioJobTempData;
 class K3bDevice::Device;
+class K3bDoc;
 
 /**
   *@author Sebastian Trueg

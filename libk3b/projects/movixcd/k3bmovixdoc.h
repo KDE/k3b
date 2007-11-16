@@ -26,10 +26,8 @@
 //class K3bView;
 class KUrl;
 class QDomElement;
-class K3bFileItem;
 class K3bMovixFileItem;
 class K3bDataItem;
-class KConfig;
 
 
 class LIBK3B_EXPORT K3bMovixDoc : public K3bDataDoc

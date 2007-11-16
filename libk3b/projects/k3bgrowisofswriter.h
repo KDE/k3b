@@ -21,8 +21,7 @@
 
 namespace K3bDevice {
   class Device;
-  class DeviceHandler;
-}
+  }
 class K3Process;
 
 
