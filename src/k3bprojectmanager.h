@@ -60,7 +60,7 @@ public:
     /**
      * Will create if none exists.
      */
-    K3bProjectInterface* dcopInterface( K3bDoc* doc );
+    //K3bProjectInterface* dcopInterface( K3bDoc* doc );
 
 public slots:
     void addProject( K3bDoc* );

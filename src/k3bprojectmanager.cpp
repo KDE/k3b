@@ -115,7 +115,7 @@ void K3bProjectManager::removeProject( K3bDoc* docToRemove )
     //
     Q_FOREACH( K3bDoc* doc, d->projects ) {
         if( docToRemove == doc ) {
-
+#if 0
             // remove the DCOP interface
             QMap<K3bDoc*, K3bProjectInterface*>::iterator it = d->projectInterfaceMap.find( doc );
             if( it != d->projectInterfaceMap.end() ) {
@@ -123,7 +123,7 @@ void K3bProjectManager::removeProject( K3bDoc* docToRemove )
                 delete it.data();
                 d->projectInterfaceMap.remove( it );
             }
-
+#endif
             d->projects.removeRef(doc);
             emit closingProject(doc);
 
@@ -237,7 +237,7 @@ K3bDoc* K3bProjectManager::createProject( K3bDoc::DocType type )
     K3bDoc* doc = createEmptyProject( type );
 
     // create the dcop interface
-    dcopInterface( doc );
+    //dcopInterface( doc );
 
     addProject( doc );
 
@@ -247,22 +247,21 @@ K3bDoc* K3bProjectManager::createProject( K3bDoc::DocType type )
 
 void K3bProjectManager::loadDefaults( K3bDoc* doc )
 {
-    KConfig* c = KGlobal::config();
+    KConfig* config = KGlobal::config();
 
-    QString oldGroup = c->group();
+    //QString oldGroup = config->group();
 
     QString cg = "default " + doc->typeString() + " settings";
 
     // earlier K3b versions loaded the saved settings
     // so that is what we do as a default
-    int i = KConfigGroup( c, "General Options" ).readEntry( "action dialog startup settings",
+    int i = KConfigGroup( config, "General Options" ).readEntry( "action dialog startup settings",
                                                             int(K3bInteractionDialog::LOAD_SAVED_SETTINGS) );
     if( i == K3bInteractionDialog::LOAD_K3B_DEFAULTS )
         return; // the default k3b settings are the ones everyone starts with
     else if( i == K3bInteractionDialog::LOAD_LAST_SETTINGS )
         cg = "last used " + cg;
-
-    c->setGroup( cg );
+    KConfigGroup c(config,cg);
 
     QString mode = c.readEntry( "writing_mode" );
     if ( mode == "dao" )
@@ -413,10 +412,10 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
 
     doc->setModified( false );
 
-    c->setGroup( oldGroup );
+    //c->setGroup( oldGroup );
 }
 
-
+#if 0
 K3bProjectInterface* K3bProjectManager::dcopInterface( K3bDoc* doc )
 {
     QMap<K3bDoc*, K3bProjectInterface*>::iterator it = d->projectInterfaceMap.find( doc );
@@ -436,7 +435,7 @@ K3bProjectInterface* K3bProjectManager::dcopInterface( K3bDoc* doc )
     else
         return it.data();
 }
-
+#endif
 
 K3bDoc* K3bProjectManager::openProject( const KUrl& url )
 {
@@ -541,7 +540,7 @@ K3bDoc* K3bProjectManager::openProject( const KUrl& url )
         newDoc->setModified( false );
 
         // ok, finish the doc setup, inform the others about the new project
-        dcopInterface( newDoc );
+        //dcopInterface( newDoc );
         addProject( newDoc );
 
         // FIXME: find a better way to tell everyone (especially the projecttabwidget)
