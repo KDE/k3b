@@ -98,10 +98,10 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent )
 
     // ToolTips
     // -------------------------------------------------------------------------
-    m_radioVcd11->setToolTip( i18n( "Select Video CD type %1", "(VCD 1.1)" ) );
-    m_radioVcd20->setToolTip( i18n( "Select Video CD type %1" , "(VCD 2.0)" ) );
-    m_radioSvcd10->setToolTip( i18n( "Select Video CD type %1" , "(SVCD 1.0)" ) );
-    m_radioHqVcd10->setToolTip( i18n( "Select Video CD type %1" , "(HQ-VCD 1.0)" ) );
+    m_radioVcd11->setToolTip( i18n( "Select Video CD type %1", QString("(VCD 1.1)") ) );
+    m_radioVcd20->setToolTip( i18n( "Select Video CD type %1" , QString("(VCD 2.0)" )) );
+    m_radioSvcd10->setToolTip( i18n( "Select Video CD type %1" , QString("(SVCD 1.0)" )) );
+    m_radioHqVcd10->setToolTip( i18n( "Select Video CD type %1" , QString("(HQ-VCD 1.0)" )) );
     m_checkAutoDetect->setToolTip( i18n( "Automatic video type recognition." ) );
     m_checkNonCompliant->setToolTip( i18n( "Non-compliant compatibility mode for broken devices" ) );
     m_checkVCD30interpretation->setToolTip( i18n( "Chinese VCD3.0 track interpretation" ) );
@@ -410,7 +410,7 @@ void K3bVcdBurnDialog::setupVideoCdTab()
     m_checkNonCompliant->setEnabled( false );
     m_checkNonCompliant->setChecked( false );
 
-    m_checkVCD30interpretation = new QCheckBox( i18n( "Enable %1 track interpretation" ).arg( "VCD 3.0" ), m_groupOptions );
+    m_checkVCD30interpretation = new QCheckBox( i18n( "Enable %1 track interpretation" , QString("VCD 3.0") ), m_groupOptions );
     // Only available on SVCD Type
     m_checkVCD30interpretation->setEnabled( false );
     m_checkVCD30interpretation->setChecked( false );

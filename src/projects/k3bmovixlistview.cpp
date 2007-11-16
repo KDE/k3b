@@ -86,7 +86,7 @@ QString K3bMovixFileViewItem::text( int col ) const
     case 2:
     {
         if( fileItem()->isSymLink() )
-            return i18n("Link to %1").arg(const_cast<K3bMovixFileViewItem*>(this)->mimeComment()) + "  ";
+            return i18n("Link to %1",const_cast<K3bMovixFileViewItem*>(this)->mimeComment()) + "  ";
         else
             return const_cast<K3bMovixFileViewItem*>(this)->mimeComment() + "  ";
     }
@@ -141,7 +141,7 @@ QString K3bMovixSubTitleViewItem::text( int c ) const
     case 2:
     {
         if( fileItem()->subTitleItem()->isSymLink() )
-            return i18n("Link to %1").arg(const_cast<K3bMovixSubTitleViewItem*>(this)->mimeComment());
+            return i18n("Link to %1",const_cast<K3bMovixSubTitleViewItem*>(this)->mimeComment());
         else
             return const_cast<K3bMovixSubTitleViewItem*>(this)->mimeComment();
     }

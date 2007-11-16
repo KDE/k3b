@@ -262,7 +262,7 @@ void K3bDataImageSettingsWidget::slotFilesystemsChanged()
   if( s.isEmpty() )
     m_comboFilesystems->changeItem( i18n("Custom (ISO9660 only)"), FS_CUSTOM );
   else
-    m_comboFilesystems->changeItem( i18n("Custom (%1)").arg( s.join(", ") ), FS_CUSTOM );
+    m_comboFilesystems->changeItem( i18n("Custom (%1)", s.join(", ") ), FS_CUSTOM );
 
   // see if any of the presets is loaded
   m_comboFilesystems->setCurrentItem( FS_CUSTOM );

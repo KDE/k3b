@@ -364,7 +364,7 @@ void K3bDeviceWidget::slotNewDevice()
       updateDeviceListViews();
     }
     else
-      KMessageBox::error( this, i18n("Could not find an additional device at\n%1").arg(newDevicename), i18n("Error"), false );
+      KMessageBox::error( this, i18n("Could not find an additional device at\n%1",newDevicename), i18n("Error"), false );
   }
 }
 

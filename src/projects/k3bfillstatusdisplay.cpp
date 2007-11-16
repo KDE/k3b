@@ -218,15 +218,15 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
     if( d->cdSize.mode1Bytes() >= d->doc->size() )
         overSizeText = i18n("Available: %1 of %2")
                        .arg( d->showTime
-                             ? i18n("%1 min").arg((K3b::Msf( cdSize*60*75 ) - d->doc->length()).toString(false))
+                             ? i18n("%1 min",(K3b::Msf( cdSize*60*75 ) - d->doc->length()).toString(false))
                              : KIO::convertSize( qMax( (cdSize * 1024LL * 1024LL) - (long long)d->doc->size(), 0LL ) ) )
                        .arg( d->showTime
-                             ? i18n("%1 min").arg(K3b::Msf( cdSize*60*75 ).toString(false))
+                             ? i18n("%1 min",K3b::Msf( cdSize*60*75 ).toString(false))
                              : KIO::convertSizeFromKiB( cdSize * 1024 ) );
     else
         overSizeText = i18n("Capacity exceeded by %1")
                        .arg( d->showTime
-                             ? i18n("%1 min").arg( (d->doc->length() - K3b::Msf( cdSize*60*75 ) ).toString(false))
+                             ? i18n("%1 min", (d->doc->length() - K3b::Msf( cdSize*60*75 ) ).toString(false))
                              : KIO::convertSize( (long long)d->doc->size() - (cdSize * 1024LL * 1024LL) ) );
     // ====================================================================================
 
@@ -381,11 +381,11 @@ void K3bFillStatusDisplay::setupPopupMenu()
 
     d->actionAuto = K3b::createAction( this, i18n("Automatic Size"), 0, 0, this, SLOT(slotAutoSize()),
                                        d->actionCollection, "fillstatus_auto" );
-    d->action74Min = K3b::createAction( this, i18n("%1 MB").arg(650), 0, 0, this, SLOT(slot74Minutes()),
+    d->action74Min = K3b::createAction( this, i18n("%1 MB",650), 0, 0, this, SLOT(slot74Minutes()),
                                         d->actionCollection, "fillstatus_74minutes" );
-    d->action80Min = K3b::createAction( this, i18n("%1 MB").arg(700), 0, 0, this, SLOT(slot80Minutes()),
+    d->action80Min = K3b::createAction( this, i18n("%1 MB",700), 0, 0, this, SLOT(slot80Minutes()),
                                         d->actionCollection, "fillstatus_80minutes" );
-    d->action100Min = K3b::createAction( this, i18n("%1 MB").arg(880), 0, 0, this, SLOT(slot100Minutes()),
+    d->action100Min = K3b::createAction( this, i18n("%1 MB",880), 0, 0, this, SLOT(slot100Minutes()),
                                          d->actionCollection, "fillstatus_100minutes" );
     d->actionDvd4_7GB = K3b::createAction( this, KIO::convertSizeFromKiB((int)(4.4*1024.0*1024.0)), 0, 0, this, SLOT(slotDvd4_7GB()),
                                            d->actionCollection, "fillstatus_dvd_4_7gb" );
@@ -472,9 +472,9 @@ void K3bFillStatusDisplay::showSize()
 {
     d->actionShowMegs->setChecked( true );
 
-    d->action74Min->setText( i18n("%1 MB").arg(650) );
-    d->action80Min->setText( i18n("%1 MB").arg(700) );
-    d->action100Min->setText( i18n("%1 MB").arg(880) );
+    d->action74Min->setText( i18n("%1 MB",650) );
+    d->action80Min->setText( i18n("%1 MB",700) );
+    d->action100Min->setText( i18n("%1 MB",880) );
 
     d->showTime = false;
     d->displayWidget->setShowTime(false);

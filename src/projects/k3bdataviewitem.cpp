@@ -233,7 +233,7 @@ QString K3bDataFileViewItem::text( int index ) const
             comment = m_pMimeType->name();
 
         if( m_fileItem->isSymLink() )
-            return i18n("Link to %1").arg(comment);
+            return i18n("Link to %1",comment);
         else
             return comment;
     }
