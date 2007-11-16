@@ -53,7 +53,7 @@ static void freeArray( char** a, unsigned int length )
 void halDeviceAdded( LibHalContext* ctx, const char* udi )
 {
   Q_UNUSED( ctx );
-  kDebug() << "adding udi   " << udi << endl;
+  kDebug() << "adding udi   " << udi;
   K3bDevice::HalConnection::instance()->addDevice( udi );
 }
 
@@ -61,7 +61,7 @@ void halDeviceAdded( LibHalContext* ctx, const char* udi )
 void halDeviceRemoved( LibHalContext* ctx, const char* udi )
 {
   Q_UNUSED( ctx );
-  kDebug() << "removing udi " << udi << endl;
+  kDebug() << "removing udi " << udi;
   K3bDevice::HalConnection::instance()->removeDevice( udi );
 }
 
@@ -97,7 +97,7 @@ K3bDevice::HalConnection* K3bDevice::HalConnection::instance()
     s_instance = new HalConnection( 0 );
 
   if( !s_instance->isConnected() && !s_instance->open() )
-      kDebug() << "(K3bDevice::HalConnection) failed to open connection to HAL." << endl;
+      kDebug() << "(K3bDevice::HalConnection) failed to open connection to HAL.";
 
   return s_instance;
 }
@@ -128,11 +128,11 @@ bool K3bDevice::HalConnection::open()
 {
   close();
 
-  kDebug() << "(K3bDevice::HalConnection) initializing HAL >= 0.5" << endl;
+  kDebug() << "(K3bDevice::HalConnection) initializing HAL >= 0.5";
 
   d->halContext = libhal_ctx_new();
   if( !d->halContext ) {
-    kDebug() << "(K3bDevice::HalConnection) unable to create HAL context." << endl;
+    kDebug() << "(K3bDevice::HalConnection) unable to create HAL context.";
     return false;
   }
 
@@ -140,7 +140,7 @@ bool K3bDevice::HalConnection::open()
   dbus_error_init( &error );
   d->connection = dbus_bus_get( DBUS_BUS_SYSTEM, &error );
   if( dbus_error_is_set(&error) ) {
-    kDebug() << "(K3bDevice::HalConnection) unable to connect to DBUS: " << error.message << endl;
+    kDebug() << "(K3bDevice::HalConnection) unable to connect to DBUS: " << error.message;
     return false;
   }
 
@@ -156,7 +156,7 @@ bool K3bDevice::HalConnection::open()
   libhal_ctx_set_device_condition( d->halContext, 0 );
   
   if( !libhal_ctx_init( d->halContext, 0 ) ) {
-    kDebug() << "(K3bDevice::HalConnection) Failed to init HAL context!" << endl;
+    kDebug() << "(K3bDevice::HalConnection) Failed to init HAL context!";
     return false;
   }
 
@@ -211,7 +211,7 @@ void K3bDevice::HalConnection::addDevice( const char* udi )
       libhal_free_string( dev );
 
       if( !s.isEmpty() ) {
-	kDebug() << "Mapping udi " << udi << " to device " << s << endl;
+	kDebug() << "Mapping udi " << udi << " to device " << s;
 	d->udiDeviceMap[udi] = s;
 	d->deviceUdiMap[s] = udi;
 	emit deviceAdded( s );
@@ -243,7 +243,7 @@ void K3bDevice::HalConnection::removeDevice( const char* udi )
 {
   QMapIterator<Q3CString, QString> it = d->udiDeviceMap.find( udi );
   if( it != d->udiDeviceMap.end() ) {
-    kDebug() << "Unmapping udi " << udi << " from device " << it.data() << endl;
+    kDebug() << "Unmapping udi " << udi << " from device " << it.data();
     emit deviceRemoved( it.data() );
     d->udiDeviceMap.erase( it );
     d->deviceUdiMap.erase( it.data() );
@@ -317,7 +317,7 @@ int K3bDevice::HalConnection::lock( Device* dev )
     dbus_error_free( &error );
   }
   else
-    kDebug() << "(K3bDevice::HalConnection) lock queued for " << udi << endl;
+    kDebug() << "(K3bDevice::HalConnection) lock queued for " << udi;
 
   dbus_message_unref( dmesg );
   if( reply )
@@ -373,7 +373,7 @@ int K3bDevice::HalConnection::unlock( Device* dev )
     dbus_error_free( &error );
   }
   else
-    kDebug() << "(K3bDevice::HalConnection) unlock queued for " << udi << endl;
+    kDebug() << "(K3bDevice::HalConnection) unlock queued for " << udi;
 
   dbus_message_unref( dmesg );
   if( reply )
@@ -455,7 +455,7 @@ int K3bDevice::HalConnection::mount( K3bDevice::Device* dev,
     dbus_error_free( &error );
   }
   else
-    kDebug() << "(K3bDevice::HalConnection) mount queued for " << mediumUdi << endl;
+    kDebug() << "(K3bDevice::HalConnection) mount queued for " << mediumUdi;
 
   dbus_message_unref( dmesg );
   if( reply )
@@ -526,7 +526,7 @@ int K3bDevice::HalConnection::unmount( K3bDevice::Device* dev,
     dbus_error_free( &error );
   }
   else
-    kDebug() << "(K3bDevice::HalConnection) unmount queued for " << mediumUdi << endl;
+    kDebug() << "(K3bDevice::HalConnection) unmount queued for " << mediumUdi;
 
   dbus_message_unref( dmesg );
   if( reply )
@@ -593,7 +593,7 @@ int K3bDevice::HalConnection::eject( K3bDevice::Device* dev,
     dbus_error_free( &error );
   }
   else
-    kDebug() << "(K3bDevice::HalConnection) eject queued for " << mediumUdi << endl;
+    kDebug() << "(K3bDevice::HalConnection) eject queued for " << mediumUdi;
 
   dbus_message_unref( dmesg );
   if( reply )

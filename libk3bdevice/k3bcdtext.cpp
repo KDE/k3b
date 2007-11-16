@@ -61,7 +61,7 @@ namespace K3bDevice {
 
   void debugRawTextPackData( const unsigned char* data, int dataLen )
   {
-    kDebug() << endl << " id1    | id2    | id3    | charps | blockn | dbcc | data           | crc |" << endl;
+    kDebug() << endl << " id1    | id2    | id3    | charps | blockn | dbcc | data           | crc |";
 
     cdtext_pack* pack = (cdtext_pack*)data;
 
@@ -90,7 +90,7 @@ namespace K3bDevice {
 //       s += QString( " %1 |" ).arg( "'" + QCString(str,13) + "'", 14 );
 //       quint16 crc = pack[i].crc[0]<<8|pack[i].crc[1];
 //       s += QString( " %1 |" ).arg( crc );
-      kDebug() << s << endl;
+      kDebug() << s;
     }
   }
 
@@ -156,7 +156,7 @@ void K3bDevice::CdText::setRawPackData( const unsigned char* data, int len )
 
   int r = len%18;
   if( r > 0 && r != 4 ) {
-    kDebug() << "(K3bDevice::CdText) invalid cdtext size: " << len << endl;
+    kDebug() << "(K3bDevice::CdText) invalid cdtext size: " << len;
   }
   else if( len-r > 0 ) {
     debugRawTextPackData( &data[r], len-r );
@@ -167,7 +167,7 @@ void K3bDevice::CdText::setRawPackData( const unsigned char* data, int len )
     for( int i = 0; i < (len-r)/18; ++i ) {
 
       if( pack[i].dbcc ) {
-	kDebug() << "(K3bDevice::CdText) Double byte code not supported" << endl;
+	kDebug() << "(K3bDevice::CdText) Double byte code not supported";
 	return;
       }
 
@@ -183,7 +183,7 @@ void K3bDevice::CdText::setRawPackData( const unsigned char* data, int len )
       pack[i].crc[1] ^= 0xff;
 
       if( crc != 0x0000 )
-	kDebug() << "(K3bDevice::CdText) CRC invalid!" << endl;
+	kDebug() << "(K3bDevice::CdText) CRC invalid!";
 
 
       //
@@ -291,7 +291,7 @@ void K3bDevice::CdText::setRawPackData( const unsigned char* data, int len )
     resize( i );
   }
   else
-    kDebug() << "(K3bDevice::CdText) zero-sized CD-TEXT: " << len << endl;
+    kDebug() << "(K3bDevice::CdText) zero-sized CD-TEXT: " << len;
 }
 
 
@@ -592,7 +592,7 @@ bool K3bDevice::CdText::checkCrc( const unsigned char* data, int len )
 {
   int r = len%18;
   if( r > 0 && r != 4 ) {
-    kDebug() << "(K3bDevice::CdText) invalid cdtext size: " << len << endl;
+    kDebug() << "(K3bDevice::CdText) invalid cdtext size: " << len;
     return false;
   }
   else {

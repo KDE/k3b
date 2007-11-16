@@ -820,19 +820,19 @@ void K3bIso9660::debug() const
       kDebug() << "First ISO Dir entry:";
       kDebug() << "----------------------------------------------";
       debugEntry( firstIsoDirEntry(), 0 );
-      kDebug() << "----------------------------------------------" << endl;
+      kDebug() << "----------------------------------------------";
     }
     if( firstRRDirEntry() ) {
       kDebug() << "First RR Dir entry:";
       kDebug() << "----------------------------------------------";
       debugEntry( firstRRDirEntry(), 0 );
-      kDebug() << "----------------------------------------------" << endl;
+      kDebug() << "----------------------------------------------";
     }
     if( firstJolietDirEntry() ) {
       kDebug() << "First Joliet Dir entry:";
       kDebug() << "----------------------------------------------";
       debugEntry( firstJolietDirEntry(), 0 );
-      kDebug() << "----------------------------------------------" << endl;
+      kDebug() << "----------------------------------------------";
     }
   }
 }

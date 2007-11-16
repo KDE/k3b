@@ -133,14 +133,14 @@ void K3bDevice::Toc::clear()
 
 void K3bDevice::Toc::debug() const
 {
-    kDebug() << count() << " in " << sessions() << " sessions" << endl;
+    kDebug() << count() << " in " << sessions() << " sessions";
     int sessionN = 0;
     int trackN = 0;
     for( Toc::const_iterator it = begin(); it != end(); ++it ) {
         ++trackN;
         if( sessionN != (*it).session() ) {
             sessionN = (*it).session();
-            kDebug() << "Session Number " << sessionN << endl;
+            kDebug() << "Session Number " << sessionN;
         }
         kDebug() << "  Track " << trackN << ( (*it).type() == Track::AUDIO ? " AUDIO" : " DATA" )
                  << " " << (*it).firstSector().lba() << " - " << (*it).lastSector().lba()

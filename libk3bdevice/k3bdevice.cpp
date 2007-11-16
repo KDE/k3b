@@ -123,7 +123,7 @@ int K3bDevice::openDevice( const char* name, bool write )
 #ifdef HAVE_RESMGR
     // first try resmgr
     fd = ::rsm_open_device( name, flags );
-    //  kDebug() << "(K3bDevice::Device) resmgr open: " << fd << endl;
+    //  kDebug() << "(K3bDevice::Device) resmgr open: " << fd;
 #endif
 
     if( fd < 0 )
@@ -132,7 +132,7 @@ int K3bDevice::openDevice( const char* name, bool write )
     if( fd < 0 ) {
         kDebug() << "(K3bDevice::Device) could not open device "
                    << name << ( write ? " for writing" : " for reading" ) << endl;
-        kDebug() << "                    (" << strerror(errno) << ")" << endl;
+        kDebug() << "                    (" << strerror(errno) << ")";
         fd = -1;
 
         // at least open it read-only (which is sufficient for kernels < 2.6.8 anyway)
@@ -214,7 +214,7 @@ K3bDevice::Device::~Device()
 
 bool K3bDevice::Device::init( bool bCheckWritingModes )
 {
-    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": init()" << endl;
+    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": init()";
 
     //
     // they all should read CD-ROM.
@@ -313,7 +313,7 @@ bool K3bDevice::Device::furtherInit()
     open();
     int drivetype = ::ioctl( handle(), CDROM_GET_CAPABILITY, CDSL_CURRENT );
     if( drivetype < 0 ) {
-        kDebug() << "Error while retrieving capabilities." << endl;
+        kDebug() << "Error while retrieving capabilities.";
         close();
         return false;
     }
@@ -678,7 +678,7 @@ int K3bDevice::Device::numSessions() const
             delete [] data;
         }
         else {
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": could not get session info !" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": could not get session info !";
         }
     }
     else if ( m & ( MEDIA_DVD_PLUS_RW|MEDIA_DVD_RW_OVWR|MEDIA_BD_RE ) ) {
@@ -822,7 +822,7 @@ K3bDevice::Toc K3bDevice::Device::readToc() const
     }
 
     else if( mt == MEDIA_DVD_RAM ) {
-        kDebug() << "(K3bDevice::readDvdToc) no dvdram support" << endl;
+        kDebug() << "(K3bDevice::readDvdToc) no dvdram support";
     }
 
 
@@ -833,7 +833,7 @@ K3bDevice::Toc K3bDevice::Device::readToc() const
 
 #ifdef Q_OS_LINUX
             if( !success ) {
-                kDebug() << "(K3bDevice::Device) MMC READ TOC failed. falling back to cdrom.h." << endl;
+                kDebug() << "(K3bDevice::Device) MMC READ TOC failed. falling back to cdrom.h.";
                 readTocLinux(toc);
             }
 #endif
@@ -856,20 +856,20 @@ void K3bDevice::Device::readIsrcMcn( K3bDevice::Toc& toc ) const
     Q3CString mcn;
     if( readMcn( mcn ) ) {
         toc.setMcn( mcn );
-        kDebug() << "(K3bDevice::Device) found MCN: " << mcn << endl;
+        kDebug() << "(K3bDevice::Device) found MCN: " << mcn;
     }
     else
-        kDebug() << "(K3bDevice::Device) no MCN found." << endl;
+        kDebug() << "(K3bDevice::Device) no MCN found.";
 
     for( int i = 1; i <= toc.count(); ++i ) {
         Q3CString isrc;
         if( toc[i-1].type() == Track::AUDIO ) {
             if( readIsrc( i, isrc ) ) {
-                kDebug() << "(K3bDevice::Device) found ISRC for track " << i << ": " << isrc << endl;
+                kDebug() << "(K3bDevice::Device) found ISRC for track " << i << ": " << isrc;
                 toc[i-1].setIsrc( isrc );
             }
             else
-                kDebug() << "(K3bDevice::Device) no ISRC found for track " << i << endl;
+                kDebug() << "(K3bDevice::Device) no ISRC found for track " << i;
         }
     }
 }
@@ -920,7 +920,7 @@ bool K3bDevice::Device::readFormattedToc( K3bDevice::Toc& toc, int mt ) const
         if( readTocPmaAtip( &data, dataLen, 0, 0, 1 ) ) {
 
             if( dataLen < 4 ) {
-                kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": formatted toc data too small." << endl;
+                kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": formatted toc data too small.";
             }
             else if( dataLen != ( (unsigned int)sizeof(toc_track_descriptor) * ((unsigned int)data[3]+1) ) + 4 ) {
                 kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": invalid formatted toc data length: "
@@ -1012,7 +1012,7 @@ bool K3bDevice::Device::readFormattedToc( K3bDevice::Toc& toc, int mt ) const
 
     // this can only happen with DVD media
     if( !toc.isEmpty() && toc.last().lastSector() == 0 ) {
-        kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " no track length for the last non-empty track." << endl;
+        kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " no track length for the last non-empty track.";
         unsigned char* trackData = 0;
         unsigned int trackDataLen = 0;
         if( readTrackInformation( &trackData, trackDataLen, 1, lastTrack+1 ) ) {
@@ -1063,7 +1063,7 @@ bool K3bDevice::Device::readRawToc( K3bDevice::Toc& toc ) const
                 //
                 // debug the raw toc data
                 //
-                kDebug() << "Session |  ADR   | CONTROL|  TNO   | POINT  |  Min   |  Sec   | Frame  |  Zero  |  PMIN  |  PSEC  | PFRAME |" << endl;
+                kDebug() << "Session |  ADR   | CONTROL|  TNO   | POINT  |  Min   |  Sec   | Frame  |  Zero  |  PMIN  |  PSEC  | PFRAME |";
                 for( unsigned int i = 0; i < (dataLen-4)/(int)sizeof(toc_raw_track_descriptor); ++i ) {
                     QString s;
                     s += QString( " %1 |" ).arg( (int)tr[i].session_number, 6 );
@@ -1078,7 +1078,7 @@ bool K3bDevice::Device::readRawToc( K3bDevice::Toc& toc ) const
                     s += QString( " %1 |" ).arg( (int)tr[i].p_min, 6 );
                     s += QString( " %1 |" ).arg( (int)tr[i].p_sec, 6 );
                     s += QString( " %1 |" ).arg( (int)tr[i].p_frame, 6 );
-                    kDebug() << s << endl;
+                    kDebug() << s;
                 }
 
                 //
@@ -1142,14 +1142,14 @@ bool K3bDevice::Device::readRawToc( K3bDevice::Toc& toc ) const
                     }
                 }
 
-                kDebug() << blockDeviceName() << ": setting last sector of last track to " << (sessionLeadOut-1).lba() << endl;
+                kDebug() << blockDeviceName() << ": setting last sector of last track to " << (sessionLeadOut-1).lba();
 
                 // set the last track's last sector
                 if( !toc.isEmpty() )
                     toc[toc.count()-1].m_lastSector = sessionLeadOut - 1;
             }
             else
-                kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " empty raw toc." << endl;
+                kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " empty raw toc.";
 
             delete [] data;
         }
@@ -1255,7 +1255,7 @@ int K3bDevice::Device::rawTocDataWithBcdValues( unsigned char* data, unsigned in
 
 
     if( !notBcd && !notHex ) {
-        kDebug() << "(K3bDevice::Device) need to compare raw toc to formatted toc. :(" << endl;
+        kDebug() << "(K3bDevice::Device) need to compare raw toc to formatted toc. :(";
         //
         // All values are valid bcd and valid HEX values so we compare with the formatted toc.
         // This slows us down a lot but in most cases this should not be reached anyway.
@@ -1293,14 +1293,14 @@ int K3bDevice::Device::rawTocDataWithBcdValues( unsigned char* data, unsigned in
     }
 
     if( notBcd )
-        kDebug() << "(K3bDevice::Device) found invalid bcd values. No bcd toc." << endl;
+        kDebug() << "(K3bDevice::Device) found invalid bcd values. No bcd toc.";
     if( notHex )
-        kDebug() << "(K3bDevice::Device) found invalid hex values. No hex toc." << endl;
+        kDebug() << "(K3bDevice::Device) found invalid hex values. No hex toc.";
 
     if( notBcd == notHex ) {
-        kDebug() << "(K3bDevice::Device) unable to determine if hex (" << notHex << ") or bcd (" << notBcd << ")." << endl;
+        kDebug() << "(K3bDevice::Device) unable to determine if hex (" << notHex << ") or bcd (" << notBcd << ").";
         if( !notHex ) {
-            kDebug() << "Assuming hex encoding in favor of newer drives and the more reliable raw toc." << endl;
+            kDebug() << "Assuming hex encoding in favor of newer drives and the more reliable raw toc.";
             return 0;
         }
         return -1;
@@ -1361,7 +1361,7 @@ bool K3bDevice::Device::readTocLinux( K3bDevice::Toc& toc ) const
         // cdth_trk1: Last Track Number
         //
         if( ::ioctl( d->deviceFd, CDROMREADTOCHDR, &tochdr ) ) {
-            kDebug() << "(K3bDevice::Device) could not get toc header !" << endl;
+            kDebug() << "(K3bDevice::Device) could not get toc header !";
             success = false;
         }
         else {
@@ -1396,7 +1396,7 @@ bool K3bDevice::Device::readTocLinux( K3bDevice::Toc& toc ) const
                 //
 
                 if( ::ioctl( d->deviceFd, CDROMREADTOCENTRY, &tocentry ) ) {
-                    kDebug() << "(K3bDevice::Device) error reading tocentry " << i << endl;
+                    kDebug() << "(K3bDevice::Device) error reading tocentry " << i;
                     success = false;
                     break;
                 }
@@ -1456,7 +1456,7 @@ bool K3bDevice::Device::fixupToc( K3bDevice::Toc& toc ) const
     // include these 11400 sectors which would result in a strange ending audio file.
     //
     if( numSessions() > 1 || toc.contentType() == MIXED ) {
-        kDebug() << "(K3bDevice::Device) fixup multisession toc..." << endl;
+        kDebug() << "(K3bDevice::Device) fixup multisession toc...";
 
         //
         // we need to update the last sector of every last track in every session
@@ -1479,7 +1479,7 @@ bool K3bDevice::Device::fixupToc( K3bDevice::Toc& toc ) const
             success = true;
         }
         else
-            kDebug() << "(K3bDevice::Device) FIXUP TOC failed." << endl;
+            kDebug() << "(K3bDevice::Device) FIXUP TOC failed.";
     }
 
     return success;
@@ -1527,7 +1527,7 @@ bool K3bDevice::Device::block( bool b ) const
     int r = cmd.transport( TR_DIR_WRITE );
 
     if( r )
-        kDebug() << "(K3bDevice::Device) MMC ALLOW MEDIA REMOVAL failed." << endl;
+        kDebug() << "(K3bDevice::Device) MMC ALLOW MEDIA REMOVAL failed.";
 
     return ( r == 0 );
 }
@@ -2009,7 +2009,7 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
                     delete [] data;
                 }
                 else {
-                    kDebug() << "(K3bDevice::Device) Unable to read DVD structure for num of layers." << endl;
+                    kDebug() << "(K3bDevice::Device) Unable to read DVD structure for num of layers.";
                     inf.m_numLayers = ( (inf.m_mediaType & MEDIA_WRITABLE_DVD_DL) ? 2 : 1 );
                 }
             }
@@ -2023,7 +2023,7 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
                 if( sessions >= 0 )
                     inf.m_numSessions = sessions;
                 else
-                    kDebug() << "(K3bDevice::Device) could not get session info via READ TOC/PMA/ATIP." << endl;
+                    kDebug() << "(K3bDevice::Device) could not get session info via READ TOC/PMA/ATIP.";
             }
             else
                 inf.m_numSessions = 0;
@@ -2055,7 +2055,7 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
                         if( dataLen >= 11 ) {
                             inf.m_capacity = K3b::Msf( atip->lead_out_m, atip->lead_out_s, atip->lead_out_f ) - 150;
                             debugBitfield( &atip->lead_out_m, 3 );
-                            kDebug() << blockDeviceName() << ": ATIP capacity: " << inf.m_capacity.toString() << endl;
+                            kDebug() << blockDeviceName() << ": ATIP capacity: " << inf.m_capacity.toString();
                         }
 
                         delete [] data;
@@ -2191,7 +2191,7 @@ K3bDevice::DiskInfo K3bDevice::Device::diskInfo() const
                     inf.m_capacity = from4Byte( trackInfo->track_size );
                     if( !inf.empty() ) {
                         if( readFormatCapacity( 0x10, inf.m_capacity ) )
-                            kDebug() << blockDeviceName() << ": Format capacity 0x10: " << inf.m_capacity.toString() << endl;
+                            kDebug() << blockDeviceName() << ": Format capacity 0x10: " << inf.m_capacity.toString();
 
                         inf.m_usedCapacity = from4Byte( trackInfo->track_size );
                     }
@@ -2304,7 +2304,7 @@ int K3bDevice::Device::mediaType() const
                 case 0xA0: m = MEDIA_DVD_PLUS_R; break;
                 case 0xE0: m = MEDIA_DVD_PLUS_R_DL; break;
                 default:
-                    kDebug() << "(K3bDevice::Device) unknown dvd media type: " << QString::number(data[4]&0xF0, 8) << endl;
+                    kDebug() << "(K3bDevice::Device) unknown dvd media type: " << QString::number(data[4]&0xF0, 8);
                     break; // unknown
                 }
 
@@ -2416,7 +2416,7 @@ void K3bDevice::Device::checkFeatures()
     if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
         unsigned int len = from4Byte( header );
         if( len >= 12 ) {
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Mastering" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Mastering";
 #ifdef WORDS_BIGENDIAN
             struct cd_mastering_feature {
                 unsigned char reserved1 : 1;
@@ -2459,7 +2459,7 @@ void K3bDevice::Device::checkFeatures()
     if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
         unsigned int len = from4Byte( header );
         if( len >= 12 ) {
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Track At Once" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD Track At Once";
 #ifdef WORDS_BIGENDIAN
             struct cd_track_at_once_feature {
                 unsigned char reserved1 : 1;
@@ -2517,7 +2517,7 @@ void K3bDevice::Device::checkFeatures()
     if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
         unsigned int len = from4Byte( header );
         if( len >= 12 ) {
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD-RW Media Write Support" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "CD-RW Media Write Support";
             d->writeCapabilities |= (MEDIA_CD_R|MEDIA_CD_RW);
         }
     }
@@ -2533,7 +2533,7 @@ void K3bDevice::Device::checkFeatures()
     if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
         unsigned int len = from4Byte( header );
         if( len >= 12 ) {
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD Read (MMC5)" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD Read (MMC5)";
             d->readCapabilities |= MEDIA_DVD_ROM;
             if( header[8+6] & 0x1 )
                 d->readCapabilities |= MEDIA_WRITABLE_DVD_DL;
@@ -2545,7 +2545,7 @@ void K3bDevice::Device::checkFeatures()
         if( !cmd.transport( TR_DIR_READ, header, 12 ) ) {
             unsigned int len = from4Byte( header );
             if( len >= 8 ) {
-                kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD Read (pre-MMC5)" << endl;
+                kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD Read (pre-MMC5)";
                 d->readCapabilities |= MEDIA_DVD_ROM;
             }
         }
@@ -2560,7 +2560,7 @@ void K3bDevice::Device::checkFeatures()
     if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
         unsigned int len = from4Byte( header );
         if( len >= 12 ) {
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+R" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+R";
             d->readCapabilities |= MEDIA_DVD_PLUS_R;
             if( header[12] & 0x1 )
                 d->writeCapabilities |= MEDIA_DVD_PLUS_R;
@@ -2573,7 +2573,7 @@ void K3bDevice::Device::checkFeatures()
     if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
         unsigned int len = from4Byte( header );
         if( len >= 12 ) {
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+RW" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+RW";
 #ifdef WORDS_BIGENDIAN
             struct dvd_plus_rw_feature {
                 unsigned char reserved1   : 7;
@@ -2610,7 +2610,7 @@ void K3bDevice::Device::checkFeatures()
         if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
             unsigned int len = from4Byte( header );
             if( len >= 12 ) {
-                kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+RW Double Layer" << endl;
+                kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+RW Double Layer";
                 d->readCapabilities |= MEDIA_DVD_PLUS_RW_DL;
                 if( header[12] & 0x1 )
                     d->writeCapabilities |= MEDIA_DVD_PLUS_RW_DL;
@@ -2623,7 +2623,7 @@ void K3bDevice::Device::checkFeatures()
         if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
             unsigned int len = from4Byte( header );
             if( len >= 12 ) {
-                kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+R Double Layer" << endl;
+                kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD+R Double Layer";
                 d->readCapabilities |= MEDIA_DVD_PLUS_R_DL;
                 if( header[12] & 0x1 )
                     d->writeCapabilities |= MEDIA_DVD_PLUS_R_DL;
@@ -2643,7 +2643,7 @@ void K3bDevice::Device::checkFeatures()
     if( !cmd.transport( TR_DIR_READ, header, 40 ) ) {
         unsigned int len = from4Byte( header );
         if( len >= 36 ) {
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "BD Read" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "BD Read";
             if( header[8+8] || header[8+9] || header[8+10] || header[8+11] || header[8+12] || header[8+13] || header[8+14] || header[8+15] )
                 d->readCapabilities |= MEDIA_BD_RE;
             if( header[8+16] || header[8+17] || header[8+18] || header[8+19] || header[8+20] || header[8+21] || header[8+22] || header[8+23] )
@@ -2659,7 +2659,7 @@ void K3bDevice::Device::checkFeatures()
     if( !cmd.transport( TR_DIR_READ, header, 32 ) ) {
         unsigned int len = from4Byte( header );
         if( len >= 28 ) {
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "BD Write" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "BD Write";
             if( header[8+8] || header[8+9] || header[8+10] || header[8+11] || header[8+12] || header[8+13] || header[8+14] || header[8+15] )
                 d->writeCapabilities |= MEDIA_BD_RE;
             if( header[8+16] || header[8+17] || header[8+18] || header[8+19] || header[8+20] || header[8+21] || header[8+22] || header[8+23] ) {
@@ -2700,7 +2700,7 @@ void K3bDevice::Device::checkFeatures()
     if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
         unsigned int len = from4Byte( header );
         if( len >= 12 ) {
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD-R/-RW Write" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "DVD-R/-RW Write";
 #ifdef WORDS_BIGENDIAN
             struct dvd_r_rw_write_feature {
                 unsigned char reserved1 : 1;
@@ -2747,7 +2747,7 @@ void K3bDevice::Device::checkFeatures()
     if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
         unsigned int len = from4Byte( header );
         if( len >= 12 ) {
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Rigid Restricted Overwrite" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Rigid Restricted Overwrite";
             m_writeModes |= WRITINGMODE_RES_OVWR;
             d->writeCapabilities |= (MEDIA_DVD_RW|MEDIA_DVD_RW_OVWR);
         }
@@ -2764,7 +2764,7 @@ void K3bDevice::Device::checkFeatures()
         // Now the jump feature is longer than 4 bytes but we don't need the link sizes.
         unsigned int len = from4Byte( header );
         if( len >= 8 ) {
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Layer Jump Recording" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "Layer Jump Recording";
             d->writeCapabilities |= (MEDIA_DVD_R_DL|MEDIA_DVD_R_DL_JUMP);
             m_writeModes |= WRITINGMODE_LAYER_JUMP;
         }
@@ -2780,7 +2780,7 @@ void K3bDevice::Device::checkFeatures()
     if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
         unsigned int len = from4Byte( header );
         if( len >= 12 ) {
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "HD-DVD Read" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "HD-DVD Read";
             d->readCapabilities |= MEDIA_HD_DVD_ROM;
             if( header[8+4] & 0x1 )
                 d->readCapabilities |= MEDIA_HD_DVD_R;
@@ -2799,7 +2799,7 @@ void K3bDevice::Device::checkFeatures()
     if( !cmd.transport( TR_DIR_READ, header, 16 ) ) {
         unsigned int len = from4Byte( header );
         if( len >= 12 ) {
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "HD-DVD Write" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " feature: " << "HD-DVD Write";
             if( header[8+4] & 0x1 )
                 d->writeCapabilities |= MEDIA_HD_DVD_R;
             if( header[8+6] & 0x1 )
@@ -2955,7 +2955,7 @@ void K3bDevice::Device::checkFor2AFeatures()
         delete [] mm_cap_buffer;
     }
     else {
-        kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": read mode page 2A failed!" << endl;
+        kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": read mode page 2A failed!";
     }
 }
 
@@ -2982,7 +2982,7 @@ void K3bDevice::Device::checkWritingModes()
                    << "(K3bDevice::Device) " << blockDeviceName() << ": Cannot check write modes." << endl;
     }
     else {
-        kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": dataLen: " << dataLen << endl;
+        kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": dataLen: " << dataLen;
 
         wr_param_page_05* mp = (struct wr_param_page_05*)(buffer+8);
 
@@ -3004,7 +3004,7 @@ void K3bDevice::Device::checkWritingModes()
         mp->track_mode = 4;     // MMC-4 says: 5, cdrecord uses 4 ?
         mp->dbtype = 8;         // Mode 1
 
-        //    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": modeselect WRITINGMODE_TAO data: " << endl;
+        //    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": modeselect WRITINGMODE_TAO data: ";
         //    debugBitfield( buffer, dataLen );
 
 
@@ -3013,7 +3013,7 @@ void K3bDevice::Device::checkWritingModes()
         // requirement
         //
 
-        kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for TAO" << endl;
+        kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for TAO";
         if( modeSelect( buffer, dataLen, 1, 0 ) ) {
             m_writeModes |= WRITINGMODE_TAO;
             d->writeCapabilities |= MEDIA_CD_R;
@@ -3021,7 +3021,7 @@ void K3bDevice::Device::checkWritingModes()
             // WRITINGMODE_SAO
             mp->write_type = 0x02; // Session-at-once
 
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for SAO" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for SAO";
             if( modeSelect( buffer, dataLen, 1, 0 ) )
                 m_writeModes |= WRITINGMODE_SAO;
 
@@ -3030,19 +3030,19 @@ void K3bDevice::Device::checkWritingModes()
 // 	m_writeModes |= WRITINGMODE_RAW_R16;
 //       }
 
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for SAO_R96P" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for SAO_R96P";
             mp->dbtype = 2;        // Raw data with P-W Sub-channel (2448 bytes)
             if( modeSelect( buffer, dataLen, 1, 0 ) ) {
                 m_writeModes |= WRITINGMODE_SAO_R96P;
             }
 
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for SAO_R96R" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for SAO_R96R";
             mp->dbtype = 3;        // Raw data with P-W raw Sub-channel (2448 bytes)
             if( modeSelect( buffer, dataLen, 1, 0 ) ) {
                 m_writeModes |= WRITINGMODE_SAO_R96R;
             }
 
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for RAW_R16" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for RAW_R16";
             // WRITINGMODE_RAW
             mp->write_type = 0x03; // WRITINGMODE_RAW
             mp->dbtype = 1;        // Raw data with P and Q Sub-channel (2368 bytes)
@@ -3051,14 +3051,14 @@ void K3bDevice::Device::checkWritingModes()
                 m_writeModes |= WRITINGMODE_RAW_R16;
             }
 
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for RAW_R96P" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for RAW_R96P";
             mp->dbtype = 2;        // Raw data with P-W Sub-channel (2448 bytes)
             if( modeSelect( buffer, dataLen, 1, 0 ) ) {
                 m_writeModes |= WRITINGMODE_RAW;
                 m_writeModes |= WRITINGMODE_RAW_R96P;
             }
 
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for RAW_R96R" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": checking for RAW_R96R";
             mp->dbtype = 3;        // Raw data with P-W raw Sub-channel (2448 bytes)
             if( modeSelect( buffer, dataLen, 1, 0 ) ) {
                 m_writeModes |= WRITINGMODE_RAW;
@@ -3066,7 +3066,7 @@ void K3bDevice::Device::checkWritingModes()
             }
         }
         else {
-            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": modeSelect with WRITINGMODE_TAO failed. No writer" << endl;
+            kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": modeSelect with WRITINGMODE_TAO failed. No writer";
         }
 
 
@@ -3353,7 +3353,7 @@ int K3bDevice::Device::getIndex( unsigned long lba ) const
     }
 
     else {
-        kDebug() << "(K3bDevice::Device::getIndex) readCd failed. Trying seek." << endl;
+        kDebug() << "(K3bDevice::Device::getIndex) readCd failed. Trying seek.";
 
         unsigned char* data = 0;
         unsigned int dataLen = 0;
@@ -3372,7 +3372,7 @@ int K3bDevice::Device::getIndex( unsigned long lba ) const
             delete [] data;
         }
         else
-            kDebug() << "(K3bDevice::Device::getIndex) seek or readSubChannel failed." << endl;
+            kDebug() << "(K3bDevice::Device::getIndex) seek or readSubChannel failed.";
     }
 
     if( needToClose )
@@ -3409,7 +3409,7 @@ bool K3bDevice::Device::searchIndex0( unsigned long startSec,
         }
 
         if( lastIndex == 0 ) {
-            kDebug() << "(K3bDevice::Device) warning: no index != 0 found." << endl;
+            kDebug() << "(K3bDevice::Device) warning: no index != 0 found.";
         }
         else {
             // search forward to the first index = 0
@@ -3450,7 +3450,7 @@ bool K3bDevice::Device::indexScan( K3bDevice::Toc& toc ) const
             track.m_indices.clear();
             long index0 = -1;
             if( searchIndex0( track.firstSector().lba(), track.lastSector().lba(), index0 ) ) {
-                kDebug() << "(K3bDevice::Device) found index 0: " << index0 << endl;
+                kDebug() << "(K3bDevice::Device) found index 0: " << index0;
             }
             if( index0 > 0 )
                 track.m_index0 = K3b::Msf( index0 - track.firstSector().lba() );
@@ -3479,7 +3479,7 @@ void K3bDevice::Device::searchIndexTransitions( long start, long end, K3bDevice:
     int endIndex = getIndex( end );
 
     if( startIndex < 0 || endIndex < 0 ) {
-        kDebug() << "(K3bDevice::Device) could not retrieve index values." << endl;
+        kDebug() << "(K3bDevice::Device) could not retrieve index values.";
     }
     else {
         kDebug() << "(K3bDevice::Device) indices: " << start << " - " << startIndex
@@ -3487,7 +3487,7 @@ void K3bDevice::Device::searchIndexTransitions( long start, long end, K3bDevice:
 
         if( startIndex != endIndex ) {
             if( start+1 == end ) {
-                kDebug() << "(K3bDevice::Device) found index transition: " << endIndex << " " << end << endl;
+                kDebug() << "(K3bDevice::Device) found index transition: " << endIndex << " " << end;
                 track.m_indices.resize( endIndex );
                 // we save the index relative to the first sector
                 track.m_indices[endIndex-1] = K3b::Msf( end ) - track.firstSector();

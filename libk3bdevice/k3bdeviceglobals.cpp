@@ -187,7 +187,7 @@ void K3bDevice::debugBitfield( unsigned char* data, long len )
     index.sprintf( "%4i", i );
     for( int bp = 7; bp >= 0; --bp )
       bitString[7-bp] = ( data[i] & (1<<bp) ? '1' : '0' );
-    kDebug() << index << " - " << bitString << " - " << (int)data[i] << endl;
+    kDebug() << index << " - " << bitString << " - " << (int)data[i];
   }
 }
 

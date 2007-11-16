@@ -57,7 +57,7 @@ bool K3bDevice::Device::getFeature( unsigned char** data, unsigned int& dataLen,
   if( cmd.transport( TR_DIR_READ, header, 8 ) )
     dataLen = from4Byte( header ) + 4;
   else
-    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": GET CONFIGURATION length det failed." << endl;
+    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": GET CONFIGURATION length det failed.";
 
   //
   // Some buggy firmwares do not return the size of the available data
@@ -293,7 +293,7 @@ bool K3bDevice::Device::readTrackInformation( unsigned char** data, unsigned int
     cmd[5] = value;
     break;
   default:
-    kDebug() << "(K3bDevice::readTrackInformation) wrong type parameter: " << type << endl;
+    kDebug() << "(K3bDevice::readTrackInformation) wrong type parameter: " << type;
     return false;
   }
 
@@ -303,7 +303,7 @@ bool K3bDevice::Device::readTrackInformation( unsigned char** data, unsigned int
   if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 )
     dataLen = from2Byte( header ) + 2;
   else
-    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TRACK INFORMATION length det failed." << endl;
+    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TRACK INFORMATION length det failed.";
 
   //
   // Some buggy firmwares do not return the size of the available data
@@ -364,7 +364,7 @@ bool K3bDevice::Device::read10( unsigned char* data,
   cmd[9] = 0;      // Necessary to set the proper command length
 
   if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
-    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ 10 failed!" << endl;
+    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ 10 failed!";
     return false;
   }
   else
@@ -396,7 +396,7 @@ bool K3bDevice::Device::read12( unsigned char* data,
   cmd[11] = 0;      // Necessary to set the proper command length
 
   if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
-    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ 12 failed!" << endl;
+    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ 12 failed!";
     return false;
   }
   else
@@ -440,7 +440,7 @@ bool K3bDevice::Device::readCd( unsigned char* data,
   cmd[11] = 0;      // Necessary to set the proper command length
 
   if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
-    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ CD failed!" << endl;
+    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ CD failed!";
     return false;
   }
   else {
@@ -484,7 +484,7 @@ bool K3bDevice::Device::readCdMsf( unsigned char* data,
   cmd[11] = 0;      // Necessary to set the proper command length
 
   if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
-    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ CD MSF failed!" << endl;
+    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ CD MSF failed!";
     return false;
   }
   else
@@ -512,7 +512,7 @@ bool K3bDevice::Device::readSubChannel( unsigned char** data, unsigned int& data
   if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 )
     dataLen = from2Byte( &header[2] ) + 4;
   else
-    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ SUB-CHANNEL length det failed." << endl;
+    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ SUB-CHANNEL length det failed.";
 
   //
   // Some buggy firmwares do not return the size of the available data
@@ -584,7 +584,7 @@ bool K3bDevice::Device::readTocPmaAtip( unsigned char** data, unsigned int& data
   if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 )
     dataLen = from2Byte( header ) + 2;
   else
-    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP length det failed." << endl;
+    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP length det failed.";
 
   //
   // Some buggy firmwares return an invalid size here
@@ -593,7 +593,7 @@ bool K3bDevice::Device::readTocPmaAtip( unsigned char** data, unsigned int& data
   // We cannot use this as default since many firmwares fail with a too high data length.
   //
   if( (dataLen-4) % descLen || dataLen < 4+descLen ) {
-    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP invalid length returned: " << dataLen << endl;
+    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP invalid length returned: " << dataLen;
     dataLen = 0xFFFF;
   }
 
@@ -645,7 +645,7 @@ bool K3bDevice::Device::mechanismStatus( unsigned char** data, unsigned int& dat
   if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 )
     dataLen = from4Byte( &header[6] ) + 8;
   else
-    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": MECHANISM STATUS length det failed." << endl;
+    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": MECHANISM STATUS length det failed.";
 
   //
   // Some buggy firmwares do not return the size of the available data
@@ -698,7 +698,7 @@ bool K3bDevice::Device::modeSense( unsigned char** pageData, unsigned int& pageL
   if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 )
     pageLen = from2Byte( header ) + 2;
   else
-    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": MODE SENSE length det failed." << endl;
+    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": MODE SENSE length det failed.";
 
   //
   // Some buggy firmwares do not return the size of the available data
@@ -913,12 +913,12 @@ bool K3bDevice::Device::readDiscStructure( unsigned char** data, unsigned int& d
       return true;
     }
     else {
-      kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ DVD STRUCTURE with real length failed." << endl;
+      kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ DVD STRUCTURE with real length failed.";
       delete [] *data;
     }
   }
   else
-    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ DVD STRUCTURE length det failed" << endl;
+    kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": READ DVD STRUCTURE length det failed";
 
   return false;
 }
