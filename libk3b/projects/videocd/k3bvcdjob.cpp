@@ -113,7 +113,7 @@ void K3bVcdJob::cancelAll()
     // remove bin-file if it is unfinished or the user selected to remove image
     if ( QFile::exists( m_doc->vcdImage() ) ) {
         if ( !m_doc->onTheFly() && m_doc->removeImages() || !m_imageFinished ) {
-            emit infoMessage( i18n( "Removing Binary file %1" ).arg( m_doc->vcdImage() ), K3bJob::SUCCESS );
+            emit infoMessage( i18n( "Removing Binary file %1" , m_doc->vcdImage() ), K3bJob::SUCCESS );
             QFile::remove
                 ( m_doc->vcdImage() );
             m_doc->setVcdImage( "" );
@@ -123,7 +123,7 @@ void K3bVcdJob::cancelAll()
     // remove cue-file if it is unfinished or the user selected to remove image
     if ( QFile::exists( m_cueFile ) ) {
         if ( !m_doc->onTheFly() && m_doc->removeImages() || !m_imageFinished ) {
-            emit infoMessage( i18n( "Removing Cue file %1" ).arg( m_cueFile ), K3bJob::SUCCESS );
+            emit infoMessage( i18n( "Removing Cue file %1" , m_cueFile ), K3bJob::SUCCESS );
             QFile::remove
                 ( m_cueFile );
             m_cueFile = "";
@@ -191,8 +191,8 @@ void K3bVcdJob::vcdxBuild()
     const K3bExternalBin* bin = k3bcore ->externalBinManager() ->binObject( "vcdxbuild" );
     if ( !bin ) {
         kDebug() << "(K3bVcdJob) could not find vcdxbuild executable";
-        emit infoMessage( i18n( "Could not find %1 executable." ).arg( "vcdxbuild" ), K3bJob::ERROR );
-        emit infoMessage( i18n( "To create VideoCDs you must install VcdImager Version %1." ).arg( ">= 0.7.12" ), K3bJob::INFO );
+        emit infoMessage( i18n( "Could not find %1 executable." , QString("vcdxbuild") ), K3bJob::ERROR );
+        emit infoMessage( i18n( "To create VideoCDs you must install VcdImager Version %1." ,QString( ">= 0.7.12") ), K3bJob::INFO );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3bJob::INFO );
         cancelAll();
         jobFinished( false );
@@ -201,7 +201,7 @@ void K3bVcdJob::vcdxBuild()
 
     if ( bin->version < K3bVersion( "0.7.12" ) ) {
         kDebug() << "(K3bVcdJob) vcdxbuild executable too old!";
-        emit infoMessage( i18n( "%1 executable too old: need version %2 or greater." ).arg( "Vcdxbuild" ).arg( "0.7.12" ), K3bJob::ERROR );
+        emit infoMessage( i18n( "%1 executable too old: need version %2 or greater." ,QString( "Vcdxbuild" ),QString( "0.7.12" )), K3bJob::ERROR );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3bJob::INFO );
         cancelAll();
         jobFinished( false );
@@ -209,7 +209,7 @@ void K3bVcdJob::vcdxBuild()
     }
 
     if ( !bin->copyright.isEmpty() )
-        emit infoMessage( i18n( "Using %1 %2 - Copyright (C) %3" ).arg( bin->name() ).arg( bin->version ).arg( bin->copyright ), INFO );
+        emit infoMessage( i18n( "Using %1 %2 - Copyright (C) %3" , bin->name() , bin->version ,bin->copyright ), INFO );
 
     *m_process << bin;
 
@@ -251,7 +251,7 @@ void K3bVcdJob::vcdxBuild()
 
     if ( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) {
         kDebug() << "(K3bVcdJob) could not start vcdxbuild";
-        emit infoMessage( i18n( "Could not start %1." ).arg( "vcdxbuild" ), K3bJob::ERROR );
+        emit infoMessage( i18n( "Could not start %1." , QString("vcdxbuild") ), K3bJob::ERROR );
         cancelAll();
         jobFinished( false );
     }

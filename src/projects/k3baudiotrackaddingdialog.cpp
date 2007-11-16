@@ -104,7 +104,7 @@ int K3bAudioTrackAddingDialog::addUrls( const KUrl::List& urls,
   dlg.m_trackAfter = afterTrack;
   dlg.m_parentTrack = parentTrack;
   dlg.m_sourceAfter = afterSource;
-  dlg.m_infoLabel->setText( i18n("Adding files to project \"%1\"...").arg(doc->URL().fileName()) );
+  dlg.m_infoLabel->setText( i18n("Adding files to project \"%1\"...",doc->URL().fileName()) );
 
   dlg.m_busyWidget->showBusy(true);
   QTimer::singleShot( 0, &dlg, SLOT(slotAddUrls()) );
@@ -162,7 +162,7 @@ void K3bAudioTrackAddingDialog::slotAddUrls()
     }
   }
 
-  m_infoLabel->setText( i18n("Analysing file '%1'...").arg( url.fileName() ) );
+  m_infoLabel->setText( i18n("Analysing file '%1'..." , url.fileName() ) );
 
   if( !url.isLocalFile() ) {
     valid = false;

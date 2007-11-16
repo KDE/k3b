@@ -297,7 +297,7 @@ void K3bMediaCopyDialog::slotStartClicked()
         //
         if( QFileInfo( m_tempDirSelectionWidget->tempPath() ).isFile() ) {
             if( KMessageBox::warningContinueCancel( this,
-                                                    i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath()),
+                                                    i18n("Do you want to overwrite %1?",m_tempDirSelectionWidget->tempPath()),
                                                     i18n("File Exists"),
                                                     KStandardGuiItem::overwrite() )
                 != KMessageBox::Continue )
@@ -306,7 +306,7 @@ void K3bMediaCopyDialog::slotStartClicked()
 
         if( QFileInfo( m_tempDirSelectionWidget->tempPath() + ".toc" ).isFile() ) {
             if( KMessageBox::warningContinueCancel( this,
-                                                    i18n("Do you want to overwrite %1?").arg(m_tempDirSelectionWidget->tempPath() + ".toc"),
+                                                    i18n("Do you want to overwrite %1?",m_tempDirSelectionWidget->tempPath() + ".toc"),
                                                     i18n("File Exists"),
                                                     KStandardGuiItem::overwrite() )
                 != KMessageBox::Continue )

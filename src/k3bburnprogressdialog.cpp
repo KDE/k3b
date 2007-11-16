@@ -91,8 +91,8 @@ void K3bBurnProgressDialog::setBurnJob( K3bBurnJob* burnJob )
     connect( burnJob, SIGNAL(burning(bool)), m_labelWritingSpeed, SLOT(setEnabled(bool)) );
 
     if( burnJob->writer() )
-      m_labelWriter->setText( i18n("Writer: %1 %2").arg(burnJob->writer()->vendor()).
-			      arg(burnJob->writer()->description()) );
+      m_labelWriter->setText( i18n("Writer: %1 %2",burnJob->writer()->vendor(),
+			      burnJob->writer()->description()) );
 
     m_labelWritingSpeed->setText( i18n("no info") );
     m_progressWritingBuffer->setFormat( i18n("no info") );

@@ -108,26 +108,26 @@ int K3bVideoDvdImager::writePathSpec()
   d->tempPath = K3b::findUniqueFilePrefix( "k3bVideoDvd", dir.path() );
   kDebug() << "(K3bVideoDvdImager) creating temp dir: " << d->tempPath;
   if( !dir.mkdir( d->tempPath, true ) ) {
-    emit infoMessage( i18n("Unable to create temporary directory '%1'.").arg(d->tempPath), ERROR );
+    emit infoMessage( i18n("Unable to create temporary directory '%1'.",d->tempPath), ERROR );
     return -1;
   }
 
   dir.cd( d->tempPath );
   if( !dir.mkdir( "VIDEO_TS" ) ) {
-    emit infoMessage( i18n("Unable to create temporary directory '%1'.").arg(d->tempPath + "/VIDEO_TS"), ERROR );
+    emit infoMessage( i18n("Unable to create temporary directory '%1'.",d->tempPath + "/VIDEO_TS"), ERROR );
     return -1;
   }
 
   Q_FOREACH( K3bDataItem* item, d->doc->videoTsDir()->children() ) {
     if( item->isDir() ) {
-      emit infoMessage( i18n("Found invalid entry in the VIDEO_TS folder (%1).").arg(item->k3bName()), ERROR );
+      emit infoMessage( i18n("Found invalid entry in the VIDEO_TS folder (%1).",item->k3bName()), ERROR );
       return -1;
     }
 
     // convert to upper case names
     if( ::symlink( QFile::encodeName( item->localPath() ),
 		   QFile::encodeName( d->tempPath + "/VIDEO_TS/" + item->k3bName().upper() ) ) == -1 ) {
-      emit infoMessage( i18n("Unable to link temporary file in folder %1.").arg( d->tempPath ), ERROR );
+      emit infoMessage( i18n("Unable to link temporary file in folder %1.", d->tempPath ), ERROR );
       return -1;
     }
   }
