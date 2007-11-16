@@ -20,7 +20,7 @@
 #ifndef koStoreDevice_h
 #define koStoreDevice_h
 
-#include "koStore.h"
+#include <KoStore.h>
 
 /**
  * This class implements a QIODevice around KoStore, so that
@@ -31,33 +31,35 @@ class KoStoreDevice : public QIODevice
 {
 public:
   /// Note: KoStore::open() should be called before calling this.
-  KoStoreDevice( KoStore * store ) : m_store(store) {
-      setType( IO_Direct );
+  explicit KoStoreDevice( KoStore * store ) : m_store(store) {
+      // koffice-1.x behavior compat: a KoStoreDevice is automatically open
+      setOpenMode( m_store->mode() == KoStore::Read ? QIODevice::ReadOnly : QIODevice::WriteOnly );
   }
   ~KoStoreDevice() {}
 
-  bool open( int m ) {
+  virtual bool isSequential() const { return true; }
+
+  virtual bool open( OpenMode m ) {
+    setOpenMode(m);
     if ( m & QIODevice::ReadOnly )
       return ( m_store->mode() == KoStore::Read );
     if ( m & QIODevice::WriteOnly )
       return ( m_store->mode() == KoStore::Write );
     return false;
   }
-  void close() { }
-  void flush() { }
+  virtual void close() {}
 
-  Offset size() const {
+  qint64 size() const {
     if ( m_store->mode() == KoStore::Read )
       return m_store->size();
     else
       return 0xffffffff;
   }
 
-  virtual Q_LONG readBlock( char *data, Q_ULONG maxlen ) { return m_store->read(data, maxlen); }
-  virtual Q_LONG writeBlock( const char *data, Q_ULONG len ) { return m_store->write( data, len ); }
-  // Not virtual, only to uncover shadow
-  Q_LONG writeBlock( const QByteArray& data ) { return QIODevice::writeBlock( data ); }
+  virtual qint64 readData( char *data, qint64 maxlen ) { return m_store->read(data, maxlen); }
+  virtual qint64 writeData( const char *data, qint64 len ) { return m_store->write( data, len ); }
 
+#if 0
   int getch() {
     char c[2];
     if ( m_store->read(c, 1) == -1)
@@ -75,10 +77,11 @@ public:
       return -1;
   }
   int ungetch( int ) { return -1; } // unsupported
+#endif
 
   // See QIODevice
-  virtual bool at( Offset pos ) { return m_store->at(pos); }
-  virtual Offset at() const { return m_store->at(); }
+  virtual qint64 pos() const { return m_store->pos(); }
+  virtual bool seek( qint64 pos ) { return m_store->seek(pos); }
   virtual bool atEnd() const { return m_store->atEnd(); }
 
 protected:
