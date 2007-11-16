@@ -96,14 +96,14 @@ void K3bMd5Job::start()
     }
     else if( !d->filename.isEmpty() ) {
         if( !QFile::exists( d->filename ) ) {
-            emit infoMessage( i18n("Could not find file %1").arg(d->filename), ERROR );
+            emit infoMessage( i18n("Could not find file %1",d->filename), ERROR );
             jobFinished(false);
             return;
         }
 
         d->file.setName( d->filename );
         if( !d->file.open( QIODevice::ReadOnly ) ) {
-            emit infoMessage( i18n("Could not open file %1").arg(d->filename), ERROR );
+            emit infoMessage( i18n("Could not open file %1",d->filename), ERROR );
             jobFinished(false);
             return;
         }
@@ -251,7 +251,7 @@ void K3bMd5Job::slotUpdate()
             }
 
             if( read < 0 ) {
-                emit infoMessage( i18n("Error while reading from file %1").arg(d->filename), ERROR );
+                emit infoMessage( i18n("Error while reading from file %1",d->filename), ERROR );
                 stopAll();
                 jobFinished(false);
             }

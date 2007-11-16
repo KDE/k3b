@@ -62,7 +62,7 @@ K3bMpegInfo::K3bMpegInfo( const char* filename )
     // nothing to do on an empty file
     if ( !m_filesize ) {
         kDebug() << QString( "File %1 is empty." ).arg( m_filename );
-        m_error_string = i18n( "File %1 is empty." ).arg( m_filename );
+        m_error_string = i18n( "File %1 is empty." , m_filename );
         return ;
     }
 

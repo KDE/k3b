@@ -166,7 +166,7 @@ int K3bPluginManager::pluginSystemVersion() const
 int K3bPluginManager::execPluginDialog( K3bPlugin* plugin, QWidget* parent, const char* name )
 {
     KDialog dlg( parent );
-    dlg.setCaption( i18n("Configure plugin %1").arg( plugin->pluginInfo().name() ) );
+    dlg.setCaption( i18n("Configure plugin %1", plugin->pluginInfo().name() ) );
 
     K3bPluginConfigWidget* configWidget = plugin->createConfigWidget( &dlg );
     if( configWidget ) {
@@ -179,7 +179,7 @@ int K3bPluginManager::execPluginDialog( K3bPlugin* plugin, QWidget* parent, cons
         return r;
     }
     else {
-        KMessageBox::sorry( parent, i18n("No settings available for plugin %1.").arg( plugin->pluginInfo().name() ) );
+        KMessageBox::sorry( parent, i18n("No settings available for plugin %1.", plugin->pluginInfo().name() ) );
         return 0;
     }
 }

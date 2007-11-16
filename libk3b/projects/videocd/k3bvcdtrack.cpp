@@ -191,7 +191,7 @@ QString K3bVcdTrack::video_bitrate()
     if ( mpeg_info->has_video ) {
         for ( int i = 0; i < 2; i++ ) {
             if ( mpeg_info->video[ i ].seen ) {
-                return i18n( "%1 bit/s" ).arg( mpeg_info->video[ i ].bitrate ) ;
+                return i18n( "%1 bit/s" , mpeg_info->video[ i ].bitrate ) ;
             }
         }
     }
@@ -280,7 +280,7 @@ QString K3bVcdTrack::audio_bitrate()
     if ( mpeg_info->has_audio ) {
         for ( int i = 0; i < 2; i++ ) {
             if ( mpeg_info->audio[ i ].seen ) {
-                return i18n( "%1 bit/s" ).arg( mpeg_info->audio[ i ].bitrate ) ;
+                return i18n( "%1 bit/s" , mpeg_info->audio[ i ].bitrate ) ;
             }
         }
     }
@@ -293,7 +293,7 @@ QString K3bVcdTrack::audio_sampfreq()
     if ( mpeg_info->has_audio ) {
         for ( int i = 0; i < 2; i++ ) {
             if ( mpeg_info->audio[ i ].seen ) {
-                return i18n( "%1 Hz" ).arg( mpeg_info->audio[ i ].sampfreq ) ;
+                return i18n( "%1 Hz" , mpeg_info->audio[ i ].sampfreq ) ;
             }
         }
     }
@@ -333,16 +333,16 @@ QString K3bVcdTrack::mpegTypeS( bool audio )
         for ( int i = 0; i < 3; i++ )
             if ( mpeg_info->video[ i ].seen ) {
                 if ( i == 0 ) {
-                    return QString( "MPEG%1 " ).arg( mpeg_info->version ) + i18n( "Motion Picture" );
+                    return QString( "MPEG%1 ").arg(mpeg_info->version ) + i18n( "Motion Picture" );
                 } else {
-                    return QString( "MPEG%1 " ).arg( mpeg_info->version ) + i18n( "Still Picture" );
+                    return QString( "MPEG%1 ").arg(mpeg_info->version ) + i18n( "Still Picture" );
                 }
             }
     }
     if ( mpeg_info->has_audio && audio ) {
         for ( int i = 0; i < 3; i++ )
             if ( mpeg_info->audio[ i ].seen ) {
-                return QString( "MPEG%1 " ).arg( mpeg_info->audio[ i ].version ) + i18n( "Layer %1" ).arg( mpeg_info->audio[ i ].layer );
+                return QString( "MPEG%1 ").arg(mpeg_info->audio[ i ].version ) + i18n( "Layer %1" , mpeg_info->audio[ i ].layer );
             }
     }
 
