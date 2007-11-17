@@ -110,9 +110,10 @@ K3bAudioConvertingOptionWidget::K3bAudioConvertingOptionWidget( QWidget* parent 
   d->extensionMap[0] = "wav";
 
   // check the available encoding plugins
-  Q3PtrList<K3bPlugin> fl = k3bcore->pluginManager()->plugins( "AudioEncoder" );
-  for( Q3PtrListIterator<K3bPlugin> it( fl ); it.current(); ++it ) {
-    K3bAudioEncoder* f = (K3bAudioEncoder*)it.current();
+  QList<K3bPlugin*> fl = k3bcore->pluginManager()->plugins( "AudioEncoder" );
+  for( QList<K3bPlugin *>::const_iterator it = fl.begin();
+       it != fl.end(); ++it ) {
+    K3bAudioEncoder* f = (K3bAudioEncoder*)(*it);
     QStringList exL = f->extensions();
 
     for( QStringList::const_iterator exIt = exL.begin();
@@ -137,7 +138,7 @@ K3bAudioConvertingOptionWidget::~K3bAudioConvertingOptionWidget()
 
 QString K3bAudioConvertingOptionWidget::baseDir() const
 {
-  return m_editBaseDir->url();
+  return m_editBaseDir->url().url();
 }
 
 
@@ -170,7 +171,7 @@ void K3bAudioConvertingOptionWidget::slotConfigurePlugin()
 
 void K3bAudioConvertingOptionWidget::slotUpdateFreeTempSpace()
 {
-  QString path = m_editBaseDir->url();
+  QString path = m_editBaseDir->url().url();
 
   if( !QFile::exists( path ) )
     path.truncate( path.findRev('/') );
@@ -214,7 +215,7 @@ void K3bAudioConvertingOptionWidget::loadDefaults()
   m_editBaseDir->setUrl( QDir::homePath() );
   m_checkSingleFile->setChecked( false );
   m_checkWriteCueFile->setChecked( false );
-  m_comboFileType->setCurrentItem( d->getDefaultFormat() );
+  m_comboFileType->setCurrentIndex( d->getDefaultFormat() );
   m_checkCreatePlaylist->setChecked(false);
   m_checkPlaylistRelative->setChecked(false);
 
@@ -224,7 +225,7 @@ void K3bAudioConvertingOptionWidget::loadDefaults()
 
 void K3bAudioConvertingOptionWidget::loadConfig( const KConfigGroup& c )
 {
-  m_editBaseDir->setURL( c.readEntry( "last ripping directory", QDir::homePath() ) );
+  m_editBaseDir->setUrl( c.readEntry( "last ripping directory", QDir::homePath() ) );
 
   m_checkSingleFile->setChecked( c.readEntry( "single_file", false ) );
   m_checkWriteCueFile->setChecked( c.readEntry( "write_cue_file", false ) );
@@ -239,7 +240,7 @@ void K3bAudioConvertingOptionWidget::loadConfig( const KConfigGroup& c )
     for( QMap<int, QString>::iterator it = d->extensionMap.begin();
 	 it != d->extensionMap.end(); ++it ) {
       if( it.data() == filetype ) {
-	m_comboFileType->setCurrentItem( it.key() );
+	m_comboFileType->setCurrentIndex( it.key() );
 	break;
       }
     }
@@ -251,7 +252,7 @@ void K3bAudioConvertingOptionWidget::loadConfig( const KConfigGroup& c )
 
 void K3bAudioConvertingOptionWidget::saveConfig( KConfigGroup& c )
 {
-  c.writePathEntry( "last ripping directory", m_editBaseDir->url() );
+  c.writePathEntry( "last ripping directory", m_editBaseDir->url().url() );
 
   c.writeEntry( "single_file", m_checkSingleFile->isChecked() );
   c.writeEntry( "write_cue_file", m_checkWriteCueFile->isChecked() );

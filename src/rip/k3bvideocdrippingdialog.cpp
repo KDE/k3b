@@ -82,8 +82,8 @@ void K3bVideoCdRippingDialog::setupGui()
     groupDirectoryLayout->setAlignment( Qt::AlignTop );
 
     QLabel* rippathLabel = new QLabel( i18n( "Rip files to:" ), groupDirectory );
-    m_editDirectory = new KUrlRequester( groupDirectory, "m_editDirectory" );
-    m_editDirectory->setURL( QDir::homePath() );
+    m_editDirectory = new KUrlRequester( groupDirectory );
+    m_editDirectory->setUrl( QDir::homePath() );
     m_editDirectory->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
     rippathLabel->setBuddy( m_editDirectory );
@@ -134,7 +134,7 @@ void K3bVideoCdRippingDialog::setupGui()
 
 void K3bVideoCdRippingDialog::setupContextHelp()
 {
-    m_labelFreeSpace->setToolTip( i18n("Free space on destination directory: %1", m_editDirectory ->url() ) );
+    m_labelFreeSpace->setToolTip( i18n("Free space on destination directory: %1", m_editDirectory ->url().url() ) );
 
     m_labelNecessarySize->setToolTip( i18n("Necessary space for extracted files") );
 
@@ -157,12 +157,12 @@ void K3bVideoCdRippingDialog::slotStartClicked()
 
     QStringList filesExists;
     QDir d;
-    d.setPath( m_editDirectory ->url() );
+    d.setPath( m_editDirectory ->url().url() );
     if( !d.exists() ) {
-      if( KMessageBox::warningYesNo( this, i18n("Image folder '%1' does not exist. Do you want K3b to create it?", m_editDirectory->url() ) )
+      if( KMessageBox::warningYesNo( this, i18n("Image folder '%1' does not exist. Do you want K3b to create it?", m_editDirectory->url().url() ) )
 	  == KMessageBox::Yes ) {
-	if( !KStandardDirs::makeDir( m_editDirectory->url() ) ) {
-	  KMessageBox::error( this, i18n("Failed to create folder '%1'.", m_editDirectory->url() ) );
+	if( !KStandardDirs::makeDir( m_editDirectory->url().url() ) ) {
+	  KMessageBox::error( this, i18n("Failed to create folder '%1'.", m_editDirectory->url().url() ) );
 	  return;
 	}
       }
@@ -172,7 +172,7 @@ void K3bVideoCdRippingDialog::slotStartClicked()
     QFileInfo* fi;
     while ( ( fi = it.current() ) != 0 ) {
         if ( fi ->fileName() != "." && fi ->fileName() != ".." )
-            filesExists.append( QString( "%1 (%2)" ).arg( QFile::encodeName( fi ->fileName() ) ).arg( KIO::convertSize( fi ->size() ) ) );
+            filesExists.append( QString( "%1 (%2)" ).arg( QString(QFile::encodeName( fi ->fileName() )) ).arg( KIO::convertSize( fi ->size() ) ) );
         ++it;
     }
 
@@ -186,7 +186,7 @@ void K3bVideoCdRippingDialog::slotStartClicked()
     m_videooptions ->setVideoCdIgnoreExt( m_ignoreExt ->isChecked() );
     m_videooptions ->setVideoCdSector2336( m_sector2336 ->isChecked() );
     m_videooptions ->setVideoCdExtractXml( m_extractXML ->isChecked() );
-    m_videooptions ->setVideoCdDestination( m_editDirectory ->url() );
+    m_videooptions ->setVideoCdDestination( m_editDirectory ->url().url() );
 
     K3bJobProgressDialog ripDialog( kapp->mainWidget(), "Ripping" );
     K3bVideoCdRip * rip = new K3bVideoCdRip( &ripDialog, m_videooptions );
@@ -219,7 +219,7 @@ void K3bVideoCdRippingDialog::slotFreeSpace(const QString&,
 
 void K3bVideoCdRippingDialog::slotUpdateFreeSpace()
 {
-    QString path = m_editDirectory->url();
+    QString path = m_editDirectory->url().url();
 
     if( !QFile::exists( path ) )
         path.truncate( path.findRev('/') );
@@ -233,7 +233,7 @@ void K3bVideoCdRippingDialog::slotUpdateFreeSpace()
 
 void K3bVideoCdRippingDialog::loadK3bDefaults()
 {
-    m_editDirectory->setURL( QDir::homePath() );
+    m_editDirectory->setUrl( QDir::homePath() );
     m_ignoreExt ->setChecked( false );
     m_sector2336 ->setChecked( false );
     m_extractXML ->setChecked( false );
@@ -243,7 +243,7 @@ void K3bVideoCdRippingDialog::loadK3bDefaults()
 
 void K3bVideoCdRippingDialog::loadUserDefaults( const KConfigGroup& c )
 {
-    m_editDirectory ->setURL( c->readPathEntry( "last ripping directory", QDir::homePath() ) );
+    m_editDirectory ->setUrl( c.readEntry( "last ripping directory", QDir::homePath() ) );
     m_ignoreExt ->setChecked( c.readEntry( "ignore ext", false ) );
     m_sector2336 ->setChecked( c.readEntry( "sector 2336", false ) );
     m_extractXML ->setChecked( c.readEntry( "extract xml", false ) );
@@ -253,7 +253,7 @@ void K3bVideoCdRippingDialog::loadUserDefaults( const KConfigGroup& c )
 
 void K3bVideoCdRippingDialog::saveUserDefaults( KConfigGroup& c )
 {
-    c->writePathEntry( "last ripping directory", m_editDirectory->url() );
+    c.writeEntry( "last ripping directory", m_editDirectory->url() );
     c.writeEntry( "ignore ext", m_ignoreExt ->isChecked( ) );
     c.writeEntry( "sector 2336", m_sector2336 ->isChecked( ) );
     c.writeEntry( "extract xml", m_extractXML ->isChecked( ) );

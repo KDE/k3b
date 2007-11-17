@@ -100,7 +100,7 @@ void K3bAudioProjectConvertingDialog::setupGui()
   Form1Layout->setSpacing( KDialog::spacingHint() );
   Form1Layout->setMargin( 0 );
 
-  m_viewTracks = new K3bListView( frame, "m_viewTracks" );
+  m_viewTracks = new K3bListView( frame );
   m_viewTracks->addColumn(i18n( "Filename (relative to base directory)") );
   m_viewTracks->addColumn(i18n( "Length") );
   m_viewTracks->addColumn(i18n( "File Size") );
@@ -167,7 +167,7 @@ void K3bAudioProjectConvertingDialog::slotStartClicked()
     if( KMessageBox::warningContinueCancelList( this, 
 					i18n("Do you want to overwrite these files?"),
 					filesToOverwrite,
-					i18n("Files Exist"), i18n("Overwrite") ) == KMessageBox::Cancel )
+					i18n("Files Exist"), KGuiItem(i18n("Overwrite")) ) == KMessageBox::Cancel )
       return;
 
 

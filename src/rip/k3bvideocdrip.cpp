@@ -145,10 +145,10 @@ void K3bVideoCdRip::vcdxRip()
      if ( m_videooptions ->getVideoCdSector2336() )
         *m_process << "--sector-2336";
         
-     *m_process << "-i" << QString( "%1" ).arg( QFile::encodeName( m_videooptions ->getVideoCdSource() ) );
+     *m_process << "-i" << QFile::encodeName( m_videooptions ->getVideoCdSource() );
 
      if ( m_videooptions ->getVideoCdExtractXml() )
-        *m_process << "-o" << QString( "%1" ).arg( QFile::encodeName( m_videooptions ->getVideoCdDescription() + ".xml" ) );
+        *m_process << "-o" << QFile::encodeName( m_videooptions ->getVideoCdDescription() + ".xml" );
      else
         *m_process << "-o" << "/dev/null";
       
@@ -272,14 +272,14 @@ void K3bVideoCdRip::slotVcdXRipFinished()
                 emit infoMessage( i18n( "Files successfully extracted." ), K3bJob::SUCCESS );
                 break;
             default:
-                emit infoMessage( i18n( "%1 returned an unknown error (code %2)." ).arg( "vcdxrip" ).arg( m_process->exitStatus() ), K3bJob::ERROR );
+                emit infoMessage( i18n( "%1 returned an unknown error (code %2)." , QString("vcdxrip" ), m_process->exitStatus() ), K3bJob::ERROR );
                 emit infoMessage( i18n( "Please send me an email with the last output..." ), K3bJob::ERROR );
                 cancelAll();
                 jobFinished( false );
                 return ;
         }
     } else {
-        emit infoMessage( i18n( "%1 did not exit cleanly." , "Vcdxrip" ), K3bJob::ERROR );
+        emit infoMessage( i18n( "%1 did not exit cleanly." , QString("Vcdxrip") ), K3bJob::ERROR );
         cancelAll();
         jobFinished( false );
         return ;
@@ -293,7 +293,7 @@ void K3bVideoCdRip::parseInformation( QString text )
     // parse warning
     if ( text.contains( "encountered non-form2 sector" ) ) {
         // I think this is an error not a warning. Finish ripping with invalid mpegs.
-        emit infoMessage( i18n( "%1 encountered non-form2 sector" ,"Vcdxrip"), K3bJob::ERROR );
+        emit infoMessage( i18n( "%1 encountered non-form2 sector" ,QString("Vcdxrip")), K3bJob::ERROR );
         emit infoMessage( i18n( "leaving loop" ), K3bJob::ERROR );
         cancelAll();
         jobFinished( false );

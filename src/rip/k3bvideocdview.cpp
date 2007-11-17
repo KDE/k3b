@@ -48,7 +48,7 @@
 #include <k3bcore.h>
 #include <k3blistview.h>
 #include <k3bstdguiitems.h>
-
+#include <k3baction.h>
 
 class K3bVideoCdView::VideoTrackViewItem : public Q3ListViewItem
 {
@@ -331,14 +331,14 @@ void K3bVideoCdView::initActions()
     KAction* actionDeselectAll = KStandardAction::deselect( this, SLOT( slotDeselectAll() ),
                                  m_actionCollection, "deselect_all" );
     actionDeselectAll->setText( i18n( "Dese&lect All" ) );
-    KAction* actionSelect = new KAction( i18n( "Select Track" ), 0, 0, this,
+    KAction* actionSelect = K3b::createAction(this, i18n( "Select Track" ), 0, 0, this,
                                          SLOT( slotSelect() ), actionCollection(),
                                          "select_track" );
-    KAction* actionDeselect = new KAction( i18n( "Deselect Track" ), 0, 0, this,
+    KAction* actionDeselect = K3b::createAction(this, i18n( "Deselect Track" ), 0, 0, this,
                                            SLOT( slotDeselect() ), actionCollection(),
                                            "deselect_track" );
 
-    KAction* actionStartRip = new KAction( i18n( "Start Ripping" ), "run", 0, this,
+    KAction* actionStartRip = K3b::createAction(this, i18n( "Start Ripping" ), "run", 0, this,
                                            SLOT( startRip() ), actionCollection(), "start_rip" );
 
     // TODO: set the actions tooltips and whatsthis infos

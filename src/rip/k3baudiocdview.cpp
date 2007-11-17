@@ -276,12 +276,12 @@ void K3bAudioCdView::initActions()
   m_popupMenu->insert( actionStartRip );
 
   // setup the toolbox
-  m_toolBox->addButton( actionStartRip, true );
+  m_toolBox->addAction( actionStartRip );
   m_toolBox->addSpacing();
-  m_toolBox->addButton( actionQueryCddb );
-  m_toolBox->addButton( actionSaveCddbLocally );
-  m_toolBox->addButton( actionEditTrackCddbInfo );
-  m_toolBox->addButton( actionEditAlbumCddbInfo );
+  m_toolBox->addAction( actionQueryCddb );
+  m_toolBox->addAction( actionSaveCddbLocally );
+  m_toolBox->addAction( actionEditTrackCddbInfo );
+  m_toolBox->addAction( actionEditAlbumCddbInfo );
 }
 
 
@@ -344,7 +344,7 @@ void K3bAudioCdView::slotEditTrackCddb()
   if( !items.isEmpty() ) {
     AudioTrackViewItem* a = static_cast<AudioTrackViewItem*>(items.first());
 
-    KDialog d( this, "trackCddbDialog", true, i18n("Cddb Track %1").arg(a->trackNumber),
+    KDialog d( this, "trackCddbDialog", true, i18n("Cddb Track %1",a->trackNumber),
 		   KDialog::Ok|KDialog::Cancel, KDialog::Ok, true);
     QWidget* w = new QWidget( &d );
 
@@ -401,7 +401,7 @@ void K3bAudioCdView::slotEditAlbumCddb()
   // set the category
   for( int i = 0; i < comboCat->count(); ++i )
     if( comboCat->text(i) == m_cddbInfo.category ) {
-      comboCat->setCurrentItem(i);
+      comboCat->setCurrentIndex(i);
       break;
     }
 
