@@ -20,7 +20,7 @@
 
 #include <k3baudioclient.h>
 
-include <k3bmsf.h>
+#include <k3bmsf.h>
 
 class K3bAudioDoc;
 class K3bAudioTrack;

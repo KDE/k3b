@@ -431,7 +431,7 @@ QString K3bAudioProjectConvertingThread::findRelativePath( const QString& absPat
   // now the paths are equal up to oldPos, so that's how "deep" we go
   path = path.mid( oldPos+1 );
   baseDir_ = baseDir_.mid( oldPos+1 );
-  int numberOfDirs = baseDir_.contains( '/' );
+  int numberOfDirs = baseDir_.count( '/' );
   for( int i = 0; i < numberOfDirs; ++i )
     path.prepend( "../" );
 
