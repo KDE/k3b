@@ -70,7 +70,7 @@ public:
     : K3bCheckListViewItem( parent, after ) {
 
     setText( 1, QString::number(_trackNumber).rightJustified( 2, ' ' ) );
-    setText( 3, i18n("Track %1").arg(_trackNumber) );
+    setText( 3, i18n("Track %1",_trackNumber) );
     setText( 4, " " + length.toString() + " " );
     setText( 5, " " + KIO::convertSize( length.audioBytes() ) + " " );
 

@@ -88,7 +88,7 @@ K3bVideoDVDRippingWidget::K3bVideoDVDRippingWidget( QWidget* parent )
     //
     // Example filename pattern
     //
-    m_comboFilenamePattern->insertItem( QString( "%b - %1 %t (%n %a %c)" ).arg(i18n("Title") ) );
+    m_comboFilenamePattern->insertItem( QString( "%b - %1 %t (%n %a %c)").arg(i18n("Title") ) );
     m_comboFilenamePattern->insertItem( QString( "%{volumeid} (%{title})" ) );
 
 
@@ -96,7 +96,7 @@ K3bVideoDVDRippingWidget::K3bVideoDVDRippingWidget( QWidget* parent )
     // Add the Audio bitrates
     //
     for( int i = 0; s_mp3Bitrates[i]; ++i )
-        m_comboAudioBitrate->insertItem( i18n("%1 kbps" ).arg(s_mp3Bitrates[i]) );
+        m_comboAudioBitrate->insertItem( i18n("%1 kbps" ,s_mp3Bitrates[i]) );
 
 
     for( int i = 0; i < K3bVideoDVDTitleTranscodingJob::VIDEO_CODEC_NUM_ENTRIES; ++i ) {

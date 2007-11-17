@@ -338,7 +338,7 @@ bool K3bAudioRipThread::ripTrack( int track, const QString& filename )
       !m_cddbEntry.titles[track-1].isEmpty() )
     emitNewSubTask( i18n("Ripping track %1 (%2 - %3)",track,m_cddbEntry.artists[track-1],m_cddbEntry.titles[track-1]) );
   else
-    emitNewSubTask( i18n("Ripping track %1").arg(track) );
+    emitNewSubTask( i18n("Ripping track %1",track) );
 
     int status;
     while( 1 ) {

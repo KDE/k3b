@@ -128,7 +128,7 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
             s.replace( '*', '_' );
             s.replace( '}', '*' );
             dir.append( s.isEmpty()
-                ? i18n("Track %1").arg(trackNumber)
+                ? i18n("Track %1",trackNumber)
                 : s );
             break;
           case NUMBER:

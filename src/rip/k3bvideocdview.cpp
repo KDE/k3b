@@ -73,7 +73,7 @@ class K3bVideoCdView::VideoTrackViewItem : public Q3ListViewItem
                 : Q3ListViewItem( parent )
         {
             setText( 0, QString( "%1. %2" ).arg( _trackNumber ).arg( id ) );
-            setText( 1 );
+            setText( 1,"" );
             if ( length > 0 ) {
                 setText( 2, length.toString() );
                 setText( 3, KIO::convertSize( length.mode2Form2Bytes() ) );
@@ -236,7 +236,7 @@ void K3bVideoCdView::reloadMedium()
             K3b::Msf length( ( *it ).length() );
             sequenceSize += length;
             m_videocdmpegsize += length.mode2Form2Bytes();
-            ( void ) new VideoTrackViewItem( ( VideoTrackViewCheckItem* ) m_contentList[ 0 ], i18n( "Sequence-%1" ).arg( index ), "", index, length );
+            ( void ) new VideoTrackViewItem( ( VideoTrackViewCheckItem* ) m_contentList[ 0 ], i18n( "Sequence-%1" , index ), "", index, length );
         } else {
             K3b::Msf length( ( *it ).length() );
             m_videocddatasize += length.mode2Form1Bytes();
@@ -354,7 +354,7 @@ void K3bVideoCdView::initActions()
     m_popupMenu->insert( actionStartRip );
 
     // setup the toolbox
-    m_toolBox->addButton( actionStartRip, true );
+    m_toolBox->addAction( actionStartRip );
 }
 
 

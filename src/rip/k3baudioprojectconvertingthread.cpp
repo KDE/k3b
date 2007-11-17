@@ -239,7 +239,7 @@ bool K3bAudioProjectConvertingThread::convertTrack( K3bAudioTrack* track, const 
 		    .arg(m_cddbEntry.artists[d->currentTrackIndex])
 		    .arg(m_cddbEntry.titles[d->currentTrackIndex]) );
   else
-    emitNewSubTask( i18n("Converting track %1").arg(d->currentTrackIndex+1) );
+    emitNewSubTask( i18n("Converting track %1",d->currentTrackIndex+1) );
 
 
   // do the conversion
