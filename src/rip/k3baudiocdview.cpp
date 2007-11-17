@@ -28,6 +28,7 @@
 #include <k3bthememanager.h>
 #include <k3baudiocdtrackdrag.h>
 #include <k3bthemedlabel.h>
+#include <k3baction.h>
 
 #include <ktoolbar.h>
 #include <klocale.h>
@@ -42,6 +43,7 @@
 #include <kstandarddirs.h>
 #include <kdialog.h>
 #include <kactioncollection.h>
+#include <KActionMenu>
 #include <qlayout.h>
 #include <q3header.h>
 #include <qlabel.h>
@@ -230,32 +232,32 @@ void K3bAudioCdView::initActions()
 {
   m_actionCollection = new KActionCollection( this );
 
-  KAction* actionSelectAll = new KAction( i18n("Check All"), 0, 0, this,
+  KAction* actionSelectAll = K3b::createAction(this, i18n("Check All"), 0, 0, this,
 					  SLOT(slotCheckAll()), actionCollection(),
 					  "check_all" );
-  KAction* actionDeselectAll = new KAction( i18n("Uncheck All"), 0, 0, this,
+  KAction* actionDeselectAll = K3b::createAction(this, i18n("Uncheck All"), 0, 0, this,
 					    SLOT(slotUncheckAll()), actionCollection(),
 					    "uncheck_all" );
-  KAction* actionSelect = new KAction( i18n("Check Track"), 0, 0, this,
+  KAction* actionSelect = K3b::createAction(this, i18n("Check Track"), 0, 0, this,
 				       SLOT(slotSelect()), actionCollection(),
 				       "select_track" );
-  KAction* actionDeselect = new KAction( i18n("Uncheck Track"), 0, 0, this,
+  KAction* actionDeselect = K3b::createAction(this, i18n("Uncheck Track"), 0, 0, this,
 					 SLOT(slotDeselect()), actionCollection(),
 					 "deselect_track" );
-  KAction* actionEditTrackCddbInfo = new KAction( i18n("Edit Track cddb Info"), "edit", 0, this,
+  KAction* actionEditTrackCddbInfo = K3b::createAction(this, i18n("Edit Track cddb Info"), "edit", 0, this,
 						  SLOT(slotEditTrackCddb()), actionCollection(),
 						  "edit_track_cddb" );
-  KAction* actionEditAlbumCddbInfo = new KAction( i18n("Edit Album cddb Info"), "edit", 0, this,
+  KAction* actionEditAlbumCddbInfo = K3b::createAction(this, i18n("Edit Album cddb Info"), "edit", 0, this,
 						  SLOT(slotEditAlbumCddb()), actionCollection(),
 						  "edit_album_cddb" );
 
-  KAction* actionStartRip = new KAction( i18n("Start Ripping"), "cddarip", 0, this,
+  KAction* actionStartRip = K3b::createAction(this, i18n("Start Ripping"), "cddarip", 0, this,
 					 SLOT(startRip()), actionCollection(), "start_rip" );
 
-  KAction* actionQueryCddb = new KAction( i18n("Query cddb"), "reload", 0, this,
+  KAction* actionQueryCddb = K3b::createAction(this, i18n("Query cddb"), "reload", 0, this,
 					  SLOT(queryCddb()), actionCollection(), "query_cddb" );
 
-  KAction* actionSaveCddbLocally = new KAction( i18n("Save Cddb Entry Locally"), "filesave", 0, this,
+  KAction* actionSaveCddbLocally = K3b::createAction(this, i18n("Save Cddb Entry Locally"), "filesave", 0, this,
 						SLOT(slotSaveCddbLocally()), actionCollection(), "save_cddb_local" );
 
   // TODO: set the actions tooltips and whatsthis infos

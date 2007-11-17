@@ -222,9 +222,9 @@ void K3bAudioConvertingOptionWidget::loadDefaults()
 }
 
 
-void K3bAudioConvertingOptionWidget::loadConfig( KConfigBase* c )
+void K3bAudioConvertingOptionWidget::loadConfig( const KConfigGroup& c )
 {
-  m_editBaseDir->setURL( c->readPathEntry( "last ripping directory", QDir::homePath() ) );
+  m_editBaseDir->setURL( c.readEntry( "last ripping directory", QDir::homePath() ) );
 
   m_checkSingleFile->setChecked( c.readEntry( "single_file", false ) );
   m_checkWriteCueFile->setChecked( c.readEntry( "write_cue_file", false ) );
@@ -249,9 +249,9 @@ void K3bAudioConvertingOptionWidget::loadConfig( KConfigBase* c )
 }
 
 
-void K3bAudioConvertingOptionWidget::saveConfig( KConfigBase* c )
+void K3bAudioConvertingOptionWidget::saveConfig( KConfigGroup& c )
 {
-  c->writePathEntry( "last ripping directory", m_editBaseDir->url() );
+  c.writePathEntry( "last ripping directory", m_editBaseDir->url() );
 
   c.writeEntry( "single_file", m_checkSingleFile->isChecked() );
   c.writeEntry( "write_cue_file", m_checkWriteCueFile->isChecked() );

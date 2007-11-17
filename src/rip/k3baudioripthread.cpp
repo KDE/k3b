@@ -76,8 +76,7 @@ public:
 
 
 K3bAudioRipThread::K3bAudioRipThread()
-  : QObject(),
-    K3bThread(),
+  :  K3bThread(),
     m_device(0),
     m_useIndex0(false)
 {
@@ -573,7 +572,7 @@ QString K3bAudioRipThread::findRelativePath( const QString& absPath, const QStri
   // now the paths are equal up to oldPos, so that's how "deep" we go
   path = path.mid( oldPos+1 );
   baseDir_ = baseDir_.mid( oldPos+1 );
-  int numberOfDirs = baseDir_.contains( '/' );
+  int numberOfDirs = baseDir_.count( '/' );
   for( int i = 0; i < numberOfDirs; ++i )
     path.prepend( "../" );
 

@@ -47,7 +47,7 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
         len = 2;
 
         if( pattern[i+1] != '{' ) {  // strings like %a
-          c = pattern[i+1];
+          c = pattern[i+1].toLatin1();
         }
         else if( i + 3 >= pattern.length() ) {  // too short to contain a %{*} string
           c = ' ';
@@ -55,7 +55,7 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
         else {  // long enough to contain %{*}
 
           if( pattern[i+3] == '}' ) {  // strings like %{a}
-            c = pattern[i+2];
+            c = pattern[i+2].toLatin1();
             len = 4;
           }
           else {  // strings like %{artist}, or anything like %{*
@@ -218,7 +218,7 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
       int offset = offsetStack.pop();
       int length = i - offset + 1;
 
-      switch( (QChar) dir[offset+1] ) {
+      switch( dir[offset+1].unicode() ) {
       case ARTIST:
         s = entry.artists[trackNumber-1];
         break;
@@ -254,7 +254,7 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
       }
 
       if( dir[offset+2] == '{' ) { // no string matching, e.g. ?y{text}
-        switch( (QChar) dir[offset+1] ) {
+        switch( dir[offset+1].unicode() ) {
         case YEAR:
           isIncluded = (s != "0");
           break;

@@ -32,7 +32,7 @@ namespace K3bDevice {
 }
 
 
-class K3bAudioRipThread : public QObject, public K3bThread
+class K3bAudioRipThread : public K3bThread
 {
   Q_OBJECT
 

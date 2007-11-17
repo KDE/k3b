@@ -126,7 +126,7 @@ void K3bAudioRippingDialog::setupGui()
   Form1Layout->setSpacing( KDialog::spacingHint() );
   Form1Layout->setMargin( 0 );
 
-  m_viewTracks = new K3ListView( frame, "m_viewTracks" );
+  m_viewTracks = new K3ListView( frame );
   m_viewTracks->addColumn(i18n( "Filename") );
   m_viewTracks->addColumn(i18n( "Length") );
   m_viewTracks->addColumn(i18n( "File Size") );
@@ -244,7 +244,7 @@ void K3bAudioRippingDialog::slotStartClicked()
     if( KMessageBox::questionYesNoList( this, 
 					i18n("Do you want to overwrite these files?"),
 					filesToOverwrite,
-					i18n("Files Exist"), i18n("Overwrite"), KStandardGuiItem::cancel() ) == KMessageBox::No )
+					i18n("Files Exist"), KGuiItem(i18n("Overwrite")), KStandardGuiItem::cancel() ) == KMessageBox::No )
       return;
 
 

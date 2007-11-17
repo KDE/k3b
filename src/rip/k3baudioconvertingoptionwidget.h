@@ -55,8 +55,8 @@ class K3bAudioConvertingOptionWidget : public base_K3bAudioRippingOptionWidget
 
  public slots:
   void loadDefaults();
-  void loadConfig( KConfigBase* );
-  void saveConfig( KConfigBase* );
+  void loadConfig( const KConfigGroup& );
+  void saveConfig( KConfigGroup& );
 
  signals:
   void changed();
