@@ -23,6 +23,7 @@ ${libk3b_SOURCE_DIR}/projects/movixcd/
 ${CMAKE_CURRENT_SOURCE_DIR}/projects
 ${libk3b_SOURCE_DIR}/projects/videodvd/
 ${CMAKE_CURRENT_SOURCE_DIR}/projects/kostore/
+${libk3b_SOURCE_DIR}/cddb
 )
 
 add_subdirectory( option )
