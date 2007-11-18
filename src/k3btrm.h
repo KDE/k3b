@@ -2,7 +2,6 @@
 #include <Q3CString>
 /* 
  *
- * $Id$
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.

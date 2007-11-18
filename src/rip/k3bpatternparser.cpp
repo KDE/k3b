@@ -1,6 +1,5 @@
 /*
  *
- * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  * Copyright (C) 2004-2005 Jakob Petsovits <jpetso@gmx.at>
  *

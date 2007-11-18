@@ -1,6 +1,5 @@
 /* 
  *
- * $Id$
  * Copyright (C) 2005 Waldo Bastian <bastian@kde.org>
  *
  * This file is part of the K3b project.

@@ -1,6 +1,5 @@
 /*
  *
- * $Id: k3bdatamultisessioncombobox.h 619556 2007-01-03 17:38:12Z trueg $
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.

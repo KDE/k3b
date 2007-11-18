@@ -1,6 +1,5 @@
 /*
  *
- * $Id: k3bdatajob.cpp 657635 2007-04-24 16:55:42Z trueg $
  * Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.

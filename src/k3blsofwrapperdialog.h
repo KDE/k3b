@@ -1,6 +1,5 @@
 /*
  *
- * $Id: k3bapplication.cpp 567271 2006-07-28 13:19:18Z trueg $
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.

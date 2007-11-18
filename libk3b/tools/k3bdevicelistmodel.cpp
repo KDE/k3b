@@ -1,6 +1,5 @@
 /*
  *
- * $Id: k3bdevicecombobox.cpp 735766 2007-11-12 15:25:22Z trueg $
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.

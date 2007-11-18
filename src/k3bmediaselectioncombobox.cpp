@@ -1,6 +1,5 @@
 /*
  *
- * $Id: sourceheader 380067 2005-01-19 13:03:46Z trueg $
  * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.

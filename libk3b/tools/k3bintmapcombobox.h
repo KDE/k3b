@@ -1,6 +1,5 @@
 /* 
  *
- * $Id: k3bwritingmodewidget.cpp 554512 2006-06-24 07:25:39Z trueg $
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.

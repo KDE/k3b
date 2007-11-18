@@ -1,6 +1,5 @@
 /*
  *
- * $Id: k3bmsinfofetcher.h 619556 2007-01-03 17:38:12Z trueg $
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.

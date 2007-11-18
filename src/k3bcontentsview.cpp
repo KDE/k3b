@@ -1,6 +1,5 @@
 /*
  *
- * $Id: k3bcdcontentsview.cpp 582796 2006-09-10 15:31:38Z trueg $
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
