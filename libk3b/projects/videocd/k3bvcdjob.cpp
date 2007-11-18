@@ -283,10 +283,10 @@ void K3bVcdJob::slotParseVcdxBuildOutput( K3Process*, char* output, int len )
             if ( el.isNull() )
                 continue;
 
-            const QString tagName = el.tagName().lower();
+            const QString tagName = el.tagName().toLower();
 
             if ( tagName == "progress" ) {
-                const QString oper = el.attribute( "operation" ).lower();
+                const QString oper = el.attribute( "operation" ).toLower();
                 const unsigned long long pos = el.attribute( "position" ).toLong();
                 const long long size = el.attribute( "size" ).toLong();
 
@@ -326,7 +326,7 @@ void K3bVcdJob::slotParseVcdxBuildOutput( K3Process*, char* output, int len )
                 }
             } else if ( tagName == "log" ) {
                 QDomText tel = el.firstChild().toText();
-                const QString level = el.attribute( "level" ).lower();
+                const QString level = el.attribute( "level" ).toLower();
                 if ( tel.isText() ) {
                     const QString text = tel.data();
                     if ( m_stage == stageWrite && level == "information" )

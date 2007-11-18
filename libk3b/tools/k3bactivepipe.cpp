@@ -218,7 +218,7 @@ int K3bActivePipe::out() const
 int K3bActivePipe::read( char* data, int max )
 {
   if( d->sourceIODevice )
-    return d->sourceIODevice->readBlock( data, max );
+    return d->sourceIODevice->read( data, max );
   else
     return ::read( d->readFd(), data, max );
 }
@@ -227,7 +227,7 @@ int K3bActivePipe::read( char* data, int max )
 int K3bActivePipe::write( char* data, int max )
 {
   if( d->sinkIODevice )
-    return d->sinkIODevice->writeBlock( data, max );
+    return d->sinkIODevice->write( data, max );
   else
     return ::write( d->writeFd(), data, max );
 }

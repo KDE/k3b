@@ -182,7 +182,7 @@ void K3bAudioDoc::addTracks( const KUrl::List& urls, uint position )
   KUrl::List::iterator end( allUrls.end());
   for( KUrl::List::iterator it = allUrls.begin(); it != end; it++, position++ ) {
     KUrl& url = *it;
-    if( url.path().right(3).lower() == "cue" ) {
+    if( url.path().right(3).toLower() == "cue" ) {
       // try adding a cue file
       if( K3bAudioTrack* newAfter = importCueFile( url.path(), getTrack(position) ) ) {
 	position = newAfter->trackNumber();
@@ -237,7 +237,7 @@ KUrl::List K3bAudioDoc::extractUrlList( const KUrl::List& urls )
       // add all files into the list after the current item
       for( QStringList::iterator dirIt = entries.begin();
 	   dirIt != entries.end(); ++dirIt )
-	it = allUrls.insert( oldIt, KUrl( dir.absPath() + "/" + *dirIt ) );
+	it = allUrls.insert( oldIt, KUrl( dir.absolutePath() + "/" + *dirIt ) );
     }
     else if( readPlaylistFile( url, urlsFromPlaylist ) ) {
       it = allUrls.remove( it );

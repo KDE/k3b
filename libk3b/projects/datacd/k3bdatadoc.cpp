@@ -996,7 +996,7 @@ QString K3bDataDoc::treatWhitespace( const QString& path )
       for( int i = 0; i < path.length(); i++ ) {
 	if( path[i] == ' ' ) {
 	  if( path[i+1] != ' ' )
-	    result.append( path[++i].upper() );
+	    result.append( path[++i].toUpper() );
 	}
 	else
 	  result.append( path[i] );

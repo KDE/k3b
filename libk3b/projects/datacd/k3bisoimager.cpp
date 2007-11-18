@@ -1153,21 +1153,21 @@ QString K3bIsoImager::dummyDir( K3bDirItem* dir )
 
   if( !_appDir.cd( name ) ) {
 
-    kDebug() << "(K3bIsoImager) creating dummy dir: " << _appDir.absPath() << "/" << name;
+    kDebug() << "(K3bIsoImager) creating dummy dir: " << _appDir.absolutePath() << "/" << name;
 
     _appDir.mkdir( name );
     _appDir.cd( name );
 
     if( perm ) {
-      ::chmod( QFile::encodeName( _appDir.absPath() ), statBuf.st_mode );
-      ::chown( QFile::encodeName( _appDir.absPath() ), statBuf.st_uid, statBuf.st_gid );
+      ::chmod( QFile::encodeName( _appDir.absolutePath() ), statBuf.st_mode );
+      ::chown( QFile::encodeName( _appDir.absolutePath() ), statBuf.st_uid, statBuf.st_gid );
       struct utimbuf tb;
       tb.actime = tb.modtime = statBuf.st_mtime;
-      ::utime( QFile::encodeName( _appDir.absPath() ), &tb );
+      ::utime( QFile::encodeName( _appDir.absolutePath() ), &tb );
     }
   }
 
-  return _appDir.absPath() + "/";
+  return _appDir.absolutePath() + "/";
 }
 
 

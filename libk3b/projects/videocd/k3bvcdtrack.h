@@ -38,7 +38,7 @@ class LIBK3B_EXPORT K3bVcdTrack
         {
             return QFileInfo( m_file ).fileName();
         }
-        QString absPath() const
+        QString absolutePath() const
         {
             return QFileInfo( m_file ).absoluteFilePath();
         }

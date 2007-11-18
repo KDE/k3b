@@ -415,8 +415,8 @@ bool K3bCueFileParser::findImageFileName( const QString& dataFile )
   }
 
   // try the filename ignoring case
-  if( QFileInfo( K3b::parentDir(filename()) + dataFile.section( '/', -1 ).lower() ).isFile() ) {
-    setImageFilename( K3b::parentDir(filename()) + dataFile.section( '/', -1 ).lower() );
+  if( QFileInfo( K3b::parentDir(filename()) + dataFile.section( '/', -1 ).toLower() ).isFile() ) {
+    setImageFilename( K3b::parentDir(filename()) + dataFile.section( '/', -1 ).toLower() );
     kDebug() << "(K3bCueFileParser) found image file: " << imageFilename();
     return true;
   }
@@ -446,7 +446,7 @@ bool K3bCueFileParser::findImageFileName( const QString& dataFile )
   QStringList possibleImageFiles = parentDir.entryList( QDir::Files );
   int cnt = 0;
   for( QStringList::const_iterator it = possibleImageFiles.constBegin(); it != possibleImageFiles.constEnd(); ++it ) {
-    if( (*it).lower() == dataFile.section( '/', -1 ).lower() ||
+    if( (*it).toLower() == dataFile.section( '/', -1 ).toLower() ||
 	(*it).startsWith( filenamePrefix ) && !(*it).endsWith( "cue" ) ) {
       ++cnt;
       setImageFilename( K3b::parentDir(filename()) + *it );

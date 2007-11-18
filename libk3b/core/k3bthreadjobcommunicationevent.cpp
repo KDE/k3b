@@ -104,7 +104,7 @@ void K3bThreadJobCommunicationEvent::wait()
 {
     QMutex mutex;
     mutex.lock();
-    m_threadBlocker.wait( &mutex );
+    m_threader.wait( &mutex );
     mutex.unlock();
 }
 
@@ -112,7 +112,7 @@ void K3bThreadJobCommunicationEvent::wait()
 void K3bThreadJobCommunicationEvent::done( int result )
 {
     m_result = result;
-    m_threadBlocker.wakeAll();
+    m_threader.wakeAll();
 }
 
 

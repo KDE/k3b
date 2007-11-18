@@ -121,18 +121,18 @@ bool K3bVcdXmlView::write( const QString& fname )
 
     // create info element
     QDomElement elemInfo = addSubElement( xmlDoc, root, "info" );
-    addSubElement( xmlDoc, elemInfo, "album-id", m_doc->vcdOptions() ->albumId().upper() );
+    addSubElement( xmlDoc, elemInfo, "album-id", m_doc->vcdOptions() ->albumId().toUpper() );
     addSubElement( xmlDoc, elemInfo, "volume-count", m_doc->vcdOptions() ->volumeCount() );
     addSubElement( xmlDoc, elemInfo, "volume-number", m_doc->vcdOptions() ->volumeNumber() );
     addSubElement( xmlDoc, elemInfo, "restriction", m_doc->vcdOptions() ->Restriction() );
 
     // create pvd element
     QDomElement elemPvd = addSubElement( xmlDoc, root, "pvd" );
-    addSubElement( xmlDoc, elemPvd, "volume-id", m_doc->vcdOptions() ->volumeId().upper() );
+    addSubElement( xmlDoc, elemPvd, "volume-id", m_doc->vcdOptions() ->volumeId().toUpper() );
     addSubElement( xmlDoc, elemPvd, "system-id", m_doc->vcdOptions() ->systemId() );
     addSubElement( xmlDoc, elemPvd, "application-id", m_doc->vcdOptions() ->applicationId() );
-    addSubElement( xmlDoc, elemPvd, "preparer-id", QString( "K3b - Version %1" ).arg( k3bcore->version() ).upper() );
-    addSubElement( xmlDoc, elemPvd, "publisher-id", m_doc->vcdOptions() ->publisher().upper() );
+    addSubElement( xmlDoc, elemPvd, "preparer-id", QString( "K3b - Version %1" ).arg( k3bcore->version() ).toUpper() );
+    addSubElement( xmlDoc, elemPvd, "publisher-id", m_doc->vcdOptions() ->publisher().toUpper() );
 
 
     // create filesystem element
@@ -198,7 +198,7 @@ bool K3bVcdXmlView::write( const QString& fname )
             QString seqId = QString::number( track ->index() ).rightJustified( 3, '0' );
 
             elemsequenceItem = addSubElement( xmlDoc, elemsequenceItems, "sequence-item" );
-            elemsequenceItem.setAttribute( "src", track ->absPath() );
+            elemsequenceItem.setAttribute( "src", track ->absolutePath() );
             elemsequenceItem.setAttribute( "id", QString( "sequence-%1" ).arg( seqId ) );
 
             // default entry
@@ -209,7 +209,7 @@ bool K3bVcdXmlView::write( const QString& fname )
         } else {
             // sequence-items element needs at least one segment to fit the XML
             elemsegmentItem = addSubElement( xmlDoc, elemsegmentItems, "segment-item" );
-            elemsegmentItem.setAttribute( "src", track ->absPath() );
+            elemsegmentItem.setAttribute( "src", track ->absolutePath() );
             elemsegmentItem.setAttribute( "id", QString( "segment-%1" ).arg( QString::number( track ->index() ).rightJustified( 3, '0' ) ) );
 
         }
@@ -412,7 +412,7 @@ void K3bVcdXmlView::setNumkeySEL( QDomDocument& doc, QDomElement& parent, K3bVcd
                 while ( none < trackIt.key() ) {
                     elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );
                     elemPbcSelectionNumKeySEL.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( track->index() ).rightJustified( 3, '0' ) ) );
-                    addComment( doc, parent, QString( "key %1 -> %2 (normal none)" ).arg( none ).arg( track->absPath() ) );
+                    addComment( doc, parent, QString( "key %1 -> %2 (normal none)" ).arg( none ).arg( track->absolutePath() ) );
                     none++;
                 }
 
@@ -420,7 +420,7 @@ void K3bVcdXmlView::setNumkeySEL( QDomDocument& doc, QDomElement& parent, K3bVcd
                     QString ref = ( trackIt.data() ->isSegment() ) ? "segment" : "sequence";
                     elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );
                     elemPbcSelectionNumKeySEL.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( trackIt.data() ->index() ).rightJustified( 3, '0' ) ) );
-                    addComment( doc, parent, QString( "key %1 -> %2" ).arg( trackIt.key() ).arg( trackIt.data() ->absPath() ) );
+                    addComment( doc, parent, QString( "key %1 -> %2" ).arg( trackIt.key() ).arg( trackIt.data() ->absolutePath() ) );
                 } else {
                     elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );
                     elemPbcSelectionNumKeySEL.setAttribute( "ref", "end" );

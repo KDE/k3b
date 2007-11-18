@@ -260,7 +260,7 @@ void K3bCdrecordWriter::prepareProcess()
   }
 
   if( m_cue ) {
-    m_process->setWorkingDirectory(Q3Url(m_cueFile).dirPath());
+    m_process->setWorkingDirectory(Q3Url(m_cueFile).path());
     *m_process << QString("cuefile=%1").arg( m_cueFile );
   }
 

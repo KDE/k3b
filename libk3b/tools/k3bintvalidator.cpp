@@ -51,7 +51,7 @@ QValidator::State K3bIntValidator::validate ( QString &str, int & ) const
   QString newStr;
 
   newStr = str.trimmed();
-  newStr = newStr.upper();
+  newStr = newStr.toUpper();
 
   if( newStr.length() ) {
     // check for < 0
@@ -128,9 +128,9 @@ int K3bIntValidator::top () const
 
 int K3bIntValidator::toInt( const QString& s, bool* ok )
 {
-  if( s.lower().startsWith( "0x" ) )
+  if( s.toLower().startsWith( "0x" ) )
     return s.right( s.length()-2 ).toInt( ok, 16 );
-  else if( s.lower().startsWith( "-0x" ) )
+  else if( s.toLower().startsWith( "-0x" ) )
     return -1 * s.right( s.length()-3 ).toInt( ok, 16 );
   else
     return s.toInt( ok, 10 );

@@ -532,7 +532,7 @@ void K3bCdrdaoWriter::start()
     }
   prepareArgumentList();
   // set working dir to dir part of toc file (to allow rel names in toc-file)
-  m_process->setWorkingDirectory(Q3Url(m_tocFile).dirPath());
+  m_process->setWorkingDirectory(Q3Url(m_tocFile).path());
 
   kDebug() << "***** cdrdao parameters:\n";
   QList<QByteArray> args = m_process->args();
@@ -656,7 +656,7 @@ bool K3bCdrdaoWriter::cueSheet()
 
   // TODO: do this in the K3bCueFileParser
 
-    if ( m_tocFile.lower().endsWith( ".cue" ) ) {
+    if ( m_tocFile.toLower().endsWith( ".cue" ) ) {
         QFile f( m_tocFile );
         if ( f.open( QIODevice::ReadOnly ) ) {
             QTextStream ts( &f );
@@ -672,7 +672,7 @@ bool K3bCdrdaoWriter::cueSheet()
                 return false;
 
             line = line.mid( pos, endPos-pos );
-            QFileInfo fi( QFileInfo( m_tocFile ).dirPath() + "/" + QFileInfo( line ).fileName() );
+            QFileInfo fi( QFileInfo( m_tocFile ).path() + "/" + QFileInfo( line ).fileName() );
             QString binpath = fi.filePath();
             kDebug() << QString("K3bCdrdaoWriter::cueSheet() BinFilePath from CueFile: %1").arg( line );
             kDebug() << QString("K3bCdrdaoWriter::cueSheet() absolute BinFilePath: %1").arg( binpath );
@@ -973,7 +973,7 @@ void K3bCdrdaoWriter::parseCdrdaoMessage()
 
     // read one message (the message size changed in cdrdao 1.1.8)
     ::memset( &d->newMsg, 0, d->progressMsgSize );
-    int size = m_comSock->readBlock( (char*)&d->newMsg, d->progressMsgSize);
+    int size = m_comSock->read( (char*)&d->newMsg, d->progressMsgSize);
     if( size == -1 ) {
       kDebug() << "(K3bCdrdaoParser) read error";
       return;

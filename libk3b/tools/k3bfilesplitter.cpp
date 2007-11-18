@@ -210,7 +210,7 @@ qint64 K3bFileSplitter::writeData( const char *data, qint64 len )
     // We cannot rely on QFile::at since it uses long on most copmpilations
     qint64 max = qMin( len, d->maxFileSize - d->currentFilePos );
 
-    qint64 r = d->file.writeBlock( data, max );
+    qint64 r = d->file.write( data, max );
 
     if( r < 0 )
         return r;

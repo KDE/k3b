@@ -832,7 +832,7 @@ bool K3bVcdDoc::saveDocumentData( QDomElement * docElem )
 
     Q_FOREACH( K3bVcdTrack* track, *m_tracks ) {
         QDomElement trackElem = doc.createElement( "track" );
-        trackElem.setAttribute( "url", KIO::decodeFileName( track->absPath() ) );
+        trackElem.setAttribute( "url", KIO::decodeFileName( track->absolutePath() ) );
         trackElem.setAttribute( "playtime", track->getPlayTime() );
         trackElem.setAttribute( "waittime", track->getWaitTime() );
         trackElem.setAttribute( "reactivity", track->Reactivity() );

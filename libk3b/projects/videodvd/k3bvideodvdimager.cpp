@@ -126,7 +126,7 @@ int K3bVideoDvdImager::writePathSpec()
 
     // convert to upper case names
     if( ::symlink( QFile::encodeName( item->localPath() ),
-		   QFile::encodeName( d->tempPath + "/VIDEO_TS/" + item->k3bName().upper() ) ) == -1 ) {
+		   QFile::encodeName( d->tempPath + "/VIDEO_TS/" + item->k3bName().toUpper() ) ) == -1 ) {
       emit infoMessage( i18n("Unable to link temporary file in folder %1.", d->tempPath ), ERROR );
       return -1;
     }
@@ -195,7 +195,7 @@ void K3bVideoDvdImager::cleanup()
     QDir dir( d->tempPath );
     dir.cd( "VIDEO_TS" );
     Q_FOREACH( K3bDataItem* item, d->doc->videoTsDir()->children() )
-      dir.remove( item->k3bName().upper() );
+      dir.remove( item->k3bName().toUpper() );
     dir.cdUp();
     dir.rmdir( "VIDEO_TS" );
     dir.cdUp();

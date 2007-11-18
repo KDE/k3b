@@ -86,7 +86,7 @@ class K3bThreadJobCommunicationEvent : public QEvent
     QString m_yesText;
     QString m_noText;
 
-    QWaitCondition m_threadBlocker;
+    QWaitCondition m_threader;
     int m_result;
 };
 

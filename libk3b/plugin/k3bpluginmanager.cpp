@@ -95,7 +95,7 @@ void K3bPluginManager::loadPlugin( const QString& fileName )
 //   }
 
 //   // read the lib
-//   KLibFactory* factory = KLibLoader::self()->factory( libName.latin1() );
+//   KLibFactory* factory = KLibLoader::self()->factory( libName.toLatin1() );
 //   if( factory ) {
 //     K3bPlugin* plugin = dynamic_cast<K3bPlugin*>( factory->create( this ) );
 //     if( plugin ) {

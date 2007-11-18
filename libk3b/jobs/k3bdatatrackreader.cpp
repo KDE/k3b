@@ -291,7 +291,7 @@ void K3bDataTrackReader::WorkThread::run()
       }
     }
     else {
-      if( file.writeBlock( reinterpret_cast<char*>(buffer), readBytes ) != readBytes ) {
+      if( file.write( reinterpret_cast<char*>(buffer), readBytes ) != readBytes ) {
 	kDebug() << "(K3bDataTrackReader::WorkThread) error while writing to file " << m_imagePath
 		  << " current sector: " << (currentSector.lba()-m_firstSector.lba()) << endl;
 	emitDebuggingOutput( "K3bDataTrackReader",

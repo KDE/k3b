@@ -90,7 +90,7 @@ void K3bCloneTocReader::readFile()
     // Inspired by clone.c from the cdrecord sources
     //
     char buffer[2048];
-    int read = f.readBlock( buffer, 2048 );
+    int read = f.read( buffer, 2048 );
     f.close();
 
     if( read == 2048 ) {

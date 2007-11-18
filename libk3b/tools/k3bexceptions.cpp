@@ -18,25 +18,25 @@
 
 bool K3bExceptions::brokenDaoAudio( K3bDevice::Device* dev )
 {
-  if( dev->vendor().upper().startsWith("PIONEER") )
-    if( dev->description().upper().startsWith("DVR-106D") ||
-	dev->description().upper().startsWith("DVD-RW  DVR-K12D") )
+  if( dev->vendor().toUpper().startsWith("PIONEER") )
+    if( dev->description().toUpper().startsWith("DVR-106D") ||
+	dev->description().toUpper().startsWith("DVD-RW  DVR-K12D") )
       return true;
 
-  if( dev->vendor().upper().startsWith("HL-DT-ST") )
-    if( dev->description().upper().startsWith("RW/DVD GCC-4320B") ||
-	dev->description().upper().contains("GCE-8520B") )
+  if( dev->vendor().toUpper().startsWith("HL-DT-ST") )
+    if( dev->description().toUpper().startsWith("RW/DVD GCC-4320B") ||
+	dev->description().toUpper().contains("GCE-8520B") )
       return true;
 
-  if( dev->vendor().upper().startsWith("PHILIPS") &&
-      dev->description().upper().startsWith("CDRWDVD3210") )
+  if( dev->vendor().toUpper().startsWith("PHILIPS") &&
+      dev->description().toUpper().startsWith("CDRWDVD3210") )
     return true;
 
-  if( dev->vendor().upper().startsWith("LITE-ON") )
-    if( dev->description().upper().startsWith("LTR-32123S") ||
-	dev->description().upper().startsWith("LTR-40125S") ||
-	dev->description().upper().contains("LTC-48161H") ||
-	dev->description().upper().startsWith("DVDRW LDW-811S") )
+  if( dev->vendor().toUpper().startsWith("LITE-ON") )
+    if( dev->description().toUpper().startsWith("LTR-32123S") ||
+	dev->description().toUpper().startsWith("LTR-40125S") ||
+	dev->description().toUpper().contains("LTC-48161H") ||
+	dev->description().toUpper().startsWith("DVDRW LDW-811S") )
     return true;
 
   return false;

@@ -443,7 +443,7 @@ QString K3b::resolveLink( const QString& file )
 //     while( f.isSymLink() ) {
 //         QString p = f.readLink();
 //         if( !p.startsWith( "/" ) )
-//             p.prepend( f.dirPath(true) + "/" );
+//             p.prepend( f.absolutePath() + "/" );
 //         f.setFile( p );
 //         if( steps.contains( f.absoluteFilePath() ) ) {
 //             kDebug() << "(K3b) symlink loop detected.";

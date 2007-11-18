@@ -123,7 +123,7 @@ bool K3bAudioEncoder::initEncoder( const QString& ext, const K3b::Msf& length )
 Q_LONG K3bAudioEncoder::writeData( const char* data, Q_ULONG len )
 {
   if( d->outputFile ) {
-    return d->outputFile->writeBlock( data, len );
+    return d->outputFile->write( data, len );
   }
   else {
     kDebug() << "(K3bAudioEncoder) call to writeData without opening a file first.";
