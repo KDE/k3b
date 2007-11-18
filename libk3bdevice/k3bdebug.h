@@ -1,6 +1,5 @@
 /*
  *
- * $Id: k3bemptydiscwaiter.cpp 606691 2006-11-21 12:15:21Z trueg $
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.

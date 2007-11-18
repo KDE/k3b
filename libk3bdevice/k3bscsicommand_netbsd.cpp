@@ -1,6 +1,5 @@
 /*
  *
- * $Id: sourceheader 511311 2006-02-19 14:51:05Z trueg $
  * Copyright (C) 2006 Mark Davies <mark@mcs.vuw.ac.nz>
  *
  * This file is part of the K3b project.
