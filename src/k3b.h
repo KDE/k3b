@@ -163,13 +163,13 @@ protected:
      * opened file by a temporary filename provided by KApplication.
      * @see KTMainWindow#saveProperties
      */
-    virtual void saveProperties(KConfig *_cfg);
+    virtual void saveProperties(KConfigGroup &_cfg);
 
     /** reads the session config file and restores the application's state including the last opened files and documents by reading the
      * temporary files saved by saveProperties()
      * @see KTMainWindow#readProperties
      */
-    virtual void readProperties(KConfig *_cfg);
+    virtual void readProperties(const KConfigGroup &_cfg);
 
     /**
      * checks if doc is modified and asks the user for saving if so.

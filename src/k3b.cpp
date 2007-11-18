@@ -592,7 +592,7 @@ void K3bMainWindow::readOptions()
 }
 
 
-void K3bMainWindow::saveProperties( KConfig* c )
+void K3bMainWindow::saveProperties( KConfigGroup& c )
 {
     // 1. put saved projects in the config
     // 2. save every modified project in  "~/.kde/share/apps/k3b/sessions/" + KApp->sessionId()
@@ -644,7 +644,7 @@ void K3bMainWindow::saveProperties( KConfig* c )
 
 
 // FIXME:move this to K3bProjectManager
-void K3bMainWindow::readProperties( KConfig* c )
+void K3bMainWindow::readProperties( const KConfigGroup& c )
 {
     // FIXME: do not delete the files here. rather do it when the app is exited normally
     //        since that's when we can be sure we never need the session stuff again.

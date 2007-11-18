@@ -84,7 +84,7 @@ protected:
     /**
      * Protected since the BurnDialog is not part of the API.
      */
-    virtual K3bProjectBurnDialog* newBurnDialog( QWidget* = 0, const char* = 0 ) = 0;
+    virtual K3bProjectBurnDialog* newBurnDialog( QWidget* = 0) = 0;
 
     /**
      * Call this to add the projectplugin buttons to the toolbox. It is not called 
