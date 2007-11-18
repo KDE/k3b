@@ -1693,7 +1693,7 @@ bool K3bDevice::Device::open( bool write ) const
 
 #ifdef Q_OS_FREEBSD
     if( !d->cam ) {
-        d->cam = cam_open_pass (m_passDevice.latin1(), O_RDWR,0 /* NULL */);
+        d->cam = cam_open_pass (m_passDevice.toLatin1(), O_RDWR,0 /* NULL */);
         kDebug() << "(K3bDevice::openDevice) open device " << m_passDevice
                    << ((d->cam)?" succeeded.":" failed.") << endl;
     }
