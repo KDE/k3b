@@ -236,5 +236,5 @@ if(DVDREAD_FOUND)
   target_link_libraries(k3b ${DVDREAD_LIBRARIES})
 endif(DVDREAD_FOUND)
 
-set_target_properties(k3b PROPERTIES VERSION 3.0.0 SOVERSION 3 )
+set_target_properties(k3b PROPERTIES VERSION 4.0.0 SOVERSION 4 )
 install(TARGETS k3b DESTINATION ${LIB_INSTALL_DIR} )

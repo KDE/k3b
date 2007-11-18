@@ -22,7 +22,7 @@ target_link_libraries(k3bdevice
   ${KDE4_KIO_LIBS}
   ${QT_QT3SUPPORT_LIBRARY})
 
-set_target_properties(k3bdevice PROPERTIES VERSION 5.0.0 SOVERSION 5 )
+set_target_properties(k3bdevice PROPERTIES VERSION 6.0.0 SOVERSION 6 )
 install(TARGETS k3bdevice DESTINATION ${LIB_INSTALL_DIR} )
 
 
