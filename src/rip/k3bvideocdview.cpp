@@ -326,10 +326,10 @@ void K3bVideoCdView::initActions()
 {
     m_actionCollection = new KActionCollection( this );
 
-    KAction* actionSelectAll = KStandardAction::selectAll( this, SLOT( slotSelectAll() ),
-                               m_actionCollection, "select_all" );
-    KAction* actionDeselectAll = KStandardAction::deselect( this, SLOT( slotDeselectAll() ),
-                                 m_actionCollection, "deselect_all" );
+    KAction* actionSelectAll = KStandardAction::selectAll( this, SLOT( slotSelectAll() ),this);
+    m_actionCollection->addAction("select_all",actionSelectAll);
+    KAction* actionDeselectAll = KStandardAction::deselect( this, SLOT( slotDeselectAll() ),this);
+    m_actionCollection->addAction("deselect_all",actionDeselectAll);
     actionDeselectAll->setText( i18n( "Dese&lect All" ) );
     KAction* actionSelect = K3b::createAction(this, i18n( "Select Track" ), 0, 0, this,
                                          SLOT( slotSelect() ), actionCollection(),
