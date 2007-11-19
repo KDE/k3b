@@ -83,7 +83,7 @@ class K3bAudioTrackPlayer : public QObject, public K3bAudioClient
   Private* d;
 };
 
-
+#if 0
 class K3bAudioTrackPlayerSeekAction : public K3bWidgetFactoryAction
 {
  public:
@@ -99,5 +99,6 @@ class K3bAudioTrackPlayerSeekAction : public K3bWidgetFactoryAction
  private:
     K3bAudioTrackPlayer* m_player;
 };
+#endif
 
 #endif

@@ -26,7 +26,7 @@
 #include <qmutex.h>
 #include <qtooltip.h>
 
-
+#if 0
 K3bAudioTrackPlayerSeekAction::K3bAudioTrackPlayerSeekAction( K3bAudioTrackPlayer* player, QObject* parent )
     : K3bWidgetFactoryAction( parent ),
       m_player( player )
@@ -72,7 +72,7 @@ QWidget* K3bAudioTrackPlayerSeekAction::createWidget( QWidget* container)
     connect( seekSlider, SIGNAL(sliderMoved(int)), m_player, SLOT(slotSeek(int)) );
     return seekSlider;
 }
-
+#endif
 
 class K3bAudioTrackPlayer::Private
 {
@@ -83,7 +83,7 @@ public:
   KAction* actionStop;
   KAction* actionNext;
   KAction* actionPrev;
-  K3bAudioTrackPlayerSeekAction* actionSeek;
+  //K3bAudioTrackPlayerSeekAction* actionSeek;
 
   // just to handle them easily;
   KActionCollection* actionCollection;
@@ -150,13 +150,13 @@ K3bAudioTrackPlayer::K3bAudioTrackPlayer( K3bAudioDoc* doc, QObject* parent )
 			       this, SLOT(prev()),
 			       d->actionCollection,
 			       "prev" );
-  d->actionSeek = new K3bAudioTrackPlayerSeekAction( this, d->actionCollection, "seek" );
+  //d->actionSeek = new K3bAudioTrackPlayerSeekAction( this, d->actionCollection, "seek" );
 
   d->actionStop->setEnabled(false);
   d->actionPause->setEnabled(false);
   d->actionNext->setEnabled(false);
   d->actionPrev->setEnabled(false);
-  d->actionSeek->setEnabled(false);
+  //d->actionSeek->setEnabled(false);
 
   connect( m_doc, SIGNAL(changed()),
 	   this, SLOT(slotDocChanged()) );
@@ -202,8 +202,8 @@ KAction* K3bAudioTrackPlayer::action( int action ) const
     return d->actionNext;
   case ACTION_PREV:
     return d->actionPrev;
-  case ACTION_SEEK:
-    return d->actionSeek;
+  //case ACTION_SEEK:
+    //return d->actionSeek;
   default:
     return 0;
   }
@@ -214,11 +214,13 @@ void K3bAudioTrackPlayer::playTrack( K3bAudioTrack* track )
 {
   if( track ) {
     // we show the currently playing track as a tooltip on the slider
+/*
     d->actionSeek->setToolTip( i18n("Playing track %1: %2 - %3")
                                .arg(track->trackNumber())
                                .arg(track->artist())
                                .arg(track->title()) );
     d->actionSeek->setMaxValue( track->length().totalFrames() );
+*/
     m_currentTrack = track;
     d->paused = true;
 
@@ -245,7 +247,7 @@ void K3bAudioTrackPlayer::playPause()
       d->actionPlayPause->setIcon( "player_pause" );
       d->actionPause->setEnabled(true);
       d->actionPlay->setEnabled(false);
-      d->actionSeek->setEnabled(true);
+      //d->actionSeek->setEnabled(true);
       startStreaming();
       d->sliderTimer.start(1000);
     }
@@ -285,7 +287,7 @@ void K3bAudioTrackPlayer::stop()
   d->actionStop->setEnabled(false);
   d->actionPause->setEnabled(false);
   d->actionPlay->setEnabled(true);
-  d->actionSeek->setEnabled(false);
+  //d->actionSeek->setEnabled(false);
   d->actionNext->setEnabled(false);
   d->actionPrev->setEnabled(false);
   d->sliderTimer.stop();
@@ -371,15 +373,17 @@ void K3bAudioTrackPlayer::slotTrackRemoved( K3bAudioTrack* track )
 
 void K3bAudioTrackPlayer::slotTrackChanged( K3bAudioTrack* track )
 {
+/*
   if( m_currentTrack == track ) {
     d->actionSeek->setMaxValue( track->length().totalFrames() );
   }
+*/
 }
 
 
 void K3bAudioTrackPlayer::slotUpdateSlider()
 {
-  d->actionSeek->setValue( m_currentPosition.totalFrames() );
+  //d->actionSeek->setValue( m_currentPosition.totalFrames() );
 }
 
 

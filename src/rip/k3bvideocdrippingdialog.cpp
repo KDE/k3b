@@ -167,14 +167,11 @@ void K3bVideoCdRippingDialog::slotStartClicked()
 	}
       }
     }
-    const QFileInfoList* list = d.entryInfoList();
-    QFileInfoListIterator it( *list );
-    QFileInfo* fi;
-    while ( ( fi = it.current() ) != 0 ) {
-        if ( fi ->fileName() != "." && fi ->fileName() != ".." )
-            filesExists.append( QString( "%1 (%2)" ).arg( QString(QFile::encodeName( fi ->fileName() )) ).arg( KIO::convertSize( fi ->size() ) ) );
-        ++it;
-    }
+    foreach( QFileInfo fi, d.entryInfoList() )
+    {
+       if ( fi.fileName() != "." && fi .fileName() != ".." )
+           filesExists.append( QString( "%1 (%2)" ).arg( QString(QFile::encodeName( fi.fileName() )) ).arg( KIO::convertSize( fi.size() ) ) );
+    } 
 
     if( !filesExists.isEmpty() )
         if( KMessageBox::questionYesNoList( this,
