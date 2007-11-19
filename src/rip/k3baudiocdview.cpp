@@ -99,7 +99,7 @@ public:
 };
 
 
-K3bAudioCdView::K3bAudioCdView( QWidget* parent, const char *name )
+K3bAudioCdView::K3bAudioCdView( QWidget* parent )
   : K3bMediaContentsView( true,
 			  K3bMedium::CONTENT_AUDIO,
 			  K3bDevice::MEDIA_CD_ALL,
@@ -262,17 +262,16 @@ void K3bAudioCdView::initActions()
   // TODO: set the actions tooltips and whatsthis infos
 
   // setup the popup menu
-  m_popupMenu = new KActionMenu( actionCollection(), "popup_menu" );
-  KAction* separator = new KActionSeparator( actionCollection(), "separator" );
-  m_popupMenu->insert( actionSelect );
-  m_popupMenu->insert( actionDeselect );
-  m_popupMenu->insert( actionSelectAll );
-  m_popupMenu->insert( actionDeselectAll );
-  m_popupMenu->insert( separator );
-  m_popupMenu->insert( actionEditTrackCddbInfo );
-  m_popupMenu->insert( actionEditAlbumCddbInfo );
-  m_popupMenu->insert( separator );
-  m_popupMenu->insert( actionStartRip );
+  m_popupMenu = new KActionMenu( actionCollection()/*, "popup_menu"*/ );
+  m_popupMenu->addAction( actionSelect );
+  m_popupMenu->addAction( actionDeselect );
+  m_popupMenu->addAction( actionSelectAll );
+  m_popupMenu->addAction( actionDeselectAll );
+  m_popupMenu->addSeparator();
+  m_popupMenu->addAction( actionEditTrackCddbInfo );
+  m_popupMenu->addAction( actionEditAlbumCddbInfo );
+  m_popupMenu->addSeparator();
+  m_popupMenu->addAction( actionStartRip );
 
   // setup the toolbox
   m_toolBox->addAction( actionStartRip );
@@ -447,9 +446,9 @@ void K3bAudioCdView::slotEditAlbumCddb()
 void K3bAudioCdView::queryCddb()
 {
   KConfig* c = k3bcore->config();
-  c->setGroup("Cddb");
+  KConfigGroup grp(c,"Cddb");
 
-  m_cddb->readConfig( c );
+  m_cddb->readConfig( grp );
 
   if( c.readEntry( "use local cddb query", true ) ||
       c.readEntry( "use remote cddb", false ) ) {
@@ -524,9 +523,9 @@ void K3bAudioCdView::slotSaveCddbLocally()
   m_cddbInfo.rawData.truncate(0);
 
   KConfig* c = k3bcore->config();
-  c->setGroup("Cddb");
+  KConfigGroup grp(c,"Cddb");
 
-  m_cddb->readConfig( c );
+  m_cddb->readConfig( grp );
 
   m_cddb->saveEntry( m_cddbInfo );
   K3bPassivePopup::showPopup( i18n("Saved entry (%1) in category %2.",m_cddbInfo.discid,m_cddbInfo.category),

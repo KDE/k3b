@@ -343,14 +343,13 @@ void K3bVideoCdView::initActions()
     // TODO: set the actions tooltips and whatsthis infos
 
     // setup the popup menu
-    m_popupMenu = new KActionMenu( actionCollection(), "popup_menu" );
-    KAction* separator = new KActionSeparator( actionCollection(), "separator" );
-    m_popupMenu->insert( actionSelect );
-    m_popupMenu->insert( actionDeselect );
-    m_popupMenu->insert( actionSelectAll );
-    m_popupMenu->insert( actionDeselectAll );
-    m_popupMenu->insert( separator );
-    m_popupMenu->insert( actionStartRip );
+    m_popupMenu = new KActionMenu( actionCollection() );
+    m_popupMenu->addAction( actionSelect );
+    m_popupMenu->addAction( actionDeselect );
+    m_popupMenu->addAction( actionSelectAll );
+    m_popupMenu->addAction( actionDeselectAll );
+    m_popupMenu->addSeparator();
+    m_popupMenu->addAction( actionStartRip );
 
     // setup the toolbox
     m_toolBox->addAction( actionStartRip );
