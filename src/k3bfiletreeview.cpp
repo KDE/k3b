@@ -399,8 +399,8 @@ public:
   K3bDeviceTreeToolTip* toolTip;
 };
 
-K3bFileTreeView::K3bFileTreeView( QWidget *parent, const char *name )
-  : K3FileTreeView( parent,  name )
+K3bFileTreeView::K3bFileTreeView( QWidget *parent )
+  : K3FileTreeView( parent )
 {
   d = new Private();
 

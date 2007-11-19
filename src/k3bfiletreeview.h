@@ -121,7 +121,7 @@ class K3bFileTreeView : public K3FileTreeView
   Q_OBJECT
 
  public: 
-  K3bFileTreeView( QWidget *parent = 0, const char *name = 0 );
+  K3bFileTreeView( QWidget *parent = 0 );
   ~K3bFileTreeView();
 
 
