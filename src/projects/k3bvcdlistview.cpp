@@ -134,7 +134,7 @@ Q3DragObject* K3bVcdListView::dragObject()
     KUrl::List urls;
 
     Q_FOREACH( Q3ListViewItem* item, list )
-        urls.append( KUrl( ( ( K3bVcdListViewItem* ) item ) ->vcdTrack() ->absPath() ) );
+        urls.append( KUrl( ( ( K3bVcdListViewItem* ) item ) ->vcdTrack() ->absolutePath() ) );
 
     return K3URLDrag::newDrag( urls, viewport() );
 }
