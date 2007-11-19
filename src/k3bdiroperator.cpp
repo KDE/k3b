@@ -19,6 +19,7 @@
 #include <k3bapplication.h>
 #include <k3b.h>
 #include <k3bcore.h>
+#include <k3baction.h>
 
 #include <kaction.h>
 #include <kbookmarkmenu.h>
@@ -27,6 +28,7 @@
 #include <kactioncollection.h>
 #include <qdir.h>
 
+#include <QAbstractItemView>
 
 K3bDirOperator::K3bDirOperator(const KUrl& url, QWidget* parent )
   : KDirOperator( url, parent )
@@ -49,7 +51,7 @@ K3bDirOperator::K3bDirOperator(const KUrl& url, QWidget* parent )
   m_bmPopup = new KActionMenu( i18n("Bookmarks"), "bookmark", this, "bookmarks" );
   m_bmMenu = new KBookmarkMenu( bmMan, this, m_bmPopup->popupMenu(), actionCollection(), true );
 
-  (void)new KAction( i18n("&Add to Project"), Qt::SHIFT+Qt::Key_Return, 
+  (void)K3b::createAction( this,i18n("&Add to Project"), Qt::SHIFT+Qt::Key_Return, 
 		     this, SLOT(slotAddFilesToProject()), 
 		     actionCollection(), "add_file_to_project");
 }
@@ -63,17 +65,16 @@ K3bDirOperator::~K3bDirOperator()
 
 void K3bDirOperator::readConfig( KConfig* cfg, const QString& group )
 {
-  QString oldGroup = cfg->group();
-  cfg->setGroup( group );
+  KConfigGroup grp(cfg, group );
 
-  KDirOperator::readConfig( cfg, group );
+  KDirOperator::readConfig( grp );
   setView( KFile::Default );
 
   //
   // There seems to be a bug in the KDELibs which makes setURL crash on
   // some systems when used with a non-existing url
   //
-  QString lastUrl = cfg->readPathEntry( "last url", QDir::home().absPath() );
+  QString lastUrl = grp.readPathEntry( "last url", QDir::home().absPath() );
   while( !QFile::exists(lastUrl) ) {
     QString urlUp = lastUrl.section( '/', 0, -2 );
     if( urlUp == lastUrl )
@@ -84,21 +85,15 @@ void K3bDirOperator::readConfig( KConfig* cfg, const QString& group )
 
   setUrl( KUrl(lastUrl), true );
 
-  cfg->setGroup( oldGroup );
-
   emit urlEntered( url() );
 }
 
 
 void K3bDirOperator::writeConfig( KConfig* cfg, const QString& group )
 {
-  QString oldGroup = cfg->group();
-  cfg->setGroup( group );
-
-  KDirOperator::writeConfig( cfg, group );
-  cfg->writePathEntry( "last url", url().path() );
-
-  cfg->setGroup( oldGroup );
+  KConfigGroup grp (cfg, group);
+  KDirOperator::writeConfig(grp );
+  grp.writePathEntry( "last url", url().path() );
 }
 
 
@@ -128,17 +123,18 @@ void K3bDirOperator::activatedMenu( const KFileItem*, const QPoint& pos )
 
   // insert our own actions
   KActionMenu* dirOpMenu = (KActionMenu*)actionCollection()->action("popupMenu");
-  dirOpMenu->insert( new KActionSeparator( actionCollection() ) );
-  dirOpMenu->insert( m_bmPopup );
+  dirOpMenu->addSeparator();
+  dirOpMenu->addAction( m_bmPopup );
 
-  dirOpMenu->insert( actionCollection()->action("add_file_to_project"), 0 );
-  dirOpMenu->insert( new KActionSeparator( actionCollection() ), 1 );
+  dirOpMenu->addAction( actionCollection()->action("add_file_to_project"), 0 );
+  dirOpMenu->addSeparator();
+
 
   bool hasSelection = view() && view()->selectedItems() &&
                       !view()->selectedItems()->isEmpty();
   actionCollection()->action("add_file_to_project")->setEnabled( hasSelection && k3bappcore->k3bMainWindow()->activeView() != 0 );
 
-  dirOpMenu->popup( pos );
+  dirOpMenu->menu()->popup( pos );
 }
 
 

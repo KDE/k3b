@@ -51,6 +51,7 @@
 #include <kstandarddirs.h>
 #include <kstartupinfo.h>
 #include <kmessagebox.h>
+#include <KGlobal>
 
 #include <qpointer.h>
 #include <qtimer.h>
@@ -95,7 +96,7 @@ void K3bApplication::init()
   KConfigGroup generalOptions( config(), "General Options" );
 
   QPointer<K3bSplash> splash;
-  if( !isRestored() ) {
+  if( !qApp->isSessionRestored() ) {
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
     if( generalOptions.readEntry("Show splash", true) && args->isSet( "splash" ) ) {
@@ -117,7 +118,7 @@ void K3bApplication::init()
   // Load device, external programs, and stuff.
   //
   m_core->init();
-  m_core->readSettings( config() );
+  m_core->readSettings( globalConfig() );
 
   m_core->deviceManager()->printDevices();
 
@@ -129,7 +130,7 @@ void K3bApplication::init()
   m_core->m_mainWindow = m_mainWindow;
   //m_core->interface()->setMainWindow( m_mainWindow );
 
-  if( isRestored() ) {
+  if( qApp->isSessionRestored() ) {
     // we only have one single mainwindow to restore
     m_mainWindow->restore(1);
   }
@@ -229,20 +230,20 @@ bool K3bApplication::processCmdLineArgs()
     showTips = false;
     dialogOpen = true;
     if( k3bcore->jobsRunning() == 0 ) {
-      m_mainWindow->slotWriteCdImage( KUrl( QFile::decodeName( args->getOption( "cdimage" ) ) ) );
+      m_mainWindow->slotWriteCdImage( KUrl(  args->getOption( "cdimage" )  ) );
     }
   }
   else if( args->isSet( "dvdimage" ) ) {
     showTips = false;
     dialogOpen = true;
     if( k3bcore->jobsRunning() == 0 ) {
-      m_mainWindow->slotWriteDvdIsoImage( KUrl( QFile::decodeName( args->getOption( "dvdimage" ) ) ) );
+      m_mainWindow->slotWriteDvdIsoImage( KUrl(args->getOption( "dvdimage" ) ) );
     }
   }
   else if( args->isSet( "image" ) ) {
     showTips = false;
     dialogOpen = true;
-    KUrl url = KUrl( QFile::decodeName( args->getOption( "image" ) ) );
+    KUrl url = KUrl( args->getOption( "image" ) );
     if( k3bcore->jobsRunning() == 0 ) {
       if( K3b::filesize( url ) > 1000*1024*1024 )
 	m_mainWindow->slotWriteDvdIsoImage( url );
@@ -255,25 +256,25 @@ bool K3bApplication::processCmdLineArgs()
            args->isSet("copydvd")) {
     showTips = false;
     dialogOpen = true;
-    m_mainWindow->mediaCopy( K3b::urlToDevice( KUrl( QFile::decodeName( args->getOption( "copycd" ) ) ) ) );
+    m_mainWindow->mediaCopy( K3b::urlToDevice( KUrl( args->getOption( "copycd"  ) ) ) );
   }
   else if( args->isSet("erasecd") ||
            args->isSet("formatdvd") ||
            args->isSet("format")) {
     showTips = false;
     dialogOpen = true;
-    m_mainWindow->formatMedium( K3b::urlToDevice( KUrl( QFile::decodeName( args->getOption( "erasecd" ) ) ) ) );
+    m_mainWindow->formatMedium( K3b::urlToDevice( KUrl( args->getOption( "erasecd" )  ) ) );
   }
 
   // no dialog used here
   if( args->isSet( "cddarip" ) ) {
-    m_mainWindow->cddaRip( K3b::urlToDevice( KUrl( QFile::decodeName( args->getOption( "cddarip" ) ) ) ) );
+    m_mainWindow->cddaRip( K3b::urlToDevice( KUrl( args->getOption( "cddarip" )  ) ) );
   }
   else if( args->isSet( "videodvdrip" ) ) {
-    m_mainWindow->videoDvdRip( K3b::urlToDevice( KUrl( QFile::decodeName( args->getOption( "videodvdrip" ) ) ) ) );
+    m_mainWindow->videoDvdRip( K3b::urlToDevice( KUrl( args->getOption( "videodvdrip" )  ) ) );
   }
   else if( args->isSet( "videocdrip" ) ) {
-    m_mainWindow->videoCdRip( K3b::urlToDevice( KUrl( QFile::decodeName( args->getOption( "videocdrip" ) ) ) ) );
+    m_mainWindow->videoCdRip( K3b::urlToDevice( KUrl(  args->getOption( "videocdrip" ) ) ) );
   }
 
   if( !dialogOpen && args->isSet( "burn" ) ) {
@@ -350,7 +351,7 @@ K3bDevice::DeviceManager* K3bApplication::Core::deviceManager() const
 }
 
 
-KConfig* K3bApplication::Core::config() const
+KSharedConfig::Ptr K3bApplication::Core::globalConfig() const
 {
   return KGlobal::config();
 }
@@ -383,16 +384,16 @@ void K3bApplication::Core::readSettings( KConfig* cnf )
 
   KConfig* c = cnf;
   if( !c )
-    c = config();
+    c = globalConfig();
 
-  m_themeManager->readConfig( config() );
+  m_themeManager->readConfig( globalConfig() );
 }
 
 
 void K3bApplication::Core::saveSettings( KConfig* cnf )
 {
   if( !cnf )
-    cnf = config();
+    cnf = globalConfig();
 
   K3bCore::saveSettings( cnf );
   m_themeManager->saveConfig( cnf );

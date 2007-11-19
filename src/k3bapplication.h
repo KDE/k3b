@@ -84,7 +84,7 @@ class K3bApplication::Core : public K3bCore
   // make sure the libk3b uses the same configuration
   // needed since the lib still depends on K3bCore::config
   // the goal is to make the lib independent from the config
-  KConfig* config() const;
+  KSharedConfig::Ptr globalConfig() const;
 
   void readSettings( KConfig* c = 0 );
   void saveSettings( KConfig* c = 0 );

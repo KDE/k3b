@@ -472,10 +472,10 @@ void K3bWelcomeWidget::slotMoreActions()
 
     for ( int i = 0; s_allActions[i]; ++i ) {
         if ( s_allActions[i][0] == '_' ) {
-            (new KActionSeparator( &popup ))->plug( &popup );
+            popup.addSeparator();
         }
         else {
-            m_mainWindow->actionCollection()->action( s_allActions[i] )->plug( &popup );
+            popup.addAction(m_mainWindow->actionCollection()->action( s_allActions[i] ));
         }
     }
 

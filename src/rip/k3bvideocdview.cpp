@@ -24,6 +24,7 @@
 #include <KActionMenu>
 #include <KActionCollection>
 #include <KToolBar>
+#include <KMenu>
 
 // qt includes
 #include <qfont.h>
@@ -358,7 +359,7 @@ void K3bVideoCdView::initActions()
 
 void K3bVideoCdView::slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& p )
 {
-    m_popupMenu->popup( p );
+    m_popupMenu->menu()->popup( p );
 }
 
 
