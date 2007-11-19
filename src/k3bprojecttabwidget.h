@@ -44,10 +44,8 @@ class K3bProjectTabWidget : public QTabWidget
   
   void addTab( QWidget * child, const QString & label );
   void addTab( QWidget * child, const QIcon & iconset, const QString & label );
-  void addTab( QWidget * child, QTab * tab );
   void insertTab( QWidget * child, const QString & label, int index = -1 );
   void insertTab( QWidget * child, const QIcon & iconset, const QString & label, int index = -1 );
-  void insertTab( QWidget * child, QTab * tab, int index = -1 );
 
   /**
    * \return the project for the tab at position \p pos or 0 in case the tab is
@@ -61,6 +59,9 @@ class K3bProjectTabWidget : public QTabWidget
   void insertAction( KAction* );
 
   bool eventFilter( QObject* o, QEvent* e );
+
+protected:
+  virtual void tabInserted ( int index );
 
  public slots:
   void removePage( QWidget* );

@@ -59,7 +59,7 @@ public:
 
 
 K3bProjectTabWidget::K3bProjectTabWidget( QWidget *parent, const char *name, Qt::WFlags f )
-  : QTabWidget( parent, f )
+  : QTabWidget( parent/*, f*/ )
 {
   tabBar()->setAcceptDrops(true);
   tabBar()->installEventFilter( this );
@@ -86,13 +86,11 @@ void K3bProjectTabWidget::addTab( QWidget* child, const QIcon& iconset, const QS
   tabBar()->setShown( count() != 1 );
 }
 
-
-void K3bProjectTabWidget::addTab( QWidget* child, QTab* tab )
+void K3bProjectTabWidget::tabInserted ( int index )
 {
-  QTabWidget::addTab( child, tab );
+  QTabWidget::tabInserted ( index );
   tabBar()->setShown( count() != 1 );
 }
-
 
 void K3bProjectTabWidget::insertTab( QWidget* child, const QString& label, int index )
 {
@@ -106,14 +104,6 @@ void K3bProjectTabWidget::insertTab( QWidget* child, const QIcon& iconset, const
   QTabWidget::insertTab( child, iconset, label, index );
   tabBar()->setShown( count() != 1 );
 }
-
-
-void K3bProjectTabWidget::insertTab( QWidget* child, QTab* tab, int index )
-{
-  QTabWidget::insertTab( child, tab, index );
-  tabBar()->setShown( count() != 1 );
-}
-
 
 void K3bProjectTabWidget::removePage( QWidget* w )
 {

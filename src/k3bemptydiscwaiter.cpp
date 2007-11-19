@@ -86,32 +86,39 @@ public:
 
 
 K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice::Device* device, QWidget* parent )
-  : KDialog( KDialog::Plain, i18n("Waiting for Disk"),
-		 KDialog::Cancel|KDialog::User1|KDialog::User2|KDialog::User3,
-		 KDialog::User3, parent, true, true, i18n("Force"), i18n("Eject"), i18n("Load") )
+  : KDialog( parent)
 {
+  setCaption(i18n("Waiting for Disk"));
+  setButtons(KDialog::Cancel|KDialog::User1|KDialog::User2|KDialog::User3);
+  setDefaultButton(KDialog::User3);
+  setModal(true);
+  setButtonText(KDialog::User1,i18n("Force"));
+  setButtonText(KDialog::User2,i18n("Eject"));
+  setButtonText(KDialog::User3,i18n("Load"));
+  QWidget *widget = new QWidget;
+  setMainWidget(widget);
   d = new Private();
   d->device = device;
 
   // setup the gui
   // -----------------------------
-  d->labelRequest = new QLabel( plainPage() );
+  d->labelRequest = new QLabel( widget );
   d->labelRequest->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
-  d->labelFoundMedia = new QLabel( plainPage() );
-  d->pixLabel = new QLabel( plainPage() );
+  d->labelFoundMedia = new QLabel( widget );
+  d->pixLabel = new QLabel( widget );
   d->pixLabel->setAlignment( Qt::AlignHCenter | Qt::AlignTop );
 
   QFont f( d->labelFoundMedia->font() );
   f.setBold(true);
   d->labelFoundMedia->setFont( f );
 
-  Q3GridLayout* grid = new Q3GridLayout( plainPage() );
+  Q3GridLayout* grid = new Q3GridLayout( widget );
   grid->setMargin( marginHint() );
   grid->setSpacing( spacingHint() );
 
   grid->addMultiCellWidget( d->pixLabel, 0, 2, 0, 0 );
   grid->addColSpacing( 1, 20 );
-  grid->addWidget( new QLabel( i18n("Found media:"), plainPage() ), 0, 2 );
+  grid->addWidget( new QLabel( i18n("Found media:"), widget ), 0, 2 );
   grid->addWidget( d->labelFoundMedia, 0, 3 );
   grid->addMultiCellWidget( d->labelRequest, 1, 1, 2, 3 );
   grid->setRowStretch( 2, 1 );
@@ -121,7 +128,7 @@ K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice::Device* device, QWidget* pare
   connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3bDevice::Device*)),
 	   this, SLOT(slotMediumChanged(K3bDevice::Device*)) );
 
-  actionButton(KDialog::User1)->setToolTip(
+  setButtonToolTip(KDialog::User1,
 		 i18n("Force K3b to continue if it seems not to detect your empty CD/DVD.") );
 }
 

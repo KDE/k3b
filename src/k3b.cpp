@@ -37,7 +37,7 @@
 #include <QShowEvent>
 
 #include <k3dockwidget.h>
-#include <kkeydialog.h>
+#include <KShortcutsDialog>
 // include files for KDE
 #include <kiconloader.h>
 #include <kmessagebox.h>
@@ -658,7 +658,7 @@ void K3bMainWindow::readProperties( const KConfigGroup& c )
     // FIXME: for some reason the config entries are not properly stored when using the default
     //        KMainWindow session config. Since I was not able to find the bug I use another config object
     // ----------------------------------------------------------
-    c = new KSimpleConfig( saveDir + "list", true );
+    c = new KConfig( saveDir + "list", true );
     c->setGroup( "Saved Session" );
     // ----------------------------------------------------------
 
@@ -837,7 +837,7 @@ void K3bMainWindow::slotFileOpen()
 {
     slotStatusMsg(i18n("Opening file..."));
 
-    KUrl::List urls = KFileDialog::getOpenUrls( ":k3b-projects-folder",
+    KUrl::List urls = KFileDialog::getOpenUrls( KUrl(":k3b-projects-folder"),
                                                 i18n("*.k3b|K3b Projects"),
                                                 this,
                                                 i18n("Open Files") );
@@ -918,7 +918,7 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
             if( !exists ||
                 ( exists &&
                   KMessageBox::warningContinueCancel( this, i18n("Do you want to overwrite %1?", url.prettyUrl() ),
-                                                      i18n("File Exists"), i18n("Overwrite") )
+                                                      i18n("File Exists"), KGuiItem(i18n("Overwrite")) )
                   == KMessageBox::Continue ) ) {
 
                 if( !k3bappcore->projectManager()->saveProject( doc, url ) ) {
@@ -1020,7 +1020,7 @@ void K3bMainWindow::slotStatusMsg(const QString &text)
 
 void K3bMainWindow::slotSettingsConfigure()
 {
-    K3bOptionDialog d( this, "SettingsDialog", true );
+    K3bOptionDialog d( this, true );
 
     d.exec();
 

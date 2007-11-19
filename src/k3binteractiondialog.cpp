@@ -40,6 +40,7 @@
 #include <QKeyEvent>
 #include <QEvent>
 #include <Q3WhatsThis>
+#include <Q3HBoxLayout>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -123,7 +124,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
     m_buttonStart = 0;
 
   if( buttonMask & SAVE_BUTTON ) {
-    m_buttonSave = new KPushButton( KStandardGuiItem::save(), mainWidget(), "m_buttonSave" );
+    m_buttonSave = new KPushButton( KStandardGuiItem::save(), mainWidget() );
   }
   else
     m_buttonSave = 0;
@@ -133,8 +134,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 				      .readEntry( "keep action dialogs open", false )
 				      ? KStandardGuiItem::close()
 				      : KStandardGuiItem::cancel(),
-				      mainWidget(),
-				      "m_buttonCancel" );
+				      mainWidget());
   }
   else
     m_buttonCancel = 0;
@@ -282,27 +282,27 @@ void K3bInteractionDialog::slotLoadK3bDefaults()
 void K3bInteractionDialog::slotLoadUserDefaults()
 {
   KConfigGroup c( k3bcore->config(), m_configGroup );
-  loadUserDefaults( &c );
+  loadUserDefaults( c );
 }
 
 void K3bInteractionDialog::slotSaveUserDefaults()
 {
   KConfigGroup c( k3bcore->config(), m_configGroup );
-  saveUserDefaults( &c );
+  saveUserDefaults( c );
 }
 
 
 void K3bInteractionDialog::slotLoadLastSettings()
 {
   KConfigGroup c( k3bcore->config(), "last used " + m_configGroup );
-  loadUserDefaults( &c );
+  loadUserDefaults( c );
 }
 
 
 void K3bInteractionDialog::saveLastSettings()
 {
   KConfigGroup c( k3bcore->config(), "last used " + m_configGroup );
-  saveUserDefaults( &c );
+  saveUserDefaults( c );
 }
 
 

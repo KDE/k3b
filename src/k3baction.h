@@ -14,23 +14,7 @@ namespace K3b {
 			   const QString& text, const QString& icon, const
 			   QKeySequence& shortcut, QObject* receiver, const char* slot,
 			   KActionCollection* actionCollection = 0,
-			   const QString& actionName = QString() )
-    {
-	KAction* action = new KAction( parent );
-	action->setText( text );
-	if( !icon.isEmpty() ) {
-	    action->setIcon( KIcon( icon ) );
-	}
-	action->setShortcut( shortcut );
-	if( receiver ) {
-	    QObject::connect( action, SIGNAL( triggered() ),
-			      receiver, slot );
-	}
-	if( actionCollection ) {
-	    actionCollection->addAction( actionName, action );
-	}
-	return action;
-    }
+			   const QString& actionName = QString() );
 }
 
 #endif

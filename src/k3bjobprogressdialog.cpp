@@ -20,7 +20,7 @@
 #include "k3bjobprogressosd.h"
 #include "k3bdebuggingoutputdialog.h"
 #include "k3bapplication.h"
-#include "k3bjobinterface.h"
+//#include "k3bjobinterface.h"
 #include "k3bthemedlabel.h"
 #include <k3bjob.h>
 #include <k3bdevice.h>
@@ -248,7 +248,7 @@ void K3bJobProgressDialog::setupGUI()
   QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
   layout5->addItem( spacer );
 
-  m_buttonCancel = new KPushButton( KStandardGuiItem::cancel(), this, "m_buttonCancel" );
+  m_buttonCancel = new KPushButton( KStandardGuiItem::cancel(), this );
   layout5->addWidget( m_buttonCancel );
   m_buttonClose = new KPushButton( KStandardGuiItem::close(), this );
   layout5->addWidget( m_buttonClose );

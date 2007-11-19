@@ -88,14 +88,14 @@ void K3bFileView::setupGUI()
   m_toolBox->addAction( m_dirOp->actionCollection()->action("short view") );
   m_toolBox->addAction( m_dirOp->actionCollection()->action("detailed view") );
   m_toolBox->addSpacing();
-  m_toolBox->addButton( m_dirOp->bookmarkMenu() );
+  m_toolBox->addAction( m_dirOp->bookmarkMenu() );
   m_toolBox->addSpacing();
 
   // create filter selection combobox
   m_toolBox->addSpacing();
   m_toolBox->addAction( i18n("Filter:") );
   m_toolBox->addSpacing();
-  m_filterWidget = new KFileFilterCombo( m_toolBox, "filterwidget" );
+  m_filterWidget = new KFileFilterCombo( m_toolBox );
   m_toolBox->addWidget( m_filterWidget );
   m_toolBox->addStretch();
   m_toolBox->addWidget( m_dirOp->progressBar() );

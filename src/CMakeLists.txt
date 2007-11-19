@@ -200,8 +200,8 @@ set(k3b_SRCS
    k3bprojectmanager.cpp 
    k3btrm.cpp 
    k3bmusicbrainz.cpp 
-   k3baudioprojectinterface.cpp 
-   k3bmixedprojectinterface.cpp 
+   #k3baudioprojectinterface.cpp 
+   #k3bmixedprojectinterface.cpp 
    k3bflatbutton.cpp 
    k3bemptydiscwaiter.cpp 
    k3bjobprogressosd.cpp 
@@ -224,7 +224,9 @@ set(k3b_SRCS
    k3blsofwrapper.cpp 
    k3blsofwrapperdialog.cpp 
    k3bservicemenuinstaller.cpp 
-   k3bfirstrun.cpp )
+   k3bfirstrun.cpp 
+   k3baction.cpp
+   )
 
 set(k3b_bin_SRCS 
   ${k3b_option_SRCS}
