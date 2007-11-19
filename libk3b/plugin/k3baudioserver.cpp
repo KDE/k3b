@@ -110,7 +110,7 @@ K3bAudioServer::~K3bAudioServer()
 }
 
 
-bool K3bAudioServer::setOutputMethod( const Q3CString& name )
+bool K3bAudioServer::setOutputMethod( const QString& name )
 {
   if( K3bAudioOutputPlugin* p = findOutputPlugin( name ) ) {
     setOutputPlugin( p );

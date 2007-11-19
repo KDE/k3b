@@ -339,12 +339,15 @@ void K3bAudioCdView::startRip()
 
 void K3bAudioCdView::slotEditTrackCddb()
 {
-  Q3PtrList<Q3ListViewItem> items( m_trackView->selectedItems() );
+  QList<Q3ListViewItem *> items(m_trackView->selectedItems());
   if( !items.isEmpty() ) {
-    AudioTrackViewItem* a = static_cast<AudioTrackViewItem*>(items.first());
+    AudioTrackViewItem* a = static_cast<AudioTrackViewItem*>(items.at(0));
 
-    KDialog d( this, "trackCddbDialog", true, i18n("Cddb Track %1",a->trackNumber),
-		   KDialog::Ok|KDialog::Cancel, KDialog::Ok, true);
+    KDialog d( this);
+    d.setCaption(i18n("Cddb Track %1",a->trackNumber));
+    d.setButtons(KDialog::Ok|KDialog::Cancel);
+    d.setDefaultButton(KDialog::Ok);
+    d.setModal(true);
     QWidget* w = new QWidget( &d );
 
     KLineEdit* editTitle = new KLineEdit( m_cddbInfo.titles[a->trackNumber-1], w );
@@ -381,10 +384,13 @@ void K3bAudioCdView::slotEditTrackCddb()
 
 void K3bAudioCdView::slotEditAlbumCddb()
 {
-  KDialog d( this, "trackCddbDialog", true, i18n("Album Cddb"),
-		 KDialog::Ok|KDialog::Cancel, KDialog::Ok, true);
+  KDialog d( this);
+  d.setCaption(i18n("Album Cddb"));
+  d.setModal(true);
+  d.setButtons(KDialog::Ok|KDialog::Cancel);
+  d.setDefaultButton(KDialog::Ok);
   QWidget* w = new QWidget( &d );
-
+  
   KLineEdit* editTitle = new KLineEdit( m_cddbInfo.cdTitle, w );
   KLineEdit* editArtist = new KLineEdit( m_cddbInfo.cdArtist, w );
   KLineEdit* editExtInfo = new KLineEdit( m_cddbInfo.cdExtInfo, w );
@@ -462,8 +468,8 @@ void K3bAudioCdView::slotCddbQueryFinished( int error )
 
     // save the entry locally
     KConfig* c = k3bcore->config();
-    c->setGroup( "Cddb" );
-    if( c.readEntry( "save cddb entries locally", true ) )
+    KConfigGroup grp(c, "Cddb" );
+    if( grp.readEntry( "save cddb entries locally", true ) )
       m_cddb->saveEntry( m_cddbInfo );
 
     updateDisplay();
@@ -523,9 +529,7 @@ void K3bAudioCdView::slotSaveCddbLocally()
   m_cddb->readConfig( c );
 
   m_cddb->saveEntry( m_cddbInfo );
-  K3bPassivePopup::showPopup( i18n("Saved entry (%1) in category %2.")
-			      .arg(m_cddbInfo.discid)
-			      .arg(m_cddbInfo.category),
+  K3bPassivePopup::showPopup( i18n("Saved entry (%1) in category %2.",m_cddbInfo.discid,m_cddbInfo.category),
 			      i18n("CDDB") );
 }
 
@@ -544,18 +548,18 @@ void K3bAudioCdView::slotUncheckAll()
 
 void K3bAudioCdView::slotSelect()
 {
-  Q3PtrList<Q3ListViewItem> items( m_trackView->selectedItems() );
-  for( Q3PtrListIterator<Q3ListViewItem> it( items );
-       it.current(); ++it )
-    static_cast<AudioTrackViewItem*>(it.current())->setChecked(true);
+  QList<Q3ListViewItem *> items(m_trackView->selectedItems());
+  for( QList<Q3ListViewItem *>::const_iterator it = items.begin();
+       it != items.end(); ++it )
+    static_cast<AudioTrackViewItem*>(*it)->setChecked(true);
 }
 
 void K3bAudioCdView::slotDeselect()
 {
-  Q3PtrList<Q3ListViewItem> items( m_trackView->selectedItems() );
-  for( Q3PtrListIterator<Q3ListViewItem> it( items );
-       it.current(); ++it )
-    static_cast<AudioTrackViewItem*>(it.current())->setChecked(false);
+  QList<Q3ListViewItem *> items(m_trackView->selectedItems());
+  for( QList<Q3ListViewItem *>::const_iterator it = items.begin();
+       it != items.end(); ++it )
+    static_cast<AudioTrackViewItem*>(*it)->setChecked(false);
 }
 
 void K3bAudioCdView::updateDisplay()
@@ -617,11 +621,11 @@ void K3bAudioCdView::enableInteraction( bool b )
 
 Q3DragObject* K3bAudioCdView::dragObject()
 {
-  Q3PtrList<Q3ListViewItem> items = m_trackView->selectedItems();
   Q3ValueList<int> tracks;
-  for( Q3PtrListIterator<Q3ListViewItem> it( items );
-       it.current(); ++it )
-    tracks.append( static_cast<AudioTrackViewItem*>(it.current())->trackNumber );
+  QList<Q3ListViewItem *> items(m_trackView->selectedItems());
+  for( QList<Q3ListViewItem *>::const_iterator it = items.begin();
+       it != items.end(); ++it )
+    tracks.append( static_cast<AudioTrackViewItem*>(*it)->trackNumber );
 
   if( !items.isEmpty() ) {
     Q3DragObject* drag = new K3bAudioCdTrackDrag( m_toc,

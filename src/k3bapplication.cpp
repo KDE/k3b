@@ -127,7 +127,7 @@ void K3bApplication::init()
 
   m_mainWindow = new K3bMainWindow();
   m_core->m_mainWindow = m_mainWindow;
-  m_core->interface()->setMainWindow( m_mainWindow );
+  //m_core->interface()->setMainWindow( m_mainWindow );
 
   if( isRestored() ) {
     // we only have one single mainwindow to restore
@@ -155,7 +155,7 @@ void K3bApplication::init()
 
   // write the current version to make sure checks such as K3bSystemProblemDialog::readCheckSystemConfig
   // use a proper value
-  generalOptions.writeEntry( "config version", m_core->version() );
+  generalOptions.writeEntry( "config version", QString(m_core->version()) );
 }
 
 
