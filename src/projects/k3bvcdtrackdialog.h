@@ -1,6 +1,5 @@
 /*
 *
-* $Id$
 * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
 *
 * This file is part of the K3b project.

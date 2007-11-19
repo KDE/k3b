@@ -1,6 +1,5 @@
 /*
 *
-* $Id$
 * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
 *             THX to Manfred Odenstein <odix@chello.at>
 *

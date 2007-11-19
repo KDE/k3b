@@ -1,6 +1,5 @@
 /*
 *
-* $Id$
 * Copyright (C) 2003-2005 Christian Kvasny <chris@k3b.org>
 * Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
 *
