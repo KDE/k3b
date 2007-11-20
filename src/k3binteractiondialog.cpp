@@ -90,7 +90,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
     userDefaultsPopup->insertItem( i18n("Load default settings"), this, SLOT(slotLoadK3bDefaults()) );
     userDefaultsPopup->insertItem( i18n("Load saved settings"), this, SLOT(slotLoadUserDefaults()) );
     userDefaultsPopup->insertItem( i18n("Load last used settings"), this, SLOT(slotLoadLastSettings()) );
-    m_buttonLoadSettings)->setMenu( userDefaultsPopup );
+    m_buttonLoadSettings->setMenu( userDefaultsPopup );
     layout2->addWidget( m_buttonLoadSettings );
 
     m_buttonSaveSettings = new QToolButton( /*i18n("Save User Defaults"), */mainWidget(), "m_buttonSaveSettings" );
@@ -322,7 +322,6 @@ void K3bInteractionDialog::slotStartClickedInternal()
 					       "configuration dialog.</em>"),
 					  QMessageBox::Question,
 					  this,
-					  0,
 					  3,
 					  KGuiItem(i18n("Default Settings")),
 					  KGuiItem(i18n("Saved Settings")),

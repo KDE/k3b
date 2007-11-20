@@ -85,15 +85,14 @@ public:
 
 
 K3bJobProgressDialog::K3bJobProgressDialog( QWidget* parent,
-					    const char* name,
 					    bool showSubProgress,
 					    bool modal, Qt::WFlags fl )
-  : KDialog( parent, modal, fl ),
+  : KDialog( parent/*, modal, fl*/ ),
     in_loop(false),
     m_osd(0)
 {
   d = new Private;
-
+  setModal(modal);
   setupGUI();
   setupConnections();
 
@@ -161,7 +160,7 @@ void K3bJobProgressDialog::setupGUI()
   // ------------------------------------------------------------------------------------------
 
 
-  m_viewInfo = new K3ListView( this, "m_viewInfo" );
+  m_viewInfo = new K3ListView( this );
   m_viewInfo->addColumn( "" );
   m_viewInfo->addColumn( i18n( "Message" ) );
   m_viewInfo->setFullWidth( true );
@@ -466,7 +465,7 @@ void K3bJobProgressDialog::setJob( K3bJob* job )
 
     if( KConfigGroup( k3bcore->config(), "General Options" ).readEntry( "Show progress OSD", true ) ) {
       if( !m_osd )
-	m_osd = new K3bJobProgressOSD( this, "progressosd" );
+	m_osd = new K3bJobProgressOSD( this );
     }
     else
       delete m_osd;

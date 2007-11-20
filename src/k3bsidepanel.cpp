@@ -86,13 +86,14 @@ Q3Frame* K3bSidePanel::createPanel()
 }
 
 
-void K3bSidePanel::addButton( Q3Frame* frame, KAction* a )
+void K3bSidePanel::addButton( Q3Frame* frame, QAction* a )
 {
   if( a ) {
     QToolButton* b = new QToolButton( frame );
     b->setTextLabel( a->toolTip(), true );
     b->setTextLabel( a->text(), false );
-    b->setIconSet( a->iconSet(KIcon::Small) );
+    //FIXME kde4
+    //b->setIconSet( a->iconSet(KIcon::Small) );
     b->setUsesTextLabel( true );
     b->setAutoRaise( true );
     b->setTextPosition( QToolButton::BesideIcon );

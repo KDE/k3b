@@ -44,7 +44,7 @@ class K3bSidePanel : public QToolBox
   K3bFileTreeView* m_fileTreeView;
 
   Q3Frame* createPanel();
-  void addButton( Q3Frame* frame, KAction* action );
+  void addButton( Q3Frame* frame, QAction* action );
 };
 
 #endif
