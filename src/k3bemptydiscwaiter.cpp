@@ -43,7 +43,6 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <k3activelabel.h>
-#include <knotifyclient.h>
 
 
 class K3bEmptyDiscWaiter::Private
@@ -523,7 +522,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
 					      K3bDevice::mediaTypeString(medium.diskInfo().mediaType()),
 					      d->device->vendor(),
 					      d->device->description()),
-					      i18np("Found %1","DVD-RW"), KGuiItem(i18n("Format")) ) == KMessageBox::Continue ) {
+					      i18n("Found %1",QString("DVD-RW")), KGuiItem(i18n("Format")) ) == KMessageBox::Continue ) {
 
 	kDebug() << "(K3bEmptyDiscWaiter) ------ formatting DVD-RW.";
 
@@ -650,7 +649,8 @@ void K3bEmptyDiscWaiter::showDialog()
   // we need to show the dialog if not done already
   if( !d->dialogVisible ) {
 
-    KNotifyClient::event( 0, "WaitingForMedium", i18n("Waiting for Medium") );
+//TODO fixme kde4
+    //KNotifyClient::event( 0, "WaitingForMedium", i18n("Waiting for Medium") );
 
     d->dialogVisible = true;
     clearWFlags( WDestructiveClose );

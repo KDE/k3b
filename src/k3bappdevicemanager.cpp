@@ -42,7 +42,7 @@ K3bAppDeviceManager::K3bAppDeviceManager( QObject* parent )
   m_actionCollection = new KActionCollection( this );
 
   // setup actions
-  KActionMenu* devicePopupMenu = new KActionMenu( m_actionCollection, "device_popup" );
+  KActionMenu* devicePopupMenu = new KActionMenu( m_actionCollection );
   m_actionDiskInfo = K3b::createAction(this, i18n("Media &Info"), "info", 0, this, SLOT(diskInfo()),
 				  m_actionCollection, "device_diskinfo");
   m_actionUnmount = K3b::createAction(this,  i18n("&Unmount"), "cdrom_unmount", 0, this, SLOT(unmountDisk()),
@@ -67,18 +67,18 @@ K3bAppDeviceManager::K3bAppDeviceManager( QObject* parent )
   m_actionLoad->setToolTip( i18n("(Re)Load the medium") );
   m_actionSetReadSpeed->setToolTip( i18n("Force the drive's read speed") );
 
-  devicePopupMenu->insert( m_actionDiskInfo );
-  devicePopupMenu->insert( new KActionSeparator( this ) );
-  devicePopupMenu->insert( m_actionUnmount );
-  devicePopupMenu->insert( m_actionMount );
-  devicePopupMenu->insert( new KActionSeparator( this ) );
-  devicePopupMenu->insert( m_actionEject );
-  devicePopupMenu->insert( m_actionLoad );
+  devicePopupMenu->addAction( m_actionDiskInfo );
+  devicePopupMenu->addSeparator();
+  devicePopupMenu->addAction( m_actionUnmount );
+  devicePopupMenu->addAction( m_actionMount );
+  devicePopupMenu->addSeparator();
+  devicePopupMenu->addAction( m_actionEject );
+  devicePopupMenu->addAction( m_actionLoad );
 //  devicePopupMenu->insert( new KActionSeparator( this ) );
 //  devicePopupMenu->insert( actionUnlock );
 //  devicePopupMenu->insert( actionlock );
-  devicePopupMenu->insert( new KActionSeparator( this ) );
-  devicePopupMenu->insert( m_actionSetReadSpeed );
+  devicePopupMenu->addSeparator();
+  devicePopupMenu->addAction( m_actionSetReadSpeed );
 
   setCurrentDevice( 0 );
 }
@@ -119,7 +119,7 @@ void K3bAppDeviceManager::removeDevice( const QString& dev )
   K3bDevice::DeviceManager::removeDevice( dev );
 
   if( !m_currentDevice )
-    setCurrentDevice( allDevices().getFirst() );
+    setCurrentDevice( allDevices().first() );
 }
 
 
@@ -185,8 +185,8 @@ void K3bAppDeviceManager::mountDisk()
         // FIXME: make this non-blocking
         if( !K3b::isMounted( currentDevice() ) )
             K3b::mount( currentDevice() );
-
-        emit mountFinished( KIO::findDeviceMountPoint( currentDevice()->blockDeviceName() ) );
+        //TODO fixme "KIO::findDeviceMountPoint"
+        //emit mountFinished( KIO::findDeviceMountPoint( currentDevice()->blockDeviceName() ) );
     }
 }
 

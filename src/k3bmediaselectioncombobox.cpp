@@ -35,7 +35,8 @@
 #include <Q3ValueList>
 #include <Q3PtrList>
 
-
+//TODO portme kde4
+#if 0
 class K3bMediaSelectionComboBox::ToolTip : public QToolTip
 {
 public:
@@ -70,7 +71,7 @@ void K3bMediaSelectionComboBox::ToolTip::maybeTip( const QPoint& pos )
 	 m_box->mediumToolTip( k3bappcore->mediaCache()->medium( dev ) ) );
   }
 }
-
+#endif
 
 
 
@@ -122,7 +123,7 @@ K3bMediaSelectionComboBox::K3bMediaSelectionComboBox( QWidget* parent )
   updateMedia();
 
   // initialize the tooltip for the dropdown box
-  (void)new ToolTip( this );
+  //(void)new ToolTip( this );
 }
 
 
@@ -160,7 +161,7 @@ Q3ValueList<K3bDevice::Device*> K3bMediaSelectionComboBox::allDevices() const
 void K3bMediaSelectionComboBox::setSelectedDevice( K3bDevice::Device* dev )
 {
   if( dev && d->deviceIndexMap.contains( dev ) ) {
-    setCurrentItem( d->deviceIndexMap[dev] );
+    setCurrentIndex( d->deviceIndexMap[dev] );
     emit selectionChanged( dev );
   }
 }
@@ -301,7 +302,7 @@ void K3bMediaSelectionComboBox::updateMedia()
     }
   }
   else if( selected && d->deviceIndexMap.contains( selected ) ) {
-    setCurrentItem( d->deviceIndexMap[selected] );
+    setCurrentIndex( d->deviceIndexMap[selected] );
   }
   else {
     emit selectionChanged( selectedDevice() );
@@ -526,10 +527,12 @@ QString K3bMediaSelectionComboBox::noMediumMessage() const
 
 void K3bMediaSelectionComboBox::slotUpdateToolTip( K3bDevice::Device* dev )
 {
+#if 0
     // update the tooltip for the combobox (the tooltip for the dropdown box is created in the constructor)
     QToolTip::remove( this );
     if( dev )
         this->setToolTip( mediumToolTip( k3bappcore->mediaCache()->medium( dev ) ) );
+#endif
 }
 
 #include "k3bmediaselectioncombobox.moc"
