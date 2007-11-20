@@ -450,8 +450,8 @@ void K3bAudioCdView::queryCddb()
 
   m_cddb->readConfig( grp );
 
-  if( c.readEntry( "use local cddb query", true ) ||
-      c.readEntry( "use remote cddb", false ) ) {
+  if( grp.readEntry( "use local cddb query", true ) ||
+      grp.readEntry( "use remote cddb", false ) ) {
 
     showBusyLabel(true);
 

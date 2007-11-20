@@ -249,16 +249,16 @@ void K3bMainWindow::initActions()
                                                   actionCollection(), "file_continue_multisession" );
 
     actionFileNewMenu->setDelayed( false );
-    actionFileNewMenu->insert( actionFileNewData );
-    actionFileNewMenu->insert( actionFileContinueMultisession );
-    actionFileNewMenu->insert( new KActionSeparator( this ) );
-    actionFileNewMenu->insert( actionFileNewAudio );
-    actionFileNewMenu->insert( actionFileNewMixed );
-    actionFileNewMenu->insert( new KActionSeparator( this ) );
-    actionFileNewMenu->insert( actionFileNewVcd );
-    actionFileNewMenu->insert( actionFileNewVideoDvd );
-    actionFileNewMenu->insert( new KActionSeparator( this ) );
-    actionFileNewMenu->insert( actionFileNewMovix );
+    actionFileNewMenu->addAction( actionFileNewData );
+    actionFileNewMenu->addAction( actionFileContinueMultisession );
+    actionFileNewMenu->addSeparator();
+    actionFileNewMenu->addAction( actionFileNewAudio );
+    actionFileNewMenu->addAction( actionFileNewMixed );
+    actionFileNewMenu->addSeparator();
+    actionFileNewMenu->addAction( actionFileNewVcd );
+    actionFileNewMenu->addAction( actionFileNewVideoDvd );
+    actionFileNewMenu->addSeparator();
+    actionFileNewMenu->addAction( actionFileNewMovix );
 
 
 
@@ -296,7 +296,7 @@ void K3bMainWindow::initActions()
     actionToolsVideoCdRip = K3b::createAction(this,i18n("Rip Video CD..."), "videocd", 0, this, SLOT(slotVideoCdRip()),
                                          actionCollection(), "tools_videocd_rip" );
 
-    (void)new KAction( i18n("System Check"), 0, 0, this, SLOT(slotCheckSystem()),
+    (void)K3b::createAction(this, i18n("System Check"), 0, 0, this, SLOT(slotCheckSystem()),
                        actionCollection(), "help_check_system" );
 
 #ifdef HAVE_K3BSETUP
@@ -305,7 +305,7 @@ void K3bMainWindow::initActions()
 #endif
 
 #ifdef K3B_DEBUG
-    (void)new KAction( "Test Media Selection ComboBox", 0, 0, this,
+    (void)K3b::createAction(this, "Test Media Selection ComboBox", 0, 0, this,
                        SLOT(slotMediaSelectionTester()), actionCollection(),
                        "test_media_selection" );
 #endif
@@ -440,7 +440,7 @@ void K3bMainWindow::initView()
                                                               0, 0, 0,
                                                               actionCollection(), "quick_dir_selector" );
     fileTreeComboAction->setAutoSized(true);
-    (void)new KAction( i18n("Go"), "key_enter", 0, m_fileTreeComboBox, SLOT(slotGoUrl()), actionCollection(), "go_url" );
+    (void)K3b::createAction(this, i18n("Go"), "key_enter", 0, m_fileTreeComboBox, SLOT(slotGoUrl()), actionCollection(), "go_url" );
     // ---------------------------------------------------------------------------------------------
 }
 
@@ -547,7 +547,8 @@ K3bDoc* K3bMainWindow::openDocument(const KUrl& url)
 
 void K3bMainWindow::saveOptions()
 {
-    actionFileOpenRecent->saveEntries( config(), "Recent Files" );
+    KConfigGroup recentGrp(config(),"Recent Files");
+    actionFileOpenRecent->saveEntries( recentGrp );
 
     // save dock positions!
     manager()->writeConfig( config(), "Docking Config" );
@@ -573,7 +574,8 @@ void K3bMainWindow::readOptions()
     actionViewDocumentHeader->setChecked(bViewDocumentHeader);
 
     // initialize the recent file list
-    actionFileOpenRecent->loadEntries( config(), "Recent Files" );
+    KConfigGroup recentGrp(config(), "Recent Files");
+    actionFileOpenRecent->loadEntries( recentGrp );
 
     // do not read dock-positions from a config that has been saved by an old version
     K3bVersion configVersion( grp.readEntry( "config version", "0.1" ) );
@@ -608,7 +610,7 @@ void K3bMainWindow::saveProperties( KConfigGroup& /*c*/ )
     // ----------------------------------------------------------
 
     QList<K3bDoc*> docs = k3bappcore->projectManager()->projects();
-    c.writeEntry( "Number of projects", docs.count() );
+    grp.writeEntry( "Number of projects", docs.count() );
 
     int cnt = 1;
     Q_FOREACH( K3bDoc* doc, docs ) {
@@ -658,7 +660,7 @@ void K3bMainWindow::readProperties( const KConfigGroup& /*c*/ )
     // FIXME: for some reason the config entries are not properly stored when using the default
     //        KMainWindow session config. Since I was not able to find the bug I use another config object
     // ----------------------------------------------------------
-    KConfig *c = new KConfig( saveDir + "list", true );
+    KConfig *c = new KConfig( saveDir + "list"/*, true*/ );
     KConfigGroup grp(c, "Saved Session" );
     // ----------------------------------------------------------
 
@@ -669,13 +671,13 @@ void K3bMainWindow::readProperties( const KConfigGroup& /*c*/ )
 */
     for( int i = 1; i <= cnt; ++i ) {
         // in this case the constructor works since we saved as url()
-        KUrl url = grp.readPathEntry( QString("%1 url", QString()).arg(i) );
+        KUrl url = grp.readPathEntry( QString("%1 url").arg(i),QString() );
 
-        bool modified = grp.readEntry( QString("%1 modified").arg(i) );
+        bool modified = grp.readEntry( QString("%1 modified").arg(i),false );
 
-        bool saved = grp.readEntry( QString("%1 saved").arg(i) );
+        bool saved = grp.readEntry( QString("%1 saved").arg(i),false );
 
-        KUrl saveUrl = grp.readPathEntry( QString("%1 saveurl").arg(i) );
+        KUrl saveUrl = grp.readPathEntry( QString("%1 saveurl").arg(i),QString() );
 
         // now load the project
         if( K3bDoc* doc = k3bappcore->projectManager()->openProject( saveUrl ) ) {
@@ -905,7 +907,7 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 
     if( doc != 0 ) {
         // we do not use the static KFileDialog method here to be able to specify a filename suggestion
-        KFileDialog dlg( KUrl(":k3b-projects-folder"), i18n("*.k3b|K3b Projects"), this, true );
+        KFileDialog dlg( KUrl(":k3b-projects-folder"), i18n("*.k3b|K3b Projects"), this);
         dlg.setCaption( i18n("Save As") );
         dlg.setOperationMode( KFileDialog::Saving );
         dlg.setSelection( doc->name() );
