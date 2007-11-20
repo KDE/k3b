@@ -110,7 +110,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
   m_fileTreeView->header()->hide();
 
   m_fileView     = new K3bFileView(m_viewStack, "fileView");
-  m_cdView       = new K3bAudioCdView(m_viewStack, "cdview");
+  m_cdView       = new K3bAudioCdView(m_viewStack);
   m_videoView    = new K3bVideoCdView(m_viewStack, "videoview");
   m_infoView     = new K3bDiskInfoView(m_viewStack);
 #ifdef HAVE_LIBDVDREAD

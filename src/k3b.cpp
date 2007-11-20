@@ -591,7 +591,7 @@ void K3bMainWindow::readOptions()
 }
 
 
-void K3bMainWindow::saveProperties( KConfigGroup& c )
+void K3bMainWindow::saveProperties( KConfigGroup& /*c*/ )
 {
     // 1. put saved projects in the config
     // 2. save every modified project in  "~/.kde/share/apps/k3b/sessions/" + KApp->sessionId()
@@ -603,8 +603,8 @@ void K3bMainWindow::saveProperties( KConfigGroup& c )
     // FIXME: for some reason the config entries are not properly stored when using the default
     //        KMainWindow session config. Since I was not able to find the bug I use another config object
     // ----------------------------------------------------------
-    c = new KSimpleConfig( saveDir + "list", false );
-    c->setGroup( "Saved Session" );
+    KConfig *c = new KConfig( saveDir + "list", false );
+    KConfigGroup grp(c, "Saved Session" );
     // ----------------------------------------------------------
 
     QList<K3bDoc*> docs = k3bappcore->projectManager()->projects();
@@ -613,20 +613,20 @@ void K3bMainWindow::saveProperties( KConfigGroup& c )
     int cnt = 1;
     Q_FOREACH( K3bDoc* doc, docs ) {
         // the "name" of the project (or the original url if isSaved())
-        c->writePathEntry( QString("%1 url").arg(cnt), (doc)->URL().url() );
+        grp.writePathEntry( QString("%1 url").arg(cnt), (doc)->URL().url() );
 
         // is the doc modified
-        c.writeEntry( QString("%1 modified").arg(cnt), (doc)->isModified() );
+        grp.writeEntry( QString("%1 modified").arg(cnt), (doc)->isModified() );
 
         // has the doc already been saved?
-        c.writeEntry( QString("%1 saved").arg(cnt), (doc)->isSaved() );
+        grp.writeEntry( QString("%1 saved").arg(cnt), (doc)->isSaved() );
 
         // where does the session management save it? If it's not modified and saved this is
         // the same as the url
         KUrl saveUrl = (doc)->URL();
         if( !(doc)->isSaved() || (doc)->isModified() )
             saveUrl = KUrl( saveDir + QString::number(cnt) );
-        c->writePathEntry( QString("%1 saveurl").arg(cnt), saveUrl.url() );
+        grp.writePathEntry( QString("%1 saveurl").arg(cnt), saveUrl.url() );
 
         // finally save it
         k3bappcore->projectManager()->saveProject( doc, saveUrl );
@@ -643,7 +643,7 @@ void K3bMainWindow::saveProperties( KConfigGroup& c )
 
 
 // FIXME:move this to K3bProjectManager
-void K3bMainWindow::readProperties( const KConfigGroup& c )
+void K3bMainWindow::readProperties( const KConfigGroup& /*c*/ )
 {
     // FIXME: do not delete the files here. rather do it when the app is exited normally
     //        since that's when we can be sure we never need the session stuff again.
@@ -658,23 +658,24 @@ void K3bMainWindow::readProperties( const KConfigGroup& c )
     // FIXME: for some reason the config entries are not properly stored when using the default
     //        KMainWindow session config. Since I was not able to find the bug I use another config object
     // ----------------------------------------------------------
-    c = new KConfig( saveDir + "list", true );
-    c->setGroup( "Saved Session" );
+    KConfig *c = new KConfig( saveDir + "list", true );
+    KConfigGroup grp(c, "Saved Session" );
     // ----------------------------------------------------------
 
-    int cnt = c.readEntry( "Number of projects", 0 );
+    int cnt = grp.readEntry( "Number of projects", 0 );
+/*
     kDebug() << "(K3bMainWindow::readProperties) number of projects from last session in " << saveDir << ": " << cnt << endl
              << "                                read from config group " << c->group() << endl;
-
+*/
     for( int i = 1; i <= cnt; ++i ) {
         // in this case the constructor works since we saved as url()
-        KUrl url = c->readPathEntry( QString("%1 url", QString()).arg(i) );
+        KUrl url = grp.readPathEntry( QString("%1 url", QString()).arg(i) );
 
-        bool modified = c.readEntry( QString("%1 modified").arg(i) );
+        bool modified = grp.readEntry( QString("%1 modified").arg(i) );
 
-        bool saved = c.readEntry( QString("%1 saved").arg(i) );
+        bool saved = grp.readEntry( QString("%1 saved").arg(i) );
 
-        KUrl saveUrl = c->readPathEntry( QString("%1 saveurl", QString()).arg(i) );
+        KUrl saveUrl = grp.readPathEntry( QString("%1 saveurl").arg(i) );
 
         // now load the project
         if( K3bDoc* doc = k3bappcore->projectManager()->openProject( saveUrl ) ) {
@@ -904,7 +905,7 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
 
     if( doc != 0 ) {
         // we do not use the static KFileDialog method here to be able to specify a filename suggestion
-        KFileDialog dlg( KUrl(":k3b-projects-folder"), i18n("*.k3b|K3b Projects"), this, "filedialog", true );
+        KFileDialog dlg( KUrl(":k3b-projects-folder"), i18n("*.k3b|K3b Projects"), this, true );
         dlg.setCaption( i18n("Save As") );
         dlg.setOperationMode( KFileDialog::Saving );
         dlg.setSelection( doc->name() );
@@ -1020,7 +1021,7 @@ void K3bMainWindow::slotStatusMsg(const QString &text)
 
 void K3bMainWindow::slotSettingsConfigure()
 {
-    K3bOptionDialog d( this, true );
+    K3bOptionDialog d( this );
 
     d.exec();
 
@@ -1032,7 +1033,7 @@ void K3bMainWindow::slotSettingsConfigure()
 
 void K3bMainWindow::showOptionDialog( int index )
 {
-    K3bOptionDialog d( this, "SettingsDialog", true );
+    K3bOptionDialog d( this);
 
     d.showPage( index );
 

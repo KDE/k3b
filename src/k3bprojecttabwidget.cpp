@@ -27,6 +27,7 @@
 #include <k3urldrag.h>
 #include <klocale.h>
 #include <kactionmenu.h>
+#include <kmenu.h>
 
 #include <qevent.h>
 #include <qtabbar.h>
@@ -129,7 +130,7 @@ void K3bProjectTabWidget::insertTab( K3bDoc* doc )
 
 void K3bProjectTabWidget::insertAction( KAction* action )
 {
-  m_projectActionMenu->insert( action );
+  m_projectActionMenu->addAction( action );
 }
 
 
@@ -179,7 +180,7 @@ bool K3bProjectTabWidget::eventFilter( QObject* o, QEvent* e )
 	    tabBar()->setCurrentTab( clickedTab );
 	    
 	    // show the popup menu
-	    m_projectActionMenu->popup( me->globalPos() );
+	    m_projectActionMenu->menu()->popup( me->globalPos() );
 	  }
 	}
 	return true;
