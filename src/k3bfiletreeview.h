@@ -78,7 +78,7 @@ class K3bFileTreeBranch : public KFileTreeBranch
 		     const QString& name,
 		     const QPixmap& pix,
 		     bool showHidden = false,
-		     K3FileTreeViewItem* item = 0 );
+		     K3FileTreeViewItem& item = K3FileTreeViewItem() );
 };
 
 
@@ -106,8 +106,8 @@ class K3bDeviceBranchViewItem : public K3FileTreeViewItem
 class K3bFileTreeViewItem : public K3FileTreeViewItem
 {
  public:
-  K3bFileTreeViewItem( K3FileTreeViewItem*, KFileItem*, KFileTreeBranch* );
-  K3bFileTreeViewItem( K3FileTreeView *, KFileItem*, KFileTreeBranch* );
+  K3bFileTreeViewItem( K3FileTreeViewItem*, KFileItem&, KFileTreeBranch* );
+  K3bFileTreeViewItem( K3FileTreeView *, KFileItem&, KFileTreeBranch* );
 
   QString key( int column, bool ascending ) const;
 };

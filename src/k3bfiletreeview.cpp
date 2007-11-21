@@ -141,12 +141,12 @@ K3bFileTreeBranch::K3bFileTreeBranch( K3FileTreeView* view,
 				      const QString& name,
 				      const QPixmap& pix,
 				      bool showHidden,
-				      K3FileTreeViewItem* item )
+				      K3FileTreeViewItem& item )
   : KFileTreeBranch( view, url, pix, showHidden,
 		     item == 0
-		     ? new K3bFileTreeViewItem( view,
+		     ? *(new K3bFileTreeViewItem( view,
 						new KFileItem( url, "inode/directory",
-							       S_IFDIR  ),
+							       S_IFDIR  )),
 						this )
 		     : item )
 {
@@ -158,7 +158,7 @@ K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( K3FileTreeViewItem* parent,
 						  K3bDevice::Device* dev,
 						  K3bDeviceBranch* branch )
   : K3FileTreeViewItem( parent,
-		       new KFileItem( KUrl( "media:/" + dev->blockDeviceName() ),
+		       *new KFileItem( KUrl( "media:/" + dev->blockDeviceName() ),
 				      "inode/directory",
 				      S_IFDIR  ),
 		       branch ),
@@ -172,9 +172,9 @@ K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( K3FileTreeView* parent,
 						  K3bDevice::Device* dev,
 						  K3bDeviceBranch* branch )
   : K3FileTreeViewItem( parent,
-		       new KFileItem( KUrl( "media:/" + dev->blockDeviceName() ),
+		       *(new KFileItem( KUrl( "media:/" + dev->blockDeviceName() ),
 				      "inode/directory",
-				      S_IFDIR  ),
+				      S_IFDIR  )),
 		       branch ),
     m_bCurrent( false ),
     m_device( dev )
@@ -240,12 +240,15 @@ void K3bDeviceBranchViewItem::paintCell( QPainter* p, const QColorGroup& cg, int
     if ( textheight % 2 > 0 )
       textheight++;
     if ( textheight < height() ) {
+    //FIXME kde4
+#if 0
       int w = listView()->treeStepSize() / 2;
       listView()->style().drawComplexControl( QStyle::CC_ListView, p, listView(),
 					      QRect( 0, textheight, w + 1, height() - textheight + 1 ), cg,
 					      QStyle::Style_Enabled,
 					      QStyle::SC_ListViewExpand,
 					      (uint)QStyle::SC_All, QStyleOption( this ) );
+#endif
     }
   }
 
@@ -282,13 +285,13 @@ QString K3bDeviceBranchViewItem::key( int column, bool ascending ) const
 
 
 
-K3bFileTreeViewItem::K3bFileTreeViewItem( K3FileTreeViewItem* parent, KFileItem* item, KFileTreeBranch* branch )
+K3bFileTreeViewItem::K3bFileTreeViewItem( K3FileTreeViewItem* parent, KFileItem& item, KFileTreeBranch* branch )
   : K3FileTreeViewItem( parent, item, branch )
 {
 }
 
 
-K3bFileTreeViewItem::K3bFileTreeViewItem( K3FileTreeView* parent, KFileItem* item, KFileTreeBranch* branch )
+K3bFileTreeViewItem::K3bFileTreeViewItem( K3FileTreeView* parent, KFileItem& item, KFileTreeBranch* branch )
   : K3FileTreeViewItem( parent, item, branch )
 {
 }
@@ -512,7 +515,7 @@ void K3bFileTreeView::addCdDeviceBranches( K3bDevice::DeviceManager* dm )
 
   K3bDevice::Device* currentDevice = k3bappcore->appDeviceManager()->currentDevice();
   if ( !currentDevice && !k3bappcore->appDeviceManager()->allDevices().isEmpty() ) {
-      k3bappcore->appDeviceManager()->setCurrentDevice( k3bappcore->appDeviceManager()->allDevices().getFirst() );
+      k3bappcore->appDeviceManager()->setCurrentDevice( k3bappcore->appDeviceManager()->allDevices().first() );
   }
 
   d->currentDeviceBranch = d->deviceBranchDict[currentDevice];
