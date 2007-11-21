@@ -86,8 +86,8 @@ class K3bWelcomeWidget::Display : public QWidget
   QSizePolicy sizePolicy () const;
   int heightForWidth ( int w ) const;
 
-  void addAction( KAction* );
-  void removeAction( KAction* );
+  void addAction( QAction* );
+  void removeAction( QAction* );
   void removeButton( K3bFlatButton* );
   void rebuildGui();
   void rebuildGui( const QList<QAction*>& );

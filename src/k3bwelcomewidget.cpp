@@ -112,7 +112,7 @@ K3bWelcomeWidget::Display::~Display()
 }
 
 
-void K3bWelcomeWidget::Display::addAction( KAction* action )
+void K3bWelcomeWidget::Display::addAction( QAction* action )
 {
     if( action ) {
         m_actions.append(action);
@@ -121,10 +121,10 @@ void K3bWelcomeWidget::Display::addAction( KAction* action )
 }
 
 
-void K3bWelcomeWidget::Display::removeAction( KAction* action )
+void K3bWelcomeWidget::Display::removeAction( QAction* action )
 {
     if( action ) {
-        m_actions.removeRef( action );
+        m_actions.removeAll( action );
         rebuildGui();
     }
 }
@@ -426,7 +426,7 @@ void K3bWelcomeWidget::fixSize()
 void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
 {
     if( e->button() == Qt::RightButton ) {
-        QMap<int, KAction*> map;
+        QMap<int, QAction*> map;
         KMenu addPop;
 
         for ( int i = 0; s_allActions[i]; ++i ) {
@@ -440,13 +440,13 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
 
         // menu identifiers in QT are always < 0 (when automatically generated)
         // and unique throughout the entire application!
-        int r = 0;
-        int removeAction = 0;
+        QAction *r = 0;
+        QAction *removeAction = 0;
 
         QWidget* widgetAtPos = viewport()->childAt(e->pos());
         if( widgetAtPos && widgetAtPos->inherits( "K3bFlatButton" ) ) {
             KMenu pop;
-            removeAction = pop.insertItem( SmallIcon("remove"), i18n("Remove Button") );
+            removeAction = pop.addAction( SmallIcon("remove"), i18n("Remove Button") );
             if ( addPop.count() > 0 )
                 pop.insertItem( i18n("Add Button"), &addPop );
             pop.insertSeparator();
@@ -462,7 +462,7 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
             if( r == removeAction )
                 main->removeButton( static_cast<K3bFlatButton*>(widgetAtPos) );
             else
-                main->addAction( map[r] );
+                main->addAction( /*map[r]*/r );
         }
 
         fixSize();

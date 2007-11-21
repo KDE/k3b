@@ -25,7 +25,7 @@
 class QEvent;
 class QMouseEvent;
 class QPainter;
-class KAction;
+class QAction;
 
 
 /**
@@ -38,7 +38,7 @@ class K3bFlatButton : public Q3Frame
  public:
   K3bFlatButton( QWidget *parent = 0, const char *name = 0 );
   K3bFlatButton( const QString& text, QWidget *parent = 0, const char *name = 0 );
-  K3bFlatButton( KAction*, QWidget *parent = 0, const char *name = 0 );
+  K3bFlatButton( QAction*, QWidget *parent = 0, const char *name = 0 );
   
   ~K3bFlatButton();
 

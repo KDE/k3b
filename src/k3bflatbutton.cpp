@@ -47,7 +47,7 @@ K3bFlatButton::K3bFlatButton( const QString& text, QWidget *parent, const char *
 }
 
 
-K3bFlatButton::K3bFlatButton( KAction* a, QWidget *parent, const char *name )
+K3bFlatButton::K3bFlatButton( QAction* a, QWidget *parent, const char *name )
   : Q3Frame( parent/*, WNoAutoErase*/ ),
     m_pressed(false)
 {
