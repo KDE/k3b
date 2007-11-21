@@ -27,13 +27,15 @@
 #include <kmenu.h>
 #include <kactioncollection.h>
 #include <qdir.h>
+#include <KConfigGroup>
 
 #include <QAbstractItemView>
 
 K3bDirOperator::K3bDirOperator(const KUrl& url, QWidget* parent )
   : KDirOperator( url, parent )
 {
-  setViewConfig( k3bcore->config(), "file view" );
+  KConfigGroup grp(k3bcore->config(), "file view" );
+  setViewConfig( grp );
   setMode( KFile::Files );
 
   // disable the del-key since we still have a focus problem and users keep
@@ -105,13 +107,13 @@ void K3bDirOperator::openBookmarkURL( const QString& url )
 
 QString K3bDirOperator::currentTitle() const
 {
-  return url().path(-1);
+  return url().path(KUrl::RemoveTrailingSlash);
 }
 
 
 QString K3bDirOperator::currentURL() const
 {
-  return url().path(-1);
+  return url().path(KUrl::RemoveTrailingSlash);
 }
 
 
@@ -126,7 +128,7 @@ void K3bDirOperator::activatedMenu( const KFileItem*, const QPoint& pos )
   dirOpMenu->addSeparator();
   dirOpMenu->addAction( m_bmPopup );
 
-  dirOpMenu->addAction( actionCollection()->action("add_file_to_project"), 0 );
+  dirOpMenu->addAction( actionCollection()->action("add_file_to_project")/*, 0 */);
   dirOpMenu->addSeparator();
 
 
@@ -141,8 +143,10 @@ void K3bDirOperator::activatedMenu( const KFileItem*, const QPoint& pos )
 void K3bDirOperator::slotAddFilesToProject()
 {
   KUrl::List files;
-  for( Q3PtrListIterator<KFileItem> it( *(selectedItems()) ); it.current(); ++it ) {
-    files.append( it.current()->url() );
+  QList<KFileItem> items(selectedItems());
+  for( QList<KFileItem>::const_iterator it = items.begin();
+       it != items.end(); ++it ) {
+    files.append( (*it).url() );
   }    
   if( !files.isEmpty() )
     k3bappcore->k3bMainWindow()->addUrls( files );
