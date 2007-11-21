@@ -94,7 +94,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
     layout2->addWidget( m_buttonLoadSettings );
 
     m_buttonSaveSettings = new QToolButton( /*i18n("Save User Defaults"), */mainWidget(), "m_buttonSaveSettings" );
-    ((QToolButton*)m_buttonSaveSettings)->setIconSet( SmallIconSet( "filesave" ) );
+    m_buttonSaveSettings->setIconSet( SmallIconSet( "filesave" ) );
     layout2->addWidget( m_buttonSaveSettings );
 
     mainGrid->addLayout( layout2, 2, 0 );

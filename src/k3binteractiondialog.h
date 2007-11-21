@@ -268,7 +268,7 @@ class K3bInteractionDialog : public KDialog
   QWidget* m_mainWidget;
 
   QToolButton* m_buttonLoadSettings;
-  QButton* m_buttonSaveSettings;
+  QToolButton* m_buttonSaveSettings;
 
   QGridLayout* mainGrid;
   int m_defaultButton;
