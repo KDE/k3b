@@ -45,15 +45,17 @@ K3bDirOperator::K3bDirOperator(const KUrl& url, QWidget* parent )
     aDelete->setShortcut( 0 );
 
   // add the bookmark stuff
-  KBookmarkManager* bmMan = KBookmarkManager::managerForFile( KStandardDirs::locateLocal( "data", "k3b/bookmarks.xml" ), false );
+
+  QString bookmarksFile = KStandardDirs::locateLocal("data", QString::fromLatin1("k3b/bookmarks.xml"));
+  KBookmarkManager* bmMan = KBookmarkManager::managerForFile( bookmarksFile, "k3b" );
   bmMan->setEditorOptions( i18n("K3b Bookmarks"), false );
   bmMan->setUpdate( true );
-  bmMan->setShowNSBookmarks( false );
 
-  m_bmPopup = new KActionMenu( i18n("Bookmarks"), "bookmark", this, "bookmarks" );
-  m_bmMenu = new KBookmarkMenu( bmMan, this, m_bmPopup->popupMenu(), actionCollection(), true );
+  m_bmPopup = new KActionMenu( KIcon("bookmark"),i18n("Bookmarks"), this);
+  m_bmMenu = new KBookmarkMenu( bmMan, this, m_bmPopup->popupMenu(), actionCollection()/*, true*/ );
 
-  (void)K3b::createAction( this,i18n("&Add to Project"), Qt::SHIFT+Qt::Key_Return, 
+  //FIXME kde4
+  (void)K3b::createAction( this,i18n("&Add to Project"), "",Qt::SHIFT+Qt::Key_Return, 
 		     this, SLOT(slotAddFilesToProject()), 
 		     actionCollection(), "add_file_to_project");
 }
@@ -65,9 +67,8 @@ K3bDirOperator::~K3bDirOperator()
 }
 
 
-void K3bDirOperator::readConfig( KConfig* cfg, const QString& group )
+void K3bDirOperator::readConfig( const KConfigGroup & grp )
 {
-  KConfigGroup grp(cfg, group );
 
   KDirOperator::readConfig( grp );
   setView( KFile::Default );
@@ -91,9 +92,8 @@ void K3bDirOperator::readConfig( KConfig* cfg, const QString& group )
 }
 
 
-void K3bDirOperator::writeConfig( KConfig* cfg, const QString& group )
+void K3bDirOperator::writeConfig( KConfigGroup &grp )
 {
-  KConfigGroup grp (cfg, group);
   KDirOperator::writeConfig(grp );
   grp.writePathEntry( "last url", url().path() );
 }

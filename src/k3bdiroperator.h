@@ -40,12 +40,12 @@ class K3bDirOperator : public KDirOperator, public KBookmarkOwner
   /**
    * reimplemented from KDirOperator
    */
-  void readConfig( KConfig* cfg, const QString& group );
+  void readConfig( const KConfigGroup & cfg );
 
   /**
    * reimplemented from KDirOperator
    */
-  void writeConfig( KConfig* cfg, const QString& group );
+  void writeConfig( KConfigGroup & grp );
 
   /**
    * reimplemented from KBookmarkOwner
@@ -63,6 +63,8 @@ class K3bDirOperator : public KDirOperator, public KBookmarkOwner
   QString currentURL() const;
 
   KActionMenu* bookmarkMenu() const { return m_bmPopup; }
+
+  virtual void openBookmark(const KBookmark & bm, Qt::MouseButtons mb, Qt::KeyboardModifiers km) {}
 
  public slots:
   void slotAddFilesToProject();
