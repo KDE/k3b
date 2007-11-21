@@ -66,14 +66,13 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kglobal.h>
-#include <knotifyclient.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
 #include <kmainwindow.h>
 #include <kstdguiitem.h>
 #include <kpushbutton.h>
 #include <ksqueezedtextlabel.h>
-
+#include <KNotification>
 
 
 class K3bJobProgressDialog::Private
@@ -142,17 +141,18 @@ void K3bJobProgressDialog::setupGUI()
   Q3VBoxLayout* frame4Layout = new Q3VBoxLayout( frame4, 6, 3, "frame4Layout");
 
   m_labelJob = new K3bThemedLabel( frame4 );
-  m_labelJob->setMinimumVisibleText( 40 );
+  //TODO fix me
+  //m_labelJob->setMinimumVisibleText( 40 );
   QFont m_labelJob_font(  m_labelJob->font() );
   m_labelJob_font.setPointSize( m_labelJob_font.pointSize() + 2 );
   m_labelJob_font.setBold( true );
   m_labelJob->setFont( m_labelJob_font );
-  m_labelJob->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
+  m_labelJob->setAlignment( Qt::AlignVCenter | Qt::AlignRight  );
   frame4Layout->addWidget( m_labelJob );
 
   m_labelJobDetails = new K3bThemedLabel( frame4 );
   m_labelJobDetails->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 0, 1, m_labelJobDetails->sizePolicy().hasHeightForWidth() ) );
-  m_labelJobDetails->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
+  m_labelJobDetails->setAlignment( Qt::AlignVCenter | Qt::AlignRight  );
   frame4Layout->addWidget( m_labelJobDetails );
   headerLayout->addWidget( frame4 );
 
@@ -379,7 +379,7 @@ void K3bJobProgressDialog::slotFinished( bool success )
     if( m_osd )
       m_osd->setText( i18n("Success.") );
 
-    KNotifyClient::event( 0, "SuccessfullyFinished", i18n("Successfully finished.") );
+    KNotification::event("SuccessfullyFinished", i18n("Successfully finished."),QPixmap() ,0);
   }
   else {
     m_pixLabel->setThemePixmap( K3bTheme::PROGRESS_FAIL );
@@ -396,8 +396,7 @@ void K3bJobProgressDialog::slotFinished( bool success )
       if( m_osd )
 	m_osd->setText( i18n("Error.") );
     }
-
-    KNotifyClient::event( 0, "FinishedWithError", i18n("Finished with errors") );
+    KNotification::event("FinishedWithError", i18n("Finished with errors") ,QPixmap() ,0);
   }
 
   m_buttonCancel->hide();
@@ -608,7 +607,8 @@ int K3bJobProgressDialog::startJob( K3bJob* job )
 {
   if( job ) {
     setJob( job );
-    k3bappcore->jobInterface()->setJob( job );
+    //FIXME kde4
+    //k3bappcore->jobInterface()->setJob( job );
   }
   else if( !m_job ) {
     kError() << "(K3bJobProgressDialog) null job!" << endl;
