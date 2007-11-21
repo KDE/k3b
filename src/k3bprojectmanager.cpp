@@ -94,7 +94,7 @@ QList<K3bDoc*> K3bProjectManager::projects() const
 
 void K3bProjectManager::addProject( K3bDoc* doc )
 {
-    if( !d->projects.containsRef( doc ) ) {
+    if( d->projects.count( doc )!=0 ) {
         kDebug() << "(K3bProjectManager) adding doc " << doc->URL().path();
 
         d->projects.append(doc);
@@ -107,14 +107,14 @@ void K3bProjectManager::addProject( K3bDoc* doc )
 }
 
 
-void K3bProjectManager::removeProject( K3bDoc* docToRemove )
+void K3bProjectManager::removeProject( K3bDoc* docRemove )
 {
     //
     // QPtrList.findRef seems to be buggy. Everytime we search for the
     // first added item it is not found!
     //
     Q_FOREACH( K3bDoc* doc, d->projects ) {
-        if( docToRemove == doc ) {
+        if( docRemove == doc ) {
 #if 0
             // remove the DCOP interface
             QMap<K3bDoc*, K3bProjectInterface*>::iterator it = d->projectInterfaceMap.find( doc );
@@ -124,13 +124,13 @@ void K3bProjectManager::removeProject( K3bDoc* docToRemove )
                 d->projectInterfaceMap.remove( it );
             }
 #endif
-            d->projects.removeRef(doc);
+            d->projects.removeAll(doc);
             emit closingProject(doc);
 
             return;
         }
     }
-    kDebug() << "(K3bProjectManager) unable to find doc: " << doc->URL().path();
+    kDebug() << "(K3bProjectManager) unable to find doc: " << docRemove->URL().path();
 }
 
 
@@ -150,9 +150,9 @@ bool K3bProjectManager::isEmpty() const
 }
 
 
-void K3bProjectManager::setActive( K3bDoc* docToSetActive )
+void K3bProjectManager::setActive( K3bDoc* docActive )
 {
-    if( !doc ) {
+    if( !docActive ) {
         d->activeProject = 0L;
         emit activeProjectChanged( 0L );
         return;
@@ -163,7 +163,7 @@ void K3bProjectManager::setActive( K3bDoc* docToSetActive )
     // first added item it is not found!
     //
     Q_FOREACH( K3bDoc* doc, d->projects ) {
-        if( docToSetActive == doc ) {
+        if( docActive == doc ) {
             d->activeProject = doc;
             emit activeProjectChanged(doc);
         }

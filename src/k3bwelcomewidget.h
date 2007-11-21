@@ -90,7 +90,7 @@ class K3bWelcomeWidget::Display : public QWidget
   void removeAction( KAction* );
   void removeButton( K3bFlatButton* );
   void rebuildGui();
-  void rebuildGui( const Q3PtrList<KAction>& );
+  void rebuildGui( const QList<QAction*>& );
 
  signals:
   void dropped( const KUrl::List& );
@@ -115,9 +115,9 @@ class K3bWelcomeWidget::Display : public QWidget
   int m_cols;
   int m_rows;
 
-  Q3PtrList<KAction> m_actions;
+  QList<QAction*> m_actions;
   Q3PtrList<K3bFlatButton> m_buttons;
-  QMap<K3bFlatButton*, KAction*> m_buttonMap;
+  QMap<K3bFlatButton*, QAction*> m_buttonMap;
 
   K3bFlatButton* m_buttonMore;
 

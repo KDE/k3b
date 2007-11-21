@@ -136,7 +136,7 @@ void K3bWelcomeWidget::Display::removeButton( K3bFlatButton* b )
 }
 
 
-void K3bWelcomeWidget::Display::rebuildGui( const Q3PtrList<QAction>& actions )
+void K3bWelcomeWidget::Display::rebuildGui( const QList<QAction*>& actions )
 {
     m_actions = actions;
     rebuildGui();
@@ -172,8 +172,10 @@ void K3bWelcomeWidget::Display::rebuildGui()
     if( numActions > 0 ) {
 
         // create buttons
-        for( Q3PtrListIterator<KAction> it( m_actions ); it.current(); ++it ) {
-            KAction* a = it.current();
+        QList<QAction *> items(m_actions);
+        for( QList<QAction *>::const_iterator it = items.begin();
+            it != items.end(); ++it ) {
+            QAction* a = *it;
 
             K3bFlatButton* b = new K3bFlatButton( a, this );
 
@@ -373,7 +375,7 @@ void K3bWelcomeWidget::loadConfig( const KConfigGroup& c )
         sl.append( "tools_copy_medium" );
     }
 
-    Q3PtrList<QAction> actions;
+    QList<QAction*> actions;
     for( QStringList::const_iterator it = sl.begin(); it != sl.end(); ++it )
         if( QAction* a = m_mainWindow->actionCollection()->action( (*it).latin1() ) )
             actions.append(a);
@@ -387,8 +389,10 @@ void K3bWelcomeWidget::loadConfig( const KConfigGroup& c )
 void K3bWelcomeWidget::saveConfig( KConfigGroup& c )
 {
     QStringList sl;
-    for( Q3PtrListIterator<KAction> it( main->m_actions ); it.current(); ++it )
-        sl.append( it.current()->name() );
+    QList<QAction *> items(main->m_actions);
+    for( QList<QAction *>::const_iterator it = items.begin();
+            it != items.end(); ++it )
+        sl.append( (*it)->name() );
 
     c.writeEntry( "welcome_actions", sl );
 }
@@ -428,7 +432,7 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
         for ( int i = 0; s_allActions[i]; ++i ) {
             if ( s_allActions[i][0] != '_' ) {
                 QAction* a = m_mainWindow->actionCollection()->action( s_allActions[i] );
-                if ( a && !main->m_actions.containsRef(a) ) {
+                if ( a && main->m_actions.count(a)!=0 ) {
                     map.insert( addPop.insertItem( a->iconSet(), a->text() ), a );
                 }
             }
@@ -449,7 +453,7 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
             r = pop.exec( e->globalPos() );
         }
         else {
-            addPop.addTitle( i18n("Add Button"), -1, 0 );
+            addPop.addTitle( i18n("Add Button"));
             addPop.insertSeparator();
             r = addPop.exec( e->globalPos() );
         }
