@@ -555,11 +555,13 @@ void K3bMainWindow::saveOptions()
 
     m_dirView->saveConfig( config() );
 
-    saveMainWindowSettings( config(), "main_window_settings" );
+    KConfigGroup grpWindows(config(), "main_window_settings");
+    saveMainWindowSettings( grpWindows );
 
     k3bcore->saveSettings( config() );
 
-    d->welcomeWidget->saveConfig( KConfigGroup( config(), "Welcome Widget" ) );
+    KConfigGroup grp(config(), "Welcome Widget" );
+    d->welcomeWidget->saveConfig( grp );
 
     KConfigGroup grp( m_config, "General Options" );
     grp.writeEntry( "Show Document Header", actionViewDocumentHeader->isChecked() );
