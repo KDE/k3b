@@ -1160,7 +1160,8 @@ void K3bMainWindow::slotCurrentDocChanged()
 
 void K3bMainWindow::slotEditToolbars()
 {
-    saveMainWindowSettings( m_config, "main_window_settings" );
+    KConfigGroup grp(m_config, "main_window_settings");
+    saveMainWindowSettings( grp );
     KEditToolBar dlg( factory() );
     connect(&dlg, SIGNAL(newToolbarConfig()), SLOT(slotNewToolBarConfig()));
     dlg.exec();
@@ -1169,7 +1170,8 @@ void K3bMainWindow::slotEditToolbars()
 
 void K3bMainWindow::slotNewToolBarConfig()
 {
-    applyMainWindowSettings( m_config, "main_window_settings" );
+    KConfigGroup grp(m_config, "main_window_settings");
+    applyMainWindowSettings(grp);
 }
 
 
