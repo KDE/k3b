@@ -77,8 +77,8 @@ class K3bFileTreeBranch : public KFileTreeBranch
 		     const KUrl& url,
 		     const QString& name,
 		     const QPixmap& pix,
-		     bool showHidden = false,
-		     K3FileTreeViewItem& item = K3FileTreeViewItem() );
+		     bool showHidden,
+		     K3FileTreeViewItem& item );
 };
 
 

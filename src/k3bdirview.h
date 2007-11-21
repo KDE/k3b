@@ -36,7 +36,7 @@ class Q3ScrollView;
 class QLabel;
 class KConfig;
 class K3bDeviceBranch;
-
+class KConfigGroup;
 namespace K3bDevice {
   class Device;
   class DiskInfo;
@@ -59,8 +59,8 @@ class K3bDirView : public Q3VBox
   ~K3bDirView();
 
  public slots:
-  void saveConfig( KConfig* c );
-  void readConfig( KConfig* c );
+  void saveConfig( KConfigGroup&grp );
+  void readConfig( const KConfigGroup & grp );
   void showUrl( const KUrl& );
   void showDevice( K3bDevice::Device* );
   

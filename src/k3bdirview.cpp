@@ -352,15 +352,15 @@ void K3bDirView::home()
 }
 
 
-void K3bDirView::saveConfig( KConfig* c )
+void K3bDirView::saveConfig( KConfigGroup& grp )
 {
-  m_fileView->saveConfig(c);
+  m_fileView->saveConfig(grp);
 }
 
 
-void K3bDirView::readConfig( KConfig* c )
+void K3bDirView::readConfig( const KConfigGroup &grp )
 {
-  m_fileView->readConfig(c);
+  m_fileView->readConfig(grp);
 }
 
 #include "k3bdirview.moc"

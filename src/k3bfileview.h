@@ -28,7 +28,7 @@ class KFileItem;
 class KActionCollection;
 class KConfig;
 class KToolBar;
-
+class KConfigGroup;
 /**
   *@author Sebastian Trueg
   */
@@ -52,8 +52,8 @@ class K3bFileView : public K3bContentsView
 
  public slots:
   void setDir( const QString& );
-  void saveConfig( KConfig* c );
-  void readConfig( KConfig* c );
+  void saveConfig( KConfigGroup &grp );
+  void readConfig( const KConfigGroup &grp );
   void setAutoUpdate( bool );
 
  private:

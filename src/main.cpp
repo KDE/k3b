@@ -41,44 +41,12 @@
 static const char* description = I18N_NOOP("A CD and DVD burning application");
 
 
-static KCmdLineOptions options[] =
-    {
-        { "+[URL(s)]", I18N_NOOP("file(s) to open"), 0 },
-        { "data", I18N_NOOP("Create a new data CD project and add all given files"), 0 },
-        { "datacd", I18N_NOOP("Create a new data CD project and add all given files (DEPRECATED. Use --data)"), 0 },
-        { "audiocd", I18N_NOOP("Create a new audio CD project and add all given files"), 0 },
-        { "videocd", I18N_NOOP("Create a new video CD project and add all given files"), 0 },
-        { "mixedcd", I18N_NOOP("Create a new mixed mode CD project and add all given files"), 0 },
-        { "emovix", I18N_NOOP("Create a new eMovix CD project and add all given files"), 0 },
-        { "emovixcd", I18N_NOOP("Create a new eMovix CD project and add all given files (DEPRECATED. Use --emovix)"), 0 },
-        { "datadvd", I18N_NOOP("Create a new data DVD project and add all given files (DEPRECATED. Use --data)"), 0 },
-        { "emovixdvd", I18N_NOOP("Create a new eMovix DVD project and add all given files (DEPRECATED. Use --emovix)"), 0 },
-        { "videodvd", I18N_NOOP("Create a new Video DVD project and add all given files"), 0 },
-        { "burn", I18N_NOOP("Open the project burn dialog for the current project"), 0 },
-        { "copy <device>", I18N_NOOP("Open the copy dialog, optionally specify the source device"), 0 },
-        { "copycd <device>", I18N_NOOP("Open the CD copy dialog, optionally specify the source device (DEPRECATED: Use --copy)"), 0 },
-        { "copydvd <device>", I18N_NOOP("Open the DVD copy dialog (DEPRECATED: Use --copy)"), 0 },
-        { "cdimage <url>", I18N_NOOP("Write a CD image to a CD-R(W)"), 0 },
-        { "dvdimage <url>", I18N_NOOP("Write a DVD ISO9660 image to a DVD"), 0 },
-        { "image <url>", I18N_NOOP("Write a CD or DVD image to a CD-R(W) or DVD depending on the size"), 0 },
-	{ "format <device>", I18N_NOOP("Format a rewritable medium"), 0 },
-	{ "erasecd <device>", I18N_NOOP("Erase a CDRW (DEPRECATED: Use --format)"), 0 },
-	{ "formatdvd <device>", I18N_NOOP("Format a DVD-RW or DVD+RW (DEPRECATED: Use --format)"), 0 },
-	{ "cddarip <device>", I18N_NOOP("Extract Audio tracks digitally (+encoding)"), 0 },
-	{ "videodvdrip <device>", I18N_NOOP("Rip Video DVD Titles (+transcoding)"), 0 },
-	{ "videocdrip <device>", I18N_NOOP("Rip Video CD Tracks"), 0 },
-	{ "lang <language>", I18N_NOOP("Set the GUI language"), 0 },
-	{ "nosplash", I18N_NOOP("Disable the splash screen"), 0 },
-	{ "ao <method>", I18N_NOOP("Set the audio output method (like arts or alsa depending on the installed plugins)"), 0 },
-        { "device <device>", I18N_NOOP( "Set the device to be used for new projects (This option has no effect. "
-                                        "Its main purpose is to enable handling of empty media from the KDE Media Manager)." ), 0 }
-    };
-
 int main( int argc, char* argv[] )
 {
-  KAboutData aboutData( "k3b", ki18n("K3b"),
-			LIBK3B_VERSION, description, KAboutData::License_GPL,
+  KAboutData aboutData( "k3b",0, ki18n("K3b"),
+			LIBK3B_VERSION, ki18n(description), KAboutData::License_GPL,
 			ki18n("(c) 1999 - 2007, Sebastian Trüg"), KLocalizedString(), I18N_NOOP("http://www.k3b.org" ));
+
   aboutData.addAuthor(ki18n("Sebastian Trüg"),ki18n("Maintainer and Lead Developer"), "trueg@k3b.org");
   aboutData.addAuthor(ki18n("Christian Kvasny"),ki18n("VideoCD Project and VideoCD ripping"), "chris@k3b.org");
   aboutData.addCredit(ki18n("Klaus-Dieter Krannich"), ki18n("Advanced Cdrdao integration"), "kd@k3b.org" );
@@ -131,6 +99,38 @@ int main( int argc, char* argv[] )
   aboutData.addCredit( ki18n("Dmitry Novikov"),
                        ki18n( "For the amazing K3b 1.0 theme." ),
                        "quant@trktvs.ru" );
+
+  KCmdLineOptions options;
+  options.add("+[URL(s)]", ki18n("file(s) to open"));
+  options.add("data", ki18n("Create a new data CD project and add all given files"));
+  options.add("datacd", ki18n("Create a new data CD project and add all given files (DEPRECATED. Use --data)"));
+  options.add("audiocd", ki18n("Create a new audio CD project and add all given files"));
+  options.add("videocd", ki18n("Create a new video CD project and add all given files"));
+  options.add("mixedcd", ki18n("Create a new mixed mode CD project and add all given files"));
+  options.add("emovix", ki18n("Create a new eMovix CD project and add all given files"));
+  options.add("emovixcd", ki18n("Create a new eMovix CD project and add all given files (DEPRECATED. Use --emovix)"));
+  options.add("datadvd", ki18n("Create a new data DVD project and add all given files (DEPRECATED. Use --data)"));
+  options.add("emovixdvd", ki18n("Create a new eMovix DVD project and add all given files (DEPRECATED. Use --emovix)"));
+  options.add("videodvd", ki18n("Create a new Video DVD project and add all given files"));
+  options.add("burn", ki18n("Open the project burn dialog for the current project"));
+  options.add("copy <device>", ki18n("Open the copy dialog, optionally specify the source device"));
+  options.add("copycd <device>", ki18n("Open the CD copy dialog, optionally specify the source device (DEPRECATED: Use --copy)"));
+  options.add("copydvd <device>", ki18n("Open the DVD copy dialog (DEPRECATED: Use --copy)"));
+  options.add("cdimage <url>", ki18n("Write a CD image to a CD-R(W)"));
+  options.add("dvdimage <url>", ki18n("Write a DVD ISO9660 image to a DVD"));
+  options.add("image <url>", ki18n("Write a CD or DVD image to a CD-R(W) or DVD depending on the size"));
+  options.add("format <device>", ki18n("Format a rewritable medium"));
+  options.add("erasecd <device>", ki18n("Erase a CDRW (DEPRECATED: Use --format)"));
+  options.add("formatdvd <device>", ki18n("Format a DVD-RW or DVD+RW (DEPRECATED: Use --format)"));
+  options.add("cddarip <device>", ki18n("Extract Audio tracks digitally (+encoding)"));
+  options.add("videodvdrip <device>", ki18n("Rip Video DVD Titles (+transcoding)"));
+  options.add("videocdrip <device>", ki18n("Rip Video CD Tracks"));
+  options.add("lang <language>", ki18n("Set the GUI language"));
+  options.add("nosplash", ki18n("Disable the splash screen"));
+  options.add("ao <method>", ki18n("Set the audio output method (like arts or alsa depending on the installed plugins)"));
+  options.add("device <device>", ki18n( "Set the device to be used for new projects (This option has no effect. "
+                                        "Its main purpose is to enable handling of empty media from the KDE Media Manager)." ));
+
 
   KCmdLineArgs::init( argc, argv, &aboutData );
   KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.

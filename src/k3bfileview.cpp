@@ -171,15 +171,15 @@ void K3bFileView::reload()
 }
 
 
-void K3bFileView::saveConfig( KConfig* c )
+void K3bFileView::saveConfig( KConfigGroup &grp )
 {
-  m_dirOp->writeConfig( c, "file view" );
+  m_dirOp->writeConfig(grp );
 }
 
 
-void K3bFileView::readConfig( KConfig* c )
+void K3bFileView::readConfig( const KConfigGroup& grp )
 {
-  m_dirOp->readConfig( c, "file view" );
+  m_dirOp->readConfig( grp);
 }
 
 #include "k3bfileview.moc"
