@@ -519,9 +519,9 @@ QString K3bMediaSelectionComboBox::noMediumMessage() const
   }
 
   if ( stateString.contains( "%1" ) )
-      return i18n("Please insert %1...").arg( stateString.arg( mediumString ) );
+      return i18n("Please insert %1...", stateString.arg( mediumString ) );
   else
-      return i18n("Please insert %1...").arg( stateString );
+      return i18n("Please insert %1...", stateString );
 }
 
 

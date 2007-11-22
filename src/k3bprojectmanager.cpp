@@ -185,37 +185,37 @@ K3bDoc* K3bProjectManager::createEmptyProject( K3bDoc::DocType type )
     switch( type ) {
     case K3bDoc::AUDIO: {
         doc = new K3bAudioDoc( this );
-        fileName = i18n("AudioCD%1").arg(d->audioUntitledCount++);
+        fileName = i18n("AudioCD%1",d->audioUntitledCount++);
         break;
     }
 
     case K3bDoc::DATA: {
         doc = new K3bDataDoc( this );
-        fileName = i18n("Data%1").arg(d->dataUntitledCount++);
+        fileName = i18n("Data%1",d->dataUntitledCount++);
         break;
     }
 
     case K3bDoc::MIXED: {
         doc = new K3bMixedDoc( this );
-        fileName=i18n("MixedCD%1").arg(d->mixedUntitledCount++);
+        fileName=i18n("MixedCD%1",d->mixedUntitledCount++);
         break;
     }
 
     case K3bDoc::VCD: {
         doc = new K3bVcdDoc( this );
-        fileName=i18n("VideoCD%1").arg(d->vcdUntitledCount++);
+        fileName=i18n("VideoCD%1",d->vcdUntitledCount++);
         break;
     }
 
     case K3bDoc::MOVIX: {
         doc = new K3bMovixDoc( this );
-        fileName=i18n("eMovix%1").arg(d->movixUntitledCount++);
+        fileName=i18n("eMovix%1",d->movixUntitledCount++);
         break;
     }
 
     case K3bDoc::VIDEODVD: {
         doc = new K3bVideoDvdDoc( this );
-        fileName = i18n("VideoDVD%1").arg(d->videoDvdUntitledCount++);
+        fileName = i18n("VideoDVD%1",d->videoDvdUntitledCount++);
         break;
     }
     }

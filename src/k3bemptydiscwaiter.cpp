@@ -159,11 +159,11 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
   //
   if( (d->wantedMediaType & K3bDevice::MEDIA_WRITABLE_DVD) &&
 	   (d->wantedMediaType & K3bDevice::MEDIA_WRITABLE_CD) )
-    d->wantedMediaTypeString = i18n("CD-R(W) or DVD%1R(W)").arg("±");
+    d->wantedMediaTypeString = i18n("CD-R(W) or DVD%1R(W)",QString("±"));
   else if( d->wantedMediaType & K3bDevice::MEDIA_WRITABLE_DVD_SL )
-    d->wantedMediaTypeString = i18n("DVD%1R(W)").arg("±");
+    d->wantedMediaTypeString = i18n("DVD%1R(W)",QString("±"));
   else if( d->wantedMediaType & K3bDevice::MEDIA_WRITABLE_DVD_DL )
-    d->wantedMediaTypeString = i18n("Double Layer DVD%1R").arg("±");
+    d->wantedMediaTypeString = i18n("Double Layer DVD%1R",QString("±"));
   else if( d->wantedMediaType & K3bDevice::MEDIA_WRITABLE_BD )
     d->wantedMediaTypeString = i18n("Blu-ray BD-R(E)");
   else
