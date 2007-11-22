@@ -220,11 +220,10 @@ void K3bJobProgressOSD::mousePressEvent( QMouseEvent* e )
   }
   else if( e->button() == Qt::RightButton ) {
     KMenu m;
-    //TODO port me kde4
-#if 0
-    if( m.insertItem( i18n("Hide OSD") ) == m.exec( e->globalPos() ) )
-      hide();
-#endif
+    QAction *hideOSD = m.addAction(i18n("Hide OSD"));
+    QAction *a = m.exec( e->globalPos() );
+    if( a == hideOSD)
+       hide();
   }
 }
 

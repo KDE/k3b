@@ -498,13 +498,13 @@ QString K3bMediaSelectionComboBox::noMediumMessage() const
   else if ( d->wantedMediumType == K3bDevice::MEDIA_BD_ALL )
       mediumString = i18n( "Blu-ray" );
   else if( d->wantedMediumType == ( K3bDevice::MEDIA_WRITABLE_DVD|K3bDevice::MEDIA_WRITABLE_CD) )
-      mediumString = i18n("CD-R(W) or DVD%1R(W)").arg("±");
+      mediumString = i18n("CD-R(W) or DVD%1R(W)",QString("±"));
   else if( d->wantedMediumType == ( K3bDevice::MEDIA_WRITABLE_DVD|K3bDevice::MEDIA_WRITABLE_BD) )
-      mediumString = i18n("DVD%1R(W) or BD-R(E)").arg("±");
+      mediumString = i18n("DVD%1R(W) or BD-R(E)",QString("±"));
   else if( d->wantedMediumType == K3bDevice::MEDIA_WRITABLE_DVD_SL )
-      mediumString = i18n("DVD%1R(W)").arg("±");
+      mediumString = i18n("DVD%1R(W)",QString("±"));
   else if( d->wantedMediumType == K3bDevice::MEDIA_WRITABLE_DVD_DL )
-      mediumString = i18n("Double Layer DVD%1R").arg("±");
+      mediumString = i18n("Double Layer DVD%1R",QString("±"));
   else if ( d->wantedMediumType == K3bDevice::MEDIA_WRITABLE_BD )
       mediumString = i18n( "Blu-ray BD-R(E)" );
   else if( d->wantedMediumType == K3bDevice::MEDIA_WRITABLE_CD )
@@ -527,12 +527,10 @@ QString K3bMediaSelectionComboBox::noMediumMessage() const
 
 void K3bMediaSelectionComboBox::slotUpdateToolTip( K3bDevice::Device* dev )
 {
-#if 0
     // update the tooltip for the combobox (the tooltip for the dropdown box is created in the constructor)
     QToolTip::remove( this );
     if( dev )
         this->setToolTip( mediumToolTip( k3bappcore->mediaCache()->medium( dev ) ) );
-#endif
 }
 
 #include "k3bmediaselectioncombobox.moc"

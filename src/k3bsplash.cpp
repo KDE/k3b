@@ -45,8 +45,7 @@ K3bSplash::K3bSplash( QWidget* parent )
   setMargin( 0 );
   setSpacing( 0 );
 
-  //TODO fix me kde4
-  QLabel* copyrightLabel = new QLabel( /*kapp->aboutData()->copyrightStatement()*/"", this );
+  QLabel* copyrightLabel = new QLabel( KGlobal::mainComponent().aboutData()->copyrightStatement(), this );
   copyrightLabel->setMargin( 5 );
   copyrightLabel->setPaletteBackgroundColor( Qt::black );
   copyrightLabel->setPaletteForegroundColor( Qt::white );
