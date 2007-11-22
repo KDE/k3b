@@ -568,12 +568,14 @@ int K3bInteractionDialog::exec( bool returnOnHide )
     kError() << "(K3bInteractionDialog::exec) Recursive call detected." << endl;
     return -1;
   }
-
+  //FIXME kde4
+#if 0
   bool destructiveClose = testWFlags( WDestructiveClose );
   clearWFlags( WDestructiveClose );
 
   bool wasShowModal = testWFlags( WShowModal );
   setWFlags( WShowModal );
+#endif
   setResult( 0 );
 
   loadStartupSettings();
@@ -582,7 +584,8 @@ int K3bInteractionDialog::exec( bool returnOnHide )
     QTimer::singleShot( 0, this, SLOT(slotDelayedInit()) );
   else
     init();
-
+ //FIXME kde4
+#if 0
   m_inLoop = true;
   QApplication::eventLoop()->enterLoop();
 
@@ -593,8 +596,9 @@ int K3bInteractionDialog::exec( bool returnOnHide )
 
   if( destructiveClose )
     delete this;
-
   return res;
+#endif
+  return 0;
 }
 
 
@@ -604,32 +608,38 @@ void K3bInteractionDialog::hide()
     return;
 
   KDialog::hide();
-
+  //FIXME kde4
+#if 0
   if( m_inLoop && m_exitLoopOnHide ) {
     m_inLoop = false;
     QApplication::eventLoop()->exitLoop();
   }
+#endif
 }
 
 
 bool K3bInteractionDialog::close( bool alsoDelete )
 {
+  //FIXME kde4
+#if 0
   if( m_inLoop && !m_exitLoopOnHide ) {
     m_inLoop = false;
     QApplication::eventLoop()->exitLoop();
   }
-
+#endif
   return KDialog::close( alsoDelete );
 }
 
 
 void K3bInteractionDialog::done( int r )
 {
+  //FIXME kde4
+#if 0
   if( m_inLoop && !m_exitLoopOnHide ) {
     m_inLoop = false;
     QApplication::eventLoop()->exitLoop();
   }
-
+#endif
   return KDialog::done( r );
 }
 

@@ -75,10 +75,11 @@ K3bFileTreeComboBox::K3bFileTreeComboBox( QWidget* parent )
 
   m_fileTreeView->addDefaultBranches();
   m_fileTreeView->addCdDeviceBranches( k3bcore->deviceManager() );
-
+  //FIXME kde4
+#if 0
   // HACK! Why the hell is QComboBox that closed???
   listBox()->insertItem( "HACK" );
-
+#endif
   connect( m_fileTreeView, SIGNAL(deviceExecuted(K3bDevice::Device*)),
 	   this, SLOT(slotDeviceExecuted(K3bDevice::Device*)) );
   connect( m_fileTreeView, SIGNAL(urlExecuted(const KUrl&)),
@@ -179,7 +180,8 @@ void K3bFileTreeComboBox::popup()
     x = sx;
   if (y + h > sy+sh && y - h - height() >= 0 )
     y = y - h - height();
-
+  //FIXME kde4
+#if 0
   QRect rect =
     style().querySubControlMetrics( QStyle::CC_ComboBox, this,
 				    QStyle::SC_ComboBoxListBoxPopup,
@@ -190,6 +192,7 @@ void K3bFileTreeComboBox::popup()
     rect.setRect( x, y, w, h );
 
   m_fileTreeView->setGeometry( rect );
+#endif
   m_fileTreeView->raise();
 
   // TODO: somehow set the current item
@@ -280,6 +283,7 @@ bool K3bFileTreeComboBox::eventFilter( QObject* o, QEvent* e )
     else if( e->type() == QEvent::MouseButtonPress ) {
       QMouseEvent* me = (QMouseEvent*)e;
       if ( !m_fileTreeView->rect().contains( me->pos() ) ) {
+#if 0
 	QRect arrowRect = style().querySubControlMetrics( QStyle::CC_ComboBox, this,
 							  QStyle::SC_ComboBoxArrow);
 	arrowRect = QStyle::visualRect(arrowRect, this);
@@ -292,6 +296,7 @@ bool K3bFileTreeComboBox::eventFilter( QObject* o, QEvent* e )
 	  d->ignoreNextMouseClick = true;  // in the case we hit the arrow button
 	}
 	popdown();
+#endif
       }
       return false; // we need this in the listview
     }
@@ -313,7 +318,8 @@ void K3bFileTreeComboBox::mousePressEvent( QMouseEvent* e )
     d->ignoreNextMouseClick = FALSE;
     return;
   }
-
+  //FIXME kde4
+#if 0
   QRect arrowRect = style().querySubControlMetrics( QStyle::CC_ComboBox, this,
 						    QStyle::SC_ComboBoxArrow);
   arrowRect = QStyle::visualRect(arrowRect, this);
@@ -326,6 +332,7 @@ void K3bFileTreeComboBox::mousePressEvent( QMouseEvent* e )
     popup();
     repaint( FALSE );
   }
+#endif
 }
 
 
@@ -347,7 +354,8 @@ void K3bFileTreeComboBox::paintEvent( QPaintEvent* )
   QPainter p( this );
   const QColorGroup & g = colorGroup();
   p.setPen(g.text());
-
+ //FIXME kde4
+#if 0
   QStyle::SFlags flags = QStyle::Style_Default;
   if (isEnabled())
     flags |= QStyle::Style_Enabled;
@@ -359,7 +367,6 @@ void K3bFileTreeComboBox::paintEvent( QPaintEvent* )
 		     &g.brush( QColorGroup::Button ) );
     return;
   }
-
   //  bool reverse = QApplication::reverseLayout();
 
   style().drawComplexControl( QStyle::CC_ComboBox, &p, this, rect(), g,
@@ -391,6 +398,7 @@ void K3bFileTreeComboBox::paintEvent( QPaintEvent* )
 		    ( re.height() - pix->height() ) / 2, *pix );
     }
 //   }
+#endif
   p.setClipping( FALSE );
 }
 

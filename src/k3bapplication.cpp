@@ -76,7 +76,7 @@ K3bApplication::K3bApplication()
 
   // TODO: move to K3bCore?
   // from this point on available through K3bAudioServer::instance()
-  m_audioServer = new K3bAudioServer( this, "K3bAudioServer" );
+  //m_audioServer = new K3bAudioServer( this, "K3bAudioServer" );
 
   connect( m_core, SIGNAL(initializationInfo(const QString&)),
 	   SIGNAL(initializationInfo(const QString&)) );
@@ -289,14 +289,14 @@ bool K3bApplication::processCmdLineArgs()
       static_cast<K3bView*>( m_core->projectManager()->activeDoc()->view() )->slotBurn();
     }
   }
-
+#if 0
   // FIXME: seems not like the right place...
   if( args->isSet( "ao" ) )
     if( !m_audioServer->setOutputMethod( args->getOption( "ao" ) ) )
       K3bPassivePopup::showPopup( i18n("Could not find Audio Output plugin '%1'",args->getOption("ao") ),
 				  i18n("Initialization Problem"),
 				  K3bPassivePopup::Warning );
-
+ #endif
   args->clear();
 
   return showTips;

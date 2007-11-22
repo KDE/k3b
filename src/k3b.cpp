@@ -198,7 +198,7 @@ K3bMainWindow::~K3bMainWindow()
 void K3bMainWindow::showEvent( QShowEvent* e )
 {
     slotCheckDockWidgetStatus();
-    KDockMainWindow::showEvent( e );
+    K3DockMainWindow::showEvent( e );
 }
 
 
@@ -363,9 +363,9 @@ void K3bMainWindow::initView()
 {
     // setup main docking things
     mainDock = createDockWidget( "project_view", SmallIcon("idea"), 0,
-                                 KInstance::makeStandardCaption( i18n("Project View") ), i18n("Project View") );
-    mainDock->setDockSite( KDockWidget::DockCorner );
-    mainDock->setEnableDocking( KDockWidget::DockNone );
+                                 KDialog::makeStandardCaption( i18n("Project View") ), i18n("Project View") );
+    mainDock->setDockSite( K3DockWidget::DockCorner );
+    mainDock->setEnableDocking( K3DockWidget::DockNone );
     setView( mainDock );
     setMainDockWidget( mainDock );
 
@@ -402,25 +402,25 @@ void K3bMainWindow::initView()
 
     // --- Directory Dock --------------------------------------------------------------------------
     m_dirTreeDock = createDockWidget( "directory_tree", SmallIcon("folder"), 0,
-                                      KInstance::makeStandardCaption( i18n("Sidepanel") ), i18n("Sidepanel") );
-    m_dirTreeDock->setEnableDocking( KDockWidget::DockCorner );
+                                      KDialog::makeStandardCaption( i18n("Sidepanel") ), i18n("Sidepanel") );
+    m_dirTreeDock->setEnableDocking( K3DockWidget::DockCorner );
 
     K3bFileTreeView* sidePanel = new K3bFileTreeView( m_dirTreeDock );
     //K3bSidePanel* sidePanel = new K3bSidePanel( this, m_dirTreeDock, "sidePanel" );
 
     m_dirTreeDock->setWidget( sidePanel );
-    m_dirTreeDock->manualDock( mainDock, KDockWidget::DockTop, 4000 );
+    m_dirTreeDock->manualDock( mainDock, K3DockWidget::DockTop, 4000 );
     connect( m_dirTreeDock, SIGNAL(iMBeingClosed()), this, SLOT(slotDirTreeDockHidden()) );
     connect( m_dirTreeDock, SIGNAL(hasUndocked()), this, SLOT(slotDirTreeDockHidden()) );
     // ---------------------------------------------------------------------------------------------
 
     // --- Contents Dock ---------------------------------------------------------------------------
     m_contentsDock = createDockWidget( "contents_view", SmallIcon("idea"), 0,
-                                       KInstance::makeStandardCaption( i18n("Contents View") ), i18n("Contents View") );
-    m_contentsDock->setEnableDocking( KDockWidget::DockCorner );
+                                       KDialog::makeStandardCaption( i18n("Contents View") ), i18n("Contents View") );
+    m_contentsDock->setEnableDocking( K3DockWidget::DockCorner );
     m_dirView = new K3bDirView( sidePanel/*->fileTreeView()*/, m_contentsDock );
     m_contentsDock->setWidget( m_dirView );
-    m_contentsDock->manualDock( m_dirTreeDock, KDockWidget::DockRight, 2000 );
+    m_contentsDock->manualDock( m_dirTreeDock, K3DockWidget::DockRight, 2000 );
 
     connect( m_contentsDock, SIGNAL(iMBeingClosed()), this, SLOT(slotContentsDockHidden()) );
     connect( m_contentsDock, SIGNAL(hasUndocked()), this, SLOT(slotContentsDockHidden()) );
@@ -433,12 +433,14 @@ void K3bMainWindow::initView()
              SLOT(showDevice(K3bDevice::Device* )) );
     connect( m_dirView, SIGNAL(urlEntered(const KUrl&)), m_fileTreeComboBox, SLOT(setUrl(const KUrl&)) );
     connect( m_dirView, SIGNAL(deviceSelected(K3bDevice::Device*)), m_fileTreeComboBox, SLOT(setDevice(K3bDevice::Device*)) );
-
+//FIXME kde4
+#if 0
     K3WidgetAction* fileTreeComboAction = new K3WidgetAction( m_fileTreeComboBox,
                                                               i18n("&Quick Dir Selector"),
                                                               0, 0, 0,
                                                               actionCollection(), "quick_dir_selector" );
     fileTreeComboAction->setAutoSized(true);
+#endif
     (void)K3b::createAction(this, i18n("Go"), "key_enter", 0, m_fileTreeComboBox, SLOT(slotGoUrl()), actionCollection(), "go_url" );
     // ---------------------------------------------------------------------------------------------
 }
@@ -562,8 +564,8 @@ void K3bMainWindow::saveOptions()
     KConfigGroup grp(config(), "Welcome Widget" );
     d->welcomeWidget->saveConfig( grp );
 
-    KConfigGroup grp( m_config, "General Options" );
-    grp.writeEntry( "Show Document Header", actionViewDocumentHeader->isChecked() );
+    KConfigGroup grpOption( m_config, "General Options" );
+    grpOption.writeEntry( "Show Document Header", actionViewDocumentHeader->isChecked() );
 }
 
 
@@ -587,7 +589,8 @@ void K3bMainWindow::readOptions()
 
     applyMainWindowSettings( config(), "main_window_settings" );
 
-    m_dirView->readConfig( config() );
+//FIXME kde4
+    //m_dirView->readConfig( config() );
 
     slotViewDocumentHeader();
     slotCheckDockWidgetStatus();

@@ -135,7 +135,7 @@ void K3bDeviceBranch::showBlockDeviceName( bool b )
   updateLabel();
 }
 
-
+#if 0
 K3bFileTreeBranch::K3bFileTreeBranch( K3FileTreeView* view,
 				      const KUrl& url,
 				      const QString& name,
@@ -151,7 +151,7 @@ K3bFileTreeBranch::K3bFileTreeBranch( K3FileTreeView* view,
 		     : item )
 {
 }
-
+#endif
 
 
 K3bDeviceBranchViewItem::K3bDeviceBranchViewItem( K3FileTreeViewItem* parent,
@@ -474,10 +474,12 @@ void K3bFileTreeView::addDefaultBranches()
 {
   KUrl home = KUrl( QDir::homePath() );
   KUrl root = KUrl( "file:/" );
-
+  //FIXME kde4
+#if 0
   KFileTreeBranch* treeBranch = addBranch( new K3bFileTreeBranch( this, root, i18n("Root"), SmallIcon("folder_red") ) );
   treeBranch = addBranch( new K3bFileTreeBranch( this, home, i18n("Home"), SmallIcon("folder_home") ) );
   treeBranch->setOpen( true );
+#endif
 }
 
 
@@ -575,11 +577,15 @@ KFileTreeBranch* K3bFileTreeView::addBranch( KFileTreeBranch* branch )
 
 KFileTreeBranch* K3bFileTreeView::addBranch( const KUrl& url, const QString& name, const QPixmap& pix, bool showHidden )
 {
+  //FIXME kde4
+#if 0
   KFileTreeBranch* newBranch = K3FileTreeView::addBranch( url, pix, showHidden );
   newBranch->setChildRecurse( false );
   setDirOnlyMode( newBranch, m_dirOnlyMode );
 
   return newBranch;
+#endif
+  return 0;
 }
 
 
@@ -605,6 +611,8 @@ void K3bFileTreeView::setTreeDirOnlyMode( bool b )
 
 void K3bFileTreeView::followUrl( const KUrl& url )
 {
+  //FIXME kde4
+#if 0
   // TODO: first try the current branch
   KFileTreeBranchIterator it( branches() );
   for( ; *it; ++it ) {
@@ -616,6 +624,7 @@ void K3bFileTreeView::followUrl( const KUrl& url )
 	return;
       }
   }
+#endif
 }
 
 

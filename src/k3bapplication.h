@@ -60,7 +60,7 @@ class K3bApplication : public KUniqueApplication
   bool processCmdLineArgs();
 
   Core* m_core;
-  K3bAudioServer* m_audioServer;
+  //K3bAudioServer* m_audioServer;
   K3bMainWindow* m_mainWindow;
 
   bool m_needToInit;

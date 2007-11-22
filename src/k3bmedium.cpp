@@ -293,7 +293,7 @@ QString K3bMedium::shortString( bool useContent ) const
   }
 
   else if( diskInfo().diskState() == K3bDevice::STATE_EMPTY ) {
-    return i18n("Empty %1 medium").arg( mediaTypeString );
+    return i18n("Empty %1 medium", mediaTypeString );
   }
 
   else {
@@ -311,31 +311,31 @@ QString K3bMedium::shortString( bool useContent ) const
 	  return i18n("Audio CD");
 	}
 	else {
-	  return i18n("%1 (Mixed CD)").arg( beautifiedVolumeId() );
+	  return i18n("%1 (Mixed CD)", beautifiedVolumeId() );
 	}
       }
 
       // DATA CD and DVD
       else if( !volumeId().isEmpty() ) {
 	if( content() & CONTENT_VIDEO_DVD ) {
-	  return QString("%1 (%2)").arg( beautifiedVolumeId() ).arg( i18n("Video DVD") );
+	  return QString("%1 (%2)").arg(beautifiedVolumeId()).arg( i18n("Video DVD") );
 	}
 	else if( content() & CONTENT_VIDEO_CD ) {
-	  return QString("%1 (%2)").arg( beautifiedVolumeId() ).arg( i18n("Video CD") );
+	  return QString("%1 (%2)").arg(beautifiedVolumeId()).arg(i18n("Video CD") );
 	}
 	else if( diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE ) {
-	  return i18n("%1 (Appendable Data %2)").arg( beautifiedVolumeId(), mediaTypeString );
+	  return i18n("%1 (Appendable Data %2)", beautifiedVolumeId(), mediaTypeString );
 	}
 	else {
-	  return i18n("%1 (Complete Data %2)").arg( beautifiedVolumeId(), mediaTypeString );
+	  return i18n("%1 (Complete Data %2)", beautifiedVolumeId(), mediaTypeString );
 	}
       }
       else {
 	if( diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE ) {
-	  return i18n("Appendable Data %1").arg( mediaTypeString );
+	  return i18n("Appendable Data %1", mediaTypeString );
 	}
 	else {
-	  return i18n("Complete Data %1").arg( mediaTypeString );
+	  return i18n("Complete Data %1", mediaTypeString );
 	}
       }
     }
@@ -343,10 +343,10 @@ QString K3bMedium::shortString( bool useContent ) const
     // without content
     else {
       if( diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE ) {
-	return i18n("Appendable %1 medium").arg( mediaTypeString );
+	return i18n("Appendable %1 medium", mediaTypeString );
       }
       else {
-	return i18n("Complete %1 medium").arg( mediaTypeString );
+	return i18n("Complete %1 medium", mediaTypeString );
       }
     }
   }

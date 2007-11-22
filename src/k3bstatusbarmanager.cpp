@@ -65,7 +65,7 @@ K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
   m_labelInfoMessage = new QLabel( " ", m_mainWindow->statusBar() );
 
   // setup version info
-  m_versionBox = new QLabel( QString("K3b %1").arg(kapp->aboutData()->version()), m_mainWindow->statusBar() );
+  m_versionBox = new QLabel( QString("K3b %1").arg(KGlobal::mainComponent().aboutData()->version()), m_mainWindow->statusBar() );
   m_versionBox->installEventFilter( this );
 
   // setup the statusbar
@@ -79,10 +79,13 @@ K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
   m_mainWindow->statusBar()->addWidget( m_versionBox, 0, true );
 
   connect( m_mainWindow, SIGNAL(configChanged(KConfig*)), this, SLOT(update()) );
+  //FIXME kde4
+#if 0
   connect( m_mainWindow->actionCollection(), SIGNAL(actionStatusText(const QString&)),
 	   this, SLOT(showActionStatusText(const QString&)) );
   connect( m_mainWindow->actionCollection(), SIGNAL(clearStatusText()),
 	   this, SLOT(clearActionStatusText()) );
+#endif
   connect( k3bappcore->projectManager(), SIGNAL(activeProjectChanged(K3bDoc*)),
 	   this, SLOT(slotActiveProjectChanged(K3bDoc*)) );
   connect( k3bappcore->projectManager(), SIGNAL(projectChanged(K3bDoc*)),
@@ -158,7 +161,7 @@ bool K3bStatusBarManager::eventFilter( QObject* o, QEvent* e )
       m_mainWindow->showOptionDialog( 0 );  // FIXME: use an enumeration for the option pages
     else if( o == m_versionBox )
       if( QAction* a = m_mainWindow->action( "help_about_app" ) )
-	a->activate();
+	a->activate(QAction::Trigger);
   }
 
   return QObject::eventFilter( o, e );

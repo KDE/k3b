@@ -43,7 +43,7 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <k3activelabel.h>
-
+#include <KNotification>
 
 class K3bEmptyDiscWaiter::Private
 {
@@ -232,11 +232,13 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
   // the loop only causes problems (since there is no dialog yet the user could
   // not have forced or canceled yet
   //
+  //FIXME kde4
+#if 0
   if( !d->waitingDone ) {
     d->inLoop = true;
     QApplication::eventLoop()->enterLoop();
   }
-
+#endif
   return d->result;
 }
 
@@ -649,12 +651,14 @@ void K3bEmptyDiscWaiter::showDialog()
   // we need to show the dialog if not done already
   if( !d->dialogVisible ) {
 
-//TODO fixme kde4
-    //KNotifyClient::event( 0, "WaitingForMedium", i18n("Waiting for Medium") );
+    KNotification::event( "WaitingForMedium", i18n("Waiting for Medium"),QPixmap(),0 );
 
     d->dialogVisible = true;
+    //FIXME kde4
+#if 0
     clearWFlags( WDestructiveClose );
     setWFlags( WShowModal );
+#endif
     setResult( 0 );
     show();
   }
@@ -708,7 +712,8 @@ void K3bEmptyDiscWaiter::finishWaiting( int code )
   if( d->inLoop ) {
     d->inLoop = false;
     kDebug() << "(K3bEmptyDiscWaiter) exitLoop ";
-    QApplication::eventLoop()->exitLoop();
+//FIXME kde4
+    //QApplication::eventLoop()->exitLoop();
   }
 }
 
