@@ -131,9 +131,11 @@ void K3bDirOperator::activatedMenu( const KFileItem*, const QPoint& pos )
   dirOpMenu->addAction( actionCollection()->action("add_file_to_project")/*, 0 */);
   dirOpMenu->addSeparator();
 
-
-  bool hasSelection = view() && view()->selectedItems() &&
+  bool hasSelection = !selectedItems().isEmpty();
+ /*
+ view() && view()->selectedItems() &&
                       !view()->selectedItems()->isEmpty();
+  */
   actionCollection()->action("add_file_to_project")->setEnabled( hasSelection && k3bappcore->k3bMainWindow()->activeView() != 0 );
 
   dirOpMenu->menu()->popup( pos );

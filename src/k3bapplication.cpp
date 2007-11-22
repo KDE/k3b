@@ -93,6 +93,8 @@ K3bApplication::~K3bApplication()
 
 void K3bApplication::init()
 {
+ //FIXME kde4
+#if 0
   KConfigGroup generalOptions( config(), "General Options" );
 
   QPointer<K3bSplash> splash;
@@ -113,16 +115,18 @@ void K3bApplication::init()
       qApp->processEvents();
     }
   }
-
+#endif
   //
   // Load device, external programs, and stuff.
   //
   m_core->init();
-  m_core->readSettings( globalConfig() );
+  //FIXME kde4
+  //m_core->readSettings( globalConfig() );
 
   m_core->deviceManager()->printDevices();
 
-  m_audioServer->setOutputMethod( generalOptions.readEntry( "Audio Output System", "arts" ).local8Bit() );
+  //FIXME kde4
+  //m_audioServer->setOutputMethod( generalOptions.readEntry( "Audio Output System", "arts" ).local8Bit() );
 
   emit initializationInfo( i18n("Creating GUI...") );
 
@@ -156,7 +160,8 @@ void K3bApplication::init()
 
   // write the current version to make sure checks such as K3bSystemProblemDialog::readCheckSystemConfig
   // use a proper value
-  generalOptions.writeEntry( "config version", QString(m_core->version()) );
+  //FIXME kde4
+  //generalOptions.writeEntry( "config version", QString(m_core->version()) );
 }
 
 
@@ -380,6 +385,8 @@ void K3bApplication::Core::init()
 
 void K3bApplication::Core::readSettings( KConfig* cnf )
 {
+  //FIXME kde4
+#if 0
   K3bCore::readSettings( cnf );
 
   KConfig* c = cnf;
@@ -387,16 +394,20 @@ void K3bApplication::Core::readSettings( KConfig* cnf )
     c = globalConfig();
 
   m_themeManager->readConfig( globalConfig() );
+#endif
 }
 
 
 void K3bApplication::Core::saveSettings( KConfig* cnf )
 {
+  //FIXME kde4
+#if 0
   if( !cnf )
     cnf = globalConfig();
 
   K3bCore::saveSettings( cnf );
   m_themeManager->saveConfig( cnf );
+#endif
 }
 
 

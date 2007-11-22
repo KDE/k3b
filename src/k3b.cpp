@@ -55,7 +55,6 @@
 #include <kglobalsettings.h>
 #include <kdialog.h>
 #include <kedittoolbar.h>
-#include <ksystemtray.h>
 #include <kaboutdata.h>
 #include <ktip.h>
 #include <kxmlguifactory.h>

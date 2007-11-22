@@ -112,12 +112,12 @@ void K3bDeviceBranch::updateLabel()
 
   if( k3bappcore->mediaCache() ) {
     root()->setMultiLinesEnabled( true );
-    root()->setText( 0 +name() + "\n" + k3bappcore->mediaCache()->mediumString( m_device ) );
+    root()->setText( 0,QString::number(0) +name() + "\n" + k3bappcore->mediaCache()->mediumString( m_device ) );
     static_cast<K3bFileTreeView*>( root()->listView() )->updateMinimumWidth();
   }
   else {
     root()->setMultiLinesEnabled( false );
-    root()->setText( 0+name() );
+    root()->setText( 0,QString::number(0)+name() );
   }
 }
 
@@ -143,7 +143,7 @@ K3bFileTreeBranch::K3bFileTreeBranch( K3FileTreeView* view,
 				      bool showHidden,
 				      K3FileTreeViewItem& item )
   : KFileTreeBranch( view, url, pix, showHidden,
-		     item == 0
+		     item.isNull()
 		     ? *(new K3bFileTreeViewItem( view,
 						new KFileItem( url, "inode/directory",
 							       S_IFDIR  )),
