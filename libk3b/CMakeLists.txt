@@ -200,6 +200,14 @@ set(k3b_project_videodvd
    projects/videodvd/k3bvideodvdimager.cpp
 )
 
+
+set(k3b_samplerate_SRCS
+  plugin/libsamplerate/samplerate.c 
+  plugin/libsamplerate/src_sinc.c 
+  plugin/libsamplerate/src_zoh.c 
+  plugin/libsamplerate/src_linear.c)
+
+
 set(k3b_LIB_SRCS 
       ${k3b_core_SRCS} 
       ${k3b_tools_SRCS} 
@@ -216,6 +224,10 @@ set(k3b_LIB_SRCS
       ${k3b_project_mpeg_info}
       ${k3b_project_videodvd}
 ) 
+if(NOT SAMPLERATE_FOUND)
+   set(k3b_LIB_SRCS ${k3b_LIB_SRCS} ${k3b_samplerate_SRCS})
+endif(NOT SAMPLERATE_FOUND)
+
 
 kde4_add_library(k3b SHARED ${k3b_LIB_SRCS})
 
@@ -225,11 +237,9 @@ target_link_libraries(k3b
   k3bdevice
   dl )
 
-if(NOT SAMPLERATE_FOUND)
-  target_link_libraries(k3b k3b_samplerate)
-else(NOT SAMPLERATE_FOUND)
+if(SAMPLERATE_FOUND)
   target_link_libraries(k3b ${SAMPLERATE_LIBRARIES})
-endif(NOT SAMPLERATE_FOUND)
+endif(SAMPLERATE_FOUND)
 
 if(DVDREAD_FOUND)
   target_link_libraries(k3b ${DVDREAD_LIBRARIES})
