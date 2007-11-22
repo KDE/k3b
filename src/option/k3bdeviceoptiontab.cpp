@@ -43,12 +43,13 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent )
   // Info Label
   // ------------------------------------------------
   m_labelDevicesInfo = new QLabel( this, "m_labelDevicesInfo" );
-  m_labelDevicesInfo->setAlignment( Qt::WordBreak | Qt::AlignVCenter | Qt::AlignLeft );
+  m_labelDevicesInfo->setAlignment( Qt::AlignVCenter | Qt::AlignLeft );
   m_labelDevicesInfo->setText( i18n( "K3b tries to detect all your devices properly. "
 				     "You can add devices that have not been detected and change "
 				     "the black values by clicking in the list. If K3b is unable "
 				     "to detect your drive, you need to modify their permissions "
 				     "to give K3b write access to all devices." ) );
+  m_labelDevicesInfo->setWordWrap(true);
   // ------------------------------------------------
 
   m_deviceWidget = new K3bDeviceWidget( k3bcore->deviceManager(), this );

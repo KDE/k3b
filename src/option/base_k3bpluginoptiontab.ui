@@ -57,6 +57,9 @@
             <property name="text">
                 <string>&lt;p&gt;Here all &lt;em&gt;K3b Plugins&lt;/em&gt; may be configured. Be aware that this does not include the &lt;em&gt;KPart Plugins&lt;/em&gt; which embed themselves in the K3b menu structure.&lt;/p&gt;</string>
             </property>
+            <property name="wordWrap">
+               <bool>true</bool>
+            </property>
         </widget>
     </grid>
 </widget>
