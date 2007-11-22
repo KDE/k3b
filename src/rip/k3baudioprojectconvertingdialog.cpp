@@ -130,7 +130,8 @@ void K3bAudioProjectConvertingDialog::setupGui()
 void K3bAudioProjectConvertingDialog::slotStartClicked()
 {
   // make sure we have the tracks just for ourselves
-  static_cast<K3bAudioView*>(m_doc->view())->player()->stop();
+  //FIXME kde4
+  //static_cast<K3bAudioView*>(m_doc->view())->player()->stop();
 
   // check if all filenames differ
   if( d->filenames.count() > 1 ) {

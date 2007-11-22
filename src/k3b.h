@@ -32,6 +32,7 @@
 #include <kxmlguiwindow.h>
 #include <k3dockwidget.h>
 #include <kaction.h>
+#include <dockmainwindow3.h>
 #include <kurl.h>
 
 class Q3VBox;
@@ -60,7 +61,7 @@ namespace K3bDevice {
 }
 
 
-class K3bMainWindow : public KXmlGuiWindow
+class K3bMainWindow : public KParts::DockMainWindow3
 {
     Q_OBJECT
 

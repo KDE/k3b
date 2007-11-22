@@ -61,6 +61,7 @@
 #include <kstdguiitem.h>
 #include <kio/global.h>
 #include <kio/netaccess.h>
+#include <kio/deletejob.h>
 #include <krecentdocument.h>
 #include <ktoggleaction.h>
 #include <stdlib.h>
@@ -141,7 +142,7 @@ public:
 
 
 K3bMainWindow::K3bMainWindow()
-    : KXmlGuiWindow()
+    : KParts::DockMainWindow3(0)
 {
     //setup splitter behavior
     manager()->setSplitterHighResolution(true);
@@ -153,7 +154,8 @@ K3bMainWindow::K3bMainWindow()
 
     setPlainCaption( i18n("K3b - The CD and DVD Kreator") );
 
-    m_config = KGlobal::config();
+    //FIXME kde4
+    m_config = 0;//KGlobal::config();
 
     // /////////////////////////////////////////////////////////////////
     // call inits to invoke all other construction parts
@@ -176,7 +178,7 @@ K3bMainWindow::K3bMainWindow()
 
     connect( k3bappcore->projectManager(), SIGNAL(newProject(K3bDoc*)), this, SLOT(createClient(K3bDoc*)) );
     connect( k3bcore->deviceManager(), SIGNAL(changed()), this, SLOT(slotCheckSystemTimed()) );
-    connect( K3bAudioServer::instance(), SIGNAL(error(const QString&)), this, SLOT(slotAudioServerError(const QString&)) );
+    //connect( K3bAudioServer::instance(), SIGNAL(error(const QString&)), this, SLOT(slotAudioServerError(const QString&)) );
 
     // FIXME: now make sure the welcome screen is displayed completely
     resize( 780, 550 );
@@ -198,7 +200,8 @@ K3bMainWindow::~K3bMainWindow()
 void K3bMainWindow::showEvent( QShowEvent* e )
 {
     slotCheckDockWidgetStatus();
-    K3DockMainWindow::showEvent( e );
+    //KDE4 port me
+    //K3DockMainWindow::showEvent( e );
 }
 
 
@@ -208,7 +211,9 @@ void K3bMainWindow::initActions()
     // operator+= is deprecated but I know no other way to do this. Why does the KDE app framework
     // need to have all actions in the mainwindow's actioncollection anyway (or am I just to stupid to
     // see the correct solution?)
-    *actionCollection() += *k3bappcore->appDeviceManager()->actionCollection();
+
+    //FIXME kde4
+    //*actionCollection() += *k3bappcore->appDeviceManager()->actionCollection();
 
     actionFileOpen = KStandardAction::open(this, SLOT(slotFileOpen()), actionCollection());
     actionFileOpenRecent = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection());
@@ -231,7 +236,8 @@ void K3bMainWindow::initActions()
     setStandardToolBarMenuEnabled(true);
     KStandardAction::showMenubar( this, SLOT(slotShowMenuBar()), actionCollection() );
 
-    actionFileNewMenu = new KActionMenu( i18n("&New Project"), "filenew", actionCollection(), "file_new" );
+    //FIXME kde4 verify it
+    actionFileNewMenu = new KActionMenu( i18n("&New Project"),this/*, "filenew"*//*, actionCollection(), "file_new"*/ );
     actionFileNewAudio = K3b::createAction(this,i18n("New &Audio CD Project"), "audiocd", 0, this, SLOT(slotNewAudioDoc()),
                                      actionCollection(), "file_new_audio");
     actionFileNewData = K3b::createAction(this,i18n("New &Data Project"), "datacd", 0, this, SLOT(slotNewDataDoc()),
@@ -269,14 +275,19 @@ void K3bMainWindow::initActions()
     KAction* actionClearProject = K3b::createAction(this,i18n("&Clear Project"), QApplication::reverseLayout() ? "clear_left" : "locationbar_erase", 0,
                                                this, SLOT(slotClearProject()), actionCollection(), "project_clear_project" );
 
-    actionViewDirTreeView = new KToggleAction(i18n("Show Directories"), 0, this, SLOT(slotShowDirTreeView()),
-                                              actionCollection(), "view_dir_tree");
+    actionViewDirTreeView = new KToggleAction(i18n("Show Directories"),this);
+    KAction* action = actionCollection()->addAction("view_dir_tree",actionViewDirTreeView);
+    connect( action , SIGNAL(toggled(bool)) , this , SLOT(slotShowDirTreeView()) ); 
 
-    actionViewContentsView = new KToggleAction(i18n("Show Contents"), 0, this, SLOT(slotShowContentsView()),
-                                               actionCollection(), "view_contents");
 
-    actionViewDocumentHeader = new KToggleAction(i18n("Show Document Header"), 0, this, SLOT(slotViewDocumentHeader()),
-                                                 actionCollection(), "view_document_header");
+    actionViewContentsView = new KToggleAction(i18n("Show Contents"),this);
+    action= actionCollection()->addAction("view_contents",actionViewContentsView);
+    connect( action , SIGNAL(toggled(bool)) , this , SLOT(slotShowContentsView()) );
+
+    actionViewDocumentHeader = new KToggleAction(i18n("Show Document Header"),this);
+    action= actionCollection()->addAction("view_document_header",actionViewDocumentHeader);
+    connect( action , SIGNAL(toggled(bool)) , this , SLOT(slotViewDocumentHeader()) );
+
 
     KAction* actionToolsFormatMedium = K3b::createAction(this,i18n("&Format/Erase rewritable disk..."), "formatdvd", 0, this,
                                                     SLOT(slotFormatMedium()), actionCollection(), "tools_format_medium" );
@@ -336,8 +347,9 @@ void K3bMainWindow::initActions()
     actionProjectAddFiles->setToolTip( i18n("Add files to the current project") );
     actionClearProject->setToolTip( i18n("Clear the current project") );
 
+    //FIXME kde4
     // make sure the tooltips are used for the menu
-    actionCollection()->setHighlightingEnabled( true );
+    //actionCollection()->setHighlightingEnabled( true );
 }
 
 
@@ -350,7 +362,7 @@ QList<K3bDoc*> K3bMainWindow::projects() const
 
 void K3bMainWindow::slotConfigureKeys()
 {
-    KShortcutsDialog::configure( actionCollection(), this );
+    KShortcutsDialog::configure( actionCollection(),KShortcutsEditor::LetterShortcutsDisallowed, this );
 }
 
 void K3bMainWindow::initStatusBar()
@@ -554,7 +566,8 @@ void K3bMainWindow::saveOptions()
     // save dock positions!
     manager()->writeConfig( config(), "Docking Config" );
 
-    m_dirView->saveConfig( config() );
+    //FIXME kde4
+    //m_dirView->saveConfig( config() );
 
     KConfigGroup grpWindows(config(), "main_window_settings");
     saveMainWindowSettings( grpWindows );
@@ -586,8 +599,8 @@ void K3bMainWindow::readOptions()
         manager()->readConfig( config(), "Docking Config" );
     else
         kDebug() << "(K3bMainWindow) ignoring docking config from K3b version " << configVersion;
-
-    applyMainWindowSettings( config(), "main_window_settings" );
+    KConfigGroup grpWindow(config(), "main_window_settings");
+    applyMainWindowSettings( grpWindow );
 
 //FIXME kde4
     //m_dirView->readConfig( config() );
@@ -1040,8 +1053,8 @@ void K3bMainWindow::slotSettingsConfigure()
 void K3bMainWindow::showOptionDialog( int index )
 {
     K3bOptionDialog d( this);
-
-    d.showPage( index );
+    //FIXME kde4
+    //d.showPage( index );
 
     d.exec();
 
@@ -1466,6 +1479,8 @@ void K3bMainWindow::slotClearProject()
 {
     K3bDoc* doc = k3bappcore->projectManager()->activeDoc();
     if( doc ) {
+    //FIXME kde4
+#if 0
         if( KMessageBox::warningContinueCancel( this,
                                                 i18n("Do you really want to clear the current project?"),
                                                 KGuiItem(i18n("Clear Project")),
@@ -1473,7 +1488,9 @@ void K3bMainWindow::slotClearProject()
                                                 "clear_current_project_dontAskAgain" ) == KMessageBox::Continue ) {
             doc->clear();
         }
+#endif
     }
+
 }
 
 
