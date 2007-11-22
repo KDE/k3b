@@ -165,7 +165,8 @@ K3bMainWindow::K3bMainWindow()
     createGUI(0L);
 
     // we need the actions for the welcomewidget
-    d->welcomeWidget->loadConfig( KConfigGroup( config(), "Welcome Widget" ) );
+    //FIXME kde4 it crash
+    //d->welcomeWidget->loadConfig( KConfigGroup( config(), "Welcome Widget" ) );
 
     // fill the tabs action menu
     m_documentTab->insertAction( actionFileSave );
@@ -185,7 +186,8 @@ K3bMainWindow::K3bMainWindow()
 //   getMainDockWidget()->resize( getMainDockWidget()->size().expandedTo( d->welcomeWidget->sizeHint() ) );
 //   m_dirTreeDock->resize( QSize( m_dirTreeDock->sizeHint().width(), m_dirTreeDock->height() ) );
 
-    readOptions();
+    //FIXME kde4
+    //readOptions();
 }
 
 K3bMainWindow::~K3bMainWindow()
@@ -421,7 +423,9 @@ void K3bMainWindow::initView()
     //K3bSidePanel* sidePanel = new K3bSidePanel( this, m_dirTreeDock, "sidePanel" );
 
     m_dirTreeDock->setWidget( sidePanel );
-    m_dirTreeDock->manualDock( mainDock, K3DockWidget::DockTop, 4000 );
+
+    //FIXME kde4 it crash
+    //m_dirTreeDock->manualDock( mainDock, K3DockWidget::DockTop, 4000 );
     connect( m_dirTreeDock, SIGNAL(iMBeingClosed()), this, SLOT(slotDirTreeDockHidden()) );
     connect( m_dirTreeDock, SIGNAL(hasUndocked()), this, SLOT(slotDirTreeDockHidden()) );
     // ---------------------------------------------------------------------------------------------
