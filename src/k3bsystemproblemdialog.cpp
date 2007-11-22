@@ -90,31 +90,33 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const Q3ValueList<K3bSystemProbl
   : KDialog( parent )
 {
   setCaption( i18n("System Configuration Problems") );
-
+  setButtons(KDialog::None);
+  QWidget *widget = new QWidget(this);
+  setMainWidget(widget);
   // setup the title
   // ---------------------------------------------------------------------------------------------------
-  K3bThemedHeader* titleFrame = new K3bThemedHeader( this );
+  K3bThemedHeader* titleFrame = new K3bThemedHeader( widget );
   titleFrame->setTitle( i18n("System Configuration Problems"),
 			i18np("1 problem", "%n problems", problems.count() ) );
 
-  m_closeButton = new QPushButton( i18n("Close"), this );
+  m_closeButton = new QPushButton( i18n("Close"), widget );
   connect( m_closeButton, SIGNAL(clicked()), this, SLOT(close()) );
-  m_checkDontShowAgain = new QCheckBox( i18n("Do not show again"), this );
+  m_checkDontShowAgain = new QCheckBox( i18n("Do not show again"), widget );
 
 #ifdef HAVE_K3BSETUP
-  m_k3bsetupButton = new QPushButton( i18n("Start K3bSetup2"), this );
+  m_k3bsetupButton = new QPushButton( i18n("Start K3bSetup2"), widget );
   connect( m_k3bsetupButton, SIGNAL(clicked()), this, SLOT(slotK3bSetup()) );
 #endif
 
   // setup the problem view
   // ---------------------------------------------------------------------------------------------------
-  KTextEdit* view = new KTextEdit( this );
+  KTextEdit* view = new KTextEdit( widget );
   view->setReadOnly(true);
   view->setTextFormat(Qt::RichText);
 
 
   // layout everything
-  Q3GridLayout* grid = new Q3GridLayout( this );
+  Q3GridLayout* grid = new Q3GridLayout( widget );
   grid->setMargin( marginHint() );
   grid->setSpacing( spacingHint() );
   grid->addMultiCellWidget( titleFrame, 0, 0, 0, 1 );
