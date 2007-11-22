@@ -226,7 +226,7 @@ target_link_libraries(k3b
   dl )
 
 if(NOT SAMPLERATE_FOUND)
-  target_link_libraries(k3b k3b_sameplrate)
+  target_link_libraries(k3b k3b_samplerate)
 else(NOT SAMPLERATE_FOUND)
   target_link_libraries(k3b ${SAMPLERATE_LIBRARIES})
 endif(NOT SAMPLERATE_FOUND)

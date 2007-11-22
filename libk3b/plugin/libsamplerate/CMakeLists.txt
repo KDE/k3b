@@ -3,7 +3,7 @@ project(k3b_sameplrate)
 set(k3b_samplerate_SRCS
   samplerate.c src_sinc.c src_zoh.c src_linear.c)
 
-kde4_add_library(k3b_sameplrate STATIC ${k3b_samplerate_SRCS})
+kde4_add_library(k3b_samplerate STATIC ${k3b_samplerate_SRCS})
 
 
 
