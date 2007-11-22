@@ -212,6 +212,8 @@ void K3bExternalEncoderSettingsWidget::saveConfig()
   KConfigGroup grp(c, "K3bExternalEncoderPlugin" );
 
   QStringList cmdNames;
+  //FIXME kde4
+/*
   for( QMapIterator<Q3ListViewItem*, K3bExternalEncoderCommand> it = d->commands.begin();
        it != d->commands.end(); ++it ) {
     QStringList cmd;
@@ -224,7 +226,9 @@ void K3bExternalEncoderSettingsWidget::saveConfig()
     cmdNames << it.data().name;
   }
   grp.writeEntry( "commands", cmdNames );
+*/
 }
+
 
 
 

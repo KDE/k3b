@@ -25,7 +25,7 @@
 #include <k3blistview.h>
 
 #include <kdebug.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kfilemetainfo.h>

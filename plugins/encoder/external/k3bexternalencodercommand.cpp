@@ -20,6 +20,7 @@
 #include <k3bcore.h>
 
 #include <kconfig.h>
+#include <KConfigGroup>
 #include <kstandarddirs.h>
 //Added by qt3to4:
 #include <Q3ValueList>
@@ -28,14 +29,13 @@
 Q3ValueList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::readCommands()
 {
   KConfig* c = k3bcore->config();
-
-  c->setGroup( "K3bExternalEncoderPlugin" );
+  KConfigGroup grp(c,"K3bExternalEncoderPlugin" );
 
   Q3ValueList<K3bExternalEncoderCommand> cl;
 
-  QStringList cmds = c->readListEntry( "commands" );
+  QStringList cmds = grp.readEntry( "commands",QStringList() );
   for( QStringList::iterator it = cmds.begin(); it != cmds.end(); ++it ) {
-    QStringList cmdString = c->readListEntry( "command_" + *it );
+    QStringList cmdString = grp.readEntry( "command_" + *it,QStringList() );
     K3bExternalEncoderCommand cmd;
     cmd.name = cmdString[0];
     cmd.extension = cmdString[1];
