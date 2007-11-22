@@ -120,6 +120,7 @@ set(k3b_plugin_SRCS
     plugin/k3bpluginmanager.cpp 
     plugin/k3baudiodecoder.cpp 
     plugin/k3baudioencoder.cpp 
+    plugin/k3bprojectplugin.cpp
 )
 
 set(k3b_project_SRCS

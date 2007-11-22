@@ -43,6 +43,7 @@
 #include <kdialog.h>
 #include <kactioncollection.h>
 #include <KActionMenu>
+#include <KMenu>
 #include <qlayout.h>
 #include <q3header.h>
 #include <qlabel.h>
@@ -275,7 +276,7 @@ void K3bAudioCdView::initActions()
 
   // setup the toolbox
   m_toolBox->addAction( actionStartRip );
-  m_toolBox->addSpacing();
+  //m_toolBox->addSpacing();
   m_toolBox->addAction( actionQueryCddb );
   m_toolBox->addAction( actionSaveCddbLocally );
   m_toolBox->addAction( actionEditTrackCddbInfo );
@@ -285,7 +286,7 @@ void K3bAudioCdView::initActions()
 
 void K3bAudioCdView::slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& p )
 {
-  m_popupMenu->popup(p);
+  m_popupMenu->menu()->popup(p);
 }
 
 
@@ -326,18 +327,23 @@ void K3bAudioCdView::startRip()
 			i18n("No Tracks Selected") );
   }
   else {
+//FIXME kde4
+/*
     K3bAudioRippingDialog rip( m_toc,
 			       m_device,
 			       m_cddbInfo,
 			       trackNumbers,
 			       this );
     rip.exec();
+*/
   }
 }
 
 
 void K3bAudioCdView::slotEditTrackCddb()
 {
+//FIXME kde4
+/*
   QList<Q3ListViewItem *> items(m_trackView->selectedItems());
   if( !items.isEmpty() ) {
     AudioTrackViewItem* a = static_cast<AudioTrackViewItem*>(items.at(0));
@@ -378,11 +384,14 @@ void K3bAudioCdView::slotEditTrackCddb()
       a->updateCddbData( m_cddbInfo );
     }
   }
+*/
 }
 
 
 void K3bAudioCdView::slotEditAlbumCddb()
 {
+//FIXME kde4
+/*
   KDialog d( this);
   d.setCaption(i18n("Album Cddb"));
   d.setModal(true);
@@ -440,6 +449,7 @@ void K3bAudioCdView::slotEditAlbumCddb()
 
     updateDisplay();
   }
+*/
 }
 
 
@@ -447,7 +457,8 @@ void K3bAudioCdView::queryCddb()
 {
   KConfig* c = k3bcore->config();
   KConfigGroup grp(c,"Cddb");
-
+//FIXME kde4
+/*
   m_cddb->readConfig( grp );
 
   if( grp.readEntry( "use local cddb query", true ) ||
@@ -457,11 +468,14 @@ void K3bAudioCdView::queryCddb()
 
     m_cddb->query( m_toc );
   }
+*/
 }
 
 
 void K3bAudioCdView::slotCddbQueryFinished( int error )
 {
+//FIXME kde4
+/*
   if( error == K3bCddbQuery::SUCCESS ) {
     m_cddbInfo = m_cddb->result();
 
@@ -483,13 +497,15 @@ void K3bAudioCdView::slotCddbQueryFinished( int error )
   else if( error != K3bCddbQuery::CANCELED ) {
     K3bPassivePopup::showPopup( m_cddb->errorString(), i18n("CDDB Error") );
   }
-
+*/
   enableInteraction(true);
 }
 
 
 void K3bAudioCdView::slotSaveCddbLocally()
 {
+//FIXME kde4
+/*
   // check if the minimal info has been inserted
   if( m_cddbInfo.category.isEmpty() ) {
     KMessageBox::sorry( this, i18n("Please set the category before saving.") );
@@ -530,6 +546,7 @@ void K3bAudioCdView::slotSaveCddbLocally()
   m_cddb->saveEntry( m_cddbInfo );
   K3bPassivePopup::showPopup( i18n("Saved entry (%1) in category %2.",m_cddbInfo.discid,m_cddbInfo.category),
 			      i18n("CDDB") );
+*/
 }
 
 
@@ -563,6 +580,8 @@ void K3bAudioCdView::slotDeselect()
 
 void K3bAudioCdView::updateDisplay()
 {
+//FIXME kde4
+/*
   // update the listview
   for( Q3ListViewItemIterator it( m_trackView ); it.current(); ++it ) {
     AudioTrackViewItem* item = (AudioTrackViewItem*)it.current();
@@ -581,6 +600,7 @@ void K3bAudioCdView::updateDisplay()
   m_labelLength->setText( i18np("1 track (%1)",
 			       "%n tracks (%1)",
 			       m_toc.count(),K3b::Msf(m_toc.length()).toString()) );
+*/
 }
 
 
@@ -620,6 +640,8 @@ void K3bAudioCdView::enableInteraction( bool b )
 
 Q3DragObject* K3bAudioCdView::dragObject()
 {
+//FIXME kde4
+/*
   Q3ValueList<int> tracks;
   QList<Q3ListViewItem *> items(m_trackView->selectedItems());
   for( QList<Q3ListViewItem *>::const_iterator it = items.begin();
@@ -636,6 +658,7 @@ Q3DragObject* K3bAudioCdView::dragObject()
     return drag;
   }
   else
+*/
     return 0;
 }
 

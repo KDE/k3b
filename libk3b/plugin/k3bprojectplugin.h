@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
  *
@@ -21,8 +21,8 @@
 class K3bDoc;
 
 /**
- * In case your plugin provides a GUI it is recommended to use the 
- * K3bProjectPluginGUIBase interface. That way K3b can embed the GUI into 
+ * In case your plugin provides a GUI it is recommended to use the
+ * K3bProjectPluginGUIBase interface. That way K3b can embed the GUI into
  * a fancy dialog which fits the overall look.
  *
  * This is not derived from QWidget to make it possible to inherit
@@ -72,14 +72,10 @@ class LIBK3B_EXPORT K3bProjectPlugin : public K3bPlugin
   /**
    * @param type The type of the plugin
    * @param gui If true the plugin is supposed to provide a widget via @p createGUI(). In that case
-   *            @p activate() will not be used. A plugin has a GUI if it's functionality is started 
+   *            @p activate() will not be used. A plugin has a GUI if it's functionality is started
    *            by some user input.
    */
-  K3bProjectPlugin( int type, bool gui = false, QObject* parent = 0, const char* name = 0 )
-  : K3bPlugin( parent, name ),
-    m_type(type),
-    m_hasGUI(gui) {
-  }
+  K3bProjectPlugin( int type, bool gui = false, QObject* parent = 0, const char* name = 0 );
 
   virtual ~K3bProjectPlugin() {
   }
