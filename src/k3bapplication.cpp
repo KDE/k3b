@@ -81,7 +81,7 @@ K3bApplication::K3bApplication()
   connect( m_core, SIGNAL(initializationInfo(const QString&)),
 	   SIGNAL(initializationInfo(const QString&)) );
 
-  connect( this, SIGNAL(shutDown()), SLOT(slotShutDown()) );
+  connect( qApp, SIGNAL(aboutToQuit()), SLOT(slotShutDown()) );
 }
 
 

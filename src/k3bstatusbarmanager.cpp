@@ -113,13 +113,8 @@ void K3bStatusBarManager::update()
     slotFreeTempSpace( path, size, 0, avail );
   else
     m_labelFreeTemp->setText(i18n("No info"));
-  //FIXME kde4
-#if 0
-  if( path != QToolTip::textFor( m_labelFreeTemp->parentWidget() ) ) {
-    QToolTip::remove( m_labelFreeTemp->parentWidget() );
-    m_labelFreeTemp->parentWidget()->setToolTip( path );
-  }
-#endif
+  if(path != m_labelFreeTemp->parentWidget()->toolTip())
+     m_labelFreeTemp->parentWidget()->setToolTip( path );
 }
 
 
