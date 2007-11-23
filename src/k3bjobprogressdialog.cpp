@@ -40,7 +40,7 @@
 #include <q3whatsthis.h>
 #include <qdatetime.h>
 #include <qstring.h>
-#include <q3hbox.h>
+
 #include <q3header.h>
 #include <qscrollbar.h>
 #include <qpoint.h>
@@ -73,6 +73,7 @@
 #include <kpushbutton.h>
 #include <ksqueezedtextlabel.h>
 #include <KNotification>
+#include <kvbox.h>
 
 
 class K3bJobProgressDialog::Private

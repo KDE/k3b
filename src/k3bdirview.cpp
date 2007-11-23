@@ -78,6 +78,7 @@
 #include <kconfig.h>
 #include <kaction.h>
 #include <kinputdialog.h>
+#include <kvbox.h>
 
 
 
@@ -90,7 +91,7 @@ public:
 
 
 K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *name )
-  : Q3VBox(parent),
+  : KVBox(parent),
     m_fileTreeView(treeView),
     m_bViewDiskInfo(false)
 {

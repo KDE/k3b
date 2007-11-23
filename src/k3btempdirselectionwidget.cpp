@@ -21,7 +21,7 @@
 #include <q3groupbox.h>
 #include <qlayout.h>
 #include <qtimer.h>
-#include <q3hbox.h>
+
 #include <qtooltip.h>
 
 #include <qfileinfo.h>
@@ -35,6 +35,7 @@
 #include <kurlrequester.h>
 #include <kio/global.h>
 #include <klineedit.h>
+#include <kvbox.h>
 
 
 K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const char *name )
@@ -50,7 +51,7 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const cha
 
     m_imageFileLabel->setBuddy( m_editDirectory );
 
-    Q3HBox* freeTempSpaceBox = new Q3HBox( this );
+    KHBox* freeTempSpaceBox = new KHBox( this );
     freeTempSpaceBox->setSpacing( KDialog::spacingHint() );
     (void)new QLabel( i18n( "Free space in temporary directory:" ), freeTempSpaceBox, "TextLabel2" );
     m_labelFreeSpace = new QLabel( "                       ",freeTempSpaceBox, "m_labelFreeSpace" );
@@ -206,7 +207,7 @@ void K3bTempDirSelectionWidget::setNeededSize( KIO::filesize_t bytes )
 {
     m_requestedSize = bytes;
     if( !m_labelCdSize ) {
-        Q3HBox* cdSizeBox = new Q3HBox( this );
+        KHBox* cdSizeBox = new KHBox( this );
         cdSizeBox->setSpacing( KDialog::spacingHint() );
         (void)new QLabel( i18n( "Size of project:" ), cdSizeBox, "TextLabel4" );
         m_labelCdSize = new QLabel( KIO::convertSize(bytes), cdSizeBox, "m_labelCdSize" );

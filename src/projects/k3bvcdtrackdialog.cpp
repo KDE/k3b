@@ -18,7 +18,7 @@
 #include <qcombobox.h>
 #include <q3frame.h>
 #include <q3groupbox.h>
-#include <q3hbox.h>
+
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qlayout.h>
@@ -46,6 +46,7 @@
 #include "k3bvcdtrack.h"
 #include <k3bmsf.h>
 #include <k3bglobals.h>
+#include <kvbox.h>
 
 
 K3bVcdTrackDialog::K3bVcdTrackDialog( K3bVcdDoc* _doc, QList<K3bVcdTrack*>& tracks, QList<K3bVcdTrack*>& selectedTracks, QWidget* parent )

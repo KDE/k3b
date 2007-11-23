@@ -20,7 +20,7 @@
 #include <q3frame.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <q3hbox.h>
+
 #include <q3whatsthis.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
@@ -43,6 +43,7 @@
 #include <k3bcdtextvalidator.h>
 #include <k3baudiodecoder.h>
 #include <k3bmsfedit.h>
+#include <kvbox.h>
 
 
 // TODO: three modes:

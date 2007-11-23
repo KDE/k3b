@@ -16,11 +16,12 @@
 #ifndef K3BDIRVIEW_H
 #define K3BDIRVIEW_H
 
-#include <q3vbox.h>
+
 //Added by qt3to4:
 #include <QLabel>
 
 #include <k3bmedium.h>
+#include <kvbox.h>
 
 class QSplitter;
 class KUrl;
@@ -50,7 +51,7 @@ namespace KIO {
 /**
   *@author Sebastian Trueg
   */
-class K3bDirView : public Q3VBox
+class K3bDirView : public KVBox
 {
   Q_OBJECT
 

@@ -34,8 +34,9 @@
 #include <kaction.h>
 #include <dockmainwindow3.h>
 #include <kurl.h>
+#include <kvbox.h>
 
-class Q3VBox;
+class KVBox;
 
 
 // forward declaration of the K3b classes

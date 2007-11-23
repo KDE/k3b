@@ -47,7 +47,7 @@
 #include <qvariant.h>
 #include <qtooltip.h>
 #include <q3whatsthis.h>
-#include <q3vbox.h>
+
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
 //Added by qt3to4:
@@ -58,6 +58,7 @@
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
+#include <kvbox.h>
 
 
 K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent )

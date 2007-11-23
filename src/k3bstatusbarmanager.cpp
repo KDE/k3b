@@ -37,11 +37,12 @@
 #include <kaction.h>
 
 #include <qlabel.h>
-#include <q3hbox.h>
+
 #include <qfile.h>
 #include <qtimer.h>
 #include <qevent.h>
 #include <qtooltip.h>
+#include <kvbox.h>
 
 
 
@@ -50,7 +51,7 @@ K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
     m_mainWindow(parent)
 {
   // setup free temp space box
-  Q3HBox* boxFreeTemp = new Q3HBox( m_mainWindow->statusBar() );
+  KHBox* boxFreeTemp = new KHBox( m_mainWindow->statusBar() );
   boxFreeTemp->setSpacing(2);
 
   m_labelProjectInfo = new QLabel( m_mainWindow->statusBar() );

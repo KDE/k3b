@@ -33,7 +33,7 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qstringlist.h>
-#include <q3hbox.h>
+
 //Added by qt3to4:
 #include <Q3GridLayout>
 
@@ -45,6 +45,7 @@
 #include <k3bcore.h>
 #include <k3bglobals.h>
 #include <k3bstdguiitems.h>
+#include <kvbox.h>
 
 K3bVideoCdRippingDialog::K3bVideoCdRippingDialog( K3bVideoCdRippingOptions* options, QWidget* parent )
   : K3bInteractionDialog( parent,
@@ -87,13 +88,13 @@ void K3bVideoCdRippingDialog::setupGui()
 
     rippathLabel->setBuddy( m_editDirectory );
 
-    Q3HBox* freeSpaceBox = new Q3HBox( groupDirectory );
+    KHBox* freeSpaceBox = new KHBox( groupDirectory );
     freeSpaceBox->setSpacing( KDialog::spacingHint() );
     ( void ) new QLabel( i18n( "Free space in directory:" ), freeSpaceBox, "FreeSpaceLabel" );
     m_labelFreeSpace = new QLabel( "                       ", freeSpaceBox, "m_labelFreeSpace" );
     m_labelFreeSpace->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
 
-    Q3HBox* necessarySizeBox = new Q3HBox( groupDirectory );
+    KHBox* necessarySizeBox = new KHBox( groupDirectory );
     necessarySizeBox->setSpacing( KDialog::spacingHint() );
     ( void ) new QLabel( i18n( "Necessary storage size:" ), necessarySizeBox, "StorSize" );
     m_labelNecessarySize = new QLabel( "                        ", necessarySizeBox, "m_labelNecessarySize" );

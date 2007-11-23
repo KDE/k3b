@@ -55,7 +55,7 @@
 #include <qstringlist.h>
 #include <qmessagebox.h>
 #include <qfont.h>
-#include <q3hbox.h>
+
 #include <qtoolbutton.h>
 #include <qtabwidget.h>
 #include <qspinbox.h>
@@ -66,6 +66,7 @@
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3ValueList>
+#include <kvbox.h>
 
 
 class K3bAudioRippingDialog::Private

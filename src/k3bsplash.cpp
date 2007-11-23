@@ -31,16 +31,21 @@
 #include <kstandarddirs.h>
 #include <kapplication.h>
 #include <kaboutdata.h>
+#include <kvbox.h>
 
 
+//FIXME kde4
 K3bSplash::K3bSplash( QWidget* parent )
-  : Q3VBox( parent,"", 
+  : KVBox( parent)
+#if 0
+,"", 
 	   Qt::WStyle_Customize|
 	   Qt::WDestructiveClose|
 	   /*	   Qt::WStyle_Splash|*/
 	   Qt::X11BypassWindowManagerHint|
 	   Qt::WStyle_NoBorder|
 	   Qt::WStyle_StaysOnTop )
+#endif
 {
   setMargin( 0 );
   setSpacing( 0 );
@@ -84,7 +89,7 @@ void K3bSplash::mousePressEvent( QMouseEvent* )
 
 void K3bSplash::show()
 {
-  Q3VBox::show();
+  KVBox::show();
   // make sure the splash screen is shown immediately
   qApp->processEvents();
 }

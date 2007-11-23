@@ -53,7 +53,7 @@
 #include <qtooltip.h>
 #include <qtabwidget.h>
 
-#include <q3hbox.h>
+
 #include <qpushbutton.h>
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
@@ -62,6 +62,7 @@
 #include <qfileinfo.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
+#include <kvbox.h>
 
 
 K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
@@ -163,7 +164,7 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
     m_groupAdvancedDataOptions = new Q3GroupBox( 3, Qt::Vertical, i18n("Data"), advancedTab, "data_options" );
     m_groupAdvancedDataOptions->setInsideSpacing( spacingHint() );
     m_groupAdvancedDataOptions->setInsideMargin( marginHint() );
-    Q3HBox* box = new Q3HBox( m_groupAdvancedDataOptions );
+    KHBox* box = new KHBox( m_groupAdvancedDataOptions );
     box->setSpacing( spacingHint() );
     box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
     m_spinDataRetries = new QSpinBox( 1, 128, 1, box );
@@ -173,12 +174,12 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
     m_groupAdvancedAudioOptions = new Q3GroupBox( 5, Qt::Vertical, i18n("Audio"), advancedTab, "audio_options" );
     m_groupAdvancedAudioOptions->setInsideSpacing( spacingHint() );
     m_groupAdvancedAudioOptions->setInsideMargin( marginHint() );
-    box = new Q3HBox( m_groupAdvancedAudioOptions );
+    box = new KHBox( m_groupAdvancedAudioOptions );
     box->setSpacing( spacingHint() );
     box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
     m_spinAudioRetries = new QSpinBox( 1, 128, 1, box );
     m_checkIgnoreAudioReadErrors = K3bStdGuiItems::ignoreAudioReadErrorsCheckBox( m_groupAdvancedAudioOptions );
-    box = new Q3HBox( m_groupAdvancedAudioOptions );
+    box = new KHBox( m_groupAdvancedAudioOptions );
     box->setSpacing( spacingHint() );
     box->setStretchFactor(new QLabel( i18n("Paranoia mode:"), box ), 1 );
     m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( box );

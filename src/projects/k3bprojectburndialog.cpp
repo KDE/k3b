@@ -35,7 +35,7 @@
 #include <qtooltip.h>
 
 #include <qlayout.h>
-#include <q3vbox.h>
+
 #include <qcheckbox.h>
 #include <qtabwidget.h>
 #include <q3groupbox.h>
@@ -55,6 +55,7 @@
 #include <kstandarddirs.h>
 #include <kapplication.h>
 #include <kiconloader.h>
+#include <kvbox.h>
 
 
 K3bProjectBurnDialog::K3bProjectBurnDialog( K3bDoc* doc, QWidget *parent )

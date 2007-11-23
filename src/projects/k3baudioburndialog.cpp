@@ -45,7 +45,7 @@
 #include <q3ptrlist.h>
 #include <qstringlist.h>
 #include <qpoint.h>
-#include <q3hbox.h>
+
 #include <qspinbox.h>
 //Added by qt3to4:
 #include <QShowEvent>
@@ -55,6 +55,7 @@
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
+#include <kvbox.h>
 
 
 K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent )
@@ -88,11 +89,11 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent )
     m_checkHideFirstTrack = new QCheckBox( i18n( "Hide first track" ), advancedGimmickGroup, "m_checkHideFirstTrack" );
 
     m_audioRippingGroup = new Q3GroupBox( 3, Qt::Vertical, i18n("Audio Ripping"), advancedTab );
-    Q3HBox* box = new Q3HBox( m_audioRippingGroup );
+    KHBox* box = new KHBox( m_audioRippingGroup );
     box->setSpacing( spacingHint() );
     box->setStretchFactor(new QLabel( i18n("Paranoia mode:"), box ), 1 );
     m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( box );
-    box = new Q3HBox( m_audioRippingGroup );
+    box = new KHBox( m_audioRippingGroup );
     box->setSpacing( spacingHint() );
     box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
     m_spinAudioRippingReadRetries = new QSpinBox( 1, 128, 1, box );
