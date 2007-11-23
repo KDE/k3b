@@ -906,13 +906,13 @@ void K3bCdImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, con
     if( !d->haveMd5Sum )
         return;
 
-    Q3PopupMenu popup;
-    int copyItem = popup.insertItem( i18n("Copy checksum to clipboard") );
-    int compareItem = popup.insertItem( i18n("Compare checksum...") );
+    QMenu popup;
+    QAction *copyItem = popup.addAction( i18n("Copy checksum to clipboard") );
+    QAction *compareItem = popup.addAction( i18n("Compare checksum...") );
 
-    int r = popup.exec( pos );
+    QAction *act = popup.exec( pos );
 
-    if( r == compareItem ) {
+    if( act == compareItem ) {
         bool ok;
         QString md5sumToCompare = KInputDialog::getText( i18n("MD5 Sum Check"),
                                                          i18n("Please insert the MD5 Sum to compare:"),
@@ -928,7 +928,7 @@ void K3bCdImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, con
                                     i18n("MD5 Sums Differ") );
         }
     }
-    else if( r == copyItem ) {
+    else if( act == copyItem ) {
         QApplication::clipboard()->setText( d->md5Job->hexDigest().lower(), QClipboard::Clipboard );
     }
 }
