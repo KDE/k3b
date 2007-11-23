@@ -60,7 +60,7 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent )
     // add button for the audio conversion
     KAction* conversionAction = new KAction( this );
     conversionAction->setText( i18n("Convert Tracks") );
-    conversionAction->setIcon( KIcon( "redo" ) );
+    conversionAction->setIcon( KIcon( "edit-redo" ) );
     conversionAction->setToolTip( i18n("Convert audio tracks to other audio formats." ) );
     connect( conversionAction, SIGNAL( triggered() ), this, SLOT(slotAudioConversion()) );
     actionCollection()->addAction( "project_audio_convert", conversionAction );

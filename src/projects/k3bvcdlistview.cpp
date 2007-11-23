@@ -97,8 +97,8 @@ void K3bVcdListView::setupColumns()
 void K3bVcdListView::setupActions()
 {
     m_actionCollection = new KActionCollection( this );
-    m_actionProperties = K3b::createAction( this, i18n( "Properties" ), "misc", 0, this, SLOT( showPropertiesDialog() ), actionCollection() );
-    m_actionRemove = K3b::createAction( this, i18n( "Remove" ), "editdelete", Qt::Key_Delete, this, SLOT( slotRemoveTracks() ), actionCollection() );
+    m_actionProperties = K3b::createAction( this, i18n( "Properties" ), "document-properties", 0, this, SLOT( showPropertiesDialog() ), actionCollection() );
+    m_actionRemove = K3b::createAction( this, i18n( "Remove" ), "edit-delete", Qt::Key_Delete, this, SLOT( slotRemoveTracks() ), actionCollection() );
 
     // disabled by default
     m_actionRemove->setEnabled( false );

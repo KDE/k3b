@@ -194,7 +194,7 @@ protected:
 	  preW = h*16/9;
 
 	p->drawRect( ( w - preW ) / 2, ( height() - h ) / 2, preW, h );
-	QPixmap noIcon = KIconLoader::global()->loadIcon( "no", KIconLoader::NoGroup, KIconLoader::SizeSmall );
+	QPixmap noIcon = KIconLoader::global()->loadIcon( "image-missing", KIconLoader::NoGroup, KIconLoader::SizeSmall );
 	p->drawPixmap( ( w - noIcon.width() ) / 2, ( height() - noIcon.height() ) / 2, noIcon );
       }
       else {

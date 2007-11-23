@@ -77,9 +77,9 @@ K3bVcdTrackDialog::K3bVcdTrackDialog( K3bVcdDoc* _doc, QList<K3bVcdTrack*>& trac
         m_muxrate->setText( i18n( "%1 bit/s", selectedTrack->muxrate() ) );
 
         if ( selectedTrack->isSegment() )
-            m_labelMimeType->setPixmap( SmallIcon( "image", KIconLoader::SizeMedium ) );
+            m_labelMimeType->setPixmap( SmallIcon( "image-x-generic", KIconLoader::SizeMedium ) );
         else
-            m_labelMimeType->setPixmap( SmallIcon( "video", KIconLoader::SizeMedium ) );
+            m_labelMimeType->setPixmap( SmallIcon( "video-x-generic", KIconLoader::SizeMedium ) );
 
         fillGui();
     }
@@ -249,9 +249,9 @@ void K3bVcdTrackDialog::fillPbcGui()
     Q_FOREACH( K3bVcdTrack* track, m_tracks ) {
         QPixmap pm;
         if ( track->isSegment() )
-            pm = SmallIcon( "image" );
+            pm = SmallIcon( "image-x-generic" );
         else
-            pm = SmallIcon( "video" );
+            pm = SmallIcon( "video-x-generic" );
 
         QString s = displayName( track );
         if ( track != selectedTrack )              // donot insert selectedTrack, it was as "ItSelf" inserted to the begin of map
@@ -280,7 +280,7 @@ void K3bVcdTrackDialog::fillPbcGui()
     }
 
     // add Event Disabled
-    QPixmap pmDisabled = SmallIcon( "stop" );
+    QPixmap pmDisabled = SmallIcon( "process-stop" );
     QString txtDisabled = i18n( "Event Disabled" );
     m_pbc_previous->insertItem( pmDisabled, txtDisabled );
     m_pbc_next->insertItem( pmDisabled, txtDisabled );
@@ -289,7 +289,7 @@ void K3bVcdTrackDialog::fillPbcGui()
     m_comboAfterTimeout->insertItem( pmDisabled, txtDisabled );
 
     // add VideoCD End
-    QPixmap pmEnd = SmallIcon( "cdrom_unmount" );
+    QPixmap pmEnd = SmallIcon( "media-optical-video" );
     QString txtEnd = i18n( "VideoCD END" );
     m_pbc_previous->insertItem( pmEnd, txtEnd );
     m_pbc_next->insertItem( pmEnd, txtEnd );

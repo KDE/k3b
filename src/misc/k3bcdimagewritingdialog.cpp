@@ -268,7 +268,7 @@ void K3bCdImageWritingDialog::setupGui()
     groupCopies->setInsideSpacing( spacingHint() );
     groupCopies->setInsideMargin( marginHint() );
     QLabel* pixLabel = new QLabel( groupCopies );
-    pixLabel->setPixmap( SmallIcon( "cdcopy", KIconLoader::SizeMedium ) );
+    pixLabel->setPixmap( SmallIcon( "tools-media-optical-copy", KIconLoader::SizeMedium ) );
     pixLabel->setScaledContents( false );
     m_spinCopies = new QSpinBox( groupCopies );
     m_spinCopies->setMinValue( 1 );
@@ -586,7 +586,7 @@ void K3bCdImageWritingDialog::slotUpdateImage( const QString& )
             K3bListViewItem* item = new K3bListViewItem( m_infoView, m_infoView->lastItem(),
                                                          i18n("Seems not to be a usable image") );
             item->setForegroundColor( 0, Qt::red );
-            item->setPixmap( 0, SmallIcon( "stop") );
+            item->setPixmap( 0, SmallIcon( "dialog-error") );
         }
         else {
             // remember as recent image
@@ -601,7 +601,7 @@ void K3bCdImageWritingDialog::slotUpdateImage( const QString& )
         K3bListViewItem* item = new K3bListViewItem( m_infoView, m_infoView->lastItem(),
                                                      i18n("File not found") );
         item->setForegroundColor( 0, Qt::red );
-        item->setPixmap( 0, SmallIcon( "stop") );
+        item->setPixmap( 0, SmallIcon( "dialog-error") );
     }
 
     slotToggleAll();
@@ -614,7 +614,7 @@ void K3bCdImageWritingDialog::createIso9660InfoItems( K3bIso9660* isoF )
                                                         i18n("Detected:"),
                                                         i18n("Iso9660 image") );
     isoRootItem->setForegroundColor( 0, palette().disabled().foreground() );
-    isoRootItem->setPixmap( 0, SmallIcon( "cdimage") );
+    isoRootItem->setPixmap( 0, SmallIcon( "application-x-cd-image") );
 
     KIO::filesize_t size = K3b::filesize( KUrl(isoF->fileName()) );
     K3bListViewItem* item = new K3bListViewItem( isoRootItem, m_infoView->lastItem(),
@@ -679,7 +679,7 @@ void K3bCdImageWritingDialog::createCdrecordCloneItems( const QString& tocFile, 
                                                         i18n("Detected:"),
                                                         i18n("Cdrecord clone image") );
     isoRootItem->setForegroundColor( 0, palette().disabled().foreground() );
-    isoRootItem->setPixmap( 0, SmallIcon( "cdimage") );
+    isoRootItem->setPixmap( 0, SmallIcon( "application-x-cd-image") );
 
     K3bListViewItem* item = new K3bListViewItem( isoRootItem, m_infoView->lastItem(),
                                                  i18n("Filesize:"), KIO::convertSize( K3b::filesize(KUrl(imageFile)) ) );
@@ -707,7 +707,7 @@ void K3bCdImageWritingDialog::createCueBinItems( const QString& cueFile, const Q
                                                         i18n("Detected:"),
                                                         i18n("Cue/bin image") );
     isoRootItem->setForegroundColor( 0, palette().disabled().foreground() );
-    isoRootItem->setPixmap( 0, SmallIcon( "cdimage") );
+    isoRootItem->setPixmap( 0, SmallIcon( "application-x-cd-image") );
 
     K3bListViewItem* item = new K3bListViewItem( isoRootItem, m_infoView->lastItem(),
                                                  i18n("Filesize:"), KIO::convertSize( K3b::filesize(KUrl(imageFile)) ) );
@@ -735,7 +735,7 @@ void K3bCdImageWritingDialog::createAudioCueItems( const K3bCueFileParser& cp )
                                                      i18n("Detected:"),
                                                      i18n("Audio Cue Image") );
     rootItem->setForegroundColor( 0, palette().disabled().foreground() );
-    rootItem->setPixmap( 0, SmallIcon( "sound") );
+    rootItem->setPixmap( 0, SmallIcon( "audio-x-generic") );
 
     K3bListViewItem* trackParent = new K3bListViewItem( rootItem,
                                                         i18np("%n track", "%n tracks", cp.toc().count() ),
@@ -862,7 +862,7 @@ void K3bCdImageWritingDialog::calculateMd5Sum( const QString& file )
     d->md5SumItem->setText( 0, i18n("Md5 Sum:") );
     d->md5SumItem->setForegroundColor( 0, palette().disabled().foreground() );
     d->md5SumItem->setProgress( 1, 0 );
-    d->md5SumItem->setPixmap( 0, SmallIcon( "exec") );
+    d->md5SumItem->setPixmap( 0, SmallIcon("system-run") );
 
     if( file != d->lastCheckedFile ) {
         d->lastCheckedFile = file;
@@ -884,6 +884,7 @@ void K3bCdImageWritingDialog::slotMd5JobFinished( bool success )
 {
     if( success ) {
         d->md5SumItem->setText( 1, d->md5Job->hexDigest() );
+        d->md5SumItem->setPixmap( 0, SmallIcon("document-properties") );
         d->haveMd5Sum = true;
     }
     else {
@@ -892,7 +893,7 @@ void K3bCdImageWritingDialog::slotMd5JobFinished( bool success )
             d->md5SumItem->setText( 1, i18n("Calculation cancelled") );
         else
             d->md5SumItem->setText( 1, i18n("Calculation failed") );
-        d->md5SumItem->setPixmap( 0, SmallIcon( "stop") );
+        d->md5SumItem->setPixmap( 0, SmallIcon("dialog-error") );
         d->lastCheckedFile.truncate(0);
     }
 

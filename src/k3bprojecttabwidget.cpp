@@ -138,7 +138,7 @@ void K3bProjectTabWidget::slotDocChanged( K3bDoc* doc )
 {
   // we need to cache the icon changes since the changed() signal will be emitted very often
   if( !m_projectDataMap[doc].modified ) {
-    setTabIconSet( doc->view(), SmallIconSet( "filesave" ) );
+    setTabIconSet( doc->view(), SmallIconSet( "document-save" ) );
     m_projectDataMap[doc].modified = true;
 
     // we need this one for the session management

@@ -446,7 +446,7 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
         QWidget* widgetAtPos = viewport()->childAt(e->pos());
         if( widgetAtPos && widgetAtPos->inherits( "K3bFlatButton" ) ) {
             KMenu pop;
-            removeAction = pop.addAction( SmallIcon("remove"), i18n("Remove Button") );
+            removeAction = pop.addAction( SmallIcon("list-remove"), i18n("Remove Button") );
             if ( addPop.count() > 0 )
                 pop.insertItem( i18n("Add Button"), &addPop );
             pop.insertSeparator();

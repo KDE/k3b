@@ -277,7 +277,7 @@ void K3bDataPropertiesDialog::loadItemProperties( K3bDataItem* dataItem )
 
 void K3bDataPropertiesDialog::loadListProperties( const QList<K3bDataItem*>& items )
 {
-    m_labelIcon->setPixmap( DesktopIcon( "kmultiple", KIconLoader::SizeLarge ) );
+    m_labelIcon->setPixmap( DesktopIcon( "document-multiple", KIconLoader::SizeLarge ) );
 
     int files = 0;
     int folders = 0;

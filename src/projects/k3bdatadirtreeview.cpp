@@ -296,11 +296,11 @@ void K3bDataDirTreeView::setupActions()
     m_actionNewDir->setText( i18n("New Directory...") );
     m_actionNewDir->setShortcut( Qt::CTRL+Qt::Key_N );
     connect( m_actionNewDir, SIGNAL( triggered() ), this, SLOT( slotNewDir() ) );
-    m_actionCollection->addAction( "new_dir", m_actionNewDir );
+    m_actionCollection->addAction( "folder-new", m_actionNewDir );
 
     m_actionRemove = new KAction( this );
     m_actionRemove->setText( i18n("Remove") );
-    m_actionRemove->setIcon( KIcon( "editdelete" ) );
+    m_actionRemove->setIcon( KIcon( "edit-delete" ) );
     m_actionRemove->setShortcut( Qt::Key_Delete );
     connect( m_actionRemove, SIGNAL( triggered() ), this, SLOT( slotRemoveItem() ) );
     m_actionCollection->addAction( "remove", m_actionRemove );
@@ -308,7 +308,7 @@ void K3bDataDirTreeView::setupActions()
     m_actionRename = new KAction( this );
     m_actionRename->setText( i18n("Rename") );
     m_actionRename->setShortcut( Qt::Key_F2 );
-    m_actionRename->setIcon( KIcon( "edit" ) );
+    m_actionRename->setIcon( KIcon( "edit-rename" ) );
     connect( m_actionRemove, SIGNAL( triggered() ), this, SLOT( slotRenameItem() ) );
     m_actionCollection->addAction( "rename", m_actionRename );
 
@@ -429,22 +429,22 @@ void K3bDataDirTreeView::slotDropAnimate()
         else {
             switch(d->animationCounter) {
             case 0:
-                d->animatedDirItem->setPixmap( 0, SmallIcon( "folder_cyan" ) );
+                d->animatedDirItem->setPixmap( 0, SmallIcon( "folder-cyan" ) );
                 break;
             case 1:
-                d->animatedDirItem->setPixmap( 0, SmallIcon( "folder_green" ) );
+                d->animatedDirItem->setPixmap( 0, SmallIcon( "folder-green" ) );
                 break;
             case 2:
-                d->animatedDirItem->setPixmap( 0, SmallIcon( "folder_yellow" ) );
+                d->animatedDirItem->setPixmap( 0, SmallIcon( "folder-yellow" ) );
                 break;
             case 3:
-                d->animatedDirItem->setPixmap( 0, SmallIcon( "folder_orange" ) );
+                d->animatedDirItem->setPixmap( 0, SmallIcon( "folder-orange" ) );
                 break;
             case 4:
-                d->animatedDirItem->setPixmap( 0, SmallIcon( "folder_red" ) );
+                d->animatedDirItem->setPixmap( 0, SmallIcon( "folder-red" ) );
                 break;
             case 5:
-                d->animatedDirItem->setPixmap( 0, SmallIcon( "folder_violet" ) );
+                d->animatedDirItem->setPixmap( 0, SmallIcon( "folder-violet" ) );
                 break;
             }
 
@@ -506,7 +506,7 @@ void K3bDataDirTreeView::checkForNewItems()
         if( K3bDataDirViewItem* dirViewItem = dynamic_cast<K3bDataDirViewItem*>(it.current()) )
             if( it.current() != m_root ) {
                 K3bDirItem* dirItem = dirViewItem->dirItem();
-                dirViewItem->setPixmap( 0, dirItem->depth() > 7 ? SmallIcon( "folder_red" ) : SmallIcon( "folder" ) );
+                dirViewItem->setPixmap( 0, dirItem->depth() > 7 ? SmallIcon( "folder-root" ) : SmallIcon( "folder" ) );
             }
 
         ++it;

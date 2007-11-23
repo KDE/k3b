@@ -294,7 +294,7 @@ void K3bProjectBurnDialog::prepareGui()
     groupCopies->setInsideSpacing( spacingHint() );
     groupCopies->setInsideMargin( marginHint() );
     QLabel* pixLabel = new QLabel( groupCopies );
-    pixLabel->setPixmap( SmallIcon( "cdcopy", KIconLoader::SizeMedium ) );
+    pixLabel->setPixmap( SmallIcon( "tools-media-optical-copy", KIconLoader::SizeMedium ) );
     pixLabel->setScaledContents( false );
     m_spinCopies = new QSpinBox( 1, 999, 1, groupCopies );
 

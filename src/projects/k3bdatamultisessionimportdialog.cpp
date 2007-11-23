@@ -177,7 +177,7 @@ void K3bDataMultisessionImportDialog::addMedium( const K3bMedium& medium )
     QFont fnt( font() );
     fnt.setBold( true );
     mediumItem->setFont( 0, fnt );
-    mediumItem->setPixmap( 0, SmallIcon("cdwriter_unmount") );
+    mediumItem->setPixmap( 0, SmallIcon("media-optical-recordable") );
 
     // the medium item in case we have no session info (will always use the last session)
     d->sessions.insert( mediumItem, SessionInfo( 0, medium.device() ) );
@@ -215,9 +215,9 @@ void K3bDataMultisessionImportDialog::addMedium( const K3bMedium& medium )
                                                .arg( lastSession )
                                                + ( sessionInfo.isEmpty() ? QString::null : " (" + sessionInfo + ')' ) );
             if ( track.type() == K3bDevice::Track::AUDIO )
-                sessionItem->setPixmap( 0, SmallIcon( "sound" ) );
+                sessionItem->setPixmap( 0, SmallIcon( "audio-x-generic" ) );
             else
-                sessionItem->setPixmap( 0, SmallIcon( "tar" ) );
+                sessionItem->setPixmap( 0, SmallIcon( "application-x-tar" ) );
 
             d->sessions.insert( sessionItem, SessionInfo( lastSession, medium.device() ) );
 

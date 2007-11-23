@@ -255,10 +255,10 @@ void K3bDiskInfoView::reloadMedium()
         item = new K3ListViewItem( trackItem, item );
         QString text;
         if( track.type() == K3bTrack::AUDIO ) {
-          item->setPixmap( 0, SmallIcon( "sound" ) );
+          item->setPixmap( 0, SmallIcon( "audio-x-generic" ) );
           text = i18n("Audio");
         } else {
-          item->setPixmap( 0, SmallIcon( "tar" ) );
+          item->setPixmap( 0, SmallIcon( "application-x-tar" ) );
           if( track.mode() == K3bTrack::MODE1 )
             text = i18n("Data/Mode1");
           else if( track.mode() == K3bTrack::MODE2 )

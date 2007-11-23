@@ -338,7 +338,7 @@ K3bFillStatusDisplay::K3bFillStatusDisplay( K3bDoc* doc, QWidget *parent )
 
     d->displayWidget = new K3bFillStatusDisplayWidget( doc, this );
 //   d->buttonMenu = new QToolButton( this );
-//   d->buttonMenu->setIconSet( SmallIconSet("cdrom_unmount") );
+//   d->buttonMenu->setIconSet( SmallIconSet("media-optical") );
 //   d->buttonMenu->setAutoRaise(true);
 //   d->buttonMenu->setToolTip( i18n("Fill display properties") );
 //   connect( d->buttonMenu, SIGNAL(clicked()), this, SLOT(slotMenuButtonClicked()) );
@@ -402,7 +402,7 @@ void K3bFillStatusDisplay::setupPopupMenu()
 #warning setAlwaysEmitActivated
 #endif
     //    d->actionCustomSize->setAlwaysEmitActivated(true);
-    d->actionDetermineSize = K3b::createAction( this, i18n("From Medium..."), "cdrom_unmount", 0,
+    d->actionDetermineSize = K3b::createAction( this, i18n("From Medium..."), "media-optical", 0,
                                                  this, SLOT(slotDetermineSize()),
                                                  d->actionCollection, "fillstatus_size_from_disk" );
 //    d->actionDetermineSize->setAlwaysEmitActivated(true);

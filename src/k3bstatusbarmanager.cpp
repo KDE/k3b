@@ -57,7 +57,7 @@ K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
 
   m_pixFreeTemp = new QLabel( boxFreeTemp );
   (void)new QLabel( i18n("Temp:"), boxFreeTemp );
-  m_pixFreeTemp->setPixmap( SmallIcon("folder_green") );
+  m_pixFreeTemp->setPixmap( SmallIcon("folder-green") );
   m_labelFreeTemp = new QLabel( boxFreeTemp );
   boxFreeTemp->installEventFilter( this );
 
@@ -128,9 +128,9 @@ void K3bStatusBarManager::slotFreeTempSpace(const QString&,
 
   // if we have less than 640 MB that is not good
   if( kbAvail < 655360 )
-    m_pixFreeTemp->setPixmap( SmallIcon("folder_red") );
+    m_pixFreeTemp->setPixmap( SmallIcon("folder-red") );
   else
-    m_pixFreeTemp->setPixmap( SmallIcon("folder_green") );
+    m_pixFreeTemp->setPixmap( SmallIcon("folder-green") );
 
   // update the display every second
   QTimer::singleShot( 2000, this, SLOT(update()) );

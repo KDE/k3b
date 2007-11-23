@@ -81,7 +81,7 @@ void K3bExternalBinWidget::K3bExternalBinViewItem::setDefault( bool b )
 
   m_default = b;
   if( b )
-    setPixmap( 0, SmallIcon( "ok" ) );
+    setPixmap( 0, SmallIcon( "dialog-ok" ) );
   else
     setPixmap( 0, s_emptyPix );
 }

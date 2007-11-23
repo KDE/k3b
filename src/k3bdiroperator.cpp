@@ -55,7 +55,7 @@ K3bDirOperator::K3bDirOperator(const KUrl& url, QWidget* parent )
   m_bmMenu = new KBookmarkMenu( bmMan, this, m_bmPopup->popupMenu(), actionCollection()/*, true*/ );
 
   //FIXME kde4
-  (void)K3b::createAction( this,i18n("&Add to Project"), "",Qt::SHIFT+Qt::Key_Return, 
+  (void)K3b::createAction( this,i18n("&Add to Project"), 0, Qt::SHIFT+Qt::Key_Return, 
 		     this, SLOT(slotAddFilesToProject()), 
 		     actionCollection(), "add_file_to_project");
 }

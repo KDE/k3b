@@ -235,11 +235,11 @@ void K3bDeviceWidget::updateDeviceListViews()
   // create the parent view items
   // -----------------------------------------
   m_writerParentViewItem = new Q3ListViewItem( m_viewDevices, i18n("Writer Drives") );
-  m_writerParentViewItem->setPixmap( 0, SmallIcon( "cdwriter_unmount" ) );
+  m_writerParentViewItem->setPixmap( 0, SmallIcon( "media-optical-recordable" ) );
   // spacer item
   (void)new Q3ListViewItem( m_viewDevices );
   m_readerParentViewItem = new Q3ListViewItem( m_viewDevices, i18n("Readonly Drives") );
-  m_readerParentViewItem->setPixmap( 0, SmallIcon( "cdrom_unmount" ) );
+  m_readerParentViewItem->setPixmap( 0, SmallIcon( "media-optical" ) );
   // -----------------------------------------
 
   QFont fBold( m_viewDevices->font() );

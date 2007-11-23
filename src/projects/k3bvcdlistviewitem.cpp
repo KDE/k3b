@@ -109,17 +109,17 @@ bool K3bVcdListViewItem::animate()
 
     switch ( m_track->mpegType() ) {
             case 0: // MPEG_MOTION
-            setPixmap( 2, ( SmallIcon( "video" ) ) );
+            setPixmap( 2, ( SmallIcon( "video-x-generic" ) ) );
             break;
             case 1: // MPEG_STILL
-            setPixmap( 2, ( SmallIcon( "image" ) ) );
+            setPixmap( 2, ( SmallIcon( "image-x-generic" ) ) );
             break;
             case 2: // MPEG_AUDIO
-            setPixmap( 2, ( SmallIcon( "sound" ) ) );
+            setPixmap( 2, ( SmallIcon( "audio-x-generic" ) ) );
             break;
 
             default:
-            setPixmap( 2, ( SmallIcon( "video" ) ) );
+            setPixmap( 2, ( SmallIcon( "video-x-generic" ) ) );
             break;
     }
 

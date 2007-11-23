@@ -38,7 +38,7 @@ public:
     : K3bListViewItem( parent, after ),
       m_doc(doc)
   {
-    setPixmap( 0, SmallIcon("sound") );
+    setPixmap( 0, SmallIcon("audio-x-generic") );
   }
 
   QString text( int col ) const {

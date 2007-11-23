@@ -168,31 +168,28 @@ void K3bAudioTrackView::setupActions()
 
     m_actionProperties = new KAction( this );
     m_actionProperties->setText( i18n("Properties") );
-    m_actionProperties->setIcon( KIcon( "misc" ) );
+    m_actionProperties->setIcon( KIcon( "document-properties" ) );
     connect( m_actionProperties, SIGNAL( triggered() ), this, SLOT( slotProperties() ) );
     actionCollection()->addAction( "track_properties", m_actionProperties );
 
     m_actionRemove = new KAction( this );
     m_actionRemove->setText( i18n("Remove") );
-    m_actionRemove->setIcon( KIcon( "editdelete" ) );
+    m_actionRemove->setIcon( KIcon( "edit-delete" ) );
     connect( m_actionRemove, SIGNAL( triggered() ), this, SLOT( slotRemove() ) );
     actionCollection()->addAction( "track_remove", m_actionRemove );
 
     m_actionAddSilence = new KAction( this );
     m_actionAddSilence->setText( i18n("Add Silence...") );
-    m_actionAddSilence->setIcon( KIcon( "misc" ) );
     connect( m_actionAddSilence, SIGNAL( triggered() ), this, SLOT( slotRemove() ) );
     actionCollection()->addAction( "track_add_silence", m_actionAddSilence );
 
     m_actionMergeTracks = new KAction( this );
     m_actionMergeTracks->setText( i18n("Merge Tracks") );
-    m_actionMergeTracks->setIcon( KIcon( "misc" ) );
     connect( m_actionMergeTracks, SIGNAL( triggered() ), this, SLOT( slotMergeTracks() ) );
     actionCollection()->addAction( "track_merge", m_actionMergeTracks );
 
     m_actionSplitSource = new KAction( this );
     m_actionSplitSource->setText( i18n("Source to Track") );
-    m_actionSplitSource->setIcon( KIcon( "misc" ) );
     connect( m_actionSplitSource, SIGNAL( triggered() ), this, SLOT( slotSplitSource() ) );
     actionCollection()->addAction( "source_split", m_actionSplitSource );
 
@@ -206,7 +203,7 @@ void K3bAudioTrackView::setupActions()
     connect( m_actionEditSource, SIGNAL( triggered() ), this, SLOT( slotEditSource() ) );
     actionCollection()->addAction( "track_split", m_actionEditSource );
 
-    //     m_actionPlayTrack = new KAction( i18n("Play Track"), "player_play",
+    //     m_actionPlayTrack = new KAction( i18n("Play Track"), "media-playback-start",
 //                                      KShortcut(), this, SLOT(slotPlayTrack()),
 //                                      actionCollection(), "track_play" );
 #ifdef HAVE_MUSICBRAINZ
@@ -990,7 +987,7 @@ void K3bAudioTrackView::showPlayerIndicator( K3bAudioTrack* track )
     removePlayerIndicator();
     m_currentlyPlayingTrack = track;
     K3bAudioTrackViewItem* item = getTrackViewItem( track );
-    item->setPixmap( 1, SmallIcon( "player_play" ) );
+    item->setPixmap( 1, SmallIcon( "media-playback-start" ) );
     m_playerItemAnimator->setItem( item, 1 );
 }
 
@@ -999,9 +996,9 @@ void K3bAudioTrackView::togglePauseIndicator( bool b )
 {
     if( m_currentlyPlayingTrack ) {
         if( b )
-            m_playerItemAnimator->setPixmap( SmallIcon( "player_pause" ) );
+            m_playerItemAnimator->setPixmap( SmallIcon( "media-playback-pause" ) );
         else
-            m_playerItemAnimator->setPixmap( SmallIcon( "player_play" ) );
+            m_playerItemAnimator->setPixmap( SmallIcon( "media-playback-start" ) );
     }
 }
 

@@ -88,14 +88,14 @@ K3bCddbOptionTab::K3bCddbOptionTab( QWidget* parent )
 
 
   // set icons for the buttons
-  m_buttonAddLocalDir->setPixmap( SmallIcon("ok") );
-  m_buttonRemoveLocalDir->setPixmap( SmallIcon("stop") );
-  m_buttonLocalDirUp->setPixmap( SmallIcon("up") );
-  m_buttonLocalDirDown->setPixmap( SmallIcon("down") );
-  m_buttonAddCddbServer->setPixmap( SmallIcon("ok") );
-  m_buttonRemoveCddbServer->setPixmap( SmallIcon("stop") );
-  m_buttonCddbServerUp->setPixmap( SmallIcon("up") );
-  m_buttonCddbServerDown->setPixmap( SmallIcon("down") );
+  m_buttonAddLocalDir->setPixmap( SmallIcon("list-add") );
+  m_buttonRemoveLocalDir->setPixmap( SmallIcon("list-remove") );
+  m_buttonLocalDirUp->setPixmap( SmallIcon("go-up") );
+  m_buttonLocalDirDown->setPixmap( SmallIcon("go-down") );
+  m_buttonAddCddbServer->setPixmap( SmallIcon("list-add") );
+  m_buttonRemoveCddbServer->setPixmap( SmallIcon("list-remove") );
+  m_buttonCddbServerUp->setPixmap( SmallIcon("go-up") );
+  m_buttonCddbServerDown->setPixmap( SmallIcon("go-down") );
 
 
   // setup connections

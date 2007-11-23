@@ -217,11 +217,11 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
     d->labelRequest->setText( message );
 
   if( d->wantedMediaType & K3bDevice::MEDIA_WRITABLE_DVD )
-    d->pixLabel->setPixmap( KIconLoader::global()->loadIcon( "dvd_unmount",
-									 KIconLoader::NoGroup, KIconLoader::SizeMedium ) );
+    d->pixLabel->setPixmap( KIconLoader::global()->loadIcon( "media-optical-dvd",
+                   KIconLoader::NoGroup, KIconLoader::SizeMedium ) );
   else
-    d->pixLabel->setPixmap( KIconLoader::global()->loadIcon( "cdwriter_unmount",
-									 KIconLoader::NoGroup, KIconLoader::SizeMedium ) );
+    d->pixLabel->setPixmap( KIconLoader::global()->loadIcon( "media-optical-recordable",
+                   KIconLoader::NoGroup, KIconLoader::SizeMedium ) );
 
   adjustSize();
 

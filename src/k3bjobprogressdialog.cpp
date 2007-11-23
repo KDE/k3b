@@ -339,17 +339,17 @@ void K3bJobProgressDialog::slotInfoMessage( const QString& infoString, int type 
   // set the icon
   switch( type ) {
   case K3bJob::ERROR:
-    currentInfoItem->setPixmap( 0, SmallIcon( "stop" ) );
+    currentInfoItem->setPixmap( 0, SmallIcon( "dialog-error" ) );
     break;
   case K3bJob::WARNING:
-    currentInfoItem->setPixmap( 0, SmallIcon( "yellowinfo" ) );
+    currentInfoItem->setPixmap( 0, SmallIcon( "dialog-warning" ) );
     break;
   case K3bJob::SUCCESS:
-    currentInfoItem->setPixmap( 0, SmallIcon( "ok" ) );
+    currentInfoItem->setPixmap( 0, SmallIcon( "dialog-ok" ) );
     break;
   case K3bJob::INFO:
   default:
-    currentInfoItem->setPixmap( 0, SmallIcon( "info" ) );
+    currentInfoItem->setPixmap( 0, SmallIcon( "dialog-information" ) );
   }
 
   // This should scroll down (hopefully!)

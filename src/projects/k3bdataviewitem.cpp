@@ -138,7 +138,7 @@ K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, Q3ListView* parent )
     : K3bDataViewItem( dir, parent )
 {
     m_dirItem = dir;
-    setPixmap( 0, dir->depth() > 7 ? SmallIcon( "folder_red" ) : SmallIcon( "folder" ) );
+    setPixmap( 0, dir->depth() > 7 ? SmallIcon( "folder-root" ) : SmallIcon( "folder" ) );
 }
 
 
@@ -146,7 +146,7 @@ K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, Q3ListViewItem* parent 
     : K3bDataViewItem( dir, parent )
 {
     m_dirItem = dir;
-    setPixmap( 0, dir->depth() > 7 ? SmallIcon( "folder_red" ) : SmallIcon( "folder" ) );
+    setPixmap( 0, dir->depth() > 7 ? SmallIcon( "folder-root" ) : SmallIcon( "folder" ) );
 }
 
 
@@ -270,7 +270,7 @@ K3bDataRootViewItem::K3bDataRootViewItem( K3bDataDoc* doc, Q3ListView* parent )
     : K3bDataDirViewItem( doc->root(), parent )
 {
     m_doc = doc;
-    setPixmap( 0, SmallIcon( "cdrom_unmount" ) );
+    setPixmap( 0, SmallIcon( "media-optical" ) );
     setValidator( 0, new K3bLatin1Validator() );
 }
 

@@ -242,7 +242,7 @@ void K3bVideoDVDRippingView::initActions()
 
   KAction* actionStartRip = new KAction( this );
   actionStartRip->setText( i18n("Start Ripping") );
-  actionStartRip->setIcon( KIcon( "gear" ) );
+  actionStartRip->setIcon( KIcon( "system-run" ) );
   actionStartRip->setToolTip( i18n("Open the Video DVD ripping dialog") );
   connect( actionStartRip, SIGNAL( triggered() ), this, SLOT( slotStartRipping() ) );
   actionCollection()->addAction( "start_rip", actionStartRip );

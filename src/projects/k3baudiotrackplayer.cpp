@@ -244,7 +244,7 @@ void K3bAudioTrackPlayer::playPause()
     if( !d->playing ) {
       seek( m_currentPosition );
       d->playing = true;
-      d->actionPlayPause->setIcon( "player_pause" );
+      d->actionPlayPause->setIcon( "media-playback-start" );
       d->actionPause->setEnabled(true);
       d->actionPlay->setEnabled(false);
       //d->actionSeek->setEnabled(true);
@@ -253,7 +253,7 @@ void K3bAudioTrackPlayer::playPause()
     }
     else if( d->paused ) {
       d->paused = false;
-      d->actionPlayPause->setIcon( "player_pause" );
+      d->actionPlayPause->setIcon( "media-playback-pause" );
       d->actionPause->setEnabled(true);
       d->actionPlay->setEnabled(false);
       startStreaming();
@@ -263,7 +263,7 @@ void K3bAudioTrackPlayer::playPause()
     }
     else {
       d->paused = true;
-      d->actionPlayPause->setIcon( "player_play" );
+      d->actionPlayPause->setIcon( "media-playback-start" );
       d->actionPause->setEnabled(false);
       d->actionPlay->setEnabled(true);
       stopStreaming();
@@ -292,7 +292,7 @@ void K3bAudioTrackPlayer::stop()
   d->actionPrev->setEnabled(false);
   d->sliderTimer.stop();
 
-  d->actionPlayPause->setIcon( "player_play" );
+  d->actionPlayPause->setIcon( "media-playback-start" );
 
   emit stopped();
 }

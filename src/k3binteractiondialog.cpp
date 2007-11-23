@@ -84,7 +84,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   if( !m_configGroup.isEmpty() ) {
     Q3HBoxLayout* layout2 = new Q3HBoxLayout( 0, 0, spacingHint(), "layout2");
     m_buttonLoadSettings = new QToolButton( /*i18n("User Defaults"), */mainWidget() );
-    m_buttonLoadSettings->setIconSet( SmallIconSet( "revert" ) );
+    m_buttonLoadSettings->setIconSet( SmallIconSet( "document-revert" ) );
     m_buttonLoadSettings->setPopupMode( QToolButton::MenuButtonPopup );
     Q3PopupMenu* userDefaultsPopup = new Q3PopupMenu( m_buttonLoadSettings );
     userDefaultsPopup->insertItem( i18n("Load default settings"), this, SLOT(slotLoadK3bDefaults()) );
@@ -94,7 +94,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
     layout2->addWidget( m_buttonLoadSettings );
 
     m_buttonSaveSettings = new QToolButton( /*i18n("Save User Defaults"), */mainWidget(), "m_buttonSaveSettings" );
-    m_buttonSaveSettings->setIconSet( SmallIconSet( "filesave" ) );
+    m_buttonSaveSettings->setIconSet( SmallIconSet( "document-save" ) );
     layout2->addWidget( m_buttonSaveSettings );
 
     mainGrid->addLayout( layout2, 2, 0 );

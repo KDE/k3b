@@ -328,25 +328,25 @@ void K3bDataFileView::setupActions()
 
     m_actionProperties = new KAction( this );
     m_actionProperties->setText( i18n("Properties") );
-    m_actionProperties->setIcon( KIcon( "misc" ) );
+    m_actionProperties->setIcon( KIcon( "document-properties" ) );
     connect( m_actionProperties, SIGNAL( triggered() ), this, SLOT(slotProperties()) );
     m_actionCollection->addAction( "properties", m_actionProperties );
 
     m_actionNewDir = new KAction( this );
     m_actionNewDir->setText( i18n("New Directory...") );
-    m_actionNewDir->setIcon( KIcon( "folder_new" ) );
+    m_actionNewDir->setIcon( KIcon( "folder-new" ) );
     m_actionNewDir->setShortcut( Qt::CTRL+Qt::Key_N );
     connect( m_actionNewDir, SIGNAL( triggered() ), this, SLOT(slotNewDir()) );
     m_actionCollection->addAction( "new_dir", m_actionNewDir );
 
-    m_actionRemove = K3b::createAction( this, i18n("Remove"), "editdelete", Qt::Key_Delete, this, SLOT(slotRemoveItem()),
+    m_actionRemove = K3b::createAction( this, i18n("Remove"), "edit-delete", Qt::Key_Delete, this, SLOT(slotRemoveItem()),
                                         actionCollection(), "remove" );
-    m_actionRename = K3b::createAction( this, i18n("Rename"), "edit", Qt::Key_F2, this, SLOT(slotRenameItem()),
-                                  actionCollection(), "rename" );
-    m_actionParentDir = K3b::createAction( this, i18n("Parent Directory"), "up", 0, this, SLOT(slotParentDir()),
-                                     actionCollection(), "parent_dir" );
-    m_actionOpen = K3b::createAction( this, i18n("Open"), "fileopen", 0, this, SLOT(slotOpen()),
-                                actionCollection(), "open" );
+    m_actionRename = K3b::createAction( this, i18n("Rename"), "edit-rename", Qt::Key_F2, this, SLOT(slotRenameItem()),
+                                        actionCollection(), "rename" );
+    m_actionParentDir = K3b::createAction( this, i18n("Parent Directory"), "go-up", 0, this, SLOT(slotParentDir()),
+                                           actionCollection(), "parent_dir" );
+    m_actionOpen = K3b::createAction( this, i18n("Open"), "document-open", 0, this, SLOT(slotOpen()),
+                                      actionCollection(), "open" );
 
     m_popupMenu = new KMenu( this );
     m_popupMenu->addAction( m_actionParentDir );

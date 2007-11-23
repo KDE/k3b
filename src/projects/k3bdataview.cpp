@@ -74,12 +74,12 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent )
 
 
     // the data actions
-    KAction* actionImportSession = K3b::createAction( this, i18n("&Import Session..."), "gear", 0, this, SLOT(importSession()),
+    KAction* actionImportSession = K3b::createAction( this, i18n("&Import Session..."), "document-import", 0, this, SLOT(importSession()),
                                                       actionCollection(), "project_data_import_session" );
-    KAction* actionClearSession = K3b::createAction( this, i18n("&Clear Imported Session"), "gear", 0, this,
+    KAction* actionClearSession = K3b::createAction( this, i18n("&Clear Imported Session"), "edit-clear", 0, this,
                                                      SLOT(clearImportedSession()), actionCollection(),
                                                      "project_data_clear_imported_session" );
-    KAction* actionEditBootImages = K3b::createAction( this, i18n("&Edit Boot Images..."), "cdtrack", 0, this,
+    KAction* actionEditBootImages = K3b::createAction( this, i18n("&Edit Boot Images..."), "object-edit", 0, this,
                                                        SLOT(editBootImages()), actionCollection(),
                                                        "project_data_edit_boot_images" );
 

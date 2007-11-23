@@ -338,7 +338,7 @@ void K3bVideoCdView::initActions()
                                            SLOT( slotDeselect() ), actionCollection(),
                                            "deselect_track" );
 
-    KAction* actionStartRip = K3b::createAction(this, i18n( "Start Ripping" ), "run", 0, this,
+    KAction* actionStartRip = K3b::createAction(this, i18n( "Start Ripping" ), "system-run", 0, this,
                                            SLOT( startRip() ), actionCollection(), "start_rip" );
 
     // TODO: set the actions tooltips and whatsthis infos

@@ -57,8 +57,8 @@ K3bDeviceBranch::K3bDeviceBranch( K3FileTreeView* view, K3bDevice::Device* dev, 
 		     KUrl( "media:/" + dev->blockDeviceName() ),
 		     QString("%1 - %2").arg(dev->vendor()).arg(dev->description()),
 		     ( dev->burner()
-		       ? SmallIcon("cdwriter_unmount")
-		       : SmallIcon("cdrom_unmount") ),
+		       ? SmallIcon("media-optical-recordable")
+		       : SmallIcon("media-optical") ),
 		     false,
 		     item == 0
 		     ? new K3bDeviceBranchViewItem( view, dev, this )
@@ -476,8 +476,8 @@ void K3bFileTreeView::addDefaultBranches()
   KUrl root = KUrl( "file:/" );
   //FIXME kde4
 #if 0
-  KFileTreeBranch* treeBranch = addBranch( new K3bFileTreeBranch( this, root, i18n("Root"), SmallIcon("folder_red") ) );
-  treeBranch = addBranch( new K3bFileTreeBranch( this, home, i18n("Home"), SmallIcon("folder_home") ) );
+  KFileTreeBranch* treeBranch = addBranch( new K3bFileTreeBranch( this, root, i18n("Root"), SmallIcon("folder-root") ) );
+  treeBranch = addBranch( new K3bFileTreeBranch( this, home, i18n("Home"), SmallIcon("user-home") ) );
   treeBranch->setOpen( true );
 #endif
 }

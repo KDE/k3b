@@ -125,7 +125,7 @@ void K3bOptionDialog::setupBurningPage()
     m_burningOptionTab = new K3bBurningOptionTab;
     KPageWidgetItem* item = addPage( m_burningOptionTab, i18n("Advanced") );
     item->setHeader( i18n("Advanced Settings") );
-    item->setIcon( KIcon( "cdwriter_unmount" ) );
+    item->setIcon( KIcon( "media-optical-recordable" ) );
 }
 
 
@@ -134,7 +134,7 @@ void K3bOptionDialog::setupProgramsPage()
     m_externalBinOptionTab = new K3bExternalBinOptionTab( k3bcore->externalBinManager() );
     KPageWidgetItem* item = addPage( m_externalBinOptionTab, i18n("Programs") );
     item->setHeader( i18n("Setup External Programs") );
-    item->setIcon( KIcon( "exec" ) );
+    item->setIcon( KIcon( "system-run" ) );
 }
 
 
@@ -143,7 +143,7 @@ void K3bOptionDialog::setupDevicePage()
     m_deviceOptionTab = new K3bDeviceOptionTab;
     KPageWidgetItem* item = addPage( m_deviceOptionTab, i18n("Devices") );
     item->setHeader( i18n("Setup Devices") );
-    item->setIcon( KIcon( "blockdevice" ) );
+    item->setIcon( KIcon( "drive-optical" ) );
 }
 
 
@@ -152,7 +152,7 @@ void K3bOptionDialog::setupMiscPage()
     m_miscOptionTab = new K3bMiscOptionTab;
     KPageWidgetItem* item = addPage( m_miscOptionTab, i18n("Misc") );
     item->setHeader( i18n("Miscellaneous Settings") );
-    item->setIcon( KIcon( "misc" ) );
+    item->setIcon( KIcon( "preferences-other" ) );
 }
 
 
@@ -161,7 +161,7 @@ void K3bOptionDialog::setupNotifyPage()
     m_notifyOptionTab = new K3bNotifyOptionTab;
     KPageWidgetItem* item = addPage( m_notifyOptionTab, i18n("Notifications") );
     item->setHeader( i18n("System Notifications") );
-    item->setIcon( KIcon( "knotify" ) );
+    item->setIcon( KIcon( "preferences-desktop-notification" ) );
 }
 
 
@@ -170,7 +170,7 @@ void K3bOptionDialog::setupPluginPage()
     m_pluginOptionTab = new K3bPluginOptionTab;
     KPageWidgetItem* item = addPage( m_pluginOptionTab, i18n("Plugins") );
     item->setHeader( i18n("K3b Plugin Configuration") );
-    item->setIcon( KIcon( "gear" ) );
+    item->setIcon( KIcon( "preferences-plugin" ) );
 }
 
 
@@ -179,7 +179,7 @@ void K3bOptionDialog::setupThemePage()
     m_themeOptionTab = new K3bThemeOptionTab;
     KPageWidgetItem* item = addPage( m_themeOptionTab, i18n("Themes") );
     item->setHeader( i18n("K3b GUI Themes") );
-    item->setIcon( KIcon( "style" ) );
+    item->setIcon( KIcon( "preferences-desktop-theme" ) );
 }
 
 

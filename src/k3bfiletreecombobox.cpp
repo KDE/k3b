@@ -123,7 +123,7 @@ void K3bFileTreeComboBox::setUrl( const KUrl& url )
 
 void K3bFileTreeComboBox::setDevice( K3bDevice::Device* dev )
 {
-  setEditText( SmallIcon("cdrom_unmount"), dev->vendor() + " " + dev->description() + " (" + dev->blockDeviceName() + ")" );
+  setEditText( SmallIcon("media-optical"), dev->vendor() + " " + dev->description() + " (" + dev->blockDeviceName() + ")" );
 }
 
 
