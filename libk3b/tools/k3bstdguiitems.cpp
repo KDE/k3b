@@ -199,16 +199,16 @@ QCheckBox* K3bStdGuiItems::ignoreAudioReadErrorsCheckBox( QWidget* parent )
 }
 
 
-Q3Frame* K3bStdGuiItems::horizontalLine( QWidget* parent )
+QFrame* K3bStdGuiItems::horizontalLine( QWidget* parent )
 {
-  Q3Frame* line = new Q3Frame( parent );
-  line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
+  QFrame* line = new QFrame( parent );
+  line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
   return line;
 }
 
-Q3Frame* K3bStdGuiItems::verticalLine( QWidget* parent )
+QFrame* K3bStdGuiItems::verticalLine( QWidget* parent )
 {
-  Q3Frame* line = new Q3Frame( parent );
-  line->setFrameStyle( Q3Frame::VLine | Q3Frame::Sunken );
+  QFrame* line = new QFrame( parent );
+  line->setFrameStyle( QFrame::VLine | QFrame::Sunken );
   return line;
 }

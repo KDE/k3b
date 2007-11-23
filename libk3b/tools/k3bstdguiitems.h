@@ -16,12 +16,12 @@
 #define K3B_STD_GUIITEMS_H
 #include "k3b_export.h"
 //Added by qt3to4:
-#include <Q3Frame>
+#include <QFrame>
 
 class QWidget;
 class QCheckBox;
 class QComboBox;
-class Q3Frame;
+class QFrame;
 
 
 namespace K3bStdGuiItems
@@ -39,8 +39,8 @@ namespace K3bStdGuiItems
   LIBK3B_EXPORT QCheckBox* normalizeCheckBox( QWidget* parent = 0 );
   LIBK3B_EXPORT QCheckBox* verifyCheckBox( QWidget* parent = 0 );
   LIBK3B_EXPORT QCheckBox* ignoreAudioReadErrorsCheckBox( QWidget* parent = 0 );
-  LIBK3B_EXPORT Q3Frame* horizontalLine( QWidget* parent = 0 );
-  LIBK3B_EXPORT Q3Frame* verticalLine( QWidget* parent = 0 );
+  LIBK3B_EXPORT QFrame* horizontalLine( QWidget* parent = 0 );
+  LIBK3B_EXPORT QFrame* verticalLine( QWidget* parent = 0 );
 }
 
 #endif

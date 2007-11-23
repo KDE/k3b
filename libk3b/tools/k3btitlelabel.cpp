@@ -23,7 +23,7 @@
 #include <qtooltip.h>
 //Added by qt3to4:
 #include <QHelpEvent>
-#include <Q3Frame>
+#include <QFrame>
 
 
 class K3bTitleLabel::Private
@@ -59,7 +59,7 @@ public:
 
 
 K3bTitleLabel::K3bTitleLabel( QWidget* parent )
-    : Q3Frame( parent )
+    : QFrame( parent )
 {
     d = new Private();
 }
@@ -107,7 +107,7 @@ QSize K3bTitleLabel::minimumSizeHint() const
 
 void K3bTitleLabel::resizeEvent( QResizeEvent* e )
 {
-    Q3Frame::resizeEvent( e );
+    QFrame::resizeEvent( e );
     updatePositioning();
     update();
 }
@@ -180,7 +180,8 @@ void K3bTitleLabel::updatePositioning()
     // cut the text to window width
     d->displayTitle = d->title;
     d->displaySubTitle = d->subTitle;
-    int widthAvail = contentsRect().width() - 2*margin();
+    //FIXME add margin
+    int widthAvail = contentsRect().width() /*- 2*margin()*/;
 
     // 5 pix spacing between title and subtitle
     if( !d->subTitle.isEmpty() )
@@ -263,7 +264,7 @@ bool K3bTitleLabel::event( QEvent* event )
         return true;
     }
 
-    return Q3Frame::event( event );
+    return QFrame::event( event );
 }
 
 #include "k3btitlelabel.moc"

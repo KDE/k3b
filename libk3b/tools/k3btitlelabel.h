@@ -24,7 +24,7 @@ class QPainter;
 class QResizeEvent;
 
 
-class LIBK3B_EXPORT K3bTitleLabel : public Q3Frame
+class LIBK3B_EXPORT K3bTitleLabel : public QFrame
 {
     Q_OBJECT
 

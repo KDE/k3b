@@ -41,7 +41,7 @@
 #include <QKeyEvent>
 #include <Q3PtrList>
 #include <QPixmap>
-#include <Q3Frame>
+#include <QFrame>
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
@@ -751,7 +751,7 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
   case K3bListViewItem::LINE: {
     if( !m_editorLineEdit ) {
       m_editorLineEdit = new QLineEdit( viewport() );
-      m_editorLineEdit->setFrameStyle( Q3Frame::Box | Q3Frame::Plain );
+      m_editorLineEdit->setFrameStyle( QFrame::Box | QFrame::Plain );
       m_editorLineEdit->setLineWidth(1);
       m_editorLineEdit->installEventFilter( this );
     }
