@@ -103,7 +103,7 @@ class LIBK3B_EXPORT K3bPlugin : public QObject
    *
    * The caller has to destroy the widget
    */
-  virtual K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0, const char* name = 0 ) const;
+  virtual K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0 ) const;
 
  private:
   K3bPluginInfo m_pluginInfo;

@@ -27,7 +27,7 @@ K3bPlugin::~K3bPlugin()
 }
 
 
-K3bPluginConfigWidget* K3bPlugin::createConfigWidget( QWidget*, const char* ) const
+K3bPluginConfigWidget* K3bPlugin::createConfigWidget( QWidget*) const
 {
   return 0;
 }
