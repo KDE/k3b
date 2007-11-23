@@ -140,12 +140,13 @@ void K3bThemeOptionTab::slotInstallTheme()
 
     if( !KIO::NetAccess::download( themeURL, themeTmpFile, this ) ) {
         QString sorryText;
+        QString tmpArg = themeURL.prettyUrl();
         if (themeURL.isLocalFile())
-            sorryText = i18n("Unable to find the icon theme archive %1.");
+            sorryText = i18n("Unable to find the icon theme archive %1.",tmpArg);
         else
             sorryText = i18n("Unable to download the icon theme archive.\n"
-                             "Please check that address %1 is correct.");
-        KMessageBox::sorry( this, sorryText.arg(themeURL.prettyUrl()) );
+                             "Please check that address %1 is correct.",tmpArg);
+        KMessageBox::sorry( this, sorryText );
         return;
     }
 
@@ -207,8 +208,7 @@ void K3bThemeOptionTab::slotRemoveTheme()
         QString question=i18n("<qt>Are you sure you want to remove the "
                               "<strong>%1</strong> icon theme?<br>"
                               "<br>"
-                              "This will delete the files installed by this theme.</qt>").
-                         arg(item->text(0));
+                              "This will delete the files installed by this theme.</qt>",item->text(0));
 
         if( KMessageBox::warningContinueCancel( this, question, i18n("Delete") ) != KMessageBox::Continue )
             return;
