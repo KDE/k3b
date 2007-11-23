@@ -84,6 +84,8 @@ K3bVcdTrackDialog::K3bVcdTrackDialog( K3bVcdDoc* _doc, QList<K3bVcdTrack*>& trac
 
         fillGui();
     }
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
+    connect(this,SIGNAL(applyClicked()),this,SLOT(slotApply()));
 }
 
 K3bVcdTrackDialog::~K3bVcdTrackDialog()

@@ -29,6 +29,7 @@ K3bBootImageDialog::K3bBootImageDialog( K3bDataDoc* doc,
   setCaption(i18n("Boot Images"));
   setModal(modal);
   setButtons(Ok);
+  connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
   m_bootImageView = new K3bBootImageView( doc, this );
   setMainWidget( m_bootImageView );
 }
