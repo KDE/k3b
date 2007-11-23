@@ -13,8 +13,6 @@ find_package(Kcddb REQUIRED)
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 add_definitions (-DQT3_SUPPORT)
 
-include(ConvenienceLibs.cmake)
-
 include(ConfigureChecks.cmake)
 
 include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}
