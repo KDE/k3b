@@ -44,8 +44,8 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, bool showSubProgr
   m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Estimated writing speed:"), m_frameExtraInfo ), 1, 0 );
 
   m_labelWriter = new K3bThemedLabel( m_frameExtraInfo );
-  m_labelWriter->setFrameShape( Q3Frame::StyledPanel );
-  m_labelWriter->setFrameShadow( Q3Frame::Sunken );
+  m_labelWriter->setFrameShape( QFrame::StyledPanel );
+  m_labelWriter->setFrameShadow( QFrame::Sunken );
   m_labelWriter->setLineWidth( 1 );
   m_labelWriter->setMargin( 5 );
   QFont textLabel14_font( m_labelWriter->font() );

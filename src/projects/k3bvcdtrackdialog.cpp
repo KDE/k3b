@@ -389,8 +389,8 @@ void K3bVcdTrackDialog::prepareGui()
     m_muxrate->setText( i18n( "%1 bit/s" ,QString::number( 0 ) ));
     m_muxrate->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
 
-    Q3Frame* fileInfoLine = new Q3Frame( groupFileInfo );
-    fileInfoLine->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
+    QFrame* fileInfoLine = new QFrame( groupFileInfo );
+    fileInfoLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
     groupFileInfoLayout->addWidget( m_labelMimeType, 0, 0 );
     groupFileInfoLayout->addMultiCellWidget( m_displayFileName, 0, 1, 1, 1 );

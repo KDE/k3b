@@ -42,7 +42,7 @@
 #include <Q3GridLayout>
 #include <Q3PtrList>
 #include <QPixmap>
-#include <Q3Frame>
+#include <QFrame>
 #include <Q3WhatsThis>
 #include <QMouseEvent>
 #include <QPaintEvent>
@@ -329,7 +329,7 @@ public:
 
 
 K3bFillStatusDisplay::K3bFillStatusDisplay( K3bDoc* doc, QWidget *parent )
-    : Q3Frame(parent)
+    : QFrame(parent)
 {
     d = new Private;
     d->doc = doc;
@@ -815,7 +815,7 @@ bool K3bFillStatusDisplay::event( QEvent* event )
         return true;
     }
 
-    return Q3Frame::event( event );
+    return QFrame::event( event );
 }
 
 #include "k3bfillstatusdisplay.moc"

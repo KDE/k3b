@@ -33,7 +33,7 @@
 //Added by qt3to4:
 #include <QDropEvent>
 #include <Q3GridLayout>
-#include <Q3Frame>
+#include <QFrame>
 #include <k3urldrag.h>
 
 #include <kiconloader.h>
@@ -175,9 +175,9 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent )
 
   m_labelOverallTime->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
   m_labelCurrentTime->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
-  m_labelOverallTime->setFrameStyle( Q3Frame::StyledPanel | Q3Frame::Plain );
-  m_labelCurrentTime->setFrameStyle( Q3Frame::StyledPanel | Q3Frame::Plain );
-  m_labelFilename->setFrameStyle( Q3Frame::StyledPanel | Q3Frame::Plain );
+  m_labelOverallTime->setFrameStyle( QFrame::StyledPanel | QFrame::Plain );
+  m_labelCurrentTime->setFrameStyle( QFrame::StyledPanel | QFrame::Plain );
+  m_labelFilename->setFrameStyle( QFrame::StyledPanel | QFrame::Plain );
   m_labelOverallTime->setPalette( QPalette( QColor(238, 238, 205) ) );
   m_labelCurrentTime->setPalette( QPalette( QColor(238, 238, 205) ) );
   m_labelFilename->setPalette( QPalette( QColor(238, 238, 205) ) );

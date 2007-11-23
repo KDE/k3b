@@ -38,7 +38,7 @@
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
-#include <Q3Frame>
+#include <QFrame>
 #include <QPixmap>
 #include <Q3VBoxLayout>
 
@@ -102,13 +102,13 @@ public:
 
 
 K3bPassivePopup::K3bPassivePopup( QWidget* parent )
-  : Q3Frame( parent )
+  : QFrame( parent )
 {
   d = new Private;
   d->timeout = 6000;
   d->showEffect = 0;
 
-  setFrameStyle( Q3Frame::StyledPanel | Q3Frame::Raised );
+  setFrameStyle( QFrame::StyledPanel | QFrame::Raised );
 
   Q3VBoxLayout* mainLay = new Q3VBoxLayout( this );
   mainLay->setMargin( frameWidth() );

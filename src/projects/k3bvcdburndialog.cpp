@@ -27,7 +27,7 @@
 #include <qfileinfo.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
-#include <Q3Frame>
+#include <QFrame>
 #include <Q3TextStream>
 
 #include <klocale.h>
@@ -482,10 +482,10 @@ void K3bVcdBurnDialog::setupLabelTab()
     m_spinVolumeNumber->setMaxValue( 1 );
     m_spinVolumeCount->setMinValue( 1 );
 
-    Q3Frame* line = new Q3Frame( w );
-    line->setFrameShape( Q3Frame::HLine );
-    line->setFrameShadow( Q3Frame::Sunken );
-    line->setFrameShape( Q3Frame::HLine );
+    QFrame* line = new QFrame( w );
+    line->setFrameShape( QFrame::HLine );
+    line->setFrameShadow( QFrame::Sunken );
+    line->setFrameShape( QFrame::HLine );
 
 
     // ----------------------------------------------------------------------

@@ -19,7 +19,7 @@
 #include <kdialog.h>
 
 //Added by qt3to4:
-#include <Q3Frame>
+#include <QFrame>
 #include <QLabel>
 #include <QList>
 
@@ -55,7 +55,7 @@ private:
     QLabel* m_labelBlocks;
     QLabel* m_extraInfoLabel;
 
-    Q3Frame* m_spacerLine;
+    QFrame* m_spacerLine;
 
     QLabel* m_labelLocalNameText;
     QLabel* m_labelLocalLocationText;

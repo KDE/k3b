@@ -74,7 +74,7 @@ private:
 };
 
 
-class K3bFillStatusDisplay : public Q3Frame  {
+class K3bFillStatusDisplay : public QFrame  {
 
     Q_OBJECT
 

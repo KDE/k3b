@@ -167,7 +167,7 @@ void K3bMedium::update()
 
     if( d->diskInfo.diskState() != K3bDevice::STATE_NO_MEDIA ) {
         kDebug() << "(K3bMedium) found medium: (" << d->device->blockDeviceName() << ')' << endl
-                  << "=====================================================" << endl;
+                  << "=====================================================";
         d->diskInfo.debug();
         kDebug() << "=====================================================";
     }
@@ -240,7 +240,7 @@ void K3bMedium::analyseContent()
     if( iso.open() ) {
       d->isoDesc = iso.primaryDescriptor();
       kDebug() << "(K3bMedium) found volume id from start sector " << startSec
-		<< ": '" << d->isoDesc.volumeId << "'" << endl;
+		<< ": '" << d->isoDesc.volumeId << "'" ;
 
       if( diskInfo().isDvdMedia() ) {
 	// Every VideoDVD needs to have a VIDEO_TS.IFO file

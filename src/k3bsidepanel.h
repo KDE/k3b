@@ -17,11 +17,11 @@
 
 #include <qtoolbox.h>
 //Added by qt3to4:
-#include <Q3Frame>
+#include <QFrame>
 
 class K3bMainWindow;
 class K3bFileTreeView;
-class Q3Frame;
+class QFrame;
 class KAction;
 
 
@@ -43,8 +43,8 @@ class K3bSidePanel : public QToolBox
   K3bMainWindow* m_mainWindow;
   K3bFileTreeView* m_fileTreeView;
 
-  Q3Frame* createPanel();
-  void addButton( Q3Frame* frame, QAction* action );
+  QFrame* createPanel();
+  void addButton( QFrame* frame, QAction* action );
 };
 
 #endif

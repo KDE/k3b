@@ -49,7 +49,7 @@
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <QPixmap>
-#include <Q3Frame>
+#include <QFrame>
 #include <QStyleOption>
 
 K3bDeviceBranch::K3bDeviceBranch( K3FileTreeView* view, K3bDevice::Device* dev, K3FileTreeViewItem* item )
@@ -334,9 +334,9 @@ void K3bDeviceTreeToolTip::maybeTip( const QPoint& pos )
 
   K3bDevice::Device* dev = static_cast<K3bDeviceBranch*>( item->branch() )->device();
 
-  Q3Frame* tooltip = new Q3Frame( parentWidget() );
-  tooltip->setFrameStyle( Q3Frame::Panel | Q3Frame::Raised );
-  tooltip->setFrameShape( Q3Frame::StyledPanel );
+  QFrame* tooltip = new QFrame( parentWidget() );
+  tooltip->setFrameStyle( QFrame::Panel | QFrame::Raised );
+  tooltip->setFrameShape( QFrame::StyledPanel );
   Q3GridLayout* lay = new Q3GridLayout( tooltip, 2, 2, tooltip->frameWidth()*2 /*margin*/, 6 /*spacing*/ );
 
   QString text = k3bappcore->mediaCache()->medium( dev ).longString();

@@ -27,7 +27,7 @@
 class QPainter;
 
 
-class K3bAudioEditorWidget : public Q3Frame
+class K3bAudioEditorWidget : public QFrame
 {
     Q_OBJECT
 

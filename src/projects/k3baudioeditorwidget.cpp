@@ -23,7 +23,7 @@
 #include <qtooltip.h>
 //Added by qt3to4:
 #include <Q3PointArray>
-#include <Q3Frame>
+#include <QFrame>
 #include <Q3ValueList>
 #include <QMouseEvent>
 #include <Q3PtrList>
@@ -175,7 +175,7 @@ public:
 
 
 K3bAudioEditorWidget::K3bAudioEditorWidget( QWidget* parent )
-    : Q3Frame( parent ),
+    : QFrame( parent ),
       m_maxMarkers(1),
       m_idCnt(1),
       m_mouseAt(true),
@@ -684,7 +684,7 @@ void K3bAudioEditorWidget::mousePressEvent( QMouseEvent* e )
         m_draggedMarker = findMarker( e->pos() );
     }
 
-    Q3Frame::mousePressEvent(e);
+    QFrame::mousePressEvent(e);
 }
 
 
@@ -708,13 +708,13 @@ void K3bAudioEditorWidget::mouseReleaseEvent( QMouseEvent* e )
     m_draggedMarker = 0;
     d->movedRange = 0;
 
-    Q3Frame::mouseReleaseEvent(e);
+    QFrame::mouseReleaseEvent(e);
 }
 
 
 void K3bAudioEditorWidget::mouseDoubleClickEvent( QMouseEvent* e )
 {
-    Q3Frame::mouseDoubleClickEvent(e);
+    QFrame::mouseDoubleClickEvent(e);
 }
 
 
@@ -777,7 +777,7 @@ void K3bAudioEditorWidget::mouseMoveEvent( QMouseEvent* e )
     else
         setCursor( Qt::PointingHandCursor );
 
-    Q3Frame::mouseMoveEvent(e);
+    QFrame::mouseMoveEvent(e);
 }
 
 

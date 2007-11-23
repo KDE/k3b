@@ -85,7 +85,7 @@ void K3bDebuggingOutputDialog::slotUser1()
 	t << debugView->text();
       }
       else {
-	KMessageBox::error( this, i18n("Could not open file %1").arg(filename) );
+	KMessageBox::error( this, i18n("Could not open file %1",filename) );
       }
     }
   }

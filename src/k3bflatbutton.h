@@ -31,7 +31,7 @@ class QAction;
 /**
 @author Sebastian Trueg
 */
-class K3bFlatButton : public Q3Frame
+class K3bFlatButton : public QFrame
 {
   Q_OBJECT
 

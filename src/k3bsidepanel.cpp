@@ -37,7 +37,7 @@ K3bSidePanel::K3bSidePanel( K3bMainWindow* m, QWidget* parent )
   addItem( m_fileTreeView, SmallIconSet( "folder-open" ), i18n("Folders") );
 
   // CD projects
-  Q3Frame* cdProjectsFrame = createPanel();
+  QFrame* cdProjectsFrame = createPanel();
   addItem( cdProjectsFrame, SmallIconSet( "media-optical" ), i18n("CD Tasks") );
   addButton( cdProjectsFrame, m_mainWindow->action( "file_new_audio" ) );
   addButton( cdProjectsFrame, m_mainWindow->action( "file_new_data" ) );
@@ -52,7 +52,7 @@ K3bSidePanel::K3bSidePanel( K3bMainWindow* m, QWidget* parent )
   grid->setRowStretch( grid->numRows()+1, 1 );
 
   // DVD projects
-  Q3Frame* dvdProjectsFrame = createPanel();
+  QFrame* dvdProjectsFrame = createPanel();
   addItem( dvdProjectsFrame, SmallIconSet( "media-optical-dvd" ), i18n("DVD Tasks") );
   addButton( dvdProjectsFrame, m_mainWindow->action( "file_new_dvd" ) );
   addButton( dvdProjectsFrame, m_mainWindow->action( "file_new_video_dvd" ) );
@@ -75,9 +75,9 @@ K3bSidePanel::~K3bSidePanel()
 }
 
 
-Q3Frame* K3bSidePanel::createPanel()
+QFrame* K3bSidePanel::createPanel()
 {
-  Q3Frame* frame = new Q3Frame( this );
+  QFrame* frame = new QFrame( this );
   frame->setPaletteBackgroundColor( Qt::white );
   Q3GridLayout* grid = new Q3GridLayout( frame );
   grid->setMargin( 5 );
@@ -86,7 +86,7 @@ Q3Frame* K3bSidePanel::createPanel()
 }
 
 
-void K3bSidePanel::addButton( Q3Frame* frame, QAction* a )
+void K3bSidePanel::addButton( QFrame* frame, QAction* a )
 {
   if( a ) {
     QToolButton* b = new QToolButton( frame );

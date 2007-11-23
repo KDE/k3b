@@ -54,7 +54,7 @@
 #include <Q3HBoxLayout>
 #include <QKeyEvent>
 #include <Q3GridLayout>
-#include <Q3Frame>
+#include <QFrame>
 #include <Q3VBoxLayout>
 #include <QCloseEvent>
 
@@ -123,21 +123,21 @@ void K3bJobProgressDialog::setupGUI()
 
   // header
   // ------------------------------------------------------------------------------------------
-  Q3Frame* headerFrame = new Q3Frame( this, "headerFrame" );
-  headerFrame->setFrameShape( Q3Frame::StyledPanel );
-  headerFrame->setFrameShadow( Q3Frame::Sunken );
+  QFrame* headerFrame = new QFrame( this, "headerFrame" );
+  headerFrame->setFrameShape( QFrame::StyledPanel );
+  headerFrame->setFrameShadow( QFrame::Sunken );
   headerFrame->setLineWidth( 1 );
-  headerFrame->setMargin( 1 );
+  //headerFrame->setMargin( 1 );
   Q3HBoxLayout* headerLayout = new Q3HBoxLayout( headerFrame );
   headerLayout->setMargin( 2 ); // to make sure the frame gets displayed
   headerLayout->setSpacing( 0 );
   m_pixLabel = new K3bThemedLabel( headerFrame );
   headerLayout->addWidget( m_pixLabel );
 
-  Q3Frame* frame4 = new Q3Frame( headerFrame, "frame4" );
+  QFrame* frame4 = new QFrame( headerFrame, "frame4" );
   frame4->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 1, 0, frame4->sizePolicy().hasHeightForWidth() ) );
-  frame4->setFrameShape( Q3Frame::NoFrame );
-  frame4->setFrameShadow( Q3Frame::Raised );
+  frame4->setFrameShape( QFrame::NoFrame );
+  frame4->setFrameShadow( QFrame::Raised );
   Q3VBoxLayout* frame4Layout = new Q3VBoxLayout( frame4, 6, 3, "frame4Layout");
 
   m_labelJob = new K3bThemedLabel( frame4 );
@@ -171,20 +171,20 @@ void K3bJobProgressDialog::setupGUI()
 
   // progress header
   // ------------------------------------------------------------------------------------------
-  Q3Frame* progressHeaderFrame = new Q3Frame( this, "progressHeaderFrame" );
-  progressHeaderFrame->setFrameShape( Q3Frame::StyledPanel );
-  progressHeaderFrame->setFrameShadow( Q3Frame::Sunken );
+  QFrame* progressHeaderFrame = new QFrame( this, "progressHeaderFrame" );
+  progressHeaderFrame->setFrameShape( QFrame::StyledPanel );
+  progressHeaderFrame->setFrameShadow( QFrame::Sunken );
   progressHeaderFrame->setLineWidth( 1 );
-  progressHeaderFrame->setMargin( 1 );
+  //progressHeaderFrame->setMargin( 1 );
 
   Q3HBoxLayout* progressHeaderLayout = new Q3HBoxLayout( progressHeaderFrame );
   progressHeaderLayout->setMargin( 2 );
   progressHeaderLayout->setSpacing( 0 );
 
-  Q3Frame* frame5 = new Q3Frame( progressHeaderFrame, "frame5" );
+  QFrame* frame5 = new QFrame( progressHeaderFrame, "frame5" );
   frame5->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 1, 0, frame5->sizePolicy().hasHeightForWidth() ) );
-  frame5->setFrameShape( Q3Frame::NoFrame );
-  frame5->setFrameShadow( Q3Frame::Raised );
+  frame5->setFrameShape( QFrame::NoFrame );
+  frame5->setFrameShadow( QFrame::Raised );
   Q3VBoxLayout* frame5Layout = new Q3VBoxLayout( frame5, 6, 3, "frame5Layout");
 
   m_labelTask = new K3bThemedLabel( frame5 );
@@ -230,17 +230,17 @@ void K3bJobProgressDialog::setupGUI()
   m_progressPercent = new QProgressBar( this );
   mainLayout->addWidget( m_progressPercent );
 
-  m_frameExtraInfo = new Q3Frame( this );
-  m_frameExtraInfo->setFrameShape( Q3Frame::NoFrame );
-  m_frameExtraInfo->setFrameShadow( Q3Frame::Raised );
+  m_frameExtraInfo = new QFrame( this );
+  m_frameExtraInfo->setFrameShape( QFrame::NoFrame );
+  m_frameExtraInfo->setFrameShadow( QFrame::Raised );
   m_frameExtraInfoLayout = new Q3GridLayout( m_frameExtraInfo );
   m_frameExtraInfoLayout->setMargin(0);
   m_frameExtraInfoLayout->setSpacing( spacingHint() );
   mainLayout->addWidget( m_frameExtraInfo );
 
-  Q3Frame* line2 = new Q3Frame( this, "line2" );
-  line2->setFrameShape( Q3Frame::HLine );
- line2->setFrameShadow( Q3Frame::Sunken );
+  QFrame* line2 = new QFrame( this, "line2" );
+  line2->setFrameShape( QFrame::HLine );
+ line2->setFrameShadow( QFrame::Sunken );
   mainLayout->addWidget( line2 );
 
   Q3HBoxLayout* layout5 = new Q3HBoxLayout( 0, 0, 6, "layout5");

@@ -83,8 +83,8 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const QList<K3bDataItem*>& dat
     }
     int row = 1;
 
-    m_spacerLine = new Q3Frame( mainWidget() );
-    m_spacerLine->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
+    m_spacerLine = new QFrame( mainWidget() );
+    m_spacerLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     grid->addMultiCellWidget( m_spacerLine, row, row, 0, 2 );
     ++row;
     if ( dataItems.count() == 1 ) {
@@ -99,8 +99,8 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const QList<K3bDataItem*>& dat
     grid->addWidget( new QLabel( i18n("Used blocks:"), mainWidget() ), row, 0 );
     grid->addWidget( m_labelBlocks, row++, 2 );
 
-    m_spacerLine = new Q3Frame( mainWidget() );
-    m_spacerLine->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
+    m_spacerLine = new QFrame( mainWidget() );
+    m_spacerLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     grid->addMultiCellWidget( m_spacerLine, row, row, 0, 2 );
     ++row;
 
@@ -120,8 +120,8 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const QList<K3bDataItem*>& dat
     // OPTIONS
     // /////////////////////////////////////////////////
     QTabWidget* optionTab = new QTabWidget( mainWidget() );
-    m_spacerLine = new Q3Frame( mainWidget() );
-    m_spacerLine->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
+    m_spacerLine = new QFrame( mainWidget() );
+    m_spacerLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
     grid->addMultiCellWidget( m_spacerLine, 10, 10, 0, 2 );
     grid->addMultiCellWidget( optionTab, 12, 12, 0, 2 );

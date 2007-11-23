@@ -27,11 +27,11 @@
 //Added by qt3to4:
 #include <QEvent>
 #include <QMouseEvent>
-#include <Q3Frame>
+#include <QFrame>
 
 
 K3bFlatButton::K3bFlatButton( QWidget *parent, const char *name )
-  : Q3Frame( parent/*, WNoAutoErase*/ ),
+  : QFrame( parent/*, WNoAutoErase*/ ),
     m_pressed(false)
 {
   init();
@@ -39,7 +39,7 @@ K3bFlatButton::K3bFlatButton( QWidget *parent, const char *name )
 
 
 K3bFlatButton::K3bFlatButton( const QString& text, QWidget *parent, const char *name )
-  : Q3Frame( parent/*, WNoAutoErase*/ ),
+  : QFrame( parent/*, WNoAutoErase*/ ),
     m_pressed(false)
 {
   init();
@@ -48,7 +48,7 @@ K3bFlatButton::K3bFlatButton( const QString& text, QWidget *parent, const char *
 
 
 K3bFlatButton::K3bFlatButton( QAction* a, QWidget *parent, const char *name )
-  : Q3Frame( parent/*, WNoAutoErase*/ ),
+  : QFrame( parent/*, WNoAutoErase*/ ),
     m_pressed(false)
 {
   init();
@@ -66,8 +66,9 @@ K3bFlatButton::~K3bFlatButton() {}
 void K3bFlatButton::init()
 {
   setHover(false);
-  setMargin(5);
-  setFrameStyle( Q3Frame::Box|Q3Frame::Plain );
+  //FIXME add margin
+  //setMargin(5);
+  setFrameStyle( QFrame::Box|QFrame::Plain );
 
   connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
   connect( kapp, SIGNAL(appearanceChanged()), this, SLOT(slotThemeChanged()) );

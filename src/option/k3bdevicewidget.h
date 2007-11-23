@@ -17,7 +17,7 @@
 #define K3BDEVICEWIDGET_H
 
 #include <qwidget.h>
-#include <Q3Frame>
+#include <QFrame>
 #include <QLabel>
 #include "k3bdevice.h"
 #include "k3bdevicemanager.h"
@@ -30,7 +30,7 @@ class QCheckBox;
 class K3bListView;
 class QString;
 class KIntNumInput;
-class Q3Frame;
+class QFrame;
 class Q3ListViewItem;
 class QString;
 class QLineEdit;

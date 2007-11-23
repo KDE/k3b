@@ -29,7 +29,7 @@ class QLabel;
  * A message box which is closed using a timer or a close button
  * It will delete itself once it has been closed.
  */
-class K3bPassivePopup : public Q3Frame
+class K3bPassivePopup : public QFrame
 {
   Q_OBJECT
 

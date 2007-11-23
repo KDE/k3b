@@ -24,7 +24,7 @@
 class K3bTitleLabel;
 class QLabel;
 
-class K3bThemedHeader : public Q3Frame
+class K3bThemedHeader : public QFrame
 {
   Q_OBJECT
 

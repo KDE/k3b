@@ -33,7 +33,7 @@
 #include <Q3GridLayout>
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
-#include <Q3Frame>
+#include <QFrame>
 
 #include <klocale.h>
 #include <kiconloader.h>

@@ -142,7 +142,7 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent )
   setRightPixmap( K3bTheme::MEDIA_AUDIO );
 
   m_busyInfoLabel = new K3bThemedLabel( i18n("Searching for Artist information..."), this );
-  m_busyInfoLabel->setFrameStyle( Q3Frame::Box|Q3Frame::Plain );
+  m_busyInfoLabel->setFrameStyle( QFrame::Box|QFrame::Plain );
   m_busyInfoLabel->setMargin( 6 );
   m_busyInfoLabel->hide();
 }
@@ -358,9 +358,9 @@ void K3bAudioCdView::slotEditTrackCddb()
     KLineEdit* editTitle = new KLineEdit( m_cddbInfo.titles[a->trackNumber-1], w );
     KLineEdit* editArtist = new KLineEdit( m_cddbInfo.artists[a->trackNumber-1], w );
     KLineEdit* editExtInfo = new KLineEdit( m_cddbInfo.extInfos[a->trackNumber-1], w );
-    Q3Frame* line = new Q3Frame( w );
-    line->setFrameShape( Q3Frame::HLine );
-    line->setFrameShadow( Q3Frame::Sunken );
+    QFrame* line = new QFrame( w );
+    line->setFrameShape( QFrame::HLine );
+    line->setFrameShadow( QFrame::Sunken );
 
     Q3GridLayout* grid = new Q3GridLayout( w );
     grid->setSpacing( KDialog::spacingHint() );
@@ -405,9 +405,9 @@ void K3bAudioCdView::slotEditAlbumCddb()
   KLineEdit* editGenre = new KLineEdit( m_cddbInfo.genre, w );
   QSpinBox* spinYear = new QSpinBox( 0, 9999, 1, w );
   spinYear->setValue( m_cddbInfo.year );
-  Q3Frame* line = new Q3Frame( w );
-  line->setFrameShape( Q3Frame::HLine );
-  line->setFrameShadow( Q3Frame::Sunken );
+  QFrame* line = new QFrame( w );
+  line->setFrameShape( QFrame::HLine );
+  line->setFrameShadow( QFrame::Sunken );
   KComboBox* comboCat = new KComboBox( w );
   comboCat->insertStringList( K3bCddbQuery::categories() );
 

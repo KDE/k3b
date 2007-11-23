@@ -30,7 +30,7 @@
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
 #include <QLabel>
-#include <Q3Frame>
+#include <QFrame>
 #include <QKeyEvent>
 #include <QCloseEvent>
 
@@ -38,7 +38,7 @@ class Q3VBoxLayout;
 class Q3HBoxLayout;
 class Q3GridLayout;
 class K3ListView;
-class Q3Frame;
+class QFrame;
 class Q3GroupBox;
 class QLabel;
 class Q3ListViewItem;
@@ -146,7 +146,7 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
   QProgressBar* m_progressSubPercent;
   QLabel* m_labelProcessedSize;
   QProgressBar* m_progressPercent;
-  Q3Frame* m_frameExtraInfo;
+  QFrame* m_frameExtraInfo;
   QPushButton* m_buttonCancel;
   QPushButton* m_buttonClose;
   QPushButton* m_buttonShowDebug;
