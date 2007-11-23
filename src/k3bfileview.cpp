@@ -68,7 +68,7 @@ void K3bFileView::setupGUI()
   Q3VBoxLayout* layout = new Q3VBoxLayout( this );
   //  layout->setAutoAdd( true );
 
-  m_dirOp = new K3bDirOperator( KUrl(QDir::home().absPath()), this );
+  m_dirOp = new K3bDirOperator( KUrl(QDir::home().absolutePath()), this );
   m_toolBox = new KToolBar( this);
 
   layout->addWidget( m_toolBox );

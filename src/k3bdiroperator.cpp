@@ -77,11 +77,11 @@ void K3bDirOperator::readConfig( const KConfigGroup & grp )
   // There seems to be a bug in the KDELibs which makes setURL crash on
   // some systems when used with a non-existing url
   //
-  QString lastUrl = grp.readPathEntry( "last url", QDir::home().absPath() );
+  QString lastUrl = grp.readPathEntry( "last url", QDir::home().absolutePath() );
   while( !QFile::exists(lastUrl) ) {
     QString urlUp = lastUrl.section( '/', 0, -2 );
     if( urlUp == lastUrl )
-      lastUrl = QDir::home().absPath();
+      lastUrl = QDir::home().absolutePath();
     else
       lastUrl = urlUp;
   }

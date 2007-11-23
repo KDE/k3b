@@ -148,7 +148,7 @@ QString K3bTempDirSelectionWidget::tempPath() const
             if( fi.isDir() )
                 return fi.absoluteFilePath();
             else
-                return fi.dirPath( true );
+                return fi.absolutePath();
         }
         else {
             if( fi.isFile() )

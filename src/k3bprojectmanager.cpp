@@ -478,7 +478,7 @@ K3bDoc* K3bProjectManager::openProject( const KUrl& url )
             // the setContent method blocks for a very long time
             //
             char test[5];
-            if( f.readBlock( test, 5 ) ) {
+            if( f.read( test, 5 ) ) {
                 if( ::strncmp( test, "<?xml", 5 ) ) {
                     kDebug() << "(K3bDoc) " << url.path() << " seems to be no xml file.";
                     QApplication::restoreOverrideCursor();

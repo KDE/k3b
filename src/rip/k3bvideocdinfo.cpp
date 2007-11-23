@@ -144,12 +144,12 @@ void K3bVideoCdInfo::parseXmlData()
 
     for ( QDomNode node = xml_root.firstChild(); !node.isNull(); node = node.nextSibling() ) {
         QDomElement el = node.toElement();
-        QString tagName = el.tagName().lower();
+        QString tagName = el.tagName().toLower();
 
         if ( tagName == "pvd" ) {
             for ( QDomNode snode = node.firstChild(); !snode.isNull(); snode = snode.nextSibling() ) {
                 QDomElement sel = snode.toElement();
-                QString pvdElement = sel.tagName().lower();
+                QString pvdElement = sel.tagName().toLower();
                 QString pvdElementText = sel.text();
                 if ( pvdElement == "volume-id" )
                     m_Result.volumeId = pvdElementText;
@@ -158,7 +158,7 @@ void K3bVideoCdInfo::parseXmlData()
         } else if ( tagName == "sequence-items" ) {
             for ( QDomNode snode = node.firstChild(); !snode.isNull(); snode = snode.nextSibling() ) {
                 QDomElement sel = snode.toElement();
-                QString seqElement = sel.tagName().lower();
+                QString seqElement = sel.tagName().toLower();
                 m_Result.addEntry( K3bVideoCdInfoResultEntry(
                                        sel.attribute( "src" ),
                                        sel.attribute( "id" ) ),
@@ -168,7 +168,7 @@ void K3bVideoCdInfo::parseXmlData()
         } else if ( tagName == "segment-items" ) {
             for ( QDomNode snode = node.firstChild(); !snode.isNull(); snode = snode.nextSibling() ) {
                 QDomElement sel = snode.toElement();
-                QString seqElement = sel.tagName().lower();
+                QString seqElement = sel.tagName().toLower();
                 m_Result.addEntry( K3bVideoCdInfoResultEntry(
                                        sel.attribute( "src" ),
                                        sel.attribute( "id" ) ),

@@ -407,7 +407,7 @@ QString K3bMedium::beautifiedVolumeId() const
     // the restricted iso9660 charset (like almost every project
     // created with K3b)
     //
-    if( c.isLetter() && c.lower() == c )
+    if( c.isLetter() && c.toLower() == c )
       return oldId;
     else if( c.isSpace() )
       return oldId;
@@ -425,7 +425,7 @@ QString K3bMedium::beautifiedVolumeId() const
 	newWord = false;
       }
       else {
-	newId.append( c.lower() );
+	newId.append( c.toLower() );
       }
     }
     else {

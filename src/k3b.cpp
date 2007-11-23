@@ -274,7 +274,7 @@ void K3bMainWindow::initActions()
     actionProjectAddFiles = K3b::createAction(this, i18n("&Add Files..."), "document-open", 0, this, SLOT(slotProjectAddFiles()),
                                          actionCollection(), "project_add_files");
 
-    KAction* actionClearProject = K3b::createAction(this,i18n("&Clear Project"), QApplication::reverseLayout() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar", 0,
+    KAction* actionClearProject = K3b::createAction(this,i18n("&Clear Project"), QApplication::isRightToLeft() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar", 0,
                                                this, SLOT(slotClearProject()), actionCollection(), "project_clear_project" );
 
     actionViewDirTreeView = new KToggleAction(i18n("Show Directories"),this);

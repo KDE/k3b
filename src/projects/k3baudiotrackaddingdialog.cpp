@@ -151,7 +151,7 @@ void K3bAudioTrackAddingDialog::slotAddUrls()
   KUrl url = m_urls.first();
   bool valid = true;
 
-  if( url.path().right(3).lower() == "cue" ) {
+  if( url.path().right(3).toLower() == "cue" ) {
     // see if its a cue file
     K3bCueFileParser parser( url.path() );
     if( parser.isValid() && parser.toc().contentType() == K3bDevice::AUDIO ) {
@@ -281,7 +281,7 @@ KUrl::List K3bAudioTrackAddingDialog::extractUrlList( const KUrl::List& urls )
       // add all files into the list after the current item
       for( QStringList::iterator dirIt = entries.begin();
 	   dirIt != entries.end(); ++dirIt )
-	it = allUrls.insert( oldIt, KUrl( dir.absPath() + "/" + *dirIt ) );
+	it = allUrls.insert( oldIt, KUrl( dir.absolutePath() + "/" + *dirIt ) );
     }
     else if( K3bAudioDoc::readPlaylistFile( url, urlsFromPlaylist ) ) {
       it = allUrls.remove( it );

@@ -246,10 +246,10 @@ void K3bBootImageView::slotOptionsChanged()
             bool ok = true;
             i->setLoadSegment( K3bIntValidator::toInt( m_editLoadSegment->text(), &ok ) );
             if( !ok )
-                kDebug() << "(K3bBootImageView) parsing number failed: " << m_editLoadSegment->text().lower();
+                kDebug() << "(K3bBootImageView) parsing number failed: " << m_editLoadSegment->text().toLower();
             i->setLoadSize( K3bIntValidator::toInt( m_editLoadSize->text(), &ok ) );
             if( !ok )
-                kDebug() << "(K3bBootImageView) parsing number failed: " << m_editLoadSize->text().lower();
+                kDebug() << "(K3bBootImageView) parsing number failed: " << m_editLoadSize->text().toLower();
 
             if( m_radioFloppy->isChecked() )
                 i->setImageType( K3bBootItem::FLOPPY );

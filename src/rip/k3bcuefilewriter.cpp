@@ -54,7 +54,7 @@ bool K3bCueFileWriter::save( QTextStream& t )
     t << "TITLE \"" << m_cdText.title() << "\"" << endl;
   }
 
-  t << "FILE \"" << m_image << "\" " << m_dataType.upper() << endl;
+  t << "FILE \"" << m_image << "\" " << m_dataType.toUpper() << endl;
 
   // the tracks
   unsigned int i = 0;

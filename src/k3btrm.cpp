@@ -55,7 +55,7 @@ void K3bTRM::start( const K3b::Msf& length )
 {
   if( KProtocolManager::useProxy() ) {
     KUrl proxy = KProtocolManager::proxyFor("http");
-    trm_SetProxy( d->trm, const_cast<char*>(proxy.host().latin1()), short(proxy.port()) );
+    trm_SetProxy( d->trm, const_cast<char*>(proxy.host().toLatin1()), short(proxy.port()) );
   }
 
   trm_SetPCMDataInfo( d->trm, 44100, 2, 16 );

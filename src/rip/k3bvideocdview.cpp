@@ -488,10 +488,10 @@ void K3bVideoCdView::buildTree( Q3ListViewItem *parentItem, const QDomElement &p
             QString txt = node.firstChild().toElement().text();
             thisItem->setText( 0, txt);
             if ( node.nodeName() == "folder" ) {
-		buildTree( thisItem, node.toElement(), pname + "_" + txt.lower() );
+		buildTree( thisItem, node.toElement(), pname + "_" + txt.toLower() );
             }
             else {
-                thisItem->setText( 1, pname + "_" + txt.lower() );
+                thisItem->setText( 1, pname + "_" + txt.toLower() );
 		buildTree( thisItem, node.toElement(), pname );
             }
         } else if ( node.isElement() && node.nodeName() == "segment-item" || node.nodeName() == "sequence-item" ) {

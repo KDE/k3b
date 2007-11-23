@@ -133,7 +133,7 @@ bool K3bMiscOptionTab::saveSettings()
                                              "K3b will use its base path as the temporary directory."),
                                   i18n("Warning"),
                                   "temp file only using base path" );
-        fi.setFile( fi.dirPath() );
+        fi.setFile( fi.path() );
     }
 
     // check for writing permission

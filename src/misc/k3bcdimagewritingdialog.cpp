@@ -544,9 +544,9 @@ void K3bCdImageWritingDialog::slotUpdateImage( const QString& )
             // once again we try both path and path.cue
             K3bCueFileParser cp;
 
-            if( path.right(4).lower() == ".cue" )
+            if( path.right(4).toLower() == ".cue" )
                 cp.openFile( path );
-            else if( path.right(4).lower() == ".bin" )
+            else if( path.right(4).toLower() == ".bin" )
                 cp.openFile( path.left( path.length()-3) + "cue" );
 
             if( cp.isValid() ) {
@@ -929,7 +929,7 @@ void K3bCdImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, con
         }
     }
     else if( act == copyItem ) {
-        QApplication::clipboard()->setText( d->md5Job->hexDigest().lower(), QClipboard::Clipboard );
+        QApplication::clipboard()->setText( d->md5Job->hexDigest().toLower(), QClipboard::Clipboard );
     }
 }
 

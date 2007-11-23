@@ -270,7 +270,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
   // can come from removing QFileInfo usage here.
   //
   QFileInfo info(url.path());
-  QString absoluteFilePath( info.absFilePath() );
+  QString absoluteFilePath( info.absoluteFilePath() );
   QString resolved( absoluteFilePath );
 
   bool valid = true;

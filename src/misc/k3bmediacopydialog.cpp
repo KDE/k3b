@@ -509,14 +509,14 @@ void K3bMediaCopyDialog::toggleAll()
     if( sourceMedium.toc().contentType() == K3bDevice::DATA &&
         sourceMedium.toc().count() == 1 ) {
         m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
-        m_tempDirSelectionWidget->setDefaultImageFileName( sourceMedium.volumeId().lower()
+        m_tempDirSelectionWidget->setDefaultImageFileName( sourceMedium.volumeId().toLower()
                                                            + QString(".iso"), true );
     }
     else {
         m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::DIR );
 
         if ( sourceMedium.content() & K3bMedium::CONTENT_DATA && !sourceMedium.volumeId().isEmpty() ) {
-            m_tempDirSelectionWidget->setTempPath( m_tempDirSelectionWidget->tempDirectory() + sourceMedium.volumeId().lower() );
+            m_tempDirSelectionWidget->setTempPath( m_tempDirSelectionWidget->tempDirectory() + sourceMedium.volumeId().toLower() );
         }
         else if ( sourceMedium.content() & K3bMedium::CONTENT_AUDIO && !sourceMedium.cdText().title().isEmpty() ) {
             m_tempDirSelectionWidget->setTempPath( m_tempDirSelectionWidget->tempDirectory() + sourceMedium.cdText().title() );

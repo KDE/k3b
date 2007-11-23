@@ -496,7 +496,7 @@ void K3bIsoImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, co
                                                          &ok,
                                                          this );
         if( ok ) {
-            if( md5sumToCompare.lower().utf8() == m_md5Job->hexDigest().lower() )
+            if( md5sumToCompare.toLower().utf8() == m_md5Job->hexDigest().toLower() )
                 KMessageBox::information( this, i18n("The MD5 Sum of %1 equals the specified.").arg(imagePath()),
                                           i18n("MD5 Sums Equal") );
             else
@@ -505,7 +505,7 @@ void K3bIsoImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, co
         }
     }
     else if( r == copyItem ) {
-        QApplication::clipboard()->setText( m_md5Job->hexDigest().lower(), QClipboard::Clipboard );
+        QApplication::clipboard()->setText( m_md5Job->hexDigest().toLower(), QClipboard::Clipboard );
     }
 }
 

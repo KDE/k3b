@@ -367,7 +367,7 @@ void K3bFileTreeComboBox::paintEvent( QPaintEvent* )
 		     &g.brush( QColorGroup::Button ) );
     return;
   }
-  //  bool reverse = QApplication::reverseLayout();
+  //  bool reverse = QApplication::isRightToLeft();
 
   style().drawComplexControl( QStyle::CC_ComboBox, &p, this, rect(), g,
 			      flags, QStyle::SC_All,
