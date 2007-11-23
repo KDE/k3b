@@ -453,7 +453,7 @@ bool K3bAudioRipThread::writePlaylist()
 
   QFile f( m_playlistFilename );
   if( f.open( QIODevice::WriteOnly ) ) {
-    Q3TextStream t( &f );
+    QTextStream t( &f );
 
     // format descriptor
     t << "#EXTM3U" << endl;

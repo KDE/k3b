@@ -36,7 +36,7 @@ class K3bCueFileWriter
  public:
   K3bCueFileWriter();
 
-  bool save( Q3TextStream& );
+  bool save( QTextStream& );
   bool save( const QString& filename );
 
   void setData( const K3bDevice::Toc& toc ) { m_toc = toc; }

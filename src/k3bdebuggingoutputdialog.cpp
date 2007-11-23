@@ -25,7 +25,7 @@
 #include <qcursor.h>
 #include <qfile.h>
 #include <qclipboard.h>
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include <klocale.h>
 #include <kstdguiitem.h>
@@ -81,7 +81,7 @@ void K3bDebuggingOutputDialog::slotUser1()
 	== KMessageBox::Continue ) {
 
       if( f.open( QIODevice::WriteOnly ) ) {
-	Q3TextStream t( &f );
+	QTextStream t( &f );
 	t << debugView->text();
       }
       else {

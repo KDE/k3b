@@ -28,7 +28,7 @@
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <QFrame>
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -849,7 +849,7 @@ void K3bVcdBurnDialog::saveCdiConfig()
     if ( !cdi.open( QIODevice::WriteOnly ) )
         return ;
 
-    Q3TextStream s( &cdi );
+    QTextStream s( &cdi );
     int i = m_editCdiCfg->numLines();
 
     for ( int j = 0; j < i; j++ )
@@ -870,7 +870,7 @@ void K3bVcdBurnDialog::loadCdiConfig()
             return ;
         }
 
-        Q3TextStream s( &cdi );
+        QTextStream s( &cdi );
 
         m_editCdiCfg->clear();
 
@@ -897,7 +897,7 @@ void K3bVcdBurnDialog::loadDefaultCdiConfig()
             return ;
         }
 
-        Q3TextStream s( &cdi );
+        QTextStream s( &cdi );
 
         m_editCdiCfg->clear();
 

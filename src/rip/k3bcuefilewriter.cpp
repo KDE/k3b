@@ -38,13 +38,13 @@ bool K3bCueFileWriter::save( const QString& filename )
     return false;
   }
 
-  Q3TextStream s( &f );
+  QTextStream s( &f );
 
   return save( s );
 }
 
 
-bool K3bCueFileWriter::save( Q3TextStream& t )
+bool K3bCueFileWriter::save( QTextStream& t )
 {
   t << "REM Cue file written by K3b " << k3bcore->version() << endl
     << endl;
