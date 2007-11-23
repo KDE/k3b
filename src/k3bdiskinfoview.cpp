@@ -232,7 +232,7 @@ void K3bDiskInfoView::reloadMedium()
       // if we have multiple sessions we create a header item for every session
       K3ListViewItem* trackItem = 0;
       if( medium().diskInfo().numSessions() > 1 && medium().toc()[0].session() > 0 ) {
-	trackItem = new HeaderViewItem( trackHeaderItem, item, i18n("Session %1").arg(1) );
+	trackItem = new HeaderViewItem( trackHeaderItem, item, i18n("Session %1",QString::number(1)) );
 	lastSession = 1;
       }
       else
@@ -249,7 +249,7 @@ void K3bDiskInfoView::reloadMedium()
 	  trackItem->setOpen(true);
 	  trackItem = new HeaderViewItem( trackHeaderItem,
 					  m_infoView->lastItem()->parent(),
-					  i18n("Session %1").arg(lastSession) );
+					  i18n("Session %1",lastSession) );
 	}
 
         item = new K3ListViewItem( trackItem, item );
@@ -356,19 +356,19 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bMedium& medium )
 
   atipChild = new K3ListViewItem( atipItem, atipChild,
 				 i18n("Capacity:"),
-				 i18n("%1 min").arg(info.capacity().toString()),
+				 i18n("%1 min",info.capacity().toString()),
 				 KIO::convertSize(info.capacity().mode1Bytes()) );
 
   if( !info.empty() )
     atipChild = new K3ListViewItem( atipItem, atipChild,
 				   i18n("Used Capacity:"),
-				   i18n("%1 min").arg(info.size().toString()),
+				   i18n("%1 min",info.size().toString()),
 				   KIO::convertSize(info.size().mode1Bytes()) );
 
   if( info.appendable() )
     atipChild = new K3ListViewItem( atipItem, atipChild,
 				   i18n("Remaining:"),
-				   i18n("%1 min").arg( info.remainingSize().toString() ),
+				   i18n("%1 min",info.remainingSize().toString() ),
 				   KIO::convertSize(info.remainingSize().mode1Bytes()) );
 
   atipChild = new K3ListViewItem( atipItem, atipChild,
