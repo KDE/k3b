@@ -1,6 +1,6 @@
 /* 
  *
- * $Id$
+ *
  * Copyright (C) 2004 Matthieu Bedouet <mbedouet@no-log.org>
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *

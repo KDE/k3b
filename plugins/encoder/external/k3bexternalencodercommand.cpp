@@ -1,6 +1,6 @@
 /* 
  *
- * $Id: k3bexternalencoder.cpp 567280 2006-07-28 13:26:27Z trueg $
+ *
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
