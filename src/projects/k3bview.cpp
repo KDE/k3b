@@ -59,7 +59,7 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent )
   grid->setSpacing( 5 );
   grid->setMargin( 2 );
 
-  KAction* burnAction = K3b::createAction(this,i18n("&Burn"), "media-optical-recordable-burn", Qt::CTRL + Qt::Key_B, this, SLOT(slotBurn()),
+  KAction* burnAction = K3b::createAction(this,i18n("&Burn"), "tools-media-optical-burn", Qt::CTRL + Qt::Key_B, this, SLOT(slotBurn()),
 				     actionCollection(), "project_burn");
   burnAction->setToolTip( i18n("Open the burn dialog for the current project") );
   KAction* propAction = K3b::createAction(this, i18n("&Properties"), "document-properties", Qt::CTRL + Qt::Key_P, this, SLOT(slotProperties()),
