@@ -90,7 +90,7 @@ public:
 
 
 
-K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *name )
+K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent )
   : KVBox(parent),
     m_fileTreeView(treeView),
     m_bViewDiskInfo(false)
@@ -110,7 +110,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent, const char *n
 
   m_fileTreeView->header()->hide();
 
-  m_fileView     = new K3bFileView(m_viewStack, "fileView");
+  m_fileView     = new K3bFileView(m_viewStack );
   m_cdView       = new K3bAudioCdView(m_viewStack);
   m_videoView    = new K3bVideoCdView(m_viewStack, "videoview");
   m_infoView     = new K3bDiskInfoView(m_viewStack);
@@ -297,10 +297,10 @@ void K3bDirView::slotMountFinished( const QString& mp )
   }
   else {
     m_viewStack->raiseWidget( m_fileView );
-    K3bPassivePopup::showPopup( i18n("<p>K3b was unable to mount medium <b>%1</b> in device <em>%2 - %3</em>")
-				.arg( k3bappcore->mediaCache()->medium( k3bappcore->appDeviceManager()->currentDevice() ).shortString() )
-				.arg( k3bappcore->appDeviceManager()->currentDevice()->vendor() )
-				.arg( k3bappcore->appDeviceManager()->currentDevice()->description() ),
+    K3bPassivePopup::showPopup( i18n("<p>K3b was unable to mount medium <b>%1</b> in device <em>%2 - %3</em>"
+				,k3bappcore->mediaCache()->medium( k3bappcore->appDeviceManager()->currentDevice() ).shortString() 
+				,k3bappcore->appDeviceManager()->currentDevice()->vendor() 
+				,k3bappcore->appDeviceManager()->currentDevice()->description() ),
 				i18n("Mount Failed"),
 				K3bPassivePopup::Warning );
   }
@@ -313,10 +313,10 @@ void K3bDirView::slotUnmountFinished( bool success )
     // TODO: check if the fileview is still displaying a folder from the medium
   }
   else {
-    K3bPassivePopup::showPopup( i18n("<p>K3b was unable to unmount medium <b>%1</b> in device <em>%2 - %3</em>")
-				.arg( k3bappcore->mediaCache()->medium( k3bappcore->appDeviceManager()->currentDevice() ).shortString() )
-				.arg( k3bappcore->appDeviceManager()->currentDevice()->vendor() )
-				.arg( k3bappcore->appDeviceManager()->currentDevice()->description() ),
+    K3bPassivePopup::showPopup( i18n("<p>K3b was unable to unmount medium <b>%1</b> in device <em>%2 - %3</em>"
+				,k3bappcore->mediaCache()->medium( k3bappcore->appDeviceManager()->currentDevice() ).shortString()
+				,k3bappcore->appDeviceManager()->currentDevice()->vendor()
+				,k3bappcore->appDeviceManager()->currentDevice()->description() ),
 				i18n("Unmount Failed"),
 				K3bPassivePopup::Warning );
   }

@@ -37,7 +37,7 @@ class K3bFileView : public K3bContentsView
   Q_OBJECT
 
  public:
-  K3bFileView(QWidget *parent=0, const char *name=0);
+  K3bFileView(QWidget *parent=0);
   ~K3bFileView();
 
   void setUrl( const KUrl &url, bool forward = true );
@@ -65,7 +65,7 @@ class K3bFileView : public K3bContentsView
 
  private slots:
   void slotFilterChanged();
-  void slotFileHighlighted( const KFileItem* item );
+  void slotFileHighlighted( const KFileItem & );
 };
 
 

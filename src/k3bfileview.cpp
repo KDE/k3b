@@ -45,7 +45,7 @@
 #include <KActionMenu>
 #include <kvbox.h>
 
-K3bFileView::K3bFileView(QWidget *parent, const char *name )
+K3bFileView::K3bFileView(QWidget *parent )
   : K3bContentsView( false, parent)
 {
   setupGUI();
@@ -112,11 +112,10 @@ void K3bFileView::setupGUI()
 
   connect( m_filterWidget, SIGNAL(filterChanged()), SLOT(slotFilterChanged()) );
 
-  connect( m_dirOp, SIGNAL(fileHighlighted(const KFileItem*)), this, SLOT(slotFileHighlighted(const KFileItem*)) );
+  connect( m_dirOp, SIGNAL(fileHighlighted(const KFileItem &)), this, SLOT(slotFileHighlighted(const KFileItem &)) );
   connect( m_dirOp, SIGNAL(urlEntered(const KUrl&)), this, SIGNAL(urlEntered(const KUrl&)) );
-  connect( m_dirOp, SIGNAL(fileSelected(const KFileItem*)), m_dirOp, SLOT(slotAddFilesToProject()) );
+  connect( m_dirOp, SIGNAL(fileSelected(const KFileItem &)), m_dirOp, SLOT(slotAddFilesToProject()) );
 
-  slotFileHighlighted(0);
 }
 
 void K3bFileView::setDir( const QString& dir )
@@ -142,7 +141,7 @@ void K3bFileView::setAutoUpdate( bool b )
   m_dirOp->dirLister()->setAutoUpdate( b );
 }
 
-void K3bFileView::slotFileHighlighted( const KFileItem* )
+void K3bFileView::slotFileHighlighted( const KFileItem & )
 {
 }
 

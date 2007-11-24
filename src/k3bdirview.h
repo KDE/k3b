@@ -56,7 +56,7 @@ class K3bDirView : public KVBox
   Q_OBJECT
 
  public:
-  K3bDirView(K3bFileTreeView* tree, QWidget *parent=0, const char *name=0);
+  K3bDirView(K3bFileTreeView* tree, QWidget *parent=0);
   ~K3bDirView();
 
  public slots:
