@@ -39,7 +39,7 @@
 #include <kiconloader.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kdeversion.h>
+
 #include "k3bnotifyoptiontab.h"
 
 

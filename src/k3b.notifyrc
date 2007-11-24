@@ -1,4 +1,4 @@
-[!Global!]
+[Global]
 IconName=k3b
 Comment=K3b
 Comment[ar]= K3b
@@ -6,7 +6,7 @@ Comment[bn]=কে-থ্রি-বি
 Comment[hi]=के3बी
 Comment[xx]=xxK3bxx
 
-[SuccessfullyFinished]
+[Event/SuccessfullyFinished]
 Name=Process successful
 Name[af]=Proses suksesvol
 Name[ar]= تمت المعالجة بنجاح
@@ -107,11 +107,10 @@ Comment[uz]=Жараён муваффақиятли тугади
 Comment[xx]=xxProcess successfully finishedxx
 Comment[zh_CN]=处理成功完成
 Comment[zh_TW]=成功完成處理
-default_sound=k3b_success1.wav
-default_presentation=1
-# None = 0, Sound = 1, Messagebox = 2, Logfile = 4, Stderr = 8, PassivePopup = 16, Execute = 32
+Sound=k3b_success1.wav
+Action=Sound
 
-[FinishedWithError]
+[Event/FinishedWithError]
 Name=Process error
 Name[af]=Verwerking fout
 Name[ar]= خطأ خلال المعالجة
@@ -212,10 +211,10 @@ Comment[uz]=Жараён хатолар билан тугади
 Comment[xx]=xxProcess finished with errorsxx
 Comment[zh_CN]=处理完成，有错误
 Comment[zh_TW]=完成處理，但發生錯誤
-default_sound=k3b_error1.wav
-default_presentation=1
+Sound=k3b_error1.wav
+Action=Sound
 
-[WaitingForMedium]
+[Event/WaitingForMedium]
 Name=Waiting for medium
 Name[af]=Wag vir medium
 Name[ar]= في انتظار الواسطة
@@ -317,5 +316,5 @@ Comment[uz]=Фойдаланувчи дискни қўйиши керак
 Comment[xx]=xxThe user needs to insert a mediumxx
 Comment[zh_CN]=用户需要插入存储介质
 Comment[zh_TW]=使用者需要插入媒體
-default_sound=k3b_wait_media1.wav
-default_presentation=1
+Sound=k3b_wait_media1.wav
+Action=Sound

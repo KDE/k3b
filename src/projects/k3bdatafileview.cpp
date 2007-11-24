@@ -50,7 +50,6 @@
 #include <kdebug.h>
 #include <kshortcut.h>
 #include <krun.h>
-#include <kdeversion.h>
 #include <kactioncollection.h>
 #include <kmenu.h>
 

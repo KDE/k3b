@@ -38,7 +38,7 @@
 #include <knuminput.h>
 #include <kconfig.h>
 #include <kapplication.h>
-#include <kdeversion.h>
+
 #include <kglobal.h>
 
 

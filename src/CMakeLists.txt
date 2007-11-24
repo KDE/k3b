@@ -261,7 +261,7 @@ install(TARGETS k3b_bin DESTINATION ${BIN_INSTALL_DIR})
 
 install( FILES  k3b.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 #install( FILES  k3b-iso.desktop k3b-cue.desktop DESTINATION ${APPLNK_INSTALL_DIR}/.hidden/ )
-install( FILES  k3bui.rc eventsrc tips DESTINATION ${DATA_INSTALL_DIR}/k3b )
+install( FILES  k3bui.rc k3b.notifyrc tips DESTINATION ${DATA_INSTALL_DIR}/k3b )
 
 
 

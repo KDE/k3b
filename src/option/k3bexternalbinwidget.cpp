@@ -41,7 +41,7 @@
 #include <keditlistbox.h>
 #include <k3listview.h>
 #include <kglobalsettings.h>
-#include <kdeversion.h>
+
 
 
 

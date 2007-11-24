@@ -26,7 +26,7 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kglobalsettings.h>
-#include <kdeversion.h>
+
 
 #include <qstringlist.h>
 #include <qpushbutton.h>

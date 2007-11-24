@@ -13,8 +13,6 @@
  */
 
 
-#include <kdeversion.h>
-
 #include "k3bnotifyoptiontab.h"
 
 #include <kdebug.h>
