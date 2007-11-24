@@ -83,14 +83,16 @@ Name[ta]=K3b அமைவு
 Name[tg]=ТанзимиK3b
 Name[xx]=xxK3bSetupxx
 Name[zh_TW]=K3b 設定
+
 Terminal=false
-Type=Application
+Type=Service
 Icon=k3b
-X-KDE-FactoryName=k3bsetup2
-X-KDE-Library=k3bsetup2
-X-KDE-ModuleType=Library
+X-KDE-ServiceTypes=KCModule
+X-KDE-Library=kcm_k3bsetup2
 X-KDE-RootOnly=true
+X-KDE-ParentApp=kcontrol
 Categories=Application;System;X-KDE-System;
+
 GenericName=CD & DVD Burning Setup
 GenericName[af]=CD & DVD Skryf Opstelling
 GenericName[ar]=العام  اعداد كتابة القرص المدمج (CD) و القرص المرئي الرقمي (DVD)
