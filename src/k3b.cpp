@@ -202,8 +202,7 @@ K3bMainWindow::~K3bMainWindow()
 void K3bMainWindow::showEvent( QShowEvent* e )
 {
     slotCheckDockWidgetStatus();
-    //KDE4 port me
-    //K3DockMainWindow::showEvent( e );
+    K3DockMainWindow::showEvent( e );
 }
 
 
@@ -410,8 +409,8 @@ void K3bMainWindow::initView()
     d->welcomeWidget = new K3bWelcomeWidget( this, m_documentTab );
     m_documentTab->addTab( d->welcomeWidget, i18n("Quickstart") );
 
-//   d->documentStack->addWidget( d->welcomeWidget );
-//   d->documentStack->raiseWidget( d->welcomeWidget );
+   d->documentStack->addWidget( d->welcomeWidget );
+   d->documentStack->raiseWidget( d->welcomeWidget );
     // ---------------------------------------------------------------------------------------------
 
     // --- Directory Dock --------------------------------------------------------------------------
@@ -1483,16 +1482,14 @@ void K3bMainWindow::slotClearProject()
 {
     K3bDoc* doc = k3bappcore->projectManager()->activeDoc();
     if( doc ) {
-    //FIXME kde4
-#if 0
         if( KMessageBox::warningContinueCancel( this,
+                                                i18n("Clear Project"),
                                                 i18n("Do you really want to clear the current project?"),
                                                 KGuiItem(i18n("Clear Project")),
                                                 KGuiItem(i18n("Clear")),
-                                                "clear_current_project_dontAskAgain" ) == KMessageBox::Continue ) {
+                                                QString("clear_current_project_dontAskAgain") ) == KMessageBox::Continue ) {
             doc->clear();
         }
-#endif
     }
 
 }
