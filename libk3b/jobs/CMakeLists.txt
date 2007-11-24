@@ -1,31 +1,6 @@
-
-
-
-########### next target ###############
-
-
-########### install files ###############
-
 install( FILES  k3bcdcopyjob.h k3bdvdcopyjob.h k3bclonejob.h  	k3baudiocuefilewritingjob.h k3bbinimagewritingjob.h  	k3biso9660imagewritingjob.h k3bdvdformattingjob.h  	k3bblankingjob.h k3bvideodvdtitletranscodingjob.h k3bvideodvdtitledetectclippingjob.h  	k3bverificationjob.h k3bcdcopyjob.h k3bdvdcopyjob.h k3bclonejob.h  	k3baudiocuefilewritingjob.h k3bbinimagewritingjob.h  	k3biso9660imagewritingjob.h k3bdvdformattingjob.h  	k3bblankingjob.h k3bverificationjob.h DESTINATION ${INCLUDE_INSTALL_DIR} )
 
 
-
-#original Makefile.am contents follow:
-
-#AM_CPPFLAGS = 	-I$(srcdir)/../core \
-#		-I$(srcdir)/../../libk3bdevice \
-#		-I$(srcdir)/../../src \
-#		-I$(srcdir)/../tools \
-#		-I$(srcdir)/../cddb \
-#		-I$(srcdir)/../plugin \
-#		-I$(srcdir)/../projects \
-#		-I$(srcdir)/../videodvd \
-#		-I$(srcdir)/../projects/audiocd \
-#		$(all_includes)
-#
-#METASOURCES = AUTO
-#
-#noinst_LTLIBRARIES = libjobs.la
 #
 #if include_videodvdrip
 #libjobs_la_SOURCES = k3bdatatrackreader.cpp k3breadcdreader.cpp \
