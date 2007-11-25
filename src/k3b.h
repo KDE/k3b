@@ -18,9 +18,7 @@
 #define K3B_H
 
 
-#ifdef HAVE_CONFIG_H
 #include <config-k3b.h>
-#endif
 
 // include files for Qt
 #include <qworkspace.h>
