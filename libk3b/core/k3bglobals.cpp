@@ -258,10 +258,7 @@ QString K3b::systemName()
 
 bool K3b::kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& avail )
 {
-#ifdef __GNUC__
-#warning enable once cmake check for statvfs is done
-#endif
-#if 0
+#ifdef HAVE_SYS_STATVFS_H
     struct statvfs fs;
     if( ::statvfs( QFile::encodeName(path), &fs ) == 0 ) {
         unsigned long kBfak = fs.f_frsize/1024;
