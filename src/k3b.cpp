@@ -155,7 +155,7 @@ K3bMainWindow::K3bMainWindow()
     setPlainCaption( i18n("K3b - The CD and DVD Kreator") );
 
     //FIXME kde4
-    m_config = 0;//KGlobal::config();
+    m_config = KGlobal::config();
 
     // /////////////////////////////////////////////////////////////////
     // call inits to invoke all other construction parts
@@ -166,7 +166,8 @@ K3bMainWindow::K3bMainWindow()
 
     // we need the actions for the welcomewidget
     //FIXME kde4 it crash
-    //d->welcomeWidget->loadConfig( KConfigGroup( config(), "Welcome Widget" ) );
+    KConfigGroup grp( config(), "Welcome Widget" ); 
+    d->welcomeWidget->loadConfig( grp );
 
     // fill the tabs action menu
     m_documentTab->insertAction( actionFileSave );
@@ -186,8 +187,7 @@ K3bMainWindow::K3bMainWindow()
 //   getMainDockWidget()->resize( getMainDockWidget()->size().expandedTo( d->welcomeWidget->sizeHint() ) );
 //   m_dirTreeDock->resize( QSize( m_dirTreeDock->sizeHint().width(), m_dirTreeDock->height() ) );
 
-    //FIXME kde4
-    //readOptions();
+    readOptions();
 }
 
 K3bMainWindow::~K3bMainWindow()
@@ -587,7 +587,7 @@ void K3bMainWindow::saveOptions()
     KConfigGroup grpWindows(config(), "main_window_settings");
     saveMainWindowSettings( grpWindows );
 
-    k3bcore->saveSettings( config() );
+    //k3bcore->saveSettings( config() );
 
     KConfigGroup grp(config(), "Welcome Widget" );
     d->welcomeWidget->saveConfig( grp );
@@ -1061,7 +1061,8 @@ void K3bMainWindow::slotSettingsConfigure()
 
     // emit a changed signal every time since we do not know if the user selected
     // "apply" and "cancel" or "ok"
-    emit configChanged( m_config );
+    //port kde4
+    //emit configChanged( m_config );
 }
 
 
@@ -1075,7 +1076,8 @@ void K3bMainWindow::showOptionDialog( int index )
 
     // emit a changed signal every time since we do not know if the user selected
     // "apply" and "cancel" or "ok"
-    emit configChanged( m_config );
+    //port kde4
+    //emit configChanged( m_config );
 }
 
 

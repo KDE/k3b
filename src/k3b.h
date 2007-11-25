@@ -77,7 +77,7 @@ public:
 
     K3bDevice::DeviceManager*      deviceManager() const;
     K3bExternalBinManager* externalBinManager() const;
-    KConfig*               config() const            { return m_config; }
+    KSharedConfig::Ptr               config() const            { return m_config; }
     // return main window with browser/cd/dvd view, used for DND
     K3bDirView*            mainWindow() const        { return m_dirView; }
     /**
@@ -261,7 +261,7 @@ private:
     bool isCdDvdImageAndIfSoOpenDialog( const KUrl& url );
 
     /** the configuration object of the application */
-    KConfig *m_config;
+    KSharedConfig::Ptr m_config;
 
     /** The MDI-Interface is managed by this tabbed view */
     K3bProjectTabWidget* m_documentTab;
