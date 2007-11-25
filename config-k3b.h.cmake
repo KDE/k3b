@@ -15,3 +15,4 @@
 
 #cmakedefine HAVE_SYS_STATVFS_H 1
 
+#cmakedefine HAVE_STAT64 1
