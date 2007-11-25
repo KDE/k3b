@@ -56,7 +56,7 @@ K3bFlatButton::K3bFlatButton( QAction* a, QWidget *parent, const char *name )
   setText( a->text() );
   this->setToolTip( a->toolTip() );
   //setPixmap( KIconLoader::global()->loadIcon( a->icon(), KIconLoader::NoGroup, KIconLoader::SizeMedium ) );
-  connect( this, SIGNAL(clicked()), a, SLOT(activate()) );
+  connect( this, SIGNAL(clicked()), a, SLOT(trigger()) );
 }
 
 
