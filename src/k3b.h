@@ -24,6 +24,7 @@
 #include <qworkspace.h>
 //Added by qt3to4:
 #include <QShowEvent>
+#include <QDockWidget>
 
 // include files for KDE
 #include <kapplication.h>
@@ -60,7 +61,7 @@ namespace K3bDevice {
 }
 
 
-class K3bMainWindow : public KParts::DockMainWindow3
+class K3bMainWindow : public KXmlGuiWindow
 {
     Q_OBJECT
 
@@ -297,9 +298,14 @@ private:
     // project actions
     QList<KAction*> m_dataProjectActions;
 
-    K3DockWidget* mainDock;
-    K3DockWidget* m_contentsDock;
-    K3DockWidget* m_dirTreeDock;
+    //K3DockWidget* mainDock;
+    //K3DockWidget* m_contentsDock;
+    //K3DockWidget* m_dirTreeDock;
+    QDockWidget * mainDock;
+    QDockWidget * m_contentsDock;
+    QDockWidget * m_dirTreeDock;
+
+
 
     // The K3b-specific widgets
     K3bDirView* m_dirView;

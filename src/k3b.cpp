@@ -142,12 +142,12 @@ public:
 
 
 K3bMainWindow::K3bMainWindow()
-    : KParts::DockMainWindow3(0)
+    : KXmlGuiWindow(0)
 {
     //setup splitter behavior
-    manager()->setSplitterHighResolution(true);
-    manager()->setSplitterOpaqueResize(true);
-    manager()->setSplitterKeepSize(true);
+    //manager()->setSplitterHighResolution(true);
+    //manager()->setSplitterOpaqueResize(true);
+    //manager()->setSplitterKeepSize(true);
 
     d = new Private;
     d->lastDoc = 0;
@@ -202,7 +202,7 @@ K3bMainWindow::~K3bMainWindow()
 void K3bMainWindow::showEvent( QShowEvent* e )
 {
     slotCheckDockWidgetStatus();
-    K3DockMainWindow::showEvent( e );
+    //K3DockMainWindow::showEvent( e );
 }
 
 
@@ -375,13 +375,18 @@ void K3bMainWindow::initStatusBar()
 void K3bMainWindow::initView()
 {
     // setup main docking things
+    mainDock = new QDockWidget(KDialog::makeStandardCaption( i18n("Project View") ),0);
+/*
     mainDock = createDockWidget( "project_view", SmallIcon("media-optical"), 0,
                                  KDialog::makeStandardCaption( i18n("Project View") ), i18n("Project View") );
+*/
+    addDockWidget ( Qt::TopDockWidgetArea, mainDock );
+/*
     mainDock->setDockSite( K3DockWidget::DockCorner );
     mainDock->setEnableDocking( K3DockWidget::DockNone );
     setView( mainDock );
     setMainDockWidget( mainDock );
-
+*/
     // --- Document Dock ----------------------------------------------------------------------------
     d->documentStack = new Q3WidgetStack( mainDock );
     mainDock->setWidget( d->documentStack );
@@ -414,10 +419,13 @@ void K3bMainWindow::initView()
     // ---------------------------------------------------------------------------------------------
 
     // --- Directory Dock --------------------------------------------------------------------------
+/*
     m_dirTreeDock = createDockWidget( "directory_tree", SmallIcon("folder"), 0,
                                       KDialog::makeStandardCaption( i18n("Sidepanel") ), i18n("Sidepanel") );
     m_dirTreeDock->setEnableDocking( K3DockWidget::DockCorner );
-
+*/
+    m_dirTreeDock = new QDockWidget(KDialog::makeStandardCaption( i18n("Sidepanel") ),0);
+    
     K3bFileTreeView* sidePanel = new K3bFileTreeView( m_dirTreeDock );
     //K3bSidePanel* sidePanel = new K3bSidePanel( this, m_dirTreeDock, "sidePanel" );
 
@@ -430,12 +438,16 @@ void K3bMainWindow::initView()
     // ---------------------------------------------------------------------------------------------
 
     // --- Contents Dock ---------------------------------------------------------------------------
+/*
     m_contentsDock = createDockWidget( "contents_view", SmallIcon("view-file-detailed"), 0,
                                        KDialog::makeStandardCaption( i18n("Contents View") ), i18n("Contents View") );
     m_contentsDock->setEnableDocking( K3DockWidget::DockCorner );
+*/
+    m_contentsDock = new QDockWidget(KDialog::makeStandardCaption( i18n("Contents View") ),0);
+    
     m_dirView = new K3bDirView( sidePanel/*->fileTreeView()*/, m_contentsDock );
     m_contentsDock->setWidget( m_dirView );
-    m_contentsDock->manualDock( m_dirTreeDock, K3DockWidget::DockRight, 2000 );
+    //m_contentsDock->manualDock( m_dirTreeDock, K3DockWidget::DockRight, 2000 );
 
     connect( m_contentsDock, SIGNAL(iMBeingClosed()), this, SLOT(slotContentsDockHidden()) );
     connect( m_contentsDock, SIGNAL(hasUndocked()), this, SLOT(slotContentsDockHidden()) );
@@ -567,7 +579,7 @@ void K3bMainWindow::saveOptions()
     actionFileOpenRecent->saveEntries( recentGrp );
 
     // save dock positions!
-    manager()->writeConfig( config(), "Docking Config" );
+    //manager()->writeConfig( config(), "Docking Config" );
 
     //FIXME kde4
     //m_dirView->saveConfig( config() );
@@ -598,10 +610,10 @@ void K3bMainWindow::readOptions()
 
     // do not read dock-positions from a config that has been saved by an old version
     K3bVersion configVersion( grp.readEntry( "config version", "0.1" ) );
-    if( configVersion >= K3bVersion("0.12") )
-        manager()->readConfig( config(), "Docking Config" );
-    else
-        kDebug() << "(K3bMainWindow) ignoring docking config from K3b version " << configVersion;
+    //if( configVersion >= K3bVersion("0.12") )
+    //    manager()->readConfig( config(), "Docking Config" );
+    //else
+    //    kDebug() << "(K3bMainWindow) ignoring docking config from K3b version " << configVersion;
     KConfigGroup grpWindow(config(), "main_window_settings");
     applyMainWindowSettings( grpWindow );
 
@@ -1317,14 +1329,14 @@ void K3bMainWindow::slotMediaCopy()
 
 void K3bMainWindow::slotShowDirTreeView()
 {
-    m_dirTreeDock->changeHideShowState();
+    //m_dirTreeDock->changeHideShowState();
     slotCheckDockWidgetStatus();
 }
 
 
 void K3bMainWindow::slotShowContentsView()
 {
-    m_contentsDock->changeHideShowState();
+    //m_contentsDock->changeHideShowState();
     slotCheckDockWidgetStatus();
 }
 
