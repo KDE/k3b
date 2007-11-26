@@ -231,8 +231,8 @@ void K3bAppDeviceManager::setReadSpeed()
 					   "watching movies which are read directly from the drive "
 					   "and the spinning noise is intrusive."
 					   "<p>Be aware that this has no influence on K3b since it will "
-					   "change the reading speed again when copying CDs or DVDs.")
-				      .arg(currentDevice()->vendor() + " " + currentDevice()->description()),
+					   "change the reading speed again when copying CDs or DVDs."
+				      ,currentDevice()->vendor() + " " + currentDevice()->description()),
 				      12,
 				      1,
 				      currentDevice()->maxReadSpeed(),

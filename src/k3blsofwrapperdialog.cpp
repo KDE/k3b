@@ -76,10 +76,10 @@ bool K3bLsofWrapperDialog::slotCheckDevice()
 			     "Otherwise K3b might not be able to fully access the device."
 			     "<p><em>Hint: Sometimes shutting down an application does not "
 			     "happen instantly. In that case you might have to use the '%3' "
-			     "button.")
-			.arg( m_device->vendor() + " - " + m_device->description() )
-			.arg( joinProcessNames(apps) )
-			.arg( i18n( "Check again" ) ) );
+			     "button."
+			,m_device->vendor() + " - " + m_device->description() 
+			, joinProcessNames(apps) 
+			, i18n( "Check again" ) ) );
       return true;
     }
   }
