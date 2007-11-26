@@ -212,7 +212,7 @@ public:
   }
 
   char* buffer;
-  size_t bufSize;
+  unsigned int bufSize;
   int outFd;
   int inFd;
   int inFdPair[2];
