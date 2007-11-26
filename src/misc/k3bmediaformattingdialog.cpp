@@ -45,7 +45,7 @@
 K3bMediaFormattingDialog::K3bMediaFormattingDialog( QWidget* parent )
   : K3bInteractionDialog( parent,
 			  i18n("Format and Erase"),
-			  i18n( "CD-RW" ) + '/' + i18n("DVD%1RW").arg("±") + '/' + i18n( "BD-RW" ),
+			  i18n( "CD-RW" ) + '/' + i18n("DVD%1RW",QString("±")) + '/' + i18n( "BD-RW" ),
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
 			  "Formatting and Erasing" ) // config group

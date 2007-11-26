@@ -270,7 +270,7 @@ void K3bDiskInfoView::reloadMedium()
 	  else
 	    text = i18n("Data");
         }
-        item->setText( 0, i18n("%1 (%2)").arg( QString::number(index).rightJustified( 2, ' ' )).arg(text) );
+        item->setText( 0, i18n("%1 (%2)", QString::number(index).rightJustified( 2, ' ' ),text) );
 	item->setText( 1, QString( "%1/%2" )
 		       .arg( track.copyPermitted() ? i18n("copy") : i18n("no copy") )
 		       .arg( track.type() == K3bTrack::AUDIO
