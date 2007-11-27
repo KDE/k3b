@@ -16,6 +16,7 @@
 #include "k3bnotifyoptiontab.h"
 
 #include <kdebug.h>
+#include <KNotifyConfigWidget>
 
 #include <qlayout.h>
 
@@ -27,6 +28,8 @@ K3bNotifyOptionTab::K3bNotifyOptionTab( QWidget* parent )
 #ifdef __GNUC__
 #warning Get the KNotification KCModule and show it here.
 #endif
+  m_notifyWidget = new KNotifyConfigWidget(this);
+  m_notifyWidget->setApplication();
 }
 
 
@@ -37,6 +40,7 @@ K3bNotifyOptionTab::~K3bNotifyOptionTab()
 
 void K3bNotifyOptionTab::readSettings()
 {
+
 //   m_notifyWidget->clear();
 //   KNotify::Application* app = m_notifyWidget->addApplicationEvents( "k3b/eventsrc" );
 //   if( app )
@@ -48,8 +52,7 @@ void K3bNotifyOptionTab::readSettings()
 
 bool K3bNotifyOptionTab::saveSettings()
 {
-//   m_notifyWidget->save();
-
+  m_notifyWidget->save();
   return true;
 }
 
