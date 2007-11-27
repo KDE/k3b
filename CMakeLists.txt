@@ -35,21 +35,3 @@ if(K3BSETUP_BUILD)
    add_subdirectory(k3bsetup)
 endif(K3BSETUP_BUILD)
 
-########### install files ###############
-
-
-
-
-#original Makefile.am contents follow:
-
-#if with_k3bsetup1
-#  K3BSETUPDIR=k3bsetup
-#endif
-#
-#EXTRA_DIST = AUTHORS COPYING ChangeLog INSTALL README TODO k3b.lsm admin configure.in.in
-#
-#AUTOMAKE_OPTIONS = foreign 1.5
-#
-##include admin/deps.am
-#
-#SUBDIRS = libk3bdevice libk3b src kioslaves plugins kfile-plugins $(K3BSETUPDIR)
