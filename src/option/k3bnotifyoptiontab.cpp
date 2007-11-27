@@ -25,9 +25,6 @@
 K3bNotifyOptionTab::K3bNotifyOptionTab( QWidget* parent )
   : QWidget( parent )
 {
-#ifdef __GNUC__
-#warning Get the KNotification KCModule and show it here.
-#endif
   m_notifyWidget = new KNotifyConfigWidget(this);
   m_notifyWidget->setApplication();
 }
@@ -40,13 +37,6 @@ K3bNotifyOptionTab::~K3bNotifyOptionTab()
 
 void K3bNotifyOptionTab::readSettings()
 {
-
-//   m_notifyWidget->clear();
-//   KNotify::Application* app = m_notifyWidget->addApplicationEvents( "k3b/eventsrc" );
-//   if( app )
-//     m_notifyWidget->addVisibleApp(app);
-//   else
-//     kDebug() << "(K3bNotifyOptionTab) could not find K3b eventsrc.";
 }
 
 
