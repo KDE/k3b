@@ -37,19 +37,15 @@
 //FIXME kde4
 K3bSplash::K3bSplash( QWidget* parent )
   : KVBox( parent)
-#if 0
-,"", 
-	   Qt::WStyle_Customize|
-	   Qt::WDestructiveClose|
-	   /*	   Qt::WStyle_Splash|*/
-	   Qt::X11BypassWindowManagerHint|
-	   Qt::WStyle_NoBorder|
-	   Qt::WStyle_StaysOnTop )
-#endif
 {
   setMargin( 0 );
   setSpacing( 0 );
-
+  setWindowFlags(Qt::WStyle_Customize|
+           Qt::WDestructiveClose|
+           /*      Qt::WStyle_Splash|*/
+           Qt::X11BypassWindowManagerHint|
+           Qt::WStyle_NoBorder|
+           Qt::WStyle_StaysOnTop);
   QLabel* copyrightLabel = new QLabel( KGlobal::mainComponent().aboutData()->copyrightStatement(), this );
   copyrightLabel->setMargin( 5 );
   copyrightLabel->setPaletteBackgroundColor( Qt::black );
