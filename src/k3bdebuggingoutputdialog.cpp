@@ -21,7 +21,7 @@
 #include <k3bversion.h>
 #include <k3bglobals.h>
 
-#include <q3textedit.h>
+#include <QTextEdit>
 #include <qcursor.h>
 #include <qfile.h>
 #include <qclipboard.h>
@@ -47,11 +47,11 @@ K3bDebuggingOutputDialog::K3bDebuggingOutputDialog( QWidget* parent )
   setButtonToolTip( User1, i18n("Save to file") );
   setButtonToolTip( User2, i18n("Copy to clipboard") );
 
-  debugView = new Q3TextEdit( this );
+  debugView = new QTextEdit( this );
   debugView->setReadOnly(true);
-  debugView->setTextFormat( Qt::PlainText );
+  debugView->setAcceptRichText( false );
   debugView->setCurrentFont( KGlobalSettings::fixedFont() );
-  debugView->setWordWrap( Q3TextEdit::NoWrap );
+  debugView->setWordWrapMode( QTextOption::NoWrap );
 
   setMainWidget( debugView );
 

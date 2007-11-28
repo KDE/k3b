@@ -421,7 +421,7 @@ void K3bVcdBurnDialog::setupVideoCdTab()
     // ------------------------------------------------- CD-i Application ---
     m_groupCdi = new Q3GroupBox( 4, Qt::Vertical, i18n( "VideoCD on CD-i" ), w );
     m_editCdiCfg = new Q3MultiLineEdit( m_groupCdi, "m_editCdiCfg" );
-    m_editCdiCfg->setFrameShape( Q3TextEdit::NoFrame );
+    m_editCdiCfg->setFrameShape( QFrame::NoFrame );
 
     // ----------------------------------------------------------------------
     Q3GridLayout* grid = new Q3GridLayout( w );

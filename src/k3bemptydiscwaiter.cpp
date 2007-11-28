@@ -172,45 +172,45 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
   if( message.isEmpty() ) {
     if( (d->wantedMediaState & K3bDevice::STATE_COMPLETE) && (d->wantedMediaState & K3bDevice::STATE_INCOMPLETE) )
       d->labelRequest->setText( i18n("Please insert a complete or appendable %4 medium "
-				     "into drive<p><b>%1 %2 (%3)</b>.")
-				.arg(d->device->vendor())
-				.arg(d->device->description())
-				.arg(d->device->devicename())
-				.arg( d->wantedMediaTypeString ) );
+				     "into drive<p><b>%1 %2 (%3)</b>."
+				,d->device->vendor()
+				,d->device->description()
+				,d->device->devicename()
+				, d->wantedMediaTypeString ) );
     else if( d->wantedMediaState & K3bDevice::STATE_COMPLETE )
       d->labelRequest->setText( i18n("Please insert a complete %4 medium "
-				     "into drive<p><b>%1 %2 (%3)</b>.")
-				.arg(d->device->vendor())
-				.arg(d->device->description())
-				.arg(d->device->devicename())
-				.arg( d->wantedMediaTypeString ) );
+				     "into drive<p><b>%1 %2 (%3)</b>."
+				,d->device->vendor()
+				,d->device->description()
+				,d->device->devicename()
+				, d->wantedMediaTypeString ) );
     else if( (d->wantedMediaState & K3bDevice::STATE_INCOMPLETE) && (d->wantedMediaState & K3bDevice::STATE_EMPTY) )
       d->labelRequest->setText( i18n("Please insert an empty or appendable %4 medium "
-				     "into drive<p><b>%1 %2 (%3)</b>.")
-				.arg(d->device->vendor())
-				.arg(d->device->description())
-				.arg(d->device->devicename())
-				.arg( d->wantedMediaTypeString ) );
+				     "into drive<p><b>%1 %2 (%3)</b>."
+				,d->device->vendor()
+				,d->device->description()
+				,d->device->devicename()
+				, d->wantedMediaTypeString ) );
     else if( d->wantedMediaState & K3bDevice::STATE_INCOMPLETE )
       d->labelRequest->setText( i18n("Please insert an appendable %4 medium "
-				     "into drive<p><b>%1 %2 (%3)</b>.")
-				.arg(d->device->vendor())
-				.arg(d->device->description())
-				.arg(d->device->devicename())
-				.arg( d->wantedMediaTypeString ) );
+				     "into drive<p><b>%1 %2 (%3)</b>."
+				,d->device->vendor()
+				,d->device->description()
+				,d->device->devicename()
+				, d->wantedMediaTypeString ) );
     else if( d->wantedMediaState & K3bDevice::STATE_EMPTY )
       d->labelRequest->setText( i18n("Please insert an empty %4 medium "
-				     "into drive<p><b>%1 %2 (%3)</b>.")
-				.arg(d->device->vendor())
-				.arg(d->device->description())
-				.arg(d->device->devicename())
-				.arg( d->wantedMediaTypeString ) );
+				     "into drive<p><b>%1 %2 (%3)</b>."
+				,d->device->vendor()
+				,d->device->description()
+				,d->device->devicename()
+				, d->wantedMediaTypeString ) );
     else // fallback case (this should not happen in K3b)
       d->labelRequest->setText( i18n("Please insert a suitable medium "
-				     "into drive<p><b>%1 %2 (%3)</b>.")
-				.arg(d->device->vendor())
-				.arg(d->device->description())
-				.arg(d->device->devicename()) );
+				     "into drive<p><b>%1 %2 (%3)</b>."
+				,d->device->vendor()
+				,d->device->description()
+				,d->device->devicename()) );
 
   }
   else
@@ -596,7 +596,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
     if( formatWithoutAsking ||
 	KMessageBox::questionYesNo( parentWidgetToUse(),
 				    i18n("Found rewritable media in %1 - %2. "
-					 "Should it be erased?").arg(d->device->vendor()).arg(d->device->description()),
+					 "Should it be erased?",d->device->vendor(),d->device->description()),
 				    i18n("Found Rewritable Disk"),
 				    KGuiItem(i18n("&Erase"), "cdrwblank"),
 				    KGuiItem(i18n("E&ject")) ) == KMessageBox::Yes ) {

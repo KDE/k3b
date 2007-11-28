@@ -18,7 +18,7 @@
 #include <kdialog.h>
 #include <qmap.h>
 
-class Q3TextEdit;
+class QTextEdit;
 
 class K3bDebuggingOutputDialog : public KDialog
 {
@@ -34,7 +34,7 @@ class K3bDebuggingOutputDialog : public KDialog
   void slotUser1();
   void slotUser2();
   
-  Q3TextEdit* debugView;
+  QTextEdit* debugView;
 };
 
 
