@@ -28,7 +28,6 @@
 #include <qlayout.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
-#include <Q3WhatsThis>
 
 K3bCddbPatternWidget::K3bCddbPatternWidget( QWidget* parent )
   : base_K3bCddbPatternWidget( parent )
@@ -130,7 +129,7 @@ void K3bCddbPatternWidget::loadDefaults()
 
 void K3bCddbPatternWidget::slotSeeSpecialStrings()
 {
-  Q3WhatsThis::display( i18n( "<p><b>Pattern special strings:</b>"
+  setWhatsThis( i18n( "<p><b>Pattern special strings:</b>"
 			     "<p>The following strings will be replaced with their respective meaning in every "
 			     "track name.<br>"
 			     "<em>Hint:</em> %A differs from %a only on soundtracks or compilations."
@@ -151,7 +150,7 @@ void K3bCddbPatternWidget::slotSeeSpecialStrings()
 
 void K3bCddbPatternWidget::slotSeeConditionalInclusion()
 {
-  Q3WhatsThis::display( i18n( "<p><b>Conditional inclusion:</b>"
+  setWhatsThis( i18n( "<p><b>Conditional inclusion:</b>"
                              "<p>These patterns make it possible to selectively include texts, "
                              "depending on the value of CDDB entries. You can choose only to "
                              "include or exclude texts if one of the entries is empty, "

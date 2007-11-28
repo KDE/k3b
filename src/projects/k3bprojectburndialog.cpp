@@ -35,7 +35,7 @@
 #include <qtooltip.h>
 
 #include <qlayout.h>
-
+#include <QWhatsThis>
 #include <qcheckbox.h>
 #include <qtabwidget.h>
 #include <q3groupbox.h>
@@ -44,7 +44,6 @@
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3VBoxLayout>
-#include <Q3WhatsThis>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
@@ -424,8 +423,7 @@ void K3bProjectBurnDialog::slotShowImageTip( bool buttonActivated )
 {
     if ( buttonActivated ) {
         // FIXME: use the tab bar's position
-        Q3WhatsThis::display( i18n( "Use the 'Image' tab to optionally adjust the path of the image." ),
-                              mapToGlobal( QPoint( rect().center().x(), rect().top() ) ) );
+        QWhatsThis::showText( mapToGlobal( QPoint( rect().center().x(), rect().top() ) ),i18n( "Use the 'Image' tab to optionally adjust the path of the image." ));
     }
 }
 

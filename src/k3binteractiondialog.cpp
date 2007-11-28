@@ -39,7 +39,6 @@
 #include <QGridLayout>
 #include <QKeyEvent>
 #include <QEvent>
-#include <Q3WhatsThis>
 #include <Q3HBoxLayout>
 
 #include <klocale.h>
@@ -447,7 +446,6 @@ void K3bInteractionDialog::setButtonText( int button,
   if( KPushButton* b = getButton( button ) ) {
     b->setText( text );
     QToolTip::remove( b );
-    Q3WhatsThis::remove( b );
     b->setToolTip( tooltip );
     b->setWhatsThis( whatsthis );
   }
@@ -481,7 +479,6 @@ void K3bInteractionDialog::setStartButtonText( const QString& text,
   if( m_buttonStart ) {
     m_buttonStart->setText( text );
     QToolTip::remove( m_buttonStart );
-    Q3WhatsThis::remove( m_buttonStart );
     m_buttonStart->setToolTip( tooltip );
     m_buttonStart->setWhatsThis( whatsthis );
   }
@@ -495,7 +492,6 @@ void K3bInteractionDialog::setCancelButtonText( const QString& text,
   if( m_buttonCancel ) {
     m_buttonCancel->setText( text );
     QToolTip::remove( m_buttonCancel );
-    Q3WhatsThis::remove( m_buttonCancel );
     m_buttonCancel->setToolTip( tooltip );
     m_buttonCancel->setWhatsThis( whatsthis );
   }
@@ -509,7 +505,6 @@ void K3bInteractionDialog::setSaveButtonText( const QString& text,
   if( m_buttonSave ) {
     m_buttonSave->setText( text );
     QToolTip::remove( m_buttonSave );
-    Q3WhatsThis::remove( m_buttonSave );
     m_buttonSave->setToolTip( tooltip );
     m_buttonSave->setWhatsThis( whatsthis );
   }

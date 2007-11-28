@@ -43,7 +43,6 @@
 #include <Q3PtrList>
 #include <QPixmap>
 #include <QFrame>
-#include <Q3WhatsThis>
 #include <QMouseEvent>
 #include <QPaintEvent>
 
@@ -542,7 +541,7 @@ void K3bFillStatusDisplay::slotBD50()
 
 void K3bFillStatusDisplay::slotWhy44()
 {
-    Q3WhatsThis::display( i18n("<p><b>Why does K3b offer 4.4 GB and 8.0 GB instead of 4.7 and 8.5 like "
+    this->setWhatsThis( i18n("<p><b>Why does K3b offer 4.4 GB and 8.0 GB instead of 4.7 and 8.5 like "
                                "it says on the media?</b>"
                                "<p>A single layer DVD media has a capacity of approximately "
                                "4.4 GB which equals 4.4*1024<sup>3</sup> bytes. Media producers just "
