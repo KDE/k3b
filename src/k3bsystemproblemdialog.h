@@ -79,8 +79,7 @@ class K3bSystemProblemDialog : public KDialog
    * or K3b is started for the first time.
    */
   static bool readCheckSystemConfig();
-  static void checkSystem( QWidget* parent = 0, 
-			   const char* name = 0 );
+  static void checkSystem( QWidget* parent = 0); 
 
  protected:
   void closeEvent( QCloseEvent* );
@@ -90,8 +89,7 @@ class K3bSystemProblemDialog : public KDialog
 
  private:
   K3bSystemProblemDialog( const Q3ValueList<K3bSystemProblem>&,
-			  QWidget* parent = 0, 
-			  const char* name = 0 );
+			  QWidget* parent = 0); 
   static int dmaActivated( K3bDevice::Device* );
   static QList<K3bDevice::Device*> checkForAutomounting();
 

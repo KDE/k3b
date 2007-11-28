@@ -138,6 +138,8 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   else
     m_buttonCancel = 0;
 
+  //TODO qt4 is able to change it. Remove this code.
+
   // we only handle some of the possible settings since
   // our buttons are always to the right of the dialog
   switch( KGlobalSettings::buttonLayout() ) {
