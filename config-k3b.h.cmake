@@ -16,3 +16,5 @@
 #cmakedefine HAVE_SYS_STATVFS_H 1
 
 #cmakedefine HAVE_STAT64 1
+
+#define K3B_VERSION_STRING "${K3B_VERSION_STRING}"
