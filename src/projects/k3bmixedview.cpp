@@ -29,10 +29,9 @@
 #include <k3bfillstatusdisplay.h>
 #include <k3bprojectplugin.h>
 
-#include <q3widgetstack.h>
+#include <QStackedWidget>
 #include <qsplitter.h>
 #include <qlayout.h>
-#include <q3valuelist.h>
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -49,7 +48,7 @@ K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent )
 {
   QSplitter* splitter = new QSplitter( this );
   m_mixedDirTreeView = new K3bMixedDirTreeView( this, doc, splitter );
-  m_widgetStack = new Q3WidgetStack( splitter );
+  m_widgetStack = new QStackedWidget( splitter );
   m_dataFileView = new K3bDataFileView( this, m_mixedDirTreeView, doc->dataDoc(), m_widgetStack );
   m_mixedDirTreeView->setFileView( m_dataFileView );
   m_audioListView = new K3bAudioTrackView( doc->audioDoc(), m_widgetStack );
@@ -61,7 +60,7 @@ K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent )
   connect( m_mixedDirTreeView, SIGNAL(dataTreeSelected()),
 	   this, SLOT(slotDataTreeSelected()) );
 
-  m_widgetStack->raiseWidget( m_dataFileView );
+  m_widgetStack->setCurrentWidget( m_dataFileView );
 
 #ifdef __GNUC__
 #warning enable player once ported to Phonon
@@ -101,19 +100,19 @@ K3bAudioTrackPlayer* K3bMixedView::player() const
 
 void K3bMixedView::slotAudioTreeSelected()
 {
-  m_widgetStack->raiseWidget( m_audioListView );
+  m_widgetStack->setCurrentWidget( m_audioListView );
 }
 
 
 void K3bMixedView::slotDataTreeSelected()
 {
-  m_widgetStack->raiseWidget( m_dataFileView );
+  m_widgetStack->setCurrentWidget( m_dataFileView );
 }
 
 
 K3bDirItem* K3bMixedView::currentDir() const
 {
-  if( m_widgetStack->visibleWidget() == m_dataFileView )
+  if( m_widgetStack->currentWidget() == m_dataFileView )
     return m_dataFileView->currentDir();
   else
     return 0;
@@ -147,7 +146,7 @@ K3bProjectBurnDialog* K3bMixedView::newBurnDialog( QWidget* parent )
 
 void K3bMixedView::addUrls( const KUrl::List& urls )
 {
-  if( m_widgetStack->visibleWidget() == m_dataFileView )
+  if( m_widgetStack->currentWidget() == m_dataFileView )
     K3bDataUrlAddingDialog::addUrls( urls, currentDir() );
   else
     K3bAudioTrackAddingDialog::addUrls( urls, m_doc->audioDoc(), 0, 0, 0, this );

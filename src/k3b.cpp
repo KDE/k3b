@@ -29,7 +29,7 @@
 #include <qlist.h>
 #include <qfont.h>
 #include <qpalette.h>
-#include <q3widgetstack.h>
+#include <QStackedWidget>
 #include <qtimer.h>
 //Added by qt3to4:
 #include <QLabel>
@@ -131,7 +131,7 @@ class K3bMainWindow::Private
 public:
     K3bDoc* lastDoc;
 
-    Q3WidgetStack* documentStack;
+    QStackedWidget* documentStack;
     K3bWelcomeWidget* welcomeWidget;
     QWidget* documentHull;
 
@@ -385,7 +385,7 @@ void K3bMainWindow::initView()
     setMainDockWidget( mainDock );
 */
     // --- Document Dock ----------------------------------------------------------------------------
-    d->documentStack = new Q3WidgetStack( mainDock );
+    d->documentStack = new QStackedWidget( mainDock );
     mainDock->setWidget( d->documentStack );
 
     d->documentHull = new QWidget( d->documentStack );
@@ -412,7 +412,7 @@ void K3bMainWindow::initView()
     m_documentTab->addTab( d->welcomeWidget, i18n("Quickstart") );
 
    d->documentStack->addWidget( d->welcomeWidget );
-   d->documentStack->raiseWidget( d->welcomeWidget );
+   d->documentStack->setCurrentWidget( d->welcomeWidget );
     // ---------------------------------------------------------------------------------------------
 
     // --- Directory Dock --------------------------------------------------------------------------
@@ -1182,7 +1182,7 @@ void K3bMainWindow::slotCurrentDocChanged()
         slotStateChanged( "state_project_active", KXMLGUIClient::StateReverse );
     }
     else {
-        d->documentStack->raiseWidget( d->documentHull );
+        d->documentStack->setCurrentWidget( d->documentHull );
         slotStateChanged( "state_project_active", KXMLGUIClient::StateNoReverse );
     }
 

@@ -20,7 +20,7 @@
 #include <kurl.h>
 
 class K3bMixedDoc;
-class Q3WidgetStack;
+class QStackedWidget ;
 class K3bDataFileView;
 class K3bMixedDirTreeView;
 class K3bAudioTrackView;
@@ -55,7 +55,7 @@ class K3bMixedView : public K3bView
  private:
   K3bMixedDoc* m_doc;
 
-  Q3WidgetStack* m_widgetStack;
+  QStackedWidget* m_widgetStack;
 
   K3bMixedDirTreeView* m_mixedDirTreeView;
   K3bDataFileView* m_dataFileView;

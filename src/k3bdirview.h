@@ -31,7 +31,7 @@ class K3bFileView;
 class K3bVideoDVDRippingView;
 class KComboBox;
 class K3bFileTreeView;
-class Q3WidgetStack;
+class QStackedWidget;
 class K3bDiskInfoView;
 class Q3ScrollView;
 class QLabel;
@@ -80,7 +80,7 @@ class K3bDirView : public KVBox
   void deviceSelected( K3bDevice::Device* );
 
  private:
-  Q3WidgetStack* m_viewStack;
+  QStackedWidget* m_viewStack;
   Q3ScrollView* m_scroll;
 
   K3bAudioCdView*   m_cdView;

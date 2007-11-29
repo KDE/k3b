@@ -20,7 +20,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpixmap.h>
-#include <q3widgetstack.h>
+#include <QStackedWidget>
 
 
 class K3bMediaContentsView::Private
@@ -131,8 +131,8 @@ void K3bMediaContentsView::slotMediumChanged( K3bDevice::Device* dev )
 {
   // FIXME: derive a K3bContentsStack from QWidgetStack and let it set an active flag
   // to replace this hack
-  if( Q3WidgetStack* stack = dynamic_cast<Q3WidgetStack*>( parentWidget() ) )
-    if( stack->visibleWidget() != this )
+  if( QStackedWidget* stack = dynamic_cast<QStackedWidget*>( parentWidget() ) )
+    if( stack->currentWidget() != this )
       return;
 
   if( !d->autoReload /*|| !isActive()*/ )

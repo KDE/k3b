@@ -53,7 +53,7 @@
 #include <qicon.h>
 #include <q3valuelist.h>
 #include <qlabel.h>
-#include <q3widgetstack.h>
+#include <QStackedWidget>
 #include <q3scrollview.h>
 #include <qpainter.h>
 #include <q3simplerichtext.h>
@@ -101,10 +101,10 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent )
   if( !m_fileTreeView ) {
     m_mainSplitter = new QSplitter( this );
     m_fileTreeView = new K3bFileTreeView( m_mainSplitter );
-    m_viewStack    = new Q3WidgetStack( m_mainSplitter );
+    m_viewStack    = new QStackedWidget( m_mainSplitter );
   }
   else {
-    m_viewStack    = new Q3WidgetStack( this );
+    m_viewStack    = new QStackedWidget( this );
     m_mainSplitter = 0;
   }
 
@@ -118,7 +118,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent )
   m_movieView    = new K3bVideoDVDRippingView(m_viewStack, "movieview");
 #endif
 
-  m_viewStack->raiseWidget( m_fileView );
+  m_viewStack->setCurrentWidget( m_fileView );
 
   m_fileTreeView->addDefaultBranches();
   m_fileTreeView->addCdDeviceBranches( k3bcore->deviceManager() );
@@ -190,7 +190,7 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
       medium.diskInfo().diskState() == K3bDevice::STATE_NO_MEDIA ) {
 
     // show cd info
-    m_viewStack->raiseWidget( m_infoView );
+    m_viewStack->setCurrentWidget( m_infoView );
     m_infoView->reload( medium );
     return;
   }
@@ -224,12 +224,12 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
       //      m_viewStack->raiseWidget( m_fileView );
     }
     else if( r == KMessageBox::No ) {
-      m_viewStack->raiseWidget( m_fileView );
+      m_viewStack->setCurrentWidget( m_fileView );
       static_cast<K3bMainWindow*>( kapp->mainWidget() )->slotMediaCopy();
     }
     else {
       m_movieView->reload( medium );
-      m_viewStack->raiseWidget( m_movieView );
+      m_viewStack->setCurrentWidget( m_movieView );
     }
 
     return;
@@ -252,7 +252,7 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
 					KGuiItem(i18n("Mount CD")),
 					KGuiItem(i18n("Show Video Tracks")) ) == KMessageBox::No ) {
 	  mount = false;
-	  m_viewStack->raiseWidget( m_videoView );
+	  m_viewStack->setCurrentWidget( m_videoView );
 	  m_videoView->reload( medium );
 	}
       }
@@ -265,7 +265,7 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
 				      KGuiItem(i18n("Mount CD")),
 				      KGuiItem(i18n("Show Audio Tracks")) ) == KMessageBox::No ) {
 	mount = false;
-	m_viewStack->raiseWidget( m_cdView );
+	m_viewStack->setCurrentWidget( m_cdView );
 	m_cdView->reload( medium );
       }
     }
@@ -275,13 +275,13 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
   }
 
   else if( medium.content() & K3bMedium::CONTENT_AUDIO ) {
-    m_viewStack->raiseWidget( m_cdView );
+    m_viewStack->setCurrentWidget( m_cdView );
     m_cdView->reload( medium );
   }
 
   else {
     // show cd info
-    m_viewStack->raiseWidget( m_infoView );
+    m_viewStack->setCurrentWidget( m_infoView );
     m_infoView->reload( medium );
   }
 
@@ -296,7 +296,7 @@ void K3bDirView::slotMountFinished( const QString& mp )
     m_fileView->reload(); // HACK to get the contents shown... FIXME
   }
   else {
-    m_viewStack->raiseWidget( m_fileView );
+    m_viewStack->setCurrentWidget( m_fileView );
     K3bPassivePopup::showPopup( i18n("<p>K3b was unable to mount medium <b>%1</b> in device <em>%2 - %3</em>"
 				,k3bappcore->mediaCache()->medium( k3bappcore->appDeviceManager()->currentDevice() ).shortString() 
 				,k3bappcore->appDeviceManager()->currentDevice()->vendor() 
@@ -343,7 +343,7 @@ void K3bDirView::slotDirActivated( const KUrl& url )
   m_fileView->setUrl(url, true);
 //   m_urlCombo->setEditText( url.path() );
 
-  m_viewStack->raiseWidget( m_fileView );
+  m_viewStack->setCurrentWidget( m_fileView );
 }
 
 
