@@ -376,10 +376,7 @@ void K3bMainWindow::initView()
 {
     // setup main docking things
     mainDock = new QDockWidget(KDialog::makeStandardCaption( i18n("Project View") ),0);
-/*
-    mainDock = createDockWidget( "project_view", SmallIcon("media-optical"), 0,
-                                 KDialog::makeStandardCaption( i18n("Project View") ), i18n("Project View") );
-*/
+    mainDock->setObjectName("project_view");
     addDockWidget ( Qt::BottomDockWidgetArea, mainDock );
 /*
     mainDock->setDockSite( K3DockWidget::DockCorner );
@@ -425,6 +422,7 @@ void K3bMainWindow::initView()
     m_dirTreeDock->setEnableDocking( K3DockWidget::DockCorner );
 */
     m_dirTreeDock = new QDockWidget(KDialog::makeStandardCaption( i18n("Sidepanel") ),0);
+    m_dirTreeDock->setObjectName("directory_tree");
     addDockWidget ( Qt::TopDockWidgetArea, m_dirTreeDock ); 
     K3bFileTreeView* sidePanel = new K3bFileTreeView( m_dirTreeDock );
     //K3bSidePanel* sidePanel = new K3bSidePanel( this, m_dirTreeDock, "sidePanel" );
@@ -444,6 +442,7 @@ void K3bMainWindow::initView()
     m_contentsDock->setEnableDocking( K3DockWidget::DockCorner );
 */
     m_contentsDock = new QDockWidget(KDialog::makeStandardCaption( i18n("Contents View") ),0);
+    m_contentsDock->setObjectName("contents_view");
     addDockWidget ( Qt::TopDockWidgetArea,m_contentsDock );
     m_dirView = new K3bDirView( sidePanel/*->fileTreeView()*/, m_contentsDock );
     m_contentsDock->setWidget( m_dirView );
