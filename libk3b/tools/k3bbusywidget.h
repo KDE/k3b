@@ -37,7 +37,7 @@ class LIBK3B_EXPORT K3bBusyWidget : public QFrame
   QSize minimumSizeHint() const;
 
  protected:
-  void drawContents( QPainter* p );
+  void paintEvent( QPaintEvent* );
 
  private slots:
   void animateBusy();

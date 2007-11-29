@@ -81,8 +81,9 @@ QSize K3bBusyWidget::minimumSizeHint() const
 }
 
 
-void K3bBusyWidget::drawContents( QPainter* p )
+void K3bBusyWidget::paintEvent( QPaintEvent*  )
 {
+  QPainter p(this);
   QRect rect = contentsRect();
 
   int squareSize = 8;
@@ -97,7 +98,7 @@ void K3bBusyWidget::drawContents( QPainter* p )
 
   //  p->eraseRect( rect );
   if( m_bBusy )
-    p->fillRect( pos, (rect.height() - squareSize)/2, squareSize, squareSize, palette().highlight() );
+    p.fillRect( pos, (rect.height() - squareSize)/2, squareSize, squareSize, palette().highlight() );
 }
 
 

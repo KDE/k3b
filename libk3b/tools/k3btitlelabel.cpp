@@ -112,18 +112,18 @@ void K3bTitleLabel::resizeEvent( QResizeEvent* e )
     update();
 }
 
-void K3bTitleLabel::drawContents( QPainter* p )
+void K3bTitleLabel::paintEvent( QPaintEvent* )
 {
-    p->save();
 
+    QPainter p(this);
     QRect r = contentsRect();
-    p->eraseRect( r );
+    p.eraseRect( r );
 
     QFont f(font());
     f.setBold(true);
     f.setPointSize( f.pointSize() + 2 );
 
-    p->setFont(f);
+    p.setFont(f);
 
     int neededWidth = d->displayTitleLength;
     if( !d->displaySubTitle.isEmpty() )
@@ -138,16 +138,14 @@ void K3bTitleLabel::drawContents( QPainter* p )
         startPos = r.left() + d->margin;
 
     // paint title
-    p->drawText( startPos, r.top() + d->titleBaseLine, d->displayTitle );
+    p.drawText( startPos, r.top() + d->titleBaseLine, d->displayTitle );
 
     if( !d->subTitle.isEmpty() ) {
         f.setBold(false);
         f.setPointSize( f.pointSize() - 4 );
-        p->setFont(f);
-        p->drawText( startPos + d->displayTitleLength + 5, r.top() + d->subTitleBaseLine, d->displaySubTitle );
+        p.setFont(f);
+        p.drawText( startPos + d->displayTitleLength + 5, r.top() + d->subTitleBaseLine, d->displaySubTitle );
     }
-
-    p->restore();
 }
 
 

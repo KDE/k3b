@@ -489,7 +489,7 @@ bool K3bAudioEditorWidget::moveMarker( int identifier, const K3b::Msf& pos )
 }
 
 
-void K3bAudioEditorWidget::drawContents( QPainter* p )
+void K3bAudioEditorWidget::paintEvent( QPaintEvent* p )
 {
     // double buffering
     QPixmap pix( contentsRect().size() );
@@ -514,11 +514,13 @@ void K3bAudioEditorWidget::drawContents( QPainter* p )
     drawAll( &pixP, drawRect );
 
     pixP.end();
-
+    //Fix me kde4
+#if 0
     QRect rect = p->clipRegion().boundingRect();
     QRect pixRect = rect;
     pixRect.moveBy( -1*frameWidth(), -1*frameWidth() );
     bitBlt( this, rect.topLeft(), &pix, pixRect );
+#endif
 }
 
 

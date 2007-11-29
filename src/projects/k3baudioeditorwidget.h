@@ -182,7 +182,7 @@ private:
     void mouseReleaseEvent( QMouseEvent* e );
     void mouseDoubleClickEvent( QMouseEvent* e );
     void mouseMoveEvent( QMouseEvent* e );
-    void drawContents( QPainter* );
+    void paintEvent(QPaintEvent *);
     void drawAll( QPainter*, const QRect& );
     void drawRange( QPainter* p, const QRect&, Range* r );
     void drawMarker( QPainter* p, const QRect&, Marker* m );

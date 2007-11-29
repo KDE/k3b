@@ -56,7 +56,7 @@ public Q_SLOTS:
 
 protected:
     void resizeEvent( QResizeEvent* );
-    void drawContents( QPainter* p );
+    void paintEvent( QPaintEvent* );
 
 private:
     void updatePositioning();
