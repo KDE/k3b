@@ -18,3 +18,5 @@
 #cmakedefine HAVE_STAT64 1
 
 #define K3B_VERSION_STRING "${K3B_VERSION_STRING}"
+
+#cmakedefine HAVE_K3BSETUP 1
