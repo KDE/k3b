@@ -152,8 +152,9 @@ QSize K3bFlatButton::sizeHint() const
 }
 
 
-void K3bFlatButton::drawContents( QPainter* p )
+void K3bFlatButton::paintEvent ( QPaintEvent * event ) 
 {
+  QFrame::paintEvent( event );
   QRect rect = contentsRect();
 
 //   if( m_hover )
@@ -165,26 +166,24 @@ void K3bFlatButton::drawContents( QPainter* p )
 //     parentWidget()->repaint( r );
 //   }
 
-  p->save();
-
+  QPainter p(this);
   QRect textRect = fontMetrics().boundingRect( m_text );
   int textX = qMax( 0, ( rect.width() - textRect.width() ) / 2 );
   int textY = textRect.height();
 
   if( !m_pixmap.isNull() ) {
-    p->translate( rect.left(), rect.top() );
+    p.translate( rect.left(), rect.top() );
     textX = qMax( textX, (m_pixmap.width() - textRect.width()) / 2 );
     textY += 5 + m_pixmap.height();
 
     int pixX = qMax( qMax( 0, (textRect.width() - m_pixmap.width()) / 2 ), 
 		     ( rect.width() - m_pixmap.width() ) / 2 );
-    p->drawPixmap( pixX, 0, m_pixmap );
-    p->drawText( textX, textY, m_text ); 
+    p.drawPixmap( pixX, 0, m_pixmap );
+    p.drawText( textX, textY, m_text ); 
   }
   else
-    p->drawText( rect, Qt::AlignCenter, m_text );
+    p.drawText( rect, Qt::AlignCenter, m_text );
 
-  p->restore();
 }
 
 

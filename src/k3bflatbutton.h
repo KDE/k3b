@@ -26,7 +26,7 @@ class QEvent;
 class QMouseEvent;
 class QPainter;
 class QAction;
-
+class QPaintEvent;
 
 /**
 @author Sebastian Trueg
@@ -63,6 +63,7 @@ class K3bFlatButton : public QFrame
   void mouseReleaseEvent(QMouseEvent* e);
   void enterEvent( QEvent* );
   void leaveEvent( QEvent* );
+  void paintEvent ( QPaintEvent * event );
   void drawContents( QPainter* );
 
   void setHover( bool );
