@@ -64,8 +64,6 @@ class K3bFlatButton : public QFrame
   void enterEvent( QEvent* );
   void leaveEvent( QEvent* );
   void paintEvent ( QPaintEvent * event );
-  void drawContents( QPainter* );
-
   void setHover( bool );
 
   bool m_pressed;
