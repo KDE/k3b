@@ -31,7 +31,6 @@
 #include <Q3GridLayout>
 #include <QEvent>
 #include <QMouseEvent>
-#include <Q3ValueList>
 #include <QContextMenuEvent>
 
 
@@ -203,10 +202,10 @@ void K3bAudioTrackSplitDialog::splitTrack( K3bAudioTrack* track,
 {
     K3bAudioTrackSplitDialog d( track, parent );
     if( d.exec() == QDialog::Accepted ) {
-        Q3ValueList<int> ranges = d.m_editorWidget->allRanges();
+        QList<int> ranges = d.m_editorWidget->allRanges();
         // we split the track at all range ends and just delete those that relate to the gaps in between
         K3b::Msf pos = 0;
-        for( Q3ValueList<int>::const_iterator it = ranges.constBegin();
+        for( QList<int>::const_iterator it = ranges.constBegin();
              it != ranges.constEnd(); ++it ) {
 
             // delete the unwanted part

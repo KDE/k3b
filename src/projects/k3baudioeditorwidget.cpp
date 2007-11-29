@@ -24,7 +24,6 @@
 //Added by qt3to4:
 #include <Q3PointArray>
 #include <QFrame>
-#include <Q3ValueList>
 #include <QMouseEvent>
 #include <Q3PtrList>
 
@@ -415,9 +414,9 @@ K3b::Msf K3bAudioEditorWidget::rangeEnd( int identifier ) const
 }
 
 
-Q3ValueList<int> K3bAudioEditorWidget::allRanges() const
+QList<int> K3bAudioEditorWidget::allRanges() const
 {
-    Q3ValueList<int> l;
+    QList<int> l;
     d->ranges.sort();
     for( Q3PtrListIterator<Range> it( d->ranges ); *it; ++it )
         l.append( (*it)->id );

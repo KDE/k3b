@@ -19,7 +19,6 @@
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <QMouseEvent>
-#include <Q3ValueList>
 
 #include <k3bmsf.h>
 
@@ -88,7 +87,7 @@ public:
      * \return A list of all ranges' identifiers sorted ascending by start
      * offset
      */
-    Q3ValueList<int> allRanges() const;
+    QList<int> allRanges() const;
 
     void setMaxNumberOfMarkers( int );
 

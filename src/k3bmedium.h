@@ -22,9 +22,7 @@
 #include <k3biso9660.h>
 
 #include <ksharedptr.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-
+#include <QList>
 
 /**
  * K3bMedium represents a medium in K3b.
@@ -68,7 +66,7 @@ class K3bMedium
    * media. In that case refer to K3bDevice::Device::maxWriteSpeed
    * combined with a manual speed selection.
    */
-  const Q3ValueList<int>& writingSpeeds() const;
+  const QList<int>& writingSpeeds() const;
   const QString& volumeId() const;
 
   /**

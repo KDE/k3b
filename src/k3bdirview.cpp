@@ -128,7 +128,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent )
 
   if( m_mainSplitter ) {
     // split
-    Q3ValueList<int> sizes = m_mainSplitter->sizes();
+    QList<int> sizes = m_mainSplitter->sizes();
     int all = sizes[0] + sizes[1];
     sizes[1] = all*2/3;
     sizes[0] = all - sizes[1];

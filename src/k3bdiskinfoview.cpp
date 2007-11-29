@@ -418,7 +418,7 @@ void K3bDiskInfoView::createMediaInfoItems( const K3bMedium& medium )
     if( medium.writingSpeeds().isEmpty() )
       s = "-";
     else
-      for( Q3ValueList<int>::const_iterator it = medium.writingSpeeds().begin();
+      for( QList<int>::const_iterator it = medium.writingSpeeds().begin();
 	   it != medium.writingSpeeds().end(); ++it ) {
 	if( !s.isEmpty() ) {
 	  s.append( "\n" );

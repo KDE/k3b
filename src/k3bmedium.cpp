@@ -24,8 +24,6 @@
 
 #include <klocale.h>
 #include <kio/global.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 /**
  * Internal class used by K3bMedium
@@ -39,7 +37,7 @@ public:
   K3bDevice::DiskInfo diskInfo;
   K3bDevice::Toc toc;
   K3bDevice::CdText cdText;
-  Q3ValueList<int> writingSpeeds;
+  QList<int> writingSpeeds;
   K3bIso9660SimplePrimaryDescriptor isoDesc;
   int content;
 };
@@ -125,7 +123,7 @@ const K3bDevice::CdText& K3bMedium::cdText() const
 }
 
 
-const Q3ValueList<int>& K3bMedium::writingSpeeds() const
+const QList<int>& K3bMedium::writingSpeeds() const
 {
   return d->writingSpeeds;
 }

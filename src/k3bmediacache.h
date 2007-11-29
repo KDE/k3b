@@ -102,7 +102,7 @@ class K3bMediaCache : public QObject
   /**
    * Read cached supported writing speeds.
    */
-  Q3ValueList<int> writingSpeeds( K3bDevice::Device* );
+  QList<int> writingSpeeds( K3bDevice::Device* );
 
   /**
    * \see K3bMedium::shortString()

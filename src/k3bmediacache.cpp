@@ -29,7 +29,6 @@
 #include <qevent.h>
 //Added by qt3to4:
 #include <QCustomEvent>
-#include <Q3ValueList>
 #include <Q3PtrList>
 #include <krandom.h>
 
@@ -292,16 +291,16 @@ K3bDevice::CdText K3bMediaCache::cdText( K3bDevice::Device* dev )
 }
 
 
-Q3ValueList<int> K3bMediaCache::writingSpeeds( K3bDevice::Device* dev )
+QList<int> K3bMediaCache::writingSpeeds( K3bDevice::Device* dev )
 {
   if( DeviceEntry* e = findDeviceEntry( dev ) ) {
     e->mutex.lock();
-    Q3ValueList<int> ws = e->medium.writingSpeeds();
+    QList<int> ws = e->medium.writingSpeeds();
     e->mutex.unlock();
     return ws;
   }
   else
-    return Q3ValueList<int>();
+    return QList<int>();
 }
 
 

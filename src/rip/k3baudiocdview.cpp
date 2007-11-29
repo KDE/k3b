@@ -315,7 +315,7 @@ void K3bAudioCdView::slotTrackSelectionChanged( Q3ListViewItem* item )
 
 void K3bAudioCdView::startRip()
 {
-  Q3ValueList<int> trackNumbers;
+  QList<int> trackNumbers;
   for( Q3ListViewItemIterator it( m_trackView ); it.current(); ++it ) {
     AudioTrackViewItem* a = (AudioTrackViewItem*)it.current();
     if( a->isChecked() )
