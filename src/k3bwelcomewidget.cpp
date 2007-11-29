@@ -347,11 +347,11 @@ void K3bWelcomeWidget::Display::dropEvent( QDropEvent* e )
 
 
 K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent )
-    : Q3ScrollView( parent ),
+    : QScrollArea( parent ),
       m_mainWindow( mw )
 {
     main = new Display( this );
-    addChild( main );
+    setWidget( main );
 
     connect( main, SIGNAL(dropped(const KUrl::List&)), m_mainWindow, SLOT(addUrls(const KUrl::List&)) );
 
@@ -399,15 +399,15 @@ void K3bWelcomeWidget::saveConfig( KConfigGroup& c )
 
 void K3bWelcomeWidget::resizeEvent( QResizeEvent* e )
 {
-    Q3ScrollView::resizeEvent( e );
     fixSize();
+    QScrollArea::resizeEvent( e );
 }
 
 
 void K3bWelcomeWidget::showEvent( QShowEvent* e )
 {
-    Q3ScrollView::showEvent( e );
     fixSize();
+    QScrollArea::showEvent( e );
 }
 
 
@@ -422,7 +422,7 @@ void K3bWelcomeWidget::fixSize()
 }
 
 
-void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
+void K3bWelcomeWidget::mousePressEvent ( QMouseEvent* e )
 {
     if( e->button() == Qt::RightButton ) {
         QMap<QAction *, QAction*> map;

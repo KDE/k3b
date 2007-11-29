@@ -16,7 +16,7 @@
 #ifndef _K3B_WELCOME_WIDGET_H_
 #define _K3B_WELCOME_WIDGET_H_
 
-#include <q3scrollview.h>
+#include <QScrollArea>
 #include <q3ptrlist.h>
 #include <qmap.h>
 #include <qimage.h>
@@ -45,7 +45,7 @@ class QMouseEvent;
 class QShowEvent;
 
 
-class K3bWelcomeWidget : public Q3ScrollView
+class K3bWelcomeWidget : public QScrollArea
 {
   Q_OBJECT
 
@@ -64,7 +64,7 @@ class K3bWelcomeWidget : public Q3ScrollView
  protected:
   void resizeEvent( QResizeEvent* );
   void showEvent( QShowEvent* );
-  void contentsMousePressEvent( QMouseEvent* e );
+  void mousePressEvent ( QMouseEvent* e );
 
  private:
   void fixSize();
