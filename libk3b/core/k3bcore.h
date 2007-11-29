@@ -24,7 +24,7 @@
 #include "k3b_export.h"
 #include "config-k3b.h"
 
-#define LIBK3B_VERSION "K3B_VERSION_STRING" 
+#define LIBK3B_VERSION K3B_VERSION_STRING
 
 #define k3bcore K3bCore::k3bCore()
 
