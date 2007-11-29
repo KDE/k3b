@@ -50,7 +50,7 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   K3bAudioRippingDialog( const K3bDevice::Toc&, 
 			 K3bDevice::Device*,
 			 const K3bCddbResultEntry&, 
-			 const Q3ValueList<int>&, 
+			 const QList<int>&, 
 			 QWidget *parent = 0, const char *name = 0 );
   ~K3bAudioRippingDialog();
 
@@ -64,7 +64,7 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
   K3bDevice::Toc m_toc;
   K3bDevice::Device* m_device;
   K3bCddbResultEntry m_cddbEntry;
-  Q3ValueList<int> m_trackNumbers;
+  QList<int> m_trackNumbers;
 
   K3ListView*    m_viewTracks;
 

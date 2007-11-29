@@ -29,8 +29,6 @@
 #include <qglobal.h>
 #include <q3valuevector.h>
 #include <qmutex.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <Q3CString>
 
 #include <kdebug.h>
@@ -3108,9 +3106,9 @@ int K3bDevice::Device::determineMaximalWriteSpeed() const
             return ret;
     }
 
-    Q3ValueList<int> list = determineSupportedWriteSpeeds();
+    QList<int> list = determineSupportedWriteSpeeds();
     if( !list.isEmpty() ) {
-        for( Q3ValueList<int>::const_iterator it = list.constBegin(); it != list.constEnd(); ++it )
+        for( QList<int>::const_iterator it = list.constBegin(); it != list.constEnd(); ++it )
             ret = qMax( ret, *it );
     }
 
@@ -3121,9 +3119,9 @@ int K3bDevice::Device::determineMaximalWriteSpeed() const
 }
 
 
-Q3ValueList<int> K3bDevice::Device::determineSupportedWriteSpeeds() const
+QList<int> K3bDevice::Device::determineSupportedWriteSpeeds() const
 {
-    Q3ValueList<int> ret;
+    QList<int> ret;
 
     if( burner() ) {
         //
@@ -3176,7 +3174,7 @@ Q3ValueList<int> K3bDevice::Device::determineSupportedWriteSpeeds() const
 }
 
 
-bool K3bDevice::Device::getSupportedWriteSpeedsVia2A( Q3ValueList<int>& list, int mediaType ) const
+bool K3bDevice::Device::getSupportedWriteSpeedsVia2A( QList<int>& list, int mediaType ) const
 {
     unsigned char* data = 0;
     unsigned int dataLen = 0;
@@ -3222,7 +3220,7 @@ bool K3bDevice::Device::getSupportedWriteSpeedsVia2A( Q3ValueList<int>& list, in
                         s = fixupDvdWritingSpeed( s );
 
                     // sort the list
-                    Q3ValueList<int>::iterator it = list.begin();
+                    QList<int>::iterator it = list.begin();
                     while( it != list.end() && *it < s )
                         ++it;
                     list.insert( it, s );
@@ -3237,7 +3235,7 @@ bool K3bDevice::Device::getSupportedWriteSpeedsVia2A( Q3ValueList<int>& list, in
 }
 
 
-bool K3bDevice::Device::getSupportedWriteSpeedsViaGP( Q3ValueList<int>& list, int mediaType ) const
+bool K3bDevice::Device::getSupportedWriteSpeedsViaGP( QList<int>& list, int mediaType ) const
 {
     unsigned char* data = 0;
     unsigned int dataLen = 0;
@@ -3271,7 +3269,7 @@ bool K3bDevice::Device::getSupportedWriteSpeedsViaGP( Q3ValueList<int>& list, in
                 if( isDvdMedia( mediaType ) )
                     s = fixupDvdWritingSpeed( s );
 
-                Q3ValueList<int>::iterator it = list.begin();
+                QList<int>::iterator it = list.begin();
                 while( it != list.end() && *it < s )
                     ++it;
                 // the speed might already have been found in the 2a modepage

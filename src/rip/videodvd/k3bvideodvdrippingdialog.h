@@ -19,7 +19,6 @@
 #include <k3bvideodvd.h>
 #include "k3bvideodvdrippingjob.h"
 
-#include <q3valuelist.h>
 #include <qmap.h>
 
 
@@ -32,7 +31,7 @@ class K3bVideoDVDRippingDialog : public K3bInteractionDialog
 
  public: 
   K3bVideoDVDRippingDialog( const K3bVideoDVD::VideoDVD& dvd, 
-			    const Q3ValueList<int>& titles,
+			    const QList<int>& titles,
 			    QWidget *parent = 0 );
   ~K3bVideoDVDRippingDialog();
 

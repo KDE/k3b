@@ -642,7 +642,7 @@ Q3DragObject* K3bAudioCdView::dragObject()
 {
 //FIXME kde4
 /*
-  Q3ValueList<int> tracks;
+  QList<int> tracks;
   QList<Q3ListViewItem *> items(m_trackView->selectedItems());
   for( QList<Q3ListViewItem *>::const_iterator it = items.begin();
        it != items.end(); ++it )

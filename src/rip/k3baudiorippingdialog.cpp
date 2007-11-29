@@ -84,7 +84,7 @@ public:
 K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bDevice::Toc& toc, 
 					     K3bDevice::Device* device,
 					     const K3bCddbResultEntry& entry, 
-					     const Q3ValueList<int>& tracks,
+					     const QList<int>& tracks,
 					     QWidget *parent, const char *name )
   : K3bInteractionDialog( parent,
 			  QString::null,
@@ -103,7 +103,7 @@ K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bDevice::Toc& toc,
   setupContextHelp();
 
   K3b::Msf length;
-  for( Q3ValueList<int>::const_iterator it = m_trackNumbers.begin();
+  for( QList<int>::const_iterator it = m_trackNumbers.begin();
        it != m_trackNumbers.end(); ++it ) {
     length += m_toc[*it-1].length();
   }
@@ -251,7 +251,7 @@ void K3bAudioRippingDialog::slotStartClicked()
   // prepare list of tracks to rip
   Q3ValueVector<QPair<int, QString> > tracksToRip;
   unsigned int i = 0;
-  for( Q3ValueList<int>::const_iterator trackIt = m_trackNumbers.begin();
+  for( QList<int>::const_iterator trackIt = m_trackNumbers.begin();
        trackIt != m_trackNumbers.end(); ++trackIt ) {
     tracksToRip.append( qMakePair( *trackIt, d->filenames[(m_optionWidget->createSingleFile() ? 0 : i)] ) );
     ++i;
@@ -299,7 +299,7 @@ void K3bAudioRippingDialog::refresh()
 
   if( m_optionWidget->createSingleFile() ) {
     long length = 0;
-    for( Q3ValueList<int>::const_iterator it = m_trackNumbers.begin();
+    for( QList<int>::const_iterator it = m_trackNumbers.begin();
 	 it != m_trackNumbers.end(); ++it ) {
       length += ( m_checkUseIndex0->isChecked() 
 		  ? m_toc[*it-1].realAudioLength().lba()
@@ -350,7 +350,7 @@ void K3bAudioRippingDialog::refresh()
 			       i18n("Cue-file") );
   }
   else {
-    for( Q3ValueList<int>::const_iterator it = m_trackNumbers.begin();
+    for( QList<int>::const_iterator it = m_trackNumbers.begin();
 	 it != m_trackNumbers.end(); ++it ) {
       int index = *it - 1;
 

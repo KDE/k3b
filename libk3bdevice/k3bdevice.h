@@ -444,7 +444,7 @@ namespace K3bDevice
        *
        * This only works with MMC3 compliant drives.
        */
-      Q3ValueList<int> determineSupportedWriteSpeeds() const;
+      QList<int> determineSupportedWriteSpeeds() const;
 
       /**
        * @returnes the speed in kb/s or 0 on failure.
@@ -788,8 +788,8 @@ namespace K3bDevice
        */
       int rawTocDataWithBcdValues( unsigned char* data, unsigned int dataLen ) const;
 
-      bool getSupportedWriteSpeedsVia2A( Q3ValueList<int>& list, int type ) const;
-      bool getSupportedWriteSpeedsViaGP( Q3ValueList<int>& list, int type ) const;
+      bool getSupportedWriteSpeedsVia2A( QList<int>& list, int type ) const;
+      bool getSupportedWriteSpeedsViaGP( QList<int>& list, int type ) const;
 
       int getMaxWriteSpeedVia2A() const;
 

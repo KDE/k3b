@@ -27,21 +27,21 @@
 class LIBK3B_EXPORT K3bAudioCdTrackDrag : public Q3StoredDrag
 {
  public:
-  K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, const Q3ValueList<int>& cdTrackNumbers, const K3bCddbResultEntry& cddb,
+  K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, const QList<int>& cdTrackNumbers, const K3bCddbResultEntry& cddb,
 		       K3bDevice::Device* lastDev = 0, QWidget* dragSource = 0 );
 
   const K3bDevice::Toc& toc() const { return m_toc; }
-  const Q3ValueList<int>& cdTrackNumbers() const { return m_cdTrackNumbers; }
+  const QList<int>& cdTrackNumbers() const { return m_cdTrackNumbers; }
   const K3bCddbResultEntry& cddbEntry() const { return m_cddb; }
 
   bool provides( const char* mimetype ) const { return !qstrcmp( mimetype, "k3b/audio_track_drag" ); }
 
   static bool canDecode( const QMimeSource* s ) { return s->provides( "k3b/audio_track_drag" ); }
-  static bool decode( const QMimeSource* s, K3bDevice::Toc&, Q3ValueList<int>& trackNumbers, K3bCddbResultEntry&, K3bDevice::Device** dev = 0 );
+  static bool decode( const QMimeSource* s, K3bDevice::Toc&, QList<int>& trackNumbers, K3bCddbResultEntry&, K3bDevice::Device** dev = 0 );
 
  private:
   K3bDevice::Toc m_toc;
-  Q3ValueList<int> m_cdTrackNumbers;
+  QList<int> m_cdTrackNumbers;
   K3bCddbResultEntry m_cddb;
   K3bDevice::Device* m_device;
 };
