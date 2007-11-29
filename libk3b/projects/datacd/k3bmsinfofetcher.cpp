@@ -27,9 +27,6 @@
 #include <kdebug.h>
 
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
 
 
 K3bMsInfoFetcher::K3bMsInfoFetcher( K3bJobHandler* jh, QObject* parent )
