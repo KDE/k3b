@@ -176,7 +176,6 @@ void K3bWelcomeWidget::Display::rebuildGui()
         for( QList<QAction *>::const_iterator it = items.begin();
             it != items.end(); ++it ) {
             QAction* a = *it;
-
             K3bFlatButton* b = new K3bFlatButton( a, this );
 
             m_buttons.append( b );
@@ -426,14 +425,14 @@ void K3bWelcomeWidget::fixSize()
 void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
 {
     if( e->button() == Qt::RightButton ) {
-        QMap<int, QAction*> map;
+        QMap<QAction *, QAction*> map;
         KMenu addPop;
 
         for ( int i = 0; s_allActions[i]; ++i ) {
             if ( s_allActions[i][0] != '_' ) {
                 QAction* a = m_mainWindow->actionCollection()->action( s_allActions[i] );
                 if ( a && main->m_actions.count(a)==0 ) {
-                    map.insert( addPop.insertItem( a->iconSet(), a->text() ), a );
+                    map.insert( addPop.addAction( a->iconSet(), a->text() ), a );
                 }
             }
         }
@@ -462,7 +461,7 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
             if( r == removeAction )
                 main->removeButton( static_cast<K3bFlatButton*>(widgetAtPos) );
             else
-                main->addAction( /*map[r]*/r );
+                main->addAction( map[r] );
         }
 
         fixSize();
