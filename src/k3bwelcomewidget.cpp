@@ -432,7 +432,7 @@ void K3bWelcomeWidget::contentsMousePressEvent( QMouseEvent* e )
         for ( int i = 0; s_allActions[i]; ++i ) {
             if ( s_allActions[i][0] != '_' ) {
                 QAction* a = m_mainWindow->actionCollection()->action( s_allActions[i] );
-                if ( a && main->m_actions.count(a)!=0 ) {
+                if ( a && main->m_actions.count(a)==0 ) {
                     map.insert( addPop.insertItem( a->iconSet(), a->text() ), a );
                 }
             }
