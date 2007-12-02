@@ -597,8 +597,8 @@ void K3bAudioCdView::updateDisplay()
   else
     setTitle( i18n("Audio CD") );
 
-  m_labelLength->setText( i18np("1 track (%1)",
-			       "%n tracks (%1)",
+  m_labelLength->setText( i18np("1 track (%2)",
+			       "%1 tracks (%2)",
 			       m_toc.count(),K3b::Msf(m_toc.length()).toString()) );
 */
 }

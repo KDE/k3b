@@ -174,8 +174,8 @@ K3bVideoDVDRippingDialog::K3bVideoDVDRippingDialog( const K3bVideoDVD::VideoDVD&
              this, SLOT(slotUpdateVideoSizes()) );
 
     setTitle( i18n("Video DVD Ripping"),
-              i18np("1 title from %1", "%n titles from %1", titles.count())
-              .arg( k3bappcore->mediaCache()->medium(m_dvd.device()).beautifiedVolumeId() ) );
+              i18np("1 title from %2", "%1 titles from %2", titles.count(),
+              k3bappcore->mediaCache()->medium(m_dvd.device()).beautifiedVolumeId() ) );
 
     // populate list map
     populateTitleView( titles );

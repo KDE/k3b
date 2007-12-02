@@ -525,7 +525,7 @@ void K3bJobProgressDialog::slotUpdateTime()
 
     QString s = i18n("Elapsed time") + ": ";
     if ( elapsedDays > 0 ) {
-        s += i18np( "1 Day", "%n Days", elapsedDays ) + ", ";
+        s += i18np( "1 Day", "%1 Days", elapsedDays ) + ", ";
     }
     s += QTime().addSecs(elapsedSecs).toString();
 
@@ -533,7 +533,7 @@ void K3bJobProgressDialog::slotUpdateTime()
         int rem = m_startTime.secsTo( m_lastProgressUpdateTime ) * (100-d->lastProgress) / d->lastProgress;
         s += " / " + i18n("Remaining" ) + ": ";
         if ( rem >= 24*60*60 ) {
-            s += i18np( "1 Day", "%n Days", rem/(24*60*60) ) + ", ";
+            s += i18np( "1 Day", "%1 Days", rem/(24*60*60) ) + ", ";
         }
         s += QTime().addSecs(rem%(24*60*60)).toString();
     }

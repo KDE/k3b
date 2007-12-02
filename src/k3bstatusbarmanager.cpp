@@ -166,7 +166,7 @@ bool K3bStatusBarManager::eventFilter( QObject* o, QEvent* e )
 
 static QString dataDocStats( K3bDataDoc* dataDoc )
 {
-  return i18np("1 file in %1", "%n files in %1", dataDoc->root()->numFiles(), i18np("1 folder", "%n folders", dataDoc->root()->numDirs()+1 ) );
+  return i18np("1 file in %1", "%1 files in %2", dataDoc->root()->numFiles(), i18np("1 folder", "%1 folders", dataDoc->root()->numDirs()+1 ) );
 }
 
 
@@ -192,7 +192,7 @@ void K3bStatusBarManager::slotUpdateProjectStats()
     switch( doc->type() ) {
     case K3bDoc::AUDIO: {
       K3bAudioDoc* audioDoc = static_cast<K3bAudioDoc*>( doc );
-      m_labelProjectInfo->setText( i18np("Audio CD (1 track)", "Audio CD (%n tracks)", audioDoc->numOfTracks() ) );
+      m_labelProjectInfo->setText( i18np("Audio CD (1 track)", "Audio CD (%1 tracks)", audioDoc->numOfTracks() ) );
       break;
     }
 
@@ -205,14 +205,14 @@ void K3bStatusBarManager::slotUpdateProjectStats()
     case K3bDoc::MIXED: {
       K3bAudioDoc* audioDoc = static_cast<K3bMixedDoc*>( doc )->audioDoc();
       K3bDataDoc* dataDoc = static_cast<K3bMixedDoc*>( doc )->dataDoc();
-      m_labelProjectInfo->setText( i18np("Mixed CD (1 track and %1)", "Mixed CD (%n tracks and %1)", audioDoc->numOfTracks(),
+      m_labelProjectInfo->setText( i18np("Mixed CD (1 track and %1)", "Mixed CD (%1 tracks and %2)", audioDoc->numOfTracks(),
 				   dataDocStats(dataDoc)) );
       break;
     }
 
     case K3bDoc::VCD: {
       K3bVcdDoc* vcdDoc = static_cast<K3bVcdDoc*>( doc );
-      m_labelProjectInfo->setText( i18np("Video CD (1 track)", "Video CD (%n tracks)", vcdDoc->numOfTracks() ) );
+      m_labelProjectInfo->setText( i18np("Video CD (1 track)", "Video CD (%1 tracks)", vcdDoc->numOfTracks() ) );
       break;
     }
 

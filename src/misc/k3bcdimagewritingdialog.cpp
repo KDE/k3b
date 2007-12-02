@@ -738,7 +738,7 @@ void K3bCdImageWritingDialog::createAudioCueItems( const K3bCueFileParser& cp )
     rootItem->setPixmap( 0, SmallIcon( "audio-x-generic") );
 
     K3bListViewItem* trackParent = new K3bListViewItem( rootItem,
-                                                        i18np("%n track", "%n tracks", cp.toc().count() ),
+                                                        i18np("%1 track", "%1 tracks", cp.toc().count() ),
                                                         cp.toc().length().toString() );
     if( !cp.cdText().isEmpty() )
         trackParent->setText( 1,

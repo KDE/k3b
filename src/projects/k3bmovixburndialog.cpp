@@ -55,7 +55,7 @@ K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent )
     m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
 
     setTitle( i18n("eMovix Project"),
-              i18np("1 file (%1)", "%n files (%1)", m_doc->movixFileItems().count(),KIO::convertSize(m_doc->size())) );
+              i18np("1 file (%2)", "%1 files (%2)", m_doc->movixFileItems().count(),KIO::convertSize(m_doc->size())) );
 
     m_movixOptionsWidget = new K3bMovixOptionsWidget( this );
     addPage( m_movixOptionsWidget, i18n("eMovix") );

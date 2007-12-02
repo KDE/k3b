@@ -206,13 +206,13 @@ void K3bDataMultisessionImportDialog::addMedium( const K3bMedium& medium )
                     ++numAudioTracks;
                 }
                 --it;
-                sessionInfo = i18np( "%n audio tracks", "1 audio track", numAudioTracks );
+                sessionInfo = i18np("1 audio track", "%1 audio tracks", numAudioTracks );
             }
 
             sessionItem = new K3bListViewItem( mediumItem,
                                                sessionItem,
-                                               i18n( "Session %1" )
-                                               .arg( lastSession )
+                                               i18n( "Session %1" ,
+                                               lastSession )
                                                + ( sessionInfo.isEmpty() ? QString::null : " (" + sessionInfo + ')' ) );
             if ( track.type() == K3bDevice::Track::AUDIO )
                 sessionItem->setPixmap( 0, SmallIcon( "audio-x-generic" ) );

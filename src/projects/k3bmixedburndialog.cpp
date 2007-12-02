@@ -67,9 +67,9 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent )
 {
   prepareGui();
 
-  setTitle( i18n("Mixed Project"), i18np("1 track (%1 minutes)",
-					"%n tracks (%1 minutes)",
-					m_doc->numOfTracks()).arg(m_doc->length().toString()) );
+  setTitle( i18n("Mixed Project"), i18np("1 track (%2 minutes)",
+					"%1 tracks (%é minutes)",
+					m_doc->numOfTracks(),m_doc->length().toString()) );
 
   m_checkOnlyCreateImage->hide();
 

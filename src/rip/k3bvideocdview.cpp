@@ -318,7 +318,7 @@ void K3bVideoCdView::updateDisplay()
     else
         setTitle( i18n( "Video CD" ) );
 
-    m_labelLength->setText( i18np( "1 track (%1)", "%n tracks (%1)", m_toc.count(), K3b::Msf( m_toc.length() ).toString() ) );
+    m_labelLength->setText( i18np( "1 track (%2)", "%1 tracks (%2)", m_toc.count(), K3b::Msf( m_toc.length() ).toString() ) );
 }
 
 

@@ -113,9 +113,9 @@ QString K3bVideoDVDRippingJob::jobDescription() const
 
 QString K3bVideoDVDRippingJob::jobDetails() const
 {
-    return i18np("Transcoding %n title to %1/%2", "Transcoding %n titles to %1/%2", m_titleRipInfos.count() )
-        .arg( K3bVideoDVDTitleTranscodingJob::videoCodecString( m_transcodingJob->videoCodec() ) )
-        .arg( K3bVideoDVDTitleTranscodingJob::audioCodecString( m_transcodingJob->audioCodec() ) );
+    return i18np("Transcoding %1 title to %2/%3", "Transcoding %1 titles to %2/%3", m_titleRipInfos.count(),
+        K3bVideoDVDTitleTranscodingJob::videoCodecString( m_transcodingJob->videoCodec() ) ,
+        K3bVideoDVDTitleTranscodingJob::audioCodecString( m_transcodingJob->audioCodec() ) );
 }
 
 

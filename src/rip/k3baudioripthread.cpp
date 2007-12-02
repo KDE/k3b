@@ -590,11 +590,11 @@ QString K3bAudioRipThread::jobDescription() const
 QString K3bAudioRipThread::jobDetails() const 
 {
   if( d->encoder )
-    return i18np("1 track (encoding to %1)", 
-		"%n tracks (encoding to %1)", 
+    return i18np("1 track (encoding to %2)", 
+		"%1 tracks (encoding to %é)", 
 		m_tracks.count() ,d->encoder->fileTypeComment(d->fileType));
   else
-    return i18np("1 track", "%n tracks", m_tracks.count() );
+    return i18np("1 track", "%1 tracks", m_tracks.count() );
 }
 
 #include "k3baudioripthread.moc"

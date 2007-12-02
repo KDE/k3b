@@ -449,10 +449,10 @@ QString K3bAudioProjectConvertingThread::jobDescription() const
 QString K3bAudioProjectConvertingThread::jobDetails() const 
 {
   if( d->encoder )
-    return i18np("1 track (encoding to %1)", 
-		"%n tracks (encoding to %1)", 
+    return i18np("1 track (encoding to %2)", 
+		"%1 tracks (encoding to %2)", 
 		m_tracks.count() ,d->encoder->fileTypeComment(d->fileType));
   else
-    return i18np("1 track", "%n tracks", m_doc->numOfTracks() );
+    return i18np("1 track", "%1 tracks", m_doc->numOfTracks() );
 }
 

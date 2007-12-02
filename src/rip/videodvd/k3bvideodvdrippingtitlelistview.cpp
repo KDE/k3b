@@ -246,7 +246,7 @@ private:
 		  "%3")
 	.arg( m_title.titleNumber(), 2 )
 	.arg( m_title.playbackTime().toString( false ) )
-	.arg( i18np("%n chapter", "%n chapters", m_title.numPTTs() ) );
+	.arg( i18np("%1 chapter", "%1 chapters", m_title.numPTTs() ) );
 
     case 3:
       // video stream info

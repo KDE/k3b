@@ -363,10 +363,10 @@ QString K3bMedium::longString() const
 
   if( diskInfo().diskState() == K3bDevice::STATE_COMPLETE ||
       diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE  ) {
-    s += "<br>" + i18np("%1 in %n track", "%1 in %n tracks", toc().count() )
-      .arg( KIO::convertSize(diskInfo().size().mode1Bytes() ) );
+    s += "<br>" + i18np("%1 in %2 track", "%1 in %2 tracks", toc().count(),
+      KIO::convertSize(diskInfo().size().mode1Bytes() ) );
     if( diskInfo().numSessions() > 1 )
-      s += i18np(" and %n session", " and %n sessions", diskInfo().numSessions() );
+      s += i18np(" and %1 session", " and %1 sessions", diskInfo().numSessions() );
   }
 
   if( diskInfo().diskState() == K3bDevice::STATE_EMPTY ||

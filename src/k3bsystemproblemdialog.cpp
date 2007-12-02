@@ -96,7 +96,7 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const Q3ValueList<K3bSystemProbl
   // ---------------------------------------------------------------------------------------------------
   K3bThemedHeader* titleFrame = new K3bThemedHeader( widget );
   titleFrame->setTitle( i18n("System Configuration Problems"),
-			i18np("1 problem", "%n problems", problems.count() ) );
+			i18np("1 problem", "%1 problems", problems.count() ) );
 
   m_closeButton = new QPushButton( i18n("Close"), widget );
   connect( m_closeButton, SIGNAL(clicked()), this, SLOT(close()) );

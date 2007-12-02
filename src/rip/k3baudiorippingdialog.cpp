@@ -108,7 +108,7 @@ K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bDevice::Toc& toc,
     length += m_toc[*it-1].length();
   }
   setTitle( i18n("CD Ripping"), 
-	    i18np("1 track (%1)", "%n tracks (%1)", 
+	    i18np("1 track (%2)", "%1 tracks (%2)", 
 		 m_trackNumbers.count(),length.toString()) );
 }
 

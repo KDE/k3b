@@ -79,7 +79,7 @@ K3bAudioProjectConvertingDialog::K3bAudioProjectConvertingDialog( K3bAudioDoc* d
   setupGui();
 
   setTitle( i18n("Audio Project Conversion"), 
-	    i18np("1 track (%1)", "%n tracks (%1)", 
+	    i18np("1 track (%2)", "%1 tracks (%2)", 
 		 m_doc->numOfTracks(),m_doc->length().toString()) );
 
   refresh();

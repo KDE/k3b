@@ -71,7 +71,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent )
             vcdType = i18n( "Video CD" );
     }
 
-    setTitle( vcdType, i18np( "1 MPEG (%1)", "%n MPEGs (%1)",
+    setTitle( vcdType, i18np( "1 MPEG (%2)", "%1 MPEGs (%2)",
                              m_vcdDoc->tracks() ->count() , KIO::convertSize( m_vcdDoc->size() ) ) );
 
     const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager() ->binObject( "cdrecord" );
