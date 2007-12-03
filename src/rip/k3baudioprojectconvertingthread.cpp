@@ -233,10 +233,10 @@ bool K3bAudioProjectConvertingThread::convertTrack( K3bAudioTrack* track, const 
 
   if( !m_cddbEntry.artists[d->currentTrackIndex].isEmpty() &&
       !m_cddbEntry.titles[d->currentTrackIndex].isEmpty() )
-    emitNewSubTask( i18n("Converting track %1 (%2 - %3)")
-		    .arg(d->currentTrackIndex+1)
-		    .arg(m_cddbEntry.artists[d->currentTrackIndex])
-		    .arg(m_cddbEntry.titles[d->currentTrackIndex]) );
+    emitNewSubTask( i18n("Converting track %1 (%2 - %3)"
+		    ,d->currentTrackIndex+1
+		    ,m_cddbEntry.artists[d->currentTrackIndex]
+		    ,m_cddbEntry.titles[d->currentTrackIndex]) );
   else
     emitNewSubTask( i18n("Converting track %1",d->currentTrackIndex+1) );
 

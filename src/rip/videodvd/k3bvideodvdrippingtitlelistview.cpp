@@ -45,13 +45,13 @@ static QString audioStreamString( const K3bVideoDVD::Title& title, unsigned int 
     if( i > 0 )
       s += "<br>";
     s += QString::number(i+1) + ": "
-      + i18n("%1 %2Ch (%3<em>%4</em>)")
-      .arg( K3bVideoDVD::audioFormatString( title.audioStream(i).format() ) )
-      .arg( title.audioStream(i).channels() )
-      .arg( title.audioStream(i).langCode().isEmpty()
+      + i18n("%1 %2Ch (%3<em>%4</em>)"
+      ,K3bVideoDVD::audioFormatString( title.audioStream(i).format() ) 
+      ,title.audioStream(i).channels() 
+      ,title.audioStream(i).langCode().isEmpty()
 	    ? i18n("unknown language")
-	    : KGlobal::locale()->languageCodeToName( title.audioStream(i).langCode() ) )
-      .arg( includeExtInfo && title.audioStream(i).codeExtension() != K3bVideoDVD::AUDIO_CODE_EXT_UNSPECIFIED
+	    : KGlobal::locale()->languageCodeToName( title.audioStream(i).langCode() ) 
+      ,includeExtInfo && title.audioStream(i).codeExtension() != K3bVideoDVD::AUDIO_CODE_EXT_UNSPECIFIED
 	    ? QString(" ") + K3bVideoDVD::audioCodeExtensionString( title.audioStream(i).codeExtension() )
 	    : QString::null );
   }

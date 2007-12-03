@@ -159,13 +159,13 @@ bool K3bGrowisofsWriter::prepareProcess()
 {
   d->growisofsBin = k3bcore->externalBinManager()->binObject( "growisofs" );
   if( !d->growisofsBin ) {
-    emit infoMessage( i18n("Could not find %1 executable.").arg("growisofs"), ERROR );
+    emit infoMessage( i18n("Could not find %1 executable.",QString("growisofs")), ERROR );
     return false;
   }
 
   if( d->growisofsBin->version < K3bVersion( 5, 10 ) ) {
     emit infoMessage( i18n("Growisofs version %1 is too old. "
-			   "K3b needs at least version 5.10.").arg(d->growisofsBin->version),
+			   "K3b needs at least version 5.10.",d->growisofsBin->version),
 		      ERROR );
     return false;
   }
@@ -173,8 +173,8 @@ bool K3bGrowisofsWriter::prepareProcess()
   emit debuggingOutput( "Used versions", "growisofs: " + d->growisofsBin->version );
 
   if( !d->growisofsBin->copyright.isEmpty() )
-    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3").arg("growisofs")
-		      .arg(d->growisofsBin->version).arg(d->growisofsBin->copyright), INFO );
+    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3",QString("growisofs")
+		      ,d->growisofsBin->version,d->growisofsBin->copyright), INFO );
 
 
   //
@@ -238,7 +238,7 @@ bool K3bGrowisofsWriter::prepareProcess()
     d->inputFile.setName( d->image );
     d->trackSize = (K3b::filesize( d->image ) + 1024) / 2048;
     if( !d->inputFile.open( QIODevice::ReadOnly ) ) {
-      emit infoMessage( i18n("Could not open file %1.").arg(d->image), ERROR );
+      emit infoMessage( i18n("Could not open file %1.",d->image), ERROR );
       return false;
     }
   }
@@ -389,7 +389,7 @@ void K3bGrowisofsWriter::start()
       // something went wrong when starting the program
       // it "should" be the executable
       kDebug() << "(K3bGrowisofsWriter) could not start " << d->growisofsBin->path;
-      emit infoMessage( i18n("Could not start %1.").arg(d->growisofsBin->name()), K3bJob::ERROR );
+      emit infoMessage( i18n("Could not start %1.",d->growisofsBin->name()), K3bJob::ERROR );
       jobFinished(false);
     }
     else {
@@ -565,9 +565,9 @@ void K3bGrowisofsWriter::slotProcessExited( K3Process* p )
 
     int s = d->speedEst->average();
     if( s > 0 )
-      emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)")
-                        .arg(s)
-                        .arg(KGlobal::locale()->formatNumber( ( double )s/( double )d->speedMultiplicator()), 2), INFO );
+      emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)"
+                        ,s
+                        ,KGlobal::locale()->formatNumber( ( double )s/( double )d->speedMultiplicator()), 2), INFO );
 
     if( simulate() )
       emit infoMessage( i18n("Simulation successfully completed"), K3bJob::SUCCESS );

@@ -175,9 +175,9 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
     bool ok = true;
     double speed = line.mid( pos, endPos-pos ).toDouble(&ok);
     if( ok )
-      emit infoMessage( i18n("Writing speed: %1 KB/s (%2x)")
-			.arg((int)(speed*1385.0))
-			.arg(KGlobal::locale()->formatNumber(speed)), K3bJob::INFO );
+      emit infoMessage( i18n("Writing speed: %1 KB/s (%2x)",
+			(int)(speed*1385.0)
+			,KGlobal::locale()->formatNumber(speed)), K3bJob::INFO );
     else
       kDebug() << "(K3bGrowisofsHandler) parsing error: '" << line.mid( pos, endPos-pos ) << "'";
   }
@@ -285,7 +285,7 @@ void K3bGrowisofsHandler::handleExit( int exitCode )
       emit infoMessage( i18n("Most likely mkisofs failed in some way."), K3bJob::ERROR );
     }
     else {
-      emit infoMessage( i18n("Fatal error during recording: %1").arg(strerror(exitCode)), 
+      emit infoMessage( i18n("Fatal error during recording: %1",strerror(exitCode)), 
 			K3bJob::ERROR );
     }
   }

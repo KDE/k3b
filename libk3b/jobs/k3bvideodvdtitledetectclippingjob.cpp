@@ -89,15 +89,15 @@ void K3bVideoDVDTitleDetectClippingJob::start()
 
   d->usedTranscodeBin = k3bcore->externalBinManager()->binObject("transcode");
   if( !d->usedTranscodeBin ) {
-    emit infoMessage( i18n("%1 executable could not be found.").arg("transcode"), ERROR );
+    emit infoMessage( i18n("%1 executable could not be found.",QString("transcode")), ERROR );
     jobFinished( false );
     return;
   }
 
   if( d->usedTranscodeBin->version < K3bVersion( 1, 0, 0 ) ){
-    emit infoMessage( i18n("%1 version %2 is too old.")
-		      .arg("transcode")
-		      .arg(d->usedTranscodeBin->version), ERROR );
+    emit infoMessage( i18n("%1 version %2 is too old.",
+		      QString("transcode")
+		      ,d->usedTranscodeBin->version), ERROR );
     jobFinished( false );
     return;
   }
@@ -105,12 +105,12 @@ void K3bVideoDVDTitleDetectClippingJob::start()
   emit debuggingOutput( "Used versions", "transcode: " + d->usedTranscodeBin->version );
 
   if( !d->usedTranscodeBin->copyright.isEmpty() )
-    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3")
-		      .arg(d->usedTranscodeBin->name())
-		      .arg(d->usedTranscodeBin->version)
-		      .arg(d->usedTranscodeBin->copyright), INFO );
+    emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3"
+		      ,d->usedTranscodeBin->name()
+		      ,d->usedTranscodeBin->version
+		      ,d->usedTranscodeBin->copyright), INFO );
 
-  emit newTask( i18n("Analysing Title %1 of Video DVD %2").arg(m_titleNumber).arg(m_dvd.volumeIdentifier()) );
+  emit newTask( i18n("Analysing Title %1 of Video DVD %2",m_titleNumber,m_dvd.volumeIdentifier()) );
 
   startTranscode( 1 );
 }
@@ -182,11 +182,11 @@ void K3bVideoDVDTitleDetectClippingJob::startTranscode( int chapter )
   if( !d->process->start( K3Process::NotifyOnExit, K3Process::All ) ) {
     // something went wrong when starting the program
     // it "should" be the executable
-    emit infoMessage( i18n("Could not start %1.").arg(d->usedTranscodeBin->name()), K3bJob::ERROR );
+    emit infoMessage( i18n("Could not start %1.",d->usedTranscodeBin->name()), K3bJob::ERROR );
     jobFinished(false);
   }
   else {
-    emit newSubTask( i18n("Analysing Chapter %1 of %2").arg(chapter).arg(m_dvd[m_titleNumber-1].numPTTs()) );
+    emit newSubTask( i18n("Analysing Chapter %1 of %2",chapter,m_dvd[m_titleNumber-1].numPTTs()) );
     emit subPercent( 0 );
   }
 }
@@ -279,8 +279,8 @@ void K3bVideoDVDTitleDetectClippingJob::slotTranscodeExited( K3Process* p )
       emit canceled();
     }
     else {
-      emit infoMessage( i18n("%1 returned an unknown error (code %2).")
-			.arg(d->usedTranscodeBin->name()).arg(p->exitStatus()),
+      emit infoMessage( i18n("%1 returned an unknown error (code %2).",
+			d->usedTranscodeBin->name(),p->exitStatus()),
 			K3bJob::ERROR );
       emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
     }

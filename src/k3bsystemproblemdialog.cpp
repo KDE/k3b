@@ -613,7 +613,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent)
 void K3bSystemProblemDialog::slotK3bSetup()
 {
   K3Process p;
-  p << "kdesu" << "kcmshell k3bsetup2 --lang " + KGlobal::locale()->language();
+  p << K3b::findExe("kdesu") << "kcmshell k3bsetup2 --lang " + KGlobal::locale()->language();
   if( !p.start( K3Process::DontCare ) )
     KMessageBox::error( 0, i18n("Unable to start K3bSetup2.") );
 }

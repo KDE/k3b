@@ -103,7 +103,7 @@ void K3bAudioNormalizeJob::slotStdLine( const QString& line )
 {
   // percent, subPercent, newTask (compute level and adjust)
 
-  //  emit newSubTask( i18n("Normalizing track %1 of %2 (%3)").arg(t).arg(tt).arg(m_files.at(t-1)) );
+  //  emit newSubTask( i18n("Normalizing track %1 of %2 (%3)",t,tt,m_files.at(t-1)) );
 
   emit debuggingOutput( "normalize", line );
 
@@ -122,13 +122,13 @@ void K3bAudioNormalizeJob::slotStdLine( const QString& line )
 
   else if( line.contains( "already normalized" ) ) {
     // no normalization necessary for the current track
-    emit infoMessage( i18n("Track %1 is already normalized.").arg(m_currentTrack), INFO );
+    emit infoMessage( i18n("Track %1 is already normalized.",m_currentTrack), INFO );
     m_currentTrack++;
   }
 
   else if( line.contains( "--% done") ) {
     if( m_currentAction == ADJUSTING_LEVELS ) {
-      emit newTask( i18n("Adjusting volume level for track %1 of %2").arg(m_currentTrack).arg(m_files.count()) );
+      emit newTask( i18n("Adjusting volume level for track %1 of %2",m_currentTrack,m_files.count()) );
       kDebug() << "(K3bAudioNormalizeJob) adjusting level for track "
 		<< m_currentTrack
 		<< " "
@@ -136,7 +136,7 @@ void K3bAudioNormalizeJob::slotStdLine( const QString& line )
 		<< endl;
     }
     else {
-      emit newTask( i18n("Computing level for track %1 of %2").arg(m_currentTrack).arg(m_files.count()) );
+      emit newTask( i18n("Computing level for track %1 of %2",m_currentTrack,m_files.count()) );
       kDebug() << "(K3bAudioNormalizeJob) computing level for track "
 		<< m_currentTrack
 		<< " "
@@ -184,7 +184,7 @@ void K3bAudioNormalizeJob::slotProcessExited( K3Process* p )
       break;
     default:
       if( !m_canceled ) {
-	emit infoMessage( i18n("%1 returned an unknown error (code %2).").arg("normalize").arg(p->exitStatus()),
+	emit infoMessage( i18n("%1 returned an unknown error (code %2).",QString("normalize"),p->exitStatus()),
 			  K3bJob::ERROR );
 	emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
 	emit infoMessage( i18n("Error while normalizing tracks."), ERROR );
@@ -196,7 +196,7 @@ void K3bAudioNormalizeJob::slotProcessExited( K3Process* p )
     }
   }
   else {
-    emit infoMessage( i18n("%1 did not exit cleanly.").arg("Normalize"), K3bJob::ERROR );
+    emit infoMessage( i18n("%1 did not exit cleanly.",QString("Normalize")), K3bJob::ERROR );
     jobFinished( false );
   }
 }

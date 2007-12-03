@@ -345,7 +345,7 @@ void K3bAudioJob::start()
   }
   else {
     emit burning(false);
-    emit infoMessage( i18n("Creating image files in %1").arg(m_doc->tempDir()), INFO );
+    emit infoMessage( i18n("Creating image files in %1",m_doc->tempDir()), INFO );
     emit newTask( i18n("Creating image files") );
     m_tempData->prepareTempFileNames( doc()->tempDir() );
     QStringList filenames;
@@ -655,7 +655,7 @@ bool K3bAudioJob::startWriting()
   if( m_doc->dummy() )
     emit newTask( i18n("Simulating") );
   else if( d->copies > 1 )
-    emit newTask( i18n("Writing Copy %1").arg(d->copiesDone+1) );
+    emit newTask( i18n("Writing Copy %1",d->copiesDone+1) );
   else
     emit newTask( i18n("Writing") );
 

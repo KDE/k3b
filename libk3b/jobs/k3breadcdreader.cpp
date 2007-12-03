@@ -30,8 +30,6 @@
 #include <qregexp.h>
 #include <q3valuelist.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <Q3PtrList>
 
 
@@ -106,7 +104,7 @@ void K3bReadcdReader::start()
   // the first thing to do is to check for readcd
   d->readcdBinObject = k3bcore->externalBinManager()->binObject( "readcd" );
   if( !d->readcdBinObject ) {
-    emit infoMessage( i18n("Could not find %1 executable.").arg("readcd"), ERROR );
+    emit infoMessage( i18n("Could not find %1 executable.",QString("readcd")), ERROR );
     jobFinished(false);
     return;
   }
@@ -122,7 +120,7 @@ void K3bReadcdReader::start()
       for( Q3PtrListIterator<K3bExternalBin> it( readcdBins ); it.current(); ++it ) {
 	if( it.current()->hasFeature( "clone" ) ) {
 	  d->readcdBinObject = it.current();
-	  emit infoMessage( i18n("Using readcd %1 instead of default version for clone support.").arg(d->readcdBinObject->version), INFO );
+	  emit infoMessage( i18n("Using readcd %1 instead of default version for clone support.",d->readcdBinObject->version), INFO );
 	  foundCloneSupport = true;
 	  break;
 	}
@@ -162,8 +160,8 @@ void K3bReadcdReader::start()
     d->process->dupStdout( d->fdToWriteTo );
   }
   else {
-    emit newTask( i18n("Writing image to %1.").arg(m_imagePath) );
-    emit infoMessage( i18n("Writing image to %1.").arg(m_imagePath), INFO );
+    emit newTask( i18n("Writing image to %1.",m_imagePath) );
+    emit infoMessage( i18n("Writing image to %1.",m_imagePath), INFO );
     *d->process << "f=" + m_imagePath;
   }
 
@@ -278,7 +276,7 @@ void K3bReadcdReader::slotStdLine( const QString& line )
       kError() << "(K3bReadcdReader) problemSector parsing error in line: "
 		<< line.mid( pos, line.find( QRegExp("\\D"), pos )-pos ) << endl;
     }
-    emit infoMessage( i18n("Retrying from sector %1.").arg(problemSector), INFO );
+    emit infoMessage( i18n("Retrying from sector %1.",problemSector), INFO );
   }
 
   else if( (pos = line.find("Error on sector")) >= 0 ) {
@@ -293,10 +291,10 @@ void K3bReadcdReader::slotStdLine( const QString& line )
     }
 
     if( line.contains( "not corrected") ) {
-      emit infoMessage( i18n("Uncorrected error in sector %1").arg(problemSector), ERROR );
+      emit infoMessage( i18n("Uncorrected error in sector %1",problemSector), ERROR );
     }
     else {
-      emit infoMessage( i18n("Corrected error in sector %1").arg(problemSector), ERROR );
+      emit infoMessage( i18n("Corrected error in sector %1",problemSector), ERROR );
     }
   }
 
@@ -316,7 +314,7 @@ void K3bReadcdReader::slotProcessExited( K3Process* p )
       jobFinished( true );
     }
     else {
-      emit infoMessage( i18n("%1 returned error: %2").arg("Readcd").arg(p->exitStatus()), ERROR );
+      emit infoMessage( i18n("%1 returned error: %2",QString("Readcd"),p->exitStatus()), ERROR );
       jobFinished( false );
     }
   }

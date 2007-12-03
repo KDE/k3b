@@ -17,7 +17,7 @@
 
 #include <qdir.h>
 #include <qfile.h>
-#include <q3textstream.h>
+#include <qtextstream.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -37,7 +37,7 @@ K3bCddbLocalQuery::~K3bCddbLocalQuery()
 
 void K3bCddbLocalQuery::doQuery()
 {
-  emit infoMessage( i18n("Searching entry in %1").arg( m_cddbDir ) );
+  emit infoMessage( i18n("Searching entry in %1", m_cddbDir ) );
   kapp->processEvents(); //BAD!
 
   QString path = preparePath( m_cddbDir );
@@ -58,7 +58,7 @@ void K3bCddbLocalQuery::doQuery()
 	kDebug() << "(K3bCddbLocalQuery) Could not open file";
       }
       else {
-	Q3TextStream t( &f );
+	QTextStream t( &f );
 
 	K3bCddbResultEntry entry;
 	parseEntry( t, entry );

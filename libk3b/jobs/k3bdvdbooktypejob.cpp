@@ -30,8 +30,6 @@
 
 #include <q3valuelist.h>
 #include <qregexp.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <errno.h>
 #include <string.h>

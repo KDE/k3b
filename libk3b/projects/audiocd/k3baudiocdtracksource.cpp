@@ -257,7 +257,7 @@ QString K3bAudioCdTrackSource::type() const
 
 QString K3bAudioCdTrackSource::sourceComment() const
 {
-    return i18n("Track %1 from Audio CD %2").arg(m_cdTrackNumber).arg(m_discId,0,16);
+    return i18n("Track %1 from Audio CD %2",m_cdTrackNumber,m_discId,0,16);
 }
 
 

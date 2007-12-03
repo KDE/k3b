@@ -27,7 +27,7 @@
 #include <kdebug.h>
 
 #include <qfile.h>
-#include <q3textstream.h>
+#include <qtextstream.h>
 
 
 
@@ -76,8 +76,7 @@ void K3bBinImageWritingJob::cancel()
 
 bool K3bBinImageWritingJob::prepareWriter()
 {
-  if( m_writer )
-    delete m_writer;
+  delete m_writer;
 
   int usedWritingApp = writingApp();
   const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
@@ -96,7 +95,7 @@ bool K3bBinImageWritingJob::prepareWriter()
       // let's see if cdrecord can handle the cue file
       QFile f( m_tocFile );
       if( f.open( QIODevice::ReadOnly ) ) {
-	Q3TextStream fStr( &f );
+	QTextStream fStr( &f );
 	if( fStr.read().contains( "MODE1/2352" ) ) {
 	  kDebug() << "(K3bBinImageWritingJob) cuefile contains MODE1/2352 track. using cdrdao.";
 	  usedWritingApp = K3b::CDRDAO;
@@ -212,7 +211,7 @@ void K3bBinImageWritingJob::writerFinished(bool ok)
 
 void K3bBinImageWritingJob::slotNextTrack( int t, int tt )
 {
-  emit newSubTask( i18n("Writing track %1 of %2").arg(t).arg(tt) );
+  emit newSubTask( i18n("Writing track %1 of %2",t,tt) );
 }
 
 

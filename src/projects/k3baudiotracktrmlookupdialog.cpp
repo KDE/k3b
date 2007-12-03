@@ -123,8 +123,8 @@ void K3bAudioTrackTRMLookupDialog::slotCancel()
 void K3bAudioTrackTRMLookupDialog::slotTrackFinished( K3bAudioTrack* track, bool success )
 {
   if( !success )
-    K3bPassivePopup::showPopup( i18n("Track %1 was not found in the MusicBrainz database.")
-				.arg( track->trackNumber()),
+    K3bPassivePopup::showPopup( i18n("Track %1 was not found in the MusicBrainz database.",
+				track->trackNumber()),
 				i18n("Audio Project") );
 }
 

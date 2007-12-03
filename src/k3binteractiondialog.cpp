@@ -40,6 +40,7 @@
 #include <QKeyEvent>
 #include <QEvent>
 #include <Q3HBoxLayout>
+#include <QDialogButtonBox>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -105,8 +106,40 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 
   // action buttons
   // ---------------------------------------------------------------------------------------------------
-  Q3HBoxLayout* layout5 = new Q3HBoxLayout( 0, 0, spacingHint(), "layout5");
+  //Q3HBoxLayout* layout5 = new Q3HBoxLayout( 0, 0, spacingHint(), "layout5");
+  QDialogButtonBox *buttonBox = new QDialogButtonBox(this);
+  if( buttonMask & START_BUTTON ) {
+    KGuiItem startItem = KStandardGuiItem::ok();
+    m_buttonStart = new KPushButton( startItem, mainWidget() );
+    m_buttonStart->setObjectName( "m_buttonStart" );
+    // refine the button text
+    setButtonText( START_BUTTON,
+                   i18n("Start"),
+                   i18n("Start the task") );
+    QFont fnt( m_buttonStart->font() );
+    fnt.setBold(true);
+    m_buttonStart->setFont( fnt );
+    buttonBox->addButton(m_buttonStart,QDialogButtonBox::ActionRole); 
+  }
+  if( buttonMask & SAVE_BUTTON ) {
+    m_buttonSave = new KPushButton( KStandardGuiItem::save(), mainWidget() );
+    buttonBox->addButton(m_buttonSave,QDialogButtonBox::AcceptRole);
+  }
+  else
+    m_buttonSave = 0;
+  if( buttonMask & CANCEL_BUTTON ) {
+    m_buttonCancel = new KPushButton( KConfigGroup( k3bcore->config(), "General Options" )
+                                      .readEntry( "keep action dialogs open", false )
+                                      ? KStandardGuiItem::close()
+                                      : KStandardGuiItem::cancel(),
+                                      mainWidget());
+   buttonBox->addButton(m_buttonCancel,QDialogButtonBox::RejectRole);
+  }
+  else
+    m_buttonCancel = 0;
 
+
+#if 0
   if( buttonMask & START_BUTTON ) {
     KGuiItem startItem = KStandardGuiItem::ok();
     m_buttonStart = new KPushButton( startItem, mainWidget() );
@@ -173,7 +206,8 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   }
 
   mainGrid->addLayout( layout5, 2, 2 );
-
+#endif
+  mainGrid->addWidget(buttonBox,2,2);
   mainGrid->setRowStretch( 1, 1 );
 
   setTitle( title, subTitle );
