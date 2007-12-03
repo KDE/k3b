@@ -884,7 +884,7 @@ void K3bCdImageWritingDialog::slotMd5JobFinished( bool success )
 {
     if( success ) {
         d->md5SumItem->setText( 1, d->md5Job->hexDigest() );
-        d->md5SumItem->setPixmap( 0, SmallIcon("document-properties") );
+        d->md5SumItem->setPixmap( 0, SmallIcon("dialog-information") );
         d->haveMd5Sum = true;
     }
     else {
