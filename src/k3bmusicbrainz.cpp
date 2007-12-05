@@ -59,10 +59,10 @@ int K3bMusicBrainz::query( const Q3CString& trm )
 
   if( KProtocolManager::useProxy() ) {
     KUrl proxy = KProtocolManager::proxyFor("http");
-    mb_SetProxy( d->mb, const_cast<char*>(proxy.host().toLatin1()), short(proxy.port()) );
+    mb_SetProxy( d->mb, const_cast<char*>(proxy.host().toLatin1().constData()), short(proxy.port()) );
   }
 
-  char* args[2];
+  const char* args[2];
   args[0] = trm.data();
   args[1] = 0;
 

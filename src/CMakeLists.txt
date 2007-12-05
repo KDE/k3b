@@ -254,6 +254,9 @@ set_target_properties(k3b_bin PROPERTIES OUTPUT_NAME k3b)
 target_link_libraries(k3b_bin ${KDE4_KFILE_LIBS} ${KDE4_KIO_LIBS}
 ${KDE4_KPARTS_LIBS} k3bdevice ${KDE4_KNOTIFYCONFIG_LIBS}
 k3b ) #fastscale )
+if(MUSICBRAINZ_FOUND)
+  target_link_libraries(k3b_bin ${MUSICBRAINZ_LIBRARIES})
+endif(MUSICBRAINZ_FOUND)
 
 install(TARGETS k3b_bin DESTINATION ${BIN_INSTALL_DIR})
 
