@@ -1,6 +1,7 @@
 [Desktop Entry]
 ServiceTypes=KonqPopupMenu/Plugin;media/blankcd
 Actions=K3bDataProject;K3bAudioCDProject;
+Type=Service
 X-KDE-Priority=TopLevel
 
 [Desktop Action K3bDataProject]
