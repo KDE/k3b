@@ -44,25 +44,24 @@
 
 
 K3bAudioTrackTRMLookupDialog::K3bAudioTrackTRMLookupDialog( QWidget* parent )
-  : KDialog( KDialog::Plain, 
-		 i18n("MusicBrainz Query"), 
-		 KDialog::Cancel,
-		 KDialog::Cancel,
-		 parent, 
-		 name,
-		 true,
-		 true )
+  : KDialog( parent)
 {
-  Q3GridLayout* grid = new Q3GridLayout( plainPage() );
+  QWidget *widget = new QWidget(this);
+  setMainWidget(widget);
+  setCaption(i18n("MusicBrainz Query"));
+  setButtons(KDialog::Cancel);
+  setDefaultButton(KDialog::Cancel);
+  setModal(true);
+  Q3GridLayout* grid = new Q3GridLayout( widget );
   grid->setMargin( marginHint() );
   grid->setSpacing( spacingHint() );
 
-  m_infoLabel = new QLabel( plainPage() );
-  QLabel* pixLabel = new QLabel( plainPage() );
+  m_infoLabel = new QLabel( widget );
+  QLabel* pixLabel = new QLabel( widget );
   pixLabel->setPixmap( KIconLoader::global()->loadIcon( "musicbrainz", KIconLoader::NoGroup, 64 ) );
   pixLabel->setScaledContents( false );
 
-  m_busyWidget = new K3bBusyWidget( plainPage() );
+  m_busyWidget = new K3bBusyWidget( widget );
 
   grid->addMultiCellWidget( pixLabel, 0, 1, 0, 0 );
   grid->addWidget( m_infoLabel, 0, 1 );
@@ -92,7 +91,8 @@ int K3bAudioTrackTRMLookupDialog::lookup( const Q3PtrList<K3bAudioTrack>& tracks
   setModal( true );
   show();
   m_inLoop = true;
-  QApplication::eventLoop()->enterLoop();
+  //FIXME kde4
+  //QApplication::eventLoop()->enterLoop();
 
   return 0;
 }
@@ -108,14 +108,17 @@ void K3bAudioTrackTRMLookupDialog::slotMbJobFinished( bool )
 {
   m_busyWidget->showBusy(false);
   hide();
+  //FIXME kde4
+/*
   if( m_inLoop )
     QApplication::eventLoop()->exitLoop();
+*/
 }
 
 
 void K3bAudioTrackTRMLookupDialog::slotCancel()
 {
-  actionButton( Cancel )->setEnabled( false );
+  enableButton( KDialog::Cancel, false );
   m_mbJob->cancel();
 }
 
