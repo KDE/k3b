@@ -37,7 +37,6 @@
 
 #include <qtabwidget.h>
 #include <qcheckbox.h>
-#include <q3frame.h>
 #include <q3groupbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>

@@ -21,7 +21,6 @@
 #include <kdebug.h>
 
 #include <qtoolbutton.h>
-#include <q3frame.h>
 #include <qlayout.h>
 //Added by qt3to4:
 #include <Q3GridLayout>

@@ -47,7 +47,6 @@
 #include <qlayout.h>
 #include <q3header.h>
 #include <qlabel.h>
-#include <q3frame.h>
 #include <qspinbox.h>
 #include <qfont.h>
 #include <q3dragobject.h>

@@ -17,12 +17,11 @@
 #ifndef K3BFILLSTATUSDISPLAY_H
 #define K3BFILLSTATUSDISPLAY_H
 
-#include <q3frame.h>
 #include <qtooltip.h>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QPaintEvent>
-
+#include <QFrame>
 
 class QPaintEvent;
 class QMouseEvent;

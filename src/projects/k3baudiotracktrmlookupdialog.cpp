@@ -34,7 +34,6 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qtimer.h>
-#include <q3frame.h>
 #include <qeventloop.h>
 #include <qpushbutton.h>
 #include <qapplication.h>

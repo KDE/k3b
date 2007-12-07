@@ -22,7 +22,6 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3frame.h>
 #include <qcheckbox.h>
 #include <qtooltip.h>
 

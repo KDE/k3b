@@ -34,7 +34,6 @@
 #include <k3bwritingmodewidget.h>
 
 #include <qcheckbox.h>
-#include <q3frame.h>
 #include <q3groupbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>

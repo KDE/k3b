@@ -28,7 +28,6 @@
 
 // qt includes
 #include <qfont.h>
-#include <q3frame.h>
 #include <q3header.h>
 #include <qlabel.h>
 #include <qlayout.h>

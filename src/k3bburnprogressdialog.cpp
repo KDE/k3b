@@ -30,7 +30,6 @@
 #include <q3groupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <q3frame.h>
 
 
 K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, bool showSubProgress,

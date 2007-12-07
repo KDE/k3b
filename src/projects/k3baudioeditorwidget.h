@@ -15,11 +15,10 @@
 #ifndef _K3B_AUDIO_EDITOR_WIDGET_H_
 #define _K3B_AUDIO_EDITOR_WIDGET_H_
 
-#include <q3frame.h>
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <QMouseEvent>
-
+#include <QFrame>
 #include <k3bmsf.h>
 
 

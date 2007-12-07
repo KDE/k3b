@@ -17,7 +17,6 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <q3groupbox.h>
-#include <q3frame.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 

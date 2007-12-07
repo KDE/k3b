@@ -16,7 +16,6 @@
 #include <q3buttongroup.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <q3frame.h>
 #include <q3groupbox.h>
 
 #include <qlineedit.h>

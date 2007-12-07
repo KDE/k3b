@@ -15,7 +15,6 @@
 #ifndef _K3B_THEMED_HEADER_H_
 #define _K3B_THEMED_HEADER_H_
 
-#include <q3frame.h>
 //Added by qt3to4:
 #include <QLabel>
 
