@@ -38,7 +38,7 @@
 #include <kvbox.h>
 
 
-K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent, const char *name )
+K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent )
     : Q3GroupBox( 4, Qt::Vertical, parent ),
       m_labelCdSize(0),
       m_defaultImageFileName( "k3b_image.iso" )

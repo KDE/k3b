@@ -51,7 +51,7 @@ class K3bAudioRippingDialog : public K3bInteractionDialog
 			 K3bDevice::Device*,
 			 const K3bCddbResultEntry&, 
 			 const QList<int>&, 
-			 QWidget *parent = 0, const char *name = 0 );
+			 QWidget *parent = 0 );
   ~K3bAudioRippingDialog();
 
   void setStaticDir( const QString& path );

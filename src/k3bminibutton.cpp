@@ -24,7 +24,7 @@
 #include <QEvent>
 
 
-K3bMiniButton::K3bMiniButton( QWidget *parent, const char * name )
+K3bMiniButton::K3bMiniButton( QWidget *parent )
   :QPushButton( parent ),
    m_mouseOver( false )
 {

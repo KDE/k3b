@@ -35,7 +35,7 @@ class K3bAudioTrackDialog : public KDialog
   Q_OBJECT
 
  public:
-  K3bAudioTrackDialog( Q3PtrList<K3bAudioTrack>&, QWidget *parent=0, const char *name=0);
+  K3bAudioTrackDialog( Q3PtrList<K3bAudioTrack>&, QWidget *parent=0);
   ~K3bAudioTrackDialog();
 	
  protected slots:

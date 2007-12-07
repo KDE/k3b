@@ -30,7 +30,7 @@
 #include <QFrame>
 
 
-K3bFlatButton::K3bFlatButton( QWidget *parent, const char *name )
+K3bFlatButton::K3bFlatButton( QWidget *parent)
   : QFrame( parent/*, WNoAutoErase*/ ),
     m_pressed(false)
 {
@@ -38,7 +38,7 @@ K3bFlatButton::K3bFlatButton( QWidget *parent, const char *name )
 }
 
 
-K3bFlatButton::K3bFlatButton( const QString& text, QWidget *parent, const char *name )
+K3bFlatButton::K3bFlatButton( const QString& text, QWidget *parent )
   : QFrame( parent/*, WNoAutoErase*/ ),
     m_pressed(false)
 {
@@ -47,7 +47,7 @@ K3bFlatButton::K3bFlatButton( const QString& text, QWidget *parent, const char *
 }
 
 
-K3bFlatButton::K3bFlatButton( QAction* a, QWidget *parent, const char *name )
+K3bFlatButton::K3bFlatButton( QAction* a, QWidget *parent)
   : QFrame( parent/*, WNoAutoErase*/ ),
     m_pressed(false)
 {

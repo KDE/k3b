@@ -37,7 +37,7 @@ class K3bMiniButton : public QPushButton
   Q_OBJECT
 
  public:
-  K3bMiniButton( QWidget *parent=0, const char *name=0 );
+  K3bMiniButton( QWidget *parent=0);
   virtual ~K3bMiniButton();
 
  protected:

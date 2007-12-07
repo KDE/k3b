@@ -35,7 +35,7 @@ class K3bTempDirSelectionWidget : public Q3GroupBox
     Q_OBJECT
 
 public: 
-    K3bTempDirSelectionWidget( QWidget *parent = 0, const char *name = 0 );
+    K3bTempDirSelectionWidget( QWidget *parent = 0 );
     ~K3bTempDirSelectionWidget();
 
     /** determines if the selection dialog should ask for a dir or a file */

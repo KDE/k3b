@@ -56,7 +56,7 @@
 //         do only show cd-text and options (eventuelle index0)
 
 
-K3bAudioTrackDialog::K3bAudioTrackDialog( Q3PtrList<K3bAudioTrack>& tracks, QWidget *parent, const char *name )
+K3bAudioTrackDialog::K3bAudioTrackDialog( Q3PtrList<K3bAudioTrack>& tracks, QWidget *parent )
   : KDialog( parent)
 {
   m_tracks = tracks;

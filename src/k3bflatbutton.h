@@ -15,7 +15,7 @@
 #ifndef FLATBUTTON_H
 #define FLATBUTTON_H
 
-#include <q3frame.h>
+#include <QFrame>
 #include <qcolor.h>
 #include <qpixmap.h>
 //Added by qt3to4:
@@ -36,9 +36,9 @@ class K3bFlatButton : public QFrame
   Q_OBJECT
 
  public:
-  K3bFlatButton( QWidget *parent = 0, const char *name = 0 );
-  K3bFlatButton( const QString& text, QWidget *parent = 0, const char *name = 0 );
-  K3bFlatButton( QAction*, QWidget *parent = 0, const char *name = 0 );
+  K3bFlatButton( QWidget *parent = 0);
+  K3bFlatButton( const QString& text, QWidget *parent = 0 );
+  K3bFlatButton( QAction*, QWidget *parent = 0);
   
   ~K3bFlatButton();
 
