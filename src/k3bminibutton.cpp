@@ -35,34 +35,42 @@ K3bMiniButton::~K3bMiniButton()
 {
 }
 
+void K3bMiniButton::paintEvent(QPaintEvent *)
+{
+     QPainter painter(this);
+     drawButton(&painter);
+}
 
 void K3bMiniButton::drawButton( QPainter* p )
 {
- //TODO port me kde4
-#if 0
   p->fillRect( 0,0, width(), height(), QBrush(colorGroup().brush(QColorGroup::Background)) );
   p->drawPixmap( (width() - pixmap()->width()) / 2, (height() - pixmap()->height()) / 2, *pixmap() );
   if( m_mouseOver && !isDown() ){
     p->setPen( Qt::white );
-    p->moveTo( 0, height() - 1 );
-    p->lineTo( 0, 0 );
-    p->lineTo( width() - 1, 0 );
+    QPainterPath path;
+    path.moveTo( 0, height() - 1 );
+    path.lineTo( 0, 0 );
+    path.lineTo( width() - 1, 0 );
 
     p->setPen( colorGroup().dark() );
-    p->lineTo( width() - 1, height() - 1 );
-    p->lineTo( 0, height() - 1 );
+    path.lineTo( width() - 1, height() - 1 );
+    path.lineTo( 0, height() - 1 );
+    p->drawPath(path);
   }
   if( isOn() || isDown() ){
     p->setPen( colorGroup().dark() );
-    p->moveTo( 0, height() - 1 );
-    p->lineTo( 0, 0 );
-    p->lineTo( width() - 1, 0 );
-
+    QPainterPath path;
+    path.moveTo( 0, height() - 1 );
+    path.lineTo( 0, 0 );
+    path.lineTo( width() - 1, 0 );
+    p->drawPath(path);
+ 
+    QPainterPath pathWhite;
     p->setPen( Qt::white );
-    p->lineTo( width() - 1, height() - 1 );
-    p->lineTo( 0, height() - 1 );
+    pathWhite.lineTo( width() - 1, height() - 1 );
+    pathWhite.lineTo( 0, height() - 1 );
+    p->drawPath(pathWhite);
   }
-#endif
 }
 
 void K3bMiniButton::enterEvent( QEvent * )

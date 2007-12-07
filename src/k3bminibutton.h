@@ -41,7 +41,8 @@ class K3bMiniButton : public QPushButton
   virtual ~K3bMiniButton();
 
  protected:
-  virtual void drawButton( QPainter * );
+  virtual void paintEvent(QPaintEvent *);
+  void drawButton( QPainter * );
   virtual void enterEvent( QEvent * );
   virtual void leaveEvent( QEvent * );
   
