@@ -253,7 +253,11 @@ class K3bInteractionDialog : public KDialog
   void slotStartClickedInternal();
   void slotDelayedInit();
 
+ signals:
+    void leaveModality();
+
  private:
+  void enterLoop();
   void initConnections();
   void initToolTipsAndWhatsThis();
   void saveLastSettings();

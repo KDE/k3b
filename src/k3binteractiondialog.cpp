@@ -68,8 +68,12 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
     m_delayedInit(false)
 {
   installEventFilter( this );
+  setButtons(KDialog::None);
 
-  mainGrid = new QGridLayout( mainWidget() );
+  mainGrid = new QGridLayout;
+  QWidget *widget = new QWidget(this);
+  setMainWidget( widget );
+
   mainGrid->setSpacing( spacingHint() );
   mainGrid->setMargin( marginHint() );
 
@@ -138,75 +142,6 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
   else
     m_buttonCancel = 0;
 
-
-#if 0
-  if( buttonMask & START_BUTTON ) {
-    KGuiItem startItem = KStandardGuiItem::ok();
-    m_buttonStart = new KPushButton( startItem, mainWidget() );
-    m_buttonStart->setObjectName( "m_buttonStart" );
-    // refine the button text
-    setButtonText( START_BUTTON,
-		   i18n("Start"),
-		   i18n("Start the task") );
-    QFont fnt( m_buttonStart->font() );
-    fnt.setBold(true);
-    m_buttonStart->setFont( fnt );
-  }
-  else
-    m_buttonStart = 0;
-
-  if( buttonMask & SAVE_BUTTON ) {
-    m_buttonSave = new KPushButton( KStandardGuiItem::save(), mainWidget() );
-  }
-  else
-    m_buttonSave = 0;
-
-  if( buttonMask & CANCEL_BUTTON ) {
-    m_buttonCancel = new KPushButton( KConfigGroup( k3bcore->config(), "General Options" )
-				      .readEntry( "keep action dialogs open", false )
-				      ? KStandardGuiItem::close()
-				      : KStandardGuiItem::cancel(),
-				      mainWidget());
-  }
-  else
-    m_buttonCancel = 0;
-
-  //TODO qt4 is able to change it. Remove this code.
-
-  // we only handle some of the possible settings since
-  // our buttons are always to the right of the dialog
-  switch( KGlobalSettings::buttonLayout() ) {
-  case 0: // KDE default
-  default:
-      if ( m_buttonStart )
-          layout5->addWidget( m_buttonStart );
-      if ( m_buttonSave )
-          layout5->addWidget( m_buttonSave );
-      if ( m_buttonCancel )
-          layout5->addWidget( m_buttonCancel );
-      break;
-
-  case 1: // something different
-      if ( m_buttonCancel )
-          layout5->addWidget( m_buttonCancel );
-      if ( m_buttonSave )
-          layout5->addWidget( m_buttonSave );
-      if ( m_buttonStart )
-          layout5->addWidget( m_buttonStart );
-      break;
-
-  case 2: // GTK-Style
-      if ( m_buttonSave )
-          layout5->addWidget( m_buttonSave );
-      if ( m_buttonCancel )
-          layout5->addWidget( m_buttonCancel );
-      if ( m_buttonStart )
-          layout5->addWidget( m_buttonStart );
-      break;
-  }
-
-  mainGrid->addLayout( layout5, 2, 2 );
-#endif
   mainGrid->addWidget(buttonBox,2,2);
   mainGrid->setRowStretch( 1, 1 );
 
@@ -304,7 +239,8 @@ void K3bInteractionDialog::setMainWidget( QWidget* w )
 QWidget* K3bInteractionDialog::mainWidget()
 {
   if( !m_mainWidget ) {
-    setMainWidget( new QWidget( this ) );
+    QWidget *widget = new QWidget(this);
+    setMainWidget( widget );
   }
   return m_mainWidget;
 }
@@ -615,11 +551,9 @@ int K3bInteractionDialog::exec( bool returnOnHide )
     QTimer::singleShot( 0, this, SLOT(slotDelayedInit()) );
   else
     init();
- //FIXME kde4
-#if 0
   m_inLoop = true;
-  QApplication::eventLoop()->enterLoop();
-
+  enterLoop();
+#if 0
   if( !wasShowModal )
     clearWFlags( WShowModal );
 
@@ -632,6 +566,13 @@ int K3bInteractionDialog::exec( bool returnOnHide )
   return 0;
 }
 
+void K3bInteractionDialog::enterLoop()
+{
+    QEventLoop eventLoop;
+    connect(this, SIGNAL(leaveModality()),
+        &eventLoop, SLOT(quit()));
+    eventLoop.exec(QEventLoop::ExcludeUserInputEvents);
+}
 
 void K3bInteractionDialog::hide()
 {
@@ -639,38 +580,29 @@ void K3bInteractionDialog::hide()
     return;
 
   KDialog::hide();
-  //FIXME kde4
-#if 0
   if( m_inLoop && m_exitLoopOnHide ) {
     m_inLoop = false;
-    QApplication::eventLoop()->exitLoop();
+    emit leaveModality();
   }
-#endif
 }
 
 
 bool K3bInteractionDialog::close( bool alsoDelete )
 {
-  //FIXME kde4
-#if 0
   if( m_inLoop && !m_exitLoopOnHide ) {
     m_inLoop = false;
-    QApplication::eventLoop()->exitLoop();
+    emit leaveModality();
   }
-#endif
   return KDialog::close( alsoDelete );
 }
 
 
 void K3bInteractionDialog::done( int r )
 {
-  //FIXME kde4
-#if 0
   if( m_inLoop && !m_exitLoopOnHide ) {
     m_inLoop = false;
-    QApplication::eventLoop()->exitLoop();
+    emit leaveModality();
   }
-#endif
   return KDialog::done( r );
 }
 
