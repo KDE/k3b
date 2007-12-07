@@ -43,7 +43,7 @@ class K3bAudioProjectConvertingDialog : public K3bInteractionDialog
   Q_OBJECT
 
  public: 
-  K3bAudioProjectConvertingDialog( K3bAudioDoc*, QWidget *parent = 0, const char *name = 0 );
+  K3bAudioProjectConvertingDialog( K3bAudioDoc*, QWidget *parent = 0);
   ~K3bAudioProjectConvertingDialog();
 
   void setBaseDir( const QString& path );

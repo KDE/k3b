@@ -65,7 +65,7 @@ public:
 };
 
 
-K3bAudioProjectConvertingDialog::K3bAudioProjectConvertingDialog( K3bAudioDoc* doc, QWidget *parent, const char *name )
+K3bAudioProjectConvertingDialog::K3bAudioProjectConvertingDialog( K3bAudioDoc* doc, QWidget *parent )
   : K3bInteractionDialog( parent,
 			  QString::null,
 			  QString::null,

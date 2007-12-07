@@ -110,7 +110,6 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 
   // action buttons
   // ---------------------------------------------------------------------------------------------------
-  //Q3HBoxLayout* layout5 = new Q3HBoxLayout( 0, 0, spacingHint(), "layout5");
   QDialogButtonBox *buttonBox = new QDialogButtonBox(this);
   if( buttonMask & START_BUTTON ) {
     KGuiItem startItem = KStandardGuiItem::ok();
