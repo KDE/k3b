@@ -32,7 +32,6 @@
 #include <qlabel.h>
 #include <qtimer.h>
 
-#include <q3widgetstack.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <qlayout.h>

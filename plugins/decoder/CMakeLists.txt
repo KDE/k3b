@@ -1,6 +1,7 @@
 macro_optional_find_package(FFmpeg)
 macro_optional_find_package(Flac)
 macro_optional_find_package(Mad)
+macro_optional_find_package(Muse)
 if(OGGVORBIS_FOUND)
    add_subdirectory(ogg)
 endif(OGGVORBIS_FOUND)
@@ -15,26 +16,6 @@ if(MAD_FOUND)
 endif(MAD_FOUND)
 
 add_subdirectory( wave )
-
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(DECAIFFDIR)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(MPCDIR)")
-
-########### install files ###############
-
-
-
-
-#original Makefile.am contents follow:
-
-#if include_MP3
-#DECMP3DIR = mp3
-#endif
-#
-#DECAIFFDIR = libsndfile
-#endif
-#
-#if include_MPC
-#MPCDIR = musepack
-#endif
-#
-#SUBDIRS = wave $(DECOGGDIR) $(DECMP3DIR) $(DECFLACDIR) $(DECAIFFDIR) $(FFMPEGDIR) $(MPCDIR)
+if(MUSE_FOUND)
+    add_subdirectory(musepack)
+endif(MUSE_FOUND)

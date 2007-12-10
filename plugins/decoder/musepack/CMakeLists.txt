@@ -3,7 +3,8 @@ set(k3bmpcdecoder_PART_SRCS k3bmpcdecoder.cpp k3bmpcwrapper.cpp )
 
 kde4_add_plugin(k3bmpcdecoder WITH_PREFIX ${k3bmpcdecoder_PART_SRCS})
 
-target_link_libraries(k3bmpcdecoder  ${KDE4_KDECORE_LIBS} k3b )
+target_link_libraries(k3bmpcdecoder  ${KDE4_KDECORE_LIBS} k3b
+${MUSE_LIBRARIES})
 
 install(TARGETS k3bmpcdecoder DESTINATION ${PLUGIN_INSTALL_DIR} )
 

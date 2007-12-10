@@ -13,7 +13,6 @@
  */
 
 
-#include <q3textedit.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <q3groupbox.h>

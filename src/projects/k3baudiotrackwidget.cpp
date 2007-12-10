@@ -24,7 +24,6 @@
 #include <qcheckbox.h>
 #include <qtooltip.h>
 
-#include <q3widgetstack.h>
 #include <q3groupbox.h>
 #include <qtabwidget.h>
 //Added by qt3to4:
