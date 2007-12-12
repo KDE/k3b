@@ -24,7 +24,7 @@
 class K3bBusyWidget;
 class QLabel;
 class QProgressBar;
-class Q3WidgetStack;
+class QStackedWidget;
 
 
 /**
@@ -54,7 +54,7 @@ class LIBK3B_EXPORT  K3bProgressDialog : public KDialog
 
  private:
   QLabel* m_label;
-  Q3WidgetStack* m_stack;
+  QStackedWidget* m_stack;
   K3bBusyWidget* m_busyWidget;
   QProgressBar* m_progressBar;
 };

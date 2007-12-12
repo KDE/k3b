@@ -19,7 +19,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <q3widgetstack.h>
+#include <QStackedWidget>
 //Added by qt3to4:
 #include <Q3GridLayout>
 
@@ -40,7 +40,7 @@ K3bProgressDialog::K3bProgressDialog( const QString& text,
     mainLayout->setSpacing( spacingHint() );
 
     m_label = new QLabel( text, main );
-    m_stack = new Q3WidgetStack( main );
+    m_stack = new QStackedWidget( main );
     m_progressBar = new QProgressBar( m_stack );
     m_busyWidget = new K3bBusyWidget( m_stack );
     m_stack->addWidget( m_progressBar );
@@ -60,9 +60,9 @@ K3bProgressDialog::~K3bProgressDialog()
 int K3bProgressDialog::exec( bool progress )
 {
     if( progress )
-        m_stack->raiseWidget( m_progressBar );
+        m_stack->setCurrentWidget( m_progressBar );
     else
-        m_stack->raiseWidget( m_busyWidget );
+        m_stack->setCurrentWidget( m_busyWidget );
 
     m_busyWidget->showBusy( !progress );
 

@@ -24,8 +24,6 @@
 #include <qdatetime.h>
 #include <qfile.h>
 #include <qtimer.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <kdebug.h>
 #include <qregexp.h>
 #include <qdom.h>
@@ -68,8 +66,7 @@ K3bVcdJob::~K3bVcdJob()
 {
     delete m_process;
 
-    if ( m_writerJob )
-        delete m_writerJob;
+    delete m_writerJob;
 }
 
 

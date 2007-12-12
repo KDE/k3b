@@ -34,8 +34,6 @@
 
 #include <q3valuelist.h>
 #include <qfile.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <unistd.h>
 
