@@ -1,4 +1,4 @@
 #! /bin/sh
-$XGETTEXT `find -name "*.cpp" -or -name "*.h"` -o $podir/libk3bdevice.pot
+$XGETTEXT `find -name "*.cpp"` -o $podir/libk3bdevice.pot
 
 
