@@ -21,8 +21,6 @@
 #include <k3bcore.h>
 
 #include <qdatastream.h>
-#include <q3cstring.h>
-//Added by qt3to4:
 
 
 // FIXME: multiple tracks
@@ -42,7 +40,7 @@ K3bAudioCdTrackDrag::K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, const QList
     const K3bDevice::Track& track = *it;
     s << track.firstSector().lba() << track.lastSector().lba();
   }
-  Q3TextStream t( s.device() );
+  QTextStream t( s.device() );
   t << cddb.cdArtist << endl
     << cddb.cdTitle << endl;
   for( unsigned int i = 0; i < toc.count(); ++i ) {
@@ -83,7 +81,7 @@ bool K3bAudioCdTrackDrag::decode( const QMimeSource* e,
     toc.append( K3bDevice::Track( fs, ls, K3bDevice::Track::AUDIO ) );
   }
 
-  Q3TextStream t( s.device() );
+  QTextStream t( s.device() );
   cddb.artists.clear();
   cddb.titles.clear();
   cddb.cdArtist = t.readLine();
