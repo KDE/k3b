@@ -20,69 +20,66 @@
 #include <k3baudioencoder.h>
 #include <k3bpluginconfigwidget.h>
 
-#include "base_k3blameencodersettingswidget.h"
-#include "base_k3bmanualbitratesettingswidget.h"
+#include "ui_base_k3blameencodersettingswidget.h"
+#include "ui_base_k3bmanualbitratesettingswidget.h"
 
 
 class KDialogBase;
-
+class K3bLameManualSettingsDialog;
 
 class K3bLameEncoder : public K3bAudioEncoder
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bLameEncoder( QObject* parent = 0, const char* name = 0 );
-  ~K3bLameEncoder();
+public:
+    K3bLameEncoder( QObject* parent = 0 );
+    ~K3bLameEncoder();
 
-  bool openFile( const QString& extension, const QString& filename, const K3b::Msf& length );
-  bool isOpen() const;
-  void closeFile();
-  const QString& filename() const;
+    bool openFile( const QString& extension, const QString& filename, const K3b::Msf& length );
+    bool isOpen() const;
+    void closeFile();
+    const QString& filename() const;
 
-  QStringList extensions() const;
+    QStringList extensions() const;
   
-  QString fileTypeComment( const QString& ) const;
+    QString fileTypeComment( const QString& ) const;
 
-  long long fileSize( const QString&, const K3b::Msf& msf ) const;
+    long long fileSize( const QString&, const K3b::Msf& msf ) const;
 
-  int pluginSystemVersion() const { return 3; }
+    int pluginSystemVersion() const { return 3; }
 
-  K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0, 
-					     const char* name = 0 ) const;
+    K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0 ) const;
 
- private:
-  void finishEncoderInternal();
-  bool initEncoderInternal( const QString& extension, const K3b::Msf& length );
-  long encodeInternal( const char* data, Q_ULONG len );
-  void setMetaDataInternal( MetaDataField, const QString& );
+private:
+    void finishEncoderInternal();
+    bool initEncoderInternal( const QString& extension, const K3b::Msf& length );
+    long encodeInternal( const char* data, Q_ULONG len );
+    void setMetaDataInternal( MetaDataField, const QString& );
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 };
 
 
-class K3bLameEncoderSettingsWidget : public K3bPluginConfigWidget
+class K3bLameEncoderSettingsWidget : public K3bPluginConfigWidget, Ui::K3bLameEncoderSettingsWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bLameEncoderSettingsWidget( QWidget* parent = 0, const char* name = 0 );
-  ~K3bLameEncoderSettingsWidget();
+public:
+    K3bLameEncoderSettingsWidget( QWidget* parent = 0 );
+    ~K3bLameEncoderSettingsWidget();
 
- public slots:
-  void loadConfig();
-  void saveConfig();
+public slots:
+    void loadConfig();
+    void saveConfig();
 
- private slots:
-  void slotQualityLevelChanged( int val );
-  void slotShowManualSettings();
-  void updateManualSettingsLabel();
+private slots:
+    void slotQualityLevelChanged( int val );
+    void slotShowManualSettings();
+    void updateManualSettingsLabel();
 
- private:
-  base_K3bLameEncoderSettingsWidget* m_w;
-  base_K3bManualBitrateSettingsWidget* m_brW;
-  KDialogBase* m_manualSettingsDlg;
+private:
+    K3bLameManualSettingsDialog* m_manualSettingsDialog;
 };
 
 #endif

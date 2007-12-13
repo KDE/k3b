@@ -3,9 +3,9 @@
 
 ########### next target ###############
 
-set(k3blameencoder_PART_SRCS k3blameencoder.cpp )
+set(k3blameencoder_PART_SRCS k3blameencoder.cpp k3blamemanualsettingsdialog.cpp)
 
-kde4_add_ui3_files(k3blameencoder_PART_SRCS base_k3blameencodersettingswidget.ui base_k3bmanualbitratesettingswidget.ui )
+kde4_add_ui_files(k3blameencoder_PART_SRCS base_k3blameencodersettingswidget.ui base_k3bmanualbitratesettingswidget.ui )
 
 kde4_add_plugin(k3blameencoder WITH_PREFIX ${k3blameencoder_PART_SRCS})
 

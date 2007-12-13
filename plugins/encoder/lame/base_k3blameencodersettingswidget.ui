@@ -1,480 +1,507 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>base_K3bLameEncoderSettingsWidget</class>
-<author>Sebastian Trueg</author>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>Form1</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>337</width>
-            <height>295</height>
-        </rect>
-    </property>
-    <hbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>0</number>
-        </property>
-        <widget class="QTabWidget">
-            <property name="name">
-                <cstring>m_mainTab</cstring>
+<ui version="4.0" >
+ <author>Sebastian Trueg</author>
+ <class>K3bLameEncoderSettingsWidget</class>
+ <widget class="QWidget" name="K3bLameEncoderSettingsWidget" >
+  <layout class="QHBoxLayout" >
+   <property name="leftMargin" >
+    <number>0</number>
+   </property>
+   <property name="topMargin" >
+    <number>0</number>
+   </property>
+   <property name="rightMargin" >
+    <number>0</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QTabWidget" name="m_mainTab" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab" >
+      <attribute name="title" >
+       <string>Settings</string>
+      </attribute>
+      <layout class="QHBoxLayout" >
+       <item>
+        <widget class="Q3ButtonGroup" name="m_groupVariableBitrate" >
+         <property name="title" >
+          <string>Quality Settings</string>
+         </property>
+         <layout class="QVBoxLayout" >
+          <item>
+           <layout class="QHBoxLayout" >
+            <item>
+             <widget class="QRadioButton" name="m_radioQualityLevel" >
+              <property name="text" >
+               <string>Preset:</string>
+              </property>
+              <property name="checked" >
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="m_labelQualityLevel" >
+              <property name="font" >
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text" >
+               <string>textLabel1</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="wordWrap" >
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="Q3Frame" name="m_qualityLevelFrame" >
+            <property name="frameShape" >
+             <enum>QFrame::NoFrame</enum>
             </property>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>tab</cstring>
-                </property>
-                <attribute name="title">
-                    <string>Settings</string>
-                </attribute>
-                <hbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QButtonGroup">
-                        <property name="name">
-                            <cstring>m_groupVariableBitrate</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Quality Settings</string>
-                        </property>
-                        <vbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>layout10</cstring>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <widget class="QRadioButton">
-                                        <property name="name">
-                                            <cstring>m_radioQualityLevel</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Preset:</string>
-                                        </property>
-                                        <property name="checked">
-                                            <bool>true</bool>
-                                        </property>
-                                    </widget>
-                                    <widget class="QLabel">
-                                        <property name="name">
-                                            <cstring>m_labelQualityLevel</cstring>
-                                        </property>
-                                        <property name="font">
-                                            <font>
-                                                <bold>1</bold>
-                                            </font>
-                                        </property>
-                                        <property name="text">
-                                            <string>textLabel1</string>
-                                        </property>
-                                        <property name="alignment">
-                                            <set>AlignVCenter|AlignRight</set>
-                                        </property>
-                                    </widget>
-                                </hbox>
-                            </widget>
-                            <widget class="QFrame">
-                                <property name="name">
-                                    <cstring>m_qualityLevelFrame</cstring>
-                                </property>
-                                <property name="frameShape">
-                                    <enum>StyledPanel</enum>
-                                </property>
-                                <property name="frameShadow">
-                                    <enum>Plain</enum>
-                                </property>
-                                <property name="lineWidth">
-                                    <number>0</number>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <property name="margin">
-                                        <number>0</number>
-                                    </property>
-                                    <property name="spacing">
-                                        <number>0</number>
-                                    </property>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>spacer2_2</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Horizontal</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Fixed</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>20</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                    <widget class="QLayoutWidget">
-                                        <property name="name">
-                                            <cstring>layout8</cstring>
-                                        </property>
-                                        <grid>
-                                            <property name="name">
-                                                <cstring>unnamed</cstring>
-                                            </property>
-                                            <widget class="QLabel" row="1" column="1">
-                                                <property name="name">
-                                                    <cstring>textLabel4</cstring>
-                                                </property>
-                                                <property name="font">
-                                                    <font>
-                                                        <italic>1</italic>
-                                                    </font>
-                                                </property>
-                                                <property name="text">
-                                                    <string>high quality</string>
-                                                </property>
-                                                <property name="alignment">
-                                                    <set>AlignVCenter|AlignRight</set>
-                                                </property>
-                                            </widget>
-                                            <widget class="QLabel" row="1" column="0">
-                                                <property name="name">
-                                                    <cstring>textLabel3</cstring>
-                                                </property>
-                                                <property name="font">
-                                                    <font>
-                                                        <italic>1</italic>
-                                                    </font>
-                                                </property>
-                                                <property name="text">
-                                                    <string>small file</string>
-                                                </property>
-                                            </widget>
-                                            <widget class="QSlider" row="0" column="0" rowspan="1" colspan="2">
-                                                <property name="name">
-                                                    <cstring>m_sliderQuality</cstring>
-                                                </property>
-                                                <property name="maxValue">
-                                                    <number>9</number>
-                                                </property>
-                                                <property name="pageStep">
-                                                    <number>3</number>
-                                                </property>
-                                                <property name="value">
-                                                    <number>3</number>
-                                                </property>
-                                                <property name="orientation">
-                                                    <enum>Horizontal</enum>
-                                                </property>
-                                            </widget>
-                                        </grid>
-                                    </widget>
-                                </hbox>
-                            </widget>
-                            <spacer>
-                                <property name="name">
-                                    <cstring>spacer9</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Fixed</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>layout12</cstring>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <widget class="QRadioButton">
-                                        <property name="name">
-                                            <cstring>m_radioManual</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Manual settings:</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QLabel">
-                                        <property name="name">
-                                            <cstring>m_labelManualSettings</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="font">
-                                            <font>
-                                                <bold>1</bold>
-                                            </font>
-                                        </property>
-                                        <property name="text">
-                                            <string>textLabel2</string>
-                                        </property>
-                                        <property name="alignment">
-                                            <set>AlignVCenter|AlignRight</set>
-                                        </property>
-                                    </widget>
-                                </hbox>
-                            </widget>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>layout11</cstring>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <property name="margin">
-                                        <number>0</number>
-                                    </property>
-                                    <property name="spacing">
-                                        <number>0</number>
-                                    </property>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>spacer2_2_3</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Horizontal</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>5</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                    <widget class="QPushButton">
-                                        <property name="name">
-                                            <cstring>m_buttonManualSettings</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="text">
-                                            <string>Change Settings...</string>
-                                        </property>
-                                    </widget>
-                                </hbox>
-                            </widget>
-                        </vbox>
-                    </widget>
-                </hbox>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>tab</cstring>
-                </property>
-                <attribute name="title">
-                    <string>Advanced</string>
-                </attribute>
-                <vbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QGroupBox">
-                        <property name="name">
-                            <cstring>groupBox1</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Encoder Quality</string>
-                        </property>
-                        <vbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="spacing">
-                                <number>0</number>
-                            </property>
-                            <widget class="KIntNumInput">
-                                <property name="name">
-                                    <cstring>m_spinEncoderQuality</cstring>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Choose the noise shaping &amp; psycho acoustic algorithm.</string>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>&lt;p&gt;Bitrate is of course the main influence on quality. The higher the bitrate, the higher the quality. But for a given bitrate, we have a choice of algorithms to determine the best scalefactors and huffman encoding (noise shaping).
-&lt;p&gt;The quality increases from 0 to 9 while the encoding speed drops.
-&lt;p&gt;9 uses the slowest &amp; best possible version of all algorithms.
-&lt;p&gt;&lt;b&gt;7 is the recommended setting&lt;/b&gt; while 4 still produced reasonable quality at good speed.
-&lt;p&gt;0 disables almost all algorithms including psy-model resulting in poor quality.
-&lt;p&gt;&lt;b&gt;This setting has no influence on the size of the resulting file.&lt;/b&gt;</string>
-                                </property>
-                            </widget>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>layout2</cstring>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <property name="margin">
-                                        <number>0</number>
-                                    </property>
-                                    <widget class="QLabel">
-                                        <property name="name">
-                                            <cstring>textLabel1</cstring>
-                                        </property>
-                                        <property name="font">
-                                            <font>
-                                                <italic>1</italic>
-                                            </font>
-                                        </property>
-                                        <property name="text">
-                                            <string>fast encoding</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QLabel">
-                                        <property name="name">
-                                            <cstring>textLabel2</cstring>
-                                        </property>
-                                        <property name="font">
-                                            <font>
-                                                <italic>1</italic>
-                                            </font>
-                                        </property>
-                                        <property name="text">
-                                            <string>high quality</string>
-                                        </property>
-                                        <property name="alignment">
-                                            <set>AlignVCenter|AlignRight</set>
-                                        </property>
-                                    </widget>
-                                </hbox>
-                            </widget>
-                        </vbox>
-                    </widget>
-                    <widget class="QGroupBox">
-                        <property name="name">
-                            <cstring>groupBox3</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>5</hsizetype>
-                                <vsizetype>5</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>1</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="title">
-                            <string>Options</string>
-                        </property>
-                        <vbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>m_checkCopyright</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Mark copyrighted</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Mark the encoded file as being copyrighted.</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>m_checkOriginal</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Mark as original</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Mark the encoded file as being a copy.</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>m_checkISO</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Strict ISO compliance</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Enforce strict ISO compliance</string>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>&lt;p&gt;If this option is checked LAME will enforce the 7680 bit limitation on total frame size.&lt;br&gt;
-This  results  in  many  wasted bits for high bitrate encodings but will ensure strict ISO compatibility. This compatibility might be important for hardware players.</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>m_checkError</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Error protection</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Turn on CRC error protection.</string>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>&lt;p&gt;If this option is checked a cyclic redundancy check (CRC) code will be added to each frame, allowing transmission errors that could occur on the MP3 stream to be detected; however, it takes 16 bits per frame that would otherwise be used for encoding, thus slightly reducing the sound quality.</string>
-                                </property>
-                            </widget>
-                        </vbox>
-                    </widget>
-                </vbox>
-            </widget>
+            <property name="frameShadow" >
+             <enum>QFrame::Plain</enum>
+            </property>
+            <property name="lineWidth" >
+             <number>0</number>
+            </property>
+            <layout class="QHBoxLayout" >
+             <property name="spacing" >
+              <number>0</number>
+             </property>
+             <property name="leftMargin" >
+              <number>0</number>
+             </property>
+             <property name="topMargin" >
+              <number>0</number>
+             </property>
+             <property name="rightMargin" >
+              <number>0</number>
+             </property>
+             <property name="bottomMargin" >
+              <number>0</number>
+             </property>
+             <item>
+              <spacer>
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType" >
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" >
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <layout class="QGridLayout" >
+               <item row="1" column="1" >
+                <widget class="QLabel" name="textLabel4" >
+                 <property name="font" >
+                  <font>
+                   <italic>true</italic>
+                  </font>
+                 </property>
+                 <property name="text" >
+                  <string>high quality</string>
+                 </property>
+                 <property name="alignment" >
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                 <property name="wordWrap" >
+                  <bool>false</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0" >
+                <widget class="QLabel" name="textLabel3" >
+                 <property name="font" >
+                  <font>
+                   <italic>true</italic>
+                  </font>
+                 </property>
+                 <property name="text" >
+                  <string>small file</string>
+                 </property>
+                 <property name="wordWrap" >
+                  <bool>false</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0" colspan="2" >
+                <widget class="QSlider" name="m_sliderQuality" >
+                 <property name="maximum" >
+                  <number>9</number>
+                 </property>
+                 <property name="pageStep" >
+                  <number>3</number>
+                 </property>
+                 <property name="value" >
+                  <number>3</number>
+                 </property>
+                 <property name="orientation" >
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType" >
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" >
+            <item>
+             <widget class="QRadioButton" name="m_radioManual" >
+              <property name="text" >
+               <string>Manual settings:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="m_labelManualSettings" >
+              <property name="enabled" >
+               <bool>false</bool>
+              </property>
+              <property name="font" >
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text" >
+               <string>textLabel2</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="wordWrap" >
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="spacing" >
+             <number>0</number>
+            </property>
+            <property name="leftMargin" >
+             <number>0</number>
+            </property>
+            <property name="topMargin" >
+             <number>0</number>
+            </property>
+            <property name="rightMargin" >
+             <number>0</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>0</number>
+            </property>
+            <item>
+             <spacer>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType" >
+               <enum>QSizePolicy::Expanding</enum>
+              </property>
+              <property name="sizeHint" >
+               <size>
+                <width>20</width>
+                <height>5</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="m_buttonManualSettings" >
+              <property name="enabled" >
+               <bool>false</bool>
+              </property>
+              <property name="text" >
+               <string>Change Settings...</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </widget>
-    </hbox>
-</widget>
-<customwidgets>
-</customwidgets>
-<connections>
-    <connection>
-        <sender>m_radioManual</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_buttonManualSettings</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>m_radioQualityLevel</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_qualityLevelFrame</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>m_radioQualityLevel</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_labelQualityLevel</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>m_radioManual</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_labelManualSettings</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-</connections>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>knuminput.h</includehint>
-</includehints>
-</UI>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab" >
+      <attribute name="title" >
+       <string>Advanced</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <item>
+        <widget class="Q3GroupBox" name="groupBox1" >
+         <property name="title" >
+          <string>Encoder Quality</string>
+         </property>
+         <layout class="QVBoxLayout" >
+          <property name="spacing" >
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="KIntNumInput" name="m_spinEncoderQuality" >
+            <property name="toolTip" >
+             <string>Choose the noise shaping &amp; psycho acoustic algorithm.</string>
+            </property>
+            <property name="whatsThis" >
+             <string>&lt;p>Bitrate is of course the main influence on quality. The higher the bitrate, the higher the quality. But for a given bitrate, we have a choice of algorithms to determine the best scalefactors and huffman encoding (noise shaping).
+&lt;p>The quality increases from 0 to 9 while the encoding speed drops.
+&lt;p>9 uses the slowest &amp; best possible version of all algorithms.
+&lt;p>&lt;b>7 is the recommended setting&lt;/b> while 4 still produced reasonable quality at good speed.
+&lt;p>0 disables almost all algorithms including psy-model resulting in poor quality.
+&lt;p>&lt;b>This setting has no influence on the size of the resulting file.&lt;/b></string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="leftMargin" >
+             <number>0</number>
+            </property>
+            <property name="topMargin" >
+             <number>0</number>
+            </property>
+            <property name="rightMargin" >
+             <number>0</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="textLabel1" >
+              <property name="font" >
+               <font>
+                <italic>true</italic>
+               </font>
+              </property>
+              <property name="text" >
+               <string>fast encoding</string>
+              </property>
+              <property name="wordWrap" >
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="textLabel2" >
+              <property name="font" >
+               <font>
+                <italic>true</italic>
+               </font>
+              </property>
+              <property name="text" >
+               <string>high quality</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="wordWrap" >
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="Q3GroupBox" name="groupBox3" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+           <horstretch>0</horstretch>
+           <verstretch>1</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title" >
+          <string>Options</string>
+         </property>
+         <layout class="QVBoxLayout" >
+          <item>
+           <widget class="QCheckBox" name="m_checkCopyright" >
+            <property name="toolTip" >
+             <string>Mark the encoded file as being copyrighted.</string>
+            </property>
+            <property name="text" >
+             <string>Mark copyrighted</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="m_checkOriginal" >
+            <property name="toolTip" >
+             <string>Mark the encoded file as being a copy.</string>
+            </property>
+            <property name="text" >
+             <string>Mark as original</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="m_checkISO" >
+            <property name="toolTip" >
+             <string>Enforce strict ISO compliance</string>
+            </property>
+            <property name="whatsThis" >
+             <string>&lt;p>If this option is checked LAME will enforce the 7680 bit limitation on total frame size.&lt;br>
+This  results  in  many  wasted bits for high bitrate encodings but will ensure strict ISO compatibility. This compatibility might be important for hardware players.</string>
+            </property>
+            <property name="text" >
+             <string>Strict ISO compliance</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="m_checkError" >
+            <property name="toolTip" >
+             <string>Turn on CRC error protection.</string>
+            </property>
+            <property name="whatsThis" >
+             <string>&lt;p>If this option is checked a cyclic redundancy check (CRC) code will be added to each frame, allowing transmission errors that could occur on the MP3 stream to be detected; however, it takes 16 bits per frame that would otherwise be used for encoding, thus slightly reducing the sound quality.</string>
+            </property>
+            <property name="text" >
+             <string>Error protection</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Q3GroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>Qt3Support/Q3GroupBox</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Q3Frame</class>
+   <extends>QFrame</extends>
+   <header>Qt3Support/Q3Frame</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Q3ButtonGroup</class>
+   <extends>Q3GroupBox</extends>
+   <header>Qt3Support/Q3ButtonGroup</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KIntNumInput</class>
+   <extends>QWidget</extends>
+   <header>knuminput.h</header>
+  </customwidget>
+ </customwidgets>
+ <includes/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>m_radioManual</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_buttonManualSettings</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_radioQualityLevel</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_qualityLevelFrame</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_radioQualityLevel</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_labelQualityLevel</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_radioManual</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_labelManualSettings</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

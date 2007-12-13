@@ -1,273 +1,312 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>base_K3bManualBitrateSettingsWidget</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>base_K3bManualBitrateSettingsWidget</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>283</width>
-            <height>298</height>
-        </rect>
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
+<ui version="4.0" >
+ <class>K3bManualBitrateSettingsWidget</class>
+ <widget class="QWidget" name="K3bManualBitrateSettingsWidget" >
+  <layout class="QVBoxLayout" >
+   <item>
+    <widget class="Q3ButtonGroup" name="buttonGroup2" >
+     <property name="title" >
+      <string>Quality</string>
+     </property>
+     <property name="checkable" >
+      <bool>false</bool>
+     </property>
+     <layout class="QVBoxLayout" >
+      <item>
+       <widget class="QRadioButton" name="m_radioConstantBitrate" >
+        <property name="text" >
+         <string>Constant Bitrate</string>
         </property>
-        <widget class="QButtonGroup">
-            <property name="name">
-                <cstring>buttonGroup2</cstring>
-            </property>
-            <property name="title">
-                <string>Quality</string>
-            </property>
-            <property name="checkable">
-                <bool>false</bool>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>m_radioConstantBitrate</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Constant Bitrate</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout3</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <spacer>
-                            <property name="name">
-                                <cstring>spacer2_2</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Fixed</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>20</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                        <widget class="KComboBox">
-                            <property name="name">
-                                <cstring>m_comboConstantBitrate</cstring>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>m_radioVariableBitrate</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Variable Bitrate</string>
-                    </property>
-                </widget>
-                <widget class="QFrame">
-                    <property name="name">
-                        <cstring>frame5</cstring>
-                    </property>
-                    <property name="enabled">
-                        <bool>false</bool>
-                    </property>
-                    <property name="frameShape">
-                        <enum>NoFrame</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Plain</enum>
-                    </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <property name="margin">
-                            <number>0</number>
-                        </property>
-                        <widget class="KComboBox" row="2" column="2">
-                            <property name="name">
-                                <cstring>m_comboMinimumBitrate</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                        </widget>
-                        <spacer row="0" column="0" rowspan="3" colspan="1">
-                            <property name="name">
-                                <cstring>spacer2</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Fixed</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>20</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                        <widget class="KComboBox" row="0" column="2">
-                            <property name="name">
-                                <cstring>m_comboMaximumBitrate</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                        </widget>
-                        <widget class="QCheckBox" row="0" column="1">
-                            <property name="name">
-                                <cstring>m_checkBitrateMaximum</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Maximum bitrate:</string>
-                            </property>
-                        </widget>
-                        <widget class="QCheckBox" row="2" column="1">
-                            <property name="name">
-                                <cstring>m_checkBitrateMinimum</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Minimum bitrate:</string>
-                            </property>
-                        </widget>
-                        <widget class="QCheckBox" row="1" column="1">
-                            <property name="name">
-                                <cstring>m_checkBitrateAverage</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>1</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>1</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>Average bitrate:</string>
-                            </property>
-                        </widget>
-                        <widget class="QSpinBox" row="1" column="2">
-                            <property name="name">
-                                <cstring>m_spinAverageBitrate</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="suffix">
-                                <string> kbps</string>
-                            </property>
-                            <property name="buttonSymbols">
-                                <enum>UpDownArrows</enum>
-                            </property>
-                            <property name="maxValue">
-                                <number>310</number>
-                            </property>
-                            <property name="minValue">
-                                <number>8</number>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
-            </vbox>
-        </widget>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>groupBox2</cstring>
-            </property>
-            <property name="title">
-                <string>Channel Mode</string>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="KComboBox">
-                    <item>
-                        <property name="text">
-                            <string>Stereo</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Joint Stereo</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Mono</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>m_comboMode</cstring>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Select the channel mode.</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;Select the channel mode of the resulting Mp3 file:
-&lt;p&gt;&lt;b&gt;Stereo&lt;/b&gt;&lt;br&gt;
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" >
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType" >
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="KComboBox" name="m_comboConstantBitrate" />
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="m_radioVariableBitrate" >
+        <property name="text" >
+         <string>Variable Bitrate</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Q3Frame" name="frame5" >
+        <property name="enabled" >
+         <bool>false</bool>
+        </property>
+        <property name="frameShape" >
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow" >
+         <enum>QFrame::Plain</enum>
+        </property>
+        <layout class="QGridLayout" >
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
+         </property>
+         <item row="2" column="2" >
+          <widget class="KComboBox" name="m_comboMinimumBitrate" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item rowspan="3" row="0" column="0" >
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType" >
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="0" column="2" >
+          <widget class="KComboBox" name="m_comboMaximumBitrate" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" >
+          <widget class="QCheckBox" name="m_checkBitrateMaximum" >
+           <property name="text" >
+            <string>Maximum bitrate:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1" >
+          <widget class="QCheckBox" name="m_checkBitrateMinimum" >
+           <property name="text" >
+            <string>Minimum bitrate:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1" >
+          <widget class="QCheckBox" name="m_checkBitrateAverage" >
+           <property name="sizePolicy" >
+            <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+             <horstretch>1</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text" >
+            <string>Average bitrate:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2" >
+          <widget class="QSpinBox" name="m_spinAverageBitrate" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="buttonSymbols" >
+            <enum>QAbstractSpinBox::UpDownArrows</enum>
+           </property>
+           <property name="suffix" >
+            <string> kbps</string>
+           </property>
+           <property name="minimum" >
+            <number>8</number>
+           </property>
+           <property name="maximum" >
+            <number>310</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="Q3GroupBox" name="groupBox2" >
+     <property name="title" >
+      <string>Channel Mode</string>
+     </property>
+     <layout class="QHBoxLayout" >
+      <item>
+       <widget class="KComboBox" name="m_comboMode" >
+        <property name="toolTip" >
+         <string>Select the channel mode.</string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;p>Select the channel mode of the resulting Mp3 file:
+&lt;p>&lt;b>Stereo&lt;/b>&lt;br>
 In this mode, the encoder makes no use of potential correlations between the two input channels; it can, however, negotiate the bit demand between both channel, i.e. give one channel more bits if the other contains silence or needs fewer bits because of a lower complexity.
-&lt;p&gt;&lt;b&gt;Joint-Stereo&lt;/b&gt;&lt;br&gt;
+&lt;p>&lt;b>Joint-Stereo&lt;/b>&lt;br>
 In this mode, the encoder will make use of correlations between both channels. The signal will be matrixed into a sum ("mid"), computed by L+R, and difference ("side") signal, computed by L-R, and more bits are allocated to the mid channel. This will effectively increase the bandwidth if the signal does not have too much stereo separation, thus giving a significant gain in encoding quality.
-&lt;p&gt;&lt;b&gt;Mono&lt;/b&gt;&lt;br&gt;
+&lt;p>&lt;b>Mono&lt;/b>&lt;br>
 The input will be encoded as a mono signal. If it was a stereo signal, it will be downsampled to mono. The downmix is calculated as the sum of the left and right channel, attenuated by 6 dB.</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-    </vbox>
-</widget>
-<connections>
-    <connection>
-        <sender>m_radioVariableBitrate</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>frame5</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>m_radioConstantBitrate</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_comboConstantBitrate</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>m_checkBitrateMaximum</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_comboMaximumBitrate</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>m_checkBitrateAverage</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_spinAverageBitrate</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>m_checkBitrateMinimum</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>m_comboMinimumBitrate</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-</connections>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+        </property>
+        <item>
+         <property name="text" >
+          <string>Stereo</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Joint Stereo</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Mono</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>Q3GroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>Qt3Support/Q3GroupBox</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Q3Frame</class>
+   <extends>QFrame</extends>
+   <header>Qt3Support/Q3Frame</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Q3ButtonGroup</class>
+   <extends>Q3GroupBox</extends>
+   <header>Qt3Support/Q3ButtonGroup</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>m_radioVariableBitrate</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame5</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_radioConstantBitrate</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_comboConstantBitrate</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_checkBitrateMaximum</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_comboMaximumBitrate</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_checkBitrateAverage</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_spinAverageBitrate</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_checkBitrateMinimum</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_comboMinimumBitrate</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
