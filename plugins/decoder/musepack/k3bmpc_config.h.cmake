@@ -1,0 +1,1 @@
+#define MPC_HEADER_FILE ${MPC_HEADER_FILE}

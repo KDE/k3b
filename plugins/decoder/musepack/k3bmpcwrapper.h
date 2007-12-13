@@ -16,9 +16,7 @@
 #ifndef _K3B_MPC_WRAPPER_H_
 #define _K3B_MPC_WRAPPER_H_
 
-#ifdef HAVE_CONFIG_H
-#include <config-k3b.h>
-#endif
+#include <k3bmpc_config.h>
 
 #include <qstring.h>
 

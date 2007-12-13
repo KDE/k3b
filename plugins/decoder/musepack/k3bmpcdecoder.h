@@ -33,8 +33,7 @@ class K3bMpcDecoderFactory : public K3bAudioDecoderFactory
 
   int pluginSystemVersion() const { return 3; }
 
-  K3bAudioDecoder* createDecoder( QObject* parent = 0, 
-				   ) const;
+  K3bAudioDecoder* createDecoder( QObject* parent = 0 ) const;
 };
 
 

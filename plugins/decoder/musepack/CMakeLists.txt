@@ -1,5 +1,13 @@
 
+include_directories(
+  ${CMAKE_CURRENT_BINARY_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${MUSE_INCLUDE_DIR}
+)
+
 set(k3bmpcdecoder_PART_SRCS k3bmpcdecoder.cpp k3bmpcwrapper.cpp )
+
+configure_file(k3bmpc_config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/k3bmpc_config.h)
 
 kde4_add_plugin(k3bmpcdecoder WITH_PREFIX ${k3bmpcdecoder_PART_SRCS})
 
