@@ -270,7 +270,7 @@ void K3bMixedJob::startFirstCopy()
   else {
     emit burning(false);
 
-    emit infoMessage( i18n("Creating audio image files in %1").arg(m_doc->tempDir()), INFO );
+    emit infoMessage( i18n("Creating audio image files in %1",m_doc->tempDir()), INFO );
 
     m_tempFilePrefix = K3b::findUniqueFilePrefix( ( !m_doc->audioDoc()->title().isEmpty()
 						    ? m_doc->audioDoc()->title()
@@ -618,10 +618,10 @@ void K3bMixedJob::slotAudioDecoderNextTrack( int t, int tt )
 {
   if( m_doc->onlyCreateImages() || !m_doc->onTheFly() ) {
     K3bAudioTrack* track = m_doc->audioDoc()->getTrack(t);
-    emit newSubTask( i18n("Decoding audio track %1 of %2%3")
-		     .arg(t)
-		     .arg(tt)
-		     .arg( track->title().isEmpty() || track->artist().isEmpty()
+    emit newSubTask( i18n("Decoding audio track %1 of %2%3"
+		     ,t
+		     ,tt
+		     , track->title().isEmpty() || track->artist().isEmpty()
 			   ? QString::null
 			   : " (" + track->artist() + " - " + track->title() + ")" ) );
   }
@@ -882,14 +882,14 @@ void K3bMixedJob::slotWriterNextTrack( int t, int )
     t = m_doc->numOfTracks();
 
   if( track )
-    emit newSubTask( i18n("Writing track %1 of %2%3")
-		     .arg(t)
-		     .arg(m_doc->numOfTracks())
-		     .arg( track->title().isEmpty() || track->artist().isEmpty()
+    emit newSubTask( i18n("Writing track %1 of %2%3"
+		     ,t
+		     ,m_doc->numOfTracks()
+		     , track->title().isEmpty() || track->artist().isEmpty()
 			   ? QString::null
 			   : " (" + track->artist() + " - " + track->title() + ")" ) );
   else
-    emit newSubTask( i18n("Writing track %1 of %2 (%3)").arg(t).arg(m_doc->numOfTracks()).arg(i18n("ISO9660 data")) );
+    emit newSubTask( i18n("Writing track %1 of %2 (%3)",t,m_doc->numOfTracks(),i18n("ISO9660 data")) );
 }
 
 
@@ -997,7 +997,7 @@ bool K3bMixedJob::startWriting()
       if( m_doc->dummy() )
 	emit newTask( i18n("Simulating second session") );
       else if( d->copies > 1 )
-	emit newTask( i18n("Writing second session of copy %1").arg(d->copiesDone+1) );
+	emit newTask( i18n("Writing second session of copy %1",d->copiesDone+1) );
       else
 	emit newTask( i18n("Writing second session") );
     }
@@ -1005,7 +1005,7 @@ bool K3bMixedJob::startWriting()
       if( m_doc->dummy() )
 	emit newTask( i18n("Simulating first session") );
       else if( d->copies > 1 )
-	emit newTask( i18n("Writing first session of copy %1").arg(d->copiesDone+1) );
+	emit newTask( i18n("Writing first session of copy %1",d->copiesDone+1) );
       else
 	emit newTask( i18n("Writing first session") );
     }
@@ -1013,7 +1013,7 @@ bool K3bMixedJob::startWriting()
   else if( m_doc->dummy() )
     emit newTask( i18n("Simulating") );
   else
-    emit newTask( i18n("Writing Copy %1").arg(d->copiesDone+1) );
+    emit newTask( i18n("Writing Copy %1",d->copiesDone+1) );
 
 
   // if we append the second session the cd is already in the drive
@@ -1078,8 +1078,8 @@ void K3bMixedJob::createIsoImage()
 
   if( !m_doc->onTheFly() )
     emit newTask( i18n("Creating ISO image file") );
-  emit newSubTask( i18n("Creating ISO image in %1").arg(m_isoImageFilePath) );
-  emit infoMessage( i18n("Creating ISO image in %1").arg(m_isoImageFilePath), INFO );
+  emit newSubTask( i18n("Creating ISO image in %1",m_isoImageFilePath) );
+  emit infoMessage( i18n("Creating ISO image in %1",m_isoImageFilePath), INFO );
 
   m_isoImager->writeToImageFile( m_isoImageFilePath );
   m_isoImager->start();
@@ -1094,7 +1094,7 @@ void K3bMixedJob::cleanupAfterError()
   if( m_writer )
     m_writer->cancel();
 
-  if( m_tocFile ) delete m_tocFile;
+  delete m_tocFile;
   m_tocFile = 0;
 
   // remove the temp files
@@ -1110,7 +1110,7 @@ void K3bMixedJob::removeBufferFiles()
 
     if( QFile::exists( m_isoImageFilePath ) )
         if( !QFile::remove( m_isoImageFilePath ) )
-            emit infoMessage( i18n("Could not delete file %1.").arg(m_isoImageFilePath), ERROR );
+            emit infoMessage( i18n("Could not delete file %1.",m_isoImageFilePath), ERROR );
 
     // removes buffer images and temp toc or inf files
     m_tempData->cleanup();
@@ -1221,7 +1221,7 @@ void K3bMixedJob::determineWritingMode()
     if( m_doc->audioDoc()->cdText() ) {
       if( !cdrecordCdText ) {
 	m_doc->audioDoc()->writeCdText( false );
-	emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.").arg(k3bcore->externalBinManager()->binObject("cdrecord")->version), ERROR );
+	emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.",k3bcore->externalBinManager()->binObject("cdrecord")->version), ERROR );
       }
       else if( m_usedAudioWritingMode == K3b::TAO ) {
 	emit infoMessage( i18n("It is not possible to write CD-Text in TAO mode. Try DAO or RAW."), WARNING );
@@ -1335,10 +1335,10 @@ QString K3bMixedJob::jobDescription() const
 
 QString K3bMixedJob::jobDetails() const
 {
-  return ( i18n("%1 tracks (%2 minutes audio data, %3 ISO9660 data)")
-	   .arg(m_doc->numOfTracks())
-	   .arg(m_doc->audioDoc()->length().toString())
-	   .arg(KIO::convertSize(m_doc->dataDoc()->size()))
+  return ( i18n("%1 tracks (%2 minutes audio data, %3 ISO9660 data)"
+	   ,m_doc->numOfTracks()
+	   ,m_doc->audioDoc()->length().toString()
+	   ,KIO::convertSize(m_doc->dataDoc()->size()))
 	   + ( m_doc->copies() > 1 && !m_doc->dummy()
 	       ? i18np(" - %n copy", " - %n copies", m_doc->copies())
 	       : QString::null ) );

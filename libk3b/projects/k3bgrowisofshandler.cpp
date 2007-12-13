@@ -273,7 +273,7 @@ void K3bGrowisofsHandler::handleExit( int exitCode )
       // for now we just emit a message with the error
       // in the future when I know more about what kinds of errors may occur
       // we will enhance this
-      emit infoMessage( i18n("Fatal error at startup: %1").arg(strerror(exitCode-128)), 
+      emit infoMessage( i18n("Fatal error at startup: %1",strerror(exitCode-128)), 
 			K3bJob::ERROR );
     }
     else if( exitCode == 1 ) {

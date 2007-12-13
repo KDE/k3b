@@ -52,7 +52,7 @@ void K3bMsInfoFetcher::start()
 
   if( !k3bcore->externalBinManager()->foundBin( "cdrecord" ) ) {
     kDebug() << "(K3bMsInfoFetcher) could not find cdrecord executable";
-    emit infoMessage( i18n("Could not find %1 executable.").arg("cdrecord"), K3bJob::ERROR );
+    emit infoMessage( i18n("Could not find %1 executable.",QString("cdrecord")), K3bJob::ERROR );
     jobFinished(false);
     return;
   }
@@ -88,7 +88,7 @@ void K3bMsInfoFetcher::getMsInfo()
     bin = k3bcore->externalBinManager()->binObject( "cdrecord" );
 
     if( !bin ) {
-      emit infoMessage( i18n("Could not find %1 executable.").arg( m_dvd ? "dvdrecord" : "cdrecord" ), ERROR );
+      emit infoMessage( i18n("Could not find %1 executable.", m_dvd ? QString("dvdrecord") : QString("cdrecord" )), ERROR );
       jobFinished(false);
       return;
     }
@@ -127,7 +127,7 @@ void K3bMsInfoFetcher::getMsInfo()
     m_canceled = false;
 
     if( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) {
-      emit infoMessage( i18n("Could not start %1.").arg(bin->name()), K3bJob::ERROR );
+      emit infoMessage( i18n("Could not start %1.",bin->name()), K3bJob::ERROR );
       jobFinished(false);
     }
   }
@@ -159,8 +159,8 @@ void K3bMsInfoFetcher::slotMediaDetectionFinished( K3bDevice::DeviceHandler* h )
 	jobFinished( true );
       }
       else {
-	emit infoMessage( i18n("Could not open Iso9660 filesystem in %1.")
-			  .arg( m_device->vendor() + " " + m_device->description() ), ERROR );
+	emit infoMessage( i18n("Could not open Iso9660 filesystem in %1.",
+			  m_device->vendor() + " " + m_device->description() ), ERROR );
 	jobFinished( false );
       }
     }
