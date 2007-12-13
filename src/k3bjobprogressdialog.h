@@ -154,7 +154,11 @@ class K3bJobProgressDialog : public KDialog, public K3bJobHandler
 
   Q3GridLayout* m_frameExtraInfoLayout;
 
+ signals:
+    void leaveModality();
+
  private:
+  void enterLoop();
   class Private;
   Private* d;
 

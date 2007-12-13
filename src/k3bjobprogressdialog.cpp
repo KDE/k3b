@@ -639,9 +639,9 @@ int K3bJobProgressDialog::startJob( K3bJob* job )
   m_job->start();
 
   in_loop = true;
+  enterLoop();
   //FIXME kde4
 #if 0
-  QApplication::eventLoop()->enterLoop();
 
   if ( !wasShowModal )
     clearWFlags( WShowModal );
@@ -657,6 +657,14 @@ int K3bJobProgressDialog::startJob( K3bJob* job )
 }
 
 
+void K3bJobProgressDialog::enterLoop()
+{
+    QEventLoop eventLoop;
+    connect(this, SIGNAL(leaveModality()),
+        &eventLoop, SLOT(quit()));
+    eventLoop.exec(QEventLoop::ExcludeUserInputEvents);
+}
+
 void K3bJobProgressDialog::hide()
 {
   // we need to reimplement this since
@@ -669,8 +677,7 @@ void K3bJobProgressDialog::hide()
 
   if ( in_loop ) {
     in_loop = FALSE;
-//FIXME kde4
-//    QApplication::eventLoop()->exitLoop();
+    emit leaveModality();
   }
 }
 

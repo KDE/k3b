@@ -232,16 +232,20 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
   // the loop only causes problems (since there is no dialog yet the user could
   // not have forced or canceled yet
   //
-  //FIXME kde4
-#if 0
   if( !d->waitingDone ) {
     d->inLoop = true;
-    QApplication::eventLoop()->enterLoop();
+    enterLoop();
   }
-#endif
   return d->result;
 }
 
+void K3bEmptyDiscWaiter::enterLoop()
+{
+    QEventLoop eventLoop;
+    connect(this, SIGNAL(leaveModality()),
+        &eventLoop, SLOT(quit()));
+    eventLoop.exec(QEventLoop::ExcludeUserInputEvents);
+}
 
 int K3bEmptyDiscWaiter::exec()
 {
@@ -712,8 +716,7 @@ void K3bEmptyDiscWaiter::finishWaiting( int code )
   if( d->inLoop ) {
     d->inLoop = false;
     kDebug() << "(K3bEmptyDiscWaiter) exitLoop ";
-//FIXME kde4
-    //QApplication::eventLoop()->exitLoop();
+    emit leaveModality();
   }
 }
 

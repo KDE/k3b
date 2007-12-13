@@ -125,7 +125,11 @@ class K3bEmptyDiscWaiter : public KDialog, public K3bJobHandler
    */
   void closeEvent( QCloseEvent* ) {}
 
+ signals:
+    void leaveModality();
+
  private:
+  void enterLoop();
   void finishWaiting( int );
   void prepareErasingDialog();
 
