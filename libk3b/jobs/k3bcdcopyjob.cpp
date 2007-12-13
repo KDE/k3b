@@ -313,7 +313,7 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
       unsigned long avail, size;
       QString pathToTest = m_tempPath.left( m_tempPath.findRev( '/' ) );
       if( !K3b::kbFreeOnFs( pathToTest, size, avail ) ) {
-	emit infoMessage( i18n("Unable to determine free space in temporary directory '%1'.").arg(pathToTest), ERROR );
+	emit infoMessage( i18n("Unable to determine free space in temporary directory '%1'.",pathToTest), ERROR );
 	d->error = true;
 	canCopy = false;
       }
@@ -379,7 +379,7 @@ void K3bCdCopyJob::slotCdTextReady( K3bDevice::DeviceHandler* dh )
   if( dh->success() ) {
     if( K3bDevice::CdText::checkCrc( dh->cdTextRaw() ) ) {
       K3bDevice::CdText cdt( dh->cdTextRaw() );
-      emit infoMessage( i18n("Found CD-TEXT (%1 - %2).").arg(cdt.performer()).arg(cdt.title()), SUCCESS );
+      emit infoMessage( i18n("Found CD-TEXT (%1 - %2).",cdt.performer(),cdt.title()), SUCCESS );
       d->haveCdText = true;
       d->cdTextRaw = dh->cdTextRaw();
     }
@@ -431,7 +431,7 @@ void K3bCdCopyJob::slotCddbQueryFinished( int error )
 //     d->cddbInfo = d->cddb->result();
 //     d->haveCddb = true;
 
-//     emit infoMessage( i18n("Found Cddb entry (%1 - %2).").arg(d->cddbInfo.cdArtist).arg(d->cddbInfo.cdTitle), SUCCESS );
+//     emit infoMessage( i18n("Found Cddb entry (%1 - %2).",d->cddbInfo.cdArtist,d->cddbInfo.cdTitle), SUCCESS );
 
     // save the entry locally
 //     KConfig* c = k3bcore->config();
@@ -443,7 +443,7 @@ void K3bCdCopyJob::slotCddbQueryFinished( int error )
 //     emit infoMessage( i18n("No Cddb entry found."), WARNING );
 //   }
 //   else {
-//     emit infoMessage( i18n("Cddb error (%1).").arg(d->cddb->errorString()), ERROR );
+//     emit infoMessage( i18n("Cddb error (%1).",d->cddb->errorString()), ERROR );
 //   }
 
   startCopy();
@@ -457,9 +457,9 @@ void K3bCdCopyJob::startCopy()
 
   if ( d->haveCdText && d->haveCddb ) {
       K3bDevice::CdText cdt( d->cdTextRaw );
-      if ( !questionYesNo( i18n( "Found CD-TEXT (%1 - %2) and Cddb (%3 - %4) entries. Which one should be used to generate the CD-TEXT on the new CD?" )
-                          .arg(cdt.performer()).arg(cdt.title())
-                          .arg(d->cddbInfo.cdArtist).arg(d->cddbInfo.cdTitle),
+      if ( !questionYesNo( i18n( "Found CD-TEXT (%1 - %2) and Cddb (%3 - %4) entries. Which one should be used to generate the CD-TEXT on the new CD?" 
+                          ,cdt.performer(),cdt.title()
+                          ,d->cddbInfo.cdArtist,d->cddbInfo.cdTitle),
                           i18n( "CD-TEXT" ),
                           i18n( "Use CD-TEXT data" ),
                           i18n( "Use Cddb entry" ) ) ) {
@@ -538,14 +538,14 @@ bool K3bCdCopyJob::prepareImageFiles()
       m_tempPath = K3b::findUniqueFilePrefix( "k3bCdCopy", m_tempPath );
       kDebug() << "(K3bCdCopyJob) creating temp dir: " << m_tempPath;
       if( !dir.mkdir( m_tempPath, true ) ) {
-	emit infoMessage( i18n("Unable to create temporary directory '%1'.").arg(m_tempPath), ERROR );
+	emit infoMessage( i18n("Unable to create temporary directory '%1'.",m_tempPath), ERROR );
 	return false;
       }
       d->deleteTempDir = true;
     }
 
     m_tempPath = K3b::prepareDir( m_tempPath );
-    emit infoMessage( i18n("Using temporary directory %1.").arg(m_tempPath), INFO );
+    emit infoMessage( i18n("Using temporary directory %1.",m_tempPath), INFO );
 
     // create temp filenames
     int i = 1;
@@ -568,7 +568,7 @@ bool K3bCdCopyJob::prepareImageFiles()
   else {
     // we only need a single image file
     if( !fi.isFile() ||
-	questionYesNo( i18n("Do you want to overwrite %1?").arg(m_tempPath),
+	questionYesNo( i18n("Do you want to overwrite %1?",m_tempPath),
 		       i18n("File Exists") ) ) {
       if( fi.isDir() )
 	m_tempPath = K3b::findTempFile( "iso", m_tempPath );
@@ -578,7 +578,7 @@ bool K3bCdCopyJob::prepareImageFiles()
       }
       // else the user specified a file in an existing dir
 
-      emit infoMessage( i18n("Writing image file to %1.").arg(m_tempPath), INFO );
+      emit infoMessage( i18n("Writing image file to %1.",m_tempPath), INFO );
     }
     else
       return false;
@@ -594,12 +594,12 @@ void K3bCdCopyJob::readNextSession()
 {
   if( !m_onTheFly || m_onlyCreateImages ) {
     if( d->numSessions > 1 )
-      emit newTask( i18n("Reading Session %1").arg(d->currentReadSession) );
+      emit newTask( i18n("Reading Session %1",d->currentReadSession) );
     else
       emit newTask( i18n("Reading Source Medium") );
 
     if( d->currentReadSession == 1 )
-      emit newSubTask( i18n("Reading track %1 of %2").arg(1).arg(d->toc.count()) );
+      emit newSubTask( i18n("Reading track %1 of %2",QString::number(1),d->toc.count()) );
   }
 
   // there is only one situation where we need the audiosessionreader:
@@ -691,17 +691,17 @@ bool K3bCdCopyJob::writeNextSession()
   // we emit our own task since the cdrecord task is way too simple
   if( d->numSessions > 1 ) {
     if( m_simulate )
-      emit newTask( i18n("Simulating Session %1").arg(d->currentWrittenSession) );
+      emit newTask( i18n("Simulating Session %1",d->currentWrittenSession) );
     else if( m_copies > 1 )
-      emit newTask( i18n("Writing Copy %1 (Session %2)").arg(d->doneCopies+1).arg(d->currentWrittenSession) );
+      emit newTask( i18n("Writing Copy %1 (Session %2)",d->doneCopies+1,d->currentWrittenSession) );
     else
-      emit newTask( i18n("Writing Copy (Session %2)").arg(d->currentWrittenSession) );
+      emit newTask( i18n("Writing Copy (Session %2)",d->currentWrittenSession) );
   }
   else {
     if( m_simulate )
       emit newTask( i18n("Simulating") );
     else if( m_copies > 1 )
-      emit newTask( i18n("Writing Copy %1").arg(d->doneCopies+1) );
+      emit newTask( i18n("Writing Copy %1",d->doneCopies+1) );
     else
       emit newTask( i18n("Writing Copy") );
   }
@@ -969,7 +969,7 @@ void K3bCdCopyJob::slotSessionReaderFinished( bool success )
 
   if( success ) {
     if( d->numSessions > 1 )
-      emit infoMessage( i18n("Successfully read session %1.").arg(d->currentReadSession), SUCCESS );
+      emit infoMessage( i18n("Successfully read session %1.",d->currentReadSession), SUCCESS );
     else
       emit infoMessage( i18n("Successfully read source disk."), SUCCESS );
 
@@ -1003,7 +1003,7 @@ void K3bCdCopyJob::slotSessionReaderFinished( bool success )
   }
   else {
     if( !d->canceled ) {
-      emit infoMessage( i18n("Error while reading session %1.").arg(d->currentReadSession), ERROR );
+      emit infoMessage( i18n("Error while reading session %1.",d->currentReadSession), ERROR );
       if( m_onTheFly )
 	d->cdrecordWriter->setSourceUnreadable(true);
     }
@@ -1168,14 +1168,14 @@ void K3bCdCopyJob::slotWritingNextTrack( int t, int tt )
 {
   if( d->toc.contentType() == K3bDevice::MIXED ) {
     if( d->currentWrittenSession == 1 )
-      emit newSubTask( i18n("Writing track %1 of %2").arg(t).arg(d->toc.count()) );
+      emit newSubTask( i18n("Writing track %1 of %2",t,d->toc.count()) );
     else
-      emit newSubTask( i18n("Writing track %1 of %2").arg(d->toc.count()).arg(d->toc.count()) );
+      emit newSubTask( i18n("Writing track %1 of %2",d->toc.count(),d->toc.count()) );
   }
   else if( d->numSessions > 1 )
-    emit newSubTask( i18n("Writing track %1 of %2").arg(d->currentWrittenSession).arg(d->toc.count()) );
+    emit newSubTask( i18n("Writing track %1 of %2",d->currentWrittenSession,d->toc.count()) );
   else
-    emit newSubTask( i18n("Writing track %1 of %2").arg(t).arg(tt) );
+    emit newSubTask( i18n("Writing track %1 of %2",t,tt) );
 }
 
 
@@ -1190,7 +1190,7 @@ void K3bCdCopyJob::slotReadingNextTrack( int t, int )
     else
       track = d->currentReadSession;
 
-    emit newSubTask( i18n("Reading track %1 of %2").arg(track).arg(d->toc.count()) );
+    emit newSubTask( i18n("Reading track %1 of %2",track,d->toc.count()) );
   }
 }
 

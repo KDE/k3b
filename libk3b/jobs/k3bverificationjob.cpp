@@ -228,7 +228,7 @@ void K3bVerificationJob::readTrack( int trackIndex )
     return;
   }
 
-  emit newTask( i18n("Verifying track %1").arg( d->tracks[trackIndex].trackNumber ) );
+  emit newTask( i18n("Verifying track %1", d->tracks[trackIndex].trackNumber ) );
 
   K3bDevice::Track& track = d->toc[d->tracks[trackIndex].trackNumber-1];
 
@@ -298,7 +298,7 @@ void K3bVerificationJob::slotMd5JobFinished( bool success )
   if( success && !d->canceled && d->readSuccessful ) {
     // compare the two sums
     if( d->tracks[d->currentTrackIndex].checksum != d->md5Job->hexDigest() ) {
-      emit infoMessage( i18n("Written data in track %1 differs from original.").arg(d->tracks[d->currentTrackIndex].trackNumber), ERROR );
+      emit infoMessage( i18n("Written data in track %1 differs from original.",d->tracks[d->currentTrackIndex].trackNumber), ERROR );
       jobFinished(false);
     }
     else {

@@ -81,7 +81,7 @@ void K3bCddbHttpQuery::performCommand( const QString& cmd )
 
   if( !job ) {
     setError( CONNECTION_ERROR );
-    emit infoMessage( i18n("Could not connect to host %1").arg(m_server) );
+    emit infoMessage( i18n("Could not connect to host %1",m_server) );
     emitQueryFinished();
     return;
   }

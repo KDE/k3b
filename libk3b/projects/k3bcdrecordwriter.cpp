@@ -228,7 +228,7 @@ void K3bCdrecordWriter::prepareProcess()
           *m_process << "-tao";
   }
   else {
-      emit infoMessage( i18n( "Cdrecord does not support writing %1 media." ).arg( K3bDevice::mediaTypeString( d->burnedMediaType ) ), ERROR );
+      emit infoMessage( i18n( "Cdrecord does not support writing %1 media." , K3bDevice::mediaTypeString( d->burnedMediaType ) ), ERROR );
       // FIXME: add a way to fail the whole thing here
   }
 
@@ -750,7 +750,7 @@ void K3bCdrecordWriter::slotProcessExited( K3Process* p )
 	emit infoMessage( i18n("OPC failed. Probably the writer does not like the medium."), ERROR );
 	break;
       case CANNOT_SET_SPEED:
-	emit infoMessage( i18n("Unable to set write speed to %1.").arg(d->usedSpeed), ERROR );
+	emit infoMessage( i18n("Unable to set write speed to %1.",d->usedSpeed), ERROR );
 	emit infoMessage( i18n("Probably this is lower than your writer's lowest writing speed."), ERROR );
 	break;
       case CANNOT_SEND_CUE_SHEET:

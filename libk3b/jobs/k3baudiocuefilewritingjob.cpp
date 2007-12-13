@@ -251,19 +251,19 @@ void K3bAudioCueFileWritingJob::importCueInProject()
 
       // now analyze the source
       emit newTask( i18n("Analysing the audio file") );
-      emit newSubTask( i18n("Analysing %1").arg( parser.imageFilename() ) );
+      emit newSubTask( i18n("Analysing %1", parser.imageFilename() ) );
 
       // start the analyser thread
       m_analyserThread->setDecoder( m_decoder );
       m_analyserJob->start();
     }
     else {
-      emit infoMessage( i18n("Unable to handle '%1' due to an unsupported format.").arg( m_cueFile ), ERROR );
+      emit infoMessage( i18n("Unable to handle '%1' due to an unsupported format.", m_cueFile ), ERROR );
       jobFinished(false);
     }
   }
   else {
-    emit infoMessage( i18n("No valid audio cue file: '%1'").arg( m_cueFile ), ERROR );
+    emit infoMessage( i18n("No valid audio cue file: '%1'", m_cueFile ), ERROR );
     jobFinished(false);
   }
 }

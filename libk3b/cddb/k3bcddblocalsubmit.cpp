@@ -93,7 +93,7 @@ void K3bCddbLocalSubmit::doSubmit()
   else {
     kDebug() << "(K3bCddbLocalSubmit) could not find directory: " << path;
     setError( IO_ERROR );
-    emit infoMessage( i18n("Could not find directory: %1").arg(path) );
+    emit infoMessage( i18n("Could not find directory: %1",path) );
     emit submitFinished( this );
   }
 }

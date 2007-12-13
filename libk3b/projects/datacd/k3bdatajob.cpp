@@ -205,7 +205,7 @@ void K3bDataJob::writeImage()
 
   emit newTask( i18n("Creating image file") );
   emit newSubTask( i18n("Track 1 of 1") );
-  emit infoMessage( i18n("Creating image file in %1").arg(d->doc->tempDir()), INFO );
+  emit infoMessage( i18n("Creating image file in %1",d->doc->tempDir()), INFO );
 
   m_isoImager->writeToImageFile( d->doc->tempDir() );
   m_isoImager->start();
@@ -303,7 +303,7 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
 	d->doc->onlyCreateImages() ) {
 
       if( success ) {
-	emit infoMessage( i18n("Image successfully created in %1").arg(d->doc->tempDir()), K3bJob::SUCCESS );
+	emit infoMessage( i18n("Image successfully created in %1",d->doc->tempDir()), K3bJob::SUCCESS );
 	d->imageFinished = true;
 
 	if( d->doc->onlyCreateImages() ) {
@@ -349,7 +349,7 @@ bool K3bDataJob::startWriterJob()
   if( d->doc->dummy() )
     emit newTask( i18n("Simulating") );
   else if( d->copies > 1 )
-    emit newTask( i18n("Writing Copy %1").arg(d->copiesDone+1) );
+    emit newTask( i18n("Writing Copy %1",d->copiesDone+1) );
   else
     emit newTask( i18n("Writing") );
 
@@ -378,7 +378,7 @@ void K3bDataJob::slotWriterJobPercent( int p )
 
 void K3bDataJob::slotWriterNextTrack( int t, int tt )
 {
-  emit newSubTask( i18n("Writing Track %1 of %2").arg(t).arg(tt) );
+  emit newSubTask( i18n("Writing Track %1 of %2",t,tt) );
 }
 
 
@@ -650,7 +650,7 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
     // CD-R(W)
     // -------------------------------
     if ( foundMedium & K3bDevice::MEDIA_CD_ALL ) {
-        emit infoMessage( i18n( "Writing %1" ).arg( K3bDevice::mediaTypeString( foundMedium ) ), INFO );
+        emit infoMessage( i18n( "Writing %1" , K3bDevice::mediaTypeString( foundMedium ) ), INFO );
 
         // first of all we determine the data mode
         if( d->doc->dataMode() == K3b::DATA_MODE_AUTO ) {
@@ -704,7 +704,7 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
 
 
         if ( writingApp() == K3b::GROWISOFS ) {
-            emit infoMessage( i18n( "Cannot write %1 media using %2. Falling back to default application." ).arg( "CD" ).arg( "growisofs" ), WARNING );
+            emit infoMessage( i18n( "Cannot write %1 media using %2. Falling back to default application." , QString("CD") , QString("growisofs") ), WARNING );
             setWritingApp( K3b::DEFAULT );
         }
         // cdrecord seems to have problems writing xa 1 disks in dao mode? At least on my system!
@@ -818,7 +818,7 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
 
                 if( d->doc->writingMode() == K3b::DAO ) {
                     d->usedWritingMode = K3b::DAO;
-                    emit infoMessage( i18n("Writing %1 in DAO mode.").arg( K3bDevice::mediaTypeString(foundMedium, true) ), INFO );
+                    emit infoMessage( i18n("Writing %1 in DAO mode.", K3bDevice::mediaTypeString(foundMedium, true) ), INFO );
                 }
 
                 else {
@@ -835,7 +835,7 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
                         }
                         else {
                             d->usedWritingMode = K3b::DAO;
-                            emit infoMessage( i18n("Writing %1 in DAO mode.").arg( K3bDevice::mediaTypeString(foundMedium, true) ), INFO );
+                            emit infoMessage( i18n("Writing %1 in DAO mode.", K3bDevice::mediaTypeString(foundMedium, true) ), INFO );
                         }
                     }
                     else {
@@ -844,7 +844,7 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
                             d->doc->writingMode() == K3b::WRITING_MODE_RES_OVWR )
                             emit infoMessage( i18n("Restricted Overwrite is not possible with DVD-R media."), INFO );
 
-                        emit infoMessage( i18n("Writing %1 in incremental mode.").arg( K3bDevice::mediaTypeString(foundMedium, true) ), INFO );
+                        emit infoMessage( i18n("Writing %1 in incremental mode.", K3bDevice::mediaTypeString(foundMedium, true) ), INFO );
                     }
                 }
             }
@@ -869,7 +869,7 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
         }
 
         // FIXME: what do we need to take care of with BD media?
-        emit infoMessage( i18n( "Writing %1" ).arg( K3bDevice::mediaTypeString( foundMedium, true ) ), INFO );
+        emit infoMessage( i18n( "Writing %1" , K3bDevice::mediaTypeString( foundMedium, true ) ), INFO );
     }
 
     return true;
@@ -924,7 +924,7 @@ void K3bDataJob::cleanup()
     if( !d->doc->onTheFly() && d->doc->removeImages() ) {
         if( QFile::exists( d->doc->tempDir() ) ) {
             d->imageFile.remove();
-            emit infoMessage( i18n("Removed image file %1").arg(d->doc->tempDir()), K3bJob::SUCCESS );
+            emit infoMessage( i18n("Removed image file %1",d->doc->tempDir()), K3bJob::SUCCESS );
         }
     }
 

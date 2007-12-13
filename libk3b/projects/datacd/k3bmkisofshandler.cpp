@@ -82,7 +82,7 @@ void K3bMkisofsHandler::parseMkisofsOutput( const QString& line )
       // error or warning
       QString errorLine = line.mid( d->mkisofsBin->path.length() + 2 );
       if( errorLine.startsWith( "Input/output error. cannot read from" ) ) {
-	handleMkisofsInfoMessage( i18n("Read error from file '%1'").arg( errorLine.mid( 38, errorLine.length()-40 ) ), 
+	handleMkisofsInfoMessage( i18n("Read error from file '%1'", errorLine.mid( 38, errorLine.length()-40 ) ), 
 				  K3bJob::ERROR );
 	d->readError = true;
       }

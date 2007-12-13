@@ -85,13 +85,13 @@ void K3bCloneJob::start()
   //
   const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject( "cdrecord" );
   if( !cdrecordBin ) {
-    emit infoMessage( i18n("Could not find %1 executable.").arg("cdrecord"), ERROR );
+    emit infoMessage( i18n("Could not find %1 executable.",QString("cdrecord")), ERROR );
     jobFinished(false);
     m_running = false;
     return;
   }
   else if( !cdrecordBin->hasFeature( "clone" ) ) {
-    emit infoMessage( i18n("Cdrecord version %1 does not have cloning support.").arg(cdrecordBin->version), ERROR );
+    emit infoMessage( i18n("Cdrecord version %1 does not have cloning support.",cdrecordBin->version), ERROR );
     jobFinished(false);
     m_running = false;
     return;
@@ -222,7 +222,7 @@ void K3bCloneJob::slotWriterPercent( int p )
 
 void K3bCloneJob::slotWriterNextTrack( int t, int tt )
 {
-  emit newSubTask( i18n("Writing Track %1 of %2").arg(t).arg(tt) );
+  emit newSubTask( i18n("Writing Track %1 of %2",t,tt) );
 }
 
 
@@ -239,7 +239,7 @@ void K3bCloneJob::slotWriterFinished( bool success )
     if( success ) {
         d->doneCopies++;
 
-        emit infoMessage( i18n("Successfully written clone copy %1.").arg(d->doneCopies), INFO );
+        emit infoMessage( i18n("Successfully written clone copy %1.",d->doneCopies), INFO );
 
         if( d->doneCopies < m_copies ) {
             K3bDevice::eject( writer() );
@@ -334,7 +334,7 @@ void K3bCloneJob::startWriting()
   if( m_simulate )
     emit newTask( i18n("Simulating clone copy") );
   else
-    emit newTask( i18n("Writing clone copy %1").arg(d->doneCopies+1) );
+    emit newTask( i18n("Writing clone copy %1",d->doneCopies+1) );
 
   m_writerJob->start();
 }

@@ -785,7 +785,7 @@ bool K3bDvdCopyJob::waitForDvd()
     }
     else {
         // this should NEVER happen
-        emit infoMessage( i18n( "Unsupported media type: %1" ).arg( K3bDevice::mediaTypeString( d->sourceDiskInfo.mediaType() ) ), ERROR );
+        emit infoMessage( i18n( "Unsupported media type: %1" , K3bDevice::mediaTypeString( d->sourceDiskInfo.mediaType() ) ), ERROR );
         return false;
     }
 
@@ -918,7 +918,7 @@ void K3bDvdCopyJob::removeImageFiles()
 {
     if( QFile::exists( m_imagePath ) ) {
         d->imageFile.remove();
-        emit infoMessage( i18n("Removed image file %1").arg(m_imagePath), K3bJob::SUCCESS );
+        emit infoMessage( i18n("Removed image file %1",m_imagePath), K3bJob::SUCCESS );
     }
 }
 

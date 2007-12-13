@@ -85,7 +85,7 @@ void K3bIso9660ImageWritingJob::start()
   emit newTask( i18n("Preparing data") );
 
   if( !QFile::exists( m_imagePath ) ) {
-    emit infoMessage( i18n("Could not find image %1").arg(m_imagePath), K3bJob::ERROR );
+    emit infoMessage( i18n("Could not find image %1",m_imagePath), K3bJob::ERROR );
     jobFinished( false );
     return;
   }
@@ -132,7 +132,7 @@ void K3bIso9660ImageWritingJob::slotWriterJobFinished( bool success )
       if( m_copies == 1 )
 	emit newTask( i18n("Verifying written data") );
       else
-	emit newTask( i18n("Verifying written copy %1 of %2").arg(m_currentCopy).arg(m_copies) );
+	emit newTask( i18n("Verifying written copy %1 of %2",m_currentCopy,m_copies) );
 
       m_verifyJob->start();
     }
@@ -198,7 +198,7 @@ void K3bIso9660ImageWritingJob::slotNextTrack( int, int )
   if( m_copies == 1 )
     emit newSubTask( i18n("Writing image") );
   else
-    emit newSubTask( i18n("Writing copy %1 of %2").arg(m_currentCopy).arg(m_copies) );
+    emit newSubTask( i18n("Writing copy %1 of %2",m_currentCopy,m_copies) );
 }
 
 

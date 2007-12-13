@@ -53,7 +53,7 @@ void K3bCddbpQuery::doQuery()
   // connect to the server
 
   m_socket->connectToHost( m_server, m_port );
-  emit infoMessage( i18n("Searching %1 on port %2").arg(m_server).arg(m_port) );
+  emit infoMessage( i18n("Searching %1 on port %2",m_server,m_port) );
 }
 
 
@@ -257,16 +257,16 @@ void K3bCddbpQuery::slotError( int e )
 {
   switch(e) {
   case Q3Socket::ErrConnectionRefused:
-    kDebug() <<  i18n("Connection to %1 refused").arg( m_server );
-    emit infoMessage( i18n("Connection to %1 refused").arg( m_server ) );
+    kDebug() <<  i18n("Connection to %1 refused", m_server );
+    emit infoMessage( i18n("Connection to %1 refused", m_server ) );
     break;
   case Q3Socket::ErrHostNotFound:
-    kDebug() <<  i18n("Could not find host %1").arg( m_server );
-    emit infoMessage( i18n("Could not find host %1").arg( m_server ) );
+    kDebug() <<  i18n("Could not find host %1", m_server );
+    emit infoMessage( i18n("Could not find host %1", m_server ) );
     break;
   case Q3Socket::ErrSocketRead:
-    kDebug() <<  i18n("Error while reading from %1").arg( m_server );
-    emit infoMessage( i18n("Error while reading from %1").arg( m_server ) );
+    kDebug() <<  i18n("Error while reading from %1", m_server );
+    emit infoMessage( i18n("Error while reading from %1", m_server ) );
     break;
   }
 
