@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -29,43 +29,44 @@ class KActionCollection;
 class KConfig;
 class KToolBar;
 class KConfigGroup;
+
 /**
-  *@author Sebastian Trueg
-  */
+ *@author Sebastian Trueg
+ */
 class K3bFileView : public K3bContentsView
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bFileView(QWidget *parent=0);
-  ~K3bFileView();
+public:
+    K3bFileView(QWidget *parent=0);
+    ~K3bFileView();
 
-  void setUrl( const KUrl &url, bool forward = true );
-  KUrl url();
+    void setUrl( const KUrl &url, bool forward = true );
+    KUrl url();
 
-  KActionCollection* actionCollection() const;
+    KActionCollection* actionCollection() const;
 
-  void reload();
+    void reload();
 
- signals:
-  void urlEntered( const KUrl& url );
+signals:
+    void urlEntered( const KUrl& url );
 
- public slots:
-  void setDir( const QString& );
-  void saveConfig( KConfigGroup &grp );
-  void readConfig( const KConfigGroup &grp );
-  void setAutoUpdate( bool );
+public Q_SLOTS:
+    void setDir( const QString& );
+    void saveConfig( KConfigGroup &grp );
+    void readConfig( const KConfigGroup &grp );
+    void setAutoUpdate( bool );
 
- private:
-  KToolBar* m_toolBox;
-  K3bDirOperator* m_dirOp;
-  KFileFilterCombo* m_filterWidget;
+private:
+    KToolBar* m_toolBox;
+    K3bDirOperator* m_dirOp;
+    KFileFilterCombo* m_filterWidget;
 
-  void setupGUI();
+    void setupGUI();
 
- private slots:
-  void slotFilterChanged();
-  void slotFileHighlighted( const KFileItem & );
+private Q_SLOTS:
+    void slotFilterChanged();
+    void slotFileHighlighted( const KFileItem & );
 };
 
 

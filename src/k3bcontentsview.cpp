@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -19,27 +19,26 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpixmap.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 
 K3bContentsView::K3bContentsView( bool withHeader,
-				  QWidget* parent )
-  : QWidget( parent ),
-    m_header(0),
-    m_centerWidget(0)
+                                  QWidget* parent )
+    : QWidget( parent ),
+      m_header(0),
+      m_centerWidget(0)
 {
-  if( withHeader ) {
-    Q3VBoxLayout* lay = new Q3VBoxLayout( this );
-    lay->setMargin( 2 );
-    lay->setSpacing( 0 );
+    if( withHeader ) {
+        QVBoxLayout* lay = new QVBoxLayout( this );
+        lay->setMargin( 2 );
+        lay->setSpacing( 0 );
 
-    m_header = new K3bThemedHeader( this );
-    lay->addWidget( m_header );
+        m_header = new K3bThemedHeader( this );
+        lay->addWidget( m_header );
 
-    m_header->setLeftPixmap( K3bTheme::MEDIA_LEFT );
-    m_header->setRightPixmap( K3bTheme::MEDIA_NONE );
-  }
+        m_header->setLeftPixmap( K3bTheme::MEDIA_LEFT );
+        m_header->setRightPixmap( K3bTheme::MEDIA_NONE );
+    }
 }
 
 
@@ -50,37 +49,37 @@ K3bContentsView::~K3bContentsView()
 
 void K3bContentsView::setMainWidget( QWidget* w )
 {
-  m_centerWidget = w;
-  ((Q3VBoxLayout*)layout())->addWidget( w );
+    m_centerWidget = w;
+    layout()->addWidget( w );
 }
 
 
 QWidget* K3bContentsView::mainWidget()
 {
-  if( !m_centerWidget )
-    setMainWidget( new QWidget( this ) );
-  return m_centerWidget;
+    if( !m_centerWidget )
+        setMainWidget( new QWidget( this ) );
+    return m_centerWidget;
 }
 
 
 void K3bContentsView::setTitle( const QString& s )
 {
-  if( m_header )
-    m_header->setTitle( s );
+    if( m_header )
+        m_header->setTitle( s );
 }
 
 
 void K3bContentsView::setLeftPixmap( K3bTheme::PixmapType s )
 {
-  if( m_header )
-    m_header->setLeftPixmap( s );
+    if( m_header )
+        m_header->setLeftPixmap( s );
 }
 
 
 void K3bContentsView::setRightPixmap( K3bTheme::PixmapType s )
 {
-  if( m_header )
-    m_header->setRightPixmap( s );
+    if( m_header )
+        m_header->setRightPixmap( s );
 }
 
 #include "k3bcontentsview.moc"

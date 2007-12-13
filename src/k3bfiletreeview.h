@@ -31,172 +31,172 @@ class QDropEvent;
 class QDragEnterEvent;
 
 namespace K3bDevice {
-  class Device;
-  class DeviceManager;
+    class Device;
+    class DeviceManager;
 }
 
 namespace KIO {
-  class Job;
+    class Job;
 }
 
 
 class K3bDeviceBranch : public KFileTreeBranch
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bDeviceBranch( K3FileTreeView*, K3bDevice::Device* dev, K3FileTreeViewItem* item = 0 );
+public:
+    K3bDeviceBranch( K3FileTreeView*, K3bDevice::Device* dev, K3FileTreeViewItem* item = 0 );
 
-  K3bDevice::Device* device() const { return m_device; }
+    K3bDevice::Device* device() const { return m_device; }
 
-  /**
-   * Adds or removes the blockdevicename from the branch name
-   */
-  void showBlockDeviceName( bool b );
+    /**
+     * Adds or removes the blockdevicename from the branch name
+     */
+    void showBlockDeviceName( bool b );
 
- public slots:
-  void setCurrent( bool );
+public Q_SLOTS:
+    void setCurrent( bool );
 
-  bool populate( const KUrl& url,  K3FileTreeViewItem *currItem );
+    bool populate( const KUrl& url,  K3FileTreeViewItem *currItem );
 
- private slots:
-  void slotMediumChanged( K3bDevice::Device* );
+private Q_SLOTS:
+    void slotMediumChanged( K3bDevice::Device* );
 
- private:
-  void updateLabel();
+private:
+    void updateLabel();
 
-  K3bDevice::Device* m_device;
-  bool m_showBlockDeviceName;
+    K3bDevice::Device* m_device;
+    bool m_showBlockDeviceName;
 };
 
 
 class K3bFileTreeBranch : public KFileTreeBranch
 {
- public:
-  K3bFileTreeBranch( K3FileTreeView*,
-		     const KUrl& url,
-		     const QString& name,
-		     const QPixmap& pix,
-		     bool showHidden,
-		     K3FileTreeViewItem& item );
+public:
+    K3bFileTreeBranch( K3FileTreeView*,
+                       const KUrl& url,
+                       const QString& name,
+                       const QPixmap& pix,
+                       bool showHidden,
+                       K3FileTreeViewItem& item );
 };
 
 
 class K3bDeviceBranchViewItem : public K3FileTreeViewItem
 {
- public:
-  K3bDeviceBranchViewItem( K3FileTreeViewItem*, K3bDevice::Device*, K3bDeviceBranch* );
-  K3bDeviceBranchViewItem( K3FileTreeView*, K3bDevice::Device*, K3bDeviceBranch* );
+public:
+    K3bDeviceBranchViewItem( K3FileTreeViewItem*, K3bDevice::Device*, K3bDeviceBranch* );
+    K3bDeviceBranchViewItem( K3FileTreeView*, K3bDevice::Device*, K3bDeviceBranch* );
 
-  QString key( int column, bool ascending ) const;
+    QString key( int column, bool ascending ) const;
 
-  void setCurrent( bool );
+    void setCurrent( bool );
 
-  void paintCell( QPainter* p, const QColorGroup& cg, int col, int width, int align );
+    void paintCell( QPainter* p, const QColorGroup& cg, int col, int width, int align );
 
-  int widthHint() const;
+    int widthHint() const;
 
- private:
-  bool m_bCurrent;
+private:
+    bool m_bCurrent;
 
-  K3bDevice::Device* m_device;
+    K3bDevice::Device* m_device;
 };
 
 
 class K3bFileTreeViewItem : public K3FileTreeViewItem
 {
- public:
-  K3bFileTreeViewItem( K3FileTreeViewItem*, KFileItem&, KFileTreeBranch* );
-  K3bFileTreeViewItem( K3FileTreeView *, KFileItem&, KFileTreeBranch* );
+public:
+    K3bFileTreeViewItem( K3FileTreeViewItem*, KFileItem&, KFileTreeBranch* );
+    K3bFileTreeViewItem( K3FileTreeView *, KFileItem&, KFileTreeBranch* );
 
-  QString key( int column, bool ascending ) const;
+    QString key( int column, bool ascending ) const;
 };
 
 
 /**
-  *@author Sebastian Trueg
-  */
+ *@author Sebastian Trueg
+ */
 class K3bFileTreeView : public K3FileTreeView
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public: 
-  K3bFileTreeView( QWidget *parent = 0 );
-  ~K3bFileTreeView();
+public: 
+    K3bFileTreeView( QWidget *parent = 0 );
+    ~K3bFileTreeView();
 
 
-  virtual KFileTreeBranch* addBranch( KFileTreeBranch* );
-  virtual KFileTreeBranch* addBranch( const KUrl& url, const QString& name, const QPixmap& , bool showHidden = false );
+    virtual KFileTreeBranch* addBranch( KFileTreeBranch* );
+    virtual KFileTreeBranch* addBranch( const KUrl& url, const QString& name, const QPixmap& , bool showHidden = false );
 
-  K3bDeviceBranch* branch( K3bDevice::Device* dev );
+    K3bDeviceBranch* branch( K3bDevice::Device* dev );
 
-  /**
-   * returns 0 if no device is selected 
-   */
-  K3bDevice::Device* selectedDevice() const;
+    /**
+     * returns 0 if no device is selected 
+     */
+    K3bDevice::Device* selectedDevice() const;
 
-  /** 
-   * returnes an empty url if no url is selected
-   */
-  KUrl selectedUrl() const;
+    /** 
+     * returnes an empty url if no url is selected
+     */
+    KUrl selectedUrl() const;
 
- public slots:
-  /**
-   * adds home and root dir branch
-   */
-  void addDefaultBranches();
-  void addCdDeviceBranches( K3bDevice::DeviceManager* );
-  void addDeviceBranch( K3bDevice::Device* dev );
+public Q_SLOTS:
+    /**
+     * adds home and root dir branch
+     */
+    void addDefaultBranches();
+    void addCdDeviceBranches( K3bDevice::DeviceManager* );
+    void addDeviceBranch( K3bDevice::Device* dev );
 
-  /**
-   * Make dev the current device. This does not mean that the device entry
-   * will be highlighted but marked otherwise since this means that it is the
-   * current device in the application and not the treeview.
-   */
-  void setCurrentDevice( K3bDevice::Device* dev );
+    /**
+     * Make dev the current device. This does not mean that the device entry
+     * will be highlighted but marked otherwise since this means that it is the
+     * current device in the application and not the treeview.
+     */
+    void setCurrentDevice( K3bDevice::Device* dev );
 
-  /**
-   * his will highlight the device and also make it the current device.
-   */
-  void setSelectedDevice( K3bDevice::Device* dev );
+    /**
+     * his will highlight the device and also make it the current device.
+     */
+    void setSelectedDevice( K3bDevice::Device* dev );
 
-  void followUrl( const KUrl& url );
-  void setTreeDirOnlyMode( bool b );
-  void enablePopupMenu( bool b ) { m_menuEnabled = b; }
+    void followUrl( const KUrl& url );
+    void setTreeDirOnlyMode( bool b );
+    void enablePopupMenu( bool b ) { m_menuEnabled = b; }
 
-  /**
-   * @reimplemented
-   */
-  virtual void clear();
+    /**
+     * @reimplemented
+     */
+    virtual void clear();
 
-  void updateMinimumWidth();
+    void updateMinimumWidth();
 
- signals:
-  void urlExecuted( const KUrl& url );
-  void deviceExecuted( K3bDevice::Device* dev );
+signals:
+    void urlExecuted( const KUrl& url );
+    void deviceExecuted( K3bDevice::Device* dev );
 
-  /** only gets emitted if the menu is disabled */
-  void contextMenu( K3bDevice::Device*, const QPoint& );
-  /** only gets emitted if the menu is disabled */
-  void contextMenu( const KUrl& url, const QPoint& );
+    /** only gets emitted if the menu is disabled */
+    void contextMenu( K3bDevice::Device*, const QPoint& );
+    /** only gets emitted if the menu is disabled */
+    void contextMenu( const KUrl& url, const QPoint& );
   
- private slots:
-  void slotItemExecuted( Q3ListViewItem* item );
-  void slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& );
-  void slotSettingsChangedK3b(int category);
-  void slotMouseButtonClickedK3b( int btn, Q3ListViewItem *item, const QPoint &pos, int c );
+    private slots:
+    void slotItemExecuted( Q3ListViewItem* item );
+    void slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& );
+    void slotSettingsChangedK3b(int category);
+    void slotMouseButtonClickedK3b( int btn, Q3ListViewItem *item, const QPoint &pos, int c );
 
- private:
-  void initActions();
+private:
+    void initActions();
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 
-  bool m_dirOnlyMode;
-  KActionCollection* m_actionCollection;
-  KActionMenu* m_devicePopupMenu;
-  KActionMenu* m_urlPopupMenu;
-  bool m_menuEnabled;
+    bool m_dirOnlyMode;
+    KActionCollection* m_actionCollection;
+    KActionMenu* m_devicePopupMenu;
+    KActionMenu* m_urlPopupMenu;
+    bool m_menuEnabled;
 };
 
 #endif

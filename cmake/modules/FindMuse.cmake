@@ -21,8 +21,10 @@ FIND_PATH(MUSE_INCLUDE_DIR NAMES mpcdec/mpcdec.h
 
 if(MUSE_INCLUDE_DIR)
   FIND_LIBRARY(MUSE_LIBRARIES NAMES mpcdec)
+  set(MPC_HEADER_FILE "<mpcdec/mpcdec.h>")
 else(MUSE_INCLUDE_DIR)
   FIND_PATH(MUSE_INCLUDE_DIR NAMES musepack/musepack.h)
+  set(MPC_HEADER_FILE "<musepack/musepack.h>")
   FIND_LIBRARY(MUSE_LIBRARIES NAMES musepack )
 endif(MUSE_INCLUDE_DIR)
 
