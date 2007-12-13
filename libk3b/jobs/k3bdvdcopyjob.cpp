@@ -122,8 +122,8 @@ void K3bDvdCopyJob::start()
     if( m_onTheFly &&
         k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 12 ) ) {
         m_onTheFly = false;
-        emit infoMessage( i18n("K3b does not support writing on-the-fly with growisofs %1.")
-                          .arg(k3bcore->externalBinManager()->binObject( "growisofs" )->version), ERROR );
+        emit infoMessage( i18n("K3b does not support writing on-the-fly with growisofs %1.",
+                          k3bcore->externalBinManager()->binObject( "growisofs" )->version), ERROR );
         emit infoMessage( i18n("Disabling on-the-fly writing."), INFO );
     }
 
@@ -300,7 +300,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
             //
             QFileInfo fi( m_imagePath );
             if( !fi.isFile() ||
-                questionYesNo( i18n("Do you want to overwrite %1?").arg(m_imagePath),
+                questionYesNo( i18n("Do you want to overwrite %1?",m_imagePath),
                                i18n("File Exists") ) ) {
                 if( fi.isDir() )
                     m_imagePath = K3b::findTempFile( "iso", m_imagePath );
@@ -310,7 +310,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
                 }
                 // else the user specified a file in an existing dir
 
-                emit infoMessage( i18n("Writing image file to %1.").arg(m_imagePath), INFO );
+                emit infoMessage( i18n("Writing image file to %1.",m_imagePath), INFO );
                 emit newSubTask( i18n("Reading source medium.") );
             }
 
@@ -321,7 +321,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
             unsigned long avail, size;
             QString pathToTest = m_imagePath.left( m_imagePath.findRev( '/' ) );
             if( !K3b::kbFreeOnFs( pathToTest, size, avail ) ) {
-                emit infoMessage( i18n("Unable to determine free space in temporary directory '%1'.").arg(pathToTest), ERROR );
+                emit infoMessage( i18n("Unable to determine free space in temporary directory '%1'.",pathToTest), ERROR );
                 jobFinished(false);
                 d->running = false;
                 return;
@@ -337,7 +337,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 
             d->imageFile.setName( m_imagePath );
             if( !d->imageFile.open( QIODevice::WriteOnly ) ) {
-                emit infoMessage( i18n("Unable to open '%1' for writing.").arg(m_imagePath), ERROR );
+                emit infoMessage( i18n("Unable to open '%1' for writing.",m_imagePath), ERROR );
                 jobFinished( false );
                 d->running = false;
                 return;
@@ -358,7 +358,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
                 if( m_simulate )
                     emit newTask( i18n("Simulating copy") );
                 else if( m_copies > 1 )
-                    emit newTask( i18n("Writing copy %1").arg(d->doneCopies+1) );
+                    emit newTask( i18n("Writing copy %1",d->doneCopies+1) );
                 else
                     emit newTask( i18n("Writing copy") );
 
@@ -584,7 +584,7 @@ void K3bDvdCopyJob::slotReaderFinished( bool success )
                 if( waitForDvd() ) {
                     prepareWriter();
                     if( m_copies > 1 )
-                        emit newTask( i18n("Writing copy %1").arg(d->doneCopies+1) );
+                        emit newTask( i18n("Writing copy %1",d->doneCopies+1) );
                     else
                         emit newTask( i18n("Writing copy") );
 
@@ -633,7 +633,7 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
     }
 
     if( success ) {
-        emit infoMessage( i18n("Successfully written copy %1.").arg(d->doneCopies+1), INFO );
+        emit infoMessage( i18n("Successfully written copy %1.",d->doneCopies+1), INFO );
 
         if( d->verifyData && !m_simulate ) {
             if( !d->verificationJob ) {
@@ -656,7 +656,7 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
             d->verificationJob->addTrack( 1, d->inPipe.checksum(), d->lastSector+1 );
 
             if( m_copies > 1 )
-                emit newTask( i18n("Verifying copy %1").arg(d->doneCopies+1) );
+                emit newTask( i18n("Verifying copy %1",d->doneCopies+1) );
             else
                 emit newTask( i18n("Verifying copy") );
 
@@ -673,7 +673,7 @@ void K3bDvdCopyJob::slotWriterFinished( bool success )
 
             if( waitForDvd() ) {
                 prepareWriter();
-                emit newTask( i18n("Writing copy %1").arg(d->doneCopies+1) );
+                emit newTask( i18n("Writing copy %1",d->doneCopies+1) );
 
                 emit burning(true);
 
@@ -725,7 +725,7 @@ void K3bDvdCopyJob::slotVerificationFinished( bool success )
 
         if( waitForDvd() ) {
             prepareWriter();
-            emit newTask( i18n("Writing copy %1").arg(d->doneCopies+1) );
+            emit newTask( i18n("Writing copy %1",d->doneCopies+1) );
 
             emit burning(true);
 
@@ -839,9 +839,9 @@ bool K3bDvdCopyJob::waitForDvd()
             if( m_simulate && !m_writerDevice->dvdMinusTestwrite() ) {
                 if( !questionYesNo( i18n("Your writer (%1 %2) does not support simulation with DVD-R(W) media. "
                                          "Do you really want to continue? The media will be written "
-                                         "for real.")
-                                    .arg(m_writerDevice->vendor())
-                                    .arg(m_writerDevice->description()),
+                                         "for real.",
+                                    m_writerDevice->vendor()
+                                    ,m_writerDevice->description()),
                                     i18n("No Simulation with DVD-R(W)") ) ) {
                     cancel();
                     return false;
@@ -889,11 +889,11 @@ bool K3bDvdCopyJob::waitForDvd()
                 if( m_writingMode == K3b::DAO ) {
 // 	    ( m_writingMode ==  K3b::WRITING_MODE_AUTO &&
 // 	      ( sizeWithDao || !m_onTheFly ) ) ) {
-                    emit infoMessage( i18n("Writing %1 in DAO mode.").arg( K3bDevice::mediaTypeString(m, true) ), INFO );
+                    emit infoMessage( i18n("Writing %1 in DAO mode.",K3bDevice::mediaTypeString(m, true) ), INFO );
                     d->usedWritingMode = K3b::DAO;
                 }
                 else {
-                    emit infoMessage( i18n("Writing %1 in incremental mode.").arg( K3bDevice::mediaTypeString(m, true) ), INFO );
+                    emit infoMessage( i18n("Writing %1 in incremental mode.",K3bDevice::mediaTypeString(m, true) ), INFO );
                     d->usedWritingMode = K3b::WRITING_MODE_INCR_SEQ;
                 }
             }
@@ -904,7 +904,7 @@ bool K3bDvdCopyJob::waitForDvd()
         // Blue-Ray
         // -------------------------------
         else {
-            emit infoMessage( i18n("Writing %1.").arg( K3bDevice::mediaTypeString(m, true) ), INFO );
+            emit infoMessage( i18n("Writing %1.", K3bDevice::mediaTypeString(m, true) ), INFO );
             d->usedWritingMode = K3b::WRITING_MODE_INCR_SEQ; // just to set some mode for now
         }
     }
