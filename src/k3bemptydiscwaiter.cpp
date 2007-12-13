@@ -658,11 +658,9 @@ void K3bEmptyDiscWaiter::showDialog()
     KNotification::event( "WaitingForMedium", i18n("Waiting for Medium"),QPixmap(),0 );
 
     d->dialogVisible = true;
-    //FIXME kde4
-#if 0
-    clearWFlags( WDestructiveClose );
-    setWFlags( WShowModal );
-#endif
+    //clear it.
+    setAttribute(Qt::WA_DeleteOnClose,false);
+    setWindowFlags(windowFlags () ^ Qt::WShowModal);
     setResult( 0 );
     show();
   }

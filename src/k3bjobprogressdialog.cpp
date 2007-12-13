@@ -623,14 +623,10 @@ int K3bJobProgressDialog::startJob( K3bJob* job )
     kError() << "(K3bJobProgressDialog::startJob) Recursive call detected." << endl;
     return -1;
   }
-  //FIXME kde4
-#if 0
-  bool destructiveClose = testWFlags( WDestructiveClose );
-  clearWFlags( WDestructiveClose );
-
-  bool wasShowModal = testWFlags( WShowModal );
-  setWFlags( WShowModal );
-#endif
+  bool destructiveClose = testAttribute(Qt::WA_DeleteOnClose);
+  setAttribute(Qt::WA_DeleteOnClose,false);
+  bool wasShowModal =  (windowModality() != Qt::NonModal);
+  setWindowModality(Qt::WindowModal);
   setResult( 0 );
 
   show();
@@ -641,10 +637,9 @@ int K3bJobProgressDialog::startJob( K3bJob* job )
   in_loop = true;
   enterLoop();
   //FIXME kde4
-#if 0
 
   if ( !wasShowModal )
-    clearWFlags( WShowModal );
+    setAttribute(Qt::WA_DeleteOnClose,false);
 
   int res = result();
 
@@ -652,8 +647,6 @@ int K3bJobProgressDialog::startJob( K3bJob* job )
     delete this;
 
   return res;
-#endif
-  return 0;
 }
 
 
