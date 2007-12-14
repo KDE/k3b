@@ -62,13 +62,12 @@ K3bDirItem::~K3bDirItem()
     // doing this by hand is much saver than using the
     // auto-delete feature since some of the items' destructors
     // may change the list
-    K3bDataItem* i = m_children.first();
-    while( i ) {
+    while( !m_children.isEmpty() ) {
         // it is important to use takeDataItem here to be sure
         // the size gets updated properly
-        takeDataItem(i);
-        delete i;
-        i = m_children.first();
+        K3bDataItem* item = m_children.first();
+        takeDataItem( item );
+        delete item;
     }
 
     // this has to be done after deleting the children

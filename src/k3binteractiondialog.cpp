@@ -87,17 +87,17 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
     // ---------------------------------------------------------------------------------------------------
     if( !m_configGroup.isEmpty() ) {
         QHBoxLayout* layout2 = new QHBoxLayout( 0, 0, spacingHint(), "layout2");
-        m_buttonLoadSettings = new QToolButton( /*i18n("User Defaults"), */KDialog::mainWidget() );
+        m_buttonLoadSettings = new QToolButton( KDialog::mainWidget() );
         m_buttonLoadSettings->setIcon( KIcon( "document-revert" ) );
-        m_buttonLoadSettings->setPopupMode( QToolButton::MenuButtonPopup );
-        Q3PopupMenu* userDefaultsPopup = new Q3PopupMenu( m_buttonLoadSettings );
+        m_buttonLoadSettings->setPopupMode( QToolButton::InstantPopup );
+        QMenu* userDefaultsPopup = new QMenu( m_buttonLoadSettings );
         userDefaultsPopup->insertItem( i18n("Load default settings"), this, SLOT(slotLoadK3bDefaults()) );
         userDefaultsPopup->insertItem( i18n("Load saved settings"), this, SLOT(slotLoadUserDefaults()) );
         userDefaultsPopup->insertItem( i18n("Load last used settings"), this, SLOT(slotLoadLastSettings()) );
         m_buttonLoadSettings->setMenu( userDefaultsPopup );
         layout2->addWidget( m_buttonLoadSettings );
 
-        m_buttonSaveSettings = new QToolButton( /*i18n("Save User Defaults"), */KDialog::mainWidget(), "m_buttonSaveSettings" );
+        m_buttonSaveSettings = new QToolButton( KDialog::mainWidget() );
         m_buttonSaveSettings->setIcon( KIcon( "document-save" ) );
         layout2->addWidget( m_buttonSaveSettings );
 

@@ -46,7 +46,6 @@
 #include <qpixmap.h>
 #include <qstringlist.h>
 #include <q3strlist.h>
-#include <q3header.h>
 #include <qsplitter.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
@@ -108,8 +107,6 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent )
         m_mainSplitter = 0;
     }
 
-    m_fileTreeView->header()->hide();
-
     m_fileView     = new K3bFileView( m_viewStack );
     m_viewStack->addWidget( m_fileView );
     m_cdView       = new K3bAudioCdView( m_viewStack );
@@ -125,9 +122,9 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent )
 
     m_viewStack->setCurrentWidget( m_fileView );
 
-    m_fileTreeView->addDefaultBranches();
-    m_fileTreeView->addCdDeviceBranches( k3bcore->deviceManager() );
-    m_fileTreeView->setCurrentDevice( k3bappcore->appDeviceManager()->currentDevice() );
+//     m_fileTreeView->addDefaultBranches();
+//     m_fileTreeView->addCdDeviceBranches( k3bcore->deviceManager() );
+//     m_fileTreeView->setCurrentDevice( k3bappcore->appDeviceManager()->currentDevice() );
 
     m_fileView->setAutoUpdate( true ); // in case we look at the mounted path
 
@@ -140,16 +137,16 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent )
         m_mainSplitter->setSizes( sizes );
     }
 
-    connect( m_fileTreeView, SIGNAL(urlExecuted(const KUrl&)),
+    connect( m_fileTreeView, SIGNAL(activated(const KUrl&)),
              this, SLOT(slotDirActivated(const KUrl&)) );
-    connect( m_fileTreeView, SIGNAL(deviceExecuted(K3bDevice::Device*)),
+    connect( m_fileTreeView, SIGNAL(activated(K3bDevice::Device*)),
              this, SLOT(showDevice(K3bDevice::Device*)) );
     connect( m_fileTreeView, SIGNAL(deviceExecuted(K3bDevice::Device*)),
              this, SIGNAL(deviceSelected(K3bDevice::Device*)) );
     connect( m_fileTreeView, SIGNAL(contextMenu(K3bDevice::Device*, const QPoint&)),
              this, SLOT(slotFileTreeContextMenu(K3bDevice::Device*, const QPoint&)) );
 
-    connect( m_fileView, SIGNAL(urlEntered(const KUrl&)), m_fileTreeView, SLOT(followUrl(const KUrl&)) );
+    connect( m_fileView, SIGNAL(urlEntered(const KUrl&)), m_fileTreeView, SLOT(setCurrentUrl(const KUrl&)) );
     connect( m_fileView, SIGNAL(urlEntered(const KUrl&)), this, SIGNAL(urlEntered(const KUrl&)) );
 
     connect( k3bappcore->appDeviceManager(), SIGNAL(mountFinished(const QString&)),
@@ -345,7 +342,8 @@ void K3bDirView::slotDirActivated( const QString& url )
 
 void K3bDirView::slotDirActivated( const KUrl& url )
 {
-    m_fileView->setUrl(url, true);
+    kDebug();
+    m_fileView->setUrl( url, true );
 //   m_urlCombo->setEditText( url.path() );
 
     m_viewStack->setCurrentWidget( m_fileView );

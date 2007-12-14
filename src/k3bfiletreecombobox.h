@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -30,48 +30,34 @@ class QMouseEvent;
 class QPaintEvent;
 
 namespace K3bDevice {
-  class Device;
+    class Device;
 }
 
 class K3bFileTreeComboBox : public KComboBox
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bFileTreeComboBox( QWidget* parent = 0 );
-  ~K3bFileTreeComboBox();
+public:
+    K3bFileTreeComboBox( QWidget* parent = 0 );
+    ~K3bFileTreeComboBox();
 
-  void popup();
-  void popdown();
+public slots:
+    void setDevice( K3bDevice::Device* );
+    void setUrl( const KUrl& url );
+    void slotGoUrl();
 
-  void setCurrentItem( int );
-  void setCurrentText( const QString& );
+signals:
+    void activated( const KUrl& url );
+    void activated( K3bDevice::Device* dev );
 
- public slots:
-  void setDevice( K3bDevice::Device* );
-  void setUrl( const KUrl& url );
-  void slotGoUrl();
+private slots:
+    void slotDeviceExecuted( K3bDevice::Device* );
+    void slotUrlExecuted( const KUrl& url );
 
- signals:
-  void urlExecuted( const KUrl& url );
-  void deviceExecuted( K3bDevice::Device* dev );
-
- private slots:
-  void slotDeviceExecuted( K3bDevice::Device* );
-  void slotUrlExecuted( const KUrl& url );
-
- protected:
-  bool eventFilter( QObject*, QEvent* );
-  void keyPressEvent( QKeyEvent* );
-  void mousePressEvent( QMouseEvent* );
-  void paintEvent( QPaintEvent* );
-
- private:
-  void setEditText( const QPixmap& pix, const QString& t );
-
-  class Private;
-  Private* d;
-  K3bFileTreeView* m_fileTreeView;
+private:
+    class Private;
+    Private* d;
+    K3bFileTreeView* m_fileTreeView;
 };
 
 #endif

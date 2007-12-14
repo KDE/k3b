@@ -166,7 +166,7 @@ K3bMainWindow::K3bMainWindow()
 
     // we need the actions for the welcomewidget
     //FIXME kde4 it crash
-    KConfigGroup grp( config(), "Welcome Widget" ); 
+    KConfigGroup grp( config(), "Welcome Widget" );
     d->welcomeWidget->loadConfig( grp );
 
     // fill the tabs action menu
@@ -238,7 +238,9 @@ void K3bMainWindow::initActions()
     KStandardAction::showMenubar( this, SLOT(slotShowMenuBar()), actionCollection() );
 
     //FIXME kde4 verify it
-    actionFileNewMenu = new KActionMenu( i18n("&New Project"),this/*, "filenew"*//*, actionCollection(), "file_new"*/ );
+    actionFileNewMenu = new KActionMenu( i18n("&New Project"),this );
+    actionFileNewMenu->setIcon( KIcon( "filenew" ) );
+    actionCollection()->addAction( "file_new", actionFileNewMenu );
     actionFileNewAudio = K3b::createAction(this,i18n("New &Audio CD Project"), "media-optical-audio", 0, this, SLOT(slotNewAudioDoc()),
                                      actionCollection(), "file_new_audio");
     actionFileNewData = K3b::createAction(this,i18n("New &Data Project"), "media-optical-data", 0, this, SLOT(slotNewDataDoc()),
@@ -278,7 +280,7 @@ void K3bMainWindow::initActions()
 
     actionViewDirTreeView = new KToggleAction(i18n("Show Directories"),this);
     KAction* action = actionCollection()->addAction("view_dir_tree",actionViewDirTreeView);
-    connect( action , SIGNAL(toggled(bool)) , this , SLOT(slotShowDirTreeView()) ); 
+    connect( action , SIGNAL(toggled(bool)) , this , SLOT(slotShowDirTreeView()) );
 
 
     actionViewContentsView = new KToggleAction(i18n("Show Contents"),this);
@@ -290,29 +292,87 @@ void K3bMainWindow::initActions()
     connect( action , SIGNAL(toggled(bool)) , this , SLOT(slotViewDocumentHeader()) );
 
 
-    KAction* actionToolsFormatMedium = K3b::createAction(this,i18n("&Format/Erase rewritable disk..."), "tools-media-optical-format", 0, this,
-                                                    SLOT(slotFormatMedium()), actionCollection(), "tools_format_medium" );
-    actionToolsWriteCdImage = K3b::createAction(this,i18n("&Burn CD Image..."), "tools-media-optical-image-burn", 0, this, SLOT(slotWriteCdImage()),
-                                          actionCollection(), "tools_write_cd_image" );
-    KAction* actionToolsWriteDvdImage = K3b::createAction(this,i18n("&Burn DVD ISO Image..."), "tools-media-optical-image-burn-dvd", 0, this, SLOT(slotWriteDvdIsoImage()),
-                                                    actionCollection(), "tools_write_dvd_iso" );
+    KAction* actionToolsFormatMedium = K3b::createAction( this,
+                                                          i18n("&Format/Erase rewritable disk..."),
+                                                          "tools-media-optical-format",
+                                                          0,
+                                                          this,
+                                                          SLOT(slotFormatMedium()),
+                                                          actionCollection(),
+                                                          "tools_format_medium" );
+    actionToolsFormatMedium->setIconText( i18n( "Format" ) );
 
-    KAction* actionToolsMediaCopy = K3b::createAction(this,i18n("Copy &Medium..."), "tools-media-optical-copy", 0, this, SLOT(slotMediaCopy()),
-                                                actionCollection(), "tools_copy_medium" );
+    actionToolsWriteCdImage = K3b::createAction( this,
+                                                 i18n("&Burn CD Image..."),
+                                                 "tools-media-optical-image-burn",
+                                                 0,
+                                                 this,
+                                                 SLOT(slotWriteCdImage()),
+                                                 actionCollection(),
+                                                 "tools_write_cd_image" );
+    KAction* actionToolsWriteDvdImage = K3b::createAction( this,
+                                                          i18n("&Burn DVD ISO Image..."),
+                                                           "tools-media-optical-image-burn-dvd",
+                                                           0,
+                                                           this,
+                                                           SLOT(slotWriteDvdIsoImage()),
+                                                           actionCollection(),
+                                                           "tools_write_dvd_iso" );
+    actionToolsWriteDvdImage->setIconText( i18n( "Burn Image" ) );
 
-    actionToolsCddaRip = K3b::createAction(this,i18n("Rip Audio CD..."), "tools-media-optical-rip-audio", 0, this, SLOT(slotCddaRip()),
-                                      actionCollection(), "tools_cdda_rip" );
-    actionToolsVideoDvdRip = K3b::createAction(this,i18n("Rip Video DVD..."), "tools-media-optical-rip-video-dvd", 0, this, SLOT(slotVideoDvdRip()),
-                                          actionCollection(), "tools_videodvd_rip" );
-    actionToolsVideoCdRip = K3b::createAction(this,i18n("Rip Video CD..."), "tools-media-optical-rip-video-cd", 0, this, SLOT(slotVideoCdRip()),
-                                         actionCollection(), "tools_videocd_rip" );
+    KAction* actionToolsMediaCopy = K3b::createAction( this,
+                                                       i18n("Copy &Medium..."),
+                                                       "tools-media-optical-copy",
+                                                       0,
+                                                       this,
+                                                       SLOT(slotMediaCopy()),
+                                                       actionCollection(),
+                                                       "tools_copy_medium" );
+    actionToolsMediaCopy->setIconText( i18n( "Copy" ) );
 
-    (void)K3b::createAction(this, i18n("System Check"), 0, 0, this, SLOT(slotCheckSystem()),
-                       actionCollection(), "help_check_system" );
+    actionToolsCddaRip = K3b::createAction( this,
+                                            i18n("Rip Audio CD..."),
+                                            "tools-media-optical-rip-audio",
+                                            0,
+                                            this,
+                                            SLOT(slotCddaRip()),
+                                            actionCollection(),
+                                            "tools_cdda_rip" );
+    actionToolsVideoDvdRip = K3b::createAction( this,
+                                                i18n("Rip Video DVD..."),
+                                                "tools-media-optical-rip-video-dvd",
+                                                0,
+                                                this,
+                                                SLOT(slotVideoDvdRip()),
+                                                actionCollection(),
+                                                "tools_videodvd_rip" );
+    actionToolsVideoCdRip = K3b::createAction( this,
+                                               i18n("Rip Video CD..."),
+                                               "tools-media-optical-rip-video-cd",
+                                               0,
+                                               this,
+                                               SLOT(slotVideoCdRip()),
+                                               actionCollection(),
+                                               "tools_videocd_rip" );
+
+    (void)K3b::createAction( this,
+                             i18n("System Check"),
+                             0,
+                             0,
+                             this,
+                             SLOT(slotCheckSystem()),
+                             actionCollection(),
+                             "help_check_system" );
 
 #ifdef HAVE_K3BSETUP
-    actionSettingsK3bSetup = K3b::createAction(this,i18n("&Setup System Permissions..."), "configure", 0, this, SLOT(slotK3bSetup()),
-                                         actionCollection(), "settings_k3bsetup" );
+    actionSettingsK3bSetup = K3b::createAction( this,
+                                                i18n("&Setup System Permissions..."),
+                                                "configure",
+                                                0,
+                                                this,
+                                                SLOT(slotK3bSetup()),
+                                                actionCollection(),
+                                                "settings_k3bsetup" );
 #endif
 
 #ifdef K3B_DEBUG
@@ -423,7 +483,7 @@ void K3bMainWindow::initView()
 */
     m_dirTreeDock = new QDockWidget(KDialog::makeStandardCaption( i18n("Sidepanel") ),0);
     m_dirTreeDock->setObjectName("directory_tree");
-    addDockWidget ( Qt::TopDockWidgetArea, m_dirTreeDock ); 
+    addDockWidget ( Qt::TopDockWidgetArea, m_dirTreeDock );
     K3bFileTreeView* sidePanel = new K3bFileTreeView( m_dirTreeDock );
     //K3bSidePanel* sidePanel = new K3bSidePanel( this, m_dirTreeDock, "sidePanel" );
 
@@ -454,8 +514,8 @@ void K3bMainWindow::initView()
 
     // --- filetreecombobox-toolbar ----------------------------------------------------------------
     K3bFileTreeComboBox* m_fileTreeComboBox = new K3bFileTreeComboBox( 0 );
-    connect( m_fileTreeComboBox, SIGNAL(urlExecuted(const KUrl&)), m_dirView, SLOT(showUrl(const KUrl& )) );
-    connect( m_fileTreeComboBox, SIGNAL(deviceExecuted(K3bDevice::Device*)), m_dirView,
+    connect( m_fileTreeComboBox, SIGNAL(activated(const KUrl&)), m_dirView, SLOT(showUrl(const KUrl& )) );
+    connect( m_fileTreeComboBox, SIGNAL(activated(K3bDevice::Device*)), m_dirView,
              SLOT(showDevice(K3bDevice::Device* )) );
     connect( m_dirView, SIGNAL(urlEntered(const KUrl&)), m_fileTreeComboBox, SLOT(setUrl(const KUrl&)) );
     connect( m_dirView, SIGNAL(deviceSelected(K3bDevice::Device*)), m_fileTreeComboBox, SLOT(setDevice(K3bDevice::Device*)) );
@@ -474,6 +534,8 @@ void K3bMainWindow::initView()
 
 void K3bMainWindow::createClient( K3bDoc* doc )
 {
+    kDebug();
+
     // create the proper K3bView (maybe we should put this into some other class like K3bProjectManager)
     K3bView* view = 0;
     switch( doc->type() ) {

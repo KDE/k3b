@@ -1,6 +1,6 @@
 /* 
  *
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -19,8 +19,8 @@
 #include <qobject.h>
 
 #include <q3valuelist.h>
-//Added by qt3to4:
-#include <QCustomEvent>
+#include <QMutex>
+#include <QThread>
 
 #include <k3bdevice.h>
 #include <k3btoc.h>
@@ -30,7 +30,7 @@
 #include "k3bmedium.h"
 
 namespace K3bDevice {
-  class DeviceManager;
+    class DeviceManager;
 }
 
 class QCustomEvent;
@@ -51,100 +51,141 @@ class QCustomEvent;
  */
 class K3bMediaCache : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bMediaCache( QObject* parent = 0 );
-  ~K3bMediaCache();
+public:
+    K3bMediaCache( QObject* parent = 0 );
+    ~K3bMediaCache();
 
-  /**
-   * block a device so it will not be polled. This is used
-   * to disable polling on devices that are currently in use
-   * for burning.
-   *
-   * \return A unique id to be used to unblock the device or -1 if the device
-   *         is already blocked.
-   */
-  int blockDevice( K3bDevice::Device* dev );
+    /**
+     * block a device so it will not be polled. This is used
+     * to disable polling on devices that are currently in use
+     * for burning.
+     *
+     * \return A unique id to be used to unblock the device or -1 if the device
+     *         is already blocked.
+     */
+    int blockDevice( K3bDevice::Device* dev );
 
-  /**
-   * Unblock a device that has been blocked with block() before.
-   *
-   * \param id The id returned by the previous call to block(). This makes
-   *           sure only the one who did the block may unblock the device.
-   *
-   * \return true if dev has been blocked with id before. false otherwise.
-   */
-  bool unblockDevice( K3bDevice::Device* dev, int id );
+    /**
+     * Unblock a device that has been blocked with block() before.
+     *
+     * \param id The id returned by the previous call to block(). This makes
+     *           sure only the one who did the block may unblock the device.
+     *
+     * \return true if dev has been blocked with id before. false otherwise.
+     */
+    bool unblockDevice( K3bDevice::Device* dev, int id );
 
-  bool isBlocked( K3bDevice::Device* dev );
+    bool isBlocked( K3bDevice::Device* dev );
 
-  /**
-   * Read cached medium information.
-   */
-  K3bMedium medium( K3bDevice::Device* dev );
+    /**
+     * Read cached medium information.
+     */
+    K3bMedium medium( K3bDevice::Device* dev );
 
-  /**
-   * Read cached disk information.
-   */
-  K3bDevice::DiskInfo diskInfo( K3bDevice::Device* );
+    /**
+     * Read cached disk information.
+     */
+    K3bDevice::DiskInfo diskInfo( K3bDevice::Device* );
 
-  /**
-   * Read cached Table of contents.
-   */
-  K3bDevice::Toc toc( K3bDevice::Device* );
+    /**
+     * Read cached Table of contents.
+     */
+    K3bDevice::Toc toc( K3bDevice::Device* );
 
-  /**
-   * Read cached CD text from an Audio CD.
-   */
-  K3bDevice::CdText cdText( K3bDevice::Device* );
+    /**
+     * Read cached CD text from an Audio CD.
+     */
+    K3bDevice::CdText cdText( K3bDevice::Device* );
 
-  /**
-   * Read cached supported writing speeds.
-   */
-  QList<int> writingSpeeds( K3bDevice::Device* );
+    /**
+     * Read cached supported writing speeds.
+     */
+    QList<int> writingSpeeds( K3bDevice::Device* );
 
-  /**
-   * \see K3bMedium::shortString()
-   */
-  QString mediumString( K3bDevice::Device* device, bool useContent = true );
+    /**
+     * \see K3bMedium::shortString()
+     */
+    QString mediumString( K3bDevice::Device* device, bool useContent = true );
 
- signals:
-  /**
-   * Signal emitted whenever a medium changes. That means when a new medium is inserted
-   * or an old one is removed.
-   *
-   * This signal will also be emitted when a previously blocked device becomes unblocked.
-   *
-   * Be aware though that the Media Cache will silently ignore removed devices. That means
-   * once should also listen to K3bDevice::DeviceManager::changed() in case a USB drive or
-   * something similar is removed.
-   */
-  void mediumChanged( K3bDevice::Device* dev );
+signals:
+    /**
+     * Signal emitted whenever a medium changes. That means when a new medium is inserted
+     * or an old one is removed.
+     *
+     * This signal will also be emitted when a previously blocked device becomes unblocked.
+     *
+     * Be aware though that the Media Cache will silently ignore removed devices. That means
+     * once should also listen to K3bDevice::DeviceManager::changed() in case a USB drive or
+     * something similar is removed.
+     */
+    void mediumChanged( K3bDevice::Device* dev );
 
- public slots:
-  /**
-   * Build the device list and start the polling.
-   * It might make sense to connect this to K3bDevice::DeviceManager::changed()
-   */
-  void buildDeviceList( K3bDevice::DeviceManager* );
+public slots:
+    /**
+     * Build the device list and start the polling.
+     * It might make sense to connect this to K3bDevice::DeviceManager::changed()
+     */
+    void buildDeviceList( K3bDevice::DeviceManager* );
 
-  /**
-   * Clear the device list and stop all the polling.
-   * This is also done in the destructor.
-   */
-  void clearDeviceList();
+    /**
+     * Clear the device list and stop all the polling.
+     * This is also done in the destructor.
+     */
+    void clearDeviceList();
 
- private:
-  class PollThread;
-  class DeviceEntry;
-  class MediaChangeEvent;
+private:
+    class PollThread;
+    class DeviceEntry;
 
-  class Private;
-  Private* const d;
+    class Private;
+    Private* const d;
 
-  DeviceEntry* findDeviceEntry( K3bDevice::Device* );
-  void customEvent( QCustomEvent* );
+    DeviceEntry* findDeviceEntry( K3bDevice::Device* );
 };
+
+
+
+class K3bMediaCache::DeviceEntry
+{
+public:
+    DeviceEntry( K3bMediaCache* cache, K3bDevice::Device* dev );
+    ~DeviceEntry();
+
+    K3bMedium medium;
+
+    int blockedId;
+
+    QMutex mutex;
+
+    K3bMediaCache::PollThread* thread;
+
+    K3bMediaCache* cache;
+
+    void clear() {
+        medium.reset();
+    }
+};
+
+
+class K3bMediaCache::PollThread : public QThread
+{
+    Q_OBJECT
+
+public:
+    PollThread( K3bMediaCache::DeviceEntry* de )
+        : m_deviceEntry( de ) {}
+
+Q_SIGNALS:
+    void mediumChanged( K3bDevice::Device* dev );
+
+protected:
+    void run();
+
+private:
+    K3bMediaCache::DeviceEntry* m_deviceEntry;
+};
+
 
 #endif

@@ -94,7 +94,9 @@ QList<K3bDoc*> K3bProjectManager::projects() const
 
 void K3bProjectManager::addProject( K3bDoc* doc )
 {
-    if( d->projects.count( doc )!=0 ) {
+    kDebug() << doc;
+
+    if( !d->projects.contains( doc ) ) {
         kDebug() << "(K3bProjectManager) adding doc " << doc->URL().path();
 
         d->projects.append(doc);
@@ -179,6 +181,8 @@ K3bDoc* K3bProjectManager::activeProject() const
 
 K3bDoc* K3bProjectManager::createEmptyProject( K3bDoc::DocType type )
 {
+    kDebug() << type;
+
     K3bDoc* doc = 0;
     QString fileName;
 
@@ -234,6 +238,8 @@ K3bDoc* K3bProjectManager::createEmptyProject( K3bDoc::DocType type )
 
 K3bDoc* K3bProjectManager::createProject( K3bDoc::DocType type )
 {
+    kDebug() << type;
+
     K3bDoc* doc = createEmptyProject( type );
 
     // create the dcop interface
@@ -258,7 +264,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
     // earlier K3b versions loaded the saved settings
     // so that is what we do as a default
     int i = KConfigGroup( config, "General Options" ).readEntry( "action dialog startup settings",
-                                                            int(K3bInteractionDialog::LOAD_SAVED_SETTINGS) );
+                                                                 int(K3bInteractionDialog::LOAD_SAVED_SETTINGS) );
     if( i == K3bInteractionDialog::LOAD_K3B_DEFAULTS )
         return; // the default k3b settings are the ones everyone starts with
     else if( i == K3bInteractionDialog::LOAD_LAST_SETTINGS )

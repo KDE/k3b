@@ -38,13 +38,14 @@
 #include <qlayout.h>
 
 #include <qtimer.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3PtrList>
+#include <QGridLayout>
 #include <QPixmap>
 #include <QFrame>
 #include <QMouseEvent>
 #include <QPaintEvent>
+#include <QLinearGradient>
+#include <QBrush>
+#include <QWhatsThis>
 
 #include <kaction.h>
 #include <kmenu.h>
@@ -172,30 +173,29 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
     p.fillRect( crect, Qt::green );
 
     QRect oversizeRect(crect);
-#ifdef __GNUC__
-#warning draw a nice fill state bar again
-#endif
-#if 0
-    // draw yellow if cdSize - tolerance < docSize
-    if( docSize > cdSize - tolerance ) {
-        oversizeRect.setLeft( oversizeRect.left() + (int)(one * (cdSize - tolerance)) );
-        p.fillRect( oversizeRect, Qt::yellow );
-        KPixmap pix;
-        pix.resize( rect().height()*2, rect().height() );
-        KPixmapEffect::gradient( pix, green, yellow, KPixmapEffect::HorizontalGradient, 0 );
-        p.drawPixmap( oversizeRect.left() - pix.width()/2, 0, pix );
-    }
 
     // draw red if docSize > cdSize + tolerance
     if( docSize > cdSize + tolerance ) {
-        oversizeRect.setLeft( oversizeRect.left() + (int)(one * tolerance*2) );
+        oversizeRect.setLeft( oversizeRect.left() + (int)(one * (cdSize - tolerance)) );
         p.fillRect( oversizeRect, Qt::red );
-        KPixmap pix;
-        pix.resize( rect().height()*2, rect().height() );
-        KPixmapEffect::gradient( pix, yellow, red, KPixmapEffect::HorizontalGradient, 0 );
-        p.drawPixmap( oversizeRect.left() - pix.width()/2, 0, pix );
+        QLinearGradient gradient( QPoint( oversizeRect.left() - rect().height(), 0 ),
+                                  QPoint( oversizeRect.left() + rect().height(), 0 ) );
+        gradient.setColorAt( 0.1, Qt::green );
+        gradient.setColorAt( 0.5, Qt::yellow );
+        gradient.setColorAt( 0.9, Qt::red );
+        p.fillRect( oversizeRect.left() - rect().height(), 0, rect().height()*2, rect().height(), gradient );
     }
-#endif
+
+    // draw yellow if cdSize - tolerance < docSize
+    else if( docSize > cdSize - tolerance ) {
+        oversizeRect.setLeft( oversizeRect.left() + (int)(one * (cdSize - tolerance)) );
+        p.fillRect( oversizeRect, Qt::yellow );
+        QLinearGradient gradient( QPoint( oversizeRect.left() - rect().height(), 0 ),
+                                  QPoint( oversizeRect.left() + rect().height(), 0 ) );
+        gradient.setColorAt( 0.1, Qt::green );
+        gradient.setColorAt( 0.9, Qt::yellow );
+        p.fillRect( oversizeRect.left() - rect().height(), 0, rect().height()*2, rect().height(), gradient );
+    }
 
     p.setClipping(false);
 
@@ -214,18 +214,18 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 
     QString overSizeText;
     if( d->cdSize.mode1Bytes() >= d->doc->size() )
-        overSizeText = i18n("Available: %1 of %2")
-                       .arg( d->showTime
-                             ? i18n("%1 min",(K3b::Msf( cdSize*60*75 ) - d->doc->length()).toString(false))
-                             : KIO::convertSize( qMax( (cdSize * 1024LL * 1024LL) - (long long)d->doc->size(), 0LL ) ) )
-                       .arg( d->showTime
-                             ? i18n("%1 min",K3b::Msf( cdSize*60*75 ).toString(false))
-                             : KIO::convertSizeFromKiB( cdSize * 1024 ) );
+        overSizeText = i18n("Available: %1 of %2",
+                            d->showTime
+                            ? i18n("%1 min", (K3b::Msf( cdSize*60*75 ) - d->doc->length()).toString(false) )
+                            : KIO::convertSize( qMax( (cdSize * 1024LL * 1024LL) - (long long)d->doc->size(), 0LL ) ),
+                            d->showTime
+                            ? i18n("%1 min", K3b::Msf( cdSize*60*75 ).toString(false))
+                            : KIO::convertSizeFromKiB( cdSize * 1024 ) );
     else
-        overSizeText = i18n("Capacity exceeded by %1")
-                       .arg( d->showTime
-                             ? i18n("%1 min", (d->doc->length() - K3b::Msf( cdSize*60*75 ) ).toString(false))
-                             : KIO::convertSize( (long long)d->doc->size() - (cdSize * 1024LL * 1024LL) ) );
+        overSizeText = i18n("Capacity exceeded by %1",
+                            d->showTime
+                            ? i18n("%1 min", (d->doc->length() - K3b::Msf( cdSize*60*75 ) ).toString(false))
+                            : KIO::convertSize( (long long)d->doc->size() - (cdSize * 1024LL * 1024LL) ) );
     // ====================================================================================
 
     // draw the medium size marker
@@ -342,7 +342,7 @@ K3bFillStatusDisplay::K3bFillStatusDisplay( K3bDoc* doc, QWidget *parent )
 //   d->buttonMenu->setToolTip( i18n("Fill display properties") );
 //   connect( d->buttonMenu, SIGNAL(clicked()), this, SLOT(slotMenuButtonClicked()) );
 
-    Q3GridLayout* layout = new Q3GridLayout( this );
+    QGridLayout* layout = new QGridLayout( this );
     layout->setSpacing(5);
     layout->setMargin(frameWidth());
     layout->addWidget( d->displayWidget, 0, 0 );
@@ -372,37 +372,37 @@ void K3bFillStatusDisplay::setupPopupMenu()
     // we use a nother popup for the dvd sizes
     d->popup = new KMenu( this );
 
-    d->actionShowMinutes = K3b::createAction( this, i18n("Minutes"), 0, 0, this, SLOT(showTime()),
-                                              d->actionCollection, "fillstatus_show_minutes" );
-    d->actionShowMegs = K3b::createAction( this, i18n("Megabytes"), 0, 0, this, SLOT(showSize()),
-                                           d->actionCollection, "fillstatus_show_megabytes" );
+    d->actionShowMinutes = K3b::createToggleAction( this, i18n("Minutes"), 0, 0, this, SLOT(showTime()),
+                                                    d->actionCollection, "fillstatus_show_minutes" );
+    d->actionShowMegs = K3b::createToggleAction( this, i18n("Megabytes"), 0, 0, this, SLOT(showSize()),
+                                                 d->actionCollection, "fillstatus_show_megabytes" );
 
-    d->actionAuto = K3b::createAction( this, i18n("Automatic Size"), 0, 0, this, SLOT(slotAutoSize()),
-                                       d->actionCollection, "fillstatus_auto" );
-    d->action74Min = K3b::createAction( this, i18n("%1 MB",650), 0, 0, this, SLOT(slot74Minutes()),
-                                        d->actionCollection, "fillstatus_74minutes" );
-    d->action80Min = K3b::createAction( this, i18n("%1 MB",700), 0, 0, this, SLOT(slot80Minutes()),
-                                        d->actionCollection, "fillstatus_80minutes" );
-    d->action100Min = K3b::createAction( this, i18n("%1 MB",880), 0, 0, this, SLOT(slot100Minutes()),
-                                         d->actionCollection, "fillstatus_100minutes" );
-    d->actionDvd4_7GB = K3b::createAction( this, KIO::convertSizeFromKiB((int)(4.4*1024.0*1024.0)), 0, 0, this, SLOT(slotDvd4_7GB()),
-                                           d->actionCollection, "fillstatus_dvd_4_7gb" );
-    d->actionDvdDoubleLayer = K3b::createAction( this, KIO::convertSizeFromKiB((int)(8.0*1024.0*1024.0)),
-                                                 0, 0, this, SLOT(slotDvdDoubleLayer()),
-                                                 d->actionCollection, "fillstatus_dvd_double_layer" );
-    d->actionBD25 = K3b::createAction( this, KIO::convertSizeFromKiB( 25*1024*1024 ), 0, 0, this, SLOT( slotBD25() ),
-                                       d->actionCollection, "fillstatus_bd_25" );
-    d->actionBD50 = K3b::createAction( this, KIO::convertSizeFromKiB( 50*1024*1024 ), 0, 0, this, SLOT( slotBD50() ),
-                                       d->actionCollection, "fillstatus_bd_50" );
+    d->actionAuto = K3b::createToggleAction( this, i18n("Automatic Size"), 0, 0, this, SLOT(slotAutoSize()),
+                                             d->actionCollection, "fillstatus_auto" );
+    d->action74Min = K3b::createToggleAction( this, i18n("%1 MB",650), 0, 0, this, SLOT(slot74Minutes()),
+                                              d->actionCollection, "fillstatus_74minutes" );
+    d->action80Min = K3b::createToggleAction( this, i18n("%1 MB",700), 0, 0, this, SLOT(slot80Minutes()),
+                                              d->actionCollection, "fillstatus_80minutes" );
+    d->action100Min = K3b::createToggleAction( this, i18n("%1 MB",880), 0, 0, this, SLOT(slot100Minutes()),
+                                               d->actionCollection, "fillstatus_100minutes" );
+    d->actionDvd4_7GB = K3b::createToggleAction( this, KIO::convertSizeFromKiB((int)(4.4*1024.0*1024.0)), 0, 0, this, SLOT(slotDvd4_7GB()),
+                                                 d->actionCollection, "fillstatus_dvd_4_7gb" );
+    d->actionDvdDoubleLayer = K3b::createToggleAction( this, KIO::convertSizeFromKiB((int)(8.0*1024.0*1024.0)),
+                                                       0, 0, this, SLOT(slotDvdDoubleLayer()),
+                                                       d->actionCollection, "fillstatus_dvd_double_layer" );
+    d->actionBD25 = K3b::createToggleAction( this, KIO::convertSizeFromKiB( 25*1024*1024 ), 0, 0, this, SLOT( slotBD25() ),
+                                             d->actionCollection, "fillstatus_bd_25" );
+    d->actionBD50 = K3b::createToggleAction( this, KIO::convertSizeFromKiB( 50*1024*1024 ), 0, 0, this, SLOT( slotBD50() ),
+                                             d->actionCollection, "fillstatus_bd_50" );
 
-    d->actionCustomSize = K3b::createAction( this, i18n("Custom..."), 0, 0, this, SLOT(slotCustomSize()),
-                                             d->actionCollection, "fillstatus_custom_size" );
+    d->actionCustomSize = K3b::createToggleAction( this, i18n("Custom..."), 0, 0, this, SLOT(slotCustomSize()),
+                                                   d->actionCollection, "fillstatus_custom_size" );
 #ifdef __GNUC__
 #warning setAlwaysEmitActivated
 #endif
     //    d->actionCustomSize->setAlwaysEmitActivated(true);
-    d->actionDetermineSize = K3b::createAction( this, i18n("From Medium..."), "media-optical", 0,
-                                                 this, SLOT(slotDetermineSize()),
+    d->actionDetermineSize = K3b::createToggleAction( this, i18n("From Medium..."), "media-optical", 0,
+                                                      this, SLOT(slotDetermineSize()),
                                                  d->actionCollection, "fillstatus_size_from_disk" );
 //    d->actionDetermineSize->setAlwaysEmitActivated(true);
 
@@ -541,12 +541,14 @@ void K3bFillStatusDisplay::slotBD50()
 
 void K3bFillStatusDisplay::slotWhy44()
 {
-    this->setWhatsThis( i18n("<p><b>Why does K3b offer 4.4 GB and 8.0 GB instead of 4.7 and 8.5 like "
+    QWhatsThis::showText( QCursor::pos(),
+                          i18n("<p><b>Why does K3b offer 4.4 GB and 8.0 GB instead of 4.7 and 8.5 like "
                                "it says on the media?</b>"
                                "<p>A single layer DVD media has a capacity of approximately "
                                "4.4 GB which equals 4.4*1024<sup>3</sup> bytes. Media producers just "
                                "calculate with 1000 instead of 1024 for advertising reasons.<br>"
-                               "This results in 4.4*1024<sup>3</sup>/1000<sup>3</sup> = 4.7 GB.") );
+                               "This results in 4.4*1024<sup>3</sup>/1000<sup>3</sup> = 4.7 GB."),
+                          this );
 }
 
 
