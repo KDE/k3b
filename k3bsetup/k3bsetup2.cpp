@@ -40,7 +40,6 @@
 #include <ktextedit.h>
 
 #include "k3bsetup2.h"
-#include "base_k3bsetup2.h"
 
 #include <k3bdevicemanager.h>
 #include <k3bdevice.h>

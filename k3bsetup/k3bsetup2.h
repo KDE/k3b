@@ -18,11 +18,17 @@
 
 #include <kcmodule.h>
 #include <kaboutdata.h>
+#include "ui_base_k3bsetup2.h"
 
-
-class base_K3bSetup2;
 class Q3CheckListItem;
 
+class base_K3bSetup2 : public QWidget, public Ui::base_K3bSetup2
+{
+public:
+  base_K3bSetup2( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 class K3bSetup2: public KCModule
 {
