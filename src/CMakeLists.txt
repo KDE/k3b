@@ -92,16 +92,16 @@ projects/k3bdatamultisessionimportdialog.cpp
 
 kde4_add_ui3_files(k3b_project_SRCS
 projects/base_k3baudiocdtextwidget.ui 
-projects/base_k3baudiotrackwidget.ui 
 projects/base_k3bbootimageview.ui 
-projects/base_k3bdataimagesettings.ui 
-projects/base_k3bdatavolumedescwidget.ui 
 projects/base_k3bmovixoptionswidget.ui
 )
 
 kde4_add_ui_files(k3b_project_SRCS
 projects/base_k3badvanceddataimagesettings.ui
 projects/base_k3baudiocdtextallfieldswidget.ui
+projects/base_k3bdataimagesettings.ui
+projects/base_k3bdatavolumedescwidget.ui
+projects/base_k3baudiotrackwidget.ui
 )
 
 set(k3b_kostore_SRCS

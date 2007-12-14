@@ -16,9 +16,17 @@
 #define K3B_DATA_VOLUMEDESC_WIDGET_H
 
 
-#include "base_k3bdatavolumedescwidget.h"
+#include "ui_base_k3bdatavolumedescwidget.h"
 
 class K3bIsoOptions;
+
+class base_K3bDataVolumeDescWidget : public QWidget, public Ui::base_K3bDataVolumeDescWidget
+{
+public:
+  base_K3bDataVolumeDescWidget( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 
 class K3bDataVolumeDescWidget : public base_K3bDataVolumeDescWidget

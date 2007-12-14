@@ -16,10 +16,17 @@
 #define K3B_DATAIMAGE_SETTINGS_WIDGET_H
 
 
-#include "base_k3bdataimagesettings.h"
+#include "ui_base_k3bdataimagesettings.h"
 
 class K3bIsoOptions;
 
+class base_K3bDataImageSettings : public QWidget, public Ui::base_K3bDataImageSettings
+{
+public:
+  base_K3bDataImageSettings( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 class K3bDataImageSettingsWidget : public base_K3bDataImageSettings
 {

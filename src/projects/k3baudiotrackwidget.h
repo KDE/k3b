@@ -15,7 +15,7 @@
 #ifndef _K3B_AUDIO_TRACK_WIDGET_H_
 #define _K3B_AUDIO_TRACK_WIDGET_H_
 
-#include "base_k3baudiotrackwidget.h"
+#include "ui_base_k3baudiotrackwidget.h"
 
 #include <k3bmsf.h>
 
@@ -24,6 +24,13 @@
 
 class K3bAudioTrack;
 
+class base_K3bAudioTrackWidget : public QWidget, public Ui::base_K3bAudioTrackWidget
+{
+public:
+  base_K3bAudioTrackWidget( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 /**
  * This class is used internally by K3bAudioTrackDialog.
