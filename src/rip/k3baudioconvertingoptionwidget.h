@@ -15,13 +15,21 @@
 #ifndef _K3B_AUDIO_CONVERTING_OPTION_WIDGET_H_
 #define _K3B_AUDIO_CONVERTING_OPTION_WIDGET_H_
 
-#include "base_k3baudiorippingoptionwidget.h"
+#include "ui_base_k3baudiorippingoptionwidget.h"
 
 #include <qcheckbox.h>
 #include <kio/global.h>
 
 class K3bAudioEncoder;
 class KConfigBase;
+
+class base_K3bAudioRippingOptionWidget : public QWidget, public Ui::base_K3bAudioRippingOptionWidget
+{
+public:
+  base_K3bAudioRippingOptionWidget( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 
 /**

@@ -16,10 +16,17 @@
 #ifndef _K3B_CDDB_PATTERN_WIDGET_H_
 #define _K3B_CDDB_PATTERN_WIDGET_H_
 
-#include "base_k3bcddbpatternwidget.h"
+#include "ui_base_k3bcddbpatternwidget.h"
 
 class KConfigBase;
 
+class base_K3bCddbPatternWidget : public QWidget, public Ui::base_K3bCddbPatternWidget
+{
+public:
+  base_K3bCddbPatternWidget( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 class K3bCddbPatternWidget : public base_K3bCddbPatternWidget
 {

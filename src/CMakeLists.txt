@@ -137,12 +137,12 @@ set(k3b_videodvd_SRCS
   rip/videodvd/k3bvideodvdrippingpreview.cpp
 )
 
-kde4_add_ui3_files(k3b_videodvd_SRCS
+kde4_add_ui_files(k3b_videodvd_SRCS
   rip/videodvd/base_k3bvideodvdrippingwidget.ui)
 
-kde4_add_ui3_files(k3b_rip_SRCS
-  rip/base_k3baudiorippingoptionwidget.ui 
-  rip/base_k3bcddbpatternwidget.ui 
+kde4_add_ui_files(k3b_rip_SRCS
+  rip/base_k3baudiorippingoptionwidget.ui
+  rip/base_k3bcddbpatternwidget.ui
 )
 
 set(k3b_option_SRCS

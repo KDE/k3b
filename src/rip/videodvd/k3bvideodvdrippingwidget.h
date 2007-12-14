@@ -15,7 +15,7 @@
 #ifndef _K3B_VIDEODVD_RIPPING_WIDGET_H_
 #define _K3B_VIDEODVD_RIPPING_WIDGET_H_
 
-#include "base_k3bvideodvdrippingwidget.h"
+#include "ui_base_k3bvideodvdrippingwidget.h"
 
 #include <k3bvideodvdtitletranscodingjob.h>
 
@@ -25,6 +25,14 @@
 #include <kio/global.h>
 
 class QTimer;
+
+class base_K3bVideoDVDRippingWidget : public QWidget, public Ui::base_K3bVideoDVDRippingWidget
+{
+public:
+  base_K3bVideoDVDRippingWidget( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 class K3bVideoDVDRippingWidget : public base_K3bVideoDVDRippingWidget
 {
