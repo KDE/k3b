@@ -19,10 +19,15 @@
 
 #include <k3baudioencoder.h>
 #include <k3bpluginconfigwidget.h>
+#include "ui_base_k3boggvorbisencodersettingswidget.h"
 
-
-class base_K3bOggVorbisEncoderSettingsWidget;
-
+class base_K3bOggVorbisEncoderSettingsWidget : public QWidget, public Ui::base_K3bOggVorbisEncoderSettingsWidget
+{
+public:
+  base_K3bOggVorbisEncoderSettingsWidget( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 class K3bOggVorbisEncoder : public K3bAudioEncoder
 {

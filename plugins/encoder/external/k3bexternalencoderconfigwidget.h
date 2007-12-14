@@ -16,13 +16,28 @@
 #ifndef _K3B_EXTERNAL_ENCODER_CONFIG_WIDGET_H_
 #define _K3B_EXTERNAL_ENCODER_CONFIG_WIDGET_H_
 
-#include "base_k3bexternalencodereditwidget.h"
-#include "base_k3bexternalencoderconfigwidget.h"
+#include "ui_base_k3bexternalencodereditwidget.h"
+#include "ui_base_k3bexternalencoderconfigwidget.h"
 #include "k3bexternalencodercommand.h"
 
 #include <k3bpluginconfigwidget.h>
 #include <kdialog.h>
 
+class base_K3bExternalEncoderConfigWidget : public QWidget, public Ui::base_K3bExternalEncoderConfigWidget
+{
+public:
+  base_K3bExternalEncoderConfigWidget( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
+class base_K3bExternalEncoderEditWidget : public QWidget, public Ui::base_K3bExternalEncoderEditWidget
+{
+public:
+  base_K3bExternalEncoderEditWidget( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 class K3bExternalEncoderEditDialog : public KDialog
 {

@@ -16,7 +16,6 @@
 #include <config-k3b.h>
 
 #include "k3bsoxencoder.h"
-#include "base_k3bsoxencoderconfigwidget.h"
 
 #include <k3bprocess.h>
 #include <k3bcore.h>

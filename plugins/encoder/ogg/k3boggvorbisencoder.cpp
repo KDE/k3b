@@ -16,7 +16,6 @@
 #include <config-k3b.h>
 
 #include "k3boggvorbisencoder.h"
-#include "base_k3boggvorbisencodersettingswidget.h"
 
 #include <k3bcore.h>
 

@@ -19,10 +19,17 @@
 
 #include <k3baudioencoder.h>
 #include <k3bpluginconfigwidget.h>
+#include "ui_base_k3bsoxencoderconfigwidget.h"
 
-
-class base_K3bSoxEncoderConfigWidget;
 class K3Process;
+
+class base_K3bSoxEncoderConfigWidget : public QWidget, public Ui::base_K3bSoxEncoderConfigWidget
+{
+public:
+  base_K3bSoxEncoderConfigWidget( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 class K3bSoxEncoder : public K3bAudioEncoder
 {

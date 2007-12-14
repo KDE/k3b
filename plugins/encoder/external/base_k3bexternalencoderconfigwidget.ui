@@ -1,148 +1,129 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>base_K3bExternalEncoderConfigWidget</class>
-<author>Sebastian Trueg</author>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>base_K3bExternalEncoderConfigWidget</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author>Sebastian Trueg</author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>base_K3bExternalEncoderConfigWidget</class>
+  <widget class="QWidget" name="base_K3bExternalEncoderConfigWidget" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>441</width>
+        <height>354</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>441</width>
-            <height>354</height>
-        </rect>
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>0</number>
-        </property>
-        <widget class="K3ActiveLabel">
-            <property name="name">
-                <cstring>kActiveLabel1</cstring>
-            </property>
-            <property name="text">
-                <string>&lt;p&gt;This dialog can be used to setup external command line applications as audio encoders. These can then be used by K3b to encode audio data (Tracks from an audio CD or the titles from an audio project) to formats that are normally not supported (i.e. no encoder plugin exists).
-&lt;p&gt;K3b comes with a selection of predefined external applications that depends on the installed applications.</string>
-            </property>
+    <layout class="QVBoxLayout" >
+      <property name="margin" >
+        <number>0</number>
+      </property>
+      <item>
+        <widget class="K3ActiveLabel" name="kActiveLabel1" >
+          <property name="text" >
+            <string>&lt;p>This dialog can be used to setup external command line applications as audio encoders. These can then be used by K3b to encode audio data (Tracks from an audio CD or the titles from an audio project) to formats that are normally not supported (i.e. no encoder plugin exists).
+&lt;p>K3b comes with a selection of predefined external applications that depends on the installed applications.</string>
+          </property>
         </widget>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>groupBox1</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>1</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="title">
-                <string>Configured Encoders</string>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QListView">
-                    <column>
-                        <property name="text">
-                            <string>Name</string>
-                        </property>
-                        <property name="clickable">
-                            <bool>true</bool>
-                        </property>
-                        <property name="resizable">
-                            <bool>true</bool>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>Extension</string>
-                        </property>
-                        <property name="clickable">
-                            <bool>true</bool>
-                        </property>
-                        <property name="resizable">
-                            <bool>true</bool>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>Command</string>
-                        </property>
-                        <property name="clickable">
-                            <bool>true</bool>
-                        </property>
-                        <property name="resizable">
-                            <bool>true</bool>
-                        </property>
-                    </column>
-                    <property name="name">
-                        <cstring>m_viewEncoders</cstring>
+      </item>
+      <item>
+        <widget class="Q3GroupBox" name="groupBox1" >
+          <property name="sizePolicy" >
+            <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>5</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>1</verstretch>
+            </sizepolicy>
+          </property>
+          <property name="title" >
+            <string>Configured Encoders</string>
+          </property>
+          <layout class="QVBoxLayout" >
+            <item>
+              <widget class="Q3ListView" name="m_viewEncoders" >
+                <column>
+                  <property name="text" >
+                    <string>Name</string>
+                  </property>
+                  <property name="clickable" >
+                    <bool>true</bool>
+                  </property>
+                  <property name="resizable" >
+                    <bool>true</bool>
+                  </property>
+                </column>
+                <column>
+                  <property name="text" >
+                    <string>Extension</string>
+                  </property>
+                  <property name="clickable" >
+                    <bool>true</bool>
+                  </property>
+                  <property name="resizable" >
+                    <bool>true</bool>
+                  </property>
+                </column>
+                <column>
+                  <property name="text" >
+                    <string>Command</string>
+                  </property>
+                  <property name="clickable" >
+                    <bool>true</bool>
+                  </property>
+                  <property name="resizable" >
+                    <bool>true</bool>
+                  </property>
+                </column>
+              </widget>
+            </item>
+            <item>
+              <layout class="QHBoxLayout" >
+                <item>
+                  <spacer name="spacer3" >
+                    <property name="sizeHint" >
+                      <size>
+                        <width>71</width>
+                        <height>20</height>
+                      </size>
                     </property>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout6</cstring>
+                    <property name="sizeType" >
+                      <enum>QSizePolicy::Expanding</enum>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <spacer>
-                            <property name="name">
-                                <cstring>spacer3</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>71</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>m_buttonRemove</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Remove</string>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>m_buttonEdit</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Edit...</string>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>m_buttonAdd</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Add...</string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-            </vbox>
+                    <property name="orientation" >
+                      <enum>Qt::Horizontal</enum>
+                    </property>
+                  </spacer>
+                </item>
+                <item>
+                  <widget class="QPushButton" name="m_buttonRemove" >
+                    <property name="text" >
+                      <string>Remove</string>
+                    </property>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QPushButton" name="m_buttonEdit" >
+                    <property name="text" >
+                      <string>Edit...</string>
+                    </property>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QPushButton" name="m_buttonAdd" >
+                    <property name="text" >
+                      <string>Add...</string>
+                    </property>
+                  </widget>
+                </item>
+              </layout>
+            </item>
+          </layout>
         </widget>
-    </vbox>
-</widget>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>k3activelabel.h</includehint>
-</includehints>
-</UI>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <includes>
+    <include location="local" >k3activelabel.h</include>
+  </includes>
+</ui>
