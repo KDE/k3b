@@ -364,7 +364,7 @@ void K3bCdImageWritingDialog::slotStartClicked()
         d->tocFile = imagePath();
 
     // create a progresswidget
-    K3bBurnProgressDialog dlg( kapp->mainWidget(), "burnProgress", true );
+    K3bBurnProgressDialog dlg( kapp->mainWidget() );
 
     // create the job
     K3bBurnJob* job = 0;

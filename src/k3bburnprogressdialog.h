@@ -1,6 +1,6 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -26,31 +26,30 @@ class QLabel;
 
 
 /**
-  *@author Sebastian Trueg
-  */
+ *@author Sebastian Trueg
+ */
 class K3bBurnProgressDialog : public K3bJobProgressDialog  {
 
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bBurnProgressDialog( QWidget* parent = 0, bool showSubProgress = true, 
-			 bool modal = true, Qt::WFlags = 0 );
-  ~K3bBurnProgressDialog();
+public:
+    K3bBurnProgressDialog( QWidget* parent = 0, bool showSubProgress = true );
+    ~K3bBurnProgressDialog();
 
-  void setJob( K3bJob* );
-  void setBurnJob( K3bBurnJob* );
+    void setJob( K3bJob* );
+    void setBurnJob( K3bBurnJob* );
 
- protected slots:
-  void slotWriteSpeed( int, int );
-  void slotBufferStatus( int );
-  void slotDeviceBuffer( int );
-  void slotFinished(bool);
+protected slots:
+    void slotWriteSpeed( int, int );
+    void slotBufferStatus( int );
+    void slotDeviceBuffer( int );
+    void slotFinished(bool);
 
- protected:
-  QLabel* m_labelWriter;
-  QProgressBar* m_progressWritingBuffer;
-  QProgressBar* m_progressDeviceBuffer;
-  QLabel* m_labelWritingSpeed;
+protected:
+    QLabel* m_labelWriter;
+    QProgressBar* m_progressWritingBuffer;
+    QProgressBar* m_progressDeviceBuffer;
+    QLabel* m_labelWritingSpeed;
 };
 
 #endif

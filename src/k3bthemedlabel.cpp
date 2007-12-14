@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -16,63 +16,65 @@
 #include "k3bapplication.h"
 
 K3bThemedLabel::K3bThemedLabel( QWidget* parent )
-  : KSqueezedTextLabel( parent ),
-    m_themePixmapCode( -1 )
+    : KSqueezedTextLabel( parent ),
+      m_themePixmapCode( -1 )
 {
-  slotThemeChanged();
-  setTextElideMode( Qt::ElideRight );
+    slotThemeChanged();
+    setTextElideMode( Qt::ElideRight );
 
-  connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
-	   this, SLOT(slotThemeChanged()) );
-  connect( kapp, SIGNAL(appearanceChanged()),
-	   this, SLOT(slotThemeChanged()) );
+    connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
+             this, SLOT(slotThemeChanged()) );
+    connect( kapp, SIGNAL(appearanceChanged()),
+             this, SLOT(slotThemeChanged()) );
 }
 
 
 K3bThemedLabel::K3bThemedLabel( const QString& text, QWidget* parent )
-  : KSqueezedTextLabel( text, parent ),
-    m_themePixmapCode( -1 )
+    : KSqueezedTextLabel( text, parent ),
+      m_themePixmapCode( -1 )
 {
-  slotThemeChanged();
-  setTextElideMode( Qt::ElideRight );
+    slotThemeChanged();
+    setTextElideMode( Qt::ElideRight );
 
-  connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
-	   this, SLOT(slotThemeChanged()) );
-  connect( kapp, SIGNAL(appearanceChanged()),
-	   this, SLOT(slotThemeChanged()) );
+    connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
+             this, SLOT(slotThemeChanged()) );
+    connect( kapp, SIGNAL(appearanceChanged()),
+             this, SLOT(slotThemeChanged()) );
 }
 
 
 K3bThemedLabel::K3bThemedLabel( K3bTheme::PixmapType pix, QWidget* parent )
-  : KSqueezedTextLabel( parent )
+    : KSqueezedTextLabel( parent )
 {
-  setThemePixmap( pix );
-  setTextElideMode( Qt::ElideRight );
+    setThemePixmap( pix );
+    setTextElideMode( Qt::ElideRight );
 
-  connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
-	   this, SLOT(slotThemeChanged()) );
-  connect( kapp, SIGNAL(appearanceChanged()),
-	   this, SLOT(slotThemeChanged()) );
+    connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
+             this, SLOT(slotThemeChanged()) );
+    connect( kapp, SIGNAL(appearanceChanged()),
+             this, SLOT(slotThemeChanged()) );
 }
 
 
 void K3bThemedLabel::setThemePixmap( K3bTheme::PixmapType pix )
 {
-  m_themePixmapCode = pix;
-  slotThemeChanged();
+    m_themePixmapCode = pix;
+    slotThemeChanged();
 }
 
 
 void K3bThemedLabel::slotThemeChanged()
 {
-  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-    setPaletteBackgroundColor( theme->backgroundColor() );
-    setPaletteForegroundColor( theme->foregroundColor() );
-    if( m_themePixmapCode > -1 ) {
-      setPixmap( theme->pixmap( (K3bTheme::PixmapType)m_themePixmapCode ) );
-      setScaledContents( false );
+    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+        QPalette p = palette();
+        p.setColor( QPalette::Normal, QPalette::Background, theme->backgroundColor() );
+        p.setColor( QPalette::Normal, QPalette::Foreground, theme->foregroundColor() );
+        setPalette( p );
+        if( m_themePixmapCode > -1 ) {
+            setPixmap( theme->pixmap( (K3bTheme::PixmapType)m_themePixmapCode ) );
+            setScaledContents( false );
+        }
     }
-  }
 }
 
 #include "k3bthemedlabel.moc"

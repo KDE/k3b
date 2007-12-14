@@ -903,13 +903,13 @@ QString K3bDataJob::jobDetails() const
         !d->doc->dummy() &&
         !(d->doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
           d->doc->multiSessionMode() == K3bDataDoc::FINISH) )
-        return i18np("ISO9660 Filesystem (Size: %1) - %n copy",
-                     "ISO9660 Filesystem (Size: %1) - %n copies",
-                     d->doc->copies() )
-            .arg(KIO::convertSize( d->doc->size() ));
+        return i18np("ISO9660 Filesystem (Size: %1) - %2 copy",
+                     "ISO9660 Filesystem (Size: %1) - %2 copies",
+                     KIO::convertSize( d->doc->size() ),
+                     d->doc->copies() );
     else
-        return i18n("ISO9660 Filesystem (Size: %1)")
-            .arg(KIO::convertSize( d->doc->size() ));
+        return i18n( "ISO9660 Filesystem (Size: %1)",
+                     KIO::convertSize( d->doc->size() ) );
 }
 
 

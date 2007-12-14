@@ -648,7 +648,7 @@ void K3bMainWindow::saveOptions()
     KConfigGroup grpWindows(config(), "main_window_settings");
     saveMainWindowSettings( grpWindows );
 
-    //k3bcore->saveSettings( config() );
+    k3bcore->saveSettings( config().data() );
 
     KConfigGroup grp(config(), "Welcome Widget" );
     d->welcomeWidget->saveConfig( grp );

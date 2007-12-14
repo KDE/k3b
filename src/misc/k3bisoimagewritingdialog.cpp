@@ -265,7 +265,7 @@ void K3bIsoImageWritingDialog::slotStartClicked()
         c.writePathEntry( "last written image", imagePath() );
 
     // create a progresswidget
-    K3bBurnProgressDialog dlg( kapp->mainWidget(), "burnProgress", true );
+    K3bBurnProgressDialog dlg( kapp->mainWidget() );
 
     // create the job
     K3bIso9660ImageWritingJob* job = new K3bIso9660ImageWritingJob( &dlg );

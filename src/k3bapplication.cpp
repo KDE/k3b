@@ -384,29 +384,15 @@ void K3bApplication::Core::init()
 
 void K3bApplication::Core::readSettings( KConfig* cnf )
 {
-    //FIXME kde4
-#if 0
     K3bCore::readSettings( cnf );
-
-    KConfig* c = cnf;
-    if( !c )
-        c = globalConfig();
-
-    m_themeManager->readConfig( globalConfig() );
-#endif
+    m_themeManager->readConfig( cnf->group( "General Options" ) );
 }
 
 
 void K3bApplication::Core::saveSettings( KConfig* cnf )
 {
-    //FIXME kde4
-#if 0
-    if( !cnf )
-        cnf = globalConfig();
-
     K3bCore::saveSettings( cnf );
-    m_themeManager->saveConfig( cnf );
-#endif
+    m_themeManager->saveConfig( cnf->group( "General Options" ) );
 }
 
 
