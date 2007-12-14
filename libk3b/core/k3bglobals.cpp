@@ -181,13 +181,18 @@ QString K3b::defaultTempPath()
 
 QString K3b::prepareDir( const QString& dir )
 {
-    return (dir + (dir[dir.length()-1] != '/' ? "/" : ""));
+    if(dir.isEmpty())
+        return QString();
+    else
+        return (dir + (dir[dir.length()-1] != '/' ? "/" : ""));
 }
 
 
 QString K3b::parentDir( const QString& path )
 {
     QString parent = path;
+    if( path.isEmpty())
+        return QString();
     if( path[path.length()-1] == '/' )
         parent.truncate( parent.length()-1 );
 
