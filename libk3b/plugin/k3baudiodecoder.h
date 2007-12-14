@@ -211,7 +211,7 @@ class LIBK3B_EXPORT K3bAudioDecoderFactory : public K3bPlugin
 
  public:
   K3bAudioDecoderFactory( QObject* parent = 0, const char* name = 0 )
-    : K3bPlugin( parent, name ) {
+    : K3bPlugin( parent ) {
   }
 
   virtual ~K3bAudioDecoderFactory() {

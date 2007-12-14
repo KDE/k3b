@@ -1,6 +1,6 @@
-/* 
+/*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -16,8 +16,8 @@
 #include "k3bplugin.h"
 
 
-K3bPlugin::K3bPlugin( QObject* parent, const char* name )
-  : QObject( parent, name )
+K3bPlugin::K3bPlugin( QObject* parent )
+    : QObject( parent )
 {
 }
 
@@ -29,7 +29,7 @@ K3bPlugin::~K3bPlugin()
 
 K3bPluginConfigWidget* K3bPlugin::createConfigWidget( QWidget*) const
 {
-  return 0;
+    return 0;
 }
 
 #include "k3bplugin.moc"

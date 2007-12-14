@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -25,6 +25,10 @@
 #include <klibloader.h>
 #include <kdialog.h>
 
+#include <KServiceTypeTrader>
+#include <KService>
+#include <KPluginInfo>
+
 #include <qlist.h>
 #include <qmap.h>
 #include <qdir.h>
@@ -34,83 +38,77 @@
 class K3bPluginManager::Private
 {
 public:
-  QList<K3bPlugin*> plugins;
+    Private( K3bPluginManager* parent )
+        : m_parent( parent ) {
+    }
+
+    QList<K3bPlugin*> plugins;
+
+    void loadPlugin( KService::Ptr service );
+
+private:
+    K3bPluginManager* m_parent;
 };
 
 
 
 
 K3bPluginManager::K3bPluginManager( QObject* parent )
-  : QObject( parent )
+    : QObject( parent ),
+      d( new Private( this ) )
 {
-  d = new Private();
 }
 
 
 K3bPluginManager::~K3bPluginManager()
 {
-  delete d;
+    delete d;
 }
 
 
 
-QStringList K3bPluginManager::groups() const
+QStringList K3bPluginManager::categories() const
 {
-  QStringList grps;
+    QStringList grps;
 
-  QList<K3bPlugin*> fl;
-  Q_FOREACH( K3bPlugin* plugin, d->plugins ) {
-    if( !grps.contains( plugin->group() ) )
-	grps.append( plugin->group() );
-  }
+    QList<K3bPlugin*> fl;
+    Q_FOREACH( K3bPlugin* plugin, d->plugins ) {
+        if( !grps.contains( plugin->group() ) )
+            grps.append( plugin->group() );
+    }
 
-  return grps;
+    return grps;
 }
 
 
 QList<K3bPlugin*> K3bPluginManager::plugins( const QString& group ) const
 {
-  QList<K3bPlugin*> fl;
-  Q_FOREACH( K3bPlugin* plugin, d->plugins ) {
-    if( plugin->group() == group || group.isEmpty() )
-      fl.append( plugin );
-  }
-  return fl;
+    QList<K3bPlugin*> fl;
+    Q_FOREACH( K3bPlugin* plugin, d->plugins ) {
+        if( plugin->group() == group || group.isEmpty() )
+            fl.append( plugin );
+    }
+    return fl;
 }
 
 
-void K3bPluginManager::loadPlugin( const QString& fileName )
+void K3bPluginManager::Private::loadPlugin( KService::Ptr service )
 {
-#ifdef __GNUC__
-#warning Port plugin loading to KDE 4
-#endif
-//   KSimpleConfig c( fileName, true );
-//   c.setGroup( "K3b Plugin" );
+    kDebug() << service->name();
+    K3bPlugin* plugin = service->createInstance<K3bPlugin>( m_parent );
+    if ( plugin ) {
+        kDebug() << "Loaded plugin" << service->name();
+        // FIXME: improve this versioning stuff
+        if( plugin->pluginSystemVersion() != K3B_PLUGIN_SYSTEM_VERSION ) {
+            delete plugin;
+            kDebug() << "plugin system does not fit";
+        }
+        else {
+            plugin->m_pluginInfo = KPluginInfo( service );
+            plugins.append( plugin );
+        }
+    }
 
-//   QString libName = c.readEntry( "Lib" );
-//   if( libName.isEmpty() ) {
-//     kDebug() << "(K3bPluginManager) no Lib specified in " << fileName;
-//     return;
-//   }
-
-//   // read the lib
-//   KLibFactory* factory = KLibLoader::self()->factory( libName.toLatin1() );
-//   if( factory ) {
-//     K3bPlugin* plugin = dynamic_cast<K3bPlugin*>( factory->create( this ) );
-//     if( plugin ) {
-//       // FIXME: improve this versioning stuff
-//       if( plugin->pluginSystemVersion() != K3B_PLUGIN_SYSTEM_VERSION ) {
-// 	delete plugin;
-// 	kDebug() << "(K3bPluginManager) plugin system does not fit lib " << libName;
-//       }
-//       else {
-// 	plugin->m_pluginInfo = K3bPluginInfo( libName,
-// 					      c.readEntry( "Name" ),
-// 					      c.readEntry( "Author" ),
-// 					      c.readEntry( "Email" ),
-// 					      c.readEntry( "Comment" ),
-// 					      c.readEntry( "Version" ),
-// 					      c.readEntry( "License" ) );
 
 // 	// make sure to only use the latest version of one plugin
 // 	bool addPlugin = true;
@@ -126,39 +124,21 @@ void K3bPluginManager::loadPlugin( const QString& fileName )
 // 	    }
 // 	    break;
 // 	  }
-// 	}
-// 	if( addPlugin )
-// 	  d->plugins.append( plugin );
-// 	else
-// 	  delete plugin;
-//       }
-//     }
-//     else
-//       kDebug() << "(K3bPluginManager) lib " << libName << " not a K3b plugin";
-//   }
-//   else
-//     kDebug() << "(K3bPluginManager) lib " << libName << " not found";
 }
 
 
 void K3bPluginManager::loadAll()
 {
-//   // we simply search the K3b plugin dir for now
-//   QStringList dirs = KGlobal::dirs()->findDirs( "data", "k3b/plugins/" );
-
-//   for( QStringList::const_iterator it = dirs.begin();
-//        it != dirs.end(); ++it ) {
-//     QStringList entries = QDir(*it).entryList( "*.plugin", QDir::Files );
-//     for( QStringList::const_iterator it2 = entries.begin();
-// 	 it2 != entries.end(); ++it2 ) {
-//       loadPlugin( *it + *it2 );
-//     }
-//   }
+    kDebug();
+    KService::List services = KServiceTypeTrader::self()->query( "K3b/Plugin" );
+    Q_FOREACH( KService::Ptr service, services ) {
+        d->loadPlugin( service );
+    }
 }
 
 int K3bPluginManager::pluginSystemVersion() const
 {
-  return K3B_PLUGIN_SYSTEM_VERSION;
+    return K3B_PLUGIN_SYSTEM_VERSION;
 }
 
 

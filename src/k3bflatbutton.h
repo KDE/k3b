@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -29,50 +29,52 @@ class QAction;
 class QPaintEvent;
 
 /**
-@author Sebastian Trueg
+   @author Sebastian Trueg
 */
 class K3bFlatButton : public QFrame
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bFlatButton( QWidget *parent = 0);
-  K3bFlatButton( const QString& text, QWidget *parent = 0 );
-  K3bFlatButton( QAction*, QWidget *parent = 0);
+public:
+    K3bFlatButton( QWidget *parent = 0);
+    K3bFlatButton( const QString& text, QWidget *parent = 0 );
+    K3bFlatButton( QAction*, QWidget *parent = 0);
   
-  ~K3bFlatButton();
+    ~K3bFlatButton();
 
-  QSize sizeHint() const;
+    QSize sizeHint() const;
 
- public slots:
-  void setColors( const QColor& fore, const QColor& back );
-  void setText( const QString& );
-  void setPixmap( const QPixmap& );
+public slots:
+    void setColors( const QColor& fore, const QColor& back );
+    void setText( const QString& );
+    void setPixmap( const QPixmap& );
+    void setMargin( int margin );
 
- signals:
-  void pressed();
-  void clicked();
+signals:
+    void pressed();
+    void clicked();
 
- private slots:
-  void slotThemeChanged();
+    private slots:
+    void slotThemeChanged();
 
- private:
-  void init();
+private:
+    void init();
 
-  void mousePressEvent(QMouseEvent* e);
-  void mouseReleaseEvent(QMouseEvent* e);
-  void enterEvent( QEvent* );
-  void leaveEvent( QEvent* );
-  void paintEvent ( QPaintEvent * event );
-  void setHover( bool );
+    void mousePressEvent(QMouseEvent* e);
+    void mouseReleaseEvent(QMouseEvent* e);
+    void enterEvent( QEvent* );
+    void leaveEvent( QEvent* );
+    void paintEvent ( QPaintEvent * event );
+    void setHover( bool );
 
-  bool m_pressed;
-  QColor m_backColor;
-  QColor m_foreColor;
-  QString m_text;
-  QPixmap m_pixmap;
+    bool m_pressed;
+    QColor m_backColor;
+    QColor m_foreColor;
+    QString m_text;
+    QPixmap m_pixmap;
+    int m_margin;
 
-  bool m_hover;
+    bool m_hover;
 };
 
 #endif

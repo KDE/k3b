@@ -1,6 +1,6 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -33,37 +33,32 @@ class QWidget;
  */
 class LIBK3B_EXPORT K3bPluginManager : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bPluginManager( QObject* parent = 0 );
-  ~K3bPluginManager();
+public:
+    K3bPluginManager( QObject* parent = 0 );
+    ~K3bPluginManager();
 
-  /**
-   * if group is empty all plugins are returned
-   */
-  QList<K3bPlugin*> plugins( const QString& group = QString() ) const;
+    /**
+     * if group is empty all plugins are returned
+     */
+    QList<K3bPlugin*> plugins( const QString& category = QString() ) const;
 
-  /**
-   * Returnes a list of the available groups.
-   */
-  QStringList groups() const;
+    /**
+     * Returnes a list of the available categories.
+     */
+    QStringList categories() const;
 
-  int pluginSystemVersion() const;
+    int pluginSystemVersion() const;
 
- public slots:
-  /**
-   * Loads all plugins from the ressource directories.
-   */
-  void loadAll();
+public slots:
+    void loadAll();
 
-  void loadPlugin( const QString& fileName );
+    int execPluginDialog( K3bPlugin*, QWidget* parent = 0, const char* name = 0 );
 
-  int execPluginDialog( K3bPlugin*, QWidget* parent = 0, const char* name = 0 );
-
- private:
-  class Private;
-  Private* d;
+private:
+    class Private;
+    Private* d;
 };
 
 #endif

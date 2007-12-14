@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -34,7 +34,7 @@ public:
 
 
 K3bAudioEncoder::K3bAudioEncoder( QObject* parent, const char* name )
-  : K3bPlugin( parent, name )
+  : K3bPlugin( parent )
 {
   d = new Private();
 }

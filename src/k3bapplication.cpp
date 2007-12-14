@@ -64,266 +64,266 @@ K3bApplication::Core* K3bApplication::Core::s_k3bAppCore = 0;
 
 
 K3bApplication::K3bApplication()
-  : KUniqueApplication(),
-    m_mainWindow(0),
-    m_needToInit(true)
+    : KUniqueApplication(),
+      m_mainWindow(0),
+      m_needToInit(true)
 {
-  // insert library i18n data
-  KGlobal::locale()->insertCatalog( "libk3bdevice" );
-  KGlobal::locale()->insertCatalog( "libk3b" );
+    // insert library i18n data
+    KGlobal::locale()->insertCatalog( "libk3bdevice" );
+    KGlobal::locale()->insertCatalog( "libk3b" );
 
-  m_core = new Core( this );
+    m_core = new Core( this );
 
-  // TODO: move to K3bCore?
-  // from this point on available through K3bAudioServer::instance()
-  //m_audioServer = new K3bAudioServer( this, "K3bAudioServer" );
+    // TODO: move to K3bCore?
+    // from this point on available through K3bAudioServer::instance()
+    //m_audioServer = new K3bAudioServer( this, "K3bAudioServer" );
 
-  connect( m_core, SIGNAL(initializationInfo(const QString&)),
-	   SIGNAL(initializationInfo(const QString&)) );
+    connect( m_core, SIGNAL(initializationInfo(const QString&)),
+             SIGNAL(initializationInfo(const QString&)) );
 
-  connect( qApp, SIGNAL(aboutToQuit()), SLOT(slotShutDown()) );
+    connect( qApp, SIGNAL(aboutToQuit()), SLOT(slotShutDown()) );
 }
 
 
 K3bApplication::~K3bApplication()
 {
-  // we must not delete m_mainWindow here, QApplication takes care of it
+    // we must not delete m_mainWindow here, QApplication takes care of it
 }
 
 
 void K3bApplication::init()
 {
- //FIXME kde4
-  KConfigGroup generalOptions( KGlobal::config(), "General Options" );
+    //FIXME kde4
+    KConfigGroup generalOptions( KGlobal::config(), "General Options" );
 
-  QPointer<K3bSplash> splash;
-  if( !qApp->isSessionRestored() ) {
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    QPointer<K3bSplash> splash;
+    if( !qApp->isSessionRestored() ) {
+        KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-    if( generalOptions.readEntry("Show splash", true) && args->isSet( "splash" ) ) {
-      // we need the correct splash pic
-       //FIXME kde4
-   //    m_core->m_themeManager->readConfig( KGlobal::config() );
+        if( generalOptions.readEntry("Show splash", true) && args->isSet( "splash" ) ) {
+            // we need the correct splash pic
+            //FIXME kde4
+            //    m_core->m_themeManager->readConfig( KGlobal::config() );
 
-      splash = new K3bSplash( 0 );
-      splash->connect( this, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
+            splash = new K3bSplash( 0 );
+            splash->connect( this, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
 
-      // kill the splash after 5 seconds
-      QTimer::singleShot( 5000, splash, SLOT(close()) );
+            // kill the splash after 5 seconds
+            QTimer::singleShot( 5000, splash, SLOT(close()) );
 
-      splash->show();
-      qApp->processEvents();
+            splash->show();
+            qApp->processEvents();
+        }
     }
-  }
-  //
-  // Load device, external programs, and stuff.
-  //
-  m_core->init();
-  //FIXME kde4
-  //m_core->readSettings( globalConfig() );
+    //
+    // Load device, external programs, and stuff.
+    //
+    m_core->init();
+    //FIXME kde4
+    //m_core->readSettings( globalConfig() );
 
-  m_core->deviceManager()->printDevices();
+    m_core->deviceManager()->printDevices();
 
-  //FIXME kde4
-  //m_audioServer->setOutputMethod( generalOptions.readEntry( "Audio Output System", "arts" ).local8Bit() );
+    //FIXME kde4
+    //m_audioServer->setOutputMethod( generalOptions.readEntry( "Audio Output System", "arts" ).local8Bit() );
 
-  emit initializationInfo( i18n("Creating GUI...") );
+    emit initializationInfo( i18n("Creating GUI...") );
 
-  m_mainWindow = new K3bMainWindow();
-  m_core->m_mainWindow = m_mainWindow;
-  //m_core->interface()->setMainWindow( m_mainWindow );
+    m_mainWindow = new K3bMainWindow();
+    m_core->m_mainWindow = m_mainWindow;
+    //m_core->interface()->setMainWindow( m_mainWindow );
 
-  if( qApp->isSessionRestored() ) {
-    // we only have one single mainwindow to restore
-    m_mainWindow->restore(1);
-  }
-  else {
-    setMainWidget( m_mainWindow );
+    if( qApp->isSessionRestored() ) {
+        // we only have one single mainwindow to restore
+        m_mainWindow->restore(1);
+    }
+    else {
+        setMainWidget( m_mainWindow );
 
-    m_mainWindow->show();
+        m_mainWindow->show();
 
-    emit initializationInfo( i18n("Ready.") );
+        emit initializationInfo( i18n("Ready.") );
 
-    emit initializationDone();
+        emit initializationDone();
 
-    K3bFirstRun::run( m_mainWindow );
+        K3bFirstRun::run( m_mainWindow );
 
-    if( K3bSystemProblemDialog::readCheckSystemConfig() ) {
-      emit initializationInfo( i18n("Checking System") );
-      K3bSystemProblemDialog::checkSystem( m_mainWindow );
+        if( K3bSystemProblemDialog::readCheckSystemConfig() ) {
+            emit initializationInfo( i18n("Checking System") );
+            K3bSystemProblemDialog::checkSystem( m_mainWindow );
+        }
+
+        if( processCmdLineArgs() )
+            KTipDialog::showTip( m_mainWindow );
     }
 
-    if( processCmdLineArgs() )
-      KTipDialog::showTip( m_mainWindow );
-  }
-
-  // write the current version to make sure checks such as K3bSystemProblemDialog::readCheckSystemConfig
-  // use a proper value
-  //FIXME kde4
-  //generalOptions.writeEntry( "config version", QString(m_core->version()) );
+    // write the current version to make sure checks such as K3bSystemProblemDialog::readCheckSystemConfig
+    // use a proper value
+    //FIXME kde4
+    //generalOptions.writeEntry( "config version", QString(m_core->version()) );
 }
 
 
 int K3bApplication::newInstance()
 {
-  if( m_needToInit ) {
-    //    init();
-    m_needToInit = false;
-  }
-  else
-    processCmdLineArgs();
+    if( m_needToInit ) {
+        //    init();
+        m_needToInit = false;
+    }
+    else
+        processCmdLineArgs();
 
-  return KUniqueApplication::newInstance();
+    return KUniqueApplication::newInstance();
 }
 
 
 bool K3bApplication::processCmdLineArgs()
 {
-  KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-  bool showTips = true;
-  bool dialogOpen = false;
+    bool showTips = true;
+    bool dialogOpen = false;
 
-  if( k3bcore->jobsRunning() > 0 ) {
-    K3bPassivePopup::showPopup( i18n("K3b is currently busy and cannot start any other operations."),
-				i18n("K3b is busy"),
-				K3bPassivePopup::Information );
-    return true;
-  }
-
-  K3bDoc* doc = 0;
-  if( args->isSet( "data" ) ||
-      args->isSet( "datacd" ) ||
-      args->isSet( "datadvd" )) {
-    doc = m_mainWindow->slotNewDataDoc();
-  }
-  else if( args->isSet( "audiocd" ) ) {
-    doc = m_mainWindow->slotNewAudioDoc();
-  }
-  else if( args->isSet( "mixedcd" ) ) {
-    doc = m_mainWindow->slotNewMixedDoc();
-  }
-  else if( args->isSet( "videocd" ) ) {
-    doc = m_mainWindow->slotNewVcdDoc();
-  }
-  else if( args->isSet( "emovix" ) ||
-           args->isSet( "emovixcd" ) ||
-           args->isSet( "emovixdvd" ) ) {
-    doc = m_mainWindow->slotNewMovixDoc();
-  }
-  else if( args->isSet( "videodvd" ) ) {
-    doc = m_mainWindow->slotNewVideoDvdDoc();
-  }
-
-  // if we created a doc the urls are used to populate it
-  if( doc ) {
-    KUrl::List urls;
-    for( int i = 0; i < args->count(); i++ )
-      urls.append( args->url(i) );
-    dynamic_cast<K3bView*>( doc->view() )->addUrls( urls );
-  }
-  // otherwise we open them as documents
-  else {
-    for( int i = 0; i < args->count(); i++ ) {
-      m_mainWindow->openDocument( args->url(i) );
+    if( k3bcore->jobsRunning() > 0 ) {
+        K3bPassivePopup::showPopup( i18n("K3b is currently busy and cannot start any other operations."),
+                                    i18n("K3b is busy"),
+                                    K3bPassivePopup::Information );
+        return true;
     }
-  }
 
-  // we only allow one dialog to be opened
-  if( args->isSet( "cdimage" ) ) {
-    showTips = false;
-    dialogOpen = true;
-    if( k3bcore->jobsRunning() == 0 ) {
-      m_mainWindow->slotWriteCdImage( KUrl(  args->getOption( "cdimage" )  ) );
+    K3bDoc* doc = 0;
+    if( args->isSet( "data" ) ||
+        args->isSet( "datacd" ) ||
+        args->isSet( "datadvd" )) {
+        doc = m_mainWindow->slotNewDataDoc();
     }
-  }
-  else if( args->isSet( "dvdimage" ) ) {
-    showTips = false;
-    dialogOpen = true;
-    if( k3bcore->jobsRunning() == 0 ) {
-      m_mainWindow->slotWriteDvdIsoImage( KUrl(args->getOption( "dvdimage" ) ) );
+    else if( args->isSet( "audiocd" ) ) {
+        doc = m_mainWindow->slotNewAudioDoc();
     }
-  }
-  else if( args->isSet( "image" ) ) {
-    showTips = false;
-    dialogOpen = true;
-    KUrl url = KUrl( args->getOption( "image" ) );
-    if( k3bcore->jobsRunning() == 0 ) {
-      if( K3b::filesize( url ) > 1000*1024*1024 )
-	m_mainWindow->slotWriteDvdIsoImage( url );
-      else
-	m_mainWindow->slotWriteCdImage( url );
+    else if( args->isSet( "mixedcd" ) ) {
+        doc = m_mainWindow->slotNewMixedDoc();
     }
-  }
-  else if( args->isSet("copy") ||
-           args->isSet("copycd") ||
-           args->isSet("copydvd")) {
-    showTips = false;
-    dialogOpen = true;
-    m_mainWindow->mediaCopy( K3b::urlToDevice( KUrl( args->getOption( "copycd"  ) ) ) );
-  }
-  else if( args->isSet("erasecd") ||
-           args->isSet("formatdvd") ||
-           args->isSet("format")) {
-    showTips = false;
-    dialogOpen = true;
-    m_mainWindow->formatMedium( K3b::urlToDevice( KUrl( args->getOption( "erasecd" )  ) ) );
-  }
+    else if( args->isSet( "videocd" ) ) {
+        doc = m_mainWindow->slotNewVcdDoc();
+    }
+    else if( args->isSet( "emovix" ) ||
+             args->isSet( "emovixcd" ) ||
+             args->isSet( "emovixdvd" ) ) {
+        doc = m_mainWindow->slotNewMovixDoc();
+    }
+    else if( args->isSet( "videodvd" ) ) {
+        doc = m_mainWindow->slotNewVideoDvdDoc();
+    }
 
-  // no dialog used here
-  if( args->isSet( "cddarip" ) ) {
-    m_mainWindow->cddaRip( K3b::urlToDevice( KUrl( args->getOption( "cddarip" )  ) ) );
-  }
-  else if( args->isSet( "videodvdrip" ) ) {
-    m_mainWindow->videoDvdRip( K3b::urlToDevice( KUrl( args->getOption( "videodvdrip" )  ) ) );
-  }
-  else if( args->isSet( "videocdrip" ) ) {
-    m_mainWindow->videoCdRip( K3b::urlToDevice( KUrl(  args->getOption( "videocdrip" ) ) ) );
-  }
-
-  if( !dialogOpen && args->isSet( "burn" ) ) {
-    if( m_core->projectManager()->activeDoc() ) {
-      showTips = false;
-      dialogOpen = true;
-      static_cast<K3bView*>( m_core->projectManager()->activeDoc()->view() )->slotBurn();
+    // if we created a doc the urls are used to populate it
+    if( doc ) {
+        KUrl::List urls;
+        for( int i = 0; i < args->count(); i++ )
+            urls.append( args->url(i) );
+        dynamic_cast<K3bView*>( doc->view() )->addUrls( urls );
     }
-  }
+    // otherwise we open them as documents
+    else {
+        for( int i = 0; i < args->count(); i++ ) {
+            m_mainWindow->openDocument( args->url(i) );
+        }
+    }
+
+    // we only allow one dialog to be opened
+    if( args->isSet( "cdimage" ) ) {
+        showTips = false;
+        dialogOpen = true;
+        if( k3bcore->jobsRunning() == 0 ) {
+            m_mainWindow->slotWriteCdImage( KUrl(  args->getOption( "cdimage" )  ) );
+        }
+    }
+    else if( args->isSet( "dvdimage" ) ) {
+        showTips = false;
+        dialogOpen = true;
+        if( k3bcore->jobsRunning() == 0 ) {
+            m_mainWindow->slotWriteDvdIsoImage( KUrl(args->getOption( "dvdimage" ) ) );
+        }
+    }
+    else if( args->isSet( "image" ) ) {
+        showTips = false;
+        dialogOpen = true;
+        KUrl url = KUrl( args->getOption( "image" ) );
+        if( k3bcore->jobsRunning() == 0 ) {
+            if( K3b::filesize( url ) > 1000*1024*1024 )
+                m_mainWindow->slotWriteDvdIsoImage( url );
+            else
+                m_mainWindow->slotWriteCdImage( url );
+        }
+    }
+    else if( args->isSet("copy") ||
+             args->isSet("copycd") ||
+             args->isSet("copydvd")) {
+        showTips = false;
+        dialogOpen = true;
+        m_mainWindow->mediaCopy( K3b::urlToDevice( KUrl( args->getOption( "copycd"  ) ) ) );
+    }
+    else if( args->isSet("erasecd") ||
+             args->isSet("formatdvd") ||
+             args->isSet("format")) {
+        showTips = false;
+        dialogOpen = true;
+        m_mainWindow->formatMedium( K3b::urlToDevice( KUrl( args->getOption( "erasecd" )  ) ) );
+    }
+
+    // no dialog used here
+    if( args->isSet( "cddarip" ) ) {
+        m_mainWindow->cddaRip( K3b::urlToDevice( KUrl( args->getOption( "cddarip" )  ) ) );
+    }
+    else if( args->isSet( "videodvdrip" ) ) {
+        m_mainWindow->videoDvdRip( K3b::urlToDevice( KUrl( args->getOption( "videodvdrip" )  ) ) );
+    }
+    else if( args->isSet( "videocdrip" ) ) {
+        m_mainWindow->videoCdRip( K3b::urlToDevice( KUrl(  args->getOption( "videocdrip" ) ) ) );
+    }
+
+    if( !dialogOpen && args->isSet( "burn" ) ) {
+        if( m_core->projectManager()->activeDoc() ) {
+            showTips = false;
+            dialogOpen = true;
+            static_cast<K3bView*>( m_core->projectManager()->activeDoc()->view() )->slotBurn();
+        }
+    }
 #if 0
-  // FIXME: seems not like the right place...
-  if( args->isSet( "ao" ) )
-    if( !m_audioServer->setOutputMethod( args->getOption( "ao" ) ) )
-      K3bPassivePopup::showPopup( i18n("Could not find Audio Output plugin '%1'",args->getOption("ao") ),
-				  i18n("Initialization Problem"),
-				  K3bPassivePopup::Warning );
- #endif
-  args->clear();
+    // FIXME: seems not like the right place...
+    if( args->isSet( "ao" ) )
+        if( !m_audioServer->setOutputMethod( args->getOption( "ao" ) ) )
+            K3bPassivePopup::showPopup( i18n("Could not find Audio Output plugin '%1'",args->getOption("ao") ),
+                                        i18n("Initialization Problem"),
+                                        K3bPassivePopup::Warning );
+#endif
+    args->clear();
 
-  return showTips;
+    return showTips;
 }
 
 
 void K3bApplication::slotShutDown()
 {
-  k3bappcore->mediaCache()->clearDeviceList();
-  K3bThread::waitUntilFinished();
+    k3bappcore->mediaCache()->clearDeviceList();
+    K3bThread::waitUntilFinished();
 }
 
 
 
 K3bApplication::Core::Core( QObject* parent )
-  : K3bCore( parent ),
-    m_appDeviceManager(0),
-    m_mediaCache(0)
+    : K3bCore( parent ),
+      m_appDeviceManager(0),
+      m_mediaCache(0)
 {
-  s_k3bAppCore = this;
-  m_themeManager = new K3bThemeManager( this );
-  m_projectManager = new K3bProjectManager( this );
-  // we need the themes on startup (loading them is fast anyway :)
-  m_themeManager->loadThemes();
+    s_k3bAppCore = this;
+    m_themeManager = new K3bThemeManager( this );
+    m_projectManager = new K3bProjectManager( this );
+    // we need the themes on startup (loading them is fast anyway :)
+    m_themeManager->loadThemes();
 
-  //m_jobInterface = new K3bJobInterface( this );
-  //m_interface = new K3bInterface();
-  //dcopClient()->setDefaultObject( m_interface->objId() );
+    //m_jobInterface = new K3bJobInterface( this );
+    //m_interface = new K3bInterface();
+    //dcopClient()->setDefaultObject( m_interface->objId() );
 }
 
 
@@ -334,119 +334,119 @@ K3bApplication::Core::~Core()
 
 void K3bApplication::Core::initDeviceManager()
 {
-  if( !m_appDeviceManager ) {
-    // our very own special device manager
-    m_appDeviceManager = new K3bAppDeviceManager( this );
-  }
-  if( !m_mediaCache ) {
-    // create the media cache but do not connect it to the device manager
-    // yet to speed up application start. We connect it in init()
-    // once the devicemanager has scanned for devices.
-    m_mediaCache = new K3bMediaCache( this );
-  }
+    if( !m_appDeviceManager ) {
+        // our very own special device manager
+        m_appDeviceManager = new K3bAppDeviceManager( this );
+    }
+    if( !m_mediaCache ) {
+        // create the media cache but do not connect it to the device manager
+        // yet to speed up application start. We connect it in init()
+        // once the devicemanager has scanned for devices.
+        m_mediaCache = new K3bMediaCache( this );
+    }
 
-  m_appDeviceManager->setMediaCache( m_mediaCache );
+    m_appDeviceManager->setMediaCache( m_mediaCache );
 }
 
 
 K3bDevice::DeviceManager* K3bApplication::Core::deviceManager() const
 {
-  return appDeviceManager();
+    return appDeviceManager();
 }
 
 
 KSharedConfig::Ptr K3bApplication::Core::globalConfig() const
 {
-  return KGlobal::config();
+    return KGlobal::config();
 }
 
 
 void K3bApplication::Core::init()
 {
-  //
-  // The eMovix program is a special case which is not part of
-  // the default programs handled by K3bCore
-  //
-  initExternalBinManager();
-  externalBinManager()->addProgram( new K3bMovixProgram() );
-  externalBinManager()->addProgram( new K3bNormalizeProgram() );
-  K3b::addTranscodePrograms( externalBinManager() );
-  K3b::addVcdimagerPrograms( externalBinManager() );
+    //
+    // The eMovix program is a special case which is not part of
+    // the default programs handled by K3bCore
+    //
+    initExternalBinManager();
+    externalBinManager()->addProgram( new K3bMovixProgram() );
+    externalBinManager()->addProgram( new K3bNormalizeProgram() );
+    K3b::addTranscodePrograms( externalBinManager() );
+    K3b::addVcdimagerPrograms( externalBinManager() );
 
-  K3bCore::init();
+    K3bCore::init();
 
-  mediaCache()->buildDeviceList( deviceManager() );
+    mediaCache()->buildDeviceList( deviceManager() );
 
-  connect( deviceManager(), SIGNAL(changed(K3bDevice::DeviceManager*)),
-	   mediaCache(), SLOT(buildDeviceList(K3bDevice::DeviceManager*)) );
+    connect( deviceManager(), SIGNAL(changed(K3bDevice::DeviceManager*)),
+             mediaCache(), SLOT(buildDeviceList(K3bDevice::DeviceManager*)) );
 }
 
 
 void K3bApplication::Core::readSettings( KConfig* cnf )
 {
-  //FIXME kde4
+    //FIXME kde4
 #if 0
-  K3bCore::readSettings( cnf );
+    K3bCore::readSettings( cnf );
 
-  KConfig* c = cnf;
-  if( !c )
-    c = globalConfig();
+    KConfig* c = cnf;
+    if( !c )
+        c = globalConfig();
 
-  m_themeManager->readConfig( globalConfig() );
+    m_themeManager->readConfig( globalConfig() );
 #endif
 }
 
 
 void K3bApplication::Core::saveSettings( KConfig* cnf )
 {
-  //FIXME kde4
+    //FIXME kde4
 #if 0
-  if( !cnf )
-    cnf = globalConfig();
+    if( !cnf )
+        cnf = globalConfig();
 
-  K3bCore::saveSettings( cnf );
-  m_themeManager->saveConfig( cnf );
+    K3bCore::saveSettings( cnf );
+    m_themeManager->saveConfig( cnf );
 #endif
 }
 
 
 bool K3bApplication::Core::internalBlockDevice( K3bDevice::Device* dev )
 {
-  if( K3bCore::internalBlockDevice( dev ) ) {
-    if( mediaCache() ) {
-      m_deviceBlockMap[dev] = mediaCache()->blockDevice( dev );
-    }
+    if( K3bCore::internalBlockDevice( dev ) ) {
+        if( mediaCache() ) {
+            m_deviceBlockMap[dev] = mediaCache()->blockDevice( dev );
+        }
 
 #ifdef HAVE_HAL
-    if( K3bDevice::HalConnection::instance()->lock( dev ) != K3bDevice::HalConnection::org_freedesktop_Hal_Success )
-      kDebug() << "(K3bInterferingSystemsHandler) HAL lock failed.";
+        if( K3bDevice::HalConnection::instance()->lock( dev ) != K3bDevice::HalConnection::org_freedesktop_Hal_Success )
+            kDebug() << "(K3bInterferingSystemsHandler) HAL lock failed.";
 #endif
 
-    //
-    // Check if the device is in use
-    //
-    // FIXME: Use the top level widget as parent
-    K3bLsofWrapperDialog::checkDevice( dev );
+        //
+        // Check if the device is in use
+        //
+        // FIXME: Use the top level widget as parent
+        K3bLsofWrapperDialog::checkDevice( dev );
 
-    return true;
-  }
-  else
-    return false;
+        return true;
+    }
+    else
+        return false;
 }
 
 
 void K3bApplication::Core::internalUnblockDevice( K3bDevice::Device* dev )
 {
-  if( mediaCache() ) {
-    mediaCache()->unblockDevice( dev, m_deviceBlockMap[dev] );
-    m_deviceBlockMap.erase( dev );
-  }
+    if( mediaCache() ) {
+        mediaCache()->unblockDevice( dev, m_deviceBlockMap[dev] );
+        m_deviceBlockMap.erase( dev );
+    }
 
 #ifdef HAVE_HAL
-  K3bDevice::HalConnection::instance()->unlock( dev );
+    K3bDevice::HalConnection::instance()->unlock( dev );
 #endif
 
-  K3bCore::internalUnblockDevice( dev );
+    K3bCore::internalUnblockDevice( dev );
 }
 
 #include "k3bapplication.moc"
