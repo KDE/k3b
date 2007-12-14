@@ -16,11 +16,19 @@
 #ifndef _K3B_MOVIX_OPTIONSWIDGET_H_
 #define _K3B_MOVIX_OPTIONSWIDGET_H_
 
-#include "base_k3bmovixoptionswidget.h"
+#include "ui_base_k3bmovixoptionswidget.h"
 
 class K3bMovixDoc;
 class K3bMovixBin;
 class KConfigBase;
+
+class base_K3bMovixOptionsWidget : public QWidget, public Ui::base_K3bMovixOptionsWidget
+{
+public:
+  base_K3bMovixOptionsWidget( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 
 class K3bMovixOptionsWidget : public base_K3bMovixOptionsWidget
