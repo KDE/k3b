@@ -16,10 +16,18 @@
 #define K3B_DATA_ADVANCED_IMAGE_SETTINGS_WIDGET_H
 
 
-#include "base_k3badvanceddataimagesettings.h"
+#include "ui_base_k3badvanceddataimagesettings.h"
 
 class K3bIsoOptions;
 class Q3CheckListItem;
+
+class base_K3bAdvancedDataImageSettings : public QWidget, public Ui::base_K3bAdvancedDataImageSettings
+{
+public:
+  base_K3bAdvancedDataImageSettings( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 
 class K3bDataAdvancedImageSettingsWidget : public base_K3bAdvancedDataImageSettings

@@ -16,9 +16,17 @@
 #define K3B_AUDIO_CDTEXT_WIDGET_H
 
 #include "base_k3baudiocdtextwidget.h"
-
+#include "ui_base_k3baudiocdtextallfieldswidget.h"
 
 class K3bAudioDoc;
+
+class base_K3bAudioCdTextAllFieldsWidget : public QWidget, public Ui::base_K3bAudioCdTextAllFieldsWidget
+{
+public:
+  base_K3bAudioCdTextAllFieldsWidget( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 
 class K3bAudioCdTextWidget : public base_K3bAudioCdTextWidget
