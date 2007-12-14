@@ -15,9 +15,15 @@
 #ifndef _K3B_PLUGIN_OPTION_TAB_H_
 #define _K3B_PLUGIN_OPTION_TAB_H_
 
-#include "base_k3bpluginoptiontab.h"
+#include "ui_base_k3bpluginoptiontab.h"
 
-
+class base_K3bPluginOptionTab : public QWidget, public Ui::base_K3bPluginOptionTab
+{
+public:
+  base_K3bPluginOptionTab( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 class K3bPluginOptionTab : public base_K3bPluginOptionTab
 {

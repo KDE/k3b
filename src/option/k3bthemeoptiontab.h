@@ -16,8 +16,16 @@
 #ifndef _K3BTHEMEOPTIONTAB_H_
 #define _K3BTHEMEOPTIONTAB_H_
 
-#include "base_k3bthemeoptiontab.h"
+#include "ui_base_k3bthemeoptiontab.h"
 
+
+class base_K3bThemeOptionTab : public QWidget, public Ui::base_K3bThemeOptionTab
+{
+public:
+  base_K3bThemeOptionTab( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 /**
   *@author Sebastian Trueg

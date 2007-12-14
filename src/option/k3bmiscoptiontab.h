@@ -16,10 +16,18 @@
 #ifndef K3BMISCOPTIONTAB_H
 #define K3BMISCOPTIONTAB_H
 
-#include "base_k3bmiscoptiontab.h"
+#include "ui_base_k3bmiscoptiontab.h"
 
 class QCheckBox;
 class KUrlRequester;
+
+class base_K3bMiscOptionTab : public QWidget, public Ui::base_K3bMiscOptionTab
+{
+public:
+  base_K3bMiscOptionTab( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 /**
   *@author Sebastian Trueg

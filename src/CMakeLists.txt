@@ -158,10 +158,10 @@ set(k3b_option_SRCS
   option/k3bexternalbinwidget.cpp
 )
 
-kde4_add_ui3_files(k3b_option_SRCS
+kde4_add_ui_files(k3b_option_SRCS
+  option/base_k3bthemeoptiontab.ui
   option/base_k3bmiscoptiontab.ui
   option/base_k3bpluginoptiontab.ui
-  option/base_k3bthemeoptiontab.ui
 )
 
 set(k3b_misc_SRCS
