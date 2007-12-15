@@ -76,9 +76,9 @@ void K3bDataPreparationJob::Private::run()
 	 maxlines > 0 && it != items.end();
 	 ++it, --maxlines ) {
       K3bDataItem* item = *it;
-      listOfRenamedItems += i18n("<em>%1</em> renamed to <em>%2</em>")
-	.arg( KStringHandler::csqueeze( item->k3bName(), 30 ) )
-	.arg( KStringHandler::csqueeze( item->writtenName(), 30 ) );
+      listOfRenamedItems += i18n("<em>%1</em> renamed to <em>%2</em>",
+	 KStringHandler::csqueeze( item->k3bName(), 30 ) 
+	,KStringHandler::csqueeze( item->writtenName(), 30 ) );
       listOfRenamedItems += "<br>";
     }
     if( it != items.end() )
@@ -206,8 +206,8 @@ void K3bDataPreparationJob::slotWorkDone( bool success )
       if( !questionYesNo( "<p>" + i18n("The Joliet extensions (which are needed for long filenames on Windows systems) "
 				       "restrict the length of the volume descriptor (the name of the filesystem) "
 				       "to %1 characters. The selected descriptor '%2' is longer than that. Do you "
-				       "want it to be cut or do you want to go back and change it manually?")
-			  .arg( 16 ).arg( d->doc->isoOptions().volumeID() ),
+				       "want it to be cut or do you want to go back and change it manually?",
+			  QString::number( 16 ), d->doc->isoOptions().volumeID() ),
 			  i18n("Warning"),
 			  i18n("Cut volume descriptor in the Joliet tree"),
 			  i18n("Cancel and go back") ) ) {
