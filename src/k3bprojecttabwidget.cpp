@@ -156,15 +156,13 @@ void K3bProjectTabWidget::slotDocSaved( K3bDoc* doc )
 
 K3bDoc* K3bProjectTabWidget::projectAt( const QPoint& pos ) const
 {
-  //FIXME kde4
-#if 0
-  QTab* tab = tabBar()->selectTab( pos );
-  if( tab ) {
-    QWidget* w = page( tabBar()->indexOf( tab->identifier() ) );
-    if( K3bView* view = dynamic_cast<K3bView*>(w) )
+  int tabPos = tabBar()->tabAt(pos);
+  if( tabPos != -1 )
+  {
+     QWidget *w = widget(tabPos);
+     if(K3bView* view = dynamic_cast<K3bView*>(w) )
       return view->doc();
   }
-#endif
   return 0;
 }
 
@@ -176,17 +174,12 @@ bool K3bProjectTabWidget::eventFilter( QObject* o, QEvent* e )
       QMouseEvent* me = static_cast<QMouseEvent*>(e);
       if( me->button() == Qt::RightButton ) {
 	if( projectAt( me->pos() ) ) {
-	  // we need change the tab because the actions work on the current tab
-  //FIXME kde4
-#if 0
-	  QTab* clickedTab = tabBar()->selectTab( me->pos() );
-	  if( clickedTab ) {
-	    tabBar()->setCurrentTab( clickedTab );
-	    
-	    // show the popup menu
-	    m_projectActionMenu->menu()->popup( me->globalPos() );
-	  }
-#endif
+           int tabPos = tabBar()->tabAt(me->pos());
+           if(tabPos!=-1){
+              setCurrentIndex(tabPos);
+              // show the popup menu
+              m_projectActionMenu->menu()->popup( me->globalPos() );
+           }
 	}
 	return true;
       }
