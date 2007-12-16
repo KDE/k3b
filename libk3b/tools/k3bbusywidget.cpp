@@ -22,8 +22,8 @@
 #include <kglobalsettings.h>
 
 
-K3bBusyWidget::K3bBusyWidget( QWidget* parent, const char* name )
-  : QFrame( parent, name )
+K3bBusyWidget::K3bBusyWidget( QWidget* parent )
+  : QFrame( parent )
 {
   m_busyTimer = new QTimer( this );
   m_iBusyPosition = 0;

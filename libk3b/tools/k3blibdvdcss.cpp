@@ -140,7 +140,7 @@ int K3bLibDvdCss::readWrapped( void* buffer, int firstSector, int sectors )
       kDebug() << "(K3bLibDvdCss) title start inside of sector range ("
 		<< firstSector << "-" << (firstSector+sectors-1)
 		<< "). only reading " << (titleStart - firstSector) << " sectors up to title offset "
-		<< (titleStart-1) << endl;
+		<< (titleStart-1);
       sectors = titleStart - firstSector;
     }
 
@@ -148,7 +148,7 @@ int K3bLibDvdCss::readWrapped( void* buffer, int firstSector, int sectors )
       kDebug() << "(K3bLibDvdCss) title end inside of sector range ("
 		<< firstSector << "-" << (firstSector+sectors-1)
 		<< "). only reading " << (titleEnd - firstSector + 1) << " sectors up to title offset "
-		<< titleEnd << endl;
+		<< titleEnd;
       sectors = titleEnd - firstSector + 1;
       inTitle = true;
     }

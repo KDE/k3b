@@ -101,7 +101,7 @@ QString K3b::squeezeTextToWidth( const QFontMetrics& fm, const QString& fullText
 
     if (letters == 2)
       kDebug() << "(K3b::squeezeTextToWidth) WARNING: unable to squeeze text to width " 
-		<< cutWidth << endl;
+		<< cutWidth;
     
     return squeezedText;
   }

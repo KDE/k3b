@@ -23,15 +23,15 @@
 #include <kdebug.h>
 
 
-K3bIntValidator::K3bIntValidator ( QWidget * parent, const char * name )
-  : QValidator(parent, name)
+K3bIntValidator::K3bIntValidator ( QWidget * parent )
+  : QValidator(parent)
 {
   m_min = m_max = 0;
 }
 
 
-K3bIntValidator::K3bIntValidator ( int bottom, int top, QWidget * parent, const char * name )
-  : QValidator(parent, name)
+K3bIntValidator::K3bIntValidator ( int bottom, int top, QWidget * parent)
+  : QValidator(parent)
 {
   m_min = bottom;
   m_max = top;

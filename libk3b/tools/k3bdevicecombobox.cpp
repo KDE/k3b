@@ -61,6 +61,7 @@ K3bDevice::Device* K3bDeviceComboBox::selectedDevice() const
 //         return d->devices[currentIndex()];
 //     else
 //         return 0;
+    return 0;
 }
 
 

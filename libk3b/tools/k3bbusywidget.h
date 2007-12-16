@@ -27,7 +27,7 @@ class LIBK3B_EXPORT K3bBusyWidget : public QFrame
   Q_OBJECT
 
  public:
-  K3bBusyWidget( QWidget* parent = 0, const char* name = 0 );
+  K3bBusyWidget( QWidget* parent = 0 );
   ~K3bBusyWidget();
 
   void showBusy( bool b );

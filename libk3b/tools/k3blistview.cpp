@@ -77,8 +77,7 @@ public:
   }
 
   ~ColumnInfo() {
-    if( next )
-      delete next;
+    delete next;
   }
 
   bool button;

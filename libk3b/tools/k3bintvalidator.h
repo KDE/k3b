@@ -33,12 +33,12 @@ class LIBK3B_EXPORT K3bIntValidator : public QValidator
   /**
    * Constuctor.  Also sets the base value.
    */
-  K3bIntValidator ( QWidget * parent, const char * name = 0 );
+  K3bIntValidator ( QWidget * parent );
 
   /**
    * Constructor.  Also sets the minimum, maximum, and numeric base values.
    */
-  K3bIntValidator ( int bottom, int top, QWidget * parent, const char * name = 0 );
+  K3bIntValidator ( int bottom, int top, QWidget * parent );
 
   /**
    * Destructs the validator.
