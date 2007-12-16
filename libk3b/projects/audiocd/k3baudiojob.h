@@ -21,11 +21,8 @@
 
 class K3bAudioDoc;
 class K3bAudioImager;
-class QFile;
-class QDataStream;
 class K3bAbstractWriter;
 class KTemporaryFile;
-class K3bCdrecordWriter;
 class K3bAudioNormalizeJob;
 class K3bAudioJobTempData;
 class K3bDevice::Device;

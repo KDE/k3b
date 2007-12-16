@@ -19,7 +19,6 @@
 #include <q3frame.h>
 #include "k3b_export.h"
 
-class QPainter;
 class QTimer;
 
 
