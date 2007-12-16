@@ -1,4 +1,4 @@
-[K3b Plugin]
+[Desktop Entry]
 Name=K3b Ogg Vorbis Decoder
 X-KDE-ServiceTypes=K3b/Plugin
 Comment=Decoding module to decode Ogg Vorbis files
