@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=K3b FLAC Decoder
+Comment=Decoding module to decode FLAC files
+Type=Service
+X-KDE-ServiceTypes=K3b/Plugin
+
+X-KDE-Library=k3bflacdecoder
+X-KDE-PluginInfo-Name=k3bflacdecoder
+X-KDE-PluginInfo-Author=John Steele Scott
+X-KDE-PluginInfo-Email=toojays@toojays.net
+X-KDE-PluginInfo-Version=2.1
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Category=AudioDecoder
+

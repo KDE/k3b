@@ -1,9 +1,14 @@
-[K3b Plugin]
-Lib=lib<name>decoder
-Group=AudioDecoder
+[Desktop Entry]
 Name=K3b ??? Decoder
-Author=???
-Email=???
-Version=0.1
 Comment=Decoding module to decode ??? files
-License=???
+Type=Service
+X-KDE-ServiceTypes=K3b/Plugin
+
+X-KDE-Library=<name>
+X-KDE-PluginInfo-Name=<name>
+X-KDE-PluginInfo-Author=???
+X-KDE-PluginInfo-Email=???
+X-KDE-PluginInfo-Version=3.1
+X-KDE-PluginInfo-License=???
+X-KDE-PluginInfo-Category=AudioDecoder
+

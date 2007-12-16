@@ -1,9 +1,0 @@
-[K3b Plugin]
-Lib=libk3bwavedecoder
-Group=AudioDecoder
-Name=K3b Wave Decoder
-Author=Sebastian Trueg
-Email=trueg@k3b.org
-Version=3.0
-Comment=Decoding module to decode wave files
-License=GPL

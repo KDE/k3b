@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=K3b Wave Decoder
+Comment=Decoding module to decode wave files
+Type=Service
+X-KDE-ServiceTypes=K3b/Plugin
+
+X-KDE-Library=k3bwavedecoder
+X-KDE-PluginInfo-Name=k3bwavedecoder
+X-KDE-PluginInfo-Author=Sebastian Trueg
+X-KDE-PluginInfo-Email=trueg@k3b.org
+X-KDE-PluginInfo-Version=3.1
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Category=AudioDecoder
+

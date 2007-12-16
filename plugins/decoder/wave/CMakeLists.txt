@@ -11,4 +11,4 @@ install(TARGETS k3bwavedecoder DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES  k3bwavedecoder.plugin DESTINATION ${DATA_INSTALL_DIR}/k3b/plugins )
+install( FILES  k3bwavedecoder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

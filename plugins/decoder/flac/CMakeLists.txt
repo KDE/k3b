@@ -15,5 +15,5 @@ install(TARGETS k3bflacdecoder DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES  k3bflacdecoder.plugin DESTINATION ${DATA_INSTALL_DIR}/k3b/plugins )
+install( FILES  k3bflacdecoder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 

@@ -19,5 +19,5 @@ install(TARGETS k3bmpcdecoder DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES  k3bmpcdecoder.plugin DESTINATION ${DATA_INSTALL_DIR}/k3b/plugins )
+install( FILES  k3bmpcdecoder.desktop DESTINATION ${PLUGIN_INSTALL_DIR} )
 
