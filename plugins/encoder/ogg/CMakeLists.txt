@@ -17,4 +17,5 @@ install(TARGETS k3boggvorbisencoder DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES  k3boggvorbisencoder.plugin DESTINATION ${DATA_INSTALL_DIR}/k3b/plugins )
+install( FILES  k3boggvorbisencoder.desktop DESTINATION
+${SERVICES_INSTALL_DIR} )

@@ -1,9 +1,0 @@
-[K3b Plugin]
-Lib=libk3boggvorbisencoder
-Group=AudioEncoder
-Name=K3b Ogg Vorbis Encoder
-Author=Sebastian Trueg
-Email=trueg@k3b.org
-Version=2.1
-Comment=Encoding module to encode Ogg Vorbis files
-License=GPL

@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=K3b ??? Encoder
+Comment=Encoding module to encode <name> files
+Type=Service
+X-KDE-ServiceTypes=K3b/Plugin
+
+X-KDE-Library=k3b<name>encoder
+X-KDE-PluginInfo-Name=k3b<name>encoder
+X-KDE-PluginInfo-Author=???
+X-KDE-PluginInfo-Email=???
+X-KDE-PluginInfo-Version=???
+X-KDE-PluginInfo-License=???
+X-KDE-PluginInfo-Category=AudioEncoder
+
