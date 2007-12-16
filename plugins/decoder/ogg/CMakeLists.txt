@@ -12,4 +12,4 @@ install(TARGETS k3boggvorbisdecoder DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES  k3boggvorbisdecoder.plugin DESTINATION ${DATA_INSTALL_DIR}/k3b/plugins )
+install( FILES  k3boggvorbisdecoder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

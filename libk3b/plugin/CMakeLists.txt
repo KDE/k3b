@@ -9,3 +9,4 @@ install( FILES
   k3bprojectplugin.h
   DESTINATION ${INCLUDE_INSTALL_DIR} )
 
+install( FILES k3bplugins.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR}) 

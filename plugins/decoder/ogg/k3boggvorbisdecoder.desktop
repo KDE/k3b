@@ -1,0 +1,13 @@
+[K3b Plugin]
+Name=K3b Ogg Vorbis Decoder
+X-KDE-ServiceTypes=K3b/Plugin
+Comment=Decoding module to decode Ogg Vorbis files
+Type=Service
+X-KDE-Library=k3boggvorbisdecoder
+
+X-KDE-PluginInfo-Name=oggvorbisdecoder
+X-KDE-PluginInfo-Author=Sebastian Trueg
+X-KDE-PluginInfo-Email=trueg@k3b.org
+X-KDE-PluginInfo-Version=3.1
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Category=AudioDecoder
