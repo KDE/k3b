@@ -103,9 +103,9 @@ bool K3bAudioCdTrackSource::initParanoia()
             // ask here for the cd since searchForAudioCD() may also be called from outside
             if( !m_lastUsedDevice ) {
                 // could not find the CD, so ask for it
-                QString s = i18n("Please insert Audio CD %1%2")
-                            .arg(m_discId, 0, 16)
-                            .arg(m_cdTitle.isEmpty() || m_cdArtist.isEmpty()
+                QString s = i18n("Please insert Audio CD %1%2"
+                            ,QString::number(m_discId),
+                            m_cdTitle.isEmpty() || m_cdArtist.isEmpty()
                                  ? QString::null
                                  : " (" + m_cdArtist + " - " + m_cdTitle + ")");
 

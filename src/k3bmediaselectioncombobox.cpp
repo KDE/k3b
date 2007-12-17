@@ -436,21 +436,21 @@ QString K3bMediaSelectionComboBox::mediumToolTip( const K3bMedium& m ) const
 
 QString K3bMediaSelectionComboBox::noMediumMessage() const
 {
-  QString stateString;
+  KLocalizedString stateString;
   if( d->wantedMediumContent == K3bMedium::CONTENT_ALL ) {
       if( d->wantedMediumState == K3bDevice::STATE_EMPTY )
-          stateString = i18n("an empty %1 medium");
+          stateString = ki18n("an empty %1 medium");
       else if( d->wantedMediumState == K3bDevice::STATE_INCOMPLETE )
-          stateString = i18n("an appendable %1 medium");
+          stateString = ki18n("an appendable %1 medium");
       else if( d->wantedMediumState == K3bDevice::STATE_COMPLETE )
-          stateString = i18n("a complete %1 medium");
+          stateString = ki18n("a complete %1 medium");
       else if( d->wantedMediumState & (K3bDevice::STATE_EMPTY|K3bDevice::STATE_INCOMPLETE) &&
                !(d->wantedMediumState & K3bDevice::STATE_COMPLETE) )
-          stateString = i18n("an empty or appendable %1 medium");
+          stateString = ki18n("an empty or appendable %1 medium");
       else if( d->wantedMediumState & (K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE) )
-          stateString = i18n("a complete or appendable %1 medium");
+          stateString = ki18n("a complete or appendable %1 medium");
       else
-          stateString = i18n("a %1 medium");
+          stateString = ki18n("a %1 medium");
   }
   else {
       //
@@ -459,28 +459,28 @@ QString K3bMediaSelectionComboBox::noMediumMessage() const
       // also request a specific type of medium (like DVD+RW or DVD-R)
       //
       if( d->wantedMediumContent & K3bMedium::CONTENT_VIDEO_CD )
-          stateString = i18n("a Video CD medium");
+          stateString = ki18n("a Video CD medium");
       else if ( d->wantedMediumContent & K3bMedium::CONTENT_VIDEO_DVD )
-          stateString = i18n("a Video DVD medium");
+          stateString = ki18n("a Video DVD medium");
       else if( d->wantedMediumContent & K3bMedium::CONTENT_AUDIO &&
                d->wantedMediumContent & K3bMedium::CONTENT_DATA )
-          stateString = i18n("a Mixed Mode CD medium");
+          stateString = ki18n("a Mixed Mode CD medium");
       else if( d->wantedMediumContent & K3bMedium::CONTENT_AUDIO )
-          stateString = i18n("an Audio CD medium");
+          stateString = ki18n("an Audio CD medium");
       else if( d->wantedMediumContent & K3bMedium::CONTENT_DATA ) {
           if ( d->wantedMediumType == K3bDevice::MEDIA_ALL )
-              stateString = i18n("a Data medium");
+              stateString = ki18n("a Data medium");
           else if ( d->wantedMediumType == (K3bDevice::MEDIA_CD_ALL|K3bDevice::MEDIA_DVD_ALL) )
-              stateString = i18n("a Data CD or DVD medium");
+              stateString = ki18n("a Data CD or DVD medium");
           else if ( d->wantedMediumType == K3bDevice::MEDIA_CD_ALL )
-              stateString = i18n("a Data CD medium");
+              stateString = ki18n("a Data CD medium");
           else if( d->wantedMediumType == K3bDevice::MEDIA_DVD_ALL )
-              stateString = i18n("a Data DVD medium");
+              stateString = ki18n("a Data DVD medium");
           else if ( d->wantedMediumType == K3bDevice::MEDIA_BD_ALL )
-              stateString = i18n("a Data Blu-ray medium");
+              stateString = ki18n("a Data Blu-ray medium");
       }
       else {
-          stateString = i18n("an empty medium");
+          stateString = ki18n("an empty medium");
       }
   }
 
@@ -514,14 +514,10 @@ QString K3bMediaSelectionComboBox::noMediumMessage() const
   else if( d->wantedMediumType == K3bDevice::MEDIA_CD_ROM )
       mediumString = i18n("CD-ROM");
 
-  if ( mediumString.isEmpty() ) {
-      stateString = stateString.replace( "%1", "" ).simplified();
-  }
-
-  if ( stateString.contains( "%1" ) )
-      return i18n("Please insert %1...", stateString.arg( mediumString ) );
+  if ( stateString.toString().contains( "%1" ) )
+      return ki18n("Please insert %1...").subs(stateString.subs( mediumString ).toString() ).toString();
   else
-      return i18n("Please insert %1...", stateString );
+      return ki18n("Please insert %1...").subs(stateString.toString() ).toString();
 }
 
 
