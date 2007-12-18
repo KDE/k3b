@@ -476,9 +476,6 @@ void K3bMainWindow::initView()
 
     m_dirTreeDock->setWidget( sidePanel );
 
-    connect( m_dirTreeDock, SIGNAL(iMBeingClosed()), this, SLOT(slotDirTreeDockHidden()) );
-    connect( m_dirTreeDock, SIGNAL(hasUndocked()), this, SLOT(slotDirTreeDockHidden()) );
-    // ---------------------------------------------------------------------------------------------
 
     // --- Contents Dock ---------------------------------------------------------------------------
     m_contentsDock = new QDockWidget(KDialog::makeStandardCaption( i18n("Contents View") ),0);
@@ -488,10 +485,6 @@ void K3bMainWindow::initView()
     m_contentsDock->setWidget( m_dirView );
     //m_contentsDock->manualDock( m_dirTreeDock, K3DockWidget::DockRight, 2000 );
 
-    connect( m_contentsDock, SIGNAL(iMBeingClosed()), this, SLOT(slotContentsDockHidden()) );
-    connect( m_contentsDock, SIGNAL(hasUndocked()), this, SLOT(slotContentsDockHidden()) );
-    // ---------------------------------------------------------------------------------------------
-
     // --- filetreecombobox-toolbar ----------------------------------------------------------------
     K3bFileTreeComboBox* m_fileTreeComboBox = new K3bFileTreeComboBox( 0 );
     connect( m_fileTreeComboBox, SIGNAL(activated(const KUrl&)), m_dirView, SLOT(showUrl(const KUrl& )) );
@@ -499,14 +492,10 @@ void K3bMainWindow::initView()
              SLOT(showDevice(K3bDevice::Device* )) );
     connect( m_dirView, SIGNAL(urlEntered(const KUrl&)), m_fileTreeComboBox, SLOT(setUrl(const KUrl&)) );
     connect( m_dirView, SIGNAL(deviceSelected(K3bDevice::Device*)), m_fileTreeComboBox, SLOT(setDevice(K3bDevice::Device*)) );
-//FIXME kde4
-#if 0
-    K3WidgetAction* fileTreeComboAction = new K3WidgetAction( m_fileTreeComboBox,
-                                                              i18n("&Quick Dir Selector"),
-                                                              0, 0, 0,
-                                                              actionCollection(), "quick_dir_selector" );
-    fileTreeComboAction->setAutoSized(true);
-#endif
+    QWidgetAction * fileTreeComboAction = new QWidgetAction(this);
+    fileTreeComboAction->setDefaultWidget(m_fileTreeComboBox);
+    fileTreeComboAction->setText(i18n("&Quick Dir Selector"));
+    actionCollection()->addAction( "quick_dir_selector", fileTreeComboAction ); 
     (void)K3b::createAction(this, i18n("Go"), "go-jump-locationbar", 0, m_fileTreeComboBox, SLOT(slotGoUrl()), actionCollection(), "go_url" );
     // ---------------------------------------------------------------------------------------------
 }
