@@ -253,11 +253,7 @@ K3bDoc* K3bProjectManager::createProject( K3bDoc::DocType type )
 
 void K3bProjectManager::loadDefaults( K3bDoc* doc )
 {
-//FIXME kde4
-#if 0
-    KConfig *config = (*KGlobal::config());
-
-    //QString oldGroup = config->group();
+    KSharedConfig::Ptr config = KGlobal::config();
 
     QString cg = "default " + doc->typeString() + " settings";
 
@@ -419,8 +415,6 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
     }
 
     doc->setModified( false );
-#endif
-    //c->setGroup( oldGroup );
 }
 
 #if 0

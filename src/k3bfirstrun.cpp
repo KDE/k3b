@@ -30,13 +30,11 @@
 
 void K3bFirstRun::run( QWidget* parent )
 {
-  //TODO port me kde4
-#if 0
-  if( !k3bcore->config()->readEntry( "First run", true ) )
+  KConfigGroup group(k3bcore->config(), "Docking Config");
+  if( !group.readEntry( "First run", true ) )
     return;
 
-  k3bcore->config()->writeEntry( "First run", false );
-#endif
+  group.writeEntry( "First run", false );
   // for now the first run dialog only asks for
   // the konqui integration. So in case it is 
   // already installed there is no need to show the
