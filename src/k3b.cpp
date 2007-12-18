@@ -154,7 +154,6 @@ K3bMainWindow::K3bMainWindow()
 
     setPlainCaption( i18n("K3b - The CD and DVD Kreator") );
 
-    //FIXME kde4
     m_config = KGlobal::config();
 
     // /////////////////////////////////////////////////////////////////
@@ -165,7 +164,6 @@ K3bMainWindow::K3bMainWindow()
     createGUI(0L);
 
     // we need the actions for the welcomewidget
-    //FIXME kde4 it crash
     KConfigGroup grp( config(), "Welcome Widget" );
     d->welcomeWidget->loadConfig( grp );
 
@@ -438,12 +436,6 @@ void K3bMainWindow::initView()
     mainDock = new QDockWidget(KDialog::makeStandardCaption( i18n("Project View") ),0);
     mainDock->setObjectName("project_view");
     addDockWidget ( Qt::BottomDockWidgetArea, mainDock );
-/*
-    mainDock->setDockSite( K3DockWidget::DockCorner );
-    mainDock->setEnableDocking( K3DockWidget::DockNone );
-    setView( mainDock );
-    setMainDockWidget( mainDock );
-*/
     // --- Document Dock ----------------------------------------------------------------------------
     d->documentStack = new QStackedWidget( mainDock );
     mainDock->setWidget( d->documentStack );
@@ -476,11 +468,6 @@ void K3bMainWindow::initView()
     // ---------------------------------------------------------------------------------------------
 
     // --- Directory Dock --------------------------------------------------------------------------
-/*
-    m_dirTreeDock = createDockWidget( "directory_tree", SmallIcon("folder"), 0,
-                                      KDialog::makeStandardCaption( i18n("Sidepanel") ), i18n("Sidepanel") );
-    m_dirTreeDock->setEnableDocking( K3DockWidget::DockCorner );
-*/
     m_dirTreeDock = new QDockWidget(KDialog::makeStandardCaption( i18n("Sidepanel") ),0);
     m_dirTreeDock->setObjectName("directory_tree");
     addDockWidget ( Qt::TopDockWidgetArea, m_dirTreeDock );
@@ -489,18 +476,11 @@ void K3bMainWindow::initView()
 
     m_dirTreeDock->setWidget( sidePanel );
 
-    //FIXME kde4 it crash
-    //m_dirTreeDock->manualDock( mainDock, K3DockWidget::DockTop, 4000 );
     connect( m_dirTreeDock, SIGNAL(iMBeingClosed()), this, SLOT(slotDirTreeDockHidden()) );
     connect( m_dirTreeDock, SIGNAL(hasUndocked()), this, SLOT(slotDirTreeDockHidden()) );
     // ---------------------------------------------------------------------------------------------
 
     // --- Contents Dock ---------------------------------------------------------------------------
-/*
-    m_contentsDock = createDockWidget( "contents_view", SmallIcon("view-file-detailed"), 0,
-                                       KDialog::makeStandardCaption( i18n("Contents View") ), i18n("Contents View") );
-    m_contentsDock->setEnableDocking( K3DockWidget::DockCorner );
-*/
     m_contentsDock = new QDockWidget(KDialog::makeStandardCaption( i18n("Contents View") ),0);
     m_contentsDock->setObjectName("contents_view");
     addDockWidget ( Qt::TopDockWidgetArea,m_contentsDock );
