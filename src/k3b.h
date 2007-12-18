@@ -193,9 +193,6 @@ private slots:
     void slotFileClose();
     void slotFileCloseAll();
 
-    void slotDirTreeDockHidden();
-    void slotContentsDockHidden();
-
     void slotSettingsConfigure();
 
     /** checks if the currently visible tab is a k3bview
@@ -210,15 +207,11 @@ private slots:
 
     void slotViewDocumentHeader();
 
-    void slotCheckDockWidgetStatus();
-
     /** changes the statusbar contents for the standard label permanently, used to indicate current actions.
      * @param text the text that is displayed in the statusbar
      */
     void slotStatusMsg(const QString &text);
 
-    void slotShowDirTreeView();
-    void slotShowContentsView();
     void slotShowMenuBar();
 
     void slotProjectAddFiles();
@@ -291,8 +284,6 @@ private:
     KAction* actionToolsVideoCdRip;
     KAction* actionProjectAddFiles;
     KToggleAction* actionViewStatusBar;
-    KToggleAction* actionViewDirTreeView;
-    KToggleAction* actionViewContentsView;
     KToggleAction* actionViewDocumentHeader;
 
     // project actions

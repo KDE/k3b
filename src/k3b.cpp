@@ -199,7 +199,6 @@ K3bMainWindow::~K3bMainWindow()
 
 void K3bMainWindow::showEvent( QShowEvent* e )
 {
-    slotCheckDockWidgetStatus();
     //K3DockMainWindow::showEvent( e );
 }
 
@@ -276,17 +275,9 @@ void K3bMainWindow::initActions()
     KAction* actionClearProject = K3b::createAction(this,i18n("&Clear Project"), QApplication::isRightToLeft() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar", 0,
                                                this, SLOT(slotClearProject()), actionCollection(), "project_clear_project" );
 
-    actionViewDirTreeView = new KToggleAction(i18n("Show Directories"),this);
-    KAction* action = actionCollection()->addAction("view_dir_tree",actionViewDirTreeView);
-    connect( action , SIGNAL(toggled(bool)) , this , SLOT(slotShowDirTreeView()) );
-
-
-    actionViewContentsView = new KToggleAction(i18n("Show Contents"),this);
-    action= actionCollection()->addAction("view_contents",actionViewContentsView);
-    connect( action , SIGNAL(toggled(bool)) , this , SLOT(slotShowContentsView()) );
 
     actionViewDocumentHeader = new KToggleAction(i18n("Show Document Header"),this);
-    action= actionCollection()->addAction("view_document_header",actionViewDocumentHeader);
+    QAction *action= actionCollection()->addAction("view_document_header",actionViewDocumentHeader);
     connect( action , SIGNAL(toggled(bool)) , this , SLOT(slotViewDocumentHeader()) );
 
 
@@ -471,6 +462,10 @@ void K3bMainWindow::initView()
     m_dirTreeDock = new QDockWidget(KDialog::makeStandardCaption( i18n("Sidepanel") ),0);
     m_dirTreeDock->setObjectName("directory_tree");
     addDockWidget ( Qt::TopDockWidgetArea, m_dirTreeDock );
+    QAction *action = m_dirTreeDock->toggleViewAction();
+    action->setText(i18n("Show Directories"));
+    actionCollection()->addAction( "view_dir_tree", action );
+ 
     K3bFileTreeView* sidePanel = new K3bFileTreeView( m_dirTreeDock );
     //K3bSidePanel* sidePanel = new K3bSidePanel( this, m_dirTreeDock, "sidePanel" );
 
@@ -481,6 +476,10 @@ void K3bMainWindow::initView()
     m_contentsDock = new QDockWidget(KDialog::makeStandardCaption( i18n("Contents View") ),0);
     m_contentsDock->setObjectName("contents_view");
     addDockWidget ( Qt::TopDockWidgetArea,m_contentsDock );
+    action = m_contentsDock->toggleViewAction();
+    action->setText(i18n("Show Contents"));
+    actionCollection()->addAction("view_contents",action);
+
     m_dirView = new K3bDirView( sidePanel/*->fileTreeView()*/, m_contentsDock );
     m_contentsDock->setWidget( m_dirView );
     //m_contentsDock->manualDock( m_dirTreeDock, K3DockWidget::DockRight, 2000 );
@@ -651,7 +650,6 @@ void K3bMainWindow::readOptions()
     //m_dirView->readConfig( config() );
 
     slotViewDocumentHeader();
-    slotCheckDockWidgetStatus();
 }
 
 
@@ -1359,19 +1357,6 @@ void K3bMainWindow::slotMediaCopy()
 // }
 
 
-void K3bMainWindow::slotShowDirTreeView()
-{
-    //m_dirTreeDock->changeHideShowState();
-    slotCheckDockWidgetStatus();
-}
-
-
-void K3bMainWindow::slotShowContentsView()
-{
-    //m_contentsDock->changeHideShowState();
-    slotCheckDockWidgetStatus();
-}
-
 
 void K3bMainWindow::slotShowMenuBar()
 {
@@ -1387,24 +1372,6 @@ void K3bMainWindow::slotShowTips()
     KTipDialog::showTip( this, QString::null, true );
 }
 
-
-void K3bMainWindow::slotDirTreeDockHidden()
-{
-    actionViewDirTreeView->setChecked( false );
-}
-
-
-void K3bMainWindow::slotContentsDockHidden()
-{
-    actionViewContentsView->setChecked( false );
-}
-
-
-void K3bMainWindow::slotCheckDockWidgetStatus()
-{
-    actionViewContentsView->setChecked( m_contentsDock->isVisible() );
-    actionViewDirTreeView->setChecked( m_dirTreeDock->isVisible() );
-}
 
 
 void K3bMainWindow::slotViewDocumentHeader()
