@@ -93,7 +93,6 @@ K3bApplication::~K3bApplication()
 
 void K3bApplication::init()
 {
-    //FIXME kde4
     KConfigGroup generalOptions( KGlobal::config(), "General Options" );
 
     QPointer<K3bSplash> splash;
@@ -102,8 +101,7 @@ void K3bApplication::init()
 
         if( generalOptions.readEntry("Show splash", true) && args->isSet( "splash" ) ) {
             // we need the correct splash pic
-            //FIXME kde4
-            //    m_core->m_themeManager->readConfig( KGlobal::config() );
+            m_core->m_themeManager->readConfig(generalOptions );
 
             splash = new K3bSplash( 0 );
             splash->connect( this, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
@@ -159,8 +157,7 @@ void K3bApplication::init()
 
     // write the current version to make sure checks such as K3bSystemProblemDialog::readCheckSystemConfig
     // use a proper value
-    //FIXME kde4
-    //generalOptions.writeEntry( "config version", QString(m_core->version()) );
+    generalOptions.writeEntry( "config version", QString(m_core->version()) );
 }
 
 
