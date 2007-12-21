@@ -23,8 +23,6 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 
-#include <KComponentData>
-#include <KAboutData>
 #include <KGlobal>
 
 #include <q3textstream.h>

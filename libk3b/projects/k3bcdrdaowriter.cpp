@@ -37,7 +37,6 @@
 #include <q3socket.h>
 #include <q3socketdevice.h>
 //Added by qt3to4:
-#include <Q3CString>
 
 #include <klocale.h>
 #include <kdebug.h>

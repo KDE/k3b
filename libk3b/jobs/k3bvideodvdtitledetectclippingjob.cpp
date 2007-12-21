@@ -22,7 +22,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 //Added by qt3to4:
-#include <Q3CString>
 
 
 static const int s_unrealisticHighClippingValue = 100000;

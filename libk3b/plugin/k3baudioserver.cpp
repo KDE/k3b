@@ -29,7 +29,6 @@
 //Added by qt3to4:
 #include <Q3CString>
 #include <QCustomEvent>
-#include <Q3PtrList>
 
 
 

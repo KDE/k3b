@@ -27,7 +27,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 //Added by qt3to4:
-#include <Q3PtrList>
 
 
 K3bAudioCdTrackSource::K3bAudioCdTrackSource( const K3bDevice::Toc& toc, int cdTrackNumber,
