@@ -243,10 +243,10 @@ void K3bAudioCdView::initActions()
   KAction* actionDeselect = K3b::createAction(this, i18n("Uncheck Track"), 0, 0, this,
 					 SLOT(slotDeselect()), actionCollection(),
 					 "deselect_track" );
-  KAction* actionEditTrackCddbInfo = K3b::createAction(this, i18n("Edit Track cddb Info"), "object-edit", 0, this,
+  KAction* actionEditTrackCddbInfo = K3b::createAction(this, i18n("Edit Track cddb Info"), "document-properties", 0, this,
 						  SLOT(slotEditTrackCddb()), actionCollection(),
 						  "edit_track_cddb" );
-  KAction* actionEditAlbumCddbInfo = K3b::createAction(this, i18n("Edit Album cddb Info"), "document-properties", 0, this,
+  KAction* actionEditAlbumCddbInfo = K3b::createAction(this, i18n("Edit Album cddb Info"), "help-about", 0, this,
 						  SLOT(slotEditAlbumCddb()), actionCollection(),
 						  "edit_album_cddb" );
 

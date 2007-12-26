@@ -79,7 +79,7 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent )
     KAction* actionClearSession = K3b::createAction( this, i18n("&Clear Imported Session"), "edit-clear", 0, this,
                                                      SLOT(clearImportedSession()), actionCollection(),
                                                      "project_data_clear_imported_session" );
-    KAction* actionEditBootImages = K3b::createAction( this, i18n("&Edit Boot Images..."), "object-edit", 0, this,
+    KAction* actionEditBootImages = K3b::createAction( this, i18n("&Edit Boot Images..."), "document-properties", 0, this,
                                                        SLOT(editBootImages()), actionCollection(),
                                                        "project_data_edit_boot_images" );
 
