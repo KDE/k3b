@@ -13,7 +13,7 @@
  */
 
 #include "k3baudiocdtextwidget.h"
-#include "base_k3baudiocdtextallfieldswidget.h"
+#include "ui_base_k3baudiocdtextallfieldswidget.h"
 
 #include "k3baudiodoc.h"
 #include "k3baudiotrack.h"
