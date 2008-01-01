@@ -236,7 +236,7 @@ void K3bMainWindow::initActions()
 
     //FIXME kde4 verify it
     actionFileNewMenu = new KActionMenu( i18n("&New Project"),this );
-    actionFileNewMenu->setIcon( KIcon( "filenew" ) );
+    actionFileNewMenu->setIcon( KIcon( "document-new" ) );
     actionCollection()->addAction( "file_new", actionFileNewMenu );
     actionFileNewAudio = K3b::createAction(this,i18n("New &Audio CD Project"), "media-optical-audio", 0, this, SLOT(slotNewAudioDoc()),
                                      actionCollection(), "file_new_audio");
@@ -272,7 +272,7 @@ void K3bMainWindow::initActions()
     actionProjectAddFiles = K3b::createAction(this, i18n("&Add Files..."), "document-open", 0, this, SLOT(slotProjectAddFiles()),
                                          actionCollection(), "project_add_files");
 
-    KAction* actionClearProject = K3b::createAction(this,i18n("&Clear Project"), QApplication::isRightToLeft() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar", 0,
+    KAction* actionClearProject = K3b::createAction(this,i18n("&Clear Project"), QApplication::isRightToLeft() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar-ltr", 0,
                                                this, SLOT(slotClearProject()), actionCollection(), "project_clear_project" );
 
 
