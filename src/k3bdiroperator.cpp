@@ -51,7 +51,7 @@ K3bDirOperator::K3bDirOperator(const KUrl& url, QWidget* parent )
   bmMan->setEditorOptions( i18n("K3b Bookmarks"), false );
   bmMan->setUpdate( true );
 
-  m_bmPopup = new KActionMenu( KIcon("bookmark"),i18n("Bookmarks"), this);
+  m_bmPopup = new KActionMenu( KIcon("bookmarks"),i18n("Bookmarks"), this);
   m_bmMenu = new KBookmarkMenu( bmMan, this, m_bmPopup->popupMenu(), actionCollection()/*, true*/ );
 
   (void)K3b::createAction( this,i18n("&Add to Project"), 0, Qt::SHIFT+Qt::Key_Return, 
