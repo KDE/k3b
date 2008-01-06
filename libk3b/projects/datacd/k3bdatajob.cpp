@@ -619,7 +619,7 @@ bool K3bDataJob::waitForMedium()
 
     // if everything goes wrong we are left with no possible media to request
     if ( !m ) {
-        emit infoMessage( i18n( "Internal error: No medium tyoe fits. This project cannot be burned." ), ERROR );
+        emit infoMessage( i18n( "Internal Error: No medium type fits. This project cannot be burned." ), ERROR );
         return false;
     }
 
