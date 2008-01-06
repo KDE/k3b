@@ -157,7 +157,7 @@ void K3bVerificationJob::start()
 
   // make sure the job is initialized
   if ( d->tracks.isEmpty() ) {
-      emit infoMessage( i18n( "Internal error: Verification job improperly initialized (%1)" )
+      emit infoMessage( i18n( "Internal Error: Verification job improperly initialized (%1)" )
                         .arg( "no tracks added" ), ERROR );
       jobFinished( false );
       return;
