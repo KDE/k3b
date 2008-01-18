@@ -1,10 +1,10 @@
 /*
  *
  * $Id.cpp,v 1.82 2005/02/04 09:27:19 trueg Exp $
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -457,7 +457,7 @@ void K3bCdCopyJob::startCopy()
 
   if ( d->haveCdText && d->haveCddb ) {
       K3bDevice::CdText cdt( d->cdTextRaw );
-      if ( !questionYesNo( i18n( "Found CD-TEXT (%1 - %2) and Cddb (%3 - %4) entries. Which one should be used to generate the CD-TEXT on the new CD?" 
+      if ( !questionYesNo( i18n( "Found CD-TEXT (%1 - %2) and Cddb (%3 - %4) entries. Which one should be used to generate the CD-TEXT on the new CD?"
                           ,cdt.performer(),cdt.title()
                           ,d->cddbInfo.cdArtist,d->cddbInfo.cdTitle),
                           i18n( "CD-TEXT" ),
@@ -611,10 +611,11 @@ void K3bCdCopyJob::readNextSession()
       connect( d->audioSessionReader, SIGNAL(nextTrack(int, int)),
 	       this, SLOT(slotReadingNextTrack(int, int)) );
       connectSubJob( d->audioSessionReader,
-		     SLOT(slotSessionReaderFinished(bool)),
-		     true,
-		     SLOT(slotReaderProgress(int)),
-		     SLOT(slotReaderSubProgress(int)) );
+                     SLOT(slotSessionReaderFinished(bool)),
+                     K3bJob::DEFAULT_SIGNAL_CONNECTION,
+                     K3bJob::DEFAULT_SIGNAL_CONNECTION,
+                     SLOT(slotReaderProgress(int)),
+                     SLOT(slotReaderSubProgress(int)) );
     }
 
     d->audioSessionReader->setDevice( m_readerDevice );

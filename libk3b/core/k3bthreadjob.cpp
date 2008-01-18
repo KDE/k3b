@@ -22,82 +22,135 @@
 //Added by qt3to4:
 
 
+class K3bThreadJob::Private
+{
+public:
+    Private()
+        : thread( 0 ),
+          running( false ) {
+    }
+    K3bThread* thread;
+    bool running;
+};
+
 
 K3bThreadJob::K3bThreadJob( K3bJobHandler* jh, QObject* parent )
-  : K3bJob( jh, parent ),
-    m_running(false)
+    : K3bJob( jh, parent ),
+      d( new Private )
 {
 }
 
 
 K3bThreadJob::K3bThreadJob( K3bThread* thread, K3bJobHandler* jh, QObject* parent )
-  : K3bJob( jh, parent ),
-    m_running(false)
+    : K3bJob( jh, parent ),
+      d( new Private )
 {
-  setThread(thread);
+    setThread(thread);
 }
 
 
 K3bThreadJob::~K3bThreadJob()
 {
+    delete d;
 }
 
 
 QString K3bThreadJob::jobDescription() const
 {
-  if( m_thread )
-    return m_thread->jobDescription();
-  else
-    return QString::null;
+    if( d->thread )
+        return d->thread->jobDescription();
+    else
+        return QString::null;
 }
 
 
 QString K3bThreadJob::jobDetails() const
 {
-  if( m_thread )
-    return m_thread->jobDetails();
-  else
-    return QString::null;
+    if( d->thread )
+        return d->thread->jobDetails();
+    else
+        return QString::null;
+}
+
+
+bool K3bThreadJob::active() const
+{
+    return d->running;
+}
+
+
+K3bThread* K3bThreadJob::thread() const
+{
+    return d->thread;
 }
 
 
 void K3bThreadJob::setThread( K3bThread* t )
 {
-  m_thread = t;
-  m_thread->setProgressInfoEventHandler(this);
+    if ( d->thread ) {
+        d->thread->disconnect( this );
+    }
+
+    d->thread = t;
+    d->thread->setProgressInfoEventHandler(this);
+
+    connect( d->thread, SIGNAL(infoMessage( const QString&, int )),
+             this, SIGNAL(infoMessage( const QString&, int )) );
+    connect( d->thread, SIGNAL(percent( int )),
+             this, SIGNAL(percent( int )) );
+    connect( d->thread, SIGNAL(subPercent( int )),
+             this, SIGNAL(subPercent( int )) );
+    connect( d->thread, SIGNAL(processedSize( int, int )),
+             this, SIGNAL(processedSize( int, int )) );
+    connect( d->thread, SIGNAL(processedSubSize( int, int )),
+             this, SIGNAL(processedSubSize( int, int )) );
+    connect( d->thread, SIGNAL(newTask( const QString& )),
+             this, SIGNAL(newTask( const QString& )) );
+    connect( d->thread, SIGNAL(newSubTask( const QString& )),
+             this, SIGNAL(newSubTask( const QString& )) );
+    connect( d->thread, SIGNAL(debuggingOutput(const QString&, const QString&)),
+             this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+    connect( d->thread, SIGNAL(nextTrack( int, int )),
+             this, SIGNAL(nextTrack( int, int )) );
+    connect( d->thread, SIGNAL(canceled()),
+             this, SIGNAL(canceled()) );
+    connect( d->thread, SIGNAL(started()),
+             this, SIGNAL(started()) );
+    connect( d->thread, SIGNAL(finished( bool )),
+             this, SIGNAL(finished( bool )) );
 }
 
 
 void K3bThreadJob::start()
 {
-  if( m_thread ) {
-    if( !m_running ) {
-      m_thread->setProgressInfoEventHandler(this);
-      m_running = true;
-      m_thread->init();
-      m_thread->start();
+    if( d->thread ) {
+        if( !d->running ) {
+            d->thread->setProgressInfoEventHandler(this);
+            d->running = true;
+            d->thread->init();
+            d->thread->start();
+        }
+        else
+            kDebug() << "(K3bThreadJob) thread not finished yet.";
     }
-    else
-      kDebug() << "(K3bThreadJob) thread not finished yet.";
-  }
-  else {
-    kError() << "(K3bThreadJob) no job set." << endl;
-    jobFinished(false);
-  }
+    else {
+        kError() << "(K3bThreadJob) no job set." << endl;
+        jobFinished(false);
+    }
 }
 
 
 void K3bThreadJob::cancel()
 {
-  m_thread->cancel();
-  // wait for the thread to finish
-  //  m_thread->wait();
+    d->thread->cancel();
+    // wait for the thread to finish
+    //  d->thread->wait();
 }
 
 
 void K3bThreadJob::cleanupJob( bool success )
 {
-  Q_UNUSED( success );
+    Q_UNUSED( success );
 }
 
 
@@ -124,56 +177,6 @@ void K3bThreadJob::customEvent( QEvent* e )
             break;
         }
         ce->done( result );
-    }
-    else {
-        K3bProgressInfoEvent* be = static_cast<K3bProgressInfoEvent*>(e);
-        switch( be->type() ) {
-        case K3bProgressInfoEvent::Progress:
-            emit percent( be->firstValue() );
-            break;
-        case K3bProgressInfoEvent::SubProgress:
-            emit subPercent( be->firstValue() );
-            break;
-        case K3bProgressInfoEvent::ProcessedSize:
-            emit processedSize( be->firstValue(), be->secondValue() );
-            break;
-        case K3bProgressInfoEvent::ProcessedSubSize:
-            emit processedSubSize( be->firstValue(), be->secondValue() );
-            break;
-        case K3bProgressInfoEvent::InfoMessage:
-            emit infoMessage( be->firstString(), be->firstValue() );
-            break;
-        case K3bProgressInfoEvent::Started:
-            jobStarted();
-            break;
-        case K3bProgressInfoEvent::Canceled:
-            emit canceled();
-            break;
-        case K3bProgressInfoEvent::Finished:
-            // we wait until the thred really finished
-            // although this may be dangerous if some thread
-            // emits the finished signal although it has not finished yet
-            // but makes a lot stuff easier.
-            kDebug() << "(K3bThreadJob) waiting for the thread to finish.";
-            m_thread->wait();
-            kDebug() << "(K3bThreadJob) thread finished.";
-            cleanupJob( be->firstValue() );
-            m_running = false;
-            jobFinished( be->firstValue() );
-            break;
-        case K3bProgressInfoEvent::NewTask:
-            emit newTask( be->firstString() );
-            break;
-        case K3bProgressInfoEvent::NewSubTask:
-            emit newSubTask( be->firstString() );
-            break;
-        case K3bProgressInfoEvent::DebuggingOutput:
-            emit debuggingOutput( be->firstString(), be->secondString() );
-            break;
-        case K3bProgressInfoEvent::NextTrack:
-            emit nextTrack( be->firstValue(), be->secondValue() );
-            break;
-        }
     }
 }
 

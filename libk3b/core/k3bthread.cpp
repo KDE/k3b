@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,188 +19,146 @@
 
 #include <kdebug.h>
 
-#include <qapplication.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QApplication>
+#include <QList>
 
 
-static Q3PtrList<K3bThread> s_threads;
+static QList<K3bThread*> s_threads;
 
 
 void K3bThread::waitUntilFinished()
 {
-  Q3PtrListIterator<K3bThread> it( s_threads );
-  while( it.current() ) {
-    kDebug() << "Waiting for thread " << it.current();
-    it.current()->wait();
-    ++it;
-  }
+    foreach( K3bThread* thread, s_threads ) {
+        kDebug() << "Waiting for thread " << thread;
+        thread->wait();
+    }
 
-  kDebug() << "Thread waiting done.";
+    kDebug() << "Thread waiting done.";
 }
 
 
 class K3bThread::Private
 {
 public:
-  Private()
-    : eventHandler( 0 ) {
-  }
+    Private()
+        : eventHandler( 0 ) {
+    }
 
-  QObject* eventHandler;
+    QObject* eventHandler;
 };
 
 
-K3bThread::K3bThread( QObject* eventHandler )
-  : QThread()
+K3bThread::K3bThread( QObject* eventHandler, QObject* parent )
+    : QThread( parent )
 {
-  d = new Private;
-  d->eventHandler = eventHandler;
+    d = new Private;
+    d->eventHandler = eventHandler;
 
-  s_threads.append(this);
+    s_threads.append(this);
 }
 
 
 K3bThread::~K3bThread()
 {
-  s_threads.removeRef(this);
-  delete d;
+    s_threads.removeAll(this);
+    delete d;
 }
 
 
 void K3bThread::setProgressInfoEventHandler( QObject* eventHandler )
 {
-  d->eventHandler = eventHandler;
+    d->eventHandler = eventHandler;
 }
 
 QString K3bThread::jobDescription() const
 {
-  return QString::null;
+    return QString::null;
 }
 
 
 QString K3bThread::jobDetails() const
 {
-  return QString::null;
+    return QString::null;
 }
 
 
 void K3bThread::init()
 {
-  // do nothing...
+    // do nothing...
 }
 
 
 void K3bThread::cancel()
 {
-  if( isRunning() ) {
-    terminate();
-    if( d->eventHandler ) {
-      emitCanceled();
-      emitFinished(false);
+    if( isRunning() ) {
+        terminate();
+        if( d->eventHandler ) {
+            emitCanceled();
+            emitFinished(false);
+        }
     }
-  }
 }
 
 
 void K3bThread::emitInfoMessage( const QString& msg, int type )
 {
-  if( d->eventHandler )
-    QApplication::postEvent( d->eventHandler,
-			     new K3bProgressInfoEvent( K3bProgressInfoEvent::InfoMessage, msg, QString::null, type ) );
-  else
-    kWarning() << "(K3bThread) call to emitInfoMessage() without eventHandler.";
+    emit infoMessage( msg, type );
 }
 
 void K3bThread::emitPercent( int p )
 {
-  if( d->eventHandler )
-    QApplication::postEvent( d->eventHandler,
-			     new K3bProgressInfoEvent( K3bProgressInfoEvent::Progress, p ) );
-  else
-    kWarning() << "(K3bThread) call to emitPercent() without eventHandler.";
+    emit percent( p );
 }
 
 void K3bThread::emitSubPercent( int p )
 {
-  if( d->eventHandler )
-    QApplication::postEvent( d->eventHandler,
-			     new K3bProgressInfoEvent( K3bProgressInfoEvent::SubProgress, p ) );
-  else
-    kWarning() << "(K3bThread) call to emitSubPercent() without eventHandler.";
+    emit subPercent( p );
 }
 
 void K3bThread::emitStarted()
 {
-  if( d->eventHandler )
-    QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::Started ) );
-  else
-    kWarning() << "(K3bThread) call to emitStarted() without eventHandler.";
+    emit started();
 }
 
 void K3bThread::emitCanceled()
 {
-  if( d->eventHandler )
-    QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::Canceled ) );
-  else
-    kWarning() << "(K3bThread) call to emitCanceled() without eventHandler.";
+    emit canceled();
 }
 
 void K3bThread::emitFinished( bool success )
 {
-  if( d->eventHandler )
-    QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::Finished, success ) );
-  else
-    kWarning() << "(K3bThread) call to emitFinished() without eventHandler.";
+    emit finished( success );
 }
 
 void K3bThread::emitProcessedSize( int p, int size )
 {
-  if( d->eventHandler )
-    QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::ProcessedSize, p, size ) );
-  else
-    kWarning() << "(K3bThread) call to emitProcessedSize() without eventHandler.";
+    emit processedSize( p, size );
 }
 
 void K3bThread::emitProcessedSubSize( int p, int size )
 {
-  if( d->eventHandler )
-    QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::ProcessedSubSize, p, size ) );
-  else
-    kWarning() << "(K3bThread) call to emitProcessedSubSize() without eventHandler.";
+    emit processedSubSize( p, size );
 }
 
 void K3bThread::emitNewTask( const QString& job )
 {
-  if( d->eventHandler )
-    QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::NewTask, job ) );
-  else
-    kWarning() << "(K3bThread) call to emitNewTask() without eventHandler.";
+    emit newTask( job );
 }
 
 void K3bThread::emitNewSubTask( const QString& job )
 {
-  if( d->eventHandler )
-    QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::NewSubTask, job ) );
-  else
-    kWarning() << "(K3bThread) call to emitNewSubTask() without eventHandler.";
+    emit newSubTask( job );
 }
 
 void K3bThread::emitDebuggingOutput(const QString& group, const QString& text)
 {
-  if( d->eventHandler )
-    QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::DebuggingOutput, group, text ) );
-  else
-    kWarning() << "(K3bThread) call to emitDebuggingOutput() without eventHandler.";
+    emit debuggingOutput( group, text );
 }
 
 
 void K3bThread::emitNextTrack( int t, int n )
 {
-  if( d->eventHandler )
-    QApplication::postEvent( d->eventHandler, new K3bProgressInfoEvent( K3bProgressInfoEvent::NextTrack, t, n ) );
-  else
-    kWarning() << "(K3bThread) call to emitNextTrack() without eventHandler.";
+    emit nextTrack( t, n );
 }
 
 
@@ -259,3 +217,5 @@ void K3bThread::blockingInformation( const QString& text,
         kWarning() << "(K3bThread) call to blockingInformation() without eventHandler.";
     }
 }
+
+#include "k3bthread.moc"

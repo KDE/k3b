@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -120,10 +120,11 @@ void K3bIso9660ImageWritingJob::slotWriterJobFinished( bool success )
       if( !m_verifyJob ) {
 	m_verifyJob = new K3bVerificationJob( this );
 	connectSubJob( m_verifyJob,
-		       SLOT(slotVerificationFinished(bool)),
-		       true,
-		       SLOT(slotVerificationProgress(int)),
-		       SIGNAL(subPercent(int)) );
+                   SLOT(slotVerificationFinished(bool)),
+                   K3bJob::DEFAULT_SIGNAL_CONNECTION,
+                   K3bJob::DEFAULT_SIGNAL_CONNECTION,
+                   SLOT(slotVerificationProgress(int)),
+                   SIGNAL(subPercent(int)) );
       }
       m_verifyJob->setDevice( m_device );
       m_verifyJob->clear();

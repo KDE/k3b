@@ -25,7 +25,6 @@
 #include <kurl.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kinstance.h>
 
 
 #include <math.h>

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,9 +18,7 @@
 
 #include "k3bjob.h"
 #include "k3b_export.h"
-//Added by qt3to4:
-#include <QCustomEvent>
-class QCustomEvent;
+
 class K3bThread;
 
 
@@ -41,50 +39,50 @@ class K3bThread;
  */
 class LIBK3B_EXPORT K3bThreadJob : public K3bJob
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bThreadJob( K3bJobHandler*, QObject* parent = 0 );
-  K3bThreadJob( K3bThread*, K3bJobHandler*, QObject* parent = 0 );
-  virtual ~K3bThreadJob();
+public:
+    K3bThreadJob( K3bJobHandler*, QObject* parent = 0 );
+    K3bThreadJob( K3bThread*, K3bJobHandler*, QObject* parent = 0 );
+    virtual ~K3bThreadJob();
 
-  void setThread( K3bThread* t );
-  K3bThread* thread() const { return m_thread; }
+    void setThread( K3bThread* t );
+    K3bThread* thread() const;
 
-  /**
-   * \reimplemented from K3bJob
-   *
-   * \return true if the job has been started and has not yet
-   * emitted the finished signal
-   */
-  virtual bool active() const { return m_running; }
+    /**
+     * \reimplemented from K3bJob
+     *
+     * \return true if the job has been started and has not yet
+     * emitted the finished signal
+     */
+    virtual bool active() const;
 
-  virtual QString jobDescription() const;
-  virtual QString jobDetails() const;
+    virtual QString jobDescription() const;
+    virtual QString jobDetails() const;
 
- public slots:
-  virtual void start();
-  virtual void cancel();
+    public slots:
+    virtual void start();
+    virtual void cancel();
 
- protected:
-  /**
-   * converts K3bThread events to K3bJob signals
-   */
-  virtual void customEvent( QEvent* );
+protected:
+    /**
+     * converts K3bThread events to K3bJob signals
+     */
+    virtual void customEvent( QEvent* );
 
-  /**
-   * Reimplement this method to do some housekeeping once
-   * the thread has finished.
-   *
-   * The default implementation does nothing.
-   *
-   * \param success True if the thread finished successfully
-   */
-  virtual void cleanupJob( bool success );
+    /**
+     * Reimplement this method to do some housekeeping once
+     * the thread has finished.
+     *
+     * The default implementation does nothing.
+     *
+     * \param success True if the thread finished successfully
+     */
+    virtual void cleanupJob( bool success );
 
- private:
-  K3bThread* m_thread;
-  bool m_running;
+private:
+    class Private;
+    Private* const d;
 };
 
 #endif

@@ -256,9 +256,16 @@ MESSAGE(STATUS "DCOP stuff was remove into kde4, convert it to dbus please.kde4_
 kde4_add_executable(k3b_bin ${k3b_bin_SRCS})
 set_target_properties(k3b_bin PROPERTIES OUTPUT_NAME k3b)
 
-target_link_libraries(k3b_bin ${KDE4_KFILE_LIBS} ${KDE4_KIO_LIBS}
-  ${KDE4_KPARTS_LIBS} k3bdevice ${KDE4_KNOTIFYCONFIG_LIBS}
-  k3b ) #fastscale )
+target_link_libraries(k3b_bin
+  k3bdevice
+  k3b
+  #fastscale )
+  ${KDE4_KFILE_LIBS}
+  ${KDE4_KIO_LIBS}
+  ${KDE4_KPARTS_LIBS}
+  ${KDE4_KNOTIFYCONFIG_LIBS}
+  )
+
 if(MUSICBRAINZ_FOUND)
   target_link_libraries(k3b_bin ${MUSICBRAINZ_LIBRARIES})
 endif(MUSICBRAINZ_FOUND)

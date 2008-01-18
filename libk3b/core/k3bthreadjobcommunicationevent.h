@@ -25,6 +25,7 @@ namespace K3bDevice {
 }
 
 
+#warning Replace the K3bThreadJobCommunicationEvent with signals in Qt::BlockingQueuedConnection mode
 class K3bThreadJobCommunicationEvent : public QEvent
 {
  public:
