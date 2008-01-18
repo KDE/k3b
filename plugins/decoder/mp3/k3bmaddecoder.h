@@ -1,10 +1,10 @@
 /* 
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,53 +26,55 @@ extern "C" {
 
 class K3bMadDecoderFactory : public K3bAudioDecoderFactory
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bMadDecoderFactory( QObject* parent = 0  );
-  ~K3bMadDecoderFactory();
+public:
+    K3bMadDecoderFactory( QObject* parent = 0, const QVariantList& args = QVariantList() );
+    ~K3bMadDecoderFactory();
 
-  bool canDecode( const KUrl& filename );
+    bool canDecode( const KUrl& filename );
 
-  int pluginSystemVersion() const { return 3; }
+    int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-  K3bAudioDecoder* createDecoder( QObject* parent = 0 ) const;
+    K3bAudioDecoder* createDecoder( QObject* parent = 0 ) const;
 };
 
 
 class K3bMadDecoder : public K3bAudioDecoder
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bMadDecoder( QObject* parent = 0 );
-  ~K3bMadDecoder();
+public:
+    K3bMadDecoder( QObject* parent = 0 );
+    ~K3bMadDecoder();
 
-  QString metaInfo( MetaDataField );
+    QString metaInfo( MetaDataField );
 
-  void cleanup();
+    void cleanup();
 
-  bool seekInternal( const K3b::Msf& );
+    bool seekInternal( const K3b::Msf& );
 
-  QString fileType() const;
-  QStringList supportedTechnicalInfos() const;
-  QString technicalInfo( const QString& ) const;
+    QString fileType() const;
+    QStringList supportedTechnicalInfos() const;
+    QString technicalInfo( const QString& ) const;
 
- protected:
-  bool analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch );
-  bool initDecoderInternal();
+protected:
+    bool analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch );
+    bool initDecoderInternal();
 
-  int decodeInternal( char* _data, int maxLen );
+    int decodeInternal( char* _data, int maxLen );
  
- private:
-  unsigned long countFrames();
-  inline unsigned short linearRound( mad_fixed_t fixed );
-  bool createPcmSamples( mad_synth* );
+private:
+    unsigned long countFrames();
+    inline unsigned short linearRound( mad_fixed_t fixed );
+    bool createPcmSamples( mad_synth* );
 
-  static int MaxAllowedRecoverableErrors;
+    static int MaxAllowedRecoverableErrors;
 
-  class MadDecoderPrivate;
-  MadDecoderPrivate* d;
+    class MadDecoderPrivate;
+    MadDecoderPrivate* d;
 };
+
+K3B_EXPORT_PLUGIN(k3bmaddecoder, K3bMadDecoderFactory)
 
 #endif

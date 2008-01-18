@@ -7,7 +7,7 @@ set(k3bsoxencoder_PART_SRCS k3bsoxencoder.cpp )
 
 kde4_add_ui_files(k3bsoxencoder_PART_SRCS base_k3bsoxencoderconfigwidget.ui )
 
-kde4_add_plugin(k3bsoxencoder WITH_PREFIX ${k3bsoxencoder_PART_SRCS})
+kde4_add_plugin(k3bsoxencoder ${k3bsoxencoder_PART_SRCS})
 
 target_link_libraries(k3bsoxencoder  ${KDE4_KDECORE_LIBS} k3b )
 

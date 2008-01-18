@@ -8,6 +8,6 @@ X-KDE-Library=k3boggvorbisdecoder
 X-KDE-PluginInfo-Name=oggvorbisdecoder
 X-KDE-PluginInfo-Author=Sebastian Trueg
 X-KDE-PluginInfo-Email=trueg@k3b.org
-X-KDE-PluginInfo-Version=3.1
+X-KDE-PluginInfo-Version=4.0
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Category=AudioDecoder

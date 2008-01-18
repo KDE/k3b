@@ -8,6 +8,6 @@ X-KDE-Library=k3bsoxencoder
 X-KDE-PluginInfo-Name=k3bsoxencoder
 X-KDE-PluginInfo-Author=Sebastian Trueg
 X-KDE-PluginInfo-Email=trueg@k3b.org
-X-KDE-PluginInfo-Version=2.0
+X-KDE-PluginInfo-Version=3.0
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Category=AudioEncoder

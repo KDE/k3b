@@ -2,7 +2,7 @@
 
 set(k3bwavedecoder_PART_SRCS k3bwavedecoder.cpp )
 
-kde4_add_plugin(k3bwavedecoder WITH_PREFIX ${k3bwavedecoder_PART_SRCS})
+kde4_add_plugin(k3bwavedecoder ${k3bwavedecoder_PART_SRCS})
 
 target_link_libraries(k3bwavedecoder  ${KDE4_KDECORE_LIBS} k3b )
 

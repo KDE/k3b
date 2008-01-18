@@ -7,7 +7,7 @@ set(k3blameencoder_PART_SRCS k3blameencoder.cpp k3blamemanualsettingsdialog.cpp)
 
 kde4_add_ui_files(k3blameencoder_PART_SRCS base_k3blameencodersettingswidget.ui base_k3bmanualbitratesettingswidget.ui )
 
-kde4_add_plugin(k3blameencoder WITH_PREFIX ${k3blameencoder_PART_SRCS})
+kde4_add_plugin(k3blameencoder ${k3blameencoder_PART_SRCS})
 
 target_link_libraries(k3blameencoder  ${KDE4_KDECORE_LIBS} k3b mp3lame )
 

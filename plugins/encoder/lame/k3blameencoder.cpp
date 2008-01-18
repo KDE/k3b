@@ -1,10 +1,10 @@
 /*
  *
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,9 +45,6 @@
 #include <stdio.h>
 #include <lame/lame.h>
 
-
-//K_EXPORT_COMPONENT_FACTORY( libk3blameencoder, KPluginFactory<K3bLameEncoder>( "libk3blameencoder" ) )
-K_EXPORT_PLUGIN(K3bLameEncoder)
 
 static const int s_lame_bitrates[] = {
     32,
@@ -143,7 +140,7 @@ public:
 
 
 
-K3bLameEncoder::K3bLameEncoder( QObject* parent )
+K3bLameEncoder::K3bLameEncoder( QObject* parent, const QVariantList& )
     : K3bAudioEncoder( parent )
 {
     d = new Private();

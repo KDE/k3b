@@ -5,7 +5,7 @@
 
 set(k3bffmpegdecoder_PART_SRCS k3bffmpegdecoder.cpp k3bffmpegwrapper.cpp )
 
-kde4_add_plugin(k3bffmpegdecoder WITH_PREFIX ${k3bffmpegdecoder_PART_SRCS})
+kde4_add_plugin(k3bffmpegdecoder ${k3bffmpegdecoder_PART_SRCS})
 
 target_link_libraries(k3bffmpegdecoder  ${KDE4_KDEUI_LIBS} k3b ${FFMPEG_LIBRARIES} )
 

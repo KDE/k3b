@@ -1,10 +1,10 @@
 /* 
  *
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,41 +23,43 @@
 
 class K3b<name>Encoder : public K3bAudioEncoder
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3b<name>Encoder( QObject* parent = 0 );
-  ~K3b<name>Encoder();
+public:
+    K3b<name>Encoder( QObject* parent, const QVariantList& );
+    ~K3b<name>Encoder();
 
-  QStringList extensions() const;
+    QStringList extensions() const;
   
-  QString fileTypeComment( const QString& ) const;
+    QString fileTypeComment( const QString& ) const;
 
-  long long fileSize( const QString&, const K3b::Msf& msf ) const;
+    long long fileSize( const QString&, const K3b::Msf& msf ) const;
 
-  int pluginSystemVersion() const { return 3; }
+    int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-  K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0 ) const;
+    K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0 ) const;
 
- private:
-  void finishEncoderInternal();
-  bool initEncoderInternal( const QString& extension );
-  long encodeInternal( const char* data, Q_ULONG len );
-  void setMetaDataInternal( MetaDataField, const QString& );
+private:
+    void finishEncoderInternal();
+    bool initEncoderInternal( const QString& extension );
+    long encodeInternal( const char* data, Q_ULONG len );
+    void setMetaDataInternal( MetaDataField, const QString& );
 };
 
 
 class K3b<name>EncoderSettingsWidget : public K3bPluginConfigWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3b<name>EncoderSettingsWidget( QWidget* parent = 0 );
-  ~K3b<name>EncoderSettingsWidget();
+public:
+    K3b<name>EncoderSettingsWidget( QWidget* parent = 0 );
+    ~K3b<name>EncoderSettingsWidget();
 
- public slots:
-  void loadConfig();
-  void saveConfig();
+    public slots:
+    void loadConfig();
+    void saveConfig();
 };
+
+K3B_EXPORT_PLUGIN(k3b<name>encoder, K3b<name>Encoder)
 
 #endif

@@ -1,10 +1,10 @@
 /* 
  *
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,47 +25,49 @@ class KUrl;
 
 class K3bOggVorbisDecoderFactory : public K3bAudioDecoderFactory
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bOggVorbisDecoderFactory( QObject* parent = 0 );
-  ~K3bOggVorbisDecoderFactory();
+public:
+    K3bOggVorbisDecoderFactory( QObject* parent, const QVariantList& );
+    ~K3bOggVorbisDecoderFactory();
 
-  bool canDecode( const KUrl& filename );
+    bool canDecode( const KUrl& filename );
 
-  int pluginSystemVersion() const { return 3; }
+    int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-  K3bAudioDecoder* createDecoder( QObject* parent = 0) const;
+    K3bAudioDecoder* createDecoder( QObject* parent = 0) const;
 };
 
 
 /**
-  *@author Sebastian Trueg
-  */
+ *@author Sebastian Trueg
+ */
 class K3bOggVorbisDecoder : public K3bAudioDecoder
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public: 
-  K3bOggVorbisDecoder( QObject* parent = 0 );
-  ~K3bOggVorbisDecoder();
+public: 
+    K3bOggVorbisDecoder( QObject* parent = 0 );
+    ~K3bOggVorbisDecoder();
 
-  void cleanup();
+    void cleanup();
 
-  QString fileType() const;
+    QString fileType() const;
 
- protected:
-  bool analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch );
-  bool initDecoderInternal();
-  bool seekInternal( const K3b::Msf& );
+protected:
+    bool analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch );
+    bool initDecoderInternal();
+    bool seekInternal( const K3b::Msf& );
 
-  int decodeInternal( char* _data, int maxLen );
+    int decodeInternal( char* _data, int maxLen );
 
- private:
-  bool openOggVorbisFile();
+private:
+    bool openOggVorbisFile();
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 };
+
+K3B_EXPORT_PLUGIN(k3boggvorbisdecoder, K3bOggVorbisDecoderFactory)
 
 #endif

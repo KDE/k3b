@@ -1,10 +1,10 @@
 /*
  *
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,348 +41,346 @@
 #include <sys/wait.h>
 
 
-//K_EXPORT_COMPONENT_FACTORY( libk3bsoxencoder, KPluginFactory<K3bSoxEncoder>( "libk3bsoxencoder" ) )
-K_EXPORT_PLUGIN(K3bSoxEncoder)
 
 // the sox external program
 class K3bSoxProgram : public K3bExternalProgram
 {
- public:
-  K3bSoxProgram()
-    : K3bExternalProgram( "sox" ) {
-  }
-
-  bool scan( const QString& p ) {
-    if( p.isEmpty() )
-      return false;
-
-    QString path = p;
-    QFileInfo fi( path );
-    if( fi.isDir() ) {
-      if( path[path.length()-1] != '/' )
-	path.append("/");
-      path.append("sox");
+public:
+    K3bSoxProgram()
+        : K3bExternalProgram( "sox" ) {
     }
 
-    if( !QFile::exists( path ) )
-      return false;
+    bool scan( const QString& p ) {
+        if( p.isEmpty() )
+            return false;
 
-    K3bExternalBin* bin = 0;
+        QString path = p;
+        QFileInfo fi( path );
+        if( fi.isDir() ) {
+            if( path[path.length()-1] != '/' )
+                path.append("/");
+            path.append("sox");
+        }
 
-    // probe version
-    K3Process vp;
-    K3bProcessOutputCollector out( &vp );
+        if( !QFile::exists( path ) )
+            return false;
 
-    vp << path << "-h";
-    if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
-      int pos = out.output().find( "sox: SoX Version" );
-      if ( pos < 0 )
-          pos = out.output().find( "sox: SoX v" ); // newer sox versions
-      int endPos = out.output().find( "\n", pos );
-      if( pos > 0 && endPos > 0 ) {
-	pos += 17;
-	bin = new K3bExternalBin( this );
-	bin->path = path;
-	bin->version = out.output().mid( pos, endPos-pos );
+        K3bExternalBin* bin = 0;
 
-	addBin( bin );
+        // probe version
+        K3Process vp;
+        K3bProcessOutputCollector out( &vp );
 
-	return true;
-      }
-      else {
-        pos = out.output().find( "sox: Version" );
-        endPos = out.output().find( "\n", pos );
-        if( pos > 0 && endPos > 0 ) {
-	  pos += 13;
-	  bin = new K3bExternalBin( this );
-	  bin->path = path;
-	  bin->version = out.output().mid( pos, endPos-pos );
+        vp << path << "-h";
+        if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
+            int pos = out.output().find( "sox: SoX Version" );
+            if ( pos < 0 )
+                pos = out.output().find( "sox: SoX v" ); // newer sox versions
+            int endPos = out.output().find( "\n", pos );
+            if( pos > 0 && endPos > 0 ) {
+                pos += 17;
+                bin = new K3bExternalBin( this );
+                bin->path = path;
+                bin->version = out.output().mid( pos, endPos-pos );
 
-	  addBin( bin );
+                addBin( bin );
 
-	  return true;
+                return true;
+            }
+            else {
+                pos = out.output().find( "sox: Version" );
+                endPos = out.output().find( "\n", pos );
+                if( pos > 0 && endPos > 0 ) {
+                    pos += 13;
+                    bin = new K3bExternalBin( this );
+                    bin->path = path;
+                    bin->version = out.output().mid( pos, endPos-pos );
+
+                    addBin( bin );
+
+                    return true;
+                }
+                else
+                    return false;
+            }
         }
         else
-  	  return false;
-      }
+            return false;
     }
-    else
-      return false;
-  }
 };
 
 
 class K3bSoxEncoder::Private
 {
 public:
-  Private()
-    : process(0) {
-  }
+    Private()
+        : process(0) {
+    }
 
-  K3bProcess* process;
-  QString fileName;
+    K3bProcess* process;
+    QString fileName;
 };
 
 
-K3bSoxEncoder::K3bSoxEncoder( QObject* parent )
-  : K3bAudioEncoder( parent )
+K3bSoxEncoder::K3bSoxEncoder( QObject* parent, const QVariantList& )
+    : K3bAudioEncoder( parent )
 {
-  if( k3bcore->externalBinManager()->program( "sox" ) == 0 )
-    k3bcore->externalBinManager()->addProgram( new K3bSoxProgram() );
+    if( k3bcore->externalBinManager()->program( "sox" ) == 0 )
+        k3bcore->externalBinManager()->addProgram( new K3bSoxProgram() );
 
-  d = new Private();
+    d = new Private();
 }
 
 
 K3bSoxEncoder::~K3bSoxEncoder()
 {
-  delete d->process;
-  delete d;
+    delete d->process;
+    delete d;
 }
 
 
 void K3bSoxEncoder::finishEncoderInternal()
 {
-  if( d->process ) {
-    if( d->process->isRunning() ) {
-      ::close( d->process->stdinFd() );
+    if( d->process ) {
+        if( d->process->isRunning() ) {
+            ::close( d->process->stdinFd() );
 
-      // this is kind of evil...
-      // but we need to be sure the process exited when this method returnes
-      ::waitpid( d->process->pid(), 0, 0 );
+            // this is kind of evil...
+            // but we need to be sure the process exited when this method returnes
+            ::waitpid( d->process->pid(), 0, 0 );
+        }
     }
-  }
 }
 
 
 void K3bSoxEncoder::slotSoxFinished( K3Process* p )
 {
-  if( !p->normalExit() || p->exitStatus() != 0 )
-    kDebug() << "(K3bSoxEncoder) sox exited with error.";
+    if( !p->normalExit() || p->exitStatus() != 0 )
+        kDebug() << "(K3bSoxEncoder) sox exited with error.";
 }
 
 
 bool K3bSoxEncoder::openFile( const QString& ext, const QString& filename, const K3b::Msf& )
 {
-  d->fileName = filename;
-  return initEncoderInternal( ext );
+    d->fileName = filename;
+    return initEncoderInternal( ext );
 }
 
 
 void K3bSoxEncoder::closeFile()
 {
-  finishEncoderInternal();
+    finishEncoderInternal();
 }
 
 
 bool K3bSoxEncoder::initEncoderInternal( const QString& extension )
 {
-  const K3bExternalBin* soxBin = k3bcore->externalBinManager()->binObject( "sox" );
-  if( soxBin ) {
-    delete d->process;
-    d->process = new K3bProcess();
-    d->process->setSplitStdout(true);
-    d->process->setRawStdin(true);
+    const K3bExternalBin* soxBin = k3bcore->externalBinManager()->binObject( "sox" );
+    if( soxBin ) {
+        delete d->process;
+        d->process = new K3bProcess();
+        d->process->setSplitStdout(true);
+        d->process->setRawStdin(true);
 
-    connect( d->process, SIGNAL(processExited(K3Process*)),
-	     this, SLOT(slotSoxFinished(K3Process*)) );
-    connect( d->process, SIGNAL(stderrLine(const QString&)),
-	     this, SLOT(slotSoxOutputLine(const QString&)) );
-    connect( d->process, SIGNAL(stdoutLine(const QString&)),
-	     this, SLOT(slotSoxOutputLine(const QString&)) );
+        connect( d->process, SIGNAL(processExited(K3Process*)),
+                 this, SLOT(slotSoxFinished(K3Process*)) );
+        connect( d->process, SIGNAL(stderrLine(const QString&)),
+                 this, SLOT(slotSoxOutputLine(const QString&)) );
+        connect( d->process, SIGNAL(stdoutLine(const QString&)),
+                 this, SLOT(slotSoxOutputLine(const QString&)) );
 
-    // input settings
-    *d->process << soxBin->path
-		<< "-t" << "raw"    // raw samples
-		<< "-r" << "44100"  // samplerate
-		<< "-s"             // signed linear
-		<< "-w"             // 16-bit words
-		<< "-c" << "2"      // stereo
-		<< "-";             // read from stdin
+        // input settings
+        *d->process << soxBin->path
+                    << "-t" << "raw"    // raw samples
+                    << "-r" << "44100"  // samplerate
+                    << "-s"             // signed linear
+                    << "-w"             // 16-bit words
+                    << "-c" << "2"      // stereo
+                    << "-";             // read from stdin
 
-    // output settings
-    *d->process << "-t" << extension;
+        // output settings
+        *d->process << "-t" << extension;
 
-    KConfig* c = k3bcore->config();
-    KConfigGroup grp(c,"K3bSoxEncoderPlugin" );
-    if( grp.readEntry( "manual settings", false ) ) {
-      *d->process << "-r" << QString::number( grp.readEntry( "samplerate", 44100 ) )
-		  << "-c" << QString::number( grp.readEntry( "channels", 2 ) );
+        KConfig* c = k3bcore->config();
+        KConfigGroup grp(c,"K3bSoxEncoderPlugin" );
+        if( grp.readEntry( "manual settings", false ) ) {
+            *d->process << "-r" << QString::number( grp.readEntry( "samplerate", 44100 ) )
+                        << "-c" << QString::number( grp.readEntry( "channels", 2 ) );
 
-      int size = grp.readEntry( "data size", 16 );
-      *d->process << ( size == 8 ? QString("-b") : ( size == 32 ? QString("-l") : QString("-w") ) );
+            int size = grp.readEntry( "data size", 16 );
+            *d->process << ( size == 8 ? QString("-b") : ( size == 32 ? QString("-l") : QString("-w") ) );
 
-      QString encoding = grp.readEntry( "data encoding", "signed" );
-      if( encoding == "unsigned" )
-	*d->process << "-u";
-      else if( encoding == "u-law" )
-	*d->process << "-U";
-      else if( encoding == "A-law" )
-	*d->process << "-A";
-      else if( encoding == "ADPCM" )
-	*d->process << "-a";
-      else if( encoding == "IMA_ADPCM" )
-	*d->process << "-i";
-      else if( encoding == "GSM" )
-	*d->process << "-g";
-      else if( encoding == "Floating-point" )
-	*d->process << "-f";
-      else
-	*d->process << "-s";
+            QString encoding = grp.readEntry( "data encoding", "signed" );
+            if( encoding == "unsigned" )
+                *d->process << "-u";
+            else if( encoding == "u-law" )
+                *d->process << "-U";
+            else if( encoding == "A-law" )
+                *d->process << "-A";
+            else if( encoding == "ADPCM" )
+                *d->process << "-a";
+            else if( encoding == "IMA_ADPCM" )
+                *d->process << "-i";
+            else if( encoding == "GSM" )
+                *d->process << "-g";
+            else if( encoding == "Floating-point" )
+                *d->process << "-f";
+            else
+                *d->process << "-s";
+        }
+
+        *d->process << d->fileName;
+
+        kDebug() << "***** sox parameters:";
+        const QList<QByteArray> args = d->process->args();
+        QString s;
+        for( QList<QByteArray>::const_iterator it = args.begin(); it != args.end(); ++it ) {
+            s += *it + " ";
+        }
+        kDebug() << s << flush;
+
+
+        return d->process->start( K3Process::NotifyOnExit, K3Process::All );
     }
-
-    *d->process << d->fileName;
-
-    kDebug() << "***** sox parameters:";
-    const QList<QByteArray> args = d->process->args();
-    QString s;
-    for( QList<QByteArray>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-      s += *it + " ";
+    else {
+        kDebug() << "(K3bSoxEncoder) could not find sox bin.";
+        return false;
     }
-    kDebug() << s << flush;
-
-
-    return d->process->start( K3Process::NotifyOnExit, K3Process::All );
-  }
-  else {
-    kDebug() << "(K3bSoxEncoder) could not find sox bin.";
-    return false;
-  }
 }
 
 
 long K3bSoxEncoder::encodeInternal( const char* data, Q_ULONG len )
 {
-  if( d->process ) {
-    if( d->process->isRunning() )
-      return ::write( d->process->stdinFd(), (const void*)data, len );
+    if( d->process ) {
+        if( d->process->isRunning() )
+            return ::write( d->process->stdinFd(), (const void*)data, len );
+        else
+            return -1;
+    }
     else
-      return -1;
-  }
-  else
-    return -1;
+        return -1;
 }
 
 
 void K3bSoxEncoder::slotSoxOutputLine( const QString& line )
 {
-  kDebug() << "(sox) " << line;
+    kDebug() << "(sox) " << line;
 }
 
 
 QStringList K3bSoxEncoder::extensions() const
 {
-  static QStringList s_extensions;
-  if( s_extensions.isEmpty() ) {
-    s_extensions << "au"
-		 << "8svx"
-		 << "aiff"
-		 << "avr"
-		 << "cdr"
-		 << "cvs"
-		 << "dat"
-		 << "gsm"
-		 << "hcom"
-		 << "maud"
-		 << "sf"
-		 << "sph"
-		 << "smp"
-		 << "txw"
-		 << "vms"
-		 << "voc"
-		 << "wav"
-		 << "wve"
-		 << "raw";
-  }
+    static QStringList s_extensions;
+    if( s_extensions.isEmpty() ) {
+        s_extensions << "au"
+                     << "8svx"
+                     << "aiff"
+                     << "avr"
+                     << "cdr"
+                     << "cvs"
+                     << "dat"
+                     << "gsm"
+                     << "hcom"
+                     << "maud"
+                     << "sf"
+                     << "sph"
+                     << "smp"
+                     << "txw"
+                     << "vms"
+                     << "voc"
+                     << "wav"
+                     << "wve"
+                     << "raw";
+    }
 
-  if( k3bcore->externalBinManager()->foundBin( "sox" ) )
-    return s_extensions;
-  else
-    return QStringList(); // no sox -> no encoding
+    if( k3bcore->externalBinManager()->foundBin( "sox" ) )
+        return s_extensions;
+    else
+        return QStringList(); // no sox -> no encoding
 }
 
 
 QString K3bSoxEncoder::fileTypeComment( const QString& ext ) const
 {
-  if( ext == "au" )
-    return i18n("Sun AU");
-  else if( ext == "8svx" )
-    return i18n("Amiga 8SVX");
-  else if( ext == "aiff" )
-    return i18n("AIFF");
-  else if( ext == "avr" )
-    return i18n("Audio Visual Research");
-  else if( ext == "cdr" )
-    return i18n("CD-R");
-  else if( ext == "cvs" )
-    return i18n("CVS");
-  else if( ext == "dat" )
-    return i18n("Text Data");
-  else if( ext == "gsm" )
-    return i18n("GSM Speech");
-  else if( ext == "hcom" )
-    return i18n("Macintosh HCOM");
-  else if( ext == "maud" )
-    return i18n("Maud (Amiga)");
-  else if( ext == "sf" )
-    return i18n("IRCAM");
-  else if( ext == "sph" )
-    return i18n("SPHERE");
-  else if( ext == "smp" )
-    return i18n("Turtle Beach SampleVision");
-  else if( ext == "txw" )
-    return i18n("Yamaha TX-16W");
-  else if( ext == "vms" )
-    return i18n("VMS");
-  else if( ext == "voc" )
-    return i18n("Sound Blaster VOC");
-  else if( ext == "wav" )
-    return i18n("Wave (Sox)");
-  else if( ext == "wve" )
-    return i18n("Psion 8-bit A-law");
-  else if( ext == "raw" )
-    return i18n("Raw");
-  else
-    return i18n("Error");
+    if( ext == "au" )
+        return i18n("Sun AU");
+    else if( ext == "8svx" )
+        return i18n("Amiga 8SVX");
+    else if( ext == "aiff" )
+        return i18n("AIFF");
+    else if( ext == "avr" )
+        return i18n("Audio Visual Research");
+    else if( ext == "cdr" )
+        return i18n("CD-R");
+    else if( ext == "cvs" )
+        return i18n("CVS");
+    else if( ext == "dat" )
+        return i18n("Text Data");
+    else if( ext == "gsm" )
+        return i18n("GSM Speech");
+    else if( ext == "hcom" )
+        return i18n("Macintosh HCOM");
+    else if( ext == "maud" )
+        return i18n("Maud (Amiga)");
+    else if( ext == "sf" )
+        return i18n("IRCAM");
+    else if( ext == "sph" )
+        return i18n("SPHERE");
+    else if( ext == "smp" )
+        return i18n("Turtle Beach SampleVision");
+    else if( ext == "txw" )
+        return i18n("Yamaha TX-16W");
+    else if( ext == "vms" )
+        return i18n("VMS");
+    else if( ext == "voc" )
+        return i18n("Sound Blaster VOC");
+    else if( ext == "wav" )
+        return i18n("Wave (Sox)");
+    else if( ext == "wve" )
+        return i18n("Psion 8-bit A-law");
+    else if( ext == "raw" )
+        return i18n("Raw");
+    else
+        return i18n("Error");
 }
 
 
 long long K3bSoxEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 {
-  // for now we make a rough assumption based on the settings
+    // for now we make a rough assumption based on the settings
     KConfig* c = k3bcore->config();
     KConfigGroup grp(c, "K3bSoxEncoderPlugin" );
     if( grp.readEntry( "manual settings", false ) ) {
-      int sr =  grp.readEntry( "samplerate", 44100 );
-      int ch = grp.readEntry( "channels", 2 );
-      int wsize = grp.readEntry( "data size", 16 );
+        int sr =  grp.readEntry( "samplerate", 44100 );
+        int ch = grp.readEntry( "channels", 2 );
+        int wsize = grp.readEntry( "data size", 16 );
 
-      return msf.totalFrames()*sr*ch*wsize/75;
+        return msf.totalFrames()*sr*ch*wsize/75;
     }
     else {
-      // fallback to raw
-      return msf.audioBytes();
+        // fallback to raw
+        return msf.audioBytes();
     }
 }
 
 
 K3bPluginConfigWidget* K3bSoxEncoder::createConfigWidget( QWidget* parent ) const
 {
-  return new K3bSoxEncoderSettingsWidget( parent );
+    return new K3bSoxEncoderSettingsWidget( parent );
 }
 
 
 
 K3bSoxEncoderSettingsWidget::K3bSoxEncoderSettingsWidget( QWidget* parent )
-  : K3bPluginConfigWidget( parent )
+    : K3bPluginConfigWidget( parent )
 {
-  w = new base_K3bSoxEncoderConfigWidget( this );
-  w->m_editSamplerate->setValidator( new QIntValidator( w->m_editSamplerate ) );
+    w = new base_K3bSoxEncoderConfigWidget( this );
+    w->m_editSamplerate->setValidator( new QIntValidator( w->m_editSamplerate ) );
 
-  Q3HBoxLayout* lay = new Q3HBoxLayout( this );
-  lay->setMargin( 0 );
+    Q3HBoxLayout* lay = new Q3HBoxLayout( this );
+    lay->setMargin( 0 );
 
-  lay->addWidget( w );
+    lay->addWidget( w );
 }
 
 
@@ -393,89 +391,89 @@ K3bSoxEncoderSettingsWidget::~K3bSoxEncoderSettingsWidget()
 
 void K3bSoxEncoderSettingsWidget::loadConfig()
 {
-  KConfig* c = k3bcore->config();
-  KConfigGroup grp(c, "K3bSoxEncoderPlugin" );
+    KConfig* c = k3bcore->config();
+    KConfigGroup grp(c, "K3bSoxEncoderPlugin" );
 
-  w->m_checkManual->setChecked( grp.readEntry( "manual settings", false ) );
+    w->m_checkManual->setChecked( grp.readEntry( "manual settings", false ) );
 
-  int channels = grp.readEntry( "channels", 2 );
-  w->m_comboChannels->setCurrentItem( channels == 4 ? 2 : channels-1 );
+    int channels = grp.readEntry( "channels", 2 );
+    w->m_comboChannels->setCurrentItem( channels == 4 ? 2 : channels-1 );
 
-  w->m_editSamplerate->setText( QString::number( grp.readEntry( "samplerate", 44100 ) ) );
+    w->m_editSamplerate->setText( QString::number( grp.readEntry( "samplerate", 44100 ) ) );
 
-  QString encoding = grp.readEntry( "data encoding", "signed" );
-  if( encoding == "unsigned" )
-    w->m_comboEncoding->setCurrentItem(1);
-  else if( encoding == "u-law" )
-    w->m_comboEncoding->setCurrentItem(2);
-  else if( encoding == "A-law" )
-    w->m_comboEncoding->setCurrentItem(3);
-  else if( encoding == "ADPCM" )
-    w->m_comboEncoding->setCurrentItem(4);
-  else if( encoding == "IMA_ADPCM" )
-    w->m_comboEncoding->setCurrentItem(5);
-  else if( encoding == "GSM" )
-    w->m_comboEncoding->setCurrentItem(6);
-  else if( encoding == "Floating-point" )
-    w->m_comboEncoding->setCurrentItem(7);
-  else
-    w->m_comboEncoding->setCurrentItem(0);
+    QString encoding = grp.readEntry( "data encoding", "signed" );
+    if( encoding == "unsigned" )
+        w->m_comboEncoding->setCurrentItem(1);
+    else if( encoding == "u-law" )
+        w->m_comboEncoding->setCurrentItem(2);
+    else if( encoding == "A-law" )
+        w->m_comboEncoding->setCurrentItem(3);
+    else if( encoding == "ADPCM" )
+        w->m_comboEncoding->setCurrentItem(4);
+    else if( encoding == "IMA_ADPCM" )
+        w->m_comboEncoding->setCurrentItem(5);
+    else if( encoding == "GSM" )
+        w->m_comboEncoding->setCurrentItem(6);
+    else if( encoding == "Floating-point" )
+        w->m_comboEncoding->setCurrentItem(7);
+    else
+        w->m_comboEncoding->setCurrentItem(0);
 
-  int size = grp.readEntry( "data size", 16 );
-  w->m_comboSize->setCurrentItem( size == 8 ? 0 : ( size == 32 ? 2 : 1 ) );
+    int size = grp.readEntry( "data size", 16 );
+    w->m_comboSize->setCurrentItem( size == 8 ? 0 : ( size == 32 ? 2 : 1 ) );
 }
 
 
 void K3bSoxEncoderSettingsWidget::saveConfig()
 {
-  KConfig* c = k3bcore->config();
+    KConfig* c = k3bcore->config();
 
-  KConfigGroup grp (c, "K3bSoxEncoderPlugin" );
+    KConfigGroup grp (c, "K3bSoxEncoderPlugin" );
 
-  grp.writeEntry( "manual settings", w->m_checkManual->isChecked() );
+    grp.writeEntry( "manual settings", w->m_checkManual->isChecked() );
 
-  grp.writeEntry( "channels", w->m_comboChannels->currentItem() == 0
-		 ? 1
-		 : ( w->m_comboChannels->currentItem() == 2
-		     ? 4
-		     : 2 ) );
+    grp.writeEntry( "channels", w->m_comboChannels->currentItem() == 0
+                    ? 1
+                    : ( w->m_comboChannels->currentItem() == 2
+                        ? 4
+                        : 2 ) );
 
-  grp.writeEntry( "data size", w->m_comboSize->currentItem() == 0
-		 ? 8
-		 : ( w->m_comboSize->currentItem() == 2
-		     ? 32
-		     : 16 ) );
+    grp.writeEntry( "data size", w->m_comboSize->currentItem() == 0
+                    ? 8
+                    : ( w->m_comboSize->currentItem() == 2
+                        ? 32
+                        : 16 ) );
 
-  grp.writeEntry( "samplerate", w->m_editSamplerate->text().toInt() );
+    grp.writeEntry( "samplerate", w->m_editSamplerate->text().toInt() );
 
-  QString enc;
-  switch( w->m_comboEncoding->currentItem() ) {
-  case 1:
-    enc = "unsigned";
-    break;
-  case 2:
-    enc = "u-law";
-    break;
-  case 3:
-    enc = "A-law";
-    break;
-  case 4:
-    enc = "ADPCM";
-    break;
-  case 5:
-    enc = "IMA_ADPCM";
-    break;
-  case 6:
-    enc = "GSM";
-    break;
-  case 7:
-    enc = "Floating-point";
-    break;
-  default:
-    enc = "signed";
-    break;
-  }
-  grp.writeEntry( "data encoding", enc );
+    QString enc;
+    switch( w->m_comboEncoding->currentItem() ) {
+    case 1:
+        enc = "unsigned";
+        break;
+    case 2:
+        enc = "u-law";
+        break;
+    case 3:
+        enc = "A-law";
+        break;
+    case 4:
+        enc = "ADPCM";
+        break;
+    case 5:
+        enc = "IMA_ADPCM";
+        break;
+    case 6:
+        enc = "GSM";
+        break;
+    case 7:
+        enc = "Floating-point";
+        break;
+    default:
+        enc = "signed";
+        break;
+    }
+    grp.writeEntry( "data encoding", enc );
 }
 
 

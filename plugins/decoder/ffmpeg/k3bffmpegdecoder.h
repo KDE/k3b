@@ -1,10 +1,10 @@
 /* 
  *
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,44 +23,46 @@ class K3bFFMpegFile;
 
 class K3bFFMpegDecoderFactory : public K3bAudioDecoderFactory
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bFFMpegDecoderFactory( QObject* parent = 0  );
-  ~K3bFFMpegDecoderFactory();
+public:
+    K3bFFMpegDecoderFactory( QObject* parent, const QVariantList& args  );
+    ~K3bFFMpegDecoderFactory();
 
-  bool canDecode( const KUrl& filename );
+    bool canDecode( const KUrl& filename );
 
-  int pluginSystemVersion() const { return 3; }
+    int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-  bool multiFormatDecoder() const { return true; }
+    bool multiFormatDecoder() const { return true; }
 
-  K3bAudioDecoder* createDecoder( QObject* parent = 0  ) const;
+    K3bAudioDecoder* createDecoder( QObject* parent = 0  ) const;
 };
 
 
 class K3bFFMpegDecoder : public K3bAudioDecoder
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bFFMpegDecoder( QObject* parent = 0  );
-  ~K3bFFMpegDecoder();
+public:
+    K3bFFMpegDecoder( QObject* parent = 0  );
+    ~K3bFFMpegDecoder();
 
-  QString fileType() const;
+    QString fileType() const;
 
-  void cleanup();
+    void cleanup();
 
- protected:
-  bool analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch );
-  bool initDecoderInternal();
-  bool seekInternal( const K3b::Msf& );
+protected:
+    bool analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch );
+    bool initDecoderInternal();
+    bool seekInternal( const K3b::Msf& );
 
-  int decodeInternal( char* _data, int maxLen );
+    int decodeInternal( char* _data, int maxLen );
 
- private:
-  K3bFFMpegFile* m_file;
-  QString m_type;
+private:
+    K3bFFMpegFile* m_file;
+    QString m_type;
 };
+
+K3B_EXPORT_PLUGIN(k3bffmpegdecoder, K3bFFMpegDecoderFactory)
 
 #endif

@@ -1,10 +1,10 @@
 /* 
  *
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,47 +28,48 @@ class QFile;
 
 class LIBK3B_EXPORT K3bWaveDecoderFactory : public K3bAudioDecoderFactory
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bWaveDecoderFactory( QObject* parent = 0  );
-  ~K3bWaveDecoderFactory();
+public:
+    K3bWaveDecoderFactory( QObject* parent, const QVariantList& );
+    ~K3bWaveDecoderFactory();
 
-  bool canDecode( const KUrl& filename );
+    bool canDecode( const KUrl& filename );
 
-  int pluginSystemVersion() const { return 3; }
+    int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-  K3bAudioDecoder* createDecoder( QObject* parent = 0
-				   ) const;
+    K3bAudioDecoder* createDecoder( QObject* parent = 0 ) const;
 };
 
 
 class LIBK3B_EXPORT K3bWaveDecoder : public K3bAudioDecoder
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bWaveDecoder( QObject* parent = 0  );
-  ~K3bWaveDecoder();
+public:
+    K3bWaveDecoder( QObject* parent = 0  );
+    ~K3bWaveDecoder();
 
-  void cleanup();
+    void cleanup();
 
-  bool seekInternal( const K3b::Msf& );
+    bool seekInternal( const K3b::Msf& );
 
-  QString fileType() const;
+    QString fileType() const;
 
-  QStringList supportedTechnicalInfos() const;
+    QStringList supportedTechnicalInfos() const;
 
-  QString technicalInfo( const QString& ) const;
+    QString technicalInfo( const QString& ) const;
 
- protected:
-  bool analyseFileInternal( K3b::Msf& frames, int& samplerate, int& channels );
-  bool initDecoderInternal();
-  int decodeInternal( char* data, int maxLen );
+protected:
+    bool analyseFileInternal( K3b::Msf& frames, int& samplerate, int& channels );
+    bool initDecoderInternal();
+    int decodeInternal( char* data, int maxLen );
 
- private:
-  class Private;
-  Private* d;
+private:
+    class Private;
+    Private* d;
 };
+
+K3B_EXPORT_PLUGIN(k3bwavedecoder, K3bWaveDecoderFactory)
 
 #endif

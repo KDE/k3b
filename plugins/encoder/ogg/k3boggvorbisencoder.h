@@ -1,10 +1,10 @@
 /* 
  *
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,62 +24,64 @@
 class base_K3bOggVorbisEncoderSettingsWidget : public QWidget, public Ui::base_K3bOggVorbisEncoderSettingsWidget
 {
 public:
-  base_K3bOggVorbisEncoderSettingsWidget( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
+    base_K3bOggVorbisEncoderSettingsWidget( QWidget *parent ) : QWidget( parent ) {
+        setupUi( this );
+    }
 };
 
 class K3bOggVorbisEncoder : public K3bAudioEncoder
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bOggVorbisEncoder( QObject* parent = 0 );
-  ~K3bOggVorbisEncoder();
+public:
+    K3bOggVorbisEncoder( QObject* parent, const QVariantList& );
+    ~K3bOggVorbisEncoder();
 
-  QStringList extensions() const { return QStringList("ogg"); }
+    QStringList extensions() const { return QStringList("ogg"); }
   
-  QString fileTypeComment( const QString& ) const;
+    QString fileTypeComment( const QString& ) const;
 
-  long long fileSize( const QString&, const K3b::Msf& msf ) const;
+    long long fileSize( const QString&, const K3b::Msf& msf ) const;
 
-  int pluginSystemVersion() const { return 3; }
+    int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-  K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0) const; 
+    K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0) const; 
 
- private:
-  void loadConfig();
-  void finishEncoderInternal();
-  bool initEncoderInternal( const QString& extension, const K3b::Msf& length );
-  long encodeInternal( const char* data, Q_ULONG len );
-  void setMetaDataInternal( MetaDataField, const QString& );
+private:
+    void loadConfig();
+    void finishEncoderInternal();
+    bool initEncoderInternal( const QString& extension, const K3b::Msf& length );
+    long encodeInternal( const char* data, Q_ULONG len );
+    void setMetaDataInternal( MetaDataField, const QString& );
 
-  bool writeOggHeaders();
-  void cleanup();
-  long flushVorbis();
+    bool writeOggHeaders();
+    void cleanup();
+    long flushVorbis();
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 };
 
 
 class K3bOggVorbisEncoderSettingsWidget : public K3bPluginConfigWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bOggVorbisEncoderSettingsWidget( QWidget* parent = 0 );
-  ~K3bOggVorbisEncoderSettingsWidget();
+public:
+    K3bOggVorbisEncoderSettingsWidget( QWidget* parent = 0 );
+    ~K3bOggVorbisEncoderSettingsWidget();
 
- public slots:
-  void loadConfig();
-  void saveConfig();
+    public slots:
+    void loadConfig();
+    void saveConfig();
 
- private slots:
-  void slotQualityLevelChanged( int val );
+    private slots:
+    void slotQualityLevelChanged( int val );
 
- private:
-  base_K3bOggVorbisEncoderSettingsWidget* w;
+private:
+    base_K3bOggVorbisEncoderSettingsWidget* w;
 };
+
+K3B_EXPORT_PLUGIN(k3boggvorbisdecoder, K3bOggVorbisEncoder)
 
 #endif

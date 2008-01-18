@@ -1,10 +1,10 @@
 /* 
  *
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ class K3bLameEncoder : public K3bAudioEncoder
     Q_OBJECT
 
 public:
-    K3bLameEncoder( QObject* parent = 0 );
+    K3bLameEncoder( QObject* parent, const QVariantList& );
     ~K3bLameEncoder();
 
     bool openFile( const QString& extension, const QString& filename, const K3b::Msf& length );
@@ -46,7 +46,7 @@ public:
 
     long long fileSize( const QString&, const K3b::Msf& msf ) const;
 
-    int pluginSystemVersion() const { return 3; }
+    int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
     K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0 ) const;
 
@@ -69,11 +69,11 @@ public:
     K3bLameEncoderSettingsWidget( QWidget* parent = 0 );
     ~K3bLameEncoderSettingsWidget();
 
-public slots:
+    public slots:
     void loadConfig();
     void saveConfig();
 
-private slots:
+    private slots:
     void slotQualityLevelChanged( int val );
     void slotShowManualSettings();
     void updateManualSettingsLabel();
@@ -81,5 +81,7 @@ private slots:
 private:
     K3bLameManualSettingsDialog* m_manualSettingsDialog;
 };
+
+K3B_EXPORT_PLUGIN(k3blameencoder, K3bLameEncoder)
 
 #endif

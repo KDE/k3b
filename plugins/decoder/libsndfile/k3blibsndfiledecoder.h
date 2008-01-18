@@ -2,10 +2,10 @@
  *
  *
  * Copyright (C) 2004 Matthieu Bedouet <mbedouet@no-log.org>
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,45 +24,47 @@ class KUrl;
 
 class K3bLibsndfileDecoderFactory : public K3bAudioDecoderFactory
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bLibsndfileDecoderFactory( QObject* parent = 0  );
-  ~K3bLibsndfileDecoderFactory();
+public:
+    K3bLibsndfileDecoderFactory( QObject* parent, const QVariantList& args  );
+    ~K3bLibsndfileDecoderFactory();
 
-  bool canDecode( const KUrl& filename );
+    bool canDecode( const KUrl& filename );
 
-  int pluginSystemVersion() const { return 3; }
+    int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-  bool multiFormatDecoder() const { return true; }
+    bool multiFormatDecoder() const { return true; }
 
-  K3bAudioDecoder* createDecoder( QObject* parent = 0 ) const;
+    K3bAudioDecoder* createDecoder( QObject* parent = 0 ) const;
 };
 
 
 class K3bLibsndfileDecoder : public K3bAudioDecoder
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bLibsndfileDecoder( QObject* parent = 0  );
-  ~K3bLibsndfileDecoder();
-  void cleanup();
-  QString fileType() const;
+public:
+    K3bLibsndfileDecoder( QObject* parent = 0  );
+    ~K3bLibsndfileDecoder();
+    void cleanup();
+    QString fileType() const;
 
- protected:
-  bool analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch );
-  bool initDecoderInternal();
-  bool seekInternal( const K3b::Msf& );
+protected:
+    bool analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch );
+    bool initDecoderInternal();
+    bool seekInternal( const K3b::Msf& );
 
-  int decodeInternal( char* _data, int maxLen );
+    int decodeInternal( char* _data, int maxLen );
  
- private:
-  bool openFile();
+private:
+    bool openFile();
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
   
 };
+
+K3B_EXPORT_PLUGIN(k3blibsndfiledecoder, K3bLibsndfileDecoderFactory)
 
 #endif

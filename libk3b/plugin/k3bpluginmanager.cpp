@@ -94,7 +94,7 @@ QList<K3bPlugin*> K3bPluginManager::plugins( const QString& group ) const
 
 void K3bPluginManager::Private::loadPlugin( KService::Ptr service )
 {
-    kDebug() << service->name();
+    kDebug() << service->name() << service->library();
     K3bPlugin* plugin = service->createInstance<K3bPlugin>( m_parent );
     if ( plugin ) {
         kDebug() << "Loaded plugin" << service->name();

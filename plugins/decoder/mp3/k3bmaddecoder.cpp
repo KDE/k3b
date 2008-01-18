@@ -50,8 +50,6 @@
 #endif
 
 
-//K_EXPORT_COMPONENT_FACTORY( libk3bmaddecoder, KPluginFactory<K3bMadDecoderFactory>( "k3bmaddecoder" ) )
-K_EXPORT_PLUGIN(K3bMadDecoderFactory)
 
 int K3bMadDecoder::MaxAllowedRecoverableErrors = 10;
 
@@ -148,7 +146,7 @@ bool K3bMadDecoder::initDecoderInternal()
   cleanup();
 
   d->bOutputFinished = false;
-    
+
   if( !d->handle->open( filename() ) )
     return false;
 
@@ -181,11 +179,11 @@ unsigned long K3bMadDecoder::countFrames()
     }
     else if( d->handle->madFrame->header.bitrate != d->firstHeader.bitrate )
       d->vbr = true;
-    
+
     //
     // position in stream: postion in file minus the not yet used buffer
     //
-    unsigned long long seekPos = d->handle->inputPos() - 
+    unsigned long long seekPos = d->handle->inputPos() -
       (d->handle->madStream->bufend - d->handle->madStream->this_frame + 1);
 
     // save the number of bytes to be read to decode i-1 frames at position i
@@ -195,7 +193,7 @@ unsigned long K3bMadDecoder::countFrames()
 
   if( !d->handle->inputError() && !error ) {
     // we need the length of the track to be multiple of frames (1/75 second)
-    float seconds = (float)d->handle->madTimer->seconds + 
+    float seconds = (float)d->handle->madTimer->seconds +
       (float)d->handle->madTimer->fraction/(float)MAD_TIMER_RESOLUTION;
     frames = (unsigned long)ceil(seconds * 75.0);
     kDebug() << "(K3bMadDecoder) length of track " << seconds;
@@ -227,12 +225,12 @@ int K3bMadDecoder::decodeInternal( char* _data, int maxLen )
       bOutputBufferFull = true;
     }
     else if( d->handle->decodeNextFrame() ) {
-      // 
+      //
       // Once decoded the frame is synthesized to PCM samples. No errors
       // are reported by mad_synth_frame();
       //
       mad_synth_frame( d->handle->madSynth, d->handle->madFrame );
-      
+
       // this fills the output buffer
       if( !createPcmSamples( d->handle->madSynth ) ) {
 	return -1;
@@ -284,17 +282,17 @@ bool K3bMadDecoder::createPcmSamples( mad_synth* synth )
     unsigned short sample = linearRound( synth->pcm.samples[0][i] );
     *(d->outputPointer++) = (sample >> 8) & 0xff;
     *(d->outputPointer++) = sample & 0xff;
-    
+
     /* Right channel. If the decoded stream is monophonic then
      * the right output channel is the same as the left one.
      */
     if( synth->pcm.channels == 2 )
       sample = linearRound( synth->pcm.samples[1][i] );
-      
+
     *(d->outputPointer++) = (sample >> 8) & 0xff;
     *(d->outputPointer++) = sample & 0xff;
   } // pcm conversion
-  
+
   return true;
 }
 
@@ -308,7 +306,7 @@ void K3bMadDecoder::cleanup()
 bool K3bMadDecoder::seekInternal( const K3b::Msf& pos )
 {
   //
-  // we need to reset the complete mad stuff 
+  // we need to reset the complete mad stuff
   //
   if( !initDecoderInternal() )
     return false;
@@ -317,7 +315,7 @@ bool K3bMadDecoder::seekInternal( const K3b::Msf& pos )
   // search a position
   // This is all hacking, I don't really know what I am doing here... ;)
   //
-  double mp3FrameSecs = static_cast<double>(d->firstHeader.duration.seconds) 
+  double mp3FrameSecs = static_cast<double>(d->firstHeader.duration.seconds)
     + static_cast<double>(d->firstHeader.duration.fraction) / static_cast<double>(MAD_TIMER_RESOLUTION);
 
   double posSecs = static_cast<double>(pos.totalFrames()) / 75.0;
@@ -334,7 +332,7 @@ bool K3bMadDecoder::seekInternal( const K3b::Msf& pos )
   // seek in the input file behind the already decoded data
   d->handle->inputSeek( d->seekPositions[frame] );
 
-  kDebug() << "(K3bMadDecoder) Seeking to frame " << frame << " with " 
+  kDebug() << "(K3bMadDecoder) Seeking to frame " << frame << " with "
 	    << frameReservoirProtect << " reservoir frames." << endl;
 
   // decode some frames ignoring MAD_ERROR_BADDATAPTR errors
@@ -351,7 +349,7 @@ bool K3bMadDecoder::seekInternal( const K3b::Msf& pos )
 	  continue;
 	}
 	else {
-	  kDebug() << "(K3bMadDecoder) Seeking: ignoring (" 
+	  kDebug() << "(K3bMadDecoder) Seeking: ignoring ("
 		    << mad_stream_errorstr(d->handle->madStream) << ")" << endl;
 	}
       }
@@ -385,7 +383,7 @@ QString K3bMadDecoder::fileType() const
 
 QStringList K3bMadDecoder::supportedTechnicalInfos() const
 {
-  return QStringList::split( ";", 
+  return QStringList::split( ";",
 			     i18n("Channels") + ";" +
 			     i18n("Sampling Rate") + ";" +
 			     i18n("Bitrate") + ";" +
@@ -456,7 +454,7 @@ QString K3bMadDecoder::technicalInfo( const QString& name ) const
 }
 
 
-K3bMadDecoderFactory::K3bMadDecoderFactory( QObject* parent  )
+K3bMadDecoderFactory::K3bMadDecoderFactory( QObject* parent, const QVariantList& )
   : K3bAudioDecoderFactory( parent )
 {
 }
@@ -521,7 +519,7 @@ bool K3bMadDecoderFactory::canDecode( const KUrl& url )
 	// only support layer III for now since otherwise some wave files
 	// are taken for layer I
 	if( ++cnt >= 5 ) {
-	  kDebug() << "(K3bMadDecoder) valid mpeg 1 layer " << layer 
+	  kDebug() << "(K3bMadDecoder) valid mpeg 1 layer " << layer
 		    << " file with " << c << " channels and a samplerate of "
 		    << s << endl;
 	  return ( layer == MAD_LAYER_III );

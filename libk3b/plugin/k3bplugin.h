@@ -66,4 +66,8 @@ private:
     KPluginInfo m_pluginInfo;
 };
 
+#define K3B_EXPORT_PLUGIN( libname, classname )     \
+K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
+K_EXPORT_PLUGIN(factory(#libname))
+
 #endif

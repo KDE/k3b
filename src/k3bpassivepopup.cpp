@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ static QPixmap themedMessageBoxIcon( K3bPassivePopup::MessageType mt )
 {
   QString icon_name;
   QMessageBox::Icon qIcon;
-  
+
   switch( mt ) {
   case K3bPassivePopup::Information:
     qIcon = QMessageBox::Information;
@@ -78,7 +78,7 @@ static QPixmap themedMessageBoxIcon( K3bPassivePopup::MessageType mt )
   }
 
   QPixmap ret = KIconLoader::global()->loadIcon(icon_name, KIconLoader::NoGroup, KIconLoader::SizeMedium, KIconLoader::DefaultState, QStringList(), 0,true);
-  
+
   if( ret.isNull() )
     return QMessageBox::standardIcon( qIcon );
   else
@@ -224,7 +224,7 @@ void K3bPassivePopup::slideIn()
 {
   d->showEffect = K3bWidgetShowEffect::Slide;
   connect( K3bWidgetShowEffect::showWidget( this, (K3bWidgetShowEffect::Effect)d->showEffect ), SIGNAL(widgetShown(QWidget*)),
-	   this, SLOT(slotShown()) );  
+	   this, SLOT(slotShown()) );
 }
 
 
@@ -267,12 +267,14 @@ void K3bPassivePopup::slotSticky( bool b )
 }
 
 
-void K3bPassivePopup::showPopup( const QString& message, 
-				 const QString& title, 
+void K3bPassivePopup::showPopup( const QString& message,
+				 const QString& title,
 				 MessageType messageType,
 				 bool countdown,
 				 bool button )
 {
+#warning FIXME: K3bPassivePopup
+#if 0
   K3bPassivePopup* pop = new K3bPassivePopup( static_cast<Q3MainWindow*>(qApp->mainWidget())->centralWidget() );
   pop->setMessage( message );
   pop->setTitle( title );
@@ -280,6 +282,7 @@ void K3bPassivePopup::showPopup( const QString& message,
   pop->setShowCloseButton( button );
   pop->setShowCountdown( countdown );
   pop->slideIn();
+#endif
 }
 
 #include "k3bpassivepopup.moc"

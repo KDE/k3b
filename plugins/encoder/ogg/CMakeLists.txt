@@ -7,7 +7,7 @@ set(k3boggvorbisencoder_PART_SRCS k3boggvorbisencoder.cpp )
 
 kde4_add_ui_files(k3boggvorbisencoder_PART_SRCS base_k3boggvorbisencodersettingswidget.ui )
 
-kde4_add_plugin(k3boggvorbisencoder WITH_PREFIX ${k3boggvorbisencoder_PART_SRCS})
+kde4_add_plugin(k3boggvorbisencoder ${k3boggvorbisencoder_PART_SRCS})
 
 target_link_libraries(k3boggvorbisencoder  ${KDE4_KDECORE_LIBS} k3b
 ${OGGVORBIS_LIBRARIES} )

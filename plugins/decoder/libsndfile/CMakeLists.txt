@@ -5,7 +5,7 @@
 
 set(k3blibsndfiledecoder_PART_SRCS k3blibsndfiledecoder.cpp )
 
-kde4_add_plugin(k3blibsndfiledecoder WITH_PREFIX ${k3blibsndfiledecoder_PART_SRCS})
+kde4_add_plugin(k3blibsndfiledecoder ${k3blibsndfiledecoder_PART_SRCS})
 
 target_link_libraries(k3blibsndfiledecoder  ${KDE4_KDECORE_LIBS} k3b ${KDE4_KDEUI_LIBS} sndfile )
 

@@ -1,4 +1,4 @@
 [Desktop Entry]
 Type=ServiceType
 X-KDE-ServiceType=K3b/Plugin
-Comment=Plugin for the K3b
+Name=K3b Plugin

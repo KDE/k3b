@@ -1,10 +1,10 @@
 /* 
  *
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,42 +26,44 @@ class K3Process;
 
 class K3bExternalEncoder : public K3bAudioEncoder
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bExternalEncoder( QObject* parent = 0 );
-  ~K3bExternalEncoder();
+public:
+    K3bExternalEncoder( QObject* parent, const QVariantList& );
+    ~K3bExternalEncoder();
 
-  QStringList extensions() const;
+    QStringList extensions() const;
   
-  QString fileTypeComment( const QString& ) const;
+    QString fileTypeComment( const QString& ) const;
 
-  int pluginSystemVersion() const { return 3; }
+    int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-  K3bPluginConfigWidget* createConfigWidget( QWidget* parent ) const;
+    K3bPluginConfigWidget* createConfigWidget( QWidget* parent ) const;
 
-  /**
-   * reimplemented since the external program is intended to write the file
-   * TODO: allow writing to stdout.
-   */
-  bool openFile( const QString& ext, const QString& filename, const K3b::Msf& length );
-  void closeFile();
+    /**
+     * reimplemented since the external program is intended to write the file
+     * TODO: allow writing to stdout.
+     */
+    bool openFile( const QString& ext, const QString& filename, const K3b::Msf& length );
+    void closeFile();
 
-  class Command;
+    class Command;
 
- private slots:
-  void slotExternalProgramFinished( K3Process* );
-  void slotExternalProgramOutputLine( const QString& );
+    private slots:
+    void slotExternalProgramFinished( K3Process* );
+    void slotExternalProgramOutputLine( const QString& );
 
- private:
-  void finishEncoderInternal();
-  bool initEncoderInternal( const QString& extension );
-  long encodeInternal( const char* data, Q_ULONG len );
-  void setMetaDataInternal( MetaDataField, const QString& );
-  bool writeWaveHeader();
+private:
+    void finishEncoderInternal();
+    bool initEncoderInternal( const QString& extension );
+    long encodeInternal( const char* data, Q_ULONG len );
+    void setMetaDataInternal( MetaDataField, const QString& );
+    bool writeWaveHeader();
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 };
+
+K3B_EXPORT_PLUGIN(k3bexternalencoder, K3bExternalEncoder)
 
 #endif
