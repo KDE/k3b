@@ -50,14 +50,14 @@ public:
      */
     bool isJob() const { return true; }
 
-    K3bJobHandler* jobHandler() const { return m_jobHandler; }
+    K3bJobHandler* jobHandler() const;
 
     /**
      * Is the job active?
      * The default implementation is based on the jobStarted() and jobFinished()
      * methods and there is normally no need to reimplement this.
      */
-    virtual bool active() const { return m_active; }
+    virtual bool active() const;
 
     /**
      * The default implementation is based on the canceled() signal.
@@ -68,7 +68,7 @@ public:
      * in case the job makes proper usage of the jobStarted/jobFinished
      * methods.
      */
-    virtual bool hasBeenCanceled() const { return m_canceled; }
+    virtual bool hasBeenCanceled() const;
 
     virtual QString jobDescription() const { return "K3bJob"; }
     virtual QString jobDetails() const { return QString::null; }
@@ -79,7 +79,7 @@ public:
      */
     unsigned int numRunningSubJobs() const;
 
-    const Q3PtrList<K3bJob>& runningSubJobs() const { return m_runningSubJobs; }
+    const Q3PtrList<K3bJob>& runningSubJobs() const;
 
     static const char* DEFAULT_SIGNAL_CONNECTION;
 
@@ -230,14 +230,8 @@ private:
     void registerSubJob( K3bJob* );
     void unregisterSubJob( K3bJob* );
 
-    K3bJobHandler* m_jobHandler;
-    Q3PtrList<K3bJob> m_runningSubJobs;
-
-    bool m_canceled;
-    bool m_active;
-
     class Private;
-    Private* d;
+    Private* const d;
 };
 
 
@@ -262,7 +256,7 @@ public:
     /**
      * use K3b::WritingApp
      */
-    int writingApp() const { return m_writeMethod; }
+    int writingApp() const;
 
     /**
      * K3b::WritingApp "ored" together
@@ -273,7 +267,7 @@ public Q_SLOTS:
     /**
      * use K3b::WritingApp
      */
-    void setWritingApp( int w ) { m_writeMethod = w; }
+    void setWritingApp( int w );
 
 signals:
     void bufferStatus( int );
@@ -296,9 +290,7 @@ signals:
     void burning(bool);
 
 private:
-    int m_writeMethod;
-
     class Private;
-    Private* d;
+    Private* const d;
 };
 #endif

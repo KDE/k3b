@@ -41,7 +41,7 @@ K3bThreadJob::K3bThreadJob( K3bJobHandler* jh, QObject* parent )
 {
     d->thread = new K3bThread( this );
     connect( d->thread, SIGNAL(finished()),
-             this, SLOT(jobFinished()) );
+             this, SLOT(slotThreadFinished()) );
 }
 
 

@@ -30,6 +30,12 @@
 class K3bJob::Private
 {
 public:
+    K3bJobHandler* jobHandler;
+    Q3PtrList<K3bJob> runningSubJobs;
+
+    bool canceled;
+    bool active;
+
     QList<QEventLoop*> waitLoops;
 };
 
@@ -39,10 +45,12 @@ const char* K3bJob::DEFAULT_SIGNAL_CONNECTION = "K3bJobDefault";
 
 K3bJob::K3bJob( K3bJobHandler* handler, QObject* parent )
     : QObject( parent ),
-      m_jobHandler( handler ),
-      m_canceled(false),
-      m_active(false)
+      d( new Private() )
 {
+    d->jobHandler = handler;
+    d->canceled = false;
+    d->active = false;
+
     connect( this, SIGNAL(canceled()),
              this, SLOT(slotCanceled()) );
 }
@@ -53,21 +61,47 @@ K3bJob::~K3bJob()
     // Normally a job (or the user of a job should take care of this
     // but we do this here for security reasons.
     //
-    if( m_active )
+    if( d->active )
         jobFinished( false );
+
+    delete d;
+}
+
+
+K3bJobHandler* K3bJob::jobHandler() const
+{
+    return d->jobHandler;
+}
+
+
+bool K3bJob::active() const
+{
+    return d->active;
+}
+
+
+bool K3bJob::hasBeenCanceled() const
+{
+    return d->canceled;
+}
+
+
+const Q3PtrList<K3bJob>& K3bJob::runningSubJobs() const
+{
+    return d->runningSubJobs;
 }
 
 
 void K3bJob::setJobHandler( K3bJobHandler* jh )
 {
-    m_jobHandler = jh;
+    d->jobHandler = jh;
 }
 
 
 void K3bJob::jobStarted()
 {
-    m_canceled = false;
-    m_active = true;
+    d->canceled = false;
+    d->active = true;
 
     if( jobHandler() && jobHandler()->isJob() )
         static_cast<K3bJob*>(jobHandler())->registerSubJob( this );
@@ -80,7 +114,7 @@ void K3bJob::jobStarted()
 
 void K3bJob::jobFinished( bool success )
 {
-    m_active = false;
+    d->active = false;
 
     if( jobHandler() && jobHandler()->isJob() )
         static_cast<K3bJob*>(jobHandler())->unregisterSubJob( this );
@@ -97,7 +131,7 @@ void K3bJob::jobFinished( bool success )
 
 void K3bJob::slotCanceled()
 {
-    m_canceled = true;
+    d->canceled = true;
 }
 
 
@@ -107,7 +141,7 @@ int K3bJob::waitForMedia( K3bDevice::Device* device,
                           const QString& message )
 {
     // TODO: What about:   emit newSubTask( i18n("Waiting for media") );
-    return m_jobHandler->waitForMedia( device, mediaState, mediaType, message );
+    return d->jobHandler->waitForMedia( device, mediaState, mediaType, message );
 }
 
 
@@ -116,14 +150,14 @@ bool K3bJob::questionYesNo( const QString& text,
                             const QString& yesText,
                             const QString& noText )
 {
-    return m_jobHandler->questionYesNo( text, caption, yesText, noText );
+    return d->jobHandler->questionYesNo( text, caption, yesText, noText );
 }
 
 
 void K3bJob::blockingInformation( const QString& text,
                                   const QString& caption )
 {
-    return m_jobHandler->blockingInformation( text, caption );
+    return d->jobHandler->blockingInformation( text, caption );
 }
 
 
@@ -178,7 +212,7 @@ void K3bJob::connectSubJob( K3bJob* subJob,
 
 unsigned int K3bJob::numRunningSubJobs() const
 {
-    return m_runningSubJobs.count();
+    return d->runningSubJobs.count();
 }
 
 
@@ -190,13 +224,13 @@ void K3bJob::slotNewSubTask( const QString& str )
 
 void K3bJob::registerSubJob( K3bJob* job )
 {
-    m_runningSubJobs.append( job );
+    d->runningSubJobs.append( job );
 }
 
 
 void K3bJob::unregisterSubJob( K3bJob* job )
 {
-    m_runningSubJobs.removeRef( job );
+    d->runningSubJobs.removeRef( job );
 }
 
 
@@ -206,6 +240,7 @@ void K3bJob::wait()
         QEventLoop loop;
         d->waitLoops.append( &loop );
         loop.exec();
+        d->waitLoops.remove( &loop );
     }
 }
 
@@ -215,21 +250,34 @@ void K3bJob::wait()
 class K3bBurnJob::Private
 {
 public:
+    int writeMethod;
 };
 
 
 
 K3bBurnJob::K3bBurnJob( K3bJobHandler* handler, QObject* parent )
     : K3bJob( handler, parent ),
-      m_writeMethod( K3b::DEFAULT )
+      d( new Private() )
 {
-    d = new Private;
+    d->writeMethod = K3b::DEFAULT;
 }
 
 
 K3bBurnJob::~K3bBurnJob()
 {
     delete d;
+}
+
+
+int K3bBurnJob::writingApp() const
+{
+    return d->writeMethod;
+}
+
+
+void K3bBurnJob::setWritingApp( int w )
+{
+    d->writeMethod = w;
 }
 
 
