@@ -46,6 +46,7 @@ set(k3b_jobs_SRCS
   jobs/k3bdvdcopyjob.cpp 
   jobs/k3bvideodvdtitletranscodingjob.cpp 
   jobs/k3bvideodvdtitledetectclippingjob.cpp 
+  jobs/k3baudiofileanalyzerjob.cpp
   jobs/k3baudiocuefilewritingjob.cpp 
   jobs/k3bbinimagewritingjob.cpp 
   jobs/k3biso9660imagewritingjob.cpp 

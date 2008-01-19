@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2007-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,38 +30,42 @@
  */
 class LIBK3B_EXPORT K3bDirSizeJob : public K3bThreadJob
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bDirSizeJob( QObject* parent = 0 );
-  ~K3bDirSizeJob();
+public:
+    K3bDirSizeJob( QObject* parent = 0 );
+    ~K3bDirSizeJob();
 
-  KIO::filesize_t totalSize() const;
+    KIO::filesize_t totalSize() const;
 
-  /**
-   * Does also include symlinks to files, devices, and fifos
-   */
-  KIO::filesize_t totalFiles() const;
+    /**
+     * Does also include symlinks to files, devices, and fifos
+     */
+    KIO::filesize_t totalFiles() const;
 
-  /**
-   * Total number of counted dirs. This does also
-   * include the first dirs the job was started with.
-   * Does also include symlinks to dirs.
-   */
-  KIO::filesize_t totalDirs() const;
+    /**
+     * Total number of counted dirs. This does also
+     * include the first dirs the job was started with.
+     * Does also include symlinks to dirs.
+     */
+    KIO::filesize_t totalDirs() const;
 
-  /**
-   * Includes symlinks to files and folders
-   */
-  KIO::filesize_t totalSymlinks() const;
+    /**
+     * Includes symlinks to files and folders
+     */
+    KIO::filesize_t totalSymlinks() const;
 
- public slots:
-  void setUrls( const KUrl::List& urls );
-  void setFollowSymlinks( bool );
+public Q_SLOTS:
+    void setUrls( const KUrl::List& urls );
+    void setFollowSymlinks( bool );
 
- private:
-  class WorkThread;
-  WorkThread* d;
+private:
+    bool run();
+    bool countDir( const QString& dir );
+    bool countFiles( const QStringList& l, const QString& dir );
+
+    class Private;
+    Private* const d;
 };
 
 #endif

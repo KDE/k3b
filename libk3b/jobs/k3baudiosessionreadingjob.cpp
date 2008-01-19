@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,250 +28,223 @@
 #include <unistd.h>
 
 
-class K3bAudioSessionReadingJob::WorkThread : public K3bThread
+class K3bAudioSessionReadingJob::Private
 {
 public:
-  WorkThread();
-  ~WorkThread();
+    Private();
+    ~Private();
 
-  void init();
-  void run();
-  void cancel();
-
-  bool canceled;
-
-  int fd;
-  K3bCdparanoiaLib* paranoia;
-  K3bDevice::Device* device;
-  K3bDevice::Toc toc;
-  K3bWaveFileWriter* waveFileWriter;
-  QStringList filenames;
-  int paranoiaMode;
-  int retries;
-  bool neverSkip;
+    int fd;
+    K3bCdparanoiaLib* paranoia;
+    K3bDevice::Device* device;
+    K3bDevice::Toc toc;
+    K3bWaveFileWriter* waveFileWriter;
+    QStringList filenames;
+    int paranoiaMode;
+    int retries;
+    bool neverSkip;
 };
 
 
-K3bAudioSessionReadingJob::WorkThread::WorkThread()
-  : K3bThread(),
-    fd(-1),
-    paranoia(0),
-    waveFileWriter(0),
-    paranoiaMode(0),
-    retries(50),
-    neverSkip(false)
+K3bAudioSessionReadingJob::Private::Private()
+    : fd(-1),
+      paranoia(0),
+      waveFileWriter(0),
+      paranoiaMode(0),
+      retries(50),
+      neverSkip(false)
 {
 }
 
 
-K3bAudioSessionReadingJob::WorkThread::~WorkThread()
+K3bAudioSessionReadingJob::Private::~Private()
 {
-  delete waveFileWriter;
-  delete paranoia;
+    delete waveFileWriter;
+    delete paranoia;
 }
-
-
-void K3bAudioSessionReadingJob::WorkThread::init()
-{
-  canceled = false;
-}
-
-
-void K3bAudioSessionReadingJob::WorkThread::run()
-{
-  if( !paranoia )
-    paranoia = K3bCdparanoiaLib::create();
-
-  if( !paranoia ) {
-    emitInfoMessage( i18n("Could not load libcdparanoia."), K3bJob::ERROR );
-    emitFinished(false);
-    return;
-  }
-
-  if( toc.isEmpty() )
-    toc = device->readToc();
-
-  if( !paranoia->initParanoia( device, toc ) ) {
-    emitInfoMessage( i18n("Could not open device %1",device->blockDeviceName()),
-		     K3bJob::ERROR );
-    emitFinished(false);
-    return;
-  }
-
-  if( !paranoia->initReading() ) {
-    emitInfoMessage( i18n("Error while initializing audio ripping."), K3bJob::ERROR );
-    emitFinished(false);    
-    return;
-  }
-
-  device->block( true );
-
-  // init settings
-  paranoia->setMaxRetries( retries );
-  paranoia->setParanoiaMode( paranoiaMode );
-  paranoia->setNeverSkip( neverSkip );
-
-  bool writeError = false;
-  unsigned int trackNum = 1;
-  unsigned int currentTrack = 0;
-  unsigned long trackRead = 0;
-  unsigned long totalRead = 0;
-  unsigned int lastTrackPercent = 0;
-  unsigned int lastTotalPercent = 0;
-  bool newTrack = true;
-  int status = 0;
-  char* buffer = 0;
-  while( !canceled && (buffer = paranoia->read( &status, &trackNum, fd == -1 /*when writing to a wav be want little endian */ )) ) {
-
-    if( currentTrack != trackNum ) {
-      emitNextTrack( trackNum, paranoia->toc().count() );
-      trackRead = 0;
-      lastTrackPercent = 0;
-
-      currentTrack = trackNum;
-      newTrack = true;
-    }
-
-    if( fd > 0 ) {
-      if( ::write( fd, buffer, CD_FRAMESIZE_RAW ) != CD_FRAMESIZE_RAW ) {
-	kDebug() << "(K3bAudioSessionCopyJob::WorkThread) error while writing to fd " << fd;
-	writeError = true;
-	break;
-      }
-    }
-    else {
-      if( newTrack ) {
-	newTrack = false;
-
-	if( !waveFileWriter )
-	  waveFileWriter = new K3bWaveFileWriter();
-
-	if( filenames.count() < currentTrack ) {
-	  kDebug() << "(K3bAudioSessionCopyJob) not enough image filenames given: " << currentTrack;
-	  writeError = true;
-	  break;
-	}
-
-	if( !waveFileWriter->open( filenames[currentTrack-1] ) ) {
-	  emitInfoMessage( i18n("Unable to open '%1' for writing.",filenames[currentTrack-1]), K3bJob::ERROR );
-	  writeError = true;
-	  break;
-	}
-      }
-
-      waveFileWriter->write( buffer, 
-			     CD_FRAMESIZE_RAW, 
-			     K3bWaveFileWriter::LittleEndian );
-    }
-
-    trackRead++;
-    totalRead++;
-
-    unsigned int trackPercent = 100 * trackRead / toc[currentTrack-1].length().lba();
-    if( trackPercent > lastTrackPercent ) {
-      lastTrackPercent = trackPercent;
-      emitSubPercent( lastTrackPercent );
-    }
-    unsigned int totalPercent = 100 * totalRead / paranoia->rippedDataLength();
-    if( totalPercent > lastTotalPercent ) {
-      lastTotalPercent = totalPercent;
-      emitPercent( lastTotalPercent );
-    }
-  }
-
-  if( waveFileWriter )
-    waveFileWriter->close();
-
-  paranoia->close();
-
-  device->block( false );
-
-  if( status != K3bCdparanoiaLib::S_OK ) {
-    emitInfoMessage( i18n("Unrecoverable error while ripping track %1.",trackNum), K3bJob::ERROR );
-    emitFinished(false);
-    return;
-  }
-
-  emitFinished( !writeError & !canceled );
-}
-
-
-void K3bAudioSessionReadingJob::WorkThread::cancel()
-{
-  canceled = true;
-  // FIXME: add backup killing like in the audio ripping and make sure to close paranoia
-}
-
-
 
 
 K3bAudioSessionReadingJob::K3bAudioSessionReadingJob( K3bJobHandler* jh, QObject* parent )
-  : K3bThreadJob( jh, parent )
+    : K3bThreadJob( jh, parent ),
+      d( new Private() )
 {
-  m_thread = new WorkThread();
-  setThread( m_thread );
 }
 
 
 K3bAudioSessionReadingJob::~K3bAudioSessionReadingJob()
 {
-  delete m_thread;
+    delete d;
 }
 
 
 void K3bAudioSessionReadingJob::setDevice( K3bDevice::Device* dev )
 {
-  m_thread->device = dev;
-  m_thread->toc = K3bDevice::Toc();
+    d->device = dev;
+    d->toc = K3bDevice::Toc();
 }
 
 
 void K3bAudioSessionReadingJob::setToc( const K3bDevice::Toc& toc )
 {
-  m_thread->toc = toc;
+    d->toc = toc;
 }
 
 
 void K3bAudioSessionReadingJob::writeToFd( int fd )
 {
-  m_thread->fd = fd;
+    d->fd = fd;
 }
 
 void K3bAudioSessionReadingJob::setImageNames( const QStringList& l )
 {
-  m_thread->filenames = l;
-  m_thread->fd = -1;
+    d->filenames = l;
+    d->fd = -1;
 }
 
 
 void K3bAudioSessionReadingJob::setParanoiaMode( int m )
 {
-  m_thread->paranoiaMode = m;
+    d->paranoiaMode = m;
 }
 
 
 void K3bAudioSessionReadingJob::setReadRetries( int r )
 {
-  m_thread->retries = r;
+    d->retries = r;
 }
 
 void K3bAudioSessionReadingJob::setNeverSkip( bool b )
 {
-  m_thread->neverSkip = b;
+    d->neverSkip = b;
 }
 
 
 void K3bAudioSessionReadingJob::start()
 {
-  k3bcore->blockDevice( m_thread->device );
-  K3bThreadJob::start();
+    k3bcore->blockDevice( d->device );
+    K3bThreadJob::start();
 }
 
 
-void K3bAudioSessionReadingJob::cleanupJob( bool success )
+void K3bAudioSessionReadingJob::jobFinished( bool success )
 {
-  Q_UNUSED( success );
-  k3bcore->unblockDevice( m_thread->device );
+    k3bcore->unblockDevice( d->device );
+    K3bThreadJob::jobFinished( success );
+}
+
+
+bool K3bAudioSessionReadingJob::run()
+{
+    if( !d->paranoia )
+        d->paranoia = K3bCdparanoiaLib::create();
+
+    if( !d->paranoia ) {
+        emit infoMessage( i18n("Could not load libcdparanoia."), K3bJob::ERROR );
+        return false;
+    }
+
+    if( d->toc.isEmpty() )
+        d->toc = d->device->readToc();
+
+    if( !d->paranoia->initParanoia( d->device, d->toc ) ) {
+        emit infoMessage( i18n("Could not open device %1", d->device->blockDeviceName()),
+                          K3bJob::ERROR );
+        return false;
+    }
+
+    if( !d->paranoia->initReading() ) {
+        emit infoMessage( i18n("Error while initializing audio ripping."), K3bJob::ERROR );
+        return false;
+    }
+
+    d->device->block( true );
+
+    // init settings
+    d->paranoia->setMaxRetries( d->retries );
+    d->paranoia->setParanoiaMode( d->paranoiaMode );
+    d->paranoia->setNeverSkip( d->neverSkip );
+
+    bool writeError = false;
+    unsigned int trackNum = 1;
+    unsigned int currentTrack = 0;
+    unsigned long trackRead = 0;
+    unsigned long totalRead = 0;
+    unsigned int lastTrackPercent = 0;
+    unsigned int lastTotalPercent = 0;
+    bool newTrack = true;
+    int status = 0;
+    char* buffer = 0;
+    while( !canceled() && (buffer = d->paranoia->read( &status, &trackNum, d->fd == -1 /*when writing to a wav be want little endian */ )) ) {
+
+        if( currentTrack != trackNum ) {
+            emit nextTrack( trackNum, d->paranoia->toc().count() );
+            trackRead = 0;
+            lastTrackPercent = 0;
+
+            currentTrack = trackNum;
+            newTrack = true;
+        }
+
+        if( d->fd > 0 ) {
+            if( ::write( d->fd, buffer, CD_FRAMESIZE_RAW ) != CD_FRAMESIZE_RAW ) {
+                kDebug() << "(K3bAudioSessionCopyJob::WorkThread) error while writing to fd " << d->fd;
+                writeError = true;
+                break;
+            }
+        }
+        else {
+            if( newTrack ) {
+                newTrack = false;
+
+                if( !d->waveFileWriter )
+                    d->waveFileWriter = new K3bWaveFileWriter();
+
+                if( d->filenames.count() < ( int )currentTrack ) {
+                    kDebug() << "(K3bAudioSessionCopyJob) not enough image filenames given: " << currentTrack;
+                    writeError = true;
+                    break;
+                }
+
+                if( !d->waveFileWriter->open( d->filenames[currentTrack-1] ) ) {
+                    emit infoMessage( i18n("Unable to open '%1' for writing.", d->filenames[currentTrack-1]), K3bJob::ERROR );
+                    writeError = true;
+                    break;
+                }
+            }
+
+            d->waveFileWriter->write( buffer,
+                                      CD_FRAMESIZE_RAW,
+                                      K3bWaveFileWriter::LittleEndian );
+        }
+
+        trackRead++;
+        totalRead++;
+
+        unsigned int trackPercent = 100 * trackRead / d->toc[currentTrack-1].length().lba();
+        if( trackPercent > lastTrackPercent ) {
+            lastTrackPercent = trackPercent;
+            emit subPercent( lastTrackPercent );
+        }
+        unsigned int totalPercent = 100 * totalRead / d->paranoia->rippedDataLength();
+        if( totalPercent > lastTotalPercent ) {
+            lastTotalPercent = totalPercent;
+            emit percent( lastTotalPercent );
+        }
+    }
+
+    if( d->waveFileWriter )
+        d->waveFileWriter->close();
+
+    d->paranoia->close();
+
+    d->device->block( false );
+
+    if( status != K3bCdparanoiaLib::S_OK ) {
+        emit infoMessage( i18n("Unrecoverable error while ripping track %1.", trackNum), K3bJob::ERROR );
+        return false;
+    }
+
+    return !writeError && !canceled();
 }
 
 #include "k3baudiosessionreadingjob.moc"

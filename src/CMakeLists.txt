@@ -82,13 +82,20 @@ set(k3b_project_SRCS
   projects/k3bprojectplugindialog.cpp 
   projects/k3baudiotracktrmlookupdialog.cpp 
   projects/k3bdatamultisessioncombobox.cpp 
-  projects/k3bmusicbrainzjob.cpp 
   projects/k3bdataurladdingdialog.cpp 
   projects/k3baudiodatasourceeditwidget.cpp 
   projects/k3baudiotrackaddingdialog.cpp 
   projects/k3bencodingconverter.cpp 
   projects/k3bdatamultisessionimportdialog.cpp
   )
+
+if(MUSICBRAINZ_FOUND)
+set(k3b_project_SRCS
+  ${k3b_project_SRCS}
+  projects/k3bmusicbrainzjob.cpp 
+  projects/k3bmusicbrainztrackloopupjob.cpp 
+)
+endif(MUSICBRAINZ_FOUND)
 
 kde4_add_ui3_files(k3b_project_SRCS
   projects/base_k3baudiocdtextwidget.ui 
@@ -111,9 +118,9 @@ set(k3b_kostore_SRCS
   )
 
 set(k3b_rip_SRCS
+  rip/k3baudioripjob.cpp
   rip/k3bpatternparser.cpp 
   rip/k3baudiorippingdialog.cpp 
-  rip/k3baudioripthread.cpp 
   rip/k3baudiocdview.cpp 
   rip/k3bcddbpatternwidget.cpp 
   rip/k3bvideocdinfo.cpp 
@@ -124,8 +131,7 @@ set(k3b_rip_SRCS
   rip/k3baudioconvertingoptionwidget.cpp 
   rip/k3baudiocdlistview.cpp 
   rip/k3baudioprojectconvertingdialog.cpp 
-  rip/k3baudioprojectconvertingthread.cpp 
-  rip/k3baudioripjob.cpp
+  rip/k3baudioprojectconvertingjob.cpp 
   )
 
 set(k3b_videodvd_SRCS

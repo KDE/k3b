@@ -19,7 +19,6 @@
 
 #include <kdebug.h>
 #include <kapplication.h>
-//Added by qt3to4:
 
 
 class K3bThreadJob::Private
@@ -27,10 +26,12 @@ class K3bThreadJob::Private
 public:
     Private()
         : thread( 0 ),
-          running( false ) {
+          running( false ),
+          canceled( false ) {
     }
     K3bThread* thread;
     bool running;
+    bool canceled;
 };
 
 
@@ -38,14 +39,9 @@ K3bThreadJob::K3bThreadJob( K3bJobHandler* jh, QObject* parent )
     : K3bJob( jh, parent ),
       d( new Private )
 {
-}
-
-
-K3bThreadJob::K3bThreadJob( K3bThread* thread, K3bJobHandler* jh, QObject* parent )
-    : K3bJob( jh, parent ),
-      d( new Private )
-{
-    setThread(thread);
+    d->thread = new K3bThread( this );
+    connect( d->thread, SIGNAL(finished()),
+             this, SLOT(jobFinished()) );
 }
 
 
@@ -55,102 +51,85 @@ K3bThreadJob::~K3bThreadJob()
 }
 
 
-QString K3bThreadJob::jobDescription() const
-{
-    if( d->thread )
-        return d->thread->jobDescription();
-    else
-        return QString::null;
-}
-
-
-QString K3bThreadJob::jobDetails() const
-{
-    if( d->thread )
-        return d->thread->jobDetails();
-    else
-        return QString::null;
-}
-
-
 bool K3bThreadJob::active() const
 {
     return d->running;
 }
 
 
-K3bThread* K3bThreadJob::thread() const
-{
-    return d->thread;
-}
-
-
-void K3bThreadJob::setThread( K3bThread* t )
-{
-    if ( d->thread ) {
-        d->thread->disconnect( this );
-    }
-
-    d->thread = t;
-    d->thread->setProgressInfoEventHandler(this);
-
-    connect( d->thread, SIGNAL(infoMessage( const QString&, int )),
-             this, SIGNAL(infoMessage( const QString&, int )) );
-    connect( d->thread, SIGNAL(percent( int )),
-             this, SIGNAL(percent( int )) );
-    connect( d->thread, SIGNAL(subPercent( int )),
-             this, SIGNAL(subPercent( int )) );
-    connect( d->thread, SIGNAL(processedSize( int, int )),
-             this, SIGNAL(processedSize( int, int )) );
-    connect( d->thread, SIGNAL(processedSubSize( int, int )),
-             this, SIGNAL(processedSubSize( int, int )) );
-    connect( d->thread, SIGNAL(newTask( const QString& )),
-             this, SIGNAL(newTask( const QString& )) );
-    connect( d->thread, SIGNAL(newSubTask( const QString& )),
-             this, SIGNAL(newSubTask( const QString& )) );
-    connect( d->thread, SIGNAL(debuggingOutput(const QString&, const QString&)),
-             this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
-    connect( d->thread, SIGNAL(nextTrack( int, int )),
-             this, SIGNAL(nextTrack( int, int )) );
-    connect( d->thread, SIGNAL(canceled()),
-             this, SIGNAL(canceled()) );
-    connect( d->thread, SIGNAL(started()),
-             this, SIGNAL(started()) );
-    connect( d->thread, SIGNAL(finished( bool )),
-             this, SIGNAL(finished( bool )) );
-}
-
-
 void K3bThreadJob::start()
 {
-    if( d->thread ) {
-        if( !d->running ) {
-            d->thread->setProgressInfoEventHandler(this);
-            d->running = true;
-            d->thread->init();
-            d->thread->start();
-        }
-        else
-            kDebug() << "(K3bThreadJob) thread not finished yet.";
+    if( !d->running ) {
+        d->canceled = false;
+        d->running = true;
+        jobStarted();
+        d->thread->start();
     }
     else {
-        kError() << "(K3bThreadJob) no job set." << endl;
-        jobFinished(false);
+        kDebug() << "(K3bThreadJob) thread not finished yet.";
     }
+}
+
+
+void K3bThreadJob::slotThreadFinished()
+{
+    d->running = false;
+    if( canceled() )
+        emit canceled();
+    jobFinished( d->thread->success() );
 }
 
 
 void K3bThreadJob::cancel()
 {
-    d->thread->cancel();
-    // wait for the thread to finish
-    //  d->thread->wait();
+    d->canceled = true;
+    d->thread->ensureDone();
 }
 
 
-void K3bThreadJob::cleanupJob( bool success )
+bool K3bThreadJob::canceled() const
 {
-    Q_UNUSED( success );
+    return d->canceled;
+}
+
+
+int K3bThreadJob::waitForMedia( K3bDevice::Device* device,
+                                int mediaState,
+                                int mediaType,
+                                const QString& message )
+{
+    K3bThreadJobCommunicationEvent* event = K3bThreadJobCommunicationEvent::waitForMedium( device,
+                                                                                           mediaState,
+                                                                                           mediaType,
+                                                                                           message );
+    QApplication::postEvent( this, event );
+    event->wait();
+    return event->intResult();
+}
+
+
+bool K3bThreadJob::questionYesNo( const QString& text,
+                                  const QString& caption,
+                                  const QString& yesText,
+                                  const QString& noText )
+{
+    K3bThreadJobCommunicationEvent* event = K3bThreadJobCommunicationEvent::questionYesNo( text,
+                                                                                           caption,
+                                                                                           yesText,
+                                                                                           noText );
+    QApplication::postEvent( this, event );
+    event->wait();
+    return event->boolResult();
+}
+
+
+void K3bThreadJob::blockingInformation( const QString& text,
+                                        const QString& caption )
+{
+    K3bThreadJobCommunicationEvent* event = K3bThreadJobCommunicationEvent::blockingInformation( text,
+                                                                                                 caption );
+    QApplication::postEvent( this, event );
+    event->wait();
 }
 
 
@@ -165,6 +144,7 @@ void K3bThreadJob::customEvent( QEvent* e )
                                    ce->wantedMediaType(),
                                    ce->text() );
             break;
+
         case K3bThreadJobCommunicationEvent::QuestionYesNo:
             result = questionYesNo( ce->text(),
                                     ce->caption(),
@@ -172,12 +152,13 @@ void K3bThreadJob::customEvent( QEvent* e )
                                     ce->noText() )
                      ? 1 : 0;
             break;
+
         case K3bThreadJobCommunicationEvent::BlockingInfo:
             blockingInformation( ce->text(), ce->caption() );
             break;
         }
         ce->done( result );
     }
-}
+ }
 
 #include "k3bthreadjob.moc"

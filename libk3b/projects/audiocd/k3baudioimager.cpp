@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2004-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,175 +28,140 @@
 #include <unistd.h>
 
 
-class K3bAudioImager::WorkThread : public K3bThread
+class K3bAudioImager::Private
 {
 public:
-  WorkThread( K3bAudioDoc* doc );
+    Private()
+        : fd(-1) {
+    }
 
-  void run();
-
-  void cancel();
-
-  bool m_canceled;
-  int m_fd;
-  QStringList m_imageNames;
-  K3bAudioImager::ErrorType lastError;
-
-private:
-  K3bAudioDoc* m_doc;
+    int fd;
+    QStringList imageNames;
+    K3bAudioImager::ErrorType lastError;
+    K3bAudioDoc* doc;
 };
-
-
-K3bAudioImager::WorkThread::WorkThread( K3bAudioDoc* doc )
-  : K3bThread(),
-    m_canceled(false),
-    m_fd(-1),
-    m_doc(doc)
-{
-}
-
-
-void K3bAudioImager::WorkThread::run()
-{
-  m_canceled = false;
-
-  emitStarted();
-
-  lastError = K3bAudioImager::ERROR_UNKNOWN;
-
-  //
-  //
-  //
-  QStringList::iterator imageFileIt = m_imageNames.begin();
-  K3bWaveFileWriter waveFileWriter;
-
-  K3bAudioTrack* track = m_doc->firstTrack();
-  int trackNumber = 1;
-  unsigned long long totalSize = m_doc->length().audioBytes();
-  unsigned long long totalRead = 0;
-  char buffer[2352 * 10];
-
-  while( track ) {
-
-    emitNextTrack( trackNumber, m_doc->numOfTracks() );
-
-    //
-    // Seek to the beginning of the track
-    //
-    if( !track->seek(0) ) {
-      emitInfoMessage( i18n("Unable to seek in track %1.",trackNumber), K3bJob::ERROR );
-      emitFinished(false);
-      return;
-    }
-
-    //
-    // Initialize the reading
-    //
-    int read = 0;
-    unsigned long long trackRead = 0;
-
-    //
-    // Create the image file
-    //
-    if( m_fd == -1 ) {
-      if( !waveFileWriter.open( *imageFileIt ) ) {
-	emitInfoMessage( i18n("Could not open %1 for writing",*imageFileIt), K3bJob::ERROR );
-	emitFinished(false);
-	return;
-      }
-    }
-
-    //
-    // Read data from the track
-    //
-    while( (read = track->read( buffer, sizeof(buffer) )) > 0 ) {
-      if( m_fd == -1 ) {
-	waveFileWriter.write( buffer, read, K3bWaveFileWriter::BigEndian );
-      }
-      else {
-	if( ::write( m_fd, reinterpret_cast<void*>(buffer), read ) != read ) {
-	  kDebug() << "(K3bAudioImager::WorkThread) writing to fd " << m_fd << " failed.";
-	  lastError = K3bAudioImager::ERROR_FD_WRITE;
-	  emitFinished(false);
-	  return;
-	}
-      }
-
-      if( m_canceled ) {
-	emitCanceled();
-	emitFinished(false);
-	return;
-      }
-
-      //
-      // Emit progress
-      //
-      totalRead += read;
-      trackRead += read;
-
-      emitSubPercent( 100*trackRead/track->length().audioBytes() );
-      emitPercent( 100*totalRead/totalSize );
-      emitProcessedSubSize( trackRead/1024/1024, track->length().audioBytes()/1024/1024 );
-      emitProcessedSize( totalRead/1024/1024, totalSize/1024/1024 );
-    }
-
-    if( read < 0 ) {
-      emitInfoMessage( i18n("Error while decoding track %1.",trackNumber), K3bJob::ERROR );
-      kDebug() << "(K3bAudioImager::WorkThread) read error on track " << trackNumber
-		<< " at pos " << K3b::Msf(trackRead/2352) << endl;
-      lastError = K3bAudioImager::ERROR_DECODING_TRACK;
-      emitFinished(false);
-      return;
-    }
-
-    track = track->next();
-    trackNumber++;
-    imageFileIt++;
-  }
-
-  emitFinished(true);
-}
-
-
-void K3bAudioImager::WorkThread::cancel()
-{
-  m_canceled = true;
-}
-
 
 
 
 K3bAudioImager::K3bAudioImager( K3bAudioDoc* doc, K3bJobHandler* jh, QObject* parent )
-  : K3bThreadJob( jh, parent ),
-    m_doc(doc)
+    : K3bThreadJob( jh, parent ),
+      d( new Private() )
 {
-  m_thread = new WorkThread(doc);
-  setThread( m_thread );
+    d->doc = doc;
 }
 
 
 K3bAudioImager::~K3bAudioImager()
 {
-  delete m_thread;
+    delete d;
 }
 
 
 void K3bAudioImager::writeToFd( int fd )
 {
-  m_thread->m_fd = fd;
+    d->fd = fd;
 }
 
 
 void K3bAudioImager::setImageFilenames( const QStringList& p )
 {
-  m_thread->m_imageNames = p;
-  m_thread->m_fd = -1;
+    d->imageNames = p;
+    d->fd = -1;
 }
 
 
 K3bAudioImager::ErrorType K3bAudioImager::lastErrorType() const
 {
-  return m_thread->lastError;
+    return d->lastError;
+}
+
+
+bool K3bAudioImager::run()
+{
+    d->lastError = K3bAudioImager::ERROR_UNKNOWN;
+
+    QStringList::iterator imageFileIt = d->imageNames.begin();
+    K3bWaveFileWriter waveFileWriter;
+
+    K3bAudioTrack* track = d->doc->firstTrack();
+    int trackNumber = 1;
+    unsigned long long totalSize = d->doc->length().audioBytes();
+    unsigned long long totalRead = 0;
+    char buffer[2352 * 10];
+
+    while( track ) {
+
+        emit nextTrack( trackNumber, d->doc->numOfTracks() );
+
+        //
+        // Seek to the beginning of the track
+        //
+        if( !track->seek(0) ) {
+            emit infoMessage( i18n("Unable to seek in track %1.", trackNumber), K3bJob::ERROR );
+            return false;
+        }
+
+        //
+        // Initialize the reading
+        //
+        int read = 0;
+        unsigned long long trackRead = 0;
+
+        //
+        // Create the image file
+        //
+        if( d->fd == -1 ) {
+            if( !waveFileWriter.open( *imageFileIt ) ) {
+                emit infoMessage( i18n("Could not open %1 for writing", *imageFileIt), K3bJob::ERROR );
+                return false;
+            }
+        }
+
+        //
+        // Read data from the track
+        //
+        while( (read = track->read( buffer, sizeof(buffer) )) > 0 ) {
+            if( d->fd == -1 ) {
+                waveFileWriter.write( buffer, read, K3bWaveFileWriter::BigEndian );
+            }
+            else {
+                if( ::write( d->fd, reinterpret_cast<void*>(buffer), read ) != read ) {
+                    kDebug() << "(K3bAudioImager::WorkThread) writing to fd " << d->fd << " failed.";
+                    d->lastError = K3bAudioImager::ERROR_FD_WRITE;
+                    return false;
+                }
+            }
+
+            if( canceled() ) {
+                return false;
+            }
+
+            //
+            // Emit progress
+            //
+            totalRead += read;
+            trackRead += read;
+
+            emit subPercent( 100*trackRead/track->length().audioBytes() );
+            emit percent( 100*totalRead/totalSize );
+            emit processedSubSize( trackRead/1024/1024, track->length().audioBytes()/1024/1024 );
+            emit processedSize( totalRead/1024/1024, totalSize/1024/1024 );
+        }
+
+        if( read < 0 ) {
+            emit infoMessage( i18n("Error while decoding track %1.", trackNumber), K3bJob::ERROR );
+            kDebug() << "(K3bAudioImager::WorkThread) read error on track " << trackNumber
+                     << " at pos " << K3b::Msf(trackRead/2352) << endl;
+            d->lastError = K3bAudioImager::ERROR_DECODING_TRACK;
+            return false;
+        }
+
+        track = track->next();
+        trackNumber++;
+        imageFileIt++;
+    }
+
+    return true;
 }
 
 #include "k3baudioimager.moc"

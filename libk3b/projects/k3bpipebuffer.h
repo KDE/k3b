@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,36 +23,39 @@
  */
 class K3bPipeBuffer : public K3bThreadJob
 {
- public:
-  K3bPipeBuffer( K3bJobHandler*, QObject* parent = 0 );
-  ~K3bPipeBuffer();
+    Q_OBJECT
 
-  /**
-   * Set the buffer size in MB. The default value is 4 MB.
-   */
-  void setBufferSize( int );
+public:
+    K3bPipeBuffer( K3bJobHandler*, QObject* parent = 0 );
+    ~K3bPipeBuffer();
 
-  /**
-   * If this is set to -1 (which is the default) the pipebuffer
-   * will create a fd pair which can be obtained by inFd() after
-   * the buffer has been started.
-   */
-  void readFromFd( int fd );
-  void writeToFd( int fd );
+    /**
+     * Set the buffer size in MB. The default value is 4 MB.
+     */
+    void setBufferSize( int );
 
-  /**
-   * This is only valid after the piepbuffer has been started and no fd
-   * has been set with readFromFd.
-   */
-  int inFd() const;
+    /**
+     * If this is set to -1 (which is the default) the pipebuffer
+     * will create a fd pair which can be obtained by inFd() after
+     * the buffer has been started.
+     */
+    void readFromFd( int fd );
+    void writeToFd( int fd );
 
- public slots:
-  void start();
-  void cancel();
+    /**
+     * This is only valid after the piepbuffer has been started and no fd
+     * has been set with readFromFd.
+     */
+    int inFd() const;
 
- private:
-  class WorkThread;
-  WorkThread* m_thread;
+public Q_SLOTS:
+    void start();
+
+private:
+    bool run();
+
+    class Private;
+    Private* const d;
 };
 
 #endif

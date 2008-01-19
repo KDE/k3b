@@ -23,10 +23,14 @@
 #include <qstringlist.h>
 #include <kdebug.h>
 
+#include <QtCore/QEventLoop>
+
+
 
 class K3bJob::Private
 {
 public:
+    QList<QEventLoop*> waitLoops;
 };
 
 
@@ -82,6 +86,10 @@ void K3bJob::jobFinished( bool success )
         static_cast<K3bJob*>(jobHandler())->unregisterSubJob( this );
     else
         k3bcore->unregisterJob( this );
+
+    foreach( QEventLoop* loop, d->waitLoops ) {
+        loop->exit();
+    }
 
     emit finished( success );
 }
@@ -189,6 +197,16 @@ void K3bJob::registerSubJob( K3bJob* job )
 void K3bJob::unregisterSubJob( K3bJob* job )
 {
     m_runningSubJobs.removeRef( job );
+}
+
+
+void K3bJob::wait()
+{
+    if ( active() ) {
+        QEventLoop loop;
+        d->waitLoops.append( &loop );
+        loop.exec();
+    }
 }
 
 

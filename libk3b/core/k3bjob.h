@@ -121,24 +121,31 @@ public:
     /**
      * reimplemented from K3bJobHandler
      */
-    int waitForMedia( K3bDevice::Device*,
-                      int mediaState = K3bDevice::STATE_EMPTY,
-                      int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
-                      const QString& message = QString::null );
+    virtual int waitForMedia( K3bDevice::Device*,
+                              int mediaState = K3bDevice::STATE_EMPTY,
+                              int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
+                              const QString& message = QString::null );
   
     /**
      * reimplemented from K3bJobHandler
      */
-    bool questionYesNo( const QString& text,
-                        const QString& caption = QString::null,
-                        const QString& yesText = QString::null,
-                        const QString& noText = QString::null );
+    virtual bool questionYesNo( const QString& text,
+                                const QString& caption = QString::null,
+                                const QString& yesText = QString::null,
+                                const QString& noText = QString::null );
 
     /**
      * reimplemented from K3bJobHandler
      */
-    void blockingInformation( const QString& text,
-                              const QString& caption = QString::null );
+    virtual void blockingInformation( const QString& text,
+                                      const QString& caption = QString::null );
+
+    /**
+     * Wait for the job to finish. In case the job is not running 
+     * this method returns immediately. Otherwise it will start a local
+     * event loop to wait for the job to finish.
+     */
+    void wait();
 
 public Q_SLOTS:
     /**

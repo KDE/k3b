@@ -25,16 +25,15 @@ namespace K3bDevice {
 }
 
 
-#warning Replace the K3bThreadJobCommunicationEvent with signals in Qt::BlockingQueuedConnection mode
 class K3bThreadJobCommunicationEvent : public QEvent
 {
  public:
     ~K3bThreadJobCommunicationEvent();
 
     enum Type {
-	WaitForMedium = QEvent::User + 50,
-	QuestionYesNo,
-	BlockingInfo
+        WaitForMedium = QEvent::User + 50,
+        QuestionYesNo,
+        BlockingInfo
     };
 
     int type() const;
@@ -64,15 +63,15 @@ class K3bThreadJobCommunicationEvent : public QEvent
     void done( int result );
 
     static K3bThreadJobCommunicationEvent* waitForMedium( K3bDevice::Device* device,
-							  int mediaState,
-							  int mediaType,
-							  const QString& message );
+                                                          int mediaState,
+                                                          int mediaType,
+                                                          const QString& message );
     static K3bThreadJobCommunicationEvent* questionYesNo( const QString& text,
-							  const QString& caption,
-							  const QString& yesText,
-							  const QString& noText );
+                                                          const QString& caption,
+                                                          const QString& yesText,
+                                                          const QString& noText );
     static K3bThreadJobCommunicationEvent* blockingInformation( const QString& text,
-								const QString& caption );
+                                                                const QString& caption );
 
  private:
     K3bThreadJobCommunicationEvent( int type );

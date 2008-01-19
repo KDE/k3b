@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2007-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ class K3bDataMultiSessionParameterJob : public K3bThreadJob
 {
     Q_OBJECT
 
- public:
+public:
     K3bDataMultiSessionParameterJob( K3bDataDoc*, K3bJobHandler*, QObject* parent );
     ~K3bDataMultiSessionParameterJob();
 
@@ -33,9 +33,14 @@ class K3bDataMultiSessionParameterJob : public K3bThreadJob
     unsigned int nextSessionStart() const;
     bool importPreviousSession() const;
 
- private:
-    class WorkThread;
-    WorkThread* m_thread;
+private:
+    bool run();
+
+    K3bDataDoc::MultiSessionMode determineMultiSessionModeFromMedium();
+    bool setupMultiSessionParameters();
+
+    class Private;
+    Private* const d;
 };
 
 #endif

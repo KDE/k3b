@@ -1,4 +1,26 @@
-install( FILES  k3bcdcopyjob.h k3bdvdcopyjob.h k3bclonejob.h  	k3baudiocuefilewritingjob.h k3bbinimagewritingjob.h  	k3biso9660imagewritingjob.h k3bdvdformattingjob.h  	k3bblankingjob.h k3bvideodvdtitletranscodingjob.h k3bvideodvdtitledetectclippingjob.h  	k3bverificationjob.h k3bcdcopyjob.h k3bdvdcopyjob.h k3bclonejob.h  	k3baudiocuefilewritingjob.h k3bbinimagewritingjob.h  	k3biso9660imagewritingjob.h k3bdvdformattingjob.h  	k3bblankingjob.h k3bverificationjob.h DESTINATION ${INCLUDE_INSTALL_DIR} )
+install( FILES
+  k3bcdcopyjob.h
+  k3bdvdcopyjob.h
+  k3bclonejob.h
+  k3baudiocuefilewritingjob.h
+  k3bbinimagewritingjob.h
+  k3biso9660imagewritingjob.h
+  k3bdvdformattingjob.h
+  k3bblankingjob.h
+  k3bvideodvdtitletranscodingjob.h
+  k3bvideodvdtitledetectclippingjob.h
+  k3bverificationjob.h
+  k3bcdcopyjob.h
+  k3bdvdcopyjob.h
+  k3bclonejob.h
+  k3baudiofileanalyzerjob.h
+  k3baudiocuefilewritingjob.h
+  k3bbinimagewritingjob.h
+  k3biso9660imagewritingjob.h
+  k3bdvdformattingjob.h
+  k3bblankingjob.h
+  k3bverificationjob.h
+  DESTINATION ${INCLUDE_INSTALL_DIR} )
 
 
 #

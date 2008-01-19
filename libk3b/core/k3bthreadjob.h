@@ -19,23 +19,11 @@
 #include "k3bjob.h"
 #include "k3b_export.h"
 
-class K3bThread;
-
 
 /**
- * A Wrapper to use a K3bThread just like a K3bJob.
- * Usage:
- * <pre>
- *   K3bThread* thread = new MySuperThread(...);
- *   K3bThreadJob* job = new K3bThreadJob( thread, ... );
- *   K3bBurnProgressDialog d;
- *   d.setJob(job);
- *   job->start();
- *   d.exec();
- *   delete job;
- *   delete thread;
- * </pre>
- * Be aware that K3bThreadJob's destructor does NOT delete the thread.
+ * A K3bJob that runs in a different thread. Instead of reimplementing
+ * start() reimplement run() to perform all operations in a different
+ * thread. Otherwise usage is the same as K3bJob.
  */
 class LIBK3B_EXPORT K3bThreadJob : public K3bJob
 {
@@ -43,11 +31,7 @@ class LIBK3B_EXPORT K3bThreadJob : public K3bJob
 
 public:
     K3bThreadJob( K3bJobHandler*, QObject* parent = 0 );
-    K3bThreadJob( K3bThread*, K3bJobHandler*, QObject* parent = 0 );
     virtual ~K3bThreadJob();
-
-    void setThread( K3bThread* t );
-    K3bThread* thread() const;
 
     /**
      * \reimplemented from K3bJob
@@ -57,32 +41,80 @@ public:
      */
     virtual bool active() const;
 
-    virtual QString jobDescription() const;
-    virtual QString jobDetails() const;
+    /**
+     * reimplemented from K3bJobHandler
+     */
+    virtual int waitForMedia( K3bDevice::Device*,
+                              int mediaState = K3bDevice::STATE_EMPTY,
+                              int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
+                              const QString& message = QString::null );
+  
+    /**
+     * reimplemented from K3bJobHandler
+     */
+    virtual bool questionYesNo( const QString& text,
+                                const QString& caption = QString::null,
+                                const QString& yesText = QString::null,
+                                const QString& noText = QString::null );
 
-    public slots:
+    /**
+     * reimplemented from K3bJobHandler
+     */
+    virtual void blockingInformation( const QString& text,
+                                      const QString& caption = QString::null );
+
+public Q_SLOTS:
+    /**
+     * Starts the job in a different thread. Emits the started()
+     * signal.
+     *
+     * When reimplementing this method to perform housekeeping
+     * operations in the GUI thread make sure to call the 
+     * parent implementation.
+     *
+     * \sa run()
+     */
     virtual void start();
+
+    /**
+     * Cancel the job. The method will give the thread a certain
+     * time to actually cancel. After that the thread is terminated.
+     *
+     * \sa canceled()
+     */
     virtual void cancel();
 
 protected:
     /**
-     * converts K3bThread events to K3bJob signals
+     * Implement this method to do the actual work in the thread.
+     * Do not emit started(), finished(), and canceled() signals
+     * in this method. K3bThreadJob will do that automatically.
+     *
+     * \return \p true on success.
      */
-    virtual void customEvent( QEvent* );
+    virtual bool run() = 0;
 
     /**
-     * Reimplement this method to do some housekeeping once
-     * the thread has finished.
-     *
-     * The default implementation does nothing.
-     *
-     * \param success True if the thread finished successfully
+     * Use to check if the job has been canceled.
+     * \sa cancel()
      */
-    virtual void cleanupJob( bool success );
+    bool canceled() const;
+
+private Q_SLOTS:
+    /**
+     * Called in the GUi thread once the job is done.
+     * Emits the finished signal and performs some
+     * housekeeping.
+     */
+    void slotThreadFinished();
 
 private:
+    void customEvent( QEvent* );
+
     class Private;
     Private* const d;
+
+    friend class K3bThread;
 };
 
 #endif

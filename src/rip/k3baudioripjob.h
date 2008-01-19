@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,59 +12,100 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#ifndef _K3B_AUDIORIP_JOB_H_
-#define _K3B_AUDIORIP_JOB_H_
 
-#include <k3bjob.h>
+#ifndef K3B_AUDIO_RIP_THREAD_H
+#define K3B_AUDIO_RIP_THREAD_H
 
-#include "k3baudioripthread.h"
-#include <k3bdevice.h>
-#include <k3bcddbresult.h>
-#include <k3baudioencoder.h>
-
+#include <k3bthreadjob.h>
 #include <q3valuevector.h>
+#include <qpair.h>
 
-class K3bInterferingSystemsHandler;
-class K3bThreadJob;
+#include <k3bcddbquery.h>
 
 
-class K3bAudioRipJob : public K3bJob
+class K3bAudioEncoder;
+class K3bCdparanoiaLib;
+namespace K3bDevice {
+    class Device;
+}
+
+
+class K3bAudioRipJob : public K3bThreadJob
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bAudioRipJob( K3bJobHandler* hdl, QObject* parent );
-  ~K3bAudioRipJob();
+public:
+    K3bAudioRipJob( K3bJobHandler* hdl, QObject* parent );
+    ~K3bAudioRipJob();
 
-  QString jobDescription() const;
-  QString jobDetails() const;
+    QString jobDescription() const;
+    QString jobDetails() const;
 
- public slots:
-  void start();
-  void cancel();
+    // paranoia settings
+    void setParanoiaMode( int mode );
+    void setMaxRetries( int r );
+    void setNeverSkip( bool b );
 
-  void setDevice( K3bDevice::Device* dev ) { m_thread->setDevice( dev ); }
-  void setCddbEntry( const K3bCddbResultEntry& entry ) { m_thread->setCddbEntry( entry ); }
-  void setTracksToRip( const Q3ValueVector<QPair<int, QString> >& tracksToRip ) { m_thread->setTracksToRip( tracksToRip ); }
-  void setParanoiaMode( int mode ) { m_thread->setParanoiaMode( mode ); }
-  void setMaxRetries( int retries ) { m_thread->setMaxRetries( retries ); }
-  void setNeverSkip( bool neverSkip ) { m_thread->setNeverSkip( neverSkip ); }
-  void setSingleFile( bool singleFile ) { m_thread->setSingleFile( singleFile ); }
-  void setWriteCueFile( bool cue ) { m_thread->setWriteCueFile( cue ); }
-  void setEncoder( K3bAudioEncoder* encoder ) { m_thread->setEncoder( encoder ); }
-  void setWritePlaylist( bool playlist ) { m_thread->setWritePlaylist( playlist ); }
-  void setPlaylistFilename( const QString& filename ) { m_thread->setPlaylistFilename( filename ); }
-  void setUseRelativePathInPlaylist( bool relative ) { m_thread->setUseRelativePathInPlaylist( relative ); }
-  void setUseIndex0( bool index0 ) { m_thread->setUseIndex0( index0 ); }
-  void setFileType( const QString& filetype ) { m_thread->setFileType( filetype ); }
+    void setSingleFile( bool b ) { m_singleFile = b; }
 
- private slots:
-  void slotRippingFinished( bool );
+    void setUseIndex0( bool b ) { m_useIndex0 = b; }
 
- private:
-  K3bInterferingSystemsHandler* m_interferingSystemsHandler;
-  K3bThreadJob* m_threadJob;
-  K3bAudioRipThread* m_thread;
+    void setDevice( K3bDevice::Device* dev ) { m_device = dev; }
+
+    void setCddbEntry( const K3bCddbResultEntry& e ) { m_cddbEntry = e; }
+
+    // if 0 (default) wave files are created
+    void setEncoder( K3bAudioEncoder* f );
+
+    /**
+     * Used for encoders that support multiple formats
+     */
+    void setFileType( const QString& );
+
+    /**
+     * 1 is the first track
+     */
+    void setTracksToRip( const Q3ValueVector<QPair<int, QString> >& t ) { m_tracks = t; }
+
+    void setWritePlaylist( bool b ) { m_writePlaylist = b; }
+    void setPlaylistFilename( const QString& s ) { m_playlistFilename = s; }
+    void setUseRelativePathInPlaylist( bool b ) { m_relativePathInPlaylist = b; }
+    void setWriteCueFile( bool b ) { m_writeCueFile = b; }
+
+public Q_SLOTS:
+    void start();
+
+private:
+    bool run();
+    void jobFinished( bool );
+
+    bool ripTrack( int track, const QString& filename );
+    void cleanupAfterCancellation();
+    bool writePlaylist();
+    bool writeCueFile();
+
+    /**
+     * Finds a relative path from baseDir to absPath
+     */
+    QString findRelativePath( const QString& absPath, const QString& baseDir );
+
+    K3bCddbResultEntry m_cddbEntry;
+    K3bDevice::Device* m_device;
+
+    bool m_bUsePattern;
+    bool m_singleFile;
+    bool m_useIndex0;
+
+    bool m_writePlaylist;
+    bool m_relativePathInPlaylist;
+    QString m_playlistFilename;
+
+    bool m_writeCueFile;
+
+    Q3ValueVector<QPair<int, QString> > m_tracks;
+
+    class Private;
+    Private* d;
 };
 
 #endif

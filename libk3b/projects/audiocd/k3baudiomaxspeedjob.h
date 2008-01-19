@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,21 +22,23 @@ class K3bAudioDoc;
 
 class K3bAudioMaxSpeedJob : public K3bThreadJob
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bAudioMaxSpeedJob( K3bAudioDoc* doc, K3bJobHandler*, QObject* parent = 0 );
-  ~K3bAudioMaxSpeedJob();
+public:
+    K3bAudioMaxSpeedJob( K3bAudioDoc* doc, K3bJobHandler*, QObject* parent = 0 );
+    ~K3bAudioMaxSpeedJob();
 
-  /**
-   * KB/sec
-   * Only valid if the job finished successfully.
-   */
-  int maxSpeed() const;
+    /**
+     * KB/sec
+     * Only valid if the job finished successfully.
+     */
+    int maxSpeed() const;
 
- private:
-  class WorkThread;
-  WorkThread* m_thread;
+private:
+    bool run();
+
+    class Private;
+    Private* const d;
 };
 
 #endif

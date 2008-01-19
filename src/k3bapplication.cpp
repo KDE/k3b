@@ -35,7 +35,6 @@
 #include <k3bversion.h>
 #include <k3bdoc.h>
 #include "k3bsystemproblemdialog.h"
-#include <k3bthread.h>
 #include <k3bpluginmanager.h>
 #include <k3bthememanager.h>
 #include <k3bmsf.h>
@@ -302,7 +301,8 @@ bool K3bApplication::processCmdLineArgs()
 void K3bApplication::slotShutDown()
 {
     k3bappcore->mediaCache()->clearDeviceList();
-    K3bThread::waitUntilFinished();
+#warning FIXME: We have no K3bThread::waitUntilFinished anymore!
+//    K3bThread::waitUntilFinished();
 }
 
 

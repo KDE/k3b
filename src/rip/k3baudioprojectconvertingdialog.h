@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,42 +36,43 @@ class K3bAudioDoc;
 
 
 /**
-  *@author Sebastian Trueg
-  */
+ *@author Sebastian Trueg
+ */
 class K3bAudioProjectConvertingDialog : public K3bInteractionDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public: 
-  K3bAudioProjectConvertingDialog( K3bAudioDoc*, QWidget *parent = 0);
-  ~K3bAudioProjectConvertingDialog();
+public: 
+    K3bAudioProjectConvertingDialog( K3bAudioDoc*, QWidget *parent = 0);
+    ~K3bAudioProjectConvertingDialog();
 
-  void setBaseDir( const QString& path );
+    void setBaseDir( const QString& path );
 
- public slots:  
-  void refresh();
+public Q_SLOTS:  
+    void refresh();
 
- protected:
-  void loadK3bDefaults();
-  void loadUserDefaults( const KConfigGroup& );
-  void saveUserDefaults( KConfigGroup& );
+protected:
+    void loadK3bDefaults();
+    void loadUserDefaults( const KConfigGroup& );
+    void saveUserDefaults( KConfigGroup& );
 
- private:
-  K3bCddbPatternWidget* m_patternWidget;
-  K3bAudioConvertingOptionWidget* m_optionWidget;
+private Q_SLOTS:
+    void slotStartClicked();
 
-  K3bListView* m_viewTracks;
-  K3bAudioDoc* m_doc;
+private:
+    K3bCddbPatternWidget* m_patternWidget;
+    K3bAudioConvertingOptionWidget* m_optionWidget;
 
-  void setupGui();
+    K3bListView* m_viewTracks;
+    K3bAudioDoc* m_doc;
 
-  static K3bCddbResultEntry createCddbEntryFromDoc( K3bAudioDoc* );
+    void setupGui();
 
-  class Private;
-  Private* d;
+    static K3bCddbResultEntry createCddbEntryFromDoc( K3bAudioDoc* );
+
+    class Private;
+    Private* d;
   
- private slots:
-  void slotStartClicked();
 };
 
 #endif

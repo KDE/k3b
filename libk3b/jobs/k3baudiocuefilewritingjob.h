@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,57 +22,46 @@ class K3bAudioJob;
 class K3bAudioDecoder;
 class K3bThreadJob;
 namespace K3bDevice {
-  class Device;
+    class Device;
 }
 
 
 class LIBK3B_EXPORT K3bAudioCueFileWritingJob : public K3bBurnJob
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bAudioCueFileWritingJob( K3bJobHandler*, QObject* parent = 0 );
-  ~K3bAudioCueFileWritingJob();
+public:
+    K3bAudioCueFileWritingJob( K3bJobHandler*, QObject* parent = 0 );
+    ~K3bAudioCueFileWritingJob();
 
-  K3bDevice::Device* writer() const;
+    K3bDevice::Device* writer() const;
 	
-  QString jobDescription() const;
-  QString jobDetails() const;
+    QString jobDescription() const;
+    QString jobDetails() const;
 
-  const QString& cueFile() const { return m_cueFile; }
+    QString cueFile() const;
 
- public slots:
-  void start();
-  void cancel();
+public Q_SLOTS:
+    void start();
+    void cancel();
 
-  void setCueFile( const QString& );
-  void setSpeed( int s );
-  void setBurnDevice( K3bDevice::Device* dev );
-  void setWritingMode( int mode );
-  void setSimulate( bool b );
-  void setCopies( int c );
-  void setOnTheFly( bool b );
-  void setTempDir( const QString& );
+    void setCueFile( const QString& );
+    void setSpeed( int s );
+    void setBurnDevice( K3bDevice::Device* dev );
+    void setWritingMode( int mode );
+    void setSimulate( bool b );
+    void setCopies( int c );
+    void setOnTheFly( bool b );
+    void setTempDir( const QString& );
 
- private slots:
-  void slotAnalyserThreadFinished(bool);
+private Q_SLOTS:
+    void slotAnalyserJobFinished(bool);
 
- private:
-  void importCueInProject();
+private:
+    void importCueInProject();
 
-  K3bDevice::Device* m_device;
-
-  QString m_cueFile;
-  K3bAudioDoc* m_audioDoc;
-  K3bAudioJob* m_audioJob;
-  K3bAudioDecoder* m_decoder;
-
-  bool m_canceled;
-  bool m_audioJobRunning;
-
-  class AnalyserThread;
-  AnalyserThread* m_analyserThread;
-  K3bThreadJob* m_analyserJob;
+    class Private;
+    Private* const d;
 };
 
 #endif
