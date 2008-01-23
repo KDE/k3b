@@ -55,7 +55,7 @@ public Q_SLOTS:
     void start();
     void cancel();
 
-    void setTracks( const Q3PtrList<K3bAudioTrack>& tracks );
+    void setTracks( const QList<K3bAudioTrack*>& tracks );
 
 private Q_SLOTS:
     void slotTrmPercent( int p );

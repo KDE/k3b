@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,36 +21,36 @@
 
 #include <k3bmsf.h>
 
-#include <q3ptrlist.h>
+#include <QtCore/QList>
 
 class K3bAudioTrack;
 class K3bAudioTrackWidget;
 
 /**
-  *@author Sebastian Trueg
-  */
+ *@author Sebastian Trueg
+ */
 
 class K3bAudioTrackDialog : public KDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bAudioTrackDialog( Q3PtrList<K3bAudioTrack>&, QWidget *parent=0);
-  ~K3bAudioTrackDialog();
+public:
+    K3bAudioTrackDialog( const QList<K3bAudioTrack*>&, QWidget *parent=0);
+    ~K3bAudioTrackDialog();
 	
- protected slots:
-  void slotOk();
-  void slotApply();
+protected Q_SLOTS:
+    void slotOk();
+    void slotApply();
 
-  void updateTrackLengthDisplay();
+    void updateTrackLengthDisplay();
 
- private:
-  Q3PtrList<K3bAudioTrack> m_tracks;
+private:
+    QList<K3bAudioTrack*> m_tracks;
 
-  K3bAudioTrackWidget* m_audioTrackWidget;
+    K3bAudioTrackWidget* m_audioTrackWidget;
 
-  void setupGui();
-  void setupConnections();
+    void setupGui();
+    void setupConnections();
 };
 
 #endif

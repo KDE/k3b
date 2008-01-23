@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,25 +20,23 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-//Added by qt3to4:
-#include <QFrame>
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 
 
 K3bThemedHeader::K3bThemedHeader( QWidget* parent )
-  : QFrame( parent )
+    : QFrame( parent )
 {
-  init();
+    init();
 }
 
 
 K3bThemedHeader::K3bThemedHeader( const QString& title, const QString& subtitle, QWidget* parent )
-  : QFrame( parent )
+    : QFrame( parent )
 {
-  setTitle( title );
-  setSubTitle( subtitle );
+    setTitle( title );
+    setSubTitle( subtitle );
 
-  init();
+    init();
 }
 
 
@@ -46,86 +44,86 @@ K3bThemedHeader::~K3bThemedHeader()
 {
 }
 
- 
+
 void K3bThemedHeader::setTitle( const QString& title, const QString& subtitle )
 {
-  m_titleLabel->setTitle( title, subtitle );
+    m_titleLabel->setTitle( title, subtitle );
 }
 
 
 void K3bThemedHeader::setSubTitle( const QString& subtitle )
 {
-  m_titleLabel->setSubTitle( subtitle );
+    m_titleLabel->setSubTitle( subtitle );
 }
 
 
 void K3bThemedHeader::setLeftPixmap( K3bTheme::PixmapType p )
 {
-  m_leftPix = p;
-  slotThemeChanged();
+    m_leftPix = p;
+    slotThemeChanged();
 }
 
 
 void K3bThemedHeader::setRightPixmap( K3bTheme::PixmapType p )
 {
-  m_rightPix = p;
-  slotThemeChanged();
+    m_rightPix = p;
+    slotThemeChanged();
 }
 
 
 void K3bThemedHeader::setAlignment( int align )
 {
-  m_titleLabel->setAlignment( align );
+    m_titleLabel->setAlignment( align );
 }
 
 
 void K3bThemedHeader::init()
 {
-  setFrameShape( QFrame::StyledPanel );
-  setFrameShadow( QFrame::Sunken );
-  setLineWidth( 1 );
-  //setMargin( 1 );
+    setFrameShape( QFrame::StyledPanel );
+    setFrameShadow( QFrame::Sunken );
+    setLineWidth( 1 );
+    //setMargin( 1 );
 
-  Q3HBoxLayout* layout = new Q3HBoxLayout( this );
-  layout->setMargin( 2 ); // to make sure the frame gets displayed
-  layout->setSpacing( 0 );
+    QHBoxLayout* layout = new QHBoxLayout( this );
+    layout->setMargin( 2 ); // to make sure the frame gets displayed
+    layout->setSpacing( 0 );
 
-  m_leftLabel = new QLabel( this );
-  m_leftLabel->setScaledContents( false );
-  m_titleLabel = new K3bTitleLabel( this );
-  m_rightLabel = new QLabel( this );
-  m_rightLabel->setScaledContents( false );
+    m_leftLabel = new QLabel( this );
+    m_leftLabel->setScaledContents( false );
+    m_titleLabel = new K3bTitleLabel( this );
+    m_rightLabel = new QLabel( this );
+    m_rightLabel->setScaledContents( false );
 
-  layout->addWidget( m_leftLabel );
-  layout->addWidget( m_titleLabel );
-  layout->setStretchFactor( m_titleLabel, 1 );
-  layout->addWidget( m_rightLabel );
+    layout->addWidget( m_leftLabel );
+    layout->addWidget( m_titleLabel );
+    layout->setStretchFactor( m_titleLabel, 1 );
+    layout->addWidget( m_rightLabel );
 
-  m_leftPix = K3bTheme::DIALOG_LEFT;
-  m_rightPix = K3bTheme::DIALOG_RIGHT;
+    m_leftPix = K3bTheme::DIALOG_LEFT;
+    m_rightPix = K3bTheme::DIALOG_RIGHT;
 
-  slotThemeChanged();
+    slotThemeChanged();
 
-  connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
-	   this, SLOT(slotThemeChanged()) );
-  connect( kapp, SIGNAL(appearanceChanged()),
-	   this, SLOT(slotThemeChanged()) );
+    connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
+             this, SLOT(slotThemeChanged()) );
+    connect( kapp, SIGNAL(appearanceChanged()),
+             this, SLOT(slotThemeChanged()) );
 }
 
 
 void K3bThemedHeader::slotThemeChanged()
 {
-  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
 //     setPaletteBackgroundColor( theme->backgroundColor() );
 //     setPaletteForegroundColor( theme->foregroundColor() );
 
-    m_leftLabel->setPaletteBackgroundColor( theme->backgroundColor() );
-    m_leftLabel->setPixmap( theme->pixmap( m_leftPix ) );
-    m_rightLabel->setPaletteBackgroundColor( theme->backgroundColor() );
-    m_rightLabel->setPixmap( theme->pixmap( m_rightPix ) );
-    m_titleLabel->setPaletteBackgroundColor( theme->backgroundColor() );
-    m_titleLabel->setPaletteForegroundColor( theme->foregroundColor() );
-  }
+        m_leftLabel->setPaletteBackgroundColor( theme->backgroundColor() );
+        m_leftLabel->setPixmap( theme->pixmap( m_leftPix ) );
+        m_rightLabel->setPaletteBackgroundColor( theme->backgroundColor() );
+        m_rightLabel->setPixmap( theme->pixmap( m_rightPix ) );
+        m_titleLabel->setPaletteBackgroundColor( theme->backgroundColor() );
+        m_titleLabel->setPaletteForegroundColor( theme->foregroundColor() );
+    }
 }
 
 #include "k3bthemedheader.moc"

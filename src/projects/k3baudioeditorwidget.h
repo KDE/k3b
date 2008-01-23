@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2004-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2004-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,8 +15,7 @@
 #ifndef _K3B_AUDIO_EDITOR_WIDGET_H_
 #define _K3B_AUDIO_EDITOR_WIDGET_H_
 
-#include <q3ptrlist.h>
-//Added by qt3to4:
+#include <QList>
 #include <QMouseEvent>
 #include <QFrame>
 #include <k3bmsf.h>
@@ -52,9 +51,9 @@ public:
      * @return -1 on error or an identifier on success (be aware that the highest value for end is length-1)
      */
     int addRange( const K3b::Msf& start, const K3b::Msf& end, 
-		  bool startFixed = false, bool endFixed = false,
-		  const QString& toolTip = QString::null,
-		  const QBrush& brush = QBrush() );
+                  bool startFixed = false, bool endFixed = false,
+                  const QString& toolTip = QString::null,
+                  const QBrush& brush = QBrush() );
 
     /**
      * \returns the identifier of the range which spans over x position \a pos or
@@ -95,7 +94,7 @@ public:
      * @return -1 on error or an identifier on success.
      */
     int addMarker( const K3b::Msf& pos, bool fixed = false, 
-		   const QString& toolTip = QString::null, const QColor& color = QColor() );
+                   const QString& toolTip = QString::null, const QColor& color = QColor() );
 
     /**
      * @return false if the marker does not exist.
@@ -145,7 +144,7 @@ public:
     void setSelectedRangeBrush( const QBrush& );
     const QBrush& selectedRangeBrush() const;
 
-signals:
+Q_SIGNALS:
     /**
      * Emitted when enabled.
      */
@@ -183,8 +182,8 @@ private:
     void mouseMoveEvent( QMouseEvent* e );
     void paintEvent(QPaintEvent *);
     void drawAll( QPainter*, const QRect& );
-    void drawRange( QPainter* p, const QRect&, Range* r );
-    void drawMarker( QPainter* p, const QRect&, Marker* m );
+    void drawRange( QPainter* p, const QRect&, const Range& r );
+    void drawMarker( QPainter* p, const QRect&, const Marker& m );
 
     /**
      * Makes sure that \a r does not overlap any other range by modifying and
@@ -201,7 +200,6 @@ private:
 
     int m_maxMarkers;
     K3b::Msf m_length;
-    Q3PtrList<Marker> m_markers;
     int m_idCnt;
     bool m_mouseAt;
 

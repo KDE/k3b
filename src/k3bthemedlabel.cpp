@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2006-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,14 +65,18 @@ void K3bThemedLabel::setThemePixmap( K3bTheme::PixmapType pix )
 
 void K3bThemedLabel::slotThemeChanged()
 {
+    setAutoFillBackground( true );
     if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
         QPalette p = palette();
-        p.setColor( QPalette::Normal, QPalette::Background, theme->backgroundColor() );
-        p.setColor( QPalette::Normal, QPalette::Foreground, theme->foregroundColor() );
+        p.setColor( backgroundRole(), theme->backgroundColor() );
+        p.setColor( foregroundRole(), theme->foregroundColor() );
         setPalette( p );
         if( m_themePixmapCode > -1 ) {
             setPixmap( theme->pixmap( (K3bTheme::PixmapType)m_themePixmapCode ) );
             setScaledContents( false );
+            if ( pixmap() ) {
+                setFixedSize( pixmap()->size() );
+            }
         }
     }
 }

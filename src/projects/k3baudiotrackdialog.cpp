@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@
 #include <q3whatsthis.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
-#include <Q3PtrList>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -54,54 +53,54 @@
 //         do only show cd-text and options (eventuelle index0)
 
 
-K3bAudioTrackDialog::K3bAudioTrackDialog( Q3PtrList<K3bAudioTrack>& tracks, QWidget *parent )
-  : KDialog( parent)
+K3bAudioTrackDialog::K3bAudioTrackDialog( const QList<K3bAudioTrack*>& tracks, QWidget *parent )
+    : KDialog( parent)
 {
-  m_tracks = tracks;
+    m_tracks = tracks;
 
-  setCaption(i18n("Audio Track Properties"));
-  setButtons(Ok|Cancel|Apply);
-  setDefaultButton(Ok);
-  setModal(true);
-  connect(this,SIGNAL(okClicked()), this, SLOT(slotOk()));
-  connect(this,SIGNAL(applyClicked()),this,SLOT(slotApply()));
+    setCaption(i18n("Audio Track Properties"));
+    setButtons(Ok|Cancel|Apply);
+    setDefaultButton(Ok);
+    setModal(true);
+    connect(this,SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(this,SIGNAL(applyClicked()),this,SLOT(slotApply()));
 
 
-  setupGui();
-  setupConnections();
+    setupGui();
+    setupConnections();
 }
 
 K3bAudioTrackDialog::~K3bAudioTrackDialog()
 {
 }
-	
+
 
 void K3bAudioTrackDialog::slotOk()
 {
-  slotApply();
-  done(0);
+    slotApply();
+    done(0);
 }
 
 
 void K3bAudioTrackDialog::slotApply()
 {
-  m_audioTrackWidget->save();
-  
+    m_audioTrackWidget->save();
+
 }
 
 
 void K3bAudioTrackDialog::setupGui()
 {
-  QFrame* frame = new QFrame();
-  setMainWidget( frame );
+    QFrame* frame = new QFrame();
+    setMainWidget( frame );
 
 
-  Q3GridLayout* mainLayout = new Q3GridLayout( frame );
-  mainLayout->setSpacing( spacingHint() );
-  mainLayout->setMargin( 0 );
+    Q3GridLayout* mainLayout = new Q3GridLayout( frame );
+    mainLayout->setSpacing( spacingHint() );
+    mainLayout->setMargin( 0 );
 
-  m_audioTrackWidget = new K3bAudioTrackWidget( m_tracks, frame );
-  mainLayout->addWidget( m_audioTrackWidget, 0, 0 );
+    m_audioTrackWidget = new K3bAudioTrackWidget( m_tracks, frame );
+    mainLayout->addWidget( m_audioTrackWidget, 0, 0 );
 }
 
 void K3bAudioTrackDialog::setupConnections()
@@ -115,7 +114,5 @@ void K3bAudioTrackDialog::updateTrackLengthDisplay()
 //   m_displayLength->setText( len.toString() );
 //   m_displaySize->setText( KIO::convertSize(len.audioBytes()) );
 }
-
-
 
 #include "k3baudiotrackdialog.moc"

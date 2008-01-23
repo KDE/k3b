@@ -1,10 +1,10 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,6 +75,7 @@
 #include <ksqueezedtextlabel.h>
 #include <KNotification>
 #include <kvbox.h>
+#include <KStandardGuiItem>
 
 
 class K3bJobProgressDialog::Private
@@ -86,6 +87,9 @@ public:
 
     int lastProgress;
     QEventLoop* eventLoop;
+
+    QFrame* headerFrame;
+    QFrame* progressHeaderFrame;
 };
 
 
@@ -122,32 +126,29 @@ K3bJobProgressDialog::~K3bJobProgressDialog()
 
 void K3bJobProgressDialog::setupGUI()
 {
-    setButtons( Cancel|Close|User1 );
+    // KDialog does not allow to use Cancel and Close buttons at the same time!
+    setButtons( KDialog::Cancel|KDialog::User1|KDialog::User2 );
     setButtonText( User1, i18n("Show Debugging Output") );
+    setButtonGuiItem( User2, KStandardGuiItem::close() );
 
-    QVBoxLayout* mainLayout = new QVBoxLayout( mainWidget(), 11, 6 );
+    QVBoxLayout* mainLayout = new QVBoxLayout( mainWidget() );
     mainLayout->setMargin( 0 );
 
     // header
     // ------------------------------------------------------------------------------------------
-    QFrame* headerFrame = new QFrame( mainWidget(), "headerFrame" );
-    headerFrame->setFrameShape( QFrame::StyledPanel );
-    headerFrame->setFrameShadow( QFrame::Sunken );
-    headerFrame->setLineWidth( 1 );
-    //headerFrame->setMargin( 1 );
-    QHBoxLayout* headerLayout = new QHBoxLayout( headerFrame );
+    d->headerFrame = new QFrame( mainWidget() );
+    d->headerFrame->setFrameShape( QFrame::StyledPanel );
+    d->headerFrame->setFrameShadow( QFrame::Sunken );
+    d->headerFrame->setLineWidth( 1 );
+    d->headerFrame->setAutoFillBackground( true );
+    //d->headerFrame->setMargin( 1 );
+    QHBoxLayout* headerLayout = new QHBoxLayout( d->headerFrame );
     headerLayout->setMargin( 2 ); // to make sure the frame gets displayed
     headerLayout->setSpacing( 0 );
-    m_pixLabel = new K3bThemedLabel( headerFrame );
+    m_pixLabel = new K3bThemedLabel( d->headerFrame );
     headerLayout->addWidget( m_pixLabel );
 
-    QFrame* frame4 = new QFrame( headerFrame, "frame4" );
-    frame4->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 1, 0, frame4->sizePolicy().hasHeightForWidth() ) );
-    frame4->setFrameShape( QFrame::NoFrame );
-    frame4->setFrameShadow( QFrame::Raised );
-    QVBoxLayout* frame4Layout = new QVBoxLayout( frame4, 6, 3, "frame4Layout");
-
-    m_labelJob = new K3bThemedLabel( frame4 );
+    m_labelJob = new K3bThemedLabel( d->headerFrame );
     //TODO fix me
     //m_labelJob->setMinimumVisibleText( 40 );
     QFont m_labelJob_font(  m_labelJob->font() );
@@ -155,15 +156,21 @@ void K3bJobProgressDialog::setupGUI()
     m_labelJob_font.setBold( true );
     m_labelJob->setFont( m_labelJob_font );
     m_labelJob->setAlignment( Qt::AlignVCenter | Qt::AlignRight  );
-    frame4Layout->addWidget( m_labelJob );
 
-    m_labelJobDetails = new K3bThemedLabel( frame4 );
-    m_labelJobDetails->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 0, 1, m_labelJobDetails->sizePolicy().hasHeightForWidth() ) );
+    m_labelJobDetails = new K3bThemedLabel( d->headerFrame );
+    m_labelJobDetails->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5,
+                                                   (QSizePolicy::SizeType)5,
+                                                   0, 1,
+                                                   m_labelJobDetails->sizePolicy().hasHeightForWidth() ) );
     m_labelJobDetails->setAlignment( Qt::AlignVCenter | Qt::AlignRight  );
-    frame4Layout->addWidget( m_labelJobDetails );
-    headerLayout->addWidget( frame4 );
 
-    mainLayout->addWidget( headerFrame );
+    QVBoxLayout* jobLabelsLayout = new QVBoxLayout;
+    jobLabelsLayout->setMargin( KDialog::spacingHint() );
+    jobLabelsLayout->addWidget( m_labelJob );
+    jobLabelsLayout->addWidget( m_labelJobDetails );
+    headerLayout->addLayout( jobLabelsLayout );
+
+    mainLayout->addWidget( d->headerFrame );
     // ------------------------------------------------------------------------------------------
 
 
@@ -178,36 +185,35 @@ void K3bJobProgressDialog::setupGUI()
 
     // progress header
     // ------------------------------------------------------------------------------------------
-    QFrame* progressHeaderFrame = new QFrame( mainWidget(), "progressHeaderFrame" );
-    progressHeaderFrame->setFrameShape( QFrame::StyledPanel );
-    progressHeaderFrame->setFrameShadow( QFrame::Sunken );
-    progressHeaderFrame->setLineWidth( 1 );
-    //progressHeaderFrame->setMargin( 1 );
+    d->progressHeaderFrame = new QFrame( mainWidget() );
+    d->progressHeaderFrame->setFrameShape( QFrame::StyledPanel );
+    d->progressHeaderFrame->setFrameShadow( QFrame::Sunken );
+    d->progressHeaderFrame->setLineWidth( 1 );
+    d->progressHeaderFrame->setAutoFillBackground( true );
+    //d->progressHeaderFrame->setMargin( 1 );
 
-    QHBoxLayout* progressHeaderLayout = new QHBoxLayout( progressHeaderFrame );
+    QHBoxLayout* progressHeaderLayout = new QHBoxLayout( d->progressHeaderFrame );
     progressHeaderLayout->setMargin( 2 );
     progressHeaderLayout->setSpacing( 0 );
 
-    QFrame* frame5 = new QFrame( progressHeaderFrame, "frame5" );
-    frame5->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 1, 0, frame5->sizePolicy().hasHeightForWidth() ) );
-    frame5->setFrameShape( QFrame::NoFrame );
-    frame5->setFrameShadow( QFrame::Raised );
-    QVBoxLayout* frame5Layout = new QVBoxLayout( frame5, 6, 3, "frame5Layout");
-
-    m_labelTask = new K3bThemedLabel( frame5 );
-    QFont m_labelTask_font(  m_labelTask->font() );
+    m_labelTask = new K3bThemedLabel( d->progressHeaderFrame );
+    QFont m_labelTask_font( m_labelTask->font() );
     m_labelTask_font.setPointSize( m_labelTask_font.pointSize() + 2 );
     m_labelTask_font.setBold( true );
     m_labelTask->setFont( m_labelTask_font );
-    frame5Layout->addWidget( m_labelTask );
 
-    m_labelElapsedTime = new K3bThemedLabel( frame5 );
-    m_labelElapsedTime->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 0, 1, m_labelElapsedTime->sizePolicy().hasHeightForWidth() ) );
-    frame5Layout->addWidget( m_labelElapsedTime );
-    progressHeaderLayout->addWidget( frame5 );
+    m_labelElapsedTime = new K3bThemedLabel( d->progressHeaderFrame );
+    m_labelElapsedTime->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5,
+                                                    0, 1, m_labelElapsedTime->sizePolicy().hasHeightForWidth() ) );
 
-    progressHeaderLayout->addWidget( new K3bThemedLabel( K3bTheme::PROGRESS_RIGHT, progressHeaderFrame ) );
-    mainLayout->addWidget( progressHeaderFrame );
+    QVBoxLayout* jobProgressLayout = new QVBoxLayout( d->progressHeaderFrame );
+    jobProgressLayout->setMargin( KDialog::spacingHint() );
+    jobProgressLayout->addWidget( m_labelTask );
+    jobProgressLayout->addWidget( m_labelElapsedTime );
+
+    progressHeaderLayout->addLayout( jobProgressLayout );
+    progressHeaderLayout->addWidget( new K3bThemedLabel( K3bTheme::PROGRESS_RIGHT, d->progressHeaderFrame ) );
+    mainLayout->addWidget( d->progressHeaderFrame );
     // ------------------------------------------------------------------------------------------
 
     QHBoxLayout* layout3 = new QHBoxLayout( 0, 0, 6, "layout3");
@@ -280,7 +286,7 @@ void K3bJobProgressDialog::setExtraInfo( QWidget *extra )
 
 void K3bJobProgressDialog::closeEvent( QCloseEvent* e )
 {
-    if( button( Close )->isVisible() ) {
+    if( button( User2 )->isVisible() ) {
         KDialog::closeEvent( e );
         if( QWidget* w = kapp->mainWidget() )
             w->show();
@@ -291,7 +297,7 @@ void K3bJobProgressDialog::closeEvent( QCloseEvent* e )
 
         if( m_osd ) {
             m_osd->hide();
-//FIXME kde4
+#warning FIXME kde4
             //m_osd->saveSettings( KGlobal::config() );
         }
     }
@@ -303,7 +309,7 @@ void K3bJobProgressDialog::closeEvent( QCloseEvent* e )
 void K3bJobProgressDialog::setupConnections()
 {
     connect( this, SIGNAL(cancelClicked()), this, SLOT(slotCancelButtonPressed()) );
-    connect( this, SIGNAL(closeClicked()), this, SLOT(close()) );
+    connect( this, SIGNAL(user2Clicked()), this, SLOT(close()) );
     connect( this, SIGNAL(user1Clicked()), this, SLOT(slotShowDebuggingOutput()) );
 }
 
@@ -391,7 +397,7 @@ void K3bJobProgressDialog::slotFinished( bool success )
 
     showButton( Cancel, false );
     showButton( User1, true );
-    showButton( Close, true );
+    showButton( User2, true );
     m_timer->stop();
 }
 
@@ -409,7 +415,7 @@ void K3bJobProgressDialog::setJob( K3bJob* job )
     // clear everything
     showButton( Cancel, true );
     showButton( User1, false );
-    showButton( Close, false );
+    showButton( User2, false );
     enableButtonCancel( true );
 
     m_viewInfo->clear();
@@ -472,7 +478,7 @@ void K3bJobProgressDialog::setJob( K3bJob* job )
 
 void K3bJobProgressDialog::slotCancelButtonPressed()
 {
-    if( m_job )
+    if( m_job && m_job->active() )
         if( KMessageBox::questionYesNo( this, i18n("Do you really want to cancel?"), i18n("Cancel Confirmation") ) == KMessageBox::Yes ) {
             if( m_job ) {
                 m_job->cancel();
@@ -568,14 +574,14 @@ void K3bJobProgressDialog::keyPressEvent( QKeyEvent *e )
     case Qt::Key_Enter:
     case Qt::Key_Return:
         // if the process finished this closes the dialog
-        if( button( Close )->isVisible() )
+        if( button( User2 )->isVisible() )
             close();
         break;
     case Qt::Key_Escape:
         // simulate button clicks
-        if( button( Cancel )->isVisible() && isButtonEnabled( Cancel ) )
+        if( m_job && m_job->active() )
             slotCancelButtonPressed();
-        else if( !button( Cancel )->isVisible() )
+        else if( button( User2 )->isVisible() )
             close();
         break;
     default:
@@ -642,17 +648,14 @@ int K3bJobProgressDialog::startJob( K3bJob* job )
 }
 
 
-void K3bJobProgressDialog::hide()
+void K3bJobProgressDialog::setVisible( bool visible )
 {
     // we need to reimplement this since
     // QDialog does not know if we are in a loop from startJob
 
-    if ( isHidden() )
-        return;
+    KDialog::setVisible( visible );
 
-    KDialog::hide();
-
-    if ( d->eventLoop ) {
+    if ( !visible && d->eventLoop ) {
         d->eventLoop->exit();
     }
 }
@@ -690,14 +693,10 @@ void K3bJobProgressDialog::blockingInformation( const QString& text,
 void K3bJobProgressDialog::slotThemeChanged()
 {
     if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-        static_cast<QWidget*>(child( "frame4" ))->setPaletteBackgroundColor( theme->backgroundColor() );
-        static_cast<QWidget*>(child( "frame4" ))->setPaletteForegroundColor( theme->backgroundColor() );
-        static_cast<QWidget*>(child( "frame5" ))->setPaletteBackgroundColor( theme->backgroundColor() );
-        static_cast<QWidget*>(child( "frame5" ))->setPaletteForegroundColor( theme->backgroundColor() );
-        static_cast<QWidget*>(child( "progressHeaderFrame" ))->setPaletteBackgroundColor( theme->backgroundColor() );
-        static_cast<QWidget*>(child( "progressHeaderFrame" ))->setPaletteForegroundColor( theme->backgroundColor() );
-        static_cast<QWidget*>(child( "headerFrame" ))->setPaletteBackgroundColor( theme->backgroundColor() );
-        static_cast<QWidget*>(child( "headerFrame" ))->setPaletteForegroundColor( theme->backgroundColor() );
+        d->progressHeaderFrame->setPaletteBackgroundColor( theme->backgroundColor() );
+        d->progressHeaderFrame->setPaletteForegroundColor( theme->backgroundColor() );
+        d->headerFrame->setPaletteBackgroundColor( theme->backgroundColor() );
+        d->headerFrame->setPaletteForegroundColor( theme->backgroundColor() );
     }
 }
 

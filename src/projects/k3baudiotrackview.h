@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2004-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2004-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 #include <k3blistview.h>
 
 #include <qmap.h>
-#include <q3ptrlist.h>
+#include <QList>
 //Added by qt3to4:
 #include <QResizeEvent>
 #include <QDropEvent>
@@ -59,10 +59,10 @@ public:
 
     K3bAudioTrackPlayer* player() const { return m_player; }
 
-    void getSelectedItems( Q3PtrList<K3bAudioTrack>& tracks, 
-			   Q3PtrList<K3bAudioDataSource>& sources );
+    void getSelectedItems( QList<K3bAudioTrack*>& tracks, 
+                           QList<K3bAudioDataSource*>& sources );
 
-public slots:
+public Q_SLOTS:
     void showPlayerIndicator( K3bAudioTrack* );
     void togglePauseIndicator( bool b );
     void removePlayerIndicator();
@@ -108,7 +108,7 @@ private:
     K3bAudioTrack* m_dropTrackParent;
     K3bAudioDataSource* m_dropSourceAfter;
 
-private slots:
+private Q_SLOTS:
     void slotAnimation();
     void slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3ListViewItem* after );
     void slotChanged();
@@ -122,7 +122,7 @@ private slots:
     void slotMergeTracks();
     void slotSplitSource();
     void slotSplitTrack();
-    void showPopupMenu( K3ListView*, Q3ListViewItem* item, const QPoint& pos );
+    void showPopupMenu( Q3ListViewItem* item, const QPoint& pos, int );
     void slotProperties();
     void slotPlayTrack();
     void slotQueryMusicBrainz();

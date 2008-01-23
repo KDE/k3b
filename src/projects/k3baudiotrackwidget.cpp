@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2004-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,29 +35,31 @@
 
 
 
-K3bAudioTrackWidget::K3bAudioTrackWidget( const Q3PtrList<K3bAudioTrack>& tracks, 
-					  QWidget* parent )
-  : base_K3bAudioTrackWidget( parent ),
-    m_tracks(tracks)
+K3bAudioTrackWidget::K3bAudioTrackWidget( const QList<K3bAudioTrack*>& tracks,
+                                          QWidget* parent )
+    : QWidget( parent ),
+      m_tracks(tracks)
 {
-  m_labelPostGap->setBuddy( m_editPostGap );
-  //TODO kde4 port me
-  //m_labelPostGap->setToolTip( QToolTip::textFor( m_editPostGap ) );
-  //m_labelPostGap->setWhatsThis( Q3WhatsThis::textFor( m_editPostGap ) );
+    setupUi( this );
 
-  // no post-gap for the last track
-  m_editPostGap->setDisabled( tracks.count() == 1 && !tracks.getFirst()->next() );
+    m_labelPostGap->setBuddy( m_editPostGap );
+    //TODO kde4 port me
+    //m_labelPostGap->setToolTip( QToolTip::textFor( m_editPostGap ) );
+    //m_labelPostGap->setWhatsThis( Q3WhatsThis::textFor( m_editPostGap ) );
 
-  K3bCdTextValidator* val = new K3bCdTextValidator( this );
-  m_editSongwriter->setValidator( val );
-  m_editArranger->setValidator( val );
-  m_editComposer->setValidator( val );
-  m_editMessage->setValidator( val );
-  m_editTitle->setValidator( val );
-  m_editPerformer->setValidator( val );
-  m_editIsrc->setValidator( K3bValidators::isrcValidator( this ) );
+    // no post-gap for the last track
+    m_editPostGap->setDisabled( tracks.count() == 1 && !tracks.first()->next() );
 
-  load();
+    K3bCdTextValidator* val = new K3bCdTextValidator( this );
+    m_editSongwriter->setValidator( val );
+    m_editArranger->setValidator( val );
+    m_editComposer->setValidator( val );
+    m_editMessage->setValidator( val );
+    m_editTitle->setValidator( val );
+    m_editPerformer->setValidator( val );
+    m_editIsrc->setValidator( K3bValidators::isrcValidator( this ) );
+
+    load();
 }
 
 
@@ -68,95 +70,97 @@ K3bAudioTrackWidget::~K3bAudioTrackWidget()
 
 void K3bAudioTrackWidget::load()
 {
- if( !m_tracks.isEmpty() ) {
+    if( !m_tracks.isEmpty() ) {
 
-    K3bAudioTrack* track = m_tracks.first();
+        K3bAudioTrack* track = m_tracks.first();
 
-    m_editPostGap->setMsfValue( track->postGap() );
+        m_editPostGap->setMsfValue( track->postGap() );
 
-    m_editTitle->setText( track->title() );
-    m_editPerformer->setText( track->artist() );
-    m_editArranger->setText( track->arranger() );
-    m_editSongwriter->setText( track->songwriter() );
-    m_editComposer->setText( track->composer() );
-    m_editIsrc->setText( track->isrc() );
-    m_editMessage->setText( track->cdTextMessage() );
-    
-    m_checkCopyPermitted->setChecked( !track->copyProtection() );
-    m_checkPreemphasis->setChecked( track->preEmp() );
-    
-    // load CD-Text for all other tracks
-    for( track = m_tracks.next(); track != 0; track = m_tracks.next() ) {
+        m_editTitle->setText( track->title() );
+        m_editPerformer->setText( track->artist() );
+        m_editArranger->setText( track->arranger() );
+        m_editSongwriter->setText( track->songwriter() );
+        m_editComposer->setText( track->composer() );
+        m_editIsrc->setText( track->isrc() );
+        m_editMessage->setText( track->cdTextMessage() );
 
-      // FIXME: handle different post-gaps
-      // m_editPostGap->setMsfValue( track->postGap() );
+        m_checkCopyPermitted->setChecked( !track->copyProtection() );
+        m_checkPreemphasis->setChecked( track->preEmp() );
 
-      if( track->title() != m_editTitle->text() )
-	m_editTitle->setText( QString::null );
+        // load CD-Text for all other tracks
+        for( int i = 1; i < m_tracks.count(); ++i ) {
+            track = m_tracks[i];
 
-      if( track->artist() != m_editPerformer->text() )
-	m_editPerformer->setText( QString::null );
+            // FIXME: handle different post-gaps
+            // m_editPostGap->setMsfValue( track->postGap() );
 
-      if( track->arranger() != m_editArranger->text() )
-	m_editArranger->setText( QString::null );
+            if( track->title() != m_editTitle->text() )
+                m_editTitle->setText( QString::null );
 
-      if( track->songwriter() != m_editSongwriter->text() )
-	m_editSongwriter->setText( QString::null );
+            if( track->artist() != m_editPerformer->text() )
+                m_editPerformer->setText( QString::null );
 
-      if( track->composer() != m_editComposer->text() )
-	m_editComposer->setText( QString::null );
+            if( track->arranger() != m_editArranger->text() )
+                m_editArranger->setText( QString::null );
 
-      if( track->isrc() != m_editIsrc->text() )
-	m_editIsrc->setText( QString::null );
+            if( track->songwriter() != m_editSongwriter->text() )
+                m_editSongwriter->setText( QString::null );
 
-      if( track->cdTextMessage() != m_editMessage->text() )
-	m_editMessage->setText( QString::null );
+            if( track->composer() != m_editComposer->text() )
+                m_editComposer->setText( QString::null );
+
+            if( track->isrc() != m_editIsrc->text() )
+                m_editIsrc->setText( QString::null );
+
+            if( track->cdTextMessage() != m_editMessage->text() )
+                m_editMessage->setText( QString::null );
+        }
+
+        if( m_tracks.count() > 1 ) {
+            m_checkCopyPermitted->setNoChange();
+            m_checkPreemphasis->setNoChange();
+        }
     }
 
-    if( m_tracks.count() > 1 ) {
-      m_checkCopyPermitted->setNoChange();
-      m_checkPreemphasis->setNoChange();
-    }
-  }
-
-  m_editTitle->setFocus();
+    m_editTitle->setFocus();
 }
 
 
 void K3bAudioTrackWidget::save()
 {
-  // save CD-Text, preemphasis, and copy protection for all tracks. no problem
-  for( K3bAudioTrack* track = m_tracks.first(); track != 0; track = m_tracks.next() ) {
-    
-    if( m_editTitle->isModified() )
-      track->setTitle( m_editTitle->text() );
+    // save CD-Text, preemphasis, and copy protection for all tracks. no problem
+    for( int i = 0; i < m_tracks.count(); ++i ) {
+        K3bAudioTrack* track = m_tracks[i];
 
-    if( m_editPerformer->isModified() )
-      track->setArtist( m_editPerformer->text() );
+        if( m_editTitle->isModified() )
+            track->setTitle( m_editTitle->text() );
 
-    if( m_editArranger->isModified() )
-      track->setArranger( m_editArranger->text() );
+        if( m_editPerformer->isModified() )
+            track->setArtist( m_editPerformer->text() );
 
-    if( m_editSongwriter->isModified() )
-      track->setSongwriter( m_editSongwriter->text() );
+        if( m_editArranger->isModified() )
+            track->setArranger( m_editArranger->text() );
 
-    if( m_editComposer->isModified() )
-      track->setComposer( m_editComposer->text() );
+        if( m_editSongwriter->isModified() )
+            track->setSongwriter( m_editSongwriter->text() );
 
-    if( m_editIsrc->isModified() )
-      track->setIsrc( m_editIsrc->text() );
+        if( m_editComposer->isModified() )
+            track->setComposer( m_editComposer->text() );
 
-    if( m_editMessage->isModified() )
-      track->setCdTextMessage( m_editMessage->text() );
+        if( m_editIsrc->isModified() )
+            track->setIsrc( m_editIsrc->text() );
 
-    if( m_checkCopyPermitted->state() != QCheckBox::NoChange )
-      track->setCopyProtection( !m_checkCopyPermitted->isChecked() );
+        if( m_editMessage->isModified() )
+            track->setCdTextMessage( m_editMessage->text() );
 
-    if( m_checkPreemphasis->state() != QCheckBox::NoChange )
-      track->setPreEmp( m_checkPreemphasis->isChecked() );
+        if( m_checkCopyPermitted->state() != QCheckBox::NoChange )
+            track->setCopyProtection( !m_checkCopyPermitted->isChecked() );
 
-    track->setIndex0( track->length() - m_editPostGap->msfValue() );
-  }
+        if( m_checkPreemphasis->state() != QCheckBox::NoChange )
+            track->setPreEmp( m_checkPreemphasis->isChecked() );
+
+        track->setIndex0( track->length() - m_editPostGap->msfValue() );
+    }
 }
 
 #include "k3baudiotrackwidget.moc"

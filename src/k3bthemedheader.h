@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,8 +15,7 @@
 #ifndef _K3B_THEMED_HEADER_H_
 #define _K3B_THEMED_HEADER_H_
 
-//Added by qt3to4:
-#include <QLabel>
+#include <QFrame>
 
 #include "k3bthememanager.h"
 
@@ -25,31 +24,31 @@ class QLabel;
 
 class K3bThemedHeader : public QFrame
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bThemedHeader( QWidget* parent = 0 );
-  K3bThemedHeader( const QString& title, const QString& subtitle, QWidget* parent = 0 );
-  ~K3bThemedHeader(); 
+public:
+    K3bThemedHeader( QWidget* parent = 0 );
+    K3bThemedHeader( const QString& title, const QString& subtitle, QWidget* parent = 0 );
+    ~K3bThemedHeader(); 
 
- public slots:
-  void setTitle( const QString& title, const QString& subtitle = QString::null );
-  void setSubTitle( const QString& subtitle );
-  void setAlignment( int );
-  void setLeftPixmap( K3bTheme::PixmapType );
-  void setRightPixmap( K3bTheme::PixmapType );
+public Q_SLOTS:
+    void setTitle( const QString& title, const QString& subtitle = QString::null );
+    void setSubTitle( const QString& subtitle );
+    void setAlignment( int );
+    void setLeftPixmap( K3bTheme::PixmapType );
+    void setRightPixmap( K3bTheme::PixmapType );
 
- private slots:
-  void slotThemeChanged();
+private Q_SLOTS:
+    void slotThemeChanged();
 
- private:
-  void init();
+private:
+    void init();
 
-  K3bTitleLabel* m_titleLabel;
-  QLabel* m_leftLabel;
-  QLabel* m_rightLabel;
-  K3bTheme::PixmapType m_leftPix;
-  K3bTheme::PixmapType m_rightPix;
+    K3bTitleLabel* m_titleLabel;
+    QLabel* m_leftLabel;
+    QLabel* m_rightLabel;
+    K3bTheme::PixmapType m_leftPix;
+    K3bTheme::PixmapType m_rightPix;
 };
 
 #endif

@@ -85,11 +85,6 @@ public:
     /**
      * Reimplemented for internal reasons. The API does not change.
      */
-    void hide();
-
-    /**
-     * Reimplemented for internal reasons. The API does not change.
-     */
     bool close( bool alsoDelete );
 
     inline bool close() { return close( false ); }
@@ -175,6 +170,11 @@ public Q_SLOTS:
      * handling be done before (default: false).
      */
     void setDelayedInitialization( bool b ) { m_delayedInit = b; }
+
+    /**
+     * Reimplemented for internal reasons. The API does not change.
+     */
+    void setVisible( bool visible );
 
 protected Q_SLOTS:
     // FIXME: replace these with protected methods which are called from private slots.

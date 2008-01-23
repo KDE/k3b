@@ -75,7 +75,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
     mainGrid = new QGridLayout( KDialog::mainWidget() );
 
     mainGrid->setSpacing( spacingHint() );
-    mainGrid->setMargin( marginHint() );
+    mainGrid->setMargin( 0 );
 
     // header
     // ---------------------------------------------------------------------------------------------------
@@ -568,13 +568,10 @@ int K3bInteractionDialog::exec( bool returnOnHide )
 }
 
 
-void K3bInteractionDialog::hide()
+void K3bInteractionDialog::setVisible( bool visible )
 {
-    if( isHidden() )
-        return;
-
-    KDialog::hide();
-    if( m_eventLoop && m_exitLoopOnHide ) {
+    KDialog::setVisible( visible );
+    if( visible && m_eventLoop && m_exitLoopOnHide ) {
         m_eventLoop->exit();
     }
 }

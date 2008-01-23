@@ -115,7 +115,7 @@ bool K3bMusicBrainzTrackLookupJob::run()
     }
 
     emit infoMessage( i18n("Querying MusicBrainz for track %1.",
-                      d->track->trackNumber()), INFO );
+                           d->track->trackNumber()), INFO );
 
     d->results = d->mb.query( d->trm.signature() );
     return( d->results > 0 );

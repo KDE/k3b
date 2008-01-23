@@ -27,7 +27,8 @@
 class K3bMusicBrainzJob::Private
 {
 public:
-    Q3PtrList<K3bAudioTrack> tracks;
+    QList<K3bAudioTrack*> tracks;
+    int currentTrackIndex;
     bool canceled;
     K3bMusicBrainzTrackLookupJob* mbTrackLookupJob;
 };
@@ -41,10 +42,10 @@ K3bMusicBrainzJob::K3bMusicBrainzJob( QWidget* parent )
     d->canceled = false;
     d->mbTrackLookupJob = new K3bMusicBrainzTrackLookupJob( this, this );
 
-    connect( d->mbTrackLookupJob, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)) );
-    connect( d->mbTrackLookupJob, SIGNAL(percent(int)), this, SLOT(slotTrmPercent(int)) );
-    connect( d->mbTrackLookupJob, SIGNAL(finished(bool)), this, SLOT(slotMbJobFinished(bool)) );
-    connect( d->mbTrackLookupJob, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+    connect( d->mbTrackLookupJob, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)), Qt::QueuedConnection );
+    connect( d->mbTrackLookupJob, SIGNAL(percent(int)), this, SLOT(slotTrmPercent(int)), Qt::QueuedConnection );
+    connect( d->mbTrackLookupJob, SIGNAL(finished(bool)), this, SLOT(slotMbJobFinished(bool)), Qt::QueuedConnection );
+    connect( d->mbTrackLookupJob, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)), Qt::QueuedConnection );
 }
 
 
@@ -61,7 +62,7 @@ bool K3bMusicBrainzJob::hasBeenCanceled() const
 }
 
 
-void K3bMusicBrainzJob::setTracks( const Q3PtrList<K3bAudioTrack>& tracks )
+void K3bMusicBrainzJob::setTracks( const QList<K3bAudioTrack*>& tracks )
 {
     d->tracks = tracks;
 }
@@ -72,6 +73,7 @@ void K3bMusicBrainzJob::start()
     jobStarted();
 
     d->canceled = false;
+    d->currentTrackIndex = 0;
 
     d->mbTrackLookupJob->setAudioTrack( d->tracks.first() );
     d->mbTrackLookupJob->start();
@@ -88,7 +90,7 @@ void K3bMusicBrainzJob::cancel()
 void K3bMusicBrainzJob::slotTrmPercent( int p )
 {
     // the easy way (inaccurate)
-    emit percent( (100*d->tracks.at() + p) / d->tracks.count() );
+    emit percent( (100*d->currentTrackIndex + p) / d->tracks.count() );
 }
 
 
@@ -99,7 +101,7 @@ void K3bMusicBrainzJob::slotMbJobFinished( bool success )
         jobFinished(false);
     }
     else {
-        emit trackFinished( d->tracks.current(), success );
+        K3bAudioTrack* currentTrack = d->tracks.at( d->currentTrackIndex );
 
         if( success ) {
             // found entries
@@ -119,8 +121,8 @@ void K3bMusicBrainzJob::slotMbJobFinished( bool success )
             if( resultStringsUnique.count() > 1 )
                 s = KInputDialog::getItem( i18n("MusicBrainz Query"),
                                            i18n("Found multiple matches for track %1 (%2). Please select one.")
-                                           .arg(d->tracks.current()->trackNumber())
-                                           .arg(d->tracks.current()->firstSource()->sourceComment()),
+                                           .arg(currentTrack->trackNumber())
+                                           .arg(currentTrack->firstSource()->sourceComment()),
                                            resultStringsUnique,
                                            0,
                                            false,
@@ -131,14 +133,17 @@ void K3bMusicBrainzJob::slotMbJobFinished( bool success )
 
             if( ok ) {
                 int i = resultStrings.findIndex( s );
-                d->tracks.current()->setTitle( d->mbTrackLookupJob->title(i) );
-                d->tracks.current()->setArtist( d->mbTrackLookupJob->artist(i) );
+                currentTrack->setTitle( d->mbTrackLookupJob->title(i) );
+                currentTrack->setArtist( d->mbTrackLookupJob->artist(i) );
             }
         }
 
+        emit trackFinished( currentTrack, success );
+
         // query next track
-        if( d->tracks.next() ) {
-            d->mbTrackLookupJob->setAudioTrack( d->tracks.current() );
+        ++d->currentTrackIndex;
+        if( d->currentTrackIndex < d->tracks.count() ) {
+            d->mbTrackLookupJob->setAudioTrack( d->tracks.at( d->currentTrackIndex ) );
             d->mbTrackLookupJob->start();
         }
         else {
