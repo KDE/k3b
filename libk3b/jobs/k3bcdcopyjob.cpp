@@ -785,13 +785,12 @@ bool K3bCdCopyJob::writeNextSession()
 	  // the same way we delete them when writing with images
 	  // It is important that the files have the ending inf because
 	  // cdrecord only checks this
-
-#ifdef __GNUC__
-#warning Make sure the temp files have the extension inf. Otherwise cdrecord wont use them
-#endif
 	  KTemporaryFile tmp;
-	  d->infNames.append( tmp.fileName() );
-          QTextStream stream( &tmp );
+      tmp.setSuffix( ".inf" );
+      tmp.setAutoRemove( false );
+      tmp.open();
+      d->infNames.append( tmp.fileName() );
+      QTextStream stream( &tmp );
 	  bool success = d->infFileWriter->save( stream );
 	  tmp.close();
 	  if( !success )

@@ -104,7 +104,7 @@ set(k3b_tools_SRCS
       tools/k3bsignalwaiter.cpp tools/k3blibdvdcss.cpp tools/k3biso9660backend.cpp 
       tools/k3bpipe.cpp tools/k3bchecksumpipe.cpp 
       tools/k3bintmapcombobox.cpp tools/k3bdirsizejob.cpp tools/k3brichtextlabel.cpp 
-      tools/k3btempfile.cpp tools/k3bactivepipe.cpp tools/k3bfilesplitter.cpp 
+      tools/k3bactivepipe.cpp tools/k3bfilesplitter.cpp 
       tools/k3bfilesysteminfo.cpp
 )
 

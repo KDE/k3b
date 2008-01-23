@@ -239,7 +239,7 @@ void K3bMd5Job::slotUpdate()
             // read from the file
             //
             else if( d->fileDes < 0 ) {
-                read = d->file.readData( d->data, readSize );
+                read = d->file.read( d->data, readSize );
             }
 
             //

@@ -84,54 +84,55 @@ bool K3bDataMultiSessionParameterJob::run()
 {
     d->usedMultiSessionMode = d->doc->multiSessionMode();
 
-    if ( d->usedMultiSessionMode == K3bDataDoc::AUTO ) {
-        if( d->doc->writingMode() == K3b::WRITING_MODE_AUTO ||
-            !( d->doc->writingMode() & (K3bDevice::WRITINGMODE_SAO|K3bDevice::WRITINGMODE_RAW) ) ) {
-            emit newSubTask( i18n("Searching for old session") );
+    if( !d->doc->onlyCreateImages() ) {
+        if ( d->usedMultiSessionMode == K3bDataDoc::AUTO ) {
+            if( d->doc->writingMode() == K3b::WRITING_MODE_AUTO ||
+                !( d->doc->writingMode() & (K3bDevice::WRITINGMODE_SAO|K3bDevice::WRITINGMODE_RAW) ) ) {
+                emit newSubTask( i18n("Searching for old session") );
 
-            //
-            // Wait for the medium.
-            // In case an old session was imported we always want to continue or finish a multisession CD/DVD.
-            // Otherwise we wait for everything we could handle and decide what to do in
-            // determineMultiSessionMode( K3bDevice::DeviceHandler* ) below.
-            //
+                //
+                // Wait for the medium.
+                // In case an old session was imported we always want to continue or finish a multisession CD/DVD.
+                // Otherwise we wait for everything we could handle and decide what to do in
+                // determineMultiSessionMode( K3bDevice::DeviceHandler* ) below.
+                //
 
-            int wantedMediaState = K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_EMPTY;
-            if( d->doc->importedSession() >= 0 )
-                wantedMediaState = K3bDevice::STATE_INCOMPLETE;
+                int wantedMediaState = K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_EMPTY;
+                if( d->doc->importedSession() >= 0 )
+                    wantedMediaState = K3bDevice::STATE_INCOMPLETE;
 
+                int m = waitForMedia( d->doc->burner(),
+                                      wantedMediaState,
+                                      K3bDevice::MEDIA_WRITABLE );
+
+                if( m < 0 ) {
+                    cancel();
+                    return false;
+                }
+                else {
+                    d->usedMultiSessionMode = determineMultiSessionModeFromMedium();
+                }
+            }
+            else {
+                d->usedMultiSessionMode = K3bDataDoc::NONE;
+            }
+        }
+
+        // FIXME: not sure if it is good to always wait for a medium this early
+        if( d->usedMultiSessionMode == K3bDataDoc::CONTINUE ||
+            d->usedMultiSessionMode == K3bDataDoc::FINISH ) {
             int m = waitForMedia( d->doc->burner(),
-                                  wantedMediaState,
+                                  K3bDevice::STATE_INCOMPLETE,
                                   K3bDevice::MEDIA_WRITABLE );
 
             if( m < 0 ) {
                 cancel();
                 return false;
             }
-            else {
-                d->usedMultiSessionMode = determineMultiSessionModeFromMedium();
+
+            if ( !setupMultiSessionParameters() ) {
+                return false;
             }
-        }
-        else {
-            d->usedMultiSessionMode = K3bDataDoc::NONE;
-        }
-    }
-
-    // FIXME: not sure if it is good to always wait for a medium this early
-    if( !d->doc->onlyCreateImages() &&
-        ( d->usedMultiSessionMode == K3bDataDoc::CONTINUE ||
-          d->usedMultiSessionMode == K3bDataDoc::FINISH ) ) {
-        int m = waitForMedia( d->doc->burner(),
-                              K3bDevice::STATE_INCOMPLETE,
-                              K3bDevice::MEDIA_WRITABLE );
-
-        if( m < 0 ) {
-            cancel();
-            return false;
-        }
-
-        if ( !setupMultiSessionParameters() ) {
-            return false;
         }
     }
 

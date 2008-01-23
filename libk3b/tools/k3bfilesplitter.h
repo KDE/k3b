@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -84,8 +84,6 @@ public:
     virtual bool seek( qint64 );
 
     virtual bool atEnd() const;
-    virtual qint64 readData( char *data, qint64 maxlen );
-    virtual qint64 writeData( const char *data, qint64 len );
 
     /**
      * Deletes all the splitted files.
@@ -93,6 +91,10 @@ public:
      * additional checks.
      */
     void remove();
+
+protected:
+    virtual qint64 readData( char *data, qint64 maxlen );
+    virtual qint64 writeData( const char *data, qint64 len );
 
 private:
     class Private;

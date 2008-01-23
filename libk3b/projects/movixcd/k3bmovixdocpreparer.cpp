@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -172,7 +172,7 @@ bool K3bMovixDocPreparer::writePlaylistFile()
 {
     delete d->playlistFile;
     d->playlistFile = new KTemporaryFile();
-    d->playlistFile->setAutoRemove(true);
+    d->playlistFile->open();
 
     QTextStream s( d->playlistFile );
 
@@ -193,7 +193,7 @@ bool K3bMovixDocPreparer::writeIsolinuxConfigFile( const QString& originalPath )
 {
     delete d->isolinuxConfigFile;
     d->isolinuxConfigFile = new KTemporaryFile();
-    d->isolinuxConfigFile->setAutoRemove(true);
+    d->isolinuxConfigFile->open();
 
     QTextStream s( d->isolinuxConfigFile );
 
@@ -227,7 +227,7 @@ bool K3bMovixDocPreparer::writeMovixRcFile()
 {
     delete d->movixRcFile;
     d->movixRcFile = new KTemporaryFile();
-    d->movixRcFile->setAutoRemove(true);
+    d->movixRcFile->open();
 
     QTextStream s( d->movixRcFile );
 

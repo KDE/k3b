@@ -139,22 +139,22 @@ void K3bThreadJob::customEvent( QEvent* e )
         int result = 0;
         switch( ce->type() ) {
         case K3bThreadJobCommunicationEvent::WaitForMedium:
-            result = waitForMedia( ce->device(),
-                                   ce->wantedMediaState(),
-                                   ce->wantedMediaType(),
-                                   ce->text() );
+            result = K3bJob::waitForMedia( ce->device(),
+                                           ce->wantedMediaState(),
+                                           ce->wantedMediaType(),
+                                           ce->text() );
             break;
 
         case K3bThreadJobCommunicationEvent::QuestionYesNo:
-            result = questionYesNo( ce->text(),
-                                    ce->caption(),
-                                    ce->yesText(),
-                                    ce->noText() )
+            result = K3bJob::questionYesNo( ce->text(),
+                                            ce->caption(),
+                                            ce->yesText(),
+                                            ce->noText() )
                      ? 1 : 0;
             break;
 
         case K3bThreadJobCommunicationEvent::BlockingInfo:
-            blockingInformation( ce->text(), ce->caption() );
+            K3bJob::blockingInformation( ce->text(), ce->caption() );
             break;
         }
         ce->done( result );
