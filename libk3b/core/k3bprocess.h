@@ -178,6 +178,7 @@ class LIBK3B_EXPORT K3bProcess : public K3Process
   bool m_bSplitStdout;
 };
 
+// FIXME: replace with QProcess::readAll as in the example in the QProcess docu
 class LIBK3B_EXPORT K3bProcessOutputCollector: public QObject
 {
   Q_OBJECT

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -218,10 +218,10 @@ void K3bMainWindow::initActions()
     actionFileSave = KStandardAction::save(this, SLOT(slotFileSave()), actionCollection());
     actionFileSaveAs = KStandardAction::saveAs(this, SLOT(slotFileSaveAs()), actionCollection());
     actionFileSaveAll = K3b::createAction(this, i18n("Save All"), "document-save-all", 0, this, SLOT(slotFileSaveAll()),
-                                     actionCollection(), "file_save_all" );
+                                          actionCollection(), "file_save_all" );
     actionFileClose = KStandardAction::close(this, SLOT(slotFileClose()), actionCollection());
     actionFileCloseAll = K3b::createAction(this, i18n("Close All"), 0, 0, this, SLOT(slotFileCloseAll()),
-                                      actionCollection(), "file_close_all" );
+                                           actionCollection(), "file_close_all" );
     actionFileQuit = KStandardAction::quit(this, SLOT(slotFileQuit()), actionCollection());
     actionViewStatusBar = KStandardAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
     actionSettingsConfigure = KStandardAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
@@ -238,20 +238,20 @@ void K3bMainWindow::initActions()
     actionFileNewMenu = new KActionMenu( i18n("&New Project"),this );
     actionFileNewMenu->setIcon( KIcon( "document-new" ) );
     actionCollection()->addAction( "file_new", actionFileNewMenu );
-    actionFileNewAudio = K3b::createAction(this,i18n("New &Audio CD Project"), "media-optical-audio", 0, this, SLOT(slotNewAudioDoc()),
-                                     actionCollection(), "file_new_audio");
-    actionFileNewData = K3b::createAction(this,i18n("New &Data Project"), "media-optical-data", 0, this, SLOT(slotNewDataDoc()),
-                                    actionCollection(), "file_new_data");
-    actionFileNewMixed = K3b::createAction(this,i18n("New &Mixed Mode CD Project"), "media-optical-mixed", 0, this, SLOT(slotNewMixedDoc()),
-                                     actionCollection(), "file_new_mixed");
-    actionFileNewVcd = K3b::createAction(this,i18n("New &Video CD Project"), "media-optical-video", 0, this, SLOT(slotNewVcdDoc()),
-				   actionCollection(), "file_new_vcd");
-    actionFileNewMovix = K3b::createAction(this,i18n("New &eMovix Project"), "media-optical-emovix", 0, this, SLOT(slotNewMovixDoc()),
-                                     actionCollection(), "file_new_movix");
-    actionFileNewVideoDvd = K3b::createAction(this,i18n("New V&ideo DVD Project"), "media-optical-video-dvd", 0, this, SLOT(slotNewVideoDvdDoc()),
-                                        actionCollection(), "file_new_video_dvd");
-    actionFileContinueMultisession = K3b::createAction(this,i18n("Continue Multisession Project"), "media-optical-data", 0, this, SLOT(slotContinueMultisession()),
-                                                  actionCollection(), "file_continue_multisession" );
+    actionFileNewAudio = K3b::createAction(this,i18n("New &Audio CD Project"), "audiocd", 0, this, SLOT(slotNewAudioDoc()),
+                                           actionCollection(), "file_new_audio");
+    actionFileNewData = K3b::createAction(this,i18n("New &Data Project"), "datacd", 0, this, SLOT(slotNewDataDoc()),
+                                          actionCollection(), "file_new_data");
+    actionFileNewMixed = K3b::createAction(this,i18n("New &Mixed Mode CD Project"), "mixedcd", 0, this, SLOT(slotNewMixedDoc()),
+                                           actionCollection(), "file_new_mixed");
+    actionFileNewVcd = K3b::createAction(this,i18n("New &Video CD Project"), "videocd", 0, this, SLOT(slotNewVcdDoc()),
+                                         actionCollection(), "file_new_vcd");
+    actionFileNewMovix = K3b::createAction(this,i18n("New &eMovix Project"), "emovix", 0, this, SLOT(slotNewMovixDoc()),
+                                           actionCollection(), "file_new_movix");
+    actionFileNewVideoDvd = K3b::createAction(this,i18n("New V&ideo DVD Project"), "videodvd", 0, this, SLOT(slotNewVideoDvdDoc()),
+                                              actionCollection(), "file_new_video_dvd");
+    actionFileContinueMultisession = K3b::createAction(this,i18n("Continue Multisession Project"), "datacd", 0, this, SLOT(slotContinueMultisession()),
+                                                       actionCollection(), "file_continue_multisession" );
 
     actionFileNewMenu->setDelayed( false );
     actionFileNewMenu->addAction( actionFileNewData );
@@ -270,10 +270,10 @@ void K3bMainWindow::initActions()
 
 
     actionProjectAddFiles = K3b::createAction(this, i18n("&Add Files..."), "document-open", 0, this, SLOT(slotProjectAddFiles()),
-                                         actionCollection(), "project_add_files");
+                                              actionCollection(), "project_add_files");
 
     KAction* actionClearProject = K3b::createAction(this,i18n("&Clear Project"), QApplication::isRightToLeft() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar-ltr", 0,
-                                               this, SLOT(slotClearProject()), actionCollection(), "project_clear_project" );
+                                                    this, SLOT(slotClearProject()), actionCollection(), "project_clear_project" );
 
 
     actionViewDocumentHeader = new KToggleAction(i18n("Show Document Header"),this);
@@ -283,7 +283,7 @@ void K3bMainWindow::initActions()
 
     KAction* actionToolsFormatMedium = K3b::createAction( this,
                                                           i18n("&Format/Erase rewritable disk..."),
-                                                          "tools-media-optical-format",
+                                                          "formatdvd",
                                                           0,
                                                           this,
                                                           SLOT(slotFormatMedium()),
@@ -293,15 +293,15 @@ void K3bMainWindow::initActions()
 
     actionToolsWriteCdImage = K3b::createAction( this,
                                                  i18n("&Burn CD Image..."),
-                                                 "tools-media-optical-image-burn",
+                                                 "burn_cdimage",
                                                  0,
                                                  this,
                                                  SLOT(slotWriteCdImage()),
                                                  actionCollection(),
                                                  "tools_write_cd_image" );
     KAction* actionToolsWriteDvdImage = K3b::createAction( this,
-                                                          i18n("&Burn DVD ISO Image..."),
-                                                           "tools-media-optical-image-burn-dvd",
+                                                           i18n("&Burn DVD ISO Image..."),
+                                                           "burn_dvdimage",
                                                            0,
                                                            this,
                                                            SLOT(slotWriteDvdIsoImage()),
@@ -311,7 +311,7 @@ void K3bMainWindow::initActions()
 
     KAction* actionToolsMediaCopy = K3b::createAction( this,
                                                        i18n("Copy &Medium..."),
-                                                       "tools-media-optical-copy",
+                                                       "cdcopy",
                                                        0,
                                                        this,
                                                        SLOT(slotMediaCopy()),
@@ -321,7 +321,7 @@ void K3bMainWindow::initActions()
 
     actionToolsCddaRip = K3b::createAction( this,
                                             i18n("Rip Audio CD..."),
-                                            "tools-media-optical-rip-audio",
+                                            "cddarip",
                                             0,
                                             this,
                                             SLOT(slotCddaRip()),
@@ -329,7 +329,7 @@ void K3bMainWindow::initActions()
                                             "tools_cdda_rip" );
     actionToolsVideoDvdRip = K3b::createAction( this,
                                                 i18n("Rip Video DVD..."),
-                                                "tools-media-optical-rip-video-dvd",
+                                                "videodvd",
                                                 0,
                                                 this,
                                                 SLOT(slotVideoDvdRip()),
@@ -337,7 +337,7 @@ void K3bMainWindow::initActions()
                                                 "tools_videodvd_rip" );
     actionToolsVideoCdRip = K3b::createAction( this,
                                                i18n("Rip Video CD..."),
-                                               "tools-media-optical-rip-video-cd",
+                                               "videocd",
                                                0,
                                                this,
                                                SLOT(slotVideoCdRip()),
@@ -366,8 +366,8 @@ void K3bMainWindow::initActions()
 
 #ifdef K3B_DEBUG
     (void)K3b::createAction(this, "Test Media Selection ComboBox", 0, 0, this,
-                       SLOT(slotMediaSelectionTester()), actionCollection(),
-                       "test_media_selection" );
+                            SLOT(slotMediaSelectionTester()), actionCollection(),
+                            "test_media_selection" );
 #endif
 
     actionFileNewMenu->setToolTip(i18n("Creates a new project"));
@@ -454,8 +454,8 @@ void K3bMainWindow::initView()
     d->welcomeWidget = new K3bWelcomeWidget( this, m_documentTab );
     m_documentTab->addTab( d->welcomeWidget, i18n("Quickstart") );
 
-   d->documentStack->addWidget( d->welcomeWidget );
-   d->documentStack->setCurrentWidget( d->welcomeWidget );
+    d->documentStack->addWidget( d->welcomeWidget );
+    d->documentStack->setCurrentWidget( d->welcomeWidget );
     // ---------------------------------------------------------------------------------------------
 
     // --- Directory Dock --------------------------------------------------------------------------
@@ -465,7 +465,7 @@ void K3bMainWindow::initView()
     QAction *action = m_dirTreeDock->toggleViewAction();
     action->setText(i18n("Show Directories"));
     actionCollection()->addAction( "view_dir_tree", action );
- 
+
     K3bFileTreeView* sidePanel = new K3bFileTreeView( m_dirTreeDock );
     //K3bSidePanel* sidePanel = new K3bSidePanel( this, m_dirTreeDock, "sidePanel" );
 
@@ -494,7 +494,7 @@ void K3bMainWindow::initView()
     QWidgetAction * fileTreeComboAction = new QWidgetAction(this);
     fileTreeComboAction->setDefaultWidget(m_fileTreeComboBox);
     fileTreeComboAction->setText(i18n("&Quick Dir Selector"));
-    actionCollection()->addAction( "quick_dir_selector", fileTreeComboAction ); 
+    actionCollection()->addAction( "quick_dir_selector", fileTreeComboAction );
     (void)K3b::createAction(this, i18n("Go"), "go-jump-locationbar", 0, m_fileTreeComboBox, SLOT(slotGoUrl()), actionCollection(), "go_url" );
     // ---------------------------------------------------------------------------------------------
 }
@@ -726,8 +726,8 @@ void K3bMainWindow::readProperties( const KConfigGroup& /*c*/ )
 
     int cnt = grp.readEntry( "Number of projects", 0 );
 /*
-    kDebug() << "(K3bMainWindow::readProperties) number of projects from last session in " << saveDir << ": " << cnt << endl
-             << "                                read from config group " << c->group() << endl;
+  kDebug() << "(K3bMainWindow::readProperties) number of projects from last session in " << saveDir << ": " << cnt << endl
+  << "                                read from config group " << c->group() << endl;
 */
     for( int i = 1; i <= cnt; ++i ) {
         // in this case the constructor works since we saved as url()
