@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -289,14 +289,8 @@ private:
     // project actions
     QList<KAction*> m_dataProjectActions;
 
-    //K3DockWidget* mainDock;
-    //K3DockWidget* m_contentsDock;
-    //K3DockWidget* m_dirTreeDock;
-    QDockWidget * mainDock;
-    QDockWidget * m_contentsDock;
-    QDockWidget * m_dirTreeDock;
-
-
+    QDockWidget* m_contentsDock;
+    QDockWidget* m_dirTreeDock;
 
     // The K3b-specific widgets
     K3bDirView* m_dirView;

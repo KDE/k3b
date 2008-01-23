@@ -190,9 +190,6 @@ K3bMainWindow::K3bMainWindow()
 
 K3bMainWindow::~K3bMainWindow()
 {
-    delete mainDock;
-    delete m_contentsDock;
-
     delete d;
 }
 
@@ -423,17 +420,17 @@ void K3bMainWindow::initStatusBar()
 
 void K3bMainWindow::initView()
 {
+    setDockOptions( AnimatedDocks );
+
     // setup main docking things
-    mainDock = new QDockWidget(KDialog::makeStandardCaption( i18n("Project View") ),0);
-    mainDock->setObjectName("project_view");
-    addDockWidget ( Qt::BottomDockWidgetArea, mainDock );
+
     // --- Document Dock ----------------------------------------------------------------------------
-    d->documentStack = new QStackedWidget( mainDock );
-    mainDock->setWidget( d->documentStack );
+    d->documentStack = new QStackedWidget( this );
+    setCentralWidget( d->documentStack );
 
     d->documentHull = new QWidget( d->documentStack );
     d->documentStack->addWidget( d->documentHull );
-    Q3GridLayout* documentHullLayout = new Q3GridLayout( d->documentHull );
+    QGridLayout* documentHullLayout = new QGridLayout( d->documentHull );
     documentHullLayout->setMargin( 2 );
     documentHullLayout->setSpacing( 0 );
 
@@ -459,9 +456,9 @@ void K3bMainWindow::initView()
     // ---------------------------------------------------------------------------------------------
 
     // --- Directory Dock --------------------------------------------------------------------------
-    m_dirTreeDock = new QDockWidget(KDialog::makeStandardCaption( i18n("Sidepanel") ),0);
-    m_dirTreeDock->setObjectName("directory_tree");
-    addDockWidget ( Qt::TopDockWidgetArea, m_dirTreeDock );
+    m_dirTreeDock = new QDockWidget( this );
+    m_dirTreeDock->setFeatures( QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable );
+    addDockWidget( Qt::TopDockWidgetArea, m_dirTreeDock );
     QAction *action = m_dirTreeDock->toggleViewAction();
     action->setText(i18n("Show Directories"));
     actionCollection()->addAction( "view_dir_tree", action );
@@ -470,15 +467,16 @@ void K3bMainWindow::initView()
     //K3bSidePanel* sidePanel = new K3bSidePanel( this, m_dirTreeDock, "sidePanel" );
 
     m_dirTreeDock->setWidget( sidePanel );
+    // ---------------------------------------------------------------------------------------------
 
 
     // --- Contents Dock ---------------------------------------------------------------------------
-    m_contentsDock = new QDockWidget(KDialog::makeStandardCaption( i18n("Contents View") ),0);
-    m_contentsDock->setObjectName("contents_view");
-    addDockWidget ( Qt::TopDockWidgetArea,m_contentsDock );
+    m_contentsDock = new QDockWidget( this );
+    m_contentsDock->setFeatures( QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable );
+    addDockWidget ( Qt::TopDockWidgetArea, m_contentsDock );
     action = m_contentsDock->toggleViewAction();
-    action->setText(i18n("Show Contents"));
-    actionCollection()->addAction("view_contents",action);
+    action->setText( i18n("Show Contents") );
+    actionCollection()->addAction( "view_contents", action );
 
     m_dirView = new K3bDirView( sidePanel/*->fileTreeView()*/, m_contentsDock );
     m_contentsDock->setWidget( m_dirView );
