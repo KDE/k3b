@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,32 +17,24 @@
 
 #include "ui_base_k3bpluginoptiontab.h"
 
-class base_K3bPluginOptionTab : public QWidget, public Ui::base_K3bPluginOptionTab
+class K3bPluginOptionTab : public QWidget, public Ui::base_K3bPluginOptionTab
 {
+    Q_OBJECT
+
 public:
-  base_K3bPluginOptionTab( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
-};
+    K3bPluginOptionTab( QWidget* parent = 0 );
+    ~K3bPluginOptionTab();
 
-class K3bPluginOptionTab : public base_K3bPluginOptionTab
-{
-  Q_OBJECT
+public Q_SLOTS:
+    void readSettings();
+    bool saveSettings();
 
- public:
-  K3bPluginOptionTab( QWidget* parent = 0 );
-  ~K3bPluginOptionTab();
+private Q_SLOTS:
+    void slotConfigureButtonClicked();
+    void slotSelectionChanged();
 
- public slots:
-  void readSettings();
-  bool saveSettings();
-
- private slots:
-  void slotConfigureButtonClicked();
-  void slotSelectionChanged();
-
- private:
-  class PluginViewItem;
+private:
+    class PluginViewItem;
 };
 
 #endif

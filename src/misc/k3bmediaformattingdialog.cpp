@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2007-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,68 +43,68 @@
 
 
 K3bMediaFormattingDialog::K3bMediaFormattingDialog( QWidget* parent )
-  : K3bInteractionDialog( parent,
-			  i18n("Format and Erase"),
-			  i18n( "CD-RW" ) + '/' + i18n("DVD%1RW",QString("±")) + '/' + i18n( "BD-RW" ),
-			  START_BUTTON|CANCEL_BUTTON,
-			  START_BUTTON,
-			  "Formatting and Erasing" ) // config group
+    : K3bInteractionDialog( parent,
+                            i18n("Format and Erase"),
+                            i18n( "CD-RW" ) + '/' + i18n("DVD%1RW",QString("±")) + '/' + i18n( "BD-RW" ),
+                            START_BUTTON|CANCEL_BUTTON,
+                            START_BUTTON,
+                            "Formatting and Erasing" ) // config group
 {
-  QWidget* frame = mainWidget();
+    QWidget* frame = mainWidget();
 
-  m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
-  m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_REWRITABLE );
-  // we need state empty here for preformatting DVD+RW.
-  m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_COMPLETE|
-						 K3bDevice::STATE_INCOMPLETE|
-						 K3bDevice::STATE_EMPTY );
-  m_writerSelectionWidget->setSupportedWritingApps( K3b::DVD_RW_FORMAT );
-  m_writerSelectionWidget->setForceAutoSpeed(true);
+    m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
+    m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_REWRITABLE );
+    // we need state empty here for preformatting DVD+RW.
+    m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_COMPLETE|
+                                                   K3bDevice::STATE_INCOMPLETE|
+                                                   K3bDevice::STATE_EMPTY );
+    m_writerSelectionWidget->setSupportedWritingApps( K3b::DVD_RW_FORMAT );
+    m_writerSelectionWidget->setForceAutoSpeed(true);
 
-  Q3GroupBox* groupWritingMode = new Q3GroupBox( 1, Qt::Vertical, i18n("Writing Mode"), frame );
-  groupWritingMode->layout()->setMargin( marginHint() );
-  groupWritingMode->layout()->setSpacing( spacingHint() );
-  m_writingModeWidget = new K3bWritingModeWidget( K3b::WRITING_MODE_INCR_SEQ|K3b::WRITING_MODE_RES_OVWR,
-						  groupWritingMode );
+    Q3GroupBox* groupWritingMode = new Q3GroupBox( 1, Qt::Vertical, i18n("Writing Mode"), frame );
+    groupWritingMode->layout()->setMargin( marginHint() );
+    groupWritingMode->layout()->setSpacing( spacingHint() );
+    m_writingModeWidget = new K3bWritingModeWidget( K3b::WRITING_MODE_INCR_SEQ|K3b::WRITING_MODE_RES_OVWR,
+                                                    groupWritingMode );
 
 
-  Q3GroupBox* groupOptions = new Q3GroupBox( 2, Qt::Vertical, i18n("Settings"), frame );
-  groupOptions->layout()->setMargin( marginHint() );
-  groupOptions->layout()->setSpacing( spacingHint() );
-  m_checkForce = new QCheckBox( i18n("Force"), groupOptions );
-  m_checkQuickFormat = new QCheckBox( i18n("Quick format"), groupOptions );
+    Q3GroupBox* groupOptions = new Q3GroupBox( 2, Qt::Vertical, i18n("Settings"), frame );
+    groupOptions->layout()->setMargin( marginHint() );
+    groupOptions->layout()->setSpacing( spacingHint() );
+    m_checkForce = new QCheckBox( i18n("Force"), groupOptions );
+    m_checkQuickFormat = new QCheckBox( i18n("Quick format"), groupOptions );
 
-  QGridLayout* grid = new QGridLayout( frame );
-  grid->setMargin( 0 );
-  grid->setSpacing( spacingHint() );
+    QGridLayout* grid = new QGridLayout( frame );
+    grid->setMargin( 0 );
+    grid->setSpacing( spacingHint() );
 
-  grid->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
-  grid->addWidget( groupWritingMode, 1, 0 );
-  grid->addWidget( groupOptions, 1, 1 );
-  grid->setRowStretch( 1, 1 );
+    grid->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
+    grid->addWidget( groupWritingMode, 1, 0 );
+    grid->addWidget( groupOptions, 1, 1 );
+    grid->setRowStretch( 1, 1 );
 
 // FIXME: check if we need Blu-ray comments here
-  m_checkForce->setToolTip( i18n("Force formatting of empty DVDs") );
-  m_checkForce->setWhatsThis( i18n("<p>If this option is checked K3b will format a "
-				      "DVD-RW even if it is empty. It may also be used to "
-				      "force K3b to format a DVD+RW or a DVD-RW in restricted "
-				      "overwrite mode."
-				      "<p><b>Caution:</b> It is not recommended to often format a DVD "
-				      "since it may already be unusable after 10-20 reformat procedures."
-				      "<p>DVD+RW media only needs to be formatted once. After that it "
-				      "just needs to be overwritten. The same applies to DVD-RW in "
-				      "restricted overwrite mode.") );
+    m_checkForce->setToolTip( i18n("Force formatting of empty DVDs") );
+    m_checkForce->setWhatsThis( i18n("<p>If this option is checked K3b will format a "
+                                     "DVD-RW even if it is empty. It may also be used to "
+                                     "force K3b to format a DVD+RW or a DVD-RW in restricted "
+                                     "overwrite mode."
+                                     "<p><b>Caution:</b> It is not recommended to often format a DVD "
+                                     "since it may already be unusable after 10-20 reformat procedures."
+                                     "<p>DVD+RW media only needs to be formatted once. After that it "
+                                     "just needs to be overwritten. The same applies to DVD-RW in "
+                                     "restricted overwrite mode.") );
 
-  m_checkQuickFormat->setToolTip( i18n("Try to perform quick formatting") );
-  m_checkQuickFormat->setWhatsThis( i18n("<p>If this option is checked K3b will tell the writer "
-					    "to perform a quick format."
-					    "<p>Erasing a rewritable medium completely can take a very long "
-					    "time and some writers perform a full format even if "
-					    "quick format is enabled." ) );
+    m_checkQuickFormat->setToolTip( i18n("Try to perform quick formatting") );
+    m_checkQuickFormat->setWhatsThis( i18n("<p>If this option is checked K3b will tell the writer "
+                                           "to perform a quick format."
+                                           "<p>Erasing a rewritable medium completely can take a very long "
+                                           "time and some writers perform a full format even if "
+                                           "quick format is enabled." ) );
 
-  connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotToggleAll()) );
+    connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotToggleAll()) );
 
-  slotToggleAll();
+    slotToggleAll();
 }
 
 
@@ -115,7 +115,7 @@ K3bMediaFormattingDialog::~K3bMediaFormattingDialog()
 
 void K3bMediaFormattingDialog::setDevice( K3bDevice::Device* dev )
 {
-  m_writerSelectionWidget->setWriterDevice( dev );
+    m_writerSelectionWidget->setWriterDevice( dev );
 }
 
 

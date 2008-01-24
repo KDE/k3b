@@ -162,6 +162,7 @@ set(k3b_option_SRCS
   option/k3bthemeoptiontab.cpp 
   option/k3bdevicewidget.cpp 
   option/k3bexternalbinwidget.cpp
+  option/k3bcddboptiontab.cpp
   )
 
 kde4_add_ui_files(k3b_option_SRCS
@@ -270,6 +271,7 @@ target_link_libraries(k3b_bin
   ${KDE4_KIO_LIBS}
   ${KDE4_KPARTS_LIBS}
   ${KDE4_KNOTIFYCONFIG_LIBS}
+  ${KCDDB_LIBRARIES}
   )
 
 if(MUSICBRAINZ_FOUND)

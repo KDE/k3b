@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,15 +18,18 @@
 #include <kdebug.h>
 #include <KNotifyConfigWidget>
 
-#include <qlayout.h>
+#include <QtGui/QHBoxLayout>
 
 
 
 K3bNotifyOptionTab::K3bNotifyOptionTab( QWidget* parent )
-  : QWidget( parent )
+    : QWidget( parent )
 {
-  m_notifyWidget = new KNotifyConfigWidget(this);
-  m_notifyWidget->setApplication();
+    m_notifyWidget = new KNotifyConfigWidget(this);
+    m_notifyWidget->setApplication();
+    QHBoxLayout* layout = new QHBoxLayout( this );
+    layout->setMargin( 0 );
+    layout->addWidget( m_notifyWidget );
 }
 
 
@@ -42,8 +45,8 @@ void K3bNotifyOptionTab::readSettings()
 
 bool K3bNotifyOptionTab::saveSettings()
 {
-  m_notifyWidget->save();
-  return true;
+    m_notifyWidget->save();
+    return true;
 }
 
 #include "k3bnotifyoptiontab.moc"

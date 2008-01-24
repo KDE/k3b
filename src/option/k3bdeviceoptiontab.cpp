@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,11 +44,11 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent )
   // ------------------------------------------------
   m_labelDevicesInfo = new QLabel( this, "m_labelDevicesInfo" );
   m_labelDevicesInfo->setAlignment( Qt::AlignVCenter | Qt::AlignLeft );
-  m_labelDevicesInfo->setText( i18n( "K3b tries to detect all your devices properly. "
-				     "You can add devices that have not been detected and change "
-				     "the black values by clicking in the list. If K3b is unable "
-				     "to detect your drive, you need to modify their permissions "
-				     "to give K3b write access to all devices." ) );
+  m_labelDevicesInfo->setText( "<p>" + i18n( "K3b tries to detect all your devices properly. "
+                                             "You can add devices that have not been detected and change "
+                                             "the black values by clicking in the list. If K3b is unable "
+                                             "to detect your drive, you need to modify their permissions "
+                                             "to give K3b write access to all devices." ) );
   m_labelDevicesInfo->setWordWrap(true);
   // ------------------------------------------------
 

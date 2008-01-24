@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,37 +18,24 @@
 
 #include "ui_base_k3bthemeoptiontab.h"
 
-
-class base_K3bThemeOptionTab : public QWidget, public Ui::base_K3bThemeOptionTab
-{
-public:
-  base_K3bThemeOptionTab( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
-};
-
 /**
-  *@author Sebastian Trueg
-  */
-class K3bThemeOptionTab : public base_K3bThemeOptionTab
+ *@author Sebastian Trueg
+ */
+class K3bThemeOptionTab : public QWidget, public Ui::base_K3bThemeOptionTab
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bThemeOptionTab( QWidget* parent = 0 );
-  ~K3bThemeOptionTab();
+public:
+    K3bThemeOptionTab( QWidget* parent = 0 );
+    ~K3bThemeOptionTab();
 
-  void readSettings();
-  bool saveSettings();
+    void readSettings();
+    bool saveSettings();
 
- private slots:
-  void selectionChanged();
-  void slotInstallTheme();
-  void slotRemoveTheme();
-
- private:
-  class Private;
-  Private* d;
+private Q_SLOTS:
+    void selectionChanged();
+    void slotInstallTheme();
+    void slotRemoveTheme();
 };
 
 #endif

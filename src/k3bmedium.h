@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,8 +23,13 @@
 
 #include <KIcon>
 
-#include <ksharedptr.h>
+#include <QtCore/QSharedDataPointer>
 #include <QList>
+
+namespace KCDDB{
+    class CDInfo;
+}
+
 
 /**
  * K3bMedium represents a medium in K3b.
@@ -61,6 +66,8 @@ public:
     const K3bDevice::DiskInfo& diskInfo() const;
     const K3bDevice::Toc& toc() const;
     const K3bDevice::CdText& cdText() const;
+
+    const KCDDB::CDInfo& cddbInfo() const;
 
     /**
      * The writing speeds the device supports with the inserted medium.
@@ -125,16 +132,14 @@ public:
      */
     QString longString() const;
 
-    bool operator==( const K3bMedium& other );
-    bool operator!=( const K3bMedium& other );
+    bool operator==( const K3bMedium& other ) const;
+    bool operator!=( const K3bMedium& other ) const;
 
 private:
     void analyseContent();
 
-    void detach();
-
     class Data;
-    KSharedPtr<Data> d;
+    QSharedDataPointer<Data> d;
 };
 
 #endif

@@ -1,10 +1,10 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,112 +15,37 @@
 
 #include "k3bcddboptiontab.h"
 
-#include <qvariant.h>
-#include <q3buttongroup.h>
-#include <qcheckbox.h>
-#include <q3listbox.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qtabwidget.h>
-#include <qlayout.h>
-#include <qtooltip.h>
-#include <q3whatsthis.h>
-#include <qstringlist.h>
-#include <qcombobox.h>
-#include <qtoolbutton.h>
+#include <KCModule>
+#include <KService>
+#include <KServiceTypeTrader>
+#include <KLocale>
 
-#include <kdialog.h>
-#include <kiconloader.h>
-#include <krun.h>
-#include <k3listview.h>
-#include <klineedit.h>
-#include <klocale.h>
-#include <knuminput.h>
-#include <kconfig.h>
-#include <kapplication.h>
-
-#include <kglobal.h>
+#include <QtGui/QLabel>
+#include <QtGui/QHBoxLayout>
 
 
 K3bCddbOptionTab::K3bCddbOptionTab( QWidget* parent )
     : QWidget( parent )
 {
-  // fix all the margins and spacings that have been corrupted by QDesigner ;-)
-  // -----------------------------------------------------------------------------
+    QHBoxLayout* layout = new QHBoxLayout( this );
+    layout->setMargin( 0 );
 
-  base_K3bCddbOptionTabLayout->setMargin( 0 );
-  base_K3bCddbOptionTabLayout->setSpacing( KDialog::spacingHint() );
+    m_cddbKcm = 0;
+    if ( KService::Ptr service = KService::serviceByStorageId( "libkcddb.desktop" ) )
+        m_cddbKcm = service->createInstance<KCModule>( this );
+//     KService::List services = KServiceTypeTrader::self()->query( "KCModule", "[X-KDE-Library] == 'kcm_cddb'" );
+//     if ( !services.isEmpty() ) {
+//         m_cddbKcm = services.first()->createInstance<KCModule>( this );
+//     }
 
-  m_mainTabbed->page(0)->layout()->setMargin( KDialog::marginHint() );
-  m_mainTabbed->page(0)->layout()->setSpacing( KDialog::spacingHint() );
-  m_mainTabbed->page(1)->layout()->setMargin( KDialog::marginHint() );
-  m_mainTabbed->page(1)->layout()->setSpacing( KDialog::spacingHint() );
-
-//   m_groupLocalDir->layout()->setMargin( 0 );
-//   m_groupLocalDirLayout->setMargin( KDialog::marginHint() );
-//   m_groupLocalDirLayout->setSpacing( KDialog::spacingHint() );
-
-//   m_groupCddbServer->layout()->setMargin( 0 );
-//   m_groupCddbServerLayout->setMargin( KDialog::marginHint() );
-//   m_groupCddbServerLayout->setSpacing( KDialog::spacingHint() );
-
-  m_groupCgi->layout()->setMargin( 0 );
-  m_groupCgiLayout->setMargin( KDialog::marginHint() );
-  m_groupCgiLayout->setSpacing( KDialog::spacingHint() );
-
-  m_boxLocalDirectoryLayout->setSpacing( KDialog::spacingHint() );
-  m_boxCddbServerLayout->setSpacing( KDialog::spacingHint() );
-  // -----------------------------------------------------------------------------
-
-
-  m_viewLocalDir->setSorting(-1);
-  m_viewLocalDir->setAcceptDrops( true );
-  m_viewLocalDir->setDragEnabled( true );
-  m_viewLocalDir->setDropVisualizer( true );
-
-  m_viewCddbServer->setSorting(-1);
-  m_viewCddbServer->setAcceptDrops( true );
-  m_viewCddbServer->setDragEnabled( true );
-  m_viewCddbServer->setDropVisualizer( true );
-
-  m_comboCddbType->insertItem( "Http" );
-  m_comboCddbType->insertItem( "Cddbp" );
-
-
-  // set icons for the buttons
-  m_buttonAddLocalDir->setPixmap( SmallIcon("list-add") );
-  m_buttonRemoveLocalDir->setPixmap( SmallIcon("list-remove") );
-  m_buttonLocalDirUp->setPixmap( SmallIcon("go-up") );
-  m_buttonLocalDirDown->setPixmap( SmallIcon("go-down") );
-  m_buttonAddCddbServer->setPixmap( SmallIcon("list-add") );
-  m_buttonRemoveCddbServer->setPixmap( SmallIcon("list-remove") );
-  m_buttonCddbServerUp->setPixmap( SmallIcon("go-up") );
-  m_buttonCddbServerDown->setPixmap( SmallIcon("go-down") );
-
-
-  // setup connections
-  // -----------------------------------------------------------------------------
-  connect( m_buttonAddLocalDir, SIGNAL(clicked()), this, SLOT(slotLocalDirAdd()) );
-  connect( m_buttonRemoveLocalDir, SIGNAL(clicked()), this, SLOT(slotLocalDirRemove()) );
-  connect( m_buttonLocalDirUp, SIGNAL(clicked()), this, SLOT(slotLocalDirUp()) );
-  connect( m_buttonLocalDirDown, SIGNAL(clicked()), this, SLOT(slotLocalDirDown()) );
-
-  connect( m_buttonAddCddbServer, SIGNAL(clicked()), this, SLOT(slotCddbServerAdd()) );
-  connect( m_buttonRemoveCddbServer, SIGNAL(clicked()), this, SLOT(slotCddbServerRemove()) );
-  connect( m_buttonCddbServerUp, SIGNAL(clicked()), this, SLOT(slotCddbServerUp()) );
-  connect( m_buttonCddbServerDown, SIGNAL(clicked()), this, SLOT(slotCddbServerDown()) );
-
-  connect( m_editLocalDir, SIGNAL(textChanged(const QString&)), this, SLOT(enDisableButtons()) );
-  connect( m_editCddbServer, SIGNAL(textChanged(const QString&)), this, SLOT(enDisableButtons()) );
-  connect( m_viewLocalDir, SIGNAL(selectionChanged()), this, SLOT(enDisableButtons()) );
-  connect( m_viewCddbServer, SIGNAL(selectionChanged()), this, SLOT(enDisableButtons()) );
-  connect( m_comboCddbType, SIGNAL(highlighted(int)),
-	   this, SLOT(slotServerTypeChanged()) );
-  connect( m_comboCddbType, SIGNAL(activated(int)),
-	   this, SLOT(slotServerTypeChanged()) );
-  // -----------------------------------------------------------------------------
-
-  enDisableButtons();
+    if ( m_cddbKcm ) {
+        layout->addWidget( m_cddbKcm );
+    }
+    else {
+        QLabel* label = new QLabel( i18n( "Unable to load KCDDB configuration module." ), this );
+        label->setAlignment( Qt::AlignCenter );
+        layout->addWidget( label );
+    }
 }
 
 
@@ -131,209 +56,17 @@ K3bCddbOptionTab::~K3bCddbOptionTab()
 
 void K3bCddbOptionTab::readSettings()
 {
-  KConfig* c = KGlobal::config();
-
-  c->setGroup( "Cddb" );
-
-  // old config <= 0.7.3
-  QStringList cddbpServer = c->readListEntry( "cddbp server" );
-  QStringList httpServer = c->readListEntry( "http server" );
-
-  // new config
-  QStringList cddbServer = c->readListEntry( "cddb server" );
-
-  QStringList localCddbDirs = c->readPathEntry( "local cddb dirs", QStringList() );
-
-  m_checkRemoteCddb->setChecked( c.readEntry( "use remote cddb", true ) );
-  m_checkUseLocalCddb->setChecked( c.readEntry( "use local cddb query", true ) );
-  m_checkSaveLocalEntries->setChecked( c.readEntry( "save cddb entries locally", true ) );
-  m_checkManualCgiPath->setChecked( c.readEntry( "use manual cgi path", false ) );
-  m_editManualCgiPath->setText( c.readEntry( "cgi path", "/~cddb/cddb.cgi" ) );
-
-  if( localCddbDirs.isEmpty() )
-    localCddbDirs.append( "~/.cddb/" );
-
-  for( QStringList::const_iterator it = localCddbDirs.begin(); it != localCddbDirs.end(); ++it )
-    (void)new K3ListViewItem( m_viewLocalDir, m_viewLocalDir->lastItem(), *it );
-
-
-  // old config <= 0.7.3
-  if( !httpServer.isEmpty() ) {
-    for( QStringList::iterator it = httpServer.begin(); it != httpServer.end(); ++it ) {
-      cddbServer.append( "Http " + *it );
+    if ( m_cddbKcm ) {
+        m_cddbKcm->load();
     }
-  }
-  if( !cddbpServer.isEmpty() ) {
-    for( QStringList::iterator it = cddbpServer.begin(); it != cddbpServer.end(); ++it ) {
-      cddbServer.append( "Cddbp " + *it );
-    }
-  }
-
-  if( cddbServer.isEmpty() )
-    cddbServer.append( "Http freedb2.org:80" );
-
-  for( QStringList::const_iterator it = cddbServer.begin(); it != cddbServer.end(); ++it ) {
-    const QString& s = *it;
-    QStringList buf = QStringList::split( ":", s.mid( s.find(" ")+1 ) );
-    QString server = buf[0];
-    int port = buf[1].toInt();
-    if( s.startsWith("Http") )
-      (void)new K3ListViewItem( m_viewCddbServer, m_viewCddbServer->lastItem(), "Http", server, QString::number(port) );
-    else
-      (void)new K3ListViewItem( m_viewCddbServer, m_viewCddbServer->lastItem(), "Cddbp", server, QString::number(port) );
-  }
-
-  enDisableButtons();
 }
 
 
 void K3bCddbOptionTab::apply()
 {
-  KConfig* c = KGlobal::config();
-
-  c->setGroup( "Cddb" );
-
-  c.writeEntry( "use remote cddb", m_checkRemoteCddb->isChecked() );
-  c.writeEntry( "use local cddb query", m_checkUseLocalCddb->isChecked() );
-  c.writeEntry( "save cddb entries locally", m_checkSaveLocalEntries->isChecked() );
-  c.writeEntry( "use manual cgi path", m_checkManualCgiPath->isChecked() );
-  c.writeEntry( "cgi path", m_editManualCgiPath->text() );
-
-  QStringList cddbServer;
-  QStringList localCddbDirs;
-
-  Q3ListViewItemIterator it( m_viewLocalDir );
-  while( it.current() ) {
-    localCddbDirs.append( it.current()->text(0) );
-    ++it;
-  }
-
-  Q3ListViewItemIterator it1( m_viewCddbServer );
-  while( it1.current() ) {
-    cddbServer.append( it1.current()->text(0) + " " + it1.current()->text(1) + ":" + it1.current()->text(2) );
-    ++it1;
-  }
-
-  // new config
-  c.writeEntry( "cddb server", cddbServer );
-
-  // old config <= 0.7.3
-  if( c->hasKey( "http server" ) )
-    c->deleteEntry( "http server" );
-  if( c->hasKey( "cddbp server" ) )
-    c->deleteEntry( "cddbp server" );
-
-  c->writePathEntry( "local cddb dirs", localCddbDirs );
-}
-
-
-void K3bCddbOptionTab::slotLocalDirAdd()
-{
-  if( !m_editLocalDir->text().isEmpty() ) {
-      QString localDir( m_editLocalDir->text() );
-      Q3ListViewItemIterator it( m_viewLocalDir );
-      while( it.current() ) {
-          if ( it.current()->text(0) == localDir )
-              return;
-          ++it;
-      }
-    (void)new K3ListViewItem( m_viewLocalDir, m_viewLocalDir->lastItem(),
-			     localDir );
-
-    enDisableButtons();
-  }
-}
-
-
-void K3bCddbOptionTab::slotLocalDirRemove()
-{
-  if( Q3ListViewItem* item = m_viewLocalDir->selectedItem() )
-    delete item;
-
-  enDisableButtons();
-}
-
-
-void K3bCddbOptionTab::slotCddbServerAdd()
-{
-  if( !m_editCddbServer->text().isEmpty() ) {
-    (void)new K3ListViewItem( m_viewCddbServer, m_viewCddbServer->lastItem(),
-			     m_comboCddbType->currentText(),
-			     m_editCddbServer->text(),
-			     QString::number( m_editCddbPort->value() ) );
-
-    enDisableButtons();
-  }
-}
-
-
-void K3bCddbOptionTab::slotCddbServerRemove()
-{
-  if( Q3ListViewItem* item = m_viewCddbServer->selectedItem() )
-    delete item;
-
-  enDisableButtons();
-}
-
-
-void K3bCddbOptionTab::enDisableButtons()
-{
-  m_buttonAddLocalDir->setDisabled( m_editLocalDir->text().isEmpty() );
-  m_buttonRemoveLocalDir->setDisabled( m_viewLocalDir->selectedItem() == 0 );
-  m_buttonLocalDirUp->setDisabled( m_viewLocalDir->selectedItem() == 0 ||
-				   m_viewLocalDir->selectedItem() == m_viewLocalDir->firstChild() );
-  m_buttonLocalDirDown->setDisabled( m_viewLocalDir->selectedItem() == 0 ||
-				     m_viewLocalDir->selectedItem() == m_viewLocalDir->lastItem() );
-
-  m_buttonAddCddbServer->setDisabled( m_editCddbServer->text().isEmpty() );
-  m_buttonRemoveCddbServer->setDisabled( m_viewCddbServer->selectedItem() == 0 );
-  m_buttonCddbServerUp->setDisabled( m_viewCddbServer->selectedItem() == 0 ||
-				     m_viewCddbServer->selectedItem() == m_viewCddbServer->firstChild() );
-  m_buttonCddbServerDown->setDisabled( m_viewCddbServer->selectedItem() == 0 ||
-				       m_viewCddbServer->selectedItem() == m_viewCddbServer->lastItem() );
-
-  if( m_viewLocalDir->childCount() <= 0 ) {
-    m_checkSaveLocalEntries->setChecked(false);
-  }
-  m_checkSaveLocalEntries->setDisabled( m_viewLocalDir->childCount() <= 0 );
-}
-
-
-void K3bCddbOptionTab::slotServerTypeChanged()
-{
-  m_editCddbPort->setValue( m_comboCddbType->currentText() == "Http" ? 80 : 8880 );
-}
-
-
-void K3bCddbOptionTab::slotLocalDirDown()
-{
-  Q3ListViewItem* sel = m_viewLocalDir->selectedItem();
-  m_viewLocalDir->moveItem( sel, 0, sel->nextSibling() );
-  m_viewLocalDir->setSelected( sel, true );
-}
-
-
-void K3bCddbOptionTab::slotLocalDirUp()
-{
-  Q3ListViewItem* sel = m_viewLocalDir->selectedItem();
-  m_viewLocalDir->moveItem( sel, 0, sel->itemAbove()->itemAbove() );
-  m_viewLocalDir->setSelected( sel, true );
-}
-
-
-void K3bCddbOptionTab::slotCddbServerDown()
-{
-  Q3ListViewItem* sel = m_viewCddbServer->selectedItem();
-  m_viewCddbServer->moveItem( sel, 0, sel->nextSibling() );
-  m_viewCddbServer->setSelected( sel, true );
-}
-
-
-void K3bCddbOptionTab::slotCddbServerUp()
-{
-  Q3ListViewItem* sel = m_viewCddbServer->selectedItem();
-  m_viewCddbServer->moveItem( sel, 0, sel->itemAbove()->itemAbove() );
-  m_viewCddbServer->setSelected( sel, true );
+    if ( m_cddbKcm ) {
+        m_cddbKcm->save();
+    }
 }
 
 #include "k3bcddboptiontab.moc"

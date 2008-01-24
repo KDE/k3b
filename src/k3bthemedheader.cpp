@@ -90,9 +90,13 @@ void K3bThemedHeader::init()
 
     m_leftLabel = new QLabel( this );
     m_leftLabel->setScaledContents( false );
+    m_leftLabel->setAutoFillBackground( true );
+
     m_titleLabel = new K3bTitleLabel( this );
+
     m_rightLabel = new QLabel( this );
     m_rightLabel->setScaledContents( false );
+    m_rightLabel->setAutoFillBackground( true );
 
     layout->addWidget( m_leftLabel );
     layout->addWidget( m_titleLabel );
@@ -114,13 +118,12 @@ void K3bThemedHeader::init()
 void K3bThemedHeader::slotThemeChanged()
 {
     if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-//     setPaletteBackgroundColor( theme->backgroundColor() );
-//     setPaletteForegroundColor( theme->foregroundColor() );
-
         m_leftLabel->setPaletteBackgroundColor( theme->backgroundColor() );
         m_leftLabel->setPixmap( theme->pixmap( m_leftPix ) );
+
         m_rightLabel->setPaletteBackgroundColor( theme->backgroundColor() );
         m_rightLabel->setPixmap( theme->pixmap( m_rightPix ) );
+
         m_titleLabel->setPaletteBackgroundColor( theme->backgroundColor() );
         m_titleLabel->setPaletteForegroundColor( theme->foregroundColor() );
     }

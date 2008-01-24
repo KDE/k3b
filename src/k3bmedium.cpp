@@ -1,10 +1,10 @@
 
 /*
  *
- * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,10 +25,17 @@
 #include <klocale.h>
 #include <kio/global.h>
 
+#include <QtCore/QSharedData>
+#include <QtCore/QList>
+
+#include <libkcddb/cdinfo.h>
+#include <libkcddb/client.h>
+
+
 /**
  * Internal class used by K3bMedium
  */
-class K3bMedium::Data : public KShared
+class K3bMedium::Data : public QSharedData
 {
 public:
     Data();
@@ -40,6 +47,8 @@ public:
     QList<int> writingSpeeds;
     K3bIso9660SimplePrimaryDescriptor isoDesc;
     int content;
+
+    KCDDB::CDInfo cddbInfo;
 };
 
 
@@ -78,16 +87,8 @@ K3bMedium::~K3bMedium()
 
 K3bMedium& K3bMedium::operator=( const K3bMedium& other )
 {
-    if( this != &other )
-        d = other.d;
+    d = other.d;
     return *this;
-}
-
-
-void K3bMedium::detach()
-{
-    if( d.count() > 1 )
-        d = new Data( *d );
 }
 
 
@@ -123,6 +124,12 @@ const K3bDevice::CdText& K3bMedium::cdText() const
 }
 
 
+const KCDDB::CDInfo& K3bMedium::cddbInfo() const
+{
+    return d->cddbInfo;
+}
+
+
 const QList<int>& K3bMedium::writingSpeeds() const
 {
     return d->writingSpeeds;
@@ -143,13 +150,12 @@ const K3bIso9660SimplePrimaryDescriptor& K3bMedium::iso9660Descriptor() const
 
 void K3bMedium::reset()
 {
-    detach();
-
     d->diskInfo = K3bDevice::DiskInfo();
     d->toc.clear();
     d->cdText.clear();
     d->writingSpeeds.clear();
     d->content = CONTENT_NONE;
+    d->cddbInfo.clear();
 
     // clear the desc
     d->isoDesc = K3bIso9660SimplePrimaryDescriptor();
@@ -174,8 +180,22 @@ void K3bMedium::update()
             diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE ) {
             d->toc = d->device->readToc();
             if( d->toc.contentType() == K3bDevice::AUDIO ||
-                d->toc.contentType() == K3bDevice::MIXED )
+                d->toc.contentType() == K3bDevice::MIXED ) {
+
+                // update CD-Text
                 d->cdText = d->device->readCdText();
+
+                // Update Cddb information
+                KCDDB::Client cddbClient;
+                cddbClient.setBlockingMode( true );
+                KCDDB::TrackOffsetList trackOffsets;
+                for ( int i = 0; i < d->toc.count(); ++i ) {
+                    trackOffsets.append( d->toc[i].firstSector().lba() );
+                }
+                if ( cddbClient.lookup( trackOffsets ) == KCDDB::Success ) {
+                    d->cddbInfo = cddbClient.lookupResponse().first();
+                }
+            }
         }
 
         if( diskInfo().mediaType() & K3bDevice::MEDIA_WRITABLE ) {
@@ -299,10 +319,18 @@ QString K3bMedium::shortString( bool useContent ) const
             // AUDIO + MIXED
             if( toc().contentType() == K3bDevice::AUDIO ||
                 toc().contentType() == K3bDevice::MIXED ) {
-                if( !cdText().performer().isEmpty() || !cdText().title().isEmpty() ) {
+                QString title = cdText().title();
+                QString performer = cdText().performer();
+                if ( title.isEmpty() ) {
+                    title = cddbInfo().get( KCDDB::Title ).toString();
+                }
+                if ( performer.isEmpty() ) {
+                    performer = cddbInfo().get( KCDDB::Artist ).toString();
+                }
+                if( !performer.isEmpty() && !title.isEmpty() ) {
                     return QString("%1 - %2 (%3)")
-                        .arg( cdText().performer() )
-                        .arg( cdText().title() )
+                        .arg( performer )
+                        .arg( title )
                         .arg( toc().contentType() == K3bDevice::AUDIO ? i18n("Audio CD") : i18n("Mixed CD") );
                 }
                 else if( toc().contentType() == K3bDevice::AUDIO ) {
@@ -437,7 +465,6 @@ QString K3bMedium::beautifiedVolumeId() const
 
 KIcon K3bMedium::icon() const
 {
-    // FIXME: use whatever oxygen provides in the end
     if ( diskInfo().empty() ) {
         return KIcon( "media-optical-recordable" );
     }
@@ -450,11 +477,14 @@ KIcon K3bMedium::icon() const
 }
 
 
-bool K3bMedium::operator==( const K3bMedium& other )
+bool K3bMedium::operator==( const K3bMedium& other ) const
 {
     if( this->d == other.d )
         return true;
 
+    // We do not compare CDDB info here. Mainly becasue KCDDB::CDInfo does
+    // not have operators for that. Secondly it does not really define the
+    // medium as it can differ based on the KCDDB settings.
     return( this->device() == other.device() &&
             this->diskInfo() == other.diskInfo() &&
             this->toc() == other.toc() &&
@@ -464,11 +494,14 @@ bool K3bMedium::operator==( const K3bMedium& other )
 }
 
 
-bool K3bMedium::operator!=( const K3bMedium& other )
+bool K3bMedium::operator!=( const K3bMedium& other ) const
 {
     if( this->d == other.d )
         return false;
 
+    // We do not compare CDDB info here. Mainly becasue KCDDB::CDInfo does
+    // not have operators for that. Secondly it does not really define the
+    // medium as it can differ based on the KCDDB settings.
     return( this->device() != other.device() ||
             this->diskInfo() != other.diskInfo() ||
             this->toc() != other.toc() ||

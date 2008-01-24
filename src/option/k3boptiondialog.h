@@ -1,10 +1,10 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,61 +26,66 @@ class K3bMiscOptionTab;
 class K3bNotifyOptionTab;
 class K3bPluginOptionTab;
 class K3bThemeOptionTab;
-
+class K3bCddbOptionTab;
 
 /**
-  *@author Sebastian Trueg
-  */
+ *@author Sebastian Trueg
+ */
 class K3bOptionDialog : public KPageDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bOptionDialog(QWidget *parent=0);
-  ~K3bOptionDialog();
+public:
+    K3bOptionDialog( QWidget* parent = 0 );
+    ~K3bOptionDialog();
 
-  enum m_configPageIndex { Burning = 0, Devices = 1, Programs = 2, Cddb = 3 };
+    // FIXME: add the missing ones, add slot to open to a specific one
+    enum ConfigPage {
+        Burning = 0,
+        Devices = 1,
+        Programs = 2,
+        Cddb = 3
+    };
 
-/*   void addOptionPage( QWidget* widget, */
-/* 		      const QString& name, */
-/* 		      const QString& header, */
-/* 		      const QPixmap& icon ); */
+protected Q_SLOTS:
+    void slotOk();
+    void slotApply();
+    void slotDefault();
 
- protected slots:
-  void slotOk();
-  void slotApply();
-  void slotDefault();
+private:
+    bool saveSettings();
 
- private:
-  bool saveSettings();
+    // programs tab
+    K3bExternalBinOptionTab* m_externalBinOptionTab;
+    void setupProgramsPage();
 
-  // programs tab
-  K3bExternalBinOptionTab* m_externalBinOptionTab;
-  void setupProgramsPage();
+    // device tab
+    K3bDeviceOptionTab* m_deviceOptionTab;
+    void setupDevicePage();
 
-  // device tab
-  K3bDeviceOptionTab* m_deviceOptionTab;
-  void setupDevicePage();
+    // burning tab
+    void setupBurningPage();
+    K3bBurningOptionTab* m_burningOptionTab;
 
-  // burning tab
-  void setupBurningPage();
-  K3bBurningOptionTab* m_burningOptionTab;
+    // misc options
+    K3bMiscOptionTab* m_miscOptionTab;
+    void setupMiscPage();
 
-  // misc options
-  K3bMiscOptionTab* m_miscOptionTab;
-  void setupMiscPage();
+    // notify options
+    K3bNotifyOptionTab* m_notifyOptionTab;
+    void setupNotifyPage();
 
-  // notify options
-  K3bNotifyOptionTab* m_notifyOptionTab;
-  void setupNotifyPage();
+    // plugin options
+    K3bPluginOptionTab* m_pluginOptionTab;
+    void setupPluginPage();
 
-  // plugin options
-  K3bPluginOptionTab* m_pluginOptionTab;
-  void setupPluginPage();
+    // theme options
+    K3bThemeOptionTab* m_themeOptionTab;
+    void setupThemePage();
 
-  // theme options
-  K3bThemeOptionTab* m_themeOptionTab;
-  void setupThemePage();
+    // cddb options
+    K3bCddbOptionTab* m_cddbOptionTab;
+    void setupCddbPage();
 };
 
 #endif

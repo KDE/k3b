@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,55 +28,57 @@
  */
 class LIBK3B_EXPORT K3bIntMapComboBox : public KComboBox
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bIntMapComboBox( QWidget* parent = 0 );
-  ~K3bIntMapComboBox();
+public:
+    K3bIntMapComboBox( QWidget* parent = 0 );
+    ~K3bIntMapComboBox();
 
-  int selectedValue() const;
+    int selectedValue() const;
 
- signals:
-  /**
-   * Emitted if the selected value changes by user interaction.
-   */
-  void valueChanged( int );
+    bool hasValue( int value ) const;
 
-  /**
-   * Emitted if the current highlighted value changed by user interaction.
-   */
-  void valueHighlighted( int );
+signals:
+    /**
+     * Emitted if the selected value changes by user interaction.
+     */
+    void valueChanged( int );
 
- public slots:
-  /**
-   * If \a v has not been added via insertItem the selection will not be changed
-   */
-  void setSelectedValue( int v );
+    /**
+     * Emitted if the current highlighted value changed by user interaction.
+     */
+    void valueHighlighted( int );
 
-  void clear();
+public Q_SLOTS:
+    /**
+     * If \a v has not been added via insertItem the selection will not be changed
+     */
+    void setSelectedValue( int v );
 
-  /**
-   * Insert a new item
-   * \param value The integer value to insert
-   * \param text The text to be displayed in the combobox
-   * \param description The text to be used to describe the item in the whatsthis help
-   * \param index The position where to inserts the item. The item will be appended if index is negative.
-   *
-   * \return true if the item could be inserted. False if the value had already been inserted.
-   */
-  bool insertItem( int value, const QString& text, const QString& description, int index = -1 );
+    void clear();
 
-  void addGlobalWhatsThisText( const QString& top, const QString& bottom );
+    /**
+     * Insert a new item
+     * \param value The integer value to insert
+     * \param text The text to be displayed in the combobox
+     * \param description The text to be used to describe the item in the whatsthis help
+     * \param index The position where to inserts the item. The item will be appended if index is negative.
+     *
+     * \return true if the item could be inserted. False if the value had already been inserted.
+     */
+    bool insertItem( int value, const QString& text, const QString& description = QString(), int index = -1 );
 
- private slots:
-  void slotItemActivated( int );
-  void slotItemHighlighted( int );
+    void addGlobalWhatsThisText( const QString& top, const QString& bottom );
 
- private:
-  void updateWhatsThis();
+private Q_SLOTS:
+    void slotItemActivated( int );
+    void slotItemHighlighted( int );
 
-  class Private;
-  Private* d;
+private:
+    void updateWhatsThis();
+
+    class Private;
+    Private* d;
 };
 
 #endif

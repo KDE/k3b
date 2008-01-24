@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,64 +27,63 @@
  */
 class K3bWritingModeWidget : public K3bIntMapComboBox
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bWritingModeWidget( QWidget* parent = 0 );
-  K3bWritingModeWidget( int modes, QWidget* parent = 0 );
-  ~K3bWritingModeWidget();
+public:
+    K3bWritingModeWidget( QWidget* parent = 0 );
+    K3bWritingModeWidget( int modes, QWidget* parent = 0 );
+    ~K3bWritingModeWidget();
 
-  int writingMode() const;
+    int writingMode() const;
 
-  void saveConfig( KConfigGroup& );
+    void saveConfig( KConfigGroup& );
 
-  /**
-   * This will not emit the writingModeChanged signal
-   */
-  void loadConfig( const KConfigGroup& );
+    /**
+     * This will not emit the writingModeChanged signal
+     */
+    void loadConfig( const KConfigGroup& );
 
- public slots:
-  /**
-   * This will not emit the writingModeChanged signal
-   */
-  void setWritingMode( int m );
-  void setSupportedModes( int );
+public Q_SLOTS:
+    /**
+     * This will not emit the writingModeChanged signal
+     */
+    void setWritingMode( int m );
+    void setSupportedModes( int );
 
-  /**
-   * If the device is set the supported writing modes
-   * will be filtered by the ones supported by the drive.
-   */
-  void setDevice( K3bDevice::Device* );
+    /**
+     * If the device is set the supported writing modes
+     * will be filtered by the ones supported by the drive.
+     */
+    void setDevice( K3bDevice::Device* );
 
-  /**
-   * Set the writing modes which make sense with the provided medium.
-   * This will also reset the device from the medium.
-   *
-   * \param m The medium. May even be non-writable or no medium at all
-   *          in which case only the auto mode will be selected.
-   *
-   * \sa setDevice
-   */
-  void determineSupportedModesFromMedium( const K3bMedium& m );
+    /**
+     * Set the writing modes which make sense with the provided medium.
+     * This will also reset the device from the medium.
+     *
+     * \param m The medium. May even be non-writable or no medium at all
+     *          in which case only the auto mode will be selected.
+     *
+     * \sa setDevice
+     */
+    void determineSupportedModesFromMedium( const K3bMedium& m );
 
-  /**
-   * Convinience method. Does the same as the one above.
-   *
-   * \param dev The device which contains the medium. May even be 0 in
-   *            which case only the auto mode will be selected.
-   */
-  void determineSupportedModesFromMedium( K3bDevice::Device* dev );
+    /**
+     * Convinience method. Does the same as the one above.
+     *
+     * \param dev The device which contains the medium. May even be 0 in
+     *            which case only the auto mode will be selected.
+     */
+    void determineSupportedModesFromMedium( K3bDevice::Device* dev );
 
- signals:
-  void writingModeChanged( int );
+signals:
+    void writingModeChanged( int );
 
- private:
-  void init();
-  void updateModes();
-  void initWhatsThisHelp();
+private:
+    void init();
+    void updateModes();
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 };
 
 #endif

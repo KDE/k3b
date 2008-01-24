@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,24 +38,23 @@
 
 
 K3bExternalBinOptionTab::K3bExternalBinOptionTab( K3bExternalBinManager* manager, QWidget* parent )
-  : QWidget( parent )
+    : QWidget( parent )
 {
-  m_manager = manager;
+    m_manager = manager;
 
-  Q3GridLayout* frameLayout = new Q3GridLayout( this );
-  frameLayout->setSpacing( KDialog::spacingHint() );
-  frameLayout->setMargin( 0 );
+    Q3GridLayout* frameLayout = new Q3GridLayout( this );
+    frameLayout->setSpacing( KDialog::spacingHint() );
+    frameLayout->setMargin( 0 );
 
-  m_externalBinWidget = new K3bExternalBinWidget( manager, this );
-  frameLayout->addWidget( m_externalBinWidget, 1, 0 );
+    m_externalBinWidget = new K3bExternalBinWidget( manager, this );
+    frameLayout->addWidget( m_externalBinWidget, 1, 0 );
 
-  QLabel* m_labelInfo = new QLabel( this, "m_labelInfo" );
-  m_labelInfo->setText( i18n( "Specify the paths to the external programs that K3b needs to work properly, "
-			      "or press \"Search\" to let K3b search for the programs." ) );
-  m_labelInfo->setScaledContents( false );
-  m_labelInfo->setAlignment( int( Qt::WordBreak | Qt::AlignVCenter | Qt::AlignLeft ) );
+    QLabel* m_labelInfo = new QLabel( this, "m_labelInfo" );
+    m_labelInfo->setText( "<p>" + i18n( "Specify the paths to the external programs that K3b needs to work properly, "
+                                        "or press \"Search\" to let K3b search for the programs." ) );
+    m_labelInfo->setWordWrap( true );
 
-  frameLayout->addWidget( m_labelInfo, 0, 0 );
+    frameLayout->addWidget( m_labelInfo, 0, 0 );
 }
 
 
@@ -66,13 +65,13 @@ K3bExternalBinOptionTab::~K3bExternalBinOptionTab()
 
 void K3bExternalBinOptionTab::readSettings()
 {
-  m_externalBinWidget->load();
+    m_externalBinWidget->load();
 }
 
 
 void K3bExternalBinOptionTab::saveSettings()
 {
-  m_externalBinWidget->save();
+    m_externalBinWidget->save();
 }
 
 

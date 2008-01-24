@@ -1,10 +1,10 @@
 /*
  *
  * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,8 @@
 #include "k3bmiscoptiontab.h"
 #include "k3bthemeoptiontab.h"
 #include "k3bpluginoptiontab.h"
+#include "k3bcddboptiontab.h"
+
 #include <k3bsystemproblemdialog.h>
 
 
@@ -50,6 +52,7 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent )
 {
     setFaceType( List );
     setCaption( i18n("Settings") );
+    showButtonSeparator( true );
 
     setupMiscPage();
     setupDevicePage();
@@ -58,6 +61,7 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent )
     setupPluginPage();
     setupThemePage();
     setupBurningPage();
+    setupCddbPage();
 
     m_externalBinOptionTab->readSettings();
     m_deviceOptionTab->readDevices();
@@ -183,20 +187,12 @@ void K3bOptionDialog::setupThemePage()
 }
 
 
-// void K3bOptionDialog::addOptionPage( QWidget* widget,
-// 				     const QString& name,
-// 				     const QString& header,
-// 				     const QPixmap& icon )
-// {
-//   KPageWidgetItem* item = addPage( name, header, icon );
-
-//   QVBoxLayout* box = new QVBoxLayout( frame );
-//   box->setSpacing( 0 );
-//   box->setMargin( 0 );
-
-//   widget->reparent( frame );
-//   box->addWidget( widget );
-// }
-
+void K3bOptionDialog::setupCddbPage()
+{
+    m_cddbOptionTab = new K3bCddbOptionTab;
+    KPageWidgetItem* item = addPage( m_cddbOptionTab, i18n("CDDB") );
+    item->setHeader( i18n("CDDB Audio CD Info Retrieval") );
+    item->setIcon( KIcon( "media-optical-audio" ) );
+}
 
 #include "k3boptiondialog.moc"
