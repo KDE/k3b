@@ -1,10 +1,10 @@
 /* 
  *
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,62 +26,62 @@
 class base_K3bExternalEncoderConfigWidget : public QWidget, public Ui::base_K3bExternalEncoderConfigWidget
 {
 public:
-  base_K3bExternalEncoderConfigWidget( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
+    base_K3bExternalEncoderConfigWidget( QWidget *parent ) : QWidget( parent ) {
+        setupUi( this );
+    }
 };
 
 class base_K3bExternalEncoderEditWidget : public QWidget, public Ui::base_K3bExternalEncoderEditWidget
 {
 public:
-  base_K3bExternalEncoderEditWidget( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
+    base_K3bExternalEncoderEditWidget( QWidget *parent ) : QWidget( parent ) {
+        setupUi( this );
+    }
 };
 
 class K3bExternalEncoderEditDialog : public KDialog
 {
-  Q_OBJECT
+    Q_OBJECT
   
- public:
-  K3bExternalEncoderEditDialog( QWidget* parent );
-  ~K3bExternalEncoderEditDialog();
+public:
+    K3bExternalEncoderEditDialog( QWidget* parent );
+    ~K3bExternalEncoderEditDialog();
 
-  K3bExternalEncoderCommand currentCommand() const;
-  void setCommand( const K3bExternalEncoderCommand& cmd );
+    K3bExternalEncoderCommand currentCommand() const;
+    void setCommand( const K3bExternalEncoderCommand& cmd );
 
- private slots:
-  void slotOk();
+private Q_SLOTS:
+    void slotOk();
 
- private:
-  base_K3bExternalEncoderEditWidget* m_editW;
+private:
+    base_K3bExternalEncoderEditWidget* m_editW;
 };
 
 
 class K3bExternalEncoderSettingsWidget : public K3bPluginConfigWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bExternalEncoderSettingsWidget( QWidget* parent = 0 );
-  ~K3bExternalEncoderSettingsWidget();
+public:
+    K3bExternalEncoderSettingsWidget( QWidget* parent, const QVariantList& args );
+    ~K3bExternalEncoderSettingsWidget();
 
- public slots:
-  void loadConfig();
-  void saveConfig();
+public Q_SLOTS:
+    void load();
+    void save();
 
- private slots:
-  void slotSelectionChanged();
-  void slotNewCommand();
-  void slotEditCommand();
-  void slotRemoveCommand();
+private Q_SLOTS:
+    void slotSelectionChanged();
+    void slotNewCommand();
+    void slotEditCommand();
+    void slotRemoveCommand();
 
- private:
-  base_K3bExternalEncoderConfigWidget* w;
-  K3bExternalEncoderEditDialog* m_editDlg;
+private:
+    base_K3bExternalEncoderConfigWidget* w;
+    K3bExternalEncoderEditDialog* m_editDlg;
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 };
 
 #endif

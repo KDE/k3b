@@ -16,16 +16,8 @@
 #ifndef _K3B_LAME_ENCODER_H_
 #define _K3B_LAME_ENCODER_H_
 
-
 #include <k3baudioencoder.h>
-#include <k3bpluginconfigwidget.h>
 
-#include "ui_base_k3blameencodersettingswidget.h"
-#include "ui_base_k3bmanualbitratesettingswidget.h"
-
-
-class KDialogBase;
-class K3bLameManualSettingsDialog;
 
 class K3bLameEncoder : public K3bAudioEncoder
 {
@@ -48,8 +40,6 @@ public:
 
     int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-    K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0 ) const;
-
 private:
     void finishEncoderInternal();
     bool initEncoderInternal( const QString& extension, const K3b::Msf& length );
@@ -58,28 +48,6 @@ private:
 
     class Private;
     Private* d;
-};
-
-
-class K3bLameEncoderSettingsWidget : public K3bPluginConfigWidget, Ui::K3bLameEncoderSettingsWidget
-{
-    Q_OBJECT
-
-public:
-    K3bLameEncoderSettingsWidget( QWidget* parent = 0 );
-    ~K3bLameEncoderSettingsWidget();
-
-    public slots:
-    void loadConfig();
-    void saveConfig();
-
-    private slots:
-    void slotQualityLevelChanged( int val );
-    void slotShowManualSettings();
-    void updateManualSettingsLabel();
-
-private:
-    K3bLameManualSettingsDialog* m_manualSettingsDialog;
 };
 
 K3B_EXPORT_PLUGIN(k3blameencoder, K3bLameEncoder)

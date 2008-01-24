@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,9 +14,15 @@
 
 #include "k3bpluginconfigwidget.h"
 
+#include <KGlobal>
 
-K3bPluginConfigWidget::K3bPluginConfigWidget( QWidget* parent )
-  : QWidget( parent )
+#include <k3bcore.h>
+
+
+// we only use the plugins when loaded into the main application. Thus they do not need
+// their own KComponentData
+K3bPluginConfigWidget::K3bPluginConfigWidget( QWidget* parent, const QVariantList& args )
+    : KCModule( KGlobal::mainComponent(), parent, args )
 {
 }
 
@@ -26,16 +32,17 @@ K3bPluginConfigWidget::~K3bPluginConfigWidget()
 }
 
 
-void K3bPluginConfigWidget::loadConfig()
-{
-  // do nothing
-}
+// void K3bPluginConfigWidget::load()
+// {
+
+//     loadConfig();
+// }
 
 
-void K3bPluginConfigWidget::saveConfig()
-{
-  // do nothing
-}
+// void K3bPluginConfigWidget::saveConfig()
+// {
+
+// }
 
 
 #include "k3bpluginconfigwidget.moc"

@@ -14,124 +14,43 @@
 
 #include "k3bpluginoptiontab.h"
 
-
 #include <k3bpluginmanager.h>
 #include <k3bplugin.h>
-#include <k3bpluginconfigwidget.h>
-#include <k3blistview.h>
 #include <k3bcore.h>
 
 #include <klocale.h>
-#include <kmessagebox.h>
 #include <kdebug.h>
-#include <kconfig.h>
-#include <kglobalsettings.h>
+#include <kpluginselector.h>
+#include <KPluginInfo>
+
+#include <QtCore/QList>
 
 
-#include <qstringlist.h>
-#include <qpushbutton.h>
 
 
-class K3bPluginOptionTab::PluginViewItem : public K3bListViewItem
-{
-public:
-    PluginViewItem( K3bPlugin* p, K3ListViewItem* parent )
-        : K3bListViewItem( parent ),
-          plugin(p) {
-        KPluginInfo info = p->pluginInfo();
-        setText( 0, info.name() );
-        if( !info.author().isEmpty() ) {
-            if( info.email().isEmpty() )
-                setText( 1, info.author() );
-            else
-                setText( 1, info.author() + " <" + info.email() + ">" );
-        }
-        setText( 2, info.version() );
-        setText( 3, info.comment() );
-        setText( 4, info.license() );
-    }
-
-    K3bPlugin* plugin;
-};
-
-
-#ifdef __GNUC__
-#warning Use KUtils::PluginPage to nicely display the plugin list
-#endif
 K3bPluginOptionTab::K3bPluginOptionTab( QWidget* parent )
     : QWidget( parent )
 {
-    setupUi( this );
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    layout->setMargin( 0 );
+    layout->setAutoAdd( true );
 
-    m_viewPlugins->setShadeSortColumn( false );
-    m_viewPlugins->addColumn( i18n("Name") );
-    m_viewPlugins->addColumn( i18n("Author") );
-    m_viewPlugins->addColumn( i18n("Version") );
-    m_viewPlugins->addColumn( i18n("Description") );
-    m_viewPlugins->addColumn( i18n("License") );
-    m_viewPlugins->setAlternateBackground( QColor() );
-    m_viewPlugins->setAllColumnsShowFocus(true);
+    QLabel* label = new QLabel( i18n( "<p>Here all <em>K3b Plugins</em> may be configured. Be aware that this does not include the "
+                                      "<em>KPart Plugins</em> which embed themselves in the K3b menu structure.</p>" ), this );
+    label->setWordWrap( true );
 
-    connect( m_viewPlugins, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)), this, SLOT(slotConfigureButtonClicked()) );
-    connect( m_buttonConfigure, SIGNAL(clicked()), this, SLOT(slotConfigureButtonClicked()) );
-    connect( m_viewPlugins, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()) );
+    KPluginSelector* pluginSelector = new KPluginSelector( this );
+
+    foreach( K3bPlugin* plugin, k3bcore->pluginManager()->plugins() ) {
+        pluginSelector->addPlugins( QList<KPluginInfo>() << plugin->pluginInfo(),
+                                    KPluginSelector::IgnoreConfigFile,
+                                    plugin->group() );
+    }
 }
 
 
 K3bPluginOptionTab::~K3bPluginOptionTab()
 {
-}
-
-
-void K3bPluginOptionTab::readSettings()
-{
-    m_viewPlugins->clear();
-    QStringList groups = k3bcore->pluginManager()->categories();
-    for( QStringList::const_iterator it = groups.begin();
-         it != groups.end(); ++it ) {
-        const QString& group = *it;
-
-        K3bListViewItem* groupViewItem = new K3bListViewItem( m_viewPlugins,
-                                                              m_viewPlugins->lastChild(),
-                                                              group );
-        QFont f( font() );
-        f.setBold(true);
-        groupViewItem->setFont( 0, f );
-//     groupViewItem->setBackgroundColor( 0, KGlobalSettings::alternateBackgroundColor() );
-//     groupViewItem->setBackgroundColor( 1, KGlobalSettings::alternateBackgroundColor() );
-//     groupViewItem->setBackgroundColor( 2, KGlobalSettings::alternateBackgroundColor() );
-//     groupViewItem->setBackgroundColor( 3, KGlobalSettings::alternateBackgroundColor() );
-//     groupViewItem->setBackgroundColor( 4, KGlobalSettings::alternateBackgroundColor() );
-        groupViewItem->setSelectable( false );
-
-        QList<K3bPlugin*> fl = k3bcore->pluginManager()->plugins( group );
-        Q_FOREACH( K3bPlugin* plugin, fl )
-            (void)new PluginViewItem( plugin, groupViewItem );
-
-        groupViewItem->setOpen(true);
-    }
-
-    slotSelectionChanged();
-}
-
-
-bool K3bPluginOptionTab::saveSettings()
-{
-    return true;
-}
-
-
-void K3bPluginOptionTab::slotConfigureButtonClicked()
-{
-    Q3ListViewItem* item = m_viewPlugins->selectedItem();
-    if( PluginViewItem* pi = dynamic_cast<PluginViewItem*>( item ) )
-        k3bcore->pluginManager()->execPluginDialog( pi->plugin, this );
-}
-
-
-void K3bPluginOptionTab::slotSelectionChanged()
-{
-    m_buttonConfigure->setEnabled( dynamic_cast<PluginViewItem*>( m_viewPlugins->selectedItem() ) != 0 );
 }
 
 #include "k3bpluginoptiontab.moc"

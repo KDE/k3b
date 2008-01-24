@@ -8,7 +8,7 @@ include (KDE4Defaults)
 include (MacroLibrary)
 macro_optional_find_package(DvdRead)
 macro_optional_find_package(MusicBrainz)
-find_package(KdeMultimedia REQUIRED)
+find_package(Kcddb REQUIRED)
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 add_definitions (-DQT3_SUPPORT)
@@ -39,3 +39,21 @@ if(K3BSETUP_BUILD)
    add_subdirectory(k3bsetup)
 endif(K3BSETUP_BUILD)
 
+
+# apidox
+find_package(Doxygen)
+
+if(DOXYGEN_EXECUTABLE)
+  configure_file(${k3b_SOURCE_DIR}/Doxyfile.cmake ${k3b_BINARY_DIR}/Doxyfile)
+
+  if(EXISTS ${QT_DOC_DIR}/html)
+    set(QTDOCS "${QT_DOC_DIR}/html")
+  else(EXISTS ${QT_DOC_DIR}/html)
+    set(QTDOCS "http://doc.trolltech.com/4.3/")
+  endif(EXISTS ${QT_DOC_DIR}/html)
+
+  add_custom_target(
+    apidox
+    COMMAND ${DOXYGEN_EXECUTABLE} Doxyfile
+    COMMAND docs/html/installdox -l qt4.tag@${QTDOCS} docs/html/*.html)
+endif(DOXYGEN_EXECUTABLE)

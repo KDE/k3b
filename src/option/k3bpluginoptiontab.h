@@ -17,6 +17,8 @@
 
 #include "ui_base_k3bpluginoptiontab.h"
 
+class K3bPluginModel;
+
 class K3bPluginOptionTab : public QWidget, public Ui::base_K3bPluginOptionTab
 {
     Q_OBJECT
@@ -24,17 +26,6 @@ class K3bPluginOptionTab : public QWidget, public Ui::base_K3bPluginOptionTab
 public:
     K3bPluginOptionTab( QWidget* parent = 0 );
     ~K3bPluginOptionTab();
-
-public Q_SLOTS:
-    void readSettings();
-    bool saveSettings();
-
-private Q_SLOTS:
-    void slotConfigureButtonClicked();
-    void slotSelectionChanged();
-
-private:
-    class PluginViewItem;
 };
 
 #endif

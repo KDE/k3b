@@ -22,19 +22,6 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kdebug.h>
-#include <knuminput.h>
-
-#include <qlayout.h>
-#include <qradiobutton.h>
-#include <qslider.h>
-#include <qlcdnumber.h>
-#include <qcheckbox.h>
-#include <q3cstring.h>
-#include <qtooltip.h>
-
-#include <qlabel.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
 
 #include <vorbis/vorbisenc.h>
 
@@ -192,7 +179,7 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
     vorbis_comment_init( d->vorbisComment );
 
     // add the encoder tag (so everybody knows we did it! ;)
-    vorbis_comment_add_tag( d->vorbisComment, Q3CString("ENCODER").data(), Q3CString("K3bOggVorbisEncoderPlugin").data() );
+    vorbis_comment_add_tag( d->vorbisComment, QByteArray("ENCODER").data(), QByteArray("K3bOggVorbisEncoderPlugin").data() );
 
     // set up the analysis state and auxiliary encoding storage
     d->vorbisDspState = new vorbis_dsp_state;
@@ -329,7 +316,7 @@ void K3bOggVorbisEncoder::finishEncoderInternal()
 void K3bOggVorbisEncoder::setMetaDataInternal( K3bAudioEncoder::MetaDataField f, const QString& value )
 {
     if( d->vorbisComment ) {
-        Q3CString key;
+        QByteArray key;
 
         switch( f ) {
         case META_TRACK_TITLE:
@@ -421,92 +408,6 @@ void K3bOggVorbisEncoder::loadConfig()
 }
 
 
-
-
-K3bOggVorbisEncoderSettingsWidget::K3bOggVorbisEncoderSettingsWidget( QWidget* parent)
-    : K3bPluginConfigWidget( parent)
-{
-    w = new base_K3bOggVorbisEncoderSettingsWidget( this );
-
-    QString ttQuality = i18n("Controls the quality of the encoded files.");
-    QString wsQuality = i18n("<p>Vorbis' audio quality is not best measured in kilobits per second, "
-                             "but on a scale from -1 to 10 called <em>quality</em>."
-                             "<p>For now, quality -1 is roughly equivalent to 45kbps average, "
-                             "5 is roughly 160kbps, and 10 gives about 400kbps. "
-                             "Most people seeking very-near-CD-quality audio encode at a quality of 5 or, "
-                             "for lossless stereo coupling, 6. The quality 3 gives, at "
-                             "approximately 110kbps a smaller filesize and significantly better fidelity "
-                             "than .mp3 compression at 128kbps."
-                             "<p><em>This explanation is based on the one from the www.vorbis.com FAQ.</em>");
-
-    QToolTip::add( w->m_radioQualityLevel, ttQuality );
-    QToolTip::add( w->m_labelQualityLevel, ttQuality );
-    QToolTip::add( w->m_slideQualityLevel, ttQuality );
-    w->m_radioQualityLevel->setWhatsThis( wsQuality );
-    w->m_labelQualityLevel->setWhatsThis( wsQuality );
-    w->m_slideQualityLevel->setWhatsThis( wsQuality );
-
-
-    Q3HBoxLayout* lay = new Q3HBoxLayout( this );
-    lay->setMargin( 0 );
-
-    lay->addWidget( w );
-
-    connect( w->m_slideQualityLevel, SIGNAL(valueChanged(int)),
-             this, SLOT(slotQualityLevelChanged(int)) );
-
-    slotQualityLevelChanged( 4 );
-}
-
-
-K3bOggVorbisEncoderSettingsWidget::~K3bOggVorbisEncoderSettingsWidget()
-{
-}
-
-
-void K3bOggVorbisEncoderSettingsWidget::slotQualityLevelChanged( int val )
-{
-    w->m_labelQualityLevel->setText( QString::number(val) + " "
-                                     + i18n("(targetted VBR of %1)",s_rough_average_quality_level_bitrates[val+1]) );
-}
-
-
-void K3bOggVorbisEncoderSettingsWidget::loadConfig()
-{
-    KConfig* c = k3bcore->config();
-
-    KConfigGroup grp(c, "K3bOggVorbisEncoderPlugin" );
-
-    if( grp.readEntry( "manual bitrate", false ) )
-        w->m_radioManual->setChecked(true);
-    else
-        w->m_radioQualityLevel->setChecked(true);
-    w->m_slideQualityLevel->setValue( grp.readEntry( "quality level", 4 ) );
-    w->m_inputBitrateUpper->setValue( grp.readEntry( "bitrate upper", -1 ) );
-    w->m_checkBitrateUpper->setChecked( grp.readEntry( "bitrate upper", -1 ) != -1 );
-    w->m_inputBitrateNominal->setValue( grp.readEntry( "bitrate nominal", -1 ) );
-    w->m_checkBitrateNominal->setChecked( grp.readEntry( "bitrate nominal", -1 ) != -1 );
-    w->m_inputBitrateLower->setValue( grp.readEntry( "bitrate lower", -1 ) );
-    w->m_checkBitrateLower->setChecked( grp.readEntry( "bitrate lower", -1 ) != -1 );
-    //  w->m_inputSamplerate->setValue( c->readEntry( "samplerate", 44100 ) );
-}
-
-
-void K3bOggVorbisEncoderSettingsWidget::saveConfig()
-{
-    KConfig* c = k3bcore->config();
-
-    KConfigGroup grp(c,"K3bOggVorbisEncoderPlugin" );
-
-    grp.writeEntry( "manual bitrate", w->m_radioManual->isChecked() );
-    grp.writeEntry( "quality level", w->m_slideQualityLevel->value() );
-    grp.writeEntry( "bitrate upper", w->m_checkBitrateUpper->isChecked() ? w->m_inputBitrateUpper->value() : -1 );
-    grp.writeEntry( "bitrate nominal", w->m_checkBitrateNominal->isChecked() ? w->m_inputBitrateNominal->value() : -1 );
-    grp.writeEntry( "bitrate lower", w->m_checkBitrateLower->isChecked() ? w->m_inputBitrateLower->value() : -1 );
-    //  c->writeEntry( "samplerate", w->m_inputSamplerate->value() );
-}
-
-
 QString K3bOggVorbisEncoder::fileTypeComment( const QString& ) const
 {
     return i18n("Ogg-Vorbis");
@@ -540,12 +441,5 @@ long long K3bOggVorbisEncoder::fileSize( const QString&, const K3b::Msf& msf ) c
         return (msf.totalFrames()/75) * grp.readEntry( "bitrate nominal", 160 ) * 1000 / 8;
     }
 }
-
-
-K3bPluginConfigWidget* K3bOggVorbisEncoder::createConfigWidget( QWidget* parent ) const
-{
-    return new K3bOggVorbisEncoderSettingsWidget( parent );
-}
-
 
 #include "k3boggvorbisencoder.moc"

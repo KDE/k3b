@@ -39,7 +39,7 @@
     </spacer>
    </item>
    <item row="1" column="0" colspan="2" >
-    <widget class="K3bListView" native="1" name="m_viewPlugins" />
+    <widget class="QListView" native="1" name="m_viewPlugins" />
    </item>
    <item row="0" column="0" colspan="2" >
     <widget class="QLabel" name="textLabel1" >
@@ -54,16 +54,6 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <customwidgets>
-  <customwidget>
-   <class>K3bListView</class>
-   <extends>QWidget</extends>
-   <header location="global" >k3blistview.h</header>
-  </customwidget>
- </customwidgets>
- <includes>
-  <include location="local" >k3blistview.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

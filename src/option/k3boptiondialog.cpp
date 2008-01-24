@@ -68,7 +68,6 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent )
     m_advancedOptionTab->readSettings();
     m_miscOptionTab->readSettings();
     m_notifyOptionTab->readSettings();
-    m_pluginOptionTab->readSettings();
     m_themeOptionTab->readSettings();
 
     // if we don't do this the dialog start really huge

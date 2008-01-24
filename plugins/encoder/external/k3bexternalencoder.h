@@ -16,13 +16,9 @@
 #ifndef _K3B_EXTERNAL_ENCODER_H_
 #define _K3B_EXTERNAL_ENCODER_H_
 
-
 #include <k3baudioencoder.h>
 
-
-class base_K3bExternalEncoderConfigWidget;
 class K3Process;
-
 
 class K3bExternalEncoder : public K3bAudioEncoder
 {
@@ -38,8 +34,6 @@ public:
 
     int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-    K3bPluginConfigWidget* createConfigWidget( QWidget* parent ) const;
-
     /**
      * reimplemented since the external program is intended to write the file
      * TODO: allow writing to stdout.
@@ -49,7 +43,7 @@ public:
 
     class Command;
 
-    private slots:
+private Q_SLOTS:
     void slotExternalProgramFinished( K3Process* );
     void slotExternalProgramOutputLine( const QString& );
 
@@ -63,7 +57,5 @@ private:
     class Private;
     Private* d;
 };
-
-K3B_EXPORT_PLUGIN(k3bexternalencoder, K3bExternalEncoder)
 
 #endif

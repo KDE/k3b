@@ -144,23 +144,24 @@ int K3bPluginManager::pluginSystemVersion() const
 
 int K3bPluginManager::execPluginDialog( K3bPlugin* plugin, QWidget* parent, const char* name )
 {
-    KDialog dlg( parent );
-    dlg.setCaption( i18n("Configure plugin %1", plugin->pluginInfo().name() ) );
+//     KDialog dlg( parent );
+//     dlg.setCaption( i18n("Configure plugin %1", plugin->pluginInfo().name() ) );
 
-    K3bPluginConfigWidget* configWidget = plugin->createConfigWidget( &dlg );
-    if( configWidget ) {
-        dlg.setMainWidget( configWidget );
-        connect( &dlg, SIGNAL(applyClicked()), configWidget, SLOT(saveConfig()) );
-        connect( &dlg, SIGNAL(okClicked()), configWidget, SLOT(saveConfig()) );
-        configWidget->loadConfig();
-        int r = dlg.exec();
-        delete configWidget;
-        return r;
-    }
-    else {
-        KMessageBox::sorry( parent, i18n("No settings available for plugin %1.", plugin->pluginInfo().name() ) );
-        return 0;
-    }
+//     K3bPluginConfigWidget* configWidget = plugin->createConfigWidget( &dlg );
+//     if( configWidget ) {
+//         dlg.setMainWidget( configWidget );
+//         connect( &dlg, SIGNAL(applyClicked()), configWidget, SLOT(saveConfig()) );
+//         connect( &dlg, SIGNAL(okClicked()), configWidget, SLOT(saveConfig()) );
+//         configWidget->loadConfig();
+//         int r = dlg.exec();
+//         delete configWidget;
+//         return r;
+//     }
+//     else {
+//         KMessageBox::sorry( parent, i18n("No settings available for plugin %1.", plugin->pluginInfo().name() ) );
+//         return 0;
+//     }
+#warning FIXME: use KService::kcmServices to get the config widget for a plugin as done in KPluginSelector
 }
 
 #include "k3bpluginmanager.moc"

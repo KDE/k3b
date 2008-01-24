@@ -17,7 +17,6 @@
 
 #include "k3bexternalencoder.h"
 #include "k3bexternalencodercommand.h"
-#include "k3bexternalencoderconfigwidget.h"
 
 #include <k3bprocess.h>
 #include <k3bcore.h>
@@ -35,6 +34,9 @@
 
 #include <sys/types.h>
 #include <sys/wait.h>
+
+
+K3B_EXPORT_PLUGIN(k3bexternalencoder, K3bExternalEncoder)
 
 
 
@@ -368,12 +370,5 @@ QString K3bExternalEncoder::fileTypeComment( const QString& ext ) const
 {
     return commandByExtension( ext ).name;
 }
-
-
-K3bPluginConfigWidget* K3bExternalEncoder::createConfigWidget( QWidget* parent ) const
-{
-    return new K3bExternalEncoderSettingsWidget( parent );
-}
-
 
 #include "k3bexternalencoder.moc"

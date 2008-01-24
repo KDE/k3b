@@ -18,16 +18,6 @@
 
 
 #include <k3baudioencoder.h>
-#include <k3bpluginconfigwidget.h>
-#include "ui_base_k3boggvorbisencodersettingswidget.h"
-
-class base_K3bOggVorbisEncoderSettingsWidget : public QWidget, public Ui::base_K3bOggVorbisEncoderSettingsWidget
-{
-public:
-    base_K3bOggVorbisEncoderSettingsWidget( QWidget *parent ) : QWidget( parent ) {
-        setupUi( this );
-    }
-};
 
 class K3bOggVorbisEncoder : public K3bAudioEncoder
 {
@@ -45,8 +35,6 @@ public:
 
     int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-    K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0) const; 
-
 private:
     void loadConfig();
     void finishEncoderInternal();
@@ -60,26 +48,6 @@ private:
 
     class Private;
     Private* d;
-};
-
-
-class K3bOggVorbisEncoderSettingsWidget : public K3bPluginConfigWidget
-{
-    Q_OBJECT
-
-public:
-    K3bOggVorbisEncoderSettingsWidget( QWidget* parent = 0 );
-    ~K3bOggVorbisEncoderSettingsWidget();
-
-    public slots:
-    void loadConfig();
-    void saveConfig();
-
-    private slots:
-    void slotQualityLevelChanged( int val );
-
-private:
-    base_K3bOggVorbisEncoderSettingsWidget* w;
 };
 
 K3B_EXPORT_PLUGIN(k3boggvorbisdecoder, K3bOggVorbisEncoder)
