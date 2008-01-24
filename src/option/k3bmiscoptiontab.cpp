@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,11 +38,11 @@
 
 
 K3bMiscOptionTab::K3bMiscOptionTab(QWidget *parent )
-    : base_K3bMiscOptionTab(parent)
+    : QWidget(parent)
 {
+    setupUi( this );
+
     m_editTempDir->setMode( KFile::Directory );
-    connect( m_buttonConfigureAudioOutput, SIGNAL(clicked()),
-             this, SLOT(slotConfigureAudioOutput()) );
 
     m_comboActionDialogSettings->insertItem( K3bInteractionDialog::LOAD_K3B_DEFAULTS,
                                              i18n("Default Settings"),

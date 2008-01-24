@@ -17,7 +17,7 @@
 #include "k3boptiondialog.h"
 #include <k3bcore.h>
 #include "k3bdeviceoptiontab.h"
-#include "k3bburningoptiontab.h"
+#include "k3badvancedoptiontab.h"
 #include "k3bexternalbinoptiontab.h"
 #include "k3bmiscoptiontab.h"
 #include "k3bthemeoptiontab.h"
@@ -60,12 +60,12 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent )
     setupNotifyPage();
     setupPluginPage();
     setupThemePage();
-    setupBurningPage();
     setupCddbPage();
+    setupAdvancedPage();
 
     m_externalBinOptionTab->readSettings();
     m_deviceOptionTab->readDevices();
-    m_burningOptionTab->readSettings();
+    m_advancedOptionTab->readSettings();
     m_miscOptionTab->readSettings();
     m_notifyOptionTab->readSettings();
     m_pluginOptionTab->readSettings();
@@ -106,7 +106,7 @@ void K3bOptionDialog::slotApply()
 bool K3bOptionDialog::saveSettings()
 {
     m_deviceOptionTab->saveDevices();
-    m_burningOptionTab->saveSettings();
+    m_advancedOptionTab->saveSettings();
     m_externalBinOptionTab->saveSettings();
     m_notifyOptionTab->saveSettings();
 
@@ -124,10 +124,10 @@ void K3bOptionDialog::slotDefault()
 }
 
 
-void K3bOptionDialog::setupBurningPage()
+void K3bOptionDialog::setupAdvancedPage()
 {
-    m_burningOptionTab = new K3bBurningOptionTab;
-    KPageWidgetItem* item = addPage( m_burningOptionTab, i18n("Advanced") );
+    m_advancedOptionTab = new K3bAdvancedOptionTab;
+    KPageWidgetItem* item = addPage( m_advancedOptionTab, i18n("Advanced") );
     item->setHeader( i18n("Advanced Settings") );
     item->setIcon( KIcon( "media-optical-recordable" ) );
 }

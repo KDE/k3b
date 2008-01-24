@@ -35,13 +35,39 @@ public:
             valueIndexMap.insert( values[i].first, i );
         }
     }
+
+    bool haveCustomWhatsThis() const {
+        for ( int i = 0; i < values.count(); ++i ) {
+            if ( !values[i].second.isEmpty() ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void updateWhatsThis() {
+        if ( haveCustomWhatsThis() ) {
+            QString ws( topWhatsThis );
+            for( int i = 0; i < values.count(); ++i ) {
+                ws += "<p><b>" + q->text( i ) + "</b><br>";
+                ws += values[i].second;
+            }
+            ws += "<p>" + bottomWhatsThis;
+
+            q->setWhatsThis( ws );
+        }
+    }
+
+    K3bIntMapComboBox* q;
 };
 
 
 K3bIntMapComboBox::K3bIntMapComboBox( QWidget* parent )
-    : KComboBox( parent )
+    : QComboBox( parent ),
+      d( new Private() )
 {
-    d = new Private;
+    d->q = this;
+
     connect( this, SIGNAL(highlighted(int)),
              this, SLOT(slotItemHighlighted(int)) );
     connect( this, SIGNAL(activated(int)),
@@ -57,9 +83,9 @@ K3bIntMapComboBox::~K3bIntMapComboBox()
 
 int K3bIntMapComboBox::selectedValue() const
 {
-    if( d->values.count() > KComboBox::currentIndex() &&
-        KComboBox::currentIndex() >= 0 )
-        return d->values[KComboBox::currentIndex()].first;
+    if( d->values.count() > QComboBox::currentIndex() &&
+        QComboBox::currentIndex() >= 0 )
+        return d->values[QComboBox::currentIndex()].first;
     else
         return 0;
 }
@@ -68,7 +94,7 @@ int K3bIntMapComboBox::selectedValue() const
 void K3bIntMapComboBox::setSelectedValue( int value )
 {
     if( d->valueIndexMap.contains( value ) ) {
-        KComboBox::setCurrentIndex( d->valueIndexMap[value] );
+        QComboBox::setCurrentIndex( d->valueIndexMap[value] );
     }
 }
 
@@ -84,7 +110,7 @@ void K3bIntMapComboBox::clear()
     d->valueIndexMap.clear();
     d->values.clear();
 
-    KComboBox::clear();
+    QComboBox::clear();
 }
 
 
@@ -93,36 +119,23 @@ bool K3bIntMapComboBox::insertItem( int value, const QString& text, const QStrin
     if( d->valueIndexMap.contains( value ) )
         return false;
 
-    if ( index < 0 || index > KComboBox::count() ) {
-        index = KComboBox::count();
+    if ( index < 0 || index > QComboBox::count() ) {
+        index = QComboBox::count();
     }
 
     d->values.insert( index, qMakePair<int, QString>( value, description ) );
     d->buildValueIndexMap();
 
-    KComboBox::insertItem( index, text );
+    QComboBox::insertItem( index, text );
 
-    updateWhatsThis();
+    d->updateWhatsThis();
 
     // select a default value. This is always wanted in K3b
-    if ( KComboBox::currentIndex() < 0 ) {
+    if ( QComboBox::currentIndex() < 0 ) {
         setSelectedValue( d->values[0].first );
     }
 
     return true;
-}
-
-
-void K3bIntMapComboBox::updateWhatsThis()
-{
-    QString ws( d->topWhatsThis );
-    for( int i = 0; i < d->values.count(); ++i ) {
-        ws += "<p><b>" + KComboBox::text( i ) + "</b><br>";
-        ws += d->values[i].second;
-    }
-    ws += "<p>" + d->bottomWhatsThis;
-
-    setWhatsThis( ws );
 }
 
 
@@ -142,7 +155,7 @@ void K3bIntMapComboBox::addGlobalWhatsThisText( const QString& top, const QStrin
 {
     d->topWhatsThis = top;
     d->bottomWhatsThis = bottom;
-    updateWhatsThis();
+    d->updateWhatsThis();
 }
 
 #include "k3bintmapcombobox.moc"

@@ -15,7 +15,7 @@
 #ifndef _K3B_INT_MAP_COMBOBOX_H_
 #define _K3B_INT_MAP_COMBOBOX_H_
 
-#include <kcombobox.h>
+#include <QtGui/QComboBox>
 
 #include "k3b_export.h"
 
@@ -26,7 +26,7 @@
  * The K3bIntMapComboBox will create a WhatsThis help automatically from
  * the description texts (if all are set). The ToolTip has to be set manually.
  */
-class LIBK3B_EXPORT K3bIntMapComboBox : public KComboBox
+class LIBK3B_EXPORT K3bIntMapComboBox : public QComboBox
 {
     Q_OBJECT
 
@@ -75,8 +75,6 @@ private Q_SLOTS:
     void slotItemHighlighted( int );
 
 private:
-    void updateWhatsThis();
-
     class Private;
     Private* d;
 };

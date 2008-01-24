@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,27 +21,19 @@
 class QCheckBox;
 class KUrlRequester;
 
-class base_K3bMiscOptionTab : public QWidget, public Ui::base_K3bMiscOptionTab
-{
-public:
-  base_K3bMiscOptionTab( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
-};
-
 /**
-  *@author Sebastian Trueg
-  */
-class K3bMiscOptionTab : public base_K3bMiscOptionTab
+ *@author Sebastian Trueg
+ */
+class K3bMiscOptionTab : public QWidget, public Ui::base_K3bMiscOptionTab
 {
-   Q_OBJECT
+    Q_OBJECT
 
- public: 
-  K3bMiscOptionTab(QWidget *parent=0);
-  ~K3bMiscOptionTab();
+public: 
+    K3bMiscOptionTab(QWidget *parent=0);
+    ~K3bMiscOptionTab();
 
-  void readSettings();
-  bool saveSettings();
+    void readSettings();
+    bool saveSettings();
 };
 
 #endif

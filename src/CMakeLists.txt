@@ -154,7 +154,7 @@ kde4_add_ui_files(k3b_rip_SRCS
 set(k3b_option_SRCS
   option/k3bmiscoptiontab.cpp 
   option/k3bexternalbinoptiontab.cpp 
-  option/k3bburningoptiontab.cpp 
+  option/k3badvancedoptiontab.cpp 
   option/k3boptiondialog.cpp 
   option/k3bdeviceoptiontab.cpp 
   option/k3bnotifyoptiontab.cpp 

@@ -20,7 +20,7 @@
 #include <kpagedialog.h>
 
 class K3bDeviceOptionTab;
-class K3bBurningOptionTab;
+class K3bAdvancedOptionTab;
 class K3bExternalBinOptionTab;
 class K3bMiscOptionTab;
 class K3bNotifyOptionTab;
@@ -41,7 +41,7 @@ public:
 
     // FIXME: add the missing ones, add slot to open to a specific one
     enum ConfigPage {
-        Burning = 0,
+        Advanced = 0,
         Devices = 1,
         Programs = 2,
         Cddb = 3
@@ -63,9 +63,9 @@ private:
     K3bDeviceOptionTab* m_deviceOptionTab;
     void setupDevicePage();
 
-    // burning tab
-    void setupBurningPage();
-    K3bBurningOptionTab* m_burningOptionTab;
+    // advanced tab
+    void setupAdvancedPage();
+    K3bAdvancedOptionTab* m_advancedOptionTab;
 
     // misc options
     K3bMiscOptionTab* m_miscOptionTab;

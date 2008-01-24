@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,7 +12,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include "k3bburningoptiontab.h"
+#include "k3badvancedoptiontab.h"
 #include <k3bmsfedit.h>
 #include <k3bcore.h>
 #include <k3bstdguiitems.h>
@@ -38,19 +38,19 @@
 #include <klineedit.h>
 
 
-K3bBurningOptionTab::K3bBurningOptionTab( QWidget* parent )
+K3bAdvancedOptionTab::K3bAdvancedOptionTab( QWidget* parent )
     : QWidget( parent )
 {
     setupGui();
 }
 
 
-K3bBurningOptionTab::~K3bBurningOptionTab()
+K3bAdvancedOptionTab::~K3bAdvancedOptionTab()
 {
 }
 
 
-void K3bBurningOptionTab::setupGui()
+void K3bAdvancedOptionTab::setupGui()
 {
     QGridLayout* groupAdvancedLayout = new QGridLayout( this );
     groupAdvancedLayout->setAlignment( Qt::AlignTop );
@@ -148,7 +148,7 @@ void K3bBurningOptionTab::setupGui()
 }
 
 
-void K3bBurningOptionTab::readSettings()
+void K3bAdvancedOptionTab::readSettings()
 {
     KConfigGroup c( k3bcore->config(), "General Options" );
 
@@ -165,7 +165,7 @@ void K3bBurningOptionTab::readSettings()
 }
 
 
-void K3bBurningOptionTab::saveSettings()
+void K3bAdvancedOptionTab::saveSettings()
 {
     KConfigGroup c( k3bcore->config(), "General Options" );
 
@@ -184,7 +184,7 @@ void K3bBurningOptionTab::saveSettings()
 }
 
 
-void K3bBurningOptionTab::slotSetDefaultBufferSizes( bool b )
+void K3bAdvancedOptionTab::slotSetDefaultBufferSizes( bool b )
 {
     if( !b ) {
         m_editWritingBufferSize->setValue( 4 );
@@ -192,4 +192,4 @@ void K3bBurningOptionTab::slotSetDefaultBufferSizes( bool b )
 }
 
 
-#include "k3bburningoptiontab.moc"
+#include "k3badvancedoptiontab.moc"
