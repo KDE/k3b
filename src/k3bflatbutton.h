@@ -24,7 +24,6 @@
 
 class QEvent;
 class QMouseEvent;
-class QPainter;
 class QAction;
 class QPaintEvent;
 

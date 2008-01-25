@@ -18,8 +18,6 @@
 
 #include "ui_base_k3bmiscoptiontab.h"
 
-class QCheckBox;
-class KUrlRequester;
 
 /**
  *@author Sebastian Trueg

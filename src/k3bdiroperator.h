@@ -19,8 +19,6 @@
 #include <kdiroperator.h>
 #include <kbookmarkmanager.h>
 
-class Q3IconViewItem;
-class Q3ListViewItem;
 class KBookmarkMenu;
 class KActionMenu;
 

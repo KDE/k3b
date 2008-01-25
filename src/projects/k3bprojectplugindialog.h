@@ -20,7 +20,6 @@
 class K3bProjectPlugin;
 class K3bProjectPluginGUIBase;
 class K3bDoc;
-class KConfigBase;
 
 
 class K3bProjectPluginDialog : public K3bInteractionDialog

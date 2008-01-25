@@ -18,7 +18,6 @@
 #include <kdialog.h>
 
 class K3bDataDoc;
-class K3bListView;
 class K3bMedium;
 namespace K3bDevice {
     class Device;

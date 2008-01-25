@@ -19,17 +19,12 @@
 #include <k3bview.h>
 
 class K3bDataDoc;
-class K3bDataItem;
-class K3bFileItem;
 class K3bDirItem;
 class K3bDataDirTreeView;
 class K3bDataFileView;
 class QLineEdit;
 
 
-namespace KIO {
-    class Job;
-}
 namespace K3bDevice {
     class Device;
 }

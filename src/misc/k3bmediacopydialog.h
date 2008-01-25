@@ -20,7 +20,6 @@
 
 namespace K3bDevice {
     class Device;
-    class DeviceManager;
 }
 
 class K3bWriterSelectionWidget;
@@ -30,7 +29,6 @@ class QCheckBox;
 class QSpinBox;
 class QComboBox;
 class K3bWritingModeWidget;
-class Q3ButtonGroup;
 class Q3GroupBox;
 
 class K3bMediaCopyDialog : public K3bInteractionDialog

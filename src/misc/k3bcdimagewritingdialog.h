@@ -28,8 +28,6 @@ class QCheckBox;
 class K3bWriterSelectionWidget;
 class QLabel;
 class KUrl;
-class K3ActiveLabel;
-class QProgressBar;
 class K3bDataModeWidget;
 class K3bWritingModeWidget;
 class K3bTempDirSelectionWidget;

@@ -35,7 +35,6 @@
 #include <kurl.h>
 #include <kvbox.h>
 
-class KVBox;
 
 
 // forward declaration of the K3b classes
@@ -44,11 +43,9 @@ class K3bView;
 class K3bDirView;
 class K3bExternalBinManager;
 class K3bOptionDialog;
-class K3bJob;
 class K3bProjectTabWidget;
 class KSystemTray;
 class K3bStatusBarManager;
-class K3bProjectInterface;
 class K3bThemedHeader;
 class KToggleAction;
 class KAction;

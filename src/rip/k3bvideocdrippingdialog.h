@@ -24,12 +24,8 @@
 #include <k3bdiskinfo.h>
 #include "k3bvideocdrippingoptions.h"
 
-class K3ListView;
 class QCheckBox;
 class QLabel;
-class QSpinBox;
-class QComboBox;
-class QToolButton;
 class KUrlRequester;
 class K3bTempDirSelectionWidget;
 

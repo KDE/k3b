@@ -41,8 +41,6 @@ class QFocusEvent;
 class QMouseEvent;
 class QDragMoveEvent;
 class QTimer;
-class KMenu;
-class QPainter;
 class K3bListViewItemAnimator;
 class K3bAudioTrackPlayer;
 

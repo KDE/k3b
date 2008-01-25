@@ -18,7 +18,6 @@
 
 #include "ui_base_k3bcddbpatternwidget.h"
 
-class KConfigBase;
 
 class base_K3bCddbPatternWidget : public QWidget, public Ui::base_K3bCddbPatternWidget
 {

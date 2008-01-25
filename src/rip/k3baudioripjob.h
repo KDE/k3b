@@ -24,7 +24,6 @@
 
 
 class K3bAudioEncoder;
-class K3bCdparanoiaLib;
 namespace K3bDevice {
     class Device;
 }

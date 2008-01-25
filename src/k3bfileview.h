@@ -21,7 +21,6 @@
 
 
 class K3bDirOperator;
-class Q3DragObject;
 class KUrl;
 class KFileFilterCombo;
 class KFileItem;

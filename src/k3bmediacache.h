@@ -33,7 +33,6 @@ namespace K3bDevice {
     class DeviceManager;
 }
 
-class QCustomEvent;
 
 
 /**

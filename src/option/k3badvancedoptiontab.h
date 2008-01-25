@@ -22,12 +22,7 @@
 
 class QCheckBox;
 class QLabel;
-class Q3GroupBox;
-class QComboBox;
-class QString;
-class QSpinBox;
 class KIntNumInput;
-class QRadioButton;
 
 
 

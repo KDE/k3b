@@ -23,15 +23,9 @@
 
 
 class K3bListView;
-class QCheckBox;
-class QSpinBox;
-class QComboBox;
 class K3bCddbPatternWidget;
-class QToolButton;
 class K3bAudioConvertingOptionWidget;
 class K3bCddbResultEntry;
-class K3bAudioConvertingJob;
-class K3bJobHandler;
 class K3bAudioDoc;
 
 

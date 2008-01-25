@@ -29,10 +29,7 @@
 class K3bVcdTrack;
 class QLabel;
 class QCheckBox;
-class QComboBox;
 class Q3GroupBox;
-class QRadioButton;
-class Q3ButtonGroup;
 class KSqueezedTextLabel;
 
 #ifdef __GNUC__

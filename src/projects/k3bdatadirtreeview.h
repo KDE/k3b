@@ -26,7 +26,6 @@
 #include <QDragMoveEvent>
 #include <QDragLeaveEvent>
 
-class K3bDataView;
 class K3bDataDoc;
 class K3bDataDirViewItem;
 class K3bDirItem;

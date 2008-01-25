@@ -22,7 +22,6 @@
 #include <kio/global.h>
 #include <kconfiggroup.h>
 
-class QTimer;
 class QLabel;
 class KUrlRequester;
 

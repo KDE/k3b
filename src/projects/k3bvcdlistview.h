@@ -27,7 +27,6 @@
 class QDragEnterEvent;
 class Q3DragObject;
 class QDropEvent;
-class QTimer;
 class KMenu;
 class KAction;
 class K3bVcdDoc;
@@ -35,7 +34,6 @@ class K3bView;
 class K3bVcdTrack;
 class KActionCollection;
 class K3bVcdListViewItem;
-class QPainter;
 
 
 class K3bVcdListView : public K3bListView

@@ -18,9 +18,6 @@
 //Added by qt3to4:
 #include <QLabel>
 
-class K3bTimeoutWidget;
-class K3ActiveLabel;
-class KPushButton;
 class QLabel;
 
 

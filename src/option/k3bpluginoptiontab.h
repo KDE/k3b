@@ -17,7 +17,6 @@
 
 #include "ui_base_k3bpluginoptiontab.h"
 
-class K3bPluginModel;
 
 class K3bPluginOptionTab : public QWidget, public Ui::base_K3bPluginOptionTab
 {

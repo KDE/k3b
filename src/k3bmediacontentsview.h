@@ -20,7 +20,6 @@
 #include <k3bthememanager.h>
 #include <k3bmedium.h>
 
-class K3bThemedHeader;
 
 
 /**

@@ -19,7 +19,6 @@
 
 
 class K3bAudioTrack;
-class K3bThreadJob;
 class QWidget;
 
 

@@ -21,16 +21,9 @@
 #include <QLabel>
 
 class QCheckBox;
-class KComboBox;
 class Q3GroupBox;
 class QLabel;
-class QToolButton;
-class QRadioButton;
-class Q3ButtonGroup;
-class K3bWriterSelectionWidget;
-class K3bTempDirSelectionWidget;
 class K3bDataDoc;
-class KLineEdit;
 class K3bDataImageSettingsWidget;
 class K3bDataModeWidget;
 class K3bDataMultiSessionCombobox;

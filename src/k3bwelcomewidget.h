@@ -40,7 +40,6 @@ class K3bFlatButton;
 class QPaintEvent;
 class QResizeEvent;
 class Q3SimpleRichText;
-class KConfigBase;
 class QMouseEvent;
 class QShowEvent;
 

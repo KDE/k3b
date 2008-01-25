@@ -18,7 +18,6 @@
 #include <qcombobox.h>
 #include <k3bdatadoc.h>
 
-class KConfigBase;
 
 
 class K3bDataMultiSessionCombobox : public QComboBox

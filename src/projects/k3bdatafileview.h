@@ -39,7 +39,6 @@ class KAction;
 class K3bDataDirTreeView;
 class K3bDataDirViewItem;
 class K3bView;
-class QPainter;
 class QDragMoveEvent;
 class QDragLeaveEvent;
 

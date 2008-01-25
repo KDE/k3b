@@ -21,7 +21,6 @@
 
 class QString;
 class K3Process;
-class QDataStream;
 
 class K3bVideoCdRip : public K3bJob
 {

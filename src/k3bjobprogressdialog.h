@@ -33,16 +33,12 @@
 
 class K3ListView;
 class QFrame;
-class Q3GroupBox;
 class QLabel;
-class Q3ListViewItem;
 class QProgressBar;
-class QPushButton;
 class QTimer;
 class K3bJob;
 class KSqueezedTextLabel;
 class QCloseEvent;
-class Q3GridLayout;
 class QKeyEvent;
 class K3bJobProgressOSD;
 class K3bThemedLabel;

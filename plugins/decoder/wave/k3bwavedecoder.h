@@ -23,7 +23,6 @@
 #include <q3cstring.h>
 
 
-class QFile;
 
 
 class LIBK3B_EXPORT K3bWaveDecoderFactory : public K3bAudioDecoderFactory

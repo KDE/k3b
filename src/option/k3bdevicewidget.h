@@ -22,18 +22,13 @@
 #include "k3bdevice.h"
 #include "k3bdevicemanager.h"
 
-class QComboBox;
 class QLabel;
-class Q3GroupBox;
 class QPushButton;
-class QCheckBox;
 class K3bListView;
 class QString;
-class KIntNumInput;
 class QFrame;
 class Q3ListViewItem;
 class QString;
-class QLineEdit;
 
 
 /**
@@ -60,8 +55,7 @@ Q_SIGNALS:
 
 private:
     class PrivateTempDevice;
-    class PrivateDeviceViewItem1;
-
+    class PrivateDeviceViewItem1;    
     /** list to save changes to the devices before applying */
     QList<PrivateTempDevice*> m_tempDevices;
 

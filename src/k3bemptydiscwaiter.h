@@ -25,7 +25,6 @@
 
 namespace K3bDevice {
     class Device;
-    class DeviceHandler;
 }
 
 

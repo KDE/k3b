@@ -25,10 +25,6 @@ namespace K3bDevice {
   class DiskInfoDetector;
 }
 
-namespace KIO {
-  class Job;
-}
-
 #include <k3bdevicemanager.h>
 
 

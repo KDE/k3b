@@ -19,11 +19,8 @@
 #include "k3bprojectburndialog.h"
 
 class QCheckBox;
-class K3bWriterSelectionWidget;
-class K3bTempDirSelectionWidget;
 class K3bMixedDoc;
 class K3bDataImageSettingsWidget;
-class Q3ButtonGroup;
 class QRadioButton;
 class K3bAudioCdTextWidget;
 class K3bDataModeWidget;

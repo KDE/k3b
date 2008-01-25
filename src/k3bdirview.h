@@ -36,15 +36,10 @@ class K3bDiskInfoView;
 class Q3ScrollView;
 class QLabel;
 class KConfig;
-class K3bDeviceBranch;
 class KConfigGroup;
 namespace K3bDevice {
   class Device;
   class DiskInfo;
-}
-
-namespace KIO {
-  class Job;
 }
 
 

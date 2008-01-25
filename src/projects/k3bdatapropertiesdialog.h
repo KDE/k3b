@@ -26,7 +26,6 @@
 class K3bDataItem;
 
 class KLineEdit;
-class QPushButton;
 class QLabel;
 class QCheckBox;
 

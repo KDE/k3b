@@ -21,13 +21,8 @@
 #include <k3bview.h>
 
 class K3bVcdListView;
-class K3bVcdListViewItem;
 class QWidget;
 class K3bVcdDoc;
-class K3bVcdTrack;
-class Q3ListViewItem;
-class K3ListView;
-class K3bVcdBurnDialog;
 class K3bProjectBurnDialog;
 
 

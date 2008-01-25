@@ -169,7 +169,6 @@ Q_SIGNALS:
 
 private:
     class Range;
-    class RangeList;
     class Marker;
     class ToolTip;
 

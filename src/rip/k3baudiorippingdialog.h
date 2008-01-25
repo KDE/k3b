@@ -35,7 +35,6 @@ class QCheckBox;
 class QSpinBox;
 class QComboBox;
 class K3bCddbPatternWidget;
-class QToolButton;
 class K3bAudioConvertingOptionWidget;
 
 

@@ -28,11 +28,7 @@ class QRadioButton;
 class QLabel;
 class QLineEdit;
 class Q3MultiLineEdit;
-class QToolButton;
-class K3bWriterSelectionWidget;
-class K3bTempDirSelectionWidget;
 class K3bVcdDoc;
-class K3bVcdOptions;
 
 class K3bVcdBurnDialog : public K3bProjectBurnDialog
 {

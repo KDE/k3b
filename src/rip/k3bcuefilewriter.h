@@ -21,10 +21,6 @@
 #include <k3btoc.h>
 #include <k3bcdtext.h>
 
-namespace K3bDevice {
-  class TrackCdText;
-}
-
 /**
  * Write a CDRWIN cue file.
  * For now this writer only supports audio CDs

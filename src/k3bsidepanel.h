@@ -22,7 +22,6 @@
 class K3bMainWindow;
 class K3bFileTreeView;
 class QFrame;
-class KAction;
 
 
 class K3bSidePanel : public QToolBox

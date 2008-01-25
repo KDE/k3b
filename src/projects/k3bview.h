@@ -28,7 +28,6 @@
 #include <kurl.h>
 
 class K3bDoc;
-class KActionCollection;
 class K3bFillStatusDisplay;
 class K3bProjectBurnDialog;
 class K3bProjectPlugin;

@@ -20,7 +20,6 @@
 
 class K3bMovixDoc;
 class K3bMovixBin;
-class KConfigBase;
 
 class base_K3bMovixOptionsWidget : public QWidget, public Ui::base_K3bMovixOptionsWidget
 {

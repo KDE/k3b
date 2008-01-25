@@ -41,8 +41,7 @@ public:
     bool openFile( const QString& ext, const QString& filename, const K3b::Msf& length );
     void closeFile();
 
-    class Command;
-
+    
 private Q_SLOTS:
     void slotExternalProgramFinished( K3Process* );
     void slotExternalProgramOutputLine( const QString& );

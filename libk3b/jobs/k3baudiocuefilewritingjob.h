@@ -17,10 +17,6 @@
 
 #include <k3bjob.h>
 #include "k3b_export.h"
-class K3bAudioDoc;
-class K3bAudioJob;
-class K3bAudioDecoder;
-class K3bThreadJob;
 namespace K3bDevice {
     class Device;
 }

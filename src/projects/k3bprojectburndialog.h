@@ -31,7 +31,6 @@ class QTabWidget;
 class QSpinBox;
 class Q3VBoxLayout;
 class K3bWritingModeWidget;
-class KConfigBase;
 
 
 /**

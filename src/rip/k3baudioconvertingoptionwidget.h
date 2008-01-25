@@ -21,7 +21,6 @@
 #include <kio/global.h>
 
 class K3bAudioEncoder;
-class KConfigBase;
 
 class base_K3bAudioRippingOptionWidget : public QWidget, public Ui::base_K3bAudioRippingOptionWidget
 {

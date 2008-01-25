@@ -24,7 +24,6 @@ class QStackedWidget ;
 class K3bDataFileView;
 class K3bMixedDirTreeView;
 class K3bAudioTrackView;
-class Q3ListViewItem;
 class K3bDirItem;
 class K3bAudioTrackPlayer;
 
