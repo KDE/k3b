@@ -43,6 +43,8 @@ endif(K3BSETUP_BUILD)
 # apidox
 find_package(Doxygen)
 
+#laurent: removes this line when Doxyfile.cmake will add to svn
+set(DOXYGEN_EXECUTABLE FALSE)
 if(DOXYGEN_EXECUTABLE)
   configure_file(${k3b_SOURCE_DIR}/Doxyfile.cmake ${k3b_BINARY_DIR}/Doxyfile)
 
