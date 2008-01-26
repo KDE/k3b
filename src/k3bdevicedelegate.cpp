@@ -21,6 +21,10 @@
 #include <KIconLoader>
 
 
+// FIXME: Get the whole animated hovering code from KFileItemDelegate and put it into a generic class which we can then reuse here
+//        To keep KFileItemDelegate BC it could simply forward calls to a subclass of the new generic delegate.
+
+
 // A lot of code is from KFileItemDelegate. Sadly this is all hidden in the private stuff
 namespace {
     QPixmap decoration( const QStyleOptionViewItem& option, const QModelIndex& index, const QSize& size )
@@ -81,7 +85,11 @@ QSize K3bDeviceDelegate::sizeHint( const QStyleOptionViewItem& option, const QMo
         mediumFont.setBold( true );
         mediumFont.setPointSize( mediumFont.pointSize()+2 );
 
-        int iconHeight = QFontMetrics( font ).height() + margin + QFontMetrics( blockDeviceFont ).height();
+        QFontMetrics fontM( font );
+        QFontMetrics blockDeviceFontM( blockDeviceFont );
+        QFontMetrics mediumFontM( mediumFont );
+
+        int iconHeight = blockDeviceFontM.height() + margin + mediumFontM.height();
 
         QString text1 = index.data( K3bDeviceModel::Vendor ).toString() + " - " + index.data( K3bDeviceModel::Description ).toString();
 
@@ -89,13 +97,9 @@ QSize K3bDeviceDelegate::sizeHint( const QStyleOptionViewItem& option, const QMo
 
         QString text3 = index.data( Qt::DisplayRole ).toString();
 
-        QFontMetrics fontM( font );
-        QFontMetrics blockDeviceFontM( blockDeviceFont );
-        QFontMetrics mediumFontM( mediumFont );
 
-        return QSize( qMax( iconHeight + margin + qMax( fontM.width( text1 ), blockDeviceFontM.width( text2 ) ),
-                            mediumFontM.width( text3 ) ),
-                      iconHeight + margin + mediumFontM.height() + margin );
+        return QSize( iconHeight + margin + qMax( blockDeviceFontM.width( text1 + " " + text2 ), mediumFontM.width( text3 ) ),
+                      iconHeight + margin );
     }
     else {
         return KFileItemDelegate::sizeHint( option, index );
@@ -109,8 +113,15 @@ void K3bDeviceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
         painter->save();
         painter->setRenderHint(QPainter::Antialiasing);
 
+        // HACK: we erase the branch
+        QRect rect( option.rect );
+        rect.setLeft( 0 );
+
         if ( option.state & QStyle::State_Selected ) {
-            painter->fillRect( option.rect, option.palette.highlight() );
+            painter->fillRect( rect, option.palette.highlight() );
+        }
+        else {
+            painter->fillRect( rect, option.palette.base() );
         }
 
         const int margin = 4;
@@ -132,20 +143,21 @@ void K3bDeviceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
 
         // draw decoration
         QPixmap pix = decoration( option, index, QSize( iconHeight, iconHeight ) );
-        painter->drawPixmap( option.rect.topLeft(), pix );
-
-        // draw fixed device text
-        painter->setFont( font );
-        QString text = index.data( K3bDeviceModel::Vendor ).toString() + " - " + index.data( K3bDeviceModel::Description ).toString();
-        painter->drawText( option.rect.left() + pix.width() + margin, option.rect.top() + fontM.height(), text );
-        painter->setFont( blockDeviceFont );
-        text = index.data( K3bDeviceModel::BlockDevice ).toString();
-        painter->drawText( option.rect.left() + pix.width() + margin, option.rect.top() + fontM.height() + margin + blockDeviceFontM.height(), text );
+        painter->drawPixmap( rect.topLeft(), pix );
 
         // draw medium text
         painter->setFont( mediumFont );
-        text = index.data( Qt::DisplayRole ).toString();
-        painter->drawText( option.rect.left(), option.rect.top() + pix.height() + margin + mediumFontM.height(), text );
+        QString text = index.data( Qt::DisplayRole ).toString();
+        painter->drawText( rect.left() + pix.width() + margin, rect.top() + mediumFontM.height(), text );
+
+        // draw fixed device text
+        painter->setFont( blockDeviceFont );
+        text = index.data( K3bDeviceModel::Vendor ).toString() + " - " + index.data( K3bDeviceModel::Description ).toString();
+        painter->drawText( rect.left() + pix.width() + margin, rect.top() + mediumFontM.height() + margin + blockDeviceFontM.height(), text );
+//         painter->setFont( blockDeviceFont );
+//         text = index.data( K3bDeviceModel::BlockDevice ).toString();
+//         painter->drawText( rect.left() + pix.width() + margin, rect.top() + fontM.height() + margin + blockDeviceFontM.height(), text );
+
 
         painter->restore();
     }
