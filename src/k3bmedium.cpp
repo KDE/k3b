@@ -186,15 +186,15 @@ void K3bMedium::update()
                 d->cdText = d->device->readCdText();
 
                 // Update Cddb information
-                KCDDB::Client cddbClient;
-                cddbClient.setBlockingMode( true );
-                KCDDB::TrackOffsetList trackOffsets;
-                for ( int i = 0; i < d->toc.count(); ++i ) {
-                    trackOffsets.append( d->toc[i].firstSector().lba() );
-                }
-                if ( cddbClient.lookup( trackOffsets ) == KCDDB::Success ) {
-                    d->cddbInfo = cddbClient.lookupResponse().first();
-                }
+//                 KCDDB::Client cddbClient;
+//                 cddbClient.setBlockingMode( true );
+//                 KCDDB::TrackOffsetList trackOffsets;
+//                 for ( int i = 0; i < d->toc.count(); ++i ) {
+//                     trackOffsets.append( d->toc[i].firstSector().lba() );
+//                 }
+//                 if ( cddbClient.lookup( trackOffsets ) == KCDDB::Success ) {
+//                     d->cddbInfo = cddbClient.lookupResponse().first();
+//                 }
             }
         }
 

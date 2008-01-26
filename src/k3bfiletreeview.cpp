@@ -34,6 +34,7 @@
 #include <kfileitem.h>
 #include <kapplication.h>
 #include <kglobalsettings.h>
+#include <KFileItemDelegate>
 
 #include <qdir.h>
 #include <qevent.h>
@@ -271,14 +272,24 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent )
 {
     header()->hide();
 
-//     d->model = new K3bPlacesModel( this );
-//     setModel( d->model );
-//     d->model->addPlace( i18n( "Home" ), KIcon("user-home"), QDir::homeDirPath() );
+    viewport()->setAttribute(Qt::WA_Hover);
+    setSelectionMode(QAbstractItemView::SingleSelection);
 
-    // we always simulate the single click
-    slotSettingsChangedK3b(KGlobalSettings::SETTINGS_MOUSE);
-    if( kapp )
-        connect( kapp, SIGNAL(settingsChanged(int)), SLOT(slotSettingsChangedK3b(int)) );
+    KFileItemDelegate* delegate = new KFileItemDelegate(this);
+    setItemDelegate(delegate);
+
+    d->model = new K3bPlacesModel( this );
+    setModel( d->model );
+
+    // react on K3bPlacesModel::expandToUrl calls
+    connect( d->model, SIGNAL( expand( const QModelIndex& ) ),
+             this, SLOT( slotExpandUrl( const QModelIndex& ) ) );
+
+    // add the default places
+    d->model->addPlace( i18n( "Home" ), KIcon("user-home"), QDir::homeDirPath() );
+    d->model->addPlace( i18n( "Root" ), KIcon("folder-red"), KUrl( "/" ) );
+
+    connect( this, SIGNAL(clicked(const QModelIndex&)), SLOT(slotClicked(const QModelIndex&)) );
 
     initActions();
 }
@@ -312,9 +323,19 @@ void K3bFileTreeView::initActions()
 }
 
 
+void K3bFileTreeView::slotExpandUrl( const QModelIndex& index )
+{
+    kDebug();
+    expand( index );
+    setCurrentIndex( index );
+    scrollTo( index );
+}
+
+
 void K3bFileTreeView::setSelectedUrl( const KUrl& url )
 {
-// FIXME
+    kDebug();
+    d->model->expandToUrl( url );
 }
 
 
@@ -406,17 +427,13 @@ void K3bFileTreeView::setSelectedDevice( K3bDevice::Device* dev )
 // }
 
 
-void K3bFileTreeView::slotSettingsChangedK3b(int category)
+void K3bFileTreeView::slotClicked( const QModelIndex& index )
 {
-    // we force single click like konqueror does. This really should be done in K3FileTreeView
-
-    if( category == KGlobalSettings::SETTINGS_MOUSE ) {
-        disconnect(this, SIGNAL(mouseButtonClicked(int, Q3ListViewItem*, const QPoint &, int)),
-                   this, SLOT(slotMouseButtonClickedK3b(int, Q3ListViewItem*, const QPoint &, int)));
-
-        if( !KGlobalSettings::singleClick() )
-            connect(this, SIGNAL(mouseButtonClicked(int, Q3ListViewItem*, const QPoint &, int)),
-                    this, SLOT(slotMouseButtonClickedK3b(int, Q3ListViewItem*, const QPoint &, int)));
+    if ( K3bDevice::Device* dev = d->model->deviceForIndex( index ) ) {
+        emit activated( dev );
+    }
+    else if ( index.isValid() ) {
+        emit activated( d->model->itemForIndex( index ).url() );
     }
 }
 

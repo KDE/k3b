@@ -40,6 +40,13 @@ public:
     QModelIndex parent( const QModelIndex& index ) const;
     int rowCount( const QModelIndex& parent = QModelIndex() ) const;
 
+    enum DeviceRoles {
+        IsDevice = 1000, //**< boolean value only used to check if we have a device item */
+        Vendor,
+        Description,
+        BlockDevice
+    };
+
 public Q_SLOTS:
     void setDevices( const QList<K3bDevice::Device*>& devices );
 

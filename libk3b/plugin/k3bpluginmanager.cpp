@@ -44,7 +44,7 @@ public:
 
     QList<K3bPlugin*> plugins;
 
-    void loadPlugin( KService::Ptr service );
+    void loadPlugin( const KService::Ptr service );
 
 private:
     K3bPluginManager* m_parent;
@@ -92,7 +92,7 @@ QList<K3bPlugin*> K3bPluginManager::plugins( const QString& group ) const
 }
 
 
-void K3bPluginManager::Private::loadPlugin( KService::Ptr service )
+void K3bPluginManager::Private::loadPlugin( const KService::Ptr service )
 {
     kDebug() << service->name() << service->library();
     K3bPlugin* plugin = service->createInstance<K3bPlugin>( m_parent );

@@ -146,7 +146,7 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent )
     connect( m_fileTreeView, SIGNAL(contextMenu(K3bDevice::Device*, const QPoint&)),
              this, SLOT(slotFileTreeContextMenu(K3bDevice::Device*, const QPoint&)) );
 
-    connect( m_fileView, SIGNAL(urlEntered(const KUrl&)), m_fileTreeView, SLOT(setCurrentUrl(const KUrl&)) );
+    connect( m_fileView, SIGNAL(urlEntered(const KUrl&)), m_fileTreeView, SLOT(setSelectedUrl(const KUrl&)) );
     connect( m_fileView, SIGNAL(urlEntered(const KUrl&)), this, SIGNAL(urlEntered(const KUrl&)) );
 
     connect( k3bappcore->appDeviceManager(), SIGNAL(mountFinished(const QString&)),

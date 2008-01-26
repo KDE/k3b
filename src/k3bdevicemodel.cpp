@@ -79,10 +79,22 @@ QVariant K3bDeviceModel::data( const QModelIndex& index, int role ) const
 
     switch( role ) {
     case Qt::DisplayRole:
-        return dev->vendor() + ' ' + dev->description();
+        return medium.shortString();
 
     case Qt::DecorationRole:
         return medium.icon();
+
+    case IsDevice:
+        return true;
+
+    case Vendor:
+        return dev->vendor();
+
+    case Description:
+        return dev->description();
+
+    case BlockDevice:
+        return dev->blockDeviceName();
 
     default:
         return QVariant();

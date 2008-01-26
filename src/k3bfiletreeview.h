@@ -69,7 +69,8 @@ Q_SIGNALS:
     void activated( K3bDevice::Device* dev );
 
 private slots:
-    void slotSettingsChangedK3b( int category );
+    void slotClicked( const QModelIndex& index );
+    void slotExpandUrl( const QModelIndex& index );
 
 private:
     void initActions();
