@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@ namespace {
         Node* findNodeForOriginalIndex( const QModelIndex& index );
         Node* createNodeForOriginalIndex( const QModelIndex& index );
         Node* getChildNode( const QModelIndex& originalIndex );
+        void updateChildren();
         void reset();
 
         // the parent node, 0 for Place instances
@@ -54,10 +55,10 @@ namespace {
         // to be used in the public API (exception: mapToSubModel())
         QModelIndex originalModelIndex;
 
-    private:
         // the child nodes
-        QVector<Node> m_children;
+        QVector<Node> children;
 
+    private:
         // the root element of this node
         Place* m_place;
     };
@@ -80,6 +81,8 @@ namespace {
 
         // the row index of this node
         int row;
+
+        bool flat;
 
     private:
         QAbstractItemModel* m_model;
@@ -115,16 +118,34 @@ namespace {
     }
 
 
+    void Node::updateChildren()
+    {
+        int rows = model()->rowCount( originalModelIndex );
+        if ( children.size() < rows ) {
+            kDebug() << "resizing children from" << children.size() << "to" << rows;
+            children.resize( rows );
+
+            for ( int i = 0; i < children.count(); ++i ) {
+                Node& node = children[i];
+                node.setPlace( place() );
+                node.parent = this;
+                // FIXME: support multiple columns
+                node.originalModelIndex = model()->index( i, 0, originalModelIndex );
+            }
+        }
+    }
+
+
     Node* Node::getChildNode( const QModelIndex& originalIndex )
     {
-        if ( m_children.size() <= originalIndex.row() ) {
+        if ( children.size() <= originalIndex.row() ) {
             int rows = model()->rowCount( originalModelIndex );
-            kDebug() << "resizing children from" << m_children.size() << "to" << rows;
+            kDebug() << "resizing children from" << children.size() << "to" << rows;
             Q_ASSERT( originalIndex.row() < rows );
-            m_children.resize( rows );
+            children.resize( rows );
         }
 
-        Node* node = &m_children[originalIndex.row()];
+        Node* node = &children[originalIndex.row()];
         node->setPlace( place() );
         node->originalModelIndex = originalIndex;
         node->parent = this;
@@ -138,8 +159,8 @@ namespace {
             return this;
         }
 
-        for ( int i = 0; i < m_children.count(); ++i ) {
-            if ( Node* node = m_children[i].findNodeForOriginalIndex( index ) )
+        for ( int i = 0; i < children.count(); ++i ) {
+            if ( Node* node = children[i].findNodeForOriginalIndex( index ) )
                 return node;
         }
 
@@ -167,7 +188,7 @@ namespace {
 
     void Node::reset()
     {
-        m_children.clear();
+        children.clear();
     }
 }
 
@@ -184,6 +205,50 @@ public:
                 return &places[i];
             }
         }
+        return 0;
+    }
+
+    void updatePlaceRows() {
+        int row = 0;
+        QList<Place>::iterator end = places.end();
+        for ( QList<Place>::iterator it = places.begin();
+              it != end; ++it ) {
+            it->row = row;
+            if ( it->flat ) {
+                row += it->model()->rowCount( QModelIndex() );
+            }
+            else {
+                ++row;
+            }
+        }
+    }
+
+    /**
+     * root nodes are all non-flat places +
+     * all root items from flat places.
+     */
+    Node* getRootNode( int row ) {
+        int i = 0;
+        QList<Place>::iterator end = places.end();
+        for ( QList<Place>::iterator it = places.begin();
+              it != end; ++it ) {
+            if ( it->flat ) {
+                it->updateChildren();
+                if ( i + it->children.count() > row ) {
+                    return &it->children[row-i];
+                }
+                else {
+                    i += it->children.count();
+                }
+            }
+            else if ( row == i ) {
+                return &( *it );
+            }
+            else {
+                ++i;
+            }
+        }
+
         return 0;
     }
 };
@@ -309,9 +374,8 @@ QModelIndex K3bMetaItemModel::index( int row, int column, const QModelIndex& par
         return createIndex( row, column, node );
     }
     else {
-        if ( row < d->places.count() ) {
-            // list a place
-            return createIndex( row, column, &d->places[row] );
+        if ( Node* node = d->getRootNode( row ) ) {
+            return createIndex( row, column, node );
         }
         else {
             return QModelIndex();
@@ -342,9 +406,11 @@ QModelIndex K3bMetaItemModel::parent( const QModelIndex& index ) const
 
             return createIndex( origIndex.row(), origIndex.column(), node->parent );
         }
-        else {
-            Q_ASSERT( node->place()->row < d->places.count() );
+        else if ( !node->place()->flat ) {
             return createIndex( node->place()->row, index.column(), node->place() );
+        }
+        else {
+            return QModelIndex();
         }
     }
 }
@@ -437,7 +503,18 @@ int K3bMetaItemModel::rowCount( const QModelIndex& parent ) const
         }
     }
     else {
-        return d->places.count();
+        int cnt = 0;
+        QList<Place>::iterator end = d->places.end();
+        for ( QList<Place>::iterator it = d->places.begin();
+              it != end; ++it ) {
+            if( it->flat ) {
+                cnt += it->model()->rowCount( QModelIndex() );
+            }
+            else {
+                ++cnt;
+            }
+        }
+        return cnt;
     }
 }
 
@@ -507,7 +584,7 @@ Qt::DropActions K3bMetaItemModel::supportedDropActions() const
 }
 
 
-void K3bMetaItemModel::addSubModel( const QString& name, const KIcon& icon, QAbstractItemModel* model )
+void K3bMetaItemModel::addSubModel( const QString& name, const KIcon& icon, QAbstractItemModel* model, bool flat )
 {
     beginInsertRows( QModelIndex(), d->places.count(), d->places.count() );
 
@@ -518,7 +595,9 @@ void K3bMetaItemModel::addSubModel( const QString& name, const KIcon& icon, QAbs
     Place& place = d->places.last();
     place.name = name;
     place.icon = icon;
-    place.row = d->places.count()-1;
+    place.flat = flat;
+
+    d->updatePlaceRows();
 
     connect( place.model(), SIGNAL( modelReset() ),
              this, SLOT( slotReset() ) );
@@ -555,6 +634,7 @@ void K3bMetaItemModel::removeSubModel( QAbstractItemModel* model )
     // and simply remove the place from the list
     beginRemoveRows( QModelIndex(), row, row );
     d->places.erase( it );
+    d->updatePlaceRows();
     endRemoveRows();
 
     // finally delete the model
@@ -587,6 +667,11 @@ void K3bMetaItemModel::slotRowsAboutToBeInserted( const QModelIndex& index, int 
 void K3bMetaItemModel::slotRowsInserted( const QModelIndex& index, int start, int end )
 {
 //    kDebug() << index << start << end;
+
+    if ( d->placeForModel( qobject_cast<QAbstractItemModel*>( sender() ) )->flat ) {
+        d->updatePlaceRows();
+    }
+
     Q_UNUSED( index );
     Q_UNUSED( start );
     Q_UNUSED( end );
@@ -619,6 +704,11 @@ void K3bMetaItemModel::slotRowsAboutToBeRemoved( const QModelIndex& index, int s
 void K3bMetaItemModel::slotRowsRemoved( const QModelIndex& index, int start, int end )
 {
     kDebug();
+
+    if ( d->placeForModel( qobject_cast<QAbstractItemModel*>( sender() ) )->flat ) {
+        d->updatePlaceRows();
+    }
+
     Q_UNUSED( index );
     Q_UNUSED( start );
     Q_UNUSED( end );

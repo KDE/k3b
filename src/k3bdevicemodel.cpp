@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2007-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,8 @@ K3bDeviceModel::K3bDeviceModel( QObject* parent )
     : QAbstractItemModel( parent ),
       d( new Private() )
 {
+    connect( k3bappcore->mediaCache(), SIGNAL( mediumChanged( K3bDevice::Device* ) ),
+             this, SLOT( slotMediumChanged( K3bDevice::Device* ) ) );
 }
 
 
@@ -60,7 +62,12 @@ K3bDevice::Device* K3bDeviceModel::deviceForIndex( const QModelIndex& index ) co
 
 QModelIndex K3bDeviceModel::indexForDevice( K3bDevice::Device* dev ) const
 {
-
+    for ( int i = 0; i < d->devices.count(); ++i ) {
+        if ( d->devices[i] == dev ) {
+            return createIndex( i, 0, dev );
+        }
+    }
+    return QModelIndex();
 }
 
 
@@ -123,6 +130,15 @@ int K3bDeviceModel::rowCount( const QModelIndex& parent ) const
     }
     else {
         return 0;
+    }
+}
+
+
+void K3bDeviceModel::slotMediumChanged( K3bDevice::Device* dev )
+{
+    QModelIndex index = indexForDevice( dev );
+    if ( index.isValid() ) {
+        emit dataChanged( index, index );
     }
 }
 

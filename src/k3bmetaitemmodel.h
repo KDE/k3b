@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -82,8 +82,13 @@ public Q_SLOTS:
     /**
      * K3bPlacesModel takes over ownership of model.
      * FIXME: name and icon are weird parameters here
+     *
+     * \param model The submodel to be added.
+     * \param flat If flat is set true the root items of the submodel will
+     * be merged into the root item list of this model. Otherwise the submodel
+     * will be added under a new root item.
      */
-    void addSubModel( const QString& name, const KIcon& icon, QAbstractItemModel* model );
+    void addSubModel( const QString& name, const KIcon& icon, QAbstractItemModel* model, bool flat = false );
 
     /**
      * FIXME: better use an id or something?

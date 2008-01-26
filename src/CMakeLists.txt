@@ -182,6 +182,7 @@ set(k3b_SRCS
   k3bwelcomewidget.cpp 
   k3bapplication.cpp 
   k3bdevicemodel.cpp
+  k3bdevicedelegate.cpp
   k3bmetaitemmodel.cpp
   k3bplacesmodel.cpp
   k3bdiroperator.cpp 

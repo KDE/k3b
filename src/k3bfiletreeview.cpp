@@ -20,6 +20,7 @@
 #include "k3btooltip.h"
 #include "k3bthememanager.h"
 #include "k3bplacesmodel.h"
+#include "k3bdevicedelegate.h"
 
 #include <k3bdevice.h>
 #include <k3bdiskinfo.h>
@@ -34,7 +35,6 @@
 #include <kfileitem.h>
 #include <kapplication.h>
 #include <kglobalsettings.h>
-#include <KFileItemDelegate>
 
 #include <qdir.h>
 #include <qevent.h>
@@ -275,7 +275,7 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent )
     viewport()->setAttribute(Qt::WA_Hover);
     setSelectionMode(QAbstractItemView::SingleSelection);
 
-    KFileItemDelegate* delegate = new KFileItemDelegate(this);
+    K3bDeviceDelegate* delegate = new K3bDeviceDelegate(this);
     setItemDelegate(delegate);
 
     d->model = new K3bPlacesModel( this );
