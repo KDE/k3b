@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -99,25 +99,25 @@ public:
 
 K3bListViewItem::K3bListViewItem(QListView *parent)
   : KListViewItem( parent )
-{ 
+{
   init();
 }
 
 K3bListViewItem::K3bListViewItem(QListViewItem *parent)
   : KListViewItem( parent )
-{ 
+{
   init();
 }
 
 K3bListViewItem::K3bListViewItem(QListView *parent, QListViewItem *after)
   : KListViewItem( parent, after )
-{ 
+{
   init();
 }
 
 K3bListViewItem::K3bListViewItem(QListViewItem *parent, QListViewItem *after)
   : KListViewItem( parent, after )
-{ 
+{
   init();
 }
 
@@ -128,7 +128,7 @@ K3bListViewItem::K3bListViewItem(QListView *parent,
 				 const QString& s5, const QString& s6,
 				 const QString& s7, const QString& s8)
   : KListViewItem( parent, s1, s2, s3, s4, s5, s6, s7, s8 )
-{ 
+{
   init();
 }
 
@@ -139,7 +139,7 @@ K3bListViewItem::K3bListViewItem(QListViewItem *parent,
 				 const QString& s5, const QString& s6,
 				 const QString& s7, const QString& s8)
   : KListViewItem( parent, s1, s2, s3, s4, s5, s6, s7, s8 )
-{ 
+{
   init();
 }
 
@@ -150,7 +150,7 @@ K3bListViewItem::K3bListViewItem(QListView *parent, QListViewItem *after,
 				 const QString& s5, const QString& s6,
 				 const QString& s7, const QString& s8)
   : KListViewItem( parent, after, s1, s2, s3, s4, s5, s6, s7, s8 )
-{ 
+{
   init();
 }
 
@@ -161,7 +161,7 @@ K3bListViewItem::K3bListViewItem(QListViewItem *parent, QListViewItem *after,
 				 const QString& s5, const QString& s6,
 				 const QString& s7, const QString& s8)
   : KListViewItem( parent, after, s1, s2, s3, s4, s5, s6, s7, s8 )
-{ 
+{
   init();
 }
 
@@ -368,7 +368,7 @@ void K3bListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int col, in
   if( isSelected() &&
       (col == 0 || listView()->allColumnsShowFocus()) &&
       info->margin > 0 ) {
-    
+
     p->fillRect( 0, 0, info->margin, height(),
 		 cgh.brush( QColorGroup::Highlight ) );
     p->fillRect( width-info->margin, 0, info->margin, height(),
@@ -426,7 +426,7 @@ void K3bListViewItem::paintProgressBar( QPainter* p, const QColorGroup& cgh, int
   if( K3bListView* lv = dynamic_cast<K3bListView*>(listView()) )
     lv->paintEmptyArea( &dbPainter, r );
   else
-    dbPainter.fillRect( 0, 0, width, height(), 
+    dbPainter.fillRect( 0, 0, width, height(),
 			cgh.brush( QPalette::backgroundRoleFromMode(listView()->viewport()->backgroundMode()) ) );
 
   // we want a little additional margin
@@ -724,7 +724,7 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
   case K3bListViewItem::COMBO:
     if( !m_editorComboBox ) {
       m_editorComboBox = new QComboBox( viewport() );
-      connect( m_editorComboBox, SIGNAL(activated(const QString&)), 
+      connect( m_editorComboBox, SIGNAL(activated(const QString&)),
 	       this, SLOT(slotEditorComboBoxActivated(const QString&)) );
       m_editorComboBox->installEventFilter( this );
     }
@@ -983,7 +983,7 @@ bool K3bListView::doRename()
 	m_editorMsfEdit->setText( m_currentEditItem->text( m_currentEditColumn ) );
 	break;
       }
-    }      
+    }
   }
 
 
@@ -1014,11 +1014,11 @@ void K3bListView::slotEditorButtonClicked( K3bListViewItem* item, int col )
 
 bool K3bListView::eventFilter( QObject* o, QEvent* e )
 {
-  if( e->type() == QEvent::KeyPress ) { 
+  if( e->type() == QEvent::KeyPress ) {
      QKeyEvent* ke = static_cast<QKeyEvent*>(e);
      if( ke->key() == Key_Tab ) {
-       if( o == m_editorLineEdit || 
-	   o == d->msfEditLineEdit || 
+       if( o == m_editorLineEdit ||
+	   o == d->msfEditLineEdit ||
 	   o == d->spinBoxLineEdit ) {
 	 K3bListViewItem* lastEditItem = m_currentEditItem;
 
@@ -1038,7 +1038,7 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
 	     viewport()->setFocus();
 
 	     // search for the next editable item
-	     while( K3bListViewItem* nextItem = 
+	     while( K3bListViewItem* nextItem =
 		    dynamic_cast<K3bListViewItem*>( lastEditItem->nextSibling() ) ) {
 	       // edit first column
 	       col = 0;
@@ -1048,7 +1048,7 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
 		 editItem( nextItem, col );
 		 break;
 	       }
-	       
+
 	       lastEditItem = nextItem;
 	     }
 	   }
@@ -1057,14 +1057,15 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
 	 return true;
        }
      }
-     if( ke->key() == Key_Return ) {
-       if( o == m_editorLineEdit || 
-	   o == d->msfEditLineEdit || 
+     if( ke->key() == Key_Return ||
+         ke->key() == Key_Enter ) {
+       if( o == m_editorLineEdit ||
+	   o == d->msfEditLineEdit ||
 	   o == d->spinBoxLineEdit ) {
 	 K3bListViewItem* lastEditItem = m_currentEditItem;
 	 doRename();
 
-	 if( K3bListViewItem* nextItem = 
+	 if( K3bListViewItem* nextItem =
 	     dynamic_cast<K3bListViewItem*>( lastEditItem->nextSibling() ) )
 	   editItem( nextItem, currentEditColumn() );
 	 else {
@@ -1078,8 +1079,8 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
        }
      }
      else if( ke->key() == Key_Escape ) {
-       if( o == m_editorLineEdit || 
-	   o == d->msfEditLineEdit || 
+       if( o == m_editorLineEdit ||
+	   o == d->msfEditLineEdit ||
 	   o == d->spinBoxLineEdit ) {
 	 hideEditor();
 
@@ -1111,8 +1112,8 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
       if( item != m_currentEditItem || m_currentEditColumn != col ) {
 	doRename();
 	if( K3bListViewItem* k3bItem = dynamic_cast<K3bListViewItem*>(item) ) {
-	  if( me->pos().x() > item->depth()*treeStepSize() && 
-	      item->isEnabled() && 
+	  if( me->pos().x() > item->depth()*treeStepSize() &&
+	      item->isEnabled() &&
 	      (m_lastClickedItem == item || !m_doubleClickForEdit) )
 	    showEditor( k3bItem, col );
 	  else {
@@ -1137,8 +1138,8 @@ bool K3bListView::eventFilter( QObject* o, QEvent* e )
   }
 
   else if( e->type() == QEvent::FocusOut ) {
-    if( o == m_editorLineEdit || 
-	o == d->msfEditLineEdit || 
+    if( o == m_editorLineEdit ||
+	o == d->msfEditLineEdit ||
 	o == d->spinBoxLineEdit ||
 	o == m_editorComboBox ) {
       // make sure we did not lose the focus to one of the edit widgets' children
@@ -1175,25 +1176,25 @@ void K3bListView::viewportResizeEvent( QResizeEvent* e )
 	bgPix.height() < m_backgroundPixmap.height() ) {
       QPixmap newBgPix( m_backgroundPixmap.convertToImage().scale( bgPix.size(), QImage::ScaleMin ) );
       if( m_backgroundPixmapPosition == TOP_LEFT )
-	bitBlt( &bgPix, 0, 0, 
-		&newBgPix, 0, 0, 
+	bitBlt( &bgPix, 0, 0,
+		&newBgPix, 0, 0,
 		newBgPix.width(), newBgPix.height() );
       else {
 	int dx = bgPix.width() / 2 - m_backgroundPixmap.width() /2;
 	int dy = bgPix.height() / 2 - m_backgroundPixmap.height() /2;
-	bitBlt( &bgPix, dx, dy, &newBgPix, 0, 0, 
+	bitBlt( &bgPix, dx, dy, &newBgPix, 0, 0,
 		newBgPix.width(), newBgPix.height() );
       }
     }
     else {
       if( m_backgroundPixmapPosition == TOP_LEFT )
-	bitBlt( &bgPix, 0, 0, 
-		&m_backgroundPixmap, 0, 0, 
+	bitBlt( &bgPix, 0, 0,
+		&m_backgroundPixmap, 0, 0,
 		m_backgroundPixmap.width(), m_backgroundPixmap.height() );
       else {
 	int dx = bgPix.width() / 2 - m_backgroundPixmap.width() /2;
 	int dy = bgPix.height() / 2 - m_backgroundPixmap.height() /2;
-	bitBlt( &bgPix, dx, dy, &m_backgroundPixmap, 0, 0, 
+	bitBlt( &bgPix, dx, dy, &m_backgroundPixmap, 0, 0,
 		m_backgroundPixmap.width(), m_backgroundPixmap.height() );
       }
     }
@@ -1234,7 +1235,7 @@ KPixmap K3bListView::createDragPixmap( const QPtrList<QListViewItem>& items )
   }
 
   // now we should have a range top->bottom which includes all visible items
-  
+
   // there are two situations in which we fade the pixmap on the top or the bottom:
   // 1. there are invisible items above (below) the visible
   // 2. the range is way too big
