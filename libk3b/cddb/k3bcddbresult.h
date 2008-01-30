@@ -20,9 +20,10 @@
 
 
 #include <qstringlist.h>
+#include "k3b_export.h"
 
 
-class K3bCddbResultHeader
+class LIBK3B_EXPORT K3bCddbResultHeader
 {
  public:
   QString category;
@@ -32,7 +33,7 @@ class K3bCddbResultHeader
 };
 
 
-class K3bCddbResultEntry
+class LIBK3B_EXPORT K3bCddbResultEntry
 {
  public:
   // just to set a default
@@ -58,7 +59,7 @@ class K3bCddbResultEntry
 };
 
 
-class K3bCddbResult
+class LIBK3B_EXPORT K3bCddbResult
 {
  public:
   K3bCddbResult();
