@@ -53,7 +53,7 @@
 
 
 static const int DEFAULT_CD_SIZE_74 = 74*60*75;
-static const int DEFAULT_CD_SIZE_80 = 80*60*74;
+static const int DEFAULT_CD_SIZE_80 = 80*60*75;
 static const int DEFAULT_CD_SIZE_100 = 100*60*75;
 static const int DEFAULT_DVD_SIZE_4_4 = 2295104;
 static const int DEFAULT_DVD_SIZE_8_0 = 4173824;
