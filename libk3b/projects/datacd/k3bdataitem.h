@@ -203,9 +203,11 @@ class LIBK3B_EXPORT K3bDataItem
 
   QString m_writtenName;
   QString m_rawIsoName;
+  QString m_extraInfo;
 
   K3bDataDoc* m_doc;
   K3bDirItem* m_parentDir;
+  long m_sortWeight;
 
   bool m_bHideOnRockRidge;
   bool m_bHideOnJoliet;
@@ -214,9 +216,7 @@ class LIBK3B_EXPORT K3bDataItem
   bool m_bMovable;
   bool m_bHideable;
   bool m_bWriteToCd;
-  QString m_extraInfo;
 
-  long m_sortWeight;
 
   friend class K3bDirItem;
 };
