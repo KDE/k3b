@@ -1,5 +1,6 @@
 macro_optional_find_package(FFmpeg)
 macro_optional_find_package(Flac)
+macro_optional_find_package(Flac++)
 macro_optional_find_package(Mad)
 macro_optional_find_package(Muse)
 macro_optional_find_package(Sndfile)
@@ -14,9 +15,9 @@ if(FFMPEG_FOUND)
   add_subdirectory(ffmpeg)
 endif(FFMPEG_FOUND)
 
-if(FLAC_FOUND)
+if(FLAC_FOUND AND FLAC++_FOUND)
   add_subdirectory(flac)
-endif(FLAC_FOUND)
+endif(FLAC_FOUND AND FLAC++_FOUND)
 
 if(MAD_FOUND)
   add_subdirectory(mp3)
