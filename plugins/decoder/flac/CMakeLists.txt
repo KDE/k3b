@@ -1,5 +1,19 @@
 
+check_cxx_source_compiles("
+#include <FLAC++/metadata.h>
+int main()
+{
+  FLAC::Metadata::VorbisComment* vc;
+  vc->get_vendor_string().get_field();
+  return 0;
+}
+" FLAC_LESS_THAN_1_1_1 )
 
+if( NOT FLAC_LESS_THAN_1_1_1)
+  set(FLAC_NEWER_THAN_1_1_1 1)
+endif(NOT FLAC_LESS_THAN_1_1_1)
+
+configure_file(config-flac.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-flac.h )
 
 ########### next target ###############
 

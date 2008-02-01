@@ -12,7 +12,7 @@
  */
 
 #include <config-k3b.h>
-
+#include <config-flac.h>
 #include "k3bflacdecoder.h"
 
 
