@@ -53,7 +53,8 @@ class K3bFLACDecoder::Private
             file = f;
             file->open(QIODevice::ReadOnly);
 
-            internalBuffer->flush();
+            //TODO port me to kde4
+            //internalBuffer->flush();
 
             set_metadata_respond(FLAC__METADATA_TYPE_STREAMINFO);
             set_metadata_respond(FLAC__METADATA_TYPE_VORBIS_COMMENT);
