@@ -19,7 +19,7 @@
       <item>
         <layout class="QVBoxLayout" >
           <item>
-            <widget class="Q3GroupBox" name="groupBox3" >
+            <widget class="QGroupBox" name="groupBox3" >
               <property name="title" >
                 <string>Settings</string>
               </property>
@@ -90,7 +90,7 @@
             </widget>
           </item>
           <item>
-            <widget class="Q3GroupBox" name="groupBox1" >
+            <widget class="QGroupBox" name="groupBox1" >
               <property name="title" >
                 <string>Devices</string>
               </property>
@@ -184,7 +184,7 @@
             </widget>
           </item>
           <item>
-            <widget class="Q3GroupBox" name="groupBox2" >
+            <widget class="QGroupBox" name="groupBox2" >
               <property name="title" >
                 <string>External Programs</string>
               </property>
