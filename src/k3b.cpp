@@ -457,6 +457,7 @@ void K3bMainWindow::initView()
 
     // --- Directory Dock --------------------------------------------------------------------------
     m_dirTreeDock = new QDockWidget( this );
+    m_dirTreeDock->setObjectName("dirtreedock");
     m_dirTreeDock->setFeatures( QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable );
     addDockWidget( Qt::TopDockWidgetArea, m_dirTreeDock );
     QAction *action = m_dirTreeDock->toggleViewAction();
@@ -471,7 +472,8 @@ void K3bMainWindow::initView()
 
 
     // --- Contents Dock ---------------------------------------------------------------------------
-    m_contentsDock = new QDockWidget( this );
+    m_contentsDock = new QDockWidget( this ); 
+    m_contentsDock->setObjectName("contentsdock");
     m_contentsDock->setFeatures( QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable );
     addDockWidget ( Qt::TopDockWidgetArea, m_contentsDock );
     action = m_contentsDock->toggleViewAction();
