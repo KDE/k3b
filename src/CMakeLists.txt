@@ -134,6 +134,7 @@ set(k3b_rip_SRCS
   rip/k3baudioprojectconvertingjob.cpp 
   )
 
+if (DVDREAD_FOUND)
 set(k3b_videodvd_SRCS
   rip/videodvd/k3bvideodvdrippingview.cpp 
   rip/videodvd/k3bvideodvdrippingtitlelistview.cpp 
@@ -145,6 +146,7 @@ set(k3b_videodvd_SRCS
 
 kde4_add_ui_files(k3b_videodvd_SRCS
   rip/videodvd/base_k3bvideodvdrippingwidget.ui)
+endif (DVDREAD_FOUND)
 
 kde4_add_ui_files(k3b_rip_SRCS
   rip/base_k3baudiorippingoptionwidget.ui
@@ -245,12 +247,18 @@ set(k3b_SRCS
 set(k3b_bin_SRCS 
   ${k3b_option_SRCS}
   ${k3b_misc_SRCS}
-  ${k3b_videodvd_SRCS}
   ${k3b_project_SRCS}
   ${k3b_kostore_SRCS}
   ${k3b_rip_SRCS}
   ${k3b_SRCS}
-  )
+)
+
+if (DVDREAD_FOUND)
+set(k3b_bin_SRCS
+  ${k3b_bin_SRCS}
+  ${k3b_videodvd_SRCS}
+)
+endif (DVDREAD_FOUND)
 
 #kde4_add_dcop_skels(k3b_SRCS );
 MESSAGE(STATUS "DCOP stuff was remove into kde4, convert it to dbus please.kde4_add_dcop_skels macro doesn't exist now. We keep it just to remember to port to dbus")

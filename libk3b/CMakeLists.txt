@@ -65,6 +65,7 @@ set(k3b_jobs_SRCS
   jobs/k3bclonejob.cpp 
   jobs/k3baudiosessionreadingjob.cpp 
   jobs/k3bdvdcopyjob.cpp 
+  jobs/k3baudiofileanalyzerjob.cpp
   jobs/k3baudiocuefilewritingjob.cpp 
   jobs/k3bbinimagewritingjob.cpp 
   jobs/k3biso9660imagewritingjob.cpp 
@@ -216,15 +217,21 @@ set(k3b_LIB_SRCS
       ${k3b_project_SRCS} 
       ${k3b_jobs_SRCS} 
       ${k3b_libisofs_SRCS}
-      ${k3b_videodvd_SRCS}
       ${k3b_project_audiocd_SRCS} 
       ${k3b_project_datacd} 
       ${k3b_project_mixedcd}
       ${k3b_project_movixcd} 
-      ${k3b_project_videocd} 
       ${k3b_project_mpeg_info}
+      ${k3b_project_videocd}
+)
+
+if (DVDREAD_FOUND)
+set(k3b_LIB_SRCS ${k3b_LIB_SRCS}
+      ${k3b_videodvd_SRCS}
       ${k3b_project_videodvd}
-) 
+)
+endif (DVDREAD_FOUND)
+
 if(NOT SAMPLERATE_FOUND)
    set(k3b_LIB_SRCS ${k3b_LIB_SRCS} ${k3b_samplerate_SRCS})
 endif(NOT SAMPLERATE_FOUND)

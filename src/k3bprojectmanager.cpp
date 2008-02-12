@@ -218,8 +218,12 @@ K3bDoc* K3bProjectManager::createEmptyProject( K3bDoc::DocType type )
     }
 
     case K3bDoc::VIDEODVD: {
+#ifdef HAVE_DVDREAD
         doc = new K3bVideoDvdDoc( this );
         fileName = i18n("VideoDVD%1",d->videoDvdUntitledCount++);
+#else
+	return 0;
+#endif
         break;
     }
     }
@@ -352,6 +356,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
         break;
     }
 
+#ifdef HAVE_LIBDVDREAD
     case K3bDoc::VIDEODVD: {
         // the only defaults we need here are the volume id and stuff
         K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>(doc);
@@ -359,6 +364,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
         dataDoc->setVerifyData( c.readEntry( "verify data", false ) );
         break;
     }
+#endif
 
     case K3bDoc::MIXED: {
         K3bMixedDoc* mixedDoc = static_cast<K3bMixedDoc*>(doc);
@@ -522,9 +528,14 @@ K3bDoc* K3bProjectManager::openProject( const KUrl& url )
         type = K3bDoc::MOVIX; // backward compatibility
     else if( xmlDoc.doctype().name() == "k3b_dvd_project" )
         type = K3bDoc::DATA; // backward compatibility
-    else if( xmlDoc.doctype().name() == "k3b_video_dvd_project" )
+    else if( xmlDoc.doctype().name() == "k3b_video_dvd_project" ) {
+#ifdef HAVE_LIBDVDREAD
         type = K3bDoc::VIDEODVD;
-    else {
+#else
+        QApplication::restoreOverrideCursor();
+	return 0;
+#endif
+    } else {
         kDebug() << "(K3bDoc) unknown doc type: " << xmlDoc.doctype().name();
         QApplication::restoreOverrideCursor();
         return 0;

@@ -83,8 +83,10 @@
 #include "k3bprojectburndialog.h"
 #include <k3bdatadoc.h>
 #include "k3bdataview.h"
+#ifdef HAVE_LIBDVDREAD
 #include <k3bvideodvddoc.h>
 #include "k3bvideodvdview.h"
+#endif
 #include <k3bmixeddoc.h>
 #include "k3bmixedview.h"
 #include <k3bvcddoc.h>
@@ -245,8 +247,10 @@ void K3bMainWindow::initActions()
                                          actionCollection(), "file_new_vcd");
     actionFileNewMovix = K3b::createAction(this,i18n("New &eMovix Project"), "emovix", 0, this, SLOT(slotNewMovixDoc()),
                                            actionCollection(), "file_new_movix");
+#ifdef HAVE_LIBDVDREAD
     actionFileNewVideoDvd = K3b::createAction(this,i18n("New V&ideo DVD Project"), "videodvd", 0, this, SLOT(slotNewVideoDvdDoc()),
                                               actionCollection(), "file_new_video_dvd");
+#endif
     actionFileContinueMultisession = K3b::createAction(this,i18n("Continue Multisession Project"), "datacd", 0, this, SLOT(slotContinueMultisession()),
                                                        actionCollection(), "file_continue_multisession" );
 
@@ -258,7 +262,9 @@ void K3bMainWindow::initActions()
     actionFileNewMenu->addAction( actionFileNewMixed );
     actionFileNewMenu->addSeparator();
     actionFileNewMenu->addAction( actionFileNewVcd );
+#ifdef HAVE_LIBDVDREAD
     actionFileNewMenu->addAction( actionFileNewVideoDvd );
+#endif
     actionFileNewMenu->addSeparator();
     actionFileNewMenu->addAction( actionFileNewMovix );
 
@@ -528,7 +534,11 @@ void K3bMainWindow::createClient( K3bDoc* doc )
         view = new K3bMovixView( static_cast<K3bMovixDoc*>(doc), m_documentTab );
         break;
     case K3bDoc::VIDEODVD:
+#ifdef HAVE_LIBDVDREAD
         view = new K3bVideoDvdView( static_cast<K3bVideoDvdDoc*>(doc), m_documentTab );
+#else
+	return;
+#endif
         break;
     }
 
