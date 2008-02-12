@@ -24,14 +24,57 @@
 #include <qregexp.h>
 #include <qtextstream.h>
 
-#include <k3bprocess.h>
 #include <kdebug.h>
+#include <kprocess.h>
 
 #include <unistd.h>
 #include <sys/stat.h>
 #include <stdlib.h>
 
+class K3bExternalScanner : public KProcess
+{
+public:
+	K3bExternalScanner( QObject *parent = 0 );
 
+	QString getVersion(const int &pos) const;
+	QByteArray getData() const { return m_data; }
+
+	bool run();
+
+private:
+	QByteArray m_data;
+};
+
+K3bExternalScanner::K3bExternalScanner( QObject *parent )
+	: KProcess( parent )
+{
+	setOutputChannelMode( MergedChannels );
+}
+
+bool K3bExternalScanner::run()
+{
+	start();
+	if( waitForFinished( -1 ) ) {
+		m_data = readAll();
+		return true;
+	} else
+		return false;
+}
+
+QString K3bExternalScanner::getVersion(const int &pos) const
+{
+	QString tmp = m_data;
+
+	int sPos = tmp.indexOf( QRegExp("\\d"), pos );
+	if( sPos < 0 )
+		return QString();
+
+	int endPos = tmp.indexOf( QRegExp("\\s"), sPos + 1 );
+	if( endPos < 0 )
+		return QString();
+
+	return tmp.mid( sPos, endPos - sPos );
+}
 
 void K3b::addDefaultPrograms( K3bExternalBinManager* m )
 {
@@ -147,45 +190,41 @@ bool K3bCdrecordProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  K3Process vp;
-  K3bProcessOutputCollector out( &vp );
-
+  K3bExternalScanner vp;
   vp << path << "-version";
-  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
+
+  if( vp.run() ) {
+    QString out = vp.getData();
     int pos = -1;
     if( wodim ) {
-      pos = out.output().indexOf( "Wodim" );
+      pos = out.indexOf( "Wodim" );
     }
     else if( m_dvdPro ) {
-      pos = out.output().indexOf( "Cdrecord-ProDVD" );
+      pos = out.indexOf( "Cdrecord-ProDVD" );
     }
     else {
-      pos = out.output().indexOf( "Cdrecord" );
+      pos = out.indexOf( "Cdrecord" );
     }
 
     if( pos < 0 )
       return false;
 
-    pos = out.output().indexOf( QRegExp("[0-9]"), pos );
-    if( pos < 0 )
-      return false;
-
-    int endPos = out.output().indexOf( QRegExp("\\s"), pos+1 );
-    if( endPos < 0 )
+    QString ver = vp.getVersion( pos );
+    if (ver.isEmpty())
       return false;
 
     bin = new K3bExternalBin( this );
     bin->path = path;
-    bin->version = out.output().mid( pos, endPos-pos );
+    bin->version = ver;
 
     if( wodim )
       bin->addFeature( "wodim" );
 
-    pos = out.output().indexOf( "Copyright") + 14;
-    endPos = out.output().indexOf( "\n", pos );
+    pos = out.indexOf( "Copyright") + 14;
+    int endPos = out.indexOf( "\n", pos );
 
     // cdrecord does not use local encoding for the copyright statement but plain latin1
-    bin->copyright = QString::fromLatin1( out.output().mid( pos, endPos-pos ).toLocal8Bit() ).trimmed();
+    bin->copyright = QString::fromLatin1( out.mid( pos, endPos-pos ).toLocal8Bit() ).trimmed();
   }
   else {
     kDebug() << "(K3bCdrecordProgram) could not start " << path;
@@ -198,21 +237,23 @@ bool K3bCdrecordProgram::scan( const QString& p )
   }
 
   // probe features
-  K3Process fp;
-  out.setProcess( &fp );
+  K3bExternalScanner fp;
   fp << path << "-help";
-  if( fp.start( K3Process::Block, K3Process::AllOutput ) ) {
-    if( out.output().contains( "gracetime" ) )
+
+  if( fp.run() ) {
+    QByteArray out = fp.getData();
+
+    if( out.contains( "gracetime" ) )
       bin->addFeature( "gracetime" );
-    if( out.output().contains( "-overburn" ) )
+    if( out.contains( "-overburn" ) )
       bin->addFeature( "overburn" );
-    if( out.output().contains( "-text" ) )
+    if( out.contains( "-text" ) )
       bin->addFeature( "cdtext" );
-    if( out.output().contains( "-clone" ) )
+    if( out.contains( "-clone" ) )
       bin->addFeature( "clone" );
-    if( out.output().contains( "-tao" ) )
+    if( out.contains( "-tao" ) )
       bin->addFeature( "tao" );
-    if( out.output().contains( "cuefile=" ) &&
+    if( out.contains( "cuefile=" ) &&
 	( wodim || bin->version > K3bVersion( 2, 1, -1, "a14") ) ) // cuefile handling was still buggy in a14
       bin->addFeature( "cuefile" );
 
@@ -221,7 +262,7 @@ bool K3bCdrecordProgram::scan( const QString& p )
     // just double-checked and the help page is proper but there is no harm in having
     // two checks)
     // and the version check does not handle versions like 2.01-dvd properly
-    if( out.output().contains( "-xamix" ) ||
+    if( out.contains( "-xamix" ) ||
 	bin->version >= K3bVersion( 2, 1, -1, "a12" ) ||
 	wodim )
       bin->addFeature( "xamix" );
@@ -300,30 +341,27 @@ bool K3bMkisofsProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  K3Process vp;
+  K3bExternalScanner vp;
   vp << path << "-version";
-  K3bProcessOutputCollector out( &vp );
-  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
+
+  if( vp.run() ) {
+    QString out = vp.getData();
     int pos = -1;
     if( genisoimage )
-      pos = out.output().indexOf( "genisoimage" );
+      pos = out.indexOf( "genisoimage" );
     else
-      pos = out.output().indexOf( "mkisofs" );
+      pos = out.indexOf( "mkisofs" );
 
     if( pos < 0 )
       return false;
 
-    pos = out.output().indexOf( QRegExp("[0-9]"), pos );
-    if( pos < 0 )
-      return false;
-
-    int endPos = out.output().indexOf( ' ', pos+1 );
-    if( endPos < 0 )
+    QString ver = vp.getVersion( pos );
+    if( ver.isEmpty() )
       return false;
 
     bin = new K3bExternalBin( this );
     bin->path = path;
-    bin->version = out.output().mid( pos, endPos-pos );
+    bin->version = ver;
 
     if( genisoimage )
       bin->addFeature( "genisoimage" );
@@ -336,19 +374,20 @@ bool K3bMkisofsProgram::scan( const QString& p )
 
 
   // probe features
-  K3Process fp;
+  K3bExternalScanner fp;
   fp << path << "-help";
-  out.setProcess( &fp );
-  if( fp.start( K3Process::Block, K3Process::AllOutput ) ) {
-    if( out.output().contains( "-udf" ) )
+
+  if( fp.run() ) {
+    QByteArray out = fp.getData();
+    if( out.contains( "-udf" ) )
       bin->addFeature( "udf" );
-    if( out.output().contains( "-dvd-video" ) )
+    if( out.contains( "-dvd-video" ) )
       bin->addFeature( "dvd-video" );
-    if( out.output().contains( "-joliet-long" ) )
+    if( out.contains( "-joliet-long" ) )
       bin->addFeature( "joliet-long" );
-    if( out.output().contains( "-xa" ) )
+    if( out.contains( "-xa" ) )
       bin->addFeature( "xa" );
-    if( out.output().contains( "-sectype" ) )
+    if( out.contains( "-sectype" ) )
       bin->addFeature( "sectype" );
 
     // check if we run mkisofs as root
@@ -415,29 +454,26 @@ bool K3bReadcdProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  K3Process vp;
+  K3bExternalScanner vp;
   vp << path << "-version";
-  K3bProcessOutputCollector out( &vp );
-  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
+
+  if( vp.run() ) {
+    QString out = vp.getData();
     int pos = -1;
     if( readom )
-      pos = out.output().indexOf( "readom" );
+      pos = out.indexOf( "readom" );
     else
-      pos = out.output().indexOf( "readcd" );
+      pos = out.indexOf( "readcd" );
     if( pos < 0 )
       return false;
 
-    pos = out.output().indexOf( QRegExp("[0-9]"), pos );
-    if( pos < 0 )
-      return false;
-
-    int endPos = out.output().indexOf( ' ', pos+1 );
-    if( endPos < 0 )
+    QString ver = vp.getVersion( pos );
+    if( ver.isEmpty() )
       return false;
 
     bin = new K3bExternalBin( this );
     bin->path = path;
-    bin->version = out.output().mid( pos, endPos-pos );
+    bin->version = ver;
 
     if( readom )
       bin->addFeature( "readom" );
@@ -450,11 +486,12 @@ bool K3bReadcdProgram::scan( const QString& p )
 
 
   // probe features
-  K3Process fp;
+  K3bExternalScanner fp;
   fp << path << "-help";
-  out.setProcess( &fp );
-  if( fp.start( K3Process::Block, K3Process::AllOutput ) ) {
-    if( out.output().contains( "-clone" ) )
+
+  if( fp.run() ) {
+    QByteArray out = fp.getData();
+    if( out.contains( "-clone" ) )
       bin->addFeature( "clone" );
 
     // check if we run mkisofs as root
@@ -506,29 +543,28 @@ bool K3bCdrdaoProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  K3Process vp;
+  K3bExternalScanner vp;
   vp << path ;
-  K3bProcessOutputCollector out( &vp );
-  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
-    int pos = out.output().indexOf( "Cdrdao version" );
+
+  if( vp.run() ) {
+    QString out = vp.getData();
+    int pos = out.indexOf( "Cdrdao version" );
     if( pos < 0 )
       return false;
 
-    pos = out.output().indexOf( QRegExp("[0-9]"), pos );
-    if( pos < 0 )
-      return false;
-
-    int endPos = out.output().indexOf( ' ', pos+1 );
-    if( endPos < 0 )
+    QString ver = vp.getVersion( pos );
+    if( ver.isEmpty() )
       return false;
 
     bin = new K3bExternalBin( this );
     bin->path = path;
-    bin->version = out.output().mid( pos, endPos-pos );
+    bin->version = ver;
 
-    pos = out.output().indexOf( "(C)", endPos+1 ) + 4;
-    endPos = out.output().indexOf( '\n', pos );
-    bin->copyright = out.output().mid( pos, endPos-pos );
+    int endPos = out.indexOf( QRegExp("[0-9]"), pos );
+    endPos = out.indexOf( QRegExp("\\s"), endPos + 1 );
+    pos = out.indexOf( "(C)", endPos+1 ) + 4;
+    endPos = out.indexOf( '\n', pos );
+    bin->copyright = out.mid( pos, endPos-pos );
   }
   else {
     kDebug() << "(K3bCdrdaoProgram) could not start " << path;
@@ -538,16 +574,17 @@ bool K3bCdrdaoProgram::scan( const QString& p )
 
 
   // probe features
-  K3Process fp;
+  K3bExternalScanner fp;
   fp << path << "write" << "-h";
-  out.setProcess( &fp );
-  if( fp.start( K3Process::Block, K3Process::AllOutput ) ) {
-    if( out.output().contains( "--overburn" ) )
+
+  if( fp.run() ) {
+    QByteArray out = fp.getData();
+    if( out.contains( "--overburn" ) )
       bin->addFeature( "overburn" );
-    if( out.output().contains( "--multi" ) )
+    if( out.contains( "--multi" ) )
       bin->addFeature( "multisession" );
 
-    if( out.output().contains( "--buffer-under-run-protection" ) )
+    if( out.contains( "--buffer-under-run-protection" ) )
       bin->addFeature( "disable-burnproof" );
 
     // check if we run cdrdao as root
@@ -604,23 +641,24 @@ bool K3bTranscodeProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  K3Process vp;
+  K3bExternalScanner vp;
   vp << appPath << "-v";
-  K3bProcessOutputCollector out( &vp );
-  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
-    int pos = out.output().indexOf( "transcode v" );
+
+  if( vp.run() ) {
+    QString out = vp.getData();
+    int pos = out.indexOf( "transcode v" );
     if( pos < 0 )
       return false;
 
     pos += 11;
 
-    int endPos = out.output().indexOf( QRegExp("[\\s\\)]"), pos+1 );
+    int endPos = out.indexOf( QRegExp("[\\s\\)]"), pos+1 );
     if( endPos < 0 )
       return false;
 
     bin = new K3bExternalBin( this );
     bin->path = appPath;
-    bin->version = out.output().mid( pos, endPos-pos );
+    bin->version = out.mid( pos, endPos-pos );
   }
   else {
     kDebug() << "(K3bTranscodeProgram) could not start " << appPath;
@@ -631,11 +669,11 @@ bool K3bTranscodeProgram::scan( const QString& p )
   // Check features
   //
   QString modInfoBin = path + "tcmodinfo";
-  K3Process modp;
+  K3bExternalScanner modp;
   modp << modInfoBin << "-p";
-  out.setProcess( &modp );
-  if( modp.start( K3Process::Block, K3Process::AllOutput ) ) {
-    QString modPath = out.output().trimmed();
+
+  if( modp.run() ) {
+    QString modPath = modp.getData();
     QDir modDir( modPath );
     if( !modDir.entryList( QStringList() << "*export_xvid*", QDir::Files ).isEmpty() )
       bin->addFeature( "xvid" );
@@ -678,27 +716,28 @@ bool K3bVcdbuilderProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  K3Process vp;
+  K3bExternalScanner vp;
   vp << path << "-V";
-  K3bProcessOutputCollector out( &vp );
-  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
-    int pos = out.output().indexOf( "GNU VCDImager" );
+
+  if( vp.run() ) {
+    QString out = vp.getData();
+    int pos = out.indexOf( "GNU VCDImager" );
     if( pos < 0 )
       return false;
 
     pos += 14;
 
-    int endPos = out.output().indexOf( QRegExp("[\\n\\)]"), pos+1 );
+    int endPos = out.indexOf( QRegExp("[\\n\\)]"), pos+1 );
     if( endPos < 0 )
       return false;
 
     bin = new K3bExternalBin( this );
     bin->path = path;
-    bin->version = out.output().mid( pos, endPos-pos ).trimmed();
+    bin->version = out.mid( pos, endPos-pos ).trimmed();
 
-    pos = out.output().indexOf( "Copyright" ) + 14;
-    endPos = out.output().indexOf( "\n", pos );
-    bin->copyright = out.output().mid( pos, endPos-pos ).trimmed();
+    pos = out.indexOf( "Copyright" ) + 14;
+    endPos = out.indexOf( "\n", pos );
+    bin->copyright = out.mid( pos, endPos-pos ).trimmed();
   }
   else {
     kDebug() << "(K3bVcdbuilderProgram) could not start " << path;
@@ -735,30 +774,26 @@ bool K3bNormalizeProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  K3Process vp;
-  K3bProcessOutputCollector out( &vp );
-
+  K3bExternalScanner vp;
   vp << path << "--version";
-  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
-    int pos = out.output().indexOf( "normalize" );
+
+  if( vp.run() ) {
+    QString out = vp.getData();
+    int pos = out.indexOf( "normalize" );
     if( pos < 0 )
       return false;
 
-    pos = out.output().indexOf( QRegExp("\\d"), pos );
-    if( pos < 0 )
-      return false;
-
-    int endPos = out.output().indexOf( QRegExp("\\s"), pos+1 );
-    if( endPos < 0 )
+    QString ver = vp.getVersion( pos );
+    if( ver.isEmpty() )
       return false;
 
     bin = new K3bExternalBin( this );
     bin->path = path;
-    bin->version = out.output().mid( pos, endPos-pos );
+    bin->version = ver;
 
-    pos = out.output().indexOf( "Copyright" )+14;
-    endPos = out.output().indexOf( "\n", pos );
-    bin->copyright = out.output().mid( pos, endPos-pos ).trimmed();
+    pos = out.indexOf( "Copyright" )+14;
+    int endPos = out.indexOf( "\n", pos );
+    bin->copyright = out.mid( pos, endPos-pos ).trimmed();
   }
   else {
     kDebug() << "(K3bCdrecordProgram) could not start " << path;
@@ -794,26 +829,26 @@ bool K3bGrowisofsProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  K3Process vp;
-  K3bProcessOutputCollector out( &vp );
-
+  K3bExternalScanner vp;
   vp << path << "-version";
-  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
-    int pos = out.output().indexOf( "growisofs" );
+
+  if( vp.run() ) {
+    QString out = vp.getData();
+    int pos = out.indexOf( "growisofs" );
     if( pos < 0 )
       return false;
 
-    pos = out.output().indexOf( QRegExp("\\d"), pos );
+    pos = out.indexOf( QRegExp("\\d"), pos );
     if( pos < 0 )
       return false;
 
-    int endPos = out.output().indexOf( ",", pos+1 );
+    int endPos = out.indexOf( ',', pos+1 );
     if( endPos < 0 )
       return false;
 
     bin = new K3bExternalBin( this );
     bin->path = path;
-    bin->version = out.output().mid( pos, endPos-pos );
+    bin->version = out.mid( pos, endPos-pos );
   }
   else {
     kDebug() << "(K3bGrowisofsProgram) could not start " << path;
@@ -874,31 +909,31 @@ bool K3bDvdformatProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  K3Process vp;
-  K3bProcessOutputCollector out( &vp );
-
+  K3bExternalScanner vp;
   vp << path;
-  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
+
+  if( vp.run() ) {
     // different locales make searching for the +- char difficult
     // so we simply ignore it.
-    int pos = out.output().indexOf( QRegExp("DVD.*RW(/-RAM)? format utility") );
+    QString out = vp.getData();
+    int pos = out.indexOf( QRegExp("DVD.*RW(/-RAM)? format utility") );
     if( pos < 0 )
       return false;
 
-    pos = out.output().indexOf( "version", pos );
+    pos = out.indexOf( "version", pos );
     if( pos < 0 )
       return false;
 
     pos += 8;
 
     // the version ends in a dot.
-    int endPos = out.output().indexOf( QRegExp("\\.\\D"), pos );
+    int endPos = out.indexOf( QRegExp("\\.\\D"), pos );
     if( endPos < 0 )
       return false;
 
     bin = new K3bExternalBin( this );
     bin->path = path;
-    bin->version = out.output().mid( pos, endPos-pos );
+    bin->version = out.mid( pos, endPos-pos );
   }
   else {
     kDebug() << "(K3bDvdformatProgram) could not start " << path;
@@ -944,12 +979,12 @@ bool K3bDvdBooktypeProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  K3Process vp;
-  K3bProcessOutputCollector out( &vp );
-
+  K3bExternalScanner vp;
   vp << path;
-  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
-    int pos = out.output().indexOf( "dvd+rw-booktype" );
+
+  if( vp.run() ) {
+    QString out = vp.getData();
+    int pos = out.indexOf( "dvd+rw-booktype" );
     if( pos < 0 )
       return false;
 
@@ -993,41 +1028,41 @@ bool K3bCdda2wavProgram::scan( const QString& p )
   K3bExternalBin* bin = 0;
 
   // probe version
-  K3Process vp;
-  K3bProcessOutputCollector out( &vp );
-
+  K3bExternalScanner vp;
   vp << path << "-h";
-  if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
-    int pos = out.output().indexOf( "cdda2wav" );
+
+  if( vp.run() ) {
+    QString out = vp.getData();
+    int pos = out.indexOf( "cdda2wav" );
     if( pos < 0 )
       return false;
 
-    pos = out.output().indexOf( "Version", pos );
+    pos = out.indexOf( "Version", pos );
     if( pos < 0 )
       return false;
 
     pos += 8;
 
     // the version does not end in a space but the kernel info
-    int endPos = out.output().indexOf( QRegExp("[^\\d\\.]"), pos );
+    int endPos = out.indexOf( QRegExp("[^\\d\\.]"), pos );
     if( endPos < 0 )
       return false;
 
     bin = new K3bExternalBin( this );
     bin->path = path;
-    bin->version = out.output().mid( pos, endPos-pos );
+    bin->version = out.mid( pos, endPos-pos );
 
     // features (we do this since the cdda2wav help says that the short
     //           options will disappear soon)
-    if( out.output().indexOf( "-info-only" ) )
+    if( out.indexOf( "-info-only" ) )
       bin->addFeature( "info-only" ); // otherwise use the -J option
-    if( out.output().indexOf( "-no-infofile" ) )
+    if( out.indexOf( "-no-infofile" ) )
       bin->addFeature( "no-infofile" ); // otherwise use the -H option
-    if( out.output().indexOf( "-gui" ) )
+    if( out.indexOf( "-gui" ) )
       bin->addFeature( "gui" ); // otherwise use the -g option
-    if( out.output().indexOf( "-bulk" ) )
+    if( out.indexOf( "-bulk" ) )
       bin->addFeature( "bulk" ); // otherwise use the -B option
-    if( out.output().indexOf( "dev=" ) )
+    if( out.indexOf( "dev=" ) )
       bin->addFeature( "dev" ); // otherwise use the -B option
   }
   else {
@@ -1045,4 +1080,3 @@ bool K3bCdda2wavProgram::scan( const QString& p )
   addBin( bin );
   return true;
 }
-
