@@ -19,7 +19,6 @@
 #include <qstring.h>
 #include <q3valuelist.h>
 //Added by qt3to4:
-#include <Q3PtrList>
 #include <QCloseEvent>
 
 #include <kdialog.h>

@@ -39,7 +39,6 @@
 #include <qapplication.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
-#include <Q3PtrList>
 
 
 K3bAudioTrackTRMLookupDialog::K3bAudioTrackTRMLookupDialog( QWidget* parent )

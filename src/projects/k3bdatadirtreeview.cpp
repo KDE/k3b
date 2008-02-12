@@ -34,7 +34,6 @@
 #include <QDragLeaveEvent>
 #include <Q3ValueList>
 #include <QPixmap>
-#include <Q3PtrList>
 
 #include <klocale.h>
 #include <kaction.h>

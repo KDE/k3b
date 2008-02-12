@@ -32,8 +32,6 @@
 #include <qtimer.h>
 #include <qtoolbutton.h>
 #include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 
 

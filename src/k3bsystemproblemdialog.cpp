@@ -43,7 +43,6 @@
 #include <QCloseEvent>
 #include <Q3GridLayout>
 #include <Q3ValueList>
-#include <Q3PtrList>
 
 #include <klocale.h>
 #include <kstandarddirs.h>

@@ -25,8 +25,6 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3GridLayout>
-#include <Q3PtrList>
-
 #include <k3bdatadoc.h>
 #include <k3bdiritem.h>
 #include <k3bcore.h>

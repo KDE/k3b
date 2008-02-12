@@ -54,7 +54,6 @@
 #include <Q3HBoxLayout>
 #include <Q3ValueList>
 #include <Q3GridLayout>
-#include <Q3PtrList>
 
 
 
