@@ -15,8 +15,7 @@
 
 #include "k3bmovixprogram.h"
 
-#include <k3bprocess.h>
-
+#include <kprocess.h>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -48,17 +47,22 @@ bool K3bMovixProgram::scan( const QString& p )
   //
   // probe version and data dir
   //
-  K3Process vp, dp;
+  KProcess vp, dp;
   vp << path + "movix-version";
   dp << path + "movix-conf";
-  K3bProcessOutputCollector vout( &vp ), dout( &dp );
-  if( vp.start( K3Process::Block, K3Process::AllOutput ) && dp.start( K3Process::Block, K3Process::AllOutput ) ) {
+  vp.setOutputChannelMode( KProcess::MergedChannels );
+  dp.setOutputChannelMode( KProcess::MergedChannels );
+  vp.start();
+  dp.start();
+  if( vp.waitForFinished( -1 ) && dp.waitForFinished( -1 ) ) {
+    QByteArray vout = vp.readAll();
+    QByteArray dout = dp.readAll();
     // movix-version just gives us the version number on stdout
-    if( !vout.output().isEmpty() && !dout.output().isEmpty() ) {
+    if( !vout.isEmpty() && !dout.isEmpty() ) {
       bin = new K3bMovixBin( this );
-      bin->version = vout.output().trimmed();
+      bin->version = vout.trimmed();
       bin->path = path;
-      bin->m_movixPath = dout.output().trimmed();
+      bin->m_movixPath = dout.trimmed();
     }
   }
   else {
@@ -132,11 +136,12 @@ bool K3bMovixProgram::scanOldEMovix( K3bMovixBin* bin, const QString& path )
   if( QFile::exists( path + "movix-files" ) ) {
     bin->addFeature( "files" );
 
-    K3Process p;
-    K3bProcessOutputCollector out( &p );
+    KProcess p;
     p << bin->path + "movix-files";
-    if( p.start( K3Process::Block, K3Process::AllOutput ) ) {
-      bin->m_movixFiles = QStringList::split( "\n", out.output() );
+    p.setOutputChannelMode( KProcess::MergedChannels );
+    p.start();
+    if( p.waitForFinished( -1 ) ) {
+      bin->m_movixFiles = QStringList::split( "\n", p.readAll() );
     }
   }
 
@@ -299,11 +304,11 @@ QStringList K3bMovixBin::supportedCodecs() const
 
 QStringList K3bMovixBin::supported( const QString& type ) const
 {
-  K3Process p;
-  K3bProcessOutputCollector out( &p );
+  KProcess p;
   p << path + "movix-conf" << "--supported=" + type;
-  if( p.start( K3Process::Block, K3Process::AllOutput ) )
-    return QStringList::split( "\n", out.output() );
+  p.setOutputChannelMode( KProcess::MergedChannels );
+  if( p.waitForFinished( -1 ) )
+    return QStringList::split( "\n", p.readAll() );
   else
     return QStringList();
 }
@@ -315,10 +320,9 @@ QStringList K3bMovixBin::files( const QString& kbd,
 				const QString& lang,
 				const QStringList& codecs ) const
 {
-  K3Process p;
-  K3bProcessOutputCollector out( &p );
+  KProcess p;
   p << path + "movix-conf" << "--files";
-
+  p.setOutputChannelMode( KProcess::MergedChannels );
 
   if( !kbd.isEmpty() && kbd != i18n("default") )
     p << "--kbd" << kbd;
@@ -331,8 +335,9 @@ QStringList K3bMovixBin::files( const QString& kbd,
   if( !codecs.isEmpty() )
     p << "--codecs" << codecs.join( "," );
 
-  if( p.start( K3Process::Block, K3Process::AllOutput ) )
-    return QStringList::split( "\n", out.output() );
+  p.start();
+  if( p.waitForFinished( -1 ) )
+    return QStringList::split( "\n", p.readAll() );
   else
     return QStringList();
 }
