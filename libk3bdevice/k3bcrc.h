@@ -29,6 +29,6 @@ namespace K3bDevice
    * subdata is 12 bytes in long.
    */
   bool checkQCrc( unsigned char* subdata );
-};
+}
 
 #endif
