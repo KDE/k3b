@@ -163,7 +163,7 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
 
     // load the options
     QDomNodeList optionList = nodes.item(3).childNodes();
-    for( uint i = 0; i < optionList.count(); i++ ) {
+    for( int i = 0; i < optionList.count(); i++ ) {
 
         QDomElement e = optionList.item(i).toElement();
         if( e.isNull() )
@@ -211,7 +211,7 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
 
     // load file items
     QDomNodeList fileList = nodes.item(4).childNodes();
-    for( uint i = 0; i < fileList.count(); i++ ) {
+    for( int i = 0; i < fileList.count(); i++ ) {
 
         QDomElement e = fileList.item(i).toElement();
         if( e.isNull() )

@@ -186,7 +186,7 @@ const K3bVideoCdInfoResult& K3bVideoCdInfo::result() const
     return m_Result;
 }
 
-const K3bVideoCdInfoResultEntry& K3bVideoCdInfoResult::entry( unsigned int number, int type ) const
+const K3bVideoCdInfoResultEntry& K3bVideoCdInfoResult::entry( int number, int type ) const
 {
     switch ( type ) {
         case K3bVideoCdInfoResult::FILE:

@@ -113,12 +113,12 @@ void K3bAudioJobTempData::prepareTempFileNames( const QString& path )
 
 void K3bAudioJobTempData::cleanup()
 {
-  for( uint i = 0; i < d->infFiles.count(); ++i ) {
+  for( int i = 0; i < d->infFiles.count(); ++i ) {
     if( QFile::exists( d->infFiles[i] ) )
       QFile::remove(  d->infFiles[i] );
   }
 
-  for( uint i = 0; i < d->bufferFiles.count(); ++i ) {
+  for( int i = 0; i < d->bufferFiles.count(); ++i ) {
     if( QFile::exists( d->bufferFiles[i] ) )
       QFile::remove(  d->bufferFiles[i] );
   }

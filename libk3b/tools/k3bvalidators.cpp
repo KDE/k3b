@@ -29,7 +29,7 @@ QValidator::State K3bCharValidator::validate( QString& s, int& pos ) const
 {
   Q_UNUSED(pos);
 
-  for( unsigned int i = 0; i < s.length(); ++i ) {
+  for( int i = 0; i < s.length(); ++i ) {
     State r = validateChar( s[i] );
     if( r != Acceptable )
       return r;
@@ -41,7 +41,7 @@ QValidator::State K3bCharValidator::validate( QString& s, int& pos ) const
 
 void K3bCharValidator::fixup( QString& s ) const
 {
-  for( unsigned int i = 0; i < s.length(); ++i ) {
+  for( int i = 0; i < s.length(); ++i ) {
     if( validateChar( s[i] ) != Acceptable )
       s[i] = m_replaceChar;
   }
@@ -97,7 +97,7 @@ K3bValidator::K3bValidator( const QRegExp& rx, QObject* parent )
 
 void K3bValidator::fixup( QString& input ) const
 {
-  for( unsigned int i = 0; i < input.length(); ++i )
+  for( int i = 0; i < input.length(); ++i )
     if( !regExp().exactMatch( input.mid(i, 1) ) )
       input[i] = m_replaceChar;
 }
@@ -106,7 +106,7 @@ void K3bValidator::fixup( QString& input ) const
 QString K3bValidators::fixup( const QString& input, const QRegExp& rx, const QChar& replaceChar )
 {
   QString s;
-  for( unsigned int i = 0; i < input.length(); ++i )
+  for( int i = 0; i < input.length(); ++i )
     if( rx.exactMatch( input.mid(i, 1) ) )
       s += input[i];
     else

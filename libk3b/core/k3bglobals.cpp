@@ -301,7 +301,7 @@ KIO::filesize_t K3b::imageFilesize( const KUrl& url )
 {
     KIO::filesize_t size = K3b::filesize( url );
     int cnt = 0;
-    while( KIO::NetAccess::exists( url.url() + '.' + QString::number(cnt).rightJustified( 3, '0' ), true, 0 ), true )
+    while( KIO::NetAccess::exists( url.url() + '.' + QString::number(cnt).rightJustified( 3, '0' ), KIO::NetAccess::SourceSide, 0 ), true )
         size += K3b::filesize( url.url() + '.' + QString::number(cnt++).rightJustified( 3, '0' ) );
     return size;
 }

@@ -40,7 +40,7 @@ Q3ValueList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::readCommands()
     cmd.name = cmdString[0];
     cmd.extension = cmdString[1];
     cmd.command = cmdString[2];
-    for( unsigned int i = 3; i < cmdString.count(); ++i ) {
+    for( int i = 3; i < cmdString.count(); ++i ) {
       if( cmdString[i] == "swap" )
 	cmd.swapByteOrder = true;
       else if( cmdString[i] == "wave" )

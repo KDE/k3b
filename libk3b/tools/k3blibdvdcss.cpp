@@ -126,7 +126,7 @@ int K3bLibDvdCss::readWrapped( void* buffer, int firstSector, int sectors )
   // Make sure we never read encrypted and unencrypted data at once since libdvdcss
   // only decrypts the whole area of read sectors or nothing at all.
   //
-  for( unsigned int i = 0; i < d->titleOffsets.count(); ++i ) {
+  for( int i = 0; i < d->titleOffsets.count(); ++i ) {
     int titleStart = d->titleOffsets[i].first;
     int titleEnd = titleStart + d->titleOffsets[i].second - 1;
 

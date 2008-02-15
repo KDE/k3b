@@ -215,8 +215,8 @@ void K3bAudioRippingDialog::slotStartClicked()
     bool differ = true;
     // the most stupid version to compare but most cds have about 12 tracks
     // that's a size where algorithms do not need any optimization! ;)
-    for( unsigned int i = 0; i < d->filenames.count(); ++i ) {
-      for( unsigned int j = i+1; j < d->filenames.count(); ++j )
+    for( int i = 0; i < d->filenames.count(); ++i ) {
+      for( int j = i+1; j < d->filenames.count(); ++j )
 	if( d->filenames[i] == d->filenames[j] ) {
 	  differ = false;
 	  break;
@@ -232,7 +232,7 @@ void K3bAudioRippingDialog::slotStartClicked()
   // check if we need to overwrite some files...
   Q3ListViewItemIterator it( m_viewTracks );
   QStringList filesToOverwrite;
-  for( unsigned int i = 0; i < d->filenames.count(); ++i ) {
+  for( int i = 0; i < d->filenames.count(); ++i ) {
     if( QFile::exists( d->filenames[i] ) )
       filesToOverwrite.append( d->filenames[i] );
   }

@@ -148,7 +148,7 @@ bool K3bMixedDoc::loadDocumentData( QDomElement* rootElem )
     return false;
 
   QDomNodeList optionList = nodes.item(3).childNodes();
-  for( uint i = 0; i < optionList.count(); i++ ) {
+  for( int i = 0; i < optionList.count(); i++ ) {
 
     QDomElement e = optionList.item(i).toElement();
     if( e.isNull() )

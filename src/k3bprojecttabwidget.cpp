@@ -59,8 +59,8 @@ public:
 
 
 
-K3bProjectTabWidget::K3bProjectTabWidget( QWidget *parent, const char *name, Qt::WFlags f )
-    : QTabWidget( parent/*, f*/ )
+K3bProjectTabWidget::K3bProjectTabWidget( QWidget *parent )
+    : QTabWidget( parent )
 {
     tabBar()->setAcceptDrops(true);
     tabBar()->installEventFilter( this );
@@ -138,7 +138,7 @@ void K3bProjectTabWidget::slotDocChanged( K3bDoc* doc )
 {
     // we need to cache the icon changes since the changed() signal will be emitted very often
     if( !m_projectDataMap[doc].modified ) {
-        setTabIconSet( doc->view(), SmallIconSet( "document-save" ) );
+        setTabIconSet( doc->view(), KIcon( "document-save" ) );
         m_projectDataMap[doc].modified = true;
 
         // we need this one for the session management

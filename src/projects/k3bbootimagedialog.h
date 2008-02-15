@@ -28,9 +28,7 @@ class K3bBootImageDialog : public KDialog
 
  public:
   K3bBootImageDialog( K3bDataDoc*, 
-		      QWidget* parent = 0, 
-		      const char* name = 0, 
-		      bool modal = true );
+		      QWidget* parent = 0);
   ~K3bBootImageDialog();
 
  private slots:

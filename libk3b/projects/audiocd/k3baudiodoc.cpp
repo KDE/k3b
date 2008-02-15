@@ -335,7 +335,7 @@ K3bAudioTrack* K3bAudioDoc::importCueFile( const QString& cuefile, K3bAudioTrack
 
     bool reused = true;
     if( !decoder )
-      decoder = getDecoderForUrl( KUrl::fromPathOrUrl(parser.imageFilename()), &reused );
+      decoder = getDecoderForUrl( KUrl(parser.imageFilename()), &reused );
 
     if( decoder ) {
       if( !reused )

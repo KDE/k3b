@@ -52,7 +52,7 @@ class K3bVideoCdInfoResult
         enum type {NONE = 0, FILE, SEGMENT, SEQUENCE};
 
         void addEntry( const K3bVideoCdInfoResultEntry& = K3bVideoCdInfoResultEntry(), int type = K3bVideoCdInfoResult::SEQUENCE );
-        const K3bVideoCdInfoResultEntry& entry( unsigned int number = 0 , int type = K3bVideoCdInfoResult::SEQUENCE ) const;
+        const K3bVideoCdInfoResultEntry& entry( int number = 0 , int type = K3bVideoCdInfoResult::SEQUENCE ) const;
         int foundEntries( int type = K3bVideoCdInfoResult::SEQUENCE ) const;
 
         QString volumeId;

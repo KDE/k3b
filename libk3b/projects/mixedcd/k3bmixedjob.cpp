@@ -54,7 +54,7 @@
 #include <kstringhandler.h>
 
 
-static QString createNonExistingFilesString( const QList<K3bAudioFile*>& items, unsigned int max )
+static QString createNonExistingFilesString( const QList<K3bAudioFile*>& items, int max )
 {
     QString s;
     int cnt = 0;

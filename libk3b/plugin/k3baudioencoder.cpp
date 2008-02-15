@@ -33,7 +33,7 @@ public:
 };
 
 
-K3bAudioEncoder::K3bAudioEncoder( QObject* parent, const char* name )
+K3bAudioEncoder::K3bAudioEncoder( QObject* parent )
   : K3bPlugin( parent )
 {
   d = new Private();

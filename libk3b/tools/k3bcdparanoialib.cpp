@@ -629,7 +629,7 @@ bool K3bCdparanoiaLib::initReading()
 }
 
 
-bool K3bCdparanoiaLib::initReading( unsigned int track )
+bool K3bCdparanoiaLib::initReading( int track )
 {
   if( d->device ) {
     if( track <= d->toc.count() ) {

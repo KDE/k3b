@@ -259,7 +259,7 @@ bool K3bFileItem::isValid() const
 
     QStringList tokens = QStringList::split( QRegExp("/+"), dest );  // two slashes or more do the same as one does!
 
-    unsigned int i = 0;
+    int i = 0;
     while( i < tokens.size() ) {
       if( tokens[i] == "." ) {
 	// ignore it

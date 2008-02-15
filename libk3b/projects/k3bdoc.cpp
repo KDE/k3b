@@ -173,7 +173,7 @@ bool K3bDoc::readGeneralDocumentData( const QDomElement& elem )
     return false;
 
   QDomNodeList nodes = elem.childNodes();
-  for( uint i = 0; i < nodes.count(); i++ ) {
+  for( int i = 0; i < nodes.count(); i++ ) {
 
     QDomElement e = nodes.item(i).toElement();
     if( e.isNull() )

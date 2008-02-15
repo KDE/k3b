@@ -28,7 +28,7 @@ class K3bPatternParser
 {
  public:
   static QString parsePattern( const K3bCddbResultEntry& entry,
-                               unsigned int trackNumber,
+                               int trackNumber,
                                const QString& pattern,
                                bool replace = false,
                                const QString& replaceString = "_" );

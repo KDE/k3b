@@ -25,7 +25,7 @@
 
 
 QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
-                                        unsigned int trackNumber,
+                                        int trackNumber,
                                         const QString& pattern,
                                         bool replace,
                                         const QString& replaceString )
@@ -38,7 +38,7 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
   unsigned int len; // length of the current special string
 
 
-  for( unsigned int i = 0; i < pattern.length(); ++i ) {
+  for( int i = 0; i < pattern.length(); ++i ) {
 
     if( pattern[i] == '%' ) {
 
@@ -199,7 +199,7 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
   static QRegExp conditionrx( "^[@|!][atyegrmx](?:='.*')?\\{" );
   conditionrx.setMinimal( TRUE );
 
-  for( unsigned int i = 0; i < dir.length(); ++i ) {
+  for( int i = 0; i < dir.length(); ++i ) {
 
     offsetStack.push(
       conditionrx.search(dir, i, QRegExp::CaretAtOffset) );

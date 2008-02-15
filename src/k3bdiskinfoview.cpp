@@ -318,7 +318,7 @@ void K3bDiskInfoView::reloadMedium()
       item->setText( 3, medium().cdText().composer() );
 
       int index = 1;
-      for( unsigned int i = 0; i < medium().cdText().count(); ++i ) {
+      for( int i = 0; i < medium().cdText().count(); ++i ) {
         item = new K3ListViewItem( cdTextHeaderItem, item );
 	item->setText( 0, QString::number(index).rightJustified( 2, ' ' ) + " " +
 		       medium().cdText().at(i).performer() );

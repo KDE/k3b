@@ -74,7 +74,7 @@ void K3bAudioNormalizeJob::start()
   *m_process << "--";
 
   // add the files
-  for( uint i = 0; i < m_files.count(); ++i )
+  for( int i = 0; i < m_files.count(); ++i )
     *m_process << m_files[i];
 
   // now start the process

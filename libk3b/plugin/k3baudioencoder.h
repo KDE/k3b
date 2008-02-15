@@ -34,7 +34,7 @@ class LIBK3B_EXPORT K3bAudioEncoder : public K3bPlugin
   Q_OBJECT
 
  public:
-  K3bAudioEncoder( QObject* parent = 0, const char* name = 0 );
+  K3bAudioEncoder( QObject* parent = 0 );
   virtual ~K3bAudioEncoder();
 
   // TODO: if the following methods are to be activated the config methods in

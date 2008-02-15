@@ -123,7 +123,7 @@ bool K3bInfFileWriter::save( QTextStream& s )
   if( m_indices.isEmpty() )
     s << "Index=\t\t0" << endl;
   else {
-    for( unsigned int i = 0; i < m_indices.count(); ++i )
+    for( int i = 0; i < m_indices.count(); ++i )
       s << "Index=\t\t" << m_indices[i] << endl;
   }
 
@@ -141,7 +141,7 @@ void K3bInfFileWriter::setTrack( const K3bDevice::Track& track )
   m_indices.append( 0 );
 
   const Q3ValueVector<K3b::Msf>& indexList = track.indices();
-  for( unsigned int i = 0; i < indexList.count(); ++i )
+  for( int i = 0; i < indexList.count(); ++i )
     m_indices.append( indexList[i].lba() );
 
   if( track.index0() > 0 )

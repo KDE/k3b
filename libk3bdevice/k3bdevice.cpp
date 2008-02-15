@@ -960,7 +960,7 @@ bool K3bDevice::Device::readFormattedToc( K3bDevice::Toc& toc, int mt ) const
     //
     // Try to get information for all the tracks
     //
-    for( int i = 0; i < lastTrack; ++i ) {
+    for( unsigned int i = 0; i < lastTrack; ++i ) {
         if( toc.count() < i+1 )
             toc.append( Track() );
 

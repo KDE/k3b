@@ -33,11 +33,11 @@ K3bSidePanel::K3bSidePanel( K3bMainWindow* m, QWidget* parent )
 {
   // our first widget is the tree view
   m_fileTreeView = new K3bFileTreeView( this );
-  addItem( m_fileTreeView, SmallIconSet( "folder-open" ), i18n("Folders") );
+  addItem( m_fileTreeView, KIcon( "folder-open" ), i18n("Folders") );
 
   // CD projects
   QFrame* cdProjectsFrame = createPanel();
-  addItem( cdProjectsFrame, SmallIconSet( "media-optical" ), i18n("CD Tasks") );
+  addItem( cdProjectsFrame, KIcon( "media-optical" ), i18n("CD Tasks") );
   addButton( cdProjectsFrame, m_mainWindow->action( "file_new_audio" ) );
   addButton( cdProjectsFrame, m_mainWindow->action( "file_new_data" ) );
   addButton( cdProjectsFrame, m_mainWindow->action( "file_new_mixed" ) );
@@ -52,7 +52,7 @@ K3bSidePanel::K3bSidePanel( K3bMainWindow* m, QWidget* parent )
 
   // DVD projects
   QFrame* dvdProjectsFrame = createPanel();
-  addItem( dvdProjectsFrame, SmallIconSet( "media-optical-dvd" ), i18n("DVD Tasks") );
+  addItem( dvdProjectsFrame, KIcon( "media-optical-dvd" ), i18n("DVD Tasks") );
   addButton( dvdProjectsFrame, m_mainWindow->action( "file_new_dvd" ) );
   addButton( dvdProjectsFrame, m_mainWindow->action( "file_new_video_dvd" ) );
   addButton( dvdProjectsFrame, m_mainWindow->action( "file_new_movix_dvd" ) );

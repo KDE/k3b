@@ -20,14 +20,11 @@
 
 
 K3bBootImageDialog::K3bBootImageDialog( K3bDataDoc* doc, 
-					QWidget* parent, 
-					const char* name, 
-					bool modal )
+					QWidget* parent )
   : KDialog( parent )
 {
 
   setCaption(i18n("Boot Images"));
-  setModal(modal);
   setButtons(Ok);
   connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
   m_bootImageView = new K3bBootImageView( doc, this );

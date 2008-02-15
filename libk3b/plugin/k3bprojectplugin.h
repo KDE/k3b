@@ -40,7 +40,7 @@ class K3bProjectPluginGUIBase
    * Title used for the GUI
    */
   virtual QString title() const = 0;
-  virtual QString subTitle() const { return QString::null; }
+  virtual QString subTitle() const { return QString(); }
 
   virtual void readSettings( KConfigBase* ) {}
   virtual void saveSettings( KConfigBase* ) {}
@@ -75,7 +75,7 @@ class LIBK3B_EXPORT K3bProjectPlugin : public K3bPlugin
    *            @p activate() will not be used. A plugin has a GUI if it's functionality is started
    *            by some user input.
    */
-  K3bProjectPlugin( int type, bool gui = false, QObject* parent = 0, const char* name = 0 );
+  K3bProjectPlugin( int type, bool gui = false, QObject* parent = 0 );
 
   virtual ~K3bProjectPlugin() {
   }

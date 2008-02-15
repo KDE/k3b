@@ -747,7 +747,7 @@ void K3bCdImageWritingDialog::createAudioCueItems( const K3bCueFileParser& cp )
                               .arg(cp.cdText().performer())
                               .arg(cp.cdText().title()) );
 
-    unsigned int i = 1;
+    int i = 1;
     for( K3bDevice::Toc::const_iterator it = cp.toc().begin();
          it != cp.toc().end(); ++it ) {
 

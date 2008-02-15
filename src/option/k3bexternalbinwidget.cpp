@@ -170,7 +170,8 @@ K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWid
   Q3GridLayout* searchPathTabLayout = new Q3GridLayout( searchPathTab );
   searchPathTabLayout->setMargin( KDialog::marginHint() );
   searchPathTabLayout->setSpacing( KDialog::spacingHint() );
-  m_searchPathBox = new KEditListBox( i18n("Search Path"), searchPathTab, "searchPathBox", true );
+  m_searchPathBox = new KEditListBox( i18n("Search Path"), searchPathTab );
+  m_searchPathBox->setCheckAtEntering( true );
   searchPathTabLayout->addWidget( m_searchPathBox, 0, 0 );
   searchPathTabLayout->addWidget( new QLabel( i18n("<qt><b>Hint:</b> to force K3b to use another than the "
 						   "default name for the executable specify it in the search path.</qt>"),

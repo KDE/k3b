@@ -36,7 +36,6 @@
 #include <q3url.h>
 #include <q3socket.h>
 #include <q3socketdevice.h>
-//Added by qt3to4:
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -514,7 +513,7 @@ void K3bCdrdaoWriter::start()
                 m_backupTocFile = m_tocFile + ".k3bbak";
 
                 // workaround, cdrdao deletes the tocfile when --remote parameter is set
-                if ( !KIO::NetAccess::copy(KUrl(m_tocFile),KUrl(m_backupTocFile), (QWidget*) 0) )
+                if ( !KIO::NetAccess::file_copy(KUrl(m_tocFile),KUrl(m_backupTocFile), (QWidget*) 0) )
                 {
                     kDebug() << "(K3bCdrdaoWriter) could not backup " << m_tocFile << " to " << m_backupTocFile;
                     emit infoMessage( i18n("Could not backup tocfile."), ERROR );
@@ -718,20 +717,20 @@ void K3bCdrdaoWriter::slotProcessExited( K3Process* p )
     case WRITE:
     case COPY:
         if ( !m_binFileLnk.isEmpty() ) {
-            KIO::NetAccess::del(KUrl::fromPathOrUrl(m_cueFileLnk), (QWidget*) 0);
-            KIO::NetAccess::del(KUrl::fromPathOrUrl(m_binFileLnk), (QWidget*) 0);
+            KIO::NetAccess::del(KUrl(m_cueFileLnk), (QWidget*) 0);
+            KIO::NetAccess::del(KUrl(m_binFileLnk), (QWidget*) 0);
         }
-        else if( (!QFile::exists( m_tocFile ) || K3b::filesize( KUrl::fromPathOrUrl(m_tocFile) ) == 0 ) && !m_onTheFly )
+        else if( (!QFile::exists( m_tocFile ) || K3b::filesize( KUrl(m_tocFile) ) == 0 ) && !m_onTheFly )
         {
             // cdrdao removed the tocfile :(
             // we need to recover it
-            if ( !KIO::NetAccess::copy(KUrl::fromPathOrUrl(m_backupTocFile), KUrl::fromPathOrUrl(m_tocFile), (QWidget*) 0) )
+            if ( !KIO::NetAccess::file_copy(KUrl(m_backupTocFile), KUrl(m_tocFile), (QWidget*) 0) )
             {
                 kDebug() << "(K3bCdrdaoWriter) restoring tocfile " << m_tocFile << " failed.";
                 emit infoMessage( i18n("Due to a bug in cdrdao the toc/cue file %1 has been deleted. "
                                        "K3b was unable to restore it from the backup %2.",m_tocFile,m_backupTocFile), ERROR );
             }
-            else if ( !KIO::NetAccess::del(KUrl::fromPathOrUrl(m_backupTocFile), (QWidget*) 0) )
+            else if ( !KIO::NetAccess::del(KUrl(m_backupTocFile), (QWidget*) 0) )
             {
                 kDebug() << "(K3bCdrdaoWriter) delete tocfile backkup " << m_backupTocFile << " failed.";
             }

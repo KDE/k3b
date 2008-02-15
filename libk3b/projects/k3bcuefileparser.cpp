@@ -118,7 +118,7 @@ void K3bCueFileParser::readFile()
       // debug the toc
       kDebug() << "(K3bCueFileParser) successfully parsed cue file." << endl
 		<< "------------------------------------------------" << endl;
-      for( unsigned int i = 0; i < d->toc.count(); ++i ) {
+      for( int i = 0; i < d->toc.count(); ++i ) {
 	K3bDevice::Track& track = d->toc[i];
 	kDebug() << "Track " << (i+1)
 		  << " (" << ( track.type() == K3bDevice::Track::AUDIO ? "audio" : "data" ) << ") "
@@ -363,7 +363,7 @@ void K3bCueFileParser::simplified( QString& s )
 {
   s = s.trimmed();
 
-  unsigned int i = 0;
+  int i = 0;
   bool insideQuote = false;
   while( i < s.length() ) {
     if( !insideQuote ) {

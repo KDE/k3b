@@ -96,7 +96,7 @@ class LIBK3B_EXPORT K3bCdparanoiaLib
   /**
    * Call this after initParanoia to set the data to rip.
    */
-  bool initReading( unsigned int track );
+  bool initReading( int track );
 
   /**
    * Call this after initParanoia to set the data to rip.

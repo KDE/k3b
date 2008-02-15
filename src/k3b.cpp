@@ -987,7 +987,7 @@ void K3bMainWindow::fileSaveAs( K3bDoc* doc )
         if( url.isValid() ) {
             KRecentDocument::add( url );
 
-            bool exists = KIO::NetAccess::exists( url, false, 0 );
+            bool exists = KIO::NetAccess::exists( url, KIO::NetAccess::DestinationSide, 0 );
             if( !exists ||
                 ( exists &&
                   KMessageBox::warningContinueCancel( this, i18n("Do you want to overwrite %1?", url.prettyUrl() ),

@@ -560,7 +560,7 @@ bool K3bCdCopyJob::prepareImageFiles()
     }
 
     kDebug() << "(K3bCdCopyJob) created image filenames:";
-    for( unsigned int i = 0; i < d->imageNames.count(); ++i )
+    for( int i = 0; i < d->imageNames.count(); ++i )
       kDebug() << "(K3bCdCopyJob) " << d->imageNames[i];
 
     return true;
@@ -870,7 +870,7 @@ bool K3bCdCopyJob::writeNextSession()
     //
     d->cdrecordWriter->addArgument( "-audio" )->addArgument( "-shorttrack" );
 
-    for( unsigned int i = 0; i < d->infNames.count(); ++i ) {
+    for( int i = 0; i < d->infNames.count(); ++i ) {
       if( m_onTheFly )
 	d->cdrecordWriter->addArgument( d->infNames[i] );
       else
