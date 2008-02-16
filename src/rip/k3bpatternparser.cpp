@@ -197,7 +197,7 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
   bool isIncluded;
 
   static QRegExp conditionrx( "^[@|!][atyegrmx](?:='.*')?\\{" );
-  conditionrx.setMinimal( TRUE );
+  conditionrx.setMinimal( true );
 
   for( int i = 0; i < dir.length(); ++i ) {
 
@@ -281,7 +281,7 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
 
       dir.replace( offset, length, ( isIncluded ? inclusion : QString("") ) );
 
-      if( isIncluded == TRUE )
+      if( isIncluded == true )
         i -= length - inclusion.length();
       else
         i = offset - 1; // start next loop at offset

@@ -163,7 +163,7 @@ K3bFLACDecoder::Private::seek_callback(FLAC__uint64 absolute_byte_offset) {
 #else
 FLAC__StreamDecoderSeekStatus
 K3bFLACDecoder::Private::seek_callback(FLAC__uint64 absolute_byte_offset) {
-    if(file->at(absolute_byte_offset) == FALSE)
+    if(file->at(absolute_byte_offset) == false)
         return FLAC__STREAM_DECODER_SEEK_STATUS_ERROR;
     else
         return FLAC__STREAM_DECODER_SEEK_STATUS_OK;

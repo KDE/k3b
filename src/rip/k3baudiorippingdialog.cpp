@@ -159,7 +159,7 @@ void K3bAudioRippingDialog::setupGui()
   m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( advancedPage );
   m_spinRetries = new QSpinBox( advancedPage );
   m_checkIgnoreReadErrors = new QCheckBox( i18n("Ignore read errors"), advancedPage );
-  m_checkUseIndex0 = new QCheckBox( i18n("Don't read pregaps"), advancedPage );
+  m_checkUseIndex0 = new QCheckBox( i18n("Do not read pregaps"), advancedPage );
 
   advancedPageLayout->addWidget( new QLabel( i18n("Paranoia mode:"), advancedPage ), 0, 0 );
   advancedPageLayout->addWidget( m_comboParanoiaMode, 0, 1 );
