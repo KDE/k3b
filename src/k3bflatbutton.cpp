@@ -19,6 +19,7 @@
 #include <kaction.h>
 #include <kiconloader.h>
 #include <kglobal.h>
+#include <KGlobalSettings>
 
 #include <qpainter.h>
 #include <qtooltip.h>
@@ -72,7 +73,7 @@ void K3bFlatButton::init()
     setAutoFillBackground( true );
 
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
-    connect( kapp, SIGNAL(appearanceChanged()), this, SLOT(slotThemeChanged()) );
+    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()), this, SLOT(slotThemeChanged()) );
     slotThemeChanged();
 }
 

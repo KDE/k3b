@@ -287,7 +287,7 @@ void K3bDataDirTreeView::setupActions()
 
     m_actionProperties = new KAction( this );
     m_actionProperties->setText( i18n("Properties") );
-    m_actionProperties->setIcon( KIcon( "misc" ) );
+    m_actionProperties->setIcon( KIcon( "document-properties" ) );
     connect( m_actionProperties, SIGNAL( triggered() ), this, SLOT( slotProperties() ) );
     m_actionCollection->addAction( "properties", m_actionProperties );
 

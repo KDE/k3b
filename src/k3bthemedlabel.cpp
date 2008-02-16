@@ -15,6 +15,8 @@
 #include "k3bthemedlabel.h"
 #include "k3bapplication.h"
 
+#include <KGlobalSettings>
+
 K3bThemedLabel::K3bThemedLabel( QWidget* parent )
     : KSqueezedTextLabel( parent ),
       m_themePixmapCode( -1 )
@@ -24,7 +26,7 @@ K3bThemedLabel::K3bThemedLabel( QWidget* parent )
 
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
              this, SLOT(slotThemeChanged()) );
-    connect( kapp, SIGNAL(appearanceChanged()),
+    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()),
              this, SLOT(slotThemeChanged()) );
 }
 
@@ -38,7 +40,7 @@ K3bThemedLabel::K3bThemedLabel( const QString& text, QWidget* parent )
 
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
              this, SLOT(slotThemeChanged()) );
-    connect( kapp, SIGNAL(appearanceChanged()),
+    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()),
              this, SLOT(slotThemeChanged()) );
 }
 
@@ -51,7 +53,7 @@ K3bThemedLabel::K3bThemedLabel( K3bTheme::PixmapType pix, QWidget* parent )
 
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
              this, SLOT(slotThemeChanged()) );
-    connect( kapp, SIGNAL(appearanceChanged()),
+    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()),
              this, SLOT(slotThemeChanged()) );
 }
 

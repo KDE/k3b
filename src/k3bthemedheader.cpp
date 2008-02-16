@@ -18,6 +18,7 @@
 
 #include <k3btitlelabel.h>
 
+#include <KGlobalSettings>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <QHBoxLayout>
@@ -110,7 +111,7 @@ void K3bThemedHeader::init()
 
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
              this, SLOT(slotThemeChanged()) );
-    connect( kapp, SIGNAL(appearanceChanged()),
+    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()),
              this, SLOT(slotThemeChanged()) );
 }
 

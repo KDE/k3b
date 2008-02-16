@@ -25,6 +25,7 @@
 #include <klocale.h>
 #include <kmenu.h>
 #include <KConfigGroup>
+#include <KGlobalSettings>
 
 #include <qpixmap.h>
 #include <qpainter.h>
@@ -55,7 +56,7 @@ K3bJobProgressOSD::K3bJobProgressOSD( QWidget* parent )
 
   connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
 	   this, SLOT(refresh()) );
-  connect( kapp, SIGNAL(appearanceChanged()),
+  connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()),
 	   this, SLOT(refresh()) );
 }
 

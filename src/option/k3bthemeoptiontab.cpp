@@ -29,7 +29,7 @@
 #include <kstandarddirs.h>
 #include <ktar.h>
 #include <kurlrequesterdlg.h>
-
+#include <KGlobalSettings>
 
 #include <qlabel.h>
 #include <qfile.h>
@@ -64,7 +64,7 @@ K3bThemeOptionTab::K3bThemeOptionTab( QWidget* parent )
 
     connect( m_viewTheme, SIGNAL(selectionChanged()),
              this, SLOT(selectionChanged()) );
-    connect( kapp, SIGNAL(appearanceChanged()),
+    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()),
              this, SLOT(selectionChanged()) );
     connect( m_buttonInstallTheme, SIGNAL(clicked()),
              this, SLOT(slotInstallTheme()) );

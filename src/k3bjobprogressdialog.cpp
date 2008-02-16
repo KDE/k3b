@@ -76,6 +76,7 @@
 #include <KNotification>
 #include <kvbox.h>
 #include <KStandardGuiItem>
+#include <KGlobalSettings>
 
 
 class K3bJobProgressDialog::Private
@@ -257,7 +258,7 @@ void K3bJobProgressDialog::setupGUI()
 
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
              this, SLOT(slotThemeChanged()) );
-    connect( kapp, SIGNAL(appearanceChanged()),
+    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()),
              this, SLOT(slotThemeChanged()) );
 }
 

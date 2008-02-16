@@ -53,6 +53,7 @@
 #include <KActionMenu>
 #include <KToggleAction>
 #include <KActionCollection>
+#include <KGlobalSettings>
 
 static const char* s_allActions[] = {
     "file_new_data",
@@ -355,7 +356,7 @@ K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent )
 
     connect( main, SIGNAL(dropped(const KUrl::List&)), m_mainWindow, SLOT(addUrls(const KUrl::List&)) );
 
-    connect( kapp, SIGNAL(appearanceChanged()), main, SLOT(update()) );
+    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()), main, SLOT(update()) );
 }
 
 
