@@ -107,7 +107,7 @@
 //     }
 
 //     ypos += fm.ascent();
-//     QString line1 = text(0).left( text(0).find('\n') );
+//     QString line1 = text(0).left( text(0).indexOf('\n') );
 //     p->drawText( xpos, ypos, line1 );
 
 //     QFont f( listView()->font() );
@@ -117,7 +117,7 @@
 //     p->setFont( f );
 
 //     ypos += p->fontMetrics().height() + 1;
-//     QString line2 = text(0).mid( text(0).find('\n')+1 );
+//     QString line2 = text(0).mid( text(0).indexOf('\n')+1 );
 //     p->drawText( xpos - p->fontMetrics().leftBearing( line2[0] ), ypos, line2 );
 
 
@@ -150,12 +150,12 @@
 //     if ( m_bCurrent ) {
 //         f.setBold( true );
 //     }
-//     int w = QFontMetrics(f).width( text(0).left( text(0).find('\n') ) );
+//     int w = QFontMetrics(f).width( text(0).left( text(0).indexOf('\n') ) );
 
 //     f.setItalic( true );
 //     f.setBold( false );
 //     f.setPointSize( f.pointSize() - 2 );
-//     w = qMax( w, QFontMetrics(f).width( text(0).mid( text(0).find('\n')+1 ) ) );
+//     w = qMax( w, QFontMetrics(f).width( text(0).mid( text(0).indexOf('\n')+1 ) ) );
 
 //     w++; // see paintCell
 
@@ -203,7 +203,7 @@
 //     Q3GridLayout* lay = new Q3GridLayout( tooltip, 2, 2, tooltip->frameWidth()*2 /*margin*/, 6 /*spacing*/ );
 
 //     QString text = k3bappcore->mediaCache()->medium( dev ).longString();
-//     int detailsStart = text.find( "<p>", 3 );
+//     int detailsStart = text.indexOf( "<p>", 3 );
 //     QString details = text.mid( detailsStart );
 //     text.truncate( detailsStart );
 

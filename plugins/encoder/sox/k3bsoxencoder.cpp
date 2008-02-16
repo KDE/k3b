@@ -73,10 +73,10 @@ public:
 
         vp << path << "-h";
         if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
-            int pos = out.output().find( "sox: SoX Version" );
+            int pos = out.output().indexOf( "sox: SoX Version" );
             if ( pos < 0 )
-                pos = out.output().find( "sox: SoX v" ); // newer sox versions
-            int endPos = out.output().find( "\n", pos );
+                pos = out.output().indexOf( "sox: SoX v" ); // newer sox versions
+            int endPos = out.output().indexOf( '\n', pos );
             if( pos > 0 && endPos > 0 ) {
                 pos += 17;
                 bin = new K3bExternalBin( this );
@@ -88,8 +88,8 @@ public:
                 return true;
             }
             else {
-                pos = out.output().find( "sox: Version" );
-                endPos = out.output().find( "\n", pos );
+                pos = out.output().indexOf( "sox: Version" );
+                endPos = out.output().indexOf( '\n', pos );
                 if( pos > 0 && endPos > 0 ) {
                     pos += 13;
                     bin = new K3bExternalBin( this );

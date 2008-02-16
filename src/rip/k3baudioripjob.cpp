@@ -208,7 +208,7 @@ bool K3bAudioRipJob::run()
     if( m_singleFile ) {
         QString& filename = m_tracks[0].second;
 
-        QString dir = filename.left( filename.findRev("/") );
+        QString dir = filename.left( filename.lastIndexOf('/') );
         if( !KStandardDirs::makeDir( dir, 0777 ) ) {
             d->paranoiaLib->close();
             emit infoMessage( i18n("Unable to create directory %1",dir), K3bJob::ERROR );
@@ -309,7 +309,7 @@ bool K3bAudioRipJob::ripTrack( int track, const QString& filename )
 
         long trackSectorsRead = 0;
 
-        QString dir = filename.left( filename.findRev("/") );
+        QString dir = filename.left( filename.lastIndexOf('/') );
         if( !KStandardDirs::makeDir( dir, 0777 ) ) {
             emit infoMessage( i18n("Unable to create directory %1", dir), K3bJob::ERROR );
             return false;
@@ -413,7 +413,7 @@ bool K3bAudioRipJob::ripTrack( int track, const QString& filename )
 bool K3bAudioRipJob::writePlaylist()
 {
     // this is an absolut path so there is always a "/"
-    QString playlistDir = m_playlistFilename.left( m_playlistFilename.findRev( "/" ) );
+    QString playlistDir = m_playlistFilename.left( m_playlistFilename.lastIndexOf( '/' ) );
 
     if( !KStandardDirs::makeDir( playlistDir ) ) {
         emit infoMessage( i18n("Unable to create directory %1",playlistDir), K3bJob::ERROR );
@@ -436,8 +436,8 @@ bool K3bAudioRipJob::writePlaylist()
             if( !m_cddbEntry.cdArtist.isEmpty() && !m_cddbEntry.cdTitle.isEmpty() )
                 t << m_cddbEntry.cdArtist << " - " << m_cddbEntry.cdTitle << endl;
             else
-                t << m_tracks[0].second.mid(m_tracks[0].second.findRev("/") + 1,
-                                            m_tracks[0].second.length() - m_tracks[0].second.findRev("/") - 5)
+                t << m_tracks[0].second.mid(m_tracks[0].second.lastIndexOf('/') + 1,
+                                            m_tracks[0].second.length() - m_tracks[0].second.lastIndexOf('/') - 5)
                   << endl; // filename without extension
 
             // filename
@@ -457,9 +457,9 @@ bool K3bAudioRipJob::writePlaylist()
                 if( !m_cddbEntry.artists[trackIndex].isEmpty() && !m_cddbEntry.titles[trackIndex].isEmpty() )
                     t << m_cddbEntry.artists[trackIndex] << " - " << m_cddbEntry.titles[trackIndex] << endl;
                 else
-                    t << m_tracks[i].second.mid(m_tracks[i].second.findRev("/") + 1,
+                    t << m_tracks[i].second.mid(m_tracks[i].second.lastIndexOf('/') + 1,
                                                 m_tracks[i].second.length()
-                                                - m_tracks[i].second.findRev("/") - 5)
+                                                - m_tracks[i].second.lastIndexOf('/') - 5)
                       << endl; // filename without extension
 
                 // filename
@@ -517,7 +517,7 @@ bool K3bAudioRipJob::writeCueFile()
 
     // use the same base name as the image file
     QString cueFile = m_tracks[0].second;
-    cueFile.truncate( cueFile.findRev(".") );
+    cueFile.truncate( cueFile.lastIndexOf('.') );
     cueFile += ".cue";
 
     emit infoMessage( i18n("Writing cue file to %1.",cueFile), K3bJob::INFO );
@@ -532,11 +532,11 @@ QString K3bAudioRipJob::findRelativePath( const QString& absPath, const QString&
     QString path = K3b::fixupPath( absPath );
 
     // both paths have an equal beginning. That's just how it's configured by K3b
-    int pos = baseDir_.find( "/" );
+    int pos = baseDir_.indexOf( '/' );
     int oldPos = pos;
     while( pos != -1 && path.left( pos+1 ) == baseDir_.left( pos+1 ) ) {
         oldPos = pos;
-        pos = baseDir_.find( "/", pos+1 );
+        pos = baseDir_.indexOf( '/', pos+1 );
     }
 
     // now the paths are equal up to oldPos, so that's how "deep" we go

@@ -150,7 +150,7 @@ void K3bFileView::slotFilterChanged()
     QString filter = m_filterWidget->currentFilter();
     m_dirOp->clearFilter();
 
-    if( filter.find( '/' ) > -1 ) {
+    if( filter.indexOf( '/' ) > -1 ) {
         QStringList types = QStringList::split( " ", filter );
         types.prepend( "inode/directory" );
         m_dirOp->setMimeFilter( types );

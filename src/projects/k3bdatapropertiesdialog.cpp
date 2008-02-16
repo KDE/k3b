@@ -212,7 +212,7 @@ void K3bDataPropertiesDialog::loadItemProperties( K3bDataItem* dataItem )
             m_labelType->setText( kFileItem.mimeComment() );
         m_labelLocalName->setText( kFileItem.name() );
         QString localLocation = kFileItem.url().path( KUrl::RemoveTrailingSlash );
-        localLocation.truncate( localLocation.findRev('/') );
+        localLocation.truncate( localLocation.lastIndexOf('/') );
         m_labelLocalLocation->setText( localLocation );
         m_labelSize->setText( KIO::convertSize(dataItem->size()) );
     }
@@ -245,7 +245,7 @@ void K3bDataPropertiesDialog::loadItemProperties( K3bDataItem* dataItem )
     QString location = "/" + dataItem->k3bPath();
     if( location[location.length()-1] == '/' )
         location.truncate( location.length()-1 );
-    location.truncate( location.findRev('/') );
+    location.truncate( location.lastIndexOf('/') );
     if( location.isEmpty() )
         location = "/";
     m_labelLocation->setText( location );
@@ -314,7 +314,7 @@ void K3bDataPropertiesDialog::loadListProperties( const QList<K3bDataItem*>& ite
     QString location = "/" + items.first()->k3bPath();
     if( location[location.length()-1] == '/' )
         location.truncate( location.length()-1 );
-    location.truncate( location.findRev('/') );
+    location.truncate( location.lastIndexOf('/') );
     if( location.isEmpty() )
         location = "/";
     m_labelLocation->setText( location );

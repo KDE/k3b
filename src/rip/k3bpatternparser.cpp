@@ -266,7 +266,7 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
       else { // with string matching, e.g. ?y='2004'{text}
 
 	// Be aware that there might be ' in the condition text
-        int endOfCondition = dir.find( '{', offset+4 )-1;
+        int endOfCondition = dir.indexOf( '{', offset+4 )-1;
         QString condition = dir.mid( offset+4,
 				     endOfCondition - (offset+4) );
 

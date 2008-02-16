@@ -92,7 +92,7 @@ unsigned long K3bTempDirSelectionWidget::freeTempSpace() const
     QString path = m_editDirectory->url().path();
 
     if( !QFile::exists( path ) )
-        path.truncate( path.findRev('/') );
+        path.truncate( path.lastIndexOf('/') );
 
     unsigned long size;
     K3b::kbFreeOnFs( path, size, m_freeTempSpace );
@@ -183,7 +183,7 @@ QString K3bTempDirSelectionWidget::tempDirectory() const
 
     // now we treat the last section as a filename and return the path
     // in front of it
-    td.truncate( td.findRev( '/' ) + 1 );
+    td.truncate( td.lastIndexOf( '/' ) + 1 );
     return td;
 }
 

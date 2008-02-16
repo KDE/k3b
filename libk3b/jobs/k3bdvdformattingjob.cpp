@@ -217,15 +217,15 @@ void K3bDvdFormattingJob::slotStderrLine( const QString& line )
   emit debuggingOutput( "dvd+rw-format", line );
 
   // parsing for the -gui mode (since dvd+rw-format 4.6)
-  int pos = line.find( "blanking" );
+  int pos = line.indexOf( "blanking" );
   if( pos < 0 )
-    pos = line.find( "formatting" );
+    pos = line.indexOf( "formatting" );
   if( pos >= 0 ) {
-    pos = line.find( QRegExp( "\\d" ), pos );
+    pos = line.indexOf( QRegExp( "\\d" ), pos );
   }
   // parsing for \b\b... stuff
   else if( !line.startsWith("*") ) {
-    pos = line.find( QRegExp( "\\d" ) );
+    pos = line.indexOf( QRegExp( "\\d" ) );
   }
   else if( line.startsWith( ":-(" ) ) {
     if( line.startsWith( ":-( unable to proceed with format" ) ) {
@@ -234,7 +234,7 @@ void K3bDvdFormattingJob::slotStderrLine( const QString& line )
   }
 
   if( pos >= 0 ) {
-    int endPos = line.find( QRegExp("[^\\d\\.]"), pos ) - 1;
+    int endPos = line.indexOf( QRegExp("[^\\d\\.]"), pos ) - 1;
     bool ok;
     int progress = (int)(line.mid( pos, endPos - pos ).toDouble(&ok));
     if( ok ) {

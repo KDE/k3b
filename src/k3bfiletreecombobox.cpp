@@ -127,8 +127,8 @@ void K3bFileTreeComboBox::slotGoUrl()
 
     // check for our own internal format
     else if( p.contains("/dev/") ) {
-        int pos1 = p.findRev('(');
-        int pos2 = p.findRev(')');
+        int pos1 = p.lastIndexOf('(');
+        int pos2 = p.lastIndexOf(')');
         QString devStr = p.mid( pos1+1, pos2-pos1-1  );
         if( K3bDevice::Device* dev = k3bcore->deviceManager()->findDevice( devStr ) ) {
             emit activated( dev );

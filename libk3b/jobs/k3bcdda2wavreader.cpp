@@ -180,9 +180,9 @@ void K3bCdda2wavReader::slotProcessLine( const QString& line )
 
   static QRegExp rx( "T\\d\\d:" );
   if( rx.exactMatch( line.left(4) ) || line.startsWith( "Leadout" ) ) {
-    int pos = line.find( " " );
-    int endpos = line.find( QRegExp( "\\d" ), pos );
-    endpos = line.find( " ", endpos );
+    int pos = line.indexOf( ' ' );
+    int endpos = line.indexOf( QRegExp( "\\d" ), pos );
+    endpos = line.indexOf( ' ', endpos );
     bool ok;
     int offset = line.mid( pos, endpos-pos ).toInt(&ok);
     if( ok )

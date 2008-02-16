@@ -170,7 +170,7 @@ void K3bCddb::slotQueryFinished( K3bCddbQuery* query )
 
 K3bCddbQuery* K3bCddb::getQuery( const QString& s )
 {
-  QStringList buf = QStringList::split( ":", s.mid( s.find(" ")+1 ) );
+  QStringList buf = s.mid( s.indexOf(' ')+1 ).split( ':' );
   QString server = buf[0];
   int port = buf[1].toInt();
 

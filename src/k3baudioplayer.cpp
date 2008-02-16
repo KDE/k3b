@@ -78,7 +78,7 @@ QString K3bPlayListViewItem::text( int c ) const
   switch( c ) {
   case 0:
     {
-      int pos = m_filename.findRev("/");
+      int pos = m_filename.lastIndexOf('/');
       if( pos >= 0 )
 	return m_filename.mid(pos+1);
       return m_filename;
@@ -584,7 +584,7 @@ void K3bAudioPlayer::slotUpdateFilename()
 {
   if( m_currentItem ) {
     QString display = m_currentItem->filename();
-    int pos = display.findRev("/");
+    int pos = display.lastIndexOf('/');
     if( pos >= 0 )
       display = display.mid(pos+1);
 

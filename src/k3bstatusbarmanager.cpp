@@ -107,7 +107,7 @@ void K3bStatusBarManager::update()
     QString path = K3b::defaultTempPath();
 
     if( !QFile::exists( path ) )
-        path.truncate( path.findRev('/') );
+        path.truncate( path.lastIndexOf('/') );
 
     unsigned long size, avail;
     if( K3b::kbFreeOnFs( path, size, avail ) )

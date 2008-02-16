@@ -334,7 +334,7 @@ QString K3bVideoDVDRippingDialog::createFilename( const K3bVideoDVDRippingJob::T
             // first check if we have a long keyword instead of a one-char
             //
             if( pattern[i] == '{' ) {
-                int j = pattern.find( '}', i );
+                int j = pattern.indexOf( '}', i );
                 if( j < 0 ) // no closing bracket -> no valid pattern
                     c = '*';
                 else {

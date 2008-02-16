@@ -219,7 +219,7 @@ void K3bVideoCdRippingDialog::slotUpdateFreeSpace()
     QString path = m_editDirectory->url().url();
 
     if( !QFile::exists( path ) )
-        path.truncate( path.findRev('/') );
+        path.truncate( path.lastIndexOf('/') );
 
     unsigned long size, avail;
     if( K3b::kbFreeOnFs( path, size, avail ) )
