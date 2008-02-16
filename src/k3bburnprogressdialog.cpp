@@ -35,7 +35,7 @@
 K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, bool showSubProgress )
     : K3bJobProgressDialog( parent, showSubProgress )
 {
-    m_labelWritingSpeed = new QLabel( m_frameExtraInfo, "m_labelWritingSpeed" );
+    m_labelWritingSpeed = new QLabel( m_frameExtraInfo );
     //  m_labelWritingSpeed->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
 
     m_frameExtraInfoLayout->addWidget( m_labelWritingSpeed, 2, 0 );

@@ -153,7 +153,7 @@ void K3bIsoImageWritingDialog::setupGui()
     Q3GroupBox* groupImageUrl = new Q3GroupBox( 1, Qt::Horizontal, i18n("Image to Burn"), frame );
     m_editImagePath = new KUrlRequester( groupImageUrl );
     m_editImagePath->setMode( KFile::File|KFile::ExistingOnly );
-    m_editImagePath->setCaption( i18n("Choose Image File") );
+    m_editImagePath->setWindowTitle( i18n("Choose Image File") );
     m_editImagePath->setFilter( i18n("*.iso *.ISO|ISO9660 Image Files") + "\n"
                                 + i18n("*|All Files") );
 
@@ -199,8 +199,8 @@ void K3bIsoImageWritingDialog::setupGui()
     pixLabel->setPixmap( SmallIcon( "tools-media-optical-copy", KIconLoader::SizeMedium ) );
     pixLabel->setScaledContents( false );
     m_spinCopies = new QSpinBox( groupCopies );
-    m_spinCopies->setMinValue( 1 );
-    m_spinCopies->setMaxValue( 999 );
+    m_spinCopies->setMinimum( 1 );
+    m_spinCopies->setMaximum( 999 );
     // -------- copies
 
     Q3GroupBox* optionGroup = new Q3GroupBox( 3, Qt::Vertical, i18n("Settings"), optionTab );
@@ -496,7 +496,7 @@ void K3bIsoImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, co
                                                          &ok,
                                                          this );
         if( ok ) {
-            if( md5sumToCompare.toLower().utf8() == m_md5Job->hexDigest().toLower() )
+            if( md5sumToCompare.toLower().toUtf8() == m_md5Job->hexDigest().toLower() )
                 KMessageBox::information( this, i18n("The MD5 Sum of %1 equals the specified.",imagePath()),
                                           i18n("MD5 Sums Equal") );
             else

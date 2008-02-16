@@ -381,15 +381,15 @@ void K3bVcdTrackDialog::prepareGui()
 
     m_displaySize = new QLabel( groupFileInfo );
     m_displaySize->setText( "0.0 MB" );
-    m_displaySize->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
+    m_displaySize->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
 
     m_displayLength = new QLabel( groupFileInfo );
     m_displayLength->setText( "0:0:0" );
-    m_displayLength->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
+    m_displayLength->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
 
     m_muxrate = new QLabel( groupFileInfo );
     m_muxrate->setText( i18n( "%1 bit/s" ,QString::number( 0 ) ));
-    m_muxrate->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
+    m_muxrate->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
 
     QFrame* fileInfoLine = new QFrame( groupFileInfo );
     fileInfoLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
@@ -465,7 +465,7 @@ void K3bVcdTrackDialog::setupPbcTab()
     //////////////////////////////////////////////////////////////////////////////////////////
     m_labelWait = new QLabel( i18n( "then wait" ), m_groupPlay );
     m_spin_waittime = new QSpinBox( m_groupPlay );
-    m_spin_waittime->setMinValue( -1 );
+    m_spin_waittime->setMinimum( -1 );
     m_spin_waittime->setValue( 0 );
     // m_spin_waittime->setEnabled( false );
     m_spin_waittime->setSuffix( i18n( " seconds" ) );

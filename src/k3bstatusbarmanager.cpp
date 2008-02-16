@@ -71,13 +71,13 @@ K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
 
     // setup the statusbar
     m_mainWindow->statusBar()->addWidget( m_labelInfoMessage, 1 ); // for showing some info
-    m_mainWindow->statusBar()->addWidget( m_labelProjectInfo, 0, true );
+    m_mainWindow->statusBar()->addPermanentWidget( m_labelProjectInfo, 0 );
     // a spacer item
-    m_mainWindow->statusBar()->addWidget( new QLabel( "  ", m_mainWindow->statusBar() ), 0, true );
-    m_mainWindow->statusBar()->addWidget( boxFreeTemp, 0, true );
+    m_mainWindow->statusBar()->addPermanentWidget( new QLabel( "  ", m_mainWindow->statusBar() ), 0 );
+    m_mainWindow->statusBar()->addPermanentWidget( boxFreeTemp, 0 );
     // a spacer item
-    m_mainWindow->statusBar()->addWidget( new QLabel( "  ", m_mainWindow->statusBar() ), 0, true );
-    m_mainWindow->statusBar()->addWidget( m_versionBox, 0, true );
+    m_mainWindow->statusBar()->addPermanentWidget( new QLabel( "  ", m_mainWindow->statusBar() ), 0 );
+    m_mainWindow->statusBar()->addPermanentWidget( m_versionBox, 0 );
 
     connect( m_mainWindow, SIGNAL(configChanged(KConfig*)), this, SLOT(update()) );
     //FIXME kde4
@@ -140,13 +140,13 @@ void K3bStatusBarManager::slotFreeTempSpace(const QString&,
 
 void K3bStatusBarManager::showActionStatusText( const QString& text )
 {
-    m_mainWindow->statusBar()->message( text );
+    m_mainWindow->statusBar()->showMessage( text );
 }
 
 
 void K3bStatusBarManager::clearActionStatusText()
 {
-    m_mainWindow->statusBar()->clear();
+    m_mainWindow->statusBar()->clearMessage();
 }
 
 
@@ -179,7 +179,8 @@ void K3bStatusBarManager::slotActiveProjectChanged( K3bDoc* doc )
         // cache updates
         if( !m_updateTimer->isActive() ) {
             slotUpdateProjectStats();
-            m_updateTimer->start( 1000, false );
+            m_updateTimer->setSingleShot( false );
+            m_updateTimer->start( 1000 );
         }
     }
     else if( !doc ) {

@@ -22,20 +22,20 @@
 mpc_int32_t read_impl( void* data, void* ptr, mpc_int32_t size )
 {
   QFile* input = static_cast<QFile*>( data );
-  return input->readBlock( (char*)ptr, size );
+  return input->read( (char*)ptr, size );
 }
 
 
 mpc_bool_t seek_impl( void* data, mpc_int32_t offset )
 {
   QFile* input = static_cast<QFile*>( data );
-  return input->at( offset );
+  return input->seek( offset );
 }
 
 mpc_int32_t tell_impl( void* data )
 {
   QFile* input = static_cast<QFile*>( data );
-  return input->at();
+  return input->pos();
 }
 
 mpc_int32_t get_size_impl( void* data )
@@ -95,7 +95,7 @@ bool K3bMpcWrapper::open( const QString& filename )
 {
   close();
 
-  m_input->setName( filename );
+  m_input->setFileName( filename );
 
   if( m_input->open( QIODevice::ReadOnly ) ) {
     mpc_streaminfo_init( m_info );

@@ -78,7 +78,7 @@ bool K3bLsofWrapper::checkDevice( K3bDevice::Device* dev )
 
   //
   // now process its output
-  QStringList l = QStringList::split( "\n", out.output() );
+  QStringList l = out.output().split( '\n' );
   for( QStringList::iterator it = l.begin(); it != l.end(); ++it ) {
     int pid = (*it).mid(1).toInt();
     QString app = (*(++it)).mid(1);

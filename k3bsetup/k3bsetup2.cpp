@@ -399,7 +399,7 @@ void K3bSetup2::save()
   struct group* g = 0;
   if( w->m_checkUseBurningGroup->isChecked() ) {
     // TODO: create the group if it's not there
-    g = getgrnam( burningGroup().local8Bit() );
+    g = getgrnam( burningGroup().toLocal8Bit() );
     if( !g ) {
       KMessageBox::error( this, i18n("There is no group %1.",burningGroup()) );
       return;

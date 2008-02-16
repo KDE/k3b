@@ -263,7 +263,7 @@ void K3bVcdListView::slotUpdateItems()
 
     sort();  // This is so lame!
 
-    header()->setShown( m_doc->numOfTracks() > 0 );
+    header()->setVisible( m_doc->numOfTracks() > 0 );
 }
 
 #include "k3bvcdlistview.moc"

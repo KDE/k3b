@@ -53,9 +53,9 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent )
 
     KHBox* freeTempSpaceBox = new KHBox( this );
     freeTempSpaceBox->setSpacing( KDialog::spacingHint() );
-    (void)new QLabel( i18n( "Free space in temporary directory:" ), freeTempSpaceBox, "TextLabel2" );
-    m_labelFreeSpace = new QLabel( "                       ",freeTempSpaceBox, "m_labelFreeSpace" );
-    m_labelFreeSpace->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
+    (void)new QLabel( i18n( "Free space in temporary directory:" ), freeTempSpaceBox );
+    m_labelFreeSpace = new QLabel( "                       ",freeTempSpaceBox );
+    m_labelFreeSpace->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
 
 
     connect( m_editDirectory, SIGNAL(openFileDialog(KUrlRequester*)),
@@ -122,11 +122,11 @@ void K3bTempDirSelectionWidget::slotTempDirButtonPressed( KUrlRequester* r )
 {
     // set the correct mode for the filedialog
     if( m_mode == DIR ) {
-        r->setCaption( i18n("Select Temporary Directory") );
+        r->setWindowTitle( i18n("Select Temporary Directory") );
         r->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
     }
     else {
-        r->setCaption( i18n("Select Temporary File") );
+        r->setWindowTitle( i18n("Select Temporary File") );
         r->setMode( KFile::File | KFile::LocalOnly );
     }
 }
@@ -209,9 +209,9 @@ void K3bTempDirSelectionWidget::setNeededSize( KIO::filesize_t bytes )
     if( !m_labelCdSize ) {
         KHBox* cdSizeBox = new KHBox( this );
         cdSizeBox->setSpacing( KDialog::spacingHint() );
-        (void)new QLabel( i18n( "Size of project:" ), cdSizeBox, "TextLabel4" );
-        m_labelCdSize = new QLabel( KIO::convertSize(bytes), cdSizeBox, "m_labelCdSize" );
-        m_labelCdSize->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
+        (void)new QLabel( i18n( "Size of project:" ), cdSizeBox );
+        m_labelCdSize = new QLabel( KIO::convertSize(bytes), cdSizeBox );
+        m_labelCdSize->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     }
     m_labelCdSize->setText( KIO::convertSize(bytes) );
 }

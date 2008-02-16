@@ -86,7 +86,7 @@ void K3bDataVolumeDescWidget::save( K3bIsoOptions& o )
 
 void K3bDataVolumeDescWidget::slotVolumeSetSizeChanged( int i )
 {
-  m_spinVolumeSetNumber->setMaxValue( i );
+  m_spinVolumeSetNumber->setMaximum( i );
 }
 
 #include "k3bdatavolumedescwidget.moc"

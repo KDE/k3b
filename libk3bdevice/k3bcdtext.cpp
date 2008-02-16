@@ -322,7 +322,7 @@ QByteArray K3bDevice::CdText::rawPackData() const
   //
   // create the CD-Text packs
   //
-  QByteArray data(0);
+  QByteArray data;
   for( int i = 0; i <= 6; ++i ) {
     if( textLengthForPackType( 0x80 | i ) ) {
       appendByteArray( data, createPackData( 0x80 | i, pc ) );

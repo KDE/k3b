@@ -57,7 +57,7 @@ void K3bMiniButton::drawButton( QPainter* p )
     path.lineTo( 0, height() - 1 );
     p->drawPath(path);
   }
-  if( isOn() || isDown() ){
+  if( isChecked() || isDown() ){
     p->setPen( colorGroup().dark() );
     QPainterPath path;
     path.moveTo( 0, height() - 1 );

@@ -90,15 +90,15 @@ void K3bVideoCdRippingDialog::setupGui()
 
     KHBox* freeSpaceBox = new KHBox( groupDirectory );
     freeSpaceBox->setSpacing( KDialog::spacingHint() );
-    ( void ) new QLabel( i18n( "Free space in directory:" ), freeSpaceBox, "FreeSpaceLabel" );
-    m_labelFreeSpace = new QLabel( "                       ", freeSpaceBox, "m_labelFreeSpace" );
-    m_labelFreeSpace->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
+    ( void ) new QLabel( i18n( "Free space in directory:" ), freeSpaceBox );
+    m_labelFreeSpace = new QLabel( "                       ", freeSpaceBox );
+    m_labelFreeSpace->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
 
     KHBox* necessarySizeBox = new KHBox( groupDirectory );
     necessarySizeBox->setSpacing( KDialog::spacingHint() );
-    ( void ) new QLabel( i18n( "Necessary storage size:" ), necessarySizeBox, "StorSize" );
-    m_labelNecessarySize = new QLabel( "                        ", necessarySizeBox, "m_labelNecessarySize" );
-    m_labelNecessarySize->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
+    ( void ) new QLabel( i18n( "Necessary storage size:" ), necessarySizeBox );
+    m_labelNecessarySize = new QLabel( "                        ", necessarySizeBox );
+    m_labelNecessarySize->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
 
 
     groupDirectoryLayout->addWidget( rippathLabel, 0, 0 );

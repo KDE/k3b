@@ -187,7 +187,7 @@ void K3bVideoCdRip::slotParseVcdXRipOutput( K3Process*, char* output, int len )
     QString buffer = QString::fromLocal8Bit( output, len );
 
     // split to lines
-    QStringList lines = QStringList::split( "\n", buffer );
+    QStringList lines = buffer.split( '\n' );
 
     QDomDocument xml_doc;
     QDomElement xml_root;

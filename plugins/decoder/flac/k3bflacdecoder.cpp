@@ -132,7 +132,7 @@ bool K3bFLACDecoder::Private::eof_callback() {
 
 #ifdef LEGACY_FLAC
 FLAC__SeekableStreamDecoderReadStatus K3bFLACDecoder::Private::read_callback(FLAC__byte buffer[],                                                                             unsigned *bytes) {
-    long retval =  file->readBlock((char *)buffer, (*bytes));
+    long retval =  file->read((char *)buffer, (*bytes));
     if(-1 == retval) {
         return FLAC__SEEKABLE_STREAM_DECODER_READ_STATUS_ERROR;
     } else {
@@ -142,7 +142,7 @@ FLAC__SeekableStreamDecoderReadStatus K3bFLACDecoder::Private::read_callback(FLA
 }
 #else
 FLAC__StreamDecoderReadStatus K3bFLACDecoder::Private::read_callback(FLAC__byte buffer[],                                                                             size_t *bytes) {
-    long retval =  file->readBlock((char *)buffer, (*bytes));
+    long retval =  file->read((char *)buffer, (*bytes));
     if(-1 == retval) {
         return FLAC__STREAM_DECODER_READ_STATUS_ABORT;
     } else {
@@ -155,7 +155,7 @@ FLAC__StreamDecoderReadStatus K3bFLACDecoder::Private::read_callback(FLAC__byte 
 #ifdef LEGACY_FLAC
 FLAC__SeekableStreamDecoderSeekStatus
 K3bFLACDecoder::Private::seek_callback(FLAC__uint64 absolute_byte_offset) {
-    if(!file->at(absolute_byte_offset))
+    if(!file->seek(absolute_byte_offset))
         return FLAC__SEEKABLE_STREAM_DECODER_SEEK_STATUS_ERROR;
     else
         return FLAC__SEEKABLE_STREAM_DECODER_SEEK_STATUS_OK;
@@ -163,7 +163,7 @@ K3bFLACDecoder::Private::seek_callback(FLAC__uint64 absolute_byte_offset) {
 #else
 FLAC__StreamDecoderSeekStatus
 K3bFLACDecoder::Private::seek_callback(FLAC__uint64 absolute_byte_offset) {
-    if(file->at(absolute_byte_offset) == false)
+    if(file->seek(absolute_byte_offset) == false)
         return FLAC__STREAM_DECODER_SEEK_STATUS_ERROR;
     else
         return FLAC__STREAM_DECODER_SEEK_STATUS_OK;
@@ -173,13 +173,13 @@ K3bFLACDecoder::Private::seek_callback(FLAC__uint64 absolute_byte_offset) {
 #ifdef LEGACY_FLAC
 FLAC__SeekableStreamDecoderTellStatus
 K3bFLACDecoder::Private::tell_callback(FLAC__uint64 *absolute_byte_offset) {
-    (*absolute_byte_offset) = file->at();
+    (*absolute_byte_offset) = file->pos();
     return FLAC__SEEKABLE_STREAM_DECODER_TELL_STATUS_OK;
 }
 #else
 FLAC__StreamDecoderTellStatus
 K3bFLACDecoder::Private::tell_callback(FLAC__uint64 *absolute_byte_offset) {
-    (*absolute_byte_offset) = file->at();
+    (*absolute_byte_offset) = file->pos();
     return FLAC__STREAM_DECODER_TELL_STATUS_OK;
 }
 #endif
@@ -234,7 +234,7 @@ FLAC__StreamDecoderWriteStatus K3bFLACDecoder::Private::write_callback(const FLA
     }
 
     // Rewind the buffer so the decode method will take data from the beginning.
-    internalBuffer->at(0);
+    internalBuffer->seek(0);
     return FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
 }
 
@@ -277,11 +277,11 @@ bool K3bFLACDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int
             QString value = QString::fromUtf8( d->comments->get_comment(i).get_field_value(),
                                                d->comments->get_comment(i).get_field_value_length() );
 
-            if( key.upper() == "TITLE" )
+            if( key.toUpper() == "TITLE" )
                 addMetaInfo( META_TITLE, value );
-            else if( key.upper() == "ARTIST" )
+            else if( key.toUpper() == "ARTIST" )
                 addMetaInfo( META_ARTIST, value );
-            else if( key.upper() == "DESCRIPTION" )
+            else if( key.toUpper() == "DESCRIPTION" )
                 addMetaInfo( META_COMMENT, value );
         }
     }
@@ -345,9 +345,9 @@ int K3bFLACDecoder::decodeInternal( char* _data, int maxLen )
     }
 #endif
 
-    bytesAvailable = d->internalBuffer->size() - d->internalBuffer->at();
+    bytesAvailable = d->internalBuffer->size() - d->internalBuffer->pos();
     bytesToCopy = qMin(maxLen, bytesAvailable);
-    bytesCopied = (int)d->internalBuffer->readBlock(_data, bytesToCopy);
+    bytesCopied = (int)d->internalBuffer->read(_data, bytesToCopy);
 
     if(bytesCopied == bytesAvailable) {
         // reset the buffer
@@ -373,10 +373,9 @@ QString K3bFLACDecoder::fileType() const
 
 QStringList K3bFLACDecoder::supportedTechnicalInfos() const
 {
-    return QStringList::split( ";",
-                               i18n("Channels") + ";" +
-                               i18n("Sampling Rate") + ";" +
-                               i18n("Sample Size") );
+    return QString( i18n("Channels") + ';' +
+                    i18n("Sampling Rate") + ';' +
+                    i18n("Sample Size") ).split( ';' );
 }
 
 
@@ -434,7 +433,7 @@ bool K3bFLACDecoderFactory::canDecode( const KUrl& url )
     }
 
     // look for a fLaC magic number or ID3 tag header
-    if(10 != file.readBlock(buf, 10)) {
+    if(10 != file.read(buf, 10)) {
         kDebug() << "(K3bFLACDecorder) File " << url.path()
                  << " is too small to be a FLAC file" << endl;
         return false;
@@ -451,13 +450,13 @@ bool K3bFLACDecoderFactory::canDecode( const KUrl& url )
 
         kDebug() << "(K3bFLACDecoder) " << url.path() << ": seeking to "
                  << pos << endl;
-        if(!file.at(pos)) {
+        if(!file.seek(pos)) {
             kDebug() << "(K3bFLACDecoder) " << url.path() << ": couldn't seek to "
                      << pos << endl;
             return false;
         }else{
             // seek was okay, try and read magic number into buf
-            if(4 != file.readBlock(buf, 4)) {
+            if(4 != file.read(buf, 4)) {
                 kDebug() << "(K3bFLACDecorder) File " << url.path()
                          << " has ID3 tag but naught else!" << endl;
                 return false;
@@ -471,7 +470,7 @@ bool K3bFLACDecoderFactory::canDecode( const KUrl& url )
     }
 
     FLAC::Metadata::StreamInfo info = FLAC::Metadata::StreamInfo();
-    FLAC::Metadata::get_streaminfo(url.path().ascii(), info);
+    FLAC::Metadata::get_streaminfo(url.path().toAscii(), info);
 
     if((info.get_channels() <= 2) &&
        (info.get_bits_per_sample() <= 16)) {

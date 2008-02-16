@@ -114,8 +114,8 @@ void K3bAudioTrackWidget::load()
         }
 
         if( m_tracks.count() > 1 ) {
-            m_checkCopyPermitted->setNoChange();
-            m_checkPreemphasis->setNoChange();
+            m_checkCopyPermitted->setCheckState( Qt::PartiallyChecked );
+            m_checkPreemphasis->setCheckState( Qt::PartiallyChecked );
         }
     }
 

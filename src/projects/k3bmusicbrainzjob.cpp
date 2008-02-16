@@ -132,7 +132,7 @@ void K3bMusicBrainzJob::slotMbJobFinished( bool success )
                 s = resultStringsUnique.first();
 
             if( ok ) {
-                int i = resultStrings.findIndex( s );
+                int i = resultStrings.lastIndexOf( s );
                 currentTrack->setTitle( d->mbTrackLookupJob->title(i) );
                 currentTrack->setArtist( d->mbTrackLookupJob->artist(i) );
             }

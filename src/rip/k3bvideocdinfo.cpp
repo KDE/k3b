@@ -85,7 +85,7 @@ void K3bVideoCdInfo::slotParseOutput( K3Process*, char* output, int len )
     QString buffer = QString::fromLocal8Bit( output, len );
 
     // split to lines
-    QStringList lines = QStringList::split( "\n", buffer );
+    QStringList lines = buffer.split( '\n' );
     QStringList::Iterator end( lines.end());
     for ( QStringList::Iterator str = lines.begin(); str != end; ++str ) {
 

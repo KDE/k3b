@@ -68,9 +68,9 @@ K3bOggVorbisEncoderSettingsWidget::K3bOggVorbisEncoderSettingsWidget( QWidget* p
                              "than .mp3 compression at 128kbps."
                              "<p><em>This explanation is based on the one from the www.vorbis.com FAQ.</em>");
 
-    QToolTip::add( w->m_radioQualityLevel, ttQuality );
-    QToolTip::add( w->m_labelQualityLevel, ttQuality );
-    QToolTip::add( w->m_slideQualityLevel, ttQuality );
+    w->m_radioQualityLevel->setToolTip( ttQuality );
+    w->m_labelQualityLevel->setToolTip( ttQuality );
+    w->m_slideQualityLevel->setToolTip( ttQuality );
     w->m_radioQualityLevel->setWhatsThis( wsQuality );
     w->m_labelQualityLevel->setWhatsThis( wsQuality );
     w->m_slideQualityLevel->setWhatsThis( wsQuality );

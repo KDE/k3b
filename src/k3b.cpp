@@ -543,10 +543,10 @@ void K3bMainWindow::createClient( K3bDoc* doc )
     }
 
     doc->setView( view );
-    view->setCaption( doc->URL().fileName() );
+    view->setWindowTitle( doc->URL().fileName() );
 
     m_documentTab->insertTab( doc );
-    m_documentTab->showPage( view );
+    m_documentTab->showPage(  view );
 
     slotCurrentDocChanged();
 }
@@ -1087,7 +1087,7 @@ void K3bMainWindow::slotStatusMsg(const QString &text)
 //   statusBar()->clear();
 //   statusBar()->changeItem(text,1);
 
-    statusBar()->message( text, 2000 );
+    statusBar()->showMessage( text, 2000 );
 }
 
 

@@ -391,7 +391,7 @@ void K3bWelcomeWidget::saveConfig( KConfigGroup& c )
     QList<QAction *> items(main->m_actions);
     for( QList<QAction *>::const_iterator it = items.begin();
             it != items.end(); ++it )
-        sl.append( (*it)->name() );
+        sl.append( (*it)->objectName() );
 
     c.writeEntry( "welcome_actions", sl );
 }
@@ -432,7 +432,7 @@ void K3bWelcomeWidget::mousePressEvent ( QMouseEvent* e )
             if ( s_allActions[i][0] != '_' ) {
                 QAction* a = m_mainWindow->actionCollection()->action( s_allActions[i] );
                 if ( a && main->m_actions.count(a)==0 ) {
-                    map.insert( addPop.addAction( a->iconSet(), a->text() ), a );
+                    map.insert( addPop.addAction( a->icon(), a->text() ), a );
                 }
             }
         }
@@ -446,14 +446,14 @@ void K3bWelcomeWidget::mousePressEvent ( QMouseEvent* e )
         if( widgetAtPos && widgetAtPos->inherits( "K3bFlatButton" ) ) {
             KMenu pop;
             removeAction = pop.addAction( SmallIcon("list-remove"), i18n("Remove Button") );
-            if ( addPop.count() > 0 )
+            if ( addPop.actions().count() > 0 )
                 pop.insertItem( i18n("Add Button"), &addPop );
-            pop.insertSeparator();
+            pop.addSeparator();
             r = pop.exec( e->globalPos() );
         }
         else {
             addPop.addTitle( i18n("Add Button"));
-            addPop.insertSeparator();
+            addPop.addSeparator();
             r = addPop.exec( e->globalPos() );
         }
 

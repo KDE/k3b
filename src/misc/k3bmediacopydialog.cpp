@@ -117,7 +117,8 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
     QLabel* pixLabel = new QLabel( groupCopies );
     pixLabel->setPixmap( SmallIcon( "tools-media-optical-copy", KIconLoader::SizeMedium ) );
     pixLabel->setScaledContents( false );
-    m_spinCopies = new QSpinBox( 1, 999, 1, groupCopies );
+    m_spinCopies = new QSpinBox( groupCopies );
+    m_spinCopies->setRange( 1, 999 );
 
     Q3GroupBox* groupOptions = new Q3GroupBox( 5, Qt::Vertical, i18n("Settings"), optionTab );
     groupOptions->setInsideSpacing( spacingHint() );
@@ -167,7 +168,8 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
     KHBox* box = new KHBox( m_groupAdvancedDataOptions );
     box->setSpacing( spacingHint() );
     box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
-    m_spinDataRetries = new QSpinBox( 1, 128, 1, box );
+    m_spinDataRetries = new QSpinBox( box );
+    m_spinDataRetries->setRange( 1, 128 );
     m_checkIgnoreDataReadErrors = K3bStdGuiItems::ignoreAudioReadErrorsCheckBox( m_groupAdvancedDataOptions );
     m_checkNoCorrection = new QCheckBox( i18n("No error correction"), m_groupAdvancedDataOptions );
 
@@ -177,7 +179,8 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
     box = new KHBox( m_groupAdvancedAudioOptions );
     box->setSpacing( spacingHint() );
     box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
-    m_spinAudioRetries = new QSpinBox( 1, 128, 1, box );
+    m_spinAudioRetries = new QSpinBox( box );
+    m_spinAudioRetries->setRange( 1, 128 );
     m_checkIgnoreAudioReadErrors = K3bStdGuiItems::ignoreAudioReadErrorsCheckBox( m_groupAdvancedAudioOptions );
     box = new KHBox( m_groupAdvancedAudioOptions );
     box->setSpacing( spacingHint() );

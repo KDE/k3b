@@ -218,7 +218,7 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension )
 
 
     // create the commandline
-    QStringList params = QStringList::split( ' ', d->cmd.command, false );
+    QStringList params = d->cmd.command.split( ' ' );
     for( QStringList::iterator it = params.begin(); it != params.end(); ++it ) {
         (*it).replace( "%f", d->fileName );
         (*it).replace( "%a", d->artist );

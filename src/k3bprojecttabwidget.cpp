@@ -77,39 +77,39 @@ K3bProjectTabWidget::~K3bProjectTabWidget()
 void K3bProjectTabWidget::addTab( QWidget* child, const QString& label )
 {
     QTabWidget::addTab( child, label );
-    tabBar()->setShown( count() != 1 );
+    tabBar()->setVisible( count() != 1 );
 }
 
 
 void K3bProjectTabWidget::addTab( QWidget* child, const QIcon& iconset, const QString& label )
 {
     QTabWidget::addTab( child, iconset, label );
-    tabBar()->setShown( count() != 1 );
+    tabBar()->setVisible( count() != 1 );
 }
 
 void K3bProjectTabWidget::tabInserted ( int index )
 {
     QTabWidget::tabInserted ( index );
-    tabBar()->setShown( count() != 1 );
+    tabBar()->setVisible( count() != 1 );
 }
 
 void K3bProjectTabWidget::insertTab( QWidget* child, const QString& label, int index )
 {
     QTabWidget::insertTab( child, label, index );
-    tabBar()->setShown( count() != 1 );
+    tabBar()->setVisible( count() != 1 );
 }
 
 
 void K3bProjectTabWidget::insertTab( QWidget* child, const QIcon& iconset, const QString& label, int index )
 {
     QTabWidget::insertTab( child, iconset, label, index );
-    tabBar()->setShown( count() != 1 );
+    tabBar()->setVisible( count() != 1 );
 }
 
 void K3bProjectTabWidget::removePage( QWidget* w )
 {
     QTabWidget::removePage( w );
-    tabBar()->setShown( count() != 1 );
+    tabBar()->setVisible( count() != 1 );
 }
 
 
@@ -138,7 +138,7 @@ void K3bProjectTabWidget::slotDocChanged( K3bDoc* doc )
 {
     // we need to cache the icon changes since the changed() signal will be emitted very often
     if( !m_projectDataMap[doc].modified ) {
-        setTabIconSet( doc->view(), KIcon( "document-save" ) );
+        setTabIcon( indexOf( doc->view() ), KIcon( "document-save" ) );
         m_projectDataMap[doc].modified = true;
 
         // we need this one for the session management
@@ -149,7 +149,7 @@ void K3bProjectTabWidget::slotDocChanged( K3bDoc* doc )
 
 void K3bProjectTabWidget::slotDocSaved( K3bDoc* doc )
 {
-    setTabIconSet( doc->view(), QIcon() );
+    setTabIcon( indexOf( doc->view() ), QIcon() );
     changeTab( doc->view(), doc->URL().fileName() );
 }
 

@@ -115,7 +115,7 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent )
   QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
   toolBoxLayout->addItem( spacer );
   m_labelLength = new QLabel( mainWidget() );
-  m_labelLength->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
+  m_labelLength->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
   toolBoxLayout->addWidget( m_labelLength );
 
 

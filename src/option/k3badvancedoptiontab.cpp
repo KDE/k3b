@@ -22,11 +22,10 @@
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 #include <qtabwidget.h>
 #include <qradiobutton.h>
 #include <qvalidator.h>
-#include <q3buttongroup.h>
 #include <qspinbox.h>
 #include <qtooltip.h>
 
@@ -58,9 +57,8 @@ void K3bAdvancedOptionTab::setupGui()
     groupAdvancedLayout->setMargin( 0 );
 
 
-    Q3GroupBox* groupWritingApp = new Q3GroupBox( 0, Qt::Vertical, i18n("Burning"), this );
-    groupWritingApp->layout()->setMargin( 0 );
-    QGridLayout* bufferLayout = new QGridLayout( groupWritingApp->layout() );
+    QGroupBox* groupWritingApp = new QGroupBox( i18n("Burning"), this );
+    QGridLayout* bufferLayout = new QGridLayout( groupWritingApp );
     bufferLayout->setMargin( KDialog::marginHint() );
     bufferLayout->setSpacing( KDialog::spacingHint() );
 
@@ -79,9 +77,14 @@ void K3bAdvancedOptionTab::setupGui()
     bufferLayout->addMultiCellWidget( m_checkAllowWritingAppSelection, 4, 4, 0, 2 );
     bufferLayout->setColStretch( 2, 1 );
 
-    Q3GroupBox* groupMisc = new Q3GroupBox( 2, Qt::Vertical, i18n("Miscellaneous"), this );
+    QGroupBox* groupMisc = new QGroupBox( i18n("Miscellaneous"), this );
+    QVBoxLayout* groupMiscLayout = new QVBoxLayout( groupMisc );
+    groupMiscLayout->setMargin( KDialog::marginHint() );
+    groupMiscLayout->setSpacing( KDialog::spacingHint() );
     m_checkEject = new QCheckBox( i18n("Do not &eject medium after write process"), groupMisc );
+    groupMiscLayout->addWidget( m_checkEject );
     m_checkAutoErasingRewritable = new QCheckBox( i18n("Automatically erase CD-RWs and DVD-RWs"), groupMisc );
+    groupMiscLayout->addWidget( m_checkAutoErasingRewritable );
 
     groupAdvancedLayout->addWidget( groupWritingApp, 0, 0 );
     groupAdvancedLayout->addWidget( groupMisc, 1, 0 );

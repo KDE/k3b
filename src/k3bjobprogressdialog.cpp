@@ -223,7 +223,7 @@ void K3bJobProgressDialog::setupGUI()
     layout3->addWidget( m_labelSubTask );
 
     m_labelSubProcessedSize = new QLabel( mainWidget() );
-    m_labelSubProcessedSize->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
+    m_labelSubProcessedSize->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     layout3->addWidget( m_labelSubProcessedSize );
     mainLayout->addLayout( layout3 );
 
@@ -236,7 +236,7 @@ void K3bJobProgressDialog::setupGUI()
     layout4->addWidget( textLabel5 );
 
     m_labelProcessedSize = new QLabel( mainWidget() );
-    m_labelProcessedSize->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
+    m_labelProcessedSize->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     layout4->addWidget( m_labelProcessedSize );
     mainLayout->addLayout( layout4 );
 
@@ -507,7 +507,7 @@ void K3bJobProgressDialog::slotStarted()
     m_timer->start( 1000 );
     m_startTime = QDateTime::currentDateTime();
     if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->mainWidget()) )
-        m_plainCaption = w->caption();
+        m_plainCaption = w->windowTitle();
 
     m_logFile.open();
 }

@@ -325,7 +325,7 @@ void K3bDataPropertiesDialog::loadListProperties( const QList<K3bDataItem*>& ite
           it != m_dataItems.end(); ++it ) {
         K3bDataItem* item = *it;
         if ( m_checkHideOnJoliet->isChecked() != item->hideOnJoliet() ) {
-            m_checkHideOnJoliet->setNoChange();
+            m_checkHideOnJoliet->setCheckState( Qt::PartiallyChecked );
             break;
         }
     }
@@ -334,7 +334,7 @@ void K3bDataPropertiesDialog::loadListProperties( const QList<K3bDataItem*>& ite
           it != m_dataItems.end(); ++it ) {
         K3bDataItem* item = *it;
         if ( m_checkHideOnRockRidge->isChecked() != item->hideOnRockRidge() ) {
-            m_checkHideOnRockRidge->setNoChange();
+            m_checkHideOnRockRidge->setCheckState( Qt::PartiallyChecked );
             break;
         }
     }

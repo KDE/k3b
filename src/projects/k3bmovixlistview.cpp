@@ -320,7 +320,7 @@ Q3DragObject* K3bMovixListView::dragObject()
 
 void K3bMovixListView::slotChanged()
 {
-    header()->setShown( m_doc->root()->numFiles() > 0 );
+    header()->setVisible( m_doc->root()->numFiles() > 0 );
 }
 
 #include "k3bmovixlistview.moc"

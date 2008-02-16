@@ -149,7 +149,7 @@ void K3bFileTreeComboBox::slotGoUrl()
     // to expand another user's home dir we need a tilde followed by a user name
     static QRegExp someUsersHomeDir( "\\~([^/]+)" );
     int pos = 0;
-    while( ( pos = someUsersHomeDir.search( p, pos ) ) != -1 ) {
+    while( ( pos = someUsersHomeDir.indexIn( p, pos ) ) != -1 ) {
         KUser user( someUsersHomeDir.cap(1) );
         if( user.isValid() )
             p.replace( pos, someUsersHomeDir.cap(1).length() + 1, user.homeDir() );

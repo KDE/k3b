@@ -141,7 +141,7 @@ K3bPassivePopup::K3bPassivePopup( QWidget* parent )
   connect( d->closeButton, SIGNAL(clicked()), this, SLOT(slotClose()) );
 
   d->stickyButton = new K3bMiniButton( d->titleLabel );
-  d->stickyButton->setToggleButton( true );
+  d->stickyButton->setCheckable( true );
   d->stickyButton->setPixmap( const_cast< const char** >( sticky_xpm ) );
   d->stickyButton->setFixedSize( d->closeButton->pixmap()->width(), d->closeButton->pixmap()->height() );
   d->stickyButton->setToolTip( i18n("Keep Open") );
@@ -180,15 +180,15 @@ K3bPassivePopup::~K3bPassivePopup()
 
 void K3bPassivePopup::setShowCloseButton( bool b )
 {
-  d->closeButton->setShown( b );
+  d->closeButton->setVisible( b );
   adjustSize();
 }
 
 
 void K3bPassivePopup::setShowCountdown( bool b )
 {
-  d->timeoutWidget->setShown( b );
-  d->stickyButton->setShown( b );
+  d->timeoutWidget->setVisible( b );
+  d->stickyButton->setVisible( b );
 }
 
 
@@ -202,7 +202,7 @@ void K3bPassivePopup::setMessage( const QString& m )
 void K3bPassivePopup::setTitle( const QString& t )
 {
   d->titleLabel->setText( t );
-  //  d->titleLabel->setShown( !t.isEmpty() );
+  //  d->titleLabel->setVisible( !t.isEmpty() );
   adjustSize();
 }
 

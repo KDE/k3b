@@ -287,7 +287,7 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent )
              this, SLOT( slotExpandUrl( const QModelIndex& ) ) );
 
     // add the default places
-    d->model->addPlace( i18n( "Home" ), KIcon("user-home"), QDir::homeDirPath() );
+    d->model->addPlace( i18n( "Home" ), KIcon("user-home"), QDir::homePath() );
     d->model->addPlace( i18n( "Root" ), KIcon("folder-red"), KUrl( "/" ) );
 
     connect( this, SIGNAL(clicked(const QModelIndex&)), SLOT(slotClicked(const QModelIndex&)) );

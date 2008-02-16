@@ -794,7 +794,8 @@ void K3bFillStatusDisplay::slotDocChanged()
     // cache updates
     if( !d->updateTimer.isActive() ) {
         slotUpdateDisplay();
-        d->updateTimer.start( 500, false );
+        d->updateTimer.setSingleShot( false );
+        d->updateTimer.start( 500 );
     }
 }
 

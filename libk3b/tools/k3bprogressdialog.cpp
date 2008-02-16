@@ -20,8 +20,6 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <QStackedWidget>
-//Added by qt3to4:
-#include <Q3GridLayout>
 
 #include <klocale.h>
 #include <QtGui/QProgressBar>
@@ -35,7 +33,7 @@ K3bProgressDialog::K3bProgressDialog( const QString& text,
     setCaption( caption );
 
     QWidget* main = mainWidget();
-    Q3GridLayout* mainLayout = new Q3GridLayout( main );
+    QGridLayout* mainLayout = new QGridLayout( main );
     mainLayout->setMargin( marginHint() );
     mainLayout->setSpacing( spacingHint() );
 

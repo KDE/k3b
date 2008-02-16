@@ -95,16 +95,16 @@ K3bMovixOptionsWidget::~K3bMovixOptionsWidget()
 
 void K3bMovixOptionsWidget::init( const K3bMovixBin* bin )
 {
-  m_labelAudioBackground->setShown( bin->hasFeature( "newfiles" ) );
-  m_comboAudioBackground->setShown( bin->hasFeature( "newfiles" ) );
-  m_labelKeyboardLayout->setShown( bin->hasFeature( "newfiles" ) );
-  m_comboKeyboardLayout->setShown( bin->hasFeature( "newfiles" ) );
+  m_labelAudioBackground->setVisible( bin->hasFeature( "newfiles" ) );
+  m_comboAudioBackground->setVisible( bin->hasFeature( "newfiles" ) );
+  m_labelKeyboardLayout->setVisible( bin->hasFeature( "newfiles" ) );
+  m_comboKeyboardLayout->setVisible( bin->hasFeature( "newfiles" ) );
 
-  m_comboSubtitleFontset->insertStringList( bin->supportedSubtitleFonts() );
+  m_comboSubtitleFontset->addItems( bin->supportedSubtitleFonts() );
   m_helpLangHelper->insertLanguages( bin->supportedLanguages() );
-  m_comboDefaultBootLabel->insertStringList( bin->supportedBootLabels() );
+  m_comboDefaultBootLabel->addItems( bin->supportedBootLabels() );
   m_keyboardLangHelper->insertLanguages( bin->supportedKbdLayouts() );
-  m_comboAudioBackground->insertStringList( bin->supportedBackgrounds() );
+  m_comboAudioBackground->addItems( bin->supportedBackgrounds() );
 }
 
 

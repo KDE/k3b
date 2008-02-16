@@ -172,7 +172,7 @@ void kio_videodvdProtocol::get(const KUrl& url )
     {
       const K3bIso9660File* file = static_cast<const K3bIso9660File*>( e );
       totalSize( file->size() );
-      QByteArray buffer( 10*2048 );
+      QByteArray buffer( 10*2048, '\n' );
       int read = 0;
       int cnt = 0;
       KIO::filesize_t totalRead = 0;
@@ -344,7 +344,7 @@ void kio_videodvdProtocol::mimetype( const KUrl& url )
       {
         // send some data
         const K3bIso9660File* file = static_cast<const K3bIso9660File*>( e );
-        QByteArray buffer( 10*2048 );
+        QByteArray buffer( 10*2048, '\n' );
         int read = file->read( 0, buffer.data(), buffer.size() );
         if( read > 0 )
         {

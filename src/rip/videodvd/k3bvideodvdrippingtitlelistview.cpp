@@ -177,7 +177,7 @@ protected:
 	    preH = m_preview.height()*preW/m_preview.width();
 	  if( preW > w )
 	    preW = m_preview.width()*preH/m_preview.height();
-	  m_scaledPreview.convertFromImage( m_preview.smoothScale( preW, preH ), 0 );
+	  m_scaledPreview = QPixmap::fromImage( m_preview.scaled( preW, preH, Qt::IgnoreAspectRatio, Qt::SmoothTransformation ), 0 );
 	}
 
 	// center the preview in the column

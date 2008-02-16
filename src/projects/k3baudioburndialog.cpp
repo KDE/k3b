@@ -86,7 +86,7 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent )
     m_checkNormalize = K3bStdGuiItems::normalizeCheckBox( advancedSettingsGroup );
 
     Q3GroupBox* advancedGimmickGroup = new Q3GroupBox( 1, Qt::Vertical, i18n("Gimmicks"), advancedTab );
-    m_checkHideFirstTrack = new QCheckBox( i18n( "Hide first track" ), advancedGimmickGroup, "m_checkHideFirstTrack" );
+    m_checkHideFirstTrack = new QCheckBox( i18n( "Hide first track" ), advancedGimmickGroup );
 
     m_audioRippingGroup = new Q3GroupBox( 3, Qt::Vertical, i18n("Audio Ripping"), advancedTab );
     KHBox* box = new KHBox( m_audioRippingGroup );
@@ -96,7 +96,8 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent )
     box = new KHBox( m_audioRippingGroup );
     box->setSpacing( spacingHint() );
     box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
-    m_spinAudioRippingReadRetries = new QSpinBox( 1, 128, 1, box );
+    m_spinAudioRippingReadRetries = new QSpinBox( box );
+    m_spinAudioRippingReadRetries->setRange( 1, 128 );
     m_checkAudioRippingIgnoreReadErrors = new QCheckBox( i18n("Ignore read errors"), m_audioRippingGroup );
 
     advancedTabGrid->addWidget( advancedSettingsGroup, 0, 0 );
@@ -290,7 +291,7 @@ void K3bAudioBurnDialog::showEvent( QShowEvent* e )
         }
     }
 
-    m_audioRippingGroup->setShown( showRipOptions );
+    m_audioRippingGroup->setVisible( showRipOptions );
 
     K3bProjectBurnDialog::showEvent(e);
 }

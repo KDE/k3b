@@ -18,8 +18,6 @@
 
 #include <kdialog.h>
 #include "k3b_export.h"
-//Added by qt3to4:
-#include <QLabel>
 
 class K3bBusyWidget;
 class QLabel;
@@ -37,9 +35,9 @@ class LIBK3B_EXPORT  K3bProgressDialog : public KDialog
   Q_OBJECT
 
  public:
-  K3bProgressDialog( const QString& text = QString::null,
+  K3bProgressDialog( const QString& text = QString(),
 		     QWidget* parent = 0, 
-		     const QString& caption = QString::null );
+		     const QString& caption = QString() );
   ~K3bProgressDialog();
 
   int exec( bool showProgress );

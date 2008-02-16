@@ -34,7 +34,7 @@ bool K3bCueFileWriter::save( const QString& filename )
   QFile f( filename );
 
   if( !f.open( QIODevice::WriteOnly ) ) {
-    kDebug() << "(K3bCueFileWriter) could not open file " << f.name();
+    kDebug() << "(K3bCueFileWriter) could not open file " << f.fileName();
     return false;
   }
 

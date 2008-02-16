@@ -102,13 +102,13 @@ bool K3bOggVorbisDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate
             // add meta tags
             for( int i = 0; i < d->vComment->comments; ++i ) {
                 QString comment = QString::fromUtf8( d->vComment->user_comments[i] );
-                QStringList values = QStringList::split( "=", comment );
+                QStringList values = comment.split( '=' );
                 if( values.count() > 1 ) {
-                    if( values[0].lower() == "title" )
+                    if( values[0].toLower() == "title" )
                         addMetaInfo( META_TITLE, values[1] );
-                    else if( values[0].lower() == "artist" )
+                    else if( values[0].toLower() == "artist" )
                         addMetaInfo( META_ARTIST, values[1] );
-                    else if( values[0].lower() == "description" )
+                    else if( values[0].toLower() == "description" )
                         addMetaInfo( META_COMMENT, values[1] );
                 }
             }

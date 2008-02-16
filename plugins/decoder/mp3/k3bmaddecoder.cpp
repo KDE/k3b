@@ -383,15 +383,14 @@ QString K3bMadDecoder::fileType() const
 
 QStringList K3bMadDecoder::supportedTechnicalInfos() const
 {
-  return QStringList::split( ";",
-			     i18n("Channels") + ";" +
-			     i18n("Sampling Rate") + ";" +
-			     i18n("Bitrate") + ";" +
-			     i18n("Layer") + ";" +
-			     i18n("Emphasis") + ";" +
-			     i18n("Copyright") + ";" +
-			     i18n("Original") + ";" +
-			     i18n("CRC") );
+  return QString( i18n("Channels") + ';' +
+                  i18n("Sampling Rate") + ';' +
+                  i18n("Bitrate") + ';' +
+                  i18n("Layer") + ';' +
+                  i18n("Emphasis") + ';' +
+                  i18n("Copyright") + ';' +
+                  i18n("Original") + ';' +
+                  i18n("CRC") ).split( ';' );
 }
 
 
@@ -484,7 +483,7 @@ bool K3bMadDecoderFactory::canDecode( const KUrl& url )
   if( !f.open( QIODevice::ReadOnly ) )
     return false;
   char buffer[12];
-  if( f.readBlock( buffer, 12 ) != 12 )
+  if( f.read( buffer, 12 ) != 12 )
     return false;
   if( !qstrncmp( buffer, "RIFF", 4 ) &&
       !qstrncmp( buffer + 8, "WAVE", 4 ) )

@@ -139,7 +139,7 @@ class K3bVideoCdView::VideoTrackViewCheckItem : public Q3CheckListItem
 
 };
 
-K3bVideoCdView::K3bVideoCdView( QWidget* parent, const char *name )
+K3bVideoCdView::K3bVideoCdView( QWidget* parent )
         : K3bMediaContentsView( true,
 				K3bMedium::CONTENT_VIDEO_CD,
 				K3bDevice::MEDIA_CD_ALL,
@@ -156,7 +156,7 @@ K3bVideoCdView::K3bVideoCdView( QWidget* parent, const char *name )
     QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
     toolBoxLayout->addItem( spacer );
     m_labelLength = new QLabel( mainWidget() );
-    m_labelLength->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
+    m_labelLength->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     toolBoxLayout->addWidget( m_labelLength );
 
     // the track view

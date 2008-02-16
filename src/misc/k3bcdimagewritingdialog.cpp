@@ -160,7 +160,7 @@ K3bCdImageWritingDialog::~K3bCdImageWritingDialog()
     QStringList recentImages;
     // do not store more than 10 recent images
     for ( int i = 0; i < m_comboRecentImages->count() && recentImages.count() < 10; ++i ) {
-        QString image = m_comboRecentImages->text( i );
+        QString image = m_comboRecentImages->itemText( i );
         if ( !recentImages.contains( image ) )
             recentImages += image;
     }
@@ -183,7 +183,7 @@ void K3bCdImageWritingDialog::init()
     }
 
     m_comboRecentImages->clear();
-    m_comboRecentImages->insertStringList( c.readPathEntry( "recent images", QStringList() ) );
+    m_comboRecentImages->addItems( c.readPathEntry( "recent images", QStringList() ) );
 }
 
 
@@ -197,7 +197,7 @@ void K3bCdImageWritingDialog::setupGui()
     m_comboRecentImages = new KComboBox( true, this );
     m_editImagePath = new KUrlRequester( m_comboRecentImages, groupImageUrl );
     m_editImagePath->setMode( KFile::File|KFile::ExistingOnly );
-    m_editImagePath->setCaption( i18n("Choose Image File") );
+    m_editImagePath->setWindowTitle( i18n("Choose Image File") );
     m_editImagePath->setFilter( i18n("*.iso *.toc *.ISO *.TOC *.cue *.CUE|Image Files")
                                 + "\n"
                                 + i18n("*.iso *.ISO|ISO9660 Image Files")
@@ -271,8 +271,8 @@ void K3bCdImageWritingDialog::setupGui()
     pixLabel->setPixmap( SmallIcon( "tools-media-optical-copy", KIconLoader::SizeMedium ) );
     pixLabel->setScaledContents( false );
     m_spinCopies = new QSpinBox( groupCopies );
-    m_spinCopies->setMinValue( 1 );
-    m_spinCopies->setMaxValue( 999 );
+    m_spinCopies->setMinimum( 1 );
+    m_spinCopies->setMaximum( 999 );
     // -------- copies
 
     Q3GroupBox* optionGroup = new Q3GroupBox( 3, Qt::Vertical, i18n("Settings"), optionTab );
@@ -591,7 +591,7 @@ void K3bCdImageWritingDialog::slotUpdateImage( const QString& )
         else {
             // remember as recent image
             int i = 0;
-            while ( i < m_comboRecentImages->count() && m_comboRecentImages->text(i) != path )
+            while ( i < m_comboRecentImages->count() && m_comboRecentImages->itemText(i) != path )
                 ++i;
             if ( i == m_comboRecentImages->count() )
                 m_comboRecentImages->insertItem( path, 0 );
@@ -920,7 +920,7 @@ void K3bCdImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, con
                                                          &ok,
                                                          this );
         if( ok ) {
-            if( md5sumToCompare.toLower().utf8() == d->md5Job->hexDigest().toLower() )
+            if( md5sumToCompare.toLower().toUtf8() == d->md5Job->hexDigest().toLower() )
                 KMessageBox::information( this, i18n("The MD5 Sum of %1 equals the specified.",imagePath()),
                                           i18n("MD5 Sums Equal") );
             else

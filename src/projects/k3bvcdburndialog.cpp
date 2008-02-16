@@ -273,32 +273,32 @@ void K3bVcdBurnDialog::setupAdvancedTab()
 
     m_checkGaps = new QCheckBox( i18n( "Customize gaps and margins" ), m_groupGaps );
 
-    m_labelPreGapLeadout = new QLabel( i18n( "Leadout pre gap (0..300):" ), m_groupGaps, "labelPreGapLeadout" );
-    m_spinPreGapLeadout = new QSpinBox( m_groupGaps, "m_spinPreGapLeadout" );
-    m_spinPreGapLeadout->setMinValue( 0 );
-    m_spinPreGapLeadout->setMaxValue( 300 );
+    m_labelPreGapLeadout = new QLabel( i18n( "Leadout pre gap (0..300):" ), m_groupGaps );
+    m_spinPreGapLeadout = new QSpinBox( m_groupGaps );
+    m_spinPreGapLeadout->setMinimum( 0 );
+    m_spinPreGapLeadout->setMaximum( 300 );
 
-    m_labelPreGapTrack = new QLabel( i18n( "Track pre gap (0..300):" ), m_groupGaps, "labelPreGapTrack" );
-    m_spinPreGapTrack = new QSpinBox( m_groupGaps, "m_spinPreGapTrack" );
-    m_spinPreGapTrack->setMinValue( 0 );
-    m_spinPreGapTrack->setMaxValue( 300 );
+    m_labelPreGapTrack = new QLabel( i18n( "Track pre gap (0..300):" ), m_groupGaps );
+    m_spinPreGapTrack = new QSpinBox( m_groupGaps );
+    m_spinPreGapTrack->setMinimum( 0 );
+    m_spinPreGapTrack->setMaximum( 300 );
 
-    m_labelFrontMarginTrack = new QLabel( i18n( "Track front margin (0..150):" ), m_groupGaps, "labelFrontMarginTrack" );
-    m_spinFrontMarginTrack = new QSpinBox( m_groupGaps, "m_spinFrontMarginTrack" );
-    m_spinFrontMarginTrack->setMinValue( 0 );
-    m_spinFrontMarginTrack->setMaxValue( 150 );
-    m_spinFrontMarginTrackSVCD = new QSpinBox( m_groupGaps, "m_spinFrontMarginTrackSVCD" );
-    m_spinFrontMarginTrackSVCD->setMinValue( 0 );
-    m_spinFrontMarginTrackSVCD->setMaxValue( 150 );
+    m_labelFrontMarginTrack = new QLabel( i18n( "Track front margin (0..150):" ), m_groupGaps );
+    m_spinFrontMarginTrack = new QSpinBox( m_groupGaps );
+    m_spinFrontMarginTrack->setMinimum( 0 );
+    m_spinFrontMarginTrack->setMaximum( 150 );
+    m_spinFrontMarginTrackSVCD = new QSpinBox( m_groupGaps );
+    m_spinFrontMarginTrackSVCD->setMinimum( 0 );
+    m_spinFrontMarginTrackSVCD->setMaximum( 150 );
     m_spinFrontMarginTrackSVCD->setHidden( true );
 
-    m_labelRearMarginTrack = new QLabel( i18n( "Track rear margin (0..150):" ), m_groupGaps, "labelRearMarginTrack" );
-    m_spinRearMarginTrack = new QSpinBox( m_groupGaps, "m_spinRearMarginTrack" );
-    m_spinRearMarginTrack->setMinValue( 0 );
-    m_spinRearMarginTrack->setMaxValue( 150 );
-    m_spinRearMarginTrackSVCD = new QSpinBox( m_groupGaps, "m_spinRearMarginTrackSVCD" );
-    m_spinRearMarginTrackSVCD->setMinValue( 0 );
-    m_spinRearMarginTrackSVCD->setMaxValue( 150 );
+    m_labelRearMarginTrack = new QLabel( i18n( "Track rear margin (0..150):" ), m_groupGaps );
+    m_spinRearMarginTrack = new QSpinBox( m_groupGaps );
+    m_spinRearMarginTrack->setMinimum( 0 );
+    m_spinRearMarginTrack->setMaximum( 150 );
+    m_spinRearMarginTrackSVCD = new QSpinBox( m_groupGaps );
+    m_spinRearMarginTrackSVCD->setMinimum( 0 );
+    m_spinRearMarginTrackSVCD->setMaximum( 150 );
     m_spinRearMarginTrackSVCD->setHidden( true );
 
     groupGapsLayout->addMultiCellWidget( m_checkGaps, 1, 1, 0, 4 );
@@ -367,10 +367,10 @@ void K3bVcdBurnDialog::setupAdvancedTab()
     Q3GridLayout* groupMiscLayout = new Q3GridLayout( m_groupMisc->layout() );
     groupMiscLayout->setAlignment( Qt::AlignTop );
 
-    m_labelRestriction = new QLabel( i18n( "Restriction category (0..3):" ), m_groupMisc, "m_labelRestriction" );
-    m_spinRestriction = new QSpinBox( m_groupMisc, "m_spinRestriction" );
-    m_spinRestriction->setMinValue( 0 );
-    m_spinRestriction->setMaxValue( 3 );
+    m_labelRestriction = new QLabel( i18n( "Restriction category (0..3):" ), m_groupMisc );
+    m_spinRestriction = new QSpinBox( m_groupMisc );
+    m_spinRestriction->setMinimum( 0 );
+    m_spinRestriction->setMaximum( 3 );
 
     groupMiscLayout->addWidget( m_labelRestriction, 1, 0 );
     groupMiscLayout->addMultiCellWidget( m_spinRestriction, 1, 1, 1, 4 );
@@ -440,10 +440,10 @@ void K3bVcdBurnDialog::setupLabelTab()
 
     // ----------------------------------------------------------------------
     // noEdit
-    QLabel* labelSystemId = new QLabel( i18n( "System:" ), w, "labelSystemId" );
-    QLabel* labelApplicationId = new QLabel( i18n( "Application:" ), w, "labelApplicationId" );
-    QLabel* labelInfoSystemId = new QLabel( vcdDoc() ->vcdOptions() ->systemId(), w, "labelInfoSystemId" );
-    QLabel* labelInfoApplicationId = new QLabel( vcdDoc() ->vcdOptions() ->applicationId(), w, "labelInfoApplicationId" );
+    QLabel* labelSystemId = new QLabel( i18n( "System:" ), w );
+    QLabel* labelApplicationId = new QLabel( i18n( "Application:" ), w );
+    QLabel* labelInfoSystemId = new QLabel( vcdDoc() ->vcdOptions() ->systemId(), w );
+    QLabel* labelInfoApplicationId = new QLabel( vcdDoc() ->vcdOptions() ->applicationId(), w );
 
     labelInfoSystemId->setFrameShape( QLabel::LineEditPanel );
     labelInfoSystemId->setFrameShadow( QLabel::Sunken );
@@ -455,18 +455,18 @@ void K3bVcdBurnDialog::setupLabelTab()
 
     // ----------------------------------------------------------------------
 
-    QLabel* labelVolumeId = new QLabel( i18n( "&Volume name:" ), w, "labelVolumeId" );
-    QLabel* labelAlbumId = new QLabel( i18n( "Volume &set name:" ), w, "labelAlbumId" );
-    QLabel* labelVolumeCount = new QLabel( i18n( "Volume set s&ize:" ), w, "labelVolumeCount" );
-    QLabel* labelVolumeNumber = new QLabel( i18n( "Volume set &number:" ), w, "labelVolumeNumber" );
-    QLabel* labelPublisher = new QLabel( i18n( "&Publisher:" ), w, "labelPublisher" );
+    QLabel* labelVolumeId = new QLabel( i18n( "&Volume name:" ), w );
+    QLabel* labelAlbumId = new QLabel( i18n( "Volume &set name:" ), w );
+    QLabel* labelVolumeCount = new QLabel( i18n( "Volume set s&ize:" ), w );
+    QLabel* labelVolumeNumber = new QLabel( i18n( "Volume set &number:" ), w );
+    QLabel* labelPublisher = new QLabel( i18n( "&Publisher:" ), w );
 
 
-    m_editVolumeId = new QLineEdit( w, "m_editVolumeId" );
-    m_editAlbumId = new QLineEdit( w, "m_editAlbumId" );
-    m_spinVolumeNumber = new QSpinBox( w, "m_editVolumeNumber" );
-    m_spinVolumeCount = new QSpinBox( w, "m_editVolumeCount" );
-    m_editPublisher = new QLineEdit( w, "m_editPublisher" );
+    m_editVolumeId = new QLineEdit( w );
+    m_editAlbumId = new QLineEdit( w );
+    m_spinVolumeNumber = new QSpinBox( w );
+    m_spinVolumeCount = new QSpinBox( w );
+    m_editPublisher = new QLineEdit( w );
 
     // only ISO646 d-Characters
     m_editVolumeId->setValidator( K3bValidators::iso646Validator( K3bValidators::Iso646_d, true, m_editVolumeId ) );
@@ -478,9 +478,9 @@ void K3bVcdBurnDialog::setupLabelTab()
     m_editPublisher->setValidator( K3bValidators::iso646Validator( K3bValidators::Iso646_a, true, m_editVolumeId ) );
     m_editPublisher->setMaxLength( 128 );
 
-    m_spinVolumeNumber->setMinValue( 1 );
-    m_spinVolumeNumber->setMaxValue( 1 );
-    m_spinVolumeCount->setMinValue( 1 );
+    m_spinVolumeNumber->setMinimum( 1 );
+    m_spinVolumeNumber->setMaximum( 1 );
+    m_spinVolumeCount->setMinimum( 1 );
 
     QFrame* line = new QFrame( w );
     line->setFrameShape( QFrame::HLine );
@@ -563,7 +563,7 @@ void K3bVcdBurnDialog::loadK3bDefaults()
     m_checkNonCompliant->setChecked( o.NonCompliantMode() );
     m_checkVCD30interpretation->setChecked( o.VCD30interpretation() );
     m_spinVolumeCount->setValue( o.volumeCount() );
-    m_spinVolumeNumber->setMaxValue( o.volumeCount() );
+    m_spinVolumeNumber->setMaximum( o.volumeCount() );
     m_spinVolumeNumber->setValue( o.volumeNumber() );
 
 
@@ -687,7 +687,7 @@ void K3bVcdBurnDialog::readSettings()
     }
 
     m_spinVolumeCount->setValue( vcdDoc() ->vcdOptions() ->volumeCount() );
-    m_spinVolumeNumber->setMaxValue( vcdDoc() ->vcdOptions() ->volumeCount() );
+    m_spinVolumeNumber->setMaximum( vcdDoc() ->vcdOptions() ->volumeCount() );
     m_spinVolumeNumber->setValue( vcdDoc() ->vcdOptions() ->volumeNumber() );
 
     m_checkAutoDetect->setChecked( vcdDoc() ->vcdOptions() ->AutoDetect() );
@@ -779,7 +779,7 @@ void K3bVcdBurnDialog::loadUserDefaults( const KConfigGroup& c )
     }
 
     m_spinVolumeCount->setValue( o.volumeCount() );
-    m_spinVolumeNumber->setMaxValue( o.volumeCount() );
+    m_spinVolumeNumber->setMaximum( o.volumeCount() );
     m_spinVolumeNumber->setValue( o.volumeNumber() );
 
     m_editVolumeId->setText( o.volumeId() );
@@ -925,7 +925,7 @@ void K3bVcdBurnDialog::setVolumeID()
 
 void K3bVcdBurnDialog::slotSpinVolumeCount()
 {
-    m_spinVolumeNumber->setMaxValue( m_spinVolumeCount->value() );
+    m_spinVolumeNumber->setMaximum( m_spinVolumeCount->value() );
 }
 
 void K3bVcdBurnDialog::slotVcdTypeClicked( int i )

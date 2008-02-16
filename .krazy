@@ -1,1 +1,1 @@
-EXCLUDE dpointer,inline,sigsandslots
+EXCLUDE dpointer,inline,sigsandslots,constref

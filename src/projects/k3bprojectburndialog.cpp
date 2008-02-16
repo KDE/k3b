@@ -296,7 +296,8 @@ void K3bProjectBurnDialog::prepareGui()
     QLabel* pixLabel = new QLabel( groupCopies );
     pixLabel->setPixmap( SmallIcon( "tools-media-optical-copy", KIconLoader::SizeMedium ) );
     pixLabel->setScaledContents( false );
-    m_spinCopies = new QSpinBox( 1, 999, 1, groupCopies );
+    m_spinCopies = new QSpinBox( groupCopies );
+    m_spinCopies->setRange( 1, 999 );
 
     // arrange it
     Q3GridLayout* grid = new Q3GridLayout( w );

@@ -28,7 +28,7 @@ static const int s_mode2Index = 2;
 
 
 K3bDataModeWidget::K3bDataModeWidget( QWidget* parent )
-  : QComboBox( false, parent )
+  : QComboBox( parent )
 {
   insertItem( i18n("Auto"), s_autoIndex );
   insertItem( i18n("Mode1"), s_mode1Index );

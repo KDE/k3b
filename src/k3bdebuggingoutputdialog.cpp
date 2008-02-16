@@ -82,7 +82,7 @@ void K3bDebuggingOutputDialog::slotUser1()
 
       if( f.open( QIODevice::WriteOnly ) ) {
 	QTextStream t( &f );
-	t << debugView->text();
+	t << debugView->toPlainText();
       }
       else {
 	KMessageBox::error( this, i18n("Could not open file %1",filename) );
@@ -94,7 +94,7 @@ void K3bDebuggingOutputDialog::slotUser1()
 
 void K3bDebuggingOutputDialog::slotUser2()
 {
-  QApplication::clipboard()->setText( debugView->text(), QClipboard::Clipboard );
+  QApplication::clipboard()->setText( debugView->toPlainText(), QClipboard::Clipboard );
 }
 
 #include "k3bdebuggingoutputdialog.moc"

@@ -89,12 +89,13 @@ void K3bSidePanel::addButton( QFrame* frame, QAction* a )
 {
   if( a ) {
     QToolButton* b = new QToolButton( frame );
-    b->setTextLabel( a->toolTip(), true );
-    b->setTextLabel( a->text(), false );
-    b->setIconSet( a->iconSet() );
-    b->setUsesTextLabel( true );
+    b->setText( a->toolTip() );
+    b->setToolTip( a->toolTip() );
+    b->setText( a->text() );
+    b->setIcon( a->icon() );
+    b->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
     b->setAutoRaise( true );
-    b->setTextPosition( QToolButton::BesideIcon );
+    b->setToolButtonStyle( Qt::ToolButtonTextBesideIcon );
 
     connect( b, SIGNAL(clicked()), a, SLOT(activate()) );
 

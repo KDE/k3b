@@ -202,7 +202,7 @@ QString K3bPatternParser::parsePattern( const K3bCddbResultEntry& entry,
   for( int i = 0; i < dir.length(); ++i ) {
 
     offsetStack.push(
-      conditionrx.search(dir, i, QRegExp::CaretAtOffset) );
+      conditionrx.indexIn(dir, i, QRegExp::CaretAtOffset) );
 
     if( offsetStack.top() == -1 ) {
       offsetStack.pop();

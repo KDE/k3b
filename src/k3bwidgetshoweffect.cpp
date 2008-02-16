@@ -61,7 +61,7 @@ void K3bWidgetShowEffect::show( bool effectOnly )
   m_dissolveSize = 24;
   m_dissolveDelta = -1;
 
-  m_widget->polish();
+  m_widget->ensurePolished();
 
   if( m_effect == Dissolve ) {
     // necessary to create the mask
@@ -97,7 +97,7 @@ void K3bWidgetShowEffect::timerEvent( QTimerEvent* )
 void K3bWidgetShowEffect::dissolveMask()
 {
   if( m_bShow ) {
-    m_widget->repaint( false );
+    m_widget->repaint();
     QPainter maskPainter(&m_mask);
 
     m_mask.fill(Qt::black);

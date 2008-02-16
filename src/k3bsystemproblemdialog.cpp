@@ -661,7 +661,7 @@ QList<K3bDevice::Device*> K3bSystemProblemDialog::checkForAutomounting()
 
     if( type == "supermount" || type == "subfs" ) {
       // parse the device
-      QStringList opts = QStringList::split( ",", QString::fromLocal8Bit(mountInfo->fs_mntops) );
+      QStringList opts = QString::fromLocal8Bit(mountInfo->fs_mntops).split( ',' );
       for( QStringList::const_iterator it = opts.begin(); it != opts.end(); ++it ) {
 	if( (*it).startsWith("dev=") ) {
 	  md = (*it).mid( 4 );

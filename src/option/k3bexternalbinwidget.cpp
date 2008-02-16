@@ -272,7 +272,7 @@ void K3bExternalBinWidget::save()
   QRegExp reSpace( "\\s" );
   while( paraIt.current() ) {
     K3bExternalProgramViewItem* pV = (K3bExternalProgramViewItem*)paraIt.current();
-    pV->program()->setUserParameters( QStringList::split( reSpace, pV->text(1) ) );
+    pV->program()->setUserParameters( pV->text(1).split( reSpace ) );
 
     ++paraIt;
   }

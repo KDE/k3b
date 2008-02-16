@@ -133,7 +133,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent )
     groupWriterLayout->setSpacing( KDialog::spacingHint() );
     groupWriterLayout->setMargin( 0 );
 
-    QLabel* labelSpeed = new QLabel( groupWriter, "TextLabel1" );
+    QLabel* labelSpeed = new QLabel( groupWriter );
     labelSpeed->setText( i18n( "Speed:" ) );
 
     m_comboSpeed = new K3bIntMapComboBox( groupWriter );

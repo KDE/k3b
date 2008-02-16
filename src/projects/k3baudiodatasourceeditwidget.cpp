@@ -104,8 +104,8 @@ void K3bAudioDataSourceEditWidget::loadSource( K3bAudioDataSource* source )
 				  i18n("Used part of the audio source"),
 				  colorGroup().highlight() );
 
-  m_editStartOffset->setMaxValue( source->originalLength().lba() );
-  m_editEndOffset->setMaxValue( source->originalLength().lba() );
+  m_editStartOffset->setMaximum( source->originalLength().lba() );
+  m_editEndOffset->setMaximum( source->originalLength().lba() );
 
   m_editStartOffset->setMsfValue( startOffset() );
   m_editEndOffset->setMsfValue( endOffset() );

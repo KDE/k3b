@@ -153,7 +153,7 @@ bool K3bToolTip::eventFilter( QObject* o, QEvent* e )
     case QEvent::MouseMove: {
       QMouseEvent* m = (QMouseEvent*)e;
       m_lastMousePos = m_parentWidget->mapFromGlobal( m->globalPos() );
-
+      m_tipTimer->setSingleShot( true );
       m_tipTimer->stop();
       if( m_currentTip ) {
 	// see if we have to hide it
@@ -162,13 +162,13 @@ bool K3bToolTip::eventFilter( QObject* o, QEvent* e )
 
 	  // in case we moved the mouse from one tip area to the next without leaving
 	  // the widget just popup the new tip immedeately
-	  m_tipTimer->start( 0, true );
+	  m_tipTimer->start( 0 );
 	}
       }
 
       // if we are not showing a tip currently start the tip timer
       else
-	m_tipTimer->start( m_tipTimeout, true );
+	m_tipTimer->start( m_tipTimeout );
 
       break;
     }

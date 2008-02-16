@@ -125,7 +125,7 @@ class K3bMediaSelectionComboBox : public KComboBox
   void clear();
 
   // usedby the tooltip
-  K3bDevice::Device* deviceAt( unsigned int index );
+  K3bDevice::Device* deviceAt( int index );
 
   class ToolTip;
   friend class ToolTip;

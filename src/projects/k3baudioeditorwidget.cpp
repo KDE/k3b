@@ -347,7 +347,7 @@ bool K3bAudioEditorWidget::modifyRange( int identifier, const K3b::Msf& start, c
         if( !d->allowOverlappingRanges )
             fixupOverlappingRanges( range );
 
-        repaint( false );
+        repaint();
 
         return true;
     }
