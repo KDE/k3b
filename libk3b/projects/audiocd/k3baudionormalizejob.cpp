@@ -147,7 +147,7 @@ void K3bAudioNormalizeJob::slotStdLine( const QString& line )
     m_currentTrack++;
   }
 
-  else if( int pos = line.find( "% done" ) > 0 ) {
+  else if( int pos = line.indexOf( "% done" ) > 0 ) {
     // parse progress: "XXX% done" and "batch XXX% done"
     pos -= 3;
     bool ok;

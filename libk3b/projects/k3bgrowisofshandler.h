@@ -33,7 +33,7 @@ class K3bGrowisofsHandler : public QObject
   Q_OBJECT
 
  public:
-  K3bGrowisofsHandler( QObject* parent = 0, const char* name = 0 );
+  K3bGrowisofsHandler( QObject* parent = 0 );
   ~K3bGrowisofsHandler();
 
   enum ErrorType {

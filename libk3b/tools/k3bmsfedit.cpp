@@ -36,9 +36,9 @@ K3bMsfEdit::K3bMsfEdit( QWidget* parent )
   : QSpinBox( parent )
 {
 //  setValidator( new K3bMsfValidator( this ) );
-  setMinValue( 0 );
+  setMinimum( 0 );
   // some very high value (10000 minutes)
-  setMaxValue( 10000*60*75 );
+  setMaximum( 10000*60*75 );
 
   connect( this, SIGNAL(valueChanged(int)),
 	   this, SLOT(slotValueChanged(int)) );

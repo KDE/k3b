@@ -59,7 +59,7 @@ QString K3bMovixFileItem::subTitleFileName( const QString& name )
 {
   // remove ending from k3bName
   QString subName = name;
-  int pos = subName.findRev(".");
+  int pos = subName.lastIndexOf('.');
   if( pos > 0 )
     subName.truncate( pos );
   subName += ".sub";

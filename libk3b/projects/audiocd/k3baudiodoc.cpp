@@ -391,7 +391,7 @@ K3bAudioDecoder* K3bAudioDoc::getDecoderForUrl( const KUrl& url, bool* reused )
     *reused = true;
   }
   else if( (decoder = K3bAudioDecoderFactory::createDecoder( url )) ) {
-    kDebug() << "(K3bAudioDoc) using " << decoder->className()
+    kDebug() << "(K3bAudioDoc) using " << decoder->metaObject()->className()
 	      << " for decoding of " << url.path() << endl;
 
     decoder->setFilename( url.path() );

@@ -188,7 +188,7 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
         else if( e.nodeName() == "keyboard_language")
             setKeyboardLayout( e.text() );
         else if( e.nodeName() == "codecs")
-            setCodecs( QStringList::split( ',', e.text() ) );
+            setCodecs( e.text().split( ',' ) );
         else if( e.nodeName() == "default_boot_label")
             setDefaultBootLabel( e.text() );
         else if( e.nodeName() == "additional_mplayer_options")

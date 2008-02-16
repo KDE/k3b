@@ -11,7 +11,7 @@ macro_optional_find_package(MusicBrainz)
 find_package(Kcddb REQUIRED)
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
-add_definitions (-DQT3_SUPPORT)
+add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 include(ConfigureChecks.cmake)
 

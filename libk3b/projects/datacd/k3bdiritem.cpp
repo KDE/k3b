@@ -218,7 +218,7 @@ K3bDataItem* K3bDirItem::findByPath( const QString& p )
     QString path = p;
     if( path.startsWith("/") )
         path = path.mid(1);
-    int pos = path.find( "/" );
+    int pos = path.indexOf( "/" );
     if( pos < 0 )
         return find( path );
     else {
@@ -249,7 +249,7 @@ bool K3bDirItem::mkdir( const QString& dirPath )
 
     QString restPath;
     QString dirName;
-    int pos = dirPath.find( '/' );
+    int pos = dirPath.indexOf( '/' );
     if( pos == -1 ) {
         dirName = dirPath;
     }

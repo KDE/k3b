@@ -243,7 +243,7 @@ void K3bReadcdReader::slotStdLine( const QString& line )
 
   else if( line.startsWith( "addr:" ) ) {
     bool ok;
-    long currentReadBlock = line.mid( 6, line.find("cnt")-7 ).toInt(&ok);
+    long currentReadBlock = line.mid( 6, line.indexOf("cnt")-7 ).toInt(&ok);
     if( d->firstSector < d->lastSector )
       currentReadBlock -= d->firstSector.lba();
     if( ok ) {
@@ -260,34 +260,34 @@ void K3bReadcdReader::slotStdLine( const QString& line )
     }
     else
       kError() << "(K3bReadcdReader) currentReadBlock parsing error in line: "
-		<< line.mid( 6, line.find("cnt")-7 ) << endl;
+		<< line.mid( 6, line.indexOf("cnt")-7 ) << endl;
   }
 
   else if( line.contains("Cannot read source disk") ) {
     emit infoMessage( i18n("Cannot read source disk."), ERROR );
   }
 
-  else if( (pos = line.find("Retrying from sector")) >= 0 ) {
+  else if( (pos = line.indexOf("Retrying from sector")) >= 0 ) {
     // parse the sector
     pos += 21;
     bool ok;
-    int problemSector = line.mid( pos, line.find( QRegExp("\\D"), pos )-pos ).toInt(&ok);
+    int problemSector = line.mid( pos, line.indexOf( QRegExp("\\D"), pos )-pos ).toInt(&ok);
     if( !ok ) {
       kError() << "(K3bReadcdReader) problemSector parsing error in line: "
-		<< line.mid( pos, line.find( QRegExp("\\D"), pos )-pos ) << endl;
+		<< line.mid( pos, line.indexOf( QRegExp("\\D"), pos )-pos ) << endl;
     }
     emit infoMessage( i18n("Retrying from sector %1.",problemSector), INFO );
   }
 
-  else if( (pos = line.find("Error on sector")) >= 0 ) {
+  else if( (pos = line.indexOf("Error on sector")) >= 0 ) {
     d->unreadableBlocks++;
 
     pos += 16;
     bool ok;
-    int problemSector = line.mid( pos, line.find( QRegExp("\\D"), pos )-pos ).toInt(&ok);
+    int problemSector = line.mid( pos, line.indexOf( QRegExp("\\D"), pos )-pos ).toInt(&ok);
     if( !ok ) {
       kError() << "(K3bReadcdReader) problemSector parsing error in line: "
-		<< line.mid( pos, line.find( QRegExp("\\D"), pos )-pos ) << endl;
+		<< line.mid( pos, line.indexOf( QRegExp("\\D"), pos )-pos ) << endl;
     }
 
     if( line.contains( "not corrected") ) {

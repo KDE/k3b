@@ -387,7 +387,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 
             m_tocFile->close();
 
-            writer->setTocFile( m_tocFile->name() );
+            writer->setTocFile( m_tocFile->fileName() );
 
             m_writer = writer;
         }

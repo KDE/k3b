@@ -49,7 +49,7 @@ public:
         if ( haveCustomWhatsThis() ) {
             QString ws( topWhatsThis );
             for( int i = 0; i < values.count(); ++i ) {
-                ws += "<p><b>" + q->text( i ) + "</b><br>";
+                ws += "<p><b>" + q->itemText( i ) + "</b><br>";
                 ws += values[i].second;
             }
             ws += "<p>" + bottomWhatsThis;

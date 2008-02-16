@@ -270,7 +270,7 @@ void K3bCdrecordWriter::prepareProcess()
         d->cdTextFile->write( m_rawCdText );
         d->cdTextFile->close();
 
-        *m_process << "textfile=" + d->cdTextFile->name();
+        *m_process << "textfile=" + d->cdTextFile->fileName();
     }
 
     bool manualBufferSize = k3bcore->globalSettings()->useManualBufferSize();
@@ -439,8 +439,8 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 
                 m_totalTracks = tt;
 
-                int sizeStart = line.find( QRegExp("\\d"), 10 );
-                int sizeEnd = line.find( "MB", sizeStart );
+                int sizeStart = line.indexOf( QRegExp("\\d"), 10 );
+                int sizeEnd = line.indexOf( "MB", sizeStart );
                 track.size = line.mid( sizeStart, sizeEnd-sizeStart ).toInt(&ok);
 
                 if( ok ) {
@@ -507,7 +507,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
              line.startsWith( m_cdrecordBinObject->path ) ||
              line.startsWith( m_cdrecordBinObject->path.left(m_cdrecordBinObject->path.length()-5) ) ) {
         // get rid of the path and the following colon and space
-        QString errStr = line.mid( line.find(':') + 2 );
+        QString errStr = line.mid( line.indexOf(':') + 2 );
 
         if( errStr.startsWith( "Drive does not support SAO" ) ) {
             emit infoMessage( i18n("DAO (Disk At Once) recording not supported with this writer"), K3bJob::ERROR );
@@ -541,7 +541,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
         else if( errStr.startsWith("Bad Option") ) {
             m_cdrecordError = BAD_OPTION;
             // parse option
-            int pos = line.find( "Bad Option" ) + 13;
+            int pos = line.indexOf( "Bad Option" ) + 13;
             int len = line.length() - pos - 1;
             emit infoMessage( i18n("No valid %1 option: %2",m_cdrecordBinObject->name(),line.mid(pos, len)),
                               ERROR );
@@ -591,8 +591,8 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 
     else if( line.contains( "at speed" ) ) {
         // parse the speed and inform the user if cdrdao switched it down
-        int pos = line.find( "at speed" );
-        int pos2 = line.find( "in", pos+9 );
+        int pos = line.indexOf( "at speed" );
+        int pos2 = line.indexOf( "in", pos+9 );
         int speed = static_cast<int>( line.mid( pos+9, pos2-pos-10 ).toDouble() );  // cdrecord-dvd >= 2.01a25 uses 8.0 and stuff
         if( speed != d->usedSpeed ) {
             emit infoMessage( i18n("Medium or burner do not support writing at %1x speed",d->usedSpeed), K3bJob::WARNING );
@@ -661,13 +661,13 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
         // hopefully this will do it since I have no possibility to test it!
         ::write( fd(), "\n", 1 );
     }
-    else if( s_burnfreeCounterRx.search( line ) ) {
+    else if( s_burnfreeCounterRx.indexIn( line ) ) {
         bool ok;
         int num = s_burnfreeCounterRx.cap(1).toInt(&ok);
         if( ok )
             emit infoMessage( i18np("Burnfree was used 1 time.", "Burnfree was used %n times.", num), INFO );
     }
-    else if( s_burnfreeCounterRxPredict.search( line ) ) {
+    else if( s_burnfreeCounterRxPredict.indexIn( line ) ) {
         bool ok;
         int num = s_burnfreeCounterRxPredict.cap(1).toInt(&ok);
         if( ok )

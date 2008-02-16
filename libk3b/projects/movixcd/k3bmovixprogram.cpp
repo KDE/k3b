@@ -83,7 +83,7 @@ bool K3bMovixProgram::scanNewEMovix( K3bMovixBin* bin, const QString& path )
   for( QStringList::iterator it = files.begin();
        it != files.end(); ++it ) {
     if( (*it).contains( "isolinux.cfg" ) ) {
-      bin->m_supportedBootLabels = determineSupportedBootLabels( QStringList::split( " ", *it )[1] );
+      bin->m_supportedBootLabels = determineSupportedBootLabels( QString(*it).split( ' ' )[1] );
       break;
     }
   }
@@ -141,7 +141,7 @@ bool K3bMovixProgram::scanOldEMovix( K3bMovixBin* bin, const QString& path )
     p.setOutputChannelMode( KProcess::MergedChannels );
     p.start();
     if( p.waitForFinished( -1 ) ) {
-      bin->m_movixFiles = QStringList::split( "\n", p.readAll() );
+      bin->m_movixFiles = QString(p.readAll()).split( '\n' );
     }
   }
 
@@ -198,7 +198,7 @@ bool K3bMovixProgram::scanOldEMovix( K3bMovixBin* bin, const QString& path )
   bin->m_supportedSubtitleFonts.remove("..");
   bin->m_supportedSubtitleFonts.remove("CVS");  // the eMovix makefile stuff seems not perfect ;)
   // new ttf fonts in 0.8.0rc2
-  bin->m_supportedSubtitleFonts += dir.entryList( "*.ttf", QDir::Files );
+  bin->m_supportedSubtitleFonts += dir.entryList( QStringList() << "*.ttf", QDir::Files );
   bin->m_supportedSubtitleFonts.prepend( i18n("none") );
   dir.cdUp();
   
@@ -223,7 +223,7 @@ QStringList K3bMovixProgram::determineSupportedBootLabels( const QString& isoCon
 
   QFile f( isoConfigFile );
   if( !f.open( QIODevice::ReadOnly ) ) {
-    kDebug() << "(K3bMovixProgram) could not open file '" << f.name() << "'";
+    kDebug() << "(K3bMovixProgram) could not open file '" << f.fileName() << "'";
   }
   else {
     QTextStream fs( &f );
@@ -308,7 +308,7 @@ QStringList K3bMovixBin::supported( const QString& type ) const
   p << path + "movix-conf" << "--supported=" + type;
   p.setOutputChannelMode( KProcess::MergedChannels );
   if( p.waitForFinished( -1 ) )
-    return QStringList::split( "\n", p.readAll() );
+    return QString(p.readAll()).split( '\n' );
   else
     return QStringList();
 }
@@ -337,7 +337,7 @@ QStringList K3bMovixBin::files( const QString& kbd,
 
   p.start();
   if( p.waitForFinished( -1 ) )
-    return QStringList::split( "\n", p.readAll() );
+    return QString(p.readAll()).split( '\n' );
   else
     return QStringList();
 }

@@ -42,7 +42,7 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent )
 
   // Info Label
   // ------------------------------------------------
-  m_labelDevicesInfo = new QLabel( this, "m_labelDevicesInfo" );
+  m_labelDevicesInfo = new QLabel( this );
   m_labelDevicesInfo->setAlignment( Qt::AlignVCenter | Qt::AlignLeft );
   m_labelDevicesInfo->setText( "<p>" + i18n( "K3b tries to detect all your devices properly. "
                                              "You can add devices that have not been detected and change "

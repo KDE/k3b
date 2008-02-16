@@ -106,7 +106,7 @@ int K3bVideoDvdImager::writePathSpec()
   QDir dir( KGlobal::dirs()->resourceDirs( "tmp" ).first() );
   d->tempPath = K3b::findUniqueFilePrefix( "k3bVideoDvd", dir.path() );
   kDebug() << "(K3bVideoDvdImager) creating temp dir: " << d->tempPath;
-  if( !dir.mkdir( d->tempPath, true ) ) {
+  if( !dir.mkdir( d->tempPath ) ) {
     emit infoMessage( i18n("Unable to create temporary directory '%1'.",d->tempPath), ERROR );
     return -1;
   }

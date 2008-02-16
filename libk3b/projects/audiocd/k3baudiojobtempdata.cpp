@@ -42,8 +42,8 @@ public:
 };
 
 
-K3bAudioJobTempData::K3bAudioJobTempData( K3bAudioDoc* doc, QObject* parent, const char* name )
-  : QObject( parent, name )
+K3bAudioJobTempData::K3bAudioJobTempData( K3bAudioDoc* doc, QObject* parent )
+  : QObject( parent )
 {
   d = new Private( doc );
 }

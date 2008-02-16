@@ -135,7 +135,7 @@ void K3bVcdJob::start()
     emit burning( false );
     m_canceled = false;
 
-    int pos = QString( m_doc->vcdImage() ).find( ".bin", QString( m_doc->vcdImage() ).length() - 4 );
+    int pos = QString( m_doc->vcdImage() ).indexOf( ".bin", QString( m_doc->vcdImage() ).length() - 4 );
     if ( pos > 0 ) {
         m_cueFile = m_doc->vcdImage().left( pos ) + ".cue";
     } else {
@@ -154,7 +154,7 @@ void K3bVcdJob::xmlGen()
 {
     KTemporaryFile tempF;
     tempF.open();
-    m_xmlFile = tempF.name();
+    m_xmlFile = tempF.fileName();
     tempF.remove();
 
     K3bVcdXmlView xmlView( m_doc );
@@ -257,7 +257,7 @@ void K3bVcdJob::slotParseVcdxBuildOutput( K3Process*, char* output, int len )
     QString buffer = QString::fromLocal8Bit( output, len );
 
     // split to lines
-    QStringList lines = QStringList::split( "\n", buffer );
+    QStringList lines = buffer.split( '\n' );
 
     QDomDocument xml_doc;
     QDomElement xml_root;
@@ -517,7 +517,7 @@ void K3bVcdJob::parseInformation( const QString &text )
 {
     // parse warning
     if ( text.contains( "mpeg user scan data: one or more BCD fields out of range for" ) ) {
-        int index = text.find( " for" );
+        int index = text.indexOf( " for" );
 
         emit infoMessage( i18n( "One or more BCD fields out of range for %1" , text.mid( index + 4 ).trimmed() ), K3bJob::WARNING );
 
@@ -526,18 +526,18 @@ void K3bVcdJob::parseInformation( const QString &text )
         emit infoMessage( i18n( "Consider enabling the 'update scan offsets' option, if it is not enabled already." ), K3bJob::INFO );
 
     } else if ( text.contains( "APS' pts seems out of order (actual pts" ) ) {
-        int index = text.find( "(actual pts" );
-        int index2 = text.find( ", last seen pts" );
-        int index3 = text.find( ") -- ignoring this aps" );
+        int index = text.indexOf( "(actual pts" );
+        int index2 = text.indexOf( ", last seen pts" );
+        int index3 = text.indexOf( ") -- ignoring this aps" );
 
         emit infoMessage( i18n( "APS' pts seems out of order (actual pts %1, last seen pts %2)" , text.mid( index + 12, index2 - index - 12 ).trimmed() , text.mid( index2 + 14, index3 - index2 - 14 ).trimmed() ), K3bJob::WARNING );
         emit infoMessage( i18n( "Ignoring this aps" ), K3bJob::INFO );
 
     } else if ( text.contains( "bad packet at packet" ) ) {
-        int index = text.find( "at packet #" );
-        int index2 = text.find( "(stream byte offset" );
-        int index3 = text.find( ") -- remaining " );
-        int index4 = text.find( "bytes of stream will be ignored" );
+        int index = text.indexOf( "at packet #" );
+        int index2 = text.indexOf( "(stream byte offset" );
+        int index3 = text.indexOf( ") -- remaining " );
+        int index4 = text.indexOf( "bytes of stream will be ignored" );
 
         emit infoMessage( i18n( "Bad packet at packet #%1 (stream byte offset %2)" , text.mid( index + 11, index2 - index - 11 ).trimmed() , text.mid( index2 + 19, index3 - index2 - 19 ).trimmed() ), K3bJob::WARNING );
         emit infoMessage( i18n( "Remaining %1 bytes of stream will be ignored." , text.mid( index3 + 15, index4 - index3 - 15 ).trimmed() ), K3bJob::WARNING );

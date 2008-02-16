@@ -28,7 +28,7 @@ class K3bAudioJobTempData : public QObject
   Q_OBJECT
 
  public:
-  K3bAudioJobTempData( K3bAudioDoc* doc, QObject* parent = 0, const char* name = 0 );
+  K3bAudioJobTempData( K3bAudioDoc* doc, QObject* parent = 0 );
   ~K3bAudioJobTempData();
 
   const QString& bufferFileName( int track );

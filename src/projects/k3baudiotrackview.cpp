@@ -466,7 +466,7 @@ void K3bAudioTrackView::slotChanged()
         showAllSources();
     }
 
-    header()->setShown( m_doc->numOfTracks() > 0 );
+    header()->setVisible( m_doc->numOfTracks() > 0 );
 
     kDebug() << "(K3bAudioTrackView::slotChanged) finished";
 }
@@ -914,7 +914,7 @@ void K3bAudioTrackView::showPopupMenu( Q3ListViewItem* item, const QPoint& pos, 
 
     if( m_actionPlayTrack && numTracks >= 1 ) {
         popupMenu.addAction( m_actionPlayTrack );
-        popupMenu.insertSeparator();
+        popupMenu.addSeparator();
     }
 
     if( item )
@@ -924,12 +924,12 @@ void K3bAudioTrackView::showPopupMenu( Q3ListViewItem* item, const QPoint& pos, 
         popupMenu.addAction( m_actionAddSilence );
 
     if( numSources == 1 && numTracks == 0 ) {
-        popupMenu.insertSeparator();
+        popupMenu.addSeparator();
         popupMenu.addAction( m_actionSplitSource );
         popupMenu.addAction( m_actionEditSource );
     }
     else if( numTracks == 1 && numSources == 0 ) {
-        popupMenu.insertSeparator();
+        popupMenu.addSeparator();
 
         if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>(item) )
             if( tv->track()->length().lba() > 60 )
@@ -939,12 +939,12 @@ void K3bAudioTrackView::showPopupMenu( Q3ListViewItem* item, const QPoint& pos, 
 
     }
     else if( numTracks > 1 ) {
-        popupMenu.insertSeparator();
+        popupMenu.addSeparator();
         popupMenu.addAction( m_actionMergeTracks );
     }
 
     popupMenu.addAction( m_actionProperties );
-    popupMenu.insertSeparator();
+    popupMenu.addSeparator();
     popupMenu.addAction( static_cast<K3bView*>(m_doc->view())->actionCollection()->action( "project_burn" ) );
 
     popupMenu.exec( pos );

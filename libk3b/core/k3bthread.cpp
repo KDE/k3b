@@ -77,7 +77,7 @@ void K3bThread::ensureDone()
 
 void K3bThread::slotEnsureDoneTimeout()
 {
-    if ( running() ) {
+    if ( isRunning() ) {
         terminate();
         wait();
     }

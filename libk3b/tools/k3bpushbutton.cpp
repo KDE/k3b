@@ -15,10 +15,8 @@
 #include "k3bpushbutton.h"
 
 #include <qtimer.h>
-#include <q3popupmenu.h>
+#include <qmenu.h>
 #include <qevent.h>
-//Added by qt3to4:
-#include <QMouseEvent>
 
 #include <kglobalsettings.h>
 #include <kapplication.h>
@@ -78,17 +76,17 @@ K3bPushButton::~K3bPushButton()
 }
 
 
-void K3bPushButton::setDelayedPopupMenu( Q3PopupMenu* popup )
+void K3bPushButton::setDelayedPopupMenu( QMenu* menu )
 {
   if( !d->popupTimer ) {
     d->popupTimer = new QTimer( this );
     connect( d->popupTimer, SIGNAL(timeout()), this, SLOT(slotDelayedPopup()) );
   }
 
-  setPopup( popup );
+  setMenu( menu );
 
-  // we need to do the popup handling ourselves so we cheat a little
-  // QPushButton connects a popup slot to the pressed signal which we disconnect here
+  // we need to do the menu handling ourselves so we cheat a little
+  // QPushButton connects a menu slot to the pressed signal which we disconnect here
   disconnect( this );
 }
 
@@ -99,7 +97,7 @@ bool K3bPushButton::eventFilter( QObject* o, QEvent* ev )
 
     // Popup the menu when the left mousebutton is pressed and the mouse
     // is moved by a small distance.
-    if( popup() ) {
+    if( menu() ) {
       if( ev->type() == QEvent::MouseButtonPress ) {
         QMouseEvent* mev = static_cast<QMouseEvent*>(ev);
         d->mousePressPos = mev->pos();
@@ -127,10 +125,10 @@ void K3bPushButton::slotDelayedPopup()
   if( isDown() ) {
     // popup the menu.
     // this has been taken from the QPushButton code
-    if( mapToGlobal( QPoint( 0, rect().bottom() ) ).y() + popup()->sizeHint().height() <= qApp->desktop()->height() )
-      popup()->exec( mapToGlobal( rect().bottomLeft() ) );
+    if( mapToGlobal( QPoint( 0, rect().bottom() ) ).y() + menu()->sizeHint().height() <= qApp->desktop()->height() )
+      menu()->exec( mapToGlobal( rect().bottomLeft() ) );
     else
-      popup()->exec( mapToGlobal( rect().topLeft() - QPoint( 0, popup()->sizeHint().height() ) ) );
+      menu()->exec( mapToGlobal( rect().topLeft() - QPoint( 0, menu()->sizeHint().height() ) ) );
     setDown( false );
   }
 }

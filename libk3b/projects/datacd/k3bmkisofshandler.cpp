@@ -133,7 +133,7 @@ int K3bMkisofsHandler::parseMkisofsProgress( const QString& line )
   //
 
   QString perStr = line;
-  perStr.truncate( perStr.find('%') );
+  perStr.truncate( perStr.indexOf('%') );
   bool ok;
   double p = perStr.toDouble( &ok );
   if( !ok ) {

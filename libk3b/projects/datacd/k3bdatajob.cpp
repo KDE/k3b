@@ -1022,7 +1022,7 @@ bool K3bDataJob::setupCdrdaoJob()
 
     d->tocFile->close();
 
-    writer->setTocFile( d->tocFile->name() );
+    writer->setTocFile( d->tocFile->fileName() );
 
     setWriterJob( writer );
 

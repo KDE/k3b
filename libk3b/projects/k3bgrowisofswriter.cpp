@@ -233,7 +233,7 @@ bool K3bGrowisofsWriter::prepareProcess()
 
 
   if( !d->image.isEmpty() && d->usingRingBuffer ) {
-    d->inputFile.setName( d->image );
+    d->inputFile.setFileName( d->image );
     d->trackSize = (K3b::filesize( d->image ) + 1024) / 2048;
     if( !d->inputFile.open( QIODevice::ReadOnly ) ) {
       emit infoMessage( i18n("Could not open file %1.",d->image), ERROR );
@@ -486,10 +486,10 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
     }
 
     // parse progress
-    int pos = line.find( "/" );
+    int pos = line.indexOf( '/' );
     unsigned long long done = line.left( pos ).toULongLong();
     bool ok = true;
-    d->overallSizeFromOutput = line.mid( pos+1, line.find( "(", pos ) - pos - 1 ).toULongLong( &ok );
+    d->overallSizeFromOutput = line.mid( pos+1, line.indexOf( '(', pos ) - pos - 1 ).toULongLong( &ok );
     if( d->firstSizeFromOutput == -1 )
       d->firstSizeFromOutput = done;
     done -= d->firstSizeFromOutput;
@@ -508,10 +508,10 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
       }
 
       // try parsing write speed (since growisofs 5.11)
-      pos = line.find( '@' );
+      pos = line.indexOf( '@' );
       if( pos != -1 ) {
 	pos += 1;
-	double speed = line.mid( pos, line.find( 'x', pos ) - pos ).toDouble(&ok);
+	double speed = line.mid( pos, line.indexOf( 'x', pos ) - pos ).toDouble(&ok);
 	if( ok ) {
 	  if( d->lastWritingSpeed != speed )
 	    emit writeSpeed( (int)(speed*d->speedMultiplicator()), d->speedMultiplicator() );
@@ -519,7 +519,7 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
 	}
 	else
 	  kDebug() << "(K3bGrowisofsWriter) speed parsing failed: '"
-		    << line.mid( pos, line.find( 'x', pos ) - pos ) << "'" << endl;
+		    << line.mid( pos, line.indexOf( 'x', pos ) - pos ) << "'" << endl;
       }
       else {
 	d->speedEst->dataWritten( done/1024 );
@@ -527,7 +527,7 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
     }
     else
       kDebug() << "(K3bGrowisofsWriter) progress parsing failed: '"
-		<< line.mid( pos+1, line.find( "(", pos ) - pos - 1 ).trimmed() << "'" << endl;
+		<< line.mid( pos+1, line.indexOf( '(', pos ) - pos - 1 ).trimmed() << "'" << endl;
   }
 
   //  else

@@ -739,7 +739,7 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
       m_editorComboBox->insertItem( item->text( col ) );
     }
     else {
-      m_editorComboBox->insertStringList( item->comboStrings(col) );
+      m_editorComboBox->addItems( item->comboStrings(col) );
       int current = item->comboStrings(col).findIndex( item->text(col) );
       if( current != -1 )
 	m_editorComboBox->setCurrentItem( current );
@@ -749,8 +749,6 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
   case K3bListViewItem::LINE: {
     if( !m_editorLineEdit ) {
       m_editorLineEdit = new QLineEdit( viewport() );
-      m_editorLineEdit->setFrameStyle( QFrame::Box | QFrame::Plain );
-      m_editorLineEdit->setLineWidth(1);
       m_editorLineEdit->installEventFilter( this );
     }
 
@@ -758,7 +756,7 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
     m_editorLineEdit->setText( txt );
 
     // select the edit text (handle extensions while doing so)
-    int pos = txt.findRev( '.' );
+    int pos = txt.lastIndexOf( '.' );
     if( pos > 0 )
       m_editorLineEdit->setSelection( 0, pos );
     else
@@ -838,7 +836,7 @@ void K3bListView::drawContentsOffset( QPainter * p, int ox, int oy, int cx, int 
 
     p->setPen( Qt::darkGray );
 
-    QStringList lines = QStringList::split( "\n", m_noItemText );
+    QStringList lines = m_noItemText.split( "\n" );
     int xpos = m_noItemHMargin;
     int ypos = m_noItemVMargin + p->fontMetrics().height();
 
@@ -973,7 +971,7 @@ bool K3bListView::doRename()
       switch( m_currentEditItem->editorType( m_currentEditColumn ) ) {
       case K3bListViewItem::COMBO:
 	for( int i = 0; i < m_editorComboBox->count(); ++i ) {
-	  if( m_editorComboBox->text(i) == m_currentEditItem->text(m_currentEditColumn) ) {
+	  if( m_editorComboBox->itemText(i) == m_currentEditItem->text(m_currentEditColumn) ) {
 	    m_editorComboBox->setCurrentItem( i );
 	    break;
 	  }

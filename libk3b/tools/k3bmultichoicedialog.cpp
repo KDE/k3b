@@ -89,7 +89,7 @@ K3bMultiChoiceDialog::K3bMultiChoiceDialog( const QString& caption,
     d->mapper = new QSignalMapper( this );
     connect( d->mapper, SIGNAL(mapped(int)), this, SLOT(done(int)) );
 
-    setCaption( caption );
+    setWindowTitle( caption );
 
     QGridLayout* mainGrid = new QGridLayout( this );
     mainGrid->setSpacing( KDialog::spacingHint() );
@@ -130,7 +130,7 @@ K3bMultiChoiceDialog::~K3bMultiChoiceDialog()
 int K3bMultiChoiceDialog::addButton( const KGuiItem& b )
 {
     KPushButton* button = new KPushButton( b, this );
-    d->buttonLayout->add( button );
+    d->buttonLayout->addWidget( button );
     d->buttons.append(button);
     d->mapper->setMapping( button, d->buttons.count() );
     connect( button, SIGNAL(clicked()), d->mapper, SLOT(map()) );

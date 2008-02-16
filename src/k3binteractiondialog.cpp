@@ -437,7 +437,7 @@ void K3bInteractionDialog::setButtonEnabled( int button, bool enabled )
 void K3bInteractionDialog::setButtonShown( int button, bool shown )
 {
     if( KPushButton* b = getButton( button ) ) {
-        b->setShown( shown );
+        b->setVisible( shown );
         // make sure the correct button is selected as default again
         setDefaultButton( m_defaultButton );
     }

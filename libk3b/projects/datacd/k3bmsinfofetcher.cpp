@@ -189,8 +189,8 @@ void K3bMsInfoFetcher::slotProcessExited()
   kDebug() << "(K3bMsInfoFetcher) msinfo fetched";
 
   // now parse the output
-  QString firstLine = m_collectedOutput.left( m_collectedOutput.find("\n") );
-  QStringList list = QStringList::split( ",",  firstLine );
+  QString firstLine = m_collectedOutput.left( m_collectedOutput.indexOf('\n') );
+  QStringList list = firstLine.split( ',' );
   if( list.count() == 2 ) {
     bool ok1, ok2;
     m_lastSessionStart = list.first().toInt( &ok1 );

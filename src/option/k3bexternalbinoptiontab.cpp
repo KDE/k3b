@@ -49,7 +49,7 @@ K3bExternalBinOptionTab::K3bExternalBinOptionTab( K3bExternalBinManager* manager
     m_externalBinWidget = new K3bExternalBinWidget( manager, this );
     frameLayout->addWidget( m_externalBinWidget, 1, 0 );
 
-    QLabel* m_labelInfo = new QLabel( this, "m_labelInfo" );
+    QLabel* m_labelInfo = new QLabel( this );
     m_labelInfo->setText( "<p>" + i18n( "Specify the paths to the external programs that K3b needs to work properly, "
                                         "or press \"Search\" to let K3b search for the programs." ) );
     m_labelInfo->setWordWrap( true );

@@ -21,7 +21,6 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-//Added by qt3to4:
 
 
 static const int s_unrealisticHighClippingValue = 100000;
@@ -206,8 +205,8 @@ void K3bVideoDVDTitleDetectClippingJob::slotTranscodeStderr( const QString& line
   // parse progress
   // encoding frame [185],  24.02 fps, 93.0%, ETA: 0:00:00, ( 0| 0| 0)
   if( line.startsWith( "encoding frame" ) ) {
-    int pos1 = line.find( '[', 15 );
-    int pos2 = line.find( ']', pos1+1 );
+    int pos1 = line.indexOf( '[', 15 );
+    int pos2 = line.indexOf( ']', pos1+1 );
     if( pos1 > 0 && pos2 > 0 ) {
       bool ok;
       int encodedFrames = line.mid( pos1+1, pos2-pos1-1 ).toInt( &ok );
@@ -235,9 +234,9 @@ void K3bVideoDVDTitleDetectClippingJob::slotTranscodeStderr( const QString& line
 
   // [detectclipping#0] valid area: X: 5..719 Y: 72..507  -> -j 72,6,68,0
   else if( line.startsWith( "[detectclipping" ) ) {
-    int pos = line.find( "-j" );
+    int pos = line.indexOf( "-j" );
     if( pos > 0 ) {
-      QStringList values = QStringList::split( ',', line.mid( pos+3 ) );
+      QStringList values = line.mid( pos+3 ).split( ',' );
       m_clippingTop = qMin( m_clippingTop, values[0].toInt() );
       m_clippingLeft = qMin( m_clippingLeft, values[1].toInt() );
       m_clippingBottom = qMin( m_clippingBottom, values[2].toInt() );

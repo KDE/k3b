@@ -693,7 +693,7 @@ bool K3bMixedJob::prepareWriter()
         writer->setMulti( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION
                           && m_currentAction == WRITING_AUDIO_IMAGE );
 
-        writer->setTocFile( m_tocFile->name() );
+        writer->setTocFile( m_tocFile->fileName() );
 
         m_writer = writer;
     }

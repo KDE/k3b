@@ -249,7 +249,7 @@ void K3bVideoDVDRippingWidget::slotUpdateFreeTempSpace()
     QString path = m_editBaseDir->url().toLocalFile();
 
     if( !QFile::exists( path ) )
-        path.truncate( path.findRev('/') );
+        path.truncate( path.lastIndexOf('/') );
 
     unsigned long size, avail;
     if( K3b::kbFreeOnFs( path, size, avail ) ) {
@@ -344,12 +344,18 @@ void K3bVideoDVDRippingWidget::slotCustomPictureSize()
                                                          "Be aware that setting both the width and the height to fixed values "
                                                          "will result in no aspect ratio correction to be performed."),
                                                     dlg.mainWidget() );
-    QSpinBox* spinWidth = new QSpinBox( 0, 20000, 16, dlg.mainWidget() );
-    QSpinBox* spinHeight = new QSpinBox( 0, 20000, 16, dlg.mainWidget() );
+    QSpinBox* spinWidth = new QSpinBox( dlg.mainWidget() );
+    spinWidth->setRange( 0, 20000 );
+    spinWidth->setSingleStep( 16 );
+    QSpinBox* spinHeight = new QSpinBox( dlg.mainWidget() );
+    spinHeight->setRange( 0, 20000 );
+    spinHeight->setSingleStep( 16 );
     spinWidth->setSpecialValueText( i18n("Auto") );
     spinHeight->setSpecialValueText( i18n("Auto") );
-    QLabel* labelW = new QLabel( spinWidth, i18n("Width") + ':', dlg.mainWidget() );
-    QLabel* labelH = new QLabel( spinHeight, i18n("Height") + ':', dlg.mainWidget() );
+    QLabel* labelW = new QLabel( i18n("Width") + ':', dlg.mainWidget() );
+    labelW->setBuddy( spinWidth );
+    QLabel* labelH = new QLabel( i18n("Height") + ':', dlg.mainWidget() );
+    labelH->setBuddy( spinHeight );
     labelW->setAlignment( Qt::AlignRight|Qt::AlignVCenter );
     labelH->setAlignment( Qt::AlignRight|Qt::AlignVCenter );
 

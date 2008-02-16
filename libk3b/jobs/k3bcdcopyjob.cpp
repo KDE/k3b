@@ -311,7 +311,7 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
       }
 
       unsigned long avail, size;
-      QString pathToTest = m_tempPath.left( m_tempPath.findRev( '/' ) );
+      QString pathToTest = m_tempPath.left( m_tempPath.lastIndexOf( '/' ) );
       if( !K3b::kbFreeOnFs( pathToTest, size, avail ) ) {
 	emit infoMessage( i18n("Unable to determine free space in temporary directory '%1'.",pathToTest), ERROR );
 	d->error = true;
@@ -537,7 +537,7 @@ bool K3bCdCopyJob::prepareImageFiles()
       QDir dir( m_tempPath );
       m_tempPath = K3b::findUniqueFilePrefix( "k3bCdCopy", m_tempPath );
       kDebug() << "(K3bCdCopyJob) creating temp dir: " << m_tempPath;
-      if( !dir.mkdir( m_tempPath, true ) ) {
+      if( !dir.mkdir( m_tempPath ) ) {
 	emit infoMessage( i18n("Unable to create temporary directory '%1'.",m_tempPath), ERROR );
 	return false;
       }

@@ -232,7 +232,7 @@ bool K3bDataTrackReader::run()
 
     QFile file;
     if( d->fd == -1 ) {
-        file.setName( d->imagePath );
+        file.setFileName( d->imagePath );
         if( !file.open( QIODevice::WriteOnly ) ) {
             d->device->close();
             if( d->useLibdvdcss )

@@ -344,7 +344,7 @@ void K3bOggVorbisEncoder::setMetaDataInternal( K3bAudioEncoder::MetaDataField f,
             return;
         }
 
-        vorbis_comment_add_tag( d->vorbisComment, key.data(), value.utf8().data() );
+        vorbis_comment_add_tag( d->vorbisComment, key.data(), value.toUtf8().data() );
     }
     else
         kDebug() << "(K3bOggVorbisEncoder) call to setMetaDataInternal without init.";

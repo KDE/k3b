@@ -257,7 +257,7 @@ bool K3bFileItem::isValid() const
     // parse the link
     K3bDirItem* dir = getParent();
 
-    QStringList tokens = QStringList::split( QRegExp("/+"), dest );  // two slashes or more do the same as one does!
+    QStringList tokens = dest.split( QRegExp("/+") );  // two slashes or more do the same as one does!
 
     int i = 0;
     while( i < tokens.size() ) {

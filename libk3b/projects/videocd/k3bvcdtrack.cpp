@@ -35,7 +35,7 @@ K3bVcdTrack::K3bVcdTrack( QList<K3bVcdTrack*>* parent, const QString& filename )
         m_file( filename )
 {
     m_parent = parent;
-    m_title = QFileInfo( m_file ).baseName( true );
+    m_title = QFileInfo( m_file ).completeBaseName();
 
     for ( int i = 0; i < K3bVcdTrack::_maxPbcTracks; i++ ) {
         m_pbctrackmap.insert( i, 0L );

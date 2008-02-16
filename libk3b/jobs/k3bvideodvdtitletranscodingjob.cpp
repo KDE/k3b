@@ -384,8 +384,8 @@ void K3bVideoDVDTitleTranscodingJob::slotTranscodeStderr( const QString& line )
   // parse progress
   // encoding frames [000000-000144],  27.58 fps, EMT: 0:00:05, ( 0| 0| 0)
   if( line.startsWith( "encoding frame" ) ) {
-    int pos1 = line.find( '-', 15 );
-    int pos2 = line.find( ']', pos1+1 );
+    int pos1 = line.indexOf( '-', 15 );
+    int pos2 = line.indexOf( ']', pos1+1 );
     if( pos1 > 0 && pos2 > 0 ) {
       bool ok;
       int encodedFrames = line.mid( pos1+1, pos2-pos1-1 ).toInt( &ok );

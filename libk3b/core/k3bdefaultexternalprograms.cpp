@@ -142,7 +142,7 @@ static QString& debianWeirdnessHack( QString& path )
       kDebug() << "(K3bCdrecordProgram) Debian Wrapper script size fits. Checking file.";
       QFile f( path );
       f.open( QIODevice::ReadOnly );
-      QString s = QTextStream( &f ).read();
+      QString s = QTextStream( &f ).readAll();
       if( s.contains( "cdrecord.mmap" ) && s.contains( "cdrecord.shm" ) ) {
 	kDebug() << "(K3bCdrecordProgram) Found Debian Wrapper script.";
 	QString ext;

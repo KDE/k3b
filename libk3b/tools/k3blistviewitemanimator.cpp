@@ -16,20 +16,17 @@
 
 #include <qtimer.h>
 #include <q3listview.h>
-//Added by qt3to4:
-#include <QPixmap>
 
 
-
-K3bListViewItemAnimator::K3bListViewItemAnimator( QObject* parent, const char* name )
-  : QObject( parent, name )
+K3bListViewItemAnimator::K3bListViewItemAnimator( QObject* parent )
+  : QObject( parent )
 {
   init();
 }
 
 
-K3bListViewItemAnimator::K3bListViewItemAnimator( Q3ListViewItem* item, int col, QObject* parent, const char* name )
-  : QObject( parent, name )
+K3bListViewItemAnimator::K3bListViewItemAnimator( Q3ListViewItem* item, int col, QObject* parent )
+  : QObject( parent )
 {
   init();
   setItem( item, col );

@@ -31,11 +31,11 @@ class LIBK3B_EXPORT K3bListViewItemAnimator : public QObject
   Q_OBJECT
 
  public:
-  K3bListViewItemAnimator( QObject* parent = 0, const char* name = 0 );
+  K3bListViewItemAnimator( QObject* parent = 0 );
   /**
    * Will use the items pixmap.
    */
-  K3bListViewItemAnimator( Q3ListViewItem* item, int col, QObject* parent = 0, const char* name = 0 );
+  K3bListViewItemAnimator( Q3ListViewItem* item, int col, QObject* parent = 0 );
   ~K3bListViewItemAnimator();
 
   Q3ListViewItem* item() const;

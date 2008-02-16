@@ -38,8 +38,8 @@ public:
 };
 
 
-K3bGrowisofsHandler::K3bGrowisofsHandler( QObject* parent, const char* name )
-  : QObject( parent, name )
+K3bGrowisofsHandler::K3bGrowisofsHandler( QObject* parent )
+  : QObject( parent )
 {
   d = new Private;
   reset();
@@ -166,12 +166,12 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
       emit infoMessage( i18n("Engaging DAO"), K3bJob::WARNING );
     }
   }
-  else if( ( pos = line.find( "Current Write Speed" ) ) > 0 ) {
+  else if( ( pos = line.indexOf( "Current Write Speed" ) ) > 0 ) {
     // parse write speed
     // /dev/sr0: "Current Write Speed" is 2.4x1385KBps
 
     pos += 24;
-    int endPos = line.find( 'x', pos+1 );
+    int endPos = line.indexOf( 'x', pos+1 );
     bool ok = true;
     double speed = line.mid( pos, endPos-pos ).toDouble(&ok);
     if( ok )
@@ -181,13 +181,13 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
     else
       kDebug() << "(K3bGrowisofsHandler) parsing error: '" << line.mid( pos, endPos-pos ) << "'";
   }
-  else if( (pos = line.find( "RBU" )) > 0 ) {
+  else if( (pos = line.indexOf( "RBU" )) > 0 ) {
 
     // FIXME: use QRegExp
 
     // parse ring buffer fill for growisofs >= 6.0
     pos += 4;
-    int endPos = line.find( '%', pos+1 );
+    int endPos = line.indexOf( '%', pos+1 );
     bool ok = true;
     double val = line.mid( pos, endPos-pos ).toDouble( &ok );
     if( ok ) {
@@ -198,8 +198,8 @@ void K3bGrowisofsHandler::handleLine( const QString& line )
       }
 
       // device buffer for growisofs >= 7.0
-      pos = line.find( "UBU", pos );
-      endPos = line.find( '%', pos+5 );
+      pos = line.indexOf( "UBU", pos );
+      endPos = line.indexOf( '%', pos+5 );
       if( pos > 0 ) {
 	pos += 4;
 	val = line.mid( pos, endPos-pos ).toDouble( &ok );

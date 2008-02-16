@@ -28,7 +28,7 @@ static QString qrichtextify( const QString& text )
   if ( text.isEmpty() || text[0] == '<' )
     return text;
 
-  QStringList lines = QStringList::split('\n', text);
+  QStringList lines = text.split('\n');
   for(QStringList::Iterator it = lines.begin(); it != lines.end(); ++it)
   {
     *it = Qt::convertFromPlainText( *it, Qt::WhiteSpaceNormal );
@@ -37,17 +37,17 @@ static QString qrichtextify( const QString& text )
   return lines.join(QString::null);
 }
 
-K3bRichTextLabel::K3bRichTextLabel( const QString &text , QWidget *parent, const char *name )
- : QLabel ( parent, name ) {
+K3bRichTextLabel::K3bRichTextLabel( const QString &text , QWidget *parent )
+ : QLabel ( parent ) {
   m_defaultWidth = qMin(400, KGlobalSettings::desktopGeometry(this).width()*2/5);
-  setAlignment( Qt::TextWordWrap );
+  setWordWrap( true );
   setText(text);
 }
 
-K3bRichTextLabel::K3bRichTextLabel( QWidget *parent, const char *name )
- : QLabel ( parent, name ) {
+K3bRichTextLabel::K3bRichTextLabel( QWidget *parent )
+ : QLabel ( parent ) {
   m_defaultWidth = qMin(400, KGlobalSettings::desktopGeometry(this).width()*2/5);
-  setAlignment( Qt::TextWordWrap );
+  setWordWrap( true );
 }
 
 void K3bRichTextLabel::setDefaultWidth(int defaultWidth)

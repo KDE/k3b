@@ -135,7 +135,7 @@ K3bActivePipe::~K3bActivePipe()
 
 bool K3bActivePipe::open( bool closeWhenDone )
 {
-    if( d->running() )
+    if( d->isRunning() )
         return false;
 
     d->closeWhenDone = closeWhenDone;

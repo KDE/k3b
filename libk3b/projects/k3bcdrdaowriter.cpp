@@ -659,12 +659,12 @@ bool K3bCdrdaoWriter::cueSheet()
             QTextStream ts( &f );
             QString line = ts.readLine();
             f.close();
-            int pos = line.find( "FILE \"" );
+            int pos = line.indexOf( "FILE \"" );
             if( pos < 0 )
                 return false;
 
             pos += 6;
-            int endPos = line.find( "\" BINARY", pos+1 );
+            int endPos = line.indexOf( "\" BINARY", pos+1 );
             if( endPos < 0 )
                 return false;
 
@@ -679,7 +679,7 @@ bool K3bCdrdaoWriter::cueSheet()
 
             KTemporaryFile tempF;
             tempF.open();
-            QString tempFile = tempF.name();
+            QString tempFile = tempF.fileName();
             tempF.remove();
 
             if ( symlink(QFile::encodeName( binpath ), QFile::encodeName( tempFile + ".bin") ) == -1 )
@@ -800,8 +800,8 @@ void K3bCdrdaoWriter::unknownCdrdaoLine( const QString& line )
     if( line.contains( "at speed" ) )
     {
         // parse the speed and inform the user if cdrdao switched it down
-        int pos = line.find( "at speed" );
-        int po2 = line.find( QRegExp("\\D"), pos + 9 );
+        int pos = line.indexOf( "at speed" );
+        int po2 = line.indexOf( QRegExp("\\D"), pos + 9 );
         int speed = line.mid( pos+9, po2-pos-9 ).toInt();
         if( speed < d->usedSpeed )
         {
@@ -865,7 +865,7 @@ void K3bCdrdaoWriter::parseCdrdaoLine( const QString& str )
     }
     else if( str.startsWith( "Found pre-gap" ) )
     {
-        emit infoMessage( i18n("Found pregap: %1", str.mid(str.find(":")+1) ), K3bJob::INFO );
+        emit infoMessage( i18n("Found pregap: %1", str.mid(str.indexOf(":")+1) ), K3bJob::INFO );
     }
     else
         unknownCdrdaoLine(str);
@@ -896,7 +896,7 @@ void K3bCdrdaoWriter::parseCdrdaoError( const QString& line )
         emit infoMessage( i18n("Cue sheet not accepted."), K3bJob::ERROR );
         m_knownError = true;
     }
-    else if( (pos = line.find( "Illegal option" )) > 0 ) {
+    else if( (pos = line.indexOf( "Illegal option" )) > 0 ) {
         // ERROR: Illegal option: -wurst
         emit infoMessage( i18n("No valid %1 option: %2",m_cdrdaoBinObject->name(),line.mid(pos+16)),
                           ERROR );
@@ -915,12 +915,12 @@ void K3bCdrdaoWriter::parseCdrdaoError( const QString& line )
 void K3bCdrdaoWriter::parseCdrdaoWrote( const QString& line )
 {
     int pos, po2;
-    pos = line.find( "Wrote" );
-    po2 = line.find( " ", pos + 6 );
+    pos = line.indexOf( "Wrote" );
+    po2 = line.indexOf( " ", pos + 6 );
     int processed = line.mid( pos+6, po2-pos-6 ).toInt();
 
-    pos = line.find( "of" );
-    po2 = line.find( " ", pos + 3 );
+    pos = line.indexOf( "of" );
+    po2 = line.indexOf( " ", pos + 3 );
     m_size = line.mid( pos+3, po2-pos-3 ).toInt();
 
     d->speedEst->dataWritten( processed*1024 );
@@ -1037,8 +1037,8 @@ QString K3bCdrdaoWriter::findDriverFile( const K3bExternalBin* bin )
 
     // cdrdao normally in (prefix)/bin and driver table in (prefix)/share/cdrdao
     QString path = bin->path;
-    path.truncate( path.findRev("/") );
-    path.truncate( path.findRev("/") );
+    path.truncate( path.lastIndexOf("/") );
+    path.truncate( path.lastIndexOf("/") );
     path += "/share/cdrdao/drivers";
     if( QFile::exists(path) )
         return path;

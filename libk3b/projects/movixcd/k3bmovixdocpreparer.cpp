@@ -342,9 +342,9 @@ bool K3bMovixDocPreparer::addMovixFiles()
         writeIsolinuxConfigFile( d->eMovixBin->path + "/isolinux/isolinux.cfg" ) &&
         writePlaylistFile() ) {
 
-        (void)new K3bFileItem( d->movixRcFile->name(), d->doc, d->movixDir, "movixrc" );
-        (void)new K3bFileItem( d->isolinuxConfigFile->name(), d->doc, d->isolinuxDir, "isolinux.cfg" );
-        d->playlistFileItem = new K3bFileItem( d->playlistFile->name(), d->doc, d->doc->root(), "movix.list" );
+        (void)new K3bFileItem( d->movixRcFile->fileName(), d->doc, d->movixDir, "movixrc" );
+        (void)new K3bFileItem( d->isolinuxConfigFile->fileName(), d->doc, d->isolinuxDir, "isolinux.cfg" );
+        d->playlistFileItem = new K3bFileItem( d->playlistFile->fileName(), d->doc, d->doc->root(), "movix.list" );
 
         return true;
     }
@@ -375,7 +375,7 @@ bool K3bMovixDocPreparer::addMovixFilesNew()
         if( fileName == "isolinux.cfg" ) {
             // replace the local file with our modified one
             if( writeIsolinuxConfigFile( filePath ) )
-                createItem( d->isolinuxConfigFile->name(), docPath )->setK3bName( "isolinux.cfg" );
+                createItem( d->isolinuxConfigFile->fileName(), docPath )->setK3bName( "isolinux.cfg" );
             else
                 return false;
         }
@@ -417,8 +417,8 @@ bool K3bMovixDocPreparer::addMovixFilesNew()
 
     if( writePlaylistFile() && writeMovixRcFile() ) {
         // add the two items that are not listed by the script
-        createItem( d->movixRcFile->name(), "/eMoviX/movix" )->setK3bName( "movixrc" );
-        createItem( d->playlistFile->name(), "/" )->setK3bName( "movix.list" );
+        createItem( d->movixRcFile->fileName(), "/eMoviX/movix" )->setK3bName( "movixrc" );
+        createItem( d->playlistFile->fileName(), "/" )->setK3bName( "movix.list" );
         return true;
     }
     else
@@ -444,7 +444,7 @@ K3bFileItem* K3bMovixDocPreparer::createItem( const QString& localPath, const QS
 
 K3bDirItem* K3bMovixDocPreparer::createDir( const QString& docPath )
 {
-    QStringList docPathSections = QStringList::split( '/', docPath );
+    QStringList docPathSections = docPath.split( '/' );
     K3bDirItem* dir = d->doc->root();
     for( QStringList::iterator it = docPathSections.begin(); it != docPathSections.end(); ++it ) {
         K3bDataItem* next = dir->find( *it );

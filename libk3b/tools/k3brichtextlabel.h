@@ -35,8 +35,8 @@ public:
   /**
    * Default constructor.
    */
-  K3bRichTextLabel( QWidget *parent, const char *name = 0 );
-  K3bRichTextLabel( const QString &text, QWidget *parent, const char *name = 0 );
+  K3bRichTextLabel( QWidget *parent );
+  K3bRichTextLabel( const QString &text, QWidget *parent );
 
   int defaultWidth() const { return m_defaultWidth; }
   void setDefaultWidth(int defaultWidth);

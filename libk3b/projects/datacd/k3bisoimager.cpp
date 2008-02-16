@@ -398,7 +398,7 @@ void K3bIsoImager::slotMkisofsPrintSizeFinished()
     else {
         // parse the stderr output
         // I hope parsing the last line is enough!
-        int pos = m_collectedMkisofsPrintSizeStderr.findRev( "extents scheduled to be written" );
+        int pos = m_collectedMkisofsPrintSizeStderr.lastIndexOf( "extents scheduled to be written" );
 
         if( pos == -1 )
             success = false;
@@ -654,7 +654,7 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
     *m_process << "-volset-seqno" << QString::number(volsetSeqNo);
 
     if( m_sortWeightFile ) {
-        *m_process << "-sort" << m_sortWeightFile->name();
+        *m_process << "-sort" << m_sortWeightFile->fileName();
     }
 
     if( m_doc->isoOptions().createRockRidge() ) {
@@ -663,7 +663,7 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
         else
             *m_process << "-rational-rock";
         if( m_rrHideFile )
-            *m_process << "-hide-list" << m_rrHideFile->name();
+            *m_process << "-hide-list" << m_rrHideFile->fileName();
     }
 
     if( m_doc->isoOptions().createJoliet() ) {
@@ -671,7 +671,7 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
         if( m_doc->isoOptions().jolietLong() )
             *m_process << "-joliet-long";
         if( m_jolietHideFile )
-            *m_process << "-hide-joliet-list" << m_jolietHideFile->name();
+            *m_process << "-hide-joliet-list" << m_jolietHideFile->fileName();
     }
 
     if( m_doc->isoOptions().doNotCacheInodes() )
@@ -766,7 +766,7 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
     }
     *m_process << "-iso-level" << QString::number( isoLevel );
 
-    *m_process << "-path-list" << m_pathSpecFile->name();
+    *m_process << "-path-list" << m_pathSpecFile->fileName();
 
 
     // boot stuff
@@ -1176,7 +1176,7 @@ void K3bIsoImager::clearDummyDirs()
     QString jobId = qApp->sessionId() + "_" + QString::number( m_sessionNumber );
     QDir appDir( KStandardDirs::locateLocal( "appdata", "temp/" ) );
     if( appDir.cd( jobId ) ) {
-        QStringList dummyDirEntries = appDir.entryList( "dummydir*", QDir::Dirs );
+        QStringList dummyDirEntries = appDir.entryList( QStringList() << "dummydir*", QDir::Dirs );
         for( QStringList::iterator it = dummyDirEntries.begin(); it != dummyDirEntries.end(); ++it )
             appDir.rmdir( *it );
         appDir.cdUp();

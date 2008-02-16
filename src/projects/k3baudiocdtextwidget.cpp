@@ -55,14 +55,14 @@ K3bAudioCdTextWidget::K3bAudioCdTextWidget( QWidget* parent )
 {
     m_allFieldsDlg = new AllFieldsDialog( this );
 
-    m_buttonCopyTitle->setPixmap( SmallIcon( "edit-copy" ) );
-    m_buttonCopyPerformer->setPixmap( SmallIcon( "edit-copy" ) );
+    m_buttonCopyTitle->setIcon( KIcon( "edit-copy" ) );
+    m_buttonCopyPerformer->setIcon( KIcon( "edit-copy" ) );
 
-    m_allFieldsDlg->w->m_buttonCopyTitle->setPixmap( SmallIcon( "edit-copy" ) );
-    m_allFieldsDlg->w->m_buttonCopyPerformer->setPixmap( SmallIcon( "edit-copy" ) );
-    m_allFieldsDlg->w->m_buttonCopySongwriter->setPixmap( SmallIcon( "edit-copy" ) );
-    m_allFieldsDlg->w->m_buttonCopyComposer->setPixmap( SmallIcon( "edit-copy" ) );
-    m_allFieldsDlg->w->m_buttonCopyArranger->setPixmap( SmallIcon( "edit-copy" ) );
+    m_allFieldsDlg->w->m_buttonCopyTitle->setIcon( KIcon( "edit-copy" ) );
+    m_allFieldsDlg->w->m_buttonCopyPerformer->setIcon( KIcon( "edit-copy" ) );
+    m_allFieldsDlg->w->m_buttonCopySongwriter->setIcon( KIcon( "edit-copy" ) );
+    m_allFieldsDlg->w->m_buttonCopyComposer->setIcon( KIcon( "edit-copy" ) );
+    m_allFieldsDlg->w->m_buttonCopyArranger->setIcon( KIcon( "edit-copy" ) );
 
     QValidator* cdTextVal = new K3bCdTextValidator( this );
     m_editTitle->setValidator( cdTextVal );
