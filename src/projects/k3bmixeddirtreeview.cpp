@@ -45,7 +45,7 @@ public:
     if( col == 0 )
       return i18n("Audio Tracks") + QString(" (%1)" ).arg(m_doc->audioDoc()->numOfTracks());
     else
-      return QString::null;
+      return QString();
   }
 
   private:

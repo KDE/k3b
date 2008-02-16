@@ -181,7 +181,7 @@ QString K3bCutComboBox::text( int i ) const
   if( i < (int)d->originalItems.count() )
     return d->originalItems[i];
   else
-    return QString::null;
+    return QString();
 }
 
 
@@ -190,7 +190,7 @@ QString K3bCutComboBox::currentText() const
   if( currentItem() < (int)d->originalItems.count() )
     return d->originalItems[currentItem()];
   else
-    return QString::null;
+    return QString();
 }
 
 

@@ -150,8 +150,8 @@ void K3bMovixOptionsWidget::loadDefaults()
   m_comboAudioBackground->setCurrentItem( 0 ); // default
   m_comboKeyboardLayout->setCurrentItem( 0 ); // default
   m_spinLoop->setValue( 1 );
-  m_editAdditionalMplayerOptions->setText( QString::null );
-  m_editUnwantedMplayerOptions->setText( QString::null );
+  m_editAdditionalMplayerOptions->setText( QString() );
+  m_editUnwantedMplayerOptions->setText( QString() );
   m_comboBootMessageLanguage->setCurrentItem( 0 ); // default
   m_comboDefaultBootLabel->setCurrentItem( 0 );  // default
   m_checkShutdown->setChecked( false );
@@ -175,7 +175,7 @@ void K3bMovixOptionsWidget::loadConfig( const KConfigGroup & c )
   m_editUnwantedMplayerOptions->setText( c.readEntry( "unwanted_mplayer_options" ) );
 
   s = c.readEntry("boot_message_language");
-  m_helpLangHelper->setLanguage( s == "default" ? QString::null : s );
+  m_helpLangHelper->setLanguage( s == "default" ? QString() : s );
 
   s = c.readEntry( "default_boot_label" );
   if( !s.isEmpty() && s != "default" && m_comboDefaultBootLabel->contains(s) )
@@ -190,7 +190,7 @@ void K3bMovixOptionsWidget::loadConfig( const KConfigGroup & c )
     m_comboAudioBackground->setCurrentItem( 0 ); // default
 
   s = c.readEntry("keyboard_layout");
-  m_keyboardLangHelper->setLanguage( s == "default" ? QString::null : s );
+  m_keyboardLangHelper->setLanguage( s == "default" ? QString() : s );
 
   m_checkShutdown->setChecked( c.readEntry( "shutdown", false) );
   m_checkReboot->setChecked( c.readEntry( "reboot", false ) );

@@ -99,7 +99,7 @@ bool K3bEncodingConverter::fixEncoding( const Q3CString& s, Q3CString& result, Q
 
   }
   else
-    d->lastEncoding = QString::null;
+    d->lastEncoding = QString();
 #else
   return false;
 #endif

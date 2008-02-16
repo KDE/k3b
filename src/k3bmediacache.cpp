@@ -248,7 +248,7 @@ QString K3bMediaCache::mediumString( K3bDevice::Device* device, bool useContent 
         return e->medium.shortString( useContent );
     }
     else
-        return QString::null;
+        return QString();
 }
 
 

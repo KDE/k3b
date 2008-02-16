@@ -64,7 +64,7 @@ public:
         else if( col == 2 )
             return m_image->localPath();
         else
-            return QString::null;
+            return QString();
     }
 
     K3bBootItem* bootImage() const { return m_image; }

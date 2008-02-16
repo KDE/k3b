@@ -182,7 +182,7 @@ void K3bDataJob::prepareWriting()
                                           d->multiSessionParameterJob->importPreviousSession() ? d->doc->burner() : 0 );
     }
     else {
-        m_isoImager->setMultiSessionInfo( QString::null, 0 );
+        m_isoImager->setMultiSessionInfo( QString(), 0 );
     }
 
     d->initializingImager = true;
@@ -885,13 +885,13 @@ QString K3bDataJob::jobDescription() const
              d->doc->multiSessionMode() == K3bDataDoc::AUTO ) {
         return i18n("Writing Data Project")
             + ( d->doc->isoOptions().volumeID().isEmpty()
-                ? QString::null
+                ? QString()
                 : QString( " (%1)" ).arg(d->doc->isoOptions().volumeID()) );
     }
     else {
         return i18n("Writing Multisession Project")
             + ( d->doc->isoOptions().volumeID().isEmpty()
-                ? QString::null
+                ? QString()
                 : QString( " (%1)" ).arg(d->doc->isoOptions().volumeID()) );
     }
 }
@@ -1051,7 +1051,7 @@ bool K3bDataJob::setupGrowisofsJob()
     writer->setCloseDvd( usedMultiSessionMode() == K3bDataDoc::NONE ||
                          usedMultiSessionMode() == K3bDataDoc::FINISH );
 
-    writer->setImageToWrite( QString::null );  // read from stdin
+    writer->setImageToWrite( QString() );  // read from stdin
     writer->setTrackSize( m_isoImager->size() );
 
     if( usedMultiSessionMode() != K3bDataDoc::NONE ) {

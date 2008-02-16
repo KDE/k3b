@@ -328,7 +328,7 @@ void K3bJobProgressDialog::slotProcessedSubSize( int processedTrackSize, int tra
 
 void K3bJobProgressDialog::slotInfoMessage( const QString& infoString, int type )
 {
-    Q3ListViewItem* currentInfoItem = new Q3ListViewItem( m_viewInfo, m_viewInfo->lastItem(), QString::null, infoString );
+    Q3ListViewItem* currentInfoItem = new Q3ListViewItem( m_viewInfo, m_viewInfo->lastItem(), QString(), infoString );
     currentInfoItem->setSelectable( false );
 
     // set the icon
@@ -363,7 +363,7 @@ void K3bJobProgressDialog::slotFinished( bool success )
 
         m_labelTask->setText( i18n("Success.") );
         m_labelTask->setPaletteForegroundColor( Qt::darkGreen );
-        m_labelSubTask->setText( QString::null );
+        m_labelSubTask->setText( QString() );
 
         m_progressPercent->setValue(100);
         m_progressSubPercent->setValue(100);

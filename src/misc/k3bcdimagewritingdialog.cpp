@@ -916,7 +916,7 @@ void K3bCdImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, con
         bool ok;
         QString md5sumToCompare = KInputDialog::getText( i18n("MD5 Sum Check"),
                                                          i18n("Please insert the MD5 Sum to compare:"),
-                                                         QString::null,
+                                                         QString(),
                                                          &ok,
                                                          this );
         if( ok ) {

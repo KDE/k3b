@@ -89,7 +89,7 @@ QString K3bDvdBooktypeJob::jobDescription() const
 
 QString K3bDvdBooktypeJob::jobDetails() const
 {
-  return QString::null;
+  return QString();
 }
 
 

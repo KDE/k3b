@@ -50,7 +50,7 @@
 K3bVideoCdRippingDialog::K3bVideoCdRippingDialog( K3bVideoCdRippingOptions* options, QWidget* parent )
   : K3bInteractionDialog( parent,
 			  i18n( "Video CD Ripping" ),
-			  QString::null,
+			  QString(),
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
 			  "Video CD Ripping" ), // config group

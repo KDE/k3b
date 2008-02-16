@@ -92,25 +92,25 @@ void K3bAudioTrackWidget::load()
             // m_editPostGap->setMsfValue( track->postGap() );
 
             if( track->title() != m_editTitle->text() )
-                m_editTitle->setText( QString::null );
+                m_editTitle->setText( QString() );
 
             if( track->artist() != m_editPerformer->text() )
-                m_editPerformer->setText( QString::null );
+                m_editPerformer->setText( QString() );
 
             if( track->arranger() != m_editArranger->text() )
-                m_editArranger->setText( QString::null );
+                m_editArranger->setText( QString() );
 
             if( track->songwriter() != m_editSongwriter->text() )
-                m_editSongwriter->setText( QString::null );
+                m_editSongwriter->setText( QString() );
 
             if( track->composer() != m_editComposer->text() )
-                m_editComposer->setText( QString::null );
+                m_editComposer->setText( QString() );
 
             if( track->isrc() != m_editIsrc->text() )
-                m_editIsrc->setText( QString::null );
+                m_editIsrc->setText( QString() );
 
             if( track->cdTextMessage() != m_editMessage->text() )
-                m_editMessage->setText( QString::null );
+                m_editMessage->setText( QString() );
         }
 
         if( m_tracks.count() > 1 ) {

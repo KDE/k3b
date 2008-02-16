@@ -34,7 +34,7 @@ static QString qrichtextify( const QString& text )
     *it = Qt::convertFromPlainText( *it, Qt::WhiteSpaceNormal );
   }
 
-  return lines.join(QString::null);
+  return lines.join(QString());
 }
 
 K3bRichTextLabel::K3bRichTextLabel( const QString &text , QWidget *parent )

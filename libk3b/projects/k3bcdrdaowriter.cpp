@@ -1033,7 +1033,7 @@ void K3bCdrdaoWriter::slotThroughput( int t )
 QString K3bCdrdaoWriter::findDriverFile( const K3bExternalBin* bin )
 {
     if( !bin )
-        return QString::null;
+        return QString();
 
     // cdrdao normally in (prefix)/bin and driver table in (prefix)/share/cdrdao
     QString path = bin->path;
@@ -1044,7 +1044,7 @@ QString K3bCdrdaoWriter::findDriverFile( const K3bExternalBin* bin )
         return path;
     else {
         kDebug() << "(K3bCdrdaoWriter) could not find cdrdao driver table.";
-        return QString::null;
+        return QString();
     }
 }
 

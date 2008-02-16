@@ -49,7 +49,7 @@ K3bImageFileReader::~K3bImageFileReader()
 void K3bImageFileReader::openFile( const QString& filename )
 {
   d->filename = filename;
-  d->imageFilename = QString::null;
+  d->imageFilename = QString();
   setValid(false);
 
   if( !filename.isEmpty() )

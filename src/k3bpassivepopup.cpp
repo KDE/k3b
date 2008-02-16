@@ -167,7 +167,7 @@ K3bPassivePopup::K3bPassivePopup( QWidget* parent )
     d->titleLabel->setPaletteForegroundColor( theme->foregroundColor() );
   }
 
-  setTitle( QString::null );
+  setTitle( QString() );
   setMessageType( Information );
 }
 

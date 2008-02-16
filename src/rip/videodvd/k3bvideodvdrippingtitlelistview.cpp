@@ -53,7 +53,7 @@ static QString audioStreamString( const K3bVideoDVD::Title& title, unsigned int 
 	    : KGlobal::locale()->languageCodeToName( title.audioStream(i).langCode() ) 
       ,includeExtInfo && title.audioStream(i).codeExtension() != K3bVideoDVD::AUDIO_CODE_EXT_UNSPECIFIED
 	    ? QString(" ") + K3bVideoDVD::audioCodeExtensionString( title.audioStream(i).codeExtension() )
-	    : QString::null );
+	    : QString() );
   }
   if( title.numAudioStreams() > maxLines )
     s += "...";
@@ -78,7 +78,7 @@ static QString subpictureStreamString( const K3bVideoDVD::Title& title, unsigned
 	    : KGlobal::locale()->languageCodeToName( title.subPictureStream(i).langCode() ) )
       .arg( includeExtInfo && title.subPictureStream(i).codeExtension() != K3bVideoDVD::SUBPIC_CODE_EXT_UNSPECIFIED
 	    ? QString(" ") + K3bVideoDVD::subPictureCodeExtensionString( title.subPictureStream(i).codeExtension() )
-	    : QString::null );
+	    : QString() );
   }
   if( title.numSubPictureStreams() > maxLines )
     s += "...";
@@ -257,7 +257,7 @@ private:
 	.arg( m_title.videoStream().displayAspectRatio() == K3bVideoDVD::VIDEO_ASPECT_RATIO_4_3 ? "4:3" : "16:9" )
 	.arg( m_title.videoStream().letterboxed() ? QString(" - <em>") + i18n("letterboxed") + QString("</em>"):
 	      m_title.videoStream().permittedDf() == K3bVideoDVD::VIDEO_PERMITTED_DF_LETTERBOXED
-	      ? QString(" - <em>") + i18n("anamorph") + QString("</em>") : QString::null );
+	      ? QString(" - <em>") + i18n("anamorph") + QString("</em>") : QString() );
 
     case 4:
       // audio streams info

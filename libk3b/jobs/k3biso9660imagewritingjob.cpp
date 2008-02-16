@@ -410,7 +410,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
         writer->setSimulate( m_simulate );
         writer->setBurnSpeed( m_speed );
         writer->setWritingMode( m_writingMode == K3b::DAO ? K3b::DAO : 0 );
-        writer->setImageToWrite( QString::null ); // read from stdin
+        writer->setImageToWrite( QString() ); // read from stdin
         writer->setCloseDvd( !m_noFix );
         writer->setTrackSize( K3b::imageFilesize( m_imagePath )/2048 );
 
@@ -442,7 +442,7 @@ QString K3bIso9660ImageWritingJob::jobDescription() const
         return ( i18n("Burning ISO9660 Image")
                  + ( m_copies > 1
                      ? i18np(" - %n Copy", " - %n Copies", m_copies)
-                     : QString::null ) );
+                     : QString() ) );
 }
 
 

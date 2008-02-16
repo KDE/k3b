@@ -167,7 +167,7 @@ QString K3b::findUniqueFilePrefix( const QString& _prefix, const QString& path )
 
 QString K3b::findTempFile( const QString& ending, const QString& d )
 {
-    return findUniqueFilePrefix( "k3b_", d ) + ( ending.isEmpty() ? QString::null : (QString::fromLatin1(".") + ending) );
+    return findUniqueFilePrefix( "k3b_", d ) + ( ending.isEmpty() ? QString() : (QString::fromLatin1(".") + ending) );
 }
 
 

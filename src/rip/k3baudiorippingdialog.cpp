@@ -87,8 +87,8 @@ K3bAudioRippingDialog::K3bAudioRippingDialog(const K3bDevice::Toc& toc,
 					     const QList<int>& tracks,
 					     QWidget *parent )
   : K3bInteractionDialog( parent,
-			  QString::null,
-			  QString::null,
+			  QString(),
+			  QString(),
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
 			  "Audio Ripping" ), // config group

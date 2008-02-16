@@ -188,7 +188,7 @@ QString K3bBlankingJob::jobDetails() const
   if( m_mode == Fast )
     return i18n("Quick Format");
   else
-    return QString::null;
+    return QString();
 }
 
 #include "k3bblankingjob.moc"

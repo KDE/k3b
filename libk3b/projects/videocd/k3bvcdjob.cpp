@@ -568,7 +568,7 @@ QString K3bVcdJob::jobDetails() const
                     m_doc->tracks() ->count() ).arg( KIO::convertSize( m_doc->size() ) )
              + ( m_doc->copies() > 1
                  ? i18np( " - %n copy", " - %n copies", m_doc->copies() )
-                 : QString::null ) );
+                 : QString() ) );
 }
 
 #include "k3bvcdjob.moc"

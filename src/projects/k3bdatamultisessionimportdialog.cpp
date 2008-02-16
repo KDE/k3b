@@ -212,7 +212,7 @@ void K3bDataMultisessionImportDialog::addMedium( const K3bMedium& medium )
                                                sessionItem,
                                                i18n( "Session %1" ,
                                                lastSession )
-                                               + ( sessionInfo.isEmpty() ? QString::null : " (" + sessionInfo + ')' ) );
+                                               + ( sessionInfo.isEmpty() ? QString() : " (" + sessionInfo + ')' ) );
             if ( track.type() == K3bDevice::Track::AUDIO )
                 sessionItem->setPixmap( 0, SmallIcon( "audio-x-generic" ) );
             else

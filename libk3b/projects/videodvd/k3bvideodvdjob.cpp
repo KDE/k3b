@@ -55,7 +55,7 @@ QString K3bVideoDvdJob::jobDescription() const
   else {
     return i18n("Writing Video DVD")
       + ( m_doc->isoOptions().volumeID().isEmpty()
-	  ? QString::null
+	  ? QString()
 	  : QString( " (%1)" ).arg(m_doc->isoOptions().volumeID()) );
   }
 }
@@ -66,7 +66,7 @@ QString K3bVideoDvdJob::jobDetails() const
   return ( i18n("ISO9660/Udf Filesystem (Size: %1)",KIO::convertSize( doc()->size() ))
 	   + ( m_doc->copies() > 1
 	       ? i18np(" - %n copy", " - %n copies", m_doc->copies())
-	       : QString::null ) );
+	       : QString() ) );
 }
 
 #include "k3bvideodvdjob.moc"

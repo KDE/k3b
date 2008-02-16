@@ -536,7 +536,7 @@ QString K3bAudioDecoder::metaInfo( MetaDataField f )
             return item.value().toString();
     }
 
-    return QString::null;
+    return QString();
 }
 
 

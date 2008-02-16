@@ -107,7 +107,7 @@ QString K3bDvdFormattingJob::jobDetails() const
   if( d->quick )
     return i18n("Quick Format");
   else
-    return QString::null;
+    return QString();
 }
 
 

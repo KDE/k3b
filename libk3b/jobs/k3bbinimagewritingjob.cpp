@@ -220,7 +220,7 @@ QString K3bBinImageWritingJob::jobDescription() const
   return ( i18n("Writing cue/bin Image")
 	   + ( m_copies > 1
 	       ? i18np(" - %n Copy", " - %n Copies", m_copies)
-	       : QString::null ) );
+	       : QString() ) );
 }
 
 

@@ -113,11 +113,11 @@ QString K3bMadDecoder::metaInfo( MetaDataField f )
   case META_COMMENT:
     return TStringToQString( file.tag()->comment() );
   default:
-    return QString::null;
+    return QString();
   }
   }
   else {
-      return QString::null;
+      return QString();
   }
 
 #else
@@ -450,7 +450,7 @@ QString K3bMadDecoder::technicalInfo( const QString& name ) const
   else if( name == i18n("CRC") )
     return ( d->firstHeader.flags & MAD_FLAG_PROTECTION ? i18n("Yes") : i18n("No") );
   else
-    return QString::null;
+    return QString();
 }
 
 

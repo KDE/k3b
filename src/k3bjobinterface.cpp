@@ -68,7 +68,7 @@ QString K3bJobInterface::jobDescription() const
   if( m_job )
     return m_job->jobDescription();
   else
-    return QString::null;
+    return QString();
 }
 
 
@@ -77,7 +77,7 @@ QString K3bJobInterface::jobDetails() const
   if( m_job )
     return m_job->jobDetails();
   else
-    return QString::null;
+    return QString();
 }
 
 

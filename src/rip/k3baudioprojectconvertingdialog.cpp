@@ -66,8 +66,8 @@ public:
 
 K3bAudioProjectConvertingDialog::K3bAudioProjectConvertingDialog( K3bAudioDoc* doc, QWidget *parent )
     : K3bInteractionDialog( parent,
-                            QString::null,
-                            QString::null,
+                            QString(),
+                            QString(),
                             START_BUTTON|CANCEL_BUTTON,
                             START_BUTTON,
                             "Audio Project Converting" ), // config group

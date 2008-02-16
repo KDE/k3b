@@ -62,7 +62,7 @@ QString K3bAudioZeroData::type() const
 
 QString K3bAudioZeroData::sourceComment() const
 {
-  return QString::null;
+  return QString();
 }
 
 

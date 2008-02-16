@@ -397,7 +397,7 @@ QString K3bFLACDecoder::technicalInfo( const QString& info ) const
             return i18n("%1 bits",d->bitsPerSample);
     }
 
-    return QString::null;
+    return QString();
 }
 
 

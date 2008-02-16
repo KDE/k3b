@@ -123,7 +123,7 @@ void K3bMixedView::slotBurn()
 {
   if( m_doc->audioDoc()->numOfTracks() == 0 || m_doc->dataDoc()->size() == 0 ) {
     KMessageBox::information( this, i18n("Please add files and audio titles to your project first."),
-			      i18n("No Data to Burn"), QString::null, false );
+			      i18n("No Data to Burn"), QString(), false );
   }
   else {
     K3bProjectBurnDialog* dlg = newBurnDialog( this );

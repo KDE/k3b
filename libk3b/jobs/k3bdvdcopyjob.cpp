@@ -468,7 +468,7 @@ void K3bDvdCopyJob::prepareWriter()
             job->setTrackSize( d->lastSector.lba()+1 );
         }
 
-        job->setImageToWrite( QString::null ); // write to stdin
+        job->setImageToWrite( QString() ); // write to stdin
 
         d->writerJob = job;
     }

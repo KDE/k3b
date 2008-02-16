@@ -61,7 +61,7 @@ QString K3bAudioDataSourceViewItem::text( int i ) const
   case 5:
     return m_source->sourceComment();
   default:
-    return QString::null;
+    return QString();
   }
 }
 

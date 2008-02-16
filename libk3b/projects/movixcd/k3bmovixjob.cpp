@@ -125,7 +125,7 @@ QString K3bMovixJob::jobDetails() const
                    m_doc->movixFileItems().count()).arg(KIO::convertSize(m_doc->size()))
              + ( m_doc->copies() > 1
                  ? i18np(" - %n copy", " - %n copies", m_doc->copies())
-                 : QString::null ) );
+                 : QString() ) );
 }
 
 #include "k3bmovixjob.moc"

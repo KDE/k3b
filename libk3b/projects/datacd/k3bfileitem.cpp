@@ -213,7 +213,7 @@ bool K3bFileItem::exists() const
 QString K3bFileItem::absIsoPath()
 {
   //	return m_dir->absIsoPath() + m_isoName;
-  return QString::null;
+  return QString();
 }
 
 

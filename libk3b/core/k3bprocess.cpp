@@ -179,7 +179,7 @@ QStringList K3bProcess::splitOutput( char* data, int len,
   // in case we suppress empty lines we need to handle the following separately
   // to make sure we join unfinished lines correctly
   if( suppressEmptyLines && buffer[0] == '\n' )
-    lines.prepend( QString::null );
+    lines.prepend( QString() );
 
   if( !unfinishedLine.isEmpty() ) {
     lines.first().prepend( unfinishedLine );

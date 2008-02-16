@@ -295,17 +295,17 @@ QString K3bAudioMetainfoRenamerPluginWidget::createNewName( K3bFileItem* item )
 	if( i < d->pattern.length() ) {
 	  if( d->pattern[i] == 'a' ) {
 	    if( artist.isEmpty() )
-	      return QString::null;
+	      return QString();
 	    newName.append(artist);
 	  }
 	  else if( d->pattern[i] == 'n' ) {
 	    if( title.isEmpty() )
-	      return QString::null;
+	      return QString();
 	    newName.append(track);
 	  }
 	  else if( d->pattern[i] == 't' ) {
 	    if( title.isEmpty() )
-	      return QString::null;
+	      return QString();
 	    newName.append(title);
 	  }
 	  else {
@@ -347,7 +347,7 @@ QString K3bAudioMetainfoRenamerPluginWidget::createNewName( K3bFileItem* item )
     return newName;
   }
   else
-    return QString::null;
+    return QString();
 }
 
 

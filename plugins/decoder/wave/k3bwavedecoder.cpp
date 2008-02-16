@@ -349,7 +349,7 @@ QString K3bWaveDecoder::technicalInfo( const QString& name ) const
     else if( name == i18n("Sample Size") )
         return i18n("%1 bits",d->sampleSize);
     else
-        return QString::null;
+        return QString();
 }
 
 

@@ -210,7 +210,7 @@ QString K3bFFMpegFile::title() const
   if( d->formatContext->title[0] != '\0' )
     return QString::fromLocal8Bit( d->formatContext->title );
   else
-    return QString::null;
+    return QString();
 }
 
 
@@ -220,7 +220,7 @@ QString K3bFFMpegFile::author() const
   if( d->formatContext->author[0] != '\0' )
     return QString::fromLocal8Bit( d->formatContext->author );
   else
-    return QString::null;
+    return QString();
 }
 
 
@@ -230,7 +230,7 @@ QString K3bFFMpegFile::comment() const
   if( d->formatContext->comment[0] != '\0' )
     return QString::fromLocal8Bit( d->formatContext->comment );
   else
-    return QString::null;
+    return QString();
 }
 
 

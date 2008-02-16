@@ -320,7 +320,7 @@ void K3bMixedBurnDialog::slotNormalizeToggled( bool on )
       if( KMessageBox::warningYesNo( this, i18n("<p>K3b is not able to normalize audio tracks when burning on-the-fly. "
 						"The external program used for this task only supports normalizing a set "
 						"of audio files."),
-				     QString::null,
+				     QString(),
 				     KGuiItem( i18n("Disable normalization") ),
 				     KGuiItem( i18n("Disable on-the-fly burning") ),
 				     "audioProjectNormalizeOrOnTheFly" ) == KMessageBox::Yes )
@@ -339,7 +339,7 @@ void K3bMixedBurnDialog::slotCacheImageToggled( bool on )
       if( KMessageBox::warningYesNo( this, i18n("<p>K3b is not able to normalize audio tracks when burning on-the-fly. "
 						"The external program used for this task only supports normalizing a set "
 						"of audio files."),
-				     QString::null,
+				     QString(),
 				     KGuiItem( i18n("Disable normalization") ),
 				     KGuiItem( i18n("Disable on-the-fly burning") ),
 				     "audioProjectNormalizeOrOnTheFly" ) == KMessageBox::Yes )

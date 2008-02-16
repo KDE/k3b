@@ -488,7 +488,7 @@ void K3bAudioJob::slotAudioDecoderNextTrack( int t, int tt )
                               t,
                               tt,
                               track->title().isEmpty() || track->artist().isEmpty()
-                              ? QString::null
+                              ? QString()
                               : " (" + track->artist() + " - " + track->title() + ")" ) );
     }
 }
@@ -596,7 +596,7 @@ void K3bAudioJob::slotWriterNextTrack( int t, int tt )
                           t,
                           tt,
                           track->title().isEmpty() || track->artist().isEmpty()
-                          ? QString::null
+                          ? QString()
                           : " (" + track->artist() + " - " + track->title() + ")" ) );
 }
 
@@ -851,7 +851,7 @@ QString K3bAudioJob::jobDescription() const
 {
     return i18n("Writing Audio CD")
         + ( m_doc->title().isEmpty()
-            ? QString::null
+            ? QString()
             : QString( " (%1)" ).arg(m_doc->title()) );
 }
 
@@ -863,7 +863,7 @@ QString K3bAudioJob::jobDetails() const
                     m_doc->numOfTracks() ).arg(m_doc->length().toString())
              + ( m_doc->copies() > 1 && !m_doc->dummy()
                  ? i18np(" - %n copy", " - %n copies", m_doc->copies())
-                 : QString::null ) );
+                 : QString() ) );
 }
 
 #include "k3baudiojob.moc"

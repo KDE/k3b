@@ -80,7 +80,7 @@ void K3bAudioEncoder::closeFile()
       d->outputFile->close();
     delete d->outputFile;
     d->outputFile = 0;
-    d->outputFilename = QString::null;
+    d->outputFilename = QString();
   }
 }
 
@@ -90,7 +90,7 @@ const QString& K3bAudioEncoder::filename() const
   if( d->outputFile )
     return d->outputFilename;
   else
-    return QString::null;
+    return QString();
 }
 
 

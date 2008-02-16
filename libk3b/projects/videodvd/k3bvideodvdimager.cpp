@@ -200,7 +200,7 @@ void K3bVideoDvdImager::cleanup()
     dir.cdUp();
     dir.rmdir( d->tempPath );
   }
-  d->tempPath = QString::null;
+  d->tempPath = QString();
 
   K3bIsoImager::cleanup();
 }

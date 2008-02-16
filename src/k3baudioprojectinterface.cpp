@@ -49,7 +49,7 @@ QString K3bAudioProjectInterface::trackTitle( int trackNum ) const
   if( track )
     return track->title();
   else
-    return QString::null;
+    return QString();
 }
 
 
@@ -59,7 +59,7 @@ QString K3bAudioProjectInterface::trackArtist( int trackNum ) const
   if( track )
     return track->artist();
   else
-    return QString::null;
+    return QString();
 }
 
 

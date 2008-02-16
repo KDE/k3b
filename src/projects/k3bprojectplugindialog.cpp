@@ -21,8 +21,8 @@
 
 K3bProjectPluginDialog::K3bProjectPluginDialog( K3bProjectPlugin* plugin, K3bDoc* doc, QWidget* parent )
   : K3bInteractionDialog( parent,
-			  QString::null,
-			  QString::null,
+			  QString(),
+			  QString(),
 			  START_BUTTON|CANCEL_BUTTON,
 			  START_BUTTON,
 			  plugin->className() ),

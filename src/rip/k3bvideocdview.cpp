@@ -98,7 +98,7 @@ class K3bVideoCdView::VideoTrackViewCheckItem : public Q3CheckListItem
         VideoTrackViewCheckItem( Q3ListViewItem* parent,
                                  const QString& desc )
                 : Q3CheckListItem( parent,
-                                  QString::null,
+                                  QString(),
                                   Q3CheckListItem::CheckBox )
         {
             setText( 0, desc );
@@ -109,7 +109,7 @@ class K3bVideoCdView::VideoTrackViewCheckItem : public Q3CheckListItem
         VideoTrackViewCheckItem( Q3ListView* parent,
                                  const QString& desc )
                 : Q3CheckListItem( parent,
-                                  QString::null,
+                                  QString(),
                                   Q3CheckListItem::CheckBox )
         {
             setText( 0, desc );
@@ -120,7 +120,7 @@ class K3bVideoCdView::VideoTrackViewCheckItem : public Q3CheckListItem
         VideoTrackViewCheckItem( VideoTrackViewCheckItem* parent,
                                  const QString& desc )
                 : Q3CheckListItem( parent,
-                                  QString::null,
+                                  QString(),
                                   Q3CheckListItem::CheckBox )
         {
             setText( 0, desc );

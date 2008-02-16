@@ -159,7 +159,7 @@ bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
 							  titleIfo->vtsi_mat->vts_audio_attr[j].lang_code>>8, 
 							  titleIfo->vtsi_mat->vts_audio_attr[j].lang_code & 0xff );
       else
-	m_titles[i].m_audioStreams[j].m_langCode = QString::null;
+	m_titles[i].m_audioStreams[j].m_langCode = QString();
     }
 
     //
@@ -174,7 +174,7 @@ bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
 							       titleIfo->vtsi_mat->vts_subp_attr[j].lang_code>>8, 
 							       titleIfo->vtsi_mat->vts_subp_attr[j].lang_code & 0xff );
       else
-	m_titles[i].m_subPictureStreams[j].m_langCode = QString::null;
+	m_titles[i].m_subPictureStreams[j].m_langCode = QString();
     }
 
     //

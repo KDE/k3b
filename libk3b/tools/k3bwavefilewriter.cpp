@@ -64,7 +64,7 @@ void K3bWaveFileWriter::close()
     }
   }
 
-  m_filename = QString::null;
+  m_filename = QString();
 }
 
 

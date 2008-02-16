@@ -377,9 +377,9 @@ QString K3bVcdTrack::audio_type2str( unsigned int version, unsigned int audio_mo
                                         {
                                             i18n( "unknown" ),
                                             i18n( "invalid" ),
-                                            QString::null,
-                                            QString::null,
-                                            QString::null
+                                            QString(),
+                                            QString(),
+                                            QString()
                                         },
                                         {
                                             i18n( "stereo" ),
@@ -388,11 +388,11 @@ QString K3bVcdTrack::audio_type2str( unsigned int version, unsigned int audio_mo
                                             i18n( "single channel" )
                                         },
                                         {
-                                            QString::null,
+                                            QString(),
                                             i18n( "dual channel" ),
                                             i18n( "surround sound" ),
-                                            QString::null,
-                                            QString::null
+                                            QString(),
+                                            QString()
                                         }
                                     };
     switch ( version ) {

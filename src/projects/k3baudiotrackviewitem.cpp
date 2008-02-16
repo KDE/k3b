@@ -99,7 +99,7 @@ QString K3bAudioTrackViewItem::text(int i) const
 {
   // to avoid crashes when the track has been deleted and this viewitem is still around
   if( m_alreadyRemoved )
-    return QString::null;
+    return QString();
 
   //
   // We add two spaces after all strings (except the once renameable)
@@ -116,14 +116,14 @@ QString K3bAudioTrackViewItem::text(int i) const
       return m_track->title();
     case 3:
       if( m_showingSources )
-	return QString::null;
+	return QString();
       else
 	return m_track->firstSource()->type();
     case 4:
       return m_track->length().toString();
     case 5:
       if( m_showingSources )
-	return QString::null;
+	return QString();
       else
 	return m_track->firstSource()->sourceComment();
     default:

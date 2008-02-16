@@ -225,7 +225,7 @@ void K3bMixedJob::start()
 
     // we do not have msinfo yet
     m_currentAction = INITIALIZING_IMAGER;
-    m_isoImager->setMultiSessionInfo( QString::null );
+    m_isoImager->setMultiSessionInfo( QString() );
     m_isoImager->init();
 }
 
@@ -622,7 +622,7 @@ void K3bMixedJob::slotAudioDecoderNextTrack( int t, int tt )
                               ,t
                               ,tt
                               , track->title().isEmpty() || track->artist().isEmpty()
-                              ? QString::null
+                              ? QString()
                               : " (" + track->artist() + " - " + track->title() + ")" ) );
     }
 }
@@ -884,7 +884,7 @@ void K3bMixedJob::slotWriterNextTrack( int t, int )
                               ,t
                               ,m_doc->numOfTracks()
                               , track->title().isEmpty() || track->artist().isEmpty()
-                              ? QString::null
+                              ? QString()
                               : " (" + track->artist() + " - " + track->title() + ")" ) );
     else
         emit newSubTask( i18n("Writing track %1 of %2 (%3)",t,m_doc->numOfTracks(),i18n("ISO9660 data")) );
@@ -1321,12 +1321,12 @@ QString K3bMixedJob::jobDescription() const
     if( m_doc->mixedType() == K3bMixedDoc::DATA_SECOND_SESSION )
         return i18n("Writing Enhanced Audio CD")
             + ( m_doc->audioDoc()->title().isEmpty()
-                ? QString::null
+                ? QString()
                 : QString( " (%1)" ).arg(m_doc->audioDoc()->title()) );
     else
         return i18n("Writing Mixed Mode CD")
             + ( m_doc->audioDoc()->title().isEmpty()
-                ? QString::null
+                ? QString()
                 : QString( " (%1)" ).arg(m_doc->audioDoc()->title()) );
 }
 
@@ -1339,7 +1339,7 @@ QString K3bMixedJob::jobDetails() const
                   ,KIO::convertSize(m_doc->dataDoc()->size()))
              + ( m_doc->copies() > 1 && !m_doc->dummy()
                  ? i18np(" - %n copy", " - %n copies", m_doc->copies())
-                 : QString::null ) );
+                 : QString() ) );
 }
 
 #include "k3bmixedjob.moc"

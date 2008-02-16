@@ -105,7 +105,7 @@ bool K3bAudioCdTrackSource::initParanoia()
                 QString s = i18n("Please insert Audio CD %1%2"
                             ,QString::number(m_discId),
                             m_cdTitle.isEmpty() || m_cdArtist.isEmpty()
-                                 ? QString::null
+                                 ? QString()
                                  : " (" + m_cdArtist + " - " + m_cdTitle + ")");
 
                 while( K3bDevice::Device* dev = K3bThreadWidget::selectDevice( track()->doc()->view(), s ) ) {

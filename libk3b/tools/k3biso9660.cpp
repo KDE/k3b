@@ -557,7 +557,7 @@ void K3bIso9660::addBoot(struct el_torito_boot_descriptor* bootdesc)
 
   entry=new K3bIso9660File( this, "Catalog", "Catalog", dirent->permissions() & ~S_IFDIR,
 			    dirent->date(), dirent->adate(), dirent->cdate(),
-			    dirent->user(), dirent->group(), QString::null,
+			    dirent->user(), dirent->group(), QString(),
 			    isonum_731(bootdesc->boot_catalog), 2048 );
   dirent->addEntry(entry);
   if (!ReadBootTable(&K3bIso9660::read_callback,isonum_731(bootdesc->boot_catalog),&boot,this)) {
@@ -573,7 +573,7 @@ void K3bIso9660::addBoot(struct el_torito_boot_descriptor* bootdesc)
       if (i>1) path += " (" + QString::number(i) + ")";
       entry=new K3bIso9660File( this, path, path, dirent->permissions() & ~S_IFDIR,
 				dirent->date(), dirent->adate(), dirent->cdate(),
-				dirent->user(), dirent->group(), QString::null,
+				dirent->user(), dirent->group(), QString(),
 				isonum_731(((struct default_entry*) be->data)->start), size<<9 );
       dirent->addEntry(entry);
       be=be->next;
@@ -667,7 +667,7 @@ bool K3bIso9660::open()
 	  path += " (" + QString::number(c_b) + ")";
 
 	dirent = new K3bIso9660Directory( this, path, path, access | S_IFDIR,
-					  buf.st_mtime, buf.st_atime, buf.st_ctime, uid, gid, QString::null );
+					  buf.st_mtime, buf.st_atime, buf.st_ctime, uid, gid, QString() );
 	d->elToritoDirs.append( dirent );
 
 	addBoot(bootdesc);
@@ -701,7 +701,7 @@ bool K3bIso9660::open()
 	}
 
 	dirent = new K3bIso9660Directory( this, path, path, access | S_IFDIR,
-					  buf.st_mtime, buf.st_atime, buf.st_ctime, uid, gid, QString::null );
+					  buf.st_mtime, buf.st_atime, buf.st_ctime, uid, gid, QString() );
 
 	// expand the root entry
 	ProcessDir( &K3bIso9660::read_callback, isonum_733(idr->extent),isonum_733(idr->size),&K3bIso9660::isofs_callback,this);

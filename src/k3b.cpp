@@ -1379,7 +1379,7 @@ void K3bMainWindow::slotShowMenuBar()
 
 void K3bMainWindow::slotShowTips()
 {
-    KTipDialog::showTip( this, QString::null, true );
+    KTipDialog::showTip( this, QString(), true );
 }
 
 

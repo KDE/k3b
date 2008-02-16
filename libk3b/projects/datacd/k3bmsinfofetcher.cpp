@@ -122,8 +122,8 @@ void K3bMsInfoFetcher::getMsInfo()
     connect( m_process, SIGNAL(processExited(K3Process*)),
 	     this, SLOT(slotProcessExited()) );
 
-    m_msInfo = QString::null;
-    m_collectedOutput = QString::null;
+    m_msInfo = QString();
+    m_collectedOutput = QString();
     m_canceled = false;
 
     if( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) {
@@ -198,10 +198,10 @@ void K3bMsInfoFetcher::slotProcessExited()
     if( ok1 && ok2 )
       m_msInfo = firstLine.trimmed();
     else
-      m_msInfo = QString::null;
+      m_msInfo = QString();
   }
   else {
-    m_msInfo = QString::null;
+    m_msInfo = QString();
   }
 
   kDebug() << "(K3bMsInfoFetcher) msinfo parsed: " << m_msInfo;

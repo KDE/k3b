@@ -349,8 +349,8 @@ void K3bIsoImager::startSizeCalculation()
     connect( m_process, SIGNAL(stderrLine( const QString& )),
              this, SLOT(slotReceivedStderr( const QString& )) );
 
-    m_collectedMkisofsPrintSizeStdout = QString::null;
-    m_collectedMkisofsPrintSizeStderr = QString::null;
+    m_collectedMkisofsPrintSizeStdout = QString();
+    m_collectedMkisofsPrintSizeStderr = QString();
     m_mkisofsPrintSizeResult = 0;
 
     if( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) {

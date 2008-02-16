@@ -152,7 +152,7 @@ K3bVideoDVDRippingDialog::K3bVideoDVDRippingDialog( const K3bVideoDVD::VideoDVD&
 						    QWidget* parent )
     : K3bInteractionDialog( parent,
                             i18n("Video DVD Ripping"),
-                            QString::null,
+                            QString(),
                             START_BUTTON|CANCEL_BUTTON,
                             START_BUTTON,
                             "VideoDVD Ripping" ), // config group
@@ -232,7 +232,7 @@ void K3bVideoDVDRippingDialog::populateTitleView( const QList<int>& titles )
                                  : KGlobal::locale()->languageCodeToName( m_dvd[*it-1].audioStream(i).langCode() ) )
                            .arg( m_dvd[*it-1].audioStream(i).codeExtension() != K3bVideoDVD::AUDIO_CODE_EXT_UNSPECIFIED
                                  ? QString(" ") + K3bVideoDVD::audioCodeExtensionString( m_dvd[*it-1].audioStream(i).codeExtension() )
-                                 : QString::null );
+                                 : QString() );
 
             if( m_dvd[*it-1].audioStream(i).format() == K3bVideoDVD::AUDIO_FORMAT_DTS ) {
                 // width of the radio button from QCheckListItem::paintCell
