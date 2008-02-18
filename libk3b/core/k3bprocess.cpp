@@ -409,42 +409,4 @@ bool K3bProcess::closeStdout()
     return K3Process::closeStdout();
 }
 
-
-K3bProcessOutputCollector::K3bProcessOutputCollector( K3Process* p )
-  : m_process(0)
-{
-  setProcess( p );
-}
-
-void K3bProcessOutputCollector::setProcess( K3Process* p )
-{
-  if( m_process )
-    m_process->disconnect( this );
-
-  m_process = p;
-  if( p ) {
-    connect( p, SIGNAL(receivedStdout(K3Process*, char*, int)),
-	     this, SLOT(slotGatherStdout(K3Process*, char*, int)) );
-    connect( p, SIGNAL(receivedStderr(K3Process*, char*, int)),
-	     this, SLOT(slotGatherStderr(K3Process*, char*, int)) );
-  }
-
-  m_gatheredOutput.truncate( 0 );
-  m_stderrOutput.truncate( 0 );
-  m_stdoutOutput.truncate( 0 );
-}
-
-void K3bProcessOutputCollector::slotGatherStderr( K3Process*, char* data, int len )
-{
-  m_gatheredOutput.append( QString::fromLocal8Bit( data, len ) );
-  m_stderrOutput.append( QString::fromLocal8Bit( data, len ) );
-}
-
-void K3bProcessOutputCollector::slotGatherStdout( K3Process*, char* data, int len )
-{
-  m_gatheredOutput.append( QString::fromLocal8Bit( data, len ) );
-  m_stdoutOutput.append( QString::fromLocal8Bit( data, len ) );
-}
-
-
 #include "k3bprocess.moc"

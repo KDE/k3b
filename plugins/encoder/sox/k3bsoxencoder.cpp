@@ -24,6 +24,7 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <klocale.h>
+#include <kprocess.h>
 
 #include <qfileinfo.h>
 #include <qfile.h>
@@ -68,33 +69,35 @@ public:
         K3bExternalBin* bin = 0;
 
         // probe version
-        K3Process vp;
-        K3bProcessOutputCollector out( &vp );
+        KProcess vp;
+        vp.setOutputChannelMode( KProcess::MergedChannels );
 
         vp << path << "-h";
-        if( vp.start( K3Process::Block, K3Process::AllOutput ) ) {
-            int pos = out.output().indexOf( "sox: SoX Version" );
+        vp.start();
+        if( vp.waitForFinished( -1 ) ) {
+            QByteArray out = vp.readAll();
+            int pos = out.indexOf( "sox: SoX Version" );
             if ( pos < 0 )
-                pos = out.output().indexOf( "sox: SoX v" ); // newer sox versions
-            int endPos = out.output().indexOf( '\n', pos );
+                pos = out.indexOf( "sox: SoX v" ); // newer sox versions
+            int endPos = out.indexOf( '\n', pos );
             if( pos > 0 && endPos > 0 ) {
                 pos += 17;
                 bin = new K3bExternalBin( this );
                 bin->path = path;
-                bin->version = out.output().mid( pos, endPos-pos );
+                bin->version = out.mid( pos, endPos-pos );
 
                 addBin( bin );
 
                 return true;
             }
             else {
-                pos = out.output().indexOf( "sox: Version" );
-                endPos = out.output().indexOf( '\n', pos );
+                pos = out.indexOf( "sox: Version" );
+                endPos = out.indexOf( '\n', pos );
                 if( pos > 0 && endPos > 0 ) {
                     pos += 13;
                     bin = new K3bExternalBin( this );
                     bin->path = path;
-                    bin->version = out.output().mid( pos, endPos-pos );
+                    bin->version = out.mid( pos, endPos-pos );
 
                     addBin( bin );
 

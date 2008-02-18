@@ -29,7 +29,6 @@
 #include <k3bglobals.h>
 #include <k3bpluginmanager.h>
 #include <k3bplugin.h>
-#include <k3bprocess.h>
 #include <k3bthememanager.h>
 #include <k3bcore.h>
 
@@ -50,7 +49,7 @@
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
-#include <k3process.h>
+#include <kprocess.h>
 #include <kglobal.h>
 
 #ifdef HAVE_ICONV_H
@@ -58,6 +57,7 @@
 #endif
 
 #include <fstab.h>
+#include <unistd.h>
 
 
 static QString markupString( const QString& s_ )
@@ -611,9 +611,9 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent)
 
 void K3bSystemProblemDialog::slotK3bSetup()
 {
-  K3Process p;
+  KProcess p;
   p << K3b::findExe("kdesu") << "kcmshell k3bsetup2 --lang " + KGlobal::locale()->language();
-  if( !p.start( K3Process::DontCare ) )
+  if( !p.startDetached() )
     KMessageBox::error( 0, i18n("Unable to start K3bSetup2.") );
 }
 
@@ -624,10 +624,12 @@ int K3bSystemProblemDialog::dmaActivated( K3bDevice::Device* dev )
   if( hdparm.isEmpty() )
     return -1;
 
-  K3bProcess p;
-  K3bProcessOutputCollector out( &p );
+  KProcess p;
+  p.setOutputChannelMode( KProcess::MergedChannels );
+
   p << hdparm << "-d" << dev->blockDeviceName();
-  if( !p.start( K3Process::Block, K3Process::AllOutput ) )
+  p.start();
+  if( !p.waitForFinished( -1 ) )
     return -1;
 
   // output is something like:
@@ -637,9 +639,10 @@ int K3bSystemProblemDialog::dmaActivated( K3bDevice::Device* dev )
   //
   // But we ignore the on/off since it might be translated
   //
-  if( out.output().contains( "1 (" ) )
+  QByteArray out = p.readAll();
+  if( out.contains( "1 (" ) )
     return 1;
-  else if( out.output().contains( "0 (" ) )
+  else if( out.contains( "0 (" ) )
     return 0;
   else
     return -1;

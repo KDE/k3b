@@ -14,8 +14,9 @@
 
 #include "k3blsofwrapper.h"
 
+#include <kprocess.h>
+
 #include <k3bdevice.h>
-#include <k3bprocess.h>
 #include <k3bglobals.h>
 
 #include <qfile.h>
@@ -63,8 +64,8 @@ bool K3bLsofWrapper::checkDevice( K3bDevice::Device* dev )
     return false;
 
   // run lsof
-  K3Process p;
-  K3bProcessOutputCollector out( &p );
+  KProcess p;
+  p.setOutputChannelMode( KProcess::OnlyStdoutChannel );
 
   //
   // We use the following output form: 
@@ -72,13 +73,14 @@ bool K3bLsofWrapper::checkDevice( K3bDevice::Device* dev )
   // c<COMMAND_NAME>
   //
   p << d->lsofBin << "-Fpc" << dev->blockDeviceName();
+  p.start();
 
-  if( !p.start( K3Process::Block, K3Process::Stdout ) )
+  if( !p.waitForFinished( -1 ) )
     return false;
 
   //
   // now process its output
-  QStringList l = out.output().split( '\n' );
+  QStringList l = QStringList::split( "\n", p.readAllStandardOutput() );
   for( QStringList::iterator it = l.begin(); it != l.end(); ++it ) {
     int pid = (*it).mid(1).toInt();
     QString app = (*(++it)).mid(1);

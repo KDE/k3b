@@ -39,9 +39,6 @@ class K3bExternalBin;
 class LIBK3B_EXPORT K3bProcess : public K3Process
 {
   Q_OBJECT
-    
- public:
-  class OutputCollector;
 
  public:
   K3bProcess();
@@ -177,30 +174,5 @@ class LIBK3B_EXPORT K3bProcess : public K3Process
 
   bool m_bSplitStdout;
 };
-
-// FIXME: replace with QProcess::readAll as in the example in the QProcess docu
-class LIBK3B_EXPORT K3bProcessOutputCollector: public QObject
-{
-  Q_OBJECT
-    
- public:
-  K3bProcessOutputCollector( K3Process* );
-  void setProcess( K3Process* );
-  
-  const QString& output() const { return m_gatheredOutput; }
-  const QString& stderrOutput() const { return m_stderrOutput; }
-  const QString& stdoutOutput() const { return m_stdoutOutput; }
-  
- private slots:
-  void slotGatherStderr( K3Process*, char*, int );
-  void slotGatherStdout( K3Process*, char*, int );
-  
- private:
-  QString m_gatheredOutput;
-  QString m_stderrOutput;
-  QString m_stdoutOutput;
-  K3Process* m_process;
-};
-
 
 #endif
