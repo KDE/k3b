@@ -16,11 +16,18 @@
 #ifndef K3B_BOOTIMAGEVIEW_H
 #define K3B_BOOTIMAGEVIEW_H
 
-#include "base_k3bbootimageview.h"
+#include "ui_base_k3bbootimageview.h"
 
 class K3bDataDoc;
 class K3bBootItem;
 
+class base_K3bBootImageView : public QWidget, public Ui::base_K3bBootImageView
+{
+public:
+  base_K3bBootImageView( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 class K3bBootImageView : public base_K3bBootImageView
 {

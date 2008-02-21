@@ -88,6 +88,14 @@ K3bBootImageView::K3bBootImageView( K3bDataDoc* doc, QWidget* parent )
              this, SLOT(slotSelectionChanged()) );
     connect( m_radioNoEmulation, SIGNAL(toggled(bool)),
              this, SLOT(slotNoEmulationToggled(bool)) );
+    connect( m_radioFloppy, SIGNAL(toggled(bool) ),this,SLOT(slotOptionsChanged() ) );
+    connect( m_radioHarddisk, SIGNAL(toggled(bool) ),this,SLOT(slotOptionsChanged() ) );
+    connect( m_checkNoBoot, SIGNAL(toggled(bool) ),this,SLOT(slotOptionsChanged() ) );
+    connect( m_checkInfoTable, SIGNAL(toggled(bool) ),this,SLOT(slotOptionsChanged() ) );
+    connect( m_radioNoEmulation, SIGNAL(toggled(bool) ),this,SLOT(slotOptionsChanged() ) );
+    connect( m_editLoadSegment, SIGNAL(textChanged(QString) ),this,SLOT(slotOptionsChanged() ) );
+    connect( m_editLoadSize, SIGNAL(textChanged(QString) ),this,SLOT(slotOptionsChanged() ) );
+    connect( m_radioFloppy, SIGNAL(toggled(bool) ),this,SLOT(slotOptionsChanged() ) );
 
     K3bIntValidator* v = new K3bIntValidator( this );
     m_editLoadSegment->setValidator( v );

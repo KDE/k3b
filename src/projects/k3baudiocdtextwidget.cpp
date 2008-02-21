@@ -87,6 +87,10 @@ K3bAudioCdTextWidget::K3bAudioCdTextWidget( QWidget* parent )
              this, SLOT(slotCopySongwriter()) );
     connect( m_allFieldsDlg->w->m_buttonCopyComposer, SIGNAL(clicked()),
              this, SLOT(slotCopyComposer()) );
+    connect(m_buttonCopyTitle, SIGNAL(clicked()),
+             this, SLOT(slotCopyTitle()) );
+    connect(m_buttonCopyPerformer, SIGNAL(clicked()),
+             this, SLOT(slotCopyPerformer()) );
 
     connect( m_buttonMoreFields, SIGNAL(clicked()),
              this, SLOT(slotMoreFields()) );
