@@ -675,7 +675,7 @@ void K3bMainWindow::saveProperties( KConfigGroup& /*c*/ )
     // FIXME: for some reason the config entries are not properly stored when using the default
     //        KMainWindow session config. Since I was not able to find the bug I use another config object
     // ----------------------------------------------------------
-    KConfig *c = new KConfig( saveDir + "list", false );
+    KConfig *c = new KConfig( saveDir + "list", KConfig::SimpleConfig );
     KConfigGroup grp(c, "Saved Session" );
     // ----------------------------------------------------------
 
