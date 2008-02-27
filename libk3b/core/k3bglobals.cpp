@@ -462,6 +462,7 @@ K3bDevice::Device* K3b::urlToDevice( const KUrl& deviceUrl )
 #ifdef __GNUC__
 #warning kded mediamanager: is that now solid?
 #endif
+    return NULL;
 #if 0
     if( deviceUrl.protocol() == "media" || deviceUrl.protocol() == "system" ) {
         kDebug() << "(K3b) Asking mediamanager for " << deviceUrl.fileName();
