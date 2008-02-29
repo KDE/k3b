@@ -993,10 +993,10 @@ void K3bCdImageWritingDialog::saveUserDefaults( KConfigGroup& c )
     c.writeEntry( "copies", m_spinCopies->value() );
 
     QString imageType;
-    if( m_comboImageType->currentItem() == 0 )
+    if( m_comboImageType->currentIndex() == 0 )
         imageType = "auto";
     else {
-        switch( d->imageTypeSelectionMap[m_comboImageType->currentItem()] ) {
+        switch( d->imageTypeSelectionMap[m_comboImageType->currentIndex()] ) {
         case IMAGE_ISO:
             imageType = "iso9660";
             break;
@@ -1038,10 +1038,10 @@ void K3bCdImageWritingDialog::loadK3bDefaults()
 
 int K3bCdImageWritingDialog::currentImageType()
 {
-    if( m_comboImageType->currentItem() == 0 )
+    if( m_comboImageType->currentIndex() == 0 )
         return d->foundImageType;
     else
-        return d->imageTypeSelectionMap[m_comboImageType->currentItem()];
+        return d->imageTypeSelectionMap[m_comboImageType->currentIndex()];
 }
 
 

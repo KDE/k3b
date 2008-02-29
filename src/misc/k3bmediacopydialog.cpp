@@ -292,7 +292,7 @@ void K3bMediaCopyDialog::slotStartClicked()
 
     K3bBurnJob* burnJob = 0;
 
-    if( m_comboCopyMode->currentItem() == 1 ) {
+    if( m_comboCopyMode->currentIndex() == 1 ) {
 
         //
         // check for m_tempDirSelectionWidget->tempPath() and
@@ -464,7 +464,7 @@ void K3bMediaCopyDialog::toggleAll()
     }
 
     // CD Cloning
-    if( m_comboCopyMode->currentItem() == 1 ) {
+    if( m_comboCopyMode->currentIndex() == 1 ) {
         // cdrecord does not support cloning on-the-fly
         m_checkCacheImage->setChecked(true);
         m_checkCacheImage->setEnabled(false);
@@ -529,7 +529,7 @@ void K3bMediaCopyDialog::toggleAll()
         }
     }
 
-    m_groupAdvancedAudioOptions->setEnabled( sourceMedium.content() & K3bMedium::CONTENT_AUDIO && m_comboCopyMode->currentItem() == 0 );
+    m_groupAdvancedAudioOptions->setEnabled( sourceMedium.content() & K3bMedium::CONTENT_AUDIO && m_comboCopyMode->currentIndex() == 0 );
     m_groupAdvancedDataOptions->setEnabled( sourceMedium.content() & K3bMedium::CONTENT_DATA );
 
     setButtonEnabled( START_BUTTON,
@@ -612,7 +612,7 @@ void K3bMediaCopyDialog::saveUserDefaults( KConfigGroup& c )
     c.writeEntry( "audio retries", m_spinAudioRetries->value() );
 
     QString s;
-    if( m_comboCopyMode->currentItem() == 1 )
+    if( m_comboCopyMode->currentIndex() == 1 )
         s = "clone";
     else
         s = "normal";
@@ -652,7 +652,7 @@ KIO::filesize_t K3bMediaCopyDialog::neededSize() const
         return 0;
     else if( medium.diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_RW_OVWR|K3bDevice::MEDIA_DVD_PLUS_RW) )
         return (KIO::filesize_t)medium.iso9660Descriptor().volumeSpaceSize * (KIO::filesize_t)2048;
-    else if ( m_comboCopyMode->currentItem() == 0 )
+    else if ( m_comboCopyMode->currentIndex() == 0 )
         return medium.diskInfo().size().mode1Bytes();
     else
         return medium.diskInfo().size().rawBytes();

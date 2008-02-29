@@ -227,8 +227,8 @@ void K3bDataImageSettingsWidget::slotSpaceHandlingChanged( int i )
 void K3bDataImageSettingsWidget::slotCustomFilesystems()
 {
     // load settings in custom window
-    if( m_comboFilesystems->currentItem() != FS_CUSTOM ) {
-        m_customFsDlg->w->load( s_fsPresets[m_comboFilesystems->currentItem()] );
+    if( m_comboFilesystems->currentIndex() != FS_CUSTOM ) {
+        m_customFsDlg->w->load( s_fsPresets[m_comboFilesystems->currentIndex()] );
     }
 
   // store the current settings in case the user cancels the changes
@@ -259,9 +259,9 @@ void K3bDataImageSettingsWidget::slotFilesystemsChanged()
   if( m_customFsDlg->w->m_checkUdf->isChecked() )
     s += i18n("UDF");
   if( s.isEmpty() )
-    m_comboFilesystems->changeItem( i18n("Custom (ISO9660 only)"), FS_CUSTOM );
+    m_comboFilesystems->setItemText( FS_CUSTOM,i18n("Custom (ISO9660 only)") );
   else
-    m_comboFilesystems->changeItem( i18n("Custom (%1)", s.join(", ") ), FS_CUSTOM );
+    m_comboFilesystems->setItemText( FS_CUSTOM,i18n("Custom (%1)", s.join(", ") ) );
 
   // see if any of the presets is loaded
   m_comboFilesystems->setCurrentIndex( FS_CUSTOM );
@@ -275,7 +275,7 @@ void K3bDataImageSettingsWidget::slotFilesystemsChanged()
     }
   }
 
-  if( m_comboFilesystems->currentItem() == FS_CUSTOM ) {
+  if( m_comboFilesystems->currentIndex() == FS_CUSTOM ) {
     if( !m_customFsDlg->w->m_checkRockRidge->isChecked() ) {
       KMessageBox::information( this,
 				i18n("<p>Be aware that it is not recommended to disable the Rock Ridge "
@@ -352,7 +352,7 @@ void K3bDataImageSettingsWidget::load( const K3bIsoOptions& o )
   default:
     m_comboSpaceHandling->setCurrentIndex( WS_NO_CHANGE );
   }
-  slotSpaceHandlingChanged( m_comboSpaceHandling->currentItem() );
+  slotSpaceHandlingChanged( m_comboSpaceHandling->currentIndex() );
 
   m_editReplace->setText( o.whiteSpaceTreatmentReplaceString() );
 
@@ -362,17 +362,17 @@ void K3bDataImageSettingsWidget::load( const K3bIsoOptions& o )
 
 void K3bDataImageSettingsWidget::save( K3bIsoOptions& o )
 {
-  if( m_comboFilesystems->currentItem() != FS_CUSTOM )
-    m_customFsDlg->w->load( s_fsPresets[m_comboFilesystems->currentItem()] );
+  if( m_comboFilesystems->currentIndex() != FS_CUSTOM )
+    m_customFsDlg->w->load( s_fsPresets[m_comboFilesystems->currentIndex()] );
   m_customFsDlg->w->save( o );
 
   m_volDescDlg->w->save( o );
 
-  o.setDiscardSymlinks( m_comboSymlinkHandling->currentItem() == SYM_DISCARD_ALL );
-  o.setDiscardBrokenSymlinks( m_comboSymlinkHandling->currentItem() == SYM_DISCARD_BROKEN );
-  o.setFollowSymbolicLinks( m_comboSymlinkHandling->currentItem() == SYM_FOLLOW );
+  o.setDiscardSymlinks( m_comboSymlinkHandling->currentIndex() == SYM_DISCARD_ALL );
+  o.setDiscardBrokenSymlinks( m_comboSymlinkHandling->currentIndex() == SYM_DISCARD_BROKEN );
+  o.setFollowSymbolicLinks( m_comboSymlinkHandling->currentIndex() == SYM_FOLLOW );
 
-  switch( m_comboSpaceHandling->currentItem() ) {
+  switch( m_comboSpaceHandling->currentIndex() ) {
   case WS_STRIP:
     o.setWhiteSpaceTreatment( K3bIsoOptions::strip );
     break;

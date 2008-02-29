@@ -160,7 +160,7 @@ void K3bAudioConvertingOptionWidget::setNeededSize( KIO::filesize_t size )
 void K3bAudioConvertingOptionWidget::slotConfigurePlugin()
 {
   // 0 for wave
-  K3bAudioEncoder* encoder = d->encoderMap[m_comboFileType->currentItem()];
+  K3bAudioEncoder* encoder = d->encoderMap[m_comboFileType->currentIndex()];
   if( encoder )
     k3bcore->pluginManager()->execPluginDialog( encoder, this );
 }
@@ -191,19 +191,19 @@ void K3bAudioConvertingOptionWidget::slotUpdateFreeTempSpace()
 void K3bAudioConvertingOptionWidget::slotEncoderChanged()
 {
   // 0 for wave
-  m_buttonConfigurePlugin->setEnabled( d->encoderMap[m_comboFileType->currentItem()] != 0 );
+  m_buttonConfigurePlugin->setEnabled( d->encoderMap[m_comboFileType->currentIndex()] != 0 );
 }
 
 
 K3bAudioEncoder* K3bAudioConvertingOptionWidget::encoder() const
 {
-  return d->encoderMap[m_comboFileType->currentItem()];  // 0 for wave
+  return d->encoderMap[m_comboFileType->currentIndex()];  // 0 for wave
 }
 
 
 QString K3bAudioConvertingOptionWidget::extension() const
 {
-  return d->extensionMap[m_comboFileType->currentItem()];
+  return d->extensionMap[m_comboFileType->currentIndex()];
 }
 
 
@@ -257,8 +257,8 @@ void K3bAudioConvertingOptionWidget::saveConfig( KConfigGroup& c )
   c.writeEntry( "create_playlist", m_checkCreatePlaylist->isChecked() );
   c.writeEntry( "relative_path_in_playlist", m_checkPlaylistRelative->isChecked() );
 
-  if( d->extensionMap.contains(m_comboFileType->currentItem()) )
-    c.writeEntry( "filetype", d->extensionMap[m_comboFileType->currentItem()] );
+  if( d->extensionMap.contains(m_comboFileType->currentIndex()) )
+    c.writeEntry( "filetype", d->extensionMap[m_comboFileType->currentIndex()] );
   else
     c.writeEntry( "filetype", "wav" );
 }

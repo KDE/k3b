@@ -1085,7 +1085,7 @@ void K3bMainWindow::slotStatusMsg(const QString &text)
     ///////////////////////////////////////////////////////////////////
     // change status message permanently
 //   statusBar()->clear();
-//   statusBar()->changeItem(text,1);
+//   statusBar()->setItemText(text,1);
 
     statusBar()->showMessage( text, 2000 );
 }

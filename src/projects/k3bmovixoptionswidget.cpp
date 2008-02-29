@@ -57,10 +57,10 @@ public:
   }
 
   QString selectedLanguage() const {
-    if( m_box->currentItem() == 0 )
+    if( m_box->currentIndex() == 0 )
       return i18n("default");
     else
-      return m_langMap[m_box->currentItem()];
+      return m_langMap[m_box->currentIndex()];
   }
 
   void setLanguage( const QString& l ) {
@@ -202,7 +202,7 @@ void K3bMovixOptionsWidget::loadConfig( const KConfigGroup & c )
 
 void K3bMovixOptionsWidget::saveConfig( KConfigGroup& c )
 {
-  if( m_comboSubtitleFontset->currentItem() == 0 )
+  if( m_comboSubtitleFontset->currentIndex() == 0 )
     c.writeEntry( "subtitle_fontset", "none" );
   else
     c.writeEntry( "subtitle_fontset", m_comboSubtitleFontset->currentText() );
@@ -211,22 +211,22 @@ void K3bMovixOptionsWidget::saveConfig( KConfigGroup& c )
   c.writeEntry( "additional_mplayer_options", m_editAdditionalMplayerOptions->text() );
   c.writeEntry( "unwanted_mplayer_options", m_editUnwantedMplayerOptions->text() );
 
-  if( m_comboBootMessageLanguage->currentItem() == 0 )
+  if( m_comboBootMessageLanguage->currentIndex() == 0 )
     c.writeEntry( "boot_message_language", "default" );
   else
     c.writeEntry( "boot_message_language", m_helpLangHelper->selectedLanguage() );
 
-  if( m_comboDefaultBootLabel->currentItem() == 0 )
+  if( m_comboDefaultBootLabel->currentIndex() == 0 )
     c.writeEntry( "default_boot_label", "default" );
   else
     c.writeEntry( "default_boot_label", m_comboDefaultBootLabel->currentText() );
 
-  if( m_comboAudioBackground->currentItem() == 0 )
+  if( m_comboAudioBackground->currentIndex() == 0 )
     c.writeEntry( "audio_background", "default" );
   else
     c.writeEntry( "audio_background", m_comboAudioBackground->currentText() );
 
-  if( m_comboKeyboardLayout->currentItem() == 0 )
+  if( m_comboKeyboardLayout->currentIndex() == 0 )
     c.writeEntry( "keyboard_layout", "default" );
   else
     c.writeEntry( "keyboard_layout", m_keyboardLangHelper->selectedLanguage() );

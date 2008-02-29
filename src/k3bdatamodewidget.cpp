@@ -58,9 +58,9 @@ K3bDataModeWidget::~K3bDataModeWidget()
 
 int K3bDataModeWidget::dataMode() const
 {
-  if( currentItem() == s_autoIndex )
+  if( currentIndex() == s_autoIndex )
     return K3b::DATA_MODE_AUTO;
-  else if( currentItem() == s_mode1Index )
+  else if( currentIndex() == s_mode1Index )
     return K3b::MODE1;
   else
     return K3b::MODE2;

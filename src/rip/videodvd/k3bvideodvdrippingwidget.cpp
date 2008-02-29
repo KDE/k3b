@@ -162,7 +162,7 @@ K3bVideoDVDTitleTranscodingJob::VideoCodec K3bVideoDVDRippingWidget::selectedVid
 
 QSize K3bVideoDVDRippingWidget::selectedPictureSize() const
 {
-    switch( m_comboVideoSize->currentItem() ) {
+    switch( m_comboVideoSize->currentIndex() ) {
     case PICTURE_SIZE_ORIGINAL:
         return QSize(0,0);
     case PICTURE_SIZE_640:
@@ -185,11 +185,10 @@ void K3bVideoDVDRippingWidget::setSelectedPictureSize( const QSize& size )
     else if( size == QSize(320,0) )
         m_comboVideoSize->setCurrentIndex( PICTURE_SIZE_320 );
     else {
-        m_comboVideoSize->changeItem( i18n(s_pictureSizeNames[PICTURE_SIZE_CUSTOM])
+        m_comboVideoSize->setItemText( PICTURE_SIZE_CUSTOM,i18n(s_pictureSizeNames[PICTURE_SIZE_CUSTOM])
                                       + QString(" (%1x%2)")
                                       .arg(size.width() == 0 ? i18n("auto") : QString::number(size.width()))
-                                      .arg(size.height() == 0 ? i18n("auto") : QString::number(size.height())),
-                                      PICTURE_SIZE_CUSTOM );
+                                      .arg(size.height() == 0 ? i18n("auto") : QString::number(size.height())));
         m_comboVideoSize->setCurrentIndex( PICTURE_SIZE_CUSTOM );
     }
 }
@@ -217,7 +216,7 @@ void K3bVideoDVDRippingWidget::setSelectedAudioCodec( K3bVideoDVDTitleTranscodin
 int K3bVideoDVDRippingWidget::selectedAudioBitrate() const
 {
     if( selectedAudioCodec() == K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_MP3 )
-        return s_mp3Bitrates[m_comboAudioBitrate->currentItem()];
+        return s_mp3Bitrates[m_comboAudioBitrate->currentIndex()];
     else
         return m_spinAudioBitrate->value();
 }

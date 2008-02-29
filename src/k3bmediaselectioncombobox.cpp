@@ -142,7 +142,7 @@ void K3bMediaSelectionComboBox::setIgnoreDevice( K3bDevice::Device* dev )
 K3bDevice::Device* K3bMediaSelectionComboBox::selectedDevice() const
 {
   if( d->devices.count() > 0 )
-    return d->devices[currentItem()];
+    return d->devices[currentIndex()];
   else
     return 0;
 }
@@ -360,8 +360,7 @@ void K3bMediaSelectionComboBox::addMedium( K3bDevice::Device* dev )
     //
     int prevIndex = d->mediaStringMap[s];
     if( prevIndex >= 0 )
-      changeItem( itemText(prevIndex) + QString(" (%1 - %2)").arg(d->devices[prevIndex]->vendor()).arg(d->devices[prevIndex]->description()),
-		  prevIndex );
+      setItemText( prevIndex,itemText(prevIndex) + QString(" (%1 - %2)").arg(d->devices[prevIndex]->vendor()).arg(d->devices[prevIndex]->description() ));
 
     //
     // mark the string as already changed

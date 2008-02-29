@@ -99,12 +99,12 @@ void K3bVcdTrackDialog::slotOk()
 void K3bVcdTrackDialog::setPbcTrack( K3bVcdTrack* selected, K3bCutComboBox* box, int which )
 {
     // TODO: Unset Userdefined on default settings
-    kDebug() << QString( "K3bVcdTrackDialog::setPbcTrack: currentItem = %1, count = %2" ).arg( box->currentItem() ).arg( m_tracks.count() );
+    kDebug() << QString( "K3bVcdTrackDialog::setPbcTrack: currentIndex = %1, count = %2" ).arg( box->currentIndex() ).arg( m_tracks.count() );
 
     int count = m_tracks.count();
 
-    if ( selected->getPbcTrack( which ) == m_tracks.at( box->currentItem() ) ) {
-        if ( selected->getNonPbcTrack( which ) == ( int ) ( box->currentItem() - count ) ) {
+    if ( selected->getPbcTrack( which ) == m_tracks.at( box->currentIndex() ) ) {
+        if ( selected->getNonPbcTrack( which ) == ( int ) ( box->currentIndex() - count ) ) {
             kDebug() << "K3bVcdTrackDialog::setPbcTrack: not changed, return";
             return ;
         }
@@ -113,12 +113,12 @@ void K3bVcdTrackDialog::setPbcTrack( K3bVcdTrack* selected, K3bCutComboBox* box,
     if ( selected->getPbcTrack( which ) )
         selected->getPbcTrack( which ) ->delFromRevRefList( selected );
 
-    if ( box->currentItem() > count - 1 ) {
+    if ( box->currentIndex() > count - 1 ) {
         selected->setPbcTrack( which );
-        selected->setPbcNonTrack( which, box->currentItem() - count );
+        selected->setPbcNonTrack( which, box->currentIndex() - count );
     } else {
-        selected->setPbcTrack( which, m_tracks.at( box->currentItem() ) );
-        m_tracks.at( box->currentItem() ) ->addToRevRefList( selected );
+        selected->setPbcTrack( which, m_tracks.at( box->currentIndex() ) );
+        m_tracks.at( box->currentIndex() ) ->addToRevRefList( selected );
     }
 
     selected->setUserDefined( which, true );

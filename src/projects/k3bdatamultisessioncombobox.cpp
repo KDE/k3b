@@ -83,7 +83,7 @@ void K3bDataMultiSessionCombobox::init( bool force )
 
 K3bDataDoc::MultiSessionMode K3bDataMultiSessionCombobox::multiSessionMode() const
 {
-  switch( currentItem() ) {
+  switch( currentIndex() ) {
   case s_noneIndex:
     return K3bDataDoc::NONE;
   case s_startIndex:
@@ -101,7 +101,7 @@ K3bDataDoc::MultiSessionMode K3bDataMultiSessionCombobox::multiSessionMode() con
 void K3bDataMultiSessionCombobox::saveConfig( KConfigGroup& c )
 {
   QString s;
-  switch( currentItem() ) {
+  switch( currentIndex() ) {
   case s_autoIndex:
     s = "auto";
     break;
