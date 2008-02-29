@@ -440,14 +440,14 @@ void K3bMediaCopyDialog::toggleAll()
         }
         else {
             m_comboCopyMode->setEnabled( false );
-            m_comboCopyMode->setCurrentItem( 0 );
+            m_comboCopyMode->setCurrentIndex( 0 );
         }
     }
     else {
         m_writerSelectionWidget->setSupportedWritingApps( K3b::GROWISOFS|K3b::CDRECORD );
 
         m_comboCopyMode->setEnabled( false );
-        m_comboCopyMode->setCurrentItem( 0 );
+        m_comboCopyMode->setCurrentIndex( 0 );
 
         // FIXME: at some point the media combo should also handle media sizes!
 
@@ -564,7 +564,7 @@ void K3bMediaCopyDialog::loadUserDefaults( const KConfigGroup& c )
     m_checkCacheImage->setChecked( !c.readEntry( "on_the_fly", false ) );
     m_checkDeleteImages->setChecked( c.readEntry( "delete_images", true ) );
     m_checkOnlyCreateImage->setChecked( c.readEntry( "only_create_image", false ) );
-    m_comboParanoiaMode->setCurrentItem( c.readEntry( "paranoia_mode", 0 ) );
+    m_comboParanoiaMode->setCurrentIndex( c.readEntry( "paranoia_mode", 0 ) );
     m_checkVerifyData->setChecked( c.readEntry( "verify data", false ) );
 
     m_spinCopies->setValue( c.readEntry( "copies", 1 ) );
@@ -572,9 +572,9 @@ void K3bMediaCopyDialog::loadUserDefaults( const KConfigGroup& c )
     m_tempDirSelectionWidget->readConfig( c );
 
     if( c.readEntry( "copy mode", "normal" ) == "normal" )
-        m_comboCopyMode->setCurrentItem( 0 );
+        m_comboCopyMode->setCurrentIndex( 0 );
     else
-        m_comboCopyMode->setCurrentItem( 1 );
+        m_comboCopyMode->setCurrentIndex( 1 );
 
     m_checkReadCdText->setChecked( c.readEntry( "copy cdtext", true ) );
     m_checkIgnoreDataReadErrors->setChecked( c.readEntry( "ignore data read errors", false ) );
@@ -628,13 +628,13 @@ void K3bMediaCopyDialog::loadK3bDefaults()
     m_checkCacheImage->setChecked( true );
     m_checkDeleteImages->setChecked( true );
     m_checkOnlyCreateImage->setChecked( false );
-    m_comboParanoiaMode->setCurrentItem(0);
+    m_comboParanoiaMode->setCurrentIndex(0);
     m_spinCopies->setValue(1);
     m_checkReadCdText->setChecked(true);
     m_checkIgnoreDataReadErrors->setChecked(false);
     m_checkIgnoreAudioReadErrors->setChecked(true);
     m_checkNoCorrection->setChecked(false);
-    m_comboCopyMode->setCurrentItem( 0 ); // normal
+    m_comboCopyMode->setCurrentIndex( 0 ); // normal
     m_spinDataRetries->setValue(128);
     m_spinAudioRetries->setValue(5);
     m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );

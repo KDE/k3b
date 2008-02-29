@@ -232,7 +232,7 @@ void K3bAudioConvertingOptionWidget::loadConfig( const KConfigGroup& c )
 
   QString filetype = c.readEntry( "filetype", d->extensionMap[d->getDefaultFormat()] );
   if( filetype == "wav" )
-    m_comboFileType->setCurrentItem(0);
+    m_comboFileType->setCurrentIndex(0);
   else {
     for( QMap<int, QString>::iterator it = d->extensionMap.begin();
 	 it != d->extensionMap.end(); ++it ) {

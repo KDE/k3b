@@ -179,18 +179,18 @@ void K3bVideoDVDRippingWidget::setSelectedPictureSize( const QSize& size )
 {
     m_customVideoSize = size;
     if( size == QSize(0,0) )
-        m_comboVideoSize->setCurrentItem( PICTURE_SIZE_ORIGINAL );
+        m_comboVideoSize->setCurrentIndex( PICTURE_SIZE_ORIGINAL );
     else if( size == QSize(640,0) )
-        m_comboVideoSize->setCurrentItem( PICTURE_SIZE_640 );
+        m_comboVideoSize->setCurrentIndex( PICTURE_SIZE_640 );
     else if( size == QSize(320,0) )
-        m_comboVideoSize->setCurrentItem( PICTURE_SIZE_320 );
+        m_comboVideoSize->setCurrentIndex( PICTURE_SIZE_320 );
     else {
         m_comboVideoSize->changeItem( i18n(s_pictureSizeNames[PICTURE_SIZE_CUSTOM])
                                       + QString(" (%1x%2)")
                                       .arg(size.width() == 0 ? i18n("auto") : QString::number(size.width()))
                                       .arg(size.height() == 0 ? i18n("auto") : QString::number(size.height())),
                                       PICTURE_SIZE_CUSTOM );
-        m_comboVideoSize->setCurrentItem( PICTURE_SIZE_CUSTOM );
+        m_comboVideoSize->setCurrentIndex( PICTURE_SIZE_CUSTOM );
     }
 }
 
@@ -240,7 +240,7 @@ void K3bVideoDVDRippingWidget::setSelectedAudioBitrate( int bitrate )
         }
     }
 
-    m_comboAudioBitrate->setCurrentItem( bi );
+    m_comboAudioBitrate->setCurrentIndex( bi );
 }
 
 

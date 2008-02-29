@@ -264,13 +264,13 @@ void K3bDataImageSettingsWidget::slotFilesystemsChanged()
     m_comboFilesystems->changeItem( i18n("Custom (%1)", s.join(", ") ), FS_CUSTOM );
 
   // see if any of the presets is loaded
-  m_comboFilesystems->setCurrentItem( FS_CUSTOM );
+  m_comboFilesystems->setCurrentIndex( FS_CUSTOM );
   K3bIsoOptions o;
   m_customFsDlg->w->save( o );
   for( int i = 0; i < FS_CUSTOM; ++i ) {
     if( compareAdvancedOptions( o, s_fsPresets[i] ) ) {
       kDebug() << "(K3bDataImageSettingsWidget) found preset settings: " << s_fsPresetNames[i];
-      m_comboFilesystems->setCurrentItem( i );
+      m_comboFilesystems->setCurrentIndex( i );
       break;
     }
   }
@@ -331,26 +331,26 @@ void K3bDataImageSettingsWidget::load( const K3bIsoOptions& o )
   slotFilesystemsChanged();
 
   if( o.discardBrokenSymlinks() )
-    m_comboSymlinkHandling->setCurrentItem( SYM_DISCARD_BROKEN );
+    m_comboSymlinkHandling->setCurrentIndex( SYM_DISCARD_BROKEN );
   else if( o.discardSymlinks() )
-    m_comboSymlinkHandling->setCurrentItem( SYM_DISCARD_ALL );
+    m_comboSymlinkHandling->setCurrentIndex( SYM_DISCARD_ALL );
   else if( o.followSymbolicLinks() )
-    m_comboSymlinkHandling->setCurrentItem( SYM_FOLLOW );
+    m_comboSymlinkHandling->setCurrentIndex( SYM_FOLLOW );
   else
-    m_comboSymlinkHandling->setCurrentItem( SYM_NO_CHANGE );
+    m_comboSymlinkHandling->setCurrentIndex( SYM_NO_CHANGE );
 
   switch( o.whiteSpaceTreatment() ) {
   case K3bIsoOptions::strip:
-    m_comboSpaceHandling->setCurrentItem( WS_STRIP );
+    m_comboSpaceHandling->setCurrentIndex( WS_STRIP );
     break;
   case K3bIsoOptions::extended:
-    m_comboSpaceHandling->setCurrentItem( WS_EXTENDED_STRIP );
+    m_comboSpaceHandling->setCurrentIndex( WS_EXTENDED_STRIP );
     break;
   case K3bIsoOptions::replace:
-    m_comboSpaceHandling->setCurrentItem( WS_REPLACE );
+    m_comboSpaceHandling->setCurrentIndex( WS_REPLACE );
     break;
   default:
-    m_comboSpaceHandling->setCurrentItem( WS_NO_CHANGE );
+    m_comboSpaceHandling->setCurrentIndex( WS_NO_CHANGE );
   }
   slotSpaceHandlingChanged( m_comboSpaceHandling->currentItem() );
 

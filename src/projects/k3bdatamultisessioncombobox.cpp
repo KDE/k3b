@@ -143,22 +143,22 @@ void K3bDataMultiSessionCombobox::setMultiSessionMode( K3bDataDoc::MultiSessionM
 {
   switch( m ) {
   case K3bDataDoc::AUTO:
-    setCurrentItem( s_autoIndex );
+    setCurrentIndex( s_autoIndex );
     break;
   case K3bDataDoc::NONE:
-    setCurrentItem( s_noneIndex );
+    setCurrentIndex( s_noneIndex );
     break;
   case K3bDataDoc::START:
     if( !m_forceNoMultiSession )
-      setCurrentItem( s_startIndex );
+      setCurrentIndex( s_startIndex );
     break;
   case K3bDataDoc::CONTINUE:
     if( !m_forceNoMultiSession )
-      setCurrentItem( s_continueIndex );
+      setCurrentIndex( s_continueIndex );
     break;
   case K3bDataDoc::FINISH:
     if( !m_forceNoMultiSession )
-      setCurrentItem( s_finishIndex );
+      setCurrentIndex( s_finishIndex );
     break;
   }
 }

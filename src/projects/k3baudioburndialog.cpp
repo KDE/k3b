@@ -171,7 +171,7 @@ void K3bAudioBurnDialog::readSettings()
     m_cdtextWidget->load( m_doc );
 
     // audio ripping
-    m_comboParanoiaMode->setCurrentItem( m_doc->audioRippingParanoiaMode() );
+    m_comboParanoiaMode->setCurrentIndex( m_doc->audioRippingParanoiaMode() );
     m_checkAudioRippingIgnoreReadErrors->setChecked( m_doc->audioRippingIgnoreReadErrors() );
     m_spinAudioRippingReadRetries->setValue( m_doc->audioRippingRetries() );
 
@@ -190,7 +190,7 @@ void K3bAudioBurnDialog::loadK3bDefaults()
     m_checkHideFirstTrack->setChecked( false );
     m_checkNormalize->setChecked(false);
 
-    m_comboParanoiaMode->setCurrentItem( 0 );
+    m_comboParanoiaMode->setCurrentIndex( 0 );
     m_checkAudioRippingIgnoreReadErrors->setChecked( true );
     m_spinAudioRippingReadRetries->setValue( 5 );
 
@@ -206,7 +206,7 @@ void K3bAudioBurnDialog::loadUserDefaults( const KConfigGroup& c )
     m_checkHideFirstTrack->setChecked( c.readEntry( "hide_first_track", false ) );
     m_checkNormalize->setChecked( c.readEntry( "normalize", false ) );
 
-    m_comboParanoiaMode->setCurrentItem( c.readEntry( "paranoia mode", 0 ) );
+    m_comboParanoiaMode->setCurrentIndex( c.readEntry( "paranoia mode", 0 ) );
     m_checkAudioRippingIgnoreReadErrors->setChecked( c.readEntry( "ignore read errors", true ) );
     m_spinAudioRippingReadRetries->setValue( c.readEntry( "read retries", 5 ) );
 

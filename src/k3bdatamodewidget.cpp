@@ -70,11 +70,11 @@ int K3bDataModeWidget::dataMode() const
 void K3bDataModeWidget::setDataMode( int mode )
 {
   if( mode == K3b::MODE1 )
-    setCurrentItem( s_mode1Index );
+    setCurrentIndex( s_mode1Index );
   else if( mode == K3b::MODE2 )
-    setCurrentItem( s_mode2Index );
+    setCurrentIndex( s_mode2Index );
   else
-    setCurrentItem( s_autoIndex );
+    setCurrentIndex( s_autoIndex );
 }
 
 

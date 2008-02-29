@@ -968,7 +968,7 @@ void K3bCdImageWritingDialog::loadUserDefaults( const KConfigGroup& c )
     else if( imageType == "cdrdao-toc" )
         x = d->imageTypeSelectionMapRev[IMAGE_CDRDAO_TOC];
 
-    m_comboImageType->setCurrentItem( x );
+    m_comboImageType->setCurrentIndex( x );
 
     m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
 
@@ -1029,7 +1029,7 @@ void K3bCdImageWritingDialog::loadK3bDefaults()
     m_checkNoFix->setChecked( false );
     m_checkCacheImage->setChecked( false );
     m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
-    m_comboImageType->setCurrentItem(0);
+    m_comboImageType->setCurrentIndex(0);
     m_spinCopies->setValue( 1 );
 
     slotToggleAll();
