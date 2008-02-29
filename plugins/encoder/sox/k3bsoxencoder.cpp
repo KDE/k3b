@@ -35,8 +35,6 @@
 #include <qlayout.h>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
-#include <Q3CString>
-#include <Q3ValueList>
 
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -400,30 +398,30 @@ void K3bSoxEncoderSettingsWidget::loadConfig()
     w->m_checkManual->setChecked( grp.readEntry( "manual settings", false ) );
 
     int channels = grp.readEntry( "channels", 2 );
-    w->m_comboChannels->setCurrentItem( channels == 4 ? 2 : channels-1 );
+    w->m_comboChannels->setCurrentIndex( channels == 4 ? 2 : channels-1 );
 
     w->m_editSamplerate->setText( QString::number( grp.readEntry( "samplerate", 44100 ) ) );
 
     QString encoding = grp.readEntry( "data encoding", "signed" );
     if( encoding == "unsigned" )
-        w->m_comboEncoding->setCurrentItem(1);
+        w->m_comboEncoding->setCurrentIndex(1);
     else if( encoding == "u-law" )
-        w->m_comboEncoding->setCurrentItem(2);
+        w->m_comboEncoding->setCurrentIndex(2);
     else if( encoding == "A-law" )
-        w->m_comboEncoding->setCurrentItem(3);
+        w->m_comboEncoding->setCurrentIndex(3);
     else if( encoding == "ADPCM" )
-        w->m_comboEncoding->setCurrentItem(4);
+        w->m_comboEncoding->setCurrentIndex(4);
     else if( encoding == "IMA_ADPCM" )
-        w->m_comboEncoding->setCurrentItem(5);
+        w->m_comboEncoding->setCurrentIndex(5);
     else if( encoding == "GSM" )
-        w->m_comboEncoding->setCurrentItem(6);
+        w->m_comboEncoding->setCurrentIndex(6);
     else if( encoding == "Floating-point" )
-        w->m_comboEncoding->setCurrentItem(7);
+        w->m_comboEncoding->setCurrentIndex(7);
     else
-        w->m_comboEncoding->setCurrentItem(0);
+        w->m_comboEncoding->setCurrentIndex(0);
 
     int size = grp.readEntry( "data size", 16 );
-    w->m_comboSize->setCurrentItem( size == 8 ? 0 : ( size == 32 ? 2 : 1 ) );
+    w->m_comboSize->setCurrentIndex( size == 8 ? 0 : ( size == 32 ? 2 : 1 ) );
 }
 
 
@@ -435,22 +433,22 @@ void K3bSoxEncoderSettingsWidget::saveConfig()
 
     grp.writeEntry( "manual settings", w->m_checkManual->isChecked() );
 
-    grp.writeEntry( "channels", w->m_comboChannels->currentItem() == 0
+    grp.writeEntry( "channels", w->m_comboChannels->currentIndex() == 0
                     ? 1
-                    : ( w->m_comboChannels->currentItem() == 2
+                    : ( w->m_comboChannels->currentIndex() == 2
                         ? 4
                         : 2 ) );
 
-    grp.writeEntry( "data size", w->m_comboSize->currentItem() == 0
+    grp.writeEntry( "data size", w->m_comboSize->currentIndex() == 0
                     ? 8
-                    : ( w->m_comboSize->currentItem() == 2
+                    : ( w->m_comboSize->currentIndex() == 2
                         ? 32
                         : 16 ) );
 
     grp.writeEntry( "samplerate", w->m_editSamplerate->text().toInt() );
 
     QString enc;
-    switch( w->m_comboEncoding->currentItem() ) {
+    switch( w->m_comboEncoding->currentIndex() ) {
     case 1:
         enc = "unsigned";
         break;
