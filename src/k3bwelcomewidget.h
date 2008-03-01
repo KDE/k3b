@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -17,7 +17,7 @@
 #define _K3B_WELCOME_WIDGET_H_
 
 #include <QScrollArea>
-#include <q3ptrlist.h>
+#include <qlist.h>
 #include <qmap.h>
 #include <qimage.h>
 //Added by qt3to4:
@@ -115,7 +115,7 @@ class K3bWelcomeWidget::Display : public QWidget
   int m_rows;
 
   QList<QAction*> m_actions;
-  Q3PtrList<K3bFlatButton> m_buttons;
+  QList<K3bFlatButton*> m_buttons;
   QMap<K3bFlatButton*, QAction*> m_buttonMap;
 
   K3bFlatButton* m_buttonMore;

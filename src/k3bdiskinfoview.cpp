@@ -35,8 +35,6 @@
 #include <qpalette.h>
 #include <qpixmap.h>
 #include <qregion.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include <kdialog.h>
 #include <klocale.h>

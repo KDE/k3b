@@ -25,7 +25,7 @@
 #include <qlabel.h>
 #include <qpainter.h>
 #include <q3simplerichtext.h>
-#include <q3ptrlist.h>
+#include <qlist.h>
 #include <qmap.h>
 #include <qtooltip.h>
 #include <qcursor.h>
@@ -166,7 +166,7 @@ void K3bWelcomeWidget::Display::rebuildGui()
 {
     // step 1: delete all old buttons in the buttons QPtrList<K3bFlatButton>
     m_buttonMap.clear();
-    m_buttons.setAutoDelete(true);
+    qDeleteAll( m_buttons );
     m_buttons.clear();
 
     int numActions = m_actions.count();
@@ -186,8 +186,9 @@ void K3bWelcomeWidget::Display::rebuildGui()
         // determine the needed button size (since all buttons should be equal in size
         // we use the max of all sizes)
         m_buttonSize = m_buttons.first()->sizeHint();
-        for( Q3PtrListIterator<K3bFlatButton> it( m_buttons ); it.current(); ++it ) {
-            m_buttonSize = m_buttonSize.expandedTo( it.current()->sizeHint() );
+        for ( int i = 0;i<m_buttons.count();i++ )
+        {
+            m_buttonSize = m_buttonSize.expandedTo( m_buttons.at( i )->sizeHint() );
         }
 
         repositionButtons();
@@ -209,8 +210,9 @@ void K3bWelcomeWidget::Display::repositionButtons()
     int row = 0;
     int col = 0;
 
-    for( Q3PtrListIterator<K3bFlatButton> it( m_buttons ); it.current(); ++it ) {
-        K3bFlatButton* b = it.current();
+    for ( int i = 0;i<m_buttons.count();i++ )
+    {
+        K3bFlatButton* b = m_buttons.at( i );
 
         b->setGeometry( QRect( QPoint( leftMargin + (col*(m_buttonSize.width()+4) + 2 ),
                                        topOffset + (row*(m_buttonSize.height()+4)) + 2 ),
