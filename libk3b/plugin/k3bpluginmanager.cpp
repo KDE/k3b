@@ -157,10 +157,11 @@ int K3bPluginManager::execPluginDialog( K3bPlugin* plugin, QWidget* parent, cons
 //         delete configWidget;
 //         return r;
 //     }
-//     else {
-//         KMessageBox::sorry( parent, i18n("No settings available for plugin %1.", plugin->pluginInfo().name() ) );
-//         return 0;
-//     }
+//     else
+    {
+         KMessageBox::sorry( parent, i18n("No settings available for plugin %1.", plugin->pluginInfo().name() ) );
+         return 0;
+    }
 #warning FIXME: use KService::kcmServices to get the config widget for a plugin as done in KPluginSelector
 }
 
