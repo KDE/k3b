@@ -237,7 +237,7 @@ K3bVersion K3b::kernelVersion()
         kDebug() << "kernel version: " << v;
     }
     else
-        kError() << "could not determine kernel version." << endl;
+        kError() << "could not determine kernel version." ;
     return v;
 }
 
@@ -256,7 +256,7 @@ QString K3b::systemName()
         v = QString::fromLocal8Bit( unameinfo.sysname );
     }
     else
-        kError() << "could not determine system name." << endl;
+        kError() << "could not determine system name." ;
     return v;
 }
 
@@ -470,7 +470,7 @@ K3bDevice::Device* K3b::urlToDevice( const KUrl& deviceUrl )
         DCOPReply reply = mediamanager.call("properties(QString)", deviceUrl.fileName());
         QStringList properties = reply;
         if( !reply.isValid() || properties.count() < 6 ) {
-            kError() << "(K3b) Invalid reply from mediamanager" << endl;
+            kError() << "(K3b) Invalid reply from mediamanager" ;
             return 0;
         }
         else {

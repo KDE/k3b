@@ -317,16 +317,16 @@ void K3bExternalBinManager::search()
     }
     else {
         kDebug() << "(K3bExternalBinManager) Cdrecord " << bin->version << " features: "
-                 << bin->features().join( ", " ) << endl;
+                 << bin->features().join( ", " ) ;
 
         if( bin->version >= K3bVersion("1.11a02") )
             kDebug() << "(K3bExternalBinManager) "
                      << bin->version.majorVersion() << " " << bin->version.minorVersion() << " " << bin->version.patchLevel()
                      << " " << bin->version.suffix()
-                     << " seems to be cdrecord version >= 1.11a02, using burnfree instead of burnproof" << endl;
+                     << " seems to be cdrecord version >= 1.11a02, using burnfree instead of burnproof" ;
         if( bin->version >= K3bVersion("1.11a31") )
             kDebug() << "(K3bExternalBinManager) seems to be cdrecord version >= 1.11a31, support for Just Link via burnfree "
-                     << "driveroption" << endl;
+                     << "driveroption" ;
     }
 }
 
