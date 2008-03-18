@@ -563,11 +563,11 @@ QString K3bVcdJob::jobDescription() const
 
 QString K3bVcdJob::jobDetails() const
 {
-    return ( i18np( "1 MPEG (%1)",
-                    "%n MPEGs (%1)",
-                    m_doc->tracks() ->count() ).arg( KIO::convertSize( m_doc->size() ) )
+    return ( i18np( "1 MPEG (%2)",
+                    "%1 MPEGs (%2)",
+                    m_doc->tracks() ->count(), KIO::convertSize( m_doc->size() ) )
              + ( m_doc->copies() > 1
-                 ? i18np( " - %n copy", " - %n copies", m_doc->copies() )
+                 ? i18np( " - %1 copy", " - %1 copies", m_doc->copies() )
                  : QString() ) );
 }
 

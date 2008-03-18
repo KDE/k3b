@@ -441,7 +441,7 @@ QString K3bIso9660ImageWritingJob::jobDescription() const
     else
         return ( i18n("Burning ISO9660 Image")
                  + ( m_copies > 1
-                     ? i18np(" - %n Copy", " - %n Copies", m_copies)
+                     ? i18np(" - %1 Copy", " - %1 Copies", m_copies)
                      : QString() ) );
 }
 

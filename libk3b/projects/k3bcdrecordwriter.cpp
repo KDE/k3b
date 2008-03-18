@@ -665,13 +665,13 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
         bool ok;
         int num = s_burnfreeCounterRx.cap(1).toInt(&ok);
         if( ok )
-            emit infoMessage( i18np("Burnfree was used 1 time.", "Burnfree was used %n times.", num), INFO );
+            emit infoMessage( i18np("Burnfree was used 1 time.", "Burnfree was used %1 times.", num), INFO );
     }
     else if( s_burnfreeCounterRxPredict.indexIn( line ) ) {
         bool ok;
         int num = s_burnfreeCounterRxPredict.cap(1).toInt(&ok);
         if( ok )
-            emit infoMessage( i18np("Buffer was low 1 time.", "Buffer was low %n times.", num), INFO );
+            emit infoMessage( i18np("Buffer was low 1 time.", "Buffer was low %1 times.", num), INFO );
     }
     else if( line.contains("Medium Error") ) {
         m_cdrecordError = MEDIUM_ERROR;

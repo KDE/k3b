@@ -940,7 +940,7 @@ QString K3bDvdCopyJob::jobDescription() const
 QString K3bDvdCopyJob::jobDetails() const
 {
     return i18np("Creating 1 copy",
-                 "Creating %n copies",
+                 "Creating %1 copies",
                  (m_simulate||m_onlyCreateImage) ? 1 : m_copies );
 }
 

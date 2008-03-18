@@ -858,11 +858,11 @@ QString K3bAudioJob::jobDescription() const
 
 QString K3bAudioJob::jobDetails() const
 {
-    return ( i18np( "1 track (%1 minutes)",
-                    "%n tracks (%1 minutes)",
-                    m_doc->numOfTracks() ).arg(m_doc->length().toString())
+    return ( i18np( "1 track (%2 minutes)",
+                    "%1 tracks (%2 minutes)",
+                    m_doc->numOfTracks(), m_doc->length().toString())
              + ( m_doc->copies() > 1 && !m_doc->dummy()
-                 ? i18np(" - %n copy", " - %n copies", m_doc->copies())
+                 ? i18np(" - %1 copy", " - %1 copies", m_doc->copies())
                  : QString() ) );
 }
 

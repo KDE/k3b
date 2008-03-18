@@ -350,7 +350,7 @@ bool K3bDataTrackReader::run()
     }
 
     if( d->errorSectorCount > 0 )
-        emit infoMessage( i18np("Ignored %n erroneous sector.", "Ignored a total of %n erroneous sectors.", d->errorSectorCount ),
+        emit infoMessage( i18np("Ignored %1 erroneous sector.", "Ignored a total of %1 erroneous sectors.", d->errorSectorCount ),
                           K3bJob::ERROR );
 
     // reset the error recovery mode

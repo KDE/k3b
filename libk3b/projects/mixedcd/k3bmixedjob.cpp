@@ -1338,7 +1338,7 @@ QString K3bMixedJob::jobDetails() const
                   ,m_doc->audioDoc()->length().toString()
                   ,KIO::convertSize(m_doc->dataDoc()->size()))
              + ( m_doc->copies() > 1 && !m_doc->dummy()
-                 ? i18np(" - %n copy", " - %n copies", m_doc->copies())
+                 ? i18np(" - %1 copy", " - %1 copies", m_doc->copies())
                  : QString() ) );
 }
 
