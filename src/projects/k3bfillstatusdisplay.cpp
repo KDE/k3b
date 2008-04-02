@@ -60,7 +60,7 @@
 
 
 static const int DEFAULT_CD_SIZE_74 = 74*60*75;
-static const int DEFAULT_CD_SIZE_80 = 80*60*74;
+static const int DEFAULT_CD_SIZE_80 = 80*60*75;
 static const int DEFAULT_CD_SIZE_100 = 100*60*75;
 static const int DEFAULT_DVD_SIZE_4_4 = 2295104;
 static const int DEFAULT_DVD_SIZE_8_0 = 4173824;
@@ -144,28 +144,20 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
     p.begin( &buffer, this );
     p.setPen( Qt::black ); // we use a fixed bar color (which is not very nice btw, so we also fix the text color)
 
-    long long docSize;
-    long long cdSize;
-    long long maxValue;
-    long tolerance;
+    K3b::Msf docSize;
+    K3b::Msf cdSize;
+    K3b::Msf maxValue;
+    K3b::Msf tolerance;
 
-    if( d->showTime ) {
-        docSize = d->doc->length().totalFrames() / 75 / 60;
-        cdSize = d->cdSize.totalFrames() / 75 / 60;
-        maxValue = (cdSize > docSize ? cdSize : docSize) + 10;
-        tolerance = 1;
-    }
-    else {
-        docSize = d->doc->size()/1024/1024;
-        cdSize = d->cdSize.mode1Bytes()/1024/1024;
-        maxValue = (cdSize > docSize ? cdSize : docSize) + 100;
-        tolerance = 10;
-    }
+    docSize = d->doc->length();
+    cdSize = d->cdSize;
+    maxValue = (cdSize > docSize ? cdSize : docSize) + ( 10*60*75 );
+    tolerance = 60*75;
 
     // so split width() in maxValue pieces
-    double one = (double)rect().width() / (double)maxValue;
+    double one = (double)rect().width() / (double)maxValue.totalFrames();
     QRect crect( rect() );
-    crect.setWidth( (int)(one*(double)docSize) );
+    crect.setWidth( (int)(one*(double)docSize.totalFrames()) );
 
     p.setClipping(true);
     p.setClipRect(crect);
@@ -176,7 +168,7 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 
     // draw red if docSize > cdSize + tolerance
     if( docSize > cdSize + tolerance ) {
-        oversizeRect.setLeft( oversizeRect.left() + (int)(one * (cdSize - tolerance)) );
+        oversizeRect.setLeft( oversizeRect.left() + (int)(one * (cdSize - tolerance).totalFrames()) );
         p.fillRect( oversizeRect, Qt::red );
         QLinearGradient gradient( QPoint( oversizeRect.left() - rect().height(), 0 ),
                                   QPoint( oversizeRect.left() + rect().height(), 0 ) );
@@ -188,7 +180,7 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 
     // draw yellow if cdSize - tolerance < docSize
     else if( docSize > cdSize - tolerance ) {
-        oversizeRect.setLeft( oversizeRect.left() + (int)(one * (cdSize - tolerance)) );
+        oversizeRect.setLeft( oversizeRect.left() + (int)(one * (cdSize - tolerance).lba()) );
         p.fillRect( oversizeRect, Qt::yellow );
         QLinearGradient gradient( QPoint( oversizeRect.left() - rect().height(), 0 ),
                                   QPoint( oversizeRect.left() + rect().height(), 0 ) );
@@ -216,21 +208,21 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
     if( d->cdSize.mode1Bytes() >= d->doc->size() )
         overSizeText = i18n("Available: %1 of %2",
                             d->showTime
-                            ? i18n("%1 min", (K3b::Msf( cdSize*60*75 ) - d->doc->length()).toString(false) )
-                            : KIO::convertSize( qMax( (cdSize * 1024LL * 1024LL) - (long long)d->doc->size(), 0LL ) ),
+                            ? i18n("%1 min", (cdSize - d->doc->length()).toString(false) )
+                            : KIO::convertSize( ( cdSize.lba() - (unsigned long long)d->doc->size(), 0ULL ) ),
                             d->showTime
-                            ? i18n("%1 min", K3b::Msf( cdSize*60*75 ).toString(false))
-                            : KIO::convertSizeFromKiB( cdSize * 1024 ) );
+                            ? i18n("%1 min", cdSize.toString(false))
+                            : KIO::convertSize( cdSize.mode1Bytes() ) );
     else
         overSizeText = i18n("Capacity exceeded by %1",
                             d->showTime
-                            ? i18n("%1 min", (d->doc->length() - K3b::Msf( cdSize*60*75 ) ).toString(false))
-                            : KIO::convertSize( (long long)d->doc->size() - (cdSize * 1024LL * 1024LL) ) );
+                            ? i18n("%1 min", (d->doc->length() - cdSize ).toString(false))
+                            : KIO::convertSize( (long long)d->doc->size() - cdSize.mode1Bytes() ) );
     // ====================================================================================
 
     // draw the medium size marker
     // ====================================================================================
-    int mediumSizeMarkerPos = rect().left() + (int)(one*cdSize);
+    int mediumSizeMarkerPos = rect().left() + (int)(one*cdSize.lba());
     p.drawLine( mediumSizeMarkerPos, rect().bottom(),
                 mediumSizeMarkerPos, rect().top() + ((rect().bottom()-rect().top())/2) );
     // ====================================================================================
@@ -262,9 +254,9 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 
     QRect overSizeTextRect( rect() );
     int overSizeTextLength = QFontMetrics(fnt).width(overSizeText);
-    if( overSizeTextLength + 5 > overSizeTextRect.width() - (int)(one*cdSize) ) {
+    if( overSizeTextLength + 5 > overSizeTextRect.width() - (int)(one*cdSize.totalFrames()) ) {
         // we don't have enough space on the right, so we paint to the left of the line
-        overSizeTextRect.setLeft( (int)(one*cdSize) - overSizeTextLength - 5 );
+        overSizeTextRect.setLeft( (int)(one*cdSize.totalFrames()) - overSizeTextLength - 5 );
     }
     else {
         overSizeTextRect.setLeft( mediumSizeMarkerPos + 5 );
