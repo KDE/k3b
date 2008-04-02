@@ -62,7 +62,7 @@
 #endif
 
 #ifdef Q_OS_LINUX
-
+#include <sys/utsname.h>
 /* Fix definitions for 2.5 kernels */
 #include <linux/version.h>
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,70)
@@ -623,6 +623,19 @@ bool K3bDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus, 
 #endif
 
 #ifdef Q_OS_LINUX
+    struct utsname uts;
+    int major, minor, patch;
+    if ( uname(&uts) < 0 ) {
+        return false; // *shrug*
+    }
+    else if ( sscanf( uts.release, "%d.%d.%d", &major, &minor, &patch) != 3 ) {
+        return false; // *shrug*
+    }
+    else if( major * 1000000 + minor * 1000 + patch > 2006008 ) { // > 2.6.8
+        kDebug() << "On kernels newer than 2.6.8 we only use block devices.";
+        return false;
+    }
+
     int ret = false;
     int cdromfd = K3bDevice::openDevice( QFile::encodeName( dev ).data() );
     if (cdromfd < 0) {
