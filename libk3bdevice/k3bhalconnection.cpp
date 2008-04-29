@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id: sourceheader,v 1.3 2005/01/19 13:03:46 trueg Exp $
  * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
@@ -79,9 +79,9 @@ public:
   LibHalContext* halContext;
   DBusConnection* connection;
   DBusQt::Connection* dBusQtConnection;
-  
+
   bool bOpen;
-  
+
   QMap<QCString, QString> udiDeviceMap;
   QMap<QString, QCString> deviceUdiMap;
 
@@ -145,14 +145,14 @@ bool K3bDevice::HalConnection::open()
   setupDBusQtConnection( d->connection );
 
   libhal_ctx_set_dbus_connection( d->halContext, d->connection );
-  
+
   libhal_ctx_set_device_added( d->halContext, halDeviceAdded );
   libhal_ctx_set_device_removed( d->halContext, halDeviceRemoved );
   libhal_ctx_set_device_new_capability( d->halContext, 0 );
   libhal_ctx_set_device_lost_capability( d->halContext, 0 );
   libhal_ctx_set_device_property_modified( d->halContext, 0 );
   libhal_ctx_set_device_condition( d->halContext, 0 );
-  
+
   if( !libhal_ctx_init( d->halContext, 0 ) ) {
     k3bDebug() << "(K3bDevice::HalConnection) Failed to init HAL context!" << endl;
     return false;
@@ -291,7 +291,7 @@ int K3bDevice::HalConnection::lock( Device* dev )
 
   const char* lockComment = "Locked by the K3b libraries";
 
-  if( !dbus_message_append_args( dmesg, 
+  if( !dbus_message_append_args( dmesg,
 				 DBUS_TYPE_STRING, &lockComment,
 				 DBUS_TYPE_INVALID ) ) {
     k3bDebug() << "(K3bDevice::HalConnection) lock failed for " << udi << ": could not append args to dbus message\n";
@@ -311,7 +311,7 @@ int K3bDevice::HalConnection::lock( Device* dev )
       ret = org_freedesktop_Hal_DeviceAlreadyLocked;
     else if( !strcmp(error.name, "org.freedesktop.Hal.PermissionDenied" ) )
       ret = org_freedesktop_Hal_PermissionDenied;
-  
+
     dbus_error_free( &error );
   }
   else
@@ -348,7 +348,7 @@ int K3bDevice::HalConnection::unlock( Device* dev )
     return org_freedesktop_Hal_CommunicationError;
   }
 
-  if( !dbus_message_append_args( dmesg, 
+  if( !dbus_message_append_args( dmesg,
 				 DBUS_TYPE_INVALID ) ) {
     k3bDebug() << "(K3bDevice::HalConnection) unlock failed for " << udi << ": could not append args to dbus message\n";
     dbus_message_unref( dmesg );
@@ -381,8 +381,8 @@ int K3bDevice::HalConnection::unlock( Device* dev )
 }
 
 
-int K3bDevice::HalConnection::mount( K3bDevice::Device* dev, 
-				     const QString& mountPoint, 
+int K3bDevice::HalConnection::mount( K3bDevice::Device* dev,
+				     const QString& mountPoint,
 				     const QString& fstype,
 				     const QStringList& options )
 {
@@ -396,7 +396,7 @@ int K3bDevice::HalConnection::mount( K3bDevice::Device* dev,
 
   if( !d->deviceUdiMap.contains( dev->blockDeviceName() ) )
     return org_freedesktop_Hal_NoSuchDevice;
-  
+
   if( !d->deviceMediumUdiMap.contains( d->deviceUdiMap[dev->blockDeviceName()] ) )
     return org_freedesktop_Hal_Device_Volume_NoSuchDevice;
 
@@ -411,12 +411,12 @@ int K3bDevice::HalConnection::mount( K3bDevice::Device* dev,
 
   char** poptions = qstringListToArray( options );
 
-  const char* strMountPoint = mountPoint.local8Bit().data();
-  const char* strFstype = fstype.local8Bit().data();
+  QByteArray strMountPoint = mountPoint.local8Bit();
+  QByteArray strFstype = fstype.local8Bit();
 
-  if( !dbus_message_append_args( dmesg, 
-				 DBUS_TYPE_STRING, &strMountPoint,
-				 DBUS_TYPE_STRING, &strFstype,
+  if( !dbus_message_append_args( dmesg,
+				 DBUS_TYPE_STRING, strMountPoint.data(),
+				 DBUS_TYPE_STRING, strFstype.data(),
 				 DBUS_TYPE_ARRAY, DBUS_TYPE_STRING, &poptions, options.count(),
 				 DBUS_TYPE_INVALID ) ) {
     k3bDebug() << "(K3bDevice::HalConnection) mount failed for " << mediumUdi << ": could not append args to dbus message\n";
@@ -476,7 +476,7 @@ int K3bDevice::HalConnection::unmount( K3bDevice::Device* dev,
 
   if( !d->deviceUdiMap.contains( dev->blockDeviceName() ) )
     return org_freedesktop_Hal_NoSuchDevice;
-  
+
   if( !d->deviceMediumUdiMap.contains( d->deviceUdiMap[dev->blockDeviceName()] ) )
     return org_freedesktop_Hal_Device_Volume_NoSuchDevice;
 
@@ -491,7 +491,7 @@ int K3bDevice::HalConnection::unmount( K3bDevice::Device* dev,
 
   char** poptions = qstringListToArray( options );
 
-  if( !dbus_message_append_args( dmesg, 
+  if( !dbus_message_append_args( dmesg,
 				 DBUS_TYPE_ARRAY, DBUS_TYPE_STRING, &poptions, options.count(),
 				 DBUS_TYPE_INVALID ) ) {
     k3bDebug() << "(K3bDevice::HalConnection) unmount failed for " << mediumUdi << ": could not append args to dbus message\n";
@@ -533,8 +533,8 @@ int K3bDevice::HalConnection::unmount( K3bDevice::Device* dev,
   return ret;
 }
 
-									
-int K3bDevice::HalConnection::eject( K3bDevice::Device* dev, 
+
+int K3bDevice::HalConnection::eject( K3bDevice::Device* dev,
 				     const QStringList& options )
 {
   //
@@ -547,7 +547,7 @@ int K3bDevice::HalConnection::eject( K3bDevice::Device* dev,
 
   if( !d->deviceUdiMap.contains( dev->blockDeviceName() ) )
     return org_freedesktop_Hal_NoSuchDevice;
-  
+
   if( !d->deviceMediumUdiMap.contains( d->deviceUdiMap[dev->blockDeviceName()] ) )
     return org_freedesktop_Hal_Device_Volume_NoSuchDevice;
 
@@ -562,7 +562,7 @@ int K3bDevice::HalConnection::eject( K3bDevice::Device* dev,
 
   char** poptions = qstringListToArray( options );
 
-  if( !dbus_message_append_args( dmesg, 
+  if( !dbus_message_append_args( dmesg,
 				 DBUS_TYPE_ARRAY, DBUS_TYPE_STRING, &poptions, options.count(),
 				 DBUS_TYPE_INVALID ) ) {
     k3bDebug() << "(K3bDevice::HalConnection) eject failed for " << mediumUdi << ": could not append args to dbus message\n";
