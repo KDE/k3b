@@ -256,6 +256,7 @@ bool K3bApplication::processCmdLineArgs()
   else if( args->isSet("copycd") ) {
     showTips = false;
     dialogOpen = true;
+      qApp->processEvents();
     m_mainWindow->cdCopy( K3b::urlToDevice( KURL::fromPathOrURL( QFile::decodeName( args->getOption( "copycd" ) ) ) ) );
   }
   else if( args->isSet("copydvd") ) {
@@ -382,7 +383,7 @@ void K3bApplication::Core::init()
   mediaCache()->buildDeviceList( deviceManager() );
 
   connect( deviceManager(), SIGNAL(changed(K3bDevice::DeviceManager*)),
-	   mediaCache(), SLOT(buildDeviceList(K3bDevice::DeviceManager*)) );
+           mediaCache(), SLOT(buildDeviceList(K3bDevice::DeviceManager*)) );
 }
 
 
