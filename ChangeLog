@@ -1,6 +1,8 @@
 1.0.5
 =====
  * Fix CD Copy device selection (Bug 151924)
+ * Fixed HAL mounting (thanks to Ken Milmore)
+ * Always wait for the drive to become ready before starting verification.
 
 1.0.4
 =====
