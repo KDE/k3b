@@ -161,13 +161,13 @@ void K3bVerificationJob::start()
 }
 
 
-void K3bVerificationJob::slotMediaReloaded( bool success )
+void K3bVerificationJob::slotMediaReloaded( bool /*success*/ )
 {
-  if( !success )
+    // we always need to wait for the medium. Otherwise the diskinfo below
+    // may run before the drive is ready!
     waitForMedia( d->device,
-		  K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE,
-		  K3bDevice::MEDIA_WRITABLE,
-		  i18n("Unable to Close the Tray") );
+                  K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE,
+                  K3bDevice::MEDIA_WRITABLE );
 
   d->mediumHasBeenReloaded = true;
 
