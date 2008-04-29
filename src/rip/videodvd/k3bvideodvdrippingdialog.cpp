@@ -452,6 +452,7 @@ QString K3bVideoDVDRippingDialog::createFilename( const K3bVideoDVDRippingJob::T
                 break;
             case PATTERN_AUDIO_CHANNELS:
                 if( title.numAudioStreams() > 0 )
+                    // xgettext: no-c-format
                     f.append( i18ncp("Ch is short for Channels", "%1Ch", "%1Ch",
                                     m_w->selectedAudioCodec() == K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_PASSTHROUGH
                                     ? title.audioStream( info.audioStream ).channels()

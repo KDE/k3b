@@ -92,6 +92,7 @@ void K3bExternalEncoderEditDialog::slotOk()
     }
     else if( !m_editW->m_editCommand->text().contains( "%f" ) ) {
         KMessageBox::error( this,
+                            // xgettext: no-c-format
                             i18n("Please add the output filename (%f) to the command line."),
                             i18n("No filename specified") );
     }

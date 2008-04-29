@@ -150,6 +150,7 @@ void K3bCddbPatternWidget::slotSeeSpecialStrings()
 
 void K3bCddbPatternWidget::slotSeeConditionalInclusion()
 {
+  // xgettext: no-c-format
   setWhatsThis( i18n( "<p><b>Conditional inclusion:</b>"
                              "<p>These patterns make it possible to selectively include texts, "
                              "depending on the value of CDDB entries. You can choose only to "
