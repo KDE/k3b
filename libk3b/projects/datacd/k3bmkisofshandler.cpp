@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
@@ -61,7 +61,7 @@ const K3bExternalBin* K3bMkisofsHandler::initMkisofs()
   if( d->mkisofsBin ) {
     if( !d->mkisofsBin->copyright.isEmpty() )
       handleMkisofsInfoMessage( i18n("Using %1 %2 - Copyright (C) %3")
-				.arg("mkisofs").arg(d->mkisofsBin->version).arg(d->mkisofsBin->copyright), 
+				.arg("mkisofs").arg(d->mkisofsBin->version).arg(d->mkisofsBin->copyright),
 				K3bJob::INFO );
 
     d->firstProgressValue = -1;
@@ -82,8 +82,8 @@ void K3bMkisofsHandler::parseMkisofsOutput( const QString& line )
     if( line.startsWith( d->mkisofsBin->path ) ) {
       // error or warning
       QString errorLine = line.mid( d->mkisofsBin->path.length() + 2 );
-      if( errorLine.startsWith( "Input/output error. cannot read from" ) ) {
-	handleMkisofsInfoMessage( i18n("Read error from file '%1'").arg( errorLine.mid( 38, errorLine.length()-40 ) ), 
+      if( errorLine.startsWith( "Input/output error. Cannot read from" ) ) {
+	handleMkisofsInfoMessage( i18n("Read error from file '%1'").arg( errorLine.mid( 38, errorLine.length()-40 ) ),
 				  K3bJob::ERROR );
 	d->readError = true;
       }
@@ -109,7 +109,7 @@ void K3bMkisofsHandler::parseMkisofsOutput( const QString& line )
       d->readError = true;
     }
     else if( line.endsWith( "has not an allowable size." ) ) {
-      handleMkisofsInfoMessage( i18n("The boot image has an invalid size."), K3bJob::ERROR );      
+      handleMkisofsInfoMessage( i18n("The boot image has an invalid size."), K3bJob::ERROR );
       d->readError = true;
     }
     else if( line.endsWith( "has multiple partitions." ) ) {
@@ -144,7 +144,7 @@ int K3bMkisofsHandler::parseMkisofsProgress( const QString& line )
   else {
     if( d->firstProgressValue < 0 )
       d->firstProgressValue = p;
-    
+
     return( (int)::ceil( (p - d->firstProgressValue)*100.0/(100.0 - d->firstProgressValue) ) );
   }
 }
