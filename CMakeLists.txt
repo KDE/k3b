@@ -22,7 +22,9 @@ ${CMAKE_CURRENT_BINARY_DIR}/libk3bdevice )
 SET(K3B_VERSION_STRING "1.95-svn")
 
 configure_file (config-k3b.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-k3b.h )
-configure_file (k3b.lsm.cmake ${CMAKE_CURRENT_BINARY_DIR}/k3b.lsm )
+if(NOT WIN32)
+   configure_file (k3b.lsm.cmake ${CMAKE_CURRENT_BINARY_DIR}/k3b.lsm )
+endif(NOT WIN32)
 
 option(K3BSETUP_BUILD "Build k3bsetup" ON)
 option(ADD_K3B_DEBUG "K3b additional debugging support")
