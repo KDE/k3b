@@ -697,8 +697,8 @@ bool K3bIsoImager::addMkisofsParameters( bool printSize )
 
     if ( filesGreaterThan4Gb ) {
         if ( !d->mkisofsBin->hasFeature( "no-4gb-limit" ) ) {
-            emit infoMessage( i18n( "Found files bigger than 4 GB. K3b needs at least %1 to continue." )
-                              .arg( "mkisofs >= 2.01.01a33 / genisoimage >= 1.1.4" ),
+            emit infoMessage( i18n( "Found files bigger than 4 GB. K3b needs at least %1 to continue." ,
+                              QString( "mkisofs >= 2.01.01a33 / genisoimage >= 1.1.4" ) ),
                               ERROR );
             return false;
         }
@@ -849,15 +849,11 @@ int K3bIsoImager::writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream 
             else if( d->usedLinkHandling == Private::FOLLOW ) {
                 QFileInfo f( K3b::resolveLink( item->localPath() ) );
                 if( !f.exists() ) {
-                    emit infoMessage( i18n("Could not follow link %1 to non-existing file %2. Skipping...")
-                                      .arg(item->k3bName())
-                                      .arg(f.filePath()), WARNING );
+                    emit infoMessage( i18n("Could not follow link %1 to non-existing file %2. Skipping...", item->k3bName(), f.filePath()), WARNING );
                     writeItem = false;
                 }
                 else if( f.isDir() ) {
-                    emit infoMessage( i18n("Ignoring link %1 to folder %2. K3b is unable to follow links to folders.")
-                                      .arg(item->k3bName())
-                                      .arg(f.filePath()), WARNING );
+                    emit infoMessage( i18n("Ignoring link %1 to folder %2. K3b is unable to follow links to folders.", item->k3bName(), f.filePath()), WARNING );
                     writeItem = false;
                 }
             }
