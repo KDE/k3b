@@ -134,6 +134,7 @@ K3bExternalEncoderSettingsWidget::K3bExternalEncoderSettingsWidget( QWidget* par
              this, SLOT(slotRemoveCommand()) );
 
     m_editDlg = new K3bExternalEncoderEditDialog( this );
+    slotSelectionChanged();
 }
 
 
