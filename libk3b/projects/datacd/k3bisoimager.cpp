@@ -316,7 +316,7 @@ void K3bIsoImager::startSizeCalculation()
     // ??? Seems it is not needed after all. At least mkisofs 1.14 and above don't need it. ???
     //  *m_process << dummyDir();
 
-    kDebug() << "***** mkisofs calculate size parameters:\n";
+    kDebug() << "***** mkisofs calculate size parameters:";
     QList<QByteArray> args = m_process->args();
     QString s;
     Q_FOREACH( QByteArray arg, args ) {
