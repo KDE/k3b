@@ -161,6 +161,8 @@ void K3bMovixView::slotRemoveSubTitleItems()
 
 void K3bMovixView::slotAddSubTitleFile()
 {
+    if ( m_listView->selectedItems().isEmpty() )
+        return;
     Q3ListViewItem* item = m_listView->selectedItems().first();
     if( K3bMovixListViewItem* vi = dynamic_cast<K3bMovixListViewItem*>(item) ) {
 
