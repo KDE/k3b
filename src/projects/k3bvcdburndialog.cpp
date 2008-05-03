@@ -192,7 +192,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent )
 
     m_checkCdiSupport->setWhatsThis( i18n( "<p>To allow the play of Video-CDs on a CD-i player, the Video-CD standard requires that a CD-i application program must be present."
                                    "<p>This program is designed to:"
-                                   "<ul><li>provide full play back control as defined in the PSD of the standard</l>"
+                                   "<ul><li>provide full play back control as defined in the PSD of the standard</li>"
                                    "<li>be extremely simple to use and easy-to-learn for the end-user</li></ul>"
                                    "<p>The program runs on CD-i players equipped with the CDRTOS 1.1(.1) operating system and a Digital Video extension cartridge." ) );
 
@@ -538,7 +538,7 @@ void K3bVcdBurnDialog::slotStartClicked()
 {
 
     if ( QFile::exists( vcdDoc() ->vcdImage() ) ) {
-        if ( KMessageBox::warningContinueCancel( this, i18n( "Do you want to overwrite %1" , vcdDoc() ->vcdImage() ), i18n( "File Exists" ), KGuiItem(i18n("Overwrite")) )
+        if ( KMessageBox::warningContinueCancel( this, i18n( "Do you want to overwrite %1?" , vcdDoc() ->vcdImage() ), i18n( "File Exists" ), KGuiItem(i18n("Overwrite")) )
                 != KMessageBox::Continue )
             return ;
     }
