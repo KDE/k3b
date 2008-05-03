@@ -197,9 +197,9 @@ void K3bVideoDVDRippingDialog::populateTitleView( const QList<int>& titles )
     for( QList<int>::const_iterator it = titles.begin(); it != titles.end(); ++it ) {
         titleItem = new Q3CheckListItem( m_w->m_titleView,
                                          titleItem,
-                                         i18n("Title %1 (%2)")
-                                         .arg(*it)
-                                         .arg(m_dvd[*it-1].playbackTime().toString()),
+                                         i18n("Title %1 (%2)",
+                                              *it,
+                                              m_dvd[*it-1].playbackTime().toString()),
                                          Q3CheckListItem::RadioButtonController );
         titleItem->setText( 1, QString("%1x%2")
                             .arg(m_dvd[*it-1].videoStream().realPictureWidth())
@@ -224,13 +224,13 @@ void K3bVideoDVDRippingDialog::populateTitleView( const QList<int>& titles )
 
         Q3ListViewItem* asI = 0;
         for( unsigned int i = 0; i < m_dvd[*it-1].numAudioStreams(); ++i ) {
-            QString text = i18n("%1 %2Ch (%3%4)")
-                           .arg( K3bVideoDVD::audioFormatString( m_dvd[*it-1].audioStream(i).format() ) )
-                           .arg( m_dvd[*it-1].audioStream(i).channels() )
-                           .arg( m_dvd[*it-1].audioStream(i).langCode().isEmpty()
+            QString text = i18n("%1 %2Ch (%3%4)",
+                                K3bVideoDVD::audioFormatString( m_dvd[*it-1].audioStream(i).format() ),
+                                m_dvd[*it-1].audioStream(i).channels(),
+                                m_dvd[*it-1].audioStream(i).langCode().isEmpty()
                                  ? i18n("unknown language")
-                                 : KGlobal::locale()->languageCodeToName( m_dvd[*it-1].audioStream(i).langCode() ) )
-                           .arg( m_dvd[*it-1].audioStream(i).codeExtension() != K3bVideoDVD::AUDIO_CODE_EXT_UNSPECIFIED
+                                 : KGlobal::locale()->languageCodeToName( m_dvd[*it-1].audioStream(i).langCode() ),
+                                m_dvd[*it-1].audioStream(i).codeExtension() != K3bVideoDVD::AUDIO_CODE_EXT_UNSPECIFIED
                                  ? QString(" ") + K3bVideoDVD::audioCodeExtensionString( m_dvd[*it-1].audioStream(i).codeExtension() )
                                  : QString() );
 

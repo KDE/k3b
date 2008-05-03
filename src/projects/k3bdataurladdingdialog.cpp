@@ -656,9 +656,9 @@ void K3bDataUrlAddingDialog::slotCopyMoveItems()
       else if( !m_bExistingItemsIgnoreAll ) {
 	switch( K3bMultiChoiceDialog::choose( i18n("File already exists"),
 					      i18n("<p>File <em>%1</em> already exists in "
-						   "project folder <em>%2</em>.")
-					      .arg( item->k3bName() )
-					      .arg("/" + dir->k3bPath()),
+						   "project folder <em>%2</em>.",
+						    item->k3bName(),
+						    "/" + dir->k3bPath()),
 					      QMessageBox::Warning,
 					      this,
 					      6,

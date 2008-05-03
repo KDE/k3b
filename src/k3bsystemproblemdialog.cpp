@@ -223,7 +223,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent)
 	  problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					     i18n("%1 will be run with root privileges on kernel >= 2.6.8",QString("cdrecord <= 2.01.01a05")),
 					     i18n("Since Linux kernel 2.6.8 %1 will not work when run suid "
-						  "root for security reasons anymore.").arg("cdrecord <= 2.01.01a05"),
+						  "root for security reasons anymore.",QString("cdrecord <= 2.01.01a05")),
 					     QString(),
 					     true ) );
       }
@@ -403,11 +403,11 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent)
 						  "support writing to ATAPI devices without "
 						  "SCSI emulation and there is at least one writer "
 						  "in your system not configured to use "
-						  "SCSI emulation.").arg("cdrecord"),
+						  "SCSI emulation.",QString("cdrecord")),
 					     i18n("The best and recommended solution is to enable "
 						  "ide-scsi (SCSI emulation) for all devices. "
 						  "This way you will not have any problems. Or you install "
-						  "(or select as the default) a more recent version of %1.").arg("cdrtools"),
+						  "(or select as the default) a more recent version of %1.",QString("cdrtools")),
 					     false ) );
 	}
       }
@@ -418,13 +418,13 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent)
 	    !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "plain-atapi") ) {
 	  // FIXME: replace ">" with "&gt;"
 	  problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-					     i18n("%1 %2 does not support ATAPI")
-					     .arg("cdrdao").arg(k3bcore->externalBinManager()->binObject("cdrdao")->version),
+					     i18n("%1 %2 does not support ATAPI",
+						  QString("cdrdao"), k3bcore->externalBinManager()->binObject("cdrdao")->version),
 					     i18n("The configured version of %1 does not "
 						  "support writing to ATAPI devices without "
 						  "SCSI emulation and there is at least one writer "
 						  "in your system not configured to use "
-						  "SCSI emulation.").arg("cdrdao"),
+						  "SCSI emulation.",QString("cdrdao")),
 					     K3b::simpleKernelVersion() > K3bVersion( 2, 5, 0 )
 					     ? i18n("Install cdrdao >= 1.1.8 which supports writing to "
 						    "ATAPI devices directly.")
@@ -457,9 +457,9 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent)
       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					 i18n("No write access to device %1",dev->blockDeviceName()),
 					 i18n("K3b needs write access to all the devices to perform certain tasks. "
-					      "Without it you might encounter problems with %1 - %2").arg(dev->vendor()).arg(dev->description()),
+					      "Without it you might encounter problems with %1 - %2",dev->vendor(),dev->description()),
 					 i18n("Make sure you have write access to %1. In case you are not using "
-					      "devfs or udev K3bSetup is able to do this for you.").arg(dev->blockDeviceName()),
+					      "devfs or udev K3bSetup is able to do this for you.",dev->blockDeviceName()),
 					 false ) );
 
 
@@ -468,9 +468,9 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent)
       problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
 					 i18n("No write access to generic SCSI device %1",dev->genericDevice()),
 					 i18n("Without write access to the generic device you might "
-					      "encounter problems with Audio CD ripping from %1 - %2").arg(dev->vendor()).arg(dev->description()),
+					      "encounter problems with Audio CD ripping from %1 - %2",dev->vendor(),dev->description()),
 					 i18n("Make sure you have write access to %1. In case you are not using "
-					      "devfs or udev K3bSetup is able to do this for you.").arg(dev->genericDevice()),
+					      "devfs or udev K3bSetup is able to do this for you.",dev->genericDevice()),
 					 false ) );
 
     if( dev->interfaceType() == K3bDevice::IDE && !dmaActivated( dev ) )

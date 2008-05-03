@@ -696,7 +696,7 @@ bool K3bCdCopyJob::writeNextSession()
     else if( m_copies > 1 )
       emit newTask( i18n("Writing Copy %1 (Session %2)",d->doneCopies+1,d->currentWrittenSession) );
     else
-      emit newTask( i18n("Writing Copy (Session %2)",d->currentWrittenSession) );
+      emit newTask( i18n("Writing Copy (Session %1)",d->currentWrittenSession) );
   }
   else {
     if( m_simulate )

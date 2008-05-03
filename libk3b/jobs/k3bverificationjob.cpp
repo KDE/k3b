@@ -155,8 +155,8 @@ void K3bVerificationJob::start()
 
   // make sure the job is initialized
   if ( d->tracks.isEmpty() ) {
-      emit infoMessage( i18n( "Internal Error: Verification job improperly initialized (%1)" )
-                        .arg( "no tracks added" ), ERROR );
+      emit infoMessage( i18n( "Internal Error: Verification job improperly initialized (%1)",
+                              i18n("no tracks added") ), ERROR );
       jobFinished( false );
       return;
   }
@@ -193,8 +193,8 @@ void K3bVerificationJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 
     if( (int)d->toc.count() < (*it).trackNumber ) {
         if ( d->mediumHasBeenReloaded ) {
-            emit infoMessage( i18n("Internal Error: Verification job improperly initialized (%1)")
-                              .arg( "Specified track number not found on medium" ), ERROR );
+            emit infoMessage( i18n("Internal Error: Verification job improperly initialized (%1)",
+                                   i18n("specified track number not found on medium") ), ERROR );
             jobFinished( false );
             return;
         }

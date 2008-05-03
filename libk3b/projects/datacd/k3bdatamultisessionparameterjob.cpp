@@ -243,8 +243,8 @@ bool K3bDataMultiSessionParameterJob::setupMultiSessionParameters()
             nextSessionStart = iso.primaryDescriptor().volumeSpaceSize;
         }
         else {
-            emit infoMessage( i18n("Could not open Iso9660 filesystem in %1.")
-                              .arg( d->doc->burner()->vendor() + " " + d->doc->burner()->description() ), K3bJob::ERROR );
+            emit infoMessage( i18n("Could not open Iso9660 filesystem in %1.",
+                                   d->doc->burner()->vendor() + " " + d->doc->burner()->description() ), K3bJob::ERROR );
             return false;
         }
     }

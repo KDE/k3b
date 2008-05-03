@@ -181,7 +181,7 @@ void K3bThemeOptionTab::slotInstallTheme()
         if( !QFile::exists( themeBasePath + '/' + themeName ) ||
             KMessageBox::warningYesNo( this,
                                        i18n("A theme with the name '%1' already exists. Do you want to "
-                                            "overwrite it?"),
+                                            "overwrite it?", themeName),
                                        i18n("Theme exists"),
                                        KGuiItem( i18n("Overwrite") ),
                                        KStandardGuiItem::cancel() ) == KMessageBox::Yes ) {

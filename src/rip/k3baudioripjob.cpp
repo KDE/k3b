@@ -266,7 +266,7 @@ bool K3bAudioRipJob::run()
 
         if( success && !canceled() ) {
             QString& filename = m_tracks[0].second;
-            emit infoMessage( i18n("Successfully ripped to %2.", filename), K3bJob::INFO );
+            emit infoMessage( i18n("Successfully ripped to %1.", filename), K3bJob::INFO );
         }
     }
 

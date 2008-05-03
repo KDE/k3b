@@ -373,8 +373,8 @@ void K3bDvdFormattingJob::startFormatting( const K3bDevice::DiskInfo& diskInfo )
       blank = false;
     }
     else {
-      emit infoMessage( i18n("No need to format %1 media more than once.")
-			.arg(K3bDevice::mediaTypeString(K3bDevice::MEDIA_DVD_PLUS_RW)), INFO );
+      emit infoMessage( i18n("No need to format %1 media more than once.",
+			     K3bDevice::mediaTypeString(K3bDevice::MEDIA_DVD_PLUS_RW)), INFO );
       emit infoMessage( i18n("It may simply be overwritten."), INFO );
 
       if( d->force ) {
@@ -426,8 +426,8 @@ void K3bDvdFormattingJob::startFormatting( const K3bDevice::DiskInfo& diskInfo )
       }
       else if( diskInfo.currentProfile() == K3bDevice::MEDIA_DVD_RW_OVWR &&
 	       d->mode != K3b::WRITING_MODE_INCR_SEQ ) {
-	emit infoMessage( i18n("No need to format %1 media more than once.")
-			  .arg(K3bDevice::mediaTypeString(diskInfo.currentProfile())), INFO );
+	emit infoMessage( i18n("No need to format %1 media more than once.",
+			       K3bDevice::mediaTypeString(diskInfo.currentProfile())), INFO );
 	emit infoMessage( i18n("It may simply be overwritten."), INFO );
 
 	if( d->force )

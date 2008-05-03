@@ -141,8 +141,8 @@ bool K3bDataPreparationJob::run()
         if( !questionYesNo( "<p>" + i18n("Some filenames need to be shortened due to the %1 char restriction "
                                          "of the Joliet extensions. If the Joliet extensions are disabled filenames "
                                          "do not have to be shortened but long filenames will not be available on "
-                                         "Windows systems.")
-                            .arg( d->doc->isoOptions().jolietLong() ? 103 : 64 )
+                                         "Windows systems.",
+                                         d->doc->isoOptions().jolietLong() ? 103 : 64 )
                             + "<p>" + d->listOfRenamedItems,
                             i18n("Warning"),
                             i18n("Shorten Filenames"),

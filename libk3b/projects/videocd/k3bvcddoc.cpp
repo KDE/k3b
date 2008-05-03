@@ -213,10 +213,9 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KUrl& url )
                 vcdOptions() ->setMpegVersion( mpegVersion );
                 KMessageBox::information( kapp->mainWidget(),
                                           i18n( "K3b will create a %1 image from the given MPEG "
-                                                "files, but these files must already be in %2 "
-                                                "format. K3b does not yet resample MPEG files." )
-                                          .arg( i18n( "VCD" ) )
-                                          .arg( i18n( "VCD" ) ),
+                                                "files, but these files must already be in %1 "
+                                                "format. K3b does not yet resample MPEG files.",
+                                                 i18n( "VCD" ) ),
                                           i18n( "Information" ) );
                 m_urlAddingTimer->start( 0 );
             } else if ( vcdType() == NONE ) {
@@ -224,10 +223,9 @@ K3bVcdTrack* K3bVcdDoc::createTrack( const KUrl& url )
                 vcdOptions() ->setMpegVersion( mpegVersion );
                 bool force = KMessageBox::questionYesNo( kapp->mainWidget(),
                                                          i18n( "K3b will create a %1 image from the given MPEG "
-                                                               "files, but these files must already be in %2 "
-                                                               "format. K3b does not yet resample MPEG files." )
-                                                         .arg( i18n( "SVCD" ) )
-                                                         .arg( i18n( "SVCD" ) )
+                                                               "files, but these files must already be in %1 "
+                                                               "format. K3b does not yet resample MPEG files.",
+                                                               i18n( "SVCD" ) )
                                                          + "\n\n"
                                                          + i18n( "Note: Forcing MPEG2 as VCD is not supported by "
                                                                  "some standalone DVD players." ),

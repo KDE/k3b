@@ -59,8 +59,8 @@ const K3bExternalBin* K3bMkisofsHandler::initMkisofs()
 
   if( d->mkisofsBin ) {
     if( !d->mkisofsBin->copyright.isEmpty() )
-      handleMkisofsInfoMessage( i18n("Using %1 %2 - Copyright (C) %3")
-				.arg("mkisofs").arg(d->mkisofsBin->version).arg(d->mkisofsBin->copyright), 
+      handleMkisofsInfoMessage( i18n("Using %1 %2 - Copyright (C) %3",
+				     QString("mkisofs"), d->mkisofsBin->version, d->mkisofsBin->copyright), 
 				K3bJob::INFO );
 
     d->firstProgressValue = -1;
@@ -101,8 +101,8 @@ void K3bMkisofsHandler::parseMkisofsOutput( const QString& line )
       handleMkisofsProgress( 100 );
     }
     else if( line.startsWith( "Incorrectly encoded string" ) ) {
-      handleMkisofsInfoMessage( i18n("Encountered an incorrectly encoded filename '%1'")
-				.arg(line.section( QRegExp("[\\(\\)]"), 1, 1 )), K3bJob::ERROR );
+      handleMkisofsInfoMessage( i18n("Encountered an incorrectly encoded filename '%1'",
+				     line.section( QRegExp("[\\(\\)]"), 1, 1 )), K3bJob::ERROR );
       handleMkisofsInfoMessage( i18n("This may be caused by a system update which changed the local character set."), K3bJob::ERROR );
       handleMkisofsInfoMessage( i18n("You may use convmv (http://j3e.de/linux/convmv/) to fix the filename encoding."), K3bJob::ERROR );
       d->readError = true;

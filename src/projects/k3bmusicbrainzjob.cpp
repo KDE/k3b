@@ -120,9 +120,9 @@ void K3bMusicBrainzJob::slotMbJobFinished( bool success )
             bool ok = true;
             if( resultStringsUnique.count() > 1 )
                 s = KInputDialog::getItem( i18n("MusicBrainz Query"),
-                                           i18n("Found multiple matches for track %1 (%2). Please select one.")
-                                           .arg(currentTrack->trackNumber())
-                                           .arg(currentTrack->firstSource()->sourceComment()),
+                                           i18n("Found multiple matches for track %1 (%2). Please select one.",
+                                                currentTrack->trackNumber(),
+                                                currentTrack->firstSource()->sourceComment()),
                                            resultStringsUnique,
                                            0,
                                            false,

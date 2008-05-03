@@ -730,8 +730,8 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
     // -------------------------------
     else if ( foundMedium & K3bDevice::MEDIA_DVD_ALL ) {
         if ( writingApp() == K3b::CDRDAO ) {
-            emit infoMessage( i18n( "Cannot write %1 media using %2. Falling back to default application." )
-                              .arg( K3bDevice::mediaTypeString( foundMedium, true ) ).arg( "cdrdao" ), WARNING );
+            emit infoMessage( i18n( "Cannot write %1 media using %2. Falling back to default application.",
+                                    K3bDevice::mediaTypeString( foundMedium, true ), "cdrdao" ), WARNING );
             setWritingApp( K3b::DEFAULT );
         }
 
@@ -784,9 +784,9 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
             if( d->doc->dummy() && !d->doc->burner()->dvdMinusTestwrite() ) {
                 if( !questionYesNo( i18n("Your writer (%1 %2) does not support simulation with DVD-R(W) media. "
                                          "Do you really want to continue? The media will be written "
-                                         "for real.")
-                                    .arg(d->doc->burner()->vendor())
-                                    .arg(d->doc->burner()->description()),
+                                         "for real.",
+                                         d->doc->burner()->vendor(),
+                                         d->doc->burner()->description()),
                                     i18n("No Simulation with DVD-R(W)") ) ) {
                     return false;
                 }
@@ -826,10 +826,10 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
                     // features and we simply ignore it and hope for the best)
                     if( d->doc->burner()->featureCurrent( K3bDevice::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) == 0 ) {
                         if( !questionYesNo( i18n("Your writer (%1 %2) does not support Incremental Streaming with %3 "
-                                                 "media. Multisession will not be possible. Continue anyway?")
-                                            .arg(d->doc->burner()->vendor())
-                                            .arg(d->doc->burner()->description())
-                                            .arg( K3bDevice::mediaTypeString(foundMedium, true) ),
+                                                 "media. Multisession will not be possible. Continue anyway?",
+                                                 d->doc->burner()->vendor(),
+                                                 d->doc->burner()->description(),
+                                                 K3bDevice::mediaTypeString(foundMedium, true) ),
                                             i18n("No Incremental Streaming") ) ) {
                             return false;
                         }

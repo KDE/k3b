@@ -108,9 +108,9 @@ void K3bCloneJob::start()
   if( !m_onlyCreateImage ) {
     if( !writer()->supportsWritingMode( K3bDevice::RAW_R96R ) &&
 	!writer()->supportsWritingMode( K3bDevice::RAW_R16 ) ) {
-      emit infoMessage( i18n("CD writer %1 does not support cloning.")
-			.arg(writer()->vendor())
-			.arg(writer()->description()), ERROR );
+      emit infoMessage( i18n("CD writer %1 (%2) does not support cloning.",
+			     writer()->vendor(),
+			     writer()->description()), ERROR );
       m_running = false;
       jobFinished(false);
       return;

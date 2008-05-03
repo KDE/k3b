@@ -770,7 +770,7 @@ void K3bCdrdaoWriter::slotProcessExited( K3Process* p )
 
             if( m_command == WRITE || m_command == COPY ) {
                 int s = d->speedEst->average();
-                emit infoMessage( i18n("Average overall write speed: %1 KB/s (%2x)",s,KGlobal::locale()->formatNumber((double)s/150.0), 2), INFO );
+                emit infoMessage( ki18n("Average overall write speed: %1 KB/s (%2x)").subs(s).subs((double)s/150.0, 0, 'g', 2).toString(), INFO );
             }
 
             jobFinished( true );

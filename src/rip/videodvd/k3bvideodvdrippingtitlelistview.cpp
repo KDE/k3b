@@ -243,10 +243,10 @@ private:
     case 1:
       // Title X + length
       return i18n("<p><b>Title %1 (%2)</b><br>"
-		  "%3")
-	.arg( m_title.titleNumber(), 2 )
-	.arg( m_title.playbackTime().toString( false ) )
-	.arg( i18np("%1 chapter", "%1 chapters", m_title.numPTTs() ) );
+		  "%3",
+		  m_title.titleNumber(),
+		  m_title.playbackTime().toString( false ),
+		  i18np("%1 chapter", "%1 chapters", m_title.numPTTs() ) );
 
     case 3:
       // video stream info
