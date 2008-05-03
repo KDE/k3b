@@ -275,7 +275,7 @@ void K3bDataBurnDialog::toggleAll()
         if( m_comboMultisession->multiSessionMode() == K3bDataDoc::START ||
             m_comboMultisession->multiSessionMode() == K3bDataDoc::CONTINUE ||
             m_comboMultisession->multiSessionMode() == K3bDataDoc::FINISH )
-            KMessageBox::information( this, i18n("It is not possible to write multisession media in DAO mode."
+            KMessageBox::information( this, i18n("It is not possible to write multisession media in DAO mode. "
                                                  "Multisession has been disabled."),
                                       i18n("Multisession Problem"),
                                       "multisession_no_dao" );
