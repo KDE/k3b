@@ -6,7 +6,7 @@ set( CMAKE_MODULE_PATH    ${CMAKE_MODULE_PATH}
 find_package(KDE4 REQUIRED)
 include (KDE4Defaults)
 include (MacroLibrary)
-macro_optional_find_package(DvdRead)
+find_package(DvdRead REQUIRED)
 macro_optional_find_package(MusicBrainz)
 find_package(Kcddb REQUIRED)
 
