@@ -42,6 +42,7 @@ Name[sv]=Lagra digitalljud med K3b
 Name[tr]=K3b ile Sayısal Ses Aktar
 Name[uk]=Витягування цифрового аудіо за допомогою K3b
 Name[uz]=K3b yordamida qoʻshiqlarni audio-faylga aylantirish
+Name[uz@cyrillic]=K3b ёрдамида қўшиқларни аудио-файлга айлантириш
 Name[zh_CN]=用 K3b 提取数字音频
 Name[zh_TW]=使用 K3b 以數位方式提取音樂
 Exec=k3b --cddarip %u
