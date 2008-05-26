@@ -64,7 +64,7 @@ class K3bVideoDVDRippingJob : public K3bJob
   QString jobDescription() const;
   QString jobDetails() const;
 
- public slots:
+ public Q_SLOTS:
   void start();
   void cancel();
 
@@ -81,7 +81,7 @@ class K3bVideoDVDRippingJob : public K3bJob
   void setLowPriority( bool b );
   void setAutoClipping( bool b );
 
- private slots:
+ private Q_SLOTS:
   void slotTranscodingJobFinished( bool );
   void slotDetectClippingJobFinished( bool );
   void slotTranscodingProgress( int );

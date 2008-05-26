@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,158 +22,146 @@
 #include <k3bmsf.h>
 #include "k3bdevice_export.h"
 
-#include <q3cstring.h>
-
-
+#include <QtCore/QSharedDataPointer>
 
 namespace K3bDevice
 {
-  /**
-   * This class is directly accociated to a strcuture from 
-   * the MMC draft READ_DISK_INFO.
-   * It also holds some additional data.
-   * This class' data will be retrieved by K3bDevice::Device.
-   *
-   * Before using any values one should check diskState != STATE_UNKNOWN or
-   * diskState == STATE_NO_MEDIA.
-   * That may mean that no disk is in the drive or an error occurred.
-   * Writers should never give the STATE_UNKNOWN state. CD-ROM or DVD-ROM
-   * drives on the other hand may have trouble determining the state of the disk.
-   */
-  class LIBK3BDEVICE_EXPORT DiskInfo
+    class DiskInfoPrivate;
+
+    /**
+     * This class is directly accociated to a strcuture from 
+     * the MMC draft READ_DISK_INFO.
+     * It also holds some additional data.
+     * This class' data will be retrieved by K3bDevice::Device.
+     *
+     * Before using any values one should check diskState != STATE_UNKNOWN or
+     * diskState == STATE_NO_MEDIA.
+     * That may mean that no disk is in the drive or an error occurred.
+     * Writers should never give the STATE_UNKNOWN state. CD-ROM or DVD-ROM
+     * drives on the other hand may have trouble determining the state of the disk.
+     */
+    class LIBK3BDEVICE_EXPORT DiskInfo
     {
     public:
-      DiskInfo();
-      ~DiskInfo();
+        DiskInfo();
+        DiskInfo( const DiskInfo& );
+        ~DiskInfo();
 
-      /**
-       * Returnes the state of the disk.
-       * See enum State.
-       */
-      int diskState() const;
+        DiskInfo& operator=( const DiskInfo& );
 
-      /**
-       * Returnes the state of the last session.
-       * See enum State.
-       */
-      int lastSessionState() const;
+        /**
+         * Returnes the state of the disk.
+         * See enum State.
+         */
+        int diskState() const;
 
-      /**
-       * Returnes the state of the background formatting. This does
-       * only make sense for DVD+RW (and MRW which is not yet supported)
-       */
-      int bgFormatState() const;
+        /**
+         * Returnes the state of the last session.
+         * See enum State.
+         */
+        int lastSessionState() const;
 
-      /**
-       * returnes true if diskState() == STATE_EMPTY
-       */
-      bool empty() const;
+        /**
+         * Returnes the state of the background formatting. This does
+         * only make sense for DVD+RW (and MRW which is not yet supported)
+         */
+        int bgFormatState() const;
 
-      /**
-       * Is this a rewritable media (e.g. a CD-RW, DVD-RW, or DVD+RW)
-       */
-      bool rewritable() const;
+        /**
+         * returnes true if diskState() == STATE_EMPTY
+         */
+        bool empty() const;
 
-      /**
-       * Is this disk appendable
-       * returnes true if diskState() == STATE_INCOMPLETE
-       */
-      bool appendable() const;
+        /**
+         * Is this a rewritable media (e.g. a CD-RW, DVD-RW, or DVD+RW)
+         */
+        bool rewritable() const;
 
-      /**
-       * The type of the disk:
-       * CD-ROM, CD-R, CD-RW, DVD-ROM, DVD-R(W), DVD+R(W)
-       */
-      int mediaType() const;
+        /**
+         * Is this disk appendable
+         * returnes true if diskState() == STATE_INCOMPLETE
+         */
+        bool appendable() const;
 
-      /**
-       * This is the current profile of the drive. That means it may differ
-       * from drive to drive.
-       * -1 means no info.
-       * Mainly interesting for the distiction of DVD-R(W) modes:
-       * Sequential and Restricted Overwrite.
-       */
-      int currentProfile() const { return m_currentProfile; }
+        /**
+         * The type of the disk:
+         * CD-ROM, CD-R, CD-RW, DVD-ROM, DVD-R(W), DVD+R(W)
+         */
+        int mediaType() const;
 
-      /**
-       * Just for easy implementation since there are so many
-       * different DVD formats.
-       */
-      bool isDvdMedia() const;
+        /**
+         * This is the current profile of the drive. That means it may differ
+         * from drive to drive.
+         * -1 means no info.
+         * Mainly interesting for the distiction of DVD-R(W) modes:
+         * Sequential and Restricted Overwrite.
+         */
+        int currentProfile() const;
 
-      /**
-       * The number of sessions on the disk.
-       * This does not include any leadout or the last empty session
-       * on a DVD+-R(W)
-       */
-      int numSessions() const;
+        /**
+         * Just for easy implementation since there are so many
+         * different DVD formats.
+         */
+        bool isDvdMedia() const;
 
-      /**
-       * The number of finished tracks.
-       * This does not include the empty track.
-       */
-      int numTracks() const;
+        /**
+         * The number of sessions on the disk.
+         * This does not include any leadout or the last empty session
+         * on a DVD+-R(W)
+         */
+        int numSessions() const;
 
-      /**
-       * Number of layers on a DVD media. For CD media this is always 1.
-       */
-      int numLayers() const;
+        /**
+         * The number of finished tracks.
+         * This does not include the empty track.
+         */
+        int numTracks() const;
 
-      /**
-       * Does only make sense for appendable disks.
-       */
-      K3b::Msf remainingSize() const;
+        /**
+         * Number of layers on a DVD media. For CD media this is always 1.
+         */
+        int numLayers() const;
 
-      /**
-       * The capacity of the disk.
-       * For complete disks this may be the same as size()
-       */
-      K3b::Msf capacity() const;
+        /**
+         * Does only make sense for appendable disks.
+         */
+        K3b::Msf remainingSize() const;
 
-      /**
-       * Returns the size of the used part.
-       * For appendable media this equals capacity() - remainingSize()
-       */
-      K3b::Msf size() const;
+        /**
+         * The capacity of the disk.
+         * For complete disks this may be the same as size()
+         */
+        K3b::Msf capacity() const;
 
-      /**
-       * Returns the size of Data area in the first layer for DL DVD media.
-       * Otherwise size() is returned.
-       *
-       * This does not specify the layer change sector as the data area on DVD media does
-       * not start at sector 0 but at sector 30000h or 31000h depending on the type.
-       */
-      K3b::Msf firstLayerSize() const;
+        /**
+         * Returns the size of the used part.
+         * For appendable media this equals capacity() - remainingSize()
+         */
+        K3b::Msf size() const;
 
-      const Q3CString& mediaId() const { return m_mediaId; }
+        /**
+         * Returns the size of Data area in the first layer for DL DVD media.
+         * Otherwise size() is returned.
+         *
+         * This does not specify the layer change sector as the data area on DVD media does
+         * not start at sector 0 but at sector 30000h or 31000h depending on the type.
+         */
+        K3b::Msf firstLayerSize() const;
 
-      void debug() const;
+        QByteArray mediaId() const;
 
-      bool operator==( const DiskInfo& ) const;
-      bool operator!=( const DiskInfo& ) const;
+        void debug() const;
+
+        bool operator==( const DiskInfo& ) const;
+        bool operator!=( const DiskInfo& ) const;
 
     private:
-      int m_mediaType;
-      int m_currentProfile;
+        QSharedDataPointer<DiskInfoPrivate> d;
 
-      int m_diskState;
-      int m_lastSessionState;
-      int m_bgFormatState;
-      int m_numSessions;
-      int m_numTracks;
-      int m_numLayers;  // only for DVD media
-      int m_rewritable;
-
-      K3b::Msf m_capacity;
-      K3b::Msf m_usedCapacity;
-      K3b::Msf m_firstLayerSize;
-
-      Q3CString m_mediaId;
-
-      friend class Device;
+        friend class Device;
     };
 
-  //  kdbgstream& operator<<( kdbgstream& s, const DiskInfo& ngInf );
+    //  kdbgstream& operator<<( kdbgstream& s, const DiskInfo& ngInf );
 }
 
 #endif

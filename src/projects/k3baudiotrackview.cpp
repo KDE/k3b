@@ -30,15 +30,15 @@
 #include "k3baudiotracktrmlookupdialog.h"
 #include "k3baudiodatasourceeditwidget.h"
 #include "k3baudiotrackaddingdialog.h"
+#include "k3baudioprojectmodel.h"
+#include "../rip/k3bviewcolumnadjuster.h"
 
 #include <k3bview.h>
 #include <k3blistviewitemanimator.h>
 #include <k3baudiodecoder.h>
 #include <k3bmsfedit.h>
 
-#include <q3header.h>
 #include <qtimer.h>
-#include <q3dragobject.h>
 #include <qpoint.h>
 #include <qstringlist.h>
 #include <qevent.h>
@@ -46,9 +46,8 @@
 #include <qpainter.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <qlist.h>
+#include <QHBoxLayout>
 #include <QDragLeaveEvent>
 #include <QKeyEvent>
 #include <QDragMoveEvent>
@@ -56,7 +55,8 @@
 #include <QResizeEvent>
 #include <QFocusEvent>
 #include <QMouseEvent>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
+#include <QtGui/QHeaderView>
 
 #include <kurl.h>
 #include <k3urldrag.h>
@@ -70,13 +70,19 @@
 #include <K3URLDrag>
 #include <kactioncollection.h>
 
+
 K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent )
-    : K3bListView( parent ),
+    : QTreeView( parent ),
       m_doc(doc),
       m_updatingColumnWidths(false),
-      m_currentMouseOverItem(0),
       m_currentlyPlayingTrack(0)
 {
+    m_model = new K3b::AudioProjectModel( doc, this );
+    setModel( m_model );
+
+    m_columnAdjuster = new K3b::ViewColumnAdjuster( this );
+    connect( m_columnAdjuster, SIGNAL( columnsNeedAjusting() ), this, SLOT( slotAdjustColumns() ) );
+
 #ifdef __GNUC__
 #warning Port the Audio player to Phonon
 #endif
@@ -86,45 +92,53 @@ K3bAudioTrackView::K3bAudioTrackView( K3bAudioDoc* doc, QWidget* parent )
 //     connect( m_player, SIGNAL(paused(bool)), this, SLOT(togglePauseIndicator(bool)) );
 //     connect( m_player, SIGNAL(stopped()), this, SLOT(removePlayerIndicator()) );
 
-    setItemMargin( 5 );
+//     setItemMargin( 5 );
+    setDragDropMode( QAbstractItemView::DragDrop );
+    setDropIndicatorShown( true );
+    setDragEnabled(true);
     setAcceptDrops( true );
-    setDropVisualizer( true );
-    setAllColumnsShowFocus( true );
-    setDragEnabled( true );
+    setContextMenuPolicy( Qt::CustomContextMenu );
+    setDropIndicatorShown( true );
+    setItemsExpandable( true );
+    setRootIsDecorated( false );
+
+//     setDropVisualizer( true );
+//     setAllColumnsShowFocus( true );
+//     setDragEnabled( true );
     //  setSelectionModeExt( K3ListView::Konqueror ); // FileManager in KDE3
-    setSelectionModeExt( K3ListView::Extended );
-    setItemsMovable( false );
-    setAlternateBackground( QColor() ); // disable alternate colors
+//     setSelectionModeExt( K3ListView::Extended );
+//     setItemsMovable( false );
+//    setAlternateBackground( QColor() ); // disable alternate colors
 
-    setNoItemText( i18n("Use drag'n'drop to add audio files to the project.") + "\n"
-                   + i18n("After that press the burn button to write the CD." ) );
+//     setNoItemText( i18n("Use drag'n'drop to add audio files to the project.") + "\n"
+//                    + i18n("After that press the burn button to write the CD." ) );
 
-    setupColumns();
+//     setupColumns();
     setupActions();
 
-    m_playerItemAnimator = new K3bListViewItemAnimator( this );
+//     m_playerItemAnimator = new K3bListViewItemAnimator( this );
 
-    m_animationTimer = new QTimer( this );
-    connect( m_animationTimer, SIGNAL(timeout()), this, SLOT(slotAnimation()) );
+//     m_animationTimer = new QTimer( this );
+//     connect( m_animationTimer, SIGNAL(timeout()), this, SLOT(slotAnimation()) );
 
-    m_autoOpenTrackTimer = new QTimer( this );
-    connect( m_autoOpenTrackTimer, SIGNAL(timeout()), this, SLOT(slotDragTimeout()) );
+//     m_autoOpenTrackTimer = new QTimer( this );
+//     connect( m_autoOpenTrackTimer, SIGNAL(timeout()), this, SLOT(slotDragTimeout()) );
 
-    connect( this, SIGNAL(dropped(QDropEvent*, Q3ListViewItem*, Q3ListViewItem*)),
-             this, SLOT(slotDropped(QDropEvent*, Q3ListViewItem*, Q3ListViewItem*)) );
-    connect( this, SIGNAL(contextMenuRequested(Q3ListViewItem*, const QPoint&,  int)),
-             this, SLOT(showPopupMenu(Q3ListViewItem*, const QPoint&, int)) );
-    connect( this, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)),
-             this, SLOT(slotProperties()) );
+//     connect( this, SIGNAL(dropped(QDropEvent*, Q3ListViewItem*, Q3ListViewItem*)),
+//              this, SLOT(slotDropped(QDropEvent*, Q3ListViewItem*, Q3ListViewItem*)) );
+    connect( this, SIGNAL(customContextMenuRequested(const QPoint&)),
+             this, SLOT(showPopupMenu(const QPoint&)) );
+//     connect( this, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)),
+//              this, SLOT(slotProperties()) );
 
-    connect( doc, SIGNAL(changed()),
-             this, SLOT(slotChanged()) );
+//     connect( doc, SIGNAL(changed()),
+//              this, SLOT(slotChanged()) );
     connect( doc, SIGNAL(trackChanged(K3bAudioTrack*)),
              this, SLOT(slotTrackChanged(K3bAudioTrack*)) );
-    connect( doc, SIGNAL(trackRemoved(K3bAudioTrack*)),
-             this, SLOT(slotTrackRemoved(K3bAudioTrack*)) );
+//     connect( doc, SIGNAL(trackRemoved(K3bAudioTrack*)),
+//              this, SLOT(slotTrackRemoved(K3bAudioTrack*)) );
 
-    slotChanged();
+//    slotChanged();
 
     // a little background pix hack because I am simply incapable of doing it another way. :(
 //   static QPixmap s_bgPix("/tmp/trueg/audio_bg.png");
@@ -139,25 +153,25 @@ K3bAudioTrackView::~K3bAudioTrackView()
 
 void K3bAudioTrackView::setupColumns()
 {
-    addColumn( i18n("No.") );
-    addColumn( i18n("Artist (CD-Text)") );
-    addColumn( i18n("Title (CD-Text)") );
-    addColumn( i18n("Type") );
-    addColumn( i18n("Length") );
-    addColumn( i18n("Filename") );
+//     addColumn( i18n("No.") );
+//     addColumn( i18n("Artist (CD-Text)") );
+//     addColumn( i18n("Title (CD-Text)") );
+//     addColumn( i18n("Type") );
+//     addColumn( i18n("Length") );
+//     addColumn( i18n("Filename") );
 
-    setColumnAlignment( 3, Qt::AlignHCenter );
-    setColumnAlignment( 4, Qt::AlignHCenter );
+//     setColumnAlignment( 3, Qt::AlignHCenter );
+//     setColumnAlignment( 4, Qt::AlignHCenter );
 
-    setColumnWidthMode( 1, Manual );
-    setColumnWidthMode( 2, Manual );
-    setColumnWidthMode( 3, Manual );
-    setColumnWidthMode( 4, Manual );
-    setColumnWidthMode( 5, Manual );
+//     setColumnWidthMode( 1, Manual );
+//     setColumnWidthMode( 2, Manual );
+//     setColumnWidthMode( 3, Manual );
+//     setColumnWidthMode( 4, Manual );
+//     setColumnWidthMode( 5, Manual );
 
-    header()->setResizeEnabled( false );
-    header()->setClickEnabled( false );
-    setSorting( -1 );
+//     header()->setResizeEnabled( false );
+//     header()->setClickEnabled( false );
+//     setSorting( -1 );
 }
 
 
@@ -216,174 +230,7 @@ void K3bAudioTrackView::setupActions()
 }
 
 
-bool K3bAudioTrackView::acceptDrag(QDropEvent* e) const
-{
-#ifdef __GNUC__
-#warning re-enable audio cd source drags once they are ported.
-#endif
-    // the first is for built-in item moving, the second for dropping urls, the third for dropping audio tracks
-    return ( K3ListView::acceptDrag(e) ||
-             K3URLDrag::canDecode(e) /*||
-                                       K3bAudioCdTrackDrag::canDecode(e) */);
-}
-
-
-Q3DragObject* K3bAudioTrackView::dragObject()
-{
-    QList<Q3ListViewItem*> list = selectedItems();
-
-    if( list.isEmpty() )
-        return 0;
-
-    KUrl::List urls;
-
-    Q_FOREACH( Q3ListViewItem* item, list ) {
-        // we simply ignore open track items to not include files twice
-        // we also don't want the invisible source items
-        Q3ListViewItem* parentItem = K3bListView::parentItem(item);
-        if( !item->isOpen() && ( !parentItem || parentItem->isOpen() ) ) {
-            if( K3bAudioDataSourceViewItem* sourceItem = dynamic_cast<K3bAudioDataSourceViewItem*>( item ) ) {
-                if( K3bAudioFile* file = dynamic_cast<K3bAudioFile*>( sourceItem->source() ) )
-                    urls.append( KUrl(file->filename()) );
-            }
-            else {
-                K3bAudioTrackViewItem* trackItem = static_cast<K3bAudioTrackViewItem*>( item );
-                K3bAudioDataSource* source = trackItem->track()->firstSource();
-                while( source ) {
-                    if( K3bAudioFile* file = dynamic_cast<K3bAudioFile*>( source ) )
-                        urls.append( KUrl(file->filename()) );
-                    source = source->next();
-                }
-            }
-        }
-    }
-
-    return new K3URLDrag( urls, viewport() );
-}
-
-
-void K3bAudioTrackView::slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3ListViewItem* after )
-{
-    m_autoOpenTrackTimer->stop();
-
-    if( !e->isAccepted() )
-        return;
-
-    m_dropTrackAfter = 0;
-    m_dropTrackParent = 0;
-    m_dropSourceAfter = 0;
-    if( after ) {
-        if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>( after ) ) {
-            m_dropTrackAfter = tv->track();
-        }
-        else if( K3bAudioDataSourceViewItem* sv = dynamic_cast<K3bAudioDataSourceViewItem*>( after ) ) {
-            m_dropSourceAfter = sv->source();
-        }
-    }
-
-    if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>( parent ) ) {
-        m_dropTrackParent = tv->track();
-    }
-
-    //
-    // In case the sources are not shown we do not want to handle them because the average
-    // user would be confused otherwise
-    //
-    if( m_dropTrackParent && !m_trackItemMap[m_dropTrackParent]->showingSources() ) {
-        kDebug() << "(K3bAudioTrackView) dropped after track which does not show it's sources.";
-        m_dropTrackAfter = m_dropTrackParent;
-        m_dropTrackParent = 0;
-    }
-
-    if( e->source() == viewport() ) {
-
-        bool copyItems = (e->action() == QDropEvent::Copy);
-
-        // 1. tracks (with some of their sources) -> move complete tracks around
-        // 2. sources (multiple sources) -> move the sources to the destination track
-        // 3. tracks and sources (the latter without their track) -> ignore the latter sources
-        QList<K3bAudioTrack*> tracks;
-        QList<K3bAudioDataSource*> sources;
-        getSelectedItems( tracks, sources );
-
-        //
-        // remove all sources which belong to one of the selected tracks since they will be
-        // moved along with their tracks
-        //
-        QList<K3bAudioDataSource*>::iterator srcIt = sources.begin();
-        while( srcIt != sources.end() ) {
-            if( tracks.contains( ( *srcIt )->track() ) )
-                srcIt = sources.erase( srcIt );
-            else
-                ++srcIt;
-        }
-
-        //
-        // Now move (or copy) all the tracks
-        //
-        for( QList<K3bAudioTrack*>::iterator it = tracks.begin(); it != tracks.end(); ++it ) {
-            K3bAudioTrack* track = *it;
-            if( m_dropTrackParent ) {
-                m_dropTrackParent->merge( copyItems ? track->copy() : track, m_dropSourceAfter );
-            }
-            else if( m_dropTrackAfter ) {
-                if( copyItems )
-                    track->copy()->moveAfter( m_dropTrackAfter );
-                else
-                    track->moveAfter( m_dropTrackAfter );
-            }
-            else {
-                if( copyItems )
-                    track->copy()->moveAhead( m_doc->firstTrack() );
-                else
-                    track->moveAhead( m_doc->firstTrack() );
-            }
-        }
-
-        //
-        // now move (or copy) the sources
-        //
-        for( QList<K3bAudioDataSource*>::iterator it = sources.begin(); it != sources.end(); ++it ) {
-            K3bAudioDataSource* source = *it;
-            if( m_dropTrackParent ) {
-                if( m_dropSourceAfter ) {
-                    if( copyItems )
-                        source->copy()->moveAfter( m_dropSourceAfter );
-                    else
-                        source->moveAfter( m_dropSourceAfter );
-                }
-                else {
-                    if( copyItems )
-                        source->copy()->moveAhead( m_dropTrackParent->firstSource() );
-                    else
-                        source->moveAhead( m_dropTrackParent->firstSource() );
-                }
-            }
-            else {
-                // create a new track
-                K3bAudioTrack* track = new K3bAudioTrack( m_doc );
-
-                // special case: the source we remove from the track is the last and the track
-                // will be deleted.
-                if( !copyItems && m_dropTrackAfter == source->track() && m_dropTrackAfter->numberSources() == 1 )
-                    m_dropTrackAfter = m_dropTrackAfter->prev();
-
-                if( copyItems )
-                    track->addSource( source->copy() );
-                else
-                    track->addSource( source );
-
-                if( m_dropTrackAfter ) {
-                    track->moveAfter( m_dropTrackAfter );
-                    m_dropTrackAfter = track;
-                }
-                else {
-                    track->moveAhead( m_doc->firstTrack() );
-                    m_dropTrackAfter = track;
-                }
-            }
-        }
-    }
+#if 0
 #ifdef __GNUC__
 #warning FIXME: K3bAudioCdTrackDrag
 #endif
@@ -392,12 +239,12 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3Li
 //         K3bDevice::Toc toc;
 //         K3bDevice::Device* dev = 0;
 //         K3bCddbResultEntry cddb;
-//         Q3ValueList<int> trackNumbers;
+//         QList<int> trackNumbers;
 
 //         K3bAudioCdTrackDrag::decode( e, toc, trackNumbers, cddb, &dev );
 
 //         // for now we just create one source
-//         for( Q3ValueList<int>::const_iterator it = trackNumbers.begin();
+//         for( QList<int>::const_iterator it = trackNumbers.begin();
 //              it != trackNumbers.end(); ++it ) {
 //             int trackNumber = *it;
 
@@ -421,88 +268,33 @@ void K3bAudioTrackView::slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3Li
 //             }
 //         }
 //     }
-    else{
-        m_dropUrls.clear();
-        if( K3URLDrag::decode( e, m_dropUrls ) ) {
-            //
-            // This is a small (not to ugly) hack to circumvent problems with the
-            // event queues: the url adding dialog will be non-modal regardless of
-            // the settings in case we open it directly.
-            //
-            QTimer::singleShot( 0, this, SLOT(slotAddUrls()) );
-        }
-    }
-
-    showAllSources();
-
-    // now grab that focus
-    setFocus();
-}
+#endif
 
 
-void K3bAudioTrackView::slotAddUrls()
-{
-    K3bAudioTrackAddingDialog::addUrls( m_dropUrls, m_doc, m_dropTrackAfter, m_dropTrackParent, m_dropSourceAfter, this );
-}
+// void K3bAudioTrackView::slotChanged()
+// {
+//     kDebug() << "(K3bAudioTrackView::slotChanged)";
+//     // we only need to add new items here. Everything else is done in the
+//     // specific slots below
+//     K3bAudioTrack* track = m_doc->firstTrack();
+//     bool newTracks = false;
+//     while( track ) {
+//         bool newTrack;
+//         getTrackViewItem( track, &newTrack );
+//         if( newTrack )
+//             newTracks = true;
+//         track = track->next();
+//     }
 
+//     if( newTracks ) {
+//         m_animationTimer->start(200);
+//         showAllSources();
+//     }
 
-void K3bAudioTrackView::slotChanged()
-{
-    kDebug() << "(K3bAudioTrackView::slotChanged)";
-    // we only need to add new items here. Everything else is done in the
-    // specific slots below
-    K3bAudioTrack* track = m_doc->firstTrack();
-    bool newTracks = false;
-    while( track ) {
-        bool newTrack;
-        getTrackViewItem( track, &newTrack );
-        if( newTrack )
-            newTracks = true;
-        track = track->next();
-    }
+//     header()->setVisible( m_doc->numOfTracks() > 0 );
 
-    if( newTracks ) {
-        m_animationTimer->start(200);
-        showAllSources();
-    }
-
-    header()->setVisible( m_doc->numOfTracks() > 0 );
-
-    kDebug() << "(K3bAudioTrackView::slotChanged) finished";
-}
-
-
-K3bAudioTrackViewItem* K3bAudioTrackView::getTrackViewItem( K3bAudioTrack* track, bool* isNewItem )
-{
-    QMap<K3bAudioTrack*, K3bAudioTrackViewItem*>::iterator itemIt = m_trackItemMap.find(track);
-    if( itemIt == m_trackItemMap.end() ) {
-        kDebug() << "(K3bAudioTrackView) new track " << track;
-        K3bAudioTrackViewItem* prevItem = 0;
-        if( track->prev() && m_trackItemMap.contains( track->prev() ) )
-            prevItem = m_trackItemMap[track->prev()];
-        K3bAudioTrackViewItem* newItem = new K3bAudioTrackViewItem( this, prevItem, track );
-        //
-        // disable the item until the files have been analysed
-        // so the user may not change the cd-text until the one from the
-        // file is loaded.
-        //
-        // Since for some reason QT thinks it's bad to open disabled items
-        // we need to open it before disabling it
-        //
-        newItem->showSources( track->numberSources() != 1 );
-        newItem->setEnabled( false );
-        m_trackItemMap[track] = newItem;
-
-        if( isNewItem )
-            *isNewItem = true;
-        return newItem;
-    }
-    else {
-        if( isNewItem )
-            *isNewItem = false;
-        return *itemIt;
-    }
-}
+//     kDebug() << "(K3bAudioTrackView::slotChanged) finished";
+// }
 
 
 void K3bAudioTrackView::slotTrackChanged( K3bAudioTrack* track )
@@ -515,137 +307,60 @@ void K3bAudioTrackView::slotTrackChanged( K3bAudioTrack* track )
     // we create the item in slotChanged
     //
     if( track->inList() ) {
-        K3bAudioTrackViewItem* item = getTrackViewItem(track);
-        item->updateSourceItems();
+        // FIXME: make it nice looking
+        setExpanded( m_model->indexForTrack( track ), track->numberSources() > 1 );
 
-        if( track->numberSources() > 1 )
-            item->showSources(true);
-
-        // the length might have changed
-        item->repaint();
-
-        // FIXME: only do this if the position really changed
-        // move the item if the position has changed
-        if( track->prev() && m_trackItemMap.contains(track->prev()) )
-            item->moveItem( m_trackItemMap[track->prev()] );
-        else if( !track->prev() ) {
-            takeItem( item );
-            insertItem( item );
-        }
-
-        // start the animation in case new sources have been added
-        m_animationTimer->start( 200 );
-
-        showAllSources();
     }
     kDebug() << "(K3bAudioTrackView::slotTrackChanged( " << track << " ) finished";
 }
 
 
-void K3bAudioTrackView::slotTrackRemoved( K3bAudioTrack* track )
+void K3bAudioTrackView::dragEnterEvent( QDragEnterEvent* event )
 {
-    kDebug() << "(K3bAudioTrackView::slotTrackRemoved( " << track << " )";
-    if ( m_playerItemAnimator->item() == m_trackItemMap[track] ) {
-        m_playerItemAnimator->stop();
-    }
-    delete m_trackItemMap[track];
-    m_trackItemMap.erase(track);
+    QAbstractItemView::dragEnterEvent( event );
 }
 
 
-void K3bAudioTrackView::showAllSources()
+void K3bAudioTrackView::dragLeaveEvent( QDragLeaveEvent* event )
 {
-    // TODO: add an action to show all sources
-
-    Q3ListViewItem* item = firstChild();
-    while( item ) {
-        if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>( item ) )
-            tv->showSources( tv->track()->numberSources() != 1 );
-        item = item->nextSibling();
-    }
+    QAbstractItemView::dragLeaveEvent( event );
 }
 
 
-void K3bAudioTrackView::keyPressEvent( QKeyEvent* e )
+void K3bAudioTrackView::dragMoveEvent( QDragMoveEvent* event )
 {
-    //  showAllSources();
-
-    K3bListView::keyPressEvent(e);
+    QAbstractItemView::dragMoveEvent( event );
 }
 
 
-void K3bAudioTrackView::keyReleaseEvent( QKeyEvent* e )
+// void K3bAudioTrackView::slotTrackRemoved( K3bAudioTrack* track )
+// {
+//     kDebug() << "(K3bAudioTrackView::slotTrackRemoved( " << track << " )";
+//     if ( m_playerItemAnimator->item() == m_trackItemMap[track] ) {
+//         m_playerItemAnimator->stop();
+//     }
+//     delete m_trackItemMap[track];
+//     m_trackItemMap.remove(track);
+// }
+
+
+// void K3bAudioTrackView::showAllSources()
+// {
+//     // TODO: add an action to show all sources
+
+//     Q3ListViewItem* item = firstChild();
+//     while( item ) {
+//         if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>( item ) )
+//             tv->showSources( tv->track()->numberSources() != 1 );
+//         item = item->nextSibling();
+//     }
+// }
+
+
+void K3bAudioTrackView::slotAdjustColumns()
 {
-    //  showAllSources();
+    kDebug();
 
-    K3bListView::keyReleaseEvent(e);
-}
-
-
-void K3bAudioTrackView::contentsMouseMoveEvent( QMouseEvent* e )
-{
-    //  showAllSources();
-
-    K3bListView::contentsMouseMoveEvent( e );
-}
-
-
-void K3bAudioTrackView::focusOutEvent( QFocusEvent* e )
-{
-    //  showAllSources();
-
-    K3bListView::focusOutEvent( e );
-}
-
-
-void K3bAudioTrackView::resizeEvent( QResizeEvent* e )
-{
-    K3bListView::resizeEvent(e);
-
-    resizeColumns();
-}
-
-
-void K3bAudioTrackView::contentsDragMoveEvent( QDragMoveEvent* event )
-{
-    K3bAudioTrackViewItem* item = findTrackItem( event->pos() );
-    if( m_currentMouseOverItem != item ) {
-        showAllSources(); // hide previous sources
-        m_currentMouseOverItem = item;
-    }
-    if( m_currentMouseOverItem )
-        m_autoOpenTrackTimer->start( 1000 ); // 1 sec
-
-    K3bListView::contentsDragMoveEvent( event );
-}
-
-
-void K3bAudioTrackView::contentsDragLeaveEvent( QDragLeaveEvent* e )
-{
-    m_autoOpenTrackTimer->stop();
-    K3bListView::contentsDragLeaveEvent( e );
-}
-
-
-K3bAudioTrackViewItem* K3bAudioTrackView::findTrackItem( const QPoint& pos ) const
-{
-    Q3ListViewItem* parent = 0;
-    Q3ListViewItem* after = 0;
-    K3bAudioTrackView* that = const_cast<K3bAudioTrackView*>(this);
-    that->findDrop( pos, parent, after );
-    if( parent )
-        return static_cast<K3bAudioTrackViewItem*>( parent );
-    else if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>(after) )
-        return tv;
-    else if( K3bAudioDataSourceViewItem* sv = dynamic_cast<K3bAudioDataSourceViewItem*>(after) )
-        return sv->trackViewItem();
-    else
-        return 0;
-}
-
-
-void K3bAudioTrackView::resizeColumns()
-{
     if( m_updatingColumnWidths ) {
         kDebug() << "(K3bAudioTrackView) already updating column widths.";
         return;
@@ -657,84 +372,66 @@ void K3bAudioTrackView::resizeColumns()
     // minimal width for type, length, pregap
     // fixed for filename
     // expand for cd-text
-    int titleWidth = header()->fontMetrics().width( header()->label(1) );
-    int artistWidth = header()->fontMetrics().width( header()->label(2) );
-    int typeWidth = header()->fontMetrics().width( header()->label(3) );
-    int lengthWidth = header()->fontMetrics().width( header()->label(4) );
-    int filenameWidth = header()->fontMetrics().width( header()->label(5) );
-
-    for( Q3ListViewItemIterator it( this ); it.current(); ++it ) {
-        artistWidth = qMax( artistWidth, it.current()->width( fontMetrics(), this, 1 ) );
-        titleWidth = qMax( titleWidth, it.current()->width( fontMetrics(), this, 2 ) );
-        typeWidth = qMax( typeWidth, it.current()->width( fontMetrics(), this, 3 ) );
-        lengthWidth = qMax( lengthWidth, it.current()->width( fontMetrics(), this, 4 ) );
-        filenameWidth = qMax( filenameWidth, it.current()->width( fontMetrics(), this, 5 ) );
-    }
+    int titleWidth = m_columnAdjuster->columnSizeHint( K3b::AudioProjectModel::TitleColumn );
+    int artistWidth = m_columnAdjuster->columnSizeHint( K3b::AudioProjectModel::ArtistColumn );
+    int typeWidth = m_columnAdjuster->columnSizeHint( K3b::AudioProjectModel::TypeColumn );
+    int lengthWidth = m_columnAdjuster->columnSizeHint( K3b::AudioProjectModel::LengthColumn );
+    int filenameWidth = m_columnAdjuster->columnSizeHint( K3b::AudioProjectModel::FilenameColumn );
 
     // add a margin
     typeWidth += 10;
     lengthWidth += 10;
 
     // these always need to be completely visible
-    setColumnWidth( 3, typeWidth );
-    setColumnWidth( 4, lengthWidth );
+    setColumnWidth( K3b::AudioProjectModel::TrackNumberColumn, m_columnAdjuster->columnSizeHint( K3b::AudioProjectModel::TrackNumberColumn ) );
+    setColumnWidth( K3b::AudioProjectModel::TypeColumn, typeWidth );
+    setColumnWidth( K3b::AudioProjectModel::LengthColumn, lengthWidth );
 
-    int remaining = visibleWidth() - typeWidth - lengthWidth - columnWidth(0);
+    int remaining = contentsRect().width() - typeWidth - lengthWidth - columnWidth(0);
 
     // now let's see if there is enough space for all
     if( remaining >= artistWidth + titleWidth + filenameWidth ) {
         remaining -= filenameWidth;
         remaining -= (titleWidth + artistWidth);
-        setColumnWidth( 1, artistWidth + remaining/2 );
-        setColumnWidth( 2, titleWidth + remaining/2 );
-        setColumnWidth( 5, filenameWidth );
+        setColumnWidth( K3b::AudioProjectModel::ArtistColumn, artistWidth + remaining/2 );
+        setColumnWidth( K3b::AudioProjectModel::TitleColumn, titleWidth + remaining/2 );
+        setColumnWidth( K3b::AudioProjectModel::FilenameColumn, filenameWidth );
     }
     else if( remaining >= artistWidth + titleWidth + 20 ) {
-        setColumnWidth( 1, artistWidth );
-        setColumnWidth( 2, titleWidth );
-        setColumnWidth( 5, remaining - artistWidth - titleWidth );
+        setColumnWidth( K3b::AudioProjectModel::ArtistColumn, artistWidth );
+        setColumnWidth( K3b::AudioProjectModel::TitleColumn, titleWidth );
+        setColumnWidth( K3b::AudioProjectModel::FilenameColumn, remaining - artistWidth - titleWidth );
     }
     else {
-        setColumnWidth( 1, remaining/3 );
-        setColumnWidth( 2, remaining/3 );
-        setColumnWidth( 5, remaining/3 );
+        setColumnWidth( K3b::AudioProjectModel::ArtistColumn, remaining/3 );
+        setColumnWidth( K3b::AudioProjectModel::TitleColumn, remaining/3 );
+        setColumnWidth( K3b::AudioProjectModel::FilenameColumn, remaining/3 );
     }
 
-    triggerUpdate();
     m_updatingColumnWidths = false;
 }
 
 
-void K3bAudioTrackView::slotAnimation()
-{
-    resizeColumns();
-    Q3ListViewItem* item = firstChild();
+// void K3bAudioTrackView::slotAnimation()
+// {
+//     resizeColumns();
+//     Q3ListViewItem* item = firstChild();
 
-    bool animate = false;
+//     bool animate = false;
 
-    while( item ) {
-        K3bAudioTrackViewItem* trackItem = dynamic_cast<K3bAudioTrackViewItem*>(item);
-        if( trackItem->animate() )
-            animate = true;
-        else
-            trackItem->setEnabled( true ); // files analysed, cd-text loaded
-        item = item->nextSibling();
-    }
+//     while( item ) {
+//         K3bAudioTrackViewItem* trackItem = dynamic_cast<K3bAudioTrackViewItem*>(item);
+//         if( trackItem->animate() )
+//             animate = true;
+//         else
+//             trackItem->setEnabled( true ); // files analysed, cd-text loaded
+//         item = item->nextSibling();
+//     }
 
-    if( !animate ) {
-        m_animationTimer->stop();
-    }
-}
-
-
-void K3bAudioTrackView::slotDragTimeout()
-{
-    m_autoOpenTrackTimer->stop();
-
-    if( m_currentMouseOverItem ) {
-        m_currentMouseOverItem->showSources( true );
-    }
-}
+//     if( !animate ) {
+//         m_animationTimer->stop();
+//     }
+// }
 
 
 void K3bAudioTrackView::getSelectedItems( QList<K3bAudioTrack*>& tracks,
@@ -743,16 +440,17 @@ void K3bAudioTrackView::getSelectedItems( QList<K3bAudioTrack*>& tracks,
     tracks.clear();
     sources.clear();
 
-    QList<Q3ListViewItem*> items = selectedItems();
-    Q_FOREACH( Q3ListViewItem* item, items ) {
-        if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>( item ) )
-            tracks.append( tv->track() );
-        else {
-            K3bAudioDataSourceViewItem* sv = static_cast<K3bAudioDataSourceViewItem*>( item );
+    QModelIndexList indexes = selectionModel()->selectedRows();
+    foreach( const QModelIndex& index, indexes ) {
+        if ( K3bAudioTrack* track = m_model->trackForIndex( index ) ) {
+            tracks << track;
+        }
+        else if ( K3bAudioDataSource* source = m_model->sourceForIndex( index ) ) {
+#warning Do not select hidden sources once the hiding of sources works again
             // do not select hidden source items or unfinished source files
-            if( sv->trackViewItem()->showingSources() &&
-                !(sv->source()->isValid() && sv->source()->length() == 0) )
-                sources.append( sv->source() );
+            if( source->isValid() && source->length() != 0 ) {
+                sources << source;
+            }
         }
     }
 }
@@ -792,6 +490,7 @@ void K3bAudioTrackView::slotRemove()
 
 void K3bAudioTrackView::slotAddSilence()
 {
+#if 0
     Q3ListViewItem* item = selectedItems().first();
     if( item ) {
         //
@@ -804,12 +503,15 @@ void K3bAudioTrackView::slotAddSilence()
         dlg.setDefaultButton(KDialog::Ok);
         dlg.setCaption(i18n("Add Silence"));
 
-        Q3HBoxLayout* dlgLayout = new Q3HBoxLayout( widget, 0, KDialog::spacingHint() );
-        dlgLayout->setAutoAdd( true );
-        (void)new QLabel( i18n("Length of silence:"), widget );
+        QHBoxLayout* dlgLayout = new QHBoxLayout( widget );
+        dlgLayout->setSpacing( KDialog::spacingHint() );
+        dlgLayout->setMargin( 0 );
+        QLabel* label = new QLabel( i18n("Length of silence:"), widget );
         K3bMsfEdit* msfEdit = new K3bMsfEdit( widget );
         msfEdit->setValue( 150 ); // 2 seconds default
         msfEdit->setFocus();
+        dlgLayout->addWidget( label );
+        dlgLayout->addWidget( msfEdit );
 
         if( dlg.exec() == QDialog::Accepted ) {
             K3bAudioZeroData* zero = new K3bAudioZeroData( msfEdit->value() );
@@ -821,11 +523,13 @@ void K3bAudioTrackView::slotAddSilence()
             }
         }
     }
+#endif
 }
 
 
 void K3bAudioTrackView::slotMergeTracks()
 {
+#if 0
     QList<K3bAudioTrack*> tracks;
     QList<K3bAudioDataSource*> sources;
     getSelectedItems( tracks, sources );
@@ -837,11 +541,13 @@ void K3bAudioTrackView::slotMergeTracks()
             firstTrack->merge( tracks.takeFirst(), firstTrack->lastSource() );
         }
     }
+#endif
 }
 
 
 void K3bAudioTrackView::slotSplitSource()
 {
+#if 0
     Q3ListViewItem* item = selectedItems().first();
     if( K3bAudioDataSourceViewItem* sv = dynamic_cast<K3bAudioDataSourceViewItem*>(item) ) {
         // create a new track
@@ -862,20 +568,24 @@ void K3bAudioTrackView::slotSplitSource()
             track->setCdTextMessage( file->decoder()->metaInfo( K3bAudioDecoder::META_COMMENT ) );
         }
     }
+#endif
 }
 
 
 void K3bAudioTrackView::slotSplitTrack()
 {
+#if 0
     Q3ListViewItem* item = selectedItems().first();
     if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>(item) ) {
         K3bAudioTrackSplitDialog::splitTrack( tv->track(), this );
     }
+#endif
 }
 
 
 void K3bAudioTrackView::slotEditSource()
 {
+#if 0
     Q3ListViewItem* item = selectedItems().first();
 
     K3bAudioDataSource* source = 0;
@@ -897,10 +607,11 @@ void K3bAudioTrackView::slotEditSource()
             editW->saveSource();
         }
     }
+#endif
 }
 
 
-void K3bAudioTrackView::showPopupMenu( Q3ListViewItem* item, const QPoint& pos, int )
+void K3bAudioTrackView::showPopupMenu( const QPoint& pos )
 {
     QList<K3bAudioTrack*> tracks;
     QList<K3bAudioDataSource*> sources;
@@ -917,7 +628,7 @@ void K3bAudioTrackView::showPopupMenu( Q3ListViewItem* item, const QPoint& pos, 
         popupMenu.addSeparator();
     }
 
-    if( item )
+    if( numTracks + numSources )
         popupMenu.addAction( m_actionRemove );
 
     if( numSources + numTracks == 1 )
@@ -931,9 +642,8 @@ void K3bAudioTrackView::showPopupMenu( Q3ListViewItem* item, const QPoint& pos, 
     else if( numTracks == 1 && numSources == 0 ) {
         popupMenu.addSeparator();
 
-        if( K3bAudioTrackViewItem* tv = dynamic_cast<K3bAudioTrackViewItem*>(item) )
-            if( tv->track()->length().lba() > 60 )
-                popupMenu.addAction( m_actionSplitTrack );
+        if( tracks.first()->length().lba() > 60 )
+            popupMenu.addAction( m_actionSplitTrack );
 
         popupMenu.addAction( m_actionEditSource );
 
@@ -947,12 +657,13 @@ void K3bAudioTrackView::showPopupMenu( Q3ListViewItem* item, const QPoint& pos, 
     popupMenu.addSeparator();
     popupMenu.addAction( static_cast<K3bView*>(m_doc->view())->actionCollection()->action( "project_burn" ) );
 
-    popupMenu.exec( pos );
+    popupMenu.exec( mapToGlobal( pos ) );
 }
 
 
 void K3bAudioTrackView::slotProperties()
 {
+#if 0
     QList<K3bAudioTrack*> tracks;
     QList<K3bAudioDataSource*> sources;
     getSelectedItems( tracks, sources );
@@ -966,11 +677,13 @@ void K3bAudioTrackView::slotProperties()
     else {
         static_cast<K3bView*>(m_doc->view())->slotProperties();
     }
+#endif
 }
 
 
 void K3bAudioTrackView::slotPlayTrack()
 {
+#if 0
     QList<K3bAudioTrack*> tracks;
     QList<K3bAudioDataSource*> sources;
     getSelectedItems( tracks, sources );
@@ -979,41 +692,49 @@ void K3bAudioTrackView::slotPlayTrack()
 #endif
 //     if( tracks.count() > 0 )
 //         m_player->playTrack( tracks.first() );
+#endif
 }
 
 
 void K3bAudioTrackView::showPlayerIndicator( K3bAudioTrack* track )
 {
+#if 0
     removePlayerIndicator();
     m_currentlyPlayingTrack = track;
     K3bAudioTrackViewItem* item = getTrackViewItem( track );
     item->setPixmap( 1, SmallIcon( "media-playback-start" ) );
     m_playerItemAnimator->setItem( item, 1 );
+#endif
 }
 
 
 void K3bAudioTrackView::togglePauseIndicator( bool b )
 {
+#if 0
     if( m_currentlyPlayingTrack ) {
         if( b )
             m_playerItemAnimator->setPixmap( SmallIcon( "media-playback-pause" ) );
         else
             m_playerItemAnimator->setPixmap( SmallIcon( "media-playback-start" ) );
     }
+#endif
 }
 
 
 void K3bAudioTrackView::removePlayerIndicator()
 {
+#if 0
     if( m_currentlyPlayingTrack )
         getTrackViewItem( m_currentlyPlayingTrack )->setPixmap( 1, QPixmap() );
     m_playerItemAnimator->stop();
     m_currentlyPlayingTrack = 0;
+#endif
 }
 
 
 void K3bAudioTrackView::slotQueryMusicBrainz()
 {
+#if 0
 #ifdef HAVE_MUSICBRAINZ
     QList<K3bAudioTrack*> tracks;
     QList<K3bAudioDataSource*> sources;
@@ -1032,6 +753,7 @@ void K3bAudioTrackView::slotQueryMusicBrainz()
     // now do the lookup on the files.
     K3bAudioTrackTRMLookupDialog dlg( this );
     dlg.lookup( tracks );
+#endif
 #endif
 }
 

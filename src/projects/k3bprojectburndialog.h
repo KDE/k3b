@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,176 +17,175 @@
 #define K3BPROJECTBURNDIALOG_H
 
 #include <k3binteractiondialog.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 
 class K3bDoc;
 class K3bBurnJob;
 class K3bWriterSelectionWidget;
 class K3bTempDirSelectionWidget;
-class Q3GroupBox;
+class QGroupBox;
 class QCheckBox;
 class QTabWidget;
 class QSpinBox;
-class Q3VBoxLayout;
+class QVBoxLayout;
 class K3bWritingModeWidget;
 
 
 /**
-  *@author Sebastian Trueg
-  */
+ *@author Sebastian Trueg
+ */
 class K3bProjectBurnDialog : public K3bInteractionDialog
 {
-   Q_OBJECT
+    Q_OBJECT
 
- public:
+public:
     K3bProjectBurnDialog( K3bDoc* doc, QWidget *parent=0 );
-   ~K3bProjectBurnDialog();
+    ~K3bProjectBurnDialog();
 
-   enum resultCode { Canceled = 0, Saved = 1, Burn = 2 };
+    enum resultCode { Canceled = 0, Saved = 1, Burn = 2 };
 
-   /**
-    * shows the dialog with exec().
-    * Use this instead of K3bInteractionDialog::exec
-    * \param burn If true the dialog shows the Burn-button
-    */
-   int execBurnDialog( bool burn );
+    /**
+     * shows the dialog with exec().
+     * Use this instead of K3bInteractionDialog::exec
+     * \param burn If true the dialog shows the Burn-button
+     */
+    int execBurnDialog( bool burn );
 
-   K3bDoc* doc() const { return m_doc; }
+    K3bDoc* doc() const { return m_doc; }
 	
- protected slots:
-   /** burn */
-   virtual void slotStartClicked();
-   /** save */
-   virtual void slotSaveClicked();
-   virtual void slotCancelClicked();
+protected Q_SLOTS:
+    /** burn */
+    virtual void slotStartClicked();
+    /** save */
+    virtual void slotSaveClicked();
+    virtual void slotCancelClicked();
 
-   /**
-    * gets called if the user changed the writer
-    * default implementation just calls 
-    * toggleAllOptions()
-    */
-   virtual void slotWriterChanged();
+    /**
+     * gets called if the user changed the writer
+     * default implementation just calls 
+     * toggleAllOptions()
+     */
+    virtual void slotWriterChanged();
 
-   /**
-    * gets called if the user changed the writing app
-    * default implementation just calls 
-    * toggleAllOptions()
-    */
-   virtual void slotWritingAppChanged( int );
+    /**
+     * gets called if the user changed the writing app
+     * default implementation just calls 
+     * toggleAllOptions()
+     */
+    virtual void slotWritingAppChanged( int );
 
- signals:
-   void writerChanged();
+Q_SIGNALS:
+    void writerChanged();
 
- protected:
-   /**
-    * The default implementation loads the following defaults:
-    * <ul>
-    *   <li>Writing mode</li>
-    *   <li>Simulate</li>
-    *   <li>on the fly</li>
-    *   <li>remove images</li>
-    *   <li>only create images</li>
-    * </ul>
-    */
-   virtual void loadK3bDefaults();
+protected:
+    /**
+     * The default implementation loads the following defaults:
+     * <ul>
+     *   <li>Writing mode</li>
+     *   <li>Simulate</li>
+     *   <li>on the fly</li>
+     *   <li>remove images</li>
+     *   <li>only create images</li>
+     * </ul>
+     */
+    virtual void loadK3bDefaults();
 
-   /**
-    * The default implementation loads the following settings from the KConfig.
-    * May be used in subclasses.
-    * <ul>
-    *   <li>Writing mode</li>
-    *   <li>Simulate</li>
-    *   <li>on the fly</li>
-    *   <li>remove images</li>
-    *   <li>only create images</li>
-    *   <li>writer</li>
-    *   <li>writing speed</li>
-    * </ul>
-    */
-   virtual void loadUserDefaults( const KConfigGroup& );
+    /**
+     * The default implementation loads the following settings from the KConfig.
+     * May be used in subclasses.
+     * <ul>
+     *   <li>Writing mode</li>
+     *   <li>Simulate</li>
+     *   <li>on the fly</li>
+     *   <li>remove images</li>
+     *   <li>only create images</li>
+     *   <li>writer</li>
+     *   <li>writing speed</li>
+     * </ul>
+     */
+    virtual void loadUserDefaults( const KConfigGroup& );
 
-   /**
-    * The default implementation saves the following settings to the KConfig.
-    * May be used in subclasses.
-    * <ul>
-    *   <li>Writing mode</li>
-    *   <li>Simulate</li>
-    *   <li>on the fly</li>
-    *   <li>remove images</li>
-    *   <li>only create images</li>
-    *   <li>writer</li>
-    *   <li>writing speed</li>
-    * </ul>
-    */
-   virtual void saveUserDefaults( KConfigGroup& );
+    /**
+     * The default implementation saves the following settings to the KConfig.
+     * May be used in subclasses.
+     * <ul>
+     *   <li>Writing mode</li>
+     *   <li>Simulate</li>
+     *   <li>on the fly</li>
+     *   <li>remove images</li>
+     *   <li>only create images</li>
+     *   <li>writer</li>
+     *   <li>writing speed</li>
+     * </ul>
+     */
+    virtual void saveUserDefaults( KConfigGroup& );
 
-   /**
-    * The default implementation saves the following settings to the doc and may be called 
-    * in subclasses:
-    * <ul>
-    *   <li>Writing mode</li>
-    *   <li>Simulate</li>
-    *   <li>on the fly</li>
-    *   <li>remove images</li>
-    *   <li>only create images</li>
-    *   <li>writer</li>
-    *   <li>writing speed</li>
-    * </ul>
-    */
-   virtual void saveSettings();
+    /**
+     * The default implementation saves the following settings to the doc and may be called 
+     * in subclasses:
+     * <ul>
+     *   <li>Writing mode</li>
+     *   <li>Simulate</li>
+     *   <li>on the fly</li>
+     *   <li>remove images</li>
+     *   <li>only create images</li>
+     *   <li>writer</li>
+     *   <li>writing speed</li>
+     * </ul>
+     */
+    virtual void saveSettings();
 
-   /**
-    * The default implementation reads the following settings from the doc and may be called 
-    * in subclasses:
-    * <ul>
-    *   <li>Writing mode</li>
-    *   <li>Simulate</li>
-    *   <li>on the fly</li>
-    *   <li>remove images</li>
-    *   <li>only create images</li>
-    *   <li>writer</li>
-    *   <li>writing speed</li>
-    * </ul>
-    */
-   virtual void readSettings();
+    /**
+     * The default implementation reads the following settings from the doc and may be called 
+     * in subclasses:
+     * <ul>
+     *   <li>Writing mode</li>
+     *   <li>Simulate</li>
+     *   <li>on the fly</li>
+     *   <li>remove images</li>
+     *   <li>only create images</li>
+     *   <li>writer</li>
+     *   <li>writing speed</li>
+     * </ul>
+     */
+    virtual void readSettings();
 
-   virtual void toggleAll();
+    virtual void toggleAll();
 
-   /**
-    * use this to set additionell stuff in the job
-    */
-   virtual void prepareJob( K3bBurnJob* ) {};
+    /**
+     * use this to set additionell stuff in the job
+     */
+    virtual void prepareJob( K3bBurnJob* ) {};
 
-   void prepareGui();
+    void prepareGui();
 
-   void addPage( QWidget*, const QString& title );
+    void addPage( QWidget*, const QString& title );
 
-   /**
-    * Call this if you must reimplement it.
-    * \reimplemented from K3bInteractionDialog
-    */
-   virtual void init();
+    /**
+     * Call this if you must reimplement it.
+     * \reimplemented from K3bInteractionDialog
+     */
+    virtual void init();
 
-   K3bWriterSelectionWidget* m_writerSelectionWidget;
-   K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
-   K3bWritingModeWidget* m_writingModeWidget;
-   Q3GroupBox* m_optionGroup;
-   Q3VBoxLayout* m_optionGroupLayout;
-   QCheckBox* m_checkCacheImage;
-   QCheckBox* m_checkSimulate;
-   QCheckBox* m_checkRemoveBufferFiles;
-   QCheckBox* m_checkOnlyCreateImage;
-   QSpinBox* m_spinCopies;
+    K3bWriterSelectionWidget* m_writerSelectionWidget;
+    K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
+    K3bWritingModeWidget* m_writingModeWidget;
+    QGroupBox* m_optionGroup;
+    QVBoxLayout* m_optionGroupLayout;
+    QCheckBox* m_checkCacheImage;
+    QCheckBox* m_checkSimulate;
+    QCheckBox* m_checkRemoveBufferFiles;
+    QCheckBox* m_checkOnlyCreateImage;
+    QSpinBox* m_spinCopies;
 
- private slots:
-   void slotShowImageTip( bool buttonActivated );
+private Q_SLOTS:
+    void slotShowImageTip( bool buttonActivated );
 
- private:
-   K3bDoc* m_doc;
-   K3bBurnJob* m_job;
-   QTabWidget* m_tabWidget;
+private:
+    K3bDoc* m_doc;
+    K3bBurnJob* m_job;
+    QTabWidget* m_tabWidget;
 };
 
 #endif

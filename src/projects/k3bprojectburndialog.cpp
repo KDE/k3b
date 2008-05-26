@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,12 +38,11 @@
 #include <QWhatsThis>
 #include <qcheckbox.h>
 #include <qtabwidget.h>
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 #include <qspinbox.h>
 #include <qlabel.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3VBoxLayout>
+#include <QGridLayout>
+#include <QVBoxLayout>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
@@ -176,7 +175,7 @@ int K3bProjectBurnDialog::execBurnDialog( bool burn )
         setDefaultButton( SAVE_BUTTON );
     }
 
-    return K3bInteractionDialog::exec(false);
+    return K3bInteractionDialog::exec();
 }
 
 
@@ -239,7 +238,7 @@ void K3bProjectBurnDialog::slotStartClicked()
     prepareJob( m_job );
 
     if( !exitLoopOnHide() )
-        hide();
+        hideTemporarily();
 
     dlg->startJob(m_job);
 
@@ -255,28 +254,31 @@ void K3bProjectBurnDialog::slotStartClicked()
 
 void K3bProjectBurnDialog::prepareGui()
 {
-    Q3VBoxLayout* mainLay = new Q3VBoxLayout( mainWidget() );
-    mainLay->setAutoAdd( true );
+    QVBoxLayout* mainLay = new QVBoxLayout( mainWidget() );
     mainLay->setMargin( 0 );
     mainLay->setSpacing( KDialog::spacingHint() );
 
     m_writerSelectionWidget = new K3bWriterSelectionWidget( mainWidget() );
     m_writerSelectionWidget->setWantedMediumType( m_doc->supportedMediaTypes() );
     m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY );
+    mainLay->addWidget( m_writerSelectionWidget );
 
     m_tabWidget = new QTabWidget( mainWidget() );
+    mainLay->addWidget( m_tabWidget );
 
     QWidget* w = new QWidget( m_tabWidget );
     m_tabWidget->addTab( w, i18n("Writing") );
 
-    Q3GroupBox* groupWritingMode = new Q3GroupBox( 1, Qt::Vertical, i18n("Writing Mode"), w );
-    groupWritingMode->setInsideMargin( marginHint() );
+    QGroupBox* groupWritingMode = new QGroupBox( i18n("Writing Mode"), w );
     m_writingModeWidget = new K3bWritingModeWidget( groupWritingMode );
+    QVBoxLayout* groupWritingModeLayout = new QVBoxLayout( groupWritingMode );
+    groupWritingModeLayout->setMargin( marginHint() );
+    groupWritingModeLayout->setSpacing( spacingHint() );
+    groupWritingModeLayout->addWidget( m_writingModeWidget );
 
-    m_optionGroup = new Q3GroupBox( 0, Qt::Vertical, i18n("Settings"), w );
-    m_optionGroup->layout()->setSpacing(0);
-    m_optionGroupLayout = new Q3VBoxLayout( m_optionGroup->layout() );
-    m_optionGroupLayout->setMargin( 0 );
+    m_optionGroup = new QGroupBox( i18n("Settings"), w );
+    m_optionGroupLayout = new QVBoxLayout( m_optionGroup );
+    m_optionGroupLayout->setMargin( marginHint() );
     m_optionGroupLayout->setSpacing( KDialog::spacingHint() );
 
     // add the options
@@ -290,29 +292,32 @@ void K3bProjectBurnDialog::prepareGui()
     m_optionGroupLayout->addWidget(m_checkOnlyCreateImage);
     m_optionGroupLayout->addWidget(m_checkRemoveBufferFiles);
 
-    Q3GroupBox* groupCopies = new Q3GroupBox( 2, Qt::Horizontal, i18n("Copies"), w );
-    groupCopies->setInsideSpacing( spacingHint() );
-    groupCopies->setInsideMargin( marginHint() );
+    QGroupBox* groupCopies = new QGroupBox( i18n("Copies"), w );
     QLabel* pixLabel = new QLabel( groupCopies );
     pixLabel->setPixmap( SmallIcon( "tools-media-optical-copy", KIconLoader::SizeMedium ) );
     pixLabel->setScaledContents( false );
     m_spinCopies = new QSpinBox( groupCopies );
     m_spinCopies->setRange( 1, 999 );
+    QHBoxLayout* groupCopiesLayout = new QHBoxLayout( groupCopies );
+    groupCopiesLayout->setSpacing( spacingHint() );
+    groupCopiesLayout->setMargin( marginHint() );
+    groupCopiesLayout->addWidget( pixLabel );
+    groupCopiesLayout->addWidget( m_spinCopies );
 
     // arrange it
-    Q3GridLayout* grid = new Q3GridLayout( w );
+    QGridLayout* grid = new QGridLayout( w );
     grid->setMargin( KDialog::marginHint() );
     grid->setSpacing( KDialog::spacingHint() );
 
     grid->addWidget( groupWritingMode, 0, 0 );
-    grid->addMultiCellWidget( m_optionGroup, 0, 2, 1, 1 );
+    grid->addWidget( m_optionGroup, 0, 1, 3, 1 );
     grid->addWidget( groupCopies, 2, 0 );
-    //  grid->addMultiCellWidget( m_tempDirSelectionWidget, 1, 3, 1, 1 );
+    //  grid->addWidget( m_tempDirSelectionWidget, 1, 1, 3, 1 );
     grid->setRowStretch( 1, 1 );
-    grid->setColStretch( 1, 1 );
+    grid->setColumnStretch( 1, 1 );
 
     QWidget* tempW = new QWidget( m_tabWidget );
-    grid = new Q3GridLayout( tempW );
+    grid = new QGridLayout( tempW );
     grid->setMargin( KDialog::marginHint() );
     grid->setSpacing( KDialog::spacingHint() );
     m_tabWidget->addTab( tempW, i18n("Image") );

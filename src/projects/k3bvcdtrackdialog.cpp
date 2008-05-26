@@ -1,9 +1,10 @@
 /*
 *
 * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
 *
 * This file is part of the K3b project.
-* Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+* Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -16,19 +17,18 @@
 #include <q3buttongroup.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <q3multilineedit.h>
 #include <qpixmap.h>
 #include <qradiobutton.h>
 #include <q3table.h>
 #include <qtooltip.h>
 
 //Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QList>
 
 // Kde Includes
@@ -167,9 +167,9 @@ void K3bVcdTrackDialog::slotApply()
                 QMap<QString, K3bVcdTrack*>::Iterator mit;
                 mit = m_numkeysmap.find( it.current() ->text( 1 ) );
                 if ( mit != m_numkeysmap.end() )
-                    if ( mit.data() ) {
-                        selectedTrack->setDefinedNumKey( it.current() ->text( 0 ).toInt(), mit.data() );
-                        kDebug() << "Key " << it.current() ->text( 0 ).toInt() << " Playing: " << it.current() ->text( 1 ) << "Track: " << mit.data();
+                    if ( *mit ) {
+                        selectedTrack->setDefinedNumKey( it.current() ->text( 0 ).toInt(), mit.value() );
+                        kDebug() << "Key " << it.current() ->text( 0 ).toInt() << " Playing: " << it.current() ->text( 1 ) << "Track: " << mit.value();
                     } else {
                         selectedTrack->setDefinedNumKey( it.current() ->text( 0 ).toInt(), 0L );
                         kDebug() << "Key " << it.current() ->text( 0 ).toInt() << " Playing: " << it.current() ->text( 1 );
@@ -218,17 +218,17 @@ void K3bVcdTrackDialog::fillGui()
     m_spin_waittime->setToolTip( i18n( "Time in seconds to wait after playback of 'play track'." ) );
 
     m_comboAfterTimeout->setWhatsThis( i18n( "<p>Target to be jumped to on time-out of <wait>."
-                                     "<p>If omitted (and <wait> is not set to an infinite time) one of the targets is selected at random." ) );
+                                             "<p>If omitted (and <wait> is not set to an infinite time) one of the targets is selected at random." ) );
     m_check_reactivity->setWhatsThis( i18n( "<p>When reactivity is set to delayed, it is recommended that the length of the referenced 'play track' is not more than 5 seconds."
-                                    "<p>The recommended setting for a play item consisting of one still picture and no audio is to loop once and have a delayed reactivity." ) );
+                                            "<p>The recommended setting for a play item consisting of one still picture and no audio is to loop once and have a delayed reactivity." ) );
     m_check_pbc->setWhatsThis( i18n( "<p>Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats."
-                             "<p>PBC allows control of the playback of play items and the possibility of interaction with the user through the remote control or some other input device available." ) );
+                                     "<p>PBC allows control of the playback of play items and the possibility of interaction with the user through the remote control or some other input device available." ) );
     m_check_usekeys->setWhatsThis( i18n( "These are actually pseudo keys, representing the numeric keys 0, 1, ..., 9." ) );
     m_check_overwritekeys->setWhatsThis( i18n( "<p>If numeric keys enabled, you can overwrite the default settings." ) );
     m_spin_times->setWhatsThis( i18n( "<p>Times to repeat the playback of 'play track'."
-                              "<p>The reactivity attribute controls whether the playback of 'play track' is finished, thus delayed, before executing user triggered action or an immediate jump is performed."
-                              "<p>After the specified number of repetitions have completed, the <wait> time begins to count down, unless set to an infinite wait time."
-                              "<p>If this element is omitted, a default of `1' is used, i.e. the 'play track' will be displayed once." ) );
+                                      "<p>The reactivity attribute controls whether the playback of 'play track' is finished, thus delayed, before executing user triggered action or an immediate jump is performed."
+                                      "<p>After the specified number of repetitions have completed, the <wait> time begins to count down, unless set to an infinite wait time."
+                                      "<p>If this element is omitted, a default of `1' is used, i.e. the 'play track' will be displayed once." ) );
     m_spin_waittime->setWhatsThis( i18n( "Time in seconds to wait after playback of 'play track' before triggering the <timeout> action (unless the user triggers some action before time ran up)." ) );
 
 }
@@ -259,23 +259,23 @@ void K3bVcdTrackDialog::fillPbcGui()
         if ( track != selectedTrack )              // donot insert selectedTrack, it was as "ItSelf" inserted to the begin of map
             m_numkeysmap.insert( s, track );
 
-        m_pbc_previous->insertItem( pm, s );
+        m_pbc_previous->addItem( pm, s );
         if ( track == selectedTrack->getPbcTrack( K3bVcdTrack::PREVIOUS ) )
             iPrevious = m_pbc_previous->count() - 1;
 
-        m_pbc_next->insertItem( pm, s );
+        m_pbc_next->addItem( pm, s );
         if ( track == selectedTrack->getPbcTrack( K3bVcdTrack::NEXT ) )
             iNext = m_pbc_next->count() - 1;
 
-        m_pbc_return->insertItem( pm, s );
+        m_pbc_return->addItem( pm, s );
         if ( track == selectedTrack->getPbcTrack( K3bVcdTrack::RETURN ) )
             iReturn = m_pbc_return->count() - 1;
 
-        m_pbc_default->insertItem( pm, s );
+        m_pbc_default->addItem( pm, s );
         if ( track == selectedTrack->getPbcTrack( K3bVcdTrack::DEFAULT ) )
             iDefault = m_pbc_default->count() - 1;
 
-        m_comboAfterTimeout->insertItem( pm, s );
+        m_comboAfterTimeout->addItem( pm, s );
         if ( track == selectedTrack->getPbcTrack( K3bVcdTrack::AFTERTIMEOUT ) )
             iAfterTimeOut = m_comboAfterTimeout->count() - 1;
 
@@ -284,20 +284,20 @@ void K3bVcdTrackDialog::fillPbcGui()
     // add Event Disabled
     QPixmap pmDisabled = SmallIcon( "process-stop" );
     QString txtDisabled = i18n( "Event Disabled" );
-    m_pbc_previous->insertItem( pmDisabled, txtDisabled );
-    m_pbc_next->insertItem( pmDisabled, txtDisabled );
-    m_pbc_return->insertItem( pmDisabled, txtDisabled );
-    m_pbc_default->insertItem( pmDisabled, txtDisabled );
-    m_comboAfterTimeout->insertItem( pmDisabled, txtDisabled );
+    m_pbc_previous->addItem( pmDisabled, txtDisabled );
+    m_pbc_next->addItem( pmDisabled, txtDisabled );
+    m_pbc_return->addItem( pmDisabled, txtDisabled );
+    m_pbc_default->addItem( pmDisabled, txtDisabled );
+    m_comboAfterTimeout->addItem( pmDisabled, txtDisabled );
 
     // add VideoCD End
     QPixmap pmEnd = SmallIcon( "media-optical-video" );
     QString txtEnd = i18n( "VideoCD END" );
-    m_pbc_previous->insertItem( pmEnd, txtEnd );
-    m_pbc_next->insertItem( pmEnd, txtEnd );
-    m_pbc_return->insertItem( pmEnd, txtEnd );
-    m_pbc_default->insertItem( pmEnd, txtEnd );
-    m_comboAfterTimeout->insertItem( pmEnd, txtEnd );
+    m_pbc_previous->addItem( pmEnd, txtEnd );
+    m_pbc_next->addItem( pmEnd, txtEnd );
+    m_pbc_return->addItem( pmEnd, txtEnd );
+    m_pbc_default->addItem( pmEnd, txtEnd );
+    m_comboAfterTimeout->addItem( pmEnd, txtEnd );
     m_numkeysmap.insert( txtEnd, 0L );
 
     for ( int i = 99; i > 0; i-- ) {
@@ -342,7 +342,8 @@ void K3bVcdTrackDialog::fillPbcGui()
     m_check_usekeys->setChecked( selectedTrack->PbcNumKeys() );
     m_check_overwritekeys->setChecked( selectedTrack->PbcNumKeysUserdefined() );
 
-    m_mainTabbed->setTabEnabled( m_widgetnumkeys, m_check_usekeys->isChecked() && m_check_pbc->isChecked() );
+    m_mainTabbed->setTabEnabled( m_mainTabbed->indexOf( m_widgetnumkeys ),
+                                 m_check_usekeys->isChecked() && m_check_pbc->isChecked() );
 
     setDefinedNumKeys();
 }
@@ -351,20 +352,18 @@ void K3bVcdTrackDialog::prepareGui()
 {
     QWidget * frame = mainWidget();
 
-    Q3GridLayout* mainLayout = new Q3GridLayout( frame );
+    QGridLayout* mainLayout = new QGridLayout( frame );
     mainLayout->setSpacing( spacingHint() );
     mainLayout->setMargin( 0 );
 
     m_mainTabbed = new QTabWidget( frame );
 
-    ///////////////////////////////////////////////////
+    // /////////////////////////////////////////////////
     // FILE-INFO BOX
-    ///////////////////////////////////////////////////
-    Q3GroupBox* groupFileInfo = new Q3GroupBox( 0, Qt::Vertical, i18n( "File Info" ), frame );
-    groupFileInfo->layout() ->setSpacing( 0 );
-    groupFileInfo->layout() ->setMargin( 0 );
+    // /////////////////////////////////////////////////
+    QGroupBox* groupFileInfo = new QGroupBox( i18n( "File Info" ), frame );
 
-    Q3GridLayout* groupFileInfoLayout = new Q3GridLayout( groupFileInfo->layout() );
+    QGridLayout* groupFileInfoLayout = new QGridLayout( groupFileInfo );
     groupFileInfoLayout->setAlignment( Qt::AlignTop );
     groupFileInfoLayout->setSpacing( spacingHint() );
     groupFileInfoLayout->setMargin( marginHint() );
@@ -395,8 +394,8 @@ void K3bVcdTrackDialog::prepareGui()
     fileInfoLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
     groupFileInfoLayout->addWidget( m_labelMimeType, 0, 0 );
-    groupFileInfoLayout->addMultiCellWidget( m_displayFileName, 0, 1, 1, 1 );
-    groupFileInfoLayout->addMultiCellWidget( fileInfoLine, 2, 2, 0, 1 );
+    groupFileInfoLayout->addWidget( m_displayFileName, 0, 1, 2, 1 );
+    groupFileInfoLayout->addWidget( fileInfoLine, 2, 0, 1, 2 );
     groupFileInfoLayout->addWidget( labelLength, 3, 0 );
     groupFileInfoLayout->addWidget( labelSize, 4, 0 );
     groupFileInfoLayout->addWidget( labelMuxrate, 5, 0 );
@@ -405,19 +404,19 @@ void K3bVcdTrackDialog::prepareGui()
     groupFileInfoLayout->addWidget( m_muxrate, 5, 1 );
 
     groupFileInfoLayout->setRowStretch( 6, 1 );
-    groupFileInfoLayout->setColStretch( 1, 1 );
+    groupFileInfoLayout->setColumnStretch( 1, 1 );
 
     QFont f( m_displayLength->font() );
     f.setBold( true );
     m_displayLength->setFont( f );
     m_displaySize->setFont( f );
     m_muxrate->setFont( f );
-    ///////////////////////////////////////////////////
+///////////////////////////////////////////////////
 
-    mainLayout->addWidget( groupFileInfo, 0, 0 );
-    mainLayout->addWidget( m_mainTabbed, 0, 1 );
+        mainLayout->addWidget( groupFileInfo, 0, 0 );
+        mainLayout->addWidget( m_mainTabbed, 0, 1 );
 
-    //  mainLayout->setColStretch( 0, 1 );
+        //  mainLayout->setColumnStretch( 0, 1 );
 
 }
 
@@ -428,31 +427,32 @@ void K3bVcdTrackDialog::setupPbcTab()
     // /////////////////////////////////////////////////
     QWidget * w = new QWidget( m_mainTabbed );
 
-    Q3GridLayout* grid = new Q3GridLayout( w );
+    QGridLayout* grid = new QGridLayout( w );
     grid->setAlignment( Qt::AlignTop );
     grid->setSpacing( spacingHint() );
     grid->setMargin( marginHint() );
 
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    Q3GroupBox* groupOptions = new Q3GroupBox( 3, Qt::Vertical, i18n( "Settings" ), w );
-    groupOptions->layout() ->setSpacing( spacingHint() );
-    groupOptions->layout() ->setMargin( marginHint() );
+    QGroupBox* groupOptions = new QGroupBox( i18n( "Settings" ), w );
 
     m_check_pbc = new QCheckBox( i18n( "Enable playback control (for the whole CD)" ), groupOptions );
-
     m_check_usekeys = new QCheckBox( i18n( "Use numeric keys" ), groupOptions );
     m_check_usekeys->setEnabled( false );
-
     m_check_reactivity = new QCheckBox( i18n( "Reactivity delayed to the end of playing track" ), groupOptions );
     m_check_reactivity->setEnabled( false );
 
-    //////////////////////////////////////////////////////////////////////////////////////////
-    m_groupPlay = new Q3GroupBox( 0, Qt::Vertical, i18n( "Playing" ), w );
-    m_groupPlay->layout() ->setSpacing( spacingHint() );
-    m_groupPlay->layout() ->setMargin( marginHint() );
+    QVBoxLayout* groupOptionsLayout = new QVBoxLayout( groupOptions );
+    groupOptionsLayout->setSpacing( spacingHint() );
+    groupOptionsLayout->setMargin( marginHint() );
+    groupOptionsLayout->addWidget( m_check_pbc );
+    groupOptionsLayout->addWidget( m_check_usekeys );
+    groupOptionsLayout->addWidget( m_check_reactivity );
 
-    Q3GridLayout* groupPlayLayout = new Q3GridLayout( m_groupPlay->layout() );
+    //////////////////////////////////////////////////////////////////////////////////////////
+    m_groupPlay = new QGroupBox( i18n( "Playing" ), w );
+
+    QGridLayout* groupPlayLayout = new QGridLayout( m_groupPlay );
     groupPlayLayout->setAlignment( Qt::AlignTop );
 
     QLabel* labelPlaying = new QLabel( i18n( "Playing track" ) , m_groupPlay );
@@ -480,16 +480,16 @@ void K3bVcdTrackDialog::setupPbcTab()
     groupPlayLayout->addWidget( m_spin_times, 1, 1 );
     groupPlayLayout->addWidget( m_labelWait, 1, 2 );
     groupPlayLayout->addWidget( m_spin_waittime, 1, 3 );
-    groupPlayLayout->addMultiCellWidget( m_labelAfterTimeout, 2, 2, 1, 3 );
-    groupPlayLayout->addMultiCellWidget( m_comboAfterTimeout, 3, 3, 1, 3 );
+    groupPlayLayout->addWidget( m_labelAfterTimeout, 2, 1, 1, 3 );
+    groupPlayLayout->addWidget( m_comboAfterTimeout, 3, 1, 1, 3 );
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    m_groupPbc = new Q3GroupBox( 0, Qt::Vertical, i18n( "Key Pressed Interaction" ), w );
-    m_groupPbc->layout() ->setSpacing( spacingHint() );
-    m_groupPbc->layout() ->setMargin( marginHint() );
+    m_groupPbc = new QGroupBox( i18n( "Key Pressed Interaction" ), w );
 
-    Q3GridLayout* groupPbcLayout = new Q3GridLayout( m_groupPbc->layout() );
+    QGridLayout* groupPbcLayout = new QGridLayout( m_groupPbc );
     groupPbcLayout->setAlignment( Qt::AlignTop );
+    groupPbcLayout->setSpacing( spacingHint() );
+    groupPbcLayout->setMargin( marginHint() );
 
     QLabel* labelPbc_previous = new QLabel( i18n( "Previous:" ), m_groupPbc );
     QLabel* labelPbc_next = new QLabel( i18n( "Next:" ), m_groupPbc );
@@ -502,16 +502,16 @@ void K3bVcdTrackDialog::setupPbcTab()
     m_pbc_default = new K3bCutComboBox( /*K3bCutComboBox::SQUEEZE,*/ m_groupPbc );
 
     groupPbcLayout->addWidget( labelPbc_previous, 1, 0 );
-    groupPbcLayout->addMultiCellWidget( m_pbc_previous, 1, 1, 1, 3 );
+    groupPbcLayout->addWidget( m_pbc_previous, 1, 1, 1, 3 );
 
     groupPbcLayout->addWidget( labelPbc_next, 2, 0 );
-    groupPbcLayout->addMultiCellWidget( m_pbc_next, 2, 2, 1, 3 );
+    groupPbcLayout->addWidget( m_pbc_next, 2, 1, 1, 3 );
 
     groupPbcLayout->addWidget( labelPbc_return, 3, 0 );
-    groupPbcLayout->addMultiCellWidget( m_pbc_return, 3, 3, 1, 3 );
+    groupPbcLayout->addWidget( m_pbc_return, 3, 1, 1, 3 );
 
     groupPbcLayout->addWidget( labelPbc_default, 4, 0 );
-    groupPbcLayout->addMultiCellWidget( m_pbc_default, 4, 4, 1, 3 );
+    groupPbcLayout->addWidget( m_pbc_default, 4, 1, 1, 3 );
 
 
     grid->addWidget( groupOptions, 0, 0 );
@@ -538,15 +538,13 @@ void K3bVcdTrackDialog::setupPbcKeyTab()
     // /////////////////////////////////////////////////
     m_widgetnumkeys = new QWidget( m_mainTabbed );
 
-    Q3GridLayout* grid = new Q3GridLayout( m_widgetnumkeys );
+    QGridLayout* grid = new QGridLayout( m_widgetnumkeys );
     grid->setAlignment( Qt::AlignTop );
     grid->setSpacing( spacingHint() );
     grid->setMargin( marginHint() );
 
-    m_groupKey = new Q3GroupBox( 3, Qt::Vertical, i18n( "Numeric Keys" ), m_widgetnumkeys );
+    m_groupKey = new QGroupBox( i18n( "Numeric Keys" ), m_widgetnumkeys );
     m_groupKey->setEnabled( false );
-    m_groupKey->layout() ->setSpacing( spacingHint() );
-    m_groupKey->layout() ->setMargin( marginHint() );
 
     m_list_keys = new K3bListView( m_groupKey );
     m_list_keys->setAllColumnsShowFocus( true );
@@ -557,6 +555,12 @@ void K3bVcdTrackDialog::setupPbcKeyTab()
     m_list_keys->addColumn( i18n( "Key" ) );
     m_list_keys->addColumn( i18n( "Playing" ) );
     m_list_keys->setResizeMode( Q3ListView::LastColumn );
+
+    QVBoxLayout* groupKeyLayout = new QVBoxLayout( m_groupKey );
+    groupKeyLayout->setSpacing( spacingHint() );
+    groupKeyLayout->setMargin( marginHint() );
+    groupKeyLayout->addWidget( m_list_keys );
+
     m_check_overwritekeys = new QCheckBox( i18n( "Overwrite default assignment" ), m_widgetnumkeys );
 
     grid->addWidget( m_groupKey, 1, 0 );
@@ -565,7 +569,6 @@ void K3bVcdTrackDialog::setupPbcKeyTab()
     m_mainTabbed->addTab( m_widgetnumkeys, i18n( "Numeric Keys" ) );
 
     connect( m_check_overwritekeys, SIGNAL( toggled( bool ) ), this, SLOT( slotGroupkeyToggled( bool ) ) );
-
 }
 
 void K3bVcdTrackDialog::setupAudioTab()
@@ -575,7 +578,7 @@ void K3bVcdTrackDialog::setupAudioTab()
     // /////////////////////////////////////////////////
     QWidget * w = new QWidget( m_mainTabbed );
 
-    Q3GridLayout* grid = new Q3GridLayout( w );
+    QGridLayout* grid = new QGridLayout( w );
     grid->setAlignment( Qt::AlignTop );
     grid->setSpacing( spacingHint() );
     grid->setMargin( marginHint() );
@@ -605,19 +608,19 @@ void K3bVcdTrackDialog::setupAudioTab()
     m_copyright_audio->setFrameShadow( QLabel::Sunken );
 
     grid->addWidget( labelMpegVer_Audio, 1, 0 );
-    grid->addMultiCellWidget( m_mpegver_audio, 1, 1, 1, 4 );
+    grid->addWidget( m_mpegver_audio, 1, 1, 1, 4 );
 
     grid->addWidget( labelRate_Audio, 2, 0 );
-    grid->addMultiCellWidget( m_rate_audio, 2, 2, 1, 4 );
+    grid->addWidget( m_rate_audio, 2, 1, 1, 4 );
 
     grid->addWidget( labelSampling_Frequency_Audio, 3, 0 );
-    grid->addMultiCellWidget( m_sampling_frequency_audio, 3, 3, 1, 4 );
+    grid->addWidget( m_sampling_frequency_audio, 3, 1, 1, 4 );
 
     grid->addWidget( labelMode_Audio, 4, 0 );
-    grid->addMultiCellWidget( m_mode_audio, 4, 4, 1, 4 );
+    grid->addWidget( m_mode_audio, 4, 1, 1, 4 );
 
     grid->addWidget( labelCopyright_Audio, 5, 0 );
-    grid->addMultiCellWidget( m_copyright_audio, 5, 5, 1, 4 );
+    grid->addWidget( m_copyright_audio, 5, 1, 1, 4 );
 
     grid->setRowStretch( 9, 4 );
 
@@ -632,7 +635,7 @@ void K3bVcdTrackDialog::setupVideoTab()
     // /////////////////////////////////////////////////
     QWidget * w = new QWidget( m_mainTabbed );
 
-    Q3GridLayout* grid = new Q3GridLayout( w );
+    QGridLayout* grid = new QGridLayout( w );
     grid->setAlignment( Qt::AlignTop );
     grid->setSpacing( spacingHint() );
     grid->setMargin( marginHint() );
@@ -666,22 +669,22 @@ void K3bVcdTrackDialog::setupVideoTab()
     m_highresolution_video->setFrameShadow( QLabel::Sunken );
 
     grid->addWidget( labelMpegVer_Video, 1, 0 );
-    grid->addMultiCellWidget( m_mpegver_video, 1, 1, 1, 4 );
+    grid->addWidget( m_mpegver_video, 1, 1, 1, 4 );
 
     grid->addWidget( labelRate_Video, 2, 0 );
-    grid->addMultiCellWidget( m_rate_video, 2, 2, 1, 4 );
+    grid->addWidget( m_rate_video, 2, 1, 1, 4 );
 
     grid->addWidget( labelChromaFormat_Video, 3, 0 );
-    grid->addMultiCellWidget( m_chromaformat_video, 3, 3, 1, 4 );
+    grid->addWidget( m_chromaformat_video, 3, 1, 1, 4 );
 
     grid->addWidget( labelFormat_Video, 4, 0 );
-    grid->addMultiCellWidget( m_format_video, 4, 4, 1, 4 );
+    grid->addWidget( m_format_video, 4, 1, 1, 4 );
 
     grid->addWidget( labelResolution_Video, 5, 0 );
-    grid->addMultiCellWidget( m_resolution_video, 5, 5, 1, 4 );
+    grid->addWidget( m_resolution_video, 5, 1, 1, 4 );
 
     grid->addWidget( labelHighResolution_Video, 6, 0 );
-    grid->addMultiCellWidget( m_highresolution_video, 6, 6, 1, 4 );
+    grid->addWidget( m_highresolution_video, 6, 1, 1, 4 );
 
     grid->setRowStretch( 9, 4 );
 
@@ -707,9 +710,9 @@ void K3bVcdTrackDialog::setDefinedNumKeys( )
         QMap<int, K3bVcdTrack*>::const_iterator keyit = definedkeysmap.find( itemId );
 
         if ( keyit != definedkeysmap.end() ) {
-            if ( keyit.data() ) {
-                if ( m_tracks.lastIndexOf( keyit.data() ) >= 0 ) {
-                    it.current() ->setText( 1 , displayName( keyit.data() ) ) ;
+            if ( keyit.value() ) {
+                if ( m_tracks.lastIndexOf( keyit.value() ) >= 0 ) {
+                    it.current() ->setText( 1 , displayName( keyit.value() ) ) ;
                 } else {
                     it.current() ->setText( 1 , "" ) ;
                     selectedTrack->delDefinedNumKey( keyit.key() );
@@ -776,7 +779,7 @@ void K3bVcdTrackDialog::slotPbcToggled( bool b )
 
 void K3bVcdTrackDialog::slotUseKeysToggled( bool b )
 {
-    m_mainTabbed->setTabEnabled( m_widgetnumkeys, b );
+    m_mainTabbed->setTabEnabled( m_mainTabbed->indexOf( m_widgetnumkeys ), b );
 }
 
 void K3bVcdTrackDialog::slotGroupkeyToggled( bool b )

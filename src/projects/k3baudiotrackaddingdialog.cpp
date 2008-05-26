@@ -176,7 +176,7 @@ void K3bAudioTrackAddingDialog::slotAddUrls()
 
     // invalid file, next url
     if( !valid ) {
-        m_urls.remove( m_urls.begin() );
+        m_urls.erase( m_urls.begin() );
         QTimer::singleShot( 0, this, SLOT(slotAddUrls()) );
     }
 }
@@ -192,7 +192,7 @@ void K3bAudioTrackAddingDialog::slotAnalysingFinished( bool /*success*/ )
     }
 
     KUrl url = m_urls.first();
-    m_urls.remove( m_urls.begin() );
+    m_urls.erase( m_urls.begin() );
 
     if( m_cueUrl.isValid() ) {
         // import the cue file
@@ -223,7 +223,7 @@ void K3bAudioTrackAddingDialog::slotAnalysingFinished( bool /*success*/ )
             if( m_trackAfter )
                 track->moveAfter( m_trackAfter );
             else
-                track->moveAfter( m_doc->lastTrack() );
+                track->moveAhead( m_doc->firstTrack() );
 
             m_trackAfter = track;
         }
@@ -252,7 +252,7 @@ KUrl::List K3bAudioTrackAddingDialog::extractUrlList( const KUrl::List& urls )
         QFileInfo fi( url.path() );
 
         if( fi.isDir() ) {
-            it = allUrls.remove( it );
+            it = allUrls.erase( it );
             // add all files in the dir
             QDir dir(fi.filePath());
             QStringList entries = dir.entryList( QDir::Files );
@@ -263,7 +263,7 @@ KUrl::List K3bAudioTrackAddingDialog::extractUrlList( const KUrl::List& urls )
                 it = allUrls.insert( oldIt, KUrl( dir.absolutePath() + "/" + *dirIt ) );
         }
         else if( K3bAudioDoc::readPlaylistFile( url, urlsFromPlaylist ) ) {
-            it = allUrls.remove( it );
+            it = allUrls.erase( it );
             KUrl::List::iterator oldIt = it;
             // add all files into the list after the current item
             for( KUrl::List::iterator dirIt = urlsFromPlaylist.begin();

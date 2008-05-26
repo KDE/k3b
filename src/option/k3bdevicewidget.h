@@ -44,18 +44,15 @@ public:
 
 public Q_SLOTS:
     void init();
-    void apply();
 
 Q_SIGNALS:
     void refreshButtonClicked();
 
-    private slots:
-    void slotNewDevice();
+private Q_SLOTS:
     void updateDeviceListViews();
 
 private:
     class PrivateTempDevice;
-    class PrivateDeviceViewItem1;    
     /** list to save changes to the devices before applying */
     QList<PrivateTempDevice*> m_tempDevices;
 
@@ -66,7 +63,6 @@ private:
 
     K3bListView*    m_viewDevices;
     QPushButton* m_buttonRefreshDevices;
-    QPushButton* m_buttonAddDevice;
 };
 
 #endif

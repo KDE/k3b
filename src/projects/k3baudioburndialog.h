@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,13 +21,12 @@
 
 #include <qvariant.h>
 #include <qwidget.h>
-//Added by qt3to4:
 #include <QShowEvent>
 #include <QLabel>
 
 class QCheckBox;
 class QComboBox;
-class Q3GroupBox;
+class QGroupBox;
 class QLabel;
 class QSpinBox;
 class K3bAudioDoc;
@@ -36,45 +35,45 @@ class QShowEvent;
 
 
 /**
-  *@author Sebastian Trueg
-  */
+ *@author Sebastian Trueg
+ */
 class K3bAudioBurnDialog : public K3bProjectBurnDialog  
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bAudioBurnDialog(K3bAudioDoc* doc, QWidget *parent=0 );
-  ~K3bAudioBurnDialog();
+public:
+    K3bAudioBurnDialog(K3bAudioDoc* doc, QWidget *parent=0 );
+    ~K3bAudioBurnDialog();
    
- protected:
-  void saveSettings();
-  void readSettings();
-  void loadK3bDefaults();
-  void loadUserDefaults( const KConfigGroup& );
-  void saveUserDefaults( KConfigGroup& );
-  void showEvent( QShowEvent* );
-  void toggleAll();
+protected:
+    void saveSettings();
+    void readSettings();
+    void loadK3bDefaults();
+    void loadUserDefaults( const KConfigGroup& );
+    void saveUserDefaults( KConfigGroup& );
+    void showEvent( QShowEvent* );
+    void toggleAll();
 
- protected slots:
-  /**
-   * Reimplemented for internal reasons (shut down the audio player)
-   */
-  void slotStartClicked();
-  void slotCacheImageToggled( bool on );
-  void slotNormalizeToggled( bool on );
+protected Q_SLOTS:
+    /**
+     * Reimplemented for internal reasons (shut down the audio player)
+     */
+    void slotStartClicked();
+    void slotCacheImageToggled( bool on );
+    void slotNormalizeToggled( bool on );
 
- private:
-  /**
-   * We need this here to be able to hide/show the group
-   */
-  Q3GroupBox* m_audioRippingGroup;
-  QCheckBox* m_checkHideFirstTrack;
-  QCheckBox* m_checkNormalize;
-  QCheckBox* m_checkAudioRippingIgnoreReadErrors;
-  QSpinBox* m_spinAudioRippingReadRetries;
-  QComboBox* m_comboParanoiaMode;
-  K3bAudioCdTextWidget* m_cdtextWidget;
-  K3bAudioDoc* m_doc;
+private:
+    /**
+     * We need this here to be able to hide/show the group
+     */
+    QGroupBox* m_audioRippingGroup;
+    QCheckBox* m_checkHideFirstTrack;
+    QCheckBox* m_checkNormalize;
+    QCheckBox* m_checkAudioRippingIgnoreReadErrors;
+    QSpinBox* m_spinAudioRippingReadRetries;
+    QComboBox* m_comboParanoiaMode;
+    K3bAudioCdTextWidget* m_cdtextWidget;
+    K3bAudioDoc* m_doc;
 };
 
 #endif

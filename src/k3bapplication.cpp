@@ -16,12 +16,10 @@
 #include "k3bapplication.h"
 #include "k3b.h"
 #include "k3bsplash.h"
-#include "k3baudioserver.h"
 //#include "k3binterface.h"
 //#include "k3bjobinterface.h"
 #include "k3bprojectmanager.h"
 #include "k3bappdevicemanager.h"
-#include "k3bmediacache.h"
 #include "k3bpassivepopup.h"
 #include "k3blsofwrapperdialog.h"
 #include "k3bfirstrun.h"
@@ -41,6 +39,7 @@
 #include <k3bmovixprogram.h>
 #include <k3bview.h>
 #include <k3bjob.h>
+#include <k3bmediacache.h>
 
 #include <ktip.h>
 #include <klocale.h>
@@ -128,15 +127,12 @@ void K3bApplication::init()
 
     m_mainWindow = new K3bMainWindow();
     m_core->m_mainWindow = m_mainWindow;
-    //m_core->interface()->setMainWindow( m_mainWindow );
 
     if( qApp->isSessionRestored() ) {
         // we only have one single mainwindow to restore
         m_mainWindow->restore(1);
     }
     else {
-        setMainWidget( m_mainWindow );
-
         m_mainWindow->show();
 
         emit initializationInfo( i18n("Ready.") );
@@ -300,7 +296,7 @@ bool K3bApplication::processCmdLineArgs()
 
 void K3bApplication::slotShutDown()
 {
-    k3bappcore->mediaCache()->clearDeviceList();
+    k3bcore->mediaCache()->clearDeviceList();
 #warning FIXME: We have no K3bThread::waitUntilFinished anymore!
 //    K3bThread::waitUntilFinished();
 }
@@ -309,8 +305,7 @@ void K3bApplication::slotShutDown()
 
 K3bApplication::Core::Core( QObject* parent )
     : K3bCore( parent ),
-      m_appDeviceManager(0),
-      m_mediaCache(0)
+      m_appDeviceManager(0)
 {
     s_k3bAppCore = this;
     m_themeManager = new K3bThemeManager( this );
@@ -335,14 +330,9 @@ void K3bApplication::Core::initDeviceManager()
         // our very own special device manager
         m_appDeviceManager = new K3bAppDeviceManager( this );
     }
-    if( !m_mediaCache ) {
-        // create the media cache but do not connect it to the device manager
-        // yet to speed up application start. We connect it in init()
-        // once the devicemanager has scanned for devices.
-        m_mediaCache = new K3bMediaCache( this );
-    }
 
-    m_appDeviceManager->setMediaCache( m_mediaCache );
+    // FIXME: move this to libk3b
+    m_appDeviceManager->setMediaCache( mediaCache() );
 }
 
 
@@ -371,8 +361,6 @@ void K3bApplication::Core::init()
     K3b::addVcdimagerPrograms( externalBinManager() );
 
     K3bCore::init();
-
-    mediaCache()->buildDeviceList( deviceManager() );
 
     connect( deviceManager(), SIGNAL(changed(K3bDevice::DeviceManager*)),
              mediaCache(), SLOT(buildDeviceList(K3bDevice::DeviceManager*)) );
@@ -422,7 +410,7 @@ void K3bApplication::Core::internalUnblockDevice( K3bDevice::Device* dev )
 {
     if( mediaCache() ) {
         mediaCache()->unblockDevice( dev, m_deviceBlockMap[dev] );
-        m_deviceBlockMap.erase( dev );
+        m_deviceBlockMap.remove( dev );
     }
 
 #ifdef HAVE_HAL

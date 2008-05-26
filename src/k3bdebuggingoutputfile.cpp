@@ -34,9 +34,9 @@ K3bDebuggingOutputFile::K3bDebuggingOutputFile()
 }
 
 
-bool K3bDebuggingOutputFile::open()
+bool K3bDebuggingOutputFile::open( OpenMode mode )
 {
-    if( !QFile::open( QIODevice::WriteOnly ) )
+    if( !QFile::open( mode|WriteOnly ) )
         return false;
 
     addOutput( "System", "K3b Version: " + k3bcore->version() );
@@ -50,7 +50,6 @@ bool K3bDebuggingOutputFile::open()
                    QString( "%1 (%2, %3) [%5] [%6] [%7]" )
                    .arg( dev->vendor() + " " + dev->description() + " " + dev->version() )
                    .arg( dev->blockDeviceName() )
-                   .arg( dev->genericDevice() )
                    .arg( K3bDevice::deviceTypeString( dev->type() ) )
                    .arg( K3bDevice::mediaTypeString( dev->supportedProfiles() ) )
                    .arg( K3bDevice::writingModeString( dev->writingModes() ) ) );

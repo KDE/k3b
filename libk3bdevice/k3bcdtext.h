@@ -16,187 +16,127 @@
 #ifndef _K3B_CDTEXT_H_
 #define _K3B_CDTEXT_H_
 
-#include <qstring.h>
-#include <q3valuevector.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QString>
+#include <QtCore/QSharedDataPointer>
+
 #include "k3bdevice_export.h"
 
 namespace K3bDevice
 {
-  struct cdtext_pack;
-
-  class TrackCdText
+    class LIBK3BDEVICE_EXPORT TrackCdText
     {
-      friend class Device;
-      
     public:
-      TrackCdText() {
-      }
+        TrackCdText();
+        TrackCdText( const TrackCdText& );
+        ~TrackCdText();
 
-      void clear() {
-	m_title.truncate(0);
-	m_performer.truncate(0);
-	m_songwriter.truncate(0);
-	m_composer.truncate(0);
-	m_arranger.truncate(0);
-	m_message.truncate(0);
-	m_isrc.truncate(0);
-      }
+        TrackCdText& operator=( const TrackCdText& );
 
-      const QString& title() const { return m_title; }
-      const QString& performer() const { return m_performer; }
-      const QString& songwriter() const { return m_songwriter; }
-      const QString& composer() const { return m_composer; }
-      const QString& arranger() const { return m_arranger; }
-      const QString& message() const { return m_message; }
-      const QString& isrc() const { return m_isrc; }
+        void clear();
 
-      // TODO: use the real CD-TEXT charset (a modified ISO8859-1)
-      void setTitle( const QString& s ) { m_title = s; fixup(m_title); }
-      void setPerformer( const QString& s ) { m_performer = s; fixup(m_performer); }
-      void setSongwriter( const QString& s ) { m_songwriter = s; fixup(m_songwriter); }
-      void setComposer( const QString& s ) { m_composer = s; fixup(m_composer); }
-      void setArranger( const QString& s ) { m_arranger = s; fixup(m_arranger); }
-      void setMessage( const QString& s ) { m_message = s; fixup(m_message); }
-      void setIsrc( const QString& s ) { m_isrc = s; fixup(m_isrc); }
+        QString title() const;
+        QString performer() const;
+        QString songwriter() const;
+        QString composer() const;
+        QString arranger() const;
+        QString message() const;
+        QString isrc() const;
 
-      bool isEmpty() const {
-	if( !m_title.isEmpty() )
-	  return false;
-	if( !m_performer.isEmpty() )
-	  return false;
-	if( !m_songwriter.isEmpty() )
-	  return false;
-	if( !m_composer.isEmpty() )
-	  return false;
-	if( !m_arranger.isEmpty() )
-	  return false;
-	if( !m_message.isEmpty() )
-	  return false;
-	if( !m_isrc.isEmpty() )
-	  return false;
+        // TODO: use the real CD-TEXT charset (a modified ISO8859-1)
+        void setTitle( const QString& s );
+        void setPerformer( const QString& s );
+        void setSongwriter( const QString& s );
+        void setComposer( const QString& s );
+        void setArranger( const QString& s );
+        void setMessage( const QString& s );
+        void setIsrc( const QString& s );
 
-	return true;
-      }
+        bool isEmpty() const;
 
-      bool operator==( const TrackCdText& ) const;
-      bool operator!=( const TrackCdText& ) const;
+        bool operator==( const TrackCdText& ) const;
+        bool operator!=( const TrackCdText& ) const;
 
     private:
-      // TODO: remove this (see above)
-      void fixup( QString& s ) { s.replace( '/', "_" ); s.replace( '\"', "_" ); }
+        class Private;
+        QSharedDataPointer<Private> d;
 
-      QString m_title;
-      QString m_performer;
-      QString m_songwriter;
-      QString m_composer;
-      QString m_arranger;
-      QString m_message;
-      QString m_isrc;
-
-      friend class CdText;
+        friend class CdText;
     };
 
-  class LIBK3BDEVICE_EXPORT CdText : public Q3ValueVector<TrackCdText>
+
+    class LIBK3BDEVICE_EXPORT CdText
     {
-      friend class Device;
-
     public:
-      CdText();
-      CdText( const unsigned char* data, int len );
-      CdText( const QByteArray& );
-      CdText( int size );
-      CdText( const CdText& );
+        CdText();
+        CdText( const unsigned char* data, int len );
+        CdText( const QByteArray& );
+        CdText( const CdText& );
+        ~CdText();
 
-      void setRawPackData( const unsigned char*, int );
-      void setRawPackData( const QByteArray& );
+        CdText& operator=( const CdText& );
 
-      QByteArray rawPackData() const;
+        int count() const;
 
-      bool empty() const {
-	if( !m_title.isEmpty() )
-	  return false;
-	if( !m_performer.isEmpty() )
-	  return false;
-	if( !m_songwriter.isEmpty() )
-	  return false;
-	if( !m_composer.isEmpty() )
-	  return false;
-	if( !m_arranger.isEmpty() )
-	  return false;
-	if( !m_message.isEmpty() )
-	  return false;
-	if( !m_discId.isEmpty() )
-	  return false;
-	if( !m_upcEan.isEmpty() )
-	  return false;
-	
-	for( int i = 0; i < count(); ++i )
-	  if( !at(i).isEmpty() )
-	    return false;
+        /**
+         * If i < count() behaviour is undefined.
+         */
+        TrackCdText operator[]( int i ) const;
+        TrackCdText& operator[]( int i );
 
-	return true;
-      }
+        void insert( int index, const TrackCdText& );
 
-      bool isEmpty() const {
-	return empty();
-      }
+        /**
+         * Will create a new empty TrackCdText if i is out of scope.
+         */
+        TrackCdText& track( int i );
 
-      void clear();
+        TrackCdText track( int i ) const;
 
-      QString title() const { return m_title; }
-      QString performer() const { return m_performer; }
-      QString songwriter() const { return m_songwriter; }
-      QString composer() const { return m_composer; }
-      QString arranger() const { return m_arranger; }
-      QString message() const { return m_message; }
-      QString discId() const { return m_discId; }
-      QString upcEan() const { return m_upcEan; }
+        void setRawPackData( const unsigned char*, int );
+        void setRawPackData( const QByteArray& );
 
-      // TODO: use the real CD-TEXT charset (a modified ISO8859-1)
-      void setTitle( const QString& s ) { m_title = s; fixup(m_title); }
-      void setPerformer( const QString& s ) { m_performer = s; fixup(m_performer); }
-      void setSongwriter( const QString& s ) { m_songwriter = s; fixup(m_songwriter); }
-      void setComposer( const QString& s ) { m_composer = s; fixup(m_composer); }
-      void setArranger( const QString& s ) { m_arranger = s; fixup(m_arranger); }
-      void setMessage( const QString& s ) { m_message = s; fixup(m_message); }
-      void setDiscId( const QString& s ) { m_discId = s; fixup(m_discId); }
-      void setUpcEan( const QString& s ) { m_upcEan = s; fixup(m_upcEan); }
+        QByteArray rawPackData() const;
 
-      void debug() const;
+        bool empty() const;
+        bool isEmpty() const;
 
-      /**
-       * Returns false if found a crc error in the raw cdtext block or it has a
-       * wrong length.
-       */
-      static bool checkCrc( const unsigned char*, int );
-      static bool checkCrc( const QByteArray& );
+        void clear();
 
-      bool operator==( const CdText& ) const;
-      bool operator!=( const CdText& ) const;
+        QString title() const;
+        QString performer() const;
+        QString songwriter() const;
+        QString composer() const;
+        QString arranger() const;
+        QString message() const;
+        QString discId() const;
+        QString upcEan() const;
+
+        // TODO: use the real CD-TEXT charset (a modified ISO8859-1)
+        void setTitle( const QString& s );
+        void setPerformer( const QString& s );
+        void setSongwriter( const QString& s );
+        void setComposer( const QString& s );
+        void setArranger( const QString& s );
+        void setMessage( const QString& s );
+        void setDiscId( const QString& s );
+        void setUpcEan( const QString& s );
+
+        void debug() const;
+
+        /**
+         * Returns false if found a crc error in the raw cdtext block or it has a
+         * wrong length.
+         */
+        static bool checkCrc( const unsigned char*, int );
+        static bool checkCrc( const QByteArray& );
+
+        bool operator==( const CdText& ) const;
+        bool operator!=( const CdText& ) const;
 	
     private:
-      // TODO: remove this (see above)
-      void fixup( QString& s ) { s.replace( '/', "_" ); s.replace( '\"', "_" ); }
-
-      QString textForPackType( int packType, int track ) const;
-      int textLengthForPackType( int packType ) const;
-      QByteArray createPackData( int packType, int& ) const;
-      void savePack( cdtext_pack* pack, QByteArray& data, int& dataFill ) const;
-      void appendByteArray( QByteArray& a, const QByteArray& b ) const;
-
-      QString m_title;
-      QString m_performer;
-      QString m_songwriter;
-      QString m_composer;
-      QString m_arranger;
-      QString m_message;
-      QString m_discId;
-      QString m_upcEan;
+        class Private;
+        QSharedDataPointer<Private> d;
     };
-
-  Q3CString encodeCdText( const QString& s, bool* illegalChars = 0 );
 }
 
 #endif

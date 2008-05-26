@@ -38,11 +38,11 @@ class K3bMovixJob : public K3bBurnJob
   QString jobDescription() const;
   QString jobDetails() const;
 		
- public slots:
+ public Q_SLOTS:
   void start();
   void cancel();
 
- private slots:
+ private Q_SLOTS:
   void slotDataJobFinished( bool );
 
  private:

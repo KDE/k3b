@@ -38,7 +38,7 @@ class K3bMovixOptionsWidget : public base_K3bMovixOptionsWidget
   K3bMovixOptionsWidget( QWidget* parent = 0 );
   ~K3bMovixOptionsWidget();
 
- public slots:
+ public Q_SLOTS:
   void init( const K3bMovixBin* );
   void readSettings( K3bMovixDoc* );
   void saveSettings( K3bMovixDoc* );

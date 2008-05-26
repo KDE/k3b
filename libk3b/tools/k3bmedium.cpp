@@ -16,6 +16,9 @@
 #include <config-k3b.h>
 
 #include "k3bmedium.h"
+#include "k3bmedium_p.h"
+
+#include "k3bcddb.h"
 
 #include <k3bdeviceglobals.h>
 #include <k3bglobals.h>
@@ -29,31 +32,10 @@
 #include <QtCore/QList>
 
 #include <libkcddb/cdinfo.h>
-#include <libkcddb/client.h>
-
-
-/**
- * Internal class used by K3bMedium
- */
-class K3bMedium::Data : public QSharedData
-{
-public:
-    Data();
-
-    K3bDevice::Device* device;
-    K3bDevice::DiskInfo diskInfo;
-    K3bDevice::Toc toc;
-    K3bDevice::CdText cdText;
-    QList<int> writingSpeeds;
-    K3bIso9660SimplePrimaryDescriptor isoDesc;
-    int content;
-
-    KCDDB::CDInfo cddbInfo;
-};
 
 
 
-K3bMedium::Data::Data()
+K3bMediumPrivate::K3bMediumPrivate()
     : device( 0 ),
       content( K3bMedium::CONTENT_NONE )
 {
@@ -62,7 +44,7 @@ K3bMedium::Data::Data()
 
 K3bMedium::K3bMedium()
 {
-    d = new Data;
+    d = new K3bMediumPrivate;
 }
 
 
@@ -75,7 +57,7 @@ K3bMedium::K3bMedium( const K3bMedium& other )
 
 K3bMedium::K3bMedium( K3bDevice::Device* dev )
 {
-    d = new Data;
+    d = new K3bMediumPrivate;
     d->device = dev;
 }
 
@@ -106,31 +88,31 @@ K3bDevice::Device* K3bMedium::device() const
 }
 
 
-const K3bDevice::DiskInfo& K3bMedium::diskInfo() const
+K3bDevice::DiskInfo K3bMedium::diskInfo() const
 {
     return d->diskInfo;
 }
 
 
-const K3bDevice::Toc& K3bMedium::toc() const
+K3bDevice::Toc K3bMedium::toc() const
 {
     return d->toc;
 }
 
 
-const K3bDevice::CdText& K3bMedium::cdText() const
+K3bDevice::CdText K3bMedium::cdText() const
 {
     return d->cdText;
 }
 
 
-const KCDDB::CDInfo& K3bMedium::cddbInfo() const
+KCDDB::CDInfo K3bMedium::cddbInfo() const
 {
     return d->cddbInfo;
 }
 
 
-const QList<int>& K3bMedium::writingSpeeds() const
+QList<int> K3bMedium::writingSpeeds() const
 {
     return d->writingSpeeds;
 }
@@ -184,17 +166,6 @@ void K3bMedium::update()
 
                 // update CD-Text
                 d->cdText = d->device->readCdText();
-
-                // Update Cddb information
-//                 KCDDB::Client cddbClient;
-//                 cddbClient.setBlockingMode( true );
-//                 KCDDB::TrackOffsetList trackOffsets;
-//                 for ( int i = 0; i < d->toc.count(); ++i ) {
-//                     trackOffsets.append( d->toc[i].firstSector().lba() );
-//                 }
-//                 if ( cddbClient.lookup( trackOffsets ) == KCDDB::Success ) {
-//                     d->cddbInfo = cddbClient.lookupResponse().first();
-//                 }
             }
         }
 
@@ -210,7 +181,7 @@ void K3bMedium::update()
 void K3bMedium::analyseContent()
 {
     // set basic content types
-    switch( toc().contentType() ) {
+    switch( d->toc.contentType() ) {
     case K3bDevice::AUDIO:
         d->content = CONTENT_AUDIO;
         break;
@@ -234,16 +205,16 @@ void K3bMedium::analyseContent()
         if( diskInfo().numSessions() > 1 ) {
             // We use the last data track
             // this way we get the latest session on a ms cd
-            K3bDevice::Toc::const_iterator it = toc().end();
+            K3bDevice::Toc::const_iterator it = d->toc.end();
             --it; // this is valid since there is at least one data track
-            while( it != toc().begin() && (*it).type() != K3bDevice::Track::DATA )
+            while( it != d->toc.begin() && (*it).type() != K3bDevice::Track::DATA )
                 --it;
             startSec = (*it).firstSector().lba();
         }
         else {
             // use first data track
-            K3bDevice::Toc::const_iterator it = toc().begin();
-            while( it != toc().end() && (*it).type() != K3bDevice::Track::DATA )
+            K3bDevice::Toc::const_iterator it = d->toc.begin();
+            while( it != d->toc.end() && (*it).type() != K3bDevice::Track::DATA )
                 ++it;
             startSec = (*it).firstSector().lba();
         }
@@ -317,8 +288,8 @@ QString K3bMedium::shortString( bool useContent ) const
     else {
         if( useContent ) {
             // AUDIO + MIXED
-            if( toc().contentType() == K3bDevice::AUDIO ||
-                toc().contentType() == K3bDevice::MIXED ) {
+            if( d->toc.contentType() == K3bDevice::AUDIO ||
+                d->toc.contentType() == K3bDevice::MIXED ) {
                 QString title = cdText().title();
                 QString performer = cdText().performer();
                 if ( title.isEmpty() ) {
@@ -331,9 +302,9 @@ QString K3bMedium::shortString( bool useContent ) const
                     return QString("%1 - %2 (%3)")
                         .arg( performer )
                         .arg( title )
-                        .arg( toc().contentType() == K3bDevice::AUDIO ? i18n("Audio CD") : i18n("Mixed CD") );
+                        .arg( d->toc.contentType() == K3bDevice::AUDIO ? i18n("Audio CD") : i18n("Mixed CD") );
                 }
-                else if( toc().contentType() == K3bDevice::AUDIO ) {
+                else if( d->toc.contentType() == K3bDevice::AUDIO ) {
                     return i18n("Audio CD");
                 }
                 else {
@@ -391,7 +362,7 @@ QString K3bMedium::longString() const
 
     if( diskInfo().diskState() == K3bDevice::STATE_COMPLETE ||
         diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE  ) {
-        s += "<br>" + i18np("%1 in %2 track", "%1 in %2 tracks", toc().count(),
+        s += "<br>" + i18np("%1 in %2 track", "%1 in %2 tracks", d->toc.count(),
                             KIO::convertSize(diskInfo().size().mode1Bytes() ) );
         if( diskInfo().numSessions() > 1 )
             s += i18np(" and %1 session", " and %1 sessions", diskInfo().numSessions() );
@@ -410,7 +381,7 @@ QString K3bMedium::longString() const
 }
 
 
-const QString& K3bMedium::volumeId() const
+QString K3bMedium::volumeId() const
 {
     return iso9660Descriptor().volumeId;
 }
@@ -482,13 +453,11 @@ bool K3bMedium::operator==( const K3bMedium& other ) const
     if( this->d == other.d )
         return true;
 
-    // We do not compare CDDB info here. Mainly becasue KCDDB::CDInfo does
-    // not have operators for that. Secondly it does not really define the
-    // medium as it can differ based on the KCDDB settings.
     return( this->device() == other.device() &&
             this->diskInfo() == other.diskInfo() &&
             this->toc() == other.toc() &&
             this->cdText() == other.cdText() &&
+            d->cddbInfo == other.d->cddbInfo &&
             this->content() == other.content() &&
             this->iso9660Descriptor() == other.iso9660Descriptor() );
 }
@@ -499,13 +468,26 @@ bool K3bMedium::operator!=( const K3bMedium& other ) const
     if( this->d == other.d )
         return false;
 
-    // We do not compare CDDB info here. Mainly becasue KCDDB::CDInfo does
-    // not have operators for that. Secondly it does not really define the
-    // medium as it can differ based on the KCDDB settings.
     return( this->device() != other.device() ||
             this->diskInfo() != other.diskInfo() ||
             this->toc() != other.toc() ||
             this->cdText() != other.cdText() ||
+            d->cddbInfo != other.d->cddbInfo ||
             this->content() != other.content() ||
             this->iso9660Descriptor() != other.iso9660Descriptor() );
+}
+
+
+bool K3bMedium::sameMedium( const K3bMedium& other ) const
+{
+    if( this->d == other.d )
+        return true;
+
+    // here we do ignore cddb info
+    return( this->device() == other.device() &&
+            this->diskInfo() == other.diskInfo() &&
+            this->toc() == other.toc() &&
+            this->cdText() == other.cdText() &&
+            this->content() == other.content() &&
+            this->iso9660Descriptor() == other.iso9660Descriptor() );
 }

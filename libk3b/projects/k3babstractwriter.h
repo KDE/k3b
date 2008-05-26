@@ -44,7 +44,7 @@ class K3bAbstractWriter : public K3bJob
   virtual int fd() const { return -1; }
   virtual bool closeFd() { return false; }
 
- public slots:
+ public Q_SLOTS:
   /**
    * If the burnDevice is set this will try to unlock the drive and
    * eject the disk if K3b is configured to do so.
@@ -65,7 +65,7 @@ class K3bAbstractWriter : public K3bJob
    */
   void setSourceUnreadable( bool b = true ) { m_sourceUnreadable = b; }
 
- signals:
+  Q_SIGNALS:
   void buffer( int );
   void deviceBuffer( int );
   void writeSpeed( int, int );
@@ -76,7 +76,7 @@ class K3bAbstractWriter : public K3bJob
 
   bool wasSourceUnreadable() const { return m_sourceUnreadable; }
 
- protected slots:
+ protected Q_SLOTS:
   void slotUnblockWhileCancellationFinished( bool success );
   void slotEjectWhileCancellationFinished( bool success );
 

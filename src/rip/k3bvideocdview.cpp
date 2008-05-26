@@ -1,9 +1,10 @@
 /*
 *
 * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
 *
 * This file is part of the K3b project.
-* Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+* Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -33,9 +34,8 @@
 #include <qlayout.h>
 #include <qcursor.h>
 #include <qapplication.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
+#include <QHBoxLayout>
+#include <QGridLayout>
 
 // k3b includes
 #include "k3bvideocdview.h"
@@ -51,106 +51,107 @@
 
 class K3bVideoCdView::VideoTrackViewItem : public Q3ListViewItem
 {
-    public:
-        VideoTrackViewItem( Q3ListViewItem* parent, Q3ListViewItem* after )
-                : Q3ListViewItem( parent, after )
-        {
-            setSelectable( false );
+public:
+    VideoTrackViewItem( Q3ListViewItem* parent, Q3ListViewItem* after )
+        : Q3ListViewItem( parent, after )
+    {
+        setSelectable( false );
+    }
+
+    VideoTrackViewItem( Q3ListView* parent, Q3ListViewItem* after )
+        : Q3ListViewItem( parent, after )
+    {
+        setSelectable( false );
+    }
+
+    VideoTrackViewItem( Q3ListViewItem* parent,
+                        const QString& name,
+                        const QString& id,
+                        int _trackNumber,
+                        const K3b::Msf& length )
+        : Q3ListViewItem( parent )
+    {
+        Q_UNUSED( name );
+        setText( 0, QString( "%1. %2" ).arg( _trackNumber ).arg( id ) );
+        setText( 1,"" );
+        if ( length > 0 ) {
+            setText( 2, length.toString() );
+            setText( 3, KIO::convertSize( length.mode2Form2Bytes() ) );
         }
 
-        VideoTrackViewItem( Q3ListView* parent, Q3ListViewItem* after )
-                : Q3ListViewItem( parent, after )
-        {
-            setSelectable( false );
-        }
-        
-        VideoTrackViewItem( Q3ListViewItem* parent,
-                            const QString& name,
-                            const QString& id,
-                            int _trackNumber,
-                            const K3b::Msf& length )
-                : Q3ListViewItem( parent )
-        {
-            setText( 0, QString( "%1. %2" ).arg( _trackNumber ).arg( id ) );
-            setText( 1,"" );
-            if ( length > 0 ) {
-                setText( 2, length.toString() );
-                setText( 3, KIO::convertSize( length.mode2Form2Bytes() ) );
-            }
+        trackNumber = _trackNumber;
+        setSelectable( false );
+    }
 
-            trackNumber = _trackNumber;
-            setSelectable( false );
-        }
+    int trackNumber;
 
-        int trackNumber;
-
-        void updateData( const K3bVideoCdInfoResultEntry& resultEntry )
-        {
-            setText( 0, QString( "%1. %2" ).arg( trackNumber ).arg( resultEntry.id ) );
-            setText( 1, resultEntry.name );
-        }
+    void updateData( const K3bVideoCdInfoResultEntry& resultEntry )
+    {
+        setText( 0, QString( "%1. %2" ).arg( trackNumber ).arg( resultEntry.id ) );
+        setText( 1, resultEntry.name );
+    }
 
 };
 
 class K3bVideoCdView::VideoTrackViewCheckItem : public Q3CheckListItem
 {
-    public:
-        VideoTrackViewCheckItem( Q3ListViewItem* parent,
-                                 const QString& desc )
-                : Q3CheckListItem( parent,
-                                  QString(),
-                                  Q3CheckListItem::CheckBox )
-        {
-            setText( 0, desc );
+public:
+    VideoTrackViewCheckItem( Q3ListViewItem* parent,
+                             const QString& desc )
+        : Q3CheckListItem( parent,
+                           QString(),
+                           Q3CheckListItem::CheckBox )
+    {
+        setText( 0, desc );
 
-            setOn( true );
-        }
+        setOn( true );
+    }
 
-        VideoTrackViewCheckItem( Q3ListView* parent,
-                                 const QString& desc )
-                : Q3CheckListItem( parent,
-                                  QString(),
-                                  Q3CheckListItem::CheckBox )
-        {
-            setText( 0, desc );
+    VideoTrackViewCheckItem( Q3ListView* parent,
+                             const QString& desc )
+        : Q3CheckListItem( parent,
+                           QString(),
+                           Q3CheckListItem::CheckBox )
+    {
+        setText( 0, desc );
 
-            setOn( true );
-        }
+        setOn( true );
+    }
 
-        VideoTrackViewCheckItem( VideoTrackViewCheckItem* parent,
-                                 const QString& desc )
-                : Q3CheckListItem( parent,
-                                  QString(),
-                                  Q3CheckListItem::CheckBox )
-        {
-            setText( 0, desc );
+    VideoTrackViewCheckItem( VideoTrackViewCheckItem* parent,
+                             const QString& desc )
+        : Q3CheckListItem( parent,
+                           QString(),
+                           Q3CheckListItem::CheckBox )
+    {
+        setText( 0, desc );
 
-            setOn( true );
-        }
+        setOn( true );
+    }
 
-        void updateData( const K3b::Msf& length, bool form2 = false )
-        {
-            setText( 2, length.toString() );
-            if ( form2 )
-                setText( 3, KIO::convertSize( length.mode2Form2Bytes() ) );
-            else
-                setText( 3, KIO::convertSize( length.mode2Form1Bytes() ) );
-        }
+    void updateData( const K3b::Msf& length, bool form2 = false )
+    {
+        setText( 2, length.toString() );
+        if ( form2 )
+            setText( 3, KIO::convertSize( length.mode2Form2Bytes() ) );
+        else
+            setText( 3, KIO::convertSize( length.mode2Form1Bytes() ) );
+    }
 
 };
 
 K3bVideoCdView::K3bVideoCdView( QWidget* parent )
-        : K3bMediaContentsView( true,
-				K3bMedium::CONTENT_VIDEO_CD,
-				K3bDevice::MEDIA_CD_ALL,
-				K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_COMPLETE,
-				parent )
+    : K3bMediaContentsView( true,
+                            K3bMedium::CONTENT_VIDEO_CD,
+                            K3bDevice::MEDIA_CD_ALL,
+                            K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_COMPLETE,
+                            parent )
 {
-    Q3GridLayout * mainGrid = new Q3GridLayout( mainWidget() );
+    QGridLayout * mainGrid = new QGridLayout( mainWidget() );
 
     // toolbox
     // ----------------------------------------------------------------------------------
-    Q3HBoxLayout* toolBoxLayout = new Q3HBoxLayout( 0, 0, 0, "toolBoxLayout" );
+    QHBoxLayout* toolBoxLayout = new QHBoxLayout;
     m_toolBox = new KToolBar( mainWidget() );
     toolBoxLayout->addWidget( m_toolBox );
     QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
@@ -194,7 +195,7 @@ K3bVideoCdView::K3bVideoCdView( QWidget* parent )
 
     m_videocdinfo = 0L;
     m_videooptions = new K3bVideoCdRippingOptions();
-    
+
     m_contentList.clear();
 }
 
@@ -225,11 +226,11 @@ void K3bVideoCdView::reloadMedium()
     int index = 0;
     m_videocddatasize = 0;
     m_videocdmpegsize = 0;
-            
+
     K3b::Msf sequenceSize;
 
     for ( K3bDevice::Toc::const_iterator it = m_toc.begin();
-            it != m_toc.end(); ++it ) {
+          it != m_toc.end(); ++it ) {
 
         if ( index > 0 ) {
             K3b::Msf length( ( *it ).length() );
@@ -249,10 +250,10 @@ void K3bVideoCdView::reloadMedium()
 
     ( ( VideoTrackViewCheckItem* ) m_contentList[ 0 ] ) ->updateData( sequenceSize, true );
 
-    m_videooptions ->setVideoCdSource( device()->devicename() );
-    
+    m_videooptions ->setVideoCdSource( device()->blockDeviceName() );
+
     m_videocdinfo = new K3bVideoCdInfo( this );
-    m_videocdinfo->info( device()->devicename() );
+    m_videocdinfo->info( device()->blockDeviceName() );
 
     connect( m_videocdinfo, SIGNAL( infoFinished( bool ) ),
              this, SLOT( slotVideoCdInfoFinished( bool ) ) );
@@ -331,14 +332,14 @@ void K3bVideoCdView::initActions()
     m_actionCollection->addAction("deselect_all",actionDeselectAll);
     actionDeselectAll->setText( i18n( "Dese&lect All" ) );
     KAction* actionSelect = K3b::createAction(this, i18n( "Select Track" ), 0, 0, this,
-                                         SLOT( slotSelect() ), actionCollection(),
-                                         "select_track" );
+                                              SLOT( slotSelect() ), actionCollection(),
+                                              "select_track" );
     KAction* actionDeselect = K3b::createAction(this, i18n( "Deselect Track" ), 0, 0, this,
-                                           SLOT( slotDeselect() ), actionCollection(),
-                                           "deselect_track" );
+                                                SLOT( slotDeselect() ), actionCollection(),
+                                                "deselect_track" );
 
     KAction* actionStartRip = K3b::createAction(this, i18n( "Start Ripping" ), "system-run", 0, this,
-                                           SLOT( startRip() ), actionCollection(), "start_rip" );
+                                                SLOT( startRip() ), actionCollection(), "start_rip" );
 
     // TODO: set the actions tooltips and whatsthis infos
 
@@ -371,12 +372,12 @@ void K3bVideoCdView::slotTrackSelectionChanged( Q3ListViewItem* item )
 void K3bVideoCdView::slotStateChanged( Q3ListViewItem* item )
 {
     /* > QT 3.1
-    if ( !item == 0 && item ->isSelectable() ) {
-        if ( ( ( VideoTrackViewCheckItem* ) item) ->state() == QCheckListItem::On)
-            slotSelect();
-        else if ( ( ( VideoTrackViewCheckItem* ) item) ->state() == QCheckListItem::Off)
-            slotDeselect();
-    }
+       if ( !item == 0 && item ->isSelectable() ) {
+       if ( ( ( VideoTrackViewCheckItem* ) item) ->state() == QCheckListItem::On)
+       slotSelect();
+       else if ( ( ( VideoTrackViewCheckItem* ) item) ->state() == QCheckListItem::Off)
+       slotDeselect();
+       }
     */
     if ( !item == 0 && item ->isSelectable() ) {
         if ( ( ( VideoTrackViewCheckItem* ) item) ->isOn() )
@@ -469,7 +470,7 @@ void K3bVideoCdView::slotDeselect()
 
 void K3bVideoCdView::enableInteraction( bool b )
 {
-  actionCollection()->action( "start_rip" )->setEnabled( b );
+    actionCollection()->action( "start_rip" )->setEnabled( b );
 }
 
 void K3bVideoCdView::buildTree( Q3ListViewItem *parentItem, const QDomElement &parentElement, const QString& pname )
@@ -487,11 +488,11 @@ void K3bVideoCdView::buildTree( Q3ListViewItem *parentItem, const QDomElement &p
             QString txt = node.firstChild().toElement().text();
             thisItem->setText( 0, txt);
             if ( node.nodeName() == "folder" ) {
-		buildTree( thisItem, node.toElement(), pname + "_" + txt.toLower() );
+                buildTree( thisItem, node.toElement(), pname + "_" + txt.toLower() );
             }
             else {
                 thisItem->setText( 1, pname + "_" + txt.toLower() );
-		buildTree( thisItem, node.toElement(), pname );
+                buildTree( thisItem, node.toElement(), pname );
             }
         } else if ( node.isElement() && node.nodeName() == "segment-item" || node.nodeName() == "sequence-item" ) {
             if ( parentItem == 0 )

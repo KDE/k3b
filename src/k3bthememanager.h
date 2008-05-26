@@ -1,10 +1,9 @@
 /* 
  *
- * $Id$
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,19 +58,19 @@ public:
         BG_SCALE         /**< Scale the pixmap to fill the welcome widget. */
     };
 
-    const QPixmap& pixmap( PixmapType ) const;
+    QPixmap pixmap( PixmapType ) const;
 
     /**
      * \deprecated use pixmap( PixmapType )
      */
-    const QPixmap& pixmap( const QString& name ) const;
+    QPixmap pixmap( const QString& name ) const;
 
     BackgroundMode backgroundMode() const;
 
-    const QString& name() const { return m_name; }
-    const QString& author() const { return m_author; }
-    const QString& comment() const { return m_comment; }
-    const QString& version() const { return m_version; }
+    QString name() const { return m_name; }
+    QString author() const { return m_author; }
+    QString comment() const { return m_comment; }
+    QString version() const { return m_version; }
 
     /**
      * Global themes are installed for all users and cannot be deleted.
@@ -83,7 +82,9 @@ public:
      */
     bool local() const { return m_local; }
 
-    const QString& path() const { return m_path; }
+    QString path() const { return m_path; }
+
+    QPalette palette() const;
 
     static QString filenameForPixmapType( PixmapType );
 
@@ -114,7 +115,7 @@ public:
     K3bThemeManager( QObject* parent = 0 );
     ~K3bThemeManager();
 
-    const Q3ValueList<K3bTheme*>& themes() const;
+    const QList<K3bTheme*>& themes() const;
 
     /**
      * This is never null. If no theme could be found an empty dummy theme
@@ -123,11 +124,11 @@ public:
     K3bTheme* currentTheme() const;
     K3bTheme* findTheme( const QString& ) const;
 
-signals:
+ Q_SIGNALS:
     void themeChanged();
     void themeChanged( K3bTheme* );
 
-public slots:
+public Q_SLOTS:
     void readConfig( const KConfigGroup& );
     void saveConfig( KConfigGroup );
     void setCurrentTheme( const QString& );

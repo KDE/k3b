@@ -34,7 +34,7 @@
 #include <qcheckbox.h>
 #include <qlayout.h>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -161,10 +161,10 @@ void K3bSoxEncoder::slotSoxFinished( K3Process* p )
 }
 
 
-bool K3bSoxEncoder::openFile( const QString& ext, const QString& filename, const K3b::Msf& )
+bool K3bSoxEncoder::openFile( const QString& ext, const QString& filename, const K3b::Msf& length )
 {
     d->fileName = filename;
-    return initEncoderInternal( ext );
+    return initEncoderInternal( ext, length );
 }
 
 
@@ -174,7 +174,7 @@ void K3bSoxEncoder::closeFile()
 }
 
 
-bool K3bSoxEncoder::initEncoderInternal( const QString& extension )
+bool K3bSoxEncoder::initEncoderInternal( const QString& extension, const K3b::Msf& /*length*/ )
 {
     const K3bExternalBin* soxBin = k3bcore->externalBinManager()->binObject( "sox" );
     if( soxBin ) {
@@ -378,7 +378,7 @@ K3bSoxEncoderSettingsWidget::K3bSoxEncoderSettingsWidget( QWidget* parent )
     w = new base_K3bSoxEncoderConfigWidget( this );
     w->m_editSamplerate->setValidator( new QIntValidator( w->m_editSamplerate ) );
 
-    Q3HBoxLayout* lay = new Q3HBoxLayout( this );
+    QHBoxLayout* lay = new QHBoxLayout( this );
     lay->setMargin( 0 );
 
     lay->addWidget( w );

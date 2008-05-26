@@ -18,8 +18,9 @@ set(k3bdevice_LIB_SRCS
 kde4_add_library(k3bdevice SHARED ${k3bdevice_LIB_SRCS})
 
 target_link_libraries(k3bdevice
-  ${KDE4_KIO_LIBS}
-  ${QT_QT3SUPPORT_LIBRARY})
+  ${KDE4_KDECORE_LIBS}
+  ${KDE4_SOLID_LIBS}
+)
 
 set_target_properties(k3bdevice PROPERTIES VERSION 6.0.0 SOVERSION 6 )
 install(TARGETS k3bdevice ${INSTALL_TARGETS_DEFAULT_ARGS} )

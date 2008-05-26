@@ -1,10 +1,9 @@
 /*
  *
- * $Id$
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +55,7 @@ QColor K3bTheme::foregroundColor() const
 }
 
 
-const QPixmap& K3bTheme::pixmap( const QString& name ) const
+QPixmap K3bTheme::pixmap( const QString& name ) const
 {
     QMap<QString, QPixmap>::const_iterator it = m_pixmapMap.find( name );
     if( it != m_pixmapMap.end() )
@@ -72,9 +71,18 @@ const QPixmap& K3bTheme::pixmap( const QString& name ) const
 }
 
 
-const QPixmap& K3bTheme::pixmap( K3bTheme::PixmapType t ) const
+QPixmap K3bTheme::pixmap( K3bTheme::PixmapType t ) const
 {
     return pixmap( filenameForPixmapType( t ) );
+}
+
+
+QPalette K3bTheme::palette() const
+{
+    QPalette pal;
+    pal.setColor( QPalette::Window, backgroundColor() );
+    pal.setColor( QPalette::WindowText, foregroundColor() );
+    return pal;
 }
 
 
@@ -158,7 +166,7 @@ public:
         : currentTheme(&emptyTheme) {
     }
 
-    Q3ValueList<K3bTheme*> themes;
+    QList<K3bTheme*> themes;
     K3bTheme* currentTheme;
     QString currentThemeName;
 
@@ -181,7 +189,7 @@ K3bThemeManager::~K3bThemeManager()
 }
 
 
-const Q3ValueList<K3bTheme*>& K3bThemeManager::themes() const
+const QList<K3bTheme*>& K3bThemeManager::themes() const
 {
     return d->themes;
 }
@@ -241,7 +249,7 @@ void K3bThemeManager::setCurrentTheme( K3bTheme* theme )
 
 K3bTheme* K3bThemeManager::findTheme( const QString& name ) const
 {
-    for( Q3ValueList<K3bTheme*>::iterator it = d->themes.begin(); it != d->themes.end(); ++it )
+    for( QList<K3bTheme*>::iterator it = d->themes.begin(); it != d->themes.end(); ++it )
         if( (*it)->name() == name )
             return *it;
     return 0;
@@ -251,7 +259,7 @@ K3bTheme* K3bThemeManager::findTheme( const QString& name ) const
 void K3bThemeManager::loadThemes()
 {
     // first we cleanup the loaded themes
-    for( Q3ValueList<K3bTheme*>::iterator it = d->themes.begin(); it != d->themes.end(); ++it )
+    for( QList<K3bTheme*>::iterator it = d->themes.begin(); it != d->themes.end(); ++it )
         delete *it;
     d->themes.clear();
 
@@ -263,9 +271,7 @@ void K3bThemeManager::loadThemes()
     QStringList themeNames;
     for( QStringList::const_iterator dirIt = dirs.begin(); dirIt != dirs.end(); ++dirIt ) {
         QDir dir( *dirIt );
-        QStringList entries = dir.entryList( QDir::Dirs );
-        entries.remove( "." );
-        entries.remove( ".." );
+        QStringList entries = dir.entryList( QDir::Dirs|QDir::NoDotAndDotDot );
         // every theme dir needs to contain a k3b.theme file
         for( QStringList::const_iterator entryIt = entries.begin(); entryIt != entries.end(); ++entryIt ) {
             QString themeDir = *dirIt + *entryIt + "/";

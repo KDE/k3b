@@ -36,7 +36,7 @@ class K3bVideoDvdImager : public K3bIsoImager
   K3bVideoDvdImager( K3bVideoDvdDoc* doc, K3bJobHandler*, QObject* parent = 0 );
   virtual ~K3bVideoDvdImager();
 
- public slots:
+ public Q_SLOTS:
   virtual void start();
   virtual void init();
   virtual void calculateSize();
@@ -47,7 +47,7 @@ class K3bVideoDvdImager : public K3bIsoImager
   void cleanup();
   int writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
 
- protected slots:
+ protected Q_SLOTS:
   virtual void slotReceivedStderr( const QString& );
 
  private:

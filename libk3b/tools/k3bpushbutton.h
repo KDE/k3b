@@ -66,7 +66,7 @@ class LIBK3B_EXPORT K3bPushButton : public KPushButton
  protected:
   virtual bool eventFilter( QObject*, QEvent* );
 
- private slots:
+ private Q_SLOTS:
   void slotDelayedPopup();
 
  private:

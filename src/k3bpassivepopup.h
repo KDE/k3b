@@ -51,7 +51,7 @@ class K3bPassivePopup : public QFrame
 			 bool countdown = true,
 			 bool button = true );
 
- public slots:
+ public Q_SLOTS:
   void setShowCloseButton( bool b );
   void setShowCountdown( bool b );
   void setMessage( const QString& m );
@@ -59,7 +59,7 @@ class K3bPassivePopup : public QFrame
   void setTimeout( int msecs );
   void setMessageType( MessageType m );
 
- private slots:
+ private Q_SLOTS:
   void slotShown();
   void slotHidden();
   void slotClose();

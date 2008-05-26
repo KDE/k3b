@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2004-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,21 +29,21 @@
 
 class K3bCueFileWriter
 {
- public:
-  K3bCueFileWriter();
+public:
+    K3bCueFileWriter();
 
-  bool save( QTextStream& );
-  bool save( const QString& filename );
+    bool save( QTextStream& );
+    bool save( const QString& filename );
 
-  void setData( const K3bDevice::Toc& toc ) { m_toc = toc; }
-  void setCdText( const K3bDevice::CdText& text ) { m_cdText = text; }
-  void setImage( const QString& name, const QString& type ) { m_image = name; m_dataType = type; }
+    void setData( const K3bDevice::Toc& toc ) { m_toc = toc; }
+    void setCdText( const K3bDevice::CdText& text ) { m_cdText = text; }
+    void setImage( const QString& name, const QString& type ) { m_image = name; m_dataType = type; }
 
- private:
-  K3bDevice::Toc m_toc;
-  K3bDevice::CdText m_cdText;
-  QString m_image;
-  QString m_dataType;
+private:
+    K3bDevice::Toc m_toc;
+    K3bDevice::CdText m_cdText;
+    QString m_image;
+    QString m_dataType;
 };
 
 #endif

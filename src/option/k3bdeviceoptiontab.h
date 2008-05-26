@@ -35,7 +35,7 @@ Q_OBJECT
   void readDevices();
   void saveDevices();
 
- private slots:
+ private Q_SLOTS:
   void slotRefreshButtonClicked();
 
  private:

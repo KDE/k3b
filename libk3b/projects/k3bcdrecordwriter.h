@@ -46,7 +46,7 @@ class K3bCdrecordWriter : public K3bAbstractWriter
 
   int fd() const;
 
- public slots:
+ public Q_SLOTS:
   void start();
   void cancel();
 
@@ -57,7 +57,7 @@ class K3bCdrecordWriter : public K3bAbstractWriter
 
   void setRawCdText( const QByteArray& a ) { m_rawCdText = a; }
 
- protected slots:
+ protected Q_SLOTS:
   void slotStdLine( const QString& line );
   void slotProcessExited(K3Process*);
   void slotThroughput( int t );

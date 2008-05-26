@@ -21,7 +21,7 @@
 #include <q3valuevector.h>
 #include <qpair.h>
 
-#include <k3bcddbresult.h>
+#include <libkcddb/cdinfo.h>
 
 
 class K3bAudioEncoder;
@@ -42,7 +42,7 @@ public:
 
     void setSingleFile( bool b ) { m_singleFile = b; }
 
-    void setCddbEntry( const K3bCddbResultEntry& e ) { m_cddbEntry = e; }
+    void setCddbEntry( const KCDDB::CDInfo& e ) { m_cddbEntry = e; }
 
     // if 0 (default) wave files are created
     void setEncoder( K3bAudioEncoder* f );
@@ -55,7 +55,7 @@ public:
     /**
      * 1 is the first track
      */
-    void setTracksToRip( const Q3ValueVector<QPair<int, QString> >& t ) { m_tracks = t; }
+    void setTracksToRip( const QVector<QPair<int, QString> >& t ) { m_tracks = t; }
 
     void setWritePlaylist( bool b ) { m_writePlaylist = b; }
     void setPlaylistFilename( const QString& s ) { m_playlistFilename = s; }
@@ -74,7 +74,7 @@ private:
      */
     QString findRelativePath( const QString& absPath, const QString& baseDir );
 
-    K3bCddbResultEntry m_cddbEntry;
+    KCDDB::CDInfo m_cddbEntry;
 
     bool m_singleFile;
     bool m_writePlaylist;
@@ -83,7 +83,7 @@ private:
 
     bool m_writeCueFile;
 
-    Q3ValueVector<QPair<int, QString> > m_tracks;
+    QVector<QPair<int, QString> > m_tracks;
 
     K3bAudioDoc* m_doc;
 

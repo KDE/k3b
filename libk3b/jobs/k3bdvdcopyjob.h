@@ -40,7 +40,7 @@ class LIBK3B_EXPORT K3bDvdCopyJob : public K3bBurnJob
   QString jobDescription() const;
   QString jobDetails() const;
 
- public slots:
+ public Q_SLOTS:
   void start();
   void cancel();
 
@@ -58,7 +58,7 @@ class LIBK3B_EXPORT K3bDvdCopyJob : public K3bBurnJob
   void setReadRetries( int i ) { m_readRetries = i; }
   void setVerifyData( bool b );
 
- private slots:
+ private Q_SLOTS:
   void slotDiskInfoReady( K3bDevice::DeviceHandler* );
   void slotReaderProgress( int );
   void slotReaderProcessedSize( int, int ); 

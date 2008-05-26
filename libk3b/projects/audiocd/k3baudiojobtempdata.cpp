@@ -34,8 +34,8 @@ public:
     : doc(_doc) {
   }
 
-  Q3ValueVector<QString> bufferFiles;
-  Q3ValueVector<QString> infFiles;
+  QVector<QString> bufferFiles;
+  QVector<QString> infFiles;
   QString tocFile;
 
   K3bAudioDoc* doc;

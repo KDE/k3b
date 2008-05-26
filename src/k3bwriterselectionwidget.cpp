@@ -34,7 +34,7 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 #include <qtooltip.h>
 #include <qtoolbutton.h>
 
@@ -123,15 +123,13 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent )
     d->supportedWritingApps = K3b::CDRECORD|K3b::CDRDAO|K3b::GROWISOFS;
     d->lastSetSpeed = -1;
 
-    Q3GroupBox* groupWriter = new Q3GroupBox( this );
+    QGroupBox* groupWriter = new QGroupBox( this );
     groupWriter->setTitle( i18n( "Burn Medium" ) );
-    groupWriter->setColumnLayout(0, Qt::Vertical );
-    groupWriter->layout()->setSpacing( 0 );
 
-    QGridLayout* groupWriterLayout = new QGridLayout( groupWriter->layout() );
+    QGridLayout* groupWriterLayout = new QGridLayout( groupWriter );
     groupWriterLayout->setAlignment( Qt::AlignTop );
     groupWriterLayout->setSpacing( KDialog::spacingHint() );
-    groupWriterLayout->setMargin( 0 );
+    groupWriterLayout->setMargin( KDialog::marginHint() );
 
     QLabel* labelSpeed = new QLabel( groupWriter );
     labelSpeed->setText( i18n( "Speed:" ) );
@@ -148,7 +146,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent )
     groupWriterLayout->addWidget( m_comboSpeed, 0, 2 );
     groupWriterLayout->addWidget( m_writingAppLabel, 0, 3 );
     groupWriterLayout->addWidget( m_comboWritingApp, 0, 4 );
-    groupWriterLayout->setColStretch( 0, 1 );
+    groupWriterLayout->setColumnStretch( 0, 1 );
 
 
     QGridLayout* mainLayout = new QGridLayout( this );
@@ -478,7 +476,7 @@ void K3bWriterSelectionWidget::slotWriterChanged()
     // save last selected writer
     if( K3bDevice::Device* dev = writerDevice() ) {
         KConfigGroup g( k3bcore->config(), "General Options" );
-        g.writeEntry( "current_writer", dev->devicename() );
+        g.writeEntry( "current_writer", dev->blockDeviceName() );
     }
 }
 
@@ -539,7 +537,7 @@ void K3bWriterSelectionWidget::loadConfig( const KConfigGroup& c )
 void K3bWriterSelectionWidget::saveConfig( KConfigGroup& c )
 {
     c.writeEntry( "writing_speed", writerSpeed() );
-    c.writeEntry( "writer_device", writerDevice() ? writerDevice()->devicename() : QString() );
+    c.writeEntry( "writer_device", writerDevice() ? writerDevice()->blockDeviceName() : QString() );
     c.writeEntry( "writing_app", m_comboWritingApp->currentText() );
 }
 

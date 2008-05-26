@@ -281,9 +281,9 @@ bool K3bMovixDocPreparer::addMovixFiles()
 
     // add all the isolinux files
     QStringList isolinuxFiles = d->eMovixBin->isolinuxFiles();
-    isolinuxFiles.remove( "isolinux.bin" );
-    isolinuxFiles.remove( "isolinux.cfg" );
-    isolinuxFiles.remove( "kernel/vmlinuz" );
+    isolinuxFiles.removeOne( "isolinux.bin" );
+    isolinuxFiles.removeOne( "isolinux.cfg" );
+    isolinuxFiles.removeOne( "kernel/vmlinuz" );
     for( QStringList::const_iterator it = isolinuxFiles.begin();
          it != isolinuxFiles.end(); ++it ) {
         QString path = d->eMovixBin->path + "/isolinux/" + *it;

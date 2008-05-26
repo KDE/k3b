@@ -40,7 +40,7 @@ class LIBK3B_EXPORT K3bListViewItemAnimator : public QObject
 
   Q3ListViewItem* item() const;
 
- public slots:
+ public Q_SLOTS:
   void start();
   void stop();
 
@@ -58,7 +58,7 @@ class LIBK3B_EXPORT K3bListViewItemAnimator : public QObject
    */
   void setFadeColor( const QColor& );
 
- private slots:
+ private Q_SLOTS:
   void slotAnimate();
 
  private:

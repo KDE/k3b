@@ -30,7 +30,7 @@ public:
     bool openFile( const QString& extension, const QString& filename, const K3b::Msf& length );
     bool isOpen() const;
     void closeFile();
-    const QString& filename() const;
+    QString filename() const;
 
     QStringList extensions() const;
   

@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,57 +25,57 @@ class KActionMenu;
 
 
 /**
-  *@author Sebastian Trueg
-  */
+ *@author Sebastian Trueg
+ */
 class K3bDirOperator : public KDirOperator, public KBookmarkOwner
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public: 
-  K3bDirOperator( const KUrl& urlName = KUrl(), QWidget* parent = 0 );
-  ~K3bDirOperator();
+public: 
+    K3bDirOperator( const KUrl& urlName = KUrl(), QWidget* parent = 0 );
+    ~K3bDirOperator();
 
-  /**
-   * reimplemented from KDirOperator
-   */
-  void readConfig( const KConfigGroup & cfg );
+    /**
+     * reimplemented from KDirOperator
+     */
+    void readConfig( const KConfigGroup & cfg );
 
-  /**
-   * reimplemented from KDirOperator
-   */
-  void writeConfig( KConfigGroup & grp );
+    /**
+     * reimplemented from KDirOperator
+     */
+    void writeConfig( KConfigGroup & grp );
 
-  /**
-   * reimplemented from KBookmarkOwner
-   */
-  void openBookmarkURL( const QString& url );
+    /**
+     * reimplemented from KBookmarkOwner
+     */
+    void openBookmarkURL( const QString& url );
 
-  /**
-   * reimplemented from KBookmarkOwner
-   */
-  QString currentTitle() const;
+    /**
+     * reimplemented from KBookmarkOwner
+     */
+    QString currentTitle() const;
 
-  /**
-   * reimplemented from KBookmarkOwner
-   */
-  QString currentURL() const;
+    /**
+     * reimplemented from KBookmarkOwner
+     */
+    QString currentURL() const;
 
-  KActionMenu* bookmarkMenu() const { return m_bmPopup; }
+    KActionMenu* bookmarkMenu() const { return m_bmPopup; }
 
-  virtual void openBookmark(const KBookmark & bm, Qt::MouseButtons mb, Qt::KeyboardModifiers km) {}
+    virtual void openBookmark(const KBookmark & bm, Qt::MouseButtons mb, Qt::KeyboardModifiers km) {}
 
- public slots:
-  void slotAddFilesToProject();
+public Q_SLOTS:
+    void slotAddFilesToProject();
 
- protected slots:
-  /**
-   * reimplemented from KDirOperator
-   */
-  void activatedMenu( const KFileItem*, const QPoint& );
+protected Q_SLOTS:
+    /**
+     * reimplemented from KDirOperator
+     */
+    void activatedMenu( const KFileItem&, const QPoint& );
 
- private:
-  KBookmarkMenu* m_bmMenu;
-  KActionMenu* m_bmPopup;
+private:
+    KBookmarkMenu* m_bmMenu;
+    KActionMenu* m_bmPopup;
 };
 
 #endif

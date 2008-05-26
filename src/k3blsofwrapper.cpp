@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,90 +22,93 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 #include <sys/types.h>
 #include <unistd.h>
 
 static K3bLsofWrapper::Process createProcess( const QString& name, int pid )
 {
-  K3bLsofWrapper::Process p;
-  p.name = name;
-  p.pid = pid;
-  return p;
+    K3bLsofWrapper::Process p;
+    p.name = name;
+    p.pid = pid;
+    return p;
 }
 
 
 class K3bLsofWrapper::Private
 {
 public:
-  Q3ValueList<Process> apps;
-  QString lsofBin;
+    QList<Process> apps;
+    QString lsofBin;
 };
 
 
 K3bLsofWrapper::K3bLsofWrapper()
 {
-  d = new Private;
+    d = new Private;
 }
 
 
 K3bLsofWrapper::~K3bLsofWrapper()
 {
-  delete d;
+    delete d;
 }
 
 
 bool K3bLsofWrapper::checkDevice( K3bDevice::Device* dev )
 {
-  d->apps.clear();
+    d->apps.clear();
 
-  if( !findLsofExecutable() )
-    return false;
+    if( !findLsofExecutable() )
+        return false;
 
-  // run lsof
-  KProcess p;
-  p.setOutputChannelMode( KProcess::OnlyStdoutChannel );
+    // run lsof
+    KProcess p;
+    p.setOutputChannelMode( KProcess::OnlyStdoutChannel );
 
-  //
-  // We use the following output form: 
-  // p<PID>
-  // c<COMMAND_NAME>
-  //
-  p << d->lsofBin << "-Fpc" << dev->blockDeviceName();
-  p.start();
+    //
+    // We use the following output form:
+    // p<PID>
+    // c<COMMAND_NAME>
+    //
+    p << d->lsofBin << "-Fpc" << dev->blockDeviceName();
+    p.start();
 
-  if( !p.waitForFinished( -1 ) )
-    return false;
+    if( !p.waitForFinished( -1 ) )
+        return false;
 
-  //
-  // now process its output
-  QStringList l = QStringList::split( "\n", p.readAllStandardOutput() );
-  for( QStringList::iterator it = l.begin(); it != l.end(); ++it ) {
-    int pid = (*it).mid(1).toInt();
-    QString app = (*(++it)).mid(1);
+    //
+    // now process its output
+    QStringList l = QString::fromLocal8Bit( p.readAllStandardOutput() ).split( '\n', QString::SkipEmptyParts );
+    for( QStringList::iterator it = l.begin(); it != l.end(); ++it ) {
+        int pid = (*it).mid(1).toInt();
+        ++it;
+        if ( it != l.end() ) {
+            QString app = (*(++it)).mid(1);
 
-    kDebug() << "(K3bLsofWrapper) matched: app: " << app << " pid: " << pid;
+            kDebug() << "(K3bLsofWrapper) matched: app: " << app << " pid: " << pid;
 
-    // we don't care about ourselves using the device ;)
-    if( pid != (int)::getpid() )
-      d->apps.append( createProcess( app, pid ) );
-  }
+            // we don't care about ourselves using the device ;)
+            if( pid != (int)::getpid() )
+                d->apps.append( createProcess( app, pid ) );
+        }
+    }
 
-  return true;
+    return true;
 }
 
 
-const Q3ValueList<K3bLsofWrapper::Process>& K3bLsofWrapper::usingApplications() const
+const QList<K3bLsofWrapper::Process>& K3bLsofWrapper::usingApplications() const
 {
-  return d->apps;
+    return d->apps;
 }
 
 
 bool K3bLsofWrapper::findLsofExecutable()
 {
-  if( d->lsofBin.isEmpty() )
-    d->lsofBin = K3b::findExe( "lsof" );
+    if( d->lsofBin.isEmpty() )
+        d->lsofBin = K3b::findExe( "lsof" );
 
-  return !d->lsofBin.isEmpty();
+    return !d->lsofBin.isEmpty();
 }

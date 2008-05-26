@@ -41,7 +41,7 @@ class LIBK3B_EXPORT K3bCloneJob : public K3bBurnJob
   QString jobDescription() const;
   QString jobDetails() const;
 
- public slots:
+ public Q_SLOTS:
   void start();
   void cancel();
 
@@ -57,7 +57,7 @@ class LIBK3B_EXPORT K3bCloneJob : public K3bBurnJob
   void setCopies( int c ) { m_copies = c; }
   void setReadRetries( int i ) { m_readRetries = i; }
 
- private slots:
+ private Q_SLOTS:
   void slotWriterPercent( int );
   void slotWriterFinished( bool );
   void slotWriterNextTrack( int, int );

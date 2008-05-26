@@ -41,16 +41,16 @@ public:
     K3bFileTreeComboBox( QWidget* parent = 0 );
     ~K3bFileTreeComboBox();
 
-public slots:
+public Q_SLOTS:
     void setDevice( K3bDevice::Device* );
     void setUrl( const KUrl& url );
     void slotGoUrl();
 
-signals:
+ Q_SIGNALS:
     void activated( const KUrl& url );
     void activated( K3bDevice::Device* dev );
 
-private slots:
+private Q_SLOTS:
     void slotDeviceExecuted( K3bDevice::Device* );
     void slotUrlExecuted( const KUrl& url );
 

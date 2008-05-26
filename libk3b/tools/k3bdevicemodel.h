@@ -17,11 +17,13 @@
 
 #include <QAbstractItemModel>
 
+#include "k3b_export.h"
+
 namespace K3bDevice {
     class Device;
 }
 
-class K3bDeviceModel : public QAbstractItemModel
+class LIBK3B_EXPORT K3bDeviceModel : public QAbstractItemModel
 {
     Q_OBJECT
 
@@ -44,14 +46,20 @@ public:
         IsDevice = 1000, //**< boolean value only used to check if we have a device item */
         Vendor,
         Description,
-        BlockDevice
+        BlockDevice,
+        Valid
     };
 
 public Q_SLOTS:
+    void addDevice( K3bDevice::Device* );
+    void addDevices( const QList<K3bDevice::Device*>& );
     void setDevices( const QList<K3bDevice::Device*>& devices );
+    void removeDevice( K3bDevice::Device* dev );
+    void clear();
 
 private Q_SLOTS:
     void slotMediumChanged( K3bDevice::Device* dev );
+    void slotCheckingMedium( K3bDevice::Device* dev, const QString& );
 
 private:
     class Private;

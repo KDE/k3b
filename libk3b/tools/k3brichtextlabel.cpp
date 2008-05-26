@@ -1,9 +1,9 @@
-/* 
+/*
  *
  * Copyright (C) 2005 Waldo Bastian <bastian@kde.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 
 #include <kglobalsettings.h>
 #include <QTextDocument>
+
 
 static QString qrichtextify( const QString& text )
 {
@@ -58,7 +59,7 @@ void K3bRichTextLabel::setDefaultWidth(int defaultWidth)
 
 QSizePolicy K3bRichTextLabel::sizePolicy() const
 {
-  return QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum, false);
+  return QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
 }
 
 QSize K3bRichTextLabel::minimumSizeHint() const

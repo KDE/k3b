@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,10 +18,9 @@
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <q3whatsthis.h>
-#include <q3ptrlist.h>
+#include <qlist.h>
 #include <qtoolbutton.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 #include <kaction.h>
 #include <kiconloader.h>
@@ -43,43 +42,43 @@
 
 
 K3bView::K3bView( K3bDoc* pDoc, QWidget *parent )
-  : QWidget( parent ),
-    m_doc( pDoc )
+    : QWidget( parent ),
+      m_doc( pDoc )
 {
-  Q3GridLayout* grid = new Q3GridLayout( this );
+    QGridLayout* grid = new QGridLayout( this );
 
-  m_toolBox = new KToolBar( this );
-  m_fillStatusDisplay = new K3bFillStatusDisplay( m_doc, this );
+    m_toolBox = new KToolBar( this );
+    m_fillStatusDisplay = new K3bFillStatusDisplay( m_doc, this );
 
-  grid->addMultiCellWidget( m_toolBox, 0, 0, 0, 1 );
-  grid->addMultiCellWidget( m_fillStatusDisplay, 2, 2, 0, 1 );
-  //  grid->addWidget( m_buttonBurn, 2, 1 );
-  grid->setRowStretch( 1, 1 );
-  grid->setColStretch( 0, 1 );
-  grid->setSpacing( 5 );
-  grid->setMargin( 2 );
+    grid->addWidget( m_toolBox, 0, 0, 1, 2 );
+    grid->addWidget( m_fillStatusDisplay, 2, 0, 1, 2 );
+    //  grid->addWidget( m_buttonBurn, 2, 1 );
+    grid->setRowStretch( 1, 1 );
+    grid->setColumnStretch( 0, 1 );
+    grid->setSpacing( 5 );
+    grid->setMargin( 2 );
 
-  KAction* burnAction = K3b::createAction(this,i18n("&Burn"), "tools-media-optical-burn", Qt::CTRL + Qt::Key_B, this, SLOT(slotBurn()),
-				     actionCollection(), "project_burn");
-  burnAction->setToolTip( i18n("Open the burn dialog for the current project") );
-  KAction* propAction = K3b::createAction(this, i18n("&Properties"), "document-properties", Qt::CTRL + Qt::Key_P, this, SLOT(slotProperties()),
-				     actionCollection(), "project_properties");
-  propAction->setToolTip( i18n("Open the properties dialog") );
+    KAction* burnAction = K3b::createAction(this,i18n("&Burn"), "tools-media-optical-burn", Qt::CTRL + Qt::Key_B, this, SLOT(slotBurn()),
+                                            actionCollection(), "project_burn");
+    burnAction->setToolTip( i18n("Open the burn dialog for the current project") );
+    KAction* propAction = K3b::createAction(this, i18n("&Properties"), "document-properties", Qt::CTRL + Qt::Key_P, this, SLOT(slotProperties()),
+                                            actionCollection(), "project_properties");
+    propAction->setToolTip( i18n("Open the properties dialog") );
 
-  m_toolBox->addAction( burnAction/*, true*/ );
-  m_toolBox->addSeparator();
+    m_toolBox->addAction( burnAction/*, true*/ );
+    m_toolBox->addSeparator();
 
-  // this is just for testing (or not?)
-  // most likely every project type will have it's rc file in the future
-  setXML( "<!DOCTYPE kpartgui SYSTEM \"kpartgui.dtd\">"
-	  "<kpartgui name=\"k3bproject\" version=\"1\">"
-	  "<MenuBar>"
-	  " <Menu name=\"project\"><text>&amp;Project</text>"
-	  "  <Action name=\"project_burn\"/>"
-	  "  <Action name=\"project_properties\"/>"
-	  " </Menu>"
-	  "</MenuBar>"
-	  "</kpartgui>", true );
+    // this is just for testing (or not?)
+    // most likely every project type will have it's rc file in the future
+    setXML( "<!DOCTYPE kpartgui SYSTEM \"kpartgui.dtd\">"
+            "<kpartgui name=\"k3bproject\" version=\"1\">"
+            "<MenuBar>"
+            " <Menu name=\"project\"><text>&amp;Project</text>"
+            "  <Action name=\"project_burn\"/>"
+            "  <Action name=\"project_properties\"/>"
+            " </Menu>"
+            "</MenuBar>"
+            "</kpartgui>", true );
 }
 
 K3bView::~K3bView()
@@ -89,39 +88,39 @@ K3bView::~K3bView()
 
 void K3bView::setMainWidget( QWidget* w )
 {
-  static_cast<Q3GridLayout*>(layout())->addMultiCellWidget( w, 1, 1, 0, 1 );
+    static_cast<QGridLayout*>(layout())->addWidget( w, 1, 0, 1, 2 );
 }
 
 
 void K3bView::slotBurn()
 {
-  if( m_doc->numOfTracks() == 0 || m_doc->size() == 0 ) {
-    KMessageBox::information( this, i18n("Please add files to your project first."),
-			      i18n("No Data to Burn"), QString(), false );
-  }
-  else {
-    K3bProjectBurnDialog* dlg = newBurnDialog( this );
-    if( dlg ) {
-      dlg->execBurnDialog(true);
-      delete dlg;
+    if( m_doc->numOfTracks() == 0 || m_doc->size() == 0 ) {
+        KMessageBox::information( this, i18n("Please add files to your project first."),
+                                  i18n("No Data to Burn"), QString(), false );
     }
     else {
-      kDebug() << "(K3bDoc) Error: no burndialog available.";
+        K3bProjectBurnDialog* dlg = newBurnDialog( this );
+        if( dlg ) {
+            dlg->execBurnDialog(true);
+            delete dlg;
+        }
+        else {
+            kDebug() << "(K3bDoc) Error: no burndialog available.";
+        }
     }
-  }
 }
 
 
 void K3bView::slotProperties()
 {
-  K3bProjectBurnDialog* dlg = newBurnDialog( this );
-  if( dlg ) {
-    dlg->execBurnDialog(false);
-    delete dlg;
-  }
-  else {
-    kDebug() << "(K3bDoc) Error: no burndialog available.";
-  }
+    K3bProjectBurnDialog* dlg = newBurnDialog( this );
+    if( dlg ) {
+        dlg->execBurnDialog(false);
+        delete dlg;
+    }
+    else {
+        kDebug() << "(K3bDoc) Error: no burndialog available.";
+    }
 }
 
 
@@ -133,47 +132,47 @@ void K3bView::slotProperties()
 
 void K3bView::addPluginButtons( int projectType )
 {
-  QList<K3bPlugin*> pl = k3bcore->pluginManager()->plugins( "ProjectPlugin" );
-  for( QList<K3bPlugin*>::const_iterator it = pl.begin();
-       it != pl.end(); ++it ) {
-    K3bProjectPlugin* pp = dynamic_cast<K3bProjectPlugin*>( *it );
-    if( pp && (pp->type() & projectType) ) {
-      QAction* button = toolBox()->addAction(     pp->text(),
-						  this,
-						  SLOT(slotPluginButtonClicked()) );
-      button->setIcon(QIcon(pp->icon()));
-      button->setToolTip (pp->toolTip());
-      button->setWhatsThis(pp->whatsThis());
-      m_plugins.insert( static_cast<void*>(button), pp );
+    QList<K3bPlugin*> pl = k3bcore->pluginManager()->plugins( "ProjectPlugin" );
+    for( QList<K3bPlugin*>::const_iterator it = pl.begin();
+         it != pl.end(); ++it ) {
+        K3bProjectPlugin* pp = dynamic_cast<K3bProjectPlugin*>( *it );
+        if( pp && (pp->type() & projectType) ) {
+            QAction* button = toolBox()->addAction(     pp->text(),
+                                                        this,
+                                                        SLOT(slotPluginButtonClicked()) );
+            button->setIcon(QIcon(pp->icon()));
+            button->setToolTip (pp->toolTip());
+            button->setWhatsThis(pp->whatsThis());
+            m_plugins.insert( static_cast<void*>(button), pp );
+        }
     }
-  }
 }
 
 
 void K3bView::slotPluginButtonClicked()
 {
-  QObject* o = const_cast<QObject*>(sender());
-  if( K3bProjectPlugin* p = m_plugins[static_cast<void*>(o)] ) {
-    if( p->hasGUI() ) {
-      K3bProjectPluginDialog dlg( p, doc(), this );
-      dlg.exec();
+    QObject* o = const_cast<QObject*>(sender());
+    if( K3bProjectPlugin* p = m_plugins[static_cast<void*>(o)] ) {
+        if( p->hasGUI() ) {
+            K3bProjectPluginDialog dlg( p, doc(), this );
+            dlg.exec();
+        }
+        else
+            p->activate( doc(), this );
     }
-    else
-      p->activate( doc(), this );
-  }
 }
 
 
 void K3bView::addUrl( const KUrl& url )
 {
-  KUrl::List urls(url);
-  addUrls( urls );
+    KUrl::List urls(url);
+    addUrls( urls );
 }
 
 
 void K3bView::addUrls( const KUrl::List& urls )
 {
-  doc()->addUrls( urls );
+    doc()->addUrls( urls );
 }
 
 #include "k3bview.moc"

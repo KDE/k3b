@@ -22,8 +22,8 @@
 #include <q3listview.h>
 #include <qpushbutton.h>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3ValueList>
+#include <QHBoxLayout>
+#include <QList>
 
 #include <klineedit.h>
 #include <kmessagebox.h>
@@ -120,7 +120,7 @@ K3bExternalEncoderSettingsWidget::K3bExternalEncoderSettingsWidget( QWidget* par
     d = new Private();
 
     w = new base_K3bExternalEncoderConfigWidget( this );
-    Q3HBoxLayout* lay = new Q3HBoxLayout( this );
+    QHBoxLayout* lay = new QHBoxLayout( this );
     lay->setMargin( 0 );
     lay->addWidget( w );
 
@@ -182,7 +182,7 @@ void K3bExternalEncoderSettingsWidget::slotEditCommand()
 void K3bExternalEncoderSettingsWidget::slotRemoveCommand()
 {
     if( Q3ListViewItem* item = w->m_viewEncoders->selectedItem() ) {
-        d->commands.erase( item );
+        d->commands.remove( item );
         delete item;
     }
 }
@@ -193,8 +193,8 @@ void K3bExternalEncoderSettingsWidget::load()
     d->commands.clear();
     w->m_viewEncoders->clear();
 
-    Q3ValueList<K3bExternalEncoderCommand> cmds( K3bExternalEncoderCommand::readCommands() );
-    for( Q3ValueList<K3bExternalEncoderCommand>::iterator it = cmds.begin();
+    QList<K3bExternalEncoderCommand> cmds( K3bExternalEncoderCommand::readCommands() );
+    for( QList<K3bExternalEncoderCommand>::iterator it = cmds.begin();
          it != cmds.end(); ++it ) {
         K3bExternalEncoderCommand& cmd = *it;
         d->commands.insert( new Q3ListViewItem( w->m_viewEncoders,

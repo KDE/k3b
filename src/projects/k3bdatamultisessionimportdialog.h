@@ -39,7 +39,7 @@ class K3bDataMultisessionImportDialog : public KDialog
      */
     static K3bDataDoc* importSession( K3bDataDoc* doc, QWidget* parent );
 
- private slots:
+ private Q_SLOTS:
     void slotOk();
     void slotCancel();
 

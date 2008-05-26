@@ -42,7 +42,7 @@ class K3bJobInterface : public QObject, public DCOPObject
   QString jobDescription() const;
   QString jobDetails() const;
 
- k_dcop_signals:
+ k_dcop_ Q_SIGNALS:
   void started();
   void canceled();
   void finished( bool );
@@ -55,7 +55,7 @@ class K3bJobInterface : public QObject, public DCOPObject
   void deviceBuffer( int );
   void nextTrack( int track, int numTracks );
 
- private slots:
+ private Q_SLOTS:
   void slotStarted();
   void slotCanceled();
   void slotFinished( bool );

@@ -23,7 +23,6 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
-#include <q3ptrlist.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qregexp.h>
@@ -36,6 +35,7 @@
 
 #include <Solid/DeviceNotifier>
 #include <Solid/DeviceInterface>
+#include <Solid/OpticalDrive>
 #include <Solid/Block>
 #include <Solid/Device>
 
@@ -154,21 +154,6 @@ K3bDevice::Device* K3bDevice::DeviceManager::deviceByName( const QString& name )
 }
 
 
-K3bDevice::Device* K3bDevice::DeviceManager::findDevice( int bus, int id, int lun )
-{
-    QListIterator<K3bDevice::Device*> it( d->allDevices );
-    while( it.hasNext() ) {
-        Device* dev = it.next();
-        if( dev->scsiBus() == bus &&
-            dev->scsiId() == id &&
-            dev->scsiLun() == lun )
-            return dev;
-    }
-
-    return 0;
-}
-
-
 K3bDevice::Device* K3bDevice::DeviceManager::findDevice( const QString& devicename )
 {
     if( devicename.isEmpty() ) {
@@ -178,7 +163,7 @@ K3bDevice::Device* K3bDevice::DeviceManager::findDevice( const QString& devicena
     QListIterator<K3bDevice::Device*> it( d->allDevices );
     while( it.hasNext() ) {
         Device* dev = it.next();
-        if( dev->deviceNodes().contains(devicename) )
+        if( dev->blockDeviceName() == devicename )
             return dev;
     }
 
@@ -239,29 +224,24 @@ int K3bDevice::DeviceManager::scanBus()
     int cnt = 0;
 
     QList<Solid::Device> dl = Solid::Device::listFromType( Solid::DeviceInterface::OpticalDrive );
-    Q_FOREACH( Solid::Device solidDev, dl ) {
-        if ( Solid::Block* solidDevInt = solidDev.as<Solid::Block>() ) {
-            if ( addDevice( solidDevInt->device() ) )
-                ++cnt;
+    Q_FOREACH( const Solid::Device& solidDev, dl ) {
+        if ( checkDevice( solidDev ) ) {
+            ++cnt;
         }
     }
-
-    //
-    // Scan the generic devices if we have scsi devices
-    //
-    kDebug() << "(K3bDevice::DeviceManager) SCANNING FOR GENERIC DEVICES.";
-    for( int i = 0; i < 16; i++ ) {
-        QString sgDev = resolveSymLink( QString("/dev/sg%1").arg(i) );
-        int bus = -1, id = -1, lun = -1;
-        if( determineBusIdLun( sgDev, bus, id, lun ) ) {
-            if( Device* dev = findDevice( bus, id, lun ) ) {
-                dev->m_genericDevice = sgDev;
-            }
-        }
-    }
-    // FIXME: also scan /dev/scsi/hostX.... for devfs without symlinks
 
     return cnt;
+}
+
+
+K3bDevice::Device* K3bDevice::DeviceManager::checkDevice( const Solid::Device& dev )
+{
+    if ( dev.is<Solid::OpticalDrive>() ) {
+        return addDevice( dev );
+    }
+    else {
+        return 0;
+    }
 }
 
 
@@ -271,7 +251,6 @@ void K3bDevice::DeviceManager::printDevices()
              << "------------------------------" << endl;
     Q_FOREACH( Device* dev, d->allDevices ) {
         kDebug() << "Blockdevice:    " << dev->blockDeviceName() << endl
-                 << "Generic device: " << dev->genericDevice() << endl
                  << "Vendor:         " << dev->vendor() << endl
                  << "Description:    " << dev->description() << endl
                  << "Version:        " << dev->version() << endl
@@ -280,7 +259,6 @@ void K3bDevice::DeviceManager::printDevices()
                  << "Read Cap:       " << mediaTypeString( dev->readCapabilities() ) << endl
                  << "Write Cap:      " << mediaTypeString( dev->writeCapabilities() ) << endl
                  << "Writing modes:  " << writingModeString( dev->writingModes() ) << endl
-                 << "Reader aliases: " << dev->deviceNodes().join(", ") << endl
                  << "------------------------------" << endl;
     }
 }
@@ -318,11 +296,6 @@ bool K3bDevice::DeviceManager::readConfig( KConfig* c_ )
 
     KConfigGroup c = c_->group( "Devices" );
 
-    QStringList deviceSearchPath = c.readEntry( "device_search_path", QStringList() );
-    for( QStringList::const_iterator it = deviceSearchPath.constBegin();
-         it != deviceSearchPath.constEnd(); ++it )
-        addDevice( *it );
-
     //
     // Iterate over all devices and check if we have a config entry
     //
@@ -337,10 +310,6 @@ bool K3bDevice::DeviceManager::readConfig( KConfig* c_ )
             dev->setMaxReadSpeed( list[0].toInt() );
             if( list.count() > 1 )
                 dev->setMaxWriteSpeed( list[1].toInt() );
-            if( list.count() > 2 )
-                dev->setCdrdaoDriver( list[2] );
-            if( list.count() > 3 )
-                dev->setCdTextCapability( list[3] == "yes" );
         }
     }
 
@@ -364,35 +333,16 @@ bool K3bDevice::DeviceManager::saveConfig( KConfig* c_ )
 
     KConfigGroup c = c_->group( "Devices" );
 
-    QStringList deviceSearchPath = c.readEntry( "device_search_path", QStringList() );
-    // remove duplicate entries (caused by buggy old implementations)
-    QStringList saveDeviceSearchPath;
-    for( QStringList::const_iterator it = deviceSearchPath.constBegin(); it != deviceSearchPath.constEnd(); ++it )
-        if( !saveDeviceSearchPath.contains( *it ) )
-            saveDeviceSearchPath.append( *it );
-
     Q_FOREACH( Device* dev, d->allDevices ) {
-
-        // update device search path
-        if( !saveDeviceSearchPath.contains( dev->blockDeviceName() ) )
-            saveDeviceSearchPath.append( dev->blockDeviceName() );
 
         // save the device type settings
         QString configEntryName = dev->vendor() + " " + dev->description();
         QStringList list;
         list << QString::number(dev->maxReadSpeed())
-             << QString::number(dev->maxWriteSpeed())
-             << dev->cdrdaoDriver();
-
-        if( dev->cdrdaoDriver() != "auto" )
-            list << ( dev->cdTextCapable() == 1 ? "yes" : "no" );
-        else
-            list << "auto";
+             << QString::number(dev->maxWriteSpeed());
 
         c.writeEntry( configEntryName, list );
     }
-
-    c.writeEntry( "device_search_path", saveDeviceSearchPath );
 
     c.sync();
 
@@ -400,119 +350,20 @@ bool K3bDevice::DeviceManager::saveConfig( KConfig* c_ )
 }
 
 
-bool K3bDevice::DeviceManager::testForCdrom( const QString& devicename )
+K3bDevice::Device* K3bDevice::DeviceManager::addDevice( const Solid::Device& solidDevice )
 {
-#ifdef Q_OS_FREEBSD
-    Q_UNUSED(devicename);
-    return true;
-#endif
-#if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
-    bool ret = false;
-    int cdromfd = K3bDevice::openDevice( QFile::encodeName( devicename ).data() );
-    if (cdromfd < 0) {
-        kDebug() << "could not open device " << devicename << " (" << strerror(errno) << ")";
-        return ret;
-    }
-
-    // stat the device
-    struct stat cdromStat;
-    if ( ::fstat( cdromfd, &cdromStat ) ) {
-        return false;
-    }
-
-    if( !S_ISBLK( cdromStat.st_mode) ) {
-        kDebug() << devicename << " is no block device";
-    }
-    else {
-        kDebug() << devicename << " is block device (" << (int)(cdromStat.st_rdev & 0xFF) << ")";
-#if defined(Q_OS_NETBSD)
-    }
-    {
-#endif
-        // inquiry
-        // use a 36 bytes buffer since not all devices return the full inquiry struct
-        unsigned char buf[36];
-        struct inquiry* inq = (struct inquiry*)buf;
-        ::memset( buf, 0, sizeof(buf) );
-
-        ScsiCommand cmd( cdromfd );
-        cmd[0] = MMC_INQUIRY;
-        cmd[4] = sizeof(buf);
-        cmd[5] = 0;
-
-        if( cmd.transport( TR_DIR_READ, buf, sizeof(buf) ) ) {
-            kDebug() << "(K3bDevice::Device) Unable to do inquiry. " << devicename << " is not a cdrom device";
-        }
-        else if( (inq->p_device_type&0x1f) != 0x5 ) {
-            kDebug() << devicename << " seems not to be a cdrom device: " << strerror(errno);
-        }
-        else {
-            ret = true;
-            kDebug() << devicename << " seems to be cdrom";
-        }
-    }
-
-    ::close( cdromfd );
-    return ret;
-#endif
-}
-
-K3bDevice::Device* K3bDevice::DeviceManager::addDevice( const QString& devicename )
-{
-#ifdef Q_OS_FREEBSD
-    return 0;
-#endif
-
-    K3bDevice::Device* device = 0;
-
-    // resolve all symlinks
-    QString resolved = resolveSymLink( devicename );
-    kDebug() << devicename << " resolved to " << resolved;
-
-    if ( K3bDevice::Device* oldDev = findDevice(resolved) ) {
-        kDebug() << "(K3bDevice::DeviceManager) dev " << resolved  << " already found";
-        oldDev->addDeviceNode( devicename );
+    if ( findDevice( solidDevice.as<Solid::Block>()->device() ) ) {
+        kDebug() << "(K3bDevice::DeviceManager) dev " << solidDevice.as<Solid::Block>()->device()  << " already found";
         return 0;
     }
 
-    if( !testForCdrom(resolved) ) {
-#ifdef HAVE_RESMGR
-        // With resmgr we might only be able to open the symlink name.
-        if( testForCdrom(devicename) ) {
-            resolved = devicename;
-        }
-        else {
-            return 0;
-        }
-#else
-        return 0;
-#endif
-    }
-
-    int bus = -1, target = -1, lun = -1;
-    bool scsi = determineBusIdLun( resolved, bus, target, lun );
-    if(scsi) {
-        if ( K3bDevice::Device* oldDev = findDevice(bus, target, lun) ) {
-            kDebug() << "(K3bDevice::DeviceManager) dev " << resolved  << " already found";
-            oldDev->addDeviceNode( devicename );
-            return 0;
-        }
-    }
-
-    device = new K3bDevice::Device(resolved);
-    if( scsi ) {
-        device->m_bus = bus;
-        device->m_target = target;
-        device->m_lun = lun;
-    }
-
-    return addDevice(device);
+    return addDevice( new K3bDevice::Device( solidDevice ) );
 }
 
 
 K3bDevice::Device* K3bDevice::DeviceManager::addDevice( K3bDevice::Device* device )
 {
-    const QString devicename = device->devicename();
+    const QString devicename = device->blockDeviceName();
 
     if( !device->init() ) {
         kDebug() << "Could not initialize device " << devicename;
@@ -554,9 +405,9 @@ K3bDevice::Device* K3bDevice::DeviceManager::addDevice( K3bDevice::Device* devic
 }
 
 
-void K3bDevice::DeviceManager::removeDevice( const QString& dev )
+void K3bDevice::DeviceManager::removeDevice( const Solid::Device& dev )
 {
-    if( Device* device = findDevice( dev ) ) {
+    if( Device* device = findDevice( dev.as<Solid::Block>()->device() ) ) {
         d->cdReader.removeAll( device );
         d->dvdReader.removeAll( device );
         d->bdReader.removeAll( device );
@@ -573,139 +424,20 @@ void K3bDevice::DeviceManager::removeDevice( const QString& dev )
 }
 
 
-bool K3bDevice::DeviceManager::determineBusIdLun( const QString& dev, int& bus, int& id, int& lun )
-{
-#ifdef Q_OS_FREEBSD
-    Q_UNUSED(dev);
-    Q_UNUSED(bus);
-    Q_UNUSED(id);
-    Q_UNUSED(lun);
-    return false;
-    /* NOTREACHED */
-#endif
-
-#ifdef Q_OS_NETBSD
-    int cdromfd = K3bDevice::openDevice ( dev.ascii() );
-    if (cdromfd < 0) {
-        kDebug() << "could not open device " << dev << " (" << strerror(errno) << ")";
-        return false;
-    }
-
-    struct scsi_addr my_addr;
-
-    if (::ioctl(cdromfd, SCIOCIDENTIFY, &my_addr))
-    {
-        kDebug() << "ioctl(SCIOCIDENTIFY) failed on device " << dev << " (" << strerror(errno) << ")";
-
-        ::close(cdromfd);
-        return false;
-    }
-
-    if (my_addr.type == TYPE_ATAPI)
-    {
-        // XXX Re-map atapibus, so it doesn't conflict with "real" scsi
-        // busses
-
-        bus = 15;
-        id  = my_addr.addr.atapi.drive + 2 * my_addr.addr.atapi.atbus;
-        lun = 0;
-    }
-    else
-    {
-        bus = my_addr.addr.scsi.scbus;
-        id  = my_addr.addr.scsi.target;
-        lun = my_addr.addr.scsi.lun;
-    }
-
-    ::close(cdromfd);
-
-    return true;
-#endif
-
-#ifdef Q_OS_LINUX
-    struct utsname uts;
-    int major, minor, patch;
-    if ( uname(&uts) < 0 ) {
-        return false; // *shrug*
-    }
-    else if ( sscanf( uts.release, "%d.%d.%d", &major, &minor, &patch) != 3 ) {
-        return false; // *shrug*
-    }
-    else if( major * 1000000 + minor * 1000 + patch > 2006008 ) { // > 2.6.8
-        kDebug() << "On kernels newer than 2.6.8 we only use block devices.";
-        return false;
-    }
-
-    int ret = false;
-    int cdromfd = K3bDevice::openDevice( QFile::encodeName( dev ).data() );
-    if (cdromfd < 0) {
-        return false;
-    }
-
-    struct stat cdromStat;
-    if ( ::fstat( cdromfd, &cdromStat ) ) {
-        return false;
-    }
-
-    if( SCSI_BLK_MAJOR( cdromStat.st_rdev>>8 ) ||
-        SCSI_GENERIC_MAJOR == (cdromStat.st_rdev>>8) ) {
-        struct ScsiIdLun
-        {
-            int id;
-            int lun;
-        };
-        ScsiIdLun idLun;
-
-        // in kernel 2.2 SCSI_IOCTL_GET_IDLUN does not contain the bus id
-        if ( (::ioctl( cdromfd, SCSI_IOCTL_GET_IDLUN, &idLun ) < 0) ||
-             (::ioctl( cdromfd, SCSI_IOCTL_GET_BUS_NUMBER, &bus ) < 0) ) {
-            kDebug() << "(K3bDevice::DeviceManager) no SCSI device: " << dev;
-            ret = false;
-        }
-        else {
-            id  = idLun.id & 0xff;
-            lun = (idLun.id >> 8) & 0xff;
-            kDebug() << "bus: " << bus << ", id: " << id << ", lun: " << lun;
-            ret = true;
-        }
-    }
-
-    ::close(cdromfd);
-    return ret;
-#endif
-}
-
-
-QString K3bDevice::DeviceManager::resolveSymLink( const QString& path )
-{
-    char resolved[PATH_MAX];
-    if( !realpath( QFile::encodeName(path), resolved ) )
-    {
-        kDebug() << "Could not resolve " << path;
-        return path;
-    }
-
-    return QString::fromLatin1( resolved );
-}
-
-
 void K3bDevice::DeviceManager::slotSolidDeviceAdded( const QString& udi )
 {
-    Solid::Device solidDev( udi );
-    if ( solidDev.isDeviceInterface( Solid::DeviceInterface::OpticalDrive ) ) {
-        if ( Solid::Block* solidDevInt = solidDev.as<Solid::Block>() ) {
-            addDevice( solidDevInt->device() );
-        }
-    }
+    kDebug() << udi;
+    checkDevice( Solid::Device( udi ) );
 }
 
 
 void K3bDevice::DeviceManager::slotSolidDeviceRemoved( const QString& udi )
 {
+    kDebug() << udi;
     Solid::Device solidDev( udi );
     if ( solidDev.isDeviceInterface( Solid::DeviceInterface::OpticalDrive ) ) {
-        if ( Solid::Block* solidDevInt = solidDev.as<Solid::Block>() ) {
-            removeDevice( solidDevInt->device() );
+        if ( solidDev.is<Solid::OpticalDrive>() ) {
+            removeDevice( solidDev );
         }
     }
 }

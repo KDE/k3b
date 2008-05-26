@@ -31,17 +31,16 @@
 #include <kstandarddirs.h>
 #include <kio/global.h>
 
-#include <q3groupbox.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
-#include <q3header.h>
 #include <qstring.h>
 #include <qcolor.h>
 #include <qlist.h>
+#include <q3header.h>
 #include <QGridLayout>
+#include <QtGui/QGroupBox>
 
 
 class K3bDeviceWidget::PrivateTempDevice
@@ -49,99 +48,12 @@ class K3bDeviceWidget::PrivateTempDevice
 public:
     PrivateTempDevice( K3bDevice::Device* d ) {
         device = d;
-        cdrdaoDriver = d->cdrdaoDriver();
-        cdTextCapable = ( d->cdTextCapable() != 2 );
         writer = d->burner();
     }
 
     K3bDevice::Device* device;
-    QString cdrdaoDriver;
-    bool cdTextCapable;
     bool writer;
 };
-
-
-class K3bDeviceWidget::PrivateDeviceViewItem1 : public K3bListViewItem
-{
-public:
-    PrivateDeviceViewItem1( int type, PrivateTempDevice* dev, Q3ListView* view, Q3ListViewItem* after )
-        : K3bListViewItem( view, after ),
-          m_type(type) {
-        this->dev = dev;
-        init();
-    }
-
-    PrivateDeviceViewItem1( int type, PrivateTempDevice* dev, Q3ListViewItem* item, Q3ListViewItem* after )
-        : K3bListViewItem( item, after ),
-          m_type(type) {
-        this->dev = dev;
-        init();
-    }
-
-    void setText(int col, const QString& text) {
-        if( col == 1 ) {
-            switch(m_type) {
-            case t_cdrdaoDriver:
-                dev->cdrdaoDriver = text;
-                break;
-            case t_cdTextCapable:
-                if( dev->cdrdaoDriver != "auto" )
-                    dev->cdTextCapable = ( text == i18n("yes") );
-                break;
-            }
-        }
-    }
-
-    QString text( int col ) const {
-        switch(m_type) {
-        case t_cdrdaoDriver:
-            return (col == 0 ? i18n("Cdrdao driver:") : dev->cdrdaoDriver );
-            break;
-        case t_cdTextCapable:
-            if( col == 0 )
-                return i18n("CD-Text capable:");
-            else {
-                if( dev->cdrdaoDriver == "auto" )
-                    return "auto";
-                else return ( dev->cdTextCapable ? i18n("yes") : i18n("no") );
-            }
-        }
-        return "???";
-    }
-
-    enum itemType { t_cdrdaoDriver, t_cdTextCapable };
-
-    PrivateTempDevice* dev;
-
-private:
-    void init() {
-        static QStringList l;
-        static QStringList l2;
-
-        switch(m_type) {
-        case t_cdrdaoDriver:
-            if( l.isEmpty() )
-                for( int i = 0; i < 13; i++ )
-                    l.append(K3bDevice::Device::cdrdao_drivers[i]);
-
-            setEditor( 1, COMBO, l );
-            break;
-        case t_cdTextCapable:
-            if( l2.isEmpty() ) {
-                l2.append(i18n("auto"));
-                l2.append(i18n("yes"));
-                l2.append(i18n("no"));
-            }
-
-            setEditor( 1, COMBO, l2 );
-        }
-    }
-
-    int m_type;
-};
-
-
-
 
 
 
@@ -160,20 +72,19 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDevice::DeviceManager* manager, QWidget *pa
     refreshButtonGrid->setSpacing( KDialog::spacingHint() );
     refreshButtonGrid->setMargin(0);
     m_buttonRefreshDevices = new QPushButton( i18n( "Refresh" ), this );
-    m_buttonAddDevice = new QPushButton( i18n( "Add Device..." ), this );
     m_buttonRefreshDevices->setToolTip( i18n( "Rescan the devices" ) );
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
     refreshButtonGrid->addItem( spacer, 0, 0 );
     refreshButtonGrid->addWidget( m_buttonRefreshDevices, 0, 2 );
-    refreshButtonGrid->addWidget( m_buttonAddDevice, 0, 1 );
     // ------------------------------------------------
 
 
     // Devices Box
     // ------------------------------------------------
-    Q3GroupBox* groupDevices = new Q3GroupBox( 1, Qt::Vertical, i18n( "CD/DVD Drives" ), this );
-    groupDevices->layout()->setSpacing( KDialog::spacingHint() );
-    groupDevices->layout()->setMargin( KDialog::marginHint() );
+    QGroupBox* groupDevices = new QGroupBox( i18n( "CD/DVD Drives" ), this );
+    QVBoxLayout* groupDevicesLayout = new QVBoxLayout( groupDevices );
+    groupDevicesLayout->setSpacing( KDialog::spacingHint() );
+    groupDevicesLayout->setMargin( KDialog::marginHint() );
 
     m_viewDevices = new K3bListView( groupDevices );
     m_viewDevices->addColumn( "V" );
@@ -185,6 +96,8 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDevice::DeviceManager* manager, QWidget *pa
     m_viewDevices->setAlternateBackground( QColor() );
     m_viewDevices->setSelectionMode( Q3ListView::NoSelection );
     m_viewDevices->setFullWidth(true);
+
+    groupDevicesLayout->addWidget( m_viewDevices );
     // ------------------------------------------------
 
 
@@ -196,7 +109,6 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDevice::DeviceManager* manager, QWidget *pa
     // ------------------------------------------------
     //  connect( m_buttonRefreshDevices, SIGNAL(clicked()), this, SLOT(slotRefreshDevices()) );
     connect( m_buttonRefreshDevices, SIGNAL(clicked()), this, SIGNAL(refreshButtonClicked()) );
-    connect( m_buttonAddDevice, SIGNAL(clicked()), this, SLOT(slotNewDevice()) );
     connect( m_deviceManager, SIGNAL(changed()), this, SLOT(init()) );
     // ------------------------------------------------
 }
@@ -224,6 +136,8 @@ void K3bDeviceWidget::init()
 
 void K3bDeviceWidget::updateDeviceListViews()
 {
+    QColor disabledTextColor = palette().color( QPalette::Disabled, QPalette::Text );
+
     m_viewDevices->clear();
 
     // create the parent view items
@@ -249,31 +163,21 @@ void K3bDeviceWidget::updateDeviceListViews()
 
         // create the read-only info items
         K3bListViewItem* systemDeviceItem = new K3bListViewItem( devRoot, i18n("System device name:") );
-        if( dev->device->interfaceType() == K3bDevice::SCSI )
-            systemDeviceItem->setText( 1, QString("%1 (%2)").arg(dev->device->devicename()).arg(dev->device->busTargetLun()) );
-        else
-            systemDeviceItem->setText( 1, dev->device->devicename() );
-        systemDeviceItem->setForegroundColor( 1, palette().disabled().foreground() );
+        systemDeviceItem->setText( 1, dev->device->blockDeviceName() );
+        systemDeviceItem->setForegroundColor( 1, disabledTextColor );
 
-        K3bListViewItem* interfaceItem = new K3bListViewItem( devRoot, systemDeviceItem,
-                                                              i18n("Interface type:"),
-                                                              ( dev->device->interfaceType() == K3bDevice::SCSI ?
-                                                                i18n("Generic SCSI") :
-                                                                i18n("ATAPI") ) );
-        interfaceItem->setForegroundColor( 1, palette().disabled().foreground() );
-
-        K3bListViewItem* vendorItem = new K3bListViewItem( devRoot, interfaceItem,
+        K3bListViewItem* vendorItem = new K3bListViewItem( devRoot, systemDeviceItem,
                                                            i18n("Vendor:"),
                                                            dev->device->vendor() );
-        vendorItem->setForegroundColor( 1, palette().disabled().foreground() );
+        vendorItem->setForegroundColor( 1, disabledTextColor );
         K3bListViewItem* modelItem = new K3bListViewItem( devRoot, vendorItem,
                                                           i18n("Description:"),
                                                           dev->device->description() );
-        modelItem->setForegroundColor( 1, palette().disabled().foreground() );
+        modelItem->setForegroundColor( 1, disabledTextColor );
         K3bListViewItem* versionItem = new K3bListViewItem( devRoot, modelItem,
                                                             i18n("Firmware:"),
                                                             dev->device->version() );
-        versionItem->setForegroundColor( 1, palette().disabled().foreground() );
+        versionItem->setForegroundColor( 1, disabledTextColor );
 
 
         // drive type
@@ -281,11 +185,11 @@ void K3bDeviceWidget::updateDeviceListViews()
         K3bListViewItem* typeItem = new K3bListViewItem( devRoot, versionItem,
                                                          i18n("Write Capabilities:"),
                                                          K3bDevice::mediaTypeString( dev->device->writeCapabilities(), true ) );
-        typeItem->setForegroundColor( 1, palette().disabled().foreground() );
+        typeItem->setForegroundColor( 1, disabledTextColor );
         typeItem = new K3bListViewItem( devRoot, typeItem,
                                         i18n("Read Capabilities:"),
                                         K3bDevice::mediaTypeString( dev->device->readCapabilities(), true ) );
-        typeItem->setForegroundColor( 1, palette().disabled().foreground() );
+        typeItem->setForegroundColor( 1, disabledTextColor );
         // --------------------------------
 
 
@@ -294,33 +198,23 @@ void K3bDeviceWidget::updateDeviceListViews()
             typeItem = new K3bListViewItem( devRoot, typeItem,
                                             i18n("Buffer Size:"),
                                             KIO::convertSizeFromKiB(dev->device->bufferSize()) );
-            typeItem->setForegroundColor( 1, palette().disabled().foreground() );
+            typeItem->setForegroundColor( 1, disabledTextColor );
         }
-
-        PrivateDeviceViewItem1* cdrdaoDriverItem = new PrivateDeviceViewItem1( PrivateDeviceViewItem1::t_cdrdaoDriver,
-                                                                               dev,
-                                                                               devRoot,
-                                                                               typeItem );
 
 
         // now add the writer specific items
         if( dev->writer ) {
-            PrivateDeviceViewItem1* cdTextItem = new PrivateDeviceViewItem1( PrivateDeviceViewItem1::t_cdTextCapable,
-                                                                             dev,
-                                                                             devRoot,
-                                                                             cdrdaoDriverItem );
-
-            typeItem = new K3bListViewItem( devRoot, cdTextItem,
+            typeItem = new K3bListViewItem( devRoot, typeItem,
                                             i18n("Supports Burnfree:"),
                                             dev->device->burnfree() ? i18n("yes") : i18n("no") );
-            typeItem->setForegroundColor( 1, palette().disabled().foreground() );
+            typeItem->setForegroundColor( 1, disabledTextColor );
 
 
             // and at last the write modes
             (new K3bListViewItem( devRoot,
                                   typeItem,
                                   i18n("Write modes:"),
-                                  K3bDevice::writingModeString(dev->device->writingModes()) ))->setForegroundColor( 1, palette().disabled().foreground() );
+                                  K3bDevice::writingModeString(dev->device->writingModes()) ))->setForegroundColor( 1, disabledTextColor );
         }
 
         devRoot->setOpen(true);
@@ -339,35 +233,5 @@ void K3bDeviceWidget::updateDeviceListViews()
     m_writerParentViewItem->setOpen( true );
     m_readerParentViewItem->setOpen( true );
 }
-
-
-void K3bDeviceWidget::slotNewDevice()
-{
-    bool ok;
-    QString newDevicename = KInputDialog::getText( i18n("Location of New Drive"),
-                                                   i18n("Please enter the device name where K3b should search\nfor a new drive (example: /dev/cdrom):"),
-                                                   "/dev/", &ok, this );
-
-    if( ok ) {
-        if( K3bDevice::Device* dev = m_deviceManager->addDevice( newDevicename ) ) {
-            m_tempDevices.append( new PrivateTempDevice( dev ) );
-
-            updateDeviceListViews();
-        }
-        else
-            KMessageBox::error( this, i18n("Could not find an additional device at\n%1",newDevicename), i18n("Error"), false );
-    }
-}
-
-
-void K3bDeviceWidget::apply()
-{
-    // update the devices
-    foreach( PrivateTempDevice* tempDev, m_tempDevices ) {
-        tempDev->device->setCdrdaoDriver( tempDev->cdrdaoDriver );
-        tempDev->device->setCdTextCapability( tempDev->cdTextCapable );
-    }
-}
-
 
 #include "k3bdevicewidget.moc"

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,47 +28,47 @@
 
 #include <qfont.h>
 #include <qmap.h>
-#include <q3valuevector.h>
+#include <qvector.h>
 #include <qtooltip.h>
 #include <q3listbox.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
-//TODO portme kde4
+
+#warning TODO portme kde4
 #if 0
 class K3bMediaSelectionComboBox::ToolTip : public QToolTip
 {
 public:
-  ToolTip( K3bMediaSelectionComboBox* box );
+    ToolTip( K3bMediaSelectionComboBox* box );
 
-  void maybeTip( const QPoint &pos );
+    void maybeTip( const QPoint &pos );
 
 private:
-  K3bMediaSelectionComboBox* m_box;
+    K3bMediaSelectionComboBox* m_box;
 };
 
 
 K3bMediaSelectionComboBox::ToolTip::ToolTip( K3bMediaSelectionComboBox* box )
-  : QToolTip( box->listBox()->viewport() ),
-    m_box( box )
+    : QToolTip( box->listBox()->viewport() ),
+      m_box( box )
 {
 }
 
 void K3bMediaSelectionComboBox::ToolTip::maybeTip( const QPoint& pos )
 {
-  if( !parentWidget() || !m_box )
-    return;
+    if( !parentWidget() || !m_box )
+        return;
 
-  Q3ListBoxItem* item = m_box->listBox()->itemAt( pos );
-  if( !item )
-    return;
+    Q3ListBoxItem* item = m_box->listBox()->itemAt( pos );
+    if( !item )
+        return;
 
-  int index = m_box->listBox()->index( item );
+    int index = m_box->listBox()->index( item );
 
-  if( K3bDevice::Device* dev = m_box->deviceAt( index ) ) {
-    tip( m_box->listBox()->itemRect( item ),
-	 m_box->mediumToolTip( k3bappcore->mediaCache()->medium( dev ) ) );
-  }
+    if( K3bDevice::Device* dev = m_box->deviceAt( index ) ) {
+        tip( m_box->listBox()->itemRect( item ),
+             m_box->mediumToolTip( k3bappcore->mediaCache()->medium( dev ) ) );
+    }
 }
 #endif
 
@@ -82,53 +82,53 @@ public:
         : ignoreDevice( 0 ) {
     }
 
-  QMap<K3bDevice::Device*, int> deviceIndexMap;
-  Q3ValueVector<K3bDevice::Device*> devices;
+    QMap<K3bDevice::Device*, int> deviceIndexMap;
+    QVector<K3bDevice::Device*> devices;
 
     K3bDevice::Device* ignoreDevice;
 
-  // medium strings for every entry
-  QMap<QString, int> mediaStringMap;
+    // medium strings for every entry
+    QMap<QString, int> mediaStringMap;
 
-  int wantedMediumType;
-  int wantedMediumState;
-  int wantedMediumContent;
+    int wantedMediumType;
+    int wantedMediumState;
+    int wantedMediumContent;
 
-  QFont font;
+    QFont font;
 };
 
 
 K3bMediaSelectionComboBox::K3bMediaSelectionComboBox( QWidget* parent )
-  : KComboBox( false, parent )
+    : KComboBox( false, parent )
 {
-  d = new Private();
+    d = new Private();
 
-  // set defaults
-  d->wantedMediumType = K3bDevice::MEDIA_WRITABLE_CD;
-  d->wantedMediumState = K3bDevice::STATE_EMPTY;
-  d->wantedMediumContent = K3bMedium::CONTENT_ALL;
+    // set defaults
+    d->wantedMediumType = K3bDevice::MEDIA_WRITABLE_CD;
+    d->wantedMediumState = K3bDevice::STATE_EMPTY;
+    d->wantedMediumContent = K3bMedium::CONTENT_ALL;
 
-  d->font = font();
+    d->font = font();
 
-  connect( this, SIGNAL(activated(int)),
-	   this, SLOT(slotActivated(int)) );
-  connect( k3bcore->deviceManager(), SIGNAL(changed(K3bDevice::DeviceManager*)),
-	   this, SLOT(slotDeviceManagerChanged(K3bDevice::DeviceManager*)) );
-  connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3bDevice::Device*)),
-	   this, SLOT(slotMediumChanged(K3bDevice::Device*)) );
-  connect( this, SIGNAL(selectionChanged(K3bDevice::Device*)),
-	   this, SLOT(slotUpdateToolTip(K3bDevice::Device*)) );
+    connect( this, SIGNAL(activated(int)),
+             this, SLOT(slotActivated(int)) );
+    connect( k3bcore->deviceManager(), SIGNAL(changed(K3bDevice::DeviceManager*)),
+             this, SLOT(slotDeviceManagerChanged(K3bDevice::DeviceManager*)) );
+    connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3bDevice::Device*)),
+             this, SLOT(slotMediumChanged(K3bDevice::Device*)) );
+    connect( this, SIGNAL(selectionChanged(K3bDevice::Device*)),
+             this, SLOT(slotUpdateToolTip(K3bDevice::Device*)) );
 
-  updateMedia();
+    updateMedia();
 
-  // initialize the tooltip for the dropdown box
-  //(void)new ToolTip( this );
+    // initialize the tooltip for the dropdown box
+    //(void)new ToolTip( this );
 }
 
 
 K3bMediaSelectionComboBox::~K3bMediaSelectionComboBox()
 {
-  delete d;
+    delete d;
 }
 
 
@@ -141,390 +141,388 @@ void K3bMediaSelectionComboBox::setIgnoreDevice( K3bDevice::Device* dev )
 
 K3bDevice::Device* K3bMediaSelectionComboBox::selectedDevice() const
 {
-  if( d->devices.count() > 0 )
-    return d->devices[currentIndex()];
-  else
-    return 0;
+    if( d->devices.count() > 0 )
+        return d->devices[currentIndex()];
+    else
+        return 0;
 }
 
 
-Q3ValueList<K3bDevice::Device*> K3bMediaSelectionComboBox::allDevices() const
+QList<K3bDevice::Device*> K3bMediaSelectionComboBox::allDevices() const
 {
-  Q3ValueList<K3bDevice::Device*> l;
-  for( unsigned int i = 0; i < d->devices.count(); ++i )
-    l.append( d->devices[i] );
-  return l;
+    QList<K3bDevice::Device*> l;
+    for( int i = 0; i < d->devices.count(); ++i )
+        l.append( d->devices[i] );
+    return l;
 }
 
 
 void K3bMediaSelectionComboBox::setSelectedDevice( K3bDevice::Device* dev )
 {
-  if( dev && d->deviceIndexMap.contains( dev ) ) {
-    setCurrentIndex( d->deviceIndexMap[dev] );
-    emit selectionChanged( dev );
-  }
+    if( dev && d->deviceIndexMap.contains( dev ) ) {
+        setCurrentIndex( d->deviceIndexMap[dev] );
+        emit selectionChanged( dev );
+    }
 }
 
 
 void K3bMediaSelectionComboBox::setWantedMediumType( int type )
 {
-  if( type != 0 && type != d->wantedMediumType) {
-    d->wantedMediumType = type;
-    updateMedia();
-  }
+    if( type != 0 && type != d->wantedMediumType) {
+        d->wantedMediumType = type;
+        updateMedia();
+    }
 }
 
 
 void K3bMediaSelectionComboBox::setWantedMediumState( int state )
 {
-  if( state != 0 && state != d->wantedMediumState ) {
-    d->wantedMediumState = state;
-    updateMedia();
-  }
+    if( state != 0 && state != d->wantedMediumState ) {
+        d->wantedMediumState = state;
+        updateMedia();
+    }
 }
 
 
 void K3bMediaSelectionComboBox::setWantedMediumContent( int content )
 {
-  if( content != d->wantedMediumContent ) {
-    d->wantedMediumContent = content;
-    updateMedia();
-  }
+    if( content != d->wantedMediumContent ) {
+        d->wantedMediumContent = content;
+        updateMedia();
+    }
 }
 
 
 int K3bMediaSelectionComboBox::wantedMediumType() const
 {
-  return d->wantedMediumType;
+    return d->wantedMediumType;
 }
 
 
 int K3bMediaSelectionComboBox::wantedMediumState() const
 {
-  return d->wantedMediumState;
+    return d->wantedMediumState;
 }
 
 
 int K3bMediaSelectionComboBox::wantedMediumContent() const
 {
-  return d->wantedMediumContent;
+    return d->wantedMediumContent;
 }
 
 
 void K3bMediaSelectionComboBox::slotActivated( int i )
 {
-  if( d->devices.count() > 0 )
-    emit selectionChanged( d->devices[i] );
+    if( d->devices.count() > 0 )
+        emit selectionChanged( d->devices[i] );
 }
 
 
 void K3bMediaSelectionComboBox::slotMediumChanged( K3bDevice::Device* dev )
 {
-  updateMedium( dev );
+    updateMedium( dev );
 }
 
 
 void K3bMediaSelectionComboBox::clear()
 {
-  d->deviceIndexMap.clear();
-  d->mediaStringMap.clear();
-  d->devices.clear();
-  KComboBox::clear();
+    d->deviceIndexMap.clear();
+    d->mediaStringMap.clear();
+    d->devices.clear();
+    KComboBox::clear();
 }
 
 
 void K3bMediaSelectionComboBox::showNoMediumMessage()
 {
-  // make it italic
-  QFont f( d->font );
-  f.setItalic( true );
-  setFont( f );
+    // make it italic
+    QFont f( d->font );
+    f.setItalic( true );
+    setFont( f );
 
-  insertItem( noMediumMessage() );
+    addItem( noMediumMessage() );
 }
 
 
 void K3bMediaSelectionComboBox::updateMedia()
 {
-  // reset font
-  setFont( d->font );
+    // reset font
+    setFont( d->font );
 
-  // remember set of devices
-  Q3ValueVector<K3bDevice::Device*> oldDevices = d->devices;
+    // remember set of devices
+    QVector<K3bDevice::Device*> oldDevices = d->devices;
 
-  // remember last selected medium
-  K3bDevice::Device* selected = selectedDevice();
+    // remember last selected medium
+    K3bDevice::Device* selected = selectedDevice();
 
-  clear();
+    clear();
 
-  //
-  // We need to only check a selection of the available devices based on the
-  // wanted media type.
-  //
+    //
+    // We need to only check a selection of the available devices based on the
+    // wanted media type.
+    //
 
-  // no ROM media -> we most likely want only CD/DVD writers
-  bool rwOnly = !( wantedMediumType() & (K3bDevice::MEDIA_CD_ROM|K3bDevice::MEDIA_DVD_ROM) );
-  bool dvdOnly = !( wantedMediumType() & (K3bDevice::MEDIA_CD_ROM|K3bDevice::MEDIA_WRITABLE_CD) );
+    // no ROM media -> we most likely want only CD/DVD writers
+    bool rwOnly = !( wantedMediumType() & (K3bDevice::MEDIA_CD_ROM|K3bDevice::MEDIA_DVD_ROM) );
+    bool dvdOnly = !( wantedMediumType() & (K3bDevice::MEDIA_CD_ROM|K3bDevice::MEDIA_WRITABLE_CD) );
 
-  QList<K3bDevice::Device *> devices(k3bcore->deviceManager()->allDevices());
-  if( dvdOnly ) {
-    if( rwOnly )
-      devices = k3bcore->deviceManager()->dvdWriter();
+    QList<K3bDevice::Device *> devices(k3bcore->deviceManager()->allDevices());
+    if( dvdOnly ) {
+        if( rwOnly )
+            devices = k3bcore->deviceManager()->dvdWriter();
+        else
+            devices = k3bcore->deviceManager()->dvdReader();
+    }
+    else if( rwOnly )
+        devices = k3bcore->deviceManager()->cdWriter();
     else
-      devices = k3bcore->deviceManager()->dvdReader();
-  }
-  else if( rwOnly )
-    devices = k3bcore->deviceManager()->cdWriter();
-  else
-    devices = k3bcore->deviceManager()->cdReader();
+        devices = k3bcore->deviceManager()->cdReader();
 
-  for( QList<K3bDevice::Device *>::const_iterator it = devices.begin();
-       it != devices.end(); ++it ) {
-      if ( d->ignoreDevice == *it ) {
-          continue;
-      }
+    for( QList<K3bDevice::Device *>::const_iterator it = devices.begin();
+         it != devices.end(); ++it ) {
+        if ( d->ignoreDevice == *it ) {
+            continue;
+        }
 
-    K3bMedium medium = k3bappcore->mediaCache()->medium( *it );
+        K3bMedium medium = k3bappcore->mediaCache()->medium( *it );
 
-    if( showMedium( medium ) )
-      addMedium( *it );
-  }
-
-  //
-  // Now in case no usable medium was found show the user a little message
-  //
-  if( d->devices.isEmpty() ) {
-    showNoMediumMessage();
-    if( selected != 0 ) {
-      // inform that we have no medium at all
-      emit selectionChanged( 0 );
+        if( showMedium( medium ) )
+            addMedium( *it );
     }
-  }
-  else if( selected && d->deviceIndexMap.contains( selected ) ) {
-    setCurrentIndex( d->deviceIndexMap[selected] );
-  }
-  else {
-    emit selectionChanged( selectedDevice() );
-  }
 
-  // did the selection of devices change
-  if( !( d->devices == oldDevices ) ) {
-    emit newMedia();
-    for( unsigned int i = 0; i < d->devices.count(); ++i ) {
-      unsigned int j = 0;
-      for( j = 0; j < oldDevices.count(); ++j ) {
-	if( oldDevices[j] == d->devices[i] )
-	  break;
-      }
-      if( j == oldDevices.count() ) {
-	// prefere a newly inserted medium over the previously selected
-	setSelectedDevice( d->devices[i] );
-	emit newMedium( d->devices[i] );
-      }
+    //
+    // Now in case no usable medium was found show the user a little message
+    //
+    if( d->devices.isEmpty() ) {
+        showNoMediumMessage();
+        if( selected != 0 ) {
+            // inform that we have no medium at all
+            emit selectionChanged( 0 );
+        }
     }
-  }
+    else if( selected && d->deviceIndexMap.contains( selected ) ) {
+        setCurrentIndex( d->deviceIndexMap[selected] );
+    }
+    else {
+        emit selectionChanged( selectedDevice() );
+    }
+
+    // did the selection of devices change
+    if( !( d->devices == oldDevices ) ) {
+        emit newMedia();
+        for( int i = 0; i < d->devices.count(); ++i ) {
+            int j = 0;
+            for( j = 0; j < oldDevices.count(); ++j ) {
+                if( oldDevices[j] == d->devices[i] )
+                    break;
+            }
+            if( j == oldDevices.count() ) {
+                // prefere a newly inserted medium over the previously selected
+                setSelectedDevice( d->devices[i] );
+                emit newMedium( d->devices[i] );
+            }
+        }
+    }
 }
 
 
 void K3bMediaSelectionComboBox::updateMedium( K3bDevice::Device* )
 {
-  // for now we simply rebuild the whole list
-  updateMedia();
+    // for now we simply rebuild the whole list
+    updateMedia();
 }
 
 
 void K3bMediaSelectionComboBox::addMedium( K3bDevice::Device* dev )
 {
-  //
-  // In case we only want an empty medium (this might happen in case the
-  // the medium is rewritable) we do not care about the contents but tell
-  // the user that the medium is rewritable.
-  // Otherwise we show the contents type since this might also be used
-  // for source selection.
-  //
-  QString s = mediumString( k3bappcore->mediaCache()->medium( dev ) );
-
-  //
-  // Now let's see if this string is already contained in the list
-  // and if so add the device name to both
-  //
-  if( d->mediaStringMap.contains( s ) ) {
     //
-    // insert the modified string
+    // In case we only want an empty medium (this might happen in case the
+    // the medium is rewritable) we do not care about the contents but tell
+    // the user that the medium is rewritable.
+    // Otherwise we show the contents type since this might also be used
+    // for source selection.
     //
-    insertItem( s + QString(" (%1 - %2)").arg(dev->vendor()).arg(dev->description()) );
+    QString s = mediumString( k3bappcore->mediaCache()->medium( dev ) );
 
     //
-    // change the already existing string if we did not already do so
-    // (which happens if more than 2 entries have the same medium string)
+    // Now let's see if this string is already contained in the list
+    // and if so add the device name to both
     //
-    int prevIndex = d->mediaStringMap[s];
-    if( prevIndex >= 0 )
-      setItemText( prevIndex,itemText(prevIndex) + QString(" (%1 - %2)").arg(d->devices[prevIndex]->vendor()).arg(d->devices[prevIndex]->description() ));
+    if( d->mediaStringMap.contains( s ) ) {
+        //
+        // insert the modified string
+        //
+        addItem( s + QString(" (%1 - %2)").arg(dev->vendor()).arg(dev->description()) );
+
+        //
+        // change the already existing string if we did not already do so
+        // (which happens if more than 2 entries have the same medium string)
+        //
+        int prevIndex = d->mediaStringMap[s];
+        if( prevIndex >= 0 )
+            setItemText( prevIndex,itemText(prevIndex) + QString(" (%1 - %2)").arg(d->devices[prevIndex]->vendor()).arg(d->devices[prevIndex]->description() ));
+
+        //
+        // mark the string as already changed
+        //
+        d->mediaStringMap[s] = -1;
+    }
+    else {
+        //
+        // insert the plain medium string
+        //
+        addItem( s );
+        d->mediaStringMap[s] = count()-1;
+    }
 
     //
-    // mark the string as already changed
+    // update the helper structures
     //
-    d->mediaStringMap[s] = -1;
-  }
-  else {
-    //
-    // insert the plain medium string
-    //
-    insertItem( s );
-    d->mediaStringMap[s] = count()-1;
-  }
-
-  //
-  // update the helper structures
-  //
-  d->deviceIndexMap[dev] = count()-1;
-  d->devices.append( dev );
+    d->deviceIndexMap[dev] = count()-1;
+    d->devices.append( dev );
 }
 
 
 void K3bMediaSelectionComboBox::slotDeviceManagerChanged( K3bDevice::DeviceManager* )
 {
-  updateMedia();
+    updateMedia();
 }
 
 
 K3bDevice::Device* K3bMediaSelectionComboBox::deviceAt( int index )
 {
-  if( index < d->devices.count() )
-    return d->devices[index];
-  else
-    return 0;
+    if( index < d->devices.count() )
+        return d->devices[index];
+    else
+        return 0;
 }
 
 
 bool K3bMediaSelectionComboBox::showMedium( const K3bMedium& m ) const
 {
-  //
-  // also use if wantedMediumState empty and medium rewritable
-  // because we can always format/erase/overwrite it
-  //
-  // DVD+RW and DVD-RW restr. ovwr. are never reported as appendable
-  //
-  return( m.diskInfo().mediaType() & d->wantedMediumType &&
-	  m.content() & d->wantedMediumContent &&
-	  ( m.diskInfo().diskState() & d->wantedMediumState
-	    ||
-	    ( d->wantedMediumState & K3bDevice::STATE_EMPTY &&
-	      m.diskInfo().rewritable() )
-	    ||
-	    ( d->wantedMediumState & K3bDevice::STATE_INCOMPLETE &&
-	      !m.diskInfo().empty() &&
-	      m.diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) )
-	  );
+    //
+    // also use if wantedMediumState empty and medium rewritable
+    // because we can always format/erase/overwrite it
+    //
+    // DVD+RW and DVD-RW restr. ovwr. are never reported as appendable
+    //
+    return( m.diskInfo().mediaType() & d->wantedMediumType &&
+            m.content() & d->wantedMediumContent &&
+            ( m.diskInfo().diskState() & d->wantedMediumState
+              ||
+              ( d->wantedMediumState & K3bDevice::STATE_EMPTY &&
+                m.diskInfo().rewritable() )
+              ||
+              ( d->wantedMediumState & K3bDevice::STATE_INCOMPLETE &&
+                !m.diskInfo().empty() &&
+                m.diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) )
+        );
 }
 
 
 QString K3bMediaSelectionComboBox::mediumString( const K3bMedium& medium ) const
 {
-  return medium.shortString( d->wantedMediumState != K3bDevice::STATE_EMPTY );
+    return medium.shortString( d->wantedMediumState != K3bDevice::STATE_EMPTY );
 }
 
 
 QString K3bMediaSelectionComboBox::mediumToolTip( const K3bMedium& m ) const
 {
-  return m.longString();
+    return m.longString();
 }
 
 
 QString K3bMediaSelectionComboBox::noMediumMessage() const
 {
-  KLocalizedString stateString;
-  if( d->wantedMediumContent == K3bMedium::CONTENT_ALL ) {
-      if( d->wantedMediumState == K3bDevice::STATE_EMPTY )
-          stateString = ki18n("an empty %1 medium");
-      else if( d->wantedMediumState == K3bDevice::STATE_INCOMPLETE )
-          stateString = ki18n("an appendable %1 medium");
-      else if( d->wantedMediumState == K3bDevice::STATE_COMPLETE )
-          stateString = ki18n("a complete %1 medium");
-      else if( d->wantedMediumState & (K3bDevice::STATE_EMPTY|K3bDevice::STATE_INCOMPLETE) &&
-               !(d->wantedMediumState & K3bDevice::STATE_COMPLETE) )
-          stateString = ki18n("an empty or appendable %1 medium");
-      else if( d->wantedMediumState & (K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE) )
-          stateString = ki18n("a complete or appendable %1 medium");
-      else
-          stateString = ki18n("a %1 medium");
-  }
-  else {
-      //
-      // we only handle the combinations that make sense here
-      // and if content is requested in does not make sense to
-      // also request a specific type of medium (like DVD+RW or DVD-R)
-      //
-      if( d->wantedMediumContent & K3bMedium::CONTENT_VIDEO_CD )
-          stateString = ki18n("a Video CD medium");
-      else if ( d->wantedMediumContent & K3bMedium::CONTENT_VIDEO_DVD )
-          stateString = ki18n("a Video DVD medium");
-      else if( d->wantedMediumContent & K3bMedium::CONTENT_AUDIO &&
-               d->wantedMediumContent & K3bMedium::CONTENT_DATA )
-          stateString = ki18n("a Mixed Mode CD medium");
-      else if( d->wantedMediumContent & K3bMedium::CONTENT_AUDIO )
-          stateString = ki18n("an Audio CD medium");
-      else if( d->wantedMediumContent & K3bMedium::CONTENT_DATA ) {
-          if ( d->wantedMediumType == K3bDevice::MEDIA_ALL )
-              stateString = ki18n("a Data medium");
-          else if ( d->wantedMediumType == (K3bDevice::MEDIA_CD_ALL|K3bDevice::MEDIA_DVD_ALL) )
-              stateString = ki18n("a Data CD or DVD medium");
-          else if ( d->wantedMediumType == K3bDevice::MEDIA_CD_ALL )
-              stateString = ki18n("a Data CD medium");
-          else if( d->wantedMediumType == K3bDevice::MEDIA_DVD_ALL )
-              stateString = ki18n("a Data DVD medium");
-          else if ( d->wantedMediumType == K3bDevice::MEDIA_BD_ALL )
-              stateString = ki18n("a Data Blu-ray medium");
-      }
-      else {
-          stateString = ki18n("an empty medium");
-      }
-  }
+    KLocalizedString stateString;
+    if( d->wantedMediumContent == K3bMedium::CONTENT_ALL ) {
+        if( d->wantedMediumState == K3bDevice::STATE_EMPTY )
+            stateString = ki18n("an empty %1 medium");
+        else if( d->wantedMediumState == K3bDevice::STATE_INCOMPLETE )
+            stateString = ki18n("an appendable %1 medium");
+        else if( d->wantedMediumState == K3bDevice::STATE_COMPLETE )
+            stateString = ki18n("a complete %1 medium");
+        else if( d->wantedMediumState & (K3bDevice::STATE_EMPTY|K3bDevice::STATE_INCOMPLETE) &&
+                 !(d->wantedMediumState & K3bDevice::STATE_COMPLETE) )
+            stateString = ki18n("an empty or appendable %1 medium");
+        else if( d->wantedMediumState & (K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE) )
+            stateString = ki18n("a complete or appendable %1 medium");
+        else
+            stateString = ki18n("a %1 medium");
+    }
+    else {
+        //
+        // we only handle the combinations that make sense here
+        // and if content is requested in does not make sense to
+        // also request a specific type of medium (like DVD+RW or DVD-R)
+        //
+        if( d->wantedMediumContent & K3bMedium::CONTENT_VIDEO_CD )
+            stateString = ki18n("a Video CD medium");
+        else if ( d->wantedMediumContent & K3bMedium::CONTENT_VIDEO_DVD )
+            stateString = ki18n("a Video DVD medium");
+        else if( d->wantedMediumContent & K3bMedium::CONTENT_AUDIO &&
+                 d->wantedMediumContent & K3bMedium::CONTENT_DATA )
+            stateString = ki18n("a Mixed Mode CD medium");
+        else if( d->wantedMediumContent & K3bMedium::CONTENT_AUDIO )
+            stateString = ki18n("an Audio CD medium");
+        else if( d->wantedMediumContent & K3bMedium::CONTENT_DATA ) {
+            if ( d->wantedMediumType == K3bDevice::MEDIA_ALL )
+                stateString = ki18n("a Data medium");
+            else if ( d->wantedMediumType == (K3bDevice::MEDIA_CD_ALL|K3bDevice::MEDIA_DVD_ALL) )
+                stateString = ki18n("a Data CD or DVD medium");
+            else if ( d->wantedMediumType == K3bDevice::MEDIA_CD_ALL )
+                stateString = ki18n("a Data CD medium");
+            else if( d->wantedMediumType == K3bDevice::MEDIA_DVD_ALL )
+                stateString = ki18n("a Data DVD medium");
+            else if ( d->wantedMediumType == K3bDevice::MEDIA_BD_ALL )
+                stateString = ki18n("a Data Blu-ray medium");
+        }
+        else {
+            stateString = ki18n("an empty medium");
+        }
+    }
 
-  // this is basically the same as in K3bEmptyDiskWaiter
-  // FIXME: include things like only rewritable dvd or cd since we will probably need that
-  QString mediumString;
-  if ( d->wantedMediumType == K3bDevice::MEDIA_WRITABLE )
-      mediumString = i18n( "writable" );
-  else if( d->wantedMediumType == (K3bDevice::MEDIA_CD_ALL|K3bDevice::MEDIA_DVD_ALL) )
-      mediumString = i18n("CD or DVD");
-  else if( d->wantedMediumType == K3bDevice::MEDIA_CD_ALL )
-      mediumString = i18n("CD");
-  else if( d->wantedMediumType == K3bDevice::MEDIA_DVD_ALL )
-      mediumString = i18n("DVD");
-  else if ( d->wantedMediumType == K3bDevice::MEDIA_BD_ALL )
-      mediumString = i18n( "Blu-ray" );
-  else if( d->wantedMediumType == ( K3bDevice::MEDIA_WRITABLE_DVD|K3bDevice::MEDIA_WRITABLE_CD) )
-      mediumString = i18n("CD-R(W) or DVD%1R(W)",QString("±"));
-  else if( d->wantedMediumType == ( K3bDevice::MEDIA_WRITABLE_DVD|K3bDevice::MEDIA_WRITABLE_BD) )
-      mediumString = i18n("DVD%1R(W) or BD-R(E)",QString("±"));
-  else if( d->wantedMediumType == K3bDevice::MEDIA_WRITABLE_DVD_SL )
-      mediumString = i18n("DVD%1R(W)",QString("±"));
-  else if( d->wantedMediumType == K3bDevice::MEDIA_WRITABLE_DVD_DL )
-      mediumString = i18n("Double Layer DVD%1R",QString("±"));
-  else if ( d->wantedMediumType == K3bDevice::MEDIA_WRITABLE_BD )
-      mediumString = i18n( "Blu-ray BD-R(E)" );
-  else if( d->wantedMediumType == K3bDevice::MEDIA_WRITABLE_CD )
-      mediumString = i18n("CD-R(W)");
-  else if( d->wantedMediumType == K3bDevice::MEDIA_DVD_ROM )
-      mediumString = i18n("DVD-ROM");
-  else if( d->wantedMediumType == K3bDevice::MEDIA_CD_ROM )
-      mediumString = i18n("CD-ROM");
+    // this is basically the same as in K3bEmptyDiskWaiter
+    // FIXME: include things like only rewritable dvd or cd since we will probably need that
+    QString mediumString;
+    if ( d->wantedMediumType == K3bDevice::MEDIA_WRITABLE )
+        mediumString = i18n( "writable" );
+    else if( d->wantedMediumType == (K3bDevice::MEDIA_CD_ALL|K3bDevice::MEDIA_DVD_ALL) )
+        mediumString = i18n("CD or DVD");
+    else if( d->wantedMediumType == K3bDevice::MEDIA_CD_ALL )
+        mediumString = i18n("CD");
+    else if( d->wantedMediumType == K3bDevice::MEDIA_DVD_ALL )
+        mediumString = i18n("DVD");
+    else if ( d->wantedMediumType == K3bDevice::MEDIA_BD_ALL )
+        mediumString = i18n( "Blu-ray" );
+    else if( d->wantedMediumType == ( K3bDevice::MEDIA_WRITABLE_DVD|K3bDevice::MEDIA_WRITABLE_CD) )
+        mediumString = i18n("CD-R(W) or DVD%1R(W)",QString("±"));
+    else if( d->wantedMediumType == ( K3bDevice::MEDIA_WRITABLE_DVD|K3bDevice::MEDIA_WRITABLE_BD) )
+        mediumString = i18n("DVD%1R(W) or BD-R(E)",QString("±"));
+    else if( d->wantedMediumType == K3bDevice::MEDIA_WRITABLE_DVD_SL )
+        mediumString = i18n("DVD%1R(W)",QString("±"));
+    else if( d->wantedMediumType == K3bDevice::MEDIA_WRITABLE_DVD_DL )
+        mediumString = i18n("Double Layer DVD%1R",QString("±"));
+    else if ( d->wantedMediumType == K3bDevice::MEDIA_WRITABLE_BD )
+        mediumString = i18n( "Blu-ray BD-R(E)" );
+    else if( d->wantedMediumType == K3bDevice::MEDIA_WRITABLE_CD )
+        mediumString = i18n("CD-R(W)");
+    else if( d->wantedMediumType == K3bDevice::MEDIA_DVD_ROM )
+        mediumString = i18n("DVD-ROM");
+    else if( d->wantedMediumType == K3bDevice::MEDIA_CD_ROM )
+        mediumString = i18n("CD-ROM");
 
-  if ( stateString.toString().contains( "%1" ) )
-      return ki18n("Please insert %1...").subs(stateString.subs( mediumString ).toString() ).toString();
-  else
-      return ki18n("Please insert %1...").subs(stateString.toString() ).toString();
+    if ( stateString.toString().contains( "%1" ) )
+        return ki18n("Please insert %1...").subs(stateString.subs( mediumString ).toString() ).toString();
+    else
+        return ki18n("Please insert %1...").subs(stateString.toString() ).toString();
 }
 
 
 void K3bMediaSelectionComboBox::slotUpdateToolTip( K3bDevice::Device* dev )
 {
     // update the tooltip for the combobox (the tooltip for the dropdown box is created in the constructor)
-    QToolTip::remove( this );
-    if( dev )
-        this->setToolTip( mediumToolTip( k3bappcore->mediaCache()->medium( dev ) ) );
+    setToolTip( dev ? QString() : mediumToolTip( k3bappcore->mediaCache()->medium( dev ) ) );
 }
 
 #include "k3bmediaselectioncombobox.moc"

@@ -28,10 +28,10 @@ class K3bThemedLabel : public KSqueezedTextLabel
   K3bThemedLabel( const QString& text, QWidget* parent = 0 );
   K3bThemedLabel( K3bTheme::PixmapType, QWidget* parent = 0 );
 
- public slots:
+ public Q_SLOTS:
   void setThemePixmap( K3bTheme::PixmapType );
 
- private slots:
+ private Q_SLOTS:
   void slotThemeChanged();
 
  private:

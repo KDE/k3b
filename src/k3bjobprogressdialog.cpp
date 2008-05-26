@@ -1,6 +1,5 @@
 /*
  *
- * $Id$
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -159,10 +158,6 @@ void K3bJobProgressDialog::setupGUI()
     m_labelJob->setAlignment( Qt::AlignVCenter | Qt::AlignRight  );
 
     m_labelJobDetails = new K3bThemedLabel( d->headerFrame );
-    m_labelJobDetails->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5,
-                                                   (QSizePolicy::SizeType)5,
-                                                   0, 1,
-                                                   m_labelJobDetails->sizePolicy().hasHeightForWidth() ) );
     m_labelJobDetails->setAlignment( Qt::AlignVCenter | Qt::AlignRight  );
 
     QVBoxLayout* jobLabelsLayout = new QVBoxLayout;
@@ -204,8 +199,6 @@ void K3bJobProgressDialog::setupGUI()
     m_labelTask->setFont( m_labelTask_font );
 
     m_labelElapsedTime = new K3bThemedLabel( d->progressHeaderFrame );
-    m_labelElapsedTime->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5,
-                                                    0, 1, m_labelElapsedTime->sizePolicy().hasHeightForWidth() ) );
 
     QVBoxLayout* jobProgressLayout = new QVBoxLayout( d->progressHeaderFrame );
     jobProgressLayout->setMargin( KDialog::spacingHint() );
@@ -217,7 +210,7 @@ void K3bJobProgressDialog::setupGUI()
     mainLayout->addWidget( d->progressHeaderFrame );
     // ------------------------------------------------------------------------------------------
 
-    QHBoxLayout* layout3 = new QHBoxLayout( 0, 0, 6, "layout3");
+    QHBoxLayout* layout3 = new QHBoxLayout;
 
     m_labelSubTask = new KSqueezedTextLabel( mainWidget() );
     m_labelSubTask->setTextElideMode( Qt::ElideRight );
@@ -231,7 +224,7 @@ void K3bJobProgressDialog::setupGUI()
     m_progressSubPercent = new QProgressBar( mainWidget() );
     mainLayout->addWidget( m_progressSubPercent );
 
-    QHBoxLayout* layout4 = new QHBoxLayout( 0, 0, 6, "layout4");
+    QHBoxLayout* layout4 = new QHBoxLayout;
 
     QLabel* textLabel5 = new QLabel( i18n("Overall progress:"), mainWidget() );
     layout4->addWidget( textLabel5 );
@@ -266,7 +259,7 @@ void K3bJobProgressDialog::setupGUI()
 void K3bJobProgressDialog::show()
 {
     if( KConfigGroup( k3bcore->config(), "General Options" ).readEntry( "hide main window while writing", false ) )
-        if( QWidget* w = kapp->mainWidget() )
+        if( QWidget* w = kapp->activeWindow() )
             w->hide();
 
     if( m_osd ) {
@@ -280,7 +273,7 @@ void K3bJobProgressDialog::show()
 
 void K3bJobProgressDialog::setExtraInfo( QWidget *extra )
 {
-    extra->reparent( m_frameExtraInfo, QPoint(0,0) );
+    extra->setParent( m_frameExtraInfo );
     m_frameExtraInfoLayout->addWidget( extra, 0, 0 );
 }
 
@@ -289,11 +282,11 @@ void K3bJobProgressDialog::closeEvent( QCloseEvent* e )
 {
     if( button( User2 )->isVisible() ) {
         KDialog::closeEvent( e );
-        if( QWidget* w = kapp->mainWidget() )
+        if( QWidget* w = kapp->activeWindow() )
             w->show();
 
         if( !m_plainCaption.isEmpty() )
-            if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->mainWidget()) )
+            if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->activeWindow()) )
                 w->setPlainCaption( m_plainCaption );
 
         if( m_osd ) {
@@ -359,11 +352,13 @@ void K3bJobProgressDialog::slotFinished( bool success )
 
     m_logFile.close();
 
+    QPalette taskPalette( m_labelTask->palette() );
     if( success ) {
         m_pixLabel->setThemePixmap( K3bTheme::PROGRESS_SUCCESS );
 
+        taskPalette.setColor( QPalette::WindowText, Qt::darkGreen );
+
         m_labelTask->setText( i18n("Success.") );
-        m_labelTask->setPaletteForegroundColor( Qt::darkGreen );
         m_labelSubTask->setText( QString() );
 
         m_progressPercent->setValue(100);
@@ -381,7 +376,7 @@ void K3bJobProgressDialog::slotFinished( bool success )
     else {
         m_pixLabel->setThemePixmap( K3bTheme::PROGRESS_FAIL );
 
-        m_labelTask->setPaletteForegroundColor( Qt::red );
+        taskPalette.setColor( QPalette::WindowText, Qt::red );
 
         if( m_bCanceled ) {
             m_labelTask->setText( i18n("Canceled.") );
@@ -395,6 +390,8 @@ void K3bJobProgressDialog::slotFinished( bool success )
         }
         KNotification::event("FinishedWithError", i18n("Finished with errors") ,QPixmap() ,0);
     }
+
+    m_labelTask->setPalette( taskPalette );
 
     showButton( Cancel, false );
     showButton( User1, true );
@@ -426,7 +423,7 @@ void K3bJobProgressDialog::setJob( K3bJob* job )
     m_labelSubTask->setText("");
     m_labelProcessedSize->setText("");
     m_labelSubProcessedSize->setText("");
-    m_labelTask->setPaletteForegroundColor( k3bappcore->themeManager()->currentTheme()->foregroundColor() );
+    m_labelTask->setPalette( k3bappcore->themeManager()->currentTheme()->palette() );
     m_logCache.clear();
 
     // disconnect from the former job
@@ -507,7 +504,7 @@ void K3bJobProgressDialog::slotStarted()
     d->lastProgress = 0;
     m_timer->start( 1000 );
     m_startTime = QDateTime::currentDateTime();
-    if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->mainWidget()) )
+    if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->activeWindow()) )
         m_plainCaption = w->windowTitle();
 
     m_logFile.open();
@@ -558,7 +555,7 @@ void K3bJobProgressDialog::slotProgress( int percent )
     if( percent > d->lastProgress ) {
         d->lastProgress = percent;
         m_lastProgressUpdateTime = QDateTime::currentDateTime();
-        if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->mainWidget()) ) {
+        if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->activeWindow()) ) {
             w->setPlainCaption( QString( "(%1%) %2" ).arg(percent).arg(m_plainCaption) );
         }
 
@@ -694,10 +691,8 @@ void K3bJobProgressDialog::blockingInformation( const QString& text,
 void K3bJobProgressDialog::slotThemeChanged()
 {
     if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-        d->progressHeaderFrame->setPaletteBackgroundColor( theme->backgroundColor() );
-        d->progressHeaderFrame->setPaletteForegroundColor( theme->backgroundColor() );
-        d->headerFrame->setPaletteBackgroundColor( theme->backgroundColor() );
-        d->headerFrame->setPaletteForegroundColor( theme->backgroundColor() );
+        d->progressHeaderFrame->setPalette( theme->palette() );
+        d->headerFrame->setPalette( theme->palette() );
     }
 }
 

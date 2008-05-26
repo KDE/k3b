@@ -17,7 +17,6 @@
 #define K3BJOB_H
 
 #include <qobject.h>
-#include <q3ptrlist.h>
 #include "k3bjobhandler.h"
 #include "k3b_export.h"
 
@@ -77,9 +76,9 @@ public:
      * @returns the number of running subjobs.
      * this is useful for proper cancellation of jobs.
      */
-    unsigned int numRunningSubJobs() const;
+    int numRunningSubJobs() const;
 
-    const Q3PtrList<K3bJob>& runningSubJobs() const;
+    QList<K3bJob*> runningSubJobs() const;
 
     static const char* DEFAULT_SIGNAL_CONNECTION;
 
@@ -269,7 +268,7 @@ public Q_SLOTS:
      */
     void setWritingApp( int w );
 
-signals:
+ Q_SIGNALS:
     void bufferStatus( int );
 
     void deviceBuffer( int );

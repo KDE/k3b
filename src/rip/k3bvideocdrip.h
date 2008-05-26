@@ -35,14 +35,14 @@ class K3bVideoCdRip : public K3bJob
         QString jobDescription() const;
         QString jobDetails() const;
 
-    public slots:
+    public Q_SLOTS:
         void start();
         void cancel();
 
-    private slots:
+    private Q_SLOTS:
         void cancelAll();
 
-    protected slots:
+    protected Q_SLOTS:
         void slotVcdXRipFinished();
         void slotParseVcdXRipOutput( K3Process*, char* output, int len );
 

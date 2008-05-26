@@ -30,7 +30,7 @@
 #include <qfile.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <Q3ValueList>
+#include <QList>
 
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -61,8 +61,8 @@ static const char s_riffHeader[] =
 
 static K3bExternalEncoderCommand commandByExtension( const QString& extension )
 {
-    Q3ValueList<K3bExternalEncoderCommand> cmds( K3bExternalEncoderCommand::readCommands() );
-    for( Q3ValueList<K3bExternalEncoderCommand>::iterator it = cmds.begin(); it != cmds.end(); ++it )
+    QList<K3bExternalEncoderCommand> cmds( K3bExternalEncoderCommand::readCommands() );
+    for( QList<K3bExternalEncoderCommand>::iterator it = cmds.begin(); it != cmds.end(); ++it )
         if( (*it).extension == extension )
             return *it;
 
@@ -358,8 +358,8 @@ void K3bExternalEncoder::slotExternalProgramOutputLine( const QString& line )
 QStringList K3bExternalEncoder::extensions() const
 {
     QStringList el;
-    Q3ValueList<K3bExternalEncoderCommand> cmds( K3bExternalEncoderCommand::readCommands() );
-    for( Q3ValueList<K3bExternalEncoderCommand>::iterator it = cmds.begin(); it != cmds.end(); ++it )
+    QList<K3bExternalEncoderCommand> cmds( K3bExternalEncoderCommand::readCommands() );
+    for( QList<K3bExternalEncoderCommand>::iterator it = cmds.begin(); it != cmds.end(); ++it )
         el.append( (*it).extension );
 
     return el;

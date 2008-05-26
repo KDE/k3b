@@ -34,7 +34,7 @@
 #include <kconfig.h>
 #include <kapplication.h>
 
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>
@@ -61,24 +61,30 @@ K3bMediaFormattingDialog::K3bMediaFormattingDialog( QWidget* parent )
     m_writerSelectionWidget->setSupportedWritingApps( K3b::DVD_RW_FORMAT );
     m_writerSelectionWidget->setForceAutoSpeed(true);
 
-    Q3GroupBox* groupWritingMode = new Q3GroupBox( 1, Qt::Vertical, i18n("Writing Mode"), frame );
-    groupWritingMode->layout()->setMargin( marginHint() );
-    groupWritingMode->layout()->setSpacing( spacingHint() );
+    QGroupBox* groupWritingMode = new QGroupBox( i18n("Writing Mode"), frame );
     m_writingModeWidget = new K3bWritingModeWidget( K3b::WRITING_MODE_INCR_SEQ|K3b::WRITING_MODE_RES_OVWR,
                                                     groupWritingMode );
+    QVBoxLayout* groupWritingModeLayout = new QVBoxLayout( groupWritingMode );
+    groupWritingModeLayout->setMargin( marginHint() );
+    groupWritingModeLayout->setSpacing( spacingHint() );
+    groupWritingModeLayout->addWidget( m_writingModeWidget );
+    groupWritingModeLayout->addStretch( 1 );
 
-
-    Q3GroupBox* groupOptions = new Q3GroupBox( 2, Qt::Vertical, i18n("Settings"), frame );
-    groupOptions->layout()->setMargin( marginHint() );
-    groupOptions->layout()->setSpacing( spacingHint() );
+    QGroupBox* groupOptions = new QGroupBox( i18n("Settings"), frame );
     m_checkForce = new QCheckBox( i18n("Force"), groupOptions );
     m_checkQuickFormat = new QCheckBox( i18n("Quick format"), groupOptions );
+    QVBoxLayout* groupOptionsLayout = new QVBoxLayout( groupOptions );
+    groupOptionsLayout->setMargin( marginHint() );
+    groupOptionsLayout->setSpacing( spacingHint() );
+    groupOptionsLayout->addWidget( m_checkForce );
+    groupOptionsLayout->addWidget( m_checkQuickFormat );
+    groupOptionsLayout->addStretch( 1 );
 
     QGridLayout* grid = new QGridLayout( frame );
     grid->setMargin( 0 );
     grid->setSpacing( spacingHint() );
 
-    grid->addMultiCellWidget( m_writerSelectionWidget, 0, 0, 0, 1 );
+    grid->addWidget( m_writerSelectionWidget, 0, 0, 1, 2 );
     grid->addWidget( groupWritingMode, 1, 0 );
     grid->addWidget( groupOptions, 1, 1 );
     grid->setRowStretch( 1, 1 );
@@ -123,7 +129,7 @@ void K3bMediaFormattingDialog::slotStartClicked()
 {
     K3bMedium medium = k3bappcore->mediaCache()->medium( m_writerSelectionWidget->writerDevice() );
 
-    K3bJobProgressDialog dlg( kapp->mainWidget() );
+    K3bJobProgressDialog dlg( kapp->activeWindow() );
 
     K3bJob* theJob = 0;
 

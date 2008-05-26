@@ -24,16 +24,16 @@
 
 #include <qpushbutton.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 #include <sys/types.h>
 #include <signal.h>
 
 
-static QString joinProcessNames( const Q3ValueList<K3bLsofWrapper::Process>& apps )
+static QString joinProcessNames( const QList<K3bLsofWrapper::Process>& apps )
 {
   QStringList l;
-  for( Q3ValueList<K3bLsofWrapper::Process>::const_iterator it = apps.begin();
+  for( QList<K3bLsofWrapper::Process>::const_iterator it = apps.begin();
        it != apps.end(); ++it )
     l.append( (*it).name );
   return l.join( ", " );
@@ -68,7 +68,7 @@ bool K3bLsofWrapperDialog::slotCheckDevice()
 {
   K3bLsofWrapper lsof;
   if( lsof.checkDevice( m_device ) ) {
-    const Q3ValueList<K3bLsofWrapper::Process>& apps = lsof.usingApplications();
+    const QList<K3bLsofWrapper::Process>& apps = lsof.usingApplications();
     if( apps.count() > 0 ) {
       m_label->setText( i18n("<p>Device <b>'%1'</b> is already in use by other applications "
 			     "(<em>%2</em>)."
@@ -95,12 +95,12 @@ void K3bLsofWrapperDialog::slotQuitOtherApps()
 {
   K3bLsofWrapper lsof;
   if( lsof.checkDevice( m_device ) ) {
-    const Q3ValueList<K3bLsofWrapper::Process>& apps = lsof.usingApplications();
+    const QList<K3bLsofWrapper::Process>& apps = lsof.usingApplications();
     if( apps.count() > 0 ) {
       if( KMessageBox::warningYesNo( this,
 				     i18n("<p>Do you really want K3b to kill the following processes: <em>")
 					  + joinProcessNames(apps) ) == KMessageBox::Yes ) {
-	for( Q3ValueList<K3bLsofWrapper::Process>::const_iterator it = apps.begin();
+	for( QList<K3bLsofWrapper::Process>::const_iterator it = apps.begin();
 	     it != apps.end(); ++it )
 	  ::kill( (*it).pid, SIGTERM );
       }

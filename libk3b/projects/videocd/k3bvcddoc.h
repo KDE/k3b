@@ -119,7 +119,7 @@ class LIBK3B_EXPORT K3bVcdDoc : public K3bDoc
         void setVcdType( int type );
         void setPbcTracks();
 
-    public slots:
+    public Q_SLOTS:
         /**
          * will test the file and add it to the project.
          * connect to at least result() to know when
@@ -136,11 +136,11 @@ class LIBK3B_EXPORT K3bVcdDoc : public K3bDoc
         void removeTrack( K3bVcdTrack* );
         void moveTrack( K3bVcdTrack* track, K3bVcdTrack* after );
 
-    protected slots:
+    protected Q_SLOTS:
         /** processes queue "urlsToAdd" **/
         void slotWorkUrlQueue();
 
-    signals:
+     Q_SIGNALS:
         void newTracks();
 
         void trackRemoved( K3bVcdTrack* );

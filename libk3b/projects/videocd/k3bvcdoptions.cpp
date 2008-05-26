@@ -1,6 +1,7 @@
 /*
 *
 * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -28,37 +29,37 @@
 #include <k3bversion.h>
 
 K3bVcdOptions::K3bVcdOptions()
-        : m_restriction( 0 ),
-        m_segment( 0 ),
-        m_sequence( 0 ),
-        m_pbcenabled( PbcEnabled() ),
-        m_pbcnumkeysenabled( PbcNumkeysEnabled() ),
-        m_volumeID( "VIDEOCD" ),
-        m_albumID( "" ),
-        m_volumeSetId( "" ),
-        m_publisher( QString( "K3b - Version %1" ).arg( k3bcore->version() ) ),
-        m_applicationId( "CDI/CDI_VCD.APP;1" ),
-        m_systemId( "CD-RTOS CD-BRIDGE" ),
-        m_vcdclass( "vcd" ),
-        m_vcdversion( "2.0" ),
-        m_pregapleadout( 150 ),
-        m_pregaptrack( 150 ),
-        m_frontmargintrack( 30 ),
-        m_rearmargintrack( 45 ),
-        m_frontmargintrackSVCD( 0 ),
-        m_rearmargintrackSVCD( 0 ),
-        m_mpegversion( 1 ),
-        m_volumeCount( 1 ),
-        m_volumeNumber( 1 ),
-        m_autodetect( true ),
-        m_cdisupport( false ),
-        m_brokensvcdmode( false ),
-        m_VCD30interpretation( false ),
-        m_sector2336( false ),
-        m_updatescanoffsets( false ),
-        m_relaxedaps( false ),
-        m_segmentfolder( true ),
-        m_usegaps( false )
+    : m_restriction( 0 ),
+      m_segment( 0 ),
+      m_sequence( 0 ),
+      m_pbcenabled( PbcEnabled() ),
+      m_pbcnumkeysenabled( PbcNumkeysEnabled() ),
+      m_volumeID( "VIDEOCD" ),
+      m_albumID( "" ),
+      m_volumeSetId( "" ),
+      m_publisher( QString( "K3b - Version %1" ).arg( k3bcore->version() ) ),
+      m_applicationId( "CDI/CDI_VCD.APP;1" ),
+      m_systemId( "CD-RTOS CD-BRIDGE" ),
+      m_vcdclass( "vcd" ),
+      m_vcdversion( "2.0" ),
+      m_pregapleadout( 150 ),
+      m_pregaptrack( 150 ),
+      m_frontmargintrack( 30 ),
+      m_rearmargintrack( 45 ),
+      m_frontmargintrackSVCD( 0 ),
+      m_rearmargintrackSVCD( 0 ),
+      m_mpegversion( VCD20 ),
+      m_volumeCount( 1 ),
+      m_volumeNumber( 1 ),
+      m_autodetect( true ),
+      m_cdisupport( false ),
+      m_brokensvcdmode( false ),
+      m_VCD30interpretation( false ),
+      m_sector2336( false ),
+      m_updatescanoffsets( false ),
+      m_relaxedaps( false ),
+      m_segmentfolder( true ),
+      m_usegaps( false )
 {}
 
 bool K3bVcdOptions::checkCdiFiles()
@@ -105,6 +106,7 @@ void K3bVcdOptions::save( KConfigGroup& c )
     c.writeEntry( "FrontMarginTrack", m_frontmargintrack );
     c.writeEntry( "RearMarginTrack", m_rearmargintrack );
     c.writeEntry( "UseGaps", m_usegaps );
+    c.writeEntry( "MPEG Version", ( int )m_mpegversion );
 }
 
 
@@ -134,7 +136,7 @@ K3bVcdOptions K3bVcdOptions::load( const KConfigGroup& c )
     options.setFrontMarginTrack( c.readEntry( "FrontMarginTrack", options.FrontMarginTrack() ) );
     options.setRearMarginTrack( c.readEntry( "RearMarginTrack", options.RearMarginTrack() ) );
     options.setUseGaps( c.readEntry( "UseGaps", options.UseGaps() ) );
-
+    options.setMpegVersion( ( MPEGVersion )c.readEntry( "MPEG Version", ( int )options.mpegVersion() ) );
     return options;
 }
 

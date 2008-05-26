@@ -95,27 +95,27 @@ void K3bProjectTabWidget::tabInserted ( int index )
 
 void K3bProjectTabWidget::insertTab( QWidget* child, const QString& label, int index )
 {
-    QTabWidget::insertTab( child, label, index );
+    QTabWidget::insertTab( index, child, label );
     tabBar()->setVisible( count() != 1 );
 }
 
 
 void K3bProjectTabWidget::insertTab( QWidget* child, const QIcon& iconset, const QString& label, int index )
 {
-    QTabWidget::insertTab( child, iconset, label, index );
+    QTabWidget::insertTab( index, child, iconset, label );
     tabBar()->setVisible( count() != 1 );
 }
 
 void K3bProjectTabWidget::removePage( QWidget* w )
 {
-    QTabWidget::removePage( w );
+    QTabWidget::removeTab( indexOf( w ) );
     tabBar()->setVisible( count() != 1 );
 }
 
 
 void K3bProjectTabWidget::insertTab( K3bDoc* doc )
 {
-    QTabWidget::insertTab( doc->view(), doc->URL().fileName() );
+    QTabWidget::addTab( doc->view(), doc->URL().fileName() );
     connect( k3bappcore->projectManager(), SIGNAL(projectSaved(K3bDoc*)), this, SLOT(slotDocSaved(K3bDoc*)) );
     connect( doc, SIGNAL(changed(K3bDoc*)), this, SLOT(slotDocChanged(K3bDoc*)) );
 
@@ -142,7 +142,7 @@ void K3bProjectTabWidget::slotDocChanged( K3bDoc* doc )
         m_projectDataMap[doc].modified = true;
 
         // we need this one for the session management
-        changeTab( doc->view(), doc->URL().fileName() );
+        setTabText( indexOf( doc->view() ), doc->URL().fileName() );
     }
 }
 
@@ -150,7 +150,7 @@ void K3bProjectTabWidget::slotDocChanged( K3bDoc* doc )
 void K3bProjectTabWidget::slotDocSaved( K3bDoc* doc )
 {
     setTabIcon( indexOf( doc->view() ), QIcon() );
-    changeTab( doc->view(), doc->URL().fileName() );
+    setTabText( indexOf( doc->view() ), doc->URL().fileName() );
 }
 
 
@@ -187,7 +187,7 @@ bool K3bProjectTabWidget::eventFilter( QObject* o, QEvent* e )
 
         else if( e->type() == QEvent::DragMove ) {
             QDragMoveEvent* de = static_cast<QDragMoveEvent*>(e);
-            de->accept( K3URLDrag::canDecode(de) && projectAt(de->pos()) );
+            de->setAccepted( K3URLDrag::canDecode(de) && projectAt(de->pos()) );
             return true;
         }
 

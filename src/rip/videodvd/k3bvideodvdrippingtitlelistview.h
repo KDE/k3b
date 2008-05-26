@@ -35,7 +35,7 @@ class K3bVideoDVDRippingTitleListView : public K3bListView
 
   void setVideoDVD( const K3bVideoDVD::VideoDVD& dvd );
 
- private slots:
+ private Q_SLOTS:
   void slotPreviewDone( bool );
 
  private:

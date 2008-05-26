@@ -75,7 +75,7 @@ public Q_SLOTS:
      */
     void determineSupportedModesFromMedium( K3bDevice::Device* dev );
 
-signals:
+ Q_SIGNALS:
     void writingModeChanged( int );
 
 private:

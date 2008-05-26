@@ -27,7 +27,7 @@
 #include <qregexp.h>
 #include <qtimer.h>
 #include <q3url.h>
-#include <Q3ValueList>
+#include <QList>
 
 // K3b Includes
 #include "k3bvideocdrip.h"

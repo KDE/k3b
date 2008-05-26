@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,93 +24,94 @@
 #include <qapplication.h>
 
 
-
 K3bMsfValidator::K3bMsfValidator( QObject* parent )
-  : QRegExpValidator( K3b::Msf::regExp(), parent )
+    : QRegExpValidator( K3b::Msf::regExp(), parent )
 {
 }
 
 
+class K3bMsfEdit::Private
+{
+public:
+    void _k_valueChanged( int );
+    int currentStepValue() const;
+
+    K3bMsfEdit* q;
+};
+
+
+void K3bMsfEdit::Private::_k_valueChanged( int val )
+{
+    emit q->valueChanged( K3b::Msf( val ) );
+}
+
+
+int K3bMsfEdit::Private::currentStepValue() const
+{
+    int val = 1;
+
+    // look if we are currently editing minutes or seconds
+    QString text = q->lineEdit()->text();
+    if( text.length() == 8 ) {
+        text = text.mid( q->lineEdit()->cursorPosition() );
+        int num = text.count( ':' );
+        if( num == 1 )
+            val = 75;
+        else if( num == 2 )
+            val = 60*75;
+    }
+
+    return val;
+}
+
 
 K3bMsfEdit::K3bMsfEdit( QWidget* parent )
-  : QSpinBox( parent )
+    : QSpinBox( parent ),
+      d( new Private() )
 {
-//  setValidator( new K3bMsfValidator( this ) );
-  setMinimum( 0 );
-  // some very high value (10000 minutes)
-  setMaximum( 10000*60*75 );
+    d->q = this;
 
-  connect( this, SIGNAL(valueChanged(int)),
-	   this, SLOT(slotValueChanged(int)) );
+    // some very high value (10000 minutes)
+    setRange( 0, 10000*60*75 );
+
+    connect( this, SIGNAL(valueChanged(int)),
+             this, SLOT(_k_valueChanged(int)) );
 }
 
 
 K3bMsfEdit::~K3bMsfEdit()
-{}
-
-
-QString K3bMsfEdit::mapValueToText( int value )
 {
-  return K3b::framesToString( value, true );
+    delete d;
+}
+
+
+void K3bMsfEdit::stepBy( int steps )
+{
+    QSpinBox::stepBy( steps * d->currentStepValue() );
 }
 
 
 K3b::Msf K3bMsfEdit::msfValue() const
 {
-  return K3b::Msf(value());
-}
-
-
-void K3bMsfEdit::setText( const QString& str )
-{
-  bool ok;
-  setValue( mapTextToValue( &ok) );
+    return value();
 }
 
 
 void K3bMsfEdit::setMsfValue( const K3b::Msf& msf )
 {
-  setValue( msf.totalFrames() );
+    setValue( msf.totalFrames() );
 }
 
 
-int K3bMsfEdit::mapTextToValue( bool* ok )
+QString K3bMsfEdit::textFromValue( int value ) const
 {
-  return K3b::Msf::fromString( text(), ok ).lba();
+    return K3b::Msf( value ).toString();
 }
 
-// void K3bMsfEdit::stepUp()
-// {
-//   setValue( value() + currentStepValue() );
-// }
 
-// void K3bMsfEdit::stepDown()
-// {
-//   setValue( value() - currentStepValue() );
-// }
-
-// int K3bMsfEdit::currentStepValue() const
-// {
-//   int val = 1;
-
-//   // look if we are currently editing minutes or seconds
-//   QString text = editor()->text();
-//   if( text.length() == 8 ) {
-//     text = text.mid( editor()->cursorPosition() );
-//     int num = text.contains( ':' );
-//     if( num == 1 )
-//       val = 75;
-//     else if( num == 2 )
-//       val = 60*75;
-//   }
-
-//   return val;
-// }
-
-
-void K3bMsfEdit::slotValueChanged( int v )
+int K3bMsfEdit::valueFromText( const QString& text ) const
 {
-  emit valueChanged( K3b::Msf(v) );
+    return K3b::Msf::fromString( text ).lba();
 }
 
 #include "k3bmsfedit.moc"

@@ -58,7 +58,7 @@ class K3bCdImageWritingDialog : public K3bInteractionDialog
 
   void setImage( const KUrl& url );
 
- protected slots:
+ protected Q_SLOTS:
   void slotStartClicked();
 
   void slotMd5JobPercent( int );

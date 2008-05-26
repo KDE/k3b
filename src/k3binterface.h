@@ -62,7 +62,7 @@ class K3bInterface : public DCOPObject
 
   DCOPRef openProject( const KUrl& url );
 
-  Q3ValueList<DCOPRef> projects();
+  QList<DCOPRef> projects();
 
   void copyMedium();
   void copyCd();

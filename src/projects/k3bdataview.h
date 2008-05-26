@@ -20,10 +20,13 @@
 
 class K3bDataDoc;
 class K3bDirItem;
+class K3bDataItem;
 class K3bDataDirTreeView;
 class K3bDataFileView;
 class QLineEdit;
-
+class KMenu;
+class KAction;
+class QModelIndex;
 
 namespace K3bDevice {
     class Device;
@@ -44,7 +47,8 @@ public:
 	
     K3bDirItem* currentDir() const;
 
-public slots:
+public Q_SLOTS:
+    void setCurrentDir( K3bDirItem* );
     void slotBurn();
     void importSession();
     void clearImportedSession();
@@ -53,6 +57,16 @@ public slots:
     void slotDocChanged();
 
     void addUrls( const KUrl::List& );
+
+private Q_SLOTS:
+    void showPopupMenu( const QPoint& );
+    void slotRenameItem();
+    void slotRemoveItem();
+    void slotNewDir();
+    void slotParentDir();
+    void slotItemProperties();
+    void slotOpen();
+    void slotDoubleClicked( const QModelIndex& );
 
 protected:
     K3bDataDirTreeView* m_dataDirTree;
@@ -64,8 +78,27 @@ protected:
 private:
     K3bDataDoc* m_doc;
 
+    void setupContextMenu();
+
+    /**
+     * \return a list of the selected items in the currently
+     * active view.
+     */
+    QList<K3bDataItem*> selectedItems() const;
+
+    KMenu* m_popupMenu;
+    KAction* m_actionParentDir;
+    KAction* m_actionRemove;
+    KAction* m_actionRename;
+    KAction* m_actionNewDir;
+    KAction* m_actionProperties;
+    KAction* m_actionOpen;
+
     // used for mounting when importing old session
     K3bDevice::Device* m_device;
+
+    // used for the context menu (to distinguish between the dir and file view)
+    bool m_contextMenuOnTreeView;
 };
 
 

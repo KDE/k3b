@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -137,11 +137,7 @@ void K3bFillStatusDisplayWidget::mousePressEvent( QMouseEvent* e )
 
 void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
 {
-    // double buffer
-    QPixmap buffer( size() );
-    buffer.fill( colorGroup().base() );
-    QPainter p;
-    p.begin( &buffer, this );
+    QPainter p( this );
     p.setPen( Qt::black ); // we use a fixed bar color (which is not very nice btw, so we also fix the text color)
 
     K3b::Msf docSize;
@@ -209,7 +205,7 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
         overSizeText = i18n("Available: %1 of %2",
                             d->showTime
                             ? i18n("%1 min", (cdSize - d->doc->length()).toString(false) )
-                            : KIO::convertSize( ( cdSize.lba() - (unsigned long long)d->doc->size(), 0ULL ) ),
+                            : KIO::convertSize( (cdSize - d->doc->length()).mode1Bytes() ),
                             d->showTime
                             ? i18n("%1 min", cdSize.toString(false))
                             : KIO::convertSize( cdSize.mode1Bytes() ) );
@@ -273,10 +269,6 @@ void K3bFillStatusDisplayWidget::paintEvent( QPaintEvent* )
     p.setFont(fnt);
     p.drawText( overSizeTextRect, Qt::AlignLeft | Qt::AlignVCenter, overSizeText );
     // ====================================================================================
-
-    p.end();
-
-    bitBlt( this, 0, 0, &buffer );
 }
 
 
@@ -339,7 +331,7 @@ K3bFillStatusDisplay::K3bFillStatusDisplay( K3bDoc* doc, QWidget *parent )
     layout->setMargin(frameWidth());
     layout->addWidget( d->displayWidget, 0, 0 );
     //  layout->addWidget( d->buttonMenu, 0, 1 );
-    layout->setColStretch( 0, 1 );
+    layout->setColumnStretch( 0, 1 );
 
     setupPopupMenu();
 

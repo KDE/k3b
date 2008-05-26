@@ -99,7 +99,7 @@ public:
 
     KSystemTray* systemTray() const { return m_systemTray; }
 
-public slots:
+public Q_SLOTS:
     K3bDoc* slotNewAudioDoc();
     K3bDoc* slotNewDataDoc();
     K3bDoc* slotNewMixedDoc();
@@ -126,6 +126,8 @@ public slots:
     void slotVideoCdRip();
     void slotK3bSetup();
 
+    void showDiskInfo( K3bDevice::Device* );
+
     void slotErrorMessage(const QString&);
     void slotWarningMessage(const QString&);
 
@@ -135,7 +137,7 @@ public slots:
 
     void addUrls( const KUrl::List& urls );
 
-signals:
+ Q_SIGNALS:
     void initializationInfo( const QString& );
     void configChanged( KConfig* c );
 
@@ -176,7 +178,7 @@ protected:
 
     virtual void showEvent( QShowEvent* e );
 
-private slots:
+private Q_SLOTS:
     /** open a file and load it into the document*/
     void slotFileOpen();
     /** opens a file from the recent files menu */
@@ -219,8 +221,6 @@ private slots:
     void slotDataImportSession();
     void slotDataClearImportedSession();
     void slotEditBootImages();
-
-    void slotAudioServerError( const QString& error );
 
     void createClient(K3bDoc* doc);
 

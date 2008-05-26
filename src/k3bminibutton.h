@@ -1,6 +1,6 @@
 /* 
  *
- * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -21,7 +21,6 @@
 #define _K3B_MINI_BUTTON_H_
 
 #include <qpushbutton.h>
-//Added by qt3to4:
 #include <QEvent>
 
 class QPainter;
@@ -34,20 +33,20 @@ class QEvent;
  */
 class K3bMiniButton : public QPushButton
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bMiniButton( QWidget *parent=0);
-  virtual ~K3bMiniButton();
+public:
+    K3bMiniButton( QWidget *parent = 0 );
+    virtual ~K3bMiniButton();
 
- protected:
-  virtual void paintEvent(QPaintEvent *);
-  void drawButton( QPainter * );
-  virtual void enterEvent( QEvent * );
-  virtual void leaveEvent( QEvent * );
+protected:
+    virtual void paintEvent( QPaintEvent* );
+    void drawButton( QPainter* );
+    virtual void enterEvent( QEvent * );
+    virtual void leaveEvent( QEvent * );
   
- private:
-  bool m_mouseOver;
+private:
+    bool m_mouseOver;
 };
 
 #endif

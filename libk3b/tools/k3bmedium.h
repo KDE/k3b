@@ -15,6 +15,8 @@
 #ifndef _K3B_MEDIUM_H_
 #define _K3B_MEDIUM_H_
 
+#include "k3b_export.h"
+
 #include <k3bdiskinfo.h>
 #include <k3btoc.h>
 #include <k3bcdtext.h>
@@ -31,17 +33,19 @@ namespace KCDDB{
 }
 
 
+class K3bMediumPrivate;
+
 /**
  * K3bMedium represents a medium in K3b.
  *
  * It is implicetely shared, thus copying is very fast.
  */
-class K3bMedium
+class LIBK3B_EXPORT K3bMedium
 {
 public:
     K3bMedium();
     K3bMedium( const K3bMedium& );
-    K3bMedium( K3bDevice::Device* dev );
+    explicit K3bMedium( K3bDevice::Device* dev );
     ~K3bMedium();
 
     K3bMedium& operator=( const K3bMedium& );
@@ -63,11 +67,11 @@ public:
     void update();
 
     K3bDevice::Device* device() const;
-    const K3bDevice::DiskInfo& diskInfo() const;
-    const K3bDevice::Toc& toc() const;
-    const K3bDevice::CdText& cdText() const;
+    K3bDevice::DiskInfo diskInfo() const;
+    K3bDevice::Toc toc() const;
+    K3bDevice::CdText cdText() const;
 
-    const KCDDB::CDInfo& cddbInfo() const;
+    KCDDB::CDInfo cddbInfo() const;
 
     /**
      * The writing speeds the device supports with the inserted medium.
@@ -75,8 +79,8 @@ public:
      * media. In that case refer to K3bDevice::Device::maxWriteSpeed
      * combined with a manual speed selection.
      */
-    const QList<int>& writingSpeeds() const;
-    const QString& volumeId() const;
+    QList<int> writingSpeeds() const;
+    QString volumeId() const;
 
     /**
      * This method tries to make a volume identificator witch uses a reduced character set
@@ -132,14 +136,21 @@ public:
      */
     QString longString() const;
 
+    /**
+     * Compares the plain medium ignoring the cddb information which can differ
+     * based on the cddb settings.
+     */
+    bool sameMedium( const K3bMedium& other ) const;
+
     bool operator==( const K3bMedium& other ) const;
     bool operator!=( const K3bMedium& other ) const;
 
 private:
     void analyseContent();
 
-    class Data;
-    QSharedDataPointer<Data> d;
+    QSharedDataPointer<K3bMediumPrivate> d;
+
+    friend class K3bMediaCache;
 };
 
 #endif

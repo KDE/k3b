@@ -47,13 +47,13 @@ K3bLameEncoderSettingsWidget::K3bLameEncoderSettingsWidget( QWidget* parent, con
 
     m_manualSettingsDialog = new K3bLameManualSettingsDialog( this );
     for( int i = 0; s_lame_bitrates[i]; ++i )
-        m_manualSettingsDialog->m_comboMaximumBitrate->insertItem( i18n("%1 kbps" , s_lame_bitrates[i]) );
+        m_manualSettingsDialog->m_comboMaximumBitrate->addItem( i18n("%1 kbps" , s_lame_bitrates[i]) );
 
     for( int i = 0; s_lame_bitrates[i]; ++i )
-        m_manualSettingsDialog->m_comboMinimumBitrate->insertItem( i18n("%1 kbps" , s_lame_bitrates[i]) );
+        m_manualSettingsDialog->m_comboMinimumBitrate->addItem( i18n("%1 kbps" , s_lame_bitrates[i]) );
 
     for( int i = 0; s_lame_bitrates[i]; ++i )
-        m_manualSettingsDialog->m_comboConstantBitrate->insertItem( i18n("%1 kbps" , s_lame_bitrates[i]) );
+        m_manualSettingsDialog->m_comboConstantBitrate->addItem( i18n("%1 kbps" , s_lame_bitrates[i]) );
 
 
     // TODO: add whatsthis help for the quality level.
@@ -87,11 +87,11 @@ void K3bLameEncoderSettingsWidget::slotShowManualSettings()
 {
     // save current settings for proper cancellation
     bool constant = m_manualSettingsDialog->m_radioConstantBitrate->isChecked();
-    int constBitrate = m_manualSettingsDialog->m_comboConstantBitrate->currentItem();
-    int max = m_manualSettingsDialog->m_comboMaximumBitrate->currentItem();
-    int min = m_manualSettingsDialog->m_comboMinimumBitrate->currentItem();
+    int constBitrate = m_manualSettingsDialog->m_comboConstantBitrate->currentIndex();
+    int max = m_manualSettingsDialog->m_comboMaximumBitrate->currentIndex();
+    int min = m_manualSettingsDialog->m_comboMinimumBitrate->currentIndex();
     int av = m_manualSettingsDialog->m_spinAverageBitrate->value();
-    int mode = m_manualSettingsDialog->m_comboMode->currentItem();
+    int mode = m_manualSettingsDialog->m_comboMode->currentIndex();
 
     if( m_manualSettingsDialog->exec() == QDialog::Rejected ) {
         m_manualSettingsDialog->m_radioConstantBitrate->setChecked( constant );
@@ -112,11 +112,11 @@ void K3bLameEncoderSettingsWidget::updateManualSettingsLabel()
 {
     if( m_manualSettingsDialog->m_radioConstantBitrate->isChecked() )
         m_labelManualSettings->setText( i18n("Constant Bitrate: %1 kbps (%2)",
-                                             s_lame_bitrates[m_manualSettingsDialog->m_comboConstantBitrate->currentItem()],
-                                             i18n(s_lame_mode_strings[m_manualSettingsDialog->m_comboMode->currentItem()])) );
+                                             s_lame_bitrates[m_manualSettingsDialog->m_comboConstantBitrate->currentIndex()],
+                                             i18n(s_lame_mode_strings[m_manualSettingsDialog->m_comboMode->currentIndex()])) );
     else
         m_labelManualSettings->setText( i18n("Variable Bitrate (%1)",
-                                        i18n(s_lame_mode_strings[m_manualSettingsDialog->m_comboMode->currentItem()])) );
+                                        i18n(s_lame_mode_strings[m_manualSettingsDialog->m_comboMode->currentIndex()])) );
 }
 
 
@@ -185,7 +185,7 @@ void K3bLameEncoderSettingsWidget::save()
     KConfigGroup grp(c, "K3bLameEncoderPlugin" );
 
     QString mode;
-    switch( m_manualSettingsDialog->m_comboMode->currentItem() ) {
+    switch( m_manualSettingsDialog->m_comboMode->currentIndex() ) {
     case 0:
         mode = "stereo";
         break;

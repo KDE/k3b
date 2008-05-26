@@ -48,7 +48,7 @@ class K3bGrowisofsHandler : public QObject
 
   int error() const { return m_error; }
 
- public slots:
+ public Q_SLOTS:
   /**
    * This will basically reset the error type
    * @param dao was growisofs called with DAO?
@@ -59,7 +59,7 @@ class K3bGrowisofsHandler : public QObject
   void handleLine( const QString& );
   void handleExit( int exitCode );
 
- signals:
+  Q_SIGNALS:
   void infoMessage( const QString&, int );
   void newSubTask( const QString& );
   void buffer( int );
@@ -70,7 +70,7 @@ class K3bGrowisofsHandler : public QObject
    */
   void flushingCache();
 
- private slots:
+ private Q_SLOTS:
   void slotCheckBufferStatus();
   void slotCheckBufferStatusDone( K3bDevice::DeviceHandler* );
 

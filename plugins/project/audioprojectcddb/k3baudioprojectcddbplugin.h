@@ -36,7 +36,7 @@ class K3bAudioProjectCddbPlugin : public K3bProjectPlugin
 
   void activate( K3bDoc* doc, QWidget* parent );
 
- private slots:
+ private Q_SLOTS:
   void slotCddbQueryFinished( int result );
   void slotCancelClicked();
 

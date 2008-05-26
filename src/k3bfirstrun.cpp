@@ -25,7 +25,7 @@
 #include <qlabel.h>
 //Added by qt3to4:
 #include <QFrame>
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 
 
 void K3bFirstRun::run( QWidget* parent )
@@ -69,7 +69,7 @@ K3bFirstRun::K3bFirstRun( QWidget* parent )
   QLabel* pixLabel = new QLabel( plain );
   pixLabel->setPixmap( DesktopIcon( "konqueror" ) );
 
-  Q3HBoxLayout* lay = new Q3HBoxLayout( plain );
+  QHBoxLayout* lay = new QHBoxLayout( plain );
   lay->setMargin( 0 );
   lay->setSpacing( spacingHint() );
   lay->addWidget( pixLabel );

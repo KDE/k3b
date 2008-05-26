@@ -85,7 +85,7 @@ public:
 protected:
     bool acceptDrag(QDropEvent* e) const;
 
-    private slots:
+    private Q_SLOTS:
     void slotNewFileItems();
     void slotFileItemRemoved( K3bMovixFileItem* );
     void slotSubTitleItemRemoved( K3bMovixFileItem* );

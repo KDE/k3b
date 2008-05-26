@@ -32,7 +32,7 @@
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <QDropEvent>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QFrame>
 #include <k3urldrag.h>
 
@@ -200,7 +200,7 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent )
 
   // layout
   // ------------------------------------------------------------------------
-  Q3GridLayout* grid = new Q3GridLayout( this );
+  QGridLayout* grid = new QGridLayout( this );
   grid->setSpacing( 2 );
   grid->setMargin( 0 );
 
@@ -220,7 +220,7 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent )
 
   grid->addMultiCellWidget( m_viewPlayList, 2, 2, 0, 8 );
   grid->setRowStretch( 2, 1 );
-  grid->setColStretch( 6, 1 );
+  grid->setColumnStretch( 6, 1 );
   // ------------------------------------------------------------------------
 
 

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 #include <qtabwidget.h>
 #include <qvalidator.h>
 //Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QList>
 
 #include <klineedit.h>
@@ -69,7 +69,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const QList<K3bDataItem*>& dat
 
     // layout
     // -----------------------------
-    Q3GridLayout* grid = new Q3GridLayout( mainWidget() );
+    QGridLayout* grid = new QGridLayout( mainWidget() );
     grid->setSpacing( spacingHint() );
     grid->setMargin( marginHint() );
 
@@ -84,7 +84,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const QList<K3bDataItem*>& dat
 
     m_spacerLine = new QFrame( mainWidget() );
     m_spacerLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
-    grid->addMultiCellWidget( m_spacerLine, row, row, 0, 2 );
+    grid->addWidget( m_spacerLine, row, 0, 1, 3 );
     ++row;
     if ( dataItems.count() == 1 ) {
         grid->addWidget( new QLabel( i18n("Type:"), mainWidget() ), row, 0 );
@@ -100,7 +100,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const QList<K3bDataItem*>& dat
 
     m_spacerLine = new QFrame( mainWidget() );
     m_spacerLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
-    grid->addMultiCellWidget( m_spacerLine, row, row, 0, 2 );
+    grid->addWidget( m_spacerLine, row, 0, 1, 3 );
     ++row;
 
     if ( dataItems.count() == 1 ) {
@@ -112,8 +112,8 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const QList<K3bDataItem*>& dat
         grid->addWidget( m_labelLocalLocation, row++, 2 );
     }
 
-    grid->addColSpacing( 1, 50 );
-    grid->setColStretch( 2, 1 );
+    grid->addItem( new QSpacerItem( 50, 1, QSizePolicy::Fixed, QSizePolicy::Fixed ), 0, 1 );
+    grid->setColumnStretch( 2, 1 );
 
 
     // OPTIONS
@@ -122,12 +122,12 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const QList<K3bDataItem*>& dat
     m_spacerLine = new QFrame( mainWidget() );
     m_spacerLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
-    grid->addMultiCellWidget( m_spacerLine, 10, 10, 0, 2 );
-    grid->addMultiCellWidget( optionTab, 12, 12, 0, 2 );
+    grid->addWidget( m_spacerLine, 10, 0, 1, 3 );
+    grid->addWidget( optionTab, 12, 0, 1, 3 );
     grid->setRowStretch( 11, 1 );
 
     QWidget* hideBox = new QWidget( optionTab );
-    Q3GridLayout* hideBoxGrid = new Q3GridLayout( hideBox );
+    QGridLayout* hideBoxGrid = new QGridLayout( hideBox );
     hideBoxGrid->setSpacing( spacingHint() );
     hideBoxGrid->setMargin( marginHint() );
     m_checkHideOnRockRidge = new QCheckBox( i18n("Hide on Rockridge"), hideBox );
@@ -139,7 +139,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const QList<K3bDataItem*>& dat
 //   grid->addMultiCellWidget( m_checkHideOnJoliet, 11, 11, 0, 2 );
 
     QWidget* sortingBox = new QWidget( optionTab );
-    Q3GridLayout* sortingBoxGrid = new Q3GridLayout( sortingBox );
+    QGridLayout* sortingBoxGrid = new QGridLayout( sortingBox );
     sortingBoxGrid->setSpacing( spacingHint() );
     sortingBoxGrid->setMargin( marginHint() );
     m_editSortWeight = new KLineEdit( sortingBox );
@@ -147,7 +147,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const QList<K3bDataItem*>& dat
     m_editSortWeight->setAlignment( Qt::AlignRight );
     sortingBoxGrid->addWidget( new QLabel( i18n("Sort weight:"), sortingBox ), 0, 0 );
     sortingBoxGrid->addWidget( m_editSortWeight, 0, 1 );
-    sortingBoxGrid->setColStretch( 1, 1 );
+    sortingBoxGrid->setColumnStretch( 1, 1 );
     sortingBoxGrid->setRowStretch( 1, 1 );
 
     optionTab->addTab( hideBox, i18n("Settings") );
@@ -205,9 +205,10 @@ void K3bDataPropertiesDialog::loadItemProperties( K3bDataItem* dataItem )
 {
     if( K3bFileItem* fileItem = dynamic_cast<K3bFileItem*>(dataItem) ) {
         KFileItem kFileItem( KFileItem::Unknown, KFileItem::Unknown, KUrl(fileItem->localPath()) );
+        kDebug() << kFileItem << dataItem->k3bPath() << dataItem->localPath();
         m_labelIcon->setPixmap( kFileItem.pixmap(KIconLoader::SizeLarge) );
         if( fileItem->isSymLink() )
-            m_labelType->setText( i18n("Link to %1",kFileItem.mimeComment()) );
+            m_labelType->setText( i18n("Link to %1", kFileItem.mimeComment()) );
         else
             m_labelType->setText( kFileItem.mimeComment() );
         m_labelLocalName->setText( kFileItem.name() );
@@ -361,9 +362,9 @@ void K3bDataPropertiesDialog::slotOk()
     for ( QList<K3bDataItem*>::iterator it = m_dataItems.begin();
           it != m_dataItems.end(); ++it ) {
         K3bDataItem* item = *it;
-        if ( m_checkHideOnRockRidge->state() != QCheckBox::NoChange )
+        if ( m_checkHideOnRockRidge->checkState() != Qt::PartiallyChecked )
             item->setHideOnRockRidge( m_checkHideOnRockRidge->isChecked() );
-        if ( m_checkHideOnJoliet->state() != QCheckBox::NoChange )
+        if ( m_checkHideOnJoliet->checkState() != Qt::PartiallyChecked )
             item->setHideOnJoliet( m_checkHideOnJoliet->isChecked() );
         if ( m_editSortWeight->isModified() )
             item->setSortWeight( m_editSortWeight->text().toInt() );

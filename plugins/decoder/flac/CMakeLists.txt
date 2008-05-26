@@ -21,8 +21,16 @@ set(k3bflacdecoder_PART_SRCS k3bflacdecoder.cpp )
 
 kde4_add_plugin(k3bflacdecoder ${k3bflacdecoder_PART_SRCS})
 
-target_link_libraries(k3bflacdecoder  k3b ${KDE4_KDEUI_LIBS} ${FLAC++_LIBRARIES}
-${FLAC_LIBRARIES} )
+target_link_libraries(k3bflacdecoder
+  k3b
+  ${KDE4_KDEUI_LIBS}
+  ${FLAC++_LIBRARIES}
+  ${FLAC_LIBRARIES} )
+
+if(TAGLIB_FOUND)
+  target_link_libraries(k3bflacdecoder
+    ${TAGLIB_LIBRARIES})
+endif(TAGLIB_FOUND)
 
 install(TARGETS k3bflacdecoder DESTINATION ${PLUGIN_INSTALL_DIR} )
 

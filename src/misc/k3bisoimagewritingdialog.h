@@ -53,7 +53,7 @@ class K3bIsoImageWritingDialog : public K3bInteractionDialog
 
   void setImage( const KUrl& url );
 
- protected slots:
+ protected Q_SLOTS:
   void slotStartClicked();
   void updateImageSize( const QString& );
   void slotWriterChanged();

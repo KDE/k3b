@@ -36,7 +36,6 @@
 #include <kio/global.h>
 
 #include <qstring.h>
-#include <q3textstream.h>
 #include <qfile.h>
 #include <qapplication.h>
 

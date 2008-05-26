@@ -54,7 +54,7 @@ class K3bAudioTrackPlayer : public QObject, public K3bAudioClient
    */
   int read( char* data, int maxlen );
 
- public slots:
+ public Q_SLOTS:
   void playTrack( K3bAudioTrack* );
   void playPause();
   void stop();
@@ -62,12 +62,12 @@ class K3bAudioTrackPlayer : public QObject, public K3bAudioClient
   void prev();
   void seek( const K3b::Msf& );
 
- signals:
+  Q_SIGNALS:
   void playingTrack( K3bAudioTrack* );
   void paused( bool paused );  
   void stopped();
 
- private slots:
+ private Q_SLOTS:
   void slotSeek( int );
   void slotTrackChanged( K3bAudioTrack* track );
   void slotTrackRemoved( K3bAudioTrack* track );

@@ -38,7 +38,7 @@ public:
 
     bool hasValue( int value ) const;
 
-signals:
+ Q_SIGNALS:
     /**
      * Emitted if the selected value changes by user interaction.
      */

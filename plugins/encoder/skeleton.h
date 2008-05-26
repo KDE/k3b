@@ -55,7 +55,7 @@ public:
     K3b<name>EncoderSettingsWidget( QWidget* parent = 0 );
     ~K3b<name>EncoderSettingsWidget();
 
-    public slots:
+    public Q_SLOTS:
     void loadConfig();
     void saveConfig();
 };

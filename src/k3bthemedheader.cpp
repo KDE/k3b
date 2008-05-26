@@ -119,14 +119,13 @@ void K3bThemedHeader::init()
 void K3bThemedHeader::slotThemeChanged()
 {
     if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-        m_leftLabel->setPaletteBackgroundColor( theme->backgroundColor() );
+        m_leftLabel->setPalette( theme->palette() );
         m_leftLabel->setPixmap( theme->pixmap( m_leftPix ) );
 
-        m_rightLabel->setPaletteBackgroundColor( theme->backgroundColor() );
+        m_rightLabel->setPalette( theme->palette() );
         m_rightLabel->setPixmap( theme->pixmap( m_rightPix ) );
 
-        m_titleLabel->setPaletteBackgroundColor( theme->backgroundColor() );
-        m_titleLabel->setPaletteForegroundColor( theme->foregroundColor() );
+        m_titleLabel->setPalette( theme->palette() );
     }
 }
 

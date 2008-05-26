@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
 #include "k3bmovixprogram.h"
 #include "k3bmovixoptionswidget.h"
 #include "../k3bapplication.h"
-#include "../k3bmediacache.h"
 
 #include <k3bdataimagesettingswidget.h>
 #include <k3bexternalbinmanager.h>
@@ -30,6 +29,7 @@
 #include <k3bisooptions.h>
 #include <k3bwritingmodewidget.h>
 #include <k3bcore.h>
+#include <k3bmediacache.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -40,10 +40,9 @@
 
 #include <qcheckbox.h>
 #include <qlayout.h>
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 #include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 
 K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent )
@@ -95,15 +94,23 @@ K3bMovixBurnDialog::~K3bMovixBurnDialog()
 void K3bMovixBurnDialog::setupSettingsPage()
 {
     QWidget* frame = new QWidget( this );
-    Q3GridLayout* frameLayout = new Q3GridLayout( frame );
+    QGridLayout* frameLayout = new QGridLayout( frame );
     frameLayout->setSpacing( spacingHint() );
     frameLayout->setMargin( marginHint() );
 
-    Q3GroupBox* groupDataMode = new Q3GroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), frame );
+    QGroupBox* groupDataMode = new QGroupBox( i18n("Datatrack Mode"), frame );
     m_dataModeWidget = new K3bDataModeWidget( groupDataMode );
+    QVBoxLayout* groupDataModeLayout = new QVBoxLayout( groupDataMode );
+    groupDataModeLayout->setMargin( marginHint() );
+    groupDataModeLayout->setSpacing( spacingHint() );
+    groupDataModeLayout->addWidget( m_dataModeWidget );
 
-    Q3GroupBox* groupMultisession = new Q3GroupBox( 1, Qt::Vertical, i18n("Multisession"), frame );
+    QGroupBox* groupMultisession = new QGroupBox( i18n("Multisession"), frame );
     m_checkStartMultiSesssion = K3bStdGuiItems::startMultisessionCheckBox( groupMultisession );
+    QVBoxLayout* groupMultisessionLayout = new QVBoxLayout( groupMultisession );
+    groupMultisessionLayout->setMargin( marginHint() );
+    groupMultisessionLayout->setSpacing( spacingHint() );
+    groupMultisessionLayout->addWidget( m_checkStartMultiSesssion );
 
     frameLayout->addWidget( groupDataMode, 0, 0 );
     frameLayout->addWidget( groupMultisession, 1, 0 );

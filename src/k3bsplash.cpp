@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,39 +36,42 @@
 
 //FIXME kde4
 K3bSplash::K3bSplash( QWidget* parent )
-  : KVBox( parent)
+    : KVBox( parent)
 {
-  setMargin( 0 );
-  setSpacing( 0 );
-  setWindowFlags(Qt::WStyle_Customize|
-           Qt::WDestructiveClose|
-           /*      Qt::WStyle_Splash|*/
-           Qt::X11BypassWindowManagerHint|
-           Qt::WStyle_NoBorder|
-           Qt::WStyle_StaysOnTop);
-  QLabel* copyrightLabel = new QLabel( KGlobal::mainComponent().aboutData()->copyrightStatement(), this );
-  copyrightLabel->setMargin( 5 );
-  copyrightLabel->setPaletteBackgroundColor( Qt::black );
-  copyrightLabel->setPaletteForegroundColor( Qt::white );
-  copyrightLabel->setAlignment( Qt::AlignRight );
+    setMargin( 0 );
+    setSpacing( 0 );
+    setWindowFlags(Qt::WStyle_Customize|
+                   Qt::WDestructiveClose|
+                   /*      Qt::WStyle_Splash|*/
+                   Qt::X11BypassWindowManagerHint|
+                   Qt::WStyle_NoBorder|
+                   Qt::WStyle_StaysOnTop);
+    QLabel* copyrightLabel = new QLabel( KGlobal::mainComponent().aboutData()->copyrightStatement(), this );
+    copyrightLabel->setMargin( 5 );
 
-  QLabel* picLabel = new QLabel( this );
-  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-    picLabel->setPaletteBackgroundColor( theme->backgroundColor() );
-    picLabel->setPixmap( theme->pixmap( K3bTheme::SPLASH ) );
-  }
+    QPalette pal( palette() );
+    pal.setColor( QPalette::Base, Qt::black );
+    pal.setColor( QPalette::Text, Qt::black );
 
-  m_infoBox = new QLabel( this );
-  m_infoBox->setMargin( 5 );
-  m_infoBox->setPaletteBackgroundColor( Qt::black );
-  m_infoBox->setPaletteForegroundColor( Qt::white );
+    copyrightLabel->setPalette( pal );
+    copyrightLabel->setAlignment( Qt::AlignRight );
 
-  // Set geometry, with support for Xinerama systems
-  QRect r;
-  r.setSize(sizeHint());
-  int ps = QApplication::desktop()->primaryScreen();
-  r.moveCenter( QApplication::desktop()->screenGeometry(ps).center() );
-  setGeometry(r);
+    QLabel* picLabel = new QLabel( this );
+    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+        picLabel->setPalette( theme->palette() );
+        picLabel->setPixmap( theme->pixmap( K3bTheme::SPLASH ) );
+    }
+
+    m_infoBox = new QLabel( this );
+    m_infoBox->setMargin( 5 );
+    m_infoBox->setPalette( pal );
+
+    // Set geometry, with support for Xinerama systems
+    QRect r;
+    r.setSize(sizeHint());
+    int ps = QApplication::desktop()->primaryScreen();
+    r.moveCenter( QApplication::desktop()->screenGeometry(ps).center() );
+    setGeometry(r);
 }
 
 
@@ -79,23 +82,23 @@ K3bSplash::~K3bSplash()
 
 void K3bSplash::mousePressEvent( QMouseEvent* )
 {
-  close();
+    close();
 }
 
 
 void K3bSplash::show()
 {
-  KVBox::show();
-  // make sure the splash screen is shown immediately
-  qApp->processEvents();
+    KVBox::show();
+    // make sure the splash screen is shown immediately
+    qApp->processEvents();
 }
 
 
 void K3bSplash::addInfo( const QString& s )
 {
-  m_infoBox->setText( s );
+    m_infoBox->setText( s );
 
-  qApp->processEvents();
+    qApp->processEvents();
 }
 
 

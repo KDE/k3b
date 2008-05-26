@@ -46,11 +46,11 @@ class K3bAudioJob : public K3bBurnJob
   QString jobDescription() const;
   QString jobDetails() const;
 		
- public slots:
+ public Q_SLOTS:
   void cancel();
   void start();
 
- protected slots:
+ protected Q_SLOTS:
   // writer slots
   void slotWriterFinished( bool success );
   void slotWriterNextTrack(int, int);

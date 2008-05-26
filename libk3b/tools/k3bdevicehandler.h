@@ -22,7 +22,6 @@
 #include "k3bmsf.h"
 #include "k3bcdtext.h"
 #include "k3b_export.h"
-#include <q3cstring.h>
 
 
 namespace K3bDevice

@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,24 +39,24 @@ using namespace KIO;
 
 extern "C"
 {
-  LIBK3B_EXPORT int kdemain( int argc, char **argv )
-  {
-    KComponentData componentData( "kio_videodvd" );
-
-    kDebug(7101) << "*** Starting kio_videodvd ";
-
-    if (argc != 4)
+    LIBK3B_EXPORT int kdemain( int argc, char **argv )
     {
-      kDebug(7101) << "Usage: kio_videodvd  protocol domain-socket1 domain-socket2";
-      exit(-1);
+        KComponentData componentData( "kio_videodvd" );
+
+        kDebug(7101) << "*** Starting kio_videodvd ";
+
+        if (argc != 4)
+        {
+            kDebug(7101) << "Usage: kio_videodvd  protocol domain-socket1 domain-socket2";
+            exit(-1);
+        }
+
+        kio_videodvdProtocol slave(argv[2], argv[3]);
+        slave.dispatchLoop();
+
+        kDebug(7101) << "*** kio_videodvd Done";
+        return 0;
     }
-
-    kio_videodvdProtocol slave(argv[2], argv[3]);
-    slave.dispatchLoop();
-
-    kDebug(7101) << "*** kio_videodvd Done";
-    return 0;
-  }
 }
 
 
@@ -69,56 +69,56 @@ int kio_videodvdProtocol::s_instanceCnt = 0;
 kio_videodvdProtocol::kio_videodvdProtocol(const QByteArray &pool_socket, const QByteArray &app_socket)
     : SlaveBase("kio_videodvd", pool_socket, app_socket)
 {
-  kDebug() << "kio_videodvdProtocol::kio_videodvdProtocol()";
-  if( !s_deviceManager )
-  {
-    s_deviceManager = new K3bDevice::DeviceManager();
-    s_deviceManager->setCheckWritingModes( false );
-    s_deviceManager->scanBus();
-  }
-  s_instanceCnt++;
+    kDebug() << "kio_videodvdProtocol::kio_videodvdProtocol()";
+    if( !s_deviceManager )
+    {
+        s_deviceManager = new K3bDevice::DeviceManager();
+        s_deviceManager->setCheckWritingModes( false );
+        s_deviceManager->scanBus();
+    }
+    s_instanceCnt++;
 }
 
 
 kio_videodvdProtocol::~kio_videodvdProtocol()
 {
-  kDebug() << "kio_videodvdProtocol::~kio_videodvdProtocol()";
-  s_instanceCnt--;
-  if( s_instanceCnt == 0 )
-  {
-    delete s_deviceManager;
-    s_deviceManager = 0;
-  }
+    kDebug() << "kio_videodvdProtocol::~kio_videodvdProtocol()";
+    s_instanceCnt--;
+    if( s_instanceCnt == 0 )
+    {
+        delete s_deviceManager;
+        s_deviceManager = 0;
+    }
 }
 
 
 KIO::UDSEntry kio_videodvdProtocol::createUDSEntry( const K3bIso9660Entry* e ) const
 {
-  KIO::UDSEntry uds;
-  uds.insert(KIO::UDSEntry::UDS_NAME,e->name());
-  uds.insert(KIO::UDSEntry::UDS_ACCESS, e->permissions());
-  uds.insert(KIO::UDSEntry::UDS_CREATION_TIME, e->date());
-  uds.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME,e->date());
+    KIO::UDSEntry uds;
+    uds.insert(KIO::UDSEntry::UDS_NAME,e->name());
+    uds.insert(KIO::UDSEntry::UDS_ACCESS, e->permissions());
+    uds.insert(KIO::UDSEntry::UDS_CREATION_TIME, e->date());
+    uds.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME,e->date());
 
-  if( e->isDirectory() )
-  {
-    uds.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFDIR);
-    uds.insert(KIO::UDSEntry::UDS_MIME_TYPE, "inode/directory");
-  }
-  else
-  {
-    const K3bIso9660File* file = static_cast<const K3bIso9660File*>( e );
-    uds.insert(KIO::UDSEntry::UDS_SIZE,file->size());
-    uds.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFREG);
-    QString iconName;
-    if( e->name().endsWith( "VOB" ) )
-      iconName = "video/mpeg";
+    if( e->isDirectory() )
+    {
+        uds.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFDIR);
+        uds.insert(KIO::UDSEntry::UDS_MIME_TYPE, "inode/directory");
+    }
     else
-      iconName = "unknown";
-    uds.insert(KIO::UDSEntry::UDS_MIME_TYPE, iconName);
-  }
+    {
+        const K3bIso9660File* file = static_cast<const K3bIso9660File*>( e );
+        uds.insert(KIO::UDSEntry::UDS_SIZE,file->size());
+        uds.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFREG);
+        QString iconName;
+        if( e->name().endsWith( "VOB" ) )
+            iconName = "video/mpeg";
+        else
+            iconName = "unknown";
+        uds.insert(KIO::UDSEntry::UDS_MIME_TYPE, iconName);
+    }
 
-  return uds;
+    return uds;
 }
 
 
@@ -126,238 +126,238 @@ KIO::UDSEntry kio_videodvdProtocol::createUDSEntry( const K3bIso9660Entry* e ) c
 //        in the available devices.
 K3bIso9660* kio_videodvdProtocol::openIso( const KUrl& url, QString& plainIsoPath )
 {
-  // get the volume id from the url
-  QString volumeId = url.path().section( '/', 1, 1 );
+    // get the volume id from the url
+    QString volumeId = url.path().section( '/', 1, 1 );
 
-  kDebug() << "(kio_videodvdProtocol) searching for Video dvd: " << volumeId;
+    kDebug() << "(kio_videodvdProtocol) searching for Video dvd: " << volumeId;
 
 
-  // now search the devices for this volume id
-  // FIXME: use the cache created in listVideoDVDs
-  QList<K3bDevice::Device *> items(s_deviceManager->dvdReader());
-  for( QList<K3bDevice::Device *>::const_iterator it = items.begin();
-       it != items.end(); ++it ) {
-    K3bDevice::Device* dev = *it;
-    K3bDevice::DiskInfo di = dev->diskInfo();
+    // now search the devices for this volume id
+    // FIXME: use the cache created in listVideoDVDs
+    QList<K3bDevice::Device *> items(s_deviceManager->dvdReader());
+    for( QList<K3bDevice::Device *>::const_iterator it = items.begin();
+         it != items.end(); ++it ) {
+        K3bDevice::Device* dev = *it;
+        K3bDevice::DiskInfo di = dev->diskInfo();
 
-    // we search for a DVD with a single track.
-    // this time let K3bIso9660 decide if we need dvdcss or not
-    // FIXME: check for encryption and libdvdcss and report an error
-    if( di.isDvdMedia() && di.numTracks() == 1 ) {
-      K3bIso9660* iso = new K3bIso9660( dev );
-      iso->setPlainIso9660( true );
-      if( iso->open() && iso->primaryDescriptor().volumeId == volumeId ) {
-	plainIsoPath = url.path().section( "/", 2, -1 ) + "/";
-	kDebug() << "(kio_videodvdProtocol) using iso path: " << plainIsoPath;
-	return iso;
-      }
-      delete iso;
+        // we search for a DVD with a single track.
+        // this time let K3bIso9660 decide if we need dvdcss or not
+        // FIXME: check for encryption and libdvdcss and report an error
+        if( di.isDvdMedia() && di.numTracks() == 1 ) {
+            K3bIso9660* iso = new K3bIso9660( dev );
+            iso->setPlainIso9660( true );
+            if( iso->open() && iso->primaryDescriptor().volumeId == volumeId ) {
+                plainIsoPath = url.path().section( "/", 2, -1 ) + "/";
+                kDebug() << "(kio_videodvdProtocol) using iso path: " << plainIsoPath;
+                return iso;
+            }
+            delete iso;
+        }
     }
-  }
 
-  error( ERR_SLAVE_DEFINED, i18n("No VideoDVD found") );
-  return 0;
+    error( ERR_SLAVE_DEFINED, i18n("No VideoDVD found") );
+    return 0;
 }
 
 
 void kio_videodvdProtocol::get(const KUrl& url )
 {
-  kDebug() << "kio_videodvd::get(const KUrl& url)";
+    kDebug() << "kio_videodvd::get(const KUrl& url)";
 
-  QString isoPath;
-  if( K3bIso9660* iso = openIso( url, isoPath ) )
-  {
-    const K3bIso9660Entry* e = iso->firstIsoDirEntry()->entry( isoPath );
-    if( e && e->isFile() )
+    QString isoPath;
+    if( K3bIso9660* iso = openIso( url, isoPath ) )
     {
-      const K3bIso9660File* file = static_cast<const K3bIso9660File*>( e );
-      totalSize( file->size() );
-      QByteArray buffer( 10*2048, '\n' );
-      int read = 0;
-      int cnt = 0;
-      KIO::filesize_t totalRead = 0;
-      while( (read = file->read( totalRead, buffer.data(), buffer.size() )) > 0 )
-      {
-        buffer.resize( read );
-        data(buffer);
-        ++cnt;
-        totalRead += read;
-        if( cnt == 10 )
+        const K3bIso9660Entry* e = iso->firstIsoDirEntry()->entry( isoPath );
+        if( e && e->isFile() )
         {
-          cnt = 0;
-          processedSize( totalRead );
+            const K3bIso9660File* file = static_cast<const K3bIso9660File*>( e );
+            totalSize( file->size() );
+            QByteArray buffer( 10*2048, '\n' );
+            int read = 0;
+            int cnt = 0;
+            KIO::filesize_t totalRead = 0;
+            while( (read = file->read( totalRead, buffer.data(), buffer.size() )) > 0 )
+            {
+                buffer.resize( read );
+                data(buffer);
+                ++cnt;
+                totalRead += read;
+                if( cnt == 10 )
+                {
+                    cnt = 0;
+                    processedSize( totalRead );
+                }
+            }
+
+            delete iso;
+
+            data(QByteArray()); // empty array means we're done sending the data
+
+            if( read == 0 )
+                finished();
+            else
+                error( ERR_SLAVE_DEFINED, i18n("Read error.") );
         }
-      }
-
-      delete iso;
-
-      data(QByteArray()); // empty array means we're done sending the data
-
-      if( read == 0 )
-        finished();
-      else
-        error( ERR_SLAVE_DEFINED, i18n("Read error.") );
+        else
+            error( ERR_DOES_NOT_EXIST, url.path() );
     }
-    else
-      error( ERR_DOES_NOT_EXIST, url.path() );
-  }
 }
 
 
 void kio_videodvdProtocol::listDir( const KUrl& url )
 {
-  if( url.path() == "/" ) {
-    listVideoDVDs();
-  }
-  else {
-    QString isoPath;
-    K3bIso9660* iso = openIso( url, isoPath );
-    if( iso ) {
-      const K3bIso9660Directory* mainDir = iso->firstIsoDirEntry();
-      const K3bIso9660Entry* e = mainDir->entry( isoPath );
-      if( e ) {
-	if( e->isDirectory() ) {
-	  const K3bIso9660Directory* dir = static_cast<const K3bIso9660Directory*>(e);
-	  QStringList el = dir->entries();
-	  el.remove( "." );
-	  el.remove( ".." );
-	  UDSEntryList udsl;
-	  for( QStringList::const_iterator it = el.begin(); it != el.end(); ++it )
-	    udsl.append( createUDSEntry( dir->entry( *it ) ) );
-	  listEntries( udsl );
-	  finished();
-	}
-	else {
-	  error( ERR_CANNOT_ENTER_DIRECTORY, url.path() );
-	}
-      }
-      else {
-	error( ERR_CANNOT_ENTER_DIRECTORY, url.path() );
-      }
-
-      // for testing we always do the whole thing
-      delete iso;
+    if( url.path() == "/" ) {
+        listVideoDVDs();
     }
-  }
+    else {
+        QString isoPath;
+        K3bIso9660* iso = openIso( url, isoPath );
+        if( iso ) {
+            const K3bIso9660Directory* mainDir = iso->firstIsoDirEntry();
+            const K3bIso9660Entry* e = mainDir->entry( isoPath );
+            if( e ) {
+                if( e->isDirectory() ) {
+                    const K3bIso9660Directory* dir = static_cast<const K3bIso9660Directory*>(e);
+                    QStringList el = dir->entries();
+                    el.removeOne( "." );
+                    el.removeOne( ".." );
+                    UDSEntryList udsl;
+                    for( QStringList::const_iterator it = el.begin(); it != el.end(); ++it )
+                        udsl.append( createUDSEntry( dir->entry( *it ) ) );
+                    listEntries( udsl );
+                    finished();
+                }
+                else {
+                    error( ERR_CANNOT_ENTER_DIRECTORY, url.path() );
+                }
+            }
+            else {
+                error( ERR_CANNOT_ENTER_DIRECTORY, url.path() );
+            }
+
+            // for testing we always do the whole thing
+            delete iso;
+        }
+    }
 }
 
 
 void kio_videodvdProtocol::listVideoDVDs()
 {
-  int cnt = 0;
+    int cnt = 0;
 
-  QList<K3bDevice::Device *> items(s_deviceManager->dvdReader());
-  for( QList<K3bDevice::Device *>::const_iterator it = items.begin();
-       it != items.end(); ++it ) {
-    K3bDevice::Device* dev = *it;
-    K3bDevice::DiskInfo di = dev->diskInfo();
+    QList<K3bDevice::Device *> items(s_deviceManager->dvdReader());
+    for( QList<K3bDevice::Device *>::const_iterator it = items.begin();
+         it != items.end(); ++it ) {
+        K3bDevice::Device* dev = *it;
+        K3bDevice::DiskInfo di = dev->diskInfo();
 
-    // we search for a DVD with a single track.
-    if( di.isDvdMedia() && di.numTracks() == 1 ) {
-      //
-      // now do a quick check for VideoDVD.
-      // - no dvdcss for speed
-      // - only a check for the VIDEO_TS dir
-      //
-      K3bIso9660 iso( new K3bIso9660DeviceBackend(dev) );
-      iso.setPlainIso9660( true );
-      if( iso.open() && iso.firstIsoDirEntry()->entry( "VIDEO_TS" ) ) {
-	// FIXME: cache the entry for speedup
+        // we search for a DVD with a single track.
+        if( di.isDvdMedia() && di.numTracks() == 1 ) {
+            //
+            // now do a quick check for VideoDVD.
+            // - no dvdcss for speed
+            // - only a check for the VIDEO_TS dir
+            //
+            K3bIso9660 iso( new K3bIso9660DeviceBackend(dev) );
+            iso.setPlainIso9660( true );
+            if( iso.open() && iso.firstIsoDirEntry()->entry( "VIDEO_TS" ) ) {
+                // FIXME: cache the entry for speedup
 
-        UDSEntryList udsl;
-	UDSEntry uds;
-        uds.insert(KIO::UDSEntry::UDS_NAME,iso.primaryDescriptor().volumeId);
-        uds.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFDIR);
-        uds.insert(KIO::UDSEntry::UDS_MIME_TYPE, "inode/directory");
-        uds.insert(KIO::UDSEntry::UDS_ICON_NAME, "dvd_unmount");
+                UDSEntryList udsl;
+                UDSEntry uds;
+                uds.insert(KIO::UDSEntry::UDS_NAME,iso.primaryDescriptor().volumeId);
+                uds.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFDIR);
+                uds.insert(KIO::UDSEntry::UDS_MIME_TYPE, "inode/directory");
+                uds.insert(KIO::UDSEntry::UDS_ICON_NAME, "dvd_unmount");
 
-	udsl.append( uds );
+                udsl.append( uds );
 
-	listEntries( udsl );
+                listEntries( udsl );
 
-	++cnt;
-      }
+                ++cnt;
+            }
+        }
     }
-  }
 
-  if( cnt )
-    finished();
-  else
-    error( ERR_SLAVE_DEFINED, i18n("No VideoDVD found") );
+    if( cnt )
+        finished();
+    else
+        error( ERR_SLAVE_DEFINED, i18n("No VideoDVD found") );
 }
 
 
 void kio_videodvdProtocol::stat( const KUrl& url )
 {
-  if( url.path() == "/" ) {
-    //
-    // stat the root path
-    //
-    KIO::UDSEntry uds;
-    uds.insert(KIO::UDSEntry::UDS_NAME,"/"); 
-    uds.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFDIR); 
-    uds.insert(KIO::UDSEntry::UDS_MIME_TYPE, "inode/directory");
+    if( url.path() == "/" ) {
+        //
+        // stat the root path
+        //
+        KIO::UDSEntry uds;
+        uds.insert(KIO::UDSEntry::UDS_NAME,"/");
+        uds.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFDIR);
+        uds.insert(KIO::UDSEntry::UDS_MIME_TYPE, "inode/directory");
 
-    statEntry( uds );
-    finished();
-  }
-  else {
-    QString isoPath;
-    K3bIso9660* iso = openIso( url, isoPath );
-    if( iso ) {
-      const K3bIso9660Entry* e = iso->firstIsoDirEntry()->entry( isoPath );
-      if( e ) {
-	statEntry( createUDSEntry( e ) );
-	finished();
-      }
-      else
-	error( ERR_DOES_NOT_EXIST, url.path() );
-      
-      delete iso;
+        statEntry( uds );
+        finished();
     }
-  }
+    else {
+        QString isoPath;
+        K3bIso9660* iso = openIso( url, isoPath );
+        if( iso ) {
+            const K3bIso9660Entry* e = iso->firstIsoDirEntry()->entry( isoPath );
+            if( e ) {
+                statEntry( createUDSEntry( e ) );
+                finished();
+            }
+            else
+                error( ERR_DOES_NOT_EXIST, url.path() );
+
+            delete iso;
+        }
+    }
 }
 
 
 // FIXME: when does this get called? It seems not to be used for the files.
 void kio_videodvdProtocol::mimetype( const KUrl& url )
 {
-  if( url.path() == "/" ) {
-    error( ERR_UNSUPPORTED_ACTION, "mimetype(/)" );
-    return;
-  }
-
-  QString isoPath;
-  K3bIso9660* iso = openIso( url, isoPath );
-  if( iso )
-  {
-    const K3bIso9660Entry* e = iso->firstIsoDirEntry()->entry( isoPath );
-    if( e )
-    {
-      if( e->isDirectory() )
-        mimeType( "inode/directory" );
-      else if( e->name().endsWith( ".VOB" ) )
-      {
-        mimetype( KUrl("video/mpeg") );
-      }
-      else
-      {
-        // send some data
-        const K3bIso9660File* file = static_cast<const K3bIso9660File*>( e );
-        QByteArray buffer( 10*2048, '\n' );
-        int read = file->read( 0, buffer.data(), buffer.size() );
-        if( read > 0 )
-        {
-          buffer.resize( read );
-          data(buffer);
-          data(QByteArray());
-          finished();
-          // FIXME: do we need to emit finished() after emitting the end of data()?
-        }
-        else
-          error( ERR_SLAVE_DEFINED, i18n("Read error.") );
-      }
+    if( url.path() == "/" ) {
+        error( ERR_UNSUPPORTED_ACTION, "mimetype(/)" );
+        return;
     }
-    delete iso;
-  }
+
+    QString isoPath;
+    K3bIso9660* iso = openIso( url, isoPath );
+    if( iso )
+    {
+        const K3bIso9660Entry* e = iso->firstIsoDirEntry()->entry( isoPath );
+        if( e )
+        {
+            if( e->isDirectory() )
+                mimeType( "inode/directory" );
+            else if( e->name().endsWith( ".VOB" ) )
+            {
+                mimetype( KUrl("video/mpeg") );
+            }
+            else
+            {
+                // send some data
+                const K3bIso9660File* file = static_cast<const K3bIso9660File*>( e );
+                QByteArray buffer( 10*2048, '\n' );
+                int read = file->read( 0, buffer.data(), buffer.size() );
+                if( read > 0 )
+                {
+                    buffer.resize( read );
+                    data(buffer);
+                    data(QByteArray());
+                    finished();
+                    // FIXME: do we need to emit finished() after emitting the end of data()?
+                }
+                else
+                    error( ERR_SLAVE_DEFINED, i18n("Read error.") );
+            }
+        }
+        delete iso;
+    }
 }

@@ -32,7 +32,7 @@ public:
     K3bVideoDvdBurnDialog( K3bVideoDvdDoc*, QWidget *parent = 0 );
     ~K3bVideoDvdBurnDialog();
 
-protected slots:
+protected Q_SLOTS:
     void slotStartClicked();
     void saveSettings();
     void readSettings();

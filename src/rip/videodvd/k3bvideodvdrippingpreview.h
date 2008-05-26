@@ -34,7 +34,7 @@ class K3bVideoDVDRippingPreview : public QObject
 
   const QImage& preview() const { return m_preview; }
 
- public slots:
+ public Q_SLOTS:
   /**
    * \param dvd The Video DVD object
    * \param title The Video DVD title to generate the preview for
@@ -45,10 +45,10 @@ class K3bVideoDVDRippingPreview : public QObject
 
   void cancel();
 
- signals:
+  Q_SIGNALS:
   void previewDone( bool );
 
- private slots:
+ private Q_SLOTS:
   void slotTranscodeFinished( K3Process* );
 
  private:

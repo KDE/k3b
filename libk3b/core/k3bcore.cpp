@@ -16,6 +16,7 @@
 
 #include "k3bcore.h"
 #include "k3bjob.h"
+#include "k3bmediacache.h"
 
 #include <k3bdevicemanager.h>
 #include <k3bexternalbinmanager.h>
@@ -34,10 +35,8 @@
 #include <kstandarddirs.h>
 #include <kapplication.h>
 
-#include <q3ptrlist.h>
 #include <qthread.h>
 #include <qmutex.h>
-//Added by qt3to4:
 #include <QEvent>
 
 
@@ -72,9 +71,7 @@ private:
     bool m_done;
 };
 
-#ifdef __GNUC__
-#warning FIXME: how do we define a user event type? Or just replace the whole event stuff with signals
-#endif
+
 class DeviceBlockingEvent : public QEvent
 {
 public:
@@ -99,6 +96,7 @@ public:
         : version( LIBK3B_VERSION ),
           config(0),
           deleteConfig(false),
+          mediaCache(0),
           deviceManager(0),
           externalBinManager(0),
           pluginManager(0),
@@ -108,6 +106,7 @@ public:
     K3bVersion version;
     KConfig* config;
     bool deleteConfig;
+    K3bMediaCache* mediaCache;
     K3bDevice::DeviceManager* deviceManager;
     K3bExternalBinManager* externalBinManager;
     K3bPluginManager* pluginManager;
@@ -146,6 +145,13 @@ K3bCore::~K3bCore()
 
     delete d->globalSettings;
     delete d;
+}
+
+
+K3bMediaCache* K3bCore::mediaCache() const
+{
+    const_cast<K3bCore*>(this)->initMediaCache();
+    return d->mediaCache;
 }
 
 
@@ -208,6 +214,8 @@ void K3bCore::init()
     externalBinManager()->search();
 
     deviceManager()->scanBus();
+
+    mediaCache()->buildDeviceList( deviceManager() );
 }
 
 
@@ -231,6 +239,17 @@ void K3bCore::initDeviceManager()
 {
     if( !d->deviceManager )
         d->deviceManager = new K3bDevice::DeviceManager( this );
+}
+
+
+void K3bCore::initMediaCache()
+{
+    if ( !d->mediaCache ) {
+        // create the media cache but do not connect it to the device manager
+        // yet to speed up application start. We connect it in init()
+        // once the devicemanager has scanned for devices.
+        d->mediaCache = new K3bMediaCache( this );
+    }
 }
 
 

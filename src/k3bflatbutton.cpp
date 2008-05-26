@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@
 #include <qtooltip.h>
 #include <qfontmetrics.h>
 #include <qpixmap.h>
-//Added by qt3to4:
 #include <QEvent>
 #include <QMouseEvent>
 #include <QFrame>
@@ -137,13 +136,15 @@ void K3bFlatButton::mouseReleaseEvent( QMouseEvent* e )
 
 void K3bFlatButton::setHover( bool b )
 {
+    QPalette pal( palette() );
     if( b ) {
-        setPaletteBackgroundColor( m_foreColor );
-        setPaletteForegroundColor( m_backColor );
+        pal.setColor( QPalette::WindowText, m_backColor );
+        pal.setColor( QPalette::Window, m_foreColor );
     } else {
-        setPaletteBackgroundColor( m_backColor );
-        setPaletteForegroundColor( m_foreColor );
+        pal.setColor( QPalette::WindowText, m_foreColor );
+        pal.setColor( QPalette::Window, m_backColor );
     }
+    setPalette( pal );
 
     m_hover = b;
 

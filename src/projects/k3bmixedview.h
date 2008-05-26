@@ -40,14 +40,14 @@ class K3bMixedView : public K3bView
 
   K3bAudioTrackPlayer* player() const;
 
- public slots:
+ public Q_SLOTS:
   void slotBurn();
   void addUrls( const KUrl::List& );
 
  protected:
   K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
 
- private slots:
+ private Q_SLOTS:
   void slotAudioTreeSelected();
   void slotDataTreeSelected();
 

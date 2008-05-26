@@ -47,7 +47,7 @@ public:
 
     void reload();
 
-signals:
+ Q_SIGNALS:
     void urlEntered( const KUrl& url );
 
 public Q_SLOTS:

@@ -27,7 +27,7 @@ class K3bDebuggingOutputDialog : public KDialog
  public:
   K3bDebuggingOutputDialog( QWidget* parent );
   
- public slots:
+ public Q_SLOTS:
   void setOutput( const QString& );
 
  private:

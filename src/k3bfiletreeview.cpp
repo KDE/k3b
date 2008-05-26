@@ -21,6 +21,7 @@
 #include "k3bthememanager.h"
 #include "k3bplacesmodel.h"
 #include "k3bdevicedelegate.h"
+#include "k3bdevicemenu.h"
 
 #include <k3bdevice.h>
 #include <k3bdiskinfo.h>
@@ -200,7 +201,7 @@
 //     QFrame* tooltip = new QFrame( parentWidget() );
 //     tooltip->setFrameStyle( QFrame::Panel | QFrame::Raised );
 //     tooltip->setFrameShape( QFrame::StyledPanel );
-//     Q3GridLayout* lay = new Q3GridLayout( tooltip, 2, 2, tooltip->frameWidth()*2 /*margin*/, 6 /*spacing*/ );
+//     QGridLayout* lay = new QGridLayout( tooltip, 2, 2, tooltip->frameWidth()*2 /*margin*/, 6 /*spacing*/ );
 
 //     QString text = k3bappcore->mediaCache()->medium( dev ).longString();
 //     int detailsStart = text.indexOf( "<p>", 3 );
@@ -216,7 +217,7 @@
 //     lay->addMultiCellWidget( label, 1, 2, 0, 0 );
 //     label = new QLabel( tooltip );
 //     lay->addWidget( label, 2, 1 );
-//     lay->setColStretch( 0, 1 );
+//     lay->setColumnStretch( 0, 1 );
 
 //     if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
 //         tooltip->setPaletteBackgroundColor( theme->backgroundColor() );
@@ -260,7 +261,7 @@ public:
     K3bPlacesModel* model;
 
     KActionCollection* actionCollection;
-    KActionMenu* devicePopupMenu;
+    K3b::DeviceMenu* devicePopupMenu;
     KActionMenu* urlPopupMenu;
     bool menuEnabled;
 };
@@ -272,7 +273,7 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent )
 {
     header()->hide();
 
-    viewport()->setAttribute(Qt::WA_Hover);
+    setContextMenuPolicy( Qt::CustomContextMenu );
     setSelectionMode(QAbstractItemView::SingleSelection);
 //    setRootIsDecorated( false );
 
@@ -281,6 +282,8 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent )
 
     d->model = new K3bPlacesModel( this );
     setModel( d->model );
+
+    d->devicePopupMenu = new K3b::DeviceMenu( this );
 
     // react on K3bPlacesModel::expandToUrl calls
     connect( d->model, SIGNAL( expand( const QModelIndex& ) ),
@@ -291,6 +294,7 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent )
     d->model->addPlace( i18n( "Root" ), KIcon("folder-red"), KUrl( "/" ) );
 
     connect( this, SIGNAL(clicked(const QModelIndex&)), SLOT(slotClicked(const QModelIndex&)) );
+    connect( this, SIGNAL(customContextMenuRequested( const QPoint& )), SLOT( slotContextMenu( const QPoint& ) ) );
 
     initActions();
 }
@@ -435,6 +439,16 @@ void K3bFileTreeView::slotClicked( const QModelIndex& index )
     }
     else if ( index.isValid() ) {
         emit activated( d->model->itemForIndex( index ).url() );
+    }
+}
+
+
+void K3bFileTreeView::slotContextMenu( const QPoint& pos )
+{
+    QModelIndex index = indexAt( pos );
+    if ( K3bDevice::Device* dev = d->model->deviceForIndex( index ) ) {
+        d->devicePopupMenu->setDevice( dev );
+        d->devicePopupMenu->exec( mapToGlobal( pos ) );
     }
 }
 

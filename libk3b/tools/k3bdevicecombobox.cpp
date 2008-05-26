@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
  */
 
 #include "k3bdevicecombobox.h"
-#include "k3bdevicelistmodel.h"
+#include "k3bdevicemodel.h"
 
 #include <k3bdevice.h>
 #include <k3bdevicemanager.h>
@@ -24,13 +24,10 @@
 #include <qmap.h>
 
 
-
-
-
 class K3bDeviceComboBox::Private
 {
 public:
-    K3bDeviceListModel* model;
+    K3bDeviceModel* model;
 };
 
 
@@ -38,7 +35,7 @@ K3bDeviceComboBox::K3bDeviceComboBox( QWidget* parent )
     : KComboBox( parent )
 {
     d = new Private();
-    d->model = new K3bDeviceListModel( this );
+    d->model = new K3bDeviceModel( this );
     setModel( d->model );
 
     connect( this, SIGNAL(activated(int)),
@@ -54,14 +51,13 @@ K3bDeviceComboBox::~K3bDeviceComboBox()
 
 K3bDevice::Device* K3bDeviceComboBox::selectedDevice() const
 {
-#ifdef __GNUC__
-#warning FIXME: implement K3bDeviceComboBox::selectedDevice
-#endif
-//     if ( count() > 0 )
-//         return d->devices[currentIndex()];
-//     else
-//         return 0;
-    return 0;
+    int index = currentIndex();
+    if ( index >= 0 ) {
+        return d->model->deviceForIndex( d->model->index( index, 0 ) );
+    }
+    else {
+        return 0;
+    }
 }
 
 
@@ -90,15 +86,7 @@ void K3bDeviceComboBox::refreshDevices( const QList<K3bDevice::Device*>& list )
 
 void K3bDeviceComboBox::setSelectedDevice( K3bDevice::Device* dev )
 {
-#ifdef __GNUC__
-#warning FIXME: implement K3bDeviceComboBox::setSelectedDevice
-#endif
-//     if( dev ) {
-//         if( d->deviceIndexMap.contains(dev->devicename()) ) {
-//             setCurrentItem( d->deviceIndexMap[dev->devicename()] );
-//             emit selectionChanged( dev );
-//         }
-//     }
+    setCurrentIndex( d->model->indexForDevice( dev ).row() );
 }
 
 

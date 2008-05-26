@@ -38,7 +38,7 @@ class K3bDataMultiSessionCombobox : public QComboBox
   void saveConfig( KConfigGroup & );
   void loadConfig( const KConfigGroup& );
 
- public slots:
+ public Q_SLOTS:
   void setMultiSessionMode( K3bDataDoc::MultiSessionMode );
 
  private:

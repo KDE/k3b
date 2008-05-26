@@ -97,7 +97,7 @@ void K3bLameEncoder::closeFile()
 }
 
 
-const QString& K3bLameEncoder::filename() const
+QString K3bLameEncoder::filename() const
 {
     return d->filename;
 }
@@ -275,25 +275,25 @@ void K3bLameEncoder::setMetaDataInternal( K3bAudioEncoder::MetaDataField f, cons
 
     switch( f ) {
     case META_TRACK_TITLE:
-        id3tag_set_title( d->flags, codec ? codec->fromUnicode(value).data() : value.latin1() );
+        id3tag_set_title( d->flags, codec ? codec->fromUnicode(value).data() : value.toLatin1().data() );
         break;
     case META_TRACK_ARTIST:
-        id3tag_set_artist( d->flags, codec ? codec->fromUnicode(value).data() : value.latin1() );
+        id3tag_set_artist( d->flags, codec ? codec->fromUnicode(value).data() : value.toLatin1().data() );
         break;
     case META_ALBUM_TITLE:
-        id3tag_set_album( d->flags, codec ? codec->fromUnicode(value).data() : value.latin1() );
+        id3tag_set_album( d->flags, codec ? codec->fromUnicode(value).data() : value.toLatin1().data() );
         break;
     case META_ALBUM_COMMENT:
-        id3tag_set_comment( d->flags, codec ? codec->fromUnicode(value).data() : value.latin1() );
+        id3tag_set_comment( d->flags, codec ? codec->fromUnicode(value).data() : value.toLatin1().data() );
         break;
     case META_YEAR:
-        id3tag_set_year( d->flags, codec ? codec->fromUnicode(value).data() : value.latin1() );
+        id3tag_set_year( d->flags, codec ? codec->fromUnicode(value).data() : value.toLatin1().data() );
         break;
     case META_TRACK_NUMBER:
-        id3tag_set_track( d->flags, codec ? codec->fromUnicode(value).data() : value.latin1() );
+        id3tag_set_track( d->flags, codec ? codec->fromUnicode(value).data() : value.toLatin1().data() );
         break;
     case META_GENRE:
-        if( id3tag_set_genre( d->flags, codec ? codec->fromUnicode(value).data() : value.latin1() ) )
+        if( id3tag_set_genre( d->flags, codec ? codec->fromUnicode(value).data() : value.toLatin1().data() ) )
             kDebug() << "(K3bLameEncoder) unable to set genre.";
         break;
     default:

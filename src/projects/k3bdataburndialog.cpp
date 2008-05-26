@@ -19,7 +19,6 @@
 #include "k3bdatamultisessioncombobox.h"
 #include "k3bdataview.h"
 #include "../k3bapplication.h"
-#include "../k3bmediacache.h"
 
 #include <k3bisooptions.h>
 #include <k3bdatadoc.h>
@@ -32,9 +31,10 @@
 #include <k3bdatamodewidget.h>
 #include <k3bglobals.h>
 #include <k3bwritingmodewidget.h>
+#include <k3bmediacache.h>
 
 #include <qcheckbox.h>
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
@@ -42,16 +42,13 @@
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
 #include <qpoint.h>
 #include <qradiobutton.h>
-#include <q3buttongroup.h>
 #include <qfileinfo.h>
 #include <qtabwidget.h>
 #include <qspinbox.h>
 #include <qfile.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 #include <kmessagebox.h>
 #include <klineedit.h>
@@ -155,15 +152,19 @@ void K3bDataBurnDialog::readSettings()
 void K3bDataBurnDialog::setupSettingsTab()
 {
     QWidget* frame = new QWidget( this );
-    Q3GridLayout* frameLayout = new Q3GridLayout( frame );
+    QGridLayout* frameLayout = new QGridLayout( frame );
     frameLayout->setSpacing( spacingHint() );
     frameLayout->setMargin( marginHint() );
 
     m_groupDataMode = new Q3GroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), frame );
     m_dataModeWidget = new K3bDataModeWidget( m_groupDataMode );
 
-    Q3GroupBox* groupMultiSession = new Q3GroupBox( 1, Qt::Vertical, i18n("Multisession Mode"), frame );
+    QGroupBox* groupMultiSession = new QGroupBox( i18n("Multisession Mode"), frame );
     m_comboMultisession = new K3bDataMultiSessionCombobox( groupMultiSession );
+    QVBoxLayout* groupMultiSessionLayout = new QVBoxLayout( groupMultiSession );
+    groupMultiSessionLayout->setMargin( marginHint() );
+    groupMultiSessionLayout->setSpacing( spacingHint() );
+    groupMultiSessionLayout->addWidget( m_comboMultisession );
 
     frameLayout->addWidget( m_groupDataMode, 0, 0 );
     frameLayout->addWidget( groupMultiSession, 1, 0 );

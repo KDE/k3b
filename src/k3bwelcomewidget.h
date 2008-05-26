@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
 #include <qlist.h>
 #include <qmap.h>
 #include <qimage.h>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QResizeEvent>
 #include <QShowEvent>
@@ -39,93 +38,93 @@ class QDragEnterEvent;
 class K3bFlatButton;
 class QPaintEvent;
 class QResizeEvent;
-class Q3SimpleRichText;
+class QTextDocument;
 class QMouseEvent;
 class QShowEvent;
 
 
 class K3bWelcomeWidget : public QScrollArea
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bWelcomeWidget( K3bMainWindow*, QWidget* parent = 0 );
-  ~K3bWelcomeWidget();
+public:
+    K3bWelcomeWidget( K3bMainWindow*, QWidget* parent = 0 );
+    ~K3bWelcomeWidget();
 
-  void loadConfig( const KConfigGroup& c );
-  void saveConfig( KConfigGroup& c );
+    void loadConfig( const KConfigGroup& c );
+    void saveConfig( KConfigGroup& c );
 
-  class Display;
+    class Display;
 
- public slots:
-  void slotMoreActions();
+public Q_SLOTS:
+    void slotMoreActions();
 
- protected:
-  void resizeEvent( QResizeEvent* );
-  void showEvent( QShowEvent* );
-  void mousePressEvent ( QMouseEvent* e );
+protected:
+    void resizeEvent( QResizeEvent* );
+    void showEvent( QShowEvent* );
+    void mousePressEvent ( QMouseEvent* e );
 
- private:
-  void fixSize();
+private:
+    void fixSize();
 
-  K3bMainWindow* m_mainWindow;
-  Display* main;
+    K3bMainWindow* m_mainWindow;
+    Display* main;
 };
 
 
 class K3bWelcomeWidget::Display : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  Display( K3bWelcomeWidget* parent );
-  ~Display();
+public:
+    Display( K3bWelcomeWidget* parent );
+    ~Display();
 
-  QSize minimumSizeHint() const;
-  QSizePolicy sizePolicy () const;
-  int heightForWidth ( int w ) const;
+    QSize minimumSizeHint() const;
+    QSizePolicy sizePolicy () const;
+    int heightForWidth ( int w ) const;
 
-  void addAction( QAction* );
-  void removeAction( QAction* );
-  void removeButton( K3bFlatButton* );
-  void rebuildGui();
-  void rebuildGui( const QList<QAction*>& );
+    void addAction( QAction* );
+    void removeAction( QAction* );
+    void removeButton( K3bFlatButton* );
+    void rebuildGui();
+    void rebuildGui( const QList<QAction*>& );
 
- signals:
-  void dropped( const KUrl::List& );
+Q_SIGNALS:
+    void dropped( const KUrl::List& );
 
- protected:
-  void resizeEvent( QResizeEvent* );
-  void paintEvent( QPaintEvent* );
-  void dropEvent( QDropEvent* event );
-  void dragEnterEvent( QDragEnterEvent* event );
+protected:
+    void resizeEvent( QResizeEvent* );
+    void paintEvent( QPaintEvent* );
+    void dropEvent( QDropEvent* event );
+    void dragEnterEvent( QDragEnterEvent* event );
 
- private slots:
-  void slotThemeChanged();
+private Q_SLOTS:
+    void slotThemeChanged();
 
- private:
-  void repositionButtons();
-  void updateBgPix();
+private:
+    void repositionButtons();
+    void updateBgPix();
 
-  Q3SimpleRichText* m_header;
-  Q3SimpleRichText* m_infoText;
+    QTextDocument* m_header;
+    QTextDocument* m_infoText;
 
-  QSize m_buttonSize;
-  int m_cols;
-  int m_rows;
+    QSize m_buttonSize;
+    int m_cols;
+    int m_rows;
 
-  QList<QAction*> m_actions;
-  QList<K3bFlatButton*> m_buttons;
-  QMap<K3bFlatButton*, QAction*> m_buttonMap;
+    QList<QAction*> m_actions;
+    QList<K3bFlatButton*> m_buttons;
+    QMap<K3bFlatButton*, QAction*> m_buttonMap;
 
-  K3bFlatButton* m_buttonMore;
+    K3bFlatButton* m_buttonMore;
 
-  bool m_infoTextVisible;
+    bool m_infoTextVisible;
 
-  QPixmap m_bgPixmap;
-  QImage m_bgImage;
+    QPixmap m_bgPixmap;
+    QImage m_bgImage;
 
-  friend class K3bWelcomeWidget;
+    friend class K3bWelcomeWidget;
 };
 
 #endif

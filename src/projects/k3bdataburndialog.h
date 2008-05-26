@@ -58,7 +58,7 @@ protected:
 
     QCheckBox* m_checkVerify;
 
-    protected slots:
+    protected Q_SLOTS:
     void slotStartClicked();
     void saveSettings();
     void readSettings();

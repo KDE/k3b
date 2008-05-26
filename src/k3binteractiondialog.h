@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,26 +70,10 @@ public:
     int exec();
 
     /**
-     * @param returnOnHide if false the dialog can be hidden and shown without being closed.
-     *        one needs to call close() to actually close the dialog.
-     */
-    int exec( bool returnOnHide );
-
-    /**
      * reimplemented to allow initialization after the dialog has been opened.
      */
     void show();
 
-    /**
-     * Reimplemented for internal reasons. The API does not change.
-     */
-    bool close( bool alsoDelete );
-
-    inline bool close() { return close( false ); }
-
-#ifdef __GNUC__
-#warning K3bInteractionDialog::mainWidget clashes with KDialog::MainWidget. We need to rename it and update all the subclasses
-#endif
     /**
      * If no mainWidget has been set a plain page will be created.
      */
@@ -103,7 +87,7 @@ public:
 
     QSize sizeHint() const;
 
-    const QString& configGroup() const { return m_configGroup; }
+    QString configGroup() const { return m_configGroup; }
 
     /**
      * K3b's dialogs use this method to determine if it is safe to hide when starting
@@ -127,7 +111,7 @@ public:
         LOAD_LAST_SETTINGS = 3
     };
 
-signals:
+ Q_SIGNALS:
     void started();
     void canceled();
     void saved();
@@ -170,9 +154,19 @@ public Q_SLOTS:
     void setDelayedInitialization( bool b ) { m_delayedInit = b; }
 
     /**
-     * Reimplemented for internal reasons. The API does not change.
+     * Hide the dialog but do not return from the exec call.
      */
-    void setVisible( bool visible );
+    void hideTemporarily();
+
+    /**
+     * Close the dialog and return from any exec call.
+     */
+    void close();
+
+    /**
+     * Close the dialog and return from any exec call.
+     */
+    void done( int r );
 
 protected Q_SLOTS:
     // FIXME: replace these with protected methods which are called from private slots.
@@ -237,11 +231,7 @@ protected:
      */
     virtual bool eventFilter( QObject*, QEvent* );
 
-protected Q_SLOTS:
-    /**
-     * Reimplemented for internal reasons. The API does not change.
-     */
-    virtual void done( int );
+    void hideEvent( QHideEvent* );
 
 private Q_SLOTS:
     void slotLoadK3bDefaults();

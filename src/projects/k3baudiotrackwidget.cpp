@@ -24,7 +24,6 @@
 #include <qcheckbox.h>
 #include <qtooltip.h>
 
-#include <q3groupbox.h>
 #include <qtabwidget.h>
 #include <klineedit.h>
 #include <klocale.h>
@@ -40,9 +39,8 @@ K3bAudioTrackWidget::K3bAudioTrackWidget( const QList<K3bAudioTrack*>& tracks,
     setupUi( this );
 
     m_labelPostGap->setBuddy( m_editPostGap );
-    //TODO kde4 port me
-    //m_labelPostGap->setToolTip( QToolTip::textFor( m_editPostGap ) );
-    //m_labelPostGap->setWhatsThis( Q3WhatsThis::textFor( m_editPostGap ) );
+    m_labelPostGap->setToolTip( m_editPostGap->toolTip() );
+    m_labelPostGap->setWhatsThis( m_editPostGap->whatsThis() );
 
     // no post-gap for the last track
     m_editPostGap->setDisabled( tracks.count() == 1 && !tracks.first()->next() );
@@ -150,10 +148,10 @@ void K3bAudioTrackWidget::save()
         if( m_editMessage->isModified() )
             track->setCdTextMessage( m_editMessage->text() );
 
-        if( m_checkCopyPermitted->state() != QCheckBox::NoChange )
+        if( m_checkCopyPermitted->checkState() != Qt::PartiallyChecked )
             track->setCopyProtection( !m_checkCopyPermitted->isChecked() );
 
-        if( m_checkPreemphasis->state() != QCheckBox::NoChange )
+        if( m_checkPreemphasis->checkState() != Qt::PartiallyChecked )
             track->setPreEmp( m_checkPreemphasis->isChecked() );
 
         track->setIndex0( track->length() - m_editPostGap->msfValue() );

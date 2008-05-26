@@ -12,7 +12,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <config-k3b.h>
+#include <config-libk3b.h>
 
 #include <k3bcore.h>
 

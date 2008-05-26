@@ -49,11 +49,11 @@ class K3bMixedJob : public K3bBurnJob
   QString jobDescription() const;
   QString jobDetails() const;
 		
- public slots:
+ public Q_SLOTS:
   void cancel();
   void start();
 
- protected slots:
+ protected Q_SLOTS:
   // iso imager slots
   void slotIsoImagerFinished( bool success );
   void slotIsoImagerPercent(int);

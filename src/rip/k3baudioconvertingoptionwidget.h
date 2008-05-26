@@ -59,15 +59,15 @@ class K3bAudioConvertingOptionWidget : public base_K3bAudioRippingOptionWidget
   bool createSingleFile() const { return m_checkSingleFile->isChecked(); }
   bool createCueFile() const { return m_checkWriteCueFile->isChecked(); }
 
- public slots:
+ public Q_SLOTS:
   void loadDefaults();
   void loadConfig( const KConfigGroup& );
   void saveConfig( KConfigGroup& );
 
- signals:
+  Q_SIGNALS:
   void changed();
 
- private slots:
+ private Q_SLOTS:
   void slotConfigurePlugin();
   void slotUpdateFreeTempSpace();
   void slotEncoderChanged();

@@ -59,7 +59,7 @@ class K3bVideoCdRippingDialog : public K3bInteractionDialog
 
   unsigned long m_freeSpace;
 
- private slots:
+ private Q_SLOTS:
   void slotStartClicked();
 
   void slotUpdateFreeSpace();

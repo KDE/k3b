@@ -48,9 +48,36 @@
 #include <qstringlist.h>
 #include <qtabwidget.h>
 //Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
+
+#include <libkcddb/cdinfo.h>
 
 
+namespace {
+    KCDDB::CDInfo createCddbEntryFromDoc( K3bAudioDoc* doc )
+    {
+        KCDDB::CDInfo e;
+
+        // global
+        e.set( KCDDB::Title, doc->title() );
+        e.set( KCDDB::Artist, doc->artist() );
+        e.set( KCDDB::Comment, doc->cdTextMessage() );
+
+        // tracks
+        int i = 0;
+        K3bAudioTrack* track = doc->firstTrack();
+        while( track ) {
+            e.track( i ).set( KCDDB::Title, track->title() );
+            e.track( i ).set( KCDDB::Artist, track->artist() );
+            e.track( i ).set( KCDDB::Comment, track->cdTextMessage() );
+
+            track = track->next();
+            ++i;
+        }
+
+        return e;
+    }
+}
 
 class K3bAudioProjectConvertingDialog::Private
 {
@@ -58,7 +85,7 @@ public:
     Private() {
     }
 
-    Q3ValueVector<QString> filenames;
+    QVector<QString> filenames;
     QString playlistFilename;
     QString cueFilename;
 };
@@ -94,7 +121,7 @@ K3bAudioProjectConvertingDialog::~K3bAudioProjectConvertingDialog()
 void K3bAudioProjectConvertingDialog::setupGui()
 {
     QWidget *frame = mainWidget();
-    Q3GridLayout* Form1Layout = new Q3GridLayout( frame );
+    QGridLayout* Form1Layout = new QGridLayout( frame );
     Form1Layout->setSpacing( KDialog::spacingHint() );
     Form1Layout->setMargin( 0 );
 
@@ -172,7 +199,7 @@ void K3bAudioProjectConvertingDialog::slotStartClicked()
 
     // just generate a fake m_tracks list for now so we can keep most of the methods
     // like they are in K3bAudioRipJob. This way future combination is easier
-    Q3ValueVector<QPair<int, QString> > tracksToRip;
+    QVector<QPair<int, QString> > tracksToRip;
     int i = 0;
     K3bAudioTrack* track = m_doc->firstTrack();
     while( track ) {
@@ -210,7 +237,7 @@ void K3bAudioProjectConvertingDialog::refresh()
 
     // FIXME: this is bad and needs to be improved
     // create a cddb entry from the doc to use in the patternparser
-    K3bCddbResultEntry cddbEntry = createCddbEntryFromDoc( m_doc );
+    KCDDB::CDInfo cddbEntry = createCddbEntryFromDoc( m_doc );
 
     QString baseDir = K3b::prepareDir( m_optionWidget->baseDir() );
 
@@ -339,29 +366,6 @@ void K3bAudioProjectConvertingDialog::saveUserDefaults( KConfigGroup& c )
 {
     m_optionWidget->saveConfig( c );
     m_patternWidget->saveConfig( c );
-}
-
-
-K3bCddbResultEntry K3bAudioProjectConvertingDialog::createCddbEntryFromDoc( K3bAudioDoc* doc )
-{
-    K3bCddbResultEntry e;
-
-    // global
-    e.cdTitle = doc->title();
-    e.cdArtist = doc->artist();
-    e.cdExtInfo = doc->cdTextMessage();
-
-    // tracks
-    K3bAudioTrack* track = doc->firstTrack();
-    while( track ) {
-        e.titles.append( track->title() );
-        e.artists.append( track->artist() );
-        e.extInfos.append( track->cdTextMessage() );
-
-        track = track->next();
-    }
-
-    return e;
 }
 
 #include "k3baudioprojectconvertingdialog.moc"

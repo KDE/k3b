@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,139 +26,139 @@
 class K3bMediaContentsView::Private
 {
 public:
-  K3bMedium medium;
-  int supportedMediumContent;
-  int supportedMediumTypes;
-  int supportedMediumStates;
+    K3bMedium medium;
+    int supportedMediumContent;
+    int supportedMediumTypes;
+    int supportedMediumStates;
 
-  bool autoReload;
+    bool autoReload;
 };
 
 
 K3bMediaContentsView::K3bMediaContentsView( bool withHeader,
-					    int mediumContent,
-					    int mediumTypes,
-					    int mediumState,
-					    QWidget* parent )
-  : K3bContentsView( withHeader, parent )
+                                            int mediumContent,
+                                            int mediumTypes,
+                                            int mediumState,
+                                            QWidget* parent )
+    : K3bContentsView( withHeader, parent )
 {
-  d = new Private;
-  d->supportedMediumContent = mediumContent;
-  d->supportedMediumTypes = mediumTypes;
-  d->supportedMediumStates = mediumState;
-  d->autoReload = true;
+    d = new Private;
+    d->supportedMediumContent = mediumContent;
+    d->supportedMediumTypes = mediumTypes;
+    d->supportedMediumStates = mediumState;
+    d->autoReload = true;
 
-  connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3bDevice::Device*)),
-	   this, SLOT(slotMediumChanged(K3bDevice::Device*)) );
+    connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3bDevice::Device*)),
+             this, SLOT(slotMediumChanged(K3bDevice::Device*)) );
 }
 
 
 K3bMediaContentsView::~K3bMediaContentsView()
 {
-  delete d;
+    delete d;
 }
 
 
 void K3bMediaContentsView::setAutoReload( bool b )
 {
-  d->autoReload = b;
+    d->autoReload = b;
 }
 
 
 int K3bMediaContentsView::supportedMediumContent() const
 {
-  return d->supportedMediumContent;
+    return d->supportedMediumContent;
 }
 
 
 int K3bMediaContentsView::supportedMediumTypes() const
 {
-  return d->supportedMediumTypes;
+    return d->supportedMediumTypes;
 }
 
 
 int K3bMediaContentsView::supportedMediumStates() const
 {
-  return d->supportedMediumStates;
+    return d->supportedMediumStates;
 }
 
 
-const K3bMedium& K3bMediaContentsView::medium() const
+K3bMedium K3bMediaContentsView::medium() const
 {
-  return d->medium;
+    return d->medium;
 }
 
 
 K3bDevice::Device* K3bMediaContentsView::device() const
 {
-  return medium().device();
+    return medium().device();
 }
 
 
 void K3bMediaContentsView::setMedium( const K3bMedium& m )
 {
-  d->medium = m;
+    d->medium = m;
 }
 
 
 void K3bMediaContentsView::reload( K3bDevice::Device* dev )
 {
-  reload( k3bappcore->mediaCache()->medium( dev ) );
+    reload( k3bappcore->mediaCache()->medium( dev ) );
 }
 
 
 void K3bMediaContentsView::reload( const K3bMedium& m )
 {
-  setMedium( m );
-  reload();
+    setMedium( m );
+    reload();
 }
 
 
 void K3bMediaContentsView::reload()
 {
-  enableInteraction( true );
-  reloadMedium();
+    enableInteraction( true );
+    reloadMedium();
 }
 
 
 void K3bMediaContentsView::enableInteraction( bool enable )
 {
-  mainWidget()->setEnabled( enable );
+    mainWidget()->setEnabled( enable );
 }
 
 
 void K3bMediaContentsView::slotMediumChanged( K3bDevice::Device* dev )
 {
-  // FIXME: derive a K3bContentsStack from QWidgetStack and let it set an active flag
-  // to replace this hack
-  if( QStackedWidget* stack = dynamic_cast<QStackedWidget*>( parentWidget() ) )
-    if( stack->currentWidget() != this )
-      return;
+    // FIXME: derive a K3bContentsStack from QWidgetStack and let it set an active flag
+    // to replace this hack
+    if( QStackedWidget* stack = dynamic_cast<QStackedWidget*>( parentWidget() ) )
+        if( stack->currentWidget() != this )
+            return;
 
-  if( !d->autoReload /*|| !isActive()*/ )
-    return;
+    if( !d->autoReload /*|| !isActive()*/ )
+        return;
 
-  if( dev == device() ) {
-    K3bMedium m = k3bappcore->mediaCache()->medium( dev );
+    if( dev == device() ) {
+        K3bMedium m = k3bappcore->mediaCache()->medium( dev );
 
-    // no need to reload if the medium did not change (this is even
-    // important since K3b blocks the devices in action and after
-    // the release they are signalled as changed)
-    if( m == medium() ) {
-      kDebug() << k_funcinfo << " medium did not change";
-      enableInteraction( true );
+        // no need to reload if the medium did not change (this is even
+        // important since K3b blocks the devices in action and after
+        // the release they are signalled as changed)
+        if( m == medium() ) {
+            kDebug() << k_funcinfo << " medium did not change";
+            enableInteraction( true );
+        }
+        else if( m.content() & supportedMediumContent() &&
+                 m.diskInfo().mediaType() & supportedMediumTypes() &&
+                 m.diskInfo().diskState() & supportedMediumStates() ) {
+            kDebug() << k_funcinfo << " new supported medium found";
+            reload( m );
+        }
+        else {
+            kDebug() << k_funcinfo << " unsupported medium found";
+            enableInteraction( false );
+        }
     }
-    else if( m.content() & supportedMediumContent() &&
-	     m.diskInfo().mediaType() & supportedMediumTypes() &&
-	     m.diskInfo().diskState() & supportedMediumStates() ) {
-      kDebug() << k_funcinfo << " new supported medium found";
-      reload( m );
-    }
-    else {
-      kDebug() << k_funcinfo << " unsupported medium found";
-      enableInteraction( false );
-    }
-  }
 }
 
 #include "k3bmediacontentsview.moc"

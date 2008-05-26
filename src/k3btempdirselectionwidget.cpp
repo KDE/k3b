@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -109,11 +109,14 @@ void K3bTempDirSelectionWidget::slotUpdateFreeTempSpace()
     m_labelFreeSpace->setText( KIO::convertSizeFromKiB(m_freeTempSpace) );
 
     if( m_labelCdSize ) {
+        QPalette pal( m_labelCdSize->palette() );
         if( m_freeTempSpace < m_requestedSize/1024 )
-            m_labelCdSize->setPaletteForegroundColor( Qt::red );
+            pal.setColor( QPalette::Text, Qt::red );
         else
-            m_labelCdSize->setPaletteForegroundColor( m_labelFreeSpace->paletteForegroundColor() );
+            pal.setColor( QPalette::Text, palette().color( QPalette::Text ) );
+        m_labelCdSize->setPalette( pal );
     }
+
     QTimer::singleShot( 1000, this, SLOT(slotUpdateFreeTempSpace()) );
 }
 

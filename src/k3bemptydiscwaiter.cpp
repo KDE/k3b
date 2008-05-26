@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -113,13 +113,13 @@ K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice::Device* device, QWidget* pare
     grid->setMargin( 0 );
     grid->setSpacing( spacingHint() );
 
-    grid->addMultiCellWidget( d->pixLabel, 0, 2, 0, 0 );
-    grid->addColSpacing( 1, 20 );
+    grid->addWidget( d->pixLabel, 0, 0, 3, 1 );
+    grid->addItem( new QSpacerItem( 20, 1, QSizePolicy::Fixed, QSizePolicy::Fixed ), 0, 1 );
     grid->addWidget( new QLabel( i18n("Found media:"), mainWidget() ), 0, 2 );
     grid->addWidget( d->labelFoundMedia, 0, 3 );
-    grid->addMultiCellWidget( d->labelRequest, 1, 1, 2, 3 );
+    grid->addWidget( d->labelRequest, 1, 2, 1, 2 );
     grid->setRowStretch( 2, 1 );
-    grid->setColStretch( 3, 1 );
+    grid->setColumnStretch( 3, 1 );
     // -----------------------------
 
     connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3bDevice::Device*)),
@@ -173,42 +173,42 @@ int K3bEmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QStrin
                                            "into drive<p><b>%1 %2 (%3)</b>."
                                            ,d->device->vendor()
                                            ,d->device->description()
-                                           ,d->device->devicename()
+                                           ,d->device->blockDeviceName()
                                            , d->wantedMediaTypeString ) );
         else if( d->wantedMediaState & K3bDevice::STATE_COMPLETE )
             d->labelRequest->setText( i18n("Please insert a complete %4 medium "
                                            "into drive<p><b>%1 %2 (%3)</b>."
                                            ,d->device->vendor()
                                            ,d->device->description()
-                                           ,d->device->devicename()
+                                           ,d->device->blockDeviceName()
                                            , d->wantedMediaTypeString ) );
         else if( (d->wantedMediaState & K3bDevice::STATE_INCOMPLETE) && (d->wantedMediaState & K3bDevice::STATE_EMPTY) )
             d->labelRequest->setText( i18n("Please insert an empty or appendable %4 medium "
                                            "into drive<p><b>%1 %2 (%3)</b>."
                                            ,d->device->vendor()
                                            ,d->device->description()
-                                           ,d->device->devicename()
+                                           ,d->device->blockDeviceName()
                                            , d->wantedMediaTypeString ) );
         else if( d->wantedMediaState & K3bDevice::STATE_INCOMPLETE )
             d->labelRequest->setText( i18n("Please insert an appendable %4 medium "
                                            "into drive<p><b>%1 %2 (%3)</b>."
                                            ,d->device->vendor()
                                            ,d->device->description()
-                                           ,d->device->devicename()
+                                           ,d->device->blockDeviceName()
                                            , d->wantedMediaTypeString ) );
         else if( d->wantedMediaState & K3bDevice::STATE_EMPTY )
             d->labelRequest->setText( i18n("Please insert an empty %4 medium "
                                            "into drive<p><b>%1 %2 (%3)</b>."
                                            ,d->device->vendor()
                                            ,d->device->description()
-                                           ,d->device->devicename()
+                                           ,d->device->blockDeviceName()
                                            , d->wantedMediaTypeString ) );
         else // fallback case (this should not happen in K3b)
             d->labelRequest->setText( i18n("Please insert a suitable medium "
                                            "into drive<p><b>%1 %2 (%3)</b>."
                                            ,d->device->vendor()
                                            ,d->device->description()
-                                           ,d->device->devicename()) );
+                                           ,d->device->blockDeviceName()) );
 
     }
     else

@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,18 +20,18 @@
 
 class K3bDebuggingOutputFile : public QFile
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bDebuggingOutputFile();
+public:
+    K3bDebuggingOutputFile();
 
-  /**
-   * Open the default output file and write some system information.
-   */
-  bool open();
+    /**
+     * Open the default output file and write some system information.
+     */
+    bool open( OpenMode mode = WriteOnly );
 
- public slots:
-  void addOutput( const QString&, const QString& );
+public Q_SLOTS:
+    void addOutput( const QString&, const QString& );
 };
 
 

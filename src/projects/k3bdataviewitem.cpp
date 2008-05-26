@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ void K3bDataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column,
     QColorGroup _cg = cg;
 
     if( !dataItem()->isRemoveable() && dataItem()->doc()->root() != dataItem() ) {
-        _cg.setColor( QColorGroup::Text, listView()->palette().disabled().foreground() );
+        _cg.setColor( QColorGroup::Text, listView()->palette().color( QPalette::Disabled, QPalette::Text ) );
     }
 
     if( column == 0 ) {

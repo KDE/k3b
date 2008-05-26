@@ -101,7 +101,7 @@ namespace K3bDevice {
 	org_freedesktop_Hal_Device_Volume_InvalidEjectOption
       };
 
-     public slots:
+     public Q_SLOTS:
       /**
        * Lock the device in HAL
        * 
@@ -172,7 +172,7 @@ namespace K3bDevice {
       int eject( Device*,
 		 const QStringList& options = QStringList() );
 
-    signals:
+     Q_SIGNALS:
       /**
        * This signal gets emitted whenever HAL finds a new optical drive.
        *

@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,24 +24,24 @@ class K3bThemedHeader;
 
 class K3bContentsView : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  virtual ~K3bContentsView();
+public:
+    virtual ~K3bContentsView();
 
- protected:
-  K3bContentsView( bool withHeader,
-		   QWidget* parent = 0 );
+protected:
+    K3bContentsView( bool withHeader,
+                     QWidget* parent = 0 );
 
-  QWidget* mainWidget();
-  void setMainWidget( QWidget* );
-  void setTitle( const QString& );
-  void setLeftPixmap( K3bTheme::PixmapType );
-  void setRightPixmap( K3bTheme::PixmapType );
+    QWidget* mainWidget();
+    void setMainWidget( QWidget* );
+    void setTitle( const QString& );
+    void setLeftPixmap( K3bTheme::PixmapType );
+    void setRightPixmap( K3bTheme::PixmapType );
 
- private:
-  K3bThemedHeader* m_header;
-  QWidget* m_centerWidget;
+private:
+    K3bThemedHeader* m_header;
+    QWidget* m_centerWidget;
 };
 
 #endif

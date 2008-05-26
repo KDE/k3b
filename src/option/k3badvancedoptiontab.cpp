@@ -69,13 +69,13 @@ void K3bAdvancedOptionTab::setupGui()
     m_editWritingBufferSize = new KIntNumInput( 4, groupWritingApp );
     m_editWritingBufferSize->setSuffix( " " + i18n("MB") );
     m_checkAllowWritingAppSelection = new QCheckBox( i18n("Manual writing application &selection"), groupWritingApp );
-    bufferLayout->addMultiCellWidget( m_checkBurnfree, 0, 0, 0, 2 );
-    bufferLayout->addMultiCellWidget( m_checkOverburn, 1, 1, 0, 2 );
-    bufferLayout->addMultiCellWidget( m_checkForceUnsafeOperations, 2, 2, 0, 2 );
+    bufferLayout->addWidget( m_checkBurnfree, 0, 0, 1, 3 );
+    bufferLayout->addWidget( m_checkOverburn, 1, 0, 1, 2 );
+    bufferLayout->addWidget( m_checkForceUnsafeOperations, 2, 0, 1, 3 );
     bufferLayout->addWidget( m_checkManualWritingBufferSize, 3, 0 );
     bufferLayout->addWidget( m_editWritingBufferSize, 3, 1 );
-    bufferLayout->addMultiCellWidget( m_checkAllowWritingAppSelection, 4, 4, 0, 2 );
-    bufferLayout->setColStretch( 2, 1 );
+    bufferLayout->addWidget( m_checkAllowWritingAppSelection, 4, 0, 1, 3 );
+    bufferLayout->setColumnStretch( 2, 1 );
 
     QGroupBox* groupMisc = new QGroupBox( i18n("Miscellaneous"), this );
     QVBoxLayout* groupMiscLayout = new QVBoxLayout( groupMisc );

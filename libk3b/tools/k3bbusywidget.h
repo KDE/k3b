@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,28 +24,28 @@ class QTimer;
 
 class LIBK3B_EXPORT K3bBusyWidget : public QFrame
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bBusyWidget( QWidget* parent = 0 );
-  ~K3bBusyWidget();
+public:
+    K3bBusyWidget( QWidget* parent = 0 );
+    ~K3bBusyWidget();
 
-  void showBusy( bool b );
+    void showBusy( bool b );
 
-  QSize sizeHint() const;
-  QSize minimumSizeHint() const;
+    QSize sizeHint() const;
+    QSize minimumSizeHint() const;
 
- protected:
-  void paintEvent( QPaintEvent* );
+protected:
+    void paintEvent( QPaintEvent* );
 
- private slots:
-  void animateBusy();
+private Q_SLOTS:
+    void animateBusy();
 
- private:
-  bool m_bBusy;
-  int m_iBusyPosition;
+private:
+    bool m_bBusy;
+    int m_iBusyPosition;
 
-  QTimer* m_busyTimer;
+    QTimer* m_busyTimer;
 };
 
 

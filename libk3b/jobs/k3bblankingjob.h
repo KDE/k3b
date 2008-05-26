@@ -39,7 +39,7 @@ class LIBK3B_EXPORT K3bBlankingJob : public K3bBurnJob
 
   enum blank_mode { Fast, Complete, Track, Unclose, Session };
 
- public slots:
+ public Q_SLOTS:
   void start();
   void cancel();
   void setForce( bool f ) { m_force = f; }
@@ -54,7 +54,7 @@ class LIBK3B_EXPORT K3bBlankingJob : public K3bBurnJob
    */
   void setForceNoEject( bool b ) { m_forceNoEject = b; }
 
- private slots:
+ private Q_SLOTS:
   void slotFinished(bool);
   void slotStartErasing();
 

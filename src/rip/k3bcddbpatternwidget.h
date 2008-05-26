@@ -40,15 +40,15 @@ class K3bCddbPatternWidget : public base_K3bCddbPatternWidget
   QString blankReplaceString() const;
   bool replaceBlanks() const;
 
- signals:
+  Q_SIGNALS:
   void changed();
 
- public slots:
+ public Q_SLOTS:
   void loadConfig( const KConfigGroup & );
   void saveConfig( KConfigGroup& );
   void loadDefaults();
 
- private slots:
+ private Q_SLOTS:
   void slotSeeSpecialStrings();
   void slotSeeConditionalInclusion();
 };

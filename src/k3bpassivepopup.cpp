@@ -36,11 +36,11 @@
 #include <qtooltip.h>
 #include <qfont.h>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
+#include <QHBoxLayout>
+#include <QGridLayout>
 #include <QFrame>
 #include <QPixmap>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 
 static const char* const sticky_xpm[] = {
@@ -110,7 +110,7 @@ K3bPassivePopup::K3bPassivePopup( QWidget* parent )
 
   setFrameStyle( QFrame::StyledPanel | QFrame::Raised );
 
-  Q3VBoxLayout* mainLay = new Q3VBoxLayout( this );
+  QVBoxLayout* mainLay = new QVBoxLayout( this );
   mainLay->setMargin( frameWidth() );
   mainLay->setSpacing( 0 );
 
@@ -150,12 +150,12 @@ K3bPassivePopup::K3bPassivePopup( QWidget* parent )
   grid->addWidget( d->pixmapLabel, 0, 0 );
   grid->addWidget( d->messageLabel, 0, 1 );
   grid->addWidget( d->timeoutWidget, 0, 2 );
-  grid->setColStretch( 1, 1 );
+  grid->setColumnStretch( 1, 1 );
 
   mainLay->addWidget( d->titleLabel );
   mainLay->addLayout( grid, 1 );
 
-  Q3HBoxLayout* titleLay = new Q3HBoxLayout( d->titleLabel );
+  QHBoxLayout* titleLay = new QHBoxLayout( d->titleLabel );
   titleLay->setMargin( d->titleLabel->margin() );
   titleLay->setSpacing( 2 );
   titleLay->addStretch();

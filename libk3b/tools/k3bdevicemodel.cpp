@@ -15,14 +15,18 @@
 #include "k3bdevicemodel.h"
 #include "k3bmedium.h"
 #include "k3bmediacache.h"
-#include "k3bapplication.h"
+#include "k3bcore.h"
 
 #include <k3bdevice.h>
+
+#include <KLocale>
+
 
 class K3bDeviceModel::Private
 {
 public:
     QList<K3bDevice::Device*> devices;
+    QHash<K3bDevice::Device*, bool> devicesValid;
 };
 
 
@@ -30,8 +34,10 @@ K3bDeviceModel::K3bDeviceModel( QObject* parent )
     : QAbstractItemModel( parent ),
       d( new Private() )
 {
-    connect( k3bappcore->mediaCache(), SIGNAL( mediumChanged( K3bDevice::Device* ) ),
+    connect( k3bcore->mediaCache(), SIGNAL( mediumChanged( K3bDevice::Device* ) ),
              this, SLOT( slotMediumChanged( K3bDevice::Device* ) ) );
+    connect( k3bcore->mediaCache(), SIGNAL( checkingMedium( K3bDevice::Device*, QString ) ),
+             this, SLOT( slotCheckingMedium( K3bDevice::Device*, QString ) ) );
 }
 
 
@@ -44,6 +50,45 @@ K3bDeviceModel::~K3bDeviceModel()
 void K3bDeviceModel::setDevices( const QList<K3bDevice::Device*>& devices )
 {
     d->devices = devices;
+    foreach( K3bDevice::Device* dev, devices ) {
+        d->devicesValid[dev] = true;
+    }
+    reset();
+}
+
+
+void K3bDeviceModel::addDevice( K3bDevice::Device* dev )
+{
+    if ( !d->devices.contains( dev ) ) {
+        d->devices.append( dev );
+        reset(); // hardcore reset since entries might change
+    }
+}
+
+
+void K3bDeviceModel::removeDevice( K3bDevice::Device* dev )
+{
+    if ( d->devices.contains( dev ) ) {
+        d->devices.removeOne( dev );
+            reset();
+    }
+}
+
+
+void K3bDeviceModel::addDevices( const QList<K3bDevice::Device*>& devs )
+{
+    Q_FOREACH( K3bDevice::Device* dev, devs ) {
+        if ( !d->devices.contains( dev ) ) {
+            d->devices.append( dev );
+        }
+    }
+    reset();
+}
+
+
+void K3bDeviceModel::clear()
+{
+    d->devices.clear();
     reset();
 }
 
@@ -82,11 +127,16 @@ int K3bDeviceModel::columnCount( const QModelIndex& parent ) const
 QVariant K3bDeviceModel::data( const QModelIndex& index, int role ) const
 {
     K3bDevice::Device* dev = deviceForIndex( index );
-    K3bMedium medium = k3bappcore->mediaCache()->medium( dev );
+    K3bMedium medium = k3bcore->mediaCache()->medium( dev );
 
     switch( role ) {
     case Qt::DisplayRole:
-        return medium.shortString();
+        if ( d->devicesValid[dev] ) {
+            return medium.shortString();
+        }
+        else {
+            return i18n( "Analyzing medium..." );
+        }
 
     case Qt::DecorationRole:
         return medium.icon();
@@ -102,6 +152,9 @@ QVariant K3bDeviceModel::data( const QModelIndex& index, int role ) const
 
     case BlockDevice:
         return dev->blockDeviceName();
+
+    case Valid:
+        return d->devicesValid[dev];
 
     default:
         return QVariant();
@@ -138,6 +191,17 @@ void K3bDeviceModel::slotMediumChanged( K3bDevice::Device* dev )
 {
     QModelIndex index = indexForDevice( dev );
     if ( index.isValid() ) {
+        d->devicesValid[dev] = true;
+        emit dataChanged( index, index );
+    }
+}
+
+
+void K3bDeviceModel::slotCheckingMedium( K3bDevice::Device* dev, const QString& /*message*/ )
+{
+    QModelIndex index = indexForDevice( dev );
+    if ( index.isValid() ) {
+        d->devicesValid[dev] = false;
         emit dataChanged( index, index );
     }
 }

@@ -33,13 +33,15 @@ K3bPluginOptionTab::K3bPluginOptionTab( QWidget* parent )
 {
     QVBoxLayout* layout = new QVBoxLayout( this );
     layout->setMargin( 0 );
-    layout->setAutoAdd( true );
 
     QLabel* label = new QLabel( i18n( "<p>Here all <em>K3b Plugins</em> may be configured. Be aware that this does not include the "
                                       "<em>KPart Plugins</em> which embed themselves in the K3b menu structure.</p>" ), this );
     label->setWordWrap( true );
 
     KPluginSelector* pluginSelector = new KPluginSelector( this );
+
+    layout->addWidget( label );
+    layout->addWidget( pluginSelector );
 
     foreach( K3bPlugin* plugin, k3bcore->pluginManager()->plugins() ) {
         pluginSelector->addPlugins( QList<KPluginInfo>() << plugin->pluginInfo(),

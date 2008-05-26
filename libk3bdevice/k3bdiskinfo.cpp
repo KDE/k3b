@@ -13,6 +13,7 @@
  */
 
 #include "k3bdiskinfo.h"
+#include "k3bdiskinfo_p.h"
 #include "k3bdeviceglobals.h"
 
 #include <k3bmsf.h>
@@ -25,15 +26,14 @@
 
 
 K3bDevice::DiskInfo::DiskInfo()
-  : m_mediaType(MEDIA_UNKNOWN),
-    m_currentProfile(MEDIA_UNKNOWN),
-    m_diskState(STATE_UNKNOWN),
-    m_lastSessionState(STATE_UNKNOWN),
-    m_bgFormatState(0),
-    m_numSessions(0),
-    m_numTracks(0),
-    m_rewritable(false)
+    : d( new DiskInfoPrivate() )
 {
+}
+
+
+K3bDevice::DiskInfo::DiskInfo( const DiskInfo& other )
+{
+    d = other.d;
 }
 
 
@@ -42,200 +42,219 @@ K3bDevice::DiskInfo::~DiskInfo()
 }
 
 
+K3bDevice::DiskInfo& K3bDevice::DiskInfo::operator=( const DiskInfo& other )
+{
+    d = other.d;
+    return *this;
+}
+
+
 int K3bDevice::DiskInfo::diskState() const
 {
-  return m_diskState;
+    return d->diskState;
 }
 
 
 int K3bDevice::DiskInfo::lastSessionState() const
 {
-  return m_lastSessionState;
+    return d->lastSessionState;
 }
 
 
 int K3bDevice::DiskInfo::bgFormatState() const
 {
-  return m_bgFormatState;
+    return d->bgFormatState;
 }
 
 
 bool K3bDevice::DiskInfo::empty() const
 {
-  return diskState() == STATE_EMPTY;
+    return diskState() == STATE_EMPTY;
 }
 
 
 bool K3bDevice::DiskInfo::rewritable() const
 {
-  return m_rewritable;
+    return d->rewritable;
 }
 
 
 bool K3bDevice::DiskInfo::appendable() const
 {
-  return diskState() == STATE_INCOMPLETE;
+    return diskState() == STATE_INCOMPLETE;
 }
 
 
 int K3bDevice::DiskInfo::mediaType() const
 {
-  return m_mediaType;
+    return d->mediaType;
 }
 
 
 bool K3bDevice::DiskInfo::isDvdMedia() const
 {
-  return K3bDevice::isDvdMedia( mediaType() );
+    return K3bDevice::isDvdMedia( mediaType() );
+}
+
+
+int K3bDevice::DiskInfo::currentProfile() const
+{
+    return d->currentProfile;
+}
+
+
+QByteArray K3bDevice::DiskInfo::mediaId() const
+{
+    return d->mediaId;
 }
 
 
 int K3bDevice::DiskInfo::numSessions() const
 {
-  if( empty() )
-    return 0;
-  else
-    return m_numSessions;
+    if( empty() )
+        return 0;
+    else
+        return d->numSessions;
 }
 
 
 int K3bDevice::DiskInfo::numTracks() const
 {
-  if( empty() )
-    return 0;
-  else
-    return m_numTracks;
+    if( empty() )
+        return 0;
+    else
+        return d->numTracks;
 }
 
 
 int K3bDevice::DiskInfo::numLayers() const
 {
-  if( isDvdMedia() )
-    return m_numLayers;
-  else
-    return 1;
+    if( isDvdMedia() )
+        return d->numLayers;
+    else
+        return 1;
 }
 
 
 K3b::Msf K3bDevice::DiskInfo::remainingSize() const
 {
-  if( empty() )
-    return capacity();
+    if( empty() )
+        return capacity();
 
-  //
-  // There is no way to properly determine the used size on an overwrite media
-  // without having a look at the filesystem (or is there?)
-  //
-  else if( appendable() ||
-	   mediaType() & (MEDIA_DVD_PLUS_RW|MEDIA_DVD_RW_OVWR) )
-    return capacity() - m_usedCapacity;
+    //
+    // There is no way to properly determine the used size on an overwrite media
+    // without having a look at the filesystem (or is there?)
+    //
+    else if( appendable() ||
+             mediaType() & (MEDIA_DVD_PLUS_RW|MEDIA_DVD_RW_OVWR) )
+        return capacity() - d->usedCapacity;
 
-  else
-    return 0;
+    else
+        return 0;
 }
 
 
 K3b::Msf K3bDevice::DiskInfo::capacity() const
 {
-  return (m_capacity == 0 ? size() : m_capacity);
+    return (d->capacity == 0 ? size() : d->capacity);
 }
 
 
 K3b::Msf K3bDevice::DiskInfo::size() const
 {
-  if( empty() )
-    return 0;
-  else
-    return m_usedCapacity;
+    if( empty() )
+        return 0;
+    else
+        return d->usedCapacity;
 }
 
 
 K3b::Msf K3bDevice::DiskInfo::firstLayerSize() const
 {
-  if( numLayers() > 1 )
-    return m_firstLayerSize;
-  else
-    return size();
+    if( numLayers() > 1 )
+        return d->firstLayerSize;
+    else
+        return size();
 }
 
 
 void K3bDevice::DiskInfo::debug() const
 {
-  kDebug() << "DiskInfo:" << endl
-	    << "Mediatype:       " << K3bDevice::mediaTypeString( mediaType() ) << endl
-	    << "Current Profile: " << K3bDevice::mediaTypeString( currentProfile() ) << endl
-	    << "Disk state:      " << ( diskState() == K3bDevice::STATE_EMPTY ?
-					"empty" :
-					( diskState() == K3bDevice::STATE_INCOMPLETE ?
-					  "incomplete" :
-					  ( diskState() == K3bDevice::STATE_COMPLETE ?
-					    "complete" :
-					    ( diskState() == K3bDevice::STATE_NO_MEDIA ?
-					      "no media" :
-					      "unknown" ) ) ) ) << endl
-	    << "Empty:           " << empty() << endl
-	    << "Rewritable:      " << rewritable() << endl
-	    << "Appendable:      " << appendable() << endl
-	    << "Sessions:        " << numSessions() << endl
-	    << "Tracks:          " << numTracks() << endl
-	    << "Layers:          " << numLayers() << endl
-	    << "Capacity:        " << capacity()
-	    << " (LBA " << capacity().lba()
-	    << ") (" << capacity().mode1Bytes() << " Bytes)" << endl
+    kDebug() << "DiskInfo:" << endl
+             << "Mediatype:       " << K3bDevice::mediaTypeString( mediaType() ) << endl
+             << "Current Profile: " << K3bDevice::mediaTypeString( currentProfile() ) << endl
+             << "Disk state:      " << ( diskState() == K3bDevice::STATE_EMPTY ?
+                                         "empty" :
+                                         ( diskState() == K3bDevice::STATE_INCOMPLETE ?
+                                           "incomplete" :
+                                           ( diskState() == K3bDevice::STATE_COMPLETE ?
+                                             "complete" :
+                                             ( diskState() == K3bDevice::STATE_NO_MEDIA ?
+                                               "no media" :
+                                               "unknown" ) ) ) ) << endl
+             << "Empty:           " << empty() << endl
+             << "Rewritable:      " << rewritable() << endl
+             << "Appendable:      " << appendable() << endl
+             << "Sessions:        " << numSessions() << endl
+             << "Tracks:          " << numTracks() << endl
+             << "Layers:          " << numLayers() << endl
+             << "Capacity:        " << capacity()
+             << " (LBA " << capacity().lba()
+             << ") (" << capacity().mode1Bytes() << " Bytes)" << endl
 
-	    << "Remaining size:  " << remainingSize()
-	    << " (LBA " << remainingSize().lba()
-	    << ") (" << remainingSize().mode1Bytes() << " Bytes)" << endl
+             << "Remaining size:  " << remainingSize()
+             << " (LBA " << remainingSize().lba()
+             << ") (" << remainingSize().mode1Bytes() << " Bytes)" << endl
 
-	    << "Used Size:       " << size()
-	    << " (LBA " << size().lba()
-	    << ") (" << size().mode1Bytes() << " Bytes)" << endl;
+             << "Used Size:       " << size()
+             << " (LBA " << size().lba()
+             << ") (" << size().mode1Bytes() << " Bytes)" << endl;
 
-  if( mediaType() == K3bDevice::MEDIA_DVD_PLUS_RW )
-    kDebug() << "Bg Format:       " << ( bgFormatState() == BG_FORMAT_NONE ?
-					  "none" :
-					  ( bgFormatState() == BG_FORMAT_INCOMPLETE ?
-					    "incomplete" :
-					    ( bgFormatState() == BG_FORMAT_IN_PROGRESS ?
-					      "in progress" :
-					      ( bgFormatState() == BG_FORMAT_COMPLETE ?
-                                                "complete" : "unknown" ) ) ) ) << endl;
+    if( mediaType() == K3bDevice::MEDIA_DVD_PLUS_RW )
+        kDebug() << "Bg Format:       " << ( bgFormatState() == BG_FORMAT_NONE ?
+                                             "none" :
+                                             ( bgFormatState() == BG_FORMAT_INCOMPLETE ?
+                                               "incomplete" :
+                                               ( bgFormatState() == BG_FORMAT_IN_PROGRESS ?
+                                                 "in progress" :
+                                                 ( bgFormatState() == BG_FORMAT_COMPLETE ?
+                                                   "complete" : "unknown" ) ) ) ) << endl;
 }
 
 
 bool K3bDevice::DiskInfo::operator==( const K3bDevice::DiskInfo& other ) const
 {
-  return( m_mediaType == other.m_mediaType &&
-	  m_currentProfile == other.m_currentProfile &&
-	  m_diskState == other.m_diskState &&
-	  m_lastSessionState == other.m_lastSessionState &&
-	  m_bgFormatState == other.m_bgFormatState &&
-	  m_numSessions == other.m_numSessions &&
-	  m_numTracks == other.m_numTracks &&
-	  m_numLayers == other.m_numLayers &&
-	  m_rewritable == other.m_rewritable &&
-	  m_capacity == other.m_capacity &&
-	  m_usedCapacity == other.m_usedCapacity &&
-	  m_firstLayerSize == other.m_firstLayerSize &&
-	  m_mediaId == other.m_mediaId );
+    return( d->mediaType == other.d->mediaType &&
+            d->currentProfile == other.d->currentProfile &&
+            d->diskState == other.d->diskState &&
+            d->lastSessionState == other.d->lastSessionState &&
+            d->bgFormatState == other.d->bgFormatState &&
+            d->numSessions == other.d->numSessions &&
+            d->numTracks == other.d->numTracks &&
+            d->numLayers == other.d->numLayers &&
+            d->rewritable == other.d->rewritable &&
+            d->capacity == other.d->capacity &&
+            d->usedCapacity == other.d->usedCapacity &&
+            d->firstLayerSize == other.d->firstLayerSize &&
+            d->mediaId == other.d->mediaId );
 }
 
 
 bool K3bDevice::DiskInfo::operator!=( const K3bDevice::DiskInfo& other ) const
 {
-  return( m_mediaType != other.m_mediaType ||
-	  m_currentProfile != other.m_currentProfile ||
-	  m_diskState != other.m_diskState ||
-	  m_lastSessionState != other.m_lastSessionState ||
-	  m_bgFormatState != other.m_bgFormatState ||
-	  m_numSessions != other.m_numSessions ||
-	  m_numTracks != other.m_numTracks ||
-	  m_numLayers != other.m_numLayers ||
-	  m_rewritable != other.m_rewritable ||
-	  m_capacity != other.m_capacity ||
-	  m_usedCapacity != other.m_usedCapacity ||
-	  m_firstLayerSize != other.m_firstLayerSize ||
-	  m_mediaId != other.m_mediaId );
+    return( d->mediaType != other.d->mediaType ||
+            d->currentProfile != other.d->currentProfile ||
+            d->diskState != other.d->diskState ||
+            d->lastSessionState != other.d->lastSessionState ||
+            d->bgFormatState != other.d->bgFormatState ||
+            d->numSessions != other.d->numSessions ||
+            d->numTracks != other.d->numTracks ||
+            d->numLayers != other.d->numLayers ||
+            d->rewritable != other.d->rewritable ||
+            d->capacity != other.d->capacity ||
+            d->usedCapacity != other.d->usedCapacity ||
+            d->firstLayerSize != other.d->firstLayerSize ||
+            d->mediaId != other.d->mediaId );
 }
 
 

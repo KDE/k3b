@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,11 +37,12 @@ class K3bBurnJob;
 class K3bGlobalSettings;
 class K3bPluginManager;
 class QCustomEvent;
+class K3bMediaCache;
 
 
 namespace K3bDevice {
-  class DeviceManager;
-  class Device;
+    class DeviceManager;
+    class Device;
 }
 
 
@@ -54,128 +55,131 @@ namespace K3bDevice {
  */
 class LIBK3B_EXPORT K3bCore : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  /**
-   * Although K3bCore is a singlelton it's constructor is not private to make inheritance
-   * possible. Just make sure to only create one instance.
-   */
-  K3bCore( QObject* parent = 0 );
-  virtual ~K3bCore();
+public:
+    /**
+     * Although K3bCore is a singlelton it's constructor is not private to make inheritance
+     * possible. Just make sure to only create one instance.
+     */
+    K3bCore( QObject* parent = 0 );
+    virtual ~K3bCore();
 
-  const QList<K3bJob*>& runningJobs() const;
+    const QList<K3bJob*>& runningJobs() const;
 
-  /**
-   * Equals to !runningJobs().isEmpty()
-   */
-  bool jobsRunning() const;
+    /**
+     * Equals to !runningJobs().isEmpty()
+     */
+    bool jobsRunning() const;
 
-  /**
-   * The default implementation calls add four initXXX() methods,
-   * scans for devices, applications, and reads the global settings.
-   */
-  virtual void init();
+    /**
+     * The default implementation calls add four initXXX() methods,
+     * scans for devices, applications, and reads the global settings.
+     */
+    virtual void init();
 
-  /**
-   * @param c if 0 K3bCore uses the K3b configuration
-   */
-  virtual void readSettings( KConfig* c = 0 );
+    /**
+     * @param c if 0 K3bCore uses the K3b configuration
+     */
+    virtual void readSettings( KConfig* c = 0 );
 
-  /**
-   * @param c if 0 K3bCore uses the K3b configuration
-   */
-  virtual void saveSettings( KConfig* c = 0 );
+    /**
+     * @param c if 0 K3bCore uses the K3b configuration
+     */
+    virtual void saveSettings( KConfig* c = 0 );
 
-  /**
-   * If this is reimplemented it is recommended to also reimplement
-   * init().
-   */
-  virtual K3bDevice::DeviceManager* deviceManager() const;
+    K3bMediaCache* mediaCache() const;
 
-  /**
-   * Returns the external bin manager from K3bCore.
-   *
-   * By default K3bCore only adds the default programs:
-   * cdrecord, cdrdao, growisofs, mkisofs, dvd+rw-format, readcd
-   *
-   * If you need other programs you have to add them manually like this:
-   * <pre>externalBinManager()->addProgram( new K3bNormalizeProgram() );</pre>
-   */
-  K3bExternalBinManager* externalBinManager() const;
-  K3bPluginManager* pluginManager() const;
+    /**
+     * If this is reimplemented it is recommended to also reimplement
+     * init().
+     */
+    virtual K3bDevice::DeviceManager* deviceManager() const;
 
-  /**
-   * Global settings used throughout libk3b. Change the settings directly in the
-   * K3bGlobalSettings object. They will be saved by K3bCore::saveSettings
-   */
-  K3bGlobalSettings* globalSettings() const;
+    /**
+     * Returns the external bin manager from K3bCore.
+     *
+     * By default K3bCore only adds the default programs:
+     * cdrecord, cdrdao, growisofs, mkisofs, dvd+rw-format, readcd
+     *
+     * If you need other programs you have to add them manually like this:
+     * <pre>externalBinManager()->addProgram( new K3bNormalizeProgram() );</pre>
+     */
+    K3bExternalBinManager* externalBinManager() const;
+    K3bPluginManager* pluginManager() const;
 
-  /**
-   * returns the version of the library as defined by LIBK3B_VERSION
-   */
-  const K3bVersion& version() const;
+    /**
+     * Global settings used throughout libk3b. Change the settings directly in the
+     * K3bGlobalSettings object. They will be saved by K3bCore::saveSettings
+     */
+    K3bGlobalSettings* globalSettings() const;
 
-  /**
-   * Default implementation returns the K3b configuration from k3brc.
-   * Normally this should not be used.
-   */
-  virtual KConfig* config() const;
+    /**
+     * returns the version of the library as defined by LIBK3B_VERSION
+     */
+    const K3bVersion& version() const;
 
-  /**
-   * Used by the writing jobs to block a device.
-   * This makes sure no device is used twice within libk3b
-   *
-   * When using this method in a job be aware that reimplementations might
-   * open dialogs and resulting in a blocking call.
-   *
-   * This method calls internalBlockDevice() to do the actual work.
-   */
-  bool blockDevice( K3bDevice::Device* );
-  void unblockDevice( K3bDevice::Device* );
+    /**
+     * Default implementation returns the K3b configuration from k3brc.
+     * Normally this should not be used.
+     */
+    virtual KConfig* config() const;
 
-  static K3bCore* k3bCore() { return s_k3bCore; }
+    /**
+     * Used by the writing jobs to block a device.
+     * This makes sure no device is used twice within libk3b
+     *
+     * When using this method in a job be aware that reimplementations might
+     * open dialogs and resulting in a blocking call.
+     *
+     * This method calls internalBlockDevice() to do the actual work.
+     */
+    bool blockDevice( K3bDevice::Device* );
+    void unblockDevice( K3bDevice::Device* );
 
- signals:
-  /**
-   * Emitted once a new job has been started. This includes burn jobs.
-   */
-  void jobStarted( K3bJob* );
-  void burnJobStarted( K3bBurnJob* );
-  void jobFinished( K3bJob* );
-  void burnJobFinished( K3bBurnJob* );
+    static K3bCore* k3bCore() { return s_k3bCore; }
 
- public slots:
-  /**
-   * Every running job registers itself with the core.
-   * For now this is only used to determine if some job
-   * is running.
-   */
-  void registerJob( K3bJob* job );
-  void unregisterJob( K3bJob* job );
+Q_SIGNALS:
+    /**
+     * Emitted once a new job has been started. This includes burn jobs.
+     */
+    void jobStarted( K3bJob* );
+    void burnJobStarted( K3bBurnJob* );
+    void jobFinished( K3bJob* );
+    void burnJobFinished( K3bBurnJob* );
 
- protected:
-  /**
-   * Reimplement this to add additonal checks.
-   *
-   * This method is thread safe. blockDevice makes sure
-   * it is only executed in the GUI thread.
-   */
-  virtual bool internalBlockDevice( K3bDevice::Device* );
-  virtual void internalUnblockDevice( K3bDevice::Device* );
+public Q_SLOTS:
+    /**
+     * Every running job registers itself with the core.
+     * For now this is only used to determine if some job
+     * is running.
+     */
+    void registerJob( K3bJob* job );
+    void unregisterJob( K3bJob* job );
 
-  virtual void initGlobalSettings();
-  virtual void initExternalBinManager();
-  virtual void initDeviceManager();
-  virtual void initPluginManager();
+protected:
+    /**
+     * Reimplement this to add additonal checks.
+     *
+     * This method is thread safe. blockDevice makes sure
+     * it is only executed in the GUI thread.
+     */
+    virtual bool internalBlockDevice( K3bDevice::Device* );
+    virtual void internalUnblockDevice( K3bDevice::Device* );
 
-  virtual void customEvent( QEvent* e );
+    virtual void initGlobalSettings();
+    virtual void initExternalBinManager();
+    virtual void initDeviceManager();
+    virtual void initPluginManager();
+    virtual void initMediaCache();
 
- private:
-  class Private;
-  Private* d;
+    virtual void customEvent( QEvent* e );
 
-  static K3bCore* s_k3bCore;
+private:
+    class Private;
+    Private* d;
+
+    static K3bCore* s_k3bCore;
 };
 
 #endif

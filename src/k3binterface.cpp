@@ -27,7 +27,7 @@
 #include <q3ptrlist.h>
 #include <qtimer.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 
 
@@ -121,9 +121,9 @@ DCOPRef K3bInterface::openProject( const KUrl& url )
     return DCOPRef();
 }
 
-Q3ValueList<DCOPRef> K3bInterface::projects()
+QList<DCOPRef> K3bInterface::projects()
 {
-  Q3ValueList<DCOPRef> lst;
+  QList<DCOPRef> lst;
   const Q3PtrList<K3bDoc>& docs = k3bappcore->projectManager()->projects();
   for( Q3PtrListIterator<K3bDoc> it( docs ); it.current(); ++it )
     lst.append( DCOPRef( kapp->dcopClient()->appId(), k3bappcore->projectManager()->dcopInterface( it.current() )->objId() ) );

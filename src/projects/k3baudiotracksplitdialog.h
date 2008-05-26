@@ -46,7 +46,7 @@ public:
      */
     static void splitTrack( K3bAudioTrack* track, QWidget* parent = 0 );
 
-private slots:
+private Q_SLOTS:
     void slotRangeModified( int, const K3b::Msf& start, const K3b::Msf& );
     void slotMsfEditChanged( const K3b::Msf& msf );
     void slotRangeSelectionChanged( int );

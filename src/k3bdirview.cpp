@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -122,8 +122,6 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent )
 
     m_viewStack->setCurrentWidget( m_fileView );
 
-//     m_fileTreeView->addDefaultBranches();
-//     m_fileTreeView->addCdDeviceBranches( k3bcore->deviceManager() );
 //     m_fileTreeView->setCurrentDevice( k3bappcore->appDeviceManager()->currentDevice() );
 
     m_fileView->setAutoUpdate( true ); // in case we look at the mounted path
@@ -153,8 +151,6 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent )
              this, SLOT(slotMountFinished(const QString&)) );
     connect( k3bappcore->appDeviceManager(), SIGNAL(unmountFinished(bool)),
              this, SLOT(slotUnmountFinished(bool)) );
-    connect( k3bappcore->appDeviceManager(), SIGNAL(detectingDiskInfo(K3bDevice::Device*)),
-             this, SLOT(slotDetectingDiskInfo(K3bDevice::Device*)) );
 }
 
 K3bDirView::~K3bDirView()
@@ -177,7 +173,7 @@ void K3bDirView::showDevice( K3bDevice::Device* dev )
 }
 
 
-void K3bDirView::slotDetectingDiskInfo( K3bDevice::Device* dev )
+void K3bDirView::showDiskInfo( K3bDevice::Device* dev )
 {
     d->contextMediaInfoRequested = false;
     m_fileTreeView->setSelectedDevice( dev );
@@ -213,8 +209,9 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
                                                        "<p>If you intend to make a copy of the entire Video DVD including all menus "
                                                        "and extras it is recommended to use the K3b DVD Copy tool."),
                                                   i18n("Video DVD ripping"),
-                                                  i18n("Continue"),
-                                                  i18n("Open DVD Copy Dialog"),
+                                                  KGuiItem( i18n("Continue") ),
+                                                  KGuiItem( i18n("Open DVD Copy Dialog") ),
+                                                  KStandardGuiItem::cancel(),
                                                   "videodvdripping",
                                                   KMessageBox::AllowLink );
         }
@@ -227,7 +224,7 @@ void K3bDirView::showMediumInfo( const K3bMedium& medium )
         }
         else if( r == KMessageBox::No ) {
             m_viewStack->setCurrentWidget( m_fileView );
-            static_cast<K3bMainWindow*>( kapp->mainWidget() )->slotMediaCopy();
+            static_cast<K3bMainWindow*>( kapp->activeWindow() )->slotMediaCopy();
         }
         else {
             m_movieView->reload( medium );

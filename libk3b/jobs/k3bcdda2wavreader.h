@@ -38,7 +38,7 @@ class K3bCdda2wavReader : public K3bJob
 
   bool active() const;
 
- public slots:
+ public Q_SLOTS:
   void start();
   void start( bool onlyReadInfo );
   void cancel();
@@ -53,7 +53,7 @@ class K3bCdda2wavReader : public K3bJob
    */
   void writeToFd( int fd );
 
- private slots:
+ private Q_SLOTS:
   void slotProcessLine( const QString& );
   void slotProcessExited( K3Process* );
 

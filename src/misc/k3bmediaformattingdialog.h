@@ -33,10 +33,10 @@ class K3bMediaFormattingDialog : public K3bInteractionDialog
   K3bMediaFormattingDialog( QWidget* = 0 );
   ~K3bMediaFormattingDialog();
 
- public slots:
+ public Q_SLOTS:
   void setDevice( K3bDevice::Device* );
 
- protected slots:
+ protected Q_SLOTS:
   void slotStartClicked();
 
  protected:

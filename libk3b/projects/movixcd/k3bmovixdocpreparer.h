@@ -39,7 +39,7 @@ class K3bMovixDocPreparer : public K3bJob
   bool createMovixStructures();
   void removeMovixStructures();
 
- public slots:
+ public Q_SLOTS:
   /**
    * use createMovixStructures and removeMovixStructures instead.
    */

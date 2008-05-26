@@ -123,12 +123,7 @@ bool K3bDirSizeJob::run()
 
 bool K3bDirSizeJob::countDir( const QString& dir )
 {
-    const QString& dot = KGlobal::staticQString( "." );
-    const QString& dotdot = KGlobal::staticQString( ".." );
-    QStringList l = QDir(dir).entryList( QDir::TypeMask|QDir::Hidden|QDir::System );
-    l.remove( dot );
-    l.remove( dotdot );
-
+    QStringList l = QDir(dir).entryList( QDir::TypeMask|QDir::Hidden|QDir::System|QDir::NoDotAndDotDot );
     return countFiles( l, dir );
 }
 

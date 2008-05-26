@@ -46,12 +46,12 @@ public:
 
     bool isChecked() const;
 
-public slots:
+public Q_SLOTS:
     void setChecked( bool );
     void load( K3bAudioDoc* );
     void save( K3bAudioDoc* );
 
-private slots:
+private Q_SLOTS:
     void slotCopyTitle();
     void slotCopyPerformer();
     void slotCopyArranger();

@@ -2,9 +2,10 @@
 *
 * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
 *             THX to Manfred Odenstein <odix@chello.at>
+* Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
 *
 * This file is part of the K3b project.
-* Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+* Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -172,19 +173,19 @@ bool K3bVcdXmlView::write( const QString& fname )
     elemsequenceItems = addSubElement( xmlDoc, root, "sequence-items" );
     // if we have no sequence (photo (s)vcd) we must add a dummy sequence they inform the user to turn on pbc on there videoplayer
     if ( !m_doc->vcdOptions()->haveSequence() )  {
-            QString filename;
-            if  ( m_doc->vcdOptions()->mpegVersion() == 1 )
-                filename = KStandardDirs::locate( "data", "k3b/extra/k3bphotovcd.mpg" );
-            else
-                filename = KStandardDirs::locate( "data", "k3b/extra/k3bphotosvcd.mpg" );
+        QString filename;
+        if  ( m_doc->vcdOptions()->mpegVersion() == 1 )
+            filename = KStandardDirs::locate( "data", "k3b/extra/k3bphotovcd.mpg" );
+        else
+            filename = KStandardDirs::locate( "data", "k3b/extra/k3bphotosvcd.mpg" );
 
-            elemsequenceItem = addSubElement( xmlDoc, elemsequenceItems, "sequence-item" );
-            elemsequenceItem.setAttribute( "src", filename );
-            elemsequenceItem.setAttribute( "id", "sequence-000"  );
-            // default entry
-            QDomElement elemdefaultEntry;
-            elemdefaultEntry = addSubElement( xmlDoc, elemsequenceItem, "default-entry" );
-            elemdefaultEntry.setAttribute( "id", "entry-000"  );
+        elemsequenceItem = addSubElement( xmlDoc, elemsequenceItems, "sequence-item" );
+        elemsequenceItem.setAttribute( "src", filename );
+        elemsequenceItem.setAttribute( "id", "sequence-000"  );
+        // default entry
+        QDomElement elemdefaultEntry;
+        elemdefaultEntry = addSubElement( xmlDoc, elemsequenceItem, "default-entry" );
+        elemdefaultEntry.setAttribute( "id", "entry-000"  );
     }
 
 
@@ -305,55 +306,55 @@ void K3bVcdXmlView::doPbc( QDomDocument& doc, QDomElement& parent, K3bVcdTrack* 
             QString ref = ( track->getPbcTrack( i ) ->isSegment() ) ? "segment" : "sequence";
 
             switch ( i ) {
-                case K3bVcdTrack::PREVIOUS:
-                    elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "prev" );
+            case K3bVcdTrack::PREVIOUS:
+                elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "prev" );
+                elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
+                break;
+            case K3bVcdTrack::NEXT:
+                elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "next" );
+                elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
+                break;
+            case K3bVcdTrack::RETURN:
+                elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "return" );
+                elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
+                break;
+            case K3bVcdTrack::DEFAULT:
+                elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "default" );
+                elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
+                break;
+            case K3bVcdTrack::AFTERTIMEOUT:
+                if ( track->getWaitTime() >= 0 ) {
+                    elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "timeout" );
                     elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
-                    break;
-                case K3bVcdTrack::NEXT:
-                    elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "next" );
-                    elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
-                    break;
-                case K3bVcdTrack::RETURN:
-                    elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "return" );
-                    elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
-                    break;
-                case K3bVcdTrack::DEFAULT:
-                    elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "default" );
-                    elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
-                    break;
-                case K3bVcdTrack::AFTERTIMEOUT:
-                    if ( track->getWaitTime() >= 0 ) {
-                        elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "timeout" );
-                        elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
-                    }
-                    break;
+                }
+                break;
             }
         } else {
             // jump to <endlist> otherwise do noop while disabled
             if ( track->getNonPbcTrack( i ) == K3bVcdTrack::VIDEOEND ) {
                 switch ( i ) {
-                    case K3bVcdTrack::PREVIOUS:
-                        elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "prev" );
+                case K3bVcdTrack::PREVIOUS:
+                    elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "prev" );
+                    elemPbcSelectionPNRDT.setAttribute( "ref", "end" );
+                    break;
+                case K3bVcdTrack::NEXT:
+                    elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "next" );
+                    elemPbcSelectionPNRDT.setAttribute( "ref", "end" );
+                    break;
+                case K3bVcdTrack::RETURN:
+                    elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "return" );
+                    elemPbcSelectionPNRDT.setAttribute( "ref", "end" );
+                    break;
+                case K3bVcdTrack::DEFAULT:
+                    elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "default" );
+                    elemPbcSelectionPNRDT.setAttribute( "ref", "end" );
+                    break;
+                case K3bVcdTrack::AFTERTIMEOUT:
+                    if ( track->getWaitTime() >= 0 ) {
+                        elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "timeout" );
                         elemPbcSelectionPNRDT.setAttribute( "ref", "end" );
-                        break;
-                    case K3bVcdTrack::NEXT:
-                        elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "next" );
-                        elemPbcSelectionPNRDT.setAttribute( "ref", "end" );
-                        break;
-                    case K3bVcdTrack::RETURN:
-                        elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "return" );
-                        elemPbcSelectionPNRDT.setAttribute( "ref", "end" );
-                        break;
-                    case K3bVcdTrack::DEFAULT:
-                        elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "default" );
-                        elemPbcSelectionPNRDT.setAttribute( "ref", "end" );
-                        break;
-                    case K3bVcdTrack::AFTERTIMEOUT:
-                        if ( track->getWaitTime() >= 0 ) {
-                            elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "timeout" );
-                            elemPbcSelectionPNRDT.setAttribute( "ref", "end" );
-                        }
-                        break;
+                    }
+                    break;
                 }
             }
         }
@@ -415,11 +416,11 @@ void K3bVcdXmlView::setNumkeySEL( QDomDocument& doc, QDomElement& parent, K3bVcd
                     none++;
                 }
 
-                if ( trackIt.data() ) {
-                    QString ref = ( trackIt.data() ->isSegment() ) ? "segment" : "sequence";
+                if ( trackIt.value() ) {
+                    QString ref = ( trackIt.value() ->isSegment() ) ? "segment" : "sequence";
                     elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );
-                    elemPbcSelectionNumKeySEL.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( trackIt.data() ->index() ).rightJustified( 3, '0' ) ) );
-                    addComment( doc, parent, QString( "key %1 -> %2" ).arg( trackIt.key() ).arg( trackIt.data() ->absolutePath() ) );
+                    elemPbcSelectionNumKeySEL.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( trackIt.value() ->index() ).rightJustified( 3, '0' ) ) );
+                    addComment( doc, parent, QString( "key %1 -> %2" ).arg( trackIt.key() ).arg( trackIt.value() ->absolutePath() ) );
                 } else {
                     elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );
                     elemPbcSelectionNumKeySEL.setAttribute( "ref", "end" );

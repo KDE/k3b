@@ -113,7 +113,7 @@ void K3bMusicBrainzJob::slotMbJobFinished( bool success )
             // so to not let the user have to choose between two equal entries we trim the list down
             for( QStringList::const_iterator it = resultStrings.begin();
                  it != resultStrings.end(); ++it )
-                if( resultStringsUnique.find( *it ) == resultStringsUnique.end() )
+                if( !resultStringsUnique.contains( *it ) )
                     resultStringsUnique.append( *it );
 
             QString s;

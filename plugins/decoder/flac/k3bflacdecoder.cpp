@@ -47,79 +47,79 @@ class K3bFLACDecoder::Private
 #else
         : public FLAC::Decoder::Stream
 #endif
-    {
-    public:
-        void open(QFile* f) {
-            file = f;
-            file->open(QIODevice::ReadOnly);
+{
+public:
+    void open(QFile* f) {
+        file = f;
+        file->open(QIODevice::ReadOnly);
 
-            //TODO port me to kde4
-            //internalBuffer->flush();
+        //TODO port me to kde4
+        //internalBuffer->flush();
 
-            set_metadata_respond(FLAC__METADATA_TYPE_STREAMINFO);
-            set_metadata_respond(FLAC__METADATA_TYPE_VORBIS_COMMENT);
+        set_metadata_respond(FLAC__METADATA_TYPE_STREAMINFO);
+        set_metadata_respond(FLAC__METADATA_TYPE_VORBIS_COMMENT);
 
-            init();
-            process_until_end_of_metadata();
-        }
+        init();
+        process_until_end_of_metadata();
+    }
 
-        void cleanup() {
-            file->close();
-            finish();
-            delete comments;
-            comments = 0;
-        }
+    void cleanup() {
+        file->close();
+        finish();
+        delete comments;
+        comments = 0;
+    }
 
-        Private(QFile* f)
+    Private(QFile* f)
 #ifdef LEGACY_FLAC
-            : FLAC::Decoder::SeekableStream(),
+        : FLAC::Decoder::SeekableStream(),
 #else
-              : FLAC::Decoder::Stream(),
+          : FLAC::Decoder::Stream(),
 #endif
-                comments(0) {
-                internalBuffer = new QBuffer();
-                internalBuffer->open(QIODevice::ReadWrite);
+            comments(0) {
+            internalBuffer = new QBuffer();
+            internalBuffer->open(QIODevice::ReadWrite);
 
-                open(f);
-            }
-
-
-        ~Private() {
-            cleanup();
-            delete internalBuffer;
+            open(f);
         }
 
-        bool seekToFrame(int frame);
 
-        QFile* file;
-        QBuffer* internalBuffer;
-        FLAC::Metadata::VorbisComment* comments;
-        unsigned rate;
-        unsigned channels;
-        unsigned bitsPerSample;
-        unsigned maxFramesize;
-        unsigned maxBlocksize;
-        unsigned minFramesize;
-        unsigned minBlocksize;
-        FLAC__uint64 samples;
+    ~Private() {
+        cleanup();
+        delete internalBuffer;
+    }
 
-    protected:
+    bool seekToFrame(int frame);
+
+    QFile* file;
+    QBuffer* internalBuffer;
+    FLAC::Metadata::VorbisComment* comments;
+    unsigned rate;
+    unsigned channels;
+    unsigned bitsPerSample;
+    unsigned maxFramesize;
+    unsigned maxBlocksize;
+    unsigned minFramesize;
+    unsigned minBlocksize;
+    FLAC__uint64 samples;
+
+protected:
 #ifdef LEGACY_FLAC
-        virtual FLAC__SeekableStreamDecoderReadStatus read_callback(FLAC__byte buffer[], unsigned *bytes);
-        virtual FLAC__SeekableStreamDecoderSeekStatus seek_callback(FLAC__uint64 absolute_byte_offset);
-        virtual FLAC__SeekableStreamDecoderTellStatus tell_callback(FLAC__uint64 *absolute_byte_offset);
-        virtual FLAC__SeekableStreamDecoderLengthStatus length_callback(FLAC__uint64 *stream_length);
+    virtual FLAC__SeekableStreamDecoderReadStatus read_callback(FLAC__byte buffer[], unsigned *bytes);
+    virtual FLAC__SeekableStreamDecoderSeekStatus seek_callback(FLAC__uint64 absolute_byte_offset);
+    virtual FLAC__SeekableStreamDecoderTellStatus tell_callback(FLAC__uint64 *absolute_byte_offset);
+    virtual FLAC__SeekableStreamDecoderLengthStatus length_callback(FLAC__uint64 *stream_length);
 #else
-        virtual FLAC__StreamDecoderReadStatus read_callback(FLAC__byte buffer[], size_t *bytes);
-        virtual FLAC__StreamDecoderSeekStatus seek_callback(FLAC__uint64 absolute_byte_offset);
-        virtual FLAC__StreamDecoderTellStatus tell_callback(FLAC__uint64 *absolute_byte_offset);
-        virtual FLAC__StreamDecoderLengthStatus length_callback(FLAC__uint64 *stream_length);
+    virtual FLAC__StreamDecoderReadStatus read_callback(FLAC__byte buffer[], size_t *bytes);
+    virtual FLAC__StreamDecoderSeekStatus seek_callback(FLAC__uint64 absolute_byte_offset);
+    virtual FLAC__StreamDecoderTellStatus tell_callback(FLAC__uint64 *absolute_byte_offset);
+    virtual FLAC__StreamDecoderLengthStatus length_callback(FLAC__uint64 *stream_length);
 #endif
-        virtual bool eof_callback();
-        virtual void error_callback(FLAC__StreamDecoderErrorStatus){};
-        virtual void metadata_callback(const ::FLAC__StreamMetadata *metadata);
-        virtual ::FLAC__StreamDecoderWriteStatus write_callback(const ::FLAC__Frame *frame, const FLAC__int32 * const buffer[]);
-    };
+    virtual bool eof_callback();
+    virtual void error_callback(FLAC__StreamDecoderErrorStatus){};
+    virtual void metadata_callback(const ::FLAC__StreamMetadata *metadata);
+    virtual ::FLAC__StreamDecoderWriteStatus write_callback(const ::FLAC__Frame *frame, const FLAC__int32 * const buffer[]);
+};
 
 bool K3bFLACDecoder::Private::seekToFrame(int frame) {
     FLAC__uint64 sample = frame * rate / 75;
@@ -228,8 +228,8 @@ FLAC__StreamDecoderWriteStatus K3bFLACDecoder::Private::write_callback(const FLA
         // in FLAC channel 0 is left, 1 is right
         for(j=0; j < this->channels; j++) {
             FLAC__int32 value = (buffer[j][i])<<(16 - frame->header.bits_per_sample);
-            internalBuffer->putch(value >> 8); // msb
-            internalBuffer->putch(value & 0xFF); // lsb
+            internalBuffer->putChar(value >> 8); // msb
+            internalBuffer->putChar(value & 0xFF); // lsb
         }
     }
 

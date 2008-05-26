@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,26 +28,26 @@ static const int s_mode2Index = 2;
 
 
 K3bDataModeWidget::K3bDataModeWidget( QWidget* parent )
-  : QComboBox( parent )
+    : QComboBox( parent )
 {
-  insertItem( i18n("Auto"), s_autoIndex );
-  insertItem( i18n("Mode1"), s_mode1Index );
-  insertItem( i18n("Mode2"), s_mode2Index );
+    insertItem( s_autoIndex, i18n("Auto") );
+    insertItem( s_mode1Index, i18n("Mode1") );
+    insertItem( s_mode2Index, i18n("Mode2") );
 
-  this->setToolTip(i18n("Select the mode for the data-track") );
-  this->setWhatsThis( i18n("<p><b>Data Mode</b>"
-			      "<p>Data tracks may be written in two different modes:</p>"
-			      "<p><b>Auto</b><br>"
-			      "Let K3b select the best suited data mode.</p>"
-			      "<p><b>Mode 1</b><br>"
-			      "This is the <em>original</em> writing mode as introduced in the "
-			      "<em>Yellow Book</em> standard. It is the preferred mode when writing "
-			      "pure data CDs.</p>"
-			      "<p><b>Mode 2</b><br>"
-			      "To be exact <em>XA Mode 2 Form 1</em>, but since the "
-			      "other modes are rarely used it is common to refer to it as <em>Mode 2</em>.</p>"
-			      "<p><b>Be aware:</b> Do not mix different modes on one CD. "
-			      "Some older drives may have problems reading mode 1 multisession CDs.") );
+    this->setToolTip(i18n("Select the mode for the data-track") );
+    this->setWhatsThis( i18n("<p><b>Data Mode</b>"
+                             "<p>Data tracks may be written in two different modes:</p>"
+                             "<p><b>Auto</b><br>"
+                             "Let K3b select the best suited data mode.</p>"
+                             "<p><b>Mode 1</b><br>"
+                             "This is the <em>original</em> writing mode as introduced in the "
+                             "<em>Yellow Book</em> standard. It is the preferred mode when writing "
+                             "pure data CDs.</p>"
+                             "<p><b>Mode 2</b><br>"
+                             "To be exact <em>XA Mode 2 Form 1</em>, but since the "
+                             "other modes are rarely used it is common to refer to it as <em>Mode 2</em>.</p>"
+                             "<p><b>Be aware:</b> Do not mix different modes on one CD. "
+                             "Some older drives may have problems reading mode 1 multisession CDs.") );
 }
 
 
@@ -58,48 +58,48 @@ K3bDataModeWidget::~K3bDataModeWidget()
 
 int K3bDataModeWidget::dataMode() const
 {
-  if( currentIndex() == s_autoIndex )
-    return K3b::DATA_MODE_AUTO;
-  else if( currentIndex() == s_mode1Index )
-    return K3b::MODE1;
-  else
-    return K3b::MODE2;
+    if( currentIndex() == s_autoIndex )
+        return K3b::DATA_MODE_AUTO;
+    else if( currentIndex() == s_mode1Index )
+        return K3b::MODE1;
+    else
+        return K3b::MODE2;
 }
 
 
 void K3bDataModeWidget::setDataMode( int mode )
 {
-  if( mode == K3b::MODE1 )
-    setCurrentIndex( s_mode1Index );
-  else if( mode == K3b::MODE2 )
-    setCurrentIndex( s_mode2Index );
-  else
-    setCurrentIndex( s_autoIndex );
+    if( mode == K3b::MODE1 )
+        setCurrentIndex( s_mode1Index );
+    else if( mode == K3b::MODE2 )
+        setCurrentIndex( s_mode2Index );
+    else
+        setCurrentIndex( s_autoIndex );
 }
 
 
 void K3bDataModeWidget::saveConfig( KConfigGroup& c )
 {
-  QString datamode;
-  if( dataMode() == K3b::MODE1 )
-    datamode = "mode1";
-  else if( dataMode() == K3b::MODE2 )
-    datamode = "mode2";
-  else
-    datamode = "auto";
-  c.writeEntry( "data_track_mode", datamode );
+    QString datamode;
+    if( dataMode() == K3b::MODE1 )
+        datamode = "mode1";
+    else if( dataMode() == K3b::MODE2 )
+        datamode = "mode2";
+    else
+        datamode = "auto";
+    c.writeEntry( "data_track_mode", datamode );
 }
 
 
 void K3bDataModeWidget::loadConfig( const KConfigGroup& c )
 {
-  QString datamode = c.readEntry( "data_track_mode" );
-  if( datamode == "mode1" )
-    setDataMode( K3b::MODE1 );
-  else if( datamode == "mode2" )
-    setDataMode( K3b::MODE2 );
-  else
-    setDataMode( K3b::DATA_MODE_AUTO );
+    QString datamode = c.readEntry( "data_track_mode" );
+    if( datamode == "mode1" )
+        setDataMode( K3b::MODE1 );
+    else if( datamode == "mode2" )
+        setDataMode( K3b::MODE2 );
+    else
+        setDataMode( K3b::DATA_MODE_AUTO );
 }
 
 #include "k3bdatamodewidget.moc"

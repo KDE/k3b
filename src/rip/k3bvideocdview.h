@@ -19,7 +19,7 @@
 #include <qdom.h>
 //Added by qt3to4:
 #include <QLabel>
-#include <Q3ValueList>
+#include <QList>
 
 #include <k3bmediacontentsview.h>
 #include <k3bmedium.h>
@@ -57,7 +57,7 @@ class K3bVideoCdView : public K3bMediaContentsView
             return m_actionCollection;
         }
 
-    private slots:
+    private Q_SLOTS:
         void slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& );
         void slotTrackSelectionChanged( Q3ListViewItem* );
         void slotStateChanged( Q3ListViewItem* );
@@ -96,7 +96,7 @@ class K3bVideoCdView : public K3bMediaContentsView
 
         QDomDocument domTree;
 
-        Q3ValueList<VideoTrackViewCheckItem *> m_contentList;
+        QList<VideoTrackViewCheckItem *> m_contentList;
 
         unsigned long m_videocddatasize;
         unsigned long m_videocdmpegsize;

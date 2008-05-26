@@ -45,14 +45,14 @@ class K3bAudioDataSourceEditWidget : public QWidget
    */
   K3b::Msf endOffset() const;
 
- public slots:
+ public Q_SLOTS:
   void loadSource( K3bAudioDataSource* );
   void saveSource();
 
   void setStartOffset( const K3b::Msf& );
   void setEndOffset( const K3b::Msf& );
 
- private slots:
+ private Q_SLOTS:
   void slotRangeModified( int, const K3b::Msf&, const K3b::Msf& );
   void slotStartOffsetEdited( const K3b::Msf& );
   void slotEndOffsetEdited( const K3b::Msf& );

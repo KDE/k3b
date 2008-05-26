@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,60 +38,60 @@ class QLabel;
 class KConfig;
 class KConfigGroup;
 namespace K3bDevice {
-  class Device;
-  class DiskInfo;
+    class Device;
+    class DiskInfo;
 }
 
 
 /**
-  *@author Sebastian Trueg
-  */
+ *@author Sebastian Trueg
+ */
 class K3bDirView : public KVBox
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bDirView(K3bFileTreeView* tree, QWidget *parent=0);
-  ~K3bDirView();
+public:
+    K3bDirView(K3bFileTreeView* tree, QWidget *parent=0);
+    ~K3bDirView();
 
- public slots:
-  void saveConfig( KConfigGroup&grp );
-  void readConfig( const KConfigGroup & grp );
-  void showUrl( const KUrl& );
-  void showDevice( K3bDevice::Device* );
-  
- protected slots:
-  void slotDirActivated( const KUrl& );
-  void slotDirActivated( const QString& );
-  void slotMountFinished( const QString& );
-  void slotUnmountFinished( bool );
-  void showMediumInfo( const K3bMedium& );
-  void slotDetectingDiskInfo( K3bDevice::Device* dev );
-  void home();
-  void slotFileTreeContextMenu( K3bDevice::Device* dev, const QPoint& p );
+public Q_SLOTS:
+    void saveConfig( KConfigGroup&grp );
+    void readConfig( const KConfigGroup & grp );
+    void showUrl( const KUrl& );
+    void showDevice( K3bDevice::Device* );
+    void showDiskInfo( K3bDevice::Device* );
 
- signals:
-  void urlEntered( const KUrl& );
-  void deviceSelected( K3bDevice::Device* );
+protected Q_SLOTS:
+    void slotDirActivated( const KUrl& );
+    void slotDirActivated( const QString& );
+    void slotMountFinished( const QString& );
+    void slotUnmountFinished( bool );
+    void showMediumInfo( const K3bMedium& );
+    void home();
+    void slotFileTreeContextMenu( K3bDevice::Device* dev, const QPoint& p );
 
- private:
-  QStackedWidget* m_viewStack;
-  Q3ScrollView* m_scroll;
+Q_SIGNALS:
+    void urlEntered( const KUrl& );
+    void deviceSelected( K3bDevice::Device* );
 
-  K3bAudioCdView*   m_cdView;
-  K3bVideoCdView*   m_videoView;
-  K3bVideoDVDRippingView* m_movieView;
-  K3bFileView* m_fileView;
-  K3bDiskInfoView* m_infoView;
+private:
+    QStackedWidget* m_viewStack;
+    Q3ScrollView* m_scroll;
 
-  KComboBox* m_urlCombo;
-  QSplitter* m_mainSplitter;
-  K3bFileTreeView* m_fileTreeView;
+    K3bAudioCdView*   m_cdView;
+    K3bVideoCdView*   m_videoView;
+    K3bVideoDVDRippingView* m_movieView;
+    K3bFileView* m_fileView;
+    K3bDiskInfoView* m_infoView;
 
-  bool m_bViewDiskInfo;
+    KComboBox* m_urlCombo;
+    QSplitter* m_mainSplitter;
+    K3bFileTreeView* m_fileTreeView;
 
-  class Private;
-  Private* d;
+    bool m_bViewDiskInfo;
+
+    class Private;
+    Private* d;
 };
 
 #endif

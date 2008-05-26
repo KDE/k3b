@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2004-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,8 +15,11 @@
 #ifndef _K3B_AUDIO_DATA_SOURCE_H_
 #define _K3B_AUDIO_DATA_SOURCE_H_
 
+#include <QtCore/QObject>
+
 #include <k3bmsf.h>
 #include "k3b_export.h"
+
 class K3bAudioTrack;
 class K3bAudioDoc;
 
@@ -37,131 +40,133 @@ class K3bAudioDoc;
  *
  * When a source is deleted it automatically removes itself from it's list.
  */
-class LIBK3B_EXPORT K3bAudioDataSource 
+class LIBK3B_EXPORT K3bAudioDataSource : public QObject
 {
-  friend class K3bAudioTrack;
+    Q_OBJECT
 
- public:
-  K3bAudioDataSource();
+    friend class K3bAudioTrack;
 
-  /**
-   * Create en identical copy except that the copy will not be in any list.
-   */
-  K3bAudioDataSource( const K3bAudioDataSource& );
-  virtual ~K3bAudioDataSource();
+public:
+    K3bAudioDataSource();
 
-  /**
-   * The original length of the source is the maximum data which is available
-   * when startOffset is 0 this is the max for endOffset
-   *
-   * Be aware that this may change (see K3bAudioZeroData)
-   */
-  virtual K3b::Msf originalLength() const = 0;
+    /**
+     * Create en identical copy except that the copy will not be in any list.
+     */
+    K3bAudioDataSource( const K3bAudioDataSource& );
+    virtual ~K3bAudioDataSource();
 
-  /**
-   * The default implementation returns the originalLength modified by startOffset and endOffset
-   */
-  virtual K3b::Msf length() const;
+    /**
+     * The original length of the source is the maximum data which is available
+     * when startOffset is 0 this is the max for endOffset
+     *
+     * Be aware that this may change (see K3bAudioZeroData)
+     */
+    virtual K3b::Msf originalLength() const = 0;
 
-  /** 
-   * @return The raw size in pcm samples (16bit, 44800 kHz, stereo) 
-   */
-  KIO::filesize_t size() const { return length().audioBytes(); }
+    /**
+     * The default implementation returns the originalLength modified by startOffset and endOffset
+     */
+    virtual K3b::Msf length() const;
 
-  virtual bool seek( const K3b::Msf& ) = 0;
+    /** 
+     * @return The raw size in pcm samples (16bit, 44800 kHz, stereo) 
+     */
+    KIO::filesize_t size() const { return length().audioBytes(); }
 
-  /**
-   * Read data from the source.
-   */
-  virtual int read( char* data, unsigned int max ) = 0;
+    virtual bool seek( const K3b::Msf& ) = 0;
 
-  /**
-   * Type of the data in readable form.
-   */
-  virtual QString type() const = 0;
+    /**
+     * Read data from the source.
+     */
+    virtual int read( char* data, unsigned int max ) = 0;
 
-  /**
-   * The source in readable form (this is the filename for files)
-   */
-  virtual QString sourceComment() const = 0;
+    /**
+     * Type of the data in readable form.
+     */
+    virtual QString type() const = 0;
 
-  /**
-   * Used in case an error occurred. For now this is used if the
-   * decoder was not able to decode an audiofile
-   */
-  virtual bool isValid() const { return true; }
+    /**
+     * The source in readable form (this is the filename for files)
+     */
+    virtual QString sourceComment() const = 0;
 
-  /**
-   * The doc the source is currently a part of or null.
-   */
-  K3bAudioDoc* doc() const;
-  K3bAudioTrack* track() const { return m_track; }
+    /**
+     * Used in case an error occurred. For now this is used if the
+     * decoder was not able to decode an audiofile
+     */
+    virtual bool isValid() const { return true; }
 
-  K3bAudioDataSource* prev() const { return m_prev; }
-  K3bAudioDataSource* next() const { return m_next; }
+    /**
+     * The doc the source is currently a part of or null.
+     */
+    K3bAudioDoc* doc() const;
+    K3bAudioTrack* track() const { return m_track; }
 
-  K3bAudioDataSource* take();
+    K3bAudioDataSource* prev() const { return m_prev; }
+    K3bAudioDataSource* next() const { return m_next; }
 
-  void moveAfter( K3bAudioDataSource* track );
-  void moveAhead( K3bAudioDataSource* track );
+    K3bAudioDataSource* take();
 
-  /**
-   * Set the start offset from the beginning of the source's originalLength.
-   */
-  virtual void setStartOffset( const K3b::Msf& );
+    void moveAfter( K3bAudioDataSource* track );
+    void moveAhead( K3bAudioDataSource* track );
 
-  /**
-   * Set the end offset from the beginning of the file. The endOffset sector
-   * is not included in the data.
-   * The maximum value is originalLength() which means to use all data.
-   * 0 means the same as originalLength().
-   * This has to be bigger than the start offset.
-   */
-  virtual void setEndOffset( const K3b::Msf& );
+    /**
+     * Set the start offset from the beginning of the source's originalLength.
+     */
+    virtual void setStartOffset( const K3b::Msf& );
 
-  virtual const K3b::Msf& startOffset() const { return m_startOffset; }
+    /**
+     * Set the end offset from the beginning of the file. The endOffset sector
+     * is not included in the data.
+     * The maximum value is originalLength() which means to use all data.
+     * 0 means the same as originalLength().
+     * This has to be bigger than the start offset.
+     */
+    virtual void setEndOffset( const K3b::Msf& );
 
-  /**
-   * The end offset. It is the first sector not included in the data.
-   * If 0 the last sector is determined by the originalLength
-   */
-  virtual const K3b::Msf& endOffset() const { return m_endOffset; }
+    virtual const K3b::Msf& startOffset() const { return m_startOffset; }
 
-  /**
-   * Get the last used sector in the source.
-   * The default implementation uses originalLength() and endOffset()
-   */
-  virtual K3b::Msf lastSector() const;
+    /**
+     * The end offset. It is the first sector not included in the data.
+     * If 0 the last sector is determined by the originalLength
+     */
+    virtual const K3b::Msf& endOffset() const { return m_endOffset; }
 
-  /**
-   * Create a copy of this source which is not part of a list
-   */
-  virtual K3bAudioDataSource* copy() const = 0;
+    /**
+     * Get the last used sector in the source.
+     * The default implementation uses originalLength() and endOffset()
+     */
+    virtual K3b::Msf lastSector() const;
 
-  /**
-   * Split the source at position pos and return the splitted source
-   * on success.
-   * The new source will be moved after this source.
-   *
-   * The default implementation uses copy() to create a new source instance
-   */
-  virtual K3bAudioDataSource* split( const K3b::Msf& pos );
+    /**
+     * Create a copy of this source which is not part of a list
+     */
+    virtual K3bAudioDataSource* copy() const = 0;
 
- protected:
-  /**
-   * Informs the parent track about changes.
-   */
-  void emitChange();
+    /**
+     * Split the source at position pos and return the splitted source
+     * on success.
+     * The new source will be moved after this source.
+     *
+     * The default implementation uses copy() to create a new source instance
+     */
+    virtual K3bAudioDataSource* split( const K3b::Msf& pos );
 
- private:
-  void fixupOffsets();
+protected:
+    /**
+     * Informs the parent track about changes.
+     */
+    void emitChange();
 
-  K3bAudioTrack* m_track;
-  K3bAudioDataSource* m_prev;
-  K3bAudioDataSource* m_next;
+private:
+    void fixupOffsets();
 
-  K3b::Msf m_startOffset;
-  K3b::Msf m_endOffset;
+    K3bAudioTrack* m_track;
+    K3bAudioDataSource* m_prev;
+    K3bAudioDataSource* m_next;
+
+    K3b::Msf m_startOffset;
+    K3b::Msf m_endOffset;
 };
 
 #endif

@@ -1,9 +1,10 @@
 /*
 *
 * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
 *
 * This file is part of the K3b project.
-* Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+* Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -114,18 +115,18 @@ void K3bVcdTrack::delRefFromUs()
 void K3bVcdTrack::setPbcTrack( int which, K3bVcdTrack* pbctrack )
 {
     kDebug() << "K3bVcdTrack::setPbcTrack " << which << ", " << pbctrack;
-    m_pbctrackmap.replace( which, pbctrack );
+    m_pbctrackmap[which] = pbctrack;
 }
 
 void K3bVcdTrack::setPbcNonTrack( int which, int type )
 {
     kDebug() << "K3bVcdTrack::setNonPbcTrack " << which << ", " << type;
-    m_pbcnontrackmap.replace( which, type );
+    m_pbcnontrackmap[which] = type;
 }
 
 void K3bVcdTrack::setUserDefined( int which, bool ud )
 {
-    m_pbcusrdefmap.replace( which, ud );
+    m_pbcusrdefmap[which] = ud;
 }
 
 K3bVcdTrack* K3bVcdTrack::getPbcTrack( const int& which )

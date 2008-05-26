@@ -56,7 +56,7 @@ class K3bVcdListView : public K3bListView
 
         QList<K3bVcdTrack*> selectedTracks();
 
-    signals:
+     Q_SIGNALS:
         void lengthReady();
 
     private:
@@ -75,7 +75,7 @@ class K3bVcdListView : public K3bListView
 
         QMap<K3bVcdTrack*, K3bVcdListViewItem*> m_itemMap;
 
-    private slots:
+    private Q_SLOTS:
         void slotDropped( K3ListView*, QDropEvent* e, Q3ListViewItem* after );
         void slotUpdateItems();
         void showPopupMenu( K3ListView*, Q3ListViewItem* item, const QPoint& );

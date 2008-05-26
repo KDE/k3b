@@ -74,7 +74,7 @@ class LIBK3B_EXPORT K3bMixedDoc : public K3bDoc
 
   K3bDevice::Toc toToc( int dataMode, const K3b::Msf& dataTrackLength = 0 ) const;
 
- public slots:
+ public Q_SLOTS:
   void setMixedType( MixedType t ) { m_mixedType = t; }
   void addUrls( const KUrl::List& urls );
 

@@ -34,7 +34,7 @@ public:
     K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent = 0 );
     ~K3bMovixBurnDialog();
 
-protected slots:
+protected Q_SLOTS:
     void slotStartClicked();
 
 protected:

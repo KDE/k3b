@@ -83,11 +83,11 @@ class K3bSystemProblemDialog : public KDialog
  protected:
   void closeEvent( QCloseEvent* );
 
- private slots:
+ private Q_SLOTS:
   void slotK3bSetup();
 
  private:
-  K3bSystemProblemDialog( const Q3ValueList<K3bSystemProblem>&,
+  K3bSystemProblemDialog( const QList<K3bSystemProblem>&,
 			  QWidget* parent = 0); 
   static int dmaActivated( K3bDevice::Device* );
   static QList<K3bDevice::Device*> checkForAutomounting();

@@ -111,14 +111,14 @@ bool K3bAudioProjectConvertingJob::run()
         if( d->encoder ) {
             if( isOpen = d->encoder->openFile( d->fileType, filename, m_doc->length() ) ) {
                 // here we use cd Title and Artist
-                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST, m_cddbEntry.cdArtist );
-                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE, m_cddbEntry.cdTitle );
-                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_COMMENT, m_cddbEntry.cdExtInfo );
-                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_ARTIST, m_cddbEntry.cdArtist );
-                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_TITLE, m_cddbEntry.cdTitle );
-                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_COMMENT, m_cddbEntry.cdExtInfo );
-                d->encoder->setMetaData( K3bAudioEncoder::META_YEAR, QString::number(m_cddbEntry.year) );
-                d->encoder->setMetaData( K3bAudioEncoder::META_GENRE, m_cddbEntry.genre );
+                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST, m_cddbEntry.get( KCDDB::Artist ).toString() );
+                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE, m_cddbEntry.get( KCDDB::Title ).toString() );
+                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_COMMENT, m_cddbEntry.get( KCDDB::Comment ).toString() );
+                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_ARTIST, m_cddbEntry.get( KCDDB::Artist ).toString() );
+                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_TITLE, m_cddbEntry.get( KCDDB::Title ).toString() );
+                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_COMMENT, m_cddbEntry.get( KCDDB::Comment ).toString() );
+                d->encoder->setMetaData( K3bAudioEncoder::META_YEAR, QString::number(m_cddbEntry.get( KCDDB::Year ).toInt()) );
+                d->encoder->setMetaData( K3bAudioEncoder::META_GENRE, m_cddbEntry.get( KCDDB::Genre ).toString() );
             }
             else
                 emit infoMessage( d->encoder->lastErrorString(), K3bJob::ERROR );
@@ -197,15 +197,15 @@ bool K3bAudioProjectConvertingJob::convertTrack( K3bAudioTrack* track, const QSt
                                                filename,
                                                track->length() ) ) {
 
-                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST, m_cddbEntry.artists[d->currentTrackIndex] );
-                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE, m_cddbEntry.titles[d->currentTrackIndex] );
-                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_COMMENT, m_cddbEntry.extInfos[d->currentTrackIndex] );
+                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST, m_cddbEntry.track( d->currentTrackIndex ).get( KCDDB::Artist ).toString() );
+                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE, m_cddbEntry.track( d->currentTrackIndex ).get( KCDDB::Title ).toString() );
+                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_COMMENT, m_cddbEntry.track( d->currentTrackIndex ).get( KCDDB::Comment ).toString() );
                 d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_NUMBER, QString::number(d->currentTrackIndex+1).rightJustified( 2, '0' ) );
-                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_ARTIST, m_cddbEntry.cdArtist );
-                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_TITLE, m_cddbEntry.cdTitle );
-                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_COMMENT, m_cddbEntry.cdExtInfo );
-                d->encoder->setMetaData( K3bAudioEncoder::META_YEAR, QString::number(m_cddbEntry.year) );
-                d->encoder->setMetaData( K3bAudioEncoder::META_GENRE, m_cddbEntry.genre );
+                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_ARTIST, m_cddbEntry.get( KCDDB::Artist ).toString() );
+                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_TITLE, m_cddbEntry.get( KCDDB::Title ).toString() );
+                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_COMMENT, m_cddbEntry.get( KCDDB::Comment ).toString() );
+                d->encoder->setMetaData( K3bAudioEncoder::META_YEAR, QString::number(m_cddbEntry.get( KCDDB::Year ).toInt()) );
+                d->encoder->setMetaData( K3bAudioEncoder::META_GENRE, m_cddbEntry.get( KCDDB::Genre ).toString() );
             }
             else
                 emit infoMessage( d->encoder->lastErrorString(), K3bJob::ERROR );
@@ -221,12 +221,12 @@ bool K3bAudioProjectConvertingJob::convertTrack( K3bAudioTrack* track, const QSt
     }
 
 
-    if( !m_cddbEntry.artists[d->currentTrackIndex].isEmpty() &&
-        !m_cddbEntry.titles[d->currentTrackIndex].isEmpty() )
-        emit newSubTask( i18n("Converting track %1 (%2 - %3)",
-                              d->currentTrackIndex+1,
-                              m_cddbEntry.artists[d->currentTrackIndex],
-                              m_cddbEntry.titles[d->currentTrackIndex]) );
+    if( !m_cddbEntry.track( d->currentTrackIndex ).get( KCDDB::Artist ).toString().isEmpty() &&
+        !m_cddbEntry.track( d->currentTrackIndex ).get( KCDDB::Title ).toString().isEmpty() )
+        emit newSubTask( i18n( "Converting track %1 (%2 - %3)",
+                               d->currentTrackIndex+1,
+                               m_cddbEntry.track( d->currentTrackIndex ).get( KCDDB::Artist ).toString(),
+                               m_cddbEntry.track( d->currentTrackIndex ).get( KCDDB::Title ).toString() ) );
     else
         emit newSubTask( i18n("Converting track %1", d->currentTrackIndex+1) );
 
@@ -304,12 +304,15 @@ bool K3bAudioProjectConvertingJob::writePlaylist()
         if( m_singleFile ) {
             // extra info
             t << "#EXTINF:" << m_doc->length().lba() << ",";
-            if( !m_cddbEntry.cdArtist.isEmpty() && !m_cddbEntry.cdTitle.isEmpty() )
-                t << m_cddbEntry.cdArtist << " - " << m_cddbEntry.cdTitle << endl;
-            else
+            if( !m_cddbEntry.get( KCDDB::Artist ).toString().isEmpty() &&
+                !m_cddbEntry.get( KCDDB::Title ).toString().isEmpty() ) {
+                t << m_cddbEntry.get( KCDDB::Artist ).toString() << " - " << m_cddbEntry.get( KCDDB::Title ).toString() << endl;
+            }
+            else {
                 t << m_tracks[0].second.mid(m_tracks[0].second.lastIndexOf('/') + 1,
                                             m_tracks[0].second.length() - m_tracks[0].second.lastIndexOf('/') - 5)
                   << endl; // filename without extension
+            }
 
             // filename
             if( m_relativePathInPlaylist )
@@ -325,13 +328,19 @@ bool K3bAudioProjectConvertingJob::writePlaylist()
                 // extra info
                 t << "#EXTINF:" << m_doc->length().totalFrames()/75 << ",";
 
-                if( !m_cddbEntry.artists[trackIndex].isEmpty() && !m_cddbEntry.titles[trackIndex].isEmpty() )
-                    t << m_cddbEntry.artists[trackIndex] << " - " << m_cddbEntry.titles[trackIndex] << endl;
-                else
+                if( !m_cddbEntry.track( trackIndex ).get( KCDDB::Artist ).toString().isEmpty() &&
+                    !m_cddbEntry.track( trackIndex ).get( KCDDB::Title ).toString().isEmpty() ) {
+                    t << m_cddbEntry.track( trackIndex ).get( KCDDB::Artist ).toString()
+                      << " - "
+                      << m_cddbEntry.track( trackIndex ).get( KCDDB::Title ).toString()
+                      << endl;
+                }
+                else {
                     t << m_tracks[i].second.mid(m_tracks[i].second.lastIndexOf('/') + 1,
                                                 m_tracks[i].second.length()
                                                 - m_tracks[i].second.lastIndexOf('/') - 5)
                       << endl; // filename without extension
+                }
 
                 // filename
                 if( m_relativePathInPlaylist )
@@ -342,7 +351,7 @@ bool K3bAudioProjectConvertingJob::writePlaylist()
             }
         }
 
-        return ( t.device()->status() == IO_Ok );
+        return ( t.status() == QTextStream::Ok );
     }
     else {
         emit infoMessage( i18n("Unable to open '%1' for writing.",m_playlistFilename), K3bJob::ERROR );
@@ -359,9 +368,8 @@ bool K3bAudioProjectConvertingJob::writeCueFile()
     // create a new toc and cd-text
     K3bDevice::Toc toc;
     K3bDevice::CdText text;
-    text.setPerformer( m_cddbEntry.cdArtist );
-    text.setTitle( m_cddbEntry.cdTitle );
-    text.reserve( m_tracks.count() );
+    text.setPerformer( m_cddbEntry.get( KCDDB::Artist ).toString() );
+    text.setTitle( m_cddbEntry.get( KCDDB::Title ).toString() );
     K3b::Msf currentSector;
     K3bAudioTrack* track = m_doc->firstTrack();
     int trackNum = 1;
@@ -370,10 +378,8 @@ bool K3bAudioProjectConvertingJob::writeCueFile()
         K3bDevice::Track newTrack( currentSector, (currentSector+=track->length()) - 1, K3bDevice::Track::AUDIO );
         toc.append( newTrack );
 
-        K3bDevice::TrackCdText trackText;
-        trackText.setPerformer( m_cddbEntry.artists[trackNum-1] );
-        trackText.setTitle( m_cddbEntry.titles[trackNum-1] );
-        text.append( trackText );
+        text[trackNum-1].setPerformer( m_cddbEntry.track( trackNum-1 ).get( KCDDB::Artist ).toString() );
+        text[trackNum-1].setTitle( m_cddbEntry.track( trackNum-1 ).get( KCDDB::Title ).toString() );
 
         track = track->next();
         ++trackNum;
@@ -424,20 +430,23 @@ QString K3bAudioProjectConvertingJob::findRelativePath( const QString& absPath, 
 
 QString K3bAudioProjectConvertingJob::jobDescription() const
 {
-    if( m_cddbEntry.cdTitle.isEmpty() )
-        return i18n("Converting Audio Tracks");
+    if( m_cddbEntry.get( KCDDB::Title ).toString().isEmpty() )
+        return i18n( "Converting Audio Tracks" );
     else
-        return i18n("Converting Audio Tracks From '%1'",m_cddbEntry.cdTitle);
+        return i18n( "Converting Audio Tracks From '%1'",
+                     m_cddbEntry.get( KCDDB::Title ).toString() );
 }
 
 QString K3bAudioProjectConvertingJob::jobDetails() const
 {
     if( d->encoder )
-        return i18np("1 track (encoding to %2)",
-                     "%1 tracks (encoding to %2)",
-                     m_tracks.count() ,d->encoder->fileTypeComment(d->fileType));
+        return i18np( "1 track (encoding to %2)",
+                      "%1 tracks (encoding to %2)",
+                      m_tracks.count(),
+                      d->encoder->fileTypeComment(d->fileType) );
     else
-        return i18np("1 track", "%1 tracks", m_doc->numOfTracks() );
+        return i18np( "1 track", "%1 tracks",
+                      m_doc->numOfTracks() );
 }
 
 #include "k3baudioprojectconvertingjob.moc"

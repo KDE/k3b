@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ K3bDevice::Toc::Toc()
 K3bDevice::Toc::Toc( const Toc& toc )
     : QList<K3bDevice::Track>( toc )
 {
-    m_firstSector = toc.firstSector();
+    m_mcn = toc.m_mcn;
 }
 
 
@@ -41,7 +41,7 @@ K3bDevice::Toc& K3bDevice::Toc::operator=( const Toc& toc )
 {
     if( &toc == this ) return *this;
 
-    m_firstSector = toc.firstSector();
+    m_mcn = toc.m_mcn;
 
     QList<K3bDevice::Track>::operator=( toc );
 
@@ -49,9 +49,9 @@ K3bDevice::Toc& K3bDevice::Toc::operator=( const Toc& toc )
 }
 
 
-const K3b::Msf& K3bDevice::Toc::firstSector() const
+K3b::Msf K3bDevice::Toc::firstSector() const
 {
-    return m_firstSector;
+    return isEmpty() ? K3b::Msf() : first().firstSector();
 }
 
 
@@ -84,6 +84,8 @@ unsigned int K3bDevice::Toc::discId() const
         }
     }
     unsigned int l = length().lba();
+    if ( !empty() )
+        l -= first().firstSector().lba();
     l /= 75;
     id = ( ( id % 0xff ) << 24 ) | ( l << 8 ) | count();
 
@@ -122,11 +124,22 @@ int K3bDevice::Toc::sessions() const
 }
 
 
+QByteArray K3bDevice::Toc::mcn() const
+{
+    return m_mcn;
+}
+
+
+void K3bDevice::Toc::setMcn( const QByteArray& mcn )
+{
+    m_mcn = mcn;
+}
+
+
 void K3bDevice::Toc::clear()
 {
     QList<Track>::clear();
     m_mcn.resize( 0 );
-    m_firstSector = 0;
 }
 
 
@@ -150,13 +163,11 @@ void K3bDevice::Toc::debug() const
 
 bool K3bDevice::Toc::operator==( const Toc& other ) const
 {
-    return( m_firstSector == other.m_firstSector &&
-            QList<Track>::operator==( other ) );
+    return( QList<Track>::operator==( other ) );
 }
 
 
 bool K3bDevice::Toc::operator!=( const Toc& other ) const
 {
-    return( m_firstSector != other.m_firstSector ||
-            QList<Track>::operator!=( other ) );
+    return( QList<Track>::operator!=( other ) );
 }

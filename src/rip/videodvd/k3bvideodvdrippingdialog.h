@@ -51,7 +51,7 @@ class K3bVideoDVDRippingDialog : public K3bInteractionDialog
     PATTERN_CURRENT_DATE         = 'd'
   };
 
- private slots:
+ private Q_SLOTS:
   void slotStartClicked();
   void slotUpdateFilenames();
   void slotUpdateFilesizes();

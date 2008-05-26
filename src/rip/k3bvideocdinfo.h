@@ -20,7 +20,7 @@
 #include <qstringlist.h>
 #include <qobject.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 #include <k3btoc.h>
 #include <k3bcore.h>
@@ -62,9 +62,9 @@ class K3bVideoCdInfoResult
         QString xmlData;
 
     private:
-        Q3ValueList<K3bVideoCdInfoResultEntry> m_fileEntry;
-        Q3ValueList<K3bVideoCdInfoResultEntry> m_segmentEntry;
-        Q3ValueList<K3bVideoCdInfoResultEntry> m_sequenceEntry;
+        QList<K3bVideoCdInfoResultEntry> m_fileEntry;
+        QList<K3bVideoCdInfoResultEntry> m_segmentEntry;
+        QList<K3bVideoCdInfoResultEntry> m_sequenceEntry;
 
         K3bVideoCdInfoResultEntry m_emptyEntry;
 };
@@ -85,10 +85,10 @@ class K3bVideoCdInfo : public QObject
 
         void info( const QString& );
 
-    signals:
+     Q_SIGNALS:
         void infoFinished( bool success );
 
-    private slots:
+    private Q_SLOTS:
         void slotInfoFinished();
         void slotParseOutput( K3Process*, char* output, int len );
 

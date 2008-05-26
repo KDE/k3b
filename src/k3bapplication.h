@@ -31,7 +31,6 @@ class K3bAudioServer;
 class K3bThemeManager;
 class K3bProjectManager;
 class K3bAppDeviceManager;
-class K3bMediaCache;
 
 
 class K3bApplication : public KUniqueApplication
@@ -100,8 +99,6 @@ public:
 
     K3bProjectManager* projectManager() const { return m_projectManager; }
 
-    K3bMediaCache* mediaCache() const { return m_mediaCache; }
-
     K3bMainWindow* k3bMainWindow() const { return m_mainWindow; }
 
     //K3bInterface* interface() const { return m_interface; }
@@ -143,7 +140,6 @@ private:
     K3bMainWindow* m_mainWindow;
     K3bProjectManager* m_projectManager;
     K3bAppDeviceManager* m_appDeviceManager;
-    K3bMediaCache* m_mediaCache;
 
     QMap<K3bDevice::Device*, int> m_deviceBlockMap;
 

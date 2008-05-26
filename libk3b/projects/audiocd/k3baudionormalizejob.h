@@ -33,13 +33,13 @@ class K3bAudioNormalizeJob : public K3bJob
   K3bAudioNormalizeJob( K3bJobHandler*, QObject* parent = 0 );
   ~K3bAudioNormalizeJob();
 
- public slots:
+ public Q_SLOTS:
   void start();
   void cancel();
 
   void setFilesToNormalize( const QList<QString>& files ) { m_files = files; }
 
- private slots:
+ private Q_SLOTS:
   void slotStdLine( const QString& line );
   void slotProcessExited( K3Process* p );
 

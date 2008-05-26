@@ -1,10 +1,10 @@
 
 /* 
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
 #define K3BFILLSTATUSDISPLAY_H
 
 #include <qtooltip.h>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QFrame>
@@ -52,11 +51,11 @@ public:
 
     const K3b::Msf& cdSize() const;
 
-public slots:
+public Q_SLOTS:
     void setShowTime( bool b );
     void setCdSize( const K3b::Msf& );
 
-signals:
+ Q_SIGNALS:
     void contextMenu( const QPoint& );
 
 protected:
@@ -77,14 +76,14 @@ public:
     K3bFillStatusDisplay(K3bDoc* doc, QWidget *parent=0);
     ~K3bFillStatusDisplay();
 
-public slots:
+public Q_SLOTS:
     void showSize();
     void showTime();
 
 protected:
     void setupPopupMenu();
 
-    private slots:
+    private Q_SLOTS:
     void slotAutoSize();
     void slot74Minutes();
     void slot80Minutes();

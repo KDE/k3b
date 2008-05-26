@@ -15,7 +15,7 @@
 #ifndef _K3B_AUDIO_TRACK_VIEW_H_
 #define _K3B_AUDIO_TRACK_VIEW_H_
 
-#include <k3blistview.h>
+#include <QtGui/QTreeView>
 
 #include <qmap.h>
 #include <QList>
@@ -43,9 +43,13 @@ class QDragMoveEvent;
 class QTimer;
 class K3bListViewItemAnimator;
 class K3bAudioTrackPlayer;
+namespace K3b {
+    class AudioProjectModel;
+    class ViewColumnAdjuster;
+}
 
 
-class K3bAudioTrackView : public K3bListView
+class K3bAudioTrackView : public QTreeView
 {
     Q_OBJECT
 
@@ -69,8 +73,8 @@ private:
     void setupColumns();
     void setupActions();
     void showAllSources();
-    K3bAudioTrackViewItem* findTrackItem( const QPoint& pos ) const;
-    K3bAudioTrackViewItem* getTrackViewItem( K3bAudioTrack* track, bool* isNew = 0 );
+/*     K3bAudioTrackViewItem* findTrackItem( const QPoint& pos ) const; */
+/*     K3bAudioTrackViewItem* getTrackViewItem( K3bAudioTrack* track, bool* isNew = 0 ); */
 
     K3bAudioDoc* m_doc;
 
@@ -86,9 +90,9 @@ private:
 
     bool m_updatingColumnWidths;
 
-    QMap<K3bAudioTrack*, K3bAudioTrackViewItem*> m_trackItemMap;
+/*     QMap<K3bAudioTrack*, K3bAudioTrackViewItem*> m_trackItemMap; */
 
-    K3bAudioTrackViewItem* m_currentMouseOverItem;
+/*     K3bAudioTrackViewItem* m_currentMouseOverItem; */
     QTimer* m_autoOpenTrackTimer;
     QTimer* m_animationTimer;
 
@@ -98,7 +102,7 @@ private:
     K3bAudioTrack* m_currentlyPlayingTrack;
 
     // to animate the player icon
-    K3bListViewItemAnimator* m_playerItemAnimator;
+/*     K3bListViewItemAnimator* m_playerItemAnimator; */
 
     // used for the drop-event hack
     KUrl::List m_dropUrls;
@@ -106,13 +110,16 @@ private:
     K3bAudioTrack* m_dropTrackParent;
     K3bAudioDataSource* m_dropSourceAfter;
 
+    K3b::AudioProjectModel* m_model;
+    K3b::ViewColumnAdjuster* m_columnAdjuster;
+
 private Q_SLOTS:
-    void slotAnimation();
-    void slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3ListViewItem* after );
-    void slotChanged();
+/*     void slotAnimation(); */
+/*     void slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3ListViewItem* after ); */
     void slotTrackChanged( K3bAudioTrack* );
-    void slotTrackRemoved( K3bAudioTrack* );
-    void slotDragTimeout();
+/*     void slotTrackRemoved( K3bAudioTrack* ); */
+/*     void slotDragTimeout(); */
+    void slotAdjustColumns();
 
     // action slots
     void slotAddSilence();
@@ -120,26 +127,26 @@ private Q_SLOTS:
     void slotMergeTracks();
     void slotSplitSource();
     void slotSplitTrack();
-    void showPopupMenu( Q3ListViewItem* item, const QPoint& pos, int );
+    void showPopupMenu( const QPoint& pos );
     void slotProperties();
     void slotPlayTrack();
     void slotQueryMusicBrainz();
     void slotEditSource();
 
-    // drop-event hack slot
-    void slotAddUrls();
-
 protected:
-    void keyPressEvent( QKeyEvent* e );
-    void keyReleaseEvent( QKeyEvent* e );
-    void focusOutEvent( QFocusEvent* e );
-    void contentsMouseMoveEvent( QMouseEvent* e );
-    void contentsDragMoveEvent( QDragMoveEvent* e );
-    void contentsDragLeaveEvent( QDragLeaveEvent* e );
-    void resizeEvent( QResizeEvent* e );
-    void resizeColumns();
-    bool acceptDrag(QDropEvent* e) const;
-    Q3DragObject* dragObject();
+    void dragEnterEvent( QDragEnterEvent* event );
+    void dragLeaveEvent( QDragLeaveEvent* event );
+    void dragMoveEvent( QDragMoveEvent* event );
+
+/*     void keyPressEvent( QKeyEvent* e ); */
+/*     void keyReleaseEvent( QKeyEvent* e ); */
+/*     void focusOutEvent( QFocusEvent* e ); */
+/*     void contentsMouseMoveEvent( QMouseEvent* e ); */
+/*     void contentsDragMoveEvent( QDragMoveEvent* e ); */
+/*     void contentsDragLeaveEvent( QDragLeaveEvent* e ); */
+/*     void resizeEvent( QResizeEvent* e ); */
+/*     bool acceptDrag(QDropEvent* e) const; */
+/*     Q3DragObject* dragObject(); */
 };
 
 #endif

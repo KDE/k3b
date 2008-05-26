@@ -47,7 +47,7 @@ class K3bDataJob : public K3bBurnJob
   virtual QString jobDescription() const;
   virtual QString jobDetails() const;
 		
- public slots:
+ public Q_SLOTS:
   void cancel();
   void start();
 
@@ -59,7 +59,7 @@ class K3bDataJob : public K3bBurnJob
   void setWriterJob( K3bAbstractWriter* );
   void setImager( K3bIsoImager* );
 
- protected slots:
+ protected Q_SLOTS:
   void slotIsoImagerFinished( bool success );
   void slotIsoImagerPercent(int);
   void slotWriterJobPercent( int p );
@@ -76,7 +76,7 @@ class K3bDataJob : public K3bBurnJob
    */
   virtual bool waitForMedium();
 
- private slots:
+ private Q_SLOTS:
   void slotMultiSessionParamterSetupDone( bool );
 		
  protected:

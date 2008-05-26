@@ -76,7 +76,7 @@ class K3bMediaSelectionDialog : public KDialog
 					  const QString& text = QString::null,
 					  bool* canceled = 0 );
 
- private slots:
+ private Q_SLOTS:
   void slotSelectionChanged( K3bDevice::Device* );
 
  private:

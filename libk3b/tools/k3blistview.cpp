@@ -792,7 +792,7 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
       //      m_editorMsfEdit->installEventFilter( this );
       d->msfEditLineEdit->installEventFilter( this );
     }
-    m_editorMsfEdit->setText( item->text(col) );
+    m_editorMsfEdit->setMsfValue( K3b::Msf::fromString( item->text(col) ) );
     return m_editorMsfEdit;
 
   default:
@@ -984,7 +984,7 @@ bool K3bListView::doRename()
 	m_editorSpinBox->setValue( m_currentEditItem->text( m_currentEditColumn ).toInt() );
 	break;
       case K3bListViewItem::MSF:
-	m_editorMsfEdit->setText( m_currentEditItem->text( m_currentEditColumn ) );
+          m_editorMsfEdit->setMsfValue( K3b::Msf::fromString( m_currentEditItem->text( m_currentEditColumn ) ) );
 	break;
       }
     }

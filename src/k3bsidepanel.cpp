@@ -23,7 +23,7 @@
 #include <qtoolbutton.h>
 #include <qlayout.h>
 //Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 
 
@@ -43,7 +43,7 @@ K3bSidePanel::K3bSidePanel( K3bMainWindow* m, QWidget* parent )
   addButton( cdProjectsFrame, m_mainWindow->action( "file_new_mixed" ) );
   addButton( cdProjectsFrame, m_mainWindow->action( "file_new_vcd" ) );
   addButton( cdProjectsFrame, m_mainWindow->action( "file_new_movix" ) );
-  Q3GridLayout* grid = (Q3GridLayout*)cdProjectsFrame->layout();
+  QGridLayout* grid = (QGridLayout*)cdProjectsFrame->layout();
   grid->setRowSpacing( grid->numRows(), 15 );
   addButton( cdProjectsFrame, m_mainWindow->action( "tools_copy_cd" ) );
   addButton( cdProjectsFrame, m_mainWindow->action( "tools_write_cd_image" ) );
@@ -56,7 +56,7 @@ K3bSidePanel::K3bSidePanel( K3bMainWindow* m, QWidget* parent )
   addButton( dvdProjectsFrame, m_mainWindow->action( "file_new_dvd" ) );
   addButton( dvdProjectsFrame, m_mainWindow->action( "file_new_video_dvd" ) );
   addButton( dvdProjectsFrame, m_mainWindow->action( "file_new_movix_dvd" ) );
-  grid = (Q3GridLayout*)dvdProjectsFrame->layout();
+  grid = (QGridLayout*)dvdProjectsFrame->layout();
   grid->setRowSpacing( grid->numRows(), 15 );
   addButton( dvdProjectsFrame, m_mainWindow->action( "tools_copy_dvd" ) );
   addButton( dvdProjectsFrame, m_mainWindow->action( "tools_write_dvd_iso" ) );
@@ -78,7 +78,7 @@ QFrame* K3bSidePanel::createPanel()
 {
   QFrame* frame = new QFrame( this );
   frame->setPaletteBackgroundColor( Qt::white );
-  Q3GridLayout* grid = new Q3GridLayout( frame );
+  QGridLayout* grid = new QGridLayout( frame );
   grid->setMargin( 5 );
   grid->setSpacing( 5 );
   return frame;
@@ -99,7 +99,7 @@ void K3bSidePanel::addButton( QFrame* frame, QAction* a )
 
     connect( b, SIGNAL(clicked()), a, SLOT(activate()) );
 
-    Q3GridLayout* grid = (Q3GridLayout*)(frame->layout());
+    QGridLayout* grid = (QGridLayout*)(frame->layout());
     grid->addWidget( b, grid->numRows(), 0 );
   }
   else

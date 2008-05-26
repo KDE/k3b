@@ -33,5 +33,8 @@ install( FILES
   k3bactivepipe.h
   k3bfilesplitter.h
   k3bfilesysteminfo.h
+  k3bmedium.h
+  k3bmediacache.h
+  k3bcddb.h
   DESTINATION ${INCLUDE_INSTALL_DIR} )
 

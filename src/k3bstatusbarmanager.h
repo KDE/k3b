@@ -36,10 +36,10 @@ class K3bStatusBarManager : public QObject
   K3bStatusBarManager( K3bMainWindow* parent );
   ~K3bStatusBarManager();
 
- public slots:
+ public Q_SLOTS:
   void update();
 
- private slots:
+ private Q_SLOTS:
   void slotFreeTempSpace( const QString&, unsigned long, unsigned long, unsigned long );
   void showActionStatusText( const QString& text );
   void clearActionStatusText();

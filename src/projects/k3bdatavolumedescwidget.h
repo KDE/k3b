@@ -40,7 +40,7 @@ class K3bDataVolumeDescWidget : public base_K3bDataVolumeDescWidget
   void load( const K3bIsoOptions& );
   void save( K3bIsoOptions& );
 
- private slots:
+ private Q_SLOTS:
   void slotVolumeSetSizeChanged( int );
 };
 

@@ -38,7 +38,7 @@ class K3bLsofWrapperDialog : public KDialog
    */
   static void checkDevice( K3bDevice::Device* dev, QWidget* parent = 0 );
 
- private slots:
+ private Q_SLOTS:
   bool slotCheckDevice();
   void slotQuitOtherApps();
 

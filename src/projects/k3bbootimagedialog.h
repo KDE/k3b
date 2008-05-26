@@ -31,7 +31,7 @@ class K3bBootImageDialog : public KDialog
 		      QWidget* parent = 0);
   ~K3bBootImageDialog();
 
- private slots:
+ private Q_SLOTS:
   void slotOk();
 
  private:

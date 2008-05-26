@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
@@ -40,16 +40,13 @@
 #include <qvariant.h>
 #include <qtooltip.h>
 
-#include <q3grid.h>
 #include <qtoolbutton.h>
-#include <q3ptrlist.h>
 #include <qstringlist.h>
 #include <qpoint.h>
 
 #include <qspinbox.h>
-//Added by qt3to4:
 #include <QShowEvent>
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -78,17 +75,21 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent )
     // create advanced tab
     // ----------------------------------------------------------
     QWidget* advancedTab = new QWidget( this );
-    Q3GridLayout* advancedTabGrid = new Q3GridLayout( advancedTab );
+    QGridLayout* advancedTabGrid = new QGridLayout( advancedTab );
     advancedTabGrid->setSpacing( spacingHint() );
     advancedTabGrid->setMargin( marginHint() );
 
-    Q3GroupBox* advancedSettingsGroup = new Q3GroupBox( 1, Qt::Vertical, i18n("Settings"), advancedTab );
+    QGroupBox* advancedSettingsGroup = new QGroupBox( i18n("Settings"), advancedTab );
     m_checkNormalize = K3bStdGuiItems::normalizeCheckBox( advancedSettingsGroup );
+    QVBoxLayout* advancedSettingsGroupLayout = new QVBoxLayout( advancedSettingsGroup );
+    advancedSettingsGroupLayout->addWidget( m_checkNormalize );
 
-    Q3GroupBox* advancedGimmickGroup = new Q3GroupBox( 1, Qt::Vertical, i18n("Gimmicks"), advancedTab );
+    QGroupBox* advancedGimmickGroup = new QGroupBox( i18n("Gimmicks"), advancedTab );
     m_checkHideFirstTrack = new QCheckBox( i18n( "Hide first track" ), advancedGimmickGroup );
+    QVBoxLayout* advancedGimmickGroupLayout = new QVBoxLayout( advancedGimmickGroup );
+    advancedGimmickGroupLayout->addWidget( m_checkHideFirstTrack );
 
-    m_audioRippingGroup = new Q3GroupBox( 3, Qt::Vertical, i18n("Audio Ripping"), advancedTab );
+    m_audioRippingGroup = new QGroupBox( i18n("Audio Ripping"), advancedTab );
     KHBox* box = new KHBox( m_audioRippingGroup );
     box->setSpacing( spacingHint() );
     box->setStretchFactor(new QLabel( i18n("Paranoia mode:"), box ), 1 );
@@ -99,6 +100,9 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent )
     m_spinAudioRippingReadRetries = new QSpinBox( box );
     m_spinAudioRippingReadRetries->setRange( 1, 128 );
     m_checkAudioRippingIgnoreReadErrors = new QCheckBox( i18n("Ignore read errors"), m_audioRippingGroup );
+    QVBoxLayout* audioRippingGroupLayout = new QVBoxLayout( m_audioRippingGroup );
+    audioRippingGroupLayout->addWidget( box );
+    audioRippingGroupLayout->addWidget( m_checkAudioRippingIgnoreReadErrors );
 
     advancedTabGrid->addWidget( advancedSettingsGroup, 0, 0 );
     advancedTabGrid->addWidget( advancedGimmickGroup, 1, 0 );

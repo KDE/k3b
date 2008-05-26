@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,10 +24,9 @@
 #include <k3urldrag.h>
 
 #include <q3dragobject.h>
-#include <q3ptrlist.h>
+#include <qlist.h>
 #include <qevent.h>
 #include <q3header.h>
-//Added by qt3to4:
 #include <QDropEvent>
 
 
@@ -242,7 +241,7 @@ void K3bMovixListView::slotFileItemRemoved( K3bMovixFileItem* item )
 {
     if( m_itemMap.contains( item ) ) {
         K3bMovixFileViewItem* vi = m_itemMap[item];
-        m_itemMap.erase(item);
+        m_itemMap.remove(item);
         delete vi;
     }
 }

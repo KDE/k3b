@@ -51,7 +51,7 @@ class K3bVerificationJob : public K3bJob
   K3bVerificationJob( K3bJobHandler*, QObject* parent = 0 );
   ~K3bVerificationJob();
 
- public slots:
+ public Q_SLOTS:
   void start();
   void cancel();
   void setDevice( K3bDevice::Device* dev );
@@ -73,7 +73,7 @@ class K3bVerificationJob : public K3bJob
    */
   void setGrownSessionSize( const K3b::Msf& );
 
- private slots:
+ private Q_SLOTS:
 //  void slotMediaReloaded( bool success );
   void slotDiskInfoReady( K3bDevice::DeviceHandler* dh );
   void readTrack( int trackIndex );

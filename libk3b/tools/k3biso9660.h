@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,13 +22,13 @@
 #include <qdatetime.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <q3dict.h>
+#include <qhash.h>
 
 #include "k3b_export.h"
 
 
 namespace K3bDevice {
-  class Device;
+    class Device;
 }
 
 class K3bIso9660;
@@ -47,29 +47,29 @@ typedef long sector_t;
  */
 class LIBK3B_EXPORT K3bIso9660SimplePrimaryDescriptor
 {
- public:
-  /**
-   * Creates an empty descriptor
-   */
-  K3bIso9660SimplePrimaryDescriptor();
+public:
+    /**
+     * Creates an empty descriptor
+     */
+    K3bIso9660SimplePrimaryDescriptor();
 
-  QString volumeId;
-  QString systemId;
-  QString volumeSetId;
-  QString publisherId;
-  QString preparerId;
-  QString applicationId;
-  int volumeSetSize;
-  int volumeSetNumber;
-  long logicalBlockSize;
-  long long volumeSpaceSize;
+    QString volumeId;
+    QString systemId;
+    QString volumeSetId;
+    QString publisherId;
+    QString preparerId;
+    QString applicationId;
+    int volumeSetSize;
+    int volumeSetNumber;
+    long logicalBlockSize;
+    long long volumeSpaceSize;
 };
 
 
 LIBK3B_EXPORT bool operator==( const K3bIso9660SimplePrimaryDescriptor& d1,
-			       const K3bIso9660SimplePrimaryDescriptor& d2 );
+                               const K3bIso9660SimplePrimaryDescriptor& d2 );
 LIBK3B_EXPORT bool operator!=( const K3bIso9660SimplePrimaryDescriptor& d1,
-			       const K3bIso9660SimplePrimaryDescriptor& d2 );
+                               const K3bIso9660SimplePrimaryDescriptor& d2 );
 
 
 /**
@@ -78,241 +78,241 @@ LIBK3B_EXPORT bool operator!=( const K3bIso9660SimplePrimaryDescriptor& d1,
  */
 class LIBK3B_EXPORT K3bIso9660Entry
 {
- public:
-  K3bIso9660Entry( K3bIso9660* archive,
-		   const QString& isoName,
-		   const QString& name,
-		   int access,
-		   int date,
-		   int adate,
-		   int cdate, 
-		   const QString& user,
-		   const QString& group,
-		   const QString& symlink );
-  virtual ~K3bIso9660Entry();
+public:
+    K3bIso9660Entry( K3bIso9660* archive,
+                     const QString& isoName,
+                     const QString& name,
+                     int access,
+                     int date,
+                     int adate,
+                     int cdate, 
+                     const QString& user,
+                     const QString& group,
+                     const QString& symlink );
+    virtual ~K3bIso9660Entry();
 
-  int adate() const { return m_adate; }
-  int cdate() const { return m_cdate; }
+    int adate() const { return m_adate; }
+    int cdate() const { return m_cdate; }
 
-  /**
-   * Creation date of the file.
-   * @return the creation date
-   */
-  QDateTime datetime() const;
+    /**
+     * Creation date of the file.
+     * @return the creation date
+     */
+    QDateTime datetime() const;
 
-  /**
-   * Creation date of the file.
-   * @return the creation date in seconds since 1970
-   */
-  int date() const { return m_date; }
+    /**
+     * Creation date of the file.
+     * @return the creation date in seconds since 1970
+     */
+    int date() const { return m_date; }
 
-  /**
-   * Name of the file without path.
-   * @return The file name without path.
-   */
-  const QString& name() const { return m_name; }
+    /**
+     * Name of the file without path.
+     * @return The file name without path.
+     */
+    const QString& name() const { return m_name; }
 
-  /**
-   * \return The raw name as saved in the ISO9660 tree
-   */
-  const QString& isoName() const { return m_isoName; }
+    /**
+     * \return The raw name as saved in the ISO9660 tree
+     */
+    const QString& isoName() const { return m_isoName; }
 
-  /**
-   * The permissions and mode flags as returned by the stat() function
-   * in st_mode.
-   * @return the permissions
-   */
-  mode_t permissions() const { return m_access; }
+    /**
+     * The permissions and mode flags as returned by the stat() function
+     * in st_mode.
+     * @return the permissions
+     */
+    mode_t permissions() const { return m_access; }
 
-  /**
-   * User who created the file.
-   * @return the owner of the file
-   */
-  const QString& user() const { return m_user; }
+    /**
+     * User who created the file.
+     * @return the owner of the file
+     */
+    const QString& user() const { return m_user; }
 
-  /**
-   * Group of the user who created the file.
-   * @return the group of the file
-   */
-  const QString& group() const { return m_group; }
+    /**
+     * Group of the user who created the file.
+     * @return the group of the file
+     */
+    const QString& group() const { return m_group; }
 
-  /**
-   * Symlink if there is one.
-   * @return the symlink, or QString::null
-   */
-  const QString& symlink() const { return m_symlink; }
+    /**
+     * Symlink if there is one.
+     * @return the symlink, or QString::null
+     */
+    const QString& symlink() const { return m_symlink; }
 
-  /**
-   * Checks whether the entry is a file.
-   * @return true if this entry is a file
-   */
-  virtual bool isFile() const { return false; }
+    /**
+     * Checks whether the entry is a file.
+     * @return true if this entry is a file
+     */
+    virtual bool isFile() const { return false; }
 
-  /**
-   * Checks whether the entry is a directory.
-   * @return true if this entry is a directory
-   */
-  virtual bool isDirectory() const { return false; }
+    /**
+     * Checks whether the entry is a directory.
+     * @return true if this entry is a directory
+     */
+    virtual bool isDirectory() const { return false; }
 
-  K3bIso9660* archive() const { return m_archive; }
+    K3bIso9660* archive() const { return m_archive; }
 
- private:
-  int m_adate;
-  int m_cdate;
-  QString m_name;
-  QString m_isoName;
-  int m_date;
-  mode_t m_access;
-  QString m_user;
-  QString m_group;
-  QString m_symlink;
-  K3bIso9660* m_archive;
+private:
+    int m_adate;
+    int m_cdate;
+    QString m_name;
+    QString m_isoName;
+    int m_date;
+    mode_t m_access;
+    QString m_user;
+    QString m_group;
+    QString m_symlink;
+    K3bIso9660* m_archive;
 };
 
 
 class LIBK3B_EXPORT K3bIso9660Directory : public K3bIso9660Entry
 {
- public: 
-  K3bIso9660Directory( K3bIso9660* archive, 
-		       const QString& isoName,
-		       const QString& name, 
-		       int access, 
-		       int date,
-		       int adate,
-		       int cdate, 
-		       const QString& user,
-		       const QString& group,
-		       const QString& symlink,
-		       unsigned int pos = 0, 
-		       unsigned int size = 0 );
-  ~K3bIso9660Directory();
+public: 
+    K3bIso9660Directory( K3bIso9660* archive, 
+                         const QString& isoName,
+                         const QString& name, 
+                         int access, 
+                         int date,
+                         int adate,
+                         int cdate, 
+                         const QString& user,
+                         const QString& group,
+                         const QString& symlink,
+                         unsigned int pos = 0, 
+                         unsigned int size = 0 );
+    ~K3bIso9660Directory();
 
-  /**
-   * Returns a list of sub-entries.
-   * @return the names of all entries in this directory (filenames, no path).
-   */
-  QStringList entries() const;
+    /**
+     * Returns a list of sub-entries.
+     * @return the names of all entries in this directory (filenames, no path).
+     */
+    QStringList entries() const;
 
-  /**
-   * Returns the entry with the given name.
-   * @param name may be "test1", "mydir/test3", "mydir/mysubdir/test3", etc.
-   * @return a pointer to the entry in the directory.
-   */
-  K3bIso9660Entry* entry( const QString& name );
+    /**
+     * Returns the entry with the given name.
+     * @param name may be "test1", "mydir/test3", "mydir/mysubdir/test3", etc.
+     * @return a pointer to the entry in the directory.
+     */
+    K3bIso9660Entry* entry( const QString& name );
 
-  /**
-   * Returns the entry with the given name.
-   * @param name may be "test1", "mydir/test3", "mydir/mysubdir/test3", etc.
-   * @return a pointer to the entry in the directory.
-   */
-  const K3bIso9660Entry* entry( const QString& name ) const;
+    /**
+     * Returns the entry with the given name.
+     * @param name may be "test1", "mydir/test3", "mydir/mysubdir/test3", etc.
+     * @return a pointer to the entry in the directory.
+     */
+    const K3bIso9660Entry* entry( const QString& name ) const;
 
-  /**
-   * Returns a list of sub-entries.
-   * Searches for Iso9660 names.
-   * @return the names of all entries in this directory (filenames, no path).
-   */
-  QStringList iso9660Entries() const;
+    /**
+     * Returns a list of sub-entries.
+     * Searches for Iso9660 names.
+     * @return the names of all entries in this directory (filenames, no path).
+     */
+    QStringList iso9660Entries() const;
 
-  /**
-   * Returns the entry with the given name.
-   * Searches for Iso9660 names.
-   * @param name may be "test1", "mydir/test3", "mydir/mysubdir/test3", etc.
-   * @return a pointer to the entry in the directory.
-   */
-  K3bIso9660Entry* iso9660Entry( const QString& name );
+    /**
+     * Returns the entry with the given name.
+     * Searches for Iso9660 names.
+     * @param name may be "test1", "mydir/test3", "mydir/mysubdir/test3", etc.
+     * @return a pointer to the entry in the directory.
+     */
+    K3bIso9660Entry* iso9660Entry( const QString& name );
 
-  /**
-   * Returns the entry with the given name.
-   * Searches for Iso9660 names.
-   * @param name may be "test1", "mydir/test3", "mydir/mysubdir/test3", etc.
-   * @return a pointer to the entry in the directory.
-   */
-  const K3bIso9660Entry* iso9660Entry( const QString& name ) const;
+    /**
+     * Returns the entry with the given name.
+     * Searches for Iso9660 names.
+     * @param name may be "test1", "mydir/test3", "mydir/mysubdir/test3", etc.
+     * @return a pointer to the entry in the directory.
+     */
+    const K3bIso9660Entry* iso9660Entry( const QString& name ) const;
 
-  /**
-   * @internal
-   * Adds a new entry to the directory.
-   */
-  void addEntry( K3bIso9660Entry* );
+    /**
+     * @internal
+     * Adds a new entry to the directory.
+     */
+    void addEntry( K3bIso9660Entry* );
 
-  /**
-   * Checks whether this entry is a directory.
-   * @return true, since this entry is a directory
-   */
-  bool isDirectory() const { return true; }
+    /**
+     * Checks whether this entry is a directory.
+     * @return true, since this entry is a directory
+     */
+    bool isDirectory() const { return true; }
 
- private:
-  void expand();
+private:
+    void expand();
 
-  Q3Dict<K3bIso9660Entry> m_entries;
-  Q3Dict<K3bIso9660Entry> m_iso9660Entries;
+    QHash<QString, K3bIso9660Entry*> m_entries;
+    QHash<QString, K3bIso9660Entry*> m_iso9660Entries;
 
-  bool m_bExpanded;
-  unsigned int m_startSector;
-  unsigned int m_size;
+    bool m_bExpanded;
+    unsigned int m_startSector;
+    unsigned int m_size;
 };
 
 
 class LIBK3B_EXPORT K3bIso9660File : public K3bIso9660Entry
 {
- public: 
-  /**
-   * @param pos start sector
-   */
-  K3bIso9660File( K3bIso9660* archive, 
-		  const QString& isoName,
-		  const QString& name, 
-		  int access, 
-		  int date,
-		  int adate,
-		  int cdate, 
-		  const QString& user, 
-		  const QString& group,
-		  const QString& symlink, 
-		  unsigned int pos, 
-		  unsigned int size );
-  ~K3bIso9660File();
+public: 
+    /**
+     * @param pos start sector
+     */
+    K3bIso9660File( K3bIso9660* archive, 
+                    const QString& isoName,
+                    const QString& name, 
+                    int access, 
+                    int date,
+                    int adate,
+                    int cdate, 
+                    const QString& user, 
+                    const QString& group,
+                    const QString& symlink, 
+                    unsigned int pos, 
+                    unsigned int size );
+    ~K3bIso9660File();
 
-  bool isFile() const { return true; }
+    bool isFile() const { return true; }
 
-  void setZF( char algo[2], char parms[2], int realsize );
-  int realsize() const { return m_realsize; }
+    void setZF( char algo[2], char parms[2], int realsize );
+    int realsize() const { return m_realsize; }
 
-  /**
-   * @return size in bytes.
-   */
-  unsigned int size() const { return m_size; }
+    /**
+     * @return size in bytes.
+     */
+    unsigned int size() const { return m_size; }
 
-  /**
-   * Returnes the startSector of the file.
-   */
-  unsigned int startSector() const { return m_startSector; }
+    /**
+     * Returnes the startSector of the file.
+     */
+    unsigned int startSector() const { return m_startSector; }
 
-  /**
-   * Returnes the startOffset of the file in bytes.
-   */
-  unsigned long long startPostion() const { return (unsigned long long)m_startSector * 2048; }
+    /**
+     * Returnes the startOffset of the file in bytes.
+     */
+    unsigned long long startPostion() const { return (unsigned long long)m_startSector * 2048; }
 
-  /**
-   * @param pos offset in bytes
-   * @param len max number of bytes to read
-   */
-  int read( unsigned int pos, char* data, int len ) const;
+    /**
+     * @param pos offset in bytes
+     * @param len max number of bytes to read
+     */
+    int read( unsigned int pos, char* data, int len ) const;
 
-  /**
-   * Copy this file to a url.
-   */
-  bool copyTo( const QString& url ) const;
+    /**
+     * Copy this file to a url.
+     */
+    bool copyTo( const QString& url ) const;
 
- private:
-  char m_algo[2];
-  char m_parms[2];
-  int m_realsize;
+private:
+    char m_algo[2];
+    char m_parms[2];
+    int m_realsize;
 
-  unsigned int m_curpos;
-  unsigned int m_startSector;
-  unsigned int m_size;
+    unsigned int m_curpos;
+    unsigned int m_startSector;
+    unsigned int m_size;
 };
 
 
@@ -333,120 +333,120 @@ class LIBK3B_EXPORT K3bIso9660File : public K3bIso9660Entry
  *
  * Opening a K3bIso9660 object should be fast since creation of the directory 
  * and file entries is not done until a call to K3bIso9660Directory::entries.
-*/
+ */
 class LIBK3B_EXPORT K3bIso9660
 {
- public:
-  /**
-   * Creates an instance that operates on the given filename.
-   * using the compression filter associated to given mimetype.
-   *
-   * @param filename is a local path (e.g. "/home/weis/myfile.tgz")
-   */
-  K3bIso9660( const QString& filename );
+public:
+    /**
+     * Creates an instance that operates on the given filename.
+     * using the compression filter associated to given mimetype.
+     *
+     * @param filename is a local path (e.g. "/home/weis/myfile.tgz")
+     */
+    K3bIso9660( const QString& filename );
 
-  /**
-   * Special case which always reads the TOC from the specified sector
-   * thus supporting multisession CDs.
-   */
-  K3bIso9660( K3bDevice::Device* dev, unsigned int startSector = 0 );
+    /**
+     * Special case which always reads the TOC from the specified sector
+     * thus supporting multisession CDs.
+     */
+    K3bIso9660( K3bDevice::Device* dev, unsigned int startSector = 0 );
 
-  /**
-   * @param fd open file descriptor
-   */
-  K3bIso9660( int fd );
+    /**
+     * @param fd open file descriptor
+     */
+    K3bIso9660( int fd );
 
-  /**
-   * Directly specify the backend to read from.
-   * K3bIso9660 will take ownership of the backend and delete it.
-   */
-  K3bIso9660( K3bIso9660Backend* );
+    /**
+     * Directly specify the backend to read from.
+     * K3bIso9660 will take ownership of the backend and delete it.
+     */
+    K3bIso9660( K3bIso9660Backend* );
 
-  /**
-   * If the .iso is still opened, then it will be
-   * closed automatically by the destructor.
-   */
-  virtual ~K3bIso9660();
+    /**
+     * If the .iso is still opened, then it will be
+     * closed automatically by the destructor.
+     */
+    virtual ~K3bIso9660();
 
-  /**
-   * Set where to start reading in the source.
-   */
-  void setStartSector( unsigned int startSector );
+    /**
+     * Set where to start reading in the source.
+     */
+    void setStartSector( unsigned int startSector );
 
-  /**
-   * If set to true before opening K3bIso9660 will ignore RR and joliet extensions
-   * and only create plain iso9660 names.
-   */
-  void setPlainIso9660( bool );
+    /**
+     * If set to true before opening K3bIso9660 will ignore RR and joliet extensions
+     * and only create plain iso9660 names.
+     */
+    void setPlainIso9660( bool );
 
-  bool plainIso9660() const;
+    bool plainIso9660() const;
 
-  /**
-   * Opens the archive for reading.
-   * Parses the directory listing of the archive
-   * and creates the K3bIso9660Directory/K3bIso9660File entries.
-   */
-  bool open();
+    /**
+     * Opens the archive for reading.
+     * Parses the directory listing of the archive
+     * and creates the K3bIso9660Directory/K3bIso9660File entries.
+     */
+    bool open();
 
-  bool isOpen() const;
+    bool isOpen() const;
 
-  /**
-   * Closes everything.
-   * This is also called in the destructor
-   */
-  void close();
+    /**
+     * Closes everything.
+     * This is also called in the destructor
+     */
+    void close();
 
-  /**
-   * @param sector startsector
-   * @param len number of sectors
-   * @return number of sectors read or -1 on error
-   */
-  int read( unsigned int sector, char* data, int len );
+    /**
+     * @param sector startsector
+     * @param len number of sectors
+     * @return number of sectors read or -1 on error
+     */
+    int read( unsigned int sector, char* data, int len );
 
-  /**
-   * The name of the os file, as passed to the constructor
-   * Null if you did not use the QString constructor.
-   */
-  const QString& fileName() { return m_filename; }
+    /**
+     * The name of the os file, as passed to the constructor
+     * Null if you did not use the QString constructor.
+     */
+    const QString& fileName() { return m_filename; }
 
-  const K3bIso9660Directory* firstJolietDirEntry() const;
-  const K3bIso9660Directory* firstRRDirEntry() const;
-  const K3bIso9660Directory* firstIsoDirEntry() const;
-  const K3bIso9660Directory* firstElToritoEntry() const;
+    const K3bIso9660Directory* firstJolietDirEntry() const;
+    const K3bIso9660Directory* firstRRDirEntry() const;
+    const K3bIso9660Directory* firstIsoDirEntry() const;
+    const K3bIso9660Directory* firstElToritoEntry() const;
 
-  /**
-   * @returns 0 if no joliet desc could be found
-   *          the joliet level (1-3) otherwise
-   */
-  int jolietLevel() const { return m_joliet; }
+    /**
+     * @returns 0 if no joliet desc could be found
+     *          the joliet level (1-3) otherwise
+     */
+    int jolietLevel() const { return m_joliet; }
 
-  const K3bIso9660SimplePrimaryDescriptor& primaryDescriptor() const;
+    const K3bIso9660SimplePrimaryDescriptor& primaryDescriptor() const;
 
-  void debug() const;
+    void debug() const;
 
- private:
-  /**
-   * @internal
-   */
-  void addBoot( struct el_torito_boot_descriptor* bootdesc );
-  void createSimplePrimaryDesc( struct iso_primary_descriptor* desc );
+private:
+    /**
+     * @internal
+     */
+    void addBoot( struct el_torito_boot_descriptor* bootdesc );
+    void createSimplePrimaryDesc( struct iso_primary_descriptor* desc );
 
-  void debugEntry( const K3bIso9660Entry*, int depth ) const;
+    void debugEntry( const K3bIso9660Entry*, int depth ) const;
 
-  int m_joliet;
+    int m_joliet;
 
-  // only used for creation
-  static int read_callback( char* buf, sector_t start, int len, void* udata );
-  static int isofs_callback( struct iso_directory_record* idr, void *udata );
-  K3bIso9660Directory *dirent;
-  bool m_rr;
-  friend class K3bIso9660Directory;
+    // only used for creation
+    static int read_callback( char* buf, sector_t start, int len, void* udata );
+    static int isofs_callback( struct iso_directory_record* idr, void *udata );
+    K3bIso9660Directory *dirent;
+    bool m_rr;
+    friend class K3bIso9660Directory;
   
- private:
-  QString m_filename;
+private:
+    QString m_filename;
 
-  class Private;
-  Private * d;
+    class Private;
+    Private * d;
 };
 
 #endif

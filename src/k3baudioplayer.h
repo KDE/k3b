@@ -130,14 +130,14 @@ Q_OBJECT
 
   int state();
 
- signals:
+  Q_SIGNALS:
   void started( const QString& filename );
   void started();
   void stopped();
   void paused();
   void ended();
 
- public slots:
+ public Q_SLOTS:
   void playFile( const QString& filename );
   void playFiles( const QStringList& files );
   void enqueueFile( const QString& filename );
@@ -157,7 +157,7 @@ Q_OBJECT
 /*   void dragEnterEvent( QDragEnterEvent* e ); */
 /*   void dropEvent( QDropEvent* e ); */
 
- private slots:
+ private Q_SLOTS:
   void slotCheckEnd();
   void slotUpdateDisplay();
   void slotUpdateCurrentTime( int time );

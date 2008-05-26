@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2004-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2004-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,8 +26,7 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QEvent>
 #include <QMouseEvent>
 #include <QContextMenuEvent>
@@ -47,19 +46,19 @@ K3bAudioTrackSplitDialog::K3bAudioTrackSplitDialog( K3bAudioTrack* track, QWidge
     m_msfEditStart = new K3bMsfEdit( frame );
     m_msfEditEnd = new K3bMsfEdit( frame );
 
-    Q3GridLayout* layout = new Q3GridLayout( frame );
+    QGridLayout* layout = new QGridLayout( frame );
     layout->setMargin( 0 );
     layout->setSpacing( spacingHint() );
 
     // FIXME: After the string freeze replace the text with a better one explaning how to use this dialog
-    layout->addMultiCellWidget( new QLabel( i18n("Please select the position where the track should be split."),
-                                            frame ), 0, 0, 0, 3 );
-    layout->addMultiCellWidget( m_editorWidget, 1, 1, 0, 3 );
+    layout->addWidget( new QLabel( i18n("Please select the position where the track should be split."),
+                                   frame ), 0, 0, 1, 4 );
+    layout->addWidget( m_editorWidget, 1, 0, 1, 4 );
     layout->addWidget( m_msfEditStart, 2, 1 );
     layout->addWidget( new QLabel( " - ", frame ), 2, 2 );
     layout->addWidget( m_msfEditEnd, 2, 3 );
     layout->addWidget( new QLabel( i18n("Split track at:"), frame ), 2, 0 );
-    layout->setColStretch( 0, 1 );
+    layout->setColumnStretch( 0, 1 );
 
     m_editorWidget->setAllowOverlappingRanges( false );
     m_editorWidget->enableRangeSelection( true );

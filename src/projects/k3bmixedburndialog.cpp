@@ -50,7 +50,7 @@
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
 //Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -136,7 +136,7 @@ void K3bMixedBurnDialog::setupSettingsPage()
 						     "<br>It could lead to problems with some older "
 						     "hifi audio CD players that try to play the data track.") );
 
-  Q3GridLayout* grid = new Q3GridLayout( w );
+  QGridLayout* grid = new QGridLayout( w );
   grid->setMargin( marginHint() );
   grid->setSpacing( spacingHint() );
   grid->addWidget( groupMixedType, 0, 0 );

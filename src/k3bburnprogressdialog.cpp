@@ -1,10 +1,9 @@
 /*
  *
- * $Id$
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +49,7 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, bool showSubProgr
     textLabel14_font.setBold( true );
     m_labelWriter->setFont( textLabel14_font );
 
-    m_frameExtraInfoLayout->addMultiCellWidget( m_labelWriter, 0, 0, 0, 3 );
+    m_frameExtraInfoLayout->addWidget( m_labelWriter, 0, 0, 0, 4 );
     m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Software buffer:"), m_frameExtraInfo ), 1, 2 );
     m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Device buffer:"), m_frameExtraInfo ), 2, 2 );
 
@@ -59,7 +58,7 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, bool showSubProgr
 
     m_progressDeviceBuffer = new QProgressBar( m_frameExtraInfo );
     m_frameExtraInfoLayout->addWidget( m_progressDeviceBuffer, 2, 3 );
-    m_frameExtraInfoLayout->addMultiCellWidget( K3bStdGuiItems::verticalLine( m_frameExtraInfo ), 1, 2, 1, 1 );
+    m_frameExtraInfoLayout->addWidget( K3bStdGuiItems::verticalLine( m_frameExtraInfo ), 1, 1, 2, 1 );
 }
 
 K3bBurnProgressDialog::~K3bBurnProgressDialog()

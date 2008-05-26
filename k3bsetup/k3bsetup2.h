@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,46 +25,42 @@ class Q3CheckListItem;
 class base_K3bSetup2 : public QWidget, public Ui::base_K3bSetup2
 {
 public:
-  base_K3bSetup2( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
+    base_K3bSetup2( QWidget *parent ) : QWidget( parent ) {
+        setupUi( this );
+    }
 };
 
 class K3bSetup2: public KCModule
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bSetup2( QWidget* parent = 0, const QVariantList& args = QVariantList() );
-  ~K3bSetup2();
+public:
+    K3bSetup2( QWidget* parent = 0, const QVariantList& args = QVariantList() );
+    ~K3bSetup2();
 
-  QString quickHelp() const;
-  const KAboutData* aboutData() { return m_aboutData; };
+    QString quickHelp() const;
 
-  void load();
-  void save();
-  void defaults();
+    void load();
+    void save();
+    void defaults();
 
- public slots:
-  void updateViews();
+public Q_SLOTS:
+    void updateViews();
 
- private slots:
-  void slotSearchPrograms();
-  void slotAddDevice();
+private Q_SLOTS:
+    void slotSearchPrograms();
 
- private:
-  void updatePrograms();
-  void updateDevices();
-  QString burningGroup() const;
-  void makeReadOnly();
-  Q3CheckListItem* createDeviceItem( const QString& deviceNode );
+private:
+    void updatePrograms();
+    void updateDevices();
+    QString burningGroup() const;
+    void makeReadOnly();
+    Q3CheckListItem* createDeviceItem( const QString& deviceNode );
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 
-  base_K3bSetup2* w;
-
-  KAboutData* m_aboutData;
+    base_K3bSetup2* w;
 };
 
 #endif

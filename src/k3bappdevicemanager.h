@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,9 +20,9 @@ class KAction;
 class K3bMediaCache;
 
 namespace K3bDevice {
-  class Device;
-  class DiskInfo;
-  class DiskInfoDetector;
+    class Device;
+    class DiskInfo;
+    class DiskInfoDetector;
 }
 
 #include <k3bdevicemanager.h>
@@ -34,81 +34,76 @@ namespace K3bDevice {
  */
 class K3bAppDeviceManager : public K3bDevice::DeviceManager
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bAppDeviceManager( QObject* parent = 0 );
-  ~K3bAppDeviceManager();
+public:
+    K3bAppDeviceManager( QObject* parent = 0 );
+    ~K3bAppDeviceManager();
 
-  K3bDevice::Device* currentDevice() const;
-  KActionCollection* actionCollection() const { return m_actionCollection; }
-  void setMediaCache( K3bMediaCache* c );
+    K3bDevice::Device* currentDevice() const;
+    KActionCollection* actionCollection() const { return m_actionCollection; }
+    void setMediaCache( K3bMediaCache* c );
 
- signals:
-  void currentDeviceChanged( K3bDevice::Device* );
+Q_SIGNALS:
+    void currentDeviceChanged( K3bDevice::Device* );
 
-  /**
-   * Emitted when starting to detect the diskinfo. This may be used to show some info
-   * to the user since deteting the diskinfo might take some time.
-   */
-  void detectingDiskInfo( K3bDevice::Device* );
-  void diskInfoReady( K3bDevice::DiskInfoDetector* );
+    /**
+     * Emitted when starting to detect the diskinfo. This may be used to show some info
+     * to the user since deteting the diskinfo might take some time.
+     */
+    void detectingDiskInfo( K3bDevice::Device* );
+    void diskInfoReady( K3bDevice::DiskInfoDetector* );
 
-  void mountFinished( const QString& mountPoint );
-  void unmountFinished( bool success );
+    void mountFinished( const QString& mountPoint );
+    void unmountFinished( bool success );
 
- public slots:
-  /**
-   * \reimplemeted for internal reasons. The API is unaffected.
-   */
-  void clear();
+public Q_SLOTS:
+    /**
+     * \reimplemeted for internal reasons. The API is unaffected.
+     */
+    void clear();
 
-  /**
-   * \reimplemeted for internal reasons. The API is unaffected.
-   */
-  void removeDevice( const QString& );
+    void setCurrentDevice( K3bDevice::Device* );
 
-  /**
-   * \reimplemeted for internal reasons. The API is unaffected.
-   */
-  int scanBus();
+    void diskInfo();
+    void unlockDevice();
+    void lockDevice();
+    void mountDisk();
+    void unmountDisk();
+    void ejectDisk();
+    void loadDisk();
+    void setReadSpeed();
 
-  void setCurrentDevice( K3bDevice::Device* );
+    void diskInfo( K3bDevice::Device* );
+    void unlockDevice( K3bDevice::Device* );
+    void lockDevice( K3bDevice::Device* );
+    void mountDisk( K3bDevice::Device* );
+    void unmountDisk( K3bDevice::Device* );
+    void ejectDisk( K3bDevice::Device* );
+    void loadDisk( K3bDevice::Device* );
+    void setReadSpeed( K3bDevice::Device* );
 
-  void diskInfo();
-  void unlockDevice();
-  void lockDevice();
-  void mountDisk();
-  void unmountDisk();
-  void ejectDisk();
-  void loadDisk();
-  void setReadSpeed();
+private Q_SLOTS:
+    void slotMediumChanged( K3bDevice::Device* dev );
 
-  void diskInfo( K3bDevice::Device* );
-  void unlockDevice( K3bDevice::Device* );
-  void lockDevice( K3bDevice::Device* );
-  void mountDisk( K3bDevice::Device* );
-  void unmountDisk( K3bDevice::Device* );
-  void ejectDisk( K3bDevice::Device* );
-  void loadDisk( K3bDevice::Device* );
-  void setReadSpeed( K3bDevice::Device* );
+private:
+    /**
+     * \reimplemeted for internal reasons. The API is unaffected.
+     */
+    void removeDevice( const Solid::Device& );
 
- private slots:
-  void slotMediumChanged( K3bDevice::Device* dev );
+    KAction* m_actionDiskInfo;
+    KAction* m_actionUnmount;
+    KAction* m_actionMount;
+    KAction* m_actionEject;
+    KAction* m_actionLoad;
+    KAction* m_actionSetReadSpeed;
 
- private:
-  KAction* m_actionDiskInfo;
-  KAction* m_actionUnmount;
-  KAction* m_actionMount;
-  KAction* m_actionEject;
-  KAction* m_actionLoad;
-  KAction* m_actionSetReadSpeed;
+    mutable K3bDevice::Device* m_currentDevice;
+    KActionCollection* m_actionCollection;
+    K3bDevice::DiskInfoDetector* m_diskInfoDetector;
 
-  mutable K3bDevice::Device* m_currentDevice;
-  KActionCollection* m_actionCollection;
-  K3bDevice::DiskInfoDetector* m_diskInfoDetector;
-
-  bool m_ejectRequested;
+    bool m_ejectRequested;
 };
 
 #endif

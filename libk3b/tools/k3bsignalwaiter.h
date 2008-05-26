@@ -37,7 +37,7 @@ class K3bSignalWaiter : public QObject
    */
   LIBK3B_EXPORT static void waitForJob( K3bJob* job );
 
- private slots:
+ private Q_SLOTS:
   void slotSignal();
 
  private:

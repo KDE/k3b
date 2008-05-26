@@ -111,12 +111,12 @@ K3bMultiChoiceDialog::K3bMultiChoiceDialog( const QString& caption,
     d->buttonLayout->setSpacing( KDialog::spacingHint() );
     d->buttonLayout->setMargin( 0 );
 
-    mainGrid->addMultiCellLayout( contents, 0, 0, 0, 2 );
-    mainGrid->addMultiCellWidget( K3bStdGuiItems::horizontalLine( this ), 1, 1, 0, 2 );
+    mainGrid->addLayout( contents, 0, 0, 1, 3 );
+    mainGrid->addWidget( K3bStdGuiItems::horizontalLine( this ), 1, 0, 1, 3 );
     mainGrid->addLayout( d->buttonLayout, 2, 1 );
 
-    mainGrid->setColStretch( 0, 1 );
-    mainGrid->setColStretch( 2, 1 );
+    mainGrid->setColumnStretch( 0, 1 );
+    mainGrid->setColumnStretch( 2, 1 );
     mainGrid->setRowStretch( 0, 1 );
 }
 

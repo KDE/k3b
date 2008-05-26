@@ -40,7 +40,7 @@ public:
 
     K3bAudioTrackPlayer* player() const { return m_songlist->player(); }
 
-public slots:
+public Q_SLOTS:
     void addUrls( const KUrl::List& );
 
 protected:
@@ -48,7 +48,7 @@ protected:
 
     void init();
 
-    private slots:
+    private Q_SLOTS:
     void slotAudioConversion();
 
 private:

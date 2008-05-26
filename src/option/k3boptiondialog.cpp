@@ -29,12 +29,10 @@
 
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
 #include <qtabwidget.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QFrame>
 
 #include <klocale.h>
@@ -108,7 +106,7 @@ bool K3bOptionDialog::saveSettings()
     m_advancedOptionTab->saveSettings();
     m_externalBinOptionTab->saveSettings();
     m_notifyOptionTab->saveSettings();
-
+    m_cddbOptionTab->apply();
     m_themeOptionTab->saveSettings();
 
     if( !m_miscOptionTab->saveSettings() )

@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,8 +66,8 @@ private:
     KPluginInfo m_pluginInfo;
 };
 
-#define K3B_EXPORT_PLUGIN( libname, classname )     \
-K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
-K_EXPORT_PLUGIN(factory(#libname))
+#define K3B_EXPORT_PLUGIN( libname, classname )             \
+    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
+        K_EXPORT_PLUGIN(factory(#libname))
 
 #endif

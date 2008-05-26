@@ -22,6 +22,7 @@
 #include <q3ptrlist.h>
 
 #include <kdebug.h>
+#include <KLocale>
 
 
 K3bDirItem::K3bDirItem(const QString& name, K3bDataDoc* doc, K3bDirItem* parentDir)
@@ -125,6 +126,10 @@ K3bDirItem* K3bDirItem::addDataItem( K3bDataItem* item )
             item->setK3bName( name );
         }
 
+        // inform the doc
+        if( doc() )
+            doc()->aboutToAddItemToDir( this, item );
+
         m_children.append( item->take() );
         updateSize( item, false );
         if( item->isDir() )
@@ -147,6 +152,9 @@ K3bDataItem* K3bDirItem::takeDataItem( K3bDataItem* item )
 {
     int x = m_children.lastIndexOf( item );
     if( x > -1 ) {
+        if ( doc() )
+            doc()->aboutToRemoveItemFromDir( this, item );
+
         K3bDataItem* item = m_children.takeAt(x);
         updateSize( item, true );
         if( item->isDir() )
@@ -386,6 +394,12 @@ bool K3bDirItem::writeToCd() const
 }
 
 
+KMimeType::Ptr K3bDirItem::mimeType() const
+{
+    return KMimeType::mimeType( "inode/directory" );
+}
+
+
 K3bRootItem::K3bRootItem( K3bDataDoc* doc )
     : K3bDirItem( "root", doc, 0 )
 {
@@ -397,7 +411,7 @@ K3bRootItem::~K3bRootItem()
 }
 
 
-const QString& K3bRootItem::k3bName() const
+QString K3bRootItem::k3bName() const
 {
     return doc()->isoOptions().volumeID();
 }

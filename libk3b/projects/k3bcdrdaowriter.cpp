@@ -28,7 +28,6 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
-#include <q3valuelist.h>
 #include <qregexp.h>
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -223,9 +222,7 @@ void K3bCdrdaoWriter::prepareArgumentList()
         if ( m_sourceDevice )
             *m_process << "--device"
                        << K3b::externalBinDeviceParameter(m_sourceDevice, m_cdrdaoBinObject);
-        if ( m_sourceDevice->cdrdaoDriver() != "auto" )
-            *m_process << "--driver" << m_sourceDevice->cdrdaoDriver();
-        else if( defaultToGenericMMC( m_sourceDevice, false ) ) {
+        if( defaultToGenericMMC( m_sourceDevice, false ) ) {
             kDebug() << "(K3bCdrdaoWriter) defaulting to generic-mmc driver for " << m_sourceDevice->blockDeviceName();
             *m_process << "--driver" << "generic-mmc";
         }
@@ -246,15 +243,7 @@ void K3bCdrdaoWriter::setWriteArguments()
     *m_process << "--device"
                << K3b::externalBinDeviceParameter(burnDevice(), m_cdrdaoBinObject);
 
-    if( burnDevice()->cdrdaoDriver() != "auto" )
-    {
-        *m_process << "--driver";
-        if( burnDevice()->cdTextCapable() == 1 )
-            *m_process << QString("%1:0x00000010").arg( burnDevice()->cdrdaoDriver() );
-        else
-            *m_process << burnDevice()->cdrdaoDriver();
-    }
-    else if( defaultToGenericMMC( burnDevice(), true ) ) {
+    if( defaultToGenericMMC( burnDevice(), true ) ) {
         kDebug() << "(K3bCdrdaoWriter) defaulting to generic-mmc driver for " << burnDevice()->blockDeviceName();
         *m_process << "--driver" << "generic-mmc:0x00000010";
     }
@@ -361,9 +350,7 @@ void K3bCdrdaoWriter::setCopyArguments()
 {
     // source device and source driver
     *m_process << "--source-device" << K3b::externalBinDeviceParameter(m_sourceDevice, m_cdrdaoBinObject);
-    if ( m_sourceDevice->cdrdaoDriver() != "auto" )
-        *m_process << "--source-driver" << m_sourceDevice->cdrdaoDriver();
-    else if( defaultToGenericMMC( m_sourceDevice, false ) ) {
+    if( defaultToGenericMMC( m_sourceDevice, false ) ) {
         kDebug() << "(K3bCdrdaoWriter) defaulting to generic-mmc driver for " << m_sourceDevice->blockDeviceName();
         *m_process << "--source-driver" << "generic-mmc";
     }
@@ -379,15 +366,7 @@ void K3bCdrdaoWriter::setBlankArguments()
     *m_process << "--device"
                << K3b::externalBinDeviceParameter(burnDevice(), m_cdrdaoBinObject);
 
-    if( burnDevice()->cdrdaoDriver() != "auto" )
-    {
-        *m_process << "--driver";
-        if( burnDevice()->cdTextCapable() == 1 )
-            *m_process << QString("%1:0x00000010").arg( burnDevice()->cdrdaoDriver() );
-        else
-            *m_process << burnDevice()->cdrdaoDriver();
-    }
-    else if( defaultToGenericMMC( burnDevice(), true ) ) {
+    if( defaultToGenericMMC( burnDevice(), true ) ) {
         kDebug() << "(K3bCdrdaoWriter) defaulting to generic-mmc driver for " << burnDevice()->blockDeviceName();
         *m_process << "--driver" << "generic-mmc";
     }

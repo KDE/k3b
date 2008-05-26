@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,10 +51,10 @@ public:
 
     int pluginSystemVersion() const;
 
-public slots:
+public Q_SLOTS:
     void loadAll();
 
-    int execPluginDialog( K3bPlugin*, QWidget* parent = 0, const char* name = 0 );
+    int execPluginDialog( K3bPlugin*, QWidget* parent = 0 );
 
 private:
     class Private;

@@ -56,7 +56,7 @@ public:
      */
     QString plainTempPath() const;
 
-public slots:
+public Q_SLOTS:
     void setTempPath( const QString& );
     void setSelectionMode( int mode );
     void setNeededSize( KIO::filesize_t bytes );
@@ -76,7 +76,7 @@ public slots:
     void readConfig( const KConfigGroup& );
     void saveConfig( KConfigGroup& );
 
-private slots:
+private Q_SLOTS:
     void slotUpdateFreeTempSpace();
     void slotTempDirButtonPressed( KUrlRequester* );
     void slotFixTempPath();

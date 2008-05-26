@@ -54,10 +54,10 @@ class K3bVideoDVDRippingWidget : public base_K3bVideoDVDRippingWidget
 
   void setNeededSize( KIO::filesize_t );
 
- signals:
+  Q_SIGNALS:
   void changed();
 
- private slots:
+ private Q_SLOTS:
   void slotUpdateFreeTempSpace();
   void slotSeeSpecialStrings();
   void slotAudioCodecChanged( int codec );

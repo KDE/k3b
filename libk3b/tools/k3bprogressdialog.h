@@ -42,12 +42,12 @@ class LIBK3B_EXPORT  K3bProgressDialog : public KDialog
 
   int exec( bool showProgress );
 
- public slots:
+ public Q_SLOTS:
   void setText( const QString& );
   void slotFinished( bool success );
   void setProgress( int p );
 
- private slots:
+ private Q_SLOTS:
   void slotCancel();
 
  private:

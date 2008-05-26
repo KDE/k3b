@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2006-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,15 +86,15 @@ K3bVideoDVDRippingWidget::K3bVideoDVDRippingWidget( QWidget* parent )
     //
     // Example filename pattern
     //
-    m_comboFilenamePattern->insertItem( QString( "%b - %1 %t (%n %a %c)").arg(i18n("Title") ) );
-    m_comboFilenamePattern->insertItem( QString( "%{volumeid} (%{title})" ) );
+    m_comboFilenamePattern->addItem( QString( "%b - %1 %t (%n %a %c)").arg(i18n("Title") ) );
+    m_comboFilenamePattern->addItem( QString( "%{volumeid} (%{title})" ) );
 
 
     //
     // Add the Audio bitrates
     //
     for( int i = 0; s_mp3Bitrates[i]; ++i )
-        m_comboAudioBitrate->insertItem( i18n("%1 kbps" ,s_mp3Bitrates[i]) );
+        m_comboAudioBitrate->addItem( i18n("%1 kbps" ,s_mp3Bitrates[i]) );
 
 
     for( int i = 0; i < K3bVideoDVDTitleTranscodingJob::VIDEO_CODEC_NUM_ENTRIES; ++i ) {
@@ -113,7 +113,7 @@ K3bVideoDVDRippingWidget::K3bVideoDVDRippingWidget( QWidget* parent )
     }
 
     for( int i = 0; i < PICTURE_SIZE_MAX; ++i ) {
-        m_comboVideoSize->insertItem( i18n( s_pictureSizeNames[i] ) );
+        m_comboVideoSize->addItem( i18n( s_pictureSizeNames[i] ) );
     }
 
     slotAudioCodecChanged( m_comboAudioCodec->selectedValue() );
@@ -185,10 +185,11 @@ void K3bVideoDVDRippingWidget::setSelectedPictureSize( const QSize& size )
     else if( size == QSize(320,0) )
         m_comboVideoSize->setCurrentIndex( PICTURE_SIZE_320 );
     else {
-        m_comboVideoSize->setItemText( PICTURE_SIZE_CUSTOM,i18n(s_pictureSizeNames[PICTURE_SIZE_CUSTOM])
-                                      + QString(" (%1x%2)")
-                                      .arg(size.width() == 0 ? i18n("auto") : QString::number(size.width()))
-                                      .arg(size.height() == 0 ? i18n("auto") : QString::number(size.height())));
+        m_comboVideoSize->setItemText( PICTURE_SIZE_CUSTOM,
+                                       i18n(s_pictureSizeNames[PICTURE_SIZE_CUSTOM])
+                                       + QString(" (%1x%2)")
+                                       .arg(size.width() == 0 ? i18n("auto") : QString::number(size.width()))
+                                       .arg(size.height() == 0 ? i18n("auto") : QString::number(size.height())));
         m_comboVideoSize->setCurrentIndex( PICTURE_SIZE_CUSTOM );
     }
 }
@@ -250,18 +251,20 @@ void K3bVideoDVDRippingWidget::slotUpdateFreeTempSpace()
     if( !QFile::exists( path ) )
         path.truncate( path.lastIndexOf('/') );
 
+    QPalette pal( m_labelFreeSpace->palette() );
     unsigned long size, avail;
     if( K3b::kbFreeOnFs( path, size, avail ) ) {
         m_labelFreeSpace->setText( KIO::convertSizeFromKiB(avail) );
         if( avail < m_neededSize/1024 )
-            m_labelNeededSpace->setPaletteForegroundColor( Qt::red );
+            pal.setColor( QPalette::Text, Qt::red );
         else
-            m_labelNeededSpace->setPaletteForegroundColor( paletteForegroundColor() );
+            pal.setColor( QPalette::Text, palette().color( QPalette::Text ) );
     }
     else {
         m_labelFreeSpace->setText("-");
-        m_labelNeededSpace->setPaletteForegroundColor( paletteForegroundColor() );
+        pal.setColor( QPalette::Text, palette().color( QPalette::Text ) );
     }
+    m_labelFreeSpace->setPalette( pal );
 }
 
 
@@ -361,7 +364,7 @@ void K3bVideoDVDRippingWidget::slotCustomPictureSize()
     QGridLayout* grid = new QGridLayout( dlg.mainWidget() );
     grid->setMargin( 0 );
     grid->setSpacing( KDialog::spacingHint() );
-    grid->addMultiCellWidget( label, 0, 0, 0, 3 );
+    grid->addWidget( label, 0, 0, 1, 4 );
     grid->addWidget( labelW, 1, 0 );
     grid->addWidget( spinWidth, 1, 1 );
     grid->addWidget( labelH, 1, 2 );

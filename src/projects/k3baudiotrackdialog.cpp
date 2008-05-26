@@ -15,13 +15,10 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <q3groupbox.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 
-#include <q3whatsthis.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -95,7 +92,7 @@ void K3bAudioTrackDialog::setupGui()
     setMainWidget( frame );
 
 
-    Q3GridLayout* mainLayout = new Q3GridLayout( frame );
+    QGridLayout* mainLayout = new QGridLayout( frame );
     mainLayout->setSpacing( spacingHint() );
     mainLayout->setMargin( 0 );
 

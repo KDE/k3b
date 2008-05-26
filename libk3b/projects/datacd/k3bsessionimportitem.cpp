@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,41 +18,39 @@
 
 #include <k3biso9660.h>
 
+#include <KLocale>
+
 
 K3bSessionImportItem::K3bSessionImportItem( const K3bIso9660File* isoF, K3bDataDoc* doc, K3bDirItem* dir )
-  : K3bDataItem( doc, dir ),
-    m_replaceItem(0),
-    m_size( isoF->size() )
+    : K3bSpecialDataItem( doc, isoF->size(), dir, isoF->name() ),
+      m_replaceItem(0)
 
 {
-  setK3bName( isoF->name() );
-
-  // add automagically like a qlistviewitem
-  if( parent() )
-    parent()->addDataItem( this );
+    // add automagically like a qlistviewitem
+    if( parent() )
+        parent()->addDataItem( this );
 }
 
 
 K3bSessionImportItem::K3bSessionImportItem( const K3bSessionImportItem& item )
-  : K3bDataItem( item ),
-    m_replaceItem( item.m_replaceItem ),
-    m_size( item.m_size )
+    : K3bSpecialDataItem( item ),
+      m_replaceItem( item.m_replaceItem )
 {
 }
 
 
 K3bSessionImportItem::~K3bSessionImportItem()
 {
-  if( m_replaceItem )
-    m_replaceItem->setReplacedItemFromOldSession(0);
+    if( m_replaceItem )
+        m_replaceItem->setReplacedItemFromOldSession(0);
 
-  // remove this from parentdir
-  if( parent() )
-    parent()->takeDataItem( this );
+    // remove this from parentdir
+    if( parent() )
+        parent()->takeDataItem( this );
 }
 
 
 K3bDataItem* K3bSessionImportItem::copy() const
 {
-  return new K3bSessionImportItem( *this );
+    return new K3bSessionImportItem( *this );
 }

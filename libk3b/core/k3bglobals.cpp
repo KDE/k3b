@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,11 @@
 #include <kio/netaccess.h>
 #include <kurl.h>
 #include <k3process.h>
+
+#include <kmountpoint.h>
+#include <Solid/Device>
+#include <Solid/StorageAccess>
+#include <Solid/OpticalDrive>
 
 #include <qdatastream.h>
 #include <qdir.h>
@@ -374,20 +379,8 @@ bool K3b::hackedAtapiSupport()
 
 QString K3b::externalBinDeviceParameter( K3bDevice::Device* dev, const K3bExternalBin* bin )
 {
-#ifdef Q_OS_LINUX
-    //
-    // experimental: always use block devices on 2.6 kernels
-    //
-    if( simpleKernelVersion() >= K3bVersion( 2, 6, 0 ) )
-        return dev->blockDeviceName();
-    else
-#endif
-        if( dev->interfaceType() == K3bDevice::SCSI )
-            return dev->busTargetLun();
-        else if( (plainAtapiSupport() && bin->hasFeature("plain-atapi") ) )
-            return dev->blockDeviceName();
-        else
-            return QString("ATAPI:%1").arg(dev->blockDeviceName());
+    Q_UNUSED( bin );
+    return dev->blockDeviceName();
 }
 
 
@@ -550,11 +543,8 @@ bool K3b::isMounted( K3bDevice::Device* dev )
 {
     if( !dev )
         return false;
-#ifdef __GNUC__
-#warning FIXME: we need a replacement for KIO::findDeviceMountPoint
-#endif
-//    return !KIO::findDeviceMountPoint( dev->blockDeviceName() ).isEmpty();
-    return false;
+    else
+        return( KMountPoint::currentMountPoints().findByDevice( dev->blockDeviceName() ).data() != 0 );
 }
 
 
@@ -569,14 +559,14 @@ bool K3b::unmount( K3bDevice::Device* dev )
     if( KIO::NetAccess::synchronousRun( KIO::unmount( mntDev, false ), 0 ) )
         return true;
 
-#ifdef __GNUC__
-#warning FIXME: we need a replacement for KIO::findDeviceMountPoint
-#endif
-//     QString mntPath = KIO::findDeviceMountPoint( dev->blockDeviceName() );
-//     if ( mntPath.isEmpty() ) {
-//         mntPath = dev->blockDeviceName();
-//     }
-    QString mntPath = dev->blockDeviceName();
+    QString mntPath = KMountPoint::currentMountPoints().findByDevice( dev->blockDeviceName() )->mountPoint();
+    if ( mntPath.isEmpty() ) {
+        mntPath = dev->blockDeviceName();
+    }
+
+    if ( dev->solidDevice().as<Solid::StorageAccess>()->teardown() ) {
+        return true;
+    }
 
     QString umountBin = K3b::findExe( "umount" );
     if( !umountBin.isEmpty() ) {
@@ -600,9 +590,6 @@ bool K3b::unmount( K3bDevice::Device* dev )
         return !p.exitStatus();
     }
     else {
-#ifdef __GNUC__
-#warning Use SOlid to unmount?
-#endif
         return false;
     }
 }
@@ -619,9 +606,9 @@ bool K3b::mount( K3bDevice::Device* dev )
     if( KIO::NetAccess::synchronousRun( KIO::mount( true, 0, mntDev, false ), 0 ) )
         return true;
 
-#ifdef __GNUC__
-#warning Use SOlid to mount?
-#endif
+    if ( dev->solidDevice().as<Solid::StorageAccess>()->setup() ) {
+        return true;
+    }
 
     // now try pmount
     QString pmountBin = K3b::findExe( "pmount" );
@@ -649,11 +636,13 @@ bool K3b::mount( K3bDevice::Device* dev )
 
 bool K3b::eject( K3bDevice::Device* dev )
 {
-#ifdef __GNUC__
-#warning Use Solid to eject?
-#endif
     if( K3b::isMounted( dev ) )
         K3b::unmount( dev );
 
-    return dev->eject();
+    if ( dev->solidDevice().as<Solid::OpticalDrive>()->eject() ) {
+        return true;
+    }
+    else {
+        return dev->eject();
+    }
 }

@@ -36,17 +36,14 @@ K3bVideoDvdView::K3bVideoDvdView( K3bVideoDvdDoc* doc, QWidget *parent )
     // --- setup GUI ---------------------------------------------------
     QSplitter* mainSplitter = new QSplitter( this );
     m_dataDirTree = new K3bDataDirTreeView( this, doc, mainSplitter );
-    m_dataFileView = new K3bDataFileView( this, m_dataDirTree, doc, mainSplitter );
-    m_dataDirTree->setFileView( m_dataFileView );
+    m_dataFileView = new K3bDataFileView( this, doc, mainSplitter );
     setMainWidget( mainSplitter );
 
     connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)), m_dataDirTree, SLOT(setCurrentDir(K3bDirItem*)) );
 
-    m_dataDirTree->checkForNewItems();
-    m_dataFileView->checkForNewItems();
-
     addPluginButtons( K3bProjectPlugin::VIDEO_DVD );
 }
+#warning get the currentDir connections from K3bDataView or maybe inherit from it
 
 
 K3bVideoDvdView::~K3bVideoDvdView()

@@ -25,7 +25,6 @@
 class K3bListView;
 class K3bCddbPatternWidget;
 class K3bAudioConvertingOptionWidget;
-class K3bCddbResultEntry;
 class K3bAudioDoc;
 
 
@@ -61,8 +60,6 @@ private:
     K3bAudioDoc* m_doc;
 
     void setupGui();
-
-    static K3bCddbResultEntry createCddbEntryFromDoc( K3bAudioDoc* );
 
     class Private;
     Private* d;

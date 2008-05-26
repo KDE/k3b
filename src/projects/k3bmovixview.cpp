@@ -36,7 +36,7 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <KToolBar>
 
 K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent )

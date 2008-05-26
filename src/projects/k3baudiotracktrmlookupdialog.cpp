@@ -38,7 +38,7 @@
 #include <qpushbutton.h>
 #include <qapplication.h>
 //Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 
 K3bAudioTrackTRMLookupDialog::K3bAudioTrackTRMLookupDialog( QWidget* parent )
@@ -50,7 +50,7 @@ K3bAudioTrackTRMLookupDialog::K3bAudioTrackTRMLookupDialog( QWidget* parent )
     setButtons(KDialog::Cancel);
     setDefaultButton(KDialog::Cancel);
     setModal(true);
-    Q3GridLayout* grid = new Q3GridLayout( widget );
+    QGridLayout* grid = new QGridLayout( widget );
     grid->setMargin( marginHint() );
     grid->setSpacing( spacingHint() );
 
@@ -61,7 +61,7 @@ K3bAudioTrackTRMLookupDialog::K3bAudioTrackTRMLookupDialog( QWidget* parent )
 
     m_busyWidget = new K3bBusyWidget( widget );
 
-    grid->addMultiCellWidget( pixLabel, 0, 1, 0, 0 );
+    grid->addWidget( pixLabel, 0, 0, 2, 1 );
     grid->addWidget( m_infoLabel, 0, 1 );
     grid->addWidget( m_busyWidget, 1, 1 );
 

@@ -33,7 +33,7 @@
 #include <qtimer.h>
 //Added by qt3to4:
 #include <QLabel>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QShowEvent>
 
 #include <k3dockwidget.h>
@@ -121,7 +121,6 @@
 #include "projects/k3bdatamultisessionimportdialog.h"
 #include "k3bpassivepopup.h"
 #include "k3bthemedheader.h"
-#include <k3baudioserver.h>
 #include <kglobal.h>
 #include <KShortcutsDialog>
 
@@ -178,7 +177,6 @@ K3bMainWindow::K3bMainWindow()
 
     connect( k3bappcore->projectManager(), SIGNAL(newProject(K3bDoc*)), this, SLOT(createClient(K3bDoc*)) );
     connect( k3bcore->deviceManager(), SIGNAL(changed()), this, SLOT(slotCheckSystemTimed()) );
-    //connect( K3bAudioServer::instance(), SIGNAL(error(const QString&)), this, SLOT(slotAudioServerError(const QString&)) );
 
     // FIXME: now make sure the welcome screen is displayed completely
     resize( 780, 550 );
@@ -536,7 +534,7 @@ void K3bMainWindow::createClient( K3bDoc* doc )
     view->setWindowTitle( doc->URL().fileName() );
 
     m_documentTab->insertTab( doc );
-    m_documentTab->showPage(  view );
+    m_documentTab->setCurrentWidget( view );
 
     slotCurrentDocChanged();
 }
@@ -544,7 +542,7 @@ void K3bMainWindow::createClient( K3bDoc* doc )
 
 K3bView* K3bMainWindow::activeView() const
 {
-    QWidget* w = m_documentTab->currentPage();
+    QWidget* w = m_documentTab->currentWidget();
     if( K3bView* view = dynamic_cast<K3bView*>(w) )
         return view;
     else
@@ -1097,14 +1095,13 @@ void K3bMainWindow::slotSettingsConfigure()
 void K3bMainWindow::showOptionDialog( int index )
 {
     K3bOptionDialog d( this);
-    //FIXME kde4
-    //d.showPage( index );
+//    d.setCurrentPage( index );
 
     d.exec();
 
     // emit a changed signal every time since we do not know if the user selected
     // "apply" and "cancel" or "ok"
-    //port kde4
+#warning port kde4
     //emit configChanged( m_config );
 }
 
@@ -1259,14 +1256,14 @@ void K3bMainWindow::slotWarningMessage(const QString& message)
 void K3bMainWindow::slotWriteCdImage()
 {
     K3bCdImageWritingDialog d( this );
-    d.exec(false);
+    d.exec();
 }
 
 
 void K3bMainWindow::slotWriteDvdIsoImage()
 {
     K3bIsoImageWritingDialog d( this );
-    d.exec(false);
+    d.exec();
 }
 
 
@@ -1274,7 +1271,7 @@ void K3bMainWindow::slotWriteDvdIsoImage( const KUrl& url )
 {
     K3bIsoImageWritingDialog d( this );
     d.setImage( url );
-    d.exec(false);
+    d.exec();
 }
 
 
@@ -1282,7 +1279,7 @@ void K3bMainWindow::slotWriteCdImage( const KUrl& url )
 {
     K3bCdImageWritingDialog d( this );
     d.setImage( url );
-    d.exec(false);
+    d.exec();
 }
 
 
@@ -1326,7 +1323,7 @@ void K3bMainWindow::formatMedium( K3bDevice::Device* dev )
 {
     K3bMediaFormattingDialog d( this );
     d.setDevice( dev );
-    d.exec(false);
+    d.exec();
 }
 
 
@@ -1340,7 +1337,7 @@ void K3bMainWindow::mediaCopy( K3bDevice::Device* dev )
 {
     K3bMediaCopyDialog d( this );
     d.setReadingDevice( dev );
-    d.exec(false);
+    d.exec();
 }
 
 
@@ -1587,9 +1584,9 @@ void K3bMainWindow::slotVideoCdRip()
 }
 
 
-void K3bMainWindow::slotAudioServerError( const QString& error )
+void K3bMainWindow::showDiskInfo( K3bDevice::Device* dev )
 {
-    K3bPassivePopup::showPopup( error, i18n("Audio Output Problem") );
+    m_dirView->showDiskInfo( dev );
 }
 
 #include "k3b.moc"

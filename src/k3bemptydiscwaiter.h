@@ -98,7 +98,7 @@ public:
                      const QString& message = QString::null,
                      QWidget* parent = 0 );
 
-protected slots:
+protected Q_SLOTS:
     void slotCancel();
     void slotUser1();
     void slotUser2();
@@ -124,7 +124,7 @@ protected:
      */
     void closeEvent( QCloseEvent* ) {}
 
-signals:
+ Q_SIGNALS:
     void leaveModality();
 
 private:

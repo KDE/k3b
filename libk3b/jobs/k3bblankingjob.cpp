@@ -133,9 +133,9 @@ void K3bBlankingJob::slotStartErasing()
 		    K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE,
 		    K3bDevice::MEDIA_CD_RW,
 		    i18n("Please insert a rewritable CD medium into drive<p><b>%1 %2 (%3)</b>.",
-		    m_device->vendor()
-		    ,m_device->description()
-		    ,m_device->devicename()) ) < 0 ) {
+		    m_device->vendor(),
+		    m_device->description(),
+		    m_device->blockDeviceName()) ) < 0 ) {
     emit canceled();
     jobFinished(false);
     return;

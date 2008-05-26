@@ -20,7 +20,7 @@
 #include <q3valuevector.h>
 #include <qpair.h>
 
-#include <k3bcddbquery.h>
+#include <libkcddb/cdinfo.h>
 
 
 class K3bAudioEncoder;
@@ -51,7 +51,7 @@ public:
 
     void setDevice( K3bDevice::Device* dev ) { m_device = dev; }
 
-    void setCddbEntry( const K3bCddbResultEntry& e ) { m_cddbEntry = e; }
+    void setCddbEntry( const KCDDB::CDInfo& e ) { m_cddbEntry = e; }
 
     // if 0 (default) wave files are created
     void setEncoder( K3bAudioEncoder* f );
@@ -64,7 +64,7 @@ public:
     /**
      * 1 is the first track
      */
-    void setTracksToRip( const Q3ValueVector<QPair<int, QString> >& t ) { m_tracks = t; }
+    void setTracksToRip( const QVector<QPair<int, QString> >& t ) { m_tracks = t; }
 
     void setWritePlaylist( bool b ) { m_writePlaylist = b; }
     void setPlaylistFilename( const QString& s ) { m_playlistFilename = s; }
@@ -88,7 +88,7 @@ private:
      */
     QString findRelativePath( const QString& absPath, const QString& baseDir );
 
-    K3bCddbResultEntry m_cddbEntry;
+    KCDDB::CDInfo m_cddbEntry;
     K3bDevice::Device* m_device;
 
     bool m_bUsePattern;
@@ -101,7 +101,7 @@ private:
 
     bool m_writeCueFile;
 
-    Q3ValueVector<QPair<int, QString> > m_tracks;
+    QVector<QPair<int, QString> > m_tracks;
 
     class Private;
     Private* d;

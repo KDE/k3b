@@ -35,21 +35,21 @@ class K3bTimeoutWidget : public QWidget
   QSize sizeHint() const;
   QSize minimumSizeHint() const;
 
- public slots:
+ public Q_SLOTS:
   void setTimeout( int msecs );
   void start();
   void stop();
   void pause();
   void resume();
 
- signals:
+  Q_SIGNALS:
   void timeout();
 
  protected:
   void paintEvent( QPaintEvent* );
   void resizeEvent( QResizeEvent* );
 
- private slots:
+ private Q_SLOTS:
   void timeStep();
   void startTimer();
 

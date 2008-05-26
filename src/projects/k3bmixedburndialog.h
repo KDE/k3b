@@ -46,7 +46,7 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
    K3bDataImageSettingsWidget* m_imageSettingsWidget;
    K3bAudioCdTextWidget* m_cdtextWidget;
 
- protected slots:
+ protected Q_SLOTS:
    /**
     * Reimplemented for internal reasons (shut down the audio player)
     */

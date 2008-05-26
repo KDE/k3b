@@ -58,7 +58,7 @@ class K3bDvdBooktypeJob : public K3bJob
     SET_UNIT_DVD_RW_ON_NEW_DVD_RW
   };
 
- public slots:
+ public Q_SLOTS:
   void start();
 
   /**
@@ -79,7 +79,7 @@ class K3bDvdBooktypeJob : public K3bJob
    */
   void setForceNoEject( bool );
 
- private slots:
+ private Q_SLOTS:
   void slotStderrLine( const QString& );
   void slotProcessFinished( K3Process* );
   void slotDeviceHandlerFinished( K3bDevice::DeviceHandler* );

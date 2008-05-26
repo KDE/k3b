@@ -44,7 +44,7 @@ class LIBK3B_EXPORT K3bIso9660ImageWritingJob : public K3bBurnJob
   QString jobDescription() const;
   QString jobDetails() const;
 		
- public slots:
+ public Q_SLOTS:
   void cancel();
   void start();
 
@@ -58,7 +58,7 @@ class LIBK3B_EXPORT K3bIso9660ImageWritingJob : public K3bBurnJob
   void setVerifyData( bool b ) { m_verifyData = b; }
   void setCopies( int c ) { m_copies = c; }
 
- protected slots:
+ protected Q_SLOTS:
   void slotWriterJobFinished( bool );
   void slotVerificationFinished( bool );
   void slotVerificationProgress( int );

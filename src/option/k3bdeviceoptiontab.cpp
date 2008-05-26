@@ -33,31 +33,31 @@
 
 
 K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent )
-  : QWidget( parent )
+    : QWidget( parent )
 {
-  QGridLayout* frameLayout = new QGridLayout( this );
-  frameLayout->setSpacing( KDialog::spacingHint() );
-  frameLayout->setMargin( 0 );
+    QGridLayout* frameLayout = new QGridLayout( this );
+    frameLayout->setSpacing( KDialog::spacingHint() );
+    frameLayout->setMargin( 0 );
 
 
-  // Info Label
-  // ------------------------------------------------
-  m_labelDevicesInfo = new QLabel( this );
-  m_labelDevicesInfo->setAlignment( Qt::AlignVCenter | Qt::AlignLeft );
-  m_labelDevicesInfo->setText( "<p>" + i18n( "K3b tries to detect all your devices properly. "
-                                             "You can add devices that have not been detected and change "
-                                             "the black values by clicking in the list. If K3b is unable "
-                                             "to detect your drive, you need to modify their permissions "
-                                             "to give K3b write access to all devices." ) );
-  m_labelDevicesInfo->setWordWrap(true);
-  // ------------------------------------------------
+    // Info Label
+    // ------------------------------------------------
+    m_labelDevicesInfo = new QLabel( this );
+    m_labelDevicesInfo->setAlignment( Qt::AlignVCenter | Qt::AlignLeft );
+    m_labelDevicesInfo->setText( "<p>" + i18n( "K3b tries to detect all your devices properly. "
+                                               "You can add devices that have not been detected and change "
+                                               "the black values by clicking in the list. If K3b is unable "
+                                               "to detect your drive, you need to modify their permissions "
+                                               "to give K3b write access to all devices." ) );
+    m_labelDevicesInfo->setWordWrap(true);
+    // ------------------------------------------------
 
-  m_deviceWidget = new K3bDeviceWidget( k3bcore->deviceManager(), this );
+    m_deviceWidget = new K3bDeviceWidget( k3bcore->deviceManager(), this );
 
-  frameLayout->addWidget( m_labelDevicesInfo, 0, 0 );
-  frameLayout->addWidget( m_deviceWidget, 1, 0 );
+    frameLayout->addWidget( m_labelDevicesInfo, 0, 0 );
+    frameLayout->addWidget( m_deviceWidget, 1, 0 );
 
-  connect( m_deviceWidget, SIGNAL(refreshButtonClicked()), this, SLOT(slotRefreshButtonClicked()) );
+    connect( m_deviceWidget, SIGNAL(refreshButtonClicked()), this, SLOT(slotRefreshButtonClicked()) );
 }
 
 
@@ -68,28 +68,25 @@ K3bDeviceOptionTab::~K3bDeviceOptionTab()
 
 void K3bDeviceOptionTab::readDevices()
 {
-  m_deviceWidget->init();
+    m_deviceWidget->init();
 }
 
 
 
 void K3bDeviceOptionTab::saveDevices()
 {
-  // save changes to deviceManager
-  m_deviceWidget->apply();
-
-  // save the config
-  k3bcore->deviceManager()->saveConfig( k3bcore->config() );
+    // save the config
+    k3bcore->deviceManager()->saveConfig( k3bcore->config() );
 }
 
 
 void K3bDeviceOptionTab::slotRefreshButtonClicked()
 {
-  QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
-  k3bcore->deviceManager()->clear();
-  k3bcore->deviceManager()->scanBus();
-  m_deviceWidget->init();
-  QApplication::restoreOverrideCursor();
+    QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
+    k3bcore->deviceManager()->clear();
+    k3bcore->deviceManager()->scanBus();
+    m_deviceWidget->init();
+    QApplication::restoreOverrideCursor();
 }
 
 #include "k3bdeviceoptiontab.moc"

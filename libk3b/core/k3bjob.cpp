@@ -31,7 +31,7 @@ class K3bJob::Private
 {
 public:
     K3bJobHandler* jobHandler;
-    Q3PtrList<K3bJob> runningSubJobs;
+    QList<K3bJob*> runningSubJobs;
 
     bool canceled;
     bool active;
@@ -86,7 +86,7 @@ bool K3bJob::hasBeenCanceled() const
 }
 
 
-const Q3PtrList<K3bJob>& K3bJob::runningSubJobs() const
+QList<K3bJob*> K3bJob::runningSubJobs() const
 {
     return d->runningSubJobs;
 }
@@ -210,7 +210,7 @@ void K3bJob::connectSubJob( K3bJob* subJob,
 }
 
 
-unsigned int K3bJob::numRunningSubJobs() const
+int K3bJob::numRunningSubJobs() const
 {
     return d->runningSubJobs.count();
 }
@@ -230,7 +230,7 @@ void K3bJob::registerSubJob( K3bJob* job )
 
 void K3bJob::unregisterSubJob( K3bJob* job )
 {
-    d->runningSubJobs.removeRef( job );
+    d->runningSubJobs.removeOne( job );
 }
 
 
@@ -240,7 +240,7 @@ void K3bJob::wait()
         QEventLoop loop;
         d->waitLoops.append( &loop );
         loop.exec();
-        d->waitLoops.remove( &loop );
+        d->waitLoops.removeOne( &loop );
     }
 }
 

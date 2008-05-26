@@ -1,10 +1,9 @@
 /*
  *
- * $Id$
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +39,7 @@
 #include <QKeyEvent>
 #include <QEvent>
 #include <QEventLoop>
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <QDialogButtonBox>
 #include <QPointer>
 
@@ -80,20 +79,21 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
     // header
     // ---------------------------------------------------------------------------------------------------
     m_dialogHeader = new K3bThemedHeader( KDialog::mainWidget() );
-    mainGrid->addMultiCellWidget( m_dialogHeader, 0, 0, 0, 2 );
+    mainGrid->addWidget( m_dialogHeader, 0, 0, 1, 3 );
 
 
     // settings buttons
     // ---------------------------------------------------------------------------------------------------
     if( !m_configGroup.isEmpty() ) {
-        QHBoxLayout* layout2 = new QHBoxLayout( 0, 0, spacingHint(), "layout2");
+        QHBoxLayout* layout2 = new QHBoxLayout;
+        layout2->setSpacing( spacingHint() );
         m_buttonLoadSettings = new QToolButton( KDialog::mainWidget() );
         m_buttonLoadSettings->setIcon( KIcon( "document-revert" ) );
         m_buttonLoadSettings->setPopupMode( QToolButton::InstantPopup );
         QMenu* userDefaultsPopup = new QMenu( m_buttonLoadSettings );
-        userDefaultsPopup->insertItem( i18n("Load default settings"), this, SLOT(slotLoadK3bDefaults()) );
-        userDefaultsPopup->insertItem( i18n("Load saved settings"), this, SLOT(slotLoadUserDefaults()) );
-        userDefaultsPopup->insertItem( i18n("Load last used settings"), this, SLOT(slotLoadLastSettings()) );
+        userDefaultsPopup->addAction( i18n("Load default settings"), this, SLOT(slotLoadK3bDefaults()) );
+        userDefaultsPopup->addAction( i18n("Load saved settings"), this, SLOT(slotLoadUserDefaults()) );
+        userDefaultsPopup->addAction( i18n("Load last used settings"), this, SLOT(slotLoadLastSettings()) );
         m_buttonLoadSettings->setMenu( userDefaultsPopup );
         layout2->addWidget( m_buttonLoadSettings );
 
@@ -155,6 +155,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 
 K3bInteractionDialog::~K3bInteractionDialog()
 {
+    kDebug() << this;
 }
 
 
@@ -231,10 +232,11 @@ void K3bInteractionDialog::setTitle( const QString& title, const QString& subTit
 
 void K3bInteractionDialog::setMainWidget( QWidget* w )
 {
-    w->reparent( KDialog::mainWidget(), QPoint(0,0) );
-    mainGrid->addMultiCellWidget( w, 1, 1, 0, 2 );
+    w->setParent( KDialog::mainWidget() );
+    mainGrid->addWidget( w, 1, 0, 1, 3 );
     m_mainWidget = w;
 }
+
 
 QWidget* K3bInteractionDialog::mainWidget()
 {
@@ -245,16 +247,19 @@ QWidget* K3bInteractionDialog::mainWidget()
     return m_mainWidget;
 }
 
+
 void K3bInteractionDialog::slotLoadK3bDefaults()
 {
     loadK3bDefaults();
 }
+
 
 void K3bInteractionDialog::slotLoadUserDefaults()
 {
     KConfigGroup c( k3bcore->config(), m_configGroup );
     loadUserDefaults( c );
 }
+
 
 void K3bInteractionDialog::slotSaveUserDefaults()
 {
@@ -318,11 +323,13 @@ void K3bInteractionDialog::slotStartClicked()
     emit started();
 }
 
+
 void K3bInteractionDialog::slotCancelClicked()
 {
     emit canceled();
-    close( false );
+    close();
 }
+
 
 void K3bInteractionDialog::slotSaveClicked()
 {
@@ -417,7 +424,6 @@ void K3bInteractionDialog::setButtonText( int button,
 {
     if( KPushButton* b = getButton( button ) ) {
         b->setText( text );
-        QToolTip::remove( b );
         b->setToolTip( tooltip );
         b->setWhatsThis( whatsthis );
     }
@@ -450,7 +456,6 @@ void K3bInteractionDialog::setStartButtonText( const QString& text,
 {
     if( m_buttonStart ) {
         m_buttonStart->setText( text );
-        QToolTip::remove( m_buttonStart );
         m_buttonStart->setToolTip( tooltip );
         m_buttonStart->setWhatsThis( whatsthis );
     }
@@ -463,7 +468,6 @@ void K3bInteractionDialog::setCancelButtonText( const QString& text,
 {
     if( m_buttonCancel ) {
         m_buttonCancel->setText( text );
-        QToolTip::remove( m_buttonCancel );
         m_buttonCancel->setToolTip( tooltip );
         m_buttonCancel->setWhatsThis( whatsthis );
     }
@@ -476,7 +480,6 @@ void K3bInteractionDialog::setSaveButtonText( const QString& text,
 {
     if( m_buttonSave ) {
         m_buttonSave->setText( text );
-        QToolTip::remove( m_buttonSave );
         m_buttonSave->setToolTip( tooltip );
         m_buttonSave->setWhatsThis( whatsthis );
     }
@@ -521,13 +524,8 @@ void K3bInteractionDialog::loadStartupSettings()
 
 int K3bInteractionDialog::exec()
 {
-    return exec( true );
-}
-
-
-int K3bInteractionDialog::exec( bool returnOnHide )
-{
-    m_exitLoopOnHide = returnOnHide;
+    kDebug() << this;
+    m_exitLoopOnHide = true;
 
     // the following code is mainly taken from QDialog::exec
     if( m_eventLoop ) {
@@ -568,30 +566,41 @@ int K3bInteractionDialog::exec( bool returnOnHide )
 }
 
 
-void K3bInteractionDialog::setVisible( bool visible )
+void K3bInteractionDialog::hideTemporarily()
 {
-    KDialog::setVisible( visible );
-    if( visible && m_eventLoop && m_exitLoopOnHide ) {
-        m_eventLoop->exit();
-    }
+    m_exitLoopOnHide = false;
+    hide();
 }
 
 
-bool K3bInteractionDialog::close( bool alsoDelete )
+void K3bInteractionDialog::close()
 {
-    if( m_eventLoop && !m_exitLoopOnHide ) {
+    if( m_eventLoop ) {
         m_eventLoop->exit();
     }
-    return KDialog::close( alsoDelete );
+    KDialog::close();
 }
 
 
 void K3bInteractionDialog::done( int r )
 {
-    if( m_eventLoop && !m_exitLoopOnHide ) {
+    if( m_eventLoop ) {
         m_eventLoop->exit();
     }
-    return KDialog::done( r );
+    KDialog::done( r );
+}
+
+
+void K3bInteractionDialog::hideEvent( QHideEvent* e )
+{
+    kDebug() << this;
+    if( !e->spontaneous() &&
+        m_eventLoop &&
+        m_exitLoopOnHide ) {
+        m_eventLoop->exit();
+        m_exitLoopOnHide = true;
+    }
+    KDialog::hideEvent( e );
 }
 
 

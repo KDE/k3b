@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,102 +16,56 @@
 #ifndef K3BDATADIRTREEVIEW_H
 #define K3BDATADIRTREEVIEW_H
 
+#include <QtGui/QTreeView>
 
-#include <k3blistview.h>
-#include <kurl.h>
-
-#include <qmap.h>
-//Added by qt3to4:
-#include <QDropEvent>
-#include <QDragMoveEvent>
-#include <QDragLeaveEvent>
 
 class K3bDataDoc;
-class K3bDataDirViewItem;
 class K3bDirItem;
 class K3bDataItem;
-class K3bDataFileView;
-class KActionCollection;
 class KMenu;
 class KAction;
 class K3bView;
-class QDragMoveEvent;
-class QDragLeaveEvent;
-
+class QItemSelection;
 
 /**
-  *@author Sebastian Trueg
-  */
+ *@author Sebastian Trueg
+ */
 
-class K3bDataDirTreeView : public K3bListView  
+class K3bDataDirTreeView : public QTreeView
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bDataDirTreeView( K3bView*, K3bDataDoc*, QWidget* parent );
-  virtual ~K3bDataDirTreeView();
+public:
+    K3bDataDirTreeView( K3bView*, K3bDataDoc*, QWidget* parent );
+    virtual ~K3bDataDirTreeView();
 
-  K3bDataDirViewItem* root() { return m_root; }
-		
-  void setFileView( K3bDataFileView* view ) { m_fileView = view; }
+    /**
+     * \return The item at position \p pos (local coordinates)
+     * or 0 if there is no item at that position.
+     */
+    K3bDataItem* itemAt( const QPoint& pos );
 
-  KActionCollection* actionCollection() const { return m_actionCollection; }
+    K3bDirItem* selectedDir() const;
 
- public slots:
-  void checkForNewItems();
-  void setCurrentDir( K3bDirItem* );
+public Q_SLOTS:
+    void setCurrentDir( K3bDirItem* );
 
- signals:
-  //  void urlsDropped( const KUrl::List&, QListViewItem* parent );
-  void dirSelected( K3bDirItem* );
+Q_SIGNALS:
+    void dirSelected( K3bDirItem* );
 
- protected:
-  bool acceptDrag(QDropEvent* e) const;
-  void contentsDragMoveEvent( QDragMoveEvent* e );
-  void contentsDragLeaveEvent( QDragLeaveEvent* e );
+private Q_SLOTS:
+    void slotSelectionChanged( const QItemSelection& selected, const QItemSelection& );
 
-  KActionCollection* m_actionCollection;
-  KMenu* m_popupMenu;
-  KAction* m_actionRemove;
-  KAction* m_actionRename;
-  KAction* m_actionNewDir;
-  KAction* m_actionProperties;
+private:
+    void startDropAnimation( K3bDirItem* );
+    void stopDropAnimation();
 
- protected slots:
-  virtual void slotDropped( QDropEvent* e, Q3ListViewItem* after, Q3ListViewItem* parent );
+    K3bView* m_view;
 
- private:
-  void setupActions();
-  void startDropAnimation( K3bDirItem* );
-  void stopDropAnimation();
+    K3bDataDoc* m_doc;
 
-  K3bView* m_view;
-
-  K3bDataDoc* m_doc;
-  K3bDataDirViewItem* m_root;
-  K3bDataFileView* m_fileView;
-
-  /**
-   * We save the dirItems in a map to have a fast way
-   * for checking for new or removed items
-   */
-  QMap<K3bDirItem*, K3bDataDirViewItem*> m_itemMap;
-
-  class Private;
-  Private* d;
-
- private slots:
-  void slotExecuted( Q3ListViewItem* );
-  void slotDataItemRemoved( K3bDataItem* );
-  void showPopupMenu( K3ListView*, Q3ListViewItem* _item, const QPoint& );
-  void slotRenameItem();
-  void slotRemoveItem();
-  void slotNewDir();
-  void slotProperties();
-  void slotDropAnimate();
-  void slotItemAdded( K3bDataItem* );
-  void slotAddUrls();
-  void slotDocChanged();
+    class Private;
+    Private* d;
 };
 
 #endif

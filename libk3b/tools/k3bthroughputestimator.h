@@ -34,13 +34,13 @@ class K3bThroughputEstimator : public QObject
 
   int average() const;
 
- signals:
+  Q_SIGNALS:
   /**
    * kb/s if differs from previous
    */
   void throughput( int );
 
- public slots:
+ public Q_SLOTS:
   void reset();
 
   /**

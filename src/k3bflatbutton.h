@@ -43,17 +43,17 @@ public:
 
     QSize sizeHint() const;
 
-public slots:
+public Q_SLOTS:
     void setColors( const QColor& fore, const QColor& back );
     void setText( const QString& );
     void setPixmap( const QPixmap& );
     void setMargin( int margin );
 
-signals:
+ Q_SIGNALS:
     void pressed();
     void clicked();
 
-    private slots:
+    private Q_SLOTS:
     void slotThemeChanged();
 
 private:

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,34 +29,34 @@ static const int s_finishIndex = 4;
 
 
 K3bDataMultiSessionCombobox::K3bDataMultiSessionCombobox( QWidget* parent )
-  : QComboBox( parent ),
-    m_forceNoMultiSession(false)
+    : QComboBox( parent ),
+      m_forceNoMultiSession(false)
 {
-  init( false );
+    init( false );
 
-  this->setToolTip( i18n("Select the Multisession Mode for the project.") );
-  this->setWhatsThis( i18n("<p><b>Multisession Mode</b>"
-			      "<p><b>Auto</b><br>"
-			      "Let K3b decide which mode to use. The decision will be based "
-			      "on the size of the project (does it fill the whole media) and "
-			      "the state of the inserted media (appendable or not)."
-			      "<p><b>No Multisession</b><br>"
-			      "Create a single-session CD or DVD and close the disk."
-			      "<p><b>Start Multisession</b><br>"
-			      "Start a multisession CD or DVD, not closing the disk to "
-			      "allow further sessions to be appended."
-			      "<p><b>Continue Multisession</b><br>"
-			      "Continue an appendable data CD (as for example created in "
-			      "<em>Start Multisession</em> mode) and add another session "
-			      "without closing the disk to "
-			      "allow further sessions to be appended."
-			      "<p><b>Finish Multisession</b><br>"
-			      "Continue an appendable data CD (as for example created in "
-			      "<em>Start Multisession</em> mode), add another session, "
-			      "and close the disk."
-			      "<p><em>In the case of DVD+RW and DVD-RW restricted overwrite media "
-			      "K3b will not actually create multiple sessions but grow the "
-			      "file system to include the new data.</em>") );
+    this->setToolTip( i18n("Select the Multisession Mode for the project.") );
+    this->setWhatsThis( i18n("<p><b>Multisession Mode</b>"
+                             "<p><b>Auto</b><br>"
+                             "Let K3b decide which mode to use. The decision will be based "
+                             "on the size of the project (does it fill the whole media) and "
+                             "the state of the inserted media (appendable or not)."
+                             "<p><b>No Multisession</b><br>"
+                             "Create a single-session CD or DVD and close the disk."
+                             "<p><b>Start Multisession</b><br>"
+                             "Start a multisession CD or DVD, not closing the disk to "
+                             "allow further sessions to be appended."
+                             "<p><b>Continue Multisession</b><br>"
+                             "Continue an appendable data CD (as for example created in "
+                             "<em>Start Multisession</em> mode) and add another session "
+                             "without closing the disk to "
+                             "allow further sessions to be appended."
+                             "<p><b>Finish Multisession</b><br>"
+                             "Continue an appendable data CD (as for example created in "
+                             "<em>Start Multisession</em> mode), add another session, "
+                             "and close the disk."
+                             "<p><em>In the case of DVD+RW and DVD-RW restricted overwrite media "
+                             "K3b will not actually create multiple sessions but grow the "
+                             "file system to include the new data.</em>") );
 }
 
 
@@ -67,110 +67,110 @@ K3bDataMultiSessionCombobox::~K3bDataMultiSessionCombobox()
 
 void K3bDataMultiSessionCombobox::init( bool force )
 {
-  m_forceNoMultiSession = force;
+    m_forceNoMultiSession = force;
 
-  clear();
+    clear();
 
-  insertItem( i18n("Auto"), s_autoIndex );
-  insertItem( i18n("No Multisession"), s_noneIndex );
-  if( !m_forceNoMultiSession ) {
-    insertItem( i18n("Start Multisession"), s_startIndex );
-    insertItem( i18n("Continue Multisession "), s_continueIndex );
-    insertItem( i18n("Finish Multisession "), s_finishIndex );
-  }
+    insertItem( s_autoIndex, i18n("Auto") );
+    insertItem( s_noneIndex, i18n("No Multisession") );
+    if( !m_forceNoMultiSession ) {
+        insertItem( s_startIndex, i18n("Start Multisession") );
+        insertItem( s_continueIndex, i18n("Continue Multisession ") );
+        insertItem( s_finishIndex, i18n("Finish Multisession ") );
+    }
 }
 
 
 K3bDataDoc::MultiSessionMode K3bDataMultiSessionCombobox::multiSessionMode() const
 {
-  switch( currentIndex() ) {
-  case s_noneIndex:
-    return K3bDataDoc::NONE;
-  case s_startIndex:
-    return K3bDataDoc::START;
-  case s_continueIndex:
-    return K3bDataDoc::CONTINUE;
-  case s_finishIndex:
-    return K3bDataDoc::FINISH;
-  default:
-    return K3bDataDoc::AUTO;
-  }
+    switch( currentIndex() ) {
+    case s_noneIndex:
+        return K3bDataDoc::NONE;
+    case s_startIndex:
+        return K3bDataDoc::START;
+    case s_continueIndex:
+        return K3bDataDoc::CONTINUE;
+    case s_finishIndex:
+        return K3bDataDoc::FINISH;
+    default:
+        return K3bDataDoc::AUTO;
+    }
 }
 
 
 void K3bDataMultiSessionCombobox::saveConfig( KConfigGroup& c )
 {
-  QString s;
-  switch( currentIndex() ) {
-  case s_autoIndex:
-    s = "auto";
-    break;
-  case s_noneIndex:
-    s = "none";
-    break;
-  case s_startIndex:
-    s = "start";
-    break;
-  case s_continueIndex:
-    s = "continue";
-    break;
-  case s_finishIndex:
-    s = "finish";
-    break;
-  }
+    QString s;
+    switch( currentIndex() ) {
+    case s_autoIndex:
+        s = "auto";
+        break;
+    case s_noneIndex:
+        s = "none";
+        break;
+    case s_startIndex:
+        s = "start";
+        break;
+    case s_continueIndex:
+        s = "continue";
+        break;
+    case s_finishIndex:
+        s = "finish";
+        break;
+    }
 
-  c.writeEntry( "multisession mode", s );
+    c.writeEntry( "multisession mode", s );
 }
 
 
 void K3bDataMultiSessionCombobox::loadConfig( const KConfigGroup& c )
 {
-  QString s = c.readEntry( "multisession mode" );
-  if( s == "none" )
-    setMultiSessionMode( K3bDataDoc::NONE );
-  else if( s == "start" )
-    setMultiSessionMode( K3bDataDoc::START );
-  else if( s == "continue" )
-    setMultiSessionMode( K3bDataDoc::CONTINUE );
-  else if( s == "finish" )
-    setMultiSessionMode( K3bDataDoc::FINISH );
-  else
-    setMultiSessionMode( K3bDataDoc::AUTO );
+    QString s = c.readEntry( "multisession mode" );
+    if( s == "none" )
+        setMultiSessionMode( K3bDataDoc::NONE );
+    else if( s == "start" )
+        setMultiSessionMode( K3bDataDoc::START );
+    else if( s == "continue" )
+        setMultiSessionMode( K3bDataDoc::CONTINUE );
+    else if( s == "finish" )
+        setMultiSessionMode( K3bDataDoc::FINISH );
+    else
+        setMultiSessionMode( K3bDataDoc::AUTO );
 }
 
 
 void K3bDataMultiSessionCombobox::setMultiSessionMode( K3bDataDoc::MultiSessionMode m )
 {
-  switch( m ) {
-  case K3bDataDoc::AUTO:
-    setCurrentIndex( s_autoIndex );
-    break;
-  case K3bDataDoc::NONE:
-    setCurrentIndex( s_noneIndex );
-    break;
-  case K3bDataDoc::START:
-    if( !m_forceNoMultiSession )
-      setCurrentIndex( s_startIndex );
-    break;
-  case K3bDataDoc::CONTINUE:
-    if( !m_forceNoMultiSession )
-      setCurrentIndex( s_continueIndex );
-    break;
-  case K3bDataDoc::FINISH:
-    if( !m_forceNoMultiSession )
-      setCurrentIndex( s_finishIndex );
-    break;
-  }
+    switch( m ) {
+    case K3bDataDoc::AUTO:
+        setCurrentIndex( s_autoIndex );
+        break;
+    case K3bDataDoc::NONE:
+        setCurrentIndex( s_noneIndex );
+        break;
+    case K3bDataDoc::START:
+        if( !m_forceNoMultiSession )
+            setCurrentIndex( s_startIndex );
+        break;
+    case K3bDataDoc::CONTINUE:
+        if( !m_forceNoMultiSession )
+            setCurrentIndex( s_continueIndex );
+        break;
+    case K3bDataDoc::FINISH:
+        if( !m_forceNoMultiSession )
+            setCurrentIndex( s_finishIndex );
+        break;
+    }
 }
 
 
 void K3bDataMultiSessionCombobox::setForceNoMultisession( bool f )
 {
-  if( f != m_forceNoMultiSession ) {
-    K3bDataDoc::MultiSessionMode m = multiSessionMode();
-    init( f );
-    setMultiSessionMode( m );
-  }
+    if( f != m_forceNoMultiSession ) {
+        K3bDataDoc::MultiSessionMode m = multiSessionMode();
+        init( f );
+        setMultiSessionMode( m );
+    }
 }
 
 #include "k3bdatamultisessioncombobox.moc"

@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,10 +17,9 @@
 #define K3B_PROCESS_H
 
 
-#include <k3process.h>
+#include "k3process.h"
 #include <qstring.h>
-//Added by qt3to4:
-#include <Q3CString>
+
 #include "k3b_export.h"
 
 class K3bExternalBin;
@@ -38,141 +37,141 @@ class K3bExternalBin;
  */
 class LIBK3B_EXPORT K3bProcess : public K3Process
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bProcess();
-  ~K3bProcess();
+public:
+    K3bProcess();
+    ~K3bProcess();
 
-  /**
-   * In the future this might also set the nice value
-   */
-  K3bProcess& operator<<( const K3bExternalBin* );
+    /**
+     * In the future this might also set the nice value
+     */
+    K3bProcess& operator<<( const K3bExternalBin* );
 
-  K3bProcess& operator<<( const QString& arg );
-  K3bProcess& operator<<( const char* arg );
-  K3bProcess& operator<<( const Q3CString& arg );
-  K3bProcess& operator<<( const QStringList& args );
+    K3bProcess& operator<<( const QString& arg );
+    K3bProcess& operator<<( const char* arg );
+    K3bProcess& operator<<( const QByteArray& arg );
+    K3bProcess& operator<<( const QStringList& args );
 
-  bool start( RunMode run = NotifyOnExit, Communication com = NoCommunication );
+    bool start( RunMode run = NotifyOnExit, Communication com = NoCommunication );
 
-  /** 
-   * get stdin file descriptor
-   * Only makes sense while process is running.
-   *
-   * Only use with setRawStdin
-   */
-  int stdinFd() const;
+    /** 
+     * get stdin file descriptor
+     * Only makes sense while process is running.
+     *
+     * Only use with setRawStdin
+     */
+    int stdinFd() const;
 
-  /** 
-   * get stdout file descriptor
-   * Only makes sense while process is running.
-   *
-   * Only use with setRawStdout
-   */
-  int stdoutFd() const;
+    /** 
+     * get stdout file descriptor
+     * Only makes sense while process is running.
+     *
+     * Only use with setRawStdout
+     */
+    int stdoutFd() const;
 
-  /**
-   * @deprecated use writeToFd
-   */
-  void dupStdout( int fd );
+    /**
+     * @deprecated use writeToFd
+     */
+    void dupStdout( int fd );
 
-  /**
-   * @deprecated use readFromFd
-   */
-  void dupStdin( int fd );
+    /**
+     * @deprecated use readFromFd
+     */
+    void dupStdin( int fd );
 
-  /**
-   * Make the process write to @fd instead of Stdout.
-   * This means you won't get any stdoutReady() or receivedStdout()
-   * signals anymore.
-   *
-   * Only use this before starting the process.
-   */
-  void writeToFd( int fd );
+    /**
+     * Make the process write to @fd instead of Stdout.
+     * This means you won't get any stdoutReady() or receivedStdout()
+     * signals anymore.
+     *
+     * Only use this before starting the process.
+     */
+    void writeToFd( int fd );
 
-  /**
-   * Make the process read from @fd instead of Stdin.
-   * This means you won't get any wroteStdin()
-   * signals anymore.
-   *
-   * Only use this before starting the process.
-   */
-  void readFromFd( int fd );
+    /**
+     * Make the process read from @fd instead of Stdin.
+     * This means you won't get any wroteStdin()
+     * signals anymore.
+     *
+     * Only use this before starting the process.
+     */
+    void readFromFd( int fd );
 
-  /** 
-   * If set true the process' stdin fd will be available
-   * through @stdinFd.
-   * Be aware that you will not get any wroteStdin signals
-   * anymore.
-   *
-   * Only use this before starting the process.
-   */
-  void setRawStdin(bool b);
+    /** 
+     * If set true the process' stdin fd will be available
+     * through @stdinFd.
+     * Be aware that you will not get any wroteStdin signals
+     * anymore.
+     *
+     * Only use this before starting the process.
+     */
+    void setRawStdin(bool b);
 
-  /** 
-   * If set true the process' stdout fd will be available
-   * through @stdoutFd.
-   * Be aware that you will not get any stdoutReady or receivedStdout
-   * signals anymore.
-   *
-   * Only use this before starting the process.
-   */
-  void setRawStdout(bool b);
+    /** 
+     * If set true the process' stdout fd will be available
+     * through @stdoutFd.
+     * Be aware that you will not get any stdoutReady or receivedStdout
+     * signals anymore.
+     *
+     * Only use this before starting the process.
+     */
+    void setRawStdout(bool b);
 
- public slots:
-  void setSplitStdout( bool b ) { m_bSplitStdout = b; }
+public Q_SLOTS:
+    void setSplitStdout( bool b ) { m_bSplitStdout = b; }
  
-  /**
-   * default is true
-   */
-  void setSuppressEmptyLines( bool b );
+    /**
+     * default is true
+     */
+    void setSuppressEmptyLines( bool b );
 
-  bool closeStdin();
-  bool closeStdout();
+    bool closeStdin();
+    bool closeStdout();
 
- private slots:
-  void slotSplitStderr( K3Process*, char*, int );
-  void slotSplitStdout( K3Process*, char*, int );
+    private Q_SLOTS:
+    void slotSplitStderr( K3Process*, char*, int );
+    void slotSplitStdout( K3Process*, char*, int );
 
- signals:
-  void stderrLine( const QString& line );
-  void stdoutLine( const QString& line );
+Q_SIGNALS:
+    void stderrLine( const QString& line );
+    void stdoutLine( const QString& line );
 
-  /** 
-   * Gets emitted if raw stdout mode has been requested
-   * The data has to be read from @p fd.
-   */
-  void stdoutReady( int fd );
+    /** 
+     * Gets emitted if raw stdout mode has been requested
+     * The data has to be read from @p fd.
+     */
+    void stdoutReady( int fd );
 
- protected:
-  /**
-   * reimplemeted from K3Process
-   */
-  int commSetupDoneP();
+protected:
+    /**
+     * reimplemeted from K3Process
+     */
+    int commSetupDoneP();
 
-  /**
-   * reimplemeted from K3Process
-   */
-  int commSetupDoneC();
+    /**
+     * reimplemeted from K3Process
+     */
+    int commSetupDoneC();
 
-  /**
-   * reimplemeted from K3Process
-   */
-  int setupCommunication( Communication comm );
+    /**
+     * reimplemeted from K3Process
+     */
+    int setupCommunication( Communication comm );
 
-  /**
-   * reimplemeted from K3Process
-   */
-  void commClose();
+    /**
+     * reimplemeted from K3Process
+     */
+    void commClose();
 
- private:
-  static QStringList splitOutput( char*, int, QString&, bool );
+private:
+    static QStringList splitOutput( char*, int, QString&, bool );
 
-  class Data;
-  Data* d;
+    class Data;
+    Data* d;
 
-  bool m_bSplitStdout;
+    bool m_bSplitStdout;
 };
 
 #endif

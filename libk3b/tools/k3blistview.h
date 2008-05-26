@@ -188,10 +188,10 @@ class LIBK3B_EXPORT K3bListView : public K3ListView
    */
   static Q3ListViewItem* parentItem( Q3ListViewItem* i );
 
- signals:
+  Q_SIGNALS:
   void editorButtonClicked( K3bListViewItem*, int );
 
- public slots:
+ public Q_SLOTS:
   void setNoItemText( const QString& );
   //  void setNoItemPixmap( const QPixmap& );
   void setNoItemVerticalMargin( int i ) { m_noItemVMargin = i; }
@@ -202,7 +202,7 @@ class LIBK3B_EXPORT K3bListView : public K3ListView
 
   virtual void clear();
 
- private slots:
+ private Q_SLOTS:
   void updateEditorSize();
   virtual void slotEditorLineEditReturnPressed();
   virtual void slotEditorComboBoxActivated( const QString& );
@@ -210,7 +210,7 @@ class LIBK3B_EXPORT K3bListView : public K3ListView
   virtual void slotEditorMsfEditValueChanged( int );
   virtual void slotEditorButtonClicked();
 
- protected slots:
+ protected Q_SLOTS:
   void showEditor( K3bListViewItem*, int col );
   void placeEditor( K3bListViewItem*, int col );
 

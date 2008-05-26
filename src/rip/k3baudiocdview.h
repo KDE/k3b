@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,84 +19,65 @@
 #include <k3bmediacontentsview.h>
 #include <k3bmedium.h>
 
-#include <k3btoc.h>
-#include <k3bcdtext.h>
-//Added by qt3to4:
 #include <QLabel>
 
-class K3bListView;
-class K3ListView;
+class QTreeView;
 class Q3ListViewItem;
 class QPoint;
 class KActionCollection;
-class KActionMenu;
+class KMenu;
 class K3bCddb;
 class QLabel;
 class KToolBar;
-class Q3DragObject;
 
 
-namespace K3bDevice {
-  class Device;
+namespace K3b {
+    class AudioTrackModel;
 }
-
 
 class K3bAudioCdView : public K3bMediaContentsView
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bAudioCdView( QWidget* parent = 0 );
-  ~K3bAudioCdView();
+public:
+    K3bAudioCdView( QWidget* parent = 0 );
+    ~K3bAudioCdView();
 
-  KActionCollection* actionCollection() const { return m_actionCollection; }
+    KActionCollection* actionCollection() const { return m_actionCollection; }
 
-  /**
-   * internal
-   */
-  Q3DragObject* dragObject();
+public Q_SLOTS:
+    void queryCddb();
 
- public slots:
-  void queryCddb();
+private Q_SLOTS:
+    void slotContextMenu( const QPoint& );
+    void slotTrackSelectionChanged();
+    void slotSaveCddbLocally();
 
- private slots:
-  void slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& );
-  void slotItemRenamed( Q3ListViewItem*, const QString&, int );
-  void slotCddbQueryFinished( int );
-  void slotTrackSelectionChanged( Q3ListViewItem* );
-  void slotSaveCddbLocally();
+    void slotEditTrackCddb();
+    void slotEditAlbumCddb();
+    void startRip();
+    void slotSelect();
+    void slotDeselect();
 
-  void slotEditTrackCddb();
-  void slotEditAlbumCddb();
-  void startRip();
-  void slotCheckAll();
-  void slotUncheckAll();
-  void slotSelect();
-  void slotDeselect();
+private:
+    void reloadMedium();
 
- private:
-  void reloadMedium();
+    void initActions();
+    void enableInteraction( bool );
+    void showBusyLabel( bool );
+    void updateTitle();
 
-  void initActions();
-  void updateDisplay();
-  void enableInteraction( bool );
-  void showBusyLabel( bool );
+    KActionCollection* m_actionCollection;
+    KMenu* m_popupMenu;
 
-  K3bDevice::Toc m_toc;
-  K3bDevice::Device* m_device;
+    K3b::AudioTrackModel* m_trackModel;
+    QTreeView* m_trackView;
+    KToolBar* m_toolBox;
+    QLabel* m_labelLength;
 
-  KActionCollection* m_actionCollection;
-  KActionMenu* m_popupMenu;
+    class AudioTrackViewItem;
 
-  K3bListView* m_trackView;
-  KToolBar* m_toolBox;
-  QLabel* m_labelLength;
-
-  class AudioTrackViewItem;
-
-  K3bDevice::CdText m_cdText;
-
-  QLabel* m_busyInfoLabel;
+    QLabel* m_busyInfoLabel;
 };
 
 

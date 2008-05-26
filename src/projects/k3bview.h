@@ -56,7 +56,7 @@ public:
 
     void setMainWidget( QWidget* );
 
-public slots:
+public Q_SLOTS:
     /**
      * Default impl. brings up the burnDialog via newBurnDialog() with writing
      */
@@ -95,7 +95,7 @@ protected:
     K3bFillStatusDisplay* fillStatusDisplay() const { return m_fillStatusDisplay; }
     KToolBar* toolBox() const { return m_toolBox; }
 
-    private slots:
+    private Q_SLOTS:
     void slotPluginButtonClicked();
 
 private:

@@ -47,7 +47,7 @@
 #include <k3urldrag.h>
 
 #include <q3header.h>
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qcombobox.h>
@@ -60,10 +60,9 @@
 #include <q3whatsthis.h>
 #include <qspinbox.h>
 #include <qevent.h>
-#include <q3popupmenu.h>
+#include <qmenu.h>
 #include <qclipboard.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QDragEnterEvent>
 #include <QDropEvent>
 
@@ -150,12 +149,16 @@ void K3bIsoImageWritingDialog::setupGui()
 
     // image
     // -----------------------------------------------------------------------
-    Q3GroupBox* groupImageUrl = new Q3GroupBox( 1, Qt::Horizontal, i18n("Image to Burn"), frame );
+    QGroupBox* groupImageUrl = new QGroupBox( i18n("Image to Burn"), frame );
     m_editImagePath = new KUrlRequester( groupImageUrl );
     m_editImagePath->setMode( KFile::File|KFile::ExistingOnly );
     m_editImagePath->setWindowTitle( i18n("Choose Image File") );
     m_editImagePath->setFilter( i18n("*.iso *.ISO|ISO9660 Image Files") + "\n"
                                 + i18n("*|All Files") );
+    QVBoxLayout* groupImageUrlLayout = new QVBoxLayout( groupImageUrl );
+    groupImageUrlLayout->setSpacing( spacingHint() );
+    groupImageUrlLayout->setMargin( marginHint() );
+    groupImageUrlLayout->addWidget( m_editImagePath );
 
     connect( m_editImagePath->lineEdit(), SIGNAL( textChanged ( const QString & ) ), this,  SLOT( slotWriterChanged() ) );
 
@@ -181,45 +184,54 @@ void K3bIsoImageWritingDialog::setupGui()
     QTabWidget* optionTabbed = new QTabWidget( frame );
 
     QWidget* optionTab = new QWidget( optionTabbed );
-    Q3GridLayout* optionTabLayout = new Q3GridLayout( optionTab );
+    QGridLayout* optionTabLayout = new QGridLayout( optionTab );
     optionTabLayout->setAlignment( Qt::AlignTop );
     optionTabLayout->setSpacing( spacingHint() );
     optionTabLayout->setMargin( marginHint() );
 
-    Q3GroupBox* writingModeGroup = new Q3GroupBox( 1, Qt::Vertical, i18n("Writing Mode"), optionTab );
-    writingModeGroup->setInsideMargin( marginHint() );
+    QGroupBox* writingModeGroup = new QGroupBox( i18n("Writing Mode"), optionTab );
     m_writingModeWidget = new K3bWritingModeWidget( writingModeGroup );
-
+    QVBoxLayout* writingModeGroupLayout = new QVBoxLayout( writingModeGroup );
+    writingModeGroupLayout->setSpacing( spacingHint() );
+    writingModeGroupLayout->setMargin( marginHint() );
+    writingModeGroupLayout->addWidget( m_writingModeWidget );
+    writingModeGroupLayout->addStretch( 1 );
 
     // copies --------
-    Q3GroupBox* groupCopies = new Q3GroupBox( 2, Qt::Horizontal, i18n("Copies"), optionTab );
-    groupCopies->setInsideSpacing( spacingHint() );
-    groupCopies->setInsideMargin( marginHint() );
+    QGroupBox* groupCopies = new QGroupBox( i18n("Copies"), optionTab );
     QLabel* pixLabel = new QLabel( groupCopies );
     pixLabel->setPixmap( SmallIcon( "tools-media-optical-copy", KIconLoader::SizeMedium ) );
     pixLabel->setScaledContents( false );
     m_spinCopies = new QSpinBox( groupCopies );
     m_spinCopies->setMinimum( 1 );
     m_spinCopies->setMaximum( 999 );
+    QHBoxLayout* groupCopiesLayout = new QHBoxLayout( groupCopies );
+    groupCopiesLayout->setSpacing( spacingHint() );
+    groupCopiesLayout->setMargin( marginHint() );
+    groupCopiesLayout->addWidget( pixLabel );
+    groupCopiesLayout->addWidget( m_spinCopies );
     // -------- copies
 
-    Q3GroupBox* optionGroup = new Q3GroupBox( 3, Qt::Vertical, i18n("Settings"), optionTab );
-    optionGroup->setInsideMargin( marginHint() );
-    optionGroup->setInsideSpacing( spacingHint() );
+    QGroupBox* optionGroup = new QGroupBox( i18n("Settings"), optionTab );
     m_checkDummy = K3bStdGuiItems::simulateCheckbox( optionGroup );
     m_checkVerify = K3bStdGuiItems::verifyCheckBox( optionGroup );
-
+    QVBoxLayout* optionGroupLayout = new QVBoxLayout( optionGroup );
+    optionGroupLayout->setSpacing( spacingHint() );
+    optionGroupLayout->setMargin( marginHint() );
+    optionGroupLayout->addWidget( m_checkDummy );
+    optionGroupLayout->addWidget( m_checkVerify );
+    optionGroupLayout->addStretch( 1 );
 
     optionTabLayout->addWidget( writingModeGroup, 0, 0 );
     optionTabLayout->addWidget( groupCopies, 1, 0 );
-    optionTabLayout->addMultiCellWidget( optionGroup, 0, 1, 1, 1 );
+    optionTabLayout->addWidget( optionGroup, 0, 1, 2, 1 );
     optionTabLayout->setRowStretch( 1, 1 );
-    optionTabLayout->setColStretch( 1, 1 );
+    optionTabLayout->setColumnStretch( 1, 1 );
 
     optionTabbed->addTab( optionTab, i18n("Settings") );
 
 
-    Q3GridLayout* grid = new Q3GridLayout( frame );
+    QGridLayout* grid = new QGridLayout( frame );
     grid->setSpacing( spacingHint() );
     grid->setMargin( 0 );
 
@@ -265,7 +277,7 @@ void K3bIsoImageWritingDialog::slotStartClicked()
         c.writePathEntry( "last written image", imagePath() );
 
     // create a progresswidget
-    K3bBurnProgressDialog dlg( kapp->mainWidget() );
+    K3bBurnProgressDialog dlg( kapp->activeWindow() );
 
     // create the job
     K3bIso9660ImageWritingJob* job = new K3bIso9660ImageWritingJob( &dlg );
@@ -315,16 +327,18 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
         K3bIso9660 isoF( path );
         if( isoF.open() ) {
 
+            QColor disabledTextColor = palette().color( QPalette::Disabled, QPalette::Text );
+
             d->isIsoImage = true;
 
             K3bListViewItem* isoRootItem = new K3bListViewItem( m_infoView, m_infoView->lastItem(),
                                                                 i18n("Iso9660 image") );
-            isoRootItem->setForegroundColor( 0, palette().disabled().foreground() );
+            isoRootItem->setForegroundColor( 0, disabledTextColor );
             isoRootItem->setPixmap( 0, SmallIcon( "cdimage") );
 
             K3bListViewItem* item = new K3bListViewItem( isoRootItem, m_infoView->lastItem(),
                                                          i18n("Filesize:"), KIO::convertSize( imageSize ) );
-            item->setForegroundColor( 0, palette().disabled().foreground() );
+            item->setForegroundColor( 0, disabledTextColor );
 
             item = new K3bListViewItem( isoRootItem,
                                         m_infoView->lastItem(),
@@ -332,7 +346,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
                                         isoF.primaryDescriptor().systemId.isEmpty()
                                         ? QString("-")
                                         : isoF.primaryDescriptor().systemId );
-            item->setForegroundColor( 0, palette().disabled().foreground() );
+            item->setForegroundColor( 0, disabledTextColor );
 
             item = new K3bListViewItem( isoRootItem,
                                         m_infoView->lastItem(),
@@ -340,7 +354,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
                                         isoF.primaryDescriptor().volumeId.isEmpty()
                                         ? QString("-")
                                         : isoF.primaryDescriptor().volumeId );
-            item->setForegroundColor( 0, palette().disabled().foreground() );
+            item->setForegroundColor( 0, disabledTextColor );
 
             item = new K3bListViewItem( isoRootItem,
                                         m_infoView->lastItem(),
@@ -348,7 +362,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
                                         isoF.primaryDescriptor().volumeSetId.isEmpty()
                                         ? QString("-")
                                         : isoF.primaryDescriptor().volumeSetId );
-            item->setForegroundColor( 0, palette().disabled().foreground() );
+            item->setForegroundColor( 0, disabledTextColor );
 
             item = new K3bListViewItem( isoRootItem,
                                         m_infoView->lastItem(),
@@ -356,14 +370,14 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
                                         isoF.primaryDescriptor().publisherId.isEmpty()
                                         ? QString("-")
                                         : isoF.primaryDescriptor().publisherId );
-            item->setForegroundColor( 0, palette().disabled().foreground() );
+            item->setForegroundColor( 0, disabledTextColor );
 
             item = new K3bListViewItem( isoRootItem,
                                         m_infoView->lastItem(),
                                         i18n("Preparer Id:"),
                                         isoF.primaryDescriptor().preparerId.isEmpty()
                                         ? QString("-") : isoF.primaryDescriptor().preparerId );
-            item->setForegroundColor( 0, palette().disabled().foreground() );
+            item->setForegroundColor( 0, disabledTextColor );
 
             item = new K3bListViewItem( isoRootItem,
                                         m_infoView->lastItem(),
@@ -371,7 +385,7 @@ void K3bIsoImageWritingDialog::updateImageSize( const QString& path )
                                         isoF.primaryDescriptor().applicationId.isEmpty()
                                         ? QString("-")
                                         : isoF.primaryDescriptor().applicationId );
-            item->setForegroundColor( 0, palette().disabled().foreground() );
+            item->setForegroundColor( 0, disabledTextColor );
 
             isoRootItem->setOpen( true );
 
@@ -437,7 +451,7 @@ void K3bIsoImageWritingDialog::calculateMd5Sum( const QString& file )
         d->md5SumItem = new K3bListViewItem( m_infoView, m_infoView->firstChild() );
 
     d->md5SumItem->setText( 0, i18n("Md5 Sum:") );
-    d->md5SumItem->setForegroundColor( 0, palette().disabled().foreground() );
+    d->md5SumItem->setForegroundColor( 0, palette().color( QPalette::Disabled, QPalette::Text ) );
     d->md5SumItem->setProgress( 1, 0 );
     d->md5SumItem->setPixmap( 0, SmallIcon( "exec") );
 
@@ -482,13 +496,13 @@ void K3bIsoImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, co
     if( !d->haveMd5Sum )
         return;
 
-    Q3PopupMenu popup;
-    int copyItem = popup.insertItem( i18n("Copy checksum to clipboard") );
-    int compareItem = popup.insertItem( i18n("Compare checksum...") );
+    QMenu popup;
+    QAction* copyAction = popup.addAction( i18n("Copy checksum to clipboard") );
+    QAction* compareAction = popup.addAction( i18n("Compare checksum...") );
 
-    int r = popup.exec( pos );
+    QAction* r = popup.exec( pos );
 
-    if( r == compareItem ) {
+    if( r == compareAction ) {
         bool ok;
         QString md5sumToCompare = KInputDialog::getText( i18n("MD5 Sum Check"),
                                                          i18n("Please insert the MD5 Sum to compare:"),
@@ -504,7 +518,7 @@ void K3bIsoImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, co
                                     i18n("MD5 Sums Differ") );
         }
     }
-    else if( r == copyItem ) {
+    else if( r == copyAction ) {
         QApplication::clipboard()->setText( m_md5Job->hexDigest().toLower(), QClipboard::Clipboard );
     }
 }
@@ -560,7 +574,7 @@ QString K3bIsoImageWritingDialog::imagePath() const
 
 void K3bIsoImageWritingDialog::dragEnterEvent( QDragEnterEvent* e )
 {
-    e->accept( K3URLDrag::canDecode(e) );
+    e->setAccepted( K3URLDrag::canDecode(e) );
 }
 
 

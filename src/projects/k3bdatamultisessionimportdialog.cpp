@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
 #include <qfont.h>
 #include <qmap.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -35,9 +34,9 @@
 #include <k3bdevicemanager.h>
 #include <k3bdiskinfo.h>
 #include <k3biso9660.h>
+#include <k3bmedium.h>
+#include <k3bmediacache.h>
 
-#include "../k3bmedium.h"
-#include "../k3bmediacache.h"
 #include "../k3bapplication.h"
 #include "../k3b.h"
 
@@ -70,10 +69,10 @@ public:
 
 K3bDataDoc* K3bDataMultisessionImportDialog::importSession( K3bDataDoc* doc, QWidget* parent )
 {
-  K3bDataMultisessionImportDialog dlg( parent );
-  dlg.importSession( doc );
-  dlg.exec();
-  return dlg.d->doc;
+    K3bDataMultisessionImportDialog dlg( parent );
+    dlg.importSession( doc );
+    dlg.exec();
+    return dlg.d->doc;
 }
 
 
@@ -128,9 +127,9 @@ void K3bDataMultisessionImportDialog::slotCancel()
 
 void K3bDataMultisessionImportDialog::importSession( K3bDataDoc* doc )
 {
-  d->doc = doc;
-  updateMedia();
-  slotSelectionChanged();
+    d->doc = doc;
+    updateMedia();
+    slotSelectionChanged();
 }
 
 
@@ -143,7 +142,7 @@ void K3bDataMultisessionImportDialog::updateMedia()
 
     bool haveMedium = false;
     for( QList<K3bDevice::Device *>::const_iterator it = devices.begin();
-       it != devices.end(); ++it ) {
+         it != devices.end(); ++it ) {
         K3bMedium medium = k3bappcore->mediaCache()->medium( *it );
 
         if ( medium.diskInfo().mediaType() & K3bDevice::MEDIA_WRITABLE &&
@@ -187,7 +186,7 @@ void K3bDataMultisessionImportDialog::addMedium( const K3bMedium& medium )
     for ( K3bDevice::Toc::const_iterator it = toc.begin(); it != toc.end(); ++it ) {
         const K3bTrack& track = *it;
 
-	if( track.session() != lastSession ) {
+        if( track.session() != lastSession ) {
             lastSession = track.session();
             QString sessionInfo;
             if ( track.type() == K3bDevice::Track::DATA ) {
@@ -211,7 +210,7 @@ void K3bDataMultisessionImportDialog::addMedium( const K3bMedium& medium )
             sessionItem = new K3bListViewItem( mediumItem,
                                                sessionItem,
                                                i18n( "Session %1" ,
-                                               lastSession )
+                                                     lastSession )
                                                + ( sessionInfo.isEmpty() ? QString() : " (" + sessionInfo + ')' ) );
             if ( track.type() == K3bDevice::Track::AUDIO )
                 sessionItem->setPixmap( 0, SmallIcon( "audio-x-generic" ) );
@@ -257,8 +256,8 @@ void K3bDataMultisessionImportDialog::showSessionInfo( K3bDevice::Device* dev, i
 
 
 K3bDataMultisessionImportDialog::K3bDataMultisessionImportDialog( QWidget* parent )
-  : KDialog( parent),
-    d( new Private() )
+    : KDialog( parent),
+      d( new Private() )
 {
     QWidget *widget = new QWidget();
     setMainWidget(widget);
@@ -266,15 +265,17 @@ K3bDataMultisessionImportDialog::K3bDataMultisessionImportDialog( QWidget* paren
     setDefaultButton(Ok);
     setModal(true);
     setCaption(i18n("Session Import"));
-    Q3VBoxLayout* layout = new Q3VBoxLayout( widget );
+    QVBoxLayout* layout = new QVBoxLayout( widget );
     layout->setMargin( 0 );
-    layout->setAutoAdd( true );
 
-    ( void )new QLabel( i18n( "Please select a session to import." ), widget );
+    QLabel* label = new QLabel( i18n( "Please select a session to import." ), widget );
     d->sessionView = new K3bListView( widget );
     d->sessionView->addColumn( "1" );
     d->sessionView->header()->hide();
     d->sessionView->setFullWidth( true );
+
+    layout->addWidget( label );
+    layout->addWidget( d->sessionView );
 
     connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3bDevice::Device*)),
              this, SLOT(updateMedia()) );

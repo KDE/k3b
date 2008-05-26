@@ -49,8 +49,8 @@ set(k3b_project_SRCS
   #projects/k3baudiotrackplayer.cpp 
   projects/k3baudiotracksplitdialog.cpp 
   projects/k3baudiotrackview.cpp 
-  projects/k3baudiotrackviewitem.cpp 
   projects/k3baudioview.cpp 
+  projects/k3baudioprojectmodel.cpp 
   projects/k3bmixedburndialog.cpp 
   projects/k3bmixeddirtreeview.cpp 
   projects/k3bmixedview.cpp 
@@ -60,9 +60,9 @@ set(k3b_project_SRCS
   projects/k3bdataimagesettingswidget.cpp 
   projects/k3bdatapropertiesdialog.cpp 
   projects/k3bdataview.cpp 
-  projects/k3bdataviewitem.cpp 
   projects/k3bdatavolumedescwidget.cpp 
   projects/k3bdataburndialog.cpp 
+  projects/k3bdataprojectmodel.cpp
   projects/k3bbootimagedialog.cpp 
   projects/k3bbootimageview.cpp 
   projects/k3bmovixburndialog.cpp 
@@ -90,11 +90,11 @@ set(k3b_project_SRCS
   )
 
 if(MUSICBRAINZ_FOUND)
-set(k3b_project_SRCS
-  ${k3b_project_SRCS}
-  projects/k3bmusicbrainzjob.cpp 
-  projects/k3bmusicbrainztrackloopupjob.cpp 
-)
+  set(k3b_project_SRCS
+    ${k3b_project_SRCS}
+    projects/k3bmusicbrainzjob.cpp 
+    projects/k3bmusicbrainztrackloopupjob.cpp 
+    )
 endif(MUSICBRAINZ_FOUND)
 
 kde4_add_ui_files(k3b_project_SRCS
@@ -126,9 +126,11 @@ set(k3b_rip_SRCS
   rip/k3bvideocdrippingdialog.cpp 
   rip/k3bcuefilewriter.cpp 
   rip/k3baudioconvertingoptionwidget.cpp 
-  rip/k3baudiocdlistview.cpp 
   rip/k3baudioprojectconvertingdialog.cpp 
   rip/k3baudioprojectconvertingjob.cpp 
+  rip/categories.cpp
+  rip/k3baudiotrackmodel.cpp
+  rip/k3bviewcolumnadjuster.cpp
   )
 
 if (DVDREAD_FOUND)
@@ -180,7 +182,6 @@ set(k3b_misc_SRCS
 set(k3b_SRCS
   k3bwelcomewidget.cpp 
   k3bapplication.cpp 
-  k3bdevicemodel.cpp
   k3bdevicedelegate.cpp
   k3bmetaitemmodel.cpp
   k3bplacesmodel.cpp
@@ -200,7 +201,6 @@ set(k3b_SRCS
   #k3bdataprojectinterface.cpp 
   k3bsystemproblemdialog.cpp 
   k3bmediacontentsview.cpp 
-  k3bsidepanel.cpp 
   k3bcontentsview.cpp 
   k3bjobprogressdialog.cpp 
   k3bburnprogressdialog.cpp 
@@ -222,8 +222,6 @@ set(k3b_SRCS
   k3bdebuggingoutputdialog.cpp 
   k3bdebuggingoutputfile.cpp 
   k3bappdevicemanager.cpp 
-  k3bmediacache.cpp 
-  k3bmedium.cpp 
   k3bmediaselectioncombobox.cpp 
   k3btooltip.cpp 
   k3bwidgetshoweffect.cpp 
@@ -239,6 +237,7 @@ set(k3b_SRCS
   k3bservicemenuinstaller.cpp 
   k3bfirstrun.cpp 
   k3baction.cpp
+  k3bdevicemenu.cpp
   )
 
 set(k3b_bin_SRCS 
@@ -279,7 +278,6 @@ target_link_libraries(k3b_bin
   ${KDE4_KPARTS_LIBS}
   ${KDE4_KNOTIFYCONFIG_LIBS}
   ${KDE4_KUTILS_LIBS}
-  ${KCDDB_LIBRARIES}
   )
 
 if(MUSICBRAINZ_FOUND)

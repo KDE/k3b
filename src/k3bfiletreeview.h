@@ -68,9 +68,10 @@ Q_SIGNALS:
     void activated( const KUrl& url );
     void activated( K3bDevice::Device* dev );
 
-private slots:
+private Q_SLOTS:
     void slotClicked( const QModelIndex& index );
     void slotExpandUrl( const QModelIndex& index );
+    void slotContextMenu( const QPoint& pos );
 
 private:
     void initActions();

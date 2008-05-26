@@ -29,8 +29,6 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
-#include <q3url.h>
-#include <q3valuelist.h>
 #include <qregexp.h>
 #include <qfile.h>
 
@@ -57,7 +55,7 @@ public:
         bool audio;
     };
 
-    Q3ValueList<Track> tracks;
+    QList<Track> tracks;
 
     KTemporaryFile* cdTextFile;
 
@@ -255,7 +253,7 @@ void K3bCdrecordWriter::prepareProcess()
     }
 
     if( m_cue ) {
-        m_process->setWorkingDirectory(Q3Url(m_cueFile).path());
+        m_process->setWorkingDirectory( m_cueFile );
         *m_process << QString("cuefile=%1").arg( m_cueFile );
     }
 

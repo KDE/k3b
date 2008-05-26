@@ -44,6 +44,8 @@ K3bPlacesModel::K3bPlacesModel( QObject* parent )
              this, SIGNAL( modelAboutToBeReset() ) );
     connect( d->deviceModel, SIGNAL( modelReset() ),
              this, SIGNAL( modelReset() ) );
+    connect( k3bcore->deviceManager(), SIGNAL( changed( K3bDevice::DeviceManager* ) ),
+             this, SLOT( slotDevicesChanged( K3bDevice::DeviceManager* ) ) );
     slotDevicesChanged( k3bcore->deviceManager() );
 }
 

@@ -172,7 +172,7 @@ K3bAudioEditorWidget::K3bAudioEditorWidget( QWidget* parent )
       m_draggedMarker(0)
 {
     d = new Private;
-    d->selectedRangeBrush = colorGroup().highlight();
+    d->selectedRangeBrush = palette().highlight();
 
     setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum );
     setFrameStyle( StyledPanel|Sunken );
@@ -193,7 +193,6 @@ K3bAudioEditorWidget::~K3bAudioEditorWidget()
 
 QSize K3bAudioEditorWidget::minimumSizeHint() const
 {
-    constPolish();
     // some fixed height minimum and enough space for a tickmark every minute
     // But never exceed 2/3 of the the screen width, otherwise it just looks ugly
     // FIXME: this is still bad for long sources and there might be 60 minutes sources!
@@ -297,7 +296,7 @@ int K3bAudioEditorWidget::addRange( const K3b::Msf& start, const K3b::Msf& end,
         return -1;
 
     Range r( m_idCnt++, start, end, startFixed, endFixed, toolTip,
-             brush.style() != Qt::NoBrush ? brush : QBrush(colorGroup().background()) );
+             brush.style() != Qt::NoBrush ? brush : palette().background() );
     d->ranges.append( r );
     qSort( d->ranges );
 
@@ -422,7 +421,7 @@ void K3bAudioEditorWidget::setMaxNumberOfMarkers( int i )
 int K3bAudioEditorWidget::addMarker( const K3b::Msf& pos, bool fixed, const QString& toolTip, const QColor& color )
 {
     if( pos < m_length ) {
-        Marker m( m_idCnt++, pos, fixed, color.isValid() ? color : colorGroup().foreground(), toolTip );
+        Marker m( m_idCnt++, pos, fixed, color.isValid() ? color : palette().foreground().color(), toolTip );
         d->markers.append( m );
         return m.id;
     }
@@ -701,7 +700,7 @@ void K3bAudioEditorWidget::mouseMoveEvent( QMouseEvent* e )
     if( m_mouseAt )
         emit mouseAt( posToMsf( e->pos().x() ) );
 
-    if( e->state() & Qt::LeftButton ) {
+    if( e->buttons() & Qt::LeftButton ) {
         if( m_draggedRange ) {
             // determine the position the range's end was dragged to and its other end
             K3b::Msf msfPos = qMax( K3b::Msf(), qMin( posToMsf( e->pos().x() ), m_length-1 ) );

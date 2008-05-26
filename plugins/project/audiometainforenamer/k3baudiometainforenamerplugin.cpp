@@ -48,7 +48,7 @@
 #include <qlayout.h>
 #include <q3ptrdict.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 
 
@@ -66,7 +66,7 @@ public:
   //  KProgressDialog* progressDialog;
   QPushButton* scanButton;
 
-  Q3ValueList< QPair<K3bFileItem*, Q3CheckListItem*> > renamableItems;
+  QList< QPair<K3bFileItem*, Q3CheckListItem*> > renamableItems;
   Q3PtrDict<Q3ListViewItem> dirItemDict;
 
 //   long long scannedSize;
@@ -106,7 +106,7 @@ K3bAudioMetainfoRenamerPluginWidget::K3bAudioMetainfoRenamerPluginWidget( K3bDoc
   d->viewFiles->setNoItemText( i18n("Please click the Scan button to search for renameable files.") );
 
   // layout
-  Q3VBoxLayout* box = new Q3VBoxLayout( this );
+  QVBoxLayout* box = new QVBoxLayout( this );
   box->setMargin( 0 );
   box->setSpacing( KDialog::spacingHint() );
 
@@ -244,7 +244,7 @@ void K3bAudioMetainfoRenamerPluginWidget::activate()
     KMessageBox::sorry( this, i18n("Please click the Scan button to search for renameable files.") );
   }
   else {
-    for( Q3ValueList< QPair<K3bFileItem*, Q3CheckListItem*> >::iterator it = d->renamableItems.begin();
+    for( QList< QPair<K3bFileItem*, Q3CheckListItem*> >::iterator it = d->renamableItems.begin();
 	 it != d->renamableItems.end(); ++it ) {
       QPair<K3bFileItem*, Q3CheckListItem*>& item = *it;
       

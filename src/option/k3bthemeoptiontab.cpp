@@ -84,8 +84,8 @@ void K3bThemeOptionTab::readSettings()
 
     k3bappcore->themeManager()->loadThemes();
 
-    Q3ValueList<K3bTheme*> themes = k3bappcore->themeManager()->themes();
-    for( Q3ValueList<K3bTheme*>::const_iterator it = themes.constBegin(); it != themes.constEnd(); ++it ) {
+    QList<K3bTheme*> themes = k3bappcore->themeManager()->themes();
+    for( QList<K3bTheme*>::const_iterator it = themes.constBegin(); it != themes.constEnd(); ++it ) {
         K3bTheme* theme = *it;
         ThemeViewItem* item = new ThemeViewItem( theme, m_viewTheme, m_viewTheme->lastItem() );
         if( theme == k3bappcore->themeManager()->currentTheme() )
@@ -109,12 +109,14 @@ void K3bThemeOptionTab::selectionChanged()
     ThemeViewItem* item = (ThemeViewItem*)m_viewTheme->selectedItem();
     if( item ) {
         m_centerPreviewLabel->setText( i18n("K3b - The CD/DVD Kreator") );
-        m_centerPreviewLabel->setPaletteBackgroundColor( item->theme->backgroundColor() );
-        m_centerPreviewLabel->setPaletteForegroundColor( item->theme->foregroundColor() );
-        m_leftPreviewLabel->setPaletteBackgroundColor( item->theme->backgroundColor() );
-        m_leftPreviewLabel->setPaletteForegroundColor( item->theme->foregroundColor() );
-        m_rightPreviewLabel->setPaletteBackgroundColor( item->theme->backgroundColor() );
-        m_rightPreviewLabel->setPaletteForegroundColor( item->theme->foregroundColor() );
+
+        QPalette pal( palette() );
+        pal.setColor( backgroundRole(), item->theme->backgroundColor() );
+        pal.setColor( foregroundRole(), item->theme->backgroundColor() );
+        m_centerPreviewLabel->setPalette( pal );
+        m_leftPreviewLabel->setPalette( pal );
+        m_rightPreviewLabel->setPalette( pal );
+
         m_leftPreviewLabel->setPixmap( item->theme->pixmap( K3bTheme::PROJECT_LEFT ) );
         m_rightPreviewLabel->setPixmap( item->theme->pixmap( K3bTheme::PROJECT_RIGHT ) );
 

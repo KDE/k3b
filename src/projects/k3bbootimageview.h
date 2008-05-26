@@ -37,7 +37,7 @@ public:
     K3bBootImageView( K3bDataDoc* doc, QWidget* parent = 0 );
     ~K3bBootImageView();
 
-private slots:
+private Q_SLOTS:
     void slotNewBootImage();
     void slotDeleteBootImage();
     void slotToggleOptions();

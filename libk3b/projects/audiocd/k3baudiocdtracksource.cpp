@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 
 
 K3bAudioCdTrackSource::K3bAudioCdTrackSource( const K3bDevice::Toc& toc, int cdTrackNumber,
-					      const QString& artist, const QString& title,
+                                              const QString& artist, const QString& title,
                                               const QString& cdartist, const QString& cdtitle,
                                               K3bDevice::Device* dev )
     : K3bAudioDataSource(),
@@ -50,8 +50,8 @@ K3bAudioCdTrackSource::K3bAudioCdTrackSource( const K3bDevice::Toc& toc, int cdT
 
 
 K3bAudioCdTrackSource::K3bAudioCdTrackSource( unsigned int discid, const K3b::Msf& length, int cdTrackNumber,
-					      const QString& artist, const QString& title,
-					      const QString& cdArtist, const QString& cdTitle )
+                                              const QString& artist, const QString& title,
+                                              const QString& cdArtist, const QString& cdTitle )
     : K3bAudioDataSource(),
       m_discId( discid ),
       m_length( length ),
@@ -103,8 +103,8 @@ bool K3bAudioCdTrackSource::initParanoia()
             if( !m_lastUsedDevice ) {
                 // could not find the CD, so ask for it
                 QString s = i18n("Please insert Audio CD %1%2"
-                            ,QString::number(m_discId),
-                            m_cdTitle.isEmpty() || m_cdArtist.isEmpty()
+                                 ,QString::number(m_discId),
+                                 m_cdTitle.isEmpty() || m_cdArtist.isEmpty()
                                  ? QString()
                                  : " (" + m_cdArtist + " - " + m_cdTitle + ")");
 

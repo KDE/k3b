@@ -41,7 +41,7 @@ class K3bDataImageSettingsWidget : public base_K3bDataImageSettings
 
   void showFileSystemOptions( bool );
 
- private slots:
+ private Q_SLOTS:
   void slotSpaceHandlingChanged( int i );
   void slotCustomFilesystems();
   void slotMoreVolDescFields();

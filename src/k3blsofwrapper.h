@@ -46,7 +46,7 @@ class K3bLsofWrapper
    * handle on the device used in the last successful call
    * to checkDevice.
    */
-  const Q3ValueList<Process>& usingApplications() const;
+  const QList<Process>& usingApplications() const;
 
  private:
   bool findLsofExecutable();

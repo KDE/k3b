@@ -41,7 +41,7 @@ public:
     K3bDataPropertiesDialog( const QList<K3bDataItem*>&, QWidget* parent = 0 );
     ~K3bDataPropertiesDialog();
 
-protected slots:
+protected Q_SLOTS:
     void slotOk();
 
 private:

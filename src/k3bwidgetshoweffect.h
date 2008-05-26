@@ -1,6 +1,6 @@
 /* 
  *
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -32,85 +32,85 @@
  */
 class K3bWidgetShowEffect : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  // FIXME: add an effect direction
-  enum Effect {
-    Dissolve = 1,
-    Slide
-  };
+public:
+    // FIXME: add an effect direction
+    enum Effect {
+        Dissolve = 1,
+        Slide
+    };
 
-  K3bWidgetShowEffect( QWidget* widget, Effect e = Slide );
-  ~K3bWidgetShowEffect();
+    K3bWidgetShowEffect( QWidget* widget, Effect e = Slide );
+    ~K3bWidgetShowEffect();
 
-  void setEffect( Effect e ) { m_effect = e; }
+    void setEffect( Effect e ) { m_effect = e; }
 
-  /**
-   * Using the widget effects the easy way.
-   * \returns the K3bWidgetShowEffect instance used to show the widget.
-   * Can be used to connect to signals.
-   */
-  static K3bWidgetShowEffect* showWidget( QWidget* w, Effect );
+    /**
+     * Using the widget effects the easy way.
+     * \returns the K3bWidgetShowEffect instance used to show the widget.
+     * Can be used to connect to signals.
+     */
+    static K3bWidgetShowEffect* showWidget( QWidget* w, Effect );
 
-  /**
-   * Using the widget effects the easy way.
-   * \returns the K3bWidgetShowEffect instance used to hide the widget.
-   * Can be used to connect to signals.
-   */
-  static K3bWidgetShowEffect* hideWidget( QWidget* w, Effect );
+    /**
+     * Using the widget effects the easy way.
+     * \returns the K3bWidgetShowEffect instance used to hide the widget.
+     * Can be used to connect to signals.
+     */
+    static K3bWidgetShowEffect* hideWidget( QWidget* w, Effect );
 
- signals:
-  void widgetShown( QWidget* );
-  void widgetHidden( QWidget* );
+Q_SIGNALS:
+    void widgetShown( QWidget* );
+    void widgetHidden( QWidget* );
 
- public slots:
-  /**
-   * \param effectOnly If true K3bWidgetShowEffect will not call QWidget::show().
-   *                   This is only useful in case onw uses K3bWidgetShowEffect
-   *                   to reimplement QWidget::show(). In that case the caller
-   *                   has to take care of showing the widget.
-   */
-  void show( bool effectOnly = false );
+public Q_SLOTS:
+    /**
+     * \param effectOnly If true K3bWidgetShowEffect will not call QWidget::show().
+     *                   This is only useful in case onw uses K3bWidgetShowEffect
+     *                   to reimplement QWidget::show(). In that case the caller
+     *                   has to take care of showing the widget.
+     */
+    void show( bool effectOnly = false );
 
-  /**
-   * \param effectOnly If true K3bWidgetShowEffect will not call QWidget::hide().
-   *                   This is only useful in case onw uses K3bWidgetShowEffect
-   *                   to reimplement QWidget::hide(). In that case the caller
-   *                   has to take care of hiding the widget by connecting to
-   *                   K3bWidgetShowEffect::widgetHidden()
-   */
-  void hide( bool effectOnly = false );
+    /**
+     * \param effectOnly If true K3bWidgetShowEffect will not call QWidget::hide().
+     *                   This is only useful in case onw uses K3bWidgetShowEffect
+     *                   to reimplement QWidget::hide(). In that case the caller
+     *                   has to take care of hiding the widget by connecting to
+     *                   K3bWidgetShowEffect::widgetHidden()
+     */
+    void hide( bool effectOnly = false );
 
- private:
-  void timerEvent( QTimerEvent* );
+private:
+    void timerEvent( QTimerEvent* );
   
-  /**
-   * @short Gradually show widget by dissolving from background
-   */
-  void dissolveMask();
+    /**
+     * @short Gradually show widget by dissolving from background
+     */
+    void dissolveMask();
   
-  /**
-   * @short animation to slide the widget into view
-   */
-  void slideMask();
+    /**
+     * @short animation to slide the widget into view
+     */
+    void slideMask();
 
-  Effect m_effect;
-  QWidget* m_widget;
+    Effect m_effect;
+    QWidget* m_widget;
 
-  QBitmap m_mask;
+    QBitmap m_mask;
 
-  int m_dissolveSize;
-  int m_dissolveDelta;
+    int m_dissolveSize;
+    int m_dissolveDelta;
 
-  int m_offset;
-  int m_timerId;
+    int m_offset;
+    int m_timerId;
 
-  // if true we show, otherwise we hide the widget
-  bool m_bShow;
+    // if true we show, otherwise we hide the widget
+    bool m_bShow;
 
-  bool m_deleteSelf;
-  bool m_bEffectOnly;
+    bool m_deleteSelf;
+    bool m_bEffectOnly;
 };
 
 #endif

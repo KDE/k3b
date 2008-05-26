@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 #include <qtimer.h>
 #include <qapplication.h>
 #include <qlabel.h>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QEvent>
 #include <QMouseEvent>
@@ -32,15 +31,15 @@
 
 
 K3bToolTip::K3bToolTip( QWidget* widget )
-  : QObject( widget ),
-    m_parentWidget( widget ),
-    m_currentTip( 0 ),
-    m_tipTimer( new QTimer( this ) ),
-    m_tipTimeout( 700 )
+    : QObject( widget ),
+      m_parentWidget( widget ),
+      m_currentTip( 0 ),
+      m_tipTimer( new QTimer( this ) ),
+      m_tipTimeout( 700 )
 {
-  m_parentWidget->installEventFilter( this );
-  connect( m_tipTimer, SIGNAL(timeout()),
-	   this, SLOT(slotCheckShowTip()) );
+    m_parentWidget->installEventFilter( this );
+    connect( m_tipTimer, SIGNAL(timeout()),
+             this, SLOT(slotCheckShowTip()) );
 }
 
 
@@ -51,148 +50,144 @@ K3bToolTip::~K3bToolTip()
 
 void K3bToolTip::tip( const QRect& rect, const QString& text, int effect )
 {
-  QLabel* label = new QLabel( text, parentWidget() );
-  label->setMargin( 6 );
-  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-    label->setPaletteBackgroundColor( theme->backgroundColor() );
-    label->setPaletteForegroundColor( theme->foregroundColor() );
-  }
-  tip( rect, label, (K3bWidgetShowEffect::Effect)effect );
+    QLabel* label = new QLabel( text, parentWidget() );
+    label->setMargin( 6 );
+    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+        label->setPalette( theme->palette() );
+    }
+    tip( rect, label, (K3bWidgetShowEffect::Effect)effect );
 }
 
 
 void K3bToolTip::tip( const QRect& rect, const QPixmap& pix, int effect )
 {
-  QLabel* label = new QLabel( parentWidget() );
-  label->setMargin( 6 );
-  if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-    label->setPaletteBackgroundColor( theme->backgroundColor() );
-    label->setPaletteForegroundColor( theme->foregroundColor() );
-  }
-  label->setPixmap( pix );
-  tip( rect, label, (K3bWidgetShowEffect::Effect)effect );
+    QLabel* label = new QLabel( parentWidget() );
+    label->setMargin( 6 );
+    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+        label->setPalette( theme->palette() );
+    }
+    label->setPixmap( pix );
+    tip( rect, label, (K3bWidgetShowEffect::Effect)effect );
 }
 
 
 void K3bToolTip::tip( const QRect& rect, QWidget* w, int effect )
 {
-  // stop the timer
-  m_tipTimer->stop();
+    // stop the timer
+    m_tipTimer->stop();
 
-  // hide any previous tip
-  hideTip();
+    // hide any previous tip
+    hideTip();
 
-  // which screen are we on?
-  int scr;
-  if( QApplication::desktop()->isVirtualDesktop() )
-    scr = QApplication::desktop()->screenNumber( m_parentWidget->mapToGlobal( m_lastMousePos ) );
-  else
-    scr = QApplication::desktop()->screenNumber( m_parentWidget );
+    // which screen are we on?
+    int scr;
+    if( QApplication::desktop()->isVirtualDesktop() )
+        scr = QApplication::desktop()->screenNumber( m_parentWidget->mapToGlobal( m_lastMousePos ) );
+    else
+        scr = QApplication::desktop()->screenNumber( m_parentWidget );
 
-  // make sure the widget is displayed correcly
-  w->reparent( QApplication::desktop()->screen( scr ),
-	       Qt::WStyle_StaysOnTop | Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool | Qt::X11BypassWindowManagerHint,
-	       QPoint( 0, 0 ), false );
-  w->polish();
-  w->adjustSize();
+    // make sure the widget is displayed correcly
+    w->setParent( QApplication::desktop()->screen( scr ),
+                  Qt::WStyle_StaysOnTop | Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool | Qt::X11BypassWindowManagerHint );
+    w->adjustSize();
 
-  // positioning code from qtooltip.cpp
-  QRect screen = QApplication::desktop()->screenGeometry( scr );
+    // positioning code from qtooltip.cpp
+    QRect screen = QApplication::desktop()->screenGeometry( scr );
 
-  // FIXME: why (2,16) and (4,24) below? Why not use the cursors' size?
+    // FIXME: why (2,16) and (4,24) below? Why not use the cursors' size?
 
-  QPoint p = m_parentWidget->mapToGlobal( m_lastMousePos ) + QPoint( 2, 16 );
+    QPoint p = m_parentWidget->mapToGlobal( m_lastMousePos ) + QPoint( 2, 16 );
 
-  if( p.x() + w->width() > screen.x() + screen.width() )
-    p.rx() -= 4 + w->width();
-  if( p.y() + w->height() > screen.y() + screen.height() )
-    p.ry() -= 24 + w->height();
-  
-  if( p.y() < screen.y() )
-    p.setY( screen.y() );
-  if( p.x() + w->width() > screen.x() + screen.width() )
-    p.setX( screen.x() + screen.width() - w->width() );
-  if( p.x() < screen.x() )
-    p.setX( screen.x() );
-  if( p.y() + w->height() > screen.y() + screen.height() )
-    p.setY( screen.y() + screen.height() - w->height() );
+    if( p.x() + w->width() > screen.x() + screen.width() )
+        p.rx() -= 4 + w->width();
+    if( p.y() + w->height() > screen.y() + screen.height() )
+        p.ry() -= 24 + w->height();
 
-  m_currentTip = w;
-  m_currentTipRect = rect;
-  w->move( p );
-  if( effect )
-    K3bWidgetShowEffect::showWidget( w, (K3bWidgetShowEffect::Effect)effect );
-  else
-    w->show();
-  w->raise();
+    if( p.y() < screen.y() )
+        p.setY( screen.y() );
+    if( p.x() + w->width() > screen.x() + screen.width() )
+        p.setX( screen.x() + screen.width() - w->width() );
+    if( p.x() < screen.x() )
+        p.setX( screen.x() );
+    if( p.y() + w->height() > screen.y() + screen.height() )
+        p.setY( screen.y() + screen.height() - w->height() );
+
+    m_currentTip = w;
+    m_currentTipRect = rect;
+    w->move( p );
+    if( effect )
+        K3bWidgetShowEffect::showWidget( w, (K3bWidgetShowEffect::Effect)effect );
+    else
+        w->show();
+    w->raise();
 }
 
 
 void K3bToolTip::hideTip()
 {
-  // just remove the tip
-  delete m_currentTip;
-  m_currentTip = 0;
+    // just remove the tip
+    delete m_currentTip;
+    m_currentTip = 0;
 }
 
 
 bool K3bToolTip::eventFilter( QObject* o, QEvent* e )
 {
-  if( o == parentWidget() ) {
-    switch( e->type() ) {
-    case QEvent::MouseButtonPress:
-    case QEvent::MouseButtonRelease:
-    case QEvent::MouseButtonDblClick:
-    case QEvent::KeyPress:
-    case QEvent::KeyRelease:
-      // input - turn off tool tip mode
-      hideTip();
-      m_tipTimer->stop();
-      break;
+    if( o == parentWidget() ) {
+        switch( e->type() ) {
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonRelease:
+        case QEvent::MouseButtonDblClick:
+        case QEvent::KeyPress:
+        case QEvent::KeyRelease:
+            // input - turn off tool tip mode
+            hideTip();
+            m_tipTimer->stop();
+            break;
 
-    case QEvent::MouseMove: {
-      QMouseEvent* m = (QMouseEvent*)e;
-      m_lastMousePos = m_parentWidget->mapFromGlobal( m->globalPos() );
-      m_tipTimer->setSingleShot( true );
-      m_tipTimer->stop();
-      if( m_currentTip ) {
-	// see if we have to hide it
-	if( !m_currentTipRect.contains( m_lastMousePos ) ) {
-	  hideTip();
+        case QEvent::MouseMove: {
+            QMouseEvent* m = (QMouseEvent*)e;
+            m_lastMousePos = m_parentWidget->mapFromGlobal( m->globalPos() );
+            m_tipTimer->setSingleShot( true );
+            m_tipTimer->stop();
+            if( m_currentTip ) {
+                // see if we have to hide it
+                if( !m_currentTipRect.contains( m_lastMousePos ) ) {
+                    hideTip();
 
-	  // in case we moved the mouse from one tip area to the next without leaving
-	  // the widget just popup the new tip immedeately
-	  m_tipTimer->start( 0 );
-	}
-      }
+                    // in case we moved the mouse from one tip area to the next without leaving
+                    // the widget just popup the new tip immedeately
+                    m_tipTimer->start( 0 );
+                }
+            }
 
-      // if we are not showing a tip currently start the tip timer
-      else
-	m_tipTimer->start( m_tipTimeout );
+            // if we are not showing a tip currently start the tip timer
+            else
+                m_tipTimer->start( m_tipTimeout );
 
-      break;
+            break;
+        }
+
+        case QEvent::Leave:
+        case QEvent::Hide:
+        case QEvent::Destroy:
+        case QEvent::FocusOut:
+            hideTip();
+            m_tipTimer->stop();
+            break;
+
+        default:
+            break;
+        }
     }
 
-    case QEvent::Leave:
-    case QEvent::Hide:
-    case QEvent::Destroy:
-    case QEvent::FocusOut:
-      hideTip();
-      m_tipTimer->stop();
-      break;
-
-    default:
-      break;
-    }
-  }
-
-  return false;
+    return false;
 }
 
 
 void K3bToolTip::slotCheckShowTip()
 {
-  maybeTip( m_lastMousePos );
+    maybeTip( m_lastMousePos );
 }
 
 

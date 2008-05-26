@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,13 +30,13 @@
 #include <qtooltip.h>
 #include <qcursor.h>
 #include <qimage.h>
-//Added by qt3to4:
 #include <QDropEvent>
 #include <QShowEvent>
 #include <QPaintEvent>
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QDragEnterEvent>
+#include <QTextDocument>
 
 #include <kurl.h>
 #include <k3urldrag.h>
@@ -87,12 +87,14 @@ K3bWelcomeWidget::Display::Display( K3bWelcomeWidget* parent )
     QFont fnt(font());
     fnt.setBold(true);
     fnt.setPointSize( 16 );
-    m_header = new Q3SimpleRichText( i18n("Welcome to K3b - The CD and DVD Kreator"), fnt );
-    m_infoText = new Q3SimpleRichText( QString::fromUtf8("<qt align=\"center\">K3b %1 (c) 1999 - 2007 Sebastian Trüg")
-                                       .arg(KGlobal::mainComponent().aboutData()->version()), font() );
+    m_header = new QTextDocument( i18n("Welcome to K3b - The CD and DVD Kreator"), this );
+    m_header->setDefaultFont( fnt );
+    m_infoText = new QTextDocument( this );
+    m_infoText->setHtml( QString::fromUtf8("<qt align=\"center\">K3b %1 (c) 1999 - 2007 Sebastian Trüg")
+                         .arg(KGlobal::mainComponent().aboutData()->version()) );
 
     // set a large width just to be sure no linebreak occurs
-    m_header->setWidth( 800 );
+    m_header->setTextWidth( 800 );
 
     setAcceptDrops( true );
     m_rows = m_cols = 1;
@@ -108,8 +110,6 @@ K3bWelcomeWidget::Display::Display( K3bWelcomeWidget* parent )
 
 K3bWelcomeWidget::Display::~Display()
 {
-    delete m_header;
-    delete m_infoText;
 }
 
 
@@ -202,10 +202,10 @@ void K3bWelcomeWidget::Display::repositionButtons()
     calculateButtons( width(), m_actions.count(), m_buttonSize.width(), m_cols, m_rows );
 
     int availHor = width() - 40;
-    int availVert = height() - 20 - 10 - m_header->height() - 10;
-    availVert -= m_infoText->height() - 10;
+    int availVert = height() - 20 - 10 - ( int )m_header->size().height() - 10;
+    availVert -= ( int )m_infoText->size().height() - 10;
     int leftMargin = 20 + (availHor - (m_buttonSize.width()+4)*m_cols)/2;
-    int topOffset = m_header->height() + 20 + ( availVert - (m_buttonSize.height()+4)*m_rows - m_buttonMore->height() )/2;
+    int topOffset = ( int )m_header->size().height() + 20 + ( availVert - (m_buttonSize.height()+4)*m_rows - m_buttonMore->height() )/2;
 
     int row = 0;
     int col = 0;
@@ -236,28 +236,28 @@ void K3bWelcomeWidget::Display::repositionButtons()
 
 QSizePolicy K3bWelcomeWidget::Display::sizePolicy () const
 {
-    return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum, true );
+    return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 }
 
 
 int K3bWelcomeWidget::Display::heightForWidth( int w ) const
 {
-    int ow = m_infoText->width();
-    m_infoText->setWidth( w );
-    int h = m_infoText->height();
-    m_infoText->setWidth( ow );
+    int ow = ( int )m_infoText->idealWidth();
+    m_infoText->setTextWidth( w );
+    int h = ( int )m_infoText->size().height();
+    m_infoText->setTextWidth( ow );
 
     int cols, rows;
     calculateButtons( w, m_actions.count(), m_buttonSize.width(), cols, rows );
 
-    return (20 + m_header->height() + 20 + 10 + ((m_buttonSize.height()+4)*rows) + 4 + m_buttonMore->height() + 10 + h + 20);
+    return (20 + ( int )m_header->size().height() + 20 + 10 + ((m_buttonSize.height()+4)*rows) + 4 + m_buttonMore->height() + 10 + h + 20);
 }
 
 
 QSize K3bWelcomeWidget::Display::minimumSizeHint() const
 {
-    QSize size( qMax(40+m_header->widthUsed(), 40+m_buttonSize.width()),
-                20 + m_header->height() + 20 + 10 + m_buttonSize.height() + 10 + m_infoText->height() + 20 );
+    QSize size( qMax(40+( int )m_header->idealWidth(), 40+m_buttonSize.width()),
+                20 + ( int )m_header->size().height() + 20 + 10 + m_buttonSize.height() + 10 + ( int )m_infoText->size().height() + 20 );
 
     return size;
 }
@@ -265,7 +265,7 @@ QSize K3bWelcomeWidget::Display::minimumSizeHint() const
 
 void K3bWelcomeWidget::Display::resizeEvent( QResizeEvent* e )
 {
-    m_infoText->setWidth( width() - 20 );
+    m_infoText->setTextWidth( width() - 20 );
     QWidget::resizeEvent(e);
     repositionButtons();
     if( e->size() != m_bgPixmap.size() )
@@ -306,7 +306,7 @@ void K3bWelcomeWidget::Display::paintEvent( QPaintEvent* )
         p.drawTiledPixmap( rect(), m_bgPixmap );
 
         // rect around the header
-        QRect rect( 10, 10, qMax( m_header->widthUsed() + 20, width() - 20 ), m_header->height() + 20 );
+        QRect rect( 10, 10, qMax( ( int )m_header->idealWidth() + 20, width() - 20 ), ( int )m_header->size().height() + 20 );
         p.fillRect( rect, theme->backgroundColor() );
         p.drawRect( rect );
 
@@ -314,29 +314,33 @@ void K3bWelcomeWidget::Display::paintEvent( QPaintEvent* )
         p.drawRect( 10, 10, width()-20, height()-20 );
 
         // draw the header text
-        QColorGroup grp( colorGroup() );
-        grp.setColor( QColorGroup::Text, theme->foregroundColor() );
         int pos = 20;
-        pos += qMax( (width()-40-m_header->widthUsed())/2, 0 );
-        m_header->draw( &p, pos, 20, QRect(), grp );
+        pos += qMax( (width()-40-( int )m_header->idealWidth())/2, 0 );
+        p.save();
+        p.translate( pos, 20 );
+        m_header->drawContents( &p );
+        p.restore();
 
         // draw the info box
         //    int boxWidth = 20 + m_infoText->widthUsed();
-        int boxHeight = 10 + m_infoText->height();
+        int boxHeight = 10 + ( int )m_infoText->size().height();
         QRect infoBoxRect( 10/*qMax( (width()-20-m_infoText->widthUsed())/2, 10 )*/,
                            height()-10-boxHeight,
                            width()-20/*boxWidth*/,
                            boxHeight );
         p.fillRect( infoBoxRect, theme->backgroundColor() );
         p.drawRect( infoBoxRect );
-        m_infoText->draw( &p, infoBoxRect.left()+5, infoBoxRect.top()+5, QRect(), grp );
+        p.save();
+        p.translate( infoBoxRect.left()+5, infoBoxRect.top()+5 );
+        m_infoText->drawContents( &p );
+        p.restore();
     }
 }
 
 
 void K3bWelcomeWidget::Display::dragEnterEvent( QDragEnterEvent* event )
 {
-    event->accept( K3URLDrag::canDecode(event) );
+    event->setAccepted( K3URLDrag::canDecode(event) );
 }
 
 
@@ -379,7 +383,7 @@ void K3bWelcomeWidget::loadConfig( const KConfigGroup& c )
 
     QList<QAction*> actions;
     for( QStringList::const_iterator it = sl.begin(); it != sl.end(); ++it )
-        if( QAction* a = m_mainWindow->actionCollection()->action( (*it).latin1() ) )
+        if( QAction* a = m_mainWindow->actionCollection()->action( *it ) )
             actions.append(a);
 
     main->rebuildGui( actions );
@@ -428,14 +432,19 @@ void K3bWelcomeWidget::fixSize()
 void K3bWelcomeWidget::mousePressEvent ( QMouseEvent* e )
 {
     if( e->button() == Qt::RightButton ) {
-        QMap<QAction *, QAction*> map;
+        QMap<QAction*, QAction*> map;
         KMenu addPop;
+        addPop.setTitle( i18n("Add Button") );
 
+        QAction* firstAction = 0;
         for ( int i = 0; s_allActions[i]; ++i ) {
             if ( s_allActions[i][0] != '_' ) {
                 QAction* a = m_mainWindow->actionCollection()->action( s_allActions[i] );
-                if ( a && main->m_actions.count(a)==0 ) {
-                    map.insert( addPop.addAction( a->icon(), a->text() ), a );
+                if ( a && !main->m_actions.contains(a) ) {
+                    QAction* addAction = addPop.addAction( a->icon(), a->text() );
+                    map.insert( addAction, a );
+                    if ( !firstAction )
+                        firstAction = addAction;
                 }
             }
         }
@@ -450,13 +459,11 @@ void K3bWelcomeWidget::mousePressEvent ( QMouseEvent* e )
             KMenu pop;
             removeAction = pop.addAction( SmallIcon("list-remove"), i18n("Remove Button") );
             if ( addPop.actions().count() > 0 )
-                pop.insertItem( i18n("Add Button"), &addPop );
-            pop.addSeparator();
+                pop.addMenu( &addPop );
             r = pop.exec( e->globalPos() );
         }
         else {
-            addPop.addTitle( i18n("Add Button"));
-            addPop.addSeparator();
+            addPop.addTitle( addPop.title(), firstAction );
             r = addPop.exec( e->globalPos() );
         }
 

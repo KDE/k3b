@@ -36,7 +36,7 @@ public:
     K3bMovixView( K3bMovixDoc* doc, QWidget* parent = 0 );
     virtual ~K3bMovixView();
 
-private slots:
+private Q_SLOTS:
     void slotContextMenuRequested(Q3ListViewItem*, const QPoint& , int );
     void slotRemoveItems();
     void slotRemoveSubTitleItems();

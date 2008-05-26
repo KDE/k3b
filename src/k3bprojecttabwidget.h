@@ -63,10 +63,10 @@ class K3bProjectTabWidget : public QTabWidget
 protected:
   virtual void tabInserted ( int index );
 
- public slots:
+ public Q_SLOTS:
   void removePage( QWidget* );
 
- private slots:
+ private Q_SLOTS:
   void slotDocChanged( K3bDoc* );
   void slotDocSaved( K3bDoc* );
 

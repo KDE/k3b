@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,83 +25,82 @@
 
 // FIXME: multiple tracks
 K3bAudioCdTrackDrag::K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, const QList<int>& cdTrackNumbers,
-					  const K3bCddbResultEntry& cddb,
-					  K3bDevice::Device* lastDev, QWidget* dragSource )
+                                          const KCDDB::CDInfo& cddb,
+                                          K3bDevice::Device* lastDev, QWidget* dragSource )
     : Q3StoredDrag( "k3b/audio_track_drag", dragSource, name ),
-    m_toc(toc),
-    m_cdTrackNumbers(cdTrackNumbers),
-    m_cddb(cddb),
-    m_device(lastDev)
+      m_toc(toc),
+      m_cdTrackNumbers(cdTrackNumbers),
+      m_cddb(cddb),
+      m_device(lastDev)
 {
-  QByteArray data;
-  QDataStream s( data, QIODevice::WriteOnly );
-  s << (unsigned int)toc.count();
-  for( K3bDevice::Toc::const_iterator it = toc.begin(); it != toc.end(); ++it ) {
-    const K3bDevice::Track& track = *it;
-    s << track.firstSector().lba() << track.lastSector().lba();
-  }
-  QTextStream t( s.device() );
-  t << cddb.cdArtist << endl
-    << cddb.cdTitle << endl;
-  for( unsigned int i = 0; i < toc.count(); ++i ) {
-    t << cddb.artists[i] << endl
-      << cddb.titles[i] << endl;
-  }
+    QByteArray data;
+    QDataStream s( data, QIODevice::WriteOnly );
+    s << (unsigned int)toc.count();
+    for( K3bDevice::Toc::const_iterator it = toc.begin(); it != toc.end(); ++it ) {
+        const K3bDevice::Track& track = *it;
+        s << track.firstSector().lba() << track.lastSector().lba();
+    }
+    QTextStream t( s.device() );
+    t << cddb.get( KCDDB::Artist ).toString() << endl
+      << cddb.get( KCDDB::Title ).toString() << endl;
+    for( unsigned int i = 0; i < toc.count(); ++i ) {
+        t << cddb.track( i ).get( KCDDB::Artist ).toString() << endl
+          << cddb.track( i ).get( KCDDB::Title ).toString() << endl;
+    }
 
-  s << (unsigned int)cdTrackNumbers.count();
+    s << (unsigned int)cdTrackNumbers.count();
 
-  for( QList<int>::const_iterator it = cdTrackNumbers.begin();
-       it != cdTrackNumbers.end(); ++it )
-    s << *it;
+    for( QList<int>::const_iterator it = cdTrackNumbers.begin();
+         it != cdTrackNumbers.end(); ++it )
+        s << *it;
 
-  if( lastDev )
-    t << lastDev->blockDeviceName() << endl;
-  else
-    t << endl;
+    if( lastDev )
+        t << lastDev->blockDeviceName() << endl;
+    else
+        t << endl;
 
-  // TODO: the rest
-  setEncodedData( data );
+    // TODO: the rest
+    setEncodedData( data );
 }
 
 
 bool K3bAudioCdTrackDrag::decode( const QMimeSource* e,
-				  K3bDevice::Toc& toc, QList<int>& trackNumbers,
-				  K3bCddbResultEntry& cddb, K3bDevice::Device** dev )
+                                  K3bDevice::Toc& toc, QList<int>& trackNumbers,
+                                  KCDDB::CDInfo& cddb, K3bDevice::Device** dev )
 {
-  QByteArray data = e->encodedData( "k3b/audio_track_drag" );
+    QByteArray data = e->encodedData( "k3b/audio_track_drag" );
 
-  QDataStream s( data, QIODevice::ReadOnly );
+    QDataStream s( data, QIODevice::ReadOnly );
 
-  unsigned int trackCnt;
-  s >> trackCnt;
-  for( unsigned int i = 0; i < trackCnt; ++i ) {
-    int fs, ls;
-    s >> fs;
-    s >> ls;
-    toc.append( K3bDevice::Track( fs, ls, K3bDevice::Track::AUDIO ) );
-  }
+    unsigned int trackCnt;
+    s >> trackCnt;
+    for( unsigned int i = 0; i < trackCnt; ++i ) {
+        int fs, ls;
+        s >> fs;
+        s >> ls;
+        toc.append( K3bDevice::Track( fs, ls, K3bDevice::Track::AUDIO ) );
+    }
 
-  QTextStream t( s.device() );
-  cddb.artists.clear();
-  cddb.titles.clear();
-  cddb.cdArtist = t.readLine();
-  cddb.cdTitle = t.readLine();
-  for( unsigned int i = 0; i < trackCnt; ++i ) {
-    cddb.artists.append( t.readLine() );
-    cddb.titles.append( t.readLine() );
-  }
+    QTextStream t( s.device() );
+    cddb.clear();
+    cddb.set( KCDDB::Artist, t.readLine() );
+    cddb.set( KCDDB::Title, t.readLine() );
+    for( unsigned int i = 0; i < trackCnt; ++i ) {
+        cddb.track( i ).set( KCDDB::Artist, t.readLine() );
+        cddb.track( i ).set( KCDDB::Title, t.readLine() );
+    }
 
-  s >> trackCnt;
-  trackNumbers.clear();
-  for( unsigned int i = 0; i < trackCnt; ++i ) {
-    int trackNumber = 0;
-    s >> trackNumber;
-    trackNumbers.append( trackNumber );
-  }
+    s >> trackCnt;
+    trackNumbers.clear();
+    for( unsigned int i = 0; i < trackCnt; ++i ) {
+        int trackNumber = 0;
+        s >> trackNumber;
+        trackNumbers.append( trackNumber );
+    }
 
-  QString devName = t.readLine();
-  if( dev && !devName.isEmpty() )
-    *dev = k3bcore->deviceManager()->findDevice( devName );
+    QString devName = t.readLine();
+    if( dev && !devName.isEmpty() )
+        *dev = k3bcore->deviceManager()->findDevice( devName );
 
-  return true;
+    return true;
 }

@@ -41,7 +41,7 @@ class K3bDataAdvancedImageSettingsWidget : public base_K3bAdvancedDataImageSetti
   void load( const K3bIsoOptions& );
   void save( K3bIsoOptions& );
 
- private slots:
+ private Q_SLOTS:
   void slotJolietToggled( bool on );
 
  private:

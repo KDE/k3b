@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2007-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ class QCheckBox;
 class QSpinBox;
 class QComboBox;
 class K3bWritingModeWidget;
-class Q3GroupBox;
+class QGroupBox;
 
 class K3bMediaCopyDialog : public K3bInteractionDialog
 {
@@ -42,7 +42,7 @@ public:
     void setReadingDevice( K3bDevice::Device* );
     K3bDevice::Device* readingDevice() const;
 
-private slots:
+private Q_SLOTS:
     void slotStartClicked();
     void updateOverrideDevice();
 
@@ -76,8 +76,8 @@ private:
     K3bWritingModeWidget* m_writingModeWidget;
     QComboBox* m_comboCopyMode;
 
-    Q3GroupBox* m_groupAdvancedDataOptions;
-    Q3GroupBox* m_groupAdvancedAudioOptions;
+    QGroupBox* m_groupAdvancedDataOptions;
+    QGroupBox* m_groupAdvancedAudioOptions;
 };
 
 #endif

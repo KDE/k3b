@@ -44,14 +44,14 @@ class K3bVcdJob : public K3bBurnJob
         QString jobDescription() const;
         QString jobDetails() const;
 
-    public slots:
+    public Q_SLOTS:
         void start();
         void cancel();
 
-    private slots:
+    private Q_SLOTS:
         void cancelAll();
 
-    protected slots:
+    protected Q_SLOTS:
         void slotVcdxBuildFinished();
         void slotParseVcdxBuildOutput( K3Process*, char* output, int len );
 

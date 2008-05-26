@@ -9,17 +9,34 @@ include (MacroLibrary)
 find_package(DvdRead REQUIRED)
 macro_optional_find_package(MusicBrainz)
 find_package(Kcddb REQUIRED)
+find_package(Taglib)
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 include(ConfigureChecks.cmake)
 
-include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}
-${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/libk3bdevice
-${CMAKE_CURRENT_BINARY_DIR}/libk3bdevice )
+include_directories( 
+  ${KDE4_INCLUDES}
+  ${KDE4_INCLUDE_DIR}
+  ${QT_INCLUDES}
+  ${CMAKE_CURRENT_BINARY_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}/libk3bdevice
+  ${CMAKE_CURRENT_BINARY_DIR}/libk3bdevice )
 
 SET(K3B_VERSION_STRING "1.95-svn")
+
+if(DVDREAD_FOUND)
+  set(HAVE_LIBDVDREAD 1)
+endif(DVDREAD_FOUND)
+
+if(MUSICBRAINZ_FOUND)
+  set(HAVE_MUSICBRAINZ 1)
+endif(MUSICBRAINZ_FOUND)
+
+if(TAGLIB_FOUND)
+  set(HAVE_TAGLIB 1)
+endif(TAGLIB_FOUND)
 
 configure_file (config-k3b.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-k3b.h )
 if(NOT WIN32)

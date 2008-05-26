@@ -38,7 +38,7 @@ class K3bReadcdReader : public K3bJob
 
   bool active() const;
 
- public slots:
+ public Q_SLOTS:
   void start();
   void cancel();
 
@@ -65,7 +65,7 @@ class K3bReadcdReader : public K3bJob
    */
   void writeToFd( int fd );
 
- private slots:
+ private Q_SLOTS:
   void slotStdLine( const QString& line );
   void slotProcessExited(K3Process*);
 

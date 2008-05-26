@@ -39,7 +39,7 @@ class K3bVideoDVDRippingView : public K3bMediaContentsView
 
   KActionCollection* actionCollection() const { return m_actionCollection; }
 
- private slots:
+ private Q_SLOTS:
   void slotStartRipping();
 
   void slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& );

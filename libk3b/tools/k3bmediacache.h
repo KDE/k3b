@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
 
 #ifndef _K3B_MEDIA_CACHE_H_
 #define _K3B_MEDIA_CACHE_H_
+
+#include "k3b_export.h"
 
 #include <qobject.h>
 
@@ -34,7 +36,6 @@ namespace K3bDevice {
 }
 
 
-
 /**
  * The Media Cache does know the status of all devices at all times
  * (except for blocked devices).
@@ -48,7 +49,7 @@ namespace K3bDevice {
  *
  * To start the media caching call buildDeviceList().
  */
-class K3bMediaCache : public QObject
+class LIBK3B_EXPORT K3bMediaCache : public QObject
 {
     Q_OBJECT
 
@@ -108,7 +109,7 @@ public:
      */
     QString mediumString( K3bDevice::Device* device, bool useContent = true );
 
-signals:
+Q_SIGNALS:
     /**
      * Signal emitted whenever a medium changes. That means when a new medium is inserted
      * or an old one is removed.
@@ -116,12 +117,23 @@ signals:
      * This signal will also be emitted when a previously blocked device becomes unblocked.
      *
      * Be aware though that the Media Cache will silently ignore removed devices. That means
-     * once should also listen to K3bDevice::DeviceManager::changed() in case a USB drive or
+     * one should also listen to K3bDevice::DeviceManager::changed() in case a USB drive or
      * something similar is removed.
      */
     void mediumChanged( K3bDevice::Device* dev );
 
-public slots:
+    /**
+     * Emitted when the cache analyses a new medium. This might be emitted multiple times
+     * with different messages.
+     *
+     * \param dev The device being analysed.
+     * \param message An optional message to display more details to the user.
+     *
+     * Analyzation of the medium is finished once mediumChanged has been emitted.
+     */
+    void checkingMedium( K3bDevice::Device* dev, const QString& message );
+
+public Q_SLOTS:
     /**
      * Build the device list and start the polling.
      * It might make sense to connect this to K3bDevice::DeviceManager::changed()
@@ -134,6 +146,15 @@ public slots:
      */
     void clearDeviceList();
 
+    /**
+     * Perform a new cddb query to update the information. This may be useful
+     * to let the user select a different entry in case of a multiple entry result
+     * or to re-query after enabling a new cddb source.
+     *
+     * Will result in a mediumChanged signal for media that have audio content.
+     */
+    void lookupCddb( K3bDevice::Device* );
+
 private:
     class PollThread;
     class DeviceEntry;
@@ -142,6 +163,9 @@ private:
     Private* const d;
 
     DeviceEntry* findDeviceEntry( K3bDevice::Device* );
+
+    Q_PRIVATE_SLOT( d, void _k_mediumChanged( K3bDevice::Device* ) )
+    Q_PRIVATE_SLOT( d, void _k_cddbJobFinished( KJob* job ) )
 };
 
 
@@ -178,6 +202,7 @@ public:
 
 Q_SIGNALS:
     void mediumChanged( K3bDevice::Device* dev );
+    void checkingMedium( K3bDevice::Device* dev, const QString& );
 
 protected:
     void run();

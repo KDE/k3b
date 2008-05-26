@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2006-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ public:
         : autoClipping( true ) {
     }
 
-    unsigned int currentTitleInfoIndex;
+    int currentTitleInfoIndex;
     bool autoClipping;
 
     bool canceled;
@@ -252,7 +252,7 @@ void K3bVideoDVDRippingJob::slotTranscodingProgress( int p )
 {
     // calculate the part already done
     double doneParts = 0.0;
-    for( unsigned int i = 0; i < d->currentTitleInfoIndex; ++i ) {
+    for( int i = 0; i < d->currentTitleInfoIndex; ++i ) {
         doneParts += d->titleProgressParts[i];
         if( d->autoClipping )
             doneParts += d->titleClippingProgressParts[i];
@@ -271,7 +271,7 @@ void K3bVideoDVDRippingJob::slotDetectClippingProgress( int p )
 {
     // calculate the part already done
     double doneParts = 0.0;
-    for( unsigned int i = 0; i < d->currentTitleInfoIndex; ++i ) {
+    for( int i = 0; i < d->currentTitleInfoIndex; ++i ) {
         doneParts += d->titleProgressParts[i];
         doneParts += d->titleClippingProgressParts[i];
     }
@@ -353,7 +353,7 @@ void K3bVideoDVDRippingJob::initProgressInfo()
     d->titleClippingProgressParts.resize( m_titleRipInfos.count() );
 
     unsigned long long totalFrames = 0ULL;
-    for( unsigned int i = 0; i < m_titleRipInfos.count(); ++i ) {
+    for( int i = 0; i < m_titleRipInfos.count(); ++i ) {
         if( m_transcodingJob->twoPassEncoding() )
             totalFrames += m_dvd[m_titleRipInfos[i].title-1].playbackTime().totalFrames() * 2;
         else
@@ -365,7 +365,7 @@ void K3bVideoDVDRippingJob::initProgressInfo()
             totalFrames += m_dvd[m_titleRipInfos[i].title-1].numChapters() * 200;
     }
 
-    for( unsigned int i = 0; i < m_titleRipInfos.count(); ++i ) {
+    for( int i = 0; i < m_titleRipInfos.count(); ++i ) {
         unsigned long long titleFrames = m_dvd[m_titleRipInfos[i].title-1].playbackTime().totalFrames();
         if( m_transcodingJob->twoPassEncoding() )
             titleFrames *= 2;

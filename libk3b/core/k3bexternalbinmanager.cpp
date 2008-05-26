@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,12 +24,16 @@
 #include <qregexp.h>
 #include <qfile.h>
 #include <qfileinfo.h>
-#include <q3ptrlist.h>
 
 #include <unistd.h>
 #include <sys/stat.h>
 #include <stdlib.h>
 
+
+bool compareVersions( const K3bExternalBin* bin1, const K3bExternalBin* bin2 )
+{
+    return bin1->version > bin2->version;
+}
 
 
 QString K3bExternalBinManager::m_noPath = "";
@@ -53,7 +57,7 @@ bool K3bExternalBin::isEmpty() const
 }
 
 
-const QString& K3bExternalBin::name() const
+QString K3bExternalBin::name() const
 {
     return m_program->name();
 }
@@ -71,9 +75,21 @@ void K3bExternalBin::addFeature( const QString& f )
 }
 
 
-const QStringList& K3bExternalBin::userParameters() const
+QStringList K3bExternalBin::userParameters() const
 {
     return m_program->userParameters();
+}
+
+
+QStringList K3bExternalBin::features() const
+{
+    return m_features;
+}
+
+
+K3bExternalProgram* K3bExternalBin::program() const
+{
+    return m_program;
 }
 
 
@@ -86,60 +102,64 @@ const QStringList& K3bExternalBin::userParameters() const
 
 
 K3bExternalProgram::K3bExternalProgram( const QString& name )
-    : m_name( name )
+    : m_name( name ),
+      m_defaultBin( 0 )
 {
-    m_bins.setAutoDelete( true );
 }
 
 
 K3bExternalProgram::~K3bExternalProgram()
 {
+    qDeleteAll( m_bins );
 }
 
 
 const K3bExternalBin* K3bExternalProgram::mostRecentBin() const
 {
-    Q3PtrListIterator<K3bExternalBin> it( m_bins );
-    K3bExternalBin* bin = *it;
-    ++it;
-    while( *it ) {
-        if( it.current()->version > bin->version )
-            bin = *it;
-        ++it;
+    if ( m_bins.isEmpty() ) {
+        return 0;
     }
-    return bin;
+    else {
+        return m_bins.first();
+    }
+}
+
+
+const K3bExternalBin* K3bExternalProgram::defaultBin() const
+{
+    return m_defaultBin;
 }
 
 
 void K3bExternalProgram::addBin( K3bExternalBin* bin )
 {
     if( !m_bins.contains( bin ) ) {
-        // insertion sort
+        m_bins.append( bin );
+
         // the first bin in the list is always the one used
         // so we default to using the newest one
-        K3bExternalBin* oldBin = m_bins.first();
-        while( oldBin && oldBin->version > bin->version )
-            oldBin = m_bins.next();
+        qSort( m_bins.begin(), m_bins.end(), compareVersions );
 
-        m_bins.insert( oldBin ? m_bins.at() : m_bins.count(), bin );
+        if ( !m_defaultBin || bin->version > m_defaultBin->version ) {
+            m_defaultBin = bin;
+        }
     }
 }
 
+
 void K3bExternalProgram::setDefault( const K3bExternalBin* bin )
 {
-    if( m_bins.contains( bin ) )
-        m_bins.take( m_bins.find( bin ) );
-
-    // the first bin in the list is always the one used
-    m_bins.insert( 0, bin );
+    if ( bin ) {
+        m_defaultBin = bin;
+    }
 }
 
 
 void K3bExternalProgram::setDefault( const QString& path )
 {
-    for( Q3PtrListIterator<K3bExternalBin> it( m_bins ); it.current(); ++it ) {
-        if( it.current()->path == path ) {
-            setDefault( it.current() );
+    for( QList<const K3bExternalBin*>::const_iterator it = m_bins.constBegin(); it != m_bins.constEnd(); ++it ) {
+        if( ( *it )->path == path ) {
+            setDefault( *it );
             return;
         }
     }
@@ -235,7 +255,7 @@ bool K3bExternalBinManager::foundBin( const QString& name )
 }
 
 
-const QString& K3bExternalBinManager::binPath( const QString& name )
+QString K3bExternalBinManager::binPath( const QString& name )
 {
     if( m_programs.find( name ) == m_programs.end() )
         return m_noPath;

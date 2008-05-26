@@ -816,15 +816,16 @@ int K3bIsoImager::writePathSpec()
 {
     delete m_pathSpecFile;
     m_pathSpecFile = new KTemporaryFile();
-    m_pathSpecFile->open();
+    if ( m_pathSpecFile->open() ) {
+        kDebug() << "Opened path spec file" << m_pathSpecFile->fileName();
+        QTextStream s( m_pathSpecFile );
 
-    QTextStream s( m_pathSpecFile );
-    // recursive path spec writing
-    int num = writePathSpecForDir( m_doc->root(), s );
-
-    m_pathSpecFile->close();
-
-    return num;
+        // recursive path spec writing
+        return writePathSpecForDir( m_doc->root(), s );
+    }
+    else {
+        return -1;
+    }
 }
 
 
@@ -947,7 +948,6 @@ bool K3bIsoImager::writeRRHideFile()
         item = item->nextSibling();
     }
 
-    m_rrHideFile->close();
     return true;
 }
 
@@ -969,7 +969,6 @@ bool K3bIsoImager::writeJolietHideFile()
         item = item->nextSibling();
     }
 
-    m_jolietHideFile->close();
     return true;
 }
 
@@ -1005,7 +1004,6 @@ bool K3bIsoImager::writeSortWeightFile()
         }
     }
 
-    m_sortWeightFile->close();
     return true;
 }
 

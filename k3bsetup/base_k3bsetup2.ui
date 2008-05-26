@@ -171,13 +171,6 @@
                         </property>
                       </spacer>
                     </item>
-                    <item>
-                      <widget class="QPushButton" name="m_buttonAddDevice" >
-                        <property name="text" >
-                          <string>Add Device...</string>
-                        </property>
-                      </widget>
-                    </item>
                   </layout>
                 </item>
               </layout>

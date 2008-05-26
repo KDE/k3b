@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,7 @@
 #define K3B_MSF_EDIT_H
 
 
-#include <qspinbox.h>
-#include <qstring.h>
+#include <QtGui/QSpinBox>
 #include <qvalidator.h>
 
 #include <k3bmsf.h>
@@ -26,38 +25,37 @@
 
 class K3bMsfValidator : public QRegExpValidator
 {
- public:
-  K3bMsfValidator( QObject* parent = 0 );
+public:
+    K3bMsfValidator( QObject* parent = 0 );
 };
 
 
-#ifdef __GNUC__
-#warning FIXME: make this a proper MSF edit again by subclassing from QAbtractSpinBox
-#endif
 class LIBK3B_EXPORT K3bMsfEdit : public QSpinBox
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bMsfEdit( QWidget* parent = 0 );
-  ~K3bMsfEdit();
+public:
+    K3bMsfEdit( QWidget* parent = 0 );
+    ~K3bMsfEdit();
 
-  K3b::Msf msfValue() const;
+    K3b::Msf msfValue() const;
 
- signals:
-  void valueChanged( const K3b::Msf& );
+    void stepBy( int steps );
 
- public slots:
-  void setText( const QString& );
-  void setMsfValue( const K3b::Msf& );
+Q_SIGNALS:
+    void valueChanged( const K3b::Msf& );
 
- protected:
-  QString mapValueToText( int );
-  int mapTextToValue( bool* ok );
-  int currentStepValue() const;
+public Q_SLOTS:
+    void setMsfValue( const K3b::Msf& );
 
- private slots:
-  void slotValueChanged( int );
+private:
+    QString textFromValue( int value ) const ;
+    int valueFromText( const QString & text ) const;
+
+    class Private;
+    Private* d;
+
+    Q_PRIVATE_SLOT( d, void _k_valueChanged(int) )
 };
 
 

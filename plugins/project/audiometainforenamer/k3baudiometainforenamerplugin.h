@@ -46,7 +46,7 @@ class K3bAudioMetainfoRenamerPluginWidget : public QWidget, public K3bProjectPlu
 
   void activate();
 
- private slots:
+ private Q_SLOTS:
   void slotScanClicked();
 
  private:

@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
 #define _K3B_MIXED_DIRTREEVIEW_H_
 
 #include <k3bdatadirtreeview.h>
-//Added by qt3to4:
 #include <QDropEvent>
 
 class K3bView;
@@ -29,28 +28,28 @@ class Q3ListViewItem;
 
 class K3bMixedDirTreeView : public K3bDataDirTreeView
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bMixedDirTreeView( K3bView* view, K3bMixedDoc* doc, QWidget* parent = 0 );
-  ~K3bMixedDirTreeView();
+public:
+    K3bMixedDirTreeView( K3bView* view, K3bMixedDoc* doc, QWidget* parent = 0 );
+    ~K3bMixedDirTreeView();
 
- signals:
-  void audioTreeSelected();
-  void dataTreeSelected();
+Q_SIGNALS:
+    void audioTreeSelected();
+    void dataTreeSelected();
 
- protected slots:
-  void slotDropped( QDropEvent* e, Q3ListViewItem* after, Q3ListViewItem* parent );
+protected Q_SLOTS:
+/*     void slotDropped( QDropEvent* e, Q3ListViewItem* after, Q3ListViewItem* parent ); */
   
- private slots:
-  void slotSelectionChanged( Q3ListViewItem* i );
-  void slotNewAudioTracks();
+private Q_SLOTS:
+/*     void slotSelectionChanged( Q3ListViewItem* i ); */
+/*     void slotNewAudioTracks(); */
 
- private:
-  K3bMixedDoc* m_doc;
+private:
+    K3bMixedDoc* m_doc;
 
-  class PrivateAudioRootViewItem;
-  PrivateAudioRootViewItem* m_audioRootItem;
+    class PrivateAudioRootViewItem;
+    PrivateAudioRootViewItem* m_audioRootItem;
 };
 
 

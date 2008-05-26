@@ -23,17 +23,14 @@
 #include <kiconloader.h>
 #include <k3listview.h>
 
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
 #include <qfile.h>
-#include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 
 
@@ -42,7 +39,7 @@ K3bExternalBinOptionTab::K3bExternalBinOptionTab( K3bExternalBinManager* manager
 {
     m_manager = manager;
 
-    Q3GridLayout* frameLayout = new Q3GridLayout( this );
+    QGridLayout* frameLayout = new QGridLayout( this );
     frameLayout->setSpacing( KDialog::spacingHint() );
     frameLayout->setMargin( 0 );
 

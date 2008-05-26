@@ -768,7 +768,7 @@ bool K3bMixedJob::writeTocFile()
         K3bDevice::CdText text = m_doc->audioDoc()->cdTextData();
         // if data in first track we need to add a dummy cdtext
         if( m_doc->mixedType() == K3bMixedDoc::DATA_FIRST_TRACK )
-            text.insert( text.begin(), K3bDevice::TrackCdText() );
+            text.insert( 0, K3bDevice::TrackCdText() );
 
         tocFileWriter.setCdText( text );
     }

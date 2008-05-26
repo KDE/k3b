@@ -55,13 +55,13 @@ public:
     bool openFile( const QString& ext, const QString& filename, const K3b::Msf& );
     void closeFile();
 
-    private slots:
+    private Q_SLOTS:
     void slotSoxFinished( K3Process* );
     void slotSoxOutputLine( const QString& );
 
 private:
     void finishEncoderInternal();
-    bool initEncoderInternal( const QString& extension );
+    bool initEncoderInternal( const QString& extension, const K3b::Msf& length );
     long encodeInternal( const char* data, Q_ULONG len );
 
     class Private;
@@ -77,7 +77,7 @@ public:
     K3bSoxEncoderSettingsWidget( QWidget* parent = 0 );
     ~K3bSoxEncoderSettingsWidget();
 
-    public slots:
+    public Q_SLOTS:
     void loadConfig();
     void saveConfig();
 

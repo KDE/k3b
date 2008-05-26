@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,33 +34,33 @@
 class K3bMixedDirTreeView::PrivateAudioRootViewItem : public K3bListViewItem
 {
 public:
-  PrivateAudioRootViewItem( K3bMixedDoc* doc, Q3ListView* parent, Q3ListViewItem* after )
-    : K3bListViewItem( parent, after ),
-      m_doc(doc)
-  {
-    setPixmap( 0, SmallIcon("audio-x-generic") );
-  }
+    PrivateAudioRootViewItem( K3bMixedDoc* doc, Q3ListView* parent, Q3ListViewItem* after )
+        : K3bListViewItem( parent, after ),
+          m_doc(doc)
+    {
+        setPixmap( 0, SmallIcon("audio-x-generic") );
+    }
 
-  QString text( int col ) const {
-    if( col == 0 )
-      return i18n("Audio Tracks") + QString(" (%1)" ).arg(m_doc->audioDoc()->numOfTracks());
-    else
-      return QString();
-  }
+    QString text( int col ) const {
+        if( col == 0 )
+            return i18n("Audio Tracks") + QString(" (%1)" ).arg(m_doc->audioDoc()->numOfTracks());
+        else
+            return QString();
+    }
 
-  private:
+private:
     K3bMixedDoc* m_doc;
 };
 
 
 K3bMixedDirTreeView::K3bMixedDirTreeView( K3bView* view, K3bMixedDoc* doc, QWidget* parent )
-  : K3bDataDirTreeView( view, doc->dataDoc(), parent ), m_doc(doc)
+    : K3bDataDirTreeView( view, doc->dataDoc(), parent ), m_doc(doc)
 {
-  m_audioRootItem = new PrivateAudioRootViewItem( doc, this, root() );
+//     m_audioRootItem = new PrivateAudioRootViewItem( doc, this, root() );
 
-  connect( this, SIGNAL(selectionChanged(Q3ListViewItem*)),
-	   this, SLOT(slotSelectionChanged(Q3ListViewItem*)) );
-  connect( m_doc->audioDoc(), SIGNAL(changed()), this, SLOT(slotNewAudioTracks()) );
+//     connect( this, SIGNAL(selectionChanged(Q3ListViewItem*)),
+//              this, SLOT(slotSelectionChanged(Q3ListViewItem*)) );
+//     connect( m_doc->audioDoc(), SIGNAL(changed()), this, SLOT(slotNewAudioTracks()) );
 }
 
 
@@ -68,37 +68,38 @@ K3bMixedDirTreeView::~K3bMixedDirTreeView()
 {
 }
 
-
+#warning Port the mixed dragndrop to model/view
+#if 0
 void K3bMixedDirTreeView::slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3ListViewItem* after )
 {
-  if( !e->isAccepted() )
-    return;
+    if( !e->isAccepted() )
+        return;
 
-  Q3ListViewItem* droppedItem = itemAt(e->pos());
-  if( droppedItem == m_audioRootItem ) {
-    KUrl::List urls;
-    if( K3URLDrag::decode( e, urls ) ) {
-      K3bAudioTrackAddingDialog::addUrls( urls, m_doc->audioDoc(), 0, 0, 0, this );
+    Q3ListViewItem* droppedItem = itemAt(e->pos());
+    if( droppedItem == m_audioRootItem ) {
+        KUrl::List urls;
+        if( K3URLDrag::decode( e, urls ) ) {
+            K3bAudioTrackAddingDialog::addUrls( urls, m_doc->audioDoc(), 0, 0, 0, this );
+        }
     }
-  }
-  else
-    K3bDataDirTreeView::slotDropped( e, parent, after );
+    else
+        K3bDataDirTreeView::slotDropped( e, parent, after );
 }
 
 
 void K3bMixedDirTreeView::slotSelectionChanged( Q3ListViewItem* i )
 {
-  if( i == m_audioRootItem )
-    emit audioTreeSelected();
-  else
-    emit dataTreeSelected();
+    if( i == m_audioRootItem )
+        emit audioTreeSelected();
+    else
+        emit dataTreeSelected();
 }
 
 
 void K3bMixedDirTreeView::slotNewAudioTracks()
 {
-  // update the tracknumber
-  m_audioRootItem->repaint();
+    // update the tracknumber
+    m_audioRootItem->repaint();
 }
-
+#endif
 #include "k3bmixeddirtreeview.moc"

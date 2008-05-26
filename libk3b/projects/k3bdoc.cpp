@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,11 +32,11 @@
 
 
 K3bDoc::K3bDoc( QObject* parent )
-  : QObject( parent ),
-    m_modified(false),
-    m_view(0)
+    : QObject( parent ),
+      m_modified(false),
+      m_view(0)
 {
-  connect( this, SIGNAL(changed()), this, SLOT(slotChanged()) );
+    connect( this, SIGNAL(changed()), this, SLOT(slotChanged()) );
 }
 
 
@@ -47,165 +47,165 @@ K3bDoc::~K3bDoc()
 
 void K3bDoc::slotChanged()
 {
-  setModified( true );
-  emit changed( this );
+    setModified( true );
+    emit changed( this );
 }
 
 
 void K3bDoc::setModified( bool m )
 {
-  if( m != m_modified ) {
-    m_modified = m;
-    if( m )
-      emit changed();
-  }
+    if( m != m_modified ) {
+        m_modified = m;
+        if( m )
+            emit changed();
+    }
 }
 
 
 void K3bDoc::setDummy( bool b )
 {
-  m_dummy = b;
+    m_dummy = b;
 }
 
 void K3bDoc::setSpeed( int speed )
 {
-  m_speed = speed;
+    m_speed = speed;
 }
 
 void K3bDoc::setBurner( K3bDevice::Device* dev )
 {
-  m_burner = dev;
+    m_burner = dev;
 }
 
 
 void K3bDoc::addUrl( const KUrl& url )
 {
-  KUrl::List urls(url);
-  addUrls( urls );
+    KUrl::List urls(url);
+    addUrls( urls );
 }
 
 
 void K3bDoc::setURL( const KUrl& url )
 {
-  doc_url = url;
+    doc_url = url;
 
-  emit changed();
+    emit changed();
 }
 
 const KUrl& K3bDoc::URL() const
 {
-  return doc_url;
+    return doc_url;
 }
 
 
 QString K3bDoc::name() const
 {
-  return URL().path().section( '/', -1 );
+    return URL().path().section( '/', -1 );
 }
 
 
 bool K3bDoc::newDocument()
 {
-  setModified( false );
+    setModified( false );
 
-  m_copies = 1;
-  m_burner = 0;
-  m_onTheFly = true;
-  m_speed = 0;  // Auto
-  m_onlyCreateImages = false;
-  m_removeImages = true;
-  m_dummy = false;
-  m_writingApp = K3b::DEFAULT;
-  m_writingMode = K3b::WRITING_MODE_AUTO;
-  m_saved = false;
+    m_copies = 1;
+    m_burner = 0;
+    m_onTheFly = true;
+    m_speed = 0;  // Auto
+    m_onlyCreateImages = false;
+    m_removeImages = true;
+    m_dummy = false;
+    m_writingApp = K3b::DEFAULT;
+    m_writingMode = K3b::WRITING_MODE_AUTO;
+    m_saved = false;
 
-  return true;
+    return true;
 }
 
 
 bool K3bDoc::saveGeneralDocumentData( QDomElement* part )
 {
-  QDomDocument doc = part->ownerDocument();
-  QDomElement mainElem = doc.createElement( "general" );
+    QDomDocument doc = part->ownerDocument();
+    QDomElement mainElem = doc.createElement( "general" );
 
-  QDomElement propElem = doc.createElement( "writing_mode" );
-  switch( writingMode() ) {
-  case K3b::DAO:
-    propElem.appendChild( doc.createTextNode( "dao" ) );
-    break;
-  case K3b::TAO:
-    propElem.appendChild( doc.createTextNode( "tao" ) );
-    break;
-  case K3b::RAW:
-    propElem.appendChild( doc.createTextNode( "raw" ) );
-    break;
-  default:
-    propElem.appendChild( doc.createTextNode( "auto" ) );
-    break;
-  }
-  mainElem.appendChild( propElem );
+    QDomElement propElem = doc.createElement( "writing_mode" );
+    switch( writingMode() ) {
+    case K3b::DAO:
+        propElem.appendChild( doc.createTextNode( "dao" ) );
+        break;
+    case K3b::TAO:
+        propElem.appendChild( doc.createTextNode( "tao" ) );
+        break;
+    case K3b::RAW:
+        propElem.appendChild( doc.createTextNode( "raw" ) );
+        break;
+    default:
+        propElem.appendChild( doc.createTextNode( "auto" ) );
+        break;
+    }
+    mainElem.appendChild( propElem );
 
-  propElem = doc.createElement( "dummy" );
-  propElem.setAttribute( "activated", dummy() ? "yes" : "no" );
-  mainElem.appendChild( propElem );
+    propElem = doc.createElement( "dummy" );
+    propElem.setAttribute( "activated", dummy() ? "yes" : "no" );
+    mainElem.appendChild( propElem );
 
-  propElem = doc.createElement( "on_the_fly" );
-  propElem.setAttribute( "activated", onTheFly() ? "yes" : "no" );
-  mainElem.appendChild( propElem );
+    propElem = doc.createElement( "on_the_fly" );
+    propElem.setAttribute( "activated", onTheFly() ? "yes" : "no" );
+    mainElem.appendChild( propElem );
 
-  propElem = doc.createElement( "only_create_images" );
-  propElem.setAttribute( "activated", onlyCreateImages() ? "yes" : "no" );
-  mainElem.appendChild( propElem );
+    propElem = doc.createElement( "only_create_images" );
+    propElem.setAttribute( "activated", onlyCreateImages() ? "yes" : "no" );
+    mainElem.appendChild( propElem );
 
-  propElem = doc.createElement( "remove_images" );
-  propElem.setAttribute( "activated", removeImages() ? "yes" : "no" );
-  mainElem.appendChild( propElem );
+    propElem = doc.createElement( "remove_images" );
+    propElem.setAttribute( "activated", removeImages() ? "yes" : "no" );
+    mainElem.appendChild( propElem );
 
-  part->appendChild( mainElem );
+    part->appendChild( mainElem );
 
-  return true;
+    return true;
 }
 
 
 bool K3bDoc::readGeneralDocumentData( const QDomElement& elem )
 {
-  if( elem.nodeName() != "general" )
-    return false;
+    if( elem.nodeName() != "general" )
+        return false;
 
-  QDomNodeList nodes = elem.childNodes();
-  for( int i = 0; i < nodes.count(); i++ ) {
+    QDomNodeList nodes = elem.childNodes();
+    for( int i = 0; i < nodes.count(); i++ ) {
 
-    QDomElement e = nodes.item(i).toElement();
-    if( e.isNull() )
-      return false;
+        QDomElement e = nodes.item(i).toElement();
+        if( e.isNull() )
+            return false;
 
-    if( e.nodeName() == "writing_mode") {
-      QString mode = e.text();
-      if( mode == "dao" )
-	setWritingMode( K3b::DAO );
-      else if( mode == "tao" )
-	setWritingMode( K3b::TAO );
-      else if( mode == "raw" )
-	setWritingMode( K3b::RAW );
-      else
-	setWritingMode( K3b::WRITING_MODE_AUTO );
+        if( e.nodeName() == "writing_mode") {
+            QString mode = e.text();
+            if( mode == "dao" )
+                setWritingMode( K3b::DAO );
+            else if( mode == "tao" )
+                setWritingMode( K3b::TAO );
+            else if( mode == "raw" )
+                setWritingMode( K3b::RAW );
+            else
+                setWritingMode( K3b::WRITING_MODE_AUTO );
+        }
+
+        if( e.nodeName() == "dummy")
+            setDummy( e.attributeNode( "activated" ).value() == "yes" );
+
+        if( e.nodeName() == "on_the_fly")
+            setOnTheFly( e.attributeNode( "activated" ).value() == "yes" );
+
+        if( e.nodeName() == "only_create_images")
+            setOnlyCreateImages( e.attributeNode( "activated" ).value() == "yes" );
+
+        if( e.nodeName() == "remove_images")
+            setRemoveImages( e.attributeNode( "activated" ).value() == "yes" );
     }
 
-    if( e.nodeName() == "dummy")
-      setDummy( e.attributeNode( "activated" ).value() == "yes" );
 
-    if( e.nodeName() == "on_the_fly")
-      setOnTheFly( e.attributeNode( "activated" ).value() == "yes" );
-
-    if( e.nodeName() == "only_create_images")
-      setOnlyCreateImages( e.attributeNode( "activated" ).value() == "yes" );
-
-    if( e.nodeName() == "remove_images")
-      setRemoveImages( e.attributeNode( "activated" ).value() == "yes" );
-  }
-
-
-  return true;
+    return true;
 }
 
 

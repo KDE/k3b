@@ -44,7 +44,7 @@ class K3bJobProgressOSD : public QWidget
   void readSettings( KConfigBase* );
   void saveSettings( KConfigBase* );
 
- public slots:
+ public Q_SLOTS:
   void setScreen( int );
   void setText( const QString& );
   void setProgress( int );
@@ -67,7 +67,7 @@ class K3bJobProgressOSD : public QWidget
   void renderOSD();
   void reposition( QSize size = QSize() );
 
- protected slots:
+ protected Q_SLOTS:
   void refresh();
 
  private:

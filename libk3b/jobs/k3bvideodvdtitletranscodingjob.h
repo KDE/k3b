@@ -92,7 +92,7 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
   static QString videoCodecDescription( VideoCodec );
   static QString audioCodecDescription( AudioCodec );
 
- public slots:
+ public Q_SLOTS:
   void start();
   void cancel();
 
@@ -226,7 +226,7 @@ class LIBK3B_EXPORT K3bVideoDVDTitleTranscodingJob : public K3bJob
    */
   void setLowPriority( bool b ) { m_lowPriority = b; }
 
- private slots:
+ private Q_SLOTS:
   void slotTranscodeStderr( const QString& );
   void slotTranscodeExited( K3Process* );
 

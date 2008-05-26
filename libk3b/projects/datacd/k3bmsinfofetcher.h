@@ -35,13 +35,13 @@ class K3bMsInfoFetcher : public K3bJob
   int lastSessionStart() const { return m_lastSessionStart; }
   int nextSessionStart() const { return m_nextSessionStart; }
 
- public slots:
+ public Q_SLOTS:
   void start();
   void cancel();
 
   void setDevice( K3bDevice::Device* dev ) { m_device = dev; }
 
- private slots:
+ private Q_SLOTS:
   void slotProcessExited();
   void slotCollectOutput( K3Process*, char* output, int len );
   void slotMediaDetectionFinished( K3bDevice::DeviceHandler* );

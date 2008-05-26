@@ -16,12 +16,12 @@
 #ifndef _K3B_TITLE_LABEL_H_
 #define _K3B_TITLE_LABEL_H_
 
-#include <q3frame.h>
-//Added by qt3to4:
+#include <QtGui/QFrame>
 #include <QResizeEvent>
-#include "k3b_export.h"
-class QResizeEvent;
 
+#include "k3b_export.h"
+
+class QResizeEvent;
 
 class LIBK3B_EXPORT K3bTitleLabel : public QFrame
 {

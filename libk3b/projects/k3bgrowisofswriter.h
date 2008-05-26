@@ -39,7 +39,7 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
   int fd() const;
   bool closeFd();
 
- public slots:
+ public Q_SLOTS:
   void start();
   void cancel();
 
@@ -86,7 +86,7 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
  protected:
   bool prepareProcess();
 
- protected slots:
+ protected Q_SLOTS:
   void slotReceivedStderr( const QString& );
   void slotProcessExited( K3Process* );
   void slotThroughput( int t );

@@ -39,7 +39,7 @@ public:
     void setJob( K3bJob* );
     void setBurnJob( K3bBurnJob* );
 
-protected slots:
+protected Q_SLOTS:
     void slotWriteSpeed( int, int );
     void slotBufferStatus( int );
     void slotDeviceBuffer( int );

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,14 +24,18 @@
 #include <kmessagebox.h>
 #include <klibloader.h>
 #include <kdialog.h>
+#include <kservice.h>
+#include <kcmoduleinfo.h>
 
 #include <KServiceTypeTrader>
 #include <KService>
 #include <KPluginInfo>
+#include <KCModuleProxy>
 
 #include <qlist.h>
 #include <qmap.h>
 #include <qdir.h>
+#include <QtGui/QVBoxLayout>
 
 
 
@@ -142,27 +146,27 @@ int K3bPluginManager::pluginSystemVersion() const
 }
 
 
-int K3bPluginManager::execPluginDialog( K3bPlugin* plugin, QWidget* parent, const char* name )
+int K3bPluginManager::execPluginDialog( K3bPlugin* plugin, QWidget* parent )
 {
-//     KDialog dlg( parent );
-//     dlg.setCaption( i18n("Configure plugin %1", plugin->pluginInfo().name() ) );
+    QList<KService::Ptr> kcmServices = plugin->pluginInfo().kcmServices();
+    if ( !kcmServices.isEmpty() ) {
+        KDialog dlg( parent );
+        dlg.setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Default);
+        dlg.setCaption( i18n("Configure plugin %1", plugin->pluginInfo().name() ) );
 
-//     K3bPluginConfigWidget* configWidget = plugin->createConfigWidget( &dlg );
-//     if( configWidget ) {
-//         dlg.setMainWidget( configWidget );
-//         connect( &dlg, SIGNAL(applyClicked()), configWidget, SLOT(saveConfig()) );
-//         connect( &dlg, SIGNAL(okClicked()), configWidget, SLOT(saveConfig()) );
-//         configWidget->loadConfig();
-//         int r = dlg.exec();
-//         delete configWidget;
-//         return r;
-//     }
-//     else
-    {
-         KMessageBox::sorry( parent, i18n("No settings available for plugin %1.", plugin->pluginInfo().name() ) );
-         return 0;
+        // In K3b we only have at most one KCM for each plugin
+        KCModuleInfo kcmModuleInfo( kcmServices.first() );
+        KCModuleProxy* currentModuleProxy = new KCModuleProxy( kcmModuleInfo, dlg.mainWidget() );
+        QVBoxLayout* layout = new QVBoxLayout( dlg.mainWidget() );
+        layout->setMargin( 0 );
+        layout->addWidget( currentModuleProxy );
+
+        return dlg.exec();
     }
-#warning FIXME: use KService::kcmServices to get the config widget for a plugin as done in KPluginSelector
+    else {
+        KMessageBox::sorry( parent, i18n("No settings available for plugin %1.", plugin->pluginInfo().name() ) );
+        return 0;
+    }
 }
 
 #include "k3bpluginmanager.moc"

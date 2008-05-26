@@ -5,7 +5,6 @@ install( FILES
   k3baudiodecoder.h
   k3baudioencoder.h
   k3bpluginconfigwidget.h
-  k3baudiooutputplugin.h
   k3bprojectplugin.h
   DESTINATION ${INCLUDE_INSTALL_DIR} )
 

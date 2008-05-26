@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2007-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,22 +47,20 @@
 #include <qspinbox.h>
 #include <qcombobox.h>
 #include <qlayout.h>
-#include <q3groupbox.h>
-#include <q3ptrlist.h>
+#include <qgroupbox.h>
+#include <qlist.h>
 #include <qlabel.h>
 #include <qtooltip.h>
 #include <qtabwidget.h>
 
 
 #include <qpushbutton.h>
-#include <q3buttongroup.h>
+#include <qbuttongroup.h>
 #include <qradiobutton.h>
 #include <qsizepolicy.h>
 #include <qfile.h>
 #include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <kvbox.h>
+#include <QGridLayout>
 
 
 K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
@@ -75,16 +73,18 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
 {
     QWidget* main = mainWidget();
 
-    Q3GridLayout* mainGrid = new Q3GridLayout( main );
+    QGridLayout* mainGrid = new QGridLayout( main );
     mainGrid->setSpacing( spacingHint() );
     mainGrid->setMargin( 0 );
 
-    Q3GroupBox* groupSource = new Q3GroupBox( 1, Qt::Vertical, i18n("Source Medium"), main );
-    groupSource->setInsideSpacing( spacingHint() );
-    groupSource->setInsideMargin( marginHint() );
+    QGroupBox* groupSource = new QGroupBox( i18n("Source Medium"), main );
     m_comboSourceDevice = new K3bMediaSelectionComboBox( groupSource );
     m_comboSourceDevice->setWantedMediumType( K3bDevice::MEDIA_ALL );
     m_comboSourceDevice->setWantedMediumState( K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE );
+    QHBoxLayout* groupSourceLayout = new QHBoxLayout( groupSource );
+    groupSourceLayout->setSpacing( spacingHint() );
+    groupSourceLayout->setMargin( marginHint() );
+    groupSourceLayout->addWidget( m_comboSourceDevice );
 
     m_writerSelectionWidget = new K3bWriterSelectionWidget( main );
     m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY );
@@ -96,45 +96,60 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
     // option tab --------------------
     //
     QWidget* optionTab = new QWidget( tabWidget );
-    Q3GridLayout* optionTabGrid = new Q3GridLayout( optionTab );
+    QGridLayout* optionTabGrid = new QGridLayout( optionTab );
     optionTabGrid->setSpacing( spacingHint() );
     optionTabGrid->setMargin( marginHint() );
 
-    Q3GroupBox* groupCopyMode = new Q3GroupBox( 1, Qt::Vertical, i18n("Copy Mode"), optionTab );
-    groupCopyMode->setInsideMargin( marginHint() );
-    groupCopyMode->setInsideSpacing( spacingHint() );
+    QGroupBox* groupCopyMode = new QGroupBox( i18n("Copy Mode"), optionTab );
     m_comboCopyMode = new QComboBox( groupCopyMode );
-    m_comboCopyMode->insertItem( i18n("Normal Copy") );
-    m_comboCopyMode->insertItem( i18n("Clone Copy") );
+    m_comboCopyMode->addItem( i18n("Normal Copy") );
+    m_comboCopyMode->addItem( i18n("Clone Copy") );
+    QHBoxLayout* groupCopyModeLayout = new QHBoxLayout( groupCopyMode );
+    groupCopyModeLayout->setSpacing( spacingHint() );
+    groupCopyModeLayout->setMargin( marginHint() );
+    groupCopyModeLayout->addWidget( m_comboCopyMode );
 
-    Q3GroupBox* groupWritingMode = new Q3GroupBox( 1, Qt::Vertical, i18n("Writing Mode"), optionTab );
-    groupWritingMode->setInsideMargin( marginHint() );
+    QGroupBox* groupWritingMode = new QGroupBox( i18n("Writing Mode"), optionTab );
     m_writingModeWidget = new K3bWritingModeWidget( groupWritingMode );
+    QHBoxLayout* groupWritingModeLayout = new QHBoxLayout( groupWritingMode );
+    groupWritingModeLayout->setSpacing( spacingHint() );
+    groupWritingModeLayout->setMargin( marginHint() );
+    groupWritingModeLayout->addWidget( m_writingModeWidget );
 
-    Q3GroupBox* groupCopies = new Q3GroupBox( 2, Qt::Horizontal, i18n("Copies"), optionTab );
-    groupCopies->setInsideSpacing( spacingHint() );
-    groupCopies->setInsideMargin( marginHint() );
+    QGroupBox* groupCopies = new QGroupBox( i18n("Copies"), optionTab );
     QLabel* pixLabel = new QLabel( groupCopies );
     pixLabel->setPixmap( SmallIcon( "tools-media-optical-copy", KIconLoader::SizeMedium ) );
     pixLabel->setScaledContents( false );
     m_spinCopies = new QSpinBox( groupCopies );
     m_spinCopies->setRange( 1, 999 );
+    QHBoxLayout* groupCopiesLayout = new QHBoxLayout( groupCopies );
+    groupCopiesLayout->setSpacing( spacingHint() );
+    groupCopiesLayout->setMargin( marginHint() );
+    groupCopiesLayout->addWidget( pixLabel );
+    groupCopiesLayout->addWidget( m_spinCopies );
 
-    Q3GroupBox* groupOptions = new Q3GroupBox( 5, Qt::Vertical, i18n("Settings"), optionTab );
-    groupOptions->setInsideSpacing( spacingHint() );
-    groupOptions->setInsideMargin( marginHint() );
+    QGroupBox* groupOptions = new QGroupBox( i18n("Settings"), optionTab );
     m_checkSimulate = K3bStdGuiItems::simulateCheckbox( groupOptions );
     m_checkCacheImage = K3bStdGuiItems::createCacheImageCheckbox( groupOptions );
     m_checkOnlyCreateImage = K3bStdGuiItems::onlyCreateImagesCheckbox( groupOptions );
     m_checkDeleteImages = K3bStdGuiItems::removeImagesCheckbox( groupOptions );
     m_checkVerifyData = K3bStdGuiItems::verifyCheckBox( groupOptions );
+    QVBoxLayout* groupOptionsLayout = new QVBoxLayout( groupOptions );
+    groupOptionsLayout->setSpacing( spacingHint() );
+    groupOptionsLayout->setMargin( marginHint() );
+    groupOptionsLayout->addWidget( m_checkSimulate );
+    groupOptionsLayout->addWidget( m_checkCacheImage );
+    groupOptionsLayout->addWidget( m_checkOnlyCreateImage );
+    groupOptionsLayout->addWidget( m_checkDeleteImages );
+    groupOptionsLayout->addWidget( m_checkVerifyData );
+    groupOptionsLayout->addStretch( 1 );
 
     optionTabGrid->addWidget( groupCopyMode, 0, 0 );
     optionTabGrid->addWidget( groupWritingMode, 1, 0 );
-    optionTabGrid->addMultiCellWidget( groupOptions, 0, 2, 1, 1 );
+    optionTabGrid->addWidget( groupOptions, 0, 1, 3, 1 );
     optionTabGrid->addWidget( groupCopies, 2, 0 );
     optionTabGrid->setRowStretch( 2, 1 );
-    optionTabGrid->setColStretch( 1, 1 );
+    optionTabGrid->setColumnStretch( 1, 1 );
 
     tabWidget->addTab( optionTab, i18n("&Options") );
 
@@ -143,7 +158,7 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
     // image tab ------------------
     //
     QWidget* imageTab = new QWidget( tabWidget );
-    Q3GridLayout* imageTabGrid = new Q3GridLayout( imageTab );
+    QGridLayout* imageTabGrid = new QGridLayout( imageTab );
     imageTabGrid->setSpacing( spacingHint() );
     imageTabGrid->setMargin( marginHint() );
 
@@ -158,35 +173,40 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
     // advanced tab ------------------
     //
     QWidget* advancedTab = new QWidget( tabWidget );
-    Q3GridLayout* advancedTabGrid = new Q3GridLayout( advancedTab );
+    QGridLayout* advancedTabGrid = new QGridLayout( advancedTab );
     advancedTabGrid->setSpacing( spacingHint() );
     advancedTabGrid->setMargin( marginHint() );
 
-    m_groupAdvancedDataOptions = new Q3GroupBox( 3, Qt::Vertical, i18n("Data"), advancedTab, "data_options" );
-    m_groupAdvancedDataOptions->setInsideSpacing( spacingHint() );
-    m_groupAdvancedDataOptions->setInsideMargin( marginHint() );
-    KHBox* box = new KHBox( m_groupAdvancedDataOptions );
-    box->setSpacing( spacingHint() );
-    box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
-    m_spinDataRetries = new QSpinBox( box );
+    m_groupAdvancedDataOptions = new QGroupBox( i18n("Data"), advancedTab );
+    QGridLayout* groupAdvancedDataOptionsLayout = new QGridLayout( m_groupAdvancedDataOptions );
+    groupAdvancedDataOptionsLayout->setSpacing( spacingHint() );
+    groupAdvancedDataOptionsLayout->setMargin( marginHint() );
+    m_spinDataRetries = new QSpinBox( m_groupAdvancedDataOptions );
     m_spinDataRetries->setRange( 1, 128 );
     m_checkIgnoreDataReadErrors = K3bStdGuiItems::ignoreAudioReadErrorsCheckBox( m_groupAdvancedDataOptions );
     m_checkNoCorrection = new QCheckBox( i18n("No error correction"), m_groupAdvancedDataOptions );
+    groupAdvancedDataOptionsLayout->addWidget( new QLabel( i18n("Read retries:"), m_groupAdvancedDataOptions ), 0, 0 );
+    groupAdvancedDataOptionsLayout->addWidget( m_spinDataRetries, 0, 1 );
+    groupAdvancedDataOptionsLayout->addWidget( m_checkIgnoreDataReadErrors, 1, 0, 1, 2 );
+    groupAdvancedDataOptionsLayout->addWidget( m_checkNoCorrection, 2, 0, 1, 2 );
+    groupAdvancedDataOptionsLayout->setRowStretch( 4, 1 );
 
-    m_groupAdvancedAudioOptions = new Q3GroupBox( 5, Qt::Vertical, i18n("Audio"), advancedTab, "audio_options" );
-    m_groupAdvancedAudioOptions->setInsideSpacing( spacingHint() );
-    m_groupAdvancedAudioOptions->setInsideMargin( marginHint() );
-    box = new KHBox( m_groupAdvancedAudioOptions );
-    box->setSpacing( spacingHint() );
-    box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
-    m_spinAudioRetries = new QSpinBox( box );
+    m_groupAdvancedAudioOptions = new QGroupBox( i18n("Audio"), advancedTab );
+    QGridLayout* groupAdvancedAudioOptionsLayout = new QGridLayout( m_groupAdvancedAudioOptions );
+    groupAdvancedAudioOptionsLayout->setSpacing( spacingHint() );
+    groupAdvancedAudioOptionsLayout->setMargin( marginHint() );
+    m_spinAudioRetries = new QSpinBox( m_groupAdvancedAudioOptions );
     m_spinAudioRetries->setRange( 1, 128 );
     m_checkIgnoreAudioReadErrors = K3bStdGuiItems::ignoreAudioReadErrorsCheckBox( m_groupAdvancedAudioOptions );
-    box = new KHBox( m_groupAdvancedAudioOptions );
-    box->setSpacing( spacingHint() );
-    box->setStretchFactor(new QLabel( i18n("Paranoia mode:"), box ), 1 );
-    m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( box );
+    m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( m_groupAdvancedAudioOptions );
     m_checkReadCdText = new QCheckBox( i18n("Copy CD-Text"), m_groupAdvancedAudioOptions );
+    groupAdvancedAudioOptionsLayout->addWidget( new QLabel( i18n("Read retries:"), m_groupAdvancedAudioOptions ), 0, 0 );
+    groupAdvancedAudioOptionsLayout->addWidget( m_spinAudioRetries, 0, 1 );
+    groupAdvancedAudioOptionsLayout->addWidget( m_checkIgnoreAudioReadErrors, 1, 0, 1, 2 );
+    groupAdvancedAudioOptionsLayout->addWidget( new QLabel( i18n("Paranoia mode:"), m_groupAdvancedAudioOptions ), 2, 0 );
+    groupAdvancedAudioOptionsLayout->addWidget( m_comboParanoiaMode, 2, 1 );
+    groupAdvancedAudioOptionsLayout->addWidget( m_checkReadCdText, 3, 0, 1, 2 );
+    groupAdvancedAudioOptionsLayout->setRowStretch( 4, 1 );
 
     advancedTabGrid->addWidget( m_groupAdvancedDataOptions, 0, 1 );
     advancedTabGrid->addWidget( m_groupAdvancedAudioOptions, 0, 0 );
@@ -229,7 +249,7 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
 
     m_comboCopyMode->setWhatsThis(
         "<p><b>" + i18n("Normal Copy") + "</b>"
-        + i18n("<p>This is the normal copy mode for DVD, Blu-ray, and most CD media types. "
+       + i18n("<p>This is the normal copy mode for DVD, Blu-ray, and most CD media types. "
                "It allows copying Audio CDs, multi and single session Data Media, and "
                "Enhanced Audio CDs (an Audio CD containing an additional data session)."
                "<p>For VideoCDs please use the CD Cloning mode.")
@@ -284,10 +304,10 @@ void K3bMediaCopyDialog::slotStartClicked()
 
     K3bJobProgressDialog* dlg = 0;
     if( m_checkOnlyCreateImage->isChecked() ) {
-        dlg = new K3bJobProgressDialog( kapp->mainWidget() );
+        dlg = new K3bJobProgressDialog( kapp->activeWindow() );
     }
     else {
-        dlg = new K3bBurnProgressDialog( kapp->mainWidget() );
+        dlg = new K3bBurnProgressDialog( kapp->activeWindow() );
     }
 
     K3bBurnJob* burnJob = 0;
@@ -602,7 +622,7 @@ void K3bMediaCopyDialog::saveUserDefaults( KConfigGroup& c )
     m_writerSelectionWidget->saveConfig( c );
     m_tempDirSelectionWidget->saveConfig( c );
 
-    c.writeEntry( "source_device", m_comboSourceDevice->selectedDevice() ? m_comboSourceDevice->selectedDevice()->devicename() : QString() );
+    c.writeEntry( "source_device", m_comboSourceDevice->selectedDevice() ? m_comboSourceDevice->selectedDevice()->blockDeviceName() : QString() );
 
     c.writeEntry( "copy cdtext", m_checkReadCdText->isChecked() );
     c.writeEntry( "ignore data read errors", m_checkIgnoreDataReadErrors->isChecked() );

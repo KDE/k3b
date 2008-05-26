@@ -62,20 +62,20 @@ public:
      */
     //K3bProjectInterface* dcopInterface( K3bDoc* doc );
 
-public slots:
+public Q_SLOTS:
     void addProject( K3bDoc* );
     void removeProject( K3bDoc* );
     void setActive( K3bDoc* );
     void loadDefaults( K3bDoc* );
 
-signals:
+ Q_SIGNALS:
     void newProject( K3bDoc* );
     void projectSaved( K3bDoc* );
     void closingProject( K3bDoc* );
     void projectChanged( K3bDoc* doc );
     void activeProjectChanged( K3bDoc* );
 
-    private slots:
+    private Q_SLOTS:
     void slotProjectChanged( K3bDoc* doc );
 
 private:
