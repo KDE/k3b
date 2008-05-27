@@ -284,7 +284,7 @@ if(MUSICBRAINZ_FOUND)
   target_link_libraries(k3b_bin ${MUSICBRAINZ_LIBRARIES})
 endif(MUSICBRAINZ_FOUND)
 
-install(TARGETS k3b_bin DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS k3b_bin ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############
