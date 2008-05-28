@@ -24,7 +24,6 @@
 #include <k3bvalidators.h>
 #include <k3bview.h>
 #include "k3bdataprojectmodel.h"
-#include "k3bdataprojectfiltermodel.h"
 
 #include <QList>
 #include <QtGui/QHeaderView>

@@ -19,7 +19,6 @@
 #include "k3bdataitem.h"
 #include "k3bdiritem.h"
 #include "k3bdataprojectmodel.h"
-#include "k3bdataprojectfiltermodel.h"
 #include <k3bview.h>
 #include <k3bvalidators.h>
 
