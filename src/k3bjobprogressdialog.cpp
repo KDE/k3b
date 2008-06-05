@@ -591,14 +591,10 @@ void K3bJobProgressDialog::keyPressEvent( QKeyEvent *e )
 
 QSize K3bJobProgressDialog::sizeHint() const
 {
-    //Laurent: comment it for the moment it crashs because layout() == 0
-#if 0
-    QSize s = layout()->totalSizeHint();
+    QSize s = KDialog::sizeHint();
     if( s.width() < s.height() )
         s.setWidth( s.height() );
     return s;
-#endif
-    return KDialog::sizeHint();
 }
 
 
