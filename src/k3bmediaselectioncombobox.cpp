@@ -29,50 +29,7 @@
 #include <qfont.h>
 #include <qmap.h>
 #include <qvector.h>
-#include <qtooltip.h>
-#include <q3listbox.h>
 #include <QList>
-
-
-#warning TODO portme kde4
-#if 0
-class K3bMediaSelectionComboBox::ToolTip : public QToolTip
-{
-public:
-    ToolTip( K3bMediaSelectionComboBox* box );
-
-    void maybeTip( const QPoint &pos );
-
-private:
-    K3bMediaSelectionComboBox* m_box;
-};
-
-
-K3bMediaSelectionComboBox::ToolTip::ToolTip( K3bMediaSelectionComboBox* box )
-    : QToolTip( box->listBox()->viewport() ),
-      m_box( box )
-{
-}
-
-void K3bMediaSelectionComboBox::ToolTip::maybeTip( const QPoint& pos )
-{
-    if( !parentWidget() || !m_box )
-        return;
-
-    Q3ListBoxItem* item = m_box->listBox()->itemAt( pos );
-    if( !item )
-        return;
-
-    int index = m_box->listBox()->index( item );
-
-    if( K3bDevice::Device* dev = m_box->deviceAt( index ) ) {
-        tip( m_box->listBox()->itemRect( item ),
-             m_box->mediumToolTip( k3bappcore->mediaCache()->medium( dev ) ) );
-    }
-}
-#endif
-
-
 
 
 class K3bMediaSelectionComboBox::Private
@@ -93,8 +50,7 @@ public:
     int wantedMediumType;
     int wantedMediumState;
     int wantedMediumContent;
-
-    QFont font;
+    K3b::Msf wantedMediumSize;
 };
 
 
@@ -108,8 +64,6 @@ K3bMediaSelectionComboBox::K3bMediaSelectionComboBox( QWidget* parent )
     d->wantedMediumState = K3bDevice::STATE_EMPTY;
     d->wantedMediumContent = K3bMedium::CONTENT_ALL;
 
-    d->font = font();
-
     connect( this, SIGNAL(activated(int)),
              this, SLOT(slotActivated(int)) );
     connect( k3bcore->deviceManager(), SIGNAL(changed(K3bDevice::DeviceManager*)),
@@ -120,9 +74,6 @@ K3bMediaSelectionComboBox::K3bMediaSelectionComboBox( QWidget* parent )
              this, SLOT(slotUpdateToolTip(K3bDevice::Device*)) );
 
     updateMedia();
-
-    // initialize the tooltip for the dropdown box
-    //(void)new ToolTip( this );
 }
 
 
@@ -141,7 +92,8 @@ void K3bMediaSelectionComboBox::setIgnoreDevice( K3bDevice::Device* dev )
 
 K3bDevice::Device* K3bMediaSelectionComboBox::selectedDevice() const
 {
-    if( d->devices.count() > 0 )
+    if( d->devices.count() > currentIndex() &&
+        currentIndex() >= 0 )
         return d->devices[currentIndex()];
     else
         return 0;
@@ -193,6 +145,15 @@ void K3bMediaSelectionComboBox::setWantedMediumContent( int content )
 }
 
 
+void K3bMediaSelectionComboBox::setWantedMediumSize( const K3b::Msf& minSize )
+{
+    if ( d->wantedMediumSize != minSize ) {
+        d->wantedMediumSize = minSize;
+        updateMedia();
+    }
+}
+
+
 int K3bMediaSelectionComboBox::wantedMediumType() const
 {
     return d->wantedMediumType;
@@ -210,6 +171,11 @@ int K3bMediaSelectionComboBox::wantedMediumContent() const
     return d->wantedMediumContent;
 }
 
+
+K3b::Msf K3bMediaSelectionComboBox::wantedMediumSize() const
+{
+    return d->wantedMediumSize;
+}
 
 void K3bMediaSelectionComboBox::slotActivated( int i )
 {
@@ -236,19 +202,16 @@ void K3bMediaSelectionComboBox::clear()
 void K3bMediaSelectionComboBox::showNoMediumMessage()
 {
     // make it italic
-    QFont f( d->font );
+    QFont f( font() );
     f.setItalic( true );
     setFont( f );
-
     addItem( noMediumMessage() );
+    setItemData( 0, f, Qt::FontRole );
 }
 
 
 void K3bMediaSelectionComboBox::updateMedia()
 {
-    // reset font
-    setFont( d->font );
-
     // remember set of devices
     QVector<K3bDevice::Device*> oldDevices = d->devices;
 
@@ -380,21 +343,14 @@ void K3bMediaSelectionComboBox::addMedium( K3bDevice::Device* dev )
     //
     d->deviceIndexMap[dev] = count()-1;
     d->devices.append( dev );
+
+    setItemData( count()-1, mediumToolTip( k3bappcore->mediaCache()->medium( dev ) ), Qt::ToolTipRole );
 }
 
 
 void K3bMediaSelectionComboBox::slotDeviceManagerChanged( K3bDevice::DeviceManager* )
 {
     updateMedia();
-}
-
-
-K3bDevice::Device* K3bMediaSelectionComboBox::deviceAt( int index )
-{
-    if( index < d->devices.count() )
-        return d->devices[index];
-    else
-        return 0;
 }
 
 
@@ -415,7 +371,9 @@ bool K3bMediaSelectionComboBox::showMedium( const K3bMedium& m ) const
               ||
               ( d->wantedMediumState & K3bDevice::STATE_INCOMPLETE &&
                 !m.diskInfo().empty() &&
-                m.diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) )
+                m.diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) ) &&
+            ( d->wantedMediumSize == 0 ||
+              d->wantedMediumSize <= m.diskInfo().capacity() )
         );
 }
 

@@ -27,6 +27,9 @@ class K3bMediaSelectionComboBox;
 namespace K3bDevice {
     class Device;
 }
+namespace K3b {
+    class Msf;
+}
 
 
 /**
@@ -55,6 +58,7 @@ public:
 
     int wantedMediumType() const;
     int wantedMediumState() const;
+    K3b::Msf wantedMediumSize() const;
 
     void loadDefaults();
     void loadConfig( const KConfigGroup& );
@@ -92,6 +96,12 @@ public Q_SLOTS:
     void setWantedMediumState( int state );
 
     /**
+     * Set the wanted medium size. Defaults to 0 which means
+     * that the size should be irgnored.
+     */
+    void setWantedMediumSize( const K3b::Msf& minSize );
+
+    /**
      * This is a hack to allow the copy dialogs to use the same device for reading
      * and writing without having the user to choose the same medium.
      *
@@ -99,7 +109,7 @@ public Q_SLOTS:
      *                       For example: "Burn to the same device". Set it to 0 in order
      *                       to disable the feature.
      */
-    void setOverrideDevice( K3bDevice::Device* dev, const QString& overrideString = QString::null, const QString& tooltip = QString::null );
+    void setOverrideDevice( K3bDevice::Device* dev, const QString& overrideString = QString(), const QString& tooltip = QString() );
 
     /**
      * Compare K3bMediaSelectionComboBox::setIgnoreDevice

@@ -18,12 +18,14 @@
 #include <kcombobox.h>
 
 #include "k3bmedium.h"
-//Added by qt3to4:
 #include <QList>
 
 namespace K3bDevice {
     class Device;
     class DeviceManager;
+}
+namespace K3b {
+    class Msf;
 }
 
 /**
@@ -51,6 +53,7 @@ public:
     int wantedMediumType() const;
     int wantedMediumState() const;
     int wantedMediumContent() const;
+    K3b::Msf wantedMediumSize() const;
 
 Q_SIGNALS:
     /**
@@ -98,6 +101,12 @@ public Q_SLOTS:
     void setWantedMediumContent( int content );
 
     /**
+     * Set the wanted medium size. Defaults to 0 which means
+     * that the size should be irgnored.
+     */
+    void setWantedMediumSize( const K3b::Msf& minSize );
+
+    /**
      * Set the device to ignore. This device will not be checked for
      * wanted media. This is many useful for media copy.
      *
@@ -123,12 +132,6 @@ private:
     void addMedium( K3bDevice::Device* );
     void showNoMediumMessage();
     void clear();
-
-    // usedby the tooltip
-    K3bDevice::Device* deviceAt( int index );
-
-    class ToolTip;
-    friend class ToolTip;
 
     class Private;
     Private* d;

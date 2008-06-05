@@ -222,6 +222,13 @@ void K3bWriterSelectionWidget::setWantedMediumState( int state )
 }
 
 
+void K3bWriterSelectionWidget::setWantedMediumSize( const K3b::Msf& minSize )
+{
+    #warning The wanted medium size may not be enough if we need to handle multisession!
+    m_comboMedium->setWantedMediumSize( minSize );
+}
+
+
 int K3bWriterSelectionWidget::wantedMediumType() const
 {
     return m_comboMedium->wantedMediumType();
@@ -231,6 +238,12 @@ int K3bWriterSelectionWidget::wantedMediumType() const
 int K3bWriterSelectionWidget::wantedMediumState() const
 {
     return m_comboMedium->wantedMediumState();
+}
+
+
+K3b::Msf K3bWriterSelectionWidget::wantedMediumSize() const
+{
+    return m_comboMedium->wantedMediumSize();
 }
 
 

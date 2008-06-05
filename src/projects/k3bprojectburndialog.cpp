@@ -261,6 +261,7 @@ void K3bProjectBurnDialog::prepareGui()
     m_writerSelectionWidget = new K3bWriterSelectionWidget( mainWidget() );
     m_writerSelectionWidget->setWantedMediumType( m_doc->supportedMediaTypes() );
     m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY );
+    m_writerSelectionWidget->setWantedMediumSize( m_doc->length() );
     mainLay->addWidget( m_writerSelectionWidget );
 
     m_tabWidget = new QTabWidget( mainWidget() );
