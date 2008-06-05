@@ -23,6 +23,8 @@
 #include <k3blibdvdcss.h>
 #include <k3bcore.h>
 #include <k3bexternalbinmanager.h>
+#include <k3bmediacache.h>
+#include <k3bmedium.h>
 
 #include <qcursor.h>
 #include <qlayout.h>
@@ -98,7 +100,9 @@ void K3bVideoDVDRippingView::reloadMedium()
         KMessageBox::error( this,
                             i18n("K3b was unable to unmount device '%1' containing medium '%2'. "
                                  "Video DVD ripping will not work if the device is mounted. "
-                                 "Please unmount manually."),
+                                 "Please unmount manually.",
+                            device()->blockDeviceName(),
+                            k3bcore->mediaCache()->medium( device() ).shortString() ),
                             i18n("Unmounting failed") );
     }
 

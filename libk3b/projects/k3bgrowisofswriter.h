@@ -72,7 +72,7 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
   void setCloseDvd( bool );
 
   /**
-   * set this to QString::null or an empty string to let the writer
+   * set this to QString() or an empty string to let the writer
    * read it's data from fd()
    */
   void setImageToWrite( const QString& );

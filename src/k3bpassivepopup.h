@@ -46,7 +46,7 @@ class K3bPassivePopup : public QFrame
   void slideIn();
 
   static void showPopup( const QString& message, 
-			 const QString& title = QString::null, 
+			 const QString& title = QString(), 
 			 MessageType messageType = Information,
 			 bool countdown = true,
 			 bool button = true );

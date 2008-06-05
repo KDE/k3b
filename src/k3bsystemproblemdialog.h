@@ -35,9 +35,9 @@ class K3bSystemProblem
 {
  public:
   K3bSystemProblem( int type = NON_CRITICAL,
-		    const QString& problem = QString::null,
-		    const QString& details = QString::null,
-		    const QString& solution = QString::null,
+		    const QString& problem = QString(),
+		    const QString& details = QString(),
+		    const QString& solution = QString(),
 		    bool k3bsetup = false );
 
   enum {

@@ -42,7 +42,7 @@ public Q_SLOTS:
      */
     void setMargin( int );
 
-    void setTitle( const QString& title, const QString& subTitle = QString::null );
+    void setTitle( const QString& title, const QString& subTitle = QString() );
     void setSubTitle( const QString& subTitle );
 
     /**

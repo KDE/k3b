@@ -140,8 +140,8 @@ namespace K3bDevice {
        * \see ErrorCode
        */
       int mount( Device*, 
-		 const QString& mountPoint = QString::null, 
-		 const QString& fstype = QString::null,
+		 const QString& mountPoint = QString(), 
+		 const QString& fstype = QString(),
 		 const QStringList& options = QStringList() );
 
       /**

@@ -62,10 +62,10 @@ class LIBK3B_EXPORT K3bMovixBin : public K3bExternalBin
    * Interface for the movix-conf --files interface for
    * versions >= 0.9.0
    */
-  QStringList files( const QString& kbd = QString::null,
-		     const QString& font = QString::null,
-		     const QString& bg = QString::null,
-		     const QString& lang = QString::null,
+  QStringList files( const QString& kbd = QString(),
+		     const QString& font = QString(),
+		     const QString& bg = QString(),
+		     const QString& lang = QString(),
 		     const QStringList& codecs = QStringList() ) const;
 
  private:

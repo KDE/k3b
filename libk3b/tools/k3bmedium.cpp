@@ -74,6 +74,12 @@ K3bMedium& K3bMedium::operator=( const K3bMedium& other )
 }
 
 
+bool K3bMedium::isValid() const
+{
+    return d->device != 0;
+}
+
+
 void K3bMedium::setDevice( K3bDevice::Device* dev )
 {
     if( d->device != dev ) {

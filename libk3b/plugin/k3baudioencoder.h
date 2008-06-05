@@ -100,7 +100,7 @@ public:
 
     /**
      * The default implementation returnes the filename set in openFile
-     * or QString::null if no file has been opened.
+     * or QString() if no file has been opened.
      * Normally this does not need to be reimplemented but it has to be 
      * if openFile is reimplemented.
      */

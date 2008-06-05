@@ -423,7 +423,7 @@ void K3bAudioCdView::slotSaveCddbLocally()
     KCDDB::Client cddbClient;
     cddbClient.config().readConfig();
     cddbClient.store( m_trackModel->cddbInfo(), K3bCDDB::createTrackOffsetList( m_trackModel->medium().toc() ) );
-    K3bPassivePopup::showPopup( i18n("Saved entry in category %2.",
+    K3bPassivePopup::showPopup( i18n("Saved entry in category %1.",
                                      m_trackModel->cddbInfo().get( KCDDB::Category ).toString() ),
                                 i18n("CDDB") );
 }

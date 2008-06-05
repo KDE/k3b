@@ -50,28 +50,28 @@ class LIBK3B_EXPORT K3bListViewItem : public K3ListViewItem
   K3bListViewItem(Q3ListViewItem *parent, Q3ListViewItem *after);
 
   K3bListViewItem(Q3ListView *parent,
-		  const QString&, const QString& = QString::null,
-		  const QString& = QString::null, const QString& = QString::null,
-		  const QString& = QString::null, const QString& = QString::null,
-		  const QString& = QString::null, const QString& = QString::null);
+		  const QString&, const QString& = QString(),
+		  const QString& = QString(), const QString& = QString(),
+		  const QString& = QString(), const QString& = QString(),
+		  const QString& = QString(), const QString& = QString());
 
   K3bListViewItem(Q3ListViewItem *parent,
-		  const QString&, const QString& = QString::null,
-		  const QString& = QString::null, const QString& = QString::null,
-		  const QString& = QString::null, const QString& = QString::null,
-		  const QString& = QString::null, const QString& = QString::null);
+		  const QString&, const QString& = QString(),
+		  const QString& = QString(), const QString& = QString(),
+		  const QString& = QString(), const QString& = QString(),
+		  const QString& = QString(), const QString& = QString());
 
   K3bListViewItem(Q3ListView *parent, Q3ListViewItem *after,
-		  const QString&, const QString& = QString::null,
-		  const QString& = QString::null, const QString& = QString::null,
-		  const QString& = QString::null, const QString& = QString::null,
-		  const QString& = QString::null, const QString& = QString::null);
+		  const QString&, const QString& = QString(),
+		  const QString& = QString(), const QString& = QString(),
+		  const QString& = QString(), const QString& = QString(),
+		  const QString& = QString(), const QString& = QString());
 
   K3bListViewItem(Q3ListViewItem *parent, Q3ListViewItem *after,
-		  const QString&, const QString& = QString::null,
-		  const QString& = QString::null, const QString& = QString::null,
-		  const QString& = QString::null, const QString& = QString::null,
-		  const QString& = QString::null, const QString& = QString::null);
+		  const QString&, const QString& = QString(),
+		  const QString& = QString(), const QString& = QString(),
+		  const QString& = QString(), const QString& = QString(),
+		  const QString& = QString(), const QString& = QString());
 
   virtual ~K3bListViewItem();
 

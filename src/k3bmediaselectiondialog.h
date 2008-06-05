@@ -32,8 +32,8 @@ class K3bMediaSelectionDialog : public KDialog
    * Do not use the constructor. Use the static method instead.
    */
   K3bMediaSelectionDialog( QWidget* parent = 0, 
-			   const QString& title = QString::null, 
-			   const QString& text = QString::null, 
+			   const QString& title = QString(), 
+			   const QString& text = QString(), 
 			   bool modal = false );
   ~K3bMediaSelectionDialog();
 
@@ -66,14 +66,14 @@ class K3bMediaSelectionDialog : public KDialog
    * without showing the dialog.
    */
   static K3bDevice::Device* selectMedium( int type, int state, QWidget* parent = 0,
-					  const QString& title = QString::null, 
-					  const QString& text = QString::null,
+					  const QString& title = QString(), 
+					  const QString& text = QString(),
 					  bool* canceled = 0 );
 
   static K3bDevice::Device* selectMedium( int type, int state, int content = K3bMedium::CONTENT_ALL,
 					  QWidget* parent = 0,
-					  const QString& title = QString::null, 
-					  const QString& text = QString::null,
+					  const QString& title = QString(), 
+					  const QString& text = QString(),
 					  bool* canceled = 0 );
 
  private Q_SLOTS:

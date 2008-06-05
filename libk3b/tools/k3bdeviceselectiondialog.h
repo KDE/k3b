@@ -33,7 +33,7 @@ class LIBK3B_EXPORT K3bDeviceSelectionDialog : public KDialog
 
 public:
     K3bDeviceSelectionDialog( QWidget* parent = 0, 
-			      const QString& text = QString::null );
+			      const QString& text = QString() );
     ~K3bDeviceSelectionDialog();
 
     void addDevice( K3bDevice::Device* );
@@ -44,12 +44,12 @@ public:
     K3bDevice::Device* selectedDevice() const;
 
     static K3bDevice::Device* selectWriter( QWidget* parent, 
-					    const QString& text = QString::null );
+					    const QString& text = QString() );
     static K3bDevice::Device* selectDevice( QWidget* parent, 
-					    const QString& text = QString::null );
+					    const QString& text = QString() );
     static K3bDevice::Device* selectDevice( QWidget* parent, 
 					    const QList<K3bDevice::Device*>& devices,
-					    const QString& text = QString::null );
+					    const QString& text = QString() );
 
 private:
     class Private;

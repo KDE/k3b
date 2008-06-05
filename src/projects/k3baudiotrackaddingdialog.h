@@ -42,21 +42,21 @@ public:
     int waitForMedia( K3bDevice::Device*,
                       int = K3bDevice::STATE_EMPTY,
                       int = K3bDevice::MEDIA_WRITABLE_CD,
-                      const QString& = QString::null ) { return 0; }
+                      const QString& = QString() ) { return 0; }
   
     /**
      * @reimplemented from K3bJobHandler
      */
     bool questionYesNo( const QString&,
-                        const QString& = QString::null,
-                        const QString& = QString::null,
-                        const QString& = QString::null ) { return false; }
+                        const QString& = QString(),
+                        const QString& = QString(),
+                        const QString& = QString() ) { return false; }
 
     /**
      * reimplemented from K3bJobHandler
      */
     void blockingInformation( const QString&,
-                              const QString& = QString::null ) {}
+                              const QString& = QString() ) {}
 
     /**
      * \return \see QDialog::exec()

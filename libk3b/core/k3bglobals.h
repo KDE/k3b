@@ -134,12 +134,12 @@ namespace K3b
      */
     LIBK3B_EXPORT QString appendNumberToFilename( const QString& name, int num, unsigned int maxlen );
 
-    LIBK3B_EXPORT QString findUniqueFilePrefix( const QString& _prefix = QString::null, const QString& path = QString::null );
+    LIBK3B_EXPORT QString findUniqueFilePrefix( const QString& _prefix = QString(), const QString& path = QString() );
 
     /**
      * Find a unique filename in directory d (if d is empty the method uses the defaultTempPath)
      */
-    LIBK3B_EXPORT QString findTempFile( const QString& ending = QString::null, const QString& d = QString::null );
+    LIBK3B_EXPORT QString findTempFile( const QString& ending = QString(), const QString& d = QString() );
 
     /**
      * Wrapper around KStandardDirs::findExe which searches the PATH and some additional

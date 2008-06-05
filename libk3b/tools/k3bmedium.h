@@ -48,7 +48,12 @@ public:
     explicit K3bMedium( K3bDevice::Device* dev );
     ~K3bMedium();
 
+    /**
+     * Copy operator
+     */
     K3bMedium& operator=( const K3bMedium& );
+
+    bool isValid() const;
 
     void setDevice( K3bDevice::Device* dev );
 

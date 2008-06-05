@@ -46,7 +46,7 @@ class K3bAudioJobTempData : public QObject
    * a specific directory
    * it defaults to the default K3b temp dir
    */
-  void prepareTempFileNames( const QString& path = QString::null );
+  void prepareTempFileNames( const QString& path = QString() );
 
   /**
    * remove all temp files (this does not include the audio buffer files

@@ -70,7 +70,7 @@ public:
     virtual bool hasBeenCanceled() const;
 
     virtual QString jobDescription() const { return "K3bJob"; }
-    virtual QString jobDetails() const { return QString::null; }
+    virtual QString jobDetails() const { return QString(); }
 
     /**
      * @returns the number of running subjobs.
@@ -123,21 +123,21 @@ public:
     virtual int waitForMedia( K3bDevice::Device*,
                               int mediaState = K3bDevice::STATE_EMPTY,
                               int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
-                              const QString& message = QString::null );
+                              const QString& message = QString() );
   
     /**
      * reimplemented from K3bJobHandler
      */
     virtual bool questionYesNo( const QString& text,
-                                const QString& caption = QString::null,
-                                const QString& yesText = QString::null,
-                                const QString& noText = QString::null );
+                                const QString& caption = QString(),
+                                const QString& yesText = QString(),
+                                const QString& noText = QString() );
 
     /**
      * reimplemented from K3bJobHandler
      */
     virtual void blockingInformation( const QString& text,
-                                      const QString& caption = QString::null );
+                                      const QString& caption = QString() );
 
     /**
      * Wait for the job to finish. In case the job is not running 

@@ -61,21 +61,21 @@ public:
     int waitForMedia( K3bDevice::Device*,
                       int mediaState = K3bDevice::STATE_EMPTY,
                       int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
-                      const QString& message = QString::null );
+                      const QString& message = QString() );
   
     /**
      * @reimplemented from K3bJobHandler
      */
     bool questionYesNo( const QString& text,
-                        const QString& caption = QString::null,
-                        const QString& yesText = QString::null,
-                        const QString& noText = QString::null );
+                        const QString& caption = QString(),
+                        const QString& yesText = QString(),
+                        const QString& noText = QString() );
 
     /**
      * reimplemented from K3bJobHandler
      */
     void blockingInformation( const QString& text,
-                              const QString& caption = QString::null );
+                              const QString& caption = QString() );
 
     /**
      * This only openes a dialog if the first check failed.
@@ -95,7 +95,7 @@ public:
     static int wait( K3bDevice::Device*,
                      int mediaState,
                      int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
-                     const QString& message = QString::null,
+                     const QString& message = QString(),
                      QWidget* parent = 0 );
 
 protected Q_SLOTS:
@@ -116,7 +116,7 @@ protected:
 
     int waitForDisc( int mediaState = K3bDevice::STATE_EMPTY,
                      int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
-                     const QString& message = QString::null );
+                     const QString& message = QString() );
 
 
     /**

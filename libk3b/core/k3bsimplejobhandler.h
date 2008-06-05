@@ -41,20 +41,20 @@ class LIBK3B_EXPORT K3bSimpleJobHandler : public QObject, public K3bJobHandler
   int waitForMedia( K3bDevice::Device*,
 		    int mediaState = K3bDevice::STATE_EMPTY,
 		    int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
-		    const QString& message = QString::null );
+		    const QString& message = QString() );
   /**
    * \return true
    */
   bool questionYesNo( const QString& text,
-		      const QString& caption = QString::null,
-		      const QString& yesText = QString::null,
-		      const QString& noText = QString::null );
+		      const QString& caption = QString(),
+		      const QString& yesText = QString(),
+		      const QString& noText = QString() );
 
   /**
    * Does nothing
    */
   void blockingInformation( const QString& text,
-			    const QString& caption = QString::null );
+			    const QString& caption = QString() );
 };
 
 #endif

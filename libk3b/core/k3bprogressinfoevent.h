@@ -35,7 +35,7 @@ class K3bProgressInfoEvent : public QEvent
     m_type(type)
     {}
 
-  K3bProgressInfoEvent( int type, const QString& v1, const QString& v2 = QString::null, 
+  K3bProgressInfoEvent( int type, const QString& v1, const QString& v2 = QString(), 
 			int value1 = 0, int value2 = 0 )
       : QEvent( QEvent::User ),
     m_type( type),

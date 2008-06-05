@@ -138,7 +138,7 @@ public:
 
     /**
      * Symlink if there is one.
-     * @return the symlink, or QString::null
+     * @return the symlink, or QString()
      */
     const QString& symlink() const { return m_symlink; }
 

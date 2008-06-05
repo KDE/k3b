@@ -45,7 +45,7 @@ public:
      * Call this from a thread to show a device selection dialog.
      */
     static K3bDevice::Device* selectDevice( QWidget* parent, 
-                                            const QString& text = QString::null );
+                                            const QString& text = QString() );
 
 protected:
     /**

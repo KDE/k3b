@@ -95,7 +95,7 @@ public:
      * as it enhances usability.
      * @returne The filetype of the decoded file.
      */
-    virtual QString fileType() const { return QString::null; }
+    virtual QString fileType() const { return QString(); }
 
     /**
      * This method may be reimplemented to provide technical information about

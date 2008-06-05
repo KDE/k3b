@@ -28,7 +28,7 @@
 class LIBK3B_EXPORT K3bCueFileParser : public K3bImageFileReader
 {
  public:
-  K3bCueFileParser( const QString& filename = QString::null );
+  K3bCueFileParser( const QString& filename = QString() );
   ~K3bCueFileParser();
 
   /**

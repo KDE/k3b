@@ -42,7 +42,7 @@ class K3bVcdXmlView
         QString m_xmlstring;
 
         void addComment( QDomDocument& doc, QDomElement& parent, const QString& text );
-        QDomElement addSubElement( QDomDocument&, QDomElement&, const QString& name, const QString& value = QString::null );
+        QDomElement addSubElement( QDomDocument&, QDomElement&, const QString& name, const QString& value = QString() );
         QDomElement addSubElement( QDomDocument&, QDomElement&, const QString& name, const int& value );
 
         QDomElement addFolderElement( QDomDocument&, QDomElement&, const QString& name );

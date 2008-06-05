@@ -41,7 +41,7 @@ class K3bVideoDVDRippingJob : public K3bJob
     TitleRipInfo();
     TitleRipInfo( int title,
 		  int audioStream = 0,
-		  const QString& fn = QString::null,
+		  const QString& fn = QString(),
 		  int width = 0,  // 0 -> no resize
 		  int height = 0, // 0 -> no resize
 		  int videoBitrate = 0, // 0 -> use default from job settings

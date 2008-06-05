@@ -416,13 +416,14 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent)
                     !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "plain-atapi") ) {
                     // FIXME: replace ">" with "&gt;"
                     problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
-                                                       i18n("%1 %2 does not support ATAPI", QLatin1String( "cdrdao") )
-                                                       .arg(k3bcore->externalBinManager()->binObject("cdrdao")->version),
+                                                       i18n("%1 %2 does not support ATAPI",
+                                                            QLatin1String( "cdrdao"),
+                                                            k3bcore->externalBinManager()->binObject("cdrdao")->version.toString() ),
                                                        i18n("The configured version of %1 does not "
                                                             "support writing to ATAPI devices without "
                                                             "SCSI emulation and there is at least one writer "
                                                             "in your system not configured to use "
-                                                            "SCSI emulation.").arg("cdrdao"),
+                                                            "SCSI emulation.", QLatin1String( "cdrdao" ) ),
                                                        K3b::simpleKernelVersion() > K3bVersion( 2, 5, 0 )
                                                        ? i18n("Install cdrdao >= 1.1.8 which supports writing to "
                                                               "ATAPI devices directly.")

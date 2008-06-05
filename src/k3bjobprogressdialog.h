@@ -81,21 +81,21 @@ public:
     int waitForMedia( K3bDevice::Device*,
                       int mediaState = K3bDevice::STATE_EMPTY,
                       int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
-                      const QString& message = QString::null );
+                      const QString& message = QString() );
   
     /**
      * @reimplemented from K3bJobHandler
      */
     bool questionYesNo( const QString& text,
-                        const QString& caption = QString::null,
-                        const QString& yesText = QString::null,
-                        const QString& noText = QString::null );
+                        const QString& caption = QString(),
+                        const QString& yesText = QString(),
+                        const QString& noText = QString() );
 
     /**
      * reimplemented from K3bJobHandler
      */
     void blockingInformation( const QString& text,
-                              const QString& caption = QString::null );
+                              const QString& caption = QString() );
 
 public Q_SLOTS:
     void setVisible( bool visible );

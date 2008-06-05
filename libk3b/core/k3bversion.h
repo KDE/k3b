@@ -57,7 +57,7 @@ class LIBK3B_EXPORT K3bVersion
   /**
    * sets the version and generates a version string from it
    */
-  K3bVersion( int majorVersion, int minorVersion, int pachlevel = -1, const QString& suffix = QString::null );
+  K3bVersion( int majorVersion, int minorVersion, int pachlevel = -1, const QString& suffix = QString() );
 
   /**
    * tries to parse the version string
@@ -73,7 +73,7 @@ class LIBK3B_EXPORT K3bVersion
    *
    * If minorVersion or pachlevel are -1 they will not be used when generating the version string.
    */
-  void setVersion( int majorVersion, int minorVersion = -1, int patchlevel = -1, const QString& suffix = QString::null );
+  void setVersion( int majorVersion, int minorVersion = -1, int patchlevel = -1, const QString& suffix = QString() );
 
   QString toString() const { return m_versionString; }
   QString versionString() const { return m_versionString; }
@@ -100,7 +100,7 @@ class LIBK3B_EXPORT K3bVersion
   static QString createVersionString( int majorVersion, 
 				      int minorVersion = -1, 
 				      int patchlevel = -1, 
-				      const QString& suffix = QString::null );
+				      const QString& suffix = QString() );
 
   /**
    * "Intelligent" comparison of two version suffixes.

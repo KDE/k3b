@@ -32,7 +32,7 @@ public:
     ~K3bThemedHeader(); 
 
 public Q_SLOTS:
-    void setTitle( const QString& title, const QString& subtitle = QString::null );
+    void setTitle( const QString& title, const QString& subtitle = QString() );
     void setSubTitle( const QString& subtitle );
     void setAlignment( int );
     void setLeftPixmap( K3bTheme::PixmapType );

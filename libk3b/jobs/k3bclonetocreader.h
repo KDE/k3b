@@ -29,7 +29,7 @@
 class LIBK3B_EXPORT  K3bCloneTocReader : public K3bImageFileReader
 {
 public:
-    K3bCloneTocReader( const QString& filename = QString::null );
+    K3bCloneTocReader( const QString& filename = QString() );
     ~K3bCloneTocReader();
 
     const K3b::Msf& imageSize() const;

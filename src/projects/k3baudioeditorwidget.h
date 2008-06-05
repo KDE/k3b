@@ -52,7 +52,7 @@ public:
      */
     int addRange( const K3b::Msf& start, const K3b::Msf& end, 
                   bool startFixed = false, bool endFixed = false,
-                  const QString& toolTip = QString::null,
+                  const QString& toolTip = QString(),
                   const QBrush& brush = QBrush() );
 
     /**
@@ -94,7 +94,7 @@ public:
      * @return -1 on error or an identifier on success.
      */
     int addMarker( const K3b::Msf& pos, bool fixed = false, 
-                   const QString& toolTip = QString::null, const QColor& color = QColor() );
+                   const QString& toolTip = QString(), const QColor& color = QColor() );
 
     /**
      * @return false if the marker does not exist.

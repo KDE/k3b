@@ -53,15 +53,15 @@ public:
      * @param configgroup The config group used for the loadUserDefaults and saveUserDefaults methods
      */
     K3bInteractionDialog( QWidget* parent = 0, 
-                          const QString& title = QString::null,
-                          const QString& subTitle = QString::null,
+                          const QString& title = QString(),
+                          const QString& subTitle = QString(),
                           int buttonMask = START_BUTTON|CANCEL_BUTTON,
                           int defaultButton = START_BUTTON,
-                          const QString& configgroup = QString::null );
+                          const QString& configgroup = QString() );
     virtual ~K3bInteractionDialog();
 
     void setMainWidget( QWidget* w );
-    void setTitle( const QString& title, const QString& subTitle = QString::null );
+    void setTitle( const QString& title, const QString& subTitle = QString() );
     void setDefaultButton( int b );
 
     /**
@@ -121,28 +121,28 @@ public Q_SLOTS:
      * \deprecated use setButtonText
      */
     void setStartButtonText( const QString& text, 
-                             const QString& tooltip = QString::null, 
-                             const QString& whatsthis = QString::null );
+                             const QString& tooltip = QString(), 
+                             const QString& whatsthis = QString() );
     /**
      * \deprecated use setButtonText
      */
     void setCancelButtonText( const QString& text, 
-                              const QString& tooltip = QString::null, 
-                              const QString& whatsthis = QString::null );
+                              const QString& tooltip = QString(), 
+                              const QString& whatsthis = QString() );
     /**
      * \deprecated use setButtonText
      */
     void setSaveButtonText( const QString& text, 
-                            const QString& tooltip = QString::null, 
-                            const QString& whatsthis = QString::null );
+                            const QString& tooltip = QString(), 
+                            const QString& whatsthis = QString() );
 
     void setButtonGui( int button,
                        const KGuiItem& );
 
     void setButtonText( int button,
                         const QString& text, 
-                        const QString& tooltip = QString::null, 
-                        const QString& whatsthis = QString::null );
+                        const QString& tooltip = QString(), 
+                        const QString& whatsthis = QString() );
 
     void setButtonEnabled( int button, bool enabled );
     void setButtonShown( int button, bool enabled );
