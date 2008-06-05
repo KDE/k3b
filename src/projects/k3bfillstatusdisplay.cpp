@@ -683,37 +683,47 @@ void K3bFillStatusDisplay::slotMediumChanged( K3bDevice::Device* )
         // if we find exactly one usable or multiple with the same size
         // we use that size
         //
-
-        K3bDevice::Device* dev = 0;
+        K3bMedium autoSelectedMedium;
         QList<K3bDevice::Device*> devs = k3bcore->deviceManager()->burningDevices();
 
         Q_FOREACH( K3bDevice::Device* dev, devs ) {
-            const K3bMedium& medium = k3bappcore->mediaCache()->medium( dev );
+            const K3bMedium medium = k3bappcore->mediaCache()->medium( dev );
 
             if( ( medium.diskInfo().empty() ||
                   medium.diskInfo().appendable() ||
                   medium.diskInfo().rewritable() ) &&
-                ( medium.diskInfo().mediaType() & d->doc->supportedMediaTypes() ) &&
-                d->doc->length() <= medium.diskInfo().capacity() ) {
+                ( medium.diskInfo().mediaType() & d->doc->supportedMediaTypes() ) ) {
 
-                // first usable medium
-                if( !dev ) {
-                    dev = medium.device();
-                }
+                // We use a 10% margin to allow the user to fine-tune project sizes
+                // However, if we have a bigger medium we always use that
+                if ( ( double )d->doc->size() <= ( double )( medium.diskInfo().capacity().mode1Bytes() ) * 1.1 ) {
 
-                // roughly compare the sizes of the two usable media. If they match, carry on.
-                else if( k3bappcore->mediaCache()->diskInfo( dev ).capacity().lba()/75/60
-                         != medium.diskInfo().capacity().lba()/75/60 ) {
-                    // different usable media -> fallback
-                    dev = 0;
-                    break;
+                    // first usable medium
+                    if( !autoSelectedMedium.isValid() ) {
+                        autoSelectedMedium = medium;
+                    }
+
+                    else {
+                        // prefer the medium which can fit the whole doc
+                        if ( d->doc->length() <= medium.diskInfo().capacity() &&
+                             d->doc->length() > autoSelectedMedium.diskInfo().capacity() ) {
+                            autoSelectedMedium = medium;
+                        }
+
+                        // roughly compare the sizes of the two usable media. If they match, carry on.
+                        else if( medium.diskInfo().capacity().lba()/75/60
+                                 != autoSelectedMedium.diskInfo().capacity().lba()/75/60 ) {
+                            // different usable media -> fallback
+                            autoSelectedMedium = K3bMedium();
+                            break;
+                        }
+                    }
                 }
-                // else continue;
             }
         }
 
-        if( dev ) {
-            d->displayWidget->setCdSize( k3bappcore->mediaCache()->diskInfo( dev ).capacity().lba() );
+        if( autoSelectedMedium.isValid() ) {
+            d->displayWidget->setCdSize( autoSelectedMedium.diskInfo().capacity().lba() );
         }
         else {
             bool haveDVD = !k3bcore->deviceManager()->dvdWriter().isEmpty();
