@@ -127,6 +127,10 @@ K3bEmptyDiscWaiter::K3bEmptyDiscWaiter( K3bDevice::Device* device, QWidget* pare
 
     setButtonToolTip(KDialog::User1,
                      i18n("Force K3b to continue if it seems not to detect your empty CD/DVD.") );
+    connect( this, SIGNAL( cancelClicked() ), this, SLOT( slotCancel() ) );
+    connect( this, SIGNAL( user1Clicked() ), this, SLOT( slotUser1() ) );
+    connect( this, SIGNAL( user2Clicked() ), this, SLOT( slotUser2() ) );
+    connect( this, SIGNAL( user3Clicked() ), this, SLOT( slotUser3() ) );
 }
 
 
