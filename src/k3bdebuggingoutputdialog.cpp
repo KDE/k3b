@@ -54,6 +54,8 @@ K3bDebuggingOutputDialog::K3bDebuggingOutputDialog( QWidget* parent )
   debugView->setWordWrapMode( QTextOption::NoWrap );
 
   setMainWidget( debugView );
+  connect( this, SIGNAL( user1Clicked() ), this, SLOT( slotUser1() ) );
+  connect( this, SIGNAL( user2Clicked() ), this, SLOT( slotUser2() ) );
 
   resize( 600, 300 );
 }

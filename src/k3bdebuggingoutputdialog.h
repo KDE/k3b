@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
  *
@@ -26,14 +26,14 @@ class K3bDebuggingOutputDialog : public KDialog
 
  public:
   K3bDebuggingOutputDialog( QWidget* parent );
-  
+
  public Q_SLOTS:
   void setOutput( const QString& );
 
- private:
   void slotUser1();
   void slotUser2();
-  
+private:
+
   QTextEdit* debugView;
 };
 
