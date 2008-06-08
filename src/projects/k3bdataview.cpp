@@ -250,7 +250,7 @@ void K3bDataView::showPopupMenu( const QPoint& point )
 {
     m_contextMenuOnTreeView = ( sender() == m_dataDirTree );
 
-    QPoint globalPoint;
+    QPoint globalPoint( QCursor::pos() );
     K3bDataItem* item = 0;
     if ( m_contextMenuOnTreeView ) {
         globalPoint = m_dataDirTree->mapToGlobal( point );
@@ -271,8 +271,8 @@ void K3bDataView::showPopupMenu( const QPoint& point )
         m_actionRename->setEnabled( false );
         m_actionOpen->setEnabled( false );
     }
-
     m_popupMenu->popup( globalPoint );
+
 }
 
 
