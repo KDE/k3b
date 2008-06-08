@@ -43,7 +43,7 @@ K3bDebuggingOutputDialog::K3bDebuggingOutputDialog( QWidget* parent )
   setButtons(Close|User1|User2);
   setDefaultButton(Close);
   setButtonGuiItem(User1, KStandardGuiItem::saveAs());
-  setButtonGuiItem(User2, KGuiItem( i18n("Copy"), "editcopy" ));
+  setButtonGuiItem(User2, KGuiItem( i18n("Copy"), "edit-copy" ));
   setButtonToolTip( User1, i18n("Save to file") );
   setButtonToolTip( User2, i18n("Copy to clipboard") );
 
