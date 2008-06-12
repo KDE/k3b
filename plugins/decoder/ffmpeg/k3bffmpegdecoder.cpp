@@ -21,7 +21,7 @@
 #include <kdebug.h>
 
 extern "C" {
-#include <ffmpeg/avcodec.h>
+#include <libavcodec/avcodec.h>
 }
 
 #include <math.h>
