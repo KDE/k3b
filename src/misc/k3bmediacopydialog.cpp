@@ -394,7 +394,7 @@ void K3bMediaCopyDialog::slotStartClicked()
         burnJob = job;
     }
     else {
-        KMessageBox::sorry( this, "Ups", "No copy support for this source media type yet." );
+        KMessageBox::sorry( this, i18n("Ups"), i18n("No copy support for this source media type yet.") );
         return;
     }
 
