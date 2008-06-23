@@ -122,9 +122,9 @@ K3bExternalBinWidget::K3bExternalBinWidget( K3bExternalBinManager* manager, QWid
     m_defaultButton = new QPushButton( i18n("Set Default"), programTab );
     m_defaultButton->setToolTip( i18n("Change the versions K3b should use.") );
     m_defaultButton->setWhatsThis( i18n("<p>If K3b finds more than one installed version of a program "
-                                        "it will choose one as the <em>default</em> which will be used "
-                                        "to do the work. If you want to change the default select the "
-                                        "wanted version and press this button.") );
+                                        "it will choose one as the <em>default</em>, which will be used "
+                                        "to do the work. If you want to change the default, select the "
+                                        "desired version and press this button.") );
     programTabLayout->addWidget( m_programView, 1, 0, 1, 2 );
     programTabLayout->addWidget( m_defaultButton, 0, 1 );
     programTabLayout->addWidget( new QLabel( i18n("Use the 'Default' button to change the versions K3b should use."),
