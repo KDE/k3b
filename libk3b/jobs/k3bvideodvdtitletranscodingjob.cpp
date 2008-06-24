@@ -560,7 +560,7 @@ QString K3bVideoDVDTitleTranscodingJob::audioCodecDescription( K3bVideoDVDTitleT
 
 bool K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( K3bVideoDVDTitleTranscodingJob::VideoCodec codec, const K3bExternalBin* bin )
 {
-  static char* s_codecFeatures[] = { "xvid", "ffmpeg" };
+  static const char* s_codecFeatures[] = { "xvid", "ffmpeg" };
   if( !bin )
     bin = k3bcore->externalBinManager()->binObject("transcode");
   if( !bin )
@@ -571,7 +571,7 @@ bool K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( K3bVideoDVDTi
 
 bool K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( K3bVideoDVDTitleTranscodingJob::AudioCodec codec, const K3bExternalBin* bin )
 {
-  static char* s_codecFeatures[] = { "lame", "ac3", "ac3" };
+  static const char* s_codecFeatures[] = { "lame", "ac3", "ac3" };
   if( !bin )
     bin = k3bcore->externalBinManager()->binObject("transcode");
   if( !bin )
