@@ -23,7 +23,7 @@
 #include <k3biso9660.h>
 
 #include <klocale.h>
-#include <k3process.h>
+#include <kprocess.h>
 #include <kdebug.h>
 
 #include <qstringlist.h>
@@ -78,7 +78,7 @@ void K3bMsInfoFetcher::start()
 void K3bMsInfoFetcher::getMsInfo()
 {
   delete m_process;
-  m_process = new K3Process();
+  m_process = new KProcess(this);
 
   const K3bExternalBin* bin = 0;
   if( m_dvd ) {
@@ -96,40 +96,35 @@ void K3bMsInfoFetcher::getMsInfo()
     *m_process << bin->path;
 
     // add the device (e.g. /dev/sg1)
-    *m_process << QString("dev=%1").arg( K3b::externalBinDeviceParameter(m_device, bin) );
+    *m_process << QString("dev=") + K3b::externalBinDeviceParameter(m_device, bin);
 
     *m_process << "-msinfo";
 
     // additional user parameters from config
-    const QStringList& params = bin->userParameters();
-    for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
-      *m_process << *it;
+    *m_process << bin->userParameters();
 
     kDebug() << "***** " << bin->name() << " parameters:\n";
-    QList<QByteArray> args = m_process->args();
-    QString s;
-    Q_FOREACH( QByteArray arg, args ) {
-        s += QString::fromLocal8Bit( arg ) + " ";
-    }
+    QStringList args = m_process->program();
+    args.removeFirst();
+    QString s = args.join(" ");
     kDebug() << s << flush;
     emit debuggingOutput( "msinfo command:", s );
 
 
-    //   connect( m_process, SIGNAL(receivedStderr(K3Process*, char*, int)),
-    // 	   this, SLOT(slotCollectOutput(K3Process*, char*, int)) );
-    connect( m_process, SIGNAL(receivedStdout(K3Process*, char*, int)),
-	     this, SLOT(slotCollectOutput(K3Process*, char*, int)) );
-    connect( m_process, SIGNAL(processExited(K3Process*)),
+    //   connect( m_process, SIGNAL(readReadyStandardError()),
+    // 	   this, SLOT(slotCollectOutput()) );
+    connect( m_process, SIGNAL(readReadyStandardOutput()),
+	     this, SLOT(slotCollectOutput()) );
+    connect( m_process, SIGNAL(finished()),
 	     this, SLOT(slotProcessExited()) );
 
     m_msInfo = QString();
     m_collectedOutput = QString();
     m_canceled = false;
 
-    if( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) {
-      emit infoMessage( i18n("Could not start %1.",bin->name()), K3bJob::ERROR );
-      jobFinished(false);
-    }
+    m_process->setOutputChannelMode(KProcess::SeparateChannels);
+
+    m_process->start();
   }
 }
 
@@ -186,6 +181,12 @@ void K3bMsInfoFetcher::slotProcessExited()
   if( m_canceled )
     return;
 
+  if (m_process->error() == QProcess::FailedToStart) {
+    emit infoMessage( i18n("Could not start %1", m_process->program().at(0)), K3bJob::ERROR );
+    jobFinished(false);
+    return;
+  }
+
   kDebug() << "(K3bMsInfoFetcher) msinfo fetched";
 
   // now parse the output
@@ -217,11 +218,13 @@ void K3bMsInfoFetcher::slotProcessExited()
 }
 
 
-void K3bMsInfoFetcher::slotCollectOutput( K3Process*, char* output, int len )
+void K3bMsInfoFetcher::slotCollectOutput()
 {
-  emit debuggingOutput( "msinfo", QString::fromLocal8Bit( output, len ) );
+  QByteArray a = m_process->readAllStandardOutput();
 
-  m_collectedOutput += QString::fromLocal8Bit( output, len );
+  emit debuggingOutput( "msinfo", QString::fromLocal8Bit( a ) );
+
+  m_collectedOutput += QString::fromLocal8Bit( a );
 }
 
 
@@ -230,7 +233,7 @@ void K3bMsInfoFetcher::cancel()
   // FIXME: this does not work if the devicehandler is running
 
   if( m_process )
-    if( m_process->isRunning() ) {
+    if( m_process->state() != QProcess::NotRunning) {
       m_canceled = true;
       m_process->kill();
       emit canceled();
