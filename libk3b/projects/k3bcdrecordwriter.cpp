@@ -657,7 +657,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 
         // now send a <CR> to cdrecord
         // hopefully this will do it since I have no possibility to test it!
-        ::write( fd(), "\n", 1 );
+        m_process->write( "\n", 1 );
     }
     else if( s_burnfreeCounterRx.indexIn( line ) ) {
         bool ok;

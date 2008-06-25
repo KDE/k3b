@@ -37,7 +37,6 @@
 #include <QHBoxLayout>
 
 #include <sys/types.h>
-#include <sys/wait.h>
 
 
 
@@ -144,11 +143,11 @@ void K3bSoxEncoder::finishEncoderInternal()
 {
     if( d->process ) {
         if( d->process->isRunning() ) {
-            ::close( d->process->stdinFd() );
+            d->process->closeWriteChannel();
 
             // this is kind of evil...
             // but we need to be sure the process exited when this method returnes
-            ::waitpid( d->process->pid(), 0, 0 );
+            d->process->waitForFinished(-1);
         }
     }
 }
@@ -254,7 +253,7 @@ long K3bSoxEncoder::encodeInternal( const char* data, Q_ULONG len )
 {
     if( d->process ) {
         if( d->process->isRunning() )
-            return ::write( d->process->stdinFd(), (const void*)data, len );
+            return d->process->write( data, len );
         else
             return -1;
     }

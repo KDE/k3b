@@ -119,9 +119,39 @@ public:
      */
     void setRawStdout(bool b);
 
+    /**
+     * close stdin channel
+     *
+     * Once this class is ported to use KProcess instead of K3Process this
+     * method can be deleted and the QProcess::closeWriteChannel() can be
+     * called directly.
+     *
+     * This is similar to closeStdin() but it will also close a dup'ed channel.
+     */
+    void closeWriteChannel();
+
+    /**
+     * wait until process exited
+     *
+     * Once this class is ported to use KProcess instead of K3Process this
+     * method can be deleted and the QProcess::waitForFinished() can be
+     * called directly.
+     *
+     * The timeout value MUST be -1 for now as everything else is not implemented.
+     */
+    bool waitForFinished(int timeout);
+
+    /**
+     * write data to stdin
+     *
+     * Once this class is ported to use KProcess instead of K3Process this
+     * method can be deleted and the QProcess::write() can be called directly.
+     */
+    qint64 write(const char * data, qint64 maxSize);
+
 public Q_SLOTS:
     void setSplitStdout( bool b ) { m_bSplitStdout = b; }
- 
+
     /**
      * default is true
      */

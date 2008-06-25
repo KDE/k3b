@@ -133,22 +133,18 @@ bool K3bGrowisofsWriter::active() const
 }
 
 
-int K3bGrowisofsWriter::fd() const
+bool K3bGrowisofsWriter::closeFd()
 {
     if( d->process ) {
         if( d->usingRingBuffer )
-            return d->ringBuffer->inFd();
-        else
-            return d->process->stdinFd();
+            return !::close( d->ringBuffer->inFd() );
+        else {
+            d->process->closeWriteChannel();
+            return true;
+        }
     }
     else
-        return -1;
-}
-
-
-bool K3bGrowisofsWriter::closeFd()
-{
-    return ( !::close( fd() ) );
+        return false;
 }
 
 

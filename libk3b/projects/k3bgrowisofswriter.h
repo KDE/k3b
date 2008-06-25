@@ -36,9 +36,6 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
 
   bool active() const;
 
-  int fd() const;
-  bool closeFd();
-
  public Q_SLOTS:
   void start();
   void cancel();
@@ -92,8 +89,10 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
   void slotThroughput( int t );
   void slotFlushingCache();
   void slotRingBufferFinished( bool );
-  
+
  private:
+  bool closeFd();
+
   class Private;
   Private* d;
 };

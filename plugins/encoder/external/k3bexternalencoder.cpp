@@ -33,7 +33,6 @@
 #include <QList>
 
 #include <sys/types.h>
-#include <sys/wait.h>
 
 
 K3B_EXPORT_PLUGIN(k3bexternalencoder, K3bExternalEncoder)
@@ -153,11 +152,11 @@ void K3bExternalEncoder::finishEncoderInternal()
 {
     if( d->process ) {
         if( d->process->isRunning() ) {
-            ::close( d->process->stdinFd() );
+            d->process->closeWriteChannel();
 
             // this is kind of evil...
             // but we need to be sure the process exited when this method returnes
-            ::waitpid( d->process->pid(), 0, 0 );
+            d->process->waitForFinished(-1);
         }
     }
 }
@@ -267,7 +266,7 @@ bool K3bExternalEncoder::writeWaveHeader()
     kDebug() << "(K3bExternalEncoder) writing wave header";
 
     // write the RIFF thing
-    if( ::write( d->process->stdinFd(), s_riffHeader, 4 ) != 4 ) {
+    if( d->process->write( s_riffHeader, 4 ) != 4 ) {
         kDebug() << "(K3bExternalEncoder) failed to write riff header.";
         return false;
     }
@@ -282,13 +281,13 @@ bool K3bExternalEncoder::writeWaveHeader()
     c[2] = (wavSize   >> 16) & 0xff;
     c[3] = (wavSize   >> 24) & 0xff;
 
-    if( ::write( d->process->stdinFd(), c, 4 ) != 4 ) {
+    if( d->process->write( c, 4 ) != 4 ) {
         kDebug() << "(K3bExternalEncoder) failed to write wave size.";
         return false;
     }
 
     // write static part of the header
-    if( ::write( d->process->stdinFd(), s_riffHeader+8, 32 ) != 32 ) {
+    if( d->process->write( s_riffHeader + 8, 32 ) != 32 ) {
         kDebug() << "(K3bExternalEncoder) failed to write wave header.";
         return false;
     }
@@ -298,7 +297,7 @@ bool K3bExternalEncoder::writeWaveHeader()
     c[2] = (dataSize   >> 16) & 0xff;
     c[3] = (dataSize   >> 24) & 0xff;
 
-    if( ::write( d->process->stdinFd(), c, 4 ) != 4 ) {
+    if( d->process->write( c, 4 ) != 4 ) {
         kDebug() << "(K3bExternalEncoder) failed to write data size.";
         return false;
     }
@@ -333,11 +332,11 @@ long K3bExternalEncoder::encodeInternal( const char* data, Q_ULONG len )
                     buffer[i+1] = data[i];
                 }
 
-                written = ::write( d->process->stdinFd(), (const void*)buffer, len );
+                written = d->process->write( buffer, len );
                 delete [] buffer;
             }
             else
-                written = ::write( d->process->stdinFd(), (const void*)data, len );
+                written = d->process->write( data, len );
 
             return written;
         }

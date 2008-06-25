@@ -182,15 +182,6 @@ K3bCdrdaoWriter::~K3bCdrdaoWriter()
 }
 
 
-int K3bCdrdaoWriter::fd() const
-{
-    if( m_process )
-        return m_process->stdinFd();
-    else
-        return -1;
-}
-
-
 bool K3bCdrdaoWriter::active() const
 {
     return (m_process ? m_process->isRunning() : false);

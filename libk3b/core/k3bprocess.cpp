@@ -24,6 +24,7 @@
 #include <kdebug.h>
 
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <sys/socket.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -404,6 +405,25 @@ bool K3bProcess::closeStdout()
     }
     else
         return K3Process::closeStdout();
+}
+
+void K3bProcess::closeWriteChannel()
+{
+    ::close( stdinFd() );
+}
+
+bool K3bProcess::waitForFinished(int timeout)
+{
+    Q_ASSERT( timeout == -1 );
+
+    ::waitpid( pid(), 0, 0 );
+
+    return true;
+}
+
+qint64 K3bProcess::write(const char * data, qint64 maxSize)
+{
+    return ::write( stdinFd(), data, maxSize);
 }
 
 #include "k3bprocess.moc"

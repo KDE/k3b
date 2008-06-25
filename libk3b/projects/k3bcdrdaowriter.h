@@ -48,8 +48,6 @@ public:
     K3bCdrdaoWriter* addArgument( const QString& );
     K3bDevice::Device* sourceDevice() { return m_sourceDevice; };
 
-    int fd() const;
-
     bool active() const;
 
 private:
