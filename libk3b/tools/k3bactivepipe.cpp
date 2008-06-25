@@ -29,11 +29,9 @@ class K3bActivePipe::Private : public QThread
 public:
     Private( K3bActivePipe* pipe ) :
         m_pipe( pipe ),
-        fdToReadFrom(-1),
         fdToWriteTo(-1),
         sourceIODevice(0),
         sinkIODevice(0),
-        closeFdToReadFrom(false),
         closeFdToWriteTo(false) {
     }
 
@@ -66,10 +64,7 @@ public:
     }
 
     int readFd() const {
-        if( fdToReadFrom == -1 )
-            return pipeIn.out();
-        else
-            return fdToReadFrom;
+        return pipeIn.out();
     }
 
     int writeFd() const {
@@ -91,10 +86,6 @@ public:
             if( fdToWriteTo != -1 &&
                 closeFdToWriteTo )
                 ::close( fdToWriteTo );
-
-            if( fdToReadFrom != -1 &&
-                closeFdToReadFrom )
-                ::close( fdToReadFrom );
         }
     }
 
@@ -102,7 +93,6 @@ private:
     K3bActivePipe* m_pipe;
 
 public:
-    int fdToReadFrom;
     int fdToWriteTo;
     K3bPipe pipeIn;
     K3bPipe pipeOut;
@@ -111,7 +101,6 @@ public:
     QIODevice* sinkIODevice;
 
     bool closeWhenDone;
-    bool closeFdToReadFrom;
     bool closeFdToWriteTo;
 
     QByteArray buffer;
@@ -144,7 +133,7 @@ bool K3bActivePipe::open( bool closeWhenDone )
         if( !d->sourceIODevice->open( QIODevice::ReadOnly ) )
             return false;
     }
-    else if( d->fdToReadFrom == -1 && !d->pipeIn.open() ) {
+    else if( !d->pipeIn.open() ) {
         return false;
     }
 
@@ -172,14 +161,6 @@ void K3bActivePipe::close()
 }
 
 
-void K3bActivePipe::readFromFd( int fd, bool close )
-{
-    d->fdToReadFrom = fd;
-    d->sourceIODevice = 0;
-    d->closeFdToReadFrom = close;
-}
-
-
 void K3bActivePipe::writeToFd( int fd, bool close )
 {
     d->fdToWriteTo = fd;
@@ -190,7 +171,6 @@ void K3bActivePipe::writeToFd( int fd, bool close )
 
 void K3bActivePipe::readFromIODevice( QIODevice* dev )
 {
-    d->fdToReadFrom = -1;
     d->sourceIODevice = dev;
 }
 
@@ -205,12 +185,6 @@ void K3bActivePipe::writeToIODevice( QIODevice* dev )
 int K3bActivePipe::in() const
 {
     return d->pipeIn.in();
-}
-
-
-int K3bActivePipe::out() const
-{
-    return d->pipeOut.out();
 }
 
 

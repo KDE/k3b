@@ -53,15 +53,6 @@ public:
     virtual void close();
 
     /**
-     * Set the file descriptor to read from. If this is -1 (the default) then
-     * data has to be piped into the in() file descriptor.
-     *
-     * \param fd The file descriptor to read from.
-     * \param close If true the reading file descriptor will be closed on a call to close()
-     */
-    void readFromFd( int fd, bool close = false );
-
-    /**
      * Set the file descriptor to write to. If this is -1 (the default) then
      * data has to read from the out() file descriptor.
      *
@@ -89,12 +80,6 @@ public:
      * Only valid if no source has been set
      */
     int in() const;
-
-    /**
-     * The file descriptor to read from
-     * Only valid if no sink has been set
-     */
-    int out() const;
 
     /**
      * The number of bytes that have been read.
