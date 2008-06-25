@@ -164,27 +164,6 @@ Q_SIGNALS:
      */
     void stdoutReady( int fd );
 
-protected:
-    /**
-     * reimplemeted from K3Process
-     */
-    int commSetupDoneP();
-
-    /**
-     * reimplemeted from K3Process
-     */
-    int commSetupDoneC();
-
-    /**
-     * reimplemeted from K3Process
-     */
-    int setupCommunication( Communication comm );
-
-    /**
-     * reimplemeted from K3Process
-     */
-    void commClose();
-
 private:
     static QStringList splitOutput( char*, int, QString&, bool );
 
