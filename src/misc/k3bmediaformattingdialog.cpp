@@ -156,7 +156,8 @@ void K3bMediaFormattingDialog::slotStartClicked()
         theJob = job;
     }
     else {
-        KMessageBox::sorry( this, i18n("Ups"), i18n("No formatting support for this source media type yet." ));
+        // do not translate this as it is not intended to be included in the stable version!
+        KMessageBox::sorry( this, "Ups", "No formatting support for this source media type yet." );
         return;
     }
 
