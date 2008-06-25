@@ -330,17 +330,6 @@ int K3bProcess::stdoutFd() const
 }
 
 
-void K3bProcess::dupStdout( int fd )
-{
-    writeToFd( fd );
-}
-
-void K3bProcess::dupStdin( int fd )
-{
-    readFromFd( fd );
-}
-
-
 void K3bProcess::writeToFd( int fd )
 {
     d->dupStdoutFd = fd;

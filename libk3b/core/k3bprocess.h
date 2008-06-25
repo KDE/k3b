@@ -72,16 +72,6 @@ public:
     int stdoutFd() const;
 
     /**
-     * @deprecated use writeToFd
-     */
-    void dupStdout( int fd );
-
-    /**
-     * @deprecated use readFromFd
-     */
-    void dupStdin( int fd );
-
-    /**
      * Make the process write to @fd instead of Stdout.
      * This means you won't get any stdoutReady() or receivedStdout()
      * signals anymore.

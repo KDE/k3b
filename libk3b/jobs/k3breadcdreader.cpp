@@ -157,7 +157,7 @@ void K3bReadcdReader::start()
     // output
     if( d->fdToWriteTo != -1 ) {
         *d->process << "f=-";
-        d->process->dupStdout( d->fdToWriteTo );
+        d->process->writeToFd( d->fdToWriteTo );
     }
     else {
         emit newTask( i18n("Writing image to %1.",m_imagePath) );
