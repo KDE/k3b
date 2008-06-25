@@ -18,7 +18,7 @@
 #include <k3bexternalbinmanager.h>
 #include <k3bdevice.h>
 
-#include <k3process.h>
+#include <kprocess.h>
 #include <ktempdir.h>
 #include <kdebug.h>
 
@@ -73,7 +73,7 @@ void K3bVideoDVDRippingPreview::generatePreview( const K3bVideoDVD::VideoDVD& dv
     m_tempDir = new KTempDir();
     m_tempDir->setAutoRemove( true );
 
-    m_process = new K3Process();
+    m_process = new KProcess();
     *m_process << bin->path;
     *m_process << "-i" << dvd.device()->blockDeviceName();
     *m_process << "-T" << QString("%1,%2").arg(title).arg(chapter);
@@ -84,9 +84,11 @@ void K3bVideoDVDRippingPreview::generatePreview( const K3bVideoDVD::VideoDVD& dv
     *m_process << "-Z" << "x200";
     *m_process << "-o" << m_tempDir->name();
 
-    connect( m_process, SIGNAL(processExited(K3Process*)),
-             this, SLOT(slotTranscodeFinished(K3Process*)) );
-    if( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) { // we use AllOutput to not pollute stdout
+    connect( m_process, SIGNAL(finished()),
+             this, SLOT(finished()) );
+    m_process->setOutputChannelMode(KProcess::SeparateChannels); // we use SeparateChannels to not pollute stdout
+    m_process->start();
+    if (!m_process->waitForStarted(-1)) {
         // something went wrong when starting the program
         // it "should" be the executable
         kDebug() << "(K3bVideoDVDRippingPreview) Could not start transcode.";
@@ -101,14 +103,14 @@ void K3bVideoDVDRippingPreview::generatePreview( const K3bVideoDVD::VideoDVD& dv
 
 void K3bVideoDVDRippingPreview::cancel()
 {
-    if( m_process && m_process->isRunning() ) {
+    if( m_process && (m_process->state() != QProcess::NotRunning) ) {
         m_canceled = true;
         m_process->kill();
     }
 }
 
 
-void K3bVideoDVDRippingPreview::slotTranscodeFinished( K3Process* )
+void K3bVideoDVDRippingPreview::slotTranscodeFinished()
 {
     // read the image
     QString filename = m_tempDir->name() + "000000.ppm";// + tempQDir->entryList( QDir::Files ).first();
