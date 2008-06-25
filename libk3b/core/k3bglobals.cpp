@@ -34,7 +34,7 @@
 #include <kio/job.h>
 #include <kio/netaccess.h>
 #include <kurl.h>
-#include <k3process.h>
+#include <kprocess.h>
 
 #include <kmountpoint.h>
 #include <Solid/Device>
@@ -570,24 +570,24 @@ bool K3b::unmount( K3bDevice::Device* dev )
 
     QString umountBin = K3b::findExe( "umount" );
     if( !umountBin.isEmpty() ) {
-        K3Process p;
+        KProcess p;
         p << umountBin;
         p << "-l"; // lazy unmount
         p << mntPath;
-        p.start( K3Process::Block );
-        if( !p.exitStatus() )
-            return true;
+        p.start();
+        if (p.waitForFinished(-1))
+          return true;
     }
 
     // now try pmount
     QString pumountBin = K3b::findExe( "pumount" );
     if( !pumountBin.isEmpty() ) {
-        K3Process p;
+        KProcess p;
         p << pumountBin;
         p << "-l"; // lazy unmount
         p << mntPath;
-        p.start( K3Process::Block );
-        return !p.exitStatus();
+        p.start();
+        return p.waitForFinished(-1);
     }
     else {
         return false;
@@ -613,21 +613,21 @@ bool K3b::mount( K3bDevice::Device* dev )
     // now try pmount
     QString pmountBin = K3b::findExe( "pmount" );
     if( !pmountBin.isEmpty() ) {
-        K3Process p;
+        KProcess p;
         p << pmountBin;
         p << mntDev;
-        p.start( K3Process::Block );
-        return !p.exitStatus();
+        p.start();
+        return p.waitForFinished(-1);
     }
 
     // and the most simple one
     QString mountBin = K3b::findExe( "mount" );
     if( !mountBin.isEmpty() ) {
-        K3Process p;
+        KProcess p;
         p << mountBin;
         p << mntDev;
-        p.start( K3Process::Block );
-        return !p.exitStatus();
+        p.start();
+        return p.waitForFinished(-1);
     }
 
     return false;
