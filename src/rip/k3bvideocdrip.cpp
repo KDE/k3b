@@ -169,7 +169,7 @@ void K3bVideoCdRip::vcdxRip()
     emit infoMessage( i18n( "Start extracting." ), K3bJob::INFO );
     emit infoMessage( i18n( "Extract files from %1 to %2." , m_videooptions ->getVideoCdSource() , m_videooptions ->getVideoCdDestination() ), K3bJob::INFO );
             
-    if ( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) {
+    if ( !m_process->start( K3Process::AllOutput ) ) {
         kDebug() << "(K3bVideoCdRip) could not start vcdxrip";
         emit infoMessage( i18n( "Could not start %1." , QString("vcdxrip") ), K3bJob::ERROR );
         cancelAll();

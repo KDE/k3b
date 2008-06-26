@@ -78,7 +78,7 @@ void K3bAudioNormalizeJob::start()
     *m_process << m_files[i];
 
   // now start the process
-  if( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) {
+  if( !m_process->start( K3Process::AllOutput ) ) {
     // something went wrong when starting the program
     // it "should" be the executable
     kDebug() << "(K3bAudioNormalizeJob) could not start normalize";

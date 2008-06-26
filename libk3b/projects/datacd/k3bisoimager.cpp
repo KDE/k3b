@@ -349,7 +349,7 @@ void K3bIsoImager::startSizeCalculation()
     m_collectedMkisofsPrintSizeStderr = QString();
     m_mkisofsPrintSizeResult = 0;
 
-    if( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) {
+    if( !m_process->start( K3Process::AllOutput ) ) {
         emit infoMessage( i18n("Could not start %1.",QString("mkisofs")), K3bJob::ERROR );
         cleanup();
 
@@ -518,7 +518,7 @@ void K3bIsoImager::start()
     kDebug() << s << endl << flush;
     emit debuggingOutput("mkisofs command:", s);
 
-    if( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput) ) {
+    if( !m_process->start( K3Process::AllOutput ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
         kDebug() << "(K3bIsoImager) could not start mkisofs";

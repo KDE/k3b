@@ -129,7 +129,7 @@ void K3bCdda2wavReader::start( bool onlyInfo )
         *d->process << *it;
 
     // start the thing
-    if( !d->process->start( K3Process::NotifyOnExit, K3Process::All ) ) {
+    if( !d->process->start( K3Process::All ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
         kDebug() << "(K3bCdda2wavReader) could not start cdda2wav";

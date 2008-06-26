@@ -331,7 +331,7 @@ void K3bVideoDVDTitleTranscodingJob::startTranscode( int pass )
   emit debuggingOutput( d->usedTranscodeBin->name() + " command:", s);
 
   // start the process
-  if( !d->process->start( K3Process::NotifyOnExit, K3Process::All ) ) {
+  if( !d->process->start( K3Process::All ) ) {
     // something went wrong when starting the program
     // it "should" be the executable
     emit infoMessage( i18n("Could not start %1.",d->usedTranscodeBin->name()), K3bJob::ERROR );

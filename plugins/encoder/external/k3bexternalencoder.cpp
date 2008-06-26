@@ -241,7 +241,7 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension )
     // set one general error message
     setLastError( i18n("Command failed: %1", s ) );
 
-    if( d->process->start( K3Process::NotifyOnExit, K3Process::All ) ) {
+    if( d->process->start( K3Process::All ) ) {
         if( d->cmd.writeWaveHeader )
             return writeWaveHeader();
         else

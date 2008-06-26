@@ -199,7 +199,7 @@ void K3bReadcdReader::start()
 
     d->canceled = false;
 
-    if( !d->process->start( K3Process::NotifyOnExit, K3Process::AllOutput) ) {
+    if( !d->process->start( K3Process::AllOutput ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
         kError() << "(K3bReadcdReader) could not start readcd" << endl;

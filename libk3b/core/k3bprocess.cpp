@@ -102,18 +102,14 @@ K3bProcess& K3bProcess::operator<<( const QStringList& args )
 }
 
 
-bool K3bProcess::start( RunMode run, Communication com )
+bool K3bProcess::start( Communication com )
 {
-    if( com & Stderr ) {
-        connect( this, SIGNAL(receivedStderr(K3Process*, char*, int)),
-                 this, SLOT(slotSplitStderr(K3Process*, char*, int)) );
-    }
-    if( com & Stdout ) {
-        connect( this, SIGNAL(receivedStdout(K3Process*, char*, int)),
-                 this, SLOT(slotSplitStdout(K3Process*, char*, int)) );
-    }
+    connect( this, SIGNAL(receivedStderr(K3Process*, char*, int)),
+             this, SLOT(slotSplitStderr(K3Process*, char*, int)) );
+    connect( this, SIGNAL(receivedStdout(K3Process*, char*, int)),
+             this, SLOT(slotSplitStdout(K3Process*, char*, int)) );
 
-    return K3Process::start( run, com );
+    return K3Process::start( NotifyOnExit, com );
 }
 
 

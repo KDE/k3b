@@ -53,7 +53,7 @@ public:
     K3bProcess& operator<<( const QByteArray& arg );
     K3bProcess& operator<<( const QStringList& args );
 
-    bool start( RunMode run = NotifyOnExit, Communication com = NoCommunication );
+    bool start( Communication com );
 
     /** 
      * get stdin file descriptor

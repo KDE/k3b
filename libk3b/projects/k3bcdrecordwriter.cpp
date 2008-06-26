@@ -365,7 +365,7 @@ void K3bCdrecordWriter::start()
     burnDevice()->close();
     burnDevice()->usageLock();
 
-    if( !m_process->start( K3Process::NotifyOnExit, K3Process::All ) ) {
+    if( !m_process->start( K3Process::All ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
         kDebug() << "(K3bCdrecordWriter) could not start " << m_cdrecordBinObject->name();

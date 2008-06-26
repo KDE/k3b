@@ -508,7 +508,7 @@ void K3bDvdFormattingJob::startFormatting( const K3bDevice::DiskInfo& diskInfo )
         kDebug() << s << endl << flush;
         emit debuggingOutput( "dvd+rw-format command:", s );
 
-        if( !d->process->start( K3Process::NotifyOnExit, K3Process::All ) ) {
+        if( !d->process->start( K3Process::All ) ) {
             // something went wrong when starting the program
             // it "should" be the executable
             kDebug() << "(K3bDvdFormattingJob) could not start " << d->dvdFormatBin->path;

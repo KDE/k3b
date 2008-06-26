@@ -235,7 +235,7 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension, const K3b::Ms
         QString s = d->process->joinedArgs();
         kDebug() << s << flush;
 
-        return d->process->start( K3Process::NotifyOnExit, K3Process::All );
+        return d->process->start( K3Process::All );
     }
     else {
         kDebug() << "(K3bSoxEncoder) could not find sox bin.";

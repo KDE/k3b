@@ -540,7 +540,7 @@ void K3bCdrdaoWriter::start()
     burnDevice()->close();
     burnDevice()->usageLock();
 
-    if( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) )
+    if( !m_process->start( K3Process::AllOutput ) )
     {
         // something went wrong when starting the program
         // it "should" be the executable

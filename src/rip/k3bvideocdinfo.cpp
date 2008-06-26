@@ -73,7 +73,7 @@ void K3bVideoCdInfo::info( const QString& device )
     connect( m_process, SIGNAL( processExited( K3Process* ) ),
              this, SLOT( slotInfoFinished() ) );
 
-    if ( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) {
+    if ( !m_process->start( K3Process::AllOutput ) ) {
         kDebug() << "(K3bVideoCdInfo::info) could not start vcdxrip";
         cancelAll();
         emit infoFinished( false );

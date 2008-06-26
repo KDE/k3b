@@ -331,7 +331,7 @@ void K3bDvdBooktypeJob::startBooktypeChange()
     emit debuggingOutput( "dvd+rw-booktype command:", s );
 
 
-    if( !d->process->start( K3Process::NotifyOnExit, K3Process::All ) ) {
+    if( !d->process->start( K3Process::All ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
         emit infoMessage( i18n("Could not start %1.",d->dvdBooktypeBin->name()), K3bJob::ERROR );

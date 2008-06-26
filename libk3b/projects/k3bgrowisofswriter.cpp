@@ -374,7 +374,7 @@ void K3bGrowisofsWriter::start()
         burnDevice()->close();
         burnDevice()->usageLock();
 
-        if( !d->process->start( K3Process::NotifyOnExit, K3Process::All ) ) {
+        if( !d->process->start( K3Process::All ) ) {
             // something went wrong when starting the program
             // it "should" be the executable
             kDebug() << "(K3bGrowisofsWriter) could not start " << d->growisofsBin->path;

@@ -240,7 +240,7 @@ void K3bVcdJob::vcdxBuild()
     kDebug() << s << flush;
     emit debuggingOutput( "vcdxbuild command:", s );
 
-    if ( !m_process->start( K3Process::NotifyOnExit, K3Process::AllOutput ) ) {
+    if ( !m_process->start( K3Process::AllOutput ) ) {
         kDebug() << "(K3bVcdJob) could not start vcdxbuild";
         emit infoMessage( i18n( "Could not start %1." , QString("vcdxbuild") ), K3bJob::ERROR );
         cancelAll();
