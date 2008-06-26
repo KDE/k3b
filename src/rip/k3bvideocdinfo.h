@@ -25,6 +25,7 @@
 #include <k3btoc.h>
 #include <k3bcore.h>
 
+class K3bProcess;
 class K3Process;
 
 class K3bVideoCdInfoResultEntry
@@ -98,7 +99,7 @@ class K3bVideoCdInfo : public QObject
         K3bVideoCdInfoResult m_Result;
         void parseXmlData();
 
-        K3Process* m_process;
+        K3bProcess* m_process;
 
         QString m_xmlData;
         bool m_isXml;
