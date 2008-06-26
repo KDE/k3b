@@ -242,29 +242,6 @@ void K3bProcess::setSuppressEmptyLines( bool b )
 }
 
 
-bool K3bProcess::closeStdin()
-{
-    if( d->rawStdin ) {
-        close(d->in[1]);
-        d->in[1] = -1;
-        return true;
-    }
-    else
-        return K3Process::closeStdin();
-}
-
-
-bool K3bProcess::closeStdout()
-{
-    if( d->rawStdout ) {
-        close(d->out[0]);
-        d->out[0] = -1;
-        return true;
-    }
-    else
-        return K3Process::closeStdout();
-}
-
 void K3bProcess::closeWriteChannel()
 {
     ::close( stdinFd() );

@@ -97,8 +97,6 @@ public:
      * Once this class is ported to use KProcess instead of K3Process this
      * method can be deleted and the QProcess::closeWriteChannel() can be
      * called directly.
-     *
-     * This is similar to closeStdin() but it will also close a dup'ed channel.
      */
     void closeWriteChannel();
 
@@ -133,9 +131,6 @@ public Q_SLOTS:
      * default is true
      */
     void setSuppressEmptyLines( bool b );
-
-    bool closeStdin();
-    bool closeStdout();
 
     private Q_SLOTS:
     void slotSplitStderr( K3Process*, char*, int );
