@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
@@ -101,7 +101,7 @@ void K3bIsoOptions::save( KConfigBase* c, bool saveVolumeDesc )
   c->writeEntry( "no iSO translation", m_ISOnoIsoTranslate );
   c->writeEntry( "allow multiple dots", m_ISOallowMultiDot );
   c->writeEntry( "allow lowercase filenames", m_ISOallowLowercase );
-  //  c->writeEntry( "follow symbolic links", m_followSymbolicLinks );
+  c->writeEntry( "follow symbolic links", m_followSymbolicLinks );
 
   c->writeEntry( "joliet long", m_jolietLong );
 
@@ -182,7 +182,7 @@ K3bIsoOptions K3bIsoOptions::load( KConfigBase* c, bool loadVolumeDesc )
   options.setISOallowLowercase( c->readBoolEntry( "allow lowercase filenames", options.m_ISOallowLowercase ) );
   options.setISOomitTrailingPeriod( c->readBoolEntry( "omit trailing period", options.m_ISOomitTrailingPeriod ) );
 
-  //  options.setFollowSymbolicLinks( c->readBoolEntry( "follow symbolic links", options.m_followSymbolicLinks ) );
+  options.setFollowSymbolicLinks( c->readBoolEntry( "follow symbolic links", options.m_followSymbolicLinks ) );
 
   options.setJolietLong( c->readBoolEntry( "joliet long", options.jolietLong() ) );
 
