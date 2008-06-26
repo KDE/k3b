@@ -97,7 +97,7 @@ void K3bDvdFormattingJob::setForceNoEject( bool b )
 
 QString K3bDvdFormattingJob::jobDescription() const
 {
-    return i18n("Formatting DVD%1RW",QString("±"));
+    return i18n("Formatting DVDÂ±RW");
 }
 
 
@@ -209,7 +209,7 @@ void K3bDvdFormattingJob::setForce( bool b )
 
 void K3bDvdFormattingJob::slotStderrLine( const QString& line )
 {
-// * DVD±RW format utility by <appro@fy.chalmers.se>, version 4.4.
+// * DVDÂ±RW format utility by <appro@fy.chalmers.se>, version 4.4.
 // * 4.7GB DVD-RW media in Sequential mode detected.
 // * blanking 100.0|
 
