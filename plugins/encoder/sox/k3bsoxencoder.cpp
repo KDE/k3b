@@ -232,13 +232,8 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension, const K3b::Ms
         *d->process << d->fileName;
 
         kDebug() << "***** sox parameters:";
-        const QList<QByteArray> args = d->process->args();
-        QString s;
-        for( QList<QByteArray>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-            s += *it + " ";
-        }
+        QString s = d->process->joinedArgs();
         kDebug() << s << flush;
-
 
         return d->process->start( K3Process::NotifyOnExit, K3Process::All );
     }

@@ -338,11 +338,7 @@ void K3bCdrecordWriter::start()
 
 
     kDebug() << "***** " << m_cdrecordBinObject->name() << " parameters:\n";
-    QList<QByteArray> args = m_process->args();
-    QString s;
-    Q_FOREACH( QByteArray arg, args ) {
-        s += QString::fromLocal8Bit( arg ) + " ";
-    }
+    QString s = m_process->joinedArgs();
     kDebug() << s << flush;
     emit debuggingOutput( m_cdrecordBinObject->name() + " command:", s);
 

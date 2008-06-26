@@ -17,6 +17,8 @@
 #include "k3bprocess.h"
 #include "k3bexternalbinmanager.h"
 
+#include <qbytearray.h>
+#include <qlist.h>
 #include <qstringlist.h>
 #include <qsocketnotifier.h>
 #include <qapplication.h>
@@ -306,6 +308,16 @@ bool K3bProcess::waitForFinished(int timeout)
 qint64 K3bProcess::write(const char * data, qint64 maxSize)
 {
     return ::write( stdinFd(), data, maxSize);
+}
+
+QString K3bProcess::joinedArgs()
+{
+    QList<QByteArray> a = args();
+    QString s;
+    Q_FOREACH( QByteArray arg, a ) {
+        s += QString::fromLocal8Bit( arg ) + " ";
+    }
+    return s;
 }
 
 #include "k3bprocess.moc"

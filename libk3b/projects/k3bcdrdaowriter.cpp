@@ -502,11 +502,7 @@ void K3bCdrdaoWriter::start()
     m_process->setWorkingDirectory(Q3Url(m_tocFile).path());
 
     kDebug() << "***** cdrdao parameters:\n";
-    QList<QByteArray> args = m_process->args();
-    QString s;
-    Q_FOREACH( QByteArray arg, args ) {
-        s += QString::fromLocal8Bit( arg ) + " ";
-    }
+    QString s = m_process->joinedArgs();
     kDebug() << s << flush;
     emit debuggingOutput("cdrdao command:", s);
 

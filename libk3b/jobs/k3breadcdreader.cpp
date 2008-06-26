@@ -193,13 +193,8 @@ void K3bReadcdReader::start()
 
 
     kDebug() << "***** readcd parameters:\n";
-    QList<QByteArray> args = d->process->args();
-    QString s;
-    Q_FOREACH( QByteArray arg, args ) {
-        s += QString::fromLocal8Bit( arg ) + " ";
-    }
+    QString s = d->process->joinedArgs();
     kDebug() << s << endl << flush;
-
     emit debuggingOutput("readcd command:", s);
 
     d->canceled = false;

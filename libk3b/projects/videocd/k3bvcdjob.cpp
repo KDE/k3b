@@ -236,11 +236,7 @@ void K3bVcdJob::vcdxBuild()
 
     // vcdxbuild commandline parameters
     kDebug() << "***** vcdxbuild parameters:";
-    QList<QByteArray> args = m_process->args();
-    QString s;
-    Q_FOREACH( QByteArray arg, args ) {
-        s += QString::fromLocal8Bit( arg ) + " ";
-    }
+    QString s = m_process->joinedArgs();
     kDebug() << s << flush;
     emit debuggingOutput( "vcdxbuild command:", s );
 

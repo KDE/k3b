@@ -21,6 +21,7 @@
 
 class QString;
 class K3Process;
+class K3bProcess;
 
 class K3bVideoCdRip : public K3bJob
 {
@@ -65,7 +66,7 @@ class K3bVideoCdRip : public K3bJob
 
         bool m_canceled;
 
-        K3Process* m_process;
+        K3bProcess* m_process;
 
 };
 

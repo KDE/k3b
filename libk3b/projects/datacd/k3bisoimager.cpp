@@ -317,11 +317,7 @@ void K3bIsoImager::startSizeCalculation()
     //  *m_process << dummyDir();
 
     kDebug() << "***** mkisofs calculate size parameters:";
-    QList<QByteArray> args = m_process->args();
-    QString s;
-    Q_FOREACH( QByteArray arg, args ) {
-        s += QString::fromLocal8Bit( arg ) + " ";
-    }
+    QString s = m_process->joinedArgs();
     kDebug() << s << endl << flush;
     emit debuggingOutput("mkisofs calculate size command:", s);
 
@@ -518,11 +514,7 @@ void K3bIsoImager::start()
 
 
     kDebug() << "***** mkisofs parameters:\n";
-    QList<QByteArray> args = m_process->args();
-    QString s;
-    Q_FOREACH( QByteArray arg, args ) {
-        s += QString::fromLocal8Bit( arg ) + " ";
-    }
+    QString s = m_process->joinedArgs();
     kDebug() << s << endl << flush;
     emit debuggingOutput("mkisofs command:", s);
 

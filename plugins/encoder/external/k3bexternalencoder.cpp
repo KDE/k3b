@@ -235,11 +235,7 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension )
 
 
     kDebug() << "***** external parameters:";
-    const QList<QByteArray>& args = d->process->args();
-    QString s;
-    for( QList<QByteArray>::const_iterator it = args.begin(); it != args.end(); ++it ) {
-        s += *it + " ";
-    }
+    QString s = d->process->joinedArgs();
     kDebug() << s << flush;
 
     // set one general error message

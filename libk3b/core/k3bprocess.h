@@ -139,6 +139,11 @@ public:
      */
     qint64 write(const char * data, qint64 maxSize);
 
+    /**
+     * returned joined list of program arguments
+     */
+    QString joinedArgs();
+
 public Q_SLOTS:
     void setSplitStdout( bool b ) { m_bSplitStdout = b; }
 
