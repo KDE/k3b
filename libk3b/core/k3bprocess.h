@@ -63,14 +63,6 @@ public:
      */
     int stdinFd() const;
 
-    /** 
-     * get stdout file descriptor
-     * Only makes sense while process is running.
-     *
-     * Only use with setRawStdout
-     */
-    int stdoutFd() const;
-
     /**
      * Make the process write to @fd instead of Stdout.
      * This means you won't get any stdoutReady() or receivedStdout()
@@ -98,16 +90,6 @@ public:
      * Only use this before starting the process.
      */
     void setRawStdin(bool b);
-
-    /** 
-     * If set true the process' stdout fd will be available
-     * through @stdoutFd.
-     * Be aware that you will not get any stdoutReady or receivedStdout
-     * signals anymore.
-     *
-     * Only use this before starting the process.
-     */
-    void setRawStdout(bool b);
 
     /**
      * close stdin channel

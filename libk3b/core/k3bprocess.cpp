@@ -214,17 +214,6 @@ int K3bProcess::stdinFd() const
         return -1;
 }
 
-int K3bProcess::stdoutFd() const
-{
-    if( d->rawStdout )
-        return d->out[0];
-    else if( d->dupStdoutFd != -1 )
-        return d->dupStdoutFd;
-    else
-        return -1;
-}
-
-
 void K3bProcess::writeToFd( int fd )
 {
     d->dupStdoutFd = fd;
@@ -248,17 +237,6 @@ void K3bProcess::setRawStdin(bool b)
     }
     else
         d->rawStdin = false;
-}
-
-
-void K3bProcess::setRawStdout(bool b)
-{
-    if( b ) {
-        d->rawStdout = true;
-        d->dupStdoutFd = -1;
-    }
-    else
-        d->rawStdout = false;
 }
 
 
