@@ -30,6 +30,7 @@
 #include <qfile.h>
 #include <qlist.h>
 
+#include <unistd.h>
 
 
 class K3bVideoDvdImager::Private
