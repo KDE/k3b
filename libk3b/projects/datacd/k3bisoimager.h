@@ -20,6 +20,7 @@
 
 #include <q3ptrqueue.h>
 #include <qstringlist.h>
+#include <qprocess.h>
 
 class K3bDataDoc;
 class K3bDirItem;
@@ -146,7 +147,7 @@ protected:
 
 protected Q_SLOTS:
     virtual void slotReceivedStderr( const QString& );
-    virtual void slotProcessExited( K3Process* );
+    virtual void slotProcessExited( int, QProcess::ExitStatus );
 
 private Q_SLOTS:
     void slotCollectMkisofsPrintSizeStderr(K3Process*, char*, int);

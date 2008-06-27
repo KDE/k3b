@@ -153,9 +153,9 @@ void K3bSoxEncoder::finishEncoderInternal()
 }
 
 
-void K3bSoxEncoder::slotSoxFinished( K3Process* p )
+void K3bSoxEncoder::slotSoxFinished( int exitCode, QProcess::ExitStatus exitStatus )
 {
-    if( !p->normalExit() || p->exitStatus() != 0 )
+    if( (exitStatus != QProcess::NormalExit) || (exitCode != 0) )
         kDebug() << "(K3bSoxEncoder) sox exited with error.";
 }
 
@@ -182,8 +182,8 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension, const K3b::Ms
         d->process->setSplitStdout(true);
         d->process->setRawStdin(true);
 
-        connect( d->process, SIGNAL(processExited(K3Process*)),
-                 this, SLOT(slotSoxFinished(K3Process*)) );
+        connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)),
+                 this, SLOT(slotSoxFinished(int, QProcess::ExitStatus)) );
         connect( d->process, SIGNAL(stderrLine(const QString&)),
                  this, SLOT(slotSoxOutputLine(const QString&)) );
         connect( d->process, SIGNAL(stdoutLine(const QString&)),

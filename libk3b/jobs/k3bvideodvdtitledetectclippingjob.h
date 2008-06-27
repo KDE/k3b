@@ -15,11 +15,10 @@
 #ifndef _K3B_VIDEODVD_TITLE_DETECTCLIPPING_JOB_H_
 #define _K3B_VIDEODVD_TITLE_DETECTCLIPPING_JOB_H_
 
+#include <qprocess.h>
 #include <k3b_export.h>
 #include <k3bjob.h>
 #include <k3bvideodvd.h>
-
-class K3Process;
 
 /**
  * Job to detect the clipping values for a Video DVD title.
@@ -82,7 +81,7 @@ class LIBK3B_EXPORT K3bVideoDVDTitleDetectClippingJob : public K3bJob
 
  private Q_SLOTS:
   void slotTranscodeStderr( const QString& );
-  void slotTranscodeExited( K3Process* );
+  void slotTranscodeExited( int, QProcess::ExitStatus );
 
  private:
   void startTranscode( int chapter );

@@ -15,13 +15,14 @@
 #ifndef _K3B_GROWISOFS_WRITER_H_
 #define _K3B_GROWISOFS_WRITER_H_
 
+#include <qprocess.h>
+
 #include "k3babstractwriter.h"
 
 
 namespace K3bDevice {
   class Device;
   }
-class K3Process;
 
 
 
@@ -85,7 +86,7 @@ class K3bGrowisofsWriter : public K3bAbstractWriter
 
  protected Q_SLOTS:
   void slotReceivedStderr( const QString& );
-  void slotProcessExited( K3Process* );
+  void slotProcessExited( int, QProcess::ExitStatus );
   void slotThroughput( int t );
   void slotFlushingCache();
   void slotRingBufferFinished( bool );

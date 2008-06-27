@@ -17,13 +17,13 @@
 #ifndef K3B_CDRDAO_WRITER_H
 #define K3B_CDRDAO_WRITER_H
 
+#include <qprocess.h>
 
 #include "k3babstractwriter.h"
 #include "k3b_export.h"
 
 class K3bExternalBin;
 class K3bProcess;
-class K3Process;
 class K3bDevice::Device;
 class Q3Socket;
 
@@ -83,7 +83,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void slotStdLine( const QString& line );
-    void slotProcessExited(K3Process*);
+    void slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus );
     void parseCdrdaoMessage();
     void slotThroughput( int t );
 

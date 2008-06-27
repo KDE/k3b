@@ -177,19 +177,19 @@ void K3bDvdBooktypeJob::slotStderrLine( const QString& line )
 }
 
 
-void K3bDvdBooktypeJob::slotProcessFinished( K3Process* p )
+void K3bDvdBooktypeJob::slotProcessFinished( int exitCode, QProcess::ExitStatus exitStatus )
 {
     if( d->canceled ) {
         emit canceled();
         d->success = false;
     }
-    else if( p->normalExit() ) {
-        if( p->exitStatus() == 0 ) {
+    else if( exitStatus == QProcess::NormalExit ) {
+        if( exitCode == 0 ) {
             emit infoMessage( i18n("Booktype successfully changed"), K3bJob::SUCCESS );
             d->success = true;
         }
         else {
-            emit infoMessage( i18n("%1 returned an unknown error (code %2).",d->dvdBooktypeBin->name(),p->exitStatus()),
+            emit infoMessage( i18n("%1 returned an unknown error (code %2).",d->dvdBooktypeBin->name(), exitCode),
                               K3bJob::ERROR );
             emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
 
@@ -281,7 +281,7 @@ void K3bDvdBooktypeJob::startBooktypeChange()
     d->process->setRunPrivileged(true);
     d->process->setSuppressEmptyLines(true);
     connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStderrLine(const QString&)) );
-    connect( d->process, SIGNAL(processExited(K3Process*)), this, SLOT(slotProcessFinished(K3Process*)) );
+    connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotProcessFinished(int, QProcess::ExitStatus)) );
 
     d->dvdBooktypeBin = k3bcore->externalBinManager()->binObject( "dvd+rw-booktype" );
     if( !d->dvdBooktypeBin ) {

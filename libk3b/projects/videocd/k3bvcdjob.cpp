@@ -231,8 +231,8 @@ void K3bVcdJob::vcdxBuild()
              this, SLOT( slotParseVcdxBuildOutput( K3Process*, char*, int ) ) );
     connect( m_process, SIGNAL( receivedStdout( K3Process*, char*, int ) ),
              this, SLOT( slotParseVcdxBuildOutput( K3Process*, char*, int ) ) );
-    connect( m_process, SIGNAL( processExited( K3Process* ) ),
-             this, SLOT( slotVcdxBuildFinished() ) );
+    connect( m_process, SIGNAL( finished( int, QProcess::ExitStatus ) ),
+             this, SLOT( slotVcdxBuildFinished( int, QProcess::ExitStatus ) ) );
 
     // vcdxbuild commandline parameters
     kDebug() << "***** vcdxbuild parameters:";
@@ -340,17 +340,17 @@ void K3bVcdJob::slotParseVcdxBuildOutput( K3Process*, char* output, int len )
 }
 
 
-void K3bVcdJob::slotVcdxBuildFinished()
+void K3bVcdJob::slotVcdxBuildFinished( int exitCode, QProcess::ExitStatus exitStatus )
 {
-    if ( m_process->normalExit() ) {
+    if ( exitStatus == QProcess::NormalExit ) {
         // TODO: check the process' exitStatus()
-        switch ( m_process->exitStatus() ) {
+        switch ( exitCode ) {
         case 0:
             emit infoMessage( i18n( "Cue/Bin files successfully created." ), K3bJob::SUCCESS );
             m_imageFinished = true;
             break;
         default:
-            emit infoMessage( i18n( "%1 returned an unknown error (code %2)." , QString("vcdxbuild") , m_process->exitStatus() ),
+            emit infoMessage( i18n( "%1 returned an unknown error (code %2)." , QString("vcdxbuild") , exitCode ),
                               K3bJob::ERROR );
             emit infoMessage( i18n( "Please send me an email with the last output." ), K3bJob::ERROR );
             cancelAll();

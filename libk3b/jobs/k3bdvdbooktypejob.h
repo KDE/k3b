@@ -16,10 +16,10 @@
 #define _K3B_DVD_BOOKTYPE_JOB_H_
 
 
+#include <qprocess.h>
 #include <k3bjob.h>
 
 
-class K3Process;
 namespace K3bDevice {
   class Device;
   class DeviceHandler;
@@ -81,7 +81,7 @@ class K3bDvdBooktypeJob : public K3bJob
 
  private Q_SLOTS:
   void slotStderrLine( const QString& );
-  void slotProcessFinished( K3Process* );
+  void slotProcessFinished( int, QProcess::ExitStatus );
   void slotDeviceHandlerFinished( K3bDevice::DeviceHandler* );
   void slotEjectingFinished( K3bDevice::DeviceHandler* );
 

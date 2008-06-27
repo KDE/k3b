@@ -434,8 +434,8 @@ void K3bCdrdaoWriter::start()
     m_process->setRawStdin(true);
     connect( m_process, SIGNAL(stderrLine(const QString&)),
              this, SLOT(slotStdLine(const QString&)) );
-    connect( m_process, SIGNAL(processExited(K3Process*)),
-             this, SLOT(slotProcessExited(K3Process*)) );
+    connect( m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
+             this, SLOT(slotProcessExited(int, QProcess::ExitStatus)) );
 
     m_canceled = false;
     m_knownError = false;
@@ -671,7 +671,7 @@ void K3bCdrdaoWriter::slotStdLine( const QString& line )
 }
 
 
-void K3bCdrdaoWriter::slotProcessExited( K3Process* p )
+void K3bCdrdaoWriter::slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus )
 {
     // release the device within this process
     burnDevice()->usageUnlock();
@@ -711,9 +711,9 @@ void K3bCdrdaoWriter::slotProcessExited( K3Process* p )
     if( m_canceled )
         return;
 
-    if( p->normalExit() )
+    if( exitStatus == QProcess::NormalExit )
     {
-        switch( p->exitStatus() )
+        switch( exitCode )
         {
         case 0:
             if( simulate() )
@@ -745,7 +745,7 @@ void K3bCdrdaoWriter::slotProcessExited( K3Process* p )
 
         default:
             if( !m_knownError && !wasSourceUnreadable() ) {
-                emit infoMessage( i18n("%1 returned an unknown error (code %2).",m_cdrdaoBinObject->name(),p->exitStatus()),
+                emit infoMessage( i18n("%1 returned an unknown error (code %2).",m_cdrdaoBinObject->name(), exitCode),
                                   K3bJob::ERROR );
                 emit infoMessage( i18n("Please include the debugging output in your problem report."), K3bJob::ERROR );
             }

@@ -19,6 +19,7 @@
 
 #include "k3process.h"
 #include <qstring.h>
+#include <qprocess.h>
 
 #include "k3b_export.h"
 
@@ -132,13 +133,19 @@ public Q_SLOTS:
      */
     void setSuppressEmptyLines( bool b );
 
-    private Q_SLOTS:
+private Q_SLOTS:
     void slotSplitStderr( K3Process*, char*, int );
     void slotSplitStdout( K3Process*, char*, int );
+    void processExited( K3Process * );
 
 Q_SIGNALS:
     void stderrLine( const QString& line );
     void stdoutLine( const QString& line );
+
+    /**
+     * the same as QProcess::finished()
+     */
+    void finished( int exitCode, QProcess::ExitStatus exitStatus );
 
 private:
     static QStringList splitOutput( char*, int, QString&, bool );

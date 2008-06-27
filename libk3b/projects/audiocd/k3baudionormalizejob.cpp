@@ -49,7 +49,7 @@ void K3bAudioNormalizeJob::start()
 
   m_process = new K3bProcess();
   connect( m_process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
-  connect( m_process, SIGNAL(processExited(K3Process*)), this, SLOT(slotProcessExited(K3Process*)) );
+  connect( m_process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotProcessExited(int, QProcess::ExitStatus)) );
 
   const K3bExternalBin* bin = k3bcore->externalBinManager()->binObject( "normalize" );
 
@@ -174,17 +174,17 @@ void K3bAudioNormalizeJob::slotStdLine( const QString& line )
 }
 
 
-void K3bAudioNormalizeJob::slotProcessExited( K3Process* p )
+void K3bAudioNormalizeJob::slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus )
 {
-  if( p->normalExit() ) {
-    switch( p->exitStatus() ) {
+  if( exitStatus == QProcess::NormalExit ) {
+    switch( exitCode ) {
     case 0:
       emit infoMessage( i18n("Successfully normalized all tracks."), SUCCESS );
       jobFinished(true);
       break;
     default:
       if( !m_canceled ) {
-	emit infoMessage( i18n("%1 returned an unknown error (code %2).",QString("normalize"),p->exitStatus()),
+	emit infoMessage( i18n("%1 returned an unknown error (code %2).",QString("normalize"), exitCode),
 			  K3bJob::ERROR );
 	emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
 	emit infoMessage( i18n("Error while normalizing tracks."), ERROR );

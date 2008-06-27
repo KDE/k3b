@@ -181,7 +181,7 @@ bool K3bGrowisofsWriter::prepareProcess()
     d->process->setRawStdin(true);
     connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotReceivedStderr(const QString&)) );
     connect( d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotReceivedStderr(const QString&)) );
-    connect( d->process, SIGNAL(processExited(K3Process*)), this, SLOT(slotProcessExited(K3Process*)) );
+    connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotProcessExited(int, QProcess::ExitStatus)) );
 
 
     //
@@ -528,7 +528,7 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
 }
 
 
-void K3bGrowisofsWriter::slotProcessExited( K3Process* p )
+void K3bGrowisofsWriter::slotProcessExited( int exitCode, QProcess::ExitStatus )
 {
     d->inputFile.close();
 
@@ -550,7 +550,7 @@ void K3bGrowisofsWriter::slotProcessExited( K3Process* p )
     d->finished = true;
 
     // it seems that growisofs sometimes exits with a valid exit code while a write error occured
-    if( p->exitStatus() == 0 && d->gh->error() != K3bGrowisofsHandler::ERROR_WRITE_FAILED ) {
+    if( (exitCode == 0) && d->gh->error() != K3bGrowisofsHandler::ERROR_WRITE_FAILED ) {
 
         int s = d->speedEst->average();
         if( s > 0 )
@@ -567,7 +567,7 @@ void K3bGrowisofsWriter::slotProcessExited( K3Process* p )
     }
     else {
         if( !wasSourceUnreadable() )
-            d->gh->handleExit( p->exitStatus() );
+            d->gh->handleExit( exitCode );
         d->success = false;
     }
 

@@ -140,7 +140,7 @@ void K3bCdrecordWriter::prepareProcess()
     m_process->setRawStdin(true);  // we only use stdin when writing on-the-fly
     connect( m_process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
     connect( m_process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
-    connect( m_process, SIGNAL(processExited(K3Process*)), this, SLOT(slotProcessExited(K3Process*)) );
+    connect( m_process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotProcessExited(int, QProcess::ExitStatus)) );
 
     m_cdrecordBinObject = k3bcore->externalBinManager()->binObject("cdrecord");
 
@@ -680,7 +680,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 }
 
 
-void K3bCdrecordWriter::slotProcessExited( K3Process* p )
+void K3bCdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus )
 {
     // remove temporary cdtext file
     delete d->cdTextFile;
@@ -699,8 +699,8 @@ void K3bCdrecordWriter::slotProcessExited( K3Process* p )
     }
 
 
-    if( p->normalExit() ) {
-        switch( p->exitStatus() ) {
+    if( exitStatus == QProcess::NormalExit ) {
+        switch( exitCode ) {
         case 0:
         {
             if( simulate() )
@@ -716,7 +716,7 @@ void K3bCdrecordWriter::slotProcessExited( K3Process* p )
         break;
 
         default:
-            kDebug() << "(K3bCdrecordWriter) error: " << p->exitStatus();
+            kDebug() << "(K3bCdrecordWriter) error: " << exitCode;
 
             if( m_cdrecordError == UNKNOWN && m_lastFifoValue <= 3 )
                 m_cdrecordError = BUFFER_UNDERRUN;
@@ -797,16 +797,16 @@ void K3bCdrecordWriter::slotProcessExited( K3Process* p )
                 emit infoMessage( i18n("Try again using 'Complete' erasing."), ERROR );
                 break;
             case UNKNOWN:
-                if( p->exitStatus() == 12 && K3b::kernelVersion() >= K3bVersion( 2, 6, 8 ) && m_cdrecordBinObject->hasFeature( "suidroot" ) ) {
+                if( (exitCode == 12) && K3b::kernelVersion() >= K3bVersion( 2, 6, 8 ) && m_cdrecordBinObject->hasFeature( "suidroot" ) ) {
                     emit infoMessage( i18n("Since kernel version 2.6.8 cdrecord cannot use SCSI transport when running suid root anymore."), ERROR );
                     emit infoMessage( i18n("You may use K3bSetup to solve this problem or remove the suid bit manually."), ERROR );
                 }
                 else if( !wasSourceUnreadable() ) {
-                    emit infoMessage( i18n("%1 returned an unknown error (code %2)."
-                                           ,m_cdrecordBinObject->name(),p->exitStatus()),
+                    emit infoMessage( i18n("%1 returned an unknown error (code %2).",
+                                           m_cdrecordBinObject->name(), exitCode),
                                       K3bJob::ERROR );
 
-                    if( p->exitStatus() >= 254 && m_writingMode == K3b::DAO ) {
+                    if( (exitCode >= 254) && m_writingMode == K3b::DAO ) {
                         emit infoMessage( i18n("Sometimes using TAO writing mode solves this issue."), ERROR );
                     }
                     else {

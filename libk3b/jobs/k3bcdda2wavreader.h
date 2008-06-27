@@ -15,9 +15,9 @@
 #ifndef _K3B_CDDA2WAV_READER_H_
 #define _K3B_CDDA2WAV_READER_H_
 
+#include <qprocess.h>
 #include <k3bjob.h>
 
-class K3Process;
 namespace K3bDevice {
   class Device;
 };
@@ -55,7 +55,7 @@ class K3bCdda2wavReader : public K3bJob
 
  private Q_SLOTS:
   void slotProcessLine( const QString& );
-  void slotProcessExited( K3Process* );
+  void slotProcessExited( int, QProcess::ExitStatus );
 
  private:
   K3bDevice::Device* m_device;

@@ -18,7 +18,7 @@
 
 #include <k3baudioencoder.h>
 
-class K3Process;
+#include <qprocess.h>
 
 class K3bExternalEncoder : public K3bAudioEncoder
 {
@@ -43,7 +43,7 @@ public:
 
     
 private Q_SLOTS:
-    void slotExternalProgramFinished( K3Process* );
+    void slotExternalProgramFinished( int, QProcess::ExitStatus );
     void slotExternalProgramOutputLine( const QString& );
 
 private:

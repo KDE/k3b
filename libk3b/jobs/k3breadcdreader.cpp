@@ -139,7 +139,7 @@ void K3bReadcdReader::start()
     delete d->process;
     d->process = new K3bProcess();
     connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
-    connect( d->process, SIGNAL(processExited(K3Process*)), this, SLOT(slotProcessExited(K3Process*)) );
+    connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotProcessExited(int, QProcess::ExitStatus)) );
 
 
     *d->process << d->readcdBinObject;
@@ -298,18 +298,18 @@ void K3bReadcdReader::slotStdLine( const QString& line )
     }
 }
 
-void K3bReadcdReader::slotProcessExited( K3Process* p )
+void K3bReadcdReader::slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus )
 {
     if( d->canceled ) {
         emit canceled();
         jobFinished(false);
     }
-    else if( p->normalExit() ) {
-        if( p->exitStatus() == 0 ) {
+    else if( exitStatus == QProcess::NormalExit ) {
+        if( exitCode == 0 ) {
             jobFinished( true );
         }
         else {
-            emit infoMessage( i18n("%1 returned error: %2",QString("Readcd"),p->exitStatus()), ERROR );
+            emit infoMessage( i18n("%1 returned error: %2",QString("Readcd"), exitCode ), ERROR );
             jobFinished( false );
         }
     }

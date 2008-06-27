@@ -19,10 +19,10 @@
 
 #include <k3bjob.h>
 
+#include <qprocess.h>
 #include <qlist.h>
 
 class K3bProcess;
-class K3Process;
 
 
 class K3bAudioNormalizeJob : public K3bJob
@@ -41,7 +41,7 @@ class K3bAudioNormalizeJob : public K3bJob
 
  private Q_SLOTS:
   void slotStdLine( const QString& line );
-  void slotProcessExited( K3Process* p );
+  void slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus );
 
  private:
   K3bProcess* m_process;

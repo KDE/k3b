@@ -195,7 +195,7 @@ void K3bVideoDVDTitleTranscodingJob::startTranscode( int pass )
   d->process->setSplitStdout(true);
   connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotTranscodeStderr(const QString&)) );
   connect( d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotTranscodeStderr(const QString&)) );
-  connect( d->process, SIGNAL(processExited(K3Process*)), this, SLOT(slotTranscodeExited(K3Process*)) );
+  connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotTranscodeExited(int, QProcess::ExitStatus)) );
 
   // the executable
   *d->process << d->usedTranscodeBin;
@@ -409,15 +409,15 @@ void K3bVideoDVDTitleTranscodingJob::slotTranscodeStderr( const QString& line )
 }
 
 
-void K3bVideoDVDTitleTranscodingJob::slotTranscodeExited( K3Process* p )
+void K3bVideoDVDTitleTranscodingJob::slotTranscodeExited( int exitCode, QProcess::ExitStatus exitStatus )
 {
   if( d->canceled ) {
     emit canceled();
     cleanup( false );
     jobFinished( false );
   }
-  else if( p->normalExit() ) {
-    switch( p->exitStatus() ) {
+  else if( exitStatus == QProcess::NormalExit ) {
+    switch( exitCode ) {
     case 0:
       if( d->currentEncodingPass == 1 ) {
 	emit percent( 50 );
@@ -434,8 +434,8 @@ void K3bVideoDVDTitleTranscodingJob::slotTranscodeExited( K3Process* p )
     default:
       // FIXME: error handling
 
-      emit infoMessage( i18n("%1 returned an unknown error (code %2)."
-			,d->usedTranscodeBin->name(),p->exitStatus()),
+      emit infoMessage( i18n("%1 returned an unknown error (code %2).",
+			d->usedTranscodeBin->name(), exitCode ),
 			K3bJob::ERROR );
       emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
 

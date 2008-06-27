@@ -15,6 +15,7 @@
 #ifndef K3BVCDJOB_H
 #define K3BVCDJOB_H
 
+#include <qprocess.h>
 #include <k3bjob.h>
 
 class K3bVcdDoc;
@@ -52,7 +53,7 @@ class K3bVcdJob : public K3bBurnJob
         void cancelAll();
 
     protected Q_SLOTS:
-        void slotVcdxBuildFinished();
+        void slotVcdxBuildFinished( int, QProcess::ExitStatus );
         void slotParseVcdxBuildOutput( K3Process*, char* output, int len );
 
         void slotWriterJobPercent( int p );

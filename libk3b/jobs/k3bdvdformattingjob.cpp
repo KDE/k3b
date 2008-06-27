@@ -249,14 +249,14 @@ void K3bDvdFormattingJob::slotStderrLine( const QString& line )
 }
 
 
-void K3bDvdFormattingJob::slotProcessFinished( K3Process* p )
+void K3bDvdFormattingJob::slotProcessFinished( int exitCode, QProcess::ExitStatus exitStatus )
 {
     if( d->canceled ) {
         emit canceled();
         d->success = false;
     }
-    else if( p->normalExit() ) {
-        if( !d->error && p->exitStatus() == 0 ) {
+    else if( exitStatus == QProcess::NormalExit ) {
+        if( !d->error && (exitCode == 0) ) {
             emit infoMessage( i18n("Formatting successfully completed"), K3bJob::SUCCESS );
 
             if( d->lastProgressValue < 100 ) {
@@ -267,7 +267,7 @@ void K3bDvdFormattingJob::slotProcessFinished( K3Process* p )
             d->success = true;
         }
         else {
-            emit infoMessage( i18n("%1 returned an unknown error (code %2).",d->dvdFormatBin->name(),p->exitStatus()),
+            emit infoMessage( i18n("%1 returned an unknown error (code %2).",d->dvdFormatBin->name(), exitCode),
                               K3bJob::ERROR );
             emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
 
@@ -467,7 +467,7 @@ void K3bDvdFormattingJob::startFormatting( const K3bDevice::DiskInfo& diskInfo )
         d->process->setRunPrivileged(true);
         //      d->process->setSuppressEmptyLines(false);
         connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStderrLine(const QString&)) );
-        connect( d->process, SIGNAL(processExited(K3Process*)), this, SLOT(slotProcessFinished(K3Process*)) );
+        connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotProcessFinished(int, QProcess::ExitStatus)) );
 
         d->dvdFormatBin = k3bcore->externalBinManager()->binObject( "dvd+rw-format" );
         if( !d->dvdFormatBin ) {

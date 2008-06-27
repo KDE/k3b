@@ -16,10 +16,10 @@
 #define _K3B_DVD_FORMATTING_JOB_H_
 
 
+#include <qprocess.h>
 #include <k3bjob.h>
 #include "k3b_export.h"
 
-class K3Process;
 namespace K3bDevice {
     class Device;
     class DeviceHandler;
@@ -73,9 +73,9 @@ class LIBK3B_EXPORT K3bDvdFormattingJob : public K3bBurnJob
      */
     void setForceNoEject( bool );
 
-    private Q_SLOTS:
+private Q_SLOTS:
     void slotStderrLine( const QString& );
-    void slotProcessFinished( K3Process* );
+    void slotProcessFinished( int, QProcess::ExitStatus );
     void slotDeviceHandlerFinished( K3bDevice::DeviceHandler* );
     void slotEjectingFinished( K3bDevice::DeviceHandler* );
 

@@ -20,10 +20,10 @@
 #include "k3babstractwriter.h"
 
 #include <qstringlist.h>
+#include <qprocess.h>
 
 class K3bExternalBin;
 class K3bProcess;
-class K3Process;
 class K3bDevice::Device;
 
 
@@ -59,7 +59,7 @@ class K3bCdrecordWriter : public K3bAbstractWriter
 
  protected Q_SLOTS:
   void slotStdLine( const QString& line );
-  void slotProcessExited(K3Process*);
+  void slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus );
   void slotThroughput( int t );
 
  protected:

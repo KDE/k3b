@@ -153,7 +153,7 @@ void K3bIsoImager::handleMkisofsInfoMessage( const QString& line, int type )
 }
 
 
-void K3bIsoImager::slotProcessExited( K3Process* p )
+void K3bIsoImager::slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus )
 {
     kDebug() << k_funcinfo;
 
@@ -168,7 +168,7 @@ void K3bIsoImager::slotProcessExited( K3Process* p )
     if( d->imageFile.isOpen() ) {
         d->imageFile.close();
 
-        if( m_canceled || p->exitStatus() != 0 ) {
+        if( m_canceled || (exitCode != 0) ) {
             d->imageFile.remove();
             emit infoMessage( i18n("Removed incomplete image file %1.",d->imageFile.name()), WARNING );
         }
@@ -179,12 +179,12 @@ void K3bIsoImager::slotProcessExited( K3Process* p )
         jobFinished(false);
     }
     else {
-        if( p->normalExit() ) {
-            if( p->exitStatus() == 0 ) {
+        if( exitStatus == QProcess::NormalExit ) {
+            if( exitCode == 0 ) {
                 jobFinished( !mkisofsReadError() );
             }
             else {
-                switch( p->exitStatus() ) {
+                switch( exitCode ) {
                 case 104:
                     // connection reset by peer
                     // This only happens if cdrecord does not finish successfully
@@ -208,7 +208,7 @@ void K3bIsoImager::slotProcessExited( K3Process* p )
 
                 default:
                     if( !d->knownError && !mkisofsReadError() ) {
-                        emit infoMessage( i18n("%1 returned an unknown error (code %2).",QString("mkisofs"),p->exitStatus()),
+                        emit infoMessage( i18n("%1 returned an unknown error (code %2).",QString("mkisofs"), exitCode ),
                                           K3bJob::ERROR );
                         emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
                     }
@@ -338,8 +338,8 @@ void K3bIsoImager::startSizeCalculation()
              this, SLOT(slotCollectMkisofsPrintSizeStderr(K3Process*, char*, int)) );
     connect( m_process, SIGNAL(stdoutLine(const QString&)),
              this, SLOT(slotCollectMkisofsPrintSizeStdout(const QString&)) );
-    connect( m_process, SIGNAL(processExited(K3Process*)),
-             this, SLOT(slotMkisofsPrintSizeFinished()) );
+    connect( m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
+             this, SLOT(slotMkisofsPrintSizeFinished(int, QProcess::ExitStatus)) );
 
     // we also want error messages
     connect( m_process, SIGNAL(stderrLine( const QString& )),
@@ -479,8 +479,8 @@ void K3bIsoImager::start()
         return;
     }
 
-    connect( m_process, SIGNAL(processExited(K3Process*)),
-             this, SLOT(slotProcessExited(K3Process*)) );
+    connect( m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
+             this, SLOT(slotProcessExited(int, QProcess::ExitStatus)) );
 
     connect( m_process, SIGNAL(stderrLine( const QString& )),
              this, SLOT(slotReceivedStderr( const QString& )) );

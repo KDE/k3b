@@ -137,7 +137,7 @@ void K3bVideoDVDTitleDetectClippingJob::startTranscode( int chapter )
   d->process->setSplitStdout(true);
   //  connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotTranscodeStderr(const QString&)) );
   connect( d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotTranscodeStderr(const QString&)) );
-  connect( d->process, SIGNAL(processExited(K3Process*)), this, SLOT(slotTranscodeExited(K3Process*)) );
+  connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotTranscodeExited(int, QProcess::ExitStatus)) );
 
   // the executable
   *d->process << d->usedTranscodeBin;
@@ -244,9 +244,9 @@ void K3bVideoDVDTitleDetectClippingJob::slotTranscodeStderr( const QString& line
 }
 
 
-void K3bVideoDVDTitleDetectClippingJob::slotTranscodeExited( K3Process* p )
+void K3bVideoDVDTitleDetectClippingJob::slotTranscodeExited( int exitCode, QProcess::ExitStatus )
 {
-  switch( p->exitStatus() ) {
+  switch( exitCode ) {
   case 0:
     d->currentChapter++;
     if( d->currentChapter > d->totalChapters ) {
@@ -274,7 +274,7 @@ void K3bVideoDVDTitleDetectClippingJob::slotTranscodeExited( K3Process* p )
     }
     else {
       emit infoMessage( i18n("%1 returned an unknown error (code %2).",
-			d->usedTranscodeBin->name(),p->exitStatus()),
+			d->usedTranscodeBin->name(), exitCode ),
 			K3bJob::ERROR );
       emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
     }

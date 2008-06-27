@@ -108,7 +108,7 @@ void K3bCdda2wavReader::start( bool onlyInfo )
     d->process->setWorkingDirectory( m_imagePath );
     connect( d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotProcessLine(const QString&)) );
     connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotProcessLine(const QString&)) );
-    connect( d->process, SIGNAL(processExited(K3Process*)), this, SLOT(slotProcessExited(K3Process*)) );
+    connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotProcessExited(int, QProcess::ExitStatus)) );
 
     // create the command line
     *d->process << d->cdda2wavBin->path;
@@ -221,7 +221,7 @@ void K3bCdda2wavReader::slotProcessLine( const QString& line )
 }
 
 
-void K3bCdda2wavReader::slotProcessExited( K3Process* p )
+void K3bCdda2wavReader::slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus )
 {
     d->running = false;
 
@@ -231,15 +231,15 @@ void K3bCdda2wavReader::slotProcessExited( K3Process* p )
         return;
     }
 
-    if( p->normalExit() ) {
+    if( exitStatus == QProcess::NormalExit ) {
         // TODO: improve this
 
-        if( p->exitStatus() == 0 ) {
+        if( exitCode == 0 ) {
             jobFinished( true );
         }
         else {
             emit infoMessage( i18n("%1 returned an unknown error (code %2)."
-                                   QString("Cdda2wav"),p->exitStatus()), ERROR );
+                                   QString("Cdda2wav"), exitCode ), ERROR );
             jobFinished( false );
         }
     }

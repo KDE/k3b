@@ -18,8 +18,8 @@
 
 #include <k3bjob.h>
 
+#include <qprocess.h>
 
-class K3Process;
 namespace K3bDevice {
   class Device;
 }
@@ -67,7 +67,7 @@ class K3bReadcdReader : public K3bJob
 
  private Q_SLOTS:
   void slotStdLine( const QString& line );
-  void slotProcessExited(K3Process*);
+  void slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus );
 
  private:
   bool m_noCorr;

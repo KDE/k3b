@@ -16,12 +16,11 @@
 #ifndef _K3B_SOX_ENCODER_H_
 #define _K3B_SOX_ENCODER_H_
 
+#include <qprocess.h>
 
 #include <k3baudioencoder.h>
 #include <k3bpluginconfigwidget.h>
 #include "ui_base_k3bsoxencoderconfigwidget.h"
-
-class K3Process;
 
 class base_K3bSoxEncoderConfigWidget : public QWidget, public Ui::base_K3bSoxEncoderConfigWidget
 {
@@ -55,8 +54,8 @@ public:
     bool openFile( const QString& ext, const QString& filename, const K3b::Msf& );
     void closeFile();
 
-    private Q_SLOTS:
-    void slotSoxFinished( K3Process* );
+private Q_SLOTS:
+    void slotSoxFinished( int, QProcess::ExitStatus );
     void slotSoxOutputLine( const QString& );
 
 private:

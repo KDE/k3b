@@ -19,8 +19,8 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qobject.h>
-//Added by qt3to4:
 #include <QList>
+#include <QProcess>
 
 #include <k3btoc.h>
 #include <k3bcore.h>
@@ -89,7 +89,7 @@ class K3bVideoCdInfo : public QObject
         void infoFinished( bool success );
 
     private Q_SLOTS:
-        void slotInfoFinished();
+        void slotInfoFinished( int exitCode, QProcess::ExitStatus exitStatus );
         void slotParseOutput( const QString& inp );
 
     private:

@@ -108,10 +108,11 @@ bool K3bProcess::start( Communication com )
              this, SLOT(slotSplitStderr(K3Process*, char*, int)) );
     connect( this, SIGNAL(receivedStdout(K3Process*, char*, int)),
              this, SLOT(slotSplitStdout(K3Process*, char*, int)) );
+    connect( this, SIGNAL( processExited(K3Process*) ),
+             this, SLOT( processExited(K3Process*) ) );
 
     return K3Process::start( NotifyOnExit, com );
 }
-
 
 void K3bProcess::slotSplitStdout( K3Process*, char* data, int len )
 {
@@ -144,6 +145,18 @@ void K3bProcess::slotSplitStderr( K3Process*, char* data, int len )
 
         emit stderrLine( str );
     }
+}
+
+
+void K3bProcess::processExited( K3Process* )
+{
+    int ec;
+    QProcess::ExitStatus es;
+
+    ec = exitStatus();
+    es = normalExit() ? QProcess::NormalExit : QProcess::CrashExit;
+
+    emit finished( ec, es );
 }
 
 
