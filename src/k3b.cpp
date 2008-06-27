@@ -47,7 +47,7 @@
 #include <kconfig.h>
 #include <kstandardaction.h>
 #include <kstandarddirs.h>
-#include <k3process.h>
+#include <kprocess.h>
 #include <kurl.h>
 #include <kurllabel.h>
 #include <ktoolbar.h>
@@ -1311,9 +1311,8 @@ void K3bMainWindow::slotProjectAddFiles()
 
 void K3bMainWindow::slotK3bSetup()
 {
-    K3Process p;
-    p << K3b::findExe("kdesu") << "kcmshell k3bsetup2 --lang " + KGlobal::locale()->language();
-    if( !p.start( K3Process::DontCare ) )
+    QStringList args("kcmshell k3bsetup2 --lang" + KGlobal::locale()->language());
+    if( !KProcess::startDetached( K3b::findExe("kdesu"), args ) )
         KMessageBox::error( 0, i18n("Could not find kdesu to run K3bSetup with root privileges. "
                                     "Please run it manually as root.") );
 }
