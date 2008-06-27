@@ -66,10 +66,11 @@ void K3bVideoCdInfo::info( const QString& device )
 
     *m_process << "-q" << "--norip" << "-i" << device << "-o" << "-";
 
-    connect( m_process, SIGNAL( receivedStderr( K3Process*, char*, int ) ),
-             this, SLOT( slotParseOutput( K3Process*, char*, int ) ) );
-    connect( m_process, SIGNAL( receivedStdout( K3Process*, char*, int ) ),
-             this, SLOT( slotParseOutput( K3Process*, char*, int ) ) );
+    m_process->setSuppressEmptyLines( false );
+    connect( m_process, SIGNAL( stderrLine( const QString& ) ),
+             this, SLOT( slotParseOutput( const QString& ) ) );
+    connect( m_process, SIGNAL( receivedStdout( const QString& ) ),
+             this, SLOT( slotParseOutput( const QString& ) ) );
     connect( m_process, SIGNAL( processExited( K3Process* ) ),
              this, SLOT( slotInfoFinished() ) );
 
@@ -80,26 +81,18 @@ void K3bVideoCdInfo::info( const QString& device )
     }
 }
 
-void K3bVideoCdInfo::slotParseOutput( K3Process*, char* output, int len )
+void K3bVideoCdInfo::slotParseOutput( const QString& inp )
 {
-    QString buffer = QString::fromLocal8Bit( output, len );
+    if ( inp.contains( "<?xml" ) )
+        m_isXml = true;
 
-    // split to lines
-    QStringList lines = buffer.split( '\n' );
-    QStringList::Iterator end( lines.end());
-    for ( QStringList::Iterator str = lines.begin(); str != end; ++str ) {
+    if ( m_isXml )
+        m_xmlData += inp;
+    else
+        kDebug() << "(K3bVideoCdInfo::slotParseOutput) " << inp;
 
-        if ( ( *str ).contains( "<?xml" ) )
-            m_isXml = true;
-
-        if ( m_isXml )
-            m_xmlData += *str;
-        else
-            kDebug() << "(K3bVideoCdInfo::slotParseOutput) " << *str;
-
-        if ( ( *str ).contains( "</videocd>" ) )
-            m_isXml = false;
-    }
+    if ( inp.contains( "</videocd>" ) )
+        m_isXml = false;
 }
 
 void K3bVideoCdInfo::slotInfoFinished()

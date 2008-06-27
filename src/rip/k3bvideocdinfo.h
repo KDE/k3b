@@ -26,7 +26,6 @@
 #include <k3bcore.h>
 
 class K3bProcess;
-class K3Process;
 
 class K3bVideoCdInfoResultEntry
 {
@@ -91,7 +90,7 @@ class K3bVideoCdInfo : public QObject
 
     private Q_SLOTS:
         void slotInfoFinished();
-        void slotParseOutput( K3Process*, char* output, int len );
+        void slotParseOutput( const QString& inp );
 
     private:
         void cancelAll();
