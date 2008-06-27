@@ -111,9 +111,9 @@ void K3bMsInfoFetcher::getMsInfo()
     emit debuggingOutput( "msinfo command:", s );
 
 
-    //   connect( m_process, SIGNAL(readReadyStandardError()),
+    //   connect( m_process, SIGNAL(readyReadStandardError()),
     // 	   this, SLOT(slotCollectOutput()) );
-    connect( m_process, SIGNAL(readReadyStandardOutput()),
+    connect( m_process, SIGNAL(readyReadStandardOutput()),
 	     this, SLOT(slotCollectOutput()) );
     connect( m_process, SIGNAL(finished()),
 	     this, SLOT(slotProcessExited()) );
