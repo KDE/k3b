@@ -339,7 +339,7 @@ void K3bIsoImager::startSizeCalculation()
     connect( m_process, SIGNAL(stdoutLine(const QString&)),
              this, SLOT(slotCollectMkisofsPrintSizeStdout(const QString&)) );
     connect( m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
-             this, SLOT(slotMkisofsPrintSizeFinished(int, QProcess::ExitStatus)) );
+             this, SLOT(slotMkisofsPrintSizeFinished()) );
 
     // we also want error messages
     connect( m_process, SIGNAL(stderrLine( const QString& )),
