@@ -140,12 +140,6 @@ Q_SIGNALS:
     void stderrLine( const QString& line );
     void stdoutLine( const QString& line );
 
-    /** 
-     * Gets emitted if raw stdout mode has been requested
-     * The data has to be read from @p fd.
-     */
-    void stdoutReady( int fd );
-
 private:
     static QStringList splitOutput( char*, int, QString&, bool );
 
