@@ -368,7 +368,7 @@ void K3bIsoImager::slotCollectMkisofsPrintSizeStderr(K3Process*, char* data , in
 
 void K3bIsoImager::slotCollectMkisofsPrintSizeStdout( const QString& line )
 {
-    // newer versions of mkisofs outut additional lines of junk before the size :(
+    // newer versions of mkisofs output additional lines of junk before the size :(
     // so we only use the last line
     emit debuggingOutput( "mkisofs", line );
     m_collectedMkisofsPrintSizeStdout = line;
