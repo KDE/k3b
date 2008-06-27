@@ -19,9 +19,10 @@
 #include <k3bdiskinfo.h>
 #include "k3bvideocdrippingoptions.h"
 
+#include <qprocess.h>
+
 class QString;
-class K3Process;
-class K3bProcess;
+class KProcess;
 
 class K3bVideoCdRip : public K3bJob
 {
@@ -44,8 +45,8 @@ class K3bVideoCdRip : public K3bJob
         void cancelAll();
 
     protected Q_SLOTS:
-        void slotVcdXRipFinished();
-        void slotParseVcdXRipOutput( K3Process*, char* output, int len );
+        void slotVcdXRipFinished( int, QProcess::ExitStatus );
+        void slotParseVcdXRipOutput();
 
     private:
         void vcdxRip();
@@ -66,7 +67,7 @@ class K3bVideoCdRip : public K3bJob
 
         bool m_canceled;
 
-        K3bProcess* m_process;
+        KProcess* m_process;
 
 };
 

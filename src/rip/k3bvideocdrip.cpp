@@ -19,6 +19,7 @@
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 #include <kurl.h>
+#include <kprocess.h>
 
 #include <qdatetime.h>
 #include <qdom.h>
@@ -34,7 +35,6 @@
 #include <k3bcore.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bglobals.h>
-#include <k3bprocess.h>
 
 K3bVideoCdRip::K3bVideoCdRip( K3bJobHandler* hdl, K3bVideoCdRippingOptions* options, QObject* parent )
   : K3bJob( hdl, parent ),
@@ -68,7 +68,7 @@ void K3bVideoCdRip::cancelAll()
 {
     m_canceled = true;
 
-    if ( m_process->isRunning() ) {
+    if ( m_process->state() != QProcess::NotRunning ) {
         m_process->disconnect( this );
         m_process->kill();
     }
@@ -91,7 +91,7 @@ void K3bVideoCdRip::vcdxRip()
 
     m_stage = stageUnknown;
     delete m_process;
-    m_process = new K3bProcess();
+    m_process = new KProcess(this);
 
     const K3bExternalBin* bin = k3bcore ->externalBinManager() ->binObject( "vcdxrip" );
 
@@ -150,26 +150,28 @@ void K3bVideoCdRip::vcdxRip()
         *m_process << "-o" << "/dev/null";
       
 
-    connect( m_process, SIGNAL( receivedStderr( K3Process*, char*, int ) ),
-             this, SLOT( slotParseVcdXRipOutput( K3Process*, char*, int ) ) );
-    connect( m_process, SIGNAL( receivedStdout( K3Process*, char*, int ) ),
-             this, SLOT( slotParseVcdXRipOutput( K3Process*, char*, int ) ) );
-    connect( m_process, SIGNAL( processExited( K3Process* ) ),
-             this, SLOT( slotVcdXRipFinished() ) );
+    m_process->setOutputChannelMode( KProcess::MergedChannels );
+    connect( m_process, SIGNAL( readyReadStandardOutput() ),
+             this, SLOT( slotParseVcdXRipOutput() ) );
+    connect( m_process, SIGNAL( finished( int, QProcess::ExitStatus ) ),
+             this, SLOT( slotVcdXRipFinished( int, QProcess::ExitStatus ) ) );
 
     m_process->setWorkingDirectory( Q3Url( m_videooptions ->getVideoCdDestination() ).path() );
 
     // vcdxrip commandline parameters
     kDebug() << "***** vcdxrip parameters:";
-    QString s = m_process->joinedArgs();
+    QStringList args = m_process->program();
+    args.removeFirst();
+    QString s = args.join(" ");
     kDebug() << s << flush;
     emit debuggingOutput( "vcdxrip command:", s );
 
     emit newTask( i18n( "Extracting" ) );
     emit infoMessage( i18n( "Start extracting." ), K3bJob::INFO );
     emit infoMessage( i18n( "Extract files from %1 to %2." , m_videooptions ->getVideoCdSource() , m_videooptions ->getVideoCdDestination() ), K3bJob::INFO );
-            
-    if ( !m_process->start( K3Process::AllOutput ) ) {
+
+    m_process->start();
+    if ( !m_process->waitForFinished(-1) ) {
         kDebug() << "(K3bVideoCdRip) could not start vcdxrip";
         emit infoMessage( i18n( "Could not start %1." , QString("vcdxrip") ), K3bJob::ERROR );
         cancelAll();
@@ -177,9 +179,9 @@ void K3bVideoCdRip::vcdxRip()
     }
 }
 
-void K3bVideoCdRip::slotParseVcdXRipOutput( K3Process*, char* output, int len )
+void K3bVideoCdRip::slotParseVcdXRipOutput()
 {
-    QString buffer = QString::fromLocal8Bit( output, len );
+    QString buffer = QString::fromLocal8Bit( m_process->readAllStandardOutput() );
 
     // split to lines
     QStringList lines = buffer.split( '\n' );
@@ -255,16 +257,16 @@ void K3bVideoCdRip::slotParseVcdXRipOutput( K3Process*, char* output, int len )
 }
 
 
-void K3bVideoCdRip::slotVcdXRipFinished()
+void K3bVideoCdRip::slotVcdXRipFinished( int exitCode, QProcess::ExitStatus exitStatus )
 {
-    if ( m_process->normalExit() ) {
+    if ( exitStatus == QProcess::NormalExit ) {
         // TODO: check the process' exitStatus()
-        switch ( m_process->exitStatus() ) {
+        switch ( exitCode ) {
             case 0:
                 emit infoMessage( i18n( "Files successfully extracted." ), K3bJob::SUCCESS );
                 break;
             default:
-                emit infoMessage( i18n( "%1 returned an unknown error (code %2)." , QString("vcdxrip" ), m_process->exitStatus() ), K3bJob::ERROR );
+                emit infoMessage( i18n( "%1 returned an unknown error (code %2)." , QString("vcdxrip" ), exitCode ), K3bJob::ERROR );
                 emit infoMessage( i18n( "Please send me an email with the last output..." ), K3bJob::ERROR );
                 cancelAll();
                 jobFinished( false );
