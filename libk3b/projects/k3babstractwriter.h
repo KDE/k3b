@@ -38,7 +38,7 @@ class K3bAbstractWriter : public K3bJob
 
   /**
    * This can be used to setup direct streaming between two processes
-   * for example the cdrecordwriter returnes the stdin fd which can be
+   * for example the cdrecordwriter returns the stdin fd which can be
    * connected to the stdout fd of mkisofs in the isoimager
    */
   virtual int fd() const { return -1; }
