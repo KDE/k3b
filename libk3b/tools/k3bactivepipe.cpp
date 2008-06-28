@@ -206,16 +206,6 @@ int K3bActivePipe::write( char* data, int max )
 }
 
 
-bool K3bActivePipe::pumpSync()
-{
-    if( open( true ) )
-        d->wait();
-    else
-        return false;
-    return true;
-}
-
-
 quint64 K3bActivePipe::bytesRead() const
 {
     return d->bytesRead;

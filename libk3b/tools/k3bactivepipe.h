@@ -41,13 +41,6 @@ public:
     virtual bool open( bool closeWhenDone = false );
 
     /**
-     * Opens the pipe syncroneously and blocks until all data has been
-     * pumped through.
-     * The pipe is closed afterwards.
-     */
-    bool pumpSync();
-
-    /**
      * Close the pipe
      */
     virtual void close();
