@@ -33,7 +33,7 @@ public:
     Private()
         : cdda2wavBin(0),
           process(0),
-          cancaled(false),
+          canceled(false),
           running(false),
           fdToWriteTo(-1) {
     }
@@ -41,7 +41,7 @@ public:
     const K3bExternalBin* cdda2wavBin;
     K3bProcess* process;
 
-    bool cancaled;
+    bool canceled;
     bool running;
 
     int fdToWriteTo;
@@ -86,7 +86,7 @@ void K3bCdda2wavReader::start()
 void K3bCdda2wavReader::start( bool onlyInfo )
 {
     d->running = true;
-    d->cancaled = false;
+    d->canceled = false;
     d->currentTrack = 1;
     d->trackOffsets.clear();
 
@@ -143,7 +143,7 @@ void K3bCdda2wavReader::start( bool onlyInfo )
 void K3bCdda2wavReader::cancel()
 {
     if( d->running ) {
-        d->cancaled = true;
+        d->canceled = true;
         if( d->process )
             if( d->process->isRunning() )
                 d->process->kill();
@@ -225,7 +225,7 @@ void K3bCdda2wavReader::slotProcessExited( int exitCode, QProcess::ExitStatus ex
 {
     d->running = false;
 
-    if( d->cancaled ) {
+    if( d->canceled ) {
         emit canceled();
         jobFinished(false);
         return;
