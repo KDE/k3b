@@ -12,6 +12,6 @@ install( FILES
   k3bjobhandler.h
   k3b_export.h
   k3bsimplejobhandler.h
-  DESTINATION ${INCLUDE_INSTALL_DIR} )
+  DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel )
 
 

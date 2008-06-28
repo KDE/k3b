@@ -39,6 +39,6 @@ install( FILES
   k3bmsf.h
   k3bdevicetypes.h
   k3bdevice_export.h
-  DESTINATION ${INCLUDE_INSTALL_DIR} )
+  DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel )
 
 

@@ -6,6 +6,6 @@ install( FILES
   k3baudioencoder.h
   k3bpluginconfigwidget.h
   k3bprojectplugin.h
-  DESTINATION ${INCLUDE_INSTALL_DIR} )
+  DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel )
 
 install( FILES k3bplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR}) 

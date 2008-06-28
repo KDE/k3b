@@ -36,5 +36,5 @@ install( FILES
   k3bmedium.h
   k3bmediacache.h
   k3bcddb.h
-  DESTINATION ${INCLUDE_INSTALL_DIR} )
+  DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
