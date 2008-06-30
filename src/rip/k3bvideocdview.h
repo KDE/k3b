@@ -38,7 +38,6 @@ class K3bVideoCdRippingOptions;
 
 namespace K3bDevice
 {
-  class DiskInfoDetector;
   class Toc;
   class Device;
 }

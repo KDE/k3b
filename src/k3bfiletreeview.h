@@ -22,8 +22,6 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 
-class KActionCollection;
-class KActionMenu;
 class QPoint;
 class QDropEvent;
 class QDragEnterEvent;
@@ -31,12 +29,9 @@ class KUrl;
 
 namespace K3bDevice {
     class Device;
-    class DeviceManager;
 }
 
-namespace KIO {
-    class Job;
-}
+
 
 
 /**

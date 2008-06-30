@@ -21,7 +21,6 @@
 #include <qwidget.h>
 
 
-class K3bDataDoc;
 class K3bDirItem;
 class K3bFileItem;
 class Q3ListViewItem;

@@ -22,8 +22,6 @@
 class K3bDataDoc;
 class K3bDirItem;
 class K3bDataItem;
-class KMenu;
-class KAction;
 class K3bView;
 class QItemSelection;
 

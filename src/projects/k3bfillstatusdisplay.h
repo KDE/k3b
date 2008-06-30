@@ -25,7 +25,6 @@
 class QPaintEvent;
 class QMouseEvent;
 class K3bDoc;
-class KAction;
 
 namespace K3bDevice {
     class Device;

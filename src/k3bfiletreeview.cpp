@@ -36,6 +36,7 @@
 #include <kfileitem.h>
 #include <kapplication.h>
 #include <kglobalsettings.h>
+#include <KActionMenu>
 
 #include <qdir.h>
 #include <qevent.h>

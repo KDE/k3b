@@ -22,11 +22,9 @@
 #include <QLabel>
 
 class QTreeView;
-class Q3ListViewItem;
 class QPoint;
 class KActionCollection;
 class KMenu;
-class K3bCddb;
 class QLabel;
 class KToolBar;
 
@@ -75,8 +73,7 @@ private:
     KToolBar* m_toolBox;
     QLabel* m_labelLength;
 
-    class AudioTrackViewItem;
-
+    
     QLabel* m_busyInfoLabel;
 };
 

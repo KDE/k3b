@@ -20,7 +20,6 @@
 
 class K3bDataDoc;
 class K3bDirItem;
-class K3bDataView;
 class K3bDataItem;
 class K3bView;
 namespace K3b {
