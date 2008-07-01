@@ -6,10 +6,17 @@ set( CMAKE_MODULE_PATH    ${CMAKE_MODULE_PATH}
 find_package(KDE4 REQUIRED)
 include (KDE4Defaults)
 include (MacroLibrary)
+include(MacroLogFeature)
 find_package(DvdRead REQUIRED)
 macro_optional_find_package(MusicBrainz)
 find_package(Kcddb REQUIRED)
 find_package(Taglib)
+
+macro_log_feature( TAGLIB_FOUND "taglib" "Read and write tags in audio files" "http://www.freshmeat.net/projects/taglib" TRUE "1.4.0" "")
+
+macro_log_feature( MUSICBRAINZ_FOUND "musicbrainz" "Provide information about the CD, about the artist or about related information" "http://musicbrainz.org/" TRUE "" "") 
+
+macro_log_feature( DVDREAD_FOUND "dvdread" "Libdvdread provides a simple foundation for reading DVD video disks." "http://www.dtek.chalmers.se/groups/dvd/downloads.shtml" TRUE "" "")
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
@@ -78,3 +85,6 @@ if(DOXYGEN_EXECUTABLE)
     COMMAND ${DOXYGEN_EXECUTABLE} Doxyfile
     COMMAND docs/html/installdox -l qt4.tag@${QTDOCS} docs/html/*.html)
 endif(DOXYGEN_EXECUTABLE)
+
+macro_display_feature_log()
+
