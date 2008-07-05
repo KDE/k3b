@@ -278,6 +278,7 @@ target_link_libraries(k3b_bin
   ${KDE4_KPARTS_LIBS}
   ${KDE4_KNOTIFYCONFIG_LIBS}
   ${KDE4_KUTILS_LIBS}
+  ${QT_QTWEBKIT_LIBRARY}
   )
 
 if(MUSICBRAINZ_FOUND)

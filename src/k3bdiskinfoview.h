@@ -19,7 +19,7 @@
 
 #include "k3bmediacontentsview.h"
 
-class QTextBrowser;
+class QWebView;
 
 class K3bDiskInfoView : public K3bMediaContentsView
 {
@@ -33,7 +33,11 @@ private:
     void reloadMedium();
     void updateTitle();
 
-    QTextBrowser* m_infoView;
+    QString createMediaInfoItems( const K3bMedium& medium );
+    QString createIso9660InfoItems( const K3bIso9660SimplePrimaryDescriptor& iso );
+    QString createTrackItems( const K3bMedium& medium );
+
+    QWebView* m_infoView;
 };
 
 

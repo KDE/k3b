@@ -150,10 +150,7 @@ void K3bProcess::slotSplitStderr( K3Process*, char* data, int len )
 
 void K3bProcess::slotProcessExited( K3Process* )
 {
-    int ec = exitStatus();
-    QProcess::ExitStatus es = normalExit() ? QProcess::NormalExit : QProcess::CrashExit;
-
-    emit finished( ec, es );
+    emit finished( exitStatus(), normalExit() ? QProcess::NormalExit : QProcess::CrashExit );
 }
 
 
