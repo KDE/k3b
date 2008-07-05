@@ -136,7 +136,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void slotSplitStderr( K3Process*, char*, int );
     void slotSplitStdout( K3Process*, char*, int );
-    void processExited( K3Process * );
+    void slotProcessExited( K3Process * );
 
 Q_SIGNALS:
     void stderrLine( const QString& line );
