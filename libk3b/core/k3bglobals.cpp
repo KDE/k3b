@@ -606,7 +606,9 @@ bool K3b::mount( K3bDevice::Device* dev )
     if( KIO::NetAccess::synchronousRun( KIO::mount( true, 0, mntDev, false ), 0 ) )
         return true;
 
-    if ( dev->solidDevice().as<Solid::StorageAccess>()->setup() ) {
+    Solid::StorageAccess *sa = dev->solidDevice().as<Solid::StorageAccess>();
+    if (sa && sa->setup())
+    {
         return true;
     }
 
