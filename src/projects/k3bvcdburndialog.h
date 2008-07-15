@@ -27,6 +27,7 @@ class QLabel;
 class QLineEdit;
 class QTextEdit;
 class K3bVcdDoc;
+class QButtonGroup;
 
 class K3bVcdBurnDialog : public K3bProjectBurnDialog
 {
@@ -56,7 +57,8 @@ protected:
     // the video-cd-tab
     // -----------------------------------------------------------
 
-    QGroupBox* m_groupVcdFormat;
+    QButtonGroup* m_buttonGroupVcdFormat;
+    QGroupBox *m_groupVcdFormat;
     QRadioButton* m_radioVcd11;
     QRadioButton* m_radioVcd20;
     QRadioButton* m_radioSvcd10;

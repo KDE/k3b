@@ -91,7 +91,7 @@ K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent )
     setupAdvancedTab();
 
     connect( m_spinVolumeCount, SIGNAL( valueChanged( int ) ), this, SLOT( slotSpinVolumeCount() ) );
-    connect( m_groupVcdFormat, SIGNAL( clicked( int ) ), this, SLOT( slotVcdTypeClicked( int ) ) );
+    connect( m_buttonGroupVcdFormat, SIGNAL( buttonClicked( int ) ), this, SLOT( slotVcdTypeClicked( int ) ) );
     connect( m_checkCdiSupport, SIGNAL( toggled( bool ) ), this, SLOT( slotCdiSupportChecked( bool ) ) );
     connect( m_checkAutoDetect, SIGNAL( toggled( bool ) ), this, SLOT( slotAutoDetect( bool ) ) );
     connect( m_checkGaps, SIGNAL( toggled( bool ) ), this, SLOT( slotGapsChecked( bool ) ) );
@@ -404,12 +404,13 @@ void K3bVcdBurnDialog::setupVideoCdTab()
     m_radioVcd20 = new QRadioButton( i18n( "VideoCD 2.0" ), m_groupVcdFormat );
     m_radioSvcd10 = new QRadioButton( i18n( "Super-VideoCD" ), m_groupVcdFormat );
     m_radioHqVcd10 = new QRadioButton( i18n( "HQ-VideoCD" ), m_groupVcdFormat );
-    QButtonGroup* buttonGroupVcdFormat = new QButtonGroup( m_groupVcdFormat );
-    buttonGroupVcdFormat->setExclusive( true );
-    buttonGroupVcdFormat->addButton( m_radioVcd11 );
-    buttonGroupVcdFormat->addButton( m_radioVcd20 );
-    buttonGroupVcdFormat->addButton( m_radioSvcd10 );
-    buttonGroupVcdFormat->addButton( m_radioHqVcd10 );
+    m_buttonGroupVcdFormat = new QButtonGroup( m_groupVcdFormat );
+    m_buttonGroupVcdFormat->setExclusive( true );
+    m_buttonGroupVcdFormat->addButton( m_radioVcd11, K3bVcdDoc::VCD11);
+    m_buttonGroupVcdFormat->addButton( m_radioVcd20, K3bVcdDoc::VCD20 );
+    m_buttonGroupVcdFormat->addButton( m_radioSvcd10, K3bVcdDoc::SVCD10);
+    m_buttonGroupVcdFormat->addButton( m_radioHqVcd10,K3bVcdDoc::HQVCD  );
+
     QVBoxLayout* groupVcdFormatLayout = new QVBoxLayout( m_groupVcdFormat );
     groupVcdFormatLayout->setSpacing( spacingHint() );
     groupVcdFormatLayout->setMargin( marginHint() );
@@ -417,6 +418,8 @@ void K3bVcdBurnDialog::setupVideoCdTab()
     groupVcdFormatLayout->addWidget( m_radioVcd20 );
     groupVcdFormatLayout->addWidget( m_radioSvcd10 );
     groupVcdFormatLayout->addWidget( m_radioHqVcd10 );
+
+
     // ---------------------------------------------------- Options group ---
 
     m_groupOptions = new QGroupBox( i18n( "Settings" ), w );
