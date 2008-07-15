@@ -14,7 +14,7 @@ find_package(Taglib)
 
 macro_log_feature( TAGLIB_FOUND "taglib" "Read and write tags in audio files" "http://www.freshmeat.net/projects/taglib" TRUE "1.4.0" "")
 
-macro_log_feature( MUSICBRAINZ_FOUND "musicbrainz" "Provide information about the CD, about the artist or about related information" "http://musicbrainz.org/" TRUE "" "") 
+macro_log_feature( MUSICBRAINZ_FOUND "musicbrainz" "Provide information about the CD, about the artist or about related information" "http://musicbrainz.org/" FALSE "1.1" "") 
 
 macro_log_feature( DVDREAD_FOUND "dvdread" "Libdvdread provides a simple foundation for reading DVD video disks." "http://www.dtek.chalmers.se/groups/dvd/downloads.shtml" TRUE "" "")
 
