@@ -232,6 +232,7 @@ kde4_add_library(k3b SHARED ${k3b_LIB_SRCS})
 target_link_libraries(k3b
   ${KDE4_KUTILS_LIBS}
   ${KDE4_KDE3SUPPORT_LIBS}
+  ${KDE4_KPTY_LIBS}
   ${KCDDB_LIBRARIES}
   k3bdevice
   dl )
