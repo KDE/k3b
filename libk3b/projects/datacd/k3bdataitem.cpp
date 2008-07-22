@@ -75,6 +75,10 @@ K3bDataItem::~K3bDataItem()
     delete d;
 }
 
+int K3bDataItem::flags() const
+{
+   return d->flags;
+}
 
 void K3bDataItem::setFlags( int flags )
 {
