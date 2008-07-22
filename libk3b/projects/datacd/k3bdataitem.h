@@ -144,7 +144,8 @@ public:
         BOOT_IMAGE = 0x11
     };
 
-    int flags() const;
+    //FIXME Implement Me
+    //int flags() const;
 
     virtual bool isDir() const { return false; }
     virtual bool isFile() const { return false; }
