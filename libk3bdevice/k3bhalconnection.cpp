@@ -166,9 +166,11 @@ bool K3bDevice::HalConnection::open()
   //
   int numDevices;
   char** halDeviceList = libhal_get_all_devices( d->halContext, &numDevices, 0 );
-  for( int i = 0; i < numDevices; ++i )
+  for( int i = 0; i < numDevices; ++i ){
     addDevice( halDeviceList[i] );
-
+    free(halDeviceList[i])
+  }
+free(halDeviceList)
   return true;
 }
 
