@@ -15,7 +15,7 @@ what they mean. K3b is able to choose the settings best suited for you.</p>
 <tip category="K3b">
 <html>
 <p>...that K3b has two types of settings. On the one hand K3b has settings like most
-KDE applications have accessable through the configuration dialog via the settings menu;
+KDE applications have accessible through the configuration dialog via the settings menu;
 on the other hand every K3b action dialog has three buttons to load and save defaults
 for that action.  This way one may, for example, set the defaults for CD Copy: these defaults
 will then be loaded every time the CD Copy dialog is opened. The button <em>K3b defaults</em>
