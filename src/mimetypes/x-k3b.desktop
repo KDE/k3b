@@ -1,7 +1,6 @@
 # KDE Config File
 [Desktop Entry]
-Encoding=UTF-8
-MimeType=application/x-k3b
+MimeType=application/x-k3b;
 Comment=K3b Project
 Comment[af]=K3b Projek
 Comment[ar]= مشروع K3b
