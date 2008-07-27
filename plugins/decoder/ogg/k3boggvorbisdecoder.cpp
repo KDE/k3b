@@ -156,7 +156,7 @@ int K3bOggVorbisDecoder::decodeInternal( char* data, int maxLen )
                               &bitStream );        // current bitstream
 
     if( bitStream != 0 ) {
-        kDebug() << "(K3bOggVorbisDecoder) bitstream != 0. Multible bitstreams not supported.";
+        kDebug() << "(K3bOggVorbisDecoder) bitstream != 0. Multiple bitstreams not supported.";
         return -1;
     }
 

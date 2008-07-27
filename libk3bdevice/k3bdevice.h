@@ -42,7 +42,7 @@ namespace K3bDevice
      *
      * Devices are constructed by the DeviceManager.
      *
-     * All methods except for open and close in Device are thread-safe which basicly means that
+     * All methods except for open and close in Device are thread-safe which basicaly means that
      * no two commands are sent to the device at the same time.
      */
     // FIXME: all methods are const which makes no sense at all!
