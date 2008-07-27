@@ -12,10 +12,10 @@
  * (at your option) any later version.
  * See the file "COPYING" for the exact licensing terms.
  */
+#include "k3bexternalencodercommand.h"
 
 #include <config-k3b.h>
 
-#include "k3bexternalencodercommand.h"
 
 #include <k3bcore.h>
 

@@ -12,6 +12,15 @@
 * See the file "COPYING" for the exact licensing terms.
 */
 
+// K3b Includes
+#include "k3bvcdlistview.h"
+#include "k3bvcdlistviewitem.h"
+#include "k3bvcdtrack.h"
+#include "k3bvcdtrackdialog.h"
+#include "k3bvcddoc.h"
+#include <k3bview.h>
+#include <k3baction.h>
+
 #include <q3header.h>
 #include <qtimer.h>
 #include <q3dragobject.h>
@@ -32,15 +41,6 @@
 #include <kmenu.h>
 #include <kdialog.h>
 #include <kactioncollection.h>
-
-// K3b Includes
-#include "k3bvcdlistview.h"
-#include "k3bvcdlistviewitem.h"
-#include "k3bvcdtrack.h"
-#include "k3bvcdtrackdialog.h"
-#include "k3bvcddoc.h"
-#include <k3bview.h>
-#include <k3baction.h>
 
 K3bVcdListView::K3bVcdListView( K3bView* view, K3bVcdDoc* doc, QWidget *parent )
         : K3bListView( parent ), m_doc( doc ), m_view( view )

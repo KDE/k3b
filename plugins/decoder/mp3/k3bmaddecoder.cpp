@@ -23,11 +23,10 @@
 // per block (2352 bytes: 32*588 bit). 1 second are 75 blocks.
 //
 
-#include <config-k3b.h>
-
 #include "k3bmaddecoder.h"
 #include "k3bmad.h"
 
+#include <config-k3b.h>
 
 #include <kurl.h>
 #include <kdebug.h>

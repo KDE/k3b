@@ -12,6 +12,15 @@
 * See the file "COPYING" for the exact licensing terms.
 */
 
+// K3b Includes
+#include "k3bvcdview.h"
+#include "k3bvcddoc.h"
+#include "k3bvcdlistview.h"
+#include "k3bvcdburndialog.h"
+#include <k3bfillstatusdisplay.h>
+#include <k3bexternalbinmanager.h>
+#include <k3bcore.h>
+
 // QT-includes
 #include <qlayout.h>
 #include <qstring.h>
@@ -22,16 +31,6 @@
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
-
-// K3b Includes
-#include "k3bvcdview.h"
-#include "k3bvcddoc.h"
-#include "k3bvcdlistview.h"
-#include "k3bvcdburndialog.h"
-#include <k3bfillstatusdisplay.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bcore.h>
-
 
 K3bVcdView::K3bVcdView( K3bVcdDoc* pDoc, QWidget* parent )
         : K3bView( pDoc, parent )

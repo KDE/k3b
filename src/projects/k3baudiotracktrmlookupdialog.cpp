@@ -12,12 +12,12 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <config-k3b.h>
-
 #ifdef HAVE_MUSICBRAINZ
 
 #include "k3baudiotracktrmlookupdialog.h"
 #include "k3bmusicbrainzjob.h"
+
+#include <config-k3b.h>
 
 #include <k3bbusywidget.h>
 #include <k3baudiotrack.h>

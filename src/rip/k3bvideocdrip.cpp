@@ -12,6 +12,12 @@
 * See the file "COPYING" for the exact licensing terms.
 */
 
+// K3b Includes
+#include "k3bvideocdrip.h"
+#include <k3bcore.h>
+#include <k3bexternalbinmanager.h>
+#include <k3bglobals.h>
+
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kio/global.h>
@@ -29,12 +35,6 @@
 #include <qtimer.h>
 #include <q3url.h>
 #include <QList>
-
-// K3b Includes
-#include "k3bvideocdrip.h"
-#include <k3bcore.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bglobals.h>
 
 K3bVideoCdRip::K3bVideoCdRip( K3bJobHandler* hdl, K3bVideoCdRippingOptions* options, QObject* parent )
   : K3bJob( hdl, parent ),

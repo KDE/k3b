@@ -13,9 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <config-k3b.h>
-
 #include "k3boggvorbisencoder.h"
+#include <config-k3b.h>
 
 #include <k3bcore.h>
 

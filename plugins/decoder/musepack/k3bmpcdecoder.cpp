@@ -13,11 +13,10 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <config-k3b.h>
-
 #include "k3bmpcdecoder.h"
 #include "k3bmpcwrapper.h"
 
+#include <config-k3b.h>
 
 #include <klocale.h>
 

@@ -12,10 +12,9 @@
  * (at your option) any later version.
  * See the file "COPYING" for the exact licensing terms.
  */
+#include "k3bffmpegwrapper.h"
 
 #include <config-k3b.h>
-
-#include "k3bffmpegwrapper.h"
 
 extern "C" {
 #include <ffmpeg/avcodec.h>

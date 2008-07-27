@@ -58,6 +58,9 @@
 %
 %
 */
+// Local
+#include "scale.h"
+
 #include "config-k3b.h"
 
 // System
@@ -78,9 +81,6 @@
 
 #include <string.h>
 #include <stdlib.h>
-
-// Local
-#include "scale.h"
 
 // everything in namespace
 namespace ImageUtils {

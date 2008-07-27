@@ -13,9 +13,9 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <config-k3b.h>
-
 #include "k3baudiometainforenamerplugin.h"
+
+#include <config-k3b.h>
 
 // the k3b stuff we need
 #include <k3bcore.h>

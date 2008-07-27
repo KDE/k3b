@@ -12,13 +12,14 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <config-k3b.h>
-
 #include "k3bdevicemanager.h"
 #include "k3bdevice.h"
 #include "k3bdeviceglobals.h"
 #include "k3bscsicommand.h"
 #include "k3bmmc.h"
+
+#include <config-k3b.h>
+
 #include "kdebug.h"
 
 #include <qstring.h>

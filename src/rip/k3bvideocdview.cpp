@@ -13,6 +13,19 @@
 * See the file "COPYING" for the exact licensing terms.
 */
 
+// k3b includes
+ #include "k3bvideocdview.h"
+#include "k3bvideocdrippingdialog.h"
+
+#include <k3bdevice.h>
+#include <k3bmsf.h>
+#include <k3btoc.h>
+#include <k3bcore.h>
+#include <k3blistview.h>
+#include <k3bstdguiitems.h>
+#include <k3baction.h>
+
+
 // kde includes
 #include <kaction.h>
 #include <kdebug.h>
@@ -36,18 +49,6 @@
 #include <qapplication.h>
 #include <QHBoxLayout>
 #include <QGridLayout>
-
-// k3b includes
-#include "k3bvideocdview.h"
-#include "k3bvideocdrippingdialog.h"
-
-#include <k3bdevice.h>
-#include <k3bmsf.h>
-#include <k3btoc.h>
-#include <k3bcore.h>
-#include <k3blistview.h>
-#include <k3bstdguiitems.h>
-#include <k3baction.h>
 
 class K3bVideoCdView::VideoTrackViewItem : public Q3ListViewItem
 {

@@ -12,11 +12,10 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <config-k3b.h>
-
 #include "k3bdirview.h"
 #include "k3bapplication.h"
 #include "k3b.h"
+#include <config-k3b.h>
 
 #include "rip/k3baudiocdview.h"
 #include "rip/k3bvideocdview.h"

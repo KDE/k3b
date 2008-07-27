@@ -12,11 +12,9 @@
  * (at your option) any later version.
  * See the file "COPYING" for the exact licensing terms.
  */
-
-#include <config-k3b.h>
-
 #include "k3boggvorbisdecoder.h"
 
+#include <config-k3b.h>
 
 #include <qfile.h>
 #include <qstringlist.h>

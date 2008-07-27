@@ -12,7 +12,6 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <config-k3b.h>
 
 #include "k3baudiotrackview.h"
 #include "k3baudiotrackviewitem.h"
@@ -32,6 +31,8 @@
 #include "k3baudiotrackaddingdialog.h"
 #include "k3baudioprojectmodel.h"
 #include "../rip/k3bviewcolumnadjuster.h"
+
+#include <config-k3b.h>
 
 #include <k3bview.h>
 #include <k3blistviewitemanimator.h>

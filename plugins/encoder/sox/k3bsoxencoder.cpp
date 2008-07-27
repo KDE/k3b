@@ -13,9 +13,9 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <config-k3b.h>
-
 #include "k3bsoxencoder.h"
+
+#include <config-k3b.h>
 
 #include <k3bprocess.h>
 #include <k3bcore.h>

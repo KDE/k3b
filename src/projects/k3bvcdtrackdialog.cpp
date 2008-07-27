@@ -13,6 +13,12 @@
 * See the file "COPYING" for the exact licensing terms.
 */
 
+// K3b Includes
+#include "k3bvcdtrackdialog.h"
+#include "k3bvcdtrack.h"
+#include <k3bmsf.h>
+#include <k3bglobals.h>
+
 // Qt Includes
 #include <q3buttongroup.h>
 #include <qcheckbox.h>
@@ -39,12 +45,6 @@
 #include <knuminput.h>
 #include <kurl.h>
 #include <ksqueezedtextlabel.h>
-
-// K3b Includes
-#include "k3bvcdtrackdialog.h"
-#include "k3bvcdtrack.h"
-#include <k3bmsf.h>
-#include <k3bglobals.h>
 #include <kvbox.h>
 
 

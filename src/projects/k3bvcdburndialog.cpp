@@ -13,6 +13,20 @@
 * See the file "COPYING" for the exact licensing terms.
 */
 
+#include "k3bvcdburndialog.h"
+#include "k3bvcddoc.h"
+#include "k3bvcdoptions.h"
+#include <k3bdevice.h>
+#include <k3bcore.h>
+#include <k3bwriterselectionwidget.h>
+#include <k3btempdirselectionwidget.h>
+#include <k3bstdguiitems.h>
+#include <k3bglobals.h>
+#include <k3bwritingmodewidget.h>
+#include <k3bexternalbinmanager.h>
+#include <k3bvalidators.h>
+
+
 #include <qcheckbox.h>
 #include <qgroupbox.h>
 #include <qspinbox.h>
@@ -36,20 +50,6 @@
 #include <kstandarddirs.h>
 #include <kio/global.h>
 #include <kapplication.h>
-
-#include "k3bvcdburndialog.h"
-#include "k3bvcddoc.h"
-#include "k3bvcdoptions.h"
-#include <k3bdevice.h>
-#include <k3bcore.h>
-#include <k3bwriterselectionwidget.h>
-#include <k3btempdirselectionwidget.h>
-#include <k3bstdguiitems.h>
-#include <k3bglobals.h>
-#include <k3bwritingmodewidget.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bvalidators.h>
-
 
 K3bVcdBurnDialog::K3bVcdBurnDialog( K3bVcdDoc* _doc, QWidget *parent )
     : K3bProjectBurnDialog( _doc, parent )

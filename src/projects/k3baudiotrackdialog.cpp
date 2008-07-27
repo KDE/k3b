@@ -12,22 +12,6 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-
-#include <QGridLayout>
-
-#include <kiconloader.h>
-#include <klocale.h>
-#include <knuminput.h>
-#include <kmimetype.h>
-#include <kurl.h>
-#include <kio/global.h>
-#include <klineedit.h>
-
 #include "k3baudiotrackdialog.h"
 #include "k3baudioeditorwidget.h"
 #include "k3baudiotrackwidget.h"
@@ -37,6 +21,20 @@
 #include <k3bcdtextvalidator.h>
 #include <k3baudiodecoder.h>
 #include <k3bmsfedit.h>
+
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qcheckbox.h>
+#include <qcombobox.h>
+#include <QGridLayout>
+
+#include <kiconloader.h>
+#include <klocale.h>
+#include <knuminput.h>
+#include <kmimetype.h>
+#include <kurl.h>
+#include <kio/global.h>
+#include <klineedit.h>
 #include <kvbox.h>
 
 

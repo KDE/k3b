@@ -12,10 +12,9 @@
  * (at your option) any later version.
  * See the file "COPYING" for the exact licensing terms.
  */
+#include "k3baudioprojectcddbplugin.h"
 
 #include <config-k3b.h>
-
-#include "k3baudioprojectcddbplugin.h"
 
 // the k3b stuff we need
 #include <k3bcore.h>

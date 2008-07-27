@@ -20,7 +20,6 @@
 #include <k3bmediaselectiondialog.h>
 #include <k3bdevice.h>
 #include <k3bdevicemanager.h>
-#include <k3bdevice.h>
 #include <k3bmsf.h>
 #include <k3bradioaction.h>
 #include <k3bmediacache.h>

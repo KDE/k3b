@@ -12,8 +12,6 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <k3bglobals.h>
-
 #include "k3bdataurladdingdialog.h"
 #include "k3bencodingconverter.h"
 

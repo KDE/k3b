@@ -12,15 +12,14 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <config-k3b.h>
-
 #include "k3baudioview.h"
 #include "k3baudiotrackview.h"
-#include "k3baudioburndialog.h"
 //#include "k3baudiotrackplayer.h"
 #include "k3baudioburndialog.h"
 #include "k3baudiotrackaddingdialog.h"
 #include <k3bapplication.h>
+
+#include <config-k3b.h>
 
 #include <k3baudiodoc.h>
 #include <k3baudiotrack.h>

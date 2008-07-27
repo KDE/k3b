@@ -11,10 +11,9 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include "k3bflacdecoder.h"
 #include <config-k3b.h>
 #include <config-flac.h>
-#include "k3bflacdecoder.h"
-
 
 #include <qbuffer.h>
 #include <qfile.h>

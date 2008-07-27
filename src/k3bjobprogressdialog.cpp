@@ -18,7 +18,6 @@
 #include "k3bemptydiscwaiter.h"
 #include "k3bjobprogressosd.h"
 #include "k3bdebuggingoutputdialog.h"
-#include "k3bapplication.h"
 //#include "k3bjobinterface.h"
 #include "k3bthemedlabel.h"
 #include <k3bjob.h>

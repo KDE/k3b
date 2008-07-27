@@ -25,7 +25,6 @@
 #include <klocale.h>
 #include <k3listview.h>
 #include <klocale.h>
-#include <kglobal.h>
 #include <kurlrequester.h>
 #include <kcombobox.h>
 #include <klineedit.h>

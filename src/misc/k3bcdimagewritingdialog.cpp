@@ -12,8 +12,6 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <config-k3b.h>
-
 #include "k3bcdimagewritingdialog.h"
 #include "k3biso9660imagewritingjob.h"
 #include "k3bbinimagewritingjob.h"
@@ -21,6 +19,8 @@
 #include "k3bclonetocreader.h"
 #include "k3baudiocuefilewritingjob.h"
 #include <k3bclonejob.h>
+
+#include <config-k3b.h>
 
 #include <k3btempdirselectionwidget.h>
 #include <k3bdevicemanager.h>

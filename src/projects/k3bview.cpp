@@ -12,10 +12,19 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+// application specific includes
+#include "k3bview.h"
+#include "k3bdoc.h"
+#include "k3bfillstatusdisplay.h"
+#include "k3bprojectburndialog.h"
+#include "k3bprojectplugindialog.h"
+#include <k3bpluginmanager.h>
+#include <k3bprojectplugin.h>
+#include <k3bcore.h>
+#include "k3baction.h"
 
 // include files for Qt
 #include <qlayout.h>
-#include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <q3whatsthis.h>
 #include <qlist.h>
@@ -28,18 +37,6 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <ktoolbar.h>
-
-// application specific includes
-#include "k3bview.h"
-#include "k3bdoc.h"
-#include "k3bfillstatusdisplay.h"
-#include "k3bprojectburndialog.h"
-#include "k3bprojectplugindialog.h"
-#include <k3bpluginmanager.h>
-#include <k3bprojectplugin.h>
-#include <k3bcore.h>
-#include "k3baction.h"
-
 
 K3bView::K3bView( K3bDoc* pDoc, QWidget *parent )
     : QWidget( parent ),

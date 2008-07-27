@@ -12,10 +12,10 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <config-k3b.h>
-
 #include "k3bcdtext.h"
 #include "k3bcrc.h"
+
+#include <config-k3b.h>
 
 #include <kdebug.h>
 

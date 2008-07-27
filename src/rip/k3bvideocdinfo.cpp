@@ -12,7 +12,7 @@
 * See the file "COPYING" for the exact licensing terms.
 */
 
-
+#include "k3bvideocdinfo.h"
 
 #include <qstring.h>
 #include <q3valuelist.h>
@@ -23,8 +23,6 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kdebug.h>
-
-#include "k3bvideocdinfo.h"
 
 #include <k3bprocess.h>
 #include <k3bexternalbinmanager.h>
