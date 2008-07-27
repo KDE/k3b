@@ -564,8 +564,9 @@ bool K3b::unmount( K3bDevice::Device* dev )
         mntPath = dev->blockDeviceName();
     }
 
-    if ( dev->solidDevice().as<Solid::StorageAccess>()->teardown() ) {
-        return true;
+    Solid::StorageAccess *sa = dev->solidDevice().as<Solid::StorageAccess>();
+    if ( sa && sa->teardown() ){
+	    return true;
     }
 
     QString umountBin = K3b::findExe( "umount" );
@@ -607,8 +608,7 @@ bool K3b::mount( K3bDevice::Device* dev )
         return true;
 
     Solid::StorageAccess *sa = dev->solidDevice().as<Solid::StorageAccess>();
-    if (sa && sa->setup())
-    {
+    if ( sa && sa->setup() ) {
         return true;
     }
 
