@@ -16,6 +16,7 @@
 #define _K3B_VIDEOCD_OPTIONS_H_
 
 #include <qstring.h>
+#include <klocalizedstring.h>
 
 class K3bVideoCdRippingOptions
 {
