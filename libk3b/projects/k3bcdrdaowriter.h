@@ -24,7 +24,6 @@
 
 class K3bExternalBin;
 class K3bProcess;
-class K3bDevice::Device;
 class Q3Socket;
 
 

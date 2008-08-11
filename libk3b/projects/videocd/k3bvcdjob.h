@@ -24,7 +24,6 @@ class QString;
 class K3bProcess;
 class K3Process;
 class K3bAbstractWriter;
-class K3bDevice::Device;
 class K3bDoc;
 
 class K3bVcdJob : public K3bBurnJob

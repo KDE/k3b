@@ -28,7 +28,6 @@ class K3bFileItem;
 class QTextStream;
 class K3bProcess;
 class K3Process;
-class K3bDevice::Device;
 class KTemporaryFile;
 
 

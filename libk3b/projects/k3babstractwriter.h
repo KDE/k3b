@@ -21,7 +21,6 @@
 
 #include <qdatetime.h>
 
-class K3bDevice::Device;
 class K3bJobHandler;
 
 
