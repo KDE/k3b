@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Application
 Exec=k3b %U
 Icon=k3b
@@ -117,5 +116,5 @@ Name[xx]=xxK3bxx
 MimeType=application/x-k3b;
 X-KDE-StartupNotify=true
 X-KDE-NativeMimeType=application/x-k3b;application/x-iso
-Categories=KDE;Application;AudioVideo;DiscBurning;
+Categories=KDE;Qt;AudioVideo;DiscBurning;
 X-DBUS-ServiceType=Unique
