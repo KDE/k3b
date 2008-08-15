@@ -116,7 +116,7 @@ void K3bSplash::addInfo( const QString& s )
 
 //   QString line1 = QString( "K3b version %1" ).arg(VERSION);
 //   QString line2( "(c) 2001 by Sebastian Trueg" );
-//   QString line3( "licenced under the GPL" );
+//   QString line3( "licensed under the GPL" );
 
 //   QRect rect1 = fm.boundingRect( line1 );
 //   QRect rect2 = fm.boundingRect( line2 );

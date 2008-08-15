@@ -60,7 +60,7 @@ namespace K3bDevice {
       static HalConnection* instance();
 
       /**
-       * \return true if a connection to the HAL deamon could be established and
+       * \return true if a connection to the HAL daemon could be established and
        *         communication has been set up.
        */
       bool isConnected() const;
@@ -81,7 +81,7 @@ namespace K3bDevice {
       void removeDevice( const char* udi );
 
       /**
-       * Error codes named as the HAL deamon raises them
+       * Error codes named as the HAL daemon raises them
        */
       enum ErrorCodes {
 	org_freedesktop_Hal_Success = 0, //*< The operation was successful. This code does not match any in HAL
@@ -105,7 +105,7 @@ namespace K3bDevice {
       /**
        * Lock the device in HAL
        * 
-       * Be aware that once the method returns the HAL deamon has not necessarily 
+       * Be aware that once the method returns the HAL daemon has not necessarily 
        * finished the procedure yet.
        *
        * \param dev The device to lock
@@ -118,7 +118,7 @@ namespace K3bDevice {
       /**
        * Unlock a previously locked device in HAL
        * 
-       * Be aware that once the method returns the HAL deamon has not necessarily 
+       * Be aware that once the method returns the HAL daemon has not necessarily 
        * finished the procedure yet.
        *
        * \param dev The device to lock
@@ -131,7 +131,7 @@ namespace K3bDevice {
       /**
        * Mounts a device via HAL
        * 
-       * Be aware that once the method returns the HAL deamon has not necessarily 
+       * Be aware that once the method returns the HAL daemon has not necessarily 
        * finished the procedure yet.
        *
        * \param dev The device to lock
@@ -147,7 +147,7 @@ namespace K3bDevice {
       /**
        * Unmounts a device via HAL
        * 
-       * Be aware that once the method returns the HAL deamon has not necessarily 
+       * Be aware that once the method returns the HAL daemon has not necessarily 
        * finished the procedure yet.
        *
        * \param dev The device to lock
@@ -161,7 +161,7 @@ namespace K3bDevice {
       /**
        * Unmounts a device via HAL
        * 
-       * Be aware that once the method returns the HAL deamon has not necessarily 
+       * Be aware that once the method returns the HAL daemon has not necessarily 
        * finished the procedure yet.
        *
        * \param dev The device to lock

@@ -120,7 +120,7 @@ void K3bAdvancedOptionTab::setupGui()
                                         "maximum is not always the actual maximum. Many media have an "
                                         "actual total capacity that is slightly larger than the official amount."
                                         "<p>If this option is checked K3b will disable a safety check that prevents "
-                                        "burning beyond the offical capacity."
+                                        "burning beyond the official capacity."
                                         "<p><b>Caution:</b> Enabling this option can cause failures in the end of the "
                                         "burning process if K3b attempts to write beyond the official capacity. It "
                                         "makes sense to first determine the actual maximum capacity of the media brand "

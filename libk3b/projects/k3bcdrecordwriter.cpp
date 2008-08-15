@@ -733,7 +733,7 @@ void K3bCdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus ex
                 }
                 break;
             case BAD_OPTION:
-                // error message has already been emited earlier since we needed the actual line
+                // error message has already been emitted earlier since we needed the actual line
                 break;
             case SHMGET_FAILED:
                 emit infoMessage( i18n("%1 could not reserve shared memory segment of requested size.",m_cdrecordBinObject->name()), ERROR );

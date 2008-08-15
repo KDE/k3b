@@ -21,7 +21,7 @@
 class K3bAudioDecoder;
 
 /**
- * A simple convinience class that runs K3bAudioDecoder::analyseFile
+ * A simple convenience   class that runs K3bAudioDecoder::analyseFile
  * in a different thread.
  */
 class LIBK3B_EXPORT K3bAudioFileAnalyzerJob : public K3bThreadJob

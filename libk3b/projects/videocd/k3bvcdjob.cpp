@@ -490,7 +490,7 @@ void K3bVcdJob::slotWriterJobFinished( bool success )
 
     if ( success ) {
         // allright
-        // the writerJob should have emited the "simulation/writing successful" signal
+        // the writerJob should have emitted the "simulation/writing successful" signal
         if ( m_currentcopy >= m_doc->copies() ) {
             if ( k3bcore->globalSettings()->ejectMedia() ) {
                 K3bDevice::eject( m_doc->burner() );

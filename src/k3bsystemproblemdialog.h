@@ -73,7 +73,7 @@ class K3bSystemProblemDialog : public KDialog
  public:
   /**
    * Determines if the system problem dialog should be shown or not.
-   * It basicly reads a config entry. But in addition it
+   * It basicaly reads a config entry. But in addition it
    * always forces the system check if a new version has been installed
    * or K3b is started for the first time.
    */

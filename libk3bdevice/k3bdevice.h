@@ -467,7 +467,7 @@ namespace K3bDevice
                                 unsigned int mediaType = 0x0,
                                 unsigned int format = 0x0,
                                 unsigned int layer = 0x0,
-                                unsigned long adress = 0,
+                                unsigned long address = 0,
                                 unsigned int agid = 0x0 ) const;
 
         /**
@@ -477,7 +477,7 @@ namespace K3bDevice
         bool readDvdStructure( unsigned char** data, unsigned int& dataLen, 
                                unsigned int format = 0x0,
                                unsigned int layer = 0x0,
-                               unsigned long adress = 0,
+                               unsigned long address = 0,
                                unsigned int agid = 0x0 ) const;
 
         /**
@@ -632,7 +632,7 @@ namespace K3bDevice
         /**
          * Retrieve the next writable address from the currently mounted writable medium.
          * \return The next writable address if the medium is empty or appendable or -1
-         * if an error occured.
+         * if an error occurred.
          */
         int nextWritableAddress() const;
 

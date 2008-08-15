@@ -123,7 +123,7 @@ Q_SIGNALS:
     void mediumChanged( K3bDevice::Device* dev );
 
     /**
-     * Emitted when the cache analyses a new medium. This might be emitted multiple times
+     * Emitted when the cache analysis a new medium. This might be emitted multiple times
      * with different messages.
      *
      * \param dev The device being analysed.

@@ -244,7 +244,7 @@ void K3bMixedJob::startFirstCopy()
             //
             // try to determine the max possible speed
             // no need to check the data track's max speed. Most current systems are able
-            // to handle the maxium possible
+            // to handle the maximum possible
             //
             if( !d->maxSpeedJob ) {
                 // the maxspeed job gets the device from the doc:

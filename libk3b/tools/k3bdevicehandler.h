@@ -181,7 +181,7 @@ namespace K3bDevice
      * \endcode
      *
      * Be aware that the DeviceHandler will get destroyed once the signal has been 
-     * emited.
+     * emitted.
      */
     LIBK3B_EXPORT DeviceHandler* sendCommand( int command, Device* );
 

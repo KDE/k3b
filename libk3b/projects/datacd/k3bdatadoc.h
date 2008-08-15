@@ -145,7 +145,7 @@ public:
     K3bDirItem* bootImageDir();
 
     /**
-     * Create a boot item and also create a boot cataloge file in case none
+     * Create a boot item and also create a boot catalogue file in case none
      * exists in the project.
      *
      * Calling this method has the same effect like creating a new K3bBootItem 

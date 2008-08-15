@@ -201,7 +201,7 @@ void K3bTitleLabel::updatePositioning()
 
 
     //
-    // determine the minimum width for the minumum size hint
+    // determine the minimum width for the minimum size hint
     //
     d->cachedMinimumWidth = 2*d->margin;
 

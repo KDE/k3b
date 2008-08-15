@@ -397,7 +397,7 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 
     if( success ) {
         // allright
-        // the writerJob should have emited the "simulation/writing successful" signal
+        // the writerJob should have emitted the "simulation/writing successful" signal
 
         if( d->doc->verifyData() ) {
             if( !d->verificationJob ) {

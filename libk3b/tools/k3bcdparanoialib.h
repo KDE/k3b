@@ -112,7 +112,7 @@ class LIBK3B_EXPORT K3bCdparanoiaLib
    * machine type.
    *
    * \return The read sector data or 0 if all data within the specified range
-   *         has been read or an error has occured.
+   *         has been read or an error has occurred.
    */
   char* read( int* statusCode = 0, unsigned int* track = 0, bool littleEndian = true );
 

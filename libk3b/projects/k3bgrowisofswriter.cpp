@@ -549,7 +549,7 @@ void K3bGrowisofsWriter::slotProcessExited( int exitCode, QProcess::ExitStatus )
 
     d->finished = true;
 
-    // it seems that growisofs sometimes exits with a valid exit code while a write error occured
+    // it seems that growisofs sometimes exits with a valid exit code while a write error occurred
     if( (exitCode == 0) && d->gh->error() != K3bGrowisofsHandler::ERROR_WRITE_FAILED ) {
 
         int s = d->speedEst->average();

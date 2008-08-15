@@ -866,10 +866,10 @@ bool K3bDevice::Device::readDiscInformation( unsigned char** data, unsigned int&
 bool K3bDevice::Device::readDvdStructure( unsigned char** data, unsigned int& dataLen,
                                           unsigned int format,
                                           unsigned int layer,
-                                          unsigned long adress,
+                                          unsigned long address,
                                           unsigned int agid ) const
 {
-    return readDiscStructure( data, dataLen, 0x0, format, layer, adress, agid );
+    return readDiscStructure( data, dataLen, 0x0, format, layer, address, agid );
 }
 
 
@@ -877,7 +877,7 @@ bool K3bDevice::Device::readDiscStructure( unsigned char** data, unsigned int& d
                                            unsigned int mediaType,
                                            unsigned int format,
                                            unsigned int layer,
-                                           unsigned long adress,
+                                           unsigned long address,
                                            unsigned int agid ) const
 {
     unsigned char header[4];
@@ -886,10 +886,10 @@ bool K3bDevice::Device::readDiscStructure( unsigned char** data, unsigned int& d
     ScsiCommand cmd( this );
     cmd[0] = MMC_READ_DVD_STRUCTURE;
     cmd[1] = mediaType & 0xF;
-    cmd[2] = adress>>24;
-    cmd[3] = adress>>16;
-    cmd[4] = adress>>8;
-    cmd[5] = adress;
+    cmd[2] = address>>24;
+    cmd[3] = address>>16;
+    cmd[4] = address>>8;
+    cmd[5] = address;
     cmd[6] = layer;
     cmd[7] = format;
     cmd[10] = (agid<<6);

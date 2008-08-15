@@ -68,7 +68,7 @@ public Q_SLOTS:
     void determineSupportedModesFromMedium( const K3bMedium& m );
 
     /**
-     * Convinience method. Does the same as the one above.
+     * Convenience method. Does the same as the one above.
      *
      * \param dev The device which contains the medium. May even be 0 in
      *            which case only the auto mode will be selected.

@@ -159,7 +159,7 @@ public Q_SLOTS:
 
 protected:
     /**
-     * Reimplement this to add additonal checks.
+     * Reimplement this to add additional checks.
      *
      * This method is thread safe. blockDevice makes sure
      * it is only executed in the GUI thread.

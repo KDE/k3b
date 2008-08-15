@@ -42,9 +42,9 @@
 //    1. Only one track with only one source
 //         show decoder tech info, cdtext, options and the track editor without showing anything
 //         about sources
-//    2. Only one track with multible sources
-//         like the above but with the possiblity to edit the sources
-//    3. multible tracks
+//    2. Only one track with multiple sources
+//         like the above but with the possibility to edit the sources
+//    3. multiple tracks
 //         do only show cd-text and options (eventuelle index0)
 
 
