@@ -99,7 +99,7 @@ K3bWelcomeWidget::Display::Display( K3bWelcomeWidget* parent )
     setAcceptDrops( true );
     m_rows = m_cols = 1;
 
-    m_buttonMore = new K3bFlatButton( i18n("Further actions..."), this );
+    m_buttonMore = new K3bFlatButton( i18n("More actions..."), this );
     connect( m_buttonMore, SIGNAL(pressed()), parent, SLOT(slotMoreActions()) );
 
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
