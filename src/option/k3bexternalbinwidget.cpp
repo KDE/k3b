@@ -206,6 +206,7 @@ void K3bExternalBinWidget::rescan()
 
 void K3bExternalBinWidget::load()
 {
+    m_programView->clear();
     m_programRootItems.clear();
     m_parameterView->clear();
 
