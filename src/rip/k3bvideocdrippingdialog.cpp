@@ -168,7 +168,7 @@ void K3bVideoCdRippingDialog::slotStartClicked()
             }
         }
     }
-    foreach( QFileInfo fi, d.entryInfoList() )
+    foreach( const QFileInfo& fi, d.entryInfoList() )
     {
         if ( fi.fileName() != "." && fi .fileName() != ".." )
             filesExists.append( QString( "%1 (%2)" ).arg( QString(QFile::encodeName( fi.fileName() )) ).arg( KIO::convertSize( fi.size() ) ) );
