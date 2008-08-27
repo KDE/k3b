@@ -32,10 +32,7 @@ k3b_LDADD = ./option/liboption.la ./rip/librip.la \
 
 SUBDIRS = option misc rip projects fastscale pics icons konqi mimetypes sounds
 
-xdg_apps_DATA = k3b.desktop
-
-silent_DATA = k3b-iso.desktop k3b-cue.desktop
-silentdir = $(kde_appsdir)/.hidden/
+xdg_apps_DATA = k3b.desktop k3b-iso.desktop k3b-cue.desktop
 
 ###################
 # this 10 paths are KDE specific. Use them:
