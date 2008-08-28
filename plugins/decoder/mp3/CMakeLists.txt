@@ -9,7 +9,7 @@ kde4_add_plugin(k3bmaddecoder
   ${k3bmaddecoder_PART_SRCS})
 
 target_link_libraries(k3bmaddecoder
-  k3b
+  k3b k3bdevice
   ${KDE4_KDECORE_LIBS}
   ${MAD_LIBRARIES} )
 

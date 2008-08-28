@@ -11,7 +11,7 @@ kde4_add_plugin(kcm_k3blameencoder
   ${k3blameencoderconfig_PART_SRCS})
 
 target_link_libraries(kcm_k3blameencoder
-  ${KDE4_KDECORE_LIBS}
+  ${KDE4_KDECORE_LIBS} k3bdevice
   k3b)
 
 
@@ -21,7 +21,7 @@ kde4_add_plugin(k3blameencoder
 
 target_link_libraries(k3blameencoder
   ${KDE4_KDECORE_LIBS}
-  k3b
+  k3b k3bdevice
   mp3lame)
 
 install(TARGETS

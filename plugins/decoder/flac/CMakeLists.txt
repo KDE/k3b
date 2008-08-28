@@ -22,7 +22,7 @@ set(k3bflacdecoder_PART_SRCS k3bflacdecoder.cpp )
 kde4_add_plugin(k3bflacdecoder ${k3bflacdecoder_PART_SRCS})
 
 target_link_libraries(k3bflacdecoder
-  k3b
+  k3b k3bdevice
   ${KDE4_KDEUI_LIBS}
   ${FLAC++_LIBRARIES}
   ${FLAC_LIBRARIES} )
