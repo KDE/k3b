@@ -11,8 +11,12 @@ kde4_add_plugin(kcm_k3blameencoder
   ${k3blameencoderconfig_PART_SRCS})
 
 target_link_libraries(kcm_k3blameencoder
-  ${KDE4_KDECORE_LIBS} k3bdevice
-  k3b)
+  k3bdevice
+  k3b
+  ${KDE4_KDECORE_LIBS}
+  ${KDE4_KDEUI_LIBS}
+  ${QT_QTGUI_LIBRARY}
+  ${QT_QT3SUPPORT_LIBRARY})
 
 
 # Plugin
