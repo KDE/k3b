@@ -267,7 +267,7 @@ llong K3bMpegInfo::MpegParsePacket ( llong offset )
                     // _analyze_video_pes (code & 0xff, buf + pos, size, !parse_pes, ctx);
                     if ( mpeg_info->has_video && mpeg_info->has_audio ) {
                         return -1;
-                    } else if ( mark == MPEG_VIDEO_E0_CODE || mpeg_info->version == MPEG_VERS_MPEG2 && mark == MPEG_VIDEO_E1_CODE || mpeg_info->version == MPEG_VERS_MPEG1 && mark == MPEG_VIDEO_E2_CODE ) {
+                    } else if ( mark == MPEG_VIDEO_E0_CODE || (mpeg_info->version == MPEG_VERS_MPEG2 && mark == MPEG_VIDEO_E1_CODE) || (mpeg_info->version == MPEG_VERS_MPEG1 && mark == MPEG_VIDEO_E2_CODE) ) {
                         mpeg_info->has_video = true;
                         offset = FindNextAudio( offset );
                     }

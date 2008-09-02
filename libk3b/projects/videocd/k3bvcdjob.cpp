@@ -107,7 +107,7 @@ void K3bVcdJob::cancelAll()
 
     // remove bin-file if it is unfinished or the user selected to remove image
     if ( QFile::exists( m_doc->vcdImage() ) ) {
-        if ( !m_doc->onTheFly() && m_doc->removeImages() || !m_imageFinished ) {
+        if ( (!m_doc->onTheFly() && m_doc->removeImages()) || !m_imageFinished ) {
             emit infoMessage( i18n( "Removing Binary file %1" , m_doc->vcdImage() ), K3bJob::SUCCESS );
             QFile::remove
                 ( m_doc->vcdImage() );
@@ -117,7 +117,7 @@ void K3bVcdJob::cancelAll()
 
     // remove cue-file if it is unfinished or the user selected to remove image
     if ( QFile::exists( m_cueFile ) ) {
-        if ( !m_doc->onTheFly() && m_doc->removeImages() || !m_imageFinished ) {
+        if ( (!m_doc->onTheFly() && m_doc->removeImages()) || !m_imageFinished ) {
             emit infoMessage( i18n( "Removing Cue file %1" , m_cueFile ), K3bJob::SUCCESS );
             QFile::remove
                 ( m_cueFile );
@@ -469,7 +469,7 @@ void K3bVcdJob::slotWriterJobFinished( bool success )
     if ( m_currentcopy >= m_doc->copies() ) {
         // remove bin-file if it is unfinished or the user selected to remove image
         if ( QFile::exists( m_doc->vcdImage() ) ) {
-            if ( !m_doc->onTheFly() && m_doc->removeImages() || !m_imageFinished ) {
+            if ( (!m_doc->onTheFly() && m_doc->removeImages()) || !m_imageFinished ) {
                 emit infoMessage( i18n( "Removing Binary file %1" , m_doc->vcdImage() ), K3bJob::SUCCESS );
                 QFile::remove
                     ( m_doc->vcdImage() );
@@ -479,7 +479,7 @@ void K3bVcdJob::slotWriterJobFinished( bool success )
 
         // remove cue-file if it is unfinished or the user selected to remove image
         if ( QFile::exists( m_cueFile ) ) {
-            if ( !m_doc->onTheFly() && m_doc->removeImages() || !m_imageFinished ) {
+            if ( (!m_doc->onTheFly() && m_doc->removeImages()) || !m_imageFinished ) {
                 emit infoMessage( i18n( "Removing Cue file %1" , m_cueFile ), K3bJob::SUCCESS );
                 QFile::remove
                     ( m_cueFile );

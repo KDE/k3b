@@ -942,8 +942,8 @@ bool K3bDevice::Device::readFormattedToc( K3bDevice::Toc& toc, int mt ) const
                 toc[i].setFreeBlocks( from4Byte( trackInfo->free_blocks ) );
             }
 
-            toc[i].setSession( (int)(trackInfo->session_number_m<<8 & 0xf0 |
-                                     trackInfo->session_number_l & 0x0f) );  //FIXME: is this BCD?
+            toc[i].setSession( (int)((trackInfo->session_number_m<<8 & 0xf0) |
+                                     (trackInfo->session_number_l & 0x0f)) );  //FIXME: is this BCD?
 
             int control = trackInfo->track_mode;
 

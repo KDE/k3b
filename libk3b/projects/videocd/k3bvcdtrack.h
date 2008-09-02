@@ -148,11 +148,11 @@ class LIBK3B_EXPORT K3bVcdTrack
         {
             return SecsToHMS( mpeg_info->playing_time );
         };
-        const int version()
+        int version()
         {
             return mpeg_info->version;
         };
-        const unsigned long muxrate()
+        unsigned long muxrate()
         {
             return mpeg_info->muxrate;
         };
@@ -161,7 +161,7 @@ class LIBK3B_EXPORT K3bVcdTrack
         QString audio_mode( );
         QString audio_copyright( );
         QString mpegTypeS( bool audio = false );
-        const int mpegType();
+        int mpegType();
 
         void PrintInfo();
 

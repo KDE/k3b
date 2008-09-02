@@ -806,9 +806,9 @@ bool K3bDevice::Device::readFormatCapacity( int wantedFormat, K3b::Msf& r,
             int format = (int)((buffer[i+4]>>2)&0x3f);
             kDebug() << "(K3bDevice::Device) " << blockDeviceName() << " READ FORMAT CAPACITY: "
                      << format << " " << from4Byte( &buffer[i] )
-                     << " " << (int)( buffer[i+5] << 16 & 0xFF0000 |
-                                      buffer[i+6] << 8  & 0xFF00 |
-                                      buffer[i+7]       & 0xFF ) << endl;
+                     << " " << (int)( (buffer[i+5] << 16 & 0xFF0000) |
+                                      (buffer[i+6] << 8  & 0xFF00) |
+                                      (buffer[i+7]       & 0xFF) ) << endl;
 
             if( format == wantedFormat ) {
                 // found the descriptor

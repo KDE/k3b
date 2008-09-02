@@ -108,8 +108,7 @@ namespace K3b
     LIBK3BDEVICE_EXPORT bool operator<=( const Msf&, const Msf& );
     LIBK3BDEVICE_EXPORT bool operator>=( const Msf&, const Msf& );
 
-    LIBK3BDEVICE_EXPORT kdbgstream& operator<<( kdbgstream&, const Msf& );
-    LIBK3BDEVICE_EXPORT inline kndbgstream& operator<<( kndbgstream &stream, const Msf& ) { return stream; }
+    LIBK3BDEVICE_EXPORT QDebug& operator<<( QDebug&, const Msf& );
 }
 
 #endif

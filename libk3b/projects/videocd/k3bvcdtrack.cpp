@@ -316,12 +316,15 @@ QString K3bVcdTrack::audio_mode( )
 QString K3bVcdTrack::audio_copyright( )
 {
     if ( mpeg_info->has_audio ) {
-        for ( int i = 2; i >= 0; i-- )
+        for ( int i = 2; i >= 0; i-- ) {
             if ( mpeg_info->audio[ i ].seen )
+            {
                 if ( mpeg_info->audio[ i ].copyright )
                     return QString( "(c) " ) + ( mpeg_info->audio[ i ].original ? i18n( "original" ) : i18n( "duplicate" ) );
                 else
                     return ( mpeg_info->audio[ i ].original ? i18n( "original" ) : i18n( "duplicate" ) );
+            }
+        }
     }
 
     return i18n( "n/a" );
@@ -349,7 +352,7 @@ QString K3bVcdTrack::mpegTypeS( bool audio )
     return i18n( "n/a" );
 }
 
-const int K3bVcdTrack::mpegType( )
+int K3bVcdTrack::mpegType( )
 {
     if ( mpeg_info->has_video ) {
         for ( int i = 0; i < 3; i++ )

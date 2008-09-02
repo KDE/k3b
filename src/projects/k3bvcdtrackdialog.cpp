@@ -166,7 +166,7 @@ void K3bVcdTrackDialog::slotApply()
 
                 QMap<QString, K3bVcdTrack*>::Iterator mit;
                 mit = m_numkeysmap.find( it.current() ->text( 1 ) );
-                if ( mit != m_numkeysmap.end() )
+                if ( mit != m_numkeysmap.end() ) {
                     if ( *mit ) {
                         selectedTrack->setDefinedNumKey( it.current() ->text( 0 ).toInt(), mit.value() );
                         kDebug() << "Key " << it.current() ->text( 0 ).toInt() << " Playing: " << it.current() ->text( 1 ) << "Track: " << mit.value();
@@ -174,6 +174,7 @@ void K3bVcdTrackDialog::slotApply()
                         selectedTrack->setDefinedNumKey( it.current() ->text( 0 ).toInt(), 0L );
                         kDebug() << "Key " << it.current() ->text( 0 ).toInt() << " Playing: " << it.current() ->text( 1 );
                     }
+                }
             }
             ++it;
         }

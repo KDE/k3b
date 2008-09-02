@@ -443,7 +443,7 @@ bool K3bCueFileParser::findImageFileName( const QString& dataFile )
     int cnt = 0;
     for( QStringList::const_iterator it = possibleImageFiles.constBegin(); it != possibleImageFiles.constEnd(); ++it ) {
         if( (*it).toLower() == dataFile.section( '/', -1 ).toLower() ||
-            (*it).startsWith( filenamePrefix ) && !(*it).endsWith( "cue" ) ) {
+            ((*it).startsWith( filenamePrefix ) && !(*it).endsWith( "cue" )) ) {
             ++cnt;
             setImageFilename( K3b::parentDir(filename()) + *it );
         }

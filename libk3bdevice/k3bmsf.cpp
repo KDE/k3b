@@ -396,7 +396,7 @@ bool K3b::operator>=( const K3b::Msf& m1, const K3b::Msf& m2 )
 }
 
 
-kdbgstream& K3b::operator<<( kdbgstream& s, const Msf& m )
+QDebug& K3b::operator<<( QDebug& s, const Msf& m )
 {
     return s << m.toString();
 }

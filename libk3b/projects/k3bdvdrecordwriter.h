@@ -18,7 +18,9 @@
 #include "k3bcdrecordwriter.h"
 
 
-class K3bDevice::Device;
+namespace K3bDevice {
+    class Device;
+}
 
 /**
  * Basically this is just a wrapper around K3bCdrecordWriter

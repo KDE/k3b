@@ -209,7 +209,7 @@ namespace {
         s += "<td>";
         if( track.type() == K3bTrack::AUDIO )
             s += QString( "%1 (%2)" ).arg(track.index0().toString()).arg(track.index0().lba());
-        s += "</td>"
+        s += "</td>";
 #endif
 
         s += "</tr>";

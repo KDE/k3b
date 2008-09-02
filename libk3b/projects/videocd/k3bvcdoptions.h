@@ -112,39 +112,39 @@ public:
         return m_volumeNumber;
     }
 
-    const bool AutoDetect() const
+    bool AutoDetect() const
     {
         return m_autodetect;
     }
-    const bool CdiSupport() const
+    bool CdiSupport() const
     {
         return m_cdisupport;
     }
-    const bool NonCompliantMode() const
+    bool NonCompliantMode() const
     {
         return m_brokensvcdmode;
     }
-    const bool VCD30interpretation() const
+    bool VCD30interpretation() const
     {
         return m_VCD30interpretation;
     }
-    const bool Sector2336() const
+    bool Sector2336() const
     {
         return m_sector2336;
     }
-    const bool UpdateScanOffsets() const
+    bool UpdateScanOffsets() const
     {
         return m_updatescanoffsets;
     }
-    const bool RelaxedAps() const
+    bool RelaxedAps() const
     {
         return m_relaxedaps;
     }
-    const bool UseGaps() const
+    bool UseGaps() const
     {
         return m_usegaps;
     }
-    const unsigned long long CDIsize() const
+    unsigned long long CDIsize() const
     {
         return m_cdisize;
     }

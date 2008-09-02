@@ -481,8 +481,8 @@ void K3bMediaSelectionComboBox::slotUpdateToolTip( K3bDevice::Device* dev )
 {
 
 	if ( dev ){
-    // update the tooltip for the combobox (the tooltip for the dropdown box is created in the constructor)
-    setToolTip( dev ? QString() : mediumToolTip( k3bappcore->mediaCache()->medium( dev ) ) );
+        // update the tooltip for the combobox (the tooltip for the dropdown box is created in the constructor)
+        setToolTip( dev ? QString() : mediumToolTip( k3bappcore->mediaCache()->medium( dev ) ) );
 	}
 }
 

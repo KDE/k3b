@@ -480,7 +480,7 @@ void K3bVideoCdView::buildTree( Q3ListViewItem *parentItem, const QDomElement &p
     QDomNode node = parentElement.firstChild();
 
     while ( !node.isNull() ) {
-        if ( node.isElement() && node.nodeName() == "folder" || node.nodeName() == "file" ) {
+        if ( (node.isElement() && node.nodeName() == "folder") || node.nodeName() == "file" ) {
             if ( parentItem == 0 )
                 thisItem = new VideoTrackViewItem( m_trackView, thisItem );
             else
@@ -495,7 +495,7 @@ void K3bVideoCdView::buildTree( Q3ListViewItem *parentItem, const QDomElement &p
                 thisItem->setText( 1, pname + "_" + txt.toLower() );
                 buildTree( thisItem, node.toElement(), pname );
             }
-        } else if ( node.isElement() && node.nodeName() == "segment-item" || node.nodeName() == "sequence-item" ) {
+        } else if ( (node.isElement() && node.nodeName() == "segment-item") || node.nodeName() == "sequence-item" ) {
             if ( parentItem == 0 )
                 thisItem = new VideoTrackViewItem( m_trackView, thisItem );
             else

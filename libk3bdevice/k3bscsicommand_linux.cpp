@@ -164,10 +164,10 @@ int K3bDevice::ScsiCommand::transport( TransportDirection dir,
 		d->sense.ascq );
 
     int errCode =
-      (d->sense.error_code<<24) & 0xF000 |
-      (d->sense.sense_key<<16)  & 0x0F00 |
-      (d->sense.asc<<8)         & 0x00F0 |
-      (d->sense.ascq)           & 0x000F;
+      ((d->sense.error_code<<24) & 0xF000) |
+      ((d->sense.sense_key<<16)  & 0x0F00) |
+      ((d->sense.asc<<8)         & 0x00F0) |
+      ((d->sense.ascq)           & 0x000F);
 
     return( errCode != 0 ? errCode : 1 );
   }

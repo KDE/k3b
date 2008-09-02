@@ -19,10 +19,12 @@
 #include <k3bjob.h>
 
 class K3bMovixDoc;
-class K3bDevice::Device;
 class K3bDataJob;
 class K3bMovixDocPreparer;
 class K3bDoc;
+namespace K3bDevice {
+    class Device;
+}
 
 class K3bMovixJob : public K3bBurnJob
 {
