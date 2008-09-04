@@ -18,31 +18,24 @@
 #include "k3bdiroperator.h"
 #include "k3bapplication.h"
 
-#include <qwidget.h>
-#include <q3dragobject.h>
-#include <qlayout.h>
-#include <qdir.h>
-
-#include <qlabel.h>
-#include <qtoolbutton.h>
+#include <QDir>
+#include <QHBoxLayout>
+#include <QLayout>
+#include <QLabel>
+#include <QToolButton>
 #include <QVBoxLayout>
+#include <QWidget>
 
-#include <k3listview.h>
 #include <kaction.h>
-#include <ktoolbar.h>
 #include <kactioncollection.h>
-
-#include <kurl.h>
-#include <k3urldrag.h>
-#include <kfilefiltercombo.h>
-#include <klocale.h>
-#include <kfileitem.h>
-#include <kmessagebox.h>
+#include <KActionMenu>
 #include <kdirlister.h>
+#include <kfilefiltercombo.h>
+#include <kfileitem.h>
+#include <klocale.h>
+#include <kurl.h>
 #include <kprogressdialog.h>
 #include <ktoolbar.h>
-#include <KActionMenu>
-#include <kvbox.h>
 
 K3bFileView::K3bFileView(QWidget *parent )
     : K3bContentsView( false, parent)
@@ -84,21 +77,22 @@ void K3bFileView::setupGUI()
     m_toolBox->addAction( actionBack );
     m_toolBox->addAction( actionHome );
     m_toolBox->addAction( actionReload );
-    //m_toolBox->addSpacing();
+    m_toolBox->addSeparator();
     m_toolBox->addAction( m_dirOp->actionCollection()->action("short view") );
     m_toolBox->addAction( m_dirOp->actionCollection()->action("detailed view") );
-    //m_toolBox->addSpacing();
+    m_toolBox->addSeparator();
     m_toolBox->addAction( m_dirOp->bookmarkMenu() );
-    //m_toolBox->addSpacing();
+    m_toolBox->addSeparator();
 
-    // create filter selection combobox
-    //m_toolBox->addSpacing();
-    m_toolBox->addAction( i18n("Filter:") );
-    //m_toolBox->addSpacing();
-    m_filterWidget = new KFileFilterCombo( m_toolBox );
-    m_toolBox->addWidget( m_filterWidget );
-    //m_toolBox->addStretch();
-    m_toolBox->addWidget( m_dirOp->progressBar() );
+    // create filter selection combobox & loading progress bar
+    QWidget* filterBox = new QWidget( m_toolBox );
+    QHBoxLayout* filterLayout = new QHBoxLayout( filterBox );
+    filterLayout->addWidget( new QLabel( i18n("Filter:"), filterBox ) );
+    m_filterWidget = new KFileFilterCombo( filterBox );
+    filterLayout->addWidget( m_filterWidget );
+    filterLayout->addStretch();
+    filterLayout->addWidget( m_dirOp->progressBar() );
+    m_toolBox->addWidget( filterBox );
 
     m_filterWidget->setEditable( true );
     QString filter = i18n("*|All Files");
@@ -114,8 +108,8 @@ void K3bFileView::setupGUI()
     connect( m_dirOp, SIGNAL(fileHighlighted(const KFileItem &)), this, SLOT(slotFileHighlighted(const KFileItem &)) );
     connect( m_dirOp, SIGNAL(urlEntered(const KUrl&)), this, SIGNAL(urlEntered(const KUrl&)) );
     connect( m_dirOp, SIGNAL(fileSelected(const KFileItem &)), m_dirOp, SLOT(slotAddFilesToProject()) );
-
 }
+
 
 void K3bFileView::setDir( const QString& dir )
 {
@@ -130,15 +124,18 @@ void K3bFileView::setUrl(const KUrl& url, bool forward)
     m_dirOp->setUrl( url, forward );
 }
 
+
 KUrl K3bFileView::url()
 {
     return m_dirOp->url();
 }
 
+
 void K3bFileView::setAutoUpdate( bool b )
 {
     m_dirOp->dirLister()->setAutoUpdate( b );
 }
+
 
 void K3bFileView::slotFileHighlighted( const KFileItem & )
 {
@@ -159,26 +156,24 @@ void K3bFileView::slotFilterChanged()
         m_dirOp->setNameFilter( filter );
 
     m_dirOp->rereadDir();
-    //  emit filterChanged( filter );
 }
 
 
 void K3bFileView::reload()
 {
-    //FIXME kde4
-    m_dirOp->actionCollection()->action("reload")->activate(QAction::Trigger);
+    m_dirOp->rereadDir();
 }
 
 
 void K3bFileView::saveConfig( KConfigGroup &grp )
 {
-    m_dirOp->writeConfig(grp );
+    m_dirOp->writeConfig(grp);
 }
 
 
 void K3bFileView::readConfig( const KConfigGroup& grp )
 {
-    m_dirOp->readConfig( grp);
+    m_dirOp->readConfig(grp);
 }
 
 #include "k3bfileview.moc"

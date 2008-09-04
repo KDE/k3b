@@ -194,7 +194,7 @@ set(k3b_SRCS
   k3b.cpp 
   main.cpp 
   k3bstatusbarmanager.cpp 
-  k3bfiletreecombobox.cpp 
+  k3burlnavigator.cpp
   #k3binterface.cpp 
   #k3bjobinterface.cpp 
   #k3bprojectinterface.cpp 

@@ -16,20 +16,19 @@
 
 #include "k3bdiroperator.h"
 
-#include <k3bapplication.h>
-#include <k3b.h>
-#include <k3bcore.h>
-#include <k3baction.h>
+#include "k3bapplication.h"
+#include "k3b.h"
+#include "k3bcore.h"
+#include "k3baction.h"
+
+#include <QDir>
 
 #include <kaction.h>
 #include <kbookmarkmenu.h>
 #include <kstandarddirs.h>
 #include <kmenu.h>
 #include <kactioncollection.h>
-#include <qdir.h>
 #include <KConfigGroup>
-
-#include <QAbstractItemView>
 
 K3bDirOperator::K3bDirOperator(const KUrl& url, QWidget* parent )
     : KDirOperator( url, parent )
@@ -40,9 +39,10 @@ K3bDirOperator::K3bDirOperator(const KUrl& url, QWidget* parent )
 
     // disable the del-key since we still have a focus problem and users keep
     // deleting files when they want to remove project entries
-    QAction* aDelete = actionCollection()->action("delete");
-    if( aDelete )
-        aDelete->setShortcut( 0 );
+    QAction* aTrash = actionCollection()->action("trash");
+    if( aTrash ) {
+        aTrash->setShortcut( 0 );
+    }
 
     // add the bookmark stuff
 
@@ -52,7 +52,8 @@ K3bDirOperator::K3bDirOperator(const KUrl& url, QWidget* parent )
     bmMan->setUpdate( true );
 
     m_bmPopup = new KActionMenu( KIcon("bookmarks"),i18n("Bookmarks"), this);
-    m_bmMenu = new KBookmarkMenu( bmMan, this, m_bmPopup->menu(), actionCollection()/*, true*/ );
+    m_bmPopup->setDelayed( false );
+    m_bmMenu = new KBookmarkMenu( bmMan, this, m_bmPopup->menu(), actionCollection() );
 
     (void)K3b::createAction( this,i18n("&Add to Project"), 0, Qt::SHIFT+Qt::Key_Return,
                              this, SLOT(slotAddFilesToProject()),
@@ -98,21 +99,26 @@ void K3bDirOperator::writeConfig( KConfigGroup &grp )
 }
 
 
-void K3bDirOperator::openBookmarkURL( const QString& url )
+void K3bDirOperator::openBookmark(const KBookmark & bm, Qt::MouseButtons, Qt::KeyboardModifiers)
 {
-    setUrl( KUrl( url ), true );
+    setUrl( bm.url(), true );
 }
 
 
 QString K3bDirOperator::currentTitle() const
 {
-    return url().path(KUrl::RemoveTrailingSlash);
+    const KUrl& u = url();
+    if (u.isLocalFile()) {
+        return u.path( KUrl::RemoveTrailingSlash );
+    } else {
+        return u.prettyUrl();
+    }
 }
 
 
-QString K3bDirOperator::currentURL() const
+QString K3bDirOperator::currentUrl() const
 {
-    return url().path(KUrl::RemoveTrailingSlash);
+    return url().prettyUrl();
 }
 
 
@@ -123,12 +129,15 @@ void K3bDirOperator::activatedMenu( const KFileItem&, const QPoint& pos )
     updateSelectionDependentActions();
 
     // insert our own actions
-    KActionMenu* dirOpMenu = (KActionMenu*)actionCollection()->action("popupMenu");
+    KActionMenu* dirOpMenu = qobject_cast<KActionMenu*>( actionCollection()->action("popupMenu") );
+    if (!dirOpMenu) {
+        return;
+    }
+    QAction* firstAction = dirOpMenu->menu()->actions().first();
+    dirOpMenu->insertAction( firstAction, actionCollection()->action("add_file_to_project") );
+    dirOpMenu->insertSeparator( firstAction );
     dirOpMenu->addSeparator();
     dirOpMenu->addAction( m_bmPopup );
-
-    dirOpMenu->addAction( actionCollection()->action("add_file_to_project")/*, 0 */);
-    dirOpMenu->addSeparator();
 
     bool hasSelection = !selectedItems().isEmpty();
     /*
@@ -145,12 +154,12 @@ void K3bDirOperator::slotAddFilesToProject()
 {
     KUrl::List files;
     QList<KFileItem> items(selectedItems());
-    for( QList<KFileItem>::const_iterator it = items.begin();
-         it != items.end(); ++it ) {
-        files.append( (*it).url() );
+    Q_FOREACH( const KFileItem& fileItem, items ) {
+        files.append( fileItem.url() );
     }
-    if( !files.isEmpty() )
+    if( !files.isEmpty() ) {
         k3bappcore->k3bMainWindow()->addUrls( files );
+    }
 }
 
 #include "k3bdiroperator.moc"

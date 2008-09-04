@@ -48,7 +48,7 @@ public:
     /**
      * reimplemented from KBookmarkOwner
      */
-    void openBookmarkURL( const QString& url );
+    void openBookmark(const KBookmark & bm, Qt::MouseButtons mb, Qt::KeyboardModifiers km);
 
     /**
      * reimplemented from KBookmarkOwner
@@ -58,11 +58,9 @@ public:
     /**
      * reimplemented from KBookmarkOwner
      */
-    QString currentURL() const;
+    QString currentUrl() const;
 
     KActionMenu* bookmarkMenu() const { return m_bmPopup; }
-
-    virtual void openBookmark(const KBookmark & bm, Qt::MouseButtons mb, Qt::KeyboardModifiers km) {}
 
 public Q_SLOTS:
     void slotAddFilesToProject();

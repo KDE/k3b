@@ -97,7 +97,6 @@
 #include "k3bprojecttabwidget.h"
 #include "k3btempdirselectionwidget.h"
 #include "k3bstatusbarmanager.h"
-#include "k3bfiletreecombobox.h"
 #include "k3bfiletreeview.h"
 #include "k3bsidepanel.h"
 #include "k3bstdguiitems.h"
@@ -121,8 +120,10 @@
 #include "projects/k3bdatamultisessionimportdialog.h"
 #include "k3bpassivepopup.h"
 #include "k3bthemedheader.h"
+#include "k3burlnavigator.h"
 #include <kglobal.h>
 #include <KShortcutsDialog>
+#include <kfileplacesmodel.h>
 
 
 class K3bMainWindow::Private
@@ -483,17 +484,16 @@ void K3bMainWindow::initView()
     //m_contentsDock->manualDock( m_dirTreeDock, K3DockWidget::DockRight, 2000 );
 
     // --- filetreecombobox-toolbar ----------------------------------------------------------------
-    K3bFileTreeComboBox* m_fileTreeComboBox = new K3bFileTreeComboBox( 0 );
-    connect( m_fileTreeComboBox, SIGNAL(activated(const KUrl&)), m_dirView, SLOT(showUrl(const KUrl& )) );
-    connect( m_fileTreeComboBox, SIGNAL(activated(K3bDevice::Device*)), m_dirView,
-             SLOT(showDevice(K3bDevice::Device* )) );
-    connect( m_dirView, SIGNAL(urlEntered(const KUrl&)), m_fileTreeComboBox, SLOT(setUrl(const KUrl&)) );
-    connect( m_dirView, SIGNAL(deviceSelected(K3bDevice::Device*)), m_fileTreeComboBox, SLOT(setDevice(K3bDevice::Device*)) );
-    QWidgetAction * fileTreeComboAction = new QWidgetAction(this);
-    fileTreeComboAction->setDefaultWidget(m_fileTreeComboBox);
-    fileTreeComboAction->setText(i18n("&Quick Dir Selector"));
-    actionCollection()->addAction( "quick_dir_selector", fileTreeComboAction );
-    (void)K3b::createAction(this, i18n("Go"), "go-jump-locationbar", 0, m_fileTreeComboBox, SLOT(slotGoUrl()), actionCollection(), "go_url" );
+	KFilePlacesModel* filePlacesModel = new KFilePlacesModel;
+    K3bUrlNavigator* urlNavigator = new K3bUrlNavigator( filePlacesModel, this );
+    connect( urlNavigator, SIGNAL(activated(const KUrl&)), m_dirView, SLOT(showUrl(const KUrl& )) );
+    connect( urlNavigator, SIGNAL(activated(K3bDevice::Device*)), m_dirView, SLOT(showDevice(K3bDevice::Device* )) );
+    connect( m_dirView, SIGNAL(urlEntered(const KUrl&)), urlNavigator, SLOT(setUrl(const KUrl&)) );
+    connect( m_dirView, SIGNAL(deviceSelected(K3bDevice::Device*)), urlNavigator, SLOT(setDevice(K3bDevice::Device*)) );
+    QWidgetAction * urlNavigatorAction = new QWidgetAction(this);
+    urlNavigatorAction->setDefaultWidget(urlNavigator);
+    urlNavigatorAction->setText(i18n("&Quick Dir Selector"));
+    actionCollection()->addAction( "quick_dir_selector", urlNavigatorAction );
     // ---------------------------------------------------------------------------------------------
 }
 
