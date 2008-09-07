@@ -209,7 +209,7 @@ void K3bStatusBarManager::slotUpdateProjectStats()
         case K3bDoc::MIXED: {
             K3bAudioDoc* audioDoc = static_cast<K3bMixedDoc*>( doc )->audioDoc();
             K3bDataDoc* dataDoc = static_cast<K3bMixedDoc*>( doc )->dataDoc();
-            m_labelProjectInfo->setText( i18np("Mixed CD (1 track and %1)", "Mixed CD (%1 tracks and %2)", audioDoc->numOfTracks(),
+            m_labelProjectInfo->setText( i18np("Mixed CD (1 track and %2)", "Mixed CD (%1 tracks and %2)", audioDoc->numOfTracks(),
                                                dataDocStats(dataDoc)) );
             break;
         }
