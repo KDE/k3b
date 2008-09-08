@@ -736,13 +736,13 @@ QWidget* K3bListView::prepareEditor( K3bListViewItem* item, int col )
     }
     m_editorComboBox->clear();
     if( item->comboStrings( col ).isEmpty() ) {
-      m_editorComboBox->insertItem( item->text( col ) );
+      m_editorComboBox->addItem( item->text( col ) );
     }
     else {
       m_editorComboBox->addItems( item->comboStrings(col) );
-      int current = item->comboStrings(col).findIndex( item->text(col) );
+      int current = item->comboStrings(col).indexOf( item->text(col) );
       if( current != -1 )
-	m_editorComboBox->setCurrentItem( current );
+        m_editorComboBox->setCurrentIndex( current );
     }
     return m_editorComboBox;
 
@@ -972,7 +972,7 @@ bool K3bListView::doRename()
       case K3bListViewItem::COMBO:
 	for( int i = 0; i < m_editorComboBox->count(); ++i ) {
 	  if( m_editorComboBox->itemText(i) == m_currentEditItem->text(m_currentEditColumn) ) {
-	    m_editorComboBox->setCurrentItem( i );
+	    m_editorComboBox->setCurrentIndex( i );
 	    break;
 	  }
 	}
@@ -1173,7 +1173,7 @@ void K3bListView::viewportResizeEvent( QResizeEvent* e )
     QPixmap bgPix( size );
 
     // FIXME: let the user specify the color
-    bgPix.fill( colorGroup().base() );
+    bgPix.fill( palette().base().color() );
 
     if( bgPix.width() < m_backgroundPixmap.width() ||
 	bgPix.height() < m_backgroundPixmap.height() ) {
@@ -1201,8 +1201,10 @@ void K3bListView::viewportResizeEvent( QResizeEvent* e )
 		m_backgroundPixmap.width(), m_backgroundPixmap.height() );
       }
     }
-
-    viewport()->setPaletteBackgroundPixmap( bgPix );
+    
+    QPalette bgPalette;
+    bgPalette.setBrush( viewport()->backgroundRole(), QBrush(bgPix) );
+    viewport()->setPalette( bgPalette );
   }
 
   K3ListView::viewportResizeEvent( e );

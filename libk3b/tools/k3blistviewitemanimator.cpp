@@ -76,7 +76,7 @@ void K3bListViewItemAnimator::setItem( Q3ListViewItem* item, int col )
   m_item = item;
   m_column = col;
   m_pixmap = *item->pixmap(col);
-  m_fadeColor = item->listView()->colorGroup().base();
+  m_fadeColor = item->listView()->palette().base().color();
   start();
 }
 

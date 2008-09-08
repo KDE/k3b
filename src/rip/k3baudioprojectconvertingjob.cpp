@@ -109,7 +109,8 @@ bool K3bAudioProjectConvertingJob::run()
         // initialize
         bool isOpen = true;
         if( d->encoder ) {
-            if( isOpen = d->encoder->openFile( d->fileType, filename, m_doc->length() ) ) {
+            isOpen = d->encoder->openFile( d->fileType, filename, m_doc->length() );
+            if( isOpen ) {
                 // here we use cd Title and Artist
                 d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST, m_cddbEntry.get( KCDDB::Artist ).toString() );
                 d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE, m_cddbEntry.get( KCDDB::Title ).toString() );
@@ -193,10 +194,8 @@ bool K3bAudioProjectConvertingJob::convertTrack( K3bAudioTrack* track, const QSt
     bool isOpen = true;
     if( !m_singleFile ) {
         if( d->encoder ) {
-            if( isOpen = d->encoder->openFile( d->fileType,
-                                               filename,
-                                               track->length() ) ) {
-
+            isOpen = d->encoder->openFile( d->fileType, filename, track->length() );
+            if( isOpen ) {
                 d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST, m_cddbEntry.track( d->currentTrackIndex ).get( KCDDB::Artist ).toString() );
                 d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE, m_cddbEntry.track( d->currentTrackIndex ).get( KCDDB::Title ).toString() );
                 d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_COMMENT, m_cddbEntry.track( d->currentTrackIndex ).get( KCDDB::Comment ).toString() );

@@ -891,7 +891,7 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
 }
 
 
-void K3bDataDoc::aboutToRemoveItemFromDir( K3bDirItem* parent, K3bDataItem* removedItem )
+void K3bDataDoc::aboutToRemoveItemFromDir( K3bDirItem* /*parent*/, K3bDataItem* removedItem )
 {
     emit aboutToRemoveItem( removedItem );
 }

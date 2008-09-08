@@ -163,8 +163,10 @@ K3bPassivePopup::K3bPassivePopup( QWidget* parent )
   titleLay->addWidget( d->closeButton );
 
   if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-    d->titleLabel->setPaletteBackgroundColor( theme->backgroundColor() );
-    d->titleLabel->setPaletteForegroundColor( theme->foregroundColor() );
+    QPalette titlePalette;
+    titlePalette.setColor( d->titleLabel->backgroundRole(), theme->backgroundColor() );
+    titlePalette.setColor( d->titleLabel->foregroundRole(), theme->foregroundColor() );
+    d->titleLabel->setPalette( titlePalette );
   }
 
   setTitle( QString() );

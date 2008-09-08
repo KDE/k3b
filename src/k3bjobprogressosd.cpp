@@ -130,7 +130,7 @@ void K3bJobProgressOSD::renderOSD()
     QSize newSize( qMax( qMax( 2*margin + icon.width() + margin + textWidth, 100 ), width() ),
 		   qMax( 2*margin + icon.height(), 2*margin + fontMetrics().height()*2 ) );
     
-    m_osdBuffer.resize( newSize );
+    m_osdBuffer = QPixmap( newSize );
     QPainter p( &m_osdBuffer );
     
     p.setPen( theme->foregroundColor() );
@@ -201,7 +201,7 @@ void K3bJobProgressOSD::reposition( QSize newSize )
     paintEvent( 0 );
 
   // fancy X11 move+resize, reduces visual artifacts
-  XMoveResizeWindow( x11Display(), winId(), newPos.x(), newPos.y(), newSize.width(), newSize.height() );
+  XMoveResizeWindow( QX11Info::display(), winId(), newPos.x(), newPos.y(), newSize.width(), newSize.height() );
 }
 
 
