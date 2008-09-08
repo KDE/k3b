@@ -16,114 +16,94 @@
 
 
 // include files for QT
-#include <qdir.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qlayout.h>
-#include <q3whatsthis.h>
-#include <qtooltip.h>
-#include <qtoolbutton.h>
-#include <qstring.h>
-#include <qsplitter.h>
-#include <qevent.h>
-#include <qlist.h>
-#include <qfont.h>
-#include <qpalette.h>
-#include <QStackedWidget>
-#include <qtimer.h>
-//Added by qt3to4:
-#include <QLabel>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
 #include <QGridLayout>
+#include <QLayout>
+#include <QList>
 #include <QShowEvent>
+#include <QString>
+#include <QTimer>
 
-#include <k3dockwidget.h>
-#include <KShortcutsDialog>
 // include files for KDE
-#include <kiconloader.h>
-#include <kmessagebox.h>
-#include <kfiledialog.h>
-#include <kmenubar.h>
-#include <klocale.h>
-#include <kconfig.h>
-#include <kstandardaction.h>
-#include <kstandarddirs.h>
-#include <kprocess.h>
-#include <kurl.h>
-#include <kurllabel.h>
-#include <ktoolbar.h>
-#include <kstatusbar.h>
-#include <kglobalsettings.h>
-#include <kdialog.h>
-#include <kedittoolbar.h>
 #include <kaboutdata.h>
+#include <KActionMenu>
+#include <KConfig>
+#include <KEditToolBar>
+#include <KFileDialog>
+#include <kfileplacesmodel.h>
+#include <KGlobal>
+#include <KMessageBox>
+#include <KMenuBar>
+#include <KProcess>
+#include <KRecentDocument>
+#include <KRecentFilesAction>
+#include <KShortcutsDialog>
+#include <KStandardAction>
+#include <KStandardDirs>
+#include <KStatusBar>
 #include <ktip.h>
-#include <kxmlguifactory.h>
-#include <kstdguiitem.h>
-#include <kio/global.h>
+#include <KToggleAction>
+#include <KUrl>
+#include <KXMLGUIFactory>
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>
-#include <krecentdocument.h>
-#include <ktoggleaction.h>
-#include <stdlib.h>
-#include <KRecentFilesAction>
-#include <kactionmenu.h>
+#include <cstdlib>
 
 // application specific includes
 #include "k3b.h"
 #include "k3baction.h"
-#include "k3bapplication.h"
-#include <k3bglobals.h>
-#include "k3bview.h"
-#include "k3bdirview.h"
-#include <k3baudiodoc.h>
-#include "k3baudioview.h"
 #include "k3bappdevicemanager.h"
+#include "k3bapplication.h"
+#include "k3baudiodecoder.h"
+#include "k3baudiodoc.h"
 #include "k3baudiotrackdialog.h"
-#include "option/k3boptiondialog.h"
-#include "k3bprojectburndialog.h"
-#include <k3bdatadoc.h>
+#include "k3baudioview.h"
+#include "k3bcuefileparser.h"
+#include "k3bdatadoc.h"
 #include "k3bdataview.h"
-#include <k3bvideodvddoc.h>
-#include "k3bvideodvdview.h"
-#include <k3bmixeddoc.h>
+#include "k3bdeviceselectiondialog.h"
+#include "k3bdirview.h"
+#include "k3bexternalbinmanager.h"
+#include "k3bfiletreeview.h"
+#include "k3bglobals.h"
+#include "k3biso9660.h"
+#include "k3bjob.h"
+#include "k3bmediacache.h"
+#include "k3bmediaselectiondialog.h"
+#include "k3bmedium.h"
+#include "k3bmixeddoc.h"
 #include "k3bmixedview.h"
-#include <k3bvcddoc.h>
-#include "k3bvcdview.h"
-#include <k3bmovixdoc.h>
+#include "k3bmovixdoc.h"
 #include "k3bmovixview.h"
+#include "k3bprojectburndialog.h"
+#include "k3bpassivepopup.h"
+#include "k3bplugin.h"
+#include "k3bpluginmanager.h"
+#include "k3bprojectmanager.h"
+#include "k3bprojecttabwidget.h"
+#include "k3bsidepanel.h"
+#include "k3bsignalwaiter.h"
+#include "k3bstdguiitems.h"
+#include "k3bsystemproblemdialog.h"
+#include "k3bstatusbarmanager.h"
+#include "k3btempdirselectionwidget.h"
+#include "k3bthemedheader.h"
+#include "k3bthememanager.h"
+#include "k3burlnavigator.h"
+#include "k3bvcddoc.h"
+#include "k3bvcdview.h"
+#include "k3bvideodvddoc.h"
+#include "k3bvideodvdview.h"
+#include "k3bview.h"
+#include "k3bwelcomewidget.h"
 #include "misc/k3bcdimagewritingdialog.h"
 #include "misc/k3bisoimagewritingdialog.h"
-#include <k3bexternalbinmanager.h>
-#include "k3bprojecttabwidget.h"
-#include "k3btempdirselectionwidget.h"
-#include "k3bstatusbarmanager.h"
-#include "k3bfiletreeview.h"
-#include "k3bsidepanel.h"
-#include "k3bstdguiitems.h"
 #include "misc/k3bmediacopydialog.h"
 #include "misc/k3bmediaformattingdialog.h"
-#include "k3bprojectmanager.h"
-#include "k3bwelcomewidget.h"
-#include <k3bpluginmanager.h>
-#include <k3bplugin.h>
-#include "k3bsystemproblemdialog.h"
-#include <k3baudiodecoder.h>
-#include <k3bthememanager.h>
-#include <k3biso9660.h>
-#include <k3bcuefileparser.h>
-#include <k3bdeviceselectiondialog.h>
-#include <k3bjob.h>
-#include <k3bsignalwaiter.h>
-#include "k3bmediaselectiondialog.h"
-#include "k3bmediacache.h"
-#include "k3bmedium.h"
+#include "option/k3boptiondialog.h"
 #include "projects/k3bdatamultisessionimportdialog.h"
-#include "k3bpassivepopup.h"
-#include "k3bthemedheader.h"
-#include "k3burlnavigator.h"
-#include <kglobal.h>
-#include <KShortcutsDialog>
-#include <kfileplacesmodel.h>
 
 
 class K3bMainWindow::Private
@@ -131,13 +111,8 @@ class K3bMainWindow::Private
 public:
     K3bDoc* lastDoc;
 
-    QStackedWidget* documentStack;
     K3bWelcomeWidget* welcomeWidget;
     QWidget* documentHull;
-
-    QLabel* leftDocPicLabel;
-    QLabel* centerDocLabel;
-    QLabel* rightDocPicLabel;
 };
 
 
@@ -424,11 +399,8 @@ void K3bMainWindow::initView()
     // setup main docking things
 
     // --- Document Dock ----------------------------------------------------------------------------
-    d->documentStack = new QStackedWidget( this );
-    setCentralWidget( d->documentStack );
-
-    d->documentHull = new QWidget( d->documentStack );
-    d->documentStack->addWidget( d->documentHull );
+    d->documentHull = new QWidget( this );
+    setCentralWidget( d->documentHull );
     QGridLayout* documentHullLayout = new QGridLayout( d->documentHull );
     documentHullLayout->setMargin( 2 );
     documentHullLayout->setSpacing( 0 );
@@ -449,9 +421,6 @@ void K3bMainWindow::initView()
 
     d->welcomeWidget = new K3bWelcomeWidget( this, m_documentTab );
     m_documentTab->addTab( d->welcomeWidget, i18n("Quickstart") );
-
-    d->documentStack->addWidget( d->welcomeWidget );
-    d->documentStack->setCurrentWidget( d->welcomeWidget );
     // ---------------------------------------------------------------------------------------------
 
     // --- Directory Dock --------------------------------------------------------------------------
@@ -1208,7 +1177,6 @@ void K3bMainWindow::slotCurrentDocChanged()
         slotStateChanged( "state_project_active", KXMLGUIClient::StateReverse );
     }
     else {
-        d->documentStack->setCurrentWidget( d->documentHull );
         slotStateChanged( "state_project_active", KXMLGUIClient::StateNoReverse );
     }
 
