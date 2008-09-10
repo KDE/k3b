@@ -30,7 +30,7 @@ A: You need to install NAS.
 
 Q: Where can I find K3bSetup2?
 A: K3bSetup2 is a KControlCenter Module. You can find it in the System Administration section or start
-   it manually with "kdesu kcmshell k3bsetup2".
+   it manually with "kdesu kcmshell4 k3bsetup2".
    There also is a script since K3b 0.11 called k3bsetup.
 
 
