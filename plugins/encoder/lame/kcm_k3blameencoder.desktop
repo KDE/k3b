@@ -1,5 +1,27 @@
 [Desktop Entry]
 Name=K3b Lame Mp3 Encoder Config Module
+Name[bg]=Модул за настройване на K3b Lame Mp3 Encoder
+Name[csb]=Mòdul nastôwów kòdera Lame Mp3 dlô K3b
+Name[el]=Άρθρωμα ρύθμισης του κωδικοποιητή Lame Mp3 του K3b
+Name[es]=Módulo de configuración del codificador Lame Mp3 de K3b
+Name[et]=K3b Lame MP3 kodeerija seadistamismoodul
+Name[fi]=MP3-tiedostojen pakkauksen asetukset
+Name[fr]=Module de configuration de l'encodeur Mp3 Lame pour K3b
+Name[ga]=Modúl Cumraíochta Ionchódóir Lame MP3 K3b
+Name[gl]=Módulo de configuración do Codificador mp3 Lame para K3b
+Name[ja]=K3b Lame MP3 エンコーダ設定モジュール
+Name[km]=ម៉ូឌុល​កំណត់​រចនា​សម្ព័ន្ធ​កម្មវិធី​អ៊ិនកូដ Lame Mp3 របស់ K3b
+Name[lv]=K3b Lame Mp3 kodētāja configurācijas modulis
+Name[nds]=Instellmoduul för Lame-MP3-Koderer för K3b
+Name[nl]=K3b Lame Mp3-codeerder Configuratiemodule
+Name[pl]=Moduł ustawień kodera Lame Mp3 dla K3b
+Name[pt]=Módulo de Configuração do Codificador de MP3 Lame do K3b
+Name[pt_BR]=Módulo de Configuração do Codificador Lame Mp3 do K3b
+Name[sv]=Inställningsmodul för K3b Lame MP3-kodare
+Name[tr]=K3b Lame Mp3 Kodlaması Yapılandırma Parçacığı
+Name[uk]=Модуль налаштування кодувальника Lame Mp3 K3b
+Name[x-test]=xxK3b Lame Mp3 Encoder Config Modulexx
+Name[zh_CN]=K3b Lame Mp3 编码器配置部件
 Type=Service
 X-KDE-ServiceTypes=KCModule
 X-KDE-Library=kcm_k3blameencoder
