@@ -17,10 +17,13 @@
 #include <config-k3b.h>
 
 extern "C" {
+#ifdef NEWFFMPEGAVCODECPATH
+#include <libavcodec/avcodec.h>
+#include <libavformat/avformat.h>
+#else
 #include <ffmpeg/avcodec.h>
 #include <ffmpeg/avformat.h>
-// #include <libavcodec/avcodec.h>
-// #include <libavformat/avformat.h>
+#endif
 }
 
 #include <string.h>

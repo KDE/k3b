@@ -21,8 +21,11 @@
 #include <kdebug.h>
 
 extern "C" {
+#ifdef NEWFFMPEGAVCODECPATH
+#include <libavcodec/avcodec.h>
+#else
 #include <ffmpeg/avcodec.h>
-//#include <libavcodec/avcodec.h>
+#endif
 }
 
 #include <math.h>

@@ -3,6 +3,15 @@
 
 ########### next target ###############
 
+find_file(newffmpegavcodecpath avcodec.h /usr/include/libavcodec)
+
+if(newffmpegavcodecpath)
+    message(STATUS "found new ffmpegcodecpath")
+    add_definitions(-DNEWFFMPEGAVCODECPATH)
+else(newffmpegavcodecpath)
+    message(STATUS "didn't find new ffmpegcodecpath")
+endif(newffmpegavcodecpath)
+
 set(k3bffmpegdecoder_PART_SRCS k3bffmpegdecoder.cpp k3bffmpegwrapper.cpp )
 
 kde4_add_plugin(k3bffmpegdecoder ${k3bffmpegdecoder_PART_SRCS})
