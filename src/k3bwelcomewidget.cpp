@@ -14,46 +14,30 @@
 
 #include "k3bwelcomewidget.h"
 #include "k3b.h"
-#include "k3bflatbutton.h"
-#include <k3bstdguiitems.h>
 #include "k3bapplication.h"
-#include <k3bversion.h>
+#include "k3bflatbutton.h"
+#include "k3bstdguiitems.h"
 #include "k3bthememanager.h"
+#include "k3bversion.h"
 
-#include <qpixmap.h>
-#include <qtoolbutton.h>
-#include <qlabel.h>
-#include <qpainter.h>
-#include <q3simplerichtext.h>
-#include <qlist.h>
-#include <qmap.h>
-#include <qtooltip.h>
-#include <qcursor.h>
-#include <qimage.h>
+#include <QCursor>
+#include <QDragEnterEvent>
 #include <QDropEvent>
-#include <QShowEvent>
+#include <QMouseEvent>
+#include <QPainter>
 #include <QPaintEvent>
 #include <QResizeEvent>
-#include <QMouseEvent>
-#include <QDragEnterEvent>
+#include <QShowEvent>
 #include <QTextDocument>
 
-#include <kurl.h>
 #include <k3urldrag.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
-#include <kapplication.h>
-#include <kiconloader.h>
-#include <kglobal.h>
-#include <kconfiggroup.h>
-#include <kdebug.h>
-#include <kmenu.h>
-#include <kaboutdata.h>
-
-#include <KActionMenu>
-#include <KToggleAction>
 #include <KActionCollection>
+#include <KAboutData>
+#include <KConfigGroup>
+#include <KGlobal>
 #include <KGlobalSettings>
+#include <KLocale>
+#include <KMenu>
 
 static const char* s_allActions[] = {
     "file_new_data",
@@ -84,17 +68,8 @@ static const char* s_allActions[] = {
 K3bWelcomeWidget::Display::Display( K3bWelcomeWidget* parent )
     : QWidget( parent->viewport() )
 {
-    QFont fnt(font());
-    fnt.setBold(true);
-    fnt.setPointSize( 16 );
-    m_header = new QTextDocument( i18n("Welcome to K3b - The CD and DVD Kreator"), this );
-    m_header->setDefaultFont( fnt );
+    m_header = new QTextDocument( this );
     m_infoText = new QTextDocument( this );
-    m_infoText->setHtml( QString::fromUtf8("<qt align=\"center\">K3b %1 (c) 1999 - 2007 Sebastian Trüg")
-                         .arg(KGlobal::mainComponent().aboutData()->version()) );
-
-    // set a large width just to be sure no linebreak occurs
-    m_header->setTextWidth( 800 );
 
     setAcceptDrops( true );
     m_rows = m_cols = 1;
@@ -275,10 +250,18 @@ void K3bWelcomeWidget::Display::resizeEvent( QResizeEvent* e )
 
 void K3bWelcomeWidget::Display::slotThemeChanged()
 {
-//   if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() )
-//     if( theme->backgroundMode() == K3bTheme::BG_SCALE )
-//       m_bgImage = theme->pixmap( K3bTheme::WELCOME_BG ).convertToImage();
-
+    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+//         if( theme->backgroundMode() == K3bTheme::BG_SCALE )
+//             m_bgImage = theme->pixmap( K3bTheme::WELCOME_BG ).convertToImage();
+        m_header->setDefaultStyleSheet( QString("body { font-size: 16pt; font-weight: bold; color: %1 }")
+                                        .arg(theme->foregroundColor().name()) );
+        m_infoText->setDefaultStyleSheet( QString("body { color: %1 }")
+                                          .arg(theme->foregroundColor().name()) );
+    }
+    
+    m_header->setHtml( "<html><body align=\"center\">" + i18n("Welcome to K3b - The CD and DVD Kreator") + "</body></html>" );
+    m_infoText->setHtml( QString::fromUtf8("<html><body align=\"center\">K3b %1 (c) 1999 - 2007 Sebastian Trüg</body></html>")
+                         .arg(KGlobal::mainComponent().aboutData()->version()) );
     updateBgPix();
     update();
 }

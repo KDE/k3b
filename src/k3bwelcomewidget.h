@@ -16,31 +16,24 @@
 #ifndef _K3B_WELCOME_WIDGET_H_
 #define _K3B_WELCOME_WIDGET_H_
 
-#include <QScrollArea>
-#include <qlist.h>
-#include <qmap.h>
-#include <qimage.h>
+#include <QList>
+#include <QMap>
+#include <QImage>
 #include <QPixmap>
-#include <QResizeEvent>
-#include <QShowEvent>
-#include <QDragEnterEvent>
-#include <QDropEvent>
-#include <QMouseEvent>
-#include <QPaintEvent>
+#include <QScrollArea>
 
-#include <kurl.h>
-#include <kaction.h>
-#include <kconfiggroup.h>
+#include <KUrl>
 
-class K3bMainWindow;
-class QDropEvent;
-class QDragEnterEvent;
 class K3bFlatButton;
+class K3bMainWindow;
+class KConfigGroup;
+class QDragEnterEvent;
+class QDropEvent;
+class QMouseEvent;
 class QPaintEvent;
 class QResizeEvent;
-class QTextDocument;
-class QMouseEvent;
 class QShowEvent;
+class QTextDocument;
 
 
 class K3bWelcomeWidget : public QScrollArea
