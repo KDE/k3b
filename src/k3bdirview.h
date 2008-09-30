@@ -12,36 +12,26 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-
 #ifndef K3BDIRVIEW_H
 #define K3BDIRVIEW_H
 
-
-//Added by qt3to4:
-#include <QLabel>
-
 #include <k3bmedium.h>
-#include <kvbox.h>
+#include <KVBox>
 
-class QSplitter;
-class KUrl;
 class K3bAudioCdView;
-class K3bVideoCdView;
+class K3bDiskInfoView;
+class K3bFileTreeView;
 class K3bFileView;
+class K3bVideoCdView;
 class K3bVideoDVDRippingView;
 class KComboBox;
-class K3bFileTreeView;
-class QStackedWidget;
-class K3bDiskInfoView;
-class Q3ScrollView;
-class QLabel;
-class KConfig;
 class KConfigGroup;
+class KUrl;
+class QSplitter;
+class QStackedWidget;
 namespace K3bDevice {
     class Device;
-    class DiskInfo;
 }
-
 
 /**
  *@author Sebastian Trueg
@@ -68,7 +58,6 @@ protected Q_SLOTS:
     void slotUnmountFinished( bool );
     void showMediumInfo( const K3bMedium& );
     void home();
-    void slotFileTreeContextMenu( K3bDevice::Device* dev, const QPoint& p );
 
 Q_SIGNALS:
     void urlEntered( const KUrl& );
@@ -76,7 +65,6 @@ Q_SIGNALS:
 
 private:
     QStackedWidget* m_viewStack;
-    Q3ScrollView* m_scroll;
 
     K3bAudioCdView*   m_cdView;
     K3bVideoCdView*   m_videoView;

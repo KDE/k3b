@@ -12,73 +12,39 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include "k3bdirview.h"
-#include "k3bapplication.h"
-#include "k3b.h"
+// K3B-includes
 #include <config-k3b.h>
-
+#include "k3bdirview.h"
+#include "k3b.h"
+#include "k3bappdevicemanager.h"
+#include "k3bapplication.h"
+#include "k3bdevice.h"
+#include "k3bdevicehandler.h"
+#include "k3bdiskinfoview.h"
+#include "k3bexternalbinmanager.h"
+#include "k3bfileview.h"
+#include "k3bfiletreeview.h"
+#include "k3bmediacache.h"
+#include "k3bpassivepopup.h"
+#include "k3bthememanager.h"
 #include "rip/k3baudiocdview.h"
 #include "rip/k3bvideocdview.h"
 #ifdef HAVE_LIBDVDREAD
 #include "rip/videodvd/k3bvideodvdrippingview.h"
 #endif
-#include "k3bfileview.h"
-#include "k3bfiletreeview.h"
-#include "k3bappdevicemanager.h"
-#include "k3bdiskinfoview.h"
-#include <k3bdevicehandler.h>
-#include <k3bdevice.h>
-#include <k3bthememanager.h>
-#include <k3bmediacache.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bpassivepopup.h>
-#include <KActionMenu>
-#include <kactioncollection.h>
-#include <kmenu.h>
-#include <unistd.h>
-// QT-includes
-#include <qdir.h>
-#include <q3listview.h>
-#include <qstring.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qpixmap.h>
-#include <qstringlist.h>
-#include <q3strlist.h>
-#include <qsplitter.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qicon.h>
-#include <q3valuelist.h>
-#include <qlabel.h>
-#include <QStackedWidget>
-#include <q3scrollview.h>
-#include <qpainter.h>
-#include <q3simplerichtext.h>
 
 // KDE-includes
-#include <kmimetype.h>
-#include <kcursor.h>
-#include <ktoolbar.h>
-#include <kiconloader.h>
-#include <kurl.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
-#include <kio/global.h>
-#include <krun.h>
-#include <k3process.h>
-#include <kio/job.h>
-#include <kcombobox.h>
-#include <k3filetreeview.h>
-#include <kdialog.h>
-#include <kmessagebox.h>
-#include <kstandardaction.h>
-#include <kconfig.h>
-#include <kaction.h>
-#include <kinputdialog.h>
-#include <kvbox.h>
+#include <KConfig>
+#include <KLocale>
+#include <KMessageBox>
+#include <KUrl>
+#include <unistd.h>
 
-
+// QT-includes
+#include <QDir>
+#include <QSplitter>
+#include <QString>
+#include <QStackedWidget>
 
 class K3bDirView::Private
 {
@@ -138,10 +104,8 @@ K3bDirView::K3bDirView(K3bFileTreeView* treeView, QWidget *parent )
              this, SLOT(slotDirActivated(const KUrl&)) );
     connect( m_fileTreeView, SIGNAL(activated(K3bDevice::Device*)),
              this, SLOT(showDevice(K3bDevice::Device*)) );
-    connect( m_fileTreeView, SIGNAL(deviceExecuted(K3bDevice::Device*)),
+    connect( m_fileTreeView, SIGNAL(activated(K3bDevice::Device*)),
              this, SIGNAL(deviceSelected(K3bDevice::Device*)) );
-    connect( m_fileTreeView, SIGNAL(contextMenu(K3bDevice::Device*, const QPoint&)),
-             this, SLOT(slotFileTreeContextMenu(K3bDevice::Device*, const QPoint&)) );
 
     connect( m_fileView, SIGNAL(urlEntered(const KUrl&)), m_fileTreeView, SLOT(setSelectedUrl(const KUrl&)) );
     connect( m_fileView, SIGNAL(urlEntered(const KUrl&)), this, SIGNAL(urlEntered(const KUrl&)) );
@@ -318,14 +282,6 @@ void K3bDirView::slotUnmountFinished( bool success )
                                     i18n("Unmount Failed"),
                                     K3bPassivePopup::Warning );
     }
-}
-
-
-void K3bDirView::slotFileTreeContextMenu( K3bDevice::Device* /*dev*/, const QPoint& p )
-{
-    QAction* a = k3bappcore->appDeviceManager()->actionCollection()->action( "device_popup" );
-    if( KActionMenu* m = dynamic_cast<KActionMenu*>(a) )
-        m->menu()->exec( p );
 }
 
 
