@@ -16,12 +16,7 @@
 #ifndef K3BSPLASH_H
 #define K3BSPLASH_H
 
-
-//Added by qt3to4:
-#include <QPaintEvent>
-#include <QLabel>
-#include <QMouseEvent>
-#include <kvbox.h>
+#include <KVBox>
 
 class QLabel;
 class QMouseEvent;

@@ -13,47 +13,40 @@
  */
 
 #include "k3bsplash.h"
+#include "k3bthememanager.h"
+#include "k3bapplication.h"
 
-#include <k3bthememanager.h>
-#include <k3bapplication.h>
-
-#include <qapplication.h>
-#include <qlabel.h>
-#include <qpixmap.h>
-#include <qevent.h>
-#include <qstring.h>
-#include <qfontmetrics.h>
-#include <qpainter.h>
-//Added by qt3to4:
-#include <QMouseEvent>
+#include <QApplication>
 #include <QDesktopWidget>
+#include <QEvent>
+#include <QFontMetrics>
+#include <QLabel>
+#include <QPainter>
+#include <QPixmap>
+#include <QString>
 
-#include <kstandarddirs.h>
-#include <kapplication.h>
-#include <kaboutdata.h>
-#include <kvbox.h>
+#include <KAboutData>
+#include <KApplication>
+#include <KStandardDirs>
 
-
-//FIXME kde4
 K3bSplash::K3bSplash( QWidget* parent )
     : KVBox( parent)
 {
     setMargin( 0 );
     setSpacing( 0 );
-    setWindowFlags(Qt::WStyle_Customize|
-                   Qt::WDestructiveClose|
-                   /*      Qt::WStyle_Splash|*/
-                   Qt::X11BypassWindowManagerHint|
-                   Qt::WStyle_NoBorder|
-                   Qt::WStyle_StaysOnTop);
-    QLabel* copyrightLabel = new QLabel( KGlobal::mainComponent().aboutData()->copyrightStatement(), this );
-    copyrightLabel->setMargin( 5 );
+    setAttribute( Qt::WA_DeleteOnClose );
+    setWindowFlags(Qt::FramelessWindowHint|
+                   Qt::SplashScreen|
+                   Qt::WindowStaysOnTopHint|
+                   Qt::X11BypassWindowManagerHint);
 
     QPalette pal( palette() );
-    pal.setColor( QPalette::Base, Qt::black );
-    pal.setColor( QPalette::Text, Qt::black );
+    pal.setColor( QPalette::Window, Qt::black );
+    pal.setColor( QPalette::WindowText, Qt::white );
+    setPalette( pal );
 
-    copyrightLabel->setPalette( pal );
+    QLabel* copyrightLabel = new QLabel( KGlobal::mainComponent().aboutData()->copyrightStatement(), this );
+    copyrightLabel->setMargin( 5 );
     copyrightLabel->setAlignment( Qt::AlignRight );
 
     QLabel* picLabel = new QLabel( this );
@@ -64,7 +57,6 @@ K3bSplash::K3bSplash( QWidget* parent )
 
     m_infoBox = new QLabel( this );
     m_infoBox->setMargin( 5 );
-    m_infoBox->setPalette( pal );
 
     // Set geometry, with support for Xinerama systems
     QRect r;
