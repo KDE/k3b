@@ -19,12 +19,11 @@
 
 #include "k3bminibutton.h"
 
-#include <qpainter.h>
-//Added by qt3to4:
+#include <QPainter>
 #include <QEvent>
 
 
-K3bMiniButton::K3bMiniButton( QWidget *parent )
+K3bMiniButton::K3bMiniButton( QWidget* parent )
     :QPushButton( parent ),
      m_mouseOver( false )
 {
@@ -35,7 +34,7 @@ K3bMiniButton::~K3bMiniButton()
 {
 }
 
-void K3bMiniButton::paintEvent(QPaintEvent *)
+void K3bMiniButton::paintEvent( QPaintEvent* )
 {
     QPainter painter(this);
     drawButton(&painter);
@@ -43,44 +42,42 @@ void K3bMiniButton::paintEvent(QPaintEvent *)
 
 void K3bMiniButton::drawButton( QPainter* p )
 {
-    p->fillRect( 0,0, width(), height(), palette().base() );
-    p->drawPixmap( (width() - pixmap()->width()) / 2, (height() - pixmap()->height()) / 2, *pixmap() );
+    p->fillRect( 0,0, width(), height(), parentWidget()->palette().color( parentWidget()->backgroundRole() ) );
+    QPixmap pixmap = icon().pixmap( width(), height() );
+    p->drawPixmap( (width()-pixmap.width()) / 2, (height()-pixmap.height()) / 2, pixmap );
+
+    QPainterPath pathNW;
+    pathNW.moveTo( 0, height() - 1 );
+    pathNW.lineTo( 0, 0 );
+    pathNW.lineTo( width() - 1, 0 );
+
+    QPainterPath pathSE;
+    pathSE.moveTo( width() - 1, 0 );
+    pathSE.lineTo( width() - 1, height() - 1 );
+    pathSE.lineTo( 0, height() - 1 );
+
     if( m_mouseOver && !isDown() ){
         p->setPen( Qt::white );
-        QPainterPath path;
-        path.moveTo( 0, height() - 1 );
-        path.lineTo( 0, 0 );
-        path.lineTo( width() - 1, 0 );
-
+        p->drawPath( pathNW );
         p->setPen( palette().dark().color() );
-        path.lineTo( width() - 1, height() - 1 );
-        path.lineTo( 0, height() - 1 );
-        p->drawPath(path);
+        p->drawPath( pathSE );
     }
     if( isChecked() || isDown() ){
         p->setPen( palette().dark().color() );
-        QPainterPath path;
-        path.moveTo( 0, height() - 1 );
-        path.lineTo( 0, 0 );
-        path.lineTo( width() - 1, 0 );
-        p->drawPath(path);
-
-        QPainterPath pathWhite;
+        p->drawPath( pathNW );
         p->setPen( Qt::white );
-        pathWhite.lineTo( width() - 1, height() - 1 );
-        pathWhite.lineTo( 0, height() - 1 );
-        p->drawPath(pathWhite);
+        p->drawPath( pathSE );
     }
 }
 
-void K3bMiniButton::enterEvent( QEvent * )
+void K3bMiniButton::enterEvent( QEvent* )
 {
     m_mouseOver = true;
     repaint();
 }
 
 
-void K3bMiniButton::leaveEvent( QEvent * )
+void K3bMiniButton::leaveEvent( QEvent* )
 {
     m_mouseOver = false;
     repaint();

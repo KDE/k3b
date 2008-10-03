@@ -20,11 +20,11 @@
 #ifndef _K3B_MINI_BUTTON_H_
 #define _K3B_MINI_BUTTON_H_
 
-#include <qpushbutton.h>
-#include <QEvent>
+#include <QPushButton>
 
-class QPainter;
 class QEvent;
+class QPainter;
+class QPaintEvent;
 
 
 /**
@@ -36,14 +36,14 @@ class K3bMiniButton : public QPushButton
     Q_OBJECT
 
 public:
-    K3bMiniButton( QWidget *parent = 0 );
+    K3bMiniButton( QWidget* parent = 0 );
     virtual ~K3bMiniButton();
 
 protected:
     virtual void paintEvent( QPaintEvent* );
     void drawButton( QPainter* );
-    virtual void enterEvent( QEvent * );
-    virtual void leaveEvent( QEvent * );
+    virtual void enterEvent( QEvent* );
+    virtual void leaveEvent( QEvent* );
   
 private:
     bool m_mouseOver;

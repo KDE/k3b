@@ -16,24 +16,23 @@
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
 
-#include <kiconloader.h>
-
-#include <qpainter.h>
-#include <qtimer.h>
-#include <qbitmap.h>
-//Added by qt3to4:
 #include <QResizeEvent>
+#include <QPainter>
 #include <QPaintEvent>
+#include <QTimer>
 
 
 class K3bTimeoutWidget::Private
 {
 public:
   int timeout;
+  int padding;
   int margin;
 
   QTimer timer;
   int currentTime;
+
+  bool paused;
 };
 
 
@@ -42,7 +41,9 @@ K3bTimeoutWidget::K3bTimeoutWidget( QWidget* parent )
 {
   d = new Private;
   d->timeout = 10000;
-  d->margin = 4;
+  d->padding = 4;
+  d->margin = 1;
+  d->paused = false;
   connect( &d->timer, SIGNAL(timeout()), this, SLOT(timeStep()) );
 }
 
@@ -55,6 +56,7 @@ K3bTimeoutWidget::~K3bTimeoutWidget()
 
 void K3bTimeoutWidget::start()
 {
+  d->paused = false;
   d->currentTime = 0;
   startTimer();
 }
@@ -62,6 +64,7 @@ void K3bTimeoutWidget::start()
 
 void K3bTimeoutWidget::stop()
 {
+  d->paused = false;
   d->timer.stop();
   d->currentTime = 0;
 }
@@ -69,12 +72,14 @@ void K3bTimeoutWidget::stop()
 
 void K3bTimeoutWidget::pause()
 {
+  d->paused = true;
   d->timer.stop();
 }
 
 
 void K3bTimeoutWidget::resume()
 {
+  d->paused = false;
   startTimer();
 }
 
@@ -101,7 +106,7 @@ QSize K3bTimeoutWidget::minimumSizeHint() const
   int fw = fontMetrics().width( QString::number( d->timeout/1000 ) );
   int fh = fontMetrics().height();
 
-  int diam = qMax( fw, fh ) + 2*d->margin;
+  int diam = qMax( fw, fh ) + 2*d->padding + 2*d->margin;
 
   return QSize( diam, diam );
 }
@@ -121,8 +126,9 @@ void K3bTimeoutWidget::startTimer()
 
 void K3bTimeoutWidget::paintEvent( QPaintEvent* )
 {
-  if( d->timer.isActive() ) {
+  if( d->timer.isActive() || d->paused ) {
     QPainter p(this);
+    p.setRenderHint( QPainter::Antialiasing );
     
     if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
       p.setBrush( theme->backgroundColor() );
@@ -130,10 +136,10 @@ void K3bTimeoutWidget::paintEvent( QPaintEvent* )
     }
 
     QRect r;
-    r.setSize( minimumSizeHint() );
+    r.setSize( minimumSizeHint() - QSize(2*d->margin,2*d->margin) );
     r.moveCenter( rect().center() );
 
-    p.drawArc( r, 0, 360*16 );    
+    p.drawArc( r, 0, 360*16 );
     p.drawPie( r, 90*16, 360*16*d->currentTime/d->timeout );
     
     p.setPen( Qt::black );

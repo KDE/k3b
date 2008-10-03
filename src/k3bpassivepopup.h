@@ -15,11 +15,7 @@
 #ifndef _K3B_PASSIVE_POPUP_H_
 #define _K3B_PASSIVE_POPUP_H_
 
-//Added by qt3to4:
-#include <QLabel>
-
-class QLabel;
-
+#include <QFrame>
 
 /**
  * A message box which is closed using a timer or a close button
@@ -27,47 +23,47 @@ class QLabel;
  */
 class K3bPassivePopup : public QFrame
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bPassivePopup( QWidget* parent );
-  ~K3bPassivePopup();
+public:
+    K3bPassivePopup( QWidget* parent );
+    ~K3bPassivePopup();
 
-  enum MessageType {
-   Information,
-   Warning,
-   Error
-  };
+    enum MessageType {
+        Information,
+        Warning,
+        Error
+    };
 
-  /**
-   * This will show the popup using K3bWidgetShowEffect::Slide and close it the 
-   * same way.
-   */
-  void slideIn();
+    /**
+     * This will show the popup using K3bWidgetShowEffect::Slide and close it the 
+     * same way.
+     */
+    void slideIn();
 
-  static void showPopup( const QString& message, 
-			 const QString& title = QString(), 
-			 MessageType messageType = Information,
-			 bool countdown = true,
-			 bool button = true );
+    static void showPopup( const QString& message, 
+                           const QString& title = QString(), 
+                           MessageType messageType = Information,
+                           bool countdown = true,
+                           bool button = true );
 
- public Q_SLOTS:
-  void setShowCloseButton( bool b );
-  void setShowCountdown( bool b );
-  void setMessage( const QString& m );
-  void setTitle( const QString& t );
-  void setTimeout( int msecs );
-  void setMessageType( MessageType m );
+public Q_SLOTS:
+    void setShowCloseButton( bool b );
+    void setShowCountdown( bool b );
+    void setMessage( const QString& m );
+    void setTitle( const QString& t );
+    void setTimeout( int msecs );
+    void setMessageType( MessageType m );
 
- private Q_SLOTS:
-  void slotShown();
-  void slotHidden();
-  void slotClose();
-  void slotSticky( bool );
+private Q_SLOTS:
+    void slotShown();
+    void slotHidden();
+    void slotClose();
+    void slotSticky( bool );
 
- private:
-  class Private;
-  Private* d;
+private:
+    class Private;
+    Private* d;
 };
 
 #endif
