@@ -57,15 +57,14 @@ KActionCollection* K3bFileView::actionCollection() const
 
 void K3bFileView::setupGUI()
 {
-    QVBoxLayout* layout = new QVBoxLayout( this );
-    //  layout->setAutoAdd( true );
-
     m_dirOp = new K3bDirOperator( KUrl(QDir::home().absolutePath()), this );
     m_toolBox = new KToolBar( this);
 
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    layout->setMargin( 0 );
+    layout->setSpacing( 0 );
     layout->addWidget( m_toolBox );
-    layout->addWidget( m_dirOp );
-    layout->setStretchFactor( m_dirOp, 1 );
+    layout->addWidget( m_dirOp, 1 );
 
     // setup actions
     QAction* actionHome = m_dirOp->actionCollection()->action("home");
