@@ -95,7 +95,6 @@ public:
     Private()
         : version( LIBK3B_VERSION ),
           config(0),
-          deleteConfig(false),
           mediaCache(0),
           deviceManager(0),
           externalBinManager(0),
@@ -105,7 +104,6 @@ public:
 
     K3bVersion version;
     KConfig* config;
-    bool deleteConfig;
     K3bMediaCache* mediaCache;
     K3bDevice::DeviceManager* deviceManager;
     K3bExternalBinManager* externalBinManager;
@@ -144,6 +142,9 @@ K3bCore::~K3bCore()
     s_k3bCore = 0;
 
     delete d->globalSettings;
+    if( d->config != 0 ) {
+        delete d->config;
+    }
     delete d;
 }
 
@@ -192,7 +193,6 @@ const K3bVersion& K3bCore::version() const
 KConfig* K3bCore::config() const
 {
     if( !d->config ) {
-        d->deleteConfig = true;
         d->config = new KConfig( "k3brc" );
     }
 
