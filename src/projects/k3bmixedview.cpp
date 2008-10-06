@@ -51,6 +51,8 @@ K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent )
     m_dataFileView = new K3bDataFileView( this, doc->dataDoc(), m_widgetStack );
     m_audioListView = new K3bAudioTrackView( doc->audioDoc(), m_widgetStack );
 
+    splitter->setStretchFactor( 0, 1 );
+    splitter->setStretchFactor( 1, 3 );
     setMainWidget( splitter );
 
     connect( m_mixedDirTreeView, SIGNAL(audioTreeSelected()),

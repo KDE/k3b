@@ -66,6 +66,8 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent )
     QSplitter* mainSplitter = new QSplitter( this );
     m_dataDirTree = new K3bDataDirTreeView( this, doc, mainSplitter );
     m_dataFileView = new K3bDataFileView( this, doc, mainSplitter );
+    mainSplitter->setStretchFactor( 0, 1 );
+    mainSplitter->setStretchFactor( 1, 3 );
     setMainWidget( mainSplitter );
 
 

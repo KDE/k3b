@@ -36,6 +36,8 @@ K3bVideoDvdView::K3bVideoDvdView( K3bVideoDvdDoc* doc, QWidget *parent )
     QSplitter* mainSplitter = new QSplitter( this );
     m_dataDirTree = new K3bDataDirTreeView( this, doc, mainSplitter );
     m_dataFileView = new K3bDataFileView( this, doc, mainSplitter );
+    mainSplitter->setStretchFactor( 0, 1 );
+    mainSplitter->setStretchFactor( 1, 3 );
     setMainWidget( mainSplitter );
 
     connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)), m_dataDirTree, SLOT(setCurrentDir(K3bDirItem*)) );
