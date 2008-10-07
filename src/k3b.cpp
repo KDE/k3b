@@ -320,7 +320,7 @@ void K3bMainWindow::initActions()
                              0,
                              0,
                              this,
-                             SLOT(slotCheckSystem()),
+                             SLOT(slotManualCheckSystem()),
                              actionCollection(),
                              "help_check_system" );
 
@@ -1403,7 +1403,13 @@ void K3bMainWindow::slotCheckSystemTimed()
 
 void K3bMainWindow::slotCheckSystem()
 {
-    K3bSystemProblemDialog::checkSystem( this );
+    K3bSystemProblemDialog::checkSystem( this, K3bSystemProblemDialog::NotifyOnlyErrors );
+}
+
+
+void K3bMainWindow::slotManualCheckSystem()
+{
+    K3bSystemProblemDialog::checkSystem( this, K3bSystemProblemDialog::AlwaysNotify );
 }
 
 

@@ -71,6 +71,11 @@ class K3bSystemProblemDialog : public KDialog
   Q_OBJECT
 
  public:
+     enum NotificationLevel {
+         AlwaysNotify,
+         NotifyOnlyErrors
+     };
+     
   /**
    * Determines if the system problem dialog should be shown or not.
    * It basicaly reads a config entry. But in addition it
@@ -78,7 +83,7 @@ class K3bSystemProblemDialog : public KDialog
    * or K3b is started for the first time.
    */
   static bool readCheckSystemConfig();
-  static void checkSystem( QWidget* parent = 0); 
+  static void checkSystem( QWidget* parent = 0, NotificationLevel level = NotifyOnlyErrors ); 
 
  protected:
   void closeEvent( QCloseEvent* );

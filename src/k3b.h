@@ -134,6 +134,7 @@ public Q_SLOTS:
     void slotConfigureKeys();
     void slotShowTips();
     void slotCheckSystem();
+    void slotManualCheckSystem();
 
     void addUrls( const KUrl::List& urls );
 

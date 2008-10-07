@@ -173,7 +173,7 @@ void K3bSystemProblemDialog::closeEvent( QCloseEvent* e )
 }
 
 
-void K3bSystemProblemDialog::checkSystem( QWidget* parent)
+void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel level )
 {
     QList<K3bSystemProblem> problems;
 
@@ -582,7 +582,9 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent)
     }
     if( problems.isEmpty() ) {
         kDebug() << "          - none - ";
-        K3bPassivePopup::showPopup( i18n("No problems found in system configuration."), i18n("System configured properly") );
+        if( level == AlwaysNotify ) {
+            K3bPassivePopup::showPopup( i18n("No problems found in system configuration."), i18n("System configured properly") );
+        }
     }
     else {
         static K3bSystemProblemDialog* s_openDlg = 0;
