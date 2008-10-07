@@ -90,6 +90,16 @@ K3bDirItem* K3bDataFileView::currentDir() const
 }
 
 
+void K3bDataFileView::rowsInserted( const QModelIndex& parent, int begin, int end )
+{
+    QTreeView::rowsInserted( parent, begin, end );
+    int columnCount = m_model->columnCount();
+    for( int i = 0; i < columnCount; ++i ) {
+        QTreeView::resizeColumnToContents( i );
+    }
+}
+
+
 void K3bDataFileView::setCurrentDir( K3bDirItem* dir )
 {
     setRootIndex( m_model->indexForItem( dir ? dir : m_doc->root() ) );

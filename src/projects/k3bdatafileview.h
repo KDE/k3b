@@ -48,11 +48,14 @@ public:
 
     QList<K3bDataItem*> selectedItems() const;
 
- Q_SIGNALS:
+Q_SIGNALS:
     void dirSelected( K3bDirItem* );
 	
 public Q_SLOTS:
     void setCurrentDir( K3bDirItem* );
+
+private:
+    virtual void rowsInserted( const QModelIndex& parent, int begin, int end );
 
 private:
     K3bView* m_view;
