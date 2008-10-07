@@ -50,6 +50,8 @@ K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent )
     m_widgetStack = new QStackedWidget( splitter );
     m_dataFileView = new K3bDataFileView( this, doc->dataDoc(), m_widgetStack );
     m_audioListView = new K3bAudioTrackView( doc->audioDoc(), m_widgetStack );
+    m_widgetStack->addWidget( m_dataFileView );
+    m_widgetStack->addWidget( m_audioListView );
 
     splitter->setStretchFactor( 0, 1 );
     splitter->setStretchFactor( 1, 3 );
