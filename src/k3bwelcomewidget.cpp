@@ -342,6 +342,7 @@ K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent )
 {
     main = new Display( this );
     setWidget( main );
+    setFrameStyle( QFrame::NoFrame );
 
     connect( main, SIGNAL(dropped(const KUrl::List&)), m_mainWindow, SLOT(addUrls(const KUrl::List&)) );
 
