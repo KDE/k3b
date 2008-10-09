@@ -49,7 +49,7 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, bool showSubProgr
     textLabel14_font.setBold( true );
     m_labelWriter->setFont( textLabel14_font );
 
-    m_frameExtraInfoLayout->addWidget( m_labelWriter, 0, 0, 0, 4 );
+    m_frameExtraInfoLayout->addWidget( m_labelWriter, 0, 0, 1, 4 );
     m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Software buffer:"), m_frameExtraInfo ), 1, 2 );
     m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Device buffer:"), m_frameExtraInfo ), 2, 2 );
 
