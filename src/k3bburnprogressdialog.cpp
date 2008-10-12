@@ -16,19 +16,16 @@
 #include "k3bburnprogressdialog.h"
 
 #include "k3bapplication.h"
+#include "k3bdevice.h"
 #include "k3bjob.h"
-#include <k3bdevice.h>
 #include "k3bstdguiitems.h"
 #include "k3bthemedlabel.h"
-#include <k3bthememanager.h>
+#include "k3bthememanager.h"
 
-#include <kglobal.h>
-#include <kprogressdialog.h>
-#include <klocale.h>
+#include <KLocale>
 
-#include <q3groupbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QProgressBar>
 
 
 K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, bool showSubProgress )

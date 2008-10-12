@@ -16,11 +16,10 @@
 #ifndef K3BBURNPROGRESSDIALOG_H
 #define K3BBURNPROGRESSDIALOG_H
 
-#include <k3bjobprogressdialog.h>
-//Added by qt3to4:
-#include <QLabel>
+#include "k3bjobprogressdialog.h"
 
 class K3bBurnJob;
+class K3bThemedLabel;
 class QProgressBar;
 class QLabel;
 
@@ -46,7 +45,7 @@ protected Q_SLOTS:
     void slotFinished(bool);
 
 protected:
-    QLabel* m_labelWriter;
+    K3bThemedLabel* m_labelWriter;
     QProgressBar* m_progressWritingBuffer;
     QProgressBar* m_progressDeviceBuffer;
     QLabel* m_labelWritingSpeed;
