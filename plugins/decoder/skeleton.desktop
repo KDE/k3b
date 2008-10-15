@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=K3b ??? Decoder
+Name[cs]=K3b ??? dekodér
 Name[csb]=Dekòder ??? dlô K3b
+Name[de]=K3b-???-Dekoder
 Name[el]=Αποκωδικοποιητής ??? του K3b
 Name[es]=Descodificador ??? de K3b
 Name[et]=K3b ??? dekodeerija
@@ -23,7 +25,9 @@ Name[x-test]=xxK3b ??? Decoderxx
 Name[zh_CN]=K3b ??? 解码器
 Comment=Decoding module to decode ??? files
 Comment[bg]=Декодиращ модул за ??? файлове
+Comment[cs]=Modul pro dekódování souborů ???
 Comment[csb]=Mòdul dekòdërëjący lopczi ???
+Comment[de]=Dekodierungsmodul für ???-Dateien
 Comment[el]=Άρθρωμα αποκωδικοποίησης αρχείων ???
 Comment[es]=Módulo de descodificación para descodificar archivos ???
 Comment[et]=??? failide dekodeerimise moodul

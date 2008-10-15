@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=K3b FFMpeg Decoder
+Name[cs]=FFMpeg dekodér K3b
 Name[csb]=Dekòder FFMpeg dlô K3b
+Name[de]=K3b-FFMpeg-Dekoder
 Name[el]=Αποκωδικοποιητής FFMpeg του K3b
 Name[es]=Descodificador FFMpeg de K3b
 Name[et]=K3b FFMpeg dekodeerija
@@ -24,7 +26,9 @@ Name[x-test]=xxK3b FFMpeg Decoderxx
 Name[zh_CN]=K3b FFMpeg 解码器
 Comment=Decoding module to decode wma files
 Comment[bg]=Декодиращ модул за wma файлове
+Comment[cs]=Modul pro dekódování souborů wma
 Comment[csb]=Mòdul dekòdërëjący lopczi wma
+Comment[de]=Dekodierungsmodul für WMA-Dateien
 Comment[el]=Άρθρωμα αποκωδικοποίησης αρχείων wma
 Comment[es]=Módulo de descodificación para descodificar archivos wma
 Comment[et]=WMA-failide dekodeerimise moodul

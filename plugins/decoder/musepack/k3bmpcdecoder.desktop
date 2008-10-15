@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=K3b Musepack Decoder
+Name[cs]=Musepack dekodér K3b
 Name[csb]=Dekòder Musepack dlô K3b
+Name[de]=K3b-Musepack-Dekoder
 Name[el]=Αποκωδικοποιητής Musepack του K3b
 Name[es]=Descodificador Musepack de K3b
 Name[et]=K3b Musepacki dekodeerija
@@ -24,7 +26,9 @@ Name[x-test]=xxK3b Musepack Decoderxx
 Name[zh_CN]=K3b Musepack 解码器
 Comment=Decoding module to decode Musepack audio files
 Comment[bg]=Декодиращ модул за аудио файлове Musepack
+Comment[cs]=Modul pro dekódování souborů Musepack
 Comment[csb]=Mòdul dekòdërëjący lopczi Musepack
+Comment[de]=Dekodierungsmodul für Musepack-Audio-Dateien
 Comment[el]=Άρθρωμα αποκωδικοποίησης αρχείων ήχου Musepack
 Comment[es]=Módulo de descodificación para descodificar archivos de audio Musepack
 Comment[et]=Musepacki helifailide dekodeerimise moodul

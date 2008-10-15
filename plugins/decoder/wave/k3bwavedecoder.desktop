@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=K3b Wave Decoder
+Name[cs]=Wave dekodér K3b
 Name[csb]=Dekòder Wave dlô K3b
+Name[de]=K3b-Wave-Dekoder
 Name[el]=Αποκωδικοποιητής Wave του K3b
 Name[es]=Descodificador Wave de K3b
 Name[et]=K3b Wave dekodeerija
@@ -24,7 +26,9 @@ Name[x-test]=xxK3b Wave Decoderxx
 Name[zh_CN]=K3b Wave 解码器
 Comment=Decoding module to decode wave files
 Comment[bg]=Декодиращ модул за wave файлове
+Comment[cs]=Modul pro dekódování souborů wave
 Comment[csb]=Mòdul dekòdërëjący lopczi wave
+Comment[de]=Dekodierungsmodul für Wave-Dateien
 Comment[el]=Άρθρωμα αποκωδικοποίησης αρχείων Wave
 Comment[es]=Módulo de descodificación para descodificar archivos wave
 Comment[et]=Wave-failide dekodeerimise moodul
