@@ -337,11 +337,11 @@ void K3bMediaCache::buildDeviceList( K3bDevice::DeviceManager* dm )
     clearDeviceList();
 
     QList<K3bDevice::Device *> items(dm->allDevices());
-    for( QList<K3bDevice::Device *>::const_iterator it = items.begin();
-         it != items.end(); ++it ) {
+    for( QList<K3bDevice::Device *>::const_iterator it = items.constBegin();
+         it != items.constEnd(); ++it ) {
         d->deviceMap.insert( *it, new DeviceEntry( this, *it ) );
-        QMap<K3bDevice::Device*, int>::const_iterator bi_it = blockedIds.find( *it );
-        if( bi_it != blockedIds.end() )
+        QMap<K3bDevice::Device*, int>::const_iterator bi_it = blockedIds.constFind( *it );
+        if( bi_it != blockedIds.constEnd() )
             d->deviceMap[*it]->blockedId = bi_it.value();
     }
 

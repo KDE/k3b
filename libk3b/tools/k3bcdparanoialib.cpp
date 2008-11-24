@@ -188,7 +188,7 @@ public:
     long sector() const { return m_currentSector; }
 
     static K3bCdparanoiaLibData* data( K3bDevice::Device* dev ) {
-        QMap<K3bDevice::Device*, K3bCdparanoiaLibData*>::const_iterator it = s_dataMap.find( dev );
+        QMap<K3bDevice::Device*, K3bCdparanoiaLibData*>::const_iterator it = s_dataMap.constFind( dev );
         if( it == s_dataMap.constEnd() )
             return new K3bCdparanoiaLibData( dev );
         else
@@ -605,7 +605,7 @@ bool K3bCdparanoiaLib::initReading()
 {
     if( d->device ) {
         // find first audio track
-        K3bDevice::Toc::const_iterator trackIt = d->toc.begin();
+        K3bDevice::Toc::const_iterator trackIt = d->toc.constBegin();
         while( (*trackIt).type() != K3bDevice::Track::AUDIO ) {
             ++trackIt;
         }
@@ -613,7 +613,7 @@ bool K3bCdparanoiaLib::initReading()
         long start = (*trackIt).firstSector().lba();
 
         // find last audio track
-        while( trackIt != d->toc.end() && (*trackIt).type() == K3bDevice::Track::AUDIO )
+        while( trackIt != d->toc.constEnd() && (*trackIt).type() == K3bDevice::Track::AUDIO )
             ++trackIt;
         --trackIt;
 

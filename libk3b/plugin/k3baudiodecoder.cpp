@@ -552,8 +552,8 @@ void K3bAudioDecoder::addMetaInfo( MetaDataField f, const QString& value )
 QStringList K3bAudioDecoder::supportedTechnicalInfos() const
 {
     QStringList l;
-    for( QMap<QString, QString>::const_iterator it = d->technicalInfoMap.begin();
-         it != d->technicalInfoMap.end(); ++it )
+    for( QMap<QString, QString>::const_iterator it = d->technicalInfoMap.constBegin();
+         it != d->technicalInfoMap.constEnd(); ++it )
         l.append( it.key() );
     return l;
 }

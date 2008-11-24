@@ -211,16 +211,16 @@ void K3bMedium::analyseContent()
         if( diskInfo().numSessions() > 1 ) {
             // We use the last data track
             // this way we get the latest session on a ms cd
-            K3bDevice::Toc::const_iterator it = d->toc.end();
+            K3bDevice::Toc::const_iterator it = d->toc.constEnd();
             --it; // this is valid since there is at least one data track
-            while( it != d->toc.begin() && (*it).type() != K3bDevice::Track::DATA )
+            while( it != d->toc.constBegin() && (*it).type() != K3bDevice::Track::DATA )
                 --it;
             startSec = (*it).firstSector().lba();
         }
         else {
             // use first data track
-            K3bDevice::Toc::const_iterator it = d->toc.begin();
-            while( it != d->toc.end() && (*it).type() != K3bDevice::Track::DATA )
+            K3bDevice::Toc::const_iterator it = d->toc.constBegin();
+            while( it != d->toc.constEnd() && (*it).type() != K3bDevice::Track::DATA )
                 ++it;
             startSec = (*it).firstSector().lba();
         }
@@ -368,7 +368,7 @@ QString K3bMedium::longString() const
 
     if( diskInfo().diskState() == K3bDevice::STATE_COMPLETE ||
         diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE  ) {
-        s += "<br>" + i18np("%1 in %2 track", "%1 in %2 tracks", d->toc.count(),
+        s += "<br>" + i18np("1 in %2 track", "%1 in %2 tracks", d->toc.count(),
                             KIO::convertSize(diskInfo().size().mode1Bytes() ) );
         if( diskInfo().numSessions() > 1 )
             s += i18np(" and %1 session", " and %1 sessions", diskInfo().numSessions() );

@@ -291,11 +291,11 @@ void K3bCdrecordWriter::prepareProcess()
 
     // additional user parameters from config
     const QStringList& params = m_cdrecordBinObject->userParameters();
-    for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
+    for( QStringList::const_iterator it = params.constBegin(); it != params.constEnd(); ++it )
         *m_process << *it;
 
     // add the user parameters
-    for( QStringList::const_iterator it = m_arguments.begin(); it != m_arguments.end(); ++it )
+    for( QStringList::const_iterator it = m_arguments.constBegin(); it != m_arguments.constEnd(); ++it )
         *m_process << *it;
 }
 

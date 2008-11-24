@@ -1041,7 +1041,7 @@ bool K3bCdrdaoWriter::defaultToGenericMMC( K3bDevice::Device* dev, bool writer )
             }
 
             // search for the driver
-            for( QStringList::const_iterator it = drivers.begin(); it != drivers.end(); ++it ) {
+            for( QStringList::const_iterator it = drivers.constBegin(); it != drivers.constEnd(); ++it ) {
                 if( (*it).section( '|', 1, 1 ) == dev->vendor() &&
                     (*it).section( '|', 2, 2 ) == dev->description() )
                     return false;

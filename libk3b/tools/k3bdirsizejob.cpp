@@ -105,8 +105,8 @@ bool K3bDirSizeJob::run()
     d->totalSymlinks = 0;
 
     QStringList l;
-    for( KUrl::List::const_iterator it = d->urls.begin();
-         it != d->urls.end(); ++it ) {
+    for( KUrl::List::const_iterator it = d->urls.constBegin();
+         it != d->urls.constEnd(); ++it ) {
         const KUrl& url = *it;
 
         if( !url.isLocalFile() ) {

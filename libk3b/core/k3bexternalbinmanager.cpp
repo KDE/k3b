@@ -211,7 +211,7 @@ bool K3bExternalBinManager::readConfig( KConfig* c )
         }
 
         QStringList list = grp.readEntry( p->name() + " user parameters", QStringList() );
-        for( QStringList::iterator strIt = list.begin(); strIt != list.end(); ++strIt )
+        for( QStringList::const_iterator strIt = list.constBegin(); strIt != list.constEnd(); ++strIt )
             p->addUserParameter( *strIt );
 
         K3bVersion lastMax( grp.readEntry( p->name() + " last seen newest version", QString() ) );
@@ -248,7 +248,7 @@ bool K3bExternalBinManager::saveConfig( KConfig* c )
 
 bool K3bExternalBinManager::foundBin( const QString& name )
 {
-    if( m_programs.find( name ) == m_programs.end() )
+    if( m_programs.constFind( name ) == m_programs.constEnd() )
         return false;
     else
         return (m_programs[name]->defaultBin() != 0);
@@ -257,7 +257,7 @@ bool K3bExternalBinManager::foundBin( const QString& name )
 
 QString K3bExternalBinManager::binPath( const QString& name )
 {
-    if( m_programs.find( name ) == m_programs.end() )
+    if( m_programs.constFind( name ) == m_programs.constEnd() )
         return m_noPath;
 
     if( m_programs[name]->defaultBin() != 0 )
@@ -269,7 +269,7 @@ QString K3bExternalBinManager::binPath( const QString& name )
 
 const K3bExternalBin* K3bExternalBinManager::binObject( const QString& name )
 {
-    if( m_programs.find( name ) == m_programs.end() )
+    if( m_programs.constFind( name ) == m_programs.constEnd() )
         return 0;
 
     return m_programs[name]->defaultBin();
@@ -300,7 +300,7 @@ void K3bExternalBinManager::search()
 
     // do not search one path twice
     QStringList paths;
-    for( QStringList::const_iterator it = m_searchPath.begin(); it != m_searchPath.end(); ++it ) {
+    for( QStringList::const_iterator it = m_searchPath.constBegin(); it != m_searchPath.constEnd(); ++it ) {
         QString p = *it;
         if( p[p.length()-1] == '/' )
             p.truncate( p.length()-1 );
@@ -312,7 +312,7 @@ void K3bExternalBinManager::search()
     char* env_path = ::getenv("PATH");
     if( env_path ) {
         QStringList env_pathList = QString::fromLocal8Bit(env_path).split( ':' );
-        for( QStringList::const_iterator it = env_pathList.begin(); it != env_pathList.end(); ++it ) {
+        for( QStringList::const_iterator it = env_pathList.constBegin(); it != env_pathList.constEnd(); ++it ) {
             QString p = *it;
             if( p[p.length()-1] == '/' )
                 p.truncate( p.length()-1 );
@@ -353,7 +353,7 @@ void K3bExternalBinManager::search()
 
 K3bExternalProgram* K3bExternalBinManager::program( const QString& name ) const
 {
-    if( m_programs.find( name ) == m_programs.end() )
+    if( m_programs.find( name ) == m_programs.constEnd() )
         return 0;
     else
         return m_programs[name];
@@ -381,7 +381,7 @@ void K3bExternalBinManager::setSearchPath( const QStringList& list )
 {
     loadDefaultSearchPath();
 
-    for( QStringList::const_iterator it = list.begin(); it != list.end(); ++it ) {
+    for( QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it ) {
         if( !m_searchPath.contains( *it ) )
             m_searchPath.append( *it );
     }
