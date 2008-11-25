@@ -291,7 +291,7 @@ void K3bMovixListView::slotDropped( K3ListView*, QDropEvent* e, Q3ListViewItem* 
         KUrl::List urls;
         K3URLDrag::decode( e, urls );
 
-        for( KUrl::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
+        for( KUrl::List::ConstIterator it = urls.constBegin(); it != urls.constEnd(); ++it ) {
             m_doc->addMovixFile( *it, pos++ );
         }
     }

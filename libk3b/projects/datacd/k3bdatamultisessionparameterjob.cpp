@@ -252,7 +252,7 @@ bool K3bDataMultiSessionParameterJob::setupMultiSessionParameters()
         nextSessionStart = d->doc->burner()->nextWritableAddress();
         lastSessionStart = toc.last().firstSector().lba();
         if ( d->doc->importedSession() > 0 ) {
-            for ( K3bDevice::Toc::const_iterator it = toc.begin(); it != toc.end(); ++it ) {
+            for ( K3bDevice::Toc::const_iterator it = toc.constBegin(); it != toc.constEnd(); ++it ) {
                 if ( ( *it ).session() == d->doc->importedSession() ) {
                     lastSessionStart = ( *it ).firstSector().lba();
                     if ( ( *it ).type() == K3bDevice::Track::AUDIO )

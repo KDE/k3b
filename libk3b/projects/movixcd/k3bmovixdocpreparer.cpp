@@ -284,15 +284,15 @@ bool K3bMovixDocPreparer::addMovixFiles()
     isolinuxFiles.removeOne( "isolinux.bin" );
     isolinuxFiles.removeOne( "isolinux.cfg" );
     isolinuxFiles.removeOne( "kernel/vmlinuz" );
-    for( QStringList::const_iterator it = isolinuxFiles.begin();
-         it != isolinuxFiles.end(); ++it ) {
+    for( QStringList::const_iterator it = isolinuxFiles.constBegin();
+         it != isolinuxFiles.constEnd(); ++it ) {
         QString path = d->eMovixBin->path + "/isolinux/" + *it;
         (void)new K3bFileItem( path, d->doc, d->isolinuxDir );
     }
 
     const QStringList& movixFiles = d->eMovixBin->movixFiles();
-    for( QStringList::const_iterator it = movixFiles.begin();
-         it != movixFiles.end(); ++it ) {
+    for( QStringList::const_iterator it = movixFiles.constBegin();
+         it != movixFiles.constEnd(); ++it ) {
         QString path = d->eMovixBin->path + "/movix/" + *it;
         (void)new K3bFileItem( path, d->doc, d->movixDir );
     }
@@ -301,8 +301,8 @@ bool K3bMovixDocPreparer::addMovixFiles()
     QString path = d->eMovixBin->languageDir( d->doc->bootMessageLanguage() );
     QDir dir(path);
     QStringList helpFiles = dir.entryList(QDir::Files);
-    for( QStringList::const_iterator it = helpFiles.begin();
-         it != helpFiles.end(); ++it ) {
+    for( QStringList::const_iterator it = helpFiles.constBegin();
+         it != helpFiles.constEnd(); ++it ) {
         // some emovix installations include backup-files, no one's perfect ;)
         if( !(*it).endsWith( "~" ) )
             (void)new K3bFileItem( path + "/" + *it, d->doc, d->isolinuxDir );
@@ -320,8 +320,8 @@ bool K3bMovixDocPreparer::addMovixFiles()
             K3bDirItem* fontDir = new K3bDirItem( "font", d->doc, d->mplayerDir );
             QDir dir( fontPath );
             QStringList fontFiles = dir.entryList( QDir::Files );
-            for( QStringList::const_iterator it = fontFiles.begin();
-                 it != fontFiles.end(); ++it ) {
+            for( QStringList::const_iterator it = fontFiles.constBegin();
+                 it != fontFiles.constEnd(); ++it ) {
                 (void)new K3bFileItem( fontPath + "/" + *it, d->doc, fontDir );
             }
         }
@@ -361,13 +361,13 @@ bool K3bMovixDocPreparer::addMovixFilesNew()
     // 4. set weights for isolinux files
 
     // FIXME: use the settings from the doc
-    QStringList files = d->eMovixBin->files( d->doc->keyboardLayout(),
+    const QStringList files = d->eMovixBin->files( d->doc->keyboardLayout(),
                                              d->doc->subtitleFontset(),
                                              d->doc->audioBackground(),
                                              d->doc->bootMessageLanguage(),
                                              QStringList() << "all" /*d->doc->codecs()*/ ); // for now we simply don't allow selection
 
-    for( QStringList::iterator it = files.begin(); it != files.end(); ++it ) {
+    for( QStringList::ConstIterator it = files.constBegin(); it != files.constEnd(); ++it ) {
         QString docPath = (*it).section( ' ', 0, 0 );
         QString filePath = (*it).section( ' ', 1, 1 );
         QString fileName = filePath.section( '/', -1 );
@@ -410,7 +410,7 @@ bool K3bMovixDocPreparer::addMovixFilesNew()
         QDir localCodecDir( d->eMovixBin->movixDataDir() + "/codecs" );
         if( localCodecDir.exists() ) {
             QStringList codecFiles = localCodecDir.entryList( QDir::Files );
-            for( QStringList::const_iterator it = codecFiles.begin(); it != codecFiles.end(); ++it )
+            for( QStringList::const_iterator it = codecFiles.constBegin(); it != codecFiles.constEnd(); ++it )
                 createItem( localCodecDir.path() + '/' + *it, "/eMoviX/codecs" );
         }
     }
@@ -446,7 +446,7 @@ K3bDirItem* K3bMovixDocPreparer::createDir( const QString& docPath )
 {
     QStringList docPathSections = docPath.split( '/' );
     K3bDirItem* dir = d->doc->root();
-    for( QStringList::iterator it = docPathSections.begin(); it != docPathSections.end(); ++it ) {
+    for( QStringList::ConstIterator it = docPathSections.constBegin(); it != docPathSections.constEnd(); ++it ) {
         K3bDataItem* next = dir->find( *it );
         if( !next )
             dir = new K3bDirItem( *it, d->doc, dir );

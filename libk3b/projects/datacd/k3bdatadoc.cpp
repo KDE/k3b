@@ -145,7 +145,7 @@ void K3bDataDoc::addUrlsToDir( const KUrl::List& l, K3bDirItem* dir )
 
     KUrl::List urls = K3b::convertToLocalUrls(l);
 
-    for( KUrl::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
+    for( KUrl::List::ConstIterator it = urls.constBegin(); it != urls.constEnd(); ++it ) {
         const KUrl& url = *it;
         QFileInfo f( url.path() );
         QString k3bname = f.absoluteFilePath().section( "/", -1 );
@@ -197,7 +197,7 @@ void K3bDataDoc::addUrlsToDir( const KUrl::List& l, K3bDirItem* dir )
             // recursively add all the files in the directory
             QStringList dlist = QDir( f.absoluteFilePath() ).entryList( QDir::TypeMask|QDir::System|QDir::Hidden|QDir::NoDotAndDotDot );
             KUrl::List newUrls;
-            for( QStringList::Iterator it = dlist.begin(); it != dlist.end(); ++it )
+            for( QStringList::ConstIterator it = dlist.constBegin(); it != dlist.constEnd(); ++it )
                 newUrls.append( KUrl( f.absoluteFilePath() + "/" + *it ) );
             addUrlsToDir( newUrls, newDirItem );
         }
@@ -1062,8 +1062,8 @@ void K3bDataDoc::prepareFilenamesInDir( K3bDirItem* dir )
 
     QList<K3bDataItem*> sortedChildren;
     QList<K3bDataItem*> children( dir->children() );
-    QList<K3bDataItem*>::const_iterator it = children.end();
-    while ( it != children.begin() ) {
+    QList<K3bDataItem*>::const_iterator it = children.constEnd();
+    while ( it != children.constBegin() ) {
         --it;
         K3bDataItem* item = *it;
 
@@ -1150,7 +1150,7 @@ bool K3bDataDoc::importSession( K3bDevice::Device* device, int session )
 
     long startSec = toc.last().firstSector().lba();
     if ( session > 0 ) {
-        for ( K3bDevice::Toc::const_iterator it = toc.begin(); it != toc.end(); ++it ) {
+        for ( K3bDevice::Toc::const_iterator it = toc.constBegin(); it != toc.constEnd(); ++it ) {
             if ( ( *it ).session() == session ) {
                 startSec = ( *it ).firstSector().lba();
                 break;
@@ -1220,8 +1220,8 @@ void K3bDataDoc::createSessionImportItems( const K3bIso9660Directory* importDir,
     QStringList entries = importDir->entries();
     entries.removeAll( "." );
     entries.removeAll( ".." );
-    for( QStringList::const_iterator it = entries.begin();
-         it != entries.end(); ++it ) {
+    for( QStringList::const_iterator it = entries.constBegin();
+         it != entries.constEnd(); ++it ) {
         const K3bIso9660Entry* entry = importDir->entry( *it );
         K3bDataItem* oldItem = parent->find( entry->name() );
         if( entry->isDirectory() ) {

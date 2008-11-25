@@ -33,13 +33,13 @@ namespace {
     {
         QString s;
         int cnt = 0;
-        for( QList<K3bDataItem*>::const_iterator it = items.begin();
-             it != items.end(); ++it ) {
+        for( QList<K3bDataItem*>::const_iterator it = items.constBegin();
+             it != items.constEnd(); ++it ) {
 
             s += KStringHandler::csqueeze( (*it)->localPath(), 60 );
 
             ++cnt;
-            if( cnt >= max || it == items.end() )
+            if( cnt >= max || it == items.constEnd() )
                 break;
 
             s += "<br>";
@@ -94,8 +94,8 @@ bool K3bDataPreparationJob::run()
         int maxlines = 10;
         QList<K3bDataItem*>::const_iterator it;
         QList<K3bDataItem*> items = d->doc->needToCutFilenameItems();
-        for( it = items.begin();
-             maxlines > 0 && it != items.end();
+        for( it = items.constBegin();
+             maxlines > 0 && it != items.constEnd();
              ++it, --maxlines ) {
             K3bDataItem* item = *it;
             d->listOfRenamedItems += i18n("<em>%1</em> renamed to <em>%2</em>",
@@ -103,7 +103,7 @@ bool K3bDataPreparationJob::run()
                                           KStringHandler::csqueeze( item->writtenName(), 30 ) );
             d->listOfRenamedItems += "<br>";
         }
-        if( it != items.end() )
+        if( it != items.constEnd() )
             d->listOfRenamedItems += "...";
     }
 
@@ -186,8 +186,8 @@ bool K3bDataPreparationJob::run()
                            i18n("Warning"),
                            i18n("Remove missing files and continue"),
                            i18n("Cancel and go back") ) ) {
-            for( QList<K3bDataItem*>::const_iterator it = d->nonExistingItems.begin();
-                 it != d->nonExistingItems.end(); ++it ) {
+            for( QList<K3bDataItem*>::const_iterator it = d->nonExistingItems.constBegin();
+                 it != d->nonExistingItems.constEnd(); ++it ) {
                 delete *it;
             }
         }

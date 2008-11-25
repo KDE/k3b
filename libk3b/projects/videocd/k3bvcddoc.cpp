@@ -857,8 +857,8 @@ bool K3bVcdDoc::saveDocumentData( QDomElement * docElem )
         QMap<int, K3bVcdTrack*> numKeyMap = track->DefinedNumKey();
         QMap<int, K3bVcdTrack*>::const_iterator trackIt;
 
-        for ( trackIt = numKeyMap.begin();
-              trackIt != numKeyMap.end();
+        for ( trackIt = numKeyMap.constBegin();
+              trackIt != numKeyMap.constEnd();
               ++trackIt ) {
             QDomElement numElem = doc.createElement( "numkeys" );
             if ( *trackIt ) {

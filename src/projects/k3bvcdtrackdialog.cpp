@@ -708,9 +708,9 @@ void K3bVcdTrackDialog::setDefinedNumKeys( )
     while ( it.current() ) {
         int itemId = it.current() ->text( 0 ).toInt();
 
-        QMap<int, K3bVcdTrack*>::const_iterator keyit = definedkeysmap.find( itemId );
+        QMap<int, K3bVcdTrack*>::const_iterator keyit = definedkeysmap.constFind( itemId );
 
-        if ( keyit != definedkeysmap.end() ) {
+        if ( keyit != definedkeysmap.constEnd() ) {
             if ( keyit.value() ) {
                 if ( m_tracks.lastIndexOf( keyit.value() ) >= 0 ) {
                     it.current() ->setText( 1 , displayName( keyit.value() ) ) ;

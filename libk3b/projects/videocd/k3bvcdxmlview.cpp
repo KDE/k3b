@@ -380,8 +380,8 @@ void K3bVcdXmlView::setNumkeyBSN( QDomDocument& doc, QDomElement& parent, K3bVcd
             QMap<int, K3bVcdTrack*>::const_iterator trackIt;
 
             m_startkey = 0;
-            trackIt = numKeyMap.begin();
-            if ( trackIt != numKeyMap.end() )
+            trackIt = numKeyMap.constBegin();
+            if ( trackIt != numKeyMap.constEnd() )
                 m_startkey = trackIt.key();
 
             if ( m_startkey > 0 )
@@ -406,7 +406,7 @@ void K3bVcdXmlView::setNumkeySEL( QDomDocument& doc, QDomElement& parent, K3bVcd
             QMap<int, K3bVcdTrack*> numKeyMap = track->DefinedNumKey();
             QMap<int, K3bVcdTrack*>::const_iterator trackIt;
 
-            for ( trackIt = numKeyMap.begin(); trackIt != numKeyMap.end(); ++trackIt ) {
+            for ( trackIt = numKeyMap.constBegin(); trackIt != numKeyMap.constEnd(); ++trackIt ) {
 
                 kDebug() << QString( "trackIt key: %1 none: %2" ).arg( trackIt.key() ).arg( none );
                 while ( none < trackIt.key() ) {

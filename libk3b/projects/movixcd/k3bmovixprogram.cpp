@@ -168,8 +168,8 @@ bool K3bMovixProgram::scanOldEMovix( K3bMovixBin* bin, const QString& path )
     //
     // check every single necessary file :(
     //
-    for( QStringList::const_iterator it = bin->m_isolinuxFiles.begin();
-         it != bin->m_isolinuxFiles.end(); ++it ) {
+    for( QStringList::const_iterator it = bin->m_isolinuxFiles.constBegin();
+         it != bin->m_isolinuxFiles.constEnd(); ++it ) {
         if( !QFile::exists( bin->movixDataDir() + "/isolinux/" + *it ) ) {
             kDebug() << "(K3bMovixProgram) Could not find file " << *it;
             delete bin;

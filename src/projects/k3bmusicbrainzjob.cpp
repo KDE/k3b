@@ -111,8 +111,8 @@ void K3bMusicBrainzJob::slotMbJobFinished( bool success )
 
             // since we are only using the title and the artist a lot of entries are alike to us
             // so to not let the user have to choose between two equal entries we trim the list down
-            for( QStringList::const_iterator it = resultStrings.begin();
-                 it != resultStrings.end(); ++it )
+            for( QStringList::const_iterator it = resultStrings.constBegin();
+                 it != resultStrings.constEnd(); ++it )
                 if( !resultStringsUnique.contains( *it ) )
                     resultStringsUnique.append( *it );
 

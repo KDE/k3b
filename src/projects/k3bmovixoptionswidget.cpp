@@ -64,8 +64,8 @@ public:
     }
 
     void setLanguage( const QString& l ) {
-        QMap<QString,int>::const_iterator it = m_indexMap.find(l);
-        if( it == m_indexMap.end() )
+        QMap<QString,int>::const_iterator it = m_indexMap.constFind(l);
+        if( it == m_indexMap.constEnd() )
             m_box->setCurrentIndex( 0 );
         else
             m_box->setCurrentIndex( *it );

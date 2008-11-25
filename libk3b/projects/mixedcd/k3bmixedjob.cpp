@@ -187,8 +187,8 @@ void K3bMixedJob::start()
                            i18n("Warning"),
                            i18n("Remove missing files and continue"),
                            i18n("Cancel and go back") ) ) {
-            for( QList<K3bAudioFile*>::const_iterator it = nonExistingFiles.begin();
-                 it != nonExistingFiles.end(); ++it ) {
+            for( QList<K3bAudioFile*>::const_iterator it = nonExistingFiles.constBegin();
+                 it != nonExistingFiles.constEnd(); ++it ) {
                 delete *it;
             }
         }

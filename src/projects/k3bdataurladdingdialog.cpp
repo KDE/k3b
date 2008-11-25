@@ -612,8 +612,8 @@ void K3bDataUrlAddingDialog::slotCopyMoveItems()
             //
             if( oldItem->isDir() && item->isDir() ) {
                 QList<K3bDataItem*> cl = dynamic_cast<K3bDirItem*>( item )->children();
-                for( QList<K3bDataItem*>::const_iterator it = cl.begin();
-                     it != cl.end(); ++it )
+                for( QList<K3bDataItem*>::const_iterator it = cl.constBegin();
+                     it != cl.constEnd(); ++it )
                     m_items.append( qMakePair( *it, dynamic_cast<K3bDirItem*>( oldItem ) ) );
 
                 // FIXME: we need to remove the old dir item
