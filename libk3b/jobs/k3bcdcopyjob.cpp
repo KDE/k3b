@@ -261,7 +261,7 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
         //
         if( k3bcore->externalBinManager()->binObject("cdrecord") &&
             !k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "xamix" ) ) {
-            for( K3bDevice::Toc::const_iterator it = d->toc.begin(); it != d->toc.end(); ++it ) {
+            for( K3bDevice::Toc::const_iterator it = d->toc.constBegin(); it != d->toc.constEnd(); ++it ) {
                 if( (*it).type() == K3bDevice::Track::DATA &&
                     ( (*it).mode() == K3bDevice::Track::XA_FORM1 ||
                       (*it).mode() == K3bDevice::Track::XA_FORM2 ) ) {
@@ -303,7 +303,7 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
             // check free temp space
             //
             KIO::filesize_t imageSpaceNeeded = 0;
-            for( K3bDevice::Toc::const_iterator it = d->toc.begin(); it != d->toc.end(); ++it ) {
+            for( K3bDevice::Toc::const_iterator it = d->toc.constBegin(); it != d->toc.constEnd(); ++it ) {
                 if( (*it).type() == K3bDevice::Track::AUDIO )
                     imageSpaceNeeded += (*it).length().audioBytes() + 44;
                 else
@@ -335,7 +335,7 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
             d->overallSize = 0;
 
             // now create some progress helper values
-            for( K3bDevice::Toc::const_iterator it = d->toc.begin(); it != d->toc.end(); ++it ) {
+            for( K3bDevice::Toc::const_iterator it = d->toc.constBegin(); it != d->toc.constEnd(); ++it ) {
                 d->overallSize += (*it).length().lba();
                 if( d->sessionSizes.isEmpty() || (*it).type() == K3bDevice::Track::DATA )
                     d->sessionSizes.append( (*it).length().lba() );
@@ -558,7 +558,7 @@ bool K3bCdCopyJob::prepareImageFiles()
 
         // create temp filenames
         int i = 1;
-        for( K3bDevice::Toc::const_iterator it = d->toc.begin(); it != d->toc.end(); ++it ) {
+        for( K3bDevice::Toc::const_iterator it = d->toc.constBegin(); it != d->toc.constEnd(); ++it ) {
             if( (*it).type() == K3bDevice::Track::AUDIO ) {
                 d->imageNames.append( m_tempPath + QString("Track%1.wav").arg(QString::number(i).rightJustified(2, '0')) );
                 d->infNames.append( m_tempPath + QString("Track%1.inf").arg(QString::number(i).rightJustified(2, '0')) );
@@ -768,7 +768,7 @@ bool K3bCdCopyJob::writeNextSession()
 
             int trackNumber = 1;
 
-            for( K3bDevice::Toc::const_iterator it = d->toc.begin(); it != d->toc.end(); ++it ) {
+            for( K3bDevice::Toc::const_iterator it = d->toc.constBegin(); it != d->toc.constEnd(); ++it ) {
                 const K3bDevice::Track& track = *it;
 
                 if( track.type() == K3bDevice::Track::DATA )
@@ -827,11 +827,11 @@ bool K3bCdCopyJob::writeNextSession()
             //
             bool zeroPregap = false;
             if( d->numSessions == 1 ) {
-                for( K3bDevice::Toc::const_iterator it = d->toc.begin(); it != d->toc.end(); ++it ) {
+                for( K3bDevice::Toc::const_iterator it = d->toc.constBegin(); it != d->toc.constEnd(); ++it ) {
                     const K3bDevice::Track& track = *it;
                     if( track.index0() == 0 ) {
                         ++it;
-                        if( it != d->toc.end() )
+                        if( it != d->toc.constEnd() )
                             zeroPregap = true;
                         --it;
                     }

@@ -300,8 +300,8 @@ void K3bAudioDoc::addSources( K3bAudioTrack* parent,
              << urls.first().path() << ", "
              << sourceAfter << " )" << endl;
     KUrl::List allUrls = extractUrlList( urls );
-    KUrl::List::const_iterator end(allUrls.end());
-    for( KUrl::List::const_iterator it = allUrls.begin(); it != end; ++it ) {
+    KUrl::List::const_iterator end(allUrls.constEnd());
+    for( KUrl::List::const_iterator it = allUrls.constBegin(); it != end; ++it ) {
         if( K3bAudioFile* file = createAudioFile( *it ) ) {
             if( sourceAfter )
                 file->moveAfter( sourceAfter );
@@ -343,8 +343,8 @@ K3bAudioTrack* K3bAudioDoc::importCueFile( const QString& cuefile, K3bAudioTrack
 
             K3bAudioFile* newFile = 0;
             int i = 0;
-            for( K3bDevice::Toc::const_iterator it = parser.toc().begin();
-                 it != parser.toc().end(); ++it ) {
+            for( K3bDevice::Toc::const_iterator it = parser.toc().constBegin();
+                 it != parser.toc().constEnd(); ++it ) {
                 const K3bDevice::Track& track = *it;
 
                 newFile = new K3bAudioFile( decoder, this );
@@ -930,8 +930,8 @@ void K3bAudioDoc::informAboutNotFoundFiles()
 {
     if( !m_notFoundFiles.isEmpty() ) {
         QStringList l;
-        for( KUrl::List::const_iterator it = m_notFoundFiles.begin();
-             it != m_notFoundFiles.end(); ++it )
+        for( KUrl::List::const_iterator it = m_notFoundFiles.constBegin();
+             it != m_notFoundFiles.constEnd(); ++it )
             l.append( (*it).path() );
         KMessageBox::informationList( qApp->activeWindow(),
                                       i18n("Could not find the following files:"),
@@ -942,8 +942,8 @@ void K3bAudioDoc::informAboutNotFoundFiles()
     }
     if( !m_unknownFileFormatFiles.isEmpty() ) {
         QStringList l;
-        for( KUrl::List::const_iterator it = m_unknownFileFormatFiles.begin();
-             it != m_unknownFileFormatFiles.end(); ++it )
+        for( KUrl::List::const_iterator it = m_unknownFileFormatFiles.constBegin();
+             it != m_unknownFileFormatFiles.constEnd(); ++it )
             l.append( (*it).path() );
         KMessageBox::informationList( qApp->activeWindow(),
                                       i18n("<p>Unable to handle the following files due to an unsupported format:"

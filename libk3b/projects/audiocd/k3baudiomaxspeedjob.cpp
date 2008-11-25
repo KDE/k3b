@@ -98,9 +98,9 @@ int K3bAudioMaxSpeedJob::Private::maxSpeedByMedia() const
     // simply use what we have and let the writer decide if the speeds are empty
     if( !speeds.isEmpty() ) {
         // start with the highest speed and go down the list until we are below our max
-        QList<int>::const_iterator it = speeds.end();
+        QList<int>::const_iterator it = speeds.constEnd();
         --it;
-        while( *it > maxSpeed && it != speeds.begin() )
+        while( *it > maxSpeed && it != speeds.constBegin() )
             --it;
 
         // this is the first valid speed or the lowest supported one
