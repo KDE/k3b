@@ -57,8 +57,8 @@ QColor K3bTheme::foregroundColor() const
 
 QPixmap K3bTheme::pixmap( const QString& name ) const
 {
-    QMap<QString, QPixmap>::const_iterator it = m_pixmapMap.find( name );
-    if( it != m_pixmapMap.end() )
+    QMap<QString, QPixmap>::const_iterator it = m_pixmapMap.constFind( name );
+    if( it != m_pixmapMap.constEnd() )
         return *it;
 
     // try loading the image
@@ -249,7 +249,7 @@ void K3bThemeManager::setCurrentTheme( K3bTheme* theme )
 
 K3bTheme* K3bThemeManager::findTheme( const QString& name ) const
 {
-    for( QList<K3bTheme*>::iterator it = d->themes.begin(); it != d->themes.end(); ++it )
+    for( QList<K3bTheme*>::ConstIterator it = d->themes.constBegin(); it != d->themes.constEnd(); ++it )
         if( (*it)->name() == name )
             return *it;
     return 0;
@@ -259,7 +259,7 @@ K3bTheme* K3bThemeManager::findTheme( const QString& name ) const
 void K3bThemeManager::loadThemes()
 {
     // first we cleanup the loaded themes
-    for( QList<K3bTheme*>::iterator it = d->themes.begin(); it != d->themes.end(); ++it )
+    for( QList<K3bTheme*>::ConstIterator it = d->themes.constBegin(); it != d->themes.constEnd(); ++it )
         delete *it;
     d->themes.clear();
 
@@ -269,11 +269,11 @@ void K3bThemeManager::loadThemes()
     // the local is preferred over the global stuff (like testing a theme by copying it
     // to the .kde dir)
     QStringList themeNames;
-    for( QStringList::const_iterator dirIt = dirs.begin(); dirIt != dirs.end(); ++dirIt ) {
+    for( QStringList::const_iterator dirIt = dirs.constBegin(); dirIt != dirs.constEnd(); ++dirIt ) {
         QDir dir( *dirIt );
         QStringList entries = dir.entryList( QDir::Dirs|QDir::NoDotAndDotDot );
         // every theme dir needs to contain a k3b.theme file
-        for( QStringList::const_iterator entryIt = entries.begin(); entryIt != entries.end(); ++entryIt ) {
+        for( QStringList::const_iterator entryIt = entries.constBegin(); entryIt != entries.constEnd(); ++entryIt ) {
             QString themeDir = *dirIt + *entryIt + "/";
             if( !themeNames.contains( *entryIt ) && QFile::exists( themeDir + "k3b.theme" ) ) {
                 bool themeValid = true;
@@ -294,7 +294,7 @@ void K3bThemeManager::loadThemes()
     }
 
     // now load the themes
-    for( QStringList::const_iterator themeIt = themeNames.begin(); themeIt != themeNames.end(); ++themeIt )
+    for( QStringList::const_iterator themeIt = themeNames.constBegin(); themeIt != themeNames.constEnd(); ++themeIt )
         loadTheme( *themeIt );
 
     // load the current theme

@@ -107,8 +107,8 @@ K3bAudioRippingDialog::K3bAudioRippingDialog( const K3bMedium& medium,
 
     K3b::Msf length;
     K3bDevice::Toc toc = medium.toc();
-    for( QList<int>::const_iterator it = m_trackNumbers.begin();
-         it != m_trackNumbers.end(); ++it ) {
+    for( QList<int>::const_iterator it = m_trackNumbers.constBegin();
+         it != m_trackNumbers.constEnd(); ++it ) {
         length += toc[*it].length();
     }
     setTitle( i18n("CD Ripping"),
@@ -251,8 +251,8 @@ void K3bAudioRippingDialog::slotStartClicked()
     // prepare list of tracks to rip
     QVector<QPair<int, QString> > tracksToRip;
     unsigned int i = 0;
-    for( QList<int>::const_iterator trackIt = m_trackNumbers.begin();
-         trackIt != m_trackNumbers.end(); ++trackIt ) {
+    for( QList<int>::const_iterator trackIt = m_trackNumbers.constBegin();
+         trackIt != m_trackNumbers.constEnd(); ++trackIt ) {
         tracksToRip.append( qMakePair( *trackIt+1, d->filenames[(m_optionWidget->createSingleFile() ? 0 : i)] ) );
         ++i;
     }
@@ -303,8 +303,8 @@ void K3bAudioRippingDialog::refresh()
 
     if( m_optionWidget->createSingleFile() ) {
         long length = 0;
-        for( QList<int>::const_iterator it = m_trackNumbers.begin();
-             it != m_trackNumbers.end(); ++it ) {
+        for( QList<int>::const_iterator it = m_trackNumbers.constBegin();
+             it != m_trackNumbers.constEnd(); ++it ) {
             length += ( m_checkUseIndex0->isChecked()
                         ? toc[*it].realAudioLength().lba()
                         : toc[*it].length().lba() );

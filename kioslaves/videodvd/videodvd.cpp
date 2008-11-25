@@ -135,8 +135,8 @@ K3bIso9660* kio_videodvdProtocol::openIso( const KUrl& url, QString& plainIsoPat
     // now search the devices for this volume id
     // FIXME: use the cache created in listVideoDVDs
     QList<K3bDevice::Device *> items(s_deviceManager->dvdReader());
-    for( QList<K3bDevice::Device *>::const_iterator it = items.begin();
-         it != items.end(); ++it ) {
+    for( QList<K3bDevice::Device *>::const_iterator it = items.constBegin();
+         it != items.constEnd(); ++it ) {
         K3bDevice::Device* dev = *it;
         K3bDevice::DiskInfo di = dev->diskInfo();
 
@@ -222,7 +222,7 @@ void kio_videodvdProtocol::listDir( const KUrl& url )
                     el.removeOne( "." );
                     el.removeOne( ".." );
                     UDSEntryList udsl;
-                    for( QStringList::const_iterator it = el.begin(); it != el.end(); ++it )
+                    for( QStringList::const_iterator it = el.constBegin(); it != el.constEnd(); ++it )
                         udsl.append( createUDSEntry( dir->entry( *it ) ) );
                     listEntries( udsl );
                     finished();
@@ -247,8 +247,8 @@ void kio_videodvdProtocol::listVideoDVDs()
     int cnt = 0;
 
     QList<K3bDevice::Device *> items(s_deviceManager->dvdReader());
-    for( QList<K3bDevice::Device *>::const_iterator it = items.begin();
-         it != items.end(); ++it ) {
+    for( QList<K3bDevice::Device *>::const_iterator it = items.constBegin();
+         it != items.constEnd(); ++it ) {
         K3bDevice::Device* dev = *it;
         K3bDevice::DiskInfo di = dev->diskInfo();
 

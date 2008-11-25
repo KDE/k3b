@@ -1256,14 +1256,14 @@ void K3bMainWindow::slotProjectAddFiles()
     K3bView* view = activeView();
 
     if( view ) {
-        QStringList files = KFileDialog::getOpenFileNames( KUrl(":k3b-project-add-files"),
+        const QStringList files = KFileDialog::getOpenFileNames( KUrl(":k3b-project-add-files"),
                                                            i18n("*|All Files"),
                                                            this,
                                                            i18n("Select Files to Add to Project") );
 
         KUrl::List urls;
-        for( QStringList::ConstIterator it = files.begin();
-             it != files.end(); it++ ) {
+        for( QStringList::ConstIterator it = files.constBegin();
+             it != files.constEnd(); it++ ) {
             KUrl url;
             url.setPath(*it);
             urls.append( url );

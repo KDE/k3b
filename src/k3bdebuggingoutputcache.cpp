@@ -71,8 +71,8 @@ void K3bDebuggingOutputCache::clear()
 
     // devices in the logfile
     QList<K3bDevice::Device *> items(k3bcore->deviceManager()->allDevices());
-    for( QList<K3bDevice::Device *>::const_iterator it = items.begin();
-       it != items.end(); ++it ) {
+    for( QList<K3bDevice::Device *>::const_iterator it = items.constBegin();
+       it != items.constEnd(); ++it ) {
 
         K3bDevice::Device* dev = *it;
         addOutput( "Devices",

@@ -149,8 +149,8 @@ void K3bWelcomeWidget::Display::rebuildGui()
 
         // create buttons
         QList<QAction *> items(m_actions);
-        for( QList<QAction *>::const_iterator it = items.begin();
-            it != items.end(); ++it ) {
+        for( QList<QAction *>::const_iterator it = items.constBegin();
+            it != items.constEnd(); ++it ) {
             QAction* a = *it;
             K3bFlatButton* b = new K3bFlatButton( a, this );
 
@@ -366,7 +366,7 @@ void K3bWelcomeWidget::loadConfig( const KConfigGroup& c )
     }
 
     QList<QAction*> actions;
-    for( QStringList::const_iterator it = sl.begin(); it != sl.end(); ++it )
+    for( QStringList::const_iterator it = sl.constBegin(); it != sl.constEnd(); ++it )
         if( QAction* a = m_mainWindow->actionCollection()->action( *it ) )
             actions.append(a);
 
@@ -380,8 +380,8 @@ void K3bWelcomeWidget::saveConfig( KConfigGroup& c )
 {
     QStringList sl;
     QList<QAction *> items(main->m_actions);
-    for( QList<QAction *>::const_iterator it = items.begin();
-            it != items.end(); ++it )
+    for( QList<QAction *>::const_iterator it = items.constBegin();
+            it != items.constEnd(); ++it )
         sl.append( (*it)->objectName() );
 
     c.writeEntry( "welcome_actions", sl );

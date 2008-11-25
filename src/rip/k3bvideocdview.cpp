@@ -230,8 +230,8 @@ void K3bVideoCdView::reloadMedium()
 
     K3b::Msf sequenceSize;
 
-    for ( K3bDevice::Toc::const_iterator it = m_toc.begin();
-          it != m_toc.end(); ++it ) {
+    for ( K3bDevice::Toc::const_iterator it = m_toc.constBegin();
+          it != m_toc.constEnd(); ++it ) {
 
         if ( index > 0 ) {
             K3b::Msf length( ( *it ).length() );

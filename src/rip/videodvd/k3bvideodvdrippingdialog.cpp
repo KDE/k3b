@@ -594,8 +594,8 @@ void K3bVideoDVDRippingDialog::slotStartClicked()
     QSize videoSize = m_w->selectedPictureSize();
     int i = 0;
     QVector<K3bVideoDVDRippingJob::TitleRipInfo> titles( m_titleRipInfos.count() );
-    for( QMap<Q3CheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::const_iterator it = m_titleRipInfos.begin();
-         it != m_titleRipInfos.end(); ++it ) {
+    for( QMap<Q3CheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo>::const_iterator it = m_titleRipInfos.constBegin();
+         it != m_titleRipInfos.constEnd(); ++it ) {
         titles[i] = it.value();
         titles[i].videoBitrate = 0; // use the global bitrate set below
         titles[i].width = videoSize.width();

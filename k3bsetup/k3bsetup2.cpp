@@ -212,7 +212,7 @@ void K3bSetup2::updatePrograms()
 
     // load programs
     const QMap<QString, K3bExternalProgram*>& map = d->externalBinManager->programs();
-    for( QMap<QString, K3bExternalProgram*>::const_iterator it = map.begin(); it != map.end(); ++it ) {
+    for( QMap<QString, K3bExternalProgram*>::const_iterator it = map.constBegin(); it != map.constEnd(); ++it ) {
         K3bExternalProgram* p = *it;
 
         foreach( const K3bExternalBin* b, p->bins() ) {
@@ -283,8 +283,8 @@ void K3bSetup2::updateDevices()
     d->deviceListMap.clear();
 
     QList<K3bDevice::Device*> items(d->deviceManager->allDevices());
-    for( QList<K3bDevice::Device *>::const_iterator it = items.begin();
-         it != items.end(); ++it ) {
+    for( QList<K3bDevice::Device *>::const_iterator it = items.constBegin();
+         it != items.constEnd(); ++it ) {
         K3bDevice::Device* device = *it;
         // check the item on first insertion or if it was checked before
         Q3CheckListItem* item = createDeviceItem( device->blockDeviceName() );

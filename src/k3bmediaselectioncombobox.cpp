@@ -241,8 +241,8 @@ void K3bMediaSelectionComboBox::updateMedia()
     else
         devices = k3bcore->deviceManager()->cdReader();
 
-    for( QList<K3bDevice::Device *>::const_iterator it = devices.begin();
-         it != devices.end(); ++it ) {
+    for( QList<K3bDevice::Device *>::const_iterator it = devices.constBegin();
+         it != devices.constEnd(); ++it ) {
         if ( d->ignoreDevice == *it ) {
             continue;
         }

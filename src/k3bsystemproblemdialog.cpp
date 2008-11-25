@@ -132,8 +132,8 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QList<K3bSystemProblem>& p
 
     QString text = "<html>";
 
-    for( QList<K3bSystemProblem>::const_iterator it = problems.begin();
-         it != problems.end(); ++it ) {
+    for( QList<K3bSystemProblem>::const_iterator it = problems.constBegin();
+         it != problems.constEnd(); ++it ) {
         const K3bSystemProblem& p = *it;
 
         text.append( "<p><b>" );
@@ -346,8 +346,8 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
     bool atapiWriter = false;
     bool dvd_r_dl = false;
     QList<K3bDevice::Device *> items(k3bcore->deviceManager()->readingDevices());
-    for( QList<K3bDevice::Device *>::const_iterator it = items.begin();
-         it != items.end(); ++it ) {
+    for( QList<K3bDevice::Device *>::const_iterator it = items.constBegin();
+         it != items.constEnd(); ++it ) {
         if( (*it)->type() & K3bDevice::DEVICE_DVD_R_DL )
             dvd_r_dl = true;
     }
@@ -355,8 +355,8 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
 
     // check automounted devices
     QList<K3bDevice::Device*> automountedDevices = checkForAutomounting();
-    for( QList<K3bDevice::Device *>::const_iterator it = automountedDevices.begin();
-         it != automountedDevices.end(); ++it ) {
+    for( QList<K3bDevice::Device *>::const_iterator it = automountedDevices.constBegin();
+         it != automountedDevices.constEnd(); ++it ) {
         problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
                                            i18n("Device %1 - %2 is automounted.",
                                                 (*it)->vendor(),(*it)->description()),
@@ -449,8 +449,8 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
     }
 
     QList<K3bDevice::Device *> items2(k3bcore->deviceManager()->allDevices());
-    for( QList<K3bDevice::Device *>::const_iterator it = items2.begin();
-         it != items2.end(); ++it ) {
+    for( QList<K3bDevice::Device *>::const_iterator it = items2.constBegin();
+         it != items2.constEnd(); ++it ) {
         K3bDevice::Device* dev = (*it);
 
         if( !QFileInfo( dev->blockDeviceName() ).isWritable() )
@@ -499,8 +499,8 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
     //
     QList<K3bPlugin*> plugins = k3bcore->pluginManager()->plugins( "AudioDecoder" );
     bool haveMp3Decoder = false;
-    for( QList<K3bPlugin*>::const_iterator it = plugins.begin();
-         it != plugins.end(); ++it ) {
+    for( QList<K3bPlugin*>::const_iterator it = plugins.constBegin();
+         it != plugins.constEnd(); ++it ) {
         if( (*it)->pluginInfo().pluginName() == "k3bmaddecoder" ) {
             haveMp3Decoder = true;
             break;
@@ -560,8 +560,8 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
 
 
     kDebug() << "(K3bCore) System problems:";
-    for( QList<K3bSystemProblem>::const_iterator it = problems.begin();
-         it != problems.end(); ++it ) {
+    for( QList<K3bSystemProblem>::const_iterator it = problems.constBegin();
+         it != problems.constEnd(); ++it ) {
         const K3bSystemProblem& p = *it;
 
         switch( p.type ) {
@@ -657,7 +657,7 @@ QList<K3bDevice::Device*> K3bSystemProblemDialog::checkForAutomounting()
         if( type == "supermount" || type == "subfs" ) {
             // parse the device
             QStringList opts = QString::fromLocal8Bit(mountInfo->fs_mntops).split( ',' );
-            for( QStringList::const_iterator it = opts.begin(); it != opts.end(); ++it ) {
+            for( QStringList::const_iterator it = opts.constBegin(); it != opts.constEnd(); ++it ) {
                 if( (*it).startsWith("dev=") ) {
                     md = (*it).mid( 4 );
                     break;

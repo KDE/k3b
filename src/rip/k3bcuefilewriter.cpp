@@ -58,8 +58,8 @@ bool K3bCueFileWriter::save( QTextStream& t )
 
     // the tracks
     int i = 0;
-    for( K3bDevice::Toc::const_iterator it = m_toc.begin();
-         it != m_toc.end(); ++it ) {
+    for( K3bDevice::Toc::const_iterator it = m_toc.constBegin();
+         it != m_toc.constEnd(); ++it ) {
 
         const K3bDevice::Track& track = *it;
 

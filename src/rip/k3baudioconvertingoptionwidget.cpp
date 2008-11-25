@@ -108,13 +108,13 @@ K3bAudioConvertingOptionWidget::K3bAudioConvertingOptionWidget( QWidget* parent 
 
     // check the available encoding plugins
     QList<K3bPlugin*> fl = k3bcore->pluginManager()->plugins( "AudioEncoder" );
-    for( QList<K3bPlugin *>::const_iterator it = fl.begin();
-         it != fl.end(); ++it ) {
+    for( QList<K3bPlugin *>::const_iterator it = fl.constBegin();
+         it != fl.constEnd(); ++it ) {
         K3bAudioEncoder* f = (K3bAudioEncoder*)(*it);
         QStringList exL = f->extensions();
 
-        for( QStringList::const_iterator exIt = exL.begin();
-             exIt != exL.end(); ++exIt ) {
+        for( QStringList::const_iterator exIt = exL.constBegin();
+             exIt != exL.constEnd(); ++exIt ) {
             d->extensionMap.insert( m_comboFileType->count(), *exIt );
             d->encoderMap.insert( m_comboFileType->count(), f );
             m_comboFileType->addItem( f->fileTypeComment(*exIt) );
@@ -239,8 +239,8 @@ void K3bAudioConvertingOptionWidget::loadConfig( const KConfigGroup& c )
     if( filetype == "wav" )
         m_comboFileType->setCurrentIndex(0);
     else {
-        for( QMap<int, QString>::iterator it = d->extensionMap.begin();
-             it != d->extensionMap.end(); ++it ) {
+        for( QMap<int, QString>::ConstIterator it = d->extensionMap.constBegin();
+             it != d->extensionMap.constEnd(); ++it ) {
             if( it.value() == filetype ) {
                 m_comboFileType->setCurrentIndex( it.key() );
                 break;
