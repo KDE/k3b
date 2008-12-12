@@ -33,7 +33,6 @@ add_subdirectory( fastscale )
 add_subdirectory( pics )
 add_subdirectory( icons )
 add_subdirectory( konqi )
-#add_subdirectory( mimetypes )
 add_subdirectory( sounds )
 
 
