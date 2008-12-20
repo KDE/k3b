@@ -198,7 +198,11 @@ QString K3bFFMpegFile::typeComment() const
         return i18n("Windows Media v1");
     case CODEC_ID_WMAV2:
         return i18n("Windows Media v2");
+#if LIBAVCODEC_VERSION_MAJOR < 52
     case CODEC_ID_MP3LAME:
+#else
+    case CODEC_ID_MP3:
+#endif
         return i18n("MPEG 1 Layer III");
     case CODEC_ID_AAC:
         return i18n("Advanced Audio Coding (AAC)");
@@ -291,7 +295,11 @@ int K3bFFMpegFile::fillOutputBuffer()
 
         d->outputBufferPos = d->outputBuffer;
 
+#if LIBAVCODEC_VERSION_MAJOR < 52
         int len = avcodec_decode_audio(
+#else
+        int len = avcodec_decode_audio2(
+#endif
 #ifdef FFMPEG_BUILD_PRE_4629
             &d->formatContext->streams[0]->codec,
 #else
