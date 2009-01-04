@@ -122,7 +122,7 @@ void K3bVideoCdRip::vcdxRip()
 
     // additional user parameters from config
     const QStringList& params = k3bcore->externalBinManager() ->program( "vcdxrip" ) ->userParameters();
-    for ( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
+    for ( QStringList::const_iterator it = params.constBegin(); it != params.constEnd(); ++it )
         *m_process << *it;
 
     *m_process << "--gui" << "--progress";
@@ -190,8 +190,8 @@ void K3bVideoCdRip::slotParseVcdXRipOutput()
     QDomElement xml_root;
 
     // do every line
-    QStringList::Iterator end( lines.end());
-    for ( QStringList::Iterator str = lines.begin(); str != end; ++str ) {
+    QStringList::iterator end( lines.end());
+    for ( QStringList::iterator str = lines.begin(); str != end; ++str ) {
         *str = ( *str ).trimmed();
 
         emit debuggingOutput( "vcdxrip", *str );

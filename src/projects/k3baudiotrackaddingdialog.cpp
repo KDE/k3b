@@ -255,11 +255,11 @@ KUrl::List K3bAudioTrackAddingDialog::extractUrlList( const KUrl::List& urls )
             it = allUrls.erase( it );
             // add all files in the dir
             QDir dir(fi.filePath());
-            QStringList entries = dir.entryList( QDir::Files );
+            const QStringList entries = dir.entryList( QDir::Files );
             KUrl::List::iterator oldIt = it;
             // add all files into the list after the current item
-            for( QStringList::iterator dirIt = entries.begin();
-                 dirIt != entries.end(); ++dirIt )
+            for( QStringList::ConstIterator dirIt = entries.constBegin();
+                 dirIt != entries.constEnd(); ++dirIt )
                 it = allUrls.insert( oldIt, KUrl( dir.absolutePath() + "/" + *dirIt ) );
         }
         else if( K3bAudioDoc::readPlaylistFile( url, urlsFromPlaylist ) ) {
