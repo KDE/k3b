@@ -80,8 +80,8 @@ bool K3bLsofWrapper::checkDevice( K3bDevice::Device* dev )
 
     //
     // now process its output
-    QStringList l = QString::fromLocal8Bit( p.readAllStandardOutput() ).split( '\n', QString::SkipEmptyParts );
-    for( QStringList::iterator it = l.begin(); it != l.end(); ++it ) {
+    const QStringList l = QString::fromLocal8Bit( p.readAllStandardOutput() ).split( '\n', QString::SkipEmptyParts );
+    for( QStringList::ConstIterator it = l.constBegin(); it != l.constEnd(); ++it ) {
         int pid = (*it).mid(1).toInt();
         ++it;
         if ( it != l.end() ) {
