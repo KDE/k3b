@@ -272,12 +272,16 @@ target_link_libraries(k3b_bin
   k3bdevice
   k3b
   #fastscale )
+  ${KCDDB_LIBRARIES}
   ${KDE4_KFILE_LIBS}
   ${KDE4_KIO_LIBS}
   ${KDE4_KPARTS_LIBS}
   ${KDE4_KNOTIFYCONFIG_LIBS}
   ${KDE4_KUTILS_LIBS}
+  ${KDE4_KDE3SUPPORT_LIBS}
+  ${KDE4_SOLID_LIBS}
   ${QT_QTWEBKIT_LIBRARY}
+  ${X11_LIBRARIES}
   )
 
 if(MUSICBRAINZ_FOUND)
