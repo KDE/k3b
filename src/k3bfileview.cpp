@@ -26,16 +26,16 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
-#include <kaction.h>
-#include <kactioncollection.h>
+#include <KAction>
+#include <KActionCollection>
 #include <KActionMenu>
-#include <kdirlister.h>
-#include <kfilefiltercombo.h>
-#include <kfileitem.h>
-#include <klocale.h>
-#include <kurl.h>
-#include <kprogressdialog.h>
-#include <ktoolbar.h>
+#include <KDirLister>
+#include <KFileFilterCombo>
+#include <KFileItem>
+#include <KLocale>
+#include <KProgressDialog>
+#include <KToolBar>
+#include <KUrl>
 
 K3bFileView::K3bFileView(QWidget *parent )
     : K3bContentsView( false, parent)
@@ -58,7 +58,8 @@ KActionCollection* K3bFileView::actionCollection() const
 void K3bFileView::setupGUI()
 {
     m_dirOp = new K3bDirOperator( KUrl(QDir::home().absolutePath()), this );
-    m_toolBox = new KToolBar( this);
+    m_toolBox = new KToolBar( this );
+    m_toolBox->setToolButtonStyle( Qt::ToolButtonIconOnly );
 
     QVBoxLayout* layout = new QVBoxLayout( this );
     layout->setMargin( 0 );
@@ -67,14 +68,14 @@ void K3bFileView::setupGUI()
     layout->addWidget( m_dirOp, 1 );
 
     // setup actions
-    QAction* actionHome = m_dirOp->actionCollection()->action("home");
     QAction* actionBack = m_dirOp->actionCollection()->action("back");
+    QAction* actionForward = m_dirOp->actionCollection()->action("forward");
     QAction* actionUp = m_dirOp->actionCollection()->action("up");
     QAction* actionReload = m_dirOp->actionCollection()->action("reload");
 
     m_toolBox->addAction( actionUp );
     m_toolBox->addAction( actionBack );
-    m_toolBox->addAction( actionHome );
+    m_toolBox->addAction( actionForward );
     m_toolBox->addAction( actionReload );
     m_toolBox->addSeparator();
     m_toolBox->addAction( m_dirOp->actionCollection()->action("short view") );
