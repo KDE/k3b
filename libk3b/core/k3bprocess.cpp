@@ -47,9 +47,6 @@ public:
     bool rawStdin;
     bool rawStdout;
 
-    int in[2];
-    int out[2];
-
     bool suppressEmptyLines;
 };
 
@@ -61,8 +58,6 @@ K3bProcess::K3bProcess()
     d = new Data();
     d->dupStdinFd = d->dupStdoutFd = -1;
     d->rawStdout = d->rawStdin = false;
-    d->in[0] = d->in[1] = -1;
-    d->out[0] = d->out[1] = -1;
     d->suppressEmptyLines = true;
 }
 
@@ -128,6 +123,10 @@ void K3bProcess::slotSplitStdout( K3Process*, char* data, int len )
 
             emit stdoutLine( str );
         }
+    }
+    
+    if( d->dupStdoutFd != -1 ) {
+        ::write( d->dupStdoutFd, data, len );
     }
 }
 
@@ -210,7 +209,7 @@ QStringList K3bProcess::splitOutput( char* data, int len,
 int K3bProcess::stdinFd() const
 {
     if( d->rawStdin )
-        return d->in[1];
+        return K3Process::in[1];
     else if( d->dupStdinFd != -1 )
         return d->dupStdinFd;
     else

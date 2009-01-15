@@ -52,11 +52,6 @@ public:
                     w += ww;
                     bytesWritten += ww;
                 }
-                else {
-                    kDebug() << "(K3bActivePipe) write failed.";
-                    close( closeWhenDone );
-                    return;
-                }
             }
         }
         //    kDebug() << "(K3bActivePipe) thread done: " << r << " (total bytes read/written: " << bytesRead << "/" << bytesWritten << ")";
