@@ -23,18 +23,16 @@
 
 #include <QDir>
 
-#include <kaction.h>
-#include <kbookmarkmenu.h>
-#include <kstandarddirs.h>
-#include <kmenu.h>
-#include <kactioncollection.h>
+#include <KAction>
+#include <KActionCollection>
+#include <KBookmarkMenu>
 #include <KConfigGroup>
+#include <KMenu>
+#include <KStandardDirs>
 
 K3bDirOperator::K3bDirOperator(const KUrl& url, QWidget* parent )
     : KDirOperator( url, parent )
 {
-    KConfigGroup grp(k3bcore->config(), "file view" );
-    setViewConfig( grp );
     setMode( KFile::Files );
 
     // disable the del-key since we still have a focus problem and users keep
@@ -67,9 +65,8 @@ K3bDirOperator::~K3bDirOperator()
 }
 
 
-void K3bDirOperator::readConfig( const KConfigGroup & grp )
+void K3bDirOperator::readConfig( const KConfigGroup& grp )
 {
-
     KDirOperator::readConfig( grp );
     setView( KFile::Default );
 
@@ -92,7 +89,7 @@ void K3bDirOperator::readConfig( const KConfigGroup & grp )
 }
 
 
-void K3bDirOperator::writeConfig( KConfigGroup &grp )
+void K3bDirOperator::writeConfig( KConfigGroup& grp )
 {
     KDirOperator::writeConfig(grp );
     grp.writePathEntry( "last url", url().path() );

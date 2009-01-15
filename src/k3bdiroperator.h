@@ -16,12 +16,11 @@
 #ifndef K3BDIROPERATOR_H
 #define K3BDIROPERATOR_H
 
-#include <kdiroperator.h>
-#include <kbookmarkmanager.h>
+#include <KBookmarkManager>
+#include <KDirOperator>
 
-class KBookmarkMenu;
 class KActionMenu;
-
+class KBookmarkMenu;
 
 
 /**

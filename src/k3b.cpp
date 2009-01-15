@@ -577,8 +577,8 @@ void K3bMainWindow::saveOptions()
     // save dock positions!
     //manager()->writeConfig( config(), "Docking Config" );
 
-    //FIXME kde4
-    //m_dirView->saveConfig( config() );
+    KConfigGroup grpFileView( config(), "file view" );
+    m_dirView->saveConfig( grpFileView );
 
     KConfigGroup grpWindows(config(), "main_window_settings");
     saveMainWindowSettings( grpWindows );
@@ -613,8 +613,8 @@ void K3bMainWindow::readOptions()
     KConfigGroup grpWindow(config(), "main_window_settings");
     applyMainWindowSettings( grpWindow );
 
-//FIXME kde4
-    //m_dirView->readConfig( config() );
+    KConfigGroup grpFileView( config(), "file view" );
+    m_dirView->readConfig( grpFileView );
 
     slotViewDocumentHeader();
 }
