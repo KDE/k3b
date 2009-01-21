@@ -31,6 +31,7 @@ struct cam_device;
 
 namespace Solid {
     class Device;
+    class StorageAccess;
 }
 
 namespace K3bDevice
@@ -59,6 +60,14 @@ namespace K3bDevice
         ~Device();
 
         Solid::Device solidDevice() const;
+
+        /**
+         *  Gives interface for dics volume.
+         *  Keep in mind that it can return empty pointer when no disc is inserted.
+         *
+         *  @return Interface for disc volume.
+         */
+        Solid::StorageAccess* solidStorage() const;
 
         /**
          * \deprecated use readCapabilities() and writeCapabilities()

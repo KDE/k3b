@@ -38,22 +38,11 @@ namespace K3b {
         DeviceMenu( QWidget* parent = 0 );
         ~DeviceMenu();
 
-        void setDevice( K3bDevice::Device* );
-        K3bDevice::Device* device() const;
-
     private:
         class Private;
         Private* const d;
 
         Q_PRIVATE_SLOT( d, void _k_aboutToShow() )
-        Q_PRIVATE_SLOT( d, void _k_diskInfo() )
-        Q_PRIVATE_SLOT( d, void _k_unlockDevice() )
-        Q_PRIVATE_SLOT( d, void _k_lockDevice() )
-        Q_PRIVATE_SLOT( d, void _k_mountDisk() )
-        Q_PRIVATE_SLOT( d, void _k_unmountDisk() )
-        Q_PRIVATE_SLOT( d, void _k_ejectDisk() )
-        Q_PRIVATE_SLOT( d, void _k_loadDisk() )
-        Q_PRIVATE_SLOT( d, void _k_setReadSpeed() )
         Q_PRIVATE_SLOT( d, void _k_copy() )
         Q_PRIVATE_SLOT( d, void _k_format() )
         Q_PRIVATE_SLOT( d, void _k_ripAudio() )

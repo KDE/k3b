@@ -136,7 +136,13 @@ K3bMainWindow::K3bMainWindow()
     initActions();
     initView();
     initStatusBar();
-    createGUI(0L);
+    createGUI();
+
+    // /////////////////////////////////////////////////////////////////
+    // incorporate Device Manager into main window
+    factory()->addClient( k3bappcore->appDeviceManager() );
+    connect( k3bappcore->appDeviceManager(), SIGNAL(detectingDiskInfo(K3bDevice::Device*)),
+             this, SLOT(showDiskInfo(K3bDevice::Device*)) );
 
     // we need the actions for the welcomewidget
     KConfigGroup grp( config(), "Welcome Widget" );
@@ -180,9 +186,6 @@ void K3bMainWindow::initActions()
     // operator+= is deprecated but I know no other way to do this. Why does the KDE app framework
     // need to have all actions in the mainwindow's actioncollection anyway (or am I just to stupid to
     // see the correct solution?)
-
-    //FIXME kde4
-    //*actionCollection() += *k3bappcore->appDeviceManager()->actionCollection();
 
     actionFileOpen = KStandardAction::open(this, SLOT(slotFileOpen()), actionCollection());
     actionFileOpenRecent = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection());

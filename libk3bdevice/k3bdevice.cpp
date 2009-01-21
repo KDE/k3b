@@ -34,6 +34,7 @@
 #include <Solid/Device>
 #include <Solid/OpticalDrive>
 #include <Solid/Block>
+#include <Solid/StorageAccess>
 
 #include <sys/types.h>
 #include <sys/ioctl.h>
@@ -202,6 +203,15 @@ Solid::Device K3bDevice::Device::solidDevice() const
     return d->solidDevice;
 }
 
+
+Solid::StorageAccess* K3bDevice::Device::solidStorage() const
+{
+     QList<Solid::Device> storages = Solid::Device::listFromType( Solid::DeviceInterface::StorageAccess, d->solidDevice.udi() );
+     if( storages.isEmpty() )
+         return 0;
+     else
+         return storages.first().as<Solid::StorageAccess>();
+}
 
 bool K3bDevice::Device::init( bool bCheckWritingModes )
 {

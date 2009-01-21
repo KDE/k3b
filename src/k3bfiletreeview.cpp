@@ -436,6 +436,7 @@ void K3bFileTreeView::setSelectedDevice( K3bDevice::Device* dev )
 void K3bFileTreeView::slotClicked( const QModelIndex& index )
 {
     if ( K3bDevice::Device* dev = d->model->deviceForIndex( index ) ) {
+        k3bappcore->appDeviceManager()->setCurrentDevice( dev );
         emit activated( dev );
     }
     else if ( index.isValid() ) {
@@ -448,7 +449,7 @@ void K3bFileTreeView::slotContextMenu( const QPoint& pos )
 {
     QModelIndex index = indexAt( pos );
     if ( K3bDevice::Device* dev = d->model->deviceForIndex( index ) ) {
-        d->devicePopupMenu->setDevice( dev );
+        k3bappcore->appDeviceManager()->setCurrentDevice( dev );
         d->devicePopupMenu->exec( mapToGlobal( pos ) );
     }
 }

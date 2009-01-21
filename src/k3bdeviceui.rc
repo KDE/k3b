@@ -1,0 +1,14 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="k3b" version="13">
+<MenuBar>
+  <Menu name="device"><text>&amp;Device</text>
+	<Action name ="device_diskinfo" />
+    <Separator/>
+	<Action name ="device_unmount" />
+	<Action name ="device_mount" />
+	<Action name ="device_eject" />
+	<Action name ="device_load" />
+    <Separator/>
+	<Action name ="device_set_read_speed" />
+  </Menu>
+</kpartgui>

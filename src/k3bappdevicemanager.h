@@ -15,7 +15,10 @@
 #ifndef _K3B_APP_DEVICE_MANAGER_H_
 #define _K3B_APP_DEVICE_MANAGER_H_
 
-class KActionCollection;
+#include <k3bdevicemanager.h>
+#include <KXMLGUIClient>
+#include <solid/solidnamespace.h>
+
 class KAction;
 class K3bMediaCache;
 
@@ -25,14 +28,11 @@ namespace K3bDevice {
     class DiskInfoDetector;
 }
 
-#include <k3bdevicemanager.h>
-
-
 /**
  * Enhanced device manager which can do some additional actions
  * and maintains a current device
  */
-class K3bAppDeviceManager : public K3bDevice::DeviceManager
+class K3bAppDeviceManager : public K3bDevice::DeviceManager, public KXMLGUIClient
 {
     Q_OBJECT
 
@@ -41,7 +41,6 @@ public:
     ~K3bAppDeviceManager();
 
     K3bDevice::Device* currentDevice() const;
-    KActionCollection* actionCollection() const { return m_actionCollection; }
     void setMediaCache( K3bMediaCache* c );
 
 Q_SIGNALS:
@@ -85,6 +84,9 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void slotMediumChanged( K3bDevice::Device* dev );
+    void slotMountChanged( bool accessible, const QString& udi );
+    void slotMountFinished( Solid::ErrorType error, QVariant errorData, const QString& udi );
+    void slotUnmountFinished( Solid::ErrorType error, QVariant errorData, const QString& udi );
 
 private:
     /**
@@ -100,7 +102,6 @@ private:
     KAction* m_actionSetReadSpeed;
 
     mutable K3bDevice::Device* m_currentDevice;
-    KActionCollection* m_actionCollection;
     K3bDevice::DiskInfoDetector* m_diskInfoDetector;
 
     bool m_ejectRequested;

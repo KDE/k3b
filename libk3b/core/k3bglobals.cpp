@@ -559,14 +559,14 @@ bool K3b::unmount( K3bDevice::Device* dev )
     if( KIO::NetAccess::synchronousRun( KIO::unmount( mntDev, false ), 0 ) )
         return true;
 
+    Solid::StorageAccess *sa = dev->solidStorage();
+    if ( sa && sa->teardown() ){
+	    return true;
+    }
+
     QString mntPath = KMountPoint::currentMountPoints().findByDevice( dev->blockDeviceName() )->mountPoint();
     if ( mntPath.isEmpty() ) {
         mntPath = dev->blockDeviceName();
-    }
-
-    Solid::StorageAccess *sa = dev->solidDevice().as<Solid::StorageAccess>();
-    if ( sa && sa->teardown() ){
-	    return true;
     }
 
     QString umountBin = K3b::findExe( "umount" );
@@ -607,7 +607,7 @@ bool K3b::mount( K3bDevice::Device* dev )
     if( KIO::NetAccess::synchronousRun( KIO::mount( true, 0, mntDev, false ), 0 ) )
         return true;
 
-    Solid::StorageAccess* sa = dev->solidDevice().as<Solid::StorageAccess>();
+    Solid::StorageAccess* sa = dev->solidStorage();
     if ( sa && sa->setup() ) {
         return true;
     }
