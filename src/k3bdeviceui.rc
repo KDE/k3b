@@ -11,4 +11,5 @@
     <Separator/>
 	<Action name ="device_set_read_speed" />
   </Menu>
+</MenuBar>
 </kpartgui>
