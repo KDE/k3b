@@ -69,8 +69,6 @@ private Q_SLOTS:
     void slotContextMenu( const QPoint& pos );
 
 private:
-    void initActions();
-
     class Private;
     Private* const d;
 };

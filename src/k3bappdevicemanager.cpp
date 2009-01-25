@@ -26,7 +26,6 @@
 #include <KInputDialog>
 #include <KIO/Job>
 #include <KLocale>
-#include <KMenu>
 #include <KMessageBox>
 
 #include <Solid/Block>
@@ -34,40 +33,58 @@
 #include <Solid/StorageAccess>
 
 
+class K3bAppDeviceManager::Private
+{
+public:
+    KAction* actionDiskInfo;
+    KAction* actionUnmount;
+    KAction* actionMount;
+    KAction* actionEject;
+    KAction* actionLoad;
+    KAction* actionSetReadSpeed;
+
+    K3bDevice::Device* currentDevice;
+};
+
 K3bAppDeviceManager::K3bAppDeviceManager( QObject* parent )
     : K3bDevice::DeviceManager( parent ),
-      m_currentDevice(0),
-      m_ejectRequested(false)
+      d( new Private )
 {
     // setup actions
-    m_actionDiskInfo = K3b::createAction(this, i18n("Media &Info"), "document-properties", 0, this, SLOT(diskInfo()),
+    d->actionDiskInfo = K3b::createAction(this, i18n("Media &Info"), "document-properties", 0, this, SLOT(diskInfo()),
                                          actionCollection(), "device_diskinfo");
-    // FIXME (jpetso): combine "Unmount" and "Mount" into one toggling entry
-    m_actionUnmount = K3b::createAction(this,  i18n("&Unmount"), "media-optical", 0, this, SLOT(unmountDisk()),
+    d->actionUnmount = K3b::createAction(this,  i18n("&Unmount"), "media-optical", 0, this, SLOT(unmountDisk()),
                                         actionCollection(), "device_unmount");
-    m_actionMount = K3b::createAction(this, i18n("&Mount"), "media-optical", 0, this, SLOT(mountDisk()),
+    d->actionMount = K3b::createAction(this, i18n("&Mount"), "media-optical", 0, this, SLOT(mountDisk()),
                                       actionCollection(), "device_mount");
-    m_actionEject = K3b::createAction(this, i18n("&Eject"), 0, 0, this, SLOT(ejectDisk()),
+    d->actionEject = K3b::createAction(this, i18n("&Eject"), 0, 0, this, SLOT(ejectDisk()),
                                       actionCollection(), "device_eject");
-    m_actionLoad = K3b::createAction(this, i18n("L&oad"), 0, 0, this, SLOT(loadDisk()),
+    d->actionLoad = K3b::createAction(this, i18n("L&oad"), 0, 0, this, SLOT(loadDisk()),
                                      actionCollection(), "device_load");
 //   KAction* actionUnlock = new KAction( i18n("Un&lock"), "", 0, this, SLOT(unlockDevice()),
 // 				       actionCollection(), "device_unlock" );
 //   KAction* actionlock = new KAction( i18n("Loc&k"), "", 0, this, SLOT(lockDevice()),
 // 				     actionCollection(), "device_lock" );
-    m_actionSetReadSpeed = K3b::createAction(this, i18n("Set Read Speed..."), 0, 0, this, SLOT(setReadSpeed()),
+    d->actionSetReadSpeed = K3b::createAction(this, i18n("Set Read Speed..."), 0, 0, this, SLOT(setReadSpeed()),
                                              actionCollection(), "device_set_read_speed" );
 
-    m_actionDiskInfo->setToolTip( i18n("Display generic medium information") );
-    m_actionUnmount->setToolTip( i18n("Unmount the medium") );
-    m_actionMount->setToolTip( i18n("Mount the medium") );
-    m_actionEject->setToolTip( i18n("Eject the medium") );
-    m_actionLoad->setToolTip( i18n("(Re)Load the medium") );
-    m_actionSetReadSpeed->setToolTip( i18n("Force the drive's read speed") );
+    d->actionDiskInfo->setToolTip( i18n("Display generic medium information") );
+    d->actionUnmount->setToolTip( i18n("Unmount the medium") );
+    d->actionMount->setToolTip( i18n("Mount the medium") );
+    d->actionEject->setToolTip( i18n("Eject the medium") );
+    d->actionLoad->setToolTip( i18n("(Re)Load the medium") );
+    d->actionSetReadSpeed->setToolTip( i18n("Force the drive's read speed") );
 
     setXMLFile( "k3bdeviceui.rc", true );
 
+    d->currentDevice = 0;
     slotMediumChanged( 0 );
+}
+
+
+K3bAppDeviceManager::~K3bAppDeviceManager()
+{
+    delete d;
 }
 
 
@@ -80,7 +97,7 @@ void K3bAppDeviceManager::setMediaCache( K3bMediaCache* c )
 
 K3bDevice::Device* K3bAppDeviceManager::currentDevice() const
 {
-    return m_currentDevice;
+    return d->currentDevice;
 }
 
 
@@ -91,52 +108,66 @@ void K3bAppDeviceManager::clear()
     K3bDevice::DeviceManager::clear();
 }
 
-
-void K3bAppDeviceManager::removeDevice( const Solid::Device& dev )
+K3bDevice::Device* K3bAppDeviceManager::addDevice( const Solid::Device& solidDev )
 {
-    if( findDevice( dev.as<Solid::Block>()->device() ) == currentDevice() )
+    K3bDevice::Device* dev = K3bDevice::DeviceManager::addDevice( solidDev );
+    if( dev && currentDevice() == 0 ) {
+        setCurrentDevice( dev );
+    }
+    return dev;
+}
+
+void K3bAppDeviceManager::removeDevice( const Solid::Device& solidDev )
+{
+    if( findDevice( solidDev.as<Solid::Block>()->device() ) == currentDevice() )
         setCurrentDevice( 0 );
     
-    K3bDevice::DeviceManager::removeDevice( dev );
+    K3bDevice::DeviceManager::removeDevice( solidDev );
 
     if( currentDevice() == 0 && !allDevices().isEmpty() )
         setCurrentDevice( allDevices().first() );
 }
 
 
-K3bAppDeviceManager::~K3bAppDeviceManager()
-{
-}
-
-
 void K3bAppDeviceManager::slotMediumChanged( K3bDevice::Device* dev )
 {
-    m_actionDiskInfo->setEnabled( dev != 0 );
-    m_actionUnmount->setEnabled( dev != 0 );
-    m_actionMount->setEnabled( dev != 0 );
-    m_actionEject->setEnabled( dev != 0 );
-    m_actionLoad->setEnabled( dev != 0 );
-    m_actionSetReadSpeed->setEnabled( dev != 0 );
+    if( dev == currentDevice() ) {
+        
+        d->actionDiskInfo->setEnabled( dev != 0 );
+        d->actionEject->setEnabled( dev != 0 );
+        d->actionLoad->setEnabled( dev != 0 );
+        d->actionSetReadSpeed->setEnabled( dev != 0 );
+        
+        if( dev ) {
+            bool mediumMountable = k3bappcore->mediaCache()->medium( dev ).content() & K3bMedium::CONTENT_DATA;
+            d->actionMount->setEnabled( mediumMountable );
+            d->actionUnmount->setEnabled( mediumMountable );
+            
+            disconnect( this, SLOT(slotMountChanged(bool,const QString&)) );
+            disconnect( this, SLOT(slotMountFinished(Solid::ErrorType,QVariant,const QString&)) );
+            disconnect( this, SLOT(slotUnmountFinished(Solid::ErrorType,QVariant,const QString&)) );
 
-    if( dev && dev == currentDevice() ) {
-        bool mediumMountable = k3bappcore->mediaCache()->medium( dev ).content() & K3bMedium::CONTENT_DATA;
-        m_actionMount->setEnabled( mediumMountable );
-        m_actionUnmount->setEnabled( mediumMountable );
-
-        disconnect( this, SLOT(slotMountChanged(bool,const QString&)) );
-        disconnect( this, SLOT(slotMountFinished(Solid::ErrorType,QVariant,const QString&)) );
-        disconnect( this, SLOT(slotUnmountFinished(Solid::ErrorType,QVariant,const QString&)) );
-
-        Solid::StorageAccess* storage = dev->solidStorage();
-        if( storage != 0 ) {
-            connect( storage, SIGNAL(accessibilityChanged(bool,const QString&)),
-                     this, SLOT(slotMountChanged(bool,const QString&)) );
-            connect( storage, SIGNAL(setupDone(Solid::ErrorType,QVariant,const QString&)),
-                     this, SLOT(slotMountFinished(Solid::ErrorType,QVariant,const QString&)) );
-            connect( storage, SIGNAL(teardownDone(Solid::ErrorType,QVariant,const QString&)),
-                     this, SLOT(slotUnmountFinished(Solid::ErrorType,QVariant,const QString&)) );
-            m_actionMount->setVisible( !storage->isAccessible() );
-            m_actionUnmount->setVisible( storage->isAccessible() );
+            Solid::StorageAccess* storage = dev->solidStorage();
+            if( storage != 0 ) {
+                connect( storage, SIGNAL(accessibilityChanged(bool,const QString&)),
+                        this, SLOT(slotMountChanged(bool,const QString&)) );
+                connect( storage, SIGNAL(setupDone(Solid::ErrorType,QVariant,const QString&)),
+                        this, SLOT(slotMountFinished(Solid::ErrorType,QVariant,const QString&)) );
+                connect( storage, SIGNAL(teardownDone(Solid::ErrorType,QVariant,const QString&)),
+                        this, SLOT(slotUnmountFinished(Solid::ErrorType,QVariant,const QString&)) );
+                d->actionMount->setVisible( !storage->isAccessible() );
+                d->actionUnmount->setVisible( storage->isAccessible() );
+            }
+            else {
+                d->actionMount->setVisible( true );
+                d->actionUnmount->setVisible( false );
+            }
+        }
+        else {
+            d->actionMount->setVisible( true );
+            d->actionUnmount->setVisible( false );
+            d->actionMount->setEnabled( false );
+            d->actionUnmount->setEnabled( false );
         }
     }
 }
@@ -144,8 +175,8 @@ void K3bAppDeviceManager::slotMediumChanged( K3bDevice::Device* dev )
 
 void K3bAppDeviceManager::slotMountChanged( bool accessible, const QString& )
 {
-    m_actionMount->setVisible( !accessible );
-    m_actionUnmount->setVisible( accessible );
+    d->actionMount->setVisible( !accessible );
+    d->actionUnmount->setVisible( accessible );
 }
 
 
@@ -154,6 +185,7 @@ void K3bAppDeviceManager::slotMountFinished( Solid::ErrorType error, QVariant, c
     if( currentDevice() != 0 ) {
         Solid::StorageAccess* storage = currentDevice()->solidStorage();
         if( error == Solid::NoError && storage != 0 ) {
+            kDebug() << "Device mounted at " << storage->filePath();
             emit mountFinished( storage->filePath() );
         }
     }
@@ -168,7 +200,7 @@ void K3bAppDeviceManager::slotUnmountFinished( Solid::ErrorType error, QVariant,
 void K3bAppDeviceManager::setCurrentDevice( K3bDevice::Device* dev )
 {
     if( dev != currentDevice() ) {
-        m_currentDevice = dev;
+        d->currentDevice = dev;
 
         emit currentDeviceChanged( currentDevice() );
         slotMediumChanged( currentDevice() );

@@ -75,6 +75,12 @@ K3bDevice::Device* K3bPlacesModel::deviceForIndex( const QModelIndex& index ) co
 }
 
 
+QModelIndex K3bPlacesModel::indexForDevice( K3bDevice::Device* dev ) const
+{
+    return mapFromSubModel( d->deviceModel->indexForDevice( dev ) );
+}
+
+
 void K3bPlacesModel::expandToUrl( const KUrl& url )
 {
     kDebug() << url;

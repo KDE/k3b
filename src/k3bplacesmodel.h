@@ -47,6 +47,11 @@ public:
      */
     K3bDevice::Device* deviceForIndex( const QModelIndex& index ) const;
 
+    /**
+     * Will return invalid index if model does not contain such device
+     */
+    QModelIndex indexForDevice( K3bDevice::Device* dev ) const;
+
 Q_SIGNALS:
     /**
      * Emitted for each subdirectory that is a parent of a url

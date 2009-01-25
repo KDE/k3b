@@ -275,8 +275,7 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent )
     header()->hide();
 
     setContextMenuPolicy( Qt::CustomContextMenu );
-    setSelectionMode(QAbstractItemView::SingleSelection);
-//    setRootIsDecorated( false );
+    setSelectionMode( QAbstractItemView::SingleSelection );
 
     K3bDeviceDelegate* delegate = new K3bDeviceDelegate(this);
     setItemDelegate(delegate);
@@ -296,8 +295,6 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent )
 
     connect( this, SIGNAL(clicked(const QModelIndex&)), SLOT(slotClicked(const QModelIndex&)) );
     connect( this, SIGNAL(customContextMenuRequested( const QPoint& )), SLOT( slotContextMenu( const QPoint& ) ) );
-
-    initActions();
 }
 
 
@@ -307,25 +304,19 @@ K3bFileTreeView::~K3bFileTreeView()
 }
 
 
-void K3bFileTreeView::initActions()
+K3bDevice::Device* K3bFileTreeView::selectedDevice() const
 {
-//   m_actionCollection = new KActionCollection( this );
+    return d->model->deviceForIndex( currentIndex() );
+}
 
-//   m_devicePopupMenu = new KActionMenu( m_actionCollection, "device_popup_menu" );
-//   m_urlPopupMenu = new KActionMenu( m_actionCollection, "url_popup_menu" );
 
-//   KAction* actionDiskInfo = new KAction( i18n("&Disk Info"), "info", 0, this, SLOT(slotShowDiskInfo()),
-// 					 m_actionCollection, "disk_info");
-//   KAction* actionUnmount = new KAction( i18n("&Unmount"), "cdrom_unmount", 0, this, SLOT(slotUnmountDisk()),
-// 					m_actionCollection, "disk_unmount");
-//   KAction* actionEject = new KAction( i18n("&Eject"), "", 0, this, SLOT(slotEjectDisk()),
-// 					m_actionCollection, "disk_eject");
-
-//   m_devicePopupMenu->insert( actionDiskInfo );
-//   m_devicePopupMenu->insert( new KActionSeparator( this ) );
-//   m_devicePopupMenu->insert( actionUnmount );
-//   m_devicePopupMenu->insert( actionEject );
-
+KUrl K3bFileTreeView::selectedUrl() const
+{
+    KFileItem fileItem = d->model->itemForIndex( currentIndex() );
+    if( fileItem.isNull() )
+        return KUrl();
+    else
+        return fileItem.url();
 }
 
 
@@ -347,7 +338,7 @@ void K3bFileTreeView::setSelectedUrl( const KUrl& url )
 
 void K3bFileTreeView::setSelectedDevice( K3bDevice::Device* dev )
 {
-    // FIXME
+    setCurrentIndex( d->model->indexForDevice( dev ) );
 }
 
 

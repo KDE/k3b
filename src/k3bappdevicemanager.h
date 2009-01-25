@@ -19,13 +19,10 @@
 #include <KXMLGUIClient>
 #include <solid/solidnamespace.h>
 
-class KAction;
 class K3bMediaCache;
 
 namespace K3bDevice {
     class Device;
-    class DiskInfo;
-    class DiskInfoDetector;
 }
 
 /**
@@ -51,7 +48,6 @@ Q_SIGNALS:
      * to the user since deteting the diskinfo might take some time.
      */
     void detectingDiskInfo( K3bDevice::Device* );
-    void diskInfoReady( K3bDevice::DiskInfoDetector* );
 
     void mountFinished( const QString& mountPoint );
     void unmountFinished( bool success );
@@ -92,19 +88,11 @@ private:
     /**
      * \reimplemeted for internal reasons. The API is unaffected.
      */
-    void removeDevice( const Solid::Device& );
+    virtual K3bDevice::Device* addDevice( const Solid::Device& solidDev );
+    virtual void removeDevice( const Solid::Device& solidDev );
 
-    KAction* m_actionDiskInfo;
-    KAction* m_actionUnmount;
-    KAction* m_actionMount;
-    KAction* m_actionEject;
-    KAction* m_actionLoad;
-    KAction* m_actionSetReadSpeed;
-
-    mutable K3bDevice::Device* m_currentDevice;
-    K3bDevice::DiskInfoDetector* m_diskInfoDetector;
-
-    bool m_ejectRequested;
+    class Private;
+    Private* const d;
 };
 
 #endif
