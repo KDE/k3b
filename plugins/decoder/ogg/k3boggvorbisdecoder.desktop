@@ -61,11 +61,14 @@ Comment[uk]=Модуль декодування файлів Ogg Vorbis
 Comment[x-test]=xxDecoding module to decode Ogg Vorbis filesxx
 Comment[zh_CN]=用于解码 Ogg Vorbis 文件的解码模块
 Type=Service
-X-KDE-Library=k3boggvorbisdecoder
+ServiceTypes=K3b/Plugin
+Icon=preferences-plugin
 
+X-KDE-Library=k3boggvorbisdecoder
 X-KDE-PluginInfo-Name=oggvorbisdecoder
 X-KDE-PluginInfo-Author=Sebastian Trueg
 X-KDE-PluginInfo-Email=trueg@k3b.org
 X-KDE-PluginInfo-Version=4.0
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Category=AudioDecoder
+X-KDE-PluginInfo-EnabledByDefault=true

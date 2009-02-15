@@ -60,7 +60,8 @@ Comment[uk]=Модуль декодування звукових файлів, �
 Comment[x-test]=xxDecoding module to decode audio files supported by libsndfilexx
 Comment[zh_CN]=用于解码被 libsndfile 支持的文件的解码模块
 Type=Service
-X-KDE-ServiceTypes=K3b/Plugin
+ServiceTypes=K3b/Plugin
+Icon=preferences-plugin
 
 X-KDE-Library=k3blibsndfiledecoder
 X-KDE-PluginInfo-Name=k3blibsndfiledecoder
@@ -69,4 +70,4 @@ X-KDE-PluginInfo-Email=mbedouet@no-log.org
 X-KDE-PluginInfo-Version=2.0
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Category=AudioDecoder
-
+X-KDE-PluginInfo-EnabledByDefault=true

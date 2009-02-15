@@ -108,7 +108,9 @@ void K3bPluginManager::Private::loadPlugin( const KService::Ptr service )
             kDebug() << "plugin system does not fit";
         }
         else {
-            plugin->m_pluginInfo = KPluginInfo( service );
+            // When using constructor KPluginInfo( service ), the plugin selector
+            // in preferences is empty. The one below works fine. Why?
+            plugin->m_pluginInfo = KPluginInfo( service->entryPath(), "services" );
             plugins.append( plugin );
         }
     }

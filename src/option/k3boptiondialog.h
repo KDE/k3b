@@ -16,16 +16,18 @@
 #ifndef K3BOPTIONDIALOG_H
 #define K3BOPTIONDIALOG_H
 
-#include <kpagedialog.h>
+#include <KPageDialog>
+#include <QHash>
 
-class K3bDeviceOptionTab;
-class K3bAdvancedOptionTab;
-class K3bExternalBinOptionTab;
+class KPageWidgetItem;
 class K3bMiscOptionTab;
+class K3bDeviceOptionTab;
+class K3bExternalBinOptionTab;
 class K3bNotifyOptionTab;
 class K3bPluginOptionTab;
 class K3bThemeOptionTab;
 class K3bCddbOptionTab;
+class K3bAdvancedOptionTab;
 
 /**
  *@author Sebastian Trueg
@@ -38,13 +40,19 @@ public:
     K3bOptionDialog( QWidget* parent = 0 );
     ~K3bOptionDialog();
 
-    // FIXME: add the missing ones, add slot to open to a specific one
     enum ConfigPage {
-        Advanced = 0,
-        Devices = 1,
-        Programs = 2,
-        Cddb = 3
+        Misc = 0,
+        Devices,
+        Programs,
+        Notifications,
+        Plugins,
+        Themes,
+        Cddb,
+        Advanced
     };
+
+public Q_SLOTS:
+    void setCurrentPage( ConfigPage page );
 
 protected Q_SLOTS:
     void slotOk();
@@ -54,37 +62,48 @@ protected Q_SLOTS:
 private:
     bool saveSettings();
 
-    // programs tab
-    K3bExternalBinOptionTab* m_externalBinOptionTab;
-    void setupProgramsPage();
-
-    // device tab
-    K3bDeviceOptionTab* m_deviceOptionTab;
-    void setupDevicePage();
-
-    // advanced tab
-    void setupAdvancedPage();
-    K3bAdvancedOptionTab* m_advancedOptionTab;
-
     // misc options
     K3bMiscOptionTab* m_miscOptionTab;
+    KPageWidgetItem* m_miscPage;
     void setupMiscPage();
+
+    // device options
+    K3bDeviceOptionTab* m_deviceOptionTab;
+    KPageWidgetItem* m_devicePage;
+    void setupDevicePage();
+
+    // programs options
+    K3bExternalBinOptionTab* m_externalBinOptionTab;
+    KPageWidgetItem* m_programsPage;
+    void setupProgramsPage();
 
     // notify options
     K3bNotifyOptionTab* m_notifyOptionTab;
+    KPageWidgetItem* m_notifyPage;
     void setupNotifyPage();
 
     // plugin options
     K3bPluginOptionTab* m_pluginOptionTab;
+    KPageWidgetItem* m_pluginPage;
     void setupPluginPage();
 
     // theme options
     K3bThemeOptionTab* m_themeOptionTab;
+    KPageWidgetItem* m_themePage;
     void setupThemePage();
 
     // cddb options
     K3bCddbOptionTab* m_cddbOptionTab;
+    KPageWidgetItem* m_cddbPage;
     void setupCddbPage();
+
+    // advanced options
+    K3bAdvancedOptionTab* m_advancedOptionTab;
+    KPageWidgetItem* m_advancedPage;
+    void setupAdvancedPage();
+
+    typedef QHash<ConfigPage,KPageWidgetItem*> Pages;
+    Pages m_pages;
 };
 
 #endif

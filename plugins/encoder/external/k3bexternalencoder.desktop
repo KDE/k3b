@@ -58,7 +58,8 @@ Comment[uk]=Модуль кодування, що дозволяє визнач�
 Comment[x-test]=xxEncoding module that allows specifying an encoding commandxx
 Comment[zh_CN]=允许指定编码命令的编码模块
 Type=Service
-X-KDE-ServiceTypes=K3b/Plugin
+ServiceTypes=K3b/Plugin
+Icon=preferences-plugin
 
 X-KDE-Library=k3bexternalencoder
 X-KDE-PluginInfo-Name=k3bexternalencoder
@@ -67,3 +68,4 @@ X-KDE-PluginInfo-Email=trueg@k3b.org
 X-KDE-PluginInfo-Version=5.0
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Category=AudioEncoder
+X-KDE-PluginInfo-EnabledByDefault=true

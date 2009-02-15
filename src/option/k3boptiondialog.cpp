@@ -15,7 +15,7 @@
 
 
 #include "k3boptiondialog.h"
-#include <k3bcore.h>
+#include "k3bcore.h"
 #include "k3bdeviceoptiontab.h"
 #include "k3badvancedoptiontab.h"
 #include "k3bexternalbinoptiontab.h"
@@ -23,25 +23,21 @@
 #include "k3bthemeoptiontab.h"
 #include "k3bpluginoptiontab.h"
 #include "k3bcddboptiontab.h"
-
-#include <k3bsystemproblemdialog.h>
-
-
-#include <qlayout.h>
-#include <qtooltip.h>
-#include <qtabwidget.h>
-#include <QGridLayout>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QFrame>
-
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
-
+#include "k3bsystemproblemdialog.h"
 #include "k3bnotifyoptiontab.h"
 
+#include <QFrame>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QLayout>
+#include <QTabWidget>
+#include <QToolTip>
+#include <QVBoxLayout>
+
+#include <KLocale>
+#include <KIconLoader>
+#include <KConfig>
+#include <KConfigGroup>
 
 // TODO: handle the default-settings
 
@@ -61,12 +57,12 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent )
     setupCddbPage();
     setupAdvancedPage();
 
-    m_externalBinOptionTab->readSettings();
-    m_deviceOptionTab->readDevices();
-    m_advancedOptionTab->readSettings();
     m_miscOptionTab->readSettings();
+    m_deviceOptionTab->readDevices();
+    m_externalBinOptionTab->readSettings();
     m_notifyOptionTab->readSettings();
     m_themeOptionTab->readSettings();
+    m_advancedOptionTab->readSettings();
 
     // if we don't do this the dialog start really huge
     // because of the label in the device-tab
@@ -80,6 +76,15 @@ K3bOptionDialog::K3bOptionDialog(QWidget *parent )
 
 K3bOptionDialog::~K3bOptionDialog()
 {
+}
+
+
+void K3bOptionDialog::setCurrentPage( ConfigPage page )
+{
+    Pages::const_iterator pageIt = m_pages.find( page );
+    if( pageIt != m_pages.end() ) {
+        KPageDialog::setCurrentPage( *pageIt );
+    }
 }
 
 
@@ -103,11 +108,11 @@ void K3bOptionDialog::slotApply()
 bool K3bOptionDialog::saveSettings()
 {
     m_deviceOptionTab->saveDevices();
-    m_advancedOptionTab->saveSettings();
     m_externalBinOptionTab->saveSettings();
     m_notifyOptionTab->saveSettings();
-    m_cddbOptionTab->apply();
     m_themeOptionTab->saveSettings();
+    m_cddbOptionTab->apply();
+    m_advancedOptionTab->saveSettings();
 
     if( !m_miscOptionTab->saveSettings() )
         return false;
@@ -121,75 +126,83 @@ void K3bOptionDialog::slotDefault()
 }
 
 
-void K3bOptionDialog::setupAdvancedPage()
+void K3bOptionDialog::setupMiscPage()
 {
-    m_advancedOptionTab = new K3bAdvancedOptionTab;
-    KPageWidgetItem* item = addPage( m_advancedOptionTab, i18n("Advanced") );
-    item->setHeader( i18n("Advanced Settings") );
-    item->setIcon( KIcon( "media-optical-recordable" ) );
-}
-
-
-void K3bOptionDialog::setupProgramsPage()
-{
-    m_externalBinOptionTab = new K3bExternalBinOptionTab( k3bcore->externalBinManager() );
-    KPageWidgetItem* item = addPage( m_externalBinOptionTab, i18n("Programs") );
-    item->setHeader( i18n("Setup External Programs") );
-    item->setIcon( KIcon( "system-run" ) );
+    m_miscOptionTab = new K3bMiscOptionTab;
+    m_miscPage = addPage( m_miscOptionTab, i18n("Misc") );
+    m_miscPage->setHeader( i18n("Miscellaneous Settings") );
+    m_miscPage->setIcon( KIcon( "preferences-other" ) );
+    m_pages.insert( Misc, m_miscPage );
 }
 
 
 void K3bOptionDialog::setupDevicePage()
 {
     m_deviceOptionTab = new K3bDeviceOptionTab;
-    KPageWidgetItem* item = addPage( m_deviceOptionTab, i18n("Devices") );
-    item->setHeader( i18n("Setup Devices") );
-    item->setIcon( KIcon( "drive-optical" ) );
+    m_devicePage = addPage( m_deviceOptionTab, i18n("Devices") );
+    m_devicePage->setHeader( i18n("Setup Devices") );
+    m_devicePage->setIcon( KIcon( "drive-optical" ) );
+    m_pages.insert( Devices, m_devicePage );
 }
 
 
-void K3bOptionDialog::setupMiscPage()
+void K3bOptionDialog::setupProgramsPage()
 {
-    m_miscOptionTab = new K3bMiscOptionTab;
-    KPageWidgetItem* item = addPage( m_miscOptionTab, i18n("Misc") );
-    item->setHeader( i18n("Miscellaneous Settings") );
-    item->setIcon( KIcon( "preferences-other" ) );
+    m_externalBinOptionTab = new K3bExternalBinOptionTab( k3bcore->externalBinManager() );
+    m_programsPage = addPage( m_externalBinOptionTab, i18n("Programs") );
+    m_programsPage->setHeader( i18n("Setup External Programs") );
+    m_programsPage->setIcon( KIcon( "system-run" ) );
+    m_pages.insert( Programs, m_programsPage );
 }
 
 
 void K3bOptionDialog::setupNotifyPage()
 {
     m_notifyOptionTab = new K3bNotifyOptionTab;
-    KPageWidgetItem* item = addPage( m_notifyOptionTab, i18n("Notifications") );
-    item->setHeader( i18n("System Notifications") );
-    item->setIcon( KIcon( "preferences-desktop-notification" ) );
+    m_notifyPage = addPage( m_notifyOptionTab, i18n("Notifications") );
+    m_notifyPage->setHeader( i18n("System Notifications") );
+    m_notifyPage->setIcon( KIcon( "preferences-desktop-notification" ) );
+    m_pages.insert( Notifications, m_notifyPage );
 }
 
 
 void K3bOptionDialog::setupPluginPage()
 {
     m_pluginOptionTab = new K3bPluginOptionTab;
-    KPageWidgetItem* item = addPage( m_pluginOptionTab, i18n("Plugins") );
-    item->setHeader( i18n("K3b Plugin Configuration") );
-    item->setIcon( KIcon( "preferences-plugin" ) );
+    m_pluginPage = addPage( m_pluginOptionTab, i18n("Plugins") );
+    m_pluginPage->setHeader( i18n("K3b Plugin Configuration") );
+    m_pluginPage->setIcon( KIcon( "preferences-plugin" ) );
+    m_pages.insert( Plugins, m_pluginPage );
 }
 
 
 void K3bOptionDialog::setupThemePage()
 {
     m_themeOptionTab = new K3bThemeOptionTab;
-    KPageWidgetItem* item = addPage( m_themeOptionTab, i18n("Themes") );
-    item->setHeader( i18n("K3b GUI Themes") );
-    item->setIcon( KIcon( "preferences-desktop-theme" ) );
+    m_themePage = addPage( m_themeOptionTab, i18n("Themes") );
+    m_themePage->setHeader( i18n("K3b GUI Themes") );
+    m_themePage->setIcon( KIcon( "preferences-desktop-theme" ) );
+    m_pages.insert( Themes, m_themePage );
 }
 
 
 void K3bOptionDialog::setupCddbPage()
 {
     m_cddbOptionTab = new K3bCddbOptionTab;
-    KPageWidgetItem* item = addPage( m_cddbOptionTab, i18n("CDDB") );
-    item->setHeader( i18n("CDDB Audio CD Info Retrieval") );
-    item->setIcon( KIcon( "media-optical-audio" ) );
+    m_cddbPage = addPage( m_cddbOptionTab, i18n("CDDB") );
+    m_cddbPage->setHeader( i18n("CDDB Audio CD Info Retrieval") );
+    m_cddbPage->setIcon( KIcon( "media-optical-audio" ) );
+    m_pages.insert( Cddb, m_cddbPage );
+}
+
+
+void K3bOptionDialog::setupAdvancedPage()
+{
+    m_advancedOptionTab = new K3bAdvancedOptionTab;
+    m_advancedPage = addPage( m_advancedOptionTab, i18n("Advanced") );
+    m_advancedPage->setHeader( i18n("Advanced Settings") );
+    m_advancedPage->setIcon( KIcon( "media-optical-recordable" ) );
+    m_pages.insert( Advanced, m_advancedPage );
 }
 
 #include "k3boptiondialog.moc"

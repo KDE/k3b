@@ -60,7 +60,8 @@ Comment[uk]=Модуль кодування багатьох форматів ф
 Comment[x-test]=xxEncoding module to encode many file formats using SoXxx
 Comment[zh_CN]=用于编码很多使用 SoX 格式的文件的编码模块
 Type=Service
-X-KDE-ServiceTypes=K3b/Plugin
+ServiceTypes=K3b/Plugin
+Icon=preferences-plugin
 
 X-KDE-Library=k3bsoxencoder
 X-KDE-PluginInfo-Name=k3bsoxencoder
@@ -69,3 +70,4 @@ X-KDE-PluginInfo-Email=trueg@k3b.org
 X-KDE-PluginInfo-Version=3.0
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Category=AudioEncoder
+X-KDE-PluginInfo-EnabledByDefault=true

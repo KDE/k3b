@@ -60,7 +60,8 @@ Comment[uk]=Модуль декодування файлів wave
 Comment[x-test]=xxDecoding module to decode wave filesxx
 Comment[zh_CN]=用于解码 WAVE 文件的解码模块
 Type=Service
-X-KDE-ServiceTypes=K3b/Plugin
+ServiceTypes=K3b/Plugin
+Icon=preferences-plugin
 
 X-KDE-Library=k3bwavedecoder
 X-KDE-PluginInfo-Name=k3bwavedecoder
@@ -69,4 +70,4 @@ X-KDE-PluginInfo-Email=trueg@k3b.org
 X-KDE-PluginInfo-Version=4.0
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Category=AudioDecoder
-
+X-KDE-PluginInfo-EnabledByDefault=true

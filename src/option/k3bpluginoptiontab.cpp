@@ -18,12 +18,12 @@
 #include <k3bplugin.h>
 #include <k3bcore.h>
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <kpluginselector.h>
+#include <KLocale>
+#include <KDebug>
+#include <KPluginSelector>
 #include <KPluginInfo>
 
-#include <QtCore/QList>
+#include <QList>
 
 
 
@@ -45,7 +45,7 @@ K3bPluginOptionTab::K3bPluginOptionTab( QWidget* parent )
 
     foreach( K3bPlugin* plugin, k3bcore->pluginManager()->plugins() ) {
         pluginSelector->addPlugins( QList<KPluginInfo>() << plugin->pluginInfo(),
-                                    KPluginSelector::IgnoreConfigFile,
+                                    KPluginSelector::ReadConfigFile,
                                     plugin->group() );
     }
 }

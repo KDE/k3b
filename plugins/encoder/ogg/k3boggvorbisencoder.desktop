@@ -60,7 +60,8 @@ Comment[uk]=Модуль кодування файлів Ogg Vorbis
 Comment[x-test]=xxEncoding module to encode Ogg Vorbis filesxx
 Comment[zh_CN]=用于编码 Ogg Vorbis 文件的编码模块
 Type=Service
-X-KDE-ServiceTypes=K3b/Plugin
+ServiceTypes=K3b/Plugin
+Icon=preferences-plugin
 
 X-KDE-Library=k3boggvorbisencoder
 X-KDE-PluginInfo-Name=k3boggvorbisencoder
@@ -69,4 +70,4 @@ X-KDE-PluginInfo-Email=trueg@k3b.org
 X-KDE-PluginInfo-Version=3.0
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Category=AudioEncoder
-
+X-KDE-PluginInfo-EnabledByDefault=true

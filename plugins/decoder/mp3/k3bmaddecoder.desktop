@@ -60,7 +60,8 @@ Comment[uk]=Модуль декодування файлів MPEG 1 Layer III
 Comment[x-test]=xxDecoding module to decode MPEG 1 Layer III filesxx
 Comment[zh_CN]=用于解码 MPEG 1 Layer III(mp3) 文件的解码模块
 Type=Service
-X-KDE-ServiceTypes=K3b/Plugin
+ServiceTypes=K3b/Plugin
+Icon=preferences-plugin
 
 X-KDE-Library=k3bmaddecoder
 X-KDE-PluginInfo-Name=k3bmaddecoder
@@ -69,3 +70,4 @@ X-KDE-PluginInfo-Email=trueg@k3b.org
 X-KDE-PluginInfo-Version=4.0
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Category=AudioDecoder
+X-KDE-PluginInfo-EnabledByDefault=true
