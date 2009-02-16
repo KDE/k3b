@@ -42,15 +42,22 @@ K3bStandardView::K3bStandardView(K3bDoc* doc, QWidget *parent )
     m_dirView->setDragDropMode(QTreeView::DragDrop);
     m_dirView->setSelectionMode(QTreeView::SingleSelection);
     m_dirView->setModel(m_dirProxy);
+    m_dirView->setContextMenuPolicy(Qt::CustomContextMenu);
 
     // File panel
     m_fileView->setAcceptDrops(true);
     m_fileView->setDragEnabled(true);
     m_fileView->setDragDropMode(QTreeView::DragDrop);
     m_fileView->setRootIsDecorated(false);
+    m_fileView->setSelectionMode(QTreeView::ExtendedSelection);
+    m_fileView->setContextMenuPolicy(Qt::CustomContextMenu);
 
+    // connect signals/slots
+    connect(m_dirView, SIGNAL(customContextMenuRequested(const QPoint&)),
+            this, SLOT(slotCustomContextMenu(const QPoint&)));
+    connect(m_fileView, SIGNAL(customContextMenuRequested(const QPoint&)),
+            this, SLOT(slotCustomContextMenu(const QPoint&)));
 }
-
 
 K3bStandardView::~K3bStandardView()
 {
@@ -84,6 +91,12 @@ void K3bStandardView::setShowDirPanel(bool show)
         m_fileView->setRootIndex(QModelIndex());
 }
 
+void K3bStandardView::contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos)
+{
+    // do nothing in the default implementation (at least for now)
+    qDebug() << "Gotta show a menu for " << selectedIndexes.count() << " items at " << pos;
+}
+
 void K3bStandardView::slotCurrentDirChanged()
 {
     QModelIndexList indexes = m_dirView->selectionModel()->selectedRows();
@@ -95,6 +108,33 @@ void K3bStandardView::slotCurrentDirChanged()
     // make the file view show only the child nodes of the currently selected
     // directory from dir view
     m_fileView->setRootIndex(currentDir);
+}
+
+void K3bStandardView::slotCustomContextMenu(const QPoint &pos)
+{
+    QModelIndexList selection;
+    // detect which view emitted the signal
+    QTreeView *view = dynamic_cast<QTreeView*>(sender());
+
+    // this should not happen, but just in case...
+    if (!view)
+        return;
+
+    // if the signal was emitted by the dirview, we need to map the indexes to the
+    // source model
+    if (view == m_dirView)
+    {
+        foreach(QModelIndex index, view->selectionModel()->selectedRows())
+            selection.append( m_dirProxy->mapToSource(index) );
+    }
+    else
+    {
+        selection = view->selectionModel()->selectedRows();
+    }
+
+    // call the context menu method so that derived classes can place customized
+    // context menus
+    contextMenuForSelection(selection, view->viewport()->mapToGlobal(pos));
 }
 
 #include "k3bstandardview.moc"

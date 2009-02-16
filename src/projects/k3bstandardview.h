@@ -35,6 +35,7 @@
  */
 
 #include <k3bview.h>
+#include <QModelIndex>
 
 class QAbstractItemModel;
 class QTreeView;
@@ -61,8 +62,18 @@ protected:
      */
     void setShowDirPanel(bool show);
 
+    /**
+     * Context menu for a list of indexes.
+     * This method should be reimplemented in derived classes to get
+     * custom context menus for the selected items.
+     *
+     * The default implementation does nothing (at least for now)
+     */
+    virtual void contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos);
+
 protected slots:
     void slotCurrentDirChanged();
+    void slotCustomContextMenu(const QPoint &pos);
 
 private:
     QTreeView* m_dirView;
