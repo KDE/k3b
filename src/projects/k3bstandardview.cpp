@@ -97,6 +97,16 @@ void K3bStandardView::contextMenuForSelection(const QModelIndexList &selectedInd
     qDebug() << "Gotta show a menu for " << selectedIndexes.count() << " items at " << pos;
 }
 
+QModelIndexList K3bStandardView::currentSelection() const
+{
+    return m_currentSelection;
+}
+
+QModelIndex K3bStandardView::currentRoot() const
+{
+    return m_fileView->rootIndex();
+}
+
 void K3bStandardView::slotCurrentDirChanged()
 {
     QModelIndexList indexes = m_dirView->selectionModel()->selectedRows();
@@ -131,6 +141,8 @@ void K3bStandardView::slotCustomContextMenu(const QPoint &pos)
     {
         selection = view->selectionModel()->selectedRows();
     }
+
+    m_currentSelection = selection;
 
     // call the context menu method so that derived classes can place customized
     // context menus

@@ -71,6 +71,19 @@ protected:
      */
     virtual void contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos);
 
+    /**
+     * Returns a list of the currently selected indexes.
+     * This method is meant to be used together with @ref cotnextMenuForSelection()
+     * meaning that when @ref contextMenuForSelection() is called, currentSelection()
+     * will provide the same list as the one used in the previous slot.
+     *
+     * The main purpose of its existence is for slots connected to actions in the context menu
+     * to know which items they should operate in
+     */
+    QModelIndexList currentSelection() const;
+
+    QModelIndex currentRoot() const;
+
 protected slots:
     void slotCurrentDirChanged();
     void slotCustomContextMenu(const QPoint &pos);
@@ -80,6 +93,7 @@ private:
     QTreeView* m_fileView;
     QSplitter* m_splitter;
     K3bDirProxyModel* m_dirProxy;
+    QModelIndexList m_currentSelection;
 };
 
 
