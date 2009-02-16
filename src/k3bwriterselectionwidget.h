@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 #include <QLabel>
 
 #include <kconfiggroup.h>
+
+#include <k3bglobals.h>
 
 class K3bIntMapComboBox;
 class QLabel;
@@ -54,7 +56,7 @@ public:
     /**
      * returns K3b::WritingApp
      */
-    int writingApp() const;
+    K3b::WritingApp writingApp() const;
 
     int wantedMediumType() const;
     int wantedMediumState() const;
@@ -67,14 +69,14 @@ public:
 public Q_SLOTS:
     void setWriterDevice( K3bDevice::Device* );
     void setSpeed( int );
-    void setWritingApp( int );
+    void setWritingApp( K3b::WritingApp app );
 
     /**
      * K3b::WritingApp or'ed together
      *
      * Defaults to cdrecord and cdrdao for CD and growisofs for DVD
      */
-    void setSupportedWritingApps( int );
+    void setSupportedWritingApps( K3b::WritingApps apps );
 
     /**
      * A simple hack to disable the speed selection for DVD formatting
@@ -119,7 +121,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void writerChanged();
     void writerChanged( K3bDevice::Device* );
-    void writingAppChanged( int app );
+    void writingAppChanged( K3b::WritingApp app );
 
     /**
      * \see K3bMediaSelectionComboBox
@@ -140,7 +142,7 @@ private Q_SLOTS:
 private:
     void clearSpeedCombo();
     void insertSpeedItem( int );
-    int selectedWritingApp() const;
+    K3b::WritingApp selectedWritingApp() const;
 
     class MediaSelectionComboBox;
 

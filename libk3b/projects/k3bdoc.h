@@ -16,7 +16,8 @@
 #ifndef K3BDOC_H
 #define K3BDOC_H
 
-#include <config-k3b.h>
+#include "config-k3b.h"
+#include "k3bglobals.h"
 
 // include files for QT
 #include <qobject.h>
@@ -135,7 +136,7 @@ public:
     /** sets the URL of the document */
     virtual void setURL( const KUrl& url );
 
-    int writingMode() const { return m_writingMode; }
+    K3b::WritingMode writingMode() const { return m_writingMode; }
     bool dummy() const { return m_dummy; }
     bool onTheFly() const { return m_onTheFly; }
     bool removeImages() const { return m_removeImages; }
@@ -165,8 +166,8 @@ public:
      */
     virtual K3bBurnJob* newBurnJob( K3bJobHandler*, QObject* parent = 0 ) = 0;
 
-    int writingApp() const { return m_writingApp; }
-    void setWritingApp( int a ) { m_writingApp = a; }
+    K3b::WritingApp writingApp() const { return m_writingApp; }
+    void setWritingApp( K3b::WritingApp a ) { m_writingApp = a; }
 
     /**
      * @return true if the document has successfully been saved to a file
@@ -184,7 +185,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void setDummy( bool d );
-    void setWritingMode( int m ) { m_writingMode = m; }
+    void setWritingMode( K3b::WritingMode m ) { m_writingMode = m; }
     void setOnTheFly( bool b ) { m_onTheFly = b; }
     void setSpeed( int speed );
     void setBurner( K3bDevice::Device* dev );
@@ -226,9 +227,9 @@ private:
     int  m_speed;
 
     /** see k3bglobals.h */
-    int m_writingApp;
+    K3b::WritingApp m_writingApp;
 
-    int m_writingMode;
+    K3b::WritingMode m_writingMode;
 
     int m_copies;
 

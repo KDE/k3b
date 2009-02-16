@@ -165,7 +165,7 @@ void K3bAudioCueFileWritingJob::setBurnDevice( K3bDevice::Device* dev )
 }
 
 
-void K3bAudioCueFileWritingJob::setWritingMode( int mode )
+void K3bAudioCueFileWritingJob::setWritingMode( K3b::WritingMode mode )
 {
     d->audioDoc->setWritingMode( mode );
 }

@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,77 +21,77 @@
 
 
 namespace K3bDevice {
-  class Device;
-  class DeviceHandler;
+    class Device;
+    class DeviceHandler;
 }
 
 
 class LIBK3B_EXPORT K3bDvdCopyJob : public K3bBurnJob
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bDvdCopyJob( K3bJobHandler* hdl, QObject* parent = 0 );
-  ~K3bDvdCopyJob();
+public:
+    K3bDvdCopyJob( K3bJobHandler* hdl, QObject* parent = 0 );
+    ~K3bDvdCopyJob();
 
-  K3bDevice::Device* writer() const { return m_onlyCreateImage ? 0 : m_writerDevice; }
-  K3bDevice::Device* readingDevice() const { return m_readerDevice; }
+    K3bDevice::Device* writer() const { return m_onlyCreateImage ? 0 : m_writerDevice; }
+    K3bDevice::Device* readingDevice() const { return m_readerDevice; }
 
-  QString jobDescription() const;
-  QString jobDetails() const;
+    QString jobDescription() const;
+    QString jobDetails() const;
 
- public Q_SLOTS:
-  void start();
-  void cancel();
+public Q_SLOTS:
+    void start();
+    void cancel();
 
-  void setWriterDevice( K3bDevice::Device* w ) { m_writerDevice = w; }
-  void setReaderDevice( K3bDevice::Device* w ) { m_readerDevice = w; }
-  void setImagePath( const QString& p ) { m_imagePath = p; }
-  void setRemoveImageFiles( bool b ) { m_removeImageFiles = b; }
-  void setOnlyCreateImage( bool b ) { m_onlyCreateImage = b; }
-  void setSimulate( bool b ) { m_simulate = b; }
-  void setOnTheFly( bool b ) { m_onTheFly = b; }
-  void setWriteSpeed( int s ) { m_speed = s; }
-  void setCopies( int c ) { m_copies = c; }
-  void setWritingMode( int w ) { m_writingMode = w; }
-  void setIgnoreReadErrors( bool b ) { m_ignoreReadErrors = b; }
-  void setReadRetries( int i ) { m_readRetries = i; }
-  void setVerifyData( bool b );
+    void setWriterDevice( K3bDevice::Device* w ) { m_writerDevice = w; }
+    void setReaderDevice( K3bDevice::Device* w ) { m_readerDevice = w; }
+    void setImagePath( const QString& p ) { m_imagePath = p; }
+    void setRemoveImageFiles( bool b ) { m_removeImageFiles = b; }
+    void setOnlyCreateImage( bool b ) { m_onlyCreateImage = b; }
+    void setSimulate( bool b ) { m_simulate = b; }
+    void setOnTheFly( bool b ) { m_onTheFly = b; }
+    void setWriteSpeed( int s ) { m_speed = s; }
+    void setCopies( int c ) { m_copies = c; }
+    void setWritingMode( K3b::WritingMode w ) { m_writingMode = w; }
+    void setIgnoreReadErrors( bool b ) { m_ignoreReadErrors = b; }
+    void setReadRetries( int i ) { m_readRetries = i; }
+    void setVerifyData( bool b );
 
- private Q_SLOTS:
-  void slotDiskInfoReady( K3bDevice::DeviceHandler* );
-  void slotReaderProgress( int );
-  void slotReaderProcessedSize( int, int ); 
-  void slotWriterProgress( int );
-  void slotReaderFinished( bool );
-  void slotWriterFinished( bool );
-  void slotVerificationFinished( bool );
-  void slotVerificationProgress( int p );
+private Q_SLOTS:
+    void slotDiskInfoReady( K3bDevice::DeviceHandler* );
+    void slotReaderProgress( int );
+    void slotReaderProcessedSize( int, int ); 
+    void slotWriterProgress( int );
+    void slotReaderFinished( bool );
+    void slotWriterFinished( bool );
+    void slotVerificationFinished( bool );
+    void slotVerificationProgress( int p );
 
- private:
-  bool waitForDvd();
-  void prepareReader();
-  void prepareWriter();
-  void removeImageFiles();
+private:
+    bool waitForDvd();
+    void prepareReader();
+    void prepareWriter();
+    void removeImageFiles();
 
-  K3bDevice::Device* m_writerDevice;
-  K3bDevice::Device* m_readerDevice;
-  QString m_imagePath;
+    K3bDevice::Device* m_writerDevice;
+    K3bDevice::Device* m_readerDevice;
+    QString m_imagePath;
 
-  bool m_onTheFly;
-  bool m_removeImageFiles;
+    bool m_onTheFly;
+    bool m_removeImageFiles;
 
-  bool m_simulate;
-  int m_speed;
-  int m_copies;
-  bool m_onlyCreateImage;
-  bool m_ignoreReadErrors;
-  int m_readRetries;
+    bool m_simulate;
+    int m_speed;
+    int m_copies;
+    bool m_onlyCreateImage;
+    bool m_ignoreReadErrors;
+    int m_readRetries;
 
-  int m_writingMode;
+    K3b::WritingMode m_writingMode;
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 };
 
 

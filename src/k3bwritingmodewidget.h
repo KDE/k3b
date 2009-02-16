@@ -18,6 +18,7 @@
 
 #include <k3bintmapcombobox.h>
 #include <k3bmedium.h>
+#include "k3bglobals.h"
 
 #include <kconfiggroup.h>
 
@@ -31,10 +32,17 @@ class K3bWritingModeWidget : public K3bIntMapComboBox
 
 public:
     K3bWritingModeWidget( QWidget* parent = 0 );
-    K3bWritingModeWidget( int modes, QWidget* parent = 0 );
+    K3bWritingModeWidget( K3b::WritingModes modes, QWidget* parent = 0 );
     ~K3bWritingModeWidget();
 
-    int writingMode() const;
+    K3b::WritingMode writingMode() const;
+
+    /**
+     * \return All supported writing modes. The list
+     * is optionally filtered according to the device
+     * set via setDevice.
+     */
+    K3b::WritingModes supportedWritingModes() const;
 
     void saveConfig( KConfigGroup& );
 
@@ -47,8 +55,8 @@ public Q_SLOTS:
     /**
      * This will not emit the writingModeChanged signal
      */
-    void setWritingMode( int m );
-    void setSupportedModes( int );
+    void setWritingMode( K3b::WritingMode m );
+    void setSupportedModes( K3b::WritingModes modes );
 
     /**
      * If the device is set the supported writing modes

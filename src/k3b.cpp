@@ -98,8 +98,7 @@
 #include "k3bvideodvdview.h"
 #include "k3bview.h"
 #include "k3bwelcomewidget.h"
-#include "misc/k3bcdimagewritingdialog.h"
-#include "misc/k3bisoimagewritingdialog.h"
+#include "misc/k3bimagewritingdialog.h"
 #include "misc/k3bmediacopydialog.h"
 #include "misc/k3bmediaformattingdialog.h"
 #include "option/k3boptiondialog.h"
@@ -265,23 +264,14 @@ void K3bMainWindow::initActions()
                                                           "tools_format_medium" );
     actionToolsFormatMedium->setIconText( i18n( "Format" ) );
 
-    actionToolsWriteCdImage = K3b::createAction( this,
-                                                 i18n("&Burn CD Image..."),
-                                                 "burn_cdimage",
-                                                 0,
-                                                 this,
-                                                 SLOT(slotWriteCdImage()),
-                                                 actionCollection(),
-                                                 "tools_write_cd_image" );
-    KAction* actionToolsWriteDvdImage = K3b::createAction( this,
-                                                           i18n("&Burn DVD ISO Image..."),
-                                                           "burn_dvdimage",
-                                                           0,
-                                                           this,
-                                                           SLOT(slotWriteDvdIsoImage()),
-                                                           actionCollection(),
-                                                           "tools_write_dvd_iso" );
-    actionToolsWriteDvdImage->setIconText( i18n( "Burn Image" ) );
+    actionToolsWriteImage = K3b::createAction( this,
+                                               i18n("&Burn Image..."),
+                                               "burn_cdimage",
+                                               0,
+                                               this,
+                                               SLOT(slotWriteImage()),
+                                               actionCollection(),
+                                               "tools_write_image" );
 
     KAction* actionToolsMediaCopy = K3b::createAction( this,
                                                        i18n("Copy &Medium..."),
@@ -350,8 +340,7 @@ void K3bMainWindow::initActions()
     actionFileNewMovix->setToolTip( i18n("Creates a new eMovix project") );
     actionFileNewVcd->setToolTip( i18n("Creates a new Video CD project") );
     actionToolsFormatMedium->setToolTip( i18n("Open the rewritable disk formatting/erasing dialog") );
-    actionToolsWriteCdImage->setToolTip( i18n("Write an Iso9660, cue/bin, or cdrecord clone image to CD") );
-    actionToolsWriteDvdImage->setToolTip( i18n("Write an Iso9660 image to DVD") );
+    actionToolsWriteImage->setToolTip( i18n("Write an Iso9660, cue/bin, or cdrecord clone image to an optical disc") );
     actionToolsMediaCopy->setToolTip( i18n("Open the media copy dialog") );
     actionFileOpen->setToolTip(i18n("Opens an existing project"));
     actionFileOpenRecent->setToolTip(i18n("Opens a recently used file"));
@@ -1224,31 +1213,16 @@ void K3bMainWindow::slotWarningMessage(const QString& message)
 }
 
 
-void K3bMainWindow::slotWriteCdImage()
+void K3bMainWindow::slotWriteImage()
 {
-    K3bCdImageWritingDialog d( this );
+    K3bImageWritingDialog d( this );
     d.exec();
 }
 
 
-void K3bMainWindow::slotWriteDvdIsoImage()
+void K3bMainWindow::slotWriteImage( const KUrl& url )
 {
-    K3bIsoImageWritingDialog d( this );
-    d.exec();
-}
-
-
-void K3bMainWindow::slotWriteDvdIsoImage( const KUrl& url )
-{
-    K3bIsoImageWritingDialog d( this );
-    d.setImage( url );
-    d.exec();
-}
-
-
-void K3bMainWindow::slotWriteCdImage( const KUrl& url )
-{
-    K3bCdImageWritingDialog d( this );
+    K3bImageWritingDialog d( this );
     d.setImage( url );
     d.exec();
 }
@@ -1484,12 +1458,7 @@ bool K3bMainWindow::isCdDvdImageAndIfSoOpenDialog( const KUrl& url )
     K3bIso9660 iso( url.path() );
     if( iso.open() ) {
         iso.close();
-        // very rough dvd image size test
-        if( K3b::filesize( url ) > 1000*1024*1024 )
-            slotWriteDvdIsoImage( url );
-        else
-            slotWriteCdImage( url );
-
+        slotWriteImage( url );
         return true;
     }
     else

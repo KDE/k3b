@@ -151,8 +151,8 @@ void K3bProjectBurnDialog::toggleAll()
     m_spinCopies->setDisabled( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() );
 
     // we only support DAO with cdrdao
-    if( m_writerSelectionWidget->writingApp() == K3b::CDRDAO )
-        m_writingModeWidget->setSupportedModes( K3b::DAO );
+    if( m_writerSelectionWidget->writingApp() == K3b::WRITING_APP_CDRDAO )
+        m_writingModeWidget->setSupportedModes( K3b::WRITING_MODE_DAO );
 
     if( m_checkOnlyCreateImage->isChecked() )
         setButtonText( START_BUTTON,

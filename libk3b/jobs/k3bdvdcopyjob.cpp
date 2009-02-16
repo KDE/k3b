@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ public:
           readcdReader(0),
           dataTrackReader(0),
           verificationJob(0),
-          usedWritingMode(0),
+          usedWritingMode(K3b::WRITING_MODE_AUTO),
           verifyData(false) {
         outPipe.readFromIODevice( &imageFile );
     }
@@ -74,7 +74,7 @@ public:
 
     K3b::Msf lastSector;
 
-    int usedWritingMode;
+    K3b::WritingMode usedWritingMode;
 
     K3bFileSplitter imageFile;
     K3bChecksumPipe inPipe;
@@ -251,7 +251,7 @@ void K3bDvdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
             // growisofs only uses the size from the PVD for reserving
             // writable space in DAO mode
             // with version >= 5.15 growisofs supports specifying the size of the track
-            if( m_writingMode != K3b::DAO || !m_onTheFly || m_onlyCreateImage ||
+            if( m_writingMode != K3b::WRITING_MODE_DAO || !m_onTheFly || m_onlyCreateImage ||
                 ( k3bcore->externalBinManager()->binObject( "growisofs" ) &&
                   k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "daosize" ) ) ) {
                 d->lastSector = dh->toc().lastSector();
@@ -435,18 +435,18 @@ void K3bDvdCopyJob::prepareWriter()
 
     // first let's determine which application to use
     int usedApp = writingApp();
-    if ( usedApp == K3b::DEFAULT ) {
+    if ( usedApp == K3b::WRITING_APP_DEFAULT ) {
         // let's default to cdrecord for the time being
         // FIXME: use growisofs for non-dao and non-auto mode
         if ( K3bDevice::isBdMedia( d->sourceDiskInfo.mediaType() ) ) {
             if ( k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "blu-ray" ) )
-                usedApp = K3b::CDRECORD;
+                usedApp = K3b::WRITING_APP_CDRECORD;
             else
-                usedApp = K3b::GROWISOFS;
+                usedApp = K3b::WRITING_APP_GROWISOFS;
         }
     }
 
-    if ( usedApp == K3b::GROWISOFS ) {
+    if ( usedApp == K3b::WRITING_APP_GROWISOFS ) {
         K3bGrowisofsWriter* job = new K3bGrowisofsWriter( m_writerDevice, this, this );
 
         // these do only make sense with DVD-R(W)
@@ -868,11 +868,11 @@ bool K3bDvdCopyJob::waitForDvd()
             }
             else if( m & (K3bDevice::MEDIA_DVD_RW_SEQ|
                           K3bDevice::MEDIA_DVD_RW) ) {
-                if( m_writingMode == K3b::DAO ) {
+                if( m_writingMode == K3b::WRITING_MODE_DAO ) {
 // 	    ( m_writingMode ==  K3b::WRITING_MODE_AUTO &&
 // 	      ( sizeWithDao || !m_onTheFly ) ) ) {
                     emit infoMessage( i18n("Writing DVD-RW in DAO mode."), INFO );
-                    d->usedWritingMode = K3b::DAO;
+                    d->usedWritingMode = K3b::WRITING_MODE_DAO;
                 }
                 else {
                     emit infoMessage( i18n("Writing DVD-RW in incremental mode."), INFO );
@@ -886,11 +886,11 @@ bool K3bDvdCopyJob::waitForDvd()
                 if( m_writingMode == K3b::WRITING_MODE_RES_OVWR )
                     emit infoMessage( i18n("Restricted Overwrite is not possible with DVD-R media."), INFO );
 
-                if( m_writingMode == K3b::DAO ) {
+                if( m_writingMode == K3b::WRITING_MODE_DAO ) {
 // 	    ( m_writingMode ==  K3b::WRITING_MODE_AUTO &&
 // 	      ( sizeWithDao || !m_onTheFly ) ) ) {
                     emit infoMessage( i18n("Writing %1 in DAO mode.",K3bDevice::mediaTypeString(m, true) ), INFO );
-                    d->usedWritingMode = K3b::DAO;
+                    d->usedWritingMode = K3b::WRITING_MODE_DAO;
                 }
                 else {
                     emit infoMessage( i18n("Writing %1 in incremental mode.",K3bDevice::mediaTypeString(m, true) ), INFO );

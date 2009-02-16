@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,16 +50,16 @@ namespace K3bDevice {
 namespace K3b
 {
     enum WritingApp { 
-        DEFAULT = 1, 
-        CDRECORD = 2, 
-        CDRDAO = 4,
-        DVDRECORD = 8,
-        GROWISOFS = 16,
-        DVD_RW_FORMAT = 32
+        WRITING_APP_DEFAULT = 1, 
+        WRITING_APP_CDRECORD = 2, 
+        WRITING_APP_CDRDAO = 4,
+        WRITING_APP_GROWISOFS = 16,
+        WRITING_APP_DVD_RW_FORMAT = 32
     };
+    Q_DECLARE_FLAGS( WritingApps, WritingApp )
 
-    LIBK3B_EXPORT int writingAppFromString( const QString& );
-    LIBK3B_EXPORT QString writingAppToString( int );
+    LIBK3B_EXPORT K3b::WritingApp writingAppFromString( const QString& );
+    LIBK3B_EXPORT QString writingAppToString( K3b::WritingApp );
 
     /**
      * DATA_MODE_AUTO - let K3b determine the best mode
@@ -68,8 +68,8 @@ namespace K3b
      */
     enum DataMode { 
         DATA_MODE_AUTO,
-        MODE1, 
-        MODE2
+        DATA_MODE_1, 
+        DATA_MODE_2
     };
 
     /**
@@ -87,23 +87,24 @@ namespace K3b
     };
 
     /**
-     * AUTO  - let K3b determine the best mode
-     * TAO   - Track at once
-     * DAO   - Disk at once (or session at once)
-     * RAW   - Raw mode
+     * WRITING_MODE_AUTO  - let K3b determine the best mode
+     * WRITING_MODE_TAO   - Track at once
+     * WRITING_MODE_DAO   - Disk at once (or session at once)
+     * WRITING_MODE_RAW   - Raw mode
      *
      * may be or'ed together (except for WRITING_MODE_AUTO of course)
      */
     enum WritingMode { 
         WRITING_MODE_AUTO = 0, 
-        TAO = K3bDevice::WRITINGMODE_TAO, 
-        DAO = K3bDevice::WRITINGMODE_SAO, 
-        RAW = K3bDevice::WRITINGMODE_RAW,
+        WRITING_MODE_TAO = K3bDevice::WRITINGMODE_TAO, 
+        WRITING_MODE_DAO = K3bDevice::WRITINGMODE_SAO, 
+        WRITING_MODE_RAW = K3bDevice::WRITINGMODE_RAW,
         WRITING_MODE_INCR_SEQ = K3bDevice::WRITINGMODE_INCR_SEQ,  // Incremental Sequential
         WRITING_MODE_RES_OVWR = K3bDevice::WRITINGMODE_RES_OVWR // Restricted Overwrite
     };
+    Q_DECLARE_FLAGS( WritingModes, WritingMode )
 
-    LIBK3B_EXPORT QString writingModeString( int );
+    LIBK3B_EXPORT QString writingModeString( K3b::WritingModes );
 
     LIBK3B_EXPORT QString framesToString( int h, bool showFrames = true );
     /*LIBK3B_EXPORT QString sizeToTime( long size );*/
@@ -250,5 +251,8 @@ namespace K3b
      */
     LIBK3B_EXPORT bool eject( K3bDevice::Device* );
 }
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(K3b::WritingApps)
+Q_DECLARE_OPERATORS_FOR_FLAGS(K3b::WritingModes)
 
 #endif

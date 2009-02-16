@@ -454,7 +454,7 @@ void K3bMediaCopyDialog::toggleAll()
     // we can only clone single session CDs
     if( K3bDevice::isCdMedia( sourceMedium.diskInfo().mediaType() ) ) {
         m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_CD );
-        m_writerSelectionWidget->setSupportedWritingApps( K3b::CDRECORD );
+        m_writerSelectionWidget->setSupportedWritingApps( K3b::WRITING_APP_CDRECORD );
 
         if ( sourceMedium.toc().sessions() == 1 ) {
             m_comboCopyMode->setEnabled( true );
@@ -465,7 +465,7 @@ void K3bMediaCopyDialog::toggleAll()
         }
     }
     else {
-        m_writerSelectionWidget->setSupportedWritingApps( K3b::GROWISOFS|K3b::CDRECORD );
+        m_writerSelectionWidget->setSupportedWritingApps( K3b::WRITING_APP_GROWISOFS|K3b::WRITING_APP_CDRECORD );
 
         m_comboCopyMode->setEnabled( false );
         m_comboCopyMode->setCurrentIndex( 0 );
@@ -490,7 +490,7 @@ void K3bMediaCopyDialog::toggleAll()
         m_checkCacheImage->setChecked(true);
         m_checkCacheImage->setEnabled(false);
 
-        m_writingModeWidget->setSupportedModes( K3b::RAW );
+        m_writingModeWidget->setSupportedModes( K3b::WRITING_MODE_RAW );
     }
 
     // Normal CD/DVD/Blue-Ray copy
@@ -500,14 +500,14 @@ void K3bMediaCopyDialog::toggleAll()
         // selection of the writing mode
         //
         if( burnDev == readDev ) {
-            int modes = 0;
+            K3b::WritingModes modes = 0;
             if ( sourceMedium.diskInfo().mediaType() & K3bDevice::MEDIA_CD_ALL ) {
-                modes = K3b::TAO|K3b::DAO|K3b::RAW;
+                modes = K3b::WRITING_MODE_TAO|K3b::WRITING_MODE_DAO|K3b::WRITING_MODE_RAW;
             }
             else if ( sourceMedium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_ALL ) {
                 // only auto for DVD+R(W)
                 if( burnDev->writeCapabilities() & (K3bDevice::MEDIA_DVD_R|K3bDevice::MEDIA_DVD_RW) ) {
-                    modes |= K3b::DAO|K3b::WRITING_MODE_RES_OVWR;
+                    modes |= K3b::WRITING_MODE_DAO|K3b::WRITING_MODE_RES_OVWR;
                     if( burnDev->featureCurrent( K3bDevice::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) != 0 )
                         modes |= K3b::WRITING_MODE_INCR_SEQ;
                 }

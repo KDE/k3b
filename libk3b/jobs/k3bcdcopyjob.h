@@ -18,6 +18,7 @@
 
 #include <k3bjob.h>
 #include "k3b_export.h"
+#include "k3bglobals.h"
 
 namespace K3bDevice {
     class Device;
@@ -50,7 +51,7 @@ public Q_SLOTS:
 public:
     void setWriterDevice( K3bDevice::Device* dev ) { m_writerDevice = dev; }
     void setReaderDevice( K3bDevice::Device* dev ) { m_readerDevice = dev; }
-    void setWritingMode( int m ) { m_writingMode = m; }
+    void setWritingMode( K3b::WritingMode m ) { m_writingMode = m; }
     void setSpeed( int s ) { m_speed = s; }
     void setOnTheFly( bool b ) { m_onTheFly = b; }
     void setKeepImage( bool b ) { m_keepImage = b; }
@@ -106,7 +107,7 @@ private:
     int m_audioReadRetries;
     bool m_copyCdText;
     QString m_tempPath;
-    int m_writingMode;
+    K3b::WritingMode m_writingMode;
 
     class Private;
     Private* d;

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2007-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2007-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ K3bMediaFormattingDialog::K3bMediaFormattingDialog( QWidget* parent )
     m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_COMPLETE|
                                                    K3bDevice::STATE_INCOMPLETE|
                                                    K3bDevice::STATE_EMPTY );
-    m_writerSelectionWidget->setSupportedWritingApps( K3b::DVD_RW_FORMAT );
+    m_writerSelectionWidget->setSupportedWritingApps( K3b::WRITING_APP_DVD_RW_FORMAT );
     m_writerSelectionWidget->setForceAutoSpeed(true);
 
     QGroupBox* groupWritingMode = new QGroupBox( i18n("Writing Mode"), frame );
@@ -179,7 +179,7 @@ void K3bMediaFormattingDialog::slotStartClicked()
 void K3bMediaFormattingDialog::toggleAll()
 {
     K3bMedium medium = k3bappcore->mediaCache()->medium( m_writerSelectionWidget->writerDevice() );
-    int modes = 0;
+    K3b::WritingModes modes = 0;
     if ( medium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_RW ) {
         modes |=  K3b::WRITING_MODE_INCR_SEQ|K3b::WRITING_MODE_RES_OVWR;
     }

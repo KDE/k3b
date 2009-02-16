@@ -17,6 +17,8 @@
 
 #include <k3bjob.h>
 #include "k3b_export.h"
+#include "k3bglobals.h"
+
 namespace K3bDevice {
     class Device;
 }
@@ -44,7 +46,7 @@ public Q_SLOTS:
     void setCueFile( const QString& );
     void setSpeed( int s );
     void setBurnDevice( K3bDevice::Device* dev );
-    void setWritingMode( int mode );
+    void setWritingMode( K3b::WritingMode mode );
     void setSimulate( bool b );
     void setCopies( int c );
     void setOnTheFly( bool b );

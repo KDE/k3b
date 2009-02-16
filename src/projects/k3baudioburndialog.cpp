@@ -245,9 +245,9 @@ void K3bAudioBurnDialog::toggleAll()
     // cdrdao always knows onthefly and cdtext
     bool onTheFly = true;
     bool cdText = true;
-    if( m_writingModeWidget->writingMode() == K3b::TAO ||
-        m_writingModeWidget->writingMode() == K3b::RAW ||
-        m_writerSelectionWidget->writingApp() == K3b::CDRECORD ) {
+    if( m_writingModeWidget->writingMode() == K3b::WRITING_MODE_TAO ||
+        m_writingModeWidget->writingMode() == K3b::WRITING_MODE_RAW ||
+        m_writerSelectionWidget->writingApp() == K3b::WRITING_APP_CDRECORD ) {
         onTheFly = cdrecordOnTheFly;
         cdText = cdrecordCdText;
         m_checkHideFirstTrack->setChecked(false);
@@ -264,8 +264,8 @@ void K3bAudioBurnDialog::toggleAll()
         m_checkCacheImage->setChecked( true );
     m_cdtextWidget->setEnabled( !m_checkOnlyCreateImage->isChecked() &&
                                 cdText &&
-                                m_writingModeWidget->writingMode() != K3b::TAO );
-    if( !cdText || m_writingModeWidget->writingMode() == K3b::TAO )
+                                m_writingModeWidget->writingMode() != K3b::WRITING_MODE_TAO );
+    if( !cdText || m_writingModeWidget->writingMode() == K3b::WRITING_MODE_TAO )
         m_cdtextWidget->setChecked(false);
 }
 

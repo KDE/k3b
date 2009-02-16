@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 
 
 namespace K3bDevice {
-  class Device;
+    class Device;
 }
 class K3bCdparanoiaLib;
 
@@ -40,72 +40,72 @@ class K3bCdparanoiaLib;
  */
 class LIBK3B_EXPORT K3bAudioCdTrackSource : public K3bAudioDataSource
 {
- public:
-  /**
-   * Default constructor to create a new source.
-   */
-  K3bAudioCdTrackSource( const K3bDevice::Toc& toc, 
-			 int cdTrackNumber,
-			 const QString& artist, const QString& title,
-			 const QString& cdartist, const QString& cdtitle, 
-			 K3bDevice::Device* dev = 0 );
+public:
+    /**
+     * Default constructor to create a new source.
+     */
+    K3bAudioCdTrackSource( const K3bDevice::Toc& toc, 
+                           int cdTrackNumber,
+                           const QString& artist, const QString& title,
+                           const QString& cdartist, const QString& cdtitle, 
+                           K3bDevice::Device* dev = 0 );
 
-  /**
-   * Constructor to create sources when loading from a project file without toc information
-   */
-  K3bAudioCdTrackSource( unsigned int discid, const K3b::Msf& length, int cdTrackNumber, 
-			 const QString& artist, const QString& title,
-			 const QString& cdartist, const QString& cdtitle );
-  K3bAudioCdTrackSource( const K3bAudioCdTrackSource& );
-  ~K3bAudioCdTrackSource();
+    /**
+     * Constructor to create sources when loading from a project file without toc information
+     */
+    K3bAudioCdTrackSource( unsigned int discid, const K3b::Msf& length, int cdTrackNumber, 
+                           const QString& artist, const QString& title,
+                           const QString& cdartist, const QString& cdtitle );
+    K3bAudioCdTrackSource( const K3bAudioCdTrackSource& );
+    ~K3bAudioCdTrackSource();
 
-  unsigned int discId() const { return m_discId; }
-  int cdTrackNumber() const { return m_cdTrackNumber; }
+    unsigned int discId() const { return m_discId; }
+    int cdTrackNumber() const { return m_cdTrackNumber; }
 
-  QString artist() const { return m_artist; }
-  QString title() const { return m_title; }
-  QString cdArtist() const { return m_cdArtist; }
-  QString cdTitle() const { return m_cdTitle; }
+    QString artist() const { return m_artist; }
+    QString title() const { return m_title; }
+    QString cdArtist() const { return m_cdArtist; }
+    QString cdTitle() const { return m_cdTitle; }
 
-  K3b::Msf originalLength() const;
-  bool seek( const K3b::Msf& );
-  int read( char* data, unsigned int max );
-  QString type() const;
-  QString sourceComment() const;
-  K3bAudioDataSource* copy() const;
+    K3b::Msf originalLength() const;
+    bool seek( const K3b::Msf& );
+    int read( char* data, unsigned int max );
+    QString type() const;
+    QString sourceComment() const;
+    K3bAudioDataSource* copy() const;
 
-  /**
-   * Searches for the corresponding Audio CD and returns the device in which it has
-   * been found or 0 if it could not be found.
-   */
-  K3bDevice::Device* searchForAudioCD() const;
+    /**
+     * Searches for the corresponding Audio CD and returns the device in which it has
+     * been found or 0 if it could not be found.
+     */
+    K3bDevice::Device* searchForAudioCD() const;
 
-  /**
-   * Set the device the source should start to look for the CD.
-   */
-  void setDevice( K3bDevice::Device* dev );
+    /**
+     * Set the device the source should start to look for the CD.
+     */
+    void setDevice( K3bDevice::Device* dev );
 
- private:
-  bool initParanoia();
-  void closeParanoia();
-  bool searchForAudioCD( K3bDevice::Device* ) const;
+private:
+    bool initParanoia();
+    void closeParanoia();
+    bool searchForAudioCD( K3bDevice::Device* ) const;
 
-  unsigned int m_discId;
-  K3b::Msf m_length;
-  K3bDevice::Toc m_toc;
-  int m_cdTrackNumber;
+    unsigned int m_discId;
+    K3b::Msf m_length;
+    K3bDevice::Toc m_toc;
+    int m_cdTrackNumber;
 
-  QString m_artist;
-  QString m_title;
-  QString m_cdArtist;
-  QString m_cdTitle;
+    QString m_artist;
+    QString m_title;
+    QString m_cdArtist;
+    QString m_cdTitle;
 
-  // ripping
-  // we only save the device we last saw the CD in
-  K3bDevice::Device* m_lastUsedDevice;
-  K3bCdparanoiaLib* m_cdParanoiaLib;
-  K3b::Msf m_position;
-  bool m_initialized;
+    // ripping
+    // we only save the device we last saw the CD in
+    K3bDevice::Device* m_lastUsedDevice;
+    K3bCdparanoiaLib* m_cdParanoiaLib;
+    K3b::Msf m_position;
+    bool m_initialized;
 };
 
 #endif

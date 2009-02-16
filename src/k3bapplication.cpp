@@ -226,25 +226,21 @@ bool K3bApplication::processCmdLineArgs()
         showTips = false;
         dialogOpen = true;
         if( k3bcore->jobsRunning() == 0 ) {
-            m_mainWindow->slotWriteCdImage( KUrl(  args->getOption( "cdimage" )  ) );
+            m_mainWindow->slotWriteImage( KUrl(  args->getOption( "cdimage" )  ) );
         }
     }
     else if( args->isSet( "dvdimage" ) ) {
         showTips = false;
         dialogOpen = true;
         if( k3bcore->jobsRunning() == 0 ) {
-            m_mainWindow->slotWriteDvdIsoImage( KUrl(args->getOption( "dvdimage" ) ) );
+            m_mainWindow->slotWriteImage( KUrl(args->getOption( "dvdimage" ) ) );
         }
     }
     else if( args->isSet( "image" ) ) {
         showTips = false;
         dialogOpen = true;
-        KUrl url = KUrl( args->getOption( "image" ) );
         if( k3bcore->jobsRunning() == 0 ) {
-            if( K3b::filesize( url ) > 1000*1024*1024 )
-                m_mainWindow->slotWriteDvdIsoImage( url );
-            else
-                m_mainWindow->slotWriteCdImage( url );
+            m_mainWindow->slotWriteImage( KUrl(args->getOption( "image" ) ) );
         }
     }
     else if( args->isSet("copy") ||

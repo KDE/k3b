@@ -153,8 +153,7 @@ kde4_add_ui_files(k3b_option_SRCS
   )
 
 set(k3b_misc_SRCS
-  misc/k3bcdimagewritingdialog.cpp 
-  misc/k3bisoimagewritingdialog.cpp
+  misc/k3bimagewritingdialog.cpp 
   misc/k3bmediacopydialog.cpp 
   misc/k3bmediaformattingdialog.cpp
   )

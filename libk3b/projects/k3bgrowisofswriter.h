@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,81 +21,81 @@
 
 
 namespace K3bDevice {
-  class Device;
-  }
+    class Device;
+}
 
 
 
 class K3bGrowisofsWriter : public K3bAbstractWriter
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bGrowisofsWriter( K3bDevice::Device*, K3bJobHandler*,
-		      QObject* parent = 0 );
-  ~K3bGrowisofsWriter();
+public:
+    K3bGrowisofsWriter( K3bDevice::Device*, K3bJobHandler*,
+                        QObject* parent = 0 );
+    ~K3bGrowisofsWriter();
 
-  bool active() const;
+    bool active() const;
 
- public Q_SLOTS:
-  void start();
-  void cancel();
+public Q_SLOTS:
+    void start();
+    void cancel();
 
-  void setWritingMode( int );
+    void setWritingMode( K3b::WritingMode mode );
 
-  /**
-   * If true the growisofs parameter -M is used in favor of -Z.
-   */
-  void setMultiSession( bool b );
+    /**
+     * If true the growisofs parameter -M is used in favor of -Z.
+     */
+    void setMultiSession( bool b );
 
-  /**
-   * Only used in DAO mode and only supported with growisofs >= 5.15
-   * @param size size in blocks
-   */
-  void setTrackSize( long size );
+    /**
+     * Only used in DAO mode and only supported with growisofs >= 5.15
+     * @param size size in blocks
+     */
+    void setTrackSize( long size );
 
-  /**
-   * Use this in combination with setTrackSize when writing double layer media.
-   * @param lb The number of data sectors in the first layer. It needs to be less or equal
-   *           to tracksize/2. The writer will pad the second layer with zeros if
-   *           break < tracksize/2.
-   *           If set to 0 this setting will be ignored.
-   */
-  void setLayerBreak( long lb );
+    /**
+     * Use this in combination with setTrackSize when writing double layer media.
+     * @param lb The number of data sectors in the first layer. It needs to be less or equal
+     *           to tracksize/2. The writer will pad the second layer with zeros if
+     *           break < tracksize/2.
+     *           If set to 0 this setting will be ignored.
+     */
+    void setLayerBreak( long lb );
 
-  /**
-   * Close the DVD to enable max DVD compatibility (uses the growisofs --dvd-compat parameter)
-   * This will also be used in DAO mode and when the layerBreak has been set.
-   */
-  void setCloseDvd( bool );
+    /**
+     * Close the DVD to enable max DVD compatibility (uses the growisofs --dvd-compat parameter)
+     * This will also be used in DAO mode and when the layerBreak has been set.
+     */
+    void setCloseDvd( bool );
 
-  /**
-   * set this to QString() or an empty string to let the writer
-   * read it's data from fd()
-   */
-  void setImageToWrite( const QString& );
+    /**
+     * set this to QString() or an empty string to let the writer
+     * read it's data from fd()
+     */
+    void setImageToWrite( const QString& );
 
-  /**
-   * While reading the image from stdin growisofs needs 
-   * a valid -C parameter for multisession.
-   */
-  void setMultiSessionInfo( const QString& );
+    /**
+     * While reading the image from stdin growisofs needs 
+     * a valid -C parameter for multisession.
+     */
+    void setMultiSessionInfo( const QString& );
 
- protected:
-  bool prepareProcess();
+protected:
+    bool prepareProcess();
 
- protected Q_SLOTS:
-  void slotReceivedStderr( const QString& );
-  void slotProcessExited( int, QProcess::ExitStatus );
-  void slotThroughput( int t );
-  void slotFlushingCache();
-  void slotRingBufferFinished( bool );
+protected Q_SLOTS:
+    void slotReceivedStderr( const QString& );
+    void slotProcessExited( int, QProcess::ExitStatus );
+    void slotThroughput( int t );
+    void slotFlushingCache();
+    void slotRingBufferFinished( bool );
 
- private:
-  bool closeFd();
+private:
+    bool closeFd();
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 };
 
 #endif

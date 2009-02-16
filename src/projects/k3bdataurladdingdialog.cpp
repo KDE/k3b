@@ -124,11 +124,7 @@ int K3bDataUrlAddingDialog::addUrls( const KUrl::List& urls,
                                            i18n("Adding image file to project"),
                                            KGuiItem(i18n("Add the file to the project")),
                                            KGuiItem(i18n("Burn the image directly")) ) == KMessageBox::No ) {
-                // very rough dvd image size test
-                if( K3b::filesize( urls.first() ) > 1000*1024*1024 )
-                    k3bappcore->k3bMainWindow()->slotWriteDvdIsoImage( urls.first() );
-                else
-                    k3bappcore->k3bMainWindow()->slotWriteCdImage( urls.first() );
+                k3bappcore->k3bMainWindow()->slotWriteImage( urls.first() );
                 return 0;
             }
         }

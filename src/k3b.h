@@ -110,10 +110,8 @@ public Q_SLOTS:
 
     void slotClearProject();
 
-    void slotWriteCdImage();
-    void slotWriteCdImage( const KUrl& url );
-    void slotWriteDvdIsoImage();
-    void slotWriteDvdIsoImage( const KUrl& url );
+    void slotWriteImage();
+    void slotWriteImage( const KUrl& url );
     void formatMedium( K3bDevice::Device* );
     void slotFormatMedium();
     void mediaCopy( K3bDevice::Device* );
@@ -276,7 +274,7 @@ private:
     KAction* actionFileQuit;
     KAction* actionSettingsConfigure;
     KAction* actionSettingsK3bSetup;
-    KAction* actionToolsWriteCdImage;
+    KAction* actionToolsWriteImage;
     KAction* actionToolsCddaRip;
     KAction* actionToolsVideoDvdRip;
     KAction* actionToolsVideoCdRip;

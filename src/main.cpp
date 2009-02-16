@@ -117,9 +117,9 @@ int main( int argc, char* argv[] )
   options.add("copy <device>", ki18n("Open the copy dialog, optionally specify the source device"));
   options.add("copycd <device>", ki18n("Open the CD copy dialog, optionally specify the source device (DEPRECATED: Use --copy)"));
   options.add("copydvd <device>", ki18n("Open the DVD copy dialog (DEPRECATED: Use --copy)"));
-  options.add("cdimage <url>", ki18n("Write a CD image to a CD-R(W)"));
-  options.add("dvdimage <url>", ki18n("Write a DVD ISO9660 image to a DVD"));
-  options.add("image <url>", ki18n("Write a CD or DVD image to a CD-R(W) or DVD depending on the size"));
+  options.add("image <url>", ki18n("Write an image to a CD or DVD"));
+  options.add("cdimage <url>", ki18n("Write a CD image to a CD (DEPRECATED: Use --image)"));
+  options.add("dvdimage <url>", ki18n("Write a DVD ISO9660 image to a DVD (DEPRECATED: Use --image)"));
   options.add("format <device>", ki18n("Format a rewritable medium"));
   options.add("erasecd <device>", ki18n("Erase a CDRW (DEPRECATED: Use --format)"));
   options.add("formatdvd <device>", ki18n("Format a DVD-RW or DVD+RW (DEPRECATED: Use --format)"));

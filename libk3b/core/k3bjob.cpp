@@ -250,7 +250,7 @@ void K3bJob::wait()
 class K3bBurnJob::Private
 {
 public:
-    int writeMethod;
+    K3b::WritingApp writeMethod;
 };
 
 
@@ -259,7 +259,7 @@ K3bBurnJob::K3bBurnJob( K3bJobHandler* handler, QObject* parent )
     : K3bJob( handler, parent ),
       d( new Private() )
 {
-    d->writeMethod = K3b::DEFAULT;
+    d->writeMethod = K3b::WRITING_APP_DEFAULT;
 }
 
 
@@ -269,21 +269,21 @@ K3bBurnJob::~K3bBurnJob()
 }
 
 
-int K3bBurnJob::writingApp() const
+K3b::WritingApp K3bBurnJob::writingApp() const
 {
     return d->writeMethod;
 }
 
 
-void K3bBurnJob::setWritingApp( int w )
+void K3bBurnJob::setWritingApp( K3b::WritingApp w )
 {
     d->writeMethod = w;
 }
 
 
-int K3bBurnJob::supportedWritingApps() const
+K3b::WritingApps K3bBurnJob::supportedWritingApps() const
 {
-    return K3b::DEFAULT | K3b::CDRDAO | K3b::CDRECORD;
+    return K3b::WRITING_APP_DEFAULT | K3b::WRITING_APP_CDRDAO | K3b::WRITING_APP_CDRECORD;
 }
 
 #include "k3bjob.moc"

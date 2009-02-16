@@ -203,12 +203,12 @@ K3bDataDoc::MultiSessionMode K3bDataMultiSessionParameterJob::determineMultiSess
         kDebug() << "(K3bDataMultiSessionParameterJob) found empty or complete medium.";
 
         if( d->doc->size() >= info.capacity().mode1Bytes()*9/10 ||
-            d->doc->writingMode() == K3b::DAO ) {
+            d->doc->writingMode() == K3b::WRITING_MODE_DAO ) {
             return K3bDataDoc::NONE;
         }
         else if( ( info.capacity() < 2621440 /* ~ 5 GB */ &&
                    d->doc->size() + 11400 /* used size + project size + session gap */ > 2097152 /* 4 GB */ ) ||
-                 d->doc->writingMode() == K3b::DAO ) {
+                 d->doc->writingMode() == K3b::WRITING_MODE_DAO ) {
             return K3bDataDoc::NONE;
         }
         else {

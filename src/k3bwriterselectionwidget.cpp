@@ -109,7 +109,7 @@ public:
     bool haveIgnoreSpeed;
     bool haveManualSpeed;
 
-    int supportedWritingApps;
+    K3b::WritingApps supportedWritingApps;
 
     int lastSetSpeed;
 };
@@ -120,7 +120,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent )
 {
     d = new Private;
     d->forceAutoSpeed = false;
-    d->supportedWritingApps = K3b::CDRECORD|K3b::CDRDAO|K3b::GROWISOFS;
+    d->supportedWritingApps = K3b::WRITING_APP_CDRECORD|K3b::WRITING_APP_CDRDAO|K3b::WRITING_APP_GROWISOFS;
     d->lastSetSpeed = -1;
 
     QGroupBox* groupWriter = new QGroupBox( this );
@@ -224,7 +224,7 @@ void K3bWriterSelectionWidget::setWantedMediumState( int state )
 
 void K3bWriterSelectionWidget::setWantedMediumSize( const K3b::Msf& minSize )
 {
-    #warning The wanted medium size may not be enough if we need to handle multisession!
+#warning The wanted medium size may not be enough if we need to handle multisession!
     m_comboMedium->setWantedMediumSize( minSize );
 }
 
@@ -395,7 +395,7 @@ void K3bWriterSelectionWidget::insertSpeedItem( int speed )
 
 void K3bWriterSelectionWidget::slotWritingAppSelected( int app )
 {
-    emit writingAppChanged( app );
+    emit writingAppChanged( K3b::WritingApp( app ) );
 }
 
 
@@ -432,9 +432,9 @@ void K3bWriterSelectionWidget::setSpeed( int s )
 }
 
 
-void K3bWriterSelectionWidget::setWritingApp( int app )
+void K3bWriterSelectionWidget::setWritingApp( K3b::WritingApp app )
 {
-    m_comboWritingApp->setSelectedValue( app );
+    m_comboWritingApp->setSelectedValue( ( int )app );
 }
 
 
@@ -449,20 +449,20 @@ int K3bWriterSelectionWidget::writerSpeed() const
 }
 
 
-int K3bWriterSelectionWidget::writingApp() const
+K3b::WritingApp K3bWriterSelectionWidget::writingApp() const
 {
     KConfigGroup g( k3bcore->config(), "General Options" );
     if( g.readEntry( "Manual writing app selection", false ) ) {
         return selectedWritingApp();
     }
     else
-        return K3b::DEFAULT;
+        return K3b::WRITING_APP_DEFAULT;
 }
 
 
-int K3bWriterSelectionWidget::selectedWritingApp() const
+K3b::WritingApp K3bWriterSelectionWidget::selectedWritingApp() const
 {
-    return m_comboWritingApp->selectedValue();
+    return K3b::WritingApp( m_comboWritingApp->selectedValue() );
 }
 
 
@@ -494,9 +494,9 @@ void K3bWriterSelectionWidget::slotWriterChanged()
 }
 
 
-void K3bWriterSelectionWidget::setSupportedWritingApps( int i )
+void K3bWriterSelectionWidget::setSupportedWritingApps( K3b::WritingApps i )
 {
-    int oldApp = writingApp();
+    K3b::WritingApp oldApp = writingApp();
 
     d->supportedWritingApps = i;
 
@@ -508,32 +508,30 @@ void K3bWriterSelectionWidget::setSupportedWritingApps( int i )
 
 void K3bWriterSelectionWidget::slotRefreshWritingApps()
 {
-    int i = 0;
+    K3b::WritingApps i = 0;
 
     // select the ones that make sense
     if( k3bappcore->mediaCache()->diskInfo( writerDevice() ).isDvdMedia() )
-        i = K3b::GROWISOFS|K3b::DVD_RW_FORMAT|K3b::CDRECORD;
+        i = K3b::WRITING_APP_GROWISOFS|K3b::WRITING_APP_DVD_RW_FORMAT|K3b::WRITING_APP_CDRECORD;
     else if ( K3bDevice::isBdMedia( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() ) )
-        i = K3b::GROWISOFS|K3b::CDRECORD;
+        i = K3b::WRITING_APP_GROWISOFS|K3b::WRITING_APP_CDRECORD;
     else
-        i = K3b::CDRDAO|K3b::CDRECORD;
+        i = K3b::WRITING_APP_CDRDAO|K3b::WRITING_APP_CDRECORD;
 
     // now strip it down to the ones we support
     i &= d->supportedWritingApps;
 
     m_comboWritingApp->clear();
-    m_comboWritingApp->insertItem( K3b::DEFAULT, i18n("Auto") );
+    m_comboWritingApp->insertItem( K3b::WRITING_APP_DEFAULT, i18n("Auto") );
 
-    if( i & K3b::CDRDAO )
-        m_comboWritingApp->insertItem( K3b::CDRDAO, "cdrdao" );
-    if( i & K3b::CDRECORD )
-        m_comboWritingApp->insertItem( K3b::CDRECORD, "cdrecord" );
-    if( i & K3b::DVDRECORD )
-        m_comboWritingApp->insertItem( K3b::DVDRECORD, "dvdrecord" );
-    if( i & K3b::GROWISOFS )
-        m_comboWritingApp->insertItem( K3b::GROWISOFS, "growisofs" );
-    if( i & K3b::DVD_RW_FORMAT )
-        m_comboWritingApp->insertItem( K3b::DVD_RW_FORMAT, "dvd+rw-format" );
+    if( i & K3b::WRITING_APP_CDRDAO )
+        m_comboWritingApp->insertItem( K3b::WRITING_APP_CDRDAO, "cdrdao" );
+    if( i & K3b::WRITING_APP_CDRECORD )
+        m_comboWritingApp->insertItem( K3b::WRITING_APP_CDRECORD, "cdrecord" );
+    if( i & K3b::WRITING_APP_GROWISOFS )
+        m_comboWritingApp->insertItem( K3b::WRITING_APP_GROWISOFS, "growisofs" );
+    if( i & K3b::WRITING_APP_DVD_RW_FORMAT )
+        m_comboWritingApp->insertItem( K3b::WRITING_APP_DVD_RW_FORMAT, "dvd+rw-format" );
 
     m_comboWritingApp->setEnabled( writerDevice() != 0 );
 }
@@ -558,7 +556,7 @@ void K3bWriterSelectionWidget::loadDefaults()
 {
     // ignore the writer
     m_comboSpeed->setSelectedValue( s_autoSpeedValue ); // Auto
-    setWritingApp( K3b::DEFAULT );
+    setWritingApp( K3b::WRITING_APP_DEFAULT );
 }
 
 

@@ -384,35 +384,31 @@ QString K3b::externalBinDeviceParameter( K3bDevice::Device* dev, const K3bExtern
 }
 
 
-int K3b::writingAppFromString( const QString& s )
+K3b::WritingApp K3b::writingAppFromString( const QString& s )
 {
     if( s.toLower() == "cdrdao" )
-        return K3b::CDRDAO;
+        return K3b::WRITING_APP_CDRDAO;
     else if( s.toLower() == "cdrecord" )
-        return K3b::CDRECORD;
-    else if( s.toLower() == "dvdrecord" )
-        return K3b::DVDRECORD;
+        return K3b::WRITING_APP_CDRECORD;
     else if( s.toLower() == "growisofs" )
-        return K3b::GROWISOFS;
+        return K3b::WRITING_APP_GROWISOFS;
     else if( s.toLower() == "dvd+rw-format" )
-        return K3b::DVD_RW_FORMAT;
+        return K3b::WRITING_APP_DVD_RW_FORMAT;
     else
-        return K3b::DEFAULT;
+        return K3b::WRITING_APP_DEFAULT;
 }
 
 
-QString K3b::writingAppToString( int app )
+QString K3b::writingAppToString( K3b::WritingApp app )
 {
     switch( app ) {
-    case CDRECORD:
+    case WRITING_APP_CDRECORD:
         return "cdrecord";
-    case CDRDAO:
+    case WRITING_APP_CDRDAO:
         return "cdrdao";
-    case DVDRECORD:
-        return "dvdrecord";
-    case GROWISOFS:
+    case WRITING_APP_GROWISOFS:
         return "growisofs";
-    case DVD_RW_FORMAT:
+    case WRITING_APP_DVD_RW_FORMAT:
         return "dvd+rw-format";
     default:
         return "auto";
@@ -420,12 +416,12 @@ QString K3b::writingAppToString( int app )
 }
 
 
-QString K3b::writingModeString( int mode )
+QString K3b::writingModeString( K3b::WritingModes modes )
 {
-    if( mode == WRITING_MODE_AUTO )
+    if( modes == WRITING_MODE_AUTO )
         return i18n("Auto");
     else
-        return K3bDevice::writingModeString( mode );
+        return K3bDevice::writingModeString( ( int )modes );
 }
 
 
@@ -433,20 +429,6 @@ QString K3b::resolveLink( const QString& file )
 {
     QFileInfo f( file );
     return f.canonicalFilePath();
-//     QStringList steps( f.absoluteFilePath() );
-//     while( f.isSymLink() ) {
-//         QString p = f.readLink();
-//         if( !p.startsWith( "/" ) )
-//             p.prepend( f.absolutePath() + "/" );
-//         f.setFile( p );
-//         if( steps.contains( f.absoluteFilePath() ) ) {
-//             kDebug() << "(K3b) symlink loop detected.";
-//             break;
-//         }
-//         else
-//             steps.append( f.absoluteFilePath() );
-//     }
-//     return f.absoluteFilePath();
 }
 
 

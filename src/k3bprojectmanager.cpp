@@ -269,11 +269,11 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
 
     QString mode = c.readEntry( "writing_mode" );
     if ( mode == "dao" )
-        doc->setWritingMode( K3b::DAO );
+        doc->setWritingMode( K3b::WRITING_MODE_DAO );
     else if( mode == "tao" )
-        doc->setWritingMode( K3b::TAO );
+        doc->setWritingMode( K3b::WRITING_MODE_TAO );
     else if( mode == "raw" )
-        doc->setWritingMode( K3b::RAW );
+        doc->setWritingMode( K3b::WRITING_MODE_RAW );
     else
         doc->setWritingMode( K3b::WRITING_MODE_AUTO );
 
@@ -329,9 +329,9 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
 
         QString datamode = c.readEntry( "data_track_mode" );
         if( datamode == "mode1" )
-            dataDoc->setDataMode( K3b::MODE1 );
+            dataDoc->setDataMode( K3b::DATA_MODE_1 );
         else if( datamode == "mode2" )
-            dataDoc->setDataMode( K3b::MODE2 );
+            dataDoc->setDataMode( K3b::DATA_MODE_2 );
         else
             dataDoc->setDataMode( K3b::DATA_MODE_AUTO );
 
@@ -376,9 +376,9 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
 
         QString datamode = c.readEntry( "data_track_mode" );
         if( datamode == "mode1" )
-            mixedDoc->dataDoc()->setDataMode( K3b::MODE1 );
+            mixedDoc->dataDoc()->setDataMode( K3b::DATA_MODE_1 );
         else if( datamode == "mode2" )
-            mixedDoc->dataDoc()->setDataMode( K3b::MODE2 );
+            mixedDoc->dataDoc()->setDataMode( K3b::DATA_MODE_2 );
         else
             mixedDoc->dataDoc()->setDataMode( K3b::DATA_MODE_AUTO );
 

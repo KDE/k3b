@@ -61,17 +61,17 @@ int K3bDataModeWidget::dataMode() const
     if( currentIndex() == s_autoIndex )
         return K3b::DATA_MODE_AUTO;
     else if( currentIndex() == s_mode1Index )
-        return K3b::MODE1;
+        return K3b::DATA_MODE_1;
     else
-        return K3b::MODE2;
+        return K3b::DATA_MODE_2;
 }
 
 
 void K3bDataModeWidget::setDataMode( int mode )
 {
-    if( mode == K3b::MODE1 )
+    if( mode == K3b::DATA_MODE_1 )
         setCurrentIndex( s_mode1Index );
-    else if( mode == K3b::MODE2 )
+    else if( mode == K3b::DATA_MODE_2 )
         setCurrentIndex( s_mode2Index );
     else
         setCurrentIndex( s_autoIndex );
@@ -81,9 +81,9 @@ void K3bDataModeWidget::setDataMode( int mode )
 void K3bDataModeWidget::saveConfig( KConfigGroup& c )
 {
     QString datamode;
-    if( dataMode() == K3b::MODE1 )
+    if( dataMode() == K3b::DATA_MODE_1 )
         datamode = "mode1";
-    else if( dataMode() == K3b::MODE2 )
+    else if( dataMode() == K3b::DATA_MODE_2 )
         datamode = "mode2";
     else
         datamode = "auto";
@@ -95,9 +95,9 @@ void K3bDataModeWidget::loadConfig( const KConfigGroup& c )
 {
     QString datamode = c.readEntry( "data_track_mode" );
     if( datamode == "mode1" )
-        setDataMode( K3b::MODE1 );
+        setDataMode( K3b::DATA_MODE_1 );
     else if( datamode == "mode2" )
-        setDataMode( K3b::MODE2 );
+        setDataMode( K3b::DATA_MODE_2 );
     else
         setDataMode( K3b::DATA_MODE_AUTO );
 }

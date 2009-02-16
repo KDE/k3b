@@ -124,6 +124,7 @@ K3bDirView::~K3bDirView()
 
 void K3bDirView::showUrl( const KUrl& url )
 {
+    kDebug() << url;
     slotDirActivated( url );
 }
 
@@ -294,7 +295,7 @@ void K3bDirView::slotDirActivated( const QString& url )
 
 void K3bDirView::slotDirActivated( const KUrl& url )
 {
-    kDebug();
+    kDebug() << url;
     m_fileView->setUrl( url, true );
 //   m_urlCombo->setEditText( url.path() );
 

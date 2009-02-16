@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,81 +26,81 @@ class K3bAbstractWriter;
 class K3bIsoImager;
 
 namespace K3bDevice {
-    }
+}
 
 /**
-  *@author Sebastian Trueg
-  */
+ *@author Sebastian Trueg
+ */
 class K3bDataJob : public K3bBurnJob
 {
-  Q_OBJECT
+    Q_OBJECT
 	
- public:
-  K3bDataJob( K3bDataDoc*, K3bJobHandler*, QObject* parent = 0 );
-  virtual ~K3bDataJob();
+public:
+    K3bDataJob( K3bDataDoc*, K3bJobHandler*, QObject* parent = 0 );
+    virtual ~K3bDataJob();
 	
-  K3bDoc* doc() const;
-  K3bDevice::Device* writer() const;
+    K3bDoc* doc() const;
+    K3bDevice::Device* writer() const;
 
-  virtual bool hasBeenCanceled() const;
+    virtual bool hasBeenCanceled() const;
 
-  virtual QString jobDescription() const;
-  virtual QString jobDetails() const;
+    virtual QString jobDescription() const;
+    virtual QString jobDetails() const;
 		
- public Q_SLOTS:
-  void cancel();
-  void start();
+public Q_SLOTS:
+    void cancel();
+    void start();
 
-  /**
-   * Used to specify a non-default writer.
-   * If this does notget called K3bDataJob determines
-   * the writer itself.
-   */
-  void setWriterJob( K3bAbstractWriter* );
-  void setImager( K3bIsoImager* );
+    /**
+     * Used to specify a non-default writer.
+     * If this does notget called K3bDataJob determines
+     * the writer itself.
+     */
+    void setWriterJob( K3bAbstractWriter* );
+    void setImager( K3bIsoImager* );
 
- protected Q_SLOTS:
-  void slotIsoImagerFinished( bool success );
-  void slotIsoImagerPercent(int);
-  void slotWriterJobPercent( int p );
-  void slotWriterNextTrack( int t, int tt );
-  void slotWriterJobFinished( bool success );
-  void slotVerificationProgress( int );
-  void slotVerificationFinished( bool );
-  void writeImage();
-  void cancelAll();
+protected Q_SLOTS:
+    void slotIsoImagerFinished( bool success );
+    void slotIsoImagerPercent(int);
+    void slotWriterJobPercent( int p );
+    void slotWriterNextTrack( int t, int tt );
+    void slotWriterJobFinished( bool success );
+    void slotVerificationProgress( int );
+    void slotVerificationFinished( bool );
+    void writeImage();
+    void cancelAll();
 
-  /**
-   * Just a little helper method that makes subclassing easier.
-   * Basically used for DVD writing.
-   */
-  virtual bool waitForMedium();
+    /**
+     * Just a little helper method that makes subclassing easier.
+     * Basically used for DVD writing.
+     */
+    virtual bool waitForMedium();
 
- private Q_SLOTS:
-  void slotMultiSessionParamterSetupDone( bool );
+private Q_SLOTS:
+    void slotMultiSessionParamterSetupDone( bool );
 		
- protected:
-  virtual bool prepareWriterJob();
-  virtual void prepareImager();
-  virtual void cleanup();
+protected:
+    virtual bool prepareWriterJob();
+    virtual void prepareImager();
+    virtual void cleanup();
 
-  K3bDataDoc::MultiSessionMode usedMultiSessionMode() const;
+    K3bDataDoc::MultiSessionMode usedMultiSessionMode() const;
 
-  K3bAbstractWriter* m_writerJob;
-  K3bIsoImager* m_isoImager;
+    K3bAbstractWriter* m_writerJob;
+    K3bIsoImager* m_isoImager;
 
- private:
-  bool analyseBurnMedium( int medium );
-  bool startWriterJob();
-  bool startOnTheFlyWriting();
-  void prepareWriting();
-  void connectImager();
-  bool setupCdrecordJob();
-  bool setupCdrdaoJob();
-  bool setupGrowisofsJob();
+private:
+    bool analyseBurnMedium( int medium );
+    bool startWriterJob();
+    bool startOnTheFlyWriting();
+    void prepareWriting();
+    void connectImager();
+    bool setupCdrecordJob();
+    bool setupCdrdaoJob();
+    bool setupGrowisofsJob();
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 };
 
 #endif

@@ -39,7 +39,7 @@ K3bBlankingJob::K3bBlankingJob( K3bJobHandler* hdl, QObject* parent )
     m_device(0),
     m_speed(0),
     m_mode(Fast),
-    m_writingApp(K3b::DEFAULT),
+    m_writingApp(K3b::WRITING_APP_DEFAULT),
     m_canceled(false),
     m_forceNoEject(false)
 {
@@ -84,7 +84,7 @@ void K3bBlankingJob::slotStartErasing()
   if( m_writerJob )
     delete m_writerJob;
 
-  if( m_writingApp == K3b::CDRDAO ) {
+  if( m_writingApp == K3b::WRITING_APP_CDRDAO ) {
     K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_device, this );
     m_writerJob = writer;
 

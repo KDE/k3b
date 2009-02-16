@@ -71,7 +71,7 @@ void K3bDvdrecordWriter::prepareProcess()
   // DVDs are only written in DAO mode (and Packet, but we do not support that since it does not
   //                                    make much sense here)  
   *m_process << "-dao";
-  setWritingMode( K3b::DAO ); // just to make sure the CdrecordWriter emits the correct messages
+  setWritingMode( K3b::WRITING_MODE_DAO ); // just to make sure the CdrecordWriter emits the correct messages
     
   if( simulate() )
     *m_process << "-dummy";

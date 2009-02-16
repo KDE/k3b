@@ -115,7 +115,7 @@ bool K3bDoc::newDocument()
     m_onlyCreateImages = false;
     m_removeImages = true;
     m_dummy = false;
-    m_writingApp = K3b::DEFAULT;
+    m_writingApp = K3b::WRITING_APP_DEFAULT;
     m_writingMode = K3b::WRITING_MODE_AUTO;
     m_saved = false;
 
@@ -130,13 +130,13 @@ bool K3bDoc::saveGeneralDocumentData( QDomElement* part )
 
     QDomElement propElem = doc.createElement( "writing_mode" );
     switch( writingMode() ) {
-    case K3b::DAO:
+    case K3b::WRITING_MODE_DAO:
         propElem.appendChild( doc.createTextNode( "dao" ) );
         break;
-    case K3b::TAO:
+    case K3b::WRITING_MODE_TAO:
         propElem.appendChild( doc.createTextNode( "tao" ) );
         break;
-    case K3b::RAW:
+    case K3b::WRITING_MODE_RAW:
         propElem.appendChild( doc.createTextNode( "raw" ) );
         break;
     default:
@@ -182,11 +182,11 @@ bool K3bDoc::readGeneralDocumentData( const QDomElement& elem )
         if( e.nodeName() == "writing_mode") {
             QString mode = e.text();
             if( mode == "dao" )
-                setWritingMode( K3b::DAO );
+                setWritingMode( K3b::WRITING_MODE_DAO );
             else if( mode == "tao" )
-                setWritingMode( K3b::TAO );
+                setWritingMode( K3b::WRITING_MODE_TAO );
             else if( mode == "raw" )
-                setWritingMode( K3b::RAW );
+                setWritingMode( K3b::WRITING_MODE_RAW );
             else
                 setWritingMode( K3b::WRITING_MODE_AUTO );
         }

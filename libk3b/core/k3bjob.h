@@ -19,6 +19,7 @@
 #include <qobject.h>
 #include "k3bjobhandler.h"
 #include "k3b_export.h"
+#include "k3bglobals.h"
 
 namespace K3bDevice {
     class Device;
@@ -255,18 +256,18 @@ public:
     /**
      * use K3b::WritingApp
      */
-    int writingApp() const;
+    K3b::WritingApp writingApp() const;
 
     /**
      * K3b::WritingApp "ored" together
      */
-    virtual int supportedWritingApps() const;
+    virtual K3b::WritingApps supportedWritingApps() const;
 
 public Q_SLOTS:
     /**
      * use K3b::WritingApp
      */
-    void setWritingApp( int w );
+    void setWritingApp( K3b::WritingApp w );
 
  Q_SIGNALS:
     void bufferStatus( int );

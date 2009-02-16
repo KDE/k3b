@@ -36,6 +36,7 @@
 #include <KProgressDialog>
 #include <KToolBar>
 #include <KUrl>
+#include <KDebug>
 
 K3bFileView::K3bFileView(QWidget *parent )
     : K3bContentsView( false, parent)
@@ -108,16 +109,9 @@ void K3bFileView::setupGUI()
 }
 
 
-void K3bFileView::setDir( const QString& dir )
-{
-    KUrl url;
-    url.setPath(dir);
-    setUrl( url );
-}
-
-
 void K3bFileView::setUrl(const KUrl& url, bool forward)
 {
+    kDebug() << url;
     m_dirOp->setUrl( url, forward );
 }
 

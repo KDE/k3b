@@ -51,7 +51,6 @@ public:
     void urlEntered( const KUrl& url );
 
 public Q_SLOTS:
-    void setDir( const QString& );
     void saveConfig( KConfigGroup &grp );
     void readConfig( const KConfigGroup &grp );
     void setAutoUpdate( bool );

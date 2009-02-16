@@ -191,7 +191,7 @@ void K3bCloneJob::prepareWriter()
   }
 
   m_writerJob->clearArguments();
-  m_writerJob->setWritingMode( K3b::RAW );
+  m_writerJob->setWritingMode( K3b::WRITING_MODE_RAW );
   m_writerJob->setClone( true );
   m_writerJob->setSimulate( m_simulate );
   m_writerJob->setBurnSpeed( m_speed );

@@ -232,28 +232,28 @@ void K3bIso9660ImageWritingJob::startWriting()
 
     int mt = 0;
     if( m_writingMode == K3b::WRITING_MODE_AUTO ) {
-        if( writingApp() == K3b::DEFAULT ) {
+        if( writingApp() == K3b::WRITING_APP_DEFAULT ) {
             if( m_dvd )
                 mt = K3bDevice::MEDIA_WRITABLE_DVD;
             else
                 mt = K3bDevice::MEDIA_WRITABLE_CD;
         }
-        else if( writingApp() != K3b::GROWISOFS )
+        else if( writingApp() != K3b::WRITING_APP_GROWISOFS )
             mt = K3bDevice::MEDIA_WRITABLE_CD;
         else
             mt = K3bDevice::MEDIA_WRITABLE_DVD;
     }
-    else if( m_writingMode == K3b::TAO || m_writingMode == K3b::RAW ) {
+    else if( m_writingMode == K3b::WRITING_MODE_TAO || m_writingMode == K3b::WRITING_MODE_RAW ) {
         mt = K3bDevice::MEDIA_WRITABLE_CD;
     }
-    else if( m_writingMode == K3b::DAO ) {
-        if( writingApp() == K3b::DEFAULT ) {
+    else if( m_writingMode == K3b::WRITING_MODE_DAO ) {
+        if( writingApp() == K3b::WRITING_APP_DEFAULT ) {
             if( m_dvd )
                 mt = K3bDevice::MEDIA_WRITABLE_DVD;
             else
                 mt = K3bDevice::MEDIA_WRITABLE_CD;
         }
-        else if( writingApp() == K3b::GROWISOFS )
+        else if( writingApp() == K3b::WRITING_APP_GROWISOFS )
             mt = K3bDevice::MEDIA_WRITABLE_DVD;
         else
             mt = K3bDevice::MEDIA_WRITABLE_CD;
@@ -299,7 +299,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 {
     if( mediaType == 0 ) { // media forced
         // just to get it going...
-        if( writingApp() != K3b::GROWISOFS && !m_dvd )
+        if( writingApp() != K3b::WRITING_APP_GROWISOFS && !m_dvd )
             mediaType = K3bDevice::MEDIA_CD_R;
         else
             mediaType = K3bDevice::MEDIA_DVD_R;
@@ -308,27 +308,27 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
     delete m_writer;
 
     if( mediaType == K3bDevice::MEDIA_CD_R || mediaType == K3bDevice::MEDIA_CD_RW ) {
-        int usedWritingMode = m_writingMode;
+        K3b::WritingMode usedWritingMode = m_writingMode;
         if( usedWritingMode == K3b::WRITING_MODE_AUTO ) {
             // cdrecord seems to have problems when writing in mode2 in dao mode
             // so with cdrecord we use TAO
-            if( m_noFix || m_dataMode == K3b::MODE2 || !m_device->dao() )
-                usedWritingMode = K3b::TAO;
+            if( m_noFix || m_dataMode == K3b::DATA_MODE_2 || !m_device->dao() )
+                usedWritingMode = K3b::WRITING_MODE_TAO;
             else
-                usedWritingMode = K3b::DAO;
+                usedWritingMode = K3b::WRITING_MODE_DAO;
         }
 
-        int usedApp = writingApp();
-        if( usedApp == K3b::DEFAULT ) {
-            if( usedWritingMode == K3b::DAO &&
-                ( m_dataMode == K3b::MODE2 || m_noFix ) )
-                usedApp = K3b::CDRDAO;
+        K3b::WritingApp usedApp = writingApp();
+        if( usedApp == K3b::WRITING_APP_DEFAULT ) {
+            if( usedWritingMode == K3b::WRITING_MODE_DAO &&
+                ( m_dataMode == K3b::DATA_MODE_2 || m_noFix ) )
+                usedApp = K3b::WRITING_APP_CDRDAO;
             else
-                usedApp = K3b::CDRECORD;
+                usedApp = K3b::WRITING_APP_CDRECORD;
         }
 
 
-        if( usedApp == K3b::CDRECORD ) {
+        if( usedApp == K3b::WRITING_APP_CDRECORD ) {
             K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_device, this );
 
             writer->setWritingMode( usedWritingMode );
@@ -340,7 +340,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
             }
 
             if( (m_dataMode == K3b::DATA_MODE_AUTO && m_noFix) ||
-                m_dataMode == K3b::MODE2 ) {
+                m_dataMode == K3b::DATA_MODE_2 ) {
                 if( k3bcore->externalBinManager()->binObject("cdrecord") &&
                     k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "xamix" ) )
                     writer->addArgument( "-xa" );
@@ -372,7 +372,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 
             QTextStream s( m_tocFile );
             if( (m_dataMode == K3b::DATA_MODE_AUTO && m_noFix) ||
-                m_dataMode == K3b::MODE2 ) {
+                m_dataMode == K3b::DATA_MODE_2 ) {
                 s << "CD_ROM_XA" << "\n";
                 s << "\n";
                 s << "TRACK MODE2_FORM1" << "\n";
@@ -408,7 +408,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
         K3bGrowisofsWriter* writer = new K3bGrowisofsWriter( m_device, this );
         writer->setSimulate( m_simulate );
         writer->setBurnSpeed( m_speed );
-        writer->setWritingMode( m_writingMode == K3b::DAO ? K3b::DAO : 0 );
+        writer->setWritingMode( m_writingMode == K3b::WRITING_MODE_DAO ? K3b::WRITING_MODE_DAO : K3b::WRITING_MODE_AUTO );
         writer->setImageToWrite( QString() ); // read from stdin
         writer->setCloseDvd( !m_noFix );
         writer->setTrackSize( K3b::imageFilesize( m_imagePath )/2048 );

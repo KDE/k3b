@@ -433,9 +433,9 @@ bool K3bDataDoc::loadDocumentDataOptions( QDomElement elem )
 
         else if( e.nodeName() == "data_track_mode" ) {
             if( e.text() == "mode1" )
-                m_dataMode = K3b::MODE1;
+                m_dataMode = K3b::DATA_MODE_1;
             else if( e.text() == "mode2" )
-                m_dataMode = K3b::MODE2;
+                m_dataMode = K3b::DATA_MODE_2;
             else
                 m_dataMode = K3b::DATA_MODE_AUTO;
         }
@@ -745,9 +745,9 @@ void K3bDataDoc::saveDocumentDataOptions( QDomElement& optionsElem )
     optionsElem.appendChild( topElem );
 
     topElem = doc.createElement( "data_track_mode" );
-    if( m_dataMode == K3b::MODE1 )
+    if( m_dataMode == K3b::DATA_MODE_1 )
         topElem.appendChild( doc.createTextNode( "mode1" ) );
-    else if( m_dataMode == K3b::MODE2 )
+    else if( m_dataMode == K3b::DATA_MODE_2 )
         topElem.appendChild( doc.createTextNode( "mode2" ) );
     else
         topElem.appendChild( doc.createTextNode( "auto" ) );
@@ -1381,7 +1381,7 @@ int K3bDataDoc::supportedMediaTypes() const
         m ^= K3bDevice::MEDIA_WRITABLE_CD;
     }
     // specal case: writing modes TAO and RAW apply only to CD
-    else if ( writingMode() == K3b::TAO || writingMode() == K3b::RAW ) {
+    else if ( writingMode() == K3b::WRITING_MODE_TAO || writingMode() == K3b::WRITING_MODE_RAW ) {
         m = K3bDevice::MEDIA_WRITABLE_CD;
     }
 

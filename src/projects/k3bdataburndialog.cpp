@@ -195,9 +195,9 @@ void K3bDataBurnDialog::slotStartClicked()
         }
     }
 
-    if( m_writingModeWidget->writingMode() == K3b::DAO &&
+    if( m_writingModeWidget->writingMode() == K3b::WRITING_MODE_DAO &&
         m_comboMultisession->multiSessionMode() != K3bDataDoc::NONE &&
-        m_writerSelectionWidget->writingApp() == K3b::CDRECORD )
+        m_writerSelectionWidget->writingApp() == K3b::WRITING_APP_CDRECORD )
         if( KMessageBox::warningContinueCancel( this,
                                                 i18n("Most writers do not support writing "
                                                      "multisession CDs in DAO mode.") )
@@ -272,7 +272,7 @@ void K3bDataBurnDialog::toggleAll()
                                    !K3bDevice::isCdMedia( k3bappcore->mediaCache()->diskInfo( m_writerSelectionWidget->writerDevice() ).mediaType() ) );
 
     // Multisession in DAO is not possible
-    if( m_writingModeWidget->writingMode() == K3b::DAO ) {
+    if( m_writingModeWidget->writingMode() == K3b::WRITING_MODE_DAO ) {
         if( m_comboMultisession->multiSessionMode() == K3bDataDoc::START ||
             m_comboMultisession->multiSessionMode() == K3bDataDoc::CONTINUE ||
             m_comboMultisession->multiSessionMode() == K3bDataDoc::FINISH )

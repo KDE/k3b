@@ -80,14 +80,14 @@ bool K3bBinImageWritingJob::prepareWriter()
 
   int usedWritingApp = writingApp();
   const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
-  if( usedWritingApp == K3b::CDRECORD ||
-      ( usedWritingApp == K3b::DEFAULT && cdrecordBin && cdrecordBin->hasFeature("cuefile") && m_device->dao() ) ) {
-    usedWritingApp = K3b::CDRECORD;
+  if( usedWritingApp == K3b::WRITING_APP_CDRECORD ||
+      ( usedWritingApp == K3b::WRITING_APP_DEFAULT && cdrecordBin && cdrecordBin->hasFeature("cuefile") && m_device->dao() ) ) {
+    usedWritingApp = K3b::WRITING_APP_CDRECORD;
 
     // IMPROVEME: check if it's a cdrdao toc-file
     if( m_tocFile.right(4) == ".toc" ) {
       kDebug() << "(K3bBinImageWritingJob) imagefile has ending toc.";
-      usedWritingApp = K3b::CDRDAO;
+      usedWritingApp = K3b::WRITING_APP_CDRDAO;
     }
     else {
       // TODO: put this into K3bCueFileParser
@@ -98,7 +98,7 @@ bool K3bBinImageWritingJob::prepareWriter()
 	QTextStream fStr( &f );
 	if( fStr.readAll().contains( "MODE1/2352" ) ) {
 	  kDebug() << "(K3bBinImageWritingJob) cuefile contains MODE1/2352 track. using cdrdao.";
-	  usedWritingApp = K3b::CDRDAO;
+	  usedWritingApp = K3b::WRITING_APP_CDRDAO;
 	}
 	f.close();
       }
@@ -107,9 +107,9 @@ bool K3bBinImageWritingJob::prepareWriter()
     }
   }
   else
-    usedWritingApp = K3b::CDRDAO;
+    usedWritingApp = K3b::WRITING_APP_CDRDAO;
 
-  if( usedWritingApp == K3b::CDRECORD ) {
+  if( usedWritingApp == K3b::WRITING_APP_CDRECORD ) {
     // create cdrecord job
     K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_device, this );
 

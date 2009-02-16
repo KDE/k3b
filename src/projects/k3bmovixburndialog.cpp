@@ -243,9 +243,9 @@ void K3bMovixBurnDialog::slotStartClicked()
         }
     }
 
-    if( m_writingModeWidget->writingMode() == K3b::DAO &&
+    if( m_writingModeWidget->writingMode() == K3b::WRITING_MODE_DAO &&
         m_checkStartMultiSesssion->isChecked() &&
-        m_writerSelectionWidget->writingApp() == K3b::CDRECORD )
+        m_writerSelectionWidget->writingApp() == K3b::WRITING_APP_CDRECORD )
         if( KMessageBox::warningContinueCancel( this,
                                                 i18n("Most writers do not support writing "
                                                      "multisession CDs in DAO mode.") )
