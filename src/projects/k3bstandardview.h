@@ -60,6 +60,9 @@ protected:
      */
     void setShowDirPanel(bool show);
 
+protected slots:
+    void slotCurrentDirChanged();
+
 private:
     QTreeView* m_dirView;
     QTreeView* m_fileView;
