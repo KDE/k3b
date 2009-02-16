@@ -41,9 +41,6 @@ namespace K3b {
 
         K3bDataDoc* project() const;
 
-        void setListOnlyDirs( bool b );
-        bool listOnlyDirs() const;
-
         K3bDataItem* itemForIndex( const QModelIndex& index ) const;
         QModelIndex indexForItem( K3bDataItem* item ) const;
 

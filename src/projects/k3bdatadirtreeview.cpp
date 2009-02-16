@@ -64,7 +64,7 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget*
     m_doc = doc;
 
     d->model = new K3b::DataProjectModel( doc, this );
-    d->model->setListOnlyDirs( true );
+    //d->model->setListOnlyDirs( true );
     setModel( d->model );
 
     for ( int i = K3b::DataProjectModel::TypeColumn; i < K3b::DataProjectModel::NumColumns; ++i ) {

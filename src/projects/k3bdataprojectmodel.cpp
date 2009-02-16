@@ -36,13 +36,10 @@ class K3b::DataProjectModel::Private
 public:
     Private( DataProjectModel* parent )
         : project( 0 ),
-          listDirsOnly( false ),
           q( parent ) {
     }
 
     K3bDataDoc* project;
-
-    bool listDirsOnly;
 
     int countDirs( K3bDirItem* dir );
     K3bDataItem* getChild( K3bDirItem* dir, int offset );
@@ -76,14 +73,7 @@ int K3b::DataProjectModel::Private::countDirs( K3bDirItem* dir )
 K3bDataItem* K3b::DataProjectModel::Private::getChild( K3bDirItem* dir, int offset )
 {
     QList<K3bDataItem*> children = dir->children();
-    if ( listDirsOnly ) {
-        for ( int i = 0; i < children.count(); ++i ) {
-            if ( children[i]->isDir() && offset-- == 0 ) {
-                return children[i];
-            }
-        }
-    }
-    else if ( offset >= 0 && offset < children.count() ) {
+    if ( offset >= 0 && offset < children.count() ) {
         return children[offset];
     }
 
@@ -165,20 +155,6 @@ K3bDataDoc* K3b::DataProjectModel::project() const
     return d->project;
 }
 
-
-void K3b::DataProjectModel::setListOnlyDirs( bool b )
-{
-    d->listDirsOnly = b;
-    reset();
-}
-
-
-bool K3b::DataProjectModel::listOnlyDirs() const
-{
-    return d->listDirsOnly;
-}
-
-
 K3bDataItem* K3b::DataProjectModel::itemForIndex( const QModelIndex& index ) const
 {
     if ( index.isValid() ) {
@@ -189,7 +165,6 @@ K3bDataItem* K3b::DataProjectModel::itemForIndex( const QModelIndex& index ) con
         return 0;
     }
 }
-
 
 QModelIndex K3b::DataProjectModel::indexForItem( K3bDataItem* item ) const
 {
@@ -361,7 +336,7 @@ int K3b::DataProjectModel::rowCount( const QModelIndex& index ) const
     if ( index.isValid() ) {
         K3bDataItem* item = itemForIndex( index );
         if ( K3bDirItem* dir = dynamic_cast<K3bDirItem*>( item ) ) {
-            return(  d->listDirsOnly ? d->countDirs( dir ) : dir->children().count() );
+            return( dir->children().count() );
         }
         else {
             return 0;
