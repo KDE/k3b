@@ -51,7 +51,9 @@ public:
      */
     // virtual void readConfig( KConfig* );
 
-    QString group() const { return "AudioEncoder"; }
+    QString category() const { return "AudioEncoder"; }
+
+    QString categoryName() const;
 
     /**
      * This should return the fileextensions supported by the filetype written in the

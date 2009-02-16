@@ -218,7 +218,9 @@ public:
     virtual ~K3bAudioDecoderFactory() {
     }
 
-    QString group() const { return "AudioDecoder"; }
+    QString category() const { return "AudioDecoder"; }
+
+    QString categoryName() const;
 
     /**
      * K3b uses this flag to decide which plugins to test first

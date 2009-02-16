@@ -84,14 +84,12 @@ void K3bFileView::setupGUI()
     m_toolBox->addAction( m_dirOp->bookmarkMenu() );
     m_toolBox->addSeparator();
 
-    // create filter selection combobox & loading progress bar
+    // create filter selection combobox
     QWidget* filterBox = new QWidget( m_toolBox );
     QHBoxLayout* filterLayout = new QHBoxLayout( filterBox );
     filterLayout->addWidget( new QLabel( i18n("Filter:"), filterBox ) );
     m_filterWidget = new KFileFilterCombo( filterBox );
     filterLayout->addWidget( m_filterWidget );
-    filterLayout->addStretch();
-    filterLayout->addWidget( m_dirOp->progressBar() );
     m_toolBox->addWidget( filterBox );
 
     m_filterWidget->setEditable( true );

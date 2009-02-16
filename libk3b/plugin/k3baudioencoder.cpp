@@ -47,6 +47,12 @@ K3bAudioEncoder::~K3bAudioEncoder()
 }
 
 
+QString K3bAudioEncoder::categoryName() const
+{
+    return i18nc( "plugin type", "Audio Encoder" );
+}
+
+
 bool K3bAudioEncoder::openFile( const QString& ext, const QString& filename, const K3b::Msf& length )
 {
     closeFile();

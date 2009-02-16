@@ -77,8 +77,8 @@ QStringList K3bPluginManager::categories() const
 
     QList<K3bPlugin*> fl;
     Q_FOREACH( K3bPlugin* plugin, d->plugins ) {
-        if( !grps.contains( plugin->group() ) )
-            grps.append( plugin->group() );
+        if( !grps.contains( plugin->category() ) )
+            grps.append( plugin->category() );
     }
 
     return grps;
@@ -89,7 +89,7 @@ QList<K3bPlugin*> K3bPluginManager::plugins( const QString& group ) const
 {
     QList<K3bPlugin*> fl;
     Q_FOREACH( K3bPlugin* plugin, d->plugins ) {
-        if( plugin->group() == group || group.isEmpty() )
+        if( plugin->category() == group || group.isEmpty() )
             fl.append( plugin );
     }
     return fl;
@@ -108,9 +108,8 @@ void K3bPluginManager::Private::loadPlugin( const KService::Ptr service )
             kDebug() << "plugin system does not fit";
         }
         else {
-            // When using constructor KPluginInfo( service ), the plugin selector
-            // in preferences is empty. The one below works fine. Why?
-            plugin->m_pluginInfo = KPluginInfo( service->entryPath(), "services" );
+            KPluginInfo pluginInfo( service );
+            plugin->m_pluginInfo = pluginInfo;
             plugins.append( plugin );
         }
     }

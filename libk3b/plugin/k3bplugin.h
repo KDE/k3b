@@ -50,10 +50,11 @@ public:
     virtual int pluginSystemVersion() const = 0;
 
     /**
-     * The plugin group.
+     * The plugin category.
      */
-// FIXME: rename to category and return m_pluginInfo.category(). Or do not use categories but different ServiceTypes
-    virtual QString group() const = 0;
+    virtual QString category() const = 0;
+
+    virtual QString categoryName() const = 0;
 
     /**
      * Returns a widget which configures the plugin.

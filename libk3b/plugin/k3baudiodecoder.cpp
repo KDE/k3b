@@ -596,4 +596,10 @@ K3bAudioDecoder* K3bAudioDecoderFactory::createDecoder( const KUrl& url )
     return 0;
 }
 
+
+QString K3bAudioDecoderFactory::categoryName() const
+{
+    return i18nc( "plugin type", "Audio Decoder" );
+}
+
 #include "k3baudiodecoder.moc"

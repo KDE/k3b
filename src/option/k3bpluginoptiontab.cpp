@@ -44,9 +44,11 @@ K3bPluginOptionTab::K3bPluginOptionTab( QWidget* parent )
     layout->addWidget( pluginSelector );
 
     foreach( K3bPlugin* plugin, k3bcore->pluginManager()->plugins() ) {
+        kDebug() << "Adding plugin" << plugin->pluginInfo().name();
         pluginSelector->addPlugins( QList<KPluginInfo>() << plugin->pluginInfo(),
                                     KPluginSelector::ReadConfigFile,
-                                    plugin->group() );
+                                    plugin->categoryName(),
+                                    plugin->category() );
     }
 }
 

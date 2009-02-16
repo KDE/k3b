@@ -95,7 +95,9 @@ class LIBK3B_EXPORT K3bProjectPlugin : public K3bPlugin
   };
 
   // TODO: maybe we should use something like "ProjectPlugin/AudioCD" based on the type?
-  QString group() const { return "ProjectPlugin"; }
+  QString category() const { return "ProjectPlugin"; }
+  
+  QString categoryName() const;
 
   /**
    * audio, data, videocd, or videodvd
