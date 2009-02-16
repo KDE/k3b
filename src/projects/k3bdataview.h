@@ -59,7 +59,6 @@ public Q_SLOTS:
     void addUrls( const KUrl::List& );
 
 private Q_SLOTS:
-    void slotRenameItem();
     void slotNewDir();
     void slotItemProperties();
     void slotOpen();

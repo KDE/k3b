@@ -175,4 +175,14 @@ void K3bStandardView::slotRemoveSelectedIndexes()
     m_currentSelection.clear();
 }
 
+void K3bStandardView::slotRenameItem()
+{
+    if (m_currentSelection.isEmpty())
+        return;
+
+    if (m_dirView->hasFocus())
+        m_dirView->edit( m_dirProxy->mapFromSource(m_currentSelection.first()) );
+    else
+        m_fileView->edit( m_currentSelection.first() );
+}
 #include "k3bstandardview.moc"

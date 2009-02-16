@@ -102,6 +102,11 @@ protected slots:
      */
     void slotRemoveSelectedIndexes();
 
+    /**
+     * Edit the currently selected item
+     */
+    void slotRenameItem();
+
 private:
     QTreeView* m_dirView;
     QTreeView* m_fileView;

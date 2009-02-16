@@ -296,18 +296,6 @@ void K3bDataView::slotNewDir()
     m_doc->addEmptyDir( name, parent );
 }
 
-void K3bDataView::slotRenameItem()
-{
-#if 0
-    if ( m_contextMenuOnTreeView ) {
-        m_dataDirTree->edit( m_dataDirTree->selectionModel()->selectedRows().first() );
-    }
-    else {
-        m_dataFileView->edit( m_dataFileView->selectionModel()->selectedRows().first() );
-    }
-#endif
-}
-
 void K3bDataView::slotItemProperties()
 {
     QModelIndexList selection = currentSelection();
