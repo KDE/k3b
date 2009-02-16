@@ -225,7 +225,7 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
     connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotToggleAll()) );
     connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3bDevice::Device*)),
              m_writingModeWidget, SLOT(setDevice(K3bDevice::Device*)) );
-    connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
+    connect( m_writingModeWidget, SIGNAL(writingModeChanged(K3b::WritingMode)), this, SLOT(slotToggleAll()) );
     connect( m_checkCacheImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
     connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
     connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );

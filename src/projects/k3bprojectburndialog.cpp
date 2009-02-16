@@ -110,7 +110,7 @@ void K3bProjectBurnDialog::slotWriterChanged()
 }
 
 
-void K3bProjectBurnDialog::slotWritingAppChanged( int )
+void K3bProjectBurnDialog::slotWritingAppChanged( K3b::WritingApp )
 {
     slotToggleAll();
 }
@@ -335,11 +335,11 @@ void K3bProjectBurnDialog::prepareGui()
     connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
     connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3bDevice::Device*)),
              m_writingModeWidget, SLOT(determineSupportedModesFromMedium(K3bDevice::Device*)) );
-    connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)), this, SLOT(slotWritingAppChanged(int)) );
+    connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(K3b::WritingApp)), this, SLOT(slotWritingAppChanged(K3b::WritingApp)) );
     connect( m_checkCacheImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
     connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
     connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
-    connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)), this, SLOT(slotToggleAll()) );
+    connect( m_writingModeWidget, SIGNAL(writingModeChanged(K3b::WritingMode)), this, SLOT(slotToggleAll()) );
 
     connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotShowImageTip(bool)) );
     connect( m_checkCacheImage, SIGNAL(toggled(bool)), this, SLOT(slotShowImageTip(bool)) );

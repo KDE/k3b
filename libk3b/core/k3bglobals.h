@@ -62,14 +62,13 @@ namespace K3b
     LIBK3B_EXPORT QString writingAppToString( K3b::WritingApp );
 
     /**
-     * DATA_MODE_AUTO - let K3b determine the best mode
-     * MODE1 - refers to the default Yellow book mode1
-     * MODE2 - refers to CDROM XA mode2 form1
+     * The data mode which determines the size of the user data in data
+     * CD sectors.
      */
     enum DataMode { 
-        DATA_MODE_AUTO,
-        DATA_MODE_1, 
-        DATA_MODE_2
+        DATA_MODE_AUTO, /**< let %K3b determine the best mode */
+        DATA_MODE_1,    /**< refers to the default Yellow book mode1 */
+        DATA_MODE_2     /**< refers to CDROM XA mode2 form1 */
     };
 
     /**

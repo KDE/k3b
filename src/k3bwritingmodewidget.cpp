@@ -57,6 +57,12 @@ public:
     K3b::WritingModes selectedModes;
 
     K3bDevice::Device* device;
+
+    void _k_writingModeChanged( int mode ) {
+        emit q->writingModeChanged( K3b::WritingMode( mode ) );
+    }
+
+    K3bWritingModeWidget* q;
 };
 
 
@@ -85,9 +91,10 @@ K3bWritingModeWidget::~K3bWritingModeWidget()
 void K3bWritingModeWidget::init()
 {
     d = new Private();
+    d->q = this;
     d->device = 0;
 
-    connect( this, SIGNAL(valueChanged(int)), this, SIGNAL(writingModeChanged(int)) );
+    connect( this, SIGNAL(valueChanged(int)), this, SLOT(_k_writingModeChanged(int)) );
 
     setToolTip( i18n("Select the writing mode to use") );
     addGlobalWhatsThisText( "<p><b>" + i18n("Writing mode") + "</b></p>",

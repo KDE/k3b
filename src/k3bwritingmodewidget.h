@@ -84,7 +84,7 @@ public Q_SLOTS:
     void determineSupportedModesFromMedium( K3bDevice::Device* dev );
 
  Q_SIGNALS:
-    void writingModeChanged( int );
+    void writingModeChanged( K3b::WritingMode );
 
 private:
     void init();
@@ -92,6 +92,8 @@ private:
 
     class Private;
     Private* d;
+
+    Q_PRIVATE_SLOT( d, void _k_writingModeChanged(int) )
 };
 
 #endif

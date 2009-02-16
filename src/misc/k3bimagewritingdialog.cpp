@@ -137,13 +137,13 @@ K3bImageWritingDialog::K3bImageWritingDialog( QWidget* parent )
 
     connect( m_writerSelectionWidget, SIGNAL(writerChanged()),
              this, SLOT(slotToggleAll()) );
-    connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(int)),
+    connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(K3b::WritingApp)),
              this, SLOT(slotToggleAll()) );
     connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3bDevice::Device*)),
              m_writingModeWidget, SLOT(setDevice(K3bDevice::Device*)) );
     connect( m_comboImageType, SIGNAL(activated(int)),
              this, SLOT(slotToggleAll()) );
-    connect( m_writingModeWidget, SIGNAL(writingModeChanged(int)),
+    connect( m_writingModeWidget, SIGNAL(writingModeChanged(K3b::WritingMode)),
              this, SLOT(slotToggleAll()) );
     connect( m_editImagePath, SIGNAL(textChanged(const QString&)),
              this, SLOT(slotUpdateImage(const QString&)) );
@@ -794,9 +794,6 @@ void K3bImageWritingDialog::createAudioCueItems( const K3bCueFileParser& cp )
 }
 
 
-// FIXME:
-// * m_writerSelectionWidget->setWantedMediumType() based on image type (only restrcit to CD if no iso image)
-// * medium size should be handled by the
 void K3bImageWritingDialog::toggleAll()
 {
     // enable the Write-Button if we found a valid image or the user forced an image type
