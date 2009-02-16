@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,8 +14,6 @@
 
 #include <config-k3b.h>
 
-#ifdef HAVE_MUSICBRAINZ
-
 #include "k3bmusicbrainz.h"
 
 #include <musicbrainz/mb_c.h>
@@ -23,82 +21,78 @@
 #include <kprotocolmanager.h>
 #include <kurl.h>
 #include <kdebug.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 
 class K3bMusicBrainz::Private
 {
 public:
-  musicbrainz_t mb;
+    musicbrainz_t mb;
 
-  QStringList titles;
-  QStringList artists;
+    QStringList titles;
+    QStringList artists;
 };
 
 
 K3bMusicBrainz::K3bMusicBrainz()
 {
-  d = new Private;
-  d->mb = mb_New();
-  mb_UseUTF8( d->mb, 1 );
+    d = new Private;
+    d->mb = mb_New();
+    mb_UseUTF8( d->mb, 1 );
 }
 
 
 K3bMusicBrainz::~K3bMusicBrainz()
 {
-  mb_Delete( d->mb );
-  delete d;
+    mb_Delete( d->mb );
+    delete d;
 }
 
 
-int K3bMusicBrainz::query( const Q3CString& trm )
+int K3bMusicBrainz::query( const QByteArray& trm )
 {
-  d->titles.clear();
-  d->artists.clear();
+    d->titles.clear();
+    d->artists.clear();
 
-  if( KProtocolManager::useProxy() ) {
-    KUrl proxy = KProtocolManager::proxyFor("http");
-    mb_SetProxy( d->mb, const_cast<char*>(proxy.host().toLatin1().constData()), short(proxy.port()) );
-  }
-
-  const char* args[2];
-  args[0] = trm.data();
-  args[1] = 0;
-
-  if( mb_QueryWithArgs( d->mb, (char*)MBQ_TrackInfoFromTRMId, (char**)args ) ) {
-    
-    unsigned int i = 1;
-    while( mb_Select(d->mb, (char*)MBS_Rewind) && mb_Select1( d->mb, (char*)MBS_SelectTrack, i ) ) {
-      Q3CString data(256);
-      mb_GetResultData( d->mb, (char*)MBE_TrackGetArtistName, data.data(), 256 );
-      d->artists.append( QString::fromUtf8( data ).trimmed() );
-      mb_GetResultData( d->mb, (char*)MBE_TrackGetTrackName, data.data(), 256 );
-      d->titles.append( QString::fromUtf8( data ).trimmed() );
-
-      ++i;
+    if( KProtocolManager::useProxy() ) {
+        KUrl proxy = KProtocolManager::proxyFor("http");
+        mb_SetProxy( d->mb, const_cast<char*>(proxy.host().toLatin1().constData()), short(proxy.port()) );
     }
 
-    return i-1;
-  }
-  else {
-    char buffer[256];
-    mb_GetQueryError( d->mb, buffer, 256 );
-    kDebug() << "(K3bMusicBrainz) query error: " << buffer;
-    return 0;
-  }
+    const char* args[2];
+    args[0] = trm.data();
+    args[1] = 0;
+
+    if( mb_QueryWithArgs( d->mb, (char*)MBQ_TrackInfoFromTRMId, (char**)args ) ) {
+
+        unsigned int i = 1;
+        while( mb_Select(d->mb, (char*)MBS_Rewind) && mb_Select1( d->mb, (char*)MBS_SelectTrack, i ) ) {
+            QByteArray data( 256, 0 );
+            mb_GetResultData( d->mb, (char*)MBE_TrackGetArtistName, data.data(), 256 );
+            d->artists.append( QString::fromUtf8( data ).trimmed() );
+            mb_GetResultData( d->mb, (char*)MBE_TrackGetTrackName, data.data(), 256 );
+            d->titles.append( QString::fromUtf8( data ).trimmed() );
+
+            ++i;
+        }
+
+        return i-1;
+    }
+    else {
+        char buffer[256];
+        mb_GetQueryError( d->mb, buffer, 256 );
+        kDebug() << "(K3bMusicBrainz) query error: " << buffer;
+        return 0;
+    }
 }
 
 
-const QString& K3bMusicBrainz::title( unsigned int i ) const
+QString K3bMusicBrainz::title( unsigned int i ) const
 {
-  return d->titles[i];
+    return d->titles[i];
 }
 
 
-const QString& K3bMusicBrainz::artist( unsigned int i ) const
+QString K3bMusicBrainz::artist( unsigned int i ) const
 {
-  return d->artists[i];
+    return d->artists[i];
 }
-
-#endif

@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,73 +22,71 @@
 #include <kdebug.h>
 #include <kprotocolmanager.h>
 #include <kurl.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 
 class K3bTRM::Private
 {
 public:
-  trm_t trm;
-  Q3CString sig;
-  Q3CString rawSig;
+    trm_t trm;
+    QByteArray sig;
+    QByteArray rawSig;
 };
 
 
 K3bTRM::K3bTRM()
 {
-  d = new Private;
-  d->trm = trm_New();
-  d->rawSig.resize( 17 );
-  d->sig.resize( 37 );
+    d = new Private;
+    d->trm = trm_New();
+    d->rawSig.resize( 17 );
+    d->sig.resize( 37 );
 }
 
 
 K3bTRM::~K3bTRM()
 {
-  trm_Delete( d->trm );
-  delete d;
+    trm_Delete( d->trm );
+    delete d;
 }
 
 
 void K3bTRM::start( const K3b::Msf& length )
 {
-  if( KProtocolManager::useProxy() ) {
-    KUrl proxy = KProtocolManager::proxyFor("http");
-    trm_SetProxy( d->trm, const_cast<char*>(proxy.host().toLatin1().constData()), short(proxy.port()) );
-  }
+    if( KProtocolManager::useProxy() ) {
+        KUrl proxy = KProtocolManager::proxyFor("http");
+        trm_SetProxy( d->trm, const_cast<char*>(proxy.host().toLatin1().constData()), short(proxy.port()) );
+    }
 
-  trm_SetPCMDataInfo( d->trm, 44100, 2, 16 );
-  trm_SetSongLength( d->trm, length.totalFrames()/75 );
+    trm_SetPCMDataInfo( d->trm, 44100, 2, 16 );
+    trm_SetSongLength( d->trm, length.totalFrames()/75 );
 }
 
 
 bool K3bTRM::generate( char* data, int len )
 {
-  return ( trm_GenerateSignature( d->trm, data, len ) == 1 );
+    return ( trm_GenerateSignature( d->trm, data, len ) == 1 );
 }
 
 
 bool K3bTRM::finalize()
 {
-  if( trm_FinalizeSignature( d->trm, d->rawSig.data(), 0 ) == 0 ) {
-    trm_ConvertSigToASCII( d->trm, d->rawSig.data(), d->sig.data() );
-    return true;
-  }
-  else
-    return false;
+    if( trm_FinalizeSignature( d->trm, d->rawSig.data(), 0 ) == 0 ) {
+        trm_ConvertSigToASCII( d->trm, d->rawSig.data(), d->sig.data() );
+        return true;
+    }
+    else
+        return false;
 }
 
 
-const Q3CString& K3bTRM::rawSignature() const
+QByteArray K3bTRM::rawSignature() const
 {
-  return d->rawSig;
+    return d->rawSig;
 }
 
 
-const Q3CString& K3bTRM::signature() const
+QByteArray K3bTRM::signature() const
 {
-  return d->sig;
+    return d->sig;
 }
 
 #endif

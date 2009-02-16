@@ -29,19 +29,16 @@
 #include <k3bversion.h>
 #include <k3bthememanager.h>
 
-#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
 #include <qdatetime.h>
 #include <qstring.h>
 #include <QEventLoop>
 #include <QPointer>
 
-#include <q3header.h>
 #include <qscrollbar.h>
 #include <qpoint.h>
 #include <qfontmetrics.h>
@@ -56,11 +53,11 @@
 #include <QFrame>
 #include <QVBoxLayout>
 #include <QCloseEvent>
+#include <q3header.h>
 
 #include <kprogressdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <k3listview.h>
 #include <kiconloader.h>
 #include <kconfig.h>
 #include <kdebug.h>
@@ -75,7 +72,7 @@
 #include <kvbox.h>
 #include <KStandardGuiItem>
 #include <KGlobalSettings>
-
+#include <k3listview.h>
 
 class K3bJobProgressDialog::Private
 {

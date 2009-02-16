@@ -79,7 +79,6 @@ set(k3b_project_SRCS
   projects/k3bview.cpp 
   projects/k3bprojectburndialog.cpp 
   projects/k3bprojectplugindialog.cpp 
-  projects/k3baudiotracktrmlookupdialog.cpp 
   projects/k3bdatamultisessioncombobox.cpp 
   projects/k3bdataurladdingdialog.cpp 
   projects/k3baudiodatasourceeditwidget.cpp 
@@ -87,14 +86,6 @@ set(k3b_project_SRCS
   projects/k3bencodingconverter.cpp 
   projects/k3bdatamultisessionimportdialog.cpp
   )
-
-if(MUSICBRAINZ_FOUND)
-  set(k3b_project_SRCS
-    ${k3b_project_SRCS}
-    projects/k3bmusicbrainzjob.cpp 
-    projects/k3bmusicbrainztrackloopupjob.cpp 
-    )
-endif(MUSICBRAINZ_FOUND)
 
 kde4_add_ui_files(k3b_project_SRCS
   projects/base_k3baudiocdtextwidget.ui
@@ -131,20 +122,6 @@ set(k3b_rip_SRCS
   rip/k3baudiotrackmodel.cpp
   rip/k3bviewcolumnadjuster.cpp
   )
-
-if (DVDREAD_FOUND)
-set(k3b_videodvd_SRCS
-  rip/videodvd/k3bvideodvdrippingview.cpp 
-  rip/videodvd/k3bvideodvdrippingtitlelistview.cpp 
-  rip/videodvd/k3bvideodvdrippingjob.cpp 
-  rip/videodvd/k3bvideodvdrippingwidget.cpp 
-  rip/videodvd/k3bvideodvdrippingdialog.cpp 
-  rip/videodvd/k3bvideodvdrippingpreview.cpp
-  )
-
-kde4_add_ui_files(k3b_videodvd_SRCS
-  rip/videodvd/base_k3bvideodvdrippingwidget.ui)
-endif (DVDREAD_FOUND)
 
 kde4_add_ui_files(k3b_rip_SRCS
   rip/base_k3baudiorippingoptionwidget.ui
@@ -210,8 +187,6 @@ set(k3b_SRCS
   k3binteractiondialog.cpp 
   k3bthememanager.cpp 
   k3bprojectmanager.cpp 
-  k3btrm.cpp 
-  k3bmusicbrainz.cpp 
   #k3baudioprojectinterface.cpp 
   #k3bmixedprojectinterface.cpp 
   k3bflatbutton.cpp 
@@ -248,12 +223,38 @@ set(k3b_bin_SRCS
   ${k3b_SRCS}
 )
 
-if (DVDREAD_FOUND)
-set(k3b_bin_SRCS
-  ${k3b_bin_SRCS}
-  ${k3b_videodvd_SRCS}
-)
-endif (DVDREAD_FOUND)
+if(ENABLE_DVD_RIPPING)
+  set(k3b_videodvd_SRCS
+    rip/videodvd/k3bvideodvdrippingview.cpp 
+    rip/videodvd/k3bvideodvdrippingtitlelistview.cpp 
+    rip/videodvd/k3bvideodvdrippingjob.cpp 
+    rip/videodvd/k3bvideodvdrippingwidget.cpp 
+    rip/videodvd/k3bvideodvdrippingdialog.cpp 
+    rip/videodvd/k3bvideodvdrippingpreview.cpp
+    )
+
+  kde4_add_ui_files(k3b_videodvd_SRCS
+    rip/videodvd/base_k3bvideodvdrippingwidget.ui)
+
+  set(k3b_bin_SRCS
+    ${k3b_bin_SRCS}
+    ${k3b_videodvd_SRCS}
+    )
+endif(ENABLE_DVD_RIPPING)
+
+if(ENABLE_MUSICBRAINZ)
+  set(k3b_SRCS
+    ${k3b_SRCS}
+    k3btrm.cpp 
+    k3bmusicbrainz.cpp 
+    )
+  set(k3b_project_SRCS
+    ${k3b_project_SRCS}
+    projects/k3bmusicbrainzjob.cpp 
+    projects/k3bmusicbrainztrackloopupjob.cpp 
+    projects/k3baudiotracktrmlookupdialog.cpp 
+    )
+endif(ENABLE_MUSICBRAINZ)
 
 #kde4_add_dcop_skels(k3b_SRCS );
 MESSAGE(STATUS "DCOP stuff was remove into kde4, convert it to dbus please.kde4_add_dcop_skels macro doesn't exist now. We keep it just to remember to port to dbus")
@@ -271,7 +272,6 @@ set_target_properties(k3b_bin PROPERTIES OUTPUT_NAME k3b)
 target_link_libraries(k3b_bin
   k3bdevice
   k3b
-  #fastscale )
   ${KCDDB_LIBRARIES}
   ${KDE4_KFILE_LIBS}
   ${KDE4_KIO_LIBS}
@@ -284,9 +284,9 @@ target_link_libraries(k3b_bin
   ${X11_LIBRARIES}
   )
 
-if(MUSICBRAINZ_FOUND)
+if(ENABLE_MUSICBRAINZ)
   target_link_libraries(k3b_bin ${MUSICBRAINZ_LIBRARIES})
-endif(MUSICBRAINZ_FOUND)
+endif(ENABLE_MUSICBRAINZ)
 
 install(TARGETS k3b_bin ${INSTALL_TARGETS_DEFAULT_ARGS})
 

@@ -29,7 +29,7 @@
 #include "k3bthememanager.h"
 #include "rip/k3baudiocdview.h"
 #include "rip/k3bvideocdview.h"
-#ifdef HAVE_LIBDVDREAD
+#ifdef ENABLE_DVD_RIPPING
 #include "rip/videodvd/k3bvideodvdrippingview.h"
 #endif
 

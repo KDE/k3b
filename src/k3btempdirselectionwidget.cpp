@@ -18,7 +18,7 @@
 #include <k3bcore.h>
 
 #include <qlabel.h>
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 #include <qlayout.h>
 #include <qtimer.h>
 
@@ -35,28 +35,33 @@
 #include <kurlrequester.h>
 #include <kio/global.h>
 #include <klineedit.h>
-#include <kvbox.h>
 
 
 K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent )
-    : Q3GroupBox( 4, Qt::Vertical, parent ),
+    : QGroupBox( parent ),
       m_labelCdSize(0),
       m_defaultImageFileName( "k3b_image.iso" )
 {
-    layout()->setSpacing( KDialog::spacingHint() );
-    layout()->setMargin( KDialog::marginHint() );
+    QGridLayout* layout = new QGridLayout( this );
+    layout->setSpacing( KDialog::spacingHint() );
+    layout->setMargin( KDialog::marginHint() );
 
     m_imageFileLabel = new QLabel( this );
     m_editDirectory = new KUrlRequester( this );
 
     m_imageFileLabel->setBuddy( m_editDirectory );
 
-    KHBox* freeTempSpaceBox = new KHBox( this );
-    freeTempSpaceBox->setSpacing( KDialog::spacingHint() );
-    (void)new QLabel( i18n( "Free space in temporary directory:" ), freeTempSpaceBox );
-    m_labelFreeSpace = new QLabel( "                       ",freeTempSpaceBox );
+    QLabel* freeSpaceLabel = new QLabel( i18n( "Free space in temporary directory:" ), this );
+    m_labelFreeSpace = new QLabel( this );
     m_labelFreeSpace->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
 
+    layout->addWidget( m_imageFileLabel, 0, 0, 1, 2 );
+    layout->addWidget( m_editDirectory, 1, 0, 1, 2 );
+    layout->addWidget( freeSpaceLabel, 2, 0 );
+    layout->addWidget( m_labelFreeSpace, 2, 1 );
+
+    // do not use row 3 here since that could be used in setNeededSize below
+    layout->setRowStretch( 4, 1 );
 
     connect( m_editDirectory, SIGNAL(openFileDialog(KUrlRequester*)),
              this, SLOT(slotTempDirButtonPressed(KUrlRequester*)) );
@@ -210,11 +215,11 @@ void K3bTempDirSelectionWidget::setNeededSize( KIO::filesize_t bytes )
 {
     m_requestedSize = bytes;
     if( !m_labelCdSize ) {
-        KHBox* cdSizeBox = new KHBox( this );
-        cdSizeBox->setSpacing( KDialog::spacingHint() );
-        (void)new QLabel( i18n( "Size of project:" ), cdSizeBox );
-        m_labelCdSize = new QLabel( KIO::convertSize(bytes), cdSizeBox );
+        QGridLayout* grid = static_cast<QGridLayout*>( layout() );
+        grid->addWidget( new QLabel( i18n( "Size of project:" ), this ), 3, 0 );
+        m_labelCdSize = new QLabel( KIO::convertSize(bytes), this );
         m_labelCdSize->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+        grid->addWidget( m_labelCdSize, 3, 1 );
     }
     m_labelCdSize->setText( KIO::convertSize(bytes) );
 }

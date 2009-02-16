@@ -12,8 +12,6 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#ifdef HAVE_MUSICBRAINZ
-
 #include "k3baudiotracktrmlookupdialog.h"
 #include "k3bmusicbrainzjob.h"
 
@@ -37,12 +35,13 @@
 #include <qeventloop.h>
 #include <qpushbutton.h>
 #include <qapplication.h>
-//Added by qt3to4:
 #include <QGridLayout>
+#include <QtCore/QEventLoop>
 
 
 K3bAudioTrackTRMLookupDialog::K3bAudioTrackTRMLookupDialog( QWidget* parent )
-    : KDialog( parent)
+    : KDialog( parent ),
+      m_loop( 0 )
 {
     QWidget *widget = new QWidget(this);
     setMainWidget(widget);
@@ -65,7 +64,6 @@ K3bAudioTrackTRMLookupDialog::K3bAudioTrackTRMLookupDialog( QWidget* parent )
     grid->addWidget( m_infoLabel, 0, 1 );
     grid->addWidget( m_busyWidget, 1, 1 );
 
-    m_inLoop = false;
     m_mbJob = new K3bMusicBrainzJob( this );
     connect( m_mbJob, SIGNAL(infoMessage(const QString&, int)),
              this, SLOT(slotMbJobInfoMessage(const QString&, int)) );
@@ -88,9 +86,11 @@ int K3bAudioTrackTRMLookupDialog::lookup( const QList<K3bAudioTrack*>& tracks )
     m_busyWidget->showBusy(true);
     setModal( true );
     show();
-    m_inLoop = true;
-    //FIXME kde4
-    //QApplication::eventLoop()->enterLoop();
+
+    QEventLoop loop;
+    m_loop = &loop;
+    loop.exec();
+    m_loop = 0;
 
     return 0;
 }
@@ -106,11 +106,8 @@ void K3bAudioTrackTRMLookupDialog::slotMbJobFinished( bool )
 {
     m_busyWidget->showBusy(false);
     hide();
-    //FIXME kde4
-/*
-  if( m_inLoop )
-  QApplication::eventLoop()->exitLoop();
-*/
+    if( m_loop )
+        m_loop->exit();
 }
 
 
@@ -130,5 +127,3 @@ void K3bAudioTrackTRMLookupDialog::slotTrackFinished( K3bAudioTrack* track, bool
 }
 
 #include "k3baudiotracktrmlookupdialog.moc"
-
-#endif

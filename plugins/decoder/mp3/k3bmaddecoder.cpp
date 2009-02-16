@@ -40,7 +40,7 @@
 #include <cmath>
 #include <cstdlib>
 
-#ifdef HAVE_TAGLIB
+#ifdef ENABLE_TAGLIB
 #include <taglib/tag.h>
 #include <taglib/mpegfile.h>
 #endif
@@ -97,7 +97,7 @@ K3bMadDecoder::~K3bMadDecoder()
 
 QString K3bMadDecoder::metaInfo( MetaDataField f )
 {
-#ifdef HAVE_TAGLIB
+#ifdef ENABLE_TAGLIB
     TagLib::MPEG::File file( QFile::encodeName( filename() ).data() );
 
     if ( file.tag() ) {

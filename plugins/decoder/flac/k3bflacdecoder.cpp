@@ -28,7 +28,7 @@
 #include <FLAC++/metadata.h>
 #include <FLAC++/decoder.h>
 
-#ifdef HAVE_TAGLIB
+#ifdef ENABLE_TAGLIB
 #include <taglib/tag.h>
 #include <taglib/flacfile.h>
 #endif
@@ -284,7 +284,7 @@ bool K3bFLACDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int
                 addMetaInfo( META_COMMENT, value );
         }
     }
-#ifdef HAVE_TAGLIB
+#ifdef ENABLE_TAGLIB
     if ((d->comments == 0) || (d->comments->get_num_comments() == 0)) {
         // no Vorbis comments, check for ID3 tags
         kDebug() << "(K3bFLACDecoder) using taglib to read tag";

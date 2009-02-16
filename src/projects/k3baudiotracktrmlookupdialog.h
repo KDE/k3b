@@ -23,6 +23,7 @@ class QLabel;
 class K3bAudioTrack;
 class K3bMusicBrainzJob;
 class K3bBusyWidget;
+class QEventLoop;
 
 
 class K3bAudioTrackTRMLookupDialog : public KDialog
@@ -48,7 +49,7 @@ private:
     QLabel* m_infoLabel;
     K3bBusyWidget* m_busyWidget;
     K3bMusicBrainzJob* m_mbJob;
-    bool m_inLoop;
+    QEventLoop* m_loop;
 };
 
 #endif

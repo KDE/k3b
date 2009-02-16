@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,10 +17,8 @@
 
 #include <config-k3b.h>
 
-#ifdef HAVE_MUSICBRAINZ
-
-#include <q3cstring.h>
-#include <qstring.h>
+#include <QtCore/QByteArray>
+#include <QtCore/QString>
 
 
 /**
@@ -30,24 +28,22 @@
  */
 class K3bMusicBrainz
 {
- public:
-  K3bMusicBrainz();
-  ~K3bMusicBrainz();
+public:
+    K3bMusicBrainz();
+    ~K3bMusicBrainz();
 
-  /**
-   * \return number of found results.
-   */
-  int query( const Q3CString& trm );
+    /**
+     * \return number of found results.
+     */
+    int query( const QByteArray& trm );
 
-  const QString& title( unsigned int i = 0 ) const;
-  const QString& artist( unsigned int i = 0 ) const;
+    QString title( unsigned int i = 0 ) const;
+    QString artist( unsigned int i = 0 ) const;
 
- private:
-  class Private;
-  Private* d;
+private:
+    class Private;
+    Private* d;
 };
 
-
-#endif
 
 #endif

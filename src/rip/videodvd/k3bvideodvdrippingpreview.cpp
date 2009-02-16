@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2006-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -84,8 +84,8 @@ void K3bVideoDVDRippingPreview::generatePreview( const K3bVideoDVD::VideoDVD& dv
     *m_process << "-Z" << "x200";
     *m_process << "-o" << m_tempDir->name();
 
-    connect( m_process, SIGNAL(finished()),
-             this, SLOT(finished()) );
+    connect( m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
+             this, SLOT(slotTranscodeFinished(int, QProcess::ExitStatus)) );
     m_process->setOutputChannelMode(KProcess::SeparateChannels); // we use SeparateChannels to not pollute stdout
     m_process->start();
     if (!m_process->waitForStarted(-1)) {
@@ -110,7 +110,7 @@ void K3bVideoDVDRippingPreview::cancel()
 }
 
 
-void K3bVideoDVDRippingPreview::slotTranscodeFinished()
+void K3bVideoDVDRippingPreview::slotTranscodeFinished( int, QProcess::ExitStatus )
 {
     // read the image
     QString filename = m_tempDir->name() + "000000.ppm";// + tempQDir->entryList( QDir::Files ).first();

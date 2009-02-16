@@ -56,6 +56,9 @@ K3bDirOperator::K3bDirOperator(const KUrl& url, QWidget* parent )
     (void)K3b::createAction( this,i18n("&Add to Project"), 0, Qt::SHIFT+Qt::Key_Return,
                              this, SLOT(slotAddFilesToProject()),
                              actionCollection(), "add_file_to_project");
+
+    connect( this, SIGNAL(fileSelected(KFileItem)),
+             this, SLOT(slotAddFilesToProject()) );
 }
 
 

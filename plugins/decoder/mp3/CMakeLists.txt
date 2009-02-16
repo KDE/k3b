@@ -13,10 +13,10 @@ target_link_libraries(k3bmaddecoder
   ${KDE4_KDECORE_LIBS}
   ${MAD_LIBRARIES} )
 
-if(TAGLIB_FOUND)
+if(ENABLE_TAGLIB)
   target_link_libraries(k3bmaddecoder
     ${TAGLIB_LIBRARIES})
-endif(TAGLIB_FOUND)
+endif(ENABLE_TAGLIB)
 
 install(TARGETS k3bmaddecoder DESTINATION ${PLUGIN_INSTALL_DIR} )
 

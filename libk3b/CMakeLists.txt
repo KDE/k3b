@@ -52,14 +52,14 @@ set(k3b_jobs_SRCS
 )
 
 ########### next target ###############
-if(DVDREAD_FOUND)
+if(ENABLE_DVD_RIPPING)
   add_subdirectory(videodvd)
   set(k3b_jobs_SRCS
     ${k3b_jobs_SRCS}
     jobs/k3bvideodvdtitletranscodingjob.cpp
     jobs/k3bvideodvdtitledetectclippingjob.cpp
     )
-endif(DVDREAD_FOUND)
+endif(ENABLE_DVD_RIPPING)
 
 set(k3b_core_SRCS 
   core/k3process.cpp
@@ -213,14 +213,14 @@ set(k3b_LIB_SRCS
   ${k3b_project_movixcd} 
   ${k3b_project_mpeg_info}
   ${k3b_project_videocd}
+  ${k3b_project_videodvd}
   )
 
-if (DVDREAD_FOUND)
+if (ENABLE_DVD_RIPPING)
   set(k3b_LIB_SRCS ${k3b_LIB_SRCS}
     ${k3b_videodvd_SRCS}
-    ${k3b_project_videodvd}
     )
-endif (DVDREAD_FOUND)
+endif (ENABLE_DVD_RIPPING)
 
 if(NOT SAMPLERATE_FOUND)
   set(k3b_LIB_SRCS ${k3b_LIB_SRCS} ${k3b_samplerate_SRCS})
@@ -243,9 +243,9 @@ if(SAMPLERATE_FOUND)
   target_link_libraries(k3b ${SAMPLERATE_LIBRARIES})
 endif(SAMPLERATE_FOUND)
 
-if(DVDREAD_FOUND)
+if(ENABLE_DVD_RIPPING)
   target_link_libraries(k3b ${DVDREAD_LIBRARIES})
-endif(DVDREAD_FOUND)
+endif(ENABLE_DVD_RIPPING)
 
-set_target_properties(k3b PROPERTIES VERSION 4.0.0 SOVERSION 4 )
+set_target_properties(k3b PROPERTIES VERSION ${K3B_LIB_VERSION_MAJOR}.${K3B_LIB_VERSION_MINOR}.${K3B_LIB_VERSION_RELEASE} SOVERSION ${K3B_LIB_VERSION_MAJOR})
 install(TARGETS k3b ${INSTALL_TARGETS_DEFAULT_ARGS} )

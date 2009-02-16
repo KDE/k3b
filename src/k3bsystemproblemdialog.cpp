@@ -101,7 +101,7 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QList<K3bSystemProblem>& p
     connect( m_closeButton, SIGNAL(clicked()), this, SLOT(close()) );
     m_checkDontShowAgain = new QCheckBox( i18n("Do not show again"), widget );
 
-#ifdef HAVE_K3BSETUP
+#ifdef BUILD_K3BSETUP
     m_k3bsetupButton = new QPushButton( i18n("Start K3bSetup2"), widget );
     connect( m_k3bsetupButton, SIGNAL(clicked()), this, SLOT(slotK3bSetup()) );
 #endif
@@ -122,7 +122,7 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QList<K3bSystemProblem>& p
     QHBoxLayout* buttonBox = new QHBoxLayout;
     buttonBox->setSpacing( spacingHint() );
     buttonBox->setMargin( 0 );
-#ifdef HAVE_K3BSETUP
+#ifdef BUILD_K3BSETUP
     buttonBox->addWidget( m_k3bsetupButton );
 #endif
     buttonBox->addWidget( m_closeButton );
@@ -146,7 +146,7 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QList<K3bSystemProblem>& p
         text.append( markupString( p.details ) + "<br>" );
         if( !p.solution.isEmpty() )
             text.append( "<i>" + i18n("Solution") + "</i>: " + p.solution );
-#ifdef HAVE_K3BSETUP
+#ifdef BUILD_K3BSETUP
         else if( p.solvableByK3bSetup )
             text.append( "<i>" + i18n("Solution") + "</i>: " + i18n("Use K3bSetup to solve this problem.") );
 #endif
@@ -551,7 +551,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
                                                 "This introduces unnecessary security risks."),
                                            i18n("Run K3b from a proper user account and setup the device and "
                                                 "external tool permissions appropriately.")
-#ifdef HAVE_K3BSETUP
+#ifdef BUILD_K3BSETUP
                                            + ' ' + i18n("The latter can be done via K3bSetup.")
 #endif
                                            ,

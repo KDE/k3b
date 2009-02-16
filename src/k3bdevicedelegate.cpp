@@ -119,9 +119,11 @@ void K3bDeviceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
 
         if ( option.state & QStyle::State_Selected ) {
             painter->fillRect( rect, option.palette.highlight() );
+            painter->setPen( option.palette.color( QPalette::HighlightedText ) );
         }
         else {
             painter->fillRect( rect, option.palette.base() );
+            painter->setPen( option.palette.color( QPalette::WindowText ) );
         }
 
         const int margin = 4;

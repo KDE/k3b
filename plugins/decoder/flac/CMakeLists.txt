@@ -27,10 +27,10 @@ target_link_libraries(k3bflacdecoder
   ${FLAC++_LIBRARIES}
   ${FLAC_LIBRARIES} )
 
-if(TAGLIB_FOUND)
+if(ENABLE_TAGLIB)
   target_link_libraries(k3bflacdecoder
     ${TAGLIB_LIBRARIES})
-endif(TAGLIB_FOUND)
+endif(ENABLE_TAGLIB)
 
 install(TARGETS k3bflacdecoder DESTINATION ${PLUGIN_INSTALL_DIR} )
 

@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 #ifndef K3BTEMPDIRSELECTIONWIDGET_H
 #define K3BTEMPDIRSELECTIONWIDGET_H
 
-#include <q3groupbox.h>
+#include <QtGui/QGroupBox>
 
 #include <QLabel>
 #include <kio/global.h>
@@ -29,7 +29,7 @@ class KUrlRequester;
 /**
  *@author Sebastian Trueg
  */
-class K3bTempDirSelectionWidget : public Q3GroupBox
+class K3bTempDirSelectionWidget : public QGroupBox
 {
     Q_OBJECT
 
