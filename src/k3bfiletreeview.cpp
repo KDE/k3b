@@ -1,9 +1,10 @@
 /*
  *
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ *           (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +23,8 @@
 #include "k3bplacesmodel.h"
 #include "k3bdevicedelegate.h"
 #include "k3bdevicemenu.h"
+#include "k3baction.h"
+#include "k3b.h"
 
 #include <k3bdevice.h>
 #include <k3bdiskinfo.h>
@@ -286,7 +289,10 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent )
     d->model = new K3bPlacesModel( this );
     setModel( d->model );
 
+    d->actionCollection = new KActionCollection( this );
     d->devicePopupMenu = new K3b::DeviceMenu( this );
+    d->urlPopupMenu = new KActionMenu(this);
+    initActions();
 
     // react on K3bPlacesModel::expandToUrl calls
     connect( d->model, SIGNAL( expand( const QModelIndex& ) ),
@@ -306,6 +312,13 @@ K3bFileTreeView::~K3bFileTreeView()
     delete d;
 }
 
+void K3bFileTreeView::initActions()
+{
+    // those actions are supposed to be used with url items
+    d->urlPopupMenu->addAction( K3b::createAction(this,i18n("&Add to Project"), 0, Qt::SHIFT+Qt::Key_Return,
+                                                  this, SLOT(slotAddFilesToProject()),
+                                                  d->actionCollection, "add_files_to_project") );
+}
 
 K3bDevice::Device* K3bFileTreeView::selectedDevice() const
 {
@@ -329,6 +342,23 @@ void K3bFileTreeView::slotExpandUrl( const QModelIndex& index )
     expand( index );
     setCurrentIndex( index );
     scrollTo( index );
+}
+
+void K3bFileTreeView::slotAddFilesToProject()
+{
+    QModelIndexList indexes = selectedIndexes();
+    KUrl::List files;
+    foreach(QModelIndex index, indexes)
+    {
+        KFileItem item = d->model->itemForIndex(index);
+        if (item.isNull())
+            continue;
+
+        files.append(item.url());
+    }
+
+    if (!files.isEmpty())
+        k3bappcore->k3bMainWindow()->addUrls(files);
 }
 
 
@@ -426,7 +456,6 @@ void K3bFileTreeView::setSelectedDevice( K3bDevice::Device* dev )
 //     updateMinimumWidth();
 // }
 
-
 void K3bFileTreeView::slotClicked( const QModelIndex& index )
 {
     if ( K3bDevice::Device* dev = d->model->deviceForIndex( index ) ) {
@@ -441,12 +470,25 @@ void K3bFileTreeView::slotClicked( const QModelIndex& index )
 
 void K3bFileTreeView::slotContextMenu( const QPoint& pos )
 {
+    // check if the context menu is for a device item
     QModelIndex index = indexAt( pos );
     if ( K3bDevice::Device* dev = d->model->deviceForIndex( index ) ) {
         k3bappcore->appDeviceManager()->setCurrentDevice( dev );
         d->devicePopupMenu->exec( mapToGlobal( pos ) );
     }
+
+    // ... or if it is for an url item
+    KFileItem item = d->model->itemForIndex( index );
+    if ( !item.isNull() )
+    {
+        // enable/disable the "add to project" action
+        d->actionCollection->action("add_files_to_project")->setEnabled(k3bappcore->k3bMainWindow()->activeView() != 0);
+
+        // and shows the menu
+        d->urlPopupMenu->menu()->exec( mapToGlobal( pos ) );
+    }
 }
+
 
 
 // void K3bFileTreeView::slotMouseButtonClickedK3b( int btn, Q3ListViewItem *item, const QPoint &pos, int c )
