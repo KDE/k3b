@@ -3,6 +3,7 @@ project(k3b)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 
+
 ##################  K3b version  ################################
 set(K3B_VERSION_MAJOR 1)
 set(K3B_VERSION_MINOR 60)
@@ -93,7 +94,7 @@ endif(NOT WIN32)
 
 ##################  K3b apidox ################################
 # trueg: disabled for now
-#if(0)
+if(0)
 find_package(Doxygen)
 
 if(DOXYGEN_EXECUTABLE)
@@ -110,7 +111,7 @@ if(DOXYGEN_EXECUTABLE)
     COMMAND ${DOXYGEN_EXECUTABLE} Doxyfile
     COMMAND docs/html/installdox -l qt4.tag@${QTDOCS} docs/html/*.html)
 endif(DOXYGEN_EXECUTABLE)
-#endif(0)
+endif(0)
 
 
 ##################  K3b build environment ################################
