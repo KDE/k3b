@@ -1,9 +1,10 @@
 /*
  *
  * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
+ *           (C) 2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +15,7 @@
 
 #include "k3bdataprojectmodel.h"
 #include "k3bdataurladdingdialog.h"
+#include "k3bdataroles.h"
 
 #include <k3bdatadoc.h>
 #include <k3bdiritem.h>
@@ -222,6 +224,12 @@ QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
                 else {
                     return KIcon( item->mimeType()->iconName() );
                 }
+            }
+            else if ( role == K3b::ItemTypeRole ) {
+                if (item->isDir())
+                    return (int) K3b::DirItem;
+                else
+                    return (int) K3b::FileItem;
             }
             break;
 

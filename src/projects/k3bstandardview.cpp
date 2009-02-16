@@ -19,6 +19,7 @@
 #include <QTreeView>
 #include <QSplitter>
 #include <QLayout>
+#include <QDebug>
 
 K3bStandardView::K3bStandardView(K3bDoc* doc, QWidget *parent )
 : K3bView(doc, parent)
@@ -40,6 +41,7 @@ K3bStandardView::K3bStandardView(K3bDoc* doc, QWidget *parent )
     m_dirView->setDragEnabled(true);
     m_dirView->setDragDropMode(QTreeView::DragDrop);
     m_dirView->setSelectionMode(QTreeView::SingleSelection);
+    m_dirView->setModel(m_dirProxy);
 
     // File panel
     m_fileView->setAcceptDrops(true);
@@ -56,8 +58,7 @@ K3bStandardView::~K3bStandardView()
 
 void K3bStandardView::setModel(QAbstractItemModel *model)
 {
-    //TODO: create a proxy model for the dir panel to show only directories
-    m_dirView->setModel(model);
+    m_dirProxy->setSourceModel(model);
 
     // hide the columns in the dir view
     for (int i = 1; i < model->columnCount(); ++i)
@@ -89,7 +90,7 @@ void K3bStandardView::slotCurrentDirChanged()
 
     QModelIndex currentDir;
     if (indexes.count())
-        currentDir = indexes.first();
+        currentDir = m_dirProxy->mapToSource(indexes.first());
 
     // make the file view show only the child nodes of the currently selected
     // directory from dir view

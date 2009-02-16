@@ -13,6 +13,7 @@
  */
 
 #include "k3bdirproxymodel.h"
+#include "k3bdataroles.h"
 
 
 K3bDirProxyModel::K3bDirProxyModel(QObject *parent)
@@ -28,5 +29,10 @@ K3bDirProxyModel::~K3bDirProxyModel()
 
 bool K3bDirProxyModel::filterAcceptsRow( int source_row, const QModelIndex & source_parent ) const
 {
-    return true;
+    QAbstractItemModel *model = sourceModel();
+    QModelIndex index = model->index(source_row, 0, source_parent);
+
+    K3b::ItemType type = (K3b::ItemType) index.data(K3b::ItemTypeRole).toInt();
+
+    return (type == K3b::DirItem);
 }
