@@ -196,7 +196,7 @@ void K3bDataView::setupContextMenu()
     connect( m_actionNewDir, SIGNAL( triggered() ), this, SLOT(slotNewDir()) );
     actionCollection()->addAction( "new_dir", m_actionNewDir );
 
-    m_actionRemove = K3b::createAction( this, i18n("Remove"), "edit-delete", Qt::Key_Delete, this, SLOT(slotRemoveItem()),
+    m_actionRemove = K3b::createAction( this, i18n("Remove"), "edit-delete", Qt::Key_Delete, this, SLOT(slotRemoveSelectedIndexes()),
                                         actionCollection(), "remove" );
     m_actionRename = K3b::createAction( this, i18n("Rename"), "edit-rename", Qt::Key_F2, this, SLOT(slotRenameItem()),
                                         actionCollection(), "rename" );
@@ -304,22 +304,6 @@ void K3bDataView::slotRenameItem()
     }
     else {
         m_dataFileView->edit( m_dataFileView->selectionModel()->selectedRows().first() );
-    }
-#endif
-}
-
-
-void K3bDataView::slotRemoveItem()
-{
-#if 0
-    if ( m_contextMenuOnTreeView ) {
-        if ( m_dataDirTree->selectedDir() )
-            m_doc->removeItem( m_dataDirTree->selectedDir() );
-    }
-    else {
-        foreach( K3bDataItem* item, m_dataFileView->selectedItems() ) {
-            m_doc->removeItem( item );
-        }
     }
 #endif
 }

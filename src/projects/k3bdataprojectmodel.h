@@ -56,7 +56,7 @@ namespace K3b {
         Qt::DropActions supportedDropActions() const;
         QStringList mimeTypes() const;
         bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
-
+        virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
     private:
         class Private;
         Private* const d;

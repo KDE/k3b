@@ -206,6 +206,12 @@ QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
                 else
                     return (int) K3b::FileItem;
             }
+            else if ( role == K3b::CustomFlagsRole ) {
+                if (item->isRemoveable())
+                    return (int) K3b::ItemIsRemovable;
+                else
+                    return 0;
+            }
             break;
 
         case TypeColumn:
@@ -449,6 +455,20 @@ bool K3b::DataProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction 
     else {
         return false;
     }
+}
+
+bool K3b::DataProjectModel::removeRows( int row, int count, const QModelIndex& parent)
+{
+    // remove the indexes from the project
+    while (count > 0)
+    {
+        QModelIndex i = index( row, 0, parent );
+        d->project->removeItem( itemForIndex(i) );
+
+        row++;
+        count--;
+    }
+    return true;
 }
 
 #include "k3bdataprojectmodel.moc"

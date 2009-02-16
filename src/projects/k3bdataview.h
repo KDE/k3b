@@ -60,7 +60,6 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void slotRenameItem();
-    void slotRemoveItem();
     void slotNewDir();
     void slotItemProperties();
     void slotOpen();

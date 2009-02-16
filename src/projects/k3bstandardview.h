@@ -73,7 +73,7 @@ protected:
 
     /**
      * Returns a list of the currently selected indexes.
-     * This method is meant to be used together with @ref cotnextMenuForSelection()
+     * This method is meant to be used together with @ref contextMenuForSelection()
      * meaning that when @ref contextMenuForSelection() is called, currentSelection()
      * will provide the same list as the one used in the previous slot.
      *
@@ -94,6 +94,13 @@ protected slots:
      * file panel
      */
     void slotParentDir();
+
+    /**
+     * Remove the currently selected indexes.
+     * This slot is meant to be used together with the context menu code
+     * being triggered by an action in the derived classes
+     */
+    void slotRemoveSelectedIndexes();
 
 private:
     QTreeView* m_dirView;

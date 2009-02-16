@@ -154,5 +154,25 @@ void K3bStandardView::slotParentDir()
     m_dirView->setCurrentIndex(m_dirProxy->mapFromSource(m_fileView->rootIndex().parent()));
 }
 
+void K3bStandardView::slotRemoveSelectedIndexes()
+{
+    QAbstractItemModel *model = m_fileView->model();
+    if (!model)
+        return;
+
+    // ask the model to remove the requested indexes
+    // the selectionlist is being traversed backwards so
+    // that we start removing from the bottom items to the top
+    // without needing the index to be updated
+    // TODO: check if there is a better way to remove a list of indexes
+    // CHECK: it seems that sometimes removing more than one item at a time
+    // does not work
+    for (int i = m_currentSelection.count()-1; i>= 0; --i)
+    {
+        QModelIndex index = m_currentSelection[i];
+        model->removeRow(index.row(), index.parent());
+    }
+    m_currentSelection.clear();
+}
 
 #include "k3bstandardview.moc"
