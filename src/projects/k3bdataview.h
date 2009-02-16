@@ -21,8 +21,6 @@
 class K3bDataDoc;
 class K3bDirItem;
 class K3bDataItem;
-//class K3bDataDirTreeView;
-//class K3bDataFileView;
 class QLineEdit;
 class KMenu;
 class KAction;
@@ -64,8 +62,6 @@ private Q_SLOTS:
     void slotOpen();
 
 protected:
-    //K3bDataDirTreeView* m_dataDirTree;
-    //K3bDataFileView* m_dataFileView;
     QLineEdit* m_volumeIDEdit;
 
     virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );

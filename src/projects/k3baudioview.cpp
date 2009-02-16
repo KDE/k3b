@@ -15,7 +15,6 @@
 
 #include "k3baudioprojectmodel.h"
 #include "k3baudioview.h"
-#include "k3baudiotrackview.h"
 //#include "k3baudiotrackplayer.h"
 #include "k3baudioburndialog.h"
 #include "k3baudiotrackaddingdialog.h"
@@ -54,15 +53,13 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent )
 {
     m_doc = pDoc;
 
-	m_model = new K3b::AudioProjectModel(m_doc, this);
-	// set the model for the K3bStandardView's views
-	setModel(m_model);
-	setShowDirPanel(false);
+    m_model = new K3b::AudioProjectModel(m_doc, this);
+    // set the model for the K3bStandardView's views
+    setModel(m_model);
 
-#if 0
-    m_songlist = new K3bAudioTrackView( m_doc, this );
-    setMainWidget( m_songlist );
-#endif
+    // and hide the side panel as the audio project has no tree hierarchy
+    setShowDirPanel(false);
+
     fillStatusDisplay()->showTime();
 
     // add button for the audio conversion

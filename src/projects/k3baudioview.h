@@ -28,7 +28,7 @@ class K3bAudioTrack;
 //class K3bAudioTrackView;
 
 namespace K3b {
-	class AudioProjectModel;
+    class AudioProjectModel;
 }
 
 /**
@@ -37,8 +37,8 @@ namespace K3b {
 class K3bAudioView : public K3bStandardView
 {
     Q_OBJECT
-	
-public: 
+
+public:
     K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent );
     ~K3bAudioView();
 
@@ -58,9 +58,9 @@ protected:
 
 private:
     K3bAudioDoc* m_doc;
-	
+
     //K3bAudioTrackView* m_songlist;
-	K3b::AudioProjectModel* m_model;
+    K3b::AudioProjectModel* m_model;
 };
 
 #endif
