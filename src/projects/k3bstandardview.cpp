@@ -14,10 +14,12 @@
 
 #include "k3bstandardview.h"
 
+#include <QAbstractItemModel>
+#include <QTreeView>
 #include <QSplitter>
 #include <QLayout>
 
-K3bStandardView::K3bStandardView(K3bDataDoc* doc, QWidget *parent )
+K3bStandardView::K3bStandardView(K3bDoc* doc, QWidget *parent )
 : K3bView(doc, parent)
 {
     // --- setup GUI ---------------------------------------------------

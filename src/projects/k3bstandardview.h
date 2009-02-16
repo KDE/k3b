@@ -33,12 +33,19 @@
  *
  *@author Gustavo Pichorim Boiko
  */
+
+#include <k3bview.h>
+
+class QAbstractItemModel;
+class QTreeView;
+class QSplitter;
+
 class K3bStandardView : public K3bView
 {
     Q_OBJECT
 
 public:
-    K3bStandardView(K3bDataDoc* doc, QWidget *parent=0);
+    K3bStandardView(K3bDoc* doc, QWidget* parent=0);
     virtual ~K3bStandardView();
 
 protected:
