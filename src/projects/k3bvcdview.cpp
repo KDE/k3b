@@ -1,9 +1,10 @@
 /*
 *
 * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
+*           (C) 2009      Arthur Renato Mello <arthur@mandriva.com>
 *
 * This file is part of the K3b project.
-* Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+* Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -13,6 +14,7 @@
 */
 
 // K3b Includes
+#include "k3bvcdprojectmodel.h"
 #include "k3bvcdview.h"
 #include "k3bvcddoc.h"
 #include "k3bvcdlistview.h"
@@ -33,10 +35,16 @@
 #include <kmessagebox.h>
 
 K3bVcdView::K3bVcdView( K3bVcdDoc* pDoc, QWidget* parent )
-        : K3bView( pDoc, parent )
+        : K3bStandardView( pDoc, parent )
 {
     m_doc = pDoc;
 
+    m_model = new K3b::VcdProjectModel(m_doc, this);
+    // set the model for the K3bStandardView's views
+    setModel(m_model);
+    setShowDirPanel(false);
+
+#if 0
     // --- setup GUI ---------------------------------------------------
 
     m_vcdlist = new K3bVcdListView( this, pDoc, this );
@@ -45,6 +53,7 @@ K3bVcdView::K3bVcdView( K3bVcdDoc* pDoc, QWidget* parent )
 
     connect( m_vcdlist, SIGNAL( lengthReady() ), fillStatusDisplay(), SLOT( update() ) );
     connect( m_doc, SIGNAL( newTracks() ), fillStatusDisplay(), SLOT( update() ) );
+#endif
 }
 
 K3bVcdView::~K3bVcdView()

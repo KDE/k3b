@@ -1,9 +1,10 @@
 /*
 *
 * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
+*           (C) 2009      Arthur Renato Mello <arthur@mandriva.com>
 *
 * This file is part of the K3b project.
-* Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+* Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -18,15 +19,18 @@
 #include <qstringlist.h>
 
 // K3b Includes
-#include <k3bview.h>
+#include <k3bstandardview.h>
 
 class K3bVcdListView;
 class QWidget;
 class K3bVcdDoc;
 class K3bProjectBurnDialog;
 
+namespace K3b {
+    class VcdProjectModel;
+}
 
-class K3bVcdView : public K3bView
+class K3bVcdView : public K3bStandardView
 {
   Q_OBJECT
   
@@ -41,6 +45,7 @@ class K3bVcdView : public K3bView
   
  private:
   K3bVcdDoc* m_doc;
+  K3b::VcdProjectModel* m_model;
   
   K3bVcdListView* m_vcdlist;
 };
