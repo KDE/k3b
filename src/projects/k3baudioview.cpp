@@ -1,9 +1,10 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ *           (C) 2009      Arthur Mello <arthur@mandriva.com>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,6 +13,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include "k3baudioprojectmodel.h"
 #include "k3baudioview.h"
 #include "k3baudiotrackview.h"
 //#include "k3baudiotrackplayer.h"
@@ -48,12 +50,19 @@
 
 
 K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent )
-    : K3bView( pDoc, parent )
+    : K3bStandardView( pDoc, parent )
 {
     m_doc = pDoc;
 
+	m_model = new K3b::AudioProjectModel(m_doc, this);
+	// set the model for the K3bStandardView's views
+	setModel(m_model);
+	setShowDirPanel(false);
+
+#if 0
     m_songlist = new K3bAudioTrackView( m_doc, this );
     setMainWidget( m_songlist );
+#endif
     fillStatusDisplay()->showTime();
 
     // add button for the audio conversion
@@ -80,10 +89,12 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent )
 //     m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_SEEK )->plug( toolBox() );
 //     toolBox()->addSeparator();
 
+#if 0
 #ifdef HAVE_MUSICBRAINZ
     kDebug() << "(K3bAudioView) m_songlist->actionCollection()->actions().count() " << m_songlist->actionCollection()->actions().count();
     toolBox()->addAction( m_songlist->actionCollection()->action( "project_audio_musicbrainz" ) );
     toolBox()->addSeparator();
+#endif
 #endif
 
     addPluginButtons( K3bProjectPlugin::AUDIO_CD );
