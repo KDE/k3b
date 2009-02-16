@@ -246,7 +246,7 @@ void K3bEmptyDiscWaiter::enterLoop()
     QEventLoop eventLoop;
     connect(this, SIGNAL(leaveModality()),
             &eventLoop, SLOT(quit()));
-    eventLoop.exec(QEventLoop::ExcludeUserInputEvents);
+    eventLoop.exec();
 }
 
 int K3bEmptyDiscWaiter::exec()

@@ -65,7 +65,9 @@ public:
     void setDefaultButton( int b );
 
     /**
-     * Reimplemented for internal reasons. The API does not change.
+     * In contract to "normal" dialogs K3bInteractionDialog will not return from exec
+     * until close() has been called. This allows to hide the dialog while a progress
+     * dialog is shown.
      */
     int exec();
 
@@ -88,22 +90,6 @@ public:
     QSize sizeHint() const;
 
     QString configGroup() const { return m_configGroup; }
-
-    /**
-     * K3b's dialogs use this method to determine if it is safe to hide when starting
-     * some action. Take for example the copy dialog which starts a copy job with a progress
-     * dialog. Both the job and the progress dialog are deleted by the copy dialog after the
-     * progress dialog has been closed. If the copy dialog would hide itself before starting
-     * the job and exitLoopOnHide() would return true the hiding would result in the exec call
-     * of the copy dialog to return. And what would that mean for the code after the hide()
-     * statement (deleting of the job and so on).
-     *
-     * \return true in case this dialog will not exit it's private event loop
-     *              in case it is hidden.
-     *
-     * \see exec(bool)
-     */
-    bool exitLoopOnHide() const { return m_exitLoopOnHide; }
 
     enum StartUpSettings {
         LOAD_K3B_DEFAULTS = 1,
@@ -239,7 +225,7 @@ private Q_SLOTS:
     void slotSaveUserDefaults();
     void slotLoadLastSettings();
     void slotStartClickedInternal();
-    void slotDelayedInit();
+    void slotInternalInit();
 
 private:
     void initConnections();
@@ -262,7 +248,6 @@ private:
     int m_defaultButton;
     QString m_configGroup;
 
-    bool m_exitLoopOnHide;
     bool m_inToggleMode;
     bool m_delayedInit;
 

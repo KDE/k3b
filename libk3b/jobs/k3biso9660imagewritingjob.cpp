@@ -231,32 +231,17 @@ void K3bIso9660ImageWritingJob::startWriting()
     // 9. if writing mode WRITING_MODE_RES_OVWR: DVD-RW or DVD+RW
 
     int mt = 0;
-    if( m_writingMode == K3b::WRITING_MODE_AUTO ) {
-        if( writingApp() == K3b::WRITING_APP_DEFAULT ) {
-            if( m_dvd )
-                mt = K3bDevice::MEDIA_WRITABLE_DVD;
-            else
-                mt = K3bDevice::MEDIA_WRITABLE_CD;
-        }
-        else if( writingApp() != K3b::WRITING_APP_GROWISOFS )
+    if( m_writingMode == K3b::WRITING_MODE_AUTO ||
+        m_writingMode == K3b::WRITING_MODE_DAO ) {
+        if( writingApp() == K3b::WRITING_APP_CDRDAO )
             mt = K3bDevice::MEDIA_WRITABLE_CD;
-        else
+        else if( m_dvd )
             mt = K3bDevice::MEDIA_WRITABLE_DVD;
+        else
+            mt = K3bDevice::MEDIA_WRITABLE;
     }
     else if( m_writingMode == K3b::WRITING_MODE_TAO || m_writingMode == K3b::WRITING_MODE_RAW ) {
         mt = K3bDevice::MEDIA_WRITABLE_CD;
-    }
-    else if( m_writingMode == K3b::WRITING_MODE_DAO ) {
-        if( writingApp() == K3b::WRITING_APP_DEFAULT ) {
-            if( m_dvd )
-                mt = K3bDevice::MEDIA_WRITABLE_DVD;
-            else
-                mt = K3bDevice::MEDIA_WRITABLE_CD;
-        }
-        else if( writingApp() == K3b::WRITING_APP_GROWISOFS )
-            mt = K3bDevice::MEDIA_WRITABLE_DVD;
-        else
-            mt = K3bDevice::MEDIA_WRITABLE_CD;
     }
     else if( m_writingMode == K3b::WRITING_MODE_RES_OVWR ) {
         mt = K3bDevice::MEDIA_DVD_PLUS_R|K3bDevice::MEDIA_DVD_PLUS_R_DL|K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR;

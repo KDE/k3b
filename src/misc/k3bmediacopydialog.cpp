@@ -399,16 +399,14 @@ void K3bMediaCopyDialog::slotStartClicked()
         return;
     }
 
-    if( !exitLoopOnHide() )
-        hide();
+    hide();
 
     dlg->startJob( burnJob );
 
     delete dlg;
     delete burnJob;
 
-    if( KConfigGroup( k3bcore->config(), "General Options" ).readEntry( "keep action dialogs open", false ) &&
-        !exitLoopOnHide() )
+    if( KConfigGroup( k3bcore->config(), "General Options" ).readEntry( "keep action dialogs open", false ) )
         show();
     else
         close();

@@ -161,15 +161,13 @@ void K3bMediaFormattingDialog::slotStartClicked()
         return;
     }
 
-    if( !exitLoopOnHide() )
-        hide();
+    hide();
 
     dlg.startJob( theJob );
 
     delete theJob;
 
-    if( KConfigGroup( k3bcore->config(), "General Options" ).readEntry( "keep action dialogs open", false ) &&
-        !exitLoopOnHide() )
+    if( KConfigGroup( k3bcore->config(), "General Options" ).readEntry( "keep action dialogs open", false ) )
         show();
     else
         close();

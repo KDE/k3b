@@ -470,15 +470,13 @@ void K3bImageWritingDialog::slotStartClicked()
     if( job ) {
         job->setWritingApp( m_writerSelectionWidget->writingApp() );
 
-        if( !exitLoopOnHide() )
-            hide();
+        hide();
 
         dlg.startJob(job);
 
         delete job;
 
-        if( KConfigGroup( k3bcore->config(), "General Options" ).readEntry( "keep action dialogs open", false ) &&
-            !exitLoopOnHide() )
+        if( KConfigGroup( k3bcore->config(), "General Options" ).readEntry( "keep action dialogs open", false ) )
             show();
         else
             close();
@@ -827,10 +825,12 @@ void K3bImageWritingDialog::toggleAll()
     }
 
     // set a wanted media type (DVD/BD -> only ISO)
-    if ( currentImageType() == IMAGE_ISO )
+    if ( currentImageType() == IMAGE_ISO ) {
         m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE );
-    else
+    }
+    else {
         m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_CD );
+    }
 
     // cdrecord clone and cue both need DAO
     if( m_writerSelectionWidget->writingApp() != K3b::WRITING_APP_CDRDAO

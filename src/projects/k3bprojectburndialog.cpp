@@ -237,8 +237,7 @@ void K3bProjectBurnDialog::slotStartClicked()
         m_job->setWritingApp( m_writerSelectionWidget->writingApp() );
     prepareJob( m_job );
 
-    if( !exitLoopOnHide() )
-        hideTemporarily();
+    hideTemporarily();
 
     dlg->startJob(m_job);
 

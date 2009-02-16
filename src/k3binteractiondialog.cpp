@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,7 +63,6 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
       m_mainWidget(0),
       m_defaultButton(defaultButton),
       m_configGroup(configGroup),
-      m_exitLoopOnHide(true),
       m_inToggleMode(false),
       m_delayedInit(false),
       m_eventLoop( 0 )
@@ -525,7 +524,6 @@ void K3bInteractionDialog::loadStartupSettings()
 int K3bInteractionDialog::exec()
 {
     kDebug() << this;
-    m_exitLoopOnHide = true;
 
     // the following code is mainly taken from QDialog::exec
     if( m_eventLoop ) {
@@ -545,9 +543,9 @@ int K3bInteractionDialog::exec()
     show();
 
     if( m_delayedInit )
-        QTimer::singleShot( 0, this, SLOT(slotDelayedInit()) );
+        QMetaObject::invokeMethod( this, "slotInternalInit", Qt::QueuedConnection );
     else
-        init();
+        slotInternalInit();
 
     QEventLoop eventLoop;
     m_eventLoop = &eventLoop;
@@ -568,7 +566,6 @@ int K3bInteractionDialog::exec()
 
 void K3bInteractionDialog::hideTemporarily()
 {
-    m_exitLoopOnHide = false;
     hide();
 }
 
@@ -594,12 +591,6 @@ void K3bInteractionDialog::done( int r )
 void K3bInteractionDialog::hideEvent( QHideEvent* e )
 {
     kDebug() << this;
-    if( !e->spontaneous() &&
-        m_eventLoop &&
-        m_exitLoopOnHide ) {
-        m_eventLoop->exit();
-        m_exitLoopOnHide = true;
-    }
     KDialog::hideEvent( e );
 }
 
@@ -614,14 +605,15 @@ void K3bInteractionDialog::slotToggleAll()
 }
 
 
-void K3bInteractionDialog::toggleAll()
+void K3bInteractionDialog::slotInternalInit()
 {
+    init();
+    slotToggleAll();
 }
 
 
-void K3bInteractionDialog::slotDelayedInit()
+void K3bInteractionDialog::toggleAll()
 {
-    init();
 }
 
 #include "k3binteractiondialog.moc"
