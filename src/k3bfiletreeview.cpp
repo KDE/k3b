@@ -278,6 +278,7 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent )
     setSelectionMode(QAbstractItemView::SingleSelection);
 //    setSortingEnabled( true );
 //    setRootIsDecorated( false );
+    setDragEnabled( true );
 
     K3bDeviceDelegate* delegate = new K3bDeviceDelegate(this);
     setItemDelegate(delegate);
