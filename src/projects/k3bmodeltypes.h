@@ -11,8 +11,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#ifndef K3BDATAROLES_H
-#define K3BDATAROLES_H
+#ifndef K3BMODELTYPES_H
+#define K3BMODELTYPES_H
 
 #include <Qt>
 

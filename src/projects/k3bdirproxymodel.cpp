@@ -13,7 +13,7 @@
  */
 
 #include "k3bdirproxymodel.h"
-#include "k3bdataroles.h"
+#include "k3bmodeltypes.h"
 
 
 K3bDirProxyModel::K3bDirProxyModel(QObject *parent)

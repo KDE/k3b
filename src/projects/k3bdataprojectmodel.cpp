@@ -15,7 +15,7 @@
 
 #include "k3bdataprojectmodel.h"
 #include "k3bdataurladdingdialog.h"
-#include "k3bdataroles.h"
+#include "k3bmodeltypes.h"
 
 #include <k3bdatadoc.h>
 #include <k3bdiritem.h>
