@@ -1,9 +1,10 @@
 /*
  *
  * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
+ *           (C) 2009      Arthur Renato Mello <arthur@mandriva.com>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,9 +15,10 @@
 
 #include "k3bvideodvdview.h"
 #include "k3bvideodvddoc.h"
+#include "k3bdataprojectmodel.h"
 #include "k3bvideodvdburndialog.h"
-#include "k3bdatadirtreeview.h"
-#include "k3bdatafileview.h"
+//#include "k3bdatadirtreeview.h"
+//#include "k3bdatafileview.h"
 #include "k3bdataurladdingdialog.h"
 #include <k3bfillstatusdisplay.h>
 #include <k3bprojectplugin.h>
@@ -29,9 +31,14 @@
 
 
 K3bVideoDvdView::K3bVideoDvdView( K3bVideoDvdDoc* doc, QWidget *parent )
-    : K3bView( doc, parent ),
+    : K3bStandardView( doc, parent ),
       m_doc(doc)
 {
+	m_model = new K3b::DataProjectModel(m_doc, this);
+	// set the model for the K3bStandardView's views
+	setModel(m_model);
+
+#if 0
     // --- setup GUI ---------------------------------------------------
     QSplitter* mainSplitter = new QSplitter( this );
     m_dataDirTree = new K3bDataDirTreeView( this, doc, mainSplitter );
@@ -41,7 +48,7 @@ K3bVideoDvdView::K3bVideoDvdView( K3bVideoDvdDoc* doc, QWidget *parent )
     setMainWidget( mainSplitter );
 
     connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)), m_dataDirTree, SLOT(setCurrentDir(K3bDirItem*)) );
-
+#endif
     addPluginButtons( K3bProjectPlugin::VIDEO_DVD );
 }
 #warning get the currentDir connections from K3bDataView or maybe inherit from it
@@ -72,7 +79,9 @@ void K3bVideoDvdView::init()
 
 void K3bVideoDvdView::addUrls( const KUrl::List& urls )
 {
+	/*
     K3bDataUrlAddingDialog::addUrls( urls, m_dataFileView->currentDir() );
+	*/
 }
 
 #include "k3bvideodvdview.moc"
