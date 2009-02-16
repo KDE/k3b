@@ -1,9 +1,10 @@
 /* 
  *
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +16,7 @@
 #ifndef K3B_MIXED_VIEW_H
 #define K3B_MIXED_VIEW_H
 
-#include <k3bview.h>
+#include <k3bstandardview.h>
 
 #include <kurl.h>
 
@@ -27,8 +28,12 @@ class K3bAudioTrackView;
 class K3bDirItem;
 class K3bAudioTrackPlayer;
 
+namespace K3b
+{
+    class MixedProjectModel;
+}
 
-class K3bMixedView : public K3bView
+class K3bMixedView : public K3bStandardView
 {
   Q_OBJECT
 
@@ -53,12 +58,7 @@ class K3bMixedView : public K3bView
 
  private:
   K3bMixedDoc* m_doc;
-
-  QStackedWidget* m_widgetStack;
-
-  K3bMixedDirTreeView* m_mixedDirTreeView;
-  K3bDataFileView* m_dataFileView;
-  K3bAudioTrackView* m_audioListView;
+  K3b::MixedProjectModel* m_model;
 };
 
 #endif

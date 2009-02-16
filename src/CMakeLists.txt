@@ -53,6 +53,7 @@ set(k3b_project_SRCS
   projects/k3bmixedburndialog.cpp 
   projects/k3bmixeddirtreeview.cpp 
   projects/k3bmixedview.cpp 
+  projects/k3bmixedprojectmodel.cpp
   projects/k3bdataadvancedimagesettingswidget.cpp 
   projects/k3bdatadirtreeview.cpp 
   projects/k3bdatafileview.cpp 

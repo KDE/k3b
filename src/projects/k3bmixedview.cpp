@@ -1,9 +1,10 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,21 +17,15 @@
 
 #include "k3bmixeddoc.h"
 #include "k3bmixedburndialog.h"
-#include "k3bmixeddirtreeview.h"
+#include "k3bmixedprojectmodel.h"
 #include "k3baudiotrackaddingdialog.h"
 #include "k3bdataurladdingdialog.h"
 
 //#include <k3baudiotrackplayer.h>
 #include <k3baudiodoc.h>
-#include <k3bdatafileview.h>
 #include <k3bdatadoc.h>
-#include <k3baudiotrackview.h>
 #include <k3bfillstatusdisplay.h>
 #include <k3bprojectplugin.h>
-
-#include <QStackedWidget>
-#include <qsplitter.h>
-#include <qlayout.h>
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -43,26 +38,10 @@
 
 
 K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent )
-    : K3bView( doc, parent ), m_doc(doc)
+    : K3bStandardView( doc, parent ), m_doc(doc)
 {
-    QSplitter* splitter = new QSplitter( this );
-    m_mixedDirTreeView = new K3bMixedDirTreeView( this, doc, splitter );
-    m_widgetStack = new QStackedWidget( splitter );
-    m_dataFileView = new K3bDataFileView( this, doc->dataDoc(), m_widgetStack );
-    m_audioListView = new K3bAudioTrackView( doc->audioDoc(), m_widgetStack );
-    m_widgetStack->addWidget( m_dataFileView );
-    m_widgetStack->addWidget( m_audioListView );
-
-    splitter->setStretchFactor( 0, 1 );
-    splitter->setStretchFactor( 1, 3 );
-    setMainWidget( splitter );
-
-    connect( m_mixedDirTreeView, SIGNAL(audioTreeSelected()),
-             this, SLOT(slotAudioTreeSelected()) );
-    connect( m_mixedDirTreeView, SIGNAL(dataTreeSelected()),
-             this, SLOT(slotDataTreeSelected()) );
-
-    m_widgetStack->setCurrentWidget( m_dataFileView );
+    m_model = new K3b::MixedProjectModel(m_doc, this);
+    setModel(m_model);
 
 #ifdef __GNUC__
 #warning enable player once ported to Phonon
@@ -77,11 +56,12 @@ K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent )
 //   m_audioListView->player()->action( K3bAudioTrackPlayer::ACTION_SEEK )->plug( toolBox() );
 //   toolBox()->addSeparator();
 
+#if 0
 #ifdef HAVE_MUSICBRAINZ
     toolBox()->addAction( m_audioListView->actionCollection()->action( "project_audio_musicbrainz" ) );
     toolBox()->addSeparator();
 #endif
-
+#endif
     addPluginButtons( K3bProjectPlugin::MIXED_CD );
 }
 
@@ -93,28 +73,32 @@ K3bMixedView::~K3bMixedView()
 
 K3bAudioTrackPlayer* K3bMixedView::player() const
 {
-    return m_audioListView->player();
+    //return m_audioListView->player();
+    return 0;
 }
 
 
 void K3bMixedView::slotAudioTreeSelected()
 {
-    m_widgetStack->setCurrentWidget( m_audioListView );
+    //m_widgetStack->setCurrentWidget( m_audioListView );
 }
 
 
 void K3bMixedView::slotDataTreeSelected()
 {
-    m_widgetStack->setCurrentWidget( m_dataFileView );
+    //m_widgetStack->setCurrentWidget( m_dataFileView );
 }
 
 
 K3bDirItem* K3bMixedView::currentDir() const
 {
+#if 0
     if( m_widgetStack->currentWidget() == m_dataFileView )
         return m_dataFileView->currentDir();
     else
         return 0;
+#endif
+    return 0;
 }
 
 
@@ -145,10 +129,12 @@ K3bProjectBurnDialog* K3bMixedView::newBurnDialog( QWidget* parent )
 
 void K3bMixedView::addUrls( const KUrl::List& urls )
 {
+#if 0
     if( m_widgetStack->currentWidget() == m_dataFileView )
         K3bDataUrlAddingDialog::addUrls( urls, currentDir() );
     else
         K3bAudioTrackAddingDialog::addUrls( urls, m_doc->audioDoc(), 0, 0, 0, this );
+#endif
 }
 
 #include "k3bmixedview.moc"
