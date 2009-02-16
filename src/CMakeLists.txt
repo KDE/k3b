@@ -78,6 +78,7 @@ set(k3b_project_SRCS
   projects/k3bfillstatusdisplay.cpp 
   projects/k3bview.cpp 
   projects/k3bstandardview.cpp 
+  projects/k3bdirproxymodel.cpp 
   projects/k3bprojectburndialog.cpp 
   projects/k3bprojectplugindialog.cpp 
   projects/k3bdatamultisessioncombobox.cpp 
