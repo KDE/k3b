@@ -81,8 +81,8 @@ K3bOptionDialog::~K3bOptionDialog()
 
 void K3bOptionDialog::setCurrentPage( ConfigPage page )
 {
-    Pages::const_iterator pageIt = m_pages.find( page );
-    if( pageIt != m_pages.end() ) {
+    Pages::const_iterator pageIt = m_pages.constFind( page );
+    if( pageIt != m_pages.constEnd() ) {
         KPageDialog::setCurrentPage( *pageIt );
     }
 }
