@@ -310,17 +310,23 @@ void K3bDataView::slotRenameItem()
 
 void K3bDataView::slotItemProperties()
 {
-#if 0
-    QList<K3bDataItem*> items = selectedItems();
-    if ( items.isEmpty() ) {
+    QModelIndexList selection = currentSelection();
+
+    if ( selection.isEmpty() ) 
+    {
         // show project properties
         slotProperties();
     }
-    else {
+    else 
+    {
+        QList<K3bDataItem*> items;
+
+        foreach(QModelIndex index, selection)
+            items.append(m_model->itemForIndex(index));
+
         K3bDataPropertiesDialog dlg( items, this );
         dlg.exec();
     }
-#endif
 }
 
 
