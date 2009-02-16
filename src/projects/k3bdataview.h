@@ -16,13 +16,13 @@
 #ifndef K3BDATAVIEW_H
 #define K3BDATAVIEW_H
 
-#include <k3bview.h>
+#include <k3bstandardview.h>
 
 class K3bDataDoc;
 class K3bDirItem;
 class K3bDataItem;
-class K3bDataDirTreeView;
-class K3bDataFileView;
+//class K3bDataDirTreeView;
+//class K3bDataFileView;
 class QLineEdit;
 class KMenu;
 class KAction;
@@ -32,19 +32,22 @@ namespace K3bDevice {
     class Device;
 }
 
+namespace K3b {
+    class DataProjectModel;
+}
 
 
 /**
  *@author Sebastian Trueg
  */
-class K3bDataView : public K3bView
+class K3bDataView : public K3bStandardView
 {
     Q_OBJECT
 
 public:
     K3bDataView(K3bDataDoc* doc, QWidget *parent=0);
     virtual ~K3bDataView();
-	
+
     K3bDirItem* currentDir() const;
 
 public Q_SLOTS:
@@ -69,14 +72,15 @@ private Q_SLOTS:
     void slotDoubleClicked( const QModelIndex& );
 
 protected:
-    K3bDataDirTreeView* m_dataDirTree;
-    K3bDataFileView* m_dataFileView;
+    //K3bDataDirTreeView* m_dataDirTree;
+    //K3bDataFileView* m_dataFileView;
     QLineEdit* m_volumeIDEdit;
 
     virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
-		
+
 private:
     K3bDataDoc* m_doc;
+    K3b::DataProjectModel* m_model;
 
     void setupContextMenu();
 

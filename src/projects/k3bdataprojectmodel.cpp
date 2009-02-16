@@ -335,7 +335,7 @@ QModelIndex K3b::DataProjectModel::index( int row, int column, const QModelIndex
 
 QModelIndex K3b::DataProjectModel::parent( const QModelIndex& index ) const
 {
-    kDebug() << index;
+    //kDebug() << index;
     if ( index.isValid() ) {
         K3bDataItem* item = itemForIndex( index );
         K3bDirItem* dir = item->parent();

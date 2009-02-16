@@ -15,10 +15,9 @@
 
 #include "k3bdataview.h"
 #include "k3bdatadoc.h"
+#include "k3bdataprojectmodel.h"
 #include "k3bdataburndialog.h"
 #include "k3bbootimageview.h"
-#include "k3bdatadirtreeview.h"
-#include "k3bdatafileview.h"
 #include "k3bdataurladdingdialog.h"
 #include "k3bdatamultisessionimportdialog.h"
 #include "k3bdatapropertiesdialog.h"
@@ -58,10 +57,14 @@
 
 
 K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent )
-    : K3bView(doc, parent)
+    : K3bStandardView(doc, parent)
 {
     m_doc = doc;
 
+    m_model = new K3b::DataProjectModel(doc, this);
+    // set the model for the K3bStandardView's views
+    setModel(m_model);
+#if 0
     // --- setup GUI ---------------------------------------------------
     QSplitter* mainSplitter = new QSplitter( this );
     m_dataDirTree = new K3bDataDirTreeView( this, doc, mainSplitter );
@@ -74,9 +77,10 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent )
     connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)),
              this, SLOT(setCurrentDir(K3bDirItem*)) );
     connect( m_dataDirTree, SIGNAL(dirSelected(K3bDirItem*)),
-             this, SLOT(setCurrentDir(K3bDirItem*)) );
+             this, SLOT(setCurrentDir(K3bDirItem*)) );*/
+#endif
     connect( m_doc, SIGNAL(changed()), this, SLOT(slotDocChanged()) );
-
+#if 0
     m_dataDirTree->setContextMenuPolicy( Qt::CustomContextMenu );
     m_dataFileView->setContextMenuPolicy( Qt::CustomContextMenu );
 
@@ -84,7 +88,7 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent )
              this, SLOT(showPopupMenu(const QPoint&)) );
     connect( m_dataFileView, SIGNAL(customContextMenuRequested(const QPoint&)),
              this, SLOT(showPopupMenu(const QPoint&)) );
-
+#endif
     setupContextMenu();
 
     // the data actions
@@ -140,15 +144,17 @@ K3bDataView::~K3bDataView(){
 
 K3bDirItem* K3bDataView::currentDir() const
 {
-    return m_dataFileView->currentDir();
+    //return m_dataFileView->currentDir();
+    return 0;
 }
 
 
 void K3bDataView::setCurrentDir( K3bDirItem* dir )
 {
-    m_dataFileView->setCurrentDir( dir );
+    /*m_dataFileView->setCurrentDir( dir );
     m_dataDirTree->setCurrentDir( dir );
     m_actionParentDir->setEnabled( currentDir() != m_doc->root() );
+    */
 }
 
 
@@ -205,7 +211,9 @@ void K3bDataView::slotDocChanged()
 
 void K3bDataView::addUrls( const KUrl::List& urls )
 {
+#if 0
     K3bDataUrlAddingDialog::addUrls( urls, m_dataFileView->currentDir() );
+#endif
 }
 
 
@@ -250,6 +258,7 @@ void K3bDataView::setupContextMenu()
 
 void K3bDataView::showPopupMenu( const QPoint& point )
 {
+#if 0
     m_contextMenuOnTreeView = ( sender() == m_dataDirTree );
 
     QPoint globalPoint( QCursor::pos() );
@@ -274,7 +283,7 @@ void K3bDataView::showPopupMenu( const QPoint& point )
         m_actionOpen->setEnabled( false );
     }
     m_popupMenu->popup( globalPoint );
-
+#endif
 }
 
 
@@ -306,17 +315,20 @@ void K3bDataView::slotNewDir()
 
 void K3bDataView::slotRenameItem()
 {
+#if 0
     if ( m_contextMenuOnTreeView ) {
         m_dataDirTree->edit( m_dataDirTree->selectionModel()->selectedRows().first() );
     }
     else {
         m_dataFileView->edit( m_dataFileView->selectionModel()->selectedRows().first() );
     }
+#endif
 }
 
 
 void K3bDataView::slotRemoveItem()
 {
+#if 0
     if ( m_contextMenuOnTreeView ) {
         if ( m_dataDirTree->selectedDir() )
             m_doc->removeItem( m_dataDirTree->selectedDir() );
@@ -326,19 +338,23 @@ void K3bDataView::slotRemoveItem()
             m_doc->removeItem( item );
         }
     }
+#endif
 }
 
 
 void K3bDataView::slotParentDir()
 {
+#if 0
     if( m_dataFileView->currentDir() != m_doc->root() ) {
         setCurrentDir( currentDir()->parent() );
     }
+#endif
 }
 
 
 void K3bDataView::slotItemProperties()
 {
+#if 0
     QList<K3bDataItem*> items = selectedItems();
     if ( items.isEmpty() ) {
         // show project properties
@@ -348,11 +364,13 @@ void K3bDataView::slotItemProperties()
         K3bDataPropertiesDialog dlg( items, this );
         dlg.exec();
     }
+#endif
 }
 
 
 void K3bDataView::slotOpen()
 {
+#if 0
     QList<K3bDataItem*> items = selectedItems();
     if( !items.isEmpty() && items.first()->isFile() ) {
         K3bDataItem* item = items.first();
@@ -367,19 +385,23 @@ void K3bDataView::slotOpen()
             KRun::displayOpenWithDialog( KUrl::List() << url, false, this );
         }
     }
+#endif
 }
 
 
 void K3bDataView::slotDoubleClicked( const QModelIndex& )
 {
+#if 0
     m_contextMenuOnTreeView = ( sender() == m_dataDirTree );
     slotItemProperties();
+#endif
 }
 
 
 QList<K3bDataItem*> K3bDataView::selectedItems() const
 {
     QList<K3bDataItem*> items;
+#if 0
     if ( m_contextMenuOnTreeView ) {
         if( m_dataDirTree->selectedDir() ) {
            items.append( m_dataDirTree->selectedDir() );
@@ -388,6 +410,7 @@ QList<K3bDataItem*> K3bDataView::selectedItems() const
     else {
         items = m_dataFileView->selectedItems();
     }
+#endif
     return items;
 }
 
