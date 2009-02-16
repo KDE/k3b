@@ -62,7 +62,6 @@ private Q_SLOTS:
     void slotNewDir();
     void slotItemProperties();
     void slotOpen();
-    void slotDoubleClicked( const QModelIndex& );
 
 protected:
     //K3bDataDirTreeView* m_dataDirTree;

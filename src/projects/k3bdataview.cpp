@@ -176,9 +176,10 @@ void K3bDataView::slotDocChanged()
 
 void K3bDataView::addUrls( const KUrl::List& urls )
 {
-#if 0
-    K3bDataUrlAddingDialog::addUrls( urls, m_dataFileView->currentDir() );
-#endif
+    K3bDirItem *item = dynamic_cast<K3bDirItem*>(m_model->itemForIndex(currentRoot()));
+    if (!item)
+        item = m_doc->root();
+    K3bDataUrlAddingDialog::addUrls( urls, item);
 }
 
 void K3bDataView::setupContextMenu()
@@ -320,10 +321,13 @@ void K3bDataView::slotItemProperties()
 
 void K3bDataView::slotOpen()
 {
-#if 0
-    QList<K3bDataItem*> items = selectedItems();
-    if( !items.isEmpty() && items.first()->isFile() ) {
-        K3bDataItem* item = items.first();
+    QModelIndexList selection = currentSelection();
+    if (selection.isEmpty())
+        return;
+
+    K3bDataItem* item = m_model->itemForIndex(selection.first());
+
+    if( !item->isFile() ) {
         KUrl url = item->localPath();
         if( !KRun::isExecutableFile( url,
                                      item->mimeType()->name() ) ) {
@@ -335,16 +339,6 @@ void K3bDataView::slotOpen()
             KRun::displayOpenWithDialog( KUrl::List() << url, false, this );
         }
     }
-#endif
-}
-
-
-void K3bDataView::slotDoubleClicked( const QModelIndex& )
-{
-#if 0
-    m_contextMenuOnTreeView = ( sender() == m_dataDirTree );
-    slotItemProperties();
-#endif
 }
 
 #include "k3bdataview.moc"
