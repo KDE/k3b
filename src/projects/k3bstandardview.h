@@ -39,6 +39,7 @@
 class QAbstractItemModel;
 class QTreeView;
 class QSplitter;
+class K3bDirProxyModel;
 
 class K3bStandardView : public K3bView
 {
@@ -67,6 +68,7 @@ private:
     QTreeView* m_dirView;
     QTreeView* m_fileView;
     QSplitter* m_splitter;
+    K3bDirProxyModel* m_dirProxy;
 };
 
 

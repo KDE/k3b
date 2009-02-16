@@ -13,6 +13,7 @@
  */
 
 #include "k3bstandardview.h"
+#include "k3bdirproxymodel.h"
 
 #include <QAbstractItemModel>
 #include <QTreeView>
@@ -22,6 +23,8 @@
 K3bStandardView::K3bStandardView(K3bDoc* doc, QWidget *parent )
 : K3bView(doc, parent)
 {
+    m_dirProxy = new K3bDirProxyModel(this);
+
     // --- setup GUI ---------------------------------------------------
     m_splitter = new QSplitter( this );
     m_dirView = new QTreeView(m_splitter);
