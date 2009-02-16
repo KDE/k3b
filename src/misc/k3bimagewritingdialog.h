@@ -45,7 +45,7 @@ class KComboBox;
   */
 class K3bImageWritingDialog : public K3bInteractionDialog
 {
-    Q_OBJECT;
+    Q_OBJECT
 
 public: 
     K3bImageWritingDialog( QWidget* = 0 );
