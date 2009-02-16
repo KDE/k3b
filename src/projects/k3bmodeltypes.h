@@ -20,8 +20,8 @@ namespace K3b
 {
     enum ItemDataRoles
     {
-        ItemTypeRole = Qt::UserRole
-        CustomFlagsRole = Qt::UserRole + 1;
+        ItemTypeRole = Qt::UserRole,
+        CustomFlagsRole = Qt::UserRole + 1
     };
 
     enum ItemType
@@ -32,7 +32,8 @@ namespace K3b
 
     enum ItemFlags
     {
-        ItemIsRemovable = 1,
+        ItemIsRemovable = 1
     };
+
 }
 #endif

@@ -1,9 +1,10 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ *           (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +17,7 @@
 #include "k3bdataview.h"
 #include "k3bdatadoc.h"
 #include "k3bdataprojectmodel.h"
+#include "k3bmodeltypes.h"
 #include "k3bdataburndialog.h"
 #include "k3bbootimageview.h"
 #include "k3bdataurladdingdialog.h"
@@ -64,31 +66,9 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent )
     m_model = new K3b::DataProjectModel(doc, this);
     // set the model for the K3bStandardView's views
     setModel(m_model);
-#if 0
-    // --- setup GUI ---------------------------------------------------
-    QSplitter* mainSplitter = new QSplitter( this );
-    m_dataDirTree = new K3bDataDirTreeView( this, doc, mainSplitter );
-    m_dataFileView = new K3bDataFileView( this, doc, mainSplitter );
-    mainSplitter->setStretchFactor( 0, 1 );
-    mainSplitter->setStretchFactor( 1, 3 );
-    setMainWidget( mainSplitter );
 
-
-    connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)),
-             this, SLOT(setCurrentDir(K3bDirItem*)) );
-    connect( m_dataDirTree, SIGNAL(dirSelected(K3bDirItem*)),
-             this, SLOT(setCurrentDir(K3bDirItem*)) );*/
-#endif
     connect( m_doc, SIGNAL(changed()), this, SLOT(slotDocChanged()) );
-#if 0
-    m_dataDirTree->setContextMenuPolicy( Qt::CustomContextMenu );
-    m_dataFileView->setContextMenuPolicy( Qt::CustomContextMenu );
 
-    connect( m_dataDirTree, SIGNAL(customContextMenuRequested(const QPoint&)),
-             this, SLOT(showPopupMenu(const QPoint&)) );
-    connect( m_dataFileView, SIGNAL(customContextMenuRequested(const QPoint&)),
-             this, SLOT(showPopupMenu(const QPoint&)) );
-#endif
     setupContextMenu();
 
     // the data actions
@@ -138,23 +118,8 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent )
 }
 
 
-K3bDataView::~K3bDataView(){
-}
-
-
-K3bDirItem* K3bDataView::currentDir() const
+K3bDataView::~K3bDataView()
 {
-    //return m_dataFileView->currentDir();
-    return 0;
-}
-
-
-void K3bDataView::setCurrentDir( K3bDirItem* dir )
-{
-    /*m_dataFileView->setCurrentDir( dir );
-    m_dataDirTree->setCurrentDir( dir );
-    m_actionParentDir->setEnabled( currentDir() != m_doc->root() );
-    */
 }
 
 
@@ -216,7 +181,6 @@ void K3bDataView::addUrls( const KUrl::List& urls )
 #endif
 }
 
-
 void K3bDataView::setupContextMenu()
 {
     m_actionProperties = new KAction( this );
@@ -255,41 +219,61 @@ void K3bDataView::setupContextMenu()
     m_popupMenu->addAction( actionCollection()->action("project_burn") );
 }
 
-
-void K3bDataView::showPopupMenu( const QPoint& point )
+void K3bDataView::contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos)
 {
-#if 0
-    m_contextMenuOnTreeView = ( sender() == m_dataDirTree );
+    bool open = true, rename = true, remove = true, parent = true;
 
-    QPoint globalPoint( QCursor::pos() );
-    K3bDataItem* item = 0;
-    if ( m_contextMenuOnTreeView ) {
-        globalPoint = m_dataDirTree->mapToGlobal( point );
-        item = m_dataDirTree->selectedDir();
+    // we can only rename one item at a time
+    // also, we can only create a new dir over a single directory
+    if (selectedIndexes.count() > 1)
+    {
+        rename = false;
+        open = false;
+    } 
+    else if (selectedIndexes.count() == 1)
+    {
+        QModelIndex index = selectedIndexes.first();
+        rename = (index.flags() & Qt::ItemIsEditable);
+        open = (index.data(K3b::ItemTypeRole).toInt() == (int) K3b::FileItem);
     }
-    else if ( m_dataFileView->selectedItems().count() ) {
-        globalPoint = m_dataFileView->mapToGlobal( point );
-        item = m_dataFileView->selectedItems().first();
+    else // selectedIndex.count() == 0
+    {
+        remove = false;
+        rename = false;
+        open = false;
     }
 
-    if( item ) {
-        m_actionRemove->setEnabled( item->isRemoveable() );
-        m_actionRename->setEnabled( item->isRenameable() );
-        m_actionOpen->setEnabled( item->isFile() );
+    // check if all selected items can be removed
+    foreach(QModelIndex index, selectedIndexes)
+    {
+        if (!index.data(K3b::CustomFlagsRole).toInt() & K3b::ItemIsRemovable)
+        {
+            remove = false;
+            break;
+        }
     }
-    else {
-        m_actionRemove->setEnabled( false );
-        m_actionRename->setEnabled( false );
-        m_actionOpen->setEnabled( false );
-    }
-    m_popupMenu->popup( globalPoint );
-#endif
+
+    if (m_model->indexForItem(m_doc->root()) == currentRoot())
+        parent = false;
+
+    m_actionRename->setEnabled( rename );
+    m_actionRemove->setEnabled( remove );
+    m_actionOpen->setEnabled( open );
+    m_actionParentDir->setEnabled( parent );
+
+    m_popupMenu->exec(pos);
 }
-
 
 void K3bDataView::slotNewDir()
 {
-    K3bDirItem* parent = currentDir();
+    K3bDirItem *parent = 0;
+    QModelIndex index = currentRoot();
+
+    if (index.isValid())
+        parent = dynamic_cast<K3bDirItem*>(m_model->itemForIndex(index));
+
+    if (!parent)
+        parent = m_doc->root();
 
     QString name;
     bool ok;
@@ -311,7 +295,6 @@ void K3bDataView::slotNewDir()
 
     m_doc->addEmptyDir( name, parent );
 }
-
 
 void K3bDataView::slotRenameItem()
 {
@@ -340,17 +323,6 @@ void K3bDataView::slotRemoveItem()
     }
 #endif
 }
-
-
-void K3bDataView::slotParentDir()
-{
-#if 0
-    if( m_dataFileView->currentDir() != m_doc->root() ) {
-        setCurrentDir( currentDir()->parent() );
-    }
-#endif
-}
-
 
 void K3bDataView::slotItemProperties()
 {
@@ -395,23 +367,6 @@ void K3bDataView::slotDoubleClicked( const QModelIndex& )
     m_contextMenuOnTreeView = ( sender() == m_dataDirTree );
     slotItemProperties();
 #endif
-}
-
-
-QList<K3bDataItem*> K3bDataView::selectedItems() const
-{
-    QList<K3bDataItem*> items;
-#if 0
-    if ( m_contextMenuOnTreeView ) {
-        if( m_dataDirTree->selectedDir() ) {
-           items.append( m_dataDirTree->selectedDir() );
-       }
-    }
-    else {
-        items = m_dataFileView->selectedItems();
-    }
-#endif
-    return items;
 }
 
 #include "k3bdataview.moc"

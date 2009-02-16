@@ -88,6 +88,13 @@ protected slots:
     void slotCurrentDirChanged();
     void slotCustomContextMenu(const QPoint &pos);
 
+    /**
+     * Go to the parent dir (meaning that the parent of the current dir is going
+     * to be selected in the dir panel, and its children will be shown in the 
+     * file panel
+     */
+    void slotParentDir();
+
 private:
     QTreeView* m_dirView;
     QTreeView* m_fileView;

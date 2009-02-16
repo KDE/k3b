@@ -149,4 +149,10 @@ void K3bStandardView::slotCustomContextMenu(const QPoint &pos)
     contextMenuForSelection(selection, view->viewport()->mapToGlobal(pos));
 }
 
+void K3bStandardView::slotParentDir()
+{
+    m_dirView->setCurrentIndex(m_dirProxy->mapFromSource(m_fileView->rootIndex().parent()));
+}
+
+
 #include "k3bstandardview.moc"

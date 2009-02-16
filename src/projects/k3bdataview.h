@@ -48,10 +48,7 @@ public:
     K3bDataView(K3bDataDoc* doc, QWidget *parent=0);
     virtual ~K3bDataView();
 
-    K3bDirItem* currentDir() const;
-
 public Q_SLOTS:
-    void setCurrentDir( K3bDirItem* );
     void slotBurn();
     void importSession();
     void clearImportedSession();
@@ -62,11 +59,9 @@ public Q_SLOTS:
     void addUrls( const KUrl::List& );
 
 private Q_SLOTS:
-    void showPopupMenu( const QPoint& );
     void slotRenameItem();
     void slotRemoveItem();
     void slotNewDir();
-    void slotParentDir();
     void slotItemProperties();
     void slotOpen();
     void slotDoubleClicked( const QModelIndex& );
@@ -78,17 +73,16 @@ protected:
 
     virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
 
+    /**
+     * reimplemented from @ref K3bStandardView 
+     */
+    virtual void contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos);
+
 private:
     K3bDataDoc* m_doc;
     K3b::DataProjectModel* m_model;
 
     void setupContextMenu();
-
-    /**
-     * \return a list of the selected items in the currently
-     * active view.
-     */
-    QList<K3bDataItem*> selectedItems() const;
 
     KMenu* m_popupMenu;
     KAction* m_actionParentDir;
@@ -97,12 +91,10 @@ private:
     KAction* m_actionNewDir;
     KAction* m_actionProperties;
     KAction* m_actionOpen;
+    QModelIndexList m_currentSelection;
 
     // used for mounting when importing old session
     K3bDevice::Device* m_device;
-
-    // used for the context menu (to distinguish between the dir and file view)
-    bool m_contextMenuOnTreeView;
 };
 
 
