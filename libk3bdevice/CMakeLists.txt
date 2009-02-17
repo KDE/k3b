@@ -16,6 +16,12 @@ set(k3bdevice_LIB_SRCS
    k3bcdtext.cpp )
 
 
+if(ENABLE_HAL_SUPPORT)
+  set(k3bdevice_LIB_SRCS 
+    ${k3bdevice_LIB_SRCS}
+    k3bhalconnection.cpp)
+endif(ENABLE_HAL_SUPPORT)
+
 kde4_add_library(k3bdevice SHARED ${k3bdevice_LIB_SRCS})
 
 target_link_libraries(k3bdevice

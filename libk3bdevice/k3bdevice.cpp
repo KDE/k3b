@@ -213,6 +213,7 @@ Solid::StorageAccess* K3bDevice::Device::solidStorage() const
          return storages.first().as<Solid::StorageAccess>();
 }
 
+
 bool K3bDevice::Device::init( bool bCheckWritingModes )
 {
     kDebug() << "(K3bDevice::Device) " << blockDeviceName() << ": init()";

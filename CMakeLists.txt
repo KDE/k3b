@@ -196,6 +196,10 @@ if(NOT WIN32)
    configure_file(k3b.lsm.cmake ${CMAKE_CURRENT_BINARY_DIR}/k3b.lsm )
 endif(NOT WIN32)
 
+if(NOT WIN32 AND NOT APPLE)
+  set(ENABLE_HAL_SUPPORT 1)
+endif(NOT WIN32 AND NOT APPLE)
+
 
 ##################  K3b apidox ################################
 if(K3B_BUILD_API_DOCS)

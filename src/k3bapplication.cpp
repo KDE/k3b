@@ -26,7 +26,9 @@
 
 #include <k3bcore.h>
 #include <k3bdevicemanager.h>
+#if ( ENABLE_HAL_SUPPORT )
 #include <k3bhalconnection.h>
+#endif
 #include <k3bexternalbinmanager.h>
 #include <k3bdefaultexternalprograms.h>
 #include <k3bglobals.h>
@@ -384,7 +386,7 @@ bool K3bApplication::Core::internalBlockDevice( K3bDevice::Device* dev )
             m_deviceBlockMap[dev] = mediaCache()->blockDevice( dev );
         }
 
-#ifdef HAVE_HAL
+#ifdef ENABLE_HAL_SUPPORT
         if( K3bDevice::HalConnection::instance()->lock( dev ) != K3bDevice::HalConnection::org_freedesktop_Hal_Success )
             kDebug() << "(K3bInterferingSystemsHandler) HAL lock failed.";
 #endif
@@ -409,7 +411,7 @@ void K3bApplication::Core::internalUnblockDevice( K3bDevice::Device* dev )
         m_deviceBlockMap.remove( dev );
     }
 
-#ifdef HAVE_HAL
+#ifdef ENABLE_HAL_SUPPORT
     K3bDevice::HalConnection::instance()->unlock( dev );
 #endif
 

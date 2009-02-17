@@ -20,3 +20,5 @@
 #cmakedefine HAVE_STAT64 1
 
 #define K3B_VERSION_STRING "${K3B_VERSION_STRING}"
+
+#cmakedefine ENABLE_HAL_SUPPORT
