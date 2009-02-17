@@ -443,7 +443,8 @@ bool K3b::DataProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction 
             itemDataStream >> p;
             items << ( K3bDataItem* )p;
         }
-        K3bDataUrlAddingDialog::copyMoveItems( items, dir, 0, action == Qt::CopyAction );
+        // always move the items, no copy from within the views
+        K3bDataUrlAddingDialog::copyMoveItems( items, dir, 0, false );
         return true;
     }
     else if ( KUrl::List::canDecode( data ) ) {
