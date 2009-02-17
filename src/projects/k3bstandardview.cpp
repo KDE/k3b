@@ -160,18 +160,17 @@ void K3bStandardView::slotRemoveSelectedIndexes()
     if (!model)
         return;
 
-    // ask the model to remove the requested indexes
-    // the selectionlist is being traversed backwards so
-    // that we start removing from the bottom items to the top
-    // without needing the index to be updated
-    // TODO: check if there is a better way to remove a list of indexes
-    // CHECK: it seems that sometimes removing more than one item at a time
-    // does not work
-    for (int i = m_currentSelection.count()-1; i>= 0; --i)
-    {
-        QModelIndex index = m_currentSelection[i];
+    // create a list of persistent model indexes to be able to remove all of them
+    QList<QPersistentModelIndex> indexes;
+    foreach(QModelIndex index, m_currentSelection)
+        indexes.append( QPersistentModelIndex(index) );
+
+
+    // and now ask the indexes to be removed
+    foreach(QPersistentModelIndex index, indexes)
         model->removeRow(index.row(), index.parent());
-    }
+
+    // clear the selection, just to make sure
     m_currentSelection.clear();
 }
 
