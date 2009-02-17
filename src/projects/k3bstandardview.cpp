@@ -80,8 +80,8 @@ void K3bStandardView::setModel(QAbstractItemModel *model)
             this, SLOT(slotCurrentDirChanged()));
 
     // select the first item from the model
-    if (model->rowCount() > 0)
-        m_dirView->setCurrentIndex(model->index(0,0));
+    if (m_dirProxy->rowCount() > 0)
+        m_dirView->setCurrentIndex(m_dirProxy->index(0,0));
 }
 
 void K3bStandardView::setShowDirPanel(bool show)

@@ -83,6 +83,10 @@ QModelIndex MovixProjectModel::index( int row, int column,
 {
     Q_UNUSED( parent );
 
+    // just to make sure it won't crash when the model has no items
+    if (row >= d->project->movixFileItems().count())
+        return QModelIndex();
+
     return createIndex( row, column, d->project->movixFileItems().at(row) );
 }
 
