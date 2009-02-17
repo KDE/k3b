@@ -172,7 +172,7 @@ QModelIndex K3b::DataProjectModel::indexForItem( K3bDataItem* item ) const
 }
 
 
-int K3b::DataProjectModel::columnCount( const QModelIndex& ) const
+int K3b::DataProjectModel::columnCount( const QModelIndex& index ) const
 {
     // the root item has only the first column
     if (!index.isValid())
