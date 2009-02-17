@@ -1,9 +1,10 @@
 /*
  *
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2009      Arthur Renato Mello <arthur@mandriva.com>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +15,7 @@
 
 
 #include "k3bmovixview.h"
+#include "k3bmovixprojectmodel.h"
 #include "k3bmovixdoc.h"
 #include "k3bmovixlistview.h"
 #include "k3bmovixburndialog.h"
@@ -40,12 +42,17 @@
 #include <KToolBar>
 
 K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent )
-    : K3bView( doc, parent ),
+    : K3bStandardView( doc, parent ),
       m_doc(doc)
 {
-    m_listView = new K3bMovixListView( m_doc, this );
-    setMainWidget( m_listView );
+    m_model = new K3b::MovixProjectModel(m_doc, this);
+    // set the model for the K3bStandardView's views
+    setModel(m_model);
 
+    // and hide the side panel as the audio project has no tree hierarchy
+    setShowDirPanel(false);
+
+#if 0
     connect( m_listView, SIGNAL(contextMenuRequested( Q3ListViewItem*, const QPoint& , int )),
              this, SLOT(slotContextMenuRequested(Q3ListViewItem*, const QPoint& , int )) );
 
@@ -82,6 +89,7 @@ K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent )
     connect( m_volumeIDEdit, SIGNAL(textChanged(const QString&)),
              m_doc,
              SLOT(setVolumeID(const QString&)) );
+#endif
 
     connect( m_doc, SIGNAL(changed()), this, SLOT(slotDocChanged()) );
 }

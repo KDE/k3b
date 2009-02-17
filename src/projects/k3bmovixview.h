@@ -1,9 +1,10 @@
 /* 
  *
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2009      Arthur Renato Mello <arthur@mandriva.com>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +18,7 @@
 #ifndef _K3B_MOVIX_VIEW_H_
 #define _K3B_MOVIX_VIEW_H_
 
-#include <k3bview.h>
+#include <k3bstandardview.h>
 
 class K3bMovixDoc;
 class K3bMovixListView;
@@ -27,8 +28,11 @@ class Q3ListViewItem;
 class QPoint;
 class QLineEdit;
 
+namespace K3b {
+    class MovixProjectModel;
+}
 
-class K3bMovixView : public K3bView
+class K3bMovixView : public K3bStandardView
 {
     Q_OBJECT
 
@@ -51,6 +55,7 @@ protected:
 
 private:
     K3bMovixDoc* m_doc;
+    K3b::MovixProjectModel *m_model;
 
     KAction* m_actionProperties;
     KAction* m_actionRemove;

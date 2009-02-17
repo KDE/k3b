@@ -69,6 +69,7 @@ set(k3b_project_SRCS
   projects/k3bmovixlistview.cpp 
   projects/k3bmovixoptionswidget.cpp 
   projects/k3bmovixview.cpp 
+  projects/k3bmovixprojectmodel.cpp
   projects/k3bvideodvdburndialog.cpp 
   projects/k3bvideodvdview.cpp 
   projects/k3bvcdburndialog.cpp 
