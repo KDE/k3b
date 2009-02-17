@@ -1,12 +1,15 @@
-macro_optional_find_package(Lame)
+if(BUILD_SOX_ENCODER_PLUGIN)
+  add_subdirectory( sox )
+endif(BUILD_SOX_ENCODER_PLUGIN)
 
-add_subdirectory( sox )
-add_subdirectory( external )
+if(BUILD_EXTERNAL_ENCODER_PLUGIN)
+  add_subdirectory( external )
+endif(BUILD_EXTERNAL_ENCODER_PLUGIN)
 
-if(OGGVORBIS_FOUND)
+if(BUILD_OGGVORBIS_ENCODER_PLUGIN)
    add_subdirectory(ogg)
-endif(OGGVORBIS_FOUND)
+endif(BUILD_OGGVORBIS_ENCODER_PLUGIN)
 
-if(LAME_FOUND)
+if(BUILD_LAME_ENCODER_PLUGIN)
    add_subdirectory(lame)
-endif(LAME_FOUND)
+endif(BUILD_LAME_ENCODER_PLUGIN)
