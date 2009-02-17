@@ -58,7 +58,7 @@ public:
     QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
     QModelIndex parent( const QModelIndex& index ) const;
     int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-    Qt::ItemFlags flags( const QModelIndex& index ) const;
+    virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
     bool hasChildren( const QModelIndex& parent = QModelIndex() ) const;
     bool canFetchMore( const QModelIndex& parent ) const;
     void fetchMore( const QModelIndex& parent );

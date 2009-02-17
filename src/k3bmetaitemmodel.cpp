@@ -53,7 +53,7 @@ namespace {
 
         // the model index as returned by the original model, not
         // to be used in the public API (exception: mapToSubModel())
-        QModelIndex originalModelIndex;
+        QPersistentModelIndex originalModelIndex;
 
         // the child nodes
         QVector<Node> children;
@@ -548,9 +548,25 @@ bool K3bMetaItemModel::dropMimeData( const QMimeData* data, Qt::DropAction actio
         // for places the originalModelIndex will be invalid
         return parentNode->model()->dropMimeData( data, action, row, column, parentNode->originalModelIndex );
     }
-    else {
-        return false;
+    else if ( row != -1 ) {
+        Node *node = d->getRootNode(row);
+
+        if (node->isPlace())
+        {
+            // if the node is place, threat it like if it was being dropped on an empty space of the 
+            // original model
+            return node->model()->dropMimeData(data, action, -1, -1, QModelIndex());
+        }
+        else
+        {
+            // if it is not a place (which means the original model is a flat model)
+            // drop like if it was being dropped in the row/col of the original index
+            node->model()->dropMimeData(data, action, node->originalModelIndex.row(), node->originalModelIndex.column(), QModelIndex());
+        }
     }
+
+
+    return false;
 }
 
 
@@ -577,6 +593,7 @@ QMimeData* K3bMetaItemModel::mimeData( const QModelIndexList& indexes ) const
 Qt::DropActions K3bMetaItemModel::supportedDropActions() const
 {
     Qt::DropActions a = Qt::IgnoreAction;
+
     for ( int i = 0; i < d->places.count(); ++i ) {
         a |= d->places[i].model()->supportedDropActions();
     }
