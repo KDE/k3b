@@ -47,24 +47,7 @@ void K3bUrlNavigator::setDevice( K3bDevice::Device* dev )
 
 void K3bUrlNavigator::urlActivated( const KUrl& url )
 {
-	// Check if the url is a device mount point. If so, find its original device name
-	KSharedPtr<KMountPoint> mountPoint = KMountPoint::currentMountPoints().findByPath( url.path() );
-	if( !mountPoint.isNull() )
-	{
-		if( K3bDevice::Device* dev = k3bcore->deviceManager()->findDevice( mountPoint->realDeviceName() ) ) {
-			emit activated( dev );
-			return;
-		}
-	}
-	
-	// Check if the url is a device name
-	if( K3bDevice::Device* dev = K3b::urlToDevice( url ) ) {
-		emit activated( dev );
-	}
-	// For other cases it's just a directory name
-	else {
-		emit activated( url );
-	}
+    emit activated( url );
 }
 
 #include "k3burlnavigator.moc"

@@ -161,13 +161,22 @@ K3bDevice::Device* K3bDevice::DeviceManager::findDevice( const QString& devicena
         kDebug() << "(K3bDevice::DeviceManager) request for empty device!";
         return 0;
     }
-    QListIterator<K3bDevice::Device*> it( d->allDevices );
-    while( it.hasNext() ) {
-        Device* dev = it.next();
+
+    foreach( Device* dev, d->allDevices ) {
         if( dev->blockDeviceName() == devicename )
             return dev;
     }
 
+    return 0;
+}
+
+
+K3bDevice::Device* K3bDevice::DeviceManager::findDeviceByUdi( const QString& udi )
+{
+    foreach( Device* dev, d->allDevices ) {
+        if ( dev->solidDevice().udi() == udi )
+            return dev;
+    }
     return 0;
 }
 

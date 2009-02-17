@@ -1,5 +1,5 @@
 [Desktop Entry]
-ServiceTypes=KonqPopupMenu/Plugin;media/audiocd;media/mixedcd;
+X-KDE-Solid-Predicate=[StorageVolume.ignored == false AND OpticalDisc.availableContent & 'Audio']
 Actions=K3bRip;
 Type=Service
 X-KDE-Priority=TopLevel
@@ -41,5 +41,5 @@ Name[tr]=K3b ile Sayısal Ses Aktar
 Name[uk]=Витягти цифрове аудіо через K3b
 Name[x-test]=xxExtract Digital Audio with K3bxx
 Name[zh_CN]=用 K3b 抓取数字音频
-Exec=k3b --cddarip %u
+Exec=k3b --cddarip %i
 Icon=k3b

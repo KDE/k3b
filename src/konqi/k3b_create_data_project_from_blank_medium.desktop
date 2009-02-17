@@ -1,0 +1,10 @@
+[Desktop Entry]
+X-KDE-Solid-Predicate=[StorageVolume.ignored == false AND OpticalDisc.isBlank == true]
+Actions=K3bDataProject;
+Type=Service
+X-KDE-Priority=TopLevel
+
+[Desktop Action K3bDataProject]
+Exec=k3b --device %i --data
+Name=Create File Project with K3b...
+Icon=k3b

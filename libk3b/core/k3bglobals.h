@@ -214,12 +214,6 @@ namespace K3b
     QString externalBinDeviceParameter( K3bDevice::Device* dev, const K3bExternalBin* );
 
     /**
-     * Convert an url pointing to a local device to a K3bDevice.
-     * Supports media:// and system::// urls.
-     */
-    LIBK3B_EXPORT K3bDevice::Device* urlToDevice( const KUrl& deviceUrl );
-
-    /**
      * Tries to convert urls from local protocols != "file" to file (for now supports media:/)
      */
     LIBK3B_EXPORT KUrl convertToLocalUrl( const KUrl& url );

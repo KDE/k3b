@@ -23,10 +23,11 @@
 #include "k3bpassivepopup.h"
 #include "k3blsofwrapperdialog.h"
 #include "k3bfirstrun.h"
+#include "config-k3b.h"
 
 #include <k3bcore.h>
 #include <k3bdevicemanager.h>
-#if ( ENABLE_HAL_SUPPORT )
+#ifdef ENABLE_HAL_SUPPORT
 #include <k3bhalconnection.h>
 #endif
 #include <k3bexternalbinmanager.h>
@@ -250,25 +251,25 @@ bool K3bApplication::processCmdLineArgs()
              args->isSet("copydvd")) {
         showTips = false;
         dialogOpen = true;
-        m_mainWindow->mediaCopy( K3b::urlToDevice( KUrl( args->getOption( "copycd"  ) ) ) );
+        m_mainWindow->mediaCopy( m_core->deviceManager()->findDeviceByUdi( args->getOption( "copycd"  ) ) );
     }
     else if( args->isSet("erasecd") ||
              args->isSet("formatdvd") ||
              args->isSet("format")) {
         showTips = false;
         dialogOpen = true;
-        m_mainWindow->formatMedium( K3b::urlToDevice( KUrl( args->getOption( "erasecd" )  ) ) );
+        m_mainWindow->formatMedium( m_core->deviceManager()->findDeviceByUdi( args->getOption( "erasecd" ) ) );
     }
 
     // no dialog used here
     if( args->isSet( "cddarip" ) ) {
-        m_mainWindow->cddaRip( K3b::urlToDevice( KUrl( args->getOption( "cddarip" )  ) ) );
+        m_mainWindow->cddaRip( m_core->deviceManager()->findDeviceByUdi( args->getOption( "cddarip" ) ) );
     }
     else if( args->isSet( "videodvdrip" ) ) {
-        m_mainWindow->videoDvdRip( K3b::urlToDevice( KUrl( args->getOption( "videodvdrip" )  ) ) );
+        m_mainWindow->videoDvdRip( m_core->deviceManager()->findDeviceByUdi( args->getOption( "videodvdrip" ) ) );
     }
     else if( args->isSet( "videocdrip" ) ) {
-        m_mainWindow->videoCdRip( K3b::urlToDevice( KUrl(  args->getOption( "videocdrip" ) ) ) );
+        m_mainWindow->videoCdRip( m_core->deviceManager()->findDeviceByUdi(  args->getOption( "videocdrip" ) ) );
     }
 
     if( !dialogOpen && args->isSet( "burn" ) ) {
@@ -278,14 +279,7 @@ bool K3bApplication::processCmdLineArgs()
             static_cast<K3bView*>( m_core->projectManager()->activeDoc()->view() )->slotBurn();
         }
     }
-#if 0
-    // FIXME: seems not like the right place...
-    if( args->isSet( "ao" ) )
-        if( !m_audioServer->setOutputMethod( args->getOption( "ao" ) ) )
-            K3bPassivePopup::showPopup( i18n("Could not find Audio Output plugin '%1'",args->getOption("ao") ),
-                                        i18n("Initialization Problem"),
-                                        K3bPassivePopup::Warning );
-#endif
+
     args->clear();
 
     return showTips;

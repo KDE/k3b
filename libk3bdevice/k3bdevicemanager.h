@@ -82,6 +82,13 @@ namespace K3bDevice {
         Device* findDevice( const QString& devicename );
 
         /**
+         * Search a device by UDI.
+         *
+         * \return The corresponding device or 0 if there is no such device.
+         */
+        Device* findDeviceByUdi( const QString& udi );
+
+        /**
          * Before getting the devices do a @ref scanBus().
          * \return List of all cd writer devices.
          * \deprecated use cdWriter()

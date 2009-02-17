@@ -1,0 +1,10 @@
+[Desktop Entry]
+X-KDE-Solid-Predicate=[ StorageVolume.ignored == false AND OpticalDisc.availableContent == 'Data|VideoDvd' ]
+Actions=K3bCopy;
+Type=Service
+X-KDE-Priority=TopLevel
+
+[Desktop Action K3bCopy]
+Name=Copy with K3b
+Exec=k3b --copy %i
+Icon=k3b

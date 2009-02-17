@@ -432,33 +432,6 @@ QString K3b::resolveLink( const QString& file )
 }
 
 
-K3bDevice::Device* K3b::urlToDevice( const KUrl& deviceUrl )
-{
-#ifdef __GNUC__
-#warning kded mediamanager: is that now solid?
-#endif
-    return NULL;
-#if 0
-    if( deviceUrl.protocol() == "media" || deviceUrl.protocol() == "system" ) {
-        kDebug() << "(K3b) Asking mediamanager for " << deviceUrl.fileName();
-        DCOPRef mediamanager("kded", "mediamanager");
-        DCOPReply reply = mediamanager.call("properties(QString)", deviceUrl.fileName());
-        QStringList properties = reply;
-        if( !reply.isValid() || properties.count() < 6 ) {
-            kError() << "(K3b) Invalid reply from mediamanager" ;
-            return 0;
-        }
-        else {
-            kDebug() << "(K3b) Reply from mediamanager " << properties[5];
-            return k3bcore->deviceManager()->findDevice( properties[5] );
-        }
-    }
-
-    return k3bcore->deviceManager()->findDevice( deviceUrl.path() );
-#endif
-}
-
-
 KUrl K3b::convertToLocalUrl( const KUrl& url )
 {
     if( !url.isLocalFile() ) {
