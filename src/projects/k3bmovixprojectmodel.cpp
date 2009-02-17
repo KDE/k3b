@@ -49,7 +49,7 @@ MovixProjectModel::MovixProjectModel( K3bMovixDoc* doc, QObject* parent )
 {
     d->project = doc;
 
-    connect(doc, SIGNAL(changed()), this, SLOT(_k_docChanged()));
+    connect(doc, SIGNAL(newMovixFileItems()), this, SLOT(_k_docChanged()));
 }
 
 MovixProjectModel::~MovixProjectModel()
@@ -64,54 +64,41 @@ K3bMovixDoc* MovixProjectModel::project() const
 
 K3bMovixFileItem* MovixProjectModel::itemForIndex( const QModelIndex& index ) const
 {
-#if 0
     if ( index.isValid() )
     {
         Q_ASSERT( index.internalPointer() );
-        return static_cast<K3bVcdTrack*>( index.internalPointer() );
+        return static_cast<K3bMovixFileItem*>( index.internalPointer() );
     }
-#endif
 
     return 0;
 }
 
 QModelIndex MovixProjectModel::indexForItem( K3bMovixFileItem* track ) const
 {
-#if 0
-    return createIndex( track->index(), 0, track );
-#endif
-    return QModelIndex();
+    return createIndex( d->project->indexOf(track), 0, track );
 }
 
 QModelIndex MovixProjectModel::index( int row, int column,
     const QModelIndex& parent ) const
 {
-#if 0
     Q_UNUSED( parent );
 
-    return createIndex( row, column, d->project->at(row) );
-#endif
-    return QModelIndex();
+    return createIndex( row, column, d->project->movixFileItems().at(row) );
 }
 
 QModelIndex MovixProjectModel::parent( const QModelIndex& index ) const
 {
-#if 0
     Q_UNUSED( index );
-#endif
 
     return QModelIndex();
 }
 
 int MovixProjectModel::rowCount( const QModelIndex& parent) const
 {
-#if 0
     if ( parent.isValid() )
         return 0;
     else
-        return d->project->numOfTracks();
-#endif
-    return 0;
+        return d->project->movixFileItems().size();
 }
 
 int MovixProjectModel::columnCount( const QModelIndex& parent) const
@@ -124,144 +111,109 @@ int MovixProjectModel::columnCount( const QModelIndex& parent) const
 bool MovixProjectModel::setData( const QModelIndex& index,
     const QVariant& value, int role )
 {
-#if 0
     if ( index.isValid() )
     {
-        K3bVcdTrack* track = trackForIndex( index );
+        K3bMovixFileItem* item = itemForIndex( index );
         if ( role == Qt::EditRole )
         {
             if ( index.column() == TitleColumn )
             {
-                track->setTitle( value.toString() );
+                item->setK3bName( value.toString() );
                 return true;
             }
         }
     }
-#endif
+
     return false;
 }
 
 QVariant MovixProjectModel::data( const QModelIndex& index, int role ) const
 {
-#if 0
     if ( index.isValid() ) {
-        K3bVcdTrack* track = trackForIndex( index );
+        K3bMovixFileItem* item = itemForIndex( index );
 
         switch( index.column() ) {
             case NoColumn:
                 if( role == Qt::DisplayRole ||
                     role == Qt::EditRole )
                 {
-                    return track->index() + 1;
+                    return d->project->indexOf(item);
                 }
                 break;
             case TitleColumn:
                 if( role == Qt::DisplayRole ||
                     role == Qt::EditRole )
                 {
-                    return track->title();
+                    return item->k3bName();
                 }
                 break;
             case TypeColumn:
                 if( role == Qt::DisplayRole ||
                     role == Qt::EditRole )
                 {
-                    return track->mpegTypeS();
-                }
-                break;
-            case ResolutionColumn:
-                if( role == Qt::DisplayRole ||
-                    role == Qt::EditRole )
-                {
-                    return track->resolution();
-                }
-                break;
-            case HighResolutionColumn:
-                if( role == Qt::DisplayRole ||
-                    role == Qt::EditRole )
-                {
-                    return track->highresolution();
-                }
-                break;
-            case FrameRateColumn:
-                if( role == Qt::DisplayRole ||
-                    role == Qt::EditRole )
-                {
-                    return track->video_frate();
-                }
-                break;
-            case MuxRateColumn:
-                if( role == Qt::DisplayRole ||
-                    role == Qt::EditRole )
-                {
-                    return QString::number( track->muxrate() );
-                }
-                break;
-            case DurationColumn:
-                if( role == Qt::DisplayRole ||
-                    role == Qt::EditRole )
-                {
-                    return track->duration();
+                    if( item->isSymLink() )
+                        return i18n("Link to %1", item->mimeType()->comment());
+                    else
+                        return item->mimeType()->comment();
                 }
                 break;
             case SizeColumn:
                 if( role == Qt::DisplayRole ||
                     role == Qt::EditRole )
                 {
-                    return KIO::convertSize( track->size() );
+                    return KIO::convertSize( item->size() );
                 }
                 break;
-            case FilenameColumn:
+            case LocalPathColumn:
                 if( role == Qt::DisplayRole ||
                     role == Qt::EditRole )
                 {
-                    return track->fileName();
+                    return item->localPath();
+                }
+                break;
+            case LinkColumn:
+                if( role == Qt::DisplayRole ||
+                    role == Qt::EditRole )
+                {
+                    if(item->isValid())
+                        return item->linkDest();
+                    else
+                        return item->linkDest() + i18n(" (broken)");
                 }
                 break;
         }
     }
-#endif
+
     return QVariant();
 }
 
 QVariant MovixProjectModel::headerData( int section,
     Qt::Orientation orientation, int role ) const
 {
-#if 0
     Q_UNUSED( orientation );
 
     if ( role == Qt::DisplayRole ) {
         switch( section ) {
             case NoColumn:
-                return i18nc( "VideoCD Track Number", "No." );
+                return i18nc( "Movix File Position", "No." );
             case TitleColumn:
-                return i18nc( "VideoCD Track Title", "Title" );
+                return i18nc( "Movix File Title", "Title" );
             case TypeColumn:
-                return i18nc( "VideoCD Track Type (ie. MPEG1)", "Type" );
-            case ResolutionColumn:
-                return i18nc( "VideoCD Track Resolution", "Resolution" );
-            case HighResolutionColumn:
-                return i18nc(   "VideoCD Track High Resolution",
-                                "High Resolution" );
-            case FrameRateColumn:
-                return i18nc( "VideoCD Track Framerate", "Framerate" );
-            case MuxRateColumn:
-                return i18nc( "VideoCD Track Muxrate", "Muxrate" );
-            case DurationColumn:
-                return i18nc( "VideoCD Track Duration", "Duration" );
+                return i18nc( "Movix File Type(ie. MPEG)", "Type" );
             case SizeColumn:
-                return i18nc( "VideoCD Track File Size", "File Size" );
-            case FilenameColumn:
-                return i18nc( "VideoCD Track Filename", "Filename" );
+                return i18nc( "Movix File Size", "Size" );
+            case LocalPathColumn:
+                return i18nc( "Movix File Path", "Local Path" );
+            case LinkColumn:
+                return i18nc( "Movix File Link", "Link" );
         }
     }
-#endif
+
     return QVariant();
 }
 
 Qt::ItemFlags MovixProjectModel::flags( const QModelIndex& index ) const
 {
-#if 0
     if ( index.isValid() )
     {
         Qt::ItemFlags f = Qt::ItemIsSelectable |
@@ -280,8 +232,6 @@ Qt::ItemFlags MovixProjectModel::flags( const QModelIndex& index ) const
     {
         return QAbstractItemModel::flags( index )|Qt::ItemIsDropEnabled;
     }
-#endif
-    return QAbstractItemModel::flags( index );
 }
 
 Qt::DropActions MovixProjectModel::supportedDropActions() const
@@ -292,18 +242,17 @@ Qt::DropActions MovixProjectModel::supportedDropActions() const
 QMimeData* MovixProjectModel::mimeData( const QModelIndexList& indexes ) const
 {
     QMimeData* mime = new QMimeData();
-#if 0
 
-    QList<K3bVcdTrack*> tracks;
+    QList<K3bMovixFileItem*> items;
     KUrl::List urls;
 
     foreach( const QModelIndex& index, indexes ) {
-        K3bVcdTrack* track = trackForIndex( index );
-        tracks << track;
+        K3bMovixFileItem* item = itemForIndex( index );
+        items << item;
 
-        if( !urls.contains( KUrl( track->absolutePath() ) ) )
+        if( !urls.contains( KUrl( item->localPath() ) ) )
         {
-            urls << KUrl( track->absolutePath() );
+            urls << KUrl( item->localPath() );
         }
     }
     urls.populateMimeData( mime );
@@ -312,12 +261,11 @@ QMimeData* MovixProjectModel::mimeData( const QModelIndexList& indexes ) const
     QByteArray trackData;
     QDataStream trackDataStream( &trackData, QIODevice::WriteOnly );
 
-    foreach( K3bVcdTrack* track, tracks ) {
-        trackDataStream << ( qint64 )track;
+    foreach( K3bMovixFileItem* item, items ) {
+        trackDataStream << ( qint64 )item;
     }
 
-    mime->setData( "application/x-k3bvcdtrack", trackData );
-#endif
+    mime->setData( "application/x-k3bmovixfileitem", trackData );
 
     return mime;
 }
@@ -325,9 +273,7 @@ QMimeData* MovixProjectModel::mimeData( const QModelIndexList& indexes ) const
 QStringList MovixProjectModel::mimeTypes() const
 {
     QStringList s = KUrl::List::mimeDataTypes();
-#if 0
-    s += QString::fromLatin1( "application/x-k3bvcdtrack" );
-#endif
+    s += QString::fromLatin1( "application/x-k3bmovixfileitem" );
 
     return s;
 }
@@ -335,42 +281,41 @@ QStringList MovixProjectModel::mimeTypes() const
 bool MovixProjectModel::dropMimeData( const QMimeData* data,
     Qt::DropAction action, int row, int column, const QModelIndex& parent )
 {
-#if 0
     Q_UNUSED( column );
 
     if (action == Qt::IgnoreAction)
         return true;
 
-    QList<K3bVcdTrack*> tracks;
-    if ( data->hasFormat( "application/x-k3bvcdtrack" ) )
+    QList<K3bMovixFileItem*> items;
+    if ( data->hasFormat( "application/x-k3bmovixfileitem" ) )
     {
-        QByteArray trackData = data->data( "application/x-k3bvcdtrack" );
-        QDataStream trackDataStream( trackData );
-        while ( !trackDataStream.atEnd() )
+        QByteArray itemData = data->data( "application/x-k3bmovixfileitem" );
+        QDataStream itemDataStream( itemData );
+        while ( !itemDataStream.atEnd() )
         {
             qint64 p;
-            trackDataStream >> p;
-            tracks << ( K3bVcdTrack* )p;
+            itemDataStream >> p;
+            items << ( K3bMovixFileItem* )p;
         }
 
-        K3bVcdTrack *prev;
+        K3bMovixFileItem *prev;
         if(parent.isValid())
         {
-            int index = trackForIndex(parent)->index();
+            int index = d->project->indexOf(itemForIndex(parent)) - 1;
             if(index == 0)
                 prev = 0;
             else
-                prev = d->project->at(index - 1);
+                prev = d->project->movixFileItems().at(index - 1);
         }
         else if(row >= 0)
-            prev = d->project->at(row - 1);
+            prev = d->project->movixFileItems().at(row - 1);
         else
-            prev = d->project->tracks()->last();
+            prev = d->project->movixFileItems().last();
 
-        foreach( K3bVcdTrack* track, tracks )
+        foreach( K3bMovixFileItem* item, items )
         {
-            d->project->moveTrack(track, prev);
-            prev = track;
+            d->project->moveMovixItem(item, prev);
+            prev = item;
         }
 
         return true;
@@ -380,18 +325,20 @@ bool MovixProjectModel::dropMimeData( const QMimeData* data,
     {
         int pos;
         if(parent.isValid())
-            pos = trackForIndex(parent)->index();
+            pos = d->project->indexOf(itemForIndex(parent)) - 1;
         else if(row >= 0)
             pos = row;
         else
-            pos = d->project->numOfTracks();
+            pos = d->project->movixFileItems().size();
 
         KUrl::List urls = KUrl::List::fromMimeData( data );
-        d->project->addTracks( urls, pos );
+
+        foreach( KUrl url, urls )
+            d->project->addMovixFile( url, pos );
 
         return true;
     }
-#endif
+
     return false;
 }
 

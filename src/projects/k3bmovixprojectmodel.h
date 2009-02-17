@@ -33,13 +33,9 @@ namespace K3b {
                 NoColumn = 0,
                 TitleColumn,
                 TypeColumn,
-                ResolutionColumn,
-                HighResolutionColumn,
-                FrameRateColumn,
-                MuxRateColumn,
-                DurationColumn,
                 SizeColumn,
-                FilenameColumn,
+                LocalPathColumn,
+                LinkColumn,
                 NumColumns
             };
 

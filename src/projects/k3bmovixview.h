@@ -21,7 +21,6 @@
 #include <k3bstandardview.h>
 
 class K3bMovixDoc;
-class K3bMovixListView;
 class KAction;
 class KMenu;
 class Q3ListViewItem;
@@ -42,7 +41,6 @@ public:
 
 private Q_SLOTS:
     void slotContextMenuRequested(Q3ListViewItem*, const QPoint& , int );
-    void slotRemoveItems();
     void slotRemoveSubTitleItems();
     void showPropertiesDialog();
     void slotAddSubTitleFile();
@@ -50,8 +48,6 @@ private Q_SLOTS:
 
 protected:
     virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
-
-    K3bMovixListView* m_listView;
 
 private:
     K3bMovixDoc* m_doc;

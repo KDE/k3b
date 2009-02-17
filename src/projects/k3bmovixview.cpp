@@ -49,13 +49,8 @@ K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent )
     // set the model for the K3bStandardView's views
     setModel(m_model);
 
-    // and hide the side panel as the audio project has no tree hierarchy
+    // and hide the side panel as the movix project has no tree hierarchy
     setShowDirPanel(false);
-
-#if 0
-    connect( m_listView, SIGNAL(contextMenuRequested( Q3ListViewItem*, const QPoint& , int )),
-             this, SLOT(slotContextMenuRequested(Q3ListViewItem*, const QPoint& , int )) );
-
 
     // setup actions
     m_actionProperties = K3b::createAction( this, i18n("Properties"), "document-properties",
@@ -89,7 +84,6 @@ K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent )
     connect( m_volumeIDEdit, SIGNAL(textChanged(const QString&)),
              m_doc,
              SLOT(setVolumeID(const QString&)) );
-#endif
 
     connect( m_doc, SIGNAL(changed()), this, SLOT(slotDocChanged()) );
 }
@@ -117,6 +111,7 @@ void K3bMovixView::slotContextMenuRequested(Q3ListViewItem* item, const QPoint& 
 
 void K3bMovixView::showPropertiesDialog()
 {
+#if 0
     QList<K3bDataItem*> dataItems;
 
     // get selected item
@@ -133,28 +128,13 @@ void K3bMovixView::showPropertiesDialog()
     }
     else
         slotProperties();
-}
-
-
-void K3bMovixView::slotRemoveItems()
-{
-    QList<Q3ListViewItem*> list = m_listView->selectedItems();
-
-    if( list.isEmpty() )
-        kDebug() << "nothing to remove";
-
-    Q_FOREACH( Q3ListViewItem* item, list ) {
-        K3bMovixListViewItem* vi = static_cast<K3bMovixListViewItem*>(item);
-        if( vi->isMovixFileItem() )
-            m_doc->removeItem( vi->fileItem() );
-        else
-            m_doc->removeSubTitleItem( ((K3bMovixSubTitleViewItem*)item)->fileItem() );
-    }
+#endif
 }
 
 
 void K3bMovixView::slotRemoveSubTitleItems()
 {
+#if 0
     QList<Q3ListViewItem*> list = m_listView->selectedItems();
 
     if( list.isEmpty() )
@@ -164,11 +144,13 @@ void K3bMovixView::slotRemoveSubTitleItems()
         K3bMovixListViewItem* vi = static_cast<K3bMovixListViewItem*>(item);
         m_doc->removeSubTitleItem( vi->fileItem() );
     }
+#endif
 }
 
 
 void K3bMovixView::slotAddSubTitleFile()
 {
+#if 0
     if ( m_listView->selectedItems().isEmpty() )
         return;
     Q3ListViewItem* item = m_listView->selectedItems().first();
@@ -182,6 +164,7 @@ void K3bMovixView::slotAddSubTitleFile()
                 KMessageBox::error( 0, i18n("K3b currently only supports local files.") );
         }
     }
+#endif
 }
 
 
