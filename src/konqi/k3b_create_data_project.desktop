@@ -1,0 +1,11 @@
+[Desktop Entry]
+Actions=CreateK3bDataProject;
+Type=Service
+ServiceTypes=KonqPopupMenu/Plugin
+MimeType=all/all;
+ExcludeServiceTypes=application/x-iso;
+
+[Desktop Action CreateK3bDataProject]
+Exec=k3b --data %F
+Name=Create file project with K3b...
+Icon=k3b

@@ -1,7 +1,9 @@
 [Desktop Entry]
+Type=Service
 Actions=CreateK3bAudioProject;
 Encoding=UTF-8
-ServiceTypes=KonqPopupMenu/Plugin;audio/x-mp3;audio/x-vorbis;application/x-ogg;audio/x-mp2;audio/x-mpegurl;audio/x-wav;
+ServiceTypes=KonqPopupMenu/Plugin
+MimeType=audio/*;
 
 [Desktop Action CreateK3bAudioProject]
 Exec=k3b --audiocd %F

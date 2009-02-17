@@ -1,10 +1,11 @@
 [Desktop Entry]
+Type=Service
 Actions=WriteCdImage;
-Encoding=UTF-8
-ServiceTypes=KonqPopupMenu/Plugin;application/x-cue;
+ServiceTypes=KonqPopupMenu/Plugin
+MimeType=application/x-cue;
 
 [Desktop Action WriteCdImage]
-Exec=k3b --cdimage %F
+Exec=k3b --image %F
 Name=Write CD Image with K3b...
 Name[be]=Запісаць адбітак CD пры дапамозе K3b
 Name[bg]=Запис на CD образ с K3b...

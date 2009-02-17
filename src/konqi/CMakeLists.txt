@@ -7,4 +7,11 @@ install( FILES
   DESTINATION
   ${DATA_INSTALL_DIR}/solid/actions )
 
-message("FIXME: install the serivemenus")
+install( FILES
+  k3b_create_audio_cd.desktop
+  k3b_create_data_project.desktop
+  k3b_create_video_cd.desktop
+  k3b_write_bin_image.desktop
+  k3b_write_iso_image.desktop
+  DESTINATION
+  ${SERVICES_INSTALL_DIR}/ServiceMenus )
