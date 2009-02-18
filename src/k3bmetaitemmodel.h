@@ -50,7 +50,8 @@ public:
     QModelIndex mapFromSubModel( const QModelIndex& index ) const;
 
     /**
-     * Always returns 1 as K3bMetaItemModel does not support multiple columns yet
+     * Returns the column count for the given index
+     * For the root index it always return 1
      */
     virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
 

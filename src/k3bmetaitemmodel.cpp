@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
+ *           (C) 2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -176,10 +177,13 @@ namespace {
 
         Q_ASSERT( index.isValid() );
 
-        Node* node = findNodeForOriginalIndex( index );
+        // all the node mapping is done on the first col, so make sure we use 
+        // an index on the first col
+        QModelIndex firstColIndex = index.model()->index(index.row(), 0, index.parent());
+        Node* node = findNodeForOriginalIndex( firstColIndex );
         if ( !node ) {
-            Node* parentNode = createNodeForOriginalIndex( index.parent() );
-            node = parentNode->getChildNode( index );
+            Node* parentNode = createNodeForOriginalIndex( firstColIndex.parent() );
+            node = parentNode->getChildNode( firstColIndex );
         }
 
         return node;
@@ -251,6 +255,31 @@ public:
 
         return 0;
     }
+
+    /**
+     * returns the node pointer for the given index.
+     * This makes it easier to handle multiple column
+     */
+    Node* nodeForIndex( const QModelIndex &index )
+    {
+        // all indexes store the node in their internal pointers
+        if (!index.isValid())
+            return 0;
+
+        return static_cast<Node*>(index.internalPointer());
+    }
+
+    /**
+     * returns an index from the source model for the given index
+     */
+    QModelIndex sourceIndex( const QModelIndex &index )
+    {
+        Node *node = nodeForIndex(index);
+        if (!node || node->isPlace())
+            return QModelIndex();
+
+        return node->model()->index( node->originalModelIndex.row(), index.column(), node->originalModelIndex.parent() );
+    }
 };
 
 
@@ -272,7 +301,8 @@ QAbstractItemModel* K3bMetaItemModel::subModelForIndex( const QModelIndex& index
 {
     if ( index.isValid() ) {
         Q_ASSERT( index.model() == this );
-        Node* node = static_cast<Node*>( index.internalPointer() );
+
+        Node* node = d->nodeForIndex( index );
         return node->model();
     }
     else {
@@ -285,8 +315,7 @@ QModelIndex K3bMetaItemModel::mapToSubModel( const QModelIndex& index ) const
 {
     if ( index.isValid() ) {
         Q_ASSERT( index.model() == this );
-        Node* node = static_cast<Node*>( index.internalPointer() );
-        return node->originalModelIndex;
+        return d->sourceIndex( index );
     }
     else {
         return QModelIndex();
@@ -309,25 +338,17 @@ QModelIndex K3bMetaItemModel::mapFromSubModel( const QModelIndex& index ) const
 
 int K3bMetaItemModel::columnCount( const QModelIndex& parent ) const
 {
-    // FIXME: support multiple column in Node
-    return 1;
-
-//     if ( parent.isValid() ) {
-//         Node* parentNode = static_cast<Node*>( parent.internalPointer() );
-
-//         // for places the originalModelIndex is invalid
-//         return parentNode->model()->columnCount( parentNode->originalModelIndex );
-//     }
-//     else {
-//         // we define only one column for root items
-//         return 1;
-//     }
+     QModelIndex sourceIndex = mapToSubModel( parent );
+     if ( sourceIndex.isValid() )
+         return sourceIndex.model()->columnCount( sourceIndex );
+         
+     return 1;
 }
 
 
 QVariant K3bMetaItemModel::data( const QModelIndex& index, int role ) const
 {
-    Node* node = static_cast<Node*>( index.internalPointer() );
+    Node* node = d->nodeForIndex( index );
 
     Q_ASSERT( node );
     Q_ASSERT( node->model() );
@@ -347,7 +368,7 @@ QVariant K3bMetaItemModel::data( const QModelIndex& index, int role ) const
         }
     }
     else {
-        return node->model()->data( node->originalModelIndex, role );
+        return node->model()->data( mapToSubModel( index ), role );
     }
 }
 
@@ -356,20 +377,19 @@ QModelIndex K3bMetaItemModel::index( int row, int column, const QModelIndex& par
 {
 //    kDebug() << row << column << parent;
 
-    // FIXME: add multiple column support to Node
-    if ( row < 0 || column != 0 ) {
+    if ( row < 0 || column < 0 ) {
         return QModelIndex();
     }
 
     if ( parent.isValid() ) {
-        Node* parentNode = static_cast<Node*>( parent.internalPointer() );
+        Node* parentNode = d->nodeForIndex( parent );
 
         Q_ASSERT( parentNode->parent || parentNode->isPlace() );
         Q_ASSERT( parentNode->place() );
         Q_ASSERT( parentNode->model() );
 
         // for places the originalModelIndex is invalid
-        QModelIndex originalIndex = parentNode->model()->index( row, column, parentNode->originalModelIndex );
+        QModelIndex originalIndex = parentNode->model()->index( row, 0, parentNode->originalModelIndex );
         Node* node = parentNode->getChildNode( originalIndex );
         return createIndex( row, column, node );
     }
@@ -388,30 +408,25 @@ QModelIndex K3bMetaItemModel::parent( const QModelIndex& index ) const
 {
 //    kDebug() << index;
 
-    Node* node = static_cast<Node*>( index.internalPointer() );
+    Node* node = d->nodeForIndex( index );
 
-    if ( !index.isValid() || node->isPlace() ) {
+    if ( !index.isValid() || !node || node->isPlace() )
         return QModelIndex();
+
+    Q_ASSERT( node->parent );
+    Q_ASSERT( node->place() );
+    Q_ASSERT( node->model() );
+    
+
+    QModelIndex origIndex = mapToSubModel( index ).parent();
+    if ( origIndex.isValid() ) {
+        return createIndex( origIndex.row(), origIndex.column(), node->parent );
+    }
+    else if ( !node->place()->flat ) {
+        return createIndex( node->place()->row, index.column(), node->place() );
     }
     else {
-        Q_ASSERT( index.internalPointer() );
-        Q_ASSERT( node->parent );
-        Q_ASSERT( node->place() );
-        Q_ASSERT( node->model() );
-
-        QModelIndex origIndex = node->model()->parent( node->originalModelIndex );
-        if ( origIndex.isValid() ) {
-            // update node (unsure if this is necessary...)
-            node->parent->originalModelIndex = origIndex;
-
-            return createIndex( origIndex.row(), origIndex.column(), node->parent );
-        }
-        else if ( !node->place()->flat ) {
-            return createIndex( node->place()->row, index.column(), node->place() );
-        }
-        else {
-            return QModelIndex();
-        }
+        return QModelIndex();
     }
 }
 
@@ -419,12 +434,12 @@ QModelIndex K3bMetaItemModel::parent( const QModelIndex& index ) const
 Qt::ItemFlags K3bMetaItemModel::flags( const QModelIndex& index ) const
 {
     if ( index.isValid() ) {
-        Node* node = static_cast<Node*>( index.internalPointer() );
+        Node* node = d->nodeForIndex( index );
         if ( node->isPlace() ) {
             return Qt::ItemIsSelectable|Qt::ItemIsEnabled;
         }
         else {
-            return node->model()->flags( node->originalModelIndex );
+            return mapToSubModel( index ).flags();
         }
     }
 
@@ -437,16 +452,14 @@ bool K3bMetaItemModel::hasChildren( const QModelIndex& parent ) const
 //    kDebug() << parent;
 
     if ( parent.isValid() ) {
-        Q_ASSERT( parent.internalPointer() );
-
-        Node* parentNode = static_cast<Node*>( parent.internalPointer() );
+        Node* parentNode = d->nodeForIndex( parent );
 
         Q_ASSERT( parentNode->place() );
         Q_ASSERT( parentNode->place()->model() );
         Q_ASSERT( parentNode->model() );
 
         // the originalModelIndex is invalid for place nodes
-        return parentNode->model()->hasChildren( parentNode->originalModelIndex );
+        return parentNode->model()->hasChildren( mapToSubModel( parent ) );
     }
     else {
         return !d->places.isEmpty();
@@ -459,12 +472,12 @@ bool K3bMetaItemModel::canFetchMore( const QModelIndex& parent ) const
 //    kDebug() << parent;
 
     if ( parent.isValid() ) {
-        Node* parentNode = static_cast<Node*>( parent.internalPointer() );
+        Node* parentNode = d->nodeForIndex( parent );
         if ( parentNode->isPlace() ) {
             return parentNode->place()->model()->canFetchMore( QModelIndex() );
         }
         else {
-            return parentNode->model()->canFetchMore( parentNode->originalModelIndex );
+            return parentNode->model()->canFetchMore( mapToSubModel( parent ) );
         }
     }
     else {
@@ -478,12 +491,12 @@ void K3bMetaItemModel::fetchMore( const QModelIndex& parent )
 //    kDebug() << parent;
 
     if ( parent.isValid() ) {
-        Node* parentNode = static_cast<Node*>( parent.internalPointer() );
+        Node* parentNode = d->nodeForIndex( parent );
         if ( parentNode->isPlace() ) {
             parentNode->place()->model()->fetchMore( QModelIndex() );
         }
         else {
-            parentNode->model()->fetchMore( parentNode->originalModelIndex );
+            parentNode->model()->fetchMore( mapToSubModel( parent ) );
         }
     }
 }
@@ -494,12 +507,12 @@ int K3bMetaItemModel::rowCount( const QModelIndex& parent ) const
 //    kDebug() << parent;
 
     if ( parent.isValid() ) {
-        Node* parentNode = static_cast<Node*>( parent.internalPointer() );
+        Node* parentNode = d->nodeForIndex( parent );
         if ( parentNode->isPlace() ) {
             return parentNode->place()->model()->rowCount( QModelIndex() );
         }
         else {
-            return parentNode->model()->rowCount( parentNode->originalModelIndex );
+            return parentNode->model()->rowCount( mapToSubModel( parent ) );
         }
     }
     else {
@@ -524,13 +537,13 @@ bool K3bMetaItemModel::setData( const QModelIndex& index, const QVariant& value,
 //    kDebug() << index;
 
     if ( index.isValid() ) {
-        Node* node = static_cast<Node*>( index.internalPointer() );
+        Node* node = d->nodeForIndex( index );
         if ( node->isPlace() ) {
             // cannot edit the place, should not happen anyway, see flags()
             return false;
         }
         else {
-            return node->model()->setData( node->originalModelIndex, value, role );
+            return node->model()->setData( mapToSubModel( index ), value, role );
         }
     }
     else {
@@ -544,9 +557,9 @@ bool K3bMetaItemModel::dropMimeData( const QMimeData* data, Qt::DropAction actio
 //    kDebug();
 
     if ( parent.isValid() ) {
-        Node* parentNode = static_cast<Node*>( parent.internalPointer() );
+        Node* parentNode = d->nodeForIndex( parent );
         // for places the originalModelIndex will be invalid
-        return parentNode->model()->dropMimeData( data, action, row, column, parentNode->originalModelIndex );
+        return parentNode->model()->dropMimeData( data, action, row, column, mapToSubModel( parent ) );
     }
     else if ( row != -1 ) {
         Node *node = d->getRootNode(row);
@@ -555,16 +568,15 @@ bool K3bMetaItemModel::dropMimeData( const QMimeData* data, Qt::DropAction actio
         {
             // if the node is place, threat it like if it was being dropped on an empty space of the 
             // original model
-            return node->model()->dropMimeData(data, action, -1, -1, QModelIndex());
+            return node->model()->dropMimeData(data, action, -1, column, QModelIndex());
         }
         else
         {
             // if it is not a place (which means the original model is a flat model)
             // drop like if it was being dropped in the row/col of the original index
-            node->model()->dropMimeData(data, action, node->originalModelIndex.row(), node->originalModelIndex.column(), QModelIndex());
+            node->model()->dropMimeData(data, action, node->originalModelIndex.row(), column, QModelIndex());
         }
     }
-
 
     return false;
 }
@@ -576,12 +588,12 @@ QMimeData* K3bMetaItemModel::mimeData( const QModelIndexList& indexes ) const
         QModelIndexList origIndexes;
         for ( QModelIndexList::const_iterator it = indexes.constBegin();
               it != indexes.constEnd(); ++it ) {
-            Node* node = static_cast<Node*>( ( *it ).internalPointer() );
-            if ( !origIndexes.isEmpty() && node->model() != origIndexes.first().model() ) {
+            QModelIndex sourceIndex = mapToSubModel( *it );
+            if ( !origIndexes.isEmpty() && sourceIndex.model() != origIndexes.first().model() ) {
                 kDebug() << "cannot handle indexes from different submodels yet.";
                 return 0;
             }
-            origIndexes.append( node->originalModelIndex );
+            origIndexes.append( sourceIndex );
         }
         return origIndexes.first().model()->mimeData( origIndexes );
     }
