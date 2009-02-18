@@ -338,11 +338,11 @@ QModelIndex K3bMetaItemModel::mapFromSubModel( const QModelIndex& index ) const
 
 int K3bMetaItemModel::columnCount( const QModelIndex& parent ) const
 {
-     QModelIndex sourceIndex = mapToSubModel( parent );
-     if ( sourceIndex.isValid() )
-         return sourceIndex.model()->columnCount( sourceIndex );
-         
-     return 1;
+    QAbstractItemModel *model = subModelForIndex( parent );
+    if (!model)
+        return 1;
+
+    return model->columnCount( mapToSubModel( parent ) );
 }
 
 
