@@ -29,7 +29,6 @@ include_directories(
 add_subdirectory( option )
 add_subdirectory( rip )
 add_subdirectory( projects )
-add_subdirectory( fastscale )
 add_subdirectory( pics )
 add_subdirectory( icons )
 add_subdirectory( konqi )
