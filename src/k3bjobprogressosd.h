@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 
 class QPaintEvent;
 class QMouseEvent;
-class KConfigBase;
+class KConfigGroup;
 
 /**
  * An OSD displaying a text and a progress bar.
@@ -32,59 +32,59 @@ class KConfigBase;
  */
 class K3bJobProgressOSD : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bJobProgressOSD( QWidget* parent = 0 );
-  ~K3bJobProgressOSD();
+public:
+    K3bJobProgressOSD( QWidget* parent = 0 );
+    ~K3bJobProgressOSD();
 
-  int screen() const { return m_screen; }
-  const QPoint& position() const { return m_position; }
+    int screen() const { return m_screen; }
+    const QPoint& position() const { return m_position; }
 
-  void readSettings( KConfigBase* );
-  void saveSettings( KConfigBase* );
+    void readSettings( const KConfigGroup& );
+    void saveSettings( KConfigGroup );
 
- public Q_SLOTS:
-  void setScreen( int );
-  void setText( const QString& );
-  void setProgress( int );
+public Q_SLOTS:
+    void setScreen( int );
+    void setText( const QString& );
+    void setProgress( int );
 
-  /**
-   * The position refers to one of the corners of the widget
-   * regarding on the value of the x and y coordinate.
-   * If for example the x coordinate is bigger than half the screen
-   * width it refers to the left edge of the widget.
-   */
-  void setPosition( const QPoint& );
+    /**
+     * The position refers to one of the corners of the widget
+     * regarding on the value of the x and y coordinate.
+     * If for example the x coordinate is bigger than half the screen
+     * width it refers to the left edge of the widget.
+     */
+    void setPosition( const QPoint& );
 
-  void show();
+    void show();
 
- protected:
-  void paintEvent( QPaintEvent* );
-  void mousePressEvent( QMouseEvent* );
-  void mouseReleaseEvent( QMouseEvent* );
-  void mouseMoveEvent( QMouseEvent* );
-  void renderOSD();
-  void reposition( QSize size = QSize() );
+protected:
+    void paintEvent( QPaintEvent* );
+    void mousePressEvent( QMouseEvent* );
+    void mouseReleaseEvent( QMouseEvent* );
+    void mouseMoveEvent( QMouseEvent* );
+    void renderOSD();
+    void reposition( QSize size = QSize() );
 
- protected Q_SLOTS:
-  void refresh();
+protected Q_SLOTS:
+    void refresh();
 
- private:
-  /**
-   * Ensure that the position is inside m_screen 
-   */
-  QPoint fixupPosition( const QPoint& p );
-  static const int s_outerMargin = 15;
+private:
+    /**
+     * Ensure that the position is inside m_screen 
+     */
+    QPoint fixupPosition( const QPoint& p );
+    static const int s_outerMargin = 15;
 
-  QPixmap m_osdBuffer;
-  bool m_dirty;
-  QString m_text;
-  int m_progress;
-  bool m_dragging;
-  QPoint m_dragOffset;
-  int m_screen;
-  QPoint m_position;
+    QPixmap m_osdBuffer;
+    bool m_dirty;
+    QString m_text;
+    int m_progress;
+    bool m_dragging;
+    QPoint m_dragOffset;
+    int m_screen;
+    QPoint m_position;
 };
 
 #endif

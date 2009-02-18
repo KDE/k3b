@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,8 @@ public:
 
     K3bDevice::DeviceManager*      deviceManager() const;
     K3bExternalBinManager* externalBinManager() const;
-    KSharedConfig::Ptr               config() const            { return m_config; }
+    KSharedConfig::Ptr config() const;
+
     // return main window with browser/cd/dvd view, used for DND
     K3bDirView*            mainWindow() const        { return m_dirView; }
     /**
@@ -138,7 +139,7 @@ public Q_SLOTS:
 
  Q_SIGNALS:
     void initializationInfo( const QString& );
-    void configChanged( KConfig* c );
+    void configChanged( KSharedConfig::Ptr c );
 
 protected:
     /** queryClose is called by KTMainWindow on each closeEvent of a window. Against the
@@ -248,9 +249,6 @@ private:
     void initStatusBar();
 
     bool isCdDvdImageAndIfSoOpenDialog( const KUrl& url );
-
-    /** the configuration object of the application */
-    KSharedConfig::Ptr m_config;
 
     /** The MDI-Interface is managed by this tabbed view */
     K3bProjectTabWidget* m_documentTab;

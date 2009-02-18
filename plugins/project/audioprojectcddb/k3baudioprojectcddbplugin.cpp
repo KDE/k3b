@@ -81,7 +81,7 @@ void K3bAudioProjectCddbPlugin::activate( K3bDoc* doc, QWidget* parent )
     }
 
     // read the k3b config :)
-    KConfig* c = k3bcore->config();
+    KSharedConfig::Ptr c = KGlobal::config();
     c->setGroup("Cddb");
     m_cddb->readConfig( c );
 
@@ -109,7 +109,7 @@ void K3bAudioProjectCddbPlugin::slotCddbQueryFinished( int error )
       K3bCddbResultEntry cddbInfo = m_cddb->result();
 
       // save the entry locally
-      KConfig* c = k3bcore->config();
+      KSharedConfig::Ptr c = KGlobal::config();
       c->setGroup( "Cddb" );
       if( c->readBoolEntry( "save cddb entries locally", true ) )
 	m_cddb->saveEntry( cddbInfo );

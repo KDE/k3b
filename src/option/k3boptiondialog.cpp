@@ -93,7 +93,7 @@ void K3bOptionDialog::slotOk()
     if( saveSettings() ) {
         accept();
 
-        KConfigGroup grp( k3bcore->config(), "General Options" );
+        KConfigGroup grp( KGlobal::config(), "General Options" );
         if( grp.readEntry( "check system config", true ) )
             K3bSystemProblemDialog::checkSystem();
     }

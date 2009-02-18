@@ -199,7 +199,7 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent )
 
     clearSpeedCombo();
 
-    slotConfigChanged(k3bcore->config());
+    slotConfigChanged( KGlobal::config() );
     slotWriterChanged();
 }
 
@@ -247,7 +247,7 @@ K3b::Msf K3bWriterSelectionWidget::wantedMediumSize() const
 }
 
 
-void K3bWriterSelectionWidget::slotConfigChanged( KConfigBase* c )
+void K3bWriterSelectionWidget::slotConfigChanged( KSharedConfig::Ptr c )
 {
     KConfigGroup g( c, "General Options" );
     if( g.readEntry( "Manual writing app selection", false ) ) {
@@ -451,7 +451,7 @@ int K3bWriterSelectionWidget::writerSpeed() const
 
 K3b::WritingApp K3bWriterSelectionWidget::writingApp() const
 {
-    KConfigGroup g( k3bcore->config(), "General Options" );
+    KConfigGroup g( KGlobal::config(), "General Options" );
     if( g.readEntry( "Manual writing app selection", false ) ) {
         return selectedWritingApp();
     }
@@ -488,7 +488,7 @@ void K3bWriterSelectionWidget::slotWriterChanged()
 
     // save last selected writer
     if( K3bDevice::Device* dev = writerDevice() ) {
-        KConfigGroup g( k3bcore->config(), "General Options" );
+        KConfigGroup g( KGlobal::config(), "General Options" );
         g.writeEntry( "current_writer", dev->blockDeviceName() );
     }
 }

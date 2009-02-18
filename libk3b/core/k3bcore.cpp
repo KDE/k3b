@@ -94,7 +94,6 @@ class K3bCore::Private {
 public:
     Private()
         : version( LIBK3B_VERSION ),
-          config(0),
           mediaCache(0),
           deviceManager(0),
           externalBinManager(0),
@@ -103,7 +102,6 @@ public:
     }
 
     K3bVersion version;
-    KConfig* config;
     K3bMediaCache* mediaCache;
     K3bDevice::DeviceManager* deviceManager;
     K3bExternalBinManager* externalBinManager;
@@ -142,9 +140,6 @@ K3bCore::~K3bCore()
     s_k3bCore = 0;
 
     delete d->globalSettings;
-    if( d->config != 0 ) {
-        delete d->config;
-    }
     delete d;
 }
 
@@ -187,16 +182,6 @@ K3bGlobalSettings* K3bCore::globalSettings() const
 const K3bVersion& K3bCore::version() const
 {
     return d->version;
-}
-
-
-KConfig* K3bCore::config() const
-{
-    if( !d->config ) {
-        d->config = new KConfig( "k3brc" );
-    }
-
-    return d->config;
 }
 
 
@@ -260,29 +245,23 @@ void K3bCore::initPluginManager()
 }
 
 
-void K3bCore::readSettings( KConfig* cnf )
+void K3bCore::readSettings( KSharedConfig::Ptr c )
 {
-    KConfig* c = cnf;
-    if( !c )
-        c = config();
-
-    globalSettings()->readSettings( c );
-    deviceManager()->readConfig( c );
-    externalBinManager()->readConfig( c );
+    globalSettings()->readSettings( c->group( "General Options" ) );
+    deviceManager()->readConfig( c->group( "Devices" ) );
+    externalBinManager()->readConfig( c->group( "External Programs" ) );
 }
 
 
-void K3bCore::saveSettings( KConfig* cnf )
+void K3bCore::saveSettings( KSharedConfig::Ptr c )
 {
-    KConfig* c = cnf;
-    if( !c )
-        c = config();
+    KConfigGroup grp( c, "General Options" );
+    grp.writeEntry( "config version", version().toString() );
+    grp.sync();
 
-    c->group( "General Options" ).writeEntry( "config version", version().toString() );
-
-    deviceManager()->saveConfig( c );
-    externalBinManager()->saveConfig( c );
-    d->globalSettings->saveSettings( c );
+    deviceManager()->saveConfig( c->group( "Devices" ) );
+    externalBinManager()->saveConfig( c->group( "External Programs" ) );
+    d->globalSettings->saveSettings( c->group( "General Options" ) );
 }
 
 

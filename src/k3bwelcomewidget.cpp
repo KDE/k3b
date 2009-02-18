@@ -258,7 +258,7 @@ void K3bWelcomeWidget::Display::slotThemeChanged()
         m_infoText->setDefaultStyleSheet( QString("body { color: %1 }")
                                           .arg(theme->foregroundColor().name()) );
     }
-    
+
     m_header->setHtml( "<html><body align=\"center\">" + i18n("Welcome to K3b - The CD and DVD Kreator") + "</body></html>" );
     m_infoText->setHtml( QString::fromUtf8("<html><body align=\"center\">K3b %1 (c) 1999 - 2007 Sebastian Trüg</body></html>")
                          .arg(KGlobal::mainComponent().aboutData()->version()) );
@@ -385,6 +385,7 @@ void K3bWelcomeWidget::saveConfig( KConfigGroup& c )
         sl.append( (*it)->objectName() );
 
     c.writeEntry( "welcome_actions", sl );
+    c.sync();
 }
 
 

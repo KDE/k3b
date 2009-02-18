@@ -167,7 +167,7 @@ void K3bMediaFormattingDialog::slotStartClicked()
 
     delete theJob;
 
-    if( KConfigGroup( k3bcore->config(), "General Options" ).readEntry( "keep action dialogs open", false ) )
+    if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "keep action dialogs open", false ) )
         show();
     else
         close();

@@ -28,7 +28,7 @@
 
 QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::readCommands()
 {
-  KConfig* c = k3bcore->config();
+  KSharedConfig::Ptr c = KGlobal::config();
   KConfigGroup grp(c,"K3bExternalEncoderPlugin" );
 
   QList<K3bExternalEncoderCommand> cl;

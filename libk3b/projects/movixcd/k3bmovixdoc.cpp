@@ -26,8 +26,6 @@
 #include <kurl.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
 #include <kapplication.h>
 
 #include <qdom.h>
@@ -86,12 +84,6 @@ void K3bMovixDoc::addMovixFile( const KUrl& _url, int pos )
 
     QString newName = f.fileName();
     if( nameAlreadyInDir( newName, root() ) ) {
-        KConfigGroup dataProjectSettings = KGlobal::config()->group("Data project settings");
-
-        bool dropDoubles = dataProjectSettings.readEntry( "Drop doubles", false );
-        if( dropDoubles )
-            return;
-
         bool ok = true;
         do {
             newName = KInputDialog::getText( i18n("Enter New Filename"),

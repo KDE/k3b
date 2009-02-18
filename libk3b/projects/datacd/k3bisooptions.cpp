@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -127,6 +127,8 @@ void K3bIsoOptions::save( KConfigGroup& c, bool saveVolumeDesc )
     c.writeEntry( "discard broken symlinks", discardBrokenSymlinks() );
 
     c.writeEntry( "preserve file permissions", m_preserveFilePermissions );
+
+    c.sync();
 }
 
 

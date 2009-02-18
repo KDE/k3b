@@ -216,8 +216,11 @@ void K3bThemeManager::readConfig( const KConfigGroup& c )
 
 void K3bThemeManager::saveConfig( KConfigGroup c )
 {
-    if( !d->currentThemeName.isEmpty() )
+    kDebug() << d->currentThemeName;
+    if( !d->currentThemeName.isEmpty() ) {
         c.writeEntry( "current theme", d->currentThemeName );
+        c.sync();
+    }
 }
 
 

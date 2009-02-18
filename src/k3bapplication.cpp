@@ -56,9 +56,6 @@
 
 #include <qpointer.h>
 #include <qtimer.h>
-#include <q3valuelist.h>
-#include <q3cstring.h>
-#include <kglobal.h>
 
 
 K3bApplication::Core* K3bApplication::Core::s_k3bAppCore = 0;
@@ -102,7 +99,7 @@ void K3bApplication::init()
 
         if( generalOptions.readEntry("Show splash", true) && args->isSet( "splash" ) ) {
             // we need the correct splash pic
-            m_core->m_themeManager->readConfig(generalOptions );
+            m_core->m_themeManager->readConfig( generalOptions );
 
             splash = new K3bSplash( 0 );
             splash->connect( this, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
@@ -118,13 +115,10 @@ void K3bApplication::init()
     // Load device, external programs, and stuff.
     //
     m_core->init();
-    //FIXME kde4
-    //m_core->readSettings( globalConfig() );
+
+    m_core->readSettings( KGlobal::config() );
 
     m_core->deviceManager()->printDevices();
-
-    //FIXME kde4
-    //m_audioServer->setOutputMethod( generalOptions.readEntry( "Audio Output System", "arts" ).local8Bit() );
 
     emit initializationInfo( i18n("Creating GUI...") );
 
@@ -334,12 +328,6 @@ K3bDevice::DeviceManager* K3bApplication::Core::deviceManager() const
 }
 
 
-KSharedConfig::Ptr K3bApplication::Core::globalConfig() const
-{
-    return KGlobal::config();
-}
-
-
 void K3bApplication::Core::init()
 {
     //
@@ -359,14 +347,14 @@ void K3bApplication::Core::init()
 }
 
 
-void K3bApplication::Core::readSettings( KConfig* cnf )
+void K3bApplication::Core::readSettings( KSharedConfig::Ptr cnf )
 {
     K3bCore::readSettings( cnf );
     m_themeManager->readConfig( cnf->group( "General Options" ) );
 }
 
 
-void K3bApplication::Core::saveSettings( KConfig* cnf )
+void K3bApplication::Core::saveSettings( KSharedConfig::Ptr cnf )
 {
     K3bCore::saveSettings( cnf );
     m_themeManager->saveConfig( cnf->group( "General Options" ) );

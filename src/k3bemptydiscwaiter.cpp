@@ -273,8 +273,7 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
 
     d->blockMediaChange = true;
 
-    KConfig* c = k3bcore->config();
-    bool formatWithoutAsking = KConfigGroup( k3bcore->config(), "General Options" ).readEntry( "auto rewritable erasing", false );
+    bool formatWithoutAsking = KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "auto rewritable erasing", false );
 
     K3bMedium medium = k3bappcore->mediaCache()->medium( dev );
 
@@ -615,8 +614,8 @@ void K3bEmptyDiscWaiter::slotMediumChanged( K3bDevice::Device* dev )
 
             // the user may be using cdrdao for erasing as cdrecord does not work
             int erasingApp = K3b::WRITING_APP_DEFAULT;
-            if( KConfigGroup( c, "General Options" ).readEntry( "Manual writing app selection", false ) ) {
-                erasingApp = K3b::writingAppFromString( KConfigGroup( c, "CDRW Erasing" ).readEntry( "writing_app" ) );
+            if( KGlobal::config()->group( "General Options" ).readEntry( "Manual writing app selection", false ) ) {
+                erasingApp = K3b::writingAppFromString( KGlobal::config()->group( "CDRW Erasing" ).readEntry( "writing_app" ) );
             }
 
             K3bBlankingJob job( this );

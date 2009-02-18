@@ -1,10 +1,10 @@
 /*
  *
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -209,26 +209,27 @@ void K3bExternalEncoderSettingsWidget::load()
 
 void K3bExternalEncoderSettingsWidget::save()
 {
-    KConfig* c = k3bcore->config();
-    c->deleteGroup( "K3bExternalEncoderPlugin");
-    KConfigGroup grp(c, "K3bExternalEncoderPlugin" );
+    KSharedConfig::Ptr c = KGlobal::config();
+    c->deleteGroup( "K3bExternalEncoderPlugin" );
+
+    KConfigGroup grp( c, "K3bExternalEncoderPlugin" );
 
     QStringList cmdNames;
-#warning FIXME K3bExternalEncoderPlugin
-/*
-  for( QMapIterator<Q3ListViewItem*, K3bExternalEncoderCommand> it = d->commands.begin();
-  it != d->commands.end(); ++it ) {
-  QStringList cmd;
-  cmd << it.data().name << it.data().extension << it.data().command;
-  if( it.data().swapByteOrder )
-  cmd << "swap";
-  if( it.data().writeWaveHeader )
-  cmd << "wave";
-  grp.writeEntry( "command_" + it.data().name, cmd );
-  cmdNames << it.data().name;
-  }
-  grp.writeEntry( "commands", cmdNames );
-*/
+
+    for( QMap<Q3ListViewItem*, K3bExternalEncoderCommand>::const_iterator it = d->commands.constBegin();
+         it != d->commands.constEnd(); ++it ) {
+        QStringList cmd;
+        cmd << it.value().name << it.value().extension << it.value().command;
+        if( it.value().swapByteOrder )
+            cmd << "swap";
+        if( it.value().writeWaveHeader )
+            cmd << "wave";
+        grp.writeEntry( "command_" + it.value().name, cmd );
+        cmdNames << it.value().name;
+    }
+    grp.writeEntry( "commands", cmdNames );
+
+    grp.sync();
 }
 
 #include "k3bexternalencoderconfigwidget.moc"

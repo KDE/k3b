@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,51 +30,53 @@
 
 void K3bFirstRun::run( QWidget* parent )
 {
-  KConfigGroup group(k3bcore->config(), "Docking Config");
-  if( !group.readEntry( "First run", true ) )
-    return;
+    KConfigGroup group(KGlobal::config(), "Docking Config");
+    if( !group.readEntry( "First run", true ) )
+        return;
 
-  group.writeEntry( "First run", false );
-  // for now the first run dialog only asks for
-  // the konqui integration. So in case it is 
-  // already installed there is no need to show the
-  // dialog.
-  K3bServiceInstaller si;
-  if( si.allInstalled() )
-    return;
+    group.writeEntry( "First run", false );
+    group.sync();
 
-  K3bFirstRun dlg( parent );
-  if( dlg.exec() == QDialog::Accepted )
-    si.install( parent );
+    // for now the first run dialog only asks for
+    // the konqui integration. So in case it is
+    // already installed there is no need to show the
+    // dialog.
+    K3bServiceInstaller si;
+    if( si.allInstalled() )
+        return;
+
+    K3bFirstRun dlg( parent );
+    if( dlg.exec() == QDialog::Accepted )
+        si.install( parent );
 }
 
 
 K3bFirstRun::K3bFirstRun( QWidget* parent )
-  : KDialog( parent)
+    : KDialog( parent)
 {
-  setCaption(i18n("First Run"));
-  setModal(true);
-  setButtons(Ok|Cancel);
-  setDefaultButton(Ok);
-  
-  setButtonText(Ok, i18n("Enable Konqueror integration") );
-  setButtonText(Cancel, i18n("No Konqueror integration") );
-  
-  QFrame* plain = new QFrame();
-  setMainWidget(plain);
-  QLabel* label = new QLabel( i18n("<p>K3b can integrate itself into Konqueror. This integration "
-				   "allows to start K3b from the context menu in the file manager."
-				   "<p><em>The Konqueror integration can always be disabled and "
-				   "enabled again from the K3b settings.</em>"), plain );
-  QLabel* pixLabel = new QLabel( plain );
-  pixLabel->setPixmap( DesktopIcon( "konqueror" ) );
+    setCaption(i18n("First Run"));
+    setModal(true);
+    setButtons(Ok|Cancel);
+    setDefaultButton(Ok);
 
-  QHBoxLayout* lay = new QHBoxLayout( plain );
-  lay->setMargin( 0 );
-  lay->setSpacing( spacingHint() );
-  lay->addWidget( pixLabel );
-  lay->addWidget( label );
-  lay->setStretchFactor( label, 1 );
+    setButtonText(Ok, i18n("Enable Konqueror integration") );
+    setButtonText(Cancel, i18n("No Konqueror integration") );
+
+    QFrame* plain = new QFrame();
+    setMainWidget(plain);
+    QLabel* label = new QLabel( i18n("<p>K3b can integrate itself into Konqueror. This integration "
+                                     "allows to start K3b from the context menu in the file manager."
+                                     "<p><em>The Konqueror integration can always be disabled and "
+                                     "enabled again from the K3b settings.</em>"), plain );
+    QLabel* pixLabel = new QLabel( plain );
+    pixLabel->setPixmap( DesktopIcon( "konqueror" ) );
+
+    QHBoxLayout* lay = new QHBoxLayout( plain );
+    lay->setMargin( 0 );
+    lay->setSpacing( spacingHint() );
+    lay->addWidget( pixLabel );
+    lay->addWidget( label );
+    lay->setStretchFactor( label, 1 );
 }
 
 

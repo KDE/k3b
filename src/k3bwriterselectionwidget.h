@@ -19,7 +19,7 @@
 #include <qwidget.h>
 #include <QLabel>
 
-#include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 #include <k3bglobals.h>
 
@@ -133,7 +133,7 @@ private Q_SLOTS:
     void slotRefreshWriterSpeeds();
     void slotRefreshWritingApps();
     void slotWritingAppSelected( int id );
-    void slotConfigChanged( KConfigBase* c );
+    void slotConfigChanged( KSharedConfig::Ptr c );
     void slotSpeedChanged( int index );
     void slotWriterChanged();
     void slotNewBurnMedium( K3bDevice::Device* dev );

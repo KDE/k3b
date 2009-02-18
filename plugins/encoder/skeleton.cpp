@@ -100,7 +100,7 @@ K3b<name>EncoderSettingsWidget::~K3b<name>EncoderSettingsWidget()
 
 void K3b<name>EncoderSettingsWidget::loadConfig()
 {
-    KConfig* c = k3bcore->config();
+    KSharedConfig::Ptr c = KGlobal::config();
     c->setGroup( "K3b<name>EncoderPlugin" );
 
     // PUT YOUR CODE HERE
@@ -109,7 +109,7 @@ void K3b<name>EncoderSettingsWidget::loadConfig()
 
 void K3b<name>EncoderSettingsWidget::saveConfig()
 {
-    KConfig* c = k3bcore->config();
+    KSharedConfig::Ptr c = KGlobal::config();
     c->setGroup( "K3b<name>EncoderPlugin" );
 
     // PUT YOUR CODE HERE

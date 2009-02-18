@@ -153,7 +153,7 @@ void K3bAdvancedOptionTab::setupGui()
 
 void K3bAdvancedOptionTab::readSettings()
 {
-    KConfigGroup c( k3bcore->config(), "General Options" );
+    KConfigGroup c( KGlobal::config(), "General Options" );
 
     m_checkAutoErasingRewritable->setChecked( c.readEntry( "auto rewritable erasing", false ) );
     m_checkAllowWritingAppSelection->setChecked( c.readEntry( "Manual writing app selection", false ) );
@@ -170,7 +170,7 @@ void K3bAdvancedOptionTab::readSettings()
 
 void K3bAdvancedOptionTab::saveSettings()
 {
-    KConfigGroup c( k3bcore->config(), "General Options" );
+    KConfigGroup c( KGlobal::config(), "General Options" );
 
     c.writeEntry( "auto rewritable erasing", m_checkAutoErasingRewritable->isChecked() );
     c.writeEntry( "Manual writing app selection", m_checkAllowWritingAppSelection->isChecked() );
@@ -181,9 +181,6 @@ void K3bAdvancedOptionTab::saveSettings()
     k3bcore->globalSettings()->setUseManualBufferSize( m_checkManualWritingBufferSize->isChecked() );
     k3bcore->globalSettings()->setBufferSize( m_editWritingBufferSize->value() );
     k3bcore->globalSettings()->setForce( m_checkForceUnsafeOperations->isChecked() );
-
-    // FIXME: remove this once libk3b does not use KConfig anymore for these values
-    k3bcore->globalSettings()->saveSettings( k3bcore->config() );
 }
 
 

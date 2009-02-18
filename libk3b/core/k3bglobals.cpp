@@ -16,6 +16,7 @@
 
 
 #include "k3bglobals.h"
+#include "k3bglobalsettings.h"
 #include <k3bversion.h>
 #include <k3bdevice.h>
 #include <k3bdevicemanager.h>
@@ -27,8 +28,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kio/job.h>
@@ -178,9 +177,7 @@ QString K3b::findTempFile( const QString& ending, const QString& d )
 
 QString K3b::defaultTempPath()
 {
-    KConfigGroup grp = KGlobal::config()->group( "General Options" );
-    QString url = grp.readPathEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
-    return prepareDir( url );
+    return prepareDir( k3bcore->globalSettings()->defaultTempPath() );
 }
 
 

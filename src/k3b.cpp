@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -128,8 +128,6 @@ K3bMainWindow::K3bMainWindow()
 
     setPlainCaption( i18n("K3b - The CD and DVD Kreator") );
 
-    m_config = KGlobal::config();
-
     // /////////////////////////////////////////////////////////////////
     // call inits to invoke all other construction parts
     initActions();
@@ -170,6 +168,12 @@ K3bMainWindow::K3bMainWindow()
 K3bMainWindow::~K3bMainWindow()
 {
     delete d;
+}
+
+
+KSharedConfig::Ptr K3bMainWindow::config() const
+{
+    return KGlobal::config();
 }
 
 
@@ -566,28 +570,25 @@ void K3bMainWindow::saveOptions()
     KConfigGroup recentGrp(config(),"Recent Files");
     actionFileOpenRecent->saveEntries( recentGrp );
 
-    // save dock positions!
-    //manager()->writeConfig( config(), "Docking Config" );
-
     KConfigGroup grpFileView( config(), "file view" );
     m_dirView->saveConfig( grpFileView );
 
     KConfigGroup grpWindows(config(), "main_window_settings");
     saveMainWindowSettings( grpWindows );
 
-    k3bcore->saveSettings( config().data() );
+    k3bcore->saveSettings( config() );
 
     KConfigGroup grp(config(), "Welcome Widget" );
     d->welcomeWidget->saveConfig( grp );
 
-    KConfigGroup grpOption( m_config, "General Options" );
+    KConfigGroup grpOption( config(), "General Options" );
     grpOption.writeEntry( "Show Document Header", actionViewDocumentHeader->isChecked() );
 }
 
 
 void K3bMainWindow::readOptions()
 {
-    KConfigGroup grp( m_config, "General Options" );
+    KConfigGroup grp( config(), "General Options" );
 
     bool bViewDocumentHeader = grp.readEntry("Show Document Header", true);
     actionViewDocumentHeader->setChecked(bViewDocumentHeader);
@@ -596,12 +597,6 @@ void K3bMainWindow::readOptions()
     KConfigGroup recentGrp(config(), "Recent Files");
     actionFileOpenRecent->loadEntries( recentGrp );
 
-    // do not read dock-positions from a config that has been saved by an old version
-    K3bVersion configVersion( grp.readEntry( "config version", "0.1" ) );
-    //if( configVersion >= K3bVersion("0.12") )
-    //    manager()->readConfig( config(), "Docking Config" );
-    //else
-    //    kDebug() << "(K3bMainWindow) ignoring docking config from K3b version " << configVersion;
     KConfigGroup grpWindow(config(), "main_window_settings");
     applyMainWindowSettings( grpWindow );
 
@@ -624,8 +619,8 @@ void K3bMainWindow::saveProperties( KConfigGroup& /*c*/ )
     // FIXME: for some reason the config entries are not properly stored when using the default
     //        KMainWindow session config. Since I was not able to find the bug I use another config object
     // ----------------------------------------------------------
-    KConfig *c = new KConfig( saveDir + "list", KConfig::SimpleConfig );
-    KConfigGroup grp(c, "Saved Session" );
+    KConfig c( saveDir + "list", KConfig::SimpleConfig );
+    KConfigGroup grp( &c, "Saved Session" );
     // ----------------------------------------------------------
 
     QList<K3bDoc*> docs = k3bappcore->projectManager()->projects();
@@ -655,11 +650,7 @@ void K3bMainWindow::saveProperties( KConfigGroup& /*c*/ )
         ++cnt;
     }
 
-    // FIXME: for some reason the config entries are not properly stored when using the default
-    //        KMainWindow session config. Since I was not able to find the bug I use another config object
-    // ----------------------------------------------------------
-    delete c;
-    // ----------------------------------------------------------
+    grp.sync();
 }
 
 
@@ -679,8 +670,8 @@ void K3bMainWindow::readProperties( const KConfigGroup& /*c*/ )
     // FIXME: for some reason the config entries are not properly stored when using the default
     //        KMainWindow session config. Since I was not able to find the bug I use another config object
     // ----------------------------------------------------------
-    KConfig *c = new KConfig( saveDir + "list"/*, true*/ );
-    KConfigGroup grp(c, "Saved Session" );
+    KConfig c( saveDir + "list"/*, true*/ );
+    KConfigGroup grp( &c, "Saved Session" );
     // ----------------------------------------------------------
 
     int cnt = grp.readEntry( "Number of projects", 0 );
@@ -716,12 +707,6 @@ void K3bMainWindow::readProperties( const KConfigGroup& /*c*/ )
 
     // and now remove the temp dir
     KIO::del( KUrl(saveDir), KIO::HideProgressInfo );
-
-    // FIXME: for some reason the config entries are not properly stored when using the default
-    //        KMainWindow session config. Since I was not able to find the bug I use another config object
-    // ----------------------------------------------------------
-    delete c;
-    // ----------------------------------------------------------
 }
 
 
@@ -1048,8 +1033,7 @@ void K3bMainWindow::slotSettingsConfigure()
 
     // emit a changed signal every time since we do not know if the user selected
     // "apply" and "cancel" or "ok"
-    //port kde4
-    //emit configChanged( m_config );
+    emit configChanged( config() );
 }
 
 
@@ -1062,8 +1046,7 @@ void K3bMainWindow::showOptionDialog( int index )
 
     // emit a changed signal every time since we do not know if the user selected
     // "apply" and "cancel" or "ok"
-#warning port kde4
-    //emit configChanged( m_config );
+    emit configChanged( config() );
 }
 
 
@@ -1179,17 +1162,17 @@ void K3bMainWindow::slotCurrentDocChanged()
 
 void K3bMainWindow::slotEditToolbars()
 {
-    KConfigGroup grp(m_config, "main_window_settings");
+    KConfigGroup grp( config(), "main_window_settings" );
     saveMainWindowSettings( grp );
     KEditToolBar dlg( factory() );
-    connect(&dlg, SIGNAL(newToolbarConfig()), SLOT(slotNewToolBarConfig()));
+    connect( &dlg, SIGNAL(newToolbarConfig()), SLOT(slotNewToolBarConfig()) );
     dlg.exec();
 }
 
 
 void K3bMainWindow::slotNewToolBarConfig()
 {
-    KConfigGroup grp(m_config, "main_window_settings");
+    KConfigGroup grp(config(), "main_window_settings");
     applyMainWindowSettings(grp);
 }
 

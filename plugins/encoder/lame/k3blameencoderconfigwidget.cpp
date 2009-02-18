@@ -1,10 +1,10 @@
 /*
  *
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -131,7 +131,7 @@ void K3bLameEncoderSettingsWidget::load()
     kDebug();
 
     Q_ASSERT( k3bcore );
-    KConfig* c = k3bcore->config();
+    KSharedConfig::Ptr c = KGlobal::config();
     KConfigGroup grp(c, "K3bLameEncoderPlugin" );
 
     QString mode = grp.readEntry( "Mode", "stereo" );
@@ -181,7 +181,7 @@ void K3bLameEncoderSettingsWidget::save()
     kDebug();
 
     Q_ASSERT( k3bcore );
-    KConfig* c = k3bcore->config();
+    KSharedConfig::Ptr c = KGlobal::config();
     KConfigGroup grp(c, "K3bLameEncoderPlugin" );
 
     QString mode;
@@ -219,6 +219,8 @@ void K3bLameEncoderSettingsWidget::save()
 
     // default to 2 which is the same as the -h lame option
     grp.writeEntry( "Encoder Quality", m_spinEncoderQuality->value() );
+
+    grp.sync();
 }
 
 

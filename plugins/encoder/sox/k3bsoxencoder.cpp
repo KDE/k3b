@@ -1,10 +1,10 @@
 /*
  *
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -201,7 +201,7 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension, const K3b::Ms
         // output settings
         *d->process << "-t" << extension;
 
-        KConfig* c = k3bcore->config();
+        KSharedConfig::Ptr c = KGlobal::config();
         KConfigGroup grp(c,"K3bSoxEncoderPlugin" );
         if( grp.readEntry( "manual settings", false ) ) {
             *d->process << "-r" << QString::number( grp.readEntry( "samplerate", 44100 ) )
@@ -343,7 +343,7 @@ QString K3bSoxEncoder::fileTypeComment( const QString& ext ) const
 long long K3bSoxEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 {
     // for now we make a rough assumption based on the settings
-    KConfig* c = k3bcore->config();
+    KSharedConfig::Ptr c = KGlobal::config();
     KConfigGroup grp(c, "K3bSoxEncoderPlugin" );
     if( grp.readEntry( "manual settings", false ) ) {
         int sr =  grp.readEntry( "samplerate", 44100 );
@@ -386,7 +386,7 @@ K3bSoxEncoderSettingsWidget::~K3bSoxEncoderSettingsWidget()
 
 void K3bSoxEncoderSettingsWidget::loadConfig()
 {
-    KConfig* c = k3bcore->config();
+    KSharedConfig::Ptr c = KGlobal::config();
     KConfigGroup grp(c, "K3bSoxEncoderPlugin" );
 
     w->m_checkManual->setChecked( grp.readEntry( "manual settings", false ) );
@@ -421,7 +421,7 @@ void K3bSoxEncoderSettingsWidget::loadConfig()
 
 void K3bSoxEncoderSettingsWidget::saveConfig()
 {
-    KConfig* c = k3bcore->config();
+    KSharedConfig::Ptr c = KGlobal::config();
 
     KConfigGroup grp (c, "K3bSoxEncoderPlugin" );
 
@@ -469,6 +469,8 @@ void K3bSoxEncoderSettingsWidget::saveConfig()
         break;
     }
     grp.writeEntry( "data encoding", enc );
+
+    grp.sync();
 }
 
 

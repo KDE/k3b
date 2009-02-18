@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,13 +80,8 @@ public:
 
     void init();
 
-    // make sure the libk3b uses the same configuration
-    // needed since the lib still depends on K3bCore::config
-    // the goal is to make the lib independent from the config
-    KSharedConfig::Ptr globalConfig() const;
-
-    void readSettings( KConfig* c = 0 );
-    void saveSettings( KConfig* c = 0 );
+    void readSettings( KSharedConfig::Ptr c );
+    void saveSettings( KSharedConfig::Ptr c );
 
     /**
      * \reimplemented from K3bCore. We use our own devicemanager here.

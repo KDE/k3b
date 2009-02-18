@@ -130,7 +130,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
         m_buttonSave = 0;
     }
     if( buttonMask & CANCEL_BUTTON ) {
-        m_buttonCancel = new KPushButton( KConfigGroup( k3bcore->config(), "General Options" )
+        m_buttonCancel = new KPushButton( KConfigGroup( KGlobal::config(), "General Options" )
                                           .readEntry( "keep action dialogs open", false )
                                           ? KStandardGuiItem::close()
                                           : KStandardGuiItem::cancel(),
@@ -255,29 +255,31 @@ void K3bInteractionDialog::slotLoadK3bDefaults()
 
 void K3bInteractionDialog::slotLoadUserDefaults()
 {
-    KConfigGroup c( k3bcore->config(), m_configGroup );
+    KConfigGroup c( KGlobal::config(), m_configGroup );
     loadUserDefaults( c );
 }
 
 
 void K3bInteractionDialog::slotSaveUserDefaults()
 {
-    KConfigGroup c( k3bcore->config(), m_configGroup );
+    KConfigGroup c( KGlobal::config(), m_configGroup );
     saveUserDefaults( c );
+    c.sync();
 }
 
 
 void K3bInteractionDialog::slotLoadLastSettings()
 {
-    KConfigGroup c( k3bcore->config(), "last used " + m_configGroup );
+    KConfigGroup c( KGlobal::config(), "last used " + m_configGroup );
     loadUserDefaults( c );
 }
 
 
 void K3bInteractionDialog::saveLastSettings()
 {
-    KConfigGroup c( k3bcore->config(), "last used " + m_configGroup );
+    KConfigGroup c( KGlobal::config(), "last used " + m_configGroup );
     saveUserDefaults( c );
+    c.sync();
 }
 
 
@@ -285,7 +287,7 @@ void K3bInteractionDialog::slotStartClickedInternal()
 {
     saveLastSettings();
 
-    KConfigGroup c( k3bcore->config(), "General Options" );
+    KConfigGroup c( KGlobal::config(), "General Options" );
     if( !c.readEntry( "action dialog startup settings", 0 ) ) {
         // first time saving last used settings
         switch( K3bMultiChoiceDialog::choose( i18n("Action Dialog Settings"),
@@ -502,7 +504,7 @@ void K3bInteractionDialog::loadK3bDefaults()
 
 void K3bInteractionDialog::loadStartupSettings()
 {
-    KConfigGroup c( k3bcore->config(), "General Options" );
+    KConfigGroup c( KGlobal::config(), "General Options" );
 
     // earlier K3b versions loaded the saved settings
     // so that is what we do as a default

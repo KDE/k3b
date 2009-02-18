@@ -406,7 +406,7 @@ void K3bMediaCopyDialog::slotStartClicked()
     delete dlg;
     delete burnJob;
 
-    if( KConfigGroup( k3bcore->config(), "General Options" ).readEntry( "keep action dialogs open", false ) )
+    if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "keep action dialogs open", false ) )
         show();
     else
         close();

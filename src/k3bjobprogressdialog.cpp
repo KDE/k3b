@@ -254,12 +254,12 @@ void K3bJobProgressDialog::setupGUI()
 
 void K3bJobProgressDialog::show()
 {
-    if( KConfigGroup( k3bcore->config(), "General Options" ).readEntry( "hide main window while writing", false ) )
+    if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "hide main window while writing", false ) )
         if( QWidget* w = kapp->activeWindow() )
             w->hide();
 
     if( m_osd ) {
-        m_osd->readSettings( k3bcore->config() );
+        m_osd->readSettings( KGlobal::config()->group( "OSD Position" ) );
         m_osd->show();
     }
 
@@ -287,8 +287,7 @@ void K3bJobProgressDialog::closeEvent( QCloseEvent* e )
 
         if( m_osd ) {
             m_osd->hide();
-#warning FIXME kde4
-            //m_osd->saveSettings( KGlobal::config() );
+            m_osd->saveSettings( KGlobal::config()->group( "OSD Position" ) );
         }
     }
     else
@@ -453,7 +452,7 @@ void K3bJobProgressDialog::setJob( K3bJob* job )
 
         setCaption( m_job->jobDescription() );
 
-        if( KConfigGroup( k3bcore->config(), "General Options" ).readEntry( "Show progress OSD", true ) ) {
+        if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "Show progress OSD", true ) ) {
             if( !m_osd )
                 m_osd = new K3bJobProgressOSD( this );
         }

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <kstandarddirs.h>
 
 
 K3bGlobalSettings::K3bGlobalSettings()
@@ -29,27 +30,27 @@ K3bGlobalSettings::K3bGlobalSettings()
 }
 
 
-void K3bGlobalSettings::readSettings( KConfig* c )
+void K3bGlobalSettings::readSettings( const KConfigGroup& c )
 {
-    KConfigGroup globalSettings = c->group( "General Options" );
-
-    m_eject = !globalSettings.readEntry( "No cd eject", false );
-    m_burnfree = globalSettings.readEntry( "burnfree", true );
-    m_overburn = globalSettings.readEntry( "Allow overburning", false );
-    m_useManualBufferSize = globalSettings.readEntry( "Manual buffer size", false );
-    m_bufferSize = globalSettings.readEntry( "Fifo buffer", 4 );
-    m_force = globalSettings.readEntry( "Force unsafe operations", false );
+    m_eject = !c.readEntry( "No cd eject", false );
+    m_burnfree = c.readEntry( "burnfree", true );
+    m_overburn = c.readEntry( "Allow overburning", false );
+    m_useManualBufferSize = c.readEntry( "Manual buffer size", false );
+    m_bufferSize = c.readEntry( "Fifo buffer", 4 );
+    m_force = c.readEntry( "Force unsafe operations", false );
+    m_defaultTempPath = c.readPathEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
 }
 
 
-void K3bGlobalSettings::saveSettings( KConfig* c )
+void K3bGlobalSettings::saveSettings( KConfigGroup c )
 {
-    KConfigGroup globalSettings = c->group( "General Options" );
+    c.writeEntry( "No cd eject", !m_eject );
+    c.writeEntry( "burnfree", m_burnfree );
+    c.writeEntry( "Allow overburning", m_overburn );
+    c.writeEntry( "Manual buffer size", m_useManualBufferSize );
+    c.writeEntry( "Fifo buffer", m_bufferSize );
+    c.writeEntry( "Force unsafe operations", m_force );
+    c.writeEntry( "Temp Dir", m_defaultTempPath );
 
-    globalSettings.writeEntry( "No cd eject", !m_eject );
-    globalSettings.writeEntry( "burnfree", m_burnfree );
-    globalSettings.writeEntry( "Allow overburning", m_overburn );
-    globalSettings.writeEntry( "Manual buffer size", m_useManualBufferSize );
-    globalSettings.writeEntry( "Fifo buffer", m_bufferSize );
-    globalSettings.writeEntry( "Force unsafe operations", m_force );
+    c.sync();
 }

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -624,7 +624,7 @@ void K3bFillStatusDisplay::slotDetermineSize()
 void K3bFillStatusDisplay::slotLoadUserDefaults()
 {
     // load project specific values
-    KConfigGroup c( k3bcore->config(), "default " + d->doc->typeString() + " settings" );
+    KConfigGroup c( KGlobal::config(), "default " + d->doc->typeString() + " settings" );
 
     // defaults to megabytes
     d->showTime = c.readEntry( "show minutes", false );
@@ -761,10 +761,12 @@ void K3bFillStatusDisplay::slotMediumChanged( K3bDevice::Device* )
 void K3bFillStatusDisplay::slotSaveUserDefaults()
 {
     // save project specific values
-    KConfigGroup c( k3bcore->config(), "default " + d->doc->typeString() + " settings" );
+    KConfigGroup c( KGlobal::config(), "default " + d->doc->typeString() + " settings" );
 
     c.writeEntry( "show minutes", d->showTime );
     c.writeEntry( "default media size", d->actionAuto->isChecked() ? 0 : d->displayWidget->cdSize().lba() );
+
+    c.sync();
 }
 
 

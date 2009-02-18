@@ -1,7 +1,7 @@
 /*
 *
 * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
-* Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
+* Copyright (C) 2008-2009 Sebastian Trueg <trueg@k3b.org>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -107,6 +107,8 @@ void K3bVcdOptions::save( KConfigGroup& c )
     c.writeEntry( "RearMarginTrack", m_rearmargintrack );
     c.writeEntry( "UseGaps", m_usegaps );
     c.writeEntry( "MPEG Version", ( int )m_mpegversion );
+
+    c.sync();
 }
 
 

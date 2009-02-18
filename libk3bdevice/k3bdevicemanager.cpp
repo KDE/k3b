@@ -294,17 +294,12 @@ void K3bDevice::DeviceManager::clear()
 }
 
 
-bool K3bDevice::DeviceManager::readConfig( KConfig* c_ )
+bool K3bDevice::DeviceManager::readConfig( const KConfigGroup& c )
 {
     //
     // New configuration format since K3b 0.11.94
     // for details see saveConfig()
     //
-
-    if( !c_->hasGroup( "Devices" ) )
-        return false;
-
-    KConfigGroup c = c_->group( "Devices" );
 
     //
     // Iterate over all devices and check if we have a config entry
@@ -327,7 +322,7 @@ bool K3bDevice::DeviceManager::readConfig( KConfig* c_ )
 }
 
 
-bool K3bDevice::DeviceManager::saveConfig( KConfig* c_ )
+bool K3bDevice::DeviceManager::saveConfig( KConfigGroup c )
 {
     //
     // New configuration format since K3b 0.11.94
@@ -340,8 +335,6 @@ bool K3bDevice::DeviceManager::saveConfig( KConfig* c_ )
     // for every single device but for every device type.
     // This also makes sure device settings are kept between sessions
     //
-
-    KConfigGroup c = c_->group( "Devices" );
 
     Q_FOREACH( Device* dev, d->allDevices ) {
 

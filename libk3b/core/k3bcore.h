@@ -18,11 +18,11 @@
 
 #include <qobject.h>
 #include <qlist.h>
-//Added by qt3to4:
-#include <QCustomEvent>
 
 #include "k3b_export.h"
 #include "config-k3b.h"
+
+#include <ksharedconfig.h>
 
 #define LIBK3B_VERSION K3B_VERSION_STRING
 
@@ -78,15 +78,9 @@ public:
      */
     virtual void init();
 
-    /**
-     * @param c if 0 K3bCore uses the K3b configuration
-     */
-    virtual void readSettings( KConfig* c = 0 );
+    virtual void readSettings( KSharedConfig::Ptr c );
 
-    /**
-     * @param c if 0 K3bCore uses the K3b configuration
-     */
-    virtual void saveSettings( KConfig* c = 0 );
+    virtual void saveSettings( KSharedConfig::Ptr c );
 
     K3bMediaCache* mediaCache() const;
 
@@ -118,12 +112,6 @@ public:
      * returns the version of the library as defined by LIBK3B_VERSION
      */
     const K3bVersion& version() const;
-
-    /**
-     * Default implementation returns the K3b configuration from k3brc.
-     * Normally this should not be used.
-     */
-    virtual KConfig* config() const;
 
     /**
      * Used by the writing jobs to block a device.

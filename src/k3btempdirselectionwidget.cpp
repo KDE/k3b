@@ -227,7 +227,7 @@ void K3bTempDirSelectionWidget::setNeededSize( KIO::filesize_t bytes )
 
 void K3bTempDirSelectionWidget::saveConfig()
 {
-    KConfigGroup grp( k3bcore->config(), "General Options" );
+    KConfigGroup grp( KGlobal::config(), "General Options" );
     grp.writePathEntry( "Temp Dir", tempDirectory() );
 }
 

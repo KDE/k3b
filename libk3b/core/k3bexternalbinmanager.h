@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #include "k3b_export.h"
 #include "k3bversion.h"
 
-class KConfig;
+class KConfigGroup;
 
 
 class K3bExternalProgram;
@@ -123,12 +123,12 @@ public:
      * read config and add changes to current map.
      * Takes care of setting the config group
      */
-    bool readConfig( KConfig* );
+    bool readConfig( const KConfigGroup& );
 
     /**
      * Takes care of setting the config group
      */
-    bool saveConfig( KConfig* );
+    bool saveConfig( KConfigGroup );
 
     bool foundBin( const QString& name );
     QString binPath( const QString& name );

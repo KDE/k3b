@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -193,11 +193,9 @@ K3bExternalBinManager::~K3bExternalBinManager()
 }
 
 
-bool K3bExternalBinManager::readConfig( KConfig* c )
+bool K3bExternalBinManager::readConfig( const KConfigGroup& grp )
 {
     loadDefaultSearchPath();
-
-    KConfigGroup grp = c->group( "External Programs" );
 
     if( grp.hasKey( "search path" ) ) {
         setSearchPath( grp.readPathEntry( QString( "search path" ), QStringList() ) );
@@ -225,10 +223,9 @@ bool K3bExternalBinManager::readConfig( KConfig* c )
     return true;
 }
 
-bool K3bExternalBinManager::saveConfig( KConfig* c )
-{
-    KConfigGroup grp = c->group( "External Programs" );
 
+bool K3bExternalBinManager::saveConfig( KConfigGroup grp )
+{
     grp.writePathEntry( "search path", m_searchPath );
 
     Q_FOREACH( K3bExternalProgram* p, m_programs ) {
@@ -241,6 +238,8 @@ bool K3bExternalBinManager::saveConfig( KConfig* c )
         if( newestBin )
             grp.writeEntry( p->name() + " last seen newest version", newestBin->version.toString() );
     }
+
+    grp.sync();
 
     return true;
 }

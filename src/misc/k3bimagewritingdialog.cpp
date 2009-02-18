@@ -158,7 +158,7 @@ K3bImageWritingDialog::~K3bImageWritingDialog()
 {
     d->md5Job->cancel();
 
-    KConfigGroup c( k3bcore->config(), configGroup() );
+    KConfigGroup c( KGlobal::config(), configGroup() );
     QStringList recentImages;
     // do not store more than 10 recent images
     for ( int i = 0; i < m_comboRecentImages->count() && recentImages.count() < 10; ++i ) {
@@ -174,7 +174,7 @@ K3bImageWritingDialog::~K3bImageWritingDialog()
 
 void K3bImageWritingDialog::init()
 {
-    KConfigGroup c( k3bcore->config(), configGroup() );
+    KConfigGroup c( KGlobal::config(), configGroup() );
 
     if( !d->imageForced ) {
         // when opening the dialog first the default settings are loaded and afterwards we set the
@@ -367,8 +367,7 @@ void K3bImageWritingDialog::slotStartClicked()
     d->md5Job->cancel();
 
     // save the path
-    KConfig* c = k3bcore->config();
-    KConfigGroup grp(c, configGroup() );
+    KConfigGroup grp( KGlobal::config(), configGroup() );
     grp.writePathEntry( "last written image", imagePath() );
 
     if( d->imageFile.isEmpty() )
@@ -476,7 +475,7 @@ void K3bImageWritingDialog::slotStartClicked()
 
         delete job;
 
-        if( KConfigGroup( k3bcore->config(), "General Options" ).readEntry( "keep action dialogs open", false ) )
+        if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "keep action dialogs open", false ) )
             show();
         else
             close();

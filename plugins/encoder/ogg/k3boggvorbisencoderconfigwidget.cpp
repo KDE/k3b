@@ -1,10 +1,10 @@
 /*
  *
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,7 +112,7 @@ void K3bOggVorbisEncoderSettingsWidget::slotQualityLevelChanged( int val )
 
 void K3bOggVorbisEncoderSettingsWidget::load()
 {
-    KConfig* c = k3bcore->config();
+    KSharedConfig::Ptr c = KGlobal::config();
 
     KConfigGroup grp(c, "K3bOggVorbisEncoderPlugin" );
 
@@ -133,7 +133,7 @@ void K3bOggVorbisEncoderSettingsWidget::load()
 
 void K3bOggVorbisEncoderSettingsWidget::save()
 {
-    KConfig* c = k3bcore->config();
+    KSharedConfig::Ptr c = KGlobal::config();
 
     KConfigGroup grp(c,"K3bOggVorbisEncoderPlugin" );
 
@@ -143,6 +143,8 @@ void K3bOggVorbisEncoderSettingsWidget::save()
     grp.writeEntry( "bitrate nominal", w->m_checkBitrateNominal->isChecked() ? w->m_inputBitrateNominal->value() : -1 );
     grp.writeEntry( "bitrate lower", w->m_checkBitrateLower->isChecked() ? w->m_inputBitrateLower->value() : -1 );
     //  c->writeEntry( "samplerate", w->m_inputSamplerate->value() );
+
+    grp.sync();
 }
 
 #include "k3boggvorbisencoderconfigwidget.moc"

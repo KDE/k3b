@@ -395,7 +395,7 @@ void K3bOggVorbisEncoder::cleanup()
 
 void K3bOggVorbisEncoder::loadConfig()
 {
-    KConfig* c = k3bcore->config();
+    KSharedConfig::Ptr c = KGlobal::config();
     KConfigGroup grp(c, "K3bOggVorbisEncoderPlugin" );
 
     d->manualBitrate = grp.readEntry( "manual bitrate", false );
@@ -415,7 +415,7 @@ QString K3bOggVorbisEncoder::fileTypeComment( const QString& ) const
 
 long long K3bOggVorbisEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 {
-    KConfig* c = k3bcore->config();
+    KSharedConfig::Ptr c = KGlobal::config();
     KConfigGroup grp(c, "K3bOggVorbisEncoderPlugin" );
 
     // the following code is based on the size estimation from the audiocd kioslave

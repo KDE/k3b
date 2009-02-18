@@ -23,7 +23,7 @@
 #include "k3bdevice_export.h"
 #include <kdebug.h>
 
-class KConfig;
+class KConfigGroup;
 
 namespace Solid {
     class Device;
@@ -160,9 +160,9 @@ namespace K3bDevice {
         /**
          * Reads the device information from the config file.
          */
-        virtual bool readConfig( KConfig* );
+        virtual bool readConfig( const KConfigGroup& );
 
-        virtual bool saveConfig( KConfig* );
+        virtual bool saveConfig( KConfigGroup );
 
 
     public Q_SLOTS:

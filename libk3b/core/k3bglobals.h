@@ -149,6 +149,8 @@ namespace K3b
 
     /**
      * get the default K3b temp path to store image files
+     *
+     * \sa K3bGlobalSettings::defaultTempPath
      */
     LIBK3B_EXPORT QString defaultTempPath();
 

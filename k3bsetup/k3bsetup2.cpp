@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -345,8 +345,8 @@ Q3CheckListItem* K3bSetup2::createDeviceItem( const QString& deviceNode )
 
 void K3bSetup2::load()
 {
-    d->externalBinManager->readConfig( d->config );
-    d->deviceManager->readConfig( d->config );
+    d->externalBinManager->readConfig( d->config->group( "External Programs" ) );
+    d->deviceManager->readConfig( d->config->group( "Devices" ) );
 
     KConfigGroup grp(d->config, "General Settings" );
     w->m_checkUseBurningGroup->setChecked( grp.readEntry( "use burning group", false ) );
@@ -379,11 +379,10 @@ void K3bSetup2::save()
     KConfigGroup grp(d->config, "General Settings" );
     grp.writeEntry( "use burning group", w->m_checkUseBurningGroup->isChecked() );
     grp.writeEntry( "burning group", burningGroup() );
-    KConfigGroup grpExt(d->config, "External Programs");
-    //TODO fix me.
-    d->externalBinManager->saveConfig( d->config );
-    d->deviceManager->saveConfig( d->config );
+    grp.sync();
 
+    d->externalBinManager->saveConfig( d->config->group( "External Programs" ) );
+    d->deviceManager->saveConfig( d->config->group( "Devices" ) );
 
     bool success = true;
 
