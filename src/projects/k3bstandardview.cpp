@@ -20,6 +20,7 @@
 #include <QSplitter>
 #include <QLayout>
 #include <QDebug>
+#include <QHeaderView>
 
 K3bStandardView::K3bStandardView(K3bDoc* doc, QWidget *parent )
 : K3bView(doc, parent)
@@ -118,6 +119,9 @@ void K3bStandardView::slotCurrentDirChanged()
     // make the file view show only the child nodes of the currently selected
     // directory from dir view
     m_fileView->setRootIndex(currentDir);
+    m_fileView->header()->resizeSections( QHeaderView::Stretch );
+
+    emit currentRootChanged( currentDir );
 }
 
 void K3bStandardView::slotCustomContextMenu(const QPoint &pos)

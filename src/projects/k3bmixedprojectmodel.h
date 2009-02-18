@@ -15,6 +15,7 @@
 #define K3BMIXEDMODEL_H
 
 #include "k3bmetaitemmodel.h"
+#include <QPersistentModelIndex>
 
 class K3bMixedDoc;
 
@@ -36,11 +37,21 @@ namespace K3b
     public:
         MixedProjectModel( K3bMixedDoc* doc, QObject* parent = 0 );
         ~MixedProjectModel();
+        QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+
+    public slots:
+        /**
+         * This method is used to know what is the root index being shown in the 
+         * file treeview. Knowing what root is being used, we can show the appropriate
+         * column headers for the right submodel
+         */
+        void slotCurrentRootIndexChanged( const QModelIndex& index );
 
     private:
         DataProjectModel *m_dataModel;
         AudioProjectModel *m_audioModel;
         K3bMixedDoc *m_doc;
+        QPersistentModelIndex m_currentRootIndex;
     };
 
 }

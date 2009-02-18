@@ -41,6 +41,10 @@ K3bMixedView::K3bMixedView( K3bMixedDoc* doc, QWidget* parent )
     : K3bStandardView( doc, parent ), m_doc(doc)
 {
     m_model = new K3b::MixedProjectModel(m_doc, this);
+
+    connect( this, SIGNAL( currentRootChanged( const QModelIndex& ) ),
+             m_model, SLOT( slotCurrentRootIndexChanged( const QModelIndex& ) ) );
+
     setModel(m_model);
 
 #ifdef __GNUC__

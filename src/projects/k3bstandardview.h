@@ -107,6 +107,9 @@ protected slots:
      */
     void slotRenameItem();
 
+signals:
+    void currentRootChanged( const QModelIndex& newRoot );
+
 private:
     QTreeView* m_dirView;
     QTreeView* m_fileView;
