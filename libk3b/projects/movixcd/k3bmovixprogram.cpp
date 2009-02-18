@@ -303,8 +303,9 @@ QStringList K3bMovixBin::supported( const QString& type ) const
     KProcess p;
     p << path + "movix-conf" << "--supported=" + type;
     p.setOutputChannelMode( KProcess::MergedChannels );
+    p.start();
     if( p.waitForFinished( -1 ) )
-        return QString(p.readAll()).split( '\n' );
+        return QString(p.readAll()).split( '\n', QString::SkipEmptyParts );
     else
         return QStringList();
 }

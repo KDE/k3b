@@ -52,14 +52,14 @@ public:
     bool reboot() const { return m_reboot; }
     bool ejectDisk() const { return m_ejectDisk; }
     bool randomPlay() const { return m_randomPlay; }
-    const QString& subtitleFontset() const { return m_subtitleFontset; }
-    const QString& bootMessageLanguage() const { return m_bootMessageLanguage; }
-    const QString& audioBackground() const { return m_audioBackground; }
-    const QString& keyboardLayout() const { return m_keyboardLayout; }
-    const QStringList& codecs() const { return m_codecs; }
-    const QString& defaultBootLabel() const { return m_defaultBootLabel; }
-    const QString& additionalMPlayerOptions() const { return m_additionalMPlayerOptions; }
-    const QString& unwantedMPlayerOptions() const { return m_unwantedMPlayerOptions; }
+    QString subtitleFontset() const { return m_subtitleFontset; }
+    QString bootMessageLanguage() const { return m_bootMessageLanguage; }
+    QString audioBackground() const { return m_audioBackground; }
+    QString keyboardLayout() const { return m_keyboardLayout; }
+    QStringList codecs() const { return m_codecs; }
+    QString defaultBootLabel() const { return m_defaultBootLabel; }
+    QString additionalMPlayerOptions() const { return m_additionalMPlayerOptions; }
+    QString unwantedMPlayerOptions() const { return m_unwantedMPlayerOptions; }
     int loopPlaylist() const { return m_loopPlaylist; }
     bool noDma() const { return m_noDma; }
 

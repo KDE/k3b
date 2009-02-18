@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kdebug.h>
+#include <kdialog.h>
 
 #include <qcheckbox.h>
 #include <qspinbox.h>
@@ -79,8 +80,10 @@ private:
 
 
 K3bMovixOptionsWidget::K3bMovixOptionsWidget( QWidget* parent )
-    : base_K3bMovixOptionsWidget( parent )
+    : QWidget( parent )
 {
+    setupUi( this );
+    layout()->setMargin( KDialog::marginHint() );
     m_keyboardLangHelper = new LanguageSelectionHelper( m_comboKeyboardLayout );
     m_helpLangHelper = new LanguageSelectionHelper( m_comboBootMessageLanguage );
 }
@@ -100,6 +103,7 @@ void K3bMovixOptionsWidget::init( const K3bMovixBin* bin )
     m_labelKeyboardLayout->setVisible( bin->hasFeature( "newfiles" ) );
     m_comboKeyboardLayout->setVisible( bin->hasFeature( "newfiles" ) );
 
+    kDebug() << bin->supportedSubtitleFonts();
     m_comboSubtitleFontset->addItems( bin->supportedSubtitleFonts() );
     m_helpLangHelper->insertLanguages( bin->supportedLanguages() );
     m_comboDefaultBootLabel->addItems( bin->supportedBootLabels() );
@@ -110,13 +114,25 @@ void K3bMovixOptionsWidget::init( const K3bMovixBin* bin )
 
 void K3bMovixOptionsWidget::readSettings( K3bMovixDoc* doc )
 {
-    m_comboSubtitleFontset->setCurrentItem( doc->subtitleFontset(), false );
+    if ( doc->subtitleFontset().isEmpty() )
+        m_comboSubtitleFontset->setCurrentIndex( 0 );
+    else
+        m_comboSubtitleFontset->setCurrentItem( doc->subtitleFontset(), false );
+
+    if ( doc->defaultBootLabel().isEmpty() )
+        m_comboDefaultBootLabel->setCurrentIndex( 0 );
+    else
+        m_comboDefaultBootLabel->setCurrentItem( doc->defaultBootLabel(), false );
+
+    if ( doc->audioBackground().isEmpty() )
+        m_comboAudioBackground->setCurrentIndex( 0 );
+    else
+        m_comboAudioBackground->setCurrentItem( doc->audioBackground(), false );
+
     m_spinLoop->setValue( doc->loopPlaylist() );
     m_editAdditionalMplayerOptions->setText( doc->additionalMPlayerOptions() );
     m_editUnwantedMplayerOptions->setText( doc->unwantedMPlayerOptions() );
     m_helpLangHelper->setLanguage( doc->bootMessageLanguage() );
-    m_comboDefaultBootLabel->setCurrentItem( doc->defaultBootLabel(), false );
-    m_comboAudioBackground->setCurrentItem( doc->audioBackground(), false );
     m_keyboardLangHelper->setLanguage( doc->keyboardLayout() );
     m_checkShutdown->setChecked( doc->shutdown() );
     m_checkReboot->setChecked( doc->reboot() );
@@ -146,14 +162,14 @@ void K3bMovixOptionsWidget::saveSettings( K3bMovixDoc* doc )
 
 void K3bMovixOptionsWidget::loadDefaults()
 {
-    m_comboSubtitleFontset->setCurrentItem( 0 ); // default
-    m_comboAudioBackground->setCurrentItem( 0 ); // default
-    m_comboKeyboardLayout->setCurrentItem( 0 ); // default
+    m_comboSubtitleFontset->setCurrentIndex( 0 ); // default
+    m_comboAudioBackground->setCurrentIndex( 0 ); // default
+    m_comboKeyboardLayout->setCurrentIndex( 0 ); // default
     m_spinLoop->setValue( 1 );
     m_editAdditionalMplayerOptions->setText( QString() );
     m_editUnwantedMplayerOptions->setText( QString() );
-    m_comboBootMessageLanguage->setCurrentItem( 0 ); // default
-    m_comboDefaultBootLabel->setCurrentItem( 0 );  // default
+    m_comboBootMessageLanguage->setCurrentIndex( 0 ); // default
+    m_comboDefaultBootLabel->setCurrentIndex( 0 );  // default
     m_checkShutdown->setChecked( false );
     m_checkReboot->setChecked( false );
     m_checkEject->setChecked( false );
@@ -168,7 +184,7 @@ void K3bMovixOptionsWidget::loadConfig( const KConfigGroup & c )
     if( !s.isEmpty() && s != "none" && m_comboSubtitleFontset->contains(s) )
         m_comboSubtitleFontset->setCurrentItem( s, false );
     else
-        m_comboSubtitleFontset->setCurrentItem( 0 ); // none
+        m_comboSubtitleFontset->setCurrentIndex( 0 ); // none
 
     m_spinLoop->setValue( c.readEntry("loop", 1 ) );
     m_editAdditionalMplayerOptions->setText( c.readEntry( "additional_mplayer_options" ) );
@@ -181,13 +197,13 @@ void K3bMovixOptionsWidget::loadConfig( const KConfigGroup & c )
     if( !s.isEmpty() && s != "default" && m_comboDefaultBootLabel->contains(s) )
         m_comboDefaultBootLabel->setCurrentItem( s, false );
     else
-        m_comboDefaultBootLabel->setCurrentItem( 0 );  // default
+        m_comboDefaultBootLabel->setCurrentIndex( 0 );  // default
 
     s = c.readEntry("audio_background");
     if( !s.isEmpty() && s != "default" && m_comboAudioBackground->contains(s) )
         m_comboAudioBackground->setCurrentItem( s, false );
     else
-        m_comboAudioBackground->setCurrentItem( 0 ); // default
+        m_comboAudioBackground->setCurrentIndex( 0 ); // default
 
     s = c.readEntry("keyboard_layout");
     m_keyboardLangHelper->setLanguage( s == "default" ? QString() : s );

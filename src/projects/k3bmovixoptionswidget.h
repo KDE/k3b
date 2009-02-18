@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,35 +21,26 @@
 class K3bMovixDoc;
 class K3bMovixBin;
 
-class base_K3bMovixOptionsWidget : public QWidget, public Ui::base_K3bMovixOptionsWidget
+class K3bMovixOptionsWidget : public QWidget, public Ui::base_K3bMovixOptionsWidget
 {
+    Q_OBJECT
+
 public:
-  base_K3bMovixOptionsWidget( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
-};
+    K3bMovixOptionsWidget( QWidget* parent = 0 );
+    ~K3bMovixOptionsWidget();
 
+public Q_SLOTS:
+    void init( const K3bMovixBin* );
+    void readSettings( K3bMovixDoc* );
+    void saveSettings( K3bMovixDoc* );
+    void loadConfig( const KConfigGroup & c );
+    void saveConfig( KConfigGroup &c );
+    void loadDefaults();
 
-class K3bMovixOptionsWidget : public base_K3bMovixOptionsWidget
-{
-  Q_OBJECT
-
- public:
-  K3bMovixOptionsWidget( QWidget* parent = 0 );
-  ~K3bMovixOptionsWidget();
-
- public Q_SLOTS:
-  void init( const K3bMovixBin* );
-  void readSettings( K3bMovixDoc* );
-  void saveSettings( K3bMovixDoc* );
-  void loadConfig( const KConfigGroup & c );
-  void saveConfig( KConfigGroup &c );
-  void loadDefaults();
-
- private:
-  class LanguageSelectionHelper;
-  LanguageSelectionHelper* m_keyboardLangHelper;
-  LanguageSelectionHelper* m_helpLangHelper;
+private:
+    class LanguageSelectionHelper;
+    LanguageSelectionHelper* m_keyboardLangHelper;
+    LanguageSelectionHelper* m_helpLangHelper;
 };
 
 

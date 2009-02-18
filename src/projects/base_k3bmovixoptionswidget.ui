@@ -1,217 +1,218 @@
-<ui version="4.0" stdsetdef="1" >
-  <author>Sebastian trueg</author>
-  <comment></comment>
-  <exportmacro></exportmacro>
-  <class>base_K3bMovixOptionsWidget</class>
-  <widget class="QWidget" name="Form1" >
-    <layout class="QVBoxLayout" >
-      <item>
-        <widget class="Q3GroupBox" name="groupBox2" >
-          <property name="frameShape" >
-            <enum>Q3GroupBox::GroupBoxPanel</enum>
+<ui version="4.0" >
+ <author>Sebastian trueg</author>
+ <class>base_K3bMovixOptionsWidget</class>
+ <widget class="QWidget" name="Form1" >
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="Q3GroupBox" name="groupBox2" >
+     <property name="title" >
+      <string>Playback Settings</string>
+     </property>
+     <property name="frameShape" >
+      <enum>Q3GroupBox::GroupBoxPanel</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>Q3GroupBox::Sunken</enum>
+     </property>
+     <layout class="QGridLayout" >
+      <item row="0" column="0" >
+       <widget class="QLabel" name="textLabel2" >
+        <property name="text" >
+         <string>MPlayer subtitle fontset:</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="KComboBox" name="m_comboSubtitleFontset" >
+        <property name="toolTip" >
+         <string>Select the font to be used to render subtitles</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0" >
+       <widget class="QLabel" name="textLabel7" >
+        <property name="whatsThis" >
+         <string/>
+        </property>
+        <property name="text" >
+         <string>Unwanted MPlayer options:</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2" >
+       <layout class="QHBoxLayout" >
+        <item>
+         <widget class="QCheckBox" name="m_checkRandomPlay" >
+          <property name="toolTip" >
+           <string>The files are played in random order</string>
           </property>
-          <property name="frameShadow" >
-            <enum>Q3GroupBox::Sunken</enum>
+          <property name="whatsThis" >
+           <string>&lt;p>If this option is checked the order in which the files are played is determined randomly every time it is played.</string>
           </property>
-          <property name="title" >
-            <string>Playback Settings</string>
+          <property name="text" >
+           <string>Pla&amp;y files randomly</string>
           </property>
-          <layout class="QGridLayout" >
-            <item row="0" column="0" >
-              <widget class="QLabel" name="textLabel2" >
-                <property name="text" >
-                  <string>MPlayer subtitle fontset:</string>
-                </property>
-                <property name="wordWrap" >
-                  <bool>false</bool>
-                </property>
-              </widget>
-            </item>
-            <item row="0" column="1" >
-              <widget class="KComboBox" name="m_comboSubtitleFontset" >
-                <property name="toolTip" stdset="0" >
-                  <string>Select the font to be used to render subtitles</string>
-                </property>
-              </widget>
-            </item>
-            <item row="5" column="0" >
-              <widget class="QLabel" name="textLabel7" >
-                <property name="text" >
-                  <string>Unwanted MPlayer options:</string>
-                </property>
-                <property name="whatsThis" stdset="0" >
-                  <string/>
-                </property>
-                <property name="wordWrap" >
-                  <bool>false</bool>
-                </property>
-              </widget>
-            </item>
-            <item rowspan="1" row="3" column="0" colspan="2" >
-              <layout class="QHBoxLayout" >
-                <item>
-                  <widget class="QCheckBox" name="m_checkRandomPlay" >
-                    <property name="text" >
-                      <string>Pla&amp;y files randomly</string>
-                    </property>
-                    <property name="toolTip" stdset="0" >
-                      <string>The files are played in random order</string>
-                    </property>
-                    <property name="whatsThis" stdset="0" >
-                      <string>&lt;p>If this option is checked the order in which the files are played is determined randomly every time it is played.</string>
-                    </property>
-                  </widget>
-                </item>
-                <item>
-                  <widget class="QCheckBox" name="m_checkNoDma" >
-                    <property name="text" >
-                      <string>&amp;Do not use DMA</string>
-                    </property>
-                    <property name="toolTip" stdset="0" >
-                      <string>Do not use DMA for media access</string>
-                    </property>
-                    <property name="whatsThis" stdset="0" >
-                      <string>&lt;p>If this option is checked the resulting eMovix CD/DVD will not use DMA for accessing the drive. This will slow down reading from the CD/DVD but may be necessary on some systems that do not support DMA.&lt;/p></string>
-                    </property>
-                  </widget>
-                </item>
-              </layout>
-            </item>
-            <item row="5" column="1" >
-              <widget class="QLineEdit" name="m_editUnwantedMplayerOptions" >
-                <property name="toolTip" stdset="0" >
-                  <string>MPlayer options you want to be sure MPlayer will not use</string>
-                </property>
-                <property name="whatsThis" stdset="0" >
-                  <string>&lt;p>Here one can specify MPlayer options that should never be used.
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="m_checkNoDma" >
+          <property name="toolTip" >
+           <string>Do not use DMA for media access</string>
+          </property>
+          <property name="whatsThis" >
+           <string>&lt;p>If this option is checked the resulting eMovix CD/DVD will not use DMA for accessing the drive. This will slow down reading from the CD/DVD but may be necessary on some systems that do not support DMA.&lt;/p></string>
+          </property>
+          <property name="text" >
+           <string>&amp;Do not use DMA</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="5" column="1" >
+       <widget class="QLineEdit" name="m_editUnwantedMplayerOptions" >
+        <property name="toolTip" >
+         <string>MPlayer options you want to be sure MPlayer will not use</string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;p>Here one can specify MPlayer options that should never be used.
 &lt;p>They have to be separated by spaces:
 &lt;pre>opt1 opt2 opt3&lt;/pre></string>
-                </property>
-              </widget>
-            </item>
-            <item row="4" column="1" >
-              <widget class="QLineEdit" name="m_editAdditionalMplayerOptions" >
-                <property name="toolTip" stdset="0" >
-                  <string>Additional MPlayer options</string>
-                </property>
-                <property name="whatsThis" stdset="0" >
-                  <string>&lt;p>MPlayer options that should be used in any case.
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1" >
+       <widget class="QLineEdit" name="m_editAdditionalMplayerOptions" >
+        <property name="toolTip" >
+         <string>Additional MPlayer options</string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;p>MPlayer options that should be used in any case.
 &lt;p>They have to be separated by spaces:
 &lt;pre>opt1 opt2 opt3&lt;/pre></string>
-                </property>
-              </widget>
-            </item>
-            <item row="4" column="0" >
-              <widget class="QLabel" name="textLabel6" >
-                <property name="text" >
-                  <string>Additional MPlayer options:</string>
-                </property>
-                <property name="wordWrap" >
-                  <bool>false</bool>
-                </property>
-              </widget>
-            </item>
-            <item row="2" column="0" >
-              <widget class="QLabel" name="textLabel3" >
-                <property name="text" >
-                  <string>Loop playlist:</string>
-                </property>
-                <property name="wordWrap" >
-                  <bool>false</bool>
-                </property>
-              </widget>
-            </item>
-            <item row="2" column="1" >
-              <widget class="QSpinBox" name="m_spinLoop" >
-                <property name="suffix" >
-                  <string> time(s)</string>
-                </property>
-                <property name="specialValueText" >
-                  <string>infinity</string>
-                </property>
-                <property name="value" >
-                  <number>1</number>
-                </property>
-                <property name="toolTip" stdset="0" >
-                  <string>How many times should the playlist be looped</string>
-                </property>
-              </widget>
-            </item>
-            <item row="1" column="0" >
-              <widget class="QLabel" name="m_labelAudioBackground" >
-                <property name="text" >
-                  <string>Audio Player Background:</string>
-                </property>
-                <property name="wordWrap" >
-                  <bool>false</bool>
-                </property>
-              </widget>
-            </item>
-            <item row="1" column="1" >
-              <widget class="KComboBox" name="m_comboAudioBackground" >
-                <property name="toolTip" stdset="0" >
-                  <string>Background video to show during audio playback</string>
-                </property>
-                <property name="whatsThis" stdset="0" >
-                  <string>&lt;p>&lt;b>Audio Player Background&lt;/b>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" >
+       <widget class="QLabel" name="textLabel6" >
+        <property name="text" >
+         <string>Additional MPlayer options:</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="textLabel3" >
+        <property name="text" >
+         <string>Loop playlist:</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="QSpinBox" name="m_spinLoop" >
+        <property name="toolTip" >
+         <string>How many times should the playlist be looped</string>
+        </property>
+        <property name="specialValueText" >
+         <string>infinity</string>
+        </property>
+        <property name="suffix" >
+         <string> time(s)</string>
+        </property>
+        <property name="value" >
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="m_labelAudioBackground" >
+        <property name="text" >
+         <string>Audio Player Background:</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="KComboBox" name="m_comboAudioBackground" >
+        <property name="toolTip" >
+         <string>Background video to show during audio playback</string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;p>&lt;b>Audio Player Background&lt;/b>
 &lt;p>During audio playback normally the screen would be black. However, if a background movie has been selected, eMovix will display it during playback.
 &lt;p>Additional background movies can be installed. However, this is not as simple as a few mouse clicks. The background movies are stored in the emovix shared data folder (mostly &lt;i>/usr/share/emovix&lt;/i> or &lt;i>/usr/local/share/emovix&lt;/i>) under &lt;em>backgrounds&lt;/em>. So to add a background one has to copy the file to that folder.</string>
-                </property>
-              </widget>
-            </item>
-          </layout>
-        </widget>
+        </property>
+       </widget>
       </item>
-      <item>
-        <widget class="Q3GroupBox" name="groupBox3" >
-          <property name="title" >
-            <string>Startup Behavior</string>
-          </property>
-          <layout class="QGridLayout" >
-            <item row="1" column="0" >
-              <widget class="QLabel" name="m_labelKeyboardLayout" >
-                <property name="text" >
-                  <string>Keyboard Layout:</string>
-                </property>
-                <property name="wordWrap" >
-                  <bool>false</bool>
-                </property>
-              </widget>
-            </item>
-            <item row="0" column="0" >
-              <widget class="QLabel" name="textLabel1" >
-                <property name="text" >
-                  <string>eMovix boot messages language:</string>
-                </property>
-                <property name="wordWrap" >
-                  <bool>false</bool>
-                </property>
-              </widget>
-            </item>
-            <item row="0" column="1" >
-              <widget class="KComboBox" name="m_comboBootMessageLanguage" >
-                <property name="toolTip" stdset="0" >
-                  <string>Select the language of the eMovix help screens</string>
-                </property>
-              </widget>
-            </item>
-            <item row="2" column="0" >
-              <widget class="QLabel" name="textLabel5" >
-                <property name="text" >
-                  <string>Default boot label:</string>
-                </property>
-                <property name="wordWrap" >
-                  <bool>false</bool>
-                </property>
-              </widget>
-            </item>
-            <item row="2" column="1" >
-              <widget class="KComboBox" name="m_comboDefaultBootLabel" >
-                <property name="toolTip" stdset="0" >
-                  <string>Select the default Linux kernel configuration</string>
-                </property>
-                <property name="whatsThis" stdset="0" >
-                  <string>&lt;p>&lt;b>eMovix Boot Labels&lt;/b>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="Q3GroupBox" name="groupBox3" >
+     <property name="title" >
+      <string>Startup Behavior</string>
+     </property>
+     <layout class="QGridLayout" >
+      <item row="1" column="0" >
+       <widget class="QLabel" name="m_labelKeyboardLayout" >
+        <property name="text" >
+         <string>Keyboard Layout:</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="textLabel1" >
+        <property name="text" >
+         <string>eMovix boot messages language:</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="KComboBox" name="m_comboBootMessageLanguage" >
+        <property name="toolTip" >
+         <string>Select the language of the eMovix help screens</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="textLabel5" >
+        <property name="text" >
+         <string>Default boot label:</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="KComboBox" name="m_comboDefaultBootLabel" >
+        <property name="toolTip" >
+         <string>Select the default Linux kernel configuration</string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;p>&lt;b>eMovix Boot Labels&lt;/b>
 &lt;p>eMovix provides are variety or different boot configurations which can be selected at boot time via a boot label (compare Lilo or Grub). The many different boot configurations mainly influence the Video output.
 &lt;p>The &lt;b>default&lt;/b>, &lt;b>movix&lt;/b>, or &lt;b>MoviX&lt;/b> labels start a general Vesa video driver.
 &lt;p>The &lt;b>TV&lt;/b> labels can be used to direct video to the TV output of the graphic board. eMovix provides TVout drivers for different brands of graphic boards.
@@ -219,108 +220,113 @@
 &lt;p>The &lt;b>AA&lt;/b> labels make eMovix output the video through the Ascii-Art library which displays the picture in text mode through the usage of simple Acsii characters.
 &lt;p>The &lt;b>hd&lt;/b> label makes eMovix boot from the local harddisk instead of the medium. This can be used to prevent accidental starting of an eMovix medium.
 &lt;p>The &lt;b>floppy&lt;/b> label makes eMovix boot from the local floppy drive instead of the medium.</string>
-                </property>
-              </widget>
-            </item>
-            <item row="1" column="1" >
-              <widget class="KComboBox" name="m_comboKeyboardLayout" >
-                <property name="toolTip" stdset="0" >
-                  <string>Select the layout of the keyboard</string>
-                </property>
-                <property name="whatsThis" stdset="0" >
-                  <string>&lt;p>The keyboard layout selected here will be used for the eMovix commands like controlling the media player.</string>
-                </property>
-              </widget>
-            </item>
-          </layout>
-        </widget>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="KComboBox" name="m_comboKeyboardLayout" >
+        <property name="toolTip" >
+         <string>Select the layout of the keyboard</string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;p>The keyboard layout selected here will be used for the eMovix commands like controlling the media player.</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="Q3GroupBox" name="groupBox1" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+       <horstretch>0</horstretch>
+       <verstretch>1</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title" >
+      <string>Behavior After Playing</string>
+     </property>
+     <layout class="QHBoxLayout" >
+      <item>
+       <widget class="QCheckBox" name="m_checkEject" >
+        <property name="toolTip" >
+         <string>Eject the disk after playing has finished</string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;p>If this option is checked the disk will be ejected after MPlayer has finished.</string>
+        </property>
+        <property name="text" >
+         <string>E&amp;ject disk</string>
+        </property>
+       </widget>
       </item>
       <item>
-        <widget class="Q3GroupBox" name="groupBox1" >
-          <property name="sizePolicy" >
-            <sizepolicy>
-              <hsizetype>5</hsizetype>
-              <vsizetype>5</vsizetype>
-              <horstretch>0</horstretch>
-              <verstretch>1</verstretch>
-            </sizepolicy>
-          </property>
-          <property name="title" >
-            <string>Behavior After Playing</string>
-          </property>
-          <layout class="QHBoxLayout" >
-            <item>
-              <widget class="QCheckBox" name="m_checkEject" >
-                <property name="text" >
-                  <string>E&amp;ject disk</string>
-                </property>
-                <property name="toolTip" stdset="0" >
-                  <string>Eject the disk after playing has finished</string>
-                </property>
-                <property name="whatsThis" stdset="0" >
-                  <string>&lt;p>If this option is checked the disk will be ejected after MPlayer has finished.</string>
-                </property>
-              </widget>
-            </item>
-            <item>
-              <widget class="QCheckBox" name="m_checkShutdown" >
-                <property name="text" >
-                  <string>Sh&amp;utdown</string>
-                </property>
-                <property name="toolTip" stdset="0" >
-                  <string>Shutdown after playing has finished</string>
-                </property>
-                <property name="whatsThis" stdset="0" >
-                  <string>&lt;p>If this option is checked the PC will be shut down after MPlayer has finished playing.</string>
-                </property>
-              </widget>
-            </item>
-            <item>
-              <widget class="QCheckBox" name="m_checkReboot" >
-                <property name="text" >
-                  <string>Re&amp;boot</string>
-                </property>
-                <property name="toolTip" stdset="0" >
-                  <string>Reboot after playing has finished</string>
-                </property>
-                <property name="whatsThis" stdset="0" >
-                  <string>&lt;p>If this option is checked the PC will be rebooted after MPlayer has finished playing.</string>
-                </property>
-              </widget>
-            </item>
-          </layout>
-        </widget>
+       <widget class="QCheckBox" name="m_checkShutdown" >
+        <property name="toolTip" >
+         <string>Shutdown after playing has finished</string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;p>If this option is checked the PC will be shut down after MPlayer has finished playing.</string>
+        </property>
+        <property name="text" >
+         <string>Sh&amp;utdown</string>
+        </property>
+       </widget>
       </item>
-    </layout>
-  </widget>
-  <layoutdefault spacing="6" margin="11" />
-  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
-  <customwidgets>
-    <customwidget>
-      <class>KComboBox</class>
-      <extends>QComboBox</extends>
-      <header location="global" >kcombobox.h</header>
-    </customwidget>
-  </customwidgets>
-  <includes>
-    <include location="local" >kcombobox.h</include>
-    <include location="local" >kcombobox.h</include>
-    <include location="local" >kcombobox.h</include>
-    <include location="local" >kcombobox.h</include>
-    <include location="local" >kcombobox.h</include>
-  </includes>
-  <connections>
-    <connection>
-      <sender>m_checkShutdown</sender>
-      <signal>toggled(bool)</signal>
-      <receiver>m_checkReboot</receiver>
-      <slot>setDisabled(bool)</slot>
-    </connection>
-    <connection>
-      <sender>m_checkReboot</sender>
-      <signal>toggled(bool)</signal>
-      <receiver>m_checkShutdown</receiver>
-      <slot>setDisabled(bool)</slot>
-    </connection>
-  </connections>
+      <item>
+       <widget class="QCheckBox" name="m_checkReboot" >
+        <property name="toolTip" >
+         <string>Reboot after playing has finished</string>
+        </property>
+        <property name="whatsThis" >
+         <string>&lt;p>If this option is checked the PC will be rebooted after MPlayer has finished playing.</string>
+        </property>
+        <property name="text" >
+         <string>Re&amp;boot</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>Q3GroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>Qt3Support/Q3GroupBox</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+ </customwidgets>
+ <includes>
+  <include location="local" >kcombobox.h</include>
+  <include location="local" >kcombobox.h</include>
+  <include location="local" >kcombobox.h</include>
+  <include location="local" >kcombobox.h</include>
+  <include location="local" >kcombobox.h</include>
+ </includes>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>m_checkShutdown</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_checkReboot</receiver>
+   <slot>setDisabled(bool)</slot>
+  </connection>
+  <connection>
+   <sender>m_checkReboot</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_checkShutdown</receiver>
+   <slot>setDisabled(bool)</slot>
+  </connection>
+ </connections>
 </ui>
