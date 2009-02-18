@@ -1,5 +1,5 @@
 [Desktop Entry]
-X-KDE-Solid-Predicate=[StorageVolume.ignored == false AND OpticalDisc.availableContent & 'Audio']
+X-KDE-Solid-Predicate=[StorageVolume.ignored == false AND OpticalDisc.availableContent == 'Audio']
 Actions=K3bRip;
 Type=Service
 X-KDE-Priority=TopLevel
