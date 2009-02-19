@@ -264,7 +264,6 @@ void K3bInteractionDialog::slotSaveUserDefaults()
 {
     KConfigGroup c( KGlobal::config(), m_configGroup );
     saveUserDefaults( c );
-    c.sync();
 }
 
 
@@ -279,7 +278,6 @@ void K3bInteractionDialog::saveLastSettings()
 {
     KConfigGroup c( KGlobal::config(), "last used " + m_configGroup );
     saveUserDefaults( c );
-    c.sync();
 }
 
 

@@ -257,7 +257,6 @@ void K3bCore::saveSettings( KSharedConfig::Ptr c )
 {
     KConfigGroup grp( c, "General Options" );
     grp.writeEntry( "config version", version().toString() );
-    grp.sync();
 
     deviceManager()->saveConfig( c->group( "Devices" ) );
     externalBinManager()->saveConfig( c->group( "External Programs" ) );

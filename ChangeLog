@@ -1,8 +1,10 @@
-1.1
+2.0
 ===
+ * Port to KDE 4
  * Always allow manual writing speed selection.
  * Use proper toolbars instead of the toolboxes -> nicer layouting with different styles
  * Merged CD and DVD copy dialogs
+ * Merged CD and DVD image burning dialogs
  * Merged CD-RW erasing and DVD formatting dialogs
  * Merged Data CD and Data DVD projects into one plain data project with Blu-Ray support
  * Merged eMovix CD and eMovix DVD projects
@@ -13,9 +15,47 @@
  * "Clear" project" now only clears the added data but leaves the settings as they were (bug 147838)
  * Support files bigger than 4GB via mkisofs 2.01.01a32 and above
  * Do only reload the medium for verification if necessary (depends on the writer)
- * Support for DVD writing via cdrecord
- * Support for Blue-Ray writing
+ * Support for Blu-Ray writing
+ * Support for DVD and Blu-Ray writing via cdrecord
+
+1.0.5
+=====
+ * Fix CD Copy device selection (Bug 151924)
+ * Fixed HAL mounting (thanks to Ken Milmore)
+ * Always wait for the drive to become ready before starting verification.
+
+1.0.4
+=====
+ * Never use growisofs parameter -dvd-compat with DVD-RW media in restricted overwrite mode
+ * Unmount medium before DVD formatting
+ * Silently (without introducing new strings for translation) allow the burning of files
+   bigger than 4 GB with appropriate versions of genisoimage or mkisofs.
+ * Do only reload the medium before verification if necessary, i.e. if the newly written
+   track cannot be read otherwise (many old drives depend on this). Hopefully this will
+   at least work around the aweful "DMA disabled" bug for many users.
 	
+1.0.3
+=====
+ * Reverted to old behaviour of reloading medium before verification. Not enough
+   testing had been done before introducing this and some systems fail to read the
+   medium before reload (Bugs 147297, 147328, 147420, 147698).
+ * Do not crash when the currently playing audio project item is removed (Bug 147548).
+ * Added desktop actions to handle empty media with K3b.
+ * Fixed read retry when reading data tracks (Bug 147778)
+ * K3b's dialogs now honor the global button layout setting (Bug 147799)
+ * Do not crash on mp3 files without tags if compiled with taglib support (Bug 142651)
+ * Do not allow to copy a rewritable media to itself.
+ * Fixed crash on startup with devices that return bogus GET PERFORMANCE data (Bug 147676)
+
+1.0.2
+=====
+ * Properly determine the capacity of complete CD-R(W) media.
+ * Mark a data project as modified if files are renamed.
+ * Allow adding of all actions to the welcome window (Bug 145866)
+ * Added "NoDisplay=true" property to k3b-cue.desktop and k3b-iso.desktop 
+ * Fixed supported write speed detection on some devices
+ * No reload before verification and between writing sessions (CD copy + Mixed Mode CD) anymore
+
 1.0.1
 =====
  * Fixed crash when using the Device menu without a selected device.

@@ -239,8 +239,6 @@ bool K3bExternalBinManager::saveConfig( KConfigGroup grp )
             grp.writeEntry( p->name() + " last seen newest version", newestBin->version.toString() );
     }
 
-    grp.sync();
-
     return true;
 }
 

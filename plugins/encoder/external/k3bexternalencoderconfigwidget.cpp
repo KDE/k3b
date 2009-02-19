@@ -228,8 +228,6 @@ void K3bExternalEncoderSettingsWidget::save()
         cmdNames << it.value().name;
     }
     grp.writeEntry( "commands", cmdNames );
-
-    grp.sync();
 }
 
 #include "k3bexternalencoderconfigwidget.moc"

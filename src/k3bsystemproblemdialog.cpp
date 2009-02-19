@@ -167,7 +167,6 @@ void K3bSystemProblemDialog::closeEvent( QCloseEvent* e )
     if( m_checkDontShowAgain->isChecked() ) {
         KConfigGroup grp( KGlobal::config(), "General Options" );
         grp.writeEntry( "check system config", false );
-        grp.sync();
     }
 
     e->accept();

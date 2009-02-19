@@ -143,8 +143,6 @@ void K3bOggVorbisEncoderSettingsWidget::save()
     grp.writeEntry( "bitrate nominal", w->m_checkBitrateNominal->isChecked() ? w->m_inputBitrateNominal->value() : -1 );
     grp.writeEntry( "bitrate lower", w->m_checkBitrateLower->isChecked() ? w->m_inputBitrateLower->value() : -1 );
     //  c->writeEntry( "samplerate", w->m_inputSamplerate->value() );
-
-    grp.sync();
 }
 
 #include "k3boggvorbisencoderconfigwidget.moc"

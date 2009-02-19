@@ -765,8 +765,6 @@ void K3bFillStatusDisplay::slotSaveUserDefaults()
 
     c.writeEntry( "show minutes", d->showTime );
     c.writeEntry( "default media size", d->actionAuto->isChecked() ? 0 : d->displayWidget->cdSize().lba() );
-
-    c.sync();
 }
 
 

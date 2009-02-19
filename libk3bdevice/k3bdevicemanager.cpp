@@ -347,8 +347,6 @@ bool K3bDevice::DeviceManager::saveConfig( KConfigGroup c )
         c.writeEntry( configEntryName, list );
     }
 
-    c.sync();
-
     return true;
 }
 

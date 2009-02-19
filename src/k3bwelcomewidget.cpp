@@ -385,7 +385,6 @@ void K3bWelcomeWidget::saveConfig( KConfigGroup& c )
         sl.append( (*it)->objectName() );
 
     c.writeEntry( "welcome_actions", sl );
-    c.sync();
 }
 
 

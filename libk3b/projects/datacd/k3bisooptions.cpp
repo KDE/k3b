@@ -127,8 +127,6 @@ void K3bIsoOptions::save( KConfigGroup& c, bool saveVolumeDesc )
     c.writeEntry( "discard broken symlinks", discardBrokenSymlinks() );
 
     c.writeEntry( "preserve file permissions", m_preserveFilePermissions );
-
-    c.sync();
 }
 
 

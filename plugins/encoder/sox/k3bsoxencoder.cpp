@@ -469,8 +469,6 @@ void K3bSoxEncoderSettingsWidget::saveConfig()
         break;
     }
     grp.writeEntry( "data encoding", enc );
-
-    grp.sync();
 }
 
 

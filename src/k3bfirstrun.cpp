@@ -35,7 +35,6 @@ void K3bFirstRun::run( QWidget* parent )
         return;
 
     group.writeEntry( "First run", false );
-    group.sync();
 
     // for now the first run dialog only asks for
     // the konqui integration. So in case it is

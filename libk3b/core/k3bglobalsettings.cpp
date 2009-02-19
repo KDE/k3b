@@ -51,6 +51,4 @@ void K3bGlobalSettings::saveSettings( KConfigGroup c )
     c.writeEntry( "Fifo buffer", m_bufferSize );
     c.writeEntry( "Force unsafe operations", m_force );
     c.writeEntry( "Temp Dir", m_defaultTempPath );
-
-    c.sync();
 }

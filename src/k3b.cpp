@@ -583,6 +583,8 @@ void K3bMainWindow::saveOptions()
 
     KConfigGroup grpOption( config(), "General Options" );
     grpOption.writeEntry( "Show Document Header", actionViewDocumentHeader->isChecked() );
+
+    config()->sync();
 }
 
 
@@ -650,7 +652,7 @@ void K3bMainWindow::saveProperties( KConfigGroup& /*c*/ )
         ++cnt;
     }
 
-    grp.sync();
+    c.sync();
 }
 
 

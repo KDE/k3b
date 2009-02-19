@@ -219,8 +219,6 @@ void K3bLameEncoderSettingsWidget::save()
 
     // default to 2 which is the same as the -h lame option
     grp.writeEntry( "Encoder Quality", m_spinEncoderQuality->value() );
-
-    grp.sync();
 }
 
 

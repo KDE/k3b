@@ -107,8 +107,6 @@ void K3bVcdOptions::save( KConfigGroup& c )
     c.writeEntry( "RearMarginTrack", m_rearmargintrack );
     c.writeEntry( "UseGaps", m_usegaps );
     c.writeEntry( "MPEG Version", ( int )m_mpegversion );
-
-    c.sync();
 }
 
 

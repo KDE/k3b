@@ -300,7 +300,6 @@ void K3bJobProgressOSD::saveSettings( KConfigGroup c )
 {
     c.writeEntry( "Position", m_position );
     c.writeEntry( "Screen", m_screen );
-    c.sync();
 }
 
 #include "k3bjobprogressosd.moc"
