@@ -6,5 +6,10 @@ X-KDE-Priority=TopLevel
 
 [Desktop Action K3bCopy]
 Name=Copy with K3b
+Name[ga]=Cóipeáil le K3b
+Name[pt]=Copiar com o K3b
+Name[pt_BR]=Copiar com o K3b
+Name[sv]=Kopiera med K3b
+Name[uk]=Скопіювати за допомогою K3b
 Exec=k3b --copy %i
 Icon=k3b
