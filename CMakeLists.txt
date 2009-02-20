@@ -69,7 +69,7 @@ if(K3B_ENABLE_MUSICBRAINZ)
     FALSE "1.1" "") 
 endif(K3B_ENABLE_MUSICBRAINZ)
 
-find_package(Kcddb REQUIRED)
+find_package(Kcddb)
 macro_log_feature( KCDDB_FOUND "KCddb"
   "KCddb is used to retrieve audio CD meta data from the internet." 
   "http://multimedia.kde.org" 
