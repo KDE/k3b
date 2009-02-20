@@ -58,30 +58,36 @@ K3bDevice::HalConnection::~HalConnection()
 int K3bDevice::HalConnection::lock( Device* dev )
 {
     QDBusInterface halIface( "org.freedesktop.Hal",
-                             "/org/freedesktop/Hal/devices/" + dev->solidDevice().udi(),
+                             dev->solidDevice().udi(),
                              "org.freedesktop.Hal.Device",
                              QDBusConnection::systemBus() );
 
-    QDBusMessage msg = halIface.call( "Lock", QVariant( QLatin1String( "Locked by the K3b libraries" ) ) );
+    if ( halIface.isValid() ) {
+        QDBusMessage msg = halIface.call( QLatin1String( "Lock" ), QLatin1String( "Locked by the K3b libraries" ) );
 
-    if ( msg.type() == QDBusMessage::ErrorMessage ) {
-        kDebug() << "Failed to lock device through HAL:" << msg.errorMessage();
-        if( msg.errorName() == QLatin1String( "org.freedesktop.Hal.NoSuchDevice" ) ) {
-            return org_freedesktop_Hal_NoSuchDevice;
-        }
-        else if( msg.errorName() == QLatin1String( "org.freedesktop.Hal.DeviceAlreadyLocked" ) ) {
-            return org_freedesktop_Hal_DeviceAlreadyLocked;
-        }
-        else if( msg.errorName() == QLatin1String( "org.freedesktop.Hal.PermissionDenied" ) ) {
-            return org_freedesktop_Hal_PermissionDenied;
+        if ( msg.type() == QDBusMessage::ErrorMessage ) {
+            kDebug() << "Failed to lock device through HAL:" << msg.errorMessage();
+            if( msg.errorName() == QLatin1String( "org.freedesktop.Hal.NoSuchDevice" ) ) {
+                return org_freedesktop_Hal_NoSuchDevice;
+            }
+            else if( msg.errorName() == QLatin1String( "org.freedesktop.Hal.DeviceAlreadyLocked" ) ) {
+                return org_freedesktop_Hal_DeviceAlreadyLocked;
+            }
+            else if( msg.errorName() == QLatin1String( "org.freedesktop.Hal.PermissionDenied" ) ) {
+                return org_freedesktop_Hal_PermissionDenied;
+            }
+            else {
+                kDebug() << "Unkown HAL error:" << msg.errorName();
+                return -1;
+            }
         }
         else {
-            kDebug() << "Unkown HAL error:" << msg.errorName();
-            return -1;
+            return org_freedesktop_Hal_Success;
         }
     }
     else {
-        return org_freedesktop_Hal_Success;
+        kDebug() << "Could not connect to device object:" << halIface.path();
+        return org_freedesktop_Hal_CommunicationError;
     }
 }
 
@@ -89,30 +95,36 @@ int K3bDevice::HalConnection::lock( Device* dev )
 int K3bDevice::HalConnection::unlock( Device* dev )
 {
     QDBusInterface halIface( "org.freedesktop.Hal",
-                             "/org/freedesktop/Hal/devices/" + dev->solidDevice().udi(),
+                             dev->solidDevice().udi(),
                              "org.freedesktop.Hal.Device",
                              QDBusConnection::systemBus() );
 
-    QDBusMessage msg = halIface.call( "Unlock" );
+    if ( halIface.isValid() ) {
+        QDBusMessage msg = halIface.call( QLatin1String( "Unlock" ) );
 
-    if ( msg.type() == QDBusMessage::ErrorMessage ) {
-        kDebug() << "Failed to unlock device through HAL:" << msg.errorMessage();
-        if( msg.errorName() == QLatin1String( "org.freedesktop.Hal.NoSuchDevice" ) ) {
-            return org_freedesktop_Hal_NoSuchDevice;
-        }
-        else if( msg.errorName() == QLatin1String( "org.freedesktop.Hal.DeviceAlreadyLocked" ) ) {
-            return org_freedesktop_Hal_DeviceAlreadyLocked;
-        }
-        else if( msg.errorName() == QLatin1String( "org.freedesktop.Hal.PermissionDenied" ) ) {
-            return org_freedesktop_Hal_PermissionDenied;
+        if ( msg.type() == QDBusMessage::ErrorMessage ) {
+            kDebug() << "Failed to unlock device through HAL:" << msg.errorMessage();
+            if( msg.errorName() == QLatin1String( "org.freedesktop.Hal.NoSuchDevice" ) ) {
+                return org_freedesktop_Hal_NoSuchDevice;
+            }
+            else if( msg.errorName() == QLatin1String( "org.freedesktop.Hal.DeviceAlreadyLocked" ) ) {
+                return org_freedesktop_Hal_DeviceAlreadyLocked;
+            }
+            else if( msg.errorName() == QLatin1String( "org.freedesktop.Hal.PermissionDenied" ) ) {
+                return org_freedesktop_Hal_PermissionDenied;
+            }
+            else {
+                kDebug() << "Unkown HAL error:" << msg.errorName();
+                return -1;
+            }
         }
         else {
-            kDebug() << "Unkown HAL error:" << msg.errorName();
-            return -1;
+            return org_freedesktop_Hal_Success;
         }
     }
     else {
-        return org_freedesktop_Hal_Success;
+        kDebug() << "Could not connect to device object:" << halIface.path();
+        return org_freedesktop_Hal_CommunicationError;
     }
 }
 
