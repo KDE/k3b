@@ -63,6 +63,13 @@ public:
     virtual void blockingInformation( const QString& text,
                                       const QString& caption = QString() );
 
+
+    /**
+     * waits until all running K3bThread have finished.
+     * This is used by K3bApplication.
+     */
+    static void waitUntilFinished();
+
 public Q_SLOTS:
     /**
      * Starts the job in a different thread. Emits the started()

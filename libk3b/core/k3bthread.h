@@ -19,8 +19,6 @@
 #include <qthread.h>
 #include <k3bdevicetypes.h>
 
-#include <kdemacros.h>
-
 
 class K3bThreadJob;
 namespace K3bDevice {
@@ -42,6 +40,12 @@ public:
 
     void ensureDone();
     bool success() const;
+
+    /**
+     * waits until all running K3bThread have finished.
+     * This is used by K3bApplication.
+     */
+    static void waitUntilFinished();
 
 protected:
     void run();

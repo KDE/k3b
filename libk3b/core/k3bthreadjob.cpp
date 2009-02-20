@@ -159,6 +159,12 @@ void K3bThreadJob::customEvent( QEvent* e )
         }
         ce->done( result );
     }
- }
+}
+
+
+void K3bThreadJob::waitUntilFinished()
+{
+    K3bThread::waitUntilFinished();
+}
 
 #include "k3bthreadjob.moc"

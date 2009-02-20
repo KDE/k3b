@@ -27,6 +27,7 @@
 static QList<K3bThread*> s_threads;
 
 
+
 class K3bThread::Private
 {
 public:
@@ -81,6 +82,17 @@ void K3bThread::slotEnsureDoneTimeout()
         terminate();
         wait();
     }
+}
+
+
+void K3bThread::waitUntilFinished()
+{
+    foreach( K3bThread* thread, s_threads ) {
+        kDebug() << "Waiting for thread " << thread << endl;
+        thread->wait();
+    }
+
+    kDebug() << "Thread waiting done." << endl;
 }
 
 #include "k3bthread.moc"
