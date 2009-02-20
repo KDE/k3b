@@ -70,7 +70,7 @@ public Q_SLOTS:
 
 protected:
     virtual void loadConfig( const KConfigGroup& config ) = 0;
-    virtual void saveConfig( KConfigGroup& config ) = 0;
+    virtual void saveConfig( KConfigGroup config ) = 0;
 #endif
 };
 

@@ -62,7 +62,7 @@ class K3bAudioConvertingOptionWidget : public base_K3bAudioRippingOptionWidget
  public Q_SLOTS:
   void loadDefaults();
   void loadConfig( const KConfigGroup& );
-  void saveConfig( KConfigGroup& );
+  void saveConfig( KConfigGroup );
 
   Q_SIGNALS:
   void changed();

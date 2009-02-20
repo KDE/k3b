@@ -74,7 +74,7 @@ public Q_SLOTS:
     void saveConfig();
 
     void readConfig( const KConfigGroup& );
-    void saveConfig( KConfigGroup& );
+    void saveConfig( KConfigGroup );
 
 private Q_SLOTS:
     void slotUpdateFreeTempSpace();

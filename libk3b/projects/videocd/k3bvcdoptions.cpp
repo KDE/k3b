@@ -82,7 +82,7 @@ bool K3bVcdOptions::checkCdiFiles()
     return true;
 }
 
-void K3bVcdOptions::save( KConfigGroup& c )
+void K3bVcdOptions::save( KConfigGroup c )
 {
     c.writeEntry( "volume_id", m_volumeID );
     c.writeEntry( "album_id", m_albumID );

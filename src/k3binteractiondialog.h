@@ -188,7 +188,7 @@ protected:
      * The save/load buttons are only activated if the config group is
      * set in the constructor.
      */
-    virtual void saveUserDefaults( KConfigGroup& config );
+    virtual void saveUserDefaults( KConfigGroup config );
 
     /**
      * Reimplement this to support the save/load user default buttons.

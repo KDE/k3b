@@ -34,7 +34,7 @@ public Q_SLOTS:
     void readSettings( K3bMovixDoc* );
     void saveSettings( K3bMovixDoc* );
     void loadConfig( const KConfigGroup & c );
-    void saveConfig( KConfigGroup &c );
+    void saveConfig( KConfigGroup c );
     void loadDefaults();
 
 private:

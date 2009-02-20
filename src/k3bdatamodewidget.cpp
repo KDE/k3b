@@ -78,7 +78,7 @@ void K3bDataModeWidget::setDataMode( int mode )
 }
 
 
-void K3bDataModeWidget::saveConfig( KConfigGroup& c )
+void K3bDataModeWidget::saveConfig( KConfigGroup c )
 {
     QString datamode;
     if( dataMode() == K3b::DATA_MODE_1 )

@@ -251,7 +251,7 @@ public:
     }
 
     bool checkCdiFiles();
-    void save( KConfigGroup& c );
+    void save( KConfigGroup c );
 
     static K3bVcdOptions load( const KConfigGroup& c );
     static K3bVcdOptions defaults();

@@ -1,10 +1,8 @@
 /*
- *
- * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,139 +31,175 @@
 #include <kconfig.h>
 #include <kmimetype.h>
 #include <kdialog.h>
+#include <KIcon>
 
 #include <qstring.h>
 #include <qfile.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qpushbutton.h>
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 #include <qlabel.h>
 #include <qtooltip.h>
 
 #include <qpair.h>
-#include <q3valuelist.h>
 #include <qlayout.h>
-#include <q3ptrdict.h>
-//Added by qt3to4:
 #include <QVBoxLayout>
+#include <QtCore/QHash>
+#include <QtCore/QLatin1String>
+#include <QtGui/QTreeWidget>
+
+#include <taglib/tag.h>
+#include <taglib/fileref.h>
+#include <taglib/audioproperties.h>
+#include <taglib/mpegfile.h>
+#include <taglib/vorbisfile.h>
+#include <taglib/oggflacfile.h>
 
 
+K3B_EXPORT_PLUGIN( k3baudiometainforenamerplugin, K3bAudioMetainfoRenamerPlugin )
 
-K_EXPORT_COMPONENT_FACTORY( libk3baudiometainforenamerplugin, KPluginFactory<K3bAudioMetainfoRenamerPlugin>("libk3baudiometainforenamerplugin") )
+namespace {
+    class KMimeTypeResolver : public TagLib::FileRef::FileTypeResolver
+    {
+    public:
+        // to make gcc shut up
+        virtual ~KMimeTypeResolver() {}
+
+        TagLib::File* createFile( TagLib::FileName fileName, bool, TagLib::AudioProperties::ReadStyle ) const
+        {
+            KMimeType::Ptr mimetype = KMimeType::findByPath( QFile::decodeName( fileName ) );
+            if ( mimetype ) {
+                if ( mimetype->name() == QLatin1String( "audio/mpeg" ) )
+                    return new TagLib::MPEG::File(fileName);
+                else if ( mimetype->name() == QLatin1String( "application/ogg" ) )
+                    return new TagLib::Ogg::Vorbis::File(fileName);
+                else if ( mimetype->name() == QLatin1String( "application/x-flac" ) )
+                    return new TagLib::Ogg::FLAC::File(fileName);
+            }
+
+            return 0;
+        }
+    };
+}
 
 
 class K3bAudioMetainfoRenamerPluginWidget::Private
 {
 public:
-  K3bDataDoc* doc;
-  QString pattern;
+    K3bDataDoc* doc;
+    QString pattern;
 
-  KComboBox* comboPattern;
-  K3bListView* viewFiles;
-  //  KProgressDialog* progressDialog;
-  QPushButton* scanButton;
+    KComboBox* comboPattern;
+    QTreeWidget* viewFiles;
+    //  KProgressDialog* progressDialog;
+    QPushButton* scanButton;
 
-  QList< QPair<K3bFileItem*, Q3CheckListItem*> > renamableItems;
-  Q3PtrDict<Q3ListViewItem> dirItemDict;
+    QList< QPair<K3bFileItem*, QTreeWidgetItem*> > renamableItems;
+    QHash<K3bDirItem*, QTreeWidgetItem*> dirItemHash;
 
 //   long long scannedSize;
 //   int progressCounter;
 };
 
 
-K3bAudioMetainfoRenamerPluginWidget::K3bAudioMetainfoRenamerPluginWidget( K3bDoc* doc, 
-									  QWidget* parent, 
-									  const char* name )
-  : QWidget( parent, name )
+K3bAudioMetainfoRenamerPluginWidget::K3bAudioMetainfoRenamerPluginWidget( K3bDoc* doc,
+                                                                          QWidget* parent )
+    : QWidget( parent )
 {
-  d = new Private();
-  d->doc = dynamic_cast<K3bDataDoc*>(doc);
-  //  d->progressDialog = 0;
+    d = new Private();
+    d->doc = static_cast<K3bDataDoc*>(doc);
+    //  d->progressDialog = 0;
 
-  // pattern group
-  Q3GroupBox* patternGroup = new Q3GroupBox( 2, Qt::Horizontal,
-					   i18n("Rename Pattern"), this );
-  patternGroup->setInsideMargin( KDialog::marginHint() );
-  patternGroup->setInsideSpacing( KDialog::spacingHint() );
+    // pattern group
+    QGroupBox* patternGroup = new QGroupBox( i18n("Rename Pattern"), this );
+    QHBoxLayout* patternGroupLayout = new QHBoxLayout( patternGroup );
+    patternGroupLayout->setMargin( KDialog::marginHint() );
+    patternGroupLayout->setSpacing( KDialog::spacingHint() );
 
-  d->comboPattern = new KComboBox( patternGroup );
-  d->comboPattern->setEditable( true );
+    d->comboPattern = new KComboBox( patternGroup );
+    d->comboPattern->setEditable( true );
 
-  d->scanButton = new QPushButton( i18n("Scan"), patternGroup );
+    d->scanButton = new QPushButton( i18n("Scan"), patternGroup );
+    patternGroupLayout->addWidget( d->comboPattern );
+    patternGroupLayout->addWidget( d->scanButton );
 
-  // the files view
-  Q3GroupBox* filesGroup = new Q3GroupBox( 1, Qt::Horizontal,
-					  i18n("Found Files"), this );
-  filesGroup->setInsideMargin( KDialog::marginHint() );
-  filesGroup->setInsideSpacing( KDialog::spacingHint() );
+    // the files view
+    QGroupBox* filesGroup = new QGroupBox( i18n("Found Files"), this );
+    QHBoxLayout* filesGroupLayout = new QHBoxLayout( filesGroup );
+    filesGroupLayout->setMargin( KDialog::marginHint() );
+    filesGroupLayout->setSpacing( KDialog::spacingHint() );
 
-  d->viewFiles = new K3bListView( filesGroup );
-  d->viewFiles->addColumn( i18n("New Name") );
-  d->viewFiles->addColumn( i18n("Old Name") );
-  d->viewFiles->setNoItemText( i18n("Please click the Scan button to search for renameable files.") );
+    d->viewFiles = new QTreeWidget( filesGroup );
+    d->viewFiles->setHeaderLabels( QStringList() << i18n("New Name") << i18n("Old Name") );
+    // FIXME: how about a class that installs an event filter to paint the no item text?
+//    d->viewFiles->setNoItemText( i18n("Please click the Scan button to search for renameable files.") );
 
-  // layout
-  QVBoxLayout* box = new QVBoxLayout( this );
-  box->setMargin( 0 );
-  box->setSpacing( KDialog::spacingHint() );
+    filesGroupLayout->addWidget( d->viewFiles );
 
-  box->addWidget( patternGroup );
-  box->addWidget( filesGroup );
+    // layout
+    QVBoxLayout* box = new QVBoxLayout( this );
+    box->setMargin( 0 );
+    box->setSpacing( KDialog::spacingHint() );
 
-  connect( d->scanButton, SIGNAL(clicked()), this, SLOT(slotScanClicked()) );
+    box->addWidget( patternGroup );
+    box->addWidget( filesGroup );
 
-  QToolTip::add( d->scanButton, i18n("Scan for renamable files") );
-  d->comboPattern->setWhatsThis( i18n("<qt>This specifies how the files should be renamed. "
-					 "Currently only the special strings <em>%a</em> (Artist), "
-					 "<em>%n</em> (Track number), and <em>%t</em> (Title) ,"
-					 "are supported.") );
+    connect( d->scanButton, SIGNAL(clicked()), this, SLOT(slotScanClicked()) );
+
+    d->scanButton->setToolTip( i18n("Scan for renamable files") );
+    d->comboPattern->setWhatsThis( i18n("<qt>This specifies how the files should be renamed. "
+                                        "Currently only the special strings <em>%a</em> (Artist), "
+                                        "<em>%n</em> (Track number), and <em>%t</em> (Title) ,"
+                                        "are supported.") );
+
+    TagLib::FileRef::addFileTypeResolver( new KMimeTypeResolver() );
 }
 
 
 K3bAudioMetainfoRenamerPluginWidget::~K3bAudioMetainfoRenamerPluginWidget()
 {
-  delete d;
+    delete d;
 }
 
 
 QString K3bAudioMetainfoRenamerPluginWidget::title() const
 {
-  return i18n("Rename Audio Files");
+    return i18n("Rename Audio Files");
 }
 
 
 QString K3bAudioMetainfoRenamerPluginWidget::subTitle() const
 {
-  return i18n("Based on meta info");
+    return i18n("Based on meta info");
 }
 
 
 void K3bAudioMetainfoRenamerPluginWidget::loadDefaults()
 {
-  d->comboPattern->setEditText( "%a - %t" );
+    d->comboPattern->setEditText( "%a - %t" );
 }
 
 
 void K3bAudioMetainfoRenamerPluginWidget::readSettings( const KConfigGroup& grp )
 {
-  d->comboPattern->setEditText( grp.readEntry( "rename pattern", "%a - %t" ) );
+    d->comboPattern->setEditText( grp.readEntry( "rename pattern", "%a - %t" ) );
 }
 
 
-void K3bAudioMetainfoRenamerPluginWidget::saveSettings( KConfigGroup &grp )
+void K3bAudioMetainfoRenamerPluginWidget::saveSettings( KConfigGroup grp )
 {
-  grp.writeEntry( "rename pattern", d->comboPattern->currentText() );
+    grp.writeEntry( "rename pattern", d->comboPattern->currentText() );
 }
 
 
 void K3bAudioMetainfoRenamerPluginWidget::slotScanClicked()
 {
-  d->pattern = d->comboPattern->currentText();
-  if( d->pattern.isEmpty() ) {
-    KMessageBox::error( this, i18n("Please specify a valid pattern.") );
-  }
-  else {
+    d->pattern = d->comboPattern->currentText();
+    if( d->pattern.isEmpty() ) {
+        KMessageBox::error( this, i18n("Please specify a valid pattern.") );
+    }
+    else {
 //     if( d->progressDialog == 0 ) {
 //       d->progressDialog = new KProgressDialog( this, "scanning_progress",
 // 					       i18n("Scanning..."),
@@ -174,51 +208,48 @@ void K3bAudioMetainfoRenamerPluginWidget::slotScanClicked()
 //       d->progressDialog->setAllowCancel(false);
 //     }
 
-    K3bDirItem* dir = d->doc->root();
+        K3bDirItem* dir = d->doc->root();
 
-    // clear old searches
-    d->viewFiles->clear();
-    d->renamableItems.clear();
-    d->dirItemDict.clear();
+        // clear old searches
+        d->viewFiles->clear();
+        d->renamableItems.clear();
+        d->dirItemHash.clear();
 //     d->scannedSize = 0;
 //     d->progressCounter = 0;
 
-    // create root item
-    K3ListViewItem* rootItem = new K3ListViewItem( d->viewFiles, "/" );
+        // create root item
+        QTreeWidgetItem* rootItem = new QTreeWidgetItem( d->viewFiles, QStringList() << QLatin1String( "/" ) );
+        rootItem->setIcon( 0, KIcon( "folder" ) );
 
-    //  d->progressDialog->show();
-    scanDir( dir, rootItem );
-    //    d->progressDialog->close();
+        //  d->progressDialog->show();
+        scanDir( dir, rootItem );
+        //    d->progressDialog->close();
 
-    rootItem->setOpen(true);
+        rootItem->setExpanded(true);
 
-    if( d->renamableItems.isEmpty() )
-      KMessageBox::sorry( this, i18n("No renameable files found.") );
-  }
+        if( d->renamableItems.isEmpty() )
+            KMessageBox::sorry( this, i18n("No renameable files found.") );
+    }
 }
 
 
-void K3bAudioMetainfoRenamerPluginWidget::scanDir( K3bDirItem* dir, Q3ListViewItem* viewRoot )
+void K3bAudioMetainfoRenamerPluginWidget::scanDir( K3bDirItem* dir, QTreeWidgetItem* viewRoot )
 {
-  kDebug() << "(K3bAudioMetainfoRenamerPluginWidget) scanning dir " << dir->k3bName();
+    kDebug() << "(K3bAudioMetainfoRenamerPluginWidget) scanning dir " << dir->k3bName();
 
-  d->dirItemDict.insert( dir, viewRoot );
+    d->dirItemHash.insert( dir, viewRoot );
 
-  for( Q3PtrListIterator<K3bDataItem> it( dir->children() ); it.current(); ++it ) {
-    K3bDataItem* item = it.current();
-
-    if( item->isFile() ) {
-      if( item->isRenameable() ) {
-	QString newName = createNewName( (K3bFileItem*)item );
-	if( !newName.isEmpty() ) {
-	  Q3CheckListItem* fileViewItem =  new Q3CheckListItem( viewRoot, 
-							      newName, 
-							      Q3CheckListItem::CheckBox );
-	  fileViewItem->setText(1, item->k3bName() );
-	  fileViewItem->setOn(true);
-	  d->renamableItems.append( qMakePair( (K3bFileItem*)item, fileViewItem ) );
-	}
-      }
+    foreach( K3bDataItem* item, dir->children() ) {
+        if( item->isFile() ) {
+            if( item->isRenameable() ) {
+                QString newName = createNewName( (K3bFileItem*)item );
+                if( !newName.isEmpty() ) {
+                    QTreeWidgetItem* fileViewItem = new QTreeWidgetItem( viewRoot, QStringList() << newName << item->k3bName() );
+                    fileViewItem->setCheckState( 0, Qt::Checked );
+                    fileViewItem->setIcon( 0, KIcon( item->mimeType()->iconName() ) );
+                    d->renamableItems.append( qMakePair( (K3bFileItem*)item, fileViewItem ) );
+                }
+            }
 
 //       d->scannedSize += item->k3bSize();
 //       d->progressCounter++;
@@ -227,156 +258,143 @@ void K3bAudioMetainfoRenamerPluginWidget::scanDir( K3bDirItem* dir, Q3ListViewIt
 // 	d->progressDialog->progressBar()->setProgress( 100*d->scannedSize/d->doc->root()->k3bSize() );
 // 	qApp->processEvents();
 //       }
+        }
+        else if( item->isDir() ) {
+            // create dir item
+            K3bDirItem* dirItem = static_cast<K3bDirItem*>( item );
+            if ( !dirItem->children().isEmpty() ) {
+                QTreeWidgetItem* dirViewItem = new QTreeWidgetItem( viewRoot, QStringList() << item->k3bName() );
+                dirViewItem->setIcon( 0, KIcon( "folder" ) );
+                scanDir( dirItem, dirViewItem );
+                dirViewItem->setExpanded(true);
+            }
+        }
     }
-    else if( item->isDir() ) {
-      // create dir item
-      K3ListViewItem* dirViewItem = new K3ListViewItem( viewRoot, item->k3bName() );
-      scanDir( (K3bDirItem*)item, dirViewItem );
-      dirViewItem->setOpen(true);
-    }
-  }
 }
 
 
 void K3bAudioMetainfoRenamerPluginWidget::activate()
 {
-  if( d->renamableItems.isEmpty() ) {
-    KMessageBox::sorry( this, i18n("Please click the Scan button to search for renameable files.") );
-  }
-  else {
-    for( QList< QPair<K3bFileItem*, Q3CheckListItem*> >::iterator it = d->renamableItems.begin();
-	 it != d->renamableItems.end(); ++it ) {
-      QPair<K3bFileItem*, Q3CheckListItem*>& item = *it;
-      
-      if( item.second->isOn() )
-	item.first->setK3bName( item.second->text(0) );
+    if( d->renamableItems.isEmpty() ) {
+        KMessageBox::sorry( this, i18n("Please click the Scan button to search for renameable files.") );
     }
-    
-    d->viewFiles->clear();
-    d->renamableItems.clear();
-    
-    KMessageBox::information( this, i18n("Done.") );
-  }
+    else {
+        for( QList< QPair<K3bFileItem*, QTreeWidgetItem*> >::iterator it = d->renamableItems.begin();
+             it != d->renamableItems.end(); ++it ) {
+            QPair<K3bFileItem*, QTreeWidgetItem*>& item = *it;
+
+            if( item.second->checkState(0) == Qt::Checked )
+                item.first->setK3bName( item.second->text(0) );
+        }
+
+        d->viewFiles->clear();
+        d->renamableItems.clear();
+
+        KMessageBox::information( this, i18n("Done.") );
+    }
 }
 
 
 QString K3bAudioMetainfoRenamerPluginWidget::createNewName( K3bFileItem* item )
 {
-  KMimeType::Ptr mimetype = KMimeType::findByPath( item->localPath() );
-  // sometimes ogg-vorbis files go as "application/x-ogg"
-  if( mimetype != 0 && 
-      ( mimetype->name().contains( "audio" ) || mimetype->name().contains("ogg") ) ) {
+    TagLib::FileRef file( QFile::encodeName( item->localPath() ).data() );
 
-    QString artist, title, track;
+    if ( !file.isNull() && file.tag() ) {
+        QString artist, title, track;
+        artist = TStringToQString( file.tag()->artist() );
+        title = TStringToQString( file.tag()->title() );
+        if ( file.tag()->track() > 0 )
+            track = QString::number( file.tag()->track() );
 
-    KFileMetaInfo metaInfo( item->localPath() );
-    if( metaInfo.isValid() ) {
+        QString newName;
+        for( int i = 0; i < d->pattern.length(); ++i ) {
 
-      KFileMetaInfoItem artistItem = metaInfo.item( "Artist" );
-      KFileMetaInfoItem titleItem = metaInfo.item( "Title" );
-      KFileMetaInfoItem trackItem = metaInfo.item( "Tracknumber" );
-      
-      if( artistItem.isValid() )
-	artist = artistItem.string().trimmed();
-      
-      if( titleItem.isValid() )
-	title = titleItem.string().trimmed();
-      
-      if( trackItem.isValid() )
-	track = track.sprintf("%02d",trackItem.string().toInt());
+            if( d->pattern[i] == '%' ) {
+                ++i;
+
+                if( i < d->pattern.length() ) {
+                    if( d->pattern[i] == 'a' ) {
+                        if( artist.isEmpty() )
+                            return QString();
+                        newName.append(artist);
+                    }
+                    else if( d->pattern[i] == 'n' ) {
+                        if( title.isEmpty() )
+                            return QString();
+                        newName.append(track);
+                    }
+                    else if( d->pattern[i] == 't' ) {
+                        if( title.isEmpty() )
+                            return QString();
+                        newName.append(title);
+                    }
+                    else {
+                        newName.append( "%" );
+                        newName.append( d->pattern[i] );
+                    }
+                }
+                else {  // end of pattern
+                    newName.append( "%" );
+                }
+            }
+            else {
+                newName.append( d->pattern[i] );
+            }
+        }
+
+        // remove white spaces from end and beginning
+        newName = newName.trimmed();
+
+        QString extension = item->k3bName().mid( item->k3bName().lastIndexOf('.') );
+
+        if( !newName.isEmpty() ) {
+            //
+            // Check if files with that name exists and if so append number
+            //
+            if( existsOtherItemWithSameName( item, newName + extension ) ) {
+                kDebug() << "(K3bAudioMetainfoRenamerPluginWidget) file with name "
+                         << newName << extension << " already exists" << endl;
+                int i = 1;
+                while( existsOtherItemWithSameName( item, newName + QString( " (%1)").arg(i) + extension ) )
+                    i++;
+                newName.append( QString( " (%1)").arg(i) );
+            }
+
+            // append extension
+            newName.append( extension );
+        }
+
+        return newName;
     }
-
-    QString newName;
-    for( unsigned int i = 0; i < d->pattern.length(); ++i ) {
-
-      if( d->pattern[i] == '%' ) {
-	++i;
-
-	if( i < d->pattern.length() ) {
-	  if( d->pattern[i] == 'a' ) {
-	    if( artist.isEmpty() )
-	      return QString();
-	    newName.append(artist);
-	  }
-	  else if( d->pattern[i] == 'n' ) {
-	    if( title.isEmpty() )
-	      return QString();
-	    newName.append(track);
-	  }
-	  else if( d->pattern[i] == 't' ) {
-	    if( title.isEmpty() )
-	      return QString();
-	    newName.append(title);
-	  }
-	  else {
-	    newName.append( "%" );
-	    newName.append( d->pattern[i] );
-	  }
-	}
-	else {  // end of pattern
-	  newName.append( "%" );
-	}
-      }
-      else {
-	newName.append( d->pattern[i] );
-      }
-    }
-
-    // remove white spaces from end and beginning
-    newName = newName.trimmed();
-
-    QString extension = item->k3bName().mid( item->k3bName().findRev(".") );
-
-    if( !newName.isEmpty() ) {
-      //
-      // Check if files with that name exists and if so append number
-      //
-      if( existsOtherItemWithSameName( item, newName + extension ) ) {
-	kDebug() << "(K3bAudioMetainfoRenamerPluginWidget) file with name " 
-		  << newName << extension << " already exists" << endl;
-	int i = 1;
-	while( existsOtherItemWithSameName( item, newName + QString( " (%1)").arg(i) + extension ) )
-	  i++;
-	newName.append( QString( " (%1)").arg(i) );
-      }
-
-      // append extension
-      newName.append( extension );
-    }
-
-    return newName;
-  }
-  else
-    return QString();
+    else
+        return QString();
 }
 
 
 bool K3bAudioMetainfoRenamerPluginWidget::existsOtherItemWithSameName( K3bFileItem* item, const QString& name )
 {
-  K3bDirItem* dir = item->parent();
-  K3bDataItem* otherItem = dir->find( name );
-  if( otherItem && otherItem != item )
-    return true;
+    K3bDirItem* dir = item->parent();
+    K3bDataItem* otherItem = dir->find( name );
+    if( otherItem && otherItem != item )
+        return true;
 
-  Q3ListViewItem* dirViewItem = d->dirItemDict[dir];
-  Q3ListViewItem* current = dirViewItem->firstChild();
-  while( current && current->parent() == dirViewItem ) {
-    if( current->text(0) == name )
-      return true;
-    current = current->nextSibling();
-  }
+    QTreeWidgetItem* dirViewItem = d->dirItemHash[dir];
+    for ( int i = 0; i < dirViewItem->childCount(); ++i ) {
+        QTreeWidgetItem* current = dirViewItem->child( i );
+        if( current->text(0) == name )
+            return true;
+    }
 
-  return false;
+    return false;
 }
 
 
 
-K3bAudioMetainfoRenamerPlugin::K3bAudioMetainfoRenamerPlugin( QObject* parent, 
-							      const char* name )
-  : K3bProjectPlugin( DATA_PROJECTS, true, parent, name )
+K3bAudioMetainfoRenamerPlugin::K3bAudioMetainfoRenamerPlugin( QObject* parent, const QVariantList& )
+    : K3bProjectPlugin( DATA_PROJECTS, true, parent )
 {
-  setText( i18n("Rename Audio Files") );
-  setToolTip( i18n("Rename audio files based on their meta info.") );
+    setText( i18n("Rename Audio Files") );
+    setToolTip( i18n("Rename audio files based on their meta info.") );
 }
 
 
@@ -385,9 +403,9 @@ K3bAudioMetainfoRenamerPlugin::~K3bAudioMetainfoRenamerPlugin()
 }
 
 
-K3bProjectPluginGUIBase* K3bAudioMetainfoRenamerPlugin::createGUI( K3bDoc* doc, QWidget* parent, const char* name )
+K3bProjectPluginGUIBase* K3bAudioMetainfoRenamerPlugin::createGUI( K3bDoc* doc, QWidget* parent )
 {
-  return new K3bAudioMetainfoRenamerPluginWidget( doc, parent, name );
+    return new K3bAudioMetainfoRenamerPluginWidget( doc, parent );
 }
 
 #include "k3baudiometainforenamerplugin.moc"

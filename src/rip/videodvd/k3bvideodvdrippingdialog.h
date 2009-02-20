@@ -64,7 +64,7 @@ class K3bVideoDVDRippingDialog : public K3bInteractionDialog
 
   void loadK3bDefaults();
   void loadUserDefaults( const KConfigGroup& );
-  void saveUserDefaults( KConfigGroup& );
+  void saveUserDefaults( KConfigGroup );
 
   K3bVideoDVDRippingWidget* m_w;
 

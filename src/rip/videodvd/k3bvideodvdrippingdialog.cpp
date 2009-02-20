@@ -535,7 +535,7 @@ void K3bVideoDVDRippingDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3bVideoDVDRippingDialog::saveUserDefaults( KConfigGroup& c )
+void K3bVideoDVDRippingDialog::saveUserDefaults( KConfigGroup c )
 {
     c.writeEntry( "video bitrate", m_w->m_spinVideoBitrate->value() );
     c.writeEntry( "two pass encoding", m_w->m_checkTwoPassEncoding->isChecked() );

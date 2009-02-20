@@ -252,7 +252,7 @@ void K3bAudioConvertingOptionWidget::loadConfig( const KConfigGroup& c )
 }
 
 
-void K3bAudioConvertingOptionWidget::saveConfig( KConfigGroup& c )
+void K3bAudioConvertingOptionWidget::saveConfig( KConfigGroup c )
 {
     c.writePathEntry( "last ripping directory", m_editBaseDir->url().url() );
 

@@ -607,7 +607,7 @@ void K3bMediaCopyDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3bMediaCopyDialog::saveUserDefaults( KConfigGroup& c )
+void K3bMediaCopyDialog::saveUserDefaults( KConfigGroup c )
 {
     m_writingModeWidget->saveConfig( c );
     c.writeEntry( "simulate", m_checkSimulate->isChecked() );

@@ -78,7 +78,7 @@ private:
 
     void loadK3bDefaults();
     void loadUserDefaults( const KConfigGroup& );
-    void saveUserDefaults( KConfigGroup& );
+    void saveUserDefaults( KConfigGroup );
 
     class Private;
     Private* d;

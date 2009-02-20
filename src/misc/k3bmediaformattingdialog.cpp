@@ -195,7 +195,7 @@ void K3bMediaFormattingDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3bMediaFormattingDialog::saveUserDefaults( KConfigGroup& c )
+void K3bMediaFormattingDialog::saveUserDefaults( KConfigGroup c )
 {
     c.writeEntry( "force", m_checkForce->isChecked() );
     c.writeEntry( "quick format", m_checkQuickFormat->isChecked() );

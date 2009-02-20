@@ -450,7 +450,7 @@ void K3bAudioRippingDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3bAudioRippingDialog::saveUserDefaults( KConfigGroup& c )
+void K3bAudioRippingDialog::saveUserDefaults( KConfigGroup c )
 {
     c.writeEntry( "paranoia_mode", m_comboParanoiaMode->currentText().toInt() );
     c.writeEntry( "read_retries", m_spinRetries->value() );

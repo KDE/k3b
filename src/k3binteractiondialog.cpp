@@ -485,7 +485,7 @@ void K3bInteractionDialog::setSaveButtonText( const QString& text,
 }
 
 
-void K3bInteractionDialog::saveUserDefaults( KConfigGroup& )
+void K3bInteractionDialog::saveUserDefaults( KConfigGroup )
 {
 }
 

@@ -51,7 +51,7 @@ protected:
 
     void loadK3bDefaults();
     void loadUserDefaults( const KConfigGroup& );
-    void saveUserDefaults( KConfigGroup& );
+    void saveUserDefaults( KConfigGroup );
 
     // -----------------------------------------------------------
     // the video-cd-tab

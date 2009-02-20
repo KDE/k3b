@@ -52,7 +52,7 @@ protected:
 
 private:
     void loadUserDefaults( const KConfigGroup& );
-    void saveUserDefaults( KConfigGroup& );
+    void saveUserDefaults( KConfigGroup );
     void loadK3bDefaults();
 
     KIO::filesize_t neededSize() const;

@@ -171,7 +171,7 @@ void K3bWritingModeWidget::updateModes()
 }
 
 
-void K3bWritingModeWidget::saveConfig( KConfigGroup& c )
+void K3bWritingModeWidget::saveConfig( KConfigGroup c )
 {
     switch( writingMode() ) {
     case K3b::WRITING_MODE_DAO:

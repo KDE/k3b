@@ -239,7 +239,7 @@ void K3bDataBurnDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3bDataBurnDialog::saveUserDefaults( KConfigGroup& c )
+void K3bDataBurnDialog::saveUserDefaults( KConfigGroup c )
 {
     K3bProjectBurnDialog::saveUserDefaults(c);
 

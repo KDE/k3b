@@ -380,7 +380,7 @@ void K3bProjectBurnDialog::readSettings()
 }
 
 
-void K3bProjectBurnDialog::saveUserDefaults( KConfigGroup& c )
+void K3bProjectBurnDialog::saveUserDefaults( KConfigGroup c )
 {
     m_writingModeWidget->saveConfig( c );
     c.writeEntry( "simulate", m_checkSimulate->isChecked() );

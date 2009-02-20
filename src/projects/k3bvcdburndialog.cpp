@@ -829,7 +829,7 @@ void K3bVcdBurnDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3bVcdBurnDialog::saveUserDefaults( KConfigGroup& c )
+void K3bVcdBurnDialog::saveUserDefaults( KConfigGroup c )
 {
     K3bProjectBurnDialog::saveUserDefaults( c );
 

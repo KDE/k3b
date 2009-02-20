@@ -216,7 +216,7 @@ void K3bMovixOptionsWidget::loadConfig( const KConfigGroup & c )
 }
 
 
-void K3bMovixOptionsWidget::saveConfig( KConfigGroup& c )
+void K3bMovixOptionsWidget::saveConfig( KConfigGroup c )
 {
     if( m_comboSubtitleFontset->currentIndex() == 0 )
         c.writeEntry( "subtitle_fontset", "none" );

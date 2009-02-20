@@ -45,7 +45,7 @@ public:
     ~K3bWelcomeWidget();
 
     void loadConfig( const KConfigGroup& c );
-    void saveConfig( KConfigGroup& c );
+    void saveConfig( KConfigGroup c );
 
     class Display;
 

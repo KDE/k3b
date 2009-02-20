@@ -238,7 +238,7 @@ void K3bTempDirSelectionWidget::readConfig( const KConfigGroup& c )
 }
 
 
-void K3bTempDirSelectionWidget::saveConfig( KConfigGroup& c )
+void K3bTempDirSelectionWidget::saveConfig( KConfigGroup c )
 {
     c.writePathEntry( "image path", tempPath() );
 }

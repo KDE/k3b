@@ -121,7 +121,7 @@ protected:
      *   <li>writing speed</li>
      * </ul>
      */
-    virtual void saveUserDefaults( KConfigGroup& );
+    virtual void saveUserDefaults( KConfigGroup );
 
     /**
      * The default implementation saves the following settings to the doc and may be called 

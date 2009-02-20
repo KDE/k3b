@@ -44,7 +44,7 @@ public:
      */
     K3b::WritingModes supportedWritingModes() const;
 
-    void saveConfig( KConfigGroup& );
+    void saveConfig( KConfigGroup );
 
     /**
      * This will not emit the writingModeChanged signal

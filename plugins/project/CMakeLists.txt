@@ -7,7 +7,7 @@ include_directories(
 
 add_subdirectory( audioprojectcddb )
 
-MESSAGE(STATUS "audiometainforenamer disable for the moment need to port to
-strigi ?")
-#add_subdirectory( audiometainforenamer )
+if(ENABLE_TAGLIB)
+  add_subdirectory( audiometainforenamer )
+endif(ENABLE_TAGLIB)
 

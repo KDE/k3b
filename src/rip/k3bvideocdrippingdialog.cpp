@@ -251,7 +251,7 @@ void K3bVideoCdRippingDialog::loadUserDefaults( const KConfigGroup& c )
     slotUpdateFreeSpace();
 }
 
-void K3bVideoCdRippingDialog::saveUserDefaults( KConfigGroup& c )
+void K3bVideoCdRippingDialog::saveUserDefaults( KConfigGroup c )
 {
     c.writeEntry( "last ripping directory", m_editDirectory->url() );
     c.writeEntry( "ignore ext", m_ignoreExt ->isChecked( ) );

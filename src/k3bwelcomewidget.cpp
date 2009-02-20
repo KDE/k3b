@@ -376,7 +376,7 @@ void K3bWelcomeWidget::loadConfig( const KConfigGroup& c )
 }
 
 
-void K3bWelcomeWidget::saveConfig( KConfigGroup& c )
+void K3bWelcomeWidget::saveConfig( KConfigGroup c )
 {
     QStringList sl;
     QList<QAction *> items(main->m_actions);

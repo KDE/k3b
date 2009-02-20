@@ -44,7 +44,7 @@ class K3bMediaFormattingDialog : public K3bInteractionDialog
 
  private:
   void loadUserDefaults( const KConfigGroup& );
-  void saveUserDefaults( KConfigGroup& );
+  void saveUserDefaults( KConfigGroup );
   void loadK3bDefaults();
 
   K3bWriterSelectionWidget* m_writerSelectionWidget;

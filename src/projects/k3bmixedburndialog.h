@@ -40,7 +40,7 @@ class K3bMixedBurnDialog : public K3bProjectBurnDialog
  protected:
    void loadK3bDefaults();
    void loadUserDefaults( const KConfigGroup& );
-   void saveUserDefaults( KConfigGroup& );
+   void saveUserDefaults( KConfigGroup );
    void toggleAll();
 
    K3bDataImageSettingsWidget* m_imageSettingsWidget;

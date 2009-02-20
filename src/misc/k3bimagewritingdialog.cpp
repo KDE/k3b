@@ -1021,7 +1021,7 @@ void K3bImageWritingDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3bImageWritingDialog::saveUserDefaults( KConfigGroup& c )
+void K3bImageWritingDialog::saveUserDefaults( KConfigGroup c )
 {
     m_writingModeWidget->saveConfig( c ),
         c.writeEntry( "simulate", m_checkDummy->isChecked() );

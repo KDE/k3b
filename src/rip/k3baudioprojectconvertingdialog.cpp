@@ -362,7 +362,7 @@ void K3bAudioProjectConvertingDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3bAudioProjectConvertingDialog::saveUserDefaults( KConfigGroup& c )
+void K3bAudioProjectConvertingDialog::saveUserDefaults( KConfigGroup c )
 {
     m_optionWidget->saveConfig( c );
     m_patternWidget->saveConfig( c );

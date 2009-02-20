@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@ public:
     void urlEntered( const KUrl& url );
 
 public Q_SLOTS:
-    void saveConfig( KConfigGroup &grp );
+    void saveConfig( KConfigGroup grp );
     void readConfig( const KConfigGroup &grp );
     void setAutoUpdate( bool );
 

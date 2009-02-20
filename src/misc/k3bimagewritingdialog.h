@@ -64,7 +64,7 @@ protected Q_SLOTS:
 
 protected:
     void loadUserDefaults( const KConfigGroup& );
-    void saveUserDefaults( KConfigGroup& );
+    void saveUserDefaults( KConfigGroup );
     void loadK3bDefaults();
 
     void calculateMd5Sum( const QString& );

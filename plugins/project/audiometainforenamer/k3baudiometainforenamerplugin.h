@@ -1,10 +1,8 @@
 /* 
- *
- * $Id$
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,52 +21,52 @@
 
 class K3bDirItem;
 class K3bFileItem;
-class Q3ListViewItem;
+class QTreeWidgetItem;
 
 
 class K3bAudioMetainfoRenamerPluginWidget : public QWidget, public K3bProjectPluginGUIBase
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bAudioMetainfoRenamerPluginWidget( K3bDoc* doc, QWidget* parent = 0, const char* name = 0 );
-  ~K3bAudioMetainfoRenamerPluginWidget();
+public:
+    K3bAudioMetainfoRenamerPluginWidget( K3bDoc* doc, QWidget* parent = 0 );
+    ~K3bAudioMetainfoRenamerPluginWidget();
 
-  QWidget* qWidget() { return this; }
+    QWidget* qWidget() { return this; }
 
-  QString title() const;
-  QString subTitle() const;
+    QString title() const;
+    QString subTitle() const;
 
-  void loadDefaults();
-  void readSettings( const KConfigGroup& );
-  void saveSettings( KConfigGroup & );
+    void loadDefaults();
+    void readSettings( const KConfigGroup& );
+    void saveSettings( KConfigGroup );
 
-  void activate();
+    void activate();
 
- private Q_SLOTS:
-  void slotScanClicked();
+private Q_SLOTS:
+    void slotScanClicked();
 
- private:
-  void scanDir( K3bDirItem*, Q3ListViewItem* parent );
-  QString createNewName( K3bFileItem* );
-  bool existsOtherItemWithSameName( K3bFileItem*, const QString& );
+private:
+    void scanDir( K3bDirItem*, QTreeWidgetItem* parent );
+    QString createNewName( K3bFileItem* );
+    bool existsOtherItemWithSameName( K3bFileItem*, const QString& );
 
-  class Private;
-  Private* d;
+    class Private;
+    Private* d;
 };
 
 
 class K3bAudioMetainfoRenamerPlugin : public K3bProjectPlugin
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bAudioMetainfoRenamerPlugin( QObject* parent, const char* name );
-  ~K3bAudioMetainfoRenamerPlugin();
+public:
+    K3bAudioMetainfoRenamerPlugin( QObject* parent, const QVariantList& );
+    ~K3bAudioMetainfoRenamerPlugin();
 
-  int pluginSystemVersion() const { return 3; }
+    int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-  K3bProjectPluginGUIBase* createGUI( K3bDoc*, QWidget* = 0, const char* = 0 );
+    K3bProjectPluginGUIBase* createGUI( K3bDoc*, QWidget* = 0 );
 };
 
 

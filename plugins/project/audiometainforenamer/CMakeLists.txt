@@ -1,16 +1,21 @@
+include_directories(
+  ${TAGLIB_INCLUDES}
+)
 
-########### next target ###############
+set(k3baudiometainforenamerplugin_PART_SRCS
+  k3baudiometainforenamerplugin.cpp
+  )
 
-set(k3baudiometainforenamerplugin_PART_SRCS k3baudiometainforenamerplugin.cpp )
+kde4_add_plugin(k3baudiometainforenamerplugin
+  ${k3baudiometainforenamerplugin_PART_SRCS})
 
-kde4_add_plugin(k3baudiometainforenamerplugin WITH_PREFIX ${k3baudiometainforenamerplugin_PART_SRCS})
-
-target_link_libraries(k3baudiometainforenamerplugin  ${KDE4_KDECORE_LIBS} k3b )
+target_link_libraries(k3baudiometainforenamerplugin
+  ${KDE4_KDECORE_LIBS}
+  ${KDE4_KDEUI_LIBS}
+  ${TAGLIB_LIBRARIES}
+  ${KDE4_KDE3SUPPORT_LIBS}
+  k3b )
 
 install(TARGETS k3baudiometainforenamerplugin DESTINATION ${PLUGIN_INSTALL_DIR} )
-
-
-########### install files ###############
-
-install( FILES  k3baudiometainforenamerplugin.plugin DESTINATION ${DATA_INSTALL_DIR}/k3b/plugins )
+install( FILES  k3baudiometainforenamerplugin.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 

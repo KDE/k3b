@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,29 +22,29 @@
 
 class K3bDataMultiSessionCombobox : public QComboBox
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  K3bDataMultiSessionCombobox( QWidget* parent = 0 );
-  ~K3bDataMultiSessionCombobox();
+public:
+    K3bDataMultiSessionCombobox( QWidget* parent = 0 );
+    ~K3bDataMultiSessionCombobox();
 
-  /**
-   * returnes K3bDataDoc::multiSessionModes
-   */
-  K3bDataDoc::MultiSessionMode multiSessionMode() const;
+    /**
+     * returnes K3bDataDoc::multiSessionModes
+     */
+    K3bDataDoc::MultiSessionMode multiSessionMode() const;
 
-  void setForceNoMultisession( bool );
+    void setForceNoMultisession( bool );
 
-  void saveConfig( KConfigGroup & );
-  void loadConfig( const KConfigGroup& );
+    void saveConfig( KConfigGroup );
+    void loadConfig( const KConfigGroup& );
 
- public Q_SLOTS:
-  void setMultiSessionMode( K3bDataDoc::MultiSessionMode );
+public Q_SLOTS:
+    void setMultiSessionMode( K3bDataDoc::MultiSessionMode );
 
- private:
-  void init( bool forceNo );
+private:
+    void init( bool forceNo );
 
-  bool m_forceNoMultiSession;
+    bool m_forceNoMultiSession;
 };
 
 #endif

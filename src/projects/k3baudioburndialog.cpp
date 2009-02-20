@@ -216,7 +216,7 @@ void K3bAudioBurnDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3bAudioBurnDialog::saveUserDefaults( KConfigGroup& c )
+void K3bAudioBurnDialog::saveUserDefaults( KConfigGroup c )
 {
     K3bProjectBurnDialog::saveUserDefaults( c );
 

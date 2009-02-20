@@ -22,8 +22,6 @@
 
 // include files for Qt
 #include <qworkspace.h>
-//Added by qt3to4:
-#include <QShowEvent>
 #include <QDockWidget>
 
 // include files for KDE
@@ -35,6 +33,7 @@
 #include <kurl.h>
 #include <kvbox.h>
 
+#include "option/k3boptiondialog.h"
 
 
 // forward declaration of the K3b classes
@@ -90,7 +89,7 @@ public:
     QList<K3bDoc*> projects() const;
 
     bool eject();
-    void showOptionDialog( int = 0 );
+    void showOptionDialog( K3bOptionDialog::ConfigPage page = K3bOptionDialog::Misc );
 
     /** Creates the main view of the KDockMainWindow instance and initializes the MDI view area including any needed
      *  connections.
@@ -175,8 +174,6 @@ protected:
      * returns false if the user chose cancel.
      */
     bool canCloseDocument( K3bDoc* );
-
-    virtual void showEvent( QShowEvent* e );
 
 private Q_SLOTS:
     /** open a file and load it into the document*/

@@ -240,7 +240,7 @@ void K3bMixedBurnDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3bMixedBurnDialog::saveUserDefaults( KConfigGroup& c )
+void K3bMixedBurnDialog::saveUserDefaults( KConfigGroup c )
 {
   K3bProjectBurnDialog::saveUserDefaults(c);
 

@@ -64,7 +64,7 @@ public:
 
     void loadDefaults();
     void loadConfig( const KConfigGroup& );
-    void saveConfig( KConfigGroup& );
+    void saveConfig( KConfigGroup );
 
 public Q_SLOTS:
     void setWriterDevice( K3bDevice::Device* );

@@ -45,7 +45,7 @@ class K3bCddbPatternWidget : public base_K3bCddbPatternWidget
 
  public Q_SLOTS:
   void loadConfig( const KConfigGroup & );
-  void saveConfig( KConfigGroup& );
+  void saveConfig( KConfigGroup );
   void loadDefaults();
 
  private Q_SLOTS:

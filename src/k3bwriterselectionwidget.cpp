@@ -545,7 +545,7 @@ void K3bWriterSelectionWidget::loadConfig( const KConfigGroup& c )
 }
 
 
-void K3bWriterSelectionWidget::saveConfig( KConfigGroup& c )
+void K3bWriterSelectionWidget::saveConfig( KConfigGroup c )
 {
     c.writeEntry( "writing_speed", writerSpeed() );
     c.writeEntry( "writer_device", writerDevice() ? writerDevice()->blockDeviceName() : QString() );

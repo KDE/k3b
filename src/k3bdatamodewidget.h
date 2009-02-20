@@ -34,7 +34,7 @@ class K3bDataModeWidget : public QComboBox
    */
   int dataMode() const;
 
-  void saveConfig( KConfigGroup& );
+  void saveConfig( KConfigGroup );
   void loadConfig( const KConfigGroup& );
 
  public Q_SLOTS:

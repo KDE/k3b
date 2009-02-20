@@ -98,7 +98,7 @@ K3bDataDoc::MultiSessionMode K3bDataMultiSessionCombobox::multiSessionMode() con
 }
 
 
-void K3bDataMultiSessionCombobox::saveConfig( KConfigGroup& c )
+void K3bDataMultiSessionCombobox::saveConfig( KConfigGroup c )
 {
     QString s;
     switch( currentIndex() ) {

@@ -22,7 +22,6 @@
 #include <QGridLayout>
 #include <QLayout>
 #include <QList>
-#include <QShowEvent>
 #include <QString>
 #include <QTimer>
 
@@ -174,12 +173,6 @@ K3bMainWindow::~K3bMainWindow()
 KSharedConfig::Ptr K3bMainWindow::config() const
 {
     return KGlobal::config();
-}
-
-
-void K3bMainWindow::showEvent( QShowEvent* e )
-{
-    //K3DockMainWindow::showEvent( e );
 }
 
 
@@ -609,7 +602,7 @@ void K3bMainWindow::readOptions()
 }
 
 
-void K3bMainWindow::saveProperties( KConfigGroup& /*c*/ )
+void K3bMainWindow::saveProperties( KConfigGroup& grp )
 {
     // 1. put saved projects in the config
     // 2. save every modified project in  "~/.kde/share/apps/k3b/sessions/" + KApp->sessionId()
@@ -618,12 +611,12 @@ void K3bMainWindow::saveProperties( KConfigGroup& /*c*/ )
 
     QString saveDir = KGlobal::dirs()->saveLocation( "appdata", "sessions/" + qApp->sessionId() + "/", true );
 
-    // FIXME: for some reason the config entries are not properly stored when using the default
-    //        KMainWindow session config. Since I was not able to find the bug I use another config object
-    // ----------------------------------------------------------
-    KConfig c( saveDir + "list", KConfig::SimpleConfig );
-    KConfigGroup grp( &c, "Saved Session" );
-    // ----------------------------------------------------------
+//     // FIXME: for some reason the config entries are not properly stored when using the default
+//     //        KMainWindow session config. Since I was not able to find the bug I use another config object
+//     // ----------------------------------------------------------
+//     KConfig c( saveDir + "list", KConfig::SimpleConfig );
+//     KConfigGroup grp( &c, "Saved Session" );
+//     // ----------------------------------------------------------
 
     QList<K3bDoc*> docs = k3bappcore->projectManager()->projects();
     grp.writeEntry( "Number of projects", docs.count() );
@@ -652,12 +645,12 @@ void K3bMainWindow::saveProperties( KConfigGroup& /*c*/ )
         ++cnt;
     }
 
-    c.sync();
+//    c.sync();
 }
 
 
 // FIXME:move this to K3bProjectManager
-void K3bMainWindow::readProperties( const KConfigGroup& /*c*/ )
+void K3bMainWindow::readProperties( const KConfigGroup& grp )
 {
     // FIXME: do not delete the files here. rather do it when the app is exited normally
     //        since that's when we can be sure we never need the session stuff again.
@@ -669,12 +662,12 @@ void K3bMainWindow::readProperties( const KConfigGroup& /*c*/ )
 
     QString saveDir = KGlobal::dirs()->saveLocation( "appdata", "sessions/" + qApp->sessionId() + "/", true );
 
-    // FIXME: for some reason the config entries are not properly stored when using the default
-    //        KMainWindow session config. Since I was not able to find the bug I use another config object
-    // ----------------------------------------------------------
-    KConfig c( saveDir + "list"/*, true*/ );
-    KConfigGroup grp( &c, "Saved Session" );
-    // ----------------------------------------------------------
+//     // FIXME: for some reason the config entries are not properly stored when using the default
+//     //        KMainWindow session config. Since I was not able to find the bug I use another config object
+//     // ----------------------------------------------------------
+//     KConfig c( saveDir + "list"/*, true*/ );
+//     KConfigGroup grp( &c, "Saved Session" );
+//     // ----------------------------------------------------------
 
     int cnt = grp.readEntry( "Number of projects", 0 );
 /*
@@ -1039,10 +1032,10 @@ void K3bMainWindow::slotSettingsConfigure()
 }
 
 
-void K3bMainWindow::showOptionDialog( int index )
+void K3bMainWindow::showOptionDialog( K3bOptionDialog::ConfigPage index )
 {
     K3bOptionDialog d( this);
-//    d.setCurrentPage( index );
+    d.setCurrentPage( index );
 
     d.exec();
 

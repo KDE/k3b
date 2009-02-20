@@ -64,7 +64,7 @@ K3bIsoOptions::K3bIsoOptions()
 }
 
 
-void K3bIsoOptions::save( KConfigGroup& c, bool saveVolumeDesc )
+void K3bIsoOptions::save( KConfigGroup c, bool saveVolumeDesc )
 {
     if( saveVolumeDesc ) {
         c.writeEntry( "volume id", m_volumeID );

@@ -42,7 +42,7 @@ protected:
     void readSettings();
     void loadK3bDefaults();
     void loadUserDefaults( const KConfigGroup& );
-    void saveUserDefaults( KConfigGroup& );
+    void saveUserDefaults( KConfigGroup );
     void toggleAll();
 
 private:

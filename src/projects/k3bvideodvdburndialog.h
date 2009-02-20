@@ -40,7 +40,7 @@ protected Q_SLOTS:
 protected:
     void loadK3bDefaults();
     void loadUserDefaults( const KConfigGroup& );
-    void saveUserDefaults( KConfigGroup& );
+    void saveUserDefaults( KConfigGroup );
     void toggleAll();
 
 private:

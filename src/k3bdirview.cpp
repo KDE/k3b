@@ -309,7 +309,7 @@ void K3bDirView::home()
 }
 
 
-void K3bDirView::saveConfig( KConfigGroup& grp )
+void K3bDirView::saveConfig( KConfigGroup grp )
 {
     m_fileView->saveConfig(grp);
 }

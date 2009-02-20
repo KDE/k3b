@@ -109,7 +109,7 @@ void K3bCddbPatternWidget::loadConfig( const KConfigGroup& c )
 }
 
 
-void K3bCddbPatternWidget::saveConfig( KConfigGroup& c )
+void K3bCddbPatternWidget::saveConfig( KConfigGroup c )
 {
     c.writeEntry( "playlist pattern", m_comboPlaylistPattern->currentText() );
     c.writeEntry( "filename pattern", m_comboFilenamePattern->currentText() );
