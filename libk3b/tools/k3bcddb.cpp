@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2008-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,6 +94,7 @@ class K3bCDDB::CDDBJob::Private
 public:
     KCDDB::Client cddbClient;
     K3bMedium medium;
+    K3bDevice::Toc toc;
 
     KCDDB::CDInfo cddbInfo;
 
@@ -121,7 +122,7 @@ void K3bCDDB::CDDBJob::Private::_k_cddbQueryFinished( KCDDB::Result result )
 
     // save the entry locally
     if ( cddbInfo.isValid() ) {
-        cddbClient.store( cddbInfo, K3bCDDB::createTrackOffsetList( medium.toc() ) );
+        cddbClient.store( cddbInfo, K3bCDDB::createTrackOffsetList( toc ) );
     }
 
     q->emitResult();
@@ -145,12 +146,6 @@ K3bCDDB::CDDBJob::~CDDBJob()
 }
 
 
-void K3bCDDB::CDDBJob::setMedium( const K3bMedium& medium )
-{
-    d->medium = medium;
-}
-
-
 K3bMedium K3bCDDB::CDDBJob::medium() const
 {
     return d->medium;
@@ -159,14 +154,36 @@ K3bMedium K3bCDDB::CDDBJob::medium() const
 
 void K3bCDDB::CDDBJob::start()
 {
+    kDebug();
     d->cddbInfo.clear();
-    d->cddbClient.lookup( createTrackOffsetList( d->medium.toc() ) );
+    d->cddbClient.lookup( createTrackOffsetList( d->toc ) );
 }
 
 
 KCDDB::CDInfo K3bCDDB::CDDBJob::cddbResult() const
 {
     return d->cddbInfo;
+}
+
+
+K3bCDDB::CDDBJob* K3bCDDB::CDDBJob::queryCddb( const K3bMedium& medium )
+{
+    CDDBJob* job = new CDDBJob();
+    job->d->medium = medium;
+    job->d->toc = medium.toc();
+    // start async so callers can connect to signals
+    QMetaObject::invokeMethod( job, "start", Qt::QueuedConnection );
+    return job;
+}
+
+
+K3bCDDB::CDDBJob* K3bCDDB::CDDBJob::queryCddb( const K3bDevice::Toc& toc )
+{
+    CDDBJob* job = new CDDBJob();
+    job->d->toc = toc;
+    // start async so callers can connect to signals
+    QMetaObject::invokeMethod( job, "start", Qt::QueuedConnection );
+    return job;
 }
 
 #include "k3bcddb.moc"

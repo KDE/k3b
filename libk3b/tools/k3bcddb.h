@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2008-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,10 @@ namespace K3bCDDB {
         CDDBJob( QObject* parent = 0 );
         ~CDDBJob();
 
-        void setMedium( const K3bMedium& medium );
+        /**
+         * The medium specified in queryCddb. K3bMediaCache
+         * uses it to remember the original medium.
+         */
         K3bMedium medium() const;
 
         /**
@@ -65,6 +68,19 @@ namespace K3bCDDB {
          */
         KCDDB::CDInfo cddbResult() const;
 
+        /**
+         * Query cddb for the medium. The returned job is
+         * already started.
+         */
+        static CDDBJob* queryCddb( const K3bMedium& medium );
+
+        /**
+         * Query cddb for the toc. The returned job is
+         * already started.
+         */
+        static CDDBJob* queryCddb( const K3bDevice::Toc& toc );
+
+    public Q_SLOTS:
         void start();
 
     private:

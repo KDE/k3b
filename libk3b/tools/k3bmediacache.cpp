@@ -127,12 +127,10 @@ public:
 void K3bMediaCache::Private::_k_mediumChanged( K3bDevice::Device* dev )
 {
     if ( q->medium( dev ).content() & K3bMedium::CONTENT_AUDIO ) {
-        K3bCDDB::CDDBJob* job = new K3bCDDB::CDDBJob( q );
+        K3bCDDB::CDDBJob* job = K3bCDDB::CDDBJob::queryCddb( q->medium( dev ) );
         connect( job, SIGNAL( result( KJob* ) ),
                  q, SLOT( _k_cddbJobFinished( KJob* ) ) );
-        job->setMedium( q->medium( dev ) );
         emit q->checkingMedium( dev, i18n( "CDDB Lookup" ) );
-        job->start();
     }
     else {
         emit q->mediumChanged( dev );
@@ -368,12 +366,10 @@ void K3bMediaCache::lookupCddb( K3bDevice::Device* dev )
 {
     K3bMedium m = medium( dev );
     if ( m.content() & K3bMedium::CONTENT_AUDIO ) {
-        K3bCDDB::CDDBJob* job = new K3bCDDB::CDDBJob( this );
+        K3bCDDB::CDDBJob* job = K3bCDDB::CDDBJob::queryCddb( m );
         connect( job, SIGNAL( result( KJob* ) ),
                  this, SLOT( _k_cddbJobFinished( KJob* ) ) );
-        job->setMedium( m );
         emit checkingMedium( dev, i18n( "CDDB Lookup" ) );
-        job->start();
     }
 }
 

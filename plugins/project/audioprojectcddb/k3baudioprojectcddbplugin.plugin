@@ -1,9 +1,0 @@
-[K3b Plugin]
-Lib=libk3baudioprojectcddbplugin
-Group=ProjectPlugin
-Name=K3b Cddb Audio Plugin
-Author=Sebastian Trueg
-Email=trueg@k3b.org
-Version=0.1
-Comment=Plugin to query a cddb server for information about an audio project.
-License=GPL

@@ -72,10 +72,12 @@ MACRO(MACRO_LOG_FEATURE _var _package _description _url ) # _required _minvers _
       IF (${_minvers} MATCHES ".*")
         SET(_logtext "${_logtext} (${_minvers} or higher)")
       ENDIF (${_minvers} MATCHES ".*")
-      SET(_logtext "${_logtext}  <${_url}>")
+      SET(_logtext "${_logtext}  <${_url}>\n     ")
+   ELSE (NOT ${_var})
+     SET(_logtext "${_logtext} - ")
    ENDIF (NOT ${_var})
 
-   SET(_logtext "${_logtext}\n     ${_description}")
+   SET(_logtext "${_logtext}${_description}")
 
    IF (NOT ${_var})
       IF (${_comments} MATCHES ".*")
@@ -100,39 +102,44 @@ MACRO(MACRO_DISPLAY_FEATURE_LOG)
    ENDIF (EXISTS ${_missingFile} OR EXISTS ${_enabledFile} OR EXISTS ${_disabledFile})
 
    IF(_printSummary)
-     IF (EXISTS ${_missingFile})
-       FILE(READ ${_missingFile} _requirements)
-       SET(_summary "\n-----------------------------------------------------------------------------\n-- The following REQUIRED dependencies could NOT be found.\n-----------------------------------------------------------------------------\n${_requirements}")
-       FILE(REMOVE ${_missingFile})
-       SET(_haveMissingReq 1)
-     ENDIF (EXISTS ${_missingFile})
-
-     SET(_elist 0)
+     SET(_missingDeps 0)
      IF (EXISTS ${_enabledFile})
-       SET(_elist 1)
        FILE(READ ${_enabledFile} _enabled)
        FILE(REMOVE ${_enabledFile})
        SET(_summary "${_summary}\n-----------------------------------------------------------------------------\n-- The following dependencies were found.\n-----------------------------------------------------------------------------\n${_enabled}")
      ENDIF (EXISTS ${_enabledFile})
 
-     SET(_dlist 0)
+
      IF (EXISTS ${_disabledFile})
-       SET(_dlist 1)
+       SET(_missingDeps 1)
        FILE(READ ${_disabledFile} _disabled)
        FILE(REMOVE ${_disabledFile})
        SET(_summary "${_summary}\n-----------------------------------------------------------------------------\n-- The following OPTIONAL dependencies could NOT be found.\n-----------------------------------------------------------------------------\n${_disabled}")
-     ELSE (EXISTS ${_disabledFile})
-       IF (${_elist})
-         SET(_summary "${_summary}\n-----------------------------------------------------------------------------\n-- Congratulations! All external packages have been found.")
-       ENDIF (${_elist})
      ENDIF (EXISTS ${_disabledFile})
+
+
+     IF (EXISTS ${_missingFile})
+       SET(_missingDeps 1)
+       FILE(READ ${_missingFile} _requirements)
+       SET(_summary "${_summary}\n-----------------------------------------------------------------------------\n-- The following REQUIRED dependencies could NOT be found.\n-----------------------------------------------------------------------------\n${_requirements}")
+       FILE(REMOVE ${_missingFile})
+       SET(_haveMissingReq 1)
+     ENDIF (EXISTS ${_missingFile})
+
+
+     IF (NOT ${_missingDeps})
+       SET(_summary "${_summary}\n-----------------------------------------------------------------------------\n-- Congratulations! All external packages have been found.")
+     ENDIF (NOT ${_missingDeps})
+
 
      MESSAGE(${_summary})
      MESSAGE("-----------------------------------------------------------------------------\n")
 
+
      IF(_haveMissingReq)
        MESSAGE(FATAL_ERROR "Exiting: Missing Requirements")
      ENDIF(_haveMissingReq)
+
    ENDIF(_printSummary)
 
 ENDMACRO(MACRO_DISPLAY_FEATURE_LOG)

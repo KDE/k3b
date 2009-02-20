@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=K3b Cddb Audio Plugin
+Comment=Plugin to query a cddb server for information about an audio project.
+Type=Service
+ServiceTypes=K3b/Plugin
+Icon=preferences-plugin
+
+X-KDE-Library=k3baudioprojectcddbplugin
+X-KDE-PluginInfo-Name=k3baudioprojectcddbplugin
+X-KDE-PluginInfo-Author=Sebastian Trueg
+X-KDE-PluginInfo-Email=trueg@k3b.org
+X-KDE-PluginInfo-Version=0.2
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Category=ProjectPlugin
+X-KDE-PluginInfo-EnabledByDefault=true
