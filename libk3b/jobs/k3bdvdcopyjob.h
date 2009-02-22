@@ -45,8 +45,8 @@ namespace K3b {
         void start();
         void cancel();
 
-        void setWriterDevice( Device::Device* w ) { m_writerDevice = w; }
-        void setReaderDevice( Device::Device* w ) { m_readerDevice = w; }
+        void setWriterDevice( K3b::Device::Device* w ) { m_writerDevice = w; }
+        void setReaderDevice( K3b::Device::Device* w ) { m_readerDevice = w; }
         void setImagePath( const QString& p ) { m_imagePath = p; }
         void setRemoveImageFiles( bool b ) { m_removeImageFiles = b; }
         void setOnlyCreateImage( bool b ) { m_onlyCreateImage = b; }
@@ -60,7 +60,7 @@ namespace K3b {
         void setVerifyData( bool b );
 
     private Q_SLOTS:
-        void slotDiskInfoReady( Device::DeviceHandler* );
+        void slotDiskInfoReady( K3b::Device::DeviceHandler* );
         void slotReaderProgress( int );
         void slotReaderProcessedSize( int, int );
         void slotWriterProgress( int );

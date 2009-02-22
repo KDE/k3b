@@ -49,8 +49,8 @@ namespace K3b {
 
         void setImagePath( const QString& path ) { m_imagePath = path; }
         void setSpeed( int s ) { m_speed = s; }
-        void setBurnDevice( Device::Device* dev ) { m_device = dev; }
-        void setWritingMode( WritingMode mode ) { m_writingMode = mode; }
+        void setBurnDevice( K3b::Device::Device* dev ) { m_device = dev; }
+        void setWritingMode( K3b::WritingMode mode ) { m_writingMode = mode; }
         void setSimulate( bool b ) { m_simulate = b; }
         void setNoFix( bool b ) { m_noFix = b; }
         void setDataMode( int m ) { m_dataMode = m; }

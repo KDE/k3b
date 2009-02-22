@@ -146,10 +146,10 @@ namespace K3b {
             };
 
         Q_SIGNALS:
-            void finished( DeviceHandler* );
+            void finished( K3b::Device::DeviceHandler* );
 
         public Q_SLOTS:
-            void setDevice( Device* );
+            void setDevice( K3b::Device::Device* );
             void sendCommand( int command );
 
             void getToc();

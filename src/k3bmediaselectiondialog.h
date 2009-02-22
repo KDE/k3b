@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
  *
@@ -22,69 +22,69 @@ namespace K3b {
     class MediaSelectionComboBox;
 }
 namespace Device {
-  class Device;
+    class Device;
 }
 
 namespace K3b {
-class MediaSelectionDialog : public KDialog
-{
-  Q_OBJECT
+    class MediaSelectionDialog : public KDialog
+    {
+        Q_OBJECT
 
- public:
-  /**
-   * Do not use the constructor. Use the static method instead.
-   */
-  MediaSelectionDialog( QWidget* parent = 0, 
-			   const QString& title = QString(), 
-			   const QString& text = QString(), 
-			   bool modal = false );
-  ~MediaSelectionDialog();
+    public:
+        /**
+         * Do not use the constructor. Use the static method instead.
+         */
+        MediaSelectionDialog( QWidget* parent = 0,
+                              const QString& title = QString(),
+                              const QString& text = QString(),
+                              bool modal = false );
+        ~MediaSelectionDialog();
 
-  /**
-   * \see MediaSelectionComboBox::setWantedMediumType()
-   */
-  void setWantedMediumType( int type );
+        /**
+         * \see MediaSelectionComboBox::setWantedMediumType()
+         */
+        void setWantedMediumType( int type );
 
-  /**
-   * \see MediaSelectionComboBox::setWantedMediumState()
-   */
-  void setWantedMediumState( int state );
+        /**
+         * \see MediaSelectionComboBox::setWantedMediumState()
+         */
+        void setWantedMediumState( int state );
 
-  /**
-   * \see MediaSelectionComboBox::setWantedMediumContent()
-   */
-  void setWantedMediumContent( int state );
+        /**
+         * \see MediaSelectionComboBox::setWantedMediumContent()
+         */
+        void setWantedMediumContent( int state );
 
-  /**
-   * Although the dialog is used to select a medium the result is the
-   * device containing that medium.
-   */
-  Device::Device* selectedDevice() const;
+        /**
+         * Although the dialog is used to select a medium the result is the
+         * device containing that medium.
+         */
+        Device::Device* selectedDevice() const;
 
-  /**
-   * \deprecated
-   *
-   * Select a medium.
-   * If only one medium of the wanted type is found the method returns immideately
-   * without showing the dialog.
-   */
-  static Device::Device* selectMedium( int type, int state, QWidget* parent = 0,
-					  const QString& title = QString(), 
-					  const QString& text = QString(),
-					  bool* canceled = 0 );
+        /**
+         * \deprecated
+         *
+         * Select a medium.
+         * If only one medium of the wanted type is found the method returns immideately
+         * without showing the dialog.
+         */
+        static Device::Device* selectMedium( int type, int state, QWidget* parent = 0,
+                                             const QString& title = QString(),
+                                             const QString& text = QString(),
+                                             bool* canceled = 0 );
 
-  static Device::Device* selectMedium( int type, int state, int content = Medium::CONTENT_ALL,
-					  QWidget* parent = 0,
-					  const QString& title = QString(), 
-					  const QString& text = QString(),
-					  bool* canceled = 0 );
+        static Device::Device* selectMedium( int type, int state, int content = Medium::CONTENT_ALL,
+                                             QWidget* parent = 0,
+                                             const QString& title = QString(),
+                                             const QString& text = QString(),
+                                             bool* canceled = 0 );
 
- private Q_SLOTS:
-  void slotSelectionChanged( Device::Device* );
+    private Q_SLOTS:
+        void slotSelectionChanged( K3b::Device::Device* );
 
- private:
-  MediaSelectionComboBox* m_combo;
-};
+    private:
+        MediaSelectionComboBox* m_combo;
+    };
 }
 
 #endif

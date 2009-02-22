@@ -42,17 +42,17 @@ namespace K3b {
         Device::Device* selectedDevice() const;
 
     Q_SIGNALS:
-        void selectionChanged( Device::Device* );
+        void selectionChanged( K3b::Device::Device* );
 
     public Q_SLOTS:
-        void addDevice( Device::Device* );
-        void addDevices( const QList<Device::Device*>& );
+        void addDevice( K3b::Device::Device* );
+        void addDevices( const QList<K3b::Device::Device*>& );
         /**
          * Clears the device combo and tries to keep the current selection
          */
-        void refreshDevices( const QList<Device::Device*>& );
-        void removeDevice( Device::Device* );
-        void setSelectedDevice( Device::Device* );
+        void refreshDevices( const QList<K3b::Device::Device*>& );
+        void removeDevice( K3b::Device::Device* );
+        void setSelectedDevice( K3b::Device::Device* );
 
     private Q_SLOTS:
         void slotActivated( int );

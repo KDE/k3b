@@ -52,7 +52,7 @@ namespace K3b {
          */
         void cancel();
 
-        void setBurnDevice( Device::Device* dev ) { m_burnDevice = dev; }
+        void setBurnDevice( K3b::Device::Device* dev ) { m_burnDevice = dev; }
         void setBurnSpeed( int s ) { m_burnSpeed = s; }
         void setSimulate( bool b ) { m_simulate = b; }
 

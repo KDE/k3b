@@ -100,31 +100,31 @@ namespace K3b {
         KSystemTray* systemTray() const { return m_systemTray; }
 
     public Q_SLOTS:
-        Doc* slotNewAudioDoc();
-        Doc* slotNewDataDoc();
-        Doc* slotNewMixedDoc();
-        Doc* slotNewVcdDoc();
-        Doc* slotNewMovixDoc();
-        Doc* slotNewVideoDvdDoc();
-        Doc* slotContinueMultisession();
+        K3b::Doc* slotNewAudioDoc();
+        K3b::Doc* slotNewDataDoc();
+        K3b::Doc* slotNewMixedDoc();
+        K3b::Doc* slotNewVcdDoc();
+        K3b::Doc* slotNewMovixDoc();
+        K3b::Doc* slotNewVideoDvdDoc();
+        K3b::Doc* slotContinueMultisession();
 
         void slotClearProject();
 
         void slotWriteImage();
         void slotWriteImage( const KUrl& url );
-        void formatMedium( Device::Device* );
+        void formatMedium( K3b::Device::Device* );
         void slotFormatMedium();
-        void mediaCopy( Device::Device* );
+        void mediaCopy( K3b::Device::Device* );
         void slotMediaCopy();
-        void cddaRip( Device::Device* );
+        void cddaRip( K3b::Device::Device* );
         void slotCddaRip();
-        void videoDvdRip( Device::Device* );
+        void videoDvdRip( K3b::Device::Device* );
         void slotVideoDvdRip();
-        void videoCdRip( Device::Device* );
+        void videoCdRip( K3b::Device::Device* );
         void slotVideoCdRip();
         void slotK3bSetup();
 
-        void showDiskInfo( Device::Device* );
+        void showDiskInfo( K3b::Device::Device* );
 
         void slotErrorMessage(const QString&);
         void slotWarningMessage(const QString&);

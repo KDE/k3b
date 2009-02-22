@@ -31,11 +31,11 @@ namespace K3b {
         ~UrlNavigator();
 
     public Q_SLOTS:
-        void setDevice( Device::Device* );
+        void setDevice( K3b::Device::Device* );
 
     Q_SIGNALS:
         void activated( const KUrl& url );
-        void activated( Device::Device* dev );
+        void activated( K3b::Device::Device* dev );
 
     private Q_SLOTS:
         void urlActivated( const KUrl &url );

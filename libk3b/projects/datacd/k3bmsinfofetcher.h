@@ -42,12 +42,12 @@ namespace K3b {
         void start();
         void cancel();
 
-        void setDevice( Device::Device* dev ) { m_device = dev; }
+        void setDevice( K3b::Device::Device* dev ) { m_device = dev; }
 
     private Q_SLOTS:
         void slotProcessExited();
         void slotCollectOutput();
-        void slotMediaDetectionFinished( Device::DeviceHandler* );
+        void slotMediaDetectionFinished( K3b::Device::DeviceHandler* );
         void getMsInfo();
 
     private:

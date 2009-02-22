@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
@@ -42,7 +42,7 @@ namespace K3b {
         void start();
         void cancel();
 
-        void setWritingMode( WritingMode mode );
+        void setWritingMode( K3b::WritingMode mode );
 
         /**
          * If true the growisofs parameter -M is used in favor of -Z.
@@ -77,7 +77,7 @@ namespace K3b {
         void setImageToWrite( const QString& );
 
         /**
-         * While reading the image from stdin growisofs needs 
+         * While reading the image from stdin growisofs needs
          * a valid -C parameter for multisession.
          */
         void setMultiSessionInfo( const QString& );

@@ -32,8 +32,8 @@ namespace K3b {
 
     public Q_SLOTS:
         void setChecked( bool );
-        void load( AudioDoc* );
-        void save( AudioDoc* );
+        void load( K3b::AudioDoc* );
+        void save( K3b::AudioDoc* );
 
     private Q_SLOTS:
         void slotCopyTitle();

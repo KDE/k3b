@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005-2009 Sebastian Trueg <trueg@k3b.org>
  *
@@ -21,32 +21,32 @@
 
 
 namespace K3b {
-class DataMultiSessionCombobox : public QComboBox
-{
-    Q_OBJECT
+    class DataMultiSessionCombobox : public QComboBox
+    {
+        Q_OBJECT
 
-public:
-    DataMultiSessionCombobox( QWidget* parent = 0 );
-    ~DataMultiSessionCombobox();
+    public:
+        DataMultiSessionCombobox( QWidget* parent = 0 );
+        ~DataMultiSessionCombobox();
 
-    /**
-     * returnes DataDoc::multiSessionModes
-     */
-    DataDoc::MultiSessionMode multiSessionMode() const;
+        /**
+         * returnes DataDoc::multiSessionModes
+         */
+        DataDoc::MultiSessionMode multiSessionMode() const;
 
-    void setForceNoMultisession( bool );
+        void setForceNoMultisession( bool );
 
-    void saveConfig( KConfigGroup );
-    void loadConfig( const KConfigGroup& );
+        void saveConfig( KConfigGroup );
+        void loadConfig( const KConfigGroup& );
 
-public Q_SLOTS:
-    void setMultiSessionMode( DataDoc::MultiSessionMode );
+    public Q_SLOTS:
+        void setMultiSessionMode( K3b::DataDoc::MultiSessionMode );
 
-private:
-    void init( bool forceNo );
+    private:
+        void init( bool forceNo );
 
-    bool m_forceNoMultiSession;
-};
+        bool m_forceNoMultiSession;
+    };
 }
 
 #endif

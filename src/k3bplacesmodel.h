@@ -85,7 +85,7 @@ namespace K3b {
         void expandToUrl( const KUrl& url );
 
     private Q_SLOTS:
-        void slotDevicesChanged( Device::DeviceManager* dm );
+        void slotDevicesChanged( K3b::Device::DeviceManager* dm );
         void slotExpand( const QModelIndex& index );
 
     private:

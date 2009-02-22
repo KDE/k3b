@@ -46,10 +46,10 @@ namespace K3b {
         void stepBy( int steps );
 
     Q_SIGNALS:
-        void valueChanged( const Msf& );
+        void valueChanged( const K3b::Msf& );
 
     public Q_SLOTS:
-        void setMsfValue( const Msf& );
+        void setMsfValue( const K3b::Msf& );
 
     private:
         QString textFromValue( int value ) const ;

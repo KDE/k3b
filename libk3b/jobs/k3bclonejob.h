@@ -45,8 +45,8 @@ namespace K3b {
         void start();
         void cancel();
 
-        void setWriterDevice( Device::Device* w ) { m_writerDevice = w; }
-        void setReaderDevice( Device::Device* w ) { m_readerDevice = w; }
+        void setWriterDevice( K3b::Device::Device* w ) { m_writerDevice = w; }
+        void setReaderDevice( K3b::Device::Device* w ) { m_readerDevice = w; }
         void setImagePath( const QString& p ) { m_imagePath = p; }
         void setNoCorrection( bool b ) { m_noCorrection = b; }
         void setRemoveImageFiles( bool b ) { m_removeImageFiles = b; }

@@ -52,15 +52,15 @@ namespace K3b {
         };
 
     public Q_SLOTS:
-        void addDevice( Device::Device* );
-        void addDevices( const QList<Device::Device*>& );
-        void setDevices( const QList<Device::Device*>& devices );
-        void removeDevice( Device::Device* dev );
+        void addDevice( K3b::Device::Device* );
+        void addDevices( const QList<K3b::Device::Device*>& );
+        void setDevices( const QList<K3b::Device::Device*>& devices );
+        void removeDevice( K3b::Device::Device* dev );
         void clear();
 
     private Q_SLOTS:
-        void slotMediumChanged( Device::Device* dev );
-        void slotCheckingMedium( Device::Device* dev, const QString& );
+        void slotMediumChanged( K3b::Device::Device* dev );
+        void slotCheckingMedium( K3b::Device::Device* dev, const QString& );
 
     private:
         class Private;

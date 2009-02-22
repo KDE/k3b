@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -31,31 +31,31 @@ class Q3ListViewItem;
 
 
 namespace K3b {
-class MixedDirTreeView : public DataDirTreeView
-{
-    Q_OBJECT
+    class MixedDirTreeView : public DataDirTreeView
+    {
+        Q_OBJECT
 
-public:
-    MixedDirTreeView( View* view, MixedDoc* doc, QWidget* parent = 0 );
-    ~MixedDirTreeView();
+    public:
+        MixedDirTreeView( View* view, MixedDoc* doc, QWidget* parent = 0 );
+        ~MixedDirTreeView();
 
-Q_SIGNALS:
-    void audioTreeSelected();
-    void dataTreeSelected();
+    Q_SIGNALS:
+        void audioTreeSelected();
+        void dataTreeSelected();
 
-protected Q_SLOTS:
+    protected Q_SLOTS:
 /*     void slotDropped( QDropEvent* e, Q3ListViewItem* after, Q3ListViewItem* parent ); */
-  
-private Q_SLOTS:
+
+            private Q_SLOTS:
 /*     void slotSelectionChanged( Q3ListViewItem* i ); */
 /*     void slotNewAudioTracks(); */
 
-private:
-    MixedDoc* m_doc;
+    private:
+        MixedDoc* m_doc;
 
-    class PrivateAudioRootViewItem;
-    PrivateAudioRootViewItem* m_audioRootItem;
-};
+        class PrivateAudioRootViewItem;
+        PrivateAudioRootViewItem* m_audioRootItem;
+    };
 }
 
 

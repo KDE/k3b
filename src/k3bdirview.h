@@ -49,51 +49,51 @@ namespace Device {
  *@author Sebastian Trueg
  */
 namespace K3b {
-class DirView : public KVBox
-{
-    Q_OBJECT
+    class DirView : public KVBox
+    {
+        Q_OBJECT
 
-public:
-    DirView(FileTreeView* tree, QWidget *parent=0);
-    ~DirView();
+    public:
+        DirView(FileTreeView* tree, QWidget *parent=0);
+        ~DirView();
 
-public Q_SLOTS:
-    void saveConfig( KConfigGroup grp );
-    void readConfig( const KConfigGroup & grp );
-    void showUrl( const KUrl& );
-    void showDevice( Device::Device* );
-    void showDiskInfo( Device::Device* );
+    public Q_SLOTS:
+        void saveConfig( KConfigGroup grp );
+        void readConfig( const KConfigGroup & grp );
+        void showUrl( const KUrl& );
+        void showDevice( K3b::Device::Device* );
+        void showDiskInfo( K3b::Device::Device* );
 
-protected Q_SLOTS:
-    void slotDirActivated( const KUrl& );
-    void slotDirActivated( const QString& );
-    void slotMountFinished( const QString& );
-    void slotUnmountFinished( bool );
-    void showMediumInfo( const Medium& );
-    void home();
+    protected Q_SLOTS:
+        void slotDirActivated( const KUrl& );
+        void slotDirActivated( const QString& );
+        void slotMountFinished( const QString& );
+        void slotUnmountFinished( bool );
+        void showMediumInfo( const Medium& );
+        void home();
 
-Q_SIGNALS:
-    void urlEntered( const KUrl& );
-    void deviceSelected( Device::Device* );
+    Q_SIGNALS:
+        void urlEntered( const KUrl& );
+        void deviceSelected( K3b::Device::Device* );
 
-private:
-    QStackedWidget* m_viewStack;
+    private:
+        QStackedWidget* m_viewStack;
 
-    AudioCdView*   m_cdView;
-    VideoCdView*   m_videoView;
-    VideoDVDRippingView* m_movieView;
-    FileView* m_fileView;
-    DiskInfoView* m_infoView;
+        AudioCdView*   m_cdView;
+        VideoCdView*   m_videoView;
+        VideoDVDRippingView* m_movieView;
+        FileView* m_fileView;
+        DiskInfoView* m_infoView;
 
-    KComboBox* m_urlCombo;
-    QSplitter* m_mainSplitter;
-    FileTreeView* m_fileTreeView;
+        KComboBox* m_urlCombo;
+        QSplitter* m_mainSplitter;
+        FileTreeView* m_fileTreeView;
 
-    bool m_bViewDiskInfo;
+        bool m_bViewDiskInfo;
 
-    class Private;
-    Private* d;
-};
+        class Private;
+        Private* d;
+    };
 }
 
 #endif

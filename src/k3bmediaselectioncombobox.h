@@ -59,7 +59,7 @@ namespace K3b {
          * Be aware that his signal will also be emitted in case
          * no medium is available with a null pointer.
          */
-        void selectionChanged( Device::Device* );
+        void selectionChanged( K3b::Device::Device* );
 
         /**
          * This signal is emitted if the selection of media changed.
@@ -67,14 +67,14 @@ namespace K3b {
          */
         void newMedia();
 
-        void newMedium( Device::Device* dev );
+        void newMedium( K3b::Device::Device* dev );
 
     public Q_SLOTS:
         /**
          * Only works in case the device actually contains a usable medium.
          * Otherwise the currently selected medium stays selected.
          */
-        void setSelectedDevice( Device::Device* );
+        void setSelectedDevice( K3b::Device::Device* );
 
         /**
          * Set the wanted medium type. Defaults to writable CD.
@@ -111,13 +111,13 @@ namespace K3b {
          *
          * \param dev The device to ignore or 0 to not ignore any device.
          */
-        void setIgnoreDevice( Device::Device* dev );
+        void setIgnoreDevice( K3b::Device::Device* dev );
 
     private Q_SLOTS:
-        void slotMediumChanged( Device::Device* );
-        void slotDeviceManagerChanged( Device::DeviceManager* );
+        void slotMediumChanged( K3b::Device::Device* );
+        void slotDeviceManagerChanged( K3b::Device::DeviceManager* );
         void slotActivated( int i );
-        void slotUpdateToolTip( Device::Device* );
+        void slotUpdateToolTip( K3b::Device::Device* );
 
     protected:
         void updateMedia();

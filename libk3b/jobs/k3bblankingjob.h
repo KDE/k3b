@@ -44,7 +44,7 @@ namespace K3b {
         void start();
         void cancel();
         void setForce( bool f ) { m_force = f; }
-        void setDevice( Device::Device* d );
+        void setDevice( K3b::Device::Device* d );
         void setSpeed( int s ) { m_speed = s; }
         void setMode( int m ) { m_mode = m; }
         void setWritingApp (int app) { m_writingApp = app; }

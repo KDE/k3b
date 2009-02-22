@@ -207,7 +207,7 @@ namespace K3b {
         static Q3ListViewItem* parentItem( Q3ListViewItem* i );
 
     Q_SIGNALS:
-        void editorButtonClicked( ListViewItem*, int );
+        void editorButtonClicked( K3b::ListViewItem*, int );
 
     public Q_SLOTS:
         void setNoItemText( const QString& );
@@ -229,8 +229,8 @@ namespace K3b {
         virtual void slotEditorButtonClicked();
 
     protected Q_SLOTS:
-        void showEditor( ListViewItem*, int col );
-        void placeEditor( ListViewItem*, int col );
+        void showEditor( K3b::ListViewItem*, int col );
+        void placeEditor( K3b::ListViewItem*, int col );
 
         /**
          * This is called whenever one of the editor's contents changes
@@ -238,13 +238,13 @@ namespace K3b {
          *
          * FIXME: should be called something like mayRename
          */
-        virtual bool renameItem( ListViewItem*, int, const QString& );
+        virtual bool renameItem( K3b::ListViewItem*, int, const QString& );
 
         /**
          * default impl just emits signal
          * editorButtonClicked(...)
          */
-        virtual void slotEditorButtonClicked( ListViewItem*, int );
+        virtual void slotEditorButtonClicked( K3b::ListViewItem*, int );
 
     protected:
         /**

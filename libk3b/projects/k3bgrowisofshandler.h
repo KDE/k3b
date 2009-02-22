@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
@@ -54,7 +54,7 @@ namespace K3b {
          * This will basically reset the error type
          * @param dao was growisofs called with DAO?
          */
-        void reset( Device::Device* = 0, bool dao = false );
+        void reset( K3b::Device::Device* = 0, bool dao = false );
 
         void handleStart();
         void handleLine( const QString& );

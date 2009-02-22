@@ -47,8 +47,8 @@ namespace K3b {
 
         void setCueFile( const QString& );
         void setSpeed( int s );
-        void setBurnDevice( Device::Device* dev );
-        void setWritingMode( WritingMode mode );
+        void setBurnDevice( K3b::Device::Device* dev );
+        void setWritingMode( K3b::WritingMode mode );
         void setSimulate( bool b );
         void setCopies( int c );
         void setOnTheFly( bool b );

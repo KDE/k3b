@@ -51,9 +51,9 @@ namespace K3b {
         void cancel();
 
     public:
-        void setWriterDevice( Device::Device* dev ) { m_writerDevice = dev; }
-        void setReaderDevice( Device::Device* dev ) { m_readerDevice = dev; }
-        void setWritingMode( WritingMode m ) { m_writingMode = m; }
+        void setWriterDevice( K3b::Device::Device* dev ) { m_writerDevice = dev; }
+        void setReaderDevice( K3b::Device::Device* dev ) { m_readerDevice = dev; }
+        void setWritingMode( K3b::WritingMode m ) { m_writingMode = m; }
         void setSpeed( int s ) { m_speed = s; }
         void setOnTheFly( bool b ) { m_onTheFly = b; }
         void setKeepImage( bool b ) { m_keepImage = b; }
@@ -70,9 +70,9 @@ namespace K3b {
         void setNoCorrection( bool b ) { m_noCorrection = b; }
 
     private Q_SLOTS:
-        void slotDiskInfoReady( Device::DeviceHandler* );
-        void slotCdTextReady( Device::DeviceHandler* );
-        void slotMediaReloadedForNextSession( Device::DeviceHandler* dh );
+        void slotDiskInfoReady( K3b::Device::DeviceHandler* );
+        void slotCdTextReady( K3b::Device::DeviceHandler* );
+        void slotMediaReloadedForNextSession( K3b::Device::DeviceHandler* dh );
         void slotCddbQueryFinished( KCDDB::Result );
         void slotWritingNextTrack( int t, int tt );
         void slotReadingNextTrack( int t, int tt );

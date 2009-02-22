@@ -66,11 +66,11 @@ namespace K3b {
          * The devicehandler needs to have a valid NgDiskInfo
          * Use this to prevent the job from searching a media.
          */
-        void start( Device::DeviceHandler* );
+        void start( K3b::Device::DeviceHandler* );
 
         void cancel();
 
-        void setDevice( Device::Device* );
+        void setDevice( K3b::Device::Device* );
 
         void setAction( int a ) { m_action = a; }
 

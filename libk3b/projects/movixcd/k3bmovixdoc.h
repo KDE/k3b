@@ -79,15 +79,15 @@ namespace K3b {
 
     Q_SIGNALS:
         void newMovixFileItems();
-        void movixItemRemoved( MovixFileItem* );
-        void subTitleItemRemoved( MovixFileItem* );
+        void movixItemRemoved( K3b::MovixFileItem* );
+        void subTitleItemRemoved( K3b::MovixFileItem* );
 
     public Q_SLOTS:
         void addUrls( const KUrl::List& urls );
         void addMovixFile( const KUrl& url, int pos = -1 );
-        void moveMovixItem( MovixFileItem* item, MovixFileItem* itemAfter );
-        void addSubTitleItem( MovixFileItem*, const KUrl& );
-        void removeSubTitleItem( MovixFileItem* );
+        void moveMovixItem( K3b::MovixFileItem* item, K3b::MovixFileItem* itemAfter );
+        void addSubTitleItem( K3b::MovixFileItem*, const KUrl& );
+        void removeSubTitleItem( K3b::MovixFileItem* );
 
     protected:
         /** reimplemented from Doc */

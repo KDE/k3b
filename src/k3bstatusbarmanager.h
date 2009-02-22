@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -33,37 +33,37 @@ namespace K3b {
 class QTimer;
 
 namespace K3b {
-class StatusBarManager : public QObject
-{
-  Q_OBJECT
+    class StatusBarManager : public QObject
+    {
+        Q_OBJECT
 
- public:
-  StatusBarManager( MainWindow* parent );
-  ~StatusBarManager();
+    public:
+        StatusBarManager( MainWindow* parent );
+        ~StatusBarManager();
 
- public Q_SLOTS:
-  void update();
+    public Q_SLOTS:
+        void update();
 
- private Q_SLOTS:
-  void slotFreeTempSpace( const QString&, unsigned long, unsigned long, unsigned long );
-  void showActionStatusText( const QString& text );
-  void clearActionStatusText();
-  void slotActiveProjectChanged( Doc* doc );
-  void slotUpdateProjectStats();
+    private Q_SLOTS:
+        void slotFreeTempSpace( const QString&, unsigned long, unsigned long, unsigned long );
+        void showActionStatusText( const QString& text );
+        void clearActionStatusText();
+        void slotActiveProjectChanged( K3b::Doc* doc );
+        void slotUpdateProjectStats();
 
- private:
-  bool eventFilter( QObject* o, QEvent* e );
+    private:
+        bool eventFilter( QObject* o, QEvent* e );
 
-  QLabel* m_labelInfoMessage;
-  QLabel* m_pixFreeTemp;
-  QLabel* m_labelFreeTemp;
-  QLabel* m_versionBox;
-  QLabel* m_labelProjectInfo;
+        QLabel* m_labelInfoMessage;
+        QLabel* m_pixFreeTemp;
+        QLabel* m_labelFreeTemp;
+        QLabel* m_versionBox;
+        QLabel* m_labelProjectInfo;
 
-  MainWindow* m_mainWindow;
+        MainWindow* m_mainWindow;
 
-  QTimer* m_updateTimer;
-};
+        QTimer* m_updateTimer;
+    };
 }
 
 #endif

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
  *
@@ -31,81 +31,81 @@ class KAction;
 
 
 namespace K3b {
-class AudioTrackPlayer : public QObject, public AudioClient
-{
-  Q_OBJECT
+    class AudioTrackPlayer : public QObject, public AudioClient
+    {
+        Q_OBJECT
 
- public:
-  AudioTrackPlayer( AudioDoc* doc, QObject* parent = 0 );
-  ~AudioTrackPlayer();
+    public:
+        AudioTrackPlayer( AudioDoc* doc, QObject* parent = 0 );
+        ~AudioTrackPlayer();
 
-  AudioTrack* currentPlayingTrack() const { return m_currentTrack; }
-  const K3b::Msf& currentPosition() const { return m_currentPosition; }
+        AudioTrack* currentPlayingTrack() const { return m_currentTrack; }
+        const K3b::Msf& currentPosition() const { return m_currentPosition; }
 
-  enum Actions {
-    ACTION_PLAY,
-    ACTION_PAUSE,
-    ACTION_PLAY_PAUSE,
-    ACTION_STOP,
-    ACTION_NEXT,
-    ACTION_PREV,
-    ACTION_SEEK
-  };
+        enum Actions {
+            ACTION_PLAY,
+            ACTION_PAUSE,
+            ACTION_PLAY_PAUSE,
+            ACTION_STOP,
+            ACTION_NEXT,
+            ACTION_PREV,
+            ACTION_SEEK
+        };
 
-  KAction* action( int action ) const;
+        KAction* action( int action ) const;
 
-  /**
-   * Reimplemented from AudioClient
-   */
-  int read( char* data, int maxlen );
+        /**
+         * Reimplemented from AudioClient
+         */
+        int read( char* data, int maxlen );
 
- public Q_SLOTS:
-  void playTrack( AudioTrack* );
-  void playPause();
-  void stop();
-  void next();
-  void prev();
-  void seek( const K3b::Msf& );
+    public Q_SLOTS:
+        void playTrack( K3b::AudioTrack* );
+        void playPause();
+        void stop();
+        void next();
+        void prev();
+        void seek( const K3b::Msf& );
 
-  Q_SIGNALS:
-  void playingTrack( AudioTrack* );
-  void paused( bool paused );  
-  void stopped();
+    Q_SIGNALS:
+        void playingTrack( K3b::AudioTrack* );
+        void paused( bool paused );
+        void stopped();
 
- private Q_SLOTS:
-  void slotSeek( int );
-  void slotTrackChanged( AudioTrack* track );
-  void slotTrackRemoved( AudioTrack* track );
-  void slotUpdateSlider();
-  void slotDocChanged();
+    private Q_SLOTS:
+        void slotSeek( int );
+        void slotTrackChanged( K3b::AudioTrack* track );
+        void slotTrackRemoved( K3b::AudioTrack* track );
+        void slotUpdateSlider();
+        void slotDocChanged();
 
- private:
-  AudioDoc* m_doc;
-  AudioTrack* m_currentTrack;
-  K3b::Msf m_currentPosition;
+    private:
+        AudioDoc* m_doc;
+        AudioTrack* m_currentTrack;
+        K3b::Msf m_currentPosition;
 
-  class Private;
-  Private* d;
-};
+        class Private;
+        Private* d;
+    };
 }
 
 #if 0
 namespace K3b {
-class AudioTrackPlayerSeekAction : public WidgetFactoryAction
-{
- public:
-    AudioTrackPlayerSeekAction( AudioTrackPlayer* player, QObject* parent );
-    ~AudioTrackPlayerSeekAction();
+    class AudioTrackPlayerSeekAction : public WidgetFactoryAction
+    {
+    public:
+        AudioTrackPlayerSeekAction( AudioTrackPlayer* player, QObject* parent );
+        ~AudioTrackPlayerSeekAction();
 
-    void setValue( int v );
-    void setMaxValue( int v );
+        void setValue( int v );
+        void setMaxValue( int v );
 
- protected:
-    QWidget* createWidget( QWidget* container);
+    protected:
+        QWidget* createWidget( QWidget* container);
 
- private:
-    AudioTrackPlayer* m_player;
-};
+    private:
+        AudioTrackPlayer* m_player;
+    };
 }
 #endif
 

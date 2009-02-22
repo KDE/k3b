@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
  *
@@ -33,45 +33,45 @@ namespace K3b {
  * the length of a silence source.
  */
 namespace K3b {
-class AudioDataSourceEditWidget : public QWidget
-{
-  Q_OBJECT
+    class AudioDataSourceEditWidget : public QWidget
+    {
+        Q_OBJECT
 
- public:
-  AudioDataSourceEditWidget( QWidget* parent = 0 );
-  ~AudioDataSourceEditWidget();
+    public:
+        AudioDataSourceEditWidget( QWidget* parent = 0 );
+        ~AudioDataSourceEditWidget();
 
-  K3b::Msf startOffset() const;
+        K3b::Msf startOffset() const;
 
-  /**
-   * Highest value (mening to use all the data up to the end of the source)
-   * is source::originalLength(). 
-   *
-   * Be aware that this differs from AudioDataSource::endOffset() which 
-   * points after the last used sector for internal reasons.
-   */
-  K3b::Msf endOffset() const;
+        /**
+         * Highest value (mening to use all the data up to the end of the source)
+         * is source::originalLength().
+         *
+         * Be aware that this differs from AudioDataSource::endOffset() which
+         * points after the last used sector for internal reasons.
+         */
+        K3b::Msf endOffset() const;
 
- public Q_SLOTS:
-  void loadSource( AudioDataSource* );
-  void saveSource();
+    public Q_SLOTS:
+        void loadSource( K3b::AudioDataSource* );
+        void saveSource();
 
-  void setStartOffset( const K3b::Msf& );
-  void setEndOffset( const K3b::Msf& );
+        void setStartOffset( const K3b::Msf& );
+        void setEndOffset( const K3b::Msf& );
 
- private Q_SLOTS:
-  void slotRangeModified( int, const K3b::Msf&, const K3b::Msf& );
-  void slotStartOffsetEdited( const K3b::Msf& );
-  void slotEndOffsetEdited( const K3b::Msf& );
+    private Q_SLOTS:
+        void slotRangeModified( int, const K3b::Msf&, const K3b::Msf& );
+        void slotStartOffsetEdited( const K3b::Msf& );
+        void slotEndOffsetEdited( const K3b::Msf& );
 
- private:
-  AudioDataSource* m_source;
-  int m_rangeId;
+    private:
+        AudioDataSource* m_source;
+        int m_rangeId;
 
-  AudioEditorWidget* m_editor;
-  MsfEdit* m_editStartOffset;
-  MsfEdit* m_editEndOffset;
-};
+        AudioEditorWidget* m_editor;
+        MsfEdit* m_editStartOffset;
+        MsfEdit* m_editEndOffset;
+    };
 }
 
 #endif

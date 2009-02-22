@@ -183,12 +183,12 @@ namespace K3b {
         void removeCorruptTracks();
 
     private Q_SLOTS:
-        void slotTrackChanged( AudioTrack* );
-        void slotTrackRemoved( AudioTrack* );
+        void slotTrackChanged( K3b::AudioTrack* );
+        void slotTrackRemoved( K3b::AudioTrack* );
 
     Q_SIGNALS:
-        void trackChanged( AudioTrack* );
-        void trackRemoved( AudioTrack* );
+        void trackChanged( K3b::AudioTrack* );
+        void trackRemoved( K3b::AudioTrack* );
 
     protected:
         /** reimplemented from Doc */

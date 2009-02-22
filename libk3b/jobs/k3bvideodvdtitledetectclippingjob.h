@@ -63,7 +63,7 @@ namespace K3b {
         /**
          * The device containing the Video DVD
          */
-        void setVideoDVD( const VideoDVD::VideoDVD& dvd ) { m_dvd = dvd; }
+        void setVideoDVD( const K3b::VideoDVD::VideoDVD& dvd ) { m_dvd = dvd; }
 
         /**
          * Set the title number to be analysed

@@ -42,7 +42,7 @@ namespace K3b {
     {
         Q_OBJECT
 
-            public:
+    public:
         virtual ~Job();
 
         /**
@@ -84,11 +84,11 @@ namespace K3b {
         static const char* DEFAULT_SIGNAL_CONNECTION;
 
         /**
-         * \param newTaskSlot    If DEFAULT_SIGNAL_CONNECTION the newTask signal from the subjob will 
+         * \param newTaskSlot    If DEFAULT_SIGNAL_CONNECTION the newTask signal from the subjob will
          *                       be connected to the newSubTask signal
-         * \param newSubTaskSlot If DEFAULT_SIGNAL_CONNECTION the newSubTask signal from the subjob 
+         * \param newSubTaskSlot If DEFAULT_SIGNAL_CONNECTION the newSubTask signal from the subjob
          *                       will create an infoMessage signal
-         * \param progressSlot   If DEFAULT_SIGNAL_CONNECTION the percent signal of the subjob will be 
+         * \param progressSlot   If DEFAULT_SIGNAL_CONNECTION the percent signal of the subjob will be
          *                       connected to the subPercent signal.
          * debuggingOutput and infoMessage will always be direcctly connected.
          *
@@ -108,13 +108,13 @@ namespace K3b {
          *
          * \see infoMessage()
          */
-        enum MessageType { 
+        enum MessageType {
             INFO,     /**< Informational message. For example a message that informs the user about what is
                          currently going on */
             WARNING,  /**< A warning message. Something did not go perfectly but the job may continue. */
             ERROR,    /**< An error. Only use this message type if the job will actually fail afterwards
                          with a call to jobFinished( false ) */
-            SUCCESS   /**< This message type may be used to inform the user that a sub job has 
+            SUCCESS   /**< This message type may be used to inform the user that a sub job has
                          been successfully finished. */
         };
 
@@ -125,7 +125,7 @@ namespace K3b {
                                   int mediaState = Device::STATE_EMPTY,
                                   int mediaType = Device::MEDIA_WRITABLE_CD,
                                   const QString& message = QString() );
-  
+
         /**
          * reimplemented from JobHandler
          */
@@ -141,13 +141,13 @@ namespace K3b {
                                           const QString& caption = QString() );
 
         /**
-         * Wait for the job to finish. In case the job is not running 
+         * Wait for the job to finish. In case the job is not running
          * this method returns immediately. Otherwise it will start a local
          * event loop to wait for the job to finish.
          */
         void wait();
 
-        public Q_SLOTS:
+    public Q_SLOTS:
         /**
          * This is the slot that starts the job. The first call should always
          * be jobStarted().
@@ -167,7 +167,7 @@ namespace K3b {
          */
         virtual void cancel() = 0;
 
-        void setJobHandler( JobHandler* );
+        void setJobHandler( K3b::JobHandler* );
 
     Q_SIGNALS:
         void infoMessage( const QString& msg, int type );
@@ -222,7 +222,7 @@ namespace K3b {
          */
         virtual void jobFinished( bool success );
 
-        private Q_SLOTS:
+    private Q_SLOTS:
         void slotCanceled();
         void slotNewSubTask( const QString& str );
 
@@ -243,14 +243,14 @@ namespace K3b {
     class LIBK3B_EXPORT BurnJob : public Job
     {
         Q_OBJECT
-	
+
     public:
         BurnJob( JobHandler* hdl, QObject* parent = 0 );
         virtual ~BurnJob();
 
         /**
          * The writing device used by this job.
-         */	
+         */
         virtual Device::Device* writer() const { return 0; }
 
         /**
@@ -267,7 +267,7 @@ namespace K3b {
         /**
          * use WritingApp
          */
-        void setWritingApp( WritingApp w );
+        void setWritingApp( K3b::WritingApp w );
 
     Q_SIGNALS:
         void bufferStatus( int );
@@ -277,7 +277,7 @@ namespace K3b {
         /**
          * @param speed current writing speed in Kb
          * @param multiplicator use 150 for CDs and 1380 for DVDs
-         * FIXME: maybe one should be able to ask the burnjob if it burns a CD or a DVD and remove the 
+         * FIXME: maybe one should be able to ask the burnjob if it burns a CD or a DVD and remove the
          *        multiplicator parameter)
          */
         void writeSpeed( int speed, int multiplicator );
@@ -292,7 +292,7 @@ namespace K3b {
     private:
         class Private;
         Private* const d;
-    };
+     };
 }
 
 #endif

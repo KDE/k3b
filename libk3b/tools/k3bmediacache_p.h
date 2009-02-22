@@ -49,8 +49,8 @@ public:
         : m_deviceEntry( de ) {}
 
 Q_SIGNALS:
-    void mediumChanged( Device::Device* dev );
-    void checkingMedium( Device::Device* dev, const QString& );
+    void mediumChanged( K3b::Device::Device* dev );
+    void checkingMedium( K3b::Device::Device* dev, const QString& );
 
 protected:
     void run();

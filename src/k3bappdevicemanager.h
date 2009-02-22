@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -32,71 +32,71 @@ namespace Device {
  * and maintains a current device
  */
 namespace K3b {
-class AppDeviceManager : public Device::DeviceManager, public KXMLGUIClient
-{
-    Q_OBJECT
+    class AppDeviceManager : public Device::DeviceManager, public KXMLGUIClient
+    {
+        Q_OBJECT
 
-public:
-    AppDeviceManager( QObject* parent = 0 );
-    ~AppDeviceManager();
+    public:
+        AppDeviceManager( QObject* parent = 0 );
+        ~AppDeviceManager();
 
-    Device::Device* currentDevice() const;
-    void setMediaCache( MediaCache* c );
+        Device::Device* currentDevice() const;
+        void setMediaCache( MediaCache* c );
 
-Q_SIGNALS:
-    void currentDeviceChanged( Device::Device* );
+    Q_SIGNALS:
+        void currentDeviceChanged( K3b::Device::Device* );
 
-    /**
-     * Emitted when starting to detect the diskinfo. This may be used to show some info
-     * to the user since deteting the diskinfo might take some time.
-     */
-    void detectingDiskInfo( Device::Device* );
+        /**
+         * Emitted when starting to detect the diskinfo. This may be used to show some info
+         * to the user since deteting the diskinfo might take some time.
+         */
+        void detectingDiskInfo( K3b::Device::Device* );
 
-    void mountFinished( const QString& mountPoint );
-    void unmountFinished( bool success );
+        void mountFinished( const QString& mountPoint );
+        void unmountFinished( bool success );
 
-public Q_SLOTS:
-    /**
-     * \reimplemeted for internal reasons. The API is unaffected.
-     */
-    void clear();
+    public Q_SLOTS:
+        /**
+         * \reimplemeted for internal reasons. The API is unaffected.
+         */
+        void clear();
 
-    void setCurrentDevice( Device::Device* );
+        void setCurrentDevice( K3b::Device::Device* );
 
-    void diskInfo();
-    void unlockDevice();
-    void lockDevice();
-    void mountDisk();
-    void unmountDisk();
-    void ejectDisk();
-    void loadDisk();
-    void setReadSpeed();
+        void diskInfo();
+        void unlockDevice();
+        void lockDevice();
+        void mountDisk();
+        void unmountDisk();
+        void ejectDisk();
+        void loadDisk();
+        void setReadSpeed();
 
-    void diskInfo( Device::Device* );
-    void unlockDevice( Device::Device* );
-    void lockDevice( Device::Device* );
-    void mountDisk( Device::Device* );
-    void unmountDisk( Device::Device* );
-    void ejectDisk( Device::Device* );
-    void loadDisk( Device::Device* );
-    void setReadSpeed( Device::Device* );
+        void diskInfo( K3b::Device::Device* );
+        void unlockDevice( K3b::Device::Device* );
+        void lockDevice( K3b::Device::Device* );
+        void mountDisk( K3b::Device::Device* );
+        void unmountDisk( K3b::Device::Device* );
+        void ejectDisk( K3b::Device::Device* );
+        void loadDisk( K3b::Device::Device* );
+        void setReadSpeed( K3b::Device::Device* );
 
-private Q_SLOTS:
-    void slotMediumChanged( Device::Device* dev );
-    void slotMountChanged( bool accessible, const QString& udi );
-    void slotMountFinished( Solid::ErrorType error, QVariant errorData, const QString& udi );
-    void slotUnmountFinished( Solid::ErrorType error, QVariant errorData, const QString& udi );
+    private Q_SLOTS:
+        void slotMediumChanged( K3b::Device::Device* dev );
+        void slotMountChanged( bool accessible, const QString& udi );
+        void slotMountFinished( Solid::ErrorType error, QVariant errorData, const QString& udi );
+        void slotUnmountFinished( Solid::ErrorType error, QVariant errorData, const QString& udi );
 
-private:
-    /**
-     * \reimplemeted for internal reasons. The API is unaffected.
-     */
-    virtual Device::Device* addDevice( const Solid::Device& solidDev );
-    virtual void removeDevice( const Solid::Device& solidDev );
+    private:
+        /**
+         * \reimplemeted for internal reasons. The API is unaffected.
+         */
+        virtual Device::Device* addDevice( const Solid::Device& solidDev );
+        virtual void removeDevice( const Solid::Device& solidDev );
 
-    class Private;
-    Private* const d;
-};
+        class Private;
+        Private* const d;
+    };
 }
 
 #endif

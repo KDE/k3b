@@ -45,11 +45,11 @@ namespace K3b {
         void slotOk();
         void slotCancel();
 
-        void importSession( DataDoc* doc );
+        void importSession( K3b::DataDoc* doc );
         void slotSelectionChanged();
         void updateMedia();
-        void addMedium( const Medium& medium );
-        void showSessionInfo( Device::Device* dev, int session );
+        void addMedium( const K3b::Medium& medium );
+        void showSessionInfo( K3b::Device::Device* dev, int session );
 
     private:
         DataMultisessionImportDialog( QWidget* parent );

@@ -44,7 +44,7 @@ namespace K3b {
         void start( bool onlyReadInfo );
         void cancel();
 
-        void setReadDevice( Device::Device* dev ) { m_device = dev; }
+        void setReadDevice( K3b::Device::Device* dev ) { m_device = dev; }
         void setImagePath( const QString& p ) { m_imagePath = p; }
 
         /**

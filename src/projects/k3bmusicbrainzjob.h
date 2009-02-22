@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -29,44 +29,44 @@ class QWidget;
  * Musicbrainz.
  */
 namespace K3b {
-class MusicBrainzJob : public Job
-{
-    Q_OBJECT
+    class MusicBrainzJob : public Job
+    {
+        Q_OBJECT
 
-public:
-    /**
-     * \param parent since we do not use this job with a normal progressdialog we need a widget
-     *        as parent
-     */
-    MusicBrainzJob( QWidget* parent = 0 );
-    ~MusicBrainzJob();
+    public:
+        /**
+         * \param parent since we do not use this job with a normal progressdialog we need a widget
+         *        as parent
+         */
+        MusicBrainzJob( QWidget* parent = 0 );
+        ~MusicBrainzJob();
 
-    bool hasBeenCanceled() const;
+        bool hasBeenCanceled() const;
 
-Q_SIGNALS:
-    /**
-     * Emitted for each track. This is signal can be used
-     * to display further information.
-     *
-     * \param track The track for which metadata was searched.
-     * \param success True if metadata was found
-     */
-    void trackFinished( AudioTrack* track, bool success );
+    Q_SIGNALS:
+        /**
+         * Emitted for each track. This is signal can be used
+         * to display further information.
+         *
+         * \param track The track for which metadata was searched.
+         * \param success True if metadata was found
+         */
+        void trackFinished( K3b::AudioTrack* track, bool success );
 
-public Q_SLOTS:
-    void start();
-    void cancel();
+    public Q_SLOTS:
+        void start();
+        void cancel();
 
-    void setTracks( const QList<AudioTrack*>& tracks );
+        void setTracks( const QList<K3b::AudioTrack*>& tracks );
 
-private Q_SLOTS:
-    void slotTrmPercent( int p );
-    void slotMbJobFinished( bool success );
+    private Q_SLOTS:
+        void slotTrmPercent( int p );
+        void slotMbJobFinished( bool success );
 
-private:
-    class Private;
-    Private* const d;
-};
+    private:
+        class Private;
+        Private* const d;
+    };
 }
 
 #endif

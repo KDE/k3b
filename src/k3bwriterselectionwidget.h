@@ -65,7 +65,7 @@ namespace K3b {
         void saveConfig( KConfigGroup );
 
     public Q_SLOTS:
-        void setWriterDevice( Device::Device* );
+        void setWriterDevice( K3b::Device::Device* );
         void setSpeed( int );
         void setWritingApp( K3b::WritingApp app );
 
@@ -109,23 +109,23 @@ namespace K3b {
          *                       For example: "Burn to the same device". Set it to 0 in order
          *                       to disable the feature.
          */
-        void setOverrideDevice( Device::Device* dev, const QString& overrideString = QString(), const QString& tooltip = QString() );
+        void setOverrideDevice( K3b::Device::Device* dev, const QString& overrideString = QString(), const QString& tooltip = QString() );
 
         /**
          * Compare MediaSelectionComboBox::setIgnoreDevice
          */
-        void setIgnoreDevice( Device::Device* dev );
+        void setIgnoreDevice( K3b::Device::Device* dev );
 
     Q_SIGNALS:
         void writerChanged();
-        void writerChanged( Device::Device* );
+        void writerChanged( K3b::Device::Device* );
         void writingAppChanged( K3b::WritingApp app );
 
         /**
          * \see MediaSelectionComboBox
          */
         void newMedia();
-        void newMedium( Device::Device* dev );
+        void newMedium( K3b::Device::Device* dev );
 
     private Q_SLOTS:
         void slotRefreshWriterSpeeds();
@@ -134,7 +134,7 @@ namespace K3b {
         void slotConfigChanged( KSharedConfig::Ptr c );
         void slotSpeedChanged( int index );
         void slotWriterChanged();
-        void slotNewBurnMedium( Device::Device* dev );
+        void slotNewBurnMedium( K3b::Device::Device* dev );
         void slotManualSpeed();
 
     private:

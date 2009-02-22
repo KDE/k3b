@@ -53,11 +53,11 @@ namespace K3b {
 
     public Q_SLOTS:
         void setSelectedUrl( const KUrl& url );
-        void setSelectedDevice( Device::Device* dev );
+        void setSelectedDevice( K3b::Device::Device* dev );
 
     Q_SIGNALS:
         void activated( const KUrl& url );
-        void activated( Device::Device* dev );
+        void activated( K3b::Device::Device* dev );
 
     private Q_SLOTS:
         void slotClicked( const QModelIndex& index );

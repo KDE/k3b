@@ -1,17 +1,17 @@
 /*
-*
-* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
-* Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
-*
-* This file is part of the K3b project.
-* Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-* See the file "COPYING" for the exact licensing terms.
-*/
+ *
+ * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
+ * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
 #ifndef K3BVCDBURNDIALOG_H
 #define K3BVCDBURNDIALOG_H
@@ -32,112 +32,112 @@ namespace K3b {
 class QButtonGroup;
 
 namespace K3b {
-class VcdBurnDialog : public ProjectBurnDialog
-{
-    Q_OBJECT
-
-public:
-    VcdBurnDialog( VcdDoc* doc, QWidget *parent = 0 );
-    ~VcdBurnDialog();
-
-    VcdDoc* vcdDoc() const
+    class VcdBurnDialog : public ProjectBurnDialog
     {
-        return m_vcdDoc;
-    }
+        Q_OBJECT
 
-protected:
-    void setupAdvancedTab();
-    void setupVideoCdTab();
-    void setupLabelTab();
-    void saveSettings();
-    void readSettings();
+    public:
+        VcdBurnDialog( VcdDoc* doc, QWidget *parent = 0 );
+        ~VcdBurnDialog();
 
-    void loadK3bDefaults();
-    void loadUserDefaults( const KConfigGroup& );
-    void saveUserDefaults( KConfigGroup );
+        VcdDoc* vcdDoc() const
+        {
+            return m_vcdDoc;
+        }
 
-    // -----------------------------------------------------------
-    // the video-cd-tab
-    // -----------------------------------------------------------
+    protected:
+        void setupAdvancedTab();
+        void setupVideoCdTab();
+        void setupLabelTab();
+        void saveSettings();
+        void readSettings();
 
-    QButtonGroup* m_buttonGroupVcdFormat;
-    QGroupBox *m_groupVcdFormat;
-    QRadioButton* m_radioVcd11;
-    QRadioButton* m_radioVcd20;
-    QRadioButton* m_radioSvcd10;
-    QRadioButton* m_radioHqVcd10;
+        void loadK3bDefaults();
+        void loadUserDefaults( const KConfigGroup& );
+        void saveUserDefaults( KConfigGroup );
 
-    QGroupBox* m_groupOptions;
-    QCheckBox* m_checkAutoDetect;
-    QCheckBox* m_checkNonCompliant;
-    QCheckBox* m_checkVCD30interpretation;
-    QCheckBox* m_check2336;
+        // -----------------------------------------------------------
+        // the video-cd-tab
+        // -----------------------------------------------------------
 
-    // CD-i
-    QGroupBox* m_groupCdi;
-    QCheckBox* m_checkCdiSupport;
-    QTextEdit* m_editCdiCfg;
+        QButtonGroup* m_buttonGroupVcdFormat;
+        QGroupBox *m_groupVcdFormat;
+        QRadioButton* m_radioVcd11;
+        QRadioButton* m_radioVcd20;
+        QRadioButton* m_radioSvcd10;
+        QRadioButton* m_radioHqVcd10;
+
+        QGroupBox* m_groupOptions;
+        QCheckBox* m_checkAutoDetect;
+        QCheckBox* m_checkNonCompliant;
+        QCheckBox* m_checkVCD30interpretation;
+        QCheckBox* m_check2336;
+
+        // CD-i
+        QGroupBox* m_groupCdi;
+        QCheckBox* m_checkCdiSupport;
+        QTextEdit* m_editCdiCfg;
 
 
-    // -----------------------------------------------------------
-    // the video-label-tab
-    // -----------------------------------------------------------
+        // -----------------------------------------------------------
+        // the video-label-tab
+        // -----------------------------------------------------------
 
-    QLineEdit* m_editVolumeId;
-    QLineEdit* m_editPublisher;
-    QLineEdit* m_editAlbumId;
+        QLineEdit* m_editVolumeId;
+        QLineEdit* m_editPublisher;
+        QLineEdit* m_editAlbumId;
 
-    QSpinBox* m_spinVolumeCount;
-    QSpinBox* m_spinVolumeNumber;
+        QSpinBox* m_spinVolumeCount;
+        QSpinBox* m_spinVolumeNumber;
 
-    // -----------------------------------------------------------
-    // the advanced-tab
-    // -----------------------------------------------------------
+        // -----------------------------------------------------------
+        // the advanced-tab
+        // -----------------------------------------------------------
 
-    QGroupBox* m_groupGeneric;
-    QGroupBox* m_groupGaps;
-    QGroupBox* m_groupMisc;
+        QGroupBox* m_groupGeneric;
+        QGroupBox* m_groupGaps;
+        QGroupBox* m_groupMisc;
 
-    QCheckBox* m_checkPbc;
-    QCheckBox* m_checkSegmentFolder;
-    QCheckBox* m_checkRelaxedAps;
-    QCheckBox* m_checkUpdateScanOffsets;
-    QCheckBox* m_checkGaps;
+        QCheckBox* m_checkPbc;
+        QCheckBox* m_checkSegmentFolder;
+        QCheckBox* m_checkRelaxedAps;
+        QCheckBox* m_checkUpdateScanOffsets;
+        QCheckBox* m_checkGaps;
 
-    QSpinBox* m_spinRestriction;
-    QSpinBox* m_spinPreGapLeadout;
-    QSpinBox* m_spinPreGapTrack;
-    QSpinBox* m_spinFrontMarginTrack;
-    QSpinBox* m_spinRearMarginTrack;
-    QSpinBox* m_spinFrontMarginTrackSVCD;
-    QSpinBox* m_spinRearMarginTrackSVCD;
+        QSpinBox* m_spinRestriction;
+        QSpinBox* m_spinPreGapLeadout;
+        QSpinBox* m_spinPreGapTrack;
+        QSpinBox* m_spinFrontMarginTrack;
+        QSpinBox* m_spinRearMarginTrack;
+        QSpinBox* m_spinFrontMarginTrackSVCD;
+        QSpinBox* m_spinRearMarginTrackSVCD;
 
-    QLabel* m_labelRestriction;
-    QLabel* m_labelPreGapLeadout;
-    QLabel* m_labelPreGapTrack;
-    QLabel* m_labelFrontMarginTrack;
-    QLabel* m_labelRearMarginTrack;
+        QLabel* m_labelRestriction;
+        QLabel* m_labelPreGapLeadout;
+        QLabel* m_labelPreGapTrack;
+        QLabel* m_labelFrontMarginTrack;
+        QLabel* m_labelRearMarginTrack;
 
-    // -----------------------------------------------------------
+        // -----------------------------------------------------------
 
-private:
-    VcdDoc* m_vcdDoc;
-    void setVolumeID( );
-    void MarginChecked( bool );
-    void saveCdiConfig();
-    void loadCdiConfig();
-    void loadDefaultCdiConfig();
-    void toggleAll();
+    private:
+        VcdDoc* m_vcdDoc;
+        void setVolumeID( );
+        void MarginChecked( bool );
+        void saveCdiConfig();
+        void loadCdiConfig();
+        void loadDefaultCdiConfig();
+        void toggleAll();
 
-protected Q_SLOTS:
-    void slotStartClicked();
+    protected Q_SLOTS:
+        void slotStartClicked();
 
-    void slotGapsChecked( bool );
-    void slotSpinVolumeCount();
-    void slotVcdTypeClicked( VcdOptions::MPEGVersion );
-    void slotCdiSupportChecked( bool );
-    void slotAutoDetect( bool );
-};
+        void slotGapsChecked( bool );
+        void slotSpinVolumeCount();
+        void slotVcdTypeClicked( K3b::VcdOptions::MPEGVersion );
+        void slotCdiSupportChecked( bool );
+        void slotAutoDetect( bool );
+    };
 }
 
 #endif

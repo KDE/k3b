@@ -47,7 +47,7 @@ namespace K3b {
         void start();
         void cancel();
 
-        void setWriter( Device::Device* dev ) { m_device = dev; }
+        void setWriter( K3b::Device::Device* dev ) { m_device = dev; }
         void setSimulate( bool b ) { m_simulate = b; }
         void setForce(bool b) { m_force = b; }
         void setMulti( bool b ) { m_noFix = b; }

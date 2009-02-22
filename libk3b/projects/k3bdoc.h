@@ -51,13 +51,13 @@ namespace K3b {
         Doc( QObject* = 0 );
         virtual ~Doc();
 
-        enum DocType { 
-            AUDIO = 1, 
-            DATA, 
-            MIXED, 
-            VCD, 
+        enum DocType {
+            AUDIO = 1,
+            DATA,
+            MIXED,
+            VCD,
             MOVIX,
-            VIDEODVD 
+            VIDEODVD
         };
 
         virtual int type() const { return m_docType; }
@@ -81,7 +81,7 @@ namespace K3b {
          */
         virtual int supportedMediaTypes() const;
 
-        /** 
+        /**
          * returns the view widget set with setView() or null if none has been set.
          */
         QWidget* view() const { return m_view; }
@@ -91,13 +91,13 @@ namespace K3b {
          */
         void setView( QWidget* v ) { m_view = v; }
 
-        /** 
+        /**
          * sets the modified flag for the document after a modifying action on the view connected to the document.
          */
         virtual void setModified( bool m = true );
 
-        /** 
-         * returns if the document is modified or not. Use this to determine 
+        /**
+         * returns if the document is modified or not. Use this to determine
          * if your document needs saving by the user on closing.
          */
         virtual bool isModified() const { return m_modified; }
@@ -117,14 +117,14 @@ namespace K3b {
         /**
          * Load a project from an xml stream.
          *
-         * This is used to load/save k3b projects. 
+         * This is used to load/save k3b projects.
          */
         virtual bool loadDocumentData( QDomElement* root ) = 0;
 
         /**
          * Save a project to an xml stream.
          *
-         * This is used to load/save k3b projects. 
+         * This is used to load/save k3b projects.
          */
         virtual bool saveDocumentData( QDomElement* docElem ) = 0;
 
@@ -157,7 +157,7 @@ namespace K3b {
 
         /**
          * Create a new BurnJob to burn this project. It is not mandatory to use this
-         * method. You may also just create the BurnJob you need manually. It is just 
+         * method. You may also just create the BurnJob you need manually. It is just
          * easier this way since you don't need to distinguish between the different
          * project types.
          */
@@ -178,7 +178,7 @@ namespace K3b {
 
     Q_SIGNALS:
         void changed();
-        void changed( Doc* );
+        void changed( K3b::Doc* );
 
     public Q_SLOTS:
         void setDummy( bool d );

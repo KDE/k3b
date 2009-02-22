@@ -132,10 +132,10 @@ namespace K3b {
         /**
          * Emitted once a new job has been started. This includes burn jobs.
          */
-        void jobStarted( Job* );
-        void burnJobStarted( BurnJob* );
-        void jobFinished( Job* );
-        void burnJobFinished( BurnJob* );
+        void jobStarted( K3b::Job* );
+        void burnJobStarted( K3b::BurnJob* );
+        void jobFinished( K3b::Job* );
+        void burnJobFinished( K3b::BurnJob* );
 
     public Q_SLOTS:
         /**
@@ -143,8 +143,8 @@ namespace K3b {
          * For now this is only used to determine if some job
          * is running.
          */
-        void registerJob( Job* job );
-        void unregisterJob( Job* job );
+        void registerJob( K3b::Job* job );
+        void unregisterJob( K3b::Job* job );
 
     protected:
         /**

@@ -65,20 +65,20 @@ namespace K3b {
         //ProjectInterface* dcopInterface( Doc* doc );
 
     public Q_SLOTS:
-        void addProject( Doc* );
-        void removeProject( Doc* );
-        void setActive( Doc* );
-        void loadDefaults( Doc* );
+        void addProject( K3b::Doc* );
+        void removeProject( K3b::Doc* );
+        void setActive( K3b::Doc* );
+        void loadDefaults( K3b::Doc* );
 
     Q_SIGNALS:
-        void newProject( Doc* );
-        void projectSaved( Doc* );
-        void closingProject( Doc* );
-        void projectChanged( Doc* doc );
-        void activeProjectChanged( Doc* );
+        void newProject( K3b::Doc* );
+        void projectSaved( K3b::Doc* );
+        void closingProject( K3b::Doc* );
+        void projectChanged( K3b::Doc* doc );
+        void activeProjectChanged( K3b::Doc* );
 
     private Q_SLOTS:
-        void slotProjectChanged( Doc* doc );
+        void slotProjectChanged( K3b::Doc* doc );
 
     private:
         // used internal

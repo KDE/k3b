@@ -56,7 +56,7 @@ namespace K3b {
     public Q_SLOTS:
         void loadAll();
 
-        int execPluginDialog( Plugin*, QWidget* parent = 0 );
+        int execPluginDialog( K3b::Plugin*, QWidget* parent = 0 );
 
     private:
         class Private;

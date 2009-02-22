@@ -31,9 +31,9 @@ namespace K3b {
         ~MovixOptionsWidget();
 
     public Q_SLOTS:
-        void init( const MovixBin* );
-        void readSettings( MovixDoc* );
-        void saveSettings( MovixDoc* );
+        void init( const K3b::MovixBin* );
+        void readSettings( K3b::MovixDoc* );
+        void saveSettings( K3b::MovixDoc* );
         void loadConfig( const KConfigGroup & c );
         void saveConfig( KConfigGroup c );
         void loadDefaults();

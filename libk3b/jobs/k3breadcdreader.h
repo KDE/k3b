@@ -42,7 +42,7 @@ namespace K3b {
         void start();
         void cancel();
 
-        void setReadDevice( Device::Device* dev ) { m_readDevice = dev; }
+        void setReadDevice( K3b::Device::Device* dev ) { m_readDevice = dev; }
 
         /** 0 means MAX */
         void setReadSpeed( int s ) { m_speed = s; }

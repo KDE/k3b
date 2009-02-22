@@ -221,7 +221,7 @@ namespace K3b {
          * This method adds files recursively including symlinks, hidden, and system files.
          * If a file already exists the new file's name will be appended a number.
          */
-        virtual void addUrlsToDir( const KUrl::List& urls, DirItem* dir );
+        virtual void addUrlsToDir( const KUrl::List& urls, K3b::DirItem* dir );
 
         void clearImportedSession();
 
@@ -232,10 +232,10 @@ namespace K3b {
         void setVolumeID( const QString& );
 
     Q_SIGNALS:
-        void aboutToRemoveItem( DataItem* );
-        void aboutToAddItem( DirItem* futureParent, DataItem* );
-        void itemRemoved( DataItem* );
-        void itemAdded( DataItem* );
+        void aboutToRemoveItem( K3b::DataItem* );
+        void aboutToAddItem( K3b::DirItem* futureParent, K3b::DataItem* );
+        void itemRemoved( K3b::DataItem* );
+        void itemAdded( K3b::DataItem* );
 
     protected:
         /** reimplemented from Doc */

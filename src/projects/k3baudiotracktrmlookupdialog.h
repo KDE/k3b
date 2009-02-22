@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -33,31 +33,31 @@ class QEventLoop;
 
 
 namespace K3b {
-class AudioTrackTRMLookupDialog : public KDialog
-{
-    Q_OBJECT
+    class AudioTrackTRMLookupDialog : public KDialog
+    {
+        Q_OBJECT
 
-public:
-    AudioTrackTRMLookupDialog( QWidget* parent = 0 );
-    ~AudioTrackTRMLookupDialog();
+    public:
+        AudioTrackTRMLookupDialog( QWidget* parent = 0 );
+        ~AudioTrackTRMLookupDialog();
 
-    /**
-     * This will show the dialog and start the lookup
-     */
-    int lookup( const QList<AudioTrack*>& tracks );
+        /**
+         * This will show the dialog and start the lookup
+         */
+        int lookup( const QList<AudioTrack*>& tracks );
 
-private Q_SLOTS:
-    void slotMbJobFinished( bool );
-    void slotMbJobInfoMessage( const QString&, int );
-    void slotTrackFinished( AudioTrack* track, bool success );
-    void slotCancel();
+    private Q_SLOTS:
+        void slotMbJobFinished( bool );
+        void slotMbJobInfoMessage( const QString&, int );
+        void slotTrackFinished( K3b::AudioTrack* track, bool success );
+        void slotCancel();
 
-private:
-    QLabel* m_infoLabel;
-    BusyWidget* m_busyWidget;
-    MusicBrainzJob* m_mbJob;
-    QEventLoop* m_loop;
-};
+    private:
+        QLabel* m_infoLabel;
+        BusyWidget* m_busyWidget;
+        MusicBrainzJob* m_mbJob;
+        QEventLoop* m_loop;
+    };
 }
 
 #endif

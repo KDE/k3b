@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -39,39 +39,39 @@ namespace K3b {
  */
 
 namespace K3b {
-class DataFileView : public QTreeView
-{
-    Q_OBJECT
+    class DataFileView : public QTreeView
+    {
+        Q_OBJECT
 
-public:
-    DataFileView( View*, DataDoc*, QWidget* parent );
-    ~DataFileView();
-	
-    DirItem* currentDir() const;
+    public:
+        DataFileView( View*, DataDoc*, QWidget* parent );
+        ~DataFileView();
 
-    /**
-     * \return The item at position \p pos (local coordinates)
-     * or 0 if there is no item at that position.
-     */
-    DataItem* itemAt( const QPoint& pos );
+        DirItem* currentDir() const;
 
-    QList<DataItem*> selectedItems() const;
+        /**
+         * \return The item at position \p pos (local coordinates)
+         * or 0 if there is no item at that position.
+         */
+        DataItem* itemAt( const QPoint& pos );
 
-Q_SIGNALS:
-    void dirSelected( DirItem* );
-	
-public Q_SLOTS:
-    void setCurrentDir( DirItem* );
+        QList<DataItem*> selectedItems() const;
 
-private:
-    virtual void rowsInserted( const QModelIndex& parent, int begin, int end );
+    Q_SIGNALS:
+        void dirSelected( K3b::DirItem* );
 
-private:
-    View* m_view;
-    DataDoc* m_doc;
+    public Q_SLOTS:
+        void setCurrentDir( K3b::DirItem* );
 
-    K3b::DataProjectModel* m_model;
-};
+    private:
+        virtual void rowsInserted( const QModelIndex& parent, int begin, int end );
+
+    private:
+        View* m_view;
+        DataDoc* m_doc;
+
+        K3b::DataProjectModel* m_model;
+    };
 }
 
 #endif

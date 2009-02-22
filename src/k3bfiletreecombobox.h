@@ -36,32 +36,32 @@ namespace Device {
 }
 
 namespace K3b {
-class FileTreeComboBox : public KComboBox
-{
-    Q_OBJECT
+    class FileTreeComboBox : public KComboBox
+    {
+        Q_OBJECT
 
-public:
-    FileTreeComboBox( QWidget* parent = 0 );
-    ~FileTreeComboBox();
+    public:
+        FileTreeComboBox( QWidget* parent = 0 );
+        ~FileTreeComboBox();
 
-public Q_SLOTS:
-    void setDevice( Device::Device* );
-    void setUrl( const KUrl& url );
-    void slotGoUrl();
+    public Q_SLOTS:
+        void setDevice( K3b::Device::Device* );
+        void setUrl( const KUrl& url );
+        void slotGoUrl();
 
- Q_SIGNALS:
-    void activated( const KUrl& url );
-    void activated( Device::Device* dev );
+    Q_SIGNALS:
+        void activated( const KUrl& url );
+        void activated( K3b::Device::Device* dev );
 
-private Q_SLOTS:
-    void slotDeviceExecuted( Device::Device* );
-    void slotUrlExecuted( const KUrl& url );
+    private Q_SLOTS:
+        void slotDeviceExecuted( K3b::Device::Device* );
+        void slotUrlExecuted( const KUrl& url );
 
-private:
-    class Private;
-    Private* d;
-    FileTreeView* m_fileTreeView;
-};
+    private:
+        class Private;
+        Private* d;
+        FileTreeView* m_fileTreeView;
+    };
 }
 
 #endif

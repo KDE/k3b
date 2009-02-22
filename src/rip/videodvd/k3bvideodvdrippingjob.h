@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
  *
@@ -31,79 +31,79 @@ namespace K3b {
  * For details on the options see VideoDVDTitleTranscodingJob
  */
 namespace K3b {
-class VideoDVDRippingJob : public Job
-{
-  Q_OBJECT
+    class VideoDVDRippingJob : public Job
+    {
+        Q_OBJECT
 
- public:
-  VideoDVDRippingJob( JobHandler* hdl, QObject* parent );
-  ~VideoDVDRippingJob();
+    public:
+        VideoDVDRippingJob( JobHandler* hdl, QObject* parent );
+        ~VideoDVDRippingJob();
 
-  class TitleRipInfo {
-  public:
-    TitleRipInfo();
-    TitleRipInfo( int title,
-		  int audioStream = 0,
-		  const QString& fn = QString(),
-		  int width = 0,  // 0 -> no resize
-		  int height = 0, // 0 -> no resize
-		  int videoBitrate = 0, // 0 -> use default from job settings
-		  int clipTop = 0,
-		  int clipLeft = 0,
-		  int clipBottom = 0,
-		  int clipRight = 0 );
-    int title;
-    int audioStream;
-    QString filename;
-    int width;
-    int height;
-    int videoBitrate;
-    int clipTop;
-    int clipLeft;
-    int clipBottom;
-    int clipRight;
-  };
+        class TitleRipInfo {
+        public:
+            TitleRipInfo();
+            TitleRipInfo( int title,
+                          int audioStream = 0,
+                          const QString& fn = QString(),
+                          int width = 0,  // 0 -> no resize
+                          int height = 0, // 0 -> no resize
+                          int videoBitrate = 0, // 0 -> use default from job settings
+                          int clipTop = 0,
+                          int clipLeft = 0,
+                          int clipBottom = 0,
+                          int clipRight = 0 );
+            int title;
+            int audioStream;
+            QString filename;
+            int width;
+            int height;
+            int videoBitrate;
+            int clipTop;
+            int clipLeft;
+            int clipBottom;
+            int clipRight;
+        };
 
-  QString jobDescription() const;
-  QString jobDetails() const;
+        QString jobDescription() const;
+        QString jobDetails() const;
 
- public Q_SLOTS:
-  void start();
-  void cancel();
+    public Q_SLOTS:
+        void start();
+        void cancel();
 
-  void setVideoDVD( const VideoDVD::VideoDVD& dvd ) { m_dvd = dvd; }
-  void setTitles( const QVector<TitleRipInfo>& titles ) { m_titleRipInfos = titles; }
+        void setVideoDVD( const K3b::VideoDVD::VideoDVD& dvd ) { m_dvd = dvd; }
+        void setTitles( const QVector<TitleRipInfo>& titles ) { m_titleRipInfos = titles; }
 
-  void setVideoCodec( VideoDVDTitleTranscodingJob::VideoCodec codec );
-  void setVideoBitrate( int bitrate );
-  void setTwoPassEncoding( bool b );
-  void setAudioCodec( VideoDVDTitleTranscodingJob::AudioCodec codec );
-  void setAudioBitrate( int bitrate );
-  void setAudioVBR( bool vbr );
-  void setResampleAudioTo44100( bool b );
-  void setLowPriority( bool b );
-  void setAutoClipping( bool b );
+        void setVideoCodec( K3b::VideoDVDTitleTranscodingJob::VideoCodec codec );
+        void setVideoBitrate( int bitrate );
+        void setTwoPassEncoding( bool b );
+        void setAudioCodec( K3b::VideoDVDTitleTranscodingJob::AudioCodec codec );
+        void setAudioBitrate( int bitrate );
+        void setAudioVBR( bool vbr );
+        void setResampleAudioTo44100( bool b );
+        void setLowPriority( bool b );
+        void setAutoClipping( bool b );
 
- private Q_SLOTS:
-  void slotTranscodingJobFinished( bool );
-  void slotDetectClippingJobFinished( bool );
-  void slotTranscodingProgress( int );
-  void slotDetectClippingProgress( int );
+    private Q_SLOTS:
+        void slotTranscodingJobFinished( bool );
+        void slotDetectClippingJobFinished( bool );
+        void slotTranscodingProgress( int );
+        void slotDetectClippingProgress( int );
 
- private:
-  void startTranscoding( int ripInfoIndex );
-  void startDetectClipping( int ripInfoIndex );
-  void initProgressInfo();
+    private:
+        void startTranscoding( int ripInfoIndex );
+        void startDetectClipping( int ripInfoIndex );
+        void initProgressInfo();
 
-  VideoDVD::VideoDVD m_dvd;
-  QVector<TitleRipInfo> m_titleRipInfos;
+        VideoDVD::VideoDVD m_dvd;
+        QVector<TitleRipInfo> m_titleRipInfos;
 
-  VideoDVDTitleTranscodingJob* m_transcodingJob;
-  VideoDVDTitleDetectClippingJob* m_detectClippingJob;
+        VideoDVDTitleTranscodingJob* m_transcodingJob;
+        VideoDVDTitleDetectClippingJob* m_detectClippingJob;
 
-  class Private;
-  Private* d;
-};
+        class Private;
+        Private* d;
+    };
 }
 
 #endif

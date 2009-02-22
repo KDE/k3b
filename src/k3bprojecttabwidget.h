@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -35,50 +35,50 @@ namespace K3b {
  * @author Sebastian Trueg
  */
 namespace K3b {
-class ProjectTabWidget : public QTabWidget
-{
-  Q_OBJECT
+    class ProjectTabWidget : public QTabWidget
+    {
+        Q_OBJECT
 
- public: 
-  ProjectTabWidget( QWidget *parent = 0 );
-  ~ProjectTabWidget();
+    public:
+        ProjectTabWidget( QWidget *parent = 0 );
+        ~ProjectTabWidget();
 
-  void insertTab( Doc* );
-  
-  void addTab( QWidget * child, const QString & label );
-  void addTab( QWidget * child, const QIcon & iconset, const QString & label );
-  void insertTab( QWidget * child, const QString & label, int index = -1 );
-  void insertTab( QWidget * child, const QIcon & iconset, const QString & label, int index = -1 );
+        void insertTab( Doc* );
 
-  /**
-   * \return the project for the tab at position \p pos or 0 in case the tab is
-   * not a project tab.
-   */
-  Doc* projectAt( const QPoint& pos ) const;
+        void addTab( QWidget * child, const QString & label );
+        void addTab( QWidget * child, const QIcon & iconset, const QString & label );
+        void insertTab( QWidget * child, const QString & label, int index = -1 );
+        void insertTab( QWidget * child, const QIcon & iconset, const QString & label, int index = -1 );
 
-  /**
-   * inserts the given action into the popup menu for the tabs
-   */
-  void insertAction( KAction* );
+        /**
+         * \return the project for the tab at position \p pos or 0 in case the tab is
+         * not a project tab.
+         */
+        Doc* projectAt( const QPoint& pos ) const;
 
-  bool eventFilter( QObject* o, QEvent* e );
+        /**
+         * inserts the given action into the popup menu for the tabs
+         */
+        void insertAction( KAction* );
 
-protected:
-  virtual void tabInserted ( int index );
+        bool eventFilter( QObject* o, QEvent* e );
 
- public Q_SLOTS:
-  void removePage( QWidget* );
+    protected:
+        virtual void tabInserted ( int index );
 
- private Q_SLOTS:
-  void slotDocChanged( Doc* );
-  void slotDocSaved( Doc* );
+    public Q_SLOTS:
+        void removePage( QWidget* );
 
- private:
-  KActionMenu* m_projectActionMenu;
+    private Q_SLOTS:
+        void slotDocChanged( K3b::Doc* );
+        void slotDocSaved( K3b::Doc* );
 
-  class ProjectData;
-  QMap<Doc*, ProjectData> m_projectDataMap;
-};
+    private:
+        KActionMenu* m_projectActionMenu;
+
+        class ProjectData;
+        QMap<Doc*, ProjectData> m_projectDataMap;
+    };
 }
 
 #endif

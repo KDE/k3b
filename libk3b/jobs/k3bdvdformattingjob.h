@@ -45,11 +45,11 @@ namespace K3b {
         /**
          * Use this to force the start of the formatting without checking for a usable medium.
          */
-        void start( const Device::DiskInfo& );
+        void start( const K3b::Device::DiskInfo& );
 
         void cancel();
 
-        void setDevice( Device::Device* );
+        void setDevice( K3b::Device::Device* );
 
         /**
          * One of: WRITING_MODE_INCR_SEQ, WRITING_MODE_RES_OVWR
@@ -76,8 +76,8 @@ namespace K3b {
     private Q_SLOTS:
         void slotStderrLine( const QString& );
         void slotProcessFinished( int, QProcess::ExitStatus );
-        void slotDeviceHandlerFinished( Device::DeviceHandler* );
-        void slotEjectingFinished( Device::DeviceHandler* );
+        void slotDeviceHandlerFinished( K3b::Device::DeviceHandler* );
+        void slotEjectingFinished( K3b::Device::DeviceHandler* );
 
     private:
         void startFormatting( const Device::DiskInfo& );
