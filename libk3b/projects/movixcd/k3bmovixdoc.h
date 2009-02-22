@@ -98,7 +98,7 @@ namespace K3b {
         virtual QString typeString() const { return "movix"; }
 
     private Q_SLOTS:
-        void slotDataItemRemoved( DataItem* );
+        void slotDataItemRemoved( K3b::DataItem* );
 
     private:
         QList<MovixFileItem*> m_movixFiles;

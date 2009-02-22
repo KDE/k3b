@@ -91,7 +91,7 @@ namespace K3b {
         void slotPopupMenu(const QPoint&);
         void slotDetermineSize();
         void slotDocChanged();
-        void slotMediumChanged( Device::Device* dev );
+        void slotMediumChanged( K3b::Device::Device* dev );
         void slotUpdateDisplay();
 
         void slotLoadUserDefaults();

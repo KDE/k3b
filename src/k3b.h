@@ -219,7 +219,7 @@ namespace K3b {
         void slotDataClearImportedSession();
         void slotEditBootImages();
 
-        void createClient(Doc* doc);
+        void createClient(K3b::Doc* doc);
 
         /**
          * Run slotCheckSystem with a timer

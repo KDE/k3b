@@ -130,11 +130,11 @@ namespace K3b {
         void addTrack( const KUrl&, uint );
         void addTracks( const KUrl::List&, uint );
         /** adds a track without any testing */
-        void addTrack( VcdTrack* track, uint position = 0 );
+        void addTrack( K3b::VcdTrack* track, uint position = 0 );
 
         // --- TODO: this should read: removeTrack( VcdTrack* )
-        void removeTrack( VcdTrack* );
-        void moveTrack( VcdTrack* track, VcdTrack* after );
+        void removeTrack( K3b::VcdTrack* );
+        void moveTrack( K3b::VcdTrack* track, K3b::VcdTrack* after );
 
     protected Q_SLOTS:
         /** processes queue "urlsToAdd" **/
@@ -143,7 +143,7 @@ namespace K3b {
     Q_SIGNALS:
         void newTracks();
 
-        void trackRemoved( VcdTrack* );
+        void trackRemoved( K3b::VcdTrack* );
 
     protected:
         /** reimplemented from Doc */

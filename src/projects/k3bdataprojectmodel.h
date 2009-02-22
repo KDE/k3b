@@ -19,15 +19,9 @@
 
 namespace K3b {
     class DataDoc;
-}
-namespace K3b {
     class DataItem;
-}
-namespace K3b {
     class DirItem;
-}
 
-namespace K3b {
     class DataProjectModel : public QAbstractItemModel
     {
         Q_OBJECT
@@ -63,14 +57,15 @@ namespace K3b {
         QStringList mimeTypes() const;
         bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
         virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
+
     private:
         class Private;
         Private* const d;
 
-        Q_PRIVATE_SLOT( d, void _k_aboutToAddItem( DirItem* dir, DataItem* item ) )
-        Q_PRIVATE_SLOT( d, void _k_aboutToRemoveItem( DataItem* item ) )
-        Q_PRIVATE_SLOT( d, void _k_itemAdded( DataItem* item ) )
-        Q_PRIVATE_SLOT( d, void _k_itemRemoved( DataItem* item ) )
+        Q_PRIVATE_SLOT( d, void _k_aboutToAddItem( K3b::DirItem* dir, K3b::DataItem* item ) )
+        Q_PRIVATE_SLOT( d, void _k_aboutToRemoveItem( K3b::DataItem* item ) )
+        Q_PRIVATE_SLOT( d, void _k_itemAdded( K3b::DataItem* item ) )
+        Q_PRIVATE_SLOT( d, void _k_itemRemoved( K3b::DataItem* item ) )
     };
 }
 

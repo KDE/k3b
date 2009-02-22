@@ -104,7 +104,7 @@ namespace K3b {
         virtual void reloadMedium() = 0;
 
     private Q_SLOTS:
-        void slotMediumChanged( Device::Device* );
+        void slotMediumChanged( K3b::Device::Device* );
 
     private:
         class Private;

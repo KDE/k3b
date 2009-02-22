@@ -120,7 +120,7 @@ namespace K3b {
          * one should also listen to Device::DeviceManager::changed() in case a USB drive or
          * something similar is removed.
          */
-        void mediumChanged( Device::Device* dev );
+        void mediumChanged( K3b::Device::Device* dev );
 
         /**
          * Emitted when the cache analysis a new medium. This might be emitted multiple times
@@ -131,14 +131,14 @@ namespace K3b {
          *
          * Analyzation of the medium is finished once mediumChanged has been emitted.
          */
-        void checkingMedium( Device::Device* dev, const QString& message );
+        void checkingMedium( K3b::Device::Device* dev, const QString& message );
 
     public Q_SLOTS:
         /**
          * Build the device list and start the polling.
          * It might make sense to connect this to Device::DeviceManager::changed()
          */
-        void buildDeviceList( Device::DeviceManager* );
+        void buildDeviceList( K3b::Device::DeviceManager* );
 
         /**
          * Clear the device list and stop all the polling.
@@ -153,7 +153,7 @@ namespace K3b {
          *
          * Will result in a mediumChanged signal for media that have audio content.
          */
-        void lookupCddb( Device::Device* );
+        void lookupCddb( K3b::Device::Device* );
 
     private:
         class PollThread;
@@ -164,7 +164,7 @@ namespace K3b {
 
         DeviceEntry* findDeviceEntry( Device::Device* );
 
-        Q_PRIVATE_SLOT( d, void _k_mediumChanged( Device::Device* ) )
+        Q_PRIVATE_SLOT( d, void _k_mediumChanged( K3b::Device::Device* ) )
         Q_PRIVATE_SLOT( d, void _k_cddbJobFinished( KJob* job ) )
     };
 }

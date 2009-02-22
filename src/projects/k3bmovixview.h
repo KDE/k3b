@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  * Copyright (C) 2009      Arthur Renato Mello <arthur@mandriva.com>
@@ -34,36 +34,36 @@ namespace K3b {
 }
 
 namespace K3b {
-class MovixView : public StandardView
-{
-    Q_OBJECT
+    class MovixView : public StandardView
+    {
+        Q_OBJECT
 
-public:
-    MovixView( MovixDoc* doc, QWidget* parent = 0 );
-    virtual ~MovixView();
+    public:
+        MovixView( MovixDoc* doc, QWidget* parent = 0 );
+        virtual ~MovixView();
 
-private Q_SLOTS:
-    void slotContextMenuRequested(Q3ListViewItem*, const QPoint& , int );
-    void slotRemoveSubTitleItems();
-    void showPropertiesDialog();
-    void slotAddSubTitleFile();
-    void slotDocChanged();
+    private Q_SLOTS:
+        void slotContextMenuRequested(Q3ListViewItem*, const QPoint& , int );
+        void slotRemoveSubTitleItems();
+        void showPropertiesDialog();
+        void slotAddSubTitleFile();
+        void slotDocChanged();
 
-protected:
-    virtual ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
+    protected:
+        virtual ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
 
-private:
-    MovixDoc* m_doc;
-    K3b::MovixProjectModel *m_model;
+    private:
+        MovixDoc* m_doc;
+        K3b::MovixProjectModel *m_model;
 
-    KAction* m_actionProperties;
-    KAction* m_actionRemove;
-    KAction* m_actionRemoveSubTitle;
-    KAction* m_actionAddSubTitle;
-    KMenu* m_popupMenu;
+        KAction* m_actionProperties;
+        KAction* m_actionRemove;
+        KAction* m_actionRemoveSubTitle;
+        KAction* m_actionAddSubTitle;
+        KMenu* m_popupMenu;
 
-    QLineEdit* m_volumeIDEdit;
-};
+        QLineEdit* m_volumeIDEdit;
+    };
 }
 
 #endif
