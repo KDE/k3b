@@ -56,8 +56,8 @@
 #include <kvbox.h>
 
 
-K3bProjectBurnDialog::K3bProjectBurnDialog( K3bDoc* doc, QWidget *parent )
-    : K3bInteractionDialog( parent,
+K3b::ProjectBurnDialog::ProjectBurnDialog( K3b::Doc* doc, QWidget *parent )
+    : K3b::InteractionDialog( parent,
                             i18n("Project"),
                             QString(),
                             START_BUTTON|SAVE_BUTTON|CANCEL_BUTTON,
@@ -92,11 +92,11 @@ K3bProjectBurnDialog::K3bProjectBurnDialog( K3bDoc* doc, QWidget *parent )
 }
 
 
-K3bProjectBurnDialog::~K3bProjectBurnDialog(){
+K3b::ProjectBurnDialog::~ProjectBurnDialog(){
 }
 
 
-void K3bProjectBurnDialog::init()
+void K3b::ProjectBurnDialog::init()
 {
     readSettings();
 //   if( !m_writerSelectionWidget->writerDevice() )
@@ -104,25 +104,25 @@ void K3bProjectBurnDialog::init()
 }
 
 
-void K3bProjectBurnDialog::slotWriterChanged()
+void K3b::ProjectBurnDialog::slotWriterChanged()
 {
     slotToggleAll();
 }
 
 
-void K3bProjectBurnDialog::slotWritingAppChanged( K3b::WritingApp )
+void K3b::ProjectBurnDialog::slotWritingAppChanged( K3b::WritingApp )
 {
     slotToggleAll();
 }
 
 
-void K3bProjectBurnDialog::toggleAll()
+void K3b::ProjectBurnDialog::toggleAll()
 {
-    K3bDevice::Device* dev = m_writerSelectionWidget->writerDevice();
+    K3b::Device::Device* dev = m_writerSelectionWidget->writerDevice();
     if( dev ) {
-        K3bMedium burnMedium = k3bappcore->mediaCache()->medium( dev );
+        K3b::Medium burnMedium = k3bappcore->mediaCache()->medium( dev );
 
-        if( burnMedium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_PLUS_ALL ) {
+        if( burnMedium.diskInfo().mediaType() & K3b::Device::MEDIA_DVD_PLUS_ALL ) {
             // no simulation support for DVD+R(W)
             m_checkSimulate->setChecked(false);
             m_checkSimulate->setEnabled(false);
@@ -164,7 +164,7 @@ void K3bProjectBurnDialog::toggleAll()
 }
 
 
-int K3bProjectBurnDialog::execBurnDialog( bool burn )
+int K3b::ProjectBurnDialog::execBurnDialog( bool burn )
 {
     if( burn && m_job == 0 ) {
         setButtonShown( START_BUTTON, true );
@@ -175,24 +175,24 @@ int K3bProjectBurnDialog::execBurnDialog( bool burn )
         setDefaultButton( SAVE_BUTTON );
     }
 
-    return K3bInteractionDialog::exec();
+    return K3b::InteractionDialog::exec();
 }
 
 
-void K3bProjectBurnDialog::slotSaveClicked()
+void K3b::ProjectBurnDialog::slotSaveClicked()
 {
     saveSettings();
     done( Saved );
 }
 
 
-void K3bProjectBurnDialog::slotCancelClicked()
+void K3b::ProjectBurnDialog::slotCancelClicked()
 {
     done( Canceled );
 }
 
 
-void K3bProjectBurnDialog::slotStartClicked()
+void K3b::ProjectBurnDialog::slotStartClicked()
 {
     saveSettings();
 
@@ -225,11 +225,11 @@ void K3bProjectBurnDialog::slotStartClicked()
         }
     }
 
-    K3bJobProgressDialog* dlg = 0;
+    K3b::JobProgressDialog* dlg = 0;
     if( m_checkOnlyCreateImage && m_checkOnlyCreateImage->isChecked() )
-        dlg = new K3bJobProgressDialog( parentWidget() );
+        dlg = new K3b::JobProgressDialog( parentWidget() );
     else
-        dlg = new K3bBurnProgressDialog( parentWidget() );
+        dlg = new K3b::BurnProgressDialog( parentWidget() );
 
     m_job = m_doc->newBurnJob( dlg );
 
@@ -241,7 +241,7 @@ void K3bProjectBurnDialog::slotStartClicked()
 
     dlg->startJob(m_job);
 
-    kDebug() << "(K3bProjectBurnDialog) job done. cleaning up.";
+    kDebug() << "(K3b::ProjectBurnDialog) job done. cleaning up.";
 
     delete m_job;
     m_job = 0;
@@ -251,15 +251,15 @@ void K3bProjectBurnDialog::slotStartClicked()
 }
 
 
-void K3bProjectBurnDialog::prepareGui()
+void K3b::ProjectBurnDialog::prepareGui()
 {
     QVBoxLayout* mainLay = new QVBoxLayout( mainWidget() );
     mainLay->setMargin( 0 );
     mainLay->setSpacing( KDialog::spacingHint() );
 
-    m_writerSelectionWidget = new K3bWriterSelectionWidget( mainWidget() );
+    m_writerSelectionWidget = new K3b::WriterSelectionWidget( mainWidget() );
     m_writerSelectionWidget->setWantedMediumType( m_doc->supportedMediaTypes() );
-    m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY );
+    m_writerSelectionWidget->setWantedMediumState( K3b::Device::STATE_EMPTY );
     m_writerSelectionWidget->setWantedMediumSize( m_doc->length() );
     mainLay->addWidget( m_writerSelectionWidget );
 
@@ -270,7 +270,7 @@ void K3bProjectBurnDialog::prepareGui()
     m_tabWidget->addTab( w, i18n("Writing") );
 
     QGroupBox* groupWritingMode = new QGroupBox( i18n("Writing Mode"), w );
-    m_writingModeWidget = new K3bWritingModeWidget( groupWritingMode );
+    m_writingModeWidget = new K3b::WritingModeWidget( groupWritingMode );
     QVBoxLayout* groupWritingModeLayout = new QVBoxLayout( groupWritingMode );
     groupWritingModeLayout->setMargin( marginHint() );
     groupWritingModeLayout->setSpacing( spacingHint() );
@@ -282,10 +282,10 @@ void K3bProjectBurnDialog::prepareGui()
     m_optionGroupLayout->setSpacing( KDialog::spacingHint() );
 
     // add the options
-    m_checkCacheImage = K3bStdGuiItems::createCacheImageCheckbox( m_optionGroup );
-    m_checkSimulate = K3bStdGuiItems::simulateCheckbox( m_optionGroup );
-    m_checkRemoveBufferFiles = K3bStdGuiItems::removeImagesCheckbox( m_optionGroup );
-    m_checkOnlyCreateImage = K3bStdGuiItems::onlyCreateImagesCheckbox( m_optionGroup );
+    m_checkCacheImage = K3b::StdGuiItems::createCacheImageCheckbox( m_optionGroup );
+    m_checkSimulate = K3b::StdGuiItems::simulateCheckbox( m_optionGroup );
+    m_checkRemoveBufferFiles = K3b::StdGuiItems::removeImagesCheckbox( m_optionGroup );
+    m_checkOnlyCreateImage = K3b::StdGuiItems::onlyCreateImagesCheckbox( m_optionGroup );
 
     m_optionGroupLayout->addWidget(m_checkSimulate);
     m_optionGroupLayout->addWidget(m_checkCacheImage);
@@ -321,7 +321,7 @@ void K3bProjectBurnDialog::prepareGui()
     grid->setMargin( KDialog::marginHint() );
     grid->setSpacing( KDialog::spacingHint() );
     m_tabWidget->addTab( tempW, i18n("Image") );
-    m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( tempW );
+    m_tempDirSelectionWidget = new K3b::TempDirSelectionWidget( tempW );
     grid->addWidget( m_tempDirSelectionWidget, 0, 0 );
     m_tempDirSelectionWidget->setNeededSize( doc()->size() );
 
@@ -332,8 +332,8 @@ void K3bProjectBurnDialog::prepareGui()
 
     // some default connections that should always be useful
     connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotWriterChanged()) );
-    connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3bDevice::Device*)),
-             m_writingModeWidget, SLOT(determineSupportedModesFromMedium(K3bDevice::Device*)) );
+    connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3b::Device::Device*)),
+             m_writingModeWidget, SLOT(determineSupportedModesFromMedium(K3b::Device::Device*)) );
     connect( m_writerSelectionWidget, SIGNAL(writingAppChanged(K3b::WritingApp)), this, SLOT(slotWritingAppChanged(K3b::WritingApp)) );
     connect( m_checkCacheImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
     connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
@@ -345,13 +345,13 @@ void K3bProjectBurnDialog::prepareGui()
 }
 
 
-void K3bProjectBurnDialog::addPage( QWidget* page, const QString& title )
+void K3b::ProjectBurnDialog::addPage( QWidget* page, const QString& title )
 {
     m_tabWidget->addTab( page, title );
 }
 
 
-void K3bProjectBurnDialog::saveSettings()
+void K3b::ProjectBurnDialog::saveSettings()
 {
     m_doc->setDummy( m_checkSimulate->isChecked() );
     m_doc->setOnTheFly( !m_checkCacheImage->isChecked() );
@@ -365,7 +365,7 @@ void K3bProjectBurnDialog::saveSettings()
 }
 
 
-void K3bProjectBurnDialog::readSettings()
+void K3b::ProjectBurnDialog::readSettings()
 {
     m_checkSimulate->setChecked( doc()->dummy() );
     m_checkCacheImage->setChecked( !doc()->onTheFly() );
@@ -380,7 +380,7 @@ void K3bProjectBurnDialog::readSettings()
 }
 
 
-void K3bProjectBurnDialog::saveUserDefaults( KConfigGroup c )
+void K3b::ProjectBurnDialog::saveUserDefaults( KConfigGroup c )
 {
     m_writingModeWidget->saveConfig( c );
     c.writeEntry( "simulate", m_checkSimulate->isChecked() );
@@ -394,7 +394,7 @@ void K3bProjectBurnDialog::saveUserDefaults( KConfigGroup c )
 }
 
 
-void K3bProjectBurnDialog::loadUserDefaults( const KConfigGroup& c )
+void K3b::ProjectBurnDialog::loadUserDefaults( const KConfigGroup& c )
 {
     m_writingModeWidget->loadConfig( c );
     m_checkSimulate->setChecked( c.readEntry( "simulate", false ) );
@@ -408,7 +408,7 @@ void K3bProjectBurnDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3bProjectBurnDialog::loadK3bDefaults()
+void K3b::ProjectBurnDialog::loadK3bDefaults()
 {
     m_writerSelectionWidget->loadDefaults();
     m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
@@ -418,14 +418,14 @@ void K3bProjectBurnDialog::loadK3bDefaults()
     m_checkOnlyCreateImage->setChecked( false );
     m_spinCopies->setValue( 1 );
 
-    if( m_tempDirSelectionWidget->selectionMode() == K3bTempDirSelectionWidget::DIR )
+    if( m_tempDirSelectionWidget->selectionMode() == K3b::TempDirSelectionWidget::DIR )
         m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
     else
         m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() + doc()->name() + ".iso" );
 }
 
 
-void K3bProjectBurnDialog::slotShowImageTip( bool buttonActivated )
+void K3b::ProjectBurnDialog::slotShowImageTip( bool buttonActivated )
 {
     if ( buttonActivated ) {
         // FIXME: use the tab bar's position

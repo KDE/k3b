@@ -29,7 +29,7 @@
 #include <KApplication>
 #include <KStandardDirs>
 
-K3bSplash::K3bSplash( QWidget* parent )
+K3b::Splash::Splash( QWidget* parent )
     : KVBox( parent)
 {
     setMargin( 0 );
@@ -50,9 +50,9 @@ K3bSplash::K3bSplash( QWidget* parent )
     copyrightLabel->setAlignment( Qt::AlignRight );
 
     QLabel* picLabel = new QLabel( this );
-    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+    if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
         picLabel->setPalette( theme->palette() );
-        picLabel->setPixmap( theme->pixmap( K3bTheme::SPLASH ) );
+        picLabel->setPixmap( theme->pixmap( K3b::Theme::SPLASH ) );
     }
 
     m_infoBox = new QLabel( this );
@@ -67,18 +67,18 @@ K3bSplash::K3bSplash( QWidget* parent )
 }
 
 
-K3bSplash::~K3bSplash()
+K3b::Splash::~Splash()
 {
 }
 
 
-void K3bSplash::mousePressEvent( QMouseEvent* )
+void K3b::Splash::mousePressEvent( QMouseEvent* )
 {
     close();
 }
 
 
-void K3bSplash::show()
+void K3b::Splash::show()
 {
     KVBox::show();
     // make sure the splash screen is shown immediately
@@ -86,7 +86,7 @@ void K3bSplash::show()
 }
 
 
-void K3bSplash::addInfo( const QString& s )
+void K3b::Splash::addInfo( const QString& s )
 {
     m_infoBox->setText( s );
 
@@ -94,7 +94,7 @@ void K3bSplash::addInfo( const QString& s )
 }
 
 
-// void K3bSplash::paintEvent( QPaintEvent* e )
+// void K3b::Splash::paintEvent( QPaintEvent* e )
 // {
 //   // first let the window paint the background and the child widget
 //   QWidget::paintEvent( e );

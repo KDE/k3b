@@ -23,12 +23,12 @@
 
 class QStringList;
 
-class K3bProjectFilePlugin: public KFilePlugin
+class ProjectFilePlugin: public KFilePlugin
 {
   Q_OBJECT
     
  public:
-  K3bProjectFilePlugin( QObject *parent, const char *name, const QStringList& args );
+  ProjectFilePlugin( QObject *parent, const char *name, const QStringList& args );
   
   virtual bool readInfo( KFileMetaInfo& info, uint what);
 };

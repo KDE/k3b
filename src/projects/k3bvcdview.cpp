@@ -34,20 +34,20 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 
-K3bVcdView::K3bVcdView( K3bVcdDoc* pDoc, QWidget* parent )
-        : K3bStandardView( pDoc, parent )
+K3b::VcdView::VcdView( K3b::VcdDoc* pDoc, QWidget* parent )
+        : K3b::StandardView( pDoc, parent )
 {
     m_doc = pDoc;
 
     m_model = new K3b::VcdProjectModel(m_doc, this);
-    // set the model for the K3bStandardView's views
+    // set the model for the K3b::StandardView's views
     setModel(m_model);
     setShowDirPanel(false);
 
 #if 0
     // --- setup GUI ---------------------------------------------------
 
-    m_vcdlist = new K3bVcdListView( this, pDoc, this );
+    m_vcdlist = new K3b::VcdListView( this, pDoc, this );
     setMainWidget( m_vcdlist );
     fillStatusDisplay() ->showSize();
 
@@ -56,20 +56,20 @@ K3bVcdView::K3bVcdView( K3bVcdDoc* pDoc, QWidget* parent )
 #endif
 }
 
-K3bVcdView::~K3bVcdView()
+K3b::VcdView::~VcdView()
 {}
 
 
-K3bProjectBurnDialog* K3bVcdView::newBurnDialog( QWidget * parent)
+K3b::ProjectBurnDialog* K3b::VcdView::newBurnDialog( QWidget * parent)
 {
-  return new K3bVcdBurnDialog( m_doc, parent );
+  return new K3b::VcdBurnDialog( m_doc, parent );
 }
 
 
-void K3bVcdView::init()
+void K3b::VcdView::init()
 {
   if( !k3bcore->externalBinManager()->foundBin( "vcdxbuild" ) ) {
-    kDebug() << "(K3bVcdView) could not find vcdxbuild executable";
+    kDebug() << "(K3b::VcdView) could not find vcdxbuild executable";
     KMessageBox::information( this,
 			      i18n( "Could not find VcdImager executable. "
 				    "To create VideoCD's you must install VcdImager >= 0.7.12. "

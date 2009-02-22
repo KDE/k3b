@@ -42,8 +42,8 @@
 #include <kdialog.h>
 #include <kactioncollection.h>
 
-K3bVcdListView::K3bVcdListView( K3bView* view, K3bVcdDoc* doc, QWidget *parent )
-        : K3bListView( parent ), m_doc( doc ), m_view( view )
+K3b::VcdListView::VcdListView( K3b::View* view, K3b::VcdDoc* doc, QWidget *parent )
+        : K3b::ListView( parent ), m_doc( doc ), m_view( view )
 {
     setAcceptDrops( true );
     setDropVisualizer( true );
@@ -71,15 +71,15 @@ K3bVcdListView::K3bVcdListView( K3bView* view, K3bVcdDoc* doc, QWidget *parent )
              this, SLOT( showPropertiesDialog() ) );
 
     connect( m_doc, SIGNAL( changed() ), this, SLOT( slotUpdateItems() ) );
-    connect( m_doc, SIGNAL( trackRemoved( K3bVcdTrack* ) ), this, SLOT( slotTrackRemoved( K3bVcdTrack* ) ) );
+    connect( m_doc, SIGNAL( trackRemoved( K3b::VcdTrack* ) ), this, SLOT( slotTrackRemoved( K3b::VcdTrack* ) ) );
 
     slotUpdateItems();
 }
 
-K3bVcdListView::~K3bVcdListView()
+K3b::VcdListView::~VcdListView()
 {}
 
-void K3bVcdListView::setupColumns()
+void K3b::VcdListView::setupColumns()
 {
     addColumn( i18n( "No." ) );
     addColumn( i18n( "Title" ) );
@@ -94,7 +94,7 @@ void K3bVcdListView::setupColumns()
 }
 
 
-void K3bVcdListView::setupActions()
+void K3b::VcdListView::setupActions()
 {
     m_actionCollection = new KActionCollection( this );
     m_actionProperties = K3b::createAction( this, i18n( "Properties" ), "document-properties", 0, this, SLOT( showPropertiesDialog() ), actionCollection() );
@@ -105,7 +105,7 @@ void K3bVcdListView::setupActions()
 }
 
 
-void K3bVcdListView::setupPopupMenu()
+void K3b::VcdListView::setupPopupMenu()
 {
     m_popupMenu = new KMenu( this );
     m_popupMenu->addAction( m_actionRemove );
@@ -116,14 +116,14 @@ void K3bVcdListView::setupPopupMenu()
 }
 
 
-bool K3bVcdListView::acceptDrag( QDropEvent* e ) const
+bool K3b::VcdListView::acceptDrag( QDropEvent* e ) const
 {
     // the first is for built-in item moving, the second for dropping urls
     return ( K3ListView::acceptDrag( e ) || K3URLDrag::canDecode( e ) );
 }
 
 
-Q3DragObject* K3bVcdListView::dragObject()
+Q3DragObject* K3b::VcdListView::dragObject()
 {
     QList<Q3ListViewItem*> list = selectedItems();
 
@@ -133,13 +133,13 @@ Q3DragObject* K3bVcdListView::dragObject()
     KUrl::List urls;
 
     Q_FOREACH( Q3ListViewItem* item, list )
-        urls.append( KUrl( ( ( K3bVcdListViewItem* ) item ) ->vcdTrack() ->absolutePath() ) );
+        urls.append( KUrl( ( ( K3b::VcdListViewItem* ) item ) ->vcdTrack() ->absolutePath() ) );
 
     return K3URLDrag::newDrag( urls, viewport() );
 }
 
 
-void K3bVcdListView::slotDropped( K3ListView*, QDropEvent* e, Q3ListViewItem* after )
+void K3b::VcdListView::slotDropped( K3ListView*, QDropEvent* e, Q3ListViewItem* after )
 {
     if ( !e->isAccepted() )
         return ;
@@ -148,13 +148,13 @@ void K3bVcdListView::slotDropped( K3ListView*, QDropEvent* e, Q3ListViewItem* af
     if ( after == 0L )
         pos = 0;
     else
-        pos = ( ( K3bVcdListViewItem* ) after ) ->vcdTrack() ->index() + 1;
+        pos = ( ( K3b::VcdListViewItem* ) after ) ->vcdTrack() ->index() + 1;
 
     if ( e->source() == viewport() ) {
         QList<Q3ListViewItem*> sel = selectedItems();
-        K3bVcdTrack* trackAfter = ( after ? ( ( K3bVcdListViewItem* ) after ) ->vcdTrack() : 0 );
+        K3b::VcdTrack* trackAfter = ( after ? ( ( K3b::VcdListViewItem* ) after ) ->vcdTrack() : 0 );
         Q_FOREACH( Q3ListViewItem* item, sel ) {
-            K3bVcdTrack * track = ( ( K3bVcdListViewItem* ) item ) ->vcdTrack();
+            K3b::VcdTrack * track = ( ( K3b::VcdListViewItem* ) item ) ->vcdTrack();
             m_doc->moveTrack( track, trackAfter );
             trackAfter = track;
         }
@@ -170,7 +170,7 @@ void K3bVcdListView::slotDropped( K3ListView*, QDropEvent* e, Q3ListViewItem* af
 }
 
 
-void K3bVcdListView::insertItem( Q3ListViewItem* item )
+void K3b::VcdListView::insertItem( Q3ListViewItem* item )
 {
     K3ListView::insertItem( item );
 
@@ -180,7 +180,7 @@ void K3bVcdListView::insertItem( Q3ListViewItem* item )
     }
 }
 
-void K3bVcdListView::showPopupMenu( K3ListView*, Q3ListViewItem* _item, const QPoint& _point )
+void K3b::VcdListView::showPopupMenu( K3ListView*, Q3ListViewItem* _item, const QPoint& _point )
 {
     if ( _item ) {
         m_actionRemove->setEnabled( true );
@@ -191,12 +191,12 @@ void K3bVcdListView::showPopupMenu( K3ListView*, Q3ListViewItem* _item, const QP
     m_popupMenu->popup( _point );
 }
 
-void K3bVcdListView::showPropertiesDialog()
+void K3b::VcdListView::showPropertiesDialog()
 {
-    QList<K3bVcdTrack*> selected = selectedTracks();
+    QList<K3b::VcdTrack*> selected = selectedTracks();
     if ( !selected.isEmpty() && selected.count() == 1 ) {
-        QList<K3bVcdTrack*> tracks = *m_doc->tracks();
-        K3bVcdTrackDialog d( m_doc, tracks, selected, this );
+        QList<K3b::VcdTrack*> tracks = *m_doc->tracks();
+        K3b::VcdTrackDialog d( m_doc, tracks, selected, this );
         if ( d.exec() ) {
             repaint();
         }
@@ -205,12 +205,12 @@ void K3bVcdListView::showPropertiesDialog()
     }
 }
 
-QList<K3bVcdTrack*> K3bVcdListView::selectedTracks()
+QList<K3b::VcdTrack*> K3b::VcdListView::selectedTracks()
 {
-    QList<K3bVcdTrack*> selectedTracks;
+    QList<K3b::VcdTrack*> selectedTracks;
     QList<Q3ListViewItem*> selectedVI( selectedItems() );
     Q_FOREACH( Q3ListViewItem* item, selectedVI ) {
-        K3bVcdListViewItem * vcdItem = dynamic_cast<K3bVcdListViewItem*>( item );
+        K3b::VcdListViewItem * vcdItem = dynamic_cast<K3b::VcdListViewItem*>( item );
         if ( vcdItem ) {
             selectedTracks.append( vcdItem->vcdTrack() );
         }
@@ -220,11 +220,11 @@ QList<K3bVcdTrack*> K3bVcdListView::selectedTracks()
 }
 
 
-void K3bVcdListView::slotRemoveTracks()
+void K3b::VcdListView::slotRemoveTracks()
 {
-    QList<K3bVcdTrack*> selected = selectedTracks();
+    QList<K3b::VcdTrack*> selected = selectedTracks();
     if ( !selected.isEmpty() ) {
-        Q_FOREACH( K3bVcdTrack* track,  selected ) {
+        Q_FOREACH( K3b::VcdTrack* track,  selected ) {
             m_doc->removeTrack( track );
         }
     }
@@ -235,7 +235,7 @@ void K3bVcdListView::slotRemoveTracks()
 }
 
 
-void K3bVcdListView::slotTrackRemoved( K3bVcdTrack* track )
+void K3b::VcdListView::slotTrackRemoved( K3b::VcdTrack* track )
 {
     Q3ListViewItem * viewItem = m_itemMap[ track ];
     m_itemMap.remove( track );
@@ -243,14 +243,14 @@ void K3bVcdListView::slotTrackRemoved( K3bVcdTrack* track )
 }
 
 
-void K3bVcdListView::slotUpdateItems()
+void K3b::VcdListView::slotUpdateItems()
 {
     // iterate through all doc-tracks and test if we have a listItem, if not, create one
-    QList<K3bVcdTrack*> tracks = *m_doc->tracks();
-    K3bVcdTrack* lastTrack = 0;
-    Q_FOREACH( K3bVcdTrack* track, tracks ) {
+    QList<K3b::VcdTrack*> tracks = *m_doc->tracks();
+    K3b::VcdTrack* lastTrack = 0;
+    Q_FOREACH( K3b::VcdTrack* track, tracks ) {
         if ( !m_itemMap.contains( track ) )
-            m_itemMap.insert( track, new K3bVcdListViewItem( track, this, m_itemMap[ lastTrack ] ) );
+            m_itemMap.insert( track, new K3b::VcdListViewItem( track, this, m_itemMap[ lastTrack ] ) );
 
         lastTrack = track;
     }

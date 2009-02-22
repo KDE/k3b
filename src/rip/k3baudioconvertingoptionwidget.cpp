@@ -35,10 +35,10 @@
 
 
 
-class K3bAudioConvertingOptionWidget::Private
+class K3b::AudioConvertingOptionWidget::Private
 {
 public:
-    Q3IntDict<K3bAudioEncoder> encoderMap;
+    Q3IntDict<K3b::AudioEncoder> encoderMap;
     QMap<int, QString> extensionMap;
 
     QTimer freeSpaceUpdateTimer;
@@ -76,9 +76,11 @@ public:
 };
 
 
-K3bAudioConvertingOptionWidget::K3bAudioConvertingOptionWidget( QWidget* parent )
-    : base_K3bAudioRippingOptionWidget( parent )
+K3b::AudioConvertingOptionWidget::AudioConvertingOptionWidget( QWidget* parent )
+    : QWidget( parent )
 {
+    setupUi( this );
+
     d = new Private();
 
     connect( m_editBaseDir, SIGNAL(textChanged(const QString&)),
@@ -107,10 +109,10 @@ K3bAudioConvertingOptionWidget::K3bAudioConvertingOptionWidget( QWidget* parent 
     d->extensionMap[0] = "wav";
 
     // check the available encoding plugins
-    QList<K3bPlugin*> fl = k3bcore->pluginManager()->plugins( "AudioEncoder" );
-    for( QList<K3bPlugin *>::const_iterator it = fl.constBegin();
+    QList<K3b::Plugin*> fl = k3bcore->pluginManager()->plugins( "AudioEncoder" );
+    for( QList<K3b::Plugin *>::const_iterator it = fl.constBegin();
          it != fl.constEnd(); ++it ) {
-        K3bAudioEncoder* f = (K3bAudioEncoder*)(*it);
+        K3b::AudioEncoder* f = (K3b::AudioEncoder*)(*it);
         QStringList exL = f->extensions();
 
         for( QStringList::const_iterator exIt = exL.constBegin();
@@ -127,25 +129,25 @@ K3bAudioConvertingOptionWidget::K3bAudioConvertingOptionWidget( QWidget* parent 
 }
 
 
-K3bAudioConvertingOptionWidget::~K3bAudioConvertingOptionWidget()
+K3b::AudioConvertingOptionWidget::~AudioConvertingOptionWidget()
 {
     delete d;
 }
 
 
-QString K3bAudioConvertingOptionWidget::baseDir() const
+QString K3b::AudioConvertingOptionWidget::baseDir() const
 {
     return m_editBaseDir->url().path();
 }
 
 
-void K3bAudioConvertingOptionWidget::setBaseDir( const QString& path )
+void K3b::AudioConvertingOptionWidget::setBaseDir( const QString& path )
 {
     m_editBaseDir->setUrl( path );
 }
 
 
-void K3bAudioConvertingOptionWidget::setNeededSize( KIO::filesize_t size )
+void K3b::AudioConvertingOptionWidget::setNeededSize( KIO::filesize_t size )
 {
     d->neededSize = size;
     if( size > 0 )
@@ -157,16 +159,16 @@ void K3bAudioConvertingOptionWidget::setNeededSize( KIO::filesize_t size )
 }
 
 
-void K3bAudioConvertingOptionWidget::slotConfigurePlugin()
+void K3b::AudioConvertingOptionWidget::slotConfigurePlugin()
 {
     // 0 for wave
-    K3bAudioEncoder* encoder = d->encoderMap[m_comboFileType->currentIndex()];
+    K3b::AudioEncoder* encoder = d->encoderMap[m_comboFileType->currentIndex()];
     if( encoder )
         k3bcore->pluginManager()->execPluginDialog( encoder, this );
 }
 
 
-void K3bAudioConvertingOptionWidget::slotUpdateFreeTempSpace()
+void K3b::AudioConvertingOptionWidget::slotUpdateFreeTempSpace()
 {
     QString path = m_editBaseDir->url().url();
 
@@ -193,26 +195,26 @@ void K3bAudioConvertingOptionWidget::slotUpdateFreeTempSpace()
 }
 
 
-void K3bAudioConvertingOptionWidget::slotEncoderChanged()
+void K3b::AudioConvertingOptionWidget::slotEncoderChanged()
 {
     // 0 for wave
     m_buttonConfigurePlugin->setEnabled( d->encoderMap[m_comboFileType->currentIndex()] != 0 );
 }
 
 
-K3bAudioEncoder* K3bAudioConvertingOptionWidget::encoder() const
+K3b::AudioEncoder* K3b::AudioConvertingOptionWidget::encoder() const
 {
     return d->encoderMap[m_comboFileType->currentIndex()];  // 0 for wave
 }
 
 
-QString K3bAudioConvertingOptionWidget::extension() const
+QString K3b::AudioConvertingOptionWidget::extension() const
 {
     return d->extensionMap[m_comboFileType->currentIndex()];
 }
 
 
-void K3bAudioConvertingOptionWidget::loadDefaults()
+void K3b::AudioConvertingOptionWidget::loadDefaults()
 {
     m_editBaseDir->setUrl( QDir::homePath() );
     m_checkSingleFile->setChecked( false );
@@ -225,7 +227,7 @@ void K3bAudioConvertingOptionWidget::loadDefaults()
 }
 
 
-void K3bAudioConvertingOptionWidget::loadConfig( const KConfigGroup& c )
+void K3b::AudioConvertingOptionWidget::loadConfig( const KConfigGroup& c )
 {
     m_editBaseDir->setUrl( c.readEntry( "last ripping directory", QDir::homePath() ) );
 
@@ -252,7 +254,7 @@ void K3bAudioConvertingOptionWidget::loadConfig( const KConfigGroup& c )
 }
 
 
-void K3bAudioConvertingOptionWidget::saveConfig( KConfigGroup c )
+void K3b::AudioConvertingOptionWidget::saveConfig( KConfigGroup c )
 {
     c.writePathEntry( "last ripping directory", m_editBaseDir->url().url() );
 

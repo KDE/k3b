@@ -22,168 +22,169 @@
 #include <qstringlist.h>
 #include <qprocess.h>
 
-class K3bDataDoc;
-class K3bDirItem;
-class K3bFileItem;
 class QTextStream;
-class K3bProcess;
 class K3Process;
 class KTemporaryFile;
 
+namespace K3b {
+    class DataDoc;
+    class DirItem;
+    class FileItem;
+    class Process;
 
-class K3bIsoImager : public K3bJob, public K3bMkisofsHandler
-{
-    Q_OBJECT
+    class IsoImager : public Job, public MkisofsHandler
+    {
+        Q_OBJECT
 
-public:
-    K3bIsoImager( K3bDataDoc*, K3bJobHandler*, QObject* parent = 0 );
-    virtual ~K3bIsoImager();
+    public:
+        IsoImager( DataDoc*, JobHandler*, QObject* parent = 0 );
+        virtual ~IsoImager();
 
-    virtual bool active() const;
+        virtual bool active() const;
 
-    int size() const { return m_mkisofsPrintSizeResult; }
+        int size() const { return m_mkisofsPrintSizeResult; }
 
-    virtual bool hasBeenCanceled() const; 
+        virtual bool hasBeenCanceled() const;
 
-    /**
-     * Get the checksum calculated during the creation of the image.
-     */
-    QByteArray checksum() const;
+        /**
+         * Get the checksum calculated during the creation of the image.
+         */
+        QByteArray checksum() const;
 
-public Q_SLOTS:
-    /**
-     * Starts the actual image creation. Always run init() 
-     * before starting the image creation
-     */
-    virtual void start();
-    virtual void cancel();
+    public Q_SLOTS:
+        /**
+         * Starts the actual image creation. Always run init()
+         * before starting the image creation
+         */
+        virtual void start();
+        virtual void cancel();
 
-    /**
-     * Initialize the image creator. This calculates the image size and performs
-     * some checks on the project.
-     *
-     * The initialization process also finishes with the finished() signal just
-     * like a normal job operation. Get the calculated image size via size()
-     */
-    virtual void init();
+        /**
+         * Initialize the image creator. This calculates the image size and performs
+         * some checks on the project.
+         *
+         * The initialization process also finishes with the finished() signal just
+         * like a normal job operation. Get the calculated image size via size()
+         */
+        virtual void init();
 
-    /**
-     * Only calculates the size of the image without the additional checks in
-     * init()
-     *
-     * Use this if you need to recalculate the image size for example if the
-     * multisession info changed.
-     */
-    virtual void calculateSize();
+        /**
+         * Only calculates the size of the image without the additional checks in
+         * init()
+         *
+         * Use this if you need to recalculate the image size for example if the
+         * multisession info changed.
+         */
+        virtual void calculateSize();
 
-    /**
-     * lets the isoimager write directly into fd instead of writing
-     * to an image file.
-     * Be aware that this only makes sense before starting the job.
-     * To disable just set @p fd to -1
-     */
-    void writeToFd( int fd );
+        /**
+         * lets the isoimager write directly into fd instead of writing
+         * to an image file.
+         * Be aware that this only makes sense before starting the job.
+         * To disable just set @p fd to -1
+         */
+        void writeToFd( int fd );
 
-    void writeToImageFile( const QString& path );
+        void writeToImageFile( const QString& path );
 
-    /**
-     * If dev == 0 K3bIsoImager will ignore the data in the previous session. 
-     * This is usable for CD-Extra.
-     */
-    void setMultiSessionInfo( const QString&, K3bDevice::Device* dev = 0 );
+        /**
+         * If dev == 0 IsoImager will ignore the data in the previous session.
+         * This is usable for CD-Extra.
+         */
+        void setMultiSessionInfo( const QString&, Device::Device* dev = 0 );
 
-    QString multiSessionInfo() const;
-    K3bDevice::Device* multiSessionImportDevice() const;
+        QString multiSessionInfo() const;
+        Device::Device* multiSessionImportDevice() const;
 
-    K3bDevice::Device* device() const { return m_device; }
-    K3bDataDoc* doc() const { return m_doc; }
+        Device::Device* device() const { return m_device; }
+        DataDoc* doc() const { return m_doc; }
 
-protected:
-    virtual void handleMkisofsProgress( int );
-    virtual void handleMkisofsInfoMessage( const QString&, int );
+    protected:
+        virtual void handleMkisofsProgress( int );
+        virtual void handleMkisofsInfoMessage( const QString&, int );
 
-    virtual bool addMkisofsParameters( bool printSize = false );
+        virtual bool addMkisofsParameters( bool printSize = false );
 
-    /**
-     * calls writePathSpec, writeRRHideFile, and writeJolietHideFile
-     */
-    bool prepareMkisofsFiles();
+        /**
+         * calls writePathSpec, writeRRHideFile, and writeJolietHideFile
+         */
+        bool prepareMkisofsFiles();
 
-    /**
-     * The dummy dir is used to create dirs on the iso-filesystem.
-     *
-     * @return an empty dummy dir for use with K3bDirItems.
-     */
-    QString dummyDir( K3bDirItem* );
+        /**
+         * The dummy dir is used to create dirs on the iso-filesystem.
+         *
+         * @return an empty dummy dir for use with DirItems.
+         */
+        QString dummyDir( DirItem* );
 
-    void outputData();
-    void initVariables();
-    virtual void cleanup();
-    void clearDummyDirs();
+        void outputData();
+        void initVariables();
+        virtual void cleanup();
+        void clearDummyDirs();
 
-    /**
-     * @returns The number of entries written or -1 on error
-     */
-    virtual int writePathSpec();
-    bool writeRRHideFile();
-    bool writeJolietHideFile();
-    bool writeSortWeightFile();
+        /**
+         * @returns The number of entries written or -1 on error
+         */
+        virtual int writePathSpec();
+        bool writeRRHideFile();
+        bool writeJolietHideFile();
+        bool writeSortWeightFile();
 
-    // used by writePathSpec
-    virtual int writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
-    virtual void writePathSpecForFile( K3bFileItem*, QTextStream& stream );
-    QString escapeGraftPoint( const QString& str );
+        // used by writePathSpec
+        virtual int writePathSpecForDir( DirItem* dirItem, QTextStream& stream );
+        virtual void writePathSpecForFile( FileItem*, QTextStream& stream );
+        QString escapeGraftPoint( const QString& str );
 
-    KTemporaryFile* m_pathSpecFile;
-    KTemporaryFile* m_rrHideFile;
-    KTemporaryFile* m_jolietHideFile;
-    KTemporaryFile* m_sortWeightFile;
+        KTemporaryFile* m_pathSpecFile;
+        KTemporaryFile* m_rrHideFile;
+        KTemporaryFile* m_jolietHideFile;
+        KTemporaryFile* m_sortWeightFile;
 
-    K3bProcess* m_process;
+        Process* m_process;
 
-    bool m_processExited;
-    bool m_canceled;
+        bool m_processExited;
+        bool m_canceled;
 
-protected Q_SLOTS:
-    virtual void slotReceivedStderr( const QString& );
-    virtual void slotProcessExited( int, QProcess::ExitStatus );
+    protected Q_SLOTS:
+        virtual void slotReceivedStderr( const QString& );
+        virtual void slotProcessExited( int, QProcess::ExitStatus );
 
-private Q_SLOTS:
-    void slotCollectMkisofsPrintSizeStderr(K3Process*, char*, int);
-    void slotCollectMkisofsPrintSizeStdout( const QString& );
-    void slotMkisofsPrintSizeFinished();
-    void slotDataPreparationDone( bool success );
+    private Q_SLOTS:
+        void slotCollectMkisofsPrintSizeStderr(K3Process*, char*, int);
+        void slotCollectMkisofsPrintSizeStdout( const QString& );
+        void slotMkisofsPrintSizeFinished();
+        void slotDataPreparationDone( bool success );
 
-private:
-    void startSizeCalculation();
+    private:
+        void startSizeCalculation();
 
-    class Private;
-    Private* d;
+        class Private;
+        Private* d;
 
-    K3bDataDoc* m_doc;
+        DataDoc* m_doc;
 
-    bool m_noDeepDirectoryRelocation;
+        bool m_noDeepDirectoryRelocation;
 
-    bool m_importSession;
-    QString m_multiSessionInfo;
-    K3bDevice::Device* m_device;
+        bool m_importSession;
+        QString m_multiSessionInfo;
+        Device::Device* m_device;
 
-    // used for mkisofs -print-size parsing
-    QString m_collectedMkisofsPrintSizeStdout;
-    QString m_collectedMkisofsPrintSizeStderr;
-    int m_mkisofsPrintSizeResult;
+        // used for mkisofs -print-size parsing
+        QString m_collectedMkisofsPrintSizeStdout;
+        QString m_collectedMkisofsPrintSizeStderr;
+        int m_mkisofsPrintSizeResult;
 
-    QStringList m_tempFiles;
+        QStringList m_tempFiles;
 
-    int m_fdToWriteTo;
+        int m_fdToWriteTo;
 
-    bool m_containsFilesWithMultibleBackslashes;
+        bool m_containsFilesWithMultibleBackslashes;
 
-    // used to create a unique session id
-    static int s_imagerSessionCounter;
+        // used to create a unique session id
+        static int s_imagerSessionCounter;
 
-    int m_sessionNumber;
-};
-
+        int m_sessionNumber;
+    };
+}
 
 #endif

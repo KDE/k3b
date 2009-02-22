@@ -21,25 +21,25 @@
 #include <kiconloader.h>
 
 
-K3bVcdListViewItem::K3bVcdListViewItem( K3bVcdTrack* track, K3bListView* parent )
-        : K3bListViewItem( parent ), m_track( track )
+K3b::VcdListViewItem::VcdListViewItem( K3b::VcdTrack* track, K3b::ListView* parent )
+        : K3b::ListViewItem( parent ), m_track( track )
 {
     setEditor( 1, LINE );
     animate();
 }
 
-K3bVcdListViewItem::K3bVcdListViewItem( K3bVcdTrack* track, K3bListView* parent, Q3ListViewItem* after )
-        : K3bListViewItem( parent, after ), m_track( track )
+K3b::VcdListViewItem::VcdListViewItem( K3b::VcdTrack* track, K3b::ListView* parent, Q3ListViewItem* after )
+        : K3b::ListViewItem( parent, after ), m_track( track )
 {
     setEditor( 1, LINE );
     animate();
 }
 
 
-K3bVcdListViewItem::~K3bVcdListViewItem()
+K3b::VcdListViewItem::~VcdListViewItem()
 {}
 
-QString K3bVcdListViewItem::text( int i ) const
+QString K3b::VcdListViewItem::text( int i ) const
 {
     //
     // We add two spaces after all strings (except the once renamable)
@@ -81,7 +81,7 @@ QString K3bVcdListViewItem::text( int i ) const
     }
 }
 
-void K3bVcdListViewItem::setText( int col, const QString& text )
+void K3b::VcdListViewItem::setText( int col, const QString& text )
 {
     if ( col == 1 ) {
         // this is the title field
@@ -92,7 +92,7 @@ void K3bVcdListViewItem::setText( int col, const QString& text )
 }
 
 
-QString K3bVcdListViewItem::key( int, bool ) const
+QString K3b::VcdListViewItem::key( int, bool ) const
 {
     QString num = QString::number( m_track->index() );
     if ( num.length() == 1 )
@@ -103,7 +103,7 @@ QString K3bVcdListViewItem::key( int, bool ) const
     return num;
 }
 
-bool K3bVcdListViewItem::animate()
+bool K3b::VcdListViewItem::animate()
 {
     bool animate = false;
 

@@ -1,16 +1,16 @@
 /*
-*
-* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
-*
-* This file is part of the K3b project.
-* Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-* See the file "COPYING" for the exact licensing terms.
-*/
+ *
+ * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
 // kde includes
 #include <klocale.h>
@@ -19,20 +19,20 @@
 #include "k3bmpeginfo.h"
 
 static const double frame_rates[ 16 ] =
-    {
-        0.0, 24000.0 / 1001, 24.0, 25.0,
-        30000.0 / 1001, 30.0, 50.0, 60000.0 / 1001,
-        60.0, 0.0,
-    };
+{
+    0.0, 24000.0 / 1001, 24.0, 25.0,
+    30000.0 / 1001, 30.0, 50.0, 60000.0 / 1001,
+    60.0, 0.0,
+};
 
-K3bMpegInfo::K3bMpegInfo( const char* filename )
-        : m_mpegfile( 0 ),
-        m_filename( filename ),
-        m_done( false ),
-        m_buffstart( 0 ),
-        m_buffend( 0 ),
-        m_buffer( 0 ),
-        m_initial_TS( 0.0 )
+K3b::MpegInfo::MpegInfo( const char* filename )
+    : m_mpegfile( 0 ),
+      m_filename( filename ),
+      m_done( false ),
+      m_buffstart( 0 ),
+      m_buffend( 0 ),
+      m_buffer( 0 ),
+      m_initial_TS( 0.0 )
 {
 
     mpeg_info = new Mpeginfo();
@@ -71,7 +71,7 @@ K3bMpegInfo::K3bMpegInfo( const char* filename )
 
 }
 
-K3bMpegInfo::~K3bMpegInfo()
+K3b::MpegInfo::~MpegInfo()
 {
     if ( m_buffer ) {
         delete[] m_buffer;
@@ -82,14 +82,16 @@ K3bMpegInfo::~K3bMpegInfo()
 
     delete mpeg_info;
 }
-bool K3bMpegInfo::MpegParsePacket ()
+
+
+bool K3b::MpegInfo::MpegParsePacket ()
 {
 
     /* verify the packet begins with a pack header */
     if ( !EnsureMPEG( 0, MPEG_PACK_HEADER_CODE ) ) {
         llong code = GetNBytes( 0, 4 );
 
-        kDebug() << QString( "(K3bMpegInfo::mpeg_parse_packet ()) pack header code 0x%1 expected, but 0x%2 found" ).arg( 0x00000100 + MPEG_PACK_HEADER_CODE, 0, 16 ).arg( code, 0, 16 );
+        kDebug() << QString( "(K3b::MpegInfo::mpeg_parse_packet ()) pack header code 0x%1 expected, but 0x%2 found" ).arg( 0x00000100 + MPEG_PACK_HEADER_CODE, 0, 16 ).arg( code, 0, 16 );
 
         if ( code == 0x00000100 + MPEG_SEQUENCE_CODE ) {
             kDebug() << "...this looks like an elementary video stream but a multiplexed program stream was required.";
@@ -128,15 +130,15 @@ bool K3bMpegInfo::MpegParsePacket ()
     }
 
     /*
-        int pkt = 0;
-        offset = FindNextMarker( 0, MPEG_PACK_HEADER_CODE );
+      int pkt = 0;
+      offset = FindNextMarker( 0, MPEG_PACK_HEADER_CODE );
 
-        while ( offset != -1 ) {
-            pkt++;
-            offset = FindNextMarker( offset+1, MPEG_PACK_HEADER_CODE );
-        }
+      while ( offset != -1 ) {
+      pkt++;
+      offset = FindNextMarker( offset+1, MPEG_PACK_HEADER_CODE );
+      }
 
-        kDebug() << "Pkt found: " << pkt;
+      kDebug() << "Pkt found: " << pkt;
     */
 
     //seek the file duration by fetching the last PACK
@@ -174,7 +176,7 @@ bool K3bMpegInfo::MpegParsePacket ()
     return true;
 }
 
-llong K3bMpegInfo::MpegParsePacket ( llong offset )
+llong K3b::MpegInfo::MpegParsePacket ( llong offset )
 {
     byte mark = 0;
     uint size = 0;
@@ -186,139 +188,139 @@ llong K3bMpegInfo::MpegParsePacket ( llong offset )
         return offset;
 
     switch ( mark ) {
-            int bits;
+        int bits;
 
-        case MPEG_PACK_HEADER_CODE:
-            // kDebug() << QString( "MPEG_PACK_HEADER_CODE @ %1" ).arg( offset );
+    case MPEG_PACK_HEADER_CODE:
+        // kDebug() << QString( "MPEG_PACK_HEADER_CODE @ %1" ).arg( offset );
 
-            offset += 4;
+        offset += 4;
 
-            if ( mpeg_info->version != MPEG_VERS_INVALID )
-                break;
-
-            bits = GetByte( offset ) >> 4;
-
-            if ( bits == 0x2 )                /* %0010 ISO11172-1 */
-            {
-                mpeg_info->version = MPEG_VERS_MPEG1;
-
-                unsigned long muxrate = 0;
-
-                muxrate = ( GetByte( offset + 5 ) & 0x7F ) << 15;
-                muxrate |= ( GetByte( offset + 6 ) << 7 );
-                muxrate |= ( GetByte( offset + 7 ) >> 1 );
-
-                mpeg_info->muxrate = muxrate * 50 * 8;
-
-                if ( m_initial_TS == 0.0 )
-                {
-                    m_initial_TS = ReadTS( offset );
-                    kDebug() << QString( "Initial TS = %1" ).arg( m_initial_TS );
-                }
-
-            } else if ( bits >> 2 == 0x1 )                /* %01xx ISO13818-1 */
-            {
-                mpeg_info->version = MPEG_VERS_MPEG2;
-
-                unsigned long muxrate = 0;
-                muxrate = GetByte( offset + 6 ) << 14;
-                muxrate |= GetByte( offset + 7 ) << 6;
-                muxrate |= GetByte( offset + 8 ) >> 2;
-
-                mpeg_info->muxrate = muxrate * 50 * 8;
-
-                if ( m_initial_TS == 0.0 )
-                {
-                    m_initial_TS = ReadTSMpeg2( offset );
-                    kDebug() << QString( "Initial TS = %1" ).arg( m_initial_TS );
-                }
-
-            } else {
-                kDebug() << QString( "packet not recognized as either version 1 or 2 (%1)" ).arg( bits );
-                mpeg_info->version = MPEG_VERS_INVALID;
-                return -1;
-            }
+        if ( mpeg_info->version != MPEG_VERS_INVALID )
             break;
 
+        bits = GetByte( offset ) >> 4;
+
+        if ( bits == 0x2 )                /* %0010 ISO11172-1 */
+        {
+            mpeg_info->version = MPEG_VERS_MPEG1;
+
+            unsigned long muxrate = 0;
+
+            muxrate = ( GetByte( offset + 5 ) & 0x7F ) << 15;
+            muxrate |= ( GetByte( offset + 6 ) << 7 );
+            muxrate |= ( GetByte( offset + 7 ) >> 1 );
+
+            mpeg_info->muxrate = muxrate * 50 * 8;
+
+            if ( m_initial_TS == 0.0 )
+            {
+                m_initial_TS = ReadTS( offset );
+                kDebug() << QString( "Initial TS = %1" ).arg( m_initial_TS );
+            }
+
+        } else if ( bits >> 2 == 0x1 )                /* %01xx ISO13818-1 */
+        {
+            mpeg_info->version = MPEG_VERS_MPEG2;
+
+            unsigned long muxrate = 0;
+            muxrate = GetByte( offset + 6 ) << 14;
+            muxrate |= GetByte( offset + 7 ) << 6;
+            muxrate |= GetByte( offset + 8 ) >> 2;
+
+            mpeg_info->muxrate = muxrate * 50 * 8;
+
+            if ( m_initial_TS == 0.0 )
+            {
+                m_initial_TS = ReadTSMpeg2( offset );
+                kDebug() << QString( "Initial TS = %1" ).arg( m_initial_TS );
+            }
+
+        } else {
+            kDebug() << QString( "packet not recognized as either version 1 or 2 (%1)" ).arg( bits );
+            mpeg_info->version = MPEG_VERS_INVALID;
+            return -1;
+        }
+        break;
+
+    case MPEG_SYSTEM_HEADER_CODE:
+    case MPEG_PAD_CODE:
+    case MPEG_PRIVATE_1_CODE:
+    case MPEG_VIDEO_E0_CODE:
+    case MPEG_VIDEO_E1_CODE:
+    case MPEG_VIDEO_E2_CODE:
+    case MPEG_AUDIO_C0_CODE:
+    case MPEG_AUDIO_C1_CODE:
+    case MPEG_AUDIO_C2_CODE:
+
+        offset += 4;
+        size = GetSize( offset );
+        offset += 2;
+        // kDebug() << QString( "offset = %1, size = %2" ).arg( offset ).arg( size );
+
+        switch ( mark ) {
         case MPEG_SYSTEM_HEADER_CODE:
-        case MPEG_PAD_CODE:
-        case MPEG_PRIVATE_1_CODE:
+            // kDebug() << QString( "Systemheader: %1" ).arg( m_code, 0, 16 );
+            break;
+
         case MPEG_VIDEO_E0_CODE:
         case MPEG_VIDEO_E1_CODE:
         case MPEG_VIDEO_E2_CODE:
+            ParseVideo( offset, mark );
+            // _analyze_video_pes (code & 0xff, buf + pos, size, !parse_pes, ctx);
+            if ( mpeg_info->has_video && mpeg_info->has_audio ) {
+                return -1;
+            } else if ( mark == MPEG_VIDEO_E0_CODE || (mpeg_info->version == MPEG_VERS_MPEG2 && mark == MPEG_VIDEO_E1_CODE) || (mpeg_info->version == MPEG_VERS_MPEG1 && mark == MPEG_VIDEO_E2_CODE) ) {
+                mpeg_info->has_video = true;
+                offset = FindNextAudio( offset );
+            }
+            break;
         case MPEG_AUDIO_C0_CODE:
         case MPEG_AUDIO_C1_CODE:
         case MPEG_AUDIO_C2_CODE:
-
-            offset += 4;
-            size = GetSize( offset );
-            offset += 2;
-            // kDebug() << QString( "offset = %1, size = %2" ).arg( offset ).arg( size );
-
-            switch ( mark ) {
-                case MPEG_SYSTEM_HEADER_CODE:
-                    // kDebug() << QString( "Systemheader: %1" ).arg( m_code, 0, 16 );
-                    break;
-
-                case MPEG_VIDEO_E0_CODE:
-                case MPEG_VIDEO_E1_CODE:
-                case MPEG_VIDEO_E2_CODE:
-                    ParseVideo( offset, mark );
-                    // _analyze_video_pes (code & 0xff, buf + pos, size, !parse_pes, ctx);
-                    if ( mpeg_info->has_video && mpeg_info->has_audio ) {
-                        return -1;
-                    } else if ( mark == MPEG_VIDEO_E0_CODE || (mpeg_info->version == MPEG_VERS_MPEG2 && mark == MPEG_VIDEO_E1_CODE) || (mpeg_info->version == MPEG_VERS_MPEG1 && mark == MPEG_VIDEO_E2_CODE) ) {
-                        mpeg_info->has_video = true;
-                        offset = FindNextAudio( offset );
-                    }
-                    break;
-                case MPEG_AUDIO_C0_CODE:
-                case MPEG_AUDIO_C1_CODE:
-                case MPEG_AUDIO_C2_CODE:
-                    offset = SkipPacketHeader( offset - 6 );
-                    ParseAudio( offset, mark );
-                    // audio packet doesn't begin with 0xFFF
-                    if ( !mpeg_info->audio[ GetAudioIdx( mark ) ].seen ) {
-                        int a_idx = GetAudioIdx( mark );
-                        while ( ( offset < m_filesize - 10 ) && !mpeg_info->audio[ a_idx ].seen ) {
-                            if ( ( GetByte( offset ) == 0xFF ) && ( GetByte( offset + 1 ) & 0xF0 ) == 0xF0 )
-                                ParseAudio( offset, mark );
-                            offset++;
-                        }
-                    }
-
-                    mpeg_info->has_audio = true;
-                    if ( mpeg_info->has_video )
-                        return -1;
-
-                    offset = FindNextVideo( offset );
-                    break;
-
-                case MPEG_PRIVATE_1_CODE:
-                    kDebug() << QString( "PrivateCode: %1" ).arg( mark, 0, 16 );
-                    break;
+            offset = SkipPacketHeader( offset - 6 );
+            ParseAudio( offset, mark );
+            // audio packet doesn't begin with 0xFFF
+            if ( !mpeg_info->audio[ GetAudioIdx( mark ) ].seen ) {
+                int a_idx = GetAudioIdx( mark );
+                while ( ( offset < m_filesize - 10 ) && !mpeg_info->audio[ a_idx ].seen ) {
+                    if ( ( GetByte( offset ) == 0xFF ) && ( GetByte( offset + 1 ) & 0xF0 ) == 0xF0 )
+                        ParseAudio( offset, mark );
+                    offset++;
+                }
             }
+
+            mpeg_info->has_audio = true;
+            if ( mpeg_info->has_video )
+                return -1;
+
+            offset = FindNextVideo( offset );
             break;
 
-        case MPEG_PROGRAM_END_CODE:
-            kDebug() << QString( "ProgramEndCode: %1" ).arg( mark, 0, 16 );
-            offset += 4;
+        case MPEG_PRIVATE_1_CODE:
+            kDebug() << QString( "PrivateCode: %1" ).arg( mark, 0, 16 );
             break;
+        }
+        break;
 
-        case MPEG_PICTURE_CODE:
-            kDebug() << QString( "PictureCode: %1" ).arg( mark, 0, 16 );
-            offset += 3;
-            break;
+    case MPEG_PROGRAM_END_CODE:
+        kDebug() << QString( "ProgramEndCode: %1" ).arg( mark, 0, 16 );
+        offset += 4;
+        break;
 
-        default:
-            offset += 4;
-            break;
+    case MPEG_PICTURE_CODE:
+        kDebug() << QString( "PictureCode: %1" ).arg( mark, 0, 16 );
+        offset += 3;
+        break;
+
+    default:
+        offset += 4;
+        break;
     }
 
     return offset;
 }
 
-byte K3bMpegInfo::GetByte( llong offset )
+byte K3b::MpegInfo::GetByte( llong offset )
 {
     unsigned long nread;
     if ( ( offset >= m_buffend ) || ( offset < m_buffstart ) ) {
@@ -340,7 +342,7 @@ byte K3bMpegInfo::GetByte( llong offset )
 }
 
 // same as above but improved for backward search
-byte K3bMpegInfo::bdGetByte( llong offset )
+byte K3b::MpegInfo::bdGetByte( llong offset )
 {
     unsigned long nread;
     if ( ( offset >= m_buffend ) || ( offset < m_buffstart ) ) {
@@ -363,7 +365,7 @@ byte K3bMpegInfo::bdGetByte( llong offset )
 }
 
 
-llong K3bMpegInfo::GetNBytes( llong offset, int n )
+llong K3b::MpegInfo::GetNBytes( llong offset, int n )
 {
     llong nbytes = 0;
     n--;
@@ -375,19 +377,19 @@ llong K3bMpegInfo::GetNBytes( llong offset, int n )
 }
 
 // get a two byte size
-unsigned short int K3bMpegInfo::GetSize( llong offset )
+unsigned short int K3b::MpegInfo::GetSize( llong offset )
 {
     return GetByte( offset ) * 256 + GetByte( offset + 1 );
     // return GetNBytes( offset, 2 );
 
 }
 
-bool K3bMpegInfo::EnsureMPEG( llong offset, byte mark )
+bool K3b::MpegInfo::EnsureMPEG( llong offset, byte mark )
 {
     if ( ( GetByte( offset ) == 0x00 ) &&
-            ( GetByte( offset + 1 ) == 0x00 ) &&
-            ( GetByte( offset + 2 ) == 0x01 ) &&
-            ( GetByte( offset + 3 ) == mark ) )
+         ( GetByte( offset + 1 ) == 0x00 ) &&
+         ( GetByte( offset + 2 ) == 0x01 ) &&
+         ( GetByte( offset + 3 ) == mark ) )
         return true;
     else
         return false;
@@ -395,7 +397,7 @@ bool K3bMpegInfo::EnsureMPEG( llong offset, byte mark )
 
 
 // find next 0x 00 00 01 xx sequence, returns offset or -1 on err
-llong K3bMpegInfo::FindNextMarker( llong from )
+llong K3b::MpegInfo::FindNextMarker( llong from )
 {
     llong offset;
     for ( offset = from; offset < ( m_filesize - 4 ); offset++ ) {
@@ -411,7 +413,7 @@ llong K3bMpegInfo::FindNextMarker( llong from )
 
 // find next 0x 00 00 01 xx sequence, returns offset or -1 on err and
 // change mark to xx
-llong K3bMpegInfo::FindNextMarker( llong from, byte* mark )
+llong K3b::MpegInfo::FindNextMarker( llong from, byte* mark )
 {
     llong offset = FindNextMarker( from );
     if ( offset >= 0 ) {
@@ -423,7 +425,7 @@ llong K3bMpegInfo::FindNextMarker( llong from, byte* mark )
 }
 
 // find next 0X00 00 01 mark
-llong K3bMpegInfo::FindNextMarker( llong from, byte mark )
+llong K3b::MpegInfo::FindNextMarker( llong from, byte mark )
 {
     llong offset = from;
     while ( offset >= 0 ) {
@@ -441,7 +443,7 @@ llong K3bMpegInfo::FindNextMarker( llong from, byte mark )
     return -1;
 }
 
-llong K3bMpegInfo::bdFindNextMarker( llong from, byte mark )
+llong K3b::MpegInfo::bdFindNextMarker( llong from, byte mark )
 {
     llong offset;
     for ( offset = from; offset >= 0; offset-- ) {
@@ -456,13 +458,13 @@ llong K3bMpegInfo::bdFindNextMarker( llong from, byte mark )
     return -1;
 }
 
-llong K3bMpegInfo::bdFindNextMarker( llong from, byte* mark )
+llong K3b::MpegInfo::bdFindNextMarker( llong from, byte* mark )
 {
     llong offset;
     for ( offset = from; offset >= 0; offset-- ) {
         if ( ( bdGetByte( offset ) == 0x00 ) &&
-                ( bdGetByte( offset + 1 ) == 0x00 ) &&
-                ( bdGetByte( offset + 2 ) == 0x01 ) ) {
+             ( bdGetByte( offset + 1 ) == 0x00 ) &&
+             ( bdGetByte( offset + 2 ) == 0x01 ) ) {
             *mark = bdGetByte( offset + 3 );
             return offset;
         }
@@ -471,7 +473,7 @@ llong K3bMpegInfo::bdFindNextMarker( llong from, byte* mark )
 
 }
 
-llong K3bMpegInfo::FindNextVideo( llong from )
+llong K3b::MpegInfo::FindNextVideo( llong from )
 {
     llong offset = from;
     while ( offset >= 0 ) {
@@ -489,7 +491,7 @@ llong K3bMpegInfo::FindNextVideo( llong from )
     return -1;
 }
 
-llong K3bMpegInfo::FindNextAudio( llong from )
+llong K3b::MpegInfo::FindNextAudio( llong from )
 {
     llong offset = from;
     while ( offset >= 0 ) {
@@ -507,53 +509,53 @@ llong K3bMpegInfo::FindNextAudio( llong from )
 }
 
 
-int K3bMpegInfo::GetVideoIdx ( byte marker )
+int K3b::MpegInfo::GetVideoIdx ( byte marker )
 {
     switch ( marker ) {
-        case MPEG_VIDEO_E0_CODE:
-            return 0;
-            break;
+    case MPEG_VIDEO_E0_CODE:
+        return 0;
+        break;
 
-        case MPEG_VIDEO_E1_CODE:
-            return 1;
-            break;
+    case MPEG_VIDEO_E1_CODE:
+        return 1;
+        break;
 
-        case MPEG_VIDEO_E2_CODE:
-            return 2;
-            break;
+    case MPEG_VIDEO_E2_CODE:
+        return 2;
+        break;
 
-        default:
-            kDebug() << "VideoCode not reached";
-            break;
+    default:
+        kDebug() << "VideoCode not reached";
+        break;
     }
 
     return -1;
 }
 
-int K3bMpegInfo::GetAudioIdx ( byte marker )
+int K3b::MpegInfo::GetAudioIdx ( byte marker )
 {
     switch ( marker ) {
-        case MPEG_AUDIO_C0_CODE:
-            return 0;
-            break;
+    case MPEG_AUDIO_C0_CODE:
+        return 0;
+        break;
 
-        case MPEG_AUDIO_C1_CODE:
-            return 1;
-            break;
+    case MPEG_AUDIO_C1_CODE:
+        return 1;
+        break;
 
-        case MPEG_AUDIO_C2_CODE:
-            return 2;
-            break;
+    case MPEG_AUDIO_C2_CODE:
+        return 2;
+        break;
 
-        default:
-            kDebug() << "VideoCode not reached";
-            break;
+    default:
+        kDebug() << "VideoCode not reached";
+        break;
     }
 
     return -1;
 }
 
-llong K3bMpegInfo::SkipPacketHeader( llong offset )
+llong K3b::MpegInfo::SkipPacketHeader( llong offset )
 {
     byte tmp_byte;
     if ( mpeg_info->version == MPEG_VERS_MPEG1 ) {
@@ -582,7 +584,7 @@ llong K3bMpegInfo::SkipPacketHeader( llong offset )
         return ( offset + 10 );
 }
 
-void K3bMpegInfo::ParseAudio ( llong offset, byte marker )
+void K3b::MpegInfo::ParseAudio ( llong offset, byte marker )
 {
     unsigned brate, srate;
     bool mpeg2_5 = false;
@@ -619,18 +621,18 @@ void K3bMpegInfo::ParseAudio ( llong offset, byte marker )
     // Find Layer
     mpeg_info->audio[ a_idx ].layer = ( GetByte( offset + 1 ) & 0x06 ) >> 1;
     switch ( mpeg_info->audio[ a_idx ].layer ) {
-        case 0:
-            mpeg_info->audio[ a_idx ].layer = 0;
-            break;
-        case 1:
-            mpeg_info->audio[ a_idx ].layer = 3;
-            break;
-        case 2:
-            mpeg_info->audio[ a_idx ].layer = 2;
-            break;
-        case 3:
-            mpeg_info->audio[ a_idx ].layer = 1;
-            break;
+    case 0:
+        mpeg_info->audio[ a_idx ].layer = 0;
+        break;
+    case 1:
+        mpeg_info->audio[ a_idx ].layer = 3;
+        break;
+    case 2:
+        mpeg_info->audio[ a_idx ].layer = 2;
+        break;
+    case 3:
+        mpeg_info->audio[ a_idx ].layer = 1;
+        break;
     }
 
     // Protection Bit
@@ -641,42 +643,42 @@ void K3bMpegInfo::ParseAudio ( llong offset, byte marker )
         mpeg_info->audio[ a_idx ].protect = 1;
 
     const unsigned bit_rates[ 4 ][ 16 ] = {
-                                              {
-                                                  0,
-                                              },
-                                              {0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 0},
-                                              {0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 0},
-                                              {0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 0}
-                                          };
+        {
+            0,
+        },
+        {0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 0},
+        {0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 0},
+        {0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 0}
+    };
 
 
     /*  const unsigned bit_rates [ 3 ][ 3 ][ 16 ] = {
         {
-          {0, },
-          {0, },
-          {0, },
+        {0, },
+        {0, },
+        {0, },
         },
         {
-          {0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 0},
-          {0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 0},
-          {0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 0}
+        {0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 0},
+        {0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 0},
+        {0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 0}
         },
         {
-          {0, 32, 48, 56, 64, 80 , 96 , 112, 128, 144, 160, 176, 192, 224, 256, 0},
-          {0, 8, 16, 24, 32, 40, 48, 56, 64 , 80 , 96 , 112, 128, 144, 160, 0},
-          {0, 8, 16, 24, 32, 40, 48, 56, 64 , 80 , 96 , 112, 128, 144, 160, 0}
+        {0, 32, 48, 56, 64, 80 , 96 , 112, 128, 144, 160, 176, 192, 224, 256, 0},
+        {0, 8, 16, 24, 32, 40, 48, 56, 64 , 80 , 96 , 112, 128, 144, 160, 0},
+        {0, 8, 16, 24, 32, 40, 48, 56, 64 , 80 , 96 , 112, 128, 144, 160, 0}
         }
-      };
+        };
     */
 
     const unsigned sampling_rates[ 4 ][ 4 ] = {
-                {
-                    0,
-                },
-                {44100, 48000, 32000, 0},                //mpeg 1
-                {22050, 24000, 16000, 0},                //mpeg 2
-                {11025, 12000, 8000, 0}   //mpeg 2.5
-            };
+        {
+            0,
+        },
+        {44100, 48000, 32000, 0},                //mpeg 1
+        {22050, 24000, 16000, 0},                //mpeg 2
+        {11025, 12000, 8000, 0}   //mpeg 2.5
+    };
 
 
     // Bitrate index and sampling index to pass through the array
@@ -706,18 +708,18 @@ void K3bMpegInfo::ParseAudio ( llong offset, byte marker )
     mpeg_info->audio[ a_idx ].seen = true;
 }
 
-void K3bMpegInfo::ParseVideo ( llong offset, byte marker )
+void K3b::MpegInfo::ParseVideo ( llong offset, byte marker )
 {
     unsigned long aratio, frate, brate;
 
     const int v_idx = GetVideoIdx( marker );
 
     const double aspect_ratios[ 16 ] = {
-                                           0.0000, 1.0000, 0.6735, 0.7031,
-                                           0.7615, 0.8055, 0.8437, 0.8935,
-                                           0.9375, 0.9815, 1.0255, 1.0695,
-                                           1.1250, 1.1575, 1.2015, 0.0000
-                                       };
+        0.0000, 1.0000, 0.6735, 0.7031,
+        0.7615, 0.8055, 0.8437, 0.8935,
+        0.9375, 0.9815, 1.0255, 1.0695,
+        1.1250, 1.1575, 1.2015, 0.0000
+    };
 
     if ( mpeg_info->video[ v_idx ].seen )                /* we have it already */
         return ;
@@ -762,26 +764,26 @@ void K3bMpegInfo::ParseVideo ( llong offset, byte marker )
         if ( mark == MPEG_GOP_CODE )
             break;
         switch ( GetByte( offset + 3 ) ) {
-            case MPEG_EXT_CODE :
-                // Extension
-                offset += 4;
-                switch ( GetByte( offset ) >> 4 ) {
-                    case 1:
-                        //SequenceExt
-                        if ( GetByte( offset + 1 ) & 0x08 )
-                            mpeg_info->video[ v_idx ].progressive = true;
-                        mpeg_info->video[ v_idx ].chroma_format = ( GetByte( offset + 1 ) & 0x06 ) >> 1;
-                        break;
-                    case 2:
-                        // SequenceDisplayExt
-                        mpeg_info->video[ v_idx ].video_format = ( GetByte( offset ) & 0x0E ) >> 1;
-                        break;
-                }
+        case MPEG_EXT_CODE :
+            // Extension
+            offset += 4;
+            switch ( GetByte( offset ) >> 4 ) {
+            case 1:
+                //SequenceExt
+                if ( GetByte( offset + 1 ) & 0x08 )
+                    mpeg_info->video[ v_idx ].progressive = true;
+                mpeg_info->video[ v_idx ].chroma_format = ( GetByte( offset + 1 ) & 0x06 ) >> 1;
+                break;
+            case 2:
+                // SequenceDisplayExt
+                mpeg_info->video[ v_idx ].video_format = ( GetByte( offset ) & 0x0E ) >> 1;
+                break;
+            }
 
-                break;
-            case MPEG_USER_CODE :
-                // UserData
-                break;
+            break;
+        case MPEG_USER_CODE :
+            // UserData
+            break;
         }
         offset++;
     }
@@ -789,7 +791,7 @@ void K3bMpegInfo::ParseVideo ( llong offset, byte marker )
     mpeg_info->video[ v_idx ].seen = true;
 }
 
-double K3bMpegInfo::ReadTS( llong offset )
+double K3b::MpegInfo::ReadTS( llong offset )
 {
     byte highbit;
     unsigned long low4Bytes;
@@ -811,7 +813,7 @@ double K3bMpegInfo::ReadTS( llong offset )
     return TS;
 }
 
-double K3bMpegInfo::ReadTSMpeg2( llong offset )
+double K3b::MpegInfo::ReadTSMpeg2( llong offset )
 {
     byte highbit;
     unsigned long low4Bytes;

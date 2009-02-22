@@ -18,68 +18,82 @@
 #include <k3bmedium.h>
 #include <KVBox>
 
-class K3bAudioCdView;
-class K3bDiskInfoView;
-class K3bFileTreeView;
-class K3bFileView;
-class K3bVideoCdView;
-class K3bVideoDVDRippingView;
+namespace K3b {
+    class AudioCdView;
+}
+namespace K3b {
+    class DiskInfoView;
+}
+namespace K3b {
+    class FileTreeView;
+}
+namespace K3b {
+    class FileView;
+}
+namespace K3b {
+    class VideoCdView;
+}
+namespace K3b {
+    class VideoDVDRippingView;
+}
 class KComboBox;
 class KConfigGroup;
 class KUrl;
 class QSplitter;
 class QStackedWidget;
-namespace K3bDevice {
+namespace Device {
     class Device;
 }
 
 /**
  *@author Sebastian Trueg
  */
-class K3bDirView : public KVBox
+namespace K3b {
+class DirView : public KVBox
 {
     Q_OBJECT
 
 public:
-    K3bDirView(K3bFileTreeView* tree, QWidget *parent=0);
-    ~K3bDirView();
+    DirView(FileTreeView* tree, QWidget *parent=0);
+    ~DirView();
 
 public Q_SLOTS:
     void saveConfig( KConfigGroup grp );
     void readConfig( const KConfigGroup & grp );
     void showUrl( const KUrl& );
-    void showDevice( K3bDevice::Device* );
-    void showDiskInfo( K3bDevice::Device* );
+    void showDevice( Device::Device* );
+    void showDiskInfo( Device::Device* );
 
 protected Q_SLOTS:
     void slotDirActivated( const KUrl& );
     void slotDirActivated( const QString& );
     void slotMountFinished( const QString& );
     void slotUnmountFinished( bool );
-    void showMediumInfo( const K3bMedium& );
+    void showMediumInfo( const Medium& );
     void home();
 
 Q_SIGNALS:
     void urlEntered( const KUrl& );
-    void deviceSelected( K3bDevice::Device* );
+    void deviceSelected( Device::Device* );
 
 private:
     QStackedWidget* m_viewStack;
 
-    K3bAudioCdView*   m_cdView;
-    K3bVideoCdView*   m_videoView;
-    K3bVideoDVDRippingView* m_movieView;
-    K3bFileView* m_fileView;
-    K3bDiskInfoView* m_infoView;
+    AudioCdView*   m_cdView;
+    VideoCdView*   m_videoView;
+    VideoDVDRippingView* m_movieView;
+    FileView* m_fileView;
+    DiskInfoView* m_infoView;
 
     KComboBox* m_urlCombo;
     QSplitter* m_mainSplitter;
-    K3bFileTreeView* m_fileTreeView;
+    FileTreeView* m_fileTreeView;
 
     bool m_bViewDiskInfo;
 
     class Private;
     Private* d;
 };
+}
 
 #endif

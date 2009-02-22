@@ -21,8 +21,8 @@
 #include <KLocale>
 
 
-K3bSessionImportItem::K3bSessionImportItem( const K3bIso9660File* isoF, K3bDataDoc* doc, K3bDirItem* dir )
-    : K3bSpecialDataItem( doc, isoF->size(), dir, isoF->name() ),
+K3b::SessionImportItem::SessionImportItem( const K3b::Iso9660File* isoF, K3b::DataDoc* doc, K3b::DirItem* dir )
+    : K3b::SpecialDataItem( doc, isoF->size(), dir, isoF->name() ),
       m_replaceItem(0)
 
 {
@@ -32,14 +32,14 @@ K3bSessionImportItem::K3bSessionImportItem( const K3bIso9660File* isoF, K3bDataD
 }
 
 
-K3bSessionImportItem::K3bSessionImportItem( const K3bSessionImportItem& item )
-    : K3bSpecialDataItem( item ),
+K3b::SessionImportItem::SessionImportItem( const K3b::SessionImportItem& item )
+    : K3b::SpecialDataItem( item ),
       m_replaceItem( item.m_replaceItem )
 {
 }
 
 
-K3bSessionImportItem::~K3bSessionImportItem()
+K3b::SessionImportItem::~SessionImportItem()
 {
     if( m_replaceItem )
         m_replaceItem->setReplacedItemFromOldSession(0);
@@ -50,7 +50,7 @@ K3bSessionImportItem::~K3bSessionImportItem()
 }
 
 
-K3bDataItem* K3bSessionImportItem::copy() const
+K3b::DataItem* K3b::SessionImportItem::copy() const
 {
-    return new K3bSessionImportItem( *this );
+    return new K3b::SessionImportItem( *this );
 }

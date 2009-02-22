@@ -43,21 +43,21 @@
 #include <QtGui/QGroupBox>
 
 
-class K3bDeviceWidget::PrivateTempDevice
+class K3b::DeviceWidget::PrivateTempDevice
 {
 public:
-    PrivateTempDevice( K3bDevice::Device* d ) {
+    PrivateTempDevice( K3b::Device::Device* d ) {
         device = d;
         writer = d->burner();
     }
 
-    K3bDevice::Device* device;
+    K3b::Device::Device* device;
     bool writer;
 };
 
 
 
-K3bDeviceWidget::K3bDeviceWidget( K3bDevice::DeviceManager* manager, QWidget *parent )
+K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *parent )
     : QWidget( parent ),
       m_deviceManager( manager )
 {
@@ -86,7 +86,7 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDevice::DeviceManager* manager, QWidget *pa
     groupDevicesLayout->setSpacing( KDialog::spacingHint() );
     groupDevicesLayout->setMargin( KDialog::marginHint() );
 
-    m_viewDevices = new K3bListView( groupDevices );
+    m_viewDevices = new K3b::ListView( groupDevices );
     m_viewDevices->addColumn( "V" );
     m_viewDevices->addColumn( "D" );
     m_viewDevices->setAllColumnsShowFocus( true );
@@ -114,27 +114,27 @@ K3bDeviceWidget::K3bDeviceWidget( K3bDevice::DeviceManager* manager, QWidget *pa
 }
 
 
-K3bDeviceWidget::~K3bDeviceWidget()
+K3b::DeviceWidget::~DeviceWidget()
 {
     qDeleteAll( m_tempDevices );
 }
 
 
-void K3bDeviceWidget::init()
+void K3b::DeviceWidget::init()
 {
     // fill the temporary lists
     qDeleteAll( m_tempDevices );
     m_tempDevices.clear();
 
     // add the reading devices
-    Q_FOREACH( K3bDevice::Device* dev, m_deviceManager->allDevices() )
+    Q_FOREACH( K3b::Device::Device* dev, m_deviceManager->allDevices() )
         m_tempDevices.append( new PrivateTempDevice( dev ) );
 
     updateDeviceListViews();
 }
 
 
-void K3bDeviceWidget::updateDeviceListViews()
+void K3b::DeviceWidget::updateDeviceListViews()
 {
     QColor disabledTextColor = palette().color( QPalette::Disabled, QPalette::Text );
 
@@ -157,24 +157,24 @@ void K3bDeviceWidget::updateDeviceListViews()
 
     foreach( PrivateTempDevice* dev, m_tempDevices ) {
         // create the root device item
-        K3bListViewItem* devRoot = new K3bListViewItem( (dev->writer ? m_writerParentViewItem : m_readerParentViewItem),
+        K3b::ListViewItem* devRoot = new K3b::ListViewItem( (dev->writer ? m_writerParentViewItem : m_readerParentViewItem),
                                                         dev->device->vendor() + " " + dev->device->description() );
         devRoot->setFont( 0, fBold );
 
         // create the read-only info items
-        K3bListViewItem* systemDeviceItem = new K3bListViewItem( devRoot, i18n("System device name:") );
+        K3b::ListViewItem* systemDeviceItem = new K3b::ListViewItem( devRoot, i18n("System device name:") );
         systemDeviceItem->setText( 1, dev->device->blockDeviceName() );
         systemDeviceItem->setForegroundColor( 1, disabledTextColor );
 
-        K3bListViewItem* vendorItem = new K3bListViewItem( devRoot, systemDeviceItem,
+        K3b::ListViewItem* vendorItem = new K3b::ListViewItem( devRoot, systemDeviceItem,
                                                            i18n("Vendor:"),
                                                            dev->device->vendor() );
         vendorItem->setForegroundColor( 1, disabledTextColor );
-        K3bListViewItem* modelItem = new K3bListViewItem( devRoot, vendorItem,
+        K3b::ListViewItem* modelItem = new K3b::ListViewItem( devRoot, vendorItem,
                                                           i18n("Description:"),
                                                           dev->device->description() );
         modelItem->setForegroundColor( 1, disabledTextColor );
-        K3bListViewItem* versionItem = new K3bListViewItem( devRoot, modelItem,
+        K3b::ListViewItem* versionItem = new K3b::ListViewItem( devRoot, modelItem,
                                                             i18n("Firmware:"),
                                                             dev->device->version() );
         versionItem->setForegroundColor( 1, disabledTextColor );
@@ -182,20 +182,20 @@ void K3bDeviceWidget::updateDeviceListViews()
 
         // drive type
         // --------------------------------
-        K3bListViewItem* typeItem = new K3bListViewItem( devRoot, versionItem,
+        K3b::ListViewItem* typeItem = new K3b::ListViewItem( devRoot, versionItem,
                                                          i18n("Write Capabilities:"),
-                                                         K3bDevice::mediaTypeString( dev->device->writeCapabilities(), true ) );
+                                                         K3b::Device::mediaTypeString( dev->device->writeCapabilities(), true ) );
         typeItem->setForegroundColor( 1, disabledTextColor );
-        typeItem = new K3bListViewItem( devRoot, typeItem,
+        typeItem = new K3b::ListViewItem( devRoot, typeItem,
                                         i18n("Read Capabilities:"),
-                                        K3bDevice::mediaTypeString( dev->device->readCapabilities(), true ) );
+                                        K3b::Device::mediaTypeString( dev->device->readCapabilities(), true ) );
         typeItem->setForegroundColor( 1, disabledTextColor );
         // --------------------------------
 
 
         // now add the reader (both interfaces) items
         if( dev->device->bufferSize() > 0 ) {
-            typeItem = new K3bListViewItem( devRoot, typeItem,
+            typeItem = new K3b::ListViewItem( devRoot, typeItem,
                                             i18n("Buffer Size:"),
                                             KIO::convertSizeFromKiB(dev->device->bufferSize()) );
             typeItem->setForegroundColor( 1, disabledTextColor );
@@ -204,17 +204,17 @@ void K3bDeviceWidget::updateDeviceListViews()
 
         // now add the writer specific items
         if( dev->writer ) {
-            typeItem = new K3bListViewItem( devRoot, typeItem,
+            typeItem = new K3b::ListViewItem( devRoot, typeItem,
                                             i18n("Supports Burnfree:"),
                                             dev->device->burnfree() ? i18n("yes") : i18n("no") );
             typeItem->setForegroundColor( 1, disabledTextColor );
 
 
             // and at last the write modes
-            (new K3bListViewItem( devRoot,
+            (new K3b::ListViewItem( devRoot,
                                   typeItem,
                                   i18n("Write modes:"),
-                                  K3bDevice::writingModeString(dev->device->writingModes()) ))->setForegroundColor( 1, disabledTextColor );
+                                  K3b::Device::writingModeString(dev->device->writingModes()) ))->setForegroundColor( 1, disabledTextColor );
         }
 
         devRoot->setOpen(true);
@@ -222,11 +222,11 @@ void K3bDeviceWidget::updateDeviceListViews()
 
     // create empty items
     if( m_writerParentViewItem->childCount() == 0 ) {
-        K3bListViewItem* item = new K3bListViewItem( m_writerParentViewItem, i18n("none") );
+        K3b::ListViewItem* item = new K3b::ListViewItem( m_writerParentViewItem, i18n("none") );
         item->setFont( 0, fItalic );
     }
     if( m_readerParentViewItem->childCount() == 0 ) {
-        K3bListViewItem* item = new K3bListViewItem( m_readerParentViewItem, i18n("none") );
+        K3b::ListViewItem* item = new K3b::ListViewItem( m_readerParentViewItem, i18n("none") );
         item->setFont( 0, fItalic );
     }
 

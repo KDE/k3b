@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -20,121 +20,121 @@
 #include "k3bmedium.h"
 #include <QList>
 
-namespace K3bDevice {
-    class Device;
-    class DeviceManager;
-}
 namespace K3b {
+    namespace Device {
+        class Device;
+        class DeviceManager;
+    }
     class Msf;
+
+    /**
+     * Combo box which allows to select a media (in comparison
+     * to the DeviceComboBox which allows to select a device.
+     *
+     * This class uses the MediaCache to update it's status.
+     */
+    class MediaSelectionComboBox : public KComboBox
+    {
+        Q_OBJECT
+
+    public:
+        MediaSelectionComboBox( QWidget* parent );
+        virtual ~MediaSelectionComboBox();
+
+        /**
+         * Although the widget allows selection of media this
+         * results in a device being selected.
+         */
+        Device::Device* selectedDevice() const;
+
+        QList<Device::Device*> allDevices() const;
+
+        int wantedMediumType() const;
+        int wantedMediumState() const;
+        int wantedMediumContent() const;
+        K3b::Msf wantedMediumSize() const;
+
+    Q_SIGNALS:
+        /**
+         * Be aware that his signal will also be emitted in case
+         * no medium is available with a null pointer.
+         */
+        void selectionChanged( Device::Device* );
+
+        /**
+         * This signal is emitted if the selection of media changed.
+         * This includes a change due to changing the wanted medium state.
+         */
+        void newMedia();
+
+        void newMedium( Device::Device* dev );
+
+    public Q_SLOTS:
+        /**
+         * Only works in case the device actually contains a usable medium.
+         * Otherwise the currently selected medium stays selected.
+         */
+        void setSelectedDevice( Device::Device* );
+
+        /**
+         * Set the wanted medium type. Defaults to writable CD.
+         *
+         * \param type a bitwise combination of the Device::MediaType enum
+         */
+        void setWantedMediumType( int type );
+
+        /**
+         * Set the wanted medium state. Defaults to empty media.
+         *
+         * \param state a bitwise combination of the Device::State enum
+         */
+        void setWantedMediumState( int state );
+
+        /**
+         * Set the wanted medium content type. The default is Medium::CONTENT_ALL (i.e. ignore media
+         * content)
+         * Be aware that 0 maps to Medium::CONTENT_NONE, i.e. empty media.
+         *
+         * \param content A bitwise or of Medium::MediumContent
+         */
+        void setWantedMediumContent( int content );
+
+        /**
+         * Set the wanted medium size. Defaults to 0 which means
+         * that the size should be irgnored.
+         */
+        void setWantedMediumSize( const K3b::Msf& minSize );
+
+        /**
+         * Set the device to ignore. This device will not be checked for
+         * wanted media. This is many useful for media copy.
+         *
+         * \param dev The device to ignore or 0 to not ignore any device.
+         */
+        void setIgnoreDevice( Device::Device* dev );
+
+    private Q_SLOTS:
+        void slotMediumChanged( Device::Device* );
+        void slotDeviceManagerChanged( Device::DeviceManager* );
+        void slotActivated( int i );
+        void slotUpdateToolTip( Device::Device* );
+
+    protected:
+        void updateMedia();
+        virtual bool showMedium( const Medium& ) const;
+        virtual QString mediumString( const Medium& ) const;
+        virtual QString mediumToolTip( const Medium& ) const;
+        virtual QString noMediumMessage() const;
+
+    private:
+        void updateMedium( Device::Device* );
+        void addMedium( Device::Device* );
+        void showNoMediumMessage();
+        void clear();
+
+        class Private;
+        Private* d;
+    };
 }
-
-/**
- * Combo box which allows to select a media (in comparison 
- * to the K3bDeviceComboBox which allows to select a device.
- *
- * This class uses the K3bMediaCache to update it's status.
- */
-class K3bMediaSelectionComboBox : public KComboBox
-{
-    Q_OBJECT
-
-public:
-    K3bMediaSelectionComboBox( QWidget* parent );
-    virtual ~K3bMediaSelectionComboBox();
-
-    /**
-     * Although the widget allows selection of media this
-     * results in a device being selected.
-     */
-    K3bDevice::Device* selectedDevice() const;
-
-    QList<K3bDevice::Device*> allDevices() const;
-
-    int wantedMediumType() const;
-    int wantedMediumState() const;
-    int wantedMediumContent() const;
-    K3b::Msf wantedMediumSize() const;
-
-Q_SIGNALS:
-    /**
-     * Be aware that his signal will also be emitted in case
-     * no medium is available with a null pointer.
-     */
-    void selectionChanged( K3bDevice::Device* );
-
-    /**
-     * This signal is emitted if the selection of media changed.
-     * This includes a change due to changing the wanted medium state.
-     */
-    void newMedia();
-
-    void newMedium( K3bDevice::Device* dev );
-
-public Q_SLOTS:
-    /**
-     * Only works in case the device actually contains a usable medium.
-     * Otherwise the currently selected medium stays selected.
-     */
-    void setSelectedDevice( K3bDevice::Device* );
-
-    /**
-     * Set the wanted medium type. Defaults to writable CD.
-     *
-     * \param type a bitwise combination of the K3bDevice::MediaType enum
-     */
-    void setWantedMediumType( int type );
-
-    /**
-     * Set the wanted medium state. Defaults to empty media.
-     *
-     * \param state a bitwise combination of the K3bDevice::State enum
-     */
-    void setWantedMediumState( int state );
-
-    /**
-     * Set the wanted medium content type. The default is K3bMedium::CONTENT_ALL (i.e. ignore media 
-     * content)
-     * Be aware that 0 maps to K3bMedium::CONTENT_NONE, i.e. empty media.
-     *
-     * \param content A bitwise or of K3bMedium::MediumContent
-     */
-    void setWantedMediumContent( int content );
-
-    /**
-     * Set the wanted medium size. Defaults to 0 which means
-     * that the size should be irgnored.
-     */
-    void setWantedMediumSize( const K3b::Msf& minSize );
-
-    /**
-     * Set the device to ignore. This device will not be checked for
-     * wanted media. This is many useful for media copy.
-     *
-     * \param dev The device to ignore or 0 to not ignore any device.
-     */
-    void setIgnoreDevice( K3bDevice::Device* dev );
-
-private Q_SLOTS:
-    void slotMediumChanged( K3bDevice::Device* );
-    void slotDeviceManagerChanged( K3bDevice::DeviceManager* );
-    void slotActivated( int i );
-    void slotUpdateToolTip( K3bDevice::Device* );
-
-protected:
-    void updateMedia();
-    virtual bool showMedium( const K3bMedium& ) const;
-    virtual QString mediumString( const K3bMedium& ) const;
-    virtual QString mediumToolTip( const K3bMedium& ) const;
-    virtual QString noMediumMessage() const;
-
-private:
-    void updateMedium( K3bDevice::Device* );
-    void addMedium( K3bDevice::Device* );
-    void showNoMediumMessage();
-    void clear();
-
-    class Private;
-    Private* d;
-};
 
 #endif

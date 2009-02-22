@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,25 +20,42 @@
 #include <QHash>
 
 class KPageWidgetItem;
-class K3bMiscOptionTab;
-class K3bDeviceOptionTab;
-class K3bExternalBinOptionTab;
-class K3bNotifyOptionTab;
-class K3bPluginOptionTab;
-class K3bThemeOptionTab;
-class K3bCddbOptionTab;
-class K3bAdvancedOptionTab;
+namespace K3b {
+    class MiscOptionTab;
+}
+namespace K3b {
+    class DeviceOptionTab;
+}
+namespace K3b {
+    class ExternalBinOptionTab;
+}
+namespace K3b {
+    class NotifyOptionTab;
+}
+namespace K3b {
+    class PluginOptionTab;
+}
+namespace K3b {
+    class ThemeOptionTab;
+}
+namespace K3b {
+    class CddbOptionTab;
+}
+namespace K3b {
+    class AdvancedOptionTab;
+}
 
 /**
  *@author Sebastian Trueg
  */
-class K3bOptionDialog : public KPageDialog
+namespace K3b {
+class OptionDialog : public KPageDialog
 {
     Q_OBJECT
 
 public:
-    K3bOptionDialog( QWidget* parent = 0 );
-    ~K3bOptionDialog();
+    OptionDialog( QWidget* parent = 0 );
+    ~OptionDialog();
 
     enum ConfigPage {
         Misc = 0,
@@ -63,47 +80,48 @@ private:
     bool saveSettings();
 
     // misc options
-    K3bMiscOptionTab* m_miscOptionTab;
+    MiscOptionTab* m_miscOptionTab;
     KPageWidgetItem* m_miscPage;
     void setupMiscPage();
 
     // device options
-    K3bDeviceOptionTab* m_deviceOptionTab;
+    DeviceOptionTab* m_deviceOptionTab;
     KPageWidgetItem* m_devicePage;
     void setupDevicePage();
 
     // programs options
-    K3bExternalBinOptionTab* m_externalBinOptionTab;
+    ExternalBinOptionTab* m_externalBinOptionTab;
     KPageWidgetItem* m_programsPage;
     void setupProgramsPage();
 
     // notify options
-    K3bNotifyOptionTab* m_notifyOptionTab;
+    NotifyOptionTab* m_notifyOptionTab;
     KPageWidgetItem* m_notifyPage;
     void setupNotifyPage();
 
     // plugin options
-    K3bPluginOptionTab* m_pluginOptionTab;
+    PluginOptionTab* m_pluginOptionTab;
     KPageWidgetItem* m_pluginPage;
     void setupPluginPage();
 
     // theme options
-    K3bThemeOptionTab* m_themeOptionTab;
+    ThemeOptionTab* m_themeOptionTab;
     KPageWidgetItem* m_themePage;
     void setupThemePage();
 
     // cddb options
-    K3bCddbOptionTab* m_cddbOptionTab;
+    CddbOptionTab* m_cddbOptionTab;
     KPageWidgetItem* m_cddbPage;
     void setupCddbPage();
 
     // advanced options
-    K3bAdvancedOptionTab* m_advancedOptionTab;
+    AdvancedOptionTab* m_advancedOptionTab;
     KPageWidgetItem* m_advancedPage;
     void setupAdvancedPage();
 
     typedef QHash<ConfigPage,KPageWidgetItem*> Pages;
     Pages m_pages;
 };
+}
 
 #endif

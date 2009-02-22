@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
  *
@@ -19,37 +19,39 @@
 
 #include <qstring.h>
 
-class LIBK3B_EXPORT K3bFileSystemInfo
-{
- public:
-  K3bFileSystemInfo();
-  K3bFileSystemInfo( const QString& path );
-  K3bFileSystemInfo( const K3bFileSystemInfo& );
-  ~K3bFileSystemInfo();
+namespace K3b {
+    class LIBK3B_EXPORT FileSystemInfo
+    {
+    public:
+        FileSystemInfo();
+        FileSystemInfo( const QString& path );
+        FileSystemInfo( const FileSystemInfo& );
+        ~FileSystemInfo();
 
-  QString path() const;
-  void setPath( const QString& path );
+        QString path() const;
+        void setPath( const QString& path );
 
-  enum FileSystemType {
-    FS_UNKNOWN,
-    FS_FAT
-    // FIXME: add way more file system types
-  };
+        enum FileSystemType {
+            FS_UNKNOWN,
+            FS_FAT
+            // FIXME: add way more file system types
+        };
 
-  FileSystemType type() const;
+        FileSystemType type() const;
 
-  /**
-   * Ensures that the file path does not contain
-   * any invalid chars.
-   *
-   * For now it only replaces characters like * or [
-   * on FAT file systems.
-   */
-  QString fixupPath( const QString& );
+        /**
+         * Ensures that the file path does not contain
+         * any invalid chars.
+         *
+         * For now it only replaces characters like * or [
+         * on FAT file systems.
+         */
+        QString fixupPath( const QString& );
 
- private:
-  class Private;
-  Private* d;
-};
+    private:
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

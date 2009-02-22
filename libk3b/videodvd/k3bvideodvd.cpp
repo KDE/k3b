@@ -36,23 +36,23 @@
 #define CONVERT_FRAME(x) (((x & 0x30) >> 3) * 5 + (x & 0x0f))
 
 
-K3bVideoDVD::VideoDVD::VideoDVD()
+K3b::VideoDVD::VideoDVD::VideoDVD()
 {
 }
 
 
-K3bVideoDVD::VideoDVD::~VideoDVD()
+K3b::VideoDVD::VideoDVD::~VideoDVD()
 {
 }
 
 
-bool K3bVideoDVD::VideoDVD::valid() const
+bool K3b::VideoDVD::VideoDVD::valid() const
 {
   return ( m_device != 0 );
 }
 
 
-bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
+bool K3b::VideoDVD::VideoDVD::open( K3b::Device::Device* dev )
 {
   m_device = 0;
   m_titles.clear();
@@ -62,7 +62,7 @@ bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
   //
   dvd_reader_t* dvdReaderT = DVDOpen( QFile::encodeName(dev->blockDeviceName()) );
   if( !dvdReaderT ) {
-    kDebug() << "(K3bVideoDVD) Could not open device " << dev->blockDeviceName();
+    kDebug() << "(K3b::VideoDVD) Could not open device " << dev->blockDeviceName();
     return false;
   }
 
@@ -72,7 +72,7 @@ bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
   char v[33];
   if( DVDUDFVolumeInfo( dvdReaderT, v, 33, 0, 0 ) != 0 &&
       DVDISOVolumeInfo( dvdReaderT, v, 33, 0, 0 ) != 0 ) {
-    kDebug() << "(K3bVideoDVD) Could not read volume info.";
+    kDebug() << "(K3b::VideoDVD) Could not read volume info.";
     DVDClose( dvdReaderT );
     return false;
   }
@@ -83,7 +83,7 @@ bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
   //
   ifo_handle_t* vmg = ifoOpen( dvdReaderT, 0 );
   if( !vmg ) {
-    kDebug() << "(K3bVideoDVD) Can't open VMG info.";
+    kDebug() << "(K3b::VideoDVD) Can't open VMG info.";
     DVDClose( dvdReaderT );
     return false;
   }
@@ -111,7 +111,7 @@ bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
     //
     ifo_handle_t* titleIfo = ifoOpen( dvdReaderT, vmg->tt_srpt->title[i].title_set_nr );
     if( !titleIfo ) {
-      kDebug() << "(K3bVideoDVD) Can't open Title ifo.";
+      kDebug() << "(K3b::VideoDVD) Can't open Title ifo.";
       ifoClose( vmg );
       DVDClose( dvdReaderT );
       return false;
@@ -206,19 +206,19 @@ bool K3bVideoDVD::VideoDVD::open( K3bDevice::Device* dev )
 }
 
 
-const K3bVideoDVD::Title& K3bVideoDVD::VideoDVD::title( unsigned int num ) const
+const K3b::VideoDVD::Title& K3b::VideoDVD::VideoDVD::title( unsigned int num ) const
 {
   return m_titles[num];
 }
 
 
-const K3bVideoDVD::Title& K3bVideoDVD::VideoDVD::operator[]( unsigned int num ) const
+const K3b::VideoDVD::Title& K3b::VideoDVD::VideoDVD::operator[]( unsigned int num ) const
 {
   return title( num );
 }
 
 
-void K3bVideoDVD::VideoDVD::debug() const
+void K3b::VideoDVD::VideoDVD::debug() const
 {
   kDebug() << "VideoDVD information:" << endl
 	    << "=====================" << endl
@@ -243,7 +243,7 @@ void K3bVideoDVD::VideoDVD::debug() const
 }
 
 
-QString K3bVideoDVD::audioFormatString( int format )
+QString K3b::VideoDVD::audioFormatString( int format )
 {
   switch( format ) {
   case AUDIO_FORMAT_AC3:
@@ -262,7 +262,7 @@ QString K3bVideoDVD::audioFormatString( int format )
 }
 
 
-QString K3bVideoDVD::audioCodeExtensionString( int ext )
+QString K3b::VideoDVD::audioCodeExtensionString( int ext )
 {
   switch( ext ) {
   case AUDIO_CODE_EXT_UNSPECIFIED:
@@ -281,7 +281,7 @@ QString K3bVideoDVD::audioCodeExtensionString( int ext )
 }
 
 
-QString K3bVideoDVD::subPictureCodeModeString( int mode )
+QString K3b::VideoDVD::subPictureCodeModeString( int mode )
 {
   switch( mode ) {
   case SUBPIC_CODE_MODE_RLE:
@@ -294,7 +294,7 @@ QString K3bVideoDVD::subPictureCodeModeString( int mode )
 }
 
 
-QString K3bVideoDVD::subPictureCodeExtensionString( int ext )
+QString K3b::VideoDVD::subPictureCodeExtensionString( int ext )
 {
   switch( ext ) {
   case SUBPIC_CODE_EXT_UNSPECIFIED:

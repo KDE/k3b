@@ -18,10 +18,11 @@
 #include <qstring.h>
 #include <klocalizedstring.h>
 
-class K3bVideoCdRippingOptions
+namespace K3b {
+class VideoCdRippingOptions
 {
     public:
-        K3bVideoCdRippingOptions()
+        VideoCdRippingOptions()
             :   m_videocdsize( 0 ),
                 m_videocdsource( "/dev/cdrom" ),
                 m_videocddestination( "/tmp" ),
@@ -70,5 +71,6 @@ class K3bVideoCdRippingOptions
         bool m_sector2336;
         bool m_extractXML;
 };
+}
 
 #endif

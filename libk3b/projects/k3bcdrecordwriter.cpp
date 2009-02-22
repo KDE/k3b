@@ -38,14 +38,14 @@
 #include <ktemporaryfile.h>
 
 
-class K3bCdrecordWriter::Private
+class K3b::CdrecordWriter::Private
 {
 public:
     Private()
         : cdTextFile(0) {
     }
 
-    K3bThroughputEstimator* speedEst;
+    K3b::ThroughputEstimator* speedEst;
     bool canceled;
     bool usingBurnfree;
     int usedSpeed;
@@ -59,19 +59,19 @@ public:
 
     KTemporaryFile* cdTextFile;
 
-    int burnedMediaType;
+    Device::MediaType burnedMediaType;
     int usedSpeedFactor;
 };
 
 
-K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice::Device* dev, K3bJobHandler* hdl,
+K3b::CdrecordWriter::CdrecordWriter( K3b::Device::Device* dev, K3b::JobHandler* hdl,
                                       QObject* parent )
-    : K3bAbstractWriter( dev, hdl, parent ),
+    : K3b::AbstractWriter( dev, hdl, parent ),
       m_clone(false),
       m_cue(false)
 {
     d = new Private();
-    d->speedEst = new K3bThroughputEstimator( this );
+    d->speedEst = new K3b::ThroughputEstimator( this );
     connect( d->speedEst, SIGNAL(throughput(int)),
              this, SLOT(slotThroughput(int)) );
 
@@ -80,7 +80,7 @@ K3bCdrecordWriter::K3bCdrecordWriter( K3bDevice::Device* dev, K3bJobHandler* hdl
 }
 
 
-K3bCdrecordWriter::~K3bCdrecordWriter()
+K3b::CdrecordWriter::~CdrecordWriter()
 {
     delete d->cdTextFile;
     delete d;
@@ -88,13 +88,13 @@ K3bCdrecordWriter::~K3bCdrecordWriter()
 }
 
 
-bool K3bCdrecordWriter::active() const
+bool K3b::CdrecordWriter::active() const
 {
     return ( m_process && m_process->isRunning() );
 }
 
 
-int K3bCdrecordWriter::fd() const
+int K3b::CdrecordWriter::fd() const
 {
     if( m_process )
         return m_process->stdinFd();
@@ -103,12 +103,12 @@ int K3bCdrecordWriter::fd() const
 }
 
 
-void K3bCdrecordWriter::setDao( bool b )
+void K3b::CdrecordWriter::setDao( bool b )
 {
     m_writingMode = ( b ? K3b::WRITING_MODE_DAO : K3b::WRITING_MODE_TAO );
 }
 
-void K3bCdrecordWriter::setCueFile( const QString& s)
+void K3b::CdrecordWriter::setCueFile( const QString& s)
 {
     m_cue = true;
     m_cueFile = s;
@@ -117,22 +117,22 @@ void K3bCdrecordWriter::setCueFile( const QString& s)
     setWritingMode( K3b::WRITING_MODE_DAO );
 }
 
-void K3bCdrecordWriter::setClone( bool b )
+void K3b::CdrecordWriter::setClone( bool b )
 {
     m_clone = b;
 }
 
 
-void K3bCdrecordWriter::setWritingMode( K3b::WritingMode mode )
+void K3b::CdrecordWriter::setWritingMode( K3b::WritingMode mode )
 {
     m_writingMode = mode;
 }
 
 
-void K3bCdrecordWriter::prepareProcess()
+void K3b::CdrecordWriter::prepareProcess()
 {
     if( m_process ) delete m_process;  // kdelibs want this!
-    m_process = new K3bProcess();
+    m_process = new K3b::Process();
     m_process->setRunPrivileged(true);
     //  m_process->setPriority( K3Process::PrioHighest );
     m_process->setSplitStdout(true);
@@ -168,36 +168,36 @@ void K3bCdrecordWriter::prepareProcess()
         d->usedSpeed = burnDevice()->determineMaximalWriteSpeed();
     }
 
-    if ( d->burnedMediaType & K3bDevice::MEDIA_DVD_ALL ) {
-        d->usedSpeed /= K3bDevice::SPEED_FACTOR_DVD;
-        d->usedSpeedFactor = K3bDevice::SPEED_FACTOR_DVD;
+    if ( d->burnedMediaType & K3b::Device::MEDIA_DVD_ALL ) {
+        d->usedSpeed /= K3b::Device::SPEED_FACTOR_DVD;
+        d->usedSpeedFactor = K3b::Device::SPEED_FACTOR_DVD;
     }
-    else if ( d->burnedMediaType & K3bDevice::MEDIA_BD_ALL ) {
-        d->usedSpeed /= K3bDevice::SPEED_FACTOR_BD;
-        d->usedSpeedFactor = K3bDevice::SPEED_FACTOR_BD;
+    else if ( d->burnedMediaType & K3b::Device::MEDIA_BD_ALL ) {
+        d->usedSpeed /= K3b::Device::SPEED_FACTOR_BD;
+        d->usedSpeedFactor = K3b::Device::SPEED_FACTOR_BD;
     }
     else {
         // cdrecord provides progress and speed as multiple of 150 KB (except for audio tracks)
-        d->usedSpeed /= K3bDevice::SPEED_FACTOR_CD;
-        d->usedSpeedFactor = K3bDevice::SPEED_FACTOR_CD;
+        d->usedSpeed /= K3b::Device::SPEED_FACTOR_CD;
+        d->usedSpeedFactor = K3b::Device::SPEED_FACTOR_CD;
     }
 
     if( d->usedSpeed != 0 )
         *m_process << QString("speed=%1").arg(d->usedSpeed);
 
 
-    if ( K3bDevice::isBdMedia( d->burnedMediaType ) ) {
+    if ( K3b::Device::isBdMedia( d->burnedMediaType ) ) {
         if ( !m_cdrecordBinObject->hasFeature( "blu-ray" ) ) {
             emit infoMessage( i18n( "Cdrecord version %1 does not support Blu-ray writing." ,m_cdrecordBinObject->version ), ERROR );
             // FIXME: add a way to fail the whole thing here
         }
         *m_process << "-sao";
     }
-    else if ( K3bDevice::isDvdMedia( d->burnedMediaType ) ) {
+    else if ( K3b::Device::isDvdMedia( d->burnedMediaType ) ) {
         // cdrecord only supports SAo for DVD
         *m_process << "-sao";
     }
-    else if( K3bDevice::isCdMedia( d->burnedMediaType ) ) {
+    else if( K3b::Device::isCdMedia( d->burnedMediaType ) ) {
         if( m_writingMode == K3b::WRITING_MODE_DAO || m_cue ) {
             if( burnDevice()->dao() )
                 *m_process << "-sao";
@@ -208,11 +208,11 @@ void K3bCdrecordWriter::prepareProcess()
             }
         }
         else if( m_writingMode == K3b::WRITING_MODE_RAW ) {
-            if( burnDevice()->supportsWritingMode( K3bDevice::RAW_R96R ) )
+            if( burnDevice()->supportsWritingMode( K3b::Device::RAW_R96R ) )
                 *m_process << "-raw96r";
-            else if( burnDevice()->supportsWritingMode( K3bDevice::RAW_R16 ) )
+            else if( burnDevice()->supportsWritingMode( K3b::Device::RAW_R16 ) )
                 *m_process << "-raw16";
-            else if( burnDevice()->supportsWritingMode( K3bDevice::RAW_R96P ) )
+            else if( burnDevice()->supportsWritingMode( K3b::Device::RAW_R96P ) )
                 *m_process << "-raw96p";
             else {
                 emit infoMessage( i18n("Writer does not support raw writing."), WARNING );
@@ -224,7 +224,7 @@ void K3bCdrecordWriter::prepareProcess()
             *m_process << "-tao";
     }
     else {
-        emit infoMessage( i18n( "Cdrecord does not support writing %1 media." , K3bDevice::mediaTypeString( d->burnedMediaType ) ), ERROR );
+        emit infoMessage( i18n( "Cdrecord does not support writing %1 media." , K3b::Device::mediaTypeString( d->burnedMediaType ) ), ERROR );
         // FIXME: add a way to fail the whole thing here
     }
 
@@ -300,20 +300,20 @@ void K3bCdrecordWriter::prepareProcess()
 }
 
 
-K3bCdrecordWriter* K3bCdrecordWriter::addArgument( const QString& arg )
+K3b::CdrecordWriter* K3b::CdrecordWriter::addArgument( const QString& arg )
 {
     m_arguments.append( arg );
     return this;
 }
 
 
-void K3bCdrecordWriter::clearArguments()
+void K3b::CdrecordWriter::clearArguments()
 {
     m_arguments.clear();
 }
 
 
-void K3bCdrecordWriter::start()
+void K3b::CdrecordWriter::start()
 {
     jobStarted();
 
@@ -328,7 +328,7 @@ void K3bCdrecordWriter::start()
         return;
     }
 
-    emit debuggingOutput( "Used versions", "cdrecord: " + m_cdrecordBinObject->version );
+    emit debuggingOutput( QLatin1String( "Used versions" ), QLatin1String( "cdrecord: " ) + m_cdrecordBinObject->version );
 
     if( !m_cdrecordBinObject->copyright.isEmpty() )
         emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3"
@@ -368,8 +368,8 @@ void K3bCdrecordWriter::start()
     if( !m_process->start( K3Process::All ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
-        kDebug() << "(K3bCdrecordWriter) could not start " << m_cdrecordBinObject->name();
-        emit infoMessage( i18n("Could not start %1.",m_cdrecordBinObject->name()), K3bJob::ERROR );
+        kDebug() << "(K3b::CdrecordWriter) could not start " << m_cdrecordBinObject->name();
+        emit infoMessage( i18n("Could not start %1.",m_cdrecordBinObject->name()), K3b::Job::ERROR );
         jobFinished(false);
     }
     else {
@@ -379,20 +379,20 @@ void K3bCdrecordWriter::start()
             emit infoMessage( i18n("Starting %1 simulation at %2x speed..."
                                    ,K3b::writingModeString(m_writingMode)
                                    ,d->usedSpeed),
-                              K3bJob::INFO );
+                              K3b::Job::INFO );
         }
         else {
             emit newTask( i18n("Writing") );
             emit infoMessage( i18n("Starting %1 writing at %2x speed..."
                                    ,K3b::writingModeString(m_writingMode)
                                    ,d->usedSpeed),
-                              K3bJob::INFO );
+                              K3b::Job::INFO );
         }
     }
 }
 
 
-void K3bCdrecordWriter::cancel()
+void K3b::CdrecordWriter::cancel()
 {
     if( active() ) {
         d->canceled = true;
@@ -402,7 +402,7 @@ void K3bCdrecordWriter::cancel()
 }
 
 
-void K3bCdrecordWriter::slotStdLine( const QString& line )
+void K3b::CdrecordWriter::slotStdLine( const QString& line )
 {
     static QRegExp s_burnfreeCounterRx( "^BURN\\-Free\\swas\\s(\\d+)\\stimes\\sused" );
     static QRegExp s_burnfreeCounterRxPredict( "^Total\\sof\\s(\\d+)\\s\\spossible\\sbuffer\\sunderruns\\spredicted" );
@@ -442,11 +442,11 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
                     m_totalSize += track.size;
                 }
                 else
-                    kDebug() << "(K3bCdrecordWriter) track number parse error: "
+                    kDebug() << "(K3b::CdrecordWriter) track number parse error: "
                              << line.mid( sizeStart, sizeEnd-sizeStart );
             }
             else
-                kDebug() << "(K3bCdrecordWriter) track number parse error: "
+                kDebug() << "(K3b::CdrecordWriter) track number parse error: "
                          << line.mid( 6, 2 );
         }
 
@@ -475,7 +475,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
                 size = d->tracks[m_currentTrack-1].size;
             }
             else {
-                kError() << "(K3bCdrecordWriter) Did not parse all tracks sizes!" << endl;
+                kError() << "(K3b::CdrecordWriter) Did not parse all tracks sizes!" << endl;
             }
 
             if( size > 0 ) {
@@ -504,11 +504,11 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
         QString errStr = line.mid( line.indexOf(':') + 2 );
 
         if( errStr.startsWith( "Drive does not support SAO" ) ) {
-            emit infoMessage( i18n("DAO (Disk At Once) recording not supported with this writer"), K3bJob::ERROR );
-            emit infoMessage( i18n("Please choose TAO (Track At Once) and try again"), K3bJob::ERROR );
+            emit infoMessage( i18n("DAO (Disk At Once) recording not supported with this writer"), K3b::Job::ERROR );
+            emit infoMessage( i18n("Please choose TAO (Track At Once) and try again"), K3b::Job::ERROR );
         }
         else if( errStr.startsWith( "Drive does not support RAW" ) ) {
-            emit infoMessage( i18n("RAW recording not supported with this writer"), K3bJob::ERROR );
+            emit infoMessage( i18n("RAW recording not supported with this writer"), K3b::Job::ERROR );
         }
         else if( errStr.startsWith("Input/output error.") ) {
             emit infoMessage( i18n("Input/output error. Not necessarily serious."), WARNING );
@@ -520,7 +520,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
             m_cdrecordError = OPC_FAILED;
         }
         else if( errStr.startsWith( "Drive needs to reload the media" ) ) {
-            emit infoMessage( i18n("Reloading of medium required"), K3bJob::INFO );
+            emit infoMessage( i18n("Reloading of medium required"), K3b::Job::INFO );
         }
         else if( errStr.startsWith( "The current problem looks like a buffer underrun" ) ) {
             if( m_cdrecordError == UNKNOWN ) // it is almost never a buffer underrun these days.
@@ -529,7 +529,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
         else if( errStr.startsWith("WARNING: Data may not fit") ) {
             bool overburn = k3bcore->globalSettings()->overburn();
             if( overburn && m_cdrecordBinObject->hasFeature("overburn") )
-                emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3bJob::WARNING );
+                emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3b::Job::WARNING );
             m_cdrecordError = OVERSIZE;
         }
         else if( errStr.startsWith("Bad Option") ) {
@@ -589,11 +589,11 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
         int pos2 = line.indexOf( "in", pos+9 );
         int speed = static_cast<int>( line.mid( pos+9, pos2-pos-10 ).toDouble() );  // cdrecord-dvd >= 2.01a25 uses 8.0 and stuff
         if( speed != d->usedSpeed ) {
-            emit infoMessage( i18n("Medium or burner do not support writing at %1x speed",d->usedSpeed), K3bJob::WARNING );
+            emit infoMessage( i18n("Medium or burner do not support writing at %1x speed",d->usedSpeed), K3b::Job::WARNING );
             if( speed > d->usedSpeed )
-                emit infoMessage( i18n("Switching burn speed up to %1x",speed), K3bJob::WARNING );
+                emit infoMessage( i18n("Switching burn speed up to %1x",speed), K3b::Job::WARNING );
             else
-                emit infoMessage( i18n("Switching burn speed down to %1x",speed), K3bJob::WARNING );
+                emit infoMessage( i18n("Switching burn speed down to %1x",speed), K3b::Job::WARNING );
         }
     }
     else if( line.startsWith( "Starting new" ) ) {
@@ -602,7 +602,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
             if( d->tracks.count() > m_currentTrack-1 )
                 m_alreadyWritten += d->tracks[m_currentTrack-1].size;
             else
-                kError() << "(K3bCdrecordWriter) Did not parse all tracks sizes!";
+                kError() << "(K3b::CdrecordWriter) Did not parse all tracks sizes!";
         }
         else
             emit infoMessage( i18n("Starting disc write"), INFO );
@@ -610,14 +610,14 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
         m_currentTrack++;
 
         if( m_currentTrack > d->tracks.count() ) {
-            kDebug() << "(K3bCdrecordWriter) need to add dummy track struct.";
+            kDebug() << "(K3b::CdrecordWriter) need to add dummy track struct.";
             struct Private::Track t;
             t.size = 1;
             t.audio = false;
             d->tracks.append(t);
         }
 
-        kDebug() << "(K3bCdrecordWriter) writing track " << m_currentTrack << " of " << m_totalTracks << " tracks.";
+        kDebug() << "(K3b::CdrecordWriter) writing track " << m_currentTrack << " of " << m_totalTracks << " tracks.";
         emit nextTrack( m_currentTrack, m_totalTracks );
     }
     else if( line.startsWith( "Fixating" ) ) {
@@ -634,16 +634,16 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
         emit newSubTask( i18n("Writing pregap") );
     }
     else if( line.startsWith( "Performing OPC" ) ) {
-        emit infoMessage( i18n("Performing Optimum Power Calibration"), K3bJob::INFO );
+        emit infoMessage( i18n("Performing Optimum Power Calibration"), K3b::Job::INFO );
     }
     else if( line.startsWith( "Sending" ) ) {
-        emit infoMessage( i18n("Sending CUE sheet"), K3bJob::INFO );
+        emit infoMessage( i18n("Sending CUE sheet"), K3b::Job::INFO );
     }
     else if( line.startsWith( "Turning BURN-Free on" ) || line.startsWith( "BURN-Free is ON") ) {
-        emit infoMessage( i18n("Enabled Burnfree"), K3bJob::INFO );
+        emit infoMessage( i18n("Enabled Burnfree"), K3b::Job::INFO );
     }
     else if( line.startsWith( "Turning BURN-Free off" ) ) {
-        emit infoMessage( i18n("Disabled Burnfree"), K3bJob::WARNING );
+        emit infoMessage( i18n("Disabled Burnfree"), K3b::Job::WARNING );
     }
     else if( line.startsWith( "Re-load disk and hit" ) ) {
         // this happens on some notebooks where cdrecord is not able to close the
@@ -680,7 +680,7 @@ void K3bCdrecordWriter::slotStdLine( const QString& line )
 }
 
 
-void K3bCdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus )
+void K3b::CdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus )
 {
     // remove temporary cdtext file
     delete d->cdTextFile;
@@ -694,7 +694,7 @@ void K3bCdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus ex
 
     if( d->canceled ) {
         // this will unblock and eject the drive and emit the finished/canceled signals
-        K3bAbstractWriter::cancel();
+        K3b::AbstractWriter::cancel();
         return;
     }
 
@@ -704,9 +704,9 @@ void K3bCdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus ex
         case 0:
         {
             if( simulate() )
-                emit infoMessage( i18n("Simulation successfully completed"), K3bJob::SUCCESS );
+                emit infoMessage( i18n("Simulation successfully completed"), K3b::Job::SUCCESS );
             else
-                emit infoMessage( i18n("Writing successfully completed"), K3bJob::SUCCESS );
+                emit infoMessage( i18n("Writing successfully completed"), K3b::Job::SUCCESS );
 
             int s = d->speedEst->average();
             emit infoMessage( ki18n("Average overall write speed: %1 KB/s (%2x)").subs(s).subs((double)s/( double )d->usedSpeedFactor, 0, 'g', 2).toString(), INFO );
@@ -716,7 +716,7 @@ void K3bCdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus ex
         break;
 
         default:
-            kDebug() << "(K3bCdrecordWriter) error: " << exitCode;
+            kDebug() << "(K3b::CdrecordWriter) error: " << exitCode;
 
             if( m_cdrecordError == UNKNOWN && m_lastFifoValue <= 3 )
                 m_cdrecordError = BUFFER_UNDERRUN;
@@ -797,14 +797,14 @@ void K3bCdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus ex
                 emit infoMessage( i18n("Try again using 'Complete' erasing."), ERROR );
                 break;
             case UNKNOWN:
-                if( (exitCode == 12) && K3b::kernelVersion() >= K3bVersion( 2, 6, 8 ) && m_cdrecordBinObject->hasFeature( "suidroot" ) ) {
+                if( (exitCode == 12) && K3b::kernelVersion() >= K3b::Version( 2, 6, 8 ) && m_cdrecordBinObject->hasFeature( "suidroot" ) ) {
                     emit infoMessage( i18n("Since kernel version 2.6.8 cdrecord cannot use SCSI transport when running suid root anymore."), ERROR );
-                    emit infoMessage( i18n("You may use K3bSetup to solve this problem or remove the suid bit manually."), ERROR );
+                    emit infoMessage( i18n("You may use K3b::Setup to solve this problem or remove the suid bit manually."), ERROR );
                 }
                 else if( !wasSourceUnreadable() ) {
                     emit infoMessage( i18n("%1 returned an unknown error (code %2).",
                                            m_cdrecordBinObject->name(), exitCode),
-                                      K3bJob::ERROR );
+                                      K3b::Job::ERROR );
 
                     if( (exitCode >= 254) && m_writingMode == K3b::WRITING_MODE_DAO ) {
                         emit infoMessage( i18n("Sometimes using TAO writing mode solves this issue."), ERROR );
@@ -829,10 +829,10 @@ void K3bCdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus ex
 }
 
 
-void K3bCdrecordWriter::slotThroughput( int t )
+void K3b::CdrecordWriter::slotThroughput( int t )
 {
     emit writeSpeed( t, d->tracks.count() > m_currentTrack && !d->tracks[m_currentTrack-1].audio
-                     ? K3bDevice::SPEED_FACTOR_CD_MODE1
+                     ? K3b::Device::SPEED_FACTOR_CD_MODE1
                      : d->usedSpeedFactor );
 }
 

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -15,39 +15,38 @@
 #ifndef _K3B_SESSION_IMPORT_ITEM_H_
 #define _K3B_SESSION_IMPORT_ITEM_H_
 
-
 #include "k3bspecialdataitem.h"
 
+namespace K3b {
+    class DataDoc;
+    class FileItem;
+    class DirItem;
+    class Iso9660File;
 
-class K3bDataDoc;
-class K3bFileItem;
-class K3bDirItem;
-class K3bIso9660File;
+    class SessionImportItem : public SpecialDataItem
+    {
+    public:
+        SessionImportItem( const Iso9660File*, DataDoc* doc, DirItem* );
+        SessionImportItem( const SessionImportItem& );
+        ~SessionImportItem();
 
+        DataItem* copy() const;
 
-class K3bSessionImportItem : public K3bSpecialDataItem
-{
-public:
-    K3bSessionImportItem( const K3bIso9660File*, K3bDataDoc* doc, K3bDirItem* );
-    K3bSessionImportItem( const K3bSessionImportItem& );
-    ~K3bSessionImportItem();
+        FileItem* replaceItem() const { return m_replaceItem; }
+        void setReplaceItem( FileItem* item ) { m_replaceItem = item; }
 
-    K3bDataItem* copy() const;
+        bool isFile() const { return false; }
+        bool isFromOldSession() const { return true; }
 
-    K3bFileItem* replaceItem() const { return m_replaceItem; }
-    void setReplaceItem( K3bFileItem* item ) { m_replaceItem = item; }
+        bool isRemoveable() const { return false; }
+        bool isMoveable() const { return false; }
+        bool isRenameable() const { return false; }
+        bool isHideable() const { return false; }
+        bool writeToCd() const { return false; }
 
-    bool isFile() const { return false; }
-    bool isFromOldSession() const { return true; }
-
-    bool isRemoveable() const { return false; }
-    bool isMoveable() const { return false; }
-    bool isRenameable() const { return false; }
-    bool isHideable() const { return false; }
-    bool writeToCd() const { return false; }
-
-private:
-    K3bFileItem* m_replaceItem;
-};
+    private:
+        FileItem* m_replaceItem;
+    };
+}
 
 #endif

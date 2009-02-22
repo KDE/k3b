@@ -41,12 +41,12 @@
 #include <QList>
 #include <KToolBar>
 
-K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent )
-    : K3bStandardView( doc, parent ),
+K3b::MovixView::MovixView( K3b::MovixDoc* doc, QWidget* parent )
+    : K3b::StandardView( doc, parent ),
       m_doc(doc)
 {
     m_model = new K3b::MovixProjectModel(m_doc, this);
-    // set the model for the K3bStandardView's views
+    // set the model for the K3b::StandardView's views
     setModel(m_model);
 
     // and hide the side panel as the movix project has no tree hierarchy
@@ -76,7 +76,7 @@ K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent )
     //  k3bMain()->actionCollection()->action("file_burn")->plug( m_popupMenu );
 
 
-    addPluginButtons( K3bProjectPlugin::MOVIX_CD );
+    addPluginButtons( K3b::ProjectPlugin::MOVIX_CD );
 
     m_volumeIDEdit = new QLineEdit( doc->isoOptions().volumeID(), toolBox() );
     toolBox()->addWidget( new QLabel( i18n("Volume Name:"), toolBox() ) );
@@ -89,12 +89,12 @@ K3bMovixView::K3bMovixView( K3bMovixDoc* doc, QWidget* parent )
 }
 
 
-K3bMovixView::~K3bMovixView()
+K3b::MovixView::~MovixView()
 {
 }
 
 
-void K3bMovixView::slotContextMenuRequested(Q3ListViewItem* item, const QPoint& p, int )
+void K3b::MovixView::slotContextMenuRequested(Q3ListViewItem* item, const QPoint& p, int )
 {
     if( item ) {
         m_actionRemove->setEnabled(true);
@@ -109,21 +109,21 @@ void K3bMovixView::slotContextMenuRequested(Q3ListViewItem* item, const QPoint& 
 }
 
 
-void K3bMovixView::showPropertiesDialog()
+void K3b::MovixView::showPropertiesDialog()
 {
 #if 0
-    QList<K3bDataItem*> dataItems;
+    QList<K3b::DataItem*> dataItems;
 
     // get selected item
     QList<Q3ListViewItem*> viewItems = m_listView->selectedItems();
     Q_FOREACH( Q3ListViewItem* item, viewItems ) {
-        if( K3bMovixListViewItem* viewItem = dynamic_cast<K3bMovixListViewItem*>( item ) ) {
+        if( K3b::MovixListViewItem* viewItem = dynamic_cast<K3b::MovixListViewItem*>( item ) ) {
             dataItems.append( viewItem->fileItem() );
         }
     }
 
     if( !dataItems.isEmpty() ) {
-        K3bDataPropertiesDialog d( dataItems, this );
+        K3b::DataPropertiesDialog d( dataItems, this );
         d.exec();
     }
     else
@@ -132,7 +132,7 @@ void K3bMovixView::showPropertiesDialog()
 }
 
 
-void K3bMovixView::slotRemoveSubTitleItems()
+void K3b::MovixView::slotRemoveSubTitleItems()
 {
 #if 0
     QList<Q3ListViewItem*> list = m_listView->selectedItems();
@@ -141,20 +141,20 @@ void K3bMovixView::slotRemoveSubTitleItems()
         kDebug() << "nothing to remove";
 
     Q_FOREACH( Q3ListViewItem* item, list ) {
-        K3bMovixListViewItem* vi = static_cast<K3bMovixListViewItem*>(item);
+        K3b::MovixListViewItem* vi = static_cast<K3b::MovixListViewItem*>(item);
         m_doc->removeSubTitleItem( vi->fileItem() );
     }
 #endif
 }
 
 
-void K3bMovixView::slotAddSubTitleFile()
+void K3b::MovixView::slotAddSubTitleFile()
 {
 #if 0
     if ( m_listView->selectedItems().isEmpty() )
         return;
     Q3ListViewItem* item = m_listView->selectedItems().first();
-    if( K3bMovixListViewItem* vi = dynamic_cast<K3bMovixListViewItem*>(item) ) {
+    if( K3b::MovixListViewItem* vi = dynamic_cast<K3b::MovixListViewItem*>(item) ) {
 
         KUrl url = KFileDialog::getOpenUrl();
         if( url.isValid() ) {
@@ -168,13 +168,13 @@ void K3bMovixView::slotAddSubTitleFile()
 }
 
 
-K3bProjectBurnDialog* K3bMovixView::newBurnDialog( QWidget* parent )
+K3b::ProjectBurnDialog* K3b::MovixView::newBurnDialog( QWidget* parent )
 {
-    return new K3bMovixBurnDialog( m_doc, parent );
+    return new K3b::MovixBurnDialog( m_doc, parent );
 }
 
 
-void K3bMovixView::slotDocChanged()
+void K3b::MovixView::slotDocChanged()
 {
     // do not update the editor in case it changed the volume id itself
     if( m_doc->isoOptions().volumeID() != m_volumeIDEdit->text() )

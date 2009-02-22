@@ -29,11 +29,11 @@
 #include <q3valuelist.h>
 
 namespace {
-    QString createItemsString( const QList<K3bDataItem*>& items, int max )
+    QString createItemsString( const QList<K3b::DataItem*>& items, int max )
     {
         QString s;
         int cnt = 0;
-        for( QList<K3bDataItem*>::const_iterator it = items.constBegin();
+        for( QList<K3b::DataItem*>::const_iterator it = items.constBegin();
              it != items.constEnd(); ++it ) {
 
             s += KStringHandler::csqueeze( (*it)->localPath(), 60 );
@@ -53,33 +53,33 @@ namespace {
 }
 
 
-class K3bDataPreparationJob::Private
+class K3b::DataPreparationJob::Private
 {
 public:
-    K3bDataDoc* doc;
+    K3b::DataDoc* doc;
 
-    QList<K3bDataItem*> nonExistingItems;
+    QList<K3b::DataItem*> nonExistingItems;
     QString listOfRenamedItems;
-    QList<K3bDataItem*> folderSymLinkItems;
+    QList<K3b::DataItem*> folderSymLinkItems;
 };
 
 
 
-K3bDataPreparationJob::K3bDataPreparationJob( K3bDataDoc* doc, K3bJobHandler* hdl, QObject* parent )
-    : K3bThreadJob( hdl, parent ),
+K3b::DataPreparationJob::DataPreparationJob( K3b::DataDoc* doc, K3b::JobHandler* hdl, QObject* parent )
+    : K3b::ThreadJob( hdl, parent ),
       d( new Private() )
 {
     d->doc = doc;
 }
 
 
-K3bDataPreparationJob::~K3bDataPreparationJob()
+K3b::DataPreparationJob::~DataPreparationJob()
 {
     delete d;
 }
 
 
-bool K3bDataPreparationJob::run()
+bool K3b::DataPreparationJob::run()
 {
     // clean up
     d->nonExistingItems.clear();
@@ -92,12 +92,12 @@ bool K3bDataPreparationJob::run()
     // create the message string for the renamed files
     if( d->doc->needToCutFilenames() ) {
         int maxlines = 10;
-        QList<K3bDataItem*>::const_iterator it;
-        QList<K3bDataItem*> items = d->doc->needToCutFilenameItems();
+        QList<K3b::DataItem*>::const_iterator it;
+        QList<K3b::DataItem*> items = d->doc->needToCutFilenameItems();
         for( it = items.constBegin();
              maxlines > 0 && it != items.constEnd();
              ++it, --maxlines ) {
-            K3bDataItem* item = *it;
+            K3b::DataItem* item = *it;
             d->listOfRenamedItems += i18n("<em>%1</em> renamed to <em>%2</em>",
                                           KStringHandler::csqueeze( item->k3bName(), 30 ),
                                           KStringHandler::csqueeze( item->writtenName(), 30 ) );
@@ -110,7 +110,7 @@ bool K3bDataPreparationJob::run()
     //
     // Check for missing files and folder symlinks
     //
-    K3bDataItem* item = d->doc->root();
+    K3b::DataItem* item = d->doc->root();
     while( (item = item->nextSibling()) ) {
 
         if( item->isSymLink() ) {
@@ -149,7 +149,7 @@ bool K3bDataPreparationJob::run()
                             i18n("Disable Joliet extensions") ) ) {
             // No -> disable joliet
             // for now we enable RockRidge to be sure we did not lie above (keep long filenames)
-            K3bIsoOptions op = d->doc->isoOptions();
+            K3b::IsoOptions op = d->doc->isoOptions();
             op.setCreateJoliet( false );
             op.setCreateRockRidge( true );
             d->doc->setIsoOptions( op );
@@ -186,7 +186,7 @@ bool K3bDataPreparationJob::run()
                            i18n("Warning"),
                            i18n("Remove missing files and continue"),
                            i18n("Cancel and go back") ) ) {
-            for( QList<K3bDataItem*>::const_iterator it = d->nonExistingItems.constBegin();
+            for( QList<K3b::DataItem*>::const_iterator it = d->nonExistingItems.constBegin();
                  it != d->nonExistingItems.constEnd(); ++it ) {
                 delete *it;
             }

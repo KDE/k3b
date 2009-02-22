@@ -22,15 +22,7 @@
 
 class Q3CheckListItem;
 
-class base_K3bSetup2 : public QWidget, public Ui::base_K3bSetup2
-{
-public:
-    base_K3bSetup2( QWidget *parent ) : QWidget( parent ) {
-        setupUi( this );
-    }
-};
-
-class K3bSetup2: public KCModule
+class K3bSetup2: public KCModule, public Ui::base_K3bSetup2
 {
     Q_OBJECT
 
@@ -59,8 +51,6 @@ private:
 
     class Private;
     Private* d;
-
-    base_K3bSetup2* w;
 };
 
 #endif

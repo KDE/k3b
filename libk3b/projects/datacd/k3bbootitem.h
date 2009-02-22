@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -17,49 +17,51 @@
 
 #include "k3bfileitem.h"
 
-class K3bBootItem : public K3bFileItem
-{
-public:
-    K3bBootItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName = 0 );
-    K3bBootItem( const K3bBootItem& );
-    ~K3bBootItem();
+namespace K3b {
+    class BootItem : public FileItem
+    {
+    public:
+        BootItem( const QString& fileName, DataDoc* doc, DirItem* dir, const QString& k3bName = 0 );
+        BootItem( const BootItem& );
+        ~BootItem();
 
-    K3bDataItem* copy() const;
+        DataItem* copy() const;
 
-    bool isHideable() const { return false; }
+        bool isHideable() const { return false; }
 
-    bool isBootItem() const { return true; }
+        bool isBootItem() const { return true; }
 
-    enum imageType { FLOPPY, HARDDISK, NONE };
+        enum imageType { FLOPPY, HARDDISK, NONE };
 
-    void setNoBoot( bool b ) { m_noBoot = b; }
-    void setBootInfoTable( bool b ) { m_bootInfoTable = b; }
-    void setLoadSegment( int s ) { m_loadSegment = s; }
-    void setLoadSize( int s ) { m_loadSize = s; }
-    void setImageType( int t ) { m_imageType = t; }
+        void setNoBoot( bool b ) { m_noBoot = b; }
+        void setBootInfoTable( bool b ) { m_bootInfoTable = b; }
+        void setLoadSegment( int s ) { m_loadSegment = s; }
+        void setLoadSize( int s ) { m_loadSize = s; }
+        void setImageType( int t ) { m_imageType = t; }
 
-    void setTempPath( const QString& p ) { m_tempPath = p; }
+        void setTempPath( const QString& p ) { m_tempPath = p; }
 
-    bool noBoot() const { return m_noBoot; }
-    bool bootInfoTable() const { return m_bootInfoTable; }
-    int loadSegment() const { return m_loadSegment; }
-    int loadSize() const { return m_loadSize; }
-    int imageType() const { return m_imageType; }
+        bool noBoot() const { return m_noBoot; }
+        bool bootInfoTable() const { return m_bootInfoTable; }
+        int loadSegment() const { return m_loadSegment; }
+        int loadSize() const { return m_loadSize; }
+        int imageType() const { return m_imageType; }
 
-    /**
-     * mkisofs changes boot images on disk. That is why the iso imager 
-     * buffers them and saves the path to the buffered copy here.
-     */
-    QString tempPath() const { return m_tempPath; }
+        /**
+         * mkisofs changes boot images on disk. That is why the iso imager
+         * buffers them and saves the path to the buffered copy here.
+         */
+        QString tempPath() const { return m_tempPath; }
 
-private:
-    bool m_noBoot;
-    bool m_bootInfoTable;
-    int m_loadSegment;
-    int m_loadSize;
-    int m_imageType;
+    private:
+        bool m_noBoot;
+        bool m_bootInfoTable;
+        int m_loadSegment;
+        int m_loadSize;
+        int m_imageType;
 
-    QString m_tempPath;
-};
+        QString m_tempPath;
+    };
+}
 
 #endif

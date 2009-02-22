@@ -41,7 +41,7 @@
 #include <ksqueezedtextlabel.h>
 
 
-K3bDataPropertiesDialog::K3bDataPropertiesDialog( const QList<K3bDataItem*>& dataItems, QWidget* parent )
+K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& dataItems, QWidget* parent )
     : KDialog( parent )
 {
     setCaption( i18n("File Properties") );
@@ -53,7 +53,7 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const QList<K3bDataItem*>& dat
     m_labelIcon = new QLabel( mainWidget() );
     if ( dataItems.count() == 1 ) {
         m_editName = new KLineEdit( mainWidget() );
-        m_editName->setValidator( K3bValidators::iso9660Validator( false, this ) );
+        m_editName->setValidator( K3b::Validators::iso9660Validator( false, this ) );
         m_labelType = new QLabel( mainWidget() );
         m_labelLocalName = new KSqueezedTextLabel( mainWidget() );
         m_labelLocalLocation = new KSqueezedTextLabel( mainWidget() );
@@ -196,14 +196,14 @@ K3bDataPropertiesDialog::K3bDataPropertiesDialog( const QList<K3bDataItem*>& dat
 }
 
 
-K3bDataPropertiesDialog::~K3bDataPropertiesDialog()
+K3b::DataPropertiesDialog::~DataPropertiesDialog()
 {
 }
 
 
-void K3bDataPropertiesDialog::loadItemProperties( K3bDataItem* dataItem )
+void K3b::DataPropertiesDialog::loadItemProperties( K3b::DataItem* dataItem )
 {
-    if( K3bFileItem* fileItem = dynamic_cast<K3bFileItem*>(dataItem) ) {
+    if( K3b::FileItem* fileItem = dynamic_cast<K3b::FileItem*>(dataItem) ) {
         KFileItem kFileItem( KFileItem::Unknown, KFileItem::Unknown, KUrl(fileItem->localPath()) );
         kDebug() << kFileItem << dataItem->k3bPath() << dataItem->localPath();
         m_labelIcon->setPixmap( kFileItem.pixmap(KIconLoader::SizeLarge) );
@@ -217,7 +217,7 @@ void K3bDataPropertiesDialog::loadItemProperties( K3bDataItem* dataItem )
         m_labelLocalLocation->setText( localLocation );
         m_labelSize->setText( KIO::convertSize(dataItem->size()) );
     }
-    else if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>(dataItem) ) {
+    else if( K3b::DirItem* dirItem = dynamic_cast<K3b::DirItem*>(dataItem) ) {
         m_labelIcon->setPixmap( KIO::pixmapForUrl( KUrl( "/" )) );
         m_labelType->setText( i18n("Directory") );
         m_labelLocalNameText->hide();
@@ -258,7 +258,7 @@ void K3bDataPropertiesDialog::loadItemProperties( K3bDataItem* dataItem )
     m_checkHideOnRockRidge->setChecked( dataItem->hideOnRockRidge() );
     m_editSortWeight->setText( QString::number(dataItem->sortWeight()) );
 
-    // if the parent is hidden the value cannot be changed (see K3bDataItem::setHide...)
+    // if the parent is hidden the value cannot be changed (see K3b::DataItem::setHide...)
     if( dataItem->parent() ) {
         m_checkHideOnRockRidge->setDisabled( dataItem->parent()->hideOnRockRidge() );
         m_checkHideOnJoliet->setDisabled( dataItem->parent()->hideOnJoliet() );
@@ -275,7 +275,7 @@ void K3bDataPropertiesDialog::loadItemProperties( K3bDataItem* dataItem )
 }
 
 
-void K3bDataPropertiesDialog::loadListProperties( const QList<K3bDataItem*>& items )
+void K3b::DataPropertiesDialog::loadListProperties( const QList<K3b::DataItem*>& items )
 {
     m_labelIcon->setPixmap( DesktopIcon( "document-multiple", KIconLoader::SizeLarge ) );
 
@@ -283,9 +283,9 @@ void K3bDataPropertiesDialog::loadListProperties( const QList<K3bDataItem*>& ite
     int folders = 0;
     KIO::filesize_t size = 0;
     K3b::Msf blocks = 0;
-    for ( QList<K3bDataItem*>::iterator it = m_dataItems.begin();
+    for ( QList<K3b::DataItem*>::iterator it = m_dataItems.begin();
           it != m_dataItems.end(); ++it ) {
-        K3bDataItem* item = *it;
+        K3b::DataItem* item = *it;
         if ( item->isFile() )
             ++files;
         else if ( item->isDir() )
@@ -322,18 +322,18 @@ void K3bDataPropertiesDialog::loadListProperties( const QList<K3bDataItem*>& ite
 
 
     m_checkHideOnJoliet->setChecked( items.first()->hideOnJoliet() );
-    for ( QList<K3bDataItem*>::iterator it = m_dataItems.begin();
+    for ( QList<K3b::DataItem*>::iterator it = m_dataItems.begin();
           it != m_dataItems.end(); ++it ) {
-        K3bDataItem* item = *it;
+        K3b::DataItem* item = *it;
         if ( m_checkHideOnJoliet->isChecked() != item->hideOnJoliet() ) {
             m_checkHideOnJoliet->setCheckState( Qt::PartiallyChecked );
             break;
         }
     }
     m_checkHideOnRockRidge->setChecked( items.first()->hideOnRockRidge() );
-    for ( QList<K3bDataItem*>::iterator it = m_dataItems.begin();
+    for ( QList<K3b::DataItem*>::iterator it = m_dataItems.begin();
           it != m_dataItems.end(); ++it ) {
-        K3bDataItem* item = *it;
+        K3b::DataItem* item = *it;
         if ( m_checkHideOnRockRidge->isChecked() != item->hideOnRockRidge() ) {
             m_checkHideOnRockRidge->setCheckState( Qt::PartiallyChecked );
             break;
@@ -341,9 +341,9 @@ void K3bDataPropertiesDialog::loadListProperties( const QList<K3bDataItem*>& ite
     }
 
     int weight = items.first()->sortWeight();
-    for ( QList<K3bDataItem*>::iterator it = m_dataItems.begin();
+    for ( QList<K3b::DataItem*>::iterator it = m_dataItems.begin();
           it != m_dataItems.end(); ++it ) {
-        K3bDataItem* item = *it;
+        K3b::DataItem* item = *it;
         if ( weight != item->sortWeight() ) {
             weight = 0;
             break;
@@ -353,15 +353,15 @@ void K3bDataPropertiesDialog::loadListProperties( const QList<K3bDataItem*>& ite
 }
 
 
-void K3bDataPropertiesDialog::slotOk()
+void K3b::DataPropertiesDialog::slotOk()
 {
     if ( m_dataItems.count() == 1 ) {
         m_dataItems.first()->setK3bName( m_editName->text() );
     }
 
-    for ( QList<K3bDataItem*>::iterator it = m_dataItems.begin();
+    for ( QList<K3b::DataItem*>::iterator it = m_dataItems.begin();
           it != m_dataItems.end(); ++it ) {
-        K3bDataItem* item = *it;
+        K3b::DataItem* item = *it;
         if ( m_checkHideOnRockRidge->checkState() != Qt::PartiallyChecked )
             item->setHideOnRockRidge( m_checkHideOnRockRidge->isChecked() );
         if ( m_checkHideOnJoliet->checkState() != Qt::PartiallyChecked )

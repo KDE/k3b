@@ -5,7 +5,7 @@
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
  *
- * K3bMiniButton is based on KDockButton_Private
+ * MiniButton is based on KDockButton_Private
  * Copyright (C) 2000 Max Judin <novaprint@mtu-net.ru>
  * Copyright (C) 2002,2003 Joseph Wenninger <jowenn@kde.org>
  * Copyright (C) 2005 Dominik Haumann <dhdev@gmx.de> 
@@ -28,16 +28,17 @@ class QPaintEvent;
 
 
 /**
- * K3bMiniButton is a minimalistic button mainly used
+ * MiniButton is a minimalistic button mainly used
  * to show a pixmap.
  */
-class K3bMiniButton : public QPushButton
+namespace K3b {
+class MiniButton : public QPushButton
 {
     Q_OBJECT
 
 public:
-    K3bMiniButton( QWidget* parent = 0 );
-    virtual ~K3bMiniButton();
+    MiniButton( QWidget* parent = 0 );
+    virtual ~MiniButton();
 
 protected:
     virtual void paintEvent( QPaintEvent* );
@@ -48,5 +49,6 @@ protected:
 private:
     bool m_mouseOver;
 };
+}
 
 #endif

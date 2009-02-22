@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
  *
@@ -19,33 +19,37 @@
 
 #include <k3b_export.h>
 
-class K3bJob;
+namespace K3b {
+    class Job;
+}
 
-class K3bSignalWaiter : public QObject
-{
-  Q_OBJECT
+namespace K3b {
+    class SignalWaiter : public QObject
+    {
+        Q_OBJECT
 
- public:
-  /**
-   * Use this to syncroneously wait for a signal.
-   */
-  LIBK3B_EXPORT static void waitForSignal( QObject* o, const char* signal );
+    public:
+        /**
+         * Use this to syncroneously wait for a signal.
+         */
+        LIBK3B_EXPORT static void waitForSignal( QObject* o, const char* signal );
 
-  /**
-   * Use this to syncroneously wait for a job to finish.
-   * If the job is not running at all this returns immedeately.
-   */
-  LIBK3B_EXPORT static void waitForJob( K3bJob* job );
+        /**
+         * Use this to syncroneously wait for a job to finish.
+         * If the job is not running at all this returns immedeately.
+         */
+        LIBK3B_EXPORT static void waitForJob( Job* job );
 
- private Q_SLOTS:
-  void slotSignal();
+    private Q_SLOTS:
+        void slotSignal();
 
- private:
-  K3bSignalWaiter();
-  ~K3bSignalWaiter();
+    private:
+        SignalWaiter();
+        ~SignalWaiter();
 
-  class Private;
-  Private* const d;
-};
+        class Private;
+        Private* const d;
+    };
+}
 
 #endif

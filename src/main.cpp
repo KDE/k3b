@@ -135,7 +135,7 @@ int main( int argc, char* argv[] )
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
-    if( K3bApplication::start() ) {
+    if( K3b::Application::start() ) {
         KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
         if( args->isSet("lang") ) {
             QStringList lst;
@@ -144,7 +144,7 @@ int main( int argc, char* argv[] )
                 kDebug() << "Unable to set to language " << args->getOption("lang")
                          << " current is: " << KGlobal::locale()->language() << endl;
         }
-        K3bApplication app;
+        K3b::Application app;
 
         // we need a running app for the init method
         QTimer::singleShot( 0, &app, SLOT(init()) );

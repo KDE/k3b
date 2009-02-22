@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -18,13 +18,15 @@
 #include "ui_base_k3bpluginoptiontab.h"
 
 
-class K3bPluginOptionTab : public QWidget, public Ui::base_K3bPluginOptionTab
-{
-    Q_OBJECT
+namespace K3b {
+    class PluginOptionTab : public QWidget, public Ui::base_K3bPluginOptionTab
+    {
+        Q_OBJECT
 
-public:
-    K3bPluginOptionTab( QWidget* parent = 0 );
-    ~K3bPluginOptionTab();
-};
+    public:
+        PluginOptionTab( QWidget* parent = 0 );
+        ~PluginOptionTab();
+    };
+}
 
 #endif

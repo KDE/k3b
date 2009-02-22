@@ -24,29 +24,29 @@
 #include <qapplication.h>
 
 
-K3bMsfValidator::K3bMsfValidator( QObject* parent )
+K3b::MsfValidator::MsfValidator( QObject* parent )
     : QRegExpValidator( K3b::Msf::regExp(), parent )
 {
 }
 
 
-class K3bMsfEdit::Private
+class K3b::MsfEdit::Private
 {
 public:
     void _k_valueChanged( int );
     int currentStepValue() const;
 
-    K3bMsfEdit* q;
+    K3b::MsfEdit* q;
 };
 
 
-void K3bMsfEdit::Private::_k_valueChanged( int val )
+void K3b::MsfEdit::Private::_k_valueChanged( int val )
 {
     emit q->valueChanged( K3b::Msf( val ) );
 }
 
 
-int K3bMsfEdit::Private::currentStepValue() const
+int K3b::MsfEdit::Private::currentStepValue() const
 {
     int val = 1;
 
@@ -65,7 +65,7 @@ int K3bMsfEdit::Private::currentStepValue() const
 }
 
 
-K3bMsfEdit::K3bMsfEdit( QWidget* parent )
+K3b::MsfEdit::MsfEdit( QWidget* parent )
     : QSpinBox( parent ),
       d( new Private() )
 {
@@ -79,37 +79,37 @@ K3bMsfEdit::K3bMsfEdit( QWidget* parent )
 }
 
 
-K3bMsfEdit::~K3bMsfEdit()
+K3b::MsfEdit::~MsfEdit()
 {
     delete d;
 }
 
 
-void K3bMsfEdit::stepBy( int steps )
+void K3b::MsfEdit::stepBy( int steps )
 {
     QSpinBox::stepBy( steps * d->currentStepValue() );
 }
 
 
-K3b::Msf K3bMsfEdit::msfValue() const
+K3b::Msf K3b::MsfEdit::msfValue() const
 {
     return value();
 }
 
 
-void K3bMsfEdit::setMsfValue( const K3b::Msf& msf )
+void K3b::MsfEdit::setMsfValue( const K3b::Msf& msf )
 {
     setValue( msf.totalFrames() );
 }
 
 
-QString K3bMsfEdit::textFromValue( int value ) const
+QString K3b::MsfEdit::textFromValue( int value ) const
 {
     return K3b::Msf( value ).toString();
 }
 
 
-int K3bMsfEdit::valueFromText( const QString& text ) const
+int K3b::MsfEdit::valueFromText( const QString& text ) const
 {
     return K3b::Msf::fromString( text ).lba();
 }

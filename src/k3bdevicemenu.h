@@ -17,7 +17,7 @@
 
 #include <KMenu>
 
-namespace K3bDevice {
+namespace Device {
     class Device;
 }
 

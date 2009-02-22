@@ -23,18 +23,23 @@
 #include <QLabel>
 
 class QLabel;
-class K3bMainWindow;
+namespace K3b {
+    class MainWindow;
+}
 class QEvent;
-class K3bDoc;
+namespace K3b {
+    class Doc;
+}
 class QTimer;
 
-class K3bStatusBarManager : public QObject
+namespace K3b {
+class StatusBarManager : public QObject
 {
   Q_OBJECT
 
  public:
-  K3bStatusBarManager( K3bMainWindow* parent );
-  ~K3bStatusBarManager();
+  StatusBarManager( MainWindow* parent );
+  ~StatusBarManager();
 
  public Q_SLOTS:
   void update();
@@ -43,7 +48,7 @@ class K3bStatusBarManager : public QObject
   void slotFreeTempSpace( const QString&, unsigned long, unsigned long, unsigned long );
   void showActionStatusText( const QString& text );
   void clearActionStatusText();
-  void slotActiveProjectChanged( K3bDoc* doc );
+  void slotActiveProjectChanged( Doc* doc );
   void slotUpdateProjectStats();
 
  private:
@@ -55,9 +60,10 @@ class K3bStatusBarManager : public QObject
   QLabel* m_versionBox;
   QLabel* m_labelProjectInfo;
 
-  K3bMainWindow* m_mainWindow;
+  MainWindow* m_mainWindow;
 
   QTimer* m_updateTimer;
 };
+}
 
 #endif

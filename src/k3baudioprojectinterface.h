@@ -18,15 +18,18 @@
 
 #include "k3bprojectinterface.h"
 
-class K3bAudioDoc;
+namespace K3b {
+    class AudioDoc;
+}
 
 
-class K3bAudioProjectInterface : public K3bProjectInterface
+namespace K3b {
+class AudioProjectInterface : public ProjectInterface
 {
   K_DCOP
 
  public:
-  K3bAudioProjectInterface( K3bAudioDoc* );
+  AudioProjectInterface( AudioDoc* );
 
  k_dcop:
   int trackCount() const;
@@ -56,7 +59,8 @@ class K3bAudioProjectInterface : public K3bProjectInterface
   void setTrackArtist( int trackNum, const QString& artist );
 
  private:
-  K3bAudioDoc* m_audioDoc;
+  AudioDoc* m_audioDoc;
 };
+}
 
 #endif

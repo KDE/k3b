@@ -19,7 +19,7 @@
 
 #include <k3baudioencoder.h>
 
-class K3bOggVorbisEncoder : public K3bAudioEncoder
+class K3bOggVorbisEncoder : public K3b::AudioEncoder
 {
     Q_OBJECT
 

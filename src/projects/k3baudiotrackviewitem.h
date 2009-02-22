@@ -17,24 +17,29 @@
 
 #include <k3blistview.h>
 
-class K3bAudioTrackView;
-class K3bAudioTrack;
+namespace K3b {
+    class AudioTrackView;
+}
+namespace K3b {
+    class AudioTrack;
+}
 
 
-class K3bAudioTrackViewItem : public K3bListViewItem
+namespace K3b {
+class AudioTrackViewItem : public ListViewItem
 {
  public:
-  K3bAudioTrackViewItem( K3bAudioTrackView* parent, 
-			 K3bAudioTrackViewItem* after, 
-			 K3bAudioTrack* track );
-  ~K3bAudioTrackViewItem();
+  AudioTrackViewItem( AudioTrackView* parent, 
+			 AudioTrackViewItem* after, 
+			 AudioTrack* track );
+  ~AudioTrackViewItem();
 
   /**
    * If one of the sources still have length 0 we animate.
    */
   bool animate();
 
-  K3bAudioTrack* track() const { return m_track; }
+  AudioTrack* track() const { return m_track; }
 
   void updateSourceItems();
   bool showingSources() const { return m_showingSources; }
@@ -55,11 +60,12 @@ class K3bAudioTrackViewItem : public K3bListViewItem
   void paintCell( QPainter* p, const QColorGroup& cg, int col, int width, int align );
 
  private:
-  K3bAudioTrack* m_track;
+  AudioTrack* m_track;
   bool m_alreadyRemoved;
   bool m_showingSources;
 
   int m_animationCounter;
 };
+}
 
 #endif

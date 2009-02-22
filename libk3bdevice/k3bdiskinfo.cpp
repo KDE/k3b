@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,91 +25,91 @@
 #include <qstringlist.h>
 
 
-K3bDevice::DiskInfo::DiskInfo()
+K3b::Device::DiskInfo::DiskInfo()
     : d( new DiskInfoPrivate() )
 {
 }
 
 
-K3bDevice::DiskInfo::DiskInfo( const DiskInfo& other )
+K3b::Device::DiskInfo::DiskInfo( const DiskInfo& other )
 {
     d = other.d;
 }
 
 
-K3bDevice::DiskInfo::~DiskInfo()
+K3b::Device::DiskInfo::~DiskInfo()
 {
 }
 
 
-K3bDevice::DiskInfo& K3bDevice::DiskInfo::operator=( const DiskInfo& other )
+K3b::Device::DiskInfo& K3b::Device::DiskInfo::operator=( const DiskInfo& other )
 {
     d = other.d;
     return *this;
 }
 
 
-int K3bDevice::DiskInfo::diskState() const
+K3b::Device::MediaState K3b::Device::DiskInfo::diskState() const
 {
     return d->diskState;
 }
 
 
-int K3bDevice::DiskInfo::lastSessionState() const
+K3b::Device::MediaState K3b::Device::DiskInfo::lastSessionState() const
 {
     return d->lastSessionState;
 }
 
 
-int K3bDevice::DiskInfo::bgFormatState() const
+K3b::Device::BackGroundFormattingState K3b::Device::DiskInfo::bgFormatState() const
 {
     return d->bgFormatState;
 }
 
 
-bool K3bDevice::DiskInfo::empty() const
+bool K3b::Device::DiskInfo::empty() const
 {
     return diskState() == STATE_EMPTY;
 }
 
 
-bool K3bDevice::DiskInfo::rewritable() const
+bool K3b::Device::DiskInfo::rewritable() const
 {
     return d->rewritable;
 }
 
 
-bool K3bDevice::DiskInfo::appendable() const
+bool K3b::Device::DiskInfo::appendable() const
 {
     return diskState() == STATE_INCOMPLETE;
 }
 
 
-int K3bDevice::DiskInfo::mediaType() const
+K3b::Device::MediaType K3b::Device::DiskInfo::mediaType() const
 {
     return d->mediaType;
 }
 
 
-bool K3bDevice::DiskInfo::isDvdMedia() const
+bool K3b::Device::DiskInfo::isDvdMedia() const
 {
-    return K3bDevice::isDvdMedia( mediaType() );
+    return K3b::Device::isDvdMedia( mediaType() );
 }
 
 
-int K3bDevice::DiskInfo::currentProfile() const
+int K3b::Device::DiskInfo::currentProfile() const
 {
     return d->currentProfile;
 }
 
 
-QByteArray K3bDevice::DiskInfo::mediaId() const
+QByteArray K3b::Device::DiskInfo::mediaId() const
 {
     return d->mediaId;
 }
 
 
-int K3bDevice::DiskInfo::numSessions() const
+int K3b::Device::DiskInfo::numSessions() const
 {
     if( empty() )
         return 0;
@@ -118,7 +118,7 @@ int K3bDevice::DiskInfo::numSessions() const
 }
 
 
-int K3bDevice::DiskInfo::numTracks() const
+int K3b::Device::DiskInfo::numTracks() const
 {
     if( empty() )
         return 0;
@@ -127,7 +127,7 @@ int K3bDevice::DiskInfo::numTracks() const
 }
 
 
-int K3bDevice::DiskInfo::numLayers() const
+int K3b::Device::DiskInfo::numLayers() const
 {
     if( isDvdMedia() )
         return d->numLayers;
@@ -136,7 +136,7 @@ int K3bDevice::DiskInfo::numLayers() const
 }
 
 
-K3b::Msf K3bDevice::DiskInfo::remainingSize() const
+K3b::Msf K3b::Device::DiskInfo::remainingSize() const
 {
     if( empty() )
         return capacity();
@@ -154,13 +154,13 @@ K3b::Msf K3bDevice::DiskInfo::remainingSize() const
 }
 
 
-K3b::Msf K3bDevice::DiskInfo::capacity() const
+K3b::Msf K3b::Device::DiskInfo::capacity() const
 {
     return (d->capacity == 0 ? size() : d->capacity);
 }
 
 
-K3b::Msf K3bDevice::DiskInfo::size() const
+K3b::Msf K3b::Device::DiskInfo::size() const
 {
     if( empty() )
         return 0;
@@ -169,7 +169,7 @@ K3b::Msf K3bDevice::DiskInfo::size() const
 }
 
 
-K3b::Msf K3bDevice::DiskInfo::firstLayerSize() const
+K3b::Msf K3b::Device::DiskInfo::firstLayerSize() const
 {
     if( numLayers() > 1 )
         return d->firstLayerSize;
@@ -178,18 +178,18 @@ K3b::Msf K3bDevice::DiskInfo::firstLayerSize() const
 }
 
 
-void K3bDevice::DiskInfo::debug() const
+void K3b::Device::DiskInfo::debug() const
 {
     kDebug() << "DiskInfo:" << endl
-             << "Mediatype:       " << K3bDevice::mediaTypeString( mediaType() ) << endl
-             << "Current Profile: " << K3bDevice::mediaTypeString( currentProfile() ) << endl
-             << "Disk state:      " << ( diskState() == K3bDevice::STATE_EMPTY ?
+             << "Mediatype:       " << K3b::Device::mediaTypeString( mediaType() ) << endl
+             << "Current Profile: " << K3b::Device::mediaTypeString( currentProfile() ) << endl
+             << "Disk state:      " << ( diskState() == K3b::Device::STATE_EMPTY ?
                                          "empty" :
-                                         ( diskState() == K3bDevice::STATE_INCOMPLETE ?
+                                         ( diskState() == K3b::Device::STATE_INCOMPLETE ?
                                            "incomplete" :
-                                           ( diskState() == K3bDevice::STATE_COMPLETE ?
+                                           ( diskState() == K3b::Device::STATE_COMPLETE ?
                                              "complete" :
-                                             ( diskState() == K3bDevice::STATE_NO_MEDIA ?
+                                             ( diskState() == K3b::Device::STATE_NO_MEDIA ?
                                                "no media" :
                                                "unknown" ) ) ) ) << endl
              << "Empty:           " << empty() << endl
@@ -210,7 +210,7 @@ void K3bDevice::DiskInfo::debug() const
              << " (LBA " << size().lba()
              << ") (" << size().mode1Bytes() << " Bytes)" << endl;
 
-    if( mediaType() == K3bDevice::MEDIA_DVD_PLUS_RW )
+    if( mediaType() == K3b::Device::MEDIA_DVD_PLUS_RW )
         kDebug() << "Bg Format:       " << ( bgFormatState() == BG_FORMAT_NONE ?
                                              "none" :
                                              ( bgFormatState() == BG_FORMAT_INCOMPLETE ?
@@ -222,7 +222,7 @@ void K3bDevice::DiskInfo::debug() const
 }
 
 
-bool K3bDevice::DiskInfo::operator==( const K3bDevice::DiskInfo& other ) const
+bool K3b::Device::DiskInfo::operator==( const K3b::Device::DiskInfo& other ) const
 {
     return( d->mediaType == other.d->mediaType &&
             d->currentProfile == other.d->currentProfile &&
@@ -240,7 +240,7 @@ bool K3bDevice::DiskInfo::operator==( const K3bDevice::DiskInfo& other ) const
 }
 
 
-bool K3bDevice::DiskInfo::operator!=( const K3bDevice::DiskInfo& other ) const
+bool K3b::Device::DiskInfo::operator!=( const K3b::Device::DiskInfo& other ) const
 {
     return( d->mediaType != other.d->mediaType ||
             d->currentProfile != other.d->currentProfile ||
@@ -258,18 +258,18 @@ bool K3bDevice::DiskInfo::operator!=( const K3bDevice::DiskInfo& other ) const
 }
 
 
-// kdbgstream& K3bDevice::operator<<( kdbgstream& s, const K3bDevice::DiskInfo& ngInf )
+// kdbgstream& K3b::Device::operator<<( kdbgstream& s, const K3b::Device::DiskInfo& ngInf )
 // {
 //    s << "DiskInfo:" << endl
-//      << "Mediatype:       " << K3bDevice::mediaTypeString( ngInf.mediaType() ) << endl
-//      << "Current Profile: " << K3bDevice::mediaTypeString( ngInf.currentProfile() ) << endl
-//      << "Disk state:      " << ( ngInf.diskState() == K3bDevice::STATE_EMPTY ?
+//      << "Mediatype:       " << K3b::Device::mediaTypeString( ngInf.mediaType() ) << endl
+//      << "Current Profile: " << K3b::Device::mediaTypeString( ngInf.currentProfile() ) << endl
+//      << "Disk state:      " << ( ngInf.diskState() == K3b::Device::STATE_EMPTY ?
 // 				 "empty" :
-// 				 ( ngInf.diskState() == K3bDevice::STATE_INCOMPLETE ?
+// 				 ( ngInf.diskState() == K3b::Device::STATE_INCOMPLETE ?
 // 				   "incomplete" :
-// 				   ( ngInf.diskState() == K3bDevice::STATE_COMPLETE ?
+// 				   ( ngInf.diskState() == K3b::Device::STATE_COMPLETE ?
 // 				     "complete" :
-// 				     ( ngInf.diskState() == K3bDevice::STATE_NO_MEDIA ?
+// 				     ( ngInf.diskState() == K3b::Device::STATE_NO_MEDIA ?
 // 				       "no media" :
 // 				       "unknown" ) ) ) ) << endl
 //      << "Empty:           " << ngInf.empty() << endl

@@ -29,7 +29,7 @@
 
 static const int s_maxCache = 10*1024*1024; // 10 MB max cache size
 
-class K3bDebuggingOutputCache::Private
+class K3b::DebuggingOutputCache::Private
 {
 public:
     Private()
@@ -45,48 +45,48 @@ public:
 };
 
 
-K3bDebuggingOutputCache::K3bDebuggingOutputCache()
+K3b::DebuggingOutputCache::DebuggingOutputCache()
     : d( new Private() )
 {
 }
 
 
-K3bDebuggingOutputCache::~K3bDebuggingOutputCache()
+K3b::DebuggingOutputCache::~DebuggingOutputCache()
 {
     delete d;
 }
 
 
-void K3bDebuggingOutputCache::clear()
+void K3b::DebuggingOutputCache::clear()
 {
     d->groups.clear();
     d->lastMessages.clear();
     d->lastMessageCount.clear();
     d->cacheSize = 0;
 
-    addOutput( "System", "K3b Version: " + k3bcore->version() );
-    addOutput( "System", "KDE Version: " + QString(KDE::versionString()) );
-    addOutput( "System", "QT Version:  " + QString(qVersion()) );
-    addOutput( "System", "Kernel:      " + K3b::kernelVersion() );
+    addOutput( QLatin1String( "System" ), QLatin1String( "K3b Version: " ) + k3bcore->version() );
+    addOutput( QLatin1String( "System" ), QLatin1String( "KDE Version: " ) + QString(KDE::versionString()) );
+    addOutput( QLatin1String( "System" ), QLatin1String( "QT Version:  " ) + QString(qVersion()) );
+    addOutput( QLatin1String( "System" ), QLatin1String( "Kernel:      " ) + K3b::kernelVersion() );
 
     // devices in the logfile
-    QList<K3bDevice::Device *> items(k3bcore->deviceManager()->allDevices());
-    for( QList<K3bDevice::Device *>::const_iterator it = items.constBegin();
+    QList<K3b::Device::Device *> items(k3bcore->deviceManager()->allDevices());
+    for( QList<K3b::Device::Device *>::const_iterator it = items.constBegin();
        it != items.constEnd(); ++it ) {
 
-        K3bDevice::Device* dev = *it;
+        K3b::Device::Device* dev = *it;
         addOutput( "Devices",
                    QString( "%1 (%2, %3) [%5] [%6] [%7]" )
                    .arg( dev->vendor() + " " + dev->description() + " " + dev->version() )
                    .arg( dev->blockDeviceName() )
-                   .arg( K3bDevice::deviceTypeString( dev->type() ) )
-                   .arg( K3bDevice::mediaTypeString( dev->supportedProfiles() ) )
-                   .arg( K3bDevice::writingModeString( dev->writingModes() ) ) );
+                   .arg( K3b::Device::deviceTypeString( dev->type() ) )
+                   .arg( K3b::Device::mediaTypeString( dev->supportedProfiles() ) )
+                   .arg( K3b::Device::writingModeString( dev->writingModes() ) ) );
     }
 }
 
 
-void K3bDebuggingOutputCache::addOutput( const QString& group, const QString& line )
+void K3b::DebuggingOutputCache::addOutput( const QString& group, const QString& line )
 {
     if ( d->lastMessages[group] == line ) {
         d->lastMessageCount[group]++;
@@ -111,14 +111,14 @@ void K3bDebuggingOutputCache::addOutput( const QString& group, const QString& li
 }
 
 
-K3bDebuggingOutputCache& K3bDebuggingOutputCache::operator<<( const QString& line )
+K3b::DebuggingOutputCache& K3b::DebuggingOutputCache::operator<<( const QString& line )
 {
     addOutput( defaultGroup(), line );
     return *this;
 }
 
 
-QString K3bDebuggingOutputCache::toString() const
+QString K3b::DebuggingOutputCache::toString() const
 {
     QString s;
     for ( QMap<QString, QString>::const_iterator it = d->groups.constBegin();
@@ -133,25 +133,25 @@ QString K3bDebuggingOutputCache::toString() const
 }
 
 
-QMap<QString, QString> K3bDebuggingOutputCache::toGroups() const
+QMap<QString, QString> K3b::DebuggingOutputCache::toGroups() const
 {
     return d->groups;
 }
 
 
-bool K3bDebuggingOutputCache::stderrEnabled() const
+bool K3b::DebuggingOutputCache::stderrEnabled() const
 {
     return d->stderrEnabled;
 }
 
 
-void K3bDebuggingOutputCache::enableStderr( bool b )
+void K3b::DebuggingOutputCache::enableStderr( bool b )
 {
     d->stderrEnabled = b;
 }
 
 
-QString K3bDebuggingOutputCache::defaultGroup()
+QString K3b::DebuggingOutputCache::defaultGroup()
 {
     return "Misc";
 }

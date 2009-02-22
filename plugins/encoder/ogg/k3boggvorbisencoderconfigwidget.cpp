@@ -53,7 +53,7 @@ static const int s_rough_average_quality_level_bitrates[] = {
 };
 
 K3bOggVorbisEncoderSettingsWidget::K3bOggVorbisEncoderSettingsWidget( QWidget* parent, const QVariantList& args )
-    : K3bPluginConfigWidget( parent, args )
+    : K3b::PluginConfigWidget( parent, args )
 {
     w = new base_K3bOggVorbisEncoderSettingsWidget( this );
 

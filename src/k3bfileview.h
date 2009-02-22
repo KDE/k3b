@@ -20,7 +20,9 @@
 #include "k3bcontentsview.h"
 
 
-class K3bDirOperator;
+namespace K3b {
+    class DirOperator;
+}
 class KUrl;
 class KFileFilterCombo;
 class KFileItem;
@@ -32,13 +34,14 @@ class KConfigGroup;
 /**
  *@author Sebastian Trueg
  */
-class K3bFileView : public K3bContentsView
+namespace K3b {
+class FileView : public ContentsView
 {
     Q_OBJECT
 
 public:
-    K3bFileView(QWidget *parent=0);
-    ~K3bFileView();
+    FileView(QWidget *parent=0);
+    ~FileView();
 
     void setUrl( const KUrl &url, bool forward = true );
     KUrl url();
@@ -57,7 +60,7 @@ public Q_SLOTS:
 
 private:
     KToolBar* m_toolBox;
-    K3bDirOperator* m_dirOp;
+    DirOperator* m_dirOp;
     KFileFilterCombo* m_filterWidget;
 
     void setupGUI();
@@ -66,6 +69,7 @@ private Q_SLOTS:
     void slotFilterChanged();
     void slotFileHighlighted( const KFileItem & );
 };
+}
 
 
 #endif

@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,71 +25,73 @@
 class QResizeEvent;
 
 
-/**
- * Cuts it's text.
- * Since it rebuilds the complete list of strings every time
- * a new string is added or one gets removed it is not a good
- * idea to use this for dynamic lists.
- *
- * Be aware that currently only insertItem works.
- * none of the insertStrList or insertStringList methods are implemeted
- * yet and also the removeItem methos does not work.
- */ 
-class LIBK3B_EXPORT K3bCutComboBox : public KComboBox
-{
-  Q_OBJECT
+namespace K3b {
+    /**
+     * Cuts it's text.
+     * Since it rebuilds the complete list of strings every time
+     * a new string is added or one gets removed it is not a good
+     * idea to use this for dynamic lists.
+     *
+     * Be aware that currently only insertItem works.
+     * none of the insertStrList or insertStringList methods are implemeted
+     * yet and also the removeItem methos does not work.
+     */
+    class LIBK3B_EXPORT CutComboBox : public KComboBox
+    {
+        Q_OBJECT
 
- public:
-  K3bCutComboBox( QWidget* parent = 0 );
-  K3bCutComboBox( int method, QWidget* parent = 0 );
-  virtual ~K3bCutComboBox();
+    public:
+        CutComboBox( QWidget* parent = 0 );
+        CutComboBox( int method, QWidget* parent = 0 );
+        virtual ~CutComboBox();
 
-  enum Method {
-    CUT,
-    SQUEEZE
-  };
+        enum Method {
+            CUT,
+            SQUEEZE
+        };
 
-  /**
-   * The method to shorten the text
-   * defaut: CUT
-   */
-  void setMethod( int );
+        /**
+         * The method to shorten the text
+         * defaut: CUT
+         */
+        void setMethod( int );
 
-  /** reimplemeted */
-  QSize sizeHint() const;
+        /** reimplemeted */
+        QSize sizeHint() const;
 
-  /** reimplemeted */
-  QSize minimumSizeHint() const;
+        /** reimplemeted */
+        QSize minimumSizeHint() const;
 
-  /** reimplemeted */
-  virtual void setCurrentText( const QString& );
+        /** reimplemeted */
+        virtual void setCurrentText( const QString& );
 
-  void	insertStringList( const QStringList &, int index=-1 );
-  void	insertStrList( const Q3StrList &, int index=-1 );
-  void	insertStrList( const Q3StrList *, int index=-1 );
-  void	insertStrList( const char **, int numStrings=-1, int index=-1);
+        void	insertStringList( const QStringList &, int index=-1 );
+        void	insertStrList( const Q3StrList &, int index=-1 );
+        void	insertStrList( const Q3StrList *, int index=-1 );
+        void	insertStrList( const char **, int numStrings=-1, int index=-1);
 
-  void	insertItem( const QString &text, int index=-1 );
-  void	insertItem( const QPixmap &pixmap, int index=-1 );
-  void	insertItem( const QPixmap &pixmap, const QString &text, int index=-1 );
+        void	insertItem( const QString &text, int index=-1 );
+        void	insertItem( const QPixmap &pixmap, int index=-1 );
+        void	insertItem( const QPixmap &pixmap, const QString &text, int index=-1 );
 
-  void	removeItem( int index );
+        void	removeItem( int index );
 
-  void	changeItem( const QString &text, int index );
-  void	changeItem( const QPixmap &pixmap, const QString &text, int index );
+        void	changeItem( const QString &text, int index );
+        void	changeItem( const QPixmap &pixmap, const QString &text, int index );
 
-  QString text( int ) const;
-  QString currentText() const;
+        QString text( int ) const;
+        QString currentText() const;
 
-  void clear();
+        void clear();
 
- protected:
-  void resizeEvent( QResizeEvent* e );
-  void cutText();
+    protected:
+        void resizeEvent( QResizeEvent* e );
+        void cutText();
 
- private:
-  class Private;
-  Private* d;
-};
+    private:
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

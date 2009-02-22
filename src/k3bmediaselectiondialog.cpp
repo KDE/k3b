@@ -25,7 +25,7 @@
 #include <QGridLayout>
 
 
-K3bMediaSelectionDialog::K3bMediaSelectionDialog( QWidget* parent, 
+K3b::MediaSelectionDialog::MediaSelectionDialog( QWidget* parent, 
 						  const QString& title, 
 						  const QString& text, 
 						  bool modal )
@@ -40,7 +40,7 @@ K3bMediaSelectionDialog::K3bMediaSelectionDialog( QWidget* parent,
   QGridLayout* lay = new QGridLayout( widget );
 
   QLabel* label = new QLabel( text.isEmpty() ? i18n("Please select a medium:") : text, widget );
-  m_combo = new K3bMediaSelectionComboBox( widget );
+  m_combo = new K3b::MediaSelectionComboBox( widget );
 
   //  lay->setMargin( marginHint() );
   lay->setSpacing( spacingHint() );
@@ -48,54 +48,54 @@ K3bMediaSelectionDialog::K3bMediaSelectionDialog( QWidget* parent,
   lay->addWidget( m_combo, 1, 0 );
   lay->setRowStretch( 2, 1 );
 
-  connect( m_combo, SIGNAL(selectionChanged(K3bDevice::Device*)),
-	   this, SLOT(slotSelectionChanged(K3bDevice::Device*)) );
+  connect( m_combo, SIGNAL(selectionChanged(K3b::Device::Device*)),
+	   this, SLOT(slotSelectionChanged(K3b::Device::Device*)) );
 
   slotSelectionChanged( m_combo->selectedDevice() );
 }
 
 
-K3bMediaSelectionDialog::~K3bMediaSelectionDialog()
+K3b::MediaSelectionDialog::~MediaSelectionDialog()
 {
 }
 
 
-void K3bMediaSelectionDialog::setWantedMediumType( int type )
+void K3b::MediaSelectionDialog::setWantedMediumType( int type )
 {
   m_combo->setWantedMediumType( type );
 }
 
 
-void K3bMediaSelectionDialog::setWantedMediumState( int state )
+void K3b::MediaSelectionDialog::setWantedMediumState( int state )
 {
   m_combo->setWantedMediumState( state );
 }
 
 
-void K3bMediaSelectionDialog::setWantedMediumContent( int content )
+void K3b::MediaSelectionDialog::setWantedMediumContent( int content )
 {
   m_combo->setWantedMediumContent( content );
 }
 
 
-K3bDevice::Device* K3bMediaSelectionDialog::selectedDevice() const
+K3b::Device::Device* K3b::MediaSelectionDialog::selectedDevice() const
 {
   return m_combo->selectedDevice();
 }
 
 
-void K3bMediaSelectionDialog::slotSelectionChanged( K3bDevice::Device* dev )
+void K3b::MediaSelectionDialog::slotSelectionChanged( K3b::Device::Device* dev )
 {
   enableButtonOk( dev != 0 );
 }
 
 
-K3bDevice::Device* K3bMediaSelectionDialog::selectMedium( int type, int state, int content,
+K3b::Device::Device* K3b::MediaSelectionDialog::selectMedium( int type, int state, int content,
 							  QWidget* parent, 
 							  const QString& title, const QString& text,
 							  bool* canceled )
 {
-  K3bMediaSelectionDialog dlg( parent, title, text );
+  K3b::MediaSelectionDialog dlg( parent, title, text );
   dlg.setWantedMediumType( type );
   dlg.setWantedMediumState( state );
   dlg.setWantedMediumContent( content );
@@ -117,12 +117,12 @@ K3bDevice::Device* K3bMediaSelectionDialog::selectMedium( int type, int state, i
 }
 
 
-K3bDevice::Device* K3bMediaSelectionDialog::selectMedium( int type, int state, 
+K3b::Device::Device* K3b::MediaSelectionDialog::selectMedium( int type, int state, 
 							  QWidget* parent, 
 							  const QString& title, const QString& text,
 							  bool* canceled )
 {
-  return selectMedium( type, state, K3bMedium::CONTENT_ALL, parent, title, text, canceled );
+  return selectMedium( type, state, K3b::Medium::CONTENT_ALL, parent, title, text, canceled );
 }
 
 #include "k3bmediaselectiondialog.moc"

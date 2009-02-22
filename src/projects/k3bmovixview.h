@@ -20,7 +20,9 @@
 
 #include <k3bstandardview.h>
 
-class K3bMovixDoc;
+namespace K3b {
+    class MovixDoc;
+}
 class KAction;
 class KMenu;
 class Q3ListViewItem;
@@ -31,13 +33,14 @@ namespace K3b {
     class MovixProjectModel;
 }
 
-class K3bMovixView : public K3bStandardView
+namespace K3b {
+class MovixView : public StandardView
 {
     Q_OBJECT
 
 public:
-    K3bMovixView( K3bMovixDoc* doc, QWidget* parent = 0 );
-    virtual ~K3bMovixView();
+    MovixView( MovixDoc* doc, QWidget* parent = 0 );
+    virtual ~MovixView();
 
 private Q_SLOTS:
     void slotContextMenuRequested(Q3ListViewItem*, const QPoint& , int );
@@ -47,10 +50,10 @@ private Q_SLOTS:
     void slotDocChanged();
 
 protected:
-    virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
+    virtual ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
 
 private:
-    K3bMovixDoc* m_doc;
+    MovixDoc* m_doc;
     K3b::MovixProjectModel *m_model;
 
     KAction* m_actionProperties;
@@ -61,5 +64,6 @@ private:
 
     QLineEdit* m_volumeIDEdit;
 };
+}
 
 #endif

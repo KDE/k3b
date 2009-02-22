@@ -24,8 +24,12 @@
 
 #include <KUrl>
 
-class K3bFlatButton;
-class K3bMainWindow;
+namespace K3b {
+    class FlatButton;
+}
+namespace K3b {
+    class MainWindow;
+}
 class KConfigGroup;
 class QDragEnterEvent;
 class QDropEvent;
@@ -36,13 +40,14 @@ class QShowEvent;
 class QTextDocument;
 
 
-class K3bWelcomeWidget : public QScrollArea
+namespace K3b {
+class WelcomeWidget : public QScrollArea
 {
     Q_OBJECT
 
 public:
-    K3bWelcomeWidget( K3bMainWindow*, QWidget* parent = 0 );
-    ~K3bWelcomeWidget();
+    WelcomeWidget( MainWindow*, QWidget* parent = 0 );
+    ~WelcomeWidget();
 
     void loadConfig( const KConfigGroup& c );
     void saveConfig( KConfigGroup c );
@@ -60,17 +65,19 @@ protected:
 private:
     void fixSize();
 
-    K3bMainWindow* m_mainWindow;
+    MainWindow* m_mainWindow;
     Display* main;
 };
+}
 
 
-class K3bWelcomeWidget::Display : public QWidget
+namespace K3b {
+class WelcomeWidget::Display : public QWidget
 {
     Q_OBJECT
 
 public:
-    Display( K3bWelcomeWidget* parent );
+    Display( WelcomeWidget* parent );
     ~Display();
 
     QSize minimumSizeHint() const;
@@ -79,7 +86,7 @@ public:
 
     void addAction( QAction* );
     void removeAction( QAction* );
-    void removeButton( K3bFlatButton* );
+    void removeButton( FlatButton* );
     void rebuildGui();
     void rebuildGui( const QList<QAction*>& );
 
@@ -107,17 +114,18 @@ private:
     int m_rows;
 
     QList<QAction*> m_actions;
-    QList<K3bFlatButton*> m_buttons;
-    QMap<K3bFlatButton*, QAction*> m_buttonMap;
+    QList<FlatButton*> m_buttons;
+    QMap<FlatButton*, QAction*> m_buttonMap;
 
-    K3bFlatButton* m_buttonMore;
+    FlatButton* m_buttonMore;
 
     bool m_infoTextVisible;
 
     QPixmap m_bgPixmap;
     QImage m_bgImage;
 
-    friend class K3bWelcomeWidget;
+    friend class K3b::WelcomeWidget;
 };
+}
 
 #endif

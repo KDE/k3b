@@ -20,55 +20,55 @@
 #include <KLocale>
 
 
-class K3bMusicBrainzTrackLookupJob::Private
+class K3b::MusicBrainzTrackLookupJob::Private
 {
 public:
-    K3bAudioTrack* track;
-    K3bTRM trm;
-    K3bMusicBrainz mb;
+    K3b::AudioTrack* track;
+    K3b::TRM trm;
+    K3b::MusicBrainz mb;
     int results;
 };
 
 
-K3bMusicBrainzTrackLookupJob::K3bMusicBrainzTrackLookupJob( K3bJobHandler* hdl, QObject* parent )
-    : K3bThreadJob( hdl, parent ),
+K3b::MusicBrainzTrackLookupJob::MusicBrainzTrackLookupJob( K3b::JobHandler* hdl, QObject* parent )
+    : K3b::ThreadJob( hdl, parent ),
       d( new Private() )
 {
     d->track = 0;
 }
 
 
-K3bMusicBrainzTrackLookupJob::~K3bMusicBrainzTrackLookupJob()
+K3b::MusicBrainzTrackLookupJob::~MusicBrainzTrackLookupJob()
 {
     delete d;
 }
 
 
-void K3bMusicBrainzTrackLookupJob::setAudioTrack( K3bAudioTrack* track )
+void K3b::MusicBrainzTrackLookupJob::setAudioTrack( K3b::AudioTrack* track )
 {
     d->track = track;
 }
 
 
-int K3bMusicBrainzTrackLookupJob::results()
+int K3b::MusicBrainzTrackLookupJob::results()
 {
     return d->results;
 }
 
 
-QString K3bMusicBrainzTrackLookupJob::title( int i ) const
+QString K3b::MusicBrainzTrackLookupJob::title( int i ) const
 {
     return d->mb.title( i );
 }
 
 
-QString K3bMusicBrainzTrackLookupJob::artist( int i ) const
+QString K3b::MusicBrainzTrackLookupJob::artist( int i ) const
 {
     return d->mb.artist( i );
 }
 
 
-bool K3bMusicBrainzTrackLookupJob::run()
+bool K3b::MusicBrainzTrackLookupJob::run()
 {
     if ( !d->track ) {
         emit infoMessage( "Internal error: no track set. This is a bug!", ERROR );

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -28,231 +28,233 @@
 #include "k3b_export.h"
 #include <kurl.h>
 
-class K3bAudioTrack;
 class QDomElement;
-class K3bAudioDataSource;
-class K3bAudioDecoder;
-class K3bAudioFile;
 
-/**Document class for an audio project. 
- *@author Sebastian Trueg
- */
-
-class LIBK3B_EXPORT K3bAudioDoc : public K3bDoc  
-{
-    Q_OBJECT
-
-    friend class K3bMixedDoc;
-    friend class K3bAudioTrack;
-    friend class K3bAudioFile;
-	
-public:
-    K3bAudioDoc( QObject* );
-    ~K3bAudioDoc();
-
-    QString name() const;
-	
-    bool newDocument();
-
-    void clear();
-
-    int supportedMediaTypes() const;
-
-    bool hideFirstTrack() const { return m_hideFirstTrack; }
-    int numOfTracks() const;
-
-    bool normalize() const { return m_normalize; }
-
-    K3bAudioTrack* firstTrack() const;
-    K3bAudioTrack* lastTrack() const;
+namespace K3b {
+    class AudioTrack;
+    class AudioDataSource;
+    class AudioDecoder;
+    class AudioFile;
 
     /**
-     * Slow.
-     * \return the K3bAudioTrack with track number trackNum (starting at 1) or 0 if trackNum > numOfTracks()
+     * Document class for an audio project.
+     * @author Sebastian Trueg
      */
-    K3bAudioTrack* getTrack( int trackNum );
+    class LIBK3B_EXPORT AudioDoc : public Doc
+    {
+        Q_OBJECT
 
-    /**
-     * Creates a new audiofile inside this doc which has no track yet.
-     */
-    K3bAudioFile* createAudioFile( const KUrl& url );
+        friend class MixedDoc;
+        friend class AudioTrack;
+        friend class AudioFile;
 
-    /** get the current size of the project */
-    KIO::filesize_t size() const;
-    K3b::Msf length() const;
-	
-    // CD-Text
-    bool cdText() const { return m_cdText; }
-    QString title() const { return m_cdTextData.title(); }
-    QString artist() const { return m_cdTextData.performer(); }
-    QString disc_id() const { return m_cdTextData.discId(); }
-    QString arranger() const { return m_cdTextData.arranger(); }
-    QString songwriter() const { return m_cdTextData.songwriter(); }
-    QString composer() const { return m_cdTextData.composer(); }
-    QString upc_ean() const { return m_cdTextData.upcEan(); }
-    QString cdTextMessage() const { return m_cdTextData.message(); }
+    public:
+        AudioDoc( QObject* );
+        ~AudioDoc();
 
-    /**
-     * Create complete CD-Text including the tracks' data.
-     */
-    K3bDevice::CdText cdTextData() const;
+        QString name() const;
 
-    int audioRippingParanoiaMode() const { return m_audioRippingParanoiaMode; }
-    int audioRippingRetries() const { return m_audioRippingRetries; }
-    bool audioRippingIgnoreReadErrors() const { return m_audioRippingIgnoreReadErrors; }
+        bool newDocument();
 
-    /**
-     * Represent the structure of the doc as CD Table of Contents.
-     */
-    K3bDevice::Toc toToc() const;
+        void clear();
 
-    K3bBurnJob* newBurnJob( K3bJobHandler*, QObject* parent = 0 );
+        int supportedMediaTypes() const;
 
-    /**
-     * Shows dialogs.
-     */
-    void informAboutNotFoundFiles();
-  
-    /**
-     * returns the new after track, ie. the the last added track or null if
-     * the import failed.
-     *
-     * This is a blocking method.
-     *
-     * \param cuefile The Cuefile to be imported
-     * \param after   The track after which the new tracks should be inserted
-     * \param decoder The decoder to be used for the new tracks. If 0 a new one will be created.
-     *
-     * BE AWARE THAT THE DECODER HAS TO FIT THE AUDIO FILE IN THE CUE.
-     */
-    K3bAudioTrack* importCueFile( const QString& cuefile, K3bAudioTrack* after, K3bAudioDecoder* decoder = 0 );
+        bool hideFirstTrack() const { return m_hideFirstTrack; }
+        int numOfTracks() const;
 
-    /**
-     * Create a decoder for a specific url. If another AudioFileSource with this
-     * url is already part of this project the associated decoder is returned.
-     *
-     * In the first case the decoder will not be initialized yet (K3bAudioDecoder::analyseFile
-     * is not called yet).
-     *
-     * \param url The url for which a decoder is requested.
-     * \param reused If not null this variable is set to true if the decoder is already in
-     *               use and K3bAudioDecoder::analyseFile() does not have to be called anymore.
-     */
-    K3bAudioDecoder* getDecoderForUrl( const KUrl& url, bool* reused = 0 );
+        bool normalize() const { return m_normalize; }
 
-    static bool readPlaylistFile( const KUrl& url, KUrl::List& playlist );
+        AudioTrack* firstTrack() const;
+        AudioTrack* lastTrack() const;
 
-public Q_SLOTS:
-    void addUrls( const KUrl::List& );
-    void addTrack( const KUrl&, int );
-    void addTracks( const KUrl::List&, int );
-    /** 
-     * Adds a track without any testing 
-     *
-     * Slow because it uses getTrack.
-     */
-    void addTrack( K3bAudioTrack* track, int position = 0 );
+        /**
+         * Slow.
+         * \return the AudioTrack with track number trackNum (starting at 1) or 0 if trackNum > numOfTracks()
+         */
+        AudioTrack* getTrack( int trackNum );
 
-    void addSources( K3bAudioTrack* parent, const KUrl::List& urls, K3bAudioDataSource* sourceAfter = 0 );
+        /**
+         * Creates a new audiofile inside this doc which has no track yet.
+         */
+        AudioFile* createAudioFile( const KUrl& url );
 
-    void removeTrack( K3bAudioTrack* );
-    void moveTrack( K3bAudioTrack* track, K3bAudioTrack* after );
+        /** get the current size of the project */
+        KIO::filesize_t size() const;
+        Msf length() const;
 
-    void setHideFirstTrack( bool b ) { m_hideFirstTrack = b; }
-    void setNormalize( bool b ) { m_normalize = b; }
+        // CD-Text
+        bool cdText() const { return m_cdText; }
+        QString title() const { return m_cdTextData.title(); }
+        QString artist() const { return m_cdTextData.performer(); }
+        QString disc_id() const { return m_cdTextData.discId(); }
+        QString arranger() const { return m_cdTextData.arranger(); }
+        QString songwriter() const { return m_cdTextData.songwriter(); }
+        QString composer() const { return m_cdTextData.composer(); }
+        QString upc_ean() const { return m_cdTextData.upcEan(); }
+        QString cdTextMessage() const { return m_cdTextData.message(); }
 
-    // CD-Text
-    void writeCdText( bool b ) { m_cdText = b; }
-    void setTitle( const QString& v );
-    void setArtist( const QString& v );
-    void setPerformer( const QString& v );
-    void setDisc_id( const QString& v );
-    void setArranger( const QString& v );
-    void setSongwriter( const QString& v );
-    void setComposer( const QString& v );
-    void setUpc_ean( const QString& v );
-    void setCdTextMessage( const QString& v );
+        /**
+         * Create complete CD-Text including the tracks' data.
+         */
+        Device::CdText cdTextData() const;
 
-    // Audio-CD Ripping
-    void setAudioRippingParanoiaMode( int i ) { m_audioRippingParanoiaMode = i; }
-    void setAudioRippingRetries( int r ) { m_audioRippingRetries = r; }
-    void setAudioRippingIgnoreReadErrors( bool b ) { m_audioRippingIgnoreReadErrors = b; }
+        int audioRippingParanoiaMode() const { return m_audioRippingParanoiaMode; }
+        int audioRippingRetries() const { return m_audioRippingRetries; }
+        bool audioRippingIgnoreReadErrors() const { return m_audioRippingIgnoreReadErrors; }
 
-    void removeCorruptTracks();
+        /**
+         * Represent the structure of the doc as CD Table of Contents.
+         */
+        Device::Toc toToc() const;
 
-private Q_SLOTS:
-    void slotTrackChanged( K3bAudioTrack* );
-    void slotTrackRemoved( K3bAudioTrack* );
+        BurnJob* newBurnJob( JobHandler*, QObject* parent = 0 );
 
-Q_SIGNALS:
-    void trackChanged( K3bAudioTrack* );
-    void trackRemoved( K3bAudioTrack* );
+        /**
+         * Shows dialogs.
+         */
+        void informAboutNotFoundFiles();
 
-protected:
-    /** reimplemented from K3bDoc */
-    bool loadDocumentData( QDomElement* );
-    /** reimplemented from K3bDoc */
-    bool saveDocumentData( QDomElement* );
+        /**
+         * returns the new after track, ie. the the last added track or null if
+         * the import failed.
+         *
+         * This is a blocking method.
+         *
+         * \param cuefile The Cuefile to be imported
+         * \param after   The track after which the new tracks should be inserted
+         * \param decoder The decoder to be used for the new tracks. If 0 a new one will be created.
+         *
+         * BE AWARE THAT THE DECODER HAS TO FIT THE AUDIO FILE IN THE CUE.
+         */
+        AudioTrack* importCueFile( const QString& cuefile, AudioTrack* after, AudioDecoder* decoder = 0 );
 
-    QString typeString() const;
+        /**
+         * Create a decoder for a specific url. If another AudioFileSource with this
+         * url is already part of this project the associated decoder is returned.
+         *
+         * In the first case the decoder will not be initialized yet (AudioDecoder::analyseFile
+         * is not called yet).
+         *
+         * \param url The url for which a decoder is requested.
+         * \param reused If not null this variable is set to true if the decoder is already in
+         *               use and AudioDecoder::analyseFile() does not have to be called anymore.
+         */
+        AudioDecoder* getDecoderForUrl( const KUrl& url, bool* reused = 0 );
 
-private:
-    // the stuff for adding files
-    // ---------------------------------------------------------
-    K3bAudioTrack* createTrack( const KUrl& url );
+        static bool readPlaylistFile( const KUrl& url, KUrl::List& playlist );
 
-    /**
-     * Handle directories and M3u files
-     */
-    KUrl::List extractUrlList( const KUrl::List& urls );
-    // ---------------------------------------------------------
+    public Q_SLOTS:
+        void addUrls( const KUrl::List& );
+        void addTrack( const KUrl&, int );
+        void addTracks( const KUrl::List&, int );
+        /**
+         * Adds a track without any testing
+         *
+         * Slow because it uses getTrack.
+         */
+        void addTrack( AudioTrack* track, int position = 0 );
 
-    /**
-     * Used by K3bAudioTrack to update the track list
-     */
-    void setFirstTrack( K3bAudioTrack* track );
-    /**
-     * Used by K3bAudioTrack to update the track list
-     */
-    void setLastTrack( K3bAudioTrack* track );
+        void addSources( AudioTrack* parent, const KUrl::List& urls, AudioDataSource* sourceAfter = 0 );
 
-    /**
-     * Used by K3bAudioFile to tell the doc that it does not need the decoder anymore.
-     */
-    void decreaseDecoderUsage( K3bAudioDecoder* );
-    void increaseDecoderUsage( K3bAudioDecoder* );
+        void removeTrack( AudioTrack* );
+        void moveTrack( AudioTrack* track, AudioTrack* after );
 
-    K3bAudioTrack* m_firstTrack;
-    K3bAudioTrack* m_lastTrack;
- 	
-    bool m_hideFirstTrack;
-    bool m_normalize;
+        void setHideFirstTrack( bool b ) { m_hideFirstTrack = b; }
+        void setNormalize( bool b ) { m_normalize = b; }
 
-    KUrl::List m_notFoundFiles;
-    KUrl::List m_unknownFileFormatFiles;
+        // CD-Text
+        void writeCdText( bool b ) { m_cdText = b; }
+        void setTitle( const QString& v );
+        void setArtist( const QString& v );
+        void setPerformer( const QString& v );
+        void setDisc_id( const QString& v );
+        void setArranger( const QString& v );
+        void setSongwriter( const QString& v );
+        void setComposer( const QString& v );
+        void setUpc_ean( const QString& v );
+        void setCdTextMessage( const QString& v );
 
-    // CD-Text
-    // --------------------------------------------------
-    K3bDevice::CdText m_cdTextData;
-    bool m_cdText;
-    // --------------------------------------------------
+        // Audio-CD Ripping
+        void setAudioRippingParanoiaMode( int i ) { m_audioRippingParanoiaMode = i; }
+        void setAudioRippingRetries( int r ) { m_audioRippingRetries = r; }
+        void setAudioRippingIgnoreReadErrors( bool b ) { m_audioRippingIgnoreReadErrors = b; }
 
-    // Audio ripping
-    int m_audioRippingParanoiaMode;
-    int m_audioRippingRetries;
-    bool m_audioRippingIgnoreReadErrors;
+        void removeCorruptTracks();
 
-    //
-    // decoder housekeeping
-    // --------------------------------------------------
-    // used to check if we may delete a decoder
-    QMap<K3bAudioDecoder*, int> m_decoderUsageCounterMap;
-    // used to check if we already have a decoder for a specific file
-    QMap<QString, K3bAudioDecoder*> m_decoderPresenceMap;
+    private Q_SLOTS:
+        void slotTrackChanged( AudioTrack* );
+        void slotTrackRemoved( AudioTrack* );
 
-    class Private;
-    Private* d;
-};
+    Q_SIGNALS:
+        void trackChanged( AudioTrack* );
+        void trackRemoved( AudioTrack* );
 
+    protected:
+        /** reimplemented from Doc */
+        bool loadDocumentData( QDomElement* );
+        /** reimplemented from Doc */
+        bool saveDocumentData( QDomElement* );
+
+        QString typeString() const;
+
+    private:
+        // the stuff for adding files
+        // ---------------------------------------------------------
+        AudioTrack* createTrack( const KUrl& url );
+
+        /**
+         * Handle directories and M3u files
+         */
+        KUrl::List extractUrlList( const KUrl::List& urls );
+        // ---------------------------------------------------------
+
+        /**
+         * Used by AudioTrack to update the track list
+         */
+        void setFirstTrack( AudioTrack* track );
+        /**
+         * Used by AudioTrack to update the track list
+         */
+        void setLastTrack( AudioTrack* track );
+
+        /**
+         * Used by AudioFile to tell the doc that it does not need the decoder anymore.
+         */
+        void decreaseDecoderUsage( AudioDecoder* );
+        void increaseDecoderUsage( AudioDecoder* );
+
+        AudioTrack* m_firstTrack;
+        AudioTrack* m_lastTrack;
+
+        bool m_hideFirstTrack;
+        bool m_normalize;
+
+        KUrl::List m_notFoundFiles;
+        KUrl::List m_unknownFileFormatFiles;
+
+        // CD-Text
+        // --------------------------------------------------
+        Device::CdText m_cdTextData;
+        bool m_cdText;
+        // --------------------------------------------------
+
+        // Audio ripping
+        int m_audioRippingParanoiaMode;
+        int m_audioRippingRetries;
+        bool m_audioRippingIgnoreReadErrors;
+
+        //
+        // decoder housekeeping
+        // --------------------------------------------------
+        // used to check if we may delete a decoder
+        QMap<AudioDecoder*, int> m_decoderUsageCounterMap;
+        // used to check if we already have a decoder for a specific file
+        QMap<QString, AudioDecoder*> m_decoderPresenceMap;
+
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

@@ -21,8 +21,8 @@
 #include <qtooltip.h>
 
 
-K3bAudioCdListView::K3bAudioCdListView( K3bAudioCdView* view, QWidget* parent )
-  : K3bListView( parent ),
+K3b::AudioCdListView::AudioCdListView( K3b::AudioCdView* view, QWidget* parent )
+  : K3b::ListView( parent ),
     m_view(view)
 {
   setFullWidth(true);
@@ -50,12 +50,12 @@ K3bAudioCdListView::K3bAudioCdListView( K3bAudioCdView* view, QWidget* parent )
 }
 
 
-K3bAudioCdListView::~K3bAudioCdListView()
+K3b::AudioCdListView::~AudioCdListView()
 {
 }
 
 
-Q3DragObject* K3bAudioCdListView::dragObject()
+Q3DragObject* K3b::AudioCdListView::dragObject()
 {
   return m_view->dragObject();
 }

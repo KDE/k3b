@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,46 +20,48 @@
 #include <k3b_export.h>
 
 
-/**
- * The checksum pipe calculates the checksum of the data
- * passed through it.
- */
-class LIBK3B_EXPORT K3bChecksumPipe : public K3bActivePipe
-{
- public:
-  K3bChecksumPipe();
-  ~K3bChecksumPipe();
+namespace K3b {
+    /**
+     * The checksum pipe calculates the checksum of the data
+     * passed through it.
+     */
+    class LIBK3B_EXPORT ChecksumPipe : public ActivePipe
+    {
+    public:
+        ChecksumPipe();
+        ~ChecksumPipe();
 
-  enum Type {
-    MD5
-  };
+        enum Type {
+            MD5
+        };
 
-  /**
-   * \reimplemented
-   * Defaults to MD5 checksum
-   */
-  bool open( bool closeWhenDone = false );
+        /**
+         * \reimplemented
+         * Defaults to MD5 checksum
+         */
+        bool open( bool closeWhenDone = false );
 
-  /**
-   * Opens the pipe and thus starts the 
-   * checksum calculation
-   *
-   * \param closeWhenDone If true the pipes will be closed
-   *        once all data has been read.
-   */
-  bool open( Type type, bool closeWhenDone = false );
+        /**
+         * Opens the pipe and thus starts the
+         * checksum calculation
+         *
+         * \param closeWhenDone If true the pipes will be closed
+         *        once all data has been read.
+         */
+        bool open( Type type, bool closeWhenDone = false );
 
-  /**
-   * Get the calculated checksum
-   */
-  QByteArray checksum() const;
+        /**
+         * Get the calculated checksum
+         */
+        QByteArray checksum() const;
 
- protected:
-  int write( char* data, int max );
+    protected:
+        int write( char* data, int max );
 
- private:
-  class Private;
-  Private* d;
-};
+    private:
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

@@ -19,11 +19,10 @@
 #include "k3bmedium_p.h"
 
 #include "k3bcddb.h"
-
-#include <k3bdeviceglobals.h>
-#include <k3bglobals.h>
-#include <k3biso9660.h>
-#include <k3biso9660backend.h>
+#include "k3bdeviceglobals.h"
+#include "k3bglobals.h"
+#include "k3biso9660.h"
+#include "k3biso9660backend.h"
 
 #include <klocale.h>
 #include <kio/global.h>
@@ -35,52 +34,52 @@
 
 
 
-K3bMediumPrivate::K3bMediumPrivate()
+K3b::MediumPrivate::MediumPrivate()
     : device( 0 ),
-      content( K3bMedium::CONTENT_NONE )
+      content( K3b::Medium::CONTENT_NONE )
 {
 }
 
 
-K3bMedium::K3bMedium()
+K3b::Medium::Medium()
 {
-    d = new K3bMediumPrivate;
+    d = new K3b::MediumPrivate;
 }
 
 
 
-K3bMedium::K3bMedium( const K3bMedium& other )
+K3b::Medium::Medium( const K3b::Medium& other )
 {
     d = other.d;
 }
 
 
-K3bMedium::K3bMedium( K3bDevice::Device* dev )
+K3b::Medium::Medium( K3b::Device::Device* dev )
 {
-    d = new K3bMediumPrivate;
+    d = new K3b::MediumPrivate;
     d->device = dev;
 }
 
 
-K3bMedium::~K3bMedium()
+K3b::Medium::~Medium()
 {
 }
 
 
-K3bMedium& K3bMedium::operator=( const K3bMedium& other )
+K3b::Medium& K3b::Medium::operator=( const K3b::Medium& other )
 {
     d = other.d;
     return *this;
 }
 
 
-bool K3bMedium::isValid() const
+bool K3b::Medium::isValid() const
 {
     return d->device != 0;
 }
 
 
-void K3bMedium::setDevice( K3bDevice::Device* dev )
+void K3b::Medium::setDevice( K3b::Device::Device* dev )
 {
     if( d->device != dev ) {
         reset();
@@ -88,57 +87,57 @@ void K3bMedium::setDevice( K3bDevice::Device* dev )
     }
 }
 
-K3bDevice::Device* K3bMedium::device() const
+K3b::Device::Device* K3b::Medium::device() const
 {
     return d->device;
 }
 
 
-K3bDevice::DiskInfo K3bMedium::diskInfo() const
+K3b::Device::DiskInfo K3b::Medium::diskInfo() const
 {
     return d->diskInfo;
 }
 
 
-K3bDevice::Toc K3bMedium::toc() const
+K3b::Device::Toc K3b::Medium::toc() const
 {
     return d->toc;
 }
 
 
-K3bDevice::CdText K3bMedium::cdText() const
+K3b::Device::CdText K3b::Medium::cdText() const
 {
     return d->cdText;
 }
 
 
-KCDDB::CDInfo K3bMedium::cddbInfo() const
+KCDDB::CDInfo K3b::Medium::cddbInfo() const
 {
     return d->cddbInfo;
 }
 
 
-QList<int> K3bMedium::writingSpeeds() const
+QList<int> K3b::Medium::writingSpeeds() const
 {
     return d->writingSpeeds;
 }
 
 
-int K3bMedium::content() const
+K3b::Medium::MediumContents K3b::Medium::content() const
 {
     return d->content;
 }
 
 
-const K3bIso9660SimplePrimaryDescriptor& K3bMedium::iso9660Descriptor() const
+const K3b::Iso9660SimplePrimaryDescriptor& K3b::Medium::iso9660Descriptor() const
 {
     return d->isoDesc;
 }
 
 
-void K3bMedium::reset()
+void K3b::Medium::reset()
 {
-    d->diskInfo = K3bDevice::DiskInfo();
+    d->diskInfo = K3b::Device::DiskInfo();
     d->toc.clear();
     d->cdText.clear();
     d->writingSpeeds.clear();
@@ -146,36 +145,36 @@ void K3bMedium::reset()
     d->cddbInfo.clear();
 
     // clear the desc
-    d->isoDesc = K3bIso9660SimplePrimaryDescriptor();
+    d->isoDesc = K3b::Iso9660SimplePrimaryDescriptor();
 }
 
 
-void K3bMedium::update()
+void K3b::Medium::update()
 {
     if( d->device ) {
         reset();
 
         d->diskInfo = d->device->diskInfo();
 
-        if( d->diskInfo.diskState() != K3bDevice::STATE_NO_MEDIA ) {
-            kDebug() << "(K3bMedium) found medium: (" << d->device->blockDeviceName() << ')' << endl
+        if( d->diskInfo.diskState() != K3b::Device::STATE_NO_MEDIA ) {
+            kDebug() << "(K3b::Medium) found medium: (" << d->device->blockDeviceName() << ')' << endl
                      << "=====================================================";
             d->diskInfo.debug();
             kDebug() << "=====================================================";
         }
 
-        if( diskInfo().diskState() == K3bDevice::STATE_COMPLETE ||
-            diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE ) {
+        if( diskInfo().diskState() == K3b::Device::STATE_COMPLETE ||
+            diskInfo().diskState() == K3b::Device::STATE_INCOMPLETE ) {
             d->toc = d->device->readToc();
-            if( d->toc.contentType() == K3bDevice::AUDIO ||
-                d->toc.contentType() == K3bDevice::MIXED ) {
+            if( d->toc.contentType() == K3b::Device::AUDIO ||
+                d->toc.contentType() == K3b::Device::MIXED ) {
 
                 // update CD-Text
                 d->cdText = d->device->readCdText();
             }
         }
 
-        if( diskInfo().mediaType() & K3bDevice::MEDIA_WRITABLE ) {
+        if( diskInfo().mediaType() & K3b::Device::MEDIA_WRITABLE ) {
             d->writingSpeeds = d->device->determineSupportedWriteSpeeds();
         }
 
@@ -184,18 +183,18 @@ void K3bMedium::update()
 }
 
 
-void K3bMedium::analyseContent()
+void K3b::Medium::analyseContent()
 {
     // set basic content types
     switch( d->toc.contentType() ) {
-    case K3bDevice::AUDIO:
+    case K3b::Device::AUDIO:
         d->content = CONTENT_AUDIO;
         break;
-    case K3bDevice::DATA:
-    case K3bDevice::DVD:
+    case K3b::Device::DATA:
+    case K3b::Device::DVD:
         d->content = CONTENT_DATA;
         break;
-    case K3bDevice::MIXED:
+    case K3b::Device::MIXED:
         d->content = CONTENT_AUDIO|CONTENT_DATA;
         break;
     default:
@@ -204,37 +203,37 @@ void K3bMedium::analyseContent()
 
     // analyze filesystem
     if( d->content & CONTENT_DATA ) {
-        //kDebug() << "(K3bMedium) Checking file system.";
+        //kDebug() << "(K3b::Medium) Checking file system.";
 
         unsigned long startSec = 0;
 
         if( diskInfo().numSessions() > 1 ) {
             // We use the last data track
             // this way we get the latest session on a ms cd
-            K3bDevice::Toc::const_iterator it = d->toc.constEnd();
+            K3b::Device::Toc::const_iterator it = d->toc.constEnd();
             --it; // this is valid since there is at least one data track
-            while( it != d->toc.constBegin() && (*it).type() != K3bDevice::Track::DATA )
+            while( it != d->toc.constBegin() && (*it).type() != K3b::Device::Track::TYPE_DATA )
                 --it;
             startSec = (*it).firstSector().lba();
         }
         else {
             // use first data track
-            K3bDevice::Toc::const_iterator it = d->toc.constBegin();
-            while( it != d->toc.constEnd() && (*it).type() != K3bDevice::Track::DATA )
+            K3b::Device::Toc::const_iterator it = d->toc.constBegin();
+            while( it != d->toc.constEnd() && (*it).type() != K3b::Device::Track::TYPE_DATA )
                 ++it;
             startSec = (*it).firstSector().lba();
         }
 
-        //kDebug() << "(K3bMedium) Checking file system at " << startSec;
+        //kDebug() << "(K3b::Medium) Checking file system at " << startSec;
 
         // force the backend since we don't need decryption
         // which just slows down the whole process
-        K3bIso9660 iso( new K3bIso9660DeviceBackend( d->device ) );
+        K3b::Iso9660 iso( new K3b::Iso9660DeviceBackend( d->device ) );
         iso.setStartSector( startSec );
         iso.setPlainIso9660( true );
         if( iso.open() ) {
             d->isoDesc = iso.primaryDescriptor();
-            kDebug() << "(K3bMedium) found volume id from start sector " << startSec
+            kDebug() << "(K3b::Medium) found volume id from start sector " << startSec
                      << ": '" << d->isoDesc.volumeId << "'" ;
 
             if( diskInfo().isDvdMedia() ) {
@@ -243,21 +242,21 @@ void K3bMedium::analyseContent()
                     d->content |= CONTENT_VIDEO_DVD;
             }
             else {
-                kDebug() << "(K3bMedium) checking for VCD.";
+                kDebug() << "(K3b::Medium) checking for VCD.";
 
                 // check for VCD
-                const K3bIso9660Entry* vcdEntry = iso.firstIsoDirEntry()->entry( "VCD/INFO.VCD" );
-                const K3bIso9660Entry* svcdEntry = iso.firstIsoDirEntry()->entry( "SVCD/INFO.SVD" );
-                const K3bIso9660File* vcdInfoFile = 0;
+                const K3b::Iso9660Entry* vcdEntry = iso.firstIsoDirEntry()->entry( "VCD/INFO.VCD" );
+                const K3b::Iso9660Entry* svcdEntry = iso.firstIsoDirEntry()->entry( "SVCD/INFO.SVD" );
+                const K3b::Iso9660File* vcdInfoFile = 0;
                 if( vcdEntry ) {
-                    kDebug() << "(K3bMedium) found vcd entry.";
+                    kDebug() << "(K3b::Medium) found vcd entry.";
                     if( vcdEntry->isFile() )
-                        vcdInfoFile = static_cast<const K3bIso9660File*>(vcdEntry);
+                        vcdInfoFile = static_cast<const K3b::Iso9660File*>(vcdEntry);
                 }
                 if( svcdEntry && !vcdInfoFile ) {
-                    kDebug() << "(K3bMedium) found svcd entry.";
+                    kDebug() << "(K3b::Medium) found svcd entry.";
                     if( svcdEntry->isFile() )
-                        vcdInfoFile = static_cast<const K3bIso9660File*>(svcdEntry);
+                        vcdInfoFile = static_cast<const K3b::Iso9660File*>(svcdEntry);
                 }
 
                 if( vcdInfoFile ) {
@@ -275,27 +274,27 @@ void K3bMedium::analyseContent()
 }
 
 
-QString K3bMedium::shortString( bool useContent ) const
+QString K3b::Medium::shortString( bool useContent ) const
 {
-    QString mediaTypeString = K3bDevice::mediaTypeString( diskInfo().mediaType(), true );
+    QString mediaTypeString = K3b::Device::mediaTypeString( diskInfo().mediaType(), true );
 
-    if( diskInfo().diskState() == K3bDevice::STATE_UNKNOWN ) {
+    if( diskInfo().diskState() == K3b::Device::STATE_UNKNOWN ) {
         return i18n("No medium information");
     }
 
-    else if( diskInfo().diskState() == K3bDevice::STATE_NO_MEDIA ) {
+    else if( diskInfo().diskState() == K3b::Device::STATE_NO_MEDIA ) {
         return i18n("No medium present");
     }
 
-    else if( diskInfo().diskState() == K3bDevice::STATE_EMPTY ) {
+    else if( diskInfo().diskState() == K3b::Device::STATE_EMPTY ) {
         return i18n("Empty %1 medium", mediaTypeString );
     }
 
     else {
         if( useContent ) {
             // AUDIO + MIXED
-            if( d->toc.contentType() == K3bDevice::AUDIO ||
-                d->toc.contentType() == K3bDevice::MIXED ) {
+            if( d->toc.contentType() == K3b::Device::AUDIO ||
+                d->toc.contentType() == K3b::Device::MIXED ) {
                 QString title = cdText().title();
                 QString performer = cdText().performer();
                 if ( title.isEmpty() ) {
@@ -308,9 +307,9 @@ QString K3bMedium::shortString( bool useContent ) const
                     return QString("%1 - %2 (%3)")
                         .arg( performer )
                         .arg( title )
-                        .arg( d->toc.contentType() == K3bDevice::AUDIO ? i18n("Audio CD") : i18n("Mixed CD") );
+                        .arg( d->toc.contentType() == K3b::Device::AUDIO ? i18n("Audio CD") : i18n("Mixed CD") );
                 }
-                else if( d->toc.contentType() == K3bDevice::AUDIO ) {
+                else if( d->toc.contentType() == K3b::Device::AUDIO ) {
                     return i18n("Audio CD");
                 }
                 else {
@@ -326,7 +325,7 @@ QString K3bMedium::shortString( bool useContent ) const
                 else if( content() & CONTENT_VIDEO_CD ) {
                     return QString("%1 (%2)").arg(beautifiedVolumeId()).arg(i18n("Video CD") );
                 }
-                else if( diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE ) {
+                else if( diskInfo().diskState() == K3b::Device::STATE_INCOMPLETE ) {
                     return i18n("%1 (Appendable Data %2)", beautifiedVolumeId(), mediaTypeString );
                 }
                 else {
@@ -334,7 +333,7 @@ QString K3bMedium::shortString( bool useContent ) const
                 }
             }
             else {
-                if( diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE ) {
+                if( diskInfo().diskState() == K3b::Device::STATE_INCOMPLETE ) {
                     return i18n("Appendable Data %1", mediaTypeString );
                 }
                 else {
@@ -345,7 +344,7 @@ QString K3bMedium::shortString( bool useContent ) const
 
         // without content
         else {
-            if( diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE ) {
+            if( diskInfo().diskState() == K3b::Device::STATE_INCOMPLETE ) {
                 return i18n("Appendable %1 medium", mediaTypeString );
             }
             else {
@@ -356,7 +355,7 @@ QString K3bMedium::shortString( bool useContent ) const
 }
 
 
-QString K3bMedium::longString() const
+QString K3b::Medium::longString() const
 {
     QString s = QString("<p><nobr><b>%1 %2</b> (%3)</nobr>"
                         "<p>")
@@ -364,18 +363,18 @@ QString K3bMedium::longString() const
                 .arg( d->device->description() )
                 .arg( d->device->blockDeviceName() )
                 + shortString( true )
-                + " (" + K3bDevice::mediaTypeString( diskInfo().mediaType(), true ) + ')';
+                + " (" + K3b::Device::mediaTypeString( diskInfo().mediaType(), true ) + ')';
 
-    if( diskInfo().diskState() == K3bDevice::STATE_COMPLETE ||
-        diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE  ) {
+    if( diskInfo().diskState() == K3b::Device::STATE_COMPLETE ||
+        diskInfo().diskState() == K3b::Device::STATE_INCOMPLETE  ) {
         s += "<br>" + i18np("1 in %2 track", "%1 in %2 tracks", d->toc.count(),
                             KIO::convertSize(diskInfo().size().mode1Bytes() ) );
         if( diskInfo().numSessions() > 1 )
             s += i18np(" and %1 session", " and %1 sessions", diskInfo().numSessions() );
     }
 
-    if( diskInfo().diskState() == K3bDevice::STATE_EMPTY ||
-        diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE  )
+    if( diskInfo().diskState() == K3b::Device::STATE_EMPTY ||
+        diskInfo().diskState() == K3b::Device::STATE_INCOMPLETE  )
         s += "<br>" + i18n("Free space: %1",
                            KIO::convertSize( diskInfo().remainingSize().mode1Bytes() ) );
 
@@ -387,13 +386,13 @@ QString K3bMedium::longString() const
 }
 
 
-QString K3bMedium::volumeId() const
+QString K3b::Medium::volumeId() const
 {
     return iso9660Descriptor().volumeId;
 }
 
 
-QString K3bMedium::beautifiedVolumeId() const
+QString K3b::Medium::beautifiedVolumeId() const
 {
     const QString& oldId = volumeId();
     QString newId;
@@ -440,7 +439,7 @@ QString K3bMedium::beautifiedVolumeId() const
 }
 
 
-KIcon K3bMedium::icon() const
+KIcon K3b::Medium::icon() const
 {
     if ( diskInfo().empty() ) {
         return KIcon( "media-optical-recordable" );
@@ -454,7 +453,7 @@ KIcon K3bMedium::icon() const
 }
 
 
-bool K3bMedium::operator==( const K3bMedium& other ) const
+bool K3b::Medium::operator==( const K3b::Medium& other ) const
 {
     if( this->d == other.d )
         return true;
@@ -469,7 +468,7 @@ bool K3bMedium::operator==( const K3bMedium& other ) const
 }
 
 
-bool K3bMedium::operator!=( const K3bMedium& other ) const
+bool K3b::Medium::operator!=( const K3b::Medium& other ) const
 {
     if( this->d == other.d )
         return false;
@@ -484,7 +483,7 @@ bool K3bMedium::operator!=( const K3bMedium& other ) const
 }
 
 
-bool K3bMedium::sameMedium( const K3bMedium& other ) const
+bool K3b::Medium::sameMedium( const K3b::Medium& other ) const
 {
     if( this->d == other.d )
         return true;

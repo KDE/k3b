@@ -35,7 +35,7 @@
 #include <errno.h>
 
 
-class K3bProcess::Data
+class K3b::Process::Data
 {
 public:
     QString unfinishedStdoutLine;
@@ -51,7 +51,7 @@ public:
 };
 
 
-K3bProcess::K3bProcess()
+K3b::Process::Process()
     : K3Process(),
       m_bSplitStdout(false)
 {
@@ -61,43 +61,43 @@ K3bProcess::K3bProcess()
     d->suppressEmptyLines = true;
 }
 
-K3bProcess::~K3bProcess()
+K3b::Process::~Process()
 {
     delete d;
 }
 
 
-K3bProcess& K3bProcess::operator<<( const K3bExternalBin* bin )
+K3b::Process& K3b::Process::operator<<( const K3b::ExternalBin* bin )
 {
     return this->operator<<( bin->path );
 }
 
-K3bProcess& K3bProcess::operator<<( const QString& arg )
+K3b::Process& K3b::Process::operator<<( const QString& arg )
 {
     static_cast<K3Process*>(this)->operator<<( arg );
     return *this;
 }
 
-K3bProcess& K3bProcess::operator<<( const char* arg )
+K3b::Process& K3b::Process::operator<<( const char* arg )
 {
     static_cast<K3Process*>(this)->operator<<( arg );
     return *this;
 }
 
-K3bProcess& K3bProcess::operator<<( const QByteArray& arg )
+K3b::Process& K3b::Process::operator<<( const QByteArray& arg )
 {
     static_cast<K3Process*>(this)->operator<<( arg );
     return *this;
 }
 
-K3bProcess& K3bProcess::operator<<( const QStringList& args )
+K3b::Process& K3b::Process::operator<<( const QStringList& args )
 {
     static_cast<K3Process*>(this)->operator<<( args );
     return *this;
 }
 
 
-bool K3bProcess::start( Communication com )
+bool K3b::Process::start( Communication com )
 {
     connect( this, SIGNAL(receivedStderr(K3Process*, char*, int)),
              this, SLOT(slotSplitStderr(K3Process*, char*, int)) );
@@ -109,7 +109,7 @@ bool K3bProcess::start( Communication com )
     return K3Process::start( NotifyOnExit, com );
 }
 
-void K3bProcess::slotSplitStdout( K3Process*, char* data, int len )
+void K3b::Process::slotSplitStdout( K3Process*, char* data, int len )
 {
     if( m_bSplitStdout ) {
         QStringList lines = splitOutput( data, len, d->unfinishedStdoutLine, d->suppressEmptyLines );
@@ -124,14 +124,14 @@ void K3bProcess::slotSplitStdout( K3Process*, char* data, int len )
             emit stdoutLine( str );
         }
     }
-    
+
     if( d->dupStdoutFd != -1 ) {
         ::write( d->dupStdoutFd, data, len );
     }
 }
 
 
-void K3bProcess::slotSplitStderr( K3Process*, char* data, int len )
+void K3b::Process::slotSplitStderr( K3Process*, char* data, int len )
 {
     QStringList lines = splitOutput( data, len, d->unfinishedStderrLine, d->suppressEmptyLines );
 
@@ -147,13 +147,13 @@ void K3bProcess::slotSplitStderr( K3Process*, char* data, int len )
 }
 
 
-void K3bProcess::slotProcessExited( K3Process* )
+void K3b::Process::slotProcessExited( K3Process* )
 {
     emit finished( exitStatus(), normalExit() ? QProcess::NormalExit : QProcess::CrashExit );
 }
 
 
-QStringList K3bProcess::splitOutput( char* data, int len,
+QStringList K3b::Process::splitOutput( char* data, int len,
                                      QString& unfinishedLine, bool suppressEmptyLines )
 {
     //
@@ -187,7 +187,7 @@ QStringList K3bProcess::splitOutput( char* data, int len,
         lines.first().prepend( unfinishedLine );
         unfinishedLine.truncate(0);
 
-        kDebug() << "(K3bProcess)           joined line: '" << (lines.first()) << "'";
+        kDebug() << "(K3b::Process)           joined line: '" << (lines.first()) << "'";
     }
 
     QStringList::iterator it;
@@ -197,8 +197,8 @@ QStringList K3bProcess::splitOutput( char* data, int len,
     QChar c = buffer.right(1).at(0);
     bool hasUnfinishedLine = ( c != '\n' && c != '\r' && c != QChar(46) );  // What is unicode 46?? It is printed as a point
     if( hasUnfinishedLine ) {
-        kDebug() << "(K3bProcess) found unfinished line: '" << lines.last() << "'";
-        kDebug() << "(K3bProcess)             last char: '" << buffer.right(1) << "'";
+        kDebug() << "(K3b::Process) found unfinished line: '" << lines.last() << "'";
+        kDebug() << "(K3b::Process)             last char: '" << buffer.right(1) << "'";
         unfinishedLine = lines.takeLast();
     }
 
@@ -206,7 +206,7 @@ QStringList K3bProcess::splitOutput( char* data, int len,
 }
 
 
-int K3bProcess::stdinFd() const
+int K3b::Process::stdinFd() const
 {
     if( d->rawStdin )
         return K3Process::in[1];
@@ -216,14 +216,14 @@ int K3bProcess::stdinFd() const
         return -1;
 }
 
-void K3bProcess::writeToFd( int fd )
+void K3b::Process::writeToFd( int fd )
 {
     d->dupStdoutFd = fd;
     if( fd != -1 )
         d->rawStdout = false;
 }
 
-void K3bProcess::readFromFd( int fd )
+void K3b::Process::readFromFd( int fd )
 {
     d->dupStdinFd = fd;
     if( fd != -1 )
@@ -231,7 +231,7 @@ void K3bProcess::readFromFd( int fd )
 }
 
 
-void K3bProcess::setRawStdin(bool b)
+void K3b::Process::setRawStdin(bool b)
 {
     if( b ) {
         d->rawStdin = true;
@@ -242,18 +242,18 @@ void K3bProcess::setRawStdin(bool b)
 }
 
 
-void K3bProcess::setSuppressEmptyLines( bool b )
+void K3b::Process::setSuppressEmptyLines( bool b )
 {
     d->suppressEmptyLines = b;
 }
 
 
-void K3bProcess::closeWriteChannel()
+void K3b::Process::closeWriteChannel()
 {
     ::close( stdinFd() );
 }
 
-bool K3bProcess::waitForFinished(int timeout)
+bool K3b::Process::waitForFinished(int timeout)
 {
     Q_ASSERT( timeout == -1 );
 
@@ -262,12 +262,12 @@ bool K3bProcess::waitForFinished(int timeout)
     return true;
 }
 
-qint64 K3bProcess::write(const char * data, qint64 maxSize)
+qint64 K3b::Process::write(const char * data, qint64 maxSize)
 {
     return ::write( stdinFd(), data, maxSize);
 }
 
-QString K3bProcess::joinedArgs()
+QString K3b::Process::joinedArgs()
 {
     QList<QByteArray> a = args();
     QString s;

@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,40 +21,42 @@
 #include <k3bjobhandler.h>
 
 
-/**
- * This is a simplified job handler which just consumes the
- * job handler calls without doing anything.
- * Use it for very simple jobs that don't need the job handler
- * methods.
- */
-class LIBK3B_EXPORT K3bSimpleJobHandler : public QObject, public K3bJobHandler
-{
-  Q_OBJECT
+namespace K3b {
+    /**
+     * This is a simplified job handler which just consumes the
+     * job handler calls without doing anything.
+     * Use it for very simple jobs that don't need the job handler
+     * methods.
+     */
+    class LIBK3B_EXPORT SimpleJobHandler : public QObject, public JobHandler
+    {
+        Q_OBJECT
 
- public:
-  K3bSimpleJobHandler( QObject* parent = 0 );
-  ~K3bSimpleJobHandler();
+    public:
+        SimpleJobHandler( QObject* parent = 0 );
+        ~SimpleJobHandler();
 
-  /*
-   * \return 0
-   */
-  int waitForMedia( K3bDevice::Device*,
-		    int mediaState = K3bDevice::STATE_EMPTY,
-		    int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
-		    const QString& message = QString() );
-  /**
-   * \return true
-   */
-  bool questionYesNo( const QString& text,
-		      const QString& caption = QString(),
-		      const QString& yesText = QString(),
-		      const QString& noText = QString() );
+        /*
+         * \return 0
+         */
+        int waitForMedia( Device::Device*,
+                          int mediaState = Device::STATE_EMPTY,
+                          int mediaType = Device::MEDIA_WRITABLE_CD,
+                          const QString& message = QString() );
+        /**
+         * \return true
+         */
+        bool questionYesNo( const QString& text,
+                            const QString& caption = QString(),
+                            const QString& yesText = QString(),
+                            const QString& noText = QString() );
 
-  /**
-   * Does nothing
-   */
-  void blockingInformation( const QString& text,
-			    const QString& caption = QString() );
-};
+        /**
+         * Does nothing
+         */
+        void blockingInformation( const QString& text,
+                                  const QString& caption = QString() );
+    };
+}
 
 #endif

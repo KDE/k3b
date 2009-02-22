@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2007-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -21,51 +21,53 @@
 
 #include <k3b_export.h>
 
-/**
- * K3bDirSizeJob is a replacement for KDirSize which allows
- * a much finer grained control over what is counted and how.
- * Additionally it uses threading for enhanced speed.
- *
- * For now K3bDirSizeJob only works on local urls.
- */
-class LIBK3B_EXPORT K3bDirSizeJob : public K3bThreadJob
-{
-    Q_OBJECT
-
-public:
-    K3bDirSizeJob( QObject* parent = 0 );
-    ~K3bDirSizeJob();
-
-    KIO::filesize_t totalSize() const;
-
+namespace K3b {
     /**
-     * Does also include symlinks to files, devices, and fifos
+     * DirSizeJob is a replacement for KDirSize which allows
+     * a much finer grained control over what is counted and how.
+     * Additionally it uses threading for enhanced speed.
+     *
+     * For now DirSizeJob only works on local urls.
      */
-    KIO::filesize_t totalFiles() const;
+    class LIBK3B_EXPORT DirSizeJob : public ThreadJob
+    {
+        Q_OBJECT
 
-    /**
-     * Total number of counted dirs. This does also
-     * include the first dirs the job was started with.
-     * Does also include symlinks to dirs.
-     */
-    KIO::filesize_t totalDirs() const;
+    public:
+        DirSizeJob( QObject* parent = 0 );
+        ~DirSizeJob();
 
-    /**
-     * Includes symlinks to files and folders
-     */
-    KIO::filesize_t totalSymlinks() const;
+        KIO::filesize_t totalSize() const;
 
-public Q_SLOTS:
-    void setUrls( const KUrl::List& urls );
-    void setFollowSymlinks( bool );
+        /**
+         * Does also include symlinks to files, devices, and fifos
+         */
+        KIO::filesize_t totalFiles() const;
 
-private:
-    bool run();
-    bool countDir( const QString& dir );
-    bool countFiles( const QStringList& l, const QString& dir );
+        /**
+         * Total number of counted dirs. This does also
+         * include the first dirs the job was started with.
+         * Does also include symlinks to dirs.
+         */
+        KIO::filesize_t totalDirs() const;
 
-    class Private;
-    Private* const d;
-};
+        /**
+         * Includes symlinks to files and folders
+         */
+        KIO::filesize_t totalSymlinks() const;
+
+    public Q_SLOTS:
+        void setUrls( const KUrl::List& urls );
+        void setFollowSymlinks( bool );
+
+    private:
+        bool run();
+        bool countDir( const QString& dir );
+        bool countFiles( const QStringList& l, const QString& dir );
+
+        class Private;
+        Private* const d;
+    };
+}
 
 #endif

@@ -20,26 +20,32 @@
 
 
 
-class K3bExternalBinManager;
-class K3bExternalBinWidget;
+namespace K3b {
+    class ExternalBinManager;
+}
+namespace K3b {
+    class ExternalBinWidget;
+}
 
 
-class K3bExternalBinOptionTab : public QWidget
+namespace K3b {
+class ExternalBinOptionTab : public QWidget
 {
 Q_OBJECT
 
  public:
-  K3bExternalBinOptionTab( K3bExternalBinManager*, QWidget* = 0 );
-  ~K3bExternalBinOptionTab();
+  ExternalBinOptionTab( ExternalBinManager*, QWidget* = 0 );
+  ~ExternalBinOptionTab();
 
   void readSettings();
   void saveSettings();
 
  private:
-  K3bExternalBinManager* m_manager;
+  ExternalBinManager* m_manager;
 
-  K3bExternalBinWidget* m_externalBinWidget;
+  ExternalBinWidget* m_externalBinWidget;
 };
+}
 
 
 

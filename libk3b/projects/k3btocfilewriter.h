@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2004-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2004-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,41 +21,43 @@
 #include <k3btoc.h>
 #include <k3bcdtext.h>
 
-namespace K3bDevice {
-    class TrackCdText;
+namespace K3b {
+    namespace Device {
+        class TrackCdText;
+    }
+
+    class TocFileWriter
+    {
+    public:
+        TocFileWriter();
+
+        bool save( QTextStream& );
+        bool save( const QString& filename );
+
+        void setData( const Device::Toc& toc ) { m_toc = toc; }
+        void setCdText( const Device::CdText& text ) { m_cdText = text; }
+        void setFilenames( const QStringList& names ) { m_filenames = names; }
+        void setHideFirstTrack( bool b ) { m_hideFirstTrack = b; }
+
+        /**
+         * The default is 1.
+         */
+        void setSession( int s ) { m_sessionToWrite = s; }
+
+    private:
+        void writeHeader( QTextStream& t );
+        void writeGlobalCdText( QTextStream& t );
+        void writeTrackCdText( const Device::TrackCdText& track, QTextStream& t );
+        void writeTrack( int index, const Msf& offset, QTextStream& t );
+        void writeDataSource( int trackNumber, QTextStream& t );
+        bool readFromStdin() const;
+
+        Device::Toc m_toc;
+        Device::CdText m_cdText;
+        QStringList m_filenames;
+        bool m_hideFirstTrack;
+        int m_sessionToWrite;
+    };
 }
-
-class K3bTocFileWriter
-{
-public:
-    K3bTocFileWriter();
-
-    bool save( QTextStream& );
-    bool save( const QString& filename );
-
-    void setData( const K3bDevice::Toc& toc ) { m_toc = toc; }
-    void setCdText( const K3bDevice::CdText& text ) { m_cdText = text; }
-    void setFilenames( const QStringList& names ) { m_filenames = names; }
-    void setHideFirstTrack( bool b ) { m_hideFirstTrack = b; }
-
-    /**
-     * The default is 1.
-     */
-    void setSession( int s ) { m_sessionToWrite = s; }
-
-private:
-    void writeHeader( QTextStream& t );
-    void writeGlobalCdText( QTextStream& t );
-    void writeTrackCdText( const K3bDevice::TrackCdText& track, QTextStream& t );
-    void writeTrack( int index, const K3b::Msf& offset, QTextStream& t );
-    void writeDataSource( int trackNumber, QTextStream& t );
-    bool readFromStdin() const;
-
-    K3bDevice::Toc m_toc;
-    K3bDevice::CdText m_cdText;
-    QStringList m_filenames;
-    bool m_hideFirstTrack;
-    int m_sessionToWrite;
-};
 
 #endif

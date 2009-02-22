@@ -17,18 +17,25 @@
 
 #include <k3binteractiondialog.h>
 
-class K3bProjectPlugin;
-class K3bProjectPluginGUIBase;
-class K3bDoc;
+namespace K3b {
+    class ProjectPlugin;
+}
+namespace K3b {
+    class ProjectPluginGUIBase;
+}
+namespace K3b {
+    class Doc;
+}
 
 
-class K3bProjectPluginDialog : public K3bInteractionDialog
+namespace K3b {
+class ProjectPluginDialog : public InteractionDialog
 {
   Q_OBJECT
 
  public:
-  K3bProjectPluginDialog( K3bProjectPlugin*, K3bDoc*, QWidget* );
-  ~K3bProjectPluginDialog();
+  ProjectPluginDialog( ProjectPlugin*, Doc*, QWidget* );
+  ~ProjectPluginDialog();
   
  protected Q_SLOTS:
   void slotStartClicked();
@@ -37,8 +44,9 @@ class K3bProjectPluginDialog : public K3bInteractionDialog
   void loadK3bDefaults();
 
  private:
-  K3bProjectPlugin* m_plugin;
-  K3bProjectPluginGUIBase* m_pluginGui;
+  ProjectPlugin* m_plugin;
+  ProjectPluginGUIBase* m_pluginGui;
 };
+}
 
 #endif

@@ -24,13 +24,14 @@
 class QPainter;
 
 
-class K3bAudioEditorWidget : public QFrame
+namespace K3b {
+class AudioEditorWidget : public QFrame
 {
     Q_OBJECT
 
 public:
-    K3bAudioEditorWidget( QWidget* parent = 0 );
-    ~K3bAudioEditorWidget();
+    AudioEditorWidget( QWidget* parent = 0 );
+    ~AudioEditorWidget();
 
     QSize sizeHint() const;
     QSize minimumSizeHint() const;
@@ -213,5 +214,6 @@ private:
 
     ToolTip* m_toolTip;
 };
+}
 
 #endif

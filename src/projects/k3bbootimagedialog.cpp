@@ -19,7 +19,7 @@
 #include <klocale.h>
 
 
-K3bBootImageDialog::K3bBootImageDialog( K3bDataDoc* doc, 
+K3b::BootImageDialog::BootImageDialog( K3b::DataDoc* doc, 
 					QWidget* parent )
   : KDialog( parent )
 {
@@ -27,17 +27,17 @@ K3bBootImageDialog::K3bBootImageDialog( K3bDataDoc* doc,
   setCaption(i18n("Boot Images"));
   setButtons(Ok);
   connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
-  m_bootImageView = new K3bBootImageView( doc, this );
+  m_bootImageView = new K3b::BootImageView( doc, this );
   setMainWidget( m_bootImageView );
 }
 
 
-K3bBootImageDialog::~K3bBootImageDialog()
+K3b::BootImageDialog::~BootImageDialog()
 {
 }
 
 
-void K3bBootImageDialog::slotOk()
+void K3b::BootImageDialog::slotOk()
 {
   //  m_bootImageView->save();
   done( Ok );

@@ -35,7 +35,7 @@
 #include <kmessagebox.h>
 
 
-K3bDebuggingOutputDialog::K3bDebuggingOutputDialog( QWidget* parent )
+K3b::DebuggingOutputDialog::DebuggingOutputDialog( QWidget* parent )
   : KDialog( parent)
 {
   setModal(true);
@@ -61,7 +61,7 @@ K3bDebuggingOutputDialog::K3bDebuggingOutputDialog( QWidget* parent )
 }
 
 
-void K3bDebuggingOutputDialog::setOutput( const QString& data )
+void K3b::DebuggingOutputDialog::setOutput( const QString& data )
 {
   // the following may take some time
   QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
@@ -72,7 +72,7 @@ void K3bDebuggingOutputDialog::setOutput( const QString& data )
 }
 
 
-void K3bDebuggingOutputDialog::slotUser1()
+void K3b::DebuggingOutputDialog::slotUser1()
 {
   QString filename = KFileDialog::getSaveFileName();
   if( !filename.isEmpty() ) {
@@ -94,7 +94,7 @@ void K3bDebuggingOutputDialog::slotUser1()
 }
 
 
-void K3bDebuggingOutputDialog::slotUser2()
+void K3b::DebuggingOutputDialog::slotUser2()
 {
   QApplication::clipboard()->setText( debugView->toPlainText(), QClipboard::Clipboard );
 }

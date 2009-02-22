@@ -238,7 +238,7 @@ FLAC__StreamDecoderWriteStatus K3bFLACDecoder::Private::write_callback(const FLA
 }
 
 K3bFLACDecoder::K3bFLACDecoder( QObject* parent  )
-    : K3bAudioDecoder( parent)
+    : K3b::AudioDecoder( parent)
 {
     d = 0;
 }
@@ -401,7 +401,7 @@ QString K3bFLACDecoder::technicalInfo( const QString& info ) const
 
 
 K3bFLACDecoderFactory::K3bFLACDecoderFactory( QObject* parent, const QVariantList& )
-    : K3bAudioDecoderFactory( parent )
+    : K3b::AudioDecoderFactory( parent )
 {
 }
 
@@ -411,7 +411,7 @@ K3bFLACDecoderFactory::~K3bFLACDecoderFactory()
 }
 
 
-K3bAudioDecoder* K3bFLACDecoderFactory::createDecoder( QObject* parent) const
+K3b::AudioDecoder* K3bFLACDecoderFactory::createDecoder( QObject* parent) const
 {
     return new K3bFLACDecoder( parent );
 }

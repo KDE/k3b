@@ -19,17 +19,18 @@
 #include <k3bthememanager.h>
 
 
-class K3bThemedLabel : public KSqueezedTextLabel
+namespace K3b {
+class ThemedLabel : public KSqueezedTextLabel
 {
   Q_OBJECT
 
  public:
-  K3bThemedLabel( QWidget* parent = 0 );
-  K3bThemedLabel( const QString& text, QWidget* parent = 0 );
-  K3bThemedLabel( K3bTheme::PixmapType, QWidget* parent = 0 );
+  ThemedLabel( QWidget* parent = 0 );
+  ThemedLabel( const QString& text, QWidget* parent = 0 );
+  ThemedLabel( Theme::PixmapType, QWidget* parent = 0 );
 
  public Q_SLOTS:
-  void setThemePixmap( K3bTheme::PixmapType );
+  void setThemePixmap( Theme::PixmapType );
 
  private Q_SLOTS:
   void slotThemeChanged();
@@ -37,5 +38,6 @@ class K3bThemedLabel : public KSqueezedTextLabel
  private:
   int m_themePixmapCode;
 };
+}
 
 #endif

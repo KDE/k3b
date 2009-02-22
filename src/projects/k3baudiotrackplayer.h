@@ -21,20 +21,25 @@
 
 #include <k3bmsf.h>
 
-class K3bAudioDoc;
-class K3bAudioTrack;
+namespace K3b {
+    class AudioDoc;
+}
+namespace K3b {
+    class AudioTrack;
+}
 class KAction;
 
 
-class K3bAudioTrackPlayer : public QObject, public K3bAudioClient
+namespace K3b {
+class AudioTrackPlayer : public QObject, public AudioClient
 {
   Q_OBJECT
 
  public:
-  K3bAudioTrackPlayer( K3bAudioDoc* doc, QObject* parent = 0 );
-  ~K3bAudioTrackPlayer();
+  AudioTrackPlayer( AudioDoc* doc, QObject* parent = 0 );
+  ~AudioTrackPlayer();
 
-  K3bAudioTrack* currentPlayingTrack() const { return m_currentTrack; }
+  AudioTrack* currentPlayingTrack() const { return m_currentTrack; }
   const K3b::Msf& currentPosition() const { return m_currentPosition; }
 
   enum Actions {
@@ -50,12 +55,12 @@ class K3bAudioTrackPlayer : public QObject, public K3bAudioClient
   KAction* action( int action ) const;
 
   /**
-   * Reimplemented from K3bAudioClient
+   * Reimplemented from AudioClient
    */
   int read( char* data, int maxlen );
 
  public Q_SLOTS:
-  void playTrack( K3bAudioTrack* );
+  void playTrack( AudioTrack* );
   void playPause();
   void stop();
   void next();
@@ -63,32 +68,34 @@ class K3bAudioTrackPlayer : public QObject, public K3bAudioClient
   void seek( const K3b::Msf& );
 
   Q_SIGNALS:
-  void playingTrack( K3bAudioTrack* );
+  void playingTrack( AudioTrack* );
   void paused( bool paused );  
   void stopped();
 
  private Q_SLOTS:
   void slotSeek( int );
-  void slotTrackChanged( K3bAudioTrack* track );
-  void slotTrackRemoved( K3bAudioTrack* track );
+  void slotTrackChanged( AudioTrack* track );
+  void slotTrackRemoved( AudioTrack* track );
   void slotUpdateSlider();
   void slotDocChanged();
 
  private:
-  K3bAudioDoc* m_doc;
-  K3bAudioTrack* m_currentTrack;
+  AudioDoc* m_doc;
+  AudioTrack* m_currentTrack;
   K3b::Msf m_currentPosition;
 
   class Private;
   Private* d;
 };
+}
 
 #if 0
-class K3bAudioTrackPlayerSeekAction : public K3bWidgetFactoryAction
+namespace K3b {
+class AudioTrackPlayerSeekAction : public WidgetFactoryAction
 {
  public:
-    K3bAudioTrackPlayerSeekAction( K3bAudioTrackPlayer* player, QObject* parent );
-    ~K3bAudioTrackPlayerSeekAction();
+    AudioTrackPlayerSeekAction( AudioTrackPlayer* player, QObject* parent );
+    ~AudioTrackPlayerSeekAction();
 
     void setValue( int v );
     void setMaxValue( int v );
@@ -97,8 +104,9 @@ class K3bAudioTrackPlayerSeekAction : public K3bWidgetFactoryAction
     QWidget* createWidget( QWidget* container);
 
  private:
-    K3bAudioTrackPlayer* m_player;
+    AudioTrackPlayer* m_player;
 };
+}
 #endif
 
 #endif

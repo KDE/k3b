@@ -58,7 +58,7 @@ private:
 };
 
 
-class K3bExternalEncoderSettingsWidget : public K3bPluginConfigWidget
+class K3bExternalEncoderSettingsWidget : public K3b::PluginConfigWidget
 {
     Q_OBJECT
 

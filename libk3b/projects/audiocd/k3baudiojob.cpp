@@ -47,11 +47,11 @@
 
 
 
-static QString createNonExistingFilesString( const QList<K3bAudioFile*>& items, int max )
+static QString createNonExistingFilesString( const QList<K3b::AudioFile*>& items, int max )
 {
     QString s;
     int cnt = 0;
-    for( QList<K3bAudioFile*>::const_iterator it = items.begin();
+    for( QList<K3b::AudioFile*>::const_iterator it = items.begin();
          it != items.end(); ++it ) {
 
         s += KStringHandler::csqueeze( (*it)->filename(), 60 );
@@ -71,7 +71,7 @@ static QString createNonExistingFilesString( const QList<K3bAudioFile*>& items, 
 
 
 
-class K3bAudioJob::Private
+class K3b::AudioJob::Private
 {
 public:
     Private()
@@ -91,15 +91,15 @@ public:
 };
 
 
-K3bAudioJob::K3bAudioJob( K3bAudioDoc* doc, K3bJobHandler* hdl, QObject* parent )
-    : K3bBurnJob( hdl, parent ),
+K3b::AudioJob::AudioJob( K3b::AudioDoc* doc, K3b::JobHandler* hdl, QObject* parent )
+    : K3b::BurnJob( hdl, parent ),
       m_doc( doc ),
       m_normalizeJob(0),
       m_maxSpeedJob(0)
 {
     d = new Private;
 
-    m_audioImager = new K3bAudioImager( m_doc, this, this );
+    m_audioImager = new K3b::AudioImager( m_doc, this, this );
     connect( m_audioImager, SIGNAL(infoMessage(const QString&, int)),
              this, SIGNAL(infoMessage(const QString&, int)) );
     connect( m_audioImager, SIGNAL(percent(int)),
@@ -112,32 +112,32 @@ K3bAudioJob::K3bAudioJob( K3bAudioDoc* doc, K3bJobHandler* hdl, QObject* parent 
              this, SLOT(slotAudioDecoderNextTrack(int, int)) );
 
     m_writer = 0;
-    m_tempData = new K3bAudioJobTempData( m_doc, this );
+    m_tempData = new K3b::AudioJobTempData( m_doc, this );
 }
 
 
-K3bAudioJob::~K3bAudioJob()
+K3b::AudioJob::~AudioJob()
 {
     delete d;
 }
 
 
-K3bDevice::Device* K3bAudioJob::writer() const
+K3b::Device::Device* K3b::AudioJob::writer() const
 {
     if( m_doc->onlyCreateImages() )
-        return 0; // no writer needed -> no blocking on K3bBurnJob
+        return 0; // no writer needed -> no blocking on K3b::BurnJob
     else
         return m_doc->burner();
 }
 
 
-K3bDoc* K3bAudioJob::doc() const
+K3b::Doc* K3b::AudioJob::doc() const
 {
     return m_doc;
 }
 
 
-void K3bAudioJob::start()
+void K3b::AudioJob::start()
 {
     jobStarted();
 
@@ -158,12 +158,12 @@ void K3bAudioJob::start()
     //
     // Check if all files exist
     //
-    QList<K3bAudioFile*> nonExistingFiles;
-    K3bAudioTrack* track = m_doc->firstTrack();
+    QList<K3b::AudioFile*> nonExistingFiles;
+    K3b::AudioTrack* track = m_doc->firstTrack();
     while( track ) {
-        K3bAudioDataSource* source = track->firstSource();
+        K3b::AudioDataSource* source = track->firstSource();
         while( source ) {
-            if( K3bAudioFile* file = dynamic_cast<K3bAudioFile*>( source ) ) {
+            if( K3b::AudioFile* file = dynamic_cast<K3b::AudioFile*>( source ) ) {
                 if( !QFile::exists( file->filename() ) )
                     nonExistingFiles.append( file );
             }
@@ -178,7 +178,7 @@ void K3bAudioJob::start()
                            i18n("Warning"),
                            i18n("Remove missing files and continue"),
                            i18n("Cancel and go back") ) ) {
-            for( QList<K3bAudioFile*>::const_iterator it = nonExistingFiles.constBegin();
+            for( QList<K3b::AudioFile*>::const_iterator it = nonExistingFiles.constBegin();
                  it != nonExistingFiles.constEnd(); ++it ) {
                 delete *it;
             }
@@ -312,7 +312,7 @@ void K3bAudioJob::start()
             // try to determine the max possible speed
             emit newSubTask( i18n("Determining maximum writing speed") );
             if( !m_maxSpeedJob ) {
-                m_maxSpeedJob = new K3bAudioMaxSpeedJob( m_doc, this, this );
+                m_maxSpeedJob = new K3b::AudioMaxSpeedJob( m_doc, this, this );
                 connect( m_maxSpeedJob, SIGNAL(percent(int)),
                          this, SIGNAL(subPercent(int)) );
                 connect( m_maxSpeedJob, SIGNAL(finished(bool)),
@@ -358,7 +358,7 @@ void K3bAudioJob::start()
 }
 
 
-void K3bAudioJob::slotMaxSpeedJobFinished( bool success )
+void K3b::AudioJob::slotMaxSpeedJobFinished( bool success )
 {
     d->maxSpeed = success;
     if( !success )
@@ -379,7 +379,7 @@ void K3bAudioJob::slotMaxSpeedJobFinished( bool success )
 }
 
 
-void K3bAudioJob::cancel()
+void K3b::AudioJob::cancel()
 {
     m_canceled = true;
 
@@ -390,14 +390,14 @@ void K3bAudioJob::cancel()
         m_writer->cancel();
 
     m_audioImager->cancel();
-    emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
+    emit infoMessage( i18n("Writing canceled."), K3b::Job::ERROR );
     removeBufferFiles();
     emit canceled();
     jobFinished(false);
 }
 
 
-void K3bAudioJob::slotWriterFinished( bool success )
+void K3b::AudioJob::slotWriterFinished( bool success )
 {
     if( m_canceled || m_errorOccuredAndAlreadyReported )
         return;
@@ -415,7 +415,7 @@ void K3bAudioJob::slotWriterFinished( bool success )
                 removeBufferFiles();
 
             if ( k3bcore->globalSettings()->ejectMedia() ) {
-                K3bDevice::eject( m_doc->burner() );
+                K3b::Device::eject( m_doc->burner() );
             }
 
             jobFinished(true);
@@ -441,13 +441,13 @@ void K3bAudioJob::slotWriterFinished( bool success )
 }
 
 
-void K3bAudioJob::slotAudioDecoderFinished( bool success )
+void K3b::AudioJob::slotAudioDecoderFinished( bool success )
 {
     if( m_canceled || m_errorOccuredAndAlreadyReported )
         return;
 
     if( !success ) {
-        if( m_audioImager->lastErrorType() == K3bAudioImager::ERROR_FD_WRITE ) {
+        if( m_audioImager->lastErrorType() == K3b::AudioImager::ERROR_FD_WRITE ) {
             // this means that the writer job failed so let's use the error handling there.
             return;
         }
@@ -480,10 +480,10 @@ void K3bAudioJob::slotAudioDecoderFinished( bool success )
 }
 
 
-void K3bAudioJob::slotAudioDecoderNextTrack( int t, int tt )
+void K3b::AudioJob::slotAudioDecoderNextTrack( int t, int tt )
 {
     if( m_doc->onlyCreateImages() || !m_doc->onTheFly() ) {
-        K3bAudioTrack* track = m_doc->getTrack(t);
+        K3b::AudioTrack* track = m_doc->getTrack(t);
         emit newSubTask( i18n("Decoding audio track %1 of %2%3",
                               t,
                               tt,
@@ -494,20 +494,20 @@ void K3bAudioJob::slotAudioDecoderNextTrack( int t, int tt )
 }
 
 
-bool K3bAudioJob::prepareWriter()
+bool K3b::AudioJob::prepareWriter()
 {
     delete m_writer;
 
     if( m_usedWritingApp == K3b::WRITING_APP_CDRECORD ) {
 
         if( !writeInfFiles() ) {
-            kDebug() << "(K3bAudioJob) could not write inf-files.";
+            kDebug() << "(K3b::AudioJob) could not write inf-files.";
             emit infoMessage( i18n("IO Error. Most likely no space left on harddisk."), ERROR );
 
             return false;
         }
 
-        K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_doc->burner(), this, this );
+        K3b::CdrecordWriter* writer = new K3b::CdrecordWriter( m_doc->burner(), this, this );
 
         writer->setWritingMode( m_usedWritingMode );
         writer->setSimulate( m_doc->dummy() );
@@ -534,7 +534,7 @@ bool K3bAudioJob::prepareWriter()
             }
         }
 
-        K3bAudioTrack* track = m_doc->firstTrack();
+        K3b::AudioTrack* track = m_doc->firstTrack();
         while( track ) {
             if( m_doc->onTheFly() ) {
                 // this is only supported by cdrecord versions >= 2.01a13
@@ -550,7 +550,7 @@ bool K3bAudioJob::prepareWriter()
     }
     else {
         if( !writeTocFile() ) {
-            kDebug() << "(K3bDataJob) could not write tocfile.";
+            kDebug() << "(K3b::DataJob) could not write tocfile.";
             emit infoMessage( i18n("IO Error"), ERROR );
 
             return false;
@@ -558,8 +558,8 @@ bool K3bAudioJob::prepareWriter()
 
         // create the writer
         // create cdrdao job
-        K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_doc->burner(), this, this );
-        writer->setCommand( K3bCdrdaoWriter::WRITE );
+        K3b::CdrdaoWriter* writer = new K3b::CdrdaoWriter( m_doc->burner(), this, this );
+        writer->setCommand( K3b::CdrdaoWriter::WRITE );
         writer->setSimulate( m_doc->dummy() );
         writer->setBurnSpeed( d->usedSpeed );
         writer->setTocFile( m_tempData->tocFileName() );
@@ -586,9 +586,9 @@ bool K3bAudioJob::prepareWriter()
 }
 
 
-void K3bAudioJob::slotWriterNextTrack( int t, int tt )
+void K3b::AudioJob::slotWriterNextTrack( int t, int tt )
 {
-    K3bAudioTrack* track = m_doc->getTrack(t);
+    K3b::AudioTrack* track = m_doc->getTrack(t);
     // t is in range 1..tt
     if( m_doc->hideFirstTrack() )
         track = m_doc->getTrack(t+1);
@@ -601,7 +601,7 @@ void K3bAudioJob::slotWriterNextTrack( int t, int tt )
 }
 
 
-void K3bAudioJob::slotWriterJobPercent( int p )
+void K3b::AudioJob::slotWriterJobPercent( int p )
 {
     double totalTasks = d->copies;
     double tasksDone = d->copiesDone;
@@ -618,7 +618,7 @@ void K3bAudioJob::slotWriterJobPercent( int p )
 }
 
 
-void K3bAudioJob::slotAudioDecoderPercent( int p )
+void K3b::AudioJob::slotAudioDecoderPercent( int p )
 {
     if( m_doc->onlyCreateImages() ) {
         if( m_doc->normalize() )
@@ -641,7 +641,7 @@ void K3bAudioJob::slotAudioDecoderPercent( int p )
 }
 
 
-void K3bAudioJob::slotAudioDecoderSubPercent( int p )
+void K3b::AudioJob::slotAudioDecoderSubPercent( int p )
 {
     // when writing on the fly the writer produces the subPercent
     if( m_doc->onlyCreateImages() || !m_doc->onTheFly() ) {
@@ -650,7 +650,7 @@ void K3bAudioJob::slotAudioDecoderSubPercent( int p )
 }
 
 
-bool K3bAudioJob::startWriting()
+bool K3b::AudioJob::startWriting()
 {
     if( m_doc->dummy() )
         emit newTask( i18n("Simulating") );
@@ -682,7 +682,7 @@ bool K3bAudioJob::startWriting()
 }
 
 
-void K3bAudioJob::cleanupAfterError()
+void K3b::AudioJob::cleanupAfterError()
 {
     m_errorOccuredAndAlreadyReported = true;
     m_audioImager->cancel();
@@ -695,7 +695,7 @@ void K3bAudioJob::cleanupAfterError()
 }
 
 
-void K3bAudioJob::removeBufferFiles()
+void K3b::AudioJob::removeBufferFiles()
 {
     if ( !m_doc->onTheFly() ) {
         emit infoMessage( i18n("Removing temporary files."), INFO );
@@ -706,10 +706,10 @@ void K3bAudioJob::removeBufferFiles()
 }
 
 
-void K3bAudioJob::normalizeFiles()
+void K3b::AudioJob::normalizeFiles()
 {
     if( !m_normalizeJob ) {
-        m_normalizeJob = new K3bAudioNormalizeJob( this, this );
+        m_normalizeJob = new K3b::AudioNormalizeJob( this, this );
 
         connect( m_normalizeJob, SIGNAL(infoMessage(const QString&, int)),
                  this, SIGNAL(infoMessage(const QString&, int)) );
@@ -724,7 +724,7 @@ void K3bAudioJob::normalizeFiles()
     // add all the files
     // TODO: we may need to split the wave files and put them back together!
     QList<QString> files;
-    K3bAudioTrack* track = m_doc->firstTrack();
+    K3b::AudioTrack* track = m_doc->firstTrack();
     while( track ) {
         files.append( m_tempData->bufferFileName(track) );
         track = track->next();
@@ -736,7 +736,7 @@ void K3bAudioJob::normalizeFiles()
     m_normalizeJob->start();
 }
 
-void K3bAudioJob::slotNormalizeJobFinished( bool success )
+void K3b::AudioJob::slotNormalizeJobFinished( bool success )
 {
     if( m_canceled || m_errorOccuredAndAlreadyReported )
         return;
@@ -761,7 +761,7 @@ void K3bAudioJob::slotNormalizeJobFinished( bool success )
     }
 }
 
-void K3bAudioJob::slotNormalizeProgress( int p )
+void K3b::AudioJob::slotNormalizeProgress( int p )
 {
     double totalTasks = d->copies+2.0;
     double tasksDone = 1; // the decoding has been finished
@@ -770,15 +770,15 @@ void K3bAudioJob::slotNormalizeProgress( int p )
 }
 
 
-void K3bAudioJob::slotNormalizeSubProgress( int p )
+void K3b::AudioJob::slotNormalizeSubProgress( int p )
 {
     emit subPercent( p );
 }
 
 
-bool K3bAudioJob::writeTocFile()
+bool K3b::AudioJob::writeTocFile()
 {
-    K3bTocFileWriter tocWriter;
+    K3b::TocFileWriter tocWriter;
     tocWriter.setData( m_doc->toToc() );
     tocWriter.setHideFirstTrack( m_doc->hideFirstTrack() );
     if( d->useCdText )
@@ -793,10 +793,10 @@ bool K3bAudioJob::writeTocFile()
 }
 
 
-bool K3bAudioJob::writeInfFiles()
+bool K3b::AudioJob::writeInfFiles()
 {
-    K3bInfFileWriter infFileWriter;
-    K3bAudioTrack* track = m_doc->firstTrack();
+    K3b::InfFileWriter infFileWriter;
+    K3b::AudioTrack* track = m_doc->firstTrack();
     while( track ) {
 
         infFileWriter.setTrack( track->toCdTrack() );
@@ -814,20 +814,20 @@ bool K3bAudioJob::writeInfFiles()
 
 
 // checks if the doc contains sources from an audio cd which cannot be read on-the-fly
-bool K3bAudioJob::checkAudioSources()
+bool K3b::AudioJob::checkAudioSources()
 {
-    K3bAudioTrack* track = m_doc->firstTrack();
-    K3bAudioDataSource* source = track->firstSource();
+    K3b::AudioTrack* track = m_doc->firstTrack();
+    K3b::AudioDataSource* source = track->firstSource();
 
     while( source ) {
 
-        if( K3bAudioCdTrackSource* cdSource = dynamic_cast<K3bAudioCdTrackSource*>(source) ) {
+        if( K3b::AudioCdTrackSource* cdSource = dynamic_cast<K3b::AudioCdTrackSource*>(source) ) {
             //
             // If which cases we cannot wite on-the-fly:
             // 1. the writing device contains one of the audio cds
             // 2. Well, one of the cds is missing
             //
-            K3bDevice::Device* dev = cdSource->searchForAudioCD();
+            K3b::Device::Device* dev = cdSource->searchForAudioCD();
             if( !dev || dev == writer() )
                 return false;
             else
@@ -847,7 +847,7 @@ bool K3bAudioJob::checkAudioSources()
 }
 
 
-QString K3bAudioJob::jobDescription() const
+QString K3b::AudioJob::jobDescription() const
 {
     return i18n("Writing Audio CD")
         + ( m_doc->title().isEmpty()
@@ -856,7 +856,7 @@ QString K3bAudioJob::jobDescription() const
 }
 
 
-QString K3bAudioJob::jobDetails() const
+QString K3b::AudioJob::jobDetails() const
 {
     return ( i18np( "1 track (%2 minutes)",
                     "%1 tracks (%2 minutes)",

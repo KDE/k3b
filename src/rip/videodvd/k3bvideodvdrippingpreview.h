@@ -25,13 +25,14 @@
 class KTempDir;
 class KProcess;
 
-class K3bVideoDVDRippingPreview : public QObject
+namespace K3b {
+class VideoDVDRippingPreview : public QObject
 {
     Q_OBJECT
 
 public:
-    K3bVideoDVDRippingPreview( QObject* parent = 0 );
-    ~K3bVideoDVDRippingPreview();
+    VideoDVDRippingPreview( QObject* parent = 0 );
+    ~VideoDVDRippingPreview();
 
     QImage preview() const { return m_preview; }
 
@@ -42,7 +43,7 @@ public Q_SLOTS:
      * \param chapter The Chapter number to use for the preview. 
      *                If 0 the middle of the title is used.
      */
-    void generatePreview( const K3bVideoDVD::VideoDVD& dvd, int title, int chapter = 0 );
+    void generatePreview( const VideoDVD::VideoDVD& dvd, int title, int chapter = 0 );
 
     void cancel();
 
@@ -58,9 +59,10 @@ private:
     KProcess* m_process;
     int m_title;
     int m_chapter;
-    K3bVideoDVD::VideoDVD m_dvd;
+    VideoDVD::VideoDVD m_dvd;
 
     bool m_canceled;
 };
+}
 
 #endif

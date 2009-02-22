@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
  *
@@ -19,49 +19,50 @@
 
 #include <qstring.h>
 
-
-namespace K3bVideoDVD
-{
-  enum SubPictureCodeMode {
-    SUBPIC_CODE_MODE_RLE = 0,
-    SUBPIC_CODE_MODE_EXT = 1
-  };
-
-  enum SubPictureCodeExtension {
-    SUBPIC_CODE_EXT_UNSPECIFIED = 0,
-    SUBPIC_CODE_EXT_CAPTION_NORMAL_SIZE = 1,
-    SUBPIC_CODE_EXT_CAPTION_BIGGER_SIZE = 2,
-    SUBPIC_CODE_EXT_CAPTION_FOR_CHILDREN = 3,
-    SUBPIC_CODE_EXT_CLOSED_CAPTION_NORMAL_SIZE = 5,
-    SUBPIC_CODE_EXT_CLOSED_CAPTION_BIGGER_SIZE = 6,
-    SUBPIC_CODE_EXT_CLOSED_CAPTION_FOR_CHILDREN = 7,
-    SUBPIC_CODE_EXT_FORCED_CAPTION = 9,
-    SUBPIC_CODE_EXT_DIR_COMMENTS_NORMAL_SIZE = 13,
-    SUBPIC_CODE_EXT_DIR_COMMENTS_BIGGER_SIZE = 14,
-    SUBPIC_CODE_EXT_DIR_COMMENTS_FOR_CHILDREN = 15
-  };
-
-  class LIBK3B_EXPORT SubPictureStream
+namespace K3b {
+    namespace VideoDVD
     {
-    public:
-      SubPictureStream() {}
+        enum SubPictureCodeMode {
+            SUBPIC_CODE_MODE_RLE = 0,
+            SUBPIC_CODE_MODE_EXT = 1
+        };
 
-      unsigned int codeMode() const { return m_codeMode; }
-      unsigned int codeExtension() const { return m_codeExtension; }
+        enum SubPictureCodeExtension {
+            SUBPIC_CODE_EXT_UNSPECIFIED = 0,
+            SUBPIC_CODE_EXT_CAPTION_NORMAL_SIZE = 1,
+            SUBPIC_CODE_EXT_CAPTION_BIGGER_SIZE = 2,
+            SUBPIC_CODE_EXT_CAPTION_FOR_CHILDREN = 3,
+            SUBPIC_CODE_EXT_CLOSED_CAPTION_NORMAL_SIZE = 5,
+            SUBPIC_CODE_EXT_CLOSED_CAPTION_BIGGER_SIZE = 6,
+            SUBPIC_CODE_EXT_CLOSED_CAPTION_FOR_CHILDREN = 7,
+            SUBPIC_CODE_EXT_FORCED_CAPTION = 9,
+            SUBPIC_CODE_EXT_DIR_COMMENTS_NORMAL_SIZE = 13,
+            SUBPIC_CODE_EXT_DIR_COMMENTS_BIGGER_SIZE = 14,
+            SUBPIC_CODE_EXT_DIR_COMMENTS_FOR_CHILDREN = 15
+        };
 
-      /**
-       * \return A two chars language code or the empty string
-       * if the language is undefined.
-       */
-      const QString& langCode() const { return m_langCode; }
+        class LIBK3B_EXPORT SubPictureStream
+        {
+        public:
+            SubPictureStream() {}
 
-    private:
-      unsigned int m_codeMode:3;
-      QString m_langCode;
-      unsigned int m_codeExtension;
+            unsigned int codeMode() const { return m_codeMode; }
+            unsigned int codeExtension() const { return m_codeExtension; }
 
-      friend class VideoDVD;
-    };
+            /**
+             * \return A two chars language code or the empty string
+             * if the language is undefined.
+             */
+            const QString& langCode() const { return m_langCode; }
+
+        private:
+            unsigned int m_codeMode:3;
+            QString m_langCode;
+            unsigned int m_codeExtension;
+
+            friend class VideoDVD;
+        };
+    }
 }
 
 #endif

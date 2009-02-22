@@ -17,36 +17,39 @@
 
 #include <kdialog.h>
 
-class K3bRichTextLabel;
-namespace K3bDevice {
-  class Device;
+namespace K3b {
+    class RichTextLabel;
+
+    namespace Device {
+        class Device;
+    }
+
+    class LsofWrapperDialog : public KDialog
+    {
+        Q_OBJECT
+
+    public:
+        ~LsofWrapperDialog();
+
+        /**
+         * Check if other applications are currently using the device and if so
+         * warn the user and provide a quick solution to shut down these other
+         * applications.
+         *
+         * If the device is not in use this method simply returns.
+         */
+        static void checkDevice( Device::Device* dev, QWidget* parent = 0 );
+
+    private Q_SLOTS:
+        bool slotCheckDevice();
+        void slotQuitOtherApps();
+
+    private:
+        LsofWrapperDialog( QWidget* parent );
+
+        Device::Device* m_device;
+        RichTextLabel* m_label;
+    };
 }
-
-class K3bLsofWrapperDialog : public KDialog
-{
-  Q_OBJECT
-
- public:
-  ~K3bLsofWrapperDialog();
-
-  /**
-   * Check if other applications are currently using the device and if so
-   * warn the user and provide a quick solution to shut down these other
-   * applications.
-   *
-   * If the device is not in use this method simply returns.
-   */
-  static void checkDevice( K3bDevice::Device* dev, QWidget* parent = 0 );
-
- private Q_SLOTS:
-  bool slotCheckDevice();
-  void slotQuitOtherApps();
-
- private:
-  K3bLsofWrapperDialog( QWidget* parent );
-
-  K3bDevice::Device* m_device;
-  K3bRichTextLabel* m_label;
-};
 
 #endif

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
 static int s_bufferSizeSectors = 10;
 
 
-class K3bDataTrackReader::Private
+class K3b::DataTrackReader::Private
 {
 public:
     Private();
@@ -43,7 +43,7 @@ public:
     bool ignoreReadErrors;
     bool noCorrection;
     int retries;
-    K3bDevice::Device* device;
+    K3b::Device::Device* device;
     K3b::Msf firstSector;
     K3b::Msf lastSector;
     K3b::Msf nextReadSector;
@@ -51,7 +51,7 @@ public:
     QString imagePath;
     int sectorSize;
     bool useLibdvdcss;
-    K3bLibDvdCss* libcss;
+    K3b::LibDvdCss* libcss;
 
     int oldErrorRecoveryMode;
 
@@ -61,7 +61,7 @@ public:
 };
 
 
-K3bDataTrackReader::Private::Private()
+K3b::DataTrackReader::Private::Private()
     : ignoreReadErrors(false),
       noCorrection(false),
       retries(10),
@@ -72,7 +72,7 @@ K3bDataTrackReader::Private::Private()
 }
 
 
-K3bDataTrackReader::Private::~Private()
+K3b::DataTrackReader::Private::~Private()
 {
     delete libcss;
 }
@@ -80,73 +80,73 @@ K3bDataTrackReader::Private::~Private()
 
 
 
-K3bDataTrackReader::K3bDataTrackReader( K3bJobHandler* jh, QObject* parent )
-    : K3bThreadJob( jh, parent ),
+K3b::DataTrackReader::DataTrackReader( K3b::JobHandler* jh, QObject* parent )
+    : K3b::ThreadJob( jh, parent ),
       d( new Private() )
 {
 }
 
 
-K3bDataTrackReader::~K3bDataTrackReader()
+K3b::DataTrackReader::~DataTrackReader()
 {
     delete d;
 }
 
 
-void K3bDataTrackReader::setDevice( K3bDevice::Device* dev )
+void K3b::DataTrackReader::setDevice( K3b::Device::Device* dev )
 {
     d->device = dev;
 }
 
 
-void K3bDataTrackReader::setSectorRange( const K3b::Msf& start, const K3b::Msf& end )
+void K3b::DataTrackReader::setSectorRange( const K3b::Msf& start, const K3b::Msf& end )
 {
     d->firstSector = start;
     d->lastSector = end;
 }
 
 
-void K3bDataTrackReader::setRetries( int r )
+void K3b::DataTrackReader::setRetries( int r )
 {
     d->retries = r;
 }
 
 
-void K3bDataTrackReader::setIgnoreErrors( bool b )
+void K3b::DataTrackReader::setIgnoreErrors( bool b )
 {
     d->ignoreReadErrors = b;
 }
 
 
-void K3bDataTrackReader::setNoCorrection( bool b )
+void K3b::DataTrackReader::setNoCorrection( bool b )
 {
     d->noCorrection = b;
 }
 
 
-void K3bDataTrackReader::writeToFd( int fd )
+void K3b::DataTrackReader::writeToFd( int fd )
 {
     d->fd = fd;
 }
 
 
-void K3bDataTrackReader::setImagePath( const QString& p )
+void K3b::DataTrackReader::setImagePath( const QString& p )
 {
     d->imagePath = p;
     d->fd = -1;
 }
 
 
-void K3bDataTrackReader::setSectorSize( SectorSize size )
+void K3b::DataTrackReader::setSectorSize( SectorSize size )
 {
     d->sectorSize = size;
 }
 
 
-bool K3bDataTrackReader::run()
+bool K3b::DataTrackReader::run()
 {
     if( !d->device->open() ) {
-        emit infoMessage( i18n("Could not open device %1",d->device->blockDeviceName()), K3bJob::ERROR );
+        emit infoMessage( i18n("Could not open device %1",d->device->blockDeviceName()), K3b::Job::ERROR );
         return false;
     }
 
@@ -156,73 +156,73 @@ bool K3bDataTrackReader::run()
     d->useLibdvdcss = false;
     d->usedSectorSize = d->sectorSize;
 
-    int mediaType = d->device->mediaType();
+    Device::MediaType mediaType = d->device->mediaType();
 
-    if( K3bDevice::isDvdMedia( mediaType ) ) {
+    if( K3b::Device::isDvdMedia( mediaType ) ) {
         d->usedSectorSize = MODE1;
 
         //
         // In case of an encrypted VideoDVD we read with libdvdcss which takes care of decrypting the vobs
         //
-        if( d->device->copyrightProtectionSystemType() == K3bDevice::COPYRIGHT_PROTECTION_CSS ) {
+        if( d->device->copyrightProtectionSystemType() == K3b::Device::COPYRIGHT_PROTECTION_CSS ) {
 
             // close the device for libdvdcss
             d->device->close();
 
-            kDebug() << "(K3bDataTrackReader::WorkThread) found encrypted dvd. using libdvdcss.";
+            kDebug() << "(K3b::DataTrackReader::WorkThread) found encrypted dvd. using libdvdcss.";
 
             // open the libdvdcss stuff
             if( !d->libcss )
-                d->libcss = K3bLibDvdCss::create();
+                d->libcss = K3b::LibDvdCss::create();
             if( !d->libcss ) {
-                emit infoMessage( i18n("Unable to open libdvdcss."), K3bJob::ERROR );
+                emit infoMessage( i18n("Unable to open libdvdcss."), K3b::Job::ERROR );
                 return false;
             }
 
             if( !d->libcss->open(d->device) ) {
-                emit infoMessage( i18n("Could not open device %1",d->device->blockDeviceName()), K3bJob::ERROR );
+                emit infoMessage( i18n("Could not open device %1",d->device->blockDeviceName()), K3b::Job::ERROR );
                 return false;
             }
 
-            emit infoMessage( i18n("Retrieving all CSS keys. This might take a while."), K3bJob::INFO );
+            emit infoMessage( i18n("Retrieving all CSS keys. This might take a while."), K3b::Job::INFO );
             if( !d->libcss->crackAllKeys() ) {
                 d->libcss->close();
-                emit infoMessage( i18n("Failed to retrieve all CSS keys."), K3bJob::ERROR );
-                emit infoMessage( i18n("Video DVD decryption failed."), K3bJob::ERROR );
+                emit infoMessage( i18n("Failed to retrieve all CSS keys."), K3b::Job::ERROR );
+                emit infoMessage( i18n("Video DVD decryption failed."), K3b::Job::ERROR );
                 return false;
             }
 
             d->useLibdvdcss = true;
         }
     }
-    else if ( K3bDevice::isBdMedia( mediaType ) ) {
+    else if ( K3b::Device::isBdMedia( mediaType ) ) {
         d->usedSectorSize = MODE1;
     }
     else {
         if( d->usedSectorSize == AUTO ) {
             switch( d->device->getDataMode( d->firstSector ) ) {
-            case K3bDevice::Track::MODE1:
-            case K3bDevice::Track::DVD:
+            case K3b::Device::Track::MODE1:
+            case K3b::Device::Track::DVD:
                 d->usedSectorSize = MODE1;
                 break;
-            case K3bDevice::Track::XA_FORM1:
+            case K3b::Device::Track::XA_FORM1:
                 d->usedSectorSize = MODE2FORM1;
                 break;
-            case K3bDevice::Track::XA_FORM2:
+            case K3b::Device::Track::XA_FORM2:
                 d->usedSectorSize = MODE2FORM2;
                 break;
-            case K3bDevice::Track::MODE2:
-                emit infoMessage( i18n("No support for reading formless Mode2 sectors."), K3bJob::ERROR );
+            case K3b::Device::Track::MODE2:
+                emit infoMessage( i18n("No support for reading formless Mode2 sectors."), K3b::Job::ERROR );
             default:
-                emit infoMessage( i18n("Unsupported sector type."), K3bJob::ERROR );
+                emit infoMessage( i18n("Unsupported sector type."), K3b::Job::ERROR );
                 d->device->close();
                 return false;
             }
         }
     }
 
-    emit infoMessage( i18n("Reading with sector size %1.",d->usedSectorSize), K3bJob::INFO );
-    emit debuggingOutput( "K3bDataTrackReader",
+    emit infoMessage( i18n("Reading with sector size %1.",d->usedSectorSize), K3b::Job::INFO );
+    emit debuggingOutput( "K3b::DataTrackReader",
                           QString("reading sectors %1 to %2 with sector size %3. Length: %4 sectors, %5 bytes.")
                           .arg( d->firstSector.lba() )
                           .arg( d->lastSector.lba() )
@@ -237,7 +237,7 @@ bool K3bDataTrackReader::run()
             d->device->close();
             if( d->useLibdvdcss )
                 d->libcss->close();
-            emit infoMessage( i18n("Unable to open '%1' for writing.",d->imagePath), K3bJob::ERROR );
+            emit infoMessage( i18n("Unable to open '%1' for writing.",d->imagePath), K3b::Job::ERROR );
             return false;
         }
     }
@@ -259,23 +259,23 @@ bool K3bDataTrackReader::run()
     s_bufferSizeSectors = 128;
     unsigned char* buffer = new unsigned char[d->usedSectorSize*s_bufferSizeSectors];
     while( s_bufferSizeSectors > 0 && read( buffer, d->firstSector.lba(), s_bufferSizeSectors ) < 0 ) {
-        kDebug() << "(K3bDataTrackReader) determine max read sectors: "
+        kDebug() << "(K3b::DataTrackReader) determine max read sectors: "
                  << s_bufferSizeSectors << " too high." << endl;
         s_bufferSizeSectors--;
     }
-    kDebug() << "(K3bDataTrackReader) determine max read sectors: "
+    kDebug() << "(K3b::DataTrackReader) determine max read sectors: "
              << s_bufferSizeSectors << " is max." << endl;
 
-    //    s_bufferSizeSectors = K3bDevice::determineMaxReadingBufferSize( d->device, d->firstSector );
+    //    s_bufferSizeSectors = K3b::Device::determineMaxReadingBufferSize( d->device, d->firstSector );
     if( s_bufferSizeSectors <= 0 ) {
-        emit infoMessage( i18n("Error while reading sector %1.",d->firstSector.lba()), K3bJob::ERROR );
+        emit infoMessage( i18n("Error while reading sector %1.",d->firstSector.lba()), K3b::Job::ERROR );
         d->device->block( false );
         k3bcore->unblockDevice( d->device );
         return false;
     }
 
-    kDebug() << "(K3bDataTrackReader) using buffer size of " << s_bufferSizeSectors << " blocks.";
-    emit debuggingOutput( "K3bDataTrackReader", QString("using buffer size of %1 blocks.").arg( s_bufferSizeSectors ) );
+    kDebug() << "(K3b::DataTrackReader) using buffer size of " << s_bufferSizeSectors << " blocks.";
+    emit debuggingOutput( "K3b::DataTrackReader", QString("using buffer size of %1 blocks.").arg( s_bufferSizeSectors ) );
 
     // 2. get it on
     K3b::Msf currentSector = d->firstSector;
@@ -311,9 +311,9 @@ bool K3bDataTrackReader::run()
 
         if( d->fd != -1 ) {
             if( ::write( d->fd, reinterpret_cast<void*>(buffer), readBytes ) != readBytes ) {
-                kDebug() << "(K3bDataTrackReader::WorkThread) error while writing to fd " << d->fd
+                kDebug() << "(K3b::DataTrackReader::WorkThread) error while writing to fd " << d->fd
                          << " current sector: " << (currentSector.lba()-d->firstSector.lba()) << endl;
-                emit debuggingOutput( "K3bDataTrackReader",
+                emit debuggingOutput( "K3b::DataTrackReader",
                                       QString("Error while writing to fd %1. Current sector is %2.")
                                       .arg(d->fd).arg(currentSector.lba()-d->firstSector.lba()) );
                 writeError = true;
@@ -322,9 +322,9 @@ bool K3bDataTrackReader::run()
         }
         else {
             if( file.write( reinterpret_cast<char*>(buffer), readBytes ) != readBytes ) {
-                kDebug() << "(K3bDataTrackReader::WorkThread) error while writing to file " << d->imagePath
+                kDebug() << "(K3b::DataTrackReader::WorkThread) error while writing to file " << d->imagePath
                          << " current sector: " << (currentSector.lba()-d->firstSector.lba()) << endl;
-                emit debuggingOutput( "K3bDataTrackReader",
+                emit debuggingOutput( "K3b::DataTrackReader",
                                       QString("Error while writing to file %1. Current sector is %2.")
                                       .arg(d->imagePath).arg(currentSector.lba()-d->firstSector.lba()) );
                 writeError = true;
@@ -351,7 +351,7 @@ bool K3bDataTrackReader::run()
 
     if( d->errorSectorCount > 0 )
         emit infoMessage( i18np("Ignored %1 erroneous sector.", "Ignored a total of %1 erroneous sectors.", d->errorSectorCount ),
-                          K3bJob::ERROR );
+                          K3b::Job::ERROR );
 
     // reset the error recovery mode
     setErrorRecovery( d->device, d->oldErrorRecoveryMode );
@@ -365,7 +365,7 @@ bool K3bDataTrackReader::run()
     d->device->close();
     delete [] buffer;
 
-    emit debuggingOutput( "K3bDataTrackReader",
+    emit debuggingOutput( "K3b::DataTrackReader",
                           QString("Read a total of %1 sectors (%2 bytes)")
                           .arg(totalReadSectors.lba())
                           .arg((quint64)totalReadSectors.lba()*(quint64)d->usedSectorSize) );
@@ -374,7 +374,7 @@ bool K3bDataTrackReader::run()
 }
 
 
-int K3bDataTrackReader::read( unsigned char* buffer, unsigned long sector, unsigned int len )
+int K3b::DataTrackReader::read( unsigned char* buffer, unsigned long sector, unsigned int len )
 {
     //
     // Encrypted DVD reading with libdvdcss
@@ -416,10 +416,10 @@ int K3bDataTrackReader::read( unsigned char* buffer, unsigned long sector, unsig
 
 
 // here we read every single sector for itself to find the troubleing ones
-bool K3bDataTrackReader::retryRead( unsigned char* buffer, unsigned long startSector, unsigned int len )
+bool K3b::DataTrackReader::retryRead( unsigned char* buffer, unsigned long startSector, unsigned int len )
 {
-    emit debuggingOutput( "K3bDataTrackReader", QString( "Problem while reading. Retrying from sector %1.").arg(startSector) );
-    emit infoMessage( i18n("Problem while reading. Retrying from sector %1.",startSector), K3bJob::WARNING );
+    emit debuggingOutput( "K3b::DataTrackReader", QString( "Problem while reading. Retrying from sector %1.").arg(startSector) );
+    emit infoMessage( i18n("Problem while reading. Retrying from sector %1.",startSector), K3b::Job::WARNING );
 
     int sectorsRead = -1;
     bool success = true;
@@ -435,16 +435,16 @@ bool K3bDataTrackReader::retryRead( unsigned char* buffer, unsigned long startSe
 
         if( !success ) {
             if( d->ignoreReadErrors ) {
-                emit infoMessage( i18n("Ignoring read error in sector %1.",sector), K3bJob::ERROR );
-                emit debuggingOutput( "K3bDataTrackReader", QString( "Ignoring read error in sector %1.").arg(sector) );
+                emit infoMessage( i18n("Ignoring read error in sector %1.",sector), K3b::Job::ERROR );
+                emit debuggingOutput( "K3b::DataTrackReader", QString( "Ignoring read error in sector %1.").arg(sector) );
 
                 ++d->errorSectorCount;
                 //	  ::memset( &buffer[i], 0, 1 );
                 success = true;
             }
             else {
-                emit infoMessage( i18n("Error while reading sector %1.",sector), K3bJob::ERROR );
-                emit debuggingOutput( "K3bDataTrackReader", QString( "Read error in sector %1.").arg(sector) );
+                emit infoMessage( i18n("Error while reading sector %1.",sector), K3b::Job::ERROR );
+                emit debuggingOutput( "K3b::DataTrackReader", QString( "Read error in sector %1.").arg(sector) );
                 break;
             }
         }
@@ -454,7 +454,7 @@ bool K3bDataTrackReader::retryRead( unsigned char* buffer, unsigned long startSe
 }
 
 
-bool K3bDataTrackReader::setErrorRecovery( K3bDevice::Device* dev, int code )
+bool K3b::DataTrackReader::setErrorRecovery( K3b::Device::Device* dev, int code )
 {
     unsigned char* data = 0;
     unsigned int dataLen = 0;
@@ -463,7 +463,7 @@ bool K3bDataTrackReader::setErrorRecovery( K3bDevice::Device* dev, int code )
 
     // in MMC1 the page has 8 bytes (12 in MMC4 but we only need the first 3 anyway)
     if( dataLen < 8+8 ) {
-        kDebug() << "(K3bDataTrackReader) modepage 0x01 data too small: " << dataLen;
+        kDebug() << "(K3b::DataTrackReader) modepage 0x01 data too small: " << dataLen;
         delete [] data;
         return false;
     }
@@ -472,7 +472,7 @@ bool K3bDataTrackReader::setErrorRecovery( K3bDevice::Device* dev, int code )
     data[8+2] = code;
 
     if( d->oldErrorRecoveryMode != code )
-        kDebug() << "(K3bDataTrackReader) changing data recovery mode from " << d->oldErrorRecoveryMode << " to " << code;
+        kDebug() << "(K3b::DataTrackReader) changing data recovery mode from " << d->oldErrorRecoveryMode << " to " << code;
 
     bool success = dev->modeSelect( data, dataLen, true, false );
 

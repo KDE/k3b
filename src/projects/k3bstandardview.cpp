@@ -22,10 +22,10 @@
 #include <QDebug>
 #include <QHeaderView>
 
-K3bStandardView::K3bStandardView(K3bDoc* doc, QWidget *parent )
-: K3bView(doc, parent)
+K3b::StandardView::StandardView(K3b::Doc* doc, QWidget *parent )
+: K3b::View(doc, parent)
 {
-    m_dirProxy = new K3bDirProxyModel(this);
+    m_dirProxy = new K3b::DirProxyModel(this);
 
     // --- setup GUI ---------------------------------------------------
     m_splitter = new QSplitter( this );
@@ -60,11 +60,11 @@ K3bStandardView::K3bStandardView(K3bDoc* doc, QWidget *parent )
             this, SLOT(slotCustomContextMenu(const QPoint&)));
 }
 
-K3bStandardView::~K3bStandardView()
+K3b::StandardView::~StandardView()
 {
 }
 
-void K3bStandardView::setModel(QAbstractItemModel *model)
+void K3b::StandardView::setModel(QAbstractItemModel *model)
 {
     m_dirProxy->setSourceModel(model);
 
@@ -85,30 +85,30 @@ void K3bStandardView::setModel(QAbstractItemModel *model)
         m_dirView->setCurrentIndex(m_dirProxy->index(0,0));
 }
 
-void K3bStandardView::setShowDirPanel(bool show)
+void K3b::StandardView::setShowDirPanel(bool show)
 {
     m_dirView->setVisible(show);
     if (!show)
         m_fileView->setRootIndex(QModelIndex());
 }
 
-void K3bStandardView::contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos)
+void K3b::StandardView::contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos)
 {
     // do nothing in the default implementation (at least for now)
     qDebug() << "Gotta show a menu for " << selectedIndexes.count() << " items at " << pos;
 }
 
-QModelIndexList K3bStandardView::currentSelection() const
+QModelIndexList K3b::StandardView::currentSelection() const
 {
     return m_currentSelection;
 }
 
-QModelIndex K3bStandardView::currentRoot() const
+QModelIndex K3b::StandardView::currentRoot() const
 {
     return m_fileView->rootIndex();
 }
 
-void K3bStandardView::slotCurrentDirChanged()
+void K3b::StandardView::slotCurrentDirChanged()
 {
     QModelIndexList indexes = m_dirView->selectionModel()->selectedRows();
 
@@ -124,7 +124,7 @@ void K3bStandardView::slotCurrentDirChanged()
     emit currentRootChanged( currentDir );
 }
 
-void K3bStandardView::slotCustomContextMenu(const QPoint &pos)
+void K3b::StandardView::slotCustomContextMenu(const QPoint &pos)
 {
     QModelIndexList selection;
     // detect which view emitted the signal
@@ -153,12 +153,12 @@ void K3bStandardView::slotCustomContextMenu(const QPoint &pos)
     contextMenuForSelection(selection, view->viewport()->mapToGlobal(pos));
 }
 
-void K3bStandardView::slotParentDir()
+void K3b::StandardView::slotParentDir()
 {
     m_dirView->setCurrentIndex(m_dirProxy->mapFromSource(m_fileView->rootIndex().parent()));
 }
 
-void K3bStandardView::slotRemoveSelectedIndexes()
+void K3b::StandardView::slotRemoveSelectedIndexes()
 {
     QAbstractItemModel *model = m_fileView->model();
     if (!model)
@@ -178,7 +178,7 @@ void K3bStandardView::slotRemoveSelectedIndexes()
     m_currentSelection.clear();
 }
 
-void K3bStandardView::slotRenameItem()
+void K3b::StandardView::slotRenameItem()
 {
     if (m_currentSelection.isEmpty())
         return;

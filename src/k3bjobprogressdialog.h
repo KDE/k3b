@@ -36,24 +36,31 @@ class QFrame;
 class QLabel;
 class QProgressBar;
 class QTimer;
-class K3bJob;
+namespace K3b {
+    class Job;
+}
 class KSqueezedTextLabel;
 class QCloseEvent;
 class QKeyEvent;
-class K3bJobProgressOSD;
-class K3bThemedLabel;
+namespace K3b {
+    class JobProgressOSD;
+}
+namespace K3b {
+    class ThemedLabel;
+}
 
 
-class K3bJobProgressDialog : public KDialog, public K3bJobHandler
+namespace K3b {
+class JobProgressDialog : public KDialog, public JobHandler
 {
     Q_OBJECT
 
 public:
-    K3bJobProgressDialog( QWidget* parent = 0, 
+    JobProgressDialog( QWidget* parent = 0, 
                           bool showSubProgress = true );
-    virtual ~K3bJobProgressDialog();
+    virtual ~JobProgressDialog();
 
-    virtual void setJob( K3bJob* job );
+    virtual void setJob( Job* job );
     void setExtraInfo( QWidget *extra );
 
     /**
@@ -71,20 +78,20 @@ public:
      * if job == 0 the job set with setJob
      * Use instead of exec()
      */
-    int startJob( K3bJob* job = 0 );
+    int startJob( Job* job = 0 );
 
     QSize sizeHint() const;
 
     /**
-     * @reimplemented from K3bJobHandler
+     * @reimplemented from JobHandler
      */
-    int waitForMedia( K3bDevice::Device*,
-                      int mediaState = K3bDevice::STATE_EMPTY,
-                      int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
+    int waitForMedia( Device::Device*,
+                      int mediaState = Device::STATE_EMPTY,
+                      int mediaType = Device::MEDIA_WRITABLE_CD,
                       const QString& message = QString() );
   
     /**
-     * @reimplemented from K3bJobHandler
+     * @reimplemented from JobHandler
      */
     bool questionYesNo( const QString& text,
                         const QString& caption = QString(),
@@ -92,7 +99,7 @@ public:
                         const QString& noText = QString() );
 
     /**
-     * reimplemented from K3bJobHandler
+     * reimplemented from JobHandler
      */
     void blockingInformation( const QString& text,
                               const QString& caption = QString() );
@@ -127,18 +134,18 @@ protected:
     void setupGUI();
     void setupConnections();
 	
-    K3bThemedLabel* m_labelJob;
-    K3bThemedLabel* m_labelJobDetails;
+    ThemedLabel* m_labelJob;
+    ThemedLabel* m_labelJobDetails;
     K3ListView* m_viewInfo;
-    K3bThemedLabel* m_labelTask;
-    K3bThemedLabel* m_labelElapsedTime;
+    ThemedLabel* m_labelTask;
+    ThemedLabel* m_labelElapsedTime;
     KSqueezedTextLabel* m_labelSubTask;
     QLabel* m_labelSubProcessedSize;
     QProgressBar* m_progressSubPercent;
     QLabel* m_labelProcessedSize;
     QProgressBar* m_progressPercent;
     QFrame* m_frameExtraInfo;
-    K3bThemedLabel* m_pixLabel;
+    ThemedLabel* m_pixLabel;
 
     QGridLayout* m_frameExtraInfoLayout;
 
@@ -146,20 +153,21 @@ private:
     class Private;
     Private* d;
 
-    K3bJob* m_job;
+    Job* m_job;
     QTimer* m_timer;
     QDateTime m_startTime;
     QDateTime m_lastProgressUpdateTime;
 
-    K3bDebuggingOutputFile m_logFile;
-    K3bDebuggingOutputCache m_logCache;
+    DebuggingOutputFile m_logFile;
+    DebuggingOutputCache m_logCache;
 
     bool m_bCanceled;
 
     QString m_plainCaption;
 
-    K3bJobProgressOSD* m_osd;
+    JobProgressOSD* m_osd;
 };
+}
 
 
 #endif

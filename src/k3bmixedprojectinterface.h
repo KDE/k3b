@@ -20,27 +20,35 @@
 
 #include <dcopref.h>
 
-class K3bMixedDoc;
-class K3bDataProjectInterface;
-class K3bAudioProjectInterface;
+namespace K3b {
+    class MixedDoc;
+}
+namespace K3b {
+    class DataProjectInterface;
+}
+namespace K3b {
+    class AudioProjectInterface;
+}
 
 
-class K3bMixedProjectInterface : public K3bProjectInterface
+namespace K3b {
+class MixedProjectInterface : public ProjectInterface
 {
   K_DCOP
 
  public:
-  K3bMixedProjectInterface( K3bMixedDoc* );
+  MixedProjectInterface( MixedDoc* );
 
  k_dcop:
   DCOPRef dataPart() const;
   DCOPRef audioPart() const;
 
  private:
-  K3bMixedDoc* m_mixedDoc;
+  MixedDoc* m_mixedDoc;
 
-  K3bDataProjectInterface* m_dataInterface;
-  K3bAudioProjectInterface* m_audioInterface;
+  DataProjectInterface* m_dataInterface;
+  AudioProjectInterface* m_audioInterface;
 };
+}
 
 #endif

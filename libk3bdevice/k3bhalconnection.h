@@ -24,92 +24,91 @@
 #include <qstringlist.h>
 
 
-namespace K3bDevice {
+namespace K3b {
+    namespace Device {
 
-  class Device;
+        class Device;
 
-  /**
-   * This is a simple HAL/DBUS wrapper.
-   *
-   * It only provides methods to lock and unlock a device since Solid does not provide those.
-   */
-  class LIBK3BDEVICE_EXPORT HalConnection : public QObject
-  {
-      Q_OBJECT
+        /**
+         * This is a simple HAL/DBUS wrapper.
+         *
+         * It only provides methods to lock and unlock a device since Solid does not provide those.
+         */
+        class LIBK3BDEVICE_EXPORT HalConnection : public QObject
+        {
+            Q_OBJECT;
 
-  public:
-      ~HalConnection();
+        public:
+            /**
+             * Use instance() to get the single global object
+             */
+            HalConnection( QObject* = 0 );
+            ~HalConnection();
 
-      /**
-       * Creates a new singleton HalConnection object or returns the already existing one.
-       * A newly created HalConnection will emit newDevice signals for all devices in the HAL
-       * manager. However, since one cannot be sure if this is the first time the HalConnection
-       * is created it is recommended to connect to the signals and query the list of current
-       * devices.
-       *
-       * \return An instance of the singleton HalConnection object.
-       */
-      static HalConnection* instance();
+            /**
+             * Creates a new singleton HalConnection object or returns the already existing one.
+             * A newly created HalConnection will emit newDevice signals for all devices in the HAL
+             * manager. However, since one cannot be sure if this is the first time the HalConnection
+             * is created it is recommended to connect to the signals and query the list of current
+             * devices.
+             *
+             * \return An instance of the singleton HalConnection object.
+             */
+            static HalConnection* instance();
 
-      /**
-       * Error codes named as the HAL daemon raises them
-       */
-      enum ErrorCodes {
-          org_freedesktop_Hal_Success = 0, //*< The operation was successful. This code does not match any in HAL
-          org_freedesktop_Hal_CommunicationError, //*< DBus communication error. This code does not match any in HAL
-          org_freedesktop_Hal_NoSuchDevice,
-          org_freedesktop_Hal_DeviceAlreadyLocked,
-          org_freedesktop_Hal_PermissionDenied,
-          org_freedesktop_Hal_Device_Volume_NoSuchDevice,
-          org_freedesktop_Hal_Device_Volume_PermissionDenied,
-          org_freedesktop_Hal_Device_Volume_AlreadyMounted,
-          org_freedesktop_Hal_Device_Volume_InvalidMountOption,
-          org_freedesktop_Hal_Device_Volume_UnknownFilesystemType,
-          org_freedesktop_Hal_Device_Volume_InvalidMountpoint,
-          org_freedesktop_Hal_Device_Volume_MountPointNotAvailable,
-          org_freedesktop_Hal_Device_Volume_PermissionDeniedByPolicy,
-          org_freedesktop_Hal_Device_Volume_InvalidUnmountOption,
-          org_freedesktop_Hal_Device_Volume_InvalidEjectOption
-      };
+            /**
+             * Error codes named as the HAL daemon raises them
+             */
+            enum ErrorCodes {
+                org_freedesktop_Hal_Success = 0, //*< The operation was successful. This code does not match any in HAL
+                org_freedesktop_Hal_CommunicationError, //*< DBus communication error. This code does not match any in HAL
+                org_freedesktop_Hal_NoSuchDevice,
+                org_freedesktop_Hal_DeviceAlreadyLocked,
+                org_freedesktop_Hal_PermissionDenied,
+                org_freedesktop_Hal_Device_Volume_NoSuchDevice,
+                org_freedesktop_Hal_Device_Volume_PermissionDenied,
+                org_freedesktop_Hal_Device_Volume_AlreadyMounted,
+                org_freedesktop_Hal_Device_Volume_InvalidMountOption,
+                org_freedesktop_Hal_Device_Volume_UnknownFilesystemType,
+                org_freedesktop_Hal_Device_Volume_InvalidMountpoint,
+                org_freedesktop_Hal_Device_Volume_MountPointNotAvailable,
+                org_freedesktop_Hal_Device_Volume_PermissionDeniedByPolicy,
+                org_freedesktop_Hal_Device_Volume_InvalidUnmountOption,
+                org_freedesktop_Hal_Device_Volume_InvalidEjectOption
+            };
 
-  public Q_SLOTS:
-      /**
-       * Lock the device in HAL
-       * 
-       * Be aware that once the method returns the HAL daemon has not necessarily 
-       * finished the procedure yet.
-       *
-       * \param dev The device to lock
-       * \return An error code
-       *
-       * \see ErrorCode
-       */
-      int lock( Device* );
+        public Q_SLOTS:
+            /**
+             * Lock the device in HAL
+             * 
+             * Be aware that once the method returns the HAL daemon has not necessarily 
+             * finished the procedure yet.
+             *
+             * \param dev The device to lock
+             * \return An error code
+             *
+             * \see ErrorCode
+             */
+            int lock( Device* );
 
-      /**
-       * Unlock a previously locked device in HAL
-       * 
-       * Be aware that once the method returns the HAL daemon has not necessarily 
-       * finished the procedure yet.
-       *
-       * \param dev The device to lock
-       * \return An error code
-       *
-       * \see ErrorCode
-       */
-      int unlock( Device* );
+            /**
+             * Unlock a previously locked device in HAL
+             * 
+             * Be aware that once the method returns the HAL daemon has not necessarily 
+             * finished the procedure yet.
+             *
+             * \param dev The device to lock
+             * \return An error code
+             *
+             * \see ErrorCode
+             */
+            int unlock( Device* );
 
-  private:
-      /**
-       * HalConnection is a signelton class. Use the instance() method to create it.
-       */
-      HalConnection( QObject* parent = 0 );
-
-      static HalConnection* s_instance;
-
-      class Private;
-      Private* d;
-  };
+        private:
+            class Private;
+            Private* d;
+        };
+    }
 }
 
 #endif

@@ -23,19 +23,19 @@
 #include <qdatetime.h>
 
 
-K3bTocFileWriter::K3bTocFileWriter()
+K3b::TocFileWriter::TocFileWriter()
     : m_hideFirstTrack(false),
       m_sessionToWrite(1)
 {
 }
 
 
-bool K3bTocFileWriter::save( const QString& filename )
+bool K3b::TocFileWriter::save( const QString& filename )
 {
     QFile f( filename );
 
     if( !f.open( QIODevice::WriteOnly ) ) {
-        kDebug() << "(K3bCueFileWriter) could not open file " << f.fileName();
+        kDebug() << "(K3b::CueFileWriter) could not open file " << f.fileName();
         return false;
     }
 
@@ -45,7 +45,7 @@ bool K3bTocFileWriter::save( const QString& filename )
 }
 
 
-bool K3bTocFileWriter::save( QTextStream& t )
+bool K3b::TocFileWriter::save( QTextStream& t )
 {
     writeHeader(t);
 
@@ -56,7 +56,7 @@ bool K3bTocFileWriter::save( QTextStream& t )
     // see if we have multiple sessions
     //
     int sessions = 1;
-    for( K3bDevice::Toc::iterator it = m_toc.begin(); it != m_toc.end(); ++it ) {
+    for( K3b::Device::Toc::iterator it = m_toc.begin(); it != m_toc.end(); ++it ) {
         if( (*it).session() > 1 )
             sessions = (*it).session();
     }
@@ -71,8 +71,8 @@ bool K3bTocFileWriter::save( QTextStream& t )
     //
     bool hideFirstTrack = m_hideFirstTrack;
     if( m_toc.count() < 2 ||
-        m_toc[0].type() != K3bDevice::Track::AUDIO ||
-        m_toc[1].type() != K3bDevice::Track::AUDIO ||
+        m_toc[0].type() != K3b::Device::Track::TYPE_AUDIO ||
+        m_toc[1].type() != K3b::Device::Track::TYPE_AUDIO ||
         (sessions > 1 && m_sessionToWrite != 1 ) )
         hideFirstTrack = false;
 
@@ -82,8 +82,8 @@ bool K3bTocFileWriter::save( QTextStream& t )
 
     int trackIndex = 0;
     if( hideFirstTrack ) {
-        const K3bDevice::Track& hiddenTrack = m_toc[0];
-        const K3bDevice::Track& track = m_toc[1];
+        const K3b::Device::Track& hiddenTrack = m_toc[0];
+        const K3b::Device::Track& track = m_toc[1];
 
         t << "// Track number 1 (hidden) and track number 2 (as track 1)" << endl;
         t << "TRACK AUDIO" << endl;
@@ -139,7 +139,7 @@ bool K3bTocFileWriter::save( QTextStream& t )
         dataStart = m_toc[trackIndex].firstSector();
     }
 
-    kDebug() << "(K3bTocFileWriter) using offset of: " << dataStart.toString();
+    kDebug() << "(K3b::TocFileWriter) using offset of: " << dataStart.toString();
 
     while( trackIndex < m_toc.count() ) {
         if( m_toc[trackIndex].session() == 0 || m_toc[trackIndex].session() == m_sessionToWrite )
@@ -151,7 +151,7 @@ bool K3bTocFileWriter::save( QTextStream& t )
 }
 
 
-void K3bTocFileWriter::writeHeader( QTextStream& t )
+void K3b::TocFileWriter::writeHeader( QTextStream& t )
 {
     // little comment
     t << "// TOC-file to use with cdrdao created by K3b " << k3bcore->version()
@@ -165,17 +165,17 @@ void K3bTocFileWriter::writeHeader( QTextStream& t )
     t << endl;
 
     // check the cd type
-    if( m_toc.contentType() == K3bDevice::AUDIO ) {
+    if( m_toc.contentType() == K3b::Device::AUDIO ) {
         t << "CD_DA";
     }
     else {
         bool hasMode2Tracks = false;
-        for( K3bDevice::Toc::iterator it = m_toc.begin(); it != m_toc.end(); ++it ) {
-            const K3bDevice::Track& track = *it;
-            if( track.type() == K3bDevice::Track::DATA &&
-                (track.mode() == K3bDevice::Track::MODE2 ||
-                 track.mode() == K3bDevice::Track::XA_FORM1 ||
-                 track.mode() == K3bDevice::Track::XA_FORM2 ) ) {
+        for( K3b::Device::Toc::iterator it = m_toc.begin(); it != m_toc.end(); ++it ) {
+            const K3b::Device::Track& track = *it;
+            if( track.type() == K3b::Device::Track::TYPE_DATA &&
+                (track.mode() == K3b::Device::Track::MODE2 ||
+                 track.mode() == K3b::Device::Track::XA_FORM1 ||
+                 track.mode() == K3b::Device::Track::XA_FORM2 ) ) {
                 hasMode2Tracks = true;
                 break;
             }
@@ -191,13 +191,13 @@ void K3bTocFileWriter::writeHeader( QTextStream& t )
 }
 
 
-void K3bTocFileWriter::writeTrack( int index, const K3b::Msf& offset, QTextStream& t )
+void K3b::TocFileWriter::writeTrack( int index, const K3b::Msf& offset, QTextStream& t )
 {
-    const K3bDevice::Track& track = m_toc[index];
+    const K3b::Device::Track& track = m_toc[index];
 
     t << "// Track number " << (index+1) << endl;
 
-    if( track.type() == K3bDevice::Track::AUDIO ) {
+    if( track.type() == K3b::Device::Track::TYPE_AUDIO ) {
         t << "TRACK AUDIO" << endl;
 
         if( track.copyPermitted() )
@@ -231,7 +231,7 @@ void K3bTocFileWriter::writeTrack( int index, const K3b::Msf& offset, QTextStrea
             }
         }
         else {
-            const K3bDevice::Track& lastTrack = m_toc[index-1];
+            const K3b::Device::Track& lastTrack = m_toc[index-1];
 
             //
             // the pregap data
@@ -267,14 +267,14 @@ void K3bTocFileWriter::writeTrack( int index, const K3b::Msf& offset, QTextStrea
         t << endl;
     }
     else {
-        if( track.mode() == K3bDevice::Track::XA_FORM1 )
+        if( track.mode() == K3b::Device::Track::XA_FORM1 )
             t << "TRACK MODE2_FORM1" << endl;
-        else if( track.mode() == K3bDevice::Track::XA_FORM2 )
+        else if( track.mode() == K3b::Device::Track::XA_FORM2 )
             t << "TRACK MODE2_FORM2" << endl;
         else
             t << "TRACK MODE1" << endl;
 
-        if( !m_cdText.isEmpty() && !m_toc.contentType() != K3bDevice::DATA ) {
+        if( !m_cdText.isEmpty() && !m_toc.contentType() != K3b::Device::DATA ) {
             //
             // insert fake cdtext
             // cdrdao does not work without it and it seems not to do any harm.
@@ -303,7 +303,7 @@ void K3bTocFileWriter::writeTrack( int index, const K3b::Msf& offset, QTextStrea
 }
 
 
-void K3bTocFileWriter::writeGlobalCdText( QTextStream& t )
+void K3b::TocFileWriter::writeGlobalCdText( QTextStream& t )
 {
     t << "CD_TEXT {" << endl;
     t << "  LANGUAGE_MAP { 0: EN }" << endl;
@@ -323,7 +323,7 @@ void K3bTocFileWriter::writeGlobalCdText( QTextStream& t )
 }
 
 
-void K3bTocFileWriter::writeTrackCdText( const K3bDevice::TrackCdText& track, QTextStream& t )
+void K3b::TocFileWriter::writeTrackCdText( const K3b::Device::TrackCdText& track, QTextStream& t )
 {
     t << "CD_TEXT {" << endl;
     t << "  LANGUAGE 0 {" << endl;
@@ -339,7 +339,7 @@ void K3bTocFileWriter::writeTrackCdText( const K3bDevice::TrackCdText& track, QT
 }
 
 
-void K3bTocFileWriter::writeDataSource( int trackIndex, QTextStream& t )
+void K3b::TocFileWriter::writeDataSource( int trackIndex, QTextStream& t )
 {
     if( readFromStdin() )
         t << "\"-\" ";
@@ -348,7 +348,7 @@ void K3bTocFileWriter::writeDataSource( int trackIndex, QTextStream& t )
 }
 
 
-bool K3bTocFileWriter::readFromStdin() const
+bool K3b::TocFileWriter::readFromStdin() const
 {
     return ( m_toc.count() > m_filenames.count() );
 }

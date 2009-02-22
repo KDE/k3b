@@ -24,18 +24,18 @@
 #include <qmap.h>
 
 
-class K3bDeviceComboBox::Private
+class K3b::DeviceComboBox::Private
 {
 public:
-    K3bDeviceModel* model;
+    K3b::DeviceModel* model;
 };
 
 
-K3bDeviceComboBox::K3bDeviceComboBox( QWidget* parent )
+K3b::DeviceComboBox::DeviceComboBox( QWidget* parent )
     : KComboBox( parent )
 {
     d = new Private();
-    d->model = new K3bDeviceModel( this );
+    d->model = new K3b::DeviceModel( this );
     setModel( d->model );
 
     connect( this, SIGNAL(activated(int)),
@@ -43,13 +43,13 @@ K3bDeviceComboBox::K3bDeviceComboBox( QWidget* parent )
 }
 
 
-K3bDeviceComboBox::~K3bDeviceComboBox()
+K3b::DeviceComboBox::~DeviceComboBox()
 {
     delete d;
 }
 
 
-K3bDevice::Device* K3bDeviceComboBox::selectedDevice() const
+K3b::Device::Device* K3b::DeviceComboBox::selectedDevice() const
 {
     int index = currentIndex();
     if ( index >= 0 ) {
@@ -61,36 +61,36 @@ K3bDevice::Device* K3bDeviceComboBox::selectedDevice() const
 }
 
 
-void K3bDeviceComboBox::addDevice( K3bDevice::Device* dev )
+void K3b::DeviceComboBox::addDevice( K3b::Device::Device* dev )
 {
     d->model->addDevice( dev );
 }
 
 
-void K3bDeviceComboBox::removeDevice( K3bDevice::Device* dev )
+void K3b::DeviceComboBox::removeDevice( K3b::Device::Device* dev )
 {
     d->model->removeDevice( dev );
 }
 
 
-void K3bDeviceComboBox::addDevices( const QList<K3bDevice::Device*>& list )
+void K3b::DeviceComboBox::addDevices( const QList<K3b::Device::Device*>& list )
 {
     d->model->addDevices( list );
 }
 
 
-void K3bDeviceComboBox::refreshDevices( const QList<K3bDevice::Device*>& list )
+void K3b::DeviceComboBox::refreshDevices( const QList<K3b::Device::Device*>& list )
 {
     d->model->setDevices( list );}
 
 
-void K3bDeviceComboBox::setSelectedDevice( K3bDevice::Device* dev )
+void K3b::DeviceComboBox::setSelectedDevice( K3b::Device::Device* dev )
 {
     setCurrentIndex( d->model->indexForDevice( dev ).row() );
 }
 
 
-void K3bDeviceComboBox::slotActivated( int i )
+void K3b::DeviceComboBox::slotActivated( int i )
 {
     emit selectionChanged( d->model->deviceForIndex( d->model->index( i, 0 ) ) );
 }

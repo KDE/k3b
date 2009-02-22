@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
@@ -16,54 +16,39 @@
 #define K3B_AUDIO_CDTEXT_WIDGET_H
 
 #include "ui_base_k3baudiocdtextwidget.h"
-#include "ui_base_k3baudiocdtextallfieldswidget.h"
 
-class K3bAudioDoc;
+namespace K3b {
+    class AudioDoc;
 
-class base_K3bAudioCdTextAllFieldsWidget : public QWidget, public Ui::base_K3bAudioCdTextAllFieldsWidget
-{
-public:
-  base_K3bAudioCdTextAllFieldsWidget( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
-};
+    class AudioCdTextWidget : public QWidget, public Ui::base_K3bAudioCdTextWidget
+    {
+        Q_OBJECT
 
-class base_K3bAudioCdTextWidget : public QWidget, public Ui::base_K3bAudioCdTextWidget
-{
-public:
-  base_K3bAudioCdTextWidget( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
-};
+    public:
+        AudioCdTextWidget( QWidget* parent = 0 );
+        ~AudioCdTextWidget();
 
-class K3bAudioCdTextWidget : public base_K3bAudioCdTextWidget
-{
-  Q_OBJECT
+        bool isChecked() const;
 
-public:
-    K3bAudioCdTextWidget( QWidget* parent = 0 );
-    ~K3bAudioCdTextWidget();
+    public Q_SLOTS:
+        void setChecked( bool );
+        void load( AudioDoc* );
+        void save( AudioDoc* );
 
-    bool isChecked() const;
+    private Q_SLOTS:
+        void slotCopyTitle();
+        void slotCopyPerformer();
+        void slotCopyArranger();
+        void slotCopySongwriter();
+        void slotCopyComposer();
+        void slotMoreFields();
 
-public Q_SLOTS:
-    void setChecked( bool );
-    void load( K3bAudioDoc* );
-    void save( K3bAudioDoc* );
+    private:
+        AudioDoc* m_doc;
 
-private Q_SLOTS:
-    void slotCopyTitle();
-    void slotCopyPerformer();
-    void slotCopyArranger();
-    void slotCopySongwriter();
-    void slotCopyComposer();
-    void slotMoreFields();
-
-private:
-    K3bAudioDoc* m_doc;
-
-    class AllFieldsDialog;
-    AllFieldsDialog* m_allFieldsDlg;
-};
+        class AllFieldsDialog;
+        AllFieldsDialog* m_allFieldsDlg;
+    };
+}
 
 #endif

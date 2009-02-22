@@ -18,31 +18,33 @@
 #include "k3bthreadjob.h"
 #include "k3b_export.h"
 
-class K3bAudioDecoder;
-
-/**
- * A simple convenience   class that runs K3bAudioDecoder::analyseFile
- * in a different thread.
- */
-class LIBK3B_EXPORT K3bAudioFileAnalyzerJob : public K3bThreadJob
-{
-    Q_OBJECT
-
-public:
-    K3bAudioFileAnalyzerJob( K3bJobHandler* hdl, QObject* parent );
-    ~K3bAudioFileAnalyzerJob();
+namespace K3b {
+    class AudioDecoder;
 
     /**
-     * Set the decoder that does the analyzation.
+     * A simple convenience   class that runs AudioDecoder::analyseFile
+     * in a different thread.
      */
-    void setDecoder( K3bAudioDecoder* decoder );
-    K3bAudioDecoder* decoder() const;
+    class LIBK3B_EXPORT AudioFileAnalyzerJob : public ThreadJob
+    {
+        Q_OBJECT
 
-private:
-    bool run();
+    public:
+        AudioFileAnalyzerJob( JobHandler* hdl, QObject* parent );
+        ~AudioFileAnalyzerJob();
 
-    class Private;
-    Private* const d;
-};
+        /**
+         * Set the decoder that does the analyzation.
+         */
+        void setDecoder( AudioDecoder* decoder );
+        AudioDecoder* decoder() const;
+
+    private:
+        bool run();
+
+        class Private;
+        Private* const d;
+    };
+}
 
 #endif

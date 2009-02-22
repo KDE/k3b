@@ -31,8 +31,8 @@
 
 
 
-K3bBinImageWritingJob::K3bBinImageWritingJob( K3bJobHandler* hdl, QObject* parent )
-  : K3bBurnJob( hdl, parent ),
+K3b::BinImageWritingJob::BinImageWritingJob( K3b::JobHandler* hdl, QObject* parent )
+  : K3b::BurnJob( hdl, parent ),
     m_device(0),
     m_simulate(false),
     m_force(false),
@@ -44,11 +44,11 @@ K3bBinImageWritingJob::K3bBinImageWritingJob( K3bJobHandler* hdl, QObject* paren
 {
 }
 
-K3bBinImageWritingJob::~K3bBinImageWritingJob()
+K3b::BinImageWritingJob::~BinImageWritingJob()
 {
 }
 
-void K3bBinImageWritingJob::start()
+void K3b::BinImageWritingJob::start()
 {
   m_canceled =  false;
 
@@ -66,7 +66,7 @@ void K3bBinImageWritingJob::start()
 
 }
 
-void K3bBinImageWritingJob::cancel()
+void K3b::BinImageWritingJob::cancel()
 {
   m_canceled = true;
   m_writer->cancel();
@@ -74,36 +74,36 @@ void K3bBinImageWritingJob::cancel()
   jobFinished( false );
 }
 
-bool K3bBinImageWritingJob::prepareWriter()
+bool K3b::BinImageWritingJob::prepareWriter()
 {
   delete m_writer;
 
   int usedWritingApp = writingApp();
-  const K3bExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
+  const K3b::ExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
   if( usedWritingApp == K3b::WRITING_APP_CDRECORD ||
       ( usedWritingApp == K3b::WRITING_APP_DEFAULT && cdrecordBin && cdrecordBin->hasFeature("cuefile") && m_device->dao() ) ) {
     usedWritingApp = K3b::WRITING_APP_CDRECORD;
 
     // IMPROVEME: check if it's a cdrdao toc-file
     if( m_tocFile.right(4) == ".toc" ) {
-      kDebug() << "(K3bBinImageWritingJob) imagefile has ending toc.";
+      kDebug() << "(K3b::BinImageWritingJob) imagefile has ending toc.";
       usedWritingApp = K3b::WRITING_APP_CDRDAO;
     }
     else {
-      // TODO: put this into K3bCueFileParser
-      // TODO: check K3bCueFileParser::imageFilenameInCue()
+      // TODO: put this into K3b::CueFileParser
+      // TODO: check K3b::CueFileParser::imageFilenameInCue()
       // let's see if cdrecord can handle the cue file
       QFile f( m_tocFile );
       if( f.open( QIODevice::ReadOnly ) ) {
 	QTextStream fStr( &f );
 	if( fStr.readAll().contains( "MODE1/2352" ) ) {
-	  kDebug() << "(K3bBinImageWritingJob) cuefile contains MODE1/2352 track. using cdrdao.";
+	  kDebug() << "(K3b::BinImageWritingJob) cuefile contains MODE1/2352 track. using cdrdao.";
 	  usedWritingApp = K3b::WRITING_APP_CDRDAO;
 	}
 	f.close();
       }
       else
-	kDebug() << "(K3bBinImageWritingJob) could not open file " << m_tocFile;
+	kDebug() << "(K3b::BinImageWritingJob) could not open file " << m_tocFile;
     }
   }
   else
@@ -111,7 +111,7 @@ bool K3bBinImageWritingJob::prepareWriter()
 
   if( usedWritingApp == K3b::WRITING_APP_CDRECORD ) {
     // create cdrecord job
-    K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_device, this );
+    K3b::CdrecordWriter* writer = new K3b::CdrecordWriter( m_device, this );
 
     writer->setDao( true );
     writer->setSimulate( m_simulate );
@@ -130,8 +130,8 @@ bool K3bBinImageWritingJob::prepareWriter()
   }
   else {
 //     // create cdrdao job
-//     K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_device, this );
-//     writer->setCommand( K3bCdrdaoWriter::WRITE );
+//     K3b::CdrdaoWriter* writer = new K3b::CdrdaoWriter( m_device, this );
+//     writer->setCommand( K3b::CdrdaoWriter::WRITE );
 //     writer->setSimulate( m_simulate );
 //     writer->setBurnSpeed( m_speed );
 //     writer->setForce( m_force );
@@ -161,7 +161,7 @@ bool K3bBinImageWritingJob::prepareWriter()
 }
 
 
-void K3bBinImageWritingJob::writerStart()
+void K3b::BinImageWritingJob::writerStart()
 {
 
   if( waitForMedia( m_device ) < 0 ) {
@@ -174,17 +174,17 @@ void K3bBinImageWritingJob::writerStart()
   }
 }
 
-void K3bBinImageWritingJob::copyPercent(int p)
+void K3b::BinImageWritingJob::copyPercent(int p)
 {
   emit percent( (100*m_finishedCopies + p)/m_copies );
 }
 
-void K3bBinImageWritingJob::copySubPercent(int p)
+void K3b::BinImageWritingJob::copySubPercent(int p)
 {
   emit subPercent(p);
 }
 
-void K3bBinImageWritingJob::writerFinished(bool ok)
+void K3b::BinImageWritingJob::writerFinished(bool ok)
 {
   if( m_canceled )
     return;
@@ -193,13 +193,13 @@ void K3bBinImageWritingJob::writerFinished(bool ok)
     m_finishedCopies++;
     if ( m_finishedCopies == m_copies ) {
         if ( k3bcore->globalSettings()->ejectMedia() ) {
-            K3bDevice::eject( m_device );
+            K3b::Device::eject( m_device );
         }
-        emit infoMessage( i18np("%1 copy successfully created", "%1 copies successfully created", m_copies),K3bJob::INFO );
+        emit infoMessage( i18np("%1 copy successfully created", "%1 copies successfully created", m_copies),K3b::Job::INFO );
         jobFinished( true );
     }
     else {
-        K3bDevice::eject( m_device );
+        K3b::Device::eject( m_device );
         writerStart();
     }
   }
@@ -209,13 +209,13 @@ void K3bBinImageWritingJob::writerFinished(bool ok)
 }
 
 
-void K3bBinImageWritingJob::slotNextTrack( int t, int tt )
+void K3b::BinImageWritingJob::slotNextTrack( int t, int tt )
 {
   emit newSubTask( i18n("Writing track %1 of %2",t,tt) );
 }
 
 
-QString K3bBinImageWritingJob::jobDescription() const
+QString K3b::BinImageWritingJob::jobDescription() const
 {
   return ( i18n("Writing cue/bin Image")
 	   + ( m_copies > 1
@@ -224,13 +224,13 @@ QString K3bBinImageWritingJob::jobDescription() const
 }
 
 
-QString K3bBinImageWritingJob::jobDetails() const
+QString K3b::BinImageWritingJob::jobDetails() const
 {
   return m_tocFile.section("/", -1);
 }
 
 
-void K3bBinImageWritingJob::setTocFile(const QString& s)
+void K3b::BinImageWritingJob::setTocFile(const QString& s)
 {
   m_tocFile = s;
 }

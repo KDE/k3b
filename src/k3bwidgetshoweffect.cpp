@@ -26,7 +26,7 @@
 #include <QTimerEvent>
 
 
-K3bWidgetShowEffect::K3bWidgetShowEffect( QWidget* widget, Effect e )
+K3b::WidgetShowEffect::WidgetShowEffect( QWidget* widget, Effect e )
     : QObject( widget ),
       m_effect( e ),
       m_widget( widget ),
@@ -39,12 +39,12 @@ K3bWidgetShowEffect::K3bWidgetShowEffect( QWidget* widget, Effect e )
 }
 
 
-K3bWidgetShowEffect::~K3bWidgetShowEffect()
+K3b::WidgetShowEffect::~WidgetShowEffect()
 {
 }
 
 
-void K3bWidgetShowEffect::hide( bool effectOnly )
+void K3b::WidgetShowEffect::hide( bool effectOnly )
 {
     m_bEffectOnly = effectOnly;
     m_bShow = false;
@@ -54,7 +54,7 @@ void K3bWidgetShowEffect::hide( bool effectOnly )
 }
 
 
-void K3bWidgetShowEffect::show( bool effectOnly )
+void K3b::WidgetShowEffect::show( bool effectOnly )
 {
     m_bShow = true;
     m_offset = 0;
@@ -80,7 +80,7 @@ void K3bWidgetShowEffect::show( bool effectOnly )
 }
 
 
-void K3bWidgetShowEffect::timerEvent( QTimerEvent* )
+void K3b::WidgetShowEffect::timerEvent( QTimerEvent* )
 {
     switch( m_effect ) {
     case Slide:
@@ -94,7 +94,7 @@ void K3bWidgetShowEffect::timerEvent( QTimerEvent* )
 }
 
 
-void K3bWidgetShowEffect::dissolveMask()
+void K3b::WidgetShowEffect::dissolveMask()
 {
     if( m_bShow ) {
         m_widget->repaint();
@@ -152,7 +152,7 @@ void K3bWidgetShowEffect::dissolveMask()
 }
 
 
-void K3bWidgetShowEffect::slideMask()
+void K3b::WidgetShowEffect::slideMask()
 {
     if( m_bShow ) {
         m_widget->move( 0, m_widget->parentWidget()->height() - m_offset );
@@ -185,18 +185,18 @@ void K3bWidgetShowEffect::slideMask()
 
 
 
-K3bWidgetShowEffect* K3bWidgetShowEffect::showWidget( QWidget* w, Effect m )
+K3b::WidgetShowEffect* K3b::WidgetShowEffect::showWidget( QWidget* w, Effect m )
 {
-    K3bWidgetShowEffect* e = new K3bWidgetShowEffect( w, m );
+    K3b::WidgetShowEffect* e = new K3b::WidgetShowEffect( w, m );
     e->m_deleteSelf = true;
     e->show();
     return e;
 }
 
 
-K3bWidgetShowEffect* K3bWidgetShowEffect::hideWidget( QWidget* w, Effect m )
+K3b::WidgetShowEffect* K3b::WidgetShowEffect::hideWidget( QWidget* w, Effect m )
 {
-    K3bWidgetShowEffect* e = new K3bWidgetShowEffect( w, m );
+    K3b::WidgetShowEffect* e = new K3b::WidgetShowEffect( w, m );
     e->m_deleteSelf = true;
     e->hide();
     return e;

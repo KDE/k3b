@@ -115,7 +115,7 @@ public:
 
 
 K3bExternalEncoderSettingsWidget::K3bExternalEncoderSettingsWidget( QWidget* parent, const QVariantList& args )
-    : K3bPluginConfigWidget( parent, args )
+    : K3b::PluginConfigWidget( parent, args )
 {
     d = new Private();
 

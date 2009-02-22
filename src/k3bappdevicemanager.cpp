@@ -33,7 +33,7 @@
 #include <Solid/StorageAccess>
 
 
-class K3bAppDeviceManager::Private
+class K3b::AppDeviceManager::Private
 {
 public:
     KAction* actionDiskInfo;
@@ -43,11 +43,11 @@ public:
     KAction* actionLoad;
     KAction* actionSetReadSpeed;
 
-    K3bDevice::Device* currentDevice;
+    K3b::Device::Device* currentDevice;
 };
 
-K3bAppDeviceManager::K3bAppDeviceManager( QObject* parent )
-    : K3bDevice::DeviceManager( parent ),
+K3b::AppDeviceManager::AppDeviceManager( QObject* parent )
+    : K3b::Device::DeviceManager( parent ),
       d( new Private )
 {
     // setup actions
@@ -82,54 +82,54 @@ K3bAppDeviceManager::K3bAppDeviceManager( QObject* parent )
 }
 
 
-K3bAppDeviceManager::~K3bAppDeviceManager()
+K3b::AppDeviceManager::~AppDeviceManager()
 {
     delete d;
 }
 
 
-void K3bAppDeviceManager::setMediaCache( K3bMediaCache* c )
+void K3b::AppDeviceManager::setMediaCache( K3b::MediaCache* c )
 {
-    connect( c, SIGNAL(mediumChanged(K3bDevice::Device*)),
-             this, SLOT(slotMediumChanged(K3bDevice::Device*)) );
+    connect( c, SIGNAL(mediumChanged(K3b::Device::Device*)),
+             this, SLOT(slotMediumChanged(K3b::Device::Device*)) );
 }
 
 
-K3bDevice::Device* K3bAppDeviceManager::currentDevice() const
+K3b::Device::Device* K3b::AppDeviceManager::currentDevice() const
 {
     return d->currentDevice;
 }
 
 
-void K3bAppDeviceManager::clear()
+void K3b::AppDeviceManager::clear()
 {
     // make sure we do not use a deleted device
     setCurrentDevice( 0 );
-    K3bDevice::DeviceManager::clear();
+    K3b::Device::DeviceManager::clear();
 }
 
-K3bDevice::Device* K3bAppDeviceManager::addDevice( const Solid::Device& solidDev )
+K3b::Device::Device* K3b::AppDeviceManager::addDevice( const Solid::Device& solidDev )
 {
-    K3bDevice::Device* dev = K3bDevice::DeviceManager::addDevice( solidDev );
+    K3b::Device::Device* dev = K3b::Device::DeviceManager::addDevice( solidDev );
     if( dev && currentDevice() == 0 ) {
         setCurrentDevice( dev );
     }
     return dev;
 }
 
-void K3bAppDeviceManager::removeDevice( const Solid::Device& solidDev )
+void K3b::AppDeviceManager::removeDevice( const Solid::Device& solidDev )
 {
     if( findDevice( solidDev.as<Solid::Block>()->device() ) == currentDevice() )
         setCurrentDevice( 0 );
     
-    K3bDevice::DeviceManager::removeDevice( solidDev );
+    K3b::Device::DeviceManager::removeDevice( solidDev );
 
     if( currentDevice() == 0 && !allDevices().isEmpty() )
         setCurrentDevice( allDevices().first() );
 }
 
 
-void K3bAppDeviceManager::slotMediumChanged( K3bDevice::Device* dev )
+void K3b::AppDeviceManager::slotMediumChanged( K3b::Device::Device* dev )
 {
     if( dev == currentDevice() ) {
         
@@ -139,7 +139,7 @@ void K3bAppDeviceManager::slotMediumChanged( K3bDevice::Device* dev )
         d->actionSetReadSpeed->setEnabled( dev != 0 );
         
         if( dev ) {
-            bool mediumMountable = k3bappcore->mediaCache()->medium( dev ).content() & K3bMedium::CONTENT_DATA;
+            bool mediumMountable = k3bappcore->mediaCache()->medium( dev ).content() & K3b::Medium::CONTENT_DATA;
             d->actionMount->setEnabled( mediumMountable );
             d->actionUnmount->setEnabled( mediumMountable );
             
@@ -173,14 +173,14 @@ void K3bAppDeviceManager::slotMediumChanged( K3bDevice::Device* dev )
 }
 
 
-void K3bAppDeviceManager::slotMountChanged( bool accessible, const QString& )
+void K3b::AppDeviceManager::slotMountChanged( bool accessible, const QString& )
 {
     d->actionMount->setVisible( !accessible );
     d->actionUnmount->setVisible( accessible );
 }
 
 
-void K3bAppDeviceManager::slotMountFinished( Solid::ErrorType error, QVariant, const QString& )
+void K3b::AppDeviceManager::slotMountFinished( Solid::ErrorType error, QVariant, const QString& )
 {
     if( currentDevice() != 0 ) {
         Solid::StorageAccess* storage = currentDevice()->solidStorage();
@@ -191,13 +191,13 @@ void K3bAppDeviceManager::slotMountFinished( Solid::ErrorType error, QVariant, c
     }
 }
 
-void K3bAppDeviceManager::slotUnmountFinished( Solid::ErrorType error, QVariant, const QString& )
+void K3b::AppDeviceManager::slotUnmountFinished( Solid::ErrorType error, QVariant, const QString& )
 {
     emit unmountFinished( error == Solid::NoError );
 }
 
 
-void K3bAppDeviceManager::setCurrentDevice( K3bDevice::Device* dev )
+void K3b::AppDeviceManager::setCurrentDevice( K3b::Device::Device* dev )
 {
     if( dev != currentDevice() ) {
         d->currentDevice = dev;
@@ -208,7 +208,7 @@ void K3bAppDeviceManager::setCurrentDevice( K3bDevice::Device* dev )
 }
 
 
-void K3bAppDeviceManager::diskInfo()
+void K3b::AppDeviceManager::diskInfo()
 {
     if( currentDevice() ) {
         emit detectingDiskInfo( currentDevice() );
@@ -216,21 +216,21 @@ void K3bAppDeviceManager::diskInfo()
 }
 
 
-void K3bAppDeviceManager::unlockDevice()
+void K3b::AppDeviceManager::unlockDevice()
 {
     if( currentDevice() )
-        K3bDevice::unblock( currentDevice() );
+        K3b::Device::unblock( currentDevice() );
 }
 
 
-void K3bAppDeviceManager::lockDevice()
+void K3b::AppDeviceManager::lockDevice()
 {
     if( currentDevice() )
-        K3bDevice::block( currentDevice() );
+        K3b::Device::block( currentDevice() );
 }
 
 
-void K3bAppDeviceManager::mountDisk()
+void K3b::AppDeviceManager::mountDisk()
 {
     if( currentDevice() ) {
         Solid::StorageAccess* storage = currentDevice()->solidStorage();
@@ -244,7 +244,7 @@ void K3bAppDeviceManager::mountDisk()
 }
 
 
-void K3bAppDeviceManager::unmountDisk()
+void K3b::AppDeviceManager::unmountDisk()
 {
     if ( currentDevice() ) {
         Solid::StorageAccess* storage = currentDevice()->solidStorage();
@@ -258,7 +258,7 @@ void K3bAppDeviceManager::unmountDisk()
 }
 
 
-void K3bAppDeviceManager::ejectDisk()
+void K3b::AppDeviceManager::ejectDisk()
 {
     // FIXME: make this non-blocking
     if ( currentDevice() )
@@ -266,14 +266,14 @@ void K3bAppDeviceManager::ejectDisk()
 }
 
 
-void K3bAppDeviceManager::loadDisk()
+void K3b::AppDeviceManager::loadDisk()
 {
     if( currentDevice() )
-        K3bDevice::reload( currentDevice() );
+        K3b::Device::reload( currentDevice() );
 }
 
 
-void K3bAppDeviceManager::setReadSpeed()
+void K3b::AppDeviceManager::setReadSpeed()
 {
     if( currentDevice() ) {
         bool ok = false;
@@ -302,56 +302,56 @@ void K3bAppDeviceManager::setReadSpeed()
 }
 
 
-void K3bAppDeviceManager::diskInfo( K3bDevice::Device* dev )
+void K3b::AppDeviceManager::diskInfo( K3b::Device::Device* dev )
 {
     setCurrentDevice( dev );
     diskInfo();
 }
 
 
-void K3bAppDeviceManager::unlockDevice( K3bDevice::Device* dev )
+void K3b::AppDeviceManager::unlockDevice( K3b::Device::Device* dev )
 {
     setCurrentDevice( dev );
     unlockDevice();
 }
 
 
-void K3bAppDeviceManager::lockDevice( K3bDevice::Device* dev )
+void K3b::AppDeviceManager::lockDevice( K3b::Device::Device* dev )
 {
     setCurrentDevice( dev );
     lockDevice();
 }
 
 
-void K3bAppDeviceManager::mountDisk( K3bDevice::Device* dev )
+void K3b::AppDeviceManager::mountDisk( K3b::Device::Device* dev )
 {
     setCurrentDevice( dev );
     mountDisk();
 }
 
 
-void K3bAppDeviceManager::unmountDisk( K3bDevice::Device* dev )
+void K3b::AppDeviceManager::unmountDisk( K3b::Device::Device* dev )
 {
     setCurrentDevice( dev );
     unmountDisk();
 }
 
 
-void K3bAppDeviceManager::ejectDisk( K3bDevice::Device* dev )
+void K3b::AppDeviceManager::ejectDisk( K3b::Device::Device* dev )
 {
     setCurrentDevice( dev );
     ejectDisk();
 }
 
 
-void K3bAppDeviceManager::loadDisk( K3bDevice::Device* dev )
+void K3b::AppDeviceManager::loadDisk( K3b::Device::Device* dev )
 {
     setCurrentDevice( dev );
     loadDisk();
 }
 
 
-void K3bAppDeviceManager::setReadSpeed( K3bDevice::Device* dev )
+void K3b::AppDeviceManager::setReadSpeed( K3b::Device::Device* dev )
 {
     setCurrentDevice( dev );
     setReadSpeed();

@@ -19,7 +19,7 @@
 #include <kstandarddirs.h>
 
 
-K3bGlobalSettings::K3bGlobalSettings()
+K3b::GlobalSettings::GlobalSettings()
     : m_eject(true),
       m_burnfree(true),
       m_overburn(false),
@@ -30,7 +30,12 @@ K3bGlobalSettings::K3bGlobalSettings()
 }
 
 
-void K3bGlobalSettings::readSettings( const KConfigGroup& c )
+K3b::GlobalSettings::~GlobalSettings()
+{
+}
+
+
+void K3b::GlobalSettings::readSettings( const KConfigGroup& c )
 {
     m_eject = !c.readEntry( "No cd eject", false );
     m_burnfree = c.readEntry( "burnfree", true );
@@ -42,7 +47,7 @@ void K3bGlobalSettings::readSettings( const KConfigGroup& c )
 }
 
 
-void K3bGlobalSettings::saveSettings( KConfigGroup c )
+void K3b::GlobalSettings::saveSettings( KConfigGroup c )
 {
     c.writeEntry( "No cd eject", !m_eject );
     c.writeEntry( "burnfree", m_burnfree );

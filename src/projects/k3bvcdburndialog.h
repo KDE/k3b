@@ -26,18 +26,21 @@ class QRadioButton;
 class QLabel;
 class QLineEdit;
 class QTextEdit;
-class K3bVcdDoc;
+namespace K3b {
+    class VcdDoc;
+}
 class QButtonGroup;
 
-class K3bVcdBurnDialog : public K3bProjectBurnDialog
+namespace K3b {
+class VcdBurnDialog : public ProjectBurnDialog
 {
     Q_OBJECT
 
 public:
-    K3bVcdBurnDialog( K3bVcdDoc* doc, QWidget *parent = 0 );
-    ~K3bVcdBurnDialog();
+    VcdBurnDialog( VcdDoc* doc, QWidget *parent = 0 );
+    ~VcdBurnDialog();
 
-    K3bVcdDoc* vcdDoc() const
+    VcdDoc* vcdDoc() const
     {
         return m_vcdDoc;
     }
@@ -118,7 +121,7 @@ protected:
     // -----------------------------------------------------------
 
 private:
-    K3bVcdDoc* m_vcdDoc;
+    VcdDoc* m_vcdDoc;
     void setVolumeID( );
     void MarginChecked( bool );
     void saveCdiConfig();
@@ -131,9 +134,10 @@ protected Q_SLOTS:
 
     void slotGapsChecked( bool );
     void slotSpinVolumeCount();
-    void slotVcdTypeClicked( K3bVcdOptions::MPEGVersion );
+    void slotVcdTypeClicked( VcdOptions::MPEGVersion );
     void slotCdiSupportChecked( bool );
     void slotAutoDetect( bool );
 };
+}
 
 #endif

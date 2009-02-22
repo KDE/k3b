@@ -27,22 +27,22 @@
 
 
 
-class K3bAudioTrack::Private
+class K3b::AudioTrack::Private
 {
 public:
     Private() {
-        cdTextValidator = new K3bCdTextValidator();
+        cdTextValidator = new K3b::CdTextValidator();
     }
 
     ~Private() {
         delete cdTextValidator;
     }
 
-    K3bCdTextValidator* cdTextValidator;
+    K3b::CdTextValidator* cdTextValidator;
 };
 
 
-K3bAudioTrack::K3bAudioTrack()
+K3b::AudioTrack::AudioTrack()
     : QObject(),
       m_parent(0),
       m_copy(false),
@@ -59,7 +59,7 @@ K3bAudioTrack::K3bAudioTrack()
 }
 
 
-K3bAudioTrack::K3bAudioTrack( K3bAudioDoc* parent )
+K3b::AudioTrack::AudioTrack( K3b::AudioDoc* parent )
     : QObject(),
       m_parent(parent),
       m_copy(false),
@@ -76,9 +76,9 @@ K3bAudioTrack::K3bAudioTrack( K3bAudioDoc* parent )
 }
 
 
-K3bAudioTrack::~K3bAudioTrack()
+K3b::AudioTrack::~AudioTrack()
 {
-    kDebug() << "(K3bAudioTrack::~K3bAudioTrack) " << this;
+    kDebug() << this;
     //
     // It is crucial that we do not emit the changed signal here because otherwise
     // the doc will delete us again once we are empty!
@@ -88,32 +88,32 @@ K3bAudioTrack::~K3bAudioTrack()
     // fix the list
     take();
 
-    kDebug() << "(K3bAudioTrack::~K3bAudioTrack) deleting sources.";
+    kDebug() << "deleting sources.";
 
     // delete all sources
     while( m_firstSource )
         delete m_firstSource->take();
 
-    kDebug() << "(K3bAudioTrack::~K3bAudioTrack) finished";
+    kDebug() << "finished";
 
     delete d;
 }
 
 
-void K3bAudioTrack::emitChanged()
+void K3b::AudioTrack::emitChanged()
 {
     if( m_parent )
         m_parent->slotTrackChanged( this );
 }
 
 
-void K3bAudioTrack::setArtist( const QString& a )
+void K3b::AudioTrack::setArtist( const QString& a )
 {
     setPerformer( a );
 }
 
 
-void K3bAudioTrack::setPerformer( const QString& a )
+void K3b::AudioTrack::setPerformer( const QString& a )
 {
     QString s( a );
     d->cdTextValidator->fixup( s );
@@ -122,7 +122,7 @@ void K3bAudioTrack::setPerformer( const QString& a )
 }
 
 
-void K3bAudioTrack::setTitle( const QString& t )
+void K3b::AudioTrack::setTitle( const QString& t )
 {
     QString s( t );
     d->cdTextValidator->fixup( s );
@@ -131,7 +131,7 @@ void K3bAudioTrack::setTitle( const QString& t )
 }
 
 
-void K3bAudioTrack::setArranger( const QString& t )
+void K3b::AudioTrack::setArranger( const QString& t )
 {
     QString s( t );
     d->cdTextValidator->fixup( s );
@@ -140,7 +140,7 @@ void K3bAudioTrack::setArranger( const QString& t )
 }
 
 
-void K3bAudioTrack::setSongwriter( const QString& t )
+void K3b::AudioTrack::setSongwriter( const QString& t )
 {
     QString s( t );
     d->cdTextValidator->fixup( s );
@@ -149,7 +149,7 @@ void K3bAudioTrack::setSongwriter( const QString& t )
 }
 
 
-void K3bAudioTrack::setComposer( const QString& t )
+void K3b::AudioTrack::setComposer( const QString& t )
 {
     QString s( t );
     d->cdTextValidator->fixup( s );
@@ -158,14 +158,14 @@ void K3bAudioTrack::setComposer( const QString& t )
 }
 
 
-void K3bAudioTrack::setIsrc( const QString& t )
+void K3b::AudioTrack::setIsrc( const QString& t )
 {
     m_cdText.setIsrc(t);
     emitChanged();
 }
 
 
-void K3bAudioTrack::setCdTextMessage( const QString& t )
+void K3b::AudioTrack::setCdTextMessage( const QString& t )
 {
     QString s( t );
     d->cdTextValidator->fixup( s );
@@ -174,23 +174,23 @@ void K3bAudioTrack::setCdTextMessage( const QString& t )
 }
 
 
-void K3bAudioTrack::setCdText( const K3bDevice::TrackCdText& cdtext )
+void K3b::AudioTrack::setCdText( const K3b::Device::TrackCdText& cdtext )
 {
     m_cdText = cdtext;
     emitChanged();
 }
 
 
-K3bAudioDataSource* K3bAudioTrack::lastSource() const
+K3b::AudioDataSource* K3b::AudioTrack::lastSource() const
 {
-    K3bAudioDataSource* s = m_firstSource;
+    K3b::AudioDataSource* s = m_firstSource;
     while( s && s->next() )
         s = s->next();
     return s;
 }
 
 
-bool K3bAudioTrack::inList() const
+bool K3b::AudioTrack::inList() const
 {
     if( doc() )
         return ( doc()->firstTrack() == this || m_prev != 0 );
@@ -199,10 +199,10 @@ bool K3bAudioTrack::inList() const
 }
 
 
-K3b::Msf K3bAudioTrack::length() const
+K3b::Msf K3b::AudioTrack::length() const
 {
     K3b::Msf length;
-    K3bAudioDataSource* source = m_firstSource;
+    K3b::AudioDataSource* source = m_firstSource;
     while( source ) {
         length += source->length();
         source = source->next();
@@ -211,13 +211,13 @@ K3b::Msf K3bAudioTrack::length() const
 }
 
 
-KIO::filesize_t K3bAudioTrack::size() const
+KIO::filesize_t K3b::AudioTrack::size() const
 {
     return length().audioBytes();
 }
 
 
-unsigned int K3bAudioTrack::trackNumber() const
+unsigned int K3b::AudioTrack::trackNumber() const
 {
     if( m_prev )
         return m_prev->trackNumber() + 1;
@@ -226,7 +226,7 @@ unsigned int K3bAudioTrack::trackNumber() const
 }
 
 
-K3b::Msf K3bAudioTrack::index0() const
+K3b::Msf K3b::AudioTrack::index0() const
 {
     // we save the index0Offset as length of the resulting pregap
     // this way the length of the track does not need to be ready
@@ -235,7 +235,7 @@ K3b::Msf K3bAudioTrack::index0() const
 }
 
 
-K3b::Msf K3bAudioTrack::postGap() const
+K3b::Msf K3b::AudioTrack::postGap() const
 {
     if( next() )
         return m_index0Offset;
@@ -244,7 +244,7 @@ K3b::Msf K3bAudioTrack::postGap() const
 }
 
 
-void K3bAudioTrack::setIndex0( const K3b::Msf& msf )
+void K3b::AudioTrack::setIndex0( const K3b::Msf& msf )
 {
     if( msf == 0 )
         m_index0Offset = 0;
@@ -253,7 +253,7 @@ void K3bAudioTrack::setIndex0( const K3b::Msf& msf )
 }
 
 
-K3bAudioTrack* K3bAudioTrack::take()
+K3b::AudioTrack* K3b::AudioTrack::take()
 {
     if( inList() ) {
         if( !m_prev )
@@ -278,12 +278,12 @@ K3bAudioTrack* K3bAudioTrack::take()
 }
 
 
-void K3bAudioTrack::moveAfter( K3bAudioTrack* track )
+void K3b::AudioTrack::moveAfter( K3b::AudioTrack* track )
 {
-    kDebug() << "(K3bAudioTrack::moveAfter( " << track << " )";
+    kDebug() << "(K3b::AudioTrack::moveAfter( " << track << " )";
     if( !track ) {
         if( !doc() ) {
-            kDebug() << "(K3bAudioTrack::moveAfter) no parent set";
+            kDebug() << "(K3b::AudioTrack::moveAfter) no parent set";
             return;
         }
 
@@ -296,7 +296,7 @@ void K3bAudioTrack::moveAfter( K3bAudioTrack* track )
         }
     }
     else if( track == this ) {
-        kDebug() << "(K3bAudioTrack::moveAfter) trying to move this after this.";
+        kDebug() << "(K3b::AudioTrack::moveAfter) trying to move this after this.";
         return;
     }
     else {
@@ -306,7 +306,7 @@ void K3bAudioTrack::moveAfter( K3bAudioTrack* track )
         // set the new parent doc
         m_parent = track->doc();
 
-        K3bAudioTrack* oldNext = track->m_next;
+        K3b::AudioTrack* oldNext = track->m_next;
 
         // set track as prev
         track->m_next = this;
@@ -327,11 +327,11 @@ void K3bAudioTrack::moveAfter( K3bAudioTrack* track )
 }
 
 
-void K3bAudioTrack::moveAhead( K3bAudioTrack* track )
+void K3b::AudioTrack::moveAhead( K3b::AudioTrack* track )
 {
     if( !track ) {
         if( !doc() ) {
-            kDebug() << "(K3bAudioTrack::moveAfter) no parent set";
+            kDebug() << "(K3b::AudioTrack::moveAfter) no parent set";
             return;
         }
 
@@ -344,7 +344,7 @@ void K3bAudioTrack::moveAhead( K3bAudioTrack* track )
         }
     }
     else if( track == this ) {
-        kDebug() << "(K3bAudioTrack::moveAhead) trying to move this ahead of this.";
+        kDebug() << "(K3b::AudioTrack::moveAhead) trying to move this ahead of this.";
         return;
     }
     else {
@@ -354,7 +354,7 @@ void K3bAudioTrack::moveAhead( K3bAudioTrack* track )
         // set the new parent doc
         m_parent = track->doc();
 
-        K3bAudioTrack* oldPrev = track->m_prev;
+        K3b::AudioTrack* oldPrev = track->m_prev;
 
         // set track as next
         m_next = track;
@@ -375,11 +375,11 @@ void K3bAudioTrack::moveAhead( K3bAudioTrack* track )
 }
 
 
-void K3bAudioTrack::merge( K3bAudioTrack* trackToMerge, K3bAudioDataSource* sourceAfter )
+void K3b::AudioTrack::merge( K3b::AudioTrack* trackToMerge, K3b::AudioDataSource* sourceAfter )
 {
-    kDebug() << "(K3bAudioTrack::merge) " << trackToMerge << " into " << this;
+    kDebug() << "(K3b::AudioTrack::merge) " << trackToMerge << " into " << this;
     if( this == trackToMerge ) {
-        kDebug() << "(K3bAudioTrack::merge) trying to merge this with this.";
+        kDebug() << "(K3b::AudioTrack::merge) trying to merge this with this.";
         return;
     }
 
@@ -388,7 +388,7 @@ void K3bAudioTrack::merge( K3bAudioTrack* trackToMerge, K3bAudioDataSource* sour
 
     // in case we prepend all of trackToMerge's sources
     if( !sourceAfter ) {
-        kDebug() << "(K3bAudioTrack::merge) merging " << trackToMerge->firstSource();
+        kDebug() << "(K3b::AudioTrack::merge) merging " << trackToMerge->firstSource();
         if( m_firstSource ) {
             trackToMerge->firstSource()->moveAhead( m_firstSource );
         }
@@ -398,11 +398,11 @@ void K3bAudioTrack::merge( K3bAudioTrack* trackToMerge, K3bAudioDataSource* sour
         sourceAfter = m_firstSource;
     }
 
-    kDebug() << "(K3bAudioTrack::merge) now merge the other sources.";
+    kDebug() << "(K3b::AudioTrack::merge) now merge the other sources.";
     // now merge all sources into this track
     while( trackToMerge->firstSource() ) {
-        K3bAudioDataSource* s = trackToMerge->firstSource();
-        kDebug() << "(K3bAudioTrack::merge) merging source " << s << " from track " << s->track() << " into track "
+        K3b::AudioDataSource* s = trackToMerge->firstSource();
+        kDebug() << "(K3b::AudioTrack::merge) merging source " << s << " from track " << s->track() << " into track "
                  << this << " after source " << sourceAfter << endl;
         s->moveAfter( sourceAfter );
         sourceAfter = s;
@@ -413,13 +413,13 @@ void K3bAudioTrack::merge( K3bAudioTrack* trackToMerge, K3bAudioDataSource* sour
     // now we can safely delete the track we merged
     delete trackToMerge;
 
-    kDebug() << "(K3bAudioTrack::merge) finished";
+    kDebug() << "(K3b::AudioTrack::merge) finished";
 
     emitChanged();
 }
 
 
-void K3bAudioTrack::setFirstSource( K3bAudioDataSource* source )
+void K3b::AudioTrack::setFirstSource( K3b::AudioDataSource* source )
 {
     // reset the reading stuff since this might be a completely new source list
     m_currentSource = 0;
@@ -435,12 +435,12 @@ void K3bAudioTrack::setFirstSource( K3bAudioDataSource* source )
 }
 
 
-void K3bAudioTrack::addSource( K3bAudioDataSource* source )
+void K3b::AudioTrack::addSource( K3b::AudioDataSource* source )
 {
     if( !source )
         return;
 
-    K3bAudioDataSource* s = m_firstSource;
+    K3b::AudioDataSource* s = m_firstSource;
     while( s && s->next() )
         s = s->next();
     if( s )
@@ -450,7 +450,7 @@ void K3bAudioTrack::addSource( K3bAudioDataSource* source )
 }
 
 
-void K3bAudioTrack::sourceChanged( K3bAudioDataSource* )
+void K3b::AudioTrack::sourceChanged( K3b::AudioDataSource* )
 {
     if( m_currentlyDeleting )
         return;
@@ -464,9 +464,9 @@ void K3bAudioTrack::sourceChanged( K3bAudioDataSource* )
 }
 
 
-int K3bAudioTrack::numberSources() const
+int K3b::AudioTrack::numberSources() const
 {
-    K3bAudioDataSource* source = m_firstSource;
+    K3b::AudioDataSource* source = m_firstSource;
     int i = 0;
     while( source ) {
         source = source->next();
@@ -476,9 +476,9 @@ int K3bAudioTrack::numberSources() const
 }
 
 
-bool K3bAudioTrack::seek( const K3b::Msf& msf )
+bool K3b::AudioTrack::seek( const K3b::Msf& msf )
 {
-    K3bAudioDataSource* source = m_firstSource;
+    K3b::AudioDataSource* source = m_firstSource;
 
     K3b::Msf pos;
     while( source && pos + source->length() < msf ) {
@@ -496,7 +496,7 @@ bool K3bAudioTrack::seek( const K3b::Msf& msf )
 }
 
 
-int K3bAudioTrack::read( char* data, unsigned int max )
+int K3b::AudioTrack::read( char* data, unsigned int max )
 {
     if( !m_currentSource ) {
         m_currentSource = m_firstSource;
@@ -520,15 +520,15 @@ int K3bAudioTrack::read( char* data, unsigned int max )
 }
 
 
-K3bAudioTrack* K3bAudioTrack::copy() const
+K3b::AudioTrack* K3b::AudioTrack::copy() const
 {
-    K3bAudioTrack* track = new K3bAudioTrack();
+    K3b::AudioTrack* track = new K3b::AudioTrack();
 
     track->m_copy = m_copy;
     track->m_preEmp = m_preEmp;
     track->m_index0Offset = m_index0Offset;
     track->m_cdText = m_cdText;
-    K3bAudioDataSource* source = m_firstSource;
+    K3b::AudioDataSource* source = m_firstSource;
     while( source ) {
         track->addSource( source->copy() );
         source = source->next();
@@ -538,19 +538,19 @@ K3bAudioTrack* K3bAudioTrack::copy() const
 }
 
 
-K3bAudioTrack* K3bAudioTrack::split( const K3b::Msf& pos )
+K3b::AudioTrack* K3b::AudioTrack::split( const K3b::Msf& pos )
 {
     if( pos < length() ) {
         // search the source
         // pos will be the first sector of the new track
         K3b::Msf currentPos;
-        K3bAudioDataSource* source = firstSource();
+        K3b::AudioDataSource* source = firstSource();
         while( source && currentPos + source->length() <= pos ) {
             currentPos += source->length();
             source = source->next();
         }
 
-        K3bAudioDataSource* splitSource = 0;
+        K3b::AudioDataSource* splitSource = 0;
         if( currentPos > 0 && currentPos == pos ) {
             // no need to split a source
             splitSource = source;
@@ -560,16 +560,16 @@ K3bAudioTrack* K3bAudioTrack::split( const K3b::Msf& pos )
         }
 
         // the new track should include all sources from splitSource and below
-        K3bAudioTrack* splitTrack = new K3bAudioTrack();
+        K3b::AudioTrack* splitTrack = new K3b::AudioTrack();
         splitTrack->m_cdText = m_cdText;
         source = splitSource;
         while( source ) {
-            K3bAudioDataSource* addSource = source;
+            K3b::AudioDataSource* addSource = source;
             source = source->next();
             splitTrack->addSource( addSource );
         }
 
-        kDebug() << "(K3bAudioTrack) moving track " << splitTrack << " after this (" << this << ") with parent " << doc();
+        kDebug() << "(K3b::AudioTrack) moving track " << splitTrack << " after this (" << this << ") with parent " << doc();
         splitTrack->moveAfter( this );
 
         return splitTrack;
@@ -579,21 +579,21 @@ K3bAudioTrack* K3bAudioTrack::split( const K3b::Msf& pos )
 }
 
 
-K3bDevice::Track K3bAudioTrack::toCdTrack() const
+K3b::Device::Track K3b::AudioTrack::toCdTrack() const
 {
     if( !inList() )
-        return K3bDevice::Track();
+        return K3b::Device::Track();
 
     K3b::Msf firstSector;
-    K3bAudioTrack* track = doc()->firstTrack();
+    K3b::AudioTrack* track = doc()->firstTrack();
     while( track != this ) {
         firstSector += track->length();
         track = track->next();
     }
 
-    K3bDevice::Track cdTrack( firstSector,
+    K3b::Device::Track cdTrack( firstSector,
                               firstSector + length() - 1,
-                              K3bDevice::Track::AUDIO );
+                              K3b::Device::Track::TYPE_AUDIO );
 
     // FIXME: auch im audiotrack copy permitted
     cdTrack.setCopyPermitted( !copyProtection() );
@@ -612,13 +612,13 @@ K3bDevice::Track K3bAudioTrack::toCdTrack() const
 }
 
 
-void K3bAudioTrack::debug()
+void K3b::AudioTrack::debug()
 {
     kDebug() << "Track " << this << endl
              << "  Prev: " << m_prev << endl
              << "  Next: " << m_next << endl
              << "  Sources:" << endl;
-    K3bAudioDataSource* s = m_firstSource;
+    K3b::AudioDataSource* s = m_firstSource;
     while( s ) {
         kDebug() << "  " << s << " - Prev: " << s->prev() << " Next: " << s->next();
         s = s->next();
@@ -626,10 +626,10 @@ void K3bAudioTrack::debug()
 }
 
 
-K3bAudioDataSource* K3bAudioTrack::getSource( int index ) const
+K3b::AudioDataSource* K3b::AudioTrack::getSource( int index ) const
 {
     int i = 0;
-    K3bAudioDataSource* source = firstSource();
+    K3b::AudioDataSource* source = firstSource();
     while ( source && i < index ) {
         source = source->next();
         ++i;

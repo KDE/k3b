@@ -33,26 +33,26 @@
 #include <kglobal.h>
 
 
-K3bMovixDoc::K3bMovixDoc( QObject* parent )
-    : K3bDataDoc( parent )
+K3b::MovixDoc::MovixDoc( QObject* parent )
+    : K3b::DataDoc( parent )
 {
-    connect( this, SIGNAL(itemRemoved(K3bDataItem*)),
-             this, SLOT(slotDataItemRemoved(K3bDataItem*)) );
+    connect( this, SIGNAL(itemRemoved(K3b::DataItem*)),
+             this, SLOT(slotDataItemRemoved(K3b::DataItem*)) );
 }
 
 
-K3bMovixDoc::~K3bMovixDoc()
+K3b::MovixDoc::~MovixDoc()
 {
 }
 
 
-K3bBurnJob* K3bMovixDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
+K3b::BurnJob* K3b::MovixDoc::newBurnJob( K3b::JobHandler* hdl, QObject* parent )
 {
-    return new K3bMovixJob( this, hdl, parent );
+    return new K3b::MovixJob( this, hdl, parent );
 }
 
 
-bool K3bMovixDoc::newDocument()
+bool K3b::MovixDoc::newDocument()
 {
     m_loopPlaylist = 1;
     m_ejectDisk = false;
@@ -60,11 +60,11 @@ bool K3bMovixDoc::newDocument()
     m_shutdown = false;
     m_randomPlay = false;
 
-    return K3bDataDoc::newDocument();
+    return K3b::DataDoc::newDocument();
 }
 
 
-void K3bMovixDoc::addUrls( const KUrl::List& urls )
+void K3b::MovixDoc::addUrls( const KUrl::List& urls )
 {
     for( KUrl::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
         addMovixFile( *it );
@@ -74,7 +74,7 @@ void K3bMovixDoc::addUrls( const KUrl::List& urls )
 }
 
 
-void K3bMovixDoc::addMovixFile( const KUrl& _url, int pos )
+void K3b::MovixDoc::addMovixFile( const KUrl& _url, int pos )
 {
     KUrl url = K3b::convertToLocalUrl( _url );
 
@@ -95,7 +95,7 @@ void K3bMovixDoc::addMovixFile( const KUrl& _url, int pos )
             return;
     }
 
-    K3bMovixFileItem* newK3bItem = new K3bMovixFileItem( f.absoluteFilePath(), this, root(), newName );
+    K3b::MovixFileItem* newK3bItem = new MovixFileItem( f.absoluteFilePath(), this, root(), newName );
     if( pos < 0 || pos > (int)m_movixFiles.count() )
         pos = m_movixFiles.count();
 
@@ -107,7 +107,7 @@ void K3bMovixDoc::addMovixFile( const KUrl& _url, int pos )
 }
 
 
-bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
+bool K3b::MovixDoc::loadDocumentData( QDomElement* rootElem )
 {
     if( !root() )
         newDocument();
@@ -115,7 +115,7 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
     QDomNodeList nodes = rootElem->childNodes();
 
     if( nodes.item(0).nodeName() != "general" ) {
-        kDebug() << "(K3bMovixDoc) could not find 'general' section.";
+        kDebug() << "(K3b::MovixDoc) could not find 'general' section.";
         return false;
     }
     if( !readGeneralDocumentData( nodes.item(0).toElement() ) )
@@ -125,7 +125,7 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
     // parse options
     // -----------------------------------------------------------------
     if( nodes.item(1).nodeName() != "data_options" ) {
-        kDebug() << "(K3bMovixDoc) could not find 'data_options' section.";
+        kDebug() << "(K3b::MovixDoc) could not find 'data_options' section.";
         return false;
     }
     if( !loadDocumentDataOptions( nodes.item(1).toElement() ) )
@@ -137,7 +137,7 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
     // parse header
     // -----------------------------------------------------------------
     if( nodes.item(2).nodeName() != "data_header" ) {
-        kDebug() << "(K3bMovixDoc) could not find 'data_header' section.";
+        kDebug() << "(K3b::MovixDoc) could not find 'data_header' section.";
         return false;
     }
     if( !loadDocumentDataHeader( nodes.item(2).toElement() ) )
@@ -149,7 +149,7 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
     // parse movix options
     // -----------------------------------------------------------------
     if( nodes.item(3).nodeName() != "movix_options" ) {
-        kDebug() << "(K3bMovixDoc) could not find 'movix_options' section.";
+        kDebug() << "(K3b::MovixDoc) could not find 'movix_options' section.";
         return false;
     }
 
@@ -190,14 +190,14 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
         else if( e.nodeName() == "loop_playlist")
             setLoopPlaylist( e.text().toInt() );
         else
-            kDebug() << "(K3bMovixDoc) unknown movix option: " << e.nodeName();
+            kDebug() << "(K3b::MovixDoc) unknown movix option: " << e.nodeName();
     }
     // -----------------------------------------------------------------
 
     // parse files
     // -----------------------------------------------------------------
     if( nodes.item(4).nodeName() != "movix_files" ) {
-        kDebug() << "(K3bMovixDoc) could not find 'movix_files' section.";
+        kDebug() << "(K3b::MovixDoc) could not find 'movix_files' section.";
         return false;
     }
 
@@ -211,18 +211,18 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
 
         if( e.nodeName() == "file" ) {
             if( !e.hasAttribute( "name" ) ) {
-                kDebug() << "(K3bMovixDoc) found file tag without name attribute.";
+                kDebug() << "(K3b::MovixDoc) found file tag without name attribute.";
                 return false;
             }
 
             QDomElement urlElem = e.firstChild().toElement();
             if( urlElem.isNull() ) {
-                kDebug() << "(K3bMovixDoc) found file tag without url child.";
+                kDebug() << "(K3b::MovixDoc) found file tag without url child.";
                 return false;
             }
 
             // create the item
-            K3bMovixFileItem* newK3bItem = new K3bMovixFileItem( urlElem.text(),
+            K3b::MovixFileItem* newK3bItem = new K3b::MovixFileItem( urlElem.text(),
                                                                  this,
                                                                  root(),
                                                                  e.attributeNode("name").value() );
@@ -233,17 +233,17 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
             if( !subTitleElem.isNull() && subTitleElem.nodeName() == "subtitle_file" ) {
                 urlElem = subTitleElem.firstChild().toElement();
                 if( urlElem.isNull() ) {
-                    kDebug() << "(K3bMovixDoc) found subtitle_file tag without url child.";
+                    kDebug() << "(K3b::MovixDoc) found subtitle_file tag without url child.";
                     return false;
                 }
 
-                QString name = K3bMovixFileItem::subTitleFileName( newK3bItem->k3bName() );
-                K3bFileItem* subItem = new K3bFileItem( urlElem.text(), this, root(), name );
+                QString name = K3b::MovixFileItem::subTitleFileName( newK3bItem->k3bName() );
+                K3b::FileItem* subItem = new K3b::FileItem( urlElem.text(), this, root(), name );
                 newK3bItem->setSubTitleItem( subItem );
             }
         }
         else {
-            kDebug() << "(K3bMovixDoc) found " << e.nodeName() << " node where 'file' was expected.";
+            kDebug() << "(K3b::MovixDoc) found " << e.nodeName() << " node where 'file' was expected.";
             return false;
         }
     }
@@ -256,7 +256,7 @@ bool K3bMovixDoc::loadDocumentData( QDomElement* rootElem )
 }
 
 
-bool K3bMovixDoc::saveDocumentData( QDomElement* docElem )
+bool K3b::MovixDoc::saveDocumentData( QDomElement* docElem )
 {
     QDomDocument doc = docElem->ownerDocument();
 
@@ -331,7 +331,7 @@ bool K3bMovixDoc::saveDocumentData( QDomElement* docElem )
 
 
     // save the movix items
-    Q_FOREACH( K3bMovixFileItem* item, m_movixFiles ) {
+    Q_FOREACH( K3b::MovixFileItem* item, m_movixFiles ) {
         QDomElement topElem = doc.createElement( "file" );
         topElem.setAttribute( "name", item->k3bName() );
         QDomElement urlElem = doc.createElement( "url" );
@@ -357,10 +357,10 @@ bool K3bMovixDoc::saveDocumentData( QDomElement* docElem )
 }
 
 
-void K3bMovixDoc::slotDataItemRemoved( K3bDataItem* item )
+void K3b::MovixDoc::slotDataItemRemoved( K3b::DataItem* item )
 {
     // check if it's a movix item
-    if( K3bMovixFileItem* fi = dynamic_cast<K3bMovixFileItem*>(item) )
+    if( K3b::MovixFileItem* fi = dynamic_cast<K3b::MovixFileItem*>(item) )
         if( m_movixFiles.contains( fi ) ) {
             emit movixItemRemoved( fi );
             m_movixFiles.removeAll( fi );
@@ -369,13 +369,13 @@ void K3bMovixDoc::slotDataItemRemoved( K3bDataItem* item )
 }
 
 
-int K3bMovixDoc::indexOf( K3bMovixFileItem* item )
+int K3b::MovixDoc::indexOf( K3b::MovixFileItem* item )
 {
     return m_movixFiles.lastIndexOf(item)+1;
 }
 
 
-void K3bMovixDoc::moveMovixItem( K3bMovixFileItem* item, K3bMovixFileItem* itemAfter )
+void K3b::MovixDoc::moveMovixItem( K3b::MovixFileItem* item, K3b::MovixFileItem* itemAfter )
 {
     if( item == itemAfter )
         return;
@@ -393,7 +393,7 @@ void K3bMovixDoc::moveMovixItem( K3bMovixFileItem* item, K3bMovixFileItem* itemA
 }
 
 
-void K3bMovixDoc::addSubTitleItem( K3bMovixFileItem* item, const KUrl& url )
+void K3b::MovixDoc::addSubTitleItem( K3b::MovixFileItem* item, const KUrl& url )
 {
     if( item->subTitleItem() )
         removeSubTitleItem( item );
@@ -403,14 +403,14 @@ void K3bMovixDoc::addSubTitleItem( K3bMovixFileItem* item, const KUrl& url )
         return;
 
     // check if there already is a file named like we want to name the subTitle file
-    QString name = K3bMovixFileItem::subTitleFileName( item->k3bName() );
+    QString name = K3b::MovixFileItem::subTitleFileName( item->k3bName() );
 
     if( nameAlreadyInDir( name, root() ) ) {
         KMessageBox::error( 0, i18n("Could not rename subtitle file. File with requested name %1 already exists.",name) );
         return;
     }
 
-    K3bFileItem* subItem = new K3bFileItem( f.absoluteFilePath(), this, root(), name );
+    K3b::FileItem* subItem = new K3b::FileItem( f.absoluteFilePath(), this, root(), name );
     item->setSubTitleItem( subItem );
 
     emit newMovixFileItems();
@@ -419,7 +419,7 @@ void K3bMovixDoc::addSubTitleItem( K3bMovixFileItem* item, const KUrl& url )
 }
 
 
-void K3bMovixDoc::removeSubTitleItem( K3bMovixFileItem* item )
+void K3b::MovixDoc::removeSubTitleItem( K3b::MovixFileItem* item )
 {
     if( item->subTitleItem() ) {
         emit subTitleItemRemoved( item );

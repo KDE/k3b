@@ -21,7 +21,7 @@
 class K3bFFMpegFile;
 
 
-class K3bFFMpegDecoderFactory : public K3bAudioDecoderFactory
+class K3bFFMpegDecoderFactory : public K3b::AudioDecoderFactory
 {
     Q_OBJECT
 
@@ -35,11 +35,11 @@ public:
 
     bool multiFormatDecoder() const { return true; }
 
-    K3bAudioDecoder* createDecoder( QObject* parent = 0  ) const;
+    K3b::AudioDecoder* createDecoder( QObject* parent = 0  ) const;
 };
 
 
-class K3bFFMpegDecoder : public K3bAudioDecoder
+class K3bFFMpegDecoder : public K3b::AudioDecoder
 {
     Q_OBJECT
 

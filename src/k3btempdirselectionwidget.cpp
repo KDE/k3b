@@ -37,7 +37,7 @@
 #include <klineedit.h>
 
 
-K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent )
+K3b::TempDirSelectionWidget::TempDirSelectionWidget( QWidget *parent )
     : QGroupBox( parent ),
       m_labelCdSize(0),
       m_defaultImageFileName( "k3b_image.iso" )
@@ -87,12 +87,12 @@ K3bTempDirSelectionWidget::K3bTempDirSelectionWidget( QWidget *parent )
 }
 
 
-K3bTempDirSelectionWidget::~K3bTempDirSelectionWidget()
+K3b::TempDirSelectionWidget::~TempDirSelectionWidget()
 {
 }
 
 
-unsigned long K3bTempDirSelectionWidget::freeTempSpace() const
+unsigned long K3b::TempDirSelectionWidget::freeTempSpace() const
 {
     QString path = m_editDirectory->url().path();
 
@@ -106,7 +106,7 @@ unsigned long K3bTempDirSelectionWidget::freeTempSpace() const
 }
 
 
-void K3bTempDirSelectionWidget::slotUpdateFreeTempSpace()
+void K3b::TempDirSelectionWidget::slotUpdateFreeTempSpace()
 {
     // update the temp space
     freeTempSpace();
@@ -126,7 +126,7 @@ void K3bTempDirSelectionWidget::slotUpdateFreeTempSpace()
 }
 
 
-void K3bTempDirSelectionWidget::slotTempDirButtonPressed( KUrlRequester* r )
+void K3b::TempDirSelectionWidget::slotTempDirButtonPressed( KUrlRequester* r )
 {
     // set the correct mode for the filedialog
     if( m_mode == DIR ) {
@@ -140,14 +140,14 @@ void K3bTempDirSelectionWidget::slotTempDirButtonPressed( KUrlRequester* r )
 }
 
 
-void K3bTempDirSelectionWidget::setTempPath( const QString& dir )
+void K3b::TempDirSelectionWidget::setTempPath( const QString& dir )
 {
     m_editDirectory->setUrl( dir );
     slotUpdateFreeTempSpace();
 }
 
 
-QString K3bTempDirSelectionWidget::tempPath() const
+QString K3b::TempDirSelectionWidget::tempPath() const
 {
     QFileInfo fi( m_editDirectory->url().path() );
 
@@ -171,13 +171,13 @@ QString K3bTempDirSelectionWidget::tempPath() const
 }
 
 
-QString K3bTempDirSelectionWidget::plainTempPath() const
+QString K3b::TempDirSelectionWidget::plainTempPath() const
 {
     return m_editDirectory->url().path();
 }
 
 
-QString K3bTempDirSelectionWidget::tempDirectory() const
+QString K3b::TempDirSelectionWidget::tempDirectory() const
 {
     QString td( m_editDirectory->url().path() );
 
@@ -196,7 +196,7 @@ QString K3bTempDirSelectionWidget::tempDirectory() const
 }
 
 
-void K3bTempDirSelectionWidget::setSelectionMode( int mode )
+void K3b::TempDirSelectionWidget::setSelectionMode( int mode )
 {
     m_mode = mode;
 
@@ -211,7 +211,7 @@ void K3bTempDirSelectionWidget::setSelectionMode( int mode )
 }
 
 
-void K3bTempDirSelectionWidget::setNeededSize( KIO::filesize_t bytes )
+void K3b::TempDirSelectionWidget::setNeededSize( KIO::filesize_t bytes )
 {
     m_requestedSize = bytes;
     if( !m_labelCdSize ) {
@@ -225,26 +225,26 @@ void K3bTempDirSelectionWidget::setNeededSize( KIO::filesize_t bytes )
 }
 
 
-void K3bTempDirSelectionWidget::saveConfig()
+void K3b::TempDirSelectionWidget::saveConfig()
 {
     KConfigGroup grp( KGlobal::config(), "General Options" );
     grp.writePathEntry( "Temp Dir", tempDirectory() );
 }
 
 
-void K3bTempDirSelectionWidget::readConfig( const KConfigGroup& c )
+void K3b::TempDirSelectionWidget::readConfig( const KConfigGroup& c )
 {
     setTempPath( c.readPathEntry( "image path", K3b::defaultTempPath() ) );
 }
 
 
-void K3bTempDirSelectionWidget::saveConfig( KConfigGroup c )
+void K3b::TempDirSelectionWidget::saveConfig( KConfigGroup c )
 {
     c.writePathEntry( "image path", tempPath() );
 }
 
 
-void K3bTempDirSelectionWidget::setDefaultImageFileName( const QString& name, bool changeImageName )
+void K3b::TempDirSelectionWidget::setDefaultImageFileName( const QString& name, bool changeImageName )
 {
     if ( !name.isEmpty() ) {
         if ( selectionMode() == FILE ) {
@@ -262,13 +262,13 @@ void K3bTempDirSelectionWidget::setDefaultImageFileName( const QString& name, bo
 }
 
 
-void K3bTempDirSelectionWidget::slotFixTempPath()
+void K3b::TempDirSelectionWidget::slotFixTempPath()
 {
     fixTempPath( false );
 }
 
 
-void K3bTempDirSelectionWidget::fixTempPath( bool forceNewImageName )
+void K3b::TempDirSelectionWidget::fixTempPath( bool forceNewImageName )
 {
     // if in file selection mode and no image file is specified or
     // forceNewImageName is true set the default image file name

@@ -25,19 +25,19 @@
 #include <errno.h>
 
 
-K3bPipe::K3bPipe()
+K3b::Pipe::Pipe()
 {
     m_fd[0] = m_fd[1] = -1;
 }
 
 
-K3bPipe::~K3bPipe()
+K3b::Pipe::~Pipe()
 {
     close();
 }
 
 
-bool K3bPipe::open()
+bool K3b::Pipe::open()
 {
     close();
 
@@ -47,13 +47,13 @@ bool K3bPipe::open()
         return true;
     }
     else {
-        kDebug() << "(K3bPipe) failed to setup socket pair.";
+        kDebug() << "(K3b::Pipe) failed to setup socket pair.";
         return false;
     }
 }
 
 
-void K3bPipe::closeIn()
+void K3b::Pipe::closeIn()
 {
     if( m_fd[1] != -1 ) {
         ::close( m_fd[1] );
@@ -62,7 +62,7 @@ void K3bPipe::closeIn()
 }
 
 
-void K3bPipe::closeOut()
+void K3b::Pipe::closeOut()
 {
     if( m_fd[0] != -1 ) {
         ::close( m_fd[0] );
@@ -71,7 +71,7 @@ void K3bPipe::closeOut()
 }
 
 
-void K3bPipe::close()
+void K3b::Pipe::close()
 {
     closeIn();
     closeOut();

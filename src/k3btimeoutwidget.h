@@ -21,13 +21,14 @@ class QPaintEvent;
 class QResizeEvent;
 
 
-class K3bTimeoutWidget : public QWidget
+namespace K3b {
+class TimeoutWidget : public QWidget
 {
   Q_OBJECT
 
  public:
-  K3bTimeoutWidget( QWidget* parent );
-  ~K3bTimeoutWidget();
+  TimeoutWidget( QWidget* parent );
+  ~TimeoutWidget();
 
   QSize sizeHint() const;
   QSize minimumSizeHint() const;
@@ -54,5 +55,6 @@ class K3bTimeoutWidget : public QWidget
   class Private;
   Private* d;
 };
+}
 
 #endif

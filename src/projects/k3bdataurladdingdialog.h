@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -27,87 +27,90 @@
 
 class QProgressBar;
 class QLabel;
-class K3bDataItem;
-class K3bDirItem;
-class K3bEncodingConverter;
-class K3bDirSizeJob;
-class K3bDataDoc;
 
+namespace K3b {
 
-class K3bDataUrlAddingDialog : public KDialog
-{
-    Q_OBJECT
+    class DataItem;
+    class DirItem;
+    class EncodingConverter;
+    class DirSizeJob;
+    class DataDoc;
 
-public:
-    ~K3bDataUrlAddingDialog();
+    class DataUrlAddingDialog : public KDialog
+    {
+        Q_OBJECT
 
-    /**
-     * \return \see QDialog::exec()
-     */
-    static int addUrls( const KUrl::List& urls, K3bDirItem* dir = 0,
-                        QWidget* parent = 0 );
+    public:
+        ~DataUrlAddingDialog();
 
-    static int moveItems( const QList<K3bDataItem*>& items, K3bDirItem* dir,
-                          QWidget* parent = 0 );
+        /**
+         * \return \see QDialog::exec()
+         */
+        static int addUrls( const KUrl::List& urls, DirItem* dir = 0,
+                            QWidget* parent = 0 );
 
-    static int copyItems( const QList<K3bDataItem*>& items, K3bDirItem* dir,
-                          QWidget* parent = 0 );
+        static int moveItems( const QList<DataItem*>& items, DirItem* dir,
+                              QWidget* parent = 0 );
 
-    static int copyMoveItems( const QList<K3bDataItem*>& items, K3bDirItem* dir,
-                              QWidget* parent, bool copy );
+        static int copyItems( const QList<DataItem*>& items, DirItem* dir,
+                              QWidget* parent = 0 );
 
-private Q_SLOTS:
-    void slotAddUrls();
-    void slotCopyMoveItems();
-    void slotCancel();
-    void slotDirSizeDone( bool );
-    void updateProgress();
+        static int copyMoveItems( const QList<DataItem*>& items, DirItem* dir,
+                                  QWidget* parent, bool copy );
 
-private:
-    K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent = 0 );
+    private Q_SLOTS:
+        void slotAddUrls();
+        void slotCopyMoveItems();
+        void slotCancel();
+        void slotDirSizeDone( bool );
+        void updateProgress();
 
-    bool getNewName( const QString& oldName, K3bDirItem* dir, QString& newName );
+    private:
+        DataUrlAddingDialog( DataDoc* doc, QWidget* parent = 0 );
 
-    bool addHiddenFiles();
-    bool addSystemFiles();
+        bool getNewName( const QString& oldName, DirItem* dir, QString& newName );
 
-    QString resultMessage() const;
+        bool addHiddenFiles();
+        bool addSystemFiles();
 
-    QProgressBar* m_progressWidget;
-    QLabel* m_infoLabel;
-    QLabel* m_counterLabel;
-    K3bEncodingConverter* m_encodingConverter;
+        QString resultMessage() const;
 
-    KUrl::List m_urls;
-    QList< QPair<KUrl, K3bDirItem*> > m_urlQueue;
+        QProgressBar* m_progressWidget;
+        QLabel* m_infoLabel;
+        QLabel* m_counterLabel;
+        EncodingConverter* m_encodingConverter;
 
-    QList< QPair<K3bDataItem*, K3bDirItem*> > m_items;
+        KUrl::List m_urls;
+        QList< QPair<KUrl, DirItem*> > m_urlQueue;
 
-    QList<KUrl> m_dirSizeQueue;
+        QList< QPair<DataItem*, DirItem*> > m_items;
 
-    bool m_bExistingItemsReplaceAll;
-    bool m_bExistingItemsIgnoreAll;
-    bool m_bFolderLinksFollowAll;
-    bool m_bFolderLinksAddAll;
-    int m_iAddHiddenFiles;
-    int m_iAddSystemFiles;
+        QList<KUrl> m_dirSizeQueue;
 
-    QStringList m_unreadableFiles;
-    QStringList m_notFoundFiles;
-    QStringList m_nonLocalFiles;
-    QStringList m_tooBigFiles;
-    QStringList m_mkisofsLimitationRenamedFiles;
-    QStringList m_invalidFilenameEncodingFiles;
+        bool m_bExistingItemsReplaceAll;
+        bool m_bExistingItemsIgnoreAll;
+        bool m_bFolderLinksFollowAll;
+        bool m_bFolderLinksAddAll;
+        int m_iAddHiddenFiles;
+        int m_iAddSystemFiles;
 
-    bool m_bCanceled;
+        QStringList m_unreadableFiles;
+        QStringList m_notFoundFiles;
+        QStringList m_nonLocalFiles;
+        QStringList m_tooBigFiles;
+        QStringList m_mkisofsLimitationRenamedFiles;
+        QStringList m_invalidFilenameEncodingFiles;
 
-    bool m_copyItems;
+        bool m_bCanceled;
 
-    KIO::filesize_t m_totalFiles;
-    KIO::filesize_t m_filesHandled;
-    K3bDirSizeJob* m_dirSizeJob;
+        bool m_copyItems;
 
-    unsigned int m_lastProgress;
-};
+        KIO::filesize_t m_totalFiles;
+        KIO::filesize_t m_filesHandled;
+        DirSizeJob* m_dirSizeJob;
+
+        unsigned int m_lastProgress;
+    };
+}
 
 #endif

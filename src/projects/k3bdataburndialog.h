@@ -23,23 +23,32 @@
 class QCheckBox;
 class Q3GroupBox;
 class QLabel;
-class K3bDataDoc;
-class K3bDataImageSettingsWidget;
-class K3bDataModeWidget;
-class K3bDataMultiSessionCombobox;
+namespace K3b {
+    class DataDoc;
+}
+namespace K3b {
+    class DataImageSettingsWidget;
+}
+namespace K3b {
+    class DataModeWidget;
+}
+namespace K3b {
+    class DataMultiSessionCombobox;
+}
 
 
 /**
  *@author Sebastian Trueg
  */
 
-class K3bDataBurnDialog : public K3bProjectBurnDialog
+namespace K3b {
+class DataBurnDialog : public ProjectBurnDialog
 {
     Q_OBJECT
 
 public:
-    K3bDataBurnDialog(K3bDataDoc*, QWidget *parent=0 );
-    ~K3bDataBurnDialog();
+    DataBurnDialog(DataDoc*, QWidget *parent=0 );
+    ~DataBurnDialog();
 
 protected:
     void setupSettingsTab();
@@ -49,12 +58,12 @@ protected:
     void toggleAll();
 
     // --- settings tab ---------------------------
-    K3bDataImageSettingsWidget* m_imageSettingsWidget;
+    DataImageSettingsWidget* m_imageSettingsWidget;
     // ----------------------------------------------
 	
     Q3GroupBox* m_groupDataMode;
-    K3bDataModeWidget* m_dataModeWidget;
-    K3bDataMultiSessionCombobox* m_comboMultisession;
+    DataModeWidget* m_dataModeWidget;
+    DataMultiSessionCombobox* m_comboMultisession;
 
     QCheckBox* m_checkVerify;
 
@@ -65,5 +74,6 @@ protected:
 
     void slotMultiSessionModeChanged();
 };
+}
 
 #endif

@@ -27,13 +27,13 @@
 #include <kdialog.h>
 
 
-K3bAudioDataSourceEditWidget::K3bAudioDataSourceEditWidget( QWidget* parent )
+K3b::AudioDataSourceEditWidget::AudioDataSourceEditWidget( QWidget* parent )
     : QWidget( parent ),
       m_source(0)
 {
-    m_editor = new K3bAudioEditorWidget( this );
-    m_editStartOffset = new K3bMsfEdit( this );
-    m_editEndOffset = new K3bMsfEdit( this );
+    m_editor = new K3b::AudioEditorWidget( this );
+    m_editStartOffset = new K3b::MsfEdit( this );
+    m_editEndOffset = new K3b::MsfEdit( this );
 
     QLabel* startLabel = new QLabel( i18n("Start Offset") + ":", this );
     QLabel* endLabel = new QLabel( i18n("End Offset") + ":", this );
@@ -66,24 +66,24 @@ K3bAudioDataSourceEditWidget::K3bAudioDataSourceEditWidget( QWidget* parent )
 }
 
 
-K3bAudioDataSourceEditWidget::~K3bAudioDataSourceEditWidget()
+K3b::AudioDataSourceEditWidget::~AudioDataSourceEditWidget()
 {
 }
 
 
-K3b::Msf K3bAudioDataSourceEditWidget::startOffset() const
+K3b::Msf K3b::AudioDataSourceEditWidget::startOffset() const
 {
     return m_editor->rangeStart( m_rangeId );
 }
 
 
-K3b::Msf K3bAudioDataSourceEditWidget::endOffset() const
+K3b::Msf K3b::AudioDataSourceEditWidget::endOffset() const
 {
     return m_editor->rangeEnd( m_rangeId );
 }
 
 
-void K3bAudioDataSourceEditWidget::loadSource( K3bAudioDataSource* source )
+void K3b::AudioDataSourceEditWidget::loadSource( K3b::AudioDataSource* source )
 {
     m_source = source;
 
@@ -111,7 +111,7 @@ void K3bAudioDataSourceEditWidget::loadSource( K3bAudioDataSource* source )
 }
 
 
-void K3bAudioDataSourceEditWidget::saveSource()
+void K3b::AudioDataSourceEditWidget::saveSource()
 {
     if( m_source ) {
         m_source->setStartOffset( startOffset() );
@@ -122,7 +122,7 @@ void K3bAudioDataSourceEditWidget::saveSource()
 }
 
 
-void K3bAudioDataSourceEditWidget::setStartOffset( const K3b::Msf& msf )
+void K3b::AudioDataSourceEditWidget::setStartOffset( const K3b::Msf& msf )
 {
     if( m_source ) {
         m_editor->modifyRange( m_rangeId,
@@ -132,7 +132,7 @@ void K3bAudioDataSourceEditWidget::setStartOffset( const K3b::Msf& msf )
 }
 
 
-void K3bAudioDataSourceEditWidget::setEndOffset( const K3b::Msf& msf )
+void K3b::AudioDataSourceEditWidget::setEndOffset( const K3b::Msf& msf )
 {
     if( m_source ) {
         m_editor->modifyRange( m_rangeId,
@@ -142,13 +142,13 @@ void K3bAudioDataSourceEditWidget::setEndOffset( const K3b::Msf& msf )
 }
 
 
-void K3bAudioDataSourceEditWidget::slotRangeModified( int, const K3b::Msf& start, const K3b::Msf& end )
+void K3b::AudioDataSourceEditWidget::slotRangeModified( int, const K3b::Msf& start, const K3b::Msf& end )
 {
     m_editStartOffset->setMsfValue( start );
     m_editEndOffset->setMsfValue( end );
 }
 
-void K3bAudioDataSourceEditWidget::slotStartOffsetEdited( const K3b::Msf& msf )
+void K3b::AudioDataSourceEditWidget::slotStartOffsetEdited( const K3b::Msf& msf )
 {
     if( m_source ) {
         m_editor->modifyRange( m_rangeId, msf, endOffset() );
@@ -156,7 +156,7 @@ void K3bAudioDataSourceEditWidget::slotStartOffsetEdited( const K3b::Msf& msf )
 }
 
 
-void K3bAudioDataSourceEditWidget::slotEndOffsetEdited( const K3b::Msf& msf )
+void K3b::AudioDataSourceEditWidget::slotEndOffsetEdited( const K3b::Msf& msf )
 {
     if( m_source ) {
         m_editor->modifyRange( m_rangeId, startOffset(), msf );

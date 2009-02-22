@@ -25,33 +25,42 @@
 #include <QDropEvent>
 
 
-class K3bMovixDoc;
-class K3bMovixFileItem;
-class K3bFileItem;
+namespace K3b {
+    class MovixDoc;
+}
+namespace K3b {
+    class MovixFileItem;
+}
+namespace K3b {
+    class FileItem;
+}
 
 
-class K3bMovixListViewItem : public K3bListViewItem
+namespace K3b {
+class MovixListViewItem : public ListViewItem
 {
 public:
-    K3bMovixListViewItem( K3bMovixDoc* doc, K3bMovixFileItem*, Q3ListView* parent, Q3ListViewItem* after );
-    K3bMovixListViewItem( K3bMovixDoc* doc, K3bMovixFileItem*, Q3ListViewItem* parent );
-    ~K3bMovixListViewItem();
+    MovixListViewItem( MovixDoc* doc, MovixFileItem*, Q3ListView* parent, Q3ListViewItem* after );
+    MovixListViewItem( MovixDoc* doc, MovixFileItem*, Q3ListViewItem* parent );
+    ~MovixListViewItem();
 
-    K3bMovixFileItem* fileItem() const { return m_fileItem; }
-    K3bMovixDoc* doc() const { return m_doc; }
+    MovixFileItem* fileItem() const { return m_fileItem; }
+    MovixDoc* doc() const { return m_doc; }
 
     virtual bool isMovixFileItem() const { return true; }
 
 private:
-    K3bMovixDoc* m_doc;
-    K3bMovixFileItem* m_fileItem;
+    MovixDoc* m_doc;
+    MovixFileItem* m_fileItem;
 };
+}
 
 
-class K3bMovixFileViewItem : public K3bMovixListViewItem, public KFileItem
+namespace K3b {
+class MovixFileViewItem : public MovixListViewItem, public KFileItem
 {
 public:
-    K3bMovixFileViewItem( K3bMovixDoc* doc, K3bMovixFileItem*, Q3ListView* parent, Q3ListViewItem* );
+    MovixFileViewItem( MovixDoc* doc, MovixFileItem*, Q3ListView* parent, Q3ListViewItem* );
 
     QString text( int ) const;
     void setText(int col, const QString& text );
@@ -59,26 +68,30 @@ public:
     /** always sort according to the playlist order */
     QString key( int, bool ) const;
 };
+}
 
-class K3bMovixSubTitleViewItem : public K3bMovixListViewItem, public KFileItem
+namespace K3b {
+class MovixSubTitleViewItem : public MovixListViewItem, public KFileItem
 {
 public:
-    K3bMovixSubTitleViewItem( K3bMovixDoc*, K3bMovixFileItem* item, K3bMovixListViewItem* parent );
-    ~K3bMovixSubTitleViewItem();
+    MovixSubTitleViewItem( MovixDoc*, MovixFileItem* item, MovixListViewItem* parent );
+    ~MovixSubTitleViewItem();
 
     QString text( int ) const;
 
     bool isMovixFileItem() const { return false; }
 };
+}
 
 
-class K3bMovixListView : public K3bListView
+namespace K3b {
+class MovixListView : public ListView
 {
     Q_OBJECT
 
 public:
-    K3bMovixListView( K3bMovixDoc* doc, QWidget* parent = 0 );
-    ~K3bMovixListView();
+    MovixListView( MovixDoc* doc, QWidget* parent = 0 );
+    ~MovixListView();
 
     Q3DragObject* dragObject();
 
@@ -87,15 +100,16 @@ protected:
 
     private Q_SLOTS:
     void slotNewFileItems();
-    void slotFileItemRemoved( K3bMovixFileItem* );
-    void slotSubTitleItemRemoved( K3bMovixFileItem* );
+    void slotFileItemRemoved( MovixFileItem* );
+    void slotSubTitleItemRemoved( MovixFileItem* );
     void slotDropped( K3ListView*, QDropEvent* e, Q3ListViewItem* after );
     void slotChanged();
 
 private:
-    K3bMovixDoc* m_doc;
+    MovixDoc* m_doc;
 
-    QMap<K3bFileItem*, K3bMovixFileViewItem*> m_itemMap;
+    QMap<FileItem*, MovixFileViewItem*> m_itemMap;
 };
+}
 
 #endif

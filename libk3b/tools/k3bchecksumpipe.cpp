@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 #include <unistd.h>
 
 
-class K3bChecksumPipe::Private
+class K3b::ChecksumPipe::Private
 {
 public:
   Private()
@@ -49,28 +49,28 @@ public:
 };
 
 
-K3bChecksumPipe::K3bChecksumPipe()
-  : K3bActivePipe()
+K3b::ChecksumPipe::ChecksumPipe()
+  : K3b::ActivePipe()
 {
   d = new Private();
 }
 
 
-K3bChecksumPipe::~K3bChecksumPipe()
+K3b::ChecksumPipe::~ChecksumPipe()
 {
   delete d;
 }
 
 
-bool K3bChecksumPipe::open( bool closeWhenDone )
+bool K3b::ChecksumPipe::open( bool closeWhenDone )
 {
   return open( MD5, closeWhenDone );
 }
 
 
-bool K3bChecksumPipe::open( Type type, bool closeWhenDone )
+bool K3b::ChecksumPipe::open( Type type, bool closeWhenDone )
 {
-  if( K3bActivePipe::open( closeWhenDone ) ) {
+  if( K3b::ActivePipe::open( closeWhenDone ) ) {
     d->reset();
     d->checksumType = type;
     return true;
@@ -80,7 +80,7 @@ bool K3bChecksumPipe::open( Type type, bool closeWhenDone )
 }
 
 
-QByteArray K3bChecksumPipe::checksum() const
+QByteArray K3b::ChecksumPipe::checksum() const
 {
   switch( d->checksumType ) {
   case MD5:
@@ -91,8 +91,8 @@ QByteArray K3bChecksumPipe::checksum() const
 }
 
 
-int K3bChecksumPipe::write( char* data, int max )
+int K3b::ChecksumPipe::write( char* data, int max )
 {
   d->update( data, max );
-  return K3bActivePipe::write( data, max );
+  return K3b::ActivePipe::write( data, max );
 }

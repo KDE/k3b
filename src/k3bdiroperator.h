@@ -26,13 +26,14 @@ class KBookmarkMenu;
 /**
  *@author Sebastian Trueg
  */
-class K3bDirOperator : public KDirOperator, public KBookmarkOwner
+namespace K3b {
+class DirOperator : public KDirOperator, public KBookmarkOwner
 {
     Q_OBJECT
 
 public: 
-    K3bDirOperator( const KUrl& urlName = KUrl(), QWidget* parent = 0 );
-    ~K3bDirOperator();
+    DirOperator( const KUrl& urlName = KUrl(), QWidget* parent = 0 );
+    ~DirOperator();
 
     /**
      * reimplemented from KDirOperator
@@ -74,5 +75,6 @@ private:
     KBookmarkMenu* m_bmMenu;
     KActionMenu* m_bmPopup;
 };
+}
 
 #endif

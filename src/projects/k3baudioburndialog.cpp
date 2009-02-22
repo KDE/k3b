@@ -55,8 +55,8 @@
 #include <kvbox.h>
 
 
-K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent )
-    : K3bProjectBurnDialog( _doc, parent ),
+K3b::AudioBurnDialog::AudioBurnDialog(K3b::AudioDoc* _doc, QWidget *parent )
+    : K3b::ProjectBurnDialog( _doc, parent ),
       m_doc(_doc)
 {
     prepareGui();
@@ -69,7 +69,7 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent )
     m_optionGroupLayout->addItem( spacer );
 
     // create cd-text page
-    m_cdtextWidget = new K3bAudioCdTextWidget( this );
+    m_cdtextWidget = new K3b::AudioCdTextWidget( this );
     addPage( m_cdtextWidget, i18n("CD-Text") );
 
     // create advanced tab
@@ -80,7 +80,7 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent )
     advancedTabGrid->setMargin( marginHint() );
 
     QGroupBox* advancedSettingsGroup = new QGroupBox( i18n("Settings"), advancedTab );
-    m_checkNormalize = K3bStdGuiItems::normalizeCheckBox( advancedSettingsGroup );
+    m_checkNormalize = K3b::StdGuiItems::normalizeCheckBox( advancedSettingsGroup );
     QVBoxLayout* advancedSettingsGroupLayout = new QVBoxLayout( advancedSettingsGroup );
     advancedSettingsGroupLayout->addWidget( m_checkNormalize );
 
@@ -93,7 +93,7 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent )
     KHBox* box = new KHBox( m_audioRippingGroup );
     box->setSpacing( spacingHint() );
     box->setStretchFactor(new QLabel( i18n("Paranoia mode:"), box ), 1 );
-    m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( box );
+    m_comboParanoiaMode = K3b::StdGuiItems::paranoiaModeComboBox( box );
     box = new KHBox( m_audioRippingGroup );
     box->setSpacing( spacingHint() );
     box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
@@ -131,20 +131,20 @@ K3bAudioBurnDialog::K3bAudioBurnDialog(K3bAudioDoc* _doc, QWidget *parent )
              "<p><b>This feature is only available in DAO mode when writing with cdrdao.") );
 }
 
-K3bAudioBurnDialog::~K3bAudioBurnDialog(){
+K3b::AudioBurnDialog::~AudioBurnDialog(){
 }
 
 
-void K3bAudioBurnDialog::slotStartClicked()
+void K3b::AudioBurnDialog::slotStartClicked()
 {
-//  static_cast<K3bAudioView*>(m_doc->view())->player()->stop();
-    K3bProjectBurnDialog::slotStartClicked();
+//  static_cast<K3b::AudioView*>(m_doc->view())->player()->stop();
+    K3b::ProjectBurnDialog::slotStartClicked();
 }
 
 
-void K3bAudioBurnDialog::saveSettings()
+void K3b::AudioBurnDialog::saveSettings()
 {
-    K3bProjectBurnDialog::saveSettings();
+    K3b::ProjectBurnDialog::saveSettings();
 
     m_doc->setTempDir( m_tempDirSelectionWidget->tempPath() );
     m_doc->setHideFirstTrack( m_checkHideFirstTrack->isChecked() );
@@ -162,9 +162,9 @@ void K3bAudioBurnDialog::saveSettings()
 }
 
 
-void K3bAudioBurnDialog::readSettings()
+void K3b::AudioBurnDialog::readSettings()
 {
-    K3bProjectBurnDialog::readSettings();
+    K3b::ProjectBurnDialog::readSettings();
 
     m_checkHideFirstTrack->setChecked( m_doc->hideFirstTrack() );
     m_checkNormalize->setChecked( m_doc->normalize() );
@@ -184,9 +184,9 @@ void K3bAudioBurnDialog::readSettings()
 }
 
 
-void K3bAudioBurnDialog::loadK3bDefaults()
+void K3b::AudioBurnDialog::loadK3bDefaults()
 {
-    K3bProjectBurnDialog::loadK3bDefaults();
+    K3b::ProjectBurnDialog::loadK3bDefaults();
 
     m_cdtextWidget->setChecked( true );
     m_checkHideFirstTrack->setChecked( false );
@@ -200,9 +200,9 @@ void K3bAudioBurnDialog::loadK3bDefaults()
 }
 
 
-void K3bAudioBurnDialog::loadUserDefaults( const KConfigGroup& c )
+void K3b::AudioBurnDialog::loadUserDefaults( const KConfigGroup& c )
 {
-    K3bProjectBurnDialog::loadUserDefaults( c );
+    K3b::ProjectBurnDialog::loadUserDefaults( c );
 
     m_cdtextWidget->setChecked( c.readEntry( "cd_text", true ) );
     m_checkHideFirstTrack->setChecked( c.readEntry( "hide_first_track", false ) );
@@ -216,9 +216,9 @@ void K3bAudioBurnDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3bAudioBurnDialog::saveUserDefaults( KConfigGroup c )
+void K3b::AudioBurnDialog::saveUserDefaults( KConfigGroup c )
 {
-    K3bProjectBurnDialog::saveUserDefaults( c );
+    K3b::ProjectBurnDialog::saveUserDefaults( c );
 
     c.writeEntry( "cd_text", m_cdtextWidget->isChecked() );
     c.writeEntry( "hide_first_track", m_checkHideFirstTrack->isChecked() );
@@ -229,9 +229,9 @@ void K3bAudioBurnDialog::saveUserDefaults( KConfigGroup c )
     c.writeEntry( "read retries", m_spinAudioRippingReadRetries->value() );
 }
 
-void K3bAudioBurnDialog::toggleAll()
+void K3b::AudioBurnDialog::toggleAll()
 {
-    K3bProjectBurnDialog::toggleAll();
+    K3b::ProjectBurnDialog::toggleAll();
 
     bool cdrecordOnTheFly = false;
     bool cdrecordCdText = false;
@@ -268,17 +268,17 @@ void K3bAudioBurnDialog::toggleAll()
 }
 
 
-void K3bAudioBurnDialog::showEvent( QShowEvent* e )
+void K3b::AudioBurnDialog::showEvent( QShowEvent* e )
 {
     // we only show the audio ripping options when there are audio cd track sources
     bool showRipOptions = false;
     if( m_doc->firstTrack() ) {
-        K3bAudioTrack* track = m_doc->firstTrack();
-        K3bAudioDataSource* source = track->firstSource();
+        K3b::AudioTrack* track = m_doc->firstTrack();
+        K3b::AudioDataSource* source = track->firstSource();
 
         while( source ) {
 
-            if( dynamic_cast<K3bAudioCdTrackSource*>(source) ) {
+            if( dynamic_cast<K3b::AudioCdTrackSource*>(source) ) {
                 showRipOptions = true;
                 break;
             }
@@ -295,11 +295,11 @@ void K3bAudioBurnDialog::showEvent( QShowEvent* e )
 
     m_audioRippingGroup->setVisible( showRipOptions );
 
-    K3bProjectBurnDialog::showEvent(e);
+    K3b::ProjectBurnDialog::showEvent(e);
 }
 
 
-void K3bAudioBurnDialog::slotNormalizeToggled( bool on )
+void K3b::AudioBurnDialog::slotNormalizeToggled( bool on )
 {
     if( on ) {
         // we are not able to normalize in on-the-fly mode
@@ -326,7 +326,7 @@ void K3bAudioBurnDialog::slotNormalizeToggled( bool on )
 }
 
 
-void K3bAudioBurnDialog::slotCacheImageToggled( bool on )
+void K3b::AudioBurnDialog::slotCacheImageToggled( bool on )
 {
     if( !on ) {
         if( m_checkNormalize->isChecked() ) {

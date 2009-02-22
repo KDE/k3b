@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -19,26 +19,30 @@
 #include <k3bdatajob.h>
 
 
-class K3bVideoDvdDoc;
+namespace K3b {
+    class VideoDvdDoc;
+}
 
-/**
- * This class heavily depends on K3bDataJob and uses some of it's internals.
- */
-class K3bVideoDvdJob : public K3bDataJob
-{
-  Q_OBJECT
+namespace K3b {
+    /**
+     * This class heavily depends on DataJob and uses some of it's internals.
+     */
+    class VideoDvdJob : public DataJob
+    {
+        Q_OBJECT
 
- public:
-  K3bVideoDvdJob( K3bVideoDvdDoc*, K3bJobHandler*, QObject* parent = 0 );
-  virtual ~K3bVideoDvdJob();
+    public:
+        VideoDvdJob( VideoDvdDoc*, JobHandler*, QObject* parent = 0 );
+        virtual ~VideoDvdJob();
 
-  virtual QString jobDescription() const;
-  virtual QString jobDetails() const;
+        virtual QString jobDescription() const;
+        virtual QString jobDetails() const;
 
- private:
-  void prepareImager();
+    private:
+        void prepareImager();
 
-  K3bVideoDvdDoc* m_doc;
-};
+        VideoDvdDoc* m_doc;
+    };
+}
 
 #endif

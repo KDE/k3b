@@ -30,7 +30,7 @@
 #include <QFrame>
 
 
-K3bFlatButton::K3bFlatButton( QWidget *parent)
+K3b::FlatButton::FlatButton( QWidget *parent)
     : QFrame( parent/*, WNoAutoErase*/ ),
       m_pressed(false)
 {
@@ -38,7 +38,7 @@ K3bFlatButton::K3bFlatButton( QWidget *parent)
 }
 
 
-K3bFlatButton::K3bFlatButton( const QString& text, QWidget *parent )
+K3b::FlatButton::FlatButton( const QString& text, QWidget *parent )
     : QFrame( parent/*, WNoAutoErase*/ ),
       m_pressed(false)
 {
@@ -47,7 +47,7 @@ K3bFlatButton::K3bFlatButton( const QString& text, QWidget *parent )
 }
 
 
-K3bFlatButton::K3bFlatButton( QAction* a, QWidget *parent)
+K3b::FlatButton::FlatButton( QAction* a, QWidget *parent)
     : QFrame( parent/*, WNoAutoErase*/ ),
       m_pressed(false)
 {
@@ -61,10 +61,10 @@ K3bFlatButton::K3bFlatButton( QAction* a, QWidget *parent)
 }
 
 
-K3bFlatButton::~K3bFlatButton() {}
+K3b::FlatButton::~FlatButton() {}
 
 
-void K3bFlatButton::init()
+void K3b::FlatButton::init()
 {
     setHover(false);
     setMargin(5);
@@ -77,13 +77,13 @@ void K3bFlatButton::init()
 }
 
 
-void K3bFlatButton::setMargin( int margin )
+void K3b::FlatButton::setMargin( int margin )
 {
     m_margin = margin;
 }
 
 
-void K3bFlatButton::setText( const QString& s )
+void K3b::FlatButton::setText( const QString& s )
 {
     m_text = s;
     m_text.remove( '&' );
@@ -92,26 +92,26 @@ void K3bFlatButton::setText( const QString& s )
 }
 
 
-void K3bFlatButton::setPixmap( const QPixmap& p )
+void K3b::FlatButton::setPixmap( const QPixmap& p )
 {
     m_pixmap = p;
     update();
 }
 
 
-void K3bFlatButton::enterEvent( QEvent* )
+void K3b::FlatButton::enterEvent( QEvent* )
 {
     setHover(true);
 }
 
 
-void K3bFlatButton::leaveEvent( QEvent* )
+void K3b::FlatButton::leaveEvent( QEvent* )
 {
     setHover(false);
 }
 
 
-void K3bFlatButton::mousePressEvent( QMouseEvent* e )
+void K3b::FlatButton::mousePressEvent( QMouseEvent* e )
 {
     if( e->button() == Qt::LeftButton ) {
         emit pressed();
@@ -122,7 +122,7 @@ void K3bFlatButton::mousePressEvent( QMouseEvent* e )
 }
 
 
-void K3bFlatButton::mouseReleaseEvent( QMouseEvent* e )
+void K3b::FlatButton::mouseReleaseEvent( QMouseEvent* e )
 {
     if( e->button() == Qt::LeftButton ) {
         if( m_pressed  )
@@ -134,7 +134,7 @@ void K3bFlatButton::mouseReleaseEvent( QMouseEvent* e )
 }
 
 
-void K3bFlatButton::setHover( bool b )
+void K3b::FlatButton::setHover( bool b )
 {
     QPalette pal( palette() );
     if( b ) {
@@ -152,7 +152,7 @@ void K3bFlatButton::setHover( bool b )
 }
 
 
-QSize K3bFlatButton::sizeHint() const
+QSize K3b::FlatButton::sizeHint() const
 {
     // height: pixmap + 5 spacing + font height + frame width
     // width: max( pixmap, text) + frame width
@@ -161,7 +161,7 @@ QSize K3bFlatButton::sizeHint() const
 }
 
 
-void K3bFlatButton::paintEvent ( QPaintEvent * event )
+void K3b::FlatButton::paintEvent ( QPaintEvent * event )
 {
     QFrame::paintEvent( event );
     QRect rect = contentsRect();
@@ -191,7 +191,7 @@ void K3bFlatButton::paintEvent ( QPaintEvent * event )
 }
 
 
-void K3bFlatButton::setColors( const QColor& fore, const QColor& back )
+void K3b::FlatButton::setColors( const QColor& fore, const QColor& back )
 {
     m_foreColor = fore;
     m_backColor = back;
@@ -200,9 +200,9 @@ void K3bFlatButton::setColors( const QColor& fore, const QColor& back )
 }
 
 
-void K3bFlatButton::slotThemeChanged()
+void K3b::FlatButton::slotThemeChanged()
 {
-    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+    if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
         setColors( theme->foregroundColor(), theme->backgroundColor() );
     }
 }

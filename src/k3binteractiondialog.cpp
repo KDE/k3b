@@ -53,7 +53,7 @@
 #include <kglobalsettings.h>
 
 
-K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
+K3b::InteractionDialog::InteractionDialog( QWidget* parent,
                                             const QString& title,
                                             const QString& subTitle,
                                             int buttonMask,
@@ -77,7 +77,7 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
 
     // header
     // ---------------------------------------------------------------------------------------------------
-    m_dialogHeader = new K3bThemedHeader( KDialog::mainWidget() );
+    m_dialogHeader = new K3b::ThemedHeader( KDialog::mainWidget() );
     mainGrid->addWidget( m_dialogHeader, 0, 0, 1, 3 );
 
 
@@ -152,13 +152,13 @@ K3bInteractionDialog::K3bInteractionDialog( QWidget* parent,
     setDefaultButton( START_BUTTON );
 }
 
-K3bInteractionDialog::~K3bInteractionDialog()
+K3b::InteractionDialog::~InteractionDialog()
 {
     kDebug() << this;
 }
 
 
-void K3bInteractionDialog::show()
+void K3b::InteractionDialog::show()
 {
     KDialog::show();
     if( KPushButton* b = getButton( m_defaultButton ) )
@@ -166,7 +166,7 @@ void K3bInteractionDialog::show()
 }
 
 
-QSize K3bInteractionDialog::sizeHint() const
+QSize K3b::InteractionDialog::sizeHint() const
 {
     QSize s = KDialog::sizeHint();
     // I want the dialogs to look good.
@@ -178,7 +178,7 @@ QSize K3bInteractionDialog::sizeHint() const
 }
 
 
-void K3bInteractionDialog::initConnections()
+void K3b::InteractionDialog::initConnections()
 {
     if( m_buttonStart ) {
         connect( m_buttonStart, SIGNAL(clicked()),
@@ -201,7 +201,7 @@ void K3bInteractionDialog::initConnections()
 }
 
 
-void K3bInteractionDialog::initToolTipsAndWhatsThis()
+void K3b::InteractionDialog::initToolTipsAndWhatsThis()
 {
     if( !m_configGroup.isEmpty() ) {
         // ToolTips
@@ -221,7 +221,7 @@ void K3bInteractionDialog::initToolTipsAndWhatsThis()
 }
 
 
-void K3bInteractionDialog::setTitle( const QString& title, const QString& subTitle )
+void K3b::InteractionDialog::setTitle( const QString& title, const QString& subTitle )
 {
     m_dialogHeader->setTitle( title, subTitle );
 
@@ -229,7 +229,7 @@ void K3bInteractionDialog::setTitle( const QString& title, const QString& subTit
 }
 
 
-void K3bInteractionDialog::setMainWidget( QWidget* w )
+void K3b::InteractionDialog::setMainWidget( QWidget* w )
 {
     w->setParent( KDialog::mainWidget() );
     mainGrid->addWidget( w, 1, 0, 1, 3 );
@@ -237,7 +237,7 @@ void K3bInteractionDialog::setMainWidget( QWidget* w )
 }
 
 
-QWidget* K3bInteractionDialog::mainWidget()
+QWidget* K3b::InteractionDialog::mainWidget()
 {
     if( !m_mainWidget ) {
         QWidget *widget = new QWidget(this);
@@ -247,48 +247,48 @@ QWidget* K3bInteractionDialog::mainWidget()
 }
 
 
-void K3bInteractionDialog::slotLoadK3bDefaults()
+void K3b::InteractionDialog::slotLoadK3bDefaults()
 {
     loadK3bDefaults();
 }
 
 
-void K3bInteractionDialog::slotLoadUserDefaults()
+void K3b::InteractionDialog::slotLoadUserDefaults()
 {
     KConfigGroup c( KGlobal::config(), m_configGroup );
     loadUserDefaults( c );
 }
 
 
-void K3bInteractionDialog::slotSaveUserDefaults()
+void K3b::InteractionDialog::slotSaveUserDefaults()
 {
     KConfigGroup c( KGlobal::config(), m_configGroup );
     saveUserDefaults( c );
 }
 
 
-void K3bInteractionDialog::slotLoadLastSettings()
+void K3b::InteractionDialog::slotLoadLastSettings()
 {
     KConfigGroup c( KGlobal::config(), "last used " + m_configGroup );
     loadUserDefaults( c );
 }
 
 
-void K3bInteractionDialog::saveLastSettings()
+void K3b::InteractionDialog::saveLastSettings()
 {
     KConfigGroup c( KGlobal::config(), "last used " + m_configGroup );
     saveUserDefaults( c );
 }
 
 
-void K3bInteractionDialog::slotStartClickedInternal()
+void K3b::InteractionDialog::slotStartClickedInternal()
 {
     saveLastSettings();
 
     KConfigGroup c( KGlobal::config(), "General Options" );
     if( !c.readEntry( "action dialog startup settings", 0 ) ) {
         // first time saving last used settings
-        switch( K3bMultiChoiceDialog::choose( i18n("Action Dialog Settings"),
+        switch( K3b::MultiChoiceDialog::choose( i18n("Action Dialog Settings"),
                                               i18n("<p>K3b handles three sets of settings in action dialogs: "
                                                    "the defaults, the saved settings, and the last used settings. "
                                                    "Please choose which of these sets should be loaded if an action "
@@ -317,26 +317,26 @@ void K3bInteractionDialog::slotStartClickedInternal()
 }
 
 
-void K3bInteractionDialog::slotStartClicked()
+void K3b::InteractionDialog::slotStartClicked()
 {
     emit started();
 }
 
 
-void K3bInteractionDialog::slotCancelClicked()
+void K3b::InteractionDialog::slotCancelClicked()
 {
     emit canceled();
     close();
 }
 
 
-void K3bInteractionDialog::slotSaveClicked()
+void K3b::InteractionDialog::slotSaveClicked()
 {
     emit saved();
 }
 
 
-void K3bInteractionDialog::setDefaultButton( int button )
+void K3b::InteractionDialog::setDefaultButton( int button )
 {
     m_defaultButton = button;
 
@@ -354,9 +354,9 @@ void K3bInteractionDialog::setDefaultButton( int button )
 }
 
 
-bool K3bInteractionDialog::eventFilter( QObject* o, QEvent* ev )
+bool K3b::InteractionDialog::eventFilter( QObject* o, QEvent* ev )
 {
-    if( dynamic_cast<K3bInteractionDialog*>(o) == this &&
+    if( dynamic_cast<K3b::InteractionDialog*>(o) == this &&
         ev->type() == QEvent::KeyPress ) {
 
         QKeyEvent* kev = dynamic_cast<QKeyEvent*>(ev);
@@ -393,7 +393,7 @@ bool K3bInteractionDialog::eventFilter( QObject* o, QEvent* ev )
 }
 
 
-KPushButton* K3bInteractionDialog::getButton( int button )
+KPushButton* K3b::InteractionDialog::getButton( int button )
 {
     switch( button ) {
     case START_BUTTON:
@@ -408,7 +408,7 @@ KPushButton* K3bInteractionDialog::getButton( int button )
 }
 
 
-void K3bInteractionDialog::setButtonGui( int button,
+void K3b::InteractionDialog::setButtonGui( int button,
                                          const KGuiItem& item )
 {
     if( KPushButton* b = getButton( button ) )
@@ -416,7 +416,7 @@ void K3bInteractionDialog::setButtonGui( int button,
 }
 
 
-void K3bInteractionDialog::setButtonText( int button,
+void K3b::InteractionDialog::setButtonText( int button,
                                           const QString& text,
                                           const QString& tooltip,
                                           const QString& whatsthis )
@@ -429,7 +429,7 @@ void K3bInteractionDialog::setButtonText( int button,
 }
 
 
-void K3bInteractionDialog::setButtonEnabled( int button, bool enabled )
+void K3b::InteractionDialog::setButtonEnabled( int button, bool enabled )
 {
     if( KPushButton* b = getButton( button ) ) {
         b->setEnabled( enabled );
@@ -439,7 +439,7 @@ void K3bInteractionDialog::setButtonEnabled( int button, bool enabled )
 }
 
 
-void K3bInteractionDialog::setButtonShown( int button, bool shown )
+void K3b::InteractionDialog::setButtonShown( int button, bool shown )
 {
     if( KPushButton* b = getButton( button ) ) {
         b->setVisible( shown );
@@ -449,7 +449,7 @@ void K3bInteractionDialog::setButtonShown( int button, bool shown )
 }
 
 
-void K3bInteractionDialog::setStartButtonText( const QString& text,
+void K3b::InteractionDialog::setStartButtonText( const QString& text,
                                                const QString& tooltip,
                                                const QString& whatsthis )
 {
@@ -461,7 +461,7 @@ void K3bInteractionDialog::setStartButtonText( const QString& text,
 }
 
 
-void K3bInteractionDialog::setCancelButtonText( const QString& text,
+void K3b::InteractionDialog::setCancelButtonText( const QString& text,
                                                 const QString& tooltip,
                                                 const QString& whatsthis )
 {
@@ -473,7 +473,7 @@ void K3bInteractionDialog::setCancelButtonText( const QString& text,
 }
 
 
-void K3bInteractionDialog::setSaveButtonText( const QString& text,
+void K3b::InteractionDialog::setSaveButtonText( const QString& text,
                                               const QString& tooltip,
                                               const QString& whatsthis )
 {
@@ -485,22 +485,22 @@ void K3bInteractionDialog::setSaveButtonText( const QString& text,
 }
 
 
-void K3bInteractionDialog::saveUserDefaults( KConfigGroup )
+void K3b::InteractionDialog::saveUserDefaults( KConfigGroup )
 {
 }
 
 
-void K3bInteractionDialog::loadUserDefaults( const KConfigGroup& )
+void K3b::InteractionDialog::loadUserDefaults( const KConfigGroup& )
 {
 }
 
 
-void K3bInteractionDialog::loadK3bDefaults()
+void K3b::InteractionDialog::loadK3bDefaults()
 {
 }
 
 
-void K3bInteractionDialog::loadStartupSettings()
+void K3b::InteractionDialog::loadStartupSettings()
 {
     KConfigGroup c( KGlobal::config(), "General Options" );
 
@@ -521,13 +521,13 @@ void K3bInteractionDialog::loadStartupSettings()
 }
 
 
-int K3bInteractionDialog::exec()
+int K3b::InteractionDialog::exec()
 {
     kDebug() << this;
 
     // the following code is mainly taken from QDialog::exec
     if( m_eventLoop ) {
-        kError() << "(K3bInteractionDialog::exec) Recursive call detected." << endl;
+        kError() << "(K3b::InteractionDialog::exec) Recursive call detected." << endl;
         return -1;
     }
 
@@ -564,13 +564,13 @@ int K3bInteractionDialog::exec()
 }
 
 
-void K3bInteractionDialog::hideTemporarily()
+void K3b::InteractionDialog::hideTemporarily()
 {
     hide();
 }
 
 
-void K3bInteractionDialog::close()
+void K3b::InteractionDialog::close()
 {
     if( m_eventLoop ) {
         m_eventLoop->exit();
@@ -579,7 +579,7 @@ void K3bInteractionDialog::close()
 }
 
 
-void K3bInteractionDialog::done( int r )
+void K3b::InteractionDialog::done( int r )
 {
     if( m_eventLoop ) {
         m_eventLoop->exit();
@@ -588,14 +588,14 @@ void K3bInteractionDialog::done( int r )
 }
 
 
-void K3bInteractionDialog::hideEvent( QHideEvent* e )
+void K3b::InteractionDialog::hideEvent( QHideEvent* e )
 {
     kDebug() << this;
     KDialog::hideEvent( e );
 }
 
 
-void K3bInteractionDialog::slotToggleAll()
+void K3b::InteractionDialog::slotToggleAll()
 {
     if( !m_inToggleMode ) {
         m_inToggleMode = true;
@@ -605,14 +605,14 @@ void K3bInteractionDialog::slotToggleAll()
 }
 
 
-void K3bInteractionDialog::slotInternalInit()
+void K3b::InteractionDialog::slotInternalInit()
 {
     init();
     slotToggleAll();
 }
 
 
-void K3bInteractionDialog::toggleAll()
+void K3b::InteractionDialog::toggleAll()
 {
 }
 

@@ -20,45 +20,59 @@
 
 #include <kurl.h>
 
-class K3bMixedDoc;
+namespace K3b {
+    class MixedDoc;
+}
 class QStackedWidget ;
-class K3bDataFileView;
-class K3bMixedDirTreeView;
-class K3bAudioTrackView;
-class K3bDirItem;
-class K3bAudioTrackPlayer;
+namespace K3b {
+    class DataFileView;
+}
+namespace K3b {
+    class MixedDirTreeView;
+}
+namespace K3b {
+    class AudioTrackView;
+}
+namespace K3b {
+    class DirItem;
+}
+namespace K3b {
+    class AudioTrackPlayer;
+}
 
 namespace K3b
 {
     class MixedProjectModel;
 }
 
-class K3bMixedView : public K3bStandardView
+namespace K3b {
+class MixedView : public StandardView
 {
   Q_OBJECT
 
  public:
-  K3bMixedView( K3bMixedDoc* doc, QWidget* parent = 0 );
-  ~K3bMixedView();
+  MixedView( MixedDoc* doc, QWidget* parent = 0 );
+  ~MixedView();
 
-  K3bDirItem* currentDir() const;
+  DirItem* currentDir() const;
 
-  K3bAudioTrackPlayer* player() const;
+  AudioTrackPlayer* player() const;
 
  public Q_SLOTS:
   void slotBurn();
   void addUrls( const KUrl::List& );
 
  protected:
-  K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
+  ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
 
  private Q_SLOTS:
   void slotAudioTreeSelected();
   void slotDataTreeSelected();
 
  private:
-  K3bMixedDoc* m_doc;
+  MixedDoc* m_doc;
   K3b::MixedProjectModel* m_model;
 };
+}
 
 #endif

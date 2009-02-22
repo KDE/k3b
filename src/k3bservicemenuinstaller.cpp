@@ -22,7 +22,7 @@
 #include <kdebug.h>
 
 
-class K3bServiceInstaller::Private
+class K3b::ServiceInstaller::Private
 {
 public:
   QString app;
@@ -51,26 +51,26 @@ public:
 };
 
 
-K3bServiceInstaller::K3bServiceInstaller( const QString& appname )
+K3b::ServiceInstaller::ServiceInstaller( const QString& appname )
 {
   d = new Private;
   d->app = appname;
 }
 
 
-K3bServiceInstaller::~K3bServiceInstaller()
+K3b::ServiceInstaller::~ServiceInstaller()
 {
   delete d;
 }
 
 
-bool K3bServiceInstaller::allInstalled() const
+bool K3b::ServiceInstaller::allInstalled() const
 {
   d->update();
 
   for( int i = 0; i < d->allServiceMenuFiles.count(); ++i )
     if( !KIO::NetAccess::exists( d->konqiServicemenusFolder + d->allServiceMenuFiles[i], KIO::NetAccess::SourceSide, 0 ) ) {
-      kDebug() << "(K3bServiceInstaller) service menu " << d->konqiServicemenusFolder << d->allServiceMenuFiles[i]
+      kDebug() << "(K3b::ServiceInstaller) service menu " << d->konqiServicemenusFolder << d->allServiceMenuFiles[i]
 		<< " does not exist." << endl;
       return false;
     }
@@ -79,7 +79,7 @@ bool K3bServiceInstaller::allInstalled() const
 }
 
 
-bool K3bServiceInstaller::install( QWidget* parent )
+bool K3b::ServiceInstaller::install( QWidget* parent )
 {
   d->update();
 
@@ -100,7 +100,7 @@ bool K3bServiceInstaller::install( QWidget* parent )
 }
 
 
-bool K3bServiceInstaller::remove( QWidget* parent )
+bool K3b::ServiceInstaller::remove( QWidget* parent )
 {
   d->update();
 

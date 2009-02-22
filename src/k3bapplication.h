@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
@@ -21,126 +21,128 @@
 
 #include <qmap.h>
 
-#define k3bappcore K3bApplication::Core::k3bAppCore()
+#define k3bappcore K3b::Application::Core::k3bAppCore()
 
 
-class K3bMainWindow;
-class K3bInterface;
-class K3bJobInterface;
-class K3bAudioServer;
-class K3bThemeManager;
-class K3bProjectManager;
-class K3bAppDeviceManager;
+namespace K3b {
+    class MainWindow;
+    class Interface;
+    class JobInterface;
+    class AudioServer;
+    class ThemeManager;
+    class ProjectManager;
+    class AppDeviceManager;
 
 
-class K3bApplication : public KUniqueApplication
-{
-    Q_OBJECT
+    class Application : public KUniqueApplication
+    {
+        Q_OBJECT
 
-public:
-    K3bApplication();
-    ~K3bApplication();
+    public:
+        Application();
+        ~Application();
 
-    int newInstance();
+        int newInstance();
 
-    class Core;
+        class Core;
 
-public Q_SLOTS:
-    void init();
+    public Q_SLOTS:
+        void init();
 
-Q_SIGNALS:
-    void initializationInfo( const QString& );
-    void initializationDone();
+    Q_SIGNALS:
+        void initializationInfo( const QString& );
+        void initializationDone();
 
-private Q_SLOTS:
-    void slotShutDown();
+    private Q_SLOTS:
+        void slotShutDown();
 
-private:
-    bool processCmdLineArgs();
+    private:
+        bool processCmdLineArgs();
 
-    Core* m_core;
-    //K3bAudioServer* m_audioServer;
-    K3bMainWindow* m_mainWindow;
+        Core* m_core;
+        //AudioServer* m_audioServer;
+        MainWindow* m_mainWindow;
 
-    bool m_needToInit;
-};
+        bool m_needToInit;
+    };
 
-
-/**
- * The application's core which extends K3bCore with some additional features
- * like the thememanager or an enhanced device manager.
- */
-class K3bApplication::Core : public K3bCore
-{
-    Q_OBJECT
-
-public:
-    Core( QObject* parent );
-    ~Core();
-
-    void init();
-
-    void readSettings( KSharedConfig::Ptr c );
-    void saveSettings( KSharedConfig::Ptr c );
 
     /**
-     * \reimplemented from K3bCore. We use our own devicemanager here.
+     * The application's core which extends Core with some additional features
+     * like the thememanager or an enhanced device manager.
      */
-    K3bDevice::DeviceManager* deviceManager() const;
+    class Application::Core : public K3b::Core
+    {
+        Q_OBJECT
 
-    K3bAppDeviceManager* appDeviceManager() const { return m_appDeviceManager; }
+    public:
+        Core( QObject* parent );
+        ~Core();
 
-    K3bThemeManager* themeManager() const { return m_themeManager; }
+        void init();
 
-    K3bProjectManager* projectManager() const { return m_projectManager; }
+        void readSettings( KSharedConfig::Ptr c );
+        void saveSettings( KSharedConfig::Ptr c );
 
-    K3bMainWindow* k3bMainWindow() const { return m_mainWindow; }
+        /**
+         * \reimplemented from Core. We use our own devicemanager here.
+         */
+        Device::DeviceManager* deviceManager() const;
 
-    //K3bInterface* interface() const { return m_interface; }
+        AppDeviceManager* appDeviceManager() const { return m_appDeviceManager; }
 
-    //K3bJobInterface* jobInterface() const { return m_jobInterface; }
+        ThemeManager* themeManager() const { return m_themeManager; }
 
-    static Core* k3bAppCore() { return s_k3bAppCore; }
+        ProjectManager* projectManager() const { return m_projectManager; }
 
-Q_SIGNALS:
-    /**
-     * This is used for showing info in the K3b splashscreen
-     */
-    void initializationInfo( const QString& );
+        MainWindow* k3bMainWindow() const { return m_mainWindow; }
 
-    /**
-     * Any component may request busy info
-     * In the K3b main app this will be displayed
-     * as a moving square in the taskbar
-     *
-     * FIXME: this is bad design
-     */
-    void busyInfoRequested( const QString& );
+        //Interface* interface() const { return m_interface; }
 
-    /**
-     * FIXME: this is bad design
-     */
-    void busyFinishRequested();
+        //JobInterface* jobInterface() const { return m_jobInterface; }
 
-private:
-    void initDeviceManager();
+        static Core* k3bAppCore() { return s_k3bAppCore; }
 
-    bool internalBlockDevice( K3bDevice::Device* );
-    void internalUnblockDevice( K3bDevice::Device* );
+    Q_SIGNALS:
+        /**
+         * This is used for showing info in the K3b splashscreen
+         */
+        void initializationInfo( const QString& );
 
-    //K3bInterface* m_interface;
-    //K3bJobInterface* m_jobInterface;
+        /**
+         * Any component may request busy info
+         * In the K3b main app this will be displayed
+         * as a moving square in the taskbar
+         *
+         * FIXME: this is bad design
+         */
+        void busyInfoRequested( const QString& );
 
-    K3bThemeManager* m_themeManager;
-    K3bMainWindow* m_mainWindow;
-    K3bProjectManager* m_projectManager;
-    K3bAppDeviceManager* m_appDeviceManager;
+        /**
+         * FIXME: this is bad design
+         */
+        void busyFinishRequested();
 
-    QMap<K3bDevice::Device*, int> m_deviceBlockMap;
+    private:
+        void initDeviceManager();
 
-    static Core* s_k3bAppCore;
+        bool internalBlockDevice( Device::Device* );
+        void internalUnblockDevice( Device::Device* );
 
-    friend class K3bApplication;
-};
+        //Interface* m_interface;
+        //JobInterface* m_jobInterface;
+
+        ThemeManager* m_themeManager;
+        MainWindow* m_mainWindow;
+        ProjectManager* m_projectManager;
+        AppDeviceManager* m_appDeviceManager;
+
+        QMap<Device::Device*, int> m_deviceBlockMap;
+
+        static Core* s_k3bAppCore;
+
+        friend class K3b::Application;
+    };
+}
 
 #endif

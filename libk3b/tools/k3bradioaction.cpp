@@ -15,26 +15,26 @@
 #include "k3bradioaction.h"
 
 
-K3bRadioAction::K3bRadioAction( const QString& text, QObject* parent )
-  : KToggleAction( text, parent ),
-    m_alwaysEmit(false)
+K3b::RadioAction::RadioAction( const QString& text, QObject* parent )
+    : KToggleAction( text, parent ),
+      m_alwaysEmit(false)
 {
 }
 
-K3bRadioAction::K3bRadioAction( const KIcon& icon, const QString& text, QObject* parent )
-  : KToggleAction( icon, text, parent ),
-    m_alwaysEmit(false)
+K3b::RadioAction::RadioAction( const KIcon& icon, const QString& text, QObject* parent )
+    : KToggleAction( icon, text, parent ),
+      m_alwaysEmit(false)
 {
 }
 
-K3bRadioAction::K3bRadioAction( QObject* parent )
-  : KToggleAction( parent ),
-    m_alwaysEmit(false)
+K3b::RadioAction::RadioAction( QObject* parent )
+    : KToggleAction( parent ),
+      m_alwaysEmit(false)
 {
 }
 
 
-// void K3bRadioAction::slotActivated()
+// void K3b::RadioAction::slotActivated()
 // {
 //   if( isChecked() ) {
 //     if( m_alwaysEmit )

@@ -17,7 +17,9 @@
 
 #include <QtCore/QAbstractItemModel>
 
-class K3bMedium;
+namespace K3b {
+    class Medium;
+}
 
 namespace KCDDB {
     class CDInfo;
@@ -49,8 +51,8 @@ namespace K3b {
             LengthRole
         };
         
-        void setMedium( const K3bMedium& medium );
-        K3bMedium medium() const;
+        void setMedium( const Medium& medium );
+        Medium medium() const;
 
         void setCddbInfo( const KCDDB::CDInfo& data );
         KCDDB::CDInfo cddbInfo() const;

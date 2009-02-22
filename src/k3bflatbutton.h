@@ -30,16 +30,17 @@ class QPaintEvent;
 /**
    @author Sebastian Trueg
 */
-class K3bFlatButton : public QFrame
+namespace K3b {
+class FlatButton : public QFrame
 {
     Q_OBJECT
 
 public:
-    K3bFlatButton( QWidget *parent = 0);
-    K3bFlatButton( const QString& text, QWidget *parent = 0 );
-    K3bFlatButton( QAction*, QWidget *parent = 0);
+    FlatButton( QWidget *parent = 0);
+    FlatButton( const QString& text, QWidget *parent = 0 );
+    FlatButton( QAction*, QWidget *parent = 0);
   
-    ~K3bFlatButton();
+    ~FlatButton();
 
     QSize sizeHint() const;
 
@@ -75,5 +76,6 @@ private:
 
     bool m_hover;
 };
+}
 
 #endif

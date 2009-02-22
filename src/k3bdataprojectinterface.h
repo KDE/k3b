@@ -20,16 +20,19 @@
 
 #include <qstringlist.h>
 
-class K3bDataDoc;
+namespace K3b {
+    class DataDoc;
+}
 
 
-class K3bDataProjectInterface : public K3bProjectInterface
+namespace K3b {
+class DataProjectInterface : public ProjectInterface
 {
   K_DCOP
 
  public:
-  K3bDataProjectInterface( K3bDataDoc* );
-  ~K3bDataProjectInterface();
+  DataProjectInterface( DataDoc* );
+  ~DataProjectInterface();
 
  k_dcop:
   /**
@@ -98,7 +101,8 @@ class K3bDataProjectInterface : public K3bProjectInterface
   bool setSortWeight( const QString& path, long weight ) const;
 
  private:
-  K3bDataDoc* m_dataDoc;
+  DataDoc* m_dataDoc;
 };
+}
 
 #endif

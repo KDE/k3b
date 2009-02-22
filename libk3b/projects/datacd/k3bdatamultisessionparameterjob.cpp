@@ -28,12 +28,12 @@
 #include <klocale.h>
 
 
-class K3bDataMultiSessionParameterJob::Private
+class K3b::DataMultiSessionParameterJob::Private
 {
 public:
-    K3bDataDoc* doc;
+    K3b::DataDoc* doc;
 
-    K3bDataDoc::MultiSessionMode usedMultiSessionMode;
+    K3b::DataDoc::MultiSessionMode usedMultiSessionMode;
     unsigned int previousSessionStart;
     unsigned int nextSessionStart;
     // true if the last session should be imported into the filesystem or not
@@ -42,68 +42,68 @@ public:
 
 
 
-K3bDataMultiSessionParameterJob::K3bDataMultiSessionParameterJob( K3bDataDoc* doc, K3bJobHandler* hdl, QObject* parent )
-    : K3bThreadJob( hdl, parent ),
+K3b::DataMultiSessionParameterJob::DataMultiSessionParameterJob( K3b::DataDoc* doc, K3b::JobHandler* hdl, QObject* parent )
+    : K3b::ThreadJob( hdl, parent ),
       d( new Private() )
 {
     d->doc = doc;
 }
 
 
-K3bDataMultiSessionParameterJob::~K3bDataMultiSessionParameterJob()
+K3b::DataMultiSessionParameterJob::~DataMultiSessionParameterJob()
 {
     delete d;
 }
 
 
-K3bDataDoc::MultiSessionMode K3bDataMultiSessionParameterJob::usedMultiSessionMode() const
+K3b::DataDoc::MultiSessionMode K3b::DataMultiSessionParameterJob::usedMultiSessionMode() const
 {
     return d->usedMultiSessionMode;
 }
 
 
-unsigned int K3bDataMultiSessionParameterJob::previousSessionStart() const
+unsigned int K3b::DataMultiSessionParameterJob::previousSessionStart() const
 {
     return d->previousSessionStart;
 }
 
 
-unsigned int K3bDataMultiSessionParameterJob::nextSessionStart() const
+unsigned int K3b::DataMultiSessionParameterJob::nextSessionStart() const
 {
     return d->nextSessionStart;
 }
 
 
-bool K3bDataMultiSessionParameterJob::importPreviousSession() const
+bool K3b::DataMultiSessionParameterJob::importPreviousSession() const
 {
     return d->importSession;
 }
 
 
-bool K3bDataMultiSessionParameterJob::run()
+bool K3b::DataMultiSessionParameterJob::run()
 {
     d->usedMultiSessionMode = d->doc->multiSessionMode();
 
     if( !d->doc->onlyCreateImages() ) {
-        if ( d->usedMultiSessionMode == K3bDataDoc::AUTO ) {
+        if ( d->usedMultiSessionMode == K3b::DataDoc::AUTO ) {
             if( d->doc->writingMode() == K3b::WRITING_MODE_AUTO ||
-                !( d->doc->writingMode() & (K3bDevice::WRITINGMODE_SAO|K3bDevice::WRITINGMODE_RAW) ) ) {
+                !( d->doc->writingMode() & (K3b::Device::WRITINGMODE_SAO|K3b::Device::WRITINGMODE_RAW) ) ) {
                 emit newSubTask( i18n("Searching for old session") );
 
                 //
                 // Wait for the medium.
                 // In case an old session was imported we always want to continue or finish a multisession CD/DVD.
                 // Otherwise we wait for everything we could handle and decide what to do in
-                // determineMultiSessionMode( K3bDevice::DeviceHandler* ) below.
+                // determineMultiSessionMode( K3b::Device::DeviceHandler* ) below.
                 //
 
-                int wantedMediaState = K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_EMPTY;
+                int wantedMediaState = K3b::Device::STATE_INCOMPLETE|K3b::Device::STATE_EMPTY;
                 if( d->doc->importedSession() >= 0 )
-                    wantedMediaState = K3bDevice::STATE_INCOMPLETE;
+                    wantedMediaState = K3b::Device::STATE_INCOMPLETE;
 
                 int m = waitForMedia( d->doc->burner(),
                                       wantedMediaState,
-                                      K3bDevice::MEDIA_WRITABLE );
+                                      K3b::Device::MEDIA_WRITABLE );
 
                 if( m < 0 ) {
                     cancel();
@@ -114,16 +114,16 @@ bool K3bDataMultiSessionParameterJob::run()
                 }
             }
             else {
-                d->usedMultiSessionMode = K3bDataDoc::NONE;
+                d->usedMultiSessionMode = K3b::DataDoc::NONE;
             }
         }
 
         // FIXME: not sure if it is good to always wait for a medium this early
-        if( d->usedMultiSessionMode == K3bDataDoc::CONTINUE ||
-            d->usedMultiSessionMode == K3bDataDoc::FINISH ) {
+        if( d->usedMultiSessionMode == K3b::DataDoc::CONTINUE ||
+            d->usedMultiSessionMode == K3b::DataDoc::FINISH ) {
             int m = waitForMedia( d->doc->burner(),
-                                  K3bDevice::STATE_INCOMPLETE,
-                                  K3bDevice::MEDIA_WRITABLE );
+                                  K3b::Device::STATE_INCOMPLETE,
+                                  K3b::Device::MEDIA_WRITABLE );
 
             if( m < 0 ) {
                 cancel();
@@ -140,30 +140,30 @@ bool K3bDataMultiSessionParameterJob::run()
 }
 
 
-K3bDataDoc::MultiSessionMode K3bDataMultiSessionParameterJob::determineMultiSessionModeFromMedium()
+K3b::DataDoc::MultiSessionMode K3b::DataMultiSessionParameterJob::determineMultiSessionModeFromMedium()
 {
-    K3bDevice::DiskInfo info = d->doc->burner()->diskInfo();
+    K3b::Device::DiskInfo info = d->doc->burner()->diskInfo();
 
     // FIXME: Does BD-RE really behave like DVD+RW here?
-    if( info.mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|
-                            K3bDevice::MEDIA_DVD_PLUS_RW_DL|
-                            K3bDevice::MEDIA_DVD_RW_OVWR|
-                            K3bDevice::MEDIA_BD_RE) ) {
+    if( info.mediaType() & (K3b::Device::MEDIA_DVD_PLUS_RW|
+                            K3b::Device::MEDIA_DVD_PLUS_RW_DL|
+                            K3b::Device::MEDIA_DVD_RW_OVWR|
+                            K3b::Device::MEDIA_BD_RE) ) {
         //
         // we need to handle DVD+RW and DVD-RW overwrite media differently since remainingSize() is not valid
         // in both cases
         // Since one never closes a DVD+RW we only differ between CONTINUE and START
         //
 
-        kDebug() << "(K3bDataMultiSessionParameterJob) found overwrite medium.";
+        kDebug() << "(K3b::DataMultiSessionParameterJob) found overwrite medium.";
 
         // try to check the filesystem size
-        K3bIso9660 iso( d->doc->burner() );
+        K3b::Iso9660 iso( d->doc->burner() );
         if( iso.open() && info.capacity() - iso.primaryDescriptor().volumeSpaceSize >= d->doc->burningLength() ) {
-            return K3bDataDoc::CONTINUE;
+            return K3b::DataDoc::CONTINUE;
         }
         else {
-            return K3bDataDoc::START;
+            return K3b::DataDoc::START;
         }
     }
 
@@ -176,21 +176,21 @@ K3bDataDoc::MultiSessionMode K3bDataMultiSessionParameterJob::determineMultiSess
         //  4. the project does fit and does not fill up the CD -> continue multisession
         //
 
-        kDebug() << "(K3bDataMultiSessionParameterJob) found appendable medium.";
+        kDebug() << "(K3b::DataMultiSessionParameterJob) found appendable medium.";
 
         if( d->doc->size() > info.remainingSize().mode1Bytes() &&
             d->doc->importedSession() < 0 ) {
-            return K3bDataDoc::NONE;
+            return K3b::DataDoc::NONE;
         }
         else if( d->doc->size() >= info.remainingSize().mode1Bytes()*9/10 ) {
-            return K3bDataDoc::FINISH;
+            return K3b::DataDoc::FINISH;
         }
         else if( info.capacity() < 2621440 /* ~ 5 GB */ &&
                  info.size() + d->doc->burningLength() + 11400 /* used size + project size + session gap */ > 2097152 /* 4 GB */ ) {
-            return K3bDataDoc::FINISH;
+            return K3b::DataDoc::FINISH;
         }
         else {
-            return K3bDataDoc::CONTINUE;
+            return K3b::DataDoc::CONTINUE;
         }
     }
 
@@ -200,28 +200,28 @@ K3bDataDoc::MultiSessionMode K3bDataMultiSessionParameterJob::determineMultiSess
         // 2. Special case for the 4GB boundary which seems to be enforced by a linux kernel issue
         //
 
-        kDebug() << "(K3bDataMultiSessionParameterJob) found empty or complete medium.";
+        kDebug() << "(K3b::DataMultiSessionParameterJob) found empty or complete medium.";
 
         if( d->doc->size() >= info.capacity().mode1Bytes()*9/10 ||
             d->doc->writingMode() == K3b::WRITING_MODE_DAO ) {
-            return K3bDataDoc::NONE;
+            return K3b::DataDoc::NONE;
         }
         else if( ( info.capacity() < 2621440 /* ~ 5 GB */ &&
                    d->doc->size() + 11400 /* used size + project size + session gap */ > 2097152 /* 4 GB */ ) ||
                  d->doc->writingMode() == K3b::WRITING_MODE_DAO ) {
-            return K3bDataDoc::NONE;
+            return K3b::DataDoc::NONE;
         }
         else {
-            return K3bDataDoc::START;
+            return K3b::DataDoc::START;
         }
     }
 }
 
 
-bool K3bDataMultiSessionParameterJob::setupMultiSessionParameters()
+bool K3b::DataMultiSessionParameterJob::setupMultiSessionParameters()
 {
-    K3bDevice::DiskInfo info = d->doc->burner()->diskInfo();
-    K3bDevice::Toc toc = d->doc->burner()->readToc();
+    K3b::Device::DiskInfo info = d->doc->burner()->diskInfo();
+    K3b::Device::Toc toc = d->doc->burner()->readToc();
 
     //
     // determine the multisession import info
@@ -231,20 +231,20 @@ bool K3bDataMultiSessionParameterJob::setupMultiSessionParameters()
     d->importSession = true;
 
     // FIXME: Does BD-RE really behave like DVD+RW here?
-    if( info.mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|
-                            K3bDevice::MEDIA_DVD_PLUS_RW_DL|
-                            K3bDevice::MEDIA_DVD_RW_OVWR|
-                            K3bDevice::MEDIA_BD_RE) ) {
+    if( info.mediaType() & (K3b::Device::MEDIA_DVD_PLUS_RW|
+                            K3b::Device::MEDIA_DVD_PLUS_RW_DL|
+                            K3b::Device::MEDIA_DVD_RW_OVWR|
+                            K3b::Device::MEDIA_BD_RE) ) {
         lastSessionStart = 0;
 
         // get info from iso filesystem
-        K3bIso9660 iso( d->doc->burner(), toc.last().firstSector().lba() );
+        K3b::Iso9660 iso( d->doc->burner(), toc.last().firstSector().lba() );
         if( iso.open() ) {
             nextSessionStart = iso.primaryDescriptor().volumeSpaceSize;
         }
         else {
             emit infoMessage( i18n("Could not open Iso9660 filesystem in %1.",
-                                   d->doc->burner()->vendor() + " " + d->doc->burner()->description() ), K3bJob::ERROR );
+                                   d->doc->burner()->vendor() + " " + d->doc->burner()->description() ), K3b::Job::ERROR );
             return false;
         }
     }
@@ -252,10 +252,10 @@ bool K3bDataMultiSessionParameterJob::setupMultiSessionParameters()
         nextSessionStart = d->doc->burner()->nextWritableAddress();
         lastSessionStart = toc.last().firstSector().lba();
         if ( d->doc->importedSession() > 0 ) {
-            for ( K3bDevice::Toc::const_iterator it = toc.constBegin(); it != toc.constEnd(); ++it ) {
+            for ( K3b::Device::Toc::const_iterator it = toc.constBegin(); it != toc.constEnd(); ++it ) {
                 if ( ( *it ).session() == d->doc->importedSession() ) {
                     lastSessionStart = ( *it ).firstSector().lba();
-                    if ( ( *it ).type() == K3bDevice::Track::AUDIO )
+                    if ( ( *it ).type() == K3b::Device::Track::TYPE_AUDIO )
                         d->importSession = false;
                     break;
                 }
@@ -263,7 +263,7 @@ bool K3bDataMultiSessionParameterJob::setupMultiSessionParameters()
         }
     }
 
-    if ( info.mediaType() & K3bDevice::MEDIA_DVD_ALL ) {
+    if ( info.mediaType() & K3b::Device::MEDIA_DVD_ALL ) {
         // pad to closest 32K boundary
         nextSessionStart += 15;
         nextSessionStart /= 16;

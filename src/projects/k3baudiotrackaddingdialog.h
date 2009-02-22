@@ -21,31 +21,42 @@
 #include <qstringlist.h>
 
 
-class K3bBusyWidget;
+namespace K3b {
+    class BusyWidget;
+}
 class QLabel;
-class K3bAudioTrack;
-class K3bAudioDataSource;
-class K3bAudioDoc;
-class K3bAudioFileAnalyzerJob;
+namespace K3b {
+    class AudioTrack;
+}
+namespace K3b {
+    class AudioDataSource;
+}
+namespace K3b {
+    class AudioDoc;
+}
+namespace K3b {
+    class AudioFileAnalyzerJob;
+}
 
 
-class K3bAudioTrackAddingDialog : public KDialog, public K3bJobHandler
+namespace K3b {
+class AudioTrackAddingDialog : public KDialog, public JobHandler
 {
     Q_OBJECT
 
 public:
-    ~K3bAudioTrackAddingDialog();
+    ~AudioTrackAddingDialog();
 
     /**
-     * @reimplemented from K3bJobHandler
+     * @reimplemented from JobHandler
      */
-    int waitForMedia( K3bDevice::Device*,
-                      int = K3bDevice::STATE_EMPTY,
-                      int = K3bDevice::MEDIA_WRITABLE_CD,
+    int waitForMedia( Device::Device*,
+                      int = Device::STATE_EMPTY,
+                      int = Device::MEDIA_WRITABLE_CD,
                       const QString& = QString() ) { return 0; }
   
     /**
-     * @reimplemented from K3bJobHandler
+     * @reimplemented from JobHandler
      */
     bool questionYesNo( const QString&,
                         const QString& = QString(),
@@ -53,7 +64,7 @@ public:
                         const QString& = QString() ) { return false; }
 
     /**
-     * reimplemented from K3bJobHandler
+     * reimplemented from JobHandler
      */
     void blockingInformation( const QString&,
                               const QString& = QString() ) {}
@@ -62,10 +73,10 @@ public:
      * \return \see QDialog::exec()
      */
     static int addUrls( const KUrl::List& urls, 
-                        K3bAudioDoc* doc,
-                        K3bAudioTrack* afterTrack = 0,
-                        K3bAudioTrack* parentTrack = 0,
-                        K3bAudioDataSource* afterSource = 0,
+                        AudioDoc* doc,
+                        AudioTrack* afterTrack = 0,
+                        AudioTrack* parentTrack = 0,
+                        AudioDataSource* afterSource = 0,
                         QWidget* parent = 0 );
 
 private Q_SLOTS:
@@ -74,11 +85,11 @@ private Q_SLOTS:
     void slotCancel();
 
 private:
-    K3bAudioTrackAddingDialog( QWidget* parent = 0 );
+    AudioTrackAddingDialog( QWidget* parent = 0 );
 
     static KUrl::List extractUrlList( const KUrl::List& urls );
 
-    K3bBusyWidget* m_busyWidget;
+    BusyWidget* m_busyWidget;
     QLabel* m_infoLabel;
 
     QStringList m_unreadableFiles;
@@ -88,16 +99,17 @@ private:
 
     KUrl::List m_urls;
 
-    K3bAudioDoc* m_doc;
-    K3bAudioTrack* m_trackAfter;
-    K3bAudioTrack* m_parentTrack;
-    K3bAudioDataSource* m_sourceAfter;
+    AudioDoc* m_doc;
+    AudioTrack* m_trackAfter;
+    AudioTrack* m_parentTrack;
+    AudioDataSource* m_sourceAfter;
 
     KUrl m_cueUrl;
 
     bool m_bCanceled;
 
-    K3bAudioFileAnalyzerJob* m_analyserJob;
+    AudioFileAnalyzerJob* m_analyserJob;
 };
+}
 
 #endif

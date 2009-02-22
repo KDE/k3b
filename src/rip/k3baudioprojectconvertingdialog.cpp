@@ -54,7 +54,7 @@
 
 
 namespace {
-    KCDDB::CDInfo createCddbEntryFromDoc( K3bAudioDoc* doc )
+    KCDDB::CDInfo createCddbEntryFromDoc( K3b::AudioDoc* doc )
     {
         KCDDB::CDInfo e;
 
@@ -65,7 +65,7 @@ namespace {
 
         // tracks
         int i = 0;
-        K3bAudioTrack* track = doc->firstTrack();
+        K3b::AudioTrack* track = doc->firstTrack();
         while( track ) {
             e.track( i ).set( KCDDB::Title, track->title() );
             e.track( i ).set( KCDDB::Artist, track->artist() );
@@ -79,7 +79,7 @@ namespace {
     }
 }
 
-class K3bAudioProjectConvertingDialog::Private
+class K3b::AudioProjectConvertingDialog::Private
 {
 public:
     Private() {
@@ -91,8 +91,8 @@ public:
 };
 
 
-K3bAudioProjectConvertingDialog::K3bAudioProjectConvertingDialog( K3bAudioDoc* doc, QWidget *parent )
-    : K3bInteractionDialog( parent,
+K3b::AudioProjectConvertingDialog::AudioProjectConvertingDialog( K3b::AudioDoc* doc, QWidget *parent )
+    : K3b::InteractionDialog( parent,
                             QString(),
                             QString(),
                             START_BUTTON|CANCEL_BUTTON,
@@ -112,20 +112,20 @@ K3bAudioProjectConvertingDialog::K3bAudioProjectConvertingDialog( K3bAudioDoc* d
 }
 
 
-K3bAudioProjectConvertingDialog::~K3bAudioProjectConvertingDialog()
+K3b::AudioProjectConvertingDialog::~AudioProjectConvertingDialog()
 {
     delete d;
 }
 
 
-void K3bAudioProjectConvertingDialog::setupGui()
+void K3b::AudioProjectConvertingDialog::setupGui()
 {
     QWidget *frame = mainWidget();
     QGridLayout* Form1Layout = new QGridLayout( frame );
     Form1Layout->setSpacing( KDialog::spacingHint() );
     Form1Layout->setMargin( 0 );
 
-    m_viewTracks = new K3bListView( frame );
+    m_viewTracks = new K3b::ListView( frame );
     m_viewTracks->addColumn(i18n( "Filename (relative to base directory)") );
     m_viewTracks->addColumn(i18n( "Length") );
     m_viewTracks->addColumn(i18n( "File Size") );
@@ -135,13 +135,13 @@ void K3bAudioProjectConvertingDialog::setupGui()
 
     QTabWidget* mainTab = new QTabWidget( frame );
 
-    m_optionWidget = new K3bAudioConvertingOptionWidget( mainTab );
+    m_optionWidget = new K3b::AudioConvertingOptionWidget( mainTab );
     mainTab->addTab( m_optionWidget, i18n("Settings") );
 
 
     // setup filename pattern page
     // -------------------------------------------------------------------------------------------
-    m_patternWidget = new K3bCddbPatternWidget( mainTab );
+    m_patternWidget = new K3b::CddbPatternWidget( mainTab );
     mainTab->addTab( m_patternWidget, i18n("File Naming") );
     connect( m_patternWidget, SIGNAL(changed()), this, SLOT(refresh()) );
 
@@ -153,11 +153,11 @@ void K3bAudioProjectConvertingDialog::setupGui()
 }
 
 
-void K3bAudioProjectConvertingDialog::slotStartClicked()
+void K3b::AudioProjectConvertingDialog::slotStartClicked()
 {
     // make sure we have the tracks just for ourselves
     //FIXME kde4
-    //static_cast<K3bAudioView*>(m_doc->view())->player()->stop();
+    //static_cast<K3b::AudioView*>(m_doc->view())->player()->stop();
 
     // check if all filenames differ
     if( d->filenames.count() > 1 ) {
@@ -198,20 +198,20 @@ void K3bAudioProjectConvertingDialog::slotStartClicked()
 
 
     // just generate a fake m_tracks list for now so we can keep most of the methods
-    // like they are in K3bAudioRipJob. This way future combination is easier
+    // like they are in K3b::AudioRipJob. This way future combination is easier
     QVector<QPair<int, QString> > tracksToRip;
     int i = 0;
-    K3bAudioTrack* track = m_doc->firstTrack();
+    K3b::AudioTrack* track = m_doc->firstTrack();
     while( track ) {
         tracksToRip.append( qMakePair( i+1, d->filenames[(m_optionWidget->createSingleFile() ? 0 : i)] ) );
         ++i;
         track = track->next();
     }
 
-    K3bAudioEncoder* encoder = m_optionWidget->encoder();
+    K3b::AudioEncoder* encoder = m_optionWidget->encoder();
 
-    K3bJobProgressDialog progressDialog( parentWidget() );
-    K3bAudioProjectConvertingJob job( m_doc, &progressDialog, 0 );
+    K3b::JobProgressDialog progressDialog( parentWidget() );
+    K3b::AudioProjectConvertingJob job( m_doc, &progressDialog, 0 );
     job.setCddbEntry( createCddbEntryFromDoc( m_doc ) );
     job.setTracksToRip( tracksToRip );
     job.setSingleFile( m_optionWidget->createSingleFile() );
@@ -230,7 +230,7 @@ void K3bAudioProjectConvertingDialog::slotStartClicked()
 }
 
 
-void K3bAudioProjectConvertingDialog::refresh()
+void K3b::AudioProjectConvertingDialog::refresh()
 {
     m_viewTracks->clear();
     d->filenames.clear();
@@ -258,7 +258,7 @@ void K3bAudioProjectConvertingDialog::refresh()
         if( filesize > 0 )
             overallSize = filesize;
 
-        filename = K3bPatternParser::parsePattern( cddbEntry, 1,
+        filename = K3b::PatternParser::parsePattern( cddbEntry, 1,
                                                    m_patternWidget->filenamePattern(),
                                                    m_patternWidget->replaceBlanks(),
                                                    m_patternWidget->blankReplaceString() );
@@ -283,7 +283,7 @@ void K3bAudioProjectConvertingDialog::refresh()
         }
     }
     else {
-        K3bAudioTrack* track = m_doc->firstTrack();
+        K3b::AudioTrack* track = m_doc->firstTrack();
         unsigned int i = 1;
         while( track ) {
             long long filesize = 0;
@@ -297,7 +297,7 @@ void K3bAudioProjectConvertingDialog::refresh()
             if( filesize > 0 )
                 overallSize += filesize;
 
-            QString filename = K3bPatternParser::parsePattern( cddbEntry, i,
+            QString filename = K3b::PatternParser::parsePattern( cddbEntry, i,
                                                                m_patternWidget->filenamePattern(),
                                                                m_patternWidget->replaceBlanks(),
                                                                m_patternWidget->blankReplaceString() ) + "." + extension;
@@ -317,7 +317,7 @@ void K3bAudioProjectConvertingDialog::refresh()
 
     // create playlist item
     if( m_optionWidget->createPlaylist() ) {
-        QString filename = K3bPatternParser::parsePattern( cddbEntry, 1,
+        QString filename = K3b::PatternParser::parsePattern( cddbEntry, 1,
                                                            m_patternWidget->playlistPattern(),
                                                            m_patternWidget->replaceBlanks(),
                                                            m_patternWidget->blankReplaceString() ) + ".m3u";
@@ -339,13 +339,13 @@ void K3bAudioProjectConvertingDialog::refresh()
 }
 
 
-void K3bAudioProjectConvertingDialog::setBaseDir( const QString& path )
+void K3b::AudioProjectConvertingDialog::setBaseDir( const QString& path )
 {
     m_optionWidget->setBaseDir( path );
 }
 
 
-void K3bAudioProjectConvertingDialog::loadK3bDefaults()
+void K3b::AudioProjectConvertingDialog::loadK3bDefaults()
 {
     m_optionWidget->loadDefaults();
     m_patternWidget->loadDefaults();
@@ -353,7 +353,7 @@ void K3bAudioProjectConvertingDialog::loadK3bDefaults()
     refresh();
 }
 
-void K3bAudioProjectConvertingDialog::loadUserDefaults( const KConfigGroup& c )
+void K3b::AudioProjectConvertingDialog::loadUserDefaults( const KConfigGroup& c )
 {
     m_optionWidget->loadConfig( c );
     m_patternWidget->loadConfig( c );
@@ -362,7 +362,7 @@ void K3bAudioProjectConvertingDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3bAudioProjectConvertingDialog::saveUserDefaults( KConfigGroup c )
+void K3b::AudioProjectConvertingDialog::saveUserDefaults( KConfigGroup c )
 {
     m_optionWidget->saveConfig( c );
     m_patternWidget->saveConfig( c );

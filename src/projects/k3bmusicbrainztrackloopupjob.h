@@ -17,17 +17,20 @@
 
 #include "k3bthreadjob.h"
 
-class K3bAudioTrack;
+namespace K3b {
+    class AudioTrack;
+}
 
-class K3bMusicBrainzTrackLookupJob : public K3bThreadJob
+namespace K3b {
+class MusicBrainzTrackLookupJob : public ThreadJob
 {
     Q_OBJECT
 
 public:
-    K3bMusicBrainzTrackLookupJob( K3bJobHandler* hdl, QObject* parent );
-    ~K3bMusicBrainzTrackLookupJob();
+    MusicBrainzTrackLookupJob( JobHandler* hdl, QObject* parent );
+    ~MusicBrainzTrackLookupJob();
 
-    void setAudioTrack( K3bAudioTrack* track );
+    void setAudioTrack( AudioTrack* track );
 
     int results();
     QString title( int i ) const;
@@ -39,5 +42,6 @@ private:
     class Private;
     Private* const d;
 };
+}
 
 #endif

@@ -24,9 +24,9 @@
 
 
 // FIXME: multiple tracks
-K3bAudioCdTrackDrag::K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, const QList<int>& cdTrackNumbers,
+K3b::AudioCdTrackDrag::AudioCdTrackDrag( const K3b::Device::Toc& toc, const QList<int>& cdTrackNumbers,
                                           const KCDDB::CDInfo& cddb,
-                                          K3bDevice::Device* lastDev, QWidget* dragSource )
+                                          K3b::Device::Device* lastDev, QWidget* dragSource )
     : Q3StoredDrag( "k3b/audio_track_drag", dragSource, name ),
       m_toc(toc),
       m_cdTrackNumbers(cdTrackNumbers),
@@ -36,8 +36,8 @@ K3bAudioCdTrackDrag::K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, const QList
     QByteArray data;
     QDataStream s( data, QIODevice::WriteOnly );
     s << (unsigned int)toc.count();
-    for( K3bDevice::Toc::const_iterator it = toc.begin(); it != toc.end(); ++it ) {
-        const K3bDevice::Track& track = *it;
+    for( K3b::Device::Toc::const_iterator it = toc.begin(); it != toc.end(); ++it ) {
+        const K3b::Device::Track& track = *it;
         s << track.firstSector().lba() << track.lastSector().lba();
     }
     QTextStream t( s.device() );
@@ -64,9 +64,9 @@ K3bAudioCdTrackDrag::K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, const QList
 }
 
 
-bool K3bAudioCdTrackDrag::decode( const QMimeSource* e,
-                                  K3bDevice::Toc& toc, QList<int>& trackNumbers,
-                                  KCDDB::CDInfo& cddb, K3bDevice::Device** dev )
+bool K3b::AudioCdTrackDrag::decode( const QMimeSource* e,
+                                  K3b::Device::Toc& toc, QList<int>& trackNumbers,
+                                  KCDDB::CDInfo& cddb, K3b::Device::Device** dev )
 {
     QByteArray data = e->encodedData( "k3b/audio_track_drag" );
 
@@ -78,7 +78,7 @@ bool K3bAudioCdTrackDrag::decode( const QMimeSource* e,
         int fs, ls;
         s >> fs;
         s >> ls;
-        toc.append( K3bDevice::Track( fs, ls, K3bDevice::Track::AUDIO ) );
+        toc.append( K3b::Device::Track( fs, ls, K3b::Device::Track::AUDIO ) );
     }
 
     QTextStream t( s.device() );

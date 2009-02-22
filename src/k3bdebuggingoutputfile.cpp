@@ -28,38 +28,38 @@
 #include <qtextstream.h>
 
 
-K3bDebuggingOutputFile::K3bDebuggingOutputFile()
+K3b::DebuggingOutputFile::DebuggingOutputFile()
     : QFile( KStandardDirs::locateLocal( "appdata", "lastlog.log", true ) )
 {
 }
 
 
-bool K3bDebuggingOutputFile::open( OpenMode mode )
+bool K3b::DebuggingOutputFile::open( OpenMode mode )
 {
     if( !QFile::open( mode|WriteOnly ) )
         return false;
 
-    addOutput( "System", "K3b Version: " + k3bcore->version() );
-    addOutput( "System", "KDE Version: " + QString(KDE::versionString()) );
-    addOutput( "System", "QT Version:  " + QString(qVersion()) );
-    addOutput( "System", "Kernel:      " + K3b::kernelVersion() );
+    addOutput( QLatin1String( "System" ), QLatin1String( "K3b Version: " ) + k3bcore->version() );
+    addOutput( QLatin1String( "System" ), QLatin1String( "KDE Version: " ) + QString(KDE::versionString()) );
+    addOutput( QLatin1String( "System" ), QLatin1String( "QT Version:  " ) + QString(qVersion()) );
+    addOutput( QLatin1String( "System" ), QLatin1String( "Kernel:      " ) + K3b::kernelVersion() );
 
     // devices in the logfile
-    Q_FOREACH( K3bDevice::Device* dev, k3bcore->deviceManager()->allDevices() ) {
+    Q_FOREACH( K3b::Device::Device* dev, k3bcore->deviceManager()->allDevices() ) {
         addOutput( "Devices",
                    QString( "%1 (%2, %3) [%5] [%6] [%7]" )
                    .arg( dev->vendor() + " " + dev->description() + " " + dev->version() )
                    .arg( dev->blockDeviceName() )
-                   .arg( K3bDevice::deviceTypeString( dev->type() ) )
-                   .arg( K3bDevice::mediaTypeString( dev->supportedProfiles() ) )
-                   .arg( K3bDevice::writingModeString( dev->writingModes() ) ) );
+                   .arg( K3b::Device::deviceTypeString( dev->type() ) )
+                   .arg( K3b::Device::mediaTypeString( dev->supportedProfiles() ) )
+                   .arg( K3b::Device::writingModeString( dev->writingModes() ) ) );
     }
 
     return true;
 }
 
 
-void K3bDebuggingOutputFile::addOutput( const QString& app, const QString& msg )
+void K3b::DebuggingOutputFile::addOutput( const QString& app, const QString& msg )
 {
     if( !isOpen() )
         open();

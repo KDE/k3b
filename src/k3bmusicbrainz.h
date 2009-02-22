@@ -22,15 +22,16 @@
 
 
 /**
- * A wrapper class around libmusicbrainz. Use in combination with K3bTRM.
+ * A wrapper class around libmusicbrainz. Use in combination with TRM.
  *
  * Tries to determine the artist and title related to a trm.
  */
-class K3bMusicBrainz
+namespace K3b {
+class MusicBrainz
 {
 public:
-    K3bMusicBrainz();
-    ~K3bMusicBrainz();
+    MusicBrainz();
+    ~MusicBrainz();
 
     /**
      * \return number of found results.
@@ -44,6 +45,7 @@ private:
     class Private;
     Private* d;
 };
+}
 
 
 #endif

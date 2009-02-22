@@ -19,8 +19,8 @@
 #include <qwidget.h>
 
 
-K3bProjectPluginDialog::K3bProjectPluginDialog( K3bProjectPlugin* plugin, K3bDoc* doc, QWidget* parent )
-    : K3bInteractionDialog( parent,
+K3b::ProjectPluginDialog::ProjectPluginDialog( K3b::ProjectPlugin* plugin, K3b::Doc* doc, QWidget* parent )
+    : K3b::InteractionDialog( parent,
                             QString(),
                             QString(),
                             START_BUTTON|CANCEL_BUTTON,
@@ -36,30 +36,30 @@ K3bProjectPluginDialog::K3bProjectPluginDialog( K3bProjectPlugin* plugin, K3bDoc
 }
 
 
-K3bProjectPluginDialog::~K3bProjectPluginDialog()
+K3b::ProjectPluginDialog::~ProjectPluginDialog()
 {
 }
 
 
-void K3bProjectPluginDialog::slotStartClicked()
+void K3b::ProjectPluginDialog::slotStartClicked()
 {
     m_pluginGui->activate();
 }
 
 
-void K3bProjectPluginDialog::saveUserDefaults( KConfigGroup config )
+void K3b::ProjectPluginDialog::saveUserDefaults( KConfigGroup config )
 {
     m_pluginGui->saveSettings( config );
 }
 
 
-void K3bProjectPluginDialog::loadUserDefaults( const KConfigGroup& config )
+void K3b::ProjectPluginDialog::loadUserDefaults( const KConfigGroup& config )
 {
     m_pluginGui->readSettings( config );
 }
 
 
-void K3bProjectPluginDialog::loadK3bDefaults()
+void K3b::ProjectPluginDialog::loadK3bDefaults()
 {
     m_pluginGui->loadDefaults();
 }

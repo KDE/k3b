@@ -17,9 +17,15 @@
 
 #include <QtCore/QAbstractItemModel>
 
-class K3bDataDoc;
-class K3bDataItem;
-class K3bDirItem;
+namespace K3b {
+    class DataDoc;
+}
+namespace K3b {
+    class DataItem;
+}
+namespace K3b {
+    class DirItem;
+}
 
 namespace K3b {
     class DataProjectModel : public QAbstractItemModel
@@ -27,7 +33,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        DataProjectModel( K3bDataDoc* doc, QObject* parent );
+        DataProjectModel( DataDoc* doc, QObject* parent );
         ~DataProjectModel();
 
         enum Columns {
@@ -39,10 +45,10 @@ namespace K3b {
             NumColumns
         };
 
-        K3bDataDoc* project() const;
+        DataDoc* project() const;
 
-        K3bDataItem* itemForIndex( const QModelIndex& index ) const;
-        QModelIndex indexForItem( K3bDataItem* item ) const;
+        DataItem* itemForIndex( const QModelIndex& index ) const;
+        QModelIndex indexForItem( DataItem* item ) const;
 
         int columnCount( const QModelIndex& parent = QModelIndex() ) const;
         QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
@@ -61,10 +67,10 @@ namespace K3b {
         class Private;
         Private* const d;
 
-        Q_PRIVATE_SLOT( d, void _k_aboutToAddItem( K3bDirItem* dir, K3bDataItem* item ) )
-        Q_PRIVATE_SLOT( d, void _k_aboutToRemoveItem( K3bDataItem* item ) )
-        Q_PRIVATE_SLOT( d, void _k_itemAdded( K3bDataItem* item ) )
-        Q_PRIVATE_SLOT( d, void _k_itemRemoved( K3bDataItem* item ) )
+        Q_PRIVATE_SLOT( d, void _k_aboutToAddItem( DirItem* dir, DataItem* item ) )
+        Q_PRIVATE_SLOT( d, void _k_aboutToRemoveItem( DataItem* item ) )
+        Q_PRIVATE_SLOT( d, void _k_itemAdded( DataItem* item ) )
+        Q_PRIVATE_SLOT( d, void _k_itemRemoved( DataItem* item ) )
     };
 }
 

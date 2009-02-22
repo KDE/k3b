@@ -19,29 +19,33 @@
 #include <qwidget.h>
 #include <k3bthememanager.h>
 
-class K3bThemedHeader;
+namespace K3b {
+    class ThemedHeader;
+}
 
 
-class K3bContentsView : public QWidget
+namespace K3b {
+class ContentsView : public QWidget
 {
     Q_OBJECT
 
 public:
-    virtual ~K3bContentsView();
+    virtual ~ContentsView();
 
 protected:
-    K3bContentsView( bool withHeader,
+    ContentsView( bool withHeader,
                      QWidget* parent = 0 );
 
     QWidget* mainWidget();
     void setMainWidget( QWidget* );
     void setTitle( const QString& );
-    void setLeftPixmap( K3bTheme::PixmapType );
-    void setRightPixmap( K3bTheme::PixmapType );
+    void setLeftPixmap( Theme::PixmapType );
+    void setRightPixmap( Theme::PixmapType );
 
 private:
-    K3bThemedHeader* m_header;
+    ThemedHeader* m_header;
     QWidget* m_centerWidget;
 };
+}
 
 #endif

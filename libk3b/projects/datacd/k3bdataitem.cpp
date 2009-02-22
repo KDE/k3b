@@ -21,14 +21,14 @@
 #include <math.h>
 
 
-class K3bDataItem::Private
+class K3b::DataItem::Private
 {
 public:
     int flags;
 };
 
 
-K3bDataItem::K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent, int flags )
+K3b::DataItem::DataItem( K3b::DataDoc* doc, K3b::DataItem* parent, int flags )
     : m_sortWeight(0),
       m_bHideOnRockRidge(false),
       m_bHideOnJoliet(false),
@@ -51,7 +51,7 @@ K3bDataItem::K3bDataItem( K3bDataDoc* doc, K3bDataItem* parent, int flags )
 }
 
 
-K3bDataItem::K3bDataItem( const K3bDataItem& item )
+K3b::DataItem::DataItem( const K3b::DataItem& item )
     : m_k3bName( item.m_k3bName ),
       m_extraInfo( item.m_extraInfo ),
       m_doc( 0 ),
@@ -70,29 +70,29 @@ K3bDataItem::K3bDataItem( const K3bDataItem& item )
 }
 
 
-K3bDataItem::~K3bDataItem()
+K3b::DataItem::~DataItem()
 {
     delete d;
 }
 
-int K3bDataItem::flags() const
+int K3b::DataItem::flags() const
 {
    return d->flags;
 }
 
-void K3bDataItem::setFlags( int flags )
+void K3b::DataItem::setFlags( int flags )
 {
     d->flags = flags;
 }
 
 
-bool K3bDataItem::isBootItem() const
+bool K3b::DataItem::isBootItem() const
 {
     return d->flags & BOOT_IMAGE;
 }
 
 
-KIO::filesize_t K3bDataItem::size() const
+KIO::filesize_t K3b::DataItem::size() const
 {
     return itemSize( m_doc
                      ? m_doc->isoOptions().followSymbolicLinks() ||
@@ -101,7 +101,7 @@ KIO::filesize_t K3bDataItem::size() const
 }
 
 
-K3b::Msf K3bDataItem::blocks() const
+K3b::Msf K3b::DataItem::blocks() const
 {
     return itemBlocks( m_doc
                        ? m_doc->isoOptions().followSymbolicLinks() ||
@@ -110,24 +110,24 @@ K3b::Msf K3bDataItem::blocks() const
 }
 
 
-K3b::Msf K3bDataItem::itemBlocks( bool followSymbolicLinks ) const
+K3b::Msf K3b::DataItem::itemBlocks( bool followSymbolicLinks ) const
 {
     return (long)::ceil( (double)itemSize( followSymbolicLinks ) / 2048.0 );
 }
 
 
-void K3bDataItem::setK3bName( const QString& name ) {
+void K3b::DataItem::setK3bName( const QString& name ) {
     if ( name != m_k3bName ) {
         // test for not-allowed characters
         if( name.contains('/') ) {
-            kDebug() << "(K3bDataItem) name contained invalid characters!";
+            kDebug() << "(K3b::DataItem) name contained invalid characters!";
             return;
         }
 
         if( parent() ) {
-            K3bDataItem* item = parent()->find( name );
+            K3b::DataItem* item = parent()->find( name );
             if( item && item != this ) {
-                kDebug() << "(K3bDataItem) item with that name already exists.";
+                kDebug() << "(K3b::DataItem) item with that name already exists.";
                 return;
             }
         }
@@ -138,13 +138,13 @@ void K3bDataItem::setK3bName( const QString& name ) {
 }
 
 
-QString K3bDataItem::k3bName() const
+QString K3b::DataItem::k3bName() const
 {
     return m_k3bName;
 }
 
 
-K3bDataItem* K3bDataItem::take()
+K3b::DataItem* K3b::DataItem::take()
 {
     if( parent() )
         parent()->takeDataItem( this );
@@ -153,7 +153,7 @@ K3bDataItem* K3bDataItem::take()
 }
 
 
-QString K3bDataItem::k3bPath() const
+QString K3b::DataItem::k3bPath() const
 {
     if( !getParent() )
         return QString();  // the root item is the only one not having a parent
@@ -164,7 +164,7 @@ QString K3bDataItem::k3bPath() const
 }
 
 
-QString K3bDataItem::writtenPath() const
+QString K3b::DataItem::writtenPath() const
 {
     if( !getParent() )
         return QString();  // the root item is the only one not having a parent
@@ -175,7 +175,7 @@ QString K3bDataItem::writtenPath() const
 }
 
 
-QString K3bDataItem::iso9660Path() const
+QString K3b::DataItem::iso9660Path() const
 {
     if( !getParent() )
         return QString();  // the root item is the only one not having a parent
@@ -186,13 +186,13 @@ QString K3bDataItem::iso9660Path() const
 }
 
 
-K3bDataItem* K3bDataItem::nextSibling() const
+K3b::DataItem* K3b::DataItem::nextSibling() const
 {
-    K3bDataItem* item = const_cast<K3bDataItem*>(this); // urg, but we know that we don't mess with it, so...
-    K3bDirItem* parentItem = getParent();
+    K3b::DataItem* item = const_cast<K3b::DataItem*>(this); // urg, but we know that we don't mess with it, so...
+    K3b::DirItem* parentItem = getParent();
 
     while( parentItem ) {
-        if( K3bDataItem* i = parentItem->nextChild( item ) )
+        if( K3b::DataItem* i = parentItem->nextChild( item ) )
             return i;
 
         item = parentItem;
@@ -203,14 +203,14 @@ K3bDataItem* K3bDataItem::nextSibling() const
 }
 
 
-void K3bDataItem::reparent( K3bDirItem* newParent )
+void K3b::DataItem::reparent( K3b::DirItem* newParent )
 {
     // addDataItem will do all the stuff including taking this
     newParent->addDataItem( this );
 }
 
 
-bool K3bDataItem::hideOnRockRidge() const
+bool K3b::DataItem::hideOnRockRidge() const
 {
     if( !isHideable() )
         return false;
@@ -221,7 +221,7 @@ bool K3bDataItem::hideOnRockRidge() const
 }
 
 
-bool K3bDataItem::hideOnJoliet() const
+bool K3b::DataItem::hideOnJoliet() const
 {
     if( !isHideable() )
         return false;
@@ -232,7 +232,7 @@ bool K3bDataItem::hideOnJoliet() const
 }
 
 
-void K3bDataItem::setHideOnRockRidge( bool b )
+void K3b::DataItem::setHideOnRockRidge( bool b )
 {
     // there is no use in changing the value if
     // it is already set by the parent
@@ -245,7 +245,7 @@ void K3bDataItem::setHideOnRockRidge( bool b )
 }
 
 
-void K3bDataItem::setHideOnJoliet( bool b )
+void K3b::DataItem::setHideOnJoliet( bool b )
 {
     // there is no use in changing the value if
     // it is already set by the parent
@@ -258,7 +258,7 @@ void K3bDataItem::setHideOnJoliet( bool b )
 }
 
 
-int K3bDataItem::depth() const
+int K3b::DataItem::depth() const
 {
     if( getParent() )
         return getParent()->depth() + 1;
@@ -267,7 +267,7 @@ int K3bDataItem::depth() const
 }
 
 
-KMimeType::Ptr K3bDataItem::mimeType() const
+KMimeType::Ptr K3b::DataItem::mimeType() const
 {
     return KMimeType::defaultMimeTypePtr();
 }

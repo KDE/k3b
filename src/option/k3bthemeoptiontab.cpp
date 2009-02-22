@@ -39,7 +39,7 @@
 class ThemeViewItem : public K3ListViewItem
 {
 public:
-    ThemeViewItem( K3bTheme* theme_, Q3ListView* parent, Q3ListViewItem* after )
+    ThemeViewItem( K3b::Theme* theme_, Q3ListView* parent, Q3ListViewItem* after )
         : K3ListViewItem( parent, after ),
           theme(theme_) {
         setText( 0, theme->name() );
@@ -48,10 +48,10 @@ public:
         setText( 3, theme->comment() );
     }
 
-    K3bTheme* theme;
+    K3b::Theme* theme;
 };
 
-K3bThemeOptionTab::K3bThemeOptionTab( QWidget* parent )
+K3b::ThemeOptionTab::ThemeOptionTab( QWidget* parent )
     : QWidget( parent )
 {
     setupUi( this );
@@ -73,20 +73,20 @@ K3bThemeOptionTab::K3bThemeOptionTab( QWidget* parent )
 }
 
 
-K3bThemeOptionTab::~K3bThemeOptionTab()
+K3b::ThemeOptionTab::~ThemeOptionTab()
 {
 }
 
 
-void K3bThemeOptionTab::readSettings()
+void K3b::ThemeOptionTab::readSettings()
 {
     m_viewTheme->clear();
 
     k3bappcore->themeManager()->loadThemes();
 
-    QList<K3bTheme*> themes = k3bappcore->themeManager()->themes();
-    for( QList<K3bTheme*>::const_iterator it = themes.constBegin(); it != themes.constEnd(); ++it ) {
-        K3bTheme* theme = *it;
+    QList<K3b::Theme*> themes = k3bappcore->themeManager()->themes();
+    for( QList<K3b::Theme*>::const_iterator it = themes.constBegin(); it != themes.constEnd(); ++it ) {
+        K3b::Theme* theme = *it;
         ThemeViewItem* item = new ThemeViewItem( theme, m_viewTheme, m_viewTheme->lastItem() );
         if( theme == k3bappcore->themeManager()->currentTheme() )
             m_viewTheme->setSelected( item, true );
@@ -94,7 +94,7 @@ void K3bThemeOptionTab::readSettings()
 }
 
 
-bool K3bThemeOptionTab::saveSettings()
+bool K3b::ThemeOptionTab::saveSettings()
 {
     ThemeViewItem* item = (ThemeViewItem*)m_viewTheme->selectedItem();
     if( item )
@@ -104,7 +104,7 @@ bool K3bThemeOptionTab::saveSettings()
 }
 
 
-void K3bThemeOptionTab::selectionChanged()
+void K3b::ThemeOptionTab::selectionChanged()
 {
     ThemeViewItem* item = (ThemeViewItem*)m_viewTheme->selectedItem();
     if( item ) {
@@ -117,15 +117,15 @@ void K3bThemeOptionTab::selectionChanged()
         m_leftPreviewLabel->setPalette( pal );
         m_rightPreviewLabel->setPalette( pal );
 
-        m_leftPreviewLabel->setPixmap( item->theme->pixmap( K3bTheme::PROJECT_LEFT ) );
-        m_rightPreviewLabel->setPixmap( item->theme->pixmap( K3bTheme::PROJECT_RIGHT ) );
+        m_leftPreviewLabel->setPixmap( item->theme->pixmap( K3b::Theme::PROJECT_LEFT ) );
+        m_rightPreviewLabel->setPixmap( item->theme->pixmap( K3b::Theme::PROJECT_RIGHT ) );
 
         m_buttonRemoveTheme->setEnabled( item->theme->local() );
     }
 }
 
 
-void K3bThemeOptionTab::slotInstallTheme()
+void K3b::ThemeOptionTab::slotInstallTheme()
 {
     KUrl themeURL = KUrlRequesterDialog::getUrl( QString(), this,
                                                  i18n("Drag or Type Theme URL") );
@@ -163,8 +163,8 @@ void K3bThemeOptionTab::slotInstallTheme()
                 validThemeArchive = true;
 
                 // check for all nessessary pixmaps (this is a little evil hacking)
-                for( int i = 0; i <= K3bTheme::WELCOME_BG; ++i ) {
-                    if( !subDir->entry( K3bTheme::filenameForPixmapType( (K3bTheme::PixmapType)i ) ) ) {
+                for( int i = 0; i <= K3b::Theme::WELCOME_BG; ++i ) {
+                    if( !subDir->entry( K3b::Theme::filenameForPixmapType( (K3b::Theme::PixmapType)i ) ) ) {
                         validThemeArchive = false;
                         break;
                     }
@@ -199,7 +199,7 @@ void K3bThemeOptionTab::slotInstallTheme()
 }
 
 
-void K3bThemeOptionTab::slotRemoveTheme()
+void K3b::ThemeOptionTab::slotRemoveTheme()
 {
     ThemeViewItem* item = (ThemeViewItem*)m_viewTheme->selectedItem();
     if( item ) {
@@ -211,7 +211,7 @@ void K3bThemeOptionTab::slotRemoveTheme()
         if( KMessageBox::warningContinueCancel( this, question, i18n("Delete") ) != KMessageBox::Continue )
             return;
 
-        K3bTheme* theme = item->theme;
+        K3b::Theme* theme = item->theme;
         delete item;
         QString path = theme->path();
 

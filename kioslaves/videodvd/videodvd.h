@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
  *
@@ -22,31 +22,32 @@
 #include <kio/global.h>
 #include <kio/slavebase.h>
 
-class K3bIso9660Entry;
-class K3bIso9660;
-namespace K3bDevice
-{
-  class DeviceManager;
+class Iso9660Entry;
+class Iso9660;
+namespace K3b {
+    namespace Device {
+        class DeviceManager;
+    }
 }
 
 class kio_videodvdProtocol : public KIO::SlaveBase
 {
 public:
-  kio_videodvdProtocol(const QByteArray &pool_socket, const QByteArray &app_socket);
-  ~kio_videodvdProtocol();
+    kio_videodvdProtocol(const QByteArray &pool_socket, const QByteArray &app_socket);
+    ~kio_videodvdProtocol();
 
-  void mimetype( const KUrl& url );
-  void stat( const KUrl& url );
-  void get( const KUrl& url );
-  void listDir( const KUrl& url );
+    void mimetype( const KUrl& url );
+    void stat( const KUrl& url );
+    void get( const KUrl& url );
+    void listDir( const KUrl& url );
 
 private:
-  K3bIso9660* openIso( const KUrl&, QString& plainIsoPath );
-  KIO::UDSEntry createUDSEntry( const K3bIso9660Entry* e ) const;
-  void listVideoDVDs();
+    K3b::Iso9660* openIso( const KUrl&, QString& plainIsoPath );
+    KIO::UDSEntry createUDSEntry( const K3b::Iso9660Entry* e ) const;
+    void listVideoDVDs();
 
-  static K3bDevice::DeviceManager* s_deviceManager;
-  static int s_instanceCnt;
+    static K3b::Device::DeviceManager* s_deviceManager;
+    static int s_instanceCnt;
 };
 
 #endif

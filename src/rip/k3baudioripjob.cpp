@@ -40,7 +40,7 @@
 
 
 
-class K3bAudioRipJob::Private
+class K3b::AudioRipJob::Private
 {
 public:
     Private()
@@ -60,19 +60,19 @@ public:
     int paranoiaRetries;
     int neverSkip;
 
-    K3bAudioEncoder* encoder;
-    K3bWaveFileWriter* waveFileWriter;
+    K3b::AudioEncoder* encoder;
+    K3b::WaveFileWriter* waveFileWriter;
 
-    K3bCdparanoiaLib* paranoiaLib;
+    K3b::CdparanoiaLib* paranoiaLib;
 
-    K3bDevice::Toc toc;
+    K3b::Device::Toc toc;
 
     QString fileType;
 };
 
 
-K3bAudioRipJob::K3bAudioRipJob( K3bJobHandler* hdl, QObject* parent )
-    :  K3bThreadJob( hdl, parent ),
+K3b::AudioRipJob::AudioRipJob( K3b::JobHandler* hdl, QObject* parent )
+    :  K3b::ThreadJob( hdl, parent ),
        m_device(0),
        m_useIndex0(false)
 {
@@ -80,7 +80,7 @@ K3bAudioRipJob::K3bAudioRipJob( K3bJobHandler* hdl, QObject* parent )
 }
 
 
-K3bAudioRipJob::~K3bAudioRipJob()
+K3b::AudioRipJob::~AudioRipJob()
 {
     delete d->waveFileWriter;
     delete d->paranoiaLib;
@@ -88,69 +88,69 @@ K3bAudioRipJob::~K3bAudioRipJob()
 }
 
 
-void K3bAudioRipJob::setFileType( const QString& t )
+void K3b::AudioRipJob::setFileType( const QString& t )
 {
     d->fileType = t;
 }
 
 
-void K3bAudioRipJob::setParanoiaMode( int mode )
+void K3b::AudioRipJob::setParanoiaMode( int mode )
 {
     d->paranoiaMode = mode;
 }
 
 
-void K3bAudioRipJob::setMaxRetries( int r )
+void K3b::AudioRipJob::setMaxRetries( int r )
 {
     d->paranoiaRetries = r;
 }
 
 
-void K3bAudioRipJob::setNeverSkip( bool b )
+void K3b::AudioRipJob::setNeverSkip( bool b )
 {
     d->neverSkip = b;
 }
 
 
-void K3bAudioRipJob::setEncoder( K3bAudioEncoder* f )
+void K3b::AudioRipJob::setEncoder( K3b::AudioEncoder* f )
 {
     d->encoder = f;
 }
 
 
-void K3bAudioRipJob::start()
+void K3b::AudioRipJob::start()
 {
     k3bcore->blockDevice( m_device );
-    K3bThreadJob::start();
+    K3b::ThreadJob::start();
 }
 
 
-void K3bAudioRipJob::jobFinished( bool success )
+void K3b::AudioRipJob::jobFinished( bool success )
 {
     if ( !success && canceled() ) {
         if( d->currentTrackIndex >= 0 && d->currentTrackIndex < (int)m_tracks.count() ) {
             if( QFile::exists( m_tracks[d->currentTrackIndex].second ) ) {
                 QFile::remove( m_tracks[d->currentTrackIndex].second );
-                emit infoMessage( i18n("Removed partial file '%1'.",m_tracks[d->currentTrackIndex].second), K3bJob::INFO );
+                emit infoMessage( i18n("Removed partial file '%1'.",m_tracks[d->currentTrackIndex].second), K3b::Job::INFO );
             }
         }
     }
 
     k3bcore->unblockDevice( m_device );
-    K3bThreadJob::jobFinished( success );
+    K3b::ThreadJob::jobFinished( success );
 }
 
 
-bool K3bAudioRipJob::run()
+bool K3b::AudioRipJob::run()
 {
     emit newTask( i18n("Extracting Digital Audio")  );
 
     if( !d->paranoiaLib ) {
-        d->paranoiaLib = K3bCdparanoiaLib::create();
+        d->paranoiaLib = K3b::CdparanoiaLib::create();
     }
 
     if( !d->paranoiaLib ) {
-        emit infoMessage( i18n("Could not load libcdparanoia."), K3bJob::ERROR );
+        emit infoMessage( i18n("Could not load libcdparanoia."), K3b::Job::ERROR );
         return false;
     }
 
@@ -161,12 +161,12 @@ bool K3bAudioRipJob::run()
 
     m_device->block(true);
 
-    emit infoMessage( i18n("Reading CD table of contents."), K3bJob::INFO );
+    emit infoMessage( i18n("Reading CD table of contents."), K3b::Job::INFO );
     d->toc = m_device->readToc();
 
     if( !d->paranoiaLib->initParanoia( m_device, d->toc ) ) {
         emit infoMessage( i18n("Could not open device %1",m_device->blockDeviceName()),
-                          K3bJob::ERROR );
+                          K3b::Job::ERROR );
         m_device->block(false);
 
         return false;
@@ -179,7 +179,7 @@ bool K3bAudioRipJob::run()
 
     if( !d->encoder )
         if( !d->waveFileWriter ) {
-            d->waveFileWriter = new K3bWaveFileWriter();
+            d->waveFileWriter = new K3b::WaveFileWriter();
         }
 
 
@@ -205,7 +205,7 @@ bool K3bAudioRipJob::run()
         QString dir = filename.left( filename.lastIndexOf('/') );
         if( !KStandardDirs::makeDir( dir, 0777 ) ) {
             d->paranoiaLib->close();
-            emit infoMessage( i18n("Unable to create directory %1",dir), K3bJob::ERROR );
+            emit infoMessage( i18n("Unable to create directory %1",dir), K3b::Job::ERROR );
             m_device->block(false);
             return false;
         }
@@ -216,17 +216,17 @@ bool K3bAudioRipJob::run()
             isOpen = d->encoder->openFile( d->fileType, filename, d->overallSectorsToRead );
             if( isOpen ) {
                 // here we use cd Title and Artist
-                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST, m_cddbEntry.get( KCDDB::Artist ).toString() );
-                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE, m_cddbEntry.get( KCDDB::Title ).toString() );
-                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_COMMENT, m_cddbEntry.get( KCDDB::Comment ).toString() );
-                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_ARTIST, m_cddbEntry.get( KCDDB::Artist ).toString() );
-                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_TITLE, m_cddbEntry.get( KCDDB::Title ).toString() );
-                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_COMMENT, m_cddbEntry.get( KCDDB::Comment ).toString() );
-                d->encoder->setMetaData( K3bAudioEncoder::META_YEAR, QString::number(m_cddbEntry.get( KCDDB::Year ).toInt()) );
-                d->encoder->setMetaData( K3bAudioEncoder::META_GENRE, m_cddbEntry.get( KCDDB::Genre ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_ARTIST, m_cddbEntry.get( KCDDB::Artist ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_TITLE, m_cddbEntry.get( KCDDB::Title ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_COMMENT, m_cddbEntry.get( KCDDB::Comment ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_ALBUM_ARTIST, m_cddbEntry.get( KCDDB::Artist ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_ALBUM_TITLE, m_cddbEntry.get( KCDDB::Title ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_ALBUM_COMMENT, m_cddbEntry.get( KCDDB::Comment ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_YEAR, QString::number(m_cddbEntry.get( KCDDB::Year ).toInt()) );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_GENRE, m_cddbEntry.get( KCDDB::Genre ).toString() );
             }
             else
-                emit infoMessage( d->encoder->lastErrorString(), K3bJob::ERROR );
+                emit infoMessage( d->encoder->lastErrorString(), K3b::Job::ERROR );
         }
         else {
             isOpen = d->waveFileWriter->open( filename );
@@ -234,15 +234,15 @@ bool K3bAudioRipJob::run()
 
         if( !isOpen ) {
             d->paranoiaLib->close();
-            emit infoMessage( i18n("Unable to open '%1' for writing.", filename), K3bJob::ERROR );
+            emit infoMessage( i18n("Unable to open '%1' for writing.", filename), K3b::Job::ERROR );
             m_device->block(false);
             return false;
         }
 
-        emit infoMessage( i18n("Ripping to single file '%1'.", filename), K3bJob::INFO );
+        emit infoMessage( i18n("Ripping to single file '%1'.", filename), K3b::Job::INFO );
     }
 
-    emit infoMessage( i18n("Starting digital audio extraction (ripping)."), K3bJob::INFO );
+    emit infoMessage( i18n("Starting digital audio extraction (ripping)."), K3b::Job::INFO );
 
     bool success = true;
     for( int i = 0; i < m_tracks.count(); ++i ) {
@@ -261,7 +261,7 @@ bool K3bAudioRipJob::run()
 
         if( success && !canceled() ) {
             QString& filename = m_tracks[0].second;
-            emit infoMessage( i18n("Successfully ripped to %1.", filename), K3bJob::INFO );
+            emit infoMessage( i18n("Successfully ripped to %1.", filename), K3b::Job::INFO );
         }
     }
 
@@ -292,9 +292,9 @@ bool K3bAudioRipJob::run()
 }
 
 
-bool K3bAudioRipJob::ripTrack( int track, const QString& filename )
+bool K3b::AudioRipJob::ripTrack( int track, const QString& filename )
 {
-    const K3bTrack& tt = d->toc[track-1];
+    const K3b::Device::Track& tt = d->toc[track-1];
 
     long endSec = ( (m_useIndex0 && tt.index0() > 0)
                     ? tt.firstSector().lba() + tt.index0().lba() - 1
@@ -306,7 +306,7 @@ bool K3bAudioRipJob::ripTrack( int track, const QString& filename )
 
         QString dir = filename.left( filename.lastIndexOf('/') );
         if( !KStandardDirs::makeDir( dir, 0777 ) ) {
-            emit infoMessage( i18n("Unable to create directory %1", dir), K3bJob::ERROR );
+            emit infoMessage( i18n("Unable to create directory %1", dir), K3b::Job::ERROR );
             return false;
         }
 
@@ -318,25 +318,25 @@ bool K3bAudioRipJob::ripTrack( int track, const QString& filename )
                                                filename,
                                                m_useIndex0 ? d->toc[track-1].realAudioLength() : d->toc[track-1].length() );
                 if( isOpen ) {
-                    d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST, m_cddbEntry.track( track-1 ).get( KCDDB::Artist ).toString() );
-                    d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE, m_cddbEntry.track( track-1 ).get( KCDDB::Title ).toString() );
-                    d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_COMMENT, m_cddbEntry.track( track-1 ).get( KCDDB::Comment ).toString() );
-                    d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_NUMBER, QString::number(track).rightJustified( 2, '0' ) );
-                    d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_ARTIST, m_cddbEntry.get( KCDDB::Artist ).toString() );
-                    d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_TITLE, m_cddbEntry.get( KCDDB::Title ).toString() );
-                    d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_COMMENT, m_cddbEntry.get( KCDDB::Comment ).toString() );
-                    d->encoder->setMetaData( K3bAudioEncoder::META_YEAR, QString::number(m_cddbEntry.get( KCDDB::Year ).toInt()) );
-                    d->encoder->setMetaData( K3bAudioEncoder::META_GENRE, m_cddbEntry.get( KCDDB::Genre ).toString() );
+                    d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_ARTIST, m_cddbEntry.track( track-1 ).get( KCDDB::Artist ).toString() );
+                    d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_TITLE, m_cddbEntry.track( track-1 ).get( KCDDB::Title ).toString() );
+                    d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_COMMENT, m_cddbEntry.track( track-1 ).get( KCDDB::Comment ).toString() );
+                    d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_NUMBER, QString::number(track).rightJustified( 2, '0' ) );
+                    d->encoder->setMetaData( K3b::AudioEncoder::META_ALBUM_ARTIST, m_cddbEntry.get( KCDDB::Artist ).toString() );
+                    d->encoder->setMetaData( K3b::AudioEncoder::META_ALBUM_TITLE, m_cddbEntry.get( KCDDB::Title ).toString() );
+                    d->encoder->setMetaData( K3b::AudioEncoder::META_ALBUM_COMMENT, m_cddbEntry.get( KCDDB::Comment ).toString() );
+                    d->encoder->setMetaData( K3b::AudioEncoder::META_YEAR, QString::number(m_cddbEntry.get( KCDDB::Year ).toInt()) );
+                    d->encoder->setMetaData( K3b::AudioEncoder::META_GENRE, m_cddbEntry.get( KCDDB::Genre ).toString() );
                 }
                 else
-                    emit infoMessage( d->encoder->lastErrorString(), K3bJob::ERROR );
+                    emit infoMessage( d->encoder->lastErrorString(), K3b::Job::ERROR );
             }
             else {
                 isOpen = d->waveFileWriter->open( filename );
             }
 
             if( !isOpen ) {
-                emit infoMessage( i18n("Unable to open '%1' for writing.", filename), K3bJob::ERROR );
+                emit infoMessage( i18n("Unable to open '%1' for writing.", filename), K3b::Job::ERROR );
                 return false;
             }
         }
@@ -357,12 +357,12 @@ bool K3bAudioRipJob::ripTrack( int track, const QString& filename )
             }
 
             char* buf = d->paranoiaLib->read( &status );
-            if( status == K3bCdparanoiaLib::S_OK ) {
+            if( status == K3b::CdparanoiaLib::S_OK ) {
                 if( buf == 0 ) {
                     if( m_singleFile )
-                        emit infoMessage( i18n("Successfully ripped track %1.", track), K3bJob::INFO );
+                        emit infoMessage( i18n("Successfully ripped track %1.", track), K3b::Job::INFO );
                     else
-                        emit infoMessage( i18n("Successfully ripped track %1 to %2.", track, filename), K3bJob::INFO );
+                        emit infoMessage( i18n("Successfully ripped track %1 to %2.", track, filename), K3b::Job::INFO );
 
                     if( !m_singleFile ) {
                         if( d->encoder )
@@ -377,16 +377,16 @@ bool K3bAudioRipJob::ripTrack( int track, const QString& filename )
                     if( d->encoder ) {
                         if( d->encoder->encode( buf,
                                                 CD_FRAMESIZE_RAW ) < 0 ) {
-                            kDebug() << "(K3bAudioRipJob) error while encoding.";
-                            emit infoMessage( d->encoder->lastErrorString(), K3bJob::ERROR );
-                            emit infoMessage( i18n("Error while encoding track %1.",track), K3bJob::ERROR );
+                            kDebug() << "(K3b::AudioRipJob) error while encoding.";
+                            emit infoMessage( d->encoder->lastErrorString(), K3b::Job::ERROR );
+                            emit infoMessage( i18n("Error while encoding track %1.",track), K3b::Job::ERROR );
                             return false;
                         }
                     }
                     else
                         d->waveFileWriter->write( buf,
                                                   CD_FRAMESIZE_RAW,
-                                                  K3bWaveFileWriter::LittleEndian );
+                                                  K3b::WaveFileWriter::LittleEndian );
 
                     trackSectorsRead++;
                     d->overallSectorsRead++;
@@ -395,30 +395,30 @@ bool K3bAudioRipJob::ripTrack( int track, const QString& filename )
                 }
             }
             else {
-                emit infoMessage( i18n("Unrecoverable error while ripping track %1.",track), K3bJob::ERROR );
+                emit infoMessage( i18n("Unrecoverable error while ripping track %1.",track), K3b::Job::ERROR );
                 return false;
             }
         }
         return true;
     }
     else {
-        emit infoMessage( i18n("Error while initializing audio ripping."), K3bJob::ERROR );
+        emit infoMessage( i18n("Error while initializing audio ripping."), K3b::Job::ERROR );
         return false;
     }
 }
 
 
-bool K3bAudioRipJob::writePlaylist()
+bool K3b::AudioRipJob::writePlaylist()
 {
     // this is an absolut path so there is always a "/"
     QString playlistDir = m_playlistFilename.left( m_playlistFilename.lastIndexOf( '/' ) );
 
     if( !KStandardDirs::makeDir( playlistDir ) ) {
-        emit infoMessage( i18n("Unable to create directory %1",playlistDir), K3bJob::ERROR );
+        emit infoMessage( i18n("Unable to create directory %1",playlistDir), K3b::Job::ERROR );
         return false;
     }
 
-    emit infoMessage( i18n("Writing playlist to %1.", m_playlistFilename ), K3bJob::INFO );
+    emit infoMessage( i18n("Writing playlist to %1.", m_playlistFilename ), K3b::Job::INFO );
 
     QFile f( m_playlistFilename );
     if( f.open( QIODevice::WriteOnly ) ) {
@@ -481,28 +481,28 @@ bool K3bAudioRipJob::writePlaylist()
         return ( t.status() == QTextStream::Ok );
     }
     else {
-        emit infoMessage( i18n("Unable to open '%1' for writing.",m_playlistFilename), K3bJob::ERROR );
-        kDebug() << "(K3bAudioRipJob) could not open file " << m_playlistFilename << " for writing.";
+        emit infoMessage( i18n("Unable to open '%1' for writing.",m_playlistFilename), K3b::Job::ERROR );
+        kDebug() << "(K3b::AudioRipJob) could not open file " << m_playlistFilename << " for writing.";
         return false;
     }
 }
 
 
-bool K3bAudioRipJob::writeCueFile()
+bool K3b::AudioRipJob::writeCueFile()
 {
-    K3bCueFileWriter cueWriter;
+    K3b::CueFileWriter cueWriter;
 
     // create a new toc and cd-text
-    K3bDevice::Toc toc;
-    K3bDevice::CdText text;
+    K3b::Device::Toc toc;
+    K3b::Device::CdText text;
     text.setPerformer( m_cddbEntry.get( KCDDB::Artist ).toString() );
     text.setTitle( m_cddbEntry.get( KCDDB::Title ).toString() );
     K3b::Msf currentSector;
     for( int i = 0; i < m_tracks.count(); ++i ) {
         int trackNum = m_tracks[i].first;
 
-        const K3bDevice::Track& oldTrack = d->toc[trackNum-1];
-        K3bDevice::Track newTrack( oldTrack );
+        const K3b::Device::Track& oldTrack = d->toc[trackNum-1];
+        K3b::Device::Track newTrack( oldTrack );
         newTrack.setFirstSector( currentSector );
         newTrack.setLastSector( (currentSector+=oldTrack.length()) - 1 );
         toc.append( newTrack );
@@ -524,13 +524,13 @@ bool K3bAudioRipJob::writeCueFile()
     cueFile.truncate( cueFile.lastIndexOf('.') );
     cueFile += ".cue";
 
-    emit infoMessage( i18n("Writing cue file to %1.",cueFile), K3bJob::INFO );
+    emit infoMessage( i18n("Writing cue file to %1.",cueFile), K3b::Job::INFO );
 
     return cueWriter.save( cueFile );
 }
 
 
-QString K3bAudioRipJob::findRelativePath( const QString& absPath, const QString& baseDir )
+QString K3b::AudioRipJob::findRelativePath( const QString& absPath, const QString& baseDir )
 {
     QString baseDir_ = K3b::prepareDir( K3b::fixupPath(baseDir) );
     QString path = K3b::fixupPath( absPath );
@@ -554,7 +554,7 @@ QString K3bAudioRipJob::findRelativePath( const QString& absPath, const QString&
 }
 
 
-QString K3bAudioRipJob::jobDescription() const
+QString K3b::AudioRipJob::jobDescription() const
 {
     if( m_cddbEntry.get( KCDDB::Title ).toString().isEmpty() )
         return i18n( "Ripping Audio Tracks" );
@@ -563,7 +563,7 @@ QString K3bAudioRipJob::jobDescription() const
                      m_cddbEntry.get( KCDDB::Title ).toString() );
 }
 
-QString K3bAudioRipJob::jobDetails() const
+QString K3b::AudioRipJob::jobDetails() const
 {
     if( d->encoder )
         return i18np( "1 track (encoding to %2)",

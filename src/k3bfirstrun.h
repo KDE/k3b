@@ -18,7 +18,8 @@
 #include <kdialog.h>
 
 
-class K3bFirstRun : public KDialog
+namespace K3b {
+class FirstRun : public KDialog
 {
   Q_OBJECT
 
@@ -26,8 +27,9 @@ class K3bFirstRun : public KDialog
   static void run( QWidget* parent = 0 );
 
  private:
-  K3bFirstRun( QWidget* parent );
-  ~K3bFirstRun();
+  FirstRun( QWidget* parent );
+  ~FirstRun();
 };
+}
 
 #endif

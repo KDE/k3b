@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -17,43 +17,45 @@
 
 #include "k3b_export.h"
 
-/**
- * The K3bPipe class represents a file descriptor pair
- * which can for example be used to connect two processes
- */
-class LIBK3B_EXPORT K3bPipe
-{
-public:
+namespace K3b {
     /**
-     * Creates a closed pipe object
+     * The Pipe class represents a file descriptor pair
+     * which can for example be used to connect two processes
      */
-    K3bPipe();
+    class LIBK3B_EXPORT Pipe
+    {
+    public:
+        /**
+         * Creates a closed pipe object
+         */
+        Pipe();
 
-    /**
-     * The destructor takes care of closing the pipe
-     */
-    ~K3bPipe();
+        /**
+         * The destructor takes care of closing the pipe
+         */
+        ~Pipe();
 
-    /**
-     * Open the pipe. This creates a file descriptor pair
-     * which can be accessed using the in() and out()
-     * methods.
-     */
-    bool open();
+        /**
+         * Open the pipe. This creates a file descriptor pair
+         * which can be accessed using the in() and out()
+         * methods.
+         */
+        bool open();
 
-    int in() const { return m_fd[1]; }
-    int out() const { return m_fd[0]; }
+        int in() const { return m_fd[1]; }
+        int out() const { return m_fd[0]; }
 
-    /**
-     * Calls both closeIn() and closeOut()
-     */
-    void close();
+        /**
+         * Calls both closeIn() and closeOut()
+         */
+        void close();
 
-    void closeIn();
-    void closeOut();
+        void closeIn();
+        void closeOut();
 
-private:
-    int m_fd[2];
-};
+    private:
+        int m_fd[2];
+    };
+}
 
 #endif

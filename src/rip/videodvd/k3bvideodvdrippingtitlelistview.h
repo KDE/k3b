@@ -22,18 +22,21 @@
 #include <QHideEvent>
 #include <QtCore/QVector>
 
-class K3bVideoDVDRippingPreview;
+namespace K3b {
+    class VideoDVDRippingPreview;
+}
 class QHideEvent;
 
-class K3bVideoDVDRippingTitleListView : public K3bListView
+namespace K3b {
+class VideoDVDRippingTitleListView : public ListView
 {
   Q_OBJECT
 
  public:
-  K3bVideoDVDRippingTitleListView( QWidget* parent );
-  ~K3bVideoDVDRippingTitleListView();
+  VideoDVDRippingTitleListView( QWidget* parent );
+  ~VideoDVDRippingTitleListView();
 
-  void setVideoDVD( const K3bVideoDVD::VideoDVD& dvd );
+  void setVideoDVD( const VideoDVD::VideoDVD& dvd );
 
  private Q_SLOTS:
   void slotPreviewDone( bool );
@@ -47,11 +50,12 @@ class K3bVideoDVDRippingTitleListView : public K3bListView
   TitleToolTip* m_toolTip;
 
   QVector<TitleViewItem*> m_itemMap;
-  K3bVideoDVDRippingPreview* m_previewGen;
+  VideoDVDRippingPreview* m_previewGen;
   unsigned int m_currentPreviewTitle;
 
-  K3bVideoDVD::VideoDVD m_dvd;
-  K3bMedium m_medium;
+  VideoDVD::VideoDVD m_dvd;
+  Medium m_medium;
 };
+}
 
 #endif

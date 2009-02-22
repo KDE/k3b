@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
  *
@@ -20,95 +20,95 @@
 #include <string.h>
 
 
-K3bAudioZeroData::K3bAudioZeroData( const K3b::Msf& len )
-  : K3bAudioDataSource(),
-    m_length(len),
-    m_writtenData(0)
+K3b::AudioZeroData::AudioZeroData( const K3b::Msf& len )
+    : K3b::AudioDataSource(),
+      m_length(len),
+      m_writtenData(0)
 {
 }
 
 
-K3bAudioZeroData::K3bAudioZeroData( const K3bAudioZeroData& zero )
-  : K3bAudioDataSource( zero ),
-    m_length( zero.m_length ),
-    m_writtenData( 0 )
+K3b::AudioZeroData::AudioZeroData( const K3b::AudioZeroData& zero )
+    : K3b::AudioDataSource( zero ),
+      m_length( zero.m_length ),
+      m_writtenData( 0 )
 {
 }
 
 
-K3bAudioZeroData::~K3bAudioZeroData()
+K3b::AudioZeroData::~AudioZeroData()
 {
 }
 
 
-void K3bAudioZeroData::setLength( const K3b::Msf& msf )
+void K3b::AudioZeroData::setLength( const K3b::Msf& msf )
 {
-  if( msf > 0 )
-    m_length = msf;
-  else
-    m_length = 1; // 1 frame
+    if( msf > 0 )
+        m_length = msf;
+    else
+        m_length = 1; // 1 frame
 
-  m_writtenData = 0;
+    m_writtenData = 0;
 
-  emitChange();
+    emitChange();
 }
 
 
-QString K3bAudioZeroData::type() const
+QString K3b::AudioZeroData::type() const
 {
-  return i18n("Silence");
+    return i18n("Silence");
 }
 
 
-QString K3bAudioZeroData::sourceComment() const
+QString K3b::AudioZeroData::sourceComment() const
 {
-  return QString();
+    return QString();
 }
 
 
-bool K3bAudioZeroData::seek( const K3b::Msf& msf )
+bool K3b::AudioZeroData::seek( const K3b::Msf& msf )
 {
-  if( msf < length() ) {
-    m_writtenData = msf.audioBytes();
-    return true;
-  }
-  else
-    return false;
+    if( msf < length() ) {
+        m_writtenData = msf.audioBytes();
+        return true;
+    }
+    else
+        return false;
 }
 
 
-int K3bAudioZeroData::read( char* data, unsigned int max )
+int K3b::AudioZeroData::read( char* data, unsigned int max )
 {
-  if( m_writtenData + max > length().audioBytes() )
-    max = length().audioBytes() - m_writtenData;
+    if( m_writtenData + max > length().audioBytes() )
+        max = length().audioBytes() - m_writtenData;
 
-  m_writtenData += max;
+    m_writtenData += max;
 
-  ::memset( data, 0, max );
+    ::memset( data, 0, max );
 
-  return max;
+    return max;
 }
 
 
-K3bAudioDataSource* K3bAudioZeroData::copy() const
+K3b::AudioDataSource* K3b::AudioZeroData::copy() const
 {
-  return new K3bAudioZeroData( *this );
+    return new K3b::AudioZeroData( *this );
 }
 
 
-void K3bAudioZeroData::setStartOffset( const K3b::Msf& pos )
+void K3b::AudioZeroData::setStartOffset( const K3b::Msf& pos )
 {
-  if( pos >= length() )
-    setLength( 1 );
-  else
-    setLength( length() - pos );
+    if( pos >= length() )
+        setLength( 1 );
+    else
+        setLength( length() - pos );
 }
 
 
-void K3bAudioZeroData::setEndOffset( const K3b::Msf& pos )
+void K3b::AudioZeroData::setEndOffset( const K3b::Msf& pos )
 {
-  if( pos < 1 )
-    setLength( 1 );
-  else
-    setLength( pos );
+    if( pos < 1 )
+        setLength( 1 );
+    else
+        setLength( pos );
 }

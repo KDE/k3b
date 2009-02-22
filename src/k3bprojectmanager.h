@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
@@ -22,68 +22,71 @@
 
 
 class KUrl;
-class K3bProjectInterface;
 
+namespace K3b {
 
-class K3bProjectManager : public QObject
-{
-    Q_OBJECT
+    class ProjectInterface;
 
-public:
-    K3bProjectManager( QObject* parent = 0 );
-    virtual ~K3bProjectManager();
+    class ProjectManager : public QObject
+    {
+        Q_OBJECT
 
-    QList<K3bDoc*> projects() const;
+    public:
+        ProjectManager( QObject* parent = 0 );
+        virtual ~ProjectManager();
 
-    /**
-     * Create a new project including loading user defaults and creating
-     * the dcop interface.
-     */
-    K3bDoc* createProject( K3bDoc::DocType type );
+        QList<Doc*> projects() const;
 
-    /**
-     * Opens a K3b project.
-     * \return 0 if url does not point to a valid k3b project file, the new project otherwise.
-     */
-    K3bDoc* openProject( const KUrl &url );
+        /**
+         * Create a new project including loading user defaults and creating
+         * the dcop interface.
+         */
+        Doc* createProject( Doc::DocType type );
 
-    /**
-     * saves the document under filename and format.
-     */
-    bool saveProject( K3bDoc*, const KUrl &url );
+        /**
+         * Opens a K3b project.
+         * \return 0 if url does not point to a valid k3b project file, the new project otherwise.
+         */
+        Doc* openProject( const KUrl &url );
 
-    K3bDoc* activeDoc() const { return activeProject(); }
-    K3bDoc* activeProject() const;
-    K3bDoc* findByUrl( const KUrl& url );
-    bool isEmpty() const;
+        /**
+         * saves the document under filename and format.
+         */
+        bool saveProject( Doc*, const KUrl &url );
 
-    /**
-     * Will create if none exists.
-     */
-    //K3bProjectInterface* dcopInterface( K3bDoc* doc );
+        Doc* activeDoc() const { return activeProject(); }
+        Doc* activeProject() const;
+        Doc* findByUrl( const KUrl& url );
+        bool isEmpty() const;
 
-public Q_SLOTS:
-    void addProject( K3bDoc* );
-    void removeProject( K3bDoc* );
-    void setActive( K3bDoc* );
-    void loadDefaults( K3bDoc* );
+        /**
+         * Will create if none exists.
+         */
+        //ProjectInterface* dcopInterface( Doc* doc );
 
- Q_SIGNALS:
-    void newProject( K3bDoc* );
-    void projectSaved( K3bDoc* );
-    void closingProject( K3bDoc* );
-    void projectChanged( K3bDoc* doc );
-    void activeProjectChanged( K3bDoc* );
+    public Q_SLOTS:
+        void addProject( Doc* );
+        void removeProject( Doc* );
+        void setActive( Doc* );
+        void loadDefaults( Doc* );
+
+    Q_SIGNALS:
+        void newProject( Doc* );
+        void projectSaved( Doc* );
+        void closingProject( Doc* );
+        void projectChanged( Doc* doc );
+        void activeProjectChanged( Doc* );
 
     private Q_SLOTS:
-    void slotProjectChanged( K3bDoc* doc );
+        void slotProjectChanged( Doc* doc );
 
-private:
-    // used internal
-    K3bDoc* createEmptyProject( K3bDoc::DocType );
+    private:
+        // used internal
+        Doc* createEmptyProject( Doc::DocType );
 
-    class Private;
-    Private* d;
-};
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

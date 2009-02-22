@@ -48,13 +48,13 @@
 #include <KActionCollection>
 
 
-K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent )
-    : K3bStandardView( pDoc, parent )
+K3b::AudioView::AudioView( K3b::AudioDoc* pDoc, QWidget* parent )
+    : K3b::StandardView( pDoc, parent )
 {
     m_doc = pDoc;
 
     m_model = new K3b::AudioProjectModel(m_doc, this);
-    // set the model for the K3bStandardView's views
+    // set the model for the K3b::StandardView's views
     setModel(m_model);
 
     // and hide the side panel as the audio project has no tree hierarchy
@@ -76,29 +76,29 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent )
 #ifdef __GNUC__
 #warning enable player once ported to Phonon
 #endif
-//     toolBox()->addAction( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PLAY ) );
-//     toolBox()->addAction( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PAUSE ) );
-//     toolBox()->addAction( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_STOP ) );
+//     toolBox()->addAction( m_songlist->player()->action( K3b::AudioTrackPlayer::ACTION_PLAY ) );
+//     toolBox()->addAction( m_songlist->player()->action( K3b::AudioTrackPlayer::ACTION_PAUSE ) );
+//     toolBox()->addAction( m_songlist->player()->action( K3b::AudioTrackPlayer::ACTION_STOP ) );
 //     toolBox()->addSpacing();
-//     toolBox()->addAction( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_PREV ) );
-//     toolBox()->addAction( m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_NEXT ) );
+//     toolBox()->addAction( m_songlist->player()->action( K3b::AudioTrackPlayer::ACTION_PREV ) );
+//     toolBox()->addAction( m_songlist->player()->action( K3b::AudioTrackPlayer::ACTION_NEXT ) );
 //     toolBox()->addSpacing();
-//     m_songlist->player()->action( K3bAudioTrackPlayer::ACTION_SEEK )->plug( toolBox() );
+//     m_songlist->player()->action( K3b::AudioTrackPlayer::ACTION_SEEK )->plug( toolBox() );
 //     toolBox()->addSeparator();
 
 #if 0
 #ifdef HAVE_MUSICBRAINZ
-    kDebug() << "(K3bAudioView) m_songlist->actionCollection()->actions().count() " << m_songlist->actionCollection()->actions().count();
+    kDebug() << "(K3b::AudioView) m_songlist->actionCollection()->actions().count() " << m_songlist->actionCollection()->actions().count();
     toolBox()->addAction( m_songlist->actionCollection()->action( "project_audio_musicbrainz" ) );
     toolBox()->addSeparator();
 #endif
 #endif
 
-    addPluginButtons( K3bProjectPlugin::AUDIO_CD );
+    addPluginButtons( K3b::ProjectPlugin::AUDIO_CD );
 
     // this is just for testing (or not?)
     // most likely every project type will have it's rc file in the future
-    // we only add the additional actions since K3bView already added the default actions
+    // we only add the additional actions since K3b::View already added the default actions
     setXML( "<!DOCTYPE kpartgui SYSTEM \"kpartgui.dtd\">"
             "<kpartgui name=\"k3bproject\" version=\"1\">"
             "<MenuBar>"
@@ -112,12 +112,12 @@ K3bAudioView::K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent )
             "</kpartgui>", true );
 }
 
-K3bAudioView::~K3bAudioView()
+K3b::AudioView::~AudioView()
 {
 }
 
 
-void K3bAudioView::init()
+void K3b::AudioView::init()
 {
     if( k3bcore->pluginManager()->plugins( "AudioDecoder" ).isEmpty() )
         KMessageBox::error( this, i18n("No audio decoder plugins found. You will not be able to add any files "
@@ -125,22 +125,22 @@ void K3bAudioView::init()
 }
 
 
-K3bProjectBurnDialog* K3bAudioView::newBurnDialog( QWidget* parent )
+K3b::ProjectBurnDialog* K3b::AudioView::newBurnDialog( QWidget* parent )
 {
-    return new K3bAudioBurnDialog( m_doc, parent );
+    return new K3b::AudioBurnDialog( m_doc, parent );
 }
 
 
-void K3bAudioView::slotAudioConversion()
+void K3b::AudioView::slotAudioConversion()
 {
-    K3bAudioProjectConvertingDialog dlg( m_doc, this );
+    K3b::AudioProjectConvertingDialog dlg( m_doc, this );
     dlg.exec();
 }
 
 
-void K3bAudioView::addUrls( const KUrl::List& urls )
+void K3b::AudioView::addUrls( const KUrl::List& urls )
 {
-    K3bAudioTrackAddingDialog::addUrls( urls, m_doc, 0, 0, 0, this );
+    K3b::AudioTrackAddingDialog::addUrls( urls, m_doc, 0, 0, 0, this );
 }
 
 #include "k3baudioview.moc"

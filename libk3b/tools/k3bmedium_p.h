@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -18,31 +18,35 @@
 #include <QtCore/QSharedData>
 #include <QtCore/QList>
 
-#include <k3bdiskinfo.h>
-#include <k3btoc.h>
-#include <k3bcdtext.h>
-#include <k3biso9660.h>
+#include "k3bmedium.h"
+
+#include "k3bdiskinfo.h"
+#include "k3btoc.h"
+#include "k3bcdtext.h"
+#include "k3biso9660.h"
 
 #include <libkcddb/cdinfo.h>
 
 
-/**
- * Internal class used by K3bMedium
- */
-class K3bMediumPrivate : public QSharedData
-{
-public:
-    K3bMediumPrivate();
+namespace K3b {
+    /**
+     * Internal class used by Medium
+     */
+    class MediumPrivate : public QSharedData
+    {
+    public:
+        MediumPrivate();
 
-    K3bDevice::Device* device;
-    K3bDevice::DiskInfo diskInfo;
-    K3bDevice::Toc toc;
-    K3bDevice::CdText cdText;
-    QList<int> writingSpeeds;
-    K3bIso9660SimplePrimaryDescriptor isoDesc;
-    int content;
+        Device::Device* device;
+        Device::DiskInfo diskInfo;
+        Device::Toc toc;
+        Device::CdText cdText;
+        QList<int> writingSpeeds;
+        Iso9660SimplePrimaryDescriptor isoDesc;
+        Medium::MediumContents content;
 
-    KCDDB::CDInfo cddbInfo;
-};
+        KCDDB::CDInfo cddbInfo;
+    };
+}
 
 #endif

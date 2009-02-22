@@ -19,38 +19,42 @@
 
 
 class QCheckBox;
-class K3bWritingModeWidget;
-class K3bWriterSelectionWidget;
-namespace K3bDevice {
-  class Device;
+
+namespace K3b {
+    class WritingModeWidget;
+    class WriterSelectionWidget;
+
+    namespace Device {
+        class Device;
+    }
+
+    class MediaFormattingDialog : public InteractionDialog
+    {
+        Q_OBJECT
+
+    public:
+        MediaFormattingDialog( QWidget* = 0 );
+        ~MediaFormattingDialog();
+
+    public Q_SLOTS:
+        void setDevice( Device::Device* );
+
+    protected Q_SLOTS:
+        void slotStartClicked();
+
+    protected:
+        void toggleAll();
+
+    private:
+        void loadUserDefaults( const KConfigGroup& );
+        void saveUserDefaults( KConfigGroup );
+        void loadK3bDefaults();
+
+        WriterSelectionWidget* m_writerSelectionWidget;
+        WritingModeWidget* m_writingModeWidget;
+        QCheckBox* m_checkForce;
+        QCheckBox* m_checkQuickFormat;
+    };
 }
-
-class K3bMediaFormattingDialog : public K3bInteractionDialog
-{
-  Q_OBJECT
-
- public:
-  K3bMediaFormattingDialog( QWidget* = 0 );
-  ~K3bMediaFormattingDialog();
-
- public Q_SLOTS:
-  void setDevice( K3bDevice::Device* );
-
- protected Q_SLOTS:
-  void slotStartClicked();
-
- protected:
-  void toggleAll();
-
- private:
-  void loadUserDefaults( const KConfigGroup& );
-  void saveUserDefaults( KConfigGroup );
-  void loadK3bDefaults();
-
-  K3bWriterSelectionWidget* m_writerSelectionWidget;
-  K3bWritingModeWidget* m_writingModeWidget;
-  QCheckBox* m_checkForce;
-  QCheckBox* m_checkQuickFormat;
-};
 
 #endif

@@ -69,7 +69,7 @@ static QString markupString( const QString& s_ )
 }
 
 
-K3bSystemProblem::K3bSystemProblem( int t,
+K3b::SystemProblem::SystemProblem( int t,
                                     const QString& p,
                                     const QString& d,
                                     const QString& s,
@@ -83,7 +83,7 @@ K3bSystemProblem::K3bSystemProblem( int t,
 }
 
 
-K3bSystemProblemDialog::K3bSystemProblemDialog( const QList<K3bSystemProblem>& problems,
+K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& problems,
                                                 QWidget* parent)
     : KDialog( parent )
 {
@@ -93,7 +93,7 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QList<K3bSystemProblem>& p
     setMainWidget(widget);
     // setup the title
     // ---------------------------------------------------------------------------------------------------
-    K3bThemedHeader* titleFrame = new K3bThemedHeader( widget );
+    K3b::ThemedHeader* titleFrame = new K3b::ThemedHeader( widget );
     titleFrame->setTitle( i18n("System Configuration Problems"),
                           i18np("1 problem", "%1 problems", problems.count() ) );
 
@@ -102,7 +102,7 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QList<K3bSystemProblem>& p
     m_checkDontShowAgain = new QCheckBox( i18n("Do not show again"), widget );
 
 #ifdef BUILD_K3BSETUP
-    m_k3bsetupButton = new QPushButton( i18n("Start K3bSetup2"), widget );
+    m_k3bsetupButton = new QPushButton( i18n("Start K3b::Setup2"), widget );
     connect( m_k3bsetupButton, SIGNAL(clicked()), this, SLOT(slotK3bSetup()) );
 #endif
 
@@ -132,15 +132,15 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QList<K3bSystemProblem>& p
 
     QString text = "<html>";
 
-    for( QList<K3bSystemProblem>::const_iterator it = problems.constBegin();
+    for( QList<K3b::SystemProblem>::const_iterator it = problems.constBegin();
          it != problems.constEnd(); ++it ) {
-        const K3bSystemProblem& p = *it;
+        const K3b::SystemProblem& p = *it;
 
         text.append( "<p><b>" );
-        if( p.type == K3bSystemProblem::CRITICAL )
+        if( p.type == K3b::SystemProblem::CRITICAL )
             text.append( "<span style=\"color:red\">" );
         text.append( markupString( p.problem ) );
-        if( p.type == K3bSystemProblem::CRITICAL )
+        if( p.type == K3b::SystemProblem::CRITICAL )
             text.append( "</span>" );
         text.append( "</b><br>" );
         text.append( markupString( p.details ) + "<br>" );
@@ -148,7 +148,7 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QList<K3bSystemProblem>& p
             text.append( "<i>" + i18n("Solution") + "</i>: " + p.solution );
 #ifdef BUILD_K3BSETUP
         else if( p.solvableByK3bSetup )
-            text.append( "<i>" + i18n("Solution") + "</i>: " + i18n("Use K3bSetup to solve this problem.") );
+            text.append( "<i>" + i18n("Solution") + "</i>: " + i18n("Use K3b::Setup to solve this problem.") );
 #endif
         text.append( "</p>" );
     }
@@ -162,7 +162,7 @@ K3bSystemProblemDialog::K3bSystemProblemDialog( const QList<K3bSystemProblem>& p
 }
 
 
-void K3bSystemProblemDialog::closeEvent( QCloseEvent* e )
+void K3b::SystemProblemDialog::closeEvent( QCloseEvent* e )
 {
     if( m_checkDontShowAgain->isChecked() ) {
         KConfigGroup grp( KGlobal::config(), "General Options" );
@@ -173,12 +173,12 @@ void K3bSystemProblemDialog::closeEvent( QCloseEvent* e )
 }
 
 
-void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel level )
+void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel level )
 {
-    QList<K3bSystemProblem> problems;
+    QList<K3b::SystemProblem> problems;
 
     if( k3bcore->deviceManager()->cdWriter().isEmpty() ) {
-        problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
+        problems.append( K3b::SystemProblem( K3b::SystemProblem::NON_CRITICAL,
                                            i18n("No CD/DVD writer found."),
                                            i18n("K3b did not find an optical writing device in your system. Thus, "
                                                 "you will not be able to burn CDs or DVDs. However, you can still "
@@ -189,7 +189,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
     else {
         // 1. cdrecord, cdrdao
         if( !k3bcore->externalBinManager()->foundBin( "cdrecord" ) ) {
-            problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+            problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                i18n("Unable to find %1 executable",QString("cdrecord")),
                                                i18n("K3b uses cdrecord to actually write CDs."),
                                                i18n("Install the cdrtools package which contains "
@@ -198,7 +198,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
         }
         else {
             if( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "outdated" ) ) {
-                problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
+                problems.append( K3b::SystemProblem( K3b::SystemProblem::NON_CRITICAL,
                                                    i18n("Used %1 version %2 is outdated",QString("cdrecord"),QString(k3bcore->externalBinManager()->binObject( "cdrecord" )->version)),
                                                    i18n("Although K3b supports all cdrtools versions since "
                                                         "1.10 it is highly recommended to at least use "
@@ -215,11 +215,11 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
             //
             // Kernel 2.6.16.something seems to introduce another problem which was apparently worked around in cdrecord 2.01.01a05
             //
-            if( K3b::simpleKernelVersion() >= K3bVersion( 2, 6, 8 ) &&
-                k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3bVersion( 2, 1, 1, "a05" ) &&
+            if( K3b::simpleKernelVersion() >= K3b::Version( 2, 6, 8 ) &&
+                k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3b::Version( 2, 1, 1, "a05" ) &&
                 !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "wodim" ) ) {
                 if( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) )
-                    problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+                    problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                        i18n("%1 will be run with root privileges on kernel >= 2.6.8",QString("cdrecord <= 2.01.01a05")),
                                                        i18n("Since Linux kernel 2.6.8 %1 will not work when run suid "
                                                             "root for security reasons anymore.",
@@ -229,7 +229,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
             }
 #ifdef CDRECORD_SUID_ROOT_CHECK
             else if( !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) && getuid() != 0 ) // not root
-                problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+                problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                    i18n("%1 will be run without root privileges",QString("cdrecord")),
                                                    i18n("It is highly recommended to configure cdrecord "
                                                         "to run with root privileges. Only then cdrecord "
@@ -245,7 +245,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
         }
 
         if( !k3bcore->externalBinManager()->foundBin( "cdrdao" ) ) {
-            problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+            problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                i18n("Unable to find %1 executable",QString("cdrdao")),
                                                i18n("K3b uses cdrdao to actually write CDs."),
                                                i18n("Install the cdrdao package."),
@@ -255,7 +255,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
 #ifdef Q_OS_LINUX
 #ifdef CDRECORD_SUID_ROOT_CHECK
             if( !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "suidroot" ) && getuid() != 0 )
-                problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+                problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                    i18n("%1 will be run without root privileges",QString("cdrdao")),
                                                    i18n("It is highly recommended to configure cdrdao "
                                                         "to run with root privileges to increase the "
@@ -270,7 +270,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
 
     if( !k3bcore->deviceManager()->dvdWriter().isEmpty() ) {
         if( !k3bcore->externalBinManager()->foundBin( "growisofs" ) ) {
-            problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+            problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                i18n("Unable to find %1 executable",QString("growisofs")),
                                                i18n("K3b uses growisofs to actually write dvds. "
                                                     "Without growisofs you will not be able to write dvds. "
@@ -279,16 +279,16 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
                                                false ) );
         }
         else {
-            if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 10 ) ) {
-                problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+            if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3b::Version( 5, 10 ) ) {
+                problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                    i18n("Used %1 version %2 is outdated",QString("growisofs"),k3bcore->externalBinManager()->binObject( "growisofs" )->version),
                                                    i18n("K3b needs at least growisofs version 5.10 to write dvds. "
                                                         "All older versions will not work and K3b will refuse to use them."),
                                                    i18n("Install a more recent version of %1.",QString("growisofs")),
                                                    false ) );
             }
-            else if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 5, 12 ) ) {
-                problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
+            else if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3b::Version( 5, 12 ) ) {
+                problems.append( K3b::SystemProblem( K3b::SystemProblem::NON_CRITICAL,
                                                    i18n("Used %1 version %2 is outdated",QString("growisofs"),k3bcore->externalBinManager()->binObject( "growisofs" )->version),
                                                    i18n("K3b will not be able to copy DVDs on-the-fly or write a DVD+RW in multiple "
                                                         "sessions using a growisofs "
@@ -296,8 +296,8 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
                                                    i18n("Install a more recent version of %1.",QString("growisofs")),
                                                    false ) );
             }
-            else if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 7, 0 ) ) {
-                problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
+            else if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3b::Version( 7, 0 ) ) {
+                problems.append( K3b::SystemProblem( K3b::SystemProblem::NON_CRITICAL,
                                                    i18n("Used %1 version %2 is outdated",QString("growisofs"),k3bcore->externalBinManager()->binObject( "growisofs" )->version),
                                                    i18n("It is highly recommended to use growisofs 7.0 or higher. "
                                                         "K3b will not be able to write a DVD+RW in multiple "
@@ -307,7 +307,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
             }
             // for now we ignore the suid root bit becasue of the memorylocked issue
 //       else if( !k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "suidroot" ) ) {
-// 	problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+// 	problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
 // 					   i18n("%1 will be run without root privileges","growisofs"),
 // 					   i18n("It is highly recommended to configure growisofs "
 // 						"to run with root privileges. Only then growisofs "
@@ -319,7 +319,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
         }
 
         if( !k3bcore->externalBinManager()->foundBin( "dvd+rw-format" ) ) {
-            problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+            problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                i18n("Unable to find %1 executable",QString("dvd+rw-format")),
                                                i18n("K3b uses dvd+rw-format to format DVD-RWs and DVD+RWs."),
                                                i18n("Install the dvd+rw-tools package."),
@@ -331,7 +331,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
 
     }
     else if( k3bcore->externalBinManager()->binObject( "mkisofs" )->hasFeature( "outdated" ) ) {
-        problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+        problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                            i18n("Used %1 version %2 is outdated",
                                                 QString("mkisofs"),
                                                 k3bcore->externalBinManager()->binObject( "mkisofs" )->version),
@@ -345,19 +345,19 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
 #warning Make sure we have a proper new kernel and cdrecord for simple dev= stuff
     bool atapiWriter = false;
     bool dvd_r_dl = false;
-    QList<K3bDevice::Device *> items(k3bcore->deviceManager()->readingDevices());
-    for( QList<K3bDevice::Device *>::const_iterator it = items.constBegin();
+    QList<K3b::Device::Device *> items(k3bcore->deviceManager()->readingDevices());
+    for( QList<K3b::Device::Device *>::const_iterator it = items.constBegin();
          it != items.constEnd(); ++it ) {
-        if( (*it)->type() & K3bDevice::DEVICE_DVD_R_DL )
+        if( (*it)->type() & K3b::Device::DEVICE_DVD_R_DL )
             dvd_r_dl = true;
     }
 
 
     // check automounted devices
-    QList<K3bDevice::Device*> automountedDevices = checkForAutomounting();
-    for( QList<K3bDevice::Device *>::const_iterator it = automountedDevices.constBegin();
+    QList<K3b::Device::Device*> automountedDevices = checkForAutomounting();
+    for( QList<K3b::Device::Device *>::const_iterator it = automountedDevices.constBegin();
          it != automountedDevices.constEnd(); ++it ) {
-        problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
+        problems.append( K3b::SystemProblem( K3b::SystemProblem::NON_CRITICAL,
                                            i18n("Device %1 - %2 is automounted.",
                                                 (*it)->vendor(),(*it)->description()),
                                            i18n("K3b is not able to unmount automounted devices. Thus, especially "
@@ -373,7 +373,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
     if( atapiWriter ) {
         if( !K3b::plainAtapiSupport() &&
             !K3b::hackedAtapiSupport() ) {
-            problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+            problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                i18n("No ATAPI writing support in kernel"),
                                                i18n("Your kernel does not support writing without "
                                                     "SCSI emulation but there is at least one "
@@ -395,7 +395,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
                        K3b::hackedAtapiSupport() ) &&
                     !( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "plain-atapi" ) &&
                        K3b::plainAtapiSupport() ) ) {
-                    problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+                    problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                        i18n("%1 %2 does not support ATAPI",QString("cdrecord"),k3bcore->externalBinManager()->binObject("cdrecord")->version),
                                                        i18n("The configured version of %1 does not "
                                                             "support writing to ATAPI devices without "
@@ -415,7 +415,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
                 if( !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "hacked-atapi" ) &&
                     !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "plain-atapi") ) {
                     // FIXME: replace ">" with "&gt;"
-                    problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+                    problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                        i18n("%1 %2 does not support ATAPI",
                                                             QLatin1String( "cdrdao"),
                                                             k3bcore->externalBinManager()->binObject("cdrdao")->version.toString() ),
@@ -424,7 +424,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
                                                             "SCSI emulation and there is at least one writer "
                                                             "in your system not configured to use "
                                                             "SCSI emulation.", QLatin1String( "cdrdao" ) ),
-                                                       K3b::simpleKernelVersion() > K3bVersion( 2, 5, 0 )
+                                                       K3b::simpleKernelVersion() > K3b::Version( 2, 5, 0 )
                                                        ? i18n("Install cdrdao >= 1.1.8 which supports writing to "
                                                               "ATAPI devices directly.")
                                                        : i18n("The best, and recommended, solution is to use "
@@ -439,8 +439,8 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
     }
 
     if( dvd_r_dl && k3bcore->externalBinManager()->foundBin( "growisofs" ) ) {
-        if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3bVersion( 6, 0 ) )
-            problems.append( K3bSystemProblem( K3bSystemProblem::NON_CRITICAL,
+        if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3b::Version( 6, 0 ) )
+            problems.append( K3b::SystemProblem( K3b::SystemProblem::NON_CRITICAL,
                                                i18n("Used %1 version %2 is outdated",QString("growisofs"),k3bcore->externalBinManager()->binObject( "growisofs" )->version),
                                                i18n("K3b will not be able to write DVD-R Dual Layer media using a growisofs "
                                                     "version older than 6.0."),
@@ -448,23 +448,23 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
                                                false ) );
     }
 
-    QList<K3bDevice::Device *> items2(k3bcore->deviceManager()->allDevices());
-    for( QList<K3bDevice::Device *>::const_iterator it = items2.constBegin();
+    QList<K3b::Device::Device *> items2(k3bcore->deviceManager()->allDevices());
+    for( QList<K3b::Device::Device *>::const_iterator it = items2.constBegin();
          it != items2.constEnd(); ++it ) {
-        K3bDevice::Device* dev = (*it);
+        K3b::Device::Device* dev = (*it);
 
         if( !QFileInfo( dev->blockDeviceName() ).isWritable() )
-            problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+            problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                i18n("No write access to device %1",dev->blockDeviceName()),
                                                i18n("K3b needs write access to all the devices to perform certain tasks. "
                                                     "Without it you might encounter problems with %1 - %2",dev->vendor(),dev->description()),
                                                i18n("Make sure you have write access to %1. In case you are not using "
-                                                    "devfs or udev K3bSetup is able to do this for you.",dev->blockDeviceName()),
+                                                    "devfs or udev K3b::Setup is able to do this for you.",dev->blockDeviceName()),
                                                false ) );
 
 
         if( !dmaActivated( dev ) )
-            problems.append( K3bSystemProblem( K3bSystemProblem::CRITICAL,
+            problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                i18n("DMA disabled on device %1 - %2",dev->vendor(),dev->description()),
                                                i18n("With most modern CD/DVD devices enabling DMA highly increases "
                                                     "read/write performance. If you experience very low writing speeds "
@@ -476,12 +476,12 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
     //
     // Check if the user specified some user parameters and warn about it
     //
-    const QMap<QString, K3bExternalProgram*>& programMap = k3bcore->externalBinManager()->programs();
-    for( QMap<QString, K3bExternalProgram*>::const_iterator it = programMap.constBegin();
+    const QMap<QString, K3b::ExternalProgram*>& programMap = k3bcore->externalBinManager()->programs();
+    for( QMap<QString, K3b::ExternalProgram*>::const_iterator it = programMap.constBegin();
          it != programMap.constEnd(); ++it ) {
-        const K3bExternalProgram* p = *it;
+        const K3b::ExternalProgram* p = *it;
         if( !p->userParameters().isEmpty() ) {
-            problems.append( K3bSystemProblem( K3bSystemProblem::WARNING,
+            problems.append( K3b::SystemProblem( K3b::SystemProblem::WARNING,
                                                i18n("User parameters specified for external program %1",p->name()),
                                                i18n("Sometimes it may be nessessary to specify user parameters in addition to "
                                                     "the parameters generated by K3b. This is simply a warning to make sure that "
@@ -497,9 +497,9 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
     // Way too many users are complaining about K3b not being able to decode mp3 files. So just warn them about
     // the legal restrictions with many distros
     //
-    QList<K3bPlugin*> plugins = k3bcore->pluginManager()->plugins( "AudioDecoder" );
+    QList<K3b::Plugin*> plugins = k3bcore->pluginManager()->plugins( "AudioDecoder" );
     bool haveMp3Decoder = false;
-    for( QList<K3bPlugin*>::const_iterator it = plugins.constBegin();
+    for( QList<K3b::Plugin*>::const_iterator it = plugins.constBegin();
          it != plugins.constEnd(); ++it ) {
         if( (*it)->pluginInfo().pluginName() == "k3bmaddecoder" ) {
             haveMp3Decoder = true;
@@ -507,7 +507,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
         }
     }
     if( !haveMp3Decoder ) {
-        problems.append( K3bSystemProblem( K3bSystemProblem::WARNING,
+        problems.append( K3b::SystemProblem( K3b::SystemProblem::WARNING,
                                            i18n("Mp3 Audio Decoder plugin not found."),
                                            i18n("K3b could not load or find the Mp3 decoder plugin. This means that you will not "
                                                 "be able to create Audio CDs from Mp3 files. Many Linux distributions do not "
@@ -527,7 +527,7 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
         // It is very unlikely that one would set the locale to ANSI_X3.4-1968
         // intentionally
         //
-        problems.append( K3bSystemProblem( K3bSystemProblem::WARNING,
+        problems.append( K3b::SystemProblem( K3b::SystemProblem::WARNING,
                                            i18n("System locale charset is ANSI_X3.4-1968"),
                                            i18n("Your system's locale charset (i.e. the charset used to encode filenames) "
                                                 "is set to ANSI_X3.4-1968. It is highly unlikely that this has been done "
@@ -545,33 +545,33 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
     // the kdelibs refuse it.
     //
     if( ::getuid() == 0 ) {
-        problems.append( K3bSystemProblem( K3bSystemProblem::WARNING,
+        problems.append( K3b::SystemProblem( K3b::SystemProblem::WARNING,
                                            i18n("Running K3b as root user"),
                                            i18n("It is not recommended to run K3b under the root user account. "
                                                 "This introduces unnecessary security risks."),
                                            i18n("Run K3b from a proper user account and setup the device and "
                                                 "external tool permissions appropriately.")
 #ifdef BUILD_K3BSETUP
-                                           + ' ' + i18n("The latter can be done via K3bSetup.")
+                                           + ' ' + i18n("The latter can be done via K3b::Setup.")
 #endif
                                            ,
                                            true ) );
     }
 
 
-    kDebug() << "(K3bCore) System problems:";
-    for( QList<K3bSystemProblem>::const_iterator it = problems.constBegin();
+    kDebug() << "(K3b::Core) System problems:";
+    for( QList<K3b::SystemProblem>::const_iterator it = problems.constBegin();
          it != problems.constEnd(); ++it ) {
-        const K3bSystemProblem& p = *it;
+        const K3b::SystemProblem& p = *it;
 
         switch( p.type ) {
-        case K3bSystemProblem::CRITICAL:
+        case K3b::SystemProblem::CRITICAL:
             kDebug() << " CRITICAL";
             break;
-        case K3bSystemProblem::NON_CRITICAL:
+        case K3b::SystemProblem::NON_CRITICAL:
             kDebug() << " NON_CRITICAL";
             break;
-        case K3bSystemProblem::WARNING:
+        case K3b::SystemProblem::WARNING:
             kDebug() << " WARNING";
             break;
         }
@@ -583,14 +583,14 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
     if( problems.isEmpty() ) {
         kDebug() << "          - none - ";
         if( level == AlwaysNotify ) {
-            K3bPassivePopup::showPopup( i18n("No problems found in system configuration."), i18n("System configured properly") );
+            K3b::PassivePopup::showPopup( i18n("No problems found in system configuration."), i18n("System configured properly") );
         }
     }
     else {
-        static K3bSystemProblemDialog* s_openDlg = 0;
+        static K3b::SystemProblemDialog* s_openDlg = 0;
         if( s_openDlg )
             s_openDlg->close();
-        K3bSystemProblemDialog dlg( problems, parent );
+        K3b::SystemProblemDialog dlg( problems, parent );
         s_openDlg = &dlg;
         dlg.exec();
         s_openDlg = 0;
@@ -601,16 +601,16 @@ void K3bSystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel lev
     cfg.writeEntry( "Last system check version", QString(k3bcore->version()) );
 }
 
-void K3bSystemProblemDialog::slotK3bSetup()
+void K3b::SystemProblemDialog::slotK3bSetup()
 {
     KProcess p;
     p << K3b::findExe("kdesu") << "kcmshell4 k3bsetup2 --lang " + KGlobal::locale()->language();
     if( !p.startDetached() )
-        KMessageBox::error( 0, i18n("Unable to start K3bSetup2.") );
+        KMessageBox::error( 0, i18n("Unable to start K3b::Setup2.") );
 }
 
 
-int K3bSystemProblemDialog::dmaActivated( K3bDevice::Device* dev )
+int K3b::SystemProblemDialog::dmaActivated( K3b::Device::Device* dev )
 {
     QString hdparm = K3b::findExe( "hdparm" );
     if( hdparm.isEmpty() )
@@ -641,9 +641,9 @@ int K3bSystemProblemDialog::dmaActivated( K3bDevice::Device* dev )
 }
 
 
-QList<K3bDevice::Device*> K3bSystemProblemDialog::checkForAutomounting()
+QList<K3b::Device::Device*> K3b::SystemProblemDialog::checkForAutomounting()
 {
-    QList<K3bDevice::Device *> l;
+    QList<K3b::Device::Device *> l;
 
     ::setfsent();
 
@@ -664,7 +664,7 @@ QList<K3bDevice::Device*> K3bSystemProblemDialog::checkForAutomounting()
                 }
             }
 
-            if( K3bDevice::Device* dev = k3bcore->deviceManager()->findDevice( md ) )
+            if( K3b::Device::Device* dev = k3bcore->deviceManager()->findDevice( md ) )
                 l.append( dev );
         }
     } // while mountInfo
@@ -675,11 +675,11 @@ QList<K3bDevice::Device*> K3bSystemProblemDialog::checkForAutomounting()
 }
 
 
-bool K3bSystemProblemDialog::readCheckSystemConfig()
+bool K3b::SystemProblemDialog::readCheckSystemConfig()
 {
     KConfigGroup cfgGrp( KGlobal::config(), "General Options" );
 
-    K3bVersion configVersion( cfgGrp.readEntry( "Last system check version", "0.1" ) );
+    K3b::Version configVersion( cfgGrp.readEntry( "Last system check version", "0.1" ) );
     if( configVersion < k3bcore->version() )
         cfgGrp.writeEntry( "check system config", true );
 

@@ -46,7 +46,7 @@
 
 
 
-K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
+K3b::StatusBarManager::StatusBarManager( K3b::MainWindow* parent )
     : QObject(parent),
       m_mainWindow(parent)
 {
@@ -87,22 +87,22 @@ K3bStatusBarManager::K3bStatusBarManager( K3bMainWindow* parent )
     connect( m_mainWindow->actionCollection(), SIGNAL(clearStatusText()),
              this, SLOT(clearActionStatusText()) );
 #endif
-    connect( k3bappcore->projectManager(), SIGNAL(activeProjectChanged(K3bDoc*)),
-             this, SLOT(slotActiveProjectChanged(K3bDoc*)) );
-    connect( k3bappcore->projectManager(), SIGNAL(projectChanged(K3bDoc*)),
-             this, SLOT(slotActiveProjectChanged(K3bDoc*)) );
+    connect( k3bappcore->projectManager(), SIGNAL(activeProjectChanged(K3b::Doc*)),
+             this, SLOT(slotActiveProjectChanged(K3b::Doc*)) );
+    connect( k3bappcore->projectManager(), SIGNAL(projectChanged(K3b::Doc*)),
+             this, SLOT(slotActiveProjectChanged(K3b::Doc*)) );
     connect( (m_updateTimer = new QTimer( this )), SIGNAL(timeout()), this, SLOT(slotUpdateProjectStats()) );
 
     update();
 }
 
 
-K3bStatusBarManager::~K3bStatusBarManager()
+K3b::StatusBarManager::~StatusBarManager()
 {
 }
 
 
-void K3bStatusBarManager::update()
+void K3b::StatusBarManager::update()
 {
     QString path = K3b::defaultTempPath();
 
@@ -119,7 +119,7 @@ void K3bStatusBarManager::update()
 }
 
 
-void K3bStatusBarManager::slotFreeTempSpace(const QString&,
+void K3b::StatusBarManager::slotFreeTempSpace(const QString&,
                                             unsigned long kbSize,
                                             unsigned long,
                                             unsigned long kbAvail)
@@ -138,23 +138,23 @@ void K3bStatusBarManager::slotFreeTempSpace(const QString&,
 }
 
 
-void K3bStatusBarManager::showActionStatusText( const QString& text )
+void K3b::StatusBarManager::showActionStatusText( const QString& text )
 {
     m_mainWindow->statusBar()->showMessage( text );
 }
 
 
-void K3bStatusBarManager::clearActionStatusText()
+void K3b::StatusBarManager::clearActionStatusText()
 {
     m_mainWindow->statusBar()->clearMessage();
 }
 
 
-bool K3bStatusBarManager::eventFilter( QObject* o, QEvent* e )
+bool K3b::StatusBarManager::eventFilter( QObject* o, QEvent* e )
 {
     if( e->type() == QEvent::MouseButtonDblClick ) {
         if( o == m_labelFreeTemp->parentWidget() )
-            m_mainWindow->showOptionDialog( K3bOptionDialog::Misc );
+            m_mainWindow->showOptionDialog( K3b::OptionDialog::Misc );
         else if( o == m_versionBox )
             if( QAction* a = m_mainWindow->action( "help_about_app" ) )
                 a->activate(QAction::Trigger);
@@ -164,7 +164,7 @@ bool K3bStatusBarManager::eventFilter( QObject* o, QEvent* e )
 }
 
 
-static QString dataDocStats( K3bDataDoc* dataDoc )
+static QString dataDocStats( K3b::DataDoc* dataDoc )
 {
     return i18np( "1 file in %2",
                   "%1 files in %2",
@@ -173,7 +173,7 @@ static QString dataDocStats( K3bDataDoc* dataDoc )
 }
 
 
-void K3bStatusBarManager::slotActiveProjectChanged( K3bDoc* doc )
+void K3b::StatusBarManager::slotActiveProjectChanged( K3b::Doc* doc )
 {
     if( doc && doc == k3bappcore->projectManager()->activeProject() ) {
         // cache updates
@@ -189,45 +189,45 @@ void K3bStatusBarManager::slotActiveProjectChanged( K3bDoc* doc )
 }
 
 
-void K3bStatusBarManager::slotUpdateProjectStats()
+void K3b::StatusBarManager::slotUpdateProjectStats()
 {
-    K3bDoc* doc = k3bappcore->projectManager()->activeProject();
+    K3b::Doc* doc = k3bappcore->projectManager()->activeProject();
     if( doc ) {
         switch( doc->type() ) {
-        case K3bDoc::AUDIO: {
-            K3bAudioDoc* audioDoc = static_cast<K3bAudioDoc*>( doc );
+        case K3b::Doc::AUDIO: {
+            K3b::AudioDoc* audioDoc = static_cast<K3b::AudioDoc*>( doc );
             m_labelProjectInfo->setText( i18np("Audio CD (1 track)", "Audio CD (%1 tracks)", audioDoc->numOfTracks() ) );
             break;
         }
 
-        case K3bDoc::DATA: {
-            K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>( doc );
+        case K3b::Doc::DATA: {
+            K3b::DataDoc* dataDoc = static_cast<K3b::DataDoc*>( doc );
             m_labelProjectInfo->setText( i18n("Data Project (%1)",dataDocStats(dataDoc)) );
             break;
         }
 
-        case K3bDoc::MIXED: {
-            K3bAudioDoc* audioDoc = static_cast<K3bMixedDoc*>( doc )->audioDoc();
-            K3bDataDoc* dataDoc = static_cast<K3bMixedDoc*>( doc )->dataDoc();
+        case K3b::Doc::MIXED: {
+            K3b::AudioDoc* audioDoc = static_cast<K3b::MixedDoc*>( doc )->audioDoc();
+            K3b::DataDoc* dataDoc = static_cast<K3b::MixedDoc*>( doc )->dataDoc();
             m_labelProjectInfo->setText( i18np("Mixed CD (1 track and %2)", "Mixed CD (%1 tracks and %2)", audioDoc->numOfTracks(),
                                                dataDocStats(dataDoc)) );
             break;
         }
 
-        case K3bDoc::VCD: {
-            K3bVcdDoc* vcdDoc = static_cast<K3bVcdDoc*>( doc );
+        case K3b::Doc::VCD: {
+            K3b::VcdDoc* vcdDoc = static_cast<K3b::VcdDoc*>( doc );
             m_labelProjectInfo->setText( i18np("Video CD (1 track)", "Video CD (%1 tracks)", vcdDoc->numOfTracks() ) );
             break;
         }
 
-        case K3bDoc::MOVIX: {
-            K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>( doc );
+        case K3b::Doc::MOVIX: {
+            K3b::DataDoc* dataDoc = static_cast<K3b::DataDoc*>( doc );
             m_labelProjectInfo->setText( i18n("eMovix Project (%1)",dataDocStats(dataDoc)) );
             break;
         }
 
-        case K3bDoc::VIDEODVD: {
-            K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>( doc );
+        case K3b::Doc::VIDEODVD: {
+            K3b::DataDoc* dataDoc = static_cast<K3b::DataDoc*>( doc );
             m_labelProjectInfo->setText( i18n("Video DVD (%1)",dataDocStats(dataDoc)) );
             break;
         }

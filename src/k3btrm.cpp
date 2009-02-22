@@ -24,7 +24,7 @@
 #include <kurl.h>
 
 
-class K3bTRM::Private
+class K3b::TRM::Private
 {
 public:
     trm_t trm;
@@ -33,7 +33,7 @@ public:
 };
 
 
-K3bTRM::K3bTRM()
+K3b::TRM::TRM()
 {
     d = new Private;
     d->trm = trm_New();
@@ -42,14 +42,14 @@ K3bTRM::K3bTRM()
 }
 
 
-K3bTRM::~K3bTRM()
+K3b::TRM::~TRM()
 {
     trm_Delete( d->trm );
     delete d;
 }
 
 
-void K3bTRM::start( const K3b::Msf& length )
+void K3b::TRM::start( const K3b::Msf& length )
 {
     if( KProtocolManager::useProxy() ) {
         KUrl proxy = KProtocolManager::proxyFor("http");
@@ -61,13 +61,13 @@ void K3bTRM::start( const K3b::Msf& length )
 }
 
 
-bool K3bTRM::generate( char* data, int len )
+bool K3b::TRM::generate( char* data, int len )
 {
     return ( trm_GenerateSignature( d->trm, data, len ) == 1 );
 }
 
 
-bool K3bTRM::finalize()
+bool K3b::TRM::finalize()
 {
     if( trm_FinalizeSignature( d->trm, d->rawSig.data(), 0 ) == 0 ) {
         trm_ConvertSigToASCII( d->trm, d->rawSig.data(), d->sig.data() );
@@ -78,13 +78,13 @@ bool K3bTRM::finalize()
 }
 
 
-QByteArray K3bTRM::rawSignature() const
+QByteArray K3b::TRM::rawSignature() const
 {
     return d->rawSig;
 }
 
 
-QByteArray K3bTRM::signature() const
+QByteArray K3b::TRM::signature() const
 {
     return d->sig;
 }

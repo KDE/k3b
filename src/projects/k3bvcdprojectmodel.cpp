@@ -32,7 +32,7 @@ class VcdProjectModel::Private
             : project( 0 ),
             q( parent ) { }
 
-        K3bVcdDoc* project;
+        K3b::VcdDoc* project;
 
         void _k_docChanged()
         {
@@ -43,7 +43,7 @@ class VcdProjectModel::Private
         VcdProjectModel* q;
 };
 
-VcdProjectModel::VcdProjectModel( K3bVcdDoc* doc, QObject* parent )
+VcdProjectModel::VcdProjectModel( K3b::VcdDoc* doc, QObject* parent )
     : QAbstractItemModel( parent ),
     d( new Private(this) )
 {
@@ -57,23 +57,23 @@ VcdProjectModel::~VcdProjectModel()
     delete d;
 }
 
-K3bVcdDoc* VcdProjectModel::project() const
+K3b::VcdDoc* VcdProjectModel::project() const
 {
     return d->project;
 }
 
-K3bVcdTrack* VcdProjectModel::trackForIndex( const QModelIndex& index ) const
+K3b::VcdTrack* VcdProjectModel::trackForIndex( const QModelIndex& index ) const
 {
     if ( index.isValid() )
     {
         Q_ASSERT( index.internalPointer() );
-        return static_cast<K3bVcdTrack*>( index.internalPointer() );
+        return static_cast<K3b::VcdTrack*>( index.internalPointer() );
     }
 
     return 0;
 }
 
-QModelIndex VcdProjectModel::indexForTrack( K3bVcdTrack* track ) const
+QModelIndex VcdProjectModel::indexForTrack( K3b::VcdTrack* track ) const
 {
     return createIndex( track->index(), 0, track );
 }
@@ -113,7 +113,7 @@ bool VcdProjectModel::setData( const QModelIndex& index,
 {
     if ( index.isValid() )
     {
-        K3bVcdTrack* track = trackForIndex( index );
+        K3b::VcdTrack* track = trackForIndex( index );
         if ( role == Qt::EditRole )
         {
             if ( index.column() == TitleColumn )
@@ -130,7 +130,7 @@ bool VcdProjectModel::setData( const QModelIndex& index,
 QVariant VcdProjectModel::data( const QModelIndex& index, int role ) const
 {
     if ( index.isValid() ) {
-        K3bVcdTrack* track = trackForIndex( index );
+        K3b::VcdTrack* track = trackForIndex( index );
 
         switch( index.column() ) {
             case NoColumn:
@@ -274,11 +274,11 @@ QMimeData* VcdProjectModel::mimeData( const QModelIndexList& indexes ) const
 {
     QMimeData* mime = new QMimeData();
 
-    QList<K3bVcdTrack*> tracks;
+    QList<K3b::VcdTrack*> tracks;
     KUrl::List urls;
 
     foreach( const QModelIndex& index, indexes ) {
-        K3bVcdTrack* track = trackForIndex( index );
+        K3b::VcdTrack* track = trackForIndex( index );
         tracks << track;
 
         if( !urls.contains( KUrl( track->absolutePath() ) ) )
@@ -292,7 +292,7 @@ QMimeData* VcdProjectModel::mimeData( const QModelIndexList& indexes ) const
     QByteArray trackData;
     QDataStream trackDataStream( &trackData, QIODevice::WriteOnly );
 
-    foreach( K3bVcdTrack* track, tracks ) {
+    foreach( K3b::VcdTrack* track, tracks ) {
         trackDataStream << ( qint64 )track;
     }
 
@@ -318,7 +318,7 @@ bool VcdProjectModel::dropMimeData( const QMimeData* data,
     if (action == Qt::IgnoreAction)
         return true;
 
-    QList<K3bVcdTrack*> tracks;
+    QList<K3b::VcdTrack*> tracks;
     if ( data->hasFormat( "application/x-k3bvcdtrack" ) )
     {
         QByteArray trackData = data->data( "application/x-k3bvcdtrack" );
@@ -327,10 +327,10 @@ bool VcdProjectModel::dropMimeData( const QMimeData* data,
         {
             qint64 p;
             trackDataStream >> p;
-            tracks << ( K3bVcdTrack* )p;
+            tracks << ( K3b::VcdTrack* )p;
         }
 
-        K3bVcdTrack *prev;
+        K3b::VcdTrack *prev;
         if(parent.isValid())
         {
             int index = trackForIndex(parent)->index();
@@ -344,7 +344,7 @@ bool VcdProjectModel::dropMimeData( const QMimeData* data,
         else
             prev = d->project->tracks()->last();
 
-        foreach( K3bVcdTrack* track, tracks )
+        foreach( K3b::VcdTrack* track, tracks )
         {
             d->project->moveTrack(track, prev);
             prev = track;

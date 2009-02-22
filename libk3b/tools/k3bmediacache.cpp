@@ -13,6 +13,7 @@
  */
 
 #include "k3bmediacache.h"
+#include "k3bmediacache_p.h"
 #include "k3bmedium.h"
 #include "k3bmedium_p.h"
 #include "k3bcddb.h"
@@ -36,40 +37,39 @@
 
 
 
-
-K3bMediaCache::DeviceEntry::DeviceEntry( K3bMediaCache* c, K3bDevice::Device* dev )
+K3b::MediaCache::DeviceEntry::DeviceEntry( K3b::MediaCache* c, K3b::Device::Device* dev )
     : medium(dev),
       blockedId(0),
       cache(c)
 {
-    thread = new K3bMediaCache::PollThread( this );
-    connect( thread, SIGNAL( mediumChanged( K3bDevice::Device* ) ),
-             c, SLOT( _k_mediumChanged( K3bDevice::Device* ) ),
+    thread = new K3b::MediaCache::PollThread( this );
+    connect( thread, SIGNAL( mediumChanged( K3b::Device::Device* ) ),
+             c, SLOT( _k_mediumChanged( K3b::Device::Device* ) ),
              Qt::QueuedConnection );
-    connect( thread, SIGNAL( checkingMedium( K3bDevice::Device*, QString ) ),
-             c, SIGNAL( checkingMedium( K3bDevice::Device*, QString ) ),
+    connect( thread, SIGNAL( checkingMedium( K3b::Device::Device*, QString ) ),
+             c, SIGNAL( checkingMedium( K3b::Device::Device*, QString ) ),
              Qt::QueuedConnection );
 }
 
 
-K3bMediaCache::DeviceEntry::~DeviceEntry()
+K3b::MediaCache::DeviceEntry::~DeviceEntry()
 {
     delete thread;
 }
 
 
-void K3bMediaCache::PollThread::run()
+void K3b::MediaCache::PollThread::run()
 {
     while( m_deviceEntry->blockedId == 0 ) {
         bool unitReady = m_deviceEntry->medium.device()->testUnitReady();
-        bool mediumCached = ( m_deviceEntry->medium.diskInfo().diskState() != K3bDevice::STATE_NO_MEDIA );
+        bool mediumCached = ( m_deviceEntry->medium.diskInfo().diskState() != K3b::Device::STATE_NO_MEDIA );
 
         //
         // we only get the other information in case the disk state changed or if we have
         // no info at all (FIXME: there are drives around that are not able to provide a proper
         // disk state)
         //
-        if( m_deviceEntry->medium.diskInfo().diskState() == K3bDevice::STATE_UNKNOWN ||
+        if( m_deviceEntry->medium.diskInfo().diskState() == K3b::Device::STATE_UNKNOWN ||
             unitReady != mediumCached ) {
 
             if( m_deviceEntry->blockedId == 0 )
@@ -78,7 +78,7 @@ void K3bMediaCache::PollThread::run()
             //
             // The medium has changed. We need to update the information.
             //
-            K3bMedium m( m_deviceEntry->medium.device() );
+            K3b::Medium m( m_deviceEntry->medium.device() );
             m.update();
 
             // block the info since it is not valid anymore
@@ -110,24 +110,24 @@ void K3bMediaCache::PollThread::run()
 // ////////////////////////////////////////////////////////////////////////////////
 
 
-class K3bMediaCache::Private
+class K3b::MediaCache::Private
 {
 public:
-    QMap<K3bDevice::Device*, DeviceEntry*> deviceMap;
+    QMap<K3b::Device::Device*, DeviceEntry*> deviceMap;
     KCDDB::Client cddbClient;
 
-    K3bMediaCache* q;
+    K3b::MediaCache* q;
 
-    void _k_mediumChanged( K3bDevice::Device* );
+    void _k_mediumChanged( K3b::Device::Device* );
     void _k_cddbJobFinished( KJob* job );
 };
 
 
 // called from the device thread which updated the medium
-void K3bMediaCache::Private::_k_mediumChanged( K3bDevice::Device* dev )
+void K3b::MediaCache::Private::_k_mediumChanged( K3b::Device::Device* dev )
 {
-    if ( q->medium( dev ).content() & K3bMedium::CONTENT_AUDIO ) {
-        K3bCDDB::CDDBJob* job = K3bCDDB::CDDBJob::queryCddb( q->medium( dev ) );
+    if ( q->medium( dev ).content() & K3b::Medium::CONTENT_AUDIO ) {
+        K3b::CDDB::CDDBJob* job = K3b::CDDB::CDDBJob::queryCddb( q->medium( dev ) );
         connect( job, SIGNAL( result( KJob* ) ),
                  q, SLOT( _k_cddbJobFinished( KJob* ) ) );
         emit q->checkingMedium( dev, i18n( "CDDB Lookup" ) );
@@ -139,10 +139,10 @@ void K3bMediaCache::Private::_k_mediumChanged( K3bDevice::Device* dev )
 
 
 // once the cddb job is finished the medium is really updated
-void K3bMediaCache::Private::_k_cddbJobFinished( KJob* job )
+void K3b::MediaCache::Private::_k_cddbJobFinished( KJob* job )
 {
-    K3bCDDB::CDDBJob* cddbJob = dynamic_cast<K3bCDDB::CDDBJob*>( job );
-    K3bMedium oldMedium = cddbJob->medium();
+    K3b::CDDB::CDDBJob* cddbJob = dynamic_cast<K3b::CDDB::CDDBJob*>( job );
+    K3b::Medium oldMedium = cddbJob->medium();
 
     // make sure the medium did not change during the job
     if ( oldMedium.sameMedium( q->medium( oldMedium.device() ) ) ) {
@@ -157,7 +157,7 @@ void K3bMediaCache::Private::_k_cddbJobFinished( KJob* job )
 
 
 
-K3bMediaCache::K3bMediaCache( QObject* parent )
+K3b::MediaCache::MediaCache( QObject* parent )
     : QObject( parent ),
       d( new Private() )
 {
@@ -165,14 +165,14 @@ K3bMediaCache::K3bMediaCache( QObject* parent )
 }
 
 
-K3bMediaCache::~K3bMediaCache()
+K3b::MediaCache::~MediaCache()
 {
     clearDeviceList();
     delete d;
 }
 
 
-int K3bMediaCache::blockDevice( K3bDevice::Device* dev )
+int K3b::MediaCache::blockDevice( K3b::Device::Device* dev )
 {
     DeviceEntry* e = findDeviceEntry( dev );
     if( e ) {
@@ -199,13 +199,13 @@ int K3bMediaCache::blockDevice( K3bDevice::Device* dev )
 }
 
 
-bool K3bMediaCache::unblockDevice( K3bDevice::Device* dev, int id )
+bool K3b::MediaCache::unblockDevice( K3b::Device::Device* dev, int id )
 {
     DeviceEntry* e = findDeviceEntry( dev );
     if( e && e->blockedId && e->blockedId == id ) {
         e->blockedId = 0;
 
-        e->medium = K3bMedium( dev );
+        e->medium = K3b::Medium( dev );
         emit mediumChanged( dev );
 
         // restart the poll thread
@@ -218,7 +218,7 @@ bool K3bMediaCache::unblockDevice( K3bDevice::Device* dev, int id )
 }
 
 
-bool K3bMediaCache::isBlocked( K3bDevice::Device* dev )
+bool K3b::MediaCache::isBlocked( K3b::Device::Device* dev )
 {
     if( DeviceEntry* e = findDeviceEntry( dev ) )
         return ( e->blockedId != 0 );
@@ -227,59 +227,59 @@ bool K3bMediaCache::isBlocked( K3bDevice::Device* dev )
 }
 
 
-K3bMedium K3bMediaCache::medium( K3bDevice::Device* dev )
+K3b::Medium K3b::MediaCache::medium( K3b::Device::Device* dev )
 {
     if( DeviceEntry* e = findDeviceEntry( dev ) ) {
         e->mutex.lock();
-        K3bMedium m = e->medium;
+        K3b::Medium m = e->medium;
         e->mutex.unlock();
         return m;
     }
     else
-        return K3bMedium();
+        return K3b::Medium();
 }
 
 
-K3bDevice::DiskInfo K3bMediaCache::diskInfo( K3bDevice::Device* dev )
+K3b::Device::DiskInfo K3b::MediaCache::diskInfo( K3b::Device::Device* dev )
 {
     if( DeviceEntry* e = findDeviceEntry( dev ) ) {
         e->mutex.lock();
-        K3bDevice::DiskInfo di = e->medium.diskInfo();
+        K3b::Device::DiskInfo di = e->medium.diskInfo();
         e->mutex.unlock();
         return di;
     }
     else
-        return K3bDevice::DiskInfo();
+        return K3b::Device::DiskInfo();
 }
 
 
-K3bDevice::Toc K3bMediaCache::toc( K3bDevice::Device* dev )
+K3b::Device::Toc K3b::MediaCache::toc( K3b::Device::Device* dev )
 {
     if( DeviceEntry* e = findDeviceEntry( dev ) ) {
         e->mutex.lock();
-        K3bDevice::Toc toc = e->medium.toc();
+        K3b::Device::Toc toc = e->medium.toc();
         e->mutex.unlock();
         return toc;
     }
     else
-        return K3bDevice::Toc();
+        return K3b::Device::Toc();
 }
 
 
-K3bDevice::CdText K3bMediaCache::cdText( K3bDevice::Device* dev )
+K3b::Device::CdText K3b::MediaCache::cdText( K3b::Device::Device* dev )
 {
     if( DeviceEntry* e = findDeviceEntry( dev ) ) {
         e->mutex.lock();
-        K3bDevice::CdText cdt = e->medium.cdText();
+        K3b::Device::CdText cdt = e->medium.cdText();
         e->mutex.unlock();
         return cdt;
     }
     else
-        return K3bDevice::CdText();
+        return K3b::Device::CdText();
 }
 
 
-QList<int> K3bMediaCache::writingSpeeds( K3bDevice::Device* dev )
+QList<int> K3b::MediaCache::writingSpeeds( K3b::Device::Device* dev )
 {
     if( DeviceEntry* e = findDeviceEntry( dev ) ) {
         e->mutex.lock();
@@ -292,7 +292,7 @@ QList<int> K3bMediaCache::writingSpeeds( K3bDevice::Device* dev )
 }
 
 
-QString K3bMediaCache::mediumString( K3bDevice::Device* device, bool useContent )
+QString K3b::MediaCache::mediumString( K3b::Device::Device* device, bool useContent )
 {
     if( DeviceEntry* e = findDeviceEntry( device ) ) {
         return e->medium.shortString( useContent );
@@ -302,18 +302,18 @@ QString K3bMediaCache::mediumString( K3bDevice::Device* device, bool useContent 
 }
 
 
-void K3bMediaCache::clearDeviceList()
+void K3b::MediaCache::clearDeviceList()
 {
     kDebug() << k_funcinfo;
 
     // make all the threads stop
-    for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = d->deviceMap.begin();
+    for( QMap<K3b::Device::Device*, DeviceEntry*>::iterator it = d->deviceMap.begin();
          it != d->deviceMap.end(); ++it ) {
         it.value()->blockedId = 1;
     }
 
     // and remove them
-    for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = d->deviceMap.begin();
+    for( QMap<K3b::Device::Device*, DeviceEntry*>::iterator it = d->deviceMap.begin();
          it != d->deviceMap.end(); ++it ) {
         kDebug() << k_funcinfo << " waiting for info thread " << it.key()->blockDeviceName() << " to finish";
         it.value()->thread->wait();
@@ -324,27 +324,27 @@ void K3bMediaCache::clearDeviceList()
 }
 
 
-void K3bMediaCache::buildDeviceList( K3bDevice::DeviceManager* dm )
+void K3b::MediaCache::buildDeviceList( K3b::Device::DeviceManager* dm )
 {
     // remember blocked ids
-    QMap<K3bDevice::Device*, int> blockedIds;
-    for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = d->deviceMap.begin();
+    QMap<K3b::Device::Device*, int> blockedIds;
+    for( QMap<K3b::Device::Device*, DeviceEntry*>::iterator it = d->deviceMap.begin();
          it != d->deviceMap.end(); ++it )
         blockedIds.insert( it.key(), it.value()->blockedId );
 
     clearDeviceList();
 
-    QList<K3bDevice::Device *> items(dm->allDevices());
-    for( QList<K3bDevice::Device *>::const_iterator it = items.constBegin();
+    QList<K3b::Device::Device *> items(dm->allDevices());
+    for( QList<K3b::Device::Device *>::const_iterator it = items.constBegin();
          it != items.constEnd(); ++it ) {
         d->deviceMap.insert( *it, new DeviceEntry( this, *it ) );
-        QMap<K3bDevice::Device*, int>::const_iterator bi_it = blockedIds.constFind( *it );
+        QMap<K3b::Device::Device*, int>::const_iterator bi_it = blockedIds.constFind( *it );
         if( bi_it != blockedIds.constEnd() )
             d->deviceMap[*it]->blockedId = bi_it.value();
     }
 
     // start all the polling threads
-    for( QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = d->deviceMap.begin();
+    for( QMap<K3b::Device::Device*, DeviceEntry*>::iterator it = d->deviceMap.begin();
          it != d->deviceMap.end(); ++it ) {
         if( !it.value()->blockedId )
             it.value()->thread->start();
@@ -352,9 +352,9 @@ void K3bMediaCache::buildDeviceList( K3bDevice::DeviceManager* dm )
 }
 
 
-K3bMediaCache::DeviceEntry* K3bMediaCache::findDeviceEntry( K3bDevice::Device* dev )
+K3b::MediaCache::DeviceEntry* K3b::MediaCache::findDeviceEntry( K3b::Device::Device* dev )
 {
-    QMap<K3bDevice::Device*, DeviceEntry*>::iterator it = d->deviceMap.find( dev );
+    QMap<K3b::Device::Device*, DeviceEntry*>::iterator it = d->deviceMap.find( dev );
     if( it != d->deviceMap.end() )
         return it.value();
     else
@@ -362,11 +362,11 @@ K3bMediaCache::DeviceEntry* K3bMediaCache::findDeviceEntry( K3bDevice::Device* d
 }
 
 
-void K3bMediaCache::lookupCddb( K3bDevice::Device* dev )
+void K3b::MediaCache::lookupCddb( K3b::Device::Device* dev )
 {
-    K3bMedium m = medium( dev );
-    if ( m.content() & K3bMedium::CONTENT_AUDIO ) {
-        K3bCDDB::CDDBJob* job = K3bCDDB::CDDBJob::queryCddb( m );
+    K3b::Medium m = medium( dev );
+    if ( m.content() & K3b::Medium::CONTENT_AUDIO ) {
+        K3b::CDDB::CDDBJob* job = K3b::CDDB::CDDBJob::queryCddb( m );
         connect( job, SIGNAL( result( KJob* ) ),
                  this, SLOT( _k_cddbJobFinished( KJob* ) ) );
         emit checkingMedium( dev, i18n( "CDDB Lookup" ) );
@@ -374,3 +374,4 @@ void K3bMediaCache::lookupCddb( K3bDevice::Device* dev )
 }
 
 #include "k3bmediacache.moc"
+#include "k3bmediacache_p.moc"

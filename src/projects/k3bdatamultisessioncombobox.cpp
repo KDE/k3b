@@ -28,7 +28,7 @@ static const int s_continueIndex = 3;
 static const int s_finishIndex = 4;
 
 
-K3bDataMultiSessionCombobox::K3bDataMultiSessionCombobox( QWidget* parent )
+K3b::DataMultiSessionCombobox::DataMultiSessionCombobox( QWidget* parent )
     : QComboBox( parent ),
       m_forceNoMultiSession(false)
 {
@@ -60,12 +60,12 @@ K3bDataMultiSessionCombobox::K3bDataMultiSessionCombobox( QWidget* parent )
 }
 
 
-K3bDataMultiSessionCombobox::~K3bDataMultiSessionCombobox()
+K3b::DataMultiSessionCombobox::~DataMultiSessionCombobox()
 {
 }
 
 
-void K3bDataMultiSessionCombobox::init( bool force )
+void K3b::DataMultiSessionCombobox::init( bool force )
 {
     m_forceNoMultiSession = force;
 
@@ -81,24 +81,24 @@ void K3bDataMultiSessionCombobox::init( bool force )
 }
 
 
-K3bDataDoc::MultiSessionMode K3bDataMultiSessionCombobox::multiSessionMode() const
+K3b::DataDoc::MultiSessionMode K3b::DataMultiSessionCombobox::multiSessionMode() const
 {
     switch( currentIndex() ) {
     case s_noneIndex:
-        return K3bDataDoc::NONE;
+        return K3b::DataDoc::NONE;
     case s_startIndex:
-        return K3bDataDoc::START;
+        return K3b::DataDoc::START;
     case s_continueIndex:
-        return K3bDataDoc::CONTINUE;
+        return K3b::DataDoc::CONTINUE;
     case s_finishIndex:
-        return K3bDataDoc::FINISH;
+        return K3b::DataDoc::FINISH;
     default:
-        return K3bDataDoc::AUTO;
+        return K3b::DataDoc::AUTO;
     }
 }
 
 
-void K3bDataMultiSessionCombobox::saveConfig( KConfigGroup c )
+void K3b::DataMultiSessionCombobox::saveConfig( KConfigGroup c )
 {
     QString s;
     switch( currentIndex() ) {
@@ -123,40 +123,40 @@ void K3bDataMultiSessionCombobox::saveConfig( KConfigGroup c )
 }
 
 
-void K3bDataMultiSessionCombobox::loadConfig( const KConfigGroup& c )
+void K3b::DataMultiSessionCombobox::loadConfig( const KConfigGroup& c )
 {
     QString s = c.readEntry( "multisession mode" );
     if( s == "none" )
-        setMultiSessionMode( K3bDataDoc::NONE );
+        setMultiSessionMode( K3b::DataDoc::NONE );
     else if( s == "start" )
-        setMultiSessionMode( K3bDataDoc::START );
+        setMultiSessionMode( K3b::DataDoc::START );
     else if( s == "continue" )
-        setMultiSessionMode( K3bDataDoc::CONTINUE );
+        setMultiSessionMode( K3b::DataDoc::CONTINUE );
     else if( s == "finish" )
-        setMultiSessionMode( K3bDataDoc::FINISH );
+        setMultiSessionMode( K3b::DataDoc::FINISH );
     else
-        setMultiSessionMode( K3bDataDoc::AUTO );
+        setMultiSessionMode( K3b::DataDoc::AUTO );
 }
 
 
-void K3bDataMultiSessionCombobox::setMultiSessionMode( K3bDataDoc::MultiSessionMode m )
+void K3b::DataMultiSessionCombobox::setMultiSessionMode( K3b::DataDoc::MultiSessionMode m )
 {
     switch( m ) {
-    case K3bDataDoc::AUTO:
+    case K3b::DataDoc::AUTO:
         setCurrentIndex( s_autoIndex );
         break;
-    case K3bDataDoc::NONE:
+    case K3b::DataDoc::NONE:
         setCurrentIndex( s_noneIndex );
         break;
-    case K3bDataDoc::START:
+    case K3b::DataDoc::START:
         if( !m_forceNoMultiSession )
             setCurrentIndex( s_startIndex );
         break;
-    case K3bDataDoc::CONTINUE:
+    case K3b::DataDoc::CONTINUE:
         if( !m_forceNoMultiSession )
             setCurrentIndex( s_continueIndex );
         break;
-    case K3bDataDoc::FINISH:
+    case K3b::DataDoc::FINISH:
         if( !m_forceNoMultiSession )
             setCurrentIndex( s_finishIndex );
         break;
@@ -164,10 +164,10 @@ void K3bDataMultiSessionCombobox::setMultiSessionMode( K3bDataDoc::MultiSessionM
 }
 
 
-void K3bDataMultiSessionCombobox::setForceNoMultisession( bool f )
+void K3b::DataMultiSessionCombobox::setForceNoMultisession( bool f )
 {
     if( f != m_forceNoMultiSession ) {
-        K3bDataDoc::MultiSessionMode m = multiSessionMode();
+        K3b::DataDoc::MultiSessionMode m = multiSessionMode();
         init( f );
         setMultiSessionMode( m );
     }

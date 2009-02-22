@@ -45,34 +45,34 @@
 #include <QGridLayout>
 
 
-K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent )
-    : K3bProjectBurnDialog( doc, parent ),
+K3b::MovixBurnDialog::MovixBurnDialog( K3b::MovixDoc* doc, QWidget* parent )
+    : K3b::ProjectBurnDialog( doc, parent ),
       m_doc(doc)
 {
     prepareGui();
 
-    m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
+    m_tempDirSelectionWidget->setSelectionMode( K3b::TempDirSelectionWidget::FILE );
 
     setTitle( i18n("eMovix Project"),
               i18np("1 file (%2)", "%1 files (%2)", m_doc->movixFileItems().count(),KIO::convertSize(m_doc->size())) );
 
-    m_movixOptionsWidget = new K3bMovixOptionsWidget( this );
+    m_movixOptionsWidget = new K3b::MovixOptionsWidget( this );
     addPage( m_movixOptionsWidget, i18n("eMovix") );
 
     // create image settings tab
-    m_imageSettingsWidget = new K3bDataImageSettingsWidget( this );
+    m_imageSettingsWidget = new K3b::DataImageSettingsWidget( this );
     addPage( m_imageSettingsWidget, i18n("Filesystem") );
 
     setupSettingsPage();
 
     // for now we just put the verify checkbox on the main page...
-    m_checkVerify = K3bStdGuiItems::verifyCheckBox( m_optionGroup );
+    m_checkVerify = K3b::StdGuiItems::verifyCheckBox( m_optionGroup );
     m_optionGroupLayout->addWidget( m_checkVerify );
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
     m_optionGroupLayout->addItem( spacer );
 
-    m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
+    m_tempDirSelectionWidget->setSelectionMode( K3b::TempDirSelectionWidget::FILE );
     QString path = m_doc->tempDir();
     if( !path.isEmpty() ) {
         m_tempDirSelectionWidget->setTempPath( path );
@@ -86,12 +86,12 @@ K3bMovixBurnDialog::K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent )
 }
 
 
-K3bMovixBurnDialog::~K3bMovixBurnDialog()
+K3b::MovixBurnDialog::~MovixBurnDialog()
 {
 }
 
 
-void K3bMovixBurnDialog::setupSettingsPage()
+void K3b::MovixBurnDialog::setupSettingsPage()
 {
     QWidget* frame = new QWidget( this );
     QGridLayout* frameLayout = new QGridLayout( frame );
@@ -99,14 +99,14 @@ void K3bMovixBurnDialog::setupSettingsPage()
     frameLayout->setMargin( marginHint() );
 
     QGroupBox* groupDataMode = new QGroupBox( i18n("Datatrack Mode"), frame );
-    m_dataModeWidget = new K3bDataModeWidget( groupDataMode );
+    m_dataModeWidget = new K3b::DataModeWidget( groupDataMode );
     QVBoxLayout* groupDataModeLayout = new QVBoxLayout( groupDataMode );
     groupDataModeLayout->setMargin( marginHint() );
     groupDataModeLayout->setSpacing( spacingHint() );
     groupDataModeLayout->addWidget( m_dataModeWidget );
 
     QGroupBox* groupMultisession = new QGroupBox( i18n("Multisession"), frame );
-    m_checkStartMultiSesssion = K3bStdGuiItems::startMultisessionCheckBox( groupMultisession );
+    m_checkStartMultiSesssion = K3b::StdGuiItems::startMultisessionCheckBox( groupMultisession );
     QVBoxLayout* groupMultisessionLayout = new QVBoxLayout( groupMultisession );
     groupMultisessionLayout->setMargin( marginHint() );
     groupMultisessionLayout->setSpacing( spacingHint() );
@@ -120,14 +120,14 @@ void K3bMovixBurnDialog::setupSettingsPage()
 }
 
 
-void K3bMovixBurnDialog::loadK3bDefaults()
+void K3b::MovixBurnDialog::loadK3bDefaults()
 {
-    K3bProjectBurnDialog::loadK3bDefaults();
+    K3b::ProjectBurnDialog::loadK3bDefaults();
 
     m_checkStartMultiSesssion->setChecked( false );
     m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
 
-    m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
+    m_imageSettingsWidget->load( K3b::IsoOptions::defaults() );
 
     m_movixOptionsWidget->loadDefaults();
 
@@ -137,15 +137,15 @@ void K3bMovixBurnDialog::loadK3bDefaults()
 }
 
 
-void K3bMovixBurnDialog::loadUserDefaults( const KConfigGroup& c )
+void K3b::MovixBurnDialog::loadUserDefaults( const KConfigGroup& c )
 {
-    K3bProjectBurnDialog::loadUserDefaults(c);
+    K3b::ProjectBurnDialog::loadUserDefaults(c);
 
     m_checkStartMultiSesssion->setChecked( c.readEntry( "start_multisession", false ) );
 
     m_dataModeWidget->loadConfig(c);
 
-    K3bIsoOptions o = K3bIsoOptions::load( c );
+    K3b::IsoOptions o = K3b::IsoOptions::load( c );
     m_imageSettingsWidget->load( o );
 
     m_movixOptionsWidget->loadConfig(c);
@@ -156,15 +156,15 @@ void K3bMovixBurnDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3bMovixBurnDialog::saveUserDefaults( KConfigGroup c )
+void K3b::MovixBurnDialog::saveUserDefaults( KConfigGroup c )
 {
-    K3bProjectBurnDialog::saveUserDefaults(c);
+    K3b::ProjectBurnDialog::saveUserDefaults(c);
 
     c.writeEntry( "start_multisession", m_checkStartMultiSesssion->isChecked() );
 
     m_dataModeWidget->saveConfig(c);
 
-    K3bIsoOptions o;
+    K3b::IsoOptions o;
     m_imageSettingsWidget->save( o );
     o.save( c );
 
@@ -174,16 +174,16 @@ void K3bMovixBurnDialog::saveUserDefaults( KConfigGroup c )
 }
 
 
-void K3bMovixBurnDialog::saveSettings()
+void K3b::MovixBurnDialog::saveSettings()
 {
-    K3bProjectBurnDialog::saveSettings();
+    K3b::ProjectBurnDialog::saveSettings();
 
     m_movixOptionsWidget->saveSettings( m_doc );
 
-    m_doc->setMultiSessionMode( m_checkStartMultiSesssion->isChecked() ? K3bDataDoc::START : K3bDataDoc::NONE );
+    m_doc->setMultiSessionMode( m_checkStartMultiSesssion->isChecked() ? K3b::DataDoc::START : K3b::DataDoc::NONE );
 
     // save iso image settings
-    K3bIsoOptions o = m_doc->isoOptions();
+    K3b::IsoOptions o = m_doc->isoOptions();
     m_imageSettingsWidget->save( o );
     m_doc->setIsoOptions( o );
 
@@ -196,11 +196,11 @@ void K3bMovixBurnDialog::saveSettings()
 }
 
 
-void K3bMovixBurnDialog::readSettings()
+void K3b::MovixBurnDialog::readSettings()
 {
-    K3bProjectBurnDialog::readSettings();
+    K3b::ProjectBurnDialog::readSettings();
 
-    m_checkStartMultiSesssion->setChecked( m_doc->multiSessionMode() == K3bDataDoc::START );
+    m_checkStartMultiSesssion->setChecked( m_doc->multiSessionMode() == K3b::DataDoc::START );
 
     m_checkVerify->setChecked( m_doc->verifyData() );
 
@@ -214,7 +214,7 @@ void K3bMovixBurnDialog::readSettings()
         m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() + doc()->name() + ".iso" );
 
     // first of all we need a movix installation object
-    const K3bMovixBin* bin = dynamic_cast<const K3bMovixBin*>( k3bcore->externalBinManager()->binObject("eMovix") );
+    const K3b::MovixBin* bin = dynamic_cast<const K3b::MovixBin*>( k3bcore->externalBinManager()->binObject("eMovix") );
     if( bin ) {
         m_movixOptionsWidget->init( bin );
         m_movixOptionsWidget->readSettings( m_doc );
@@ -226,7 +226,7 @@ void K3bMovixBurnDialog::readSettings()
 }
 
 
-void K3bMovixBurnDialog::slotStartClicked()
+void K3b::MovixBurnDialog::slotStartClicked()
 {
     if( m_checkOnlyCreateImage->isChecked() ||
         m_checkCacheImage->isChecked() ) {
@@ -253,13 +253,13 @@ void K3bMovixBurnDialog::slotStartClicked()
             return;
 
 
-    K3bProjectBurnDialog::slotStartClicked();
+    K3b::ProjectBurnDialog::slotStartClicked();
 }
 
 
-void K3bMovixBurnDialog::toggleAll()
+void K3b::MovixBurnDialog::toggleAll()
 {
-    K3bProjectBurnDialog::toggleAll();
+    K3b::ProjectBurnDialog::toggleAll();
 
     if( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() ) {
         m_checkVerify->setChecked(false);
@@ -270,7 +270,7 @@ void K3bMovixBurnDialog::toggleAll()
 
     // we can only select the data mode for CD media
     m_dataModeWidget->setDisabled( m_checkOnlyCreateImage->isChecked() ||
-                                   !K3bDevice::isCdMedia( k3bappcore->mediaCache()->diskInfo( m_writerSelectionWidget->writerDevice() ).mediaType() ) );
+                                   !K3b::Device::isCdMedia( k3bappcore->mediaCache()->diskInfo( m_writerSelectionWidget->writerDevice() ).mediaType() ) );
     m_checkStartMultiSesssion->setDisabled( m_checkOnlyCreateImage->isChecked() );
 }
 

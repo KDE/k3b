@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
@@ -22,85 +22,87 @@
 #include <qfile.h>
 
 class QString;
-class K3bAbstractWriter;
-class K3bIsoImager;
 
-namespace K3bDevice {
+namespace K3b {
+
+    class AbstractWriter;
+    class IsoImager;
+
+    namespace Device {
+        class Device;
+    }
+
+    class DataJob : public BurnJob
+    {
+        Q_OBJECT
+
+    public:
+        DataJob( DataDoc*, JobHandler*, QObject* parent = 0 );
+        virtual ~DataJob();
+
+        Doc* doc() const;
+        Device::Device* writer() const;
+
+        virtual bool hasBeenCanceled() const;
+
+        virtual QString jobDescription() const;
+        virtual QString jobDetails() const;
+
+    public Q_SLOTS:
+        void cancel();
+        void start();
+
+        /**
+         * Used to specify a non-default writer.
+         * If this does notget called DataJob determines
+         * the writer itself.
+         */
+        void setWriterJob( AbstractWriter* );
+        void setImager( IsoImager* );
+
+    protected Q_SLOTS:
+        void slotIsoImagerFinished( bool success );
+        void slotIsoImagerPercent(int);
+        void slotWriterJobPercent( int p );
+        void slotWriterNextTrack( int t, int tt );
+        void slotWriterJobFinished( bool success );
+        void slotVerificationProgress( int );
+        void slotVerificationFinished( bool );
+        void writeImage();
+        void cancelAll();
+
+        /**
+         * Just a little helper method that makes subclassing easier.
+         * Basically used for DVD writing.
+         */
+        virtual bool waitForMedium();
+
+    private Q_SLOTS:
+        void slotMultiSessionParamterSetupDone( bool );
+
+    protected:
+        virtual bool prepareWriterJob();
+        virtual void prepareImager();
+        virtual void cleanup();
+
+        DataDoc::MultiSessionMode usedMultiSessionMode() const;
+
+        AbstractWriter* m_writerJob;
+        IsoImager* m_isoImager;
+
+    private:
+        bool analyseBurnMedium( int medium );
+        bool startWriterJob();
+        bool startOnTheFlyWriting();
+        void prepareWriting();
+        void connectImager();
+        bool setupCdrecordJob();
+        bool setupCdrdaoJob();
+        bool setupGrowisofsJob();
+
+        class Private;
+        Private* d;
+    };
 }
-
-/**
- *@author Sebastian Trueg
- */
-class K3bDataJob : public K3bBurnJob
-{
-    Q_OBJECT
-	
-public:
-    K3bDataJob( K3bDataDoc*, K3bJobHandler*, QObject* parent = 0 );
-    virtual ~K3bDataJob();
-	
-    K3bDoc* doc() const;
-    K3bDevice::Device* writer() const;
-
-    virtual bool hasBeenCanceled() const;
-
-    virtual QString jobDescription() const;
-    virtual QString jobDetails() const;
-		
-public Q_SLOTS:
-    void cancel();
-    void start();
-
-    /**
-     * Used to specify a non-default writer.
-     * If this does notget called K3bDataJob determines
-     * the writer itself.
-     */
-    void setWriterJob( K3bAbstractWriter* );
-    void setImager( K3bIsoImager* );
-
-protected Q_SLOTS:
-    void slotIsoImagerFinished( bool success );
-    void slotIsoImagerPercent(int);
-    void slotWriterJobPercent( int p );
-    void slotWriterNextTrack( int t, int tt );
-    void slotWriterJobFinished( bool success );
-    void slotVerificationProgress( int );
-    void slotVerificationFinished( bool );
-    void writeImage();
-    void cancelAll();
-
-    /**
-     * Just a little helper method that makes subclassing easier.
-     * Basically used for DVD writing.
-     */
-    virtual bool waitForMedium();
-
-private Q_SLOTS:
-    void slotMultiSessionParamterSetupDone( bool );
-		
-protected:
-    virtual bool prepareWriterJob();
-    virtual void prepareImager();
-    virtual void cleanup();
-
-    K3bDataDoc::MultiSessionMode usedMultiSessionMode() const;
-
-    K3bAbstractWriter* m_writerJob;
-    K3bIsoImager* m_isoImager;
-
-private:
-    bool analyseBurnMedium( int medium );
-    bool startWriterJob();
-    bool startOnTheFlyWriting();
-    void prepareWriting();
-    void connectImager();
-    bool setupCdrecordJob();
-    bool setupCdrdaoJob();
-    bool setupGrowisofsJob();
-
-    class Private;
-    Private* d;
-};
 
 #endif

@@ -17,7 +17,7 @@
 #include <QtCore/QMutex>
 
 
-K3bThreadJobCommunicationEvent::K3bThreadJobCommunicationEvent( int type )
+K3b::ThreadJobCommunicationEvent::ThreadJobCommunicationEvent( int type )
     : QEvent( QEvent::User ),
       m_type( type ),
       m_device( 0 ),
@@ -28,78 +28,78 @@ K3bThreadJobCommunicationEvent::K3bThreadJobCommunicationEvent( int type )
 }
 
 
-K3bThreadJobCommunicationEvent::~K3bThreadJobCommunicationEvent()
+K3b::ThreadJobCommunicationEvent::~ThreadJobCommunicationEvent()
 {
 }
 
 
-int K3bThreadJobCommunicationEvent::type() const
+int K3b::ThreadJobCommunicationEvent::type() const
 {
     return m_type;
 }
 
 
-K3bDevice::Device* K3bThreadJobCommunicationEvent::device() const
+K3b::Device::Device* K3b::ThreadJobCommunicationEvent::device() const
 {
     return m_device;
 }
 
 
-int K3bThreadJobCommunicationEvent::wantedMediaState() const
+int K3b::ThreadJobCommunicationEvent::wantedMediaState() const
 {
     return m_wantedMediaState;
 }
 
 
-int K3bThreadJobCommunicationEvent::wantedMediaType() const
+int K3b::ThreadJobCommunicationEvent::wantedMediaType() const
 {
     return m_wantedMediaType;
 }
 
 
-QString K3bThreadJobCommunicationEvent::message() const
+QString K3b::ThreadJobCommunicationEvent::message() const
 {
     return m_text;
 }
 
 
-QString K3bThreadJobCommunicationEvent::text() const
+QString K3b::ThreadJobCommunicationEvent::text() const
 {
     return m_text;
 }
 
 
-QString K3bThreadJobCommunicationEvent::caption() const
+QString K3b::ThreadJobCommunicationEvent::caption() const
 {
     return m_caption;
 }
 
 
-QString K3bThreadJobCommunicationEvent::yesText() const
+QString K3b::ThreadJobCommunicationEvent::yesText() const
 {
     return m_yesText;
 }
 
 
-QString K3bThreadJobCommunicationEvent::noText() const
+QString K3b::ThreadJobCommunicationEvent::noText() const
 {
     return m_noText;
 }
 
 
-int K3bThreadJobCommunicationEvent::intResult() const
+int K3b::ThreadJobCommunicationEvent::intResult() const
 {
     return m_result;
 }
 
 
-bool K3bThreadJobCommunicationEvent::boolResult() const
+bool K3b::ThreadJobCommunicationEvent::boolResult() const
 {
     return ( m_result != 0 );
 }
 
 
-void K3bThreadJobCommunicationEvent::wait()
+void K3b::ThreadJobCommunicationEvent::wait()
 {
     QMutex mutex;
     mutex.lock();
@@ -108,19 +108,19 @@ void K3bThreadJobCommunicationEvent::wait()
 }
 
 
-void K3bThreadJobCommunicationEvent::done( int result )
+void K3b::ThreadJobCommunicationEvent::done( int result )
 {
     m_result = result;
     m_threader.wakeAll();
 }
 
 
-K3bThreadJobCommunicationEvent* K3bThreadJobCommunicationEvent::waitForMedium( K3bDevice::Device* device,
+K3b::ThreadJobCommunicationEvent* K3b::ThreadJobCommunicationEvent::waitForMedium( K3b::Device::Device* device,
                                                                                int mediaState,
                                                                                int mediaType,
                                                                                const QString& message )
 {
-    K3bThreadJobCommunicationEvent* event = new K3bThreadJobCommunicationEvent( WaitForMedium );
+    K3b::ThreadJobCommunicationEvent* event = new K3b::ThreadJobCommunicationEvent( WaitForMedium );
     event->m_device = device;
     event->m_wantedMediaState = mediaState;
     event->m_wantedMediaType = mediaType;
@@ -129,12 +129,12 @@ K3bThreadJobCommunicationEvent* K3bThreadJobCommunicationEvent::waitForMedium( K
 }
 
 
-K3bThreadJobCommunicationEvent* K3bThreadJobCommunicationEvent::questionYesNo( const QString& text,
+K3b::ThreadJobCommunicationEvent* K3b::ThreadJobCommunicationEvent::questionYesNo( const QString& text,
                                                                                const QString& caption,
                                                                                const QString& yesText,
                                                                                const QString& noText )
 {
-    K3bThreadJobCommunicationEvent* event = new K3bThreadJobCommunicationEvent( QuestionYesNo );
+    K3b::ThreadJobCommunicationEvent* event = new K3b::ThreadJobCommunicationEvent( QuestionYesNo );
     event->m_text = text;
     event->m_caption = caption;
     event->m_yesText = yesText;
@@ -143,10 +143,10 @@ K3bThreadJobCommunicationEvent* K3bThreadJobCommunicationEvent::questionYesNo( c
 }
 
 
-K3bThreadJobCommunicationEvent* K3bThreadJobCommunicationEvent::blockingInformation( const QString& text,
+K3b::ThreadJobCommunicationEvent* K3b::ThreadJobCommunicationEvent::blockingInformation( const QString& text,
                                                                                      const QString& caption )
 {
-    K3bThreadJobCommunicationEvent* event = new K3bThreadJobCommunicationEvent( BlockingInfo );
+    K3b::ThreadJobCommunicationEvent* event = new K3b::ThreadJobCommunicationEvent( BlockingInfo );
     event->m_text = text;
     event->m_caption = caption;
     return event;

@@ -14,7 +14,7 @@
 
 #include "k3bvideodvdvideostream.h"
 
-unsigned int K3bVideoDVD::VideoStream::pictureWidth() const
+unsigned int K3b::VideoDVD::VideoStream::pictureWidth() const
 {
   switch( pictureSize() ) {
   case VIDEO_PICTURE_SIZE_720:
@@ -30,7 +30,7 @@ unsigned int K3bVideoDVD::VideoStream::pictureWidth() const
 }
 
 
-unsigned int K3bVideoDVD::VideoStream::pictureHeight() const
+unsigned int K3b::VideoDVD::VideoStream::pictureHeight() const
 {
   int height = 480;
   if( format() != 0 )
@@ -42,10 +42,10 @@ unsigned int K3bVideoDVD::VideoStream::pictureHeight() const
 }
 
 
-unsigned int K3bVideoDVD::VideoStream::realPictureWidth() const
+unsigned int K3b::VideoDVD::VideoStream::realPictureWidth() const
 {
   double aspectRatio = 0.0;
-  if( displayAspectRatio() == K3bVideoDVD::VIDEO_ASPECT_RATIO_4_3 )
+  if( displayAspectRatio() == K3b::VideoDVD::VIDEO_ASPECT_RATIO_4_3 )
     aspectRatio = 4.0/3.0;
   else
     aspectRatio = 16.0/9.0;
@@ -53,7 +53,7 @@ unsigned int K3bVideoDVD::VideoStream::realPictureWidth() const
 }
 
 
-unsigned int K3bVideoDVD::VideoStream::realPictureHeight() const
+unsigned int K3b::VideoDVD::VideoStream::realPictureHeight() const
 {
   return pictureHeight();
 }

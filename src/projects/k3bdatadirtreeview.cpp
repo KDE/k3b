@@ -29,7 +29,7 @@
 #include <kdebug.h>
 
 
-class K3bDataDirTreeView::Private
+class K3b::DataDirTreeView::Private
 {
 public:
     Private() {
@@ -46,7 +46,7 @@ public:
 };
 
 
-K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget* parent )
+K3b::DataDirTreeView::DataDirTreeView( K3b::View* view, K3b::DataDoc* doc, QWidget* parent )
     : QTreeView( parent ), m_view(view)
 {
     d = new Private();
@@ -76,21 +76,21 @@ K3bDataDirTreeView::K3bDataDirTreeView( K3bView* view, K3bDataDoc* doc, QWidget*
 }
 
 
-K3bDataDirTreeView::~K3bDataDirTreeView()
+K3b::DataDirTreeView::~DataDirTreeView()
 {
     delete d;
 }
 
 
-K3bDataItem* K3bDataDirTreeView::itemAt( const QPoint& pos )
+K3b::DataItem* K3b::DataDirTreeView::itemAt( const QPoint& pos )
 {
     return d->model->itemForIndex( indexAt( pos ) );
 }
 
 
-K3bDirItem* K3bDataDirTreeView::selectedDir() const
+K3b::DirItem* K3b::DataDirTreeView::selectedDir() const
 {
-    if ( K3bDataItem* item = d->model->itemForIndex( selectionModel()->currentIndex() ) ) {
+    if ( K3b::DataItem* item = d->model->itemForIndex( selectionModel()->currentIndex() ) ) {
         return item->getDirItem();
     }
 //     QModelIndexList indices = selectionModel()->selectedRows();
@@ -103,17 +103,17 @@ K3bDirItem* K3bDataDirTreeView::selectedDir() const
 }
 
 
-void K3bDataDirTreeView::slotSelectionChanged( const QItemSelection& selected, const QItemSelection& )
+void K3b::DataDirTreeView::slotSelectionChanged( const QItemSelection& selected, const QItemSelection& )
 {
     QModelIndexList indexes = selected.indexes();
     if ( !indexes.isEmpty() ) {
-        K3bDirItem* dir = d->model->itemForIndex( indexes.first() )->getDirItem();
+        K3b::DirItem* dir = d->model->itemForIndex( indexes.first() )->getDirItem();
         emit dirSelected( dir );
     }
 }
 
 
-void K3bDataDirTreeView::setCurrentDir( K3bDirItem* dirItem )
+void K3b::DataDirTreeView::setCurrentDir( K3b::DirItem* dirItem )
 {
     selectionModel()->select( d->model->indexForItem( dirItem ), QItemSelectionModel::SelectCurrent );
 }
@@ -121,11 +121,11 @@ void K3bDataDirTreeView::setCurrentDir( K3bDirItem* dirItem )
 
 
 #if 0
-void K3bDataDirTreeView::startDropAnimation( K3bDirItem* dir )
+void K3b::DataDirTreeView::startDropAnimation( K3b::DirItem* dir )
 {
     stopDropAnimation();
 
-    K3bDataDirViewItem* vI = m_itemMap[dir];
+    K3b::DataDirViewItem* vI = m_itemMap[dir];
     if( vI ) {
         d->animationCounter = 0;
         d->animatedDirItem = vI;
@@ -135,7 +135,7 @@ void K3bDataDirTreeView::startDropAnimation( K3bDirItem* dir )
 }
 
 
-void K3bDataDirTreeView::slotDropAnimate()
+void K3b::DataDirTreeView::slotDropAnimate()
 {
     if( d->animatedDirItem ) {
         if( d->animationCounter > 5 )
@@ -169,7 +169,7 @@ void K3bDataDirTreeView::slotDropAnimate()
 }
 
 
-void K3bDataDirTreeView::stopDropAnimation()
+void K3b::DataDirTreeView::stopDropAnimation()
 {
     if( d->animatedDirItem ) {
         d->animatedDirItem->setPixmap( 0, d->beforeAniPixmap );

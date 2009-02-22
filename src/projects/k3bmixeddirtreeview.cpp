@@ -31,11 +31,11 @@
 #include <klocale.h>
 
 
-class K3bMixedDirTreeView::PrivateAudioRootViewItem : public K3bListViewItem
+class K3b::MixedDirTreeView::PrivateAudioRootViewItem : public K3b::ListViewItem
 {
 public:
-    PrivateAudioRootViewItem( K3bMixedDoc* doc, Q3ListView* parent, Q3ListViewItem* after )
-        : K3bListViewItem( parent, after ),
+    PrivateAudioRootViewItem( K3b::MixedDoc* doc, Q3ListView* parent, Q3ListViewItem* after )
+        : K3b::ListViewItem( parent, after ),
           m_doc(doc)
     {
         setPixmap( 0, SmallIcon("audio-x-generic") );
@@ -49,12 +49,12 @@ public:
     }
 
 private:
-    K3bMixedDoc* m_doc;
+    K3b::MixedDoc* m_doc;
 };
 
 
-K3bMixedDirTreeView::K3bMixedDirTreeView( K3bView* view, K3bMixedDoc* doc, QWidget* parent )
-    : K3bDataDirTreeView( view, doc->dataDoc(), parent ), m_doc(doc)
+K3b::MixedDirTreeView::MixedDirTreeView( K3b::View* view, K3b::MixedDoc* doc, QWidget* parent )
+    : K3b::DataDirTreeView( view, doc->dataDoc(), parent ), m_doc(doc)
 {
 //     m_audioRootItem = new PrivateAudioRootViewItem( doc, this, root() );
 
@@ -64,13 +64,13 @@ K3bMixedDirTreeView::K3bMixedDirTreeView( K3bView* view, K3bMixedDoc* doc, QWidg
 }
 
 
-K3bMixedDirTreeView::~K3bMixedDirTreeView()
+K3b::MixedDirTreeView::~MixedDirTreeView()
 {
 }
 
 #warning Port the mixed dragndrop to model/view
 #if 0
-void K3bMixedDirTreeView::slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3ListViewItem* after )
+void K3b::MixedDirTreeView::slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3ListViewItem* after )
 {
     if( !e->isAccepted() )
         return;
@@ -79,15 +79,15 @@ void K3bMixedDirTreeView::slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3
     if( droppedItem == m_audioRootItem ) {
         KUrl::List urls;
         if( K3URLDrag::decode( e, urls ) ) {
-            K3bAudioTrackAddingDialog::addUrls( urls, m_doc->audioDoc(), 0, 0, 0, this );
+            K3b::AudioTrackAddingDialog::addUrls( urls, m_doc->audioDoc(), 0, 0, 0, this );
         }
     }
     else
-        K3bDataDirTreeView::slotDropped( e, parent, after );
+        K3b::DataDirTreeView::slotDropped( e, parent, after );
 }
 
 
-void K3bMixedDirTreeView::slotSelectionChanged( Q3ListViewItem* i )
+void K3b::MixedDirTreeView::slotSelectionChanged( Q3ListViewItem* i )
 {
     if( i == m_audioRootItem )
         emit audioTreeSelected();
@@ -96,7 +96,7 @@ void K3bMixedDirTreeView::slotSelectionChanged( Q3ListViewItem* i )
 }
 
 
-void K3bMixedDirTreeView::slotNewAudioTracks()
+void K3b::MixedDirTreeView::slotNewAudioTracks()
 {
     // update the tracknumber
     m_audioRootItem->repaint();

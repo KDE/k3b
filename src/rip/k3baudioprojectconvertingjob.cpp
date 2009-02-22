@@ -35,7 +35,7 @@
 
 
 
-class K3bAudioProjectConvertingJob::Private
+class K3b::AudioProjectConvertingJob::Private
 {
 public:
     Private()
@@ -49,8 +49,8 @@ public:
     long long overallBytesRead;
     long long overallBytesToRead;
 
-    K3bAudioEncoder* encoder;
-    K3bWaveFileWriter* waveFileWriter;
+    K3b::AudioEncoder* encoder;
+    K3b::WaveFileWriter* waveFileWriter;
 
     bool canceled;
 
@@ -58,40 +58,40 @@ public:
 };
 
 
-K3bAudioProjectConvertingJob::K3bAudioProjectConvertingJob( K3bAudioDoc* doc, K3bJobHandler* hdl, QObject* parent )
-    : K3bThreadJob( hdl,  parent ),
+K3b::AudioProjectConvertingJob::AudioProjectConvertingJob( K3b::AudioDoc* doc, K3b::JobHandler* hdl, QObject* parent )
+    : K3b::ThreadJob( hdl,  parent ),
       m_doc(doc)
 {
     d = new Private();
 }
 
 
-K3bAudioProjectConvertingJob::~K3bAudioProjectConvertingJob()
+K3b::AudioProjectConvertingJob::~AudioProjectConvertingJob()
 {
     delete d->waveFileWriter;
     delete d;
 }
 
 
-void K3bAudioProjectConvertingJob::setFileType( const QString& t )
+void K3b::AudioProjectConvertingJob::setFileType( const QString& t )
 {
     d->fileType = t;
 }
 
 
-void K3bAudioProjectConvertingJob::setEncoder( K3bAudioEncoder* f )
+void K3b::AudioProjectConvertingJob::setEncoder( K3b::AudioEncoder* f )
 {
     d->encoder = f;
 }
 
 
-bool K3bAudioProjectConvertingJob::run()
+bool K3b::AudioProjectConvertingJob::run()
 {
     emit newTask( i18n("Converting Audio Tracks")  );
 
     if( !d->encoder )
         if( !d->waveFileWriter )
-            d->waveFileWriter = new K3bWaveFileWriter();
+            d->waveFileWriter = new K3b::WaveFileWriter();
 
 
     d->overallBytesRead = 0;
@@ -102,7 +102,7 @@ bool K3bAudioProjectConvertingJob::run()
 
         QString dir = filename.left( filename.lastIndexOf('/') );
         if( !KStandardDirs::makeDir( dir ) ) {
-            emit infoMessage( i18n("Unable to create directory %1",dir), K3bJob::ERROR );
+            emit infoMessage( i18n("Unable to create directory %1",dir), K3b::Job::ERROR );
             return false;
         }
 
@@ -112,32 +112,32 @@ bool K3bAudioProjectConvertingJob::run()
             isOpen = d->encoder->openFile( d->fileType, filename, m_doc->length() );
             if( isOpen ) {
                 // here we use cd Title and Artist
-                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST, m_cddbEntry.get( KCDDB::Artist ).toString() );
-                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE, m_cddbEntry.get( KCDDB::Title ).toString() );
-                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_COMMENT, m_cddbEntry.get( KCDDB::Comment ).toString() );
-                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_ARTIST, m_cddbEntry.get( KCDDB::Artist ).toString() );
-                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_TITLE, m_cddbEntry.get( KCDDB::Title ).toString() );
-                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_COMMENT, m_cddbEntry.get( KCDDB::Comment ).toString() );
-                d->encoder->setMetaData( K3bAudioEncoder::META_YEAR, QString::number(m_cddbEntry.get( KCDDB::Year ).toInt()) );
-                d->encoder->setMetaData( K3bAudioEncoder::META_GENRE, m_cddbEntry.get( KCDDB::Genre ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_ARTIST, m_cddbEntry.get( KCDDB::Artist ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_TITLE, m_cddbEntry.get( KCDDB::Title ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_COMMENT, m_cddbEntry.get( KCDDB::Comment ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_ALBUM_ARTIST, m_cddbEntry.get( KCDDB::Artist ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_ALBUM_TITLE, m_cddbEntry.get( KCDDB::Title ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_ALBUM_COMMENT, m_cddbEntry.get( KCDDB::Comment ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_YEAR, QString::number(m_cddbEntry.get( KCDDB::Year ).toInt()) );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_GENRE, m_cddbEntry.get( KCDDB::Genre ).toString() );
             }
             else
-                emit infoMessage( d->encoder->lastErrorString(), K3bJob::ERROR );
+                emit infoMessage( d->encoder->lastErrorString(), K3b::Job::ERROR );
         }
         else {
             isOpen = d->waveFileWriter->open( filename );
         }
 
         if( !isOpen ) {
-            emit infoMessage( i18n("Unable to open '%1' for writing.",filename), K3bJob::ERROR );
+            emit infoMessage( i18n("Unable to open '%1' for writing.",filename), K3b::Job::ERROR );
             return false;
         }
 
-        emit infoMessage( i18n("Converting to single file '%1'.",filename), K3bJob::INFO );
+        emit infoMessage( i18n("Converting to single file '%1'.",filename), K3b::Job::INFO );
     }
 
     bool success = true;
-    K3bAudioTrack* track = m_doc->firstTrack();
+    K3b::AudioTrack* track = m_doc->firstTrack();
     unsigned int i = 0;
     while( track ) {
         d->currentTrackIndex = i;
@@ -146,7 +146,7 @@ bool K3bAudioProjectConvertingJob::run()
             break;
         }
 
-        emit infoMessage( i18n("Successfully converted track %1.",QString::number(i+1)), K3bJob::INFO );
+        emit infoMessage( i18n("Successfully converted track %1.",QString::number(i+1)), K3b::Job::INFO );
 
         track = track->next();
         ++i;
@@ -171,7 +171,7 @@ bool K3bAudioProjectConvertingJob::run()
         if( d->currentTrackIndex >= 0 && d->currentTrackIndex < (int)m_tracks.count() ) {
             if( QFile::exists( m_tracks[d->currentTrackIndex].second ) ) {
                 QFile::remove( m_tracks[d->currentTrackIndex].second );
-                emit infoMessage( i18n("Removed partial file '%1'.",m_tracks[d->currentTrackIndex].second), K3bJob::INFO );
+                emit infoMessage( i18n("Removed partial file '%1'.",m_tracks[d->currentTrackIndex].second), K3b::Job::INFO );
             }
         }
 
@@ -182,11 +182,11 @@ bool K3bAudioProjectConvertingJob::run()
 }
 
 
-bool K3bAudioProjectConvertingJob::convertTrack( K3bAudioTrack* track, const QString& filename )
+bool K3b::AudioProjectConvertingJob::convertTrack( K3b::AudioTrack* track, const QString& filename )
 {
     QString dir = filename.left( filename.lastIndexOf('/') );
     if( !KStandardDirs::makeDir( dir ) ) {
-        emit infoMessage( i18n("Unable to create directory %1",dir), K3bJob::ERROR );
+        emit infoMessage( i18n("Unable to create directory %1",dir), K3b::Job::ERROR );
         return false;
     }
 
@@ -196,25 +196,25 @@ bool K3bAudioProjectConvertingJob::convertTrack( K3bAudioTrack* track, const QSt
         if( d->encoder ) {
             isOpen = d->encoder->openFile( d->fileType, filename, track->length() );
             if( isOpen ) {
-                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_ARTIST, m_cddbEntry.track( d->currentTrackIndex ).get( KCDDB::Artist ).toString() );
-                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_TITLE, m_cddbEntry.track( d->currentTrackIndex ).get( KCDDB::Title ).toString() );
-                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_COMMENT, m_cddbEntry.track( d->currentTrackIndex ).get( KCDDB::Comment ).toString() );
-                d->encoder->setMetaData( K3bAudioEncoder::META_TRACK_NUMBER, QString::number(d->currentTrackIndex+1).rightJustified( 2, '0' ) );
-                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_ARTIST, m_cddbEntry.get( KCDDB::Artist ).toString() );
-                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_TITLE, m_cddbEntry.get( KCDDB::Title ).toString() );
-                d->encoder->setMetaData( K3bAudioEncoder::META_ALBUM_COMMENT, m_cddbEntry.get( KCDDB::Comment ).toString() );
-                d->encoder->setMetaData( K3bAudioEncoder::META_YEAR, QString::number(m_cddbEntry.get( KCDDB::Year ).toInt()) );
-                d->encoder->setMetaData( K3bAudioEncoder::META_GENRE, m_cddbEntry.get( KCDDB::Genre ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_ARTIST, m_cddbEntry.track( d->currentTrackIndex ).get( KCDDB::Artist ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_TITLE, m_cddbEntry.track( d->currentTrackIndex ).get( KCDDB::Title ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_COMMENT, m_cddbEntry.track( d->currentTrackIndex ).get( KCDDB::Comment ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_NUMBER, QString::number(d->currentTrackIndex+1).rightJustified( 2, '0' ) );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_ALBUM_ARTIST, m_cddbEntry.get( KCDDB::Artist ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_ALBUM_TITLE, m_cddbEntry.get( KCDDB::Title ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_ALBUM_COMMENT, m_cddbEntry.get( KCDDB::Comment ).toString() );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_YEAR, QString::number(m_cddbEntry.get( KCDDB::Year ).toInt()) );
+                d->encoder->setMetaData( K3b::AudioEncoder::META_GENRE, m_cddbEntry.get( KCDDB::Genre ).toString() );
             }
             else
-                emit infoMessage( d->encoder->lastErrorString(), K3bJob::ERROR );
+                emit infoMessage( d->encoder->lastErrorString(), K3b::Job::ERROR );
         }
         else {
             isOpen = d->waveFileWriter->open( filename );
         }
 
         if( !isOpen ) {
-            emit infoMessage( i18n("Unable to open '%1' for writing.",filename), K3bJob::ERROR );
+            emit infoMessage( i18n("Unable to open '%1' for writing.",filename), K3b::Job::ERROR );
             return false;
         }
     }
@@ -251,16 +251,16 @@ bool K3bAudioProjectConvertingJob::convertTrack( K3bAudioTrack* track, const QSt
             }
 
             if( d->encoder->encode( buffer, readLength ) < 0 ) {
-                kDebug() << "(K3bAudioProjectConvertingJob) error while encoding.";
-                emit infoMessage( d->encoder->lastErrorString(), K3bJob::ERROR );
-                emit infoMessage( i18n("Error while encoding track %1.",d->currentTrackIndex+1), K3bJob::ERROR );
+                kDebug() << "(K3b::AudioProjectConvertingJob) error while encoding.";
+                emit infoMessage( d->encoder->lastErrorString(), K3b::Job::ERROR );
+                emit infoMessage( i18n("Error while encoding track %1.",d->currentTrackIndex+1), K3b::Job::ERROR );
                 return false;
             }
         }
         else {
             d->waveFileWriter->write( buffer,
                                       readLength,
-                                      K3bWaveFileWriter::BigEndian );
+                                      K3b::WaveFileWriter::BigEndian );
         }
 
         d->overallBytesRead += readLength;
@@ -280,17 +280,17 @@ bool K3bAudioProjectConvertingJob::convertTrack( K3bAudioTrack* track, const QSt
 }
 
 
-bool K3bAudioProjectConvertingJob::writePlaylist()
+bool K3b::AudioProjectConvertingJob::writePlaylist()
 {
     // this is an absolut path so there is always a "/"
     QString playlistDir = m_playlistFilename.left( m_playlistFilename.lastIndexOf( '/' ) );
 
     if( !KStandardDirs::makeDir( playlistDir ) ) {
-        emit infoMessage( i18n("Unable to create directory %1",playlistDir), K3bJob::ERROR );
+        emit infoMessage( i18n("Unable to create directory %1",playlistDir), K3b::Job::ERROR );
         return false;
     }
 
-    emit infoMessage( i18n("Writing playlist to %1.", m_playlistFilename ), K3bJob::INFO );
+    emit infoMessage( i18n("Writing playlist to %1.", m_playlistFilename ), K3b::Job::INFO );
 
     QFile f( m_playlistFilename );
     if( f.open( QIODevice::WriteOnly ) ) {
@@ -353,28 +353,28 @@ bool K3bAudioProjectConvertingJob::writePlaylist()
         return ( t.status() == QTextStream::Ok );
     }
     else {
-        emit infoMessage( i18n("Unable to open '%1' for writing.",m_playlistFilename), K3bJob::ERROR );
-        kDebug() << "(K3bAudioProjectConvertingJob) could not open file " << m_playlistFilename << " for writing.";
+        emit infoMessage( i18n("Unable to open '%1' for writing.",m_playlistFilename), K3b::Job::ERROR );
+        kDebug() << "(K3b::AudioProjectConvertingJob) could not open file " << m_playlistFilename << " for writing.";
         return false;
     }
 }
 
 
-bool K3bAudioProjectConvertingJob::writeCueFile()
+bool K3b::AudioProjectConvertingJob::writeCueFile()
 {
-    K3bCueFileWriter cueWriter;
+    K3b::CueFileWriter cueWriter;
 
     // create a new toc and cd-text
-    K3bDevice::Toc toc;
-    K3bDevice::CdText text;
+    K3b::Device::Toc toc;
+    K3b::Device::CdText text;
     text.setPerformer( m_cddbEntry.get( KCDDB::Artist ).toString() );
     text.setTitle( m_cddbEntry.get( KCDDB::Title ).toString() );
     K3b::Msf currentSector;
-    K3bAudioTrack* track = m_doc->firstTrack();
+    K3b::AudioTrack* track = m_doc->firstTrack();
     int trackNum = 1;
     while( track ) {
 
-        K3bDevice::Track newTrack( currentSector, (currentSector+=track->length()) - 1, K3bDevice::Track::AUDIO );
+        K3b::Device::Track newTrack( currentSector, (currentSector+=track->length()) - 1, K3b::Device::Track::TYPE_AUDIO );
         toc.append( newTrack );
 
         text[trackNum-1].setPerformer( m_cddbEntry.track( trackNum-1 ).get( KCDDB::Artist ).toString() );
@@ -397,13 +397,13 @@ bool K3bAudioProjectConvertingJob::writeCueFile()
     cueFile.truncate( cueFile.lastIndexOf('.') );
     cueFile += ".cue";
 
-    emit infoMessage( i18n("Writing cue file to %1.",cueFile), K3bJob::INFO );
+    emit infoMessage( i18n("Writing cue file to %1.",cueFile), K3b::Job::INFO );
 
     return cueWriter.save( cueFile );
 }
 
 
-QString K3bAudioProjectConvertingJob::findRelativePath( const QString& absPath, const QString& baseDir )
+QString K3b::AudioProjectConvertingJob::findRelativePath( const QString& absPath, const QString& baseDir )
 {
     QString baseDir_ = K3b::prepareDir( K3b::fixupPath(baseDir) );
     QString path = K3b::fixupPath( absPath );
@@ -427,7 +427,7 @@ QString K3bAudioProjectConvertingJob::findRelativePath( const QString& absPath, 
 }
 
 
-QString K3bAudioProjectConvertingJob::jobDescription() const
+QString K3b::AudioProjectConvertingJob::jobDescription() const
 {
     if( m_cddbEntry.get( KCDDB::Title ).toString().isEmpty() )
         return i18n( "Converting Audio Tracks" );
@@ -436,7 +436,7 @@ QString K3bAudioProjectConvertingJob::jobDescription() const
                      m_cddbEntry.get( KCDDB::Title ).toString() );
 }
 
-QString K3bAudioProjectConvertingJob::jobDetails() const
+QString K3b::AudioProjectConvertingJob::jobDetails() const
 {
     if( d->encoder )
         return i18np( "1 track (encoding to %2)",

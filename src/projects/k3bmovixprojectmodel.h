@@ -17,8 +17,12 @@
 
 #include <QtCore/QAbstractItemModel>
 
-class K3bMovixDoc;
-class K3bMovixFileItem;
+namespace K3b {
+    class MovixDoc;
+}
+namespace K3b {
+    class MovixFileItem;
+}
 
 namespace K3b {
     class MovixProjectModel : public QAbstractItemModel
@@ -26,7 +30,7 @@ namespace K3b {
         Q_OBJECT
 
         public:
-            MovixProjectModel( K3bMovixDoc* doc, QObject* parent );
+            MovixProjectModel( MovixDoc* doc, QObject* parent );
             ~MovixProjectModel();
 
             enum Columns {
@@ -39,10 +43,10 @@ namespace K3b {
                 NumColumns
             };
 
-            K3bMovixDoc* project() const;
+            MovixDoc* project() const;
 
-            K3bMovixFileItem* itemForIndex( const QModelIndex& index ) const;
-            QModelIndex indexForItem( K3bMovixFileItem* track ) const;
+            MovixFileItem* itemForIndex( const QModelIndex& index ) const;
+            QModelIndex indexForItem( MovixFileItem* track ) const;
 
             QModelIndex index(int row, int column,
                 const QModelIndex& parent = QModelIndex()) const;

@@ -20,11 +20,12 @@
 
 class QWidget;
 
-class K3bEncodingConverter
+namespace K3b {
+class EncodingConverter
 {
  public:
-  K3bEncodingConverter();
-  ~K3bEncodingConverter();
+  EncodingConverter();
+  ~EncodingConverter();
 
   /**
    * Check if a string is encoded using the local codeset
@@ -54,5 +55,6 @@ class K3bEncodingConverter
   class Private;
   Private* d;
 };
+}
 
 #endif

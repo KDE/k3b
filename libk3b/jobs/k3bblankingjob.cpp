@@ -32,8 +32,8 @@
 
 
 
-K3bBlankingJob::K3bBlankingJob( K3bJobHandler* hdl, QObject* parent )
-  : K3bBurnJob( hdl, parent ),
+K3b::BlankingJob::BlankingJob( K3b::JobHandler* hdl, QObject* parent )
+  : K3b::BurnJob( hdl, parent ),
     m_writerJob(0),
     m_force(true),
     m_device(0),
@@ -46,25 +46,25 @@ K3bBlankingJob::K3bBlankingJob( K3bJobHandler* hdl, QObject* parent )
 }
 
 
-K3bBlankingJob::~K3bBlankingJob()
+K3b::BlankingJob::~BlankingJob()
 {
   delete m_writerJob;
 }
 
 
-K3bDevice::Device* K3bBlankingJob::writer() const
+K3b::Device::Device* K3b::BlankingJob::writer() const
 {
   return m_device;
 }
 
 
-void K3bBlankingJob::setDevice( K3bDevice::Device* dev )
+void K3b::BlankingJob::setDevice( K3b::Device::Device* dev )
 {
   m_device = dev;
 }
 
 
-void K3bBlankingJob::start()
+void K3b::BlankingJob::start()
 {
   if( m_device == 0 )
     return;
@@ -77,7 +77,7 @@ void K3bBlankingJob::start()
   slotStartErasing();
 }
 
-void K3bBlankingJob::slotStartErasing()
+void K3b::BlankingJob::slotStartErasing()
 {
   m_canceled = false;
 
@@ -85,16 +85,16 @@ void K3bBlankingJob::slotStartErasing()
     delete m_writerJob;
 
   if( m_writingApp == K3b::WRITING_APP_CDRDAO ) {
-    K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_device, this );
+    K3b::CdrdaoWriter* writer = new K3b::CdrdaoWriter( m_device, this );
     m_writerJob = writer;
 
-    writer->setCommand(K3bCdrdaoWriter::BLANK);
-    writer->setBlankMode( m_mode == Fast ? K3bCdrdaoWriter::MINIMAL : K3bCdrdaoWriter::FULL );
+    writer->setCommand(K3b::CdrdaoWriter::BLANK);
+    writer->setBlankMode( m_mode == Fast ? K3b::CdrdaoWriter::MINIMAL : K3b::CdrdaoWriter::FULL );
     writer->setForce(m_force);
     writer->setBurnSpeed(m_speed);
   }
   else {
-    K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_device, this );
+    K3b::CdrecordWriter* writer = new K3b::CdrecordWriter( m_device, this );
     m_writerJob = writer;
 
     QString mode;
@@ -130,8 +130,8 @@ void K3bBlankingJob::slotStartErasing()
 	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
   if( waitForMedia( m_device,
-		    K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE,
-		    K3bDevice::MEDIA_CD_RW,
+		    K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE,
+		    K3b::Device::MEDIA_CD_RW,
 		    i18n("Please insert a rewritable CD medium into drive<p><b>%1 %2 (%3)</b>.",
 		    m_device->vendor(),
 		    m_device->description(),
@@ -145,7 +145,7 @@ void K3bBlankingJob::slotStartErasing()
 }
 
 
-void K3bBlankingJob::cancel()
+void K3b::BlankingJob::cancel()
 {
   m_canceled = true;
 
@@ -154,10 +154,10 @@ void K3bBlankingJob::cancel()
 }
 
 
-void K3bBlankingJob::slotFinished(bool success)
+void K3b::BlankingJob::slotFinished(bool success)
 {
     if ( !m_forceNoEject && k3bcore->globalSettings()->ejectMedia() ) {
-        K3bDevice::eject( m_device );
+        K3b::Device::eject( m_device );
     }
 
     if( success ) {
@@ -169,21 +169,21 @@ void K3bBlankingJob::slotFinished(bool success)
             emit canceled();
         }
         else {
-            emit infoMessage( i18n("Blanking error "), K3bJob::ERROR );
-            emit infoMessage( i18n("Sorry, no error handling yet."), K3bJob::ERROR );
+            emit infoMessage( i18n("Blanking error "), K3b::Job::ERROR );
+            emit infoMessage( i18n("Sorry, no error handling yet."), K3b::Job::ERROR );
         }
         jobFinished( false );
     }
 }
 
 
-QString K3bBlankingJob::jobDescription() const
+QString K3b::BlankingJob::jobDescription() const
 {
   return i18n("Erasing CD-RW");
 }
 
 
-QString K3bBlankingJob::jobDetails() const
+QString K3b::BlankingJob::jobDetails() const
 {
   if( m_mode == Fast )
     return i18n("Quick Format");

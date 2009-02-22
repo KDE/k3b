@@ -29,13 +29,14 @@ class KUrlRequester;
 /**
  *@author Sebastian Trueg
  */
-class K3bTempDirSelectionWidget : public QGroupBox
+namespace K3b {
+class TempDirSelectionWidget : public QGroupBox
 {
     Q_OBJECT
 
 public: 
-    K3bTempDirSelectionWidget( QWidget *parent = 0 );
-    ~K3bTempDirSelectionWidget();
+    TempDirSelectionWidget( QWidget *parent = 0 );
+    ~TempDirSelectionWidget();
 
     /** determines if the selection dialog should ask for a dir or a file */
     enum mode { DIR, FILE };
@@ -51,7 +52,7 @@ public:
     QString tempDirectory() const;
 
     /**
-     * Use this if you don't want K3bTempDirSelectionWidget to modify the
+     * Use this if you don't want TempDirSelectionWidget to modify the
      * user input based on the mode.
      */
     QString plainTempPath() const;
@@ -96,5 +97,6 @@ private:
 
     QString m_defaultImageFileName;
 };
+}
 
 #endif

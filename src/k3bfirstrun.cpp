@@ -28,7 +28,7 @@
 #include <QHBoxLayout>
 
 
-void K3bFirstRun::run( QWidget* parent )
+void K3b::FirstRun::run( QWidget* parent )
 {
     KConfigGroup group(KGlobal::config(), "Docking Config");
     if( !group.readEntry( "First run", true ) )
@@ -40,17 +40,17 @@ void K3bFirstRun::run( QWidget* parent )
     // the konqui integration. So in case it is
     // already installed there is no need to show the
     // dialog.
-    K3bServiceInstaller si;
+    K3b::ServiceInstaller si;
     if( si.allInstalled() )
         return;
 
-    K3bFirstRun dlg( parent );
+    K3b::FirstRun dlg( parent );
     if( dlg.exec() == QDialog::Accepted )
         si.install( parent );
 }
 
 
-K3bFirstRun::K3bFirstRun( QWidget* parent )
+K3b::FirstRun::FirstRun( QWidget* parent )
     : KDialog( parent)
 {
     setCaption(i18n("First Run"));
@@ -79,7 +79,7 @@ K3bFirstRun::K3bFirstRun( QWidget* parent )
 }
 
 
-K3bFirstRun::~K3bFirstRun()
+K3b::FirstRun::~FirstRun()
 {
 }
 

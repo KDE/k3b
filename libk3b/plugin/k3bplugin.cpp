@@ -16,18 +16,18 @@
 #include "k3bplugin.h"
 
 
-K3bPlugin::K3bPlugin( QObject* parent )
+K3b::Plugin::Plugin( QObject* parent )
     : QObject( parent )
 {
 }
 
 
-K3bPlugin::~K3bPlugin()
+K3b::Plugin::~Plugin()
 {
 }
 
 
-K3bPluginConfigWidget* K3bPlugin::createConfigWidget( QWidget*) const
+K3b::PluginConfigWidget* K3b::Plugin::createConfigWidget( QWidget*) const
 {
     return 0;
 }

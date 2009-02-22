@@ -17,12 +17,12 @@
 
 #include "k3bglobals.h"
 #include "k3bglobalsettings.h"
-#include <k3bversion.h>
-#include <k3bdevice.h>
-#include <k3bdevicemanager.h>
-#include <k3bdeviceglobals.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bcore.h>
+#include "k3bversion.h"
+#include "k3bdevice.h"
+#include "k3bdevicemanager.h"
+#include "k3bdeviceglobals.h"
+#include "k3bexternalbinmanager.h"
+#include "k3bcore.h"
 
 #include <kdeversion.h>
 #include <kglobal.h>
@@ -229,10 +229,10 @@ QString K3b::fixupPath( const QString& path )
 }
 
 
-K3bVersion K3b::kernelVersion()
+K3b::Version K3b::kernelVersion()
 {
     // initialize kernel version
-    K3bVersion v;
+    K3b::Version v;
     utsname unameinfo;
     if( ::uname(&unameinfo) == 0 ) {
         v = QString::fromLocal8Bit( unameinfo.release );
@@ -244,7 +244,7 @@ K3bVersion K3b::kernelVersion()
 }
 
 
-K3bVersion K3b::simpleKernelVersion()
+K3b::Version K3b::simpleKernelVersion()
 {
     return kernelVersion().simplify();
 }
@@ -362,7 +362,7 @@ QString K3b::appendNumberToFilename( const QString& name, int num, unsigned int 
 bool K3b::plainAtapiSupport()
 {
     // FIXME: what about BSD?
-    return ( K3b::simpleKernelVersion() >= K3bVersion( 2, 5, 40 ) );
+    return ( K3b::simpleKernelVersion() >= K3b::Version( 2, 5, 40 ) );
 }
 
 
@@ -370,11 +370,11 @@ bool K3b::hackedAtapiSupport()
 {
     // IMPROVEME!!!
     // FIXME: since when does the kernel support this?
-    return ( K3b::simpleKernelVersion() >= K3bVersion( 2, 4, 0 ) );
+    return ( K3b::simpleKernelVersion() >= K3b::Version( 2, 4, 0 ) );
 }
 
 
-QString K3b::externalBinDeviceParameter( K3bDevice::Device* dev, const K3bExternalBin* bin )
+QString K3b::externalBinDeviceParameter( K3b::Device::Device* dev, const K3b::ExternalBin* bin )
 {
     Q_UNUSED( bin );
     return dev->blockDeviceName();
@@ -418,7 +418,7 @@ QString K3b::writingModeString( K3b::WritingModes modes )
     if( modes == WRITING_MODE_AUTO )
         return i18n("Auto");
     else
-        return K3bDevice::writingModeString( ( int )modes );
+        return K3b::Device::writingModeString( ( int )modes );
 }
 
 
@@ -491,7 +491,7 @@ QString K3b::findExe( const QString& name )
 }
 
 
-bool K3b::isMounted( K3bDevice::Device* dev )
+bool K3b::isMounted( K3b::Device::Device* dev )
 {
     if( !dev )
         return false;
@@ -500,7 +500,7 @@ bool K3b::isMounted( K3bDevice::Device* dev )
 }
 
 
-bool K3b::unmount( K3bDevice::Device* dev )
+bool K3b::unmount( K3b::Device::Device* dev )
 {
     if( !dev )
         return false;
@@ -548,7 +548,7 @@ bool K3b::unmount( K3bDevice::Device* dev )
 }
 
 
-bool K3b::mount( K3bDevice::Device* dev )
+bool K3b::mount( K3b::Device::Device* dev )
 {
     if( !dev )
         return false;
@@ -588,7 +588,7 @@ bool K3b::mount( K3bDevice::Device* dev )
 }
 
 
-bool K3b::eject( K3bDevice::Device* dev )
+bool K3b::eject( K3b::Device::Device* dev )
 {
     if( K3b::isMounted( dev ) )
         K3b::unmount( dev );

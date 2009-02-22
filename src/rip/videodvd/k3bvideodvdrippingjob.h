@@ -22,19 +22,22 @@
 #include <qvector.h>
 
 
-class K3bVideoDVDTitleDetectClippingJob;
+namespace K3b {
+    class VideoDVDTitleDetectClippingJob;
+}
 
 
 /**
- * For details on the options see K3bVideoDVDTitleTranscodingJob
+ * For details on the options see VideoDVDTitleTranscodingJob
  */
-class K3bVideoDVDRippingJob : public K3bJob
+namespace K3b {
+class VideoDVDRippingJob : public Job
 {
   Q_OBJECT
 
  public:
-  K3bVideoDVDRippingJob( K3bJobHandler* hdl, QObject* parent );
-  ~K3bVideoDVDRippingJob();
+  VideoDVDRippingJob( JobHandler* hdl, QObject* parent );
+  ~VideoDVDRippingJob();
 
   class TitleRipInfo {
   public:
@@ -68,13 +71,13 @@ class K3bVideoDVDRippingJob : public K3bJob
   void start();
   void cancel();
 
-  void setVideoDVD( const K3bVideoDVD::VideoDVD& dvd ) { m_dvd = dvd; }
+  void setVideoDVD( const VideoDVD::VideoDVD& dvd ) { m_dvd = dvd; }
   void setTitles( const QVector<TitleRipInfo>& titles ) { m_titleRipInfos = titles; }
 
-  void setVideoCodec( K3bVideoDVDTitleTranscodingJob::VideoCodec codec );
+  void setVideoCodec( VideoDVDTitleTranscodingJob::VideoCodec codec );
   void setVideoBitrate( int bitrate );
   void setTwoPassEncoding( bool b );
-  void setAudioCodec( K3bVideoDVDTitleTranscodingJob::AudioCodec codec );
+  void setAudioCodec( VideoDVDTitleTranscodingJob::AudioCodec codec );
   void setAudioBitrate( int bitrate );
   void setAudioVBR( bool vbr );
   void setResampleAudioTo44100( bool b );
@@ -92,14 +95,15 @@ class K3bVideoDVDRippingJob : public K3bJob
   void startDetectClipping( int ripInfoIndex );
   void initProgressInfo();
 
-  K3bVideoDVD::VideoDVD m_dvd;
+  VideoDVD::VideoDVD m_dvd;
   QVector<TitleRipInfo> m_titleRipInfos;
 
-  K3bVideoDVDTitleTranscodingJob* m_transcodingJob;
-  K3bVideoDVDTitleDetectClippingJob* m_detectClippingJob;
+  VideoDVDTitleTranscodingJob* m_transcodingJob;
+  VideoDVDTitleDetectClippingJob* m_detectClippingJob;
 
   class Private;
   Private* d;
 };
+}
 
 #endif

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -19,19 +19,18 @@
 #include "ui_base_k3bmiscoptiontab.h"
 
 
-/**
- *@author Sebastian Trueg
- */
-class K3bMiscOptionTab : public QWidget, public Ui::base_K3bMiscOptionTab
-{
-    Q_OBJECT
+namespace K3b {
+    class MiscOptionTab : public QWidget, public Ui::base_K3bMiscOptionTab
+    {
+        Q_OBJECT
 
-public: 
-    K3bMiscOptionTab(QWidget *parent=0);
-    ~K3bMiscOptionTab();
+    public:
+        MiscOptionTab(QWidget *parent=0);
+        ~MiscOptionTab();
 
-    void readSettings();
-    bool saveSettings();
-};
+        void readSettings();
+        bool saveSettings();
+    };
+}
 
 #endif

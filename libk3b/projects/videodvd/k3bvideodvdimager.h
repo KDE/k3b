@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
  *
@@ -19,42 +19,43 @@
 
 #include <k3bisoimager.h>
 
-class K3bVideoDvdDoc;
+namespace K3b {
+    class VideoDvdDoc;
 
+    /**
+     * Create VideoDVD images with mkisofs. The difference
+     * to the IsoImager is the -dvd-video option and the fact
+     * that all VIDEO_TS files need to be in one local folder since
+     * otherwise mkisofs is not able to find the dvd structures.
+     */
+    class VideoDvdImager : public IsoImager
+    {
+        Q_OBJECT
 
-/**
- * Create VideoDVD images with mkisofs. The difference
- * to the IsoImager is the -dvd-video option and the fact
- * that all VIDEO_TS files need to be in one local folder since
- * otherwise mkisofs is not able to find the dvd structures.
- */
-class K3bVideoDvdImager : public K3bIsoImager
-{
-  Q_OBJECT
+    public:
+        VideoDvdImager( VideoDvdDoc* doc, JobHandler*, QObject* parent = 0 );
+        virtual ~VideoDvdImager();
 
- public:
-  K3bVideoDvdImager( K3bVideoDvdDoc* doc, K3bJobHandler*, QObject* parent = 0 );
-  virtual ~K3bVideoDvdImager();
+    public Q_SLOTS:
+        virtual void start();
+        virtual void init();
+        virtual void calculateSize();
 
- public Q_SLOTS:
-  virtual void start();
-  virtual void init();
-  virtual void calculateSize();
+    protected:
+        bool addMkisofsParameters( bool printSize = false );
+        int writePathSpec();
+        void cleanup();
+        int writePathSpecForDir( DirItem* dirItem, QTextStream& stream );
 
- protected:
-  bool addMkisofsParameters( bool printSize = false );
-  int writePathSpec();
-  void cleanup();
-  int writePathSpecForDir( K3bDirItem* dirItem, QTextStream& stream );
+    protected Q_SLOTS:
+        virtual void slotReceivedStderr( const QString& );
 
- protected Q_SLOTS:
-  virtual void slotReceivedStderr( const QString& );
+    private:
+        void fixVideoDVDSettings();
 
- private:
-  void fixVideoDVDSettings();
-
-  class Private;
-  Private* d;
-};
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

@@ -20,19 +20,24 @@
 #include <k3bdatadirtreeview.h>
 #include <QDropEvent>
 
-class K3bView;
-class K3bMixedDoc;
+namespace K3b {
+    class View;
+}
+namespace K3b {
+    class MixedDoc;
+}
 class QDropEvent;
 class Q3ListViewItem;
 
 
-class K3bMixedDirTreeView : public K3bDataDirTreeView
+namespace K3b {
+class MixedDirTreeView : public DataDirTreeView
 {
     Q_OBJECT
 
 public:
-    K3bMixedDirTreeView( K3bView* view, K3bMixedDoc* doc, QWidget* parent = 0 );
-    ~K3bMixedDirTreeView();
+    MixedDirTreeView( View* view, MixedDoc* doc, QWidget* parent = 0 );
+    ~MixedDirTreeView();
 
 Q_SIGNALS:
     void audioTreeSelected();
@@ -46,11 +51,12 @@ private Q_SLOTS:
 /*     void slotNewAudioTracks(); */
 
 private:
-    K3bMixedDoc* m_doc;
+    MixedDoc* m_doc;
 
     class PrivateAudioRootViewItem;
     PrivateAudioRootViewItem* m_audioRootItem;
 };
+}
 
 
 #endif

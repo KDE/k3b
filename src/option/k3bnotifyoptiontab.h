@@ -21,13 +21,14 @@
 
 class KNotifyConfigWidget;
 
-class K3bNotifyOptionTab : public QWidget
+namespace K3b {
+class NotifyOptionTab : public QWidget
 {
   Q_OBJECT
 
  public:
-  K3bNotifyOptionTab( QWidget* parent = 0 );
-  ~K3bNotifyOptionTab();
+  NotifyOptionTab( QWidget* parent = 0 );
+  ~NotifyOptionTab();
 
   void readSettings();
   bool saveSettings();
@@ -35,5 +36,6 @@ class K3bNotifyOptionTab : public QWidget
  private:
    KNotifyConfigWidget *m_notifyWidget;
 };
+}
 
 #endif

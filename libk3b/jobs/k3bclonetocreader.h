@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -21,24 +21,25 @@
 
 #include "k3b_export.h"
 
+namespace K3b {
+    /**
+     * Reads a cdrecord clone toc file and searches for the
+     * corresponding image file.
+     */
+    class LIBK3B_EXPORT  CloneTocReader : public ImageFileReader
+    {
+    public:
+        CloneTocReader( const QString& filename = QString() );
+        ~CloneTocReader();
 
-/**
- * Reads a cdrecord clone toc file and searches for the 
- * corresponding image file.
- */
-class LIBK3B_EXPORT  K3bCloneTocReader : public K3bImageFileReader
-{
-public:
-    K3bCloneTocReader( const QString& filename = QString() );
-    ~K3bCloneTocReader();
+        const Msf& imageSize() const;
 
-    const K3b::Msf& imageSize() const;
+    protected:
+        void readFile();
 
-protected:
-    void readFile();
-
-    class Private;
-    Private* d;
-};
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

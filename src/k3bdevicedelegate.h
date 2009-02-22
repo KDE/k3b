@@ -17,16 +17,18 @@
 
 #include <KFileItemDelegate>
 
-class K3bDeviceDelegate : public KFileItemDelegate
+namespace K3b {
+class DeviceDelegate : public KFileItemDelegate
 {
     Q_OBJECT
 
 public:
-    K3bDeviceDelegate( QObject* parent );
-    ~K3bDeviceDelegate();
+    DeviceDelegate( QObject* parent );
+    ~DeviceDelegate();
 
     QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 };
+}
 
 #endif

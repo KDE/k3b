@@ -22,7 +22,7 @@
 #include <kglobalsettings.h>
 
 
-K3bBusyWidget::K3bBusyWidget( QWidget* parent )
+K3b::BusyWidget::BusyWidget( QWidget* parent )
     : QFrame( parent )
 {
     m_busyTimer = new QTimer( this );
@@ -33,12 +33,12 @@ K3bBusyWidget::K3bBusyWidget( QWidget* parent )
     m_bBusy = false;
 }
 
-K3bBusyWidget::~K3bBusyWidget()
+K3b::BusyWidget::~BusyWidget()
 {
 }
 
 
-void K3bBusyWidget::showBusy( bool b )
+void K3b::BusyWidget::showBusy( bool b )
 {
     m_bBusy = b;
 
@@ -62,26 +62,26 @@ void K3bBusyWidget::showBusy( bool b )
 }
 
 
-void K3bBusyWidget::animateBusy()
+void K3b::BusyWidget::animateBusy()
 {
     m_iBusyPosition++;
     update();
 }
 
 
-QSize K3bBusyWidget::sizeHint() const
+QSize K3b::BusyWidget::sizeHint() const
 {
     return minimumSizeHint();
 }
 
 
-QSize K3bBusyWidget::minimumSizeHint() const
+QSize K3b::BusyWidget::minimumSizeHint() const
 {
     return QSize( 2*frameWidth() + 62, 10 );
 }
 
 
-void K3bBusyWidget::paintEvent( QPaintEvent*  )
+void K3b::BusyWidget::paintEvent( QPaintEvent*  )
 {
     QPainter p(this);
     QRect rect = contentsRect();

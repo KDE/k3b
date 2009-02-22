@@ -28,52 +28,48 @@ class QDropEvent;
 class QDragEnterEvent;
 class KUrl;
 
-namespace K3bDevice {
-    class Device;
+namespace K3b {
+    namespace Device {
+        class Device;
+    }
+
+    class FileTreeView : public QTreeView
+    {
+        Q_OBJECT
+
+    public:
+        FileTreeView( QWidget *parent = 0 );
+        ~FileTreeView();
+
+        /**
+         * returns 0 if no device is selected
+         */
+        Device::Device* selectedDevice() const;
+
+        /**
+         * returnes an empty url if no url is selected
+         */
+        KUrl selectedUrl() const;
+
+    public Q_SLOTS:
+        void setSelectedUrl( const KUrl& url );
+        void setSelectedDevice( Device::Device* dev );
+
+    Q_SIGNALS:
+        void activated( const KUrl& url );
+        void activated( Device::Device* dev );
+
+    private Q_SLOTS:
+        void slotClicked( const QModelIndex& index );
+        void slotExpandUrl( const QModelIndex& index );
+        void slotContextMenu( const QPoint& pos );
+        void slotAddFilesToProject();
+
+    private:
+        void initActions();
+        class Private;
+        Private* const d;
+    };
 }
-
-
-
-
-/**
- *@author Sebastian Trueg
- */
-class K3bFileTreeView : public QTreeView
-{
-    Q_OBJECT
-
-public: 
-    K3bFileTreeView( QWidget *parent = 0 );
-    ~K3bFileTreeView();
-
-    /**
-     * returns 0 if no device is selected 
-     */
-    K3bDevice::Device* selectedDevice() const;
-
-    /** 
-     * returnes an empty url if no url is selected
-     */
-    KUrl selectedUrl() const;
-
-public Q_SLOTS:
-    void setSelectedUrl( const KUrl& url );
-    void setSelectedDevice( K3bDevice::Device* dev );
-
-Q_SIGNALS:
-    void activated( const KUrl& url );
-    void activated( K3bDevice::Device* dev );
-
-private Q_SLOTS:
-    void slotClicked( const QModelIndex& index );
-    void slotExpandUrl( const QModelIndex& index );
-    void slotContextMenu( const QPoint& pos );
-    void slotAddFilesToProject();
-
-private:
-    void initActions();
-    class Private;
-    Private* const d;
-};
 
 #endif

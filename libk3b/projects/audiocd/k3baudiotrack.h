@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -20,203 +20,202 @@
 #include <qstring.h>
 #include <qfileinfo.h>
 #include <qfile.h>
-#include <q3ptrlist.h>
 
 #include <kio/global.h>
 
-#include <k3bmsf.h>
-
-#include <k3bcdtext.h>
-#include <k3btrack.h>
+#include "k3bmsf.h"
+#include "k3bcdtext.h"
+#include "k3btrack.h"
 #include "k3b_export.h"
 
-class K3bAudioDataSource;
-class K3bAudioDoc;
+namespace K3b {
+    class AudioDataSource;
+    class AudioDoc;
 
-
-/**
- * @author Sebastian Trueg
- */
-class LIBK3B_EXPORT K3bAudioTrack : public QObject
-{
-    Q_OBJECT
-
-    friend class K3bAudioDataSource;
-    friend class K3bAudioDoc;
-
-public:
-    K3bAudioTrack();
-    K3bAudioTrack( K3bAudioDoc* parent );
-    ~K3bAudioTrack();
-
-    K3bAudioDoc* doc() const { return m_parent; }
-
-    K3bDevice::Track toCdTrack() const;
-
-    /** 
-     * @return length of track in frames
-     */
-    K3b::Msf length() const;
-    KIO::filesize_t size() const;
-
-    QString artist() const { return m_cdText.performer(); }
-    QString performer() const { return m_cdText.performer(); }
-    QString title() const { return m_cdText.title(); }
-    QString arranger() const { return m_cdText.arranger(); }
-    QString songwriter() const { return m_cdText.songwriter(); }
-    QString composer() const { return m_cdText.composer(); }
-    QString isrc() const { return m_cdText.isrc(); }
-    QString cdTextMessage() const { return m_cdText.message(); }
-    K3bDevice::TrackCdText cdText() const { return m_cdText; }
-	
-    bool copyProtection() const { return m_copy; }
-    bool preEmp() const { return m_preEmp; }
-	
-    /**
-     * @obsolete use setPerformer
-     **/
-    void setArtist( const QString& a );
-    void setPerformer( const QString& a );
-    void setTitle( const QString& t );
-    void setArranger( const QString& t );
-    void setSongwriter( const QString& t );
-    void setComposer( const QString& t );
-    void setIsrc( const QString& t );
-    void setCdTextMessage( const QString& t );
-
-    void setCdText( const K3bDevice::TrackCdText& cdtext );
-
-    void setPreEmp( bool b ) { m_preEmp = b; emitChanged(); }
-    void setCopyProtection( bool b ) { m_copy = b; emitChanged(); }
-
-    K3b::Msf index0() const;
-    /**
-     * The length of the postgap, ie. the number of blocks with index0.
-     * This is always 0 for the last track.
-     */
-    K3b::Msf postGap() const;
-    void setIndex0( const K3b::Msf& );
 
     /**
-     * \return The track number starting at 1.
+     * @author Sebastian Trueg
      */
-    unsigned int trackNumber() const;
+    class LIBK3B_EXPORT AudioTrack : public QObject
+    {
+        Q_OBJECT
 
-    /**
-     * Remove this track from the list and return it.
-     */
-    K3bAudioTrack* take();
+        friend class AudioDataSource;
+        friend class AudioDoc;
 
-    /**
-     * Move this track after @p track.
-     * If @p track is null this track will be merged into the beginning
-     * of the docs list.
-     */
-    void moveAfter( K3bAudioTrack* track );
+    public:
+        AudioTrack();
+        AudioTrack( AudioDoc* parent );
+        ~AudioTrack();
 
-    /**
-     * Move this track ahead of @p track.
-     * If @p track is null this track will be appended to the end
-     * of the docs list.
-     */
-    void moveAhead( K3bAudioTrack* track );
+        AudioDoc* doc() const { return m_parent; }
 
-    /**
-     * Merge @p trackToMerge into this one.
-     */
-    void merge( K3bAudioTrack* trackToMerge, K3bAudioDataSource* sourceAfter = 0 );
+        Device::Track toCdTrack() const;
 
-    K3bAudioTrack* prev() const { return m_prev; }
-    K3bAudioTrack* next() const { return m_next; }
+        /**
+         * @return length of track in frames
+         */
+        Msf length() const;
+        KIO::filesize_t size() const;
 
-    /**
-     * Use with care.
-     */
-    void setFirstSource( K3bAudioDataSource* source );
-    K3bAudioDataSource* firstSource() const { return m_firstSource; }
-    K3bAudioDataSource* lastSource() const;
-    int numberSources() const;
+        QString artist() const { return m_cdText.performer(); }
+        QString performer() const { return m_cdText.performer(); }
+        QString title() const { return m_cdText.title(); }
+        QString arranger() const { return m_cdText.arranger(); }
+        QString songwriter() const { return m_cdText.songwriter(); }
+        QString composer() const { return m_cdText.composer(); }
+        QString isrc() const { return m_cdText.isrc(); }
+        QString cdTextMessage() const { return m_cdText.message(); }
+        Device::TrackCdText cdText() const { return m_cdText; }
 
-    /**
-     * Append source to the end of the sources list.
-     */
-    void addSource( K3bAudioDataSource* source );
+        bool copyProtection() const { return m_copy; }
+        bool preEmp() const { return m_preEmp; }
 
-    bool seek( const K3b::Msf& );
+        /**
+         * @obsolete use setPerformer
+         **/
+        void setArtist( const QString& a );
+        void setPerformer( const QString& a );
+        void setTitle( const QString& t );
+        void setArranger( const QString& t );
+        void setSongwriter( const QString& t );
+        void setComposer( const QString& t );
+        void setIsrc( const QString& t );
+        void setCdTextMessage( const QString& t );
 
-    /**
-     * Read data from the track.
-     *
-     * @return number of read bytes
-     */
-    int read( char* data, unsigned int max );
+        void setCdText( const Device::TrackCdText& cdtext );
 
-    /**
-     * called by K3bAudioDataSource because of the lack of signals
-     */
-    void sourceChanged( K3bAudioDataSource* );
+        void setPreEmp( bool b ) { m_preEmp = b; emitChanged(); }
+        void setCopyProtection( bool b ) { m_copy = b; emitChanged(); }
 
-    /**
-     * Create a copy of this track containing copies of all the sources
-     * but not being part of some list.
-     */
-    K3bAudioTrack* copy() const;
+        Msf index0() const;
+        /**
+         * The length of the postgap, ie. the number of blocks with index0.
+         * This is always 0 for the last track.
+         */
+        Msf postGap() const;
+        void setIndex0( const Msf& );
 
-    /**
-     * Split the track at position pos and return the splitted track
-     * on success.
-     * The new track will be moved after this track.
-     *
-     * \param pos The position at which to split. \a pos will be the 
-     * first frame in the new track.
-     */
-    K3bAudioTrack* split( const K3b::Msf& pos );
+        /**
+         * \return The track number starting at 1.
+         */
+        unsigned int trackNumber() const;
 
-    /**
-     * Is this track in a list
-     */
-    bool inList() const;
+        /**
+         * Remove this track from the list and return it.
+         */
+        AudioTrack* take();
 
-    /**
-     * Get the source at index.
-     * \return the requested source or 0 if index is out
-     * of bounds.
-     */
-    K3bAudioDataSource* getSource( int index ) const;
+        /**
+         * Move this track after @p track.
+         * If @p track is null this track will be merged into the beginning
+         * of the docs list.
+         */
+        void moveAfter( AudioTrack* track );
 
-private:	
-    /**
-     * Tells the doc that the track has changed
-     */
-    void emitChanged();
+        /**
+         * Move this track ahead of @p track.
+         * If @p track is null this track will be appended to the end
+         * of the docs list.
+         */
+        void moveAhead( AudioTrack* track );
 
-    void debug();
+        /**
+         * Merge @p trackToMerge into this one.
+         */
+        void merge( AudioTrack* trackToMerge, AudioDataSource* sourceAfter = 0 );
 
-    K3bAudioDoc* m_parent;
+        AudioTrack* prev() const { return m_prev; }
+        AudioTrack* next() const { return m_next; }
 
-    /** copy protection */
-    bool m_copy;
-    bool m_preEmp;
+        /**
+         * Use with care.
+         */
+        void setFirstSource( AudioDataSource* source );
+        AudioDataSource* firstSource() const { return m_firstSource; }
+        AudioDataSource* lastSource() const;
+        int numberSources() const;
 
-    K3b::Msf m_index0Offset;
+        /**
+         * Append source to the end of the sources list.
+         */
+        void addSource( AudioDataSource* source );
 
-    K3bDevice::TrackCdText m_cdText;
+        bool seek( const Msf& );
 
-    // list
-    K3bAudioTrack* m_prev;
-    K3bAudioTrack* m_next;
+        /**
+         * Read data from the track.
+         *
+         * @return number of read bytes
+         */
+        int read( char* data, unsigned int max );
 
-    K3bAudioDataSource* m_firstSource;
+        /**
+         * called by AudioDataSource because of the lack of signals
+         */
+        void sourceChanged( AudioDataSource* );
+
+        /**
+         * Create a copy of this track containing copies of all the sources
+         * but not being part of some list.
+         */
+        AudioTrack* copy() const;
+
+        /**
+         * Split the track at position pos and return the splitted track
+         * on success.
+         * The new track will be moved after this track.
+         *
+         * \param pos The position at which to split. \a pos will be the
+         * first frame in the new track.
+         */
+        AudioTrack* split( const Msf& pos );
+
+        /**
+         * Is this track in a list
+         */
+        bool inList() const;
+
+        /**
+         * Get the source at index.
+         * \return the requested source or 0 if index is out
+         * of bounds.
+         */
+        AudioDataSource* getSource( int index ) const;
+
+    private:
+        /**
+         * Tells the doc that the track has changed
+         */
+        void emitChanged();
+
+        void debug();
+
+        AudioDoc* m_parent;
+
+        /** copy protection */
+        bool m_copy;
+        bool m_preEmp;
+
+        Msf m_index0Offset;
+
+        Device::TrackCdText m_cdText;
+
+        // list
+        AudioTrack* m_prev;
+        AudioTrack* m_next;
+
+        AudioDataSource* m_firstSource;
 
 
-    K3bAudioDataSource* m_currentSource;
-    long long m_alreadyReadBytes;
+        AudioDataSource* m_currentSource;
+        long long m_alreadyReadBytes;
 
-    bool m_currentlyDeleting;
+        bool m_currentlyDeleting;
 
-    class Private;
-    Private* d;
-};
-
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

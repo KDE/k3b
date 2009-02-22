@@ -29,9 +29,11 @@
 #include <QGridLayout>
 
 
-K3bCddbPatternWidget::K3bCddbPatternWidget( QWidget* parent )
-    : base_K3bCddbPatternWidget( parent )
+K3b::CddbPatternWidget::CddbPatternWidget( QWidget* parent )
+    : QWidget( parent )
 {
+    setupUi( this );
+
     // fix the layout
     ((QGridLayout*)layout())->setRowStretch( 4, 1 );
 
@@ -71,36 +73,36 @@ K3bCddbPatternWidget::K3bCddbPatternWidget( QWidget* parent )
 }
 
 
-K3bCddbPatternWidget::~K3bCddbPatternWidget()
+K3b::CddbPatternWidget::~CddbPatternWidget()
 {
 }
 
 
-QString K3bCddbPatternWidget::filenamePattern() const
+QString K3b::CddbPatternWidget::filenamePattern() const
 {
     return m_comboFilenamePattern->currentText();
 }
 
 
-QString K3bCddbPatternWidget::playlistPattern() const
+QString K3b::CddbPatternWidget::playlistPattern() const
 {
     return m_comboPlaylistPattern->currentText();
 }
 
 
-QString K3bCddbPatternWidget::blankReplaceString() const
+QString K3b::CddbPatternWidget::blankReplaceString() const
 {
     return m_editBlankReplace->text();
 }
 
 
-bool K3bCddbPatternWidget::replaceBlanks() const
+bool K3b::CddbPatternWidget::replaceBlanks() const
 {
     return m_checkBlankReplace->isChecked();
 }
 
 
-void K3bCddbPatternWidget::loadConfig( const KConfigGroup& c )
+void K3b::CddbPatternWidget::loadConfig( const KConfigGroup& c )
 {
     m_comboPlaylistPattern->setEditText( c.readEntry( "playlist pattern", m_comboPlaylistPattern->itemText(0) ) );
     m_comboFilenamePattern->setEditText( c.readEntry( "filename pattern", m_comboFilenamePattern->itemText(0) ) );
@@ -109,7 +111,7 @@ void K3bCddbPatternWidget::loadConfig( const KConfigGroup& c )
 }
 
 
-void K3bCddbPatternWidget::saveConfig( KConfigGroup c )
+void K3b::CddbPatternWidget::saveConfig( KConfigGroup c )
 {
     c.writeEntry( "playlist pattern", m_comboPlaylistPattern->currentText() );
     c.writeEntry( "filename pattern", m_comboFilenamePattern->currentText() );
@@ -118,7 +120,7 @@ void K3bCddbPatternWidget::saveConfig( KConfigGroup c )
 }
 
 
-void K3bCddbPatternWidget::loadDefaults()
+void K3b::CddbPatternWidget::loadDefaults()
 {
     m_comboPlaylistPattern->setEditText( m_comboPlaylistPattern->itemText(0) );
     m_comboFilenamePattern->setEditText( m_comboFilenamePattern->itemText(0) );
@@ -127,7 +129,7 @@ void K3bCddbPatternWidget::loadDefaults()
 }
 
 
-void K3bCddbPatternWidget::slotSeeSpecialStrings()
+void K3b::CddbPatternWidget::slotSeeSpecialStrings()
 {
     setWhatsThis( i18n( "<p><b>Pattern special strings:</b>"
                         "<p>The following strings will be replaced with their respective meaning in every "
@@ -148,7 +150,7 @@ void K3bCddbPatternWidget::slotSeeSpecialStrings()
                         "</table>") );
 }
 
-void K3bCddbPatternWidget::slotSeeConditionalInclusion()
+void K3b::CddbPatternWidget::slotSeeConditionalInclusion()
 {
   // xgettext: no-c-format
     setWhatsThis( i18n( "<p><b>Conditional inclusion:</b>"

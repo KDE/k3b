@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -19,49 +19,49 @@
 #include <k3bdiritem.h>
 
 
-K3bMovixFileItem::K3bMovixFileItem( const QString& fileName, 
-				    K3bMovixDoc* doc, 
-				    K3bDirItem* dir, 
-				    const QString& k3bName )
-  : K3bFileItem( fileName, doc, dir, k3bName ),
-    m_doc(doc),
-    m_subTitleItem(0)
+K3b::MovixFileItem::MovixFileItem( const QString& fileName,
+                                   K3b::MovixDoc* doc,
+                                   K3b::DirItem* dir,
+                                   const QString& k3bName )
+    : K3b::FileItem( fileName, doc, dir, k3bName ),
+      m_doc(doc),
+      m_subTitleItem(0)
 {
 }
 
 
-K3bMovixFileItem::~K3bMovixFileItem()
+K3b::MovixFileItem::~MovixFileItem()
 {
-  if( m_subTitleItem )
-    m_doc->removeSubTitleItem( this );
+    if( m_subTitleItem )
+        m_doc->removeSubTitleItem( this );
 
-  // remove this from parentdir
-  // it is important to do it here and not
-  // rely on the K3bFileItem destructor becasue
-  // otherwise the doc is not informed early enough
-  if( parent() )
-    parent()->takeDataItem( this );
+    // remove this from parentdir
+    // it is important to do it here and not
+    // rely on the K3b::FileItem destructor becasue
+    // otherwise the doc is not informed early enough
+    if( parent() )
+        parent()->takeDataItem( this );
 }
 
 
-void K3bMovixFileItem::setK3bName( const QString& newName )
+void K3b::MovixFileItem::setK3bName( const QString& newName )
 {
-  K3bFileItem::setK3bName( newName );
+    K3b::FileItem::setK3bName( newName );
 
-  // take care of the subTitle file
-  if( m_subTitleItem ) {
-    m_subTitleItem->setK3bName( subTitleFileName(k3bName()) );
-  }
+    // take care of the subTitle file
+    if( m_subTitleItem ) {
+        m_subTitleItem->setK3bName( subTitleFileName(k3bName()) );
+    }
 }
 
 
-QString K3bMovixFileItem::subTitleFileName( const QString& name )
+QString K3b::MovixFileItem::subTitleFileName( const QString& name )
 {
-  // remove ending from k3bName
-  QString subName = name;
-  int pos = subName.lastIndexOf('.');
-  if( pos > 0 )
-    subName.truncate( pos );
-  subName += ".sub";
-  return subName;
+    // remove ending from k3bName
+    QString subName = name;
+    int pos = subName.lastIndexOf('.');
+    if( pos > 0 )
+        subName.truncate( pos );
+    subName += ".sub";
+    return subName;
 }

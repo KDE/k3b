@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -16,13 +16,16 @@
 
 #include <k3bprojectplugin.h>
 
-class K3bCddb;
-class K3bAudioDoc;
-class K3bProgressDialog;
+namespace K3b {
+    class Cddb;
+    class AudioDoc;
+    class ProgressDialog;
+}
+
 class QWidget;
 class KJob;
 
-class K3bAudioProjectCddbPlugin : public K3bProjectPlugin
+class K3bAudioProjectCddbPlugin : public K3b::ProjectPlugin
 {
     Q_OBJECT
 
@@ -32,15 +35,15 @@ public:
 
     int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-    void activate( K3bDoc* doc, QWidget* parent );
+    void activate( K3b::Doc* doc, QWidget* parent );
 
 private Q_SLOTS:
     void slotCddbQueryFinished( KJob* );
     void slotCancelClicked();
 
 private:
-    K3bAudioDoc* m_doc;
-    K3bProgressDialog* m_progress;
+    K3b::AudioDoc* m_doc;
+    K3b::ProgressDialog* m_progress;
     QWidget* m_parentWidget;
 
     bool m_canceled;

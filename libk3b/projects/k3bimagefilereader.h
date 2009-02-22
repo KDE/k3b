@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -18,37 +18,39 @@
 #include <qstring.h>
 #include "k3b_export.h"
 
-class LIBK3B_EXPORT K3bImageFileReader
-{
- public:
-  K3bImageFileReader();
-  virtual ~K3bImageFileReader();
+namespace K3b {
+    class LIBK3B_EXPORT ImageFileReader
+    {
+    public:
+        ImageFileReader();
+        virtual ~ImageFileReader();
 
-  /**
-   * Open a file. In most cases the TOC file
-   */
-  void openFile( const QString& filename );
+        /**
+         * Open a file. In most cases the TOC file
+         */
+        void openFile( const QString& filename );
 
-  virtual bool isValid() const;
+        virtual bool isValid() const;
 
-  /**
-   * Return the current set filename;
-   */
-  const QString& filename() const;
+        /**
+         * Return the current set filename;
+         */
+        const QString& filename() const;
 
-  /**
-   * returns the name of the corresponding image file.
-   */
-  virtual const QString& imageFilename() const;
+        /**
+         * returns the name of the corresponding image file.
+         */
+        virtual const QString& imageFilename() const;
 
- protected:
-  virtual void readFile() = 0;
-  void setValid( bool );
-  void setImageFilename( const QString& );
+    protected:
+        virtual void readFile() = 0;
+        void setValid( bool );
+        void setImageFilename( const QString& );
 
- private:
-  class Private;
-  Private* d;
-};
+    private:
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

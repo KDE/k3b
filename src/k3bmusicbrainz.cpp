@@ -23,7 +23,7 @@
 #include <kdebug.h>
 
 
-class K3bMusicBrainz::Private
+class K3b::MusicBrainz::Private
 {
 public:
     musicbrainz_t mb;
@@ -33,7 +33,7 @@ public:
 };
 
 
-K3bMusicBrainz::K3bMusicBrainz()
+K3b::MusicBrainz::MusicBrainz()
 {
     d = new Private;
     d->mb = mb_New();
@@ -41,14 +41,14 @@ K3bMusicBrainz::K3bMusicBrainz()
 }
 
 
-K3bMusicBrainz::~K3bMusicBrainz()
+K3b::MusicBrainz::~MusicBrainz()
 {
     mb_Delete( d->mb );
     delete d;
 }
 
 
-int K3bMusicBrainz::query( const QByteArray& trm )
+int K3b::MusicBrainz::query( const QByteArray& trm )
 {
     d->titles.clear();
     d->artists.clear();
@@ -80,19 +80,19 @@ int K3bMusicBrainz::query( const QByteArray& trm )
     else {
         char buffer[256];
         mb_GetQueryError( d->mb, buffer, 256 );
-        kDebug() << "(K3bMusicBrainz) query error: " << buffer;
+        kDebug() << "(K3b::MusicBrainz) query error: " << buffer;
         return 0;
     }
 }
 
 
-QString K3bMusicBrainz::title( unsigned int i ) const
+QString K3b::MusicBrainz::title( unsigned int i ) const
 {
     return d->titles[i];
 }
 
 
-QString K3bMusicBrainz::artist( unsigned int i ) const
+QString K3b::MusicBrainz::artist( unsigned int i ) const
 {
     return d->artists[i];
 }

@@ -60,7 +60,7 @@ K3b::DeviceMenu::Private::Private( DeviceMenu* parent )
 :
     q( parent )
 {
-    // FIXME: Should we move these actions to K3bAppDeviceManager?
+    // FIXME: Should we move these actions to K3b::AppDeviceManager?
     actionContinueMultisession = q->addAction( KIcon( "datacd" ), i18n("Continue Multisession Project"), q, SLOT( _k_continueMultisession() ) );
     actionCopy = q->addAction( KIcon( "cdcopy" ), i18n("Copy &Medium..."), q, SLOT( _k_copy() ) );
     actionCopy->setToolTip( i18n("Open the media copy dialog") );
@@ -84,10 +84,10 @@ K3b::DeviceMenu::Private::Private( DeviceMenu* parent )
 
 void K3b::DeviceMenu::Private::_k_aboutToShow()
 {
-    K3bMedium medium = k3bcore->mediaCache()->medium( k3bappcore->appDeviceManager()->currentDevice() );
+    K3b::Medium medium = k3bcore->mediaCache()->medium( k3bappcore->appDeviceManager()->currentDevice() );
 
     actionContinueMultisession->setVisible(
-        medium.content() == K3bMedium::CONTENT_DATA &&
+        medium.content() == K3b::Medium::CONTENT_DATA &&
         medium.diskInfo().appendable() );
 
     // non-empty cd/dvd/bd: copy
@@ -97,22 +97,22 @@ void K3b::DeviceMenu::Private::_k_aboutToShow()
     actionFormat->setVisible (
         !medium.diskInfo().empty() &&
         medium.diskInfo().rewritable() &&
-        medium.diskInfo().mediaType() != K3bDevice::MEDIA_DVD_PLUS_RW );
+        medium.diskInfo().mediaType() != K3b::Device::MEDIA_DVD_PLUS_RW );
 
     // audio content: rip audio
-    actionRipAudio->setVisible( medium.content() & K3bMedium::CONTENT_AUDIO );
+    actionRipAudio->setVisible( medium.content() & K3b::Medium::CONTENT_AUDIO );
 
     // video dvd: videodvd rip
-    actionRipVideoDVD->setVisible( medium.content() & K3bMedium::CONTENT_VIDEO_DVD );
+    actionRipVideoDVD->setVisible( medium.content() & K3b::Medium::CONTENT_VIDEO_DVD );
 
     // video cd: vcd rip
-    actionRipVcd->setVisible( medium.content() & K3bMedium::CONTENT_VIDEO_CD );
+    actionRipVcd->setVisible( medium.content() & K3b::Medium::CONTENT_VIDEO_CD );
 }
 
 
 void K3b::DeviceMenu::Private::_k_copy()
 {
-    K3bMediaCopyDialog d( qApp->activeWindow() );
+    K3b::MediaCopyDialog d( qApp->activeWindow() );
     d.setReadingDevice( k3bappcore->appDeviceManager()->currentDevice() );
     d.exec();
 }
@@ -120,7 +120,7 @@ void K3b::DeviceMenu::Private::_k_copy()
 
 void K3b::DeviceMenu::Private::_k_format()
 {
-    K3bMediaFormattingDialog d( qApp->activeWindow() );
+    K3b::MediaFormattingDialog d( qApp->activeWindow() );
     d.setDevice( k3bappcore->appDeviceManager()->currentDevice() );
     d.exec();
 }
@@ -146,7 +146,7 @@ void K3b::DeviceMenu::Private::_k_ripVideoDVD()
 
 void K3b::DeviceMenu::Private::_k_continueMultisession()
 {
-    K3bDataMultisessionImportDialog::importSession( 0, qApp->activeWindow() );
+    K3b::DataMultisessionImportDialog::importSession( 0, qApp->activeWindow() );
 }
 
 

@@ -52,43 +52,43 @@ namespace {
 }
 
 
-class K3bWriterSelectionWidget::MediaSelectionComboBox : public K3bMediaSelectionComboBox
+class K3b::WriterSelectionWidget::MediaSelectionComboBox : public K3b::MediaSelectionComboBox
 {
 public:
     MediaSelectionComboBox( QWidget* parent )
-        : K3bMediaSelectionComboBox( parent ),
+        : K3b::MediaSelectionComboBox( parent ),
           m_overrideDevice( 0 ) {
     }
 
-    void setOverrideDevice( K3bDevice::Device* dev, const QString& s, const QString& t ) {
+    void setOverrideDevice( K3b::Device::Device* dev, const QString& s, const QString& t ) {
         m_overrideDevice = dev;
         m_overrideString = s;
         m_overrideToolTip = t;
         updateMedia();
     }
 
-    K3bDevice::Device* overrideDevice() const {
+    K3b::Device::Device* overrideDevice() const {
         return m_overrideDevice;
     }
 
 protected:
-    bool showMedium( const K3bMedium& m ) const {
+    bool showMedium( const K3b::Medium& m ) const {
         return ( m.device() == m_overrideDevice ||
-                 K3bMediaSelectionComboBox::showMedium( m ) );
+                 K3b::MediaSelectionComboBox::showMedium( m ) );
     }
 
-    QString mediumString( const K3bMedium& m ) const {
+    QString mediumString( const K3b::Medium& m ) const {
         if( m.device() == m_overrideDevice )
             return m_overrideString;
         else
-            return K3bMediaSelectionComboBox::mediumString( m );
+            return K3b::MediaSelectionComboBox::mediumString( m );
     }
 
-    QString mediumToolTip( const K3bMedium& m ) const {
+    QString mediumToolTip( const K3b::Medium& m ) const {
         if( m.device() == m_overrideDevice )
             return m_overrideToolTip;
         else {
-            QString s = K3bMediaSelectionComboBox::mediumToolTip( m );
+            QString s = K3b::MediaSelectionComboBox::mediumToolTip( m );
             if( !m.diskInfo().empty() && !(wantedMediumState() & m.diskInfo().diskState()) )
                 s.append( "<p><i>" + i18n("Medium will be overwritten.") + "</i>" );
             return s;
@@ -96,13 +96,13 @@ protected:
     }
 
 private:
-    K3bDevice::Device* m_overrideDevice;
+    K3b::Device::Device* m_overrideDevice;
     QString m_overrideString;
     QString m_overrideToolTip;
 };
 
 
-class K3bWriterSelectionWidget::Private
+class K3b::WriterSelectionWidget::Private
 {
 public:
     bool forceAutoSpeed;
@@ -115,7 +115,7 @@ public:
 };
 
 
-K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent )
+K3b::WriterSelectionWidget::WriterSelectionWidget( QWidget *parent )
     : QWidget( parent )
 {
     d = new Private;
@@ -134,12 +134,12 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent )
     QLabel* labelSpeed = new QLabel( groupWriter );
     labelSpeed->setText( i18n( "Speed:" ) );
 
-    m_comboSpeed = new K3bIntMapComboBox( groupWriter );
+    m_comboSpeed = new K3b::IntMapComboBox( groupWriter );
 
     m_comboMedium = new MediaSelectionComboBox( groupWriter );
 
     m_writingAppLabel = new QLabel( i18n("Writing app:"), groupWriter );
-    m_comboWritingApp = new K3bIntMapComboBox( groupWriter );
+    m_comboWritingApp = new K3b::IntMapComboBox( groupWriter );
 
     groupWriterLayout->addWidget( m_comboMedium, 0, 0 );
     groupWriterLayout->addWidget( labelSpeed, 0, 1 );
@@ -160,12 +160,12 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent )
     setTabOrder( m_comboMedium, m_comboSpeed );
     setTabOrder( m_comboSpeed, m_comboWritingApp );
 
-    connect( m_comboMedium, SIGNAL(selectionChanged(K3bDevice::Device*)), this, SIGNAL(writerChanged()) );
-    connect( m_comboMedium, SIGNAL(selectionChanged(K3bDevice::Device*)),
-             this, SIGNAL(writerChanged(K3bDevice::Device*)) );
+    connect( m_comboMedium, SIGNAL(selectionChanged(K3b::Device::Device*)), this, SIGNAL(writerChanged()) );
+    connect( m_comboMedium, SIGNAL(selectionChanged(K3b::Device::Device*)),
+             this, SIGNAL(writerChanged(K3b::Device::Device*)) );
     connect( m_comboMedium, SIGNAL(newMedia()), this, SIGNAL(newMedia()) );
-    connect( m_comboMedium, SIGNAL(newMedium(K3bDevice::Device*)), this, SIGNAL(newMedium(K3bDevice::Device*)) );
-    connect( m_comboMedium, SIGNAL(newMedium(K3bDevice::Device*)), this, SLOT(slotNewBurnMedium(K3bDevice::Device*)) );
+    connect( m_comboMedium, SIGNAL(newMedium(K3b::Device::Device*)), this, SIGNAL(newMedium(K3b::Device::Device*)) );
+    connect( m_comboMedium, SIGNAL(newMedium(K3b::Device::Device*)), this, SLOT(slotNewBurnMedium(K3b::Device::Device*)) );
     connect( m_comboWritingApp, SIGNAL(valueChanged(int)), this, SLOT(slotWritingAppSelected(int)) );
     connect( this, SIGNAL(writerChanged()), SLOT(slotWriterChanged()) );
     connect( m_comboSpeed, SIGNAL(valueChanged(int)), this, SLOT(slotSpeedChanged(int)) );
@@ -204,50 +204,50 @@ K3bWriterSelectionWidget::K3bWriterSelectionWidget( QWidget *parent )
 }
 
 
-K3bWriterSelectionWidget::~K3bWriterSelectionWidget()
+K3b::WriterSelectionWidget::~WriterSelectionWidget()
 {
     delete d;
 }
 
 
-void K3bWriterSelectionWidget::setWantedMediumType( int type )
+void K3b::WriterSelectionWidget::setWantedMediumType( int type )
 {
     m_comboMedium->setWantedMediumType( type );
 }
 
 
-void K3bWriterSelectionWidget::setWantedMediumState( int state )
+void K3b::WriterSelectionWidget::setWantedMediumState( int state )
 {
     m_comboMedium->setWantedMediumState( state );
 }
 
 
-void K3bWriterSelectionWidget::setWantedMediumSize( const K3b::Msf& minSize )
+void K3b::WriterSelectionWidget::setWantedMediumSize( const K3b::Msf& minSize )
 {
 #warning The wanted medium size may not be enough if we need to handle multisession!
     m_comboMedium->setWantedMediumSize( minSize );
 }
 
 
-int K3bWriterSelectionWidget::wantedMediumType() const
+int K3b::WriterSelectionWidget::wantedMediumType() const
 {
     return m_comboMedium->wantedMediumType();
 }
 
 
-int K3bWriterSelectionWidget::wantedMediumState() const
+int K3b::WriterSelectionWidget::wantedMediumState() const
 {
     return m_comboMedium->wantedMediumState();
 }
 
 
-K3b::Msf K3bWriterSelectionWidget::wantedMediumSize() const
+K3b::Msf K3b::WriterSelectionWidget::wantedMediumSize() const
 {
     return m_comboMedium->wantedMediumSize();
 }
 
 
-void K3bWriterSelectionWidget::slotConfigChanged( KSharedConfig::Ptr c )
+void K3b::WriterSelectionWidget::slotConfigChanged( KSharedConfig::Ptr c )
 {
     KConfigGroup g( c, "General Options" );
     if( g.readEntry( "Manual writing app selection", false ) ) {
@@ -261,7 +261,7 @@ void K3bWriterSelectionWidget::slotConfigChanged( KSharedConfig::Ptr c )
 }
 
 
-void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
+void K3b::WriterSelectionWidget::slotRefreshWriterSpeeds()
 {
     if( writerDevice() ) {
         QList<int> speeds = k3bappcore->mediaCache()->writingSpeeds( writerDevice() );
@@ -288,19 +288,19 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
                 // is only used for CD/DVD copy anyway we simply reply on the inserted medium's type.
                 //
                 int i = 1;
-                int x1Speed = K3bDevice::SPEED_FACTOR_CD;
+                int x1Speed = K3b::Device::SPEED_FACTOR_CD;
                 if ( k3bappcore->mediaCache()->diskInfo( writerDevice() ).isDvdMedia() ) {
-                    x1Speed = K3bDevice::SPEED_FACTOR_DVD;
+                    x1Speed = K3b::Device::SPEED_FACTOR_DVD;
                 }
-                else if ( K3bDevice::isBdMedia( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() ) ) {
-                    x1Speed = K3bDevice::SPEED_FACTOR_BD;
+                else if ( K3b::Device::isBdMedia( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() ) ) {
+                    x1Speed = K3b::Device::SPEED_FACTOR_BD;
                 }
                 int max = writerDevice()->maxWriteSpeed();
                 while( i*x1Speed <= max ) {
                     insertSpeedItem( i*x1Speed );
                     // a little hack to handle the stupid 2.4x DVD speed
-                    if( i == 2 && x1Speed == K3bDevice::SPEED_FACTOR_DVD )
-                        insertSpeedItem( (int)(2.4*( double )K3bDevice::SPEED_FACTOR_DVD) );
+                    if( i == 2 && x1Speed == K3b::Device::SPEED_FACTOR_DVD )
+                        insertSpeedItem( (int)(2.4*( double )K3b::Device::SPEED_FACTOR_DVD) );
                     i = ( i == 1 ? 2 : i+2 );
                 }
             }
@@ -336,7 +336,7 @@ void K3bWriterSelectionWidget::slotRefreshWriterSpeeds()
 }
 
 
-void K3bWriterSelectionWidget::clearSpeedCombo()
+void K3b::WriterSelectionWidget::clearSpeedCombo()
 {
     m_comboSpeed->clear();
     d->haveManualSpeed = false;
@@ -344,9 +344,9 @@ void K3bWriterSelectionWidget::clearSpeedCombo()
 }
 
 
-void K3bWriterSelectionWidget::insertSpeedItem( int speed )
+void K3b::WriterSelectionWidget::insertSpeedItem( int speed )
 {
-    int mediaType = k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType();
+    Device::MediaType mediaType = k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType();
 
     int insertIndex = -1;
     if ( m_comboSpeed->hasValue( s_moreSpeedValue ) ) {
@@ -356,7 +356,7 @@ void K3bWriterSelectionWidget::insertSpeedItem( int speed )
     //
     // polish the speed
     //
-    if( K3bDevice::isDvdMedia( mediaType ) ) {
+    if( K3b::Device::isDvdMedia( mediaType ) ) {
         //
         // AFAIK there is only one strange DVD burning speed like 2.4
         //
@@ -366,58 +366,58 @@ void K3bWriterSelectionWidget::insertSpeedItem( int speed )
         else
             speed = ( ( speed+692 )/1385 )*1385;
     }
-    else if ( K3bDevice::isBdMedia( mediaType ) ) {
+    else if ( K3b::Device::isBdMedia( mediaType ) ) {
         speed = ( ( speed+2250 )/4496 )*4496;
     }
     else {
-        speed = ( ( speed + ( K3bDevice::SPEED_FACTOR_CD/2 ) )/K3bDevice::SPEED_FACTOR_CD )*K3bDevice::SPEED_FACTOR_CD;
+        speed = ( ( speed + ( K3b::Device::SPEED_FACTOR_CD/2 ) )/K3b::Device::SPEED_FACTOR_CD )*K3b::Device::SPEED_FACTOR_CD;
     }
 
     if( !m_comboSpeed->hasValue( speed ) ) {
-        if( K3bDevice::isDvdMedia( mediaType ) ) {
+        if( K3b::Device::isDvdMedia( mediaType ) ) {
             m_comboSpeed->insertItem( speed,
                                       ( speed%1385 > 0
                                         ? QString::number( (float)speed/1385.0, 'f', 1 )  // example: DVD+R(W): 2.4x
-                                        : QString::number( speed/K3bDevice::SPEED_FACTOR_DVD ) )
+                                        : QString::number( speed/K3b::Device::SPEED_FACTOR_DVD ) )
                                       + "x",
                                       QString(),
                                       insertIndex );
         }
-        else if ( K3bDevice::isBdMedia( mediaType ) ) {
-            m_comboSpeed->insertItem( speed, QString("%1x").arg(speed/K3bDevice::SPEED_FACTOR_BD), QString(), insertIndex );
+        else if ( K3b::Device::isBdMedia( mediaType ) ) {
+            m_comboSpeed->insertItem( speed, QString("%1x").arg(speed/K3b::Device::SPEED_FACTOR_BD), QString(), insertIndex );
         }
         else {
-            m_comboSpeed->insertItem( speed, QString("%1x").arg(speed/K3bDevice::SPEED_FACTOR_CD), QString(), insertIndex );
+            m_comboSpeed->insertItem( speed, QString("%1x").arg(speed/K3b::Device::SPEED_FACTOR_CD), QString(), insertIndex );
         }
     }
 }
 
 
-void K3bWriterSelectionWidget::slotWritingAppSelected( int app )
+void K3b::WriterSelectionWidget::slotWritingAppSelected( int app )
 {
     emit writingAppChanged( K3b::WritingApp( app ) );
 }
 
 
-K3bDevice::Device* K3bWriterSelectionWidget::writerDevice() const
+K3b::Device::Device* K3b::WriterSelectionWidget::writerDevice() const
 {
     return m_comboMedium->selectedDevice();
 }
 
 
-QList<K3bDevice::Device*> K3bWriterSelectionWidget::allDevices() const
+QList<K3b::Device::Device*> K3b::WriterSelectionWidget::allDevices() const
 {
     return m_comboMedium->allDevices();
 }
 
 
-void K3bWriterSelectionWidget::setWriterDevice( K3bDevice::Device* dev )
+void K3b::WriterSelectionWidget::setWriterDevice( K3b::Device::Device* dev )
 {
     m_comboMedium->setSelectedDevice( dev );
 }
 
 
-void K3bWriterSelectionWidget::setSpeed( int s )
+void K3b::WriterSelectionWidget::setSpeed( int s )
 {
     d->lastSetSpeed = -1;
 
@@ -432,13 +432,13 @@ void K3bWriterSelectionWidget::setSpeed( int s )
 }
 
 
-void K3bWriterSelectionWidget::setWritingApp( K3b::WritingApp app )
+void K3b::WriterSelectionWidget::setWritingApp( K3b::WritingApp app )
 {
     m_comboWritingApp->setSelectedValue( ( int )app );
 }
 
 
-int K3bWriterSelectionWidget::writerSpeed() const
+int K3b::WriterSelectionWidget::writerSpeed() const
 {
     if( m_comboSpeed->selectedValue() == s_autoSpeedValue )
         return 0; // Auto
@@ -449,7 +449,7 @@ int K3bWriterSelectionWidget::writerSpeed() const
 }
 
 
-K3b::WritingApp K3bWriterSelectionWidget::writingApp() const
+K3b::WritingApp K3b::WriterSelectionWidget::writingApp() const
 {
     KConfigGroup g( KGlobal::config(), "General Options" );
     if( g.readEntry( "Manual writing app selection", false ) ) {
@@ -460,13 +460,13 @@ K3b::WritingApp K3bWriterSelectionWidget::writingApp() const
 }
 
 
-K3b::WritingApp K3bWriterSelectionWidget::selectedWritingApp() const
+K3b::WritingApp K3b::WriterSelectionWidget::selectedWritingApp() const
 {
     return K3b::WritingApp( m_comboWritingApp->selectedValue() );
 }
 
 
-void K3bWriterSelectionWidget::slotSpeedChanged( int s )
+void K3b::WriterSelectionWidget::slotSpeedChanged( int s )
 {
     // the last item is the manual speed selection item
     if( d->haveManualSpeed && s == s_moreSpeedValue ) {
@@ -475,26 +475,26 @@ void K3bWriterSelectionWidget::slotSpeedChanged( int s )
     else {
         d->lastSetSpeed = s;
 
-        if( K3bDevice::Device* dev = writerDevice() )
+        if( K3b::Device::Device* dev = writerDevice() )
             dev->setCurrentWriteSpeed( writerSpeed() );
     }
 }
 
 
-void K3bWriterSelectionWidget::slotWriterChanged()
+void K3b::WriterSelectionWidget::slotWriterChanged()
 {
     slotRefreshWriterSpeeds();
     slotRefreshWritingApps();
 
     // save last selected writer
-    if( K3bDevice::Device* dev = writerDevice() ) {
+    if( K3b::Device::Device* dev = writerDevice() ) {
         KConfigGroup g( KGlobal::config(), "General Options" );
         g.writeEntry( "current_writer", dev->blockDeviceName() );
     }
 }
 
 
-void K3bWriterSelectionWidget::setSupportedWritingApps( K3b::WritingApps i )
+void K3b::WriterSelectionWidget::setSupportedWritingApps( K3b::WritingApps i )
 {
     K3b::WritingApp oldApp = writingApp();
 
@@ -506,14 +506,14 @@ void K3bWriterSelectionWidget::setSupportedWritingApps( K3b::WritingApps i )
 }
 
 
-void K3bWriterSelectionWidget::slotRefreshWritingApps()
+void K3b::WriterSelectionWidget::slotRefreshWritingApps()
 {
     K3b::WritingApps i = 0;
 
     // select the ones that make sense
     if( k3bappcore->mediaCache()->diskInfo( writerDevice() ).isDvdMedia() )
         i = K3b::WRITING_APP_GROWISOFS|K3b::WRITING_APP_DVD_RW_FORMAT|K3b::WRITING_APP_CDRECORD;
-    else if ( K3bDevice::isBdMedia( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() ) )
+    else if ( K3b::Device::isBdMedia( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() ) )
         i = K3b::WRITING_APP_GROWISOFS|K3b::WRITING_APP_CDRECORD;
     else
         i = K3b::WRITING_APP_CDRDAO|K3b::WRITING_APP_CDRECORD;
@@ -537,7 +537,7 @@ void K3bWriterSelectionWidget::slotRefreshWritingApps()
 }
 
 
-void K3bWriterSelectionWidget::loadConfig( const KConfigGroup& c )
+void K3b::WriterSelectionWidget::loadConfig( const KConfigGroup& c )
 {
     setWriterDevice( k3bcore->deviceManager()->findDevice( c.readEntry( "writer_device" ) ) );
     setSpeed( c.readEntry( "writing_speed",  0 ) );
@@ -545,14 +545,14 @@ void K3bWriterSelectionWidget::loadConfig( const KConfigGroup& c )
 }
 
 
-void K3bWriterSelectionWidget::saveConfig( KConfigGroup c )
+void K3b::WriterSelectionWidget::saveConfig( KConfigGroup c )
 {
     c.writeEntry( "writing_speed", writerSpeed() );
     c.writeEntry( "writer_device", writerDevice() ? writerDevice()->blockDeviceName() : QString() );
     c.writeEntry( "writing_app", m_comboWritingApp->currentText() );
 }
 
-void K3bWriterSelectionWidget::loadDefaults()
+void K3b::WriterSelectionWidget::loadDefaults()
 {
     // ignore the writer
     m_comboSpeed->setSelectedValue( s_autoSpeedValue ); // Auto
@@ -560,26 +560,26 @@ void K3bWriterSelectionWidget::loadDefaults()
 }
 
 
-void K3bWriterSelectionWidget::setForceAutoSpeed( bool b )
+void K3b::WriterSelectionWidget::setForceAutoSpeed( bool b )
 {
     d->forceAutoSpeed = b;
     slotRefreshWriterSpeeds();
 }
 
 
-void K3bWriterSelectionWidget::setOverrideDevice( K3bDevice::Device* dev, const QString& overrideString, const QString& tooltip )
+void K3b::WriterSelectionWidget::setOverrideDevice( K3b::Device::Device* dev, const QString& overrideString, const QString& tooltip )
 {
     m_comboMedium->setOverrideDevice( dev, overrideString, tooltip );
 }
 
 
-void K3bWriterSelectionWidget::slotNewBurnMedium( K3bDevice::Device* dev )
+void K3b::WriterSelectionWidget::slotNewBurnMedium( K3b::Device::Device* dev )
 {
     //
     // Try to select a medium that is better suited than the current one
     //
     if( dev && dev != writerDevice() ) {
-        K3bMedium medium = k3bappcore->mediaCache()->medium( dev );
+        K3b::Medium medium = k3bappcore->mediaCache()->medium( dev );
 
         //
         // Always prefer newly inserted media over the override device
@@ -591,7 +591,7 @@ void K3bWriterSelectionWidget::slotNewBurnMedium( K3bDevice::Device* dev )
         //
         // Prefer an empty medium over one that has to be erased
         //
-        else if( wantedMediumState() & K3bDevice::STATE_EMPTY &&
+        else if( wantedMediumState() & K3b::Device::STATE_EMPTY &&
                  !k3bappcore->mediaCache()->diskInfo( writerDevice() ).empty() &&
                  medium.diskInfo().empty() ) {
             setWriterDevice( dev );
@@ -600,7 +600,7 @@ void K3bWriterSelectionWidget::slotNewBurnMedium( K3bDevice::Device* dev )
 }
 
 
-void K3bWriterSelectionWidget::slotManualSpeed()
+void K3b::WriterSelectionWidget::slotManualSpeed()
 {
     //
     // In case we think we have all the available speeds (i.e. if the device reported a non-empty list)
@@ -623,12 +623,12 @@ void K3bWriterSelectionWidget::slotManualSpeed()
     // We need to know the type of medium. Since the override device
     // is only used for copy anyway we simply reply on the inserted medium's type.
     //
-    int speedFactor = K3bDevice::SPEED_FACTOR_CD;
+    int speedFactor = K3b::Device::SPEED_FACTOR_CD;
     if( k3bappcore->mediaCache()->diskInfo( writerDevice() ).isDvdMedia() ) {
-        speedFactor = K3bDevice::SPEED_FACTOR_DVD;
+        speedFactor = K3b::Device::SPEED_FACTOR_DVD;
     }
-    else if ( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() & K3bDevice::MEDIA_BD_ALL ) {
-        speedFactor = K3bDevice::SPEED_FACTOR_BD;
+    else if ( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() & K3b::Device::MEDIA_BD_ALL ) {
+        speedFactor = K3b::Device::SPEED_FACTOR_BD;
     }
 
     bool ok = true;
@@ -660,7 +660,7 @@ void K3bWriterSelectionWidget::slotManualSpeed()
 }
 
 
-void K3bWriterSelectionWidget::setIgnoreDevice( K3bDevice::Device* dev )
+void K3b::WriterSelectionWidget::setIgnoreDevice( K3b::Device::Device* dev )
 {
     m_comboMedium->setIgnoreDevice( dev );
 }

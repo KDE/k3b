@@ -21,7 +21,7 @@
 class K3bMpcWrapper;
 
 
-class K3bMpcDecoderFactory : public K3bAudioDecoderFactory
+class K3bMpcDecoderFactory : public K3b::AudioDecoderFactory
 {
     Q_OBJECT
 
@@ -33,11 +33,11 @@ public:
 
     int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-    K3bAudioDecoder* createDecoder( QObject* parent = 0 ) const;
+    K3b::AudioDecoder* createDecoder( QObject* parent = 0 ) const;
 };
 
 
-class K3bMpcDecoder : public K3bAudioDecoder
+class K3bMpcDecoder : public K3b::AudioDecoder
 {
     Q_OBJECT
 

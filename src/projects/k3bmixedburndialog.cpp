@@ -60,8 +60,8 @@
 #include <kvbox.h>
 
 
-K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent )
-  : K3bProjectBurnDialog( doc, parent ),
+K3b::MixedBurnDialog::MixedBurnDialog( K3b::MixedDoc* doc, QWidget *parent )
+  : K3b::ProjectBurnDialog( doc, parent ),
     m_doc(doc)
 {
   prepareGui();
@@ -73,11 +73,11 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent )
   m_checkOnlyCreateImage->hide();
 
   // create cd-text page
-  m_cdtextWidget = new K3bAudioCdTextWidget( this );
+  m_cdtextWidget = new K3b::AudioCdTextWidget( this );
   addPage( m_cdtextWidget, i18n("CD-Text") );
 
   // create image settings tab
-  m_imageSettingsWidget = new K3bDataImageSettingsWidget( this );
+  m_imageSettingsWidget = new K3b::DataImageSettingsWidget( this );
   addPage( m_imageSettingsWidget, i18n("Filesystem") );
 
   setupSettingsPage();
@@ -92,20 +92,20 @@ K3bMixedBurnDialog::K3bMixedBurnDialog( K3bMixedDoc* doc, QWidget *parent )
 }
 
 
-void K3bMixedBurnDialog::setupSettingsPage()
+void K3b::MixedBurnDialog::setupSettingsPage()
 {
   QWidget* w = new QWidget( this );
 
   Q3GroupBox* groupDataMode = new Q3GroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), w );
-  m_dataModeWidget = new K3bDataModeWidget( groupDataMode );
+  m_dataModeWidget = new K3b::DataModeWidget( groupDataMode );
 
   Q3GroupBox* groupNormalize = new Q3GroupBox( 1, Qt::Vertical, i18n("Misc"), w );
-  m_checkNormalize = K3bStdGuiItems::normalizeCheckBox( groupNormalize );
+  m_checkNormalize = K3b::StdGuiItems::normalizeCheckBox( groupNormalize );
 
   Q3GroupBox* groupMixedType = new Q3GroupBox( 1, Qt::Vertical, i18n("Mixed Mode Type"), w );
-  m_comboMixedModeType = new K3bIntMapComboBox( groupMixedType );
+  m_comboMixedModeType = new K3b::IntMapComboBox( groupMixedType );
 
-  m_comboMixedModeType->insertItem( K3bMixedDoc::DATA_SECOND_SESSION,
+  m_comboMixedModeType->insertItem( K3b::MixedDoc::DATA_SECOND_SESSION,
 				    i18n("Data in second session (CD-Extra)"),
 				    i18n("<em>Blue book CD</em>"
 					 "<br>K3b will create a multisession CD with "
@@ -122,11 +122,11 @@ void K3bMixedBurnDialog::setupSettingsPage()
 					 "this is the recommended mode."
 					 "<br>Some older CD-ROMs may have problems reading "
 					 "a blue book CD since it is a multisession CD.") );
-  m_comboMixedModeType->insertItem( K3bMixedDoc::DATA_FIRST_TRACK,
+  m_comboMixedModeType->insertItem( K3b::MixedDoc::DATA_FIRST_TRACK,
 				    i18n("Data in first track"),
 				    i18n("K3b will write the data track before all "
 					 "audio tracks.") );
-  m_comboMixedModeType->insertItem( K3bMixedDoc::DATA_LAST_TRACK,
+  m_comboMixedModeType->insertItem( K3b::MixedDoc::DATA_LAST_TRACK,
 				    i18n("Data in last track"),
 				    i18n("K3b will write the data track after all "
 					 "audio tracks.") );
@@ -148,26 +148,26 @@ void K3bMixedBurnDialog::setupSettingsPage()
 }
 
 
-void K3bMixedBurnDialog::slotStartClicked()
+void K3b::MixedBurnDialog::slotStartClicked()
 {
   // FIXME: this should not be done via the doc. So remove all gui stuff from the doc
-//  static_cast<K3bMixedView*>(m_doc->view())->player()->stop();
-  K3bProjectBurnDialog::slotStartClicked();
+//  static_cast<K3b::MixedView*>(m_doc->view())->player()->stop();
+  K3b::ProjectBurnDialog::slotStartClicked();
 }
 
 
-void K3bMixedBurnDialog::saveSettings()
+void K3b::MixedBurnDialog::saveSettings()
 {
-  K3bProjectBurnDialog::saveSettings();
+  K3b::ProjectBurnDialog::saveSettings();
 
-  m_doc->setMixedType( (K3bMixedDoc::MixedType)m_comboMixedModeType->selectedValue() );
+  m_doc->setMixedType( (K3b::MixedDoc::MixedType)m_comboMixedModeType->selectedValue() );
 
   m_cdtextWidget->save( m_doc->audioDoc() );
 
   m_doc->audioDoc()->setNormalize( m_checkNormalize->isChecked() );
 
   // save iso image settings
-  K3bIsoOptions o = m_doc->dataDoc()->isoOptions();
+  K3b::IsoOptions o = m_doc->dataDoc()->isoOptions();
   m_imageSettingsWidget->save( o );
   m_doc->dataDoc()->setIsoOptions( o );
 
@@ -178,9 +178,9 @@ void K3bMixedBurnDialog::saveSettings()
 }
 
 
-void K3bMixedBurnDialog::readSettings()
+void K3b::MixedBurnDialog::readSettings()
 {
-  K3bProjectBurnDialog::readSettings();
+  K3b::ProjectBurnDialog::readSettings();
 
   m_checkNormalize->setChecked( m_doc->audioDoc()->normalize() );
 
@@ -199,60 +199,60 @@ void K3bMixedBurnDialog::readSettings()
 }
 
 
-void K3bMixedBurnDialog::loadK3bDefaults()
+void K3b::MixedBurnDialog::loadK3bDefaults()
 {
-  K3bProjectBurnDialog::loadK3bDefaults();
+  K3b::ProjectBurnDialog::loadK3bDefaults();
 
   m_cdtextWidget->setChecked( false );
   m_checkNormalize->setChecked( false );
 
-  m_comboMixedModeType->setSelectedValue( K3bMixedDoc::DATA_SECOND_SESSION );
+  m_comboMixedModeType->setSelectedValue( K3b::MixedDoc::DATA_SECOND_SESSION );
 
   m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
 
-  m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
+  m_imageSettingsWidget->load( K3b::IsoOptions::defaults() );
 
   toggleAll();
 }
 
 
-void K3bMixedBurnDialog::loadUserDefaults( const KConfigGroup& c )
+void K3b::MixedBurnDialog::loadUserDefaults( const KConfigGroup& c )
 {
-  K3bProjectBurnDialog::loadUserDefaults( c );
+  K3b::ProjectBurnDialog::loadUserDefaults( c );
 
   m_cdtextWidget->setChecked( c.readEntry( "cd_text", false ) );
   m_checkNormalize->setChecked( c.readEntry( "normalize", false ) );
 
   // load mixed type
   if( c.readEntry( "mixed_type" ) == "last_track" )
-    m_comboMixedModeType->setSelectedValue( K3bMixedDoc::DATA_LAST_TRACK );
+    m_comboMixedModeType->setSelectedValue( K3b::MixedDoc::DATA_LAST_TRACK );
   else if( c.readEntry( "mixed_type" ) == "first_track" )
-    m_comboMixedModeType->setSelectedValue( K3bMixedDoc::DATA_FIRST_TRACK );
+    m_comboMixedModeType->setSelectedValue( K3b::MixedDoc::DATA_FIRST_TRACK );
   else
-    m_comboMixedModeType->setSelectedValue( K3bMixedDoc::DATA_SECOND_SESSION );
+    m_comboMixedModeType->setSelectedValue( K3b::MixedDoc::DATA_SECOND_SESSION );
 
   m_dataModeWidget->loadConfig(c);
 
-  K3bIsoOptions o = K3bIsoOptions::load( c );
+  K3b::IsoOptions o = K3b::IsoOptions::load( c );
   m_imageSettingsWidget->load( o );
 
   toggleAll();
 }
 
 
-void K3bMixedBurnDialog::saveUserDefaults( KConfigGroup c )
+void K3b::MixedBurnDialog::saveUserDefaults( KConfigGroup c )
 {
-  K3bProjectBurnDialog::saveUserDefaults(c);
+  K3b::ProjectBurnDialog::saveUserDefaults(c);
 
   c.writeEntry( "cd_text", m_cdtextWidget->isChecked() );
   c.writeEntry( "normalize", m_checkNormalize->isChecked() );
 
   // save mixed type
   switch( m_comboMixedModeType->selectedValue() ) {
-  case K3bMixedDoc::DATA_LAST_TRACK:
+  case K3b::MixedDoc::DATA_LAST_TRACK:
    c.writeEntry( "mixed_type", "last_track" );
    break;
-  case K3bMixedDoc::DATA_FIRST_TRACK:
+  case K3b::MixedDoc::DATA_FIRST_TRACK:
     c.writeEntry( "mixed_type", "first_track" );
     break;
   default:
@@ -261,7 +261,7 @@ void K3bMixedBurnDialog::saveUserDefaults( KConfigGroup c )
 
   m_dataModeWidget->saveConfig(c);
 
-  K3bIsoOptions o;
+  K3b::IsoOptions o;
   m_imageSettingsWidget->save( o );
   o.save( c );
 
@@ -271,9 +271,9 @@ void K3bMixedBurnDialog::saveUserDefaults( KConfigGroup c )
 }
 
 
-void K3bMixedBurnDialog::toggleAll()
+void K3b::MixedBurnDialog::toggleAll()
 {
-  K3bProjectBurnDialog::toggleAll();
+  K3b::ProjectBurnDialog::toggleAll();
 
   bool cdrecordOnTheFly = false;
   bool cdrecordCdText = false;
@@ -305,7 +305,7 @@ void K3bMixedBurnDialog::toggleAll()
 }
 
 
-void K3bMixedBurnDialog::slotNormalizeToggled( bool on )
+void K3b::MixedBurnDialog::slotNormalizeToggled( bool on )
 {
   if( on ) {
     // we are not able to normalize in on-the-fly mode
@@ -332,7 +332,7 @@ void K3bMixedBurnDialog::slotNormalizeToggled( bool on )
 }
 
 
-void K3bMixedBurnDialog::slotCacheImageToggled( bool on )
+void K3b::MixedBurnDialog::slotCacheImageToggled( bool on )
 {
   if( on ) {
     if( m_checkNormalize->isChecked() ) {

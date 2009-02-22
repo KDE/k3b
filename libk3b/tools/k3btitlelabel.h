@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,48 +23,47 @@
 
 class QResizeEvent;
 
-class LIBK3B_EXPORT K3bTitleLabel : public QFrame
-{
-    Q_OBJECT
+namespace K3b {
+    class LIBK3B_EXPORT TitleLabel : public QFrame
+    {
+        Q_OBJECT
 
-public:
-    K3bTitleLabel( QWidget* parent = 0 );
-    ~K3bTitleLabel();
+    public:
+        TitleLabel( QWidget* parent = 0 );
+        ~TitleLabel();
 
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
+        QSize sizeHint() const;
+        QSize minimumSizeHint() const;
 
-    bool event( QEvent* event );
+        bool event( QEvent* event );
 
-public Q_SLOTS:
-    /**
-     * default: 2
-     */
-    void setMargin( int );
+    public Q_SLOTS:
+        /**
+         * default: 2
+         */
+        void setMargin( int );
 
-    void setTitle( const QString& title, const QString& subTitle = QString() );
-    void setSubTitle( const QString& subTitle );
+        void setTitle( const QString& title, const QString& subTitle = QString() );
+        void setSubTitle( const QString& subTitle );
 
-    /**
-     * The title label only supports alignments left, hcenter, and right
-     *
-     * Default alignment is left.
-     */
-    // FIXME: honor right-to-left languages
-    void setAlignment( int align );
+        /**
+         * The title label only supports alignments left, hcenter, and right
+         *
+         * Default alignment is left.
+         */
+        // FIXME: honor right-to-left languages
+        void setAlignment( int align );
 
-protected:
-    void resizeEvent( QResizeEvent* );
-    void paintEvent( QPaintEvent* );
+    protected:
+        void resizeEvent( QResizeEvent* );
+        void paintEvent( QPaintEvent* );
 
-private:
-    void updatePositioning();
+    private:
+        void updatePositioning();
 
-    class ToolTip;
-    ToolTip* m_toolTip;
-
-    class Private;
-    Private* d;
-};
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

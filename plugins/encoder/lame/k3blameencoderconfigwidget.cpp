@@ -38,7 +38,7 @@ K3B_EXPORT_PLUGIN_CONFIG_WIDGET( kcm_k3blameencoder, K3bLameEncoderSettingsWidge
 
 
 K3bLameEncoderSettingsWidget::K3bLameEncoderSettingsWidget( QWidget* parent, const QVariantList& args )
-    : K3bPluginConfigWidget( parent, args )
+    : K3b::PluginConfigWidget( parent, args )
 {
     setupUi( this );
 

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2007-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2007-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,51 +19,53 @@
 
 #include "k3b_export.h"
 
-namespace K3bDevice {
-    class Device;
-}
+namespace K3b {
+    namespace Device {
+        class Device;
+    }
 
-class LIBK3B_EXPORT K3bDeviceModel : public QAbstractItemModel
-{
-    Q_OBJECT
+    class LIBK3B_EXPORT DeviceModel : public QAbstractItemModel
+    {
+        Q_OBJECT
 
-public:
-    K3bDeviceModel( QObject* parent = 0 );
-    ~K3bDeviceModel();
+    public:
+        DeviceModel( QObject* parent = 0 );
+        ~DeviceModel();
 
-    QList<K3bDevice::Device*> devices() const;
+        QList<Device::Device*> devices() const;
 
-    K3bDevice::Device* deviceForIndex( const QModelIndex& index ) const;
-    QModelIndex indexForDevice( K3bDevice::Device* dev ) const;
+        Device::Device* deviceForIndex( const QModelIndex& index ) const;
+        QModelIndex indexForDevice( Device::Device* dev ) const;
 
-    int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-    QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-    QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
-    QModelIndex parent( const QModelIndex& index ) const;
-    int rowCount( const QModelIndex& parent = QModelIndex() ) const;
+        int columnCount( const QModelIndex& parent = QModelIndex() ) const;
+        QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
+        QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
+        QModelIndex parent( const QModelIndex& index ) const;
+        int rowCount( const QModelIndex& parent = QModelIndex() ) const;
 
-    enum DeviceRoles {
-        IsDevice = 1000, //**< boolean value only used to check if we have a device item */
-        Vendor,
-        Description,
-        BlockDevice,
-        Valid
+        enum DeviceRoles {
+            IsDevice = 1000, //**< boolean value only used to check if we have a device item */
+            Vendor,
+            Description,
+            BlockDevice,
+            Valid
+        };
+
+    public Q_SLOTS:
+        void addDevice( Device::Device* );
+        void addDevices( const QList<Device::Device*>& );
+        void setDevices( const QList<Device::Device*>& devices );
+        void removeDevice( Device::Device* dev );
+        void clear();
+
+    private Q_SLOTS:
+        void slotMediumChanged( Device::Device* dev );
+        void slotCheckingMedium( Device::Device* dev, const QString& );
+
+    private:
+        class Private;
+        Private* const d;
     };
-
-public Q_SLOTS:
-    void addDevice( K3bDevice::Device* );
-    void addDevices( const QList<K3bDevice::Device*>& );
-    void setDevices( const QList<K3bDevice::Device*>& devices );
-    void removeDevice( K3bDevice::Device* dev );
-    void clear();
-
-private Q_SLOTS:
-    void slotMediumChanged( K3bDevice::Device* dev );
-    void slotCheckingMedium( K3bDevice::Device* dev, const QString& );
-
-private:
-    class Private;
-    Private* const d;
-};
+}
 
 #endif

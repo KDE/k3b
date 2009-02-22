@@ -23,7 +23,9 @@
 #include <QLabel>
 #include <QList>
 
-class K3bDataItem;
+namespace K3b {
+    class DataItem;
+}
 
 class KLineEdit;
 class QLabel;
@@ -33,13 +35,14 @@ class QCheckBox;
 /**
  *@author Sebastian Trueg
  */
-class K3bDataPropertiesDialog : public KDialog  
+namespace K3b {
+class DataPropertiesDialog : public KDialog  
 {
     Q_OBJECT
 
 public: 
-    K3bDataPropertiesDialog( const QList<K3bDataItem*>&, QWidget* parent = 0 );
-    ~K3bDataPropertiesDialog();
+    DataPropertiesDialog( const QList<DataItem*>&, QWidget* parent = 0 );
+    ~DataPropertiesDialog();
 
 protected Q_SLOTS:
     void slotOk();
@@ -65,10 +68,11 @@ private:
     QCheckBox* m_checkHideOnJoliet;
     KLineEdit* m_editSortWeight;
 
-    QList<K3bDataItem*> m_dataItems;
+    QList<DataItem*> m_dataItems;
 
-    void loadItemProperties( K3bDataItem* );
-    void loadListProperties( const QList<K3bDataItem*>& );
+    void loadItemProperties( DataItem* );
+    void loadListProperties( const QList<DataItem*>& );
 };
+}
 
 #endif

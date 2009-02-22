@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
  *
@@ -17,57 +17,58 @@
 
 #include <qstring.h>
 
-class K3bExternalBin;
+namespace K3b {
+    class ExternalBin;
 
+    /**
+     * Derive from this to handle mkisofs.
+     */
+    class MkisofsHandler
+    {
+    public:
+        MkisofsHandler();
+        virtual ~MkisofsHandler();
 
-/**
- * Derive from this to handle mkisofs.
- */
-class K3bMkisofsHandler
-{
- public:
-  K3bMkisofsHandler();
-  virtual ~K3bMkisofsHandler();
+        /**
+         * \return true if there was a read error.
+         */
+        bool mkisofsReadError() const;
 
-  /**
-   * \return true if there was a read error.
-   */
-  bool mkisofsReadError() const;
+    protected:
+        /**
+         * Initialize the MkisofsHandler.
+         * This method emits copyright information and an error message in case mkisofs is not installed
+         * through handleMkisofsInfoMessage.
+         *
+         * \return A mkisofs bin object to be used or 0 if mkisofs is not installed.
+         */
+        const ExternalBin* initMkisofs();
 
- protected:
-  /**
-   * Initialize the MkisofsHandler.
-   * This method emits copyright information and an error message in case mkisofs is not installed
-   * through handleMkisofsInfoMessage.
-   *
-   * \return A mkisofs bin object to be used or 0 if mkisofs is not installed.
-   */
-  const K3bExternalBin* initMkisofs();
+        void parseMkisofsOutput( const QString& line );
 
-  void parseMkisofsOutput( const QString& line );
+        /**
+         * Used internally by handleMkisofsOutput.
+         * May be used in case handleMkisofsOutput is not sufficient.
+         */
+        int parseMkisofsProgress( const QString& line );
 
-  /**
-   * Used internally by handleMkisofsOutput.
-   * May be used in case handleMkisofsOutput is not sufficient.
-   */
-  int parseMkisofsProgress( const QString& line );
+        /**
+         * Called by handleMkisofsOutput
+         */
+        virtual void handleMkisofsProgress( int ) = 0;
 
-  /**
-   * Called by handleMkisofsOutput
-   */
-  virtual void handleMkisofsProgress( int ) = 0;
+        /**
+         * Called by handleMkisofsOutput
+         *
+         * Uses Job::MessageType
+         */
+        virtual void handleMkisofsInfoMessage( const QString&, int ) = 0;
 
-  /**
-   * Called by handleMkisofsOutput
-   *
-   * Uses K3bJob::MessageType
-   */
-  virtual void handleMkisofsInfoMessage( const QString&, int ) = 0;
-
- private:
-  class Private;
-  Private* d;
-};
+    private:
+        class Private;
+        Private* d;
+    };
+}
 
 
 #endif

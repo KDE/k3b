@@ -15,6 +15,23 @@
 #include "k3bdataurladdingdialog.h"
 #include "k3bencodingconverter.h"
 
+#include "k3bdatadoc.h"
+#include "k3bdiritem.h"
+#include "k3bcore.h"
+#include "k3bfileitem.h"
+#include "k3bmultichoicedialog.h"
+#include "k3bvalidators.h"
+#include "k3bglobals.h"
+#include "k3bisooptions.h"
+#include "k3b.h"
+#include "k3bapplication.h"
+#include "k3biso9660.h"
+#include "k3bdirsizejob.h"
+#include "k3binteractiondialog.h"
+#include "k3bthread.h"
+#include "k3bsignalwaiter.h"
+#include "k3bexternalbinmanager.h"
+
 #include <qtimer.h>
 #include <qlabel.h>
 #include <qlayout.h>
@@ -22,22 +39,6 @@
 #include <qfileinfo.h>
 #include <QList>
 #include <QGridLayout>
-#include <k3bdatadoc.h>
-#include <k3bdiritem.h>
-#include <k3bcore.h>
-#include <k3bfileitem.h>
-#include <k3bmultichoicedialog.h>
-#include <k3bvalidators.h>
-#include <k3bglobals.h>
-#include <k3bisooptions.h>
-#include <k3b.h>
-#include <k3bapplication.h>
-#include <k3biso9660.h>
-#include <k3bdirsizejob.h>
-#include <k3binteractiondialog.h>
-#include <k3bthread.h>
-#include <k3bsignalwaiter.h>
-#include <k3bexternalbinmanager.h>
 
 #include <klocale.h>
 #include <kurl.h>
@@ -53,7 +54,7 @@
 #include <unistd.h>
 
 
-K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent )
+K3b::DataUrlAddingDialog::DataUrlAddingDialog( K3b::DataDoc* doc, QWidget* parent )
     : KDialog( parent),
       m_bExistingItemsReplaceAll(false),
       m_bExistingItemsIgnoreAll(false),
@@ -66,7 +67,7 @@ K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent
       m_filesHandled(0),
       m_lastProgress(0)
 {
-    m_encodingConverter = new K3bEncodingConverter();
+    m_encodingConverter = new K3b::EncodingConverter();
 
     QWidget* page = new QWidget();
     setMainWidget(page);
@@ -87,7 +88,7 @@ K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent
     grid->addWidget( m_infoLabel, 0, 0 );
     grid->addWidget( m_progressWidget, 1, 0, 1, 2 );
 
-    m_dirSizeJob = new K3bDirSizeJob( this );
+    m_dirSizeJob = new K3b::DirSizeJob( this );
     connect( m_dirSizeJob, SIGNAL(finished(bool)),
              this, SLOT(slotDirSizeDone(bool)) );
 
@@ -96,14 +97,14 @@ K3bDataUrlAddingDialog::K3bDataUrlAddingDialog( K3bDataDoc* doc, QWidget* parent
 }
 
 
-K3bDataUrlAddingDialog::~K3bDataUrlAddingDialog()
+K3b::DataUrlAddingDialog::~DataUrlAddingDialog()
 {
     delete m_encodingConverter;
 }
 
 
-int K3bDataUrlAddingDialog::addUrls( const KUrl::List& urls,
-                                     K3bDirItem* dir,
+int K3b::DataUrlAddingDialog::addUrls( const KUrl::List& urls,
+                                     K3b::DirItem* dir,
                                      QWidget* parent )
 {
     if( urls.isEmpty() )
@@ -114,7 +115,7 @@ int K3bDataUrlAddingDialog::addUrls( const KUrl::List& urls,
     // with a data project. Let's warn them
     //
     if( urls.count() == 1 ) {
-        K3bIso9660 isoF( urls.first().path() );
+        K3b::Iso9660 isoF( urls.first().path() );
         if( isoF.open() ) {
             if( KMessageBox::warningYesNo( parent,
                                            i18n("<p>The file you are about to add to the project is an ISO9660 image. As such "
@@ -130,7 +131,7 @@ int K3bDataUrlAddingDialog::addUrls( const KUrl::List& urls,
         }
     }
 
-    K3bDataUrlAddingDialog dlg( dir->doc(), parent );
+    K3b::DataUrlAddingDialog dlg( dir->doc(), parent );
     dlg.m_urls = urls;
     for( KUrl::List::ConstIterator it = urls.begin(); it != urls.end(); ++it )
         dlg.m_urlQueue.append( qMakePair( K3b::convertToLocalUrl(*it), dir ) );
@@ -146,7 +147,7 @@ int K3bDataUrlAddingDialog::addUrls( const KUrl::List& urls,
 
     // make sure the dir size job is finished
     dlg.m_dirSizeJob->cancel();
-    K3bSignalWaiter::waitForJob( dlg.m_dirSizeJob );
+    K3b::SignalWaiter::waitForJob( dlg.m_dirSizeJob );
 
     QString message = dlg.resultMessage();
     if( !message.isEmpty() )
@@ -156,7 +157,7 @@ int K3bDataUrlAddingDialog::addUrls( const KUrl::List& urls,
 }
 
 
-QString K3bDataUrlAddingDialog::resultMessage() const
+QString K3b::DataUrlAddingDialog::resultMessage() const
 {
     QString message;
     if( !m_unreadableFiles.isEmpty() )
@@ -190,40 +191,40 @@ QString K3bDataUrlAddingDialog::resultMessage() const
 }
 
 
-int K3bDataUrlAddingDialog::moveItems( const QList<K3bDataItem*>& items,
-                                       K3bDirItem* dir,
+int K3b::DataUrlAddingDialog::moveItems( const QList<K3b::DataItem*>& items,
+                                       K3b::DirItem* dir,
                                        QWidget* parent )
 {
     return copyMoveItems( items, dir, parent, false );
 }
 
 
-int K3bDataUrlAddingDialog::copyItems( const QList<K3bDataItem*>& items,
-                                       K3bDirItem* dir,
+int K3b::DataUrlAddingDialog::copyItems( const QList<K3b::DataItem*>& items,
+                                       K3b::DirItem* dir,
                                        QWidget* parent )
 {
     return copyMoveItems( items, dir, parent, true );
 }
 
 
-int K3bDataUrlAddingDialog::copyMoveItems( const QList<K3bDataItem*>& items,
-                                           K3bDirItem* dir,
+int K3b::DataUrlAddingDialog::copyMoveItems( const QList<K3b::DataItem*>& items,
+                                           K3b::DirItem* dir,
                                            QWidget* parent,
                                            bool copy )
 {
     if( items.isEmpty() )
         return 0;
 
-    K3bDataUrlAddingDialog dlg( dir->doc(), parent );
+    K3b::DataUrlAddingDialog dlg( dir->doc(), parent );
     dlg.m_infoLabel->setText( i18n("Moving files to project \"%1\"...", dir->doc()->URL().fileName()) );
     dlg.m_copyItems = copy;
 
-    for( QList<K3bDataItem*>::const_iterator it = items.begin(); it != items.end(); ++it ) {
+    for( QList<K3b::DataItem*>::const_iterator it = items.begin(); it != items.end(); ++it ) {
         dlg.m_items.append( qMakePair( *it, dir ) );
         ++dlg.m_totalFiles;
         if( (*it)->isDir() ) {
-            dlg.m_totalFiles += static_cast<K3bDirItem*>( *it )->numFiles();
-            dlg.m_totalFiles += static_cast<K3bDirItem*>( *it )->numDirs();
+            dlg.m_totalFiles += static_cast<K3b::DirItem*>( *it )->numFiles();
+            dlg.m_totalFiles += static_cast<K3b::DirItem*>( *it )->numDirs();
         }
     }
 
@@ -238,7 +239,7 @@ int K3bDataUrlAddingDialog::copyMoveItems( const QList<K3bDataItem*>& items,
 }
 
 
-void K3bDataUrlAddingDialog::slotCancel()
+void K3b::DataUrlAddingDialog::slotCancel()
 {
     m_bCanceled = true;
     m_dirSizeJob->cancel();
@@ -246,14 +247,14 @@ void K3bDataUrlAddingDialog::slotCancel()
 }
 
 
-void K3bDataUrlAddingDialog::slotAddUrls()
+void K3b::DataUrlAddingDialog::slotAddUrls()
 {
     if( m_bCanceled )
         return;
 
     // add next url
     KUrl url = m_urlQueue.first().first;
-    K3bDirItem* dir = m_urlQueue.first().second;
+    K3b::DirItem* dir = m_urlQueue.first().second;
     m_urlQueue.erase( m_urlQueue.begin() );
     //
     // HINT:
@@ -371,23 +372,23 @@ void K3bDataUrlAddingDialog::slotAddUrls()
     if( newName.isEmpty() )
         newName = "1";
 
-    K3bDirItem* newDirItem = 0;
+    K3b::DirItem* newDirItem = 0;
 
     //
     // The source is valid. Now check if the project already contains a file with that name
     // and if so handle it properly
     //
     if( valid ) {
-        if( K3bDataItem* oldItem = dir->find( newName ) ) {
+        if( K3b::DataItem* oldItem = dir->find( newName ) ) {
             //
             // reuse an existing dir
             //
             if( oldItem->isDir() && isDir )
-                newDirItem = dynamic_cast<K3bDirItem*>(oldItem);
+                newDirItem = dynamic_cast<K3b::DirItem*>(oldItem);
 
             //
             // we cannot replace files in the old session with dirs and vice versa (I think)
-            // files are handled in K3bFileItem constructor and dirs handled above
+            // files are handled in K3b::FileItem constructor and dirs handled above
             //
             else if( oldItem->isFromOldSession() &&
                      isDir != oldItem->isDir() ) {
@@ -406,7 +407,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
             }
 
             else if( m_bExistingItemsReplaceAll ) {
-                // if we replace an item from an old session the K3bFileItem constructor takes care
+                // if we replace an item from an old session the K3b::FileItem constructor takes care
                 // of replacing the item
                 if( !oldItem->isFromOldSession() )
                     delete oldItem;
@@ -416,7 +417,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
             // Let the user choose
             //
             else {
-                switch( K3bMultiChoiceDialog::choose( i18n("File already exists"),
+                switch( K3b::MultiChoiceDialog::choose( i18n("File already exists"),
                                                       i18n("<p>File <em>%1</em> already exists in "
                                                            "project folder <em>%2</em>.",
                                                            newName,
@@ -444,7 +445,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
                     m_bExistingItemsReplaceAll = true;
                     // fallthrough
                 case 1: // replace
-                    // if we replace an item from an old session the K3bFileItem constructor takes care
+                    // if we replace an item from an old session the K3b::FileItem constructor takes care
                     // of replacing the item
                     if( !oldItem->isFromOldSession() )
                         delete oldItem;
@@ -479,7 +480,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
         if( isDir && isSymLink && !absoluteFilePath.startsWith( resolved ) ) {
             bool followLink = dir->doc()->isoOptions().followSymbolicLinks() || m_bFolderLinksFollowAll;
             if( !followLink && !m_bFolderLinksAddAll ) {
-                switch( K3bMultiChoiceDialog::choose( i18n("Adding link to folder"),
+                switch( K3b::MultiChoiceDialog::choose( i18n("Adding link to folder"),
                                                       i18n("<p>'%1' is a symbolic link to folder '%2'."
                                                            "<p>If you intend to make K3b follow symbolic links you should consider letting K3b do this now "
                                                            "since K3b will not be able to do so afterwards because symbolic links to folders inside a "
@@ -546,7 +547,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 
         if( isDir && !isSymLink ) {
             if( !newDirItem ) { // maybe we reuse an already existing dir
-                newDirItem = new K3bDirItem( newName , dir->doc(), dir );
+                newDirItem = new K3b::DirItem( newName , dir->doc(), dir );
                 newDirItem->setLocalPath( url.path() ); // HACK: see k3bdiritem.h
             }
 
@@ -556,7 +557,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
             }
         }
         else {
-            (void)new K3bFileItem( &statBuf, &resolvedStatBuf, url.path(), dir->doc(), dir, newName );
+            (void)new K3b::FileItem( &statBuf, &resolvedStatBuf, url.path(), dir->doc(), dir, newName );
         }
     }
 
@@ -572,7 +573,7 @@ void K3bDataUrlAddingDialog::slotAddUrls()
 }
 
 
-void K3bDataUrlAddingDialog::slotCopyMoveItems()
+void K3b::DataUrlAddingDialog::slotCopyMoveItems()
 {
     if( m_bCanceled )
         return;
@@ -580,8 +581,8 @@ void K3bDataUrlAddingDialog::slotCopyMoveItems()
     //
     // Pop first item from the item list
     //
-    K3bDataItem* item = m_items.first().first;
-    K3bDirItem* dir = m_items.first().second;
+    K3b::DataItem* item = m_items.first().first;
+    K3b::DirItem* dir = m_items.first().second;
     m_items.erase( m_items.begin() );
 
     ++m_filesHandled;
@@ -593,31 +594,31 @@ void K3bDataUrlAddingDialog::slotCopyMoveItems()
 
 
     if( dir == item->parent() ) {
-        kDebug() << "(K3bDataUrlAddingDialog) trying to move an item into its own parent dir.";
+        kDebug() << "(K3b::DataUrlAddingDialog) trying to move an item into its own parent dir.";
     }
     else if( dir == item ) {
-        kDebug() << "(K3bDataUrlAddingDialog) trying to move an item into itselft.";
+        kDebug() << "(K3b::DataUrlAddingDialog) trying to move an item into itselft.";
     }
     else {
         //
         // Let's see if an item with that name alredy exists
         //
-        if( K3bDataItem* oldItem = dir->find( item->k3bName() ) ) {
+        if( K3b::DataItem* oldItem = dir->find( item->k3bName() ) ) {
             //
             // reuse an existing dir: move all child items into the old dir
             //
             if( oldItem->isDir() && item->isDir() ) {
-                QList<K3bDataItem*> cl = dynamic_cast<K3bDirItem*>( item )->children();
-                for( QList<K3bDataItem*>::const_iterator it = cl.constBegin();
+                QList<K3b::DataItem*> cl = dynamic_cast<K3b::DirItem*>( item )->children();
+                for( QList<K3b::DataItem*>::const_iterator it = cl.constBegin();
                      it != cl.constEnd(); ++it )
-                    m_items.append( qMakePair( *it, dynamic_cast<K3bDirItem*>( oldItem ) ) );
+                    m_items.append( qMakePair( *it, dynamic_cast<K3b::DirItem*>( oldItem ) ) );
 
                 // FIXME: we need to remove the old dir item
             }
 
             //
             // we cannot replace files in the old session with dirs and vice versa (I think)
-            // files are handled in K3bFileItem constructor and dirs handled above
+            // files are handled in K3b::FileItem constructor and dirs handled above
             //
             else if( oldItem->isFromOldSession() &&
                      item->isDir() != oldItem->isDir() ) {
@@ -632,7 +633,7 @@ void K3bDataUrlAddingDialog::slotCopyMoveItems()
 
             else if( m_bExistingItemsReplaceAll ) {
                 //
-                // if we replace an item from an old session K3bDirItem::addDataItem takes care
+                // if we replace an item from an old session K3b::DirItem::addDataItem takes care
                 // of replacing the item
                 //
                 if( !oldItem->isFromOldSession() )
@@ -643,7 +644,7 @@ void K3bDataUrlAddingDialog::slotCopyMoveItems()
             }
 
             else if( !m_bExistingItemsIgnoreAll ) {
-                switch( K3bMultiChoiceDialog::choose( i18n("File already exists"),
+                switch( K3b::MultiChoiceDialog::choose( i18n("File already exists"),
                                                       i18n("<p>File <em>%1</em> already exists in "
                                                            "project folder <em>%2</em>.",
                                                       item->k3bName(),
@@ -672,7 +673,7 @@ void K3bDataUrlAddingDialog::slotCopyMoveItems()
                     // fallthrough
                 case 1: // replace
                     //
-                    // if we replace an item from an old session K3bDirItem::addDataItem takes care
+                    // if we replace an item from an old session K3b::DirItem::addDataItem takes care
                     // of replacing the item
                     //
                     if( !oldItem->isFromOldSession() )
@@ -725,11 +726,11 @@ void K3bDataUrlAddingDialog::slotCopyMoveItems()
 }
 
 
-bool K3bDataUrlAddingDialog::getNewName( const QString& oldName, K3bDirItem* dir, QString& newName )
+bool K3b::DataUrlAddingDialog::getNewName( const QString& oldName, K3b::DirItem* dir, QString& newName )
 {
     bool ok = true;
     newName = oldName;
-    QValidator* validator = K3bValidators::iso9660Validator( false, this );
+    QValidator* validator = K3b::Validators::iso9660Validator( false, this );
     do {
         newName = KInputDialog::getText( i18n("Enter New Filename"),
                                          i18n("A file with that name already exists. Please enter a new name:"),
@@ -743,7 +744,7 @@ bool K3bDataUrlAddingDialog::getNewName( const QString& oldName, K3bDirItem* dir
 }
 
 
-bool K3bDataUrlAddingDialog::addHiddenFiles()
+bool K3b::DataUrlAddingDialog::addHiddenFiles()
 {
     if( m_iAddHiddenFiles == 0 ) {
         // FIXME: the isVisible() stuff makes the static addUrls method not return (same below)
@@ -759,7 +760,7 @@ bool K3bDataUrlAddingDialog::addHiddenFiles()
 }
 
 
-bool K3bDataUrlAddingDialog::addSystemFiles()
+bool K3b::DataUrlAddingDialog::addSystemFiles()
 {
     if( m_iAddSystemFiles == 0 ) {
         if( KMessageBox::questionYesNo( /*isVisible() ? */this/* : parentWidget()*/,
@@ -775,7 +776,7 @@ bool K3bDataUrlAddingDialog::addSystemFiles()
 }
 
 
-void K3bDataUrlAddingDialog::slotDirSizeDone( bool success )
+void K3b::DataUrlAddingDialog::slotDirSizeDone( bool success )
 {
     if( success ) {
         m_totalFiles += m_dirSizeJob->totalFiles() + m_dirSizeJob->totalDirs();
@@ -792,7 +793,7 @@ void K3bDataUrlAddingDialog::slotDirSizeDone( bool success )
 }
 
 
-void K3bDataUrlAddingDialog::updateProgress()
+void K3b::DataUrlAddingDialog::updateProgress()
 {
     if( m_totalFiles > 0 ) {
         unsigned int p = 100*m_filesHandled/m_totalFiles;

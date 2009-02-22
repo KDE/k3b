@@ -37,20 +37,20 @@
 #include <kglobal.h>
 
 
-K3bMiscOptionTab::K3bMiscOptionTab(QWidget *parent )
+K3b::MiscOptionTab::MiscOptionTab(QWidget *parent )
     : QWidget(parent)
 {
     setupUi( this );
 
     m_editTempDir->setMode( KFile::Directory );
 
-    m_comboActionDialogSettings->insertItem( K3bInteractionDialog::LOAD_K3B_DEFAULTS,
+    m_comboActionDialogSettings->insertItem( K3b::InteractionDialog::LOAD_K3B_DEFAULTS,
                                              i18n("Default Settings"),
                                              i18n("Load the K3b Defaults at dialog startup.") );
-    m_comboActionDialogSettings->insertItem( K3bInteractionDialog::LOAD_SAVED_SETTINGS,
+    m_comboActionDialogSettings->insertItem( K3b::InteractionDialog::LOAD_SAVED_SETTINGS,
                                              i18n("Saved Settings"),
                                              i18n("Load the settings saved by the user at dialog startup.") );
-    m_comboActionDialogSettings->insertItem( K3bInteractionDialog::LOAD_LAST_SETTINGS,
+    m_comboActionDialogSettings->insertItem( K3b::InteractionDialog::LOAD_LAST_SETTINGS,
                                              i18n("Last Used Settings"),
                                              i18n("Load the last used settings at dialog startup.") );
     m_comboActionDialogSettings->addGlobalWhatsThisText( i18n("K3b handles three sets of settings in action dialogs "
@@ -61,12 +61,12 @@ K3bMiscOptionTab::K3bMiscOptionTab(QWidget *parent )
 }
 
 
-K3bMiscOptionTab::~K3bMiscOptionTab()
+K3b::MiscOptionTab::~MiscOptionTab()
 {
 }
 
 
-void K3bMiscOptionTab::readSettings()
+void K3b::MiscOptionTab::readSettings()
 {
     KConfigGroup c = KGlobal::config()->group( "General Options" );
 
@@ -76,7 +76,7 @@ void K3bMiscOptionTab::readSettings()
     m_checkHideMainWindowWhileWriting->setChecked( c.readEntry( "hide main window while writing", false ) );
     m_checkKeepDialogsOpen->setChecked( c.readEntry( "keep action dialogs open", false ) );
     m_comboActionDialogSettings->setSelectedValue( c.readEntry( "action dialog startup settings",
-                                                                ( int )K3bInteractionDialog::LOAD_SAVED_SETTINGS ) );
+                                                                ( int )K3b::InteractionDialog::LOAD_SAVED_SETTINGS ) );
     m_checkSystemConfig->setChecked( c.readEntry( "check system config", true ) );
 
     QString tempdir = c.readPathEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
@@ -87,12 +87,12 @@ void K3bMiscOptionTab::readSettings()
 //   else
 //     m_radioMultipleInstancesNew->setChecked(true);
 
-    K3bServiceInstaller si;
+    K3b::ServiceInstaller si;
     m_checkKonqiIntegration->setChecked( si.allInstalled() );
 }
 
 
-bool K3bMiscOptionTab::saveSettings()
+bool K3b::MiscOptionTab::saveSettings()
 {
     KConfigGroup c = KGlobal::config()->group( "General Options" );
 
@@ -151,7 +151,7 @@ bool K3bMiscOptionTab::saveSettings()
 //   else
 //     c.writeEntry( "Multiple Instances", "always_new" );
 
-    K3bServiceInstaller si;
+    K3b::ServiceInstaller si;
     if( m_checkKonqiIntegration->isChecked() )
         si.install( this );
     else

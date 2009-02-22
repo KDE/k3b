@@ -17,7 +17,7 @@
 #include "k3baudiodoc.h"
 
 
-K3bAudioDataSource::K3bAudioDataSource()
+K3b::AudioDataSource::AudioDataSource()
     : QObject(),
       m_track(0),
       m_prev(0),
@@ -26,7 +26,7 @@ K3bAudioDataSource::K3bAudioDataSource()
 }
 
 
-K3bAudioDataSource::K3bAudioDataSource( const K3bAudioDataSource& source )
+K3b::AudioDataSource::AudioDataSource( const K3b::AudioDataSource& source )
     : QObject(),
       m_track( 0 ),
       m_prev( 0 ),
@@ -37,13 +37,13 @@ K3bAudioDataSource::K3bAudioDataSource( const K3bAudioDataSource& source )
 }
 
 
-K3bAudioDataSource::~K3bAudioDataSource()
+K3b::AudioDataSource::~AudioDataSource()
 {
     take();
 }
 
 
-K3bAudioDoc* K3bAudioDataSource::doc() const
+K3b::AudioDoc* K3b::AudioDataSource::doc() const
 {
     if( m_track )
         return m_track->doc();
@@ -52,7 +52,7 @@ K3bAudioDoc* K3bAudioDataSource::doc() const
 }
 
 
-K3bAudioDataSource* K3bAudioDataSource::take()
+K3b::AudioDataSource* K3b::AudioDataSource::take()
 {
     // if we do not have a track we are not in any list
     if( m_track ) {
@@ -74,7 +74,7 @@ K3bAudioDataSource* K3bAudioDataSource::take()
 }
 
 
-void K3bAudioDataSource::moveAfter( K3bAudioDataSource* source )
+void K3b::AudioDataSource::moveAfter( K3b::AudioDataSource* source )
 {
     // cannot create a list outside a track!
     if( !source->track() )
@@ -86,7 +86,7 @@ void K3bAudioDataSource::moveAfter( K3bAudioDataSource* source )
     // remove this from the list
     take();
 
-    K3bAudioDataSource* oldNext = source->m_next;
+    K3b::AudioDataSource* oldNext = source->m_next;
 
     // set track as prev
     source->m_next = this;
@@ -102,7 +102,7 @@ void K3bAudioDataSource::moveAfter( K3bAudioDataSource* source )
 }
 
 
-void K3bAudioDataSource::moveAhead( K3bAudioDataSource* source )
+void K3b::AudioDataSource::moveAhead( K3b::AudioDataSource* source )
 {
     // cannot create a list outside a track!
     if( !source->track() )
@@ -114,7 +114,7 @@ void K3bAudioDataSource::moveAhead( K3bAudioDataSource* source )
     // remove this from the list
     take();
 
-    K3bAudioDataSource* oldPrev = source->m_prev;
+    K3b::AudioDataSource* oldPrev = source->m_prev;
 
     // set track as next
     m_next = source;
@@ -134,17 +134,17 @@ void K3bAudioDataSource::moveAhead( K3bAudioDataSource* source )
 }
 
 
-void K3bAudioDataSource::emitChange()
+void K3b::AudioDataSource::emitChange()
 {
     if( m_track )
         m_track->sourceChanged( this );
 }
 
 
-K3bAudioDataSource* K3bAudioDataSource::split( const K3b::Msf& pos )
+K3b::AudioDataSource* K3b::AudioDataSource::split( const K3b::Msf& pos )
 {
     if( pos < length() ) {
-        K3bAudioDataSource* s = copy();
+        K3b::AudioDataSource* s = copy();
         s->setStartOffset( startOffset() + pos );
         s->setEndOffset( endOffset() );
         setEndOffset( startOffset() + pos );
@@ -157,7 +157,7 @@ K3bAudioDataSource* K3bAudioDataSource::split( const K3b::Msf& pos )
 }
 
 
-K3b::Msf K3bAudioDataSource::lastSector() const
+K3b::Msf K3b::AudioDataSource::lastSector() const
 {
     if( endOffset() > 0 )
         return endOffset()-1;
@@ -166,7 +166,7 @@ K3b::Msf K3bAudioDataSource::lastSector() const
 }
 
 
-K3b::Msf K3bAudioDataSource::length() const
+K3b::Msf K3b::AudioDataSource::length() const
 {
     if( originalLength() == 0 )
         return 0;
@@ -177,7 +177,7 @@ K3b::Msf K3bAudioDataSource::length() const
 }
 
 
-void K3bAudioDataSource::setStartOffset( const K3b::Msf& msf )
+void K3b::AudioDataSource::setStartOffset( const K3b::Msf& msf )
 {
     m_startOffset = msf;
     fixupOffsets();
@@ -185,7 +185,7 @@ void K3bAudioDataSource::setStartOffset( const K3b::Msf& msf )
 }
 
 
-void K3bAudioDataSource::setEndOffset( const K3b::Msf& msf )
+void K3b::AudioDataSource::setEndOffset( const K3b::Msf& msf )
 {
     m_endOffset = msf;
     fixupOffsets();
@@ -193,7 +193,7 @@ void K3bAudioDataSource::setEndOffset( const K3b::Msf& msf )
 }
 
 
-void K3bAudioDataSource::fixupOffsets()
+void K3b::AudioDataSource::fixupOffsets()
 {
     // no length available yet
     if( originalLength() == 0 )

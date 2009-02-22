@@ -65,7 +65,7 @@ static const char* s_allActions[] = {
     0
 };
 
-K3bWelcomeWidget::Display::Display( K3bWelcomeWidget* parent )
+K3b::WelcomeWidget::Display::Display( K3b::WelcomeWidget* parent )
     : QWidget( parent->viewport() )
 {
     m_header = new QTextDocument( this );
@@ -74,7 +74,7 @@ K3bWelcomeWidget::Display::Display( K3bWelcomeWidget* parent )
     setAcceptDrops( true );
     m_rows = m_cols = 1;
 
-    m_buttonMore = new K3bFlatButton( i18n("More actions..."), this );
+    m_buttonMore = new K3b::FlatButton( i18n("More actions..."), this );
     connect( m_buttonMore, SIGNAL(pressed()), parent, SLOT(slotMoreActions()) );
 
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
@@ -83,12 +83,12 @@ K3bWelcomeWidget::Display::Display( K3bWelcomeWidget* parent )
 }
 
 
-K3bWelcomeWidget::Display::~Display()
+K3b::WelcomeWidget::Display::~Display()
 {
 }
 
 
-void K3bWelcomeWidget::Display::addAction( QAction* action )
+void K3b::WelcomeWidget::Display::addAction( QAction* action )
 {
     if( action ) {
         m_actions.append(action);
@@ -97,7 +97,7 @@ void K3bWelcomeWidget::Display::addAction( QAction* action )
 }
 
 
-void K3bWelcomeWidget::Display::removeAction( QAction* action )
+void K3b::WelcomeWidget::Display::removeAction( QAction* action )
 {
     if( action ) {
         m_actions.removeAll( action );
@@ -106,13 +106,13 @@ void K3bWelcomeWidget::Display::removeAction( QAction* action )
 }
 
 
-void K3bWelcomeWidget::Display::removeButton( K3bFlatButton* b )
+void K3b::WelcomeWidget::Display::removeButton( K3b::FlatButton* b )
 {
     removeAction( m_buttonMap[b] );
 }
 
 
-void K3bWelcomeWidget::Display::rebuildGui( const QList<QAction*>& actions )
+void K3b::WelcomeWidget::Display::rebuildGui( const QList<QAction*>& actions )
 {
     m_actions = actions;
     rebuildGui();
@@ -137,9 +137,9 @@ static void calculateButtons( int width, int numActions, int buttonWidth, int& c
 }
 
 
-void K3bWelcomeWidget::Display::rebuildGui()
+void K3b::WelcomeWidget::Display::rebuildGui()
 {
-    // step 1: delete all old buttons in the buttons QPtrList<K3bFlatButton>
+    // step 1: delete all old buttons in the buttons QPtrList<K3b::FlatButton>
     m_buttonMap.clear();
     qDeleteAll( m_buttons );
     m_buttons.clear();
@@ -152,7 +152,7 @@ void K3bWelcomeWidget::Display::rebuildGui()
         for( QList<QAction *>::const_iterator it = items.constBegin();
             it != items.constEnd(); ++it ) {
             QAction* a = *it;
-            K3bFlatButton* b = new K3bFlatButton( a, this );
+            K3b::FlatButton* b = new K3b::FlatButton( a, this );
 
             m_buttons.append( b );
             m_buttonMap.insert( b, a );
@@ -171,7 +171,7 @@ void K3bWelcomeWidget::Display::rebuildGui()
 }
 
 
-void K3bWelcomeWidget::Display::repositionButtons()
+void K3b::WelcomeWidget::Display::repositionButtons()
 {
     // calculate rows and columns
     calculateButtons( width(), m_actions.count(), m_buttonSize.width(), m_cols, m_rows );
@@ -187,7 +187,7 @@ void K3bWelcomeWidget::Display::repositionButtons()
 
     for ( int i = 0;i<m_buttons.count();i++ )
     {
-        K3bFlatButton* b = m_buttons.at( i );
+        K3b::FlatButton* b = m_buttons.at( i );
 
         b->setGeometry( QRect( QPoint( leftMargin + (col*(m_buttonSize.width()+4) + 2 ),
                                        topOffset + (row*(m_buttonSize.height()+4)) + 2 ),
@@ -209,13 +209,13 @@ void K3bWelcomeWidget::Display::repositionButtons()
 }
 
 
-QSizePolicy K3bWelcomeWidget::Display::sizePolicy () const
+QSizePolicy K3b::WelcomeWidget::Display::sizePolicy () const
 {
     return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 }
 
 
-int K3bWelcomeWidget::Display::heightForWidth( int w ) const
+int K3b::WelcomeWidget::Display::heightForWidth( int w ) const
 {
     int ow = ( int )m_infoText->idealWidth();
     m_infoText->setTextWidth( w );
@@ -229,7 +229,7 @@ int K3bWelcomeWidget::Display::heightForWidth( int w ) const
 }
 
 
-QSize K3bWelcomeWidget::Display::minimumSizeHint() const
+QSize K3b::WelcomeWidget::Display::minimumSizeHint() const
 {
     QSize size( qMax(40+( int )m_header->idealWidth(), 40+m_buttonSize.width()),
                 20 + ( int )m_header->size().height() + 20 + 10 + m_buttonSize.height() + 10 + ( int )m_infoText->size().height() + 20 );
@@ -238,7 +238,7 @@ QSize K3bWelcomeWidget::Display::minimumSizeHint() const
 }
 
 
-void K3bWelcomeWidget::Display::resizeEvent( QResizeEvent* e )
+void K3b::WelcomeWidget::Display::resizeEvent( QResizeEvent* e )
 {
     m_infoText->setTextWidth( width() - 20 );
     QWidget::resizeEvent(e);
@@ -248,11 +248,11 @@ void K3bWelcomeWidget::Display::resizeEvent( QResizeEvent* e )
 }
 
 
-void K3bWelcomeWidget::Display::slotThemeChanged()
+void K3b::WelcomeWidget::Display::slotThemeChanged()
 {
-    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-//         if( theme->backgroundMode() == K3bTheme::BG_SCALE )
-//             m_bgImage = theme->pixmap( K3bTheme::WELCOME_BG ).convertToImage();
+    if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
+//         if( theme->backgroundMode() == K3b::Theme::BG_SCALE )
+//             m_bgImage = theme->pixmap( K3b::Theme::WELCOME_BG ).convertToImage();
         m_header->setDefaultStyleSheet( QString("body { font-size: 16pt; font-weight: bold; color: %1 }")
                                         .arg(theme->foregroundColor().name()) );
         m_infoText->setDefaultStyleSheet( QString("body { color: %1 }")
@@ -267,20 +267,20 @@ void K3bWelcomeWidget::Display::slotThemeChanged()
 }
 
 
-void K3bWelcomeWidget::Display::updateBgPix()
+void K3b::WelcomeWidget::Display::updateBgPix()
 {
-    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
-        if( theme->backgroundMode() == K3bTheme::BG_SCALE )
-            m_bgPixmap = theme->pixmap( K3bTheme::WELCOME_BG ).scaled( rect().width(), rect().height() );
+    if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
+        if( theme->backgroundMode() == K3b::Theme::BG_SCALE )
+            m_bgPixmap = theme->pixmap( K3b::Theme::WELCOME_BG ).scaled( rect().width(), rect().height() );
         else
-            m_bgPixmap = theme->pixmap( K3bTheme::WELCOME_BG );
+            m_bgPixmap = theme->pixmap( K3b::Theme::WELCOME_BG );
     }
 }
 
 
-void K3bWelcomeWidget::Display::paintEvent( QPaintEvent* )
+void K3b::WelcomeWidget::Display::paintEvent( QPaintEvent* )
 {
-    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+    if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
         QPainter p( this );
         p.setPen( theme->foregroundColor() );
 
@@ -321,13 +321,13 @@ void K3bWelcomeWidget::Display::paintEvent( QPaintEvent* )
 }
 
 
-void K3bWelcomeWidget::Display::dragEnterEvent( QDragEnterEvent* event )
+void K3b::WelcomeWidget::Display::dragEnterEvent( QDragEnterEvent* event )
 {
     event->setAccepted( K3URLDrag::canDecode(event) );
 }
 
 
-void K3bWelcomeWidget::Display::dropEvent( QDropEvent* e )
+void K3b::WelcomeWidget::Display::dropEvent( QDropEvent* e )
 {
     KUrl::List urls;
     K3URLDrag::decode( e, urls );
@@ -336,7 +336,7 @@ void K3bWelcomeWidget::Display::dropEvent( QDropEvent* e )
 
 
 
-K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent )
+K3b::WelcomeWidget::WelcomeWidget( K3b::MainWindow* mw, QWidget* parent )
     : QScrollArea( parent ),
       m_mainWindow( mw )
 {
@@ -350,12 +350,12 @@ K3bWelcomeWidget::K3bWelcomeWidget( K3bMainWindow* mw, QWidget* parent )
 }
 
 
-K3bWelcomeWidget::~K3bWelcomeWidget()
+K3b::WelcomeWidget::~WelcomeWidget()
 {
 }
 
 
-void K3bWelcomeWidget::loadConfig( const KConfigGroup& c )
+void K3b::WelcomeWidget::loadConfig( const KConfigGroup& c )
 {
     QStringList sl = c.readEntry( "welcome_actions", QStringList() );
 
@@ -376,7 +376,7 @@ void K3bWelcomeWidget::loadConfig( const KConfigGroup& c )
 }
 
 
-void K3bWelcomeWidget::saveConfig( KConfigGroup c )
+void K3b::WelcomeWidget::saveConfig( KConfigGroup c )
 {
     QStringList sl;
     QList<QAction *> items(main->m_actions);
@@ -388,21 +388,21 @@ void K3bWelcomeWidget::saveConfig( KConfigGroup c )
 }
 
 
-void K3bWelcomeWidget::resizeEvent( QResizeEvent* e )
+void K3b::WelcomeWidget::resizeEvent( QResizeEvent* e )
 {
     fixSize();
     QScrollArea::resizeEvent( e );
 }
 
 
-void K3bWelcomeWidget::showEvent( QShowEvent* e )
+void K3b::WelcomeWidget::showEvent( QShowEvent* e )
 {
     fixSize();
     QScrollArea::showEvent( e );
 }
 
 
-void K3bWelcomeWidget::fixSize()
+void K3b::WelcomeWidget::fixSize()
 {
     QSize s = contentsRect().size();
     s.setWidth( qMax( main->minimumSizeHint().width(), s.width() ) );
@@ -413,7 +413,7 @@ void K3bWelcomeWidget::fixSize()
 }
 
 
-void K3bWelcomeWidget::mousePressEvent ( QMouseEvent* e )
+void K3b::WelcomeWidget::mousePressEvent ( QMouseEvent* e )
 {
     if( e->button() == Qt::RightButton ) {
         QMap<QAction*, QAction*> map;
@@ -439,7 +439,7 @@ void K3bWelcomeWidget::mousePressEvent ( QMouseEvent* e )
         QAction *removeAction = 0;
 
         QWidget* widgetAtPos = viewport()->childAt(e->pos());
-        if( widgetAtPos && widgetAtPos->inherits( "K3bFlatButton" ) ) {
+        if( widgetAtPos && widgetAtPos->inherits( "K3b::FlatButton" ) ) {
             KMenu pop;
             removeAction = pop.addAction( SmallIcon("list-remove"), i18n("Remove Button") );
             if ( addPop.actions().count() > 0 )
@@ -453,7 +453,7 @@ void K3bWelcomeWidget::mousePressEvent ( QMouseEvent* e )
 
         if( r != 0 ) {
             if( r == removeAction )
-                main->removeButton( static_cast<K3bFlatButton*>(widgetAtPos) );
+                main->removeButton( static_cast<K3b::FlatButton*>(widgetAtPos) );
             else
                 main->addAction( map[r] );
         }
@@ -463,7 +463,7 @@ void K3bWelcomeWidget::mousePressEvent ( QMouseEvent* e )
 }
 
 
-void K3bWelcomeWidget::slotMoreActions()
+void K3b::WelcomeWidget::slotMoreActions()
 {
     KMenu popup;
 

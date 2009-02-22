@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,27 +15,27 @@
 
 #include "k3bcdtextvalidator.h"
 
-K3bCdTextValidator::K3bCdTextValidator(QObject *parent)
-  : K3bLatin1Validator(parent)
+K3b::CdTextValidator::CdTextValidator(QObject *parent)
+    : K3b::Latin1Validator(parent)
 {
 }
 
 
-K3bCdTextValidator::~K3bCdTextValidator()
+K3b::CdTextValidator::~CdTextValidator()
 {
 }
 
 
-QValidator::State K3bCdTextValidator::validate( QString& input, int& pos ) const
+QValidator::State K3b::CdTextValidator::validate( QString& input, int& pos ) const
 {
-  if( input.length() > 160 )
-    return Invalid;
+    if( input.length() > 160 )
+        return Invalid;
 
-  // forbid some characters that might introduce problems
-  for( int i = 0; i < input.length(); ++i ) {
-    if( input[i] == '/' || input[i] == '"' || input[i] == '\\' )
-      return Invalid;
-  }
+    // forbid some characters that might introduce problems
+    for( int i = 0; i < input.length(); ++i ) {
+        if( input[i] == '/' || input[i] == '"' || input[i] == '\\' )
+            return Invalid;
+    }
 
-  return K3bLatin1Validator::validate( input, pos );
+    return K3b::Latin1Validator::validate( input, pos );
 }

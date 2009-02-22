@@ -45,7 +45,7 @@
 #include <kuser.h>
 
 
-class K3bFileTreeComboBox::Private
+class K3b::FileTreeComboBox::Private
 {
 public:
     Private() {
@@ -59,7 +59,7 @@ public:
 };
 
 
-K3bFileTreeComboBox::K3bFileTreeComboBox( QWidget* parent )
+K3b::FileTreeComboBox::FileTreeComboBox( QWidget* parent )
     : KComboBox( true, parent )
 {
     d = new Private;
@@ -67,11 +67,11 @@ K3bFileTreeComboBox::K3bFileTreeComboBox( QWidget* parent )
     d->urlCompletion = new KUrlCompletion();
     setCompletionObject( d->urlCompletion );
 
-    m_fileTreeView = new K3bFileTreeView( this );
+    m_fileTreeView = new K3b::FileTreeView( this );
     setView( m_fileTreeView );
 
-    connect( m_fileTreeView, SIGNAL(activated(K3bDevice::Device*)),
-             this, SLOT(slotDeviceExecuted(K3bDevice::Device*)) );
+    connect( m_fileTreeView, SIGNAL(activated(K3b::Device::Device*)),
+             this, SLOT(slotDeviceExecuted(K3b::Device::Device*)) );
     connect( m_fileTreeView, SIGNAL(activated(const KUrl&)),
              this, SLOT(slotUrlExecuted(const KUrl&)) );
 
@@ -82,45 +82,45 @@ K3bFileTreeComboBox::K3bFileTreeComboBox( QWidget* parent )
 }
 
 
-K3bFileTreeComboBox::~K3bFileTreeComboBox()
+K3b::FileTreeComboBox::~FileTreeComboBox()
 {
     delete d->urlCompletion;
     delete d;
 }
 
 
-void K3bFileTreeComboBox::slotDeviceExecuted( K3bDevice::Device* dev )
+void K3b::FileTreeComboBox::slotDeviceExecuted( K3b::Device::Device* dev )
 {
     setDevice( dev );
     emit activated( dev );
 }
 
 
-void K3bFileTreeComboBox::slotUrlExecuted( const KUrl& url )
+void K3b::FileTreeComboBox::slotUrlExecuted( const KUrl& url )
 {
     setUrl( url );
     emit activated( url );
 }
 
 
-void K3bFileTreeComboBox::setUrl( const KUrl& url )
+void K3b::FileTreeComboBox::setUrl( const KUrl& url )
 {
     setEditText( K3b::convertToLocalUrl(url).path() );
 }
 
 
-void K3bFileTreeComboBox::setDevice( K3bDevice::Device* dev )
+void K3b::FileTreeComboBox::setDevice( K3b::Device::Device* dev )
 {
     setEditText( dev->vendor() + " " + dev->description() + " (" + dev->blockDeviceName() + ")" );
 }
 
 
-void K3bFileTreeComboBox::slotGoUrl()
+void K3b::FileTreeComboBox::slotGoUrl()
 {
     QString p = currentText();
 
     // check for a media url or a device string
-    if( K3bDevice::Device* dev = K3b::urlToDevice( p ) ) {
+    if( K3b::Device::Device* dev = K3b::urlToDevice( p ) ) {
         emit activated( dev );
         return;
     }
@@ -130,7 +130,7 @@ void K3bFileTreeComboBox::slotGoUrl()
         int pos1 = p.lastIndexOf('(');
         int pos2 = p.lastIndexOf(')');
         QString devStr = p.mid( pos1+1, pos2-pos1-1  );
-        if( K3bDevice::Device* dev = k3bcore->deviceManager()->findDevice( devStr ) ) {
+        if( K3b::Device::Device* dev = k3bcore->deviceManager()->findDevice( devStr ) ) {
             emit activated( dev );
             return;
         }

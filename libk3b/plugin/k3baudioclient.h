@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
  *
@@ -16,35 +16,38 @@
 #define _K3B_AUDIO_CLIENT_H_
 
 #include "k3b_export.h"
-/**
- * Interface for all K3b audio client classes which may attach to 
- * a K3b Audio Server to play 44100 16bit stereo audio data.
- */
-class LIBK3B_EXPORT K3bAudioClient
-{
- public:
-  virtual ~K3bAudioClient();
 
-  /**
-   * if this method returns a value below 0 streaming is stopped.
-   */
-  virtual int read( char* data, int maxlen ) = 0;
+namespace K3b {
+    /**
+     * Interface for all K3b audio client classes which may attach to
+     * a K3b Audio Server to play 44100 16bit stereo audio data.
+     */
+    class LIBK3B_EXPORT AudioClient
+    {
+    public:
+        virtual ~AudioClient();
 
- protected:
-  K3bAudioClient();
+        /**
+         * if this method returns a value below 0 streaming is stopped.
+         */
+        virtual int read( char* data, int maxlen ) = 0;
 
-  /**
-   * This will start the streaming.
-   */
-  void startStreaming();
+    protected:
+        AudioClient();
 
-  /**
-   * This stops the streaming,
-   */
-  void stopStreaming();
+        /**
+         * This will start the streaming.
+         */
+        void startStreaming();
 
- private:
-  bool m_attached;
-};
+        /**
+         * This stops the streaming,
+         */
+        void stopStreaming();
+
+    private:
+        bool m_attached;
+    };
+}
 
 #endif

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -18,21 +18,23 @@
 #include <qfile.h>
 #include <qobject.h>
 
-class K3bDebuggingOutputFile : public QFile
-{
-    Q_OBJECT
+namespace K3b {
+    class DebuggingOutputFile : public QFile
+    {
+        Q_OBJECT
 
-public:
-    K3bDebuggingOutputFile();
+    public:
+        DebuggingOutputFile();
 
-    /**
-     * Open the default output file and write some system information.
-     */
-    bool open( OpenMode mode = WriteOnly );
+        /**
+         * Open the default output file and write some system information.
+         */
+        bool open( OpenMode mode = WriteOnly );
 
-public Q_SLOTS:
-    void addOutput( const QString&, const QString& );
-};
+    public Q_SLOTS:
+        void addOutput( const QString&, const QString& );
+    };
+}
 
 
 #endif

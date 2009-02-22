@@ -39,15 +39,15 @@ public:
           q( parent ) {
     }
 
-    K3bDataDoc* project;
+    K3b::DataDoc* project;
 
-    int countDirs( K3bDirItem* dir );
-    K3bDataItem* getChild( K3bDirItem* dir, int offset );
-    int findChildIndex( K3bDataItem* item );
-    void _k_aboutToAddItem( K3bDirItem* dir, K3bDataItem* item );
-    void _k_aboutToRemoveItem( K3bDataItem* item );
-    void _k_itemAdded( K3bDataItem* item );
-    void _k_itemRemoved( K3bDataItem* item );
+    int countDirs( K3b::DirItem* dir );
+    K3b::DataItem* getChild( K3b::DirItem* dir, int offset );
+    int findChildIndex( K3b::DataItem* item );
+    void _k_aboutToAddItem( K3b::DirItem* dir, K3b::DataItem* item );
+    void _k_aboutToRemoveItem( K3b::DataItem* item );
+    void _k_itemAdded( K3b::DataItem* item );
+    void _k_itemRemoved( K3b::DataItem* item );
 
 private:
     DataProjectModel* q;
@@ -57,10 +57,10 @@ private:
 
 
 
-int K3b::DataProjectModel::Private::countDirs( K3bDirItem* dir )
+int K3b::DataProjectModel::Private::countDirs( K3b::DirItem* dir )
 {
     int cnt = 0;
-    QList<K3bDataItem*> children = dir->children();
+    QList<K3b::DataItem*> children = dir->children();
     for ( int i = 0; i < children.count(); ++i ) {
         if ( children[i]->isDir() ) {
             ++cnt;
@@ -70,9 +70,9 @@ int K3b::DataProjectModel::Private::countDirs( K3bDirItem* dir )
 }
 
 
-K3bDataItem* K3b::DataProjectModel::Private::getChild( K3bDirItem* dir, int offset )
+K3b::DataItem* K3b::DataProjectModel::Private::getChild( K3b::DirItem* dir, int offset )
 {
-    QList<K3bDataItem*> children = dir->children();
+    QList<K3b::DataItem*> children = dir->children();
     if ( offset >= 0 && offset < children.count() ) {
         return children[offset];
     }
@@ -81,11 +81,11 @@ K3bDataItem* K3b::DataProjectModel::Private::getChild( K3bDirItem* dir, int offs
 }
 
 
-int K3b::DataProjectModel::Private::findChildIndex( K3bDataItem* item )
+int K3b::DataProjectModel::Private::findChildIndex( K3b::DataItem* item )
 {
-    K3bDirItem* dir = item->parent();
+    K3b::DirItem* dir = item->parent();
     if ( dir ) {
-        QList<K3bDataItem*> cl = dir->children();
+        QList<K3b::DataItem*> cl = dir->children();
         for ( int i = 0; i < cl.count(); ++i ) {
             if ( cl[i] == item ) {
                 return i;
@@ -98,14 +98,14 @@ int K3b::DataProjectModel::Private::findChildIndex( K3bDataItem* item )
 }
 
 
-void K3b::DataProjectModel::Private::_k_aboutToAddItem( K3bDirItem* dir, K3bDataItem* )
+void K3b::DataProjectModel::Private::_k_aboutToAddItem( K3b::DirItem* dir, K3b::DataItem* )
 {
     int row = dir->children().count();
     q->beginInsertRows( q->indexForItem( dir ), row, row );
 }
 
 
-void K3b::DataProjectModel::Private::_k_aboutToRemoveItem( K3bDataItem* item )
+void K3b::DataProjectModel::Private::_k_aboutToRemoveItem( K3b::DataItem* item )
 {
     m_removingItem = true;
     int row = findChildIndex( item );
@@ -114,14 +114,14 @@ void K3b::DataProjectModel::Private::_k_aboutToRemoveItem( K3bDataItem* item )
 }
 
 
-void K3b::DataProjectModel::Private::_k_itemAdded( K3bDataItem* item )
+void K3b::DataProjectModel::Private::_k_itemAdded( K3b::DataItem* item )
 {
     Q_UNUSED( item );
     q->endInsertRows();
 }
 
 
-void K3b::DataProjectModel::Private::_k_itemRemoved( K3bDataItem* item )
+void K3b::DataProjectModel::Private::_k_itemRemoved( K3b::DataItem* item )
 {
     kDebug() << item;
     Q_UNUSED( item );
@@ -131,16 +131,16 @@ void K3b::DataProjectModel::Private::_k_itemRemoved( K3bDataItem* item )
 }
 
 
-K3b::DataProjectModel::DataProjectModel( K3bDataDoc* doc, QObject* parent )
+K3b::DataProjectModel::DataProjectModel( K3b::DataDoc* doc, QObject* parent )
     : QAbstractItemModel( parent ),
       d( new Private(this) )
 {
     d->project = doc;
 
-    connect( doc, SIGNAL( aboutToAddItem(K3bDirItem*, K3bDataItem*) ), this, SLOT( _k_aboutToAddItem(K3bDirItem*, K3bDataItem*) ) );
-    connect( doc, SIGNAL( aboutToRemoveItem(K3bDataItem*) ), this, SLOT( _k_aboutToRemoveItem(K3bDataItem*) ) );
-    connect( doc, SIGNAL( itemAdded(K3bDataItem*) ), this, SLOT( _k_itemAdded(K3bDataItem*) ) );
-    connect( doc, SIGNAL( itemRemoved(K3bDataItem*) ), this, SLOT( _k_itemRemoved(K3bDataItem*) ) );
+    connect( doc, SIGNAL( aboutToAddItem(K3b::DirItem*, K3b::DataItem*) ), this, SLOT( _k_aboutToAddItem(K3b::DirItem*, K3b::DataItem*) ) );
+    connect( doc, SIGNAL( aboutToRemoveItem(K3b::DataItem*) ), this, SLOT( _k_aboutToRemoveItem(K3b::DataItem*) ) );
+    connect( doc, SIGNAL( itemAdded(K3b::DataItem*) ), this, SLOT( _k_itemAdded(K3b::DataItem*) ) );
+    connect( doc, SIGNAL( itemRemoved(K3b::DataItem*) ), this, SLOT( _k_itemRemoved(K3b::DataItem*) ) );
 }
 
 
@@ -150,23 +150,23 @@ K3b::DataProjectModel::~DataProjectModel()
 }
 
 
-K3bDataDoc* K3b::DataProjectModel::project() const
+K3b::DataDoc* K3b::DataProjectModel::project() const
 {
     return d->project;
 }
 
-K3bDataItem* K3b::DataProjectModel::itemForIndex( const QModelIndex& index ) const
+K3b::DataItem* K3b::DataProjectModel::itemForIndex( const QModelIndex& index ) const
 {
     if ( index.isValid() ) {
         Q_ASSERT( index.internalPointer() );
-        return static_cast<K3bDataItem*>( index.internalPointer() );
+        return static_cast<K3b::DataItem*>( index.internalPointer() );
     }
     else {
         return 0;
     }
 }
 
-QModelIndex K3b::DataProjectModel::indexForItem( K3bDataItem* item ) const
+QModelIndex K3b::DataProjectModel::indexForItem( K3b::DataItem* item ) const
 {
     return createIndex( d->findChildIndex( item ), 0, item );
 }
@@ -176,7 +176,7 @@ int K3b::DataProjectModel::columnCount( const QModelIndex& index ) const
 {
     // the root item has only the first column
     if (!index.isValid())
-        return 1; 
+        return 1;
 
     return NumColumns;
 }
@@ -185,7 +185,7 @@ int K3b::DataProjectModel::columnCount( const QModelIndex& index ) const
 QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
 {
     if ( index.isValid() ) {
-        K3bDataItem* item = itemForIndex( index );
+        K3b::DataItem* item = itemForIndex( index );
 
         switch( index.column() ) {
         case FilenameColumn:
@@ -195,7 +195,7 @@ QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
             }
             else if ( role == Qt::DecorationRole ) {
                 if ( item->isDir() && item->parent() ) {
-                    return( static_cast<K3bDirItem*>( item )->depth() > 7 ? KIcon( "folder-root" ) : KIcon( "folder" ) );
+                    return( static_cast<K3b::DirItem*>( item )->depth() > 7 ? KIcon( "folder-root" ) : KIcon( "folder" ) );
                 }
                 else if ( item->isDir() ) {
                     return KIcon( "media-optical" );
@@ -206,9 +206,9 @@ QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
             }
             else if ( role == K3b::ItemTypeRole ) {
                 if (item->isDir())
-                    return (int) K3b::DirItem;
+                    return (int) K3b::DirItemType;
                 else
-                    return (int) K3b::FileItem;
+                    return (int) K3b::FileItemType;
             }
             else if ( role == K3b::CustomFlagsRole ) {
                 if (item->isRemoveable())
@@ -221,7 +221,7 @@ QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
         case TypeColumn:
             if( role == Qt::DisplayRole ) {
                 if ( item->isSpecialFile() ) {
-                    return static_cast<K3bSpecialDataItem*>( item )->specialType();
+                    return static_cast<K3b::SpecialDataItem*>( item )->specialType();
                 }
                 else {
                     return item->mimeType()->comment();
@@ -310,8 +310,8 @@ Qt::ItemFlags K3b::DataProjectModel::flags( const QModelIndex& index ) const
 QModelIndex K3b::DataProjectModel::index( int row, int column, const QModelIndex& parent ) const
 {
     if ( parent.isValid() ) {
-        K3bDirItem* dir = itemForIndex( parent )->getDirItem();
-        K3bDataItem* child = d->getChild( dir, row );
+        K3b::DirItem* dir = itemForIndex( parent )->getDirItem();
+        K3b::DataItem* child = d->getChild( dir, row );
         if ( child ) {
             return createIndex( row, column, child );
         }
@@ -330,8 +330,8 @@ QModelIndex K3b::DataProjectModel::parent( const QModelIndex& index ) const
 {
     //kDebug() << index;
     if ( index.isValid() ) {
-        K3bDataItem* item = itemForIndex( index );
-        K3bDirItem* dir = item->parent();
+        K3b::DataItem* item = itemForIndex( index );
+        K3b::DirItem* dir = item->parent();
         if( dir ) {
             return createIndex( d->findChildIndex( dir ), 0, dir );
         }
@@ -344,8 +344,8 @@ QModelIndex K3b::DataProjectModel::parent( const QModelIndex& index ) const
 int K3b::DataProjectModel::rowCount( const QModelIndex& index ) const
 {
     if ( index.isValid() ) {
-        K3bDataItem* item = itemForIndex( index );
-        if ( K3bDirItem* dir = dynamic_cast<K3bDirItem*>( item ) ) {
+        K3b::DataItem* item = itemForIndex( index );
+        if ( K3b::DirItem* dir = dynamic_cast<K3b::DirItem*>( item ) ) {
             return( dir->children().count() );
         }
         else {
@@ -361,7 +361,7 @@ int K3b::DataProjectModel::rowCount( const QModelIndex& index ) const
 bool K3b::DataProjectModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
     if ( index.isValid() ) {
-        K3bDataItem* item = itemForIndex( index );
+        K3b::DataItem* item = itemForIndex( index );
         if ( role == Qt::EditRole ) {
             if ( index.column() == 0 ) {
                 item->setK3bName( value.toString() );
@@ -379,10 +379,10 @@ QMimeData* K3b::DataProjectModel::mimeData( const QModelIndexList& indexes ) con
 {
     QMimeData* mime = new QMimeData();
 
-    QList<K3bDataItem*> items;
+    QList<K3b::DataItem*> items;
     KUrl::List urls;
     foreach( const QModelIndex& index, indexes ) {
-        K3bDataItem* item = itemForIndex( index );
+        K3b::DataItem* item = itemForIndex( index );
         items << item;
         if ( item->isFile() ) {
             urls << KUrl( item->localPath() );
@@ -393,7 +393,7 @@ QMimeData* K3b::DataProjectModel::mimeData( const QModelIndexList& indexes ) con
     // the easy road: encode the pointers
     QByteArray itemData;
     QDataStream itemDataStream( &itemData, QIODevice::WriteOnly );
-    foreach( K3bDataItem* item, items ) {
+    foreach( K3b::DataItem* item, items ) {
         itemDataStream << ( qint64 )item;
     }
     mime->setData( "application/x-k3bdataitem", itemData );
@@ -431,7 +431,7 @@ bool K3b::DataProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction 
     // - drop ontp an item -> get the item's dir (i.e. itself or its parent)
     // - drop onto the viewport -> the project's root
     // --------------------------------------------------------------
-    K3bDirItem* dir = d->project->root();
+    K3b::DirItem* dir = d->project->root();
     if ( parent.isValid() ) {
         dir = itemForIndex( parent )->getDirItem();
     }
@@ -441,20 +441,20 @@ bool K3b::DataProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction 
 
         QByteArray itemData = data->data( "application/x-k3bdataitem" );
         QDataStream itemDataStream( itemData );
-        QList<K3bDataItem*> items;
+        QList<K3b::DataItem*> items;
         while ( !itemDataStream.atEnd() ) {
             qint64 p;
             itemDataStream >> p;
-            items << ( K3bDataItem* )p;
+            items << ( K3b::DataItem* )p;
         }
         // always move the items, no copy from within the views
-        K3bDataUrlAddingDialog::copyMoveItems( items, dir, 0, false );
+        K3b::DataUrlAddingDialog::copyMoveItems( items, dir, 0, false );
         return true;
     }
     else if ( KUrl::List::canDecode( data ) ) {
         kDebug() << "url list drop";
         KUrl::List urls = KUrl::List::fromMimeData( data );
-        K3bDataUrlAddingDialog::addUrls( urls, dir, 0 );
+        K3b::DataUrlAddingDialog::addUrls( urls, dir, 0 );
         return true;
     }
     else {

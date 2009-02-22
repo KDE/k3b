@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -24,132 +24,132 @@
 
 #include "k3bdataitem.h"
 #include "k3b_export.h"
-class K3bDataDoc;
 
-/**
- *@author Sebastian Trueg
- */
-class LIBK3B_EXPORT K3bDirItem : public K3bDataItem
-{
-public: 
-    K3bDirItem( const QString& name, K3bDataDoc*, K3bDirItem* parentDir = 0 );
+namespace K3b {
+    class DataDoc;
 
-    /**
-     * Default copy constructor. Copies the dir including all children. However, none of the
-     * children will have set a doc and the copy dir will not have set a parent dir.
-     */
-    K3bDirItem( const K3bDirItem& );
+    class LIBK3B_EXPORT DirItem : public DataItem
+    {
+    public:
+        DirItem( const QString& name, DataDoc*, DirItem* parentDir = 0 );
 
-    virtual ~K3bDirItem();
+        /**
+         * Default copy constructor. Copies the dir including all children. However, none of the
+         * children will have set a doc and the copy dir will not have set a parent dir.
+         */
+        DirItem( const DirItem& );
 
-    K3bDataItem* copy() const;
-	
-    K3bDirItem* getDirItem() const;
+        virtual ~DirItem();
 
-    QList<K3bDataItem*> children() const { return m_children; }
-    K3bDirItem* addDataItem( K3bDataItem* item );
-    K3bDataItem* takeDataItem( K3bDataItem* item );
-	
-    K3bDataItem* nextSibling() const;
-    K3bDataItem* nextChild( K3bDataItem* ) const;
+        DataItem* copy() const;
 
-    bool alreadyInDirectory( const QString& fileName ) const;
-    K3bDataItem* find( const QString& filename ) const;
-    K3bDataItem* findByPath( const QString& );
+        DirItem* getDirItem() const;
 
-    long numFiles() const;
-    long numDirs() const;
+        QList<DataItem*> children() const { return m_children; }
+        DirItem* addDataItem( DataItem* item );
+        DataItem* takeDataItem( DataItem* item );
 
-    bool isEmpty() const { return ( numDirs() + numFiles() == 0 ); }
+        DataItem* nextSibling() const;
+        DataItem* nextChild( DataItem* ) const;
 
-    /**
-     * returns true if item is a subItem of 
-     * this dir item 
-     * (returns also true if item == this
-     */
-    bool isSubItem( K3bDataItem* item ) const;
+        bool alreadyInDirectory( const QString& fileName ) const;
+        DataItem* find( const QString& filename ) const;
+        DataItem* findByPath( const QString& );
 
-    bool isDir() const { return true; }
+        long numFiles() const;
+        long numDirs() const;
 
-    virtual bool isRemoveable() const;
+        bool isEmpty() const { return ( numDirs() + numFiles() == 0 ); }
 
-    /**
-     * \return true if some child is from an old session.
-     */
-    virtual bool isFromOldSession() const;
+        /**
+         * returns true if item is a subItem of
+         * this dir item
+         * (returns also true if item == this
+         */
+        bool isSubItem( DataItem* item ) const;
 
-    /**
-     * Recursively creates a directory.
-     */
-    bool mkdir( const QString& dir );
+        bool isDir() const { return true; }
 
-    void setLocalPath( const QString& p ) { m_localPath = p; }
-    QString localPath() const { return m_localPath; }
+        virtual bool isRemoveable() const;
 
-    KMimeType::Ptr mimeType() const;
+        /**
+         * \return true if some child is from an old session.
+         */
+        virtual bool isFromOldSession() const;
 
-    /**
-     * \reimplemented
-     */
-    bool writeToCd() const;
+        /**
+         * Recursively creates a directory.
+         */
+        bool mkdir( const QString& dir );
 
-protected:
-    /**
-     * Normally one does not use this method but K3bDataItem::size()
-     *
-     * This method does not take into account the possibility to share the data
-     * between files with the same inode in an iso9660 filesystem.
-     * For that one has to use K3bFileCompilationSizeHandler.
-     */
-    KIO::filesize_t itemSize( bool followSymlinks ) const;
+        void setLocalPath( const QString& p ) { m_localPath = p; }
+        QString localPath() const { return m_localPath; }
 
-    /*
-     * Normally one does not use this method but K3bDataItem::blocks()
-     */
-    K3b::Msf itemBlocks( bool followSymlinks ) const;
+        KMimeType::Ptr mimeType() const;
 
-private:
-    /**
-     * this recursivly updates the size of the directories.
-     * The size of this dir and the parent dir is updated.
-     * These values are just used for user information.
-     */
-    void updateSize( K3bDataItem*, bool removed = false );
-    /**
-     * Updates the number of files and directories. These values are
-     * just used for user information.
-     */
-    void updateFiles( long files, long dirs );
+        /**
+         * \reimplemented
+         */
+        bool writeToCd() const;
 
-    mutable QList<K3bDataItem*> m_children;
+    protected:
+        /**
+         * Normally one does not use this method but DataItem::size()
+         *
+         * This method does not take into account the possibility to share the data
+         * between files with the same inode in an iso9660 filesystem.
+         * For that one has to use FileCompilationSizeHandler.
+         */
+        KIO::filesize_t itemSize( bool followSymlinks ) const;
 
-    // size of the items simply added
-    KIO::filesize_t m_size;
-    KIO::filesize_t m_followSymlinksSize;
+        /*
+         * Normally one does not use this method but DataItem::blocks()
+         */
+        Msf itemBlocks( bool followSymlinks ) const;
 
-    // number of blocks (2048 bytes) used by all the items
-    long m_blocks;
-    long m_followSymlinksBlocks;
+    private:
+        /**
+         * this recursivly updates the size of the directories.
+         * The size of this dir and the parent dir is updated.
+         * These values are just used for user information.
+         */
+        void updateSize( DataItem*, bool removed = false );
+        /**
+         * Updates the number of files and directories. These values are
+         * just used for user information.
+         */
+        void updateFiles( long files, long dirs );
 
-    long m_files;
-    long m_dirs;
+        mutable QList<DataItem*> m_children;
 
-    // HACK: store the original path to be able to use it's permissions
-    //        ´remove this once we have a backup project
-    QString m_localPath;
-};
+        // size of the items simply added
+        KIO::filesize_t m_size;
+        KIO::filesize_t m_followSymlinksSize;
+
+        // number of blocks (2048 bytes) used by all the items
+        long m_blocks;
+        long m_followSymlinksBlocks;
+
+        long m_files;
+        long m_dirs;
+
+        // HACK: store the original path to be able to use it's permissions
+        //        ´remove this once we have a backup project
+        QString m_localPath;
+    };
 
 
-class K3bRootItem : public K3bDirItem
-{
-public:
-    K3bRootItem( K3bDataDoc* );
-    ~K3bRootItem();
+    class RootItem : public DirItem
+    {
+    public:
+        RootItem( DataDoc* );
+        ~RootItem();
 
-    QString k3bName() const;
-    void setK3bName( const QString& );
+        QString k3bName() const;
+        void setK3bName( const QString& );
 
-    bool isMoveable() const { return false; }
-    bool isRemoveable() const { return false; }
-};
+        bool isMoveable() const { return false; }
+        bool isRemoveable() const { return false; }
+    };
+}
 #endif

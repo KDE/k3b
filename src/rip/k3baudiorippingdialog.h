@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -25,63 +25,62 @@
 
 #include <libkcddb/cdinfo.h>
 
-namespace K3bDevice {
-    class Device;
-}
-
-
 class QCheckBox;
 class QSpinBox;
 class QComboBox;
-class K3bCddbPatternWidget;
-class K3bAudioConvertingOptionWidget;
 
+namespace K3b {
 
-/**
- *@author Sebastian Trueg
- */
-class K3bAudioRippingDialog : public K3bInteractionDialog
-{
-    Q_OBJECT
+    namespace Device {
+        class Device;
+    }
 
-public: 
-    K3bAudioRippingDialog( const K3bMedium&,
-                           const KCDDB::CDInfo&, 
-                           const QList<int>&, 
-                           QWidget *parent = 0 );
-    ~K3bAudioRippingDialog();
+    class CddbPatternWidget;
+    class AudioConvertingOptionWidget;
 
-    void setStaticDir( const QString& path );
+    class AudioRippingDialog : public InteractionDialog
+    {
+        Q_OBJECT
 
-public Q_SLOTS:  
-    void refresh();
-    void init();
-  
-private Q_SLOTS:
-    void slotStartClicked();
+    public:
+        AudioRippingDialog( const Medium&,
+                            const KCDDB::CDInfo&,
+                            const QList<int>&,
+                            QWidget *parent = 0 );
+        ~AudioRippingDialog();
 
-private:
-    K3bMedium m_medium;
-    KCDDB::CDInfo m_cddbEntry;
-    QList<int> m_trackNumbers;
+        void setStaticDir( const QString& path );
 
-    QComboBox* m_comboParanoiaMode;
-    QSpinBox* m_spinRetries;
-    QCheckBox* m_checkIgnoreReadErrors;
-    QCheckBox* m_checkUseIndex0;
+    public Q_SLOTS:
+        void refresh();
+        void init();
 
-    K3bCddbPatternWidget* m_patternWidget;
-    K3bAudioConvertingOptionWidget* m_optionWidget;
+    private Q_SLOTS:
+        void slotStartClicked();
 
-    void setupGui();
-    void setupContextHelp();
+    private:
+        Medium m_medium;
+        KCDDB::CDInfo m_cddbEntry;
+        QList<int> m_trackNumbers;
 
-    void loadK3bDefaults();
-    void loadUserDefaults( const KConfigGroup& );
-    void saveUserDefaults( KConfigGroup );
+        QComboBox* m_comboParanoiaMode;
+        QSpinBox* m_spinRetries;
+        QCheckBox* m_checkIgnoreReadErrors;
+        QCheckBox* m_checkUseIndex0;
 
-    class Private;
-    Private* d;
-};
+        CddbPatternWidget* m_patternWidget;
+        AudioConvertingOptionWidget* m_optionWidget;
+
+        void setupGui();
+        void setupContextHelp();
+
+        void loadK3bDefaults();
+        void loadUserDefaults( const KConfigGroup& );
+        void saveUserDefaults( KConfigGroup );
+
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

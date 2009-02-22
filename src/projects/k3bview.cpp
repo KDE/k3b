@@ -34,14 +34,14 @@
 #include <KDebug>
 #include <KToolBar>
 
-K3bView::K3bView( K3bDoc* pDoc, QWidget *parent )
+K3b::View::View( K3b::Doc* pDoc, QWidget *parent )
     : QWidget( parent ),
       m_doc( pDoc )
 {
     QGridLayout* grid = new QGridLayout( this );
 
     m_toolBox = new KToolBar( this );
-    m_fillStatusDisplay = new K3bFillStatusDisplay( m_doc, this );
+    m_fillStatusDisplay = new K3b::FillStatusDisplay( m_doc, this );
 
     grid->addWidget( m_toolBox, 0, 0, 1, 2 );
     grid->addWidget( m_fillStatusDisplay, 2, 0, 1, 2 );
@@ -74,55 +74,55 @@ K3bView::K3bView( K3bDoc* pDoc, QWidget *parent )
             "</kpartgui>", true );
 }
 
-K3bView::~K3bView()
+K3b::View::~View()
 {
 }
 
 
-void K3bView::setMainWidget( QWidget* w )
+void K3b::View::setMainWidget( QWidget* w )
 {
     static_cast<QGridLayout*>(layout())->addWidget( w, 1, 0, 1, 2 );
 }
 
 
-void K3bView::slotBurn()
+void K3b::View::slotBurn()
 {
     if( m_doc->numOfTracks() == 0 || m_doc->size() == 0 ) {
         KMessageBox::information( this, i18n("Please add files to your project first."),
                                   i18n("No Data to Burn"), QString(), false );
     }
     else {
-        K3bProjectBurnDialog* dlg = newBurnDialog( this );
+        K3b::ProjectBurnDialog* dlg = newBurnDialog( this );
         if( dlg ) {
             dlg->execBurnDialog(true);
             delete dlg;
         }
         else {
-            kDebug() << "(K3bDoc) Error: no burndialog available.";
+            kDebug() << "(K3b::Doc) Error: no burndialog available.";
         }
     }
 }
 
 
-void K3bView::slotProperties()
+void K3b::View::slotProperties()
 {
-    K3bProjectBurnDialog* dlg = newBurnDialog( this );
+    K3b::ProjectBurnDialog* dlg = newBurnDialog( this );
     if( dlg ) {
         dlg->execBurnDialog(false);
         delete dlg;
     }
     else {
-        kDebug() << "(K3bDoc) Error: no burndialog available.";
+        kDebug() << "(K3b::Doc) Error: no burndialog available.";
     }
 }
 
 
-void K3bView::addPluginButtons( int projectType )
+void K3b::View::addPluginButtons( int projectType )
 {
-    QList<K3bPlugin*> pl = k3bcore->pluginManager()->plugins( "ProjectPlugin" );
-    for( QList<K3bPlugin*>::const_iterator it = pl.constBegin();
+    QList<K3b::Plugin*> pl = k3bcore->pluginManager()->plugins( "ProjectPlugin" );
+    for( QList<K3b::Plugin*>::const_iterator it = pl.constBegin();
          it != pl.constEnd(); ++it ) {
-        K3bProjectPlugin* pp = dynamic_cast<K3bProjectPlugin*>( *it );
+        K3b::ProjectPlugin* pp = dynamic_cast<K3b::ProjectPlugin*>( *it );
         if( pp && (pp->type() & projectType) ) {
             QAction* button = toolBox()->addAction(     pp->text(),
                                                         this,
@@ -136,12 +136,12 @@ void K3bView::addPluginButtons( int projectType )
 }
 
 
-void K3bView::slotPluginButtonClicked()
+void K3b::View::slotPluginButtonClicked()
 {
     const QObject* o = sender();
     if( K3bProjectPlugin* p = m_plugins[o] ) {
         if( p->hasGUI() ) {
-            K3bProjectPluginDialog dlg( p, doc(), this );
+            K3b::ProjectPluginDialog dlg( p, doc(), this );
             dlg.exec();
         }
         else
@@ -150,14 +150,14 @@ void K3bView::slotPluginButtonClicked()
 }
 
 
-void K3bView::addUrl( const KUrl& url )
+void K3b::View::addUrl( const KUrl& url )
 {
     KUrl::List urls(url);
     addUrls( urls );
 }
 
 
-void K3bView::addUrls( const KUrl::List& urls )
+void K3b::View::addUrls( const KUrl::List& urls )
 {
     doc()->addUrls( urls );
 }

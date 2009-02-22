@@ -29,7 +29,7 @@
 #include <klocale.h>
 
 
-class K3bAudioCueFileWritingJob::Private
+class K3b::AudioCueFileWritingJob::Private
 {
 public:
     Private()
@@ -40,14 +40,14 @@ public:
           analyserJob( 0 ) {
     }
 
-    K3bDevice::Device* device;
+    K3b::Device::Device* device;
 
     QString cueFile;
-    K3bAudioDoc* audioDoc;
-    K3bAudioJob* audioJob;
-    K3bAudioDecoder* decoder;
+    K3b::AudioDoc* audioDoc;
+    K3b::AudioJob* audioJob;
+    K3b::AudioDecoder* decoder;
 
-    K3bAudioFileAnalyzerJob* analyserJob;
+    K3b::AudioFileAnalyzerJob* analyserJob;
 
     bool audioJobRunning;
     bool canceled;
@@ -55,17 +55,17 @@ public:
 
 
 
-K3bAudioCueFileWritingJob::K3bAudioCueFileWritingJob( K3bJobHandler* jh, QObject* parent )
-    : K3bBurnJob( jh, parent ),
+K3b::AudioCueFileWritingJob::AudioCueFileWritingJob( K3b::JobHandler* jh, QObject* parent )
+    : K3b::BurnJob( jh, parent ),
       d( new Private() )
 {
-    d->analyserJob = new K3bAudioFileAnalyzerJob( this, this );
+    d->analyserJob = new K3b::AudioFileAnalyzerJob( this, this );
     connect( d->analyserJob, SIGNAL(finished(bool)),
              this, SLOT(slotAnalyserJobFinished(bool)) );
 
-    d->audioDoc = new K3bAudioDoc( this );
+    d->audioDoc = new K3b::AudioDoc( this );
     d->audioDoc->newDocument();
-    d->audioJob = new K3bAudioJob( d->audioDoc, this, this );
+    d->audioJob = new K3b::AudioJob( d->audioDoc, this, this );
 
     // just loop all through
     connect( d->audioJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
@@ -90,37 +90,37 @@ K3bAudioCueFileWritingJob::K3bAudioCueFileWritingJob( K3bJobHandler* jh, QObject
 }
 
 
-K3bAudioCueFileWritingJob::~K3bAudioCueFileWritingJob()
+K3b::AudioCueFileWritingJob::~AudioCueFileWritingJob()
 {
     delete d;
 }
 
 
-K3bDevice::Device* K3bAudioCueFileWritingJob::writer() const
+K3b::Device::Device* K3b::AudioCueFileWritingJob::writer() const
 {
     return d->audioDoc->burner();
 }
 
 
-QString K3bAudioCueFileWritingJob::cueFile() const
+QString K3b::AudioCueFileWritingJob::cueFile() const
 {
     return d->cueFile;
 }
 
 
-QString K3bAudioCueFileWritingJob::jobDescription() const
+QString K3b::AudioCueFileWritingJob::jobDescription() const
 {
     return i18n("Writing Audio Cue File");
 }
 
 
-QString K3bAudioCueFileWritingJob::jobDetails() const
+QString K3b::AudioCueFileWritingJob::jobDetails() const
 {
     return d->cueFile.section( '/', -1 );
 }
 
 
-void K3bAudioCueFileWritingJob::start()
+void K3b::AudioCueFileWritingJob::start()
 {
     // FIXME: here we trust that a job won't be started twice :(
     jobStarted();
@@ -130,7 +130,7 @@ void K3bAudioCueFileWritingJob::start()
 }
 
 
-void K3bAudioCueFileWritingJob::cancel()
+void K3b::AudioCueFileWritingJob::cancel()
 {
     d->canceled = true;
 
@@ -141,55 +141,55 @@ void K3bAudioCueFileWritingJob::cancel()
 }
 
 
-void K3bAudioCueFileWritingJob::setCueFile( const QString& s )
+void K3b::AudioCueFileWritingJob::setCueFile( const QString& s )
 {
     d->cueFile = s;
 }
 
 
-void K3bAudioCueFileWritingJob::setOnTheFly( bool b )
+void K3b::AudioCueFileWritingJob::setOnTheFly( bool b )
 {
     d->audioDoc->setOnTheFly( b );
 }
 
 
-void K3bAudioCueFileWritingJob::setSpeed( int s )
+void K3b::AudioCueFileWritingJob::setSpeed( int s )
 {
     d->audioDoc->setSpeed( s );
 }
 
 
-void K3bAudioCueFileWritingJob::setBurnDevice( K3bDevice::Device* dev )
+void K3b::AudioCueFileWritingJob::setBurnDevice( K3b::Device::Device* dev )
 {
     d->audioDoc->setBurner( dev );
 }
 
 
-void K3bAudioCueFileWritingJob::setWritingMode( K3b::WritingMode mode )
+void K3b::AudioCueFileWritingJob::setWritingMode( K3b::WritingMode mode )
 {
     d->audioDoc->setWritingMode( mode );
 }
 
 
-void K3bAudioCueFileWritingJob::setSimulate( bool b )
+void K3b::AudioCueFileWritingJob::setSimulate( bool b )
 {
     d->audioDoc->setDummy( b );
 }
 
 
-void K3bAudioCueFileWritingJob::setCopies( int c )
+void K3b::AudioCueFileWritingJob::setCopies( int c )
 {
     d->audioDoc->setCopies( c );
 }
 
 
-void K3bAudioCueFileWritingJob::setTempDir( const QString& s )
+void K3b::AudioCueFileWritingJob::setTempDir( const QString& s )
 {
     d->audioDoc->setTempDir( s );
 }
 
 
-void K3bAudioCueFileWritingJob::slotAnalyserJobFinished( bool )
+void K3b::AudioCueFileWritingJob::slotAnalyserJobFinished( bool )
 {
     if( !d->canceled ) {
         if( d->audioDoc->lastTrack()->length() == 0 ) {
@@ -209,7 +209,7 @@ void K3bAudioCueFileWritingJob::slotAnalyserJobFinished( bool )
 }
 
 
-void K3bAudioCueFileWritingJob::importCueInProject()
+void K3b::AudioCueFileWritingJob::importCueInProject()
 {
     // cleanup the project (this wil also delete the decoder)
     // we do not use newDocument as that would overwrite the settings already made
@@ -218,32 +218,32 @@ void K3bAudioCueFileWritingJob::importCueInProject()
 
     d->decoder = 0;
 
-    K3bCueFileParser parser( d->cueFile );
-    if( parser.isValid() && parser.toc().contentType() == K3bDevice::AUDIO ) {
+    K3b::CueFileParser parser( d->cueFile );
+    if( parser.isValid() && parser.toc().contentType() == K3b::Device::AUDIO ) {
 
-        kDebug() << "(K3bAudioCueFileWritingJob::importCueFile) parsed with image: " << parser.imageFilename();
+        kDebug() << "(K3b::AudioCueFileWritingJob::importCueFile) parsed with image: " << parser.imageFilename();
 
         // global cd-text
         d->audioDoc->setTitle( parser.cdText().title() );
         d->audioDoc->setPerformer( parser.cdText().performer() );
         d->audioDoc->writeCdText( !parser.cdText().title().isEmpty() );
 
-        d->decoder = K3bAudioDecoderFactory::createDecoder( parser.imageFilename() );
+        d->decoder = K3b::AudioDecoderFactory::createDecoder( parser.imageFilename() );
         if( d->decoder ) {
             d->decoder->setFilename( parser.imageFilename() );
 
-            K3bAudioTrack* after = 0;
-            K3bAudioFile* newFile = 0;
+            K3b::AudioTrack* after = 0;
+            K3b::AudioFile* newFile = 0;
             unsigned int i = 0;
-            for( K3bDevice::Toc::const_iterator it = parser.toc().begin();
+            for( K3b::Device::Toc::const_iterator it = parser.toc().begin();
                  it != parser.toc().end(); ++it ) {
-                const K3bDevice::Track& track = *it;
+                const K3b::Device::Track& track = *it;
 
-                newFile = new K3bAudioFile( d->decoder, d->audioDoc );
+                newFile = new K3b::AudioFile( d->decoder, d->audioDoc );
                 newFile->setStartOffset( track.firstSector() );
                 newFile->setEndOffset( track.lastSector()+1 );
 
-                K3bAudioTrack* newTrack = new K3bAudioTrack( d->audioDoc );
+                K3b::AudioTrack* newTrack = new K3b::AudioTrack( d->audioDoc );
                 newTrack->addSource( newFile );
                 newTrack->moveAfter( after );
 

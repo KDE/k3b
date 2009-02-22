@@ -31,13 +31,13 @@
 #include <q3valuelist.h>
 
 
-K3bTheme::K3bTheme()
+K3b::Theme::Theme()
     : m_bgMode(BG_TILE)
 {
 }
 
 
-QColor K3bTheme::backgroundColor() const
+QColor K3b::Theme::backgroundColor() const
 {
     if( m_bgColor.isValid() )
         return m_bgColor;
@@ -46,7 +46,7 @@ QColor K3bTheme::backgroundColor() const
 }
 
 
-QColor K3bTheme::foregroundColor() const
+QColor K3b::Theme::foregroundColor() const
 {
     if( m_fgColor.isValid() )
         return m_fgColor;
@@ -55,7 +55,7 @@ QColor K3bTheme::foregroundColor() const
 }
 
 
-QPixmap K3bTheme::pixmap( const QString& name ) const
+QPixmap K3b::Theme::pixmap( const QString& name ) const
 {
     QMap<QString, QPixmap>::const_iterator it = m_pixmapMap.constFind( name );
     if( it != m_pixmapMap.constEnd() )
@@ -65,19 +65,19 @@ QPixmap K3bTheme::pixmap( const QString& name ) const
     if( QFile::exists( m_path + name ) )
         return *m_pixmapMap.insert( name, QPixmap( m_path + name ) );
 
-    kDebug() << "(K3bTheme) " << m_name << ": could not load image " << name;
+    kDebug() << "(K3b::Theme) " << m_name << ": could not load image " << name;
 
     return m_emptyPixmap;
 }
 
 
-QPixmap K3bTheme::pixmap( K3bTheme::PixmapType t ) const
+QPixmap K3b::Theme::pixmap( K3b::Theme::PixmapType t ) const
 {
     return pixmap( filenameForPixmapType( t ) );
 }
 
 
-QPalette K3bTheme::palette() const
+QPalette K3b::Theme::palette() const
 {
     QPalette pal;
     pal.setColor( QPalette::Window, backgroundColor() );
@@ -86,7 +86,7 @@ QPalette K3bTheme::palette() const
 }
 
 
-QString K3bTheme::filenameForPixmapType( PixmapType t )
+QString K3b::Theme::filenameForPixmapType( PixmapType t )
 {
     QString name;
 
@@ -152,30 +152,30 @@ QString K3bTheme::filenameForPixmapType( PixmapType t )
 }
 
 
-K3bTheme::BackgroundMode K3bTheme::backgroundMode() const
+K3b::Theme::BackgroundMode K3b::Theme::backgroundMode() const
 {
     return m_bgMode;
 }
 
 
 
-class K3bThemeManager::Private
+class K3b::ThemeManager::Private
 {
 public:
     Private()
         : currentTheme(&emptyTheme) {
     }
 
-    QList<K3bTheme*> themes;
-    K3bTheme* currentTheme;
+    QList<K3b::Theme*> themes;
+    K3b::Theme* currentTheme;
     QString currentThemeName;
 
-    K3bTheme emptyTheme;
+    K3b::Theme emptyTheme;
 };
 
 
 
-K3bThemeManager::K3bThemeManager( QObject* parent )
+K3b::ThemeManager::ThemeManager( QObject* parent )
     : QObject( parent )
 {
     d = new Private();
@@ -183,38 +183,38 @@ K3bThemeManager::K3bThemeManager( QObject* parent )
 }
 
 
-K3bThemeManager::~K3bThemeManager()
+K3b::ThemeManager::~ThemeManager()
 {
     delete d;
 }
 
 
-const QList<K3bTheme*>& K3bThemeManager::themes() const
+QList<K3b::Theme*> K3b::ThemeManager::themes() const
 {
     return d->themes;
 }
 
 
-K3bTheme* K3bThemeManager::currentTheme() const
+K3b::Theme* K3b::ThemeManager::currentTheme() const
 {
     return d->currentTheme;
 }
 
 
-void K3bThemeManager::readConfig( const KConfigGroup& c )
+void K3b::ThemeManager::readConfig( const KConfigGroup& c )
 {
     // allow to override the default theme by packaging a default config file
     QString defaultTheme = c.readEntry( "default theme", "quant" );
 
-    K3bVersion configVersion( c.readEntry( "config version", "0.1" ) );
-    if( configVersion >= K3bVersion("0.98") )
+    K3b::Version configVersion( c.readEntry( "config version", "0.1" ) );
+    if( configVersion >= K3b::Version("0.98") )
         setCurrentTheme( c.readEntry( "current theme", defaultTheme ) );
     else
         setCurrentTheme( defaultTheme );
 }
 
 
-void K3bThemeManager::saveConfig( KConfigGroup c )
+void K3b::ThemeManager::saveConfig( KConfigGroup c )
 {
     kDebug() << d->currentThemeName;
     if( !d->currentThemeName.isEmpty() ) {
@@ -223,16 +223,16 @@ void K3bThemeManager::saveConfig( KConfigGroup c )
 }
 
 
-void K3bThemeManager::setCurrentTheme( const QString& name )
+void K3b::ThemeManager::setCurrentTheme( const QString& name )
 {
     if( name != d->currentThemeName ) {
-        if( K3bTheme* theme = findTheme( name ) )
+        if( K3b::Theme* theme = findTheme( name ) )
             setCurrentTheme( theme );
     }
 }
 
 
-void K3bThemeManager::setCurrentTheme( K3bTheme* theme )
+void K3b::ThemeManager::setCurrentTheme( K3b::Theme* theme )
 {
     if( !theme )
         theme = d->themes.first();
@@ -249,19 +249,19 @@ void K3bThemeManager::setCurrentTheme( K3bTheme* theme )
 }
 
 
-K3bTheme* K3bThemeManager::findTheme( const QString& name ) const
+K3b::Theme* K3b::ThemeManager::findTheme( const QString& name ) const
 {
-    for( QList<K3bTheme*>::ConstIterator it = d->themes.constBegin(); it != d->themes.constEnd(); ++it )
+    for( QList<K3b::Theme*>::ConstIterator it = d->themes.constBegin(); it != d->themes.constEnd(); ++it )
         if( (*it)->name() == name )
             return *it;
     return 0;
 }
 
 
-void K3bThemeManager::loadThemes()
+void K3b::ThemeManager::loadThemes()
 {
     // first we cleanup the loaded themes
-    for( QList<K3bTheme*>::ConstIterator it = d->themes.constBegin(); it != d->themes.constEnd(); ++it )
+    for( QList<K3b::Theme*>::ConstIterator it = d->themes.constBegin(); it != d->themes.constEnd(); ++it )
         delete *it;
     d->themes.clear();
 
@@ -281,9 +281,9 @@ void K3bThemeManager::loadThemes()
                 bool themeValid = true;
 
                 // check for all nessessary pixmaps (this is a little evil hacking)
-                for( int i = 0; i <= K3bTheme::WELCOME_BG; ++i ) {
-                    if( !QFile::exists( themeDir + K3bTheme::filenameForPixmapType( (K3bTheme::PixmapType)i ) ) ) {
-                        kDebug() << "(K3bThemeManager) theme misses pixmap: " << K3bTheme::filenameForPixmapType( (K3bTheme::PixmapType)i );
+                for( int i = 0; i <= K3b::Theme::WELCOME_BG; ++i ) {
+                    if( !QFile::exists( themeDir + K3b::Theme::filenameForPixmapType( (K3b::Theme::PixmapType)i ) ) ) {
+                        kDebug() << "(K3b::ThemeManager) theme misses pixmap: " << K3b::Theme::filenameForPixmapType( (K3b::Theme::PixmapType)i );
                         themeValid = false;
                         break;
                     }
@@ -304,11 +304,11 @@ void K3bThemeManager::loadThemes()
 }
 
 
-void K3bThemeManager::loadTheme( const QString& name )
+void K3b::ThemeManager::loadTheme( const QString& name )
 {
     QString path = KGlobal::dirs()->findResource( "data", "k3b/pics/" + name + "/k3b.theme" );
     if( !path.isEmpty() ) {
-        K3bTheme* t = new K3bTheme();
+        K3b::Theme* t = new K3b::Theme();
         t->m_name = name;
         t->m_path = path.left( path.length() - 9 );
         QFileInfo fi( t->m_path );
@@ -322,7 +322,7 @@ void K3bThemeManager::loadTheme( const QString& name )
         t->m_version = group.readEntry( "Version" );
         t->m_bgColor = group.readEntry( "Backgroundcolor", QColor() );
         t->m_fgColor = group.readEntry( "Foregroundcolor", QColor() );
-        t->m_bgMode = ( group.readEntry( "BackgroundMode" ) == "Scaled" ? K3bTheme::BG_SCALE : K3bTheme::BG_TILE );
+        t->m_bgMode = ( group.readEntry( "BackgroundMode" ) == "Scaled" ? K3b::Theme::BG_SCALE : K3b::Theme::BG_TILE );
 
         d->themes.append( t );
     }

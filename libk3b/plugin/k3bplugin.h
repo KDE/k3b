@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,47 +25,50 @@
 #define K3B_PLUGIN_SYSTEM_VERSION 4
 
 
-class K3bPluginConfigWidget;
 class QWidget;
 
+namespace K3b {
+    class PluginConfigWidget;
 
-/**
- * Base class for all plugins.
- */
-class LIBK3B_EXPORT K3bPlugin : public QObject
-{
-    Q_OBJECT
-
-    friend class K3bPluginManager;
-
-public:
-    K3bPlugin( QObject* parent = 0 );
-    virtual ~K3bPlugin();
-
-    KPluginInfo pluginInfo() const { return m_pluginInfo; }
 
     /**
-     * Version of the plugin system this plugin was written for.
+     * Base class for all plugins.
      */
-    virtual int pluginSystemVersion() const = 0;
+    class LIBK3B_EXPORT Plugin : public QObject
+    {
+        Q_OBJECT
 
-    /**
-     * The plugin category.
-     */
-    virtual QString category() const = 0;
+        friend class PluginManager;
 
-    virtual QString categoryName() const = 0;
+    public:
+        Plugin( QObject* parent = 0 );
+        virtual ~Plugin();
 
-    /**
-     * Returns a widget which configures the plugin.
-     *
-     * The caller has to destroy the widget
-     */
-    virtual K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0 ) const;
+        KPluginInfo pluginInfo() const { return m_pluginInfo; }
 
-private:
-    KPluginInfo m_pluginInfo;
-};
+        /**
+         * Version of the plugin system this plugin was written for.
+         */
+        virtual int pluginSystemVersion() const = 0;
+
+        /**
+         * The plugin category.
+         */
+        virtual QString category() const = 0;
+
+        virtual QString categoryName() const = 0;
+
+        /**
+         * Returns a widget which configures the plugin.
+         *
+         * The caller has to destroy the widget
+         */
+        virtual PluginConfigWidget* createConfigWidget( QWidget* parent = 0 ) const;
+
+    private:
+        KPluginInfo m_pluginInfo;
+    };
+}
 
 #define K3B_EXPORT_PLUGIN( libname, classname )             \
     K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \

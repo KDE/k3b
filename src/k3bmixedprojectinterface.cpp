@@ -24,22 +24,22 @@
 #include <k3baudiodoc.h>
 
 
-K3bMixedProjectInterface::K3bMixedProjectInterface( K3bMixedDoc* doc )
-  : K3bProjectInterface( doc ),
+K3b::MixedProjectInterface::MixedProjectInterface( K3b::MixedDoc* doc )
+  : K3b::ProjectInterface( doc ),
     m_mixedDoc( doc )
 {
-  m_dataInterface = new K3bDataProjectInterface( doc->dataDoc(), objId() + "-datapart" );
-  m_audioInterface = new K3bAudioProjectInterface( doc->audioDoc(), objId() + "-audiopart" );
+  m_dataInterface = new K3b::DataProjectInterface( doc->dataDoc(), objId() + "-datapart" );
+  m_audioInterface = new K3b::AudioProjectInterface( doc->audioDoc(), objId() + "-audiopart" );
 }
 
 
-DCOPRef K3bMixedProjectInterface::dataPart() const
+DCOPRef K3b::MixedProjectInterface::dataPart() const
 {
   return DCOPRef( kapp->dcopClient()->appId(), m_dataInterface->objId() );
 }
 
 
-DCOPRef K3bMixedProjectInterface::audioPart() const
+DCOPRef K3b::MixedProjectInterface::audioPart() const
 {
   return DCOPRef( kapp->dcopClient()->appId(), m_audioInterface->objId() );
 }

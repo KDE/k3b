@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
@@ -22,15 +22,11 @@
 #include <qfile.h>
 #include <kio/global.h>
 #include <kurl.h>
-#include <k3bdevicetypes.h>
+
+#include "k3bdevicetypes.h"
 #include "k3b_export.h"
 
-class K3bVersion;
-class K3bExternalBin;
-
-
 #include <sys/stat.h>
-
 
 #ifdef HAVE_STAT64
 #define k3b_struct_stat struct stat64
@@ -43,29 +39,32 @@ class K3bExternalBin;
 #endif
 
 
-namespace K3bDevice {
-    class Device;
-}
+namespace K3b {
 
-namespace K3b
-{
-    enum WritingApp { 
-        WRITING_APP_DEFAULT = 1, 
-        WRITING_APP_CDRECORD = 2, 
+    class Version;
+    class ExternalBin;
+
+    namespace Device {
+        class Device;
+    }
+
+    enum WritingApp {
+        WRITING_APP_DEFAULT = 1,
+        WRITING_APP_CDRECORD = 2,
         WRITING_APP_CDRDAO = 4,
         WRITING_APP_GROWISOFS = 16,
         WRITING_APP_DVD_RW_FORMAT = 32
     };
     Q_DECLARE_FLAGS( WritingApps, WritingApp )
 
-    LIBK3B_EXPORT K3b::WritingApp writingAppFromString( const QString& );
-    LIBK3B_EXPORT QString writingAppToString( K3b::WritingApp );
+    LIBK3B_EXPORT WritingApp writingAppFromString( const QString& );
+    LIBK3B_EXPORT QString writingAppToString( WritingApp );
 
     /**
      * The data mode which determines the size of the user data in data
      * CD sectors.
      */
-    enum DataMode { 
+    enum DataMode {
         DATA_MODE_AUTO, /**< let %K3b determine the best mode */
         DATA_MODE_1,    /**< refers to the default Yellow book mode1 */
         DATA_MODE_2     /**< refers to CDROM XA mode2 form1 */
@@ -93,17 +92,17 @@ namespace K3b
      *
      * may be or'ed together (except for WRITING_MODE_AUTO of course)
      */
-    enum WritingMode { 
-        WRITING_MODE_AUTO = 0, 
-        WRITING_MODE_TAO = K3bDevice::WRITINGMODE_TAO, 
-        WRITING_MODE_DAO = K3bDevice::WRITINGMODE_SAO, 
-        WRITING_MODE_RAW = K3bDevice::WRITINGMODE_RAW,
-        WRITING_MODE_INCR_SEQ = K3bDevice::WRITINGMODE_INCR_SEQ,  // Incremental Sequential
-        WRITING_MODE_RES_OVWR = K3bDevice::WRITINGMODE_RES_OVWR // Restricted Overwrite
+    enum WritingMode {
+        WRITING_MODE_AUTO = 0,
+        WRITING_MODE_TAO = Device::WRITINGMODE_TAO,
+        WRITING_MODE_DAO = Device::WRITINGMODE_SAO,
+        WRITING_MODE_RAW = Device::WRITINGMODE_RAW,
+        WRITING_MODE_INCR_SEQ = Device::WRITINGMODE_INCR_SEQ,  // Incremental Sequential
+        WRITING_MODE_RES_OVWR = Device::WRITINGMODE_RES_OVWR // Restricted Overwrite
     };
     Q_DECLARE_FLAGS( WritingModes, WritingMode )
 
-    LIBK3B_EXPORT QString writingModeString( K3b::WritingModes );
+    LIBK3B_EXPORT QString writingModeString( WritingModes );
 
     LIBK3B_EXPORT QString framesToString( int h, bool showFrames = true );
     /*LIBK3B_EXPORT QString sizeToTime( long size );*/
@@ -150,7 +149,7 @@ namespace K3b
     /**
      * get the default K3b temp path to store image files
      *
-     * \sa K3bGlobalSettings::defaultTempPath
+     * \sa GlobalSettings::defaultTempPath
      */
     LIBK3B_EXPORT QString defaultTempPath();
 
@@ -177,12 +176,12 @@ namespace K3b
      */
     LIBK3B_EXPORT QString resolveLink( const QString& );
 
-    LIBK3B_EXPORT K3bVersion kernelVersion();
+    LIBK3B_EXPORT Version kernelVersion();
 
     /**
      * Kernel version stripped of all suffixes
      */
-    LIBK3B_EXPORT K3bVersion simpleKernelVersion();
+    LIBK3B_EXPORT Version simpleKernelVersion();
 
     QString systemName();
 
@@ -190,7 +189,7 @@ namespace K3b
 
     /**
      * Calculate the total size of an image file. This also includes
-     * images splitted by a K3bFileSplitter.
+     * images splitted by a FileSplitter.
      *
      * \returns the total size of the image file at url
      */
@@ -198,14 +197,14 @@ namespace K3b
 
     /**
      * true if the kernel supports ATAPI devices without SCSI emulation.
-     * use in combination with the K3bExternalProgram feature "plain-atapi"
+     * use in combination with the ExternalProgram feature "plain-atapi"
      */
     LIBK3B_EXPORT bool plainAtapiSupport();
-  
+
     /**
      * true if the kernel supports ATAPI devices without SCSI emulation
      * via the ATAPI: pseudo stuff
-     * use in combination with the K3bExternalProgram feature "hacked-atapi"
+     * use in combination with the ExternalProgram feature "hacked-atapi"
      */
     LIBK3B_EXPORT bool hackedAtapiSupport();
 
@@ -213,7 +212,7 @@ namespace K3b
      * Used to create a parameter for cdrecord, cdrdao or readcd.
      * Takes care of SCSI and ATAPI.
      */
-    QString externalBinDeviceParameter( K3bDevice::Device* dev, const K3bExternalBin* );
+    QString externalBinDeviceParameter( Device::Device* dev, const ExternalBin* );
 
     /**
      * Tries to convert urls from local protocols != "file" to file (for now supports media:/)
@@ -225,26 +224,26 @@ namespace K3b
     LIBK3B_EXPORT qint32 fromLe32( char* );
     LIBK3B_EXPORT qint64 fromLe64( char* );
 
-    LIBK3B_EXPORT bool isMounted( K3bDevice::Device* );
+    LIBK3B_EXPORT bool isMounted( Device::Device* );
 
     /**
      * Tries to unmount the device ignoring its actual mounting state.
      * This method uses both KIO::unmount and pumount if available.
      */
-    LIBK3B_EXPORT bool unmount( K3bDevice::Device* );
+    LIBK3B_EXPORT bool unmount( Device::Device* );
 
     /**
      * Tries to mount the medium. Since K3b does not gather any information
      * about mount points the only methods used are pmount and HAL::mount
      */
-    LIBK3B_EXPORT bool mount( K3bDevice::Device* );
+    LIBK3B_EXPORT bool mount( Device::Device* );
 
     /**
      * Ejects the medium in the device or simply opens the tray.
-     * This method improves over K3bDevice::Device::eject in that it
+     * This method improves over Device::Device::eject in that it
      * unmounts before ejecting and introduces HAL support.
      */
-    LIBK3B_EXPORT bool eject( K3bDevice::Device* );
+    LIBK3B_EXPORT bool eject( Device::Device* );
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(K3b::WritingApps)

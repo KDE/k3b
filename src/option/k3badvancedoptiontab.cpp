@@ -37,19 +37,19 @@
 #include <klineedit.h>
 
 
-K3bAdvancedOptionTab::K3bAdvancedOptionTab( QWidget* parent )
+K3b::AdvancedOptionTab::AdvancedOptionTab( QWidget* parent )
     : QWidget( parent )
 {
     setupGui();
 }
 
 
-K3bAdvancedOptionTab::~K3bAdvancedOptionTab()
+K3b::AdvancedOptionTab::~AdvancedOptionTab()
 {
 }
 
 
-void K3bAdvancedOptionTab::setupGui()
+void K3b::AdvancedOptionTab::setupGui()
 {
     QGridLayout* groupAdvancedLayout = new QGridLayout( this );
     groupAdvancedLayout->setAlignment( Qt::AlignTop );
@@ -62,7 +62,7 @@ void K3bAdvancedOptionTab::setupGui()
     bufferLayout->setMargin( KDialog::marginHint() );
     bufferLayout->setSpacing( KDialog::spacingHint() );
 
-    m_checkBurnfree = K3bStdGuiItems::burnproofCheckbox( groupWritingApp );
+    m_checkBurnfree = K3b::StdGuiItems::burnproofCheckbox( groupWritingApp );
     m_checkOverburn = new QCheckBox( i18n("Allow overburning (&not supported by cdrecord <= 1.10)"), groupWritingApp );
     m_checkForceUnsafeOperations = new QCheckBox( i18n("Force unsafe operations"), groupWritingApp );
     m_checkManualWritingBufferSize = new QCheckBox( i18n("&Manual writing buffer size") + ":", groupWritingApp );
@@ -151,7 +151,7 @@ void K3bAdvancedOptionTab::setupGui()
 }
 
 
-void K3bAdvancedOptionTab::readSettings()
+void K3b::AdvancedOptionTab::readSettings()
 {
     KConfigGroup c( KGlobal::config(), "General Options" );
 
@@ -168,7 +168,7 @@ void K3bAdvancedOptionTab::readSettings()
 }
 
 
-void K3bAdvancedOptionTab::saveSettings()
+void K3b::AdvancedOptionTab::saveSettings()
 {
     KConfigGroup c( KGlobal::config(), "General Options" );
 
@@ -184,7 +184,7 @@ void K3bAdvancedOptionTab::saveSettings()
 }
 
 
-void K3bAdvancedOptionTab::slotSetDefaultBufferSizes( bool b )
+void K3b::AdvancedOptionTab::slotSetDefaultBufferSizes( bool b )
 {
     if( !b ) {
         m_editWritingBufferSize->setValue( 4 );

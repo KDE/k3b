@@ -27,12 +27,12 @@
 
 
 
-K3bSidePanel::K3bSidePanel( K3bMainWindow* m, QWidget* parent )
+K3b::SidePanel::SidePanel( K3b::MainWindow* m, QWidget* parent )
   : QToolBox( parent ),
     m_mainWindow(m)
 {
   // our first widget is the tree view
-  m_fileTreeView = new K3bFileTreeView( this );
+  m_fileTreeView = new K3b::FileTreeView( this );
   addItem( m_fileTreeView, KIcon( "folder-open" ), i18n("Folders") );
 
   // CD projects
@@ -69,12 +69,12 @@ K3bSidePanel::K3bSidePanel( K3bMainWindow* m, QWidget* parent )
 }
 
 
-K3bSidePanel::~K3bSidePanel()
+K3b::SidePanel::~SidePanel()
 {
 }
 
 
-QFrame* K3bSidePanel::createPanel()
+QFrame* K3b::SidePanel::createPanel()
 {
   QFrame* frame = new QFrame( this );
   frame->setPaletteBackgroundColor( Qt::white );
@@ -85,7 +85,7 @@ QFrame* K3bSidePanel::createPanel()
 }
 
 
-void K3bSidePanel::addButton( QFrame* frame, QAction* a )
+void K3b::SidePanel::addButton( QFrame* frame, QAction* a )
 {
   if( a ) {
     QToolButton* b = new QToolButton( frame );
@@ -103,7 +103,7 @@ void K3bSidePanel::addButton( QFrame* frame, QAction* a )
     grid->addWidget( b, grid->numRows(), 0 );
   }
   else
-    kDebug() << "(K3bSidePanel) null action.";
+    kDebug() << "(K3b::SidePanel) null action.";
 }
 
 #include "k3bsidepanel.moc"

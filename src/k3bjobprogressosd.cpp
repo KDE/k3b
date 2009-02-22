@@ -37,7 +37,7 @@
 #include <X11/Xlib.h>
 
 
-K3bJobProgressOSD::K3bJobProgressOSD( QWidget* parent )
+K3b::JobProgressOSD::JobProgressOSD( QWidget* parent )
     : QWidget( parent, Qt::WType_TopLevel | Qt::WNoAutoErase | Qt::WStyle_Customize | Qt::X11BypassWindowManagerHint | Qt::WStyle_StaysOnTop ),
       m_dirty(true),
       m_progress(0),
@@ -61,12 +61,12 @@ K3bJobProgressOSD::K3bJobProgressOSD( QWidget* parent )
 }
 
 
-K3bJobProgressOSD::~K3bJobProgressOSD()
+K3b::JobProgressOSD::~JobProgressOSD()
 {
 }
 
 
-void K3bJobProgressOSD::show()
+void K3b::JobProgressOSD::show()
 {
     // start with 0 progress
     setProgress(0);
@@ -78,7 +78,7 @@ void K3bJobProgressOSD::show()
 }
 
 
-void K3bJobProgressOSD::setText( const QString& text )
+void K3b::JobProgressOSD::setText( const QString& text )
 {
     if( m_text != text ) {
         m_text = text;
@@ -87,7 +87,7 @@ void K3bJobProgressOSD::setText( const QString& text )
 }
 
 
-void K3bJobProgressOSD::setProgress( int p )
+void K3b::JobProgressOSD::setProgress( int p )
 {
     if( m_progress != p ) {
         m_progress = p;
@@ -96,14 +96,14 @@ void K3bJobProgressOSD::setProgress( int p )
 }
 
 
-void K3bJobProgressOSD::setPosition( const QPoint& p )
+void K3b::JobProgressOSD::setPosition( const QPoint& p )
 {
     m_position = p;
     reposition();
 }
 
 
-void K3bJobProgressOSD::refresh()
+void K3b::JobProgressOSD::refresh()
 {
     if( isVisible() )
         renderOSD();
@@ -112,7 +112,7 @@ void K3bJobProgressOSD::refresh()
 }
 
 
-void K3bJobProgressOSD::renderOSD()
+void K3b::JobProgressOSD::renderOSD()
 {
     // ----------------------------------------
     // |        Copying CD                    |
@@ -121,7 +121,7 @@ void K3bJobProgressOSD::renderOSD()
     // ----------------------------------------
 
     // calculate needed size
-    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+    if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
         QPixmap icon = KIconLoader::global()->loadIcon( "k3b", KIconLoader::NoGroup, 32 );
         int margin = 10;
         int textWidth = fontMetrics().width( m_text );
@@ -166,7 +166,7 @@ void K3bJobProgressOSD::renderOSD()
 }
 
 
-void K3bJobProgressOSD::setScreen( int screen )
+void K3b::JobProgressOSD::setScreen( int screen )
 {
     const int n = QApplication::desktop()->numScreens();
     m_screen = (screen >= n) ? n-1 : screen;
@@ -174,7 +174,7 @@ void K3bJobProgressOSD::setScreen( int screen )
 }
 
 
-void K3bJobProgressOSD::reposition( QSize newSize )
+void K3b::JobProgressOSD::reposition( QSize newSize )
 {
     if( !newSize.isValid() )
         newSize = size();
@@ -205,13 +205,13 @@ void K3bJobProgressOSD::reposition( QSize newSize )
 }
 
 
-void K3bJobProgressOSD::paintEvent( QPaintEvent* )
+void K3b::JobProgressOSD::paintEvent( QPaintEvent* )
 {
     bitBlt( this, 0, 0, &m_osdBuffer );
 }
 
 
-void K3bJobProgressOSD::mousePressEvent( QMouseEvent* e )
+void K3b::JobProgressOSD::mousePressEvent( QMouseEvent* e )
 {
     m_dragOffset = e->pos();
 
@@ -229,7 +229,7 @@ void K3bJobProgressOSD::mousePressEvent( QMouseEvent* e )
 }
 
 
-void K3bJobProgressOSD::mouseReleaseEvent( QMouseEvent* )
+void K3b::JobProgressOSD::mouseReleaseEvent( QMouseEvent* )
 {
     if( m_dragging ) {
         m_dragging = false;
@@ -238,7 +238,7 @@ void K3bJobProgressOSD::mouseReleaseEvent( QMouseEvent* )
 }
 
 
-void K3bJobProgressOSD::mouseMoveEvent( QMouseEvent* e )
+void K3b::JobProgressOSD::mouseMoveEvent( QMouseEvent* e )
 {
     if( m_dragging && this == mouseGrabber() ) {
 
@@ -266,7 +266,7 @@ void K3bJobProgressOSD::mouseMoveEvent( QMouseEvent* e )
 }
 
 
-QPoint K3bJobProgressOSD::fixupPosition( const QPoint& pp )
+QPoint K3b::JobProgressOSD::fixupPosition( const QPoint& pp )
 {
     QPoint p(pp);
     const QRect& screen = QApplication::desktop()->screenGeometry( m_screen );
@@ -289,14 +289,14 @@ QPoint K3bJobProgressOSD::fixupPosition( const QPoint& pp )
 }
 
 
-void K3bJobProgressOSD::readSettings( const KConfigGroup& c )
+void K3b::JobProgressOSD::readSettings( const KConfigGroup& c )
 {
     setPosition( c.readEntry( "Position", QPoint() ) );
     setScreen( c.readEntry( "Screen", 0 ) );
 }
 
 
-void K3bJobProgressOSD::saveSettings( KConfigGroup c )
+void K3b::JobProgressOSD::saveSettings( KConfigGroup c )
 {
     c.writeEntry( "Position", m_position );
     c.writeEntry( "Screen", m_screen );

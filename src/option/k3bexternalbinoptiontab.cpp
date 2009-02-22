@@ -34,7 +34,7 @@
 
 
 
-K3bExternalBinOptionTab::K3bExternalBinOptionTab( K3bExternalBinManager* manager, QWidget* parent )
+K3b::ExternalBinOptionTab::ExternalBinOptionTab( K3b::ExternalBinManager* manager, QWidget* parent )
     : QWidget( parent )
 {
     m_manager = manager;
@@ -43,7 +43,7 @@ K3bExternalBinOptionTab::K3bExternalBinOptionTab( K3bExternalBinManager* manager
     frameLayout->setSpacing( KDialog::spacingHint() );
     frameLayout->setMargin( 0 );
 
-    m_externalBinWidget = new K3bExternalBinWidget( manager, this );
+    m_externalBinWidget = new K3b::ExternalBinWidget( manager, this );
     frameLayout->addWidget( m_externalBinWidget, 1, 0 );
 
     QLabel* m_labelInfo = new QLabel( this );
@@ -55,18 +55,18 @@ K3bExternalBinOptionTab::K3bExternalBinOptionTab( K3bExternalBinManager* manager
 }
 
 
-K3bExternalBinOptionTab::~K3bExternalBinOptionTab()
+K3b::ExternalBinOptionTab::~ExternalBinOptionTab()
 {
 }
 
 
-void K3bExternalBinOptionTab::readSettings()
+void K3b::ExternalBinOptionTab::readSettings()
 {
     m_externalBinWidget->load();
 }
 
 
-void K3bExternalBinOptionTab::saveSettings()
+void K3b::ExternalBinOptionTab::saveSettings()
 {
     m_externalBinWidget->save();
 }

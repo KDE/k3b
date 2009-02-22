@@ -54,7 +54,7 @@
 
 
 
-class K3bDataJob::Private
+class K3b::DataJob::Private
 {
 public:
     Private()
@@ -62,7 +62,7 @@ public:
           verificationJob(0) {
     }
 
-    K3bDataDoc* doc;
+    K3b::DataDoc* doc;
 
     bool initializingImager;
     bool imageFinished;
@@ -77,20 +77,20 @@ public:
     int copies;
     int copiesDone;
 
-    K3bVerificationJob* verificationJob;
+    K3b::VerificationJob* verificationJob;
 
-    K3bFileSplitter imageFile;
-    K3bActivePipe pipe;
+    K3b::FileSplitter imageFile;
+    K3b::ActivePipe pipe;
 
-    K3bDataMultiSessionParameterJob* multiSessionParameterJob;
+    K3b::DataMultiSessionParameterJob* multiSessionParameterJob;
 };
 
 
-K3bDataJob::K3bDataJob( K3bDataDoc* doc, K3bJobHandler* hdl, QObject* parent )
-    : K3bBurnJob( hdl, parent )
+K3b::DataJob::DataJob( K3b::DataDoc* doc, K3b::JobHandler* hdl, QObject* parent )
+    : K3b::BurnJob( hdl, parent )
 {
     d = new Private;
-    d->multiSessionParameterJob = new K3bDataMultiSessionParameterJob( doc, this, this );
+    d->multiSessionParameterJob = new K3b::DataMultiSessionParameterJob( doc, this, this );
     connectSubJob( d->multiSessionParameterJob,
                    SLOT( slotMultiSessionParamterSetupDone( bool ) ),
                    SIGNAL( newTask( const QString& ) ),
@@ -104,29 +104,29 @@ K3bDataJob::K3bDataJob( K3bDataDoc* doc, K3bJobHandler* hdl, QObject* parent )
     d->imageFinished = true;
 }
 
-K3bDataJob::~K3bDataJob()
+K3b::DataJob::~DataJob()
 {
     delete d->tocFile;
     delete d;
 }
 
 
-K3bDoc* K3bDataJob::doc() const
+K3b::Doc* K3b::DataJob::doc() const
 {
     return d->doc;
 }
 
 
-K3bDevice::Device* K3bDataJob::writer() const
+K3b::Device::Device* K3b::DataJob::writer() const
 {
     if( doc()->onlyCreateImages() )
-        return 0; // no writer needed -> no blocking on K3bBurnJob
+        return 0; // no writer needed -> no blocking on K3b::BurnJob
     else
         return doc()->burner();
 }
 
 
-void K3bDataJob::start()
+void K3b::DataJob::start()
 {
     jobStarted();
 
@@ -152,7 +152,7 @@ void K3bDataJob::start()
 }
 
 
-void K3bDataJob::slotMultiSessionParamterSetupDone( bool success )
+void K3b::DataJob::slotMultiSessionParamterSetupDone( bool success )
 {
     if ( success ) {
         prepareWriting();
@@ -166,11 +166,11 @@ void K3bDataJob::slotMultiSessionParamterSetupDone( bool success )
 }
 
 
-void K3bDataJob::prepareWriting()
+void K3b::DataJob::prepareWriting()
 {
     if( !d->doc->onlyCreateImages() &&
-        ( d->multiSessionParameterJob->usedMultiSessionMode() == K3bDataDoc::CONTINUE ||
-          d->multiSessionParameterJob->usedMultiSessionMode() == K3bDataDoc::FINISH ) ) {
+        ( d->multiSessionParameterJob->usedMultiSessionMode() == K3b::DataDoc::CONTINUE ||
+          d->multiSessionParameterJob->usedMultiSessionMode() == K3b::DataDoc::FINISH ) ) {
         unsigned int nextSessionStart = d->multiSessionParameterJob->nextSessionStart();
         // for some reason cdrdao needs 150 additional sectors in the ms info
         if( writingApp() == K3b::WRITING_APP_CDRDAO ) {
@@ -190,7 +190,7 @@ void K3bDataJob::prepareWriting()
 }
 
 
-void K3bDataJob::writeImage()
+void K3b::DataJob::writeImage()
 {
     d->initializingImager = false;
 
@@ -212,7 +212,7 @@ void K3bDataJob::writeImage()
 }
 
 
-bool K3bDataJob::startOnTheFlyWriting()
+bool K3b::DataJob::startOnTheFlyWriting()
 {
     if( prepareWriterJob() ) {
         if( startWriterJob() ) {
@@ -228,9 +228,9 @@ bool K3bDataJob::startOnTheFlyWriting()
 }
 
 
-void K3bDataJob::cancel()
+void K3b::DataJob::cancel()
 {
-    emit infoMessage( i18n("Writing canceled."), K3bJob::ERROR );
+    emit infoMessage( i18n("Writing canceled."), K3b::Job::ERROR );
     emit canceled();
 
     if( m_writerJob && m_writerJob->active() ) {
@@ -251,7 +251,7 @@ void K3bDataJob::cancel()
 }
 
 
-void K3bDataJob::slotIsoImagerPercent( int p )
+void K3b::DataJob::slotIsoImagerPercent( int p )
 {
     if( d->doc->onlyCreateImages() ) {
         emit subPercent( p );
@@ -274,7 +274,7 @@ void K3bDataJob::slotIsoImagerPercent( int p )
 }
 
 
-void K3bDataJob::slotIsoImagerFinished( bool success )
+void K3b::DataJob::slotIsoImagerFinished( bool success )
 {
     if( d->initializingImager ) {
         if( success ) {
@@ -303,7 +303,7 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
             d->doc->onlyCreateImages() ) {
 
             if( success ) {
-                emit infoMessage( i18n("Image successfully created in %1",d->doc->tempDir()), K3bJob::SUCCESS );
+                emit infoMessage( i18n("Image successfully created in %1",d->doc->tempDir()), K3b::Job::SUCCESS );
                 d->imageFinished = true;
 
                 if( d->doc->onlyCreateImages() ) {
@@ -344,7 +344,7 @@ void K3bDataJob::slotIsoImagerFinished( bool success )
 }
 
 
-bool K3bDataJob::startWriterJob()
+bool K3b::DataJob::startWriterJob()
 {
     if( d->doc->dummy() )
         emit newTask( i18n("Simulating") );
@@ -359,7 +359,7 @@ bool K3bDataJob::startWriterJob()
 }
 
 
-void K3bDataJob::slotWriterJobPercent( int p )
+void K3b::DataJob::slotWriterJobPercent( int p )
 {
     double totalTasks = d->copies;
     double tasksDone = d->copiesDone;
@@ -376,13 +376,13 @@ void K3bDataJob::slotWriterJobPercent( int p )
 }
 
 
-void K3bDataJob::slotWriterNextTrack( int t, int tt )
+void K3b::DataJob::slotWriterNextTrack( int t, int tt )
 {
     emit newSubTask( i18n("Writing Track %1 of %2",t,tt) );
 }
 
 
-void K3bDataJob::slotWriterJobFinished( bool success )
+void K3b::DataJob::slotWriterJobFinished( bool success )
 {
     d->pipe.close();
 
@@ -401,7 +401,7 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 
         if( d->doc->verifyData() ) {
             if( !d->verificationJob ) {
-                d->verificationJob = new K3bVerificationJob( this, this );
+                d->verificationJob = new K3b::VerificationJob( this, this );
                 connect( d->verificationJob, SIGNAL(infoMessage(const QString&, int)),
                          this, SIGNAL(infoMessage(const QString&, int)) );
                 connect( d->verificationJob, SIGNAL(newTask(const QString&)),
@@ -454,7 +454,7 @@ void K3bDataJob::slotWriterJobFinished( bool success )
             else {
                 cleanup();
                 if ( k3bcore->globalSettings()->ejectMedia() ) {
-                    K3bDevice::eject( d->doc->burner() );
+                    K3b::Device::eject( d->doc->burner() );
                 }
                 jobFinished(true);
             }
@@ -467,7 +467,7 @@ void K3bDataJob::slotWriterJobFinished( bool success )
 }
 
 
-void K3bDataJob::slotVerificationProgress( int p )
+void K3b::DataJob::slotVerificationProgress( int p )
 {
     double totalTasks = d->copies*2;
     double tasksDone = d->copiesDone*2 + 1; // the writing of the current copy has already been finished
@@ -481,7 +481,7 @@ void K3bDataJob::slotVerificationProgress( int p )
 }
 
 
-void K3bDataJob::slotVerificationFinished( bool success )
+void K3b::DataJob::slotVerificationFinished( bool success )
 {
     d->copiesDone++;
 
@@ -489,7 +489,7 @@ void K3bDataJob::slotVerificationFinished( bool success )
     connectImager();
 
     if( k3bcore->globalSettings()->ejectMedia() || d->copiesDone < d->copies )
-        K3bDevice::eject( d->doc->burner() );
+        K3b::Device::eject( d->doc->burner() );
 
     if( !d->canceled && d->copiesDone < d->copies ) {
         bool failed = false;
@@ -512,7 +512,7 @@ void K3bDataJob::slotVerificationFinished( bool success )
 }
 
 
-void K3bDataJob::setWriterJob( K3bAbstractWriter* writer )
+void K3b::DataJob::setWriterJob( K3b::AbstractWriter* writer )
 {
     // FIXME: progressedsize for multiple copies
     m_writerJob = writer;
@@ -532,7 +532,7 @@ void K3bDataJob::setWriterJob( K3bAbstractWriter* writer )
 }
 
 
-void K3bDataJob::setImager( K3bIsoImager* imager )
+void K3b::DataJob::setImager( K3b::IsoImager* imager )
 {
     if( m_isoImager != imager ) {
         delete m_isoImager;
@@ -544,7 +544,7 @@ void K3bDataJob::setImager( K3bIsoImager* imager )
 }
 
 
-void K3bDataJob::connectImager()
+void K3b::DataJob::connectImager()
 {
     m_isoImager->disconnect( this );
     connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
@@ -555,14 +555,14 @@ void K3bDataJob::connectImager()
 }
 
 
-void K3bDataJob::prepareImager()
+void K3b::DataJob::prepareImager()
 {
     if( !m_isoImager )
-        setImager( new K3bIsoImager( d->doc, this, this ) );
+        setImager( new K3b::IsoImager( d->doc, this, this ) );
 }
 
 
-bool K3bDataJob::prepareWriterJob()
+bool K3b::DataJob::prepareWriterJob()
 {
     if( m_writerJob ) {
         delete m_writerJob;
@@ -595,7 +595,7 @@ bool K3bDataJob::prepareWriterJob()
 }
 
 
-void K3bDataJob::cancelAll()
+void K3b::DataJob::cancelAll()
 {
     d->canceled = true;
 
@@ -611,7 +611,7 @@ void K3bDataJob::cancelAll()
 }
 
 
-bool K3bDataJob::waitForMedium()
+bool K3b::DataJob::waitForMedium()
 {
     // start with all media types supported by the writer
     int m  = d->doc->supportedMediaTypes() & d->doc->burner()->writeCapabilities();
@@ -624,10 +624,10 @@ bool K3bDataJob::waitForMedium()
 
     emit newSubTask( i18n("Waiting for a medium") );
     int foundMedium = waitForMedia( d->doc->burner(),
-                                    usedMultiSessionMode() == K3bDataDoc::CONTINUE ||
-                                    usedMultiSessionMode() == K3bDataDoc::FINISH ?
-                                    K3bDevice::STATE_INCOMPLETE :
-                                    K3bDevice::STATE_EMPTY,
+                                    usedMultiSessionMode() == K3b::DataDoc::CONTINUE ||
+                                    usedMultiSessionMode() == K3b::DataDoc::FINISH ?
+                                    K3b::Device::STATE_INCOMPLETE :
+                                    K3b::Device::STATE_EMPTY,
                                     m );
 
     if( foundMedium < 0 || hasBeenCanceled() ) {
@@ -644,44 +644,44 @@ bool K3bDataJob::waitForMedium()
 }
 
 
-bool K3bDataJob::analyseBurnMedium( int foundMedium )
+bool K3b::DataJob::analyseBurnMedium( int foundMedium )
 {
     // -------------------------------
     // CD-R(W)
     // -------------------------------
-    if ( foundMedium & K3bDevice::MEDIA_CD_ALL ) {
-        emit infoMessage( i18n( "Writing %1" , K3bDevice::mediaTypeString( foundMedium ) ), INFO );
+    if ( foundMedium & K3b::Device::MEDIA_CD_ALL ) {
+        emit infoMessage( i18n( "Writing %1" , K3b::Device::mediaTypeString( foundMedium ) ), INFO );
 
         // first of all we determine the data mode
         if( d->doc->dataMode() == K3b::DATA_MODE_AUTO ) {
             if( !d->doc->onlyCreateImages() &&
-                ( usedMultiSessionMode() == K3bDataDoc::CONTINUE ||
-                  usedMultiSessionMode() == K3bDataDoc::FINISH ) ) {
+                ( usedMultiSessionMode() == K3b::DataDoc::CONTINUE ||
+                  usedMultiSessionMode() == K3b::DataDoc::FINISH ) ) {
 
                 // try to get the last track's datamode
                 // we already asked for an appendable cdr when fetching
                 // the ms info
-                kDebug() << "(K3bDataJob) determining last track's datamode...";
+                kDebug() << "(K3b::DataJob) determining last track's datamode...";
 
                 // FIXME: use the DeviceHandler
-                K3bDevice::Toc toc = d->doc->burner()->readToc();
+                K3b::Device::Toc toc = d->doc->burner()->readToc();
                 if( toc.isEmpty() ) {
-                    kDebug() << "(K3bDataJob) could not retrieve toc.";
+                    kDebug() << "(K3b::DataJob) could not retrieve toc.";
                     emit infoMessage( i18n("Unable to determine the last track's datamode. Using default."), ERROR );
                     d->usedDataMode = K3b::DATA_MODE_2;
                 }
                 else {
-                    if( toc.back().mode() == K3bDevice::Track::MODE1 )
+                    if( toc.back().mode() == K3b::Device::Track::MODE1 )
                         d->usedDataMode = K3b::DATA_MODE_1;
                     else
                         d->usedDataMode = K3b::DATA_MODE_2;
 
-                    kDebug() << "(K3bDataJob) using datamode: "
+                    kDebug() << "(K3b::DataJob) using datamode: "
                              << (d->usedDataMode == K3b::DATA_MODE_1 ? "mode1" : "mode2")
                              << endl;
                 }
             }
-            else if( usedMultiSessionMode() == K3bDataDoc::NONE )
+            else if( usedMultiSessionMode() == K3b::DataDoc::NONE )
                 d->usedDataMode = K3b::DATA_MODE_1;
             else
                 d->usedDataMode = K3b::DATA_MODE_2;
@@ -694,7 +694,7 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
             // TODO: put this into the cdreocrdwriter and decide based on the size of the
             // track
             if( writer()->dao() && d->usedDataMode == K3b::DATA_MODE_1 &&
-                usedMultiSessionMode() == K3bDataDoc::NONE )
+                usedMultiSessionMode() == K3b::DataDoc::NONE )
                 d->usedWritingMode = K3b::WRITING_MODE_DAO;
             else
                 d->usedWritingMode = K3b::WRITING_MODE_TAO;
@@ -710,7 +710,7 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
         // cdrecord seems to have problems writing xa 1 disks in dao mode? At least on my system!
         if( writingApp() == K3b::WRITING_APP_DEFAULT ) {
             if( d->usedWritingMode == K3b::WRITING_MODE_DAO ) {
-                if( usedMultiSessionMode() != K3bDataDoc::NONE )
+                if( usedMultiSessionMode() != K3b::DataDoc::NONE )
                     d->usedWritingApp = K3b::WRITING_APP_CDRDAO;
                 else if( d->usedDataMode == K3b::DATA_MODE_2 )
                     d->usedWritingApp = K3b::WRITING_APP_CDRDAO;
@@ -728,10 +728,10 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
     // -------------------------------
     // DVD Plus
     // -------------------------------
-    else if ( foundMedium & K3bDevice::MEDIA_DVD_ALL ) {
+    else if ( foundMedium & K3b::Device::MEDIA_DVD_ALL ) {
         if ( writingApp() == K3b::WRITING_APP_CDRDAO ) {
             emit infoMessage( i18n( "Cannot write %1 media using %2. Falling back to default application.",
-                                    K3bDevice::mediaTypeString( foundMedium, true ), "cdrdao" ), WARNING );
+                                    K3b::Device::mediaTypeString( foundMedium, true ), "cdrdao" ), WARNING );
             setWritingApp( K3b::WRITING_APP_DEFAULT );
         }
 
@@ -744,7 +744,7 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
             d->usedWritingApp = K3b::WRITING_APP_CDRECORD;
         }
 
-        if( foundMedium & K3bDevice::MEDIA_DVD_PLUS_ALL ) {
+        if( foundMedium & K3b::Device::MEDIA_DVD_PLUS_ALL ) {
             if( d->doc->dummy() ) {
                 if( !questionYesNo( i18n("DVD+R(W) media do not support write simulation. "
                                          "Do you really want to continue? The media will be written "
@@ -761,9 +761,9 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
                 emit infoMessage( i18n("Writing mode ignored when writing DVD+R(W) media."), INFO );
             d->usedWritingMode = K3b::WRITING_MODE_DAO; // since cdrecord uses -sao for DVD+R(W)
 
-            if( foundMedium & K3bDevice::MEDIA_DVD_PLUS_RW ) {
-                if( usedMultiSessionMode() == K3bDataDoc::NONE ||
-                    usedMultiSessionMode() == K3bDataDoc::START )
+            if( foundMedium & K3b::Device::MEDIA_DVD_PLUS_RW ) {
+                if( usedMultiSessionMode() == K3b::DataDoc::NONE ||
+                    usedMultiSessionMode() == K3b::DataDoc::START )
                     emit infoMessage( i18n("Writing DVD+RW."), INFO );
                 else {
                     emit infoMessage( i18n("Growing ISO9660 filesystem on DVD+RW."), INFO );
@@ -771,7 +771,7 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
                     d->usedWritingApp = K3b::WRITING_APP_GROWISOFS;
                 }
             }
-            else if( foundMedium & K3bDevice::MEDIA_DVD_PLUS_R_DL )
+            else if( foundMedium & K3b::Device::MEDIA_DVD_PLUS_R_DL )
                 emit infoMessage( i18n("Writing Double Layer DVD+R."), INFO );
             else
                 emit infoMessage( i18n("Writing DVD+R."), INFO );
@@ -780,7 +780,7 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
         // -------------------------------
         // DVD Minus
         // -------------------------------
-        else if ( foundMedium & K3bDevice::MEDIA_DVD_MINUS_ALL ) {
+        else if ( foundMedium & K3b::Device::MEDIA_DVD_MINUS_ALL ) {
             if( d->doc->dummy() && !d->doc->burner()->dvdMinusTestwrite() ) {
                 if( !questionYesNo( i18n("Your writer (%1 %2) does not support simulation with DVD-R(W) media. "
                                          "Do you really want to continue? The media will be written "
@@ -796,10 +796,10 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
 
             // RESTRICTED OVERWRITE
             // --------------------
-            if( foundMedium & K3bDevice::MEDIA_DVD_RW_OVWR ) {
+            if( foundMedium & K3b::Device::MEDIA_DVD_RW_OVWR ) {
                 d->usedWritingMode = K3b::WRITING_MODE_RES_OVWR;
-                if( usedMultiSessionMode() == K3bDataDoc::NONE ||
-                    usedMultiSessionMode() == K3bDataDoc::START ) {
+                if( usedMultiSessionMode() == K3b::DataDoc::NONE ||
+                    usedMultiSessionMode() == K3b::DataDoc::START ) {
                     // FIXME: can cdrecord handle this?
                     emit infoMessage( i18n("Writing DVD-RW in restricted overwrite mode."), INFO );
                 }
@@ -818,33 +818,33 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
 
                 if( d->doc->writingMode() == K3b::WRITING_MODE_DAO ) {
                     d->usedWritingMode = K3b::WRITING_MODE_DAO;
-                    emit infoMessage( i18n("Writing %1 in DAO mode.", K3bDevice::mediaTypeString(foundMedium, true) ), INFO );
+                    emit infoMessage( i18n("Writing %1 in DAO mode.", K3b::Device::mediaTypeString(foundMedium, true) ), INFO );
                 }
 
                 else {
                     // check if the writer supports writing sequential and thus multisession (on -1 the burner cannot handle
                     // features and we simply ignore it and hope for the best)
-                    if( d->doc->burner()->featureCurrent( K3bDevice::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) == 0 ) {
+                    if( d->doc->burner()->featureCurrent( K3b::Device::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) == 0 ) {
                         if( !questionYesNo( i18n("Your writer (%1 %2) does not support Incremental Streaming with %3 "
                                                  "media. Multisession will not be possible. Continue anyway?",
                                                  d->doc->burner()->vendor(),
                                                  d->doc->burner()->description(),
-                                                 K3bDevice::mediaTypeString(foundMedium, true) ),
+                                                 K3b::Device::mediaTypeString(foundMedium, true) ),
                                             i18n("No Incremental Streaming") ) ) {
                             return false;
                         }
                         else {
                             d->usedWritingMode = K3b::WRITING_MODE_DAO;
-                            emit infoMessage( i18n("Writing %1 in DAO mode.", K3bDevice::mediaTypeString(foundMedium, true) ), INFO );
+                            emit infoMessage( i18n("Writing %1 in DAO mode.", K3b::Device::mediaTypeString(foundMedium, true) ), INFO );
                         }
                     }
                     else {
                         d->usedWritingMode = K3b::WRITING_MODE_INCR_SEQ;
-                        if( !(foundMedium & (K3bDevice::MEDIA_DVD_RW|K3bDevice::MEDIA_DVD_RW_OVWR|K3bDevice::MEDIA_DVD_RW_SEQ)) &&
+                        if( !(foundMedium & (K3b::Device::MEDIA_DVD_RW|K3b::Device::MEDIA_DVD_RW_OVWR|K3b::Device::MEDIA_DVD_RW_SEQ)) &&
                             d->doc->writingMode() == K3b::WRITING_MODE_RES_OVWR )
                             emit infoMessage( i18n("Restricted Overwrite is not possible with DVD-R media."), INFO );
 
-                        emit infoMessage( i18n("Writing %1 in incremental mode.", K3bDevice::mediaTypeString(foundMedium, true) ), INFO );
+                        emit infoMessage( i18n("Writing %1 in incremental mode.", K3b::Device::mediaTypeString(foundMedium, true) ), INFO );
                     }
                 }
             }
@@ -854,7 +854,7 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
     // --------------------
     // Blu-Ray
     // --------------------
-    else if ( foundMedium & K3bDevice::MEDIA_BD_ALL ) {
+    else if ( foundMedium & K3b::Device::MEDIA_BD_ALL ) {
         d->usedWritingApp = writingApp();
         if ( d->usedWritingApp == K3b::WRITING_APP_DEFAULT ) {
             if ( k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "blu-ray" ) )
@@ -869,20 +869,20 @@ bool K3bDataJob::analyseBurnMedium( int foundMedium )
         }
 
         // FIXME: what do we need to take care of with BD media?
-        emit infoMessage( i18n( "Writing %1" , K3bDevice::mediaTypeString( foundMedium, true ) ), INFO );
+        emit infoMessage( i18n( "Writing %1" , K3b::Device::mediaTypeString( foundMedium, true ) ), INFO );
     }
 
     return true;
 }
 
 
-QString K3bDataJob::jobDescription() const
+QString K3b::DataJob::jobDescription() const
 {
     if( d->doc->onlyCreateImages() ) {
         return i18n("Creating Data Image File");
     }
-    else if( d->doc->multiSessionMode() == K3bDataDoc::NONE ||
-             d->doc->multiSessionMode() == K3bDataDoc::AUTO ) {
+    else if( d->doc->multiSessionMode() == K3b::DataDoc::NONE ||
+             d->doc->multiSessionMode() == K3b::DataDoc::AUTO ) {
         return i18n("Writing Data Project")
             + ( d->doc->isoOptions().volumeID().isEmpty()
                 ? QString()
@@ -897,12 +897,12 @@ QString K3bDataJob::jobDescription() const
 }
 
 
-QString K3bDataJob::jobDetails() const
+QString K3b::DataJob::jobDetails() const
 {
     if( d->doc->copies() > 1 &&
         !d->doc->dummy() &&
-        !(d->doc->multiSessionMode() == K3bDataDoc::CONTINUE ||
-          d->doc->multiSessionMode() == K3bDataDoc::FINISH) )
+        !(d->doc->multiSessionMode() == K3b::DataDoc::CONTINUE ||
+          d->doc->multiSessionMode() == K3b::DataDoc::FINISH) )
         return i18np("ISO9660 Filesystem (Size: %1) - %2 copy",
                      "ISO9660 Filesystem (Size: %1) - %2 copies",
                      KIO::convertSize( d->doc->size() ),
@@ -913,18 +913,18 @@ QString K3bDataJob::jobDetails() const
 }
 
 
-K3bDataDoc::MultiSessionMode K3bDataJob::usedMultiSessionMode() const
+K3b::DataDoc::MultiSessionMode K3b::DataJob::usedMultiSessionMode() const
 {
     return d->multiSessionParameterJob->usedMultiSessionMode();
 }
 
 
-void K3bDataJob::cleanup()
+void K3b::DataJob::cleanup()
 {
     if( !d->doc->onTheFly() && d->doc->removeImages() ) {
         if( QFile::exists( d->doc->tempDir() ) ) {
             d->imageFile.remove();
-            emit infoMessage( i18n("Removed image file %1",d->doc->tempDir()), K3bJob::SUCCESS );
+            emit infoMessage( i18n("Removed image file %1",d->doc->tempDir()), K3b::Job::SUCCESS );
         }
     }
 
@@ -935,15 +935,15 @@ void K3bDataJob::cleanup()
 }
 
 
-bool K3bDataJob::hasBeenCanceled() const
+bool K3b::DataJob::hasBeenCanceled() const
 {
     return d->canceled;
 }
 
 
-bool K3bDataJob::setupCdrecordJob()
+bool K3b::DataJob::setupCdrecordJob()
 {
-    K3bCdrecordWriter* writer = new K3bCdrecordWriter( d->doc->burner(), this, this );
+    K3b::CdrecordWriter* writer = new K3b::CdrecordWriter( d->doc->burner(), this, this );
 
     // cdrecord manpage says that "not all" writers are able to write
     // multisession disks in dao mode. That means there are writers that can.
@@ -952,7 +952,7 @@ bool K3bDataJob::setupCdrecordJob()
     // first session of a cd-extra in DAO mode is no problem with my writer while
     // writing the second data session is only possible in TAO mode.
     if( d->usedWritingMode == K3b::WRITING_MODE_DAO &&
-        usedMultiSessionMode() != K3bDataDoc::NONE )
+        usedMultiSessionMode() != K3b::DataDoc::NONE )
         emit infoMessage( i18n("Most writers do not support writing "
                                "multisession CDs in DAO mode."), INFO );
 
@@ -961,14 +961,14 @@ bool K3bDataJob::setupCdrecordJob()
     writer->setBurnSpeed( d->doc->speed() );
 
     // multisession
-    if( usedMultiSessionMode() == K3bDataDoc::START ||
-        usedMultiSessionMode() == K3bDataDoc::CONTINUE ) {
+    if( usedMultiSessionMode() == K3b::DataDoc::START ||
+        usedMultiSessionMode() == K3b::DataDoc::CONTINUE ) {
         writer->addArgument("-multi");
     }
 
     if( d->doc->onTheFly() &&
-        ( usedMultiSessionMode() == K3bDataDoc::CONTINUE ||
-          usedMultiSessionMode() == K3bDataDoc::FINISH ) )
+        ( usedMultiSessionMode() == K3b::DataDoc::CONTINUE ||
+          usedMultiSessionMode() == K3b::DataDoc::FINISH ) )
         writer->addArgument("-waiti");
 
     if( d->usedDataMode == K3b::DATA_MODE_1 )
@@ -989,16 +989,16 @@ bool K3bDataJob::setupCdrecordJob()
 }
 
 
-bool K3bDataJob::setupCdrdaoJob()
+bool K3b::DataJob::setupCdrdaoJob()
 {
     // create cdrdao job
-    K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( d->doc->burner(), this, this );
-    writer->setCommand( K3bCdrdaoWriter::WRITE );
+    K3b::CdrdaoWriter* writer = new K3b::CdrdaoWriter( d->doc->burner(), this, this );
+    writer->setCommand( K3b::CdrdaoWriter::WRITE );
     writer->setSimulate( d->doc->dummy() );
     writer->setBurnSpeed( d->doc->speed() );
     // multisession
-    writer->setMulti( usedMultiSessionMode() == K3bDataDoc::START ||
-                      usedMultiSessionMode() == K3bDataDoc::CONTINUE );
+    writer->setMulti( usedMultiSessionMode() == K3b::DataDoc::START ||
+                      usedMultiSessionMode() == K3b::DataDoc::CONTINUE );
 
     // now write the tocfile
     if( d->tocFile ) delete d->tocFile;
@@ -1030,9 +1030,9 @@ bool K3bDataJob::setupCdrdaoJob()
 }
 
 
-bool K3bDataJob::setupGrowisofsJob()
+bool K3b::DataJob::setupGrowisofsJob()
 {
-    K3bGrowisofsWriter* writer = new K3bGrowisofsWriter( d->doc->burner(), this, this );
+    K3b::GrowisofsWriter* writer = new K3b::GrowisofsWriter( d->doc->burner(), this, this );
 
     // these do only make sense with DVD-R(W)
     writer->setSimulate( d->doc->dummy() );
@@ -1042,22 +1042,22 @@ bool K3bDataJob::setupGrowisofsJob()
     // BUT: I also had a report that incremental sequential produced unreadable media!
     if( d->doc->writingMode() == K3b::WRITING_MODE_DAO )
 //     || ( d->doc->writingMode() == K3b::WRITING_MODE_AUTO &&
-// 	 usedMultiSessionMode() == K3bDataDoc::NONE ) )
+// 	 usedMultiSessionMode() == K3b::DataDoc::NONE ) )
         writer->setWritingMode( K3b::WRITING_MODE_DAO );
 
-    writer->setMultiSession( usedMultiSessionMode() == K3bDataDoc::CONTINUE ||
-                             usedMultiSessionMode() == K3bDataDoc::FINISH );
+    writer->setMultiSession( usedMultiSessionMode() == K3b::DataDoc::CONTINUE ||
+                             usedMultiSessionMode() == K3b::DataDoc::FINISH );
 
-    writer->setCloseDvd( usedMultiSessionMode() == K3bDataDoc::NONE ||
-                         usedMultiSessionMode() == K3bDataDoc::FINISH );
+    writer->setCloseDvd( usedMultiSessionMode() == K3b::DataDoc::NONE ||
+                         usedMultiSessionMode() == K3b::DataDoc::FINISH );
 
     writer->setImageToWrite( QString() );  // read from stdin
     writer->setTrackSize( m_isoImager->size() );
 
-    if( usedMultiSessionMode() != K3bDataDoc::NONE ) {
+    if( usedMultiSessionMode() != K3b::DataDoc::NONE ) {
         //
         // growisofs wants a valid -C parameter for multisession, so we get it from the
-        // K3bMsInfoFetcher (see K3bDataJob::slotMsInfoFetched)
+        // K3b::MsInfoFetcher (see K3b::DataJob::slotMsInfoFetched)
         //
         writer->setMultiSessionInfo( m_isoImager->multiSessionInfo() );
     }

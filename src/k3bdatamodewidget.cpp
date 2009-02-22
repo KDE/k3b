@@ -27,7 +27,7 @@ static const int s_mode1Index = 1;
 static const int s_mode2Index = 2;
 
 
-K3bDataModeWidget::K3bDataModeWidget( QWidget* parent )
+K3b::DataModeWidget::DataModeWidget( QWidget* parent )
     : QComboBox( parent )
 {
     insertItem( s_autoIndex, i18n("Auto") );
@@ -51,12 +51,12 @@ K3bDataModeWidget::K3bDataModeWidget( QWidget* parent )
 }
 
 
-K3bDataModeWidget::~K3bDataModeWidget()
+K3b::DataModeWidget::~DataModeWidget()
 {
 }
 
 
-int K3bDataModeWidget::dataMode() const
+int K3b::DataModeWidget::dataMode() const
 {
     if( currentIndex() == s_autoIndex )
         return K3b::DATA_MODE_AUTO;
@@ -67,7 +67,7 @@ int K3bDataModeWidget::dataMode() const
 }
 
 
-void K3bDataModeWidget::setDataMode( int mode )
+void K3b::DataModeWidget::setDataMode( int mode )
 {
     if( mode == K3b::DATA_MODE_1 )
         setCurrentIndex( s_mode1Index );
@@ -78,7 +78,7 @@ void K3bDataModeWidget::setDataMode( int mode )
 }
 
 
-void K3bDataModeWidget::saveConfig( KConfigGroup c )
+void K3b::DataModeWidget::saveConfig( KConfigGroup c )
 {
     QString datamode;
     if( dataMode() == K3b::DATA_MODE_1 )
@@ -91,7 +91,7 @@ void K3bDataModeWidget::saveConfig( KConfigGroup c )
 }
 
 
-void K3bDataModeWidget::loadConfig( const KConfigGroup& c )
+void K3b::DataModeWidget::loadConfig( const KConfigGroup& c )
 {
     QString datamode = c.readEntry( "data_track_mode" );
     if( datamode == "mode1" )

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,66 +21,68 @@
 #include <QEvent>
 
 
-/**
- * Custom event class for posting events corresponding to the
- * K3bJob signals. This is useful for a threaded job since
- * in that case it's not possible to emit signals that directly
- * change the GUI (see QThread docu).
- */
-class K3bProgressInfoEvent : public QEvent
-{
- public:
-  K3bProgressInfoEvent( int type )
-      : QEvent( QEvent::User ),
-    m_type(type)
-    {}
+namespace K3b {
+    /**
+     * Custom event class for posting events corresponding to the
+     * Job signals. This is useful for a threaded job since
+     * in that case it's not possible to emit signals that directly
+     * change the GUI (see QThread docu).
+     */
+    class ProgressInfoEvent : public QEvent
+    {
+    public:
+        ProgressInfoEvent( int type )
+            : QEvent( QEvent::User ),
+              m_type(type)
+        {}
 
-  K3bProgressInfoEvent( int type, const QString& v1, const QString& v2 = QString(), 
-			int value1 = 0, int value2 = 0 )
-      : QEvent( QEvent::User ),
-    m_type( type),
-    m_firstValue(value1),
-    m_secondValue(value2),
-    m_firstString(v1),
-    m_secondString(v2)
-    {}
+        ProgressInfoEvent( int type, const QString& v1, const QString& v2 = QString(),
+                           int value1 = 0, int value2 = 0 )
+            : QEvent( QEvent::User ),
+              m_type( type),
+              m_firstValue(value1),
+              m_secondValue(value2),
+              m_firstString(v1),
+              m_secondString(v2)
+        {}
 
-  K3bProgressInfoEvent( int type, int value1, int value2 = 0 )
-    : QEvent( QEvent::User ),
-    m_type( type),
-    m_firstValue(value1),
-    m_secondValue(value2)
-    {}
+        ProgressInfoEvent( int type, int value1, int value2 = 0 )
+            : QEvent( QEvent::User ),
+              m_type( type),
+              m_firstValue(value1),
+              m_secondValue(value2)
+        {}
 
-  int type() const { return m_type; }
-  const QString& firstString() const { return m_firstString; }
-  const QString& secondString() const { return m_secondString; }
-  int firstValue() const { return m_firstValue; }
-  int secondValue() const { return m_secondValue; }
+        int type() const { return m_type; }
+        const QString& firstString() const { return m_firstString; }
+        const QString& secondString() const { return m_secondString; }
+        int firstValue() const { return m_firstValue; }
+        int secondValue() const { return m_secondValue; }
 
-  enum K3bProgressInfoEventType {
-    Progress = QEvent::User + 1,
-    SubProgress,
-    ProcessedSize,
-    ProcessedSubSize,
-    InfoMessage,
-    Started,
-    Canceled,
-    Finished,
-    NewTask,
-    NewSubTask,
-    DebuggingOutput,
-    BufferStatus,
-    WriteSpeed,
-    NextTrack
-  };
+        enum ProgressInfoEventType {
+            Progress = QEvent::User + 1,
+            SubProgress,
+            ProcessedSize,
+            ProcessedSubSize,
+            InfoMessage,
+            Started,
+            Canceled,
+            Finished,
+            NewTask,
+            NewSubTask,
+            DebuggingOutput,
+            BufferStatus,
+            WriteSpeed,
+            NextTrack
+        };
 
- private:
-  int m_type;
-  int m_firstValue;
-  int m_secondValue;
-  QString m_firstString;
-  QString m_secondString;
-};
+    private:
+        int m_type;
+        int m_firstValue;
+        int m_secondValue;
+        QString m_firstString;
+        QString m_secondString;
+    };
+}
 
 #endif

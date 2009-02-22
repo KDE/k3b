@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -20,13 +20,15 @@
 #include <k3bvalidators.h>
 #include "k3b_export.h"
 
-class LIBK3B_EXPORT K3bCdTextValidator : public K3bLatin1Validator
-{
- public:
-  K3bCdTextValidator(QObject *parent = 0);
-  ~K3bCdTextValidator();
-  
-  State validate( QString& input, int& pos ) const;
-};
+namespace K3b {
+    class LIBK3B_EXPORT CdTextValidator : public Latin1Validator
+    {
+    public:
+        CdTextValidator(QObject *parent = 0);
+        ~CdTextValidator();
+
+        State validate( QString& input, int& pos ) const;
+    };
+}
 
 #endif

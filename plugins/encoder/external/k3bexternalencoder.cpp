@@ -101,7 +101,7 @@ public:
 
 
 K3bExternalEncoder::K3bExternalEncoder( QObject* parent, const QVariantList& )
-    : K3bAudioEncoder( parent)
+    : K3b::AudioEncoder( parent)
 {
     d = new Private();
 }
@@ -114,7 +114,7 @@ K3bExternalEncoder::~K3bExternalEncoder()
 }
 
 
-void K3bExternalEncoder::setMetaDataInternal( K3bAudioEncoder::MetaDataField f, const QString& value )
+void K3bExternalEncoder::setMetaDataInternal( K3b::AudioEncoder::MetaDataField f, const QString& value )
 {
     switch( f ) {
     case META_TRACK_TITLE:

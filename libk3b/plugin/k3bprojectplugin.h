@@ -19,142 +19,145 @@
 
 #include "k3b_export.h"
 
-class K3bDoc;
 class KConfigGroup;
 
-/**
- * In case your plugin provides a GUI it is recommended to use the
- * K3bProjectPluginGUIBase interface. That way K3b can embed the GUI into
- * a fancy dialog which fits the overall look.
- *
- * This is not derived from QWidget to make it possible to inherit
- * from other QWidget derivates.
- */
-class K3bProjectPluginGUIBase
-{
-public:
-    K3bProjectPluginGUIBase() {}
-    virtual ~K3bProjectPluginGUIBase() {}
-
-    virtual QWidget* qWidget() = 0;
+namespace K3b {
+    class Doc;
 
     /**
-     * Title used for the GUI
+     * In case your plugin provides a GUI it is recommended to use the
+     * ProjectPluginGUIBase interface. That way K3b can embed the GUI into
+     * a fancy dialog which fits the overall look.
+     *
+     * This is not derived from QWidget to make it possible to inherit
+     * from other QWidget derivates.
      */
-    virtual QString title() const = 0;
-    virtual QString subTitle() const { return QString(); }
+    class ProjectPluginGUIBase
+    {
+    public:
+        ProjectPluginGUIBase() {}
+        virtual ~ProjectPluginGUIBase() {}
 
-    virtual void readSettings( const KConfigGroup& ) {}
-    virtual void saveSettings( KConfigGroup ) {}
+        virtual QWidget* qWidget() = 0;
 
-    /**
-     * Load system defaults for the GUI
-     */
-    virtual void loadDefaults() {}
+        /**
+         * Title used for the GUI
+         */
+        virtual QString title() const = 0;
+        virtual QString subTitle() const { return QString(); }
 
-    /**
-     * Start the plugin. This method should do the actual work.
-     */
-    virtual void activate() = 0;
-};
+        virtual void readSettings( const KConfigGroup& ) {}
+        virtual void saveSettings( KConfigGroup ) {}
 
+        /**
+         * Load system defaults for the GUI
+         */
+        virtual void loadDefaults() {}
 
-/**
- * A K3bProjectPlugin is supposed to modify a k3b project in some way or
- * create additional data based on the project.
- *
- * Reimplement createGUI or activate and use setText, setToolTip, setWhatsThis, and setIcon
- * to specify the gui elements used when presenting the plugin to the user.
- */
-class LIBK3B_EXPORT K3bProjectPlugin : public K3bPlugin
-{
-    Q_OBJECT
-
-public:
-    /**
-     * @param type The type of the plugin
-     * @param gui If true the plugin is supposed to provide a widget via @p createGUI(). In that case
-     *            @p activate() will not be used. A plugin has a GUI if it's functionality is started
-     *            by some user input.
-     */
-    K3bProjectPlugin( int type, bool gui = false, QObject* parent = 0 );
-
-    virtual ~K3bProjectPlugin() {
-    }
-
-    // TODO: move this to K3bDoc?
-    enum Type {
-        AUDIO_CD = 0x1,
-        DATA_CD = 0x2,
-        MIXED_CD = 0x4,
-        VIDEO_CD = 0x8,
-        MOVIX_CD = 0x10,
-        DATA_DVD = 0x20,
-        VIDEO_DVD = 0x40,
-        MOVIX_DVD = 0x80,
-        DATA_PROJECTS = DATA_CD|DATA_DVD,
-        MOVIX_PROJECTS = MOVIX_CD|MOVIX_DVD
+        /**
+         * Start the plugin. This method should do the actual work.
+         */
+        virtual void activate() = 0;
     };
 
-    // TODO: maybe we should use something like "ProjectPlugin/AudioCD" based on the type?
-    QString category() const { return "ProjectPlugin"; }
-  
-    QString categoryName() const;
 
     /**
-     * audio, data, videocd, or videodvd
-     * Needs to return a proper type. The default implementation returns the type specified
-     * in the constructor.
-     */
-    virtual int type() const { return m_type; }
-
-    /**
-     * Text used for menu entries and the like.
-     */
-    QString text() const { return m_text; }
-    QString toolTip() const { return m_toolTip; }
-    QString whatsThis() const { return m_whatsThis; }
-    QString icon() const { return m_icon; }
-
-    bool hasGUI() const { return m_hasGUI; }
-
-    /**
-     * Create the GUI which provides the features for the plugin.
-     * This only needs to be implemented in case hasGUI returns true.
-     * The returned object has to be a QWidget based class.
+     * A ProjectPlugin is supposed to modify a k3b project in some way or
+     * create additional data based on the project.
      *
-     * @param doc based on the type returned by the factory
-     *            this will be the doc to work on. It should
-     *            be dynamically casted to the needed project type.
+     * Reimplement createGUI or activate and use setText, setToolTip, setWhatsThis, and setIcon
+     * to specify the gui elements used when presenting the plugin to the user.
      */
-    virtual K3bProjectPluginGUIBase* createGUI( K3bDoc* doc, QWidget* = 0 ) { Q_UNUSED(doc); return 0; }
+    class LIBK3B_EXPORT ProjectPlugin : public Plugin
+    {
+        Q_OBJECT
 
-    /**
-     * This is where the action happens.
-     * There is no need to implement this in case hasGUI returns true.
-     *
-     * @param doc based on the type returned by the factory
-     *            this will be the doc to work on. It should
-     *            be dynamically casted to the needed project type.
-     *
-     * @param parent the parent widget to be used for things like progress dialogs.
-     */
-    virtual void activate( K3bDoc* doc, QWidget* parent ) { Q_UNUSED(doc); Q_UNUSED(parent); }
+    public:
+        /**
+         * @param type The type of the plugin
+         * @param gui If true the plugin is supposed to provide a widget via @p createGUI(). In that case
+         *            @p activate() will not be used. A plugin has a GUI if it's functionality is started
+         *            by some user input.
+         */
+        ProjectPlugin( int type, bool gui = false, QObject* parent = 0 );
 
-protected:
-    void setText( const QString& s ) { m_text = s; }
-    void setToolTip( const QString& s ) { m_toolTip = s; }
-    void setWhatsThis( const QString& s ) { m_whatsThis = s; }
-    void setIcon( const QString& s ) { m_icon = s; }
+        virtual ~ProjectPlugin() {
+        }
 
-private:
-    int m_type;
-    bool m_hasGUI;
-    QString m_text;
-    QString m_toolTip;
-    QString m_whatsThis;
-    QString m_icon;
-};
+        // TODO: move this to Doc?
+        enum Type {
+            AUDIO_CD = 0x1,
+            DATA_CD = 0x2,
+            MIXED_CD = 0x4,
+            VIDEO_CD = 0x8,
+            MOVIX_CD = 0x10,
+            DATA_DVD = 0x20,
+            VIDEO_DVD = 0x40,
+            MOVIX_DVD = 0x80,
+            DATA_PROJECTS = DATA_CD|DATA_DVD,
+            MOVIX_PROJECTS = MOVIX_CD|MOVIX_DVD
+        };
+
+        // TODO: maybe we should use something like "ProjectPlugin/AudioCD" based on the type?
+        QString category() const { return "ProjectPlugin"; }
+
+        QString categoryName() const;
+
+        /**
+         * audio, data, videocd, or videodvd
+         * Needs to return a proper type. The default implementation returns the type specified
+         * in the constructor.
+         */
+        virtual int type() const { return m_type; }
+
+        /**
+         * Text used for menu entries and the like.
+         */
+        QString text() const { return m_text; }
+        QString toolTip() const { return m_toolTip; }
+        QString whatsThis() const { return m_whatsThis; }
+        QString icon() const { return m_icon; }
+
+        bool hasGUI() const { return m_hasGUI; }
+
+        /**
+         * Create the GUI which provides the features for the plugin.
+         * This only needs to be implemented in case hasGUI returns true.
+         * The returned object has to be a QWidget based class.
+         *
+         * @param doc based on the type returned by the factory
+         *            this will be the doc to work on. It should
+         *            be dynamically casted to the needed project type.
+         */
+        virtual ProjectPluginGUIBase* createGUI( Doc* doc, QWidget* = 0 ) { Q_UNUSED(doc); return 0; }
+
+        /**
+         * This is where the action happens.
+         * There is no need to implement this in case hasGUI returns true.
+         *
+         * @param doc based on the type returned by the factory
+         *            this will be the doc to work on. It should
+         *            be dynamically casted to the needed project type.
+         *
+         * @param parent the parent widget to be used for things like progress dialogs.
+         */
+        virtual void activate( Doc* doc, QWidget* parent ) { Q_UNUSED(doc); Q_UNUSED(parent); }
+
+    protected:
+        void setText( const QString& s ) { m_text = s; }
+        void setToolTip( const QString& s ) { m_toolTip = s; }
+        void setWhatsThis( const QString& s ) { m_whatsThis = s; }
+        void setIcon( const QString& s ) { m_icon = s; }
+
+    private:
+        int m_type;
+        bool m_hasGUI;
+        QString m_text;
+        QString m_toolTip;
+        QString m_whatsThis;
+        QString m_icon;
+    };
+}
 
 
 #endif

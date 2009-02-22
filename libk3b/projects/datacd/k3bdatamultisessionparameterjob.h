@@ -20,27 +20,29 @@
 #include "k3bdatadoc.h"
 
 
-class K3bDataMultiSessionParameterJob : public K3bThreadJob
-{
-    Q_OBJECT
+namespace K3b {
+    class DataMultiSessionParameterJob : public ThreadJob
+    {
+        Q_OBJECT
 
-public:
-    K3bDataMultiSessionParameterJob( K3bDataDoc*, K3bJobHandler*, QObject* parent );
-    ~K3bDataMultiSessionParameterJob();
+    public:
+        DataMultiSessionParameterJob( DataDoc*, JobHandler*, QObject* parent );
+        ~DataMultiSessionParameterJob();
 
-    K3bDataDoc::MultiSessionMode usedMultiSessionMode() const;
-    unsigned int previousSessionStart() const;
-    unsigned int nextSessionStart() const;
-    bool importPreviousSession() const;
+        DataDoc::MultiSessionMode usedMultiSessionMode() const;
+        unsigned int previousSessionStart() const;
+        unsigned int nextSessionStart() const;
+        bool importPreviousSession() const;
 
-private:
-    bool run();
+    private:
+        bool run();
 
-    K3bDataDoc::MultiSessionMode determineMultiSessionModeFromMedium();
-    bool setupMultiSessionParameters();
+        DataDoc::MultiSessionMode determineMultiSessionModeFromMedium();
+        bool setupMultiSessionParameters();
 
-    class Private;
-    Private* const d;
-};
+        class Private;
+        Private* const d;
+    };
+}
 
 #endif

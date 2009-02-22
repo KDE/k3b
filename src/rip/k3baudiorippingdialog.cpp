@@ -71,7 +71,7 @@
 
 
 
-class K3bAudioRippingDialog::Private
+class K3b::AudioRippingDialog::Private
 {
 public:
     Private() {
@@ -79,18 +79,18 @@ public:
 
     QVector<QString> filenames;
     QString playlistFilename;
-    K3bFileSystemInfo fsInfo;
+    K3b::FileSystemInfo fsInfo;
     QStandardItemModel trackModel;
 
     QTreeView* viewTracks;
 };
 
 
-K3bAudioRippingDialog::K3bAudioRippingDialog( const K3bMedium& medium,
+K3b::AudioRippingDialog::AudioRippingDialog( const K3b::Medium& medium,
                                               const KCDDB::CDInfo& entry,
                                               const QList<int>& tracks,
                                               QWidget *parent )
-    : K3bInteractionDialog( parent,
+    : K3b::InteractionDialog( parent,
                             QString(),
                             QString(),
                             START_BUTTON|CANCEL_BUTTON,
@@ -106,7 +106,7 @@ K3bAudioRippingDialog::K3bAudioRippingDialog( const K3bMedium& medium,
     setupContextHelp();
 
     K3b::Msf length;
-    K3bDevice::Toc toc = medium.toc();
+    K3b::Device::Toc toc = medium.toc();
     for( QList<int>::const_iterator it = m_trackNumbers.constBegin();
          it != m_trackNumbers.constEnd(); ++it ) {
         length += toc[*it].length();
@@ -117,13 +117,13 @@ K3bAudioRippingDialog::K3bAudioRippingDialog( const K3bMedium& medium,
 }
 
 
-K3bAudioRippingDialog::~K3bAudioRippingDialog()
+K3b::AudioRippingDialog::~AudioRippingDialog()
 {
     delete d;
 }
 
 
-void K3bAudioRippingDialog::setupGui()
+void K3b::AudioRippingDialog::setupGui()
 {
     QWidget *frame = mainWidget();
     QGridLayout* Form1Layout = new QGridLayout( frame );
@@ -138,13 +138,13 @@ void K3bAudioRippingDialog::setupGui()
 
     QTabWidget* mainTab = new QTabWidget( frame );
 
-    m_optionWidget = new K3bAudioConvertingOptionWidget( mainTab );
+    m_optionWidget = new K3b::AudioConvertingOptionWidget( mainTab );
     mainTab->addTab( m_optionWidget, i18n("Settings") );
 
 
     // setup filename pattern page
     // -------------------------------------------------------------------------------------------
-    m_patternWidget = new K3bCddbPatternWidget( mainTab );
+    m_patternWidget = new K3b::CddbPatternWidget( mainTab );
     mainTab->addTab( m_patternWidget, i18n("File Naming") );
     connect( m_patternWidget, SIGNAL(changed()), this, SLOT(refresh()) );
 
@@ -157,7 +157,7 @@ void K3bAudioRippingDialog::setupGui()
     advancedPageLayout->setSpacing( spacingHint() );
     mainTab->addTab( advancedPage, i18n("Advanced") );
 
-    m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( advancedPage );
+    m_comboParanoiaMode = K3b::StdGuiItems::paranoiaModeComboBox( advancedPage );
     m_spinRetries = new QSpinBox( advancedPage );
     m_checkIgnoreReadErrors = new QCheckBox( i18n("Ignore read errors"), advancedPage );
     m_checkUseIndex0 = new QCheckBox( i18n("Do not read pregaps"), advancedPage );
@@ -185,7 +185,7 @@ void K3bAudioRippingDialog::setupGui()
 }
 
 
-void K3bAudioRippingDialog::setupContextHelp()
+void K3b::AudioRippingDialog::setupContextHelp()
 {
     m_spinRetries->setToolTip( i18n("Maximal number of read retries") );
     m_spinRetries->setWhatsThis( i18n("<p>This specifies the maximum number of retries to "
@@ -203,13 +203,13 @@ void K3bAudioRippingDialog::setupContextHelp()
 }
 
 
-void K3bAudioRippingDialog::init()
+void K3b::AudioRippingDialog::init()
 {
     refresh();
 }
 
 
-void K3bAudioRippingDialog::slotStartClicked()
+void K3b::AudioRippingDialog::slotStartClicked()
 {
     // check if all filenames differ
     if( d->filenames.count() > 1 ) {
@@ -257,10 +257,10 @@ void K3bAudioRippingDialog::slotStartClicked()
         ++i;
     }
 
-    K3bJobProgressDialog ripDialog( parentWidget(), "Ripping" );
+    K3b::JobProgressDialog ripDialog( parentWidget(), "Ripping" );
 
-    K3bAudioEncoder* encoder = m_optionWidget->encoder();
-    K3bAudioRipJob* job = new K3bAudioRipJob( &ripDialog, this );
+    K3b::AudioEncoder* encoder = m_optionWidget->encoder();
+    K3b::AudioRipJob* job = new K3b::AudioRipJob( &ripDialog, this );
     job->setDevice( m_medium.device() );
     job->setCddbEntry( m_cddbEntry );
     job->setTracksToRip( tracksToRip );
@@ -280,14 +280,14 @@ void K3bAudioRippingDialog::slotStartClicked()
     hide();
     ripDialog.startJob(job);
 
-    kDebug() << "(K3bAudioRippingDialog) deleting ripjob.";
+    kDebug() << "(K3b::AudioRippingDialog) deleting ripjob.";
     delete job;
 
     close();
 }
 
 
-void K3bAudioRippingDialog::refresh()
+void K3b::AudioRippingDialog::refresh()
 {
     d->trackModel.clear();
     d->filenames.clear();
@@ -299,7 +299,7 @@ void K3bAudioRippingDialog::refresh()
 
     KIO::filesize_t overallSize = 0;
 
-    K3bDevice::Toc toc = m_medium.toc();
+    K3b::Device::Toc toc = m_medium.toc();
 
     if( m_optionWidget->createSingleFile() ) {
         long length = 0;
@@ -325,7 +325,7 @@ void K3bAudioRippingDialog::refresh()
         if( fileSize > 0 )
             overallSize = fileSize;
 
-        filename = K3bPatternParser::parsePattern( m_cddbEntry, 1,
+        filename = K3b::PatternParser::parsePattern( m_cddbEntry, 1,
                                                    m_patternWidget->filenamePattern(),
                                                    m_patternWidget->replaceBlanks(),
                                                    m_patternWidget->blankReplaceString() );
@@ -367,7 +367,7 @@ void K3bAudioRippingDialog::refresh()
             if( fileSize > 0 )
                 overallSize += fileSize;
 
-            if( toc[trackIndex].type() == K3bTrack::DATA ) {
+            if( toc[trackIndex].type() == K3b::Device::Track::TYPE_DATA ) {
                 extension = ".iso";
                 continue;  // TODO: find out how to rip the iso data
             }
@@ -375,7 +375,7 @@ void K3bAudioRippingDialog::refresh()
 
             QString filename;
 
-            filename = K3bPatternParser::parsePattern( m_cddbEntry, trackIndex+1,
+            filename = K3b::PatternParser::parsePattern( m_cddbEntry, trackIndex+1,
                                                        m_patternWidget->filenamePattern(),
                                                        m_patternWidget->replaceBlanks(),
                                                        m_patternWidget->blankReplaceString() );
@@ -387,7 +387,7 @@ void K3bAudioRippingDialog::refresh()
             d->trackModel.setItem( i, 0, new QStandardItem( filename ) );
             d->trackModel.setItem( i, 1, new QStandardItem( trackLength.toString() ) );
             d->trackModel.setItem( i, 2, new QStandardItem( fileSize < 0 ? i18n("unknown") : KIO::convertSize( fileSize ) ) );
-            d->trackModel.setItem( i, 3, new QStandardItem( toc[trackIndex].type() == K3bTrack::AUDIO ? i18n("Audio") : i18n("Data") ) );
+            d->trackModel.setItem( i, 3, new QStandardItem( toc[trackIndex].type() == K3b::Device::Track::TYPE_AUDIO ? i18n("Audio") : i18n("Data") ) );
 
             d->filenames.append( baseDir + "/" + filename );
         }
@@ -395,7 +395,7 @@ void K3bAudioRippingDialog::refresh()
 
     // create playlist item
     if( m_optionWidget->createPlaylist() ) {
-        QString filename = K3bPatternParser::parsePattern( m_cddbEntry, 1,
+        QString filename = K3b::PatternParser::parsePattern( m_cddbEntry, 1,
                                                            m_patternWidget->playlistPattern(),
                                                            m_patternWidget->replaceBlanks(),
                                                            m_patternWidget->blankReplaceString() ) + ".m3u";
@@ -416,13 +416,13 @@ void K3bAudioRippingDialog::refresh()
 }
 
 
-void K3bAudioRippingDialog::setStaticDir( const QString& path )
+void K3b::AudioRippingDialog::setStaticDir( const QString& path )
 {
     m_optionWidget->setBaseDir( path );
 }
 
 
-void K3bAudioRippingDialog::loadK3bDefaults()
+void K3b::AudioRippingDialog::loadK3bDefaults()
 {
     m_comboParanoiaMode->setCurrentIndex( 0 );
     m_spinRetries->setValue(5);
@@ -436,7 +436,7 @@ void K3bAudioRippingDialog::loadK3bDefaults()
 }
 
 
-void K3bAudioRippingDialog::loadUserDefaults( const KConfigGroup& c )
+void K3b::AudioRippingDialog::loadUserDefaults( const KConfigGroup& c )
 {
     m_comboParanoiaMode->setCurrentIndex( c.readEntry( "paranoia_mode", 0 ) );
     m_spinRetries->setValue( c.readEntry( "read_retries", 5 ) );
@@ -450,7 +450,7 @@ void K3bAudioRippingDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3bAudioRippingDialog::saveUserDefaults( KConfigGroup c )
+void K3b::AudioRippingDialog::saveUserDefaults( KConfigGroup c )
 {
     c.writeEntry( "paranoia_mode", m_comboParanoiaMode->currentText().toInt() );
     c.writeEntry( "read_retries", m_spinRetries->value() );

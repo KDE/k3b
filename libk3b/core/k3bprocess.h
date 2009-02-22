@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -23,137 +23,139 @@
 
 #include "k3b_export.h"
 
-class K3bExternalBin;
+namespace K3b {
+    class ExternalBin;
 
-
-/**
- * This is an enhanced K3Process.
- * It splits the stderr output to lines making sure the client gets every line as it 
- * was written by the process.
- * Aditionally one may set raw stdout and stdin handling using the stdin() and stdout() methods
- * to get the process' file descriptors.
- * Last but not least K3bProcess is able to duplicate stdout making it possible to connect two 
- * K3bProcesses like used in K3bDataJob to duplicate mkisofs' stdout to the stdin of the writer 
- * (cdrecord or cdrdao)
- */
-class LIBK3B_EXPORT K3bProcess : public K3Process
-{
-    Q_OBJECT
-
-public:
-    K3bProcess();
-    ~K3bProcess();
 
     /**
-     * In the future this might also set the nice value
+     * This is an enhanced K3Process.
+     * It splits the stderr output to lines making sure the client gets every line as it
+     * was written by the process.
+     * Aditionally one may set raw stdout and stdin handling using the stdin() and stdout() methods
+     * to get the process' file descriptors.
+     * Last but not least Process is able to duplicate stdout making it possible to connect two
+     * Processes like used in DataJob to duplicate mkisofs' stdout to the stdin of the writer
+     * (cdrecord or cdrdao)
      */
-    K3bProcess& operator<<( const K3bExternalBin* );
+    class LIBK3B_EXPORT Process : public K3Process
+    {
+        Q_OBJECT
 
-    K3bProcess& operator<<( const QString& arg );
-    K3bProcess& operator<<( const char* arg );
-    K3bProcess& operator<<( const QByteArray& arg );
-    K3bProcess& operator<<( const QStringList& args );
+    public:
+        Process();
+        ~Process();
 
-    bool start( Communication com );
+        /**
+         * In the future this might also set the nice value
+         */
+        Process& operator<<( const ExternalBin* );
 
-    /** 
-     * get stdin file descriptor
-     * Only makes sense while process is running.
-     *
-     * Only use with setRawStdin
-     */
-    int stdinFd() const;
+        Process& operator<<( const QString& arg );
+        Process& operator<<( const char* arg );
+        Process& operator<<( const QByteArray& arg );
+        Process& operator<<( const QStringList& args );
 
-    /**
-     * Make the process write to @fd instead of Stdout.
-     * This means you won't get any stdoutReady() or receivedStdout()
-     * signals anymore.
-     *
-     * Only use this before starting the process.
-     */
-    void writeToFd( int fd );
+        bool start( Communication com );
 
-    /**
-     * Make the process read from @fd instead of Stdin.
-     * This means you won't get any wroteStdin()
-     * signals anymore.
-     *
-     * Only use this before starting the process.
-     */
-    void readFromFd( int fd );
+        /**
+         * get stdin file descriptor
+         * Only makes sense while process is running.
+         *
+         * Only use with setRawStdin
+         */
+        int stdinFd() const;
 
-    /** 
-     * If set true the process' stdin fd will be available
-     * through @stdinFd.
-     * Be aware that you will not get any wroteStdin signals
-     * anymore.
-     *
-     * Only use this before starting the process.
-     */
-    void setRawStdin(bool b);
+        /**
+         * Make the process write to @fd instead of Stdout.
+         * This means you won't get any stdoutReady() or receivedStdout()
+         * signals anymore.
+         *
+         * Only use this before starting the process.
+         */
+        void writeToFd( int fd );
 
-    /**
-     * close stdin channel
-     *
-     * Once this class is ported to use KProcess instead of K3Process this
-     * method can be deleted and the QProcess::closeWriteChannel() can be
-     * called directly.
-     */
-    void closeWriteChannel();
+        /**
+         * Make the process read from @fd instead of Stdin.
+         * This means you won't get any wroteStdin()
+         * signals anymore.
+         *
+         * Only use this before starting the process.
+         */
+        void readFromFd( int fd );
 
-    /**
-     * wait until process exited
-     *
-     * Once this class is ported to use KProcess instead of K3Process this
-     * method can be deleted and the QProcess::waitForFinished() can be
-     * called directly.
-     *
-     * The timeout value MUST be -1 for now as everything else is not implemented.
-     */
-    bool waitForFinished(int timeout);
+        /**
+         * If set true the process' stdin fd will be available
+         * through @stdinFd.
+         * Be aware that you will not get any wroteStdin signals
+         * anymore.
+         *
+         * Only use this before starting the process.
+         */
+        void setRawStdin(bool b);
 
-    /**
-     * write data to stdin
-     *
-     * Once this class is ported to use KProcess instead of K3Process this
-     * method can be deleted and the QProcess::write() can be called directly.
-     */
-    qint64 write(const char * data, qint64 maxSize);
+        /**
+         * close stdin channel
+         *
+         * Once this class is ported to use KProcess instead of K3Process this
+         * method can be deleted and the QProcess::closeWriteChannel() can be
+         * called directly.
+         */
+        void closeWriteChannel();
 
-    /**
-     * returned joined list of program arguments
-     */
-    QString joinedArgs();
+        /**
+         * wait until process exited
+         *
+         * Once this class is ported to use KProcess instead of K3Process this
+         * method can be deleted and the QProcess::waitForFinished() can be
+         * called directly.
+         *
+         * The timeout value MUST be -1 for now as everything else is not implemented.
+         */
+        bool waitForFinished(int timeout);
 
-public Q_SLOTS:
-    void setSplitStdout( bool b ) { m_bSplitStdout = b; }
+        /**
+         * write data to stdin
+         *
+         * Once this class is ported to use KProcess instead of K3Process this
+         * method can be deleted and the QProcess::write() can be called directly.
+         */
+        qint64 write(const char * data, qint64 maxSize);
 
-    /**
-     * default is true
-     */
-    void setSuppressEmptyLines( bool b );
+        /**
+         * returned joined list of program arguments
+         */
+        QString joinedArgs();
 
-private Q_SLOTS:
-    void slotSplitStderr( K3Process*, char*, int );
-    void slotSplitStdout( K3Process*, char*, int );
-    void slotProcessExited( K3Process * );
+    public Q_SLOTS:
+        void setSplitStdout( bool b ) { m_bSplitStdout = b; }
 
-Q_SIGNALS:
-    void stderrLine( const QString& line );
-    void stdoutLine( const QString& line );
+        /**
+         * default is true
+         */
+        void setSuppressEmptyLines( bool b );
 
-    /**
-     * the same as QProcess::finished()
-     */
-    void finished( int exitCode, QProcess::ExitStatus exitStatus );
+    private Q_SLOTS:
+        void slotSplitStderr( K3Process*, char*, int );
+        void slotSplitStdout( K3Process*, char*, int );
+        void slotProcessExited( K3Process * );
 
-private:
-    static QStringList splitOutput( char*, int, QString&, bool );
+    Q_SIGNALS:
+        void stderrLine( const QString& line );
+        void stdoutLine( const QString& line );
 
-    class Data;
-    Data* d;
+        /**
+         * the same as QProcess::finished()
+         */
+        void finished( int exitCode, QProcess::ExitStatus exitStatus );
 
-    bool m_bSplitStdout;
-};
+    private:
+        static QStringList splitOutput( char*, int, QString&, bool );
+
+        class Data;
+        Data* d;
+
+        bool m_bSplitStdout;
+    };
+}
 
 #endif

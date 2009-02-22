@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,41 +18,44 @@
 
 #include <k3bjob.h>
 
-class K3bMovixDoc;
-class K3bDataJob;
-class K3bMovixDocPreparer;
-class K3bDoc;
-namespace K3bDevice {
-    class Device;
+namespace K3b {
+    class MovixDoc;
+    class DataJob;
+    class MovixDocPreparer;
+    class Doc;
+
+    namespace Device {
+        class Device;
+    }
+
+    class MovixJob : public BurnJob
+    {
+        Q_OBJECT
+
+    public:
+        MovixJob( MovixDoc* doc, JobHandler*, QObject* parent = 0 );
+        ~MovixJob();
+
+        Doc* doc() const;
+        Device::Device* writer() const;
+
+        QString jobDescription() const;
+        QString jobDetails() const;
+
+    public Q_SLOTS:
+        void start();
+        void cancel();
+
+    private Q_SLOTS:
+        void slotDataJobFinished( bool );
+
+    private:
+        MovixDoc* m_doc;
+        DataJob* m_dataJob;
+        MovixDocPreparer* m_movixDocPreparer;
+
+        bool m_canceled;
+    };
 }
-
-class K3bMovixJob : public K3bBurnJob
-{
-  Q_OBJECT
-
- public:
-  K3bMovixJob( K3bMovixDoc* doc, K3bJobHandler*, QObject* parent = 0 );
-  ~K3bMovixJob();
-
-  K3bDoc* doc() const;
-  K3bDevice::Device* writer() const;
-
-  QString jobDescription() const;
-  QString jobDetails() const;
-		
- public Q_SLOTS:
-  void start();
-  void cancel();
-
- private Q_SLOTS:
-  void slotDataJobFinished( bool );
-
- private:
-  K3bMovixDoc* m_doc;
-  K3bDataJob* m_dataJob;
-  K3bMovixDocPreparer* m_movixDocPreparer;
-
-  bool m_canceled;
-};
 
 #endif

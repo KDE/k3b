@@ -17,7 +17,9 @@
 #include "k3bmetaitemmodel.h"
 #include <QPersistentModelIndex>
 
-class K3bMixedDoc;
+namespace K3b {
+    class MixedDoc;
+}
 
 namespace K3b
 {
@@ -27,15 +29,15 @@ namespace K3b
 
     /**
      * The mixed model encapsulates one data model and one audio model.
-     * It uses the K3bMetaItemModel to do so
+     * It uses the MetaItemModel to do so
      *
      * @author Gustavo Pichorim Boiko
      */
-    class MixedProjectModel : public K3bMetaItemModel
+    class MixedProjectModel : public MetaItemModel
     {
         Q_OBJECT
     public:
-        MixedProjectModel( K3bMixedDoc* doc, QObject* parent = 0 );
+        MixedProjectModel( MixedDoc* doc, QObject* parent = 0 );
         ~MixedProjectModel();
         QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
@@ -50,7 +52,7 @@ namespace K3b
     private:
         DataProjectModel *m_dataModel;
         AudioProjectModel *m_audioModel;
-        K3bMixedDoc *m_doc;
+        MixedDoc *m_doc;
         QPersistentModelIndex m_currentRootIndex;
     };
 

@@ -33,7 +33,7 @@
 
 
 
-class K3bReadcdReader::Private
+class K3b::ReadcdReader::Private
 {
 public:
     Private()
@@ -44,8 +44,8 @@ public:
 
     K3b::Msf firstSector, lastSector;
 
-    K3bProcess* process;
-    const K3bExternalBin* readcdBinObject;
+    K3b::Process* process;
+    const K3b::ExternalBin* readcdBinObject;
 
     int fdToWriteTo;
     bool canceled;
@@ -59,8 +59,8 @@ public:
 
 
 
-K3bReadcdReader::K3bReadcdReader( K3bJobHandler* jh, QObject* parent )
-    : K3bJob( jh, parent ),
+K3b::ReadcdReader::ReadcdReader( K3b::JobHandler* jh, QObject* parent )
+    : K3b::Job( jh, parent ),
       m_noCorr(false),
       m_clone(false),
       m_noError(false),
@@ -72,26 +72,26 @@ K3bReadcdReader::K3bReadcdReader( K3bJobHandler* jh, QObject* parent )
 }
 
 
-K3bReadcdReader::~K3bReadcdReader()
+K3b::ReadcdReader::~ReadcdReader()
 {
     delete d->process;
     delete d;
 }
 
 
-bool K3bReadcdReader::active() const
+bool K3b::ReadcdReader::active() const
 {
     return (d->process ? d->process->isRunning() : false);
 }
 
 
-void K3bReadcdReader::writeToFd( int fd )
+void K3b::ReadcdReader::writeToFd( int fd )
 {
     d->fdToWriteTo = fd;
 }
 
 
-void K3bReadcdReader::start()
+void K3b::ReadcdReader::start()
 {
     jobStarted();
 
@@ -114,10 +114,10 @@ void K3bReadcdReader::start()
 
         if( !d->readcdBinObject->hasFeature( "clone" ) ) {
             // search all readcd installations
-            K3bExternalProgram* readcdProgram = k3bcore->externalBinManager()->program( "readcd" );
-            QList<const K3bExternalBin*> readcdBins = readcdProgram->bins();
-            for( QList<const K3bExternalBin*>::const_iterator it = readcdBins.constBegin(); it != readcdBins.constEnd(); ++it ) {
-                const K3bExternalBin* bin = *it;
+            K3b::ExternalProgram* readcdProgram = k3bcore->externalBinManager()->program( "readcd" );
+            QList<const K3b::ExternalBin*> readcdBins = readcdProgram->bins();
+            for( QList<const K3b::ExternalBin*>::const_iterator it = readcdBins.constBegin(); it != readcdBins.constEnd(); ++it ) {
+                const K3b::ExternalBin* bin = *it;
                 if( bin->hasFeature( "clone" ) ) {
                     d->readcdBinObject = bin;
                     emit infoMessage( i18n("Using readcd %1 instead of default version for clone support.", d->readcdBinObject->version), INFO );
@@ -137,7 +137,7 @@ void K3bReadcdReader::start()
 
     // create the commandline
     delete d->process;
-    d->process = new K3bProcess();
+    d->process = new K3b::Process();
     connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
     connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotProcessExited(int, QProcess::ExitStatus)) );
 
@@ -202,14 +202,14 @@ void K3bReadcdReader::start()
     if( !d->process->start( K3Process::AllOutput ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
-        kError() << "(K3bReadcdReader) could not start readcd" << endl;
-        emit infoMessage( i18n("Could not start readcd."), K3bJob::ERROR );
+        kError() << "(K3b::ReadcdReader) could not start readcd" << endl;
+        emit infoMessage( i18n("Could not start readcd."), K3b::Job::ERROR );
         jobFinished( false );
     }
 }
 
 
-void K3bReadcdReader::cancel()
+void K3b::ReadcdReader::cancel()
 {
     if( d->process ) {
         if( d->process->isRunning() ) {
@@ -220,7 +220,7 @@ void K3bReadcdReader::cancel()
 }
 
 
-void K3bReadcdReader::slotStdLine( const QString& line )
+void K3b::ReadcdReader::slotStdLine( const QString& line )
 {
     emit debuggingOutput( "readcd", line );
 
@@ -232,7 +232,7 @@ void K3bReadcdReader::slotStdLine( const QString& line )
         if( d->firstSector < d->lastSector )
             d->blocksToRead -= d->firstSector.lba();
         if( !ok )
-            kError() << "(K3bReadcdReader) blocksToRead parsing error in line: "
+            kError() << "(K3b::ReadcdReader) blocksToRead parsing error in line: "
                      << line.mid(4) << endl;
     }
 
@@ -254,7 +254,7 @@ void K3bReadcdReader::slotStdLine( const QString& line )
             }
         }
         else
-            kError() << "(K3bReadcdReader) currentReadBlock parsing error in line: "
+            kError() << "(K3b::ReadcdReader) currentReadBlock parsing error in line: "
                      << line.mid( 6, line.indexOf("cnt")-7 ) << endl;
     }
 
@@ -268,7 +268,7 @@ void K3bReadcdReader::slotStdLine( const QString& line )
         bool ok;
         int problemSector = line.mid( pos, line.indexOf( QRegExp("\\D"), pos )-pos ).toInt(&ok);
         if( !ok ) {
-            kError() << "(K3bReadcdReader) problemSector parsing error in line: "
+            kError() << "(K3b::ReadcdReader) problemSector parsing error in line: "
                      << line.mid( pos, line.indexOf( QRegExp("\\D"), pos )-pos ) << endl;
         }
         emit infoMessage( i18n("Retrying from sector %1.",problemSector), INFO );
@@ -281,7 +281,7 @@ void K3bReadcdReader::slotStdLine( const QString& line )
         bool ok;
         int problemSector = line.mid( pos, line.indexOf( QRegExp("\\D"), pos )-pos ).toInt(&ok);
         if( !ok ) {
-            kError() << "(K3bReadcdReader) problemSector parsing error in line: "
+            kError() << "(K3b::ReadcdReader) problemSector parsing error in line: "
                      << line.mid( pos, line.indexOf( QRegExp("\\D"), pos )-pos ) << endl;
         }
 
@@ -298,7 +298,7 @@ void K3bReadcdReader::slotStdLine( const QString& line )
     }
 }
 
-void K3bReadcdReader::slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus )
+void K3b::ReadcdReader::slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus )
 {
     if( d->canceled ) {
         emit canceled();
@@ -320,7 +320,7 @@ void K3bReadcdReader::slotProcessExited( int exitCode, QProcess::ExitStatus exit
 }
 
 
-void K3bReadcdReader::setSectorRange( const K3b::Msf& first, const K3b::Msf& last )
+void K3b::ReadcdReader::setSectorRange( const K3b::Msf& first, const K3b::Msf& last )
 {
     d->firstSector = first;
     d->lastSector = last;

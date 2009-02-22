@@ -20,26 +20,39 @@
 //Added by qt3to4:
 #include <QPixmap>
 
-class K3bDataItem;
-class K3bFileItem;
-class K3bDirItem;
-class K3bDataDoc;
-class K3bSpecialDataItem;
-class K3bSessionImportItem;
+namespace K3b {
+    class DataItem;
+}
+namespace K3b {
+    class FileItem;
+}
+namespace K3b {
+    class DirItem;
+}
+namespace K3b {
+    class DataDoc;
+}
+namespace K3b {
+    class SpecialDataItem;
+}
+namespace K3b {
+    class SessionImportItem;
+}
 
 class QPainter;
 class QColorGroup;
 
 
 
-class K3bDataViewItem : public K3bListViewItem
+namespace K3b {
+class DataViewItem : public ListViewItem
 {
  public:
-  K3bDataViewItem( K3bDataItem*, Q3ListView* parent );
-  K3bDataViewItem( K3bDataItem*, Q3ListViewItem* parent );
-  virtual ~K3bDataViewItem();
+  DataViewItem( DataItem*, Q3ListView* parent );
+  DataViewItem( DataItem*, Q3ListViewItem* parent );
+  virtual ~DataViewItem();
 	
-  virtual K3bDataItem* dataItem() const { return m_dataItem; }
+  virtual DataItem* dataItem() const { return m_dataItem; }
 
   void setText( int col, const QString& text );
 
@@ -53,20 +66,22 @@ class K3bDataViewItem : public K3bListViewItem
  private:
   void init();
 
-  K3bDataItem* m_dataItem;
+  DataItem* m_dataItem;
 };
+}
 
 
-class K3bDataDirViewItem : public K3bDataViewItem
+namespace K3b {
+class DataDirViewItem : public DataViewItem
 {
  public:
-  K3bDataDirViewItem( K3bDirItem* dir, Q3ListView* parent );
-  K3bDataDirViewItem( K3bDirItem* dir, Q3ListViewItem* parent );
-  ~K3bDataDirViewItem();
+  DataDirViewItem( DirItem* dir, Q3ListView* parent );
+  DataDirViewItem( DirItem* dir, Q3ListViewItem* parent );
+  ~DataDirViewItem();
 	
   virtual QString text( int ) const;
 	
-  K3bDirItem* dirItem() const { return m_dirItem; }
+  DirItem* dirItem() const { return m_dirItem; }
 
   void highlightIcon( bool );
 
@@ -74,37 +89,41 @@ class K3bDataDirViewItem : public K3bDataViewItem
   virtual void dragEntered();
 
  private:
-  K3bDirItem* m_dirItem;
+  DirItem* m_dirItem;
   QPixmap m_pixmap;
 };
+}
 
 
-class K3bDataFileViewItem : public K3bDataViewItem
+namespace K3b {
+class DataFileViewItem : public DataViewItem
 {
  public:
-  K3bDataFileViewItem( K3bFileItem*, Q3ListView* parent );
-  K3bDataFileViewItem( K3bFileItem*, Q3ListViewItem* parent );
-  ~K3bDataFileViewItem() {}
+  DataFileViewItem( FileItem*, Q3ListView* parent );
+  DataFileViewItem( FileItem*, Q3ListViewItem* parent );
+  ~DataFileViewItem() {}
 	
   QString text( int ) const;
 
-  K3bFileItem* fileItem() const { return m_fileItem; }
+  FileItem* fileItem() const { return m_fileItem; }
 
   const KMimeType::Ptr mimeType() const { return m_pMimeType; }
 
  private:
-  void init( K3bFileItem* );
+  void init( FileItem* );
 
-  K3bFileItem* m_fileItem;
+  FileItem* m_fileItem;
   KMimeType::Ptr m_pMimeType;
 };
+}
 
 
-class K3bDataRootViewItem : public K3bDataDirViewItem
+namespace K3b {
+class DataRootViewItem : public DataDirViewItem
 {
  public:
-  K3bDataRootViewItem( K3bDataDoc*, Q3ListView* parent );
-  ~K3bDataRootViewItem();
+  DataRootViewItem( DataDoc*, Q3ListView* parent );
+  ~DataRootViewItem();
 	
   QString text( int ) const;
 	
@@ -112,25 +131,30 @@ class K3bDataRootViewItem : public K3bDataDirViewItem
   void setText(int col, const QString& text );
 		
  private:
-  K3bDataDoc* m_doc;
+  DataDoc* m_doc;
 };
+}
 
 
-class K3bSpecialDataViewItem : public K3bDataViewItem
+namespace K3b {
+class SpecialDataViewItem : public DataViewItem
 {
  public:
-  K3bSpecialDataViewItem( K3bSpecialDataItem*, Q3ListView* );
+  SpecialDataViewItem( SpecialDataItem*, Q3ListView* );
 
   QString text( int ) const;
 };
+}
 
 
-class K3bSessionImportViewItem : public K3bDataViewItem
+namespace K3b {
+class SessionImportViewItem : public DataViewItem
 {
  public:
-  K3bSessionImportViewItem( K3bSessionImportItem*, Q3ListView* );
+  SessionImportViewItem( SessionImportItem*, Q3ListView* );
 
   QString text( int ) const;
 };
+}
 
 #endif

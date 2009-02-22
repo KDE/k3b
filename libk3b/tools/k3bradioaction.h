@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
  *
@@ -20,37 +20,39 @@
 
 #include <KIcon>
 
-/**
- * This differs from KRadioAction only in the boolean 
- * flag which says if it should always emit the signals 
- * even if it was checked twice.
- *
- * Docu copied from kdelibs
- */
-class LIBK3B_EXPORT K3bRadioAction : public KToggleAction
-{
-  Q_OBJECT
+namespace K3b {
+    /**
+     * This differs from KRadioAction only in the boolean
+     * flag which says if it should always emit the signals
+     * even if it was checked twice.
+     *
+     * Docu copied from kdelibs
+     */
+    class LIBK3B_EXPORT RadioAction : public KToggleAction
+    {
+        Q_OBJECT
 
- public:
-  K3bRadioAction( QObject* parent );
-  K3bRadioAction( const QString& text, QObject* parent = 0 );
-  K3bRadioAction( const KIcon& icon, const QString& text, QObject* parent = 0 );
+    public:
+        RadioAction( QObject* parent );
+        RadioAction( const QString& text, QObject* parent = 0 );
+        RadioAction( const KIcon& icon, const QString& text, QObject* parent = 0 );
 
 #ifdef __GNUC__
 #warning Make this work again (always emit signal)
 #endif
-  /**
-   * @param b if true the action will always emit the activated signal
-   *          even if the toggled state did not change. The default is false.
-   *          which is the same behaviour as KRadioAction
-   */
-  void setAlwaysEmitActivated( bool b ) { m_alwaysEmit = b; }
+        /**
+         * @param b if true the action will always emit the activated signal
+         *          even if the toggled state did not change. The default is false.
+         *          which is the same behaviour as KRadioAction
+         */
+        void setAlwaysEmitActivated( bool b ) { m_alwaysEmit = b; }
 
- protected:
+    protected:
 //  virtual void slotActivated();
 
- private:
-  bool m_alwaysEmit;
-};
+    private:
+        bool m_alwaysEmit;
+    };
+}
 
 #endif

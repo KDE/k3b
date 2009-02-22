@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2004-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -21,63 +21,64 @@
 #include <kurl.h>
 #include "k3b_export.h"
 
-class K3bAudioDecoder;
+namespace K3b {
+    class AudioDecoder;
 
-
-/**
- * The K3bAudioFile is the most important audio data source. It gets its data
- * from an audio file and uses a K3bAudioDecoder to decode this data.
- *
- * Be aware that it is currently not possible to change the doc of an AudioFile.
- * The reason for this is the decoder sharing which is in place to allow gapless
- * splitting of audio files into several tracks.
- *
- * \see K3bAudioDoc::createDecoderForUrl
- */
-class LIBK3B_EXPORT K3bAudioFile : public K3bAudioDataSource
-{
-public:
     /**
-     * The AudioFile registers itself with the doc. This is part of the
-     * decoder handling facility in K3bAudioDoc which reuses the same decoder
-     * for sources with the same url.
+     * The AudioFile is the most important audio data source. It gets its data
+     * from an audio file and uses a AudioDecoder to decode this data.
      *
-     * Use K3bAudioDoc::getDecoderForUrl to create a decoder.
+     * Be aware that it is currently not possible to change the doc of an AudioFile.
+     * The reason for this is the decoder sharing which is in place to allow gapless
+     * splitting of audio files into several tracks.
+     *
+     * \see AudioDoc::createDecoderForUrl
      */
-    K3bAudioFile( K3bAudioDecoder*, K3bAudioDoc* );
-    K3bAudioFile( const K3bAudioFile& );
+    class LIBK3B_EXPORT AudioFile : public AudioDataSource
+    {
+    public:
+        /**
+         * The AudioFile registers itself with the doc. This is part of the
+         * decoder handling facility in AudioDoc which reuses the same decoder
+         * for sources with the same url.
+         *
+         * Use AudioDoc::getDecoderForUrl to create a decoder.
+         */
+        AudioFile( AudioDecoder*, AudioDoc* );
+        AudioFile( const AudioFile& );
 
-    /**
-     * The AudioFile deregisters itself from the doc. If it was the last file
-     * to use the decoder the doc will take care of deleting it.
-     */
-    ~K3bAudioFile();
+        /**
+         * The AudioFile deregisters itself from the doc. If it was the last file
+         * to use the decoder the doc will take care of deleting it.
+         */
+        ~AudioFile();
 
-    QString filename() const;
+        QString filename() const;
 
-    /**
-     * The complete length of the file used by this source.
-     */
-    K3b::Msf originalLength() const;
+        /**
+         * The complete length of the file used by this source.
+         */
+        Msf originalLength() const;
 
-    QString type() const;
-    QString sourceComment() const;
+        QString type() const;
+        QString sourceComment() const;
 
-    bool isValid() const;
+        bool isValid() const;
 
-    K3bAudioDecoder* decoder() const { return m_decoder; }
+        AudioDecoder* decoder() const { return m_decoder; }
 
-    bool seek( const K3b::Msf& );
+        bool seek( const Msf& );
 
-    int read( char* data, unsigned int max );
+        int read( char* data, unsigned int max );
 
-    K3bAudioDataSource* copy() const;
+        AudioDataSource* copy() const;
 
-private:
-    K3bAudioDoc* m_doc;
-    K3bAudioDecoder* m_decoder;
+    private:
+        AudioDoc* m_doc;
+        AudioDecoder* m_decoder;
 
-    unsigned long long m_decodedData;
-};
+        unsigned long long m_decodedData;
+    };
+}
 
 #endif

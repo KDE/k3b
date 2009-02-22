@@ -26,14 +26,15 @@
 /**
  * Allows selection of K3b::WritingMode
  */
-class K3bWritingModeWidget : public K3bIntMapComboBox
+namespace K3b {
+class WritingModeWidget : public IntMapComboBox
 {
     Q_OBJECT
 
 public:
-    K3bWritingModeWidget( QWidget* parent = 0 );
-    K3bWritingModeWidget( K3b::WritingModes modes, QWidget* parent = 0 );
-    ~K3bWritingModeWidget();
+    WritingModeWidget( QWidget* parent = 0 );
+    WritingModeWidget( K3b::WritingModes modes, QWidget* parent = 0 );
+    ~WritingModeWidget();
 
     K3b::WritingMode writingMode() const;
 
@@ -62,7 +63,7 @@ public Q_SLOTS:
      * If the device is set the supported writing modes
      * will be filtered by the ones supported by the drive.
      */
-    void setDevice( K3bDevice::Device* );
+    void setDevice( Device::Device* );
 
     /**
      * Set the writing modes which make sense with the provided medium.
@@ -73,7 +74,7 @@ public Q_SLOTS:
      *
      * \sa setDevice
      */
-    void determineSupportedModesFromMedium( const K3bMedium& m );
+    void determineSupportedModesFromMedium( const Medium& m );
 
     /**
      * Convenience method. Does the same as the one above.
@@ -81,7 +82,7 @@ public Q_SLOTS:
      * \param dev The device which contains the medium. May even be 0 in
      *            which case only the auto mode will be selected.
      */
-    void determineSupportedModesFromMedium( K3bDevice::Device* dev );
+    void determineSupportedModesFromMedium( Device::Device* dev );
 
  Q_SIGNALS:
     void writingModeChanged( K3b::WritingMode );
@@ -95,5 +96,6 @@ private:
 
     Q_PRIVATE_SLOT( d, void _k_writingModeChanged(int) )
 };
+}
 
 #endif

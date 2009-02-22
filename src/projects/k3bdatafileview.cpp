@@ -32,7 +32,7 @@
 #include <kdebug.h>
 
 
-K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDoc* doc, QWidget* parent )
+K3b::DataFileView::DataFileView( K3b::View* view, K3b::DataDoc* doc, QWidget* parent )
     : QTreeView( parent ),
       m_view(view)
 {
@@ -63,20 +63,20 @@ K3bDataFileView::K3bDataFileView( K3bView* view, K3bDataDoc* doc, QWidget* paren
 }
 
 
-K3bDataFileView::~K3bDataFileView()
+K3b::DataFileView::~DataFileView()
 {
 }
 
 
-K3bDataItem* K3bDataFileView::itemAt( const QPoint& pos )
+K3b::DataItem* K3b::DataFileView::itemAt( const QPoint& pos )
 {
     return m_model->itemForIndex( indexAt( pos ) );
 }
 
 
-QList<K3bDataItem*> K3bDataFileView::selectedItems() const
+QList<K3b::DataItem*> K3b::DataFileView::selectedItems() const
 {
-    QList<K3bDataItem*> items;
+    QList<K3b::DataItem*> items;
     foreach( const QModelIndex& index, selectionModel()->selectedRows() ) {
         items.append( m_model->itemForIndex( index ) );
     }
@@ -84,13 +84,13 @@ QList<K3bDataItem*> K3bDataFileView::selectedItems() const
 }
 
 
-K3bDirItem* K3bDataFileView::currentDir() const
+K3b::DirItem* K3b::DataFileView::currentDir() const
 {
     return m_model->itemForIndex( rootIndex() )->getDirItem();
 }
 
 
-void K3bDataFileView::rowsInserted( const QModelIndex& parent, int begin, int end )
+void K3b::DataFileView::rowsInserted( const QModelIndex& parent, int begin, int end )
 {
     QTreeView::rowsInserted( parent, begin, end );
     int columnCount = m_model->columnCount();
@@ -100,7 +100,7 @@ void K3bDataFileView::rowsInserted( const QModelIndex& parent, int begin, int en
 }
 
 
-void K3bDataFileView::setCurrentDir( K3bDirItem* dir )
+void K3b::DataFileView::setCurrentDir( K3b::DirItem* dir )
 {
     setRootIndex( m_model->indexForItem( dir ? dir : m_doc->root() ) );
 }

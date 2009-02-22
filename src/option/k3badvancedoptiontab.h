@@ -26,13 +26,14 @@ class KIntNumInput;
 
 
 
-class K3bAdvancedOptionTab : public QWidget
+namespace K3b {
+class AdvancedOptionTab : public QWidget
 {
     Q_OBJECT
 
 public:
-    K3bAdvancedOptionTab( QWidget* parent = 0 );
-    ~K3bAdvancedOptionTab();
+    AdvancedOptionTab( QWidget* parent = 0 );
+    ~AdvancedOptionTab();
 
     void saveSettings();
     void readSettings();
@@ -52,6 +53,7 @@ private:
     QCheckBox*    m_checkAllowWritingAppSelection;
     QCheckBox*    m_checkForceUnsafeOperations;
 };
+}
 
 
 #endif

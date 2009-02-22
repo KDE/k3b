@@ -163,7 +163,7 @@
          </widget>
         </item>
         <item>
-         <widget class="K3bIntMapComboBox" native="1" name="m_comboActionDialogSettings" >
+         <widget class="K3b::IntMapComboBox" native="1" name="m_comboActionDialogSettings" >
           <property name="toolTip" >
            <string>Settings to load when opening an action dialog</string>
           </property>
@@ -206,7 +206,7 @@
    <header>kurlrequester.h</header>
   </customwidget>
   <customwidget>
-   <class>K3bIntMapComboBox</class>
+   <class>K3b::IntMapComboBox</class>
    <extends>QWidget</extends>
    <header location="global" >k3bintmapcombobox.h</header>
   </customwidget>

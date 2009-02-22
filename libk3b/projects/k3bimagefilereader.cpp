@@ -20,7 +20,7 @@
 
 
 
-class K3bImageFileReader::Private
+class K3b::ImageFileReader::Private
 {
 public:
     Private()
@@ -33,19 +33,19 @@ public:
 };
 
 
-K3bImageFileReader::K3bImageFileReader()
+K3b::ImageFileReader::ImageFileReader()
 {
     d = new Private();
 }
 
 
-K3bImageFileReader::~K3bImageFileReader()
+K3b::ImageFileReader::~ImageFileReader()
 {
     delete d;
 }
 
 
-void K3bImageFileReader::openFile( const QString& filename )
+void K3b::ImageFileReader::openFile( const QString& filename )
 {
     d->filename = filename;
     d->imageFilename = QString();
@@ -56,31 +56,31 @@ void K3bImageFileReader::openFile( const QString& filename )
 }
 
 
-void K3bImageFileReader::setValid( bool b )
+void K3b::ImageFileReader::setValid( bool b )
 {
     d->isValid = b;
 }
 
 
-void K3bImageFileReader::setImageFilename( const QString& filename )
+void K3b::ImageFileReader::setImageFilename( const QString& filename )
 {
     d->imageFilename = filename;
 }
 
 
-bool K3bImageFileReader::isValid() const
+bool K3b::ImageFileReader::isValid() const
 {
     return d->isValid;
 }
 
 
-const QString& K3bImageFileReader::filename() const
+const QString& K3b::ImageFileReader::filename() const
 {
     return d->filename;
 }
 
 
-const QString& K3bImageFileReader::imageFilename() const
+const QString& K3b::ImageFileReader::imageFilename() const
 {
     return d->imageFilename;
 }

@@ -21,7 +21,7 @@
 #include <kapplication.h>
 
 
-class K3bThreadJob::Private
+class K3b::ThreadJob::Private
 {
 public:
     Private()
@@ -29,35 +29,35 @@ public:
           running( false ),
           canceled( false ) {
     }
-    K3bThread* thread;
+    K3b::Thread* thread;
     bool running;
     bool canceled;
 };
 
 
-K3bThreadJob::K3bThreadJob( K3bJobHandler* jh, QObject* parent )
-    : K3bJob( jh, parent ),
+K3b::ThreadJob::ThreadJob( K3b::JobHandler* jh, QObject* parent )
+    : K3b::Job( jh, parent ),
       d( new Private )
 {
-    d->thread = new K3bThread( this );
+    d->thread = new K3b::Thread( this );
     connect( d->thread, SIGNAL(finished()),
              this, SLOT(slotThreadFinished()) );
 }
 
 
-K3bThreadJob::~K3bThreadJob()
+K3b::ThreadJob::~ThreadJob()
 {
     delete d;
 }
 
 
-bool K3bThreadJob::active() const
+bool K3b::ThreadJob::active() const
 {
     return d->running;
 }
 
 
-void K3bThreadJob::start()
+void K3b::ThreadJob::start()
 {
     if( !d->running ) {
         d->canceled = false;
@@ -66,12 +66,12 @@ void K3bThreadJob::start()
         d->thread->start();
     }
     else {
-        kDebug() << "(K3bThreadJob) thread not finished yet.";
+        kDebug() << "(K3b::ThreadJob) thread not finished yet.";
     }
 }
 
 
-void K3bThreadJob::slotThreadFinished()
+void K3b::ThreadJob::slotThreadFinished()
 {
     d->running = false;
     if( canceled() )
@@ -80,81 +80,81 @@ void K3bThreadJob::slotThreadFinished()
 }
 
 
-void K3bThreadJob::cancel()
+void K3b::ThreadJob::cancel()
 {
     d->canceled = true;
     d->thread->ensureDone();
 }
 
 
-bool K3bThreadJob::canceled() const
+bool K3b::ThreadJob::canceled() const
 {
     return d->canceled;
 }
 
 
-int K3bThreadJob::waitForMedia( K3bDevice::Device* device,
-                                int mediaState,
-                                int mediaType,
-                                const QString& message )
+int K3b::ThreadJob::waitForMedia( K3b::Device::Device* device,
+                                  int mediaState,
+                                  int mediaType,
+                                  const QString& message )
 {
-    K3bThreadJobCommunicationEvent* event = K3bThreadJobCommunicationEvent::waitForMedium( device,
-                                                                                           mediaState,
-                                                                                           mediaType,
-                                                                                           message );
+    K3b::ThreadJobCommunicationEvent* event = K3b::ThreadJobCommunicationEvent::waitForMedium( device,
+                                                                                               mediaState,
+                                                                                               mediaType,
+                                                                                               message );
     QApplication::postEvent( this, event );
     event->wait();
     return event->intResult();
 }
 
 
-bool K3bThreadJob::questionYesNo( const QString& text,
-                                  const QString& caption,
-                                  const QString& yesText,
-                                  const QString& noText )
+bool K3b::ThreadJob::questionYesNo( const QString& text,
+                                    const QString& caption,
+                                    const QString& yesText,
+                                    const QString& noText )
 {
-    K3bThreadJobCommunicationEvent* event = K3bThreadJobCommunicationEvent::questionYesNo( text,
-                                                                                           caption,
-                                                                                           yesText,
-                                                                                           noText );
+    K3b::ThreadJobCommunicationEvent* event = K3b::ThreadJobCommunicationEvent::questionYesNo( text,
+                                                                                               caption,
+                                                                                               yesText,
+                                                                                               noText );
     QApplication::postEvent( this, event );
     event->wait();
     return event->boolResult();
 }
 
 
-void K3bThreadJob::blockingInformation( const QString& text,
-                                        const QString& caption )
+void K3b::ThreadJob::blockingInformation( const QString& text,
+                                          const QString& caption )
 {
-    K3bThreadJobCommunicationEvent* event = K3bThreadJobCommunicationEvent::blockingInformation( text,
-                                                                                                 caption );
+    K3b::ThreadJobCommunicationEvent* event = K3b::ThreadJobCommunicationEvent::blockingInformation( text,
+                                                                                                     caption );
     QApplication::postEvent( this, event );
     event->wait();
 }
 
 
-void K3bThreadJob::customEvent( QEvent* e )
+void K3b::ThreadJob::customEvent( QEvent* e )
 {
-    if( K3bThreadJobCommunicationEvent* ce = dynamic_cast<K3bThreadJobCommunicationEvent*>(e) ) {
+    if( K3b::ThreadJobCommunicationEvent* ce = dynamic_cast<K3b::ThreadJobCommunicationEvent*>(e) ) {
         int result = 0;
         switch( ce->type() ) {
-        case K3bThreadJobCommunicationEvent::WaitForMedium:
-            result = K3bJob::waitForMedia( ce->device(),
-                                           ce->wantedMediaState(),
-                                           ce->wantedMediaType(),
-                                           ce->text() );
+        case K3b::ThreadJobCommunicationEvent::WaitForMedium:
+            result = K3b::Job::waitForMedia( ce->device(),
+                                             ce->wantedMediaState(),
+                                             ce->wantedMediaType(),
+                                             ce->text() );
             break;
 
-        case K3bThreadJobCommunicationEvent::QuestionYesNo:
-            result = K3bJob::questionYesNo( ce->text(),
-                                            ce->caption(),
-                                            ce->yesText(),
-                                            ce->noText() )
+        case K3b::ThreadJobCommunicationEvent::QuestionYesNo:
+            result = K3b::Job::questionYesNo( ce->text(),
+                                              ce->caption(),
+                                              ce->yesText(),
+                                              ce->noText() )
                      ? 1 : 0;
             break;
 
-        case K3bThreadJobCommunicationEvent::BlockingInfo:
-            K3bJob::blockingInformation( ce->text(), ce->caption() );
+        case K3b::ThreadJobCommunicationEvent::BlockingInfo:
+            K3b::Job::blockingInformation( ce->text(), ce->caption() );
             break;
         }
         ce->done( result );
@@ -162,9 +162,9 @@ void K3bThreadJob::customEvent( QEvent* e )
 }
 
 
-void K3bThreadJob::waitUntilFinished()
+void K3b::ThreadJob::waitUntilFinished()
 {
-    K3bThread::waitUntilFinished();
+    K3b::Thread::waitUntilFinished();
 }
 
 #include "k3bthreadjob.moc"

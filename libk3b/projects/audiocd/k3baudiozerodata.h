@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
  *
@@ -18,37 +18,39 @@
 #include "k3baudiodatasource.h"
 #include "k3b_export.h"
 
-class LIBK3B_EXPORT K3bAudioZeroData : public K3bAudioDataSource
-{
- public:
-  K3bAudioZeroData( const K3b::Msf& msf = 150 );
-  K3bAudioZeroData( const K3bAudioZeroData& );
-  ~K3bAudioZeroData();
+namespace K3b {
+    class LIBK3B_EXPORT AudioZeroData : public AudioDataSource
+    {
+    public:
+        AudioZeroData( const Msf& msf = 150 );
+        AudioZeroData( const AudioZeroData& );
+        ~AudioZeroData();
 
-  K3b::Msf originalLength() const { return m_length; }
-  void setLength( const K3b::Msf& msf );
+        Msf originalLength() const { return m_length; }
+        void setLength( const Msf& msf );
 
-  QString type() const;
-  QString sourceComment() const;
+        QString type() const;
+        QString sourceComment() const;
 
-  bool seek( const K3b::Msf& );
-  int read( char* data, unsigned int max );
+        bool seek( const Msf& );
+        int read( char* data, unsigned int max );
 
-  K3bAudioDataSource* copy() const;
+        AudioDataSource* copy() const;
 
-  /**
-   * Only changes the length
-   */
-  void setStartOffset( const K3b::Msf& );
+        /**
+         * Only changes the length
+         */
+        void setStartOffset( const Msf& );
 
-  /**
-   * Only changes the length
-   */
-  void setEndOffset( const K3b::Msf& );
+        /**
+         * Only changes the length
+         */
+        void setEndOffset( const Msf& );
 
- private:
-  K3b::Msf m_length;
-  unsigned long long m_writtenData;
-};
+    private:
+        Msf m_length;
+        unsigned long long m_writtenData;
+    };
+}
 
 #endif

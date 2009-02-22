@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -26,103 +26,101 @@
 
 #include "k3b_export.h"
 
-class K3bDataDoc;
-class K3bDirItem;
+namespace K3b {
+    class DataDoc;
+    class DirItem;
 
+    class LIBK3B_EXPORT FileItem : public DataItem
+    {
+    public:
+        /**
+         * Creates a new FileItem
+         */
+        FileItem( const QString& fileName, DataDoc* doc, DirItem* dir, const QString& k3bName = 0, int flags = 0 );
 
-/**
- *@author Sebastian Trueg
- */
-class LIBK3B_EXPORT K3bFileItem : public K3bDataItem
-{
-public:
-    /**
-     * Creates a new K3bFileItem
-     */
-    K3bFileItem( const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName = 0, int flags = 0 );
+        /**
+         * Constructor for optimized file item creation which does no additional stat.
+         *
+         * Used by K3b to speedup file item creation.
+         */
+        FileItem( const k3b_struct_stat* stat,
+                  const k3b_struct_stat* followedStat,
+                  const QString& fileName, DataDoc* doc, DirItem* dir, const QString& k3bName = 0 );
 
-    /**
-     * Constructor for optimized file item creation which does no additional stat.
-     *
-     * Used by K3b to speedup file item creation.
-     */
-    K3bFileItem( const k3b_struct_stat* stat, 
-                 const k3b_struct_stat* followedStat, 
-                 const QString& fileName, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName = 0 );
+        /**
+         * Default copy constructor
+         * Creates a copy of the fileitem. The copy, however, is not an exact duplicate of this item.
+         * The copy does not have a parent dir set and any old session items are set to 0.
+         */
+        FileItem( const FileItem& );
 
-    /**
-     * Default copy constructor
-     * Creates a copy of the fileitem. The copy, however, is not an exact duplicate of this item.
-     * The copy does not have a parent dir set and any old session items are set to 0.
-     */
-    K3bFileItem( const K3bFileItem& );
+        virtual ~FileItem();
 
-    virtual ~K3bFileItem();
+        virtual DataItem* copy() const;
 
-    virtual K3bDataItem* copy() const;
-	
-    bool exists() const;
+        bool exists() const;
 
-    QString absIsoPath();
+        QString absIsoPath();
 
-    /** reimplemented from K3bDataItem */
-    QString localPath() const;
+        /** reimplemented from DataItem */
+        QString localPath() const;
 
-    /**
-     * Identification of the files on the local device.
-     */
-    struct Id {
-        dev_t device;
-        ino_t inode;
+        /**
+         * Identification of the files on the local device.
+         */
+        struct Id {
+            dev_t device;
+            ino_t inode;
+        };
+
+        /**
+         * This is not the normal inode number but it also contains
+         * the device number.
+         */
+        Id localId() const;
+
+        /**
+         * The id of the file the symlink is pointing to
+         */
+        Id localId( bool followSymlinks ) const;
+
+        DirItem* getDirItem() const;
+
+        bool isSymLink() const;
+        QString linkDest() const;
+        bool isFile() const { return true; }
+
+        virtual KMimeType::Ptr mimeType() const;
+
+        /** returns true if the item is not a link or
+         *  if the link's destination is part of the compilation */
+        bool isValid() const;
+
+        DataItem* replaceItemFromOldSession() const { return m_replacedItemFromOldSession; }
+        void setReplacedItemFromOldSession( DataItem* item ) { m_replacedItemFromOldSession = item; }
+
+        /**
+         * Normally one does not use this method but DataItem::size()
+         */
+        KIO::filesize_t itemSize( bool followSymlinks ) const;
+
+    private:
+        DataItem* m_replacedItemFromOldSession;
+
+        KIO::filesize_t m_size;
+        KIO::filesize_t m_sizeFollowed;
+        Id m_id;
+        Id m_idFollowed;
+
+        QString m_localPath;
+        bool m_bSymLink;
+
+        KMimeType::Ptr m_mimeType;
     };
 
-    /**
-     * This is not the normal inode number but it also contains
-     * the device number.
-     */
-    Id localId() const;
-
-    /**
-     * The id of the file the symlink is pointing to
-     */
-    Id localId( bool followSymlinks ) const;
-
-    K3bDirItem* getDirItem() const;
-	
-    bool isSymLink() const;
-    QString linkDest() const;
-    bool isFile() const { return true; }
-
-    virtual KMimeType::Ptr mimeType() const;
-
-    /** returns true if the item is not a link or 
-     *  if the link's destination is part of the compilation */
-    bool isValid() const;
-
-    K3bDataItem* replaceItemFromOldSession() const { return m_replacedItemFromOldSession; }
-    void setReplacedItemFromOldSession( K3bDataItem* item ) { m_replacedItemFromOldSession = item; }
-
-    /**
-     * Normally one does not use this method but K3bDataItem::size()
-     */
-    KIO::filesize_t itemSize( bool followSymlinks ) const;
-
-private:
-    K3bDataItem* m_replacedItemFromOldSession;
-
-    KIO::filesize_t m_size;
-    KIO::filesize_t m_sizeFollowed;
-    Id m_id;
-    Id m_idFollowed;
-
-    QString m_localPath;
-    bool m_bSymLink;
-
-    KMimeType::Ptr m_mimeType;
-};
-
-bool operator==( const K3bFileItem::Id&, const K3bFileItem::Id& );
-bool operator<( const K3bFileItem::Id&, const K3bFileItem::Id& );
-bool operator>( const K3bFileItem::Id&, const K3bFileItem::Id& );
+    bool operator==( const FileItem::Id&, const FileItem::Id& );
+    bool operator<( const FileItem::Id&, const FileItem::Id& );
+    bool operator>( const FileItem::Id&, const FileItem::Id& );
+}
 
 #endif

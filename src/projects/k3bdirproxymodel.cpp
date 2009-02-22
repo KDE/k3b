@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
  *
@@ -16,23 +16,23 @@
 #include "k3bmodeltypes.h"
 
 
-K3bDirProxyModel::K3bDirProxyModel(QObject *parent)
+K3b::DirProxyModel::DirProxyModel(QObject *parent)
 : QSortFilterProxyModel(parent)
 {
     setDynamicSortFilter(true);
 }
 
-K3bDirProxyModel::~K3bDirProxyModel()
+K3b::DirProxyModel::~DirProxyModel()
 {
 }
 
 
-bool K3bDirProxyModel::filterAcceptsRow( int source_row, const QModelIndex & source_parent ) const
+bool K3b::DirProxyModel::filterAcceptsRow( int source_row, const QModelIndex & source_parent ) const
 {
     QAbstractItemModel *model = sourceModel();
     QModelIndex index = model->index(source_row, 0, source_parent);
 
     K3b::ItemType type = (K3b::ItemType) index.data(K3b::ItemTypeRole).toInt();
 
-    return (type == K3b::DirItem);
+    return (type == K3b::DirItemType);
 }

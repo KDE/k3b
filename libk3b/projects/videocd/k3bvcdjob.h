@@ -16,30 +16,31 @@
 #define K3BVCDJOB_H
 
 #include <qprocess.h>
-#include <k3bjob.h>
+#include "k3bjob.h"
 
-class K3bVcdDoc;
-class K3bVcdTrack;
-class QString;
-class K3bProcess;
 class K3Process;
-class K3bAbstractWriter;
-class K3bDoc;
 
-class K3bVcdJob : public K3bBurnJob
-{
+namespace K3b {
+    class VcdDoc;
+    class VcdTrack;
+    class Process;
+    class AbstractWriter;
+    class Doc;
+
+    class VcdJob : public BurnJob
+    {
         Q_OBJECT
 
     public:
-        K3bVcdJob( K3bVcdDoc*, K3bJobHandler*, QObject* parent = 0 );
-        ~K3bVcdJob();
+        VcdJob( VcdDoc*, JobHandler*, QObject* parent = 0 );
+        ~VcdJob();
 
-        K3bDoc* doc() const;
-        K3bVcdDoc* vcdDoc() const
+        Doc* doc() const;
+        VcdDoc* vcdDoc() const
         {
             return m_doc;
         }
-        K3bDevice::Device* writer() const;
+        Device::Device* writer() const;
 
         QString jobDescription() const;
         QString jobDetails() const;
@@ -78,10 +79,10 @@ class K3bVcdJob : public K3bBurnJob
 
         enum { stageUnknown, stageScan, stageWrite, _stage_max };
 
-        K3bVcdDoc* m_doc;
-        K3bDevice::Device* m_writer;
-        K3bDevice::Device* m_reader;
-        K3bVcdTrack* m_currentWrittenTrack;
+        VcdDoc* m_doc;
+        Device::Device* m_writer;
+        Device::Device* m_reader;
+        VcdTrack* m_currentWrittenTrack;
 
         int m_speed;
         int m_stage;
@@ -106,8 +107,9 @@ class K3bVcdJob : public K3bBurnJob
         QString m_xmlFile;
         QString m_collectedOutput;
 
-        K3bAbstractWriter* m_writerJob;
-        K3bProcess* m_process;
-};
+        AbstractWriter* m_writerJob;
+        Process* m_process;
+    };
+}
 
 #endif

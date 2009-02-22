@@ -23,7 +23,7 @@
 
 
 K3bMpcDecoderFactory::K3bMpcDecoderFactory( QObject* parent, const QVariantList& )
-    : K3bAudioDecoderFactory( parent )
+    : K3b::AudioDecoderFactory( parent )
 {
 }
 
@@ -33,7 +33,7 @@ K3bMpcDecoderFactory::~K3bMpcDecoderFactory()
 }
 
 
-K3bAudioDecoder* K3bMpcDecoderFactory::createDecoder( QObject* parent
+K3b::AudioDecoder* K3bMpcDecoderFactory::createDecoder( QObject* parent
     ) const
 {
     return new K3bMpcDecoder( parent );
@@ -52,7 +52,7 @@ bool K3bMpcDecoderFactory::canDecode( const KUrl& url )
 
 
 K3bMpcDecoder::K3bMpcDecoder( QObject* parent  )
-    : K3bAudioDecoder( parent )
+    : K3b::AudioDecoder( parent )
 {
     m_mpc = new K3bMpcWrapper();
 }

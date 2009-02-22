@@ -24,74 +24,76 @@
 #include "k3b_export.h"
 
 
-namespace K3bDevice {
-    class Toc;
-}
 class QListWidget;
-class K3bMedium;
+
+namespace K3b {
+    namespace Device {
+        class Toc;
+    }
+
+    class Medium;
+
+    namespace CDDB {
+        class LIBK3B_EXPORT MultiEntriesDialog : public KDialog
+        {
+            Q_OBJECT
+
+        public:
+            ~MultiEntriesDialog();
+
+            static int selectCddbEntry( const KCDDB::CDInfoList& entries, QWidget* parent = 0 );
+
+        protected:
+            MultiEntriesDialog( QWidget* parent = 0 );
+
+        private:
+            QListWidget* m_listBox;
+        };
 
 
-namespace K3bCDDB {
-    class LIBK3B_EXPORT MultiEntriesDialog : public KDialog
-    {
-        Q_OBJECT
+        class LIBK3B_EXPORT CDDBJob : public KJob
+        {
+            Q_OBJECT
 
-    public:
-        ~MultiEntriesDialog();
+        public:
+            CDDBJob( QObject* parent = 0 );
+            ~CDDBJob();
 
-        static int selectCddbEntry( const KCDDB::CDInfoList& entries, QWidget* parent = 0 );
+            /**
+             * The medium specified in queryCddb. MediaCache
+             * uses it to remember the original medium.
+             */
+            K3b::Medium medium() const;
 
-    protected:
-        MultiEntriesDialog( QWidget* parent = 0 );
+            /**
+             * Only valid after the job finished successfully.
+             */
+            KCDDB::CDInfo cddbResult() const;
 
-    private:
-        QListWidget* m_listBox;
-    };
-    
+            /**
+             * Query cddb for the medium. The returned job is
+             * already started.
+             */
+            static CDDBJob* queryCddb( const Medium& medium );
 
-    class LIBK3B_EXPORT CDDBJob : public KJob
-    {
-        Q_OBJECT
+            /**
+             * Query cddb for the toc. The returned job is
+             * already started.
+             */
+            static CDDBJob* queryCddb( const Device::Toc& toc );
 
-    public:
-        CDDBJob( QObject* parent = 0 );
-        ~CDDBJob();
+        public Q_SLOTS:
+            void start();
 
-        /**
-         * The medium specified in queryCddb. K3bMediaCache
-         * uses it to remember the original medium.
-         */
-        K3bMedium medium() const;
+        private:
+            class Private;
+            Private* const d;
 
-        /**
-         * Only valid after the job finished successfully.
-         */
-        KCDDB::CDInfo cddbResult() const;
+            Q_PRIVATE_SLOT( d, void _k_cddbQueryFinished( KCDDB::Result ) )
+        };
 
-        /**
-         * Query cddb for the medium. The returned job is
-         * already started.
-         */
-        static CDDBJob* queryCddb( const K3bMedium& medium );
-
-        /**
-         * Query cddb for the toc. The returned job is
-         * already started.
-         */
-        static CDDBJob* queryCddb( const K3bDevice::Toc& toc );
-
-    public Q_SLOTS:
-        void start();
-
-    private:
-        class Private;
-        Private* const d;
-
-        Q_PRIVATE_SLOT( d, void _k_cddbQueryFinished( KCDDB::Result ) )
-    };
-
-
-    LIBK3B_EXPORT KCDDB::TrackOffsetList createTrackOffsetList( const K3bDevice::Toc& toc );
+        LIBK3B_EXPORT KCDDB::TrackOffsetList createTrackOffsetList( const K3b::Device::Toc& toc );
+    }
 }
 
 #endif

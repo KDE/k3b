@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -18,29 +18,31 @@
 #include <k3bdatadoc.h>
 #include "k3b_export.h"
 
-class LIBK3B_EXPORT K3bVideoDvdDoc : public K3bDataDoc
-{
- public:
-  K3bVideoDvdDoc( QObject* parent = 0 );
-  virtual ~K3bVideoDvdDoc();
+namespace K3b {
+    class LIBK3B_EXPORT VideoDvdDoc : public DataDoc
+    {
+    public:
+        VideoDvdDoc( QObject* parent = 0 );
+        virtual ~VideoDvdDoc();
 
-  virtual int type() const { return VIDEODVD; }
+        virtual int type() const { return VIDEODVD; }
 
-  int supportedMediaTypes() const;
+        int supportedMediaTypes() const;
 
-  virtual K3bBurnJob* newBurnJob( K3bJobHandler* hdl, QObject* parent );
+        virtual BurnJob* newBurnJob( JobHandler* hdl, QObject* parent );
 
-  virtual bool newDocument();
+        virtual bool newDocument();
 
-  K3bDirItem* videoTsDir() const { return m_videoTsDir; }
+        DirItem* videoTsDir() const { return m_videoTsDir; }
 
-  // TODO: implement load- and saveDocumentData since we do not need all those options
+        // TODO: implement load- and saveDocumentData since we do not need all those options
 
- protected:
-  virtual QString typeString() const { return "video_dvd"; }
+    protected:
+        virtual QString typeString() const { return "video_dvd"; }
 
- private:
-  K3bDirItem* m_videoTsDir;
-};
+    private:
+        DirItem* m_videoTsDir;
+    };
+}
 
 #endif

@@ -19,31 +19,37 @@
 //Added by qt3to4:
 #include <QFrame>
 
-class K3bMainWindow;
-class K3bFileTreeView;
+namespace K3b {
+    class MainWindow;
+}
+namespace K3b {
+    class FileTreeView;
+}
 class QFrame;
 
 
-class K3bSidePanel : public QToolBox
+namespace K3b {
+class SidePanel : public QToolBox
 {
   Q_OBJECT
 
  public:
-  K3bSidePanel( K3bMainWindow*, QWidget* parent = 0 );
-  ~K3bSidePanel();
+  SidePanel( MainWindow*, QWidget* parent = 0 );
+  ~SidePanel();
 
   /**
    * This should be removed in the future. For now we need it because of the
    * bad design of the dirview. :(
    */
-  K3bFileTreeView* fileTreeView() const { return m_fileTreeView; }
+  FileTreeView* fileTreeView() const { return m_fileTreeView; }
 
  private:
-  K3bMainWindow* m_mainWindow;
-  K3bFileTreeView* m_fileTreeView;
+  MainWindow* m_mainWindow;
+  FileTreeView* m_fileTreeView;
 
   QFrame* createPanel();
   void addButton( QFrame* frame, QAction* action );
 };
+}
 
 #endif

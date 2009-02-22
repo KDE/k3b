@@ -75,7 +75,7 @@ private:
 class DeviceBlockingEvent : public QEvent
 {
 public:
-    DeviceBlockingEvent( bool block_, K3bDevice::Device* dev, DeviceBlockingEventDoneCondition* cond_, bool* success_ )
+    DeviceBlockingEvent( bool block_, K3b::Device::Device* dev, DeviceBlockingEventDoneCondition* cond_, bool* success_ )
         : QEvent( QEvent::User ),
           block(block_),
           device(dev),
@@ -84,13 +84,13 @@ public:
     }
 
     bool block;
-    K3bDevice::Device* device;
+    K3b::Device::Device* device;
     DeviceBlockingEventDoneCondition* cond;
     bool* success;
 };
 
 
-class K3bCore::Private {
+class K3b::Core::Private {
 public:
     Private()
         : version( LIBK3B_VERSION ),
@@ -101,24 +101,24 @@ public:
           globalSettings(0) {
     }
 
-    K3bVersion version;
-    K3bMediaCache* mediaCache;
-    K3bDevice::DeviceManager* deviceManager;
-    K3bExternalBinManager* externalBinManager;
-    K3bPluginManager* pluginManager;
-    K3bGlobalSettings* globalSettings;
+    K3b::Version version;
+    K3b::MediaCache* mediaCache;
+    K3b::Device::DeviceManager* deviceManager;
+    K3b::ExternalBinManager* externalBinManager;
+    K3b::PluginManager* pluginManager;
+    K3b::GlobalSettings* globalSettings;
 
-    QList<K3bJob*> runningJobs;
-    QList<K3bDevice::Device*> blockedDevices;
+    QList<K3b::Job*> runningJobs;
+    QList<K3b::Device::Device*> blockedDevices;
 };
 
 
 
-K3bCore* K3bCore::s_k3bCore = 0;
+K3b::Core* K3b::Core::s_k3bCore = 0;
 
 
 
-K3bCore::K3bCore( QObject* parent )
+K3b::Core::Core( QObject* parent )
     : QObject( parent )
 {
     d = new Private();
@@ -131,11 +131,11 @@ K3bCore::K3bCore( QObject* parent )
     s_guiThreadHandle = QThread::currentThread();
 
     // create the thread widget instance in the GUI thread
-    K3bThreadWidget::instance();
+    K3b::ThreadWidget::instance();
 }
 
 
-K3bCore::~K3bCore()
+K3b::Core::~Core()
 {
     s_k3bCore = 0;
 
@@ -144,48 +144,48 @@ K3bCore::~K3bCore()
 }
 
 
-K3bMediaCache* K3bCore::mediaCache() const
+K3b::MediaCache* K3b::Core::mediaCache() const
 {
-    const_cast<K3bCore*>(this)->initMediaCache();
+    const_cast<K3b::Core*>(this)->initMediaCache();
     return d->mediaCache;
 }
 
 
-K3bDevice::DeviceManager* K3bCore::deviceManager() const
+K3b::Device::DeviceManager* K3b::Core::deviceManager() const
 {
-    const_cast<K3bCore*>(this)->initDeviceManager();
+    const_cast<K3b::Core*>(this)->initDeviceManager();
     return d->deviceManager;
 }
 
 
-K3bExternalBinManager* K3bCore::externalBinManager() const
+K3b::ExternalBinManager* K3b::Core::externalBinManager() const
 {
-    const_cast<K3bCore*>(this)->initExternalBinManager();
+    const_cast<K3b::Core*>(this)->initExternalBinManager();
     return d->externalBinManager;
 }
 
 
-K3bPluginManager* K3bCore::pluginManager() const
+K3b::PluginManager* K3b::Core::pluginManager() const
 {
-    const_cast<K3bCore*>(this)->initPluginManager();
+    const_cast<K3b::Core*>(this)->initPluginManager();
     return d->pluginManager;
 }
 
 
-K3bGlobalSettings* K3bCore::globalSettings() const
+K3b::GlobalSettings* K3b::Core::globalSettings() const
 {
-    const_cast<K3bCore*>(this)->initGlobalSettings();
+    const_cast<K3b::Core*>(this)->initGlobalSettings();
     return d->globalSettings;
 }
 
 
-const K3bVersion& K3bCore::version() const
+const K3b::Version& K3b::Core::version() const
 {
     return d->version;
 }
 
 
-void K3bCore::init()
+void K3b::Core::init()
 {
     initGlobalSettings();
     initExternalBinManager();
@@ -204,48 +204,48 @@ void K3bCore::init()
 }
 
 
-void K3bCore::initGlobalSettings()
+void K3b::Core::initGlobalSettings()
 {
     if( !d->globalSettings )
-        d->globalSettings = new K3bGlobalSettings();
+        d->globalSettings = new K3b::GlobalSettings();
 }
 
 
-void K3bCore::initExternalBinManager()
+void K3b::Core::initExternalBinManager()
 {
     if( !d->externalBinManager ) {
-        d->externalBinManager = new K3bExternalBinManager( this );
+        d->externalBinManager = new K3b::ExternalBinManager( this );
         K3b::addDefaultPrograms( d->externalBinManager );
     }
 }
 
 
-void K3bCore::initDeviceManager()
+void K3b::Core::initDeviceManager()
 {
     if( !d->deviceManager )
-        d->deviceManager = new K3bDevice::DeviceManager( this );
+        d->deviceManager = new K3b::Device::DeviceManager( this );
 }
 
 
-void K3bCore::initMediaCache()
+void K3b::Core::initMediaCache()
 {
     if ( !d->mediaCache ) {
         // create the media cache but do not connect it to the device manager
         // yet to speed up application start. We connect it in init()
         // once the devicemanager has scanned for devices.
-        d->mediaCache = new K3bMediaCache( this );
+        d->mediaCache = new K3b::MediaCache( this );
     }
 }
 
 
-void K3bCore::initPluginManager()
+void K3b::Core::initPluginManager()
 {
     if( !d->pluginManager )
-        d->pluginManager = new K3bPluginManager( this );
+        d->pluginManager = new K3b::PluginManager( this );
 }
 
 
-void K3bCore::readSettings( KSharedConfig::Ptr c )
+void K3b::Core::readSettings( KSharedConfig::Ptr c )
 {
     globalSettings()->readSettings( c->group( "General Options" ) );
     deviceManager()->readConfig( c->group( "Devices" ) );
@@ -253,7 +253,7 @@ void K3bCore::readSettings( KSharedConfig::Ptr c )
 }
 
 
-void K3bCore::saveSettings( KSharedConfig::Ptr c )
+void K3b::Core::saveSettings( KSharedConfig::Ptr c )
 {
     KConfigGroup grp( c, "General Options" );
     grp.writeEntry( "config version", version().toString() );
@@ -264,37 +264,37 @@ void K3bCore::saveSettings( KSharedConfig::Ptr c )
 }
 
 
-void K3bCore::registerJob( K3bJob* job )
+void K3b::Core::registerJob( K3b::Job* job )
 {
     d->runningJobs.append( job );
     emit jobStarted( job );
-    if( K3bBurnJob* bj = dynamic_cast<K3bBurnJob*>( job ) )
+    if( K3b::BurnJob* bj = dynamic_cast<K3b::BurnJob*>( job ) )
         emit burnJobStarted( bj );
 }
 
 
-void K3bCore::unregisterJob( K3bJob* job )
+void K3b::Core::unregisterJob( K3b::Job* job )
 {
     d->runningJobs.removeAll( job );
     emit jobFinished( job );
-    if( K3bBurnJob* bj = dynamic_cast<K3bBurnJob*>( job ) )
+    if( K3b::BurnJob* bj = dynamic_cast<K3b::BurnJob*>( job ) )
         emit burnJobFinished( bj );
 }
 
 
-bool K3bCore::jobsRunning() const
+bool K3b::Core::jobsRunning() const
 {
     return !d->runningJobs.isEmpty();
 }
 
 
-QList<K3bJob*> K3bCore::runningJobs() const
+QList<K3b::Job*> K3b::Core::runningJobs() const
 {
     return d->runningJobs;
 }
 
 
-bool K3bCore::blockDevice( K3bDevice::Device* dev )
+bool K3b::Core::blockDevice( K3b::Device::Device* dev )
 {
     if( QThread::currentThread() == s_guiThreadHandle ) {
         return internalBlockDevice( dev );
@@ -309,7 +309,7 @@ bool K3bCore::blockDevice( K3bDevice::Device* dev )
 }
 
 
-void K3bCore::unblockDevice( K3bDevice::Device* dev )
+void K3b::Core::unblockDevice( K3b::Device::Device* dev )
 {
     if( QThread::currentThread() == s_guiThreadHandle ) {
         internalUnblockDevice( dev );
@@ -322,7 +322,7 @@ void K3bCore::unblockDevice( K3bDevice::Device* dev )
 }
 
 
-bool K3bCore::internalBlockDevice( K3bDevice::Device* dev )
+bool K3b::Core::internalBlockDevice( K3b::Device::Device* dev )
 {
     if( !d->blockedDevices.contains( dev ) ) {
         d->blockedDevices.append( dev );
@@ -333,13 +333,13 @@ bool K3bCore::internalBlockDevice( K3bDevice::Device* dev )
 }
 
 
-void K3bCore::internalUnblockDevice( K3bDevice::Device* dev )
+void K3b::Core::internalUnblockDevice( K3b::Device::Device* dev )
 {
     d->blockedDevices.removeAll( dev );
 }
 
 
-void K3bCore::customEvent( QEvent* e )
+void K3b::Core::customEvent( QEvent* e )
 {
     if( DeviceBlockingEvent* de = dynamic_cast<DeviceBlockingEvent*>(e) ) {
         if( de->block )

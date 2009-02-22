@@ -123,7 +123,7 @@ public:
 
 
 K3bSoxEncoder::K3bSoxEncoder( QObject* parent, const QVariantList& )
-    : K3bAudioEncoder( parent )
+    : K3b::AudioEncoder( parent )
 {
     if( k3bcore->externalBinManager()->program( "sox" ) == 0 )
         k3bcore->externalBinManager()->addProgram( new K3bSoxProgram() );
@@ -359,7 +359,7 @@ long long K3bSoxEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 }
 
 
-K3bPluginConfigWidget* K3bSoxEncoder::createConfigWidget( QWidget* parent ) const
+K3b::PluginConfigWidget* K3bSoxEncoder::createConfigWidget( QWidget* parent ) const
 {
     return new K3bSoxEncoderSettingsWidget( parent );
 }
@@ -367,7 +367,7 @@ K3bPluginConfigWidget* K3bSoxEncoder::createConfigWidget( QWidget* parent ) cons
 
 
 K3bSoxEncoderSettingsWidget::K3bSoxEncoderSettingsWidget( QWidget* parent )
-    : K3bPluginConfigWidget( parent )
+    : K3b::PluginConfigWidget( parent )
 {
     w = new base_K3bSoxEncoderConfigWidget( this );
     w->m_editSamplerate->setValidator( new QIntValidator( w->m_editSamplerate ) );

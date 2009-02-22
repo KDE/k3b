@@ -28,7 +28,7 @@
 
 
 
-K3bPluginOptionTab::K3bPluginOptionTab( QWidget* parent )
+K3b::PluginOptionTab::PluginOptionTab( QWidget* parent )
     : QWidget( parent )
 {
     QVBoxLayout* layout = new QVBoxLayout( this );
@@ -43,7 +43,7 @@ K3bPluginOptionTab::K3bPluginOptionTab( QWidget* parent )
     layout->addWidget( label );
     layout->addWidget( pluginSelector );
 
-    foreach( K3bPlugin* plugin, k3bcore->pluginManager()->plugins() ) {
+    foreach( K3b::Plugin* plugin, k3bcore->pluginManager()->plugins() ) {
         kDebug() << "Adding plugin" << plugin->pluginInfo().name();
         pluginSelector->addPlugins( QList<KPluginInfo>() << plugin->pluginInfo(),
                                     KPluginSelector::ReadConfigFile,
@@ -53,7 +53,7 @@ K3bPluginOptionTab::K3bPluginOptionTab( QWidget* parent )
 }
 
 
-K3bPluginOptionTab::~K3bPluginOptionTab()
+K3b::PluginOptionTab::~PluginOptionTab()
 {
 }
 

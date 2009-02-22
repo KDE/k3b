@@ -25,17 +25,17 @@
 #include <k3bcore.h>
 #include <k3bversion.h>
 
-K3bVcdXmlView::K3bVcdXmlView( K3bVcdDoc* pDoc )
+K3b::VcdXmlView::VcdXmlView( K3b::VcdDoc* pDoc )
 {
 
     m_doc = pDoc;
 
 }
 
-K3bVcdXmlView::~K3bVcdXmlView()
+K3b::VcdXmlView::~VcdXmlView()
 {}
 
-bool K3bVcdXmlView::write( const QString& fname )
+bool K3b::VcdXmlView::write( const QString& fname )
 {
 
     QDomDocument xmlDoc( "videocd PUBLIC \"-//GNU//DTD VideoCD//EN\" \"http://www.gnu.org/software/vcdimager/videocd.dtd\"" );
@@ -193,7 +193,7 @@ bool K3bVcdXmlView::write( const QString& fname )
     QDomElement elemPbc;
 
     // Add Tracks to XML
-    Q_FOREACH( K3bVcdTrack* track,  *m_doc->tracks() ) {
+    Q_FOREACH( K3b::VcdTrack* track,  *m_doc->tracks() ) {
         if ( !track ->isSegment() ) {
             QString seqId = QString::number( track ->index() ).rightJustified( 3, '0' );
 
@@ -214,7 +214,7 @@ bool K3bVcdXmlView::write( const QString& fname )
 
         }
     }
-    Q_FOREACH( K3bVcdTrack* track,  *m_doc->tracks() ) {
+    Q_FOREACH( K3b::VcdTrack* track,  *m_doc->tracks() ) {
         if ( m_doc->vcdOptions() ->PbcEnabled() ) {
             if ( elemPbc.isNull() )
                 elemPbc = addSubElement( xmlDoc, root, "pbc" );
@@ -230,7 +230,7 @@ bool K3bVcdXmlView::write( const QString& fname )
     }
 
     m_xmlstring = xmlDoc.toString();
-    kDebug() << QString( "(K3bVcdXmlView) Write Data to %1:" ).arg( fname );
+    kDebug() << QString( "(K3b::VcdXmlView) Write Data to %1:" ).arg( fname );
 
     QFile xmlFile( fname );
     if ( xmlFile.open( QIODevice::WriteOnly ) ) {
@@ -243,13 +243,13 @@ bool K3bVcdXmlView::write( const QString& fname )
     return false;
 }
 
-void K3bVcdXmlView::addComment( QDomDocument& doc, QDomElement& parent, const QString& text )
+void K3b::VcdXmlView::addComment( QDomDocument& doc, QDomElement& parent, const QString& text )
 {
     QDomComment comment = doc.createComment( text );
     parent.appendChild( comment );
 }
 
-QDomElement K3bVcdXmlView::addSubElement( QDomDocument& doc, QDomElement& parent, const QString& name, const QString& value )
+QDomElement K3b::VcdXmlView::addSubElement( QDomDocument& doc, QDomElement& parent, const QString& name, const QString& value )
 {
     QDomElement element = doc.createElement( name );
     parent.appendChild( element );
@@ -260,7 +260,7 @@ QDomElement K3bVcdXmlView::addSubElement( QDomDocument& doc, QDomElement& parent
     return element;
 }
 
-QDomElement K3bVcdXmlView::addSubElement( QDomDocument& doc, QDomElement& parent, const QString& name, const int& value )
+QDomElement K3b::VcdXmlView::addSubElement( QDomDocument& doc, QDomElement& parent, const QString& name, const int& value )
 {
     QDomElement element = doc.createElement( name );
     parent.appendChild( element );
@@ -271,7 +271,7 @@ QDomElement K3bVcdXmlView::addSubElement( QDomDocument& doc, QDomElement& parent
     return element;
 }
 
-QDomElement K3bVcdXmlView::addFolderElement( QDomDocument& doc, QDomElement& parent, const QString& name )
+QDomElement K3b::VcdXmlView::addFolderElement( QDomDocument& doc, QDomElement& parent, const QString& name )
 {
     QDomElement elemFolder = addSubElement( doc, parent, "folder" );
     addSubElement( doc, elemFolder, "name", name );
@@ -279,7 +279,7 @@ QDomElement K3bVcdXmlView::addFolderElement( QDomDocument& doc, QDomElement& par
     return elemFolder;
 }
 
-void K3bVcdXmlView::addFileElement( QDomDocument& doc, QDomElement& parent, const QString& src, const QString& name, bool mixed )
+void K3b::VcdXmlView::addFileElement( QDomDocument& doc, QDomElement& parent, const QString& src, const QString& name, bool mixed )
 {
     QDomElement elemFile = addSubElement( doc, parent, "file" );
     elemFile.setAttribute( "src", QString( "%1" ).arg( src ) );
@@ -289,7 +289,7 @@ void K3bVcdXmlView::addFileElement( QDomDocument& doc, QDomElement& parent, cons
     addSubElement( doc, elemFile, "name", name );
 }
 
-void K3bVcdXmlView::doPbc( QDomDocument& doc, QDomElement& parent, K3bVcdTrack* track )
+void K3b::VcdXmlView::doPbc( QDomDocument& doc, QDomElement& parent, K3b::VcdTrack* track )
 {
     QString ref = ( track->isSegment() ) ? "segment" : "sequence";
 
@@ -298,7 +298,7 @@ void K3bVcdXmlView::doPbc( QDomDocument& doc, QDomElement& parent, K3bVcdTrack* 
 
     setNumkeyBSN( doc, elemSelection, track );
 
-    for ( int i = 0; i < K3bVcdTrack::_maxPbcTracks; i++ ) {
+    for ( int i = 0; i < K3b::VcdTrack::_maxPbcTracks; i++ ) {
         QDomElement elemPbcSelectionPNRDT;
 
         if ( track->getPbcTrack( i ) ) {
@@ -306,23 +306,23 @@ void K3bVcdXmlView::doPbc( QDomDocument& doc, QDomElement& parent, K3bVcdTrack* 
             QString ref = ( track->getPbcTrack( i ) ->isSegment() ) ? "segment" : "sequence";
 
             switch ( i ) {
-            case K3bVcdTrack::PREVIOUS:
+            case K3b::VcdTrack::PREVIOUS:
                 elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "prev" );
                 elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
                 break;
-            case K3bVcdTrack::NEXT:
+            case K3b::VcdTrack::NEXT:
                 elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "next" );
                 elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
                 break;
-            case K3bVcdTrack::RETURN:
+            case K3b::VcdTrack::RETURN:
                 elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "return" );
                 elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
                 break;
-            case K3bVcdTrack::DEFAULT:
+            case K3b::VcdTrack::DEFAULT:
                 elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "default" );
                 elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
                 break;
-            case K3bVcdTrack::AFTERTIMEOUT:
+            case K3b::VcdTrack::AFTERTIMEOUT:
                 if ( track->getWaitTime() >= 0 ) {
                     elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "timeout" );
                     elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
@@ -331,25 +331,25 @@ void K3bVcdXmlView::doPbc( QDomDocument& doc, QDomElement& parent, K3bVcdTrack* 
             }
         } else {
             // jump to <endlist> otherwise do noop while disabled
-            if ( track->getNonPbcTrack( i ) == K3bVcdTrack::VIDEOEND ) {
+            if ( track->getNonPbcTrack( i ) == K3b::VcdTrack::VIDEOEND ) {
                 switch ( i ) {
-                case K3bVcdTrack::PREVIOUS:
+                case K3b::VcdTrack::PREVIOUS:
                     elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "prev" );
                     elemPbcSelectionPNRDT.setAttribute( "ref", "end" );
                     break;
-                case K3bVcdTrack::NEXT:
+                case K3b::VcdTrack::NEXT:
                     elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "next" );
                     elemPbcSelectionPNRDT.setAttribute( "ref", "end" );
                     break;
-                case K3bVcdTrack::RETURN:
+                case K3b::VcdTrack::RETURN:
                     elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "return" );
                     elemPbcSelectionPNRDT.setAttribute( "ref", "end" );
                     break;
-                case K3bVcdTrack::DEFAULT:
+                case K3b::VcdTrack::DEFAULT:
                     elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "default" );
                     elemPbcSelectionPNRDT.setAttribute( "ref", "end" );
                     break;
-                case K3bVcdTrack::AFTERTIMEOUT:
+                case K3b::VcdTrack::AFTERTIMEOUT:
                     if ( track->getWaitTime() >= 0 ) {
                         elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "timeout" );
                         elemPbcSelectionPNRDT.setAttribute( "ref", "end" );
@@ -372,12 +372,12 @@ void K3bVcdXmlView::doPbc( QDomDocument& doc, QDomElement& parent, K3bVcdTrack* 
     setNumkeySEL( doc, elemSelection, track );
 }
 
-void K3bVcdXmlView::setNumkeyBSN( QDomDocument& doc, QDomElement& parent, K3bVcdTrack* track )
+void K3b::VcdXmlView::setNumkeyBSN( QDomDocument& doc, QDomElement& parent, K3b::VcdTrack* track )
 {
     if ( track->PbcNumKeys() ) {
         if ( track->PbcNumKeysUserdefined() ) {
-            QMap<int, K3bVcdTrack*> numKeyMap = track->DefinedNumKey();
-            QMap<int, K3bVcdTrack*>::const_iterator trackIt;
+            QMap<int, K3b::VcdTrack*> numKeyMap = track->DefinedNumKey();
+            QMap<int, K3b::VcdTrack*>::const_iterator trackIt;
 
             m_startkey = 0;
             trackIt = numKeyMap.constBegin();
@@ -396,15 +396,15 @@ void K3bVcdXmlView::setNumkeyBSN( QDomDocument& doc, QDomElement& parent, K3bVcd
     }
 }
 
-void K3bVcdXmlView::setNumkeySEL( QDomDocument& doc, QDomElement& parent, K3bVcdTrack* track )
+void K3b::VcdXmlView::setNumkeySEL( QDomDocument& doc, QDomElement& parent, K3b::VcdTrack* track )
 {
     if ( track->PbcNumKeys() ) {
         QDomElement elemPbcSelectionNumKeySEL;
         QString ref = ( track->isSegment() ) ? "segment" : "sequence";
         int none = m_startkey;
         if ( track->PbcNumKeysUserdefined() ) {
-            QMap<int, K3bVcdTrack*> numKeyMap = track->DefinedNumKey();
-            QMap<int, K3bVcdTrack*>::const_iterator trackIt;
+            QMap<int, K3b::VcdTrack*> numKeyMap = track->DefinedNumKey();
+            QMap<int, K3b::VcdTrack*>::const_iterator trackIt;
 
             for ( trackIt = numKeyMap.constBegin(); trackIt != numKeyMap.constEnd(); ++trackIt ) {
 

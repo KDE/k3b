@@ -24,10 +24,10 @@
 #include <unistd.h>
 
 
-class K3bActivePipe::Private : public QThread
+class K3b::ActivePipe::Private : public QThread
 {
 public:
-    Private( K3bActivePipe* pipe ) :
+    Private( K3b::ActivePipe* pipe ) :
         m_pipe( pipe ),
         fdToWriteTo(-1),
         sourceIODevice(0),
@@ -36,7 +36,7 @@ public:
     }
 
     void run() {
-        kDebug() << "(K3bActivePipe) started thread.";
+        kDebug() << "(K3b::ActivePipe) started thread.";
         bytesRead = bytesWritten = 0;
         buffer.resize( 10*2048 );
         ssize_t r = 0;
@@ -54,7 +54,7 @@ public:
                 }
             }
         }
-        //    kDebug() << "(K3bActivePipe) thread done: " << r << " (total bytes read/written: " << bytesRead << "/" << bytesWritten << ")";
+        //    kDebug() << "(K3b::ActivePipe) thread done: " << r << " (total bytes read/written: " << bytesRead << "/" << bytesWritten << ")";
         close( closeWhenDone );
     }
 
@@ -85,12 +85,12 @@ public:
     }
 
 private:
-    K3bActivePipe* m_pipe;
+    K3b::ActivePipe* m_pipe;
 
 public:
     int fdToWriteTo;
-    K3bPipe pipeIn;
-    K3bPipe pipeOut;
+    K3b::Pipe pipeIn;
+    K3b::Pipe pipeOut;
 
     QIODevice* sourceIODevice;
     QIODevice* sinkIODevice;
@@ -105,19 +105,19 @@ public:
 };
 
 
-K3bActivePipe::K3bActivePipe()
+K3b::ActivePipe::ActivePipe()
 {
     d = new Private( this );
 }
 
 
-K3bActivePipe::~K3bActivePipe()
+K3b::ActivePipe::~ActivePipe()
 {
     delete d;
 }
 
 
-bool K3bActivePipe::open( bool closeWhenDone )
+bool K3b::ActivePipe::open( bool closeWhenDone )
 {
     if( d->isRunning() )
         return false;
@@ -141,14 +141,14 @@ bool K3bActivePipe::open( bool closeWhenDone )
         return false;
     }
 
-    kDebug() << "(K3bActivePipe) successfully opened pipe.";
+    kDebug() << "(K3b::ActivePipe) successfully opened pipe.";
 
     d->start();
     return true;
 }
 
 
-void K3bActivePipe::close()
+void K3b::ActivePipe::close()
 {
     d->pipeIn.closeIn();
     d->wait();
@@ -156,7 +156,7 @@ void K3bActivePipe::close()
 }
 
 
-void K3bActivePipe::writeToFd( int fd, bool close )
+void K3b::ActivePipe::writeToFd( int fd, bool close )
 {
     d->fdToWriteTo = fd;
     d->sinkIODevice = 0;
@@ -164,26 +164,26 @@ void K3bActivePipe::writeToFd( int fd, bool close )
 }
 
 
-void K3bActivePipe::readFromIODevice( QIODevice* dev )
+void K3b::ActivePipe::readFromIODevice( QIODevice* dev )
 {
     d->sourceIODevice = dev;
 }
 
 
-void K3bActivePipe::writeToIODevice( QIODevice* dev )
+void K3b::ActivePipe::writeToIODevice( QIODevice* dev )
 {
     d->fdToWriteTo = -1;
     d->sinkIODevice = dev;
 }
 
 
-int K3bActivePipe::in() const
+int K3b::ActivePipe::in() const
 {
     return d->pipeIn.in();
 }
 
 
-int K3bActivePipe::read( char* data, int max )
+int K3b::ActivePipe::read( char* data, int max )
 {
     if( d->sourceIODevice )
         return d->sourceIODevice->read( data, max );
@@ -192,7 +192,7 @@ int K3bActivePipe::read( char* data, int max )
 }
 
 
-int K3bActivePipe::write( char* data, int max )
+int K3b::ActivePipe::write( char* data, int max )
 {
     if( d->sinkIODevice )
         return d->sinkIODevice->write( data, max );
@@ -201,13 +201,13 @@ int K3bActivePipe::write( char* data, int max )
 }
 
 
-quint64 K3bActivePipe::bytesRead() const
+quint64 K3b::ActivePipe::bytesRead() const
 {
     return d->bytesRead;
 }
 
 
-quint64 K3bActivePipe::bytesWritten() const
+quint64 K3b::ActivePipe::bytesWritten() const
 {
     return d->bytesWritten;
 }

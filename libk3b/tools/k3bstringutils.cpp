@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,90 +21,11 @@
 
 QString K3b::cutToWidth( const QFontMetrics& fm, const QString& fullText, int cutWidth )
 {
-  QString squeezedText = "...";
-  int squeezedWidth = fm.width(squeezedText);
-  int textWidth = fm.width(fullText);
-
-  if( textWidth <= cutWidth ) {
-    return fullText;
-  }
-
-  if( fm.width(fullText.right(1) + "..." ) > cutWidth ) {
-    kDebug() << "(K3b::cutToWidth) not able to cut text to " << cutWidth << "!";
-    return fullText.right(1) + "...";
-  }
-
-  // estimate how many letters we can add to the dots
-  int letters = fullText.length() * (cutWidth - squeezedWidth) / textWidth;
-  squeezedText = fullText.left(letters) + "...";
-  squeezedWidth = fm.width(squeezedText);
-
-  if (squeezedWidth < cutWidth) {
-    // we estimated too short
-    // add letters while text < label
-    do {
-      letters++;
-      squeezedText = fullText.left(letters) + "...";
-      squeezedWidth = fm.width(squeezedText);
-    } while (squeezedWidth < cutWidth);
-    letters--;
-    squeezedText = fullText.left(letters) + "...";
-  } else if (squeezedWidth > cutWidth) {
-    // we estimated too long
-    // remove letters while text > label
-    do {
-      letters--;
-      squeezedText = fullText.left(letters) + "...";
-      squeezedWidth = fm.width(squeezedText);
-    } while (squeezedWidth > cutWidth);
-  }
-
-  return squeezedText;
+    return fm.elidedText( fullText, Qt::ElideRight, cutWidth );
 }
 
 
-// from KSqueezedTextLabel
 QString K3b::squeezeTextToWidth( const QFontMetrics& fm, const QString& fullText, int cutWidth )
 {
-  int textWidth = fm.width(fullText);
-  if (textWidth > cutWidth) {
-    // start with the dots only
-    QString squeezedText = "...";
-    int squeezedWidth = fm.width(squeezedText);
-
-    // estimate how many letters we can add to the dots on both sides
-    int letters = fullText.length() * (cutWidth - squeezedWidth) / textWidth / 2;
-    if (cutWidth < squeezedWidth) letters=1;
-    squeezedText = fullText.left(letters) + "..." + fullText.right(letters);
-    squeezedWidth = fm.width(squeezedText);
-
-    if (squeezedWidth < cutWidth) {
-      // we estimated too short
-      // add letters while text < label
-      do {
-	letters++;
-	squeezedText = fullText.left(letters) + "..." + fullText.right(letters);
-	squeezedWidth = fm.width(squeezedText);
-      } while (squeezedWidth < cutWidth);
-      letters--;
-      squeezedText = fullText.left(letters) + "..." + fullText.right(letters);
-    }
-    else if (squeezedWidth > cutWidth) {
-      // we estimated too long
-      // remove letters while text > label
-      do {
-	letters--;
-	squeezedText = fullText.left(letters) + "..." + fullText.right(letters);
-	squeezedWidth = fm.width(squeezedText);
-      } while (letters > 2 && squeezedWidth > cutWidth);
-    }
-
-    if (letters == 2)
-      kDebug() << "(K3b::squeezeTextToWidth) WARNING: unable to squeeze text to width " 
-		<< cutWidth;
-    
-    return squeezedText;
-  }
-  else
-    return fullText;
+    return fm.elidedText( fullText, Qt::ElideMiddle, cutWidth );
 }

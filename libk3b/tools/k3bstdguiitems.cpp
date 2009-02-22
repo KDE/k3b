@@ -23,7 +23,7 @@
 #include <klocale.h>
 
 
-QCheckBox* K3bStdGuiItems::simulateCheckbox( QWidget* parent )
+QCheckBox* K3b::StdGuiItems::simulateCheckbox( QWidget* parent )
 {
     QCheckBox* c = new QCheckBox( i18n("Simulate"), parent );
     c->setWhatsThis( i18n("<p>If this option is checked K3b will perform all writing steps with the "
@@ -35,7 +35,7 @@ QCheckBox* K3bStdGuiItems::simulateCheckbox( QWidget* parent )
     return c;
 }
 
-QCheckBox* K3bStdGuiItems::daoCheckbox( QWidget* parent )
+QCheckBox* K3b::StdGuiItems::daoCheckbox( QWidget* parent )
 {
     QCheckBox* c = new QCheckBox( i18n("Disk at once"), parent );
     c->setWhatsThis( i18n("<p>If this option is checked, K3b will write the CD in 'disk at once' mode as "
@@ -47,7 +47,7 @@ QCheckBox* K3bStdGuiItems::daoCheckbox( QWidget* parent )
     return c;
 }
 
-QCheckBox* K3bStdGuiItems::burnproofCheckbox( QWidget* parent )
+QCheckBox* K3b::StdGuiItems::burnproofCheckbox( QWidget* parent )
 {
     QCheckBox* c = new QCheckBox( i18n("Use Burnfree"), parent );
     c->setToolTip( i18n("Enable Burnfree (or Just Link) to avoid buffer underruns") );
@@ -68,7 +68,7 @@ QCheckBox* K3bStdGuiItems::burnproofCheckbox( QWidget* parent )
     return c;
 }
 
-QCheckBox* K3bStdGuiItems::onlyCreateImagesCheckbox( QWidget* parent )
+QCheckBox* K3b::StdGuiItems::onlyCreateImagesCheckbox( QWidget* parent )
 {
     QCheckBox* c = new QCheckBox( i18n("Only create image"), parent );
     c->setWhatsThis( i18n("<p>If this option is checked, K3b will only create an "
@@ -79,7 +79,7 @@ QCheckBox* K3bStdGuiItems::onlyCreateImagesCheckbox( QWidget* parent )
     return c;
 }
 
-QCheckBox* K3bStdGuiItems::createCacheImageCheckbox( QWidget* parent )
+QCheckBox* K3b::StdGuiItems::createCacheImageCheckbox( QWidget* parent )
 {
     QCheckBox* c = new QCheckBox( i18n("Create image"), parent );
     c->setWhatsThis( i18n("<p>If this option is checked, K3b will create an image before writing "
@@ -92,7 +92,7 @@ QCheckBox* K3bStdGuiItems::createCacheImageCheckbox( QWidget* parent )
     return c;
 }
 
-QCheckBox* K3bStdGuiItems::removeImagesCheckbox( QWidget* parent )
+QCheckBox* K3b::StdGuiItems::removeImagesCheckbox( QWidget* parent )
 {
     QCheckBox* c = new QCheckBox( i18n("Remove image"), parent );
     c->setWhatsThis( i18n("<p>If this option is checked, K3b will remove any created images after the "
@@ -102,7 +102,7 @@ QCheckBox* K3bStdGuiItems::removeImagesCheckbox( QWidget* parent )
     return c;
 }
 
-QCheckBox* K3bStdGuiItems::onTheFlyCheckbox( QWidget* parent )
+QCheckBox* K3b::StdGuiItems::onTheFlyCheckbox( QWidget* parent )
 {
     QCheckBox* c = new QCheckBox( i18n("On the fly"), parent );
     c->setWhatsThis( i18n("<p>If this option is checked, K3b will not create an image first but write "
@@ -114,7 +114,7 @@ QCheckBox* K3bStdGuiItems::onTheFlyCheckbox( QWidget* parent )
     return c;
 }
 
-QCheckBox* K3bStdGuiItems::cdTextCheckbox( QWidget* parent )
+QCheckBox* K3b::StdGuiItems::cdTextCheckbox( QWidget* parent )
 {
     QCheckBox* c = new QCheckBox( i18n("Write CD-TEXT"), parent );
     c->setToolTip( i18n("Create CD-TEXT entries") );
@@ -129,7 +129,7 @@ QCheckBox* K3bStdGuiItems::cdTextCheckbox( QWidget* parent )
 }
 
 
-QComboBox* K3bStdGuiItems::paranoiaModeComboBox( QWidget* parent )
+QComboBox* K3b::StdGuiItems::paranoiaModeComboBox( QWidget* parent )
 {
     QComboBox* c = new QComboBox( parent );
     c->addItem( "0" );
@@ -148,7 +148,7 @@ QComboBox* K3bStdGuiItems::paranoiaModeComboBox( QWidget* parent )
 }
 
 
-QCheckBox* K3bStdGuiItems::startMultisessionCheckBox( QWidget* parent )
+QCheckBox* K3b::StdGuiItems::startMultisessionCheckBox( QWidget* parent )
 {
     QCheckBox* c = new QCheckBox( i18n("Start multisession CD"), parent );
     c->setToolTip( i18n("Do not close the disk to allow additional sessions to be added later") );
@@ -159,7 +159,7 @@ QCheckBox* K3bStdGuiItems::startMultisessionCheckBox( QWidget* parent )
 }
 
 
-QCheckBox* K3bStdGuiItems::normalizeCheckBox( QWidget* parent )
+QCheckBox* K3b::StdGuiItems::normalizeCheckBox( QWidget* parent )
 {
     QCheckBox* c = new QCheckBox( i18n("Normalize volume levels"), parent );
     c->setToolTip( i18n("Adjust the volume levels of all tracks") );
@@ -173,7 +173,7 @@ QCheckBox* K3bStdGuiItems::normalizeCheckBox( QWidget* parent )
 }
 
 
-QCheckBox* K3bStdGuiItems::verifyCheckBox( QWidget* parent )
+QCheckBox* K3b::StdGuiItems::verifyCheckBox( QWidget* parent )
 {
     QCheckBox* c = new QCheckBox( i18n("Verify written data"), parent );
     c->setToolTip( i18n("Compare original with written data") );
@@ -185,7 +185,7 @@ QCheckBox* K3bStdGuiItems::verifyCheckBox( QWidget* parent )
 }
 
 
-QCheckBox* K3bStdGuiItems::ignoreAudioReadErrorsCheckBox( QWidget* parent )
+QCheckBox* K3b::StdGuiItems::ignoreAudioReadErrorsCheckBox( QWidget* parent )
 {
     QCheckBox* c = new QCheckBox( i18n("Ignore read errors"), parent );
     c->setToolTip( i18n("Skip unreadable audio sectors") );
@@ -198,14 +198,14 @@ QCheckBox* K3bStdGuiItems::ignoreAudioReadErrorsCheckBox( QWidget* parent )
 }
 
 
-QFrame* K3bStdGuiItems::horizontalLine( QWidget* parent )
+QFrame* K3b::StdGuiItems::horizontalLine( QWidget* parent )
 {
     QFrame* line = new QFrame( parent );
     line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     return line;
 }
 
-QFrame* K3bStdGuiItems::verticalLine( QWidget* parent )
+QFrame* K3b::StdGuiItems::verticalLine( QWidget* parent )
 {
     QFrame* line = new QFrame( parent );
     line->setFrameStyle( QFrame::VLine | QFrame::Sunken );

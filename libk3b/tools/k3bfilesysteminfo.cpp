@@ -47,94 +47,94 @@
 
 
 
-class K3bFileSystemInfo::Private
+class K3b::FileSystemInfo::Private
 {
 public:
-  Private()
-    : type(FS_UNKNOWN),
-      statDone(false) {
-  }
-
-  FileSystemType type;
-  QString path;
-
-  bool statDone;
-
-  void stat() {
-    struct statfs fs;
-    if( !::statfs( QFile::encodeName( QFileInfo(path).absolutePath() ), &fs ) ) {
-      switch( fs.f_type ) {
-      case 0x4d44: // MS-DOS
-	type = FS_FAT;
-      default:
-	type = FS_UNKNOWN;
-      }
-
-      statDone = true;
+    Private()
+        : type(FS_UNKNOWN),
+          statDone(false) {
     }
-    else {
-      kDebug() << "(K3bFileSystemInfo) statfs failed: " << ::strerror(errno);
+
+    FileSystemType type;
+    QString path;
+
+    bool statDone;
+
+    void stat() {
+        struct statfs fs;
+        if( !::statfs( QFile::encodeName( QFileInfo(path).absolutePath() ), &fs ) ) {
+            switch( fs.f_type ) {
+            case 0x4d44: // MS-DOS
+                type = FS_FAT;
+            default:
+                type = FS_UNKNOWN;
+            }
+
+            statDone = true;
+        }
+        else {
+            kDebug() << "(K3b::FileSystemInfo) statfs failed: " << ::strerror(errno);
+        }
     }
-  }
 };
 
 
-K3bFileSystemInfo::K3bFileSystemInfo()
+K3b::FileSystemInfo::~FileSystemInfo()
 {
-  d = new Private;
+    d = new Private;
 }
 
 
-K3bFileSystemInfo::K3bFileSystemInfo( const QString& path )
+K3b::FileSystemInfo::FileSystemInfo( const QString& path )
 {
-  d = new Private;
-  d->path = path;
-}
-
-
-K3bFileSystemInfo::K3bFileSystemInfo( const K3bFileSystemInfo& other )
-{
-  d = new Private;
-  d->type = other.d->type;
-  d->path = other.d->path;
-  d->statDone = other.d->statDone;
-}
-
-
-K3bFileSystemInfo::~K3bFileSystemInfo()
-{
-  delete d;
-}
-
-
-QString K3bFileSystemInfo::path() const
-{
-  return d->path;
-}
-
-
-void K3bFileSystemInfo::setPath( const QString& path )
-{
-  if( d->path != path ) {
+    d = new Private;
     d->path = path;
-    d->statDone = false;
-  }
 }
 
 
-K3bFileSystemInfo::FileSystemType K3bFileSystemInfo::type() const
+K3b::FileSystemInfo::FileSystemInfo( const K3b::FileSystemInfo& other )
 {
-  if( !d->statDone )
-    d->stat();
-  return d->type;
+    d = new Private;
+    d->type = other.d->type;
+    d->path = other.d->path;
+    d->statDone = other.d->statDone;
 }
 
 
-QString K3bFileSystemInfo::fixupPath( const QString& path )
+K3b::FileSystemInfo::FileSystemInfo()
 {
-  QString s = K3b::fixupPath( path );
-  if( type() == K3bFileSystemInfo::FS_FAT )
-    return s.replace( QRegExp("[\"\\?\\*/\\\\[\\]\\|\\=\\:;]"), "_" );
-  else
-    return s;
+    delete d;
+}
+
+
+QString K3b::FileSystemInfo::path() const
+{
+    return d->path;
+}
+
+
+void K3b::FileSystemInfo::setPath( const QString& path )
+{
+    if( d->path != path ) {
+        d->path = path;
+        d->statDone = false;
+    }
+}
+
+
+K3b::FileSystemInfo::FileSystemType K3b::FileSystemInfo::type() const
+{
+    if( !d->statDone )
+        d->stat();
+    return d->type;
+}
+
+
+QString K3b::FileSystemInfo::fixupPath( const QString& path )
+{
+    QString s = K3b::fixupPath( path );
+    if( type() == K3b::FileSystemInfo::FS_FAT )
+        return s.replace( QRegExp("[\"\\?\\*/\\\\[\\]\\|\\=\\:;]"), "_" );
+    else
+        return s;
 }

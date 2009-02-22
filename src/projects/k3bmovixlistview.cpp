@@ -30,37 +30,37 @@
 #include <QDropEvent>
 
 
-K3bMovixListViewItem::K3bMovixListViewItem( K3bMovixDoc* doc,
-					    K3bMovixFileItem* item,
+K3b::MovixListViewItem::MovixListViewItem( K3b::MovixDoc* doc,
+					    K3b::MovixFileItem* item,
 					    Q3ListView* parent,
 					    Q3ListViewItem* after )
-    : K3bListViewItem( parent, after ),
+    : K3b::ListViewItem( parent, after ),
       m_doc(doc),
       m_fileItem(item)
 {
 }
 
 
-K3bMovixListViewItem::K3bMovixListViewItem( K3bMovixDoc* doc,
-					    K3bMovixFileItem* item,
+K3b::MovixListViewItem::MovixListViewItem( K3b::MovixDoc* doc,
+					    K3b::MovixFileItem* item,
 					    Q3ListViewItem* parent )
-    : K3bListViewItem( parent ),
+    : K3b::ListViewItem( parent ),
       m_doc(doc),
       m_fileItem(item)
 {
 }
 
 
-K3bMovixListViewItem::~K3bMovixListViewItem()
+K3b::MovixListViewItem::~MovixListViewItem()
 {
 }
 
 
-K3bMovixFileViewItem::K3bMovixFileViewItem( K3bMovixDoc* doc,
-					    K3bMovixFileItem* item,
+K3b::MovixFileViewItem::MovixFileViewItem( K3b::MovixDoc* doc,
+					    K3b::MovixFileItem* item,
 					    Q3ListView* parent,
 					    Q3ListViewItem* after )
-    : K3bMovixListViewItem( doc, item, parent, after ),
+    : K3b::MovixListViewItem( doc, item, parent, after ),
       KFileItem( 0, 0, KUrl(item->localPath()) )
 {
     setPixmap( 1, KFileItem::pixmap( 16, KIconLoader::DefaultState ) );
@@ -68,7 +68,7 @@ K3bMovixFileViewItem::K3bMovixFileViewItem( K3bMovixDoc* doc,
 }
 
 
-QString K3bMovixFileViewItem::text( int col ) const
+QString K3b::MovixFileViewItem::text( int col ) const
 {
     //
     // We add two spaces after all strings (except the once renamable)
@@ -84,9 +84,9 @@ QString K3bMovixFileViewItem::text( int col ) const
     case 2:
     {
         if( fileItem()->isSymLink() )
-            return i18n("Link to %1",const_cast<K3bMovixFileViewItem*>(this)->mimeComment()) + "  ";
+            return i18n("Link to %1",const_cast<K3b::MovixFileViewItem*>(this)->mimeComment()) + "  ";
         else
-            return const_cast<K3bMovixFileViewItem*>(this)->mimeComment() + "  ";
+            return const_cast<K3b::MovixFileViewItem*>(this)->mimeComment() + "  ";
     }
     case 3:
         return KIO::convertSize( fileItem()->size() ) + "  ";
@@ -100,16 +100,16 @@ QString K3bMovixFileViewItem::text( int col ) const
 }
 
 
-void K3bMovixFileViewItem::setText( int col, const QString& text )
+void K3b::MovixFileViewItem::setText( int col, const QString& text )
 {
     if( col == 1 )
         fileItem()->setK3bName( text );
 
-    K3bMovixListViewItem::setText( col, text );
+    K3b::MovixListViewItem::setText( col, text );
 }
 
 
-QString K3bMovixFileViewItem::key( int, bool ) const
+QString K3b::MovixFileViewItem::key( int, bool ) const
 {
     return QString::number( doc()->indexOf( fileItem() ) ).rightJustified( 10, '0' );
 }
@@ -117,21 +117,21 @@ QString K3bMovixFileViewItem::key( int, bool ) const
 
 
 
-K3bMovixSubTitleViewItem::K3bMovixSubTitleViewItem( K3bMovixDoc* doc,
-						    K3bMovixFileItem* item,
-						    K3bMovixListViewItem* parent )
-    : K3bMovixListViewItem( doc, item, parent ),
+K3b::MovixSubTitleViewItem::MovixSubTitleViewItem( K3b::MovixDoc* doc,
+						    K3b::MovixFileItem* item,
+						    K3b::MovixListViewItem* parent )
+    : K3b::MovixListViewItem( doc, item, parent ),
       KFileItem( 0, 0, KUrl(item->subTitleItem()->localPath()) )
 {
 }
 
 
-K3bMovixSubTitleViewItem::~K3bMovixSubTitleViewItem()
+K3b::MovixSubTitleViewItem::~MovixSubTitleViewItem()
 {
 }
 
 
-QString K3bMovixSubTitleViewItem::text( int c ) const
+QString K3b::MovixSubTitleViewItem::text( int c ) const
 {
     switch( c ) {
     case 1:
@@ -139,9 +139,9 @@ QString K3bMovixSubTitleViewItem::text( int c ) const
     case 2:
     {
         if( fileItem()->subTitleItem()->isSymLink() )
-            return i18n("Link to %1",const_cast<K3bMovixSubTitleViewItem*>(this)->mimeComment());
+            return i18n("Link to %1",const_cast<K3b::MovixSubTitleViewItem*>(this)->mimeComment());
         else
-            return const_cast<K3bMovixSubTitleViewItem*>(this)->mimeComment();
+            return const_cast<K3b::MovixSubTitleViewItem*>(this)->mimeComment();
     }
     case 3:
         return KIO::convertSize( fileItem()->subTitleItem()->size() );
@@ -166,8 +166,8 @@ QString K3bMovixSubTitleViewItem::text( int c ) const
 
 
 
-K3bMovixListView::K3bMovixListView( K3bMovixDoc* doc, QWidget* parent )
-    : K3bListView( parent ),
+K3b::MovixListView::MovixListView( K3b::MovixDoc* doc, QWidget* parent )
+    : K3b::ListView( parent ),
       m_doc(doc)
 {
     addColumn( i18n("No.") );
@@ -191,8 +191,8 @@ K3bMovixListView::K3bMovixListView( K3bMovixDoc* doc, QWidget* parent )
 
     connect( m_doc, SIGNAL(changed()), this, SLOT(slotChanged()) );
     connect( m_doc, SIGNAL(newMovixFileItems()), this, SLOT(slotNewFileItems()) );
-    connect( m_doc, SIGNAL(movixItemRemoved(K3bMovixFileItem*)), this, SLOT(slotFileItemRemoved(K3bMovixFileItem*)) );
-    connect( m_doc, SIGNAL(subTitleItemRemoved(K3bMovixFileItem*)), this, SLOT(slotSubTitleItemRemoved(K3bMovixFileItem*)) );
+    connect( m_doc, SIGNAL(movixItemRemoved(K3b::MovixFileItem*)), this, SLOT(slotFileItemRemoved(K3b::MovixFileItem*)) );
+    connect( m_doc, SIGNAL(subTitleItemRemoved(K3b::MovixFileItem*)), this, SLOT(slotSubTitleItemRemoved(K3b::MovixFileItem*)) );
     connect( this, SIGNAL(dropped(K3ListView*, QDropEvent*, Q3ListViewItem*)),
              this, SLOT(slotDropped(K3ListView*, QDropEvent*, Q3ListViewItem*)) );
 
@@ -202,29 +202,29 @@ K3bMovixListView::K3bMovixListView( K3bMovixDoc* doc, QWidget* parent )
 }
 
 
-K3bMovixListView::~K3bMovixListView()
+K3b::MovixListView::~MovixListView()
 {
 }
 
 
-bool K3bMovixListView::acceptDrag(QDropEvent* e) const
+bool K3b::MovixListView::acceptDrag(QDropEvent* e) const
 {
     // the first is for built-in item moving, the second for dropping urls
-    return ( K3bListView::acceptDrag(e) || K3URLDrag::canDecode(e) );
+    return ( K3b::ListView::acceptDrag(e) || K3URLDrag::canDecode(e) );
 }
 
 
-void K3bMovixListView::slotNewFileItems()
+void K3b::MovixListView::slotNewFileItems()
 {
-    K3bMovixFileItem* lastItem = 0;
-    Q_FOREACH( K3bMovixFileItem* item, m_doc->movixFileItems() ) {
+    K3b::MovixFileItem* lastItem = 0;
+    Q_FOREACH( K3b::MovixFileItem* item, m_doc->movixFileItems() ) {
         if( !m_itemMap.contains( item ) )
-            m_itemMap.insert( item, new K3bMovixFileViewItem( m_doc, item, this, lastItem ? m_itemMap[lastItem] : 0L ) );
+            m_itemMap.insert( item, new K3b::MovixFileViewItem( m_doc, item, this, lastItem ? m_itemMap[lastItem] : 0L ) );
 
         if( item->subTitleItem() ) {
-            K3bMovixFileViewItem* vi = m_itemMap[item];
+            K3b::MovixFileViewItem* vi = m_itemMap[item];
             if( vi->childCount() <= 0 ) {
-                (void)new K3bMovixSubTitleViewItem( m_doc, item, vi );
+                (void)new K3b::MovixSubTitleViewItem( m_doc, item, vi );
                 vi->setOpen(true);
             }
         }
@@ -237,27 +237,27 @@ void K3bMovixListView::slotNewFileItems()
 }
 
 
-void K3bMovixListView::slotFileItemRemoved( K3bMovixFileItem* item )
+void K3b::MovixListView::slotFileItemRemoved( K3b::MovixFileItem* item )
 {
     if( m_itemMap.contains( item ) ) {
-        K3bMovixFileViewItem* vi = m_itemMap[item];
+        K3b::MovixFileViewItem* vi = m_itemMap[item];
         m_itemMap.remove(item);
         delete vi;
     }
 }
 
 
-void K3bMovixListView::slotSubTitleItemRemoved( K3bMovixFileItem* item )
+void K3b::MovixListView::slotSubTitleItemRemoved( K3b::MovixFileItem* item )
 {
     if( m_itemMap.contains( item ) ) {
-        K3bMovixFileViewItem* vi = m_itemMap[item];
+        K3b::MovixFileViewItem* vi = m_itemMap[item];
         if( vi->childCount() >= 1 )
             delete vi->firstChild();
     }
 }
 
 
-void K3bMovixListView::slotDropped( K3ListView*, QDropEvent* e, Q3ListViewItem* after )
+void K3b::MovixListView::slotDropped( K3ListView*, QDropEvent* e, Q3ListViewItem* after )
 {
     if( !e->isAccepted() )
         return;
@@ -266,21 +266,21 @@ void K3bMovixListView::slotDropped( K3ListView*, QDropEvent* e, Q3ListViewItem* 
     if( after == 0L )
         pos = 0;
     else
-        pos = m_doc->indexOf( ((K3bMovixListViewItem*)after)->fileItem() );
+        pos = m_doc->indexOf( ((K3b::MovixListViewItem*)after)->fileItem() );
 
     if( e->source() == viewport() ) {
         QList<Q3ListViewItem*> sel = selectedItems();
         QList<Q3ListViewItem*>::iterator it = sel.begin();
-        K3bMovixFileItem* itemAfter = ( after ? ((K3bMovixListViewItem*)after)->fileItem() : 0 );
+        K3b::MovixFileItem* itemAfter = ( after ? ((K3b::MovixListViewItem*)after)->fileItem() : 0 );
         while( it != sel.end() ) {
-            K3bMovixListViewItem* vi = (K3bMovixListViewItem*)*it;
+            K3b::MovixListViewItem* vi = (K3b::MovixListViewItem*)*it;
             if( vi->isMovixFileItem() ) {
-                K3bMovixFileItem* item = vi->fileItem();
+                K3b::MovixFileItem* item = vi->fileItem();
                 m_doc->moveMovixItem( item, itemAfter );
                 itemAfter = item;
             }
             else
-                kDebug() << "(K3bMovixListView) I don't move subtitle items!";
+                kDebug() << "(K3b::MovixListView) I don't move subtitle items!";
 
             ++it;
         }
@@ -301,7 +301,7 @@ void K3bMovixListView::slotDropped( K3ListView*, QDropEvent* e, Q3ListViewItem* 
 }
 
 
-Q3DragObject* K3bMovixListView::dragObject()
+Q3DragObject* K3b::MovixListView::dragObject()
 {
     QList<Q3ListViewItem*> list = selectedItems();
 
@@ -311,13 +311,13 @@ Q3DragObject* K3bMovixListView::dragObject()
     KUrl::List urls;
 
     Q_FOREACH( Q3ListViewItem* item,list )
-        urls.append( KUrl( ((K3bMovixListViewItem*)item)->fileItem()->localPath() ) );
+        urls.append( KUrl( ((K3b::MovixListViewItem*)item)->fileItem()->localPath() ) );
 
     return K3URLDrag::newDrag( urls, viewport() );
 }
 
 
-void K3bMovixListView::slotChanged()
+void K3b::MovixListView::slotChanged()
 {
     header()->setVisible( m_doc->root()->numFiles() > 0 );
 }

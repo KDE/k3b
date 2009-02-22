@@ -18,21 +18,28 @@
 #include <qwidget.h>
 #include <k3bmsf.h>
 
-class K3bAudioDataSource;
-class K3bAudioEditorWidget;
-class K3bMsfEdit;
+namespace K3b {
+    class AudioDataSource;
+}
+namespace K3b {
+    class AudioEditorWidget;
+}
+namespace K3b {
+    class MsfEdit;
+}
 
 /**
  * Widget to modify the start and end offset of a source or simply change
  * the length of a silence source.
  */
-class K3bAudioDataSourceEditWidget : public QWidget
+namespace K3b {
+class AudioDataSourceEditWidget : public QWidget
 {
   Q_OBJECT
 
  public:
-  K3bAudioDataSourceEditWidget( QWidget* parent = 0 );
-  ~K3bAudioDataSourceEditWidget();
+  AudioDataSourceEditWidget( QWidget* parent = 0 );
+  ~AudioDataSourceEditWidget();
 
   K3b::Msf startOffset() const;
 
@@ -40,13 +47,13 @@ class K3bAudioDataSourceEditWidget : public QWidget
    * Highest value (mening to use all the data up to the end of the source)
    * is source::originalLength(). 
    *
-   * Be aware that this differs from K3bAudioDataSource::endOffset() which 
+   * Be aware that this differs from AudioDataSource::endOffset() which 
    * points after the last used sector for internal reasons.
    */
   K3b::Msf endOffset() const;
 
  public Q_SLOTS:
-  void loadSource( K3bAudioDataSource* );
+  void loadSource( AudioDataSource* );
   void saveSource();
 
   void setStartOffset( const K3b::Msf& );
@@ -58,12 +65,13 @@ class K3bAudioDataSourceEditWidget : public QWidget
   void slotEndOffsetEdited( const K3b::Msf& );
 
  private:
-  K3bAudioDataSource* m_source;
+  AudioDataSource* m_source;
   int m_rangeId;
 
-  K3bAudioEditorWidget* m_editor;
-  K3bMsfEdit* m_editStartOffset;
-  K3bMsfEdit* m_editEndOffset;
+  AudioEditorWidget* m_editor;
+  MsfEdit* m_editStartOffset;
+  MsfEdit* m_editEndOffset;
 };
+}
 
 #endif

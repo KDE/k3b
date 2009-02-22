@@ -26,12 +26,12 @@
 #include <kdebug.h>
 
 
-K3bMovixJob::K3bMovixJob( K3bMovixDoc* doc, K3bJobHandler* jh, QObject* parent )
-    : K3bBurnJob( jh, parent ),
+K3b::MovixJob::MovixJob( K3b::MovixDoc* doc, K3b::JobHandler* jh, QObject* parent )
+    : K3b::BurnJob( jh, parent ),
       m_doc(doc)
 {
-    m_dataJob = new K3bDataJob( doc, this, this );
-    m_movixDocPreparer = new K3bMovixDocPreparer( doc, this, this );
+    m_dataJob = new K3b::DataJob( doc, this, this );
+    m_movixDocPreparer = new K3b::MovixDocPreparer( doc, this, this );
 
     // pipe signals
     connect( m_dataJob, SIGNAL(percent(int)), this, SIGNAL(percent(int)) );
@@ -57,24 +57,24 @@ K3bMovixJob::K3bMovixJob( K3bMovixDoc* doc, K3bJobHandler* jh, QObject* parent )
 }
 
 
-K3bMovixJob::~K3bMovixJob()
+K3b::MovixJob::~MovixJob()
 {
 }
 
 
-K3bDevice::Device* K3bMovixJob::writer() const
+K3b::Device::Device* K3b::MovixJob::writer() const
 {
     return m_dataJob->writer();
 }
 
 
-K3bDoc* K3bMovixJob::doc() const
+K3b::Doc* K3b::MovixJob::doc() const
 {
     return m_doc;
 }
 
 
-void K3bMovixJob::start()
+void K3b::MovixJob::start()
 {
     jobStarted();
 
@@ -91,14 +91,14 @@ void K3bMovixJob::start()
 }
 
 
-void K3bMovixJob::cancel()
+void K3b::MovixJob::cancel()
 {
     m_canceled = true;
     m_dataJob->cancel();
 }
 
 
-void K3bMovixJob::slotDataJobFinished( bool success )
+void K3b::MovixJob::slotDataJobFinished( bool success )
 {
     m_movixDocPreparer->removeMovixStructures();
 
@@ -109,7 +109,7 @@ void K3bMovixJob::slotDataJobFinished( bool success )
 }
 
 
-QString K3bMovixJob::jobDescription() const
+QString K3b::MovixJob::jobDescription() const
 {
     if( m_doc->isoOptions().volumeID().isEmpty() )
         return i18n("Writing eMovix Project");
@@ -118,7 +118,7 @@ QString K3bMovixJob::jobDescription() const
 }
 
 
-QString K3bMovixJob::jobDetails() const
+QString K3b::MovixJob::jobDetails() const
 {
     return ( i18np("1 file (%2) and about 8 MB eMovix data",
                    "%1 files (%2) and about 8 MB eMovix data",

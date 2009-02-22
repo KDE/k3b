@@ -18,12 +18,15 @@
 #include <kdialog.h>
 #include <k3bmedium.h>
 
-class K3bMediaSelectionComboBox;
-namespace K3bDevice {
+namespace K3b {
+    class MediaSelectionComboBox;
+}
+namespace Device {
   class Device;
 }
 
-class K3bMediaSelectionDialog : public KDialog
+namespace K3b {
+class MediaSelectionDialog : public KDialog
 {
   Q_OBJECT
 
@@ -31,24 +34,24 @@ class K3bMediaSelectionDialog : public KDialog
   /**
    * Do not use the constructor. Use the static method instead.
    */
-  K3bMediaSelectionDialog( QWidget* parent = 0, 
+  MediaSelectionDialog( QWidget* parent = 0, 
 			   const QString& title = QString(), 
 			   const QString& text = QString(), 
 			   bool modal = false );
-  ~K3bMediaSelectionDialog();
+  ~MediaSelectionDialog();
 
   /**
-   * \see K3bMediaSelectionComboBox::setWantedMediumType()
+   * \see MediaSelectionComboBox::setWantedMediumType()
    */
   void setWantedMediumType( int type );
 
   /**
-   * \see K3bMediaSelectionComboBox::setWantedMediumState()
+   * \see MediaSelectionComboBox::setWantedMediumState()
    */
   void setWantedMediumState( int state );
 
   /**
-   * \see K3bMediaSelectionComboBox::setWantedMediumContent()
+   * \see MediaSelectionComboBox::setWantedMediumContent()
    */
   void setWantedMediumContent( int state );
 
@@ -56,7 +59,7 @@ class K3bMediaSelectionDialog : public KDialog
    * Although the dialog is used to select a medium the result is the
    * device containing that medium.
    */
-  K3bDevice::Device* selectedDevice() const;
+  Device::Device* selectedDevice() const;
 
   /**
    * \deprecated
@@ -65,22 +68,23 @@ class K3bMediaSelectionDialog : public KDialog
    * If only one medium of the wanted type is found the method returns immideately
    * without showing the dialog.
    */
-  static K3bDevice::Device* selectMedium( int type, int state, QWidget* parent = 0,
+  static Device::Device* selectMedium( int type, int state, QWidget* parent = 0,
 					  const QString& title = QString(), 
 					  const QString& text = QString(),
 					  bool* canceled = 0 );
 
-  static K3bDevice::Device* selectMedium( int type, int state, int content = K3bMedium::CONTENT_ALL,
+  static Device::Device* selectMedium( int type, int state, int content = Medium::CONTENT_ALL,
 					  QWidget* parent = 0,
 					  const QString& title = QString(), 
 					  const QString& text = QString(),
 					  bool* canceled = 0 );
 
  private Q_SLOTS:
-  void slotSelectionChanged( K3bDevice::Device* );
+  void slotSelectionChanged( Device::Device* );
 
  private:
-  K3bMediaSelectionComboBox* m_combo;
+  MediaSelectionComboBox* m_combo;
 };
+}
 
 #endif

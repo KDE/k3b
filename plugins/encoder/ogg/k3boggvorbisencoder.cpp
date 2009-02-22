@@ -109,7 +109,7 @@ public:
 
 
 K3bOggVorbisEncoder::K3bOggVorbisEncoder( QObject* parent,  const QVariantList& )
-    : K3bAudioEncoder( parent )
+    : K3b::AudioEncoder( parent )
 {
     d = new Private();
 }
@@ -312,7 +312,7 @@ void K3bOggVorbisEncoder::finishEncoderInternal()
 }
 
 
-void K3bOggVorbisEncoder::setMetaDataInternal( K3bAudioEncoder::MetaDataField f, const QString& value )
+void K3bOggVorbisEncoder::setMetaDataInternal( K3b::AudioEncoder::MetaDataField f, const QString& value )
 {
     if( d->vorbisComment ) {
         QByteArray key;

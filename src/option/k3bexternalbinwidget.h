@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -23,80 +23,81 @@
 #include <k3blistview.h>
 
 
-class K3bExternalBinManager;
 class QPushButton;
 class QTabWidget;
 class KEditListBox;
-class K3bExternalProgram;
-class K3bExternalBin;
 
+namespace K3b {
+    class ExternalBinManager;
+    class ExternalProgram;
+    class ExternalBin;
 
-class K3bExternalBinWidget : public QWidget
-{
-    Q_OBJECT
+    class ExternalBinWidget : public QWidget
+    {
+        Q_OBJECT
 
-public:
-    K3bExternalBinWidget( K3bExternalBinManager*, QWidget* parent = 0 );
-    ~K3bExternalBinWidget();
+    public:
+        ExternalBinWidget( ExternalBinManager*, QWidget* parent = 0 );
+        ~ExternalBinWidget();
 
-    class K3bExternalBinViewItem;
-    class K3bExternalProgramViewItem;
+        class ExternalBinViewItem;
+        class ExternalProgramViewItem;
 
     public Q_SLOTS:
-    void rescan();
-    void load();
-    void save();
+        void rescan();
+        void load();
+        void save();
 
     private Q_SLOTS:
-    void slotSetDefaultButtonClicked();
-    void slotProgramSelectionChanged( Q3ListViewItem* );
-    void saveSearchPath();
+        void slotSetDefaultButtonClicked();
+        void slotProgramSelectionChanged( Q3ListViewItem* );
+        void saveSearchPath();
 
-private:
-    K3bExternalBinManager* m_manager;
+    private:
+        ExternalBinManager* m_manager;
 
-    QTabWidget* m_mainTabWidget;
-    K3bListView* m_programView;
-    K3bListView* m_parameterView;
-    KEditListBox* m_searchPathBox;
+        QTabWidget* m_mainTabWidget;
+        ListView* m_programView;
+        ListView* m_parameterView;
+        KEditListBox* m_searchPathBox;
 
-    QPushButton* m_defaultButton;
-    QPushButton* m_rescanButton;
+        QPushButton* m_defaultButton;
+        QPushButton* m_rescanButton;
 
-    QList<K3bExternalProgramViewItem*> m_programRootItems;
-};
-
-
-class K3bExternalBinWidget::K3bExternalProgramViewItem : public K3bListViewItem
-{
-public:
-    K3bExternalProgramViewItem( K3bExternalProgram* p, Q3ListView* parent );
-  
-    K3bExternalProgram* program() const { return m_program; }
-  
-private:
-    K3bExternalProgram* m_program;
-};
+        QList<ExternalProgramViewItem*> m_programRootItems;
+    };
 
 
+    class ExternalBinWidget::ExternalProgramViewItem : public ListViewItem
+    {
+    public:
+        ExternalProgramViewItem( ExternalProgram* p, Q3ListView* parent );
 
-class K3bExternalBinWidget::K3bExternalBinViewItem : public K3bListViewItem
-{
-public:
-    K3bExternalBinViewItem( const K3bExternalBin* bin, K3bExternalProgramViewItem* parent );
+        ExternalProgram* program() const { return m_program; }
 
-    const K3bExternalBin* bin() const { return m_bin; }
-    K3bExternalProgramViewItem* parentProgramItem() const { return m_parent; }
+    private:
+        ExternalProgram* m_program;
+    };
 
-    bool isDefault() const { return m_default; }
-    void setDefault( bool b );
 
-private:
-    const K3bExternalBin* m_bin;
-    K3bExternalProgramViewItem* m_parent;
+    class ExternalBinWidget::ExternalBinViewItem : public ListViewItem
+    {
+    public:
+        ExternalBinViewItem( const ExternalBin* bin, ExternalProgramViewItem* parent );
 
-    bool m_default;
-};
+        const ExternalBin* bin() const { return m_bin; }
+        ExternalProgramViewItem* parentProgramItem() const { return m_parent; }
+
+        bool isDefault() const { return m_default; }
+        void setDefault( bool b );
+
+    private:
+        const ExternalBin* m_bin;
+        ExternalProgramViewItem* m_parent;
+
+        bool m_default;
+    };
+}
 
 
 #endif

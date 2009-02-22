@@ -41,15 +41,16 @@ class KActionMenu;
 
 
 /**
- * Special ListViewItem for the K3bAudioPlayer playlist
+ * Special ListViewItem for the AudioPlayer playlist
  * @author Sebastian Trueg
  */
-class K3bPlayListViewItem : public K3ListViewItem
+namespace K3b {
+class PlayListViewItem : public K3ListViewItem
 {
  public:
-  K3bPlayListViewItem( const QString&, Q3ListView* parent );
-  K3bPlayListViewItem( const QString&, Q3ListView* parent, Q3ListViewItem* after );
-  ~K3bPlayListViewItem();
+  PlayListViewItem( const QString&, Q3ListView* parent );
+  PlayListViewItem( const QString&, Q3ListView* parent, Q3ListViewItem* after );
+  ~PlayListViewItem();
 
   /** @returns the filename for the first column and the 
    *           length in format 00:00.00 for the second column
@@ -77,6 +78,7 @@ class K3bPlayListViewItem : public K3ListViewItem
 
   bool m_bActive;
 };
+}
 
 
 
@@ -84,18 +86,20 @@ class K3bPlayListViewItem : public K3ListViewItem
  * Playlistview just needed to accept 
  * url drags
  */ 
-class K3bPlayListView : public K3ListView
+namespace K3b {
+class PlayListView : public K3ListView
 {
 Q_OBJECT
 
  public:
-  K3bPlayListView( QWidget* parent = 0 );
-  ~K3bPlayListView();
+  PlayListView( QWidget* parent = 0 );
+  ~PlayListView();
 
  protected:
   bool acceptDrag( QDropEvent* e ) const;
   Q3DragObject* dragObject();
 };
+}
 
 
 
@@ -103,13 +107,14 @@ Q_OBJECT
 /**
  * @author Sebastian Trueg
  */
-class K3bAudioPlayer : public QWidget
+namespace K3b {
+class AudioPlayer : public QWidget
 {
 Q_OBJECT
 
  public: 
-  K3bAudioPlayer( QWidget* parent = 0 );
-  ~K3bAudioPlayer();
+  AudioPlayer( QWidget* parent = 0 );
+  ~AudioPlayer();
 
   bool supportsMimetype( const QString& mimetype );
 
@@ -191,13 +196,13 @@ Q_OBJECT
   QToolButton* m_buttonForward;
   QToolButton* m_buttonBack;
   
-  K3bPlayListView* m_viewPlayList;
+  PlayListView* m_viewPlayList;
   
   QSlider* m_seekSlider;
   
   QTimer* m_updateTimer;
 
-  K3bPlayListViewItem* m_currentItem;
+  PlayListViewItem* m_currentItem;
 
   bool m_bLengthReady;
 
@@ -205,6 +210,7 @@ Q_OBJECT
   KAction* m_actionClear;
   KActionMenu* m_contextMenu;
 };
+}
 
 
 #endif

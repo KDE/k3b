@@ -54,7 +54,7 @@
 
 
 
-static bool shouldRunSuidRoot( const K3bExternalBin* bin )
+static bool shouldRunSuidRoot( const K3b::ExternalBin* bin )
 {
     //
     // Since kernel 2.6.8 older cdrecord versions are not able to use the SCSI subsystem when running suid root anymore
@@ -67,8 +67,8 @@ static bool shouldRunSuidRoot( const K3bExternalBin* bin )
     //
 
     if( bin->name() == "cdrecord" ) {
-        return ( K3b::simpleKernelVersion() < K3bVersion( 2, 6, 8 ) ||
-                 bin->version >= K3bVersion( 2, 1, 1, "a05" ) ||
+        return ( K3b::simpleKernelVersion() < K3b::Version( 2, 6, 8 ) ||
+                 bin->version >= K3b::Version( 2, 1, 1, "a05" ) ||
                  bin->hasFeature( "wodim" ) );
     }
     else if( bin->name() == "cdrdao" ) {
@@ -80,7 +80,7 @@ static bool shouldRunSuidRoot( const K3bExternalBin* bin )
         // BUT: newer kernels have ridiculously low default memorylocked resource limit, which prevents privileged
         // users from starting growisofs 6.0 with "unable to anonymously mmap 33554432: Resource temporarily unavailable"
         // error message. Until Andy releases a version including a workaround we simply never configure growisofs suid root
-        return false; // bin->version >= K3bVersion( 6, 0 );
+        return false; // bin->version >= K3b::Version( 6, 0 );
     }
     else
         return false;
@@ -90,16 +90,16 @@ static bool shouldRunSuidRoot( const K3bExternalBin* bin )
 class K3bSetup2::Private
 {
 public:
-    K3bDevice::DeviceManager* deviceManager;
-    K3bExternalBinManager* externalBinManager;
+    K3b::Device::DeviceManager* deviceManager;
+    K3b::ExternalBinManager* externalBinManager;
 
     bool changesNeeded;
 
     QMap<Q3CheckListItem*, QString> listDeviceMap;
     QMap<QString, Q3CheckListItem*> deviceListMap;
 
-    QMap<Q3CheckListItem*, const K3bExternalBin*> listBinMap;
-    QMap<const K3bExternalBin*, Q3CheckListItem*> binListMap;
+    QMap<Q3CheckListItem*, const K3b::ExternalBin*> listBinMap;
+    QMap<const K3b::ExternalBin*, Q3CheckListItem*> binListMap;
 
     KConfig* config;
 };
@@ -128,41 +128,42 @@ K3bSetup2::K3bSetup2( QWidget *parent, const QVariantList& )
     box->setSpacing( KDialog::spacingHint() );
 
     KTextEdit* label = new KTextEdit( this );
-    label->setText( "<h2>K3bSetup</h2>"
+    label->setText( "<h2>K3b::Setup</h2>"
                     + i18n("<p>This simple setup assistant is able to set the permissions needed by K3b in order to "
                            "burn CDs and DVDs. "
                            "<p>It does not take things like devfs or resmgr into account. In most cases this is not a "
                            "problem but on some systems the permissions may be altered the next time you login or restart "
                            "your computer. In those cases it is best to consult the distribution documentation."
-                           "<p><b>Caution:</b> Although K3bSetup 2 should not be able "
+                           "<p><b>Caution:</b> Although K3b::Setup 2 should not be able "
                            "to mess up your system no guarantee can be given.") );
     label->setReadOnly( true );
     label->setFixedWidth( 200 );
 
-    w = new base_K3bSetup2( this );
+    QWidget* w = new QWidget( this );
+    setupUi( w );
 
     // TODO: enable this and let root specify users
-    w->m_editUsers->hide();
-    w->textLabel2->hide();
+    m_editUsers->hide();
+    textLabel2->hide();
 
     box->addWidget( label );
     box->addWidget( w );
 
-    connect( w->m_checkUseBurningGroup, SIGNAL(toggled(bool)),
+    connect( m_checkUseBurningGroup, SIGNAL(toggled(bool)),
              this, SLOT(updateViews()) );
-    connect( w->m_editBurningGroup, SIGNAL(textChanged(const QString&)),
+    connect( m_editBurningGroup, SIGNAL(textChanged(const QString&)),
              this, SLOT(updateViews()) );
-    connect( w->m_editSearchPath, SIGNAL(changed()),
+    connect( m_editSearchPath, SIGNAL(changed()),
              this, SLOT(slotSearchPrograms()) );
 
 
-    d->externalBinManager = new K3bExternalBinManager( this );
-    d->deviceManager = new K3bDevice::DeviceManager( this );
+    d->externalBinManager = new K3b::ExternalBinManager( this );
+    d->deviceManager = new K3b::Device::DeviceManager( this );
 
     // these are the only programs that need special permissions
-    d->externalBinManager->addProgram( new K3bCdrdaoProgram() );
-    d->externalBinManager->addProgram( new K3bCdrecordProgram(false) );
-    d->externalBinManager->addProgram( new K3bGrowisofsProgram() );
+    d->externalBinManager->addProgram( new K3b::CdrdaoProgram() );
+    d->externalBinManager->addProgram( new K3b::CdrecordProgram(false) );
+    d->externalBinManager->addProgram( new K3b::GrowisofsProgram() );
 
     d->externalBinManager->search();
     d->deviceManager->scanBus();
@@ -201,21 +202,21 @@ void K3bSetup2::updateViews()
 void K3bSetup2::updatePrograms()
 {
     // first save which were checked
-    QMap<const K3bExternalBin*, bool> checkMap;
-    Q3ListViewItemIterator listIt( w->m_viewPrograms );
+    QMap<const K3b::ExternalBin*, bool> checkMap;
+    Q3ListViewItemIterator listIt( m_viewPrograms );
     for( ; listIt.current(); ++listIt )
         checkMap.insert( d->listBinMap[(Q3CheckListItem*)*listIt], ((Q3CheckListItem*)*listIt)->isOn() );
 
-    w->m_viewPrograms->clear();
+    m_viewPrograms->clear();
     d->binListMap.clear();
     d->listBinMap.clear();
 
     // load programs
-    const QMap<QString, K3bExternalProgram*>& map = d->externalBinManager->programs();
-    for( QMap<QString, K3bExternalProgram*>::const_iterator it = map.constBegin(); it != map.constEnd(); ++it ) {
-        K3bExternalProgram* p = *it;
+    const QMap<QString, K3b::ExternalProgram*>& map = d->externalBinManager->programs();
+    for( QMap<QString, K3b::ExternalProgram*>::const_iterator it = map.constBegin(); it != map.constEnd(); ++it ) {
+        K3b::ExternalProgram* p = *it;
 
-        foreach( const K3bExternalBin* b, p->bins() ) {
+        foreach( const K3b::ExternalBin* b, p->bins() ) {
             QFileInfo fi( b->path );
             // we need the uid bit which is not supported by QFileInfo
             struct stat s;
@@ -224,7 +225,7 @@ void K3bSetup2::updatePrograms()
             }
             else {
                 // create a checkviewitem
-                Q3CheckListItem* bi = new Q3CheckListItem( w->m_viewPrograms, b->name(), Q3CheckListItem::CheckBox );
+                Q3CheckListItem* bi = new Q3CheckListItem( m_viewPrograms, b->name(), Q3CheckListItem::CheckBox );
                 bi->setText( 1, b->version );
                 bi->setText( 2, b->path );
 
@@ -237,18 +238,18 @@ void K3bSetup2::updatePrograms()
                 int perm = s.st_mode & 0007777;
 
                 QString wantedGroup("root");
-                if( w->m_checkUseBurningGroup->isChecked() )
+                if( m_checkUseBurningGroup->isChecked() )
                     wantedGroup = burningGroup();
 
                 int wantedPerm = 0;
                 if( shouldRunSuidRoot( b ) ) {
-                    if( w->m_checkUseBurningGroup->isChecked() )
+                    if( m_checkUseBurningGroup->isChecked() )
                         wantedPerm = 0004710;
                     else
                         wantedPerm = 0004711;
                 }
                 else {
-                    if( w->m_checkUseBurningGroup->isChecked() )
+                    if( m_checkUseBurningGroup->isChecked() )
                         wantedPerm = 0000750;
                     else
                         wantedPerm = 0000755;
@@ -274,18 +275,18 @@ void K3bSetup2::updateDevices()
 {
     // first save which were checked
     QMap<QString, bool> checkMap;
-    Q3ListViewItemIterator listIt( w->m_viewDevices );
+    Q3ListViewItemIterator listIt( m_viewDevices );
     for( ; listIt.current(); ++listIt )
         checkMap.insert( d->listDeviceMap[(Q3CheckListItem*)*listIt], ((Q3CheckListItem*)*listIt)->isOn() );
 
-    w->m_viewDevices->clear();
+    m_viewDevices->clear();
     d->listDeviceMap.clear();
     d->deviceListMap.clear();
 
-    QList<K3bDevice::Device*> items(d->deviceManager->allDevices());
-    for( QList<K3bDevice::Device *>::const_iterator it = items.constBegin();
+    QList<K3b::Device::Device*> items(d->deviceManager->allDevices());
+    for( QList<K3b::Device::Device *>::const_iterator it = items.constBegin();
          it != items.constEnd(); ++it ) {
-        K3bDevice::Device* device = *it;
+        K3b::Device::Device* device = *it;
         // check the item on first insertion or if it was checked before
         Q3CheckListItem* item = createDeviceItem( device->blockDeviceName() );
         item->setOn( checkMap.contains(device->blockDeviceName()) ? checkMap[device->blockDeviceName()] : true );
@@ -304,7 +305,7 @@ Q3CheckListItem* K3bSetup2::createDeviceItem( const QString& deviceNode )
     }
     else {
         // create a checkviewitem
-        Q3CheckListItem* bi = new Q3CheckListItem( w->m_viewDevices,
+        Q3CheckListItem* bi = new Q3CheckListItem( m_viewDevices,
                                                    deviceNode,
                                                    Q3CheckListItem::CheckBox );
 
@@ -316,7 +317,7 @@ Q3CheckListItem* K3bSetup2::createDeviceItem( const QString& deviceNode )
         int perm = s.st_mode & 0000777;
 
         bi->setText( 2, QString::number( perm, 8 ).rightJustified( 3, '0' ) + " " + fi.owner() + "." + fi.group() );
-        if( w->m_checkUseBurningGroup->isChecked() ) {
+        if( m_checkUseBurningGroup->isChecked() ) {
             // we ignore the device's owner here
             if( perm != 0000660 ||
                 fi.group() != burningGroup() ) {
@@ -349,13 +350,13 @@ void K3bSetup2::load()
     d->deviceManager->readConfig( d->config->group( "Devices" ) );
 
     KConfigGroup grp(d->config, "General Settings" );
-    w->m_checkUseBurningGroup->setChecked( grp.readEntry( "use burning group", false ) );
-    w->m_editBurningGroup->setText( grp.readEntry( "burning group", "burning" ) );
+    m_checkUseBurningGroup->setChecked( grp.readEntry( "use burning group", false ) );
+    m_editBurningGroup->setText( grp.readEntry( "burning group", "burning" ) );
 
 
     // load search path
-    w->m_editSearchPath->clear();
-    w->m_editSearchPath->insertStringList( d->externalBinManager->searchPath() );
+    m_editSearchPath->clear();
+    m_editSearchPath->insertStringList( d->externalBinManager->searchPath() );
 
     updateViews();
 }
@@ -363,8 +364,8 @@ void K3bSetup2::load()
 
 void K3bSetup2::defaults()
 {
-    w->m_checkUseBurningGroup->setChecked(false);
-    w->m_editBurningGroup->setText( "burning" );
+    m_checkUseBurningGroup->setChecked(false);
+    m_editBurningGroup->setText( "burning" );
 
     //
     // This is a hack to work around a kcm bug which makes the faulty assumption that
@@ -377,7 +378,7 @@ void K3bSetup2::defaults()
 void K3bSetup2::save()
 {
     KConfigGroup grp(d->config, "General Settings" );
-    grp.writeEntry( "use burning group", w->m_checkUseBurningGroup->isChecked() );
+    grp.writeEntry( "use burning group", m_checkUseBurningGroup->isChecked() );
     grp.writeEntry( "burning group", burningGroup() );
     grp.sync();
 
@@ -387,7 +388,7 @@ void K3bSetup2::save()
     bool success = true;
 
     struct group* g = 0;
-    if( w->m_checkUseBurningGroup->isChecked() ) {
+    if( m_checkUseBurningGroup->isChecked() ) {
         // TODO: create the group if it's not there
         g = getgrnam( burningGroup().toLocal8Bit() );
         if( !g ) {
@@ -398,7 +399,7 @@ void K3bSetup2::save()
 
 
     // save the device permissions
-    Q3ListViewItemIterator listIt( w->m_viewDevices );
+    Q3ListViewItemIterator listIt( m_viewDevices );
     for( ; listIt.current(); ++listIt ) {
 
         Q3CheckListItem* checkItem = (Q3CheckListItem*)listIt.current();
@@ -406,7 +407,7 @@ void K3bSetup2::save()
         if( checkItem->isOn() ) {
             QString dev = d->listDeviceMap[checkItem];
 
-            if( w->m_checkUseBurningGroup->isChecked() ) {
+            if( m_checkUseBurningGroup->isChecked() ) {
                 if( ::chmod( QFile::encodeName(dev), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP ) )
                     success = false;
 
@@ -422,16 +423,16 @@ void K3bSetup2::save()
 
 
     // save the program permissions
-    listIt = Q3ListViewItemIterator( w->m_viewPrograms );
+    listIt = Q3ListViewItemIterator( m_viewPrograms );
     for( ; listIt.current(); ++listIt ) {
 
         Q3CheckListItem* checkItem = (Q3CheckListItem*)listIt.current();
 
         if( checkItem->isOn() ) {
 
-            const K3bExternalBin* bin = d->listBinMap[checkItem];
+            const K3b::ExternalBin* bin = d->listBinMap[checkItem];
 
-            if( w->m_checkUseBurningGroup->isChecked() ) {
+            if( m_checkUseBurningGroup->isChecked() ) {
                 if( ::chown( QFile::encodeName(bin->path), (gid_t)0, g->gr_gid ) )
                     success = false;
 
@@ -465,7 +466,7 @@ void K3bSetup2::save()
         KMessageBox::information( this, i18n("Successfully updated all permissions.") );
     else {
         if( getuid() )
-            KMessageBox::error( this, i18n("Could not update all permissions. You should run K3bSetup 2 as root.") );
+            KMessageBox::error( this, i18n("Could not update all permissions. You should run K3b::Setup 2 as root.") );
         else
             KMessageBox::error( this, i18n("Could not update all permissions.") );
     }
@@ -478,28 +479,28 @@ void K3bSetup2::save()
 
 QString K3bSetup2::quickHelp() const
 {
-    return i18n("<h2>K3bSetup 2</h2>"
+    return i18n("<h2>K3b::Setup 2</h2>"
                 "<p>This simple setup assistant is able to set the permissions needed by K3b in order to "
                 "burn CDs and DVDs."
                 "<p>It does not take into account devfs or resmgr, or similar. In most cases this is not a "
                 "problem, but on some systems the permissions may be altered the next time you login or restart "
                 "your computer. In these cases it is best to consult the distribution's documentation."
-                "<p>The important task that K3bSetup 2 performs is grant write access to the CD and DVD devices."
-                "<p><b>Caution:</b> Although K3bSetup 2 should not be able "
+                "<p>The important task that K3b::Setup 2 performs is grant write access to the CD and DVD devices."
+                "<p><b>Caution:</b> Although K3b::Setup 2 should not be able "
                 "to damage your system, no guarantee can be given.");
 }
 
 
 QString K3bSetup2::burningGroup() const
 {
-    QString g = w->m_editBurningGroup->text();
+    QString g = m_editBurningGroup->text();
     return g.isEmpty() ? QString("burning") : g;
 }
 
 
 void K3bSetup2::slotSearchPrograms()
 {
-    d->externalBinManager->setSearchPath( w->m_editSearchPath->items() );
+    d->externalBinManager->setSearchPath( m_editSearchPath->items() );
     d->externalBinManager->search();
     updatePrograms();
 
@@ -509,13 +510,12 @@ void K3bSetup2::slotSearchPrograms()
 
 void K3bSetup2::makeReadOnly()
 {
-    w->m_checkUseBurningGroup->setEnabled( false );
-    w->m_editBurningGroup->setEnabled( false );
-    w->m_editUsers->setEnabled( false );
-    w->m_viewDevices->setEnabled( false );
-    w->m_viewPrograms->setEnabled( false );
-    w->m_editSearchPath->setEnabled( false );
+    m_checkUseBurningGroup->setEnabled( false );
+    m_editBurningGroup->setEnabled( false );
+    m_editUsers->setEnabled( false );
+    m_viewDevices->setEnabled( false );
+    m_viewPrograms->setEnabled( false );
+    m_editSearchPath->setEnabled( false );
 }
-
 
 #include "k3bsetup2.moc"

@@ -22,22 +22,31 @@
 #include <qstringlist.h>
 
 
-class K3bListView;
-class K3bCddbPatternWidget;
-class K3bAudioConvertingOptionWidget;
-class K3bAudioDoc;
+namespace K3b {
+    class ListView;
+}
+namespace K3b {
+    class CddbPatternWidget;
+}
+namespace K3b {
+    class AudioConvertingOptionWidget;
+}
+namespace K3b {
+    class AudioDoc;
+}
 
 
 /**
  *@author Sebastian Trueg
  */
-class K3bAudioProjectConvertingDialog : public K3bInteractionDialog
+namespace K3b {
+class AudioProjectConvertingDialog : public InteractionDialog
 {
     Q_OBJECT
 
 public: 
-    K3bAudioProjectConvertingDialog( K3bAudioDoc*, QWidget *parent = 0);
-    ~K3bAudioProjectConvertingDialog();
+    AudioProjectConvertingDialog( AudioDoc*, QWidget *parent = 0);
+    ~AudioProjectConvertingDialog();
 
     void setBaseDir( const QString& path );
 
@@ -53,11 +62,11 @@ private Q_SLOTS:
     void slotStartClicked();
 
 private:
-    K3bCddbPatternWidget* m_patternWidget;
-    K3bAudioConvertingOptionWidget* m_optionWidget;
+    CddbPatternWidget* m_patternWidget;
+    AudioConvertingOptionWidget* m_optionWidget;
 
-    K3bListView* m_viewTracks;
-    K3bAudioDoc* m_doc;
+    ListView* m_viewTracks;
+    AudioDoc* m_doc;
 
     void setupGui();
 
@@ -65,5 +74,6 @@ private:
     Private* d;
   
 };
+}
 
 #endif

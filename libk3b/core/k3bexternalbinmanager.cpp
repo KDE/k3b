@@ -30,13 +30,13 @@
 #include <stdlib.h>
 
 
-bool compareVersions( const K3bExternalBin* bin1, const K3bExternalBin* bin2 )
+bool compareVersions( const K3b::ExternalBin* bin1, const K3b::ExternalBin* bin2 )
 {
     return bin1->version > bin2->version;
 }
 
 
-QString K3bExternalBinManager::m_noPath = "";
+QString K3b::ExternalBinManager::m_noPath = "";
 
 
 // ///////////////////////////////////////////////////////////
@@ -45,49 +45,49 @@ QString K3bExternalBinManager::m_noPath = "";
 //
 // ///////////////////////////////////////////////////////////
 
-K3bExternalBin::K3bExternalBin( K3bExternalProgram* p )
+K3b::ExternalBin::ExternalBin( K3b::ExternalProgram* p )
     : m_program(p)
 {
 }
 
 
-bool K3bExternalBin::isEmpty() const
+bool K3b::ExternalBin::isEmpty() const
 {
     return !version.isValid();
 }
 
 
-QString K3bExternalBin::name() const
+QString K3b::ExternalBin::name() const
 {
     return m_program->name();
 }
 
 
-bool K3bExternalBin::hasFeature( const QString& f ) const
+bool K3b::ExternalBin::hasFeature( const QString& f ) const
 {
     return m_features.contains( f );
 }
 
 
-void K3bExternalBin::addFeature( const QString& f )
+void K3b::ExternalBin::addFeature( const QString& f )
 {
     m_features.append( f );
 }
 
 
-QStringList K3bExternalBin::userParameters() const
+QStringList K3b::ExternalBin::userParameters() const
 {
     return m_program->userParameters();
 }
 
 
-QStringList K3bExternalBin::features() const
+QStringList K3b::ExternalBin::features() const
 {
     return m_features;
 }
 
 
-K3bExternalProgram* K3bExternalBin::program() const
+K3b::ExternalProgram* K3b::ExternalBin::program() const
 {
     return m_program;
 }
@@ -101,20 +101,20 @@ K3bExternalProgram* K3bExternalBin::program() const
 // ///////////////////////////////////////////////////////////
 
 
-K3bExternalProgram::K3bExternalProgram( const QString& name )
+K3b::ExternalProgram::ExternalProgram( const QString& name )
     : m_name( name ),
       m_defaultBin( 0 )
 {
 }
 
 
-K3bExternalProgram::~K3bExternalProgram()
+K3b::ExternalProgram::~ExternalProgram()
 {
     qDeleteAll( m_bins );
 }
 
 
-const K3bExternalBin* K3bExternalProgram::mostRecentBin() const
+const K3b::ExternalBin* K3b::ExternalProgram::mostRecentBin() const
 {
     if ( m_bins.isEmpty() ) {
         return 0;
@@ -125,13 +125,13 @@ const K3bExternalBin* K3bExternalProgram::mostRecentBin() const
 }
 
 
-const K3bExternalBin* K3bExternalProgram::defaultBin() const
+const K3b::ExternalBin* K3b::ExternalProgram::defaultBin() const
 {
     return m_defaultBin;
 }
 
 
-void K3bExternalProgram::addBin( K3bExternalBin* bin )
+void K3b::ExternalProgram::addBin( K3b::ExternalBin* bin )
 {
     if( !m_bins.contains( bin ) ) {
         m_bins.append( bin );
@@ -147,7 +147,7 @@ void K3bExternalProgram::addBin( K3bExternalBin* bin )
 }
 
 
-void K3bExternalProgram::setDefault( const K3bExternalBin* bin )
+void K3b::ExternalProgram::setDefault( const K3b::ExternalBin* bin )
 {
     if ( bin ) {
         m_defaultBin = bin;
@@ -155,9 +155,9 @@ void K3bExternalProgram::setDefault( const K3bExternalBin* bin )
 }
 
 
-void K3bExternalProgram::setDefault( const QString& path )
+void K3b::ExternalProgram::setDefault( const QString& path )
 {
-    for( QList<const K3bExternalBin*>::const_iterator it = m_bins.constBegin(); it != m_bins.constEnd(); ++it ) {
+    for( QList<const K3b::ExternalBin*>::const_iterator it = m_bins.constBegin(); it != m_bins.constEnd(); ++it ) {
         if( ( *it )->path == path ) {
             setDefault( *it );
             return;
@@ -166,7 +166,7 @@ void K3bExternalProgram::setDefault( const QString& path )
 }
 
 
-void K3bExternalProgram::addUserParameter( const QString& p )
+void K3b::ExternalProgram::addUserParameter( const QString& p )
 {
     if( !m_userParameters.contains( p ) )
         m_userParameters.append(p);
@@ -181,19 +181,19 @@ void K3bExternalProgram::addUserParameter( const QString& p )
 // ///////////////////////////////////////////////////////////
 
 
-K3bExternalBinManager::K3bExternalBinManager( QObject* parent )
+K3b::ExternalBinManager::ExternalBinManager( QObject* parent )
     : QObject( parent )
 {
 }
 
 
-K3bExternalBinManager::~K3bExternalBinManager()
+K3b::ExternalBinManager::~ExternalBinManager()
 {
     clear();
 }
 
 
-bool K3bExternalBinManager::readConfig( const KConfigGroup& grp )
+bool K3b::ExternalBinManager::readConfig( const KConfigGroup& grp )
 {
     loadDefaultSearchPath();
 
@@ -203,7 +203,7 @@ bool K3bExternalBinManager::readConfig( const KConfigGroup& grp )
 
     search();
 
-    Q_FOREACH( K3bExternalProgram* p, m_programs ) {
+    Q_FOREACH( K3b::ExternalProgram* p, m_programs ) {
         if( grp.hasKey( p->name() + " default" ) ) {
             p->setDefault( grp.readEntry( p->name() + " default", QString() ) );
         }
@@ -212,10 +212,10 @@ bool K3bExternalBinManager::readConfig( const KConfigGroup& grp )
         for( QStringList::const_iterator strIt = list.constBegin(); strIt != list.constEnd(); ++strIt )
             p->addUserParameter( *strIt );
 
-        K3bVersion lastMax( grp.readEntry( p->name() + " last seen newest version", QString() ) );
+        K3b::Version lastMax( grp.readEntry( p->name() + " last seen newest version", QString() ) );
         // now search for a newer version and use it (because it was installed after the last
         // K3b run and most users would probably expect K3b to use a newly installed version)
-        const K3bExternalBin* newestBin = p->mostRecentBin();
+        const K3b::ExternalBin* newestBin = p->mostRecentBin();
         if( newestBin && newestBin->version > lastMax )
             p->setDefault( newestBin );
     }
@@ -224,17 +224,17 @@ bool K3bExternalBinManager::readConfig( const KConfigGroup& grp )
 }
 
 
-bool K3bExternalBinManager::saveConfig( KConfigGroup grp )
+bool K3b::ExternalBinManager::saveConfig( KConfigGroup grp )
 {
     grp.writePathEntry( "search path", m_searchPath );
 
-    Q_FOREACH( K3bExternalProgram* p, m_programs ) {
+    Q_FOREACH( K3b::ExternalProgram* p, m_programs ) {
         if( p->defaultBin() )
             grp.writeEntry( p->name() + " default", p->defaultBin()->path );
 
         grp.writeEntry( p->name() + " user parameters", p->userParameters() );
 
-        const K3bExternalBin* newestBin = p->mostRecentBin();
+        const K3b::ExternalBin* newestBin = p->mostRecentBin();
         if( newestBin )
             grp.writeEntry( p->name() + " last seen newest version", newestBin->version.toString() );
     }
@@ -243,7 +243,7 @@ bool K3bExternalBinManager::saveConfig( KConfigGroup grp )
 }
 
 
-bool K3bExternalBinManager::foundBin( const QString& name )
+bool K3b::ExternalBinManager::foundBin( const QString& name )
 {
     if( m_programs.constFind( name ) == m_programs.constEnd() )
         return false;
@@ -252,7 +252,7 @@ bool K3bExternalBinManager::foundBin( const QString& name )
 }
 
 
-QString K3bExternalBinManager::binPath( const QString& name )
+QString K3b::ExternalBinManager::binPath( const QString& name )
 {
     if( m_programs.constFind( name ) == m_programs.constEnd() )
         return m_noPath;
@@ -264,7 +264,7 @@ QString K3bExternalBinManager::binPath( const QString& name )
 }
 
 
-const K3bExternalBin* K3bExternalBinManager::binObject( const QString& name )
+const K3b::ExternalBin* K3b::ExternalBinManager::binObject( const QString& name )
 {
     if( m_programs.constFind( name ) == m_programs.constEnd() )
         return 0;
@@ -273,25 +273,25 @@ const K3bExternalBin* K3bExternalBinManager::binObject( const QString& name )
 }
 
 
-void K3bExternalBinManager::addProgram( K3bExternalProgram* p )
+void K3b::ExternalBinManager::addProgram( K3b::ExternalProgram* p )
 {
     m_programs.insert( p->name(), p );
 }
 
 
-void K3bExternalBinManager::clear()
+void K3b::ExternalBinManager::clear()
 {
     qDeleteAll( m_programs );
     m_programs.clear();
 }
 
 
-void K3bExternalBinManager::search()
+void K3b::ExternalBinManager::search()
 {
     if( m_searchPath.isEmpty() )
         loadDefaultSearchPath();
 
-    Q_FOREACH( K3bExternalProgram* program, m_programs ) {
+    Q_FOREACH( K3b::ExternalProgram* program, m_programs ) {
         program->clear();
     }
 
@@ -320,35 +320,35 @@ void K3bExternalBinManager::search()
 
 
     Q_FOREACH( QString path, paths ) {
-        Q_FOREACH( K3bExternalProgram* program, m_programs ) {
+        Q_FOREACH( K3b::ExternalProgram* program, m_programs ) {
             program->scan( path );
         }
     }
 
     // TESTING
     // /////////////////////////
-    const K3bExternalBin* bin = program("cdrecord")->defaultBin();
+    const K3b::ExternalBin* bin = program("cdrecord")->defaultBin();
 
     if( !bin ) {
-        kDebug() << "(K3bExternalBinManager) Probing cdrecord failed";
+        kDebug() << "(K3b::ExternalBinManager) Probing cdrecord failed";
     }
     else {
-        kDebug() << "(K3bExternalBinManager) Cdrecord " << bin->version << " features: "
+        kDebug() << "(K3b::ExternalBinManager) Cdrecord " << bin->version << " features: "
                  << bin->features().join( ", " ) ;
 
-        if( bin->version >= K3bVersion("1.11a02") )
-            kDebug() << "(K3bExternalBinManager) "
+        if( bin->version >= K3b::Version("1.11a02") )
+            kDebug() << "(K3b::ExternalBinManager) "
                      << bin->version.majorVersion() << " " << bin->version.minorVersion() << " " << bin->version.patchLevel()
                      << " " << bin->version.suffix()
                      << " seems to be cdrecord version >= 1.11a02, using burnfree instead of burnproof" ;
-        if( bin->version >= K3bVersion("1.11a31") )
-            kDebug() << "(K3bExternalBinManager) seems to be cdrecord version >= 1.11a31, support for Just Link via burnfree "
+        if( bin->version >= K3b::Version("1.11a31") )
+            kDebug() << "(K3b::ExternalBinManager) seems to be cdrecord version >= 1.11a31, support for Just Link via burnfree "
                      << "driveroption" ;
     }
 }
 
 
-K3bExternalProgram* K3bExternalBinManager::program( const QString& name ) const
+K3b::ExternalProgram* K3b::ExternalBinManager::program( const QString& name ) const
 {
     if( m_programs.find( name ) == m_programs.constEnd() )
         return 0;
@@ -357,7 +357,7 @@ K3bExternalProgram* K3bExternalBinManager::program( const QString& name ) const
 }
 
 
-void K3bExternalBinManager::loadDefaultSearchPath()
+void K3b::ExternalBinManager::loadDefaultSearchPath()
 {
     static const char* defaultSearchPaths[] = { "/usr/bin/",
                                                 "/usr/local/bin/",
@@ -374,7 +374,7 @@ void K3bExternalBinManager::loadDefaultSearchPath()
 }
 
 
-void K3bExternalBinManager::setSearchPath( const QStringList& list )
+void K3b::ExternalBinManager::setSearchPath( const QStringList& list )
 {
     loadDefaultSearchPath();
 
@@ -385,7 +385,7 @@ void K3bExternalBinManager::setSearchPath( const QStringList& list )
 }
 
 
-void K3bExternalBinManager::addSearchPath( const QString& path )
+void K3b::ExternalBinManager::addSearchPath( const QString& path )
 {
     if( !m_searchPath.contains( path ) )
         m_searchPath.append( path );
@@ -393,9 +393,9 @@ void K3bExternalBinManager::addSearchPath( const QString& path )
 
 
 
-const K3bExternalBin* K3bExternalBinManager::mostRecentBinObject( const QString& name )
+const K3b::ExternalBin* K3b::ExternalBinManager::mostRecentBinObject( const QString& name )
 {
-    if( K3bExternalProgram* p = program( name ) )
+    if( K3b::ExternalProgram* p = program( name ) )
         return p->mostRecentBin();
     else
         return 0;

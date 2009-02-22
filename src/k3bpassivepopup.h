@@ -21,13 +21,14 @@
  * A message box which is closed using a timer or a close button
  * It will delete itself once it has been closed.
  */
-class K3bPassivePopup : public QFrame
+namespace K3b {
+class PassivePopup : public QFrame
 {
     Q_OBJECT
 
 public:
-    K3bPassivePopup( QWidget* parent );
-    ~K3bPassivePopup();
+    PassivePopup( QWidget* parent );
+    ~PassivePopup();
 
     enum MessageType {
         Information,
@@ -36,7 +37,7 @@ public:
     };
 
     /**
-     * This will show the popup using K3bWidgetShowEffect::Slide and close it the 
+     * This will show the popup using WidgetShowEffect::Slide and close it the 
      * same way.
      */
     void slideIn();
@@ -65,5 +66,6 @@ private:
     class Private;
     Private* d;
 };
+}
 
 #endif

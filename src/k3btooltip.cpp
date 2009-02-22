@@ -30,7 +30,7 @@
 #include <fixx11h.h>
 
 
-K3bToolTip::K3bToolTip( QWidget* widget )
+K3b::ToolTip::ToolTip( QWidget* widget )
     : QObject( widget ),
       m_parentWidget( widget ),
       m_currentTip( 0 ),
@@ -43,35 +43,35 @@ K3bToolTip::K3bToolTip( QWidget* widget )
 }
 
 
-K3bToolTip::~K3bToolTip()
+K3b::ToolTip::~ToolTip()
 {
 }
 
 
-void K3bToolTip::tip( const QRect& rect, const QString& text, int effect )
+void K3b::ToolTip::tip( const QRect& rect, const QString& text, int effect )
 {
     QLabel* label = new QLabel( text, parentWidget() );
     label->setMargin( 6 );
-    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+    if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
         label->setPalette( theme->palette() );
     }
-    tip( rect, label, (K3bWidgetShowEffect::Effect)effect );
+    tip( rect, label, (K3b::WidgetShowEffect::Effect)effect );
 }
 
 
-void K3bToolTip::tip( const QRect& rect, const QPixmap& pix, int effect )
+void K3b::ToolTip::tip( const QRect& rect, const QPixmap& pix, int effect )
 {
     QLabel* label = new QLabel( parentWidget() );
     label->setMargin( 6 );
-    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+    if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
         label->setPalette( theme->palette() );
     }
     label->setPixmap( pix );
-    tip( rect, label, (K3bWidgetShowEffect::Effect)effect );
+    tip( rect, label, (K3b::WidgetShowEffect::Effect)effect );
 }
 
 
-void K3bToolTip::tip( const QRect& rect, QWidget* w, int effect )
+void K3b::ToolTip::tip( const QRect& rect, QWidget* w, int effect )
 {
     // stop the timer
     m_tipTimer->stop();
@@ -116,14 +116,14 @@ void K3bToolTip::tip( const QRect& rect, QWidget* w, int effect )
     m_currentTipRect = rect;
     w->move( p );
     if( effect )
-        K3bWidgetShowEffect::showWidget( w, (K3bWidgetShowEffect::Effect)effect );
+        K3b::WidgetShowEffect::showWidget( w, (K3b::WidgetShowEffect::Effect)effect );
     else
         w->show();
     w->raise();
 }
 
 
-void K3bToolTip::hideTip()
+void K3b::ToolTip::hideTip()
 {
     // just remove the tip
     delete m_currentTip;
@@ -131,7 +131,7 @@ void K3bToolTip::hideTip()
 }
 
 
-bool K3bToolTip::eventFilter( QObject* o, QEvent* e )
+bool K3b::ToolTip::eventFilter( QObject* o, QEvent* e )
 {
     if( o == parentWidget() ) {
         switch( e->type() ) {
@@ -185,7 +185,7 @@ bool K3bToolTip::eventFilter( QObject* o, QEvent* e )
 }
 
 
-void K3bToolTip::slotCheckShowTip()
+void K3b::ToolTip::slotCheckShowTip()
 {
     maybeTip( m_lastMousePos );
 }

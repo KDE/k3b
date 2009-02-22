@@ -33,13 +33,14 @@ namespace K3b {
     class AudioTrackModel;
 }
 
-class K3bAudioCdView : public K3bMediaContentsView
+namespace K3b {
+class AudioCdView : public MediaContentsView
 {
     Q_OBJECT
 
 public:
-    K3bAudioCdView( QWidget* parent = 0 );
-    ~K3bAudioCdView();
+    AudioCdView( QWidget* parent = 0 );
+    ~AudioCdView();
 
     KActionCollection* actionCollection() const { return m_actionCollection; }
 
@@ -76,6 +77,7 @@ private:
     
     QLabel* m_busyInfoLabel;
 };
+}
 
 
 #endif

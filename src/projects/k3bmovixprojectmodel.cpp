@@ -32,7 +32,7 @@ class MovixProjectModel::Private
             : project( 0 ),
             q( parent ) { }
 
-        K3bMovixDoc* project;
+        K3b::MovixDoc* project;
 
         void _k_docChanged()
         {
@@ -43,7 +43,7 @@ class MovixProjectModel::Private
         MovixProjectModel* q;
 };
 
-MovixProjectModel::MovixProjectModel( K3bMovixDoc* doc, QObject* parent )
+MovixProjectModel::MovixProjectModel( K3b::MovixDoc* doc, QObject* parent )
     : QAbstractItemModel( parent ),
     d( new Private(this) )
 {
@@ -57,23 +57,23 @@ MovixProjectModel::~MovixProjectModel()
     delete d;
 }
 
-K3bMovixDoc* MovixProjectModel::project() const
+K3b::MovixDoc* MovixProjectModel::project() const
 {
     return d->project;
 }
 
-K3bMovixFileItem* MovixProjectModel::itemForIndex( const QModelIndex& index ) const
+K3b::MovixFileItem* MovixProjectModel::itemForIndex( const QModelIndex& index ) const
 {
     if ( index.isValid() )
     {
         Q_ASSERT( index.internalPointer() );
-        return static_cast<K3bMovixFileItem*>( index.internalPointer() );
+        return static_cast<K3b::MovixFileItem*>( index.internalPointer() );
     }
 
     return 0;
 }
 
-QModelIndex MovixProjectModel::indexForItem( K3bMovixFileItem* track ) const
+QModelIndex MovixProjectModel::indexForItem( K3b::MovixFileItem* track ) const
 {
     return createIndex( d->project->indexOf(track), 0, track );
 }
@@ -117,7 +117,7 @@ bool MovixProjectModel::setData( const QModelIndex& index,
 {
     if ( index.isValid() )
     {
-        K3bMovixFileItem* item = itemForIndex( index );
+        K3b::MovixFileItem* item = itemForIndex( index );
         if ( role == Qt::EditRole )
         {
             if ( index.column() == TitleColumn )
@@ -134,7 +134,7 @@ bool MovixProjectModel::setData( const QModelIndex& index,
 QVariant MovixProjectModel::data( const QModelIndex& index, int role ) const
 {
     if ( index.isValid() ) {
-        K3bMovixFileItem* item = itemForIndex( index );
+        K3b::MovixFileItem* item = itemForIndex( index );
 
         switch( index.column() ) {
             case NoColumn:
@@ -247,11 +247,11 @@ QMimeData* MovixProjectModel::mimeData( const QModelIndexList& indexes ) const
 {
     QMimeData* mime = new QMimeData();
 
-    QList<K3bMovixFileItem*> items;
+    QList<K3b::MovixFileItem*> items;
     KUrl::List urls;
 
     foreach( const QModelIndex& index, indexes ) {
-        K3bMovixFileItem* item = itemForIndex( index );
+        K3b::MovixFileItem* item = itemForIndex( index );
         items << item;
 
         if( !urls.contains( KUrl( item->localPath() ) ) )
@@ -265,7 +265,7 @@ QMimeData* MovixProjectModel::mimeData( const QModelIndexList& indexes ) const
     QByteArray trackData;
     QDataStream trackDataStream( &trackData, QIODevice::WriteOnly );
 
-    foreach( K3bMovixFileItem* item, items ) {
+    foreach( K3b::MovixFileItem* item, items ) {
         trackDataStream << ( qint64 )item;
     }
 
@@ -290,7 +290,7 @@ bool MovixProjectModel::dropMimeData( const QMimeData* data,
     if (action == Qt::IgnoreAction)
         return true;
 
-    QList<K3bMovixFileItem*> items;
+    QList<K3b::MovixFileItem*> items;
     if ( data->hasFormat( "application/x-k3bmovixfileitem" ) )
     {
         QByteArray itemData = data->data( "application/x-k3bmovixfileitem" );
@@ -299,10 +299,10 @@ bool MovixProjectModel::dropMimeData( const QMimeData* data,
         {
             qint64 p;
             itemDataStream >> p;
-            items << ( K3bMovixFileItem* )p;
+            items << ( K3b::MovixFileItem* )p;
         }
 
-        K3bMovixFileItem *prev;
+        K3b::MovixFileItem *prev;
         if(parent.isValid())
         {
             int index = d->project->indexOf(itemForIndex(parent)) - 1;
@@ -316,7 +316,7 @@ bool MovixProjectModel::dropMimeData( const QMimeData* data,
         else
             prev = d->project->movixFileItems().last();
 
-        foreach( K3bMovixFileItem* item, items )
+        foreach( K3b::MovixFileItem* item, items )
         {
             d->project->moveMovixItem(item, prev);
             prev = item;

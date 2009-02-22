@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -18,30 +18,23 @@
 
 #include "ui_base_k3bdatavolumedescwidget.h"
 
-class K3bIsoOptions;
+namespace K3b {
+    class IsoOptions;
 
-class base_K3bDataVolumeDescWidget : public QWidget, public Ui::base_K3bDataVolumeDescWidget
-{
-public:
-  base_K3bDataVolumeDescWidget( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
-};
+    class DataVolumeDescWidget : public QWidget, public Ui::base_K3bDataVolumeDescWidget
+    {
+        Q_OBJECT
 
+    public:
+        DataVolumeDescWidget( QWidget* parent = 0 );
+        ~DataVolumeDescWidget();
 
-class K3bDataVolumeDescWidget : public base_K3bDataVolumeDescWidget
-{
-  Q_OBJECT
+        void load( const IsoOptions& );
+        void save( IsoOptions& );
 
- public:
-  K3bDataVolumeDescWidget( QWidget* parent = 0 );
-  ~K3bDataVolumeDescWidget();
-
-  void load( const K3bIsoOptions& );
-  void save( K3bIsoOptions& );
-
- private Q_SLOTS:
-  void slotVolumeSetSizeChanged( int );
-};
+    private Q_SLOTS:
+        void slotVolumeSetSizeChanged( int );
+    };
+}
 
 #endif

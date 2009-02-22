@@ -1,9 +1,9 @@
 /* 
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,71 +23,72 @@
 #include "k3btrack.h"
 #include "k3bdevice_export.h"
 
-namespace K3bDevice
-{
-
-    enum ContentsType {
-        DATA,
-        AUDIO,
-        MIXED,
-        NONE // no tracks
-    };
-
-    /**
-     * A list of K3bTracks that represents the contents
-     * of a cd.
-     * The Toc deletes all its tracks when it is deleted and
-     * deletes removed tracks.
-     */
-    class LIBK3BDEVICE_EXPORT Toc : public QList<K3bTrack>
+namespace K3b {
+    namespace Device
     {
-    public:
-        Toc();
-        /** deep copy */
-        Toc( const Toc& );
-        /** deletes all tracks */
-        ~Toc();
-        /** deep copy */
-        Toc& operator=( const Toc& );
+        enum ContentsType {
+            DATA,
+            AUDIO,
+            MIXED,
+            NONE // no tracks
+        };
 
         /**
-         * CDDB disc Id
+         * A list of Tracks that represents the contents
+         * of a cd.
+         * The Toc deletes all its tracks when it is deleted and
+         * deletes removed tracks.
          */
-        unsigned int discId() const;
+        class LIBK3BDEVICE_EXPORT Toc : public QList<Track>
+        {
+        public:
+            Toc();
+            /** deep copy */
+            Toc( const Toc& );
+            /** deletes all tracks */
+            ~Toc();
+            /** deep copy */
+            Toc& operator=( const Toc& );
 
-        QByteArray mcn() const;
+            /**
+             * CDDB disc Id
+             */
+            unsigned int discId() const;
 
-        /**
-         * determine the contents type based on the tracks' types.
-         * Audio, Data, or Mixed
-         */
-        int contentType() const;
+            QByteArray mcn() const;
 
-        /**
-         * \return the number of sessions in this TOC.
-         */
-        int sessions() const;
+            /**
+             * determine the contents type based on the tracks' types.
+             * Audio, Data, or Mixed
+             */
+            ContentsType contentType() const;
 
-        /**
-         * The first track's first sector could differ from the disc's
-         * first sector if there is a pregap before index 1
-         */
-        K3b::Msf firstSector() const;
-        K3b::Msf lastSector() const;
-        K3b::Msf length() const;
+            /**
+             * \return the number of sessions in this TOC.
+             */
+            int sessions() const;
 
-        void setMcn( const QByteArray& mcn );
+            /**
+             * The first track's first sector could differ from the disc's
+             * first sector if there is a pregap before index 1
+             */
+            K3b::Msf firstSector() const;
+            K3b::Msf lastSector() const;
+            K3b::Msf length() const;
 
-        void clear();
+            void setMcn( const QByteArray& mcn );
 
-        void debug() const;
+            void clear();
 
-        bool operator==( const Toc& ) const;
-        bool operator!=( const Toc& ) const;
+            void debug() const;
 
-    private:
-        QByteArray m_mcn;
-    };
+            bool operator==( const Toc& ) const;
+            bool operator!=( const Toc& ) const;
+
+        private:
+            QByteArray m_mcn;
+        };
+    }
 }
 
 #endif

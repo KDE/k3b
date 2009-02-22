@@ -31,7 +31,7 @@
 #include <k3bdevicemanager.h>
 
 
-K3bDoc::K3bDoc( QObject* parent )
+K3b::Doc::Doc( QObject* parent )
     : QObject( parent ),
       m_modified(false),
       m_view(0)
@@ -40,19 +40,19 @@ K3bDoc::K3bDoc( QObject* parent )
 }
 
 
-K3bDoc::~K3bDoc()
+K3b::Doc::~Doc()
 {
 }
 
 
-void K3bDoc::slotChanged()
+void K3b::Doc::slotChanged()
 {
     setModified( true );
     emit changed( this );
 }
 
 
-void K3bDoc::setModified( bool m )
+void K3b::Doc::setModified( bool m )
 {
     if( m != m_modified ) {
         m_modified = m;
@@ -62,49 +62,49 @@ void K3bDoc::setModified( bool m )
 }
 
 
-void K3bDoc::setDummy( bool b )
+void K3b::Doc::setDummy( bool b )
 {
     m_dummy = b;
 }
 
-void K3bDoc::setSpeed( int speed )
+void K3b::Doc::setSpeed( int speed )
 {
     m_speed = speed;
 }
 
-void K3bDoc::setBurner( K3bDevice::Device* dev )
+void K3b::Doc::setBurner( K3b::Device::Device* dev )
 {
     m_burner = dev;
 }
 
 
-void K3bDoc::addUrl( const KUrl& url )
+void K3b::Doc::addUrl( const KUrl& url )
 {
     KUrl::List urls(url);
     addUrls( urls );
 }
 
 
-void K3bDoc::setURL( const KUrl& url )
+void K3b::Doc::setURL( const KUrl& url )
 {
     doc_url = url;
 
     emit changed();
 }
 
-const KUrl& K3bDoc::URL() const
+const KUrl& K3b::Doc::URL() const
 {
     return doc_url;
 }
 
 
-QString K3bDoc::name() const
+QString K3b::Doc::name() const
 {
     return URL().path().section( '/', -1 );
 }
 
 
-bool K3bDoc::newDocument()
+bool K3b::Doc::newDocument()
 {
     setModified( false );
 
@@ -123,7 +123,7 @@ bool K3bDoc::newDocument()
 }
 
 
-bool K3bDoc::saveGeneralDocumentData( QDomElement* part )
+bool K3b::Doc::saveGeneralDocumentData( QDomElement* part )
 {
     QDomDocument doc = part->ownerDocument();
     QDomElement mainElem = doc.createElement( "general" );
@@ -167,7 +167,7 @@ bool K3bDoc::saveGeneralDocumentData( QDomElement* part )
 }
 
 
-bool K3bDoc::readGeneralDocumentData( const QDomElement& elem )
+bool K3b::Doc::readGeneralDocumentData( const QDomElement& elem )
 {
     if( elem.nodeName() != "general" )
         return false;
@@ -209,12 +209,12 @@ bool K3bDoc::readGeneralDocumentData( const QDomElement& elem )
 }
 
 
-int K3bDoc::supportedMediaTypes() const
+int K3b::Doc::supportedMediaTypes() const
 {
-    return K3bDevice::MEDIA_WRITABLE;
+    return K3b::Device::MEDIA_WRITABLE;
 }
 
-KIO::filesize_t K3bDoc::burningSize() const
+KIO::filesize_t K3b::Doc::burningSize() const
 {
     return size();
 }

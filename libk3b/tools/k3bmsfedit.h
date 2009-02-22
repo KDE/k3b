@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -23,40 +23,44 @@
 #include <k3bmsf.h>
 #include "k3b_export.h"
 
-class K3bMsfValidator : public QRegExpValidator
-{
-public:
-    K3bMsfValidator( QObject* parent = 0 );
-};
+namespace K3b {
+    class MsfValidator : public QRegExpValidator
+    {
+    public:
+        MsfValidator( QObject* parent = 0 );
+    };
+}
 
 
-class LIBK3B_EXPORT K3bMsfEdit : public QSpinBox
-{
-    Q_OBJECT
+namespace K3b {
+    class LIBK3B_EXPORT MsfEdit : public QSpinBox
+    {
+        Q_OBJECT
 
-public:
-    K3bMsfEdit( QWidget* parent = 0 );
-    ~K3bMsfEdit();
+    public:
+        MsfEdit( QWidget* parent = 0 );
+        ~MsfEdit();
 
-    K3b::Msf msfValue() const;
+        Msf msfValue() const;
 
-    void stepBy( int steps );
+        void stepBy( int steps );
 
-Q_SIGNALS:
-    void valueChanged( const K3b::Msf& );
+    Q_SIGNALS:
+        void valueChanged( const Msf& );
 
-public Q_SLOTS:
-    void setMsfValue( const K3b::Msf& );
+    public Q_SLOTS:
+        void setMsfValue( const Msf& );
 
-private:
-    QString textFromValue( int value ) const ;
-    int valueFromText( const QString & text ) const;
+    private:
+        QString textFromValue( int value ) const ;
+        int valueFromText( const QString & text ) const;
 
-    class Private;
-    Private* d;
+        class Private;
+        Private* d;
 
-    Q_PRIVATE_SLOT( d, void _k_valueChanged(int) )
-};
+        Q_PRIVATE_SLOT( d, void _k_valueChanged(int) )
+    };
+}
 
 
 #endif

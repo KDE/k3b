@@ -72,9 +72,11 @@ static const char* s_pictureSizeNames[] = {
 };
 
 
-K3bVideoDVDRippingWidget::K3bVideoDVDRippingWidget( QWidget* parent )
-    : base_K3bVideoDVDRippingWidget( parent )
+K3b::VideoDVDRippingWidget::VideoDVDRippingWidget( QWidget* parent )
+    : QWidget( parent )
 {
+    setupUi( this );
+
     m_editBaseDir->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
     m_titleView->addColumn( i18n("Title") );
@@ -97,19 +99,19 @@ K3bVideoDVDRippingWidget::K3bVideoDVDRippingWidget( QWidget* parent )
         m_comboAudioBitrate->addItem( i18n("%1 kbps" ,s_mp3Bitrates[i]) );
 
 
-    for( int i = 0; i < K3bVideoDVDTitleTranscodingJob::VIDEO_CODEC_NUM_ENTRIES; ++i ) {
-        K3bVideoDVDTitleTranscodingJob::VideoCodec codec( (K3bVideoDVDTitleTranscodingJob::VideoCodec)i );
-        if( K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( codec ) )
+    for( int i = 0; i < K3b::VideoDVDTitleTranscodingJob::VIDEO_CODEC_NUM_ENTRIES; ++i ) {
+        K3b::VideoDVDTitleTranscodingJob::VideoCodec codec( (K3b::VideoDVDTitleTranscodingJob::VideoCodec)i );
+        if( K3b::VideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( codec ) )
             m_comboVideoCodec->insertItem( i,
-                                           K3bVideoDVDTitleTranscodingJob::videoCodecString( codec ),
-                                           K3bVideoDVDTitleTranscodingJob::videoCodecDescription( codec ) );
+                                           K3b::VideoDVDTitleTranscodingJob::videoCodecString( codec ),
+                                           K3b::VideoDVDTitleTranscodingJob::videoCodecDescription( codec ) );
     }
-    for( int i = 0; i < K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_NUM_ENTRIES; ++i ) {
-        K3bVideoDVDTitleTranscodingJob::AudioCodec codec( (K3bVideoDVDTitleTranscodingJob::AudioCodec)i );
-        if( K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( codec ) )
+    for( int i = 0; i < K3b::VideoDVDTitleTranscodingJob::AUDIO_CODEC_NUM_ENTRIES; ++i ) {
+        K3b::VideoDVDTitleTranscodingJob::AudioCodec codec( (K3b::VideoDVDTitleTranscodingJob::AudioCodec)i );
+        if( K3b::VideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( codec ) )
             m_comboAudioCodec->insertItem( i,
-                                           K3bVideoDVDTitleTranscodingJob::audioCodecString( codec ),
-                                           K3bVideoDVDTitleTranscodingJob::audioCodecDescription( codec ) );
+                                           K3b::VideoDVDTitleTranscodingJob::audioCodecString( codec ),
+                                           K3b::VideoDVDTitleTranscodingJob::audioCodecDescription( codec ) );
     }
 
     for( int i = 0; i < PICTURE_SIZE_MAX; ++i ) {
@@ -149,18 +151,18 @@ K3bVideoDVDRippingWidget::K3bVideoDVDRippingWidget( QWidget* parent )
 }
 
 
-K3bVideoDVDRippingWidget::~K3bVideoDVDRippingWidget()
+K3b::VideoDVDRippingWidget::~VideoDVDRippingWidget()
 {
 }
 
 
-K3bVideoDVDTitleTranscodingJob::VideoCodec K3bVideoDVDRippingWidget::selectedVideoCodec() const
+K3b::VideoDVDTitleTranscodingJob::VideoCodec K3b::VideoDVDRippingWidget::selectedVideoCodec() const
 {
-    return (K3bVideoDVDTitleTranscodingJob::VideoCodec)m_comboVideoCodec->selectedValue();
+    return (K3b::VideoDVDTitleTranscodingJob::VideoCodec)m_comboVideoCodec->selectedValue();
 }
 
 
-QSize K3bVideoDVDRippingWidget::selectedPictureSize() const
+QSize K3b::VideoDVDRippingWidget::selectedPictureSize() const
 {
     switch( m_comboVideoSize->currentIndex() ) {
     case PICTURE_SIZE_ORIGINAL:
@@ -175,7 +177,7 @@ QSize K3bVideoDVDRippingWidget::selectedPictureSize() const
 }
 
 
-void K3bVideoDVDRippingWidget::setSelectedPictureSize( const QSize& size )
+void K3b::VideoDVDRippingWidget::setSelectedPictureSize( const QSize& size )
 {
     m_customVideoSize = size;
     if( size == QSize(0,0) )
@@ -195,35 +197,35 @@ void K3bVideoDVDRippingWidget::setSelectedPictureSize( const QSize& size )
 }
 
 
-void K3bVideoDVDRippingWidget::setSelectedVideoCodec( K3bVideoDVDTitleTranscodingJob::VideoCodec codec )
+void K3b::VideoDVDRippingWidget::setSelectedVideoCodec( K3b::VideoDVDTitleTranscodingJob::VideoCodec codec )
 {
     m_comboVideoCodec->setSelectedValue( (int)codec );
 }
 
 
-K3bVideoDVDTitleTranscodingJob::AudioCodec K3bVideoDVDRippingWidget::selectedAudioCodec() const
+K3b::VideoDVDTitleTranscodingJob::AudioCodec K3b::VideoDVDRippingWidget::selectedAudioCodec() const
 {
-    return (K3bVideoDVDTitleTranscodingJob::AudioCodec)m_comboAudioCodec->selectedValue();
+    return (K3b::VideoDVDTitleTranscodingJob::AudioCodec)m_comboAudioCodec->selectedValue();
 }
 
 
-void K3bVideoDVDRippingWidget::setSelectedAudioCodec( K3bVideoDVDTitleTranscodingJob::AudioCodec codec )
+void K3b::VideoDVDRippingWidget::setSelectedAudioCodec( K3b::VideoDVDTitleTranscodingJob::AudioCodec codec )
 {
     m_comboAudioCodec->setSelectedValue( (int)codec );
     slotAudioCodecChanged( (int)codec );
 }
 
 
-int K3bVideoDVDRippingWidget::selectedAudioBitrate() const
+int K3b::VideoDVDRippingWidget::selectedAudioBitrate() const
 {
-    if( selectedAudioCodec() == K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_MP3 )
+    if( selectedAudioCodec() == K3b::VideoDVDTitleTranscodingJob::AUDIO_CODEC_MP3 )
         return s_mp3Bitrates[m_comboAudioBitrate->currentIndex()];
     else
         return m_spinAudioBitrate->value();
 }
 
 
-void K3bVideoDVDRippingWidget::setSelectedAudioBitrate( int bitrate )
+void K3b::VideoDVDRippingWidget::setSelectedAudioBitrate( int bitrate )
 {
     m_spinAudioBitrate->setValue( bitrate );
 
@@ -244,7 +246,7 @@ void K3bVideoDVDRippingWidget::setSelectedAudioBitrate( int bitrate )
 }
 
 
-void K3bVideoDVDRippingWidget::slotUpdateFreeTempSpace()
+void K3b::VideoDVDRippingWidget::slotUpdateFreeTempSpace()
 {
     QString path = m_editBaseDir->url().toLocalFile();
 
@@ -268,7 +270,7 @@ void K3bVideoDVDRippingWidget::slotUpdateFreeTempSpace()
 }
 
 
-void K3bVideoDVDRippingWidget::setNeededSize( KIO::filesize_t size )
+void K3b::VideoDVDRippingWidget::setNeededSize( KIO::filesize_t size )
 {
     m_neededSize = size;
     if( size > 0 )
@@ -280,7 +282,7 @@ void K3bVideoDVDRippingWidget::setNeededSize( KIO::filesize_t size )
 }
 
 
-void K3bVideoDVDRippingWidget::slotSeeSpecialStrings()
+void K3b::VideoDVDRippingWidget::slotSeeSpecialStrings()
 {
     QWhatsThis::showText( QCursor::pos(),
                           i18n( "<p><b>Pattern special strings:</b>"
@@ -306,16 +308,16 @@ void K3bVideoDVDRippingWidget::slotSeeSpecialStrings()
 }
 
 
-void K3bVideoDVDRippingWidget::slotAudioCodecChanged( int codec )
+void K3b::VideoDVDRippingWidget::slotAudioCodecChanged( int codec )
 {
     switch( codec ) {
-    case K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_MP3:
+    case K3b::VideoDVDTitleTranscodingJob::AUDIO_CODEC_MP3:
         m_stackAudioQuality->raiseWidget( m_stackPageAudioQualityMp3 );
         break;
-    case K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_STEREO:
+    case K3b::VideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_STEREO:
         m_stackAudioQuality->raiseWidget( m_stackPageAudioQualityAC3 );
         break;
-    case K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_PASSTHROUGH:
+    case K3b::VideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_PASSTHROUGH:
         m_stackAudioQuality->raiseWidget( m_stackPageAudioQualityAC3Pt );
         break;
     }
@@ -324,7 +326,7 @@ void K3bVideoDVDRippingWidget::slotAudioCodecChanged( int codec )
 }
 
 
-void K3bVideoDVDRippingWidget::slotVideoSizeChanged( int sizeIndex )
+void K3b::VideoDVDRippingWidget::slotVideoSizeChanged( int sizeIndex )
 {
     if( sizeIndex == PICTURE_SIZE_CUSTOM )
         slotCustomPictureSize();
@@ -333,14 +335,14 @@ void K3bVideoDVDRippingWidget::slotVideoSizeChanged( int sizeIndex )
 }
 
 
-void K3bVideoDVDRippingWidget::slotCustomPictureSize()
+void K3b::VideoDVDRippingWidget::slotCustomPictureSize()
 {
     KDialog dlg( this );
     dlg.setCaption( i18n("Video Picture Size") );
     dlg.setButtons( KDialog::Ok|KDialog::Cancel );
     dlg.setDefaultButton( KDialog::Ok );
 
-    K3bRichTextLabel* label = new K3bRichTextLabel( i18n("<p>Please choose the width and height of the resulting video. "
+    K3b::RichTextLabel* label = new K3b::RichTextLabel( i18n("<p>Please choose the width and height of the resulting video. "
                                                          "If one value is set to <em>Auto</em> K3b will choose this value "
                                                          "depending on the aspect ratio of the video picture.<br>"
                                                          "Be aware that setting both the width and the height to fixed values "

@@ -22,39 +22,50 @@
 #include <QVBoxLayout>
 
 
-class K3bDoc;
-class K3bBurnJob;
-class K3bWriterSelectionWidget;
-class K3bTempDirSelectionWidget;
+namespace K3b {
+    class Doc;
+}
+namespace K3b {
+    class BurnJob;
+}
+namespace K3b {
+    class WriterSelectionWidget;
+}
+namespace K3b {
+    class TempDirSelectionWidget;
+}
 class QGroupBox;
 class QCheckBox;
 class QTabWidget;
 class QSpinBox;
 class QVBoxLayout;
-class K3bWritingModeWidget;
+namespace K3b {
+    class WritingModeWidget;
+}
 
 
 /**
  *@author Sebastian Trueg
  */
-class K3bProjectBurnDialog : public K3bInteractionDialog
+namespace K3b {
+class ProjectBurnDialog : public InteractionDialog
 {
     Q_OBJECT
 
 public:
-    K3bProjectBurnDialog( K3bDoc* doc, QWidget *parent=0 );
-    ~K3bProjectBurnDialog();
+    ProjectBurnDialog( Doc* doc, QWidget *parent=0 );
+    ~ProjectBurnDialog();
 
     enum resultCode { Canceled = 0, Saved = 1, Burn = 2 };
 
     /**
      * shows the dialog with exec().
-     * Use this instead of K3bInteractionDialog::exec
+     * Use this instead of InteractionDialog::exec
      * \param burn If true the dialog shows the Burn-button
      */
     int execBurnDialog( bool burn );
 
-    K3bDoc* doc() const { return m_doc; }
+    Doc* doc() const { return m_doc; }
 	
 protected Q_SLOTS:
     /** burn */
@@ -158,7 +169,7 @@ protected:
     /**
      * use this to set additionell stuff in the job
      */
-    virtual void prepareJob( K3bBurnJob* ) {};
+    virtual void prepareJob( BurnJob* ) {};
 
     void prepareGui();
 
@@ -166,13 +177,13 @@ protected:
 
     /**
      * Call this if you must reimplement it.
-     * \reimplemented from K3bInteractionDialog
+     * \reimplemented from InteractionDialog
      */
     virtual void init();
 
-    K3bWriterSelectionWidget* m_writerSelectionWidget;
-    K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
-    K3bWritingModeWidget* m_writingModeWidget;
+    WriterSelectionWidget* m_writerSelectionWidget;
+    TempDirSelectionWidget* m_tempDirSelectionWidget;
+    WritingModeWidget* m_writingModeWidget;
     QGroupBox* m_optionGroup;
     QVBoxLayout* m_optionGroupLayout;
     QCheckBox* m_checkCacheImage;
@@ -185,9 +196,10 @@ private Q_SLOTS:
     void slotShowImageTip( bool buttonActivated );
 
 private:
-    K3bDoc* m_doc;
-    K3bBurnJob* m_job;
+    Doc* m_doc;
+    BurnJob* m_job;
     QTabWidget* m_tabWidget;
 };
+}
 
 #endif

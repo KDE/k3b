@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -22,31 +22,33 @@
 class QTimer;
 
 
-class LIBK3B_EXPORT K3bBusyWidget : public QFrame
-{
-    Q_OBJECT
+namespace K3b {
+    class LIBK3B_EXPORT BusyWidget : public QFrame
+    {
+        Q_OBJECT
 
-public:
-    K3bBusyWidget( QWidget* parent = 0 );
-    ~K3bBusyWidget();
+    public:
+        BusyWidget( QWidget* parent = 0 );
+        ~BusyWidget();
 
-    void showBusy( bool b );
+        void showBusy( bool b );
 
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
+        QSize sizeHint() const;
+        QSize minimumSizeHint() const;
 
-protected:
-    void paintEvent( QPaintEvent* );
+    protected:
+        void paintEvent( QPaintEvent* );
 
-private Q_SLOTS:
-    void animateBusy();
+    private Q_SLOTS:
+        void animateBusy();
 
-private:
-    bool m_bBusy;
-    int m_iBusyPosition;
+    private:
+        bool m_bBusy;
+        int m_iBusyPosition;
 
-    QTimer* m_busyTimer;
-};
+        QTimer* m_busyTimer;
+    };
+}
 
 
 #endif

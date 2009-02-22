@@ -24,39 +24,39 @@
 #include <KIcon>
 
 
-class K3bPlacesModel::Private
+class K3b::PlacesModel::Private
 {
 public:
-    K3bDeviceModel* deviceModel;
+    K3b::DeviceModel* deviceModel;
     QList<KDirModel*> dirModels;
 };
 
 
 
-K3bPlacesModel::K3bPlacesModel( QObject* parent )
-    : K3bMetaItemModel( parent ),
+K3b::PlacesModel::PlacesModel( QObject* parent )
+    : K3b::MetaItemModel( parent ),
       d( new Private() )
 {
-    d->deviceModel = new K3bDeviceModel( this );
+    d->deviceModel = new K3b::DeviceModel( this );
     addSubModel( "Devices", KIcon( "media-optical" ), d->deviceModel, true );
 
     connect( d->deviceModel, SIGNAL( modelAboutToBeReset() ),
              this, SIGNAL( modelAboutToBeReset() ) );
     connect( d->deviceModel, SIGNAL( modelReset() ),
              this, SIGNAL( modelReset() ) );
-    connect( k3bcore->deviceManager(), SIGNAL( changed( K3bDevice::DeviceManager* ) ),
-             this, SLOT( slotDevicesChanged( K3bDevice::DeviceManager* ) ) );
+    connect( k3bcore->deviceManager(), SIGNAL( changed( K3b::Device::DeviceManager* ) ),
+             this, SLOT( slotDevicesChanged( K3b::Device::DeviceManager* ) ) );
     slotDevicesChanged( k3bcore->deviceManager() );
 }
 
 
-K3bPlacesModel::~K3bPlacesModel()
+K3b::PlacesModel::~PlacesModel()
 {
     delete d;
 }
 
 
-KFileItem K3bPlacesModel::itemForIndex( const QModelIndex& index ) const
+KFileItem K3b::PlacesModel::itemForIndex( const QModelIndex& index ) const
 {
     KDirModel* model = qobject_cast<KDirModel*>( subModelForIndex( index ) );
     if ( model ) {
@@ -66,22 +66,22 @@ KFileItem K3bPlacesModel::itemForIndex( const QModelIndex& index ) const
 }
 
 
-K3bDevice::Device* K3bPlacesModel::deviceForIndex( const QModelIndex& index ) const
+K3b::Device::Device* K3b::PlacesModel::deviceForIndex( const QModelIndex& index ) const
 {
-    if ( qobject_cast<K3bDeviceModel*>( subModelForIndex( index ) ) == d->deviceModel ) {
+    if ( qobject_cast<K3b::DeviceModel*>( subModelForIndex( index ) ) == d->deviceModel ) {
         return d->deviceModel->deviceForIndex( mapToSubModel( index ) );
     }
     return 0;
 }
 
 
-QModelIndex K3bPlacesModel::indexForDevice( K3bDevice::Device* dev ) const
+QModelIndex K3b::PlacesModel::indexForDevice( K3b::Device::Device* dev ) const
 {
     return mapFromSubModel( d->deviceModel->indexForDevice( dev ) );
 }
 
 
-void K3bPlacesModel::expandToUrl( const KUrl& url )
+void K3b::PlacesModel::expandToUrl( const KUrl& url )
 {
     kDebug() << url;
     // search for a place that contains this URL
@@ -95,7 +95,7 @@ void K3bPlacesModel::expandToUrl( const KUrl& url )
 }
 
 
-void K3bPlacesModel::addPlace( const QString& name, const KIcon& icon, const KUrl& rootUrl )
+void K3b::PlacesModel::addPlace( const QString& name, const KIcon& icon, const KUrl& rootUrl )
 {
     KDirModel* model = new KDirModel( this );
     connect( model, SIGNAL( expand( const QModelIndex& ) ), this, SLOT( slotExpand( const QModelIndex& ) ) );
@@ -106,14 +106,14 @@ void K3bPlacesModel::addPlace( const QString& name, const KIcon& icon, const KUr
 }
 
 
-void K3bPlacesModel::slotExpand( const QModelIndex& index )
+void K3b::PlacesModel::slotExpand( const QModelIndex& index )
 {
     kDebug();
     emit expand( mapFromSubModel( index ) );
 }
 
 
-void K3bPlacesModel::slotDevicesChanged( K3bDevice::DeviceManager* dm )
+void K3b::PlacesModel::slotDevicesChanged( K3b::Device::DeviceManager* dm )
 {
     kDebug();
     d->deviceModel->setDevices( dm->allDevices() );

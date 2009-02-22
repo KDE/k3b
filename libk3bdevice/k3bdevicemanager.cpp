@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@
 #include <qfileinfo.h>
 #include <qregexp.h>
 
-#include <k3process.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -109,7 +108,7 @@ typedef unsigned char u8;
 
 
 
-class K3bDevice::DeviceManager::Private
+class K3b::Device::DeviceManager::Private
 {
 public:
     QList<Device*> allDevices;
@@ -125,7 +124,7 @@ public:
 
 
 
-K3bDevice::DeviceManager::DeviceManager( QObject* parent )
+K3b::Device::DeviceManager::DeviceManager( QObject* parent )
     : QObject( parent ),
       d( new Private() )
 {
@@ -136,29 +135,29 @@ K3bDevice::DeviceManager::DeviceManager( QObject* parent )
 }
 
 
-K3bDevice::DeviceManager::~DeviceManager()
+K3b::Device::DeviceManager::~DeviceManager()
 {
     qDeleteAll( d->allDevices );
     delete d;
 }
 
 
-void K3bDevice::DeviceManager::setCheckWritingModes( bool b )
+void K3b::Device::DeviceManager::setCheckWritingModes( bool b )
 {
     d->checkWritingModes = b;
 }
 
 
-K3bDevice::Device* K3bDevice::DeviceManager::deviceByName( const QString& name )
+K3b::Device::Device* K3b::Device::DeviceManager::deviceByName( const QString& name )
 {
     return findDevice( name );
 }
 
 
-K3bDevice::Device* K3bDevice::DeviceManager::findDevice( const QString& devicename )
+K3b::Device::Device* K3b::Device::DeviceManager::findDevice( const QString& devicename )
 {
     if( devicename.isEmpty() ) {
-        kDebug() << "(K3bDevice::DeviceManager) request for empty device!";
+        kDebug() << "(K3b::Device::DeviceManager) request for empty device!";
         return 0;
     }
 
@@ -171,7 +170,7 @@ K3bDevice::Device* K3bDevice::DeviceManager::findDevice( const QString& devicena
 }
 
 
-K3bDevice::Device* K3bDevice::DeviceManager::findDeviceByUdi( const QString& udi )
+K3b::Device::Device* K3b::Device::DeviceManager::findDeviceByUdi( const QString& udi )
 {
     foreach( Device* dev, d->allDevices ) {
         if ( dev->solidDevice().udi() == udi )
@@ -181,55 +180,55 @@ K3bDevice::Device* K3bDevice::DeviceManager::findDeviceByUdi( const QString& udi
 }
 
 
-QList<K3bDevice::Device*> K3bDevice::DeviceManager::cdWriter() const
+QList<K3b::Device::Device*> K3b::Device::DeviceManager::cdWriter() const
 {
     return d->cdWriter;
 }
 
-QList<K3bDevice::Device*> K3bDevice::DeviceManager::cdReader() const
+QList<K3b::Device::Device*> K3b::Device::DeviceManager::cdReader() const
 {
     return d->cdReader;
 }
 
-QList<K3bDevice::Device*> K3bDevice::DeviceManager::dvdWriter() const
+QList<K3b::Device::Device*> K3b::Device::DeviceManager::dvdWriter() const
 {
     return d->dvdWriter;
 }
 
-QList<K3bDevice::Device*> K3bDevice::DeviceManager::dvdReader() const
+QList<K3b::Device::Device*> K3b::Device::DeviceManager::dvdReader() const
 {
     return d->dvdReader;
 }
 
-QList<K3bDevice::Device*> K3bDevice::DeviceManager::blueRayReader() const
+QList<K3b::Device::Device*> K3b::Device::DeviceManager::blueRayReader() const
 {
     return d->bdReader;
 }
 
-QList<K3bDevice::Device*> K3bDevice::DeviceManager::blueRayWriters() const
+QList<K3b::Device::Device*> K3b::Device::DeviceManager::blueRayWriters() const
 {
     return d->bdWriter;
 }
 
-QList<K3bDevice::Device*> K3bDevice::DeviceManager::burningDevices() const
+QList<K3b::Device::Device*> K3b::Device::DeviceManager::burningDevices() const
 {
     return cdWriter();
 }
 
 
-QList<K3bDevice::Device*> K3bDevice::DeviceManager::readingDevices() const
+QList<K3b::Device::Device*> K3b::Device::DeviceManager::readingDevices() const
 {
     return cdReader();
 }
 
 
-QList<K3bDevice::Device*> K3bDevice::DeviceManager::allDevices() const
+QList<K3b::Device::Device*> K3b::Device::DeviceManager::allDevices() const
 {
     return d->allDevices;
 }
 
 
-int K3bDevice::DeviceManager::scanBus()
+int K3b::Device::DeviceManager::scanBus()
 {
     int cnt = 0;
 
@@ -244,7 +243,7 @@ int K3bDevice::DeviceManager::scanBus()
 }
 
 
-K3bDevice::Device* K3bDevice::DeviceManager::checkDevice( const Solid::Device& dev )
+K3b::Device::Device* K3b::Device::DeviceManager::checkDevice( const Solid::Device& dev )
 {
     if ( dev.is<Solid::OpticalDrive>() ) {
         return addDevice( dev );
@@ -255,7 +254,7 @@ K3bDevice::Device* K3bDevice::DeviceManager::checkDevice( const Solid::Device& d
 }
 
 
-void K3bDevice::DeviceManager::printDevices()
+void K3b::Device::DeviceManager::printDevices()
 {
     kDebug() << "Devices:" << endl
              << "------------------------------" << endl;
@@ -274,7 +273,7 @@ void K3bDevice::DeviceManager::printDevices()
 }
 
 
-void K3bDevice::DeviceManager::clear()
+void K3b::Device::DeviceManager::clear()
 {
     // clear current devices
     d->cdReader.clear();
@@ -294,7 +293,7 @@ void K3bDevice::DeviceManager::clear()
 }
 
 
-bool K3bDevice::DeviceManager::readConfig( const KConfigGroup& c )
+bool K3b::Device::DeviceManager::readConfig( const KConfigGroup& c )
 {
     //
     // New configuration format since K3b 0.11.94
@@ -304,13 +303,13 @@ bool K3bDevice::DeviceManager::readConfig( const KConfigGroup& c )
     //
     // Iterate over all devices and check if we have a config entry
     //
-    for( QList<K3bDevice::Device*>::iterator it = d->allDevices.begin(); it != d->allDevices.end(); ++it ) {
-        K3bDevice::Device* dev = *it;
+    for( QList<K3b::Device::Device*>::iterator it = d->allDevices.begin(); it != d->allDevices.end(); ++it ) {
+        K3b::Device::Device* dev = *it;
 
         QString configEntryName = dev->vendor() + " " + dev->description();
         QStringList list = c.readEntry( configEntryName, QStringList() );
         if( !list.isEmpty() ) {
-            kDebug() << "(K3bDevice::DeviceManager) found config entry for devicetype: " << configEntryName;
+            kDebug() << "(K3b::Device::DeviceManager) found config entry for devicetype: " << configEntryName;
 
             dev->setMaxReadSpeed( list[0].toInt() );
             if( list.count() > 1 )
@@ -322,7 +321,7 @@ bool K3bDevice::DeviceManager::readConfig( const KConfigGroup& c )
 }
 
 
-bool K3bDevice::DeviceManager::saveConfig( KConfigGroup c )
+bool K3b::Device::DeviceManager::saveConfig( KConfigGroup c )
 {
     //
     // New configuration format since K3b 0.11.94
@@ -351,18 +350,18 @@ bool K3bDevice::DeviceManager::saveConfig( KConfigGroup c )
 }
 
 
-K3bDevice::Device* K3bDevice::DeviceManager::addDevice( const Solid::Device& solidDevice )
+K3b::Device::Device* K3b::Device::DeviceManager::addDevice( const Solid::Device& solidDevice )
 {
     if ( findDevice( solidDevice.as<Solid::Block>()->device() ) ) {
-        kDebug() << "(K3bDevice::DeviceManager) dev " << solidDevice.as<Solid::Block>()->device()  << " already found";
+        kDebug() << "(K3b::Device::DeviceManager) dev " << solidDevice.as<Solid::Block>()->device()  << " already found";
         return 0;
     }
 
-    return addDevice( new K3bDevice::Device( solidDevice ) );
+    return addDevice( new K3b::Device::Device( solidDevice ) );
 }
 
 
-K3bDevice::Device* K3bDevice::DeviceManager::addDevice( K3bDevice::Device* device )
+K3b::Device::Device* K3b::Device::DeviceManager::addDevice( K3b::Device::Device* device )
 {
     const QString devicename = device->blockDeviceName();
 
@@ -377,7 +376,7 @@ K3bDevice::Device* K3bDevice::DeviceManager::addDevice( K3bDevice::Device* devic
 
         // not every drive is able to read CDs
         // there are some 1st generation DVD writer that cannot
-        if( device->type() & K3bDevice::DEVICE_CD_ROM )
+        if( device->type() & K3b::Device::DEVICE_CD_ROM )
             d->cdReader.append( device );
         if( device->readsDvd() )
             d->dvdReader.append( device );
@@ -392,7 +391,7 @@ K3bDevice::Device* K3bDevice::DeviceManager::addDevice( K3bDevice::Device* devic
 
         if( device->writesCd() ) {
             // default to max write speed
-            kDebug() << "(K3bDevice::DeviceManager) setting current write speed of device "
+            kDebug() << "(K3b::Device::DeviceManager) setting current write speed of device "
                      << device->blockDeviceName()
                      << " to " << device->maxWriteSpeed() << endl;
             device->setCurrentWriteSpeed( device->maxWriteSpeed() );
@@ -406,7 +405,7 @@ K3bDevice::Device* K3bDevice::DeviceManager::addDevice( K3bDevice::Device* devic
 }
 
 
-void K3bDevice::DeviceManager::removeDevice( const Solid::Device& dev )
+void K3b::Device::DeviceManager::removeDevice( const Solid::Device& dev )
 {
     if( Device* device = findDevice( dev.as<Solid::Block>()->device() ) ) {
         d->cdReader.removeAll( device );
@@ -425,14 +424,14 @@ void K3bDevice::DeviceManager::removeDevice( const Solid::Device& dev )
 }
 
 
-void K3bDevice::DeviceManager::slotSolidDeviceAdded( const QString& udi )
+void K3b::Device::DeviceManager::slotSolidDeviceAdded( const QString& udi )
 {
     kDebug() << udi;
     checkDevice( Solid::Device( udi ) );
 }
 
 
-void K3bDevice::DeviceManager::slotSolidDeviceRemoved( const QString& udi )
+void K3b::Device::DeviceManager::slotSolidDeviceRemoved( const QString& udi )
 {
     kDebug() << udi;
     Solid::Device solidDev( udi );

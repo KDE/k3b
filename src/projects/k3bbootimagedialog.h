@@ -18,24 +18,30 @@
 
 #include <kdialog.h>
 
-class K3bBootImageView;
-class K3bDataDoc;
+namespace K3b {
+    class BootImageView;
+}
+namespace K3b {
+    class DataDoc;
+}
 
 
-class K3bBootImageDialog : public KDialog
+namespace K3b {
+class BootImageDialog : public KDialog
 {
   Q_OBJECT
 
  public:
-  K3bBootImageDialog( K3bDataDoc*, 
+  BootImageDialog( DataDoc*, 
 		      QWidget* parent = 0);
-  ~K3bBootImageDialog();
+  ~BootImageDialog();
 
  private Q_SLOTS:
   void slotOk();
 
  private:
-  K3bBootImageView* m_bootImageView;
+  BootImageView* m_bootImageView;
 };
+}
 
 #endif

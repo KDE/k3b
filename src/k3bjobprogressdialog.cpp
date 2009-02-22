@@ -74,7 +74,7 @@
 #include <KGlobalSettings>
 #include <k3listview.h>
 
-class K3bJobProgressDialog::Private
+class K3b::JobProgressDialog::Private
 {
 public:
     Private()
@@ -90,7 +90,7 @@ public:
 
 
 
-K3bJobProgressDialog::K3bJobProgressDialog( QWidget* parent,
+K3b::JobProgressDialog::JobProgressDialog( QWidget* parent,
                                             bool showSubProgress )
     : KDialog( parent ),
       m_osd(0)
@@ -113,14 +113,14 @@ K3bJobProgressDialog::K3bJobProgressDialog( QWidget* parent,
 /*
  *  Destroys the object and frees any allocated resources
  */
-K3bJobProgressDialog::~K3bJobProgressDialog()
+K3b::JobProgressDialog::~JobProgressDialog()
 {
     delete d;
     delete m_osd;
 }
 
 
-void K3bJobProgressDialog::setupGUI()
+void K3b::JobProgressDialog::setupGUI()
 {
     // KDialog does not allow to use Cancel and Close buttons at the same time!
     setButtons( KDialog::Cancel|KDialog::User1|KDialog::User2 );
@@ -141,10 +141,10 @@ void K3bJobProgressDialog::setupGUI()
     QHBoxLayout* headerLayout = new QHBoxLayout( d->headerFrame );
     headerLayout->setMargin( 2 ); // to make sure the frame gets displayed
     headerLayout->setSpacing( 0 );
-    m_pixLabel = new K3bThemedLabel( d->headerFrame );
+    m_pixLabel = new K3b::ThemedLabel( d->headerFrame );
     headerLayout->addWidget( m_pixLabel );
 
-    m_labelJob = new K3bThemedLabel( d->headerFrame );
+    m_labelJob = new K3b::ThemedLabel( d->headerFrame );
     //TODO fix me
     //m_labelJob->setMinimumVisibleText( 40 );
     QFont m_labelJob_font(  m_labelJob->font() );
@@ -153,7 +153,7 @@ void K3bJobProgressDialog::setupGUI()
     m_labelJob->setFont( m_labelJob_font );
     m_labelJob->setAlignment( Qt::AlignVCenter | Qt::AlignRight  );
 
-    m_labelJobDetails = new K3bThemedLabel( d->headerFrame );
+    m_labelJobDetails = new K3b::ThemedLabel( d->headerFrame );
     m_labelJobDetails->setAlignment( Qt::AlignVCenter | Qt::AlignRight  );
 
     QVBoxLayout* jobLabelsLayout = new QVBoxLayout;
@@ -188,13 +188,13 @@ void K3bJobProgressDialog::setupGUI()
     progressHeaderLayout->setMargin( 2 );
     progressHeaderLayout->setSpacing( 0 );
 
-    m_labelTask = new K3bThemedLabel( d->progressHeaderFrame );
+    m_labelTask = new K3b::ThemedLabel( d->progressHeaderFrame );
     QFont m_labelTask_font( m_labelTask->font() );
     m_labelTask_font.setPointSize( m_labelTask_font.pointSize() + 2 );
     m_labelTask_font.setBold( true );
     m_labelTask->setFont( m_labelTask_font );
 
-    m_labelElapsedTime = new K3bThemedLabel( d->progressHeaderFrame );
+    m_labelElapsedTime = new K3b::ThemedLabel( d->progressHeaderFrame );
 
     QVBoxLayout* jobProgressLayout = new QVBoxLayout( d->progressHeaderFrame );
     jobProgressLayout->setMargin( KDialog::spacingHint() );
@@ -202,7 +202,7 @@ void K3bJobProgressDialog::setupGUI()
     jobProgressLayout->addWidget( m_labelElapsedTime );
 
     progressHeaderLayout->addLayout( jobProgressLayout );
-    progressHeaderLayout->addWidget( new K3bThemedLabel( K3bTheme::PROGRESS_RIGHT, d->progressHeaderFrame ) );
+    progressHeaderLayout->addWidget( new K3b::ThemedLabel( K3b::Theme::PROGRESS_RIGHT, d->progressHeaderFrame ) );
     mainLayout->addWidget( d->progressHeaderFrame );
     // ------------------------------------------------------------------------------------------
 
@@ -241,7 +241,7 @@ void K3bJobProgressDialog::setupGUI()
     m_frameExtraInfoLayout->setSpacing( spacingHint() );
     mainLayout->addWidget( m_frameExtraInfo );
 
-    m_pixLabel->setThemePixmap( K3bTheme::PROGRESS_WORKING );
+    m_pixLabel->setThemePixmap( K3b::Theme::PROGRESS_WORKING );
 
     slotThemeChanged();
 
@@ -252,7 +252,7 @@ void K3bJobProgressDialog::setupGUI()
 }
 
 
-void K3bJobProgressDialog::show()
+void K3b::JobProgressDialog::show()
 {
     if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "hide main window while writing", false ) )
         if( QWidget* w = kapp->activeWindow() )
@@ -267,14 +267,14 @@ void K3bJobProgressDialog::show()
 }
 
 
-void K3bJobProgressDialog::setExtraInfo( QWidget *extra )
+void K3b::JobProgressDialog::setExtraInfo( QWidget *extra )
 {
     extra->setParent( m_frameExtraInfo );
     m_frameExtraInfoLayout->addWidget( extra, 0, 0 );
 }
 
 
-void K3bJobProgressDialog::closeEvent( QCloseEvent* e )
+void K3b::JobProgressDialog::closeEvent( QCloseEvent* e )
 {
     if( button( User2 )->isVisible() ) {
         KDialog::closeEvent( e );
@@ -295,7 +295,7 @@ void K3bJobProgressDialog::closeEvent( QCloseEvent* e )
 }
 
 
-void K3bJobProgressDialog::setupConnections()
+void K3b::JobProgressDialog::setupConnections()
 {
     connect( this, SIGNAL(cancelClicked()), this, SLOT(slotCancelButtonPressed()) );
     connect( this, SIGNAL(user2Clicked()), this, SLOT(close()) );
@@ -303,35 +303,35 @@ void K3bJobProgressDialog::setupConnections()
 }
 
 
-void K3bJobProgressDialog::slotProcessedSize( int processed, int size )
+void K3b::JobProgressDialog::slotProcessedSize( int processed, int size )
 {
     m_labelProcessedSize->setText( i18n("%1 of %2 MB", processed, size ) );
 }
 
 
-void K3bJobProgressDialog::slotProcessedSubSize( int processedTrackSize, int trackSize )
+void K3b::JobProgressDialog::slotProcessedSubSize( int processedTrackSize, int trackSize )
 {
     m_labelSubProcessedSize->setText( i18n("%1 of %2 MB",processedTrackSize, trackSize) );
 }
 
 
-void K3bJobProgressDialog::slotInfoMessage( const QString& infoString, int type )
+void K3b::JobProgressDialog::slotInfoMessage( const QString& infoString, int type )
 {
     Q3ListViewItem* currentInfoItem = new Q3ListViewItem( m_viewInfo, m_viewInfo->lastItem(), QString(), infoString );
     currentInfoItem->setSelectable( false );
 
     // set the icon
     switch( type ) {
-    case K3bJob::ERROR:
+    case K3b::Job::ERROR:
         currentInfoItem->setPixmap( 0, SmallIcon( "dialog-error" ) );
         break;
-    case K3bJob::WARNING:
+    case K3b::Job::WARNING:
         currentInfoItem->setPixmap( 0, SmallIcon( "dialog-warning" ) );
         break;
-    case K3bJob::SUCCESS:
+    case K3b::Job::SUCCESS:
         currentInfoItem->setPixmap( 0, SmallIcon( "dialog-ok" ) );
         break;
-    case K3bJob::INFO:
+    case K3b::Job::INFO:
     default:
         currentInfoItem->setPixmap( 0, SmallIcon( "dialog-information" ) );
     }
@@ -341,15 +341,15 @@ void K3bJobProgressDialog::slotInfoMessage( const QString& infoString, int type 
 }
 
 
-void K3bJobProgressDialog::slotFinished( bool success )
+void K3b::JobProgressDialog::slotFinished( bool success )
 {
-    kDebug() << "(K3bJobProgressDialog) received finished signal!";
+    kDebug() << "(K3b::JobProgressDialog) received finished signal!";
 
     m_logFile.close();
 
     QPalette taskPalette( m_labelTask->palette() );
     if( success ) {
-        m_pixLabel->setThemePixmap( K3bTheme::PROGRESS_SUCCESS );
+        m_pixLabel->setThemePixmap( K3b::Theme::PROGRESS_SUCCESS );
 
         taskPalette.setColor( QPalette::WindowText, Qt::darkGreen );
 
@@ -369,7 +369,7 @@ void K3bJobProgressDialog::slotFinished( bool success )
         KNotification::event("SuccessfullyFinished", i18n("Successfully finished."),QPixmap() ,0);
     }
     else {
-        m_pixLabel->setThemePixmap( K3bTheme::PROGRESS_FAIL );
+        m_pixLabel->setThemePixmap( K3b::Theme::PROGRESS_FAIL );
 
         taskPalette.setColor( QPalette::WindowText, Qt::red );
 
@@ -395,13 +395,13 @@ void K3bJobProgressDialog::slotFinished( bool success )
 }
 
 
-void K3bJobProgressDialog::slotCanceled()
+void K3b::JobProgressDialog::slotCanceled()
 {
     m_bCanceled = true;
 }
 
 
-void K3bJobProgressDialog::setJob( K3bJob* job )
+void K3b::JobProgressDialog::setJob( K3b::Job* job )
 {
     m_bCanceled = false;
 
@@ -454,7 +454,7 @@ void K3bJobProgressDialog::setJob( K3bJob* job )
 
         if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "Show progress OSD", true ) ) {
             if( !m_osd )
-                m_osd = new K3bJobProgressOSD( this );
+                m_osd = new K3b::JobProgressOSD( this );
         }
         else
             delete m_osd;
@@ -469,7 +469,7 @@ void K3bJobProgressDialog::setJob( K3bJob* job )
 }
 
 
-void K3bJobProgressDialog::slotCancelButtonPressed()
+void K3b::JobProgressDialog::slotCancelButtonPressed()
 {
     if( m_job && m_job->active() )
         if( KMessageBox::questionYesNo( this, i18n("Do you really want to cancel?"), i18n("Cancel Confirmation") ) == KMessageBox::Yes ) {
@@ -481,20 +481,20 @@ void K3bJobProgressDialog::slotCancelButtonPressed()
 }
 
 
-void K3bJobProgressDialog::slotNewSubTask(const QString& name)
+void K3b::JobProgressDialog::slotNewSubTask(const QString& name)
 {
     m_labelSubTask->setText(name);
     m_labelSubProcessedSize->setText("");
     m_progressSubPercent->setValue(0);
 }
 
-void K3bJobProgressDialog::slotNewTask(const QString& name)
+void K3b::JobProgressDialog::slotNewTask(const QString& name)
 {
     m_labelTask->setText( name );
 }
 
 
-void K3bJobProgressDialog::slotStarted()
+void K3b::JobProgressDialog::slotStarted()
 {
     d->lastProgress = 0;
     m_timer->start( 1000 );
@@ -506,7 +506,7 @@ void K3bJobProgressDialog::slotStarted()
 }
 
 
-void K3bJobProgressDialog::slotUpdateTime()
+void K3b::JobProgressDialog::slotUpdateTime()
 {
     int elapsedDays = m_startTime.daysTo( QDateTime::currentDateTime() );
     int elapsedSecs = m_startTime.secsTo( QDateTime::currentDateTime() ) % (24*60*60);
@@ -530,22 +530,22 @@ void K3bJobProgressDialog::slotUpdateTime()
 }
 
 
-void K3bJobProgressDialog::slotDebuggingOutput( const QString& type, const QString& output )
+void K3b::JobProgressDialog::slotDebuggingOutput( const QString& type, const QString& output )
 {
     m_logCache.addOutput( type, output );
     m_logFile.addOutput( type, output );
 }
 
 
-void K3bJobProgressDialog::slotShowDebuggingOutput()
+void K3b::JobProgressDialog::slotShowDebuggingOutput()
 {
-    K3bDebuggingOutputDialog debugWidget( this );
+    K3b::DebuggingOutputDialog debugWidget( this );
     debugWidget.setOutput( m_logCache.toString() );
     debugWidget.exec();
 }
 
 
-void K3bJobProgressDialog::slotProgress( int percent )
+void K3b::JobProgressDialog::slotProgress( int percent )
 {
     if( percent > d->lastProgress ) {
         d->lastProgress = percent;
@@ -559,7 +559,7 @@ void K3bJobProgressDialog::slotProgress( int percent )
 }
 
 
-void K3bJobProgressDialog::keyPressEvent( QKeyEvent *e )
+void K3b::JobProgressDialog::keyPressEvent( QKeyEvent *e )
 {
     e->accept();
 
@@ -584,7 +584,7 @@ void K3bJobProgressDialog::keyPressEvent( QKeyEvent *e )
 }
 
 
-QSize K3bJobProgressDialog::sizeHint() const
+QSize K3b::JobProgressDialog::sizeHint() const
 {
     QSize s = KDialog::sizeHint();
     if( s.width() < s.height() )
@@ -593,7 +593,7 @@ QSize K3bJobProgressDialog::sizeHint() const
 }
 
 
-int K3bJobProgressDialog::startJob( K3bJob* job )
+int K3b::JobProgressDialog::startJob( K3b::Job* job )
 {
     if( job ) {
         setJob( job );
@@ -601,14 +601,14 @@ int K3bJobProgressDialog::startJob( K3bJob* job )
         //k3bappcore->jobInterface()->setJob( job );
     }
     else if( !m_job ) {
-        kError() << "(K3bJobProgressDialog) null job!" << endl;
+        kError() << "(K3b::JobProgressDialog) null job!" << endl;
         return -1;
     }
 
     // the following code is mainly taken from QDialog::exec
 
     if ( d->eventLoop ) {
-        kError() << "(K3bJobProgressDialog::startJob) Recursive call detected." << endl;
+        kError() << "(K3b::JobProgressDialog::startJob) Recursive call detected." << endl;
         return -1;
     }
 
@@ -641,7 +641,7 @@ int K3bJobProgressDialog::startJob( K3bJob* job )
 }
 
 
-void K3bJobProgressDialog::setVisible( bool visible )
+void K3b::JobProgressDialog::setVisible( bool visible )
 {
     // we need to reimplement this since
     // QDialog does not know if we are in a loop from startJob
@@ -654,16 +654,16 @@ void K3bJobProgressDialog::setVisible( bool visible )
 }
 
 
-int K3bJobProgressDialog::waitForMedia( K3bDevice::Device* device,
+int K3b::JobProgressDialog::waitForMedia( K3b::Device::Device* device,
                                         int mediaState,
                                         int mediaType,
                                         const QString& message )
 {
-    return K3bEmptyDiscWaiter::wait( device, mediaState, mediaType, message, this );
+    return K3b::EmptyDiscWaiter::wait( device, mediaState, mediaType, message, this );
 }
 
 
-bool K3bJobProgressDialog::questionYesNo( const QString& text,
+bool K3b::JobProgressDialog::questionYesNo( const QString& text,
                                           const QString& caption,
                                           const QString& yesText,
                                           const QString& noText )
@@ -676,16 +676,16 @@ bool K3bJobProgressDialog::questionYesNo( const QString& text,
 }
 
 
-void K3bJobProgressDialog::blockingInformation( const QString& text,
+void K3b::JobProgressDialog::blockingInformation( const QString& text,
                                                 const QString& caption )
 {
     KMessageBox::information( this, text, caption );
 }
 
 
-void K3bJobProgressDialog::slotThemeChanged()
+void K3b::JobProgressDialog::slotThemeChanged()
 {
-    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+    if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
         d->progressHeaderFrame->setPalette( theme->palette() );
         d->headerFrame->setPalette( theme->palette() );
     }

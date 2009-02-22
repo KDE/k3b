@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
  *
@@ -18,121 +18,121 @@
 #include <q3listview.h>
 
 
-K3bListViewItemAnimator::K3bListViewItemAnimator( QObject* parent )
-  : QObject( parent )
+K3b::ListViewItemAnimator::ListViewItemAnimator( QObject* parent )
+    : QObject( parent )
 {
-  init();
+    init();
 }
 
 
-K3bListViewItemAnimator::K3bListViewItemAnimator( Q3ListViewItem* item, int col, QObject* parent )
-  : QObject( parent )
+K3b::ListViewItemAnimator::ListViewItemAnimator( Q3ListViewItem* item, int col, QObject* parent )
+    : QObject( parent )
 {
-  init();
-  setItem( item, col );
+    init();
+    setItem( item, col );
 }
 
 
-K3bListViewItemAnimator::~K3bListViewItemAnimator()
+K3b::ListViewItemAnimator::~ListViewItemAnimator()
 {
 }
 
 
-Q3ListViewItem* K3bListViewItemAnimator::item() const
+Q3ListViewItem* K3b::ListViewItemAnimator::item() const
 {
     return m_item;
 }
 
 
-void K3bListViewItemAnimator::init()
+void K3b::ListViewItemAnimator::init()
 {
-  m_item = 0;
-  m_column = 0;
-  m_timer = new QTimer( this );
-  connect( m_timer, SIGNAL(timeout()), this, SLOT(slotAnimate()) );
+    m_item = 0;
+    m_column = 0;
+    m_timer = new QTimer( this );
+    connect( m_timer, SIGNAL(timeout()), this, SLOT(slotAnimate()) );
 }
 
 
-void K3bListViewItemAnimator::start()
+void K3b::ListViewItemAnimator::start()
 {
-  if( m_item && !m_pixmap.isNull() ) {
-    m_animationStep = 0;
-    m_animationBack = false;
-    m_timer->start( 150 );
-  }
-  else
-    stop();
+    if( m_item && !m_pixmap.isNull() ) {
+        m_animationStep = 0;
+        m_animationBack = false;
+        m_timer->start( 150 );
+    }
+    else
+        stop();
 }
 
 
-void K3bListViewItemAnimator::stop()
+void K3b::ListViewItemAnimator::stop()
 {
-  m_timer->stop();
+    m_timer->stop();
 }
 
 
-void K3bListViewItemAnimator::setItem( Q3ListViewItem* item, int col )
+void K3b::ListViewItemAnimator::setItem( Q3ListViewItem* item, int col )
 {
-  m_item = item;
-  m_column = col;
-  m_pixmap = *item->pixmap(col);
-  m_fadeColor = item->listView()->palette().base().color();
-  start();
+    m_item = item;
+    m_column = col;
+    m_pixmap = *item->pixmap(col);
+    m_fadeColor = item->listView()->palette().base().color();
+    start();
 }
 
 
-void K3bListViewItemAnimator::setPixmap( const QPixmap& p )
+void K3b::ListViewItemAnimator::setPixmap( const QPixmap& p )
 {
-  m_pixmap = p;
-  start();
+    m_pixmap = p;
+    start();
 }
 
 
-void K3bListViewItemAnimator::setColumn( int col )
+void K3b::ListViewItemAnimator::setColumn( int col )
 {
-  m_column = col;
-  start();
+    m_column = col;
+    start();
 }
 
 
-void K3bListViewItemAnimator::setFadeColor( const QColor& c )
+void K3b::ListViewItemAnimator::setFadeColor( const QColor& c )
 {
-  m_fadeColor = c;
-  start();
+    m_fadeColor = c;
+    start();
 }
 
 
-void K3bListViewItemAnimator::slotAnimate()
+void K3b::ListViewItemAnimator::slotAnimate()
 {
-  if( m_item->isVisible() ) {
-    double val = (double)m_animationStep;
-    val /= 10.0;
+    if( m_item->isVisible() ) {
+        double val = (double)m_animationStep;
+        val /= 10.0;
 #ifdef __GNUC__
 #warning "Need to port qimageblitz"
 #endif
 #if 0
-    // we need a temp pixmap since KPixmapEffect changes our pixmap
-    KPixmap pix( m_pixmap );
-    m_item->setPixmap( m_column, KPixmapEffect::fade( pix, val, m_fadeColor ) );;
+        // we need a temp pixmap since KPixmapEffect changes our pixmap
+        KPixmap pix( m_pixmap );
+        m_item->setPixmap( m_column, KPixmapEffect::fade( pix, val, m_fadeColor ) );;
 #endif
-  }
-  
-  if( m_animationBack ) {
-    --m_animationStep;
-    if( m_animationStep < 0 ) {
-      // two steps full
-      m_animationStep = 0;
-      m_animationBack = false;
     }
-  }
-  else {
-    ++m_animationStep;
-    // do not fade it completely
-    if( m_animationStep > 9 ) {
-      m_animationStep = 8;
-      m_animationBack = true;
+
+    if( m_animationBack ) {
+        --m_animationStep;
+        if( m_animationStep < 0 ) {
+            // two steps full
+            m_animationStep = 0;
+            m_animationBack = false;
+        }
     }
-  }
+    else {
+        ++m_animationStep;
+        // do not fade it completely
+        if( m_animationStep > 9 ) {
+            m_animationStep = 8;
+            m_animationBack = true;
+        }
+    }
 }
 
 #include "k3blistviewitemanimator.moc"

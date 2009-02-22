@@ -21,13 +21,14 @@
 
 
 
-class K3bDataModeWidget : public QComboBox
+namespace K3b {
+class DataModeWidget : public QComboBox
 {
   Q_OBJECT
 
  public:
-  K3bDataModeWidget( QWidget* parent = 0 );
-  ~K3bDataModeWidget();
+  DataModeWidget( QWidget* parent = 0 );
+  ~DataModeWidget();
 
   /**
    * returnes K3b::DataMode
@@ -40,5 +41,6 @@ class K3bDataModeWidget : public QComboBox
  public Q_SLOTS:
   void setDataMode( int );
 };
+}
 
 #endif

@@ -23,7 +23,7 @@
 
 class K3bLameManualSettingsDialog;
 
-class K3bLameEncoderSettingsWidget : public K3bPluginConfigWidget, Ui::K3bLameEncoderSettingsWidget
+class K3bLameEncoderSettingsWidget : public K3b::PluginConfigWidget, Ui::K3bLameEncoderSettingsWidget
 {
     Q_OBJECT
 

@@ -51,7 +51,7 @@ public:
 
 
 K3bLibsndfileDecoder::K3bLibsndfileDecoder( QObject* parent )
-    : K3bAudioDecoder( parent )
+    : K3b::AudioDecoder( parent )
 {
     d = new Private();
 }
@@ -196,7 +196,7 @@ void K3bLibsndfileDecoder::cleanup()
 
 
 K3bLibsndfileDecoderFactory::K3bLibsndfileDecoderFactory( QObject* parent, const QVariantList&  )
-    : K3bAudioDecoderFactory( parent)
+    : K3b::AudioDecoderFactory( parent)
 {
 }
 
@@ -206,7 +206,7 @@ K3bLibsndfileDecoderFactory::~K3bLibsndfileDecoderFactory()
 }
 
 
-K3bAudioDecoder* K3bLibsndfileDecoderFactory::createDecoder( QObject* parent ) const
+K3b::AudioDecoder* K3bLibsndfileDecoderFactory::createDecoder( QObject* parent ) const
 {
     return new K3bLibsndfileDecoder( parent );
 }

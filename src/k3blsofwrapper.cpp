@@ -27,16 +27,16 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-static K3bLsofWrapper::Process createProcess( const QString& name, int pid )
+static K3b::LsofWrapper::Process createProcess( const QString& name, int pid )
 {
-    K3bLsofWrapper::Process p;
+    K3b::LsofWrapper::Process p;
     p.name = name;
     p.pid = pid;
     return p;
 }
 
 
-class K3bLsofWrapper::Private
+class K3b::LsofWrapper::Private
 {
 public:
     QList<Process> apps;
@@ -44,19 +44,19 @@ public:
 };
 
 
-K3bLsofWrapper::K3bLsofWrapper()
+K3b::LsofWrapper::LsofWrapper()
 {
     d = new Private;
 }
 
 
-K3bLsofWrapper::~K3bLsofWrapper()
+K3b::LsofWrapper::~LsofWrapper()
 {
     delete d;
 }
 
 
-bool K3bLsofWrapper::checkDevice( K3bDevice::Device* dev )
+bool K3b::LsofWrapper::checkDevice( K3b::Device::Device* dev )
 {
     d->apps.clear();
 
@@ -87,7 +87,7 @@ bool K3bLsofWrapper::checkDevice( K3bDevice::Device* dev )
         if ( it != l.end() ) {
             QString app = (*(++it)).mid(1);
 
-            kDebug() << "(K3bLsofWrapper) matched: app: " << app << " pid: " << pid;
+            kDebug() << "(K3b::LsofWrapper) matched: app: " << app << " pid: " << pid;
 
             // we don't care about ourselves using the device ;)
             if( pid != (int)::getpid() )
@@ -99,13 +99,13 @@ bool K3bLsofWrapper::checkDevice( K3bDevice::Device* dev )
 }
 
 
-const QList<K3bLsofWrapper::Process>& K3bLsofWrapper::usingApplications() const
+const QList<K3b::LsofWrapper::Process>& K3b::LsofWrapper::usingApplications() const
 {
     return d->apps;
 }
 
 
-bool K3bLsofWrapper::findLsofExecutable()
+bool K3b::LsofWrapper::findLsofExecutable()
 {
     if( d->lsofBin.isEmpty() )
         d->lsofBin = K3b::findExe( "lsof" );

@@ -48,7 +48,7 @@
 //         do only show cd-text and options (eventuelle index0)
 
 
-K3bAudioTrackDialog::K3bAudioTrackDialog( const QList<K3bAudioTrack*>& tracks, QWidget *parent )
+K3b::AudioTrackDialog::AudioTrackDialog( const QList<K3b::AudioTrack*>& tracks, QWidget *parent )
     : KDialog( parent)
 {
     m_tracks = tracks;
@@ -65,26 +65,26 @@ K3bAudioTrackDialog::K3bAudioTrackDialog( const QList<K3bAudioTrack*>& tracks, Q
     setupConnections();
 }
 
-K3bAudioTrackDialog::~K3bAudioTrackDialog()
+K3b::AudioTrackDialog::~AudioTrackDialog()
 {
 }
 
 
-void K3bAudioTrackDialog::slotOk()
+void K3b::AudioTrackDialog::slotOk()
 {
     slotApply();
     done(0);
 }
 
 
-void K3bAudioTrackDialog::slotApply()
+void K3b::AudioTrackDialog::slotApply()
 {
     m_audioTrackWidget->save();
 
 }
 
 
-void K3bAudioTrackDialog::setupGui()
+void K3b::AudioTrackDialog::setupGui()
 {
     QFrame* frame = new QFrame();
     setMainWidget( frame );
@@ -94,16 +94,16 @@ void K3bAudioTrackDialog::setupGui()
     mainLayout->setSpacing( spacingHint() );
     mainLayout->setMargin( 0 );
 
-    m_audioTrackWidget = new K3bAudioTrackWidget( m_tracks, frame );
+    m_audioTrackWidget = new K3b::AudioTrackWidget( m_tracks, frame );
     mainLayout->addWidget( m_audioTrackWidget, 0, 0 );
 }
 
-void K3bAudioTrackDialog::setupConnections()
+void K3b::AudioTrackDialog::setupConnections()
 {
 }
 
 
-void K3bAudioTrackDialog::updateTrackLengthDisplay()
+void K3b::AudioTrackDialog::updateTrackLengthDisplay()
 {
 //   K3b::Msf len = m_editTrackEnd->msfValue() - m_editTrackStart->msfValue();
 //   m_displayLength->setText( len.toString() );

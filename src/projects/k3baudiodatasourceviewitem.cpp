@@ -22,10 +22,10 @@
 #include <kiconloader.h>
 
 
-K3bAudioDataSourceViewItem::K3bAudioDataSourceViewItem( K3bAudioTrackViewItem* parent,
-                                                        K3bAudioDataSourceViewItem* after,
-                                                        K3bAudioDataSource* source )
-    : K3bListViewItem( parent, after ),
+K3b::AudioDataSourceViewItem::AudioDataSourceViewItem( K3b::AudioTrackViewItem* parent,
+                                                        K3b::AudioDataSourceViewItem* after,
+                                                        K3b::AudioDataSource* source )
+    : K3b::ListViewItem( parent, after ),
       m_trackViewItem( parent ),
       m_source( source ),
       m_animationCounter(1)
@@ -46,12 +46,12 @@ K3bAudioDataSourceViewItem::K3bAudioDataSourceViewItem( K3bAudioTrackViewItem* p
     setFont( 5, f );
 
     // for zero items we make the length editable
-    if( dynamic_cast<K3bAudioZeroData*>( source ) )
+    if( dynamic_cast<K3b::AudioZeroData*>( source ) )
         setEditor( 4, MSF );
 }
 
 
-QString K3bAudioDataSourceViewItem::text( int i ) const
+QString K3b::AudioDataSourceViewItem::text( int i ) const
 {
     switch( i ) {
     case 3:
@@ -66,14 +66,14 @@ QString K3bAudioDataSourceViewItem::text( int i ) const
 }
 
 
-void K3bAudioDataSourceViewItem::setText( int col, const QString& text )
+void K3b::AudioDataSourceViewItem::setText( int col, const QString& text )
 {
     //
-    // See K3bAudioTrackViewItem::setText for an explanation why we have to check if
+    // See K3b::AudioTrackViewItem::setText for an explanation why we have to check if
     // the value really changed
     //
     if( col == 4 ) {
-        if( K3bAudioZeroData* zero = dynamic_cast<K3bAudioZeroData*>( source() ) ) {
+        if( K3b::AudioZeroData* zero = dynamic_cast<K3b::AudioZeroData*>( source() ) ) {
             bool ok;
             K3b::Msf f = K3b::Msf::fromString( text, &ok );
             if( ok && f != zero->length() )
@@ -85,7 +85,7 @@ void K3bAudioDataSourceViewItem::setText( int col, const QString& text )
 }
 
 
-bool K3bAudioDataSourceViewItem::animate()
+bool K3b::AudioDataSourceViewItem::animate()
 {
     if( source()->length() == 0 && source()->isValid() ) {
         QString icon = QString( "kde%1" ).arg( m_animationCounter );
@@ -103,8 +103,8 @@ bool K3bAudioDataSourceViewItem::animate()
 }
 
 
-void K3bAudioDataSourceViewItem::setSelected( bool s )
+void K3b::AudioDataSourceViewItem::setSelected( bool s )
 {
     if( s || !m_trackViewItem->isSelected() )
-        K3bListViewItem::setSelected(s);
+        K3b::ListViewItem::setSelected(s);
 }

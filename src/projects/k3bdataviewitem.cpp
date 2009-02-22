@@ -33,32 +33,32 @@
 #include <qfileinfo.h>
 
 
-K3bDataViewItem::K3bDataViewItem( K3bDataItem* item, Q3ListView* parent )
-    : K3bListViewItem( parent ),
+K3b::DataViewItem::DataViewItem( K3b::DataItem* item, Q3ListView* parent )
+    : K3b::ListViewItem( parent ),
       m_dataItem(item)
 {
     init();
 }
 
-K3bDataViewItem::K3bDataViewItem( K3bDataItem* item, Q3ListViewItem* parent )
-    : K3bListViewItem( parent ),
+K3b::DataViewItem::DataViewItem( K3b::DataItem* item, Q3ListViewItem* parent )
+    : K3b::ListViewItem( parent ),
       m_dataItem(item)
 {
     init();
 }
 
-K3bDataViewItem::~K3bDataViewItem()
+K3b::DataViewItem::~DataViewItem()
 {}
 
 
-void K3bDataViewItem::init()
+void K3b::DataViewItem::init()
 {
     setEditor( 0, LINE );
-    static QValidator* s_validator = K3bValidators::iso9660Validator();
+    static QValidator* s_validator = K3b::Validators::iso9660Validator();
     setValidator( 0, s_validator );
 }
 
-void K3bDataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align )
+void K3b::DataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align )
 {
     QColorGroup _cg = cg;
 
@@ -100,20 +100,20 @@ void K3bDataViewItem::paintCell( QPainter* p, const QColorGroup& cg, int column,
         }
     }
 
-    K3bListViewItem::paintCell( p, _cg, column, width, align );
+    K3b::ListViewItem::paintCell( p, _cg, column, width, align );
 }
 
 
-void K3bDataViewItem::setText( int col, const QString& text )
+void K3b::DataViewItem::setText( int col, const QString& text )
 {
     if( col == 0 && dataItem()->isRenameable() ) {
         dataItem()->setK3bName( text );
     }
-    K3bListViewItem::setText( col, text );
+    K3b::ListViewItem::setText( col, text );
 }
 
 
-QString K3bDataViewItem::key( int col, bool a ) const
+QString K3b::DataViewItem::key( int col, bool a ) const
 {
     if( col == 2 ) {
         // to have correct sorting we need to justify the size in bytes
@@ -134,34 +134,34 @@ QString K3bDataViewItem::key( int col, bool a ) const
 }
 
 
-K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, Q3ListView* parent )
-    : K3bDataViewItem( dir, parent )
+K3b::DataDirViewItem::DataDirViewItem( K3b::DirItem* dir, Q3ListView* parent )
+    : K3b::DataViewItem( dir, parent )
 {
     m_dirItem = dir;
     setPixmap( 0, dir->depth() > 7 ? SmallIcon( "folder-root" ) : SmallIcon( "folder" ) );
 }
 
 
-K3bDataDirViewItem::K3bDataDirViewItem( K3bDirItem* dir, Q3ListViewItem* parent )
-    : K3bDataViewItem( dir, parent )
+K3b::DataDirViewItem::DataDirViewItem( K3b::DirItem* dir, Q3ListViewItem* parent )
+    : K3b::DataViewItem( dir, parent )
 {
     m_dirItem = dir;
     setPixmap( 0, dir->depth() > 7 ? SmallIcon( "folder-root" ) : SmallIcon( "folder" ) );
 }
 
 
-K3bDataDirViewItem::~K3bDataDirViewItem()
+K3b::DataDirViewItem::~DataDirViewItem()
 {
 }
 
 
-void K3bDataDirViewItem::dragEntered()
+void K3b::DataDirViewItem::dragEntered()
 {
     setOpen( true );
 }
 
 
-QString K3bDataDirViewItem::text( int index ) const
+QString K3b::DataDirViewItem::text( int index ) const
 {
     switch( index ) {
     case 0:
@@ -176,7 +176,7 @@ QString K3bDataDirViewItem::text( int index ) const
 }
 
 
-void K3bDataDirViewItem::highlightIcon( bool b )
+void K3b::DataDirViewItem::highlightIcon( bool b )
 {
     if( m_pixmap.isNull() )
         m_pixmap = *pixmap(0);
@@ -193,21 +193,21 @@ void K3bDataDirViewItem::highlightIcon( bool b )
 
 
 
-K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, Q3ListView* parent )
-    : K3bDataViewItem( file, parent )
+K3b::DataFileViewItem::DataFileViewItem( K3b::FileItem* file, Q3ListView* parent )
+    : K3b::DataViewItem( file, parent )
 {
     init( file );
 }
 
 
-K3bDataFileViewItem::K3bDataFileViewItem( K3bFileItem* file, Q3ListViewItem* parent )
-    : K3bDataViewItem( file, parent )
+K3b::DataFileViewItem::DataFileViewItem( K3b::FileItem* file, Q3ListViewItem* parent )
+    : K3b::DataViewItem( file, parent )
 {
     init( file );
 }
 
 
-void K3bDataFileViewItem::init( K3bFileItem* file )
+void K3b::DataFileViewItem::init( K3b::FileItem* file )
 {
     m_fileItem = file;
 
@@ -220,7 +220,7 @@ void K3bDataFileViewItem::init( K3bFileItem* file )
 }
 
 
-QString K3bDataFileViewItem::text( int index ) const
+QString K3b::DataFileViewItem::text( int index ) const
 {
     switch( index ) {
     case 0:
@@ -266,22 +266,22 @@ QString K3bDataFileViewItem::text( int index ) const
 
 
 
-K3bDataRootViewItem::K3bDataRootViewItem( K3bDataDoc* doc, Q3ListView* parent )
-    : K3bDataDirViewItem( doc->root(), parent )
+K3b::DataRootViewItem::DataRootViewItem( K3b::DataDoc* doc, Q3ListView* parent )
+    : K3b::DataDirViewItem( doc->root(), parent )
 {
     m_doc = doc;
     setPixmap( 0, SmallIcon( "media-optical" ) );
-    setValidator( 0, new K3bLatin1Validator() );
+    setValidator( 0, new K3b::Latin1Validator() );
 }
 
 
-K3bDataRootViewItem::~K3bDataRootViewItem()
+K3b::DataRootViewItem::~DataRootViewItem()
 {
     delete validator(0);
 }
 
 
-QString K3bDataRootViewItem::text( int index ) const
+QString K3b::DataRootViewItem::text( int index ) const
 {
     switch( index ) {
     case 0:
@@ -292,28 +292,28 @@ QString K3bDataRootViewItem::text( int index ) const
 }
 
 
-void K3bDataRootViewItem::setText( int col, const QString& text )
+void K3b::DataRootViewItem::setText( int col, const QString& text )
 {
     if( col == 0 )
         m_doc->setVolumeID( text );
 
-    K3bDataViewItem::setText( col, text );
+    K3b::DataViewItem::setText( col, text );
 }
 
 
-K3bSpecialDataViewItem::K3bSpecialDataViewItem( K3bSpecialDataItem* item, Q3ListView* parent )
-    : K3bDataViewItem( item, parent )
+K3b::SpecialDataViewItem::SpecialDataViewItem( K3b::SpecialDataItem* item, Q3ListView* parent )
+    : K3b::DataViewItem( item, parent )
 {
     setPixmap( 0, SmallIcon("unknown") );
 }
 
-QString K3bSpecialDataViewItem::text( int col ) const
+QString K3b::SpecialDataViewItem::text( int col ) const
 {
     switch( col ) {
     case 0:
         return dataItem()->k3bName();
     case 1:
-        return ((K3bSpecialDataItem*)dataItem())->mimeType();
+        return ((K3b::SpecialDataItem*)dataItem())->mimeType();
     case 2:
         return KIO::convertSize( dataItem()->size() );
     default:
@@ -323,13 +323,13 @@ QString K3bSpecialDataViewItem::text( int col ) const
 
 
 
-K3bSessionImportViewItem::K3bSessionImportViewItem( K3bSessionImportItem* item, Q3ListView* parent )
-    : K3bDataViewItem( item, parent )
+K3b::SessionImportViewItem::SessionImportViewItem( K3b::SessionImportItem* item, Q3ListView* parent )
+    : K3b::DataViewItem( item, parent )
 {
     setPixmap( 0, SmallIcon("unknown") );
 }
 
-QString K3bSessionImportViewItem::text( int col ) const
+QString K3b::SessionImportViewItem::text( int col ) const
 {
     switch( col ) {
     case 0:

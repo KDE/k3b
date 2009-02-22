@@ -20,7 +20,7 @@
 
 #include <qprocess.h>
 
-class K3bExternalEncoder : public K3bAudioEncoder
+class K3bExternalEncoder : public K3b::AudioEncoder
 {
     Q_OBJECT
 

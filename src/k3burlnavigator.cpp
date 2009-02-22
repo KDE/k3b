@@ -22,17 +22,17 @@
 #include <kmountpoint.h>
 #include <QDir>
 
-K3bUrlNavigator::K3bUrlNavigator( KFilePlacesModel* model, QWidget* parent )
+K3b::UrlNavigator::UrlNavigator( KFilePlacesModel* model, QWidget* parent )
     : KUrlNavigator( model, KUrl(QDir::home().absolutePath()), parent )
 {
 	connect( this, SIGNAL(urlChanged(const KUrl&)), this, SLOT(urlActivated(const KUrl&)) );
 }
 
-K3bUrlNavigator::~K3bUrlNavigator()
+K3b::UrlNavigator::~UrlNavigator()
 {
 }
 
-void K3bUrlNavigator::setDevice( K3bDevice::Device* dev )
+void K3b::UrlNavigator::setDevice( K3b::Device::Device* dev )
 {
 	// Check if device is mounted. If so, switch to the mount path
 	KSharedPtr<KMountPoint> mountPoint = KMountPoint::currentMountPoints().findByDevice( dev->blockDeviceName() );
@@ -45,7 +45,7 @@ void K3bUrlNavigator::setDevice( K3bDevice::Device* dev )
 	}
 }
 
-void K3bUrlNavigator::urlActivated( const KUrl& url )
+void K3b::UrlNavigator::urlActivated( const KUrl& url )
 {
     emit activated( url );
 }

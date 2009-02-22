@@ -22,15 +22,15 @@
 
 #include <k3bvcddoc.h>
 
-class K3bVcdTrack;
+namespace K3b {
+    class VcdTrack;
 
-
-class K3bVcdXmlView
-{
+    class VcdXmlView
+    {
 
     public:
-        K3bVcdXmlView( K3bVcdDoc* );
-        ~K3bVcdXmlView();
+        VcdXmlView( VcdDoc* );
+        ~VcdXmlView();
 
         bool write( const QString& );
         QString xmlString()
@@ -47,11 +47,12 @@ class K3bVcdXmlView
 
         QDomElement addFolderElement( QDomDocument&, QDomElement&, const QString& name );
         void addFileElement( QDomDocument&, QDomElement&, const QString& src, const QString& name, bool mixed = false );
-        void doPbc( QDomDocument&, QDomElement&, K3bVcdTrack* );
-        void setNumkeyBSN( QDomDocument& , QDomElement&, K3bVcdTrack* );
-        void setNumkeySEL( QDomDocument& , QDomElement&, K3bVcdTrack* );
-        K3bVcdDoc* m_doc;
+        void doPbc( QDomDocument&, QDomElement&, VcdTrack* );
+        void setNumkeyBSN( QDomDocument& , QDomElement&, VcdTrack* );
+        void setNumkeySEL( QDomDocument& , QDomElement&, VcdTrack* );
+        VcdDoc* m_doc;
         int m_startkey;
-};
+    };
+}
 
 #endif

@@ -22,14 +22,14 @@
 #include <libkcddb/cdinfo.h>
 
 
-Q_DECLARE_METATYPE( K3bMedium )
+Q_DECLARE_METATYPE( K3b::Medium )
 Q_DECLARE_METATYPE( K3b::Msf )
 
 
 class K3b::AudioTrackModel::Private
 {
 public:
-    K3bMedium medium;
+    K3b::Medium medium;
     KCDDB::CDInfo cddbCache;
 
     QVector<bool> itemCheckedList;
@@ -105,7 +105,7 @@ K3b::AudioTrackModel::~AudioTrackModel()
 }
 
 
-void K3b::AudioTrackModel::setMedium( const K3bMedium& medium )
+void K3b::AudioTrackModel::setMedium( const K3b::Medium& medium )
 {
     d->medium = medium;
     d->itemCheckedList.resize( d->medium.toc().count() );
@@ -129,7 +129,7 @@ KCDDB::CDInfo K3b::AudioTrackModel::cddbInfo() const
 }
 
 
-K3bMedium K3b::AudioTrackModel::medium() const
+K3b::Medium K3b::AudioTrackModel::medium() const
 {
     return d->medium;
 }
@@ -348,7 +348,7 @@ bool K3b::AudioTrackModel::setData( const QModelIndex& index, const QVariant& va
 QMimeData* K3b::AudioTrackModel::mimeData( const QModelIndexList& indexes ) const
 {
 #warning "FIXME: drag'n'drop"
-    // FIXME: Add QDataStream operators to K3bMedium and encode a complete K3bMedium in
+    // FIXME: Add QDataStream operators to K3b::Medium and encode a complete K3b::Medium in
     // the mimedata including the modified cddb. This way, ejecting the medium during the
     // d'n'd is not a problem
     return 0;

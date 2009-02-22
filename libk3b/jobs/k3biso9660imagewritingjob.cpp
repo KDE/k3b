@@ -40,16 +40,16 @@
 #include <qapplication.h>
 
 
-class K3bIso9660ImageWritingJob::Private
+class K3b::Iso9660ImageWritingJob::Private
 {
 public:
-    K3bChecksumPipe checksumPipe;
-    K3bFileSplitter imageFile;
+    K3b::ChecksumPipe checksumPipe;
+    K3b::FileSplitter imageFile;
 };
 
 
-K3bIso9660ImageWritingJob::K3bIso9660ImageWritingJob( K3bJobHandler* hdl )
-    : K3bBurnJob( hdl ),
+K3b::Iso9660ImageWritingJob::Iso9660ImageWritingJob( K3b::JobHandler* hdl )
+    : K3b::BurnJob( hdl ),
       m_writingMode(K3b::WRITING_MODE_AUTO),
       m_simulate(false),
       m_device(0),
@@ -64,14 +64,14 @@ K3bIso9660ImageWritingJob::K3bIso9660ImageWritingJob( K3bJobHandler* hdl )
     d = new Private;
 }
 
-K3bIso9660ImageWritingJob::~K3bIso9660ImageWritingJob()
+K3b::Iso9660ImageWritingJob::~Iso9660ImageWritingJob()
 {
     delete m_tocFile;
     delete d;
 }
 
 
-void K3bIso9660ImageWritingJob::start()
+void K3b::Iso9660ImageWritingJob::start()
 {
     m_canceled = m_finished = false;
     m_currentCopy = 1;
@@ -84,7 +84,7 @@ void K3bIso9660ImageWritingJob::start()
     emit newTask( i18n("Preparing data") );
 
     if( !QFile::exists( m_imagePath ) ) {
-        emit infoMessage( i18n("Could not find image %1",m_imagePath), K3bJob::ERROR );
+        emit infoMessage( i18n("Could not find image %1",m_imagePath), K3b::Job::ERROR );
         jobFinished( false );
         return;
     }
@@ -98,7 +98,7 @@ void K3bIso9660ImageWritingJob::start()
 }
 
 
-void K3bIso9660ImageWritingJob::slotWriterJobFinished( bool success )
+void K3b::Iso9660ImageWritingJob::slotWriterJobFinished( bool success )
 {
     if( m_canceled ) {
         m_finished = true;
@@ -117,11 +117,11 @@ void K3bIso9660ImageWritingJob::slotWriterJobFinished( bool success )
             // the writerJob should have emitted the "simulation/writing successful" signal
 
             if( !m_verifyJob ) {
-                m_verifyJob = new K3bVerificationJob( this );
+                m_verifyJob = new K3b::VerificationJob( this );
                 connectSubJob( m_verifyJob,
                                SLOT(slotVerificationFinished(bool)),
-                               K3bJob::DEFAULT_SIGNAL_CONNECTION,
-                               K3bJob::DEFAULT_SIGNAL_CONNECTION,
+                               K3b::Job::DEFAULT_SIGNAL_CONNECTION,
+                               K3b::Job::DEFAULT_SIGNAL_CONNECTION,
                                SLOT(slotVerificationProgress(int)),
                                SIGNAL(subPercent(int)) );
             }
@@ -152,7 +152,7 @@ void K3bIso9660ImageWritingJob::slotWriterJobFinished( bool success )
 }
 
 
-void K3bIso9660ImageWritingJob::slotVerificationFinished( bool success )
+void K3b::Iso9660ImageWritingJob::slotVerificationFinished( bool success )
 {
     if( m_canceled ) {
         m_finished = true;
@@ -163,26 +163,26 @@ void K3bIso9660ImageWritingJob::slotVerificationFinished( bool success )
 
     if( success && m_currentCopy < m_copies ) {
         m_currentCopy++;
-        connect( K3bDevice::eject( m_device ), SIGNAL(finished(bool)),
+        connect( K3b::Device::eject( m_device ), SIGNAL(finished(bool)),
                  this, SLOT(startWriting()) );
         return;
     }
 
     if( k3bcore->globalSettings()->ejectMedia() )
-        K3bDevice::eject( m_device );
+        K3b::Device::eject( m_device );
 
     m_finished = true;
     jobFinished( success );
 }
 
 
-void K3bIso9660ImageWritingJob::slotVerificationProgress( int p )
+void K3b::Iso9660ImageWritingJob::slotVerificationProgress( int p )
 {
     emit percent( (int)(100.0 / (double)m_copies * ( (double)(m_currentCopy-1) + 0.5 + (double)p/200.0 )) );
 }
 
 
-void K3bIso9660ImageWritingJob::slotWriterPercent( int p )
+void K3b::Iso9660ImageWritingJob::slotWriterPercent( int p )
 {
     emit subPercent( p );
 
@@ -193,7 +193,7 @@ void K3bIso9660ImageWritingJob::slotWriterPercent( int p )
 }
 
 
-void K3bIso9660ImageWritingJob::slotNextTrack( int, int )
+void K3b::Iso9660ImageWritingJob::slotNextTrack( int, int )
 {
     if( m_copies == 1 )
         emit newSubTask( i18n("Writing image") );
@@ -202,7 +202,7 @@ void K3bIso9660ImageWritingJob::slotNextTrack( int, int )
 }
 
 
-void K3bIso9660ImageWritingJob::cancel()
+void K3b::Iso9660ImageWritingJob::cancel()
 {
     if( !m_finished ) {
         m_canceled = true;
@@ -215,7 +215,7 @@ void K3bIso9660ImageWritingJob::cancel()
 }
 
 
-void K3bIso9660ImageWritingJob::startWriting()
+void K3b::Iso9660ImageWritingJob::startWriting()
 {
     emit newSubTask( i18n("Waiting for medium") );
 
@@ -234,25 +234,25 @@ void K3bIso9660ImageWritingJob::startWriting()
     if( m_writingMode == K3b::WRITING_MODE_AUTO ||
         m_writingMode == K3b::WRITING_MODE_DAO ) {
         if( writingApp() == K3b::WRITING_APP_CDRDAO )
-            mt = K3bDevice::MEDIA_WRITABLE_CD;
+            mt = K3b::Device::MEDIA_WRITABLE_CD;
         else if( m_dvd )
-            mt = K3bDevice::MEDIA_WRITABLE_DVD;
+            mt = K3b::Device::MEDIA_WRITABLE_DVD;
         else
-            mt = K3bDevice::MEDIA_WRITABLE;
+            mt = K3b::Device::MEDIA_WRITABLE;
     }
     else if( m_writingMode == K3b::WRITING_MODE_TAO || m_writingMode == K3b::WRITING_MODE_RAW ) {
-        mt = K3bDevice::MEDIA_WRITABLE_CD;
+        mt = K3b::Device::MEDIA_WRITABLE_CD;
     }
     else if( m_writingMode == K3b::WRITING_MODE_RES_OVWR ) {
-        mt = K3bDevice::MEDIA_DVD_PLUS_R|K3bDevice::MEDIA_DVD_PLUS_R_DL|K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR;
+        mt = K3b::Device::MEDIA_DVD_PLUS_R|K3b::Device::MEDIA_DVD_PLUS_R_DL|K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_RW_OVWR;
     }
     else {
-        mt = K3bDevice::MEDIA_WRITABLE_DVD;
+        mt = K3b::Device::MEDIA_WRITABLE_DVD;
     }
 
 
     // wait for the media
-    int media = waitForMedia( m_device, K3bDevice::STATE_EMPTY, mt );
+    int media = waitForMedia( m_device, K3b::Device::STATE_EMPTY, mt );
     if( media < 0 ) {
         m_finished = true;
         emit canceled();
@@ -271,7 +271,7 @@ void K3bIso9660ImageWritingJob::startWriting()
         emit burning(true);
         m_writer->start();
         d->checksumPipe.writeToFd( m_writer->fd(), true );
-        d->checksumPipe.open( K3bChecksumPipe::MD5, true );
+        d->checksumPipe.open( K3b::ChecksumPipe::MD5, true );
     }
     else {
         m_finished = true;
@@ -280,19 +280,19 @@ void K3bIso9660ImageWritingJob::startWriting()
 }
 
 
-bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
+bool K3b::Iso9660ImageWritingJob::prepareWriter( int mediaType )
 {
     if( mediaType == 0 ) { // media forced
         // just to get it going...
         if( writingApp() != K3b::WRITING_APP_GROWISOFS && !m_dvd )
-            mediaType = K3bDevice::MEDIA_CD_R;
+            mediaType = K3b::Device::MEDIA_CD_R;
         else
-            mediaType = K3bDevice::MEDIA_DVD_R;
+            mediaType = K3b::Device::MEDIA_DVD_R;
     }
 
     delete m_writer;
 
-    if( mediaType == K3bDevice::MEDIA_CD_R || mediaType == K3bDevice::MEDIA_CD_RW ) {
+    if( mediaType == K3b::Device::MEDIA_CD_R || mediaType == K3b::Device::MEDIA_CD_RW ) {
         K3b::WritingMode usedWritingMode = m_writingMode;
         if( usedWritingMode == K3b::WRITING_MODE_AUTO ) {
             // cdrecord seems to have problems when writing in mode2 in dao mode
@@ -314,7 +314,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 
 
         if( usedApp == K3b::WRITING_APP_CDRECORD ) {
-            K3bCdrecordWriter* writer = new K3bCdrecordWriter( m_device, this );
+            K3b::CdrecordWriter* writer = new K3b::CdrecordWriter( m_device, this );
 
             writer->setWritingMode( usedWritingMode );
             writer->setSimulate( m_simulate );
@@ -342,8 +342,8 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
         }
         else {
             // create cdrdao job
-            K3bCdrdaoWriter* writer = new K3bCdrdaoWriter( m_device, this );
-            writer->setCommand( K3bCdrdaoWriter::WRITE );
+            K3b::CdrdaoWriter* writer = new K3b::CdrdaoWriter( m_device, this );
+            writer->setCommand( K3b::CdrdaoWriter::WRITE );
             writer->setSimulate( m_simulate );
             writer->setBurnSpeed( m_speed );
             // multisession
@@ -377,7 +377,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
         }
     }
     else {  // DVD
-        if( mediaType & K3bDevice::MEDIA_DVD_PLUS_ALL ) {
+        if( mediaType & K3b::Device::MEDIA_DVD_PLUS_ALL ) {
             if( m_simulate ) {
                 if( questionYesNo( i18n("K3b does not support simulation with DVD+R(W) media. "
                                         "Do you really want to continue? The media will be written "
@@ -390,7 +390,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
             m_simulate = false;
         }
 
-        K3bGrowisofsWriter* writer = new K3bGrowisofsWriter( m_device, this );
+        K3b::GrowisofsWriter* writer = new K3b::GrowisofsWriter( m_device, this );
         writer->setSimulate( m_simulate );
         writer->setBurnSpeed( m_speed );
         writer->setWritingMode( m_writingMode == K3b::WRITING_MODE_DAO ? K3b::WRITING_MODE_DAO : K3b::WRITING_MODE_AUTO );
@@ -418,7 +418,7 @@ bool K3bIso9660ImageWritingJob::prepareWriter( int mediaType )
 }
 
 
-QString K3bIso9660ImageWritingJob::jobDescription() const
+QString K3b::Iso9660ImageWritingJob::jobDescription() const
 {
     if( m_simulate )
         return i18n("Simulating ISO9660 Image");
@@ -430,7 +430,7 @@ QString K3bIso9660ImageWritingJob::jobDescription() const
 }
 
 
-QString K3bIso9660ImageWritingJob::jobDetails() const
+QString K3b::Iso9660ImageWritingJob::jobDetails() const
 {
     return m_imagePath.section("/", -1) + QString( " (%1)" ).arg(KIO::convertSize(K3b::filesize(m_imagePath)));
 }

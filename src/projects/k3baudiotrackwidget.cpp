@@ -31,8 +31,8 @@
 
 
 
-K3bAudioTrackWidget::K3bAudioTrackWidget( const QList<K3bAudioTrack*>& tracks,
-                                          QWidget* parent )
+K3b::AudioTrackWidget::AudioTrackWidget( const QList<K3b::AudioTrack*>& tracks,
+                                         QWidget* parent )
     : QWidget( parent ),
       m_tracks(tracks)
 {
@@ -45,29 +45,29 @@ K3bAudioTrackWidget::K3bAudioTrackWidget( const QList<K3bAudioTrack*>& tracks,
     // no post-gap for the last track
     m_editPostGap->setDisabled( tracks.count() == 1 && !tracks.first()->next() );
 
-    K3bCdTextValidator* val = new K3bCdTextValidator( this );
+    K3b::CdTextValidator* val = new K3b::CdTextValidator( this );
     m_editSongwriter->setValidator( val );
     m_editArranger->setValidator( val );
     m_editComposer->setValidator( val );
     m_editMessage->setValidator( val );
     m_editTitle->setValidator( val );
     m_editPerformer->setValidator( val );
-    m_editIsrc->setValidator( K3bValidators::isrcValidator( this ) );
+    m_editIsrc->setValidator( K3b::Validators::isrcValidator( this ) );
 
     load();
 }
 
 
-K3bAudioTrackWidget::~K3bAudioTrackWidget()
+K3b::AudioTrackWidget::~AudioTrackWidget()
 {
 }
 
 
-void K3bAudioTrackWidget::load()
+void K3b::AudioTrackWidget::load()
 {
     if( !m_tracks.isEmpty() ) {
 
-        K3bAudioTrack* track = m_tracks.first();
+        K3b::AudioTrack* track = m_tracks.first();
 
         m_editPostGap->setMsfValue( track->postGap() );
 
@@ -121,11 +121,11 @@ void K3bAudioTrackWidget::load()
 }
 
 
-void K3bAudioTrackWidget::save()
+void K3b::AudioTrackWidget::save()
 {
     // save CD-Text, preemphasis, and copy protection for all tracks. no problem
     for( int i = 0; i < m_tracks.count(); ++i ) {
-        K3bAudioTrack* track = m_tracks[i];
+        K3b::AudioTrack* track = m_tracks[i];
 
         if( m_editTitle->isModified() )
             track->setTitle( m_editTitle->text() );

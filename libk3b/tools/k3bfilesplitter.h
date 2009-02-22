@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -21,84 +21,86 @@
 #include <k3b_export.h>
 
 
-/**
- * QFile replacement which splits
- * big files according to the underlying file system's
- * maximum file size.
- *
- * The filename will be changed to include a counter
- * if the file has to be splitted like so:
- *
- * <pre>
- * filename.iso
- * filename.iso.001
- * filename.iso.002
- * ...
- * </pre>
- */
-class LIBK3B_EXPORT K3bFileSplitter : public QIODevice
-{
-public:
-    K3bFileSplitter();
-    K3bFileSplitter( const QString& filename );
-    ~K3bFileSplitter();
-
+namespace K3b {
     /**
-     * Set the maximum file size. If this is set to 0
-     * (the default) the max filesize is determined based on 
-     * the filesystem type.
+     * QFile replacement which splits
+     * big files according to the underlying file system's
+     * maximum file size.
      *
-     * Be aware that setName will reset the max file size.
+     * The filename will be changed to include a counter
+     * if the file has to be splitted like so:
+     *
+     * <pre>
+     * filename.iso
+     * filename.iso.001
+     * filename.iso.002
+     * ...
+     * </pre>
      */
-    void setMaxFileSize( qint64 size );
+    class LIBK3B_EXPORT FileSplitter : public QIODevice
+    {
+    public:
+        FileSplitter();
+        FileSplitter( const QString& filename );
+        ~FileSplitter();
 
-    const QString& name() const;
+        /**
+         * Set the maximum file size. If this is set to 0
+         * (the default) the max filesize is determined based on
+         * the filesystem type.
+         *
+         * Be aware that setName will reset the max file size.
+         */
+        void setMaxFileSize( qint64 size );
 
-    void setName( const QString& filename );
+        const QString& name() const;
 
-    virtual bool open( OpenMode mode );
+        void setName( const QString& filename );
 
-    virtual void close();
+        virtual bool open( OpenMode mode );
 
-    /**
-     * File descriptor to read from and write to.
-     * Not implemented yet!
-     */
-    int handle() const;
+        virtual void close();
 
-    virtual void flush();
+        /**
+         * File descriptor to read from and write to.
+         * Not implemented yet!
+         */
+        int handle() const;
 
-    /**
-     * Not implemented
-     */
-    virtual qint64 size() const;
+        virtual void flush();
 
-    /**
-     * Not implemented
-     */
-    virtual qint64 pos() const;
+        /**
+         * Not implemented
+         */
+        virtual qint64 size() const;
 
-    /**
-     * Not implemented
-     */
-    virtual bool seek( qint64 );
+        /**
+         * Not implemented
+         */
+        virtual qint64 pos() const;
 
-    virtual bool atEnd() const;
+        /**
+         * Not implemented
+         */
+        virtual bool seek( qint64 );
 
-    /**
-     * Deletes all the splitted files.
-     * Caution: Does remove all files that fit the naming scheme without any 
-     * additional checks.
-     */
-    void remove();
+        virtual bool atEnd() const;
 
-protected:
-    virtual qint64 readData( char *data, qint64 maxlen );
-    virtual qint64 writeData( const char *data, qint64 len );
+        /**
+         * Deletes all the splitted files.
+         * Caution: Does remove all files that fit the naming scheme without any
+         * additional checks.
+         */
+        void remove();
 
-private:
-    class Private;
-    Private* d;
-};
+    protected:
+        virtual qint64 readData( char *data, qint64 maxlen );
+        virtual qint64 writeData( const char *data, qint64 len );
+
+    private:
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

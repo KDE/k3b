@@ -18,18 +18,21 @@
 #include <k3blistview.h>
 
 class Q3DragObject;
-class K3bAudioCdView;
+namespace K3b {
+    class AudioCdView;
+}
 
 /**
- * Internally used by K3bAudioCdView
+ * Internally used by AudioCdView
  */
-class K3bAudioCdListView : public K3bListView
+namespace K3b {
+class AudioCdListView : public ListView
 {
   Q_OBJECT
 
  public:
-  K3bAudioCdListView( K3bAudioCdView*, QWidget* parent = 0 );
-  ~K3bAudioCdListView();
+  AudioCdListView( AudioCdView*, QWidget* parent = 0 );
+  ~AudioCdListView();
 
  protected:
   /**
@@ -38,7 +41,8 @@ class K3bAudioCdListView : public K3bListView
   Q3DragObject* dragObject();
 
  private:
-  K3bAudioCdView* m_view;
+  AudioCdView* m_view;
 };
+}
 
 #endif

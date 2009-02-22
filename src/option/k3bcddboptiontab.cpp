@@ -24,7 +24,7 @@
 #include <QtGui/QHBoxLayout>
 
 
-K3bCddbOptionTab::K3bCddbOptionTab( QWidget* parent )
+K3b::CddbOptionTab::CddbOptionTab( QWidget* parent )
     : QWidget( parent )
 {
     QHBoxLayout* layout = new QHBoxLayout( this );
@@ -49,12 +49,12 @@ K3bCddbOptionTab::K3bCddbOptionTab( QWidget* parent )
 }
 
 
-K3bCddbOptionTab::~K3bCddbOptionTab()
+K3b::CddbOptionTab::~CddbOptionTab()
 {
 }
 
 
-void K3bCddbOptionTab::readSettings()
+void K3b::CddbOptionTab::readSettings()
 {
     if ( m_cddbKcm ) {
         m_cddbKcm->load();
@@ -62,7 +62,7 @@ void K3bCddbOptionTab::readSettings()
 }
 
 
-void K3bCddbOptionTab::apply()
+void K3b::CddbOptionTab::apply()
 {
     if ( m_cddbKcm ) {
         m_cddbKcm->save();

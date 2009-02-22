@@ -23,29 +23,29 @@
 #include <kconfig.h>
 
 
-K3bVideoDvdDoc::K3bVideoDvdDoc( QObject* parent )
-  : K3bDataDoc( parent )
+K3b::VideoDvdDoc::VideoDvdDoc( QObject* parent )
+  : K3b::DataDoc( parent )
 {
 }
 
 
-K3bVideoDvdDoc::~K3bVideoDvdDoc()
+K3b::VideoDvdDoc::~VideoDvdDoc()
 {
 }
 
 
-bool K3bVideoDvdDoc::newDocument()
+bool K3b::VideoDvdDoc::newDocument()
 {
-  if( K3bDataDoc::newDocument() ) {
+  if( K3b::DataDoc::newDocument() ) {
 
-    // K3bDataDoc::newDocument already deleted m_videoTsDir (again: bad design!)
-    m_videoTsDir = new K3bDirItem( "VIDEO_TS", this, root() );
+    // K3b::DataDoc::newDocument already deleted m_videoTsDir (again: bad design!)
+    m_videoTsDir = new K3b::DirItem( "VIDEO_TS", this, root() );
     m_videoTsDir->setRemoveable(false);
     m_videoTsDir->setRenameable(false);
     m_videoTsDir->setMoveable(false);
     m_videoTsDir->setHideable(false);
 
-    K3bDirItem* audioTsDir = new K3bDirItem( "AUDIO_TS", this, root() );
+    K3b::DirItem* audioTsDir = new K3b::DirItem( "AUDIO_TS", this, root() );
     audioTsDir->setRemoveable(false);
     audioTsDir->setRenameable(false);
     audioTsDir->setMoveable(false);
@@ -62,15 +62,15 @@ bool K3bVideoDvdDoc::newDocument()
 }
 
 
-K3bBurnJob* K3bVideoDvdDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
+K3b::BurnJob* K3b::VideoDvdDoc::newBurnJob( K3b::JobHandler* hdl, QObject* parent )
 {
-  return new K3bVideoDvdJob( this, hdl, parent );
+  return new K3b::VideoDvdJob( this, hdl, parent );
 }
 
 
-int K3bVideoDvdDoc::supportedMediaTypes() const
+int K3b::VideoDvdDoc::supportedMediaTypes() const
 {
-    return K3bDevice::MEDIA_WRITABLE_DVD;
+    return K3b::Device::MEDIA_WRITABLE_DVD;
 }
 
 //#include "k3bdvddoc.moc"

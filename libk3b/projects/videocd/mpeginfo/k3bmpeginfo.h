@@ -1,16 +1,16 @@
 /*
-*
-* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
-*
-* This file is part of the K3b project.
-* Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-* See the file "COPYING" for the exact licensing terms.
-*/
+ *
+ * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
 #ifndef K3BMPEGINFO
 #define K3BMPEGINFO
@@ -23,7 +23,7 @@
 #define MPEG_START_CODE_PATTERN  ((ulong) 0x00000100)
 #define MPEG_START_CODE_MASK     ((ulong) 0xffffff00)
 
-#define MPEG_PICTURE_CODE        ((ulong) 0x00000100) 
+#define MPEG_PICTURE_CODE        ((ulong) 0x00000100)
 /* [...slice codes... 0x1a7] */
 
 #define MPEG_USER_CODE           ((uchar) 0xb2)
@@ -53,8 +53,9 @@ typedef long long llong;
 
 #include <kdebug.h>
 
-class video_info
-{
+namespace K3b {
+    class video_info
+    {
     public:
         bool seen;
         unsigned long hsize;
@@ -67,10 +68,11 @@ class video_info
         unsigned char video_format;
         unsigned char chroma_format;
         bool constrained_flag;
-};
+    };
 
-class audio_info
-{
+
+    class audio_info
+    {
     public:
         bool seen;
         unsigned int version;
@@ -82,18 +84,19 @@ class audio_info
         int mode;
         bool copyright;
         bool original;
-};
+    };
 
-class Mpeginfo
-{
+
+    class Mpeginfo
+    {
 
     public:
         Mpeginfo()
-                : version( 0 ),
-                muxrate( 0 ),
-                playing_time( 0 ),
-                has_video ( false ),
-                has_audio ( false )
+            : version( 0 ),
+              muxrate( 0 ),
+              playing_time( 0 ),
+              has_video ( false ),
+              has_audio ( false )
         {
             for ( int i = 0; i < 3; i++ ) {
                 video[ i ].seen = false;
@@ -112,13 +115,13 @@ class Mpeginfo
         bool has_audio;
         video_info video[ 3 ];
         audio_info audio[ 3 ];
-};
+    };
 
-class K3bMpegInfo
-{
+    class MpegInfo
+    {
     public:
-        K3bMpegInfo( const char* filename );
-        ~K3bMpegInfo();
+        MpegInfo( const char* filename );
+        ~MpegInfo();
         enum mpeg_version { MPEG_VERS_INVALID = 0, MPEG_VERS_MPEG1 = 1, MPEG_VERS_MPEG2 = 2 };
         enum mode { MPEG_STEREO = 1, MPEG_JOINT_STEREO, MPEG_DUAL_CHANNEL, MPEG_SINGLE_CHANNEL };
 
@@ -172,6 +175,7 @@ class K3bMpegInfo
         double m_initial_TS;
         QString m_error_string;
 
-};
+    };
+}
 
-#endif //K3bMpegInfo
+#endif //MpegInfo

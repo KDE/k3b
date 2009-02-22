@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -23,70 +23,72 @@
 #include <qtoolbutton.h>
 
 
-K3bDataVolumeDescWidget::K3bDataVolumeDescWidget( QWidget* parent )
-  : base_K3bDataVolumeDescWidget( parent )
+K3b::DataVolumeDescWidget::DataVolumeDescWidget( QWidget* parent )
+    : QWidget( parent )
 {
-  // the maximal number of characters that can be inserted are set in the ui file!
+    setupUi( this );
 
-  QValidator* isoValidator = new K3bLatin1Validator( this );
+    // the maximal number of characters that can be inserted are set in the ui file!
 
-  m_editVolumeName->setValidator( isoValidator );
-  m_editVolumeSetName->setValidator( isoValidator );
-  m_editPublisher->setValidator( isoValidator );
-  m_editPreparer->setValidator( isoValidator );
-  m_editSystem->setValidator( isoValidator );
-  m_editApplication->setValidator( isoValidator );
+    QValidator* isoValidator = new K3b::Latin1Validator( this );
 
-  connect( m_spinVolumeSetSize, SIGNAL(valueChanged(int)),
-	   this, SLOT(slotVolumeSetSizeChanged(int)) );
+    m_editVolumeName->setValidator( isoValidator );
+    m_editVolumeSetName->setValidator( isoValidator );
+    m_editPublisher->setValidator( isoValidator );
+    m_editPreparer->setValidator( isoValidator );
+    m_editSystem->setValidator( isoValidator );
+    m_editApplication->setValidator( isoValidator );
 
-  // for now we hide the volume set size stuff since it's not working anymore in mkisofs 2.01a34
-  textLabel1->hide();
-  textLabel2->hide();
-  m_spinVolumeSetSize->hide();
-  m_spinVolumeSetNumber->hide();
+    connect( m_spinVolumeSetSize, SIGNAL(valueChanged(int)),
+             this, SLOT(slotVolumeSetSizeChanged(int)) );
 
-  // FIXME: show the buttons and allow the selection of a file from the project
-  m_buttonFindAbstract->hide();
-  m_buttonFindCopyright->hide();
-  m_buttonFindBiblio->hide();
+    // for now we hide the volume set size stuff since it's not working anymore in mkisofs 2.01a34
+    textLabel1->hide();
+    textLabel2->hide();
+    m_spinVolumeSetSize->hide();
+    m_spinVolumeSetNumber->hide();
+
+    // FIXME: show the buttons and allow the selection of a file from the project
+    m_buttonFindAbstract->hide();
+    m_buttonFindCopyright->hide();
+    m_buttonFindBiblio->hide();
 }
 
 
-K3bDataVolumeDescWidget::~K3bDataVolumeDescWidget()
+K3b::DataVolumeDescWidget::~DataVolumeDescWidget()
 {
 }
 
 
-void K3bDataVolumeDescWidget::load( const K3bIsoOptions& o )
+void K3b::DataVolumeDescWidget::load( const K3b::IsoOptions& o )
 {
-  m_editVolumeName->setText( o.volumeID() );
-  m_editVolumeSetName->setText( o.volumeSetId() );
-  m_spinVolumeSetSize->setValue( o.volumeSetSize() );
-  m_spinVolumeSetNumber->setValue( o.volumeSetNumber() );
-  m_editPublisher->setText( o.publisher() );
-  m_editPreparer->setText( o.preparer() );
-  m_editSystem->setText( o.systemId() );
-  m_editApplication->setText( o.applicationID() );
+    m_editVolumeName->setText( o.volumeID() );
+    m_editVolumeSetName->setText( o.volumeSetId() );
+    m_spinVolumeSetSize->setValue( o.volumeSetSize() );
+    m_spinVolumeSetNumber->setValue( o.volumeSetNumber() );
+    m_editPublisher->setText( o.publisher() );
+    m_editPreparer->setText( o.preparer() );
+    m_editSystem->setText( o.systemId() );
+    m_editApplication->setText( o.applicationID() );
 }
 
 
-void K3bDataVolumeDescWidget::save( K3bIsoOptions& o )
+void K3b::DataVolumeDescWidget::save( K3b::IsoOptions& o )
 {
-  o.setVolumeID( m_editVolumeName->text() );
-  o.setVolumeSetId( m_editVolumeSetName->text() );
-  o.setVolumeSetSize( 1/*m_spinVolumeSetSize->value() */);
-  o.setVolumeSetNumber( 1/*m_spinVolumeSetNumber->value() */);
-  o.setPublisher( m_editPublisher->text() );
-  o.setPreparer( m_editPreparer->text() );
-  o.setSystemId( m_editSystem->text() );
-  o.setApplicationID( m_editApplication->text() );
+    o.setVolumeID( m_editVolumeName->text() );
+    o.setVolumeSetId( m_editVolumeSetName->text() );
+    o.setVolumeSetSize( 1/*m_spinVolumeSetSize->value() */);
+    o.setVolumeSetNumber( 1/*m_spinVolumeSetNumber->value() */);
+    o.setPublisher( m_editPublisher->text() );
+    o.setPreparer( m_editPreparer->text() );
+    o.setSystemId( m_editSystem->text() );
+    o.setApplicationID( m_editApplication->text() );
 }
 
 
-void K3bDataVolumeDescWidget::slotVolumeSetSizeChanged( int i )
+void K3b::DataVolumeDescWidget::slotVolumeSetSizeChanged( int i )
 {
-  m_spinVolumeSetNumber->setMaximum( i );
+    m_spinVolumeSetNumber->setMaximum( i );
 }
 
 #include "k3bdatavolumedescwidget.moc"

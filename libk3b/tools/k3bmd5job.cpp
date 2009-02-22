@@ -30,10 +30,10 @@
 #include <unistd.h>
 
 
-class K3bMd5Job::K3bMd5JobPrivate
+class K3b::Md5Job::Private
 {
 public:
-    K3bMd5JobPrivate()
+    Private()
         : fileDes(-1),
           fdNotifier(0),
           finished(true),
@@ -44,16 +44,16 @@ public:
     }
 
     KMD5 md5;
-    K3bFileSplitter file;
+    K3b::FileSplitter file;
     QTimer timer;
     QString filename;
     int fileDes;
-    K3bDevice::Device* device;
+    K3b::Device::Device* device;
     QSocketNotifier* fdNotifier;
 
     bool finished;
     char* data;
-    const K3bIso9660File* isoFile;
+    const K3b::Iso9660File* isoFile;
 
     qint64 maxSize;
     qint64 readData;
@@ -66,24 +66,24 @@ public:
 };
 
 
-K3bMd5Job::K3bMd5Job( K3bJobHandler* jh, QObject* parent )
-    : K3bJob( jh, parent )
+K3b::Md5Job::Md5Job( K3b::JobHandler* jh, QObject* parent )
+    : K3b::Job( jh, parent ),
+      d( new Private() )
 {
-    d = new K3bMd5JobPrivate;
-    d->data = new char[K3bMd5JobPrivate::BUFFERSIZE];
+    d->data = new char[Private::BUFFERSIZE];
     connect( &d->timer, SIGNAL(timeout()),
              this, SLOT(slotUpdate()) );
 }
 
 
-K3bMd5Job::~K3bMd5Job()
+K3b::Md5Job::~Md5Job()
 {
     delete [] d->data;
     delete d;
 }
 
 
-void K3bMd5Job::start()
+void K3b::Md5Job::start()
 {
     cancel();
 
@@ -128,7 +128,7 @@ void K3bMd5Job::start()
 }
 
 
-void K3bMd5Job::setupFdNotifier()
+void K3b::Md5Job::setupFdNotifier()
 {
     // the QSocketNotifier will fire once the fd is closed
     delete d->fdNotifier;
@@ -138,7 +138,7 @@ void K3bMd5Job::setupFdNotifier()
 }
 
 
-void K3bMd5Job::cancel()
+void K3b::Md5Job::cancel()
 {
     if( !d->finished ) {
         stopAll();
@@ -149,7 +149,7 @@ void K3bMd5Job::cancel()
 }
 
 
-void K3bMd5Job::setFile( const QString& filename )
+void K3b::Md5Job::setFile( const QString& filename )
 {
     d->filename = filename;
     d->isoFile = 0;
@@ -158,7 +158,7 @@ void K3bMd5Job::setFile( const QString& filename )
 }
 
 
-void K3bMd5Job::setFile( const K3bIso9660File* file )
+void K3b::Md5Job::setFile( const K3b::Iso9660File* file )
 {
     d->isoFile = file;
     d->fileDes = -1;
@@ -167,7 +167,7 @@ void K3bMd5Job::setFile( const K3bIso9660File* file )
 }
 
 
-void K3bMd5Job::setFd( int fd )
+void K3b::Md5Job::setFd( int fd )
 {
     d->fileDes = fd;
     d->filename.truncate(0);
@@ -176,7 +176,7 @@ void K3bMd5Job::setFd( int fd )
 }
 
 
-void K3bMd5Job::setDevice( K3bDevice::Device* dev )
+void K3b::Md5Job::setDevice( K3b::Device::Device* dev )
 {
     d->device = dev;
     d->fileDes = -1;
@@ -185,24 +185,24 @@ void K3bMd5Job::setDevice( K3bDevice::Device* dev )
 }
 
 
-void K3bMd5Job::setMaxReadSize( qint64 size )
+void K3b::Md5Job::setMaxReadSize( qint64 size )
 {
     d->maxSize = size;
 }
 
 
-void K3bMd5Job::slotUpdate()
+void K3b::Md5Job::slotUpdate()
 {
     if( !d->finished ) {
 
         // determine bytes to read
-        qint64 readSize = K3bMd5JobPrivate::BUFFERSIZE;
+        qint64 readSize = Private::BUFFERSIZE;
         if( d->maxSize > 0 )
             readSize = qMin( readSize, d->maxSize - d->readData );
 
         if( readSize <= 0 ) {
-            //      kDebug() << "(K3bMd5Job) reached max size of " << d->maxSize << ". Stopping.";
-            emit debuggingOutput( "K3bMd5Job", QString("Reached max read of %1. Stopping after %2 bytes.").arg(d->maxSize).arg(d->readData) );
+            //      kDebug() << "(K3b::Md5Job) reached max size of " << d->maxSize << ". Stopping.";
+            emit debuggingOutput( "K3b::Md5Job", QString("Reached max read of %1. Stopping after %2 bytes.").arg(d->maxSize).arg(d->readData) );
             stopAll();
             emit percent( 100 );
             jobFinished(true);
@@ -255,8 +255,8 @@ void K3bMd5Job::slotUpdate()
                 jobFinished(false);
             }
             else if( read == 0 ) {
-                //	kDebug() << "(K3bMd5Job) read all data. Total size: " << d->readData << ". Stopping.";
-                emit debuggingOutput( "K3bMd5Job", QString("All data read. Stopping after %1 bytes.").arg(d->readData) );
+                //	kDebug() << "(K3b::Md5Job) read all data. Total size: " << d->readData << ". Stopping.";
+                emit debuggingOutput( "K3b::Md5Job", QString("All data read. Stopping after %1 bytes.").arg(d->readData) );
                 stopAll();
                 emit percent( 100 );
                 jobFinished(true);
@@ -280,7 +280,7 @@ void K3bMd5Job::slotUpdate()
 }
 
 
-QByteArray K3bMd5Job::hexDigest()
+QByteArray K3b::Md5Job::hexDigest()
 {
     if( d->finished )
         return d->md5.hexDigest();
@@ -289,7 +289,7 @@ QByteArray K3bMd5Job::hexDigest()
 }
 
 
-QByteArray K3bMd5Job::base64Digest()
+QByteArray K3b::Md5Job::base64Digest()
 {
     if( d->finished )
         return d->md5.base64Digest();
@@ -299,15 +299,15 @@ QByteArray K3bMd5Job::base64Digest()
 }
 
 
-void K3bMd5Job::stop()
+void K3b::Md5Job::stop()
 {
-    emit debuggingOutput( "K3bMd5Job", QString("Stopped manually after %1 bytes.").arg(d->readData) );
+    emit debuggingOutput( "K3b::Md5Job", QString("Stopped manually after %1 bytes.").arg(d->readData) );
     stopAll();
     jobFinished( true );
 }
 
 
-void K3bMd5Job::stopAll()
+void K3b::Md5Job::stopAll()
 {
     if( d->fdNotifier )
         d->fdNotifier->setEnabled( false );

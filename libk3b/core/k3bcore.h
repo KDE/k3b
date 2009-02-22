@@ -26,148 +26,150 @@
 
 #define LIBK3B_VERSION K3B_VERSION_STRING
 
-#define k3bcore K3bCore::k3bCore()
+#define k3bcore K3b::Core::k3bCore()
 
 
-class K3bExternalBinManager;
-class K3bVersion;
 class KConfig;
-class K3bJob;
-class K3bBurnJob;
-class K3bGlobalSettings;
-class K3bPluginManager;
 class QCustomEvent;
-class K3bMediaCache;
 
+namespace K3b {
 
-namespace K3bDevice {
-    class DeviceManager;
-    class Device;
+    class ExternalBinManager;
+    class Version;
+    class Job;
+    class BurnJob;
+    class GlobalSettings;
+    class PluginManager;
+    class MediaCache;
+
+    namespace Device {
+        class DeviceManager;
+        class Device;
+    }
+
+    /**
+     * The K3b core takes care of the managers.
+     * This has been separated from Application to
+     * make creating a Part easy.
+     * This is the heart of the K3b system. Every plugin may use this
+     * to get the information it needs.
+     */
+    class LIBK3B_EXPORT Core : public QObject
+    {
+        Q_OBJECT
+
+    public:
+        /**
+         * Although Core is a singlelton it's constructor is not private to make inheritance
+         * possible. Just make sure to only create one instance.
+         */
+        Core( QObject* parent = 0 );
+        virtual ~Core();
+
+        QList<Job*> runningJobs() const;
+
+        /**
+         * Equals to !runningJobs().isEmpty()
+         */
+        bool jobsRunning() const;
+
+        /**
+         * The default implementation calls add four initXXX() methods,
+         * scans for devices, applications, and reads the global settings.
+         */
+        virtual void init();
+
+        virtual void readSettings( KSharedConfig::Ptr c );
+
+        virtual void saveSettings( KSharedConfig::Ptr c );
+
+        MediaCache* mediaCache() const;
+
+        /**
+         * If this is reimplemented it is recommended to also reimplement
+         * init().
+         */
+        virtual Device::DeviceManager* deviceManager() const;
+
+        /**
+         * Returns the external bin manager from Core.
+         *
+         * By default Core only adds the default programs:
+         * cdrecord, cdrdao, growisofs, mkisofs, dvd+rw-format, readcd
+         *
+         * If you need other programs you have to add them manually like this:
+         * <pre>externalBinManager()->addProgram( new NormalizeProgram() );</pre>
+         */
+        ExternalBinManager* externalBinManager() const;
+        PluginManager* pluginManager() const;
+
+        /**
+         * Global settings used throughout libk3b. Change the settings directly in the
+         * GlobalSettings object. They will be saved by Core::saveSettings
+         */
+        GlobalSettings* globalSettings() const;
+
+        /**
+         * returns the version of the library as defined by LIBK3B_VERSION
+         */
+        const Version& version() const;
+
+        /**
+         * Used by the writing jobs to block a device.
+         * This makes sure no device is used twice within libk3b
+         *
+         * When using this method in a job be aware that reimplementations might
+         * open dialogs and resulting in a blocking call.
+         *
+         * This method calls internalBlockDevice() to do the actual work.
+         */
+        bool blockDevice( Device::Device* );
+        void unblockDevice( Device::Device* );
+
+        static Core* k3bCore() { return s_k3bCore; }
+
+    Q_SIGNALS:
+        /**
+         * Emitted once a new job has been started. This includes burn jobs.
+         */
+        void jobStarted( Job* );
+        void burnJobStarted( BurnJob* );
+        void jobFinished( Job* );
+        void burnJobFinished( BurnJob* );
+
+    public Q_SLOTS:
+        /**
+         * Every running job registers itself with the core.
+         * For now this is only used to determine if some job
+         * is running.
+         */
+        void registerJob( Job* job );
+        void unregisterJob( Job* job );
+
+    protected:
+        /**
+         * Reimplement this to add additional checks.
+         *
+         * This method is thread safe. blockDevice makes sure
+         * it is only executed in the GUI thread.
+         */
+        virtual bool internalBlockDevice( Device::Device* );
+        virtual void internalUnblockDevice( Device::Device* );
+
+        virtual void initGlobalSettings();
+        virtual void initExternalBinManager();
+        virtual void initDeviceManager();
+        virtual void initPluginManager();
+        virtual void initMediaCache();
+
+        virtual void customEvent( QEvent* e );
+
+    private:
+        class Private;
+        Private* d;
+
+        static Core* s_k3bCore;
+    };
 }
-
-
-/**
- * The K3b core takes care of the managers. 
- * This has been separated from K3bApplication to 
- * make creating a K3bPart easy.
- * This is the heart of the K3b system. Every plugin may use this
- * to get the information it needs.
- */
-class LIBK3B_EXPORT K3bCore : public QObject
-{
-    Q_OBJECT
-
-public:
-    /**
-     * Although K3bCore is a singlelton it's constructor is not private to make inheritance
-     * possible. Just make sure to only create one instance.
-     */
-    K3bCore( QObject* parent = 0 );
-    virtual ~K3bCore();
-
-    QList<K3bJob*> runningJobs() const;
-
-    /**
-     * Equals to !runningJobs().isEmpty()
-     */
-    bool jobsRunning() const;
-
-    /**
-     * The default implementation calls add four initXXX() methods,
-     * scans for devices, applications, and reads the global settings.
-     */
-    virtual void init();
-
-    virtual void readSettings( KSharedConfig::Ptr c );
-
-    virtual void saveSettings( KSharedConfig::Ptr c );
-
-    K3bMediaCache* mediaCache() const;
-
-    /**
-     * If this is reimplemented it is recommended to also reimplement
-     * init().
-     */
-    virtual K3bDevice::DeviceManager* deviceManager() const;
-
-    /**
-     * Returns the external bin manager from K3bCore.
-     *
-     * By default K3bCore only adds the default programs:
-     * cdrecord, cdrdao, growisofs, mkisofs, dvd+rw-format, readcd
-     *
-     * If you need other programs you have to add them manually like this:
-     * <pre>externalBinManager()->addProgram( new K3bNormalizeProgram() );</pre>
-     */
-    K3bExternalBinManager* externalBinManager() const;
-    K3bPluginManager* pluginManager() const;
-
-    /**
-     * Global settings used throughout libk3b. Change the settings directly in the
-     * K3bGlobalSettings object. They will be saved by K3bCore::saveSettings
-     */
-    K3bGlobalSettings* globalSettings() const;
-
-    /**
-     * returns the version of the library as defined by LIBK3B_VERSION
-     */
-    const K3bVersion& version() const;
-
-    /**
-     * Used by the writing jobs to block a device.
-     * This makes sure no device is used twice within libk3b
-     *
-     * When using this method in a job be aware that reimplementations might
-     * open dialogs and resulting in a blocking call.
-     *
-     * This method calls internalBlockDevice() to do the actual work.
-     */
-    bool blockDevice( K3bDevice::Device* );
-    void unblockDevice( K3bDevice::Device* );
-
-    static K3bCore* k3bCore() { return s_k3bCore; }
-
-Q_SIGNALS:
-    /**
-     * Emitted once a new job has been started. This includes burn jobs.
-     */
-    void jobStarted( K3bJob* );
-    void burnJobStarted( K3bBurnJob* );
-    void jobFinished( K3bJob* );
-    void burnJobFinished( K3bBurnJob* );
-
-public Q_SLOTS:
-    /**
-     * Every running job registers itself with the core.
-     * For now this is only used to determine if some job
-     * is running.
-     */
-    void registerJob( K3bJob* job );
-    void unregisterJob( K3bJob* job );
-
-protected:
-    /**
-     * Reimplement this to add additional checks.
-     *
-     * This method is thread safe. blockDevice makes sure
-     * it is only executed in the GUI thread.
-     */
-    virtual bool internalBlockDevice( K3bDevice::Device* );
-    virtual void internalUnblockDevice( K3bDevice::Device* );
-
-    virtual void initGlobalSettings();
-    virtual void initExternalBinManager();
-    virtual void initDeviceManager();
-    virtual void initPluginManager();
-    virtual void initMediaCache();
-
-    virtual void customEvent( QEvent* e );
-
-private:
-    class Private;
-    Private* d;
-
-    static K3bCore* s_k3bCore;
-};
 
 #endif

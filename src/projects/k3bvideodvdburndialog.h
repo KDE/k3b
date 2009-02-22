@@ -19,18 +19,23 @@
 #include "k3bprojectburndialog.h"
 
 
-class K3bVideoDvdDoc;
-class K3bDataImageSettingsWidget;
+namespace K3b {
+    class VideoDvdDoc;
+}
+namespace K3b {
+    class DataImageSettingsWidget;
+}
 class QCheckBox;
 
 
-class K3bVideoDvdBurnDialog : public K3bProjectBurnDialog
+namespace K3b {
+class VideoDvdBurnDialog : public ProjectBurnDialog
 {
     Q_OBJECT
 
 public:
-    K3bVideoDvdBurnDialog( K3bVideoDvdDoc*, QWidget *parent = 0 );
-    ~K3bVideoDvdBurnDialog();
+    VideoDvdBurnDialog( VideoDvdDoc*, QWidget *parent = 0 );
+    ~VideoDvdBurnDialog();
 
 protected Q_SLOTS:
     void slotStartClicked();
@@ -44,11 +49,12 @@ protected:
     void toggleAll();
 
 private:
-    K3bDataImageSettingsWidget* m_imageSettingsWidget;
+    DataImageSettingsWidget* m_imageSettingsWidget;
 
     QCheckBox* m_checkVerify;
 
-    K3bVideoDvdDoc* m_doc;
+    VideoDvdDoc* m_doc;
 };
+}
 
 #endif

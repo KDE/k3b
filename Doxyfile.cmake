@@ -97,10 +97,14 @@ EXCLUDE                = ${k3b_SOURCE_DIR}/libk3b/images \
                          ${k3b_SOURCE_DIR}/src/fastscale \
                          ${k3b_SOURCE_DIR}/src/projects/kostore \
                          ${k3b_SOURCE_DIR}/libk3bdevice/k3bmmc.h \
+                         ${k3b_SOURCE_DIR}/libk3bdevice/k3bdiskinfo_p.h \
+                         ${k3b_SOURCE_DIR}/libk3bdevice/k3bscsicommand.h \
+                         ${k3b_SOURCE_DIR}/libk3b/core/k3process.h \
+                         ${k3b_SOURCE_DIR}/libk3b/core/k3processcontroller.h \
                          ${k3b_SOURCE_DIR}/libk3b/projects/videocd/mpeginfo
 
 EXCLUDE_SYMLINKS       = NO
-EXCLUDE_PATTERNS       = 
+EXCLUDE_PATTERNS       = *_p.h
 EXCLUDE_SYMBOLS        = 
 EXAMPLE_PATH           = 
 EXAMPLE_PATTERNS       = *

@@ -29,21 +29,26 @@ class QComboBox;
 class QGroupBox;
 class QLabel;
 class QSpinBox;
-class K3bAudioDoc;
-class K3bAudioCdTextWidget;
+namespace K3b {
+    class AudioDoc;
+}
+namespace K3b {
+    class AudioCdTextWidget;
+}
 class QShowEvent;
 
 
 /**
  *@author Sebastian Trueg
  */
-class K3bAudioBurnDialog : public K3bProjectBurnDialog  
+namespace K3b {
+class AudioBurnDialog : public ProjectBurnDialog  
 {
     Q_OBJECT
 
 public:
-    K3bAudioBurnDialog(K3bAudioDoc* doc, QWidget *parent=0 );
-    ~K3bAudioBurnDialog();
+    AudioBurnDialog(AudioDoc* doc, QWidget *parent=0 );
+    ~AudioBurnDialog();
    
 protected:
     void saveSettings();
@@ -72,8 +77,9 @@ private:
     QCheckBox* m_checkAudioRippingIgnoreReadErrors;
     QSpinBox* m_spinAudioRippingReadRetries;
     QComboBox* m_comboParanoiaMode;
-    K3bAudioCdTextWidget* m_cdtextWidget;
-    K3bAudioDoc* m_doc;
+    AudioCdTextWidget* m_cdtextWidget;
+    AudioDoc* m_doc;
 };
+}
 
 #endif

@@ -63,8 +63,8 @@
 #include <QGridLayout>
 
 
-K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
-    : K3bInteractionDialog( parent,
+K3b::MediaCopyDialog::MediaCopyDialog( QWidget *parent )
+    : K3b::InteractionDialog( parent,
                             i18n("Disk Copy"),
                             i18n("and CD Cloning"),
                             START_BUTTON|CANCEL_BUTTON,
@@ -78,16 +78,16 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
     mainGrid->setMargin( 0 );
 
     QGroupBox* groupSource = new QGroupBox( i18n("Source Medium"), main );
-    m_comboSourceDevice = new K3bMediaSelectionComboBox( groupSource );
-    m_comboSourceDevice->setWantedMediumType( K3bDevice::MEDIA_ALL );
-    m_comboSourceDevice->setWantedMediumState( K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE );
+    m_comboSourceDevice = new K3b::MediaSelectionComboBox( groupSource );
+    m_comboSourceDevice->setWantedMediumType( K3b::Device::MEDIA_ALL );
+    m_comboSourceDevice->setWantedMediumState( K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE );
     QHBoxLayout* groupSourceLayout = new QHBoxLayout( groupSource );
     groupSourceLayout->setSpacing( spacingHint() );
     groupSourceLayout->setMargin( marginHint() );
     groupSourceLayout->addWidget( m_comboSourceDevice );
 
-    m_writerSelectionWidget = new K3bWriterSelectionWidget( main );
-    m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_EMPTY );
+    m_writerSelectionWidget = new K3b::WriterSelectionWidget( main );
+    m_writerSelectionWidget->setWantedMediumState( K3b::Device::STATE_EMPTY );
 
     // tab widget --------------------
     QTabWidget* tabWidget = new QTabWidget( main );
@@ -110,7 +110,7 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
     groupCopyModeLayout->addWidget( m_comboCopyMode );
 
     QGroupBox* groupWritingMode = new QGroupBox( i18n("Writing Mode"), optionTab );
-    m_writingModeWidget = new K3bWritingModeWidget( groupWritingMode );
+    m_writingModeWidget = new K3b::WritingModeWidget( groupWritingMode );
     QHBoxLayout* groupWritingModeLayout = new QHBoxLayout( groupWritingMode );
     groupWritingModeLayout->setSpacing( spacingHint() );
     groupWritingModeLayout->setMargin( marginHint() );
@@ -129,11 +129,11 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
     groupCopiesLayout->addWidget( m_spinCopies );
 
     QGroupBox* groupOptions = new QGroupBox( i18n("Settings"), optionTab );
-    m_checkSimulate = K3bStdGuiItems::simulateCheckbox( groupOptions );
-    m_checkCacheImage = K3bStdGuiItems::createCacheImageCheckbox( groupOptions );
-    m_checkOnlyCreateImage = K3bStdGuiItems::onlyCreateImagesCheckbox( groupOptions );
-    m_checkDeleteImages = K3bStdGuiItems::removeImagesCheckbox( groupOptions );
-    m_checkVerifyData = K3bStdGuiItems::verifyCheckBox( groupOptions );
+    m_checkSimulate = K3b::StdGuiItems::simulateCheckbox( groupOptions );
+    m_checkCacheImage = K3b::StdGuiItems::createCacheImageCheckbox( groupOptions );
+    m_checkOnlyCreateImage = K3b::StdGuiItems::onlyCreateImagesCheckbox( groupOptions );
+    m_checkDeleteImages = K3b::StdGuiItems::removeImagesCheckbox( groupOptions );
+    m_checkVerifyData = K3b::StdGuiItems::verifyCheckBox( groupOptions );
     QVBoxLayout* groupOptionsLayout = new QVBoxLayout( groupOptions );
     groupOptionsLayout->setSpacing( spacingHint() );
     groupOptionsLayout->setMargin( marginHint() );
@@ -162,7 +162,7 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
     imageTabGrid->setSpacing( spacingHint() );
     imageTabGrid->setMargin( marginHint() );
 
-    m_tempDirSelectionWidget = new K3bTempDirSelectionWidget( imageTab );
+    m_tempDirSelectionWidget = new K3b::TempDirSelectionWidget( imageTab );
 
     imageTabGrid->addWidget( m_tempDirSelectionWidget, 0, 0 );
 
@@ -183,7 +183,7 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
     groupAdvancedDataOptionsLayout->setMargin( marginHint() );
     m_spinDataRetries = new QSpinBox( m_groupAdvancedDataOptions );
     m_spinDataRetries->setRange( 1, 128 );
-    m_checkIgnoreDataReadErrors = K3bStdGuiItems::ignoreAudioReadErrorsCheckBox( m_groupAdvancedDataOptions );
+    m_checkIgnoreDataReadErrors = K3b::StdGuiItems::ignoreAudioReadErrorsCheckBox( m_groupAdvancedDataOptions );
     m_checkNoCorrection = new QCheckBox( i18n("No error correction"), m_groupAdvancedDataOptions );
     groupAdvancedDataOptionsLayout->addWidget( new QLabel( i18n("Read retries:"), m_groupAdvancedDataOptions ), 0, 0 );
     groupAdvancedDataOptionsLayout->addWidget( m_spinDataRetries, 0, 1 );
@@ -197,8 +197,8 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
     groupAdvancedAudioOptionsLayout->setMargin( marginHint() );
     m_spinAudioRetries = new QSpinBox( m_groupAdvancedAudioOptions );
     m_spinAudioRetries->setRange( 1, 128 );
-    m_checkIgnoreAudioReadErrors = K3bStdGuiItems::ignoreAudioReadErrorsCheckBox( m_groupAdvancedAudioOptions );
-    m_comboParanoiaMode = K3bStdGuiItems::paranoiaModeComboBox( m_groupAdvancedAudioOptions );
+    m_checkIgnoreAudioReadErrors = K3b::StdGuiItems::ignoreAudioReadErrorsCheckBox( m_groupAdvancedAudioOptions );
+    m_comboParanoiaMode = K3b::StdGuiItems::paranoiaModeComboBox( m_groupAdvancedAudioOptions );
     m_checkReadCdText = new QCheckBox( i18n("Copy CD-Text"), m_groupAdvancedAudioOptions );
     groupAdvancedAudioOptionsLayout->addWidget( new QLabel( i18n("Read retries:"), m_groupAdvancedAudioOptions ), 0, 0 );
     groupAdvancedAudioOptionsLayout->addWidget( m_spinAudioRetries, 0, 1 );
@@ -219,12 +219,12 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
     mainGrid->setRowStretch( 2, 1 );
 
 
-    connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)), this, SLOT(slotToggleAll()) );
-    connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3bDevice::Device*)),
+    connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3b::Device::Device*)), this, SLOT(slotToggleAll()) );
+    connect( m_comboSourceDevice, SIGNAL(selectionChanged(K3b::Device::Device*)),
              this, SLOT(slotToggleAll()) );
     connect( m_writerSelectionWidget, SIGNAL(writerChanged()), this, SLOT(slotToggleAll()) );
-    connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3bDevice::Device*)),
-             m_writingModeWidget, SLOT(setDevice(K3bDevice::Device*)) );
+    connect( m_writerSelectionWidget, SIGNAL(writerChanged(K3b::Device::Device*)),
+             m_writingModeWidget, SLOT(setDevice(K3b::Device::Device*)) );
     connect( m_writingModeWidget, SIGNAL(writingModeChanged(K3b::WritingMode)), this, SLOT(slotToggleAll()) );
     connect( m_checkCacheImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
     connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
@@ -261,30 +261,30 @@ K3bMediaCopyDialog::K3bMediaCopyDialog( QWidget *parent )
 }
 
 
-K3bMediaCopyDialog::~K3bMediaCopyDialog()
+K3b::MediaCopyDialog::~MediaCopyDialog()
 {
 }
 
 
-void K3bMediaCopyDialog::init()
+void K3b::MediaCopyDialog::init()
 {
     slotToggleAll();
 }
 
 
-void K3bMediaCopyDialog::setReadingDevice( K3bDevice::Device* dev )
+void K3b::MediaCopyDialog::setReadingDevice( K3b::Device::Device* dev )
 {
     m_comboSourceDevice->setSelectedDevice( dev );
 }
 
 
-K3bDevice::Device* K3bMediaCopyDialog::readingDevice() const
+K3b::Device::Device* K3b::MediaCopyDialog::readingDevice() const
 {
     return m_comboSourceDevice->selectedDevice();
 }
 
 
-void K3bMediaCopyDialog::slotStartClicked()
+void K3b::MediaCopyDialog::slotStartClicked()
 {
     //
     // Let's check the available size
@@ -297,20 +297,20 @@ void K3bMediaCopyDialog::slotStartClicked()
         }
     }
 
-    K3bDevice::Device* readDev = m_comboSourceDevice->selectedDevice();
-    K3bDevice::Device* burnDev = m_writerSelectionWidget->writerDevice();
-    K3bMedium sourceMedium = k3bappcore->mediaCache()->medium( readDev );
-    K3bMedium burnMedium = k3bappcore->mediaCache()->medium( burnDev );
+    K3b::Device::Device* readDev = m_comboSourceDevice->selectedDevice();
+    K3b::Device::Device* burnDev = m_writerSelectionWidget->writerDevice();
+    K3b::Medium sourceMedium = k3bappcore->mediaCache()->medium( readDev );
+    K3b::Medium burnMedium = k3bappcore->mediaCache()->medium( burnDev );
 
-    K3bJobProgressDialog* dlg = 0;
+    K3b::JobProgressDialog* dlg = 0;
     if( m_checkOnlyCreateImage->isChecked() ) {
-        dlg = new K3bJobProgressDialog( kapp->activeWindow() );
+        dlg = new K3b::JobProgressDialog( kapp->activeWindow() );
     }
     else {
-        dlg = new K3bBurnProgressDialog( kapp->activeWindow() );
+        dlg = new K3b::BurnProgressDialog( kapp->activeWindow() );
     }
 
-    K3bBurnJob* burnJob = 0;
+    K3b::BurnJob* burnJob = 0;
 
     if( m_comboCopyMode->currentIndex() == 1 ) {
 
@@ -336,7 +336,7 @@ void K3bMediaCopyDialog::slotStartClicked()
                 return;
         }
 
-        K3bCloneJob* job = new K3bCloneJob( dlg, this );
+        K3b::CloneJob* job = new K3b::CloneJob( dlg, this );
 
         job->setWriterDevice( m_writerSelectionWidget->writerDevice() );
         job->setReaderDevice( m_comboSourceDevice->selectedDevice() );
@@ -351,8 +351,8 @@ void K3bMediaCopyDialog::slotStartClicked()
 
         burnJob = job;
     }
-    else if ( sourceMedium.diskInfo().mediaType() & K3bDevice::MEDIA_CD_ALL ) {
-        K3bCdCopyJob* job = new K3bCdCopyJob( dlg, this );
+    else if ( sourceMedium.diskInfo().mediaType() & K3b::Device::MEDIA_CD_ALL ) {
+        K3b::CdCopyJob* job = new K3b::CdCopyJob( dlg, this );
 
         job->setWriterDevice( m_writerSelectionWidget->writerDevice() );
         job->setReaderDevice( m_comboSourceDevice->selectedDevice() );
@@ -374,8 +374,8 @@ void K3bMediaCopyDialog::slotStartClicked()
 
         burnJob = job;
     }
-    else if ( sourceMedium.diskInfo().mediaType() & ( K3bDevice::MEDIA_DVD_ALL|K3bDevice::MEDIA_BD_ALL ) ) {
-        K3bDvdCopyJob* job = new K3bDvdCopyJob( dlg, this );
+    else if ( sourceMedium.diskInfo().mediaType() & ( K3b::Device::MEDIA_DVD_ALL|K3b::Device::MEDIA_BD_ALL ) ) {
+        K3b::DvdCopyJob* job = new K3b::DvdCopyJob( dlg, this );
 
         job->setWriterDevice( m_writerSelectionWidget->writerDevice() );
         job->setReaderDevice( m_comboSourceDevice->selectedDevice() );
@@ -413,18 +413,18 @@ void K3bMediaCopyDialog::slotStartClicked()
 }
 
 
-void K3bMediaCopyDialog::toggleAll()
+void K3b::MediaCopyDialog::toggleAll()
 {
     updateOverrideDevice();
 
-    K3bDevice::Device* readDev = m_comboSourceDevice->selectedDevice();
-    K3bDevice::Device* burnDev = m_writerSelectionWidget->writerDevice();
-    K3bMedium sourceMedium = k3bappcore->mediaCache()->medium( readDev );
-    K3bMedium burnMedium = k3bappcore->mediaCache()->medium( burnDev );
+    K3b::Device::Device* readDev = m_comboSourceDevice->selectedDevice();
+    K3b::Device::Device* burnDev = m_writerSelectionWidget->writerDevice();
+    K3b::Medium sourceMedium = k3bappcore->mediaCache()->medium( readDev );
+    K3b::Medium burnMedium = k3bappcore->mediaCache()->medium( burnDev );
 
     if ( burnDev ) {
         if( readDev != burnDev &&
-            burnMedium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_PLUS_ALL ) {
+            burnMedium.diskInfo().mediaType() & K3b::Device::MEDIA_DVD_PLUS_ALL ) {
             // no simulation support for DVD+R(W) media
             m_checkSimulate->setChecked(false);
             m_checkSimulate->setEnabled(false);
@@ -445,13 +445,13 @@ void K3bMediaCopyDialog::toggleAll()
     m_writingModeWidget->setEnabled( !m_checkOnlyCreateImage->isChecked() );
 
     // FIXME: no verification for CD yet
-    m_checkVerifyData->setDisabled( sourceMedium.diskInfo().mediaType() & K3bDevice::MEDIA_CD_ALL ||
-                                    sourceMedium.content() & K3bMedium::CONTENT_AUDIO ||
+    m_checkVerifyData->setDisabled( sourceMedium.diskInfo().mediaType() & K3b::Device::MEDIA_CD_ALL ||
+                                    sourceMedium.content() & K3b::Medium::CONTENT_AUDIO ||
                                     m_checkSimulate->isChecked() );
 
     // we can only clone single session CDs
-    if( K3bDevice::isCdMedia( sourceMedium.diskInfo().mediaType() ) ) {
-        m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_CD );
+    if( K3b::Device::isCdMedia( sourceMedium.diskInfo().mediaType() ) ) {
+        m_writerSelectionWidget->setWantedMediumType( K3b::Device::MEDIA_WRITABLE_CD );
         m_writerSelectionWidget->setSupportedWritingApps( K3b::WRITING_APP_CDRECORD );
 
         if ( sourceMedium.toc().sessions() == 1 ) {
@@ -470,15 +470,15 @@ void K3bMediaCopyDialog::toggleAll()
 
         // FIXME: at some point the media combo should also handle media sizes!
 
-        if ( K3bDevice::isDvdMedia( sourceMedium.diskInfo().mediaType() ) ) {
+        if ( K3b::Device::isDvdMedia( sourceMedium.diskInfo().mediaType() ) ) {
             m_writerSelectionWidget->setWantedMediumType( sourceMedium.diskInfo().numLayers() > 1 &&
                                                           sourceMedium.diskInfo().size().mode1Bytes() > 4700372992LL
-                                                          ? K3bDevice::MEDIA_WRITABLE_DVD_DL
-                                                          : K3bDevice::MEDIA_WRITABLE_DVD );
+                                                          ? K3b::Device::MEDIA_WRITABLE_DVD_DL
+                                                          : K3b::Device::MEDIA_WRITABLE_DVD );
         }
         else {
             // FIXME: do the same single layer/dual layer thing like with DVD
-            m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_BD );
+            m_writerSelectionWidget->setWantedMediumType( K3b::Device::MEDIA_WRITABLE_BD );
         }
     }
 
@@ -499,23 +499,23 @@ void K3bMediaCopyDialog::toggleAll()
         //
         if( burnDev == readDev ) {
             K3b::WritingModes modes = 0;
-            if ( sourceMedium.diskInfo().mediaType() & K3bDevice::MEDIA_CD_ALL ) {
+            if ( sourceMedium.diskInfo().mediaType() & K3b::Device::MEDIA_CD_ALL ) {
                 modes = K3b::WRITING_MODE_TAO|K3b::WRITING_MODE_DAO|K3b::WRITING_MODE_RAW;
             }
-            else if ( sourceMedium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_ALL ) {
+            else if ( sourceMedium.diskInfo().mediaType() & K3b::Device::MEDIA_DVD_ALL ) {
                 // only auto for DVD+R(W)
-                if( burnDev->writeCapabilities() & (K3bDevice::MEDIA_DVD_R|K3bDevice::MEDIA_DVD_RW) ) {
+                if( burnDev->writeCapabilities() & (K3b::Device::MEDIA_DVD_R|K3b::Device::MEDIA_DVD_RW) ) {
                     modes |= K3b::WRITING_MODE_DAO|K3b::WRITING_MODE_RES_OVWR;
-                    if( burnDev->featureCurrent( K3bDevice::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) != 0 )
+                    if( burnDev->featureCurrent( K3b::Device::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) != 0 )
                         modes |= K3b::WRITING_MODE_INCR_SEQ;
                 }
 
                 // TODO: once we have layer jump support: this is where it goes
-//               if ( burnDev->supportsWritingMode( K3bDevice::WRITING_MODE_LAYER_JUMP ) ) {
-//                   modes |= K3bDevice::WRITING_MODE_LAYER_JUMP;
+//               if ( burnDev->supportsWritingMode( K3b::Device::WRITING_MODE_LAYER_JUMP ) ) {
+//                   modes |= K3b::Device::WRITING_MODE_LAYER_JUMP;
 //               }
             }
-            else if ( sourceMedium.diskInfo().mediaType() & K3bDevice::MEDIA_BD_ALL ) {
+            else if ( sourceMedium.diskInfo().mediaType() & K3b::Device::MEDIA_BD_ALL ) {
                 // no modes, only auto
             }
 
@@ -528,19 +528,19 @@ void K3bMediaCopyDialog::toggleAll()
 
     m_tempDirSelectionWidget->setNeededSize( neededSize() );
 
-    if( sourceMedium.toc().contentType() == K3bDevice::DATA &&
+    if( sourceMedium.toc().contentType() == K3b::Device::DATA &&
         sourceMedium.toc().count() == 1 ) {
-        m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
+        m_tempDirSelectionWidget->setSelectionMode( K3b::TempDirSelectionWidget::FILE );
         m_tempDirSelectionWidget->setDefaultImageFileName( sourceMedium.volumeId().toLower()
                                                            + QString(".iso"), true );
     }
     else {
-        m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::DIR );
+        m_tempDirSelectionWidget->setSelectionMode( K3b::TempDirSelectionWidget::DIR );
 
-        if ( sourceMedium.content() & K3bMedium::CONTENT_DATA && !sourceMedium.volumeId().isEmpty() ) {
+        if ( sourceMedium.content() & K3b::Medium::CONTENT_DATA && !sourceMedium.volumeId().isEmpty() ) {
             m_tempDirSelectionWidget->setTempPath( m_tempDirSelectionWidget->tempDirectory() + sourceMedium.volumeId().toLower() );
         }
-        else if ( sourceMedium.content() & K3bMedium::CONTENT_AUDIO && !sourceMedium.cdText().title().isEmpty() ) {
+        else if ( sourceMedium.content() & K3b::Medium::CONTENT_AUDIO && !sourceMedium.cdText().title().isEmpty() ) {
             m_tempDirSelectionWidget->setTempPath( m_tempDirSelectionWidget->tempDirectory() + sourceMedium.cdText().title() );
         }
         else {
@@ -548,18 +548,18 @@ void K3bMediaCopyDialog::toggleAll()
         }
     }
 
-    m_groupAdvancedAudioOptions->setEnabled( sourceMedium.content() & K3bMedium::CONTENT_AUDIO && m_comboCopyMode->currentIndex() == 0 );
-    m_groupAdvancedDataOptions->setEnabled( sourceMedium.content() & K3bMedium::CONTENT_DATA );
+    m_groupAdvancedAudioOptions->setEnabled( sourceMedium.content() & K3b::Medium::CONTENT_AUDIO && m_comboCopyMode->currentIndex() == 0 );
+    m_groupAdvancedDataOptions->setEnabled( sourceMedium.content() & K3b::Medium::CONTENT_DATA );
 
     setButtonEnabled( START_BUTTON,
                       m_comboSourceDevice->selectedDevice() &&
                       (burnDev || m_checkOnlyCreateImage->isChecked()) );
 
-    K3bInteractionDialog::toggleAll();
+    K3b::InteractionDialog::toggleAll();
 }
 
 
-void K3bMediaCopyDialog::updateOverrideDevice()
+void K3b::MediaCopyDialog::updateOverrideDevice()
 {
     if( !m_checkCacheImage->isChecked() ) {
         m_writerSelectionWidget->setOverrideDevice( 0 );
@@ -574,7 +574,7 @@ void K3bMediaCopyDialog::updateOverrideDevice()
 }
 
 
-void K3bMediaCopyDialog::loadUserDefaults( const KConfigGroup& c )
+void K3b::MediaCopyDialog::loadUserDefaults( const KConfigGroup& c )
 {
     m_writerSelectionWidget->loadConfig( c );
     m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c.readEntry( "source_device" ) ) );
@@ -607,7 +607,7 @@ void K3bMediaCopyDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3bMediaCopyDialog::saveUserDefaults( KConfigGroup c )
+void K3b::MediaCopyDialog::saveUserDefaults( KConfigGroup c )
 {
     m_writingModeWidget->saveConfig( c );
     c.writeEntry( "simulate", m_checkSimulate->isChecked() );
@@ -639,7 +639,7 @@ void K3bMediaCopyDialog::saveUserDefaults( KConfigGroup c )
 }
 
 
-void K3bMediaCopyDialog::loadK3bDefaults()
+void K3b::MediaCopyDialog::loadK3bDefaults()
 {
     m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
     m_writerSelectionWidget->loadDefaults();
@@ -663,13 +663,13 @@ void K3bMediaCopyDialog::loadK3bDefaults()
 }
 
 
-KIO::filesize_t K3bMediaCopyDialog::neededSize() const
+KIO::filesize_t K3b::MediaCopyDialog::neededSize() const
 {
-    K3bMedium medium = k3bappcore->mediaCache()->medium( m_comboSourceDevice->selectedDevice() );
+    K3b::Medium medium = k3bappcore->mediaCache()->medium( m_comboSourceDevice->selectedDevice() );
 
-    if( medium.diskInfo().diskState() == K3bDevice::STATE_NO_MEDIA )
+    if( medium.diskInfo().diskState() == K3b::Device::STATE_NO_MEDIA )
         return 0;
-    else if( medium.diskInfo().mediaType() & (K3bDevice::MEDIA_DVD_RW_OVWR|K3bDevice::MEDIA_DVD_PLUS_RW) )
+    else if( medium.diskInfo().mediaType() & (K3b::Device::MEDIA_DVD_RW_OVWR|K3b::Device::MEDIA_DVD_PLUS_RW) )
         return (KIO::filesize_t)medium.iso9660Descriptor().volumeSpaceSize * (KIO::filesize_t)2048;
     else if ( m_comboCopyMode->currentIndex() == 0 )
         return medium.diskInfo().size().mode1Bytes();

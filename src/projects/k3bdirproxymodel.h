@@ -18,18 +18,19 @@
 
 /**
  * This class is used to show only directories from a specific model.
- * It is used in the dir panel (of K3bStandardView) to show a directory
+ * It is used in the dir panel (of StandardView) to show a directory
  * tree.
  *
  * @author Gustavo Pichorim Boiko
  */
-class K3bDirProxyModel : public QSortFilterProxyModel
+namespace K3b {
+class DirProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
 public:
-    K3bDirProxyModel( QObject *parent = 0 );
-    ~K3bDirProxyModel();
+    DirProxyModel( QObject *parent = 0 );
+    ~DirProxyModel();
 
 protected:
     /**
@@ -40,5 +41,6 @@ protected:
     bool filterAcceptsRow( int source_row, const QModelIndex & source_parent ) const;
 
 };
+}
 
 #endif

@@ -27,23 +27,25 @@
  * for usage in the K3b audio CD ripper.
  */
 
-class K3bCueFileWriter
+namespace K3b {
+class CueFileWriter
 {
 public:
-    K3bCueFileWriter();
+    CueFileWriter();
 
     bool save( QTextStream& );
     bool save( const QString& filename );
 
-    void setData( const K3bDevice::Toc& toc ) { m_toc = toc; }
-    void setCdText( const K3bDevice::CdText& text ) { m_cdText = text; }
+    void setData( const Device::Toc& toc ) { m_toc = toc; }
+    void setCdText( const Device::CdText& text ) { m_cdText = text; }
     void setImage( const QString& name, const QString& type ) { m_image = name; m_dataType = type; }
 
 private:
-    K3bDevice::Toc m_toc;
-    K3bDevice::CdText m_cdText;
+    Device::Toc m_toc;
+    Device::CdText m_cdText;
     QString m_image;
     QString m_dataType;
 };
+}
 
 #endif

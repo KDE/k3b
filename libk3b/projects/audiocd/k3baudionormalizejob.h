@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -22,41 +22,42 @@
 #include <qprocess.h>
 #include <qlist.h>
 
-class K3bProcess;
+namespace K3b {
+    class Process;
 
+    class AudioNormalizeJob : public Job
+    {
+        Q_OBJECT
 
-class K3bAudioNormalizeJob : public K3bJob
-{
-  Q_OBJECT
+    public:
+        AudioNormalizeJob( JobHandler*, QObject* parent = 0 );
+        ~AudioNormalizeJob();
 
- public:
-  K3bAudioNormalizeJob( K3bJobHandler*, QObject* parent = 0 );
-  ~K3bAudioNormalizeJob();
+    public Q_SLOTS:
+        void start();
+        void cancel();
 
- public Q_SLOTS:
-  void start();
-  void cancel();
+        void setFilesToNormalize( const QList<QString>& files ) { m_files = files; }
 
-  void setFilesToNormalize( const QList<QString>& files ) { m_files = files; }
+    private Q_SLOTS:
+        void slotStdLine( const QString& line );
+        void slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus );
 
- private Q_SLOTS:
-  void slotStdLine( const QString& line );
-  void slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus );
+    private:
+        Process* m_process;
 
- private:
-  K3bProcess* m_process;
+        QList<QString> m_files;
+        bool m_canceled;
 
-  QList<QString> m_files;
-  bool m_canceled;
+        enum Action {
+            COMPUTING_LEVELS,
+            ADJUSTING_LEVELS
+        };
 
-  enum Action {
-    COMPUTING_LEVELS,
-    ADJUSTING_LEVELS
-  };
-
-  int m_currentAction;
-  int m_currentTrack;
-};
+        int m_currentAction;
+        int m_currentTrack;
+    };
+}
 
 
 #endif

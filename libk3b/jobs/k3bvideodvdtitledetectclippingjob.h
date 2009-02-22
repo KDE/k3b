@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
  *
@@ -20,85 +20,87 @@
 #include <k3bjob.h>
 #include <k3bvideodvd.h>
 
-/**
- * Job to detect the clipping values for a Video DVD title.
- */
-class LIBK3B_EXPORT K3bVideoDVDTitleDetectClippingJob : public K3bJob
-{
-  Q_OBJECT
+namespace K3b {
+    /**
+     * Job to detect the clipping values for a Video DVD title.
+     */
+    class LIBK3B_EXPORT VideoDVDTitleDetectClippingJob : public Job
+    {
+        Q_OBJECT
 
- public:
-  K3bVideoDVDTitleDetectClippingJob( K3bJobHandler* hdl, QObject* parent );
-  ~K3bVideoDVDTitleDetectClippingJob();
+    public:
+        VideoDVDTitleDetectClippingJob( JobHandler* hdl, QObject* parent );
+        ~VideoDVDTitleDetectClippingJob();
 
-  const K3bVideoDVD::VideoDVD& videoDVD() const { return m_dvd; }
-  int title() const { return m_titleNumber; }
-  bool lowPriority() const { return m_lowPriority; }
+        const VideoDVD::VideoDVD& videoDVD() const { return m_dvd; }
+        int title() const { return m_titleNumber; }
+        bool lowPriority() const { return m_lowPriority; }
 
-  /**
-   * Only valid after a successful completion of the job.
-   */
-  int clippingTop() const { return m_clippingTop; }
+        /**
+         * Only valid after a successful completion of the job.
+         */
+        int clippingTop() const { return m_clippingTop; }
 
-  /**
-   * Only valid after a successful completion of the job.
-   */
-  int clippingLeft() const { return m_clippingLeft; }
+        /**
+         * Only valid after a successful completion of the job.
+         */
+        int clippingLeft() const { return m_clippingLeft; }
 
-  /**
-   * Only valid after a successful completion of the job.
-   */
-  int clippingBottom() const { return m_clippingBottom; }
+        /**
+         * Only valid after a successful completion of the job.
+         */
+        int clippingBottom() const { return m_clippingBottom; }
 
-  /**
-   * Only valid after a successful completion of the job.
-   */
-  int clippingRight() const { return m_clippingRight; }
+        /**
+         * Only valid after a successful completion of the job.
+         */
+        int clippingRight() const { return m_clippingRight; }
 
- public Q_SLOTS:
-  void start();
-  void cancel();
+    public Q_SLOTS:
+        void start();
+        void cancel();
 
-  /**
-   * The device containing the Video DVD
-   */
-  void setVideoDVD( const K3bVideoDVD::VideoDVD& dvd ) { m_dvd = dvd; }
+        /**
+         * The device containing the Video DVD
+         */
+        void setVideoDVD( const VideoDVD::VideoDVD& dvd ) { m_dvd = dvd; }
 
-  /**
-   * Set the title number to be analysed
-   *
-   * The default value is 1, denoting the first title.
-   */
-  void setTitle( int t ) { m_titleNumber = t; }
+        /**
+         * Set the title number to be analysed
+         *
+         * The default value is 1, denoting the first title.
+         */
+        void setTitle( int t ) { m_titleNumber = t; }
 
-  /**
-   * If true the transcode processes will be run with a very low scheduling 
-   * priority.
-   *
-   * The default is true.
-   */
-  void setLowPriority( bool b ) { m_lowPriority = b; }
+        /**
+         * If true the transcode processes will be run with a very low scheduling
+         * priority.
+         *
+         * The default is true.
+         */
+        void setLowPriority( bool b ) { m_lowPriority = b; }
 
- private Q_SLOTS:
-  void slotTranscodeStderr( const QString& );
-  void slotTranscodeExited( int, QProcess::ExitStatus );
+    private Q_SLOTS:
+        void slotTranscodeStderr( const QString& );
+        void slotTranscodeExited( int, QProcess::ExitStatus );
 
- private:
-  void startTranscode( int chapter );
+    private:
+        void startTranscode( int chapter );
 
-  K3bVideoDVD::VideoDVD m_dvd;
+        VideoDVD::VideoDVD m_dvd;
 
-  int m_clippingTop;
-  int m_clippingBottom;
-  int m_clippingLeft;
-  int m_clippingRight;
+        int m_clippingTop;
+        int m_clippingBottom;
+        int m_clippingLeft;
+        int m_clippingRight;
 
-  int m_titleNumber;
+        int m_titleNumber;
 
-  bool m_lowPriority;
+        bool m_lowPriority;
 
-  class Private;
-  Private* d;
-};
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

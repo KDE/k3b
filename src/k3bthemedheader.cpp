@@ -24,14 +24,14 @@
 #include <QHBoxLayout>
 
 
-K3bThemedHeader::K3bThemedHeader( QWidget* parent )
+K3b::ThemedHeader::ThemedHeader( QWidget* parent )
     : QFrame( parent )
 {
     init();
 }
 
 
-K3bThemedHeader::K3bThemedHeader( const QString& title, const QString& subtitle, QWidget* parent )
+K3b::ThemedHeader::ThemedHeader( const QString& title, const QString& subtitle, QWidget* parent )
     : QFrame( parent )
 {
     setTitle( title );
@@ -41,44 +41,44 @@ K3bThemedHeader::K3bThemedHeader( const QString& title, const QString& subtitle,
 }
 
 
-K3bThemedHeader::~K3bThemedHeader()
+K3b::ThemedHeader::~ThemedHeader()
 {
 }
 
 
-void K3bThemedHeader::setTitle( const QString& title, const QString& subtitle )
+void K3b::ThemedHeader::setTitle( const QString& title, const QString& subtitle )
 {
     m_titleLabel->setTitle( title, subtitle );
 }
 
 
-void K3bThemedHeader::setSubTitle( const QString& subtitle )
+void K3b::ThemedHeader::setSubTitle( const QString& subtitle )
 {
     m_titleLabel->setSubTitle( subtitle );
 }
 
 
-void K3bThemedHeader::setLeftPixmap( K3bTheme::PixmapType p )
+void K3b::ThemedHeader::setLeftPixmap( K3b::Theme::PixmapType p )
 {
     m_leftPix = p;
     slotThemeChanged();
 }
 
 
-void K3bThemedHeader::setRightPixmap( K3bTheme::PixmapType p )
+void K3b::ThemedHeader::setRightPixmap( K3b::Theme::PixmapType p )
 {
     m_rightPix = p;
     slotThemeChanged();
 }
 
 
-void K3bThemedHeader::setAlignment( int align )
+void K3b::ThemedHeader::setAlignment( int align )
 {
     m_titleLabel->setAlignment( align );
 }
 
 
-void K3bThemedHeader::init()
+void K3b::ThemedHeader::init()
 {
     setFrameShape( QFrame::StyledPanel );
     setFrameShadow( QFrame::Sunken );
@@ -93,7 +93,7 @@ void K3bThemedHeader::init()
     m_leftLabel->setScaledContents( false );
     m_leftLabel->setAutoFillBackground( true );
 
-    m_titleLabel = new K3bTitleLabel( this );
+    m_titleLabel = new K3b::TitleLabel( this );
 
     m_rightLabel = new QLabel( this );
     m_rightLabel->setScaledContents( false );
@@ -104,8 +104,8 @@ void K3bThemedHeader::init()
     layout->setStretchFactor( m_titleLabel, 1 );
     layout->addWidget( m_rightLabel );
 
-    m_leftPix = K3bTheme::DIALOG_LEFT;
-    m_rightPix = K3bTheme::DIALOG_RIGHT;
+    m_leftPix = K3b::Theme::DIALOG_LEFT;
+    m_rightPix = K3b::Theme::DIALOG_RIGHT;
 
     slotThemeChanged();
 
@@ -116,9 +116,9 @@ void K3bThemedHeader::init()
 }
 
 
-void K3bThemedHeader::slotThemeChanged()
+void K3b::ThemedHeader::slotThemeChanged()
 {
-    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+    if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
         m_leftLabel->setPalette( theme->palette() );
         m_leftLabel->setPixmap( theme->pixmap( m_leftPix ) );
 

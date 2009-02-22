@@ -23,7 +23,7 @@
 
 
 K3b<name>Encoder::K3b<name>Encoder( QObject* parent, const QVariantList& )
-    : K3bAudioEncoder( parent )
+    : K3b::AudioEncoder( parent )
 {
 }
 
@@ -53,7 +53,7 @@ void K3b<name>Encoder::finishEncoderInternal()
 }
 
 
-void K3b<name>Encoder::setMetaDataInternal( K3bAudioEncoder::MetaDataField f, const QString& value )
+void K3b<name>Encoder::setMetaDataInternal( K3b::AudioEncoder::MetaDataField f, const QString& value )
 {
     // PUT YOUR CODE HERE
 }
@@ -80,7 +80,7 @@ long long K3b<name>Encoder::fileSize( const QString&, const K3b::Msf& msf ) cons
 }
 
 
-K3bPluginConfigWidget* K3b<name>Encoder::createConfigWidget( QWidget* parent ) const
+K3b::PluginConfigWidget* K3b<name>Encoder::createConfigWidget( QWidget* parent ) const
 {
     return new K3b<name>EncoderSettingsWidget( parent, name );
 }
@@ -88,7 +88,7 @@ K3bPluginConfigWidget* K3b<name>Encoder::createConfigWidget( QWidget* parent ) c
 
 
 K3b<name>EncoderSettingsWidget::K3b<name>EncoderSettingsWidget( QWidget* parent )
-    : K3bPluginConfigWidget( parent )
+    : K3b::PluginConfigWidget( parent )
 {
 }
 

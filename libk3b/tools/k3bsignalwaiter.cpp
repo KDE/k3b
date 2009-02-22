@@ -18,29 +18,29 @@
 #include <qeventloop.h>
 #include <qapplication.h>
 
-class K3bSignalWaiter::Private
+class K3b::SignalWaiter::Private
 {
 public:
     QEventLoop loop;
 };
 
 
-K3bSignalWaiter::K3bSignalWaiter()
+K3b::SignalWaiter::SignalWaiter()
     : QObject(),
       d( new Private() )
 {
 }
 
 
-K3bSignalWaiter::~K3bSignalWaiter()
+K3b::SignalWaiter::~SignalWaiter()
 {
     delete d;
 }
 
 
-void K3bSignalWaiter::waitForSignal( QObject* o, const char* signal )
+void K3b::SignalWaiter::waitForSignal( QObject* o, const char* signal )
 {
-    K3bSignalWaiter w;
+    K3b::SignalWaiter w;
     connect( o, signal,
              &w, SLOT(slotSignal()) );
 
@@ -48,7 +48,7 @@ void K3bSignalWaiter::waitForSignal( QObject* o, const char* signal )
 }
 
 
-void K3bSignalWaiter::waitForJob( K3bJob* job )
+void K3b::SignalWaiter::waitForJob( K3b::Job* job )
 {
     if( !job->active() )
         return;
@@ -57,7 +57,7 @@ void K3bSignalWaiter::waitForJob( K3bJob* job )
 }
 
 
-void K3bSignalWaiter::slotSignal()
+void K3b::SignalWaiter::slotSignal()
 {
     if( d->loop.isRunning() ) {
         d->loop.exit();

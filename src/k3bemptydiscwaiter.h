@@ -23,7 +23,7 @@
 //Added by qt3to4:
 #include <QCloseEvent>
 
-namespace K3bDevice {
+namespace Device {
     class Device;
 }
 
@@ -35,12 +35,13 @@ namespace K3bDevice {
  *
  * @author Sebastian Trueg
  */
-class K3bEmptyDiscWaiter : public KDialog, public K3bJobHandler
+namespace K3b {
+class EmptyDiscWaiter : public KDialog, public JobHandler
 {
     Q_OBJECT
 
 public: 
-    ~K3bEmptyDiscWaiter();
+    ~EmptyDiscWaiter();
 
     /**
      * This should be replaced by the mediaType that was found or -1 for forced.
@@ -55,16 +56,16 @@ public:
     int exec();
 
     /**
-     * @reimplemented from K3bJobHandler
+     * @reimplemented from JobHandler
      * \internal do not use!
      */
-    int waitForMedia( K3bDevice::Device*,
-                      int mediaState = K3bDevice::STATE_EMPTY,
-                      int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
+    int waitForMedia( Device::Device*,
+                      int mediaState = Device::STATE_EMPTY,
+                      int mediaType = Device::MEDIA_WRITABLE_CD,
                       const QString& message = QString() );
   
     /**
-     * @reimplemented from K3bJobHandler
+     * @reimplemented from JobHandler
      */
     bool questionYesNo( const QString& text,
                         const QString& caption = QString(),
@@ -72,7 +73,7 @@ public:
                         const QString& noText = QString() );
 
     /**
-     * reimplemented from K3bJobHandler
+     * reimplemented from JobHandler
      */
     void blockingInformation( const QString& text,
                               const QString& caption = QString() );
@@ -80,21 +81,21 @@ public:
     /**
      * This only openes a dialog if the first check failed.
      */
-    static int wait( K3bDevice::Device* device, 
+    static int wait( Device::Device* device, 
                      bool appendable = false, 
-                     int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
+                     int mediaType = Device::MEDIA_WRITABLE_CD,
                      QWidget* parent = 0 );
 
     /**
      * Starts the emptydiskwaiter.
      *
-     * \param mediaState a bitwise combination of the K3bDevice::State enum
-     * \param mediaType a bitwise combination of the K3bDevice::MediaType enum
+     * \param mediaState a bitwise combination of the Device::State enum
+     * \param mediaType a bitwise combination of the Device::MediaType enum
      * \return the found MediaType on success, 0 if forced and -1 if canceled
      */
-    static int wait( K3bDevice::Device*,
+    static int wait( Device::Device*,
                      int mediaState,
-                     int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
+                     int mediaType = Device::MEDIA_WRITABLE_CD,
                      const QString& message = QString(),
                      QWidget* parent = 0 );
 
@@ -103,7 +104,7 @@ protected Q_SLOTS:
     void slotUser1();
     void slotUser2();
     void slotUser3();
-    void slotMediumChanged( K3bDevice::Device* );
+    void slotMediumChanged( Device::Device* );
     void showDialog();
     void continueWaiting();
     void slotErasingFinished( bool );
@@ -112,10 +113,10 @@ protected:
     /**
      * Use the static wait methods.
      */
-    explicit K3bEmptyDiscWaiter( K3bDevice::Device* device, QWidget* parent = 0 );
+    explicit EmptyDiscWaiter( Device::Device* device, QWidget* parent = 0 );
 
-    int waitForDisc( int mediaState = K3bDevice::STATE_EMPTY,
-                     int mediaType = K3bDevice::MEDIA_WRITABLE_CD,
+    int waitForDisc( int mediaState = Device::STATE_EMPTY,
+                     int mediaType = Device::MEDIA_WRITABLE_CD,
                      const QString& message = QString() );
 
 
@@ -137,6 +138,7 @@ private:
     class Private;
     Private* d;
 };
+}
 
 
 #endif

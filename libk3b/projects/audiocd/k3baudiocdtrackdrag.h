@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -26,26 +26,28 @@
 #include <libkcddb/cdinfo.h>
 
 
-class LIBK3B_EXPORT K3bAudioCdTrackDrag : public Q3StoredDrag
-{
-public:
-    K3bAudioCdTrackDrag( const K3bDevice::Toc& toc, const QList<int>& cdTrackNumbers, const KCDDB::CDInfo& cddb,
-                         K3bDevice::Device* lastDev = 0, QWidget* dragSource = 0 );
+namespace K3b {
+    class LIBK3B_EXPORT AudioCdTrackDrag : public Q3StoredDrag
+    {
+    public:
+        AudioCdTrackDrag( const Device::Toc& toc, const QList<int>& cdTrackNumbers, const KCDDB::CDInfo& cddb,
+                          Device::Device* lastDev = 0, QWidget* dragSource = 0 );
 
-    K3bDevice::Toc toc() const { return m_toc; }
-    QList<int> cdTrackNumbers() const { return m_cdTrackNumbers; }
-    KCDDB::CDInfo cddbEntry() const { return m_cddb; }
+        Device::Toc toc() const { return m_toc; }
+        QList<int> cdTrackNumbers() const { return m_cdTrackNumbers; }
+        KCDDB::CDInfo cddbEntry() const { return m_cddb; }
 
-    bool provides( const char* mimetype ) const { return !qstrcmp( mimetype, "k3b/audio_track_drag" ); }
+        bool provides( const char* mimetype ) const { return !qstrcmp( mimetype, "k3b/audio_track_drag" ); }
 
-    static bool canDecode( const QMimeSource* s ) { return s->provides( "k3b/audio_track_drag" ); }
-    static bool decode( const QMimeSource* s, K3bDevice::Toc&, QList<int>& trackNumbers, KCDDB::CDInfo&, K3bDevice::Device** dev = 0 );
+        static bool canDecode( const QMimeSource* s ) { return s->provides( "k3b/audio_track_drag" ); }
+        static bool decode( const QMimeSource* s, Device::Toc&, QList<int>& trackNumbers, KCDDB::CDInfo&, Device::Device** dev = 0 );
 
-private:
-    K3bDevice::Toc m_toc;
-    QList<int> m_cdTrackNumbers;
-    KCDDB::CDInfo m_cddb;
-    K3bDevice::Device* m_device;
-};
+    private:
+        Device::Toc m_toc;
+        QList<int> m_cdTrackNumbers;
+        KCDDB::CDInfo m_cddb;
+        Device::Device* m_device;
+    };
+}
 
 #endif

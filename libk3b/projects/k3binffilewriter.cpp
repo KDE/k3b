@@ -25,7 +25,7 @@
 
 
 
-K3bInfFileWriter::K3bInfFileWriter()
+K3b::InfFileWriter::InfFileWriter()
     : m_index0(-1),
       m_trackNumber(1),
       m_trackStart(0),
@@ -37,12 +37,12 @@ K3bInfFileWriter::K3bInfFileWriter()
 }
 
 
-bool K3bInfFileWriter::save( const QString& filename )
+bool K3b::InfFileWriter::save( const QString& filename )
 {
     QFile f( filename );
 
     if( !f.open( QIODevice::WriteOnly ) ) {
-        kDebug() << "(K3bInfFileWriter) could not open file " << f.fileName();
+        kDebug() << "(K3b::InfFileWriter) could not open file " << f.fileName();
         return false;
     }
 
@@ -52,7 +52,7 @@ bool K3bInfFileWriter::save( const QString& filename )
 }
 
 
-bool K3bInfFileWriter::save( QTextStream& s )
+bool K3b::InfFileWriter::save( QTextStream& s )
 {
     // now write the inf data
     // ----------------------
@@ -132,7 +132,7 @@ bool K3bInfFileWriter::save( QTextStream& s )
 }
 
 
-void K3bInfFileWriter::setTrack( const K3bDevice::Track& track )
+void K3b::InfFileWriter::setTrack( const K3b::Device::Track& track )
 {
     m_indices.clear();
 
@@ -160,13 +160,13 @@ void K3bInfFileWriter::setTrack( const K3bDevice::Track& track )
 }
 
 
-void K3bInfFileWriter::addIndex( long i )
+void K3b::InfFileWriter::addIndex( long i )
 {
     m_indices.append( i );
 }
 
 
-void K3bInfFileWriter::setTrackCdText( const K3bDevice::TrackCdText& cdtext )
+void K3b::InfFileWriter::setTrackCdText( const K3b::Device::TrackCdText& cdtext )
 {
     setTrackTitle( cdtext.title() );
     setTrackPerformer( cdtext.performer() );
@@ -177,7 +177,7 @@ void K3bInfFileWriter::setTrackCdText( const K3bDevice::TrackCdText& cdtext )
 }
 
 
-void K3bInfFileWriter::setCdText( const K3bDevice::CdText& cdtext )
+void K3b::InfFileWriter::setCdText( const K3b::Device::CdText& cdtext )
 {
     setAlbumTitle( cdtext.title() );
     setAlbumPerformer( cdtext.performer() );

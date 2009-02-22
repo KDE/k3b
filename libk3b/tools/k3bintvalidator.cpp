@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
  *
@@ -23,114 +23,114 @@
 #include <kdebug.h>
 
 
-K3bIntValidator::K3bIntValidator ( QWidget * parent )
-  : QValidator(parent)
+K3b::IntValidator::IntValidator ( QWidget * parent )
+    : QValidator(parent)
 {
-  m_min = m_max = 0;
+    m_min = m_max = 0;
 }
 
 
-K3bIntValidator::K3bIntValidator ( int bottom, int top, QWidget * parent)
-  : QValidator(parent)
+K3b::IntValidator::IntValidator ( int bottom, int top, QWidget * parent)
+    : QValidator(parent)
 {
-  m_min = bottom;
-  m_max = top;
+    m_min = bottom;
+    m_max = top;
 }
 
 
-K3bIntValidator::~K3bIntValidator ()
+K3b::IntValidator::~IntValidator ()
 {
 }
 
 
-QValidator::State K3bIntValidator::validate ( QString &str, int & ) const
+QValidator::State K3b::IntValidator::validate ( QString &str, int & ) const
 {
-  bool ok;
-  int  val = 0;
-  QString newStr;
+    bool ok;
+    int  val = 0;
+    QString newStr;
 
-  newStr = str.trimmed();
-  newStr = newStr.toUpper();
+    newStr = str.trimmed();
+    newStr = newStr.toUpper();
 
-  if( newStr.length() ) {
-    // check for < 0
-    bool minus = newStr.startsWith( "-" );
-    if( minus )
-      newStr.remove( 0, 1 );
+    if( newStr.length() ) {
+        // check for < 0
+        bool minus = newStr.startsWith( "-" );
+        if( minus )
+            newStr.remove( 0, 1 );
 
-    // check for hex
-    bool hex = newStr.startsWith( "0X" );
+        // check for hex
+        bool hex = newStr.startsWith( "0X" );
 
-    if( hex )
-      newStr.remove( 0, 2 );
+        if( hex )
+            newStr.remove( 0, 2 );
 
-    // a special case
-    if( newStr.isEmpty() ) {
-      if( minus && m_min && m_min >= 0)
-	ok = false;
-      else
-	return QValidator::Acceptable;
+        // a special case
+        if( newStr.isEmpty() ) {
+            if( minus && m_min && m_min >= 0)
+                ok = false;
+            else
+                return QValidator::Acceptable;
+        }
+
+        val = newStr.toInt( &ok, hex ? 16 : 10 );
+        if( minus )
+            val *= -1;
+    }
+    else {
+        val = 0;
+        ok = true;
     }
 
-    val = newStr.toInt( &ok, hex ? 16 : 10 );
-    if( minus )
-      val *= -1;
-  }
-  else {
-    val = 0;
-    ok = true;
-  }
+    if( !ok )
+        return QValidator::Invalid;
 
-  if( !ok )
-    return QValidator::Invalid;
+    if( m_min && val > 0 && val < m_min )
+        return QValidator::Acceptable;
 
-  if( m_min && val > 0 && val < m_min )
-    return QValidator::Acceptable;
+    if( m_max && val < 0 && val > m_max )
+        return QValidator::Acceptable;
 
-  if( m_max && val < 0 && val > m_max )
-    return QValidator::Acceptable;
+    if( (m_max && val > m_max) || (m_min && val < m_min) )
+        return QValidator::Invalid;
 
-  if( (m_max && val > m_max) || (m_min && val < m_min) )
-    return QValidator::Invalid;
-
-  return QValidator::Valid;
+    return QValidator::Valid;
 }
 
 
-void K3bIntValidator::fixup ( QString& ) const
+void K3b::IntValidator::fixup ( QString& ) const
 {
-  // TODO: remove preceding zeros
+    // TODO: remove preceding zeros
 }
 
 
-void K3bIntValidator::setRange ( int bottom, int top )
+void K3b::IntValidator::setRange ( int bottom, int top )
 {
-  m_min = bottom;
-  m_max = top;
+    m_min = bottom;
+    m_max = top;
 
-  if( m_max < m_min )
-    m_max = m_min;
+    if( m_max < m_min )
+        m_max = m_min;
 }
 
 
-int K3bIntValidator::bottom () const
+int K3b::IntValidator::bottom () const
 {
-  return m_min;
+    return m_min;
 }
 
 
-int K3bIntValidator::top () const
+int K3b::IntValidator::top () const
 {
-  return m_max;
+    return m_max;
 }
 
 
-int K3bIntValidator::toInt( const QString& s, bool* ok )
+int K3b::IntValidator::toInt( const QString& s, bool* ok )
 {
-  if( s.toLower().startsWith( "0x" ) )
-    return s.right( s.length()-2 ).toInt( ok, 16 );
-  else if( s.toLower().startsWith( "-0x" ) )
-    return -1 * s.right( s.length()-3 ).toInt( ok, 16 );
-  else
-    return s.toInt( ok, 10 );
+    if( s.toLower().startsWith( "0x" ) )
+        return s.right( s.length()-2 ).toInt( ok, 16 );
+    else if( s.toLower().startsWith( "-0x" ) )
+        return -1 * s.right( s.length()-3 ).toInt( ok, 16 );
+    else
+        return s.toInt( ok, 10 );
 }

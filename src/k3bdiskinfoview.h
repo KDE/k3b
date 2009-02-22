@@ -21,24 +21,26 @@
 
 class QWebView;
 
-class K3bDiskInfoView : public K3bMediaContentsView
+namespace K3b {
+class DiskInfoView : public MediaContentsView
 {
     Q_OBJECT
 
 public:
-    K3bDiskInfoView( QWidget* parent = 0 );
-    ~K3bDiskInfoView();
+    DiskInfoView( QWidget* parent = 0 );
+    ~DiskInfoView();
 
 private:
     void reloadMedium();
     void updateTitle();
 
-    QString createMediaInfoItems( const K3bMedium& medium );
-    QString createIso9660InfoItems( const K3bIso9660SimplePrimaryDescriptor& iso );
-    QString createTrackItems( const K3bMedium& medium );
+    QString createMediaInfoItems( const Medium& medium );
+    QString createIso9660InfoItems( const Iso9660SimplePrimaryDescriptor& iso );
+    QString createTrackItems( const Medium& medium );
 
     QWebView* m_infoView;
 };
+}
 
 
 #endif

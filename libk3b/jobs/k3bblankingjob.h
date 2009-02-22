@@ -17,55 +17,58 @@
 
 #include <k3bjob.h>
 #include "k3b_export.h"
+
 class QString;
-class K3bAbstractWriter;
 
+namespace K3b {
+    class AbstractWriter;
 
-class LIBK3B_EXPORT K3bBlankingJob : public K3bBurnJob
-{
-  Q_OBJECT
+    class LIBK3B_EXPORT BlankingJob : public BurnJob
+    {
+        Q_OBJECT
 
- public:
-  K3bBlankingJob( K3bJobHandler*, QObject* parent = 0 );
-  ~K3bBlankingJob();
+    public:
+        BlankingJob( JobHandler*, QObject* parent = 0 );
+        ~BlankingJob();
 
-  QString jobDescription() const;
-  QString jobDetails() const;
+        QString jobDescription() const;
+        QString jobDetails() const;
 
-  K3bDevice::Device* writer() const;
+        Device::Device* writer() const;
 
-  bool hasBeenCanceled() const { return m_canceled; }
+        bool hasBeenCanceled() const { return m_canceled; }
 
-  enum blank_mode { Fast, Complete, Track, Unclose, Session };
+        enum blank_mode { Fast, Complete, Track, Unclose, Session };
 
- public Q_SLOTS:
-  void start();
-  void cancel();
-  void setForce( bool f ) { m_force = f; }
-  void setDevice( K3bDevice::Device* d );
-  void setSpeed( int s ) { m_speed = s; }
-  void setMode( int m ) { m_mode = m; }
-  void setWritingApp (int app) { m_writingApp = app; }
+    public Q_SLOTS:
+        void start();
+        void cancel();
+        void setForce( bool f ) { m_force = f; }
+        void setDevice( Device::Device* d );
+        void setSpeed( int s ) { m_speed = s; }
+        void setMode( int m ) { m_mode = m; }
+        void setWritingApp (int app) { m_writingApp = app; }
 
-  /**
-   * If set true the job ignores the global K3b setting
-   * and does not eject the CD-RW after finishing
-   */
-  void setForceNoEject( bool b ) { m_forceNoEject = b; }
+        /**
+         * If set true the job ignores the global K3b setting
+         * and does not eject the CD-RW after finishing
+         */
+        void setForceNoEject( bool b ) { m_forceNoEject = b; }
 
- private Q_SLOTS:
-  void slotFinished(bool);
-  void slotStartErasing();
+    private Q_SLOTS:
+        void slotFinished(bool);
+        void slotStartErasing();
 
- private:
-  K3bAbstractWriter* m_writerJob;
-  bool m_force;
-  K3bDevice::Device* m_device;
-  int m_speed;
-  int m_mode;
-  int m_writingApp;
-  bool m_canceled;
-  bool m_forceNoEject;
-};
+    private:
+        AbstractWriter* m_writerJob;
+        bool m_force;
+        Device::Device* m_device;
+        int m_speed;
+        int m_mode;
+        int m_writingApp;
+        bool m_canceled;
+        bool m_forceNoEject;
+    };
+}
 
 #endif

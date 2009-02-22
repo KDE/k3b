@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -21,54 +21,56 @@
 
 #include <kio/global.h>
 
-/**
- * This can be used to create fake items like the boot catalog
- * It's mainly a K3bDataItem where everything has to be set manually
- */
-class K3bSpecialDataItem : public K3bDataItem
-{
-public:
-    K3bSpecialDataItem( K3bDataDoc* doc, KIO::filesize_t size, K3bDirItem* parent = 0, const QString& k3bName = QString() )
-        : K3bDataItem( doc, parent ),
-        m_size( size ) {
-        setK3bName( k3bName );
-
-        // add automagically like a qlistviewitem
-        if( parent )
-            parent->addDataItem( this );
-    }
-
-    K3bSpecialDataItem( const K3bSpecialDataItem& item )
-        : K3bDataItem( item ),
-        m_specialType( item.m_specialType ),
-        m_size( item.m_size ) {
-    }
-        
-    virtual ~K3bSpecialDataItem() {
-        // remove this from parentdir
-        if( parent() )
-            parent()->takeDataItem( this );
-    }
-        
-    K3bDataItem* copy() const {
-        return new K3bSpecialDataItem( *this );
-    }
-
-    void setSpecialType( const QString& s ) { m_specialType = s; }
-    QString specialType() const { return m_specialType; }
-    
-    bool isSpecialFile() const { return true; }
-    
-protected:
+namespace K3b {
     /**
-     * Normally one does not use this method but K3bDataItem::size()
+     * This can be used to create fake items like the boot catalog
+     * It's mainly a DataItem where everything has to be set manually
      */
-    KIO::filesize_t itemSize( bool ) const { return m_size; }
-    
-private:
-    QString m_specialType;
-    KIO::filesize_t m_size;
-};
+    class SpecialDataItem : public DataItem
+    {
+    public:
+        SpecialDataItem( DataDoc* doc, KIO::filesize_t size, DirItem* parent = 0, const QString& k3bName = QString() )
+            : DataItem( doc, parent ),
+              m_size( size ) {
+            setK3bName( k3bName );
+
+            // add automagically like a qlistviewitem
+            if( parent )
+                parent->addDataItem( this );
+        }
+
+        SpecialDataItem( const SpecialDataItem& item )
+            : DataItem( item ),
+              m_specialType( item.m_specialType ),
+              m_size( item.m_size ) {
+        }
+
+        virtual ~SpecialDataItem() {
+            // remove this from parentdir
+            if( parent() )
+                parent()->takeDataItem( this );
+        }
+
+        DataItem* copy() const {
+            return new SpecialDataItem( *this );
+        }
+
+        void setSpecialType( const QString& s ) { m_specialType = s; }
+        QString specialType() const { return m_specialType; }
+
+        bool isSpecialFile() const { return true; }
+
+    protected:
+        /**
+         * Normally one does not use this method but DataItem::size()
+         */
+        KIO::filesize_t itemSize( bool ) const { return m_size; }
+
+    private:
+        QString m_specialType;
+        KIO::filesize_t m_size;
+    };
+}
 
 #endif
 

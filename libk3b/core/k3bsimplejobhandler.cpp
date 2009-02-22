@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
  *
@@ -15,17 +15,17 @@
 #include "k3bsimplejobhandler.h"
 
 
-K3bSimpleJobHandler::K3bSimpleJobHandler( QObject* parent )
+K3b::SimpleJobHandler::SimpleJobHandler( QObject* parent )
   : QObject( parent ),
-    K3bJobHandler()
+    K3b::JobHandler()
 {
 }
 
-K3bSimpleJobHandler::~K3bSimpleJobHandler()
+K3b::SimpleJobHandler::~SimpleJobHandler()
 {
 }
 
-int K3bSimpleJobHandler::waitForMedia( K3bDevice::Device* dev,
+int K3b::SimpleJobHandler::waitForMedia( K3b::Device::Device* dev,
 				       int mediaState,
 				       int mediaType,
 				       const QString& message )
@@ -38,7 +38,7 @@ int K3bSimpleJobHandler::waitForMedia( K3bDevice::Device* dev,
   return 0;
 }
 
-bool K3bSimpleJobHandler::questionYesNo( const QString& text,
+bool K3b::SimpleJobHandler::questionYesNo( const QString& text,
 					 const QString& caption,
 					 const QString& yesText,
 					 const QString& noText )
@@ -51,7 +51,7 @@ bool K3bSimpleJobHandler::questionYesNo( const QString& text,
   return true;
 }
 
-void K3bSimpleJobHandler::blockingInformation( const QString& text,
+void K3b::SimpleJobHandler::blockingInformation( const QString& text,
 					       const QString& caption )
 {
   Q_UNUSED( text );

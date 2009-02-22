@@ -21,7 +21,7 @@
 #include <klocale.h>
 
 
-K3bVideoDVDRippingJob::TitleRipInfo::TitleRipInfo()
+K3b::VideoDVDRippingJob::TitleRipInfo::TitleRipInfo()
     : title(1),
       audioStream(0),
       width(0),
@@ -35,7 +35,7 @@ K3bVideoDVDRippingJob::TitleRipInfo::TitleRipInfo()
 }
 
 
-K3bVideoDVDRippingJob::TitleRipInfo::TitleRipInfo( int _title,
+K3b::VideoDVDRippingJob::TitleRipInfo::TitleRipInfo( int _title,
 						   int _audioStream,
 						   const QString& fn,
 						   int _width,
@@ -60,7 +60,7 @@ K3bVideoDVDRippingJob::TitleRipInfo::TitleRipInfo( int _title,
 
 
 
-class K3bVideoDVDRippingJob::Private {
+class K3b::VideoDVDRippingJob::Private {
 public:
     Private()
         : autoClipping( true ) {
@@ -81,12 +81,12 @@ public:
 
 
 
-K3bVideoDVDRippingJob::K3bVideoDVDRippingJob( K3bJobHandler* hdl, QObject* parent )
-    : K3bJob( hdl, parent )
+K3b::VideoDVDRippingJob::VideoDVDRippingJob( K3b::JobHandler* hdl, QObject* parent )
+    : K3b::Job( hdl, parent )
 {
     d = new Private();
 
-    m_transcodingJob = new K3bVideoDVDTitleTranscodingJob( this, this );
+    m_transcodingJob = new K3b::VideoDVDTitleTranscodingJob( this, this );
     connectSubJob( m_transcodingJob,
                    SLOT(slotTranscodingJobFinished(bool)),
                    SIGNAL(newTask(const QString&)),
@@ -99,27 +99,27 @@ K3bVideoDVDRippingJob::K3bVideoDVDRippingJob( K3bJobHandler* hdl, QObject* paren
 }
 
 
-K3bVideoDVDRippingJob::~K3bVideoDVDRippingJob()
+K3b::VideoDVDRippingJob::~VideoDVDRippingJob()
 {
     delete d;
 }
 
 
-QString K3bVideoDVDRippingJob::jobDescription() const
+QString K3b::VideoDVDRippingJob::jobDescription() const
 {
     return i18n("Ripping Video DVD Titles");
 }
 
 
-QString K3bVideoDVDRippingJob::jobDetails() const
+QString K3b::VideoDVDRippingJob::jobDetails() const
 {
     return i18np("Transcoding 1 title to %2/%3", "Transcoding %1 titles to %2/%3", m_titleRipInfos.count(),
-        K3bVideoDVDTitleTranscodingJob::videoCodecString( m_transcodingJob->videoCodec() ) ,
-        K3bVideoDVDTitleTranscodingJob::audioCodecString( m_transcodingJob->audioCodec() ) );
+        K3b::VideoDVDTitleTranscodingJob::videoCodecString( m_transcodingJob->videoCodec() ) ,
+        K3b::VideoDVDTitleTranscodingJob::audioCodecString( m_transcodingJob->audioCodec() ) );
 }
 
 
-void K3bVideoDVDRippingJob::start()
+void K3b::VideoDVDRippingJob::start()
 {
     jobStarted();
     d->canceled = false;
@@ -134,7 +134,7 @@ void K3bVideoDVDRippingJob::start()
 }
 
 
-void K3bVideoDVDRippingJob::slotTranscodingJobFinished( bool success )
+void K3b::VideoDVDRippingJob::slotTranscodingJobFinished( bool success )
 {
     if( d->canceled ) {
         emit canceled();
@@ -162,7 +162,7 @@ void K3bVideoDVDRippingJob::slotTranscodingJobFinished( bool success )
 }
 
 
-void K3bVideoDVDRippingJob::slotDetectClippingJobFinished( bool success )
+void K3b::VideoDVDRippingJob::slotDetectClippingJobFinished( bool success )
 {
     if( d->canceled ) {
         emit canceled();
@@ -201,7 +201,7 @@ void K3bVideoDVDRippingJob::slotDetectClippingJobFinished( bool success )
 }
 
 
-void K3bVideoDVDRippingJob::startTranscoding( int ripInfoIndex )
+void K3b::VideoDVDRippingJob::startTranscoding( int ripInfoIndex )
 {
     d->currentTitleInfoIndex = ripInfoIndex;
 
@@ -224,12 +224,12 @@ void K3bVideoDVDRippingJob::startTranscoding( int ripInfoIndex )
 }
 
 
-void K3bVideoDVDRippingJob::startDetectClipping( int ripInfoIndex )
+void K3b::VideoDVDRippingJob::startDetectClipping( int ripInfoIndex )
 {
     d->currentTitleInfoIndex = ripInfoIndex;
 
     if( !m_detectClippingJob ) {
-        m_detectClippingJob = new K3bVideoDVDTitleDetectClippingJob( this, this );
+        m_detectClippingJob = new K3b::VideoDVDTitleDetectClippingJob( this, this );
         connectSubJob( m_detectClippingJob,
                        SLOT(slotDetectClippingJobFinished(bool)),
                        SIGNAL(newTask(const QString&)),
@@ -248,7 +248,7 @@ void K3bVideoDVDRippingJob::startDetectClipping( int ripInfoIndex )
 }
 
 
-void K3bVideoDVDRippingJob::slotTranscodingProgress( int p )
+void K3b::VideoDVDRippingJob::slotTranscodingProgress( int p )
 {
     // calculate the part already done
     double doneParts = 0.0;
@@ -267,7 +267,7 @@ void K3bVideoDVDRippingJob::slotTranscodingProgress( int p )
 }
 
 
-void K3bVideoDVDRippingJob::slotDetectClippingProgress( int p )
+void K3b::VideoDVDRippingJob::slotDetectClippingProgress( int p )
 {
     // calculate the part already done
     double doneParts = 0.0;
@@ -283,7 +283,7 @@ void K3bVideoDVDRippingJob::slotDetectClippingProgress( int p )
 }
 
 
-void K3bVideoDVDRippingJob::cancel()
+void K3b::VideoDVDRippingJob::cancel()
 {
     d->canceled = true;
     if( m_transcodingJob->active() )
@@ -293,61 +293,61 @@ void K3bVideoDVDRippingJob::cancel()
 }
 
 
-void K3bVideoDVDRippingJob::setVideoCodec( K3bVideoDVDTitleTranscodingJob::VideoCodec codec )
+void K3b::VideoDVDRippingJob::setVideoCodec( K3b::VideoDVDTitleTranscodingJob::VideoCodec codec )
 {
     m_transcodingJob->setVideoCodec( codec );
 }
 
 
-void K3bVideoDVDRippingJob::setVideoBitrate( int bitrate )
+void K3b::VideoDVDRippingJob::setVideoBitrate( int bitrate )
 {
     d->videoBitrate = bitrate;
 }
 
 
-void K3bVideoDVDRippingJob::setTwoPassEncoding( bool b )
+void K3b::VideoDVDRippingJob::setTwoPassEncoding( bool b )
 {
     m_transcodingJob->setTwoPassEncoding( b );
 }
 
 
-void K3bVideoDVDRippingJob::setAudioCodec( K3bVideoDVDTitleTranscodingJob::AudioCodec codec )
+void K3b::VideoDVDRippingJob::setAudioCodec( K3b::VideoDVDTitleTranscodingJob::AudioCodec codec )
 {
     m_transcodingJob->setAudioCodec( codec );
 }
 
 
-void K3bVideoDVDRippingJob::setAudioBitrate( int bitrate )
+void K3b::VideoDVDRippingJob::setAudioBitrate( int bitrate )
 {
     m_transcodingJob->setAudioBitrate( bitrate );
 }
 
 
-void K3bVideoDVDRippingJob::setAudioVBR( bool vbr )
+void K3b::VideoDVDRippingJob::setAudioVBR( bool vbr )
 {
     m_transcodingJob->setAudioVBR( vbr );
 }
 
 
-void K3bVideoDVDRippingJob::setResampleAudioTo44100( bool b )
+void K3b::VideoDVDRippingJob::setResampleAudioTo44100( bool b )
 {
     m_transcodingJob->setResampleAudioTo44100( b );
 }
 
 
-void K3bVideoDVDRippingJob::setLowPriority( bool b )
+void K3b::VideoDVDRippingJob::setLowPriority( bool b )
 {
     m_transcodingJob->setLowPriority( b );
 }
 
 
-void K3bVideoDVDRippingJob::setAutoClipping( bool b )
+void K3b::VideoDVDRippingJob::setAutoClipping( bool b )
 {
     d->autoClipping = b;
 }
 
 
-void K3bVideoDVDRippingJob::initProgressInfo()
+void K3b::VideoDVDRippingJob::initProgressInfo()
 {
     d->titleProgressParts.resize( m_titleRipInfos.count() );
     d->titleClippingProgressParts.resize( m_titleRipInfos.count() );

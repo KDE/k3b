@@ -18,77 +18,72 @@
 
 #include <k3bstandardview.h>
 
-class K3bDataDoc;
-class K3bDirItem;
-class K3bDataItem;
 class QLineEdit;
 class KMenu;
 class KAction;
 class QModelIndex;
 
-namespace K3bDevice {
-    class Device;
-}
-
 namespace K3b {
+    class DataDoc;
+    class DirItem;
+    class DataItem;
     class DataProjectModel;
+
+    namespace Device {
+        class Device;
+    }
+
+    class DataView : public StandardView
+    {
+        Q_OBJECT
+
+    public:
+        DataView(DataDoc* doc, QWidget *parent=0);
+        virtual ~DataView();
+
+    public Q_SLOTS:
+        void slotBurn();
+        void importSession();
+        void clearImportedSession();
+        void editBootImages();
+
+        void slotDocChanged();
+
+        void addUrls( const KUrl::List& );
+
+    private Q_SLOTS:
+        void slotNewDir();
+        void slotItemProperties();
+        void slotOpen();
+
+    protected:
+        QLineEdit* m_volumeIDEdit;
+
+        virtual ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
+
+        /**
+         * reimplemented from @ref StandardView
+         */
+        virtual void contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos);
+
+    private:
+        DataDoc* m_doc;
+        K3b::DataProjectModel* m_model;
+
+        void setupContextMenu();
+
+        KMenu* m_popupMenu;
+        KAction* m_actionParentDir;
+        KAction* m_actionRemove;
+        KAction* m_actionRename;
+        KAction* m_actionNewDir;
+        KAction* m_actionProperties;
+        KAction* m_actionOpen;
+        QModelIndexList m_currentSelection;
+
+        // used for mounting when importing old session
+        Device::Device* m_device;
+    };
 }
-
-
-/**
- *@author Sebastian Trueg
- */
-class K3bDataView : public K3bStandardView
-{
-    Q_OBJECT
-
-public:
-    K3bDataView(K3bDataDoc* doc, QWidget *parent=0);
-    virtual ~K3bDataView();
-
-public Q_SLOTS:
-    void slotBurn();
-    void importSession();
-    void clearImportedSession();
-    void editBootImages();
-
-    void slotDocChanged();
-
-    void addUrls( const KUrl::List& );
-
-private Q_SLOTS:
-    void slotNewDir();
-    void slotItemProperties();
-    void slotOpen();
-
-protected:
-    QLineEdit* m_volumeIDEdit;
-
-    virtual K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
-
-    /**
-     * reimplemented from @ref K3bStandardView 
-     */
-    virtual void contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos);
-
-private:
-    K3bDataDoc* m_doc;
-    K3b::DataProjectModel* m_model;
-
-    void setupContextMenu();
-
-    KMenu* m_popupMenu;
-    KAction* m_actionParentDir;
-    KAction* m_actionRemove;
-    KAction* m_actionRename;
-    KAction* m_actionNewDir;
-    KAction* m_actionProperties;
-    KAction* m_actionOpen;
-    QModelIndexList m_currentSelection;
-
-    // used for mounting when importing old session
-    K3bDevice::Device* m_device;
-};
-
 
 #endif

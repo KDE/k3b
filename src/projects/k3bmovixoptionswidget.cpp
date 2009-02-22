@@ -31,7 +31,7 @@
 #include <qlabel.h>
 
 
-class K3bMovixOptionsWidget::LanguageSelectionHelper
+class K3b::MovixOptionsWidget::LanguageSelectionHelper
 {
 public:
     LanguageSelectionHelper( QComboBox* box )
@@ -79,7 +79,7 @@ private:
 };
 
 
-K3bMovixOptionsWidget::K3bMovixOptionsWidget( QWidget* parent )
+K3b::MovixOptionsWidget::MovixOptionsWidget( QWidget* parent )
     : QWidget( parent )
 {
     setupUi( this );
@@ -89,14 +89,14 @@ K3bMovixOptionsWidget::K3bMovixOptionsWidget( QWidget* parent )
 }
 
 
-K3bMovixOptionsWidget::~K3bMovixOptionsWidget()
+K3b::MovixOptionsWidget::~MovixOptionsWidget()
 {
     delete m_keyboardLangHelper;
     delete m_helpLangHelper;
 }
 
 
-void K3bMovixOptionsWidget::init( const K3bMovixBin* bin )
+void K3b::MovixOptionsWidget::init( const K3b::MovixBin* bin )
 {
     m_labelAudioBackground->setVisible( bin->hasFeature( "newfiles" ) );
     m_comboAudioBackground->setVisible( bin->hasFeature( "newfiles" ) );
@@ -112,7 +112,7 @@ void K3bMovixOptionsWidget::init( const K3bMovixBin* bin )
 }
 
 
-void K3bMovixOptionsWidget::readSettings( K3bMovixDoc* doc )
+void K3b::MovixOptionsWidget::readSettings( K3b::MovixDoc* doc )
 {
     if ( doc->subtitleFontset().isEmpty() )
         m_comboSubtitleFontset->setCurrentIndex( 0 );
@@ -142,7 +142,7 @@ void K3bMovixOptionsWidget::readSettings( K3bMovixDoc* doc )
 }
 
 
-void K3bMovixOptionsWidget::saveSettings( K3bMovixDoc* doc )
+void K3b::MovixOptionsWidget::saveSettings( K3b::MovixDoc* doc )
 {
     doc->setShutdown( m_checkShutdown->isChecked() );
     doc->setReboot( m_checkReboot->isChecked() );
@@ -160,7 +160,7 @@ void K3bMovixOptionsWidget::saveSettings( K3bMovixDoc* doc )
 }
 
 
-void K3bMovixOptionsWidget::loadDefaults()
+void K3b::MovixOptionsWidget::loadDefaults()
 {
     m_comboSubtitleFontset->setCurrentIndex( 0 ); // default
     m_comboAudioBackground->setCurrentIndex( 0 ); // default
@@ -178,7 +178,7 @@ void K3bMovixOptionsWidget::loadDefaults()
 }
 
 
-void K3bMovixOptionsWidget::loadConfig( const KConfigGroup & c )
+void K3b::MovixOptionsWidget::loadConfig( const KConfigGroup & c )
 {
     QString s = c.readEntry("subtitle_fontset");
     if( !s.isEmpty() && s != "none" && m_comboSubtitleFontset->contains(s) )
@@ -216,7 +216,7 @@ void K3bMovixOptionsWidget::loadConfig( const KConfigGroup & c )
 }
 
 
-void K3bMovixOptionsWidget::saveConfig( KConfigGroup c )
+void K3b::MovixOptionsWidget::saveConfig( KConfigGroup c )
 {
     if( m_comboSubtitleFontset->currentIndex() == 0 )
         c.writeEntry( "subtitle_fontset", "none" );

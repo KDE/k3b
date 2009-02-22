@@ -20,18 +20,19 @@
 
 
 
-class K3bDataMultiSessionCombobox : public QComboBox
+namespace K3b {
+class DataMultiSessionCombobox : public QComboBox
 {
     Q_OBJECT
 
 public:
-    K3bDataMultiSessionCombobox( QWidget* parent = 0 );
-    ~K3bDataMultiSessionCombobox();
+    DataMultiSessionCombobox( QWidget* parent = 0 );
+    ~DataMultiSessionCombobox();
 
     /**
-     * returnes K3bDataDoc::multiSessionModes
+     * returnes DataDoc::multiSessionModes
      */
-    K3bDataDoc::MultiSessionMode multiSessionMode() const;
+    DataDoc::MultiSessionMode multiSessionMode() const;
 
     void setForceNoMultisession( bool );
 
@@ -39,12 +40,13 @@ public:
     void loadConfig( const KConfigGroup& );
 
 public Q_SLOTS:
-    void setMultiSessionMode( K3bDataDoc::MultiSessionMode );
+    void setMultiSessionMode( DataDoc::MultiSessionMode );
 
 private:
     void init( bool forceNo );
 
     bool m_forceNoMultiSession;
 };
+}
 
 #endif

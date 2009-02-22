@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,43 +19,43 @@
 #include <qstring.h>
 
 
-K3bDevice::Toc::Toc()
-    : QList<K3bDevice::Track>()
+K3b::Device::Toc::Toc()
+    : QList<K3b::Device::Track>()
 {
 }
 
 
-K3bDevice::Toc::Toc( const Toc& toc )
-    : QList<K3bDevice::Track>( toc )
+K3b::Device::Toc::Toc( const Toc& toc )
+    : QList<K3b::Device::Track>( toc )
 {
     m_mcn = toc.m_mcn;
 }
 
 
-K3bDevice::Toc::~Toc()
+K3b::Device::Toc::~Toc()
 {
 }
 
 
-K3bDevice::Toc& K3bDevice::Toc::operator=( const Toc& toc )
+K3b::Device::Toc& K3b::Device::Toc::operator=( const Toc& toc )
 {
     if( &toc == this ) return *this;
 
     m_mcn = toc.m_mcn;
 
-    QList<K3bDevice::Track>::operator=( toc );
+    QList<K3b::Device::Track>::operator=( toc );
 
     return *this;
 }
 
 
-K3b::Msf K3bDevice::Toc::firstSector() const
+K3b::Msf K3b::Device::Toc::firstSector() const
 {
     return isEmpty() ? K3b::Msf() : first().firstSector();
 }
 
 
-K3b::Msf K3bDevice::Toc::lastSector() const
+K3b::Msf K3b::Device::Toc::lastSector() const
 {
     if( isEmpty() )
         return 0;
@@ -64,14 +64,14 @@ K3b::Msf K3bDevice::Toc::lastSector() const
 }
 
 
-K3b::Msf K3bDevice::Toc::length() const
+K3b::Msf K3b::Device::Toc::length() const
 {
     // +1 since the last sector is included
     return lastSector() - firstSector() + 1;
 }
 
 
-unsigned int K3bDevice::Toc::discId() const
+unsigned int K3b::Device::Toc::discId() const
 {
     // calculate cddb-id
     unsigned int id = 0;
@@ -93,27 +93,27 @@ unsigned int K3bDevice::Toc::discId() const
 }
 
 
-int K3bDevice::Toc::contentType() const
+K3b::Device::ContentsType K3b::Device::Toc::contentType() const
 {
     int audioCnt = 0, dataCnt = 0;
     for( Toc::const_iterator it = constBegin(); it != constEnd(); ++it ) {
-        if( (*it).type() == K3bDevice::Track::AUDIO )
+        if( (*it).type() == K3b::Device::Track::TYPE_AUDIO )
             audioCnt++;
         else
             dataCnt++;
     }
 
     if( audioCnt + dataCnt == 0 )
-        return K3bDevice::NONE;
+        return K3b::Device::NONE;
     if( audioCnt == 0 )
-        return K3bDevice::DATA;
+        return K3b::Device::DATA;
     if( dataCnt == 0 )
-        return K3bDevice::AUDIO;
-    return K3bDevice::MIXED;
+        return K3b::Device::AUDIO;
+    return K3b::Device::MIXED;
 }
 
 
-int K3bDevice::Toc::sessions() const
+int K3b::Device::Toc::sessions() const
 {
     if( isEmpty() )
         return 0;
@@ -124,26 +124,26 @@ int K3bDevice::Toc::sessions() const
 }
 
 
-QByteArray K3bDevice::Toc::mcn() const
+QByteArray K3b::Device::Toc::mcn() const
 {
     return m_mcn;
 }
 
 
-void K3bDevice::Toc::setMcn( const QByteArray& mcn )
+void K3b::Device::Toc::setMcn( const QByteArray& mcn )
 {
     m_mcn = mcn;
 }
 
 
-void K3bDevice::Toc::clear()
+void K3b::Device::Toc::clear()
 {
     QList<Track>::clear();
     m_mcn.resize( 0 );
 }
 
 
-void K3bDevice::Toc::debug() const
+void K3b::Device::Toc::debug() const
 {
     kDebug() << count() << " in " << sessions() << " sessions";
     int sessionN = 0;
@@ -154,20 +154,20 @@ void K3bDevice::Toc::debug() const
             sessionN = (*it).session();
             kDebug() << "Session Number " << sessionN;
         }
-        kDebug() << "  Track " << trackN << ( (*it).type() == Track::AUDIO ? " AUDIO" : " DATA" )
+        kDebug() << "  Track " << trackN << ( (*it).type() == Track::TYPE_AUDIO ? " AUDIO" : " DATA" )
                  << " " << (*it).firstSector().lba() << " - " << (*it).lastSector().lba()
                  << " (" << (*it).length().lba() << ")" << endl;
     }
 }
 
 
-bool K3bDevice::Toc::operator==( const Toc& other ) const
+bool K3b::Device::Toc::operator==( const Toc& other ) const
 {
     return( QList<Track>::operator==( other ) );
 }
 
 
-bool K3bDevice::Toc::operator!=( const Toc& other ) const
+bool K3b::Device::Toc::operator!=( const Toc& other ) const
 {
     return( QList<Track>::operator!=( other ) );
 }

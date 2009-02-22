@@ -52,7 +52,7 @@
 
 using namespace std;
 
-K3bPlayListViewItem::K3bPlayListViewItem( const QString& filename, Q3ListView* parent )
+K3b::PlayListViewItem::PlayListViewItem( const QString& filename, Q3ListView* parent )
   : K3ListViewItem( parent ), m_filename( filename )
 {
   m_length = 0;
@@ -60,7 +60,7 @@ K3bPlayListViewItem::K3bPlayListViewItem( const QString& filename, Q3ListView* p
 }
 
 
-K3bPlayListViewItem::K3bPlayListViewItem( const QString& filename, Q3ListView* parent, Q3ListViewItem* after )
+K3b::PlayListViewItem::PlayListViewItem( const QString& filename, Q3ListView* parent, Q3ListViewItem* after )
   : K3ListViewItem( parent, after ), m_filename( filename )
 {
   m_length = 0;
@@ -68,12 +68,12 @@ K3bPlayListViewItem::K3bPlayListViewItem( const QString& filename, Q3ListView* p
 }
 
 
-K3bPlayListViewItem::~K3bPlayListViewItem()
+K3b::PlayListViewItem::~PlayListViewItem()
 {
 }
 
 
-QString K3bPlayListViewItem::text( int c ) const
+QString K3b::PlayListViewItem::text( int c ) const
 {
   switch( c ) {
   case 0:
@@ -94,7 +94,7 @@ QString K3bPlayListViewItem::text( int c ) const
 }
 
 
-void K3bPlayListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int c, int w, int a )
+void K3b::PlayListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int c, int w, int a )
 {
   if( m_bActive ) {
     // change the color of the text:
@@ -113,7 +113,7 @@ void K3bPlayListViewItem::paintCell( QPainter* p, const QColorGroup& cg, int c, 
 }
 
 
-K3bPlayListView::K3bPlayListView( QWidget* parent )
+K3b::PlayListView::PlayListView( QWidget* parent )
   : K3ListView( parent )
 {
   addColumn( i18n("Filename") );
@@ -128,19 +128,19 @@ K3bPlayListView::K3bPlayListView( QWidget* parent )
 }
 
 
-K3bPlayListView::~K3bPlayListView()
+K3b::PlayListView::~PlayListView()
 {
 }
 
 
-bool K3bPlayListView::acceptDrag( QDropEvent* e ) const
+bool K3b::PlayListView::acceptDrag( QDropEvent* e ) const
 {
   // we accept textdrag (urls) and moved items (supported by K3ListView)
   return K3URLDrag::canDecode(e) || K3ListView::acceptDrag(e);
 }
 
 
-Q3DragObject* K3bPlayListView::dragObject()
+Q3DragObject* K3b::PlayListView::dragObject()
 {
   Q3PtrList<Q3ListViewItem> list = selectedItems();
 
@@ -151,13 +151,13 @@ Q3DragObject* K3bPlayListView::dragObject()
   KUrl::List urls;
 
   for( ; it.current(); ++it )
-    urls.append( KUrl( ((K3bPlayListViewItem*)it.current())->filename() ) );
+    urls.append( KUrl( ((K3b::PlayListViewItem*)it.current())->filename() ) );
 
   return K3URLDrag::newDrag( urls, viewport() );
 }
 
 
-K3bAudioPlayer::K3bAudioPlayer( QWidget* parent )
+K3b::AudioPlayer::AudioPlayer( QWidget* parent )
   : QWidget( parent )
 #ifdef WITH_ARTS
 , m_playObject( Arts::PlayObject::null() )
@@ -171,7 +171,7 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent )
   m_labelOverallTime = new QLabel( "00:00", this );
   m_labelCurrentTime = new QLabel( "00:00", this );
 
-  m_viewPlayList = new K3bPlayListView( this );
+  m_viewPlayList = new K3b::PlayListView( this );
 
   m_labelOverallTime->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
   m_labelCurrentTime->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
@@ -268,7 +268,7 @@ K3bAudioPlayer::K3bAudioPlayer( QWidget* parent )
 }
 
 
-K3bAudioPlayer::~K3bAudioPlayer()
+K3b::AudioPlayer::~AudioPlayer()
 {
   // we remove the reference to the play object
   // if we don't do this it won't be removed and K3b will crash (not sure why)
@@ -278,7 +278,7 @@ K3bAudioPlayer::~K3bAudioPlayer()
 }
 
 
-int K3bAudioPlayer::state()
+int K3b::AudioPlayer::state()
 {
 #ifdef WITH_ARTS
   if( !m_playObject.isNull() ) {
@@ -299,11 +299,11 @@ int K3bAudioPlayer::state()
 }
 
 
-void K3bAudioPlayer::playFile( const QString& filename )
+void K3b::AudioPlayer::playFile( const QString& filename )
 {
   clear();
   if( QFile::exists( filename ) ) {
-    K3bPlayListViewItem* item = new K3bPlayListViewItem( filename, m_viewPlayList );
+    K3b::PlayListViewItem* item = new K3b::PlayListViewItem( filename, m_viewPlayList );
     setCurrentItem( item );
     play();
     emit started( filename );
@@ -311,7 +311,7 @@ void K3bAudioPlayer::playFile( const QString& filename )
 }
 
 
-void K3bAudioPlayer::playFiles( const QStringList& files )
+void K3b::AudioPlayer::playFiles( const QStringList& files )
 {
   clear();
   QStringList::ConstIterator it = files.begin();
@@ -323,21 +323,21 @@ void K3bAudioPlayer::playFiles( const QStringList& files )
 }
 
 
-void K3bAudioPlayer::enqueueFile( const QString& filename )
+void K3b::AudioPlayer::enqueueFile( const QString& filename )
 {
   if( QFile::exists( filename ) )
-    (void)new K3bPlayListViewItem( filename, m_viewPlayList, m_viewPlayList->lastChild() );
+    (void)new K3b::PlayListViewItem( filename, m_viewPlayList, m_viewPlayList->lastChild() );
 }
 
 
-void K3bAudioPlayer::enqueueFiles( const QStringList& files )
+void K3b::AudioPlayer::enqueueFiles( const QStringList& files )
 {
   for( QStringList::ConstIterator it = files.begin(); it != files.end(); ++it )
     enqueueFile( *it );
 }
 
 
-void K3bAudioPlayer::play()
+void K3b::AudioPlayer::play()
 {
 #ifdef WITH_ARTS
   if( !m_currentItem ) {
@@ -348,14 +348,14 @@ void K3bAudioPlayer::play()
     if( m_playObject.isNull() ) {
       Arts::PlayObjectFactory factory = Arts::Reference("global:Arts_PlayObjectFactory");
       if( factory.isNull() ) {
-	kDebug() << "(K3bAudioPlayer) could not create PlayObjectFactory. Possibly no artsd running.";
+	kDebug() << "(K3b::AudioPlayer) could not create PlayObjectFactory. Possibly no artsd running.";
 	m_labelFilename->setText( i18n("No running aRtsd found") );
 	return;
       }
 
       m_playObject = factory.createPlayObject( string(QFile::encodeName(m_currentItem->filename()) ) );
       if( m_playObject.isNull() ) {
-	kDebug() << "(K3bAudioPlayer) no aRts module available for: " << m_currentItem->filename();
+	kDebug() << "(K3b::AudioPlayer) no aRts module available for: " << m_currentItem->filename();
 	m_labelFilename->setText( i18n("Unknown file format") );
 
 	// play the next if there is any
@@ -378,14 +378,14 @@ void K3bAudioPlayer::play()
 }
 
 
-void K3bAudioPlayer::slotPlayItem( Q3ListViewItem* item )
+void K3b::AudioPlayer::slotPlayItem( Q3ListViewItem* item )
 {
   setCurrentItem( item );
   play();
 }
 
 
-void K3bAudioPlayer::stop()
+void K3b::AudioPlayer::stop()
 {
 #ifdef WITH_ARTS
   if( !m_playObject.isNull() ) {
@@ -404,7 +404,7 @@ void K3bAudioPlayer::stop()
 }
 
 
-void K3bAudioPlayer::pause()
+void K3b::AudioPlayer::pause()
 {
 #ifdef WITH_ARTS
   if( !m_playObject.isNull() ) {
@@ -420,7 +420,7 @@ void K3bAudioPlayer::pause()
 }
 
 
-void K3bAudioPlayer::seek( long pos )
+void K3b::AudioPlayer::seek( long pos )
 {
 #ifdef WITH_ARTS
   if( !m_playObject.isNull() ) {
@@ -445,13 +445,13 @@ void K3bAudioPlayer::seek( long pos )
 
 
 
-void K3bAudioPlayer::seek( int pos )
+void K3b::AudioPlayer::seek( int pos )
 {
   seek( (long)pos );
 }
 
 
-void K3bAudioPlayer::forward()
+void K3b::AudioPlayer::forward()
 {
   if( m_currentItem ) {
     if( m_currentItem->itemBelow() ) {
@@ -468,7 +468,7 @@ void K3bAudioPlayer::forward()
 }
 
 
-void K3bAudioPlayer::back()
+void K3b::AudioPlayer::back()
 {
   if( m_currentItem ) {
     if( m_currentItem->itemAbove() ) {
@@ -485,14 +485,14 @@ void K3bAudioPlayer::back()
 }
 
 
-void K3bAudioPlayer::clear()
+void K3b::AudioPlayer::clear()
 {
   setCurrentItem( 0 );
   m_viewPlayList->clear();
 }
 
 
-long K3bAudioPlayer::length()
+long K3b::AudioPlayer::length()
 {
 #ifdef WITH_ARTS
   if( !m_playObject.isNull() ) {
@@ -503,7 +503,7 @@ long K3bAudioPlayer::length()
 }
 
 
-long K3bAudioPlayer::position()
+long K3b::AudioPlayer::position()
 {
 #ifdef WITH_ARTS
   if( !m_playObject.isNull() ) {
@@ -515,7 +515,7 @@ long K3bAudioPlayer::position()
 
 
 // FIXME: let my do some useful stuff!
-bool K3bAudioPlayer::supportsMimetype( const QString& mimetype )
+bool K3b::AudioPlayer::supportsMimetype( const QString& mimetype )
 {
   if( mimetype.contains("audio") || mimetype.contains("ogg") )
     return true;
@@ -524,7 +524,7 @@ bool K3bAudioPlayer::supportsMimetype( const QString& mimetype )
 }
 
 
-void K3bAudioPlayer::slotCheckEnd()
+void K3b::AudioPlayer::slotCheckEnd()
 {
 #ifdef WITH_ARTS
   if( !m_playObject.isNull() ) {
@@ -543,7 +543,7 @@ void K3bAudioPlayer::slotCheckEnd()
 }
 
 
-void K3bAudioPlayer::setCurrentItem( Q3ListViewItem* item )
+void K3b::AudioPlayer::setCurrentItem( Q3ListViewItem* item )
 {
   if( item == 0 ) {
     stop();
@@ -551,7 +551,7 @@ void K3bAudioPlayer::setCurrentItem( Q3ListViewItem* item )
     m_labelFilename->setText( i18n("no file") );
     m_currentItem = 0;
   }
-  else if( K3bPlayListViewItem* playItem = dynamic_cast<K3bPlayListViewItem*>(item) ) {
+  else if( K3b::PlayListViewItem* playItem = dynamic_cast<K3b::PlayListViewItem*>(item) ) {
     if( m_currentItem ) {
       // reset m_currentItem
       m_currentItem->setActive( false );
@@ -568,19 +568,19 @@ void K3bAudioPlayer::setCurrentItem( Q3ListViewItem* item )
 }
 
 
-void K3bAudioPlayer::slotUpdateCurrentTime( int time )
+void K3b::AudioPlayer::slotUpdateCurrentTime( int time )
 {
   m_labelCurrentTime->setText( K3b::Msf( time*75 ).toString(false) );
 }
 
 
-void K3bAudioPlayer::slotUpdateLength( long time )
+void K3b::AudioPlayer::slotUpdateLength( long time )
 {
   m_labelOverallTime->setText( K3b::Msf( time*75 ).toString(false) );
 }
 
 
-void K3bAudioPlayer::slotUpdateFilename()
+void K3b::AudioPlayer::slotUpdateFilename()
 {
   if( m_currentItem ) {
     QString display = m_currentItem->filename();
@@ -607,7 +607,7 @@ void K3bAudioPlayer::slotUpdateFilename()
 }
 
 
-void K3bAudioPlayer::slotUpdateDisplay()
+void K3b::AudioPlayer::slotUpdateDisplay()
 {
   if( m_currentItem ) {
     // we need to set the length here because sometimes it is not ready in the beginning (?)
@@ -625,7 +625,7 @@ void K3bAudioPlayer::slotUpdateDisplay()
 }
 
 
-void K3bAudioPlayer::slotDropped( QDropEvent* e, Q3ListViewItem* after )
+void K3b::AudioPlayer::slotDropped( QDropEvent* e, Q3ListViewItem* after )
 {
   if( !after )
     after = m_viewPlayList->lastChild();
@@ -635,14 +635,14 @@ void K3bAudioPlayer::slotDropped( QDropEvent* e, Q3ListViewItem* after )
 
   for( KUrl::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
     if( QFile::exists( (*it).path() ) ) {
-      Q3ListViewItem* newItem = new K3bPlayListViewItem( (*it).path(), m_viewPlayList, after );
+      Q3ListViewItem* newItem = new K3b::PlayListViewItem( (*it).path(), m_viewPlayList, after );
       after = newItem;
     }
   }
 }
 
 
-void K3bAudioPlayer::slotRemoveSelected()
+void K3b::AudioPlayer::slotRemoveSelected()
 {
   Q3PtrList<Q3ListViewItem> selected = m_viewPlayList->selectedItems();
   for( Q3ListViewItem* item = selected.first(); item; item = selected.next() ) {
@@ -653,7 +653,7 @@ void K3bAudioPlayer::slotRemoveSelected()
 }
 
 
-void K3bAudioPlayer::slotShowContextMenu( K3ListView*, Q3ListViewItem* item, const QPoint& p )
+void K3b::AudioPlayer::slotShowContextMenu( K3ListView*, Q3ListViewItem* item, const QPoint& p )
 {
   if( item )
     m_actionRemove->setEnabled( true );

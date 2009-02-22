@@ -18,8 +18,12 @@
 
 #include "k3bjobprogressdialog.h"
 
-class K3bBurnJob;
-class K3bThemedLabel;
+namespace K3b {
+    class BurnJob;
+}
+namespace K3b {
+    class ThemedLabel;
+}
 class QProgressBar;
 class QLabel;
 
@@ -27,16 +31,17 @@ class QLabel;
 /**
  *@author Sebastian Trueg
  */
-class K3bBurnProgressDialog : public K3bJobProgressDialog  {
+namespace K3b {
+class BurnProgressDialog : public JobProgressDialog  {
 
     Q_OBJECT
 
 public:
-    K3bBurnProgressDialog( QWidget* parent = 0, bool showSubProgress = true );
-    ~K3bBurnProgressDialog();
+    BurnProgressDialog( QWidget* parent = 0, bool showSubProgress = true );
+    ~BurnProgressDialog();
 
-    void setJob( K3bJob* );
-    void setBurnJob( K3bBurnJob* );
+    void setJob( Job* );
+    void setBurnJob( BurnJob* );
 
 protected Q_SLOTS:
     void slotWriteSpeed( int, int );
@@ -45,10 +50,11 @@ protected Q_SLOTS:
     void slotFinished(bool);
 
 protected:
-    K3bThemedLabel* m_labelWriter;
+    ThemedLabel* m_labelWriter;
     QProgressBar* m_progressWritingBuffer;
     QProgressBar* m_progressDeviceBuffer;
     QLabel* m_labelWritingSpeed;
 };
+}
 
 #endif

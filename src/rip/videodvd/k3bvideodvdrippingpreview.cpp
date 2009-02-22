@@ -26,7 +26,7 @@
 
 
 
-K3bVideoDVDRippingPreview::K3bVideoDVDRippingPreview( QObject* parent )
+K3b::VideoDVDRippingPreview::VideoDVDRippingPreview( QObject* parent )
     : QObject( parent ),
       m_tempDir( 0 ),
       m_process( 0 )
@@ -34,14 +34,14 @@ K3bVideoDVDRippingPreview::K3bVideoDVDRippingPreview( QObject* parent )
 }
 
 
-K3bVideoDVDRippingPreview::~K3bVideoDVDRippingPreview()
+K3b::VideoDVDRippingPreview::~VideoDVDRippingPreview()
 {
     delete m_process;
     delete m_tempDir;
 }
 
 
-void K3bVideoDVDRippingPreview::generatePreview( const K3bVideoDVD::VideoDVD& dvd, int title, int chapter )
+void K3b::VideoDVDRippingPreview::generatePreview( const K3b::VideoDVD::VideoDVD& dvd, int title, int chapter )
 {
     // cleanup first
     delete m_process;
@@ -50,7 +50,7 @@ void K3bVideoDVDRippingPreview::generatePreview( const K3bVideoDVD::VideoDVD& dv
     m_tempDir = 0;
     m_canceled = false;
 
-    const K3bExternalBin* bin = k3bcore->externalBinManager()->binObject("transcode");
+    const K3b::ExternalBin* bin = k3bcore->externalBinManager()->binObject("transcode");
     if( !bin ) {
         emit previewDone( false );
         return;
@@ -91,7 +91,7 @@ void K3bVideoDVDRippingPreview::generatePreview( const K3bVideoDVD::VideoDVD& dv
     if (!m_process->waitForStarted(-1)) {
         // something went wrong when starting the program
         // it "should" be the executable
-        kDebug() << "(K3bVideoDVDRippingPreview) Could not start transcode.";
+        kDebug() << "(K3b::VideoDVDRippingPreview) Could not start transcode.";
         delete m_process;
         delete m_tempDir;
         m_process = 0;
@@ -101,7 +101,7 @@ void K3bVideoDVDRippingPreview::generatePreview( const K3bVideoDVD::VideoDVD& dv
 }
 
 
-void K3bVideoDVDRippingPreview::cancel()
+void K3b::VideoDVDRippingPreview::cancel()
 {
     if( m_process && (m_process->state() != QProcess::NotRunning) ) {
         m_canceled = true;
@@ -110,11 +110,11 @@ void K3bVideoDVDRippingPreview::cancel()
 }
 
 
-void K3bVideoDVDRippingPreview::slotTranscodeFinished( int, QProcess::ExitStatus )
+void K3b::VideoDVDRippingPreview::slotTranscodeFinished( int, QProcess::ExitStatus )
 {
     // read the image
     QString filename = m_tempDir->name() + "000000.ppm";// + tempQDir->entryList( QDir::Files ).first();
-    kDebug() << "(K3bVideoDVDRippingPreview) reading from file " << filename;
+    kDebug() << "(K3b::VideoDVDRippingPreview) reading from file " << filename;
     m_preview = QImage( filename );
     bool success = !m_preview.isNull() && !m_canceled;
 

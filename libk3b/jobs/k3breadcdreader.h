@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,69 +20,70 @@
 
 #include <qprocess.h>
 
-namespace K3bDevice {
-  class Device;
-}
 namespace K3b {
-  class Msf;
+
+    namespace Device {
+        class Device;
+    }
+
+    class Msf;
+
+    class ReadcdReader : public Job
+    {
+        Q_OBJECT
+
+    public:
+        ReadcdReader( JobHandler*, QObject* parent = 0 );
+        ~ReadcdReader();
+
+        bool active() const;
+
+    public Q_SLOTS:
+        void start();
+        void cancel();
+
+        void setReadDevice( Device::Device* dev ) { m_readDevice = dev; }
+
+        /** 0 means MAX */
+        void setReadSpeed( int s ) { m_speed = s; }
+        void setDisableCorrection( bool b ) { m_noCorr = b; }
+
+        /** default: true */
+        void setAbortOnError( bool b ) { m_noError = !b; }
+        void setC2Scan( bool b ) { m_c2Scan = b; }
+        void setClone( bool b ) { m_clone = b; }
+        void setRetries( int i ) { m_retries = i; }
+
+        void setSectorRange( const Msf&, const Msf& );
+
+        void setImagePath( const QString& p ) { m_imagePath = p; }
+
+        /**
+         * the data gets written directly into fd instead of the imagefile.
+         * Be aware that this only makes sense before starting the job.
+         * To disable just set fd to -1
+         */
+        void writeToFd( int fd );
+
+    private Q_SLOTS:
+        void slotStdLine( const QString& line );
+        void slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus );
+
+    private:
+        bool m_noCorr;
+        bool m_clone;
+        bool m_noError;
+        bool m_c2Scan;
+        int m_speed;
+        int m_retries;
+
+        Device::Device* m_readDevice;
+
+        QString m_imagePath;
+
+        class Private;
+        Private* d;
+    };
 }
-
-
-class K3bReadcdReader : public K3bJob
-{
-  Q_OBJECT
-
- public:
-  K3bReadcdReader( K3bJobHandler*, QObject* parent = 0 );
-  ~K3bReadcdReader();
-
-  bool active() const;
-
- public Q_SLOTS:
-  void start();
-  void cancel();
-
-  void setReadDevice( K3bDevice::Device* dev ) { m_readDevice = dev; }
-
-  /** 0 means MAX */
-  void setReadSpeed( int s ) { m_speed = s; }
-  void setDisableCorrection( bool b ) { m_noCorr = b; }
-
-  /** default: true */
-  void setAbortOnError( bool b ) { m_noError = !b; }
-  void setC2Scan( bool b ) { m_c2Scan = b; }
-  void setClone( bool b ) { m_clone = b; }
-  void setRetries( int i ) { m_retries = i; }
-
-  void setSectorRange( const K3b::Msf&, const K3b::Msf& );
-
-  void setImagePath( const QString& p ) { m_imagePath = p; }
-
-  /**
-   * the data gets written directly into fd instead of the imagefile.
-   * Be aware that this only makes sense before starting the job.
-   * To disable just set fd to -1
-   */
-  void writeToFd( int fd );
-
- private Q_SLOTS:
-  void slotStdLine( const QString& line );
-  void slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus );
-
- private:
-  bool m_noCorr;
-  bool m_clone;
-  bool m_noError;
-  bool m_c2Scan;
-  int m_speed;
-  int m_retries;
-
-  K3bDevice::Device* m_readDevice;
-
-  QString m_imagePath;
-
-  class Private;
-  Private* d;
-};
 
 #endif

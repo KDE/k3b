@@ -46,8 +46,8 @@
 #include <kvbox.h>
 
 
-K3bVideoCdRippingDialog::K3bVideoCdRippingDialog( K3bVideoCdRippingOptions* options, QWidget* parent )
-    : K3bInteractionDialog( parent,
+K3b::VideoCdRippingDialog::VideoCdRippingDialog( K3b::VideoCdRippingOptions* options, QWidget* parent )
+    : K3b::InteractionDialog( parent,
                             i18n( "Video CD Ripping" ),
                             QString(),
                             START_BUTTON|CANCEL_BUTTON,
@@ -60,12 +60,12 @@ K3bVideoCdRippingDialog::K3bVideoCdRippingDialog( K3bVideoCdRippingOptions* opti
 }
 
 
-K3bVideoCdRippingDialog::~K3bVideoCdRippingDialog()
+K3b::VideoCdRippingDialog::~VideoCdRippingDialog()
 {
 }
 
 
-void K3bVideoCdRippingDialog::setupGui()
+void K3b::VideoCdRippingDialog::setupGui()
 {
     QWidget * frame = mainWidget();
     QGridLayout* MainLayout = new QGridLayout( frame );
@@ -133,7 +133,7 @@ void K3bVideoCdRippingDialog::setupGui()
 }
 
 
-void K3bVideoCdRippingDialog::setupContextHelp()
+void K3b::VideoCdRippingDialog::setupContextHelp()
 {
     m_labelFreeSpace->setToolTip( i18n("Free space on destination directory: %1", m_editDirectory ->url().url() ) );
 
@@ -153,7 +153,7 @@ void K3bVideoCdRippingDialog::setupContextHelp()
                                      "<p>The filename is the same as the video CD name, with a .xml extension. The default is VIDEOCD.xml.</p>") );
 }
 
-void K3bVideoCdRippingDialog::slotStartClicked()
+void K3b::VideoCdRippingDialog::slotStartClicked()
 {
 
     QStringList filesExists;
@@ -186,8 +186,8 @@ void K3bVideoCdRippingDialog::slotStartClicked()
     m_videooptions ->setVideoCdExtractXml( m_extractXML ->isChecked() );
     m_videooptions ->setVideoCdDestination( m_editDirectory ->url().url() );
 
-    K3bJobProgressDialog ripDialog( kapp->activeWindow(), "Ripping" );
-    K3bVideoCdRip * rip = new K3bVideoCdRip( &ripDialog, m_videooptions );
+    K3b::JobProgressDialog ripDialog( kapp->activeWindow(), "Ripping" );
+    K3b::VideoCdRip * rip = new K3b::VideoCdRip( &ripDialog, m_videooptions );
 
     hide();
     ripDialog.startJob( rip );
@@ -197,7 +197,7 @@ void K3bVideoCdRippingDialog::slotStartClicked()
     close();
 }
 
-void K3bVideoCdRippingDialog::slotFreeSpace(const QString&,
+void K3b::VideoCdRippingDialog::slotFreeSpace(const QString&,
                                             unsigned long,
                                             unsigned long,
                                             unsigned long kbAvail)
@@ -217,7 +217,7 @@ void K3bVideoCdRippingDialog::slotFreeSpace(const QString&,
 }
 
 
-void K3bVideoCdRippingDialog::slotUpdateFreeSpace()
+void K3b::VideoCdRippingDialog::slotUpdateFreeSpace()
 {
     QString path = m_editDirectory->url().url();
 
@@ -231,7 +231,7 @@ void K3bVideoCdRippingDialog::slotUpdateFreeSpace()
         m_labelFreeSpace->setText("-");
 }
 
-void K3bVideoCdRippingDialog::loadK3bDefaults()
+void K3b::VideoCdRippingDialog::loadK3bDefaults()
 {
     m_editDirectory->setUrl( QDir::homePath() );
     m_ignoreExt ->setChecked( false );
@@ -241,7 +241,7 @@ void K3bVideoCdRippingDialog::loadK3bDefaults()
     slotUpdateFreeSpace();
 }
 
-void K3bVideoCdRippingDialog::loadUserDefaults( const KConfigGroup& c )
+void K3b::VideoCdRippingDialog::loadUserDefaults( const KConfigGroup& c )
 {
     m_editDirectory ->setUrl( c.readEntry( "last ripping directory", QDir::homePath() ) );
     m_ignoreExt ->setChecked( c.readEntry( "ignore ext", false ) );
@@ -251,7 +251,7 @@ void K3bVideoCdRippingDialog::loadUserDefaults( const KConfigGroup& c )
     slotUpdateFreeSpace();
 }
 
-void K3bVideoCdRippingDialog::saveUserDefaults( KConfigGroup c )
+void K3b::VideoCdRippingDialog::saveUserDefaults( KConfigGroup c )
 {
     c.writeEntry( "last ripping directory", m_editDirectory->url() );
     c.writeEntry( "ignore ext", m_ignoreExt ->isChecked( ) );

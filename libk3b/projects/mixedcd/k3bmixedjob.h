@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
@@ -16,126 +16,125 @@
 #ifndef K3BMIXEDJOB_H
 #define K3BMIXEDJOB_H
 
-#include <k3bjob.h>
+#include "k3bjob.h"
 
-
-class K3bMixedDoc;
-class K3bIsoImager;
-class K3bAudioImager;
-class K3bAbstractWriter;
-class K3bWaveFileWriter;
 class KTemporaryFile;
-class K3bCdrecordWriter;
-class K3bMsInfoFetcher;
-class K3bAudioNormalizeJob;
-class K3bAudioJobTempData;
-class K3bDoc;
 
-/**
- *@author Sebastian Trueg
- */
-class K3bMixedJob : public K3bBurnJob
-{
-    Q_OBJECT
-	
-public:
-    K3bMixedJob( K3bMixedDoc*, K3bJobHandler*, QObject* parent = 0 );
-    ~K3bMixedJob();
-	
-    K3bDoc* doc() const;
-    K3bDevice::Device* writer() const;
-		
-    QString jobDescription() const;
-    QString jobDetails() const;
-		
-public Q_SLOTS:
-    void cancel();
-    void start();
+namespace K3b {
+    class MixedDoc;
+    class IsoImager;
+    class AudioImager;
+    class AbstractWriter;
+    class WaveFileWriter;
+    class CdrecordWriter;
+    class MsInfoFetcher;
+    class AudioNormalizeJob;
+    class AudioJobTempData;
+    class Doc;
 
-protected Q_SLOTS:
-    // iso imager slots
-    void slotIsoImagerFinished( bool success );
-    void slotIsoImagerPercent(int);
+    class MixedJob : public BurnJob
+    {
+        Q_OBJECT
 
-    // ms info fetcher slots
-    void slotMsInfoFetched(bool);
+    public:
+        MixedJob( MixedDoc*, JobHandler*, QObject* parent = 0 );
+        ~MixedJob();
 
-    // audio decoder slots
-    void slotAudioDecoderFinished( bool );
-    void slotAudioDecoderNextTrack( int, int );
-    void slotAudioDecoderPercent(int);
-    void slotAudioDecoderSubPercent( int );
+        Doc* doc() const;
+        Device::Device* writer() const;
 
-    // writer slots
-    void slotWriterFinished( bool success );
-    void slotWriterNextTrack(int, int);
-    void slotWriterJobPercent(int);
+        QString jobDescription() const;
+        QString jobDetails() const;
 
-    // normalizing slots
-    void slotNormalizeJobFinished( bool );
-    void slotNormalizeProgress( int );
-    void slotNormalizeSubProgress( int );
+    public Q_SLOTS:
+        void cancel();
+        void start();
 
-    // misc slots
-    void slotMediaReloadedForSecondSession( bool );
-    void slotMaxSpeedJobFinished( bool );
+    protected Q_SLOTS:
+        // iso imager slots
+        void slotIsoImagerFinished( bool success );
+        void slotIsoImagerPercent(int);
 
-private:
-    bool prepareWriter();
-    bool writeTocFile();
-    bool writeInfFiles();
-    bool startWriting();
-    void startFirstCopy();
-    void addAudioTracks( K3bCdrecordWriter* writer );
-    void addDataTrack( K3bCdrecordWriter* writer );
-    void cleanupAfterError();
-    void removeBufferFiles();
-    void createIsoImage();
-    void determineWritingMode();
-    void normalizeFiles();
-    void prepareProgressInformation();
-    void writeNextCopy();
-    void determinePreliminaryDataImageSize();
+        // ms info fetcher slots
+        void slotMsInfoFetched(bool);
 
-    K3bMixedDoc* m_doc;
-    K3bIsoImager* m_isoImager;
-    K3bAudioImager* m_audioImager;
-    K3bAudioJobTempData* m_tempData;
-    K3bWaveFileWriter* m_waveFileWriter;
-    K3bAbstractWriter* m_writer;
-    K3bMsInfoFetcher* m_msInfoFetcher;
-    K3bAudioNormalizeJob* m_normalizeJob;
+        // audio decoder slots
+        void slotAudioDecoderFinished( bool );
+        void slotAudioDecoderNextTrack( int, int );
+        void slotAudioDecoderPercent(int);
+        void slotAudioDecoderSubPercent( int );
 
-    QString m_isoImageFilePath;
+        // writer slots
+        void slotWriterFinished( bool success );
+        void slotWriterNextTrack(int, int);
+        void slotWriterJobPercent(int);
 
-    KTemporaryFile* m_tocFile;
+        // normalizing slots
+        void slotNormalizeJobFinished( bool );
+        void slotNormalizeProgress( int );
+        void slotNormalizeSubProgress( int );
 
-    enum Action { INITIALIZING_IMAGER,
-                  PREPARING_DATA,
-                  CREATING_ISO_IMAGE,
-                  CREATING_AUDIO_IMAGE,
-                  WRITING_ISO_IMAGE,
-                  WRITING_AUDIO_IMAGE,
-                  FETCHING_MSINFO };
+        // misc slots
+        void slotMediaReloadedForSecondSession( bool );
+        void slotMaxSpeedJobFinished( bool );
 
-    int m_currentAction;
-    double m_audioDocPartOfProcess;
+    private:
+        bool prepareWriter();
+        bool writeTocFile();
+        bool writeInfFiles();
+        bool startWriting();
+        void startFirstCopy();
+        void addAudioTracks( CdrecordWriter* writer );
+        void addDataTrack( CdrecordWriter* writer );
+        void cleanupAfterError();
+        void removeBufferFiles();
+        void createIsoImage();
+        void determineWritingMode();
+        void normalizeFiles();
+        void prepareProgressInformation();
+        void writeNextCopy();
+        void determinePreliminaryDataImageSize();
 
-    bool m_canceled;
-    bool m_errorOccuredAndAlreadyReported;
+        MixedDoc* m_doc;
+        IsoImager* m_isoImager;
+        AudioImager* m_audioImager;
+        AudioJobTempData* m_tempData;
+        WaveFileWriter* m_waveFileWriter;
+        AbstractWriter* m_writer;
+        MsInfoFetcher* m_msInfoFetcher;
+        AudioNormalizeJob* m_normalizeJob;
 
-    int m_usedDataMode;
-    K3b::WritingApp m_usedDataWritingApp;
-    K3b::WritingApp m_usedAudioWritingApp;
-    K3b::WritingMode m_usedDataWritingMode;
-    K3b::WritingMode m_usedAudioWritingMode;
+        QString m_isoImageFilePath;
 
-    QString m_tempFilePrefix;
+        KTemporaryFile* m_tocFile;
 
-    K3b::Msf m_projectSize;
+        enum Action { INITIALIZING_IMAGER,
+                      PREPARING_DATA,
+                      CREATING_ISO_IMAGE,
+                      CREATING_AUDIO_IMAGE,
+                      WRITING_ISO_IMAGE,
+                      WRITING_AUDIO_IMAGE,
+                      FETCHING_MSINFO };
 
-    class Private;
-    Private* d;
-};
+        int m_currentAction;
+        double m_audioDocPartOfProcess;
+
+        bool m_canceled;
+        bool m_errorOccuredAndAlreadyReported;
+
+        int m_usedDataMode;
+        WritingApp m_usedDataWritingApp;
+        WritingApp m_usedAudioWritingApp;
+        WritingMode m_usedDataWritingMode;
+        WritingMode m_usedAudioWritingMode;
+
+        QString m_tempFilePrefix;
+
+        Msf m_projectSize;
+
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

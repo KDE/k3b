@@ -19,9 +19,11 @@
 #include <KXMLGUIClient>
 #include <solid/solidnamespace.h>
 
-class K3bMediaCache;
+namespace K3b {
+    class MediaCache;
+}
 
-namespace K3bDevice {
+namespace Device {
     class Device;
 }
 
@@ -29,25 +31,26 @@ namespace K3bDevice {
  * Enhanced device manager which can do some additional actions
  * and maintains a current device
  */
-class K3bAppDeviceManager : public K3bDevice::DeviceManager, public KXMLGUIClient
+namespace K3b {
+class AppDeviceManager : public Device::DeviceManager, public KXMLGUIClient
 {
     Q_OBJECT
 
 public:
-    K3bAppDeviceManager( QObject* parent = 0 );
-    ~K3bAppDeviceManager();
+    AppDeviceManager( QObject* parent = 0 );
+    ~AppDeviceManager();
 
-    K3bDevice::Device* currentDevice() const;
-    void setMediaCache( K3bMediaCache* c );
+    Device::Device* currentDevice() const;
+    void setMediaCache( MediaCache* c );
 
 Q_SIGNALS:
-    void currentDeviceChanged( K3bDevice::Device* );
+    void currentDeviceChanged( Device::Device* );
 
     /**
      * Emitted when starting to detect the diskinfo. This may be used to show some info
      * to the user since deteting the diskinfo might take some time.
      */
-    void detectingDiskInfo( K3bDevice::Device* );
+    void detectingDiskInfo( Device::Device* );
 
     void mountFinished( const QString& mountPoint );
     void unmountFinished( bool success );
@@ -58,7 +61,7 @@ public Q_SLOTS:
      */
     void clear();
 
-    void setCurrentDevice( K3bDevice::Device* );
+    void setCurrentDevice( Device::Device* );
 
     void diskInfo();
     void unlockDevice();
@@ -69,17 +72,17 @@ public Q_SLOTS:
     void loadDisk();
     void setReadSpeed();
 
-    void diskInfo( K3bDevice::Device* );
-    void unlockDevice( K3bDevice::Device* );
-    void lockDevice( K3bDevice::Device* );
-    void mountDisk( K3bDevice::Device* );
-    void unmountDisk( K3bDevice::Device* );
-    void ejectDisk( K3bDevice::Device* );
-    void loadDisk( K3bDevice::Device* );
-    void setReadSpeed( K3bDevice::Device* );
+    void diskInfo( Device::Device* );
+    void unlockDevice( Device::Device* );
+    void lockDevice( Device::Device* );
+    void mountDisk( Device::Device* );
+    void unmountDisk( Device::Device* );
+    void ejectDisk( Device::Device* );
+    void loadDisk( Device::Device* );
+    void setReadSpeed( Device::Device* );
 
 private Q_SLOTS:
-    void slotMediumChanged( K3bDevice::Device* dev );
+    void slotMediumChanged( Device::Device* dev );
     void slotMountChanged( bool accessible, const QString& udi );
     void slotMountFinished( Solid::ErrorType error, QVariant errorData, const QString& udi );
     void slotUnmountFinished( Solid::ErrorType error, QVariant errorData, const QString& udi );
@@ -88,11 +91,12 @@ private:
     /**
      * \reimplemeted for internal reasons. The API is unaffected.
      */
-    virtual K3bDevice::Device* addDevice( const Solid::Device& solidDev );
+    virtual Device::Device* addDevice( const Solid::Device& solidDev );
     virtual void removeDevice( const Solid::Device& solidDev );
 
     class Private;
     Private* const d;
 };
+}
 
 #endif

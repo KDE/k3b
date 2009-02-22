@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,22 +17,27 @@
 #define _K3B_STRING_UTILS_H_
 
 #include <qstring.h>
+#include <kdemacros.h>
 
 class QFontMetrics;
 
 namespace K3b
 {
-  /**
-   * Cuts the text at the end.
-   * Example: "some long text" -> "some lo..."
-   */
-  QString cutToWidth( const QFontMetrics&, const QString&, int );
+    /**
+     * Cuts the text at the end.
+     * Example: "some long text" -> "some lo..."
+     *
+     * \deprecated Use QFontMetrics::elideText
+     */
+    KDE_DEPRECATED QString cutToWidth( const QFontMetrics&, const QString&, int );
 
-  /**
-   * squeezes the text.
-   * Example: "some long text" -> "some...ext"
-   */
-  QString squeezeTextToWidth( const QFontMetrics& fm, const QString& fullText, int cutWidth );
+    /**
+     * squeezes the text.
+     * Example: "some long text" -> "some...ext"
+     *
+     * \deprecated Use QFontMetrics::elideText
+     */
+    KDE_DEPRECATED QString squeezeTextToWidth( const QFontMetrics& fm, const QString& fullText, int cutWidth );
 }
 
 #endif

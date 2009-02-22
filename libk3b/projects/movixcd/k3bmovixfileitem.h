@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -18,34 +18,35 @@
 
 #include <k3bfileitem.h>
 
-class K3bMovixDoc;
+namespace K3b {
+    class MovixDoc;
 
+    class MovixFileItem : public FileItem
+    {
+    public:
+        MovixFileItem( const QString& fileName, MovixDoc* doc, DirItem* dir, const QString& k3bName = 0 );
+        ~MovixFileItem();
 
-class K3bMovixFileItem : public K3bFileItem
-{
- public:
-  K3bMovixFileItem( const QString& fileName, K3bMovixDoc* doc, K3bDirItem* dir, const QString& k3bName = 0 );
-  ~K3bMovixFileItem();
+        FileItem* subTitleItem() const { return m_subTitleItem; }
+        void setSubTitleItem( FileItem* i ) { m_subTitleItem = i; }
 
-  K3bFileItem* subTitleItem() const { return m_subTitleItem; }
-  void setSubTitleItem( K3bFileItem* i ) { m_subTitleItem = i; }
+        /**
+         * reimplemented from DataItem
+         * also renames the subTitleItem
+         */
+        void setK3bName( const QString& );
 
-  /**
-   * reimplemented from K3bDataItem
-   * also renames the subTitleItem
-   */
-  void setK3bName( const QString& );
+        /**
+         * returnes the name that the subtitle file must have in
+         * order to work with mplayer
+         */
+        static QString subTitleFileName( const QString& );
 
-  /**
-   * returnes the name that the subtitle file must have in
-   * order to work with mplayer
-   */
-  static QString subTitleFileName( const QString& );
+    private:
+        MovixDoc* m_doc;
 
- private:
-  K3bMovixDoc* m_doc;
-
-  K3bFileItem* m_subTitleItem;
-};
+        FileItem* m_subTitleItem;
+    };
+}
 
 #endif

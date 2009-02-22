@@ -24,19 +24,19 @@
 #include <QtCore/QTimer>
 
 
-static QList<K3bThread*> s_threads;
+static QList<K3b::Thread*> s_threads;
 
 
 
-class K3bThread::Private
+class K3b::Thread::Private
 {
 public:
-    K3bThreadJob* parentJob;
+    K3b::ThreadJob* parentJob;
     bool success;
 };
 
 
-K3bThread::K3bThread( K3bThreadJob* parent )
+K3b::Thread::Thread( K3b::ThreadJob* parent )
     : QThread( parent )
 {
     d = new Private;
@@ -46,14 +46,14 @@ K3bThread::K3bThread( K3bThreadJob* parent )
 }
 
 
-K3bThread::~K3bThread()
+K3b::Thread::~Thread()
 {
     s_threads.removeAll(this);
     delete d;
 }
 
 
-void K3bThread::run()
+void K3b::Thread::run()
 {
     // default to false in case we need to terminate
     d->success = false;
@@ -63,20 +63,20 @@ void K3bThread::run()
 }
 
 
-bool K3bThread::success() const
+bool K3b::Thread::success() const
 {
     return d->success;
 }
 
 
-void K3bThread::ensureDone()
+void K3b::Thread::ensureDone()
 {
     // we wait for 5 seconds before we terminate the thread
     QTimer::singleShot( 5000, this, SLOT( slotEnsureDoneTimeout() ) );
 }
 
 
-void K3bThread::slotEnsureDoneTimeout()
+void K3b::Thread::slotEnsureDoneTimeout()
 {
     if ( isRunning() ) {
         terminate();
@@ -85,9 +85,9 @@ void K3bThread::slotEnsureDoneTimeout()
 }
 
 
-void K3bThread::waitUntilFinished()
+void K3b::Thread::waitUntilFinished()
 {
-    foreach( K3bThread* thread, s_threads ) {
+    foreach( K3b::Thread* thread, s_threads ) {
         kDebug() << "Waiting for thread " << thread << endl;
         thread->wait();
     }

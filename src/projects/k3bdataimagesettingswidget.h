@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -15,46 +15,42 @@
 #ifndef K3B_DATAIMAGE_SETTINGS_WIDGET_H
 #define K3B_DATAIMAGE_SETTINGS_WIDGET_H
 
+#include <QtGui/QWidget>
 
 #include "ui_base_k3bdataimagesettings.h"
 
-class K3bIsoOptions;
+namespace K3b {
 
-class base_K3bDataImageSettings : public QWidget, public Ui::base_K3bDataImageSettings
-{
-public:
-  base_K3bDataImageSettings( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
-};
+    class IsoOptions;
 
-class K3bDataImageSettingsWidget : public base_K3bDataImageSettings
-{
-  Q_OBJECT
+    class DataImageSettingsWidget : public QWidget, public Ui::base_K3bDataImageSettings
+    {
+        Q_OBJECT
 
- public:
-  K3bDataImageSettingsWidget( QWidget* parent = 0 );
-  ~K3bDataImageSettingsWidget();
+    public:
+        DataImageSettingsWidget( QWidget* parent = 0 );
+        ~DataImageSettingsWidget();
 
-  void load( const K3bIsoOptions& );
-  void save( K3bIsoOptions& );
+        void load( const IsoOptions& );
+        void save( IsoOptions& );
 
-  void showFileSystemOptions( bool );
+        void showFileSystemOptions( bool );
 
- private Q_SLOTS:
-  void slotSpaceHandlingChanged( int i );
-  void slotCustomFilesystems();
-  void slotMoreVolDescFields();
-  void slotFilesystemsChanged();
+    private Q_SLOTS:
+        void slotSpaceHandlingChanged( int i );
+        void slotCustomFilesystems();
+        void slotMoreVolDescFields();
+        void slotFilesystemsChanged();
 
- private:
-  class CustomFilesystemsDialog;
-  class VolumeDescDialog;
-  CustomFilesystemsDialog* m_customFsDlg;
-  VolumeDescDialog* m_volDescDlg;
+    private:
+        class CustomFilesystemsDialog;
+        class VolumeDescDialog;
+        CustomFilesystemsDialog* m_customFsDlg;
+        VolumeDescDialog* m_volDescDlg;
 
-  bool m_fileSystemOptionsShown;
-};
+        bool m_fileSystemOptionsShown;
+    };
+}
 
 
 #endif

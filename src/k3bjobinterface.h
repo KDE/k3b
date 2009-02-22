@@ -17,7 +17,9 @@
 
 #include <qobject.h>
 
-class K3bJob;
+namespace K3b {
+    class Job;
+}
 
 
 /**
@@ -26,15 +28,16 @@ class K3bJob;
  * This may be used for example in a karamba theme with a non-volitile
  * DCOP connection.
  */
-class K3bJobInterface : public QObject, public DCOPObject
+namespace K3b {
+class JobInterface : public QObject, public DCOPObject
 {
   Q_OBJECT
   K_DCOP
 
  public:
-  K3bJobInterface( QObject* parent );
+  JobInterface( QObject* parent );
 
-  void setJob( K3bJob* );
+  void setJob( Job* );
 
  k_dcop:
   bool jobRunning() const;
@@ -71,10 +74,11 @@ class K3bJobInterface : public QObject, public DCOPObject
   void slotDestroyed();
 
  private:
-  K3bJob* m_job;
+  Job* m_job;
 
   int m_lastProgress;
   int m_lastSubProgress;
 };
+}
 
 #endif

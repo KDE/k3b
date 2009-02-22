@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -18,39 +18,32 @@
 
 #include "ui_base_k3bcddbpatternwidget.h"
 
+namespace K3b {
+    class CddbPatternWidget : public QWidget, public Ui::base_K3bCddbPatternWidget
+    {
+        Q_OBJECT
 
-class base_K3bCddbPatternWidget : public QWidget, public Ui::base_K3bCddbPatternWidget
-{
-public:
-  base_K3bCddbPatternWidget( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
-};
+    public:
+        CddbPatternWidget( QWidget* parent = 0 );
+        ~CddbPatternWidget();
 
-class K3bCddbPatternWidget : public base_K3bCddbPatternWidget
-{
-  Q_OBJECT
+        QString filenamePattern() const;
+        QString playlistPattern() const;
+        QString blankReplaceString() const;
+        bool replaceBlanks() const;
 
- public:
-  K3bCddbPatternWidget( QWidget* parent = 0 );
-  ~K3bCddbPatternWidget();
+    Q_SIGNALS:
+        void changed();
 
-  QString filenamePattern() const;
-  QString playlistPattern() const;
-  QString blankReplaceString() const;
-  bool replaceBlanks() const;
+    public Q_SLOTS:
+        void loadConfig( const KConfigGroup & );
+        void saveConfig( KConfigGroup );
+        void loadDefaults();
 
-  Q_SIGNALS:
-  void changed();
-
- public Q_SLOTS:
-  void loadConfig( const KConfigGroup & );
-  void saveConfig( KConfigGroup );
-  void loadDefaults();
-
- private Q_SLOTS:
-  void slotSeeSpecialStrings();
-  void slotSeeConditionalInclusion();
-};
+    private Q_SLOTS:
+        void slotSeeSpecialStrings();
+        void slotSeeConditionalInclusion();
+    };
+}
 
 #endif

@@ -22,29 +22,36 @@
 namespace K3b {
     class Msf;
 }
-class K3bAudioTrack;
-class K3bAudioEditorWidget;
-class K3bMsfEdit;
+namespace K3b {
+    class AudioTrack;
+}
+namespace K3b {
+    class AudioEditorWidget;
+}
+namespace K3b {
+    class MsfEdit;
+}
 class KMenu;
 
 
 /**
- * Internally used by K3bAudioTrackView to get an msf value from the user.
+ * Internally used by AudioTrackView to get an msf value from the user.
  */
-class K3bAudioTrackSplitDialog : public KDialog
+namespace K3b {
+class AudioTrackSplitDialog : public KDialog
 {
     Q_OBJECT
 
 public:
-    K3bAudioTrackSplitDialog( K3bAudioTrack*, QWidget* parent = 0 );
-    ~K3bAudioTrackSplitDialog();
+    AudioTrackSplitDialog( AudioTrack*, QWidget* parent = 0 );
+    ~AudioTrackSplitDialog();
 
     bool eventFilter( QObject* o, QEvent* e );
 
     /**
      * if this method returns true val is filled with the user selected value.
      */
-    static void splitTrack( K3bAudioTrack* track, QWidget* parent = 0 );
+    static void splitTrack( AudioTrack* track, QWidget* parent = 0 );
 
 private Q_SLOTS:
     void slotRangeModified( int, const K3b::Msf& start, const K3b::Msf& );
@@ -57,12 +64,13 @@ private Q_SLOTS:
 private:
     void setupActions();
 
-    K3bAudioEditorWidget* m_editorWidget;
-    K3bMsfEdit* m_msfEditStart;
-    K3bMsfEdit* m_msfEditEnd;
-    K3bAudioTrack* m_track;
+    AudioEditorWidget* m_editorWidget;
+    MsfEdit* m_msfEditStart;
+    MsfEdit* m_msfEditEnd;
+    AudioTrack* m_track;
     KMenu* m_popupMenu;
     QPoint m_lastClickPosition;
 };
+}
 
 #endif

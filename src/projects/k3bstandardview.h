@@ -40,15 +40,18 @@
 class QAbstractItemModel;
 class QTreeView;
 class QSplitter;
-class K3bDirProxyModel;
+namespace K3b {
+    class DirProxyModel;
+}
 
-class K3bStandardView : public K3bView
+namespace K3b {
+class StandardView : public View
 {
     Q_OBJECT
 
 public:
-    K3bStandardView(K3bDoc* doc, QWidget* parent=0);
-    virtual ~K3bStandardView();
+    StandardView(Doc* doc, QWidget* parent=0);
+    virtual ~StandardView();
 
 protected:
     /**
@@ -114,9 +117,10 @@ private:
     QTreeView* m_dirView;
     QTreeView* m_fileView;
     QSplitter* m_splitter;
-    K3bDirProxyModel* m_dirProxy;
+    DirProxyModel* m_dirProxy;
     QModelIndexList m_currentSelection;
 };
+}
 
 
 #endif

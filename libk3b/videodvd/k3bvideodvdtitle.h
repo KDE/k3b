@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2006-2007 Sebastian Trueg <trueg@k3b.org>
  *
@@ -26,86 +26,88 @@
 #include <qvector.h>
 
 
-namespace K3bVideoDVD
-{
-    class LIBK3B_EXPORT Title
+namespace K3b {
+    namespace VideoDVD
     {
-    public:
-	Title() {}
-    
-	unsigned int titleNumber() const { return m_titleNum; }
-      
-	/**
-	 * \return The number of PTTs (Part of Title), commonly known
-	 *         as chapters
-	 */
-	unsigned int numPTTs() const { return m_numPTTs; }
+        class LIBK3B_EXPORT Title
+        {
+        public:
+            Title() {}
 
-	/**
-	 * This method is just here for convenience. It returns the same as the above.
-	 */
-	unsigned int numChapters() const { return m_numPTTs; }
-	unsigned int numAngles() const { return m_numAngles; }
+            unsigned int titleNumber() const { return m_titleNum; }
 
-	/**
-	 * \return The number of the titleset this title is a part of.
-	 */
-	unsigned int titleSet() const { return m_titleSet; }
+            /**
+             * \return The number of PTTs (Part of Title), commonly known
+             *         as chapters
+             */
+            unsigned int numPTTs() const { return m_numPTTs; }
 
-	/**
-	 * \return Number of the title in it's titleset.
-	 */
-	unsigned int ttn() const { return m_ttn; }
-      
-	unsigned int numAudioStreams() const { return m_audioStreams.count(); }
-	unsigned int numSubPictureStreams() const { return m_subPictureStreams.count(); }
-      
-	const VideoStream& videoStream() const { return m_videoStream; }
-	const AudioStream& audioStream( unsigned int i ) const { return m_audioStreams[i]; }
-	const SubPictureStream& subPictureStream( unsigned int i ) const { return m_subPictureStreams[i]; }
+            /**
+             * This method is just here for convenience. It returns the same as the above.
+             */
+            unsigned int numChapters() const { return m_numPTTs; }
+            unsigned int numAngles() const { return m_numAngles; }
 
-	/**
-	 * Access to the PTTs of the title
-	 */
-	const PTT& operator[]( int i ) const { return ptt( i ); }
+            /**
+             * \return The number of the titleset this title is a part of.
+             */
+            unsigned int titleSet() const { return m_titleSet; }
 
-	/**
-	 * Access to the PTTs of the title
-	 */
-	const PTT& ptt( int i ) const { return m_ptts[i]; }
+            /**
+             * \return Number of the title in it's titleset.
+             */
+            unsigned int ttn() const { return m_ttn; }
 
-	/**
-	 * Access to the PTTs (chapters) of the title
-	 */
-	const PTT& chapter( int i ) const { return ptt( i ); }
+            unsigned int numAudioStreams() const { return m_audioStreams.count(); }
+            unsigned int numSubPictureStreams() const { return m_subPictureStreams.count(); }
 
-	const Time& playbackTime() const { return m_playbackTime; }
+            const VideoStream& videoStream() const { return m_videoStream; }
+            const AudioStream& audioStream( unsigned int i ) const { return m_audioStreams[i]; }
+            const SubPictureStream& subPictureStream( unsigned int i ) const { return m_subPictureStreams[i]; }
 
-	/**
-	 * \return A video capture
-	 */
-	//      QBitmap videoCapture( const Time& ) const;
-      
-    private:
-	unsigned int m_titleNum;
-	unsigned int m_numPTTs;
-	unsigned int m_titleSet;
-	// FIXME: find a proper name for ttn
-	unsigned int m_ttn;
-	unsigned int m_numAngles;
+            /**
+             * Access to the PTTs of the title
+             */
+            const PTT& operator[]( int i ) const { return ptt( i ); }
 
-	Time m_playbackTime;
-      
-	VideoStream m_videoStream;
-	QVector<AudioStream> m_audioStreams;
-	QVector<SubPictureStream> m_subPictureStreams;
+            /**
+             * Access to the PTTs of the title
+             */
+            const PTT& ptt( int i ) const { return m_ptts[i]; }
 
-	QVector<PTT> m_ptts;
+            /**
+             * Access to the PTTs (chapters) of the title
+             */
+            const PTT& chapter( int i ) const { return ptt( i ); }
 
-	//      VideoDVD* m_videoDVD;
+            const Time& playbackTime() const { return m_playbackTime; }
 
-	friend class VideoDVD;
-    };
+            /**
+             * \return A video capture
+             */
+            //      QBitmap videoCapture( const Time& ) const;
+
+        private:
+            unsigned int m_titleNum;
+            unsigned int m_numPTTs;
+            unsigned int m_titleSet;
+            // FIXME: find a proper name for ttn
+            unsigned int m_ttn;
+            unsigned int m_numAngles;
+
+            Time m_playbackTime;
+
+            VideoStream m_videoStream;
+            QVector<AudioStream> m_audioStreams;
+            QVector<SubPictureStream> m_subPictureStreams;
+
+            QVector<PTT> m_ptts;
+
+            //      VideoDVD* m_videoDVD;
+
+            friend class VideoDVD;
+        };
+    }
 }
 
 #endif

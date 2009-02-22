@@ -22,7 +22,7 @@
 class KIcon;
 
 // TODO: * implement the mimestuff
-//       * Have a K3bMetaItemView which allows to set delegates for submodel header painting
+//       * Have a MetaItemView which allows to set delegates for submodel header painting
 //       * implement something like modelHeaderData() to get data for the root elements
 
 /**
@@ -32,13 +32,14 @@ class KIcon;
  * Usage is very simple: just call addSubModel for each 
  * model that should be added to the meta model.
  */
-class K3bMetaItemModel : public QAbstractItemModel
+namespace K3b {
+class MetaItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
-    K3bMetaItemModel( QObject* parent = 0 );
-    ~K3bMetaItemModel();
+    MetaItemModel( QObject* parent = 0 );
+    ~MetaItemModel();
 
     QAbstractItemModel* subModelForIndex( const QModelIndex& index ) const;
 
@@ -81,7 +82,7 @@ public:
 
 public Q_SLOTS:
     /**
-     * K3bPlacesModel takes over ownership of model.
+     * PlacesModel takes over ownership of model.
      * FIXME: name and icon are weird parameters here
      *
      * \param model The submodel to be added.
@@ -108,5 +109,6 @@ private:
     class Private;
     Private* const d;
 };
+}
 
 #endif

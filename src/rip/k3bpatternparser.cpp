@@ -26,7 +26,7 @@
 #include <libkcddb/cdinfo.h>
 
 
-QString K3bPatternParser::parsePattern( const KCDDB::CDInfo& entry,
+QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
                                         int trackNumber,
                                         const QString& pattern,
                                         bool replace,

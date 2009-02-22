@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2004-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -17,42 +17,44 @@
 
 #include <k3bthreadjob.h>
 
-class K3bAudioDoc;
+namespace K3b {
+    class AudioDoc;
 
-class K3bAudioImager : public K3bThreadJob
-{
-    Q_OBJECT
+    class AudioImager : public ThreadJob
+    {
+        Q_OBJECT
 
-public:
-    K3bAudioImager( K3bAudioDoc*, K3bJobHandler*, QObject* parent = 0 );
-    ~K3bAudioImager();
+    public:
+        AudioImager( AudioDoc*, JobHandler*, QObject* parent = 0 );
+        ~AudioImager();
 
-    /**
-     * the data gets written directly into fd instead of the imagefile.
-     * Be aware that this only makes sense before starting the job.
-     * To disable just set fd to -1
-     */
-    void writeToFd( int fd );
+        /**
+         * the data gets written directly into fd instead of the imagefile.
+         * Be aware that this only makes sense before starting the job.
+         * To disable just set fd to -1
+         */
+        void writeToFd( int fd );
 
-    /**
-     * Image path. Should be an empty directory or a non-existing
-     * directory in which case it will be created.
-     */
-    void setImageFilenames( const QStringList& p );
+        /**
+         * Image path. Should be an empty directory or a non-existing
+         * directory in which case it will be created.
+         */
+        void setImageFilenames( const QStringList& p );
 
-    enum ErrorType {
-        ERROR_FD_WRITE,
-        ERROR_DECODING_TRACK,
-        ERROR_UNKNOWN
+        enum ErrorType {
+            ERROR_FD_WRITE,
+            ERROR_DECODING_TRACK,
+            ERROR_UNKNOWN
+        };
+
+        ErrorType lastErrorType() const;
+
+    private:
+        bool run();
+
+        class Private;
+        Private* const d;
     };
-
-    ErrorType lastErrorType() const;
-
-private:
-    bool run();
-
-    class Private;
-    Private* const d;
-};
+}
 
 #endif

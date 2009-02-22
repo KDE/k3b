@@ -24,7 +24,7 @@
 #include <QtCore/QMutex>
 
 
-class K3bThreadWidget::Data
+class K3b::ThreadWidget::Data
 {
 public:
     int id;
@@ -33,7 +33,7 @@ public:
 };
 
 
-class K3bThreadWidget::DeviceSelectionEvent : public QEvent
+class K3b::ThreadWidget::DeviceSelectionEvent : public QEvent
 {
 public:
     DeviceSelectionEvent( QWidget* parent, const QString& text, int id )
@@ -54,10 +54,10 @@ private:
 };
 
 
-K3bThreadWidget* K3bThreadWidget::s_instance = 0;
+K3b::ThreadWidget* K3b::ThreadWidget::s_instance = 0;
 
 
-K3bThreadWidget::K3bThreadWidget()
+K3b::ThreadWidget::ThreadWidget()
     : QObject(),
       m_idCounter(1)
 {
@@ -65,14 +65,14 @@ K3bThreadWidget::K3bThreadWidget()
 }
 
 
-K3bThreadWidget::~K3bThreadWidget()
+K3b::ThreadWidget::~ThreadWidget()
 {
     qDeleteAll( m_dataMap );
     s_instance = 0;
 }
 
 
-int K3bThreadWidget::getNewId()
+int K3b::ThreadWidget::getNewId()
 {
     // create new data
     Data* data = new Data;
@@ -83,36 +83,36 @@ int K3bThreadWidget::getNewId()
 }
 
 
-void K3bThreadWidget::clearId( int id )
+void K3b::ThreadWidget::clearId( int id )
 {
     m_dataMap.remove( id );
 }
 
 
-K3bThreadWidget::Data* K3bThreadWidget::data( int id )
+K3b::ThreadWidget::Data* K3b::ThreadWidget::data( int id )
 {
     return m_dataMap[id];
 }
 
 
-K3bThreadWidget* K3bThreadWidget::instance()
+K3b::ThreadWidget* K3b::ThreadWidget::instance()
 {
     if( !s_instance )
-        s_instance = new K3bThreadWidget();
+        s_instance = new K3b::ThreadWidget();
     return s_instance;
 }
 
 
 // static
-K3bDevice::Device* K3bThreadWidget::selectDevice( QWidget* parent,
+K3b::Device::Device* K3b::ThreadWidget::selectDevice( QWidget* parent,
                                                   const QString& text )
 {
     // request a new data set
-    Data* data = K3bThreadWidget::instance()->data( K3bThreadWidget::instance()->getNewId() );
+    Data* data = K3b::ThreadWidget::instance()->data( K3b::ThreadWidget::instance()->getNewId() );
 
     // inform the instance about the request
-    QApplication::postEvent( K3bThreadWidget::instance(),
-                             new K3bThreadWidget::DeviceSelectionEvent( parent, text, data->id ) );
+    QApplication::postEvent( K3b::ThreadWidget::instance(),
+                             new K3b::ThreadWidget::DeviceSelectionEvent( parent, text, data->id ) );
 
     // wait for the result to be ready
     QMutex mutex;
@@ -120,20 +120,20 @@ K3bDevice::Device* K3bThreadWidget::selectDevice( QWidget* parent,
     data->con.wait( &mutex );
     mutex.unlock();
 
-    K3bDevice::Device* dev = static_cast<K3bDevice::Device*>( data->data );
+    K3b::Device::Device* dev = static_cast<K3b::Device::Device*>( data->data );
 
     // delete the no longer needed data
-    K3bThreadWidget::instance()->clearId( data->id );
+    K3b::ThreadWidget::instance()->clearId( data->id );
 
     return dev;
 }
 
 
-void K3bThreadWidget::customEvent( QEvent* e )
+void K3b::ThreadWidget::customEvent( QEvent* e )
 {
     if( DeviceSelectionEvent* dse = dynamic_cast<DeviceSelectionEvent*>(e) ) {
         // create dialog
-        K3bDevice::Device* dev = K3bDeviceSelectionDialog::selectDevice( dse->parent(), dse->text() );
+        K3b::Device::Device* dev = K3b::DeviceSelectionDialog::selectDevice( dse->parent(), dse->text() );
 
         // return it to the thread
         Data* dat = data( dse->id() );

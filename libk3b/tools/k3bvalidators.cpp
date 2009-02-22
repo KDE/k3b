@@ -18,14 +18,14 @@
 #include <ctype.h>
 
 
-K3bCharValidator::K3bCharValidator( QObject* parent )
+K3b::CharValidator::CharValidator( QObject* parent )
   : QValidator( parent ),
     m_replaceChar( '_' )
 {
 }
 
 
-QValidator::State K3bCharValidator::validate( QString& s, int& pos ) const
+QValidator::State K3b::CharValidator::validate( QString& s, int& pos ) const
 {
   Q_UNUSED(pos);
 
@@ -39,7 +39,7 @@ QValidator::State K3bCharValidator::validate( QString& s, int& pos ) const
 }
 
 
-void K3bCharValidator::fixup( QString& s ) const
+void K3b::CharValidator::fixup( QString& s ) const
 {
   for( int i = 0; i < s.length(); ++i ) {
     if( validateChar( s[i] ) != Acceptable )
@@ -48,13 +48,13 @@ void K3bCharValidator::fixup( QString& s ) const
 }
 
 
-K3bLatin1Validator::K3bLatin1Validator( QObject* parent )
-  : K3bCharValidator( parent )
+K3b::Latin1Validator::Latin1Validator( QObject* parent )
+  : K3b::CharValidator( parent )
 {
 }
 
 
-QValidator::State K3bLatin1Validator::validateChar( const QChar& c ) const
+QValidator::State K3b::Latin1Validator::validateChar( const QChar& c ) const
 {
   if( !c.toLatin1() )
     return Invalid;
@@ -63,15 +63,15 @@ QValidator::State K3bLatin1Validator::validateChar( const QChar& c ) const
 }
 
 
-K3bAsciiValidator::K3bAsciiValidator( QObject* parent )
-  : K3bLatin1Validator( parent )
+K3b::AsciiValidator::AsciiValidator( QObject* parent )
+  : K3b::Latin1Validator( parent )
 {
 }
 
 
-QValidator::State K3bAsciiValidator::validateChar( const QChar& c ) const
+QValidator::State K3b::AsciiValidator::validateChar( const QChar& c ) const
 {
-  if( K3bLatin1Validator::validateChar( c ) == Invalid )
+  if( K3b::Latin1Validator::validateChar( c ) == Invalid )
     return Invalid;
   else if( !isascii( c.toLatin1() ) )
     return Invalid;
@@ -81,21 +81,21 @@ QValidator::State K3bAsciiValidator::validateChar( const QChar& c ) const
 
 
 
-K3bValidator::K3bValidator( QObject* parent )
+K3b::Validator::Validator( QObject* parent )
   : QRegExpValidator( parent ),
     m_replaceChar('_')
 {
 }
 
 
-K3bValidator::K3bValidator( const QRegExp& rx, QObject* parent )
+K3b::Validator::Validator( const QRegExp& rx, QObject* parent )
   : QRegExpValidator( rx, parent ),
     m_replaceChar('_')
 {
 }
 
 
-void K3bValidator::fixup( QString& input ) const
+void K3b::Validator::fixup( QString& input ) const
 {
   for( int i = 0; i < input.length(); ++i )
     if( !regExp().exactMatch( input.mid(i, 1) ) )
@@ -103,7 +103,7 @@ void K3bValidator::fixup( QString& input ) const
 }
 
 
-QString K3bValidators::fixup( const QString& input, const QRegExp& rx, const QChar& replaceChar )
+QString K3b::Validators::fixup( const QString& input, const QRegExp& rx, const QChar& replaceChar )
 {
   QString s;
   for( int i = 0; i < input.length(); ++i )
@@ -115,22 +115,22 @@ QString K3bValidators::fixup( const QString& input, const QRegExp& rx, const QCh
 }
 
 
-K3bValidator* K3bValidators::isrcValidator( QObject* parent )
+K3b::Validator* K3b::Validators::isrcValidator( QObject* parent )
 {
-  return new K3bValidator( QRegExp("^[A-Z\\d]{2,2}-[A-Z\\d]{3,3}-\\d{2,2}-\\d{5,5}$"), parent );
+  return new K3b::Validator( QRegExp("^[A-Z\\d]{2,2}-[A-Z\\d]{3,3}-\\d{2,2}-\\d{5,5}$"), parent );
 }
 
 
-K3bValidator* K3bValidators::iso9660Validator( bool allowEmpty, QObject* parent )
+K3b::Validator* K3b::Validators::iso9660Validator( bool allowEmpty, QObject* parent )
 {
   if( allowEmpty )
-    return new K3bValidator( QRegExp( "[^/]*" ), parent );
+    return new K3b::Validator( QRegExp( "[^/]*" ), parent );
   else
-    return new K3bValidator( QRegExp( "[^/]+" ), parent );
+    return new K3b::Validator( QRegExp( "[^/]+" ), parent );
 }
 
 
-K3bValidator* K3bValidators::iso646Validator( int type, bool AllowLowerCase, QObject* parent )
+K3b::Validator* K3b::Validators::iso646Validator( int type, bool AllowLowerCase, QObject* parent )
 {
   QRegExp rx;
   switch ( type ) {
@@ -149,5 +149,5 @@ K3bValidator* K3bValidators::iso646Validator( int type, bool AllowLowerCase, QOb
     break;
   }
 
-  return new K3bValidator( rx, parent );
+  return new K3b::Validator( rx, parent );
 }

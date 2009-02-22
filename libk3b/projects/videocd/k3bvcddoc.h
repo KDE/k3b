@@ -30,33 +30,33 @@
 // K3b Includes
 #include "k3bvcdoptions.h"
 #include "mpeginfo/k3bmpeginfo.h"
-#include <k3bdoc.h>
+#include "k3bdoc.h"
 #include "k3b_export.h"
-class K3bVcdTrack;
-//class K3bView;
+
 class QTimer;
 class QDomElement;
 
+namespace K3b {
+    class VcdTrack;
 
-
-class LIBK3B_EXPORT K3bVcdDoc : public K3bDoc
-{
+    class LIBK3B_EXPORT VcdDoc : public Doc
+    {
         Q_OBJECT
 
     public:
-        K3bVcdDoc( QObject* );
-        ~K3bVcdDoc();
+        VcdDoc( QObject* );
+        ~VcdDoc();
 
-	int type() const { return VCD; }
+        int type() const { return VCD; }
 
-	int supportedMediaTypes() const;
+        int supportedMediaTypes() const;
 
-	QString name() const;
+        QString name() const;
 
         enum vcdTypes { VCD11, VCD20, SVCD10, HQVCD, NONE};
 
         bool newDocument();
-	void clear();
+        void clear();
 
         int numOfTracks() const
         {
@@ -72,42 +72,42 @@ class LIBK3B_EXPORT K3bVcdDoc : public K3bDoc
             m_vcdImage = s;
         }
 
-/*         K3bVcdTrack* first() */
+/*         VcdTrack* first() */
 /*         { */
 /*             return m_tracks->first(); */
 /*         } */
-/*         K3bVcdTrack* current() const */
+/*         VcdTrack* current() const */
 /*         { */
 /*             return m_tracks->current(); */
 /*         } */
-/*         K3bVcdTrack* next() */
+/*         VcdTrack* next() */
 /*         { */
 /*             return m_tracks->next(); */
 /*         } */
-/*         K3bVcdTrack* prev() */
+/*         VcdTrack* prev() */
 /*         { */
 /*             return m_tracks->prev(); */
 /*         } */
-        K3bVcdTrack* at( uint i )
+        VcdTrack* at( uint i )
         {
             return m_tracks->at( i );
         }
-/*         K3bVcdTrack* take( uint i ) */
+/*         VcdTrack* take( uint i ) */
 /*         { */
 /*             return m_tracks->take( i ); */
 /*         } */
 
-	const QList<K3bVcdTrack*>* tracks() const
+        const QList<VcdTrack*>* tracks() const
         {
             return m_tracks;
         }
 
         /** get the current size of the project */
         KIO::filesize_t size() const;
-        K3b::Msf length() const;
+        Msf length() const;
 
-        K3bBurnJob* newBurnJob( K3bJobHandler* hdl, QObject* parent );
-        K3bVcdOptions* vcdOptions() const
+        BurnJob* newBurnJob( JobHandler* hdl, QObject* parent );
+        VcdOptions* vcdOptions() const
         {
             return m_vcdOptions;
         }
@@ -130,31 +130,31 @@ class LIBK3B_EXPORT K3bVcdDoc : public K3bDoc
         void addTrack( const KUrl&, uint );
         void addTracks( const KUrl::List&, uint );
         /** adds a track without any testing */
-        void addTrack( K3bVcdTrack* track, uint position = 0 );
+        void addTrack( VcdTrack* track, uint position = 0 );
 
-        // --- TODO: this should read: removeTrack( K3bVcdTrack* )
-        void removeTrack( K3bVcdTrack* );
-        void moveTrack( K3bVcdTrack* track, K3bVcdTrack* after );
+        // --- TODO: this should read: removeTrack( VcdTrack* )
+        void removeTrack( VcdTrack* );
+        void moveTrack( VcdTrack* track, VcdTrack* after );
 
     protected Q_SLOTS:
         /** processes queue "urlsToAdd" **/
         void slotWorkUrlQueue();
 
-     Q_SIGNALS:
+    Q_SIGNALS:
         void newTracks();
 
-        void trackRemoved( K3bVcdTrack* );
+        void trackRemoved( VcdTrack* );
 
     protected:
-        /** reimplemented from K3bDoc */
+        /** reimplemented from Doc */
         bool loadDocumentData( QDomElement* root );
-        /** reimplemented from K3bDoc */
+        /** reimplemented from Doc */
         bool saveDocumentData( QDomElement* );
 
         QString typeString() const;
 
     private:
-        K3bVcdTrack* createTrack( const KUrl& url );
+        VcdTrack* createTrack( const KUrl& url );
         void informAboutNotFoundFiles();
 
         QStringList m_notFoundFiles;
@@ -162,29 +162,30 @@ class LIBK3B_EXPORT K3bVcdDoc : public K3bDoc
 
         class PrivateUrlToAdd
         {
-            public:
-                PrivateUrlToAdd( const KUrl& u, int _pos )
-                        : url( u ), position( _pos )
-                {}
-                KUrl url;
-                int position;
+        public:
+            PrivateUrlToAdd( const KUrl& u, int _pos )
+                : url( u ), position( _pos )
+            {}
+            KUrl url;
+            int position;
         };
 
         /** Holds all the urls that have to be added to the list of tracks. **/
         QQueue<PrivateUrlToAdd*> urlsToAdd;
         QTimer* m_urlAddingTimer;
 
-        QList<K3bVcdTrack*>* m_tracks;
+        QList<VcdTrack*>* m_tracks;
         KIO::filesize_t calcTotalSize() const;
         KIO::filesize_t ISOsize() const;
 
         bool isImage( const KUrl& url );
 
-        K3bVcdTrack* m_lastAddedTrack;
-        K3bVcdOptions* m_vcdOptions;
+        VcdTrack* m_lastAddedTrack;
+        VcdOptions* m_vcdOptions;
 
         int m_vcdType;
         int lastAddedPosition;
-};
+    };
+}
 
 #endif

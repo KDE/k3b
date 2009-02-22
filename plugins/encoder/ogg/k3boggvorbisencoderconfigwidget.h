@@ -27,7 +27,7 @@ public:
     }
 };
 
-class K3bOggVorbisEncoderSettingsWidget : public K3bPluginConfigWidget
+class K3bOggVorbisEncoderSettingsWidget : public K3b::PluginConfigWidget
 {
     Q_OBJECT
 

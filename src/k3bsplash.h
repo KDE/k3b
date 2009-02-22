@@ -24,13 +24,14 @@ class QPaintEvent;
 class QString;
 
 
-class K3bSplash : public KVBox
+namespace K3b {
+class Splash : public KVBox
 {
     Q_OBJECT
 
 public:
-    K3bSplash( QWidget* parent = 0 );
-    ~K3bSplash();
+    Splash( QWidget* parent = 0 );
+    ~Splash();
 
 public Q_SLOTS:
     void show();
@@ -43,5 +44,6 @@ protected:
 private:
     QLabel* m_infoBox;
 };
+}
 
 #endif

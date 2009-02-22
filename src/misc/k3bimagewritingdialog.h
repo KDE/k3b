@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * $Id$
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
@@ -19,19 +19,12 @@
 
 #include <k3binteractiondialog.h>
 
-class QCheckBox;
-class K3bWriterSelectionWidget;
-class QLabel;
-class KUrl;
-class K3bDataModeWidget;
-class K3bWritingModeWidget;
-class K3bTempDirSelectionWidget;
-class KUrlRequester;
-class K3bListView;
 class QSpinBox;
 class QComboBox;
-class K3bIso9660;
-class K3bCueFileParser;
+class QCheckBox;
+class QLabel;
+class KUrl;
+class KUrlRequester;
 class QDragEnterEvent;
 class QDropEvent;
 class K3ListView;
@@ -39,78 +32,88 @@ class Q3ListViewItem;
 class QPoint;
 class KComboBox;
 
+namespace K3b {
+    class WriterSelectionWidget;
+    class DataModeWidget;
+    class WritingModeWidget;
+    class TempDirSelectionWidget;
+    class ListView;
+    class Iso9660;
+    class CueFileParser;
 
-/**
-  *@author Sebastian Trueg
-  */
-class K3bImageWritingDialog : public K3bInteractionDialog
-{
-    Q_OBJECT
 
-public: 
-    K3bImageWritingDialog( QWidget* = 0 );
-    ~K3bImageWritingDialog();
+    /**
+     *@author Sebastian Trueg
+     */
+    class ImageWritingDialog : public InteractionDialog
+    {
+        Q_OBJECT
 
-    void setImage( const KUrl& url );
+    public:
+        ImageWritingDialog( QWidget* = 0 );
+        ~ImageWritingDialog();
 
-protected Q_SLOTS:
-    void slotStartClicked();
+        void setImage( const KUrl& url );
 
-    void slotMd5JobPercent( int );
-    void slotMd5JobFinished( bool );
-    void slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& pos );
+    protected Q_SLOTS:
+        void slotStartClicked();
 
-    void slotUpdateImage( const QString& );
+        void slotMd5JobPercent( int );
+        void slotMd5JobFinished( bool );
+        void slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& pos );
 
-protected:
-    void loadUserDefaults( const KConfigGroup& );
-    void saveUserDefaults( KConfigGroup );
-    void loadK3bDefaults();
+        void slotUpdateImage( const QString& );
 
-    void calculateMd5Sum( const QString& );
-    void dragEnterEvent( QDragEnterEvent* );
-    void dropEvent( QDropEvent* );
+    protected:
+        void loadUserDefaults( const KConfigGroup& );
+        void saveUserDefaults( KConfigGroup );
+        void loadK3bDefaults();
 
-    void init();
+        void calculateMd5Sum( const QString& );
+        void dragEnterEvent( QDragEnterEvent* );
+        void dropEvent( QDropEvent* );
 
-    void toggleAll();
+        void init();
 
-private:
-    enum {
-        IMAGE_UNKNOWN,
-        IMAGE_ISO,
-        IMAGE_CUE_BIN,
-        IMAGE_AUDIO_CUE,
-        IMAGE_CDRDAO_TOC,
-        IMAGE_CDRECORD_CLONE
+        void toggleAll();
+
+    private:
+        enum {
+            IMAGE_UNKNOWN,
+            IMAGE_ISO,
+            IMAGE_CUE_BIN,
+            IMAGE_AUDIO_CUE,
+            IMAGE_CDRDAO_TOC,
+            IMAGE_CDRECORD_CLONE
+        };
+
+        void setupGui();
+        void createIso9660InfoItems( Iso9660* );
+        void createCdrecordCloneItems( const QString&, const QString& );
+        void createCueBinItems( const QString&, const QString& );
+        void createAudioCueItems( const CueFileParser& cp );
+        int currentImageType();
+        QString imagePath() const;
+
+        WriterSelectionWidget* m_writerSelectionWidget;
+        QCheckBox* m_checkDummy;
+        QCheckBox* m_checkNoFix;
+        QCheckBox* m_checkCacheImage;
+        QCheckBox* m_checkVerify;
+        DataModeWidget* m_dataModeWidget;
+        WritingModeWidget* m_writingModeWidget;
+        QSpinBox* m_spinCopies;
+
+        KUrlRequester* m_editImagePath;
+        KComboBox* m_comboRecentImages;
+        QComboBox* m_comboImageType;
+
+        ListView* m_infoView;
+        TempDirSelectionWidget* m_tempDirSelectionWidget;
+
+        class Private;
+        Private* d;
     };
-
-    void setupGui();
-    void createIso9660InfoItems( K3bIso9660* );
-    void createCdrecordCloneItems( const QString&, const QString& );
-    void createCueBinItems( const QString&, const QString& );
-    void createAudioCueItems( const K3bCueFileParser& cp );
-    int currentImageType();
-    QString imagePath() const;
-
-    K3bWriterSelectionWidget* m_writerSelectionWidget;
-    QCheckBox* m_checkDummy;
-    QCheckBox* m_checkNoFix;
-    QCheckBox* m_checkCacheImage;
-    QCheckBox* m_checkVerify;
-    K3bDataModeWidget* m_dataModeWidget;
-    K3bWritingModeWidget* m_writingModeWidget;
-    QSpinBox* m_spinCopies;
-
-    KUrlRequester* m_editImagePath;
-    KComboBox* m_comboRecentImages;
-    QComboBox* m_comboImageType;
-
-    K3bListView* m_infoView;
-    K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
-
-    class Private;
-    Private* d;
-};
+}
 
 #endif

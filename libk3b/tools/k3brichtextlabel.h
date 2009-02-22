@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005 Waldo Bastian <bastian@kde.org>
  *
@@ -19,43 +19,42 @@
 
 #include <k3b_export.h>
 
-/**
- * @short A replacement for QLabel that supports richtext and proper layout management
- *
- * @author Waldo Bastian <bastian@kde.org>
- */
+namespace K3b {
 
-/*
- * QLabel
- */
-class LIBK3B_EXPORT K3bRichTextLabel : public QLabel {
-  Q_OBJECT
+    /**
+     * @short A replacement for QLabel that supports richtext and proper layout management
+     *
+     * @author Waldo Bastian <bastian@kde.org>
+     */
+    class LIBK3B_EXPORT RichTextLabel : public QLabel {
+        Q_OBJECT
 
-public:
-  /**
-   * Default constructor.
-   */
-  K3bRichTextLabel( QWidget *parent );
-  K3bRichTextLabel( const QString &text, QWidget *parent );
+    public:
+        /**
+         * Default constructor.
+         */
+        RichTextLabel( QWidget *parent );
+        RichTextLabel( const QString &text, QWidget *parent );
 
-  int defaultWidth() const { return m_defaultWidth; }
-  void setDefaultWidth(int defaultWidth);
+        int defaultWidth() const { return m_defaultWidth; }
+        void setDefaultWidth(int defaultWidth);
 
-  virtual QSize minimumSizeHint() const;
-  virtual QSize sizeHint() const;
-  QSizePolicy sizePolicy() const;
+        virtual QSize minimumSizeHint() const;
+        virtual QSize sizeHint() const;
+        QSizePolicy sizePolicy() const;
 
-public Q_SLOTS:
-  void setText( const QString & );
+    public Q_SLOTS:
+        void setText( const QString & );
 
-protected:
-  int m_defaultWidth;
+    protected:
+        int m_defaultWidth;
 
-protected:
-  virtual void virtual_hook( int id, void* data );
-private:
-  class K3bRichTextLabelPrivate;
-  K3bRichTextLabelPrivate *d;
-};
+    protected:
+        virtual void virtual_hook( int id, void* data );
+    private:
+        class RichTextLabelPrivate;
+        RichTextLabelPrivate *d;
+    };
+}
 
 #endif // K3BRICHTEXTLABEL_H

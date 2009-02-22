@@ -30,14 +30,14 @@
 #include <klocale.h>
 
 
-class K3bDeviceSelectionDialog::Private
+class K3b::DeviceSelectionDialog::Private
 {
 public:
-    K3bDeviceComboBox* comboDevices;
+    K3b::DeviceComboBox* comboDevices;
 };
 
 
-K3bDeviceSelectionDialog::K3bDeviceSelectionDialog( QWidget* parent,
+K3b::DeviceSelectionDialog::DeviceSelectionDialog( QWidget* parent,
 						    const QString& text )
     : KDialog( parent ),
       d( new Private() )
@@ -49,7 +49,7 @@ K3bDeviceSelectionDialog::K3bDeviceSelectionDialog( QWidget* parent,
     QGridLayout* lay = new QGridLayout( mainWidget() );
 
     QLabel* label = new QLabel( text.isEmpty() ? i18n("Please select a device:") : text, mainWidget() );
-    d->comboDevices = new K3bDeviceComboBox( mainWidget() );
+    d->comboDevices = new K3b::DeviceComboBox( mainWidget() );
 
     //  lay->setMargin( marginHint() );
     lay->setSpacing( spacingHint() );
@@ -59,38 +59,38 @@ K3bDeviceSelectionDialog::K3bDeviceSelectionDialog( QWidget* parent,
 }
 
 
-K3bDeviceSelectionDialog::~K3bDeviceSelectionDialog()
+K3b::DeviceSelectionDialog::~DeviceSelectionDialog()
 {
     delete d;
 }
 
 
-void K3bDeviceSelectionDialog::addDevice( K3bDevice::Device* dev )
+void K3b::DeviceSelectionDialog::addDevice( K3b::Device::Device* dev )
 {
     d->comboDevices->addDevice( dev );
 }
 
 
-void K3bDeviceSelectionDialog::addDevices( const QList<K3bDevice::Device*>& list )
+void K3b::DeviceSelectionDialog::addDevices( const QList<K3b::Device::Device*>& list )
 {
     d->comboDevices->addDevices( list );
 }
 
 
-K3bDevice::Device* K3bDeviceSelectionDialog::selectedDevice() const
+K3b::Device::Device* K3b::DeviceSelectionDialog::selectedDevice() const
 {
     return d->comboDevices->selectedDevice();
 }
 
 
-void K3bDeviceSelectionDialog::setSelectedDevice( K3bDevice::Device* dev )
+void K3b::DeviceSelectionDialog::setSelectedDevice( K3b::Device::Device* dev )
 {
     d->comboDevices->setSelectedDevice( dev );
 }
 
 
-K3bDevice::Device* K3bDeviceSelectionDialog::selectDevice( QWidget* parent,
-                                                           const QList<K3bDevice::Device*>& devices,
+K3b::Device::Device* K3b::DeviceSelectionDialog::selectDevice( QWidget* parent,
+                                                           const QList<K3b::Device::Device*>& devices,
                                                            const QString& text )
 {
     if( devices.isEmpty() )
@@ -98,7 +98,7 @@ K3bDevice::Device* K3bDeviceSelectionDialog::selectDevice( QWidget* parent,
     if( devices.count() == 1 )
         return devices[0];
 
-    K3bDeviceSelectionDialog dlg( parent, text );
+    K3b::DeviceSelectionDialog dlg( parent, text );
     dlg.addDevices( devices );
 
     if( dlg.exec() == Accepted )
@@ -107,7 +107,7 @@ K3bDevice::Device* K3bDeviceSelectionDialog::selectDevice( QWidget* parent,
         return 0;
 }
 
-K3bDevice::Device* K3bDeviceSelectionDialog::selectDevice( QWidget* parent,
+K3b::Device::Device* K3b::DeviceSelectionDialog::selectDevice( QWidget* parent,
                                                            const QString& text )
 {
     return selectDevice( parent, k3bcore->deviceManager()->allDevices(), text );
@@ -116,7 +116,7 @@ K3bDevice::Device* K3bDeviceSelectionDialog::selectDevice( QWidget* parent,
 }
 
 
-K3bDevice::Device* K3bDeviceSelectionDialog::selectWriter( QWidget* parent, const QString& text )
+K3b::Device::Device* K3b::DeviceSelectionDialog::selectWriter( QWidget* parent, const QString& text )
 {
     return selectDevice( parent, k3bcore->deviceManager()->burningDevices(), text );
 }

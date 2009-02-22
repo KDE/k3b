@@ -20,10 +20,10 @@
 #include <qfile.h>
 
 
-class K3bFileSplitter::Private
+class K3b::FileSplitter::Private
 {
 public:
-    Private( K3bFileSplitter* splitter )
+    Private( K3b::FileSplitter* splitter )
         : m_splitter( splitter ) {
     }
 
@@ -38,7 +38,7 @@ public:
 
     void determineMaxFileSize() {
         if( maxFileSize == 0 ) {
-            if( K3bFileSystemInfo( filename ).type() == K3bFileSystemInfo::FS_FAT )
+            if( K3b::FileSystemInfo( filename ).type() == K3b::FileSystemInfo::FS_FAT )
                 maxFileSize = 1024ULL*1024ULL*1024ULL; // 1GB
             else
                 maxFileSize = 1024ULL*1024ULL*1024ULL*1024ULL*1024ULL;  // incredibly big, 1024 TB
@@ -78,36 +78,36 @@ public:
     }
 
 private:
-    K3bFileSplitter* m_splitter;
+    K3b::FileSplitter* m_splitter;
 };
 
 
-K3bFileSplitter::K3bFileSplitter()
+K3b::FileSplitter::FileSplitter()
 {
     d = new Private( this );
 }
 
 
-K3bFileSplitter::K3bFileSplitter( const QString& filename )
+K3b::FileSplitter::FileSplitter( const QString& filename )
 {
     d = new Private( this );
     setName( filename );
 }
 
 
-K3bFileSplitter::~K3bFileSplitter()
+K3b::FileSplitter::~FileSplitter()
 {
     delete d;
 }
 
 
-const QString& K3bFileSplitter::name() const
+const QString& K3b::FileSplitter::name() const
 {
     return d->filename;
 }
 
 
-void K3bFileSplitter::setName( const QString& filename )
+void K3b::FileSplitter::setName( const QString& filename )
 {
     close();
     d->maxFileSize = 0;
@@ -115,7 +115,7 @@ void K3bFileSplitter::setName( const QString& filename )
 }
 
 
-bool K3bFileSplitter::open( OpenMode mode )
+bool K3b::FileSplitter::open( OpenMode mode )
 {
     close();
 
@@ -133,7 +133,7 @@ bool K3bFileSplitter::open( OpenMode mode )
 }
 
 
-void K3bFileSplitter::close()
+void K3b::FileSplitter::close()
 {
     d->file.close();
     d->counter = 0;
@@ -142,34 +142,34 @@ void K3bFileSplitter::close()
 }
 
 
-int K3bFileSplitter::handle() const
+int K3b::FileSplitter::handle() const
 {
-    // FIXME: use a K3bPipe to simulate this
+    // FIXME: use a K3b::Pipe to simulate this
     return -1;
 }
 
 
 
-void K3bFileSplitter::flush()
+void K3b::FileSplitter::flush()
 {
     d->file.flush();
 }
 
 
-qint64 K3bFileSplitter::size() const
+qint64 K3b::FileSplitter::size() const
 {
     // not implemented due to Offset size limitations
     return 0;
 }
 
 
-qint64 K3bFileSplitter::pos() const
+qint64 K3b::FileSplitter::pos() const
 {
     return d->currentOverallPos;
 }
 
 
-bool K3bFileSplitter::seek( qint64 pos )
+bool K3b::FileSplitter::seek( qint64 pos )
 {
     Q_UNUSED( pos );
     // FIXME: implement me (although not used yet)
@@ -177,13 +177,13 @@ bool K3bFileSplitter::seek( qint64 pos )
 }
 
 
-bool K3bFileSplitter::atEnd() const
+bool K3b::FileSplitter::atEnd() const
 {
     return d->file.atEnd() && !QFile::exists( d->buildFileName( d->counter+1 ) );
 }
 
 
-qint64 K3bFileSplitter::readData( char *data, qint64 maxlen )
+qint64 K3b::FileSplitter::readData( char *data, qint64 maxlen )
 {
     qint64 r = d->file.read( data, maxlen );
     if( r == 0 ) {
@@ -204,7 +204,7 @@ qint64 K3bFileSplitter::readData( char *data, qint64 maxlen )
 }
 
 
-qint64 K3bFileSplitter::writeData( const char *data, qint64 len )
+qint64 K3b::FileSplitter::writeData( const char *data, qint64 len )
 {
     // We cannot rely on QFile::at since it uses long on most copmpilations
     qint64 max = qMin( len, d->maxFileSize - d->currentFilePos );
@@ -229,7 +229,7 @@ qint64 K3bFileSplitter::writeData( const char *data, qint64 len )
 }
 
 
-// int K3bFileSplitter::getch()
+// int K3b::FileSplitter::getch()
 // {
 //     int r = d->file.getch();
 //     if( r == -1 ) {
@@ -251,7 +251,7 @@ qint64 K3bFileSplitter::writeData( const char *data, qint64 len )
 // }
 
 
-// int K3bFileSplitter::putch( int c )
+// int K3b::FileSplitter::putch( int c )
 // {
 //     if( d->currentFilePos < d->maxFileSize ) {
 //         d->currentOverallPos++;
@@ -267,7 +267,7 @@ qint64 K3bFileSplitter::writeData( const char *data, qint64 len )
 // }
 
 
-// int K3bFileSplitter::ungetch( int c )
+// int K3b::FileSplitter::ungetch( int c )
 // {
 //     if( d->currentFilePos > 0 ) {
 //         int r = d->file.ungetch( c );
@@ -293,7 +293,7 @@ qint64 K3bFileSplitter::writeData( const char *data, qint64 len )
 // }
 
 
-void K3bFileSplitter::remove()
+void K3b::FileSplitter::remove()
 {
     close();
     while( QFile::exists( d->buildFileName( d->counter ) ) )
@@ -301,7 +301,7 @@ void K3bFileSplitter::remove()
 }
 
 
-void K3bFileSplitter::setMaxFileSize( qint64 size )
+void K3b::FileSplitter::setMaxFileSize( qint64 size )
 {
     d->maxFileSize = size;
 }

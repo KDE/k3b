@@ -21,15 +21,16 @@ class QWidget;
 
 
 /**
- * The K3bServiceInstaller installs konqueror servicemenus locally.
+ * The ServiceInstaller installs konqueror servicemenus locally.
  * These servicemenus have to be installed in the appdata dir under
  * the subfolder "servicemenus".
  */
-class K3bServiceInstaller
+namespace K3b {
+class ServiceInstaller
 {
  public:
-  K3bServiceInstaller( const QString& appname = "k3b" );
-  ~K3bServiceInstaller();
+  ServiceInstaller( const QString& appname = "k3b" );
+  ~ServiceInstaller();
 
   /**
    * Checks if all servicemenus are properly installed.
@@ -50,5 +51,6 @@ class K3bServiceInstaller
   class Private;
   Private* d;
 };
+}
 
 #endif

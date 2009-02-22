@@ -60,20 +60,20 @@ namespace {
 }
 
 
-K3bDeviceDelegate::K3bDeviceDelegate( QObject* parent )
+K3b::DeviceDelegate::DeviceDelegate( QObject* parent )
     : KFileItemDelegate( parent )
 {
 }
 
 
-K3bDeviceDelegate::~K3bDeviceDelegate()
+K3b::DeviceDelegate::~DeviceDelegate()
 {
 }
 
 
-QSize K3bDeviceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
+QSize K3b::DeviceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    if ( index.data( K3bDeviceModel::IsDevice ).toBool() ) {
+    if ( index.data( K3b::DeviceModel::IsDevice ).toBool() ) {
         const int margin = 4;
 
         QFont font( option.font );
@@ -91,9 +91,9 @@ QSize K3bDeviceDelegate::sizeHint( const QStyleOptionViewItem& option, const QMo
 
         int iconHeight = blockDeviceFontM.height() + margin + mediumFontM.height();
 
-        QString text1 = index.data( K3bDeviceModel::Vendor ).toString() + " - " + index.data( K3bDeviceModel::Description ).toString();
+        QString text1 = index.data( K3b::DeviceModel::Vendor ).toString() + " - " + index.data( K3b::DeviceModel::Description ).toString();
 
-        QString text2 = index.data( K3bDeviceModel::BlockDevice ).toString();
+        QString text2 = index.data( K3b::DeviceModel::BlockDevice ).toString();
 
         QString text3 = index.data( Qt::DisplayRole ).toString();
 
@@ -107,9 +107,9 @@ QSize K3bDeviceDelegate::sizeHint( const QStyleOptionViewItem& option, const QMo
 }
 
 
-void K3bDeviceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+void K3b::DeviceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    if ( index.data( K3bDeviceModel::IsDevice ).toBool() ) {
+    if ( index.data( K3b::DeviceModel::IsDevice ).toBool() ) {
         painter->save();
         painter->setRenderHint(QPainter::Antialiasing);
 
@@ -154,10 +154,10 @@ void K3bDeviceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
 
         // draw fixed device text
         painter->setFont( blockDeviceFont );
-        text = index.data( K3bDeviceModel::Vendor ).toString() + " - " + index.data( K3bDeviceModel::Description ).toString();
+        text = index.data( K3b::DeviceModel::Vendor ).toString() + " - " + index.data( K3b::DeviceModel::Description ).toString();
         painter->drawText( rect.left() + pix.width() + margin, rect.top() + mediumFontM.height() + margin + blockDeviceFontM.height(), text );
 //         painter->setFont( blockDeviceFont );
-//         text = index.data( K3bDeviceModel::BlockDevice ).toString();
+//         text = index.data( K3b::DeviceModel::BlockDevice ).toString();
 //         painter->drawText( rect.left() + pix.width() + margin, rect.top() + fontM.height() + margin + blockDeviceFontM.height(), text );
 
 

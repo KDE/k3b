@@ -39,8 +39,8 @@
 #include <q3whatsthis.h>
 
 
-K3bVideoDvdBurnDialog::K3bVideoDvdBurnDialog( K3bVideoDvdDoc* doc, QWidget *parent )
-    : K3bProjectBurnDialog( doc, parent ),
+K3b::VideoDvdBurnDialog::VideoDvdBurnDialog( K3b::VideoDvdDoc* doc, QWidget *parent )
+    : K3b::ProjectBurnDialog( doc, parent ),
       m_doc( doc )
 {
     prepareGui();
@@ -48,19 +48,19 @@ K3bVideoDvdBurnDialog::K3bVideoDvdBurnDialog( K3bVideoDvdDoc* doc, QWidget *pare
     setTitle( i18n("Video DVD Project"), i18n("Size: %1", KIO::convertSize(doc->size()) ) );
 
     // for now we just put the verify checkbox on the main page...
-    m_checkVerify = K3bStdGuiItems::verifyCheckBox( m_optionGroup );
+    m_checkVerify = K3b::StdGuiItems::verifyCheckBox( m_optionGroup );
     m_optionGroupLayout->addWidget( m_checkVerify );
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
     m_optionGroupLayout->addItem( spacer );
 
     // create image settings tab
-    m_imageSettingsWidget = new K3bDataImageSettingsWidget( this );
+    m_imageSettingsWidget = new K3b::DataImageSettingsWidget( this );
     m_imageSettingsWidget->showFileSystemOptions( false );
 
     addPage( m_imageSettingsWidget, i18n("Filesystem") );
 
-    m_tempDirSelectionWidget->setSelectionMode( K3bTempDirSelectionWidget::FILE );
+    m_tempDirSelectionWidget->setSelectionMode( K3b::TempDirSelectionWidget::FILE );
 
     QString path = m_doc->tempDir();
     if( path.isEmpty() ) {
@@ -74,17 +74,17 @@ K3bVideoDvdBurnDialog::K3bVideoDvdBurnDialog( K3bVideoDvdDoc* doc, QWidget *pare
 }
 
 
-K3bVideoDvdBurnDialog::~K3bVideoDvdBurnDialog()
+K3b::VideoDvdBurnDialog::~VideoDvdBurnDialog()
 {
 }
 
 
-void K3bVideoDvdBurnDialog::saveSettings()
+void K3b::VideoDvdBurnDialog::saveSettings()
 {
-    K3bProjectBurnDialog::saveSettings();
+    K3b::ProjectBurnDialog::saveSettings();
 
     // save iso image settings
-    K3bIsoOptions o = m_doc->isoOptions();
+    K3b::IsoOptions o = m_doc->isoOptions();
     m_imageSettingsWidget->save( o );
     m_doc->setIsoOptions( o );
 
@@ -95,9 +95,9 @@ void K3bVideoDvdBurnDialog::saveSettings()
 }
 
 
-void K3bVideoDvdBurnDialog::readSettings()
+void K3b::VideoDvdBurnDialog::readSettings()
 {
-    K3bProjectBurnDialog::readSettings();
+    K3b::ProjectBurnDialog::readSettings();
 
     if( !doc()->tempDir().isEmpty() )
         m_tempDirSelectionWidget->setTempPath( doc()->tempDir() );
@@ -113,17 +113,17 @@ void K3bVideoDvdBurnDialog::readSettings()
     if( doc()->size() > 4700372992LL &&
         ( !k3bcore->globalSettings()->overburn() ||
           doc()->size() > 4900000000LL ) )
-        m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_DVD_DL );
+        m_writerSelectionWidget->setWantedMediumType( K3b::Device::MEDIA_WRITABLE_DVD_DL );
     else
-        m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_WRITABLE_DVD );
+        m_writerSelectionWidget->setWantedMediumType( K3b::Device::MEDIA_WRITABLE_DVD );
 
     toggleAll();
 }
 
 
-void K3bVideoDvdBurnDialog::toggleAll()
+void K3b::VideoDvdBurnDialog::toggleAll()
 {
-    K3bProjectBurnDialog::toggleAll();
+    K3b::ProjectBurnDialog::toggleAll();
 
     if( m_checkSimulate->isChecked() || m_checkOnlyCreateImage->isChecked() ) {
         m_checkVerify->setChecked(false);
@@ -134,22 +134,22 @@ void K3bVideoDvdBurnDialog::toggleAll()
 }
 
 
-void K3bVideoDvdBurnDialog::loadK3bDefaults()
+void K3b::VideoDvdBurnDialog::loadK3bDefaults()
 {
-    K3bProjectBurnDialog::loadK3bDefaults();
+    K3b::ProjectBurnDialog::loadK3bDefaults();
 
-    m_imageSettingsWidget->load( K3bIsoOptions::defaults() );
+    m_imageSettingsWidget->load( K3b::IsoOptions::defaults() );
     m_checkVerify->setChecked( false );
 
     toggleAll();
 }
 
 
-void K3bVideoDvdBurnDialog::loadUserDefaults( const KConfigGroup& c )
+void K3b::VideoDvdBurnDialog::loadUserDefaults( const KConfigGroup& c )
 {
-    K3bProjectBurnDialog::loadUserDefaults( c );
+    K3b::ProjectBurnDialog::loadUserDefaults( c );
 
-    K3bIsoOptions o = K3bIsoOptions::load( c );
+    K3b::IsoOptions o = K3b::IsoOptions::load( c );
     m_imageSettingsWidget->load( o );
 
     m_checkVerify->setChecked( c.readEntry( "verify data", false ) );
@@ -158,11 +158,11 @@ void K3bVideoDvdBurnDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3bVideoDvdBurnDialog::saveUserDefaults( KConfigGroup c )
+void K3b::VideoDvdBurnDialog::saveUserDefaults( KConfigGroup c )
 {
-    K3bProjectBurnDialog::saveUserDefaults(c);
+    K3b::ProjectBurnDialog::saveUserDefaults(c);
 
-    K3bIsoOptions o;
+    K3b::IsoOptions o;
     m_imageSettingsWidget->save( o );
     o.save( c );
 
@@ -170,7 +170,7 @@ void K3bVideoDvdBurnDialog::saveUserDefaults( KConfigGroup c )
 }
 
 
-void K3bVideoDvdBurnDialog::slotStartClicked()
+void K3b::VideoDvdBurnDialog::slotStartClicked()
 {
     if( m_checkOnlyCreateImage->isChecked() ||
         m_checkCacheImage->isChecked() ) {
@@ -183,7 +183,7 @@ void K3bVideoDvdBurnDialog::slotStartClicked()
                                                     i18n("Do you want to overwrite %1?",m_tempDirSelectionWidget->tempPath()),
                                                     i18n("File Exists"), KGuiItem(i18n("Overwrite")) )
                 == KMessageBox::Continue ) {
-                // delete the file here to avoid problems with free space in K3bProjectBurnDialog::slotStartClicked
+                // delete the file here to avoid problems with free space in K3b::ProjectBurnDialog::slotStartClicked
                 QFile::remove( m_tempDirSelectionWidget->tempPath() );
             }
             else
@@ -191,7 +191,7 @@ void K3bVideoDvdBurnDialog::slotStartClicked()
         }
     }
 
-    K3bProjectBurnDialog::slotStartClicked();
+    K3b::ProjectBurnDialog::slotStartClicked();
 }
 
 #include "k3bvideodvdburndialog.moc"

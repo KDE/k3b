@@ -22,7 +22,7 @@
 #include <QVBoxLayout>
 
 
-K3bContentsView::K3bContentsView( bool withHeader,
+K3b::ContentsView::ContentsView( bool withHeader,
                                   QWidget* parent )
     : QWidget( parent ),
       m_header(0),
@@ -33,28 +33,28 @@ K3bContentsView::K3bContentsView( bool withHeader,
         lay->setMargin( 2 );
         lay->setSpacing( 0 );
 
-        m_header = new K3bThemedHeader( this );
+        m_header = new K3b::ThemedHeader( this );
         lay->addWidget( m_header );
 
-        m_header->setLeftPixmap( K3bTheme::MEDIA_LEFT );
-        m_header->setRightPixmap( K3bTheme::MEDIA_NONE );
+        m_header->setLeftPixmap( K3b::Theme::MEDIA_LEFT );
+        m_header->setRightPixmap( K3b::Theme::MEDIA_NONE );
     }
 }
 
 
-K3bContentsView::~K3bContentsView()
+K3b::ContentsView::~ContentsView()
 {
 }
 
 
-void K3bContentsView::setMainWidget( QWidget* w )
+void K3b::ContentsView::setMainWidget( QWidget* w )
 {
     m_centerWidget = w;
     layout()->addWidget( w );
 }
 
 
-QWidget* K3bContentsView::mainWidget()
+QWidget* K3b::ContentsView::mainWidget()
 {
     if( !m_centerWidget )
         setMainWidget( new QWidget( this ) );
@@ -62,21 +62,21 @@ QWidget* K3bContentsView::mainWidget()
 }
 
 
-void K3bContentsView::setTitle( const QString& s )
+void K3b::ContentsView::setTitle( const QString& s )
 {
     if( m_header )
         m_header->setTitle( s );
 }
 
 
-void K3bContentsView::setLeftPixmap( K3bTheme::PixmapType s )
+void K3b::ContentsView::setLeftPixmap( K3b::Theme::PixmapType s )
 {
     if( m_header )
         m_header->setLeftPixmap( s );
 }
 
 
-void K3bContentsView::setRightPixmap( K3bTheme::PixmapType s )
+void K3b::ContentsView::setRightPixmap( K3b::Theme::PixmapType s )
 {
     if( m_header )
         m_header->setRightPixmap( s );

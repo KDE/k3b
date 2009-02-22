@@ -27,13 +27,14 @@ class QTimer;
 /**
  * More beautiful tooltip
  */
-class K3bToolTip : public QObject
+namespace K3b {
+class ToolTip : public QObject
 {
     Q_OBJECT
 
 public:
-    K3bToolTip( QWidget* widget );
-    ~K3bToolTip();
+    ToolTip( QWidget* widget );
+    ~ToolTip();
 
     QWidget* parentWidget() const { return m_parentWidget; }
 
@@ -52,14 +53,14 @@ protected:
     /**
      * Show a tooltip.
      */
-    void tip( const QRect&, const QString&, int effect = K3bWidgetShowEffect::Dissolve );
-    void tip( const QRect& rect, const QPixmap& pix, int effect = K3bWidgetShowEffect::Dissolve );
+    void tip( const QRect&, const QString&, int effect = WidgetShowEffect::Dissolve );
+    void tip( const QRect& rect, const QPixmap& pix, int effect = WidgetShowEffect::Dissolve );
 
     /**
      * Use some arbitrary widget as the tooltip
      * \param effect Use 0 for no effect
      */
-    void tip( const QRect&, QWidget* w, int effect = K3bWidgetShowEffect::Dissolve );
+    void tip( const QRect&, QWidget* w, int effect = WidgetShowEffect::Dissolve );
 
     bool eventFilter( QObject* o, QEvent* e );
 
@@ -78,5 +79,6 @@ private:
 
     int m_tipTimeout;
 };
+}
 
 #endif

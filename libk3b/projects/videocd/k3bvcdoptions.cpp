@@ -28,7 +28,7 @@
 #include "k3bvcdoptions.h"
 #include <k3bversion.h>
 
-K3bVcdOptions::K3bVcdOptions()
+K3b::VcdOptions::VcdOptions()
     : m_restriction( 0 ),
       m_segment( 0 ),
       m_sequence( 0 ),
@@ -62,7 +62,7 @@ K3bVcdOptions::K3bVcdOptions()
       m_usegaps( false )
 {}
 
-bool K3bVcdOptions::checkCdiFiles()
+bool K3b::VcdOptions::checkCdiFiles()
 {
     m_cdisize = 0;
     if ( !QFile::exists( KStandardDirs::locate( "data", "k3b/cdi/cdi_imag.rtf" ) ) )
@@ -82,7 +82,7 @@ bool K3bVcdOptions::checkCdiFiles()
     return true;
 }
 
-void K3bVcdOptions::save( KConfigGroup c )
+void K3b::VcdOptions::save( KConfigGroup c )
 {
     c.writeEntry( "volume_id", m_volumeID );
     c.writeEntry( "album_id", m_albumID );
@@ -110,9 +110,9 @@ void K3bVcdOptions::save( KConfigGroup c )
 }
 
 
-K3bVcdOptions K3bVcdOptions::load( const KConfigGroup& c )
+K3b::VcdOptions K3b::VcdOptions::load( const KConfigGroup& c )
 {
-    K3bVcdOptions options;
+    K3b::VcdOptions options;
 
     options.setVolumeId( c.readEntry( "volume_id", options.volumeId() ) );
     options.setAlbumId( c.readEntry( "album_id", options.albumId() ) );
@@ -140,8 +140,8 @@ K3bVcdOptions K3bVcdOptions::load( const KConfigGroup& c )
     return options;
 }
 
-K3bVcdOptions K3bVcdOptions::defaults()
+K3b::VcdOptions K3b::VcdOptions::defaults()
 {
     // let the constructor create defaults
-    return K3bVcdOptions();
+    return K3b::VcdOptions();
 }

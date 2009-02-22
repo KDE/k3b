@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -24,234 +24,237 @@
 class QGridLayout;
 class QLabel;
 class KPushButton;
-class K3bThemedHeader;
 class KGuiItem;
 class QToolButton;
 class QEventLoop;
 
 
-/**
- * This is the base dialog for all the dialogs in K3b that start 
- * some job. Use setMainWidget to set the contents or let mainWidget()
- * create an empty plain page.
- * The default implementations of the slots just emit the 
- * corresponding signals.
- */
-class K3bInteractionDialog : public KDialog
-{
-    Q_OBJECT
-
-public:
-    /**
-     * The constructor.
-     * loadUserDefaults will be called automatically when the dialog is showing.
-     *
-     * @param title the text to be displayed in the K3b header (not the widget frame)
-     * @param subTitle additional text that will be displayed after the title in smaller size
-     * @param buttonMask combination of Buttons
-     * @param defaultButton may also be null to deactivate the feature
-     * @param configgroup The config group used for the loadUserDefaults and saveUserDefaults methods
-     */
-    K3bInteractionDialog( QWidget* parent = 0, 
-                          const QString& title = QString(),
-                          const QString& subTitle = QString(),
-                          int buttonMask = START_BUTTON|CANCEL_BUTTON,
-                          int defaultButton = START_BUTTON,
-                          const QString& configgroup = QString() );
-    virtual ~K3bInteractionDialog();
-
-    void setMainWidget( QWidget* w );
-    void setTitle( const QString& title, const QString& subTitle = QString() );
-    void setDefaultButton( int b );
+namespace K3b {
+    class ThemedHeader;
 
     /**
-     * In contract to "normal" dialogs K3bInteractionDialog will not return from exec
-     * until close() has been called. This allows to hide the dialog while a progress
-     * dialog is shown.
+     * This is the base dialog for all the dialogs in K3b that start
+     * some job. Use setMainWidget to set the contents or let mainWidget()
+     * create an empty plain page.
+     * The default implementations of the slots just emit the
+     * corresponding signals.
      */
-    int exec();
+    class InteractionDialog : public KDialog
+    {
+        Q_OBJECT
 
-    /**
-     * reimplemented to allow initialization after the dialog has been opened.
-     */
-    void show();
+    public:
+        /**
+         * The constructor.
+         * loadUserDefaults will be called automatically when the dialog is showing.
+         *
+         * @param title the text to be displayed in the K3b header (not the widget frame)
+         * @param subTitle additional text that will be displayed after the title in smaller size
+         * @param buttonMask combination of Buttons
+         * @param defaultButton may also be null to deactivate the feature
+         * @param configgroup The config group used for the loadUserDefaults and saveUserDefaults methods
+         */
+        InteractionDialog( QWidget* parent = 0,
+                           const QString& title = QString(),
+                           const QString& subTitle = QString(),
+                           int buttonMask = START_BUTTON|CANCEL_BUTTON,
+                           int defaultButton = START_BUTTON,
+                           const QString& configgroup = QString() );
+        virtual ~InteractionDialog();
 
-    /**
-     * If no mainWidget has been set a plain page will be created.
-     */
-    QWidget* mainWidget();
+        void setMainWidget( QWidget* w );
+        void setTitle( const QString& title, const QString& subTitle = QString() );
+        void setDefaultButton( int b );
 
-    enum Buttons {
-        START_BUTTON = 1,
-        SAVE_BUTTON = 2,
-        CANCEL_BUTTON = 4
-    };
+        /**
+         * In contract to "normal" dialogs InteractionDialog will not return from exec
+         * until close() has been called. This allows to hide the dialog while a progress
+         * dialog is shown.
+         */
+        int exec();
 
-    QSize sizeHint() const;
+        /**
+         * reimplemented to allow initialization after the dialog has been opened.
+         */
+        void show();
 
-    QString configGroup() const { return m_configGroup; }
+        /**
+         * If no mainWidget has been set a plain page will be created.
+         */
+        QWidget* mainWidget();
 
-    enum StartUpSettings {
-        LOAD_K3B_DEFAULTS = 1,
-        LOAD_SAVED_SETTINGS = 2,
-        LOAD_LAST_SETTINGS = 3
-    };
+        enum Buttons {
+            START_BUTTON = 1,
+            SAVE_BUTTON = 2,
+            CANCEL_BUTTON = 4
+        };
 
- Q_SIGNALS:
-    void started();
-    void canceled();
-    void saved();
+        QSize sizeHint() const;
 
-public Q_SLOTS:
-    /**
-     * \deprecated use setButtonText
-     */
-    void setStartButtonText( const QString& text, 
-                             const QString& tooltip = QString(), 
-                             const QString& whatsthis = QString() );
-    /**
-     * \deprecated use setButtonText
-     */
-    void setCancelButtonText( const QString& text, 
-                              const QString& tooltip = QString(), 
-                              const QString& whatsthis = QString() );
-    /**
-     * \deprecated use setButtonText
-     */
-    void setSaveButtonText( const QString& text, 
-                            const QString& tooltip = QString(), 
+        QString configGroup() const { return m_configGroup; }
+
+        enum StartUpSettings {
+            LOAD_K3B_DEFAULTS = 1,
+            LOAD_SAVED_SETTINGS = 2,
+            LOAD_LAST_SETTINGS = 3
+        };
+
+    Q_SIGNALS:
+        void started();
+        void canceled();
+        void saved();
+
+    public Q_SLOTS:
+        /**
+         * \deprecated use setButtonText
+         */
+        void setStartButtonText( const QString& text,
+                                 const QString& tooltip = QString(),
+                                 const QString& whatsthis = QString() );
+        /**
+         * \deprecated use setButtonText
+         */
+        void setCancelButtonText( const QString& text,
+                                  const QString& tooltip = QString(),
+                                  const QString& whatsthis = QString() );
+        /**
+         * \deprecated use setButtonText
+         */
+        void setSaveButtonText( const QString& text,
+                                const QString& tooltip = QString(),
+                                const QString& whatsthis = QString() );
+
+        void setButtonGui( int button,
+                           const KGuiItem& );
+
+        void setButtonText( int button,
+                            const QString& text,
+                            const QString& tooltip = QString(),
                             const QString& whatsthis = QString() );
 
-    void setButtonGui( int button,
-                       const KGuiItem& );
+        void setButtonEnabled( int button, bool enabled );
+        void setButtonShown( int button, bool enabled );
 
-    void setButtonText( int button,
-                        const QString& text, 
-                        const QString& tooltip = QString(), 
-                        const QString& whatsthis = QString() );
+        /**
+         * If set true the init() method will be called via a QTimer to ensure event
+         * handling be done before (default: false).
+         */
+        void setDelayedInitialization( bool b ) { m_delayedInit = b; }
 
-    void setButtonEnabled( int button, bool enabled );
-    void setButtonShown( int button, bool enabled );
+        /**
+         * Hide the dialog but do not return from the exec call.
+         */
+        void hideTemporarily();
 
-    /**
-     * If set true the init() method will be called via a QTimer to ensure event
-     * handling be done before (default: false).
-     */
-    void setDelayedInitialization( bool b ) { m_delayedInit = b; }
+        /**
+         * Close the dialog and return from any exec call.
+         */
+        void close();
 
-    /**
-     * Hide the dialog but do not return from the exec call.
-     */
-    void hideTemporarily();
+        /**
+         * Close the dialog and return from any exec call.
+         */
+        void done( int r );
 
-    /**
-     * Close the dialog and return from any exec call.
-     */
-    void close();
+    protected Q_SLOTS:
+        // FIXME: replace these with protected methods which are called from private slots.
+        virtual void slotStartClicked();
 
-    /**
-     * Close the dialog and return from any exec call.
-     */
-    void done( int r );
+        /**
+         * The default implementation emits the canceled() signal
+         * and calls close()
+         */
+        virtual void slotCancelClicked();
+        virtual void slotSaveClicked();
 
-protected Q_SLOTS:
-    // FIXME: replace these with protected methods which are called from private slots.
-    virtual void slotStartClicked();
+        /**
+         * This slot will call the toggleAll() method protecting from infinite loops
+         * caused by one element influencing another element which in turn influences
+         * the first.
+         *
+         * Connect this slot to GUI elements (like Checkboxes) that change
+         * the state of the whole dialog.
+         */
+        void slotToggleAll();
 
-    /**
-     * The default implementation emits the canceled() signal
-     * and calls close()
-     */
-    virtual void slotCancelClicked();
-    virtual void slotSaveClicked();
+    protected:
+        /**
+         * Reimplement this method in case you are using slotToggleAll()
+         */
+        virtual void toggleAll();
 
-    /**
-     * This slot will call the toggleAll() method protecting from infinite loops
-     * caused by one element influencing another element which in turn influences
-     * the first.
-     *
-     * Connect this slot to GUI elements (like Checkboxes) that change
-     * the state of the whole dialog.
-     */
-    void slotToggleAll();
+        /**
+         * Reimplement this to support the save/load user default buttons.
+         * @p config is already set to the correct group.
+         *
+         * The save/load buttons are only activated if the config group is
+         * set in the constructor.
+         */
+        virtual void saveUserDefaults( KConfigGroup config );
 
-protected:
-    /**
-     * Reimplement this method in case you are using slotToggleAll()
-     */
-    virtual void toggleAll();
+        /**
+         * Reimplement this to support the save/load user default buttons.
+         * @p config is already set to the correct group.
+         *
+         * The save/load buttons are only activated if the config group is
+         * set in the constructor.
+         */
+        virtual void loadUserDefaults( const KConfigGroup& config );
 
-    /**
-     * Reimplement this to support the save/load user default buttons.
-     * @p config is already set to the correct group.
-     *
-     * The save/load buttons are only activated if the config group is
-     * set in the constructor.
-     */
-    virtual void saveUserDefaults( KConfigGroup config );
+        /**
+         * Reimplement this to support the "k3b defaults" button.
+         * set all GUI options to reasonable defaults.
+         */
+        virtual void loadK3bDefaults();
 
-    /**
-     * Reimplement this to support the save/load user default buttons.
-     * @p config is already set to the correct group.
-     *
-     * The save/load buttons are only activated if the config group is
-     * set in the constructor.
-     */
-    virtual void loadUserDefaults( const KConfigGroup& config );
+        /**
+         * This is called after the dialog has been shown.
+         * Use this for initialization that should happen
+         * when the user already sees the dialog.
+         */
+        virtual void init() {}
 
-    /**
-     * Reimplement this to support the "k3b defaults" button.
-     * set all GUI options to reasonable defaults.
-     */
-    virtual void loadK3bDefaults();
+        /**
+         * reimplemented from QDialog
+         */
+        virtual bool eventFilter( QObject*, QEvent* );
 
-    /**
-     * This is called after the dialog has been shown.
-     * Use this for initialization that should happen
-     * when the user already sees the dialog.
-     */
-    virtual void init() {}
+        void hideEvent( QHideEvent* );
 
-    /**
-     * reimplemented from QDialog
-     */
-    virtual bool eventFilter( QObject*, QEvent* );
+    private Q_SLOTS:
+        void slotLoadK3bDefaults();
+        void slotLoadUserDefaults();
+        void slotSaveUserDefaults();
+        void slotLoadLastSettings();
+        void slotStartClickedInternal();
+        void slotInternalInit();
 
-    void hideEvent( QHideEvent* );
+    private:
+        void initConnections();
+        void initToolTipsAndWhatsThis();
+        void saveLastSettings();
+        void loadStartupSettings();
 
-private Q_SLOTS:
-    void slotLoadK3bDefaults();
-    void slotLoadUserDefaults();
-    void slotSaveUserDefaults();
-    void slotLoadLastSettings();
-    void slotStartClickedInternal();
-    void slotInternalInit();
+        KPushButton* getButton( int );
 
-private:
-    void initConnections();
-    void initToolTipsAndWhatsThis();
-    void saveLastSettings();
-    void loadStartupSettings();
+        ThemedHeader* m_dialogHeader;
+        KPushButton* m_buttonStart;
+        KPushButton* m_buttonSave;
+        KPushButton* m_buttonCancel;
+        QWidget* m_mainWidget;
 
-    KPushButton* getButton( int );
+        QToolButton* m_buttonLoadSettings;
+        QToolButton* m_buttonSaveSettings;
 
-    K3bThemedHeader* m_dialogHeader;
-    KPushButton* m_buttonStart;
-    KPushButton* m_buttonSave;
-    KPushButton* m_buttonCancel;
-    QWidget* m_mainWidget;
+        QGridLayout* mainGrid;
+        int m_defaultButton;
+        QString m_configGroup;
 
-    QToolButton* m_buttonLoadSettings;
-    QToolButton* m_buttonSaveSettings;
+        bool m_inToggleMode;
+        bool m_delayedInit;
 
-    QGridLayout* mainGrid;
-    int m_defaultButton;
-    QString m_configGroup;
-
-    bool m_inToggleMode;
-    bool m_delayedInit;
-
-    QEventLoop* m_eventLoop;
-};
+        QEventLoop* m_eventLoop;
+    };
+}
 
 #endif

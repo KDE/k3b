@@ -54,7 +54,7 @@
 
 
 
-class K3bCdCopyJob::Private
+class K3b::CdCopyJob::Private
 {
 public:
     Private()
@@ -80,14 +80,14 @@ public:
     int currentReadSession;
     int currentWrittenSession;
 
-    K3bDevice::Toc toc;
+    K3b::Device::Toc toc;
     QByteArray cdTextRaw;
 
-    K3bReadcdReader* readcdReader;
-    K3bDataTrackReader* dataTrackReader;
-    K3bAudioSessionReadingJob* audioSessionReader;
-    K3bCdrecordWriter* cdrecordWriter;
-    K3bInfFileWriter* infFileWriter;
+    K3b::ReadcdReader* readcdReader;
+    K3b::DataTrackReader* dataTrackReader;
+    K3b::AudioSessionReadingJob* audioSessionReader;
+    K3b::CdrecordWriter* cdrecordWriter;
+    K3b::InfFileWriter* infFileWriter;
 
     bool audioReaderRunning;
     bool dataReaderRunning;
@@ -116,8 +116,8 @@ public:
 };
 
 
-K3bCdCopyJob::K3bCdCopyJob( K3bJobHandler* hdl, QObject* parent )
-    : K3bBurnJob( hdl, parent ),
+K3b::CdCopyJob::CdCopyJob( K3b::JobHandler* hdl, QObject* parent )
+    : K3b::BurnJob( hdl, parent ),
       m_simulate(false),
       m_copies(1),
       m_onlyCreateImages(false),
@@ -134,14 +134,14 @@ K3bCdCopyJob::K3bCdCopyJob( K3bJobHandler* hdl, QObject* parent )
 }
 
 
-K3bCdCopyJob::~K3bCdCopyJob()
+K3b::CdCopyJob::~CdCopyJob()
 {
     delete d->infFileWriter;
     delete d;
 }
 
 
-void K3bCdCopyJob::start()
+void K3b::CdCopyJob::start()
 {
     d->running = true;
     d->canceled = false;
@@ -163,8 +163,8 @@ void K3bCdCopyJob::start()
 
     // wait for a source disk
     if( waitForMedia( m_readerDevice,
-                      K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE,
-                      K3bDevice::MEDIA_WRITABLE_CD|K3bDevice::MEDIA_CD_ROM ) < 0 ) {
+                      K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE,
+                      K3b::Device::MEDIA_WRITABLE_CD|K3b::Device::MEDIA_CD_ROM ) < 0 ) {
         finishJob( true, false );
         return;
     }
@@ -173,12 +173,12 @@ void K3bCdCopyJob::start()
 
     // FIXME: read ISRCs and MCN
 
-    connect( K3bDevice::diskInfo( m_readerDevice ), SIGNAL(finished(K3bDevice::DeviceHandler*)),
-             this, SLOT(slotDiskInfoReady(K3bDevice::DeviceHandler*)) );
+    connect( K3b::Device::diskInfo( m_readerDevice ), SIGNAL(finished(K3b::Device::DeviceHandler*)),
+             this, SLOT(slotDiskInfoReady(K3b::Device::DeviceHandler*)) );
 }
 
 
-void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
+void K3b::CdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
 {
     if( dh->success() ) {
         d->toc = dh->toc();
@@ -191,9 +191,9 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
         bool canCopy = true;
         bool audio = false;
         d->numSessions = dh->diskInfo().numSessions();
-        d->doNotCloseLastSession = (dh->diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE);
+        d->doNotCloseLastSession = (dh->diskInfo().diskState() == K3b::Device::STATE_INCOMPLETE);
         switch( dh->toc().contentType() ) {
-        case K3bDevice::DATA:
+        case K3b::Device::DATA:
             // check if every track is in it's own session
             // only then we copy the cd
             if( (int)dh->toc().count() != dh->diskInfo().numSessions() ) {
@@ -206,9 +206,9 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
                 emit infoMessage( i18n("Copying Data CD."), INFO );
             break;
 
-        case K3bDevice::MIXED:
+        case K3b::Device::MIXED:
             audio = true;
-            if( dh->diskInfo().numSessions() != 2 || d->toc[0].type() != K3bDevice::Track::AUDIO ) {
+            if( dh->diskInfo().numSessions() != 2 || d->toc[0].type() != K3b::Device::Track::TYPE_AUDIO ) {
                 emit infoMessage( i18n("K3b can only copy CD-Extra mixed mode CDs."), ERROR );
                 canCopy = false;
             }
@@ -216,12 +216,12 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
                 emit infoMessage( i18n("Copying Enhanced Audio CD (CD-Extra)."), INFO );
             break;
 
-        case K3bDevice::AUDIO:
+        case K3b::Device::AUDIO:
             audio = true;
             emit infoMessage( i18n("Copying Audio CD."), INFO );
             break;
 
-        case K3bDevice::NONE:
+        case K3b::Device::NONE:
         default:
             emit infoMessage( i18n("The source disk is empty."), ERROR );
             canCopy = false;
@@ -238,17 +238,17 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
         //
         unsigned char buffer[2048];
         int i = 1;
-        for( K3bDevice::Toc::iterator it = d->toc.begin(); it != d->toc.end(); ++it ) {
-            if( (*it).type() == K3bDevice::Track::DATA ) {
+        for( K3b::Device::Toc::iterator it = d->toc.begin(); it != d->toc.end(); ++it ) {
+            if( (*it).type() == K3b::Device::Track::TYPE_DATA ) {
                 // we try twice just to be sure
                 if( m_readerDevice->read10( buffer, 2048, (*it).lastSector().lba(), 1 ) ||
                     m_readerDevice->read10( buffer, 2048, (*it).lastSector().lba(), 1 ) ) {
                     d->dataSessionProbablyTAORecorded.append(false);
-                    kDebug() << "(K3bCdCopyJob) track " << i << " probably DAO recorded.";
+                    kDebug() << "(K3b::CdCopyJob) track " << i << " probably DAO recorded.";
                 }
                 else {
                     d->dataSessionProbablyTAORecorded.append(true);
-                    kDebug() << "(K3bCdCopyJob) track " << i << " probably TAO recorded.";
+                    kDebug() << "(K3b::CdCopyJob) track " << i << " probably TAO recorded.";
                 }
             }
 
@@ -261,10 +261,10 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
         //
         if( k3bcore->externalBinManager()->binObject("cdrecord") &&
             !k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "xamix" ) ) {
-            for( K3bDevice::Toc::const_iterator it = d->toc.constBegin(); it != d->toc.constEnd(); ++it ) {
-                if( (*it).type() == K3bDevice::Track::DATA &&
-                    ( (*it).mode() == K3bDevice::Track::XA_FORM1 ||
-                      (*it).mode() == K3bDevice::Track::XA_FORM2 ) ) {
+            for( K3b::Device::Toc::const_iterator it = d->toc.constBegin(); it != d->toc.constEnd(); ++it ) {
+                if( (*it).type() == K3b::Device::Track::TYPE_DATA &&
+                    ( (*it).mode() == K3b::Device::Track::XA_FORM1 ||
+                      (*it).mode() == K3b::Device::Track::XA_FORM2 ) ) {
                     emit infoMessage( i18n("K3b needs cdrecord 2.01a12 or newer to copy Mode2 data tracks."), ERROR );
                     finishJob( true, false );
                     return;
@@ -303,8 +303,8 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
             // check free temp space
             //
             KIO::filesize_t imageSpaceNeeded = 0;
-            for( K3bDevice::Toc::const_iterator it = d->toc.constBegin(); it != d->toc.constEnd(); ++it ) {
-                if( (*it).type() == K3bDevice::Track::AUDIO )
+            for( K3b::Device::Toc::const_iterator it = d->toc.constBegin(); it != d->toc.constEnd(); ++it ) {
+                if( (*it).type() == K3b::Device::Track::TYPE_AUDIO )
                     imageSpaceNeeded += (*it).length().audioBytes() + 44;
                 else
                     imageSpaceNeeded += (*it).length().mode1Bytes();
@@ -335,9 +335,9 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
             d->overallSize = 0;
 
             // now create some progress helper values
-            for( K3bDevice::Toc::const_iterator it = d->toc.constBegin(); it != d->toc.constEnd(); ++it ) {
+            for( K3b::Device::Toc::const_iterator it = d->toc.constBegin(); it != d->toc.constEnd(); ++it ) {
                 d->overallSize += (*it).length().lba();
-                if( d->sessionSizes.isEmpty() || (*it).type() == K3bDevice::Track::DATA )
+                if( d->sessionSizes.isEmpty() || (*it).type() == K3b::Device::Track::TYPE_DATA )
                     d->sessionSizes.append( (*it).length().lba() );
                 else
                     d->sessionSizes[0] += (*it).length().lba();
@@ -363,22 +363,22 @@ void K3bCdCopyJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 }
 
 
-void K3bCdCopyJob::searchCdText()
+void K3b::CdCopyJob::searchCdText()
 {
     emit newSubTask( i18n("Searching CD-TEXT") );
 
-    connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::CD_TEXT_RAW, m_readerDevice ),
-             SIGNAL(finished(K3bDevice::DeviceHandler*)),
+    connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::CD_TEXT_RAW, m_readerDevice ),
+             SIGNAL(finished(K3b::Device::DeviceHandler*)),
              this,
-             SLOT(slotCdTextReady(K3bDevice::DeviceHandler*)) );
+             SLOT(slotCdTextReady(K3b::Device::DeviceHandler*)) );
 }
 
 
-void K3bCdCopyJob::slotCdTextReady( K3bDevice::DeviceHandler* dh )
+void K3b::CdCopyJob::slotCdTextReady( K3b::Device::DeviceHandler* dh )
 {
     if( dh->success() ) {
-        if( K3bDevice::CdText::checkCrc( dh->cdTextRaw() ) ) {
-            K3bDevice::CdText cdt( dh->cdTextRaw() );
+        if( K3b::Device::CdText::checkCrc( dh->cdTextRaw() ) ) {
+            K3b::Device::CdText cdt( dh->cdTextRaw() );
             emit infoMessage( i18n("Found CD-TEXT (%1 - %2).",cdt.performer(),cdt.title()), SUCCESS );
             d->haveCdText = true;
             d->cdTextRaw = dh->cdTextRaw();
@@ -398,7 +398,7 @@ void K3bCdCopyJob::slotCdTextReady( K3bDevice::DeviceHandler* dh )
 }
 
 
-void K3bCdCopyJob::queryCddb()
+void K3b::CdCopyJob::queryCddb()
 {
     emit newSubTask( i18n("Querying Cddb") );
 
@@ -412,11 +412,11 @@ void K3bCdCopyJob::queryCddb()
     }
 
     d->cddb->config().readConfig();
-    d->cddb->lookup( K3bCDDB::createTrackOffsetList( d->toc ) );
+    d->cddb->lookup( K3b::CDDB::createTrackOffsetList( d->toc ) );
 }
 
 
-void K3bCdCopyJob::slotCddbQueryFinished( KCDDB::Result result )
+void K3b::CdCopyJob::slotCddbQueryFinished( KCDDB::Result result )
 {
     if( result == KCDDB::Success ) {
         d->cddbInfo = d->cddb->lookupResponse().first();
@@ -427,17 +427,17 @@ void K3bCdCopyJob::slotCddbQueryFinished( KCDDB::Result result )
                           SUCCESS );
 
         // save the entry locally
-        d->cddb->store( d->cddbInfo, K3bCDDB::createTrackOffsetList( d->toc ) );
+        d->cddb->store( d->cddbInfo, K3b::CDDB::createTrackOffsetList( d->toc ) );
     }
     else if ( result == KCDDB::MultipleRecordFound ) {
         KCDDB::CDInfoList results = d->cddb->lookupResponse();
-        int i = K3bCDDB::MultiEntriesDialog::selectCddbEntry( results, qApp->activeWindow() );
+        int i = K3b::CDDB::MultiEntriesDialog::selectCddbEntry( results, qApp->activeWindow() );
         if ( i >= 0 ) {
             d->haveCddb = true;
             d->cddbInfo = results[i];
 
             // save the entry locally
-            d->cddb->store( d->cddbInfo, K3bCDDB::createTrackOffsetList( d->toc ) );
+            d->cddb->store( d->cddbInfo, K3b::CDDB::createTrackOffsetList( d->toc ) );
         }
         else {
             d->haveCddb = false;
@@ -456,13 +456,13 @@ void K3bCdCopyJob::slotCddbQueryFinished( KCDDB::Result result )
 }
 
 
-void K3bCdCopyJob::startCopy()
+void K3b::CdCopyJob::startCopy()
 {
     d->currentWrittenSession = d->currentReadSession = 1;
     d->doneCopies = 0;
 
     if ( d->haveCdText && d->haveCddb ) {
-        K3bDevice::CdText cdt( d->cdTextRaw );
+        K3b::Device::CdText cdt( d->cdTextRaw );
         if ( !questionYesNo( i18n( "Found CD-TEXT (%1 - %2) and Cddb (%3 - %4) entries. "
                                    "Which one should be used to generate the CD-TEXT on the new CD?",
                                    cdt.performer(),
@@ -490,7 +490,7 @@ void K3bCdCopyJob::startCopy()
 }
 
 
-void K3bCdCopyJob::cancel()
+void K3b::CdCopyJob::cancel()
 {
     d->canceled = true;
 
@@ -510,9 +510,9 @@ void K3bCdCopyJob::cancel()
 }
 
 
-bool K3bCdCopyJob::prepareImageFiles()
+bool K3b::CdCopyJob::prepareImageFiles()
 {
-    kDebug() << "(K3bCdCopyJob) prepareImageFiles()";
+    kDebug() << "(K3b::CdCopyJob) prepareImageFiles()";
 
     d->imageNames.clear();
     d->infNames.clear();
@@ -520,7 +520,7 @@ bool K3bCdCopyJob::prepareImageFiles()
 
     QFileInfo fi( m_tempPath );
 
-    if( d->toc.count() > 1 || d->toc.contentType() == K3bDevice::AUDIO ) {
+    if( d->toc.count() > 1 || d->toc.contentType() == K3b::Device::AUDIO ) {
         // create a directory which contains all the images and inf and stuff
         // and save it in some cool structure
 
@@ -545,7 +545,7 @@ bool K3bCdCopyJob::prepareImageFiles()
         if( !tempDirReady ) {
             QDir dir( m_tempPath );
             m_tempPath = K3b::findUniqueFilePrefix( "k3bCdCopy", m_tempPath );
-            kDebug() << "(K3bCdCopyJob) creating temp dir: " << m_tempPath;
+            kDebug() << "(K3b::CdCopyJob) creating temp dir: " << m_tempPath;
             if( !dir.mkdir( m_tempPath ) ) {
                 emit infoMessage( i18n("Unable to create temporary directory '%1'.",m_tempPath), ERROR );
                 return false;
@@ -558,8 +558,8 @@ bool K3bCdCopyJob::prepareImageFiles()
 
         // create temp filenames
         int i = 1;
-        for( K3bDevice::Toc::const_iterator it = d->toc.constBegin(); it != d->toc.constEnd(); ++it ) {
-            if( (*it).type() == K3bDevice::Track::AUDIO ) {
+        for( K3b::Device::Toc::const_iterator it = d->toc.constBegin(); it != d->toc.constEnd(); ++it ) {
+            if( (*it).type() == K3b::Device::Track::TYPE_AUDIO ) {
                 d->imageNames.append( m_tempPath + QString("Track%1.wav").arg(QString::number(i).rightJustified(2, '0')) );
                 d->infNames.append( m_tempPath + QString("Track%1.inf").arg(QString::number(i).rightJustified(2, '0')) );
             }
@@ -568,9 +568,9 @@ bool K3bCdCopyJob::prepareImageFiles()
             ++i;
         }
 
-        kDebug() << "(K3bCdCopyJob) created image filenames:";
+        kDebug() << "(K3b::CdCopyJob) created image filenames:";
         for( int i = 0; i < d->imageNames.count(); ++i )
-            kDebug() << "(K3bCdCopyJob) " << d->imageNames[i];
+            kDebug() << "(K3b::CdCopyJob) " << d->imageNames[i];
 
         return true;
     }
@@ -599,7 +599,7 @@ bool K3bCdCopyJob::prepareImageFiles()
 }
 
 
-void K3bCdCopyJob::readNextSession()
+void K3b::CdCopyJob::readNextSession()
 {
     if( !m_onTheFly || m_onlyCreateImages ) {
         if( d->numSessions > 1 )
@@ -614,15 +614,15 @@ void K3bCdCopyJob::readNextSession()
     // there is only one situation where we need the audiosessionreader:
     // if the first session is an audio session. That means the first track
     // is an audio track
-    if( d->currentReadSession == 1 && d->toc[0].type() == K3bDevice::Track::AUDIO ) {
+    if( d->currentReadSession == 1 && d->toc[0].type() == K3b::Device::Track::TYPE_AUDIO ) {
         if( !d->audioSessionReader ) {
-            d->audioSessionReader = new K3bAudioSessionReadingJob( this, this );
+            d->audioSessionReader = new K3b::AudioSessionReadingJob( this, this );
             connect( d->audioSessionReader, SIGNAL(nextTrack(int, int)),
                      this, SLOT(slotReadingNextTrack(int, int)) );
             connectSubJob( d->audioSessionReader,
                            SLOT(slotSessionReaderFinished(bool)),
-                           K3bJob::DEFAULT_SIGNAL_CONNECTION,
-                           K3bJob::DEFAULT_SIGNAL_CONNECTION,
+                           K3b::Job::DEFAULT_SIGNAL_CONNECTION,
+                           K3b::Job::DEFAULT_SIGNAL_CONNECTION,
                            SLOT(slotReaderProgress(int)),
                            SLOT(slotReaderSubProgress(int)) );
         }
@@ -642,7 +642,7 @@ void K3bCdCopyJob::readNextSession()
     }
     else {
         if( !d->dataTrackReader ) {
-            d->dataTrackReader = new K3bDataTrackReader( this, this );
+            d->dataTrackReader = new K3b::DataTrackReader( this, this );
             connect( d->dataTrackReader, SIGNAL(percent(int)), this, SLOT(slotReaderProgress(int)) );
             connect( d->dataTrackReader, SIGNAL(processedSize(int, int)), this, SLOT(slotReaderProcessedSize(int, int)) );
             connect( d->dataTrackReader, SIGNAL(finished(bool)), this, SLOT(slotSessionReaderFinished(bool)) );
@@ -656,13 +656,13 @@ void K3bCdCopyJob::readNextSession()
         d->dataTrackReader->setNoCorrection( m_noCorrection );
         d->dataTrackReader->setRetries( m_dataReadRetries );
         if( m_onlyCreateImages )
-            d->dataTrackReader->setSectorSize( K3bDataTrackReader::MODE1 );
+            d->dataTrackReader->setSectorSize( K3b::DataTrackReader::MODE1 );
         else
-            d->dataTrackReader->setSectorSize( K3bDataTrackReader::AUTO );
+            d->dataTrackReader->setSectorSize( K3b::DataTrackReader::AUTO );
 
-        K3bTrack* track = 0;
+        K3b::Device::Track* track = 0;
         int dataTrackIndex = 0;
-        if( d->toc.contentType() == K3bDevice::MIXED ) {
+        if( d->toc.contentType() == K3b::Device::MIXED ) {
             track = &d->toc[d->toc.count()-1];
             dataTrackIndex = 0;
         }
@@ -679,7 +679,7 @@ void K3bCdCopyJob::readNextSession()
             d->dataTrackReader->setSectorRange( track->firstSector(), track->lastSector() );
 
         int trackNum = d->currentReadSession;
-        if( d->toc.contentType() == K3bDevice::MIXED )
+        if( d->toc.contentType() == K3b::Device::MIXED )
             trackNum = d->toc.count();
 
         if( m_onTheFly )
@@ -696,7 +696,7 @@ void K3bCdCopyJob::readNextSession()
 }
 
 
-bool K3bCdCopyJob::writeNextSession()
+bool K3b::CdCopyJob::writeNextSession()
 {
     // we emit our own task since the cdrecord task is way too simple
     if( d->numSessions > 1 ) {
@@ -720,15 +720,15 @@ bool K3bCdCopyJob::writeNextSession()
         emit newSubTask( i18n("Waiting for media") );
 
         if( waitForMedia( m_writerDevice,
-                          K3bDevice::STATE_EMPTY,
-                          K3bDevice::MEDIA_WRITABLE_CD ) < 0 ) {
+                          K3b::Device::STATE_EMPTY,
+                          K3b::Device::MEDIA_WRITABLE_CD ) < 0 ) {
             finishJob( true, false );
             return false;
         }
     }
 
     if( !d->cdrecordWriter ) {
-        d->cdrecordWriter = new K3bCdrecordWriter( m_writerDevice, this, this );
+        d->cdrecordWriter = new K3b::CdrecordWriter( m_writerDevice, this, this );
         connect( d->cdrecordWriter, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
         connect( d->cdrecordWriter, SIGNAL(percent(int)), this, SLOT(slotWriterProgress(int)) );
         connect( d->cdrecordWriter, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
@@ -752,14 +752,14 @@ bool K3bCdCopyJob::writeNextSession()
 
 
     // create the cdrecord arguments
-    if( d->currentWrittenSession == 1 && d->toc[0].type() == K3bDevice::Track::AUDIO ) {
+    if( d->currentWrittenSession == 1 && d->toc[0].type() == K3b::Device::Track::TYPE_AUDIO ) {
         //
         // Audio session
         //
 
 
         if( !d->infFileWriter )
-            d->infFileWriter = new K3bInfFileWriter();
+            d->infFileWriter = new K3b::InfFileWriter();
 
         //
         // create the inf files if not already done
@@ -768,10 +768,10 @@ bool K3bCdCopyJob::writeNextSession()
 
             int trackNumber = 1;
 
-            for( K3bDevice::Toc::const_iterator it = d->toc.constBegin(); it != d->toc.constEnd(); ++it ) {
-                const K3bDevice::Track& track = *it;
+            for( K3b::Device::Toc::const_iterator it = d->toc.constBegin(); it != d->toc.constEnd(); ++it ) {
+                const K3b::Device::Track& track = *it;
 
-                if( track.type() == K3bDevice::Track::DATA )
+                if( track.type() == K3b::Device::Track::TYPE_DATA )
                     break;
 
                 d->infFileWriter->setTrack( track );
@@ -827,8 +827,8 @@ bool K3bCdCopyJob::writeNextSession()
             //
             bool zeroPregap = false;
             if( d->numSessions == 1 ) {
-                for( K3bDevice::Toc::const_iterator it = d->toc.constBegin(); it != d->toc.constEnd(); ++it ) {
-                    const K3bDevice::Track& track = *it;
+                for( K3b::Device::Toc::const_iterator it = d->toc.constBegin(); it != d->toc.constEnd(); ++it ) {
+                    const K3b::Device::Track& track = *it;
                     if( track.index0() == 0 ) {
                         ++it;
                         if( it != d->toc.constEnd() )
@@ -890,9 +890,9 @@ bool K3bCdCopyJob::writeNextSession()
         //
         // Data Session
         //
-        K3bTrack* track = 0;
+        K3b::Device::Track* track = 0;
         int dataTrackIndex = 0;
-        if( d->toc.contentType() == K3bDevice::MIXED ) {
+        if( d->toc.contentType() == K3b::Device::MIXED ) {
             track = &d->toc[d->toc.count()-1];
             dataTrackIndex = 0;
         }
@@ -910,7 +910,7 @@ bool K3bCdCopyJob::writeNextSession()
             if( m_writerDevice->dao() &&
                 d->toc.count() == 1 &&
                 !multi &&
-                track->mode() == K3bDevice::Track::MODE1 )
+                track->mode() == K3b::Device::Track::MODE1 )
                 usedWritingMode = K3b::WRITING_MODE_DAO;
             else
                 usedWritingMode = K3b::WRITING_MODE_TAO;
@@ -928,9 +928,9 @@ bool K3bCdCopyJob::writeNextSession()
         if( m_onTheFly )
             d->cdrecordWriter->addArgument( "-waiti" );
 
-        if( track->mode() == K3bDevice::Track::MODE1 )
+        if( track->mode() == K3b::Device::Track::MODE1 )
             d->cdrecordWriter->addArgument( "-data" );
-        else if( track->mode() == K3bDevice::Track::XA_FORM1 )
+        else if( track->mode() == K3b::Device::Track::XA_FORM1 )
             d->cdrecordWriter->addArgument( "-xa1" );
         else
             d->cdrecordWriter->addArgument( "-xamix" );
@@ -942,15 +942,15 @@ bool K3bCdCopyJob::writeNextSession()
                 d->dataSessionProbablyTAORecorded[dataTrackIndex] )
                 trackLen -= 2;
 
-            if( track->mode() == K3bDevice::Track::MODE1 )
+            if( track->mode() == K3b::Device::Track::MODE1 )
                 trackLen = trackLen * 2048;
-            else if( track->mode() == K3bDevice::Track::XA_FORM1 )
+            else if( track->mode() == K3b::Device::Track::XA_FORM1 )
                 trackLen = trackLen * 2056; // see k3bdatatrackreader.h
             else
                 trackLen = trackLen * 2332; // see k3bdatatrackreader.h
             d->cdrecordWriter->addArgument( QString("-tsize=%1").arg(trackLen) )->addArgument("-");
         }
-        else if( d->toc.contentType() == K3bDevice::MIXED )
+        else if( d->toc.contentType() == K3b::Device::MIXED )
             d->cdrecordWriter->addArgument( d->imageNames[d->toc.count()-1] );
         else
             d->cdrecordWriter->addArgument( d->imageNames[d->currentWrittenSession-1] );
@@ -972,7 +972,7 @@ bool K3bCdCopyJob::writeNextSession()
 
 
 // both the readcdreader and the audiosessionreader are connected to this slot
-void K3bCdCopyJob::slotSessionReaderFinished( bool success )
+void K3b::CdCopyJob::slotSessionReaderFinished( bool success )
 {
     d->audioReaderRunning = d->dataReaderRunning = false;
 
@@ -1022,7 +1022,7 @@ void K3bCdCopyJob::slotSessionReaderFinished( bool success )
 }
 
 
-void K3bCdCopyJob::slotWriterFinished( bool success )
+void K3b::CdCopyJob::slotWriterFinished( bool success )
 {
     emit burning(false);
 
@@ -1042,8 +1042,8 @@ void K3bCdCopyJob::slotWriterFinished( bool success )
             if ( m_writerDevice->diskInfo().numSessions() < ( int )d->currentWrittenSession ) {
                 emit infoMessage( i18n( "Need to reload medium to return to proper state." ), INFO );
                 emit newSubTask( i18n("Reloading the medium") );
-                connect( K3bDevice::reload( m_writerDevice ), SIGNAL(finished(K3bDevice::DeviceHandler*)),
-                         this, SLOT(slotMediaReloadedForNextSession(K3bDevice::DeviceHandler*)) );
+                connect( K3b::Device::reload( m_writerDevice ), SIGNAL(finished(K3b::Device::DeviceHandler*)),
+                         this, SLOT(slotMediaReloadedForNextSession(K3b::Device::DeviceHandler*)) );
             }
 
             if( !writeNextSession() ) {
@@ -1075,7 +1075,7 @@ void K3bCdCopyJob::slotWriterFinished( bool success )
             }
             else {
                 if ( k3bcore->globalSettings()->ejectMedia() ) {
-                    K3bDevice::eject( m_writerDevice );
+                    K3b::Device::eject( m_writerDevice );
                 }
                 finishJob( false, false );
             }
@@ -1087,14 +1087,14 @@ void K3bCdCopyJob::slotWriterFinished( bool success )
         // The error handling will be done only here in that case
         //
 
-        // the K3bCdrecordWriter emitted an error message
+        // the K3b::CdrecordWriter emitted an error message
 
         finishJob( d->canceled, !d->canceled );
     }
 }
 
 
-void K3bCdCopyJob::slotMediaReloadedForNextSession( K3bDevice::DeviceHandler* dh )
+void K3b::CdCopyJob::slotMediaReloadedForNextSession( K3b::Device::DeviceHandler* dh )
 {
     if( !dh->success() )
         blockingInformation( i18n("Please reload the medium and press 'ok'"),
@@ -1109,7 +1109,7 @@ void K3bCdCopyJob::slotMediaReloadedForNextSession( K3bDevice::DeviceHandler* dh
 }
 
 
-void K3bCdCopyJob::cleanup()
+void K3b::CdCopyJob::cleanup()
 {
     if( m_onTheFly || !m_keepImage || ((d->canceled || d->error) && !d->readingSuccessful) ) {
         emit infoMessage( i18n("Removing temporary files."), INFO );
@@ -1131,7 +1131,7 @@ void K3bCdCopyJob::cleanup()
 }
 
 
-void K3bCdCopyJob::slotReaderProgress( int p )
+void K3b::CdCopyJob::slotReaderProgress( int p )
 {
     if( !m_onTheFly || m_onlyCreateImages ) {
         int bigParts = ( m_onlyCreateImages ? 1 : (m_simulate ? 2 : m_copies + 1 ) );
@@ -1146,7 +1146,7 @@ void K3bCdCopyJob::slotReaderProgress( int p )
 }
 
 
-void K3bCdCopyJob::slotReaderSubProgress( int p )
+void K3b::CdCopyJob::slotReaderSubProgress( int p )
 {
     // only if reading an audiosession
     if( !m_onTheFly || m_onlyCreateImages ) {
@@ -1155,14 +1155,14 @@ void K3bCdCopyJob::slotReaderSubProgress( int p )
 }
 
 
-void K3bCdCopyJob::slotReaderProcessedSize( int p, int pp )
+void K3b::CdCopyJob::slotReaderProcessedSize( int p, int pp )
 {
     if( !m_onTheFly )
         emit processedSubSize( p, pp );
 }
 
 
-void K3bCdCopyJob::slotWriterProgress( int p )
+void K3b::CdCopyJob::slotWriterProgress( int p )
 {
     int bigParts = ( m_simulate ? 1 : m_copies ) + ( m_onTheFly ? 0 : 1 );
     long done = ( m_onTheFly ? d->doneCopies : d->doneCopies+1 ) * d->overallSize
@@ -1173,9 +1173,9 @@ void K3bCdCopyJob::slotWriterProgress( int p )
 }
 
 
-void K3bCdCopyJob::slotWritingNextTrack( int t, int tt )
+void K3b::CdCopyJob::slotWritingNextTrack( int t, int tt )
 {
-    if( d->toc.contentType() == K3bDevice::MIXED ) {
+    if( d->toc.contentType() == K3b::Device::MIXED ) {
         if( d->currentWrittenSession == 1 )
             emit newSubTask( i18n("Writing track %1 of %2",t,d->toc.count()) );
         else
@@ -1188,13 +1188,13 @@ void K3bCdCopyJob::slotWritingNextTrack( int t, int tt )
 }
 
 
-void K3bCdCopyJob::slotReadingNextTrack( int t, int )
+void K3b::CdCopyJob::slotReadingNextTrack( int t, int )
 {
     if( !m_onTheFly || m_onlyCreateImages ) {
         int track = t;
         if( d->audioReaderRunning )
             track = t;
-        else if( d->toc.contentType() == K3bDevice::MIXED )
+        else if( d->toc.contentType() == K3b::Device::MIXED )
             track = d->toc.count();
         else
             track = d->currentReadSession;
@@ -1204,7 +1204,7 @@ void K3bCdCopyJob::slotReadingNextTrack( int t, int )
 }
 
 
-QString K3bCdCopyJob::jobDescription() const
+QString K3b::CdCopyJob::jobDescription() const
 {
     if( m_onlyCreateImages ) {
         return i18n("Creating CD Image");
@@ -1224,7 +1224,7 @@ QString K3bCdCopyJob::jobDescription() const
 }
 
 
-QString K3bCdCopyJob::jobDetails() const
+QString K3b::CdCopyJob::jobDetails() const
 {
     return i18np("Creating 1 copy",
                  "Creating %1 copies",
@@ -1232,7 +1232,7 @@ QString K3bCdCopyJob::jobDetails() const
 }
 
 
-void K3bCdCopyJob::finishJob( bool c, bool e )
+void K3b::CdCopyJob::finishJob( bool c, bool e )
 {
     if( d->running ) {
         if( c ) {

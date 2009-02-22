@@ -43,11 +43,11 @@
 #include <KToolBar>
 
 
-K3bVideoDVDRippingView::K3bVideoDVDRippingView( QWidget* parent )
-    : K3bMediaContentsView( true,
-                            K3bMedium::CONTENT_VIDEO_DVD,
-                            K3bDevice::MEDIA_DVD_ALL,
-                            K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_COMPLETE,
+K3b::VideoDVDRippingView::VideoDVDRippingView( QWidget* parent )
+    : K3b::MediaContentsView( true,
+                            K3b::Medium::CONTENT_VIDEO_DVD,
+                            K3b::Device::MEDIA_DVD_ALL,
+                            K3b::Device::STATE_INCOMPLETE|K3b::Device::STATE_COMPLETE,
                             parent )
 {
     QGridLayout* mainGrid = new QGridLayout( mainWidget() );
@@ -66,7 +66,7 @@ K3bVideoDVDRippingView::K3bVideoDVDRippingView( QWidget* parent )
 
     // the title view
     // ----------------------------------------------------------------------------------
-    m_titleView = new K3bVideoDVDRippingTitleListView( mainWidget() );
+    m_titleView = new K3b::VideoDVDRippingTitleListView( mainWidget() );
 
     connect( m_titleView, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)),
              this, SLOT(slotContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)) );
@@ -81,17 +81,17 @@ K3bVideoDVDRippingView::K3bVideoDVDRippingView( QWidget* parent )
 
     m_toolBox->addAction( actionCollection()->action("start_rip") );
 
-    setLeftPixmap( K3bTheme::MEDIA_LEFT );
-    setRightPixmap( K3bTheme::MEDIA_VIDEO );
+    setLeftPixmap( K3b::Theme::MEDIA_LEFT );
+    setRightPixmap( K3b::Theme::MEDIA_VIDEO );
 }
 
 
-K3bVideoDVDRippingView::~K3bVideoDVDRippingView()
+K3b::VideoDVDRippingView::~VideoDVDRippingView()
 {
 }
 
 
-void K3bVideoDVDRippingView::reloadMedium()
+void K3b::VideoDVDRippingView::reloadMedium()
 {
     //
     // For VideoDVD reading it is important that the DVD is not mounted
@@ -107,11 +107,11 @@ void K3bVideoDVDRippingView::reloadMedium()
     }
 
     //
-    // K3bVideoDVD::open does not necessarily fail on encrypted DVDs if dvdcss is not
+    // K3b::VideoDVD::open does not necessarily fail on encrypted DVDs if dvdcss is not
     // available. Thus, we test the availability of libdvdcss here
     //
-    if( device()->copyrightProtectionSystemType() == K3bDevice::COPYRIGHT_PROTECTION_CSS ) {
-        K3bLibDvdCss* css = K3bLibDvdCss::create();
+    if( device()->copyrightProtectionSystemType() == K3b::Device::COPYRIGHT_PROTECTION_CSS ) {
+        K3b::LibDvdCss* css = K3b::LibDvdCss::create();
         if( !css ) {
             KMessageBox::error( this, i18n("<p>Unable to read Video DVD contents: Found encrypted Video DVD."
                                            "<p>Install <i>libdvdcss</i> to get Video DVD decryption support.") );
@@ -139,11 +139,11 @@ void K3bVideoDVDRippingView::reloadMedium()
         }
         else {
             int vc = 0, ac = 0;
-            for( int i = 0; i < K3bVideoDVDTitleTranscodingJob::VIDEO_CODEC_NUM_ENTRIES; ++i )
-                if( K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( (K3bVideoDVDTitleTranscodingJob::VideoCodec)i ) )
+            for( int i = 0; i < K3b::VideoDVDTitleTranscodingJob::VIDEO_CODEC_NUM_ENTRIES; ++i )
+                if( K3b::VideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( (K3b::VideoDVDTitleTranscodingJob::VideoCodec)i ) )
                     ++vc;
-            for( int i = 0; i < K3bVideoDVDTitleTranscodingJob::AUDIO_CODEC_NUM_ENTRIES; ++i )
-                if( K3bVideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( (K3bVideoDVDTitleTranscodingJob::AudioCodec)i ) )
+            for( int i = 0; i < K3b::VideoDVDTitleTranscodingJob::AUDIO_CODEC_NUM_ENTRIES; ++i )
+                if( K3b::VideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( (K3b::VideoDVDTitleTranscodingJob::AudioCodec)i ) )
                     ++ac;
             if( !ac || !vc ) {
                 KMessageBox::sorry( this,
@@ -165,12 +165,12 @@ void K3bVideoDVDRippingView::reloadMedium()
 }
 
 
-void K3bVideoDVDRippingView::slotStartRipping()
+void K3b::VideoDVDRippingView::slotStartRipping()
 {
     QList<int> titles;
     int i = 1;
     for( Q3ListViewItemIterator it( m_titleView ); *it; ++it, ++i )
-        if( static_cast<K3bCheckListViewItem*>( *it )->isChecked() )
+        if( static_cast<K3b::CheckListViewItem*>( *it )->isChecked() )
             titles.append( i );
 
     if( titles.isEmpty() ) {
@@ -178,49 +178,49 @@ void K3bVideoDVDRippingView::slotStartRipping()
                             i18n("No Titles Selected") );
     }
     else {
-        K3bVideoDVDRippingDialog dlg( m_dvd, titles, this );
+        K3b::VideoDVDRippingDialog dlg( m_dvd, titles, this );
         dlg.exec();
     }
 }
 
 
-void K3bVideoDVDRippingView::slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& p )
+void K3b::VideoDVDRippingView::slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& p )
 {
     m_popupMenu->popup(p);
 }
 
 
-void K3bVideoDVDRippingView::slotCheckAll()
+void K3b::VideoDVDRippingView::slotCheckAll()
 {
     for( Q3ListViewItemIterator it( m_titleView ); it.current(); ++it )
-        dynamic_cast<K3bCheckListViewItem*>(it.current())->setChecked(true);
+        dynamic_cast<K3b::CheckListViewItem*>(it.current())->setChecked(true);
 }
 
 
-void K3bVideoDVDRippingView::slotUncheckAll()
+void K3b::VideoDVDRippingView::slotUncheckAll()
 {
     for( Q3ListViewItemIterator it( m_titleView ); it.current(); ++it )
-        dynamic_cast<K3bCheckListViewItem*>(it.current())->setChecked(false);
+        dynamic_cast<K3b::CheckListViewItem*>(it.current())->setChecked(false);
 }
 
 
-void K3bVideoDVDRippingView::slotCheck()
+void K3b::VideoDVDRippingView::slotCheck()
 {
     QList<Q3ListViewItem*> items( m_titleView->selectedItems() );
     Q_FOREACH( Q3ListViewItem* item, items )
-        dynamic_cast<K3bCheckListViewItem*>(item)->setChecked(true);
+        dynamic_cast<K3b::CheckListViewItem*>(item)->setChecked(true);
 }
 
 
-void K3bVideoDVDRippingView::slotUncheck()
+void K3b::VideoDVDRippingView::slotUncheck()
 {
     QList<Q3ListViewItem*> items( m_titleView->selectedItems() );
     Q_FOREACH( Q3ListViewItem* item, items )
-        dynamic_cast<K3bCheckListViewItem*>(item)->setChecked(false);
+        dynamic_cast<K3b::CheckListViewItem*>(item)->setChecked(false);
 }
 
 
-void K3bVideoDVDRippingView::initActions()
+void K3b::VideoDVDRippingView::initActions()
 {
     m_actionCollection = new KActionCollection( this );
 
@@ -262,7 +262,7 @@ void K3bVideoDVDRippingView::initActions()
 }
 
 
-void K3bVideoDVDRippingView::enableInteraction( bool enable )
+void K3b::VideoDVDRippingView::enableInteraction( bool enable )
 {
     actionCollection()->action( "start_rip" )->setEnabled( enable );
 }

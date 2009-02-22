@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
  *
@@ -20,30 +20,31 @@
 #include <k3bvideodvd.h>
 #include <k3bvideodvdtime.h>
 
-
-namespace K3bVideoDVD
-{
-  class LIBK3B_EXPORT PTT
+namespace K3b {
+    namespace VideoDVD
     {
-    public:
-      PTT() {}
+        class LIBK3B_EXPORT PTT
+        {
+        public:
+            PTT() {}
 
-      unsigned int pttNumber() const { return m_pttNum; }
+            unsigned int pttNumber() const { return m_pttNum; }
 
-      const Time& playbackTime() const { return m_playbackTime; }
+            const Time& playbackTime() const { return m_playbackTime; }
 
-      unsigned int firstSector() const { return m_firstSector; }
-      unsigned int lastSector() const { return m_lastSector; }
+            unsigned int firstSector() const { return m_firstSector; }
+            unsigned int lastSector() const { return m_lastSector; }
 
-    private:
-      unsigned int m_pttNum;
-      Time m_playbackTime;
+        private:
+            unsigned int m_pttNum;
+            Time m_playbackTime;
 
-      unsigned int m_firstSector;
-      unsigned int m_lastSector;
+            unsigned int m_firstSector;
+            unsigned int m_lastSector;
 
-      friend class VideoDVD;
-    };
+            friend class VideoDVD;
+        };
+    }
 }
 
 #endif

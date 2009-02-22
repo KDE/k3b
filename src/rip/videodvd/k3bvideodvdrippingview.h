@@ -21,7 +21,9 @@
 
 #include <QLabel>
 
-class K3bVideoDVDRippingTitleListView;
+namespace K3b {
+    class VideoDVDRippingTitleListView;
+}
 class KToolBar;
 class QLabel;
 class KActionCollection;
@@ -29,13 +31,14 @@ class KMenu;
 class K3ListView;
 class Q3ListViewItem;
 
-class K3bVideoDVDRippingView : public K3bMediaContentsView
+namespace K3b {
+class VideoDVDRippingView : public MediaContentsView
 {
   Q_OBJECT
 
  public:
-  K3bVideoDVDRippingView( QWidget* parent = 0 );
-  ~K3bVideoDVDRippingView();
+  VideoDVDRippingView( QWidget* parent = 0 );
+  ~VideoDVDRippingView();
 
   KActionCollection* actionCollection() const { return m_actionCollection; }
 
@@ -59,9 +62,10 @@ class K3bVideoDVDRippingView : public K3bMediaContentsView
 
   KToolBar* m_toolBox;
   QLabel* m_labelLength;
-  K3bVideoDVDRippingTitleListView* m_titleView;  
+  VideoDVDRippingTitleListView* m_titleView;  
 
-  K3bVideoDVD::VideoDVD m_dvd;
+  VideoDVD::VideoDVD m_dvd;
 };
+}
 
 #endif

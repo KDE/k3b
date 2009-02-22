@@ -48,12 +48,12 @@
 #include <kglobal.h>
 #include <KSharedConfig>
 
-class K3bProjectManager::Private
+class K3b::ProjectManager::Private
 {
 public:
-    QList<K3bDoc*> projects;
-    K3bDoc* activeProject;
-    QMap<K3bDoc*, K3bProjectInterface*> projectInterfaceMap;
+    QList<K3b::Doc*> projects;
+    K3b::Doc* activeProject;
+    QMap<K3b::Doc*, K3b::ProjectInterface*> projectInterfaceMap;
 
     int audioUntitledCount;
     int dataUntitledCount;
@@ -66,7 +66,7 @@ public:
 
 
 
-K3bProjectManager::K3bProjectManager( QObject* parent )
+K3b::ProjectManager::ProjectManager( QObject* parent )
     : QObject( parent )
 {
     d = new Private();
@@ -80,46 +80,46 @@ K3bProjectManager::K3bProjectManager( QObject* parent )
     d->videoDvdUntitledCount = 0;
 }
 
-K3bProjectManager::~K3bProjectManager()
+K3b::ProjectManager::~ProjectManager()
 {
     delete d;
 }
 
 
-QList<K3bDoc*> K3bProjectManager::projects() const
+QList<K3b::Doc*> K3b::ProjectManager::projects() const
 {
     return d->projects;
 }
 
 
-void K3bProjectManager::addProject( K3bDoc* doc )
+void K3b::ProjectManager::addProject( K3b::Doc* doc )
 {
     kDebug() << doc;
 
     if( !d->projects.contains( doc ) ) {
-        kDebug() << "(K3bProjectManager) adding doc " << doc->URL().path();
+        kDebug() << "(K3b::ProjectManager) adding doc " << doc->URL().path();
 
         d->projects.append(doc);
 
-        connect( doc, SIGNAL(changed(K3bDoc*)),
-                 this, SLOT(slotProjectChanged(K3bDoc*)) );
+        connect( doc, SIGNAL(changed(K3b::Doc*)),
+                 this, SLOT(slotProjectChanged(K3b::Doc*)) );
 
         emit newProject( doc );
     }
 }
 
 
-void K3bProjectManager::removeProject( K3bDoc* docRemove )
+void K3b::ProjectManager::removeProject( K3b::Doc* docRemove )
 {
     //
     // QPtrList.findRef seems to be buggy. Everytime we search for the
     // first added item it is not found!
     //
-    Q_FOREACH( K3bDoc* doc, d->projects ) {
+    Q_FOREACH( K3b::Doc* doc, d->projects ) {
         if( docRemove == doc ) {
 #if 0
             // remove the DCOP interface
-            QMap<K3bDoc*, K3bProjectInterface*>::iterator it = d->projectInterfaceMap.find( doc );
+            QMap<K3b::Doc*, K3b::ProjectInterface*>::iterator it = d->projectInterfaceMap.find( doc );
             if( it != d->projectInterfaceMap.end() ) {
                 // delete the interface
                 delete it.data();
@@ -132,13 +132,13 @@ void K3bProjectManager::removeProject( K3bDoc* docRemove )
             return;
         }
     }
-    kDebug() << "(K3bProjectManager) unable to find doc: " << docRemove->URL().path();
+    kDebug() << "(K3b::ProjectManager) unable to find doc: " << docRemove->URL().path();
 }
 
 
-K3bDoc* K3bProjectManager::findByUrl( const KUrl& url )
+K3b::Doc* K3b::ProjectManager::findByUrl( const KUrl& url )
 {
-    Q_FOREACH( K3bDoc* doc, d->projects ) {
+    Q_FOREACH( K3b::Doc* doc, d->projects ) {
         if( doc->URL() == url )
             return doc;
     }
@@ -146,13 +146,13 @@ K3bDoc* K3bProjectManager::findByUrl( const KUrl& url )
 }
 
 
-bool K3bProjectManager::isEmpty() const
+bool K3b::ProjectManager::isEmpty() const
 {
     return d->projects.isEmpty();
 }
 
 
-void K3bProjectManager::setActive( K3bDoc* docActive )
+void K3b::ProjectManager::setActive( K3b::Doc* docActive )
 {
     if( !docActive ) {
         d->activeProject = 0L;
@@ -164,7 +164,7 @@ void K3bProjectManager::setActive( K3bDoc* docActive )
     // QPtrList.findRef seems to be buggy. Everytime we search for the
     // first added item it is not found!
     //
-    Q_FOREACH( K3bDoc* doc, d->projects ) {
+    Q_FOREACH( K3b::Doc* doc, d->projects ) {
         if( docActive == doc ) {
             d->activeProject = doc;
             emit activeProjectChanged(doc);
@@ -173,52 +173,52 @@ void K3bProjectManager::setActive( K3bDoc* docActive )
 }
 
 
-K3bDoc* K3bProjectManager::activeProject() const
+K3b::Doc* K3b::ProjectManager::activeProject() const
 {
     return d->activeProject;
 }
 
 
-K3bDoc* K3bProjectManager::createEmptyProject( K3bDoc::DocType type )
+K3b::Doc* K3b::ProjectManager::createEmptyProject( K3b::Doc::DocType type )
 {
     kDebug() << type;
 
-    K3bDoc* doc = 0;
+    K3b::Doc* doc = 0;
     QString fileName;
 
     switch( type ) {
-    case K3bDoc::AUDIO: {
-        doc = new K3bAudioDoc( this );
+    case K3b::Doc::AUDIO: {
+        doc = new K3b::AudioDoc( this );
         fileName = i18n("AudioCD%1",d->audioUntitledCount++);
         break;
     }
 
-    case K3bDoc::DATA: {
-        doc = new K3bDataDoc( this );
+    case K3b::Doc::DATA: {
+        doc = new K3b::DataDoc( this );
         fileName = i18n("Data%1",d->dataUntitledCount++);
         break;
     }
 
-    case K3bDoc::MIXED: {
-        doc = new K3bMixedDoc( this );
+    case K3b::Doc::MIXED: {
+        doc = new K3b::MixedDoc( this );
         fileName=i18n("MixedCD%1",d->mixedUntitledCount++);
         break;
     }
 
-    case K3bDoc::VCD: {
-        doc = new K3bVcdDoc( this );
+    case K3b::Doc::VCD: {
+        doc = new K3b::VcdDoc( this );
         fileName=i18n("VideoCD%1",d->vcdUntitledCount++);
         break;
     }
 
-    case K3bDoc::MOVIX: {
-        doc = new K3bMovixDoc( this );
+    case K3b::Doc::MOVIX: {
+        doc = new K3b::MovixDoc( this );
         fileName=i18n("eMovix%1",d->movixUntitledCount++);
         break;
     }
 
-    case K3bDoc::VIDEODVD: {
-        doc = new K3bVideoDvdDoc( this );
+    case K3b::Doc::VIDEODVD: {
+        doc = new K3b::VideoDvdDoc( this );
         fileName = i18n("VideoDVD%1",d->videoDvdUntitledCount++);
         break;
     }
@@ -236,11 +236,11 @@ K3bDoc* K3bProjectManager::createEmptyProject( K3bDoc::DocType type )
 }
 
 
-K3bDoc* K3bProjectManager::createProject( K3bDoc::DocType type )
+K3b::Doc* K3b::ProjectManager::createProject( K3b::Doc::DocType type )
 {
     kDebug() << type;
 
-    K3bDoc* doc = createEmptyProject( type );
+    K3b::Doc* doc = createEmptyProject( type );
 
     // create the dcop interface
     //dcopInterface( doc );
@@ -251,7 +251,7 @@ K3bDoc* K3bProjectManager::createProject( K3bDoc::DocType type )
 }
 
 
-void K3bProjectManager::loadDefaults( K3bDoc* doc )
+void K3b::ProjectManager::loadDefaults( K3b::Doc* doc )
 {
     KSharedConfig::Ptr config = KGlobal::config();
 
@@ -260,10 +260,10 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
     // earlier K3b versions loaded the saved settings
     // so that is what we do as a default
     int i = KConfigGroup( config, "General Options" ).readEntry( "action dialog startup settings",
-                                                                 int(K3bInteractionDialog::LOAD_SAVED_SETTINGS) );
-    if( i == K3bInteractionDialog::LOAD_K3B_DEFAULTS )
+                                                                 int(K3b::InteractionDialog::LOAD_SAVED_SETTINGS) );
+    if( i == K3b::InteractionDialog::LOAD_K3B_DEFAULTS )
         return; // the default k3b settings are the ones everyone starts with
-    else if( i == K3bInteractionDialog::LOAD_LAST_SETTINGS )
+    else if( i == K3b::InteractionDialog::LOAD_LAST_SETTINGS )
         cg = "last used " + cg;
     KConfigGroup c(config,cg);
 
@@ -288,8 +288,8 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
 
 
     switch( doc->type() ) {
-    case K3bDoc::AUDIO: {
-        K3bAudioDoc* audioDoc = static_cast<K3bAudioDoc*>(doc);
+    case K3b::Doc::AUDIO: {
+        K3b::AudioDoc* audioDoc = static_cast<K3b::AudioDoc*>(doc);
 
         audioDoc->writeCdText( c.readEntry( "cd_text", true ) );
         audioDoc->setHideFirstTrack( c.readEntry( "hide_first_track", false ) );
@@ -301,8 +301,8 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
         break;
     }
 
-    case K3bDoc::MOVIX: {
-        K3bMovixDoc* movixDoc = static_cast<K3bMovixDoc*>(doc);
+    case K3b::Doc::MOVIX: {
+        K3b::MovixDoc* movixDoc = static_cast<K3b::MovixDoc*>(doc);
 
         movixDoc->setSubtitleFontset( c.readEntry("subtitle_fontset") );
 
@@ -322,10 +322,10 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
         // fallthrough
     }
 
-    case K3bDoc::DATA: {
-        K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>(doc);
+    case K3b::Doc::DATA: {
+        K3b::DataDoc* dataDoc = static_cast<K3b::DataDoc*>(doc);
 
-        dataDoc->setIsoOptions( K3bIsoOptions::load( c, false ) );
+        dataDoc->setIsoOptions( K3b::IsoOptions::load( c, false ) );
 
         QString datamode = c.readEntry( "data_track_mode" );
         if( datamode == "mode1" )
@@ -339,40 +339,40 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
 
         QString s = c.readEntry( "multisession mode" );
         if( s == "none" )
-            dataDoc->setMultiSessionMode( K3bDataDoc::NONE );
+            dataDoc->setMultiSessionMode( K3b::DataDoc::NONE );
         else if( s == "start" )
-            dataDoc->setMultiSessionMode( K3bDataDoc::START );
+            dataDoc->setMultiSessionMode( K3b::DataDoc::START );
         else if( s == "continue" )
-            dataDoc->setMultiSessionMode( K3bDataDoc::CONTINUE );
+            dataDoc->setMultiSessionMode( K3b::DataDoc::CONTINUE );
         else if( s == "finish" )
-            dataDoc->setMultiSessionMode( K3bDataDoc::FINISH );
+            dataDoc->setMultiSessionMode( K3b::DataDoc::FINISH );
         else
-            dataDoc->setMultiSessionMode( K3bDataDoc::AUTO );
+            dataDoc->setMultiSessionMode( K3b::DataDoc::AUTO );
 
         break;
     }
 
-    case K3bDoc::VIDEODVD: {
+    case K3b::Doc::VIDEODVD: {
         // the only defaults we need here are the volume id and stuff
-        K3bDataDoc* dataDoc = static_cast<K3bDataDoc*>(doc);
-        dataDoc->setIsoOptions( K3bIsoOptions::load( c, false ) );
+        K3b::DataDoc* dataDoc = static_cast<K3b::DataDoc*>(doc);
+        dataDoc->setIsoOptions( K3b::IsoOptions::load( c, false ) );
         dataDoc->setVerifyData( c.readEntry( "verify data", false ) );
         break;
     }
 
-    case K3bDoc::MIXED: {
-        K3bMixedDoc* mixedDoc = static_cast<K3bMixedDoc*>(doc);
+    case K3b::Doc::MIXED: {
+        K3b::MixedDoc* mixedDoc = static_cast<K3b::MixedDoc*>(doc);
 
         mixedDoc->audioDoc()->writeCdText( c.readEntry( "cd_text", true ) );
         mixedDoc->audioDoc()->setNormalize( c.readEntry( "normalize", false ) );
 
         // load mixed type
         if( c.readEntry( "mixed_type" ) == "last_track" )
-            mixedDoc->setMixedType( K3bMixedDoc::DATA_LAST_TRACK );
+            mixedDoc->setMixedType( K3b::MixedDoc::DATA_LAST_TRACK );
         else if( c.readEntry( "mixed_type" ) == "first_track" )
-            mixedDoc->setMixedType( K3bMixedDoc::DATA_FIRST_TRACK );
+            mixedDoc->setMixedType( K3b::MixedDoc::DATA_FIRST_TRACK );
         else
-            mixedDoc->setMixedType( K3bMixedDoc::DATA_SECOND_SESSION );
+            mixedDoc->setMixedType( K3b::MixedDoc::DATA_SECOND_SESSION );
 
         QString datamode = c.readEntry( "data_track_mode" );
         if( datamode == "mode1" )
@@ -382,7 +382,7 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
         else
             mixedDoc->dataDoc()->setDataMode( K3b::DATA_MODE_AUTO );
 
-        mixedDoc->dataDoc()->setIsoOptions( K3bIsoOptions::load( c, false ) );
+        mixedDoc->dataDoc()->setIsoOptions( K3b::IsoOptions::load( c, false ) );
 
         if( mixedDoc->dataDoc()->isoOptions().volumeID().isEmpty() )
             mixedDoc->dataDoc()->setVolumeID( doc->URL().fileName() );
@@ -390,8 +390,8 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
         break;
     }
 
-    case K3bDoc::VCD: {
-        K3bVcdDoc* vcdDoc = static_cast<K3bVcdDoc*>(doc);
+    case K3b::Doc::VCD: {
+        K3b::VcdDoc* vcdDoc = static_cast<K3b::VcdDoc*>(doc);
 
         // FIXME: I think we miss a lot here!
 
@@ -407,30 +407,30 @@ void K3bProjectManager::loadDefaults( K3bDoc* doc )
     }
     }
 
-    if( doc->type() == K3bDoc::DATA ||
-        doc->type() == K3bDoc::MOVIX ||
-        doc->type() == K3bDoc::VIDEODVD ) {
-        if( static_cast<K3bDataDoc*>(doc)->isoOptions().volumeID().isEmpty() )
-            static_cast<K3bDataDoc*>(doc)->setVolumeID( doc->URL().fileName() );
+    if( doc->type() == K3b::Doc::DATA ||
+        doc->type() == K3b::Doc::MOVIX ||
+        doc->type() == K3b::Doc::VIDEODVD ) {
+        if( static_cast<K3b::DataDoc*>(doc)->isoOptions().volumeID().isEmpty() )
+            static_cast<K3b::DataDoc*>(doc)->setVolumeID( doc->URL().fileName() );
     }
 
     doc->setModified( false );
 }
 
 #if 0
-K3bProjectInterface* K3bProjectManager::dcopInterface( K3bDoc* doc )
+K3b::ProjectInterface* K3b::ProjectManager::dcopInterface( K3b::Doc* doc )
 {
-    QMap<K3bDoc*, K3bProjectInterface*>::iterator it = d->projectInterfaceMap.find( doc );
+    QMap<K3b::Doc*, K3b::ProjectInterface*>::iterator it = d->projectInterfaceMap.find( doc );
     if( it == d->projectInterfaceMap.end() ) {
-        K3bProjectInterface* dcopInterface = 0;
-        if( doc->type() == K3bDoc::DATA )
-            dcopInterface = new K3bDataProjectInterface( static_cast<K3bDataDoc*>(doc) );
-        else if( doc->type() == K3bDoc::AUDIO )
-            dcopInterface = new K3bAudioProjectInterface( static_cast<K3bAudioDoc*>(doc) );
-        else if( doc->type() == K3bDoc::MIXED )
-            dcopInterface = new K3bMixedProjectInterface( static_cast<K3bMixedDoc*>(doc) );
+        K3b::ProjectInterface* dcopInterface = 0;
+        if( doc->type() == K3b::Doc::DATA )
+            dcopInterface = new K3b::DataProjectInterface( static_cast<K3b::DataDoc*>(doc) );
+        else if( doc->type() == K3b::Doc::AUDIO )
+            dcopInterface = new K3b::AudioProjectInterface( static_cast<K3b::AudioDoc*>(doc) );
+        else if( doc->type() == K3b::Doc::MIXED )
+            dcopInterface = new K3b::MixedProjectInterface( static_cast<K3b::MixedDoc*>(doc) );
         else
-            dcopInterface = new K3bProjectInterface( doc );
+            dcopInterface = new K3b::ProjectInterface( doc );
         d->projectInterfaceMap[doc] = dcopInterface;
         return dcopInterface;
     }
@@ -439,7 +439,7 @@ K3bProjectInterface* K3bProjectManager::dcopInterface( K3bDoc* doc )
 }
 #endif
 
-K3bDoc* K3bProjectManager::openProject( const KUrl& url )
+K3b::Doc* K3b::ProjectManager::openProject( const KUrl& url )
 {
     QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 
@@ -480,14 +480,14 @@ K3bDoc* K3bProjectManager::openProject( const KUrl& url )
             char test[5];
             if( f.read( test, 5 ) ) {
                 if( ::strncmp( test, "<?xml", 5 ) ) {
-                    kDebug() << "(K3bDoc) " << url.path() << " seems to be no xml file.";
+                    kDebug() << "(K3b::Doc) " << url.path() << " seems to be no xml file.";
                     QApplication::restoreOverrideCursor();
                     return 0;
                 }
                 f.reset();
             }
             else {
-                kDebug() << "(K3bDoc) could not read from file.";
+                kDebug() << "(K3b::Doc) could not read from file.";
                 QApplication::restoreOverrideCursor();
                 return 0;
             }
@@ -501,37 +501,37 @@ K3bDoc* K3bProjectManager::openProject( const KUrl& url )
     KIO::NetAccess::removeTempFile( tmpfile );
 
     if( !success ) {
-        kDebug() << "(K3bDoc) could not open file " << url.path();
+        kDebug() << "(K3b::Doc) could not open file " << url.path();
         QApplication::restoreOverrideCursor();
         return 0;
     }
 
     // check the documents DOCTYPE
-    K3bDoc::DocType type = K3bDoc::AUDIO;
+    K3b::Doc::DocType type = K3b::Doc::AUDIO;
     if( xmlDoc.doctype().name() == "k3b_audio_project" )
-        type = K3bDoc::AUDIO;
+        type = K3b::Doc::AUDIO;
     else if( xmlDoc.doctype().name() == "k3b_data_project" )
-        type = K3bDoc::DATA;
+        type = K3b::Doc::DATA;
     else if( xmlDoc.doctype().name() == "k3b_vcd_project" )
-        type = K3bDoc::VCD;
+        type = K3b::Doc::VCD;
     else if( xmlDoc.doctype().name() == "k3b_mixed_project" )
-        type = K3bDoc::MIXED;
+        type = K3b::Doc::MIXED;
     else if( xmlDoc.doctype().name() == "k3b_movix_project" )
-        type = K3bDoc::MOVIX;
+        type = K3b::Doc::MOVIX;
     else if( xmlDoc.doctype().name() == "k3b_movixdvd_project" )
-        type = K3bDoc::MOVIX; // backward compatibility
+        type = K3b::Doc::MOVIX; // backward compatibility
     else if( xmlDoc.doctype().name() == "k3b_dvd_project" )
-        type = K3bDoc::DATA; // backward compatibility
+        type = K3b::Doc::DATA; // backward compatibility
     else if( xmlDoc.doctype().name() == "k3b_video_dvd_project" ) {
-        type = K3bDoc::VIDEODVD;
+        type = K3b::Doc::VIDEODVD;
     } else {
-        kDebug() << "(K3bDoc) unknown doc type: " << xmlDoc.doctype().name();
+        kDebug() << "(K3b::Doc) unknown doc type: " << xmlDoc.doctype().name();
         QApplication::restoreOverrideCursor();
         return 0;
     }
 
     // we do not know yet if we will be able to actually open the project, so don't inform others yet
-    K3bDoc* newDoc = createEmptyProject( type );
+    K3b::Doc* newDoc = createEmptyProject( type );
 
     // ---------
     // load the data into the document
@@ -549,7 +549,7 @@ K3bDoc* K3bProjectManager::openProject( const KUrl& url )
         //        that the doc is not changed
         emit projectSaved( newDoc );
 
-        kDebug() << "(K3bProjectManager) loading project done.";
+        kDebug() << "(K3b::ProjectManager) loading project done.";
     }
     else {
         delete newDoc;
@@ -562,7 +562,7 @@ K3bDoc* K3bProjectManager::openProject( const KUrl& url )
 }
 
 
-bool K3bProjectManager::saveProject( K3bDoc* doc, const KUrl& url )
+bool K3b::ProjectManager::saveProject( K3b::Doc* doc, const KUrl& url )
 {
     QString tmpfile;
     KIO::NetAccess::download( url, tmpfile, 0L );
@@ -616,7 +616,7 @@ bool K3bProjectManager::saveProject( K3bDoc* doc, const KUrl& url )
 }
 
 
-void K3bProjectManager::slotProjectChanged( K3bDoc* doc )
+void K3b::ProjectManager::slotProjectChanged( K3b::Doc* doc )
 {
     emit projectChanged( doc );
 }

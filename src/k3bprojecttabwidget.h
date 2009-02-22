@@ -23,7 +23,9 @@
 
 class KAction;
 class KActionMenu;
-class K3bDoc;
+namespace K3b {
+    class Doc;
+}
 
 
 /**
@@ -32,15 +34,16 @@ class K3bDoc;
  *
  * @author Sebastian Trueg
  */
-class K3bProjectTabWidget : public QTabWidget
+namespace K3b {
+class ProjectTabWidget : public QTabWidget
 {
   Q_OBJECT
 
  public: 
-  K3bProjectTabWidget( QWidget *parent = 0 );
-  ~K3bProjectTabWidget();
+  ProjectTabWidget( QWidget *parent = 0 );
+  ~ProjectTabWidget();
 
-  void insertTab( K3bDoc* );
+  void insertTab( Doc* );
   
   void addTab( QWidget * child, const QString & label );
   void addTab( QWidget * child, const QIcon & iconset, const QString & label );
@@ -51,7 +54,7 @@ class K3bProjectTabWidget : public QTabWidget
    * \return the project for the tab at position \p pos or 0 in case the tab is
    * not a project tab.
    */
-  K3bDoc* projectAt( const QPoint& pos ) const;
+  Doc* projectAt( const QPoint& pos ) const;
 
   /**
    * inserts the given action into the popup menu for the tabs
@@ -67,14 +70,15 @@ protected:
   void removePage( QWidget* );
 
  private Q_SLOTS:
-  void slotDocChanged( K3bDoc* );
-  void slotDocSaved( K3bDoc* );
+  void slotDocChanged( Doc* );
+  void slotDocSaved( Doc* );
 
  private:
   KActionMenu* m_projectActionMenu;
 
   class ProjectData;
-  QMap<K3bDoc*, ProjectData> m_projectDataMap;
+  QMap<Doc*, ProjectData> m_projectDataMap;
 };
+}
 
 #endif

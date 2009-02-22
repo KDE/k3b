@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
  *
@@ -26,49 +26,43 @@
 
 class QTimer;
 
-class base_K3bVideoDVDRippingWidget : public QWidget, public Ui::base_K3bVideoDVDRippingWidget
-{
-public:
-  base_K3bVideoDVDRippingWidget( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
-};
+namespace K3b {
+    class VideoDVDRippingWidget : public QWidget, public Ui::base_K3bVideoDVDRippingWidget
+    {
+        Q_OBJECT
 
-class K3bVideoDVDRippingWidget : public base_K3bVideoDVDRippingWidget
-{
-  Q_OBJECT
+    public:
+        VideoDVDRippingWidget( QWidget* parent );
+        ~VideoDVDRippingWidget();
 
- public:
-  K3bVideoDVDRippingWidget( QWidget* parent );
-  ~K3bVideoDVDRippingWidget();
+        VideoDVDTitleTranscodingJob::VideoCodec selectedVideoCodec() const;
+        VideoDVDTitleTranscodingJob::AudioCodec selectedAudioCodec() const;
+        int selectedAudioBitrate() const;
+        QSize selectedPictureSize() const;
 
-  K3bVideoDVDTitleTranscodingJob::VideoCodec selectedVideoCodec() const;
-  K3bVideoDVDTitleTranscodingJob::AudioCodec selectedAudioCodec() const;
-  int selectedAudioBitrate() const;
-  QSize selectedPictureSize() const;
+        void setSelectedVideoCodec( VideoDVDTitleTranscodingJob::VideoCodec codec );
+        void setSelectedAudioCodec( VideoDVDTitleTranscodingJob::AudioCodec codec );
+        void setSelectedAudioBitrate( int bitrate );
+        void setSelectedPictureSize( const QSize& );
 
-  void setSelectedVideoCodec( K3bVideoDVDTitleTranscodingJob::VideoCodec codec );
-  void setSelectedAudioCodec( K3bVideoDVDTitleTranscodingJob::AudioCodec codec );
-  void setSelectedAudioBitrate( int bitrate );
-  void setSelectedPictureSize( const QSize& );
+        void setNeededSize( KIO::filesize_t );
 
-  void setNeededSize( KIO::filesize_t );
+    Q_SIGNALS:
+        void changed();
 
-  Q_SIGNALS:
-  void changed();
+    private Q_SLOTS:
+        void slotUpdateFreeTempSpace();
+        void slotSeeSpecialStrings();
+        void slotAudioCodecChanged( int codec );
+        void slotVideoSizeChanged( int sizeIndex );
+        void slotCustomPictureSize();
 
- private Q_SLOTS:
-  void slotUpdateFreeTempSpace();
-  void slotSeeSpecialStrings();
-  void slotAudioCodecChanged( int codec );
-  void slotVideoSizeChanged( int sizeIndex );
-  void slotCustomPictureSize();
+    private:
+        QTimer* m_freeSpaceUpdateTimer;
+        KIO::filesize_t m_neededSize;
 
- private:
-  QTimer* m_freeSpaceUpdateTimer;
-  KIO::filesize_t m_neededSize;
-
-  QSize m_customVideoSize;
-};
+        QSize m_customVideoSize;
+    };
+}
 
 #endif

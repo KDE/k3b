@@ -59,7 +59,7 @@
 #include <QHeaderView>
 
 
-// void K3bDeviceBranch::updateLabel()
+// void K3b::DeviceBranch::updateLabel()
 // {
 //     if( m_showBlockDeviceName )
 //         setName( QString("%1 %2 (%3)")
@@ -74,7 +74,7 @@
 //     if( k3bappcore->mediaCache() ) {
 //         root()->setMultiLinesEnabled( true );
 //         root()->setText( 0,QString::number(0) +name() + "\n" + k3bappcore->mediaCache()->mediumString( m_device ) );
-//         static_cast<K3bFileTreeView*>( root()->listView() )->updateMinimumWidth();
+//         static_cast<K3b::FileTreeView*>( root()->listView() )->updateMinimumWidth();
 //     }
 //     else {
 //         root()->setMultiLinesEnabled( false );
@@ -82,7 +82,7 @@
 //     }
 // }
 
-// void K3bDeviceBranchViewItem::paintCell( QPainter* p, const QColorGroup& cg, int /* col */, int width, int align )
+// void K3b::DeviceBranchViewItem::paintCell( QPainter* p, const QColorGroup& cg, int /* col */, int width, int align )
 // {
 //     p->save();
 
@@ -149,7 +149,7 @@
 // }
 
 
-// int K3bDeviceBranchViewItem::widthHint() const
+// int K3b::DeviceBranchViewItem::widthHint() const
 // {
 //     QFont f( listView()->font() );
 //     if ( m_bCurrent ) {
@@ -171,36 +171,36 @@
 // }
 
 
-// class K3bDeviceTreeToolTip : public K3bToolTip
+// class K3b::DeviceTreeToolTip : public K3b::ToolTip
 // {
 // public:
-//     K3bDeviceTreeToolTip( QWidget* parent, K3bFileTreeView* lv );
+//     K3b::DeviceTreeToolTip( QWidget* parent, K3b::FileTreeView* lv );
 
 //     void maybeTip( const QPoint &pos );
 
 // private:
-//     K3bFileTreeView* m_view;
+//     K3b::FileTreeView* m_view;
 // };
 
 
-// K3bDeviceTreeToolTip::K3bDeviceTreeToolTip( QWidget* parent, K3bFileTreeView* lv )
-//     : K3bToolTip( parent ),
+// K3b::DeviceTreeToolTip::DeviceTreeToolTip( QWidget* parent, K3b::FileTreeView* lv )
+//     : K3b::ToolTip( parent ),
 //       m_view( lv )
 // {
 //     setTipTimeout( 500 );
 // }
 
 
-// void K3bDeviceTreeToolTip::maybeTip( const QPoint& pos )
+// void K3b::DeviceTreeToolTip::maybeTip( const QPoint& pos )
 // {
 //     if( !parentWidget() || !m_view )
 //         return;
 
-//     K3bDeviceBranchViewItem* item = dynamic_cast<K3bDeviceBranchViewItem*>( m_view->itemAt( pos ) );
+//     K3b::DeviceBranchViewItem* item = dynamic_cast<K3b::DeviceBranchViewItem*>( m_view->itemAt( pos ) );
 //     if( !item )
 //         return;
 
-//     K3bDevice::Device* dev = static_cast<K3bDeviceBranch*>( item->branch() )->device();
+//     K3b::Device::Device* dev = static_cast<K3b::DeviceBranch*>( item->branch() )->device();
 
 //     QFrame* tooltip = new QFrame( parentWidget() );
 //     tooltip->setFrameStyle( QFrame::Panel | QFrame::Raised );
@@ -223,26 +223,26 @@
 //     lay->addWidget( label, 2, 1 );
 //     lay->setColumnStretch( 0, 1 );
 
-//     if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+//     if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
 //         tooltip->setPaletteBackgroundColor( theme->backgroundColor() );
 //         tooltip->setPaletteForegroundColor( theme->foregroundColor() );
-//         K3bTheme::PixmapType pm;
+//         K3b::Theme::PixmapType pm;
 //         int c = k3bappcore->mediaCache()->medium( dev ).content();
-//         if( c & (K3bMedium::CONTENT_VIDEO_CD|K3bMedium::CONTENT_VIDEO_DVD) )
-//             pm = K3bTheme::MEDIA_VIDEO;
-//         else if( c & K3bMedium::CONTENT_AUDIO &&
-//                  c & K3bMedium::CONTENT_DATA )
-//             pm = K3bTheme::MEDIA_MIXED;
-//         else if( c & K3bMedium::CONTENT_AUDIO )
-//             pm = K3bTheme::MEDIA_AUDIO;
-//         else if( c & K3bMedium::CONTENT_DATA )
-//             pm = K3bTheme::MEDIA_DATA;
+//         if( c & (K3b::Medium::CONTENT_VIDEO_CD|K3b::Medium::CONTENT_VIDEO_DVD) )
+//             pm = K3b::Theme::MEDIA_VIDEO;
+//         else if( c & K3b::Medium::CONTENT_AUDIO &&
+//                  c & K3b::Medium::CONTENT_DATA )
+//             pm = K3b::Theme::MEDIA_MIXED;
+//         else if( c & K3b::Medium::CONTENT_AUDIO )
+//             pm = K3b::Theme::MEDIA_AUDIO;
+//         else if( c & K3b::Medium::CONTENT_DATA )
+//             pm = K3b::Theme::MEDIA_DATA;
 //         else {
-//             K3bDevice::DiskInfo di = k3bappcore->mediaCache()->diskInfo( dev );
-//             if( di.diskState() == K3bDevice::STATE_EMPTY )
-//                 pm = K3bTheme::MEDIA_EMPTY;
+//             K3b::Device::DiskInfo di = k3bappcore->mediaCache()->diskInfo( dev );
+//             if( di.diskState() == K3b::Device::STATE_EMPTY )
+//                 pm = K3b::Theme::MEDIA_EMPTY;
 //             else
-//                 pm = K3bTheme::MEDIA_NONE;
+//                 pm = K3b::Theme::MEDIA_NONE;
 //         }
 //         label->setPixmap( theme->pixmap( pm ) );
 //     }
@@ -253,16 +253,16 @@
 
 
 
-class K3bFileTreeView::Private
+class K3b::FileTreeView::Private
 {
 public:
     Private()
         : deviceManager(0) {
     }
 
-    K3bDevice::DeviceManager* deviceManager;
+    K3b::Device::DeviceManager* deviceManager;
 
-    K3bPlacesModel* model;
+    K3b::PlacesModel* model;
 
     KActionCollection* actionCollection;
     K3b::DeviceMenu* devicePopupMenu;
@@ -271,7 +271,7 @@ public:
 };
 
 
-K3bFileTreeView::K3bFileTreeView( QWidget *parent )
+K3b::FileTreeView::FileTreeView( QWidget *parent )
     : QTreeView( parent ),
       d( new Private() )
 {
@@ -283,10 +283,10 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent )
 //    setRootIsDecorated( false );
     setDragEnabled( true );
 
-    K3bDeviceDelegate* delegate = new K3bDeviceDelegate(this);
+    K3b::DeviceDelegate* delegate = new K3b::DeviceDelegate(this);
     setItemDelegate(delegate);
 
-    d->model = new K3bPlacesModel( this );
+    d->model = new K3b::PlacesModel( this );
     setModel( d->model );
 
     d->actionCollection = new KActionCollection( this );
@@ -294,7 +294,7 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent )
     d->urlPopupMenu = new KActionMenu(this);
     initActions();
 
-    // react on K3bPlacesModel::expandToUrl calls
+    // react on K3b::PlacesModel::expandToUrl calls
     connect( d->model, SIGNAL( expand( const QModelIndex& ) ),
              this, SLOT( slotExpandUrl( const QModelIndex& ) ) );
 
@@ -307,12 +307,12 @@ K3bFileTreeView::K3bFileTreeView( QWidget *parent )
 }
 
 
-K3bFileTreeView::~K3bFileTreeView()
+K3b::FileTreeView::~FileTreeView()
 {
     delete d;
 }
 
-void K3bFileTreeView::initActions()
+void K3b::FileTreeView::initActions()
 {
     // those actions are supposed to be used with url items
     d->urlPopupMenu->addAction( K3b::createAction(this,i18n("&Add to Project"), 0, Qt::SHIFT+Qt::Key_Return,
@@ -320,13 +320,13 @@ void K3bFileTreeView::initActions()
                                                   d->actionCollection, "add_files_to_project") );
 }
 
-K3bDevice::Device* K3bFileTreeView::selectedDevice() const
+K3b::Device::Device* K3b::FileTreeView::selectedDevice() const
 {
     return d->model->deviceForIndex( currentIndex() );
 }
 
 
-KUrl K3bFileTreeView::selectedUrl() const
+KUrl K3b::FileTreeView::selectedUrl() const
 {
     KFileItem fileItem = d->model->itemForIndex( currentIndex() );
     if( fileItem.isNull() )
@@ -336,7 +336,7 @@ KUrl K3bFileTreeView::selectedUrl() const
 }
 
 
-void K3bFileTreeView::slotExpandUrl( const QModelIndex& index )
+void K3b::FileTreeView::slotExpandUrl( const QModelIndex& index )
 {
     kDebug();
     expand( index );
@@ -344,7 +344,7 @@ void K3bFileTreeView::slotExpandUrl( const QModelIndex& index )
     scrollTo( index );
 }
 
-void K3bFileTreeView::slotAddFilesToProject()
+void K3b::FileTreeView::slotAddFilesToProject()
 {
     QModelIndexList indexes = selectedIndexes();
     KUrl::List files;
@@ -362,25 +362,25 @@ void K3bFileTreeView::slotAddFilesToProject()
 }
 
 
-void K3bFileTreeView::setSelectedUrl( const KUrl& url )
+void K3b::FileTreeView::setSelectedUrl( const KUrl& url )
 {
     kDebug();
     d->model->expandToUrl( url );
 }
 
 
-void K3bFileTreeView::setSelectedDevice( K3bDevice::Device* dev )
+void K3b::FileTreeView::setSelectedDevice( K3b::Device::Device* dev )
 {
     setCurrentIndex( d->model->indexForDevice( dev ) );
 }
 
 
-// void K3bFileTreeView::addCdDeviceBranches( K3bDevice::DeviceManager* dm )
+// void K3b::FileTreeView::addCdDeviceBranches( K3b::Device::DeviceManager* dm )
 // {
-//     kDebug() << "(K3bFileTreeView::addCdDeviceBranches)";
+//     kDebug() << "(K3b::FileTreeView::addCdDeviceBranches)";
 
 //     // remove all previous added device branches
-//     for( QMap<KFileTreeBranch*, K3bDevice::Device*>::Iterator it = d->branchDeviceMap.begin();
+//     for( QMap<KFileTreeBranch*, K3b::Device::Device*>::Iterator it = d->branchDeviceMap.begin();
 //          it != d->branchDeviceMap.end(); ++it ) {
 //         removeBranch( it.key() );
 //     }
@@ -388,8 +388,8 @@ void K3bFileTreeView::setSelectedDevice( K3bDevice::Device* dev )
 //     // clear the maps
 //     d->branchDeviceMap.clear();
 //     d->deviceBranchDict.clear();
-//     QList<K3bDevice::Device *> items(dm->allDevices());
-//     for( QList<K3bDevice::Device *>::const_iterator it = items.begin();
+//     QList<K3b::Device::Device *> items(dm->allDevices());
+//     for( QList<K3b::Device::Device *>::const_iterator it = items.begin();
 //          it != items.end(); ++it )
 //         addDeviceBranch( *it );
 
@@ -399,15 +399,15 @@ void K3bFileTreeView::setSelectedDevice( K3bDevice::Device* dev )
 //         d->deviceManager = dm;
 
 //         // make sure we get changes to the config
-//         connect( dm, SIGNAL(changed(K3bDevice::DeviceManager*)),
-//                  this, SLOT(addCdDeviceBranches(K3bDevice::DeviceManager*)) );
+//         connect( dm, SIGNAL(changed(K3b::Device::DeviceManager*)),
+//                  this, SLOT(addCdDeviceBranches(K3b::Device::DeviceManager*)) );
 
-//         if( K3bAppDeviceManager* appDevM = dynamic_cast<K3bAppDeviceManager*>( dm ) )
-//             connect( appDevM, SIGNAL(currentDeviceChanged(K3bDevice::Device*)),
-//                      this, SLOT(setCurrentDevice(K3bDevice::Device*)) );
+//         if( K3b::AppDeviceManager* appDevM = dynamic_cast<K3b::AppDeviceManager*>( dm ) )
+//             connect( appDevM, SIGNAL(currentDeviceChanged(K3b::Device::Device*)),
+//                      this, SLOT(setCurrentDevice(K3b::Device::Device*)) );
 //     }
 
-//     K3bDevice::Device* currentDevice = k3bappcore->appDeviceManager()->currentDevice();
+//     K3b::Device::Device* currentDevice = k3bappcore->appDeviceManager()->currentDevice();
 //     if ( !currentDevice && !k3bappcore->appDeviceManager()->allDevices().isEmpty() ) {
 //         k3bappcore->appDeviceManager()->setCurrentDevice( k3bappcore->appDeviceManager()->allDevices().first() );
 //     }
@@ -417,22 +417,22 @@ void K3bFileTreeView::setSelectedDevice( K3bDevice::Device* dev )
 //         d->currentDeviceBranch->setCurrent( true );
 //     }
 
-//     kDebug() << "(K3bFileTreeView::addCdDeviceBranches) done";
+//     kDebug() << "(K3b::FileTreeView::addCdDeviceBranches) done";
 // }
 
 
-// void K3bFileTreeView::addDeviceBranch( K3bDevice::Device* dev )
+// void K3b::FileTreeView::addDeviceBranch( K3b::Device::Device* dev )
 // {
-//     K3bDeviceBranch* newBranch = new K3bDeviceBranch( this, dev );
+//     K3b::DeviceBranch* newBranch = new K3b::DeviceBranch( this, dev );
 //     addBranch( newBranch );
 
 //     // search for an equal device
 //     int equalCnt = 0;
-//     K3bDeviceBranch* equalBranch = 0;
-//     for( QMap<KFileTreeBranch*, K3bDevice::Device*>::Iterator it = d->branchDeviceMap.begin();
+//     K3b::DeviceBranch* equalBranch = 0;
+//     for( QMap<KFileTreeBranch*, K3b::Device::Device*>::Iterator it = d->branchDeviceMap.begin();
 //          it != d->branchDeviceMap.end(); ++it ) {
-//         K3bDevice::Device* itDev = it.data();
-//         K3bDeviceBranch* itBranch = (K3bDeviceBranch*)it.key();
+//         K3b::Device::Device* itDev = it.data();
+//         K3b::DeviceBranch* itBranch = (K3b::DeviceBranch*)it.key();
 //         if( itDev->vendor() == dev->vendor() &&
 //             itDev->description() == dev->description() ) {
 //             ++equalCnt;
@@ -444,7 +444,7 @@ void K3bFileTreeView::setSelectedDevice( K3bDevice::Device* dev )
 //     // if there is more than one equal device they have been updated after
 //     // adding the last one so there is no need to update more than two
 //     if( equalCnt > 0 ) {
-//         kDebug() << "(K3bFileTreeView) equal branch";
+//         kDebug() << "(K3b::FileTreeView) equal branch";
 //         newBranch->showBlockDeviceName(true);
 //         equalBranch->showBlockDeviceName(true);
 //     }
@@ -456,9 +456,9 @@ void K3bFileTreeView::setSelectedDevice( K3bDevice::Device* dev )
 //     updateMinimumWidth();
 // }
 
-void K3bFileTreeView::slotClicked( const QModelIndex& index )
+void K3b::FileTreeView::slotClicked( const QModelIndex& index )
 {
-    if ( K3bDevice::Device* dev = d->model->deviceForIndex( index ) ) {
+    if ( K3b::Device::Device* dev = d->model->deviceForIndex( index ) ) {
         k3bappcore->appDeviceManager()->setCurrentDevice( dev );
         emit activated( dev );
     }
@@ -468,11 +468,11 @@ void K3bFileTreeView::slotClicked( const QModelIndex& index )
 }
 
 
-void K3bFileTreeView::slotContextMenu( const QPoint& pos )
+void K3b::FileTreeView::slotContextMenu( const QPoint& pos )
 {
     // check if the context menu is for a device item
     QModelIndex index = indexAt( pos );
-    if ( K3bDevice::Device* dev = d->model->deviceForIndex( index ) ) {
+    if ( K3b::Device::Device* dev = d->model->deviceForIndex( index ) ) {
         k3bappcore->appDeviceManager()->setCurrentDevice( dev );
         d->devicePopupMenu->exec( mapToGlobal( pos ) );
     }
@@ -491,22 +491,22 @@ void K3bFileTreeView::slotContextMenu( const QPoint& pos )
 
 
 
-// void K3bFileTreeView::slotMouseButtonClickedK3b( int btn, Q3ListViewItem *item, const QPoint &pos, int c )
+// void K3b::FileTreeView::slotMouseButtonClickedK3b( int btn, Q3ListViewItem *item, const QPoint &pos, int c )
 // {
 //     if( (btn == Qt::LeftButton) && item )
 //         emitExecute(item, pos, c);
 // }
 
 
-// void K3bFileTreeView::updateMinimumWidth()
+// void K3b::FileTreeView::updateMinimumWidth()
 // {
 //     //
 //     // only handle the device branches, we don't care about the folders.
 //     //
 //     int w = 0;
-//     for( QMap<KFileTreeBranch*, K3bDevice::Device*>::Iterator it = d->branchDeviceMap.begin();
+//     for( QMap<KFileTreeBranch*, K3b::Device::Device*>::Iterator it = d->branchDeviceMap.begin();
 //          it != d->branchDeviceMap.end(); ++it ) {
-//         w = qMax( w, static_cast<K3bDeviceBranchViewItem*>( it.key()->root() )->widthHint() );
+//         w = qMax( w, static_cast<K3b::DeviceBranchViewItem*>( it.key()->root() )->widthHint() );
 //     }
 
 //     // width of the items + scrollbar width + the frame + a little eyecandy spacing

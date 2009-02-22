@@ -26,7 +26,7 @@
 #include <qdir.h>
 
 
-class K3bDirSizeJob::Private
+class K3b::DirSizeJob::Private
 {
 public:
     Private()
@@ -48,56 +48,56 @@ public:
 
 
 
-K3bDirSizeJob::K3bDirSizeJob( QObject* parent )
-    : K3bThreadJob( new K3bSimpleJobHandler(), parent ),
+K3b::DirSizeJob::DirSizeJob( QObject* parent )
+    : K3b::ThreadJob( new K3b::SimpleJobHandler(), parent ),
       d( new Private() )
 {
 }
 
 
-K3bDirSizeJob::~K3bDirSizeJob()
+K3b::DirSizeJob::~DirSizeJob()
 {
     delete d;
     delete jobHandler();
 }
 
 
-KIO::filesize_t K3bDirSizeJob::totalSize() const
+KIO::filesize_t K3b::DirSizeJob::totalSize() const
 {
     return d->totalSize;
 }
 
 
-KIO::filesize_t K3bDirSizeJob::totalFiles() const
+KIO::filesize_t K3b::DirSizeJob::totalFiles() const
 {
     return d->totalFiles;
 }
 
 
-KIO::filesize_t K3bDirSizeJob::totalDirs() const
+KIO::filesize_t K3b::DirSizeJob::totalDirs() const
 {
     return d->totalDirs;
 }
 
 
-KIO::filesize_t K3bDirSizeJob::totalSymlinks() const
+KIO::filesize_t K3b::DirSizeJob::totalSymlinks() const
 {
     return d->totalSymlinks;
 }
 
 
-void K3bDirSizeJob::setUrls( const KUrl::List& urls )
+void K3b::DirSizeJob::setUrls( const KUrl::List& urls )
 {
     d->urls = urls;
 }
 
 
-void K3bDirSizeJob::setFollowSymlinks( bool b )
+void K3b::DirSizeJob::setFollowSymlinks( bool b )
 {
     d->followSymlinks = b;
 }
 
-bool K3bDirSizeJob::run()
+bool K3b::DirSizeJob::run()
 {
     d->totalSize = 0;
     d->totalFiles = 0;
@@ -110,7 +110,7 @@ bool K3bDirSizeJob::run()
         const KUrl& url = *it;
 
         if( !url.isLocalFile() ) {
-            kDebug() << "(K3bDirSizeJob) no remote support.";
+            kDebug() << "(K3b::DirSizeJob) no remote support.";
             return false;
         }
 
@@ -121,14 +121,14 @@ bool K3bDirSizeJob::run()
 }
 
 
-bool K3bDirSizeJob::countDir( const QString& dir )
+bool K3b::DirSizeJob::countDir( const QString& dir )
 {
     QStringList l = QDir(dir).entryList( QDir::TypeMask|QDir::Hidden|QDir::System|QDir::NoDotAndDotDot );
     return countFiles( l, dir );
 }
 
 
-bool K3bDirSizeJob::countFiles( const QStringList& l, const QString& dir )
+bool K3b::DirSizeJob::countFiles( const QStringList& l, const QString& dir )
 {
     for( QStringList::const_iterator it = l.begin();
          it != l.end(); ++it ) {

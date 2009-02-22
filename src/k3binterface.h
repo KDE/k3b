@@ -20,24 +20,27 @@
 
 #include <kurl.h>
 
-class K3bMainWindow;
-namespace K3bDevice {
+namespace K3b {
+    class MainWindow;
+}
+namespace Device {
   class Device;
 }
 
 
-class K3bInterface : public DCOPObject
+namespace K3b {
+class Interface : public DCOPObject
 {
   K_DCOP
 
  public:
-  K3bInterface();
+  Interface();
 
-  void setMainWindow( K3bMainWindow* mw ) { m_main = mw; }
+  void setMainWindow( MainWindow* mw ) { m_main = mw; }
 
  k_dcop:
   /**
-   * returns a DCOPRef to a K3bProjectInterface
+   * returns a DCOPRef to a ProjectInterface
    */
   DCOPRef createDataProject();
   DCOPRef createDataCDProject();
@@ -56,7 +59,7 @@ class K3bInterface : public DCOPObject
    *
    * <pre>k3b --audiocd</pre>
    * and then use dcop on the newly created project via:
-   * <pre>dcop $(dcop k3b K3bInterface currentProject) something</pre>
+   * <pre>dcop $(dcop k3b Interface currentProject) something</pre>
    */
   DCOPRef currentProject();
 
@@ -96,9 +99,10 @@ class K3bInterface : public DCOPObject
   bool blocked() const;
 
  private:
-  K3bMainWindow* m_main;
+  MainWindow* m_main;
 
-  K3bDevice::Device* m_lastDevice;
+  Device::Device* m_lastDevice;
 };
+}
 
 #endif

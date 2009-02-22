@@ -32,7 +32,7 @@
 #include <QContextMenuEvent>
 
 
-K3bAudioTrackSplitDialog::K3bAudioTrackSplitDialog( K3bAudioTrack* track, QWidget* parent )
+K3b::AudioTrackSplitDialog::AudioTrackSplitDialog( K3b::AudioTrack* track, QWidget* parent )
     : KDialog( parent),
       m_track(track)
 {
@@ -42,9 +42,9 @@ K3bAudioTrackSplitDialog::K3bAudioTrackSplitDialog( K3bAudioTrack* track, QWidge
     setButtons(Ok|Cancel);
     setDefaultButton(Ok);
 
-    m_editorWidget = new K3bAudioEditorWidget( frame );
-    m_msfEditStart = new K3bMsfEdit( frame );
-    m_msfEditEnd = new K3bMsfEdit( frame );
+    m_editorWidget = new K3b::AudioEditorWidget( frame );
+    m_msfEditStart = new K3b::MsfEdit( frame );
+    m_msfEditEnd = new K3b::MsfEdit( frame );
 
     QGridLayout* layout = new QGridLayout( frame );
     layout->setMargin( 0 );
@@ -87,12 +87,12 @@ K3bAudioTrackSplitDialog::K3bAudioTrackSplitDialog( K3bAudioTrack* track, QWidge
 }
 
 
-K3bAudioTrackSplitDialog::~K3bAudioTrackSplitDialog()
+K3b::AudioTrackSplitDialog::~AudioTrackSplitDialog()
 {
 }
 
 
-void K3bAudioTrackSplitDialog::setupActions()
+void K3b::AudioTrackSplitDialog::setupActions()
 {
     m_popupMenu = new KMenu( this );
 
@@ -109,7 +109,7 @@ void K3bAudioTrackSplitDialog::setupActions()
 }
 
 
-void K3bAudioTrackSplitDialog::slotRangeModified( int id, const K3b::Msf& start, const K3b::Msf& end )
+void K3b::AudioTrackSplitDialog::slotRangeModified( int id, const K3b::Msf& start, const K3b::Msf& end )
 {
     if( id == m_editorWidget->selectedRange() ) {
         m_msfEditStart->blockSignals( true );
@@ -124,13 +124,13 @@ void K3bAudioTrackSplitDialog::slotRangeModified( int id, const K3b::Msf& start,
 }
 
 
-void K3bAudioTrackSplitDialog::slotMsfEditChanged( const K3b::Msf& )
+void K3b::AudioTrackSplitDialog::slotMsfEditChanged( const K3b::Msf& )
 {
     m_editorWidget->modifyRange( m_editorWidget->selectedRange(), m_msfEditStart->msfValue(), m_msfEditEnd->msfValue() );
 }
 
 
-void K3bAudioTrackSplitDialog::slotRangeSelectionChanged( int id )
+void K3b::AudioTrackSplitDialog::slotRangeSelectionChanged( int id )
 {
     if( id > 0 ) {
         m_msfEditStart->blockSignals( true );
@@ -151,7 +151,7 @@ void K3bAudioTrackSplitDialog::slotRangeSelectionChanged( int id )
 }
 
 
-void K3bAudioTrackSplitDialog::splitAt( const QPoint& p )
+void K3b::AudioTrackSplitDialog::splitAt( const QPoint& p )
 {
     int id = m_editorWidget->findRange( p.x() );
     if( id ) {
@@ -163,7 +163,7 @@ void K3bAudioTrackSplitDialog::splitAt( const QPoint& p )
 }
 
 
-bool K3bAudioTrackSplitDialog::eventFilter( QObject* o, QEvent* e )
+bool K3b::AudioTrackSplitDialog::eventFilter( QObject* o, QEvent* e )
 {
     if( o == m_editorWidget ) {
         if( e->type() == QEvent::MouseButtonDblClick ) {
@@ -183,22 +183,22 @@ bool K3bAudioTrackSplitDialog::eventFilter( QObject* o, QEvent* e )
 }
 
 
-void K3bAudioTrackSplitDialog::slotSplitHere()
+void K3b::AudioTrackSplitDialog::slotSplitHere()
 {
     splitAt( m_lastClickPosition );
 }
 
 
-void K3bAudioTrackSplitDialog::slotRemoveRange()
+void K3b::AudioTrackSplitDialog::slotRemoveRange()
 {
     m_editorWidget->removeRange( m_editorWidget->findRange( m_lastClickPosition.x() ) );
 }
 
 
-void K3bAudioTrackSplitDialog::splitTrack( K3bAudioTrack* track,
+void K3b::AudioTrackSplitDialog::splitTrack( K3b::AudioTrack* track,
 					   QWidget* parent )
 {
-    K3bAudioTrackSplitDialog d( track, parent );
+    K3b::AudioTrackSplitDialog d( track, parent );
     if( d.exec() == QDialog::Accepted ) {
         QList<int> ranges = d.m_editorWidget->allRanges();
         // we split the track at all range ends and just delete those that relate to the gaps in between
@@ -209,7 +209,7 @@ void K3bAudioTrackSplitDialog::splitTrack( K3bAudioTrack* track,
             // delete the unwanted part
             if( d.m_editorWidget->rangeStart( *it ) > pos ) {
                 // split so the range's start is the first frame of the new track
-                K3bAudioTrack* nextTrack = track->split( d.m_editorWidget->rangeStart( *it ) - pos );
+                K3b::AudioTrack* nextTrack = track->split( d.m_editorWidget->rangeStart( *it ) - pos );
                 delete track;
                 track = nextTrack;
             }

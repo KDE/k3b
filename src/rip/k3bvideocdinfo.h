@@ -25,15 +25,18 @@
 #include <k3btoc.h>
 #include <k3bcore.h>
 
-class K3bProcess;
+namespace K3b {
+    class Process;
+}
 
-class K3bVideoCdInfoResultEntry
+namespace K3b {
+class VideoCdInfoResultEntry
 {
     public:
-        K3bVideoCdInfoResultEntry() : name( 0 ), id( 0 )
+        VideoCdInfoResultEntry() : name( 0 ), id( 0 )
         {}
 
-        K3bVideoCdInfoResultEntry( const QString& name, const QString& id )
+        VideoCdInfoResultEntry( const QString& name, const QString& id )
                 : name( name ), id( id )
         {}
 
@@ -42,18 +45,20 @@ class K3bVideoCdInfoResultEntry
 
         long size;
 };
+}
 
-class K3bVideoCdInfoResult
+namespace K3b {
+class VideoCdInfoResult
 {
     public:
-        K3bVideoCdInfoResult()
+        VideoCdInfoResult()
         {}
 
         enum type {NONE = 0, FILE, SEGMENT, SEQUENCE};
 
-        void addEntry( const K3bVideoCdInfoResultEntry& = K3bVideoCdInfoResultEntry(), int type = K3bVideoCdInfoResult::SEQUENCE );
-        const K3bVideoCdInfoResultEntry& entry( int number = 0 , int type = K3bVideoCdInfoResult::SEQUENCE ) const;
-        int foundEntries( int type = K3bVideoCdInfoResult::SEQUENCE ) const;
+        void addEntry( const VideoCdInfoResultEntry& = VideoCdInfoResultEntry(), int type = VideoCdInfoResult::SEQUENCE );
+        const VideoCdInfoResultEntry& entry( int number = 0 , int type = VideoCdInfoResult::SEQUENCE ) const;
+        int foundEntries( int type = VideoCdInfoResult::SEQUENCE ) const;
 
         QString volumeId;
         QString type;
@@ -62,26 +67,28 @@ class K3bVideoCdInfoResult
         QString xmlData;
 
     private:
-        QList<K3bVideoCdInfoResultEntry> m_fileEntry;
-        QList<K3bVideoCdInfoResultEntry> m_segmentEntry;
-        QList<K3bVideoCdInfoResultEntry> m_sequenceEntry;
+        QList<VideoCdInfoResultEntry> m_fileEntry;
+        QList<VideoCdInfoResultEntry> m_segmentEntry;
+        QList<VideoCdInfoResultEntry> m_sequenceEntry;
 
-        K3bVideoCdInfoResultEntry m_emptyEntry;
+        VideoCdInfoResultEntry m_emptyEntry;
 };
+}
 
-class K3bVideoCdInfo : public QObject
+namespace K3b {
+class VideoCdInfo : public QObject
 {
         Q_OBJECT
 
     public:
-        K3bVideoCdInfo( QObject* parent = 0 );
-        ~K3bVideoCdInfo();
+        VideoCdInfo( QObject* parent = 0 );
+        ~VideoCdInfo();
 
         /**
          * Do NOT call this before queryResult has
          * been emitted
          */
-        const K3bVideoCdInfoResult& result() const;
+        const VideoCdInfoResult& result() const;
 
         void info( const QString& );
 
@@ -95,14 +102,15 @@ class K3bVideoCdInfo : public QObject
     private:
         void cancelAll();
 
-        K3bVideoCdInfoResult m_Result;
+        VideoCdInfoResult m_Result;
         void parseXmlData();
 
-        K3bProcess* m_process;
+        Process* m_process;
 
         QString m_xmlData;
         bool m_isXml;
 
 };
+}
 
 #endif

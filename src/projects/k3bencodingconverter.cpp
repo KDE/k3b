@@ -29,7 +29,7 @@
 #endif
 
 
-class K3bEncodingConverter::Private
+class K3b::EncodingConverter::Private
 {
  public:
 #ifdef HAVE_ICONV_H
@@ -40,19 +40,19 @@ class K3bEncodingConverter::Private
 };
 
 
-K3bEncodingConverter::K3bEncodingConverter()
+K3b::EncodingConverter::EncodingConverter()
 {
   d = new Private;
 #ifdef HAVE_ICONV_H
   char* codec = nl_langinfo( CODESET );
   d->localEncoding = QString::fromLocal8Bit( codec );
-  kDebug() << "(K3bDataUrlAddingDialog) using locale codec: " << codec;
+  kDebug() << "(K3b::DataUrlAddingDialog) using locale codec: " << codec;
   d->ic = ::iconv_open( "UCS-2BE", codec );
 #endif
 }
 
 
-K3bEncodingConverter::~K3bEncodingConverter()
+K3b::EncodingConverter::~EncodingConverter()
 {
 #ifdef HAVE_ICONV_H
   ::iconv_close( d->ic );
@@ -61,7 +61,7 @@ K3bEncodingConverter::~K3bEncodingConverter()
 }
 
 
-bool K3bEncodingConverter::encodedLocally( const Q3CString& s )
+bool K3b::EncodingConverter::encodedLocally( const Q3CString& s )
 {
 #ifdef HAVE_ICONV_H
   Q3CString utf8Encoded( s.length()*2 );
@@ -80,7 +80,7 @@ bool K3bEncodingConverter::encodedLocally( const Q3CString& s )
 }
 
 
-bool K3bEncodingConverter::fixEncoding( const Q3CString& s, Q3CString& result, QWidget* parent, bool cache )
+bool K3b::EncodingConverter::fixEncoding( const Q3CString& s, Q3CString& result, QWidget* parent, bool cache )
 {
 #ifdef IMPLEMENT_THIS_METHOD // HAVE_ICONV_H
   if( !d->lastEncoding.isEmpty() ) {
@@ -106,7 +106,7 @@ bool K3bEncodingConverter::fixEncoding( const Q3CString& s, Q3CString& result, Q
 }
 
 
-bool K3bEncodingConverter::convert( const Q3CString& s, Q3CString& result, const QString& from, const QString& to )
+bool K3b::EncodingConverter::convert( const Q3CString& s, Q3CString& result, const QString& from, const QString& to )
 {
   bool r = false;
 

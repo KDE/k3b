@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005-2009 Sebastian Trueg <trueg@k3b.org>
  *
@@ -17,11 +17,11 @@
 
 #include "k3b_export.h"
 
-#include <k3bdiskinfo.h>
-#include <k3btoc.h>
-#include <k3bcdtext.h>
-#include <k3bdevice.h>
-#include <k3biso9660.h>
+#include "k3bdiskinfo.h"
+#include "k3btoc.h"
+#include "k3bcdtext.h"
+#include "k3bdevice.h"
+#include "k3biso9660.h"
 
 #include <KIcon>
 
@@ -33,129 +33,134 @@ namespace KCDDB{
 }
 
 
-class K3bMediumPrivate;
-
-/**
- * K3bMedium represents a medium in K3b.
- *
- * It is implicetely shared, thus copying is very fast.
- */
-class LIBK3B_EXPORT K3bMedium
-{
-public:
-    K3bMedium();
-    K3bMedium( const K3bMedium& );
-    explicit K3bMedium( K3bDevice::Device* dev );
-    ~K3bMedium();
+namespace K3b {
+    class MediumPrivate;
 
     /**
-     * Copy operator
-     */
-    K3bMedium& operator=( const K3bMedium& );
-
-    bool isValid() const;
-
-    void setDevice( K3bDevice::Device* dev );
-
-    /**
-     * Resets everything to default values except the device.
-     * This means empty toc, cd text, no writing speeds, and a diskinfo
-     * with state UNKNOWN.
-     */
-    void reset();
-
-    /**
-     * Updates the medium information if the device is not null.
-     * Do not use this in the GUI thread since it uses blocking
-     * K3bdevice methods.
-     */
-    void update();
-
-    K3bDevice::Device* device() const;
-    K3bDevice::DiskInfo diskInfo() const;
-    K3bDevice::Toc toc() const;
-    K3bDevice::CdText cdText() const;
-
-    KCDDB::CDInfo cddbInfo() const;
-
-    /**
-     * The writing speeds the device supports with the inserted medium.
-     * With older devices this list might even be empty for writable
-     * media. In that case refer to K3bDevice::Device::maxWriteSpeed
-     * combined with a manual speed selection.
-     */
-    QList<int> writingSpeeds() const;
-    QString volumeId() const;
-
-    /**
-     * This method tries to make a volume identificator witch uses a reduced character set
-     * look more beautiful by, for example, replacing '_' with a space or replacing all upper
-     * case words.
+     * Medium represents a medium in K3b.
      *
-     * Volume ids already containing spaces or lower case characters are left unchanged.
+     * It is implicetely shared, thus copying is very fast.
      */
-    QString beautifiedVolumeId() const;
+    class LIBK3B_EXPORT Medium
+    {
+    public:
+        Medium();
+        Medium( const Medium& );
+        explicit Medium( Device::Device* dev );
+        ~Medium();
 
-    /**
-     * An icon representing the contents of the medium.
-     */
-    KIcon icon() const;
+        /**
+         * Copy operator
+         */
+        Medium& operator=( const Medium& );
 
-    /**
-     * Content type. May be combined by a binary OR.
-     */
-    enum MediumContent {
-        CONTENT_NONE = 0x1,
-        CONTENT_AUDIO = 0x2,
-        CONTENT_DATA = 0x4,
-        CONTENT_VIDEO_CD = 0x8,
-        CONTENT_VIDEO_DVD = 0x10,
-        CONTENT_ALL = 0xFF
+        bool isValid() const;
+
+        void setDevice( Device::Device* dev );
+
+        /**
+         * Resets everything to default values except the device.
+         * This means empty toc, cd text, no writing speeds, and a diskinfo
+         * with state UNKNOWN.
+         */
+        void reset();
+
+        /**
+         * Updates the medium information if the device is not null.
+         * Do not use this in the GUI thread since it uses blocking
+         * K3bdevice methods.
+         */
+        void update();
+
+        Device::Device* device() const;
+        Device::DiskInfo diskInfo() const;
+        Device::Toc toc() const;
+        Device::CdText cdText() const;
+
+        KCDDB::CDInfo cddbInfo() const;
+
+        /**
+         * The writing speeds the device supports with the inserted medium.
+         * With older devices this list might even be empty for writable
+         * media. In that case refer to Device::Device::maxWriteSpeed
+         * combined with a manual speed selection.
+         */
+        QList<int> writingSpeeds() const;
+        QString volumeId() const;
+
+        /**
+         * This method tries to make a volume identificator witch uses a reduced character set
+         * look more beautiful by, for example, replacing '_' with a space or replacing all upper
+         * case words.
+         *
+         * Volume ids already containing spaces or lower case characters are left unchanged.
+         */
+        QString beautifiedVolumeId() const;
+
+        /**
+         * An icon representing the contents of the medium.
+         */
+        KIcon icon() const;
+
+        /**
+         * Content type. May be combined by a binary OR.
+         */
+        enum MediumContent {
+            CONTENT_NONE = 0x1,
+            CONTENT_AUDIO = 0x2,
+            CONTENT_DATA = 0x4,
+            CONTENT_VIDEO_CD = 0x8,
+            CONTENT_VIDEO_DVD = 0x10,
+            CONTENT_ALL = 0xFF
+        };
+        Q_DECLARE_FLAGS( MediumContents, MediumContent )
+
+        /**
+         * \return a bitwise combination of MediumContent.
+         * A VideoCD for example may have the following content:
+         * CONTENT_AUDIO|CONTENT_DATA|CONTENT_VIDEO_CD
+         */
+        MediumContents content() const;
+
+        /**
+         * \return The volume descriptor from the ISO9660 filesystem.
+         */
+        const Iso9660SimplePrimaryDescriptor& iso9660Descriptor() const;
+
+        /**
+         * \return A short one-liner string representing the medium.
+         *         This string may be used for labels or selection boxes.
+         * \param useContent if true the content of the CD/DVD will be used, otherwise
+         *                   the string will simply be something like "empty DVD-R medium".
+         */
+        QString shortString( bool useContent = true ) const;
+
+        /**
+         * \return A HTML formatted string decribing this medium. This includes the device, the
+         *         medium type, the contents type, and some detail information like the number of
+         *         tracks.
+         *         This string may be used for tooltips or short descriptions.
+         */
+        QString longString() const;
+
+        /**
+         * Compares the plain medium ignoring the cddb information which can differ
+         * based on the cddb settings.
+         */
+        bool sameMedium( const Medium& other ) const;
+
+        bool operator==( const Medium& other ) const;
+        bool operator!=( const Medium& other ) const;
+
+    private:
+        void analyseContent();
+
+        QSharedDataPointer<MediumPrivate> d;
+
+        friend class MediaCache;
     };
+}
 
-    /**
-     * \return a bitwise combination of MediumContent.
-     * A VideoCD for example may have the following content: 
-     * CONTENT_AUDIO|CONTENT_DATA|CONTENT_VIDEO_CD
-     */
-    int content() const;
-
-    /**
-     * \return The volume descriptor from the ISO9660 filesystem.
-     */
-    const K3bIso9660SimplePrimaryDescriptor& iso9660Descriptor() const;
-
-    /**
-     * \return A short one-liner string representing the medium.
-     *         This string may be used for labels or selection boxes.
-     * \param useContent if true the content of the CD/DVD will be used, otherwise
-     *                   the string will simply be something like "empty DVD-R medium".
-     */
-    QString shortString( bool useContent = true ) const;
-
-    /**
-     * \return A HTML formatted string decribing this medium. This includes the device, the
-     *         medium type, the contents type, and some detail information like the number of
-     *         tracks.
-     *         This string may be used for tooltips or short descriptions.
-     */
-    QString longString() const;
-
-    /**
-     * Compares the plain medium ignoring the cddb information which can differ
-     * based on the cddb settings.
-     */
-    bool sameMedium( const K3bMedium& other ) const;
-
-    bool operator==( const K3bMedium& other ) const;
-    bool operator!=( const K3bMedium& other ) const;
-
-private:
-    void analyseContent();
-
-    QSharedDataPointer<K3bMediumPrivate> d;
-
-    friend class K3bMediaCache;
-};
+Q_DECLARE_OPERATORS_FOR_FLAGS( K3b::Medium::MediumContents )
 
 #endif

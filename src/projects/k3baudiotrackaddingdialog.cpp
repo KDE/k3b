@@ -36,7 +36,7 @@
 
 
 
-K3bAudioTrackAddingDialog::K3bAudioTrackAddingDialog( QWidget* parent )
+K3b::AudioTrackAddingDialog::AudioTrackAddingDialog( QWidget* parent )
     : KDialog( parent),
       m_bCanceled(false)
 {
@@ -51,32 +51,32 @@ K3bAudioTrackAddingDialog::K3bAudioTrackAddingDialog( QWidget* parent )
     grid->setMargin( marginHint() );
 
     m_infoLabel = new QLabel( page );
-    m_busyWidget = new K3bBusyWidget( page );
+    m_busyWidget = new K3b::BusyWidget( page );
 
     grid->addWidget( m_infoLabel, 0, 0 );
     grid->addWidget( m_busyWidget, 1, 0 );
 
-    m_analyserJob = new K3bAudioFileAnalyzerJob( this, this );
+    m_analyserJob = new K3b::AudioFileAnalyzerJob( this, this );
     connect( m_analyserJob, SIGNAL(finished(bool)), this, SLOT(slotAnalysingFinished(bool)) );
 }
 
 
-K3bAudioTrackAddingDialog::~K3bAudioTrackAddingDialog()
+K3b::AudioTrackAddingDialog::~AudioTrackAddingDialog()
 {
 }
 
 
-int K3bAudioTrackAddingDialog::addUrls( const KUrl::List& urls,
-                                        K3bAudioDoc* doc,
-                                        K3bAudioTrack* afterTrack,
-                                        K3bAudioTrack* parentTrack,
-                                        K3bAudioDataSource* afterSource,
+int K3b::AudioTrackAddingDialog::addUrls( const KUrl::List& urls,
+                                        K3b::AudioDoc* doc,
+                                        K3b::AudioTrack* afterTrack,
+                                        K3b::AudioTrack* parentTrack,
+                                        K3b::AudioDataSource* afterSource,
                                         QWidget* parent )
 {
     if( urls.isEmpty() )
         return 0;
 
-    K3bAudioTrackAddingDialog dlg( parent );
+    K3b::AudioTrackAddingDialog dlg( parent );
     dlg.m_urls = extractUrlList( urls );
     dlg.m_doc = doc;
     dlg.m_trackAfter = afterTrack;
@@ -117,7 +117,7 @@ int K3bAudioTrackAddingDialog::addUrls( const KUrl::List& urls,
 
 
 
-void K3bAudioTrackAddingDialog::slotAddUrls()
+void K3b::AudioTrackAddingDialog::slotAddUrls()
 {
     if( m_bCanceled )
         return;
@@ -132,8 +132,8 @@ void K3bAudioTrackAddingDialog::slotAddUrls()
 
     if( url.path().right(3).toLower() == "cue" ) {
         // see if its a cue file
-        K3bCueFileParser parser( url.path() );
-        if( parser.isValid() && parser.toc().contentType() == K3bDevice::AUDIO ) {
+        K3b::CueFileParser parser( url.path() );
+        if( parser.isValid() && parser.toc().contentType() == K3b::Device::AUDIO ) {
             // remember cue url and set the new audio file url
             m_cueUrl = url;
             url = m_urls[0] = KUrl( parser.imageFilename() );
@@ -160,7 +160,7 @@ void K3bAudioTrackAddingDialog::slotAddUrls()
 
     if( valid ) {
         bool reused;
-        K3bAudioDecoder* dec = m_doc->getDecoderForUrl( url, &reused );
+        K3b::AudioDecoder* dec = m_doc->getDecoderForUrl( url, &reused );
         if( dec ) {
             m_analyserJob->setDecoder( dec );
             if( reused )
@@ -182,7 +182,7 @@ void K3bAudioTrackAddingDialog::slotAddUrls()
 }
 
 
-void K3bAudioTrackAddingDialog::slotAnalysingFinished( bool /*success*/ )
+void K3b::AudioTrackAddingDialog::slotAnalysingFinished( bool /*success*/ )
 {
     if( m_bCanceled ) {
         // We only started the analyser thread in case the decoder was new
@@ -201,8 +201,8 @@ void K3bAudioTrackAddingDialog::slotAnalysingFinished( bool /*success*/ )
     }
     else {
         // create the track and source items
-        K3bAudioDecoder* dec = m_analyserJob->decoder();
-        K3bAudioFile* file = new K3bAudioFile( dec, m_doc );
+        K3b::AudioDecoder* dec = m_analyserJob->decoder();
+        K3b::AudioFile* file = new K3b::AudioFile( dec, m_doc );
         if( m_parentTrack ) {
             if( m_sourceAfter )
                 file->moveAfter( m_sourceAfter );
@@ -211,14 +211,14 @@ void K3bAudioTrackAddingDialog::slotAnalysingFinished( bool /*success*/ )
             m_sourceAfter = file;
         }
         else {
-            K3bAudioTrack* track = new K3bAudioTrack( m_doc );
+            K3b::AudioTrack* track = new K3b::AudioTrack( m_doc );
             track->setFirstSource( file );
 
-            track->setTitle( dec->metaInfo( K3bAudioDecoder::META_TITLE ) );
-            track->setArtist( dec->metaInfo( K3bAudioDecoder::META_ARTIST ) );
-            track->setSongwriter( dec->metaInfo( K3bAudioDecoder::META_SONGWRITER ) );
-            track->setComposer( dec->metaInfo( K3bAudioDecoder::META_COMPOSER ) );
-            track->setCdTextMessage( dec->metaInfo( K3bAudioDecoder::META_COMMENT ) );
+            track->setTitle( dec->metaInfo( K3b::AudioDecoder::META_TITLE ) );
+            track->setArtist( dec->metaInfo( K3b::AudioDecoder::META_ARTIST ) );
+            track->setSongwriter( dec->metaInfo( K3b::AudioDecoder::META_SONGWRITER ) );
+            track->setComposer( dec->metaInfo( K3b::AudioDecoder::META_COMPOSER ) );
+            track->setCdTextMessage( dec->metaInfo( K3b::AudioDecoder::META_COMMENT ) );
 
             if( m_trackAfter )
                 track->moveAfter( m_trackAfter );
@@ -233,7 +233,7 @@ void K3bAudioTrackAddingDialog::slotAnalysingFinished( bool /*success*/ )
 }
 
 
-void K3bAudioTrackAddingDialog::slotCancel()
+void K3b::AudioTrackAddingDialog::slotCancel()
 {
     m_bCanceled = true;
     m_analyserJob->cancel();
@@ -241,7 +241,7 @@ void K3bAudioTrackAddingDialog::slotCancel()
 }
 
 
-KUrl::List K3bAudioTrackAddingDialog::extractUrlList( const KUrl::List& urls )
+KUrl::List K3b::AudioTrackAddingDialog::extractUrlList( const KUrl::List& urls )
 {
     KUrl::List allUrls = urls;
     KUrl::List urlsFromPlaylist;
@@ -262,7 +262,7 @@ KUrl::List K3bAudioTrackAddingDialog::extractUrlList( const KUrl::List& urls )
                  dirIt != entries.constEnd(); ++dirIt )
                 it = allUrls.insert( oldIt, KUrl( dir.absolutePath() + "/" + *dirIt ) );
         }
-        else if( K3bAudioDoc::readPlaylistFile( url, urlsFromPlaylist ) ) {
+        else if( K3b::AudioDoc::readPlaylistFile( url, urlsFromPlaylist ) ) {
             it = allUrls.erase( it );
             KUrl::List::iterator oldIt = it;
             // add all files into the list after the current item

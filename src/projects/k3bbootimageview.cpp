@@ -35,16 +35,16 @@
 
 
 
-class K3bBootImageView::PrivateBootImageViewItem : public K3ListViewItem
+class K3b::BootImageView::PrivateBootImageViewItem : public K3ListViewItem
 {
 public:
-    PrivateBootImageViewItem( K3bBootItem* image, Q3ListView* parent )
+    PrivateBootImageViewItem( K3b::BootItem* image, Q3ListView* parent )
         : K3ListViewItem( parent ),
           m_image( image ) {
 
     }
 
-    PrivateBootImageViewItem( K3bBootItem* image, Q3ListView* parent, Q3ListViewItem* after )
+    PrivateBootImageViewItem( K3b::BootItem* image, Q3ListView* parent, Q3ListViewItem* after )
         : K3ListViewItem( parent, after ),
           m_image( image ) {
 
@@ -52,9 +52,9 @@ public:
 
     QString text( int col ) const {
         if( col == 0 ) {
-            if( m_image->imageType() == K3bBootItem::FLOPPY )
+            if( m_image->imageType() == K3b::BootItem::FLOPPY )
                 return i18n("Floppy");
-            else if( m_image->imageType() == K3bBootItem::HARDDISK )
+            else if( m_image->imageType() == K3b::BootItem::HARDDISK )
                 return i18n("Harddisk");
             else
                 return i18n("None");
@@ -67,17 +67,19 @@ public:
             return QString();
     }
 
-    K3bBootItem* bootImage() const { return m_image; }
+    K3b::BootItem* bootImage() const { return m_image; }
 
 private:
-    K3bBootItem* m_image;
+    K3b::BootItem* m_image;
 };
 
 
-K3bBootImageView::K3bBootImageView( K3bDataDoc* doc, QWidget* parent )
-    : base_K3bBootImageView( parent ),
+K3b::BootImageView::BootImageView( K3b::DataDoc* doc, QWidget* parent )
+    : QWidget( parent ),
       m_doc(doc)
 {
+    setupUi( this );
+
     connect( m_buttonNew, SIGNAL(clicked()),
              this, SLOT(slotNewBootImage()) );
     connect( m_buttonDelete, SIGNAL(clicked()),
@@ -97,7 +99,7 @@ K3bBootImageView::K3bBootImageView( K3bDataDoc* doc, QWidget* parent )
     connect( m_editLoadSize, SIGNAL(textChanged(QString) ),this,SLOT(slotOptionsChanged() ) );
     connect( m_radioFloppy, SIGNAL(toggled(bool) ),this,SLOT(slotOptionsChanged() ) );
 
-    K3bIntValidator* v = new K3bIntValidator( this );
+    K3b::IntValidator* v = new K3b::IntValidator( this );
     m_editLoadSegment->setValidator( v );
     m_editLoadSize->setValidator( v );
 
@@ -107,18 +109,18 @@ K3bBootImageView::K3bBootImageView( K3bDataDoc* doc, QWidget* parent )
     loadBootItemSettings(0);
 }
 
-K3bBootImageView::~K3bBootImageView()
+K3b::BootImageView::~BootImageView()
 {
 }
 
 
-void K3bBootImageView::slotToggleOptions()
+void K3b::BootImageView::slotToggleOptions()
 {
     showAdvancedOptions( !m_groupOptions->isVisible() );
 }
 
 
-void K3bBootImageView::showAdvancedOptions( bool show )
+void K3b::BootImageView::showAdvancedOptions( bool show )
 {
     if( show ) {
         m_groupOptions->show();
@@ -131,12 +133,12 @@ void K3bBootImageView::showAdvancedOptions( bool show )
 }
 
 
-void K3bBootImageView::slotNewBootImage()
+void K3b::BootImageView::slotNewBootImage()
 {
     QString file = KFileDialog::getOpenFileName( KUrl(), QString(), this, i18n("Please Choose Boot Image") );
     if( !file.isEmpty() ) {
         KIO::filesize_t fsize = K3b::filesize( file );
-        int boottype = K3bBootItem::FLOPPY;
+        int boottype = K3b::BootItem::FLOPPY;
         if( fsize != 1200*1024 &&
             fsize != 1440*1024 &&
             fsize != 2880*1024 ) {
@@ -157,10 +159,10 @@ void K3bBootImageView::slotNewBootImage()
                                                      QString(),
                                                      KMessageBox::AllowLink ) ) {
             case KMessageBox::Yes:
-                boottype = K3bBootItem::HARDDISK;
+                boottype = K3b::BootItem::HARDDISK;
                 break;
             case KMessageBox::No:
-                boottype = K3bBootItem::NONE;
+                boottype = K3b::BootItem::NONE;
                 break;
             default:
                 return;
@@ -173,18 +175,18 @@ void K3bBootImageView::slotNewBootImage()
 }
 
 
-void K3bBootImageView::slotDeleteBootImage()
+void K3b::BootImageView::slotDeleteBootImage()
 {
     Q3ListViewItem* item = m_viewImages->selectedItem();
     if( item ) {
-        K3bBootItem* i = ((PrivateBootImageViewItem*)item)->bootImage();
+        K3b::BootItem* i = ((PrivateBootImageViewItem*)item)->bootImage();
         delete item;
         m_doc->removeItem( i );
     }
 }
 
 
-void K3bBootImageView::slotSelectionChanged()
+void K3b::BootImageView::slotSelectionChanged()
 {
     Q3ListViewItem* item = m_viewImages->selectedItem();
     if( item )
@@ -194,17 +196,17 @@ void K3bBootImageView::slotSelectionChanged()
 }
 
 
-void K3bBootImageView::updateBootImages()
+void K3b::BootImageView::updateBootImages()
 {
     m_viewImages->clear();
-    Q_FOREACH( K3bBootItem* item, m_doc->bootImages() ) {
+    Q_FOREACH( K3b::BootItem* item, m_doc->bootImages() ) {
         (void)new PrivateBootImageViewItem( item, m_viewImages,
                                             m_viewImages->lastItem() );
     }
 }
 
 
-void K3bBootImageView::loadBootItemSettings( K3bBootItem* item )
+void K3b::BootImageView::loadBootItemSettings( K3b::BootItem* item )
 {
     // this is needed to prevent the slots to change stuff
     m_loadingItem = true;
@@ -218,9 +220,9 @@ void K3bBootImageView::loadBootItemSettings( K3bBootItem* item )
         m_editLoadSegment->setText( "0x" + QString::number( item->loadSegment(), 16 ) );
         m_editLoadSize->setText( "0x" + QString::number( item->loadSize(), 16 ) );
 
-        if( item->imageType() == K3bBootItem::FLOPPY )
+        if( item->imageType() == K3b::BootItem::FLOPPY )
             m_radioFloppy->setChecked(true);
-        else if( item->imageType() == K3bBootItem::HARDDISK )
+        else if( item->imageType() == K3b::BootItem::HARDDISK )
             m_radioHarddisk->setChecked(true);
         else
             m_radioNoEmulation->setChecked(true);
@@ -240,37 +242,37 @@ void K3bBootImageView::loadBootItemSettings( K3bBootItem* item )
 }
 
 
-void K3bBootImageView::slotOptionsChanged()
+void K3b::BootImageView::slotOptionsChanged()
 {
     if( !m_loadingItem ) {
         Q3ListViewItem* item = m_viewImages->selectedItem();
         if( item ) {
-            K3bBootItem* i = ((PrivateBootImageViewItem*)item)->bootImage();
+            K3b::BootItem* i = ((PrivateBootImageViewItem*)item)->bootImage();
 
             i->setNoBoot( m_checkNoBoot->isChecked() );
             i->setBootInfoTable( m_checkInfoTable->isChecked() );
 
-            // TODO: create some class K3bIntEdit : public QLineEdit
+            // TODO: create some class K3b::IntEdit : public QLineEdit
             bool ok = true;
-            i->setLoadSegment( K3bIntValidator::toInt( m_editLoadSegment->text(), &ok ) );
+            i->setLoadSegment( K3b::IntValidator::toInt( m_editLoadSegment->text(), &ok ) );
             if( !ok )
-                kDebug() << "(K3bBootImageView) parsing number failed: " << m_editLoadSegment->text().toLower();
-            i->setLoadSize( K3bIntValidator::toInt( m_editLoadSize->text(), &ok ) );
+                kDebug() << "(K3b::BootImageView) parsing number failed: " << m_editLoadSegment->text().toLower();
+            i->setLoadSize( K3b::IntValidator::toInt( m_editLoadSize->text(), &ok ) );
             if( !ok )
-                kDebug() << "(K3bBootImageView) parsing number failed: " << m_editLoadSize->text().toLower();
+                kDebug() << "(K3b::BootImageView) parsing number failed: " << m_editLoadSize->text().toLower();
 
             if( m_radioFloppy->isChecked() )
-                i->setImageType( K3bBootItem::FLOPPY );
+                i->setImageType( K3b::BootItem::FLOPPY );
             else if( m_radioHarddisk->isChecked() )
-                i->setImageType( K3bBootItem::HARDDISK );
+                i->setImageType( K3b::BootItem::HARDDISK );
             else
-                i->setImageType( K3bBootItem::NONE );
+                i->setImageType( K3b::BootItem::NONE );
         }
     }
 }
 
 
-void K3bBootImageView::slotNoEmulationToggled( bool on )
+void K3b::BootImageView::slotNoEmulationToggled( bool on )
 {
     // it makes no sense to combine no emulation and no boot!
     // the base_widget takes care of the disabling

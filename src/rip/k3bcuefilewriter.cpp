@@ -24,17 +24,17 @@
 #include <qdatetime.h>
 
 
-K3bCueFileWriter::K3bCueFileWriter()
+K3b::CueFileWriter::CueFileWriter()
 {
 }
 
 
-bool K3bCueFileWriter::save( const QString& filename )
+bool K3b::CueFileWriter::save( const QString& filename )
 {
     QFile f( filename );
 
     if( !f.open( QIODevice::WriteOnly ) ) {
-        kDebug() << "(K3bCueFileWriter) could not open file " << f.fileName();
+        kDebug() << "(K3b::CueFileWriter) could not open file " << f.fileName();
         return false;
     }
 
@@ -44,7 +44,7 @@ bool K3bCueFileWriter::save( const QString& filename )
 }
 
 
-bool K3bCueFileWriter::save( QTextStream& t )
+bool K3b::CueFileWriter::save( QTextStream& t )
 {
     t << "REM Cue file written by K3b " << k3bcore->version() << endl
       << endl;
@@ -58,10 +58,10 @@ bool K3bCueFileWriter::save( QTextStream& t )
 
     // the tracks
     int i = 0;
-    for( K3bDevice::Toc::const_iterator it = m_toc.constBegin();
+    for( K3b::Device::Toc::const_iterator it = m_toc.constBegin();
          it != m_toc.constEnd(); ++it ) {
 
-        const K3bDevice::Track& track = *it;
+        const K3b::Device::Track& track = *it;
 
         t << "  TRACK " << QString::number(i+1).rightJustified( 2, '0' ) << " AUDIO" << endl;
 

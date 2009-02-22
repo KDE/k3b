@@ -343,7 +343,7 @@
                           </widget>
                         </item>
                         <item>
-                          <widget class="K3bIntMapComboBox" name="m_comboVideoCodec" >
+                          <widget class="K3b::IntMapComboBox" name="m_comboVideoCodec" >
                             <property name="toolTip" stdset="0" >
                               <string>Select the Video codec used to encode the DVD titles</string>
                             </property>
@@ -364,7 +364,7 @@
                           </widget>
                         </item>
                         <item>
-                          <widget class="K3bIntMapComboBox" name="m_comboAudioCodec" >
+                          <widget class="K3b::IntMapComboBox" name="m_comboAudioCodec" >
                             <property name="toolTip" stdset="0" >
                               <string>Select the Audio codec used to encode the DVD titles</string>
                             </property>
@@ -573,7 +573,7 @@
   <layoutdefault spacing="6" margin="11" />
   <customwidgets>
     <customwidget>
-      <class>K3bIntMapComboBox</class>
+      <class>K3b::IntMapComboBox</class>
       <extends>QWidget</extends>
       <header location="global" >k3bintmapcombobox.h</header>
       <sizehint>

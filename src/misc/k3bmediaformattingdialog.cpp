@@ -42,8 +42,8 @@
 
 
 
-K3bMediaFormattingDialog::K3bMediaFormattingDialog( QWidget* parent )
-    : K3bInteractionDialog( parent,
+K3b::MediaFormattingDialog::MediaFormattingDialog( QWidget* parent )
+    : K3b::InteractionDialog( parent,
                             i18n("Format and Erase"),
                             i18n( "CD-RW" ) + '/' + i18n("DVD%1RW",QString("±")) + '/' + i18n( "BD-RW" ),
                             START_BUTTON|CANCEL_BUTTON,
@@ -52,17 +52,17 @@ K3bMediaFormattingDialog::K3bMediaFormattingDialog( QWidget* parent )
 {
     QWidget* frame = mainWidget();
 
-    m_writerSelectionWidget = new K3bWriterSelectionWidget( frame );
-    m_writerSelectionWidget->setWantedMediumType( K3bDevice::MEDIA_REWRITABLE );
+    m_writerSelectionWidget = new K3b::WriterSelectionWidget( frame );
+    m_writerSelectionWidget->setWantedMediumType( K3b::Device::MEDIA_REWRITABLE );
     // we need state empty here for preformatting DVD+RW.
-    m_writerSelectionWidget->setWantedMediumState( K3bDevice::STATE_COMPLETE|
-                                                   K3bDevice::STATE_INCOMPLETE|
-                                                   K3bDevice::STATE_EMPTY );
+    m_writerSelectionWidget->setWantedMediumState( K3b::Device::STATE_COMPLETE|
+                                                   K3b::Device::STATE_INCOMPLETE|
+                                                   K3b::Device::STATE_EMPTY );
     m_writerSelectionWidget->setSupportedWritingApps( K3b::WRITING_APP_DVD_RW_FORMAT );
     m_writerSelectionWidget->setForceAutoSpeed(true);
 
     QGroupBox* groupWritingMode = new QGroupBox( i18n("Writing Mode"), frame );
-    m_writingModeWidget = new K3bWritingModeWidget( K3b::WRITING_MODE_INCR_SEQ|K3b::WRITING_MODE_RES_OVWR,
+    m_writingModeWidget = new K3b::WritingModeWidget( K3b::WRITING_MODE_INCR_SEQ|K3b::WRITING_MODE_RES_OVWR,
                                                     groupWritingMode );
     QVBoxLayout* groupWritingModeLayout = new QVBoxLayout( groupWritingMode );
     groupWritingModeLayout->setMargin( marginHint() );
@@ -114,39 +114,39 @@ K3bMediaFormattingDialog::K3bMediaFormattingDialog( QWidget* parent )
 }
 
 
-K3bMediaFormattingDialog::~K3bMediaFormattingDialog()
+K3b::MediaFormattingDialog::~MediaFormattingDialog()
 {
 }
 
 
-void K3bMediaFormattingDialog::setDevice( K3bDevice::Device* dev )
+void K3b::MediaFormattingDialog::setDevice( K3b::Device::Device* dev )
 {
     m_writerSelectionWidget->setWriterDevice( dev );
 }
 
 
-void K3bMediaFormattingDialog::slotStartClicked()
+void K3b::MediaFormattingDialog::slotStartClicked()
 {
-    K3bMedium medium = k3bappcore->mediaCache()->medium( m_writerSelectionWidget->writerDevice() );
+    K3b::Medium medium = k3bappcore->mediaCache()->medium( m_writerSelectionWidget->writerDevice() );
 
-    K3bJobProgressDialog dlg( kapp->activeWindow() );
+    K3b::JobProgressDialog dlg( kapp->activeWindow() );
 
-    K3bJob* theJob = 0;
+    K3b::Job* theJob = 0;
 
-    if( medium.diskInfo().mediaType() & K3bDevice::MEDIA_CD_ALL ) {
-        K3bBlankingJob* job = new K3bBlankingJob( &dlg, this );
+    if( medium.diskInfo().mediaType() & K3b::Device::MEDIA_CD_ALL ) {
+        K3b::BlankingJob* job = new K3b::BlankingJob( &dlg, this );
 
         job->setDevice( m_writerSelectionWidget->writerDevice() );
         job->setSpeed( m_writerSelectionWidget->writerSpeed() );
         job->setForce( m_checkForce->isChecked() );
         job->setWritingApp( m_writerSelectionWidget->writingApp() );
         // no support for all the strange erasing modes anymore, they did not work anyway
-        job->setMode( m_checkQuickFormat->isChecked() ? K3bBlankingJob::Fast : K3bBlankingJob::Complete );
+        job->setMode( m_checkQuickFormat->isChecked() ? K3b::BlankingJob::Fast : K3b::BlankingJob::Complete );
 
         theJob = job;
     }
-    else if ( medium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_ALL ) {
-        K3bDvdFormattingJob* job = new K3bDvdFormattingJob( &dlg, this );
+    else if ( medium.diskInfo().mediaType() & K3b::Device::MEDIA_DVD_ALL ) {
+        K3b::DvdFormattingJob* job = new K3b::DvdFormattingJob( &dlg, this );
 
         job->setDevice( m_writerSelectionWidget->writerDevice() );
         job->setMode( m_writingModeWidget->writingMode() );
@@ -174,11 +174,11 @@ void K3bMediaFormattingDialog::slotStartClicked()
 }
 
 
-void K3bMediaFormattingDialog::toggleAll()
+void K3b::MediaFormattingDialog::toggleAll()
 {
-    K3bMedium medium = k3bappcore->mediaCache()->medium( m_writerSelectionWidget->writerDevice() );
+    K3b::Medium medium = k3bappcore->mediaCache()->medium( m_writerSelectionWidget->writerDevice() );
     K3b::WritingModes modes = 0;
-    if ( medium.diskInfo().mediaType() & K3bDevice::MEDIA_DVD_RW ) {
+    if ( medium.diskInfo().mediaType() & K3b::Device::MEDIA_DVD_RW ) {
         modes |=  K3b::WRITING_MODE_INCR_SEQ|K3b::WRITING_MODE_RES_OVWR;
     }
     m_writingModeWidget->setSupportedModes( modes );
@@ -186,7 +186,7 @@ void K3bMediaFormattingDialog::toggleAll()
 }
 
 
-void K3bMediaFormattingDialog::loadUserDefaults( const KConfigGroup& c )
+void K3b::MediaFormattingDialog::loadUserDefaults( const KConfigGroup& c )
 {
     m_checkForce->setChecked( c.readEntry( "force", false ) );
     m_checkQuickFormat->setChecked( c.readEntry( "quick format", true ) );
@@ -195,7 +195,7 @@ void K3bMediaFormattingDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3bMediaFormattingDialog::saveUserDefaults( KConfigGroup c )
+void K3b::MediaFormattingDialog::saveUserDefaults( KConfigGroup c )
 {
     c.writeEntry( "force", m_checkForce->isChecked() );
     c.writeEntry( "quick format", m_checkQuickFormat->isChecked() );
@@ -204,7 +204,7 @@ void K3bMediaFormattingDialog::saveUserDefaults( KConfigGroup c )
 }
 
 
-void K3bMediaFormattingDialog::loadK3bDefaults()
+void K3b::MediaFormattingDialog::loadK3bDefaults()
 {
     m_writerSelectionWidget->loadDefaults();
     m_checkForce->setChecked( false );

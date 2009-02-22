@@ -17,19 +17,26 @@
 
 #include <k3blistview.h>
 
-class K3bAudioTrack;
-class K3bAudioDataSource;
-class K3bAudioTrackViewItem;
+namespace K3b {
+    class AudioTrack;
+}
+namespace K3b {
+    class AudioDataSource;
+}
+namespace K3b {
+    class AudioTrackViewItem;
+}
 
-class K3bAudioDataSourceViewItem : public K3bListViewItem
+namespace K3b {
+class AudioDataSourceViewItem : public ListViewItem
 {
  public:
-  K3bAudioDataSourceViewItem( K3bAudioTrackViewItem* parent, 
-			      K3bAudioDataSourceViewItem* after, 
-			      K3bAudioDataSource* );
+  AudioDataSourceViewItem( AudioTrackViewItem* parent, 
+			      AudioDataSourceViewItem* after, 
+			      AudioDataSource* );
 
-  K3bAudioDataSource* source() const { return m_source; }
-  K3bAudioTrackViewItem* trackViewItem() const { return m_trackViewItem; }
+  AudioDataSource* source() const { return m_source; }
+  AudioTrackViewItem* trackViewItem() const { return m_trackViewItem; }
 
   QString text( int i ) const;
   void setText( int col, const QString& text );
@@ -45,9 +52,10 @@ class K3bAudioDataSourceViewItem : public K3bListViewItem
 		      int, int, int ) {}
 
  private:
-  K3bAudioTrackViewItem* m_trackViewItem;
-  K3bAudioDataSource* m_source;
+  AudioTrackViewItem* m_trackViewItem;
+  AudioDataSource* m_source;
   int m_animationCounter;
 };
+}
 
 #endif

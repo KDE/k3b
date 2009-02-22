@@ -38,7 +38,7 @@
 #include <kapplication.h>
 
 
-static QString audioStreamString( const K3bVideoDVD::Title& title, unsigned int maxLines = 9999, bool includeExtInfo = true )
+static QString audioStreamString( const K3b::VideoDVD::Title& title, unsigned int maxLines = 9999, bool includeExtInfo = true )
 {
     QString s = "<p>";
     for( unsigned int i = 0; i < qMin( title.numAudioStreams(), maxLines ); ++i ) {
@@ -46,13 +46,13 @@ static QString audioStreamString( const K3bVideoDVD::Title& title, unsigned int 
             s += "<br>";
         s += QString::number(i+1) + ": "
              + i18n("%1 %2Ch (%3<em>%4</em>)",
-                    K3bVideoDVD::audioFormatString( title.audioStream(i).format() ),
+                    K3b::VideoDVD::audioFormatString( title.audioStream(i).format() ),
                     title.audioStream(i).channels(),
                     title.audioStream(i).langCode().isEmpty()
                     ? i18n("unknown language")
                     : KGlobal::locale()->languageCodeToName( title.audioStream(i).langCode() ),
-                    includeExtInfo && title.audioStream(i).codeExtension() != K3bVideoDVD::AUDIO_CODE_EXT_UNSPECIFIED
-                    ? QString(" ") + K3bVideoDVD::audioCodeExtensionString( title.audioStream(i).codeExtension() )
+                    includeExtInfo && title.audioStream(i).codeExtension() != K3b::VideoDVD::AUDIO_CODE_EXT_UNSPECIFIED
+                    ? QString(" ") + K3b::VideoDVD::audioCodeExtensionString( title.audioStream(i).codeExtension() )
                     : QString() );
     }
     if( title.numAudioStreams() > maxLines )
@@ -62,7 +62,7 @@ static QString audioStreamString( const K3bVideoDVD::Title& title, unsigned int 
 }
 
 
-static QString subpictureStreamString( const K3bVideoDVD::Title& title, unsigned int maxLines = 9999, bool includeExtInfo = true )
+static QString subpictureStreamString( const K3b::VideoDVD::Title& title, unsigned int maxLines = 9999, bool includeExtInfo = true )
 {
     QString s = "<p>";
     for( unsigned int i = 0; i < qMin( title.numSubPictureStreams(), maxLines ); ++i ) {
@@ -70,14 +70,14 @@ static QString subpictureStreamString( const K3bVideoDVD::Title& title, unsigned
             s += "<br>";
         s += QString::number(i+1) + ": "
              + QString("%1 (%2<em>%3</em>)")
-             .arg( title.subPictureStream(i).codeMode() == K3bVideoDVD::SUBPIC_CODE_MODE_RLE
+             .arg( title.subPictureStream(i).codeMode() == K3b::VideoDVD::SUBPIC_CODE_MODE_RLE
                    ? i18n("RLE")
                    : i18n("Extended") )
              .arg( title.subPictureStream(i).langCode().isEmpty()
                    ? i18n("unknown language")
                    : KGlobal::locale()->languageCodeToName( title.subPictureStream(i).langCode() ) )
-             .arg( includeExtInfo && title.subPictureStream(i).codeExtension() != K3bVideoDVD::SUBPIC_CODE_EXT_UNSPECIFIED
-                   ? QString(" ") + K3bVideoDVD::subPictureCodeExtensionString( title.subPictureStream(i).codeExtension() )
+             .arg( includeExtInfo && title.subPictureStream(i).codeExtension() != K3b::VideoDVD::SUBPIC_CODE_EXT_UNSPECIFIED
+                   ? QString(" ") + K3b::VideoDVD::subPictureCodeExtensionString( title.subPictureStream(i).codeExtension() )
                    : QString() );
     }
     if( title.numSubPictureStreams() > maxLines )
@@ -88,11 +88,11 @@ static QString subpictureStreamString( const K3bVideoDVD::Title& title, unsigned
 
 
 
-class K3bVideoDVDRippingTitleListView::TitleViewItem : public K3bCheckListViewItem
+class K3b::VideoDVDRippingTitleListView::TitleViewItem : public K3b::CheckListViewItem
 {
 public:
-    TitleViewItem( K3bVideoDVDRippingTitleListView* parent, Q3ListViewItem* after, const K3bVideoDVD::Title& title )
-        : K3bCheckListViewItem( parent, after ),
+    TitleViewItem( K3b::VideoDVDRippingTitleListView* parent, Q3ListViewItem* after, const K3b::VideoDVD::Title& title )
+        : K3b::CheckListViewItem( parent, after ),
           m_title( title ) {
 
         setMarginVertical( 4 );
@@ -106,7 +106,7 @@ public:
         m_previewSet = false;
     }
 
-    const K3bVideoDVD::Title& videoDVDTitle() const { return m_title; }
+    const K3b::VideoDVD::Title& videoDVDTitle() const { return m_title; }
 
     void setup() {
         widthChanged();
@@ -124,7 +124,7 @@ public:
 
     int width( const QFontMetrics& fm, const Q3ListView* lv, int c ) const {
         if( c == 0 )
-            return K3bCheckListViewItem::width( fm, lv, c );
+            return K3b::CheckListViewItem::width( fm, lv, c );
         else {
             Q3SimpleRichText rt( text(c), lv->font() );
             rt.setWidth( 600 ); // way to big to avoid line breaks
@@ -151,7 +151,7 @@ protected:
 
         if( col == 0 ) {
             // the check mark
-            K3bCheckListViewItem::paintK3bCell( p, cg, col, w, align );
+            K3b::CheckListViewItem::paintK3bCell( p, cg, col, w, align );
         }
         else if( col == 2 ) {
             if( isSelected() ) {
@@ -188,7 +188,7 @@ protected:
             }
             else if( m_previewSet ) {
                 int preW = 0;
-                if( m_title.videoStream().displayAspectRatio()	== K3bVideoDVD::VIDEO_ASPECT_RATIO_4_3 )
+                if( m_title.videoStream().displayAspectRatio()	== K3b::VideoDVD::VIDEO_ASPECT_RATIO_4_3 )
                     preW = h*4/3;
                 else
                     preW = h*16/9;
@@ -204,7 +204,7 @@ protected:
         else {
             QString s = text( col );
             if( s.isEmpty() )
-                K3bCheckListViewItem::paintK3bCell( p, cg, col, w, align );
+                K3b::CheckListViewItem::paintK3bCell( p, cg, col, w, align );
             else {
                 QColorGroup cg1( cg );
                 if( isSelected() ) {
@@ -253,9 +253,9 @@ private:
                 .arg( m_title.videoStream().mpegVersion() == 0 ? i18n("MPEG1") : i18n("MPEG2") )
                 .arg( m_title.videoStream().pictureWidth() )
                 .arg( m_title.videoStream().pictureHeight() )
-                .arg( m_title.videoStream().displayAspectRatio() == K3bVideoDVD::VIDEO_ASPECT_RATIO_4_3 ? "4:3" : "16:9" )
+                .arg( m_title.videoStream().displayAspectRatio() == K3b::VideoDVD::VIDEO_ASPECT_RATIO_4_3 ? "4:3" : "16:9" )
                 .arg( m_title.videoStream().letterboxed() ? QString(" - <em>") + i18n("letterboxed") + QString("</em>"):
-                      m_title.videoStream().permittedDf() == K3bVideoDVD::VIDEO_PERMITTED_DF_LETTERBOXED
+                      m_title.videoStream().permittedDf() == K3b::VideoDVD::VIDEO_PERMITTED_DF_LETTERBOXED
                       ? QString(" - <em>") + i18n("anamorph") + QString("</em>") : QString() );
 
         case 4:
@@ -273,11 +273,11 @@ private:
                 return "<p><small><em>" + i18n("No Subpicture streams") + "</em>";
 
         default:
-            return K3bCheckListViewItem::text( col );
+            return K3b::CheckListViewItem::text( col );
         }
     }
 
-    K3bVideoDVD::Title m_title;
+    K3b::VideoDVD::Title m_title;
 
     bool m_previewSet;
     QImage m_preview;
@@ -285,11 +285,11 @@ private:
 };
 
 
-class K3bVideoDVDRippingTitleListView::TitleToolTip : public K3bToolTip
+class K3b::VideoDVDRippingTitleListView::TitleToolTip : public K3b::ToolTip
 {
 public:
-    TitleToolTip( K3bVideoDVDRippingTitleListView* view )
-        : K3bToolTip( view->viewport() ),
+    TitleToolTip( K3b::VideoDVDRippingTitleListView* view )
+        : K3b::ToolTip( view->viewport() ),
           m_view( view ) {
     }
 
@@ -324,13 +324,13 @@ public:
     }
 
 private:
-    K3bVideoDVDRippingTitleListView* m_view;
+    K3b::VideoDVDRippingTitleListView* m_view;
 };
 
 
 
-K3bVideoDVDRippingTitleListView::K3bVideoDVDRippingTitleListView( QWidget* parent )
-    : K3bListView( parent )
+K3b::VideoDVDRippingTitleListView::VideoDVDRippingTitleListView( QWidget* parent )
+    : K3b::ListView( parent )
 {
     setFullWidth(true);
     setSorting(-1);
@@ -351,19 +351,19 @@ K3bVideoDVDRippingTitleListView::K3bVideoDVDRippingTitleListView( QWidget* paren
 
     m_toolTip = new TitleToolTip( this );
 
-    m_previewGen = new K3bVideoDVDRippingPreview( this );
+    m_previewGen = new K3b::VideoDVDRippingPreview( this );
     connect( m_previewGen, SIGNAL(previewDone(bool)),
              this, SLOT(slotPreviewDone(bool)) );
 }
 
 
-K3bVideoDVDRippingTitleListView::~K3bVideoDVDRippingTitleListView()
+K3b::VideoDVDRippingTitleListView::~VideoDVDRippingTitleListView()
 {
     delete m_toolTip;
 }
 
 
-void K3bVideoDVDRippingTitleListView::setVideoDVD( const K3bVideoDVD::VideoDVD& dvd )
+void K3b::VideoDVDRippingTitleListView::setVideoDVD( const K3b::VideoDVD::VideoDVD& dvd )
 {
     clear();
 
@@ -379,7 +379,7 @@ void K3bVideoDVDRippingTitleListView::setVideoDVD( const K3bVideoDVD::VideoDVD& 
 }
 
 
-void K3bVideoDVDRippingTitleListView::slotPreviewDone( bool success )
+void K3b::VideoDVDRippingTitleListView::slotPreviewDone( bool success )
 {
     if( success )
         m_itemMap[m_currentPreviewTitle-1]->setPreview( m_previewGen->preview() );
@@ -395,7 +395,7 @@ void K3bVideoDVDRippingTitleListView::slotPreviewDone( bool success )
 }
 
 
-void K3bVideoDVDRippingTitleListView::hideEvent( QHideEvent* e )
+void K3b::VideoDVDRippingTitleListView::hideEvent( QHideEvent* e )
 {
     //
     // For now we do it the easy way: just stop the preview generation
@@ -403,7 +403,7 @@ void K3bVideoDVDRippingTitleListView::hideEvent( QHideEvent* e )
     //
     m_previewGen->cancel();
 
-    K3bListView::hideEvent( e );
+    K3b::ListView::hideEvent( e );
 }
 
 #include "k3bvideodvdrippingtitlelistview.moc"

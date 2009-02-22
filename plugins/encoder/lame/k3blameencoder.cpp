@@ -53,7 +53,7 @@ public:
 
 
 K3bLameEncoder::K3bLameEncoder( QObject* parent, const QVariantList& )
-    : K3bAudioEncoder( parent )
+    : K3b::AudioEncoder( parent )
 {
     d = new Private();
 }
@@ -265,7 +265,7 @@ void K3bLameEncoder::finishEncoderInternal()
 }
 
 
-void K3bLameEncoder::setMetaDataInternal( K3bAudioEncoder::MetaDataField f, const QString& value )
+void K3bLameEncoder::setMetaDataInternal( K3b::AudioEncoder::MetaDataField f, const QString& value )
 {
     // let's not use UTF-8 here since I don't know how to tell lame...
     // FIXME: when we use the codec we only get garbage. Why?

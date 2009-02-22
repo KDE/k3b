@@ -19,51 +19,61 @@
 #include <QtGui/QTreeView>
 
 
-class K3bDataDoc;
-class K3bDirItem;
-class K3bDataItem;
-class K3bView;
+namespace K3b {
+    class DataDoc;
+}
+namespace K3b {
+    class DirItem;
+}
+namespace K3b {
+    class DataItem;
+}
+namespace K3b {
+    class View;
+}
 class QItemSelection;
 
 /**
  *@author Sebastian Trueg
  */
 
-class K3bDataDirTreeView : public QTreeView
+namespace K3b {
+class DataDirTreeView : public QTreeView
 {
     Q_OBJECT
 
 public:
-    K3bDataDirTreeView( K3bView*, K3bDataDoc*, QWidget* parent );
-    virtual ~K3bDataDirTreeView();
+    DataDirTreeView( View*, DataDoc*, QWidget* parent );
+    virtual ~DataDirTreeView();
 
     /**
      * \return The item at position \p pos (local coordinates)
      * or 0 if there is no item at that position.
      */
-    K3bDataItem* itemAt( const QPoint& pos );
+    DataItem* itemAt( const QPoint& pos );
 
-    K3bDirItem* selectedDir() const;
+    DirItem* selectedDir() const;
 
 public Q_SLOTS:
-    void setCurrentDir( K3bDirItem* );
+    void setCurrentDir( DirItem* );
 
 Q_SIGNALS:
-    void dirSelected( K3bDirItem* );
+    void dirSelected( DirItem* );
 
 private Q_SLOTS:
     void slotSelectionChanged( const QItemSelection& selected, const QItemSelection& );
 
 private:
-    void startDropAnimation( K3bDirItem* );
+    void startDropAnimation( DirItem* );
     void stopDropAnimation();
 
-    K3bView* m_view;
+    View* m_view;
 
-    K3bDataDoc* m_doc;
+    DataDoc* m_doc;
 
     class Private;
     Private* d;
 };
+}
 
 #endif

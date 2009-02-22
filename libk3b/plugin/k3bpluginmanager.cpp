@@ -39,44 +39,44 @@
 
 
 
-class K3bPluginManager::Private
+class K3b::PluginManager::Private
 {
 public:
-    Private( K3bPluginManager* parent )
+    Private( K3b::PluginManager* parent )
         : m_parent( parent ) {
     }
 
-    QList<K3bPlugin*> plugins;
+    QList<K3b::Plugin*> plugins;
 
     void loadPlugin( const KService::Ptr service );
 
 private:
-    K3bPluginManager* m_parent;
+    K3b::PluginManager* m_parent;
 };
 
 
 
 
-K3bPluginManager::K3bPluginManager( QObject* parent )
+K3b::PluginManager::PluginManager( QObject* parent )
     : QObject( parent ),
       d( new Private( this ) )
 {
 }
 
 
-K3bPluginManager::~K3bPluginManager()
+K3b::PluginManager::~PluginManager()
 {
     delete d;
 }
 
 
 
-QStringList K3bPluginManager::categories() const
+QStringList K3b::PluginManager::categories() const
 {
     QStringList grps;
 
-    QList<K3bPlugin*> fl;
-    Q_FOREACH( K3bPlugin* plugin, d->plugins ) {
+    QList<K3b::Plugin*> fl;
+    Q_FOREACH( K3b::Plugin* plugin, d->plugins ) {
         if( !grps.contains( plugin->category() ) )
             grps.append( plugin->category() );
     }
@@ -85,10 +85,10 @@ QStringList K3bPluginManager::categories() const
 }
 
 
-QList<K3bPlugin*> K3bPluginManager::plugins( const QString& group ) const
+QList<K3b::Plugin*> K3b::PluginManager::plugins( const QString& group ) const
 {
-    QList<K3bPlugin*> fl;
-    Q_FOREACH( K3bPlugin* plugin, d->plugins ) {
+    QList<K3b::Plugin*> fl;
+    Q_FOREACH( K3b::Plugin* plugin, d->plugins ) {
         if( plugin->category() == group || group.isEmpty() )
             fl.append( plugin );
     }
@@ -96,10 +96,10 @@ QList<K3bPlugin*> K3bPluginManager::plugins( const QString& group ) const
 }
 
 
-void K3bPluginManager::Private::loadPlugin( const KService::Ptr service )
+void K3b::PluginManager::Private::loadPlugin( const KService::Ptr service )
 {
     kDebug() << service->name() << service->library();
-    K3bPlugin* plugin = service->createInstance<K3bPlugin>( m_parent );
+    K3b::Plugin* plugin = service->createInstance<K3b::Plugin>( m_parent );
     if ( plugin ) {
         kDebug() << "Loaded plugin" << service->name();
         // FIXME: improve this versioning stuff
@@ -117,10 +117,10 @@ void K3bPluginManager::Private::loadPlugin( const KService::Ptr service )
 
 // 	// make sure to only use the latest version of one plugin
 // 	bool addPlugin = true;
-// 	for( Q3PtrListIterator<K3bPlugin> it( d->plugins ); *it; ++it ) {
+// 	for( Q3PtrListIterator<K3b::Plugin> it( d->plugins ); *it; ++it ) {
 // 	  if( it.current()->pluginInfo().name() == plugin->pluginInfo().name() ) {
-// 	    if( K3bVersion(it.current()->pluginInfo().version()) < K3bVersion(plugin->pluginInfo().version()) ) {
-// 	      K3bPlugin* p = it.current();
+// 	    if( K3b::Version(it.current()->pluginInfo().version()) < K3b::Version(plugin->pluginInfo().version()) ) {
+// 	      K3b::Plugin* p = it.current();
 // 	      d->plugins.removeRef( p );
 // 	      delete p;
 // 	    }
@@ -132,7 +132,7 @@ void K3bPluginManager::Private::loadPlugin( const KService::Ptr service )
 }
 
 
-void K3bPluginManager::loadAll()
+void K3b::PluginManager::loadAll()
 {
     kDebug();
     KService::List services = KServiceTypeTrader::self()->query( "K3b/Plugin" );
@@ -141,13 +141,13 @@ void K3bPluginManager::loadAll()
     }
 }
 
-int K3bPluginManager::pluginSystemVersion() const
+int K3b::PluginManager::pluginSystemVersion() const
 {
     return K3B_PLUGIN_SYSTEM_VERSION;
 }
 
 
-int K3bPluginManager::execPluginDialog( K3bPlugin* plugin, QWidget* parent )
+int K3b::PluginManager::execPluginDialog( K3b::Plugin* plugin, QWidget* parent )
 {
     QList<KService::Ptr> kcmServices = plugin->pluginInfo().kcmServices();
     if ( !kcmServices.isEmpty() ) {

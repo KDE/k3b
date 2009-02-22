@@ -21,25 +21,25 @@
 
 // we only use the plugins when loaded into the main application. Thus they do not need
 // their own KComponentData
-K3bPluginConfigWidget::K3bPluginConfigWidget( QWidget* parent, const QVariantList& args )
+K3b::PluginConfigWidget::PluginConfigWidget( QWidget* parent, const QVariantList& args )
     : KCModule( KGlobal::mainComponent(), parent, args )
 {
 }
 
 
-K3bPluginConfigWidget::~K3bPluginConfigWidget()
+K3b::PluginConfigWidget::~PluginConfigWidget()
 {
 }
 
 
-// void K3bPluginConfigWidget::load()
+// void K3b::PluginConfigWidget::load()
 // {
 
 //     loadConfig();
 // }
 
 
-// void K3bPluginConfigWidget::saveConfig()
+// void K3b::PluginConfigWidget::saveConfig()
 // {
 
 // }

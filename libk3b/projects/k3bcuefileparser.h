@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -20,37 +20,40 @@
 #include <k3btoc.h>
 #include <k3bcdtext.h>
 #include "k3b_export.h"
-/**
- * Parses a cue file.
- * Datatracks have either mode1 or mode2 where the latter contains xa form1/2.
- * The last track may not have a proper length!
- */
-class LIBK3B_EXPORT K3bCueFileParser : public K3bImageFileReader
-{
- public:
-  K3bCueFileParser( const QString& filename = QString() );
-  ~K3bCueFileParser();
 
-  /**
-   * CDRDAO does not use this image filename but replaces the extension from the cue file
-   * with "bin" to get the image filename.
-   * So in this case cdrecord won't be able to burn the cue file. That is why we need this hack.
-   */
-  bool imageFilenameInCue() const { return m_imageFilenameInCue; }
+namespace K3b {
+    /**
+     * Parses a cue file.
+     * Datatracks have either mode1 or mode2 where the latter contains xa form1/2.
+     * The last track may not have a proper length!
+     */
+    class LIBK3B_EXPORT CueFileParser : public ImageFileReader
+    {
+    public:
+        CueFileParser( const QString& filename = QString() );
+        ~CueFileParser();
 
-  const K3bDevice::Toc& toc() const;
-  const K3bDevice::CdText& cdText() const;
+        /**
+         * CDRDAO does not use this image filename but replaces the extension from the cue file
+         * with "bin" to get the image filename.
+         * So in this case cdrecord won't be able to burn the cue file. That is why we need this hack.
+         */
+        bool imageFilenameInCue() const { return m_imageFilenameInCue; }
 
- private:
-  void readFile();
-  bool parseLine( QString& line );
-  void simplified( QString& s );
-  bool findImageFileName( const QString& fileEntry );
+        const Device::Toc& toc() const;
+        const Device::CdText& cdText() const;
 
-  bool m_imageFilenameInCue;
+    private:
+        void readFile();
+        bool parseLine( QString& line );
+        void simplified( QString& s );
+        bool findImageFileName( const QString& fileEntry );
 
-  class Private;
-  Private* d;
-};
+        bool m_imageFilenameInCue;
+
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

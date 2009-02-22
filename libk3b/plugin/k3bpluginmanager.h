@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,45 +20,48 @@
 #include <qstringlist.h>
 #include "k3b_export.h"
 
-
-class K3bPlugin;
 class QWidget;
 
 
-/**
- * Use this class to access all K3b plugins (this does not include the
- * KParts Plugins!).
- * Like the K3bCore the single instance (which has to be created manually)
- * can be obtained with the k3bpluginmanager macro.
- */
-class LIBK3B_EXPORT K3bPluginManager : public QObject
-{
-    Q_OBJECT
+namespace K3b {
+    class Plugin;
 
-public:
-    K3bPluginManager( QObject* parent = 0 );
-    ~K3bPluginManager();
 
     /**
-     * if group is empty all plugins are returned
+     * Use this class to access all K3b plugins (this does not include the
+     * KParts Plugins!).
+     * Like the Core the single instance (which has to be created manually)
+     * can be obtained with the k3bpluginmanager macro.
      */
-    QList<K3bPlugin*> plugins( const QString& category = QString() ) const;
+    class LIBK3B_EXPORT PluginManager : public QObject
+    {
+        Q_OBJECT
 
-    /**
-     * Returnes a list of the available categories.
-     */
-    QStringList categories() const;
+    public:
+        PluginManager( QObject* parent = 0 );
+        ~PluginManager();
 
-    int pluginSystemVersion() const;
+        /**
+         * if group is empty all plugins are returned
+         */
+        QList<Plugin*> plugins( const QString& category = QString() ) const;
 
-public Q_SLOTS:
-    void loadAll();
+        /**
+         * Returnes a list of the available categories.
+         */
+        QStringList categories() const;
 
-    int execPluginDialog( K3bPlugin*, QWidget* parent = 0 );
+        int pluginSystemVersion() const;
 
-private:
-    class Private;
-    Private* d;
-};
+    public Q_SLOTS:
+        void loadAll();
+
+        int execPluginDialog( Plugin*, QWidget* parent = 0 );
+
+    private:
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

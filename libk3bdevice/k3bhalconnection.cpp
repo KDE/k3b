@@ -24,38 +24,35 @@
 #include <Solid/Device>
 
 
-K3bDevice::HalConnection* K3bDevice::HalConnection::s_instance = 0;
+Q_GLOBAL_STATIC( K3b::Device::HalConnection, s_instance )
 
 
-class K3bDevice::HalConnection::Private
+class K3b::Device::HalConnection::Private
 {
 public:
 };
 
 
-K3bDevice::HalConnection* K3bDevice::HalConnection::instance()
+K3b::Device::HalConnection* K3b::Device::HalConnection::instance()
 {
-    if( s_instance == 0 )
-        s_instance = new HalConnection( 0 );
-    return s_instance;
+    return s_instance();
 }
 
 
-K3bDevice::HalConnection::HalConnection( QObject* parent )
+K3b::Device::HalConnection::HalConnection( QObject* parent )
     : QObject( parent )
 {
     d = new Private();
 }
 
 
-K3bDevice::HalConnection::~HalConnection()
+K3b::Device::HalConnection::~HalConnection()
 {
-    s_instance = 0;
     delete d;
 }
 
 
-int K3bDevice::HalConnection::lock( Device* dev )
+int K3b::Device::HalConnection::lock( Device* dev )
 {
     QDBusInterface halIface( "org.freedesktop.Hal",
                              dev->solidDevice().udi(),
@@ -92,7 +89,7 @@ int K3bDevice::HalConnection::lock( Device* dev )
 }
 
 
-int K3bDevice::HalConnection::unlock( Device* dev )
+int K3b::Device::HalConnection::unlock( Device* dev )
 {
     QDBusInterface halIface( "org.freedesktop.Hal",
                              dev->solidDevice().udi(),

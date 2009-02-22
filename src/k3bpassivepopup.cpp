@@ -45,21 +45,21 @@ static const char* const sticky_xpm[] = {
     "#####"
 };
 
-static QPixmap themedMessageBoxIcon( K3bPassivePopup::MessageType mt )
+static QPixmap themedMessageBoxIcon( K3b::PassivePopup::MessageType mt )
 {
     QString icon_name;
     QMessageBox::Icon qIcon;
     
     switch( mt ) {
-    case K3bPassivePopup::Information:
+    case K3b::PassivePopup::Information:
         qIcon = QMessageBox::Information;
         icon_name = "dialog-information";
         break;
-    case K3bPassivePopup::Warning:
+    case K3b::PassivePopup::Warning:
         qIcon = QMessageBox::Warning;
         icon_name = "dialog-warning";
         break;
-    case K3bPassivePopup::Error:
+    case K3b::PassivePopup::Error:
         qIcon = QMessageBox::Critical;
         icon_name = "dialog-error";
         break;
@@ -77,22 +77,22 @@ static QPixmap themedMessageBoxIcon( K3bPassivePopup::MessageType mt )
 }
 
 
-class K3bPassivePopup::Private
+class K3b::PassivePopup::Private
 {
 public:
     int timeout;
     int showEffect;
     
-    K3bTimeoutWidget* timeoutWidget;
+    K3b::TimeoutWidget* timeoutWidget;
     QLabel* titleLabel;
     QLabel* messageLabel;
     QLabel* pixmapLabel;
-    K3bMiniButton* closeButton;
-    K3bMiniButton* stickyButton;
+    K3b::MiniButton* closeButton;
+    K3b::MiniButton* stickyButton;
 };
 
 
-K3bPassivePopup::K3bPassivePopup( QWidget* parent )
+K3b::PassivePopup::PassivePopup( QWidget* parent )
   : QFrame( parent )
 {
     d = new Private;
@@ -117,16 +117,16 @@ K3bPassivePopup::K3bPassivePopup( QWidget* parent )
     d->pixmapLabel->setAlignment( Qt::AlignTop );
     d->pixmapLabel->setPixmap( themedMessageBoxIcon( Information ) );
     
-    d->timeoutWidget = new K3bTimeoutWidget( this );
+    d->timeoutWidget = new K3b::TimeoutWidget( this );
     connect( d->timeoutWidget, SIGNAL(timeout()), this, SLOT(slotClose()) );
     
-    d->closeButton = new K3bMiniButton( d->titleLabel );
+    d->closeButton = new K3b::MiniButton( d->titleLabel );
     d->closeButton->setIcon( style()->standardIcon( QStyle::SP_TitleBarCloseButton ) );
     d->closeButton->setFixedSize( 16, 16 );
     d->closeButton->setToolTip( i18n("Close") );
     connect( d->closeButton, SIGNAL(clicked()), this, SLOT(slotClose()) );
     
-    d->stickyButton = new K3bMiniButton( d->titleLabel );
+    d->stickyButton = new K3b::MiniButton( d->titleLabel );
     d->stickyButton->setCheckable( true );
     d->stickyButton->setIcon( QIcon( QPixmap( const_cast< const char** >( sticky_xpm ) ) ) );
     d->stickyButton->setFixedSize( 16, 16 );
@@ -153,7 +153,7 @@ K3bPassivePopup::K3bPassivePopup( QWidget* parent )
     mainLay->addWidget( d->titleLabel );
     mainLay->addLayout( msgLay, 1 );
 
-    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+    if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
         QPalette titlePalette;
         titlePalette.setColor( d->titleLabel->backgroundRole(), theme->backgroundColor() );
         titlePalette.setColor( d->titleLabel->foregroundRole(), theme->foregroundColor() );
@@ -162,34 +162,34 @@ K3bPassivePopup::K3bPassivePopup( QWidget* parent )
 }
 
 
-K3bPassivePopup::~K3bPassivePopup()
+K3b::PassivePopup::~PassivePopup()
 {
     delete d;
 }
 
 
-void K3bPassivePopup::setShowCloseButton( bool b )
+void K3b::PassivePopup::setShowCloseButton( bool b )
 {
     d->closeButton->setVisible( b );
     adjustSize();
 }
 
 
-void K3bPassivePopup::setShowCountdown( bool b )
+void K3b::PassivePopup::setShowCountdown( bool b )
 {
     d->timeoutWidget->setVisible( b );
     d->stickyButton->setVisible( b );
 }
 
 
-void K3bPassivePopup::setMessage( const QString& m )
+void K3b::PassivePopup::setMessage( const QString& m )
 {
     d->messageLabel->setText( m );
     adjustSize();
 }
 
 
-void K3bPassivePopup::setTitle( const QString& t )
+void K3b::PassivePopup::setTitle( const QString& t )
 {
     d->titleLabel->setText( t );
     //  d->titleLabel->setVisible( !t.isEmpty() );
@@ -197,28 +197,28 @@ void K3bPassivePopup::setTitle( const QString& t )
 }
 
 
-void K3bPassivePopup::setTimeout( int msecs )
+void K3b::PassivePopup::setTimeout( int msecs )
 {
     d->timeout = msecs;
 }
 
 
-void K3bPassivePopup::setMessageType( MessageType m )
+void K3b::PassivePopup::setMessageType( MessageType m )
 {
     d->pixmapLabel->setPixmap( themedMessageBoxIcon( m ) );
     adjustSize();
 }
 
 
-void K3bPassivePopup::slideIn()
+void K3b::PassivePopup::slideIn()
 {
-    d->showEffect = K3bWidgetShowEffect::Slide;
-    connect( K3bWidgetShowEffect::showWidget( this, (K3bWidgetShowEffect::Effect)d->showEffect ), SIGNAL(widgetShown(QWidget*)),
+    d->showEffect = K3b::WidgetShowEffect::Slide;
+    connect( K3b::WidgetShowEffect::showWidget( this, (K3b::WidgetShowEffect::Effect)d->showEffect ), SIGNAL(widgetShown(QWidget*)),
              this, SLOT(slotShown()) );
 }
 
 
-void K3bPassivePopup::slotShown()
+void K3b::PassivePopup::slotShown()
 {
     if( d->timeoutWidget->isVisible() ) {
         d->timeoutWidget->setTimeout( d->timeout );
@@ -229,16 +229,16 @@ void K3bPassivePopup::slotShown()
 }
 
 
-void K3bPassivePopup::slotHidden()
+void K3b::PassivePopup::slotHidden()
 {
     deleteLater();
 }
 
 
-void K3bPassivePopup::slotClose()
+void K3b::PassivePopup::slotClose()
 {
     if( d->showEffect != 0 ) {
-        connect( K3bWidgetShowEffect::hideWidget( this, (K3bWidgetShowEffect::Effect)d->showEffect ), SIGNAL(widgetHidden(QWidget*)),
+        connect( K3b::WidgetShowEffect::hideWidget( this, (K3b::WidgetShowEffect::Effect)d->showEffect ), SIGNAL(widgetHidden(QWidget*)),
                  this, SLOT(slotHidden()) );
     }
     else
@@ -246,7 +246,7 @@ void K3bPassivePopup::slotClose()
 }
 
 
-void K3bPassivePopup::slotSticky( bool b )
+void K3b::PassivePopup::slotSticky( bool b )
 {
     if( b ) {
         d->timeoutWidget->pause();
@@ -257,13 +257,13 @@ void K3bPassivePopup::slotSticky( bool b )
 }
 
 
-void K3bPassivePopup::showPopup( const QString& message,
+void K3b::PassivePopup::showPopup( const QString& message,
                                  const QString& title,
                                  MessageType messageType,
                                  bool countdown,
                                  bool button )
 {
-    K3bPassivePopup* pop = new K3bPassivePopup( k3bappcore->k3bMainWindow()->centralWidget() );
+    K3b::PassivePopup* pop = new K3b::PassivePopup( k3bappcore->k3bMainWindow()->centralWidget() );
     pop->setMessage( message );
     pop->setTitle( title );
     pop->setMessageType( messageType );

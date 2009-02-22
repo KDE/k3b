@@ -21,8 +21,8 @@
 
 namespace K3b
 {
-    MixedProjectModel::MixedProjectModel( K3bMixedDoc* doc, QObject* parent )
-    : K3bMetaItemModel( parent ), m_doc( doc )
+    MixedProjectModel::MixedProjectModel( K3b::MixedDoc* doc, QObject* parent )
+    : K3b::MetaItemModel( parent ), m_doc( doc )
     {
         m_dataModel = new DataProjectModel( doc->dataDoc(), this );
         m_audioModel = new AudioProjectModel( doc->audioDoc(), this );
@@ -45,7 +45,7 @@ namespace K3b
         QAbstractItemModel *model = subModelForIndex( m_currentRootIndex );
 
         if (!model)
-            return K3bMetaItemModel::headerData( section, orientation, role );
+            return K3b::MetaItemModel::headerData( section, orientation, role );
 
         return model->headerData( section, orientation, role );
     }

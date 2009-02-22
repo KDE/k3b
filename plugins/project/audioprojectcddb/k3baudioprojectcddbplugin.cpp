@@ -41,7 +41,7 @@ K3B_EXPORT_PLUGIN( k3baudioprojectcddbplugin, K3bAudioProjectCddbPlugin )
 
 
 K3bAudioProjectCddbPlugin::K3bAudioProjectCddbPlugin( QObject* parent, const QVariantList& )
-    : K3bProjectPlugin( AUDIO_CD, false, parent ),
+    : K3b::ProjectPlugin( AUDIO_CD, false, parent ),
       m_progress(0)
 {
     setText( i18n("Query Cddb") );
@@ -55,9 +55,9 @@ K3bAudioProjectCddbPlugin::~K3bAudioProjectCddbPlugin()
 }
 
 
-void K3bAudioProjectCddbPlugin::activate( K3bDoc* doc, QWidget* parent )
+void K3bAudioProjectCddbPlugin::activate( K3b::Doc* doc, QWidget* parent )
 {
-    m_doc = dynamic_cast<K3bAudioDoc*>( doc );
+    m_doc = dynamic_cast<K3b::AudioDoc*>( doc );
     m_parentWidget = parent;
     m_canceled = false;
 
@@ -66,12 +66,12 @@ void K3bAudioProjectCddbPlugin::activate( K3bDoc* doc, QWidget* parent )
     }
     else {
         if( !m_progress ) {
-            m_progress = new K3bProgressDialog( i18n("Query Cddb"), parent, i18n("Audio Project") );
+            m_progress = new K3b::ProgressDialog( i18n("Query Cddb"), parent, i18n("Audio Project") );
             connect( m_progress, SIGNAL(cancelClicked()),
                      this, SLOT(slotCancelClicked()) );
         }
 
-        K3bCDDB::CDDBJob* job = K3bCDDB::CDDBJob::queryCddb( m_doc->toToc() );
+        K3b::CDDB::CDDBJob* job = K3b::CDDB::CDDBJob::queryCddb( m_doc->toToc() );
         connect( job, SIGNAL( result( KJob* ) ),
                  this, SLOT( slotCddbQueryFinished( KJob* ) ) );
 
@@ -93,7 +93,7 @@ void K3bAudioProjectCddbPlugin::slotCddbQueryFinished( KJob* job )
         m_progress->hide();
 
         if( !job->error() ) {
-            K3bCDDB::CDDBJob* cddbJob = dynamic_cast<K3bCDDB::CDDBJob*>( job );
+            K3b::CDDB::CDDBJob* cddbJob = dynamic_cast<K3b::CDDB::CDDBJob*>( job );
             KCDDB::CDInfo cddbInfo = cddbJob->cddbResult();
 
             // save the entry to the doc
@@ -102,7 +102,7 @@ void K3bAudioProjectCddbPlugin::slotCddbQueryFinished( KJob* job )
             m_doc->setCdTextMessage( cddbInfo.get( KCDDB::Comment ).toString() );
 
             int i = 0;
-            for( K3bAudioTrack* track = m_doc->firstTrack(); track; track = track->next() ) {
+            for( K3b::AudioTrack* track = m_doc->firstTrack(); track; track = track->next() ) {
                 KCDDB::TrackInfo info = cddbInfo.track( i );
                 track->setTitle( info.get( KCDDB::Title ).toString() );
                 track->setPerformer( info.get( KCDDB::Artist ).toString() );

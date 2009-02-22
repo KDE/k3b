@@ -31,7 +31,7 @@
 #include <kiconloader.h>
 
 
-class K3bAudioCdTextWidget::AllFieldsDialog : public KDialog
+class K3b::AudioCdTextWidget::AllFieldsDialog : public KDialog, public Ui::base_K3bAudioCdTextAllFieldsWidget
 {
 public:
     AllFieldsDialog( QWidget* parent )
@@ -40,51 +40,52 @@ public:
         setCaption(i18n("CD-Text"));
         setButtons(Ok|Cancel);
         setDefaultButton(Ok);
-        w = new base_K3bAudioCdTextAllFieldsWidget( this );
+        QWidget* w = new QWidget( this );
+        setupUi( w );
         setMainWidget( w );
     }
-
-    base_K3bAudioCdTextAllFieldsWidget* w;
 };
 
 
-K3bAudioCdTextWidget::K3bAudioCdTextWidget( QWidget* parent )
-    : base_K3bAudioCdTextWidget( parent ),
+K3b::AudioCdTextWidget::AudioCdTextWidget( QWidget* parent )
+    : QWidget( parent ),
       m_doc(0)
 {
+    setupUi( this );
+
     m_allFieldsDlg = new AllFieldsDialog( this );
 
     m_buttonCopyTitle->setIcon( KIcon( "edit-copy" ) );
     m_buttonCopyPerformer->setIcon( KIcon( "edit-copy" ) );
 
-    m_allFieldsDlg->w->m_buttonCopyTitle->setIcon( KIcon( "edit-copy" ) );
-    m_allFieldsDlg->w->m_buttonCopyPerformer->setIcon( KIcon( "edit-copy" ) );
-    m_allFieldsDlg->w->m_buttonCopySongwriter->setIcon( KIcon( "edit-copy" ) );
-    m_allFieldsDlg->w->m_buttonCopyComposer->setIcon( KIcon( "edit-copy" ) );
-    m_allFieldsDlg->w->m_buttonCopyArranger->setIcon( KIcon( "edit-copy" ) );
+    m_allFieldsDlg->m_buttonCopyTitle->setIcon( KIcon( "edit-copy" ) );
+    m_allFieldsDlg->m_buttonCopyPerformer->setIcon( KIcon( "edit-copy" ) );
+    m_allFieldsDlg->m_buttonCopySongwriter->setIcon( KIcon( "edit-copy" ) );
+    m_allFieldsDlg->m_buttonCopyComposer->setIcon( KIcon( "edit-copy" ) );
+    m_allFieldsDlg->m_buttonCopyArranger->setIcon( KIcon( "edit-copy" ) );
 
-    QValidator* cdTextVal = new K3bCdTextValidator( this );
+    QValidator* cdTextVal = new K3b::CdTextValidator( this );
     m_editTitle->setValidator( cdTextVal );
     m_editPerformer->setValidator( cdTextVal );
 
-    m_allFieldsDlg->w->m_editTitle->setValidator( cdTextVal );
-    m_allFieldsDlg->w->m_editPerformer->setValidator( cdTextVal );
-    m_allFieldsDlg->w->m_editDisc_id->setValidator( cdTextVal );
-    m_allFieldsDlg->w->m_editUpc_ean->setValidator( cdTextVal );
-    m_allFieldsDlg->w->m_editMessage->setValidator( cdTextVal );
-    m_allFieldsDlg->w->m_editArranger->setValidator( cdTextVal );
-    m_allFieldsDlg->w->m_editSongwriter->setValidator( cdTextVal );
-    m_allFieldsDlg->w->m_editComposer->setValidator( cdTextVal );
+    m_allFieldsDlg->m_editTitle->setValidator( cdTextVal );
+    m_allFieldsDlg->m_editPerformer->setValidator( cdTextVal );
+    m_allFieldsDlg->m_editDisc_id->setValidator( cdTextVal );
+    m_allFieldsDlg->m_editUpc_ean->setValidator( cdTextVal );
+    m_allFieldsDlg->m_editMessage->setValidator( cdTextVal );
+    m_allFieldsDlg->m_editArranger->setValidator( cdTextVal );
+    m_allFieldsDlg->m_editSongwriter->setValidator( cdTextVal );
+    m_allFieldsDlg->m_editComposer->setValidator( cdTextVal );
 
-    connect( m_allFieldsDlg->w->m_buttonCopyTitle, SIGNAL(clicked()),
+    connect( m_allFieldsDlg->m_buttonCopyTitle, SIGNAL(clicked()),
              this, SLOT(slotCopyTitle()) );
-    connect( m_allFieldsDlg->w->m_buttonCopyPerformer, SIGNAL(clicked()),
+    connect( m_allFieldsDlg->m_buttonCopyPerformer, SIGNAL(clicked()),
              this, SLOT(slotCopyPerformer()) );
-    connect( m_allFieldsDlg->w->m_buttonCopyArranger, SIGNAL(clicked()),
+    connect( m_allFieldsDlg->m_buttonCopyArranger, SIGNAL(clicked()),
              this, SLOT(slotCopyArranger()) );
-    connect( m_allFieldsDlg->w->m_buttonCopySongwriter, SIGNAL(clicked()),
+    connect( m_allFieldsDlg->m_buttonCopySongwriter, SIGNAL(clicked()),
              this, SLOT(slotCopySongwriter()) );
-    connect( m_allFieldsDlg->w->m_buttonCopyComposer, SIGNAL(clicked()),
+    connect( m_allFieldsDlg->m_buttonCopyComposer, SIGNAL(clicked()),
              this, SLOT(slotCopyComposer()) );
     connect(m_buttonCopyTitle, SIGNAL(clicked()),
              this, SLOT(slotCopyTitle()) );
@@ -96,11 +97,11 @@ K3bAudioCdTextWidget::K3bAudioCdTextWidget( QWidget* parent )
 }
 
 
-K3bAudioCdTextWidget::~K3bAudioCdTextWidget()
+K3b::AudioCdTextWidget::~AudioCdTextWidget()
 {
 }
 
-void K3bAudioCdTextWidget::load( K3bAudioDoc* doc )
+void K3b::AudioCdTextWidget::load( K3b::AudioDoc* doc )
 {
     m_doc = doc;
     m_groupCdText->setChecked( doc->cdText() );
@@ -108,17 +109,17 @@ void K3bAudioCdTextWidget::load( K3bAudioDoc* doc )
     m_editTitle->setText( doc->title() );
     m_editPerformer->setText( doc->artist() );
 
-    m_allFieldsDlg->w->m_editTitle->setText( doc->title() );
-    m_allFieldsDlg->w->m_editPerformer->setText( doc->artist() );
-    m_allFieldsDlg->w->m_editDisc_id->setText( doc->disc_id() );
-    m_allFieldsDlg->w->m_editUpc_ean->setText( doc->upc_ean() );
-    m_allFieldsDlg->w->m_editArranger->setText( doc->arranger() );
-    m_allFieldsDlg->w->m_editSongwriter->setText( doc->songwriter() );
-    m_allFieldsDlg->w->m_editComposer->setText( doc->composer() );
-    m_allFieldsDlg->w->m_editMessage->setText( doc->cdTextMessage() );
+    m_allFieldsDlg->m_editTitle->setText( doc->title() );
+    m_allFieldsDlg->m_editPerformer->setText( doc->artist() );
+    m_allFieldsDlg->m_editDisc_id->setText( doc->disc_id() );
+    m_allFieldsDlg->m_editUpc_ean->setText( doc->upc_ean() );
+    m_allFieldsDlg->m_editArranger->setText( doc->arranger() );
+    m_allFieldsDlg->m_editSongwriter->setText( doc->songwriter() );
+    m_allFieldsDlg->m_editComposer->setText( doc->composer() );
+    m_allFieldsDlg->m_editMessage->setText( doc->cdTextMessage() );
 }
 
-void K3bAudioCdTextWidget::save( K3bAudioDoc* doc )
+void K3b::AudioCdTextWidget::save( K3b::AudioDoc* doc )
 {
     m_doc = doc;
     doc->writeCdText( m_groupCdText->isChecked() );
@@ -127,107 +128,107 @@ void K3bAudioCdTextWidget::save( K3bAudioDoc* doc )
     // the dialog is only updated before it is shown
     doc->setTitle( m_editTitle->text() );
     doc->setArtist( m_editPerformer->text() );
-    doc->setDisc_id( m_allFieldsDlg->w->m_editDisc_id->text() );
-    doc->setUpc_ean( m_allFieldsDlg->w->m_editUpc_ean->text() );
-    doc->setArranger( m_allFieldsDlg->w->m_editArranger->text() );
-    doc->setSongwriter( m_allFieldsDlg->w->m_editSongwriter->text() );
-    doc->setComposer( m_allFieldsDlg->w->m_editComposer->text() );
-    doc->setCdTextMessage( m_allFieldsDlg->w->m_editMessage->text() );
+    doc->setDisc_id( m_allFieldsDlg->m_editDisc_id->text() );
+    doc->setUpc_ean( m_allFieldsDlg->m_editUpc_ean->text() );
+    doc->setArranger( m_allFieldsDlg->m_editArranger->text() );
+    doc->setSongwriter( m_allFieldsDlg->m_editSongwriter->text() );
+    doc->setComposer( m_allFieldsDlg->m_editComposer->text() );
+    doc->setCdTextMessage( m_allFieldsDlg->m_editMessage->text() );
 }
 
 
-void K3bAudioCdTextWidget::slotMoreFields()
+void K3b::AudioCdTextWidget::slotMoreFields()
 {
     // update dlg to current state
-    m_allFieldsDlg->w->m_editTitle->setText( m_editTitle->text() );
-    m_allFieldsDlg->w->m_editPerformer->setText( m_editPerformer->text() );
+    m_allFieldsDlg->m_editTitle->setText( m_editTitle->text() );
+    m_allFieldsDlg->m_editPerformer->setText( m_editPerformer->text() );
 
     // save old settings
-    QString title = m_allFieldsDlg->w->m_editTitle->text();
-    QString performer = m_allFieldsDlg->w->m_editPerformer->text();
-    QString disc_id = m_allFieldsDlg->w->m_editDisc_id->text();
-    QString upc_ean = m_allFieldsDlg->w->m_editUpc_ean->text();
-    QString arranger = m_allFieldsDlg->w->m_editArranger->text();
-    QString songwriter = m_allFieldsDlg->w->m_editSongwriter->text();
-    QString composer = m_allFieldsDlg->w->m_editComposer->text();
-    QString message = m_allFieldsDlg->w->m_editMessage->text();
+    QString title = m_allFieldsDlg->m_editTitle->text();
+    QString performer = m_allFieldsDlg->m_editPerformer->text();
+    QString disc_id = m_allFieldsDlg->m_editDisc_id->text();
+    QString upc_ean = m_allFieldsDlg->m_editUpc_ean->text();
+    QString arranger = m_allFieldsDlg->m_editArranger->text();
+    QString songwriter = m_allFieldsDlg->m_editSongwriter->text();
+    QString composer = m_allFieldsDlg->m_editComposer->text();
+    QString message = m_allFieldsDlg->m_editMessage->text();
 
     // exec dlg
     if( m_allFieldsDlg->exec() == QDialog::Accepted ) {
         // accept new entries
-        m_editTitle->setText( m_allFieldsDlg->w->m_editTitle->text() );
-        m_editPerformer->setText( m_allFieldsDlg->w->m_editPerformer->text() );
+        m_editTitle->setText( m_allFieldsDlg->m_editTitle->text() );
+        m_editPerformer->setText( m_allFieldsDlg->m_editPerformer->text() );
     }
     else {
         // reset
-        m_allFieldsDlg->w->m_editTitle->setText( title );
-        m_allFieldsDlg->w->m_editPerformer->setText( performer );
-        m_allFieldsDlg->w->m_editDisc_id->setText( disc_id );
-        m_allFieldsDlg->w->m_editUpc_ean->setText( upc_ean );
-        m_allFieldsDlg->w->m_editArranger->setText( arranger );
-        m_allFieldsDlg->w->m_editSongwriter->setText( songwriter );
-        m_allFieldsDlg->w->m_editComposer->setText( composer );
-        m_allFieldsDlg->w->m_editMessage->setText( message );
+        m_allFieldsDlg->m_editTitle->setText( title );
+        m_allFieldsDlg->m_editPerformer->setText( performer );
+        m_allFieldsDlg->m_editDisc_id->setText( disc_id );
+        m_allFieldsDlg->m_editUpc_ean->setText( upc_ean );
+        m_allFieldsDlg->m_editArranger->setText( arranger );
+        m_allFieldsDlg->m_editSongwriter->setText( songwriter );
+        m_allFieldsDlg->m_editComposer->setText( composer );
+        m_allFieldsDlg->m_editMessage->setText( message );
     }
 }
 
 
-void K3bAudioCdTextWidget::setChecked( bool b )
+void K3b::AudioCdTextWidget::setChecked( bool b )
 {
     m_groupCdText->setChecked( b );
 }
 
-bool K3bAudioCdTextWidget::isChecked() const
+bool K3b::AudioCdTextWidget::isChecked() const
 {
     return m_groupCdText->isChecked();
 }
 
 
-void K3bAudioCdTextWidget::slotCopyTitle()
+void K3b::AudioCdTextWidget::slotCopyTitle()
 {
-    K3bAudioTrack* track = m_doc->firstTrack();
+    K3b::AudioTrack* track = m_doc->firstTrack();
     while( track ) {
         track->setTitle( m_allFieldsDlg->isVisible()
-                         ? m_allFieldsDlg->w->m_editTitle->text()
+                         ? m_allFieldsDlg->m_editTitle->text()
                          : m_editTitle->text() );
         track = track->next();
     }
 }
 
-void K3bAudioCdTextWidget::slotCopyPerformer()
+void K3b::AudioCdTextWidget::slotCopyPerformer()
 {
-    K3bAudioTrack* track = m_doc->firstTrack();
+    K3b::AudioTrack* track = m_doc->firstTrack();
     while( track ) {
         track->setPerformer( m_allFieldsDlg->isVisible()
-                             ? m_allFieldsDlg->w->m_editPerformer->text()
+                             ? m_allFieldsDlg->m_editPerformer->text()
                              : m_editPerformer->text() );
         track = track->next();
     }
 }
 
-void K3bAudioCdTextWidget::slotCopyArranger()
+void K3b::AudioCdTextWidget::slotCopyArranger()
 {
-    K3bAudioTrack* track = m_doc->firstTrack();
+    K3b::AudioTrack* track = m_doc->firstTrack();
     while( track ) {
-        track->setArranger( m_allFieldsDlg->w->m_editArranger->text() );
+        track->setArranger( m_allFieldsDlg->m_editArranger->text() );
         track = track->next();
     }
 }
 
-void K3bAudioCdTextWidget::slotCopySongwriter()
+void K3b::AudioCdTextWidget::slotCopySongwriter()
 {
-    K3bAudioTrack* track = m_doc->firstTrack();
+    K3b::AudioTrack* track = m_doc->firstTrack();
     while( track ) {
-        track->setSongwriter( m_allFieldsDlg->w->m_editSongwriter->text() );
+        track->setSongwriter( m_allFieldsDlg->m_editSongwriter->text() );
         track = track->next();
     }
 }
 
-void K3bAudioCdTextWidget::slotCopyComposer()
+void K3b::AudioCdTextWidget::slotCopyComposer()
 {
-    K3bAudioTrack* track = m_doc->firstTrack();
+    K3b::AudioTrack* track = m_doc->firstTrack();
     while( track ) {
-        track->setComposer( m_allFieldsDlg->w->m_editComposer->text() );
+        track->setComposer( m_allFieldsDlg->m_editComposer->text() );
         track = track->next();
     }
 }

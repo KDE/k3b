@@ -37,7 +37,7 @@
 #include <unistd.h>
 
 
-class K3bGrowisofsWriter::Private
+class K3b::GrowisofsWriter::Private
 {
 public:
     Private()
@@ -55,8 +55,8 @@ public:
     K3b::WritingMode writingMode;
     bool closeDvd;
     bool multiSession;
-    K3bProcess* process;
-    const K3bExternalBin* growisofsBin;
+    K3b::Process* process;
+    const K3b::ExternalBin* growisofsBin;
     QString image;
 
     bool success;
@@ -71,8 +71,8 @@ public:
 
     bool writingStarted;
 
-    K3bThroughputEstimator* speedEst;
-    K3bGrowisofsHandler* gh;
+    K3b::ThroughputEstimator* speedEst;
+    K3b::GrowisofsHandler* gh;
 
     // used in DAO with growisofs >= 5.15
     long trackSize;
@@ -85,28 +85,28 @@ public:
     QFile inputFile;
 
     bool usingRingBuffer;
-    K3bPipeBuffer* ringBuffer;
+    K3b::PipeBuffer* ringBuffer;
 
     QString multiSessionInfo;
 
     int burnedMediumType;
 
     int speedMultiplicator() const {
-        return ( burnedMediumType & K3bDevice::MEDIA_BD_ALL ? K3bDevice::SPEED_FACTOR_BD : K3bDevice::SPEED_FACTOR_DVD );
+        return ( burnedMediumType & K3b::Device::MEDIA_BD_ALL ? K3b::Device::SPEED_FACTOR_BD : K3b::Device::SPEED_FACTOR_DVD );
     }
 };
 
 
-K3bGrowisofsWriter::K3bGrowisofsWriter( K3bDevice::Device* dev, K3bJobHandler* hdl,
+K3b::GrowisofsWriter::GrowisofsWriter( K3b::Device::Device* dev, K3b::JobHandler* hdl,
                                         QObject* parent )
-    : K3bAbstractWriter( dev, hdl, parent )
+    : K3b::AbstractWriter( dev, hdl, parent )
 {
     d = new Private;
-    d->speedEst = new K3bThroughputEstimator( this );
+    d->speedEst = new K3b::ThroughputEstimator( this );
     connect( d->speedEst, SIGNAL(throughput(int)),
              this, SLOT(slotThroughput(int)) );
 
-    d->gh = new K3bGrowisofsHandler( this );
+    d->gh = new K3b::GrowisofsHandler( this );
     connect( d->gh, SIGNAL(infoMessage(const QString&, int)),
              this,SIGNAL(infoMessage(const QString&, int)) );
     connect( d->gh, SIGNAL(newSubTask(const QString&)),
@@ -120,20 +120,20 @@ K3bGrowisofsWriter::K3bGrowisofsWriter( K3bDevice::Device* dev, K3bJobHandler* h
 }
 
 
-K3bGrowisofsWriter::~K3bGrowisofsWriter()
+K3b::GrowisofsWriter::~GrowisofsWriter()
 {
     delete d->process;
     delete d;
 }
 
 
-bool K3bGrowisofsWriter::active() const
+bool K3b::GrowisofsWriter::active() const
 {
     return (d->process ? d->process->isRunning() : false);
 }
 
 
-bool K3bGrowisofsWriter::closeFd()
+bool K3b::GrowisofsWriter::closeFd()
 {
     if( d->process ) {
         if( d->usingRingBuffer )
@@ -148,7 +148,7 @@ bool K3bGrowisofsWriter::closeFd()
 }
 
 
-bool K3bGrowisofsWriter::prepareProcess()
+bool K3b::GrowisofsWriter::prepareProcess()
 {
     d->growisofsBin = k3bcore->externalBinManager()->binObject( "growisofs" );
     if( !d->growisofsBin ) {
@@ -156,14 +156,14 @@ bool K3bGrowisofsWriter::prepareProcess()
         return false;
     }
 
-    if( d->growisofsBin->version < K3bVersion( 5, 10 ) ) {
+    if( d->growisofsBin->version < K3b::Version( 5, 10 ) ) {
         emit infoMessage( i18n("Growisofs version %1 is too old. "
                                "K3b needs at least version 5.10.",d->growisofsBin->version),
                           ERROR );
         return false;
     }
 
-    emit debuggingOutput( "Used versions", "growisofs: " + d->growisofsBin->version );
+    emit debuggingOutput( QLatin1String( "Used versions" ), QLatin1String( "growisofs: " ) + d->growisofsBin->version );
 
     if( !d->growisofsBin->copyright.isEmpty() )
         emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3",QString("growisofs")
@@ -174,7 +174,7 @@ bool K3bGrowisofsWriter::prepareProcess()
     // The growisofs bin is ready. Now we add the parameters
     //
     delete d->process;
-    d->process = new K3bProcess();
+    d->process = new K3b::Process();
     d->process->setRunPrivileged(true);
     //  d->process->setPriority( K3Process::PrioHighest );
     d->process->setSplitStdout(true);
@@ -196,10 +196,10 @@ bool K3bGrowisofsWriter::prepareProcess()
     //        actually write the pad bytes. The only possibility I see right now is to add a padding option
     //        to the pipebuffer.
     int trackSizePadding = 0;
-    if( d->trackSize > 0 && d->growisofsBin->version < K3bVersion( 5, 20 ) ) {
+    if( d->trackSize > 0 && d->growisofsBin->version < K3b::Version( 5, 20 ) ) {
         if( d->trackSize % 16 ) {
             trackSizePadding = (16 - d->trackSize%16);
-            kDebug() << "(K3bGrowisofsWriter) need to pad " << trackSizePadding << " blocks.";
+            kDebug() << "(K3b::GrowisofsWriter) need to pad " << trackSizePadding << " blocks.";
         }
     }
 
@@ -280,8 +280,8 @@ bool K3bGrowisofsWriter::prepareProcess()
     //
     int mediaType = burnDevice()->mediaType();
     if( dvdCompat &&
-        mediaType != K3bDevice::MEDIA_DVD_PLUS_RW &&
-        mediaType != K3bDevice::MEDIA_DVD_RW_OVWR )
+        mediaType != K3b::Device::MEDIA_DVD_PLUS_RW &&
+        mediaType != K3b::Device::MEDIA_DVD_RW_OVWR )
         *d->process << "-dvd-compat";
 
     //
@@ -300,13 +300,13 @@ bool K3bGrowisofsWriter::prepareProcess()
         }
 
         if( speed != 0 ) {
-            if ( d->burnedMediumType & K3bDevice::MEDIA_DVD_ALL ) {
+            if ( d->burnedMediumType & K3b::Device::MEDIA_DVD_ALL ) {
                 // speed may be a float number. example: DVD+R(W): 2.4x
                 *d->process << QString("-speed=%1").arg( speed%1385 > 0
                                                          ? QString::number( (float)speed/1385.0, 'f', 1 )
                                                          : QString::number( speed/1385 ) );
             }
-            else if ( d->burnedMediumType & K3bDevice::MEDIA_BD_ALL ) {
+            else if ( d->burnedMediumType & K3b::Device::MEDIA_BD_ALL ) {
                 *d->process << QString("-speed=%1").arg( QString::number( speed/4496 ) );
             }
         }
@@ -326,13 +326,13 @@ bool K3bGrowisofsWriter::prepareProcess()
     for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
         *d->process << *it;
 
-    emit debuggingOutput( "Burned media", K3bDevice::mediaTypeString(mediaType) );
+    emit debuggingOutput( "Burned media", K3b::Device::mediaTypeString(mediaType) );
 
     return true;
 }
 
 
-void K3bGrowisofsWriter::start()
+void K3b::GrowisofsWriter::start()
 {
     jobStarted();
 
@@ -377,19 +377,19 @@ void K3bGrowisofsWriter::start()
         if( !d->process->start( K3Process::All ) ) {
             // something went wrong when starting the program
             // it "should" be the executable
-            kDebug() << "(K3bGrowisofsWriter) could not start " << d->growisofsBin->path;
-            emit infoMessage( i18n("Could not start %1.",d->growisofsBin->name()), K3bJob::ERROR );
+            kDebug() << "(K3b::GrowisofsWriter) could not start " << d->growisofsBin->path;
+            emit infoMessage( i18n("Could not start %1.",d->growisofsBin->name()), K3b::Job::ERROR );
             jobFinished(false);
         }
         else {
             if( simulate() ) {
                 emit newTask( i18n("Simulating") );
                 emit infoMessage( i18n("Starting simulation..."),
-                                  K3bJob::INFO );
+                                  K3b::Job::INFO );
             }
             else {
                 emit newTask( i18n("Writing") );
-                emit infoMessage( i18n("Starting disc write..."), K3bJob::INFO );
+                emit infoMessage( i18n("Starting disc write..."), K3b::Job::INFO );
             }
 
             d->gh->handleStart();
@@ -397,7 +397,7 @@ void K3bGrowisofsWriter::start()
             // create the ring buffer
             if( d->usingRingBuffer ) {
                 if( !d->ringBuffer ) {
-                    d->ringBuffer = new K3bPipeBuffer( this, this );
+                    d->ringBuffer = new K3b::PipeBuffer( this, this );
                     connect( d->ringBuffer, SIGNAL(percent(int)), this, SIGNAL(buffer(int)) );
                     connect( d->ringBuffer, SIGNAL(finished(bool)), this, SLOT(slotRingBufferFinished(bool)) );
                 }
@@ -417,7 +417,7 @@ void K3bGrowisofsWriter::start()
 }
 
 
-void K3bGrowisofsWriter::cancel()
+void K3b::GrowisofsWriter::cancel()
 {
     if( active() ) {
         d->canceled = true;
@@ -429,43 +429,43 @@ void K3bGrowisofsWriter::cancel()
 }
 
 
-void K3bGrowisofsWriter::setWritingMode( K3b::WritingMode m )
+void K3b::GrowisofsWriter::setWritingMode( K3b::WritingMode m )
 {
     d->writingMode = m;
 }
 
 
-void K3bGrowisofsWriter::setTrackSize( long size )
+void K3b::GrowisofsWriter::setTrackSize( long size )
 {
     d->trackSize = size;
 }
 
 
-void K3bGrowisofsWriter::setLayerBreak( long lb )
+void K3b::GrowisofsWriter::setLayerBreak( long lb )
 {
     d->layerBreak = lb;
 }
 
 
-void K3bGrowisofsWriter::setCloseDvd( bool b )
+void K3b::GrowisofsWriter::setCloseDvd( bool b )
 {
     d->closeDvd = b;
 }
 
 
-void K3bGrowisofsWriter::setMultiSession( bool b )
+void K3b::GrowisofsWriter::setMultiSession( bool b )
 {
     d->multiSession = b;
 }
 
 
-void K3bGrowisofsWriter::setImageToWrite( const QString& filename )
+void K3b::GrowisofsWriter::setImageToWrite( const QString& filename )
 {
     d->image = filename;
 }
 
 
-void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
+void K3b::GrowisofsWriter::slotReceivedStderr( const QString& line )
 {
     emit debuggingOutput( d->growisofsBin->name(), line );
 
@@ -509,7 +509,7 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
                     d->lastWritingSpeed = speed;
                 }
                 else
-                    kDebug() << "(K3bGrowisofsWriter) speed parsing failed: '"
+                    kDebug() << "(K3b::GrowisofsWriter) speed parsing failed: '"
                              << line.mid( pos, line.indexOf( 'x', pos ) - pos ) << "'" << endl;
             }
             else {
@@ -517,18 +517,18 @@ void K3bGrowisofsWriter::slotReceivedStderr( const QString& line )
             }
         }
         else
-            kDebug() << "(K3bGrowisofsWriter) progress parsing failed: '"
+            kDebug() << "(K3b::GrowisofsWriter) progress parsing failed: '"
                      << line.mid( pos+1, line.indexOf( '(', pos ) - pos - 1 ).trimmed() << "'" << endl;
     }
 
     //  else
     // to be able to parse the ring buffer fill in growisofs 6.0 we need to do this all the time
-    // FIXME: get rid of the K3bGrowisofsHandler once it is sure that we do not need the K3bGrowisofsImager anymore
+    // FIXME: get rid of the K3b::GrowisofsHandler once it is sure that we do not need the K3b::GrowisofsImager anymore
     d->gh->handleLine( line );
 }
 
 
-void K3bGrowisofsWriter::slotProcessExited( int exitCode, QProcess::ExitStatus )
+void K3b::GrowisofsWriter::slotProcessExited( int exitCode, QProcess::ExitStatus )
 {
     d->inputFile.close();
 
@@ -542,7 +542,7 @@ void K3bGrowisofsWriter::slotProcessExited( int exitCode, QProcess::ExitStatus )
         if( !d->finished ) {
             d->finished = true;
             // this will unblock and eject the drive and emit the finished/canceled signals
-            K3bAbstractWriter::cancel();
+            K3b::AbstractWriter::cancel();
         }
         return;
     }
@@ -550,7 +550,7 @@ void K3bGrowisofsWriter::slotProcessExited( int exitCode, QProcess::ExitStatus )
     d->finished = true;
 
     // it seems that growisofs sometimes exits with a valid exit code while a write error occurred
-    if( (exitCode == 0) && d->gh->error() != K3bGrowisofsHandler::ERROR_WRITE_FAILED ) {
+    if( (exitCode == 0) && d->gh->error() != K3b::GrowisofsHandler::ERROR_WRITE_FAILED ) {
 
         int s = d->speedEst->average();
         if( s > 0 )
@@ -559,9 +559,9 @@ void K3bGrowisofsWriter::slotProcessExited( int exitCode, QProcess::ExitStatus )
                               .subs( ( double )s/( double )d->speedMultiplicator(), 0, 'g', 2 ).toString(), INFO );
 
         if( simulate() )
-            emit infoMessage( i18n("Simulation successfully completed"), K3bJob::SUCCESS );
+            emit infoMessage( i18n("Simulation successfully completed"), K3b::Job::SUCCESS );
         else
-            emit infoMessage( i18n("Writing successfully completed"), K3bJob::SUCCESS );
+            emit infoMessage( i18n("Writing successfully completed"), K3b::Job::SUCCESS );
 
         d->success = true;
     }
@@ -575,23 +575,23 @@ void K3bGrowisofsWriter::slotProcessExited( int exitCode, QProcess::ExitStatus )
 }
 
 
-void K3bGrowisofsWriter::slotRingBufferFinished( bool )
+void K3b::GrowisofsWriter::slotRingBufferFinished( bool )
 {
     if( !d->finished ) {
         d->finished = true;
         // this will unblock and eject the drive and emit the finished/canceled signals
-        K3bAbstractWriter::cancel();
+        K3b::AbstractWriter::cancel();
     }
 }
 
 
-void K3bGrowisofsWriter::slotThroughput( int t )
+void K3b::GrowisofsWriter::slotThroughput( int t )
 {
     emit writeSpeed( t, d->speedMultiplicator() );
 }
 
 
-void K3bGrowisofsWriter::slotFlushingCache()
+void K3b::GrowisofsWriter::slotFlushingCache()
 {
     if( !d->canceled ) {
         //
@@ -604,7 +604,7 @@ void K3bGrowisofsWriter::slotFlushingCache()
 }
 
 
-void K3bGrowisofsWriter::setMultiSessionInfo( const QString& info )
+void K3b::GrowisofsWriter::setMultiSessionInfo( const QString& info )
 {
     d->multiSessionInfo = info;
 }

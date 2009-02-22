@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 #include <QHelpEvent>
 
 
-class K3bTitleLabel::Private
+class K3b::TitleLabel::Private
 {
 public:
     Private() {
@@ -56,20 +56,20 @@ public:
 
 
 
-K3bTitleLabel::K3bTitleLabel( QWidget* parent )
+K3b::TitleLabel::TitleLabel( QWidget* parent )
     : QFrame( parent )
 {
     d = new Private();
 }
 
 
-K3bTitleLabel::~K3bTitleLabel()
+K3b::TitleLabel::~TitleLabel()
 {
     delete d;
 }
 
 
-void K3bTitleLabel::setTitle( const QString& title, const QString& subTitle )
+void K3b::TitleLabel::setTitle( const QString& title, const QString& subTitle )
 {
     d->title = title;
     d->subTitle = subTitle;
@@ -78,7 +78,7 @@ void K3bTitleLabel::setTitle( const QString& title, const QString& subTitle )
 }
 
 
-void K3bTitleLabel::setSubTitle( const QString& subTitle )
+void K3b::TitleLabel::setSubTitle( const QString& subTitle )
 {
     d->subTitle = subTitle;
     updatePositioning();
@@ -86,31 +86,31 @@ void K3bTitleLabel::setSubTitle( const QString& subTitle )
 }
 
 
-void K3bTitleLabel::setAlignment( int align )
+void K3b::TitleLabel::setAlignment( int align )
 {
     d->alignment = align;
     update();
 }
 
 
-QSize K3bTitleLabel::sizeHint() const
+QSize K3b::TitleLabel::sizeHint() const
 {
     return QSize( d->titleLength + d->subTitleLength + 2*d->margin, d->titleBaseLine );
 }
 
-QSize K3bTitleLabel::minimumSizeHint() const
+QSize K3b::TitleLabel::minimumSizeHint() const
 {
     return QSize( d->cachedMinimumWidth, d->titleBaseLine );
 }
 
-void K3bTitleLabel::resizeEvent( QResizeEvent* e )
+void K3b::TitleLabel::resizeEvent( QResizeEvent* e )
 {
     QFrame::resizeEvent( e );
     updatePositioning();
     update();
 }
 
-void K3bTitleLabel::paintEvent( QPaintEvent* )
+void K3b::TitleLabel::paintEvent( QPaintEvent* )
 {
 
     QPainter p(this);
@@ -147,7 +147,7 @@ void K3bTitleLabel::paintEvent( QPaintEvent* )
 }
 
 
-void K3bTitleLabel::setMargin( int m )
+void K3b::TitleLabel::setMargin( int m )
 {
     d->margin = m;
     updatePositioning();
@@ -155,7 +155,7 @@ void K3bTitleLabel::setMargin( int m )
 }
 
 
-void K3bTitleLabel::updatePositioning()
+void K3b::TitleLabel::updatePositioning()
 {
     QFont f(font());
     f.setBold(true);
@@ -223,7 +223,7 @@ void K3bTitleLabel::updatePositioning()
 }
 
 
-bool K3bTitleLabel::event( QEvent* event )
+bool K3b::TitleLabel::event( QEvent* event )
 {
     if ( event->type() == QEvent::ToolTip ) {
         QHelpEvent* he = ( QHelpEvent* )event;

@@ -24,18 +24,25 @@
 #include <libkcddb/cdinfo.h>
 
 
-class K3bAudioEncoder;
-class K3bAudioDoc;
-class K3bAudioTrack;
+namespace K3b {
+    class AudioEncoder;
+}
+namespace K3b {
+    class AudioDoc;
+}
+namespace K3b {
+    class AudioTrack;
+}
 
 
-class K3bAudioProjectConvertingJob : public K3bThreadJob
+namespace K3b {
+class AudioProjectConvertingJob : public ThreadJob
 {
     Q_OBJECT
 
 public:
-    K3bAudioProjectConvertingJob( K3bAudioDoc*, K3bJobHandler* hdl, QObject* parent );
-    ~K3bAudioProjectConvertingJob();
+    AudioProjectConvertingJob( AudioDoc*, JobHandler* hdl, QObject* parent );
+    ~AudioProjectConvertingJob();
 
     QString jobDescription() const;
     QString jobDetails() const;
@@ -45,7 +52,7 @@ public:
     void setCddbEntry( const KCDDB::CDInfo& e ) { m_cddbEntry = e; }
 
     // if 0 (default) wave files are created
-    void setEncoder( K3bAudioEncoder* f );
+    void setEncoder( AudioEncoder* f );
 
     /**
      * Used for encoders that support multiple formats
@@ -65,7 +72,7 @@ public:
 private:
     bool run();
 
-    bool convertTrack( K3bAudioTrack*, const QString& filename );
+    bool convertTrack( AudioTrack*, const QString& filename );
     bool writePlaylist();
     bool writeCueFile();
 
@@ -85,10 +92,11 @@ private:
 
     QVector<QPair<int, QString> > m_tracks;
 
-    K3bAudioDoc* m_doc;
+    AudioDoc* m_doc;
 
     class Private;
     Private* d;
 };
+}
 
 #endif

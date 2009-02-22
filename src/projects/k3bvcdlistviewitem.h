@@ -17,15 +17,18 @@
 
 #include <k3blistview.h>
 
-class K3bVcdTrack;
+namespace K3b {
+    class VcdTrack;
+}
 
-class K3bVcdListViewItem : public K3bListViewItem
+namespace K3b {
+class VcdListViewItem : public ListViewItem
 {
 
     public:
-        K3bVcdListViewItem( K3bVcdTrack* track, K3bListView* parent );
-        K3bVcdListViewItem( K3bVcdTrack* track, K3bListView* parent, Q3ListViewItem* after );
-        ~K3bVcdListViewItem();
+        VcdListViewItem( VcdTrack* track, ListView* parent );
+        VcdListViewItem( VcdTrack* track, ListView* parent, Q3ListViewItem* after );
+        ~VcdListViewItem();
 
         /** reimplemented from QListViewItem */
         QString text( int i ) const;
@@ -37,13 +40,14 @@ class K3bVcdListViewItem : public K3bListViewItem
         QString key( int column, bool a ) const;
         bool animate();
 
-        K3bVcdTrack* vcdTrack()
+        VcdTrack* vcdTrack()
         {
             return m_track;
         }
 
     private:
-        K3bVcdTrack* m_track;
+        VcdTrack* m_track;
 };
+}
 
 #endif

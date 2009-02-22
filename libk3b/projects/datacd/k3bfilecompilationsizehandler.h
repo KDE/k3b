@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -19,54 +19,55 @@
 #include <kio/global.h>
 #include <k3bmsf.h>
 
-class K3bDataItem;
+namespace K3b {
+    class DataItem;
 
+    /**
+     * This class maintains a map of indoes and the number
+     * of files in the doc that belong to that inode.
+     * This way a more accurate size calculation is possible
+     *
+     * It has to be noted that the sizes of the directories
+     * are only locally true. That means that in some cases
+     * the root directory of the project may show a much
+     * higher size than calculated by this class.
+     */
+    class FileCompilationSizeHandler
+    {
+    public:
+        FileCompilationSizeHandler();
+        ~FileCompilationSizeHandler();
 
-/**
- * This class maintains a map of indoes and the number
- * of files in the doc that belong to that inode.
- * This way a more accurate size calculation is possible
- *
- * It has to be noted that the sizes of the directories 
- * are only locally true. That means that in some cases 
- * the root directory of the project may show a much 
- * higher size than calculated by this class.
- */
-class K3bFileCompilationSizeHandler
-{
- public:
-  K3bFileCompilationSizeHandler();
-  ~K3bFileCompilationSizeHandler();
+        /**
+         * This does NOT equal blocks() * 2048.
+         * This is the sum of the actual file sizes.
+         */
+        const KIO::filesize_t& size( bool followSymlinks = false ) const;
 
-  /**
-   * This does NOT equal blocks() * 2048.
-   * This is the sum of the actual file sizes.
-   */
-  const KIO::filesize_t& size( bool followSymlinks = false ) const;
+        /**
+         * Number of blocks the files will occupy.
+         */
+        const Msf& blocks( bool followSymlinks = false ) const;
 
-  /**
-   * Number of blocks the files will occupy.
-   */
-  const K3b::Msf& blocks( bool followSymlinks = false ) const;
+        /**
+         * This will increase the counter for the inode of
+         * the file in url and update the totel size.
+         */
+        void addFile( DataItem* );
 
-  /**
-   * This will increase the counter for the inode of
-   * the file in url and update the totel size.
-   */
-  void addFile( K3bDataItem* );
+        /**
+         * This will decrease the counter for the inode of
+         * the file in url and update the totel size.
+         */
+        void removeFile( DataItem* );
 
-  /**
-   * This will decrease the counter for the inode of
-   * the file in url and update the totel size.
-   */
-  void removeFile( K3bDataItem* );
+        void clear();
 
-  void clear();
-
- private:
-  class Private;
-  Private* d_symlinks;
-  Private* d_noSymlinks;
-};
+    private:
+        class Private;
+        Private* d_symlinks;
+        Private* d_noSymlinks;
+    };
+}
 
 #endif

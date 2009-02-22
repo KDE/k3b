@@ -32,27 +32,28 @@
 #include <qlist.h>
 #include <qpair.h>
 
+namespace {
+    class VerificationJobTrackEntry
+    {
+    public:
+        VerificationJobTrackEntry()
+            : trackNumber(0) {
+        }
 
-class K3bVerificationJobTrackEntry
-{
-public:
-  K3bVerificationJobTrackEntry()
-    : trackNumber(0) {
-  }
+        VerificationJobTrackEntry( int tn, const QByteArray& cs, const K3b::Msf& msf )
+            : trackNumber(tn),
+              checksum(cs),
+              length(msf) {
+        }
 
-  K3bVerificationJobTrackEntry( int tn, const QByteArray& cs, const K3b::Msf& msf )
-    : trackNumber(tn),
-      checksum(cs),
-      length(msf) {
-  }
-
-  int trackNumber;
-  QByteArray checksum;
-  K3b::Msf length;
-};
+        int trackNumber;
+        QByteArray checksum;
+        K3b::Msf length;
+    };
+}
 
 
-class K3bVerificationJob::Private
+class K3b::VerificationJob::Private
 {
 public:
   Private()
@@ -62,24 +63,24 @@ public:
   }
 
   bool canceled;
-  K3bMd5Job* md5Job;
-  K3bDevice::Device* device;
+  K3b::Md5Job* md5Job;
+  K3b::Device::Device* device;
 
   K3b::Msf grownSessionSize;
 
-  QList<K3bVerificationJobTrackEntry> tracks;
+  QList<VerificationJobTrackEntry> tracks;
   int currentTrackIndex;
 
-  K3bDevice::DiskInfo diskInfo;
-  K3bDevice::Toc toc;
+  K3b::Device::DiskInfo diskInfo;
+  K3b::Device::Toc toc;
 
-  K3bDataTrackReader* dataTrackReader;
+  K3b::DataTrackReader* dataTrackReader;
 
   K3b::Msf currentTrackSize;
   K3b::Msf totalSectors;
   K3b::Msf alreadyReadSectors;
 
-  K3bPipe pipe;
+  K3b::Pipe pipe;
 
   bool readSuccessful;
 
@@ -87,12 +88,12 @@ public:
 };
 
 
-K3bVerificationJob::K3bVerificationJob( K3bJobHandler* hdl, QObject* parent )
-  : K3bJob( hdl, parent )
+K3b::VerificationJob::VerificationJob( K3b::JobHandler* hdl, QObject* parent )
+  : K3b::Job( hdl, parent )
 {
   d = new Private();
 
-  d->md5Job = new K3bMd5Job( this );
+  d->md5Job = new K3b::Md5Job( this );
   connect( d->md5Job, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
   connect( d->md5Job, SIGNAL(finished(bool)), this, SLOT(slotMd5JobFinished(bool)) );
   connect( d->md5Job, SIGNAL(debuggingOutput(const QString&, const QString&)),
@@ -100,13 +101,13 @@ K3bVerificationJob::K3bVerificationJob( K3bJobHandler* hdl, QObject* parent )
 }
 
 
-K3bVerificationJob::~K3bVerificationJob()
+K3b::VerificationJob::~VerificationJob()
 {
   delete d;
 }
 
 
-void K3bVerificationJob::cancel()
+void K3b::VerificationJob::cancel()
 {
   d->canceled = true;
   if( d->md5Job && d->md5Job->active() )
@@ -116,32 +117,32 @@ void K3bVerificationJob::cancel()
 }
 
 
-void K3bVerificationJob::addTrack( int trackNum, const QByteArray& checksum, const K3b::Msf& length )
+void K3b::VerificationJob::addTrack( int trackNum, const QByteArray& checksum, const K3b::Msf& length )
 {
-  d->tracks.append( K3bVerificationJobTrackEntry( trackNum, checksum, length ) );
+  d->tracks.append( VerificationJobTrackEntry( trackNum, checksum, length ) );
 }
 
 
-void K3bVerificationJob::clear()
+void K3b::VerificationJob::clear()
 {
   d->tracks.clear();
   d->grownSessionSize = 0;
 }
 
 
-void K3bVerificationJob::setDevice( K3bDevice::Device* dev )
+void K3b::VerificationJob::setDevice( K3b::Device::Device* dev )
 {
   d->device = dev;
 }
 
 
-void K3bVerificationJob::setGrownSessionSize( const K3b::Msf& s )
+void K3b::VerificationJob::setGrownSessionSize( const K3b::Msf& s )
 {
   d->grownSessionSize = s;
 }
 
 
-void K3bVerificationJob::start()
+void K3b::VerificationJob::start()
 {
   jobStarted();
 
@@ -150,8 +151,8 @@ void K3bVerificationJob::start()
   d->alreadyReadSectors = 0;
 
   waitForMedia( d->device,
-                K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE,
-                K3bDevice::MEDIA_WRITABLE );
+                K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE,
+                K3b::Device::MEDIA_WRITABLE );
 
   // make sure the job is initialized
   if ( d->tracks.isEmpty() ) {
@@ -164,14 +165,14 @@ void K3bVerificationJob::start()
   emit newTask( i18n("Checking medium") );
 
   d->mediumHasBeenReloaded = false;
-  connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::DISKINFO, d->device ),
-           SIGNAL(finished(K3bDevice::DeviceHandler*)),
+  connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::DISKINFO, d->device ),
+           SIGNAL(finished(K3b::Device::DeviceHandler*)),
            this,
-           SLOT(slotDiskInfoReady(K3bDevice::DeviceHandler*)) );
+           SLOT(slotDiskInfoReady(K3b::Device::DeviceHandler*)) );
 }
 
 
-void K3bVerificationJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
+void K3b::VerificationJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
 {
   if( d->canceled ) {
     emit canceled();
@@ -184,7 +185,7 @@ void K3bVerificationJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 
   // just to be sure check if we actually have all the tracks
   int i = 0;
-  for( QList<K3bVerificationJobTrackEntry>::iterator it = d->tracks.begin();
+  for( QList<VerificationJobTrackEntry>::iterator it = d->tracks.begin();
        it != d->tracks.end(); ++i, ++it ) {
 
     // 0 means "last track"
@@ -202,10 +203,10 @@ void K3bVerificationJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
             // many drives need to reload the medium to return to a proper state
             d->mediumHasBeenReloaded = true;
             emit infoMessage( i18n( "Need to reload medium to return to proper state." ), INFO );
-            connect( K3bDevice::reload( d->device ),
-                     SIGNAL(finished(K3bDevice::DeviceHandler*)),
+            connect( K3b::Device::reload( d->device ),
+                     SIGNAL(finished(K3b::Device::DeviceHandler*)),
                      this,
-                     SLOT(slotDiskInfoReady(K3bDevice::DeviceHandler*)) );
+                     SLOT(slotDiskInfoReady(K3b::Device::DeviceHandler*)) );
             return;
         }
     }
@@ -217,7 +218,7 @@ void K3bVerificationJob::slotDiskInfoReady( K3bDevice::DeviceHandler* dh )
 }
 
 
-void K3bVerificationJob::readTrack( int trackIndex )
+void K3b::VerificationJob::readTrack( int trackIndex )
 {
   d->currentTrackIndex = trackIndex;
   d->readSuccessful = true;
@@ -230,13 +231,13 @@ void K3bVerificationJob::readTrack( int trackIndex )
 
   emit newTask( i18n("Verifying track %1", d->tracks[trackIndex].trackNumber ) );
 
-  K3bDevice::Track& track = d->toc[d->tracks[trackIndex].trackNumber-1];
+  K3b::Device::Track& track = d->toc[d->tracks[trackIndex].trackNumber-1];
 
   d->pipe.open();
 
-  if( track.type() == K3bDevice::Track::DATA ) {
+  if( track.type() == K3b::Device::Track::TYPE_DATA ) {
     if( !d->dataTrackReader ) {
-      d->dataTrackReader = new K3bDataTrackReader( this );
+      d->dataTrackReader = new K3b::DataTrackReader( this );
       connect( d->dataTrackReader, SIGNAL(percent(int)), this, SLOT(slotReaderProgress(int)) );
       //      connect( d->dataTrackReader, SIGNAL(processedSize(int, int)), this, SLOT(slotReaderProcessedSize(int, int)) );
       connect( d->dataTrackReader, SIGNAL(finished(bool)), this, SLOT(slotReaderFinished(bool)) );
@@ -248,12 +249,12 @@ void K3bVerificationJob::readTrack( int trackIndex )
 
     d->dataTrackReader->setDevice( d->device );
     d->dataTrackReader->setIgnoreErrors( false );
-    d->dataTrackReader->setSectorSize( K3bDataTrackReader::MODE1 );
+    d->dataTrackReader->setSectorSize( K3b::DataTrackReader::MODE1 );
 
     // in case a session was grown the track size does not say anything about the verification data size
-    if( d->diskInfo.mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) &&
+    if( d->diskInfo.mediaType() & (K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_RW_OVWR) &&
 	d->grownSessionSize > 0 ) {
-      K3bIso9660 isoF( d->device );
+      K3b::Iso9660 isoF( d->device );
       if( isoF.open() ) {
 	int firstSector = isoF.primaryDescriptor().volumeSpaceSize - d->grownSessionSize.lba();
 	d->dataTrackReader->setSectorRange( firstSector,
@@ -283,7 +284,7 @@ void K3bVerificationJob::readTrack( int trackIndex )
 }
 
 
-void K3bVerificationJob::slotReaderProgress( int p )
+void K3b::VerificationJob::slotReaderProgress( int p )
 {
   emit subPercent( p );
 
@@ -291,7 +292,7 @@ void K3bVerificationJob::slotReaderProgress( int p )
 }
 
 
-void K3bVerificationJob::slotMd5JobFinished( bool success )
+void K3b::VerificationJob::slotMd5JobFinished( bool success )
 {
   d->pipe.close();
 
@@ -317,7 +318,7 @@ void K3bVerificationJob::slotMd5JobFinished( bool success )
 }
 
 
-void K3bVerificationJob::slotReaderFinished( bool success )
+void K3b::VerificationJob::slotReaderFinished( bool success )
 {
   d->readSuccessful = success;
   if( !d->readSuccessful )
@@ -332,18 +333,18 @@ void K3bVerificationJob::slotReaderFinished( bool success )
 }
 
 
-K3b::Msf K3bVerificationJob::trackLength( int trackIndex )
+K3b::Msf K3b::VerificationJob::trackLength( int trackIndex )
 {
   K3b::Msf& trackSize = d->tracks[trackIndex].length;
   const int& trackNum = d->tracks[trackIndex].trackNumber;
 
-  K3bDevice::Track& track = d->toc[trackNum-1];
+  K3b::Device::Track& track = d->toc[trackNum-1];
 
   if( trackSize == 0 ) {
     trackSize = track.length();
 
-    if( d->diskInfo.mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) {
-      K3bIso9660 isoF( d->device, track.firstSector().lba() );
+    if( d->diskInfo.mediaType() & (K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_RW_OVWR) ) {
+      K3b::Iso9660 isoF( d->device, track.firstSector().lba() );
       if( isoF.open() ) {
 	trackSize = isoF.primaryDescriptor().volumeSpaceSize;
       }
@@ -361,14 +362,14 @@ K3b::Msf K3bVerificationJob::trackLength( int trackIndex )
     // So the solution for now is to simply try to read the last sector of a data track. If this is not
     // possible we assume it was written in TAO mode and reduce the length by 2 sectors
     //
-    if( track.type() == K3bDevice::Track::DATA &&
-	d->diskInfo.mediaType() & K3bDevice::MEDIA_CD_ALL ) {
+    if( track.type() == K3b::Device::Track::TYPE_DATA &&
+	d->diskInfo.mediaType() & K3b::Device::MEDIA_CD_ALL ) {
       // we try twice just to be sure
       unsigned char buffer[2048];
       if( !d->device->read10( buffer, 2048, track.lastSector().lba(), 1 ) &&
 	  !d->device->read10( buffer, 2048, track.lastSector().lba(), 1 ) ) {
 	trackSize -= 2;
-	kDebug() << "(K3bCdCopyJob) track " << trackNum << " probably TAO recorded.";
+	kDebug() << "(K3b::CdCopyJob) track " << trackNum << " probably TAO recorded.";
       }
     }
   }

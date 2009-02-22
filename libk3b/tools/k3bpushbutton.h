@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2004-2007 Sebastian Trueg <trueg@k3b.org>
  *
@@ -18,60 +18,62 @@
 
 #include <kpushbutton.h>
 #include "k3b_export.h"
-//Added by qt3to4:
-#include <QEvent>
-#include <QMenu>
 
-/**
- * A pushbutton with delayed popu pmenu support just like the KToolBarButton
- */
-class LIBK3B_EXPORT K3bPushButton : public KPushButton
-{
- Q_OBJECT
+class QMenu;
+class QEvent;
 
- public:
-  /**
-   * Default constructor.
-   */
-  K3bPushButton( QWidget* parent = 0 );
+namespace K3b {
+    /**
+     * A pushbutton with delayed popu pmenu support just like the KToolBarButton
+     */
+    class LIBK3B_EXPORT PushButton : public KPushButton
+    {
+        Q_OBJECT
 
-  /**
-   * Constructor, that sets the button-text to @p text
-   */
-  K3bPushButton( const QString& text, QWidget* parent = 0 );
+    public:
+        /**
+         * Default constructor.
+         */
+        PushButton( QWidget* parent = 0 );
 
-  /**
-   * Constructor, that sets an icon and the button-text to @p text
-   */
-/*   K3bPushButton( const QIcon& icon, const QString& text, */
+        /**
+         * Constructor, that sets the button-text to @p text
+         */
+        PushButton( const QString& text, QWidget* parent = 0 );
+
+        /**
+         * Constructor, that sets an icon and the button-text to @p text
+         */
+/*   PushButton( const QIcon& icon, const QString& text, */
 /* 		 QWidget* parent = 0 ); */
 
-  /**
-   * Constructor that takes a KGuiItem for the text, the icon, the tooltip
-   * and the what's this help
-   */
-  K3bPushButton( const KGuiItem& item, QWidget* parent = 0 );
+        /**
+         * Constructor that takes a KGuiItem for the text, the icon, the tooltip
+         * and the what's this help
+         */
+        PushButton( const KGuiItem& item, QWidget* parent = 0 );
 
-  /**
-   * Destructs the button.
-   */
-  ~K3bPushButton();
+        /**
+         * Destructs the button.
+         */
+        ~PushButton();
 
-  /**
-   * The popup menu will show if the button is pressed down for about half a second
-   * or if the mouse is moved while pressed just like the KToolBarButton.
-   */
-  void setDelayedPopupMenu( QMenu* );
+        /**
+         * The popup menu will show if the button is pressed down for about half a second
+         * or if the mouse is moved while pressed just like the KToolBarButton.
+         */
+        void setDelayedPopupMenu( QMenu* );
 
- protected:
-  virtual bool eventFilter( QObject*, QEvent* );
+    protected:
+        virtual bool eventFilter( QObject*, QEvent* );
 
- private Q_SLOTS:
-  void slotDelayedPopup();
+    private Q_SLOTS:
+        void slotDelayedPopup();
 
- private:
-  class Private;
-  Private* d;
-};
+    private:
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
@@ -18,46 +18,41 @@
 
 #include "ui_base_k3bbootimageview.h"
 
-class K3bDataDoc;
-class K3bBootItem;
+namespace K3b {
 
-class base_K3bBootImageView : public QWidget, public Ui::base_K3bBootImageView
-{
-public:
-  base_K3bBootImageView( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
-};
+    class DataDoc;
+    class BootItem;
 
-class K3bBootImageView : public base_K3bBootImageView
-{
-    Q_OBJECT
+    class BootImageView : public QWidget, public Ui::base_K3bBootImageView
+    {
+        Q_OBJECT
 
-public:
-    K3bBootImageView( K3bDataDoc* doc, QWidget* parent = 0 );
-    ~K3bBootImageView();
+    public:
+        BootImageView( DataDoc* doc, QWidget* parent = 0 );
+        ~BootImageView();
 
-private Q_SLOTS:
-    void slotNewBootImage();
-    void slotDeleteBootImage();
-    void slotToggleOptions();
-    void slotSelectionChanged();
+    private Q_SLOTS:
+        void slotNewBootImage();
+        void slotDeleteBootImage();
+        void slotToggleOptions();
+        void slotSelectionChanged();
 
-    /* reimplemeted from base_...*/
-    void slotOptionsChanged();
+        /* reimplemeted from base_...*/
+        void slotOptionsChanged();
 
-    void slotNoEmulationToggled( bool );
+        void slotNoEmulationToggled( bool );
 
-private:
-    void updateBootImages();
-    void showAdvancedOptions( bool );
-    void loadBootItemSettings( K3bBootItem* );
+    private:
+        void updateBootImages();
+        void showAdvancedOptions( bool );
+        void loadBootItemSettings( BootItem* );
 
-    class PrivateBootImageViewItem;
+        class PrivateBootImageViewItem;
 
-    K3bDataDoc* m_doc;
+        DataDoc* m_doc;
 
-    bool m_loadingItem;
-};
+        bool m_loadingItem;
+    };
+}
 
 #endif

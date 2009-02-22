@@ -33,7 +33,7 @@
 //
 
 
-class K3bPipeBuffer::Private
+class K3b::PipeBuffer::Private
 {
 public:
     Private()
@@ -51,7 +51,7 @@ public:
         if( inFd == -1 ) {
             if( ::socketpair(AF_UNIX, SOCK_STREAM, 0, inFdPair) ) {
                 //      if( ::pipe( inFdPair ) ) {
-                kDebug() << "(K3bPipeBuffer::WorkThread) unable to create socketpair";
+                kDebug() << "(K3b::PipeBuffer::WorkThread) unable to create socketpair";
                 inFdPair[0] = inFdPair[1] = -1;
                 return false;
             }
@@ -78,20 +78,20 @@ public:
 };
 
 
-K3bPipeBuffer::K3bPipeBuffer( K3bJobHandler* jh, QObject* parent )
-    : K3bThreadJob( jh, parent ),
+K3b::PipeBuffer::PipeBuffer( K3b::JobHandler* jh, QObject* parent )
+    : K3b::ThreadJob( jh, parent ),
       d( new Private() )
 {
 }
 
 
-K3bPipeBuffer::~K3bPipeBuffer()
+K3b::PipeBuffer::~PipeBuffer()
 {
     delete d;
 }
 
 
-void K3bPipeBuffer::start()
+void K3b::PipeBuffer::start()
 {
     //
     // Create the socketpair in the gui thread to be sure it's available after
@@ -100,29 +100,29 @@ void K3bPipeBuffer::start()
     if( !d->initFds() )
         jobFinished(false);
     else
-        K3bThreadJob::start();
+        K3b::ThreadJob::start();
 }
 
 
-void K3bPipeBuffer::setBufferSize( int mb )
+void K3b::PipeBuffer::setBufferSize( int mb )
 {
     d->bufSize = mb * 1024 * 1024;
 }
 
 
-void K3bPipeBuffer::readFromFd( int fd )
+void K3b::PipeBuffer::readFromFd( int fd )
 {
     d->inFd = fd;
 }
 
 
-void K3bPipeBuffer::writeToFd( int fd )
+void K3b::PipeBuffer::writeToFd( int fd )
 {
     d->outFd = fd;
 }
 
 
-int K3bPipeBuffer::inFd() const
+int K3b::PipeBuffer::inFd() const
 {
     if( d->inFd == -1 )
         return d->inFdPair[1];
@@ -130,7 +130,7 @@ int K3bPipeBuffer::inFd() const
         return d->inFd;
 }
 
-bool K3bPipeBuffer::run()
+bool K3b::PipeBuffer::run()
 {
     int usedInFd = -1;
     if( d->inFd > 0 )
@@ -138,9 +138,9 @@ bool K3bPipeBuffer::run()
     else
         usedInFd = d->inFdPair[0];
 
-    kDebug() << "(K3bPipeBuffer::WorkThread) reading from " << usedInFd
+    kDebug() << "(K3b::PipeBuffer::WorkThread) reading from " << usedInFd
              << " and writing to " << d->outFd << endl;
-    kDebug() << "(K3bPipeBuffer::WorkThread) using buffer size of " << d->bufSize;
+    kDebug() << "(K3b::PipeBuffer::WorkThread) using buffer size of " << d->bufSize;
 
     // start the buffering
     unsigned int bufPos = 0;
@@ -189,7 +189,7 @@ bool K3bPipeBuffer::run()
 
                 if( ret < 0 ) {
                     if( (errno != EINTR) && (errno != EAGAIN) ) {
-                        kDebug() << "(K3bPipeBuffer::WorkThread) error while writing to " << d->outFd;
+                        kDebug() << "(K3b::PipeBuffer::WorkThread) error while writing to " << d->outFd;
                         error = true;
                     }
                 }
@@ -220,12 +220,12 @@ bool K3bPipeBuffer::run()
                 ret = ::read( usedInFd, &d->buffer[readPos], maxLen );
                 if( ret < 0 ) {
                     if( (errno != EINTR) && (errno != EAGAIN) ) {
-                        kDebug() << "(K3bPipeBuffer::WorkThread) error while reading from " << usedInFd;
+                        kDebug() << "(K3b::PipeBuffer::WorkThread) error while reading from " << usedInFd;
                         error = true;
                     }
                 }
                 else if( ret == 0 ) {
-                    kDebug() << "(K3bPipeBuffer::WorkThread) end of input.";
+                    kDebug() << "(K3b::PipeBuffer::WorkThread) end of input.";
                     eof = true;
                 }
                 else {
@@ -246,7 +246,7 @@ bool K3bPipeBuffer::run()
         }
         else if( !canceled() ) {
             error = true;
-            kDebug() << "(K3bPipeBuffer::WorkThread) select: " << ::strerror(errno);
+            kDebug() << "(K3b::PipeBuffer::WorkThread) select: " << ::strerror(errno);
         }
     }
 

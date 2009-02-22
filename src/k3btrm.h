@@ -26,13 +26,14 @@
  * This class is a wrapper around the trm part of libmusicbrainz.
  * It handles proxy settings automatically through KDE.
  *
- * K3bTRM always treats audio data as 44100, 2 channel, 16 bit data.
+ * TRM always treats audio data as 44100, 2 channel, 16 bit data.
  */
-class K3bTRM
+namespace K3b {
+class TRM
 {
 public:
-    K3bTRM();
-    ~K3bTRM();
+    TRM();
+    ~TRM();
 
     void start( const K3b::Msf& length );
 
@@ -53,6 +54,7 @@ private:
     class Private;
     Private* d;
 };
+}
 
 #endif
 #endif

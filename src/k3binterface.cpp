@@ -31,79 +31,79 @@
 
 
 
-K3bInterface::K3bInterface()
-  : DCOPObject( "K3bInterface" ),
+K3b::Interface::Interface()
+  : DCOPObject( "K3b::Interface" ),
     m_main( 0 )
 {
 }
 
-DCOPRef K3bInterface::createDataProject()
+DCOPRef K3b::Interface::createDataProject()
 {
     return DCOPRef( kapp->dcopClient()->appId(),
-                    k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::DATA ) )->objId() );
+                    k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3b::Doc::DATA ) )->objId() );
 }
 
-DCOPRef K3bInterface::createDataCDProject()
+DCOPRef K3b::Interface::createDataCDProject()
 {
     // backward compatibility
     return DCOPRef( kapp->dcopClient()->appId(),
-                    k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::DATA ) )->objId() );
+                    k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3b::Doc::DATA ) )->objId() );
 }
 
-DCOPRef K3bInterface::createAudioCDProject()
+DCOPRef K3b::Interface::createAudioCDProject()
 {
   return DCOPRef( kapp->dcopClient()->appId(),
-		  k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::AUDIO ) )->objId() );
+		  k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3b::Doc::AUDIO ) )->objId() );
 }
 
-DCOPRef K3bInterface::createMixedCDProject()
+DCOPRef K3b::Interface::createMixedCDProject()
 {
   return DCOPRef( kapp->dcopClient()->appId(),
-		  k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::MIXED ) )->objId() );
+		  k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3b::Doc::MIXED ) )->objId() );
 }
 
-DCOPRef K3bInterface::createVideoCDProject()
+DCOPRef K3b::Interface::createVideoCDProject()
 {
   return DCOPRef( kapp->dcopClient()->appId(),
-		  k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::VCD ) )->objId() );
+		  k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3b::Doc::VCD ) )->objId() );
 }
 
-DCOPRef K3bInterface::createMovixProject()
+DCOPRef K3b::Interface::createMovixProject()
 {
     return DCOPRef( kapp->dcopClient()->appId(),
-                    k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::MOVIX ) )->objId() );
+                    k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3b::Doc::MOVIX ) )->objId() );
 }
 
-DCOPRef K3bInterface::createMovixCDProject()
+DCOPRef K3b::Interface::createMovixCDProject()
 {
     // backward compatibility
     return DCOPRef( kapp->dcopClient()->appId(),
-                    k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::MOVIX ) )->objId() );
+                    k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3b::Doc::MOVIX ) )->objId() );
 }
 
-DCOPRef K3bInterface::createDataDVDProject()
+DCOPRef K3b::Interface::createDataDVDProject()
 {
     // backward compatibility
     return DCOPRef( kapp->dcopClient()->appId(),
-                    k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::DATA ) )->objId() );
+                    k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3b::Doc::DATA ) )->objId() );
 }
 
-DCOPRef K3bInterface::createVideoDVDProject()
+DCOPRef K3b::Interface::createVideoDVDProject()
 {
   return DCOPRef( kapp->dcopClient()->appId(),
-		  k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::VIDEODVD ) )->objId() );
+		  k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3b::Doc::VIDEODVD ) )->objId() );
 }
 
-DCOPRef K3bInterface::createMovixDVDProject()
+DCOPRef K3b::Interface::createMovixDVDProject()
 {
         // backward compatibility
     return DCOPRef( kapp->dcopClient()->appId(),
-                    k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3bDoc::MOVIX ) )->objId() );
+                    k3bappcore->projectManager()->dcopInterface( k3bappcore->projectManager()->createProject( K3b::Doc::MOVIX ) )->objId() );
 }
 
-DCOPRef K3bInterface::currentProject()
+DCOPRef K3b::Interface::currentProject()
 {
-  K3bView* view = m_main->activeView();
+  K3b::View* view = m_main->activeView();
   if( view )
     return DCOPRef( kapp->dcopClient()->appId(),
 		    k3bappcore->projectManager()->dcopInterface( view->doc() )->objId() );
@@ -111,9 +111,9 @@ DCOPRef K3bInterface::currentProject()
     return DCOPRef();
 }
 
-DCOPRef K3bInterface::openProject( const KUrl& url )
+DCOPRef K3b::Interface::openProject( const KUrl& url )
 {
-  K3bDoc* doc = k3bappcore->projectManager()->openProject( url );
+  K3b::Doc* doc = k3bappcore->projectManager()->openProject( url );
   if( doc )
     return DCOPRef( kapp->dcopClient()->appId(),
 		    k3bappcore->projectManager()->dcopInterface( doc )->objId() );
@@ -121,22 +121,22 @@ DCOPRef K3bInterface::openProject( const KUrl& url )
     return DCOPRef();
 }
 
-QList<DCOPRef> K3bInterface::projects()
+QList<DCOPRef> K3b::Interface::projects()
 {
   QList<DCOPRef> lst;
-  const Q3PtrList<K3bDoc>& docs = k3bappcore->projectManager()->projects();
-  for( Q3PtrListIterator<K3bDoc> it( docs ); it.current(); ++it )
+  const Q3PtrList<K3b::Doc>& docs = k3bappcore->projectManager()->projects();
+  for( Q3PtrListIterator<K3b::Doc> it( docs ); it.current(); ++it )
     lst.append( DCOPRef( kapp->dcopClient()->appId(), k3bappcore->projectManager()->dcopInterface( it.current() )->objId() ) );
 
   return lst;
 }
 
-void K3bInterface::addUrls( const KUrl::List& urls )
+void K3b::Interface::addUrls( const KUrl::List& urls )
 {
   m_main->addUrls( urls );
 }
 
-void K3bInterface::addUrl( const KUrl& url )
+void K3b::Interface::addUrl( const KUrl& url )
 {
   KUrl::List l;
   l.append(url);
@@ -144,86 +144,86 @@ void K3bInterface::addUrl( const KUrl& url )
 }
 
 
-void K3bInterface::copyCd( const KUrl& dev )
+void K3b::Interface::copyCd( const KUrl& dev )
 {
     // backward compatibility
     copyMedium( dev );
 }
 
 
-void K3bInterface::copyDvd( const KUrl& dev )
+void K3b::Interface::copyDvd( const KUrl& dev )
 {
     // backward compatibility
     copyMedium( dev );
 }
 
-void K3bInterface::copyMedium( const KUrl& dev )
+void K3b::Interface::copyMedium( const KUrl& dev )
 {
     m_main->mediaCopy( K3b::urlToDevice( dev ) );
 }
 
 
-void K3bInterface::copyCd()
+void K3b::Interface::copyCd()
 {
     // backward compatibility
     copyMedium();
 }
 
 
-void K3bInterface::copyDvd()
+void K3b::Interface::copyDvd()
 {
     // backward compatibility
     copyMedium();
 }
 
 
-void K3bInterface::copyMedium()
+void K3b::Interface::copyMedium()
 {
     // HACK since we want this method to return immediately
     QTimer::singleShot( 0, m_main, SLOT(slotMediaCopy()) );
 }
 
 
-void K3bInterface::eraseCdrw()
+void K3b::Interface::eraseCdrw()
 {
     // backward compatibility
     formatMedium();
 }
 
 
-void K3bInterface::formatDvd()
+void K3b::Interface::formatDvd()
 {
     // backward compatibility
     formatMedium();
 }
 
 
-void K3bInterface::formatMedium()
+void K3b::Interface::formatMedium()
 {
     // HACK since we want this method to return immediately
     QTimer::singleShot( 0, m_main, SLOT(slotFormatMedium()) );
 }
 
 
-void K3bInterface::burnCdImage( const KUrl& url )
+void K3b::Interface::burnCdImage( const KUrl& url )
 {
   m_main->slotWriteCdImage( url );
 }
 
 
-void K3bInterface::burnDvdImage( const KUrl& url )
+void K3b::Interface::burnDvdImage( const KUrl& url )
 {
   m_main->slotWriteDvdIsoImage( url );
 }
 
 
-bool K3bInterface::blocked() const
+bool K3b::Interface::blocked() const
 {
   return k3bcore->jobsRunning();
 }
 
 
-void K3bInterface::cddaRip( const KUrl& dev )
+void K3b::Interface::cddaRip( const KUrl& dev )
 {
   m_main->cddaRip( K3b::urlToDevice( dev ) );
 }

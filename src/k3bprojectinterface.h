@@ -22,18 +22,21 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-class K3bDoc;
+namespace K3b {
+    class Doc;
+}
 
 /**
  * Base class for all project interfaces
  */
-class K3bProjectInterface : public DCOPObject
+namespace K3b {
+class ProjectInterface : public DCOPObject
 {
   K_DCOP
 
  public:
-  K3bProjectInterface( K3bDoc* );
-  virtual ~K3bProjectInterface();
+  ProjectInterface( Doc* );
+  virtual ~ProjectInterface();
 
   // Generate a name for this interface. Automatically used if name=0 is
   // passed to the constructor
@@ -81,12 +84,13 @@ class K3bProjectInterface : public DCOPObject
    * \li "videodvd" - Video DVD
    * \li "emovixdvd" - eMovix DVD
    *
-   * Be aware that this is not the same as K3bDoc::documentType for historical reasons.
+   * Be aware that this is not the same as Doc::documentType for historical reasons.
    */
   virtual QString projectType() const;
 
  private:
-  K3bDoc* m_doc;
+  Doc* m_doc;
 };
+}
 
 #endif

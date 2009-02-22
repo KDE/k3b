@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -19,43 +19,46 @@
 #include <kdialog.h>
 #include "k3b_export.h"
 
-class K3bBusyWidget;
 class QLabel;
 class QProgressBar;
 class QStackedWidget;
 
+namespace K3b {
+    class BusyWidget;
 
-/**
- * A progressdialog which displays a line of text and a progress
- * bar or a moving dot for tasks that do not provide any progress
- * information.
- */
-class LIBK3B_EXPORT  K3bProgressDialog : public KDialog
-{
-  Q_OBJECT
 
- public:
-  K3bProgressDialog( const QString& text = QString(),
-		     QWidget* parent = 0, 
-		     const QString& caption = QString() );
-  ~K3bProgressDialog();
+    /**
+     * A progressdialog which displays a line of text and a progress
+     * bar or a moving dot for tasks that do not provide any progress
+     * information.
+     */
+    class LIBK3B_EXPORT  ProgressDialog : public KDialog
+    {
+        Q_OBJECT
 
-  int exec( bool showProgress );
+    public:
+        ProgressDialog( const QString& text = QString(),
+                        QWidget* parent = 0,
+                        const QString& caption = QString() );
+        ~ProgressDialog();
 
- public Q_SLOTS:
-  void setText( const QString& );
-  void slotFinished( bool success );
-  void setProgress( int p );
+        int exec( bool showProgress );
 
- private Q_SLOTS:
-  void slotCancel();
+    public Q_SLOTS:
+        void setText( const QString& );
+        void slotFinished( bool success );
+        void setProgress( int p );
 
- private:
-  QLabel* m_label;
-  QStackedWidget* m_stack;
-  K3bBusyWidget* m_busyWidget;
-  QProgressBar* m_progressBar;
-};
+    private Q_SLOTS:
+        void slotCancel();
+
+    private:
+        QLabel* m_label;
+        QStackedWidget* m_stack;
+        BusyWidget* m_busyWidget;
+        QProgressBar* m_progressBar;
+    };
+}
 
 
 #endif

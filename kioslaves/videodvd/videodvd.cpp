@@ -63,7 +63,7 @@ extern "C"
 
 // FIXME: Does it really make sense to use a static device manager? Are all instances
 // of videodvd started in another process?
-K3bDevice::DeviceManager* kio_videodvdProtocol::s_deviceManager = 0;
+K3b::Device::DeviceManager* kio_videodvdProtocol::s_deviceManager = 0;
 int kio_videodvdProtocol::s_instanceCnt = 0;
 
 kio_videodvdProtocol::kio_videodvdProtocol(const QByteArray &pool_socket, const QByteArray &app_socket)
@@ -72,7 +72,7 @@ kio_videodvdProtocol::kio_videodvdProtocol(const QByteArray &pool_socket, const 
     kDebug() << "kio_videodvdProtocol::kio_videodvdProtocol()";
     if( !s_deviceManager )
     {
-        s_deviceManager = new K3bDevice::DeviceManager();
+        s_deviceManager = new K3b::Device::DeviceManager();
         s_deviceManager->setCheckWritingModes( false );
         s_deviceManager->scanBus();
     }
@@ -92,7 +92,7 @@ kio_videodvdProtocol::~kio_videodvdProtocol()
 }
 
 
-KIO::UDSEntry kio_videodvdProtocol::createUDSEntry( const K3bIso9660Entry* e ) const
+KIO::UDSEntry kio_videodvdProtocol::createUDSEntry( const K3b::Iso9660Entry* e ) const
 {
     KIO::UDSEntry uds;
     uds.insert(KIO::UDSEntry::UDS_NAME,e->name());
@@ -107,7 +107,7 @@ KIO::UDSEntry kio_videodvdProtocol::createUDSEntry( const K3bIso9660Entry* e ) c
     }
     else
     {
-        const K3bIso9660File* file = static_cast<const K3bIso9660File*>( e );
+        const K3b::Iso9660File* file = static_cast<const K3b::Iso9660File*>( e );
         uds.insert(KIO::UDSEntry::UDS_SIZE,file->size());
         uds.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFREG);
         QString iconName;
@@ -124,7 +124,7 @@ KIO::UDSEntry kio_videodvdProtocol::createUDSEntry( const K3bIso9660Entry* e ) c
 
 // FIXME: remember the iso instance for quicker something and search for the videodvd
 //        in the available devices.
-K3bIso9660* kio_videodvdProtocol::openIso( const KUrl& url, QString& plainIsoPath )
+K3b::Iso9660* kio_videodvdProtocol::openIso( const KUrl& url, QString& plainIsoPath )
 {
     // get the volume id from the url
     QString volumeId = url.path().section( '/', 1, 1 );
@@ -134,17 +134,17 @@ K3bIso9660* kio_videodvdProtocol::openIso( const KUrl& url, QString& plainIsoPat
 
     // now search the devices for this volume id
     // FIXME: use the cache created in listVideoDVDs
-    QList<K3bDevice::Device *> items(s_deviceManager->dvdReader());
-    for( QList<K3bDevice::Device *>::const_iterator it = items.constBegin();
+    QList<K3b::Device::Device *> items(s_deviceManager->dvdReader());
+    for( QList<K3b::Device::Device *>::const_iterator it = items.constBegin();
          it != items.constEnd(); ++it ) {
-        K3bDevice::Device* dev = *it;
-        K3bDevice::DiskInfo di = dev->diskInfo();
+        K3b::Device::Device* dev = *it;
+        K3b::Device::DiskInfo di = dev->diskInfo();
 
         // we search for a DVD with a single track.
-        // this time let K3bIso9660 decide if we need dvdcss or not
+        // this time let K3b::Iso9660 decide if we need dvdcss or not
         // FIXME: check for encryption and libdvdcss and report an error
         if( di.isDvdMedia() && di.numTracks() == 1 ) {
-            K3bIso9660* iso = new K3bIso9660( dev );
+            K3b::Iso9660* iso = new K3b::Iso9660( dev );
             iso->setPlainIso9660( true );
             if( iso->open() && iso->primaryDescriptor().volumeId == volumeId ) {
                 plainIsoPath = url.path().section( "/", 2, -1 ) + "/";
@@ -165,12 +165,12 @@ void kio_videodvdProtocol::get(const KUrl& url )
     kDebug() << "kio_videodvd::get(const KUrl& url)";
 
     QString isoPath;
-    if( K3bIso9660* iso = openIso( url, isoPath ) )
+    if( K3b::Iso9660* iso = openIso( url, isoPath ) )
     {
-        const K3bIso9660Entry* e = iso->firstIsoDirEntry()->entry( isoPath );
+        const K3b::Iso9660Entry* e = iso->firstIsoDirEntry()->entry( isoPath );
         if( e && e->isFile() )
         {
-            const K3bIso9660File* file = static_cast<const K3bIso9660File*>( e );
+            const K3b::Iso9660File* file = static_cast<const K3b::Iso9660File*>( e );
             totalSize( file->size() );
             QByteArray buffer( 10*2048, '\n' );
             int read = 0;
@@ -211,13 +211,13 @@ void kio_videodvdProtocol::listDir( const KUrl& url )
     }
     else {
         QString isoPath;
-        K3bIso9660* iso = openIso( url, isoPath );
+        K3b::Iso9660* iso = openIso( url, isoPath );
         if( iso ) {
-            const K3bIso9660Directory* mainDir = iso->firstIsoDirEntry();
-            const K3bIso9660Entry* e = mainDir->entry( isoPath );
+            const K3b::Iso9660Directory* mainDir = iso->firstIsoDirEntry();
+            const K3b::Iso9660Entry* e = mainDir->entry( isoPath );
             if( e ) {
                 if( e->isDirectory() ) {
-                    const K3bIso9660Directory* dir = static_cast<const K3bIso9660Directory*>(e);
+                    const K3b::Iso9660Directory* dir = static_cast<const K3b::Iso9660Directory*>(e);
                     QStringList el = dir->entries();
                     el.removeOne( "." );
                     el.removeOne( ".." );
@@ -246,11 +246,11 @@ void kio_videodvdProtocol::listVideoDVDs()
 {
     int cnt = 0;
 
-    QList<K3bDevice::Device *> items(s_deviceManager->dvdReader());
-    for( QList<K3bDevice::Device *>::const_iterator it = items.constBegin();
+    QList<K3b::Device::Device *> items(s_deviceManager->dvdReader());
+    for( QList<K3b::Device::Device *>::const_iterator it = items.constBegin();
          it != items.constEnd(); ++it ) {
-        K3bDevice::Device* dev = *it;
-        K3bDevice::DiskInfo di = dev->diskInfo();
+        K3b::Device::Device* dev = *it;
+        K3b::Device::DiskInfo di = dev->diskInfo();
 
         // we search for a DVD with a single track.
         if( di.isDvdMedia() && di.numTracks() == 1 ) {
@@ -259,7 +259,7 @@ void kio_videodvdProtocol::listVideoDVDs()
             // - no dvdcss for speed
             // - only a check for the VIDEO_TS dir
             //
-            K3bIso9660 iso( new K3bIso9660DeviceBackend(dev) );
+            K3b::Iso9660 iso( new K3b::Iso9660DeviceBackend(dev) );
             iso.setPlainIso9660( true );
             if( iso.open() && iso.firstIsoDirEntry()->entry( "VIDEO_TS" ) ) {
                 // FIXME: cache the entry for speedup
@@ -303,9 +303,9 @@ void kio_videodvdProtocol::stat( const KUrl& url )
     }
     else {
         QString isoPath;
-        K3bIso9660* iso = openIso( url, isoPath );
+        K3b::Iso9660* iso = openIso( url, isoPath );
         if( iso ) {
-            const K3bIso9660Entry* e = iso->firstIsoDirEntry()->entry( isoPath );
+            const K3b::Iso9660Entry* e = iso->firstIsoDirEntry()->entry( isoPath );
             if( e ) {
                 statEntry( createUDSEntry( e ) );
                 finished();
@@ -328,10 +328,10 @@ void kio_videodvdProtocol::mimetype( const KUrl& url )
     }
 
     QString isoPath;
-    K3bIso9660* iso = openIso( url, isoPath );
+    K3b::Iso9660* iso = openIso( url, isoPath );
     if( iso )
     {
-        const K3bIso9660Entry* e = iso->firstIsoDirEntry()->entry( isoPath );
+        const K3b::Iso9660Entry* e = iso->firstIsoDirEntry()->entry( isoPath );
         if( e )
         {
             if( e->isDirectory() )
@@ -343,7 +343,7 @@ void kio_videodvdProtocol::mimetype( const KUrl& url )
             else
             {
                 // send some data
-                const K3bIso9660File* file = static_cast<const K3bIso9660File*>( e );
+                const K3b::Iso9660File* file = static_cast<const K3b::Iso9660File*>( e );
                 QByteArray buffer( 10*2048, '\n' );
                 int read = file->read( 0, buffer.data(), buffer.size() );
                 if( read > 0 )

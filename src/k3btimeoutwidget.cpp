@@ -22,7 +22,7 @@
 #include <QTimer>
 
 
-class K3bTimeoutWidget::Private
+class K3b::TimeoutWidget::Private
 {
 public:
   int timeout;
@@ -36,7 +36,7 @@ public:
 };
 
 
-K3bTimeoutWidget::K3bTimeoutWidget( QWidget* parent )
+K3b::TimeoutWidget::TimeoutWidget( QWidget* parent )
   : QWidget( parent )
 {
   d = new Private;
@@ -48,13 +48,13 @@ K3bTimeoutWidget::K3bTimeoutWidget( QWidget* parent )
 }
 
 
-K3bTimeoutWidget::~K3bTimeoutWidget()
+K3b::TimeoutWidget::~TimeoutWidget()
 {
   delete d;
 }
 
 
-void K3bTimeoutWidget::start()
+void K3b::TimeoutWidget::start()
 {
   d->paused = false;
   d->currentTime = 0;
@@ -62,7 +62,7 @@ void K3bTimeoutWidget::start()
 }
 
 
-void K3bTimeoutWidget::stop()
+void K3b::TimeoutWidget::stop()
 {
   d->paused = false;
   d->timer.stop();
@@ -70,21 +70,21 @@ void K3bTimeoutWidget::stop()
 }
 
 
-void K3bTimeoutWidget::pause()
+void K3b::TimeoutWidget::pause()
 {
   d->paused = true;
   d->timer.stop();
 }
 
 
-void K3bTimeoutWidget::resume()
+void K3b::TimeoutWidget::resume()
 {
   d->paused = false;
   startTimer();
 }
 
 
-void K3bTimeoutWidget::timeStep()
+void K3b::TimeoutWidget::timeStep()
 {
   d->currentTime += 100;
   update();
@@ -95,13 +95,13 @@ void K3bTimeoutWidget::timeStep()
 }
 
 
-QSize K3bTimeoutWidget::sizeHint() const
+QSize K3b::TimeoutWidget::sizeHint() const
 {
   return minimumSizeHint();
 }
 
 
-QSize K3bTimeoutWidget::minimumSizeHint() const
+QSize K3b::TimeoutWidget::minimumSizeHint() const
 {
   int fw = fontMetrics().width( QString::number( d->timeout/1000 ) );
   int fh = fontMetrics().height();
@@ -112,25 +112,25 @@ QSize K3bTimeoutWidget::minimumSizeHint() const
 }
 
 
-void K3bTimeoutWidget::setTimeout( int msecs )
+void K3b::TimeoutWidget::setTimeout( int msecs )
 {
   d->timeout = msecs;
 }
 
 
-void K3bTimeoutWidget::startTimer()
+void K3b::TimeoutWidget::startTimer()
 {
   d->timer.start( 100 );
 }
 
 
-void K3bTimeoutWidget::paintEvent( QPaintEvent* )
+void K3b::TimeoutWidget::paintEvent( QPaintEvent* )
 {
   if( d->timer.isActive() || d->paused ) {
     QPainter p(this);
     p.setRenderHint( QPainter::Antialiasing );
     
-    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+    if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
       p.setBrush( theme->backgroundColor() );
       p.setPen( theme->backgroundColor() );
     }
@@ -148,7 +148,7 @@ void K3bTimeoutWidget::paintEvent( QPaintEvent* )
 }
 
 
-void K3bTimeoutWidget::resizeEvent( QResizeEvent* e )
+void K3b::TimeoutWidget::resizeEvent( QResizeEvent* e )
 {
   QWidget::resizeEvent( e );
 }

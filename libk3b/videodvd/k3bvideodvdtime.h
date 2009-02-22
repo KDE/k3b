@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
  *
@@ -19,40 +19,43 @@
 
 #include <qstring.h>
 
-/**
- * This should not be confused with K3b::Msf
- */
-namespace K3bVideoDVD
-{
-  class LIBK3B_EXPORT Time
+namespace K3b {
+    namespace VideoDVD
     {
-    public:
-      Time();
-      Time( unsigned short hour,
-	    unsigned short min,
-	    unsigned short sec,
-	    unsigned short frame );
+        /**
+         * This should not be confused with Msf
+         */
+        class LIBK3B_EXPORT Time
+        {
+        public:
+            Time();
+            Time( unsigned short hour,
+                  unsigned short min,
+                  unsigned short sec,
+                  unsigned short frame );
 
-      unsigned short hour() const { return m_hour; }
-      unsigned short minute() const { return m_minute; }
-      unsigned short second() const { return m_second; }
-      unsigned short frame() const { return m_frame; }
+            unsigned short hour() const { return m_hour; }
+            unsigned short minute() const { return m_minute; }
+            unsigned short second() const { return m_second; }
+            unsigned short frame() const { return m_frame; }
 
-      double totalSeconds() const;
-      unsigned int totalFrames() const;
+            double totalSeconds() const;
+            unsigned int totalFrames() const;
 
-      // FIXME: is this useful?
-      double frameRate() const;
+            // FIXME: is this useful?
+            double frameRate() const;
 
-      QString toString( bool includeFrames = true ) const;
+            QString toString( bool includeFrames = true ) const;
 
-    private:
-      void makeValid();
+        private:
+            void makeValid();
 
-      unsigned int m_hour;
-      unsigned int m_minute;
-      unsigned int m_second;
-      unsigned int m_frame;
-    };
-  }
+            unsigned int m_hour;
+            unsigned int m_minute;
+            unsigned int m_second;
+            unsigned int m_frame;
+        };
+    }
+}
+
 #endif

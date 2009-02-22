@@ -33,23 +33,28 @@ class K3ListView;
 class QLabel;
 class Q3ListViewItem;
 class KToolBar;
-class K3bListView;
-class K3bVideoCdRippingOptions;
+namespace K3b {
+    class ListView;
+}
+namespace K3b {
+    class VideoCdRippingOptions;
+}
 
-namespace K3bDevice
+namespace Device
 {
   class Toc;
   class Device;
 }
 
 
-class K3bVideoCdView : public K3bMediaContentsView
+namespace K3b {
+class VideoCdView : public MediaContentsView
 {
         Q_OBJECT
 
     public:
-        K3bVideoCdView( QWidget* parent = 0 );
-        ~K3bVideoCdView();
+        VideoCdView( QWidget* parent = 0 );
+        ~VideoCdView();
 
         KActionCollection* actionCollection() const
         {
@@ -80,16 +85,16 @@ class K3bVideoCdView : public K3bMediaContentsView
         void enableInteraction( bool );
         void buildTree( Q3ListViewItem *parentItem, const QDomElement &parentElement, const QString& pname = QString() );
 
-        K3bDevice::Toc m_toc;
+        Device::Toc m_toc;
 
         KActionCollection* m_actionCollection;
         KActionMenu* m_popupMenu;
 
-        K3bVideoCdInfoResult m_videocdinfoResult;
-        K3bVideoCdInfo* m_videocdinfo;
-        K3bVideoCdRippingOptions* m_videooptions;
+        VideoCdInfoResult m_videocdinfoResult;
+        VideoCdInfo* m_videocdinfo;
+        VideoCdRippingOptions* m_videooptions;
 
-        K3bListView* m_trackView;
+        ListView* m_trackView;
         KToolBar* m_toolBox;
         QLabel* m_labelLength;
 
@@ -101,5 +106,6 @@ class K3bVideoCdView : public K3bMediaContentsView
         unsigned long m_videocdmpegsize;
         
 };
+}
 
 #endif

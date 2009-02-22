@@ -22,7 +22,7 @@
 class KUrl;
 
 
-class K3bLibsndfileDecoderFactory : public K3bAudioDecoderFactory
+class K3bLibsndfileDecoderFactory : public K3b::AudioDecoderFactory
 {
     Q_OBJECT
 
@@ -36,11 +36,11 @@ public:
 
     bool multiFormatDecoder() const { return true; }
 
-    K3bAudioDecoder* createDecoder( QObject* parent = 0 ) const;
+    K3b::AudioDecoder* createDecoder( QObject* parent = 0 ) const;
 };
 
 
-class K3bLibsndfileDecoder : public K3bAudioDecoder
+class K3bLibsndfileDecoder : public K3b::AudioDecoder
 {
     Q_OBJECT
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
  *
  * This file is part of the K3b project.
@@ -26,8 +26,8 @@ namespace K3b
 
     enum ItemType
     {
-        DirItem,
-        FileItem
+        DirItemType,
+        FileItemType
     };
 
     enum ItemFlags

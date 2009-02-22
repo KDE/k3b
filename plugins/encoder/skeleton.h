@@ -21,7 +21,7 @@
 #include <k3bpluginconfigwidget.h>
 
 
-class K3b<name>Encoder : public K3bAudioEncoder
+class K3b<name>Encoder : public K3b::AudioEncoder
 {
     Q_OBJECT
 
@@ -37,7 +37,7 @@ public:
 
     int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-    K3bPluginConfigWidget* createConfigWidget( QWidget* parent = 0 ) const;
+    K3b::PluginConfigWidget* createConfigWidget( QWidget* parent = 0 ) const;
 
 private:
     void finishEncoderInternal();
@@ -47,7 +47,7 @@ private:
 };
 
 
-class K3b<name>EncoderSettingsWidget : public K3bPluginConfigWidget
+class K3b<name>EncoderSettingsWidget : public K3b::PluginConfigWidget
 {
     Q_OBJECT
 

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
  *
@@ -23,55 +23,57 @@ class Q3ListViewItem;
 class QTimer;
 
 
-/**
- * Fades an icon on a listview item in and out.
- */
-class LIBK3B_EXPORT K3bListViewItemAnimator : public QObject
-{
-  Q_OBJECT
+namespace K3b {
+    /**
+     * Fades an icon on a listview item in and out.
+     */
+    class LIBK3B_EXPORT ListViewItemAnimator : public QObject
+    {
+        Q_OBJECT
 
- public:
-  K3bListViewItemAnimator( QObject* parent = 0 );
-  /**
-   * Will use the items pixmap.
-   */
-  K3bListViewItemAnimator( Q3ListViewItem* item, int col, QObject* parent = 0 );
-  ~K3bListViewItemAnimator();
+    public:
+        ListViewItemAnimator( QObject* parent = 0 );
+        /**
+         * Will use the items pixmap.
+         */
+        ListViewItemAnimator( Q3ListViewItem* item, int col, QObject* parent = 0 );
+        ~ListViewItemAnimator();
 
-  Q3ListViewItem* item() const;
+        Q3ListViewItem* item() const;
 
- public Q_SLOTS:
-  void start();
-  void stop();
+    public Q_SLOTS:
+        void start();
+        void stop();
 
-  void setItem( Q3ListViewItem*, int col );
+        void setItem( Q3ListViewItem*, int col );
 
-  /**
-   * Default is the pixmap from the item.
-   */
-  void setPixmap( const QPixmap& );
+        /**
+         * Default is the pixmap from the item.
+         */
+        void setPixmap( const QPixmap& );
 
-  void setColumn( int col );
+        void setColumn( int col );
 
-  /**
-   * Default is the base color of the listview.
-   */
-  void setFadeColor( const QColor& );
+        /**
+         * Default is the base color of the listview.
+         */
+        void setFadeColor( const QColor& );
 
- private Q_SLOTS:
-  void slotAnimate();
+    private Q_SLOTS:
+        void slotAnimate();
 
- private:
- void init();
+    private:
+        void init();
 
-  int m_animationStep;
-  bool m_animationBack;
-  QPixmap m_pixmap;
-  QColor m_fadeColor;
-  Q3ListViewItem* m_item;
-  int m_column;
+        int m_animationStep;
+        bool m_animationBack;
+        QPixmap m_pixmap;
+        QColor m_fadeColor;
+        Q3ListViewItem* m_item;
+        int m_column;
 
-  QTimer* m_timer;
-};
+        QTimer* m_timer;
+    };
+}
 
 #endif

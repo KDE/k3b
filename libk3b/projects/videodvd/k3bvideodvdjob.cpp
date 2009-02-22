@@ -29,44 +29,44 @@
 
 
 
-K3bVideoDvdJob::K3bVideoDvdJob( K3bVideoDvdDoc* doc, K3bJobHandler* jh, QObject* parent )
-  : K3bDataJob( doc, jh, parent ),
-    m_doc(doc)
+K3b::VideoDvdJob::VideoDvdJob( K3b::VideoDvdDoc* doc, K3b::JobHandler* jh, QObject* parent )
+    : K3b::DataJob( doc, jh, parent ),
+      m_doc(doc)
 {
 }
 
 
-K3bVideoDvdJob::~K3bVideoDvdJob()
+K3b::VideoDvdJob::~VideoDvdJob()
 {
 }
 
 
-void K3bVideoDvdJob::prepareImager()
+void K3b::VideoDvdJob::prepareImager()
 {
-  setImager( new K3bVideoDvdImager( m_doc, this ) );
+    setImager( new K3b::VideoDvdImager( m_doc, this ) );
 }
 
 
-QString K3bVideoDvdJob::jobDescription() const
+QString K3b::VideoDvdJob::jobDescription() const
 {
-  if( m_doc->onlyCreateImages() ) {
-    return i18n("Creating Video DVD Image File");
-  }
-  else {
-    return i18n("Writing Video DVD")
-      + ( m_doc->isoOptions().volumeID().isEmpty()
-	  ? QString()
-	  : QString( " (%1)" ).arg(m_doc->isoOptions().volumeID()) );
-  }
+    if( m_doc->onlyCreateImages() ) {
+        return i18n("Creating Video DVD Image File");
+    }
+    else {
+        return i18n("Writing Video DVD")
+            + ( m_doc->isoOptions().volumeID().isEmpty()
+                ? QString()
+                : QString( " (%1)" ).arg(m_doc->isoOptions().volumeID()) );
+    }
 }
 
 
-QString K3bVideoDvdJob::jobDetails() const
+QString K3b::VideoDvdJob::jobDetails() const
 {
-  return ( i18n("ISO9660/Udf Filesystem (Size: %1)",KIO::convertSize( doc()->size() ))
-	   + ( m_doc->copies() > 1
-	       ? i18np(" - %1 copy", " - %1 copies", m_doc->copies())
-	       : QString() ) );
+    return ( i18n("ISO9660/Udf Filesystem (Size: %1)",KIO::convertSize( doc()->size() ))
+             + ( m_doc->copies() > 1
+                 ? i18np(" - %1 copy", " - %1 copies", m_doc->copies())
+                 : QString() ) );
 }
 
 #include "k3bvideodvdjob.moc"

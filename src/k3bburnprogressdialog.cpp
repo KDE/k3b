@@ -28,8 +28,8 @@
 #include <QProgressBar>
 
 
-K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, bool showSubProgress )
-    : K3bJobProgressDialog( parent, showSubProgress )
+K3b::BurnProgressDialog::BurnProgressDialog( QWidget *parent, bool showSubProgress )
+    : K3b::JobProgressDialog( parent, showSubProgress )
 {
     m_labelWritingSpeed = new QLabel( m_frameExtraInfo );
     //  m_labelWritingSpeed->setAlignment( int( Qt::AlignVCenter | Qt::AlignRight ) );
@@ -37,7 +37,7 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, bool showSubProgr
     m_frameExtraInfoLayout->addWidget( m_labelWritingSpeed, 2, 0 );
     m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Estimated writing speed:"), m_frameExtraInfo ), 1, 0 );
 
-    m_labelWriter = new K3bThemedLabel( m_frameExtraInfo );
+    m_labelWriter = new K3b::ThemedLabel( m_frameExtraInfo );
     m_labelWriter->setFrameShape( QFrame::StyledPanel );
     m_labelWriter->setFrameShadow( QFrame::Sunken );
     m_labelWriter->setLineWidth( 1 );
@@ -55,26 +55,26 @@ K3bBurnProgressDialog::K3bBurnProgressDialog( QWidget *parent, bool showSubProgr
 
     m_progressDeviceBuffer = new QProgressBar( m_frameExtraInfo );
     m_frameExtraInfoLayout->addWidget( m_progressDeviceBuffer, 2, 3 );
-    m_frameExtraInfoLayout->addWidget( K3bStdGuiItems::verticalLine( m_frameExtraInfo ), 1, 1, 2, 1 );
+    m_frameExtraInfoLayout->addWidget( K3b::StdGuiItems::verticalLine( m_frameExtraInfo ), 1, 1, 2, 1 );
 }
 
-K3bBurnProgressDialog::~K3bBurnProgressDialog()
+K3b::BurnProgressDialog::~BurnProgressDialog()
 {
 }
 
 
-void K3bBurnProgressDialog::setJob( K3bJob* job )
+void K3b::BurnProgressDialog::setJob( K3b::Job* job )
 {
-    if( K3bBurnJob* burnJob = dynamic_cast<K3bBurnJob*>(job) )
+    if( K3b::BurnJob* burnJob = dynamic_cast<K3b::BurnJob*>(job) )
         setBurnJob(burnJob);
     else
-        K3bJobProgressDialog::setJob(job);
+        K3b::JobProgressDialog::setJob(job);
 }
 
 
-void K3bBurnProgressDialog::setBurnJob( K3bBurnJob* burnJob )
+void K3b::BurnProgressDialog::setBurnJob( K3b::BurnJob* burnJob )
 {
-    K3bJobProgressDialog::setJob(burnJob);
+    K3b::JobProgressDialog::setJob(burnJob);
 
     if( burnJob ) {
         connect( burnJob, SIGNAL(bufferStatus(int)), this, SLOT(slotBufferStatus(int)) );
@@ -95,9 +95,9 @@ void K3bBurnProgressDialog::setBurnJob( K3bBurnJob* burnJob )
 }
 
 
-void K3bBurnProgressDialog::slotFinished( bool success )
+void K3b::BurnProgressDialog::slotFinished( bool success )
 {
-    K3bJobProgressDialog::slotFinished( success );
+    K3b::JobProgressDialog::slotFinished( success );
     if( success ) {
         m_labelWritingSpeed->setEnabled( false );
         m_progressWritingBuffer->setEnabled( false );
@@ -106,21 +106,21 @@ void K3bBurnProgressDialog::slotFinished( bool success )
 }
 
 
-void K3bBurnProgressDialog::slotBufferStatus( int b )
+void K3b::BurnProgressDialog::slotBufferStatus( int b )
 {
     m_progressWritingBuffer->setFormat( "%p%" );
     m_progressWritingBuffer->setValue( b );
 }
 
 
-void K3bBurnProgressDialog::slotDeviceBuffer( int b )
+void K3b::BurnProgressDialog::slotDeviceBuffer( int b )
 {
     m_progressDeviceBuffer->setFormat( "%p%" );
     m_progressDeviceBuffer->setValue( b );
 }
 
 
-void K3bBurnProgressDialog::slotWriteSpeed( int s, int multiplicator )
+void K3b::BurnProgressDialog::slotWriteSpeed( int s, int multiplicator )
 {
     m_labelWritingSpeed->setText( QString("%1 KB/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/(double)multiplicator,2)) );
 }

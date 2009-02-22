@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,76 +19,74 @@
 
 #include "k3b_export.h"
 
-namespace K3bDevice {
-  class Device;
+namespace K3b {
+    namespace Device {
+        class Device;
+    }
+
+    class LibDvdCss;
+
+    class LIBK3B_EXPORT Iso9660Backend
+    {
+    public:
+        Iso9660Backend() {}
+        virtual ~Iso9660Backend() {}
+
+        virtual bool open() = 0;
+        virtual void close() = 0;
+        virtual bool isOpen() const = 0;
+        virtual int read( unsigned int sector, char* data, int len ) = 0;
+    };
+
+    class LIBK3B_EXPORT Iso9660DeviceBackend : public Iso9660Backend
+    {
+    public:
+        Iso9660DeviceBackend( Device::Device* dev );
+        ~Iso9660DeviceBackend();
+
+        bool open();
+        void close();
+        bool isOpen() const { return m_isOpen; }
+        int read( unsigned int sector, char* data, int len );
+
+    private:
+        Device::Device* m_device;
+        bool m_isOpen;
+    };
+
+    class LIBK3B_EXPORT Iso9660FileBackend : public Iso9660Backend
+    {
+    public:
+        Iso9660FileBackend( const QString& filename );
+        Iso9660FileBackend( int fd );
+        ~Iso9660FileBackend();
+
+        bool open();
+        void close();
+        bool isOpen() const;
+        int read( unsigned int sector, char* data, int len );
+
+    private:
+        QString m_filename;
+        int m_fd;
+        bool m_closeFd;
+    };
+
+    class LIBK3B_EXPORT Iso9660LibDvdCssBackend : public Iso9660Backend
+    {
+    public:
+        Iso9660LibDvdCssBackend( Device::Device* );
+        ~Iso9660LibDvdCssBackend();
+
+        bool open();
+        void close();
+        bool isOpen() const;
+        int read( unsigned int sector, char* data, int len );
+
+    private:
+        Device::Device* m_device;
+        LibDvdCss* m_libDvdCss;
+    };
 }
-
-class K3bLibDvdCss;
-
-
-class K3bIso9660Backend
-{
- public:
-  K3bIso9660Backend() {}
-  virtual ~K3bIso9660Backend() {}
-
-  virtual bool open() = 0;
-  virtual void close() = 0;
-  virtual bool isOpen() const = 0;
-  virtual int read( unsigned int sector, char* data, int len ) = 0;
-};
-
-
-class K3bIso9660DeviceBackend : public K3bIso9660Backend
-{
- public:
-  LIBK3B_EXPORT K3bIso9660DeviceBackend( K3bDevice::Device* dev );
-  ~K3bIso9660DeviceBackend();
-
-  bool open();
-  void close();
-  bool isOpen() const { return m_isOpen; }
-  int read( unsigned int sector, char* data, int len );
-
- private:
-  K3bDevice::Device* m_device;
-  bool m_isOpen;
-};
-
-
-class K3bIso9660FileBackend : public K3bIso9660Backend
-{
- public:
-  LIBK3B_EXPORT K3bIso9660FileBackend( const QString& filename );
-  K3bIso9660FileBackend( int fd );
-  ~K3bIso9660FileBackend();
-
-  bool open();
-  void close();
-  bool isOpen() const;
-  int read( unsigned int sector, char* data, int len );
-
- private:
-  QString m_filename;
-  int m_fd;
-  bool m_closeFd;
-};
-
-
-class K3bIso9660LibDvdCssBackend : public K3bIso9660Backend
-{
- public:
-  LIBK3B_EXPORT K3bIso9660LibDvdCssBackend( K3bDevice::Device* );
-  ~K3bIso9660LibDvdCssBackend();
-
-  bool open();
-  void close();
-  bool isOpen() const;
-  int read( unsigned int sector, char* data, int len );
-
- private:
-  K3bDevice::Device* m_device;
-  K3bLibDvdCss* m_libDvdCss;
-};
 
 #endif

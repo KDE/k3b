@@ -191,7 +191,7 @@ public:
 
 
 K3bWaveDecoder::K3bWaveDecoder( QObject* parent  )
-    : K3bAudioDecoder( parent )
+    : K3b::AudioDecoder( parent )
 {
     d = new Private();
     d->file = new QFile();
@@ -268,7 +268,7 @@ bool K3bWaveDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int
 
         //
         // we pad to a multiple of 2352 bytes
-        // (the actual padding of zero data will be done by the K3bAudioDecoder class)
+        // (the actual padding of zero data will be done by the K3b::AudioDecoder class)
         //
         if( (size%2352) > 0 )
             size = (size/2352) + 1;
@@ -351,7 +351,7 @@ QString K3bWaveDecoder::technicalInfo( const QString& name ) const
 
 
 K3bWaveDecoderFactory::K3bWaveDecoderFactory( QObject* parent, const QVariantList& )
-    : K3bAudioDecoderFactory( parent )
+    : K3b::AudioDecoderFactory( parent )
 {
 }
 
@@ -361,7 +361,7 @@ K3bWaveDecoderFactory::~K3bWaveDecoderFactory()
 }
 
 
-K3bAudioDecoder* K3bWaveDecoderFactory::createDecoder( QObject* parent ) const
+K3b::AudioDecoder* K3bWaveDecoderFactory::createDecoder( QObject* parent ) const
 {
     return new K3bWaveDecoder( parent );
 }

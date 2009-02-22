@@ -50,7 +50,7 @@ static const char* s_fsPresetNames[] = {
 };
 
 static bool s_fsPresetsInitialized = false;
-static K3bIsoOptions s_fsPresets[FS_CUSTOM];
+static K3b::IsoOptions s_fsPresets[FS_CUSTOM];
 
 // indices for the whitespace treatment combobox
 static const int WS_NO_CHANGE = 0;
@@ -69,7 +69,7 @@ static const int SYM_FOLLOW = 3;
 // returns true if the part of the options that is presented in the advanced custom
 // settings dialog is equal. used to determine if some preset is used.
 //
-static bool compareAdvancedOptions( const K3bIsoOptions& o1, const K3bIsoOptions& o2 )
+static bool compareAdvancedOptions( const K3b::IsoOptions& o1, const K3b::IsoOptions& o2 )
 {
     return ( o1.createRockRidge() == o2.createRockRidge() &&
              o1.createJoliet() == o2.createJoliet() &&
@@ -120,7 +120,7 @@ static void initializePresets()
 
 
 
-class K3bDataImageSettingsWidget::CustomFilesystemsDialog : public KDialog
+class K3b::DataImageSettingsWidget::CustomFilesystemsDialog : public KDialog
 {
 public:
     CustomFilesystemsDialog( QWidget* parent )
@@ -129,15 +129,15 @@ public:
         setDefaultButton(Ok);
         setCaption(i18n("Custom Data Project Filesystems"));
         setModal(true);
-        w = new K3bDataAdvancedImageSettingsWidget( this );
+        w = new K3b::DataAdvancedImageSettingsWidget( this );
         setMainWidget( w );
     }
 
-    K3bDataAdvancedImageSettingsWidget* w;
+    K3b::DataAdvancedImageSettingsWidget* w;
 };
 
 
-class K3bDataImageSettingsWidget::VolumeDescDialog : public KDialog
+class K3b::DataImageSettingsWidget::VolumeDescDialog : public KDialog
 {
 public:
     VolumeDescDialog( QWidget* parent )
@@ -146,7 +146,7 @@ public:
         setDefaultButton(Ok);
         setCaption(i18n("Volume Descriptor"));
         setModal(true);
-        w = new K3bDataVolumeDescWidget( this );
+        w = new K3b::DataVolumeDescWidget( this );
         setMainWidget( w );
 
         // give ourselves a reasonable size
@@ -155,15 +155,17 @@ public:
         resize( s );
     }
 
-    K3bDataVolumeDescWidget* w;
+    K3b::DataVolumeDescWidget* w;
 };
 
 
 
-K3bDataImageSettingsWidget::K3bDataImageSettingsWidget( QWidget* parent )
-    : base_K3bDataImageSettings( parent ),
+K3b::DataImageSettingsWidget::DataImageSettingsWidget( QWidget* parent )
+    : QWidget( parent ),
       m_fileSystemOptionsShown(true)
 {
+    setupUi( this );
+
     layout()->setMargin( KDialog::marginHint() );
 
     m_customFsDlg = new CustomFilesystemsDialog( this );
@@ -203,12 +205,12 @@ K3bDataImageSettingsWidget::K3bDataImageSettingsWidget( QWidget* parent )
 }
 
 
-K3bDataImageSettingsWidget::~K3bDataImageSettingsWidget()
+K3b::DataImageSettingsWidget::~DataImageSettingsWidget()
 {
 }
 
 
-void K3bDataImageSettingsWidget::showFileSystemOptions( bool b )
+void K3b::DataImageSettingsWidget::showFileSystemOptions( bool b )
 {
     m_groupFileSystem->setVisible(b);
     m_groupSymlinks->setVisible(b);
@@ -218,13 +220,13 @@ void K3bDataImageSettingsWidget::showFileSystemOptions( bool b )
 }
 
 
-void K3bDataImageSettingsWidget::slotSpaceHandlingChanged( int i )
+void K3b::DataImageSettingsWidget::slotSpaceHandlingChanged( int i )
 {
     m_editReplace->setEnabled( i == WS_REPLACE );
 }
 
 
-void K3bDataImageSettingsWidget::slotCustomFilesystems()
+void K3b::DataImageSettingsWidget::slotCustomFilesystems()
 {
     // load settings in custom window
     if( m_comboFilesystems->currentIndex() != FS_CUSTOM ) {
@@ -232,7 +234,7 @@ void K3bDataImageSettingsWidget::slotCustomFilesystems()
     }
 
     // store the current settings in case the user cancels the changes
-    K3bIsoOptions o;
+    K3b::IsoOptions o;
     m_customFsDlg->w->save( o );
 
     if( m_customFsDlg->exec() == QDialog::Accepted ) {
@@ -245,7 +247,7 @@ void K3bDataImageSettingsWidget::slotCustomFilesystems()
 }
 
 
-void K3bDataImageSettingsWidget::slotFilesystemsChanged()
+void K3b::DataImageSettingsWidget::slotFilesystemsChanged()
 {
     if( !m_fileSystemOptionsShown )
         return;
@@ -265,11 +267,11 @@ void K3bDataImageSettingsWidget::slotFilesystemsChanged()
 
     // see if any of the presets is loaded
     m_comboFilesystems->setCurrentIndex( FS_CUSTOM );
-    K3bIsoOptions o;
+    K3b::IsoOptions o;
     m_customFsDlg->w->save( o );
     for( int i = 0; i < FS_CUSTOM; ++i ) {
         if( compareAdvancedOptions( o, s_fsPresets[i] ) ) {
-            kDebug() << "(K3bDataImageSettingsWidget) found preset settings: " << s_fsPresetNames[i];
+            kDebug() << "(K3b::DataImageSettingsWidget) found preset settings: " << s_fsPresetNames[i];
             m_comboFilesystems->setCurrentIndex( i );
             break;
         }
@@ -301,13 +303,13 @@ void K3bDataImageSettingsWidget::slotFilesystemsChanged()
 }
 
 
-void K3bDataImageSettingsWidget::slotMoreVolDescFields()
+void K3b::DataImageSettingsWidget::slotMoreVolDescFields()
 {
     // update dlg to current state
     m_volDescDlg->w->m_editVolumeName->setText( m_editVolumeName->text() );
 
     // remember old settings
-    K3bIsoOptions o;
+    K3b::IsoOptions o;
     m_volDescDlg->w->save( o );
 
     // exec dlg
@@ -323,7 +325,7 @@ void K3bDataImageSettingsWidget::slotMoreVolDescFields()
 }
 
 
-void K3bDataImageSettingsWidget::load( const K3bIsoOptions& o )
+void K3b::DataImageSettingsWidget::load( const K3b::IsoOptions& o )
 {
     m_customFsDlg->w->load( o );
     m_volDescDlg->w->load( o );
@@ -340,13 +342,13 @@ void K3bDataImageSettingsWidget::load( const K3bIsoOptions& o )
         m_comboSymlinkHandling->setCurrentIndex( SYM_NO_CHANGE );
 
     switch( o.whiteSpaceTreatment() ) {
-    case K3bIsoOptions::strip:
+    case K3b::IsoOptions::strip:
         m_comboSpaceHandling->setCurrentIndex( WS_STRIP );
         break;
-    case K3bIsoOptions::extended:
+    case K3b::IsoOptions::extended:
         m_comboSpaceHandling->setCurrentIndex( WS_EXTENDED_STRIP );
         break;
-    case K3bIsoOptions::replace:
+    case K3b::IsoOptions::replace:
         m_comboSpaceHandling->setCurrentIndex( WS_REPLACE );
         break;
     default:
@@ -360,7 +362,7 @@ void K3bDataImageSettingsWidget::load( const K3bIsoOptions& o )
 }
 
 
-void K3bDataImageSettingsWidget::save( K3bIsoOptions& o )
+void K3b::DataImageSettingsWidget::save( K3b::IsoOptions& o )
 {
     if( m_comboFilesystems->currentIndex() != FS_CUSTOM )
         m_customFsDlg->w->load( s_fsPresets[m_comboFilesystems->currentIndex()] );
@@ -374,16 +376,16 @@ void K3bDataImageSettingsWidget::save( K3bIsoOptions& o )
 
     switch( m_comboSpaceHandling->currentIndex() ) {
     case WS_STRIP:
-        o.setWhiteSpaceTreatment( K3bIsoOptions::strip );
+        o.setWhiteSpaceTreatment( K3b::IsoOptions::strip );
         break;
     case WS_EXTENDED_STRIP:
-        o.setWhiteSpaceTreatment( K3bIsoOptions::extended );
+        o.setWhiteSpaceTreatment( K3b::IsoOptions::extended );
         break;
     case WS_REPLACE:
-        o.setWhiteSpaceTreatment( K3bIsoOptions::replace );
+        o.setWhiteSpaceTreatment( K3b::IsoOptions::replace );
         break;
     default:
-        o.setWhiteSpaceTreatment( K3bIsoOptions::noChange );
+        o.setWhiteSpaceTreatment( K3b::IsoOptions::noChange );
     }
     o.setWhiteSpaceTreatmentReplaceString( m_editReplace->text() );
 

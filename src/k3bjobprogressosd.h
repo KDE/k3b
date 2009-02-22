@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005-2009 Sebastian Trueg <trueg@k3b.org>
  *
@@ -25,66 +25,68 @@ class QPaintEvent;
 class QMouseEvent;
 class KConfigGroup;
 
-/**
- * An OSD displaying a text and a progress bar.
- *
- * Insprired by Amarok's OSD (I also took a bit of their code. :)
- */
-class K3bJobProgressOSD : public QWidget
-{
-    Q_OBJECT
-
-public:
-    K3bJobProgressOSD( QWidget* parent = 0 );
-    ~K3bJobProgressOSD();
-
-    int screen() const { return m_screen; }
-    const QPoint& position() const { return m_position; }
-
-    void readSettings( const KConfigGroup& );
-    void saveSettings( KConfigGroup );
-
-public Q_SLOTS:
-    void setScreen( int );
-    void setText( const QString& );
-    void setProgress( int );
-
+namespace K3b {
     /**
-     * The position refers to one of the corners of the widget
-     * regarding on the value of the x and y coordinate.
-     * If for example the x coordinate is bigger than half the screen
-     * width it refers to the left edge of the widget.
+     * An OSD displaying a text and a progress bar.
+     *
+     * Insprired by Amarok's OSD (I also took a bit of their code. :)
      */
-    void setPosition( const QPoint& );
+    class JobProgressOSD : public QWidget
+    {
+        Q_OBJECT
 
-    void show();
+    public:
+        JobProgressOSD( QWidget* parent = 0 );
+        ~JobProgressOSD();
 
-protected:
-    void paintEvent( QPaintEvent* );
-    void mousePressEvent( QMouseEvent* );
-    void mouseReleaseEvent( QMouseEvent* );
-    void mouseMoveEvent( QMouseEvent* );
-    void renderOSD();
-    void reposition( QSize size = QSize() );
+        int screen() const { return m_screen; }
+        const QPoint& position() const { return m_position; }
 
-protected Q_SLOTS:
-    void refresh();
+        void readSettings( const KConfigGroup& );
+        void saveSettings( KConfigGroup );
 
-private:
-    /**
-     * Ensure that the position is inside m_screen 
-     */
-    QPoint fixupPosition( const QPoint& p );
-    static const int s_outerMargin = 15;
+    public Q_SLOTS:
+        void setScreen( int );
+        void setText( const QString& );
+        void setProgress( int );
 
-    QPixmap m_osdBuffer;
-    bool m_dirty;
-    QString m_text;
-    int m_progress;
-    bool m_dragging;
-    QPoint m_dragOffset;
-    int m_screen;
-    QPoint m_position;
-};
+        /**
+         * The position refers to one of the corners of the widget
+         * regarding on the value of the x and y coordinate.
+         * If for example the x coordinate is bigger than half the screen
+         * width it refers to the left edge of the widget.
+         */
+        void setPosition( const QPoint& );
+
+        void show();
+
+    protected:
+        void paintEvent( QPaintEvent* );
+        void mousePressEvent( QMouseEvent* );
+        void mouseReleaseEvent( QMouseEvent* );
+        void mouseMoveEvent( QMouseEvent* );
+        void renderOSD();
+        void reposition( QSize size = QSize() );
+
+    protected Q_SLOTS:
+        void refresh();
+
+    private:
+        /**
+         * Ensure that the position is inside m_screen
+         */
+        QPoint fixupPosition( const QPoint& p );
+        static const int s_outerMargin = 15;
+
+        QPixmap m_osdBuffer;
+        bool m_dirty;
+        QString m_text;
+        int m_progress;
+        bool m_dragging;
+        QPoint m_dragOffset;
+        int m_screen;
+        QPoint m_position;
+    };
+}
 
 #endif

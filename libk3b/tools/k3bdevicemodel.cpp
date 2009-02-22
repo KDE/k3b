@@ -22,42 +22,42 @@
 #include <KLocale>
 
 
-class K3bDeviceModel::Private
+class K3b::DeviceModel::Private
 {
 public:
-    QList<K3bDevice::Device*> devices;
-    QHash<K3bDevice::Device*, bool> devicesValid;
+    QList<K3b::Device::Device*> devices;
+    QHash<K3b::Device::Device*, bool> devicesValid;
 };
 
 
-K3bDeviceModel::K3bDeviceModel( QObject* parent )
+K3b::DeviceModel::DeviceModel( QObject* parent )
     : QAbstractItemModel( parent ),
       d( new Private() )
 {
-    connect( k3bcore->mediaCache(), SIGNAL( mediumChanged( K3bDevice::Device* ) ),
-             this, SLOT( slotMediumChanged( K3bDevice::Device* ) ) );
-    connect( k3bcore->mediaCache(), SIGNAL( checkingMedium( K3bDevice::Device*, QString ) ),
-             this, SLOT( slotCheckingMedium( K3bDevice::Device*, QString ) ) );
+    connect( k3bcore->mediaCache(), SIGNAL( mediumChanged( K3b::Device::Device* ) ),
+             this, SLOT( slotMediumChanged( K3b::Device::Device* ) ) );
+    connect( k3bcore->mediaCache(), SIGNAL( checkingMedium( K3b::Device::Device*, QString ) ),
+             this, SLOT( slotCheckingMedium( K3b::Device::Device*, QString ) ) );
 }
 
 
-K3bDeviceModel::~K3bDeviceModel()
+K3b::DeviceModel::~DeviceModel()
 {
     delete d;
 }
 
 
-void K3bDeviceModel::setDevices( const QList<K3bDevice::Device*>& devices )
+void K3b::DeviceModel::setDevices( const QList<K3b::Device::Device*>& devices )
 {
     d->devices = devices;
-    foreach( K3bDevice::Device* dev, devices ) {
+    foreach( K3b::Device::Device* dev, devices ) {
         d->devicesValid[dev] = true;
     }
     reset();
 }
 
 
-void K3bDeviceModel::addDevice( K3bDevice::Device* dev )
+void K3b::DeviceModel::addDevice( K3b::Device::Device* dev )
 {
     if ( !d->devices.contains( dev ) ) {
         d->devices.append( dev );
@@ -66,7 +66,7 @@ void K3bDeviceModel::addDevice( K3bDevice::Device* dev )
 }
 
 
-void K3bDeviceModel::removeDevice( K3bDevice::Device* dev )
+void K3b::DeviceModel::removeDevice( K3b::Device::Device* dev )
 {
     if ( d->devices.contains( dev ) ) {
         d->devices.removeOne( dev );
@@ -75,9 +75,9 @@ void K3bDeviceModel::removeDevice( K3bDevice::Device* dev )
 }
 
 
-void K3bDeviceModel::addDevices( const QList<K3bDevice::Device*>& devs )
+void K3b::DeviceModel::addDevices( const QList<K3b::Device::Device*>& devs )
 {
-    Q_FOREACH( K3bDevice::Device* dev, devs ) {
+    Q_FOREACH( K3b::Device::Device* dev, devs ) {
         if ( !d->devices.contains( dev ) ) {
             d->devices.append( dev );
         }
@@ -86,26 +86,26 @@ void K3bDeviceModel::addDevices( const QList<K3bDevice::Device*>& devs )
 }
 
 
-void K3bDeviceModel::clear()
+void K3b::DeviceModel::clear()
 {
     d->devices.clear();
     reset();
 }
 
 
-QList<K3bDevice::Device*> K3bDeviceModel::devices() const
+QList<K3b::Device::Device*> K3b::DeviceModel::devices() const
 {
     return d->devices;
 }
 
 
-K3bDevice::Device* K3bDeviceModel::deviceForIndex( const QModelIndex& index ) const
+K3b::Device::Device* K3b::DeviceModel::deviceForIndex( const QModelIndex& index ) const
 {
-    return static_cast<K3bDevice::Device*>( index.internalPointer() );
+    return static_cast<K3b::Device::Device*>( index.internalPointer() );
 }
 
 
-QModelIndex K3bDeviceModel::indexForDevice( K3bDevice::Device* dev ) const
+QModelIndex K3b::DeviceModel::indexForDevice( K3b::Device::Device* dev ) const
 {
     for ( int i = 0; i < d->devices.count(); ++i ) {
         if ( d->devices[i] == dev ) {
@@ -116,7 +116,7 @@ QModelIndex K3bDeviceModel::indexForDevice( K3bDevice::Device* dev ) const
 }
 
 
-int K3bDeviceModel::columnCount( const QModelIndex& parent ) const
+int K3b::DeviceModel::columnCount( const QModelIndex& parent ) const
 {
     Q_UNUSED( parent );
     // TODO: allow multiple columns at some point (so far we do not need it)
@@ -124,10 +124,10 @@ int K3bDeviceModel::columnCount( const QModelIndex& parent ) const
 }
 
 
-QVariant K3bDeviceModel::data( const QModelIndex& index, int role ) const
+QVariant K3b::DeviceModel::data( const QModelIndex& index, int role ) const
 {
-    K3bDevice::Device* dev = deviceForIndex( index );
-    K3bMedium medium = k3bcore->mediaCache()->medium( dev );
+    K3b::Device::Device* dev = deviceForIndex( index );
+    K3b::Medium medium = k3bcore->mediaCache()->medium( dev );
 
     switch( role ) {
     case Qt::DisplayRole:
@@ -162,21 +162,21 @@ QVariant K3bDeviceModel::data( const QModelIndex& index, int role ) const
 }
 
 
-QModelIndex K3bDeviceModel::index( int row, int column, const QModelIndex& parent ) const
+QModelIndex K3b::DeviceModel::index( int row, int column, const QModelIndex& parent ) const
 {
     Q_UNUSED( parent );
     return row < d->devices.count() ? createIndex( row, column, d->devices[row] ) : QModelIndex();
 }
 
 
-QModelIndex K3bDeviceModel::parent( const QModelIndex& index ) const
+QModelIndex K3b::DeviceModel::parent( const QModelIndex& index ) const
 {
     Q_UNUSED( index );
     return QModelIndex();
 }
 
 
-int K3bDeviceModel::rowCount( const QModelIndex& parent ) const
+int K3b::DeviceModel::rowCount( const QModelIndex& parent ) const
 {
     if ( !parent.isValid() ) {
         return d->devices.count();
@@ -187,7 +187,7 @@ int K3bDeviceModel::rowCount( const QModelIndex& parent ) const
 }
 
 
-void K3bDeviceModel::slotMediumChanged( K3bDevice::Device* dev )
+void K3b::DeviceModel::slotMediumChanged( K3b::Device::Device* dev )
 {
     QModelIndex index = indexForDevice( dev );
     if ( index.isValid() ) {
@@ -197,7 +197,7 @@ void K3bDeviceModel::slotMediumChanged( K3bDevice::Device* dev )
 }
 
 
-void K3bDeviceModel::slotCheckingMedium( K3bDevice::Device* dev, const QString& /*message*/ )
+void K3b::DeviceModel::slotCheckingMedium( K3b::Device::Device* dev, const QString& /*message*/ )
 {
     QModelIndex index = indexForDevice( dev );
     if ( index.isValid() ) {

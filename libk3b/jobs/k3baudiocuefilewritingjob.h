@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,47 +19,50 @@
 #include "k3b_export.h"
 #include "k3bglobals.h"
 
-namespace K3bDevice {
-    class Device;
+namespace K3b {
+
+    namespace Device {
+        class Device;
+    }
+
+
+    class LIBK3B_EXPORT AudioCueFileWritingJob : public BurnJob
+    {
+        Q_OBJECT
+
+    public:
+        AudioCueFileWritingJob( JobHandler*, QObject* parent = 0 );
+        ~AudioCueFileWritingJob();
+
+        Device::Device* writer() const;
+
+        QString jobDescription() const;
+        QString jobDetails() const;
+
+        QString cueFile() const;
+
+    public Q_SLOTS:
+        void start();
+        void cancel();
+
+        void setCueFile( const QString& );
+        void setSpeed( int s );
+        void setBurnDevice( Device::Device* dev );
+        void setWritingMode( WritingMode mode );
+        void setSimulate( bool b );
+        void setCopies( int c );
+        void setOnTheFly( bool b );
+        void setTempDir( const QString& );
+
+    private Q_SLOTS:
+        void slotAnalyserJobFinished(bool);
+
+    private:
+        void importCueInProject();
+
+        class Private;
+        Private* const d;
+    };
 }
-
-
-class LIBK3B_EXPORT K3bAudioCueFileWritingJob : public K3bBurnJob
-{
-    Q_OBJECT
-
-public:
-    K3bAudioCueFileWritingJob( K3bJobHandler*, QObject* parent = 0 );
-    ~K3bAudioCueFileWritingJob();
-
-    K3bDevice::Device* writer() const;
-	
-    QString jobDescription() const;
-    QString jobDetails() const;
-
-    QString cueFile() const;
-
-public Q_SLOTS:
-    void start();
-    void cancel();
-
-    void setCueFile( const QString& );
-    void setSpeed( int s );
-    void setBurnDevice( K3bDevice::Device* dev );
-    void setWritingMode( K3b::WritingMode mode );
-    void setSimulate( bool b );
-    void setCopies( int c );
-    void setOnTheFly( bool b );
-    void setTempDir( const QString& );
-
-private Q_SLOTS:
-    void slotAnalyserJobFinished(bool);
-
-private:
-    void importCueInProject();
-
-    class Private;
-    Private* const d;
-};
 
 #endif

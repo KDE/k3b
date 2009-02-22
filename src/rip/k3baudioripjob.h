@@ -23,88 +23,90 @@
 #include <libkcddb/cdinfo.h>
 
 
-class K3bAudioEncoder;
-namespace K3bDevice {
-    class Device;
+namespace K3b {
+    class AudioEncoder;
+
+    namespace Device {
+        class Device;
+    }
+
+    class AudioRipJob : public ThreadJob
+    {
+        Q_OBJECT
+
+    public:
+        AudioRipJob( JobHandler* hdl, QObject* parent );
+        ~AudioRipJob();
+
+        QString jobDescription() const;
+        QString jobDetails() const;
+
+        // paranoia settings
+        void setParanoiaMode( int mode );
+        void setMaxRetries( int r );
+        void setNeverSkip( bool b );
+
+        void setSingleFile( bool b ) { m_singleFile = b; }
+
+        void setUseIndex0( bool b ) { m_useIndex0 = b; }
+
+        void setDevice( Device::Device* dev ) { m_device = dev; }
+
+        void setCddbEntry( const KCDDB::CDInfo& e ) { m_cddbEntry = e; }
+
+        // if 0 (default) wave files are created
+        void setEncoder( AudioEncoder* f );
+
+        /**
+         * Used for encoders that support multiple formats
+         */
+        void setFileType( const QString& );
+
+        /**
+         * 1 is the first track
+         */
+        void setTracksToRip( const QVector<QPair<int, QString> >& t ) { m_tracks = t; }
+
+        void setWritePlaylist( bool b ) { m_writePlaylist = b; }
+        void setPlaylistFilename( const QString& s ) { m_playlistFilename = s; }
+        void setUseRelativePathInPlaylist( bool b ) { m_relativePathInPlaylist = b; }
+        void setWriteCueFile( bool b ) { m_writeCueFile = b; }
+
+    public Q_SLOTS:
+        void start();
+
+    private:
+        bool run();
+        void jobFinished( bool );
+
+        bool ripTrack( int track, const QString& filename );
+        void cleanupAfterCancellation();
+        bool writePlaylist();
+        bool writeCueFile();
+
+        /**
+         * Finds a relative path from baseDir to absPath
+         */
+        QString findRelativePath( const QString& absPath, const QString& baseDir );
+
+        KCDDB::CDInfo m_cddbEntry;
+        Device::Device* m_device;
+
+        bool m_bUsePattern;
+        bool m_singleFile;
+        bool m_useIndex0;
+
+        bool m_writePlaylist;
+        bool m_relativePathInPlaylist;
+        QString m_playlistFilename;
+
+        bool m_writeCueFile;
+
+        QVector<QPair<int, QString> > m_tracks;
+
+        class Private;
+        Private* d;
+    };
 }
-
-
-class K3bAudioRipJob : public K3bThreadJob
-{
-    Q_OBJECT
-
-public:
-    K3bAudioRipJob( K3bJobHandler* hdl, QObject* parent );
-    ~K3bAudioRipJob();
-
-    QString jobDescription() const;
-    QString jobDetails() const;
-
-    // paranoia settings
-    void setParanoiaMode( int mode );
-    void setMaxRetries( int r );
-    void setNeverSkip( bool b );
-
-    void setSingleFile( bool b ) { m_singleFile = b; }
-
-    void setUseIndex0( bool b ) { m_useIndex0 = b; }
-
-    void setDevice( K3bDevice::Device* dev ) { m_device = dev; }
-
-    void setCddbEntry( const KCDDB::CDInfo& e ) { m_cddbEntry = e; }
-
-    // if 0 (default) wave files are created
-    void setEncoder( K3bAudioEncoder* f );
-
-    /**
-     * Used for encoders that support multiple formats
-     */
-    void setFileType( const QString& );
-
-    /**
-     * 1 is the first track
-     */
-    void setTracksToRip( const QVector<QPair<int, QString> >& t ) { m_tracks = t; }
-
-    void setWritePlaylist( bool b ) { m_writePlaylist = b; }
-    void setPlaylistFilename( const QString& s ) { m_playlistFilename = s; }
-    void setUseRelativePathInPlaylist( bool b ) { m_relativePathInPlaylist = b; }
-    void setWriteCueFile( bool b ) { m_writeCueFile = b; }
-
-public Q_SLOTS:
-    void start();
-
-private:
-    bool run();
-    void jobFinished( bool );
-
-    bool ripTrack( int track, const QString& filename );
-    void cleanupAfterCancellation();
-    bool writePlaylist();
-    bool writeCueFile();
-
-    /**
-     * Finds a relative path from baseDir to absPath
-     */
-    QString findRelativePath( const QString& absPath, const QString& baseDir );
-
-    KCDDB::CDInfo m_cddbEntry;
-    K3bDevice::Device* m_device;
-
-    bool m_bUsePattern;
-    bool m_singleFile;
-    bool m_useIndex0;
-
-    bool m_writePlaylist;
-    bool m_relativePathInPlaylist;
-    QString m_playlistFilename;
-
-    bool m_writeCueFile;
-
-    QVector<QPair<int, QString> > m_tracks;
-
-    class Private;
-    Private* d;
-};
 
 #endif

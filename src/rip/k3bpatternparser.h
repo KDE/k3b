@@ -26,7 +26,8 @@ namespace KCDDB {
 /**
  *@author Sebastian Trueg
  */
-class K3bPatternParser
+namespace K3b {
+class PatternParser
 {
 public:
     static QString parsePattern( const KCDDB::CDInfo& entry,
@@ -49,5 +50,6 @@ private:
         DATE = 'd'
     };
 };
+}
 
 #endif

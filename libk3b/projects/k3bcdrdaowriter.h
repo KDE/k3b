@@ -22,124 +22,125 @@
 #include "k3babstractwriter.h"
 #include "k3b_export.h"
 
-class K3bExternalBin;
-class K3bProcess;
 class Q3Socket;
 
+namespace K3b {
+    class ExternalBin;
+    class Process;
 
+    class LIBK3B_EXPORT CdrdaoWriter : public AbstractWriter
+    {
+        Q_OBJECT
 
-class LIBK3B_EXPORT K3bCdrdaoWriter : public K3bAbstractWriter
-{
-    Q_OBJECT
+    public:
+        enum Command { WRITE, COPY, READ, BLANK };
+        enum BlankMode { FULL, MINIMAL };
+        enum SubMode { None, RW, RW_RAW };
 
-public:
-    enum Command { WRITE, COPY, READ, BLANK };
-    enum BlankMode { FULL, MINIMAL };
-    enum SubMode { None, RW, RW_RAW };
+        CdrdaoWriter( Device::Device* dev, JobHandler*,
+                      QObject* parent = 0 );
+        ~CdrdaoWriter();
 
-    K3bCdrdaoWriter( K3bDevice::Device* dev, K3bJobHandler*, 
-                     QObject* parent = 0 );
-    ~K3bCdrdaoWriter();
+        /**
+         * to be used in chain: addArgument(x)->addArgument(y)
+         */
+        CdrdaoWriter* addArgument( const QString& );
+        Device::Device* sourceDevice() { return m_sourceDevice; };
 
-    /**
-     * to be used in chain: addArgument(x)->addArgument(y)
-     */
-    K3bCdrdaoWriter* addArgument( const QString& );
-    K3bDevice::Device* sourceDevice() { return m_sourceDevice; };
+        bool active() const;
 
-    bool active() const;
+    private:
+        void reinitParser();
+        void parseCdrdaoLine( const QString& line );
+        void parseCdrdaoWrote( const QString& line );
+        void parseCdrdaoError( const QString& line );
 
-private:
-    void reinitParser();
-    void parseCdrdaoLine( const QString& line );
-    void parseCdrdaoWrote( const QString& line );
-    void parseCdrdaoError( const QString& line ); 
+    public Q_SLOTS:
+        void start();
+        void cancel();
 
-public Q_SLOTS:
-    void start();
-    void cancel();
+        // options
+        // ---------------------
+        void setCommand( int c ) { m_command = c; }
+        void setBlankMode( int b ) { m_blankMode = b; }
+        void setMulti( bool b ) { m_multi = b; }
+        void setForce( bool b ) { m_force = b; }
+        void setOnTheFly( bool b ) { m_onTheFly = b; }
+        void setDataFile( const QString& s ) { m_dataFile = s; }
+        void setTocFile( const QString& s ) { m_tocFile = s; }
 
-    // options
-    // ---------------------
-    void setCommand( int c ) { m_command = c; }
-    void setBlankMode( int b ) { m_blankMode = b; }
-    void setMulti( bool b ) { m_multi = b; }
-    void setForce( bool b ) { m_force = b; }
-    void setOnTheFly( bool b ) { m_onTheFly = b; }
-    void setDataFile( const QString& s ) { m_dataFile = s; }
-    void setTocFile( const QString& s ) { m_tocFile = s; }
-
-    void setSourceDevice( K3bDevice::Device* dev ) { m_sourceDevice = dev; }
-    void setFastToc( bool b ) { m_fastToc = b; }
-    void setReadRaw( bool b ) { m_readRaw = b; }
-    void setReadSubchan(SubMode m) { m_readSubchan=m; };
-    void setParanoiaMode( int i ) { m_paranoiaMode = i; }
-    void setTaoSource(bool b) { m_taoSource=b; };
-    void setTaoSourceAdjust(int a) { m_taoSourceAdjust=a; };
-    void setSession(int s) { m_session=s; };
-    void setEject(bool e) { m_eject=e; };  
+        void setSourceDevice( Device::Device* dev ) { m_sourceDevice = dev; }
+        void setFastToc( bool b ) { m_fastToc = b; }
+        void setReadRaw( bool b ) { m_readRaw = b; }
+        void setReadSubchan(SubMode m) { m_readSubchan=m; };
+        void setParanoiaMode( int i ) { m_paranoiaMode = i; }
+        void setTaoSource(bool b) { m_taoSource=b; };
+        void setTaoSourceAdjust(int a) { m_taoSourceAdjust=a; };
+        void setSession(int s) { m_session=s; };
+        void setEject(bool e) { m_eject=e; };
 // ---------------------
 
-private Q_SLOTS:
-    void slotStdLine( const QString& line );
-    void slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus );
-    void parseCdrdaoMessage();
-    void slotThroughput( int t );
+    private Q_SLOTS:
+        void slotStdLine( const QString& line );
+        void slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus );
+        void parseCdrdaoMessage();
+        void slotThroughput( int t );
 
-private:
-    void unknownCdrdaoLine( const QString& );
-    void prepareArgumentList();
-    void setWriteArguments();
-    void setReadArguments();
-    void setCopyArguments();
-    void setBlankArguments();
-    void setCommonArguments();
+    private:
+        void unknownCdrdaoLine( const QString& );
+        void prepareArgumentList();
+        void setWriteArguments();
+        void setReadArguments();
+        void setCopyArguments();
+        void setBlankArguments();
+        void setCommonArguments();
 
-    bool cueSheet();
+        bool cueSheet();
 
-    QString findDriverFile( const K3bExternalBin* bin );
-    bool defaultToGenericMMC( K3bDevice::Device* dev, bool writer );
+        QString findDriverFile( const ExternalBin* bin );
+        bool defaultToGenericMMC( Device::Device* dev, bool writer );
 
-    // options
-    // ---------------------
-    int        m_command;
-    int        m_blankMode;
-    K3bDevice::Device* m_sourceDevice;
-    QString    m_dataFile;
-    QString    m_tocFile;
-    QString    m_cueFileLnk;
-    QString    m_binFileLnk;
-    QString m_backupTocFile;
-    bool       m_readRaw;
-    bool       m_multi;
-    bool       m_force;
-    bool       m_onTheFly;
-    bool       m_fastToc;
-    SubMode    m_readSubchan;
-    bool       m_taoSource;
-    int        m_taoSourceAdjust;
-    int        m_paranoiaMode;
-    int        m_session;
-    bool       m_eject;
-    // ---------------------
+        // options
+        // ---------------------
+        int        m_command;
+        int        m_blankMode;
+        Device::Device* m_sourceDevice;
+        QString    m_dataFile;
+        QString    m_tocFile;
+        QString    m_cueFileLnk;
+        QString    m_binFileLnk;
+        QString m_backupTocFile;
+        bool       m_readRaw;
+        bool       m_multi;
+        bool       m_force;
+        bool       m_onTheFly;
+        bool       m_fastToc;
+        SubMode    m_readSubchan;
+        bool       m_taoSource;
+        int        m_taoSourceAdjust;
+        int        m_paranoiaMode;
+        int        m_session;
+        bool       m_eject;
+        // ---------------------
 
-    const K3bExternalBin* m_cdrdaoBinObject;
-    K3bProcess* m_process;
+        const ExternalBin* m_cdrdaoBinObject;
+        Process* m_process;
 
-    int m_cdrdaoComm[2];
-    Q3Socket         *m_comSock;
+        int m_cdrdaoComm[2];
+        Q3Socket         *m_comSock;
 
-    bool m_canceled;
+        bool m_canceled;
 
-    bool m_knownError;
+        bool m_knownError;
 
 // parser
 
-    int m_size;
-    int m_currentTrack;
+        int m_size;
+        int m_currentTrack;
 
-    class Private;
-    Private* d;
-};
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

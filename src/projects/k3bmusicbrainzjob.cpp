@@ -24,23 +24,23 @@
 #include <klocale.h>
 
 
-class K3bMusicBrainzJob::Private
+class K3b::MusicBrainzJob::Private
 {
 public:
-    QList<K3bAudioTrack*> tracks;
+    QList<K3b::AudioTrack*> tracks;
     int currentTrackIndex;
     bool canceled;
-    K3bMusicBrainzTrackLookupJob* mbTrackLookupJob;
+    K3b::MusicBrainzTrackLookupJob* mbTrackLookupJob;
 };
 
 
-// cannot use this as parent for the K3bSimpleJobHandler since this has not been constructed yet
-K3bMusicBrainzJob::K3bMusicBrainzJob( QWidget* parent )
-    : K3bJob( new K3bSimpleJobHandler( 0 ), parent ),
+// cannot use this as parent for the K3b::SimpleJobHandler since this has not been constructed yet
+K3b::MusicBrainzJob::MusicBrainzJob( QWidget* parent )
+    : K3b::Job( new K3b::SimpleJobHandler( 0 ), parent ),
       d( new Private() )
 {
     d->canceled = false;
-    d->mbTrackLookupJob = new K3bMusicBrainzTrackLookupJob( this, this );
+    d->mbTrackLookupJob = new K3b::MusicBrainzTrackLookupJob( this, this );
 
     connect( d->mbTrackLookupJob, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)), Qt::QueuedConnection );
     connect( d->mbTrackLookupJob, SIGNAL(percent(int)), this, SLOT(slotTrmPercent(int)), Qt::QueuedConnection );
@@ -49,26 +49,26 @@ K3bMusicBrainzJob::K3bMusicBrainzJob( QWidget* parent )
 }
 
 
-K3bMusicBrainzJob::~K3bMusicBrainzJob()
+K3b::MusicBrainzJob::~MusicBrainzJob()
 {
     delete jobHandler();
     delete d;
 }
 
 
-bool K3bMusicBrainzJob::hasBeenCanceled() const
+bool K3b::MusicBrainzJob::hasBeenCanceled() const
 {
     return d->canceled;
 }
 
 
-void K3bMusicBrainzJob::setTracks( const QList<K3bAudioTrack*>& tracks )
+void K3b::MusicBrainzJob::setTracks( const QList<K3b::AudioTrack*>& tracks )
 {
     d->tracks = tracks;
 }
 
 
-void K3bMusicBrainzJob::start()
+void K3b::MusicBrainzJob::start()
 {
     jobStarted();
 
@@ -80,28 +80,28 @@ void K3bMusicBrainzJob::start()
 }
 
 
-void K3bMusicBrainzJob::cancel()
+void K3b::MusicBrainzJob::cancel()
 {
     d->canceled = true;
     d->mbTrackLookupJob->cancel();
 }
 
 
-void K3bMusicBrainzJob::slotTrmPercent( int p )
+void K3b::MusicBrainzJob::slotTrmPercent( int p )
 {
     // the easy way (inaccurate)
     emit percent( (100*d->currentTrackIndex + p) / d->tracks.count() );
 }
 
 
-void K3bMusicBrainzJob::slotMbJobFinished( bool success )
+void K3b::MusicBrainzJob::slotMbJobFinished( bool success )
 {
     if( hasBeenCanceled() ) {
         emit canceled();
         jobFinished(false);
     }
     else {
-        K3bAudioTrack* currentTrack = d->tracks.at( d->currentTrackIndex );
+        K3b::AudioTrack* currentTrack = d->tracks.at( d->currentTrackIndex );
 
         if( success ) {
             // found entries

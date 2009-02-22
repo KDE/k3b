@@ -23,20 +23,25 @@
 
 #include <QtCore/QList>
 
-class K3bAudioTrack;
-class K3bAudioTrackWidget;
+namespace K3b {
+    class AudioTrack;
+}
+namespace K3b {
+    class AudioTrackWidget;
+}
 
 /**
  *@author Sebastian Trueg
  */
 
-class K3bAudioTrackDialog : public KDialog
+namespace K3b {
+class AudioTrackDialog : public KDialog
 {
     Q_OBJECT
 
 public:
-    K3bAudioTrackDialog( const QList<K3bAudioTrack*>&, QWidget *parent=0);
-    ~K3bAudioTrackDialog();
+    AudioTrackDialog( const QList<AudioTrack*>&, QWidget *parent=0);
+    ~AudioTrackDialog();
 	
 protected Q_SLOTS:
     void slotOk();
@@ -45,12 +50,13 @@ protected Q_SLOTS:
     void updateTrackLengthDisplay();
 
 private:
-    QList<K3bAudioTrack*> m_tracks;
+    QList<AudioTrack*> m_tracks;
 
-    K3bAudioTrackWidget* m_audioTrackWidget;
+    AudioTrackWidget* m_audioTrackWidget;
 
     void setupGui();
     void setupConnections();
 };
+}
 
 #endif

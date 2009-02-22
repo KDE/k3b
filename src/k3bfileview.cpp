@@ -38,27 +38,27 @@
 #include <KUrl>
 #include <KDebug>
 
-K3bFileView::K3bFileView(QWidget *parent )
-    : K3bContentsView( false, parent)
+K3b::FileView::FileView(QWidget *parent )
+    : K3b::ContentsView( false, parent)
 {
     setupGUI();
 }
 
 
-K3bFileView::~K3bFileView()
+K3b::FileView::~FileView()
 {
 }
 
 
-KActionCollection* K3bFileView::actionCollection() const
+KActionCollection* K3b::FileView::actionCollection() const
 {
     return m_dirOp->actionCollection();
 }
 
 
-void K3bFileView::setupGUI()
+void K3b::FileView::setupGUI()
 {
-    m_dirOp = new K3bDirOperator( KUrl(QDir::home().absolutePath()), this );
+    m_dirOp = new K3b::DirOperator( KUrl(QDir::home().absolutePath()), this );
     m_toolBox = new KToolBar( this );
     m_toolBox->setToolButtonStyle( Qt::ToolButtonIconOnly );
 
@@ -109,31 +109,31 @@ void K3bFileView::setupGUI()
 }
 
 
-void K3bFileView::setUrl(const KUrl& url, bool forward)
+void K3b::FileView::setUrl(const KUrl& url, bool forward)
 {
     kDebug() << url;
     m_dirOp->setUrl( url, forward );
 }
 
 
-KUrl K3bFileView::url()
+KUrl K3b::FileView::url()
 {
     return m_dirOp->url();
 }
 
 
-void K3bFileView::setAutoUpdate( bool b )
+void K3b::FileView::setAutoUpdate( bool b )
 {
     m_dirOp->dirLister()->setAutoUpdate( b );
 }
 
 
-void K3bFileView::slotFileHighlighted( const KFileItem & )
+void K3b::FileView::slotFileHighlighted( const KFileItem & )
 {
 }
 
 
-void K3bFileView::slotFilterChanged()
+void K3b::FileView::slotFilterChanged()
 {
     QString filter = m_filterWidget->currentFilter();
     m_dirOp->clearFilter();
@@ -150,19 +150,19 @@ void K3bFileView::slotFilterChanged()
 }
 
 
-void K3bFileView::reload()
+void K3b::FileView::reload()
 {
     m_dirOp->rereadDir();
 }
 
 
-void K3bFileView::saveConfig( KConfigGroup grp )
+void K3b::FileView::saveConfig( KConfigGroup grp )
 {
     m_dirOp->writeConfig(grp);
 }
 
 
-void K3bFileView::readConfig( const KConfigGroup& grp )
+void K3b::FileView::readConfig( const KConfigGroup& grp )
 {
     m_dirOp->readConfig(grp);
 }

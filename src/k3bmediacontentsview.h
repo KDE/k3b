@@ -29,22 +29,23 @@
  *
  * TODO: how about giving this one a KActionCollection so it can handle the toolbar automatically
  */
-class K3bMediaContentsView : public K3bContentsView
+namespace K3b {
+class MediaContentsView : public ContentsView
 {
     Q_OBJECT
 
 public:
-    virtual ~K3bMediaContentsView();
+    virtual ~MediaContentsView();
 
-    K3bMedium medium() const;
+    Medium medium() const;
 
     /**
      * Equals medium().device()
      */
-    K3bDevice::Device* device() const;
+    Device::Device* device() const;
 
     /**
-     * \return A bitwise or of K3bMedium::ContentType which
+     * \return A bitwise or of Medium::ContentType which
      * represents the content types that can be displayed by this
      * medium view.
      */
@@ -62,12 +63,12 @@ public Q_SLOTS:
     /**
      * Has the same effect as reload( k3bappcore->mediaCache()->medium( dev ) );
      */
-    void reload( K3bDevice::Device* dev );
+    void reload( Device::Device* dev );
 
     /**
      * Has the same effect as setMedium( m ), reload()
      */
-    void reload( const K3bMedium& m );
+    void reload( const Medium& m );
 
     /**
      * Enable or disable auto reloading when a new medium is inserted.
@@ -84,7 +85,7 @@ public Q_SLOTS:
     virtual void enableInteraction( bool enable );
 
 protected:
-    K3bMediaContentsView( bool withHeader,
+    MediaContentsView( bool withHeader,
                           int mediumContent,
                           int mediumTypes,
                           int mediumState,
@@ -92,9 +93,9 @@ protected:
 
     /**
      * Changes the medium without reloading the contents.
-     * Do not use, use reload( const K3bMedium& ) instead.
+     * Do not use, use reload( const Medium& ) instead.
      */
-    void setMedium( const K3bMedium& );
+    void setMedium( const Medium& );
 
     /**
      * Called by reload. Reimplement to actually display
@@ -103,11 +104,12 @@ protected:
     virtual void reloadMedium() = 0;
 
 private Q_SLOTS:
-    void slotMediumChanged( K3bDevice::Device* );
+    void slotMediumChanged( Device::Device* );
 
 private:
     class Private;
     Private* d;
 };
+}
 
 #endif

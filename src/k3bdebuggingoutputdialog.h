@@ -20,12 +20,13 @@
 
 class QTextEdit;
 
-class K3bDebuggingOutputDialog : public KDialog
+namespace K3b {
+class DebuggingOutputDialog : public KDialog
 {
   Q_OBJECT
 
  public:
-  K3bDebuggingOutputDialog( QWidget* parent );
+  DebuggingOutputDialog( QWidget* parent );
 
  public Q_SLOTS:
   void setOutput( const QString& );
@@ -36,6 +37,7 @@ private:
 
   QTextEdit* debugView;
 };
+}
 
 
 

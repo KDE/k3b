@@ -28,7 +28,7 @@
 #include <k3bexternalbinmanager.h>
 
 
-K3bVideoCdInfo::K3bVideoCdInfo( QObject* parent )
+K3b::VideoCdInfo::VideoCdInfo( QObject* parent )
         : QObject( parent )
 {
     m_process = 0L;
@@ -36,12 +36,12 @@ K3bVideoCdInfo::K3bVideoCdInfo( QObject* parent )
 }
 
 
-K3bVideoCdInfo::~K3bVideoCdInfo()
+K3b::VideoCdInfo::~VideoCdInfo()
 {
     delete m_process;
 }
 
-void K3bVideoCdInfo::cancelAll()
+void K3b::VideoCdInfo::cancelAll()
 {
     if ( m_process->isRunning() ) {
         m_process->disconnect( this );
@@ -49,16 +49,16 @@ void K3bVideoCdInfo::cancelAll()
     }
 }
 
-void K3bVideoCdInfo::info( const QString& device )
+void K3b::VideoCdInfo::info( const QString& device )
 {
     if ( !k3bcore ->externalBinManager() ->foundBin( "vcdxrip" ) ) {
-        kDebug() << "(K3bVideoCdInfo::info) could not find vcdxrip executable";
+        kDebug() << "(K3b::VideoCdInfo::info) could not find vcdxrip executable";
         emit infoFinished( false );
         return ;
     }
 
     delete m_process;
-    m_process = new K3bProcess();
+    m_process = new K3b::Process();
 
     *m_process << k3bcore ->externalBinManager() ->binPath( "vcdxrip" );
 
@@ -73,13 +73,13 @@ void K3bVideoCdInfo::info( const QString& device )
              this, SLOT( slotInfoFinished( int, QProcess::ExitStatus ) ) );
 
     if ( !m_process->start( K3Process::AllOutput ) ) {
-        kDebug() << "(K3bVideoCdInfo::info) could not start vcdxrip";
+        kDebug() << "(K3b::VideoCdInfo::info) could not start vcdxrip";
         cancelAll();
         emit infoFinished( false );
     }
 }
 
-void K3bVideoCdInfo::slotParseOutput( const QString& inp )
+void K3b::VideoCdInfo::slotParseOutput( const QString& inp )
 {
     if ( inp.contains( "<?xml" ) )
         m_isXml = true;
@@ -87,13 +87,13 @@ void K3bVideoCdInfo::slotParseOutput( const QString& inp )
     if ( m_isXml )
         m_xmlData += inp;
     else
-        kDebug() << "(K3bVideoCdInfo::slotParseOutput) " << inp;
+        kDebug() << "(K3b::VideoCdInfo::slotParseOutput) " << inp;
 
     if ( inp.contains( "</videocd>" ) )
         m_isXml = false;
 }
 
-void K3bVideoCdInfo::slotInfoFinished( int exitCode, QProcess::ExitStatus exitStatus )
+void K3b::VideoCdInfo::slotInfoFinished( int exitCode, QProcess::ExitStatus exitStatus )
 {
     if ( exitStatus == QProcess::NormalExit ) {
         // TODO: check the process' exitStatus()
@@ -120,7 +120,7 @@ void K3bVideoCdInfo::slotInfoFinished( int exitCode, QProcess::ExitStatus exitSt
     emit infoFinished( true );
 }
 
-void K3bVideoCdInfo::parseXmlData()
+void K3b::VideoCdInfo::parseXmlData()
 {
     QDomDocument xml_doc;
     QDomElement xml_root;
@@ -150,50 +150,50 @@ void K3bVideoCdInfo::parseXmlData()
             for ( QDomNode snode = node.firstChild(); !snode.isNull(); snode = snode.nextSibling() ) {
                 QDomElement sel = snode.toElement();
                 QString seqElement = sel.tagName().toLower();
-                m_Result.addEntry( K3bVideoCdInfoResultEntry(
+                m_Result.addEntry( K3b::VideoCdInfoResultEntry(
                                        sel.attribute( "src" ),
                                        sel.attribute( "id" ) ),
-                                   K3bVideoCdInfoResult::SEQUENCE
+                                   K3b::VideoCdInfoResult::SEQUENCE
                                  );
             }
         } else if ( tagName == "segment-items" ) {
             for ( QDomNode snode = node.firstChild(); !snode.isNull(); snode = snode.nextSibling() ) {
                 QDomElement sel = snode.toElement();
                 QString seqElement = sel.tagName().toLower();
-                m_Result.addEntry( K3bVideoCdInfoResultEntry(
+                m_Result.addEntry( K3b::VideoCdInfoResultEntry(
                                        sel.attribute( "src" ),
                                        sel.attribute( "id" ) ),
-                                   K3bVideoCdInfoResult::SEGMENT
+                                   K3b::VideoCdInfoResult::SEGMENT
                                  );
             }
         } else {
-            kDebug() << QString( "(K3bVideoCdInfo::parseXmlData) tagName '%1' not used" ).arg( tagName );
+            kDebug() << QString( "(K3b::VideoCdInfo::parseXmlData) tagName '%1' not used" ).arg( tagName );
         }
     }
 }
 
-const K3bVideoCdInfoResult& K3bVideoCdInfo::result() const
+const K3b::VideoCdInfoResult& K3b::VideoCdInfo::result() const
 {
     return m_Result;
 }
 
-const K3bVideoCdInfoResultEntry& K3bVideoCdInfoResult::entry( int number, int type ) const
+const K3b::VideoCdInfoResultEntry& K3b::VideoCdInfoResult::entry( int number, int type ) const
 {
     switch ( type ) {
-        case K3bVideoCdInfoResult::FILE:
+        case K3b::VideoCdInfoResult::FILE:
             if ( number >= m_fileEntry.count() )
                 return m_emptyEntry;
             return m_fileEntry[ number ];
-        case K3bVideoCdInfoResult::SEGMENT:
+        case K3b::VideoCdInfoResult::SEGMENT:
             if ( number >= m_segmentEntry.count() )
                 return m_emptyEntry;
             return m_segmentEntry[ number ];
-        case K3bVideoCdInfoResult::SEQUENCE:
+        case K3b::VideoCdInfoResult::SEQUENCE:
             if ( number >= m_sequenceEntry.count() )
                 return m_emptyEntry;
             return m_sequenceEntry[ number ];
         default:
-            kDebug() << "(K3bVideoCdInfoResult::entry) not supported entrytype.";
+            kDebug() << "(K3b::VideoCdInfoResult::entry) not supported entrytype.";
     }
 
     return m_emptyEntry;
@@ -201,34 +201,34 @@ const K3bVideoCdInfoResultEntry& K3bVideoCdInfoResult::entry( int number, int ty
 }
 
 
-void K3bVideoCdInfoResult::addEntry( const K3bVideoCdInfoResultEntry& entry, int type )
+void K3b::VideoCdInfoResult::addEntry( const K3b::VideoCdInfoResultEntry& entry, int type )
 {
     switch ( type ) {
-        case K3bVideoCdInfoResult::FILE:
+        case K3b::VideoCdInfoResult::FILE:
             m_fileEntry.append( entry );
             break;
-        case K3bVideoCdInfoResult::SEGMENT:
+        case K3b::VideoCdInfoResult::SEGMENT:
             m_segmentEntry.append( entry );
             break;
-        case K3bVideoCdInfoResult::SEQUENCE:
+        case K3b::VideoCdInfoResult::SEQUENCE:
             m_sequenceEntry.append( entry );
             break;
         default:
-            kDebug() << "(K3bVideoCdInfoResult::addEntry) not supported entrytype.";
+            kDebug() << "(K3b::VideoCdInfoResult::addEntry) not supported entrytype.";
     }
 }
 
-int K3bVideoCdInfoResult::foundEntries( int type ) const
+int K3b::VideoCdInfoResult::foundEntries( int type ) const
 {
     switch ( type ) {
-        case K3bVideoCdInfoResult::FILE:
+        case K3b::VideoCdInfoResult::FILE:
             return m_fileEntry.count();
-        case K3bVideoCdInfoResult::SEGMENT:
+        case K3b::VideoCdInfoResult::SEGMENT:
             return m_segmentEntry.count();
-        case K3bVideoCdInfoResult::SEQUENCE:
+        case K3b::VideoCdInfoResult::SEQUENCE:
             return m_sequenceEntry.count();
         default:
-            kDebug() << "(K3bVideoCdInfoResult::addEntry) not supported entrytype.";
+            kDebug() << "(K3b::VideoCdInfoResult::addEntry) not supported entrytype.";
     }
     return 0;
 }

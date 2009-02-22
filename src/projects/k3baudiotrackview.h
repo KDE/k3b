@@ -29,10 +29,18 @@
 #include <QDragLeaveEvent>
 #include <kurl.h>
 
-class K3bAudioTrack;
-class K3bAudioTrackViewItem;
-class K3bAudioDataSource;
-class K3bAudioDoc;
+namespace K3b {
+    class AudioTrack;
+}
+namespace K3b {
+    class AudioTrackViewItem;
+}
+namespace K3b {
+    class AudioDataSource;
+}
+namespace K3b {
+    class AudioDoc;
+}
 class KActionCollection;
 class KAction;
 class QDropEvent;
@@ -41,31 +49,36 @@ class QFocusEvent;
 class QMouseEvent;
 class QDragMoveEvent;
 class QTimer;
-class K3bListViewItemAnimator;
-class K3bAudioTrackPlayer;
+namespace K3b {
+    class ListViewItemAnimator;
+}
+namespace K3b {
+    class AudioTrackPlayer;
+}
 namespace K3b {
     class AudioProjectModel;
     class ViewColumnAdjuster;
 }
 
 
-class K3bAudioTrackView : public QTreeView
+namespace K3b {
+class AudioTrackView : public QTreeView
 {
     Q_OBJECT
 
 public:
-    K3bAudioTrackView( K3bAudioDoc*, QWidget* parent );
-    ~K3bAudioTrackView();
+    AudioTrackView( AudioDoc*, QWidget* parent );
+    ~AudioTrackView();
 
     KActionCollection* actionCollection() const { return m_actionCollection; }
 
-    K3bAudioTrackPlayer* player() const { return m_player; }
+    AudioTrackPlayer* player() const { return m_player; }
 
-    void getSelectedItems( QList<K3bAudioTrack*>& tracks, 
-                           QList<K3bAudioDataSource*>& sources );
+    void getSelectedItems( QList<AudioTrack*>& tracks, 
+                           QList<AudioDataSource*>& sources );
 
 public Q_SLOTS:
-    void showPlayerIndicator( K3bAudioTrack* );
+    void showPlayerIndicator( AudioTrack* );
     void togglePauseIndicator( bool b );
     void removePlayerIndicator();
 
@@ -73,10 +86,10 @@ private:
     void setupColumns();
     void setupActions();
     void showAllSources();
-/*     K3bAudioTrackViewItem* findTrackItem( const QPoint& pos ) const; */
-/*     K3bAudioTrackViewItem* getTrackViewItem( K3bAudioTrack* track, bool* isNew = 0 ); */
+/*     AudioTrackViewItem* findTrackItem( const QPoint& pos ) const; */
+/*     AudioTrackViewItem* getTrackViewItem( AudioTrack* track, bool* isNew = 0 ); */
 
-    K3bAudioDoc* m_doc;
+    AudioDoc* m_doc;
 
     KAction* m_actionProperties;
     KAction* m_actionRemove;
@@ -90,25 +103,25 @@ private:
 
     bool m_updatingColumnWidths;
 
-/*     QMap<K3bAudioTrack*, K3bAudioTrackViewItem*> m_trackItemMap; */
+/*     QMap<AudioTrack*, AudioTrackViewItem*> m_trackItemMap; */
 
-/*     K3bAudioTrackViewItem* m_currentMouseOverItem; */
+/*     AudioTrackViewItem* m_currentMouseOverItem; */
     QTimer* m_autoOpenTrackTimer;
     QTimer* m_animationTimer;
 
-    K3bAudioTrackPlayer* m_player;
+    AudioTrackPlayer* m_player;
 
     // used for the audiotrackplayer indicator
-    K3bAudioTrack* m_currentlyPlayingTrack;
+    AudioTrack* m_currentlyPlayingTrack;
 
     // to animate the player icon
-/*     K3bListViewItemAnimator* m_playerItemAnimator; */
+/*     ListViewItemAnimator* m_playerItemAnimator; */
 
     // used for the drop-event hack
     KUrl::List m_dropUrls;
-    K3bAudioTrack* m_dropTrackAfter;
-    K3bAudioTrack* m_dropTrackParent;
-    K3bAudioDataSource* m_dropSourceAfter;
+    AudioTrack* m_dropTrackAfter;
+    AudioTrack* m_dropTrackParent;
+    AudioDataSource* m_dropSourceAfter;
 
     K3b::AudioProjectModel* m_model;
     K3b::ViewColumnAdjuster* m_columnAdjuster;
@@ -116,8 +129,8 @@ private:
 private Q_SLOTS:
 /*     void slotAnimation(); */
 /*     void slotDropped( QDropEvent* e, Q3ListViewItem* parent, Q3ListViewItem* after ); */
-    void slotTrackChanged( K3bAudioTrack* );
-/*     void slotTrackRemoved( K3bAudioTrack* ); */
+    void slotTrackChanged( AudioTrack* );
+/*     void slotTrackRemoved( AudioTrack* ); */
 /*     void slotDragTimeout(); */
     void slotAdjustColumns();
 
@@ -148,5 +161,6 @@ protected:
 /*     bool acceptDrag(QDropEvent* e) const; */
 /*     Q3DragObject* dragObject(); */
 };
+}
 
 #endif

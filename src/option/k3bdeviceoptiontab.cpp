@@ -32,7 +32,7 @@
 #include <kglobal.h>
 
 
-K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent )
+K3b::DeviceOptionTab::DeviceOptionTab( QWidget* parent )
     : QWidget( parent )
 {
     QGridLayout* frameLayout = new QGridLayout( this );
@@ -52,7 +52,7 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent )
     m_labelDevicesInfo->setWordWrap(true);
     // ------------------------------------------------
 
-    m_deviceWidget = new K3bDeviceWidget( k3bcore->deviceManager(), this );
+    m_deviceWidget = new K3b::DeviceWidget( k3bcore->deviceManager(), this );
 
     frameLayout->addWidget( m_labelDevicesInfo, 0, 0 );
     frameLayout->addWidget( m_deviceWidget, 1, 0 );
@@ -61,26 +61,26 @@ K3bDeviceOptionTab::K3bDeviceOptionTab( QWidget* parent )
 }
 
 
-K3bDeviceOptionTab::~K3bDeviceOptionTab()
+K3b::DeviceOptionTab::~DeviceOptionTab()
 {
 }
 
 
-void K3bDeviceOptionTab::readDevices()
+void K3b::DeviceOptionTab::readDevices()
 {
     m_deviceWidget->init();
 }
 
 
 
-void K3bDeviceOptionTab::saveDevices()
+void K3b::DeviceOptionTab::saveDevices()
 {
     // save the config
     k3bcore->deviceManager()->saveConfig( KGlobal::config()->group( "Devices" ) );
 }
 
 
-void K3bDeviceOptionTab::slotRefreshButtonClicked()
+void K3b::DeviceOptionTab::slotRefreshButtonClicked()
 {
     QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
     k3bcore->deviceManager()->clear();

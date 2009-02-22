@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -18,26 +18,28 @@
 #include <k3bthreadjob.h>
 
 
-class K3bDataDoc;
-class K3bJobHandler;
+namespace K3b {
+    class DataDoc;
+    class JobHandler;
 
-/**
- * The K3bDataPreparationJob performs some checks on the data in a data project
- * It is used by th K3bIsoImager.
- */
-class K3bDataPreparationJob : public K3bThreadJob
-{
-    Q_OBJECT
+    /**
+     * The DataPreparationJob performs some checks on the data in a data project
+     * It is used by th IsoImager.
+     */
+    class DataPreparationJob : public ThreadJob
+    {
+        Q_OBJECT
 
-public:
-    K3bDataPreparationJob( K3bDataDoc* doc, K3bJobHandler* hdl, QObject* parent );
-    ~K3bDataPreparationJob();
+    public:
+        DataPreparationJob( DataDoc* doc, JobHandler* hdl, QObject* parent );
+        ~DataPreparationJob();
 
-private:
-    bool run();
+    private:
+        bool run();
 
-    class Private;
-    Private* const d;
-};
+        class Private;
+        Private* const d;
+    };
+}
 
 #endif

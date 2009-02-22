@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
@@ -12,51 +12,51 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-
-
 #ifndef _K3B_MOVIX_BURN_DIALOG_H_
 #define _K3B_MOVIX_BURN_DIALOG_H_
 
 #include "k3bprojectburndialog.h"
 
-class K3bMovixDoc;
-class K3bMovixOptionsWidget;
-class K3bDataImageSettingsWidget;
 class QCheckBox;
-class K3bDataModeWidget;
 
+namespace K3b {
+    class MovixDoc;
+    class MovixOptionsWidget;
+    class DataImageSettingsWidget;
+    class DataModeWidget;
 
-class K3bMovixBurnDialog : public K3bProjectBurnDialog
-{
-    Q_OBJECT
+    class MovixBurnDialog : public ProjectBurnDialog
+    {
+        Q_OBJECT
 
-public:
-    K3bMovixBurnDialog( K3bMovixDoc* doc, QWidget* parent = 0 );
-    ~K3bMovixBurnDialog();
+    public:
+        MovixBurnDialog( MovixDoc* doc, QWidget* parent = 0 );
+        ~MovixBurnDialog();
 
-protected Q_SLOTS:
-    void slotStartClicked();
+    protected Q_SLOTS:
+        void slotStartClicked();
 
-protected:
-    void saveSettings();
-    void readSettings();
-    void loadK3bDefaults();
-    void loadUserDefaults( const KConfigGroup& );
-    void saveUserDefaults( KConfigGroup );
-    void toggleAll();
+    protected:
+        void saveSettings();
+        void readSettings();
+        void loadK3bDefaults();
+        void loadUserDefaults( const KConfigGroup& );
+        void saveUserDefaults( KConfigGroup );
+        void toggleAll();
 
-private:
-    void setupSettingsPage();
+    private:
+        void setupSettingsPage();
 
-    K3bMovixDoc* m_doc;
-    K3bMovixOptionsWidget* m_movixOptionsWidget;
-    K3bDataImageSettingsWidget* m_imageSettingsWidget;
+        MovixDoc* m_doc;
+        MovixOptionsWidget* m_movixOptionsWidget;
+        DataImageSettingsWidget* m_imageSettingsWidget;
 
-    QCheckBox* m_checkStartMultiSesssion;
-    K3bDataModeWidget* m_dataModeWidget;
+        QCheckBox* m_checkStartMultiSesssion;
+        DataModeWidget* m_dataModeWidget;
 
-    QCheckBox* m_checkVerify;
-};
+        QCheckBox* m_checkVerify;
+    };
+}
 
 
 #endif

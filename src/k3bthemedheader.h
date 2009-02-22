@@ -19,24 +19,27 @@
 
 #include "k3bthememanager.h"
 
-class K3bTitleLabel;
+namespace K3b {
+    class TitleLabel;
+}
 class QLabel;
 
-class K3bThemedHeader : public QFrame
+namespace K3b {
+class ThemedHeader : public QFrame
 {
     Q_OBJECT
 
 public:
-    K3bThemedHeader( QWidget* parent = 0 );
-    K3bThemedHeader( const QString& title, const QString& subtitle, QWidget* parent = 0 );
-    ~K3bThemedHeader(); 
+    ThemedHeader( QWidget* parent = 0 );
+    ThemedHeader( const QString& title, const QString& subtitle, QWidget* parent = 0 );
+    ~ThemedHeader(); 
 
 public Q_SLOTS:
     void setTitle( const QString& title, const QString& subtitle = QString() );
     void setSubTitle( const QString& subtitle );
     void setAlignment( int );
-    void setLeftPixmap( K3bTheme::PixmapType );
-    void setRightPixmap( K3bTheme::PixmapType );
+    void setLeftPixmap( Theme::PixmapType );
+    void setRightPixmap( Theme::PixmapType );
 
 private Q_SLOTS:
     void slotThemeChanged();
@@ -44,11 +47,12 @@ private Q_SLOTS:
 private:
     void init();
 
-    K3bTitleLabel* m_titleLabel;
+    TitleLabel* m_titleLabel;
     QLabel* m_leftLabel;
     QLabel* m_rightLabel;
-    K3bTheme::PixmapType m_leftPix;
-    K3bTheme::PixmapType m_rightPix;
+    Theme::PixmapType m_leftPix;
+    Theme::PixmapType m_rightPix;
 };
+}
 
 #endif

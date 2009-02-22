@@ -29,20 +29,20 @@
 #include <qdatetime.h>
 
 
-class K3bAudioMaxSpeedJob::Private
+class K3b::AudioMaxSpeedJob::Private
 {
 public:
-    int speedTest( K3bAudioDataSource* source );
+    int speedTest( K3b::AudioDataSource* source );
     int maxSpeedByMedia() const;
 
     int maxSpeed;
-    K3bAudioDoc* doc;
+    K3b::AudioDoc* doc;
     char* buffer;
 };
 
 
 // returns the amount of data read from this source
-int K3bAudioMaxSpeedJob::Private::speedTest( K3bAudioDataSource* source )
+int K3b::AudioMaxSpeedJob::Private::speedTest( K3b::AudioDataSource* source )
 {
     //
     // in case of an audio track source we only test when the cd is inserted since asking the user would
@@ -50,12 +50,12 @@ int K3bAudioMaxSpeedJob::Private::speedTest( K3bAudioDataSource* source )
     //
     // FIXME: there is still the problem of the spin up time.
     //
-    if( K3bAudioCdTrackSource* cdts = dynamic_cast<K3bAudioCdTrackSource*>( source ) ) {
-        if( K3bDevice::Device* dev = cdts->searchForAudioCD() ) {
+    if( K3b::AudioCdTrackSource* cdts = dynamic_cast<K3b::AudioCdTrackSource*>( source ) ) {
+        if( K3b::Device::Device* dev = cdts->searchForAudioCD() ) {
             cdts->setDevice( dev );
         }
         else {
-            kDebug() << "(K3bAudioMaxSpeedJob) ignoring audio cd track source.";
+            kDebug() << "(K3b::AudioMaxSpeedJob) ignoring audio cd track source.";
             return 0;
         }
     }
@@ -76,13 +76,13 @@ int K3bAudioMaxSpeedJob::Private::speedTest( K3bAudioDataSource* source )
     int usedT = t.elapsed();
 
     if( r < 0 ) {
-        kDebug() << "(K3bAudioMaxSpeedJob) read failure.";
+        kDebug() << "(K3b::AudioMaxSpeedJob) read failure.";
         return -1;
     }
 
     // KB/sec (add 1 millisecond to avoid division by 0)
     int throughput = (dataRead*1000+usedT)/(usedT+1)/1024;
-    kDebug() << "(K3bAudioMaxSpeedJob) throughput: " << throughput
+    kDebug() << "(K3b::AudioMaxSpeedJob) throughput: " << throughput
              << " (" << dataRead << "/" << usedT << ")" << endl;
 
 
@@ -90,7 +90,7 @@ int K3bAudioMaxSpeedJob::Private::speedTest( K3bAudioDataSource* source )
 }
 
 
-int K3bAudioMaxSpeedJob::Private::maxSpeedByMedia() const
+int K3b::AudioMaxSpeedJob::Private::maxSpeedByMedia() const
 {
     int s = 0;
 
@@ -105,7 +105,7 @@ int K3bAudioMaxSpeedJob::Private::maxSpeedByMedia() const
 
         // this is the first valid speed or the lowest supported one
         s = *it;
-        kDebug() << "(K3bAudioMaxSpeedJob) using speed factor: " << (s/175);
+        kDebug() << "(K3b::AudioMaxSpeedJob) using speed factor: " << (s/175);
     }
 
     return s;
@@ -114,8 +114,8 @@ int K3bAudioMaxSpeedJob::Private::maxSpeedByMedia() const
 
 
 
-K3bAudioMaxSpeedJob::K3bAudioMaxSpeedJob( K3bAudioDoc* doc, K3bJobHandler* jh, QObject* parent )
-    : K3bThreadJob( jh, parent ),
+K3b::AudioMaxSpeedJob::AudioMaxSpeedJob( K3b::AudioDoc* doc, K3b::JobHandler* jh, QObject* parent )
+    : K3b::ThreadJob( jh, parent ),
       d( new Private() )
 {
     d->doc = doc;
@@ -123,24 +123,24 @@ K3bAudioMaxSpeedJob::K3bAudioMaxSpeedJob( K3bAudioDoc* doc, K3bJobHandler* jh, Q
 }
 
 
-K3bAudioMaxSpeedJob::~K3bAudioMaxSpeedJob()
+K3b::AudioMaxSpeedJob::~AudioMaxSpeedJob()
 {
     delete [] d->buffer;
     delete d;
 }
 
 
-int K3bAudioMaxSpeedJob::maxSpeed() const
+int K3b::AudioMaxSpeedJob::maxSpeed() const
 {
     return d->maxSpeedByMedia();
 }
 
 
-bool K3bAudioMaxSpeedJob::run()
+bool K3b::AudioMaxSpeedJob::run()
 {
     kDebug() << k_funcinfo;
 
-    K3bAudioDataSourceIterator it( d->doc );
+    K3b::AudioDataSourceIterator it( d->doc );
 
     // count sources for minimal progress info
     int numSources = 0;
@@ -156,7 +156,7 @@ bool K3bAudioMaxSpeedJob::run()
 
     while( it.current() && !canceled() ) {
         if( !it.current()->seek(0) ) {
-            kDebug() << "(K3bAudioMaxSpeedJob) seek failed.";
+            kDebug() << "(K3b::AudioMaxSpeedJob) seek failed.";
             success = false;
             break;
         }
@@ -184,7 +184,7 @@ bool K3bAudioMaxSpeedJob::run()
     }
 
     if( success )
-        kDebug() << "(K3bAudioMaxSpeedJob) max speed: " << d->maxSpeed;
+        kDebug() << "(K3b::AudioMaxSpeedJob) max speed: " << d->maxSpeed;
 
     return success;
 }

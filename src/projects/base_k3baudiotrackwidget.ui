@@ -197,7 +197,7 @@
                     </widget>
                   </item>
                   <item>
-                    <widget class="K3bMsfEdit" name="m_editPostGap" >
+                    <widget class="K3b::MsfEdit" name="m_editPostGap" >
                       <property name="toolTip" stdset="0" >
                         <string>Set the length of the track's post-gap</string>
                       </property>
@@ -254,7 +254,7 @@ This does not mean that K3b adds an additional gap of silence to the track. This
   <layoutdefault spacing="6" margin="11" />
   <customwidgets>
     <customwidget>
-      <class>K3bMsfEdit</class>
+      <class>K3b::MsfEdit</class>
       <extends>QWidget</extends>
       <header location="global" >k3bmsfedit.h</header>
       <sizehint>

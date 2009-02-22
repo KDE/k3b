@@ -30,231 +30,231 @@
 
 
 
-K3bMixedDoc::K3bMixedDoc( QObject* parent )
-  : K3bDoc( parent )
+K3b::MixedDoc::MixedDoc( QObject* parent )
+    : K3b::Doc( parent )
 {
-  m_dataDoc = new K3bDataDoc( this );
-  m_audioDoc = new K3bAudioDoc( this );
+    m_dataDoc = new K3b::DataDoc( this );
+    m_audioDoc = new K3b::AudioDoc( this );
 
-  connect( m_dataDoc, SIGNAL(changed()),
-	   this, SIGNAL(changed()) );
-  connect( m_audioDoc, SIGNAL(changed()),
-	   this, SIGNAL(changed()) );
+    connect( m_dataDoc, SIGNAL(changed()),
+             this, SIGNAL(changed()) );
+    connect( m_audioDoc, SIGNAL(changed()),
+             this, SIGNAL(changed()) );
 }
 
 
-K3bMixedDoc::~K3bMixedDoc()
+K3b::MixedDoc::~MixedDoc()
 {
 }
 
 
-bool K3bMixedDoc::newDocument()
+bool K3b::MixedDoc::newDocument()
 {
-  m_dataDoc->newDocument();
-  m_audioDoc->newDocument();
+    m_dataDoc->newDocument();
+    m_audioDoc->newDocument();
 
-  return K3bDoc::newDocument();
+    return K3b::Doc::newDocument();
 }
 
 
-void K3bMixedDoc::clear()
+void K3b::MixedDoc::clear()
 {
     m_dataDoc->clear();
     m_audioDoc->clear();
 }
 
 
-QString K3bMixedDoc::name() const
+QString K3b::MixedDoc::name() const
 {
-  return m_dataDoc->name();
+    return m_dataDoc->name();
 }
 
 
-void K3bMixedDoc::setURL( const KUrl& url )
+void K3b::MixedDoc::setURL( const KUrl& url )
 {
-  K3bDoc::setURL( url );
-  m_audioDoc->setURL( url );
-  m_dataDoc->setURL( url );
+    K3b::Doc::setURL( url );
+    m_audioDoc->setURL( url );
+    m_dataDoc->setURL( url );
 }
 
 
-void K3bMixedDoc::setModified( bool m )
+void K3b::MixedDoc::setModified( bool m )
 {
-  m_audioDoc->setModified( m );
-  m_dataDoc->setModified( m );
+    m_audioDoc->setModified( m );
+    m_dataDoc->setModified( m );
 }
 
 
-bool K3bMixedDoc::isModified() const
+bool K3b::MixedDoc::isModified() const
 {
-  return ( m_audioDoc->isModified() || m_dataDoc->isModified() );
+    return ( m_audioDoc->isModified() || m_dataDoc->isModified() );
 }
 
 
-KIO::filesize_t K3bMixedDoc::size() const
+KIO::filesize_t K3b::MixedDoc::size() const
 {
-  return m_dataDoc->size() + m_audioDoc->size();
+    return m_dataDoc->size() + m_audioDoc->size();
 }
 
-K3b::Msf K3bMixedDoc::length() const
+K3b::Msf K3b::MixedDoc::length() const
 {
-  return m_dataDoc->length() + m_audioDoc->length();
-}
-
-
-int K3bMixedDoc::numOfTracks() const
-{
-  return m_audioDoc->numOfTracks() + 1;
+    return m_dataDoc->length() + m_audioDoc->length();
 }
 
 
-K3bBurnJob* K3bMixedDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
+int K3b::MixedDoc::numOfTracks() const
 {
-  return new K3bMixedJob( this, hdl, parent  );
+    return m_audioDoc->numOfTracks() + 1;
 }
 
 
-void K3bMixedDoc::addUrls( const KUrl::List& urls )
+K3b::BurnJob* K3b::MixedDoc::newBurnJob( K3b::JobHandler* hdl, QObject* parent )
 {
-  dataDoc()->addUrls( urls );
+    return new K3b::MixedJob( this, hdl, parent  );
 }
 
 
-bool K3bMixedDoc::loadDocumentData( QDomElement* rootElem )
+void K3b::MixedDoc::addUrls( const KUrl::List& urls )
 {
-  QDomNodeList nodes = rootElem->childNodes();
+    dataDoc()->addUrls( urls );
+}
 
-  if( nodes.length() < 4 )
-    return false;
 
-  if( nodes.item(0).nodeName() != "general" )
-    return false;
-  if( !readGeneralDocumentData( nodes.item(0).toElement() ) )
-    return false;
+bool K3b::MixedDoc::loadDocumentData( QDomElement* rootElem )
+{
+    QDomNodeList nodes = rootElem->childNodes();
 
-  if( nodes.item(1).nodeName() != "audio" )
-    return false;
-  QDomElement audioElem = nodes.item(1).toElement();
-  if( !m_audioDoc->loadDocumentData( &audioElem ) )
-    return false;
+    if( nodes.length() < 4 )
+        return false;
 
-  if( nodes.item(2).nodeName() != "data" )
-    return false;
-  QDomElement dataElem = nodes.item(2).toElement();
-  if( !m_dataDoc->loadDocumentData( &dataElem ) )
-    return false;
+    if( nodes.item(0).nodeName() != "general" )
+        return false;
+    if( !readGeneralDocumentData( nodes.item(0).toElement() ) )
+        return false;
 
-  if( nodes.item(3).nodeName() != "mixed" )
-    return false;
+    if( nodes.item(1).nodeName() != "audio" )
+        return false;
+    QDomElement audioElem = nodes.item(1).toElement();
+    if( !m_audioDoc->loadDocumentData( &audioElem ) )
+        return false;
 
-  QDomNodeList optionList = nodes.item(3).childNodes();
-  for( int i = 0; i < optionList.count(); i++ ) {
+    if( nodes.item(2).nodeName() != "data" )
+        return false;
+    QDomElement dataElem = nodes.item(2).toElement();
+    if( !m_dataDoc->loadDocumentData( &dataElem ) )
+        return false;
 
-    QDomElement e = optionList.item(i).toElement();
-    if( e.isNull() )
-      return false;
+    if( nodes.item(3).nodeName() != "mixed" )
+        return false;
 
-    if( e.nodeName() == "remove_buffer_files" )
-      setRemoveImages( e.toElement().text() == "yes" );
-    else if( e.nodeName() == "image_path" )
-      setTempDir( e.toElement().text() );
-    else if( e.nodeName() == "mixed_type" ) {
-      QString mt = e.toElement().text();
-      if( mt == "last_track" )
-	setMixedType( DATA_LAST_TRACK );
-      else if( mt == "second_session" )
-	setMixedType( DATA_SECOND_SESSION );
-      else
-	setMixedType( DATA_FIRST_TRACK );
+    QDomNodeList optionList = nodes.item(3).childNodes();
+    for( int i = 0; i < optionList.count(); i++ ) {
+
+        QDomElement e = optionList.item(i).toElement();
+        if( e.isNull() )
+            return false;
+
+        if( e.nodeName() == "remove_buffer_files" )
+            setRemoveImages( e.toElement().text() == "yes" );
+        else if( e.nodeName() == "image_path" )
+            setTempDir( e.toElement().text() );
+        else if( e.nodeName() == "mixed_type" ) {
+            QString mt = e.toElement().text();
+            if( mt == "last_track" )
+                setMixedType( DATA_LAST_TRACK );
+            else if( mt == "second_session" )
+                setMixedType( DATA_SECOND_SESSION );
+            else
+                setMixedType( DATA_FIRST_TRACK );
+        }
     }
-  }
 
-  return true;
+    return true;
 }
 
 
-bool K3bMixedDoc::saveDocumentData( QDomElement* docElem )
+bool K3b::MixedDoc::saveDocumentData( QDomElement* docElem )
 {
-  QDomDocument doc = docElem->ownerDocument();
-  saveGeneralDocumentData( docElem );
+    QDomDocument doc = docElem->ownerDocument();
+    saveGeneralDocumentData( docElem );
 
-  QDomElement audioElem = doc.createElement( "audio" );
-  m_audioDoc->saveDocumentData( &audioElem );
-  docElem->appendChild( audioElem );
+    QDomElement audioElem = doc.createElement( "audio" );
+    m_audioDoc->saveDocumentData( &audioElem );
+    docElem->appendChild( audioElem );
 
-  QDomElement dataElem = doc.createElement( "data" );
-  m_dataDoc->saveDocumentData( &dataElem );
-  docElem->appendChild( dataElem );
+    QDomElement dataElem = doc.createElement( "data" );
+    m_dataDoc->saveDocumentData( &dataElem );
+    docElem->appendChild( dataElem );
 
-  QDomElement mixedElem = doc.createElement( "mixed" );
-  docElem->appendChild( mixedElem );
+    QDomElement mixedElem = doc.createElement( "mixed" );
+    docElem->appendChild( mixedElem );
 
-  QDomElement bufferFilesElem = doc.createElement( "remove_buffer_files" );
-  bufferFilesElem.appendChild( doc.createTextNode( removeImages() ? "yes" : "no" ) );
-  mixedElem.appendChild( bufferFilesElem );
+    QDomElement bufferFilesElem = doc.createElement( "remove_buffer_files" );
+    bufferFilesElem.appendChild( doc.createTextNode( removeImages() ? "yes" : "no" ) );
+    mixedElem.appendChild( bufferFilesElem );
 
-  QDomElement imagePathElem = doc.createElement( "image_path" );
-  imagePathElem.appendChild( doc.createTextNode( tempDir() ) );
-  mixedElem.appendChild( imagePathElem );
+    QDomElement imagePathElem = doc.createElement( "image_path" );
+    imagePathElem.appendChild( doc.createTextNode( tempDir() ) );
+    mixedElem.appendChild( imagePathElem );
 
-  QDomElement mixedTypeElem = doc.createElement( "mixed_type" );
-  switch( mixedType() ) {
-  case DATA_FIRST_TRACK:
-    mixedTypeElem.appendChild( doc.createTextNode( "first_track" ) );
-    break;
-  case DATA_LAST_TRACK:
-    mixedTypeElem.appendChild( doc.createTextNode( "last_track" ) );
-    break;
-  case DATA_SECOND_SESSION:
-    mixedTypeElem.appendChild( doc.createTextNode( "second_session" ) );
-    break;
-  }
-  mixedElem.appendChild( mixedTypeElem );
-
-  setModified( false );
-
-  return true;
-}
-
-
-K3bDevice::Toc K3bMixedDoc::toToc( int dataMode, const K3b::Msf& dataTrackLength ) const
-{
-  // !inaccurate datatrack size!
-  K3bDevice::Track dataTrack( 0, dataTrackLength > 0 ? dataTrackLength-1 : m_dataDoc->length()-1,
-				K3bDevice::Track::DATA, dataMode );
-  K3bDevice::Toc toc = audioDoc()->toToc();
-  if( mixedType() == DATA_FIRST_TRACK ) {
-    // fix the audio tracks' sectors
-    for( K3bDevice::Toc::iterator it = toc.begin(); it != toc.end(); ++it ) {
-      (*it).setLastSector( (*it).lastSector() + dataTrack.length() );
-      (*it).setFirstSector( (*it).firstSector() + dataTrack.length() );
+    QDomElement mixedTypeElem = doc.createElement( "mixed_type" );
+    switch( mixedType() ) {
+    case DATA_FIRST_TRACK:
+        mixedTypeElem.appendChild( doc.createTextNode( "first_track" ) );
+        break;
+    case DATA_LAST_TRACK:
+        mixedTypeElem.appendChild( doc.createTextNode( "last_track" ) );
+        break;
+    case DATA_SECOND_SESSION:
+        mixedTypeElem.appendChild( doc.createTextNode( "second_session" ) );
+        break;
     }
-    toc.insert( toc.begin(), dataTrack );
-  }
-  else {
-    // fix the datatrack's sectors
-    dataTrack.setLastSector( dataTrack.lastSector() + toc.back().lastSector()+1 );
-    dataTrack.setFirstSector( toc.back().lastSector()+1 );
-    toc.append( dataTrack );
+    mixedElem.appendChild( mixedTypeElem );
 
-    if( mixedType() == DATA_SECOND_SESSION ) {
-      // fix the session numbers
-      for( K3bDevice::Toc::iterator it = toc.begin(); it != toc.end(); ++it ) {
-	if( (*it).type() == K3bDevice::Track::DATA )
-	  (*it).setSession( 2 );
-	else
-	  (*it).setSession( 1 );
-      }
-    }
-  }
+    setModified( false );
 
-  return toc;
+    return true;
 }
 
 
-int K3bMixedDoc::supportedMediaTypes() const
+K3b::Device::Toc K3b::MixedDoc::toToc( K3b::Device::Track::DataMode dataMode, const K3b::Msf& dataTrackLength ) const
 {
-    return K3bDevice::MEDIA_WRITABLE_CD;
+    // !inaccurate datatrack size!
+    K3b::Device::Track dataTrack( 0, dataTrackLength > 0 ? dataTrackLength-1 : m_dataDoc->length()-1,
+                                  K3b::Device::Track::TYPE_DATA, dataMode );
+    K3b::Device::Toc toc = audioDoc()->toToc();
+    if( mixedType() == DATA_FIRST_TRACK ) {
+        // fix the audio tracks' sectors
+        for( K3b::Device::Toc::iterator it = toc.begin(); it != toc.end(); ++it ) {
+            (*it).setLastSector( (*it).lastSector() + dataTrack.length() );
+            (*it).setFirstSector( (*it).firstSector() + dataTrack.length() );
+        }
+        toc.insert( toc.begin(), dataTrack );
+    }
+    else {
+        // fix the datatrack's sectors
+        dataTrack.setLastSector( dataTrack.lastSector() + toc.back().lastSector()+1 );
+        dataTrack.setFirstSector( toc.back().lastSector()+1 );
+        toc.append( dataTrack );
+
+        if( mixedType() == DATA_SECOND_SESSION ) {
+            // fix the session numbers
+            for( K3b::Device::Toc::iterator it = toc.begin(); it != toc.end(); ++it ) {
+                if( (*it).type() == K3b::Device::Track::TYPE_DATA )
+                    (*it).setSession( 2 );
+                else
+                    (*it).setSession( 1 );
+            }
+        }
+    }
+
+    return toc;
+}
+
+
+int K3b::MixedDoc::supportedMediaTypes() const
+{
+    return K3b::Device::MEDIA_WRITABLE_CD;
 }
 
 #include "k3bmixeddoc.moc"

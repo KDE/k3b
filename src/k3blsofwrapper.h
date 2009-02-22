@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
  *
@@ -17,43 +17,44 @@
 
 #include <q3valuelist.h>
 
-namespace K3bDevice {
-  class Device;
+namespace K3b {
+    namespace Device {
+        class Device;
+    }
+
+    class LsofWrapper
+    {
+    public:
+        LsofWrapper();
+        ~LsofWrapper();
+
+        /**
+         * Checks which processes currently have an open file descriptor
+         * to the device.
+         *
+         * \return true if lsof was successfully called.
+         */
+        bool checkDevice( Device::Device* );
+
+        struct Process {
+            QString name;
+            int pid;
+        };
+
+        /**
+         * \return A list of all applications that had an open
+         * handle on the device used in the last successful call
+         * to checkDevice.
+         */
+        const QList<Process>& usingApplications() const;
+
+    private:
+        bool findLsofExecutable();
+
+        class Private;
+        Private* d;
+    };
 }
 
-
-class K3bLsofWrapper
-{
- public:
-  K3bLsofWrapper();
-  ~K3bLsofWrapper();
-
-  /**
-   * Checks which processes currently have an open file descriptor
-   * to the device.
-   *
-   * \return true if lsof was successfully called.
-   */
-  bool checkDevice( K3bDevice::Device* );
-
-  struct Process {
-    QString name;
-    int pid;
-  };
-
-  /**
-   * \return A list of all applications that had an open
-   * handle on the device used in the last successful call
-   * to checkDevice.
-   */
-  const QList<Process>& usingApplications() const;
-
- private:
-  bool findLsofExecutable();
-
-  class Private;
-  Private* d;
-};
-
 #endif
- 
+

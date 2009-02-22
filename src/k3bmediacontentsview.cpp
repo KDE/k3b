@@ -23,10 +23,10 @@
 #include <QStackedWidget>
 
 
-class K3bMediaContentsView::Private
+class K3b::MediaContentsView::Private
 {
 public:
-    K3bMedium medium;
+    K3b::Medium medium;
     int supportedMediumContent;
     int supportedMediumTypes;
     int supportedMediumStates;
@@ -35,12 +35,12 @@ public:
 };
 
 
-K3bMediaContentsView::K3bMediaContentsView( bool withHeader,
+K3b::MediaContentsView::MediaContentsView( bool withHeader,
                                             int mediumContent,
                                             int mediumTypes,
                                             int mediumState,
                                             QWidget* parent )
-    : K3bContentsView( withHeader, parent )
+    : K3b::ContentsView( withHeader, parent )
 {
     d = new Private;
     d->supportedMediumContent = mediumContent;
@@ -48,88 +48,88 @@ K3bMediaContentsView::K3bMediaContentsView( bool withHeader,
     d->supportedMediumStates = mediumState;
     d->autoReload = true;
 
-    connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3bDevice::Device*)),
-             this, SLOT(slotMediumChanged(K3bDevice::Device*)) );
+    connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3b::Device::Device*)),
+             this, SLOT(slotMediumChanged(K3b::Device::Device*)) );
 }
 
 
-K3bMediaContentsView::~K3bMediaContentsView()
+K3b::MediaContentsView::~MediaContentsView()
 {
     delete d;
 }
 
 
-void K3bMediaContentsView::setAutoReload( bool b )
+void K3b::MediaContentsView::setAutoReload( bool b )
 {
     d->autoReload = b;
 }
 
 
-int K3bMediaContentsView::supportedMediumContent() const
+int K3b::MediaContentsView::supportedMediumContent() const
 {
     return d->supportedMediumContent;
 }
 
 
-int K3bMediaContentsView::supportedMediumTypes() const
+int K3b::MediaContentsView::supportedMediumTypes() const
 {
     return d->supportedMediumTypes;
 }
 
 
-int K3bMediaContentsView::supportedMediumStates() const
+int K3b::MediaContentsView::supportedMediumStates() const
 {
     return d->supportedMediumStates;
 }
 
 
-K3bMedium K3bMediaContentsView::medium() const
+K3b::Medium K3b::MediaContentsView::medium() const
 {
     return d->medium;
 }
 
 
-K3bDevice::Device* K3bMediaContentsView::device() const
+K3b::Device::Device* K3b::MediaContentsView::device() const
 {
     return medium().device();
 }
 
 
-void K3bMediaContentsView::setMedium( const K3bMedium& m )
+void K3b::MediaContentsView::setMedium( const K3b::Medium& m )
 {
     d->medium = m;
 }
 
 
-void K3bMediaContentsView::reload( K3bDevice::Device* dev )
+void K3b::MediaContentsView::reload( K3b::Device::Device* dev )
 {
     reload( k3bappcore->mediaCache()->medium( dev ) );
 }
 
 
-void K3bMediaContentsView::reload( const K3bMedium& m )
+void K3b::MediaContentsView::reload( const K3b::Medium& m )
 {
     setMedium( m );
     reload();
 }
 
 
-void K3bMediaContentsView::reload()
+void K3b::MediaContentsView::reload()
 {
     enableInteraction( true );
     reloadMedium();
 }
 
 
-void K3bMediaContentsView::enableInteraction( bool enable )
+void K3b::MediaContentsView::enableInteraction( bool enable )
 {
     mainWidget()->setEnabled( enable );
 }
 
 
-void K3bMediaContentsView::slotMediumChanged( K3bDevice::Device* dev )
+void K3b::MediaContentsView::slotMediumChanged( K3b::Device::Device* dev )
 {
-    // FIXME: derive a K3bContentsStack from QWidgetStack and let it set an active flag
+    // FIXME: derive a K3b::ContentsStack from QWidgetStack and let it set an active flag
     // to replace this hack
     if( QStackedWidget* stack = dynamic_cast<QStackedWidget*>( parentWidget() ) )
         if( stack->currentWidget() != this )
@@ -139,7 +139,7 @@ void K3bMediaContentsView::slotMediumChanged( K3bDevice::Device* dev )
         return;
 
     if( dev == device() ) {
-        K3bMedium m = k3bappcore->mediaCache()->medium( dev );
+        K3b::Medium m = k3bappcore->mediaCache()->medium( dev );
 
         // no need to reload if the medium did not change (this is even
         // important since K3b blocks the devices in action and after

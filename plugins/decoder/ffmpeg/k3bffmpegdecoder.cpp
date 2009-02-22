@@ -32,7 +32,7 @@ extern "C" {
 
 
 K3bFFMpegDecoderFactory::K3bFFMpegDecoderFactory( QObject* parent, const QVariantList& )
-    : K3bAudioDecoderFactory( parent )
+    : K3b::AudioDecoderFactory( parent )
 {
 }
 
@@ -42,7 +42,7 @@ K3bFFMpegDecoderFactory::~K3bFFMpegDecoderFactory()
 }
 
 
-K3bAudioDecoder* K3bFFMpegDecoderFactory::createDecoder( QObject* parent ) const
+K3b::AudioDecoder* K3bFFMpegDecoderFactory::createDecoder( QObject* parent ) const
 {
     return new K3bFFMpegDecoder( parent);
 }
@@ -66,7 +66,7 @@ bool K3bFFMpegDecoderFactory::canDecode( const KUrl& url )
 
 
 K3bFFMpegDecoder::K3bFFMpegDecoder( QObject* parent  )
-    : K3bAudioDecoder( parent ),
+    : K3b::AudioDecoder( parent ),
       m_file(0)
 {
 }

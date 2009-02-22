@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -20,54 +20,53 @@
 #include "k3b_export.h"
 
 #include <qmessagebox.h>
-//Added by qt3to4:
-#include <QCloseEvent>
-
 
 class QCloseEvent;
 
-class LIBK3B_EXPORT K3bMultiChoiceDialog : public QDialog
-{
-    Q_OBJECT
+namespace K3b {
+    class LIBK3B_EXPORT MultiChoiceDialog : public QDialog
+    {
+        Q_OBJECT
 
-public:
-    K3bMultiChoiceDialog( const QString& caption,
-                          const QString& text,
-                          QMessageBox::Icon = QMessageBox::Information,
-                          QWidget* parent = 0 );
-    ~K3bMultiChoiceDialog();
+    public:
+        MultiChoiceDialog( const QString& caption,
+                           const QString& text,
+                           QMessageBox::Icon = QMessageBox::Information,
+                           QWidget* parent = 0 );
+        ~MultiChoiceDialog();
 
-    /**
-     * Adds a new button. returns it's number starting at 1.
-     */
-    int addButton( const KGuiItem& );
+        /**
+         * Adds a new button. returns it's number starting at 1.
+         */
+        int addButton( const KGuiItem& );
 
-    static int choose( const QString& caption,
-                       const QString& text,
-                       QMessageBox::Icon = QMessageBox::Information,
-                       QWidget* parent = 0, 
-                       int buttonCount = 2,
-                       const KGuiItem& b1 = KStandardGuiItem::yes(),
-                       const KGuiItem& b2 = KStandardGuiItem::no(),
-                       const KGuiItem& b3 = KStandardGuiItem::no(),
-                       const KGuiItem& b4 = KStandardGuiItem::no(),
-                       const KGuiItem& b5 = KStandardGuiItem::no(),
-                       const KGuiItem& b6 = KStandardGuiItem::no() );
-		     
-public Q_SLOTS:
-    /**
-     * returnes the number of the clicked button starting at 1.
-     */
-    int exec();
+        static int choose( const QString& caption,
+                           const QString& text,
+                           QMessageBox::Icon = QMessageBox::Information,
+                           QWidget* parent = 0,
+                           int buttonCount = 2,
+                           const KGuiItem& b1 = KStandardGuiItem::yes(),
+                           const KGuiItem& b2 = KStandardGuiItem::no(),
+                           const KGuiItem& b3 = KStandardGuiItem::no(),
+                           const KGuiItem& b4 = KStandardGuiItem::no(),
+                           const KGuiItem& b5 = KStandardGuiItem::no(),
+                           const KGuiItem& b6 = KStandardGuiItem::no() );
 
-private Q_SLOTS:
-    void slotButtonClicked( int );
+    public Q_SLOTS:
+        /**
+         * returnes the number of the clicked button starting at 1.
+         */
+        int exec();
 
-private:
-    void closeEvent( QCloseEvent* );
+    private Q_SLOTS:
+        void slotButtonClicked( int );
 
-    class Private;
-    Private* d;
-};
+    private:
+        void closeEvent( QCloseEvent* );
+
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

@@ -62,18 +62,19 @@
 /**
  * There are two ways to fill a data project with files and folders:
  * \li Use the addUrl and addUrlsT methods
- * \li or create your own K3bDirItems and K3bFileItems. The doc will be properly updated
+ * \li or create your own K3b::DirItems and K3b::FileItems. The doc will be properly updated
  *     by the constructors of the items.
  */
-K3bDataDoc::K3bDataDoc( QObject* parent )
-    : K3bDoc( parent )
+K3b::DataDoc::DataDoc( QObject* parent )
+    : K3b::Doc( parent )
 {
     m_root = 0;
 
-    m_sizeHandler = new K3bFileCompilationSizeHandler();
+    m_sizeHandler = new K3b::FileCompilationSizeHandler();
 }
 
-K3bDataDoc::~K3bDataDoc()
+
+K3b::DataDoc::~DataDoc()
 {
     delete m_root;
     delete m_sizeHandler;
@@ -81,24 +82,24 @@ K3bDataDoc::~K3bDataDoc()
 }
 
 
-bool K3bDataDoc::newDocument()
+bool K3b::DataDoc::newDocument()
 {
     clear();
     if ( !m_root )
-        m_root = new K3bRootItem( this );
+        m_root = new K3b::RootItem( this );
 
     m_bExistingItemsReplaceAll = m_bExistingItemsIgnoreAll = false;
 
     m_multisessionMode = AUTO;
     m_dataMode = K3b::DATA_MODE_AUTO;
 
-    m_isoOptions = K3bIsoOptions();
+    m_isoOptions = K3b::IsoOptions();
 
-    return K3bDoc::newDocument();
+    return K3b::Doc::newDocument();
 }
 
 
-void K3bDataDoc::clear()
+void K3b::DataDoc::clear()
 {
     clearImportedSession();
     m_importedSession = -1;
@@ -112,33 +113,33 @@ void K3bDataDoc::clear()
 }
 
 
-QString K3bDataDoc::name() const
+QString K3b::DataDoc::name() const
 {
     return m_isoOptions.volumeID();
 }
 
 
-void K3bDataDoc::setIsoOptions( const K3bIsoOptions& o )
+void K3b::DataDoc::setIsoOptions( const K3b::IsoOptions& o )
 {
     m_isoOptions = o;
     emit changed();
 }
 
 
-void K3bDataDoc::setVolumeID( const QString& v )
+void K3b::DataDoc::setVolumeID( const QString& v )
 {
     m_isoOptions.setVolumeID( v );
     emit changed();
 }
 
 
-void K3bDataDoc::addUrls( const KUrl::List& urls )
+void K3b::DataDoc::addUrls( const KUrl::List& urls )
 {
     addUrlsToDir( urls, root() );
 }
 
 
-void K3bDataDoc::addUrlsToDir( const KUrl::List& l, K3bDirItem* dir )
+void K3b::DataDoc::addUrlsToDir( const KUrl::List& l, K3b::DirItem* dir )
 {
     if( !dir )
         dir = root();
@@ -158,7 +159,7 @@ void K3bDataDoc::addUrlsToDir( const KUrl::List& l, K3bDirItem* dir )
         if( k3bname.isEmpty() )
             k3bname = "1";
 
-        K3bDirItem* newDirItem = 0;
+        K3b::DirItem* newDirItem = 0;
 
         // rename the new item if an item with that name already exists
         int cnt = 0;
@@ -168,10 +169,10 @@ void K3bDataDoc::addUrlsToDir( const KUrl::List& l, K3bDirItem* dir )
             QString name( k3bname );
             if( cnt > 0 )
                 name += QString("_%1").arg(cnt);
-            if( K3bDataItem* oldItem = dir->find( name ) ) {
+            if( K3b::DataItem* oldItem = dir->find( name ) ) {
                 if( f.isDir() && oldItem->isDir() ) {
                     // ok, just reuse the dir
-                    newDirItem = static_cast<K3bDirItem*>(oldItem);
+                    newDirItem = static_cast<K3b::DirItem*>(oldItem);
                 }
                 // directories cannot replace files in an old session (I think)
                 // and also directories can for sure never be replaced (only be reused as above)
@@ -190,7 +191,7 @@ void K3bDataDoc::addUrlsToDir( const KUrl::List& l, K3bDirItem* dir )
         // QFileInfo::exists and QFileInfo::isReadable return false for broken symlinks :(
         if( f.isDir() && !f.isSymLink() ) {
             if( !newDirItem ) {
-                newDirItem = new K3bDirItem( k3bname, this, dir );
+                newDirItem = new K3b::DirItem( k3bname, this, dir );
                 newDirItem->setLocalPath( url.path() ); // HACK: see k3bdiritem.h
             }
 
@@ -202,7 +203,7 @@ void K3bDataDoc::addUrlsToDir( const KUrl::List& l, K3bDirItem* dir )
             addUrlsToDir( newUrls, newDirItem );
         }
         else if( f.isSymLink() || f.isFile() )
-            (void)new K3bFileItem( url.path(), this, dir, k3bname );
+            (void)new K3b::FileItem( url.path(), this, dir, k3bname );
     }
 
     emit changed();
@@ -211,7 +212,7 @@ void K3bDataDoc::addUrlsToDir( const KUrl::List& l, K3bDirItem* dir )
 }
 
 
-bool K3bDataDoc::nameAlreadyInDir( const QString& name, K3bDirItem* dir )
+bool K3b::DataDoc::nameAlreadyInDir( const QString& name, K3b::DirItem* dir )
 {
     if( !dir )
         return false;
@@ -220,9 +221,9 @@ bool K3bDataDoc::nameAlreadyInDir( const QString& name, K3bDirItem* dir )
 }
 
 
-K3bDirItem* K3bDataDoc::addEmptyDir( const QString& name, K3bDirItem* parent )
+K3b::DirItem* K3b::DataDoc::addEmptyDir( const QString& name, K3b::DirItem* parent )
 {
-    K3bDirItem* item = new K3bDirItem( name, this, parent );
+    K3b::DirItem* item = new K3b::DirItem( name, this, parent );
 
     setModified( true );
 
@@ -230,7 +231,7 @@ K3bDirItem* K3bDataDoc::addEmptyDir( const QString& name, K3bDirItem* parent )
 }
 
 
-KIO::filesize_t K3bDataDoc::size() const
+KIO::filesize_t K3b::DataDoc::size() const
 {
     if( m_isoOptions.doNotCacheInodes() )
         return root()->blocks().mode1Bytes();
@@ -240,13 +241,13 @@ KIO::filesize_t K3bDataDoc::size() const
 }
 
 
-KIO::filesize_t K3bDataDoc::burningSize() const
+KIO::filesize_t K3b::DataDoc::burningSize() const
 {
     return size() - m_oldSessionSize; //m_oldSessionSizeHandler->size();
 }
 
 
-K3b::Msf K3bDataDoc::length() const
+K3b::Msf K3b::DataDoc::length() const
 {
     // 1 block consists of 2048 bytes real data
     // and 1 block equals to 1 audio frame
@@ -256,19 +257,19 @@ K3b::Msf K3bDataDoc::length() const
 }
 
 
-K3b::Msf K3bDataDoc::burningLength() const
+K3b::Msf K3b::DataDoc::burningLength() const
 {
     return K3b::Msf( burningSize() / 2048 );
 }
 
 
-QString K3bDataDoc::typeString() const
+QString K3b::DataDoc::typeString() const
 {
     return QString::fromLatin1("data");
 }
 
 
-bool K3bDataDoc::loadDocumentData( QDomElement* rootElem )
+bool K3b::DataDoc::loadDocumentData( QDomElement* rootElem )
 {
     if( !root() )
         newDocument();
@@ -276,7 +277,7 @@ bool K3bDataDoc::loadDocumentData( QDomElement* rootElem )
     QDomNodeList nodes = rootElem->childNodes();
 
     if( nodes.item(0).nodeName() != "general" ) {
-        kDebug() << "(K3bDataDoc) could not find 'general' section.";
+        kDebug() << "(K3b::DataDoc) could not find 'general' section.";
         return false;
     }
     if( !readGeneralDocumentData( nodes.item(0).toElement() ) )
@@ -286,7 +287,7 @@ bool K3bDataDoc::loadDocumentData( QDomElement* rootElem )
     // parse options
     // -----------------------------------------------------------------
     if( nodes.item(1).nodeName() != "options" ) {
-        kDebug() << "(K3bDataDoc) could not find 'options' section.";
+        kDebug() << "(K3b::DataDoc) could not find 'options' section.";
         return false;
     }
     if( !loadDocumentDataOptions( nodes.item(1).toElement() ) )
@@ -298,7 +299,7 @@ bool K3bDataDoc::loadDocumentData( QDomElement* rootElem )
     // parse header
     // -----------------------------------------------------------------
     if( nodes.item(2).nodeName() != "header" ) {
-        kDebug() << "(K3bDataDoc) could not find 'header' section.";
+        kDebug() << "(K3b::DataDoc) could not find 'header' section.";
         return false;
     }
     if( !loadDocumentDataHeader( nodes.item(2).toElement() ) )
@@ -310,12 +311,12 @@ bool K3bDataDoc::loadDocumentData( QDomElement* rootElem )
     // parse files
     // -----------------------------------------------------------------
     if( nodes.item(3).nodeName() != "files" ) {
-        kDebug() << "(K3bDataDoc) could not find 'files' section.";
+        kDebug() << "(K3b::DataDoc) could not find 'files' section.";
         return false;
     }
 
     if( m_root == 0 )
-        m_root = new K3bRootItem( this );
+        m_root = new K3b::RootItem( this );
 
     QDomNodeList filesList = nodes.item(3).childNodes();
     for( int i = 0; i < filesList.count(); i++ ) {
@@ -342,7 +343,7 @@ bool K3bDataDoc::loadDocumentData( QDomElement* rootElem )
 }
 
 
-bool K3bDataDoc::loadDocumentDataOptions( QDomElement elem )
+bool K3b::DataDoc::loadDocumentDataOptions( QDomElement elem )
 {
     QDomNodeList headerList = elem.childNodes();
     for( int i = 0; i < headerList.count(); i++ ) {
@@ -419,13 +420,13 @@ bool K3bDataDoc::loadDocumentDataOptions( QDomElement elem )
 
         else if( e.nodeName() == "whitespace_treatment" ) {
             if( e.text() == "strip" )
-                m_isoOptions.setWhiteSpaceTreatment( K3bIsoOptions::strip );
+                m_isoOptions.setWhiteSpaceTreatment( K3b::IsoOptions::strip );
             else if( e.text() == "extended" )
-                m_isoOptions.setWhiteSpaceTreatment( K3bIsoOptions::extended );
+                m_isoOptions.setWhiteSpaceTreatment( K3b::IsoOptions::extended );
             else if( e.text() == "extended" )
-                m_isoOptions.setWhiteSpaceTreatment( K3bIsoOptions::replace );
+                m_isoOptions.setWhiteSpaceTreatment( K3b::IsoOptions::replace );
             else
-                m_isoOptions.setWhiteSpaceTreatment( K3bIsoOptions::noChange );
+                m_isoOptions.setWhiteSpaceTreatment( K3b::IsoOptions::noChange );
         }
 
         else if( e.nodeName() == "whitespace_replace_string")
@@ -458,14 +459,14 @@ bool K3bDataDoc::loadDocumentDataOptions( QDomElement elem )
             setVerifyData( e.attributeNode( "activated" ).value() == "yes" );
 
         else
-            kDebug() << "(K3bDataDoc) unknown option entry: " << e.nodeName();
+            kDebug() << "(K3b::DataDoc) unknown option entry: " << e.nodeName();
     }
 
     return true;
 }
 
 
-bool K3bDataDoc::loadDocumentDataHeader( QDomElement headerElem )
+bool K3b::DataDoc::loadDocumentDataHeader( QDomElement headerElem )
 {
     QDomNodeList headerList = headerElem.childNodes();
     for( int i = 0; i < headerList.count(); i++ ) {
@@ -499,21 +500,21 @@ bool K3bDataDoc::loadDocumentDataHeader( QDomElement headerElem )
             m_isoOptions.setSystemId( e.text() );
 
         else
-            kDebug() << "(K3bDataDoc) unknown header entry: " << e.nodeName();
+            kDebug() << "(K3b::DataDoc) unknown header entry: " << e.nodeName();
     }
 
     return true;
 }
 
 
-bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
+bool K3b::DataDoc::loadDataItem( QDomElement& elem, K3b::DirItem* parent )
 {
-    K3bDataItem* newItem = 0;
+    K3b::DataItem* newItem = 0;
 
     if( elem.nodeName() == "file" ) {
         QDomElement urlElem = elem.firstChild().toElement();
         if( urlElem.isNull() ) {
-            kDebug() << "(K3bDataDoc) file-element without url!";
+            kDebug() << "(K3b::DataDoc) file-element without url!";
             return false;
         }
 
@@ -528,16 +529,16 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
             m_noPermissionFiles.append( urlElem.text() );
 
         else if( !elem.attribute( "bootimage" ).isEmpty() ) {
-            K3bBootItem* bootItem = new K3bBootItem( urlElem.text(),
-                                                     this,
-                                                     parent,
-                                                     elem.attributeNode( "name" ).value() );
+            K3b::BootItem* bootItem = new K3b::BootItem( urlElem.text(),
+                                                         this,
+                                                         parent,
+                                                         elem.attributeNode( "name" ).value() );
             if( elem.attribute( "bootimage" ) == "floppy" )
-                bootItem->setImageType( K3bBootItem::FLOPPY );
+                bootItem->setImageType( K3b::BootItem::FLOPPY );
             else if( elem.attribute( "bootimage" ) == "harddisk" )
-                bootItem->setImageType( K3bBootItem::HARDDISK );
+                bootItem->setImageType( K3b::BootItem::HARDDISK );
             else
-                bootItem->setImageType( K3bBootItem::NONE );
+                bootItem->setImageType( K3b::BootItem::NONE );
             bootItem->setNoBoot( elem.attribute( "no_boot" ) == "yes" );
             bootItem->setBootInfoTable( elem.attribute( "boot_info_table" ) == "yes" );
             bootItem->setLoadSegment( elem.attribute( "load_segment" ).toInt() );
@@ -547,10 +548,10 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
         }
 
         else {
-            newItem = new K3bFileItem( urlElem.text(),
-                                       this,
-                                       parent,
-                                       elem.attributeNode( "name" ).value() );
+            newItem = new K3b::FileItem( urlElem.text(),
+                                         this,
+                                         parent,
+                                         elem.attributeNode( "name" ).value() );
         }
     }
     else if( elem.nodeName() == "special" ) {
@@ -559,19 +560,19 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
     }
     else if( elem.nodeName() == "directory" ) {
         // This is for the VideoDVD project which already contains the *_TS folders
-        K3bDirItem* newDirItem = 0;
-        if( K3bDataItem* item = parent->find( elem.attributeNode( "name" ).value() ) ) {
+        K3b::DirItem* newDirItem = 0;
+        if( K3b::DataItem* item = parent->find( elem.attributeNode( "name" ).value() ) ) {
             if( item->isDir() ) {
-                newDirItem = static_cast<K3bDirItem*>(item);
+                newDirItem = static_cast<K3b::DirItem*>(item);
             }
             else {
-                kError() << "(K3bDataDoc) INVALID DOCUMENT: item " << item->k3bPath() << " saved twice" << endl;
+                kError() << "(K3b::DataDoc) INVALID DOCUMENT: item " << item->k3bPath() << " saved twice" << endl;
                 return false;
             }
         }
 
         if( !newDirItem )
-            newDirItem = new K3bDirItem( elem.attributeNode( "name" ).value(), this, parent );
+            newDirItem = new K3b::DirItem( elem.attributeNode( "name" ).value(), this, parent );
         QDomNodeList childNodes = elem.childNodes();
         for( int i = 0; i < childNodes.count(); i++ ) {
 
@@ -583,7 +584,7 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
         newItem = newDirItem;
     }
     else {
-        kDebug() << "(K3bDataDoc) wrong tag in files-section: " << elem.nodeName();
+        kDebug() << "(K3b::DataDoc) wrong tag in files-section: " << elem.nodeName();
         return false;
     }
 
@@ -595,7 +596,7 @@ bool K3bDataDoc::loadDataItem( QDomElement& elem, K3bDirItem* parent )
 }
 
 
-bool K3bDataDoc::saveDocumentData( QDomElement* docElem )
+bool K3b::DataDoc::saveDocumentData( QDomElement* docElem )
 {
     QDomDocument doc = docElem->ownerDocument();
 
@@ -619,7 +620,7 @@ bool K3bDataDoc::saveDocumentData( QDomElement* docElem )
     // ----------------------------------------------------------------------
     QDomElement topElem = doc.createElement( "files" );
 
-    Q_FOREACH( K3bDataItem* item, root()->children() ) {
+    Q_FOREACH( K3b::DataItem* item, root()->children() ) {
         saveDataItem( item, &doc, &topElem );
     }
 
@@ -630,7 +631,7 @@ bool K3bDataDoc::saveDocumentData( QDomElement* docElem )
 }
 
 
-void K3bDataDoc::saveDocumentDataOptions( QDomElement& optionsElem )
+void K3b::DataDoc::saveDocumentDataOptions( QDomElement& optionsElem )
 {
     QDomDocument doc = optionsElem.ownerDocument();
 
@@ -725,13 +726,13 @@ void K3bDataDoc::saveDocumentDataOptions( QDomElement& optionsElem )
 
     topElem = doc.createElement( "whitespace_treatment" );
     switch( isoOptions().whiteSpaceTreatment() ) {
-    case K3bIsoOptions::strip:
+    case K3b::IsoOptions::strip:
         topElem.appendChild( doc.createTextNode( "strip" ) );
         break;
-    case K3bIsoOptions::extended:
+    case K3b::IsoOptions::extended:
         topElem.appendChild( doc.createTextNode( "extended" ) );
         break;
-    case K3bIsoOptions::replace:
+    case K3b::IsoOptions::replace:
         topElem.appendChild( doc.createTextNode( "replace" ) );
         break;
     default:
@@ -782,7 +783,7 @@ void K3bDataDoc::saveDocumentDataOptions( QDomElement& optionsElem )
 }
 
 
-void K3bDataDoc::saveDocumentDataHeader( QDomElement& headerElem )
+void K3b::DataDoc::saveDocumentDataHeader( QDomElement& headerElem )
 {
     QDomDocument doc = headerElem.ownerDocument();
 
@@ -821,11 +822,11 @@ void K3bDataDoc::saveDocumentDataHeader( QDomElement& headerElem )
 }
 
 
-void K3bDataDoc::saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement* parent )
+void K3b::DataDoc::saveDataItem( K3b::DataItem* item, QDomDocument* doc, QDomElement* parent )
 {
-    if( K3bFileItem* fileItem = dynamic_cast<K3bFileItem*>( item ) ) {
+    if( K3b::FileItem* fileItem = dynamic_cast<K3b::FileItem*>( item ) ) {
         if( m_oldSession.contains( fileItem ) ) {
-            kDebug() << "(K3bDataDoc) ignoring fileitem " << fileItem->k3bName() << " from old session while saving...";
+            kDebug() << "(K3b::DataDoc) ignoring fileitem " << fileItem->k3bName() << " from old session while saving...";
         }
         else {
             QDomElement topElem = doc->createElement( "file" );
@@ -840,10 +841,10 @@ void K3bDataDoc::saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement
             parent->appendChild( topElem );
 
             // add boot options as attributes to preserve compatibility to older K3b versions
-            if( K3bBootItem* bootItem = dynamic_cast<K3bBootItem*>( fileItem ) ) {
-                if( bootItem->imageType() == K3bBootItem::FLOPPY )
+            if( K3b::BootItem* bootItem = dynamic_cast<K3b::BootItem*>( fileItem ) ) {
+                if( bootItem->imageType() == K3b::BootItem::FLOPPY )
                     topElem.setAttribute( "bootimage", "floppy" );
-                else if( bootItem->imageType() == K3bBootItem::HARDDISK )
+                else if( bootItem->imageType() == K3b::BootItem::HARDDISK )
                     topElem.setAttribute( "bootimage", "harddisk" );
                 else
                     topElem.setAttribute( "bootimage", "none" );
@@ -862,14 +863,14 @@ void K3bDataDoc::saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement
 
         parent->appendChild( topElem );
     }
-    else if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( item ) ) {
+    else if( K3b::DirItem* dirItem = dynamic_cast<K3b::DirItem*>( item ) ) {
         QDomElement topElem = doc->createElement( "directory" );
         topElem.setAttribute( "name", dirItem->k3bName() );
 
         if( item->sortWeight() != 0 )
             topElem.setAttribute( "sort_weight", QString::number(item->sortWeight()) );
 
-        Q_FOREACH( K3bDataItem* item, dirItem->children() ) {
+        Q_FOREACH( K3b::DataItem* item, dirItem->children() ) {
             saveDataItem( item, doc, &topElem );
         }
 
@@ -878,7 +879,7 @@ void K3bDataDoc::saveDataItem( K3bDataItem* item, QDomDocument* doc, QDomElement
 }
 
 
-void K3bDataDoc::removeItem( K3bDataItem* item )
+void K3b::DataDoc::removeItem( K3b::DataItem* item )
 {
     if( !item )
         return;
@@ -887,23 +888,23 @@ void K3bDataDoc::removeItem( K3bDataItem* item )
         delete item;
     }
     else
-        kDebug() << "(K3bDataDoc) tried to remove non-removable entry!";
+        kDebug() << "(K3b::DataDoc) tried to remove non-removable entry!";
 }
 
 
-void K3bDataDoc::aboutToRemoveItemFromDir( K3bDirItem* /*parent*/, K3bDataItem* removedItem )
+void K3b::DataDoc::aboutToRemoveItemFromDir( K3b::DirItem* /*parent*/, K3b::DataItem* removedItem )
 {
     emit aboutToRemoveItem( removedItem );
 }
 
 
-void K3bDataDoc::aboutToAddItemToDir( K3bDirItem* parent, K3bDataItem* addedItem )
+void K3b::DataDoc::aboutToAddItemToDir( K3b::DirItem* parent, K3b::DataItem* addedItem )
 {
     emit aboutToAddItem( parent, addedItem );
 }
 
 
-void K3bDataDoc::itemRemovedFromDir( K3bDirItem*, K3bDataItem* removedItem )
+void K3b::DataDoc::itemRemovedFromDir( K3b::DirItem*, K3b::DataItem* removedItem )
 {
     // update the project size
     if( !removedItem->isFromOldSession() )
@@ -911,7 +912,7 @@ void K3bDataDoc::itemRemovedFromDir( K3bDirItem*, K3bDataItem* removedItem )
 
     // update the boot item list
     if( removedItem->isBootItem() ) {
-        m_bootImages.removeAll( static_cast<K3bBootItem*>( removedItem ) );
+        m_bootImages.removeAll( static_cast<K3b::BootItem*>( removedItem ) );
         if( m_bootImages.isEmpty() ) {
             delete m_bootCataloge;
             m_bootCataloge = 0;
@@ -923,7 +924,7 @@ void K3bDataDoc::itemRemovedFromDir( K3bDirItem*, K3bDataItem* removedItem )
 }
 
 
-void K3bDataDoc::itemAddedToDir( K3bDirItem*, K3bDataItem* item )
+void K3b::DataDoc::itemAddedToDir( K3b::DirItem*, K3b::DataItem* item )
 {
     // update the project size
     if( !item->isFromOldSession() )
@@ -931,22 +932,22 @@ void K3bDataDoc::itemAddedToDir( K3bDirItem*, K3bDataItem* item )
 
     // update the boot item list
     if( item->isBootItem() )
-        m_bootImages.append( static_cast<K3bBootItem*>( item ) );
+        m_bootImages.append( static_cast<K3b::BootItem*>( item ) );
 
     emit itemAdded( item );
     emit changed();
 }
 
 
-void K3bDataDoc::moveItem( K3bDataItem* item, K3bDirItem* newParent )
+void K3b::DataDoc::moveItem( K3b::DataItem* item, K3b::DirItem* newParent )
 {
     if( !item || !newParent ) {
-        kDebug() << "(K3bDataDoc) item or parentitem was NULL while moving.";
+        kDebug() << "(K3b::DataDoc) item or parentitem was NULL while moving.";
         return;
     }
 
     if( !item->isMoveable() ) {
-        kDebug() << "(K3bDataDoc) item is not movable! ";
+        kDebug() << "(K3b::DataDoc) item is not movable! ";
         return;
     }
 
@@ -954,16 +955,16 @@ void K3bDataDoc::moveItem( K3bDataItem* item, K3bDirItem* newParent )
 }
 
 
-void K3bDataDoc::moveItems( const QList<K3bDataItem*>& itemList, K3bDirItem* newParent )
+void K3b::DataDoc::moveItems( const QList<K3b::DataItem*>& itemList, K3b::DirItem* newParent )
 {
     if( !newParent ) {
-        kDebug() << "(K3bDataDoc) tried to move items to nowhere...!";
+        kDebug() << "(K3b::DataDoc) tried to move items to nowhere...!";
         return;
     }
 
-    Q_FOREACH( K3bDataItem* item, itemList ) {
+    Q_FOREACH( K3b::DataItem* item, itemList ) {
         // check if newParent is subdir of item
-        if( K3bDirItem* dirItem = dynamic_cast<K3bDirItem*>( item ) ) {
+        if( K3b::DirItem* dirItem = dynamic_cast<K3b::DirItem*>( item ) ) {
             if( dirItem->isSubItem( newParent ) ) {
                 continue;
             }
@@ -975,13 +976,13 @@ void K3bDataDoc::moveItems( const QList<K3bDataItem*>& itemList, K3bDirItem* new
 }
 
 
-K3bBurnJob* K3bDataDoc::newBurnJob( K3bJobHandler* hdl, QObject* parent )
+K3b::BurnJob* K3b::DataDoc::newBurnJob( K3b::JobHandler* hdl, QObject* parent )
 {
-    return new K3bDataJob( this, hdl, parent );
+    return new K3b::DataJob( this, hdl, parent );
 }
 
 
-QString K3bDataDoc::treatWhitespace( const QString& path )
+QString K3b::DataDoc::treatWhitespace( const QString& path )
 {
 
     // TODO:
@@ -991,16 +992,16 @@ QString K3bDataDoc::treatWhitespace( const QString& path )
     // similar (s.a.)
 
 
-    if( isoOptions().whiteSpaceTreatment() != K3bIsoOptions::noChange ) {
+    if( isoOptions().whiteSpaceTreatment() != K3b::IsoOptions::noChange ) {
         QString result = path;
 
-        if( isoOptions().whiteSpaceTreatment() == K3bIsoOptions::replace ) {
+        if( isoOptions().whiteSpaceTreatment() == K3b::IsoOptions::replace ) {
             result.replace( ' ', isoOptions().whiteSpaceTreatmentReplaceString() );
         }
-        else if( isoOptions().whiteSpaceTreatment() == K3bIsoOptions::strip ) {
+        else if( isoOptions().whiteSpaceTreatment() == K3b::IsoOptions::strip ) {
             result.remove( ' ' );
         }
-        else if( isoOptions().whiteSpaceTreatment() == K3bIsoOptions::extended ) {
+        else if( isoOptions().whiteSpaceTreatment() == K3b::IsoOptions::extended ) {
             result.truncate(0);
             for( int i = 0; i < path.length(); i++ ) {
                 if( path[i] == ' ' ) {
@@ -1012,7 +1013,7 @@ QString K3bDataDoc::treatWhitespace( const QString& path )
             }
         }
 
-        kDebug() << "(K3bDataDoc) converted " << path << " to " << result;
+        kDebug() << "(K3b::DataDoc) converted " << path << " to " << result;
         return result;
     }
     else
@@ -1020,7 +1021,7 @@ QString K3bDataDoc::treatWhitespace( const QString& path )
 }
 
 
-void K3bDataDoc::prepareFilenames()
+void K3b::DataDoc::prepareFilenames()
 {
     m_needToCutFilenames = false;
     m_needToCutFilenameItems.clear();
@@ -1034,7 +1035,7 @@ void K3bDataDoc::prepareFilenames()
     // too much.
     //
 
-    K3bDataItem* item = root();
+    K3b::DataItem* item = root();
     int maxlen = ( isoOptions().jolietLong() ? 103 : 64 );
     while( (item = item->nextSibling()) ) {
         item->setWrittenName( treatWhitespace( item->k3bName() ) );
@@ -1055,20 +1056,20 @@ void K3bDataDoc::prepareFilenames()
 }
 
 
-void K3bDataDoc::prepareFilenamesInDir( K3bDirItem* dir )
+void K3b::DataDoc::prepareFilenamesInDir( K3b::DirItem* dir )
 {
     if( !dir )
         return;
 
-    QList<K3bDataItem*> sortedChildren;
-    QList<K3bDataItem*> children( dir->children() );
-    QList<K3bDataItem*>::const_iterator it = children.constEnd();
+    QList<K3b::DataItem*> sortedChildren;
+    QList<K3b::DataItem*> children( dir->children() );
+    QList<K3b::DataItem*>::const_iterator it = children.constEnd();
     while ( it != children.constBegin() ) {
         --it;
-        K3bDataItem* item = *it;
+        K3b::DataItem* item = *it;
 
         if( item->isDir() )
-            prepareFilenamesInDir( dynamic_cast<K3bDirItem*>( item ) );
+            prepareFilenamesInDir( dynamic_cast<K3b::DirItem*>( item ) );
 
         // insertion sort
         int i = 0;
@@ -1079,7 +1080,7 @@ void K3bDataDoc::prepareFilenamesInDir( K3bDirItem* dir )
     }
 
     if( isoOptions().createJoliet() || isoOptions().createRockRidge() ) {
-        QList<K3bDataItem*> sameNameList;
+        QList<K3b::DataItem*> sameNameList;
         while( !sortedChildren.isEmpty() ) {
 
             sameNameList.clear();
@@ -1100,7 +1101,7 @@ void K3bDataDoc::prepareFilenamesInDir( K3bDirItem* dir )
                 }
 
                 int cnt = 1;
-                Q_FOREACH( K3bDataItem* item, sameNameList ) {
+                Q_FOREACH( K3b::DataItem* item, sameNameList ) {
                     item->setWrittenName( K3b::appendNumberToFilename( item->writtenName(), cnt++, maxlen ) );
                 }
             }
@@ -1109,7 +1110,7 @@ void K3bDataDoc::prepareFilenamesInDir( K3bDirItem* dir )
 }
 
 
-void K3bDataDoc::informAboutNotFoundFiles()
+void K3b::DataDoc::informAboutNotFoundFiles()
 {
     if( !m_notFoundFiles.isEmpty() ) {
         KMessageBox::informationList( qApp->activeWindow(), i18n("Could not find the following files:"),
@@ -1126,7 +1127,7 @@ void K3bDataDoc::informAboutNotFoundFiles()
 }
 
 
-void K3bDataDoc::setMultiSessionMode( K3bDataDoc::MultiSessionMode mode )
+void K3b::DataDoc::setMultiSessionMode( K3b::DataDoc::MultiSessionMode mode )
 {
     if( m_multisessionMode == NONE || m_multisessionMode == START )
         clearImportedSession();
@@ -1135,29 +1136,29 @@ void K3bDataDoc::setMultiSessionMode( K3bDataDoc::MultiSessionMode mode )
 }
 
 
-bool K3bDataDoc::importSession( K3bDevice::Device* device, int session )
+bool K3b::DataDoc::importSession( K3b::Device::Device* device, int session )
 {
-    K3bDevice::DiskInfo diskInfo = device->diskInfo();
+    K3b::Device::DiskInfo diskInfo = device->diskInfo();
     // DVD+RW media is reported as non-appendable
     if( !diskInfo.appendable() &&
-        !(diskInfo.mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR)) )
+        !(diskInfo.mediaType() & (K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_RW_OVWR)) )
         return false;
 
-    K3bDevice::Toc toc = device->readToc();
+    K3b::Device::Toc toc = device->readToc();
     if( toc.isEmpty() ||
-        toc.last().type() != K3bDevice::Track::DATA )
+        toc.last().type() != K3b::Device::Track::TYPE_DATA )
         return false;
 
     long startSec = toc.last().firstSector().lba();
     if ( session > 0 ) {
-        for ( K3bDevice::Toc::const_iterator it = toc.constBegin(); it != toc.constEnd(); ++it ) {
+        for ( K3b::Device::Toc::const_iterator it = toc.constBegin(); it != toc.constEnd(); ++it ) {
             if ( ( *it ).session() == session ) {
                 startSec = ( *it ).firstSector().lba();
                 break;
             }
         }
     }
-    K3bIso9660 iso( device, startSec );
+    K3b::Iso9660 iso( device, startSec );
 
     if( iso.open() ) {
         // remove previously imported sessions
@@ -1174,12 +1175,12 @@ bool K3bDataDoc::importSession( K3bDevice::Device* device, int session )
         m_oldSessionSize = toc.last().lastSector().mode1Bytes();
         m_importedSession = session;
 
-        kDebug() << "(K3bDataDoc) imported session size: " << KIO::convertSize(m_oldSessionSize);
+        kDebug() << "(K3b::DataDoc) imported session size: " << KIO::convertSize(m_oldSessionSize);
 
         // the track size for DVD+RW media and DVD-RW Overwrite media has nothing to do with the filesystem
         // size. in that case we need to use the filesystem's size (which is ok since it's one track anyway,
         // no real multisession)
-        if( diskInfo.mediaType() & (K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR) ) {
+        if( diskInfo.mediaType() & (K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_RW_OVWR) ) {
             m_oldSessionSize = iso.primaryDescriptor().volumeSpaceSize
                                * iso.primaryDescriptor().logicalBlockSize;
         }
@@ -1190,7 +1191,7 @@ bool K3bDataDoc::importSession( K3bDevice::Device* device, int session )
         m_isoOptions.setVolumeID( iso.primaryDescriptor().volumeId );
         // TODO: also import some other pd fields
 
-        const K3bIso9660Directory* rootDir = iso.firstRRDirEntry();
+        const K3b::Iso9660Directory* rootDir = iso.firstRRDirEntry();
         // J�rg Schilling says that it is impossible to import the joliet tree for multisession
 //     if( !rootDir )
 //       rootDir = iso.firstJolietDirEntry();
@@ -1203,18 +1204,18 @@ bool K3bDataDoc::importSession( K3bDevice::Device* device, int session )
             return true;
         }
         else {
-            kDebug() << "(K3bDataDoc::importSession) Could not find primary volume desc.";
+            kDebug() << "(K3b::DataDoc::importSession) Could not find primary volume desc.";
             return false;
         }
     }
     else {
-        kDebug() << "(K3bDataDoc) unable to read toc.";
+        kDebug() << "(K3b::DataDoc) unable to read toc.";
         return false;
     }
 }
 
 
-void K3bDataDoc::createSessionImportItems( const K3bIso9660Directory* importDir, K3bDirItem* parent )
+void K3b::DataDoc::createSessionImportItems( const K3b::Iso9660Directory* importDir, K3b::DirItem* parent )
 {
     Q_ASSERT(importDir);
     QStringList entries = importDir->entries();
@@ -1222,18 +1223,18 @@ void K3bDataDoc::createSessionImportItems( const K3bIso9660Directory* importDir,
     entries.removeAll( ".." );
     for( QStringList::const_iterator it = entries.constBegin();
          it != entries.constEnd(); ++it ) {
-        const K3bIso9660Entry* entry = importDir->entry( *it );
-        K3bDataItem* oldItem = parent->find( entry->name() );
+        const K3b::Iso9660Entry* entry = importDir->entry( *it );
+        K3b::DataItem* oldItem = parent->find( entry->name() );
         if( entry->isDirectory() ) {
-            K3bDirItem* dir = 0;
+            K3b::DirItem* dir = 0;
             if( oldItem && oldItem->isDir() ) {
-                dir = (K3bDirItem*)oldItem;
+                dir = (K3b::DirItem*)oldItem;
             }
             else {
                 // we overwrite without warning!
                 if( oldItem )
                     removeItem( oldItem );
-                dir = new K3bDirItem( entry->name(), this, parent );
+                dir = new K3b::DirItem( entry->name(), this, parent );
             }
 
             dir->setRemoveable(false);
@@ -1244,16 +1245,16 @@ void K3bDataDoc::createSessionImportItems( const K3bIso9660Directory* importDir,
             dir->setExtraInfo( i18n("From previous session") );
             m_oldSession.append( dir );
 
-            createSessionImportItems( static_cast<const K3bIso9660Directory*>(entry), dir );
+            createSessionImportItems( static_cast<const K3b::Iso9660Directory*>(entry), dir );
         }
         else {
-            const K3bIso9660File* file = static_cast<const K3bIso9660File*>(entry);
+            const K3b::Iso9660File* file = static_cast<const K3b::Iso9660File*>(entry);
 
             // we overwrite without warning!
             if( oldItem )
                 removeItem( oldItem );
 
-            K3bSessionImportItem* item = new K3bSessionImportItem( file, this, parent );
+            K3b::SessionImportItem* item = new K3b::SessionImportItem( file, this, parent );
             item->setExtraInfo( i18n("From previous session") );
             m_oldSession.append( item );
         }
@@ -1261,23 +1262,23 @@ void K3bDataDoc::createSessionImportItems( const K3bIso9660Directory* importDir,
 }
 
 
-void K3bDataDoc::clearImportedSession()
+void K3b::DataDoc::clearImportedSession()
 {
     //  m_oldSessionSizeHandler->clear();
     m_oldSessionSize = 0;
 
     while( !m_oldSession.isEmpty() ) {
-        K3bDataItem* item = m_oldSession.takeFirst();
+        K3b::DataItem* item = m_oldSession.takeFirst();
 
         if( item->isDir() ) {
-            K3bDirItem* dir = (K3bDirItem*)item;
+            K3b::DirItem* dir = (K3b::DirItem*)item;
             if( dir->numDirs() + dir->numFiles() == 0 ) {
                 // this imported dir is not needed anymore
                 // since it is empty
                 delete item;
             }
             else {
-                Q_FOREACH( K3bDataItem* item, dir->children() ) {
+                Q_FOREACH( K3b::DataItem* item, dir->children() ) {
                     if( !m_oldSession.contains( item ) ) {
                         // now the dir becomes a totally normal dir
                         dir->setRemoveable(true);
@@ -1302,11 +1303,11 @@ void K3bDataDoc::clearImportedSession()
 }
 
 
-K3bDirItem* K3bDataDoc::bootImageDir()
+K3b::DirItem* K3b::DataDoc::bootImageDir()
 {
-    K3bDataItem* b = m_root->find( "boot" );
+    K3b::DataItem* b = m_root->find( "boot" );
     if( !b ) {
-        b = new K3bDirItem( "boot", this, m_root );
+        b = new K3b::DirItem( "boot", this, m_root );
         setModified( true );
     }
 
@@ -1314,16 +1315,16 @@ K3bDirItem* K3bDataDoc::bootImageDir()
     if( !b->isDir() )
         return m_root;
     else
-        return static_cast<K3bDirItem*>(b);
+        return static_cast<K3b::DirItem*>(b);
 }
 
 
-K3bBootItem* K3bDataDoc::createBootItem( const QString& filename, K3bDirItem* dir )
+K3b::BootItem* K3b::DataDoc::createBootItem( const QString& filename, K3b::DirItem* dir )
 {
     if( !dir )
         dir = bootImageDir();
 
-    K3bBootItem* boot = new K3bBootItem( filename, this, dir );
+    K3b::BootItem* boot = new K3b::BootItem( filename, this, dir );
 
     if( !m_bootCataloge )
         createBootCatalogeItem(dir);
@@ -1332,7 +1333,7 @@ K3bBootItem* K3bDataDoc::createBootItem( const QString& filename, K3bDirItem* di
 }
 
 
-K3bDataItem* K3bDataDoc::createBootCatalogeItem( K3bDirItem* dir )
+K3b::DataItem* K3b::DataDoc::createBootCatalogeItem( K3b::DirItem* dir )
 {
     if( !m_bootCataloge ) {
         QString newName = "boot.catalog";
@@ -1342,7 +1343,7 @@ K3bDataItem* K3bDataDoc::createBootCatalogeItem( K3bDirItem* dir )
             newName = QString( "boot%1.catalog" ).arg(i);
         }
 
-        K3bSpecialDataItem* b = new K3bSpecialDataItem( this, 0, dir, newName );
+        K3b::SpecialDataItem* b = new K3b::SpecialDataItem( this, 0, dir, newName );
         m_bootCataloge = b;
         m_bootCataloge->setRemoveable(false);
         m_bootCataloge->setHideable(false);
@@ -1357,32 +1358,32 @@ K3bDataItem* K3bDataDoc::createBootCatalogeItem( K3bDirItem* dir )
 }
 
 
-QList<K3bDataItem*> K3bDataDoc::findItemByLocalPath( const QString& path ) const
+QList<K3b::DataItem*> K3b::DataDoc::findItemByLocalPath( const QString& path ) const
 {
     Q_UNUSED( path );
-    return QList<K3bDataItem*>();
+    return QList<K3b::DataItem*>();
 }
 
 
-int K3bDataDoc::importedSession() const
+int K3b::DataDoc::importedSession() const
 {
     return ( m_oldSession.isEmpty() ? -1 : m_importedSession );
 }
 
 
-int K3bDataDoc::supportedMediaTypes() const
+int K3b::DataDoc::supportedMediaTypes() const
 {
-    int m = K3bDevice::MEDIA_WRITABLE;
+    int m = K3b::Device::MEDIA_WRITABLE;
 
     // we go bottom-up and remove those media types that are too small
     // (very very rough for now, we need the media size handling in the
     // empty disk waiter)
     if ( size() >= 1024ULL*1024ULL*1024ULL ) { // 1 GB -> no CD
-        m ^= K3bDevice::MEDIA_WRITABLE_CD;
+        m ^= K3b::Device::MEDIA_WRITABLE_CD;
     }
     // specal case: writing modes TAO and RAW apply only to CD
     else if ( writingMode() == K3b::WRITING_MODE_TAO || writingMode() == K3b::WRITING_MODE_RAW ) {
-        m = K3bDevice::MEDIA_WRITABLE_CD;
+        m = K3b::Device::MEDIA_WRITABLE_CD;
     }
 
     // 4.3 GB -> no SL-DVD
@@ -1391,18 +1392,18 @@ int K3bDataDoc::supportedMediaTypes() const
     if( size() > 4700372992LL ) {
         if( !k3bcore->globalSettings()->overburn() ||
             size() > 4900000000LL ) {
-            m ^= K3bDevice::MEDIA_WRITABLE_DVD_SL;
+            m ^= K3b::Device::MEDIA_WRITABLE_DVD_SL;
         }
     }
 
     // 9 GB -> no DVD at all
     if ( size() >= 9ULL*1024ULL*1024ULL*1024ULL ) {
-        m ^= K3bDevice::MEDIA_WRITABLE_DVD;
+        m ^= K3b::Device::MEDIA_WRITABLE_DVD;
     }
 //     // special case: the user selected a specific writing mode
 //     else if( writingMode() == K3b::WRITING_MODE_RES_OVWR ) {
 //         // we treat DVD+R(W) as restricted overwrite media
-//         m = K3bDevice::MEDIA_DVD_RW_OVWR|K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_PLUS_R;
+//         m = K3b::Device::MEDIA_DVD_RW_OVWR|K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_PLUS_R;
 //     }
 
     return m;

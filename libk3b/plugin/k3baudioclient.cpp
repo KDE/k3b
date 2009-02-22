@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
  *
@@ -16,30 +16,30 @@
 #include "k3baudioserver.h"
 
 
-K3bAudioClient::K3bAudioClient()
-  : m_attached(false)
+K3b::AudioClient::AudioClient()
+    : m_attached(false)
 {
 }
 
 
-K3bAudioClient::~K3bAudioClient()
+K3b::AudioClient::~AudioClient()
 {
 }
 
 
-void K3bAudioClient::startStreaming()
+void K3b::AudioClient::startStreaming()
 {
-  if( !m_attached ) {
-    K3bAudioServer::instance()->attachClient( this );
-    m_attached = true;
-  }
+    if( !m_attached ) {
+        K3b::AudioServer::instance()->attachClient( this );
+        m_attached = true;
+    }
 }
 
 
-void K3bAudioClient::stopStreaming()
+void K3b::AudioClient::stopStreaming()
 {
-  if( m_attached ) {
-    K3bAudioServer::instance()->detachClient( this );
-    m_attached = false;
-  }
+    if( m_attached ) {
+        K3b::AudioServer::instance()->detachClient( this );
+        m_attached = false;
+    }
 }

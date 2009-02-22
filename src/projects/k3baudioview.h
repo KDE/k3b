@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *           (C) 2009      Arthur Mello <arthur@mandriva.com>
@@ -23,44 +23,40 @@
 #include <qstringlist.h>
 
 
-class K3bAudioDoc;
-class K3bAudioTrack;
-//class K3bAudioTrackView;
-
 namespace K3b {
+
+    class AudioDoc;
+    class AudioTrack;
     class AudioProjectModel;
-}
 
-/**
- *@author Sebastian Trueg
- */
-class K3bAudioView : public K3bStandardView
-{
-    Q_OBJECT
+    class AudioView : public StandardView
+    {
+        Q_OBJECT
 
-public:
-    K3bAudioView( K3bAudioDoc* pDoc, QWidget* parent );
-    ~K3bAudioView();
+    public:
+        AudioView( AudioDoc* pDoc, QWidget* parent );
+        ~AudioView();
 
-    //K3bAudioTrackPlayer* player() const { return m_songlist->player(); }
-    K3bAudioTrackPlayer* player() const { return 0; }
+        //AudioTrackPlayer* player() const { return m_songlist->player(); }
+        AudioTrackPlayer* player() const { return 0; }
 
-public Q_SLOTS:
-    void addUrls( const KUrl::List& );
+    public Q_SLOTS:
+        void addUrls( const KUrl::List& );
 
-protected:
-    K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
+    protected:
+        ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
 
-    void init();
+        void init();
 
     private Q_SLOTS:
-    void slotAudioConversion();
+        void slotAudioConversion();
 
-private:
-    K3bAudioDoc* m_doc;
+    private:
+        AudioDoc* m_doc;
 
-    //K3bAudioTrackView* m_songlist;
-    K3b::AudioProjectModel* m_model;
-};
+        //AudioTrackView* m_songlist;
+        K3b::AudioProjectModel* m_model;
+    };
+}
 
 #endif

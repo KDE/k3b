@@ -20,7 +20,7 @@
 #include <QtCore/QPair>
 
 
-class K3bIntMapComboBox::Private
+class K3b::IntMapComboBox::Private
 {
 public:
     QHash<int, int> valueIndexMap;
@@ -58,11 +58,11 @@ public:
         }
     }
 
-    K3bIntMapComboBox* q;
+    K3b::IntMapComboBox* q;
 };
 
 
-K3bIntMapComboBox::K3bIntMapComboBox( QWidget* parent )
+K3b::IntMapComboBox::IntMapComboBox( QWidget* parent )
     : QComboBox( parent ),
       d( new Private() )
 {
@@ -75,13 +75,13 @@ K3bIntMapComboBox::K3bIntMapComboBox( QWidget* parent )
 }
 
 
-K3bIntMapComboBox::~K3bIntMapComboBox()
+K3b::IntMapComboBox::~IntMapComboBox()
 {
     delete d;
 }
 
 
-int K3bIntMapComboBox::selectedValue() const
+int K3b::IntMapComboBox::selectedValue() const
 {
     if( d->values.count() > QComboBox::currentIndex() &&
         QComboBox::currentIndex() >= 0 )
@@ -91,7 +91,7 @@ int K3bIntMapComboBox::selectedValue() const
 }
 
 
-void K3bIntMapComboBox::setSelectedValue( int value )
+void K3b::IntMapComboBox::setSelectedValue( int value )
 {
     if( d->valueIndexMap.contains( value ) ) {
         QComboBox::setCurrentIndex( d->valueIndexMap[value] );
@@ -99,13 +99,13 @@ void K3bIntMapComboBox::setSelectedValue( int value )
 }
 
 
-bool K3bIntMapComboBox::hasValue( int value ) const
+bool K3b::IntMapComboBox::hasValue( int value ) const
 {
     return d->valueIndexMap.contains( value );
 }
 
 
-void K3bIntMapComboBox::clear()
+void K3b::IntMapComboBox::clear()
 {
     d->valueIndexMap.clear();
     d->values.clear();
@@ -114,7 +114,7 @@ void K3bIntMapComboBox::clear()
 }
 
 
-bool K3bIntMapComboBox::insertItem( int value, const QString& text, const QString& description, int index )
+bool K3b::IntMapComboBox::insertItem( int value, const QString& text, const QString& description, int index )
 {
     if( d->valueIndexMap.contains( value ) )
         return false;
@@ -139,19 +139,19 @@ bool K3bIntMapComboBox::insertItem( int value, const QString& text, const QStrin
 }
 
 
-void K3bIntMapComboBox::slotItemHighlighted( int index )
+void K3b::IntMapComboBox::slotItemHighlighted( int index )
 {
     emit valueHighlighted( d->values[index].first );
 }
 
 
-void K3bIntMapComboBox::slotItemActivated( int index )
+void K3b::IntMapComboBox::slotItemActivated( int index )
 {
     emit valueChanged( d->values[index].first );
 }
 
 
-void K3bIntMapComboBox::addGlobalWhatsThisText( const QString& top, const QString& bottom )
+void K3b::IntMapComboBox::addGlobalWhatsThisText( const QString& top, const QString& bottom )
 {
     d->topWhatsThis = top;
     d->bottomWhatsThis = bottom;

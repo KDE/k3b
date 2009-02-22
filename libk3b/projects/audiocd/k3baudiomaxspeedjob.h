@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -17,28 +17,29 @@
 
 #include <k3bthreadjob.h>
 
-class K3bAudioDoc;
+namespace K3b {
+    class AudioDoc;
 
+    class AudioMaxSpeedJob : public ThreadJob
+    {
+        Q_OBJECT
 
-class K3bAudioMaxSpeedJob : public K3bThreadJob
-{
-    Q_OBJECT
+    public:
+        AudioMaxSpeedJob( AudioDoc* doc, JobHandler*, QObject* parent = 0 );
+        ~AudioMaxSpeedJob();
 
-public:
-    K3bAudioMaxSpeedJob( K3bAudioDoc* doc, K3bJobHandler*, QObject* parent = 0 );
-    ~K3bAudioMaxSpeedJob();
+        /**
+         * KB/sec
+         * Only valid if the job finished successfully.
+         */
+        int maxSpeed() const;
 
-    /**
-     * KB/sec
-     * Only valid if the job finished successfully.
-     */
-    int maxSpeed() const;
+    private:
+        bool run();
 
-private:
-    bool run();
-
-    class Private;
-    Private* const d;
-};
+        class Private;
+        Private* const d;
+    };
+}
 
 #endif

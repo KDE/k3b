@@ -17,9 +17,15 @@
 
 #include <QtCore/QAbstractItemModel>
 
-class K3bAudioDoc;
-class K3bAudioTrack;
-class K3bAudioDataSource;
+namespace K3b {
+    class AudioDoc;
+}
+namespace K3b {
+    class AudioTrack;
+}
+namespace K3b {
+    class AudioDataSource;
+}
 
 namespace K3b {
     class AudioProjectModel : public QAbstractItemModel
@@ -27,7 +33,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AudioProjectModel( K3bAudioDoc* doc, QObject* parent );
+        AudioProjectModel( AudioDoc* doc, QObject* parent );
         ~AudioProjectModel();
 
         enum Columns {
@@ -40,13 +46,13 @@ namespace K3b {
             NumColumns
         };
 
-        K3bAudioDoc* project() const;
+        AudioDoc* project() const;
 
-        K3bAudioTrack* trackForIndex( const QModelIndex& index ) const;
-        K3bAudioDataSource* sourceForIndex( const QModelIndex& index ) const;
+        AudioTrack* trackForIndex( const QModelIndex& index ) const;
+        AudioDataSource* sourceForIndex( const QModelIndex& index ) const;
 
-        QModelIndex indexForTrack( K3bAudioTrack* track ) const;
-        QModelIndex indexForSource( K3bAudioDataSource* source ) const;
+        QModelIndex indexForTrack( AudioTrack* track ) const;
+        QModelIndex indexForSource( AudioDataSource* source ) const;
 
         int columnCount( const QModelIndex& parent = QModelIndex() ) const;
         QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;

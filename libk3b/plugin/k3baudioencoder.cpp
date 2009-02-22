@@ -19,7 +19,7 @@
 #include <kdebug.h>
 
 
-class K3bAudioEncoder::Private
+class K3b::AudioEncoder::Private
 {
 public:
     Private()
@@ -33,27 +33,27 @@ public:
 };
 
 
-K3bAudioEncoder::K3bAudioEncoder( QObject* parent )
-    : K3bPlugin( parent )
+K3b::AudioEncoder::AudioEncoder( QObject* parent )
+    : K3b::Plugin( parent )
 {
     d = new Private();
 }
 
 
-K3bAudioEncoder::~K3bAudioEncoder()
+K3b::AudioEncoder::~AudioEncoder()
 {
     closeFile();
     delete d;
 }
 
 
-QString K3bAudioEncoder::categoryName() const
+QString K3b::AudioEncoder::categoryName() const
 {
     return i18nc( "plugin type", "Audio Encoder" );
 }
 
 
-bool K3bAudioEncoder::openFile( const QString& ext, const QString& filename, const K3b::Msf& length )
+bool K3b::AudioEncoder::openFile( const QString& ext, const QString& filename, const K3b::Msf& length )
 {
     closeFile();
 
@@ -62,14 +62,14 @@ bool K3bAudioEncoder::openFile( const QString& ext, const QString& filename, con
         return initEncoder( ext, length );
     }
     else {
-        kDebug() << "(K3bAudioEncoder) unable to open file " << filename;
+        kDebug() << "(K3b::AudioEncoder) unable to open file " << filename;
         closeFile();
         return false;
     }
 }
 
 
-bool K3bAudioEncoder::isOpen() const
+bool K3b::AudioEncoder::isOpen() const
 {
     if( d->outputFile )
         return d->outputFile->isOpen();
@@ -78,7 +78,7 @@ bool K3bAudioEncoder::isOpen() const
 }
 
 
-void K3bAudioEncoder::closeFile()
+void K3b::AudioEncoder::closeFile()
 {
     if( d->outputFile ) {
         finishEncoder();
@@ -91,7 +91,7 @@ void K3bAudioEncoder::closeFile()
 }
 
 
-QString K3bAudioEncoder::filename() const
+QString K3b::AudioEncoder::filename() const
 {
     if( d->outputFile )
         return d->outputFilename;
@@ -101,23 +101,23 @@ QString K3bAudioEncoder::filename() const
 
 
 
-void K3bAudioEncoder::setMetaData( K3bAudioEncoder::MetaDataField f, const QString& data )
+void K3b::AudioEncoder::setMetaData( K3b::AudioEncoder::MetaDataField f, const QString& data )
 {
     if( !data.isEmpty() )
         return setMetaDataInternal( f, data );
 }
 
 
-long K3bAudioEncoder::encode( const char* data, Q_ULONG len )
+long K3b::AudioEncoder::encode( const char* data, Q_ULONG len )
 {
     return encodeInternal( data, len );
 }
 
 
-bool K3bAudioEncoder::initEncoder( const QString& ext, const K3b::Msf& length )
+bool K3b::AudioEncoder::initEncoder( const QString& ext, const K3b::Msf& length )
 {
     if( !isOpen() ) {
-        kDebug() << "(K3bAudioEncoder) call to initEncoder without openFile!";
+        kDebug() << "(K3b::AudioEncoder) call to initEncoder without openFile!";
         return false;
     }
 
@@ -125,51 +125,51 @@ bool K3bAudioEncoder::initEncoder( const QString& ext, const K3b::Msf& length )
 }
 
 
-Q_LONG K3bAudioEncoder::writeData( const char* data, Q_ULONG len )
+Q_LONG K3b::AudioEncoder::writeData( const char* data, Q_ULONG len )
 {
     if( d->outputFile ) {
         return d->outputFile->write( data, len );
     }
     else {
-        kDebug() << "(K3bAudioEncoder) call to writeData without opening a file first.";
+        kDebug() << "(K3b::AudioEncoder) call to writeData without opening a file first.";
         return -1;
     }
 }
 
 
-bool K3bAudioEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
+bool K3b::AudioEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
 {
     // do nothing
     return true;
 }
 
 
-void K3bAudioEncoder::setMetaDataInternal( K3bAudioEncoder::MetaDataField, const QString& )
+void K3b::AudioEncoder::setMetaDataInternal( K3b::AudioEncoder::MetaDataField, const QString& )
 {
     // do nothing
 }
 
 
-void K3bAudioEncoder::finishEncoder()
+void K3b::AudioEncoder::finishEncoder()
 {
     if( isOpen() )
         finishEncoderInternal();
 }
 
 
-void K3bAudioEncoder::finishEncoderInternal()
+void K3b::AudioEncoder::finishEncoderInternal()
 {
     // do nothing
 }
 
 
-void K3bAudioEncoder::setLastError( const QString& e )
+void K3b::AudioEncoder::setLastError( const QString& e )
 {
     d->lastErrorString = e;
 }
 
 
-QString K3bAudioEncoder::lastErrorString() const
+QString K3b::AudioEncoder::lastErrorString() const
 {
     if( d->lastErrorString.isEmpty() )
         return i18n("An unknown error occurred.");

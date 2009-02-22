@@ -27,11 +27,11 @@
 
 
 
-class K3bJob::Private
+class K3b::Job::Private
 {
 public:
-    K3bJobHandler* jobHandler;
-    QList<K3bJob*> runningSubJobs;
+    K3b::JobHandler* jobHandler;
+    QList<K3b::Job*> runningSubJobs;
 
     bool canceled;
     bool active;
@@ -40,10 +40,10 @@ public:
 };
 
 
-const char* K3bJob::DEFAULT_SIGNAL_CONNECTION = "K3bJobDefault";
+const char* K3b::Job::DEFAULT_SIGNAL_CONNECTION = "K3b::JobDefault";
 
 
-K3bJob::K3bJob( K3bJobHandler* handler, QObject* parent )
+K3b::Job::Job( K3b::JobHandler* handler, QObject* parent )
     : QObject( parent ),
       d( new Private() )
 {
@@ -55,7 +55,7 @@ K3bJob::K3bJob( K3bJobHandler* handler, QObject* parent )
              this, SLOT(slotCanceled()) );
 }
 
-K3bJob::~K3bJob()
+K3b::Job::~Job()
 {
     //
     // Normally a job (or the user of a job should take care of this
@@ -68,43 +68,43 @@ K3bJob::~K3bJob()
 }
 
 
-K3bJobHandler* K3bJob::jobHandler() const
+K3b::JobHandler* K3b::Job::jobHandler() const
 {
     return d->jobHandler;
 }
 
 
-bool K3bJob::active() const
+bool K3b::Job::active() const
 {
     return d->active;
 }
 
 
-bool K3bJob::hasBeenCanceled() const
+bool K3b::Job::hasBeenCanceled() const
 {
     return d->canceled;
 }
 
 
-QList<K3bJob*> K3bJob::runningSubJobs() const
+QList<K3b::Job*> K3b::Job::runningSubJobs() const
 {
     return d->runningSubJobs;
 }
 
 
-void K3bJob::setJobHandler( K3bJobHandler* jh )
+void K3b::Job::setJobHandler( K3b::JobHandler* jh )
 {
     d->jobHandler = jh;
 }
 
 
-void K3bJob::jobStarted()
+void K3b::Job::jobStarted()
 {
     d->canceled = false;
     d->active = true;
 
     if( jobHandler() && jobHandler()->isJob() )
-        static_cast<K3bJob*>(jobHandler())->registerSubJob( this );
+        static_cast<K3b::Job*>(jobHandler())->registerSubJob( this );
     else
         k3bcore->registerJob( this );
 
@@ -112,12 +112,12 @@ void K3bJob::jobStarted()
 }
 
 
-void K3bJob::jobFinished( bool success )
+void K3b::Job::jobFinished( bool success )
 {
     d->active = false;
 
     if( jobHandler() && jobHandler()->isJob() )
-        static_cast<K3bJob*>(jobHandler())->unregisterSubJob( this );
+        static_cast<K3b::Job*>(jobHandler())->unregisterSubJob( this );
     else
         k3bcore->unregisterJob( this );
 
@@ -129,13 +129,13 @@ void K3bJob::jobFinished( bool success )
 }
 
 
-void K3bJob::slotCanceled()
+void K3b::Job::slotCanceled()
 {
     d->canceled = true;
 }
 
 
-int K3bJob::waitForMedia( K3bDevice::Device* device,
+int K3b::Job::waitForMedia( K3b::Device::Device* device,
                           int mediaState,
                           int mediaType,
                           const QString& message )
@@ -145,7 +145,7 @@ int K3bJob::waitForMedia( K3bDevice::Device* device,
 }
 
 
-bool K3bJob::questionYesNo( const QString& text,
+bool K3b::Job::questionYesNo( const QString& text,
                             const QString& caption,
                             const QString& yesText,
                             const QString& noText )
@@ -154,14 +154,14 @@ bool K3bJob::questionYesNo( const QString& text,
 }
 
 
-void K3bJob::blockingInformation( const QString& text,
+void K3b::Job::blockingInformation( const QString& text,
                                   const QString& caption )
 {
     return d->jobHandler->blockingInformation( text, caption );
 }
 
 
-void K3bJob::connectSubJob( K3bJob* subJob,
+void K3b::Job::connectSubJob( K3b::Job* subJob,
                             const char* finishedSlot,
                             const char* newTaskSlot,
                             const char* newSubTaskSlot,
@@ -210,31 +210,31 @@ void K3bJob::connectSubJob( K3bJob* subJob,
 }
 
 
-int K3bJob::numRunningSubJobs() const
+int K3b::Job::numRunningSubJobs() const
 {
     return d->runningSubJobs.count();
 }
 
 
-void K3bJob::slotNewSubTask( const QString& str )
+void K3b::Job::slotNewSubTask( const QString& str )
 {
     emit infoMessage( str, INFO );
 }
 
 
-void K3bJob::registerSubJob( K3bJob* job )
+void K3b::Job::registerSubJob( K3b::Job* job )
 {
     d->runningSubJobs.append( job );
 }
 
 
-void K3bJob::unregisterSubJob( K3bJob* job )
+void K3b::Job::unregisterSubJob( K3b::Job* job )
 {
     d->runningSubJobs.removeOne( job );
 }
 
 
-void K3bJob::wait()
+void K3b::Job::wait()
 {
     if ( active() ) {
         QEventLoop loop;
@@ -247,7 +247,7 @@ void K3bJob::wait()
 
 
 
-class K3bBurnJob::Private
+class K3b::BurnJob::Private
 {
 public:
     K3b::WritingApp writeMethod;
@@ -255,33 +255,33 @@ public:
 
 
 
-K3bBurnJob::K3bBurnJob( K3bJobHandler* handler, QObject* parent )
-    : K3bJob( handler, parent ),
+K3b::BurnJob::BurnJob( K3b::JobHandler* handler, QObject* parent )
+    : K3b::Job( handler, parent ),
       d( new Private() )
 {
     d->writeMethod = K3b::WRITING_APP_DEFAULT;
 }
 
 
-K3bBurnJob::~K3bBurnJob()
+K3b::BurnJob::~BurnJob()
 {
     delete d;
 }
 
 
-K3b::WritingApp K3bBurnJob::writingApp() const
+K3b::WritingApp K3b::BurnJob::writingApp() const
 {
     return d->writeMethod;
 }
 
 
-void K3bBurnJob::setWritingApp( K3b::WritingApp w )
+void K3b::BurnJob::setWritingApp( K3b::WritingApp w )
 {
     d->writeMethod = w;
 }
 
 
-K3b::WritingApps K3bBurnJob::supportedWritingApps() const
+K3b::WritingApps K3b::BurnJob::supportedWritingApps() const
 {
     return K3b::WRITING_APP_DEFAULT | K3b::WRITING_APP_CDRDAO | K3b::WRITING_APP_CDRECORD;
 }

@@ -24,36 +24,36 @@
 #include <QtGui/QDesktopWidget>
 
 
-class K3bPushButton::Private
+class K3b::PushButton::Private
 {
 public:
-  Private()
-    : popupTimer(0) {
-  }
+    Private()
+        : popupTimer(0) {
+    }
 
-  QTimer* popupTimer;
-  QPoint mousePressPos;
+    QTimer* popupTimer;
+    QPoint mousePressPos;
 };
 
 
 
-K3bPushButton::K3bPushButton( QWidget* parent )
-  : KPushButton( parent )
+K3b::PushButton::PushButton( QWidget* parent )
+    : KPushButton( parent )
 {
-  d = new Private();
-  installEventFilter(this);
+    d = new Private();
+    installEventFilter(this);
 }
 
 
-K3bPushButton::K3bPushButton( const QString& text, QWidget* parent )
-  : KPushButton( text, parent )
+K3b::PushButton::PushButton( const QString& text, QWidget* parent )
+    : KPushButton( text, parent )
 {
-  d = new Private();
-  installEventFilter(this);
+    d = new Private();
+    installEventFilter(this);
 }
 
 
-// K3bPushButton::K3bPushButton( const QIcon& icon, const QString& text,
+// K3b::PushButton::PushButton( const QIcon& icon, const QString& text,
 // 			      QWidget* parent )
 //   : KPushButton( icon, text, parent )
 // {
@@ -62,75 +62,75 @@ K3bPushButton::K3bPushButton( const QString& text, QWidget* parent )
 // }
 
 
-K3bPushButton::K3bPushButton( const KGuiItem& item, QWidget* parent )
-  : KPushButton( item, parent )
+K3b::PushButton::PushButton( const KGuiItem& item, QWidget* parent )
+    : KPushButton( item, parent )
 {
-  d = new Private();
-  installEventFilter(this);
+    d = new Private();
+    installEventFilter(this);
 }
 
 
-K3bPushButton::~K3bPushButton()
+K3b::PushButton::~PushButton()
 {
-  delete d;
+    delete d;
 }
 
 
-void K3bPushButton::setDelayedPopupMenu( QMenu* menu )
+void K3b::PushButton::setDelayedPopupMenu( QMenu* menu )
 {
-  if( !d->popupTimer ) {
-    d->popupTimer = new QTimer( this );
-    connect( d->popupTimer, SIGNAL(timeout()), this, SLOT(slotDelayedPopup()) );
-  }
-
-  setMenu( menu );
-
-  // we need to do the menu handling ourselves so we cheat a little
-  // QPushButton connects a menu slot to the pressed signal which we disconnect here
-  disconnect( this );
-}
-
-
-bool K3bPushButton::eventFilter( QObject* o, QEvent* ev )
-{
-  if( dynamic_cast<K3bPushButton*>(o) == this ) {
-
-    // Popup the menu when the left mousebutton is pressed and the mouse
-    // is moved by a small distance.
-    if( menu() ) {
-      if( ev->type() == QEvent::MouseButtonPress ) {
-        QMouseEvent* mev = static_cast<QMouseEvent*>(ev);
-        d->mousePressPos = mev->pos();
-	d->popupTimer->start( QApplication::startDragTime() );
-      }
-      else if( ev->type() == QEvent::MouseMove ) {
-        QMouseEvent* mev = static_cast<QMouseEvent*>(ev);
-        if( ( mev->pos() - d->mousePressPos).manhattanLength() > KGlobalSettings::dndEventDelay() ) {
-	  d->popupTimer->stop();
-	  slotDelayedPopup();
-          return true;
-        }
-      }
+    if( !d->popupTimer ) {
+        d->popupTimer = new QTimer( this );
+        connect( d->popupTimer, SIGNAL(timeout()), this, SLOT(slotDelayedPopup()) );
     }
-  }
 
-  return KPushButton::eventFilter( o, ev );
+    setMenu( menu );
+
+    // we need to do the menu handling ourselves so we cheat a little
+    // QPushButton connects a menu slot to the pressed signal which we disconnect here
+    disconnect( this );
 }
 
 
-void K3bPushButton::slotDelayedPopup()
+bool K3b::PushButton::eventFilter( QObject* o, QEvent* ev )
 {
-  d->popupTimer->stop();
+    if( dynamic_cast<K3b::PushButton*>(o) == this ) {
 
-  if( isDown() ) {
-    // popup the menu.
-    // this has been taken from the QPushButton code
-    if( mapToGlobal( QPoint( 0, rect().bottom() ) ).y() + menu()->sizeHint().height() <= qApp->desktop()->height() )
-      menu()->exec( mapToGlobal( rect().bottomLeft() ) );
-    else
-      menu()->exec( mapToGlobal( rect().topLeft() - QPoint( 0, menu()->sizeHint().height() ) ) );
-    setDown( false );
-  }
+        // Popup the menu when the left mousebutton is pressed and the mouse
+        // is moved by a small distance.
+        if( menu() ) {
+            if( ev->type() == QEvent::MouseButtonPress ) {
+                QMouseEvent* mev = static_cast<QMouseEvent*>(ev);
+                d->mousePressPos = mev->pos();
+                d->popupTimer->start( QApplication::startDragTime() );
+            }
+            else if( ev->type() == QEvent::MouseMove ) {
+                QMouseEvent* mev = static_cast<QMouseEvent*>(ev);
+                if( ( mev->pos() - d->mousePressPos).manhattanLength() > KGlobalSettings::dndEventDelay() ) {
+                    d->popupTimer->stop();
+                    slotDelayedPopup();
+                    return true;
+                }
+            }
+        }
+    }
+
+    return KPushButton::eventFilter( o, ev );
+}
+
+
+void K3b::PushButton::slotDelayedPopup()
+{
+    d->popupTimer->stop();
+
+    if( isDown() ) {
+        // popup the menu.
+        // this has been taken from the QPushButton code
+        if( mapToGlobal( QPoint( 0, rect().bottom() ) ).y() + menu()->sizeHint().height() <= qApp->desktop()->height() )
+            menu()->exec( mapToGlobal( rect().bottomLeft() ) );
+        else
+            menu()->exec( mapToGlobal( rect().topLeft() - QPoint( 0, menu()->sizeHint().height() ) ) );
+        setDown( false );
+    }
 }
 
 #include "k3bpushbutton.moc"

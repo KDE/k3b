@@ -20,7 +20,7 @@
 #include <k3bcdtext.h>
 
 
-class K3bDevice::DeviceHandler::Private
+class K3b::Device::DeviceHandler::Private
 {
 public:
     Private( bool _selfDelete )
@@ -43,114 +43,114 @@ public:
 };
 
 
-K3bDevice::DeviceHandler::DeviceHandler( Device* dev, QObject* parent )
-    : K3bThreadJob( 0, parent ),
+K3b::Device::DeviceHandler::DeviceHandler( Device* dev, QObject* parent )
+    : K3b::ThreadJob( 0, parent ),
       d( new Private( false ) )
 {
     d->dev = dev;
 }
 
 
-K3bDevice::DeviceHandler::DeviceHandler( QObject* parent )
-    : K3bThreadJob( 0, parent ),
+K3b::Device::DeviceHandler::DeviceHandler( QObject* parent )
+    : K3b::ThreadJob( 0, parent ),
       d( new Private( false ) )
 {
 }
 
 
-K3bDevice::DeviceHandler::DeviceHandler( int command, Device* dev )
-    : K3bThreadJob( 0, 0 ),
+K3b::Device::DeviceHandler::DeviceHandler( int command, Device* dev )
+    : K3b::ThreadJob( 0, 0 ),
       d( new Private( false ) )
 {
     d->dev = dev;
     sendCommand(command);
 }
 
-K3bDevice::DeviceHandler::~DeviceHandler()
+K3b::Device::DeviceHandler::~DeviceHandler()
 {
     delete d;
 }
 
 
-int K3bDevice::DeviceHandler::errorCode() const
+int K3b::Device::DeviceHandler::errorCode() const
 {
     return d->errorCode;
 }
 
-bool K3bDevice::DeviceHandler::success() const
+bool K3b::Device::DeviceHandler::success() const
 {
     return d->success;
 }
 
 
-const K3bDevice::DiskInfo& K3bDevice::DeviceHandler::diskInfo() const
+const K3b::Device::DiskInfo& K3b::Device::DeviceHandler::diskInfo() const
 {
     return d->ngInfo;
 }
 
 
-const K3bDevice::Toc& K3bDevice::DeviceHandler::toc() const
+const K3b::Device::Toc& K3b::Device::DeviceHandler::toc() const
 {
     return d->toc;
 }
 
-const K3bDevice::CdText& K3bDevice::DeviceHandler::cdText() const
+const K3b::Device::CdText& K3b::Device::DeviceHandler::cdText() const
 {
     return d->cdText;
 }
 
 
-const QByteArray& K3bDevice::DeviceHandler::cdTextRaw() const
+const QByteArray& K3b::Device::DeviceHandler::cdTextRaw() const
 {
     return d->cdTextRaw;
 }
 
 
-K3b::Msf K3bDevice::DeviceHandler::diskSize() const
+K3b::Msf K3b::Device::DeviceHandler::diskSize() const
 {
     return d->ngInfo.capacity();
 }
 
-K3b::Msf K3bDevice::DeviceHandler::remainingSize() const
+K3b::Msf K3b::Device::DeviceHandler::remainingSize() const
 {
     return d->ngInfo.remainingSize();
 }
 
-int K3bDevice::DeviceHandler::tocType() const
+int K3b::Device::DeviceHandler::tocType() const
 {
     return d->toc.contentType();
 }
 
-int K3bDevice::DeviceHandler::numSessions() const
+int K3b::Device::DeviceHandler::numSessions() const
 {
     return d->ngInfo.numSessions();
 }
 
-long long K3bDevice::DeviceHandler::bufferCapacity() const
+long long K3b::Device::DeviceHandler::bufferCapacity() const
 {
     return d->bufferCapacity;
 }
 
-long long K3bDevice::DeviceHandler::availableBufferCapacity() const
+long long K3b::Device::DeviceHandler::availableBufferCapacity() const
 {
     return d->availableBufferCapacity;
 }
 
-K3b::Msf K3bDevice::DeviceHandler::nextWritableAddress() const
+K3b::Msf K3b::Device::DeviceHandler::nextWritableAddress() const
 {
     return d->nextWritableAddress;
 }
 
-void K3bDevice::DeviceHandler::setDevice( Device* dev )
+void K3b::Device::DeviceHandler::setDevice( Device* dev )
 {
     d->dev = dev;
 }
 
 
-void K3bDevice::DeviceHandler::sendCommand( int command )
+void K3b::Device::DeviceHandler::sendCommand( int command )
 {
     if( active() ) {
-        kDebug() << "(K3bDevice::DeviceHandler) thread already running. canceling thread...";
+        kDebug() << "(K3b::Device::DeviceHandler) thread already running. canceling thread...";
         cancel();
         wait();
     }
@@ -159,55 +159,55 @@ void K3bDevice::DeviceHandler::sendCommand( int command )
     start();
 }
 
-void K3bDevice::DeviceHandler::getToc()
+void K3b::Device::DeviceHandler::getToc()
 {
     sendCommand(DeviceHandler::TOC);
 }
 
-void K3bDevice::DeviceHandler::getDiskInfo()
+void K3b::Device::DeviceHandler::getDiskInfo()
 {
     sendCommand(DeviceHandler::DISKINFO);
 }
 
-void K3bDevice::DeviceHandler::getDiskSize()
+void K3b::Device::DeviceHandler::getDiskSize()
 {
     sendCommand(DeviceHandler::DISKSIZE);
 }
 
-void K3bDevice::DeviceHandler::getRemainingSize()
+void K3b::Device::DeviceHandler::getRemainingSize()
 {
     sendCommand(DeviceHandler::REMAININGSIZE);
 }
 
-void K3bDevice::DeviceHandler::getTocType()
+void K3b::Device::DeviceHandler::getTocType()
 {
     sendCommand(DeviceHandler::TOCTYPE);
 }
 
-void K3bDevice::DeviceHandler::getNumSessions()
+void K3b::Device::DeviceHandler::getNumSessions()
 {
     sendCommand(DeviceHandler::NUMSESSIONS);
 }
 
 
-void K3bDevice::DeviceHandler::block( bool b )
+void K3b::Device::DeviceHandler::block( bool b )
 {
     sendCommand(b ? DeviceHandler::BLOCK : DeviceHandler::UNBLOCK);
 }
 
-void K3bDevice::DeviceHandler::eject()
+void K3b::Device::DeviceHandler::eject()
 {
     sendCommand(DeviceHandler::EJECT);
 }
 
-K3bDevice::DeviceHandler* K3bDevice::sendCommand( int command, Device* dev )
+K3b::Device::DeviceHandler* K3b::Device::sendCommand( int command, Device* dev )
 {
     return new DeviceHandler( command, dev );
 }
 
-void K3bDevice::DeviceHandler::jobFinished( bool success )
+void K3b::Device::DeviceHandler::jobFinished( bool success )
 {
-    K3bThreadJob::jobFinished( success );
+    K3b::ThreadJob::jobFinished( success );
 
     emit finished( this );
 
@@ -217,9 +217,9 @@ void K3bDevice::DeviceHandler::jobFinished( bool success )
 }
 
 
-bool K3bDevice::DeviceHandler::run()
+bool K3b::Device::DeviceHandler::run()
 {
-    kDebug() << "(K3bDevice::DeviceHandler) starting command: " << d->command;
+    kDebug() << "(K3b::Device::DeviceHandler) starting command: " << d->command;
 
     d->success = false;
 
@@ -266,7 +266,7 @@ bool K3bDevice::DeviceHandler::run()
                     d->cdTextRaw = QByteArray::fromRawData( reinterpret_cast<char*>(data), dataLen );
                 }
                 else {
-                    kDebug() << "(K3bDevice::DeviceHandler) invalid CD-TEXT length: " << dataLen;
+                    kDebug() << "(K3b::Device::DeviceHandler) invalid CD-TEXT length: " << dataLen;
                     delete [] data;
                     d->success = false;
                 }
@@ -304,7 +304,7 @@ bool K3bDevice::DeviceHandler::run()
         d->dev->close();
     }
 
-    kDebug() << "(K3bDevice::DeviceHandler) finished command: " << d->command;
+    kDebug() << "(K3b::Device::DeviceHandler) finished command: " << d->command;
 
     return d->success;
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -19,44 +19,45 @@
 #include <qobject.h>
 #include <k3bmsf.h>
 
-class K3bAudioTrack;
-class K3bAudioDoc;
+namespace K3b {
+    class AudioTrack;
+    class AudioDoc;
 
+    class AudioJobTempData : public QObject
+    {
+        Q_OBJECT
 
-class K3bAudioJobTempData : public QObject
-{
-  Q_OBJECT
+    public:
+        AudioJobTempData( AudioDoc* doc, QObject* parent = 0 );
+        ~AudioJobTempData();
 
- public:
-  K3bAudioJobTempData( K3bAudioDoc* doc, QObject* parent = 0 );
-  ~K3bAudioJobTempData();
+        QString bufferFileName( int track );
+        QString bufferFileName( AudioTrack* track );
 
-  const QString& bufferFileName( int track );
-  const QString& bufferFileName( K3bAudioTrack* track );
-  
-  const QString& infFileName( int track );
-  const QString& infFileName( K3bAudioTrack* track );
-  
-  const QString& tocFileName();
+        QString infFileName( int track );
+        QString infFileName( AudioTrack* track );
 
-  K3bAudioDoc* doc() const;
+        QString tocFileName();
 
-  /**
-   * use this if you want
-   * a specific directory
-   * it defaults to the default K3b temp dir
-   */
-  void prepareTempFileNames( const QString& path = QString() );
+        AudioDoc* doc() const;
 
-  /**
-   * remove all temp files (this does not include the audio buffer files
-   * since these are not created and thus not handled by the K3bAudioJobTempData)
-   */
-  void cleanup();
+        /**
+         * use this if you want
+         * a specific directory
+         * it defaults to the default K3b temp dir
+         */
+        void prepareTempFileNames( const QString& path = QString() );
 
- private:
-  class Private;
-  Private* d;
-};
+        /**
+         * remove all temp files (this does not include the audio buffer files
+         * since these are not created and thus not handled by the AudioJobTempData)
+         */
+        void cleanup();
+
+    private:
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

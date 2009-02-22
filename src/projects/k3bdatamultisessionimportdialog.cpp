@@ -48,49 +48,49 @@ public:
         : sessionNumber( 0 ),
           device( 0 ) {}
 
-    SessionInfo( int num, K3bDevice::Device* dev )
+    SessionInfo( int num, K3b::Device::Device* dev )
         : sessionNumber( num ),
           device( dev ) {}
 
     int sessionNumber;
-    K3bDevice::Device* device;
+    K3b::Device::Device* device;
 };
 
 
-class K3bDataMultisessionImportDialog::Private
+class K3b::DataMultisessionImportDialog::Private
 {
 public:
-    K3bDataDoc* doc;
-    K3bListView* sessionView;
+    K3b::DataDoc* doc;
+    K3b::ListView* sessionView;
 
-    QMap<K3bListViewItem*, SessionInfo> sessions;
+    QMap<K3b::ListViewItem*, SessionInfo> sessions;
 };
 
 
-K3bDataDoc* K3bDataMultisessionImportDialog::importSession( K3bDataDoc* doc, QWidget* parent )
+K3b::DataDoc* K3b::DataMultisessionImportDialog::importSession( K3b::DataDoc* doc, QWidget* parent )
 {
-    K3bDataMultisessionImportDialog dlg( parent );
+    K3b::DataMultisessionImportDialog dlg( parent );
     dlg.importSession( doc );
     dlg.exec();
     return dlg.d->doc;
 }
 
 
-void K3bDataMultisessionImportDialog::slotOk()
+void K3b::DataMultisessionImportDialog::slotOk()
 {
-    K3bListViewItem* selected = static_cast<K3bListViewItem*>( d->sessionView->selectedItem() );
+    K3b::ListViewItem* selected = static_cast<K3b::ListViewItem*>( d->sessionView->selectedItem() );
     if ( selected ) {
         QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 
         const SessionInfo& info = d->sessions[selected];
-        K3bDevice::Device* dev = info.device;
+        K3b::Device::Device* dev = info.device;
 
         //
         // Mkisofs does not properly import joliet filenames from an old session
         //
         // See bug 79215 for details
         //
-        K3bIso9660 iso( dev );
+        K3b::Iso9660 iso( dev );
         if( iso.open() ) {
             if( iso.firstRRDirEntry() == 0 && iso.jolietLevel() > 0 )
                 KMessageBox::sorry( this,
@@ -104,7 +104,7 @@ void K3bDataMultisessionImportDialog::slotOk()
         }
 
         if( !d->doc ) {
-            d->doc = static_cast<K3bDataDoc*>( k3bappcore->k3bMainWindow()->slotNewDataDoc() );
+            d->doc = static_cast<K3b::DataDoc*>( k3bappcore->k3bMainWindow()->slotNewDataDoc() );
         }
 
         d->doc->setBurner( dev );
@@ -119,13 +119,13 @@ void K3bDataMultisessionImportDialog::slotOk()
 }
 
 
-void K3bDataMultisessionImportDialog::slotCancel()
+void K3b::DataMultisessionImportDialog::slotCancel()
 {
     reject();
 }
 
 
-void K3bDataMultisessionImportDialog::importSession( K3bDataDoc* doc )
+void K3b::DataMultisessionImportDialog::importSession( K3b::DataDoc* doc )
 {
     d->doc = doc;
     updateMedia();
@@ -133,32 +133,32 @@ void K3bDataMultisessionImportDialog::importSession( K3bDataDoc* doc )
 }
 
 
-void K3bDataMultisessionImportDialog::updateMedia()
+void K3b::DataMultisessionImportDialog::updateMedia()
 {
     d->sessionView->clear();
     d->sessions.clear();
 
-    QList<K3bDevice::Device*> devices = k3bcore->deviceManager()->allDevices();
+    QList<K3b::Device::Device*> devices = k3bcore->deviceManager()->allDevices();
 
     bool haveMedium = false;
-    for( QList<K3bDevice::Device *>::const_iterator it = devices.constBegin();
+    for( QList<K3b::Device::Device *>::const_iterator it = devices.constBegin();
          it != devices.constEnd(); ++it ) {
-        K3bMedium medium = k3bappcore->mediaCache()->medium( *it );
+        K3b::Medium medium = k3bappcore->mediaCache()->medium( *it );
 
-        if ( medium.diskInfo().mediaType() & K3bDevice::MEDIA_WRITABLE &&
-             medium.diskInfo().diskState() == K3bDevice::STATE_INCOMPLETE ) {
+        if ( medium.diskInfo().mediaType() & K3b::Device::MEDIA_WRITABLE &&
+             medium.diskInfo().diskState() == K3b::Device::STATE_INCOMPLETE ) {
             addMedium( medium );
             haveMedium = true;
         }
         else if ( !medium.diskInfo().empty() &&
-                  medium.diskInfo().mediaType() & ( K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_RW_OVWR ) ) {
+                  medium.diskInfo().mediaType() & ( K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_RW_OVWR ) ) {
             addMedium( medium );
             haveMedium = true;
         }
     }
 
     if ( !haveMedium ) {
-        K3bListViewItem* noMediaItem = new K3bListViewItem( d->sessionView,
+        K3b::ListViewItem* noMediaItem = new K3b::ListViewItem( d->sessionView,
                                                             i18n( "Please insert an appendable medium" ) );
         QFont fnt( font() );
         fnt.setItalic( true );
@@ -169,9 +169,9 @@ void K3bDataMultisessionImportDialog::updateMedia()
 }
 
 
-void K3bDataMultisessionImportDialog::addMedium( const K3bMedium& medium )
+void K3b::DataMultisessionImportDialog::addMedium( const K3b::Medium& medium )
 {
-    K3bListViewItem* mediumItem = new K3bListViewItem( d->sessionView, medium.shortString( true ) );
+    K3b::ListViewItem* mediumItem = new K3b::ListViewItem( d->sessionView, medium.shortString( true ) );
     QFont fnt( font() );
     fnt.setBold( true );
     mediumItem->setFont( 0, fnt );
@@ -180,17 +180,17 @@ void K3bDataMultisessionImportDialog::addMedium( const K3bMedium& medium )
     // the medium item in case we have no session info (will always use the last session)
     d->sessions.insert( mediumItem, SessionInfo( 0, medium.device() ) );
 
-    const K3bDevice::Toc& toc = medium.toc();
-    K3bListViewItem* sessionItem = 0;
+    const K3b::Device::Toc& toc = medium.toc();
+    K3b::ListViewItem* sessionItem = 0;
     int lastSession = 0;
-    for ( K3bDevice::Toc::const_iterator it = toc.begin(); it != toc.end(); ++it ) {
-        const K3bTrack& track = *it;
+    for ( K3b::Device::Toc::const_iterator it = toc.begin(); it != toc.end(); ++it ) {
+        const K3b::Device::Track& track = *it;
 
         if( track.session() != lastSession ) {
             lastSession = track.session();
             QString sessionInfo;
-            if ( track.type() == K3bDevice::Track::DATA ) {
-                K3bIso9660 iso( medium.device(), track.firstSector().lba() );
+            if ( track.type() == K3b::Device::Track::TYPE_DATA ) {
+                K3b::Iso9660 iso( medium.device(), track.firstSector().lba() );
                 if ( iso.open() ) {
                     sessionInfo = iso.primaryDescriptor().volumeId;
                 }
@@ -198,7 +198,7 @@ void K3bDataMultisessionImportDialog::addMedium( const K3bMedium& medium )
             else {
                 int numAudioTracks = 1;
                 while ( it != toc.end()
-                        && ( *it ).type() == K3bDevice::Track::AUDIO
+                        && ( *it ).type() == K3b::Device::Track::TYPE_AUDIO
                         && ( *it ).session() == lastSession ) {
                     ++it;
                     ++numAudioTracks;
@@ -207,12 +207,12 @@ void K3bDataMultisessionImportDialog::addMedium( const K3bMedium& medium )
                 sessionInfo = i18np("1 audio track", "%1 audio tracks", numAudioTracks );
             }
 
-            sessionItem = new K3bListViewItem( mediumItem,
+            sessionItem = new K3b::ListViewItem( mediumItem,
                                                sessionItem,
                                                i18n( "Session %1" ,
                                                      lastSession )
                                                + ( sessionInfo.isEmpty() ? QString() : " (" + sessionInfo + ')' ) );
-            if ( track.type() == K3bDevice::Track::AUDIO )
+            if ( track.type() == K3b::Device::Track::TYPE_AUDIO )
                 sessionItem->setPixmap( 0, SmallIcon( "audio-x-generic" ) );
             else
                 sessionItem->setPixmap( 0, SmallIcon( "application-x-tar" ) );
@@ -228,9 +228,9 @@ void K3bDataMultisessionImportDialog::addMedium( const K3bMedium& medium )
 }
 
 
-void K3bDataMultisessionImportDialog::slotSelectionChanged()
+void K3b::DataMultisessionImportDialog::slotSelectionChanged()
 {
-    K3bListViewItem* selected = static_cast<K3bListViewItem*>( d->sessionView->selectedItem() );
+    K3b::ListViewItem* selected = static_cast<K3b::ListViewItem*>( d->sessionView->selectedItem() );
     if ( selected ) {
         const SessionInfo& info = d->sessions[selected];
         showSessionInfo( info.device, info.sessionNumber );
@@ -243,7 +243,7 @@ void K3bDataMultisessionImportDialog::slotSelectionChanged()
 }
 
 
-void K3bDataMultisessionImportDialog::showSessionInfo( K3bDevice::Device* dev, int session )
+void K3b::DataMultisessionImportDialog::showSessionInfo( K3b::Device::Device* dev, int session )
 {
     // FIXME: show some information about the selected session
     if ( dev ) {
@@ -255,7 +255,7 @@ void K3bDataMultisessionImportDialog::showSessionInfo( K3bDevice::Device* dev, i
 }
 
 
-K3bDataMultisessionImportDialog::K3bDataMultisessionImportDialog( QWidget* parent )
+K3b::DataMultisessionImportDialog::DataMultisessionImportDialog( QWidget* parent )
     : KDialog( parent),
       d( new Private() )
 {
@@ -269,7 +269,7 @@ K3bDataMultisessionImportDialog::K3bDataMultisessionImportDialog( QWidget* paren
     layout->setMargin( 0 );
 
     QLabel* label = new QLabel( i18n( "Please select a session to import." ), widget );
-    d->sessionView = new K3bListView( widget );
+    d->sessionView = new K3b::ListView( widget );
     d->sessionView->addColumn( "1" );
     d->sessionView->header()->hide();
     d->sessionView->setFullWidth( true );
@@ -277,7 +277,7 @@ K3bDataMultisessionImportDialog::K3bDataMultisessionImportDialog( QWidget* paren
     layout->addWidget( label );
     layout->addWidget( d->sessionView );
 
-    connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3bDevice::Device*)),
+    connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3b::Device::Device*)),
              this, SLOT(updateMedia()) );
     connect( d->sessionView, SIGNAL( selectionChanged() ), this, SLOT( slotSelectionChanged() ) );
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
@@ -285,7 +285,7 @@ K3bDataMultisessionImportDialog::K3bDataMultisessionImportDialog( QWidget* paren
 }
 
 
-K3bDataMultisessionImportDialog::~K3bDataMultisessionImportDialog()
+K3b::DataMultisessionImportDialog::~DataMultisessionImportDialog()
 {
     delete d;
 }

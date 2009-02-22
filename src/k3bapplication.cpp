@@ -59,10 +59,10 @@
 #include <qtimer.h>
 
 
-K3bApplication::Core* K3bApplication::Core::s_k3bAppCore = 0;
+K3b::Application::Core* K3b::Application::Core::s_k3bAppCore = 0;
 
 
-K3bApplication::K3bApplication()
+K3b::Application::Application()
     : KUniqueApplication(),
       m_mainWindow(0),
       m_needToInit(true)
@@ -73,9 +73,9 @@ K3bApplication::K3bApplication()
 
     m_core = new Core( this );
 
-    // TODO: move to K3bCore?
-    // from this point on available through K3bAudioServer::instance()
-    //m_audioServer = new K3bAudioServer( this, "K3bAudioServer" );
+    // TODO: move to K3b::Core?
+    // from this point on available through K3b::AudioServer::instance()
+    //m_audioServer = new K3b::AudioServer( this, "K3b::AudioServer" );
 
     connect( m_core, SIGNAL(initializationInfo(const QString&)),
              SIGNAL(initializationInfo(const QString&)) );
@@ -84,17 +84,17 @@ K3bApplication::K3bApplication()
 }
 
 
-K3bApplication::~K3bApplication()
+K3b::Application::~Application()
 {
     // we must not delete m_mainWindow here, QApplication takes care of it
 }
 
 
-void K3bApplication::init()
+void K3b::Application::init()
 {
     KConfigGroup generalOptions( KGlobal::config(), "General Options" );
 
-    QPointer<K3bSplash> splash;
+    QPointer<K3b::Splash> splash;
     if( !qApp->isSessionRestored() ) {
         KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
@@ -102,7 +102,7 @@ void K3bApplication::init()
             // we need the correct splash pic
             m_core->m_themeManager->readConfig( generalOptions );
 
-            splash = new K3bSplash( 0 );
+            splash = new K3b::Splash( 0 );
             splash->connect( this, SIGNAL(initializationInfo(const QString&)), SLOT(addInfo(const QString&)) );
 
             // kill the splash after 5 seconds
@@ -123,7 +123,7 @@ void K3bApplication::init()
 
     emit initializationInfo( i18n("Creating GUI...") );
 
-    m_mainWindow = new K3bMainWindow();
+    m_mainWindow = new K3b::MainWindow();
     m_core->m_mainWindow = m_mainWindow;
 
     if( qApp->isSessionRestored() ) {
@@ -137,24 +137,24 @@ void K3bApplication::init()
 
         emit initializationDone();
 
-        K3bFirstRun::run( m_mainWindow );
+        K3b::FirstRun::run( m_mainWindow );
 
-        if( K3bSystemProblemDialog::readCheckSystemConfig() ) {
+        if( K3b::SystemProblemDialog::readCheckSystemConfig() ) {
             emit initializationInfo( i18n("Checking System") );
-            K3bSystemProblemDialog::checkSystem( m_mainWindow );
+            K3b::SystemProblemDialog::checkSystem( m_mainWindow );
         }
 
         if( processCmdLineArgs() )
             KTipDialog::showTip( m_mainWindow );
     }
 
-    // write the current version to make sure checks such as K3bSystemProblemDialog::readCheckSystemConfig
+    // write the current version to make sure checks such as K3b::SystemProblemDialog::readCheckSystemConfig
     // use a proper value
     generalOptions.writeEntry( "config version", QString(m_core->version()) );
 }
 
 
-int K3bApplication::newInstance()
+int K3b::Application::newInstance()
 {
     if( m_needToInit ) {
         //    init();
@@ -167,7 +167,7 @@ int K3bApplication::newInstance()
 }
 
 
-bool K3bApplication::processCmdLineArgs()
+bool K3b::Application::processCmdLineArgs()
 {
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
@@ -175,13 +175,13 @@ bool K3bApplication::processCmdLineArgs()
     bool dialogOpen = false;
 
     if( k3bcore->jobsRunning() > 0 ) {
-        K3bPassivePopup::showPopup( i18n("K3b is currently busy and cannot start any other operations."),
+        K3b::PassivePopup::showPopup( i18n("K3b is currently busy and cannot start any other operations."),
                                     i18n("K3b is busy"),
-                                    K3bPassivePopup::Information );
+                                    K3b::PassivePopup::Information );
         return true;
     }
 
-    K3bDoc* doc = 0;
+    K3b::Doc* doc = 0;
     if( args->isSet( "data" ) ||
         args->isSet( "datacd" ) ||
         args->isSet( "datadvd" )) {
@@ -210,7 +210,7 @@ bool K3bApplication::processCmdLineArgs()
         KUrl::List urls;
         for( int i = 0; i < args->count(); i++ )
             urls.append( args->url(i) );
-        dynamic_cast<K3bView*>( doc->view() )->addUrls( urls );
+        dynamic_cast<K3b::View*>( doc->view() )->addUrls( urls );
     }
     // otherwise we open them as documents
     else {
@@ -271,7 +271,7 @@ bool K3bApplication::processCmdLineArgs()
         if( m_core->projectManager()->activeDoc() ) {
             showTips = false;
             dialogOpen = true;
-            static_cast<K3bView*>( m_core->projectManager()->activeDoc()->view() )->slotBurn();
+            static_cast<K3b::View*>( m_core->projectManager()->activeDoc()->view() )->slotBurn();
         }
     }
 
@@ -281,40 +281,40 @@ bool K3bApplication::processCmdLineArgs()
 }
 
 
-void K3bApplication::slotShutDown()
+void K3b::Application::slotShutDown()
 {
     k3bcore->mediaCache()->clearDeviceList();
-    K3bThreadJob::waitUntilFinished();
+    K3b::ThreadJob::waitUntilFinished();
 }
 
 
 
-K3bApplication::Core::Core( QObject* parent )
-    : K3bCore( parent ),
+K3b::Application::Core::Core( QObject* parent )
+    : K3b::Core( parent ),
       m_appDeviceManager(0)
 {
     s_k3bAppCore = this;
-    m_themeManager = new K3bThemeManager( this );
-    m_projectManager = new K3bProjectManager( this );
+    m_themeManager = new K3b::ThemeManager( this );
+    m_projectManager = new K3b::ProjectManager( this );
     // we need the themes on startup (loading them is fast anyway :)
     m_themeManager->loadThemes();
 
-    //m_jobInterface = new K3bJobInterface( this );
-    //m_interface = new K3bInterface();
+    //m_jobInterface = new K3b::JobInterface( this );
+    //m_interface = new K3b::Interface();
     //dcopClient()->setDefaultObject( m_interface->objId() );
 }
 
 
-K3bApplication::Core::~Core()
+K3b::Application::Core::~Core()
 {
 }
 
 
-void K3bApplication::Core::initDeviceManager()
+void K3b::Application::Core::initDeviceManager()
 {
     if( !m_appDeviceManager ) {
         // our very own special device manager
-        m_appDeviceManager = new K3bAppDeviceManager( this );
+        m_appDeviceManager = new K3b::AppDeviceManager( this );
     }
 
     // FIXME: move this to libk3b
@@ -322,62 +322,62 @@ void K3bApplication::Core::initDeviceManager()
 }
 
 
-K3bDevice::DeviceManager* K3bApplication::Core::deviceManager() const
+K3b::Device::DeviceManager* K3b::Application::Core::deviceManager() const
 {
     return appDeviceManager();
 }
 
 
-void K3bApplication::Core::init()
+void K3b::Application::Core::init()
 {
     //
     // The eMovix program is a special case which is not part of
-    // the default programs handled by K3bCore
+    // the default programs handled by K3b::Core
     //
     initExternalBinManager();
-    externalBinManager()->addProgram( new K3bMovixProgram() );
-    externalBinManager()->addProgram( new K3bNormalizeProgram() );
+    externalBinManager()->addProgram( new K3b::MovixProgram() );
+    externalBinManager()->addProgram( new K3b::NormalizeProgram() );
     K3b::addTranscodePrograms( externalBinManager() );
     K3b::addVcdimagerPrograms( externalBinManager() );
 
-    K3bCore::init();
+    K3b::Core::init();
 
-    connect( deviceManager(), SIGNAL(changed(K3bDevice::DeviceManager*)),
-             mediaCache(), SLOT(buildDeviceList(K3bDevice::DeviceManager*)) );
+    connect( deviceManager(), SIGNAL(changed(K3b::Device::DeviceManager*)),
+             mediaCache(), SLOT(buildDeviceList(K3b::Device::DeviceManager*)) );
 }
 
 
-void K3bApplication::Core::readSettings( KSharedConfig::Ptr cnf )
+void K3b::Application::Core::readSettings( KSharedConfig::Ptr cnf )
 {
-    K3bCore::readSettings( cnf );
+    K3b::Core::readSettings( cnf );
     m_themeManager->readConfig( cnf->group( "General Options" ) );
 }
 
 
-void K3bApplication::Core::saveSettings( KSharedConfig::Ptr cnf )
+void K3b::Application::Core::saveSettings( KSharedConfig::Ptr cnf )
 {
-    K3bCore::saveSettings( cnf );
+    K3b::Core::saveSettings( cnf );
     m_themeManager->saveConfig( cnf->group( "General Options" ) );
 }
 
 
-bool K3bApplication::Core::internalBlockDevice( K3bDevice::Device* dev )
+bool K3b::Application::Core::internalBlockDevice( K3b::Device::Device* dev )
 {
-    if( K3bCore::internalBlockDevice( dev ) ) {
+    if( K3b::Core::internalBlockDevice( dev ) ) {
         if( mediaCache() ) {
             m_deviceBlockMap[dev] = mediaCache()->blockDevice( dev );
         }
 
 #ifdef ENABLE_HAL_SUPPORT
-        if( K3bDevice::HalConnection::instance()->lock( dev ) != K3bDevice::HalConnection::org_freedesktop_Hal_Success )
-            kDebug() << "(K3bInterferingSystemsHandler) HAL lock failed.";
+        if( K3b::Device::HalConnection::instance()->lock( dev ) != K3b::Device::HalConnection::org_freedesktop_Hal_Success )
+            kDebug() << "(K3b::InterferingSystemsHandler) HAL lock failed.";
 #endif
 
         //
         // Check if the device is in use
         //
         // FIXME: Use the top level widget as parent
-        K3bLsofWrapperDialog::checkDevice( dev );
+        K3b::LsofWrapperDialog::checkDevice( dev );
 
         return true;
     }
@@ -386,7 +386,7 @@ bool K3bApplication::Core::internalBlockDevice( K3bDevice::Device* dev )
 }
 
 
-void K3bApplication::Core::internalUnblockDevice( K3bDevice::Device* dev )
+void K3b::Application::Core::internalUnblockDevice( K3b::Device::Device* dev )
 {
     if( mediaCache() ) {
         mediaCache()->unblockDevice( dev, m_deviceBlockMap[dev] );
@@ -394,10 +394,10 @@ void K3bApplication::Core::internalUnblockDevice( K3bDevice::Device* dev )
     }
 
 #ifdef ENABLE_HAL_SUPPORT
-    K3bDevice::HalConnection::instance()->unlock( dev );
+    K3b::Device::HalConnection::instance()->unlock( dev );
 #endif
 
-    K3bCore::internalUnblockDevice( dev );
+    K3b::Core::internalUnblockDevice( dev );
 }
 
 #include "k3bapplication.moc"

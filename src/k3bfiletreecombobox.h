@@ -23,41 +23,45 @@
 #include <QEvent>
 #include <QPixmap>
 
-class K3bFileTreeView;
+namespace K3b {
+    class FileTreeView;
+}
 class QEvent;
 class QKeyEvent;
 class QMouseEvent;
 class QPaintEvent;
 
-namespace K3bDevice {
+namespace Device {
     class Device;
 }
 
-class K3bFileTreeComboBox : public KComboBox
+namespace K3b {
+class FileTreeComboBox : public KComboBox
 {
     Q_OBJECT
 
 public:
-    K3bFileTreeComboBox( QWidget* parent = 0 );
-    ~K3bFileTreeComboBox();
+    FileTreeComboBox( QWidget* parent = 0 );
+    ~FileTreeComboBox();
 
 public Q_SLOTS:
-    void setDevice( K3bDevice::Device* );
+    void setDevice( Device::Device* );
     void setUrl( const KUrl& url );
     void slotGoUrl();
 
  Q_SIGNALS:
     void activated( const KUrl& url );
-    void activated( K3bDevice::Device* dev );
+    void activated( Device::Device* dev );
 
 private Q_SLOTS:
-    void slotDeviceExecuted( K3bDevice::Device* );
+    void slotDeviceExecuted( Device::Device* );
     void slotUrlExecuted( const KUrl& url );
 
 private:
     class Private;
     Private* d;
-    K3bFileTreeView* m_fileTreeView;
+    FileTreeView* m_fileTreeView;
 };
+}
 
 #endif

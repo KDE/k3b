@@ -22,18 +22,21 @@
 #include <qmap.h>
 
 
-class K3bVideoDVDRippingWidget;
+namespace K3b {
+    class VideoDVDRippingWidget;
+}
 class Q3CheckListItem;
 
-class K3bVideoDVDRippingDialog : public K3bInteractionDialog
+namespace K3b {
+class VideoDVDRippingDialog : public InteractionDialog
 {
   Q_OBJECT
 
  public: 
-  K3bVideoDVDRippingDialog( const K3bVideoDVD::VideoDVD& dvd, 
+  VideoDVDRippingDialog( const VideoDVD::VideoDVD& dvd, 
 			    const QList<int>& titles,
 			    QWidget *parent = 0 );
-  ~K3bVideoDVDRippingDialog();
+  ~VideoDVDRippingDialog();
 
   void setBaseDir( const QString& path );
 
@@ -60,21 +63,22 @@ class K3bVideoDVDRippingDialog : public K3bInteractionDialog
  private:
   void populateTitleView( const QList<int>& titles );
 
-  QString createFilename( const K3bVideoDVDRippingJob::TitleRipInfo& info, const QString& pattern ) const;
+  QString createFilename( const VideoDVDRippingJob::TitleRipInfo& info, const QString& pattern ) const;
 
   void loadK3bDefaults();
   void loadUserDefaults( const KConfigGroup& );
   void saveUserDefaults( KConfigGroup );
 
-  K3bVideoDVDRippingWidget* m_w;
+  VideoDVDRippingWidget* m_w;
 
-  K3bVideoDVD::VideoDVD m_dvd;
-  QMap<Q3CheckListItem*, K3bVideoDVDRippingJob::TitleRipInfo> m_titleRipInfos;
+  VideoDVD::VideoDVD m_dvd;
+  QMap<Q3CheckListItem*, VideoDVDRippingJob::TitleRipInfo> m_titleRipInfos;
 
   class AudioStreamViewItem;
 
   class Private;
   Private* d;
 };
+}
 
 #endif

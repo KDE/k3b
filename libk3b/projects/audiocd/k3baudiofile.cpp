@@ -19,8 +19,8 @@
 #include <k3baudiodecoder.h>
 
 
-K3bAudioFile::K3bAudioFile( K3bAudioDecoder* dec, K3bAudioDoc* doc )
-    : K3bAudioDataSource(),
+K3b::AudioFile::AudioFile( K3b::AudioDecoder* dec, K3b::AudioDoc* doc )
+    : K3b::AudioDataSource(),
       m_doc(doc),
       m_decoder(dec),
       m_decodedData(0)
@@ -30,8 +30,8 @@ K3bAudioFile::K3bAudioFile( K3bAudioDecoder* dec, K3bAudioDoc* doc )
 }
 
 
-K3bAudioFile::K3bAudioFile( const K3bAudioFile& file )
-    : K3bAudioDataSource( file ),
+K3b::AudioFile::AudioFile( const K3b::AudioFile& file )
+    : K3b::AudioDataSource( file ),
       m_doc( file.m_doc ),
       m_decoder( file.m_decoder ),
       m_decodedData(0)
@@ -40,43 +40,43 @@ K3bAudioFile::K3bAudioFile( const K3bAudioFile& file )
 }
 
 
-K3bAudioFile::~K3bAudioFile()
+K3b::AudioFile::~AudioFile()
 {
     m_doc->decreaseDecoderUsage( m_decoder );
 }
 
 
-QString K3bAudioFile::type() const
+QString K3b::AudioFile::type() const
 {
     return m_decoder->fileType();
 }
 
 
-QString K3bAudioFile::sourceComment() const
+QString K3b::AudioFile::sourceComment() const
 {
     return m_decoder->filename().section( "/", -1 );
 }
 
 
-QString K3bAudioFile::filename() const
+QString K3b::AudioFile::filename() const
 {
     return m_decoder->filename();
 }
 
 
-bool K3bAudioFile::isValid() const
+bool K3b::AudioFile::isValid() const
 {
     return m_decoder->isValid();
 }
 
 
-K3b::Msf K3bAudioFile::originalLength() const
+K3b::Msf K3b::AudioFile::originalLength() const
 {
     return m_decoder->length();
 }
 
 
-bool K3bAudioFile::seek( const K3b::Msf& msf )
+bool K3b::AudioFile::seek( const K3b::Msf& msf )
 {
     // this is valid once the decoder has been initialized.
     if( startOffset() + msf <= lastSector() &&
@@ -89,7 +89,7 @@ bool K3bAudioFile::seek( const K3b::Msf& msf )
 }
 
 
-int K3bAudioFile::read( char* data, unsigned int max )
+int K3b::AudioFile::read( char* data, unsigned int max )
 {
     // here we can trust on the decoder to always provide enough data
     // see if we decode too much
@@ -105,7 +105,7 @@ int K3bAudioFile::read( char* data, unsigned int max )
 }
 
 
-K3bAudioDataSource* K3bAudioFile::copy() const
+K3b::AudioDataSource* K3b::AudioFile::copy() const
 {
-    return new K3bAudioFile( *this );
+    return new K3b::AudioFile( *this );
 }

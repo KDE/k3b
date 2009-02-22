@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2007-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -18,66 +18,69 @@
 #include "k3binteractiondialog.h"
 #include <kio/global.h>
 
-namespace K3bDevice {
-    class Device;
-}
-
-class K3bWriterSelectionWidget;
-class K3bTempDirSelectionWidget;
-class K3bMediaSelectionComboBox;
 class QCheckBox;
 class QSpinBox;
-class QComboBox;
-class K3bWritingModeWidget;
 class QGroupBox;
+class QComboBox;
 
-class K3bMediaCopyDialog : public K3bInteractionDialog
-{
-    Q_OBJECT
+namespace K3b {
+    namespace Device {
+        class Device;
+    }
 
-public: 
-    K3bMediaCopyDialog( QWidget *parent = 0 );
-    ~K3bMediaCopyDialog();
+    class WriterSelectionWidget;
+    class TempDirSelectionWidget;
+    class MediaSelectionComboBox;
+    class WritingModeWidget;
 
-    void setReadingDevice( K3bDevice::Device* );
-    K3bDevice::Device* readingDevice() const;
+    class MediaCopyDialog : public InteractionDialog
+    {
+        Q_OBJECT
 
-private Q_SLOTS:
-    void slotStartClicked();
-    void updateOverrideDevice();
+    public:
+        MediaCopyDialog( QWidget *parent = 0 );
+        ~MediaCopyDialog();
 
-protected:
-    void toggleAll();
-    void init();
+        void setReadingDevice( Device::Device* );
+        Device::Device* readingDevice() const;
 
-private:
-    void loadUserDefaults( const KConfigGroup& );
-    void saveUserDefaults( KConfigGroup );
-    void loadK3bDefaults();
+    private Q_SLOTS:
+        void slotStartClicked();
+        void updateOverrideDevice();
 
-    KIO::filesize_t neededSize() const;
+    protected:
+        void toggleAll();
+        void init();
 
-    K3bWriterSelectionWidget* m_writerSelectionWidget;
-    K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
-    QCheckBox* m_checkSimulate;
-    QCheckBox* m_checkCacheImage;
-    QCheckBox* m_checkDeleteImages;
-    QCheckBox* m_checkOnlyCreateImage;
-    QCheckBox* m_checkReadCdText;
-    QCheckBox* m_checkIgnoreDataReadErrors;
-    QCheckBox* m_checkIgnoreAudioReadErrors;
-    QCheckBox* m_checkNoCorrection;
-    QCheckBox* m_checkVerifyData;
-    K3bMediaSelectionComboBox* m_comboSourceDevice;
-    QComboBox* m_comboParanoiaMode;
-    QSpinBox* m_spinCopies;
-    QSpinBox* m_spinDataRetries;
-    QSpinBox* m_spinAudioRetries;
-    K3bWritingModeWidget* m_writingModeWidget;
-    QComboBox* m_comboCopyMode;
+    private:
+        void loadUserDefaults( const KConfigGroup& );
+        void saveUserDefaults( KConfigGroup );
+        void loadK3bDefaults();
 
-    QGroupBox* m_groupAdvancedDataOptions;
-    QGroupBox* m_groupAdvancedAudioOptions;
-};
+        KIO::filesize_t neededSize() const;
+
+        WriterSelectionWidget* m_writerSelectionWidget;
+        TempDirSelectionWidget* m_tempDirSelectionWidget;
+        QCheckBox* m_checkSimulate;
+        QCheckBox* m_checkCacheImage;
+        QCheckBox* m_checkDeleteImages;
+        QCheckBox* m_checkOnlyCreateImage;
+        QCheckBox* m_checkReadCdText;
+        QCheckBox* m_checkIgnoreDataReadErrors;
+        QCheckBox* m_checkIgnoreAudioReadErrors;
+        QCheckBox* m_checkNoCorrection;
+        QCheckBox* m_checkVerifyData;
+        MediaSelectionComboBox* m_comboSourceDevice;
+        QComboBox* m_comboParanoiaMode;
+        QSpinBox* m_spinCopies;
+        QSpinBox* m_spinDataRetries;
+        QSpinBox* m_spinAudioRetries;
+        WritingModeWidget* m_writingModeWidget;
+        QComboBox* m_comboCopyMode;
+
+        QGroupBox* m_groupAdvancedDataOptions;
+        QGroupBox* m_groupAdvancedAudioOptions;
+    };
+}
 
 #endif

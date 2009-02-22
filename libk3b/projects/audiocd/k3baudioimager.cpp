@@ -28,7 +28,7 @@
 #include <unistd.h>
 
 
-class K3bAudioImager::Private
+class K3b::AudioImager::Private
 {
 public:
     Private()
@@ -37,53 +37,53 @@ public:
 
     int fd;
     QStringList imageNames;
-    K3bAudioImager::ErrorType lastError;
-    K3bAudioDoc* doc;
+    K3b::AudioImager::ErrorType lastError;
+    K3b::AudioDoc* doc;
 };
 
 
 
-K3bAudioImager::K3bAudioImager( K3bAudioDoc* doc, K3bJobHandler* jh, QObject* parent )
-    : K3bThreadJob( jh, parent ),
+K3b::AudioImager::AudioImager( K3b::AudioDoc* doc, K3b::JobHandler* jh, QObject* parent )
+    : K3b::ThreadJob( jh, parent ),
       d( new Private() )
 {
     d->doc = doc;
 }
 
 
-K3bAudioImager::~K3bAudioImager()
+K3b::AudioImager::~AudioImager()
 {
     delete d;
 }
 
 
-void K3bAudioImager::writeToFd( int fd )
+void K3b::AudioImager::writeToFd( int fd )
 {
     d->fd = fd;
 }
 
 
-void K3bAudioImager::setImageFilenames( const QStringList& p )
+void K3b::AudioImager::setImageFilenames( const QStringList& p )
 {
     d->imageNames = p;
     d->fd = -1;
 }
 
 
-K3bAudioImager::ErrorType K3bAudioImager::lastErrorType() const
+K3b::AudioImager::ErrorType K3b::AudioImager::lastErrorType() const
 {
     return d->lastError;
 }
 
 
-bool K3bAudioImager::run()
+bool K3b::AudioImager::run()
 {
-    d->lastError = K3bAudioImager::ERROR_UNKNOWN;
+    d->lastError = K3b::AudioImager::ERROR_UNKNOWN;
 
     QStringList::iterator imageFileIt = d->imageNames.begin();
-    K3bWaveFileWriter waveFileWriter;
+    K3b::WaveFileWriter waveFileWriter;
 
-    K3bAudioTrack* track = d->doc->firstTrack();
+    K3b::AudioTrack* track = d->doc->firstTrack();
     int trackNumber = 1;
     unsigned long long totalSize = d->doc->length().audioBytes();
     unsigned long long totalRead = 0;
@@ -97,7 +97,7 @@ bool K3bAudioImager::run()
         // Seek to the beginning of the track
         //
         if( !track->seek(0) ) {
-            emit infoMessage( i18n("Unable to seek in track %1.", trackNumber), K3bJob::ERROR );
+            emit infoMessage( i18n("Unable to seek in track %1.", trackNumber), K3b::Job::ERROR );
             return false;
         }
 
@@ -112,7 +112,7 @@ bool K3bAudioImager::run()
         //
         if( d->fd == -1 ) {
             if( !waveFileWriter.open( *imageFileIt ) ) {
-                emit infoMessage( i18n("Could not open %1 for writing", *imageFileIt), K3bJob::ERROR );
+                emit infoMessage( i18n("Could not open %1 for writing", *imageFileIt), K3b::Job::ERROR );
                 return false;
             }
         }
@@ -122,12 +122,12 @@ bool K3bAudioImager::run()
         //
         while( (read = track->read( buffer, sizeof(buffer) )) > 0 ) {
             if( d->fd == -1 ) {
-                waveFileWriter.write( buffer, read, K3bWaveFileWriter::BigEndian );
+                waveFileWriter.write( buffer, read, K3b::WaveFileWriter::BigEndian );
             }
             else {
                 if( ::write( d->fd, reinterpret_cast<void*>(buffer), read ) != read ) {
-                    kDebug() << "(K3bAudioImager::WorkThread) writing to fd " << d->fd << " failed.";
-                    d->lastError = K3bAudioImager::ERROR_FD_WRITE;
+                    kDebug() << "(K3b::AudioImager::WorkThread) writing to fd " << d->fd << " failed.";
+                    d->lastError = K3b::AudioImager::ERROR_FD_WRITE;
                     return false;
                 }
             }
@@ -149,10 +149,10 @@ bool K3bAudioImager::run()
         }
 
         if( read < 0 ) {
-            emit infoMessage( i18n("Error while decoding track %1.", trackNumber), K3bJob::ERROR );
-            kDebug() << "(K3bAudioImager::WorkThread) read error on track " << trackNumber
+            emit infoMessage( i18n("Error while decoding track %1.", trackNumber), K3b::Job::ERROR );
+            kDebug() << "(K3b::AudioImager::WorkThread) read error on track " << trackNumber
                      << " at pos " << K3b::Msf(trackRead/2352) << endl;
-            d->lastError = K3bAudioImager::ERROR_DECODING_TRACK;
+            d->lastError = K3b::AudioImager::ERROR_DECODING_TRACK;
             return false;
         }
 

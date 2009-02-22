@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
@@ -18,86 +18,88 @@
 
 #include <k3bjob.h>
 
-
-class K3bAudioDoc;
-class K3bAudioImager;
-class K3bAbstractWriter;
 class KTemporaryFile;
-class K3bAudioNormalizeJob;
-class K3bAudioJobTempData;
-class K3bAudioMaxSpeedJob;
-class K3bDoc;
 
-/**
- *@author Sebastian Trueg
- */
-class K3bAudioJob : public K3bBurnJob
-{
-    Q_OBJECT
-	
-public:
-    K3bAudioJob( K3bAudioDoc*, K3bJobHandler*, QObject* parent = 0 );
-    ~K3bAudioJob();
-	
-    K3bDoc* doc() const;
-    K3bDevice::Device* writer() const;
+namespace K3b {
+    class AudioDoc;
+    class AudioImager;
+    class AbstractWriter;
+    class AudioNormalizeJob;
+    class AudioJobTempData;
+    class AudioMaxSpeedJob;
+    class Doc;
 
-    QString jobDescription() const;
-    QString jobDetails() const;
-		
-public Q_SLOTS:
-    void cancel();
-    void start();
+    /**
+     *@author Sebastian Trueg
+     */
+    class AudioJob : public BurnJob
+    {
+        Q_OBJECT
 
-protected Q_SLOTS:
-    // writer slots
-    void slotWriterFinished( bool success );
-    void slotWriterNextTrack(int, int);
-    void slotWriterJobPercent(int);
+    public:
+        AudioJob( AudioDoc*, JobHandler*, QObject* parent = 0 );
+        ~AudioJob();
 
-    // audiodecoder slots
-    void slotAudioDecoderFinished( bool );
-    void slotAudioDecoderNextTrack( int, int );
-    void slotAudioDecoderPercent(int);
-    void slotAudioDecoderSubPercent( int );
+        Doc* doc() const;
+        Device::Device* writer() const;
 
-    // normalizing slots
-    void slotNormalizeJobFinished( bool );
-    void slotNormalizeProgress( int );
-    void slotNormalizeSubProgress( int );
+        QString jobDescription() const;
+        QString jobDetails() const;
 
-    // max speed
-    void slotMaxSpeedJobFinished( bool );
+    public Q_SLOTS:
+        void cancel();
+        void start();
 
-private:
-    bool prepareWriter();
-    bool startWriting();
-    void cleanupAfterError();
-    void removeBufferFiles();
-    void normalizeFiles();
-    bool writeTocFile();
-    bool writeInfFiles();
-    bool checkAudioSources();
+    protected Q_SLOTS:
+        // writer slots
+        void slotWriterFinished( bool success );
+        void slotWriterNextTrack(int, int);
+        void slotWriterJobPercent(int);
 
-    K3bAudioDoc* m_doc;
-    K3bAudioImager* m_audioImager;
-    K3bAbstractWriter* m_writer;
-    K3bAudioNormalizeJob* m_normalizeJob;
-    K3bAudioJobTempData* m_tempData;
-    K3bAudioMaxSpeedJob* m_maxSpeedJob;
+        // audiodecoder slots
+        void slotAudioDecoderFinished( bool );
+        void slotAudioDecoderNextTrack( int, int );
+        void slotAudioDecoderPercent(int);
+        void slotAudioDecoderSubPercent( int );
 
-    KTemporaryFile* m_tocFile;
+        // normalizing slots
+        void slotNormalizeJobFinished( bool );
+        void slotNormalizeProgress( int );
+        void slotNormalizeSubProgress( int );
 
-    bool m_canceled;
-    bool m_errorOccuredAndAlreadyReported;
+        // max speed
+        void slotMaxSpeedJobFinished( bool );
 
-    bool m_written;
+    private:
+        bool prepareWriter();
+        bool startWriting();
+        void cleanupAfterError();
+        void removeBufferFiles();
+        void normalizeFiles();
+        bool writeTocFile();
+        bool writeInfFiles();
+        bool checkAudioSources();
 
-    K3b::WritingApp m_usedWritingApp;
-    K3b::WritingMode m_usedWritingMode;
+        AudioDoc* m_doc;
+        AudioImager* m_audioImager;
+        AbstractWriter* m_writer;
+        AudioNormalizeJob* m_normalizeJob;
+        AudioJobTempData* m_tempData;
+        AudioMaxSpeedJob* m_maxSpeedJob;
 
-    class Private;
-    Private* d;
-};
+        KTemporaryFile* m_tocFile;
+
+        bool m_canceled;
+        bool m_errorOccuredAndAlreadyReported;
+
+        bool m_written;
+
+        WritingApp m_usedWritingApp;
+        WritingMode m_usedWritingMode;
+
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

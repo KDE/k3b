@@ -17,7 +17,7 @@
 
 #include <KGlobalSettings>
 
-K3bThemedLabel::K3bThemedLabel( QWidget* parent )
+K3b::ThemedLabel::ThemedLabel( QWidget* parent )
     : KSqueezedTextLabel( parent ),
       m_themePixmapCode( -1 )
 {
@@ -31,7 +31,7 @@ K3bThemedLabel::K3bThemedLabel( QWidget* parent )
 }
 
 
-K3bThemedLabel::K3bThemedLabel( const QString& text, QWidget* parent )
+K3b::ThemedLabel::ThemedLabel( const QString& text, QWidget* parent )
     : KSqueezedTextLabel( text, parent ),
       m_themePixmapCode( -1 )
 {
@@ -45,7 +45,7 @@ K3bThemedLabel::K3bThemedLabel( const QString& text, QWidget* parent )
 }
 
 
-K3bThemedLabel::K3bThemedLabel( K3bTheme::PixmapType pix, QWidget* parent )
+K3b::ThemedLabel::ThemedLabel( K3b::Theme::PixmapType pix, QWidget* parent )
     : KSqueezedTextLabel( parent )
 {
     setThemePixmap( pix );
@@ -58,23 +58,23 @@ K3bThemedLabel::K3bThemedLabel( K3bTheme::PixmapType pix, QWidget* parent )
 }
 
 
-void K3bThemedLabel::setThemePixmap( K3bTheme::PixmapType pix )
+void K3b::ThemedLabel::setThemePixmap( K3b::Theme::PixmapType pix )
 {
     m_themePixmapCode = pix;
     slotThemeChanged();
 }
 
 
-void K3bThemedLabel::slotThemeChanged()
+void K3b::ThemedLabel::slotThemeChanged()
 {
     setAutoFillBackground( true );
-    if( K3bTheme* theme = k3bappcore->themeManager()->currentTheme() ) {
+    if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
         QPalette p = palette();
         p.setColor( backgroundRole(), theme->backgroundColor() );
         p.setColor( foregroundRole(), theme->foregroundColor() );
         setPalette( p );
         if( m_themePixmapCode > -1 ) {
-            setPixmap( theme->pixmap( (K3bTheme::PixmapType)m_themePixmapCode ) );
+            setPixmap( theme->pixmap( (K3b::Theme::PixmapType)m_themePixmapCode ) );
             setScaledContents( false );
             if ( pixmap() ) {
                 setFixedSize( pixmap()->size() );

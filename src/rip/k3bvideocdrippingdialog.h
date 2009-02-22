@@ -27,15 +27,18 @@
 class QCheckBox;
 class QLabel;
 class KUrlRequester;
-class K3bTempDirSelectionWidget;
+namespace K3b {
+    class TempDirSelectionWidget;
+}
 
-class K3bVideoCdRippingDialog : public K3bInteractionDialog
+namespace K3b {
+class VideoCdRippingDialog : public InteractionDialog
 {
   Q_OBJECT
 
  public: 
-  K3bVideoCdRippingDialog( K3bVideoCdRippingOptions* options, QWidget* parent = 0 );
-  ~K3bVideoCdRippingDialog();
+  VideoCdRippingDialog( VideoCdRippingOptions* options, QWidget* parent = 0 );
+  ~VideoCdRippingDialog();
 
  private:
   void setupGui();
@@ -45,7 +48,7 @@ class K3bVideoCdRippingDialog : public K3bInteractionDialog
   void loadUserDefaults( const KConfigGroup& );
   void saveUserDefaults( KConfigGroup );
   
-  K3bTempDirSelectionWidget* m_tempDirSelectionWidget;
+  TempDirSelectionWidget* m_tempDirSelectionWidget;
 
   KUrlRequester* m_editDirectory;
 
@@ -55,7 +58,7 @@ class K3bVideoCdRippingDialog : public K3bInteractionDialog
   QCheckBox* m_sector2336;
   QCheckBox* m_extractXML;
 
-  K3bVideoCdRippingOptions* m_videooptions;
+  VideoCdRippingOptions* m_videooptions;
 
   unsigned long m_freeSpace;
 
@@ -66,5 +69,6 @@ class K3bVideoCdRippingDialog : public K3bInteractionDialog
   void slotFreeSpace(const QString&, unsigned long, unsigned long, unsigned long);
 
 };
+}
 
 #endif

@@ -34,13 +34,13 @@
 #include <string.h>
 
 
-bool operator==( const K3bFileItem::Id& id1, const K3bFileItem::Id& id2 )
+bool K3b::operator==( const K3b::FileItem::Id& id1, const K3b::FileItem::Id& id2 )
 {
     return ( id1.device == id2.device && id1.inode == id2.inode );
 }
 
 
-bool operator<( const K3bFileItem::Id& id1, const K3bFileItem::Id& id2 )
+bool K3b::operator<( const K3b::FileItem::Id& id1, const K3b::FileItem::Id& id2 )
 {
     if( id1.device == id2.device )
         return ( id1.inode < id2.inode );
@@ -49,15 +49,15 @@ bool operator<( const K3bFileItem::Id& id1, const K3bFileItem::Id& id2 )
 }
 
 
-bool operator>( const K3bFileItem::Id& id1, const K3bFileItem::Id& id2 )
+bool K3b::operator>( const K3b::FileItem::Id& id1, const K3b::FileItem::Id& id2 )
 {
     return !( id2 < id1 || id1 == id2 );
 }
 
 
 
-K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName, int flags )
-    : K3bDataItem( doc, dir, flags ),
+K3b::FileItem::FileItem( const QString& filePath, K3b::DataDoc* doc, K3b::DirItem* dir, const QString& k3bName, int flags )
+    : K3b::DataItem( doc, dir, flags ),
       m_replacedItemFromOldSession(0),
       m_localPath(filePath)
 {
@@ -80,7 +80,7 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
 
         // since we have no proper inode info, disable the inode caching in the doc
         if( doc ) {
-            K3bIsoOptions o( doc->isoOptions() );
+            K3b::IsoOptions o( doc->isoOptions() );
             o.setDoNotCacheInodes( true );
             doc->setIsoOptions( o );
         }
@@ -119,10 +119,10 @@ K3bFileItem::K3bFileItem( const QString& filePath, K3bDataDoc* doc, K3bDirItem* 
 }
 
 
-K3bFileItem::K3bFileItem( const k3b_struct_stat* stat,
+K3b::FileItem::FileItem( const k3b_struct_stat* stat,
                           const k3b_struct_stat* followedStat,
-                          const QString& filePath, K3bDataDoc* doc, K3bDirItem* dir, const QString& k3bName )
-    : K3bDataItem( doc, dir ),
+                          const QString& filePath, K3b::DataDoc* doc, K3b::DirItem* dir, const QString& k3bName )
+    : K3b::DataItem( doc, dir ),
       m_replacedItemFromOldSession(0),
       m_localPath(filePath)
 {
@@ -159,8 +159,8 @@ K3bFileItem::K3bFileItem( const k3b_struct_stat* stat,
 }
 
 
-K3bFileItem::K3bFileItem( const K3bFileItem& item )
-    : K3bDataItem( item ),
+K3b::FileItem::FileItem( const K3b::FileItem& item )
+    : K3b::DataItem( item ),
       m_replacedItemFromOldSession(0),
       m_size( item.m_size ),
       m_sizeFollowed( item.m_sizeFollowed ),
@@ -173,26 +173,26 @@ K3bFileItem::K3bFileItem( const K3bFileItem& item )
 }
 
 
-K3bFileItem::~K3bFileItem()
+K3b::FileItem::~FileItem()
 {
     // remove this from parentdir
     take();
 }
 
 
-K3bDataItem* K3bFileItem::copy() const
+K3b::DataItem* K3b::FileItem::copy() const
 {
-    return new K3bFileItem( *this );
+    return new K3b::FileItem( *this );
 }
 
 
-KMimeType::Ptr K3bFileItem::mimeType() const
+KMimeType::Ptr K3b::FileItem::mimeType() const
 {
     return m_mimeType;
 }
 
 
-KIO::filesize_t K3bFileItem::itemSize( bool followSymlinks ) const
+KIO::filesize_t K3b::FileItem::itemSize( bool followSymlinks ) const
 {
     if( followSymlinks )
         return m_sizeFollowed;
@@ -201,13 +201,13 @@ KIO::filesize_t K3bFileItem::itemSize( bool followSymlinks ) const
 }
 
 
-K3bFileItem::Id K3bFileItem::localId() const
+K3b::FileItem::Id K3b::FileItem::localId() const
 {
     return localId( doc() ? doc()->isoOptions().followSymbolicLinks() || !doc()->isoOptions().createRockRidge() : false );
 }
 
 
-K3bFileItem::Id K3bFileItem::localId( bool followSymlinks ) const
+K3b::FileItem::Id K3b::FileItem::localId( bool followSymlinks ) const
 {
     if( followSymlinks )
         return m_idFollowed;
@@ -216,42 +216,42 @@ K3bFileItem::Id K3bFileItem::localId( bool followSymlinks ) const
 }
 
 
-bool K3bFileItem::exists() const
+bool K3b::FileItem::exists() const
 {
     return true;
 }
 
-QString K3bFileItem::absIsoPath()
+QString K3b::FileItem::absIsoPath()
 {
     //	return m_dir->absIsoPath() + m_isoName;
     return QString();
 }
 
 
-QString K3bFileItem::localPath() const
+QString K3b::FileItem::localPath() const
 {
     return m_localPath;
 }
 
-K3bDirItem* K3bFileItem::getDirItem() const
+K3b::DirItem* K3b::FileItem::getDirItem() const
 {
     return getParent();
 }
 
 
-bool K3bFileItem::isSymLink() const
+bool K3b::FileItem::isSymLink() const
 {
     return m_bSymLink;
 }
 
 
-QString K3bFileItem::linkDest() const
+QString K3b::FileItem::linkDest() const
 {
     return QFileInfo( localPath() ).readLink();
 }
 
 
-bool K3bFileItem::isValid() const
+bool K3b::FileItem::isValid() const
 {
     if( isSymLink() ) {
 
@@ -266,7 +266,7 @@ bool K3bFileItem::isValid() const
             return false;  // absolut links can never be part of the compilation!
 
         // parse the link
-        K3bDirItem* dir = getParent();
+        K3b::DirItem* dir = getParent();
 
         QStringList tokens = dest.split( QRegExp("/+") );  // two slashes or more do the same as one does!
 
@@ -283,13 +283,13 @@ bool K3bFileItem::isValid() const
             }
             else {
                 // search for the item in dir
-                K3bDataItem* d = dir->find( tokens[i] );
+                K3b::DataItem* d = dir->find( tokens[i] );
                 if( d == 0 )
                     return false;
 
                 if( d->isDir() ) {
                     // change directory
-                    dir = (K3bDirItem*)d;
+                    dir = (K3b::DirItem*)d;
                 }
                 else {
                     if( i+1 != tokens.size() )

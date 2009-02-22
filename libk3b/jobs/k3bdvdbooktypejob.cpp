@@ -34,7 +34,7 @@
 #include <string.h>
 
 
-class K3bDvdBooktypeJob::Private
+class K3b::DvdBooktypeJob::Private
 {
 public:
     Private()
@@ -45,9 +45,9 @@ public:
           forceNoEject(false) {
     }
 
-    K3bDevice::Device* device;
-    K3bProcess* process;
-    const K3bExternalBin* dvdBooktypeBin;
+    K3b::Device::Device* device;
+    K3b::Process* process;
+    const K3b::ExternalBin* dvdBooktypeBin;
 
     bool success;
     bool canceled;
@@ -59,40 +59,40 @@ public:
 };
 
 
-K3bDvdBooktypeJob::K3bDvdBooktypeJob( K3bJobHandler* jh, QObject* parent )
-    : K3bJob( jh, parent ),
+K3b::DvdBooktypeJob::DvdBooktypeJob( K3b::JobHandler* jh, QObject* parent )
+    : K3b::Job( jh, parent ),
       m_action(0)
 {
     d = new Private;
 }
 
 
-K3bDvdBooktypeJob::~K3bDvdBooktypeJob()
+K3b::DvdBooktypeJob::~DvdBooktypeJob()
 {
     delete d->process;
     delete d;
 }
 
 
-void K3bDvdBooktypeJob::setForceNoEject( bool b )
+void K3b::DvdBooktypeJob::setForceNoEject( bool b )
 {
     d->forceNoEject = b;
 }
 
 
-QString K3bDvdBooktypeJob::jobDescription() const
+QString K3b::DvdBooktypeJob::jobDescription() const
 {
     return i18n("Changing DVD Booktype"); // Changing DVD±R(W) Booktype
 }
 
 
-QString K3bDvdBooktypeJob::jobDetails() const
+QString K3b::DvdBooktypeJob::jobDetails() const
 {
     return QString();
 }
 
 
-void K3bDvdBooktypeJob::start()
+void K3b::DvdBooktypeJob::start()
 {
     d->canceled = false;
     d->running = true;
@@ -113,8 +113,8 @@ void K3bDvdBooktypeJob::start()
         m_action == SET_MEDIA_DVD_R_W ) {
         emit newSubTask( i18n("Waiting for media") );
         if( waitForMedia( d->device,
-                          K3bDevice::STATE_COMPLETE|K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_EMPTY,
-                          K3bDevice::MEDIA_DVD_PLUS_RW|K3bDevice::MEDIA_DVD_PLUS_R,
+                          K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE|K3b::Device::STATE_EMPTY,
+                          K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_PLUS_R,
                           i18n("Please insert an empty DVD+R or a DVD+RW medium into drive<p><b>%1 %2 (%3)</b>.",
                                d->device->vendor(),
                                d->device->description(),
@@ -128,10 +128,10 @@ void K3bDvdBooktypeJob::start()
         emit infoMessage( i18n("Checking media..."), INFO );
         emit newTask( i18n("Checking media") );
 
-        connect( K3bDevice::sendCommand( K3bDevice::DeviceHandler::NG_DISKINFO, d->device ),
-                 SIGNAL(finished(K3bDevice::DeviceHandler*)),
+        connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::NG_DISKINFO, d->device ),
+                 SIGNAL(finished(K3b::Device::DeviceHandler*)),
                  this,
-                 SLOT(slotDeviceHandlerFinished(K3bDevice::DeviceHandler*)) );
+                 SLOT(slotDeviceHandlerFinished(K3b::Device::DeviceHandler*)) );
     }
     else {
         // change writer defaults
@@ -140,7 +140,7 @@ void K3bDvdBooktypeJob::start()
 }
 
 
-void K3bDvdBooktypeJob::start( K3bDevice::DeviceHandler* dh )
+void K3b::DvdBooktypeJob::start( K3b::Device::DeviceHandler* dh )
 {
     d->canceled = false;
     d->running = true;
@@ -151,7 +151,7 @@ void K3bDvdBooktypeJob::start( K3bDevice::DeviceHandler* dh )
 }
 
 
-void K3bDvdBooktypeJob::cancel()
+void K3b::DvdBooktypeJob::cancel()
 {
     if( d->running ) {
         d->canceled = true;
@@ -159,25 +159,25 @@ void K3bDvdBooktypeJob::cancel()
             d->process->kill();
     }
     else {
-        kDebug() << "(K3bDvdBooktypeJob) not running.";
+        kDebug() << "(K3b::DvdBooktypeJob) not running.";
     }
 }
 
 
-void K3bDvdBooktypeJob::setDevice( K3bDevice::Device* dev )
+void K3b::DvdBooktypeJob::setDevice( K3b::Device::Device* dev )
 {
     d->device = dev;
 }
 
 
-void K3bDvdBooktypeJob::slotStderrLine( const QString& line )
+void K3b::DvdBooktypeJob::slotStderrLine( const QString& line )
 {
     emit debuggingOutput( "dvd+rw-booktype", line );
     // FIXME
 }
 
 
-void K3bDvdBooktypeJob::slotProcessFinished( int exitCode, QProcess::ExitStatus exitStatus )
+void K3b::DvdBooktypeJob::slotProcessFinished( int exitCode, QProcess::ExitStatus exitStatus )
 {
     if( d->canceled ) {
         emit canceled();
@@ -185,13 +185,13 @@ void K3bDvdBooktypeJob::slotProcessFinished( int exitCode, QProcess::ExitStatus 
     }
     else if( exitStatus == QProcess::NormalExit ) {
         if( exitCode == 0 ) {
-            emit infoMessage( i18n("Booktype successfully changed"), K3bJob::SUCCESS );
+            emit infoMessage( i18n("Booktype successfully changed"), K3b::Job::SUCCESS );
             d->success = true;
         }
         else {
             emit infoMessage( i18n("%1 returned an unknown error (code %2).",d->dvdBooktypeBin->name(), exitCode),
-                              K3bJob::ERROR );
-            emit infoMessage( i18n("Please send me an email with the last output."), K3bJob::ERROR );
+                              K3b::Job::ERROR );
+            emit infoMessage( i18n("Please send me an email with the last output."), K3b::Job::ERROR );
 
             d->success = false;
         }
@@ -215,10 +215,10 @@ void K3bDvdBooktypeJob::slotProcessFinished( int exitCode, QProcess::ExitStatus 
         }
         else {
             emit infoMessage( i18n("Ejecting DVD..."), INFO );
-            connect( K3bDevice::eject( d->device ),
-                     SIGNAL(finished(K3bDevice::DeviceHandler*)),
+            connect( K3b::Device::eject( d->device ),
+                     SIGNAL(finished(K3b::Device::DeviceHandler*)),
                      this,
-                     SLOT(slotEjectingFinished(K3bDevice::DeviceHandler*)) );
+                     SLOT(slotEjectingFinished(K3b::Device::DeviceHandler*)) );
         }
     }
     else {
@@ -228,7 +228,7 @@ void K3bDvdBooktypeJob::slotProcessFinished( int exitCode, QProcess::ExitStatus 
 }
 
 
-void K3bDvdBooktypeJob::slotEjectingFinished( K3bDevice::DeviceHandler* dh )
+void K3b::DvdBooktypeJob::slotEjectingFinished( K3b::Device::DeviceHandler* dh )
 {
     if( !dh->success() )
         emit infoMessage( i18n("Unable to eject media."), ERROR );
@@ -238,7 +238,7 @@ void K3bDvdBooktypeJob::slotEjectingFinished( K3bDevice::DeviceHandler* dh )
 }
 
 
-void K3bDvdBooktypeJob::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh )
+void K3b::DvdBooktypeJob::slotDeviceHandlerFinished( K3b::Device::DeviceHandler* dh )
 {
     if( d->canceled ) {
         emit canceled();
@@ -249,7 +249,7 @@ void K3bDvdBooktypeJob::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh 
     if( dh->success() ) {
 
         d->foundMediaType = dh->diskInfo().mediaType();
-        if( d->foundMediaType == K3bDevice::MEDIA_DVD_PLUS_R ) {
+        if( d->foundMediaType == K3b::Device::MEDIA_DVD_PLUS_R ) {
             // the media needs to be empty
             if( dh->diskInfo().empty() )
                 startBooktypeChange();
@@ -258,7 +258,7 @@ void K3bDvdBooktypeJob::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh 
                 jobFinished(false);
             }
         }
-        else if( d->foundMediaType == K3bDevice::MEDIA_DVD_PLUS_RW ) {
+        else if( d->foundMediaType == K3b::Device::MEDIA_DVD_PLUS_RW ) {
             startBooktypeChange();
         }
         else {
@@ -274,10 +274,10 @@ void K3bDvdBooktypeJob::slotDeviceHandlerFinished( K3bDevice::DeviceHandler* dh 
 }
 
 
-void K3bDvdBooktypeJob::startBooktypeChange()
+void K3b::DvdBooktypeJob::startBooktypeChange()
 {
     delete d->process;
-    d->process = new K3bProcess();
+    d->process = new K3b::Process();
     d->process->setRunPrivileged(true);
     d->process->setSuppressEmptyLines(true);
     connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStderrLine(const QString&)) );
@@ -299,7 +299,7 @@ void K3bDvdBooktypeJob::startBooktypeChange()
                     << "-media";
         break;
     case SET_MEDIA_DVD_R_W:
-        if( d->foundMediaType == K3bDevice::MEDIA_DVD_PLUS_RW )
+        if( d->foundMediaType == K3b::Device::MEDIA_DVD_PLUS_RW )
             *d->process << "-dvd+rw-spec";
         else
             *d->process << "-dvd+r-spec";
@@ -334,7 +334,7 @@ void K3bDvdBooktypeJob::startBooktypeChange()
     if( !d->process->start( K3Process::All ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
-        emit infoMessage( i18n("Could not start %1.",d->dvdBooktypeBin->name()), K3bJob::ERROR );
+        emit infoMessage( i18n("Could not start %1.",d->dvdBooktypeBin->name()), K3b::Job::ERROR );
         d->running = false;
         jobFinished(false);
     }

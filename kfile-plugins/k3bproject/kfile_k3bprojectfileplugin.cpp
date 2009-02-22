@@ -30,10 +30,10 @@
 
 
 
-K_EXPORT_COMPONENT_FACTORY(kfile_k3b, KGenericFactory<K3bProjectFilePlugin>("kfile_k3b"))
+K_EXPORT_COMPONENT_FACTORY(kfile_k3b, KGenericFactory<K3b::ProjectFilePlugin>("kfile_k3b"))
 
 
-K3bProjectFilePlugin::K3bProjectFilePlugin( QObject *parent, const char *name,
+K3b::ProjectFilePlugin::K3b::ProjectFilePlugin( QObject *parent, const char *name,
 					    const QStringList &args)
   : KFilePlugin(parent, name, args)
 {
@@ -45,10 +45,10 @@ K3bProjectFilePlugin::K3bProjectFilePlugin( QObject *parent, const char *name,
 }
 
 
-bool K3bProjectFilePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
+bool K3b::ProjectFilePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
 {
   if( !info.url().isLocalFile() ) {
-    kDebug() << "(K3bProjectFilePluginInfo) no local file.";
+    kDebug() << "(K3b::ProjectFilePluginInfo) no local file.";
     return false;
   }
 
@@ -67,50 +67,50 @@ bool K3bProjectFilePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
     store->close();
   }
   else
-    kDebug() << "(K3bProjectFilePluginInfo) failed to open the store.";
+    kDebug() << "(K3b::ProjectFilePluginInfo) failed to open the store.";
 
   if( success ) {
     // check the documents DOCTYPE
-    K3bDoc::DocType type = K3bDoc::AUDIO;
+    K3b::Doc::DocType type = K3b::Doc::AUDIO;
     if( xmlDoc.doctype().name() == "k3b_audio_project" )
-      type = K3bDoc::AUDIO;
+      type = K3b::Doc::AUDIO;
     else if( xmlDoc.doctype().name() == "k3b_data_project" )
-      type = K3bDoc::DATA;
+      type = K3b::Doc::DATA;
     else if( xmlDoc.doctype().name() == "k3b_vcd_project" )
-      type = K3bDoc::VCD;
+      type = K3b::Doc::VCD;
     else if( xmlDoc.doctype().name() == "k3b_mixed_project" )
-      type = K3bDoc::MIXED;
+      type = K3b::Doc::MIXED;
     else if( xmlDoc.doctype().name() == "k3b_movix_project" )
-      type = K3bDoc::MOVIX;
+      type = K3b::Doc::MOVIX;
     else if( xmlDoc.doctype().name() == "k3b_movixdvd_project" )
-        type = K3bDoc::MOVIX;
+        type = K3b::Doc::MOVIX;
     else if( xmlDoc.doctype().name() == "k3b_dvd_project" )
-      type = K3bDoc::DATA;
+      type = K3b::Doc::DATA;
     else if( xmlDoc.doctype().name() == "k3b_video_dvd_project" )
-      type = K3bDoc::VIDEODVD;
+      type = K3b::Doc::VIDEODVD;
     else {
-      kDebug() << "(K3bDoc) unknown doc type: " << xmlDoc.doctype().name();
+      kDebug() << "(K3b::Doc) unknown doc type: " << xmlDoc.doctype().name();
       success = false;
     }
 
     QString stringType;
     switch( type ) {
-    case K3bDoc::AUDIO:
+    case K3b::Doc::AUDIO:
       stringType = i18n("Audio CD project");
       break;
-    case K3bDoc::DATA:
+    case K3b::Doc::DATA:
       stringType = i18n("Data project");
       break;
-    case K3bDoc::MIXED:
+    case K3b::Doc::MIXED:
       stringType = i18n("Mixed Mode CD project");
       break;
-    case K3bDoc::VCD:
+    case K3b::Doc::VCD:
       stringType = i18n("Video CD project");
       break;
-    case K3bDoc::MOVIX:
+    case K3b::Doc::MOVIX:
       stringType = i18n("eMovix project");
       break;
-    case K3bDoc::VIDEODVD:
+    case K3b::Doc::VIDEODVD:
       stringType = i18n("Video DVD project");
       break;
     }

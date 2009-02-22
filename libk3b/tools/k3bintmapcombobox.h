@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -19,64 +19,66 @@
 
 #include "k3b_export.h"
 
-/**
- * The K3bIntMapComboBox allows a simple selection of integer
- * values.
- *
- * The K3bIntMapComboBox will create a WhatsThis help automatically from
- * the description texts (if all are set). The ToolTip has to be set manually.
- */
-class LIBK3B_EXPORT K3bIntMapComboBox : public QComboBox
-{
-    Q_OBJECT
-
-public:
-    K3bIntMapComboBox( QWidget* parent = 0 );
-    ~K3bIntMapComboBox();
-
-    int selectedValue() const;
-
-    bool hasValue( int value ) const;
-
- Q_SIGNALS:
+namespace K3b {
     /**
-     * Emitted if the selected value changes by user interaction.
-     */
-    void valueChanged( int );
-
-    /**
-     * Emitted if the current highlighted value changed by user interaction.
-     */
-    void valueHighlighted( int );
-
-public Q_SLOTS:
-    /**
-     * If \a v has not been added via insertItem the selection will not be changed
-     */
-    void setSelectedValue( int v );
-
-    void clear();
-
-    /**
-     * Insert a new item
-     * \param value The integer value to insert
-     * \param text The text to be displayed in the combobox
-     * \param description The text to be used to describe the item in the whatsthis help
-     * \param index The position where to inserts the item. The item will be appended if index is negative.
+     * The IntMapComboBox allows a simple selection of integer
+     * values.
      *
-     * \return true if the item could be inserted. False if the value had already been inserted.
+     * The IntMapComboBox will create a WhatsThis help automatically from
+     * the description texts (if all are set). The ToolTip has to be set manually.
      */
-    bool insertItem( int value, const QString& text, const QString& description = QString(), int index = -1 );
+    class LIBK3B_EXPORT IntMapComboBox : public QComboBox
+    {
+        Q_OBJECT
 
-    void addGlobalWhatsThisText( const QString& top, const QString& bottom );
+    public:
+        IntMapComboBox( QWidget* parent = 0 );
+        ~IntMapComboBox();
 
-private Q_SLOTS:
-    void slotItemActivated( int );
-    void slotItemHighlighted( int );
+        int selectedValue() const;
 
-private:
-    class Private;
-    Private* d;
-};
+        bool hasValue( int value ) const;
+
+    Q_SIGNALS:
+        /**
+         * Emitted if the selected value changes by user interaction.
+         */
+        void valueChanged( int );
+
+        /**
+         * Emitted if the current highlighted value changed by user interaction.
+         */
+        void valueHighlighted( int );
+
+    public Q_SLOTS:
+        /**
+         * If \a v has not been added via insertItem the selection will not be changed
+         */
+        void setSelectedValue( int v );
+
+        void clear();
+
+        /**
+         * Insert a new item
+         * \param value The integer value to insert
+         * \param text The text to be displayed in the combobox
+         * \param description The text to be used to describe the item in the whatsthis help
+         * \param index The position where to inserts the item. The item will be appended if index is negative.
+         *
+         * \return true if the item could be inserted. False if the value had already been inserted.
+         */
+        bool insertItem( int value, const QString& text, const QString& description = QString(), int index = -1 );
+
+        void addGlobalWhatsThisText( const QString& top, const QString& bottom );
+
+    private Q_SLOTS:
+        void slotItemActivated( int );
+        void slotItemHighlighted( int );
+
+    private:
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

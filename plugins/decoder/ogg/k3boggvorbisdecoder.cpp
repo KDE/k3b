@@ -47,7 +47,7 @@ public:
 
 
 K3bOggVorbisDecoder::K3bOggVorbisDecoder( QObject* parent )
-    : K3bAudioDecoder( parent )
+    : K3b::AudioDecoder( parent )
 {
     d = new Private();
 }
@@ -205,7 +205,7 @@ QString K3bOggVorbisDecoder::fileType() const
 
 
 K3bOggVorbisDecoderFactory::K3bOggVorbisDecoderFactory( QObject* parent, const QVariantList& )
-    : K3bAudioDecoderFactory( parent )
+    : K3b::AudioDecoderFactory( parent )
 {
 }
 
@@ -215,7 +215,7 @@ K3bOggVorbisDecoderFactory::~K3bOggVorbisDecoderFactory()
 }
 
 
-K3bAudioDecoder* K3bOggVorbisDecoderFactory::createDecoder( QObject* parent ) const
+K3b::AudioDecoder* K3bOggVorbisDecoderFactory::createDecoder( QObject* parent ) const
 {
     return new K3bOggVorbisDecoder( parent );
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
@@ -25,136 +25,137 @@
 class KConfigGroup;
 
 
-class K3bExternalProgram;
-
-
-/**
- * A K3bExternalBin represents an installed version of a program.
- * All K3bExternalBin objects are managed by K3bExternalPrograms.
- *
- * A bin may have certain features that are represented by a string.
- */
-class LIBK3B_EXPORT K3bExternalBin
-{
-public:
-    K3bExternalBin( K3bExternalProgram* );
-    virtual ~K3bExternalBin() {}
-
-    K3bVersion version;
-    QString path;
-    QString copyright;
-
-    QString name() const;
-    bool isEmpty() const;
-    QStringList userParameters() const;
-    QStringList features() const;
-
-    bool hasFeature( const QString& ) const;
-    void addFeature( const QString& );
-
-    K3bExternalProgram* program() const;
-
-private:
-    QStringList m_features;
-    K3bExternalProgram* m_program;
-};
-
-
-/**
- * This is the main class that represents a program
- * It's scan method has to be reimplemented for every program
- * It manages a list of K3bExternalBin-objects that each represent
- * one installed version of the program.
- */
-class LIBK3B_EXPORT K3bExternalProgram
-{
-public:
-    K3bExternalProgram( const QString& name );
-    virtual ~K3bExternalProgram();
-
-    const K3bExternalBin* defaultBin() const;
-    const K3bExternalBin* mostRecentBin() const;
-
-    void addUserParameter( const QString& );
-    void setUserParameters( const QStringList& list ) { m_userParameters = list; }
-
-    const QStringList& userParameters() const { return m_userParameters; }
-    const QString& name() const { return m_name; }
-
-    void addBin( K3bExternalBin* );
-    void clear() { m_bins.clear(); }
-    void setDefault( const K3bExternalBin* );
-    void setDefault( const QString& path );
-
-    QList<const K3bExternalBin*> bins() const { return m_bins; }
+namespace K3b {
+    class ExternalProgram;
 
     /**
-     * this scans for the program in the given path,
-     * adds the found bin object to the list and returnes true.
-     * if nothing could be found false is returned.
+     * A ExternalBin represents an installed version of a program.
+     * All ExternalBin objects are managed by ExternalPrograms.
+     *
+     * A bin may have certain features that are represented by a string.
      */
-    virtual bool scan( const QString& ) {return false;}//= 0;
+    class LIBK3B_EXPORT ExternalBin
+    {
+    public:
+        ExternalBin( ExternalProgram* );
+        virtual ~ExternalBin() {}
+
+        Version version;
+        QString path;
+        QString copyright;
+
+        QString name() const;
+        bool isEmpty() const;
+        QStringList userParameters() const;
+        QStringList features() const;
+
+        bool hasFeature( const QString& ) const;
+        void addFeature( const QString& );
+
+        ExternalProgram* program() const;
+
+    private:
+        QStringList m_features;
+        ExternalProgram* m_program;
+    };
+
 
     /**
-     * reimplement this if it does not make sense to have the user be able
-     * to specify additional parameters
+     * This is the main class that represents a program
+     * It's scan method has to be reimplemented for every program
+     * It manages a list of ExternalBin-objects that each represent
+     * one installed version of the program.
      */
-    virtual bool supportsUserParameters() const { return true; }
+    class LIBK3B_EXPORT ExternalProgram
+    {
+    public:
+        ExternalProgram( const QString& name );
+        virtual ~ExternalProgram();
 
-private:
-    QString m_name;
-    QStringList m_userParameters;
-    QList<const K3bExternalBin*> m_bins;
-    const K3bExternalBin* m_defaultBin;
-};
+        const ExternalBin* defaultBin() const;
+        const ExternalBin* mostRecentBin() const;
+
+        void addUserParameter( const QString& );
+        void setUserParameters( const QStringList& list ) { m_userParameters = list; }
+
+        const QStringList& userParameters() const { return m_userParameters; }
+        const QString& name() const { return m_name; }
+
+        void addBin( ExternalBin* );
+        void clear() { m_bins.clear(); }
+        void setDefault( const ExternalBin* );
+        void setDefault( const QString& path );
+
+        QList<const ExternalBin*> bins() const { return m_bins; }
+
+        /**
+         * this scans for the program in the given path,
+         * adds the found bin object to the list and returnes true.
+         * if nothing could be found false is returned.
+         */
+        virtual bool scan( const QString& ) {return false;}//= 0;
+
+        /**
+         * reimplement this if it does not make sense to have the user be able
+         * to specify additional parameters
+         */
+        virtual bool supportsUserParameters() const { return true; }
+
+    private:
+        QString m_name;
+        QStringList m_userParameters;
+        QList<const ExternalBin*> m_bins;
+        const ExternalBin* m_defaultBin;
+    };
 
 
-class LIBK3B_EXPORT K3bExternalBinManager : public QObject
-{
-    Q_OBJECT
+    class LIBK3B_EXPORT ExternalBinManager : public QObject
+    {
+        Q_OBJECT
 
-public:
-    K3bExternalBinManager( QObject* parent = 0 );
-    ~K3bExternalBinManager();
+    public:
+        ExternalBinManager( QObject* parent = 0 );
+        ~ExternalBinManager();
 
-    void search();
+        void search();
 
-    /**
-     * read config and add changes to current map.
-     * Takes care of setting the config group
-     */
-    bool readConfig( const KConfigGroup& );
+        /**
+         * read config and add changes to current map.
+         * Takes care of setting the config group
+         */
+        bool readConfig( const KConfigGroup& );
 
-    /**
-     * Takes care of setting the config group
-     */
-    bool saveConfig( KConfigGroup );
+        /**
+         * Takes care of setting the config group
+         */
+        bool saveConfig( KConfigGroup );
 
-    bool foundBin( const QString& name );
-    QString binPath( const QString& name );
-    const K3bExternalBin* binObject( const QString& name );
-    const K3bExternalBin* mostRecentBinObject( const QString& name );
+        bool foundBin( const QString& name );
+        QString binPath( const QString& name );
+        const ExternalBin* binObject( const QString& name );
+        const ExternalBin* mostRecentBinObject( const QString& name );
 
-    K3bExternalProgram* program( const QString& ) const;
-    QMap<QString, K3bExternalProgram*> programs() const { return m_programs; }
+        ExternalProgram* program( const QString& ) const;
+        QMap<QString, ExternalProgram*> programs() const { return m_programs; }
 
-    /** always extends the default searchpath */
-    void setSearchPath( const QStringList& );
-    void addSearchPath( const QString& );
-    void loadDefaultSearchPath();
+        /** always extends the default searchpath */
+        void setSearchPath( const QStringList& );
+        void addSearchPath( const QString& );
+        void loadDefaultSearchPath();
 
-    QStringList searchPath() const { return m_searchPath; }
+        QStringList searchPath() const { return m_searchPath; }
 
-    void addProgram( K3bExternalProgram* );
-    void clear();
+        void addProgram( ExternalProgram* );
+        void clear();
 
-private:
-    QMap<QString, K3bExternalProgram*> m_programs;
-    QStringList m_searchPath;
+    private:
+        QMap<QString, ExternalProgram*> m_programs;
+        QStringList m_searchPath;
 
-    static QString m_noPath;  // used for binPath() to return const string
+        static QString m_noPath;  // used for binPath() to return const string
 
-    QString m_gatheredOutput;
-};
+        QString m_gatheredOutput;
+    };
+}
 
 #endif

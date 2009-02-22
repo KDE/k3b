@@ -23,7 +23,7 @@
 #include <qstring.h>
 
 
-K3bIsoOptions::K3bIsoOptions()
+K3b::IsoOptions::IsoOptions()
     : m_volumeID( i18n( "K3b data project" ) ),
       m_applicationID( QString("K3B THE CD KREATOR (C) 1998-2007 SEBASTIAN TRUEG") ),
       m_systemId( K3b::systemName().toUpper() ),
@@ -64,7 +64,7 @@ K3bIsoOptions::K3bIsoOptions()
 }
 
 
-void K3bIsoOptions::save( KConfigGroup c, bool saveVolumeDesc )
+void K3b::IsoOptions::save( KConfigGroup c, bool saveVolumeDesc )
 {
     if( saveVolumeDesc ) {
         c.writeEntry( "volume id", m_volumeID );
@@ -130,9 +130,9 @@ void K3bIsoOptions::save( KConfigGroup c, bool saveVolumeDesc )
 }
 
 
-K3bIsoOptions K3bIsoOptions::load( const KConfigGroup& c, bool loadVolumeDesc )
+K3b::IsoOptions K3b::IsoOptions::load( const KConfigGroup& c, bool loadVolumeDesc )
 {
-    K3bIsoOptions options;
+    K3b::IsoOptions options;
 
     if( loadVolumeDesc ) {
         options.setVolumeID( c.readEntry( "volume id", options.volumeID() ) );
@@ -202,8 +202,8 @@ K3bIsoOptions K3bIsoOptions::load( const KConfigGroup& c, bool loadVolumeDesc )
 }
 
 
-K3bIsoOptions K3bIsoOptions::defaults()
+K3b::IsoOptions K3b::IsoOptions::defaults()
 {
     // let the constructor create defaults
-    return K3bIsoOptions();
+    return K3b::IsoOptions();
 }

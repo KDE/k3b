@@ -26,19 +26,19 @@
 #include <QtGui/QApplication>
 
 
-// we have K3bAudioTracks in the first level and K3bAudioDataSources in the second level
+// we have K3b::AudioTracks in the first level and K3b::AudioDataSources in the second level
 
 class K3b::AudioProjectModel::Private
 {
 public:
-    Private( K3bAudioDoc* doc, AudioProjectModel* parent )
+    Private( K3b::AudioDoc* doc, AudioProjectModel* parent )
         : project( doc ),
           q( parent ) {
     }
 
-    K3bAudioDoc* project;
+    K3b::AudioDoc* project;
 
-    void _k_trackChanged( K3bAudioTrack* );
+    void _k_trackChanged( K3b::AudioTrack* );
     void _k_docChanged();
 
 private:
@@ -52,7 +52,7 @@ void K3b::AudioProjectModel::Private::_k_docChanged()
 }
 
 
-K3b::AudioProjectModel::AudioProjectModel( K3bAudioDoc* doc, QObject* parent )
+K3b::AudioProjectModel::AudioProjectModel( K3b::AudioDoc* doc, QObject* parent )
     : QAbstractItemModel( parent ),
       d( new Private( doc, this ) )
 {
@@ -66,17 +66,17 @@ K3b::AudioProjectModel::~AudioProjectModel()
 }
 
 
-K3bAudioDoc* K3b::AudioProjectModel::project() const
+K3b::AudioDoc* K3b::AudioProjectModel::project() const
 {
     return d->project;
 }
 
 
-K3bAudioTrack* K3b::AudioProjectModel::trackForIndex( const QModelIndex& index ) const
+K3b::AudioTrack* K3b::AudioProjectModel::trackForIndex( const QModelIndex& index ) const
 {
     if ( index.isValid() ) {
         QObject* o = static_cast<QObject*>( index.internalPointer() );
-        if ( K3bAudioTrack* track = qobject_cast<K3bAudioTrack*>( o ) )
+        if ( K3b::AudioTrack* track = qobject_cast<K3b::AudioTrack*>( o ) )
              return track;
     }
 
@@ -84,17 +84,17 @@ K3bAudioTrack* K3b::AudioProjectModel::trackForIndex( const QModelIndex& index )
 }
 
 
-QModelIndex K3b::AudioProjectModel::indexForTrack( K3bAudioTrack* track ) const
+QModelIndex K3b::AudioProjectModel::indexForTrack( K3b::AudioTrack* track ) const
 {
     return createIndex( track->trackNumber()-1, 0, track );
 }
 
 
-K3bAudioDataSource* K3b::AudioProjectModel::sourceForIndex( const QModelIndex& index ) const
+K3b::AudioDataSource* K3b::AudioProjectModel::sourceForIndex( const QModelIndex& index ) const
 {
     if ( index.isValid() ) {
         QObject* o = static_cast<QObject*>( index.internalPointer() );
-        if ( K3bAudioDataSource* source = qobject_cast<K3bAudioDataSource*>( o ) )
+        if ( K3b::AudioDataSource* source = qobject_cast<K3b::AudioDataSource*>( o ) )
              return source;
     }
 
@@ -102,10 +102,10 @@ K3bAudioDataSource* K3b::AudioProjectModel::sourceForIndex( const QModelIndex& i
 }
 
 
-QModelIndex K3b::AudioProjectModel::indexForSource( K3bAudioDataSource* source ) const
+QModelIndex K3b::AudioProjectModel::indexForSource( K3b::AudioDataSource* source ) const
 {
     int row = 0;
-    K3bAudioDataSource* s = source->track()->firstSource();
+    K3b::AudioDataSource* s = source->track()->firstSource();
     while ( s && s != source ) {
         ++row;
     }
@@ -122,8 +122,8 @@ int K3b::AudioProjectModel::columnCount( const QModelIndex& ) const
 QVariant K3b::AudioProjectModel::data( const QModelIndex& index, int role ) const
 {
     if ( index.isValid() ) {
-        K3bAudioTrack* track = trackForIndex( index );
-        K3bAudioDataSource* source = sourceForIndex( index );
+        K3b::AudioTrack* track = trackForIndex( index );
+        K3b::AudioDataSource* source = sourceForIndex( index );
 
         // track
         if ( !source ) {
@@ -266,8 +266,8 @@ QModelIndex K3b::AudioProjectModel::index( int row, int column, const QModelInde
 {
     // source
     if ( parent.isValid() ) {
-        if ( K3bAudioTrack* track = trackForIndex( parent ) ) {
-            if ( K3bAudioDataSource* source = track->getSource( row ) ) {
+        if ( K3b::AudioTrack* track = trackForIndex( parent ) ) {
+            if ( K3b::AudioDataSource* source = track->getSource( row ) ) {
                 return createIndex( row, column, source );
             }
         }
@@ -285,7 +285,7 @@ QModelIndex K3b::AudioProjectModel::index( int row, int column, const QModelInde
 QModelIndex K3b::AudioProjectModel::parent( const QModelIndex& index ) const
 {
     if ( index.isValid() ) {
-        if ( K3bAudioDataSource* source = sourceForIndex( index ) ) {
+        if ( K3b::AudioDataSource* source = sourceForIndex( index ) ) {
             return indexForTrack( source->track() );
         }
     }
@@ -297,7 +297,7 @@ QModelIndex K3b::AudioProjectModel::parent( const QModelIndex& index ) const
 int K3b::AudioProjectModel::rowCount( const QModelIndex& parent ) const
 {
     if ( parent.isValid() ) {
-        if ( K3bAudioTrack* track = trackForIndex( parent ) ) {
+        if ( K3b::AudioTrack* track = trackForIndex( parent ) ) {
             // first level
             return track->numberSources();
         }
@@ -315,7 +315,7 @@ int K3b::AudioProjectModel::rowCount( const QModelIndex& parent ) const
 bool K3b::AudioProjectModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
     if ( index.isValid() ) {
-        if ( K3bAudioTrack* track = trackForIndex( index ) ) {
+        if ( K3b::AudioTrack* track = trackForIndex( index ) ) {
             if ( role == Qt::EditRole ) {
                 switch( index.column() ) {
                 case ArtistColumn:
@@ -336,15 +336,15 @@ QMimeData* K3b::AudioProjectModel::mimeData( const QModelIndexList& indexes ) co
 {
     QMimeData* mime = new QMimeData();
 
-    QSet<K3bAudioTrack*> tracks;
-    QSet<K3bAudioDataSource*> sources;
+    QSet<K3b::AudioTrack*> tracks;
+    QSet<K3b::AudioDataSource*> sources;
     KUrl::List urls;
     foreach( const QModelIndex& index, indexes ) {
-        if ( K3bAudioTrack* track = trackForIndex( index ) ) {
+        if ( K3b::AudioTrack* track = trackForIndex( index ) ) {
             tracks << track;
-            K3bAudioDataSource* source = track->firstSource();
+            K3b::AudioDataSource* source = track->firstSource();
             while ( source ) {
-                if ( K3bAudioFile* file = dynamic_cast<K3bAudioFile*>( source ) ) {
+                if ( K3b::AudioFile* file = dynamic_cast<K3b::AudioFile*>( source ) ) {
                     if ( !urls.contains( KUrl( file->filename() ) ) ) {
                         urls.append( KUrl( file->filename() ) );
                     }
@@ -352,9 +352,9 @@ QMimeData* K3b::AudioProjectModel::mimeData( const QModelIndexList& indexes ) co
                 source = source->next();
             }
         }
-        else if ( K3bAudioDataSource* source = sourceForIndex( index ) ) {
+        else if ( K3b::AudioDataSource* source = sourceForIndex( index ) ) {
             sources << source;
-            if ( K3bAudioFile* file = dynamic_cast<K3bAudioFile*>( source ) ) {
+            if ( K3b::AudioFile* file = dynamic_cast<K3b::AudioFile*>( source ) ) {
                 if ( !urls.contains( KUrl( file->filename() ) ) ) {
                     urls.append( KUrl( file->filename() ) );
                 }
@@ -367,7 +367,7 @@ QMimeData* K3b::AudioProjectModel::mimeData( const QModelIndexList& indexes ) co
     if ( !tracks.isEmpty() ) {
         QByteArray trackData;
         QDataStream trackDataStream( &trackData, QIODevice::WriteOnly );
-        foreach( K3bAudioTrack* track, tracks ) {
+        foreach( K3b::AudioTrack* track, tracks ) {
             trackDataStream << ( qint64 )track;
         }
         mime->setData( "application/x-k3baudiotrack", trackData );
@@ -375,7 +375,7 @@ QMimeData* K3b::AudioProjectModel::mimeData( const QModelIndexList& indexes ) co
     if ( !sources.isEmpty() ) {
         QByteArray sourceData;
         QDataStream sourceDataStream( &sourceData, QIODevice::WriteOnly );
-        foreach( K3bAudioDataSource* source, sources ) {
+        foreach( K3b::AudioDataSource* source, sources ) {
             sourceDataStream << ( qint64 )source;
         }
         mime->setData( "application/x-k3baudiodatasource", sourceData );
@@ -436,10 +436,10 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
     if ( action == Qt::IgnoreAction )
         return true;
 
-    K3bAudioTrack* dropTrackParent = 0;
-    K3bAudioTrack* dropTrackAfter = 0;
-    K3bAudioDataSource* dropSourceAfter = 0;
-    if ( K3bAudioTrack* track = trackForIndex( parent ) ) {
+    K3b::AudioTrack* dropTrackParent = 0;
+    K3b::AudioTrack* dropTrackAfter = 0;
+    K3b::AudioDataSource* dropSourceAfter = 0;
+    if ( K3b::AudioTrack* track = trackForIndex( parent ) ) {
         if ( row >= 0 ) {
             dropTrackParent = track;
             dropSourceAfter = track->getSource( row-1 );
@@ -448,7 +448,7 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
             dropTrackAfter = track->prev();
         }
     }
-    else if ( K3bAudioDataSource* source = sourceForIndex( parent ) ) {
+    else if ( K3b::AudioDataSource* source = sourceForIndex( parent ) ) {
         dropTrackParent = source->track();
         dropSourceAfter = source->prev();
     }
@@ -464,8 +464,8 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
     //
     // decode data
     //
-    QList<K3bAudioTrack*> tracks;
-    QList<K3bAudioDataSource*> sources;
+    QList<K3b::AudioTrack*> tracks;
+    QList<K3b::AudioDataSource*> sources;
     KUrl::List urls;
     if ( data->hasFormat( "application/x-k3baudiotrack" ) ||
          data->hasFormat( "application/x-k3baudiodatasource" )) {
@@ -475,7 +475,7 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
         while ( !trackDataStream.atEnd() ) {
             qint64 p;
             trackDataStream >> p;
-            tracks << ( K3bAudioTrack* )p;
+            tracks << ( K3b::AudioTrack* )p;
         }
 
         QByteArray sourceData = data->data( "application/x-k3baudiosource" );
@@ -483,14 +483,14 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
         while ( !sourceDataStream.atEnd() ) {
             qint64 p;
             sourceDataStream >> p;
-            sources << ( K3bAudioDataSource* )p;
+            sources << ( K3b::AudioDataSource* )p;
         }
 
         //
         // remove all sources which belong to one of the selected tracks since they will be
         // moved along with their tracks
         //
-        QList<K3bAudioDataSource*>::iterator srcIt = sources.begin();
+        QList<K3b::AudioDataSource*>::iterator srcIt = sources.begin();
         while( srcIt != sources.end() ) {
             if( tracks.contains( ( *srcIt )->track() ) )
                 srcIt = sources.erase( srcIt );
@@ -502,8 +502,8 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
         //
         // Now move (or copy) all the tracks
         //
-        for( QList<K3bAudioTrack*>::iterator it = tracks.begin(); it != tracks.end(); ++it ) {
-            K3bAudioTrack* track = *it;
+        for( QList<K3b::AudioTrack*>::iterator it = tracks.begin(); it != tracks.end(); ++it ) {
+            K3b::AudioTrack* track = *it;
             if( dropTrackParent ) {
                 dropTrackParent->merge( copyItems ? track->copy() : track, dropSourceAfter );
             }
@@ -524,8 +524,8 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
         //
         // now move (or copy) the sources
         //
-        for( QList<K3bAudioDataSource*>::iterator it = sources.begin(); it != sources.end(); ++it ) {
-            K3bAudioDataSource* source = *it;
+        for( QList<K3b::AudioDataSource*>::iterator it = sources.begin(); it != sources.end(); ++it ) {
+            K3b::AudioDataSource* source = *it;
             if( dropTrackParent ) {
                 if( dropSourceAfter ) {
                     if( copyItems )
@@ -542,7 +542,7 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
             }
             else {
                 // create a new track
-                K3bAudioTrack* track = new K3bAudioTrack( d->project );
+                K3b::AudioTrack* track = new K3b::AudioTrack( d->project );
 
                 // special case: the source we remove from the track is the last and the track
                 // will be deleted.
@@ -579,7 +579,7 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
     else if ( KUrl::List::canDecode( data ) ) {
         kDebug() << "url list drop";
         KUrl::List urls = KUrl::List::fromMimeData( data );
-        K3bAudioTrackAddingDialog::addUrls( urls, d->project, dropTrackAfter, dropTrackParent, dropSourceAfter, qApp->activeWindow() );
+        K3b::AudioTrackAddingDialog::addUrls( urls, d->project, dropTrackAfter, dropTrackParent, dropSourceAfter, qApp->activeWindow() );
         return true;
     }
 

@@ -24,7 +24,9 @@
 
 class QLabel;
 class QPushButton;
-class K3bListView;
+namespace K3b {
+    class ListView;
+}
 class QString;
 class QFrame;
 class Q3ListViewItem;
@@ -34,13 +36,14 @@ class QString;
 /**
  *@author Sebastian Trueg
  */
-class K3bDeviceWidget : public QWidget
+namespace K3b {
+class DeviceWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    K3bDeviceWidget( K3bDevice::DeviceManager*, QWidget *parent = 0 );
-    ~K3bDeviceWidget();
+    DeviceWidget( Device::DeviceManager*, QWidget *parent = 0 );
+    ~DeviceWidget();
 
 public Q_SLOTS:
     void init();
@@ -59,10 +62,11 @@ private:
     Q3ListViewItem* m_writerParentViewItem;
     Q3ListViewItem* m_readerParentViewItem;
 
-    K3bDevice::DeviceManager* m_deviceManager;
+    Device::DeviceManager* m_deviceManager;
 
-    K3bListView*    m_viewDevices;
+    ListView*    m_viewDevices;
     QPushButton* m_buttonRefreshDevices;
 };
+}
 
 #endif

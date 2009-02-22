@@ -20,10 +20,11 @@
 #include <kconfiggroup.h>
 
 
-class LIBK3B_EXPORT K3bIsoOptions
+namespace K3b {
+class LIBK3B_EXPORT IsoOptions
 {
  public:
-  K3bIsoOptions();
+  IsoOptions();
 	
   // -- mkisofs-options ----------------------------------------------------------------------
   bool createRockRidge() const { return m_createRockRidge; }
@@ -120,8 +121,8 @@ class LIBK3B_EXPORT K3bIsoOptions
   
   void save( KConfigGroup c, bool saveVolumeDesc = true );
 
-  static K3bIsoOptions load( const KConfigGroup& c, bool loadVolumeDesc = true );
-  static K3bIsoOptions defaults();
+  static IsoOptions load( const KConfigGroup& c, bool loadVolumeDesc = true );
+  static IsoOptions defaults();
 
  private:
   // volume descriptor
@@ -174,5 +175,6 @@ class LIBK3B_EXPORT K3bIsoOptions
   bool m_discardSymlinks;
   bool m_discardBrokenSymlinks;
 };
+}
 
 #endif

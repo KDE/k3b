@@ -25,7 +25,7 @@
 #include <QtGui/QProgressBar>
 
 
-K3bProgressDialog::K3bProgressDialog( const QString& text,
+K3b::ProgressDialog::ProgressDialog( const QString& text,
 				      QWidget* parent,
 				      const QString& caption )
   : KDialog( parent )
@@ -40,7 +40,7 @@ K3bProgressDialog::K3bProgressDialog( const QString& text,
     m_label = new QLabel( text, main );
     m_stack = new QStackedWidget( main );
     m_progressBar = new QProgressBar( m_stack );
-    m_busyWidget = new K3bBusyWidget( m_stack );
+    m_busyWidget = new K3b::BusyWidget( m_stack );
     m_stack->addWidget( m_progressBar );
     m_stack->addWidget( m_busyWidget );
 
@@ -51,11 +51,12 @@ K3bProgressDialog::K3bProgressDialog( const QString& text,
 }
 
 
-K3bProgressDialog::~K3bProgressDialog()
-{}
+K3b::ProgressDialog::~ProgressDialog()
+{
+}
 
 
-int K3bProgressDialog::exec( bool progress )
+int K3b::ProgressDialog::exec( bool progress )
 {
     if( progress )
         m_stack->setCurrentWidget( m_progressBar );
@@ -70,13 +71,13 @@ int K3bProgressDialog::exec( bool progress )
 }
 
 
-void K3bProgressDialog::setText( const QString& text )
+void K3b::ProgressDialog::setText( const QString& text )
 {
     m_label->setText( text );
 }
 
 
-void K3bProgressDialog::slotFinished( bool success )
+void K3b::ProgressDialog::slotFinished( bool success )
 {
     m_busyWidget->showBusy( false );
 
@@ -89,7 +90,7 @@ void K3bProgressDialog::slotFinished( bool success )
 }
 
 
-void K3bProgressDialog::slotCancel()
+void K3b::ProgressDialog::slotCancel()
 {
     emit cancelClicked();
     // we simply forbid to click cancel twice
@@ -97,7 +98,7 @@ void K3bProgressDialog::slotCancel()
 }
 
 
-void K3bProgressDialog::setProgress( int p )
+void K3b::ProgressDialog::setProgress( int p )
 {
     m_progressBar->setValue( p );
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
  *
@@ -15,20 +15,22 @@
 #ifndef _K3B_EXCEPTIONS_H_
 #define _K3B_EXCEPTIONS_H_
 
-namespace K3bDevice {
-  class Device;
-}
+namespace K3b {
+    namespace Device {
+        class Device;
+    }
 
-class K3bExceptions
-{
- public:
-  /**
-   * Returns true if the drive's firmware produces broken
-   * Audio CDs with zero length pregaps.
-   *
-   * It simply uses a compiled in table.
-   */
-  static bool brokenDaoAudio( K3bDevice::Device* );
-};
+    class Exceptions
+    {
+    public:
+        /**
+         * Returns true if the drive's firmware produces broken
+         * Audio CDs with zero length pregaps.
+         *
+         * It simply uses a compiled in table.
+         */
+        static bool brokenDaoAudio( Device::Device* );
+    };
+}
 
 #endif

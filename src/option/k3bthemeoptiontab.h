@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -21,21 +21,23 @@
 /**
  *@author Sebastian Trueg
  */
-class K3bThemeOptionTab : public QWidget, public Ui::base_K3bThemeOptionTab
-{
-    Q_OBJECT
+namespace K3b {
+    class ThemeOptionTab : public QWidget, public Ui::base_K3bThemeOptionTab
+    {
+        Q_OBJECT
 
-public:
-    K3bThemeOptionTab( QWidget* parent = 0 );
-    ~K3bThemeOptionTab();
+    public:
+        ThemeOptionTab( QWidget* parent = 0 );
+        ~ThemeOptionTab();
 
-    void readSettings();
-    bool saveSettings();
+        void readSettings();
+        bool saveSettings();
 
-private Q_SLOTS:
-    void selectionChanged();
-    void slotInstallTheme();
-    void slotRemoveTheme();
-};
+    private Q_SLOTS:
+        void selectionChanged();
+        void slotInstallTheme();
+        void slotRemoveTheme();
+    };
+}
 
 #endif

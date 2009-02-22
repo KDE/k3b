@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2004-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -22,26 +22,28 @@
 #include <QtCore/QList>
 
 
-class K3bAudioTrack;
+namespace K3b {
+    class AudioTrack;
 
-/**
- * This class is used internally by K3bAudioTrackDialog.
- */
-class K3bAudioTrackWidget : public QWidget, public Ui::base_K3bAudioTrackWidget
-{
-    Q_OBJECT
+    /**
+     * This class is used internally by AudioTrackDialog.
+     */
+    class AudioTrackWidget : public QWidget, public Ui::base_K3bAudioTrackWidget
+    {
+        Q_OBJECT
 
-public:
-    K3bAudioTrackWidget( const QList<K3bAudioTrack*>& tracks, 
-                         QWidget* parent = 0 );
-    ~K3bAudioTrackWidget();
+    public:
+        AudioTrackWidget( const QList<AudioTrack*>& tracks,
+                          QWidget* parent = 0 );
+        ~AudioTrackWidget();
 
-public Q_SLOTS:
-    void save();
-    void load();
+    public Q_SLOTS:
+        void save();
+        void load();
 
-private:
-    QList<K3bAudioTrack*> m_tracks;
-};
+    private:
+        QList<AudioTrack*> m_tracks;
+    };
+}
 
 #endif

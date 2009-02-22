@@ -22,7 +22,7 @@
 
 #include <QtCore/QVector>
 
-// IDEA: K3bMetaItemModel::placeData( int row, int column );
+// IDEA: K3b::MetaItemModel::placeData( int row, int column );
 
 // FIXME: multiple columns!
 
@@ -198,7 +198,7 @@ namespace {
 
 
 
-class K3bMetaItemModel::Private
+class K3b::MetaItemModel::Private
 {
 public:
     QList<Place> places;
@@ -284,20 +284,20 @@ public:
 
 
 
-K3bMetaItemModel::K3bMetaItemModel( QObject* parent )
+K3b::MetaItemModel::MetaItemModel( QObject* parent )
     : QAbstractItemModel( parent ),
       d( new Private() )
 {
 }
 
 
-K3bMetaItemModel::~K3bMetaItemModel()
+K3b::MetaItemModel::~MetaItemModel()
 {
     delete d;
 }
 
 
-QAbstractItemModel* K3bMetaItemModel::subModelForIndex( const QModelIndex& index ) const
+QAbstractItemModel* K3b::MetaItemModel::subModelForIndex( const QModelIndex& index ) const
 {
     if ( index.isValid() ) {
         Q_ASSERT( index.model() == this );
@@ -311,7 +311,7 @@ QAbstractItemModel* K3bMetaItemModel::subModelForIndex( const QModelIndex& index
 }
 
 
-QModelIndex K3bMetaItemModel::mapToSubModel( const QModelIndex& index ) const
+QModelIndex K3b::MetaItemModel::mapToSubModel( const QModelIndex& index ) const
 {
     if ( index.isValid() ) {
         Q_ASSERT( index.model() == this );
@@ -323,7 +323,7 @@ QModelIndex K3bMetaItemModel::mapToSubModel( const QModelIndex& index ) const
 }
 
 
-QModelIndex K3bMetaItemModel::mapFromSubModel( const QModelIndex& index ) const
+QModelIndex K3b::MetaItemModel::mapFromSubModel( const QModelIndex& index ) const
 {
     if ( index.isValid() ) {
         Node* node = d->placeForModel( index.model() )->createNodeForOriginalIndex( index );
@@ -336,7 +336,7 @@ QModelIndex K3bMetaItemModel::mapFromSubModel( const QModelIndex& index ) const
 }
 
 
-int K3bMetaItemModel::columnCount( const QModelIndex& parent ) const
+int K3b::MetaItemModel::columnCount( const QModelIndex& parent ) const
 {
     QAbstractItemModel *model = subModelForIndex( parent );
     if (!model)
@@ -346,7 +346,7 @@ int K3bMetaItemModel::columnCount( const QModelIndex& parent ) const
 }
 
 
-QVariant K3bMetaItemModel::data( const QModelIndex& index, int role ) const
+QVariant K3b::MetaItemModel::data( const QModelIndex& index, int role ) const
 {
     Node* node = d->nodeForIndex( index );
 
@@ -373,7 +373,7 @@ QVariant K3bMetaItemModel::data( const QModelIndex& index, int role ) const
 }
 
 
-QModelIndex K3bMetaItemModel::index( int row, int column, const QModelIndex& parent ) const
+QModelIndex K3b::MetaItemModel::index( int row, int column, const QModelIndex& parent ) const
 {
 //    kDebug() << row << column << parent;
 
@@ -404,7 +404,7 @@ QModelIndex K3bMetaItemModel::index( int row, int column, const QModelIndex& par
 }
 
 
-QModelIndex K3bMetaItemModel::parent( const QModelIndex& index ) const
+QModelIndex K3b::MetaItemModel::parent( const QModelIndex& index ) const
 {
 //    kDebug() << index;
 
@@ -431,7 +431,7 @@ QModelIndex K3bMetaItemModel::parent( const QModelIndex& index ) const
 }
 
 
-Qt::ItemFlags K3bMetaItemModel::flags( const QModelIndex& index ) const
+Qt::ItemFlags K3b::MetaItemModel::flags( const QModelIndex& index ) const
 {
     if ( index.isValid() ) {
         Node* node = d->nodeForIndex( index );
@@ -447,7 +447,7 @@ Qt::ItemFlags K3bMetaItemModel::flags( const QModelIndex& index ) const
 }
 
 
-bool K3bMetaItemModel::hasChildren( const QModelIndex& parent ) const
+bool K3b::MetaItemModel::hasChildren( const QModelIndex& parent ) const
 {
 //    kDebug() << parent;
 
@@ -467,7 +467,7 @@ bool K3bMetaItemModel::hasChildren( const QModelIndex& parent ) const
 }
 
 
-bool K3bMetaItemModel::canFetchMore( const QModelIndex& parent ) const
+bool K3b::MetaItemModel::canFetchMore( const QModelIndex& parent ) const
 {
 //    kDebug() << parent;
 
@@ -486,7 +486,7 @@ bool K3bMetaItemModel::canFetchMore( const QModelIndex& parent ) const
 }
 
 
-void K3bMetaItemModel::fetchMore( const QModelIndex& parent )
+void K3b::MetaItemModel::fetchMore( const QModelIndex& parent )
 {
 //    kDebug() << parent;
 
@@ -502,7 +502,7 @@ void K3bMetaItemModel::fetchMore( const QModelIndex& parent )
 }
 
 
-int K3bMetaItemModel::rowCount( const QModelIndex& parent ) const
+int K3b::MetaItemModel::rowCount( const QModelIndex& parent ) const
 {
 //    kDebug() << parent;
 
@@ -532,7 +532,7 @@ int K3bMetaItemModel::rowCount( const QModelIndex& parent ) const
 }
 
 
-bool K3bMetaItemModel::setData( const QModelIndex& index, const QVariant& value, int role )
+bool K3b::MetaItemModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
 //    kDebug() << index;
 
@@ -552,7 +552,7 @@ bool K3bMetaItemModel::setData( const QModelIndex& index, const QVariant& value,
 }
 
 
-bool K3bMetaItemModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
+bool K3b::MetaItemModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
 {
 //    kDebug();
 
@@ -582,7 +582,7 @@ bool K3bMetaItemModel::dropMimeData( const QMimeData* data, Qt::DropAction actio
 }
 
 
-QMimeData* K3bMetaItemModel::mimeData( const QModelIndexList& indexes ) const
+QMimeData* K3b::MetaItemModel::mimeData( const QModelIndexList& indexes ) const
 {
     if ( !indexes.isEmpty() ) {
         QModelIndexList origIndexes;
@@ -602,7 +602,7 @@ QMimeData* K3bMetaItemModel::mimeData( const QModelIndexList& indexes ) const
 }
 
 
-Qt::DropActions K3bMetaItemModel::supportedDropActions() const
+Qt::DropActions K3b::MetaItemModel::supportedDropActions() const
 {
     Qt::DropActions a = Qt::IgnoreAction;
 
@@ -613,7 +613,7 @@ Qt::DropActions K3bMetaItemModel::supportedDropActions() const
 }
 
 
-void K3bMetaItemModel::addSubModel( const QString& name, const KIcon& icon, QAbstractItemModel* model, bool flat )
+void K3b::MetaItemModel::addSubModel( const QString& name, const KIcon& icon, QAbstractItemModel* model, bool flat )
 {
     beginInsertRows( QModelIndex(), d->places.count(), d->places.count() );
 
@@ -648,7 +648,7 @@ void K3bMetaItemModel::addSubModel( const QString& name, const KIcon& icon, QAbs
 }
 
 
-void K3bMetaItemModel::removeSubModel( QAbstractItemModel* model )
+void K3b::MetaItemModel::removeSubModel( QAbstractItemModel* model )
 {
     // find the place index
     int row = 0;
@@ -671,7 +671,7 @@ void K3bMetaItemModel::removeSubModel( QAbstractItemModel* model )
 }
 
 
-void K3bMetaItemModel::slotRowsAboutToBeInserted( const QModelIndex& index, int start, int end )
+void K3b::MetaItemModel::slotRowsAboutToBeInserted( const QModelIndex& index, int start, int end )
 {
 //    kDebug() << index << start << end;
     Place* place = d->placeForModel( qobject_cast<QAbstractItemModel*>( sender() ) );
@@ -693,7 +693,7 @@ void K3bMetaItemModel::slotRowsAboutToBeInserted( const QModelIndex& index, int 
 }
 
 
-void K3bMetaItemModel::slotRowsInserted( const QModelIndex& index, int start, int end )
+void K3b::MetaItemModel::slotRowsInserted( const QModelIndex& index, int start, int end )
 {
 //    kDebug() << index << start << end;
 
@@ -708,7 +708,7 @@ void K3bMetaItemModel::slotRowsInserted( const QModelIndex& index, int start, in
 }
 
 
-void K3bMetaItemModel::slotRowsAboutToBeRemoved( const QModelIndex& index, int start, int end )
+void K3b::MetaItemModel::slotRowsAboutToBeRemoved( const QModelIndex& index, int start, int end )
 {
     kDebug();
 
@@ -730,7 +730,7 @@ void K3bMetaItemModel::slotRowsAboutToBeRemoved( const QModelIndex& index, int s
 }
 
 
-void K3bMetaItemModel::slotRowsRemoved( const QModelIndex& index, int start, int end )
+void K3b::MetaItemModel::slotRowsRemoved( const QModelIndex& index, int start, int end )
 {
     kDebug();
 
@@ -745,7 +745,7 @@ void K3bMetaItemModel::slotRowsRemoved( const QModelIndex& index, int start, int
 }
 
 
-void K3bMetaItemModel::slotDataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight )
+void K3b::MetaItemModel::slotDataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight )
 {
     kDebug();
 
@@ -759,7 +759,7 @@ void K3bMetaItemModel::slotDataChanged( const QModelIndex& topLeft, const QModel
 }
 
 
-void K3bMetaItemModel::slotReset()
+void K3b::MetaItemModel::slotReset()
 {
     // clean out any cached nodes
     for ( int i = 0; i < d->places.count(); ++i ) {

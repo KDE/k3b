@@ -18,15 +18,18 @@
 #include <k3bjob.h>
 
 
-class K3bAudioTrack;
+namespace K3b {
+    class AudioTrack;
+}
 class QWidget;
 
 
 /**
- * This job tries to determine K3bAudioTrack's title and artist using
+ * This job tries to determine AudioTrack's title and artist using
  * Musicbrainz.
  */
-class K3bMusicBrainzJob : public K3bJob
+namespace K3b {
+class MusicBrainzJob : public Job
 {
     Q_OBJECT
 
@@ -35,8 +38,8 @@ public:
      * \param parent since we do not use this job with a normal progressdialog we need a widget
      *        as parent
      */
-    K3bMusicBrainzJob( QWidget* parent = 0 );
-    ~K3bMusicBrainzJob();
+    MusicBrainzJob( QWidget* parent = 0 );
+    ~MusicBrainzJob();
 
     bool hasBeenCanceled() const;
 
@@ -48,13 +51,13 @@ Q_SIGNALS:
      * \param track The track for which metadata was searched.
      * \param success True if metadata was found
      */
-    void trackFinished( K3bAudioTrack* track, bool success );
+    void trackFinished( AudioTrack* track, bool success );
 
 public Q_SLOTS:
     void start();
     void cancel();
 
-    void setTracks( const QList<K3bAudioTrack*>& tracks );
+    void setTracks( const QList<AudioTrack*>& tracks );
 
 private Q_SLOTS:
     void slotTrmPercent( int p );
@@ -64,5 +67,6 @@ private:
     class Private;
     Private* const d;
 };
+}
 
 #endif

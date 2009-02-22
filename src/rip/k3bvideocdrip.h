@@ -24,13 +24,14 @@
 class QString;
 class KProcess;
 
-class K3bVideoCdRip : public K3bJob
+namespace K3b {
+class VideoCdRip : public Job
 {
         Q_OBJECT
 
     public:
-        K3bVideoCdRip( K3bJobHandler*, K3bVideoCdRippingOptions* options, QObject* parent = 0 );
-        ~K3bVideoCdRip();
+        VideoCdRip( JobHandler*, VideoCdRippingOptions* options, QObject* parent = 0 );
+        ~VideoCdRip();
 
         enum { CDROM, BIN_IMAGE, NRG_IMAGE };
 
@@ -63,12 +64,13 @@ class K3bVideoCdRip : public K3bJob
 
         QString m_collectedOutput;
 
-        K3bVideoCdRippingOptions * m_videooptions;
+        VideoCdRippingOptions * m_videooptions;
 
         bool m_canceled;
 
         KProcess* m_process;
 
 };
+}
 
 #endif

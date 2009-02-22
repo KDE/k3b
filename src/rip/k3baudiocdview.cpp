@@ -77,11 +77,11 @@ namespace {
 }
 
 
-K3bAudioCdView::K3bAudioCdView( QWidget* parent )
-    : K3bMediaContentsView( true,
-                            K3bMedium::CONTENT_AUDIO,
-                            K3bDevice::MEDIA_CD_ALL,
-                            K3bDevice::STATE_INCOMPLETE|K3bDevice::STATE_COMPLETE,
+K3b::AudioCdView::AudioCdView( QWidget* parent )
+    : K3b::MediaContentsView( true,
+                            K3b::Medium::CONTENT_AUDIO,
+                            K3b::Device::MEDIA_CD_ALL,
+                            K3b::Device::STATE_INCOMPLETE|K3b::Device::STATE_COMPLETE,
                             parent )
 {
     QGridLayout* mainGrid = new QGridLayout( mainWidget() );
@@ -120,22 +120,22 @@ K3bAudioCdView::K3bAudioCdView( QWidget* parent )
     initActions();
     slotTrackSelectionChanged();
 
-    setLeftPixmap( K3bTheme::MEDIA_LEFT );
-    setRightPixmap( K3bTheme::MEDIA_AUDIO );
+    setLeftPixmap( K3b::Theme::MEDIA_LEFT );
+    setRightPixmap( K3b::Theme::MEDIA_AUDIO );
 
-    m_busyInfoLabel = new K3bThemedLabel( i18n("Searching for Artist information..."), this );
+    m_busyInfoLabel = new K3b::ThemedLabel( i18n("Searching for Artist information..."), this );
     m_busyInfoLabel->setFrameStyle( QFrame::Box|QFrame::Plain );
     m_busyInfoLabel->setMargin( 6 );
     m_busyInfoLabel->hide();
 }
 
 
-K3bAudioCdView::~K3bAudioCdView()
+K3b::AudioCdView::~AudioCdView()
 {
 }
 
 
-void K3bAudioCdView::reloadMedium()
+void K3b::AudioCdView::reloadMedium()
 {
     m_trackModel->setMedium( medium() );
 
@@ -188,7 +188,7 @@ void K3bAudioCdView::reloadMedium()
 }
 
 
-void K3bAudioCdView::updateTitle()
+void K3b::AudioCdView::updateTitle()
 {
     QString title = m_trackModel->cddbInfo().get( KCDDB::Title ).toString();
     QString artist = m_trackModel->cddbInfo().get( KCDDB::Artist ).toString();
@@ -204,7 +204,7 @@ void K3bAudioCdView::updateTitle()
 }
 
 
-void K3bAudioCdView::initActions()
+void K3b::AudioCdView::initActions()
 {
     m_actionCollection = new KActionCollection( this );
 
@@ -260,13 +260,13 @@ void K3bAudioCdView::initActions()
 }
 
 
-void K3bAudioCdView::slotContextMenu( const QPoint& p )
+void K3b::AudioCdView::slotContextMenu( const QPoint& p )
 {
     m_popupMenu->popup( m_trackView->mapToGlobal( p ) );
 }
 
 
-void K3bAudioCdView::slotTrackSelectionChanged()
+void K3b::AudioCdView::slotTrackSelectionChanged()
 {
     bool itemsSelected = !selectedTrackIndices( m_trackView ).isEmpty();
     actionCollection()->action("edit_track_cddb")->setEnabled( itemsSelected );
@@ -275,7 +275,7 @@ void K3bAudioCdView::slotTrackSelectionChanged()
 }
 
 
-void K3bAudioCdView::startRip()
+void K3b::AudioCdView::startRip()
 {
     QList<int> trackIndices = m_trackModel->checkedTrackIndices();
     if( trackIndices.count() == 0 ) {
@@ -283,7 +283,7 @@ void K3bAudioCdView::startRip()
                             i18n("No Tracks Selected") );
     }
     else {
-        K3bAudioRippingDialog rip( medium(),
+        K3b::AudioRippingDialog rip( medium(),
                                    m_trackModel->cddbInfo(),
                                    trackIndices,
                                    this );
@@ -292,7 +292,7 @@ void K3bAudioCdView::startRip()
 }
 
 
-void K3bAudioCdView::slotEditTrackCddb()
+void K3b::AudioCdView::slotEditTrackCddb()
 {
     QList<int> items = selectedTrackIndices( m_trackView );
     if( !items.isEmpty() ) {
@@ -336,7 +336,7 @@ void K3bAudioCdView::slotEditTrackCddb()
 }
 
 
-void K3bAudioCdView::slotEditAlbumCddb()
+void K3b::AudioCdView::slotEditAlbumCddb()
 {
     KDialog d( this);
     d.setCaption(i18n("Album Cddb"));
@@ -411,25 +411,25 @@ void K3bAudioCdView::slotEditAlbumCddb()
 }
 
 
-void K3bAudioCdView::queryCddb()
+void K3b::AudioCdView::queryCddb()
 {
     enableInteraction( false );
     k3bcore->mediaCache()->lookupCddb( medium().device() );
 }
 
 
-void K3bAudioCdView::slotSaveCddbLocally()
+void K3b::AudioCdView::slotSaveCddbLocally()
 {
     KCDDB::Client cddbClient;
     cddbClient.config().readConfig();
-    cddbClient.store( m_trackModel->cddbInfo(), K3bCDDB::createTrackOffsetList( m_trackModel->medium().toc() ) );
-    K3bPassivePopup::showPopup( i18n("Saved entry in category %1.",
+    cddbClient.store( m_trackModel->cddbInfo(), K3b::CDDB::createTrackOffsetList( m_trackModel->medium().toc() ) );
+    K3b::PassivePopup::showPopup( i18n("Saved entry in category %1.",
                                      m_trackModel->cddbInfo().get( KCDDB::Category ).toString() ),
                                 i18n("CDDB") );
 }
 
 
-void K3bAudioCdView::slotSelect()
+void K3b::AudioCdView::slotSelect()
 {
     foreach( int track, selectedTrackIndices( m_trackView ) ) {
         m_trackModel->setTrackChecked( track, true );
@@ -437,7 +437,7 @@ void K3bAudioCdView::slotSelect()
 }
 
 
-void K3bAudioCdView::slotDeselect()
+void K3b::AudioCdView::slotDeselect()
 {
     foreach( int track, selectedTrackIndices( m_trackView ) ) {
         m_trackModel->setTrackChecked( track, false );
@@ -445,7 +445,7 @@ void K3bAudioCdView::slotDeselect()
 }
 
 
-void K3bAudioCdView::showBusyLabel( bool b )
+void K3b::AudioCdView::showBusyLabel( bool b )
 {
     if( !b ) {
         actionCollection()->action( "start_rip" )->setEnabled( true );
@@ -469,7 +469,7 @@ void K3bAudioCdView::showBusyLabel( bool b )
 }
 
 
-void K3bAudioCdView::enableInteraction( bool b )
+void K3b::AudioCdView::enableInteraction( bool b )
 {
     // we leave the track view enabled in default disabled mode
     // since drag'n'drop to audio projects does not need an inserted CD

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -21,89 +21,91 @@
 class QIODevice;
 
 
-/**
- * The active pipe pumps data from a source to a sink using an
- * additional thread.
- */
-class LIBK3B_EXPORT K3bActivePipe
-{
-public:
-    K3bActivePipe();
-    virtual ~K3bActivePipe();
-
+namespace K3b {
     /**
-     * Opens the pipe and thus starts the 
-     * pumping.
-     *
-     * \param closeWhenDone If true the pipes will be closed
-     *        once all data has been read.
+     * The active pipe pumps data from a source to a sink using an
+     * additional thread.
      */
-    virtual bool open( bool closeWhenDone = false );
+    class LIBK3B_EXPORT ActivePipe
+    {
+    public:
+        ActivePipe();
+        virtual ~ActivePipe();
 
-    /**
-     * Close the pipe
-     */
-    virtual void close();
+        /**
+         * Opens the pipe and thus starts the
+         * pumping.
+         *
+         * \param closeWhenDone If true the pipes will be closed
+         *        once all data has been read.
+         */
+        virtual bool open( bool closeWhenDone = false );
 
-    /**
-     * Set the file descriptor to write to. If this is -1 (the default) then
-     * data has to read from the out() file descriptor.
-     *
-     * \param fd The file descriptor to write to.
-     * \param close If true the reading file descriptor will be closed on a call to close()
-     */
-    void writeToFd( int fd, bool close = false );
+        /**
+         * Close the pipe
+         */
+        virtual void close();
 
-    /**
-     * Read from a QIODevice instead of a file descriptor.
-     * The device will be opened QIODevice::ReadOnly and closed
-     * afterwards.
-     */
-    void readFromIODevice( QIODevice* dev );
+        /**
+         * Set the file descriptor to write to. If this is -1 (the default) then
+         * data has to read from the out() file descriptor.
+         *
+         * \param fd The file descriptor to write to.
+         * \param close If true the reading file descriptor will be closed on a call to close()
+         */
+        void writeToFd( int fd, bool close = false );
 
-    /**
-     * Write to a QIODevice instead of a file descriptor.
-     * The device will be opened QIODevice::WriteOnly and closed
-     * afterwards.
-     */
-    void writeToIODevice( QIODevice* dev );
+        /**
+         * Read from a QIODevice instead of a file descriptor.
+         * The device will be opened QIODevice::ReadOnly and closed
+         * afterwards.
+         */
+        void readFromIODevice( QIODevice* dev );
 
-    /**
-     * The file descriptor to write into
-     * Only valid if no source has been set
-     */
-    int in() const;
+        /**
+         * Write to a QIODevice instead of a file descriptor.
+         * The device will be opened QIODevice::WriteOnly and closed
+         * afterwards.
+         */
+        void writeToIODevice( QIODevice* dev );
 
-    /**
-     * The number of bytes that have been read.
-     */
-    quint64 bytesRead() const;
+        /**
+         * The file descriptor to write into
+         * Only valid if no source has been set
+         */
+        int in() const;
 
-    /**
-     * The number of bytes that have been written.
-     */
-    quint64 bytesWritten() const;
+        /**
+         * The number of bytes that have been read.
+         */
+        quint64 bytesRead() const;
 
-protected:
-    /**
-     * Reads the data from the source.
-     * The default implementation reads from the file desc
-     * set via readFromFd or from in()
-     */
-    virtual int read( char* data, int max );
+        /**
+         * The number of bytes that have been written.
+         */
+        quint64 bytesWritten() const;
 
-    /**
-     * Write the data to the sink.
-     * The default implementation writes to the file desc
-     * set via writeToFd or out()
-     *
-     * Can be reimplememented to further process the data.
-     */
-    virtual int write( char* data, int max );
+    protected:
+        /**
+         * Reads the data from the source.
+         * The default implementation reads from the file desc
+         * set via readFromFd or from in()
+         */
+        virtual int read( char* data, int max );
 
-private:
-    class Private;
-    Private* d;
-};
+        /**
+         * Write the data to the sink.
+         * The default implementation writes to the file desc
+         * set via writeToFd or out()
+         *
+         * Can be reimplememented to further process the data.
+         */
+        virtual int write( char* data, int max );
+
+    private:
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

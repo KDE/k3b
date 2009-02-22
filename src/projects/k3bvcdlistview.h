@@ -29,20 +29,29 @@ class Q3DragObject;
 class QDropEvent;
 class KMenu;
 class KAction;
-class K3bVcdDoc;
-class K3bView;
-class K3bVcdTrack;
+namespace K3b {
+    class VcdDoc;
+}
+namespace K3b {
+    class View;
+}
+namespace K3b {
+    class VcdTrack;
+}
 class KActionCollection;
-class K3bVcdListViewItem;
+namespace K3b {
+    class VcdListViewItem;
+}
 
 
-class K3bVcdListView : public K3bListView
+namespace K3b {
+class VcdListView : public ListView
 {
         Q_OBJECT
 
     public:
-        K3bVcdListView( K3bView*, K3bVcdDoc*, QWidget *parent = 0 );
-        ~K3bVcdListView();
+        VcdListView( View*, VcdDoc*, QWidget *parent = 0 );
+        ~VcdListView();
 
         /**
          * reimplemented from K3ListView
@@ -54,7 +63,7 @@ class K3bVcdListView : public K3bListView
             return m_actionCollection;
         }
 
-        QList<K3bVcdTrack*> selectedTracks();
+        QList<VcdTrack*> selectedTracks();
 
      Q_SIGNALS:
         void lengthReady();
@@ -64,8 +73,8 @@ class K3bVcdListView : public K3bListView
         void setupPopupMenu();
         void setupActions();
 
-        K3bVcdDoc* m_doc;
-        K3bView* m_view;
+        VcdDoc* m_doc;
+        View* m_view;
 
         KAction* m_actionProperties;
         KAction* m_actionRemove;
@@ -73,7 +82,7 @@ class K3bVcdListView : public K3bListView
 
         KMenu* m_popupMenu;
 
-        QMap<K3bVcdTrack*, K3bVcdListViewItem*> m_itemMap;
+        QMap<VcdTrack*, VcdListViewItem*> m_itemMap;
 
     private Q_SLOTS:
         void slotDropped( K3ListView*, QDropEvent* e, Q3ListViewItem* after );
@@ -81,11 +90,12 @@ class K3bVcdListView : public K3bListView
         void showPopupMenu( K3ListView*, Q3ListViewItem* item, const QPoint& );
         void showPropertiesDialog();
         void slotRemoveTracks();
-        void slotTrackRemoved( K3bVcdTrack* );
+        void slotTrackRemoved( VcdTrack* );
 
     protected:
         bool acceptDrag( QDropEvent* e ) const;
         Q3DragObject* dragObject();
 };
+}
 
 #endif

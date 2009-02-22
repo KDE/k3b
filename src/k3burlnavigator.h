@@ -17,28 +17,30 @@
 
 #include <kurlnavigator.h>
 
-namespace K3bDevice {
-	class Device;
+namespace K3b {
+    namespace Device {
+        class Device;
+    }
+
+    class UrlNavigator : public KUrlNavigator
+    {
+        Q_OBJECT
+
+    public:
+        UrlNavigator( KFilePlacesModel* model, QWidget* parent = 0 );
+        ~UrlNavigator();
+
+    public Q_SLOTS:
+        void setDevice( Device::Device* );
+
+    Q_SIGNALS:
+        void activated( const KUrl& url );
+        void activated( Device::Device* dev );
+
+    private Q_SLOTS:
+        void urlActivated( const KUrl &url );
+
+    };
 }
-
-class K3bUrlNavigator : public KUrlNavigator
-{
-	Q_OBJECT
-
-public:
-	K3bUrlNavigator( KFilePlacesModel* model, QWidget* parent = 0 );
-	~K3bUrlNavigator();
-
-public Q_SLOTS:
-	void setDevice( K3bDevice::Device* );
-
-Q_SIGNALS:
-	void activated( const KUrl& url );
-	void activated( K3bDevice::Device* dev );
-
-private Q_SLOTS:
-	void urlActivated( const KUrl &url );
-
-};
 
 #endif

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,47 +17,51 @@
 
 #include <k3bjob.h>
 
-namespace K3bDevice {
-  class Device;
-  class DeviceHandler;
-}
 class KProcess;
 
-class K3bMsInfoFetcher : public K3bJob
-{
-  Q_OBJECT
+namespace K3b {
 
- public:
-  K3bMsInfoFetcher( K3bJobHandler*, QObject* parent = 0 );
-  ~K3bMsInfoFetcher();
+    namespace Device {
+        class Device;
+        class DeviceHandler;
+    }
 
-  const QString& msInfo() const { return m_msInfo; }
-  int lastSessionStart() const { return m_lastSessionStart; }
-  int nextSessionStart() const { return m_nextSessionStart; }
+    class MsInfoFetcher : public Job
+    {
+        Q_OBJECT
 
- public Q_SLOTS:
-  void start();
-  void cancel();
+    public:
+        MsInfoFetcher( JobHandler*, QObject* parent = 0 );
+        ~MsInfoFetcher();
 
-  void setDevice( K3bDevice::Device* dev ) { m_device = dev; }
+        QString msInfo() const { return m_msInfo; }
+        int lastSessionStart() const { return m_lastSessionStart; }
+        int nextSessionStart() const { return m_nextSessionStart; }
 
- private Q_SLOTS:
-  void slotProcessExited();
-  void slotCollectOutput();
-  void slotMediaDetectionFinished( K3bDevice::DeviceHandler* );
-  void getMsInfo();
+    public Q_SLOTS:
+        void start();
+        void cancel();
 
- private:
-  QString m_msInfo;
-  int m_lastSessionStart;
-  int m_nextSessionStart;
-  QString m_collectedOutput;
+        void setDevice( Device::Device* dev ) { m_device = dev; }
 
-  KProcess* m_process;
-  K3bDevice::Device* m_device;
+    private Q_SLOTS:
+        void slotProcessExited();
+        void slotCollectOutput();
+        void slotMediaDetectionFinished( Device::DeviceHandler* );
+        void getMsInfo();
 
-  bool m_canceled;
-  bool m_dvd;
-};
+    private:
+        QString m_msInfo;
+        int m_lastSessionStart;
+        int m_nextSessionStart;
+        QString m_collectedOutput;
+
+        KProcess* m_process;
+        Device::Device* m_device;
+
+        bool m_canceled;
+        bool m_dvd;
+    };
+}
 
 #endif

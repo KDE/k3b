@@ -31,7 +31,7 @@
 #include <QCloseEvent>
 
 
-class K3bMultiChoiceDialog::Private
+class K3b::MultiChoiceDialog::Private
 {
 public:
     Private()
@@ -79,7 +79,7 @@ static QIcon themedMessageBoxIcon(QMessageBox::Icon icon)
 }
 
 
-K3bMultiChoiceDialog::K3bMultiChoiceDialog( const QString& caption,
+K3b::MultiChoiceDialog::MultiChoiceDialog( const QString& caption,
                                             const QString& text,
                                             QMessageBox::Icon icon,
                                             QWidget* parent )
@@ -103,7 +103,7 @@ K3bMultiChoiceDialog::K3bMultiChoiceDialog( const QString& caption,
     int size = IconSize(KIconLoader::Dialog);
     pixLabel->setPixmap( themedMessageBoxIcon( icon ).pixmap( size, size ) );
     pixLabel->setScaledContents( false );
-    QLabel* label = new K3bRichTextLabel( text, this );
+    QLabel* label = new K3b::RichTextLabel( text, this );
     contents->addWidget( pixLabel, 0 );
     contents->addWidget( label, 1 );
 
@@ -112,7 +112,7 @@ K3bMultiChoiceDialog::K3bMultiChoiceDialog( const QString& caption,
     d->buttonLayout->setMargin( 0 );
 
     mainGrid->addLayout( contents, 0, 0, 1, 3 );
-    mainGrid->addWidget( K3bStdGuiItems::horizontalLine( this ), 1, 0, 1, 3 );
+    mainGrid->addWidget( K3b::StdGuiItems::horizontalLine( this ), 1, 0, 1, 3 );
     mainGrid->addLayout( d->buttonLayout, 2, 1 );
 
     mainGrid->setColumnStretch( 0, 1 );
@@ -121,13 +121,13 @@ K3bMultiChoiceDialog::K3bMultiChoiceDialog( const QString& caption,
 }
 
 
-K3bMultiChoiceDialog::~K3bMultiChoiceDialog()
+K3b::MultiChoiceDialog::~MultiChoiceDialog()
 {
     delete d;
 }
 
 
-int K3bMultiChoiceDialog::addButton( const KGuiItem& b )
+int K3b::MultiChoiceDialog::addButton( const KGuiItem& b )
 {
     KPushButton* button = new KPushButton( b, this );
     d->buttonLayout->addWidget( button );
@@ -138,21 +138,21 @@ int K3bMultiChoiceDialog::addButton( const KGuiItem& b )
 }
 
 
-void K3bMultiChoiceDialog::slotButtonClicked( int code )
+void K3b::MultiChoiceDialog::slotButtonClicked( int code )
 {
     d->buttonClicked = true;
     done( code );
 }
 
 
-int K3bMultiChoiceDialog::exec()
+int K3b::MultiChoiceDialog::exec()
 {
     d->buttonClicked = false;
     return QDialog::exec();
 }
 
 
-void K3bMultiChoiceDialog::closeEvent( QCloseEvent* e )
+void K3b::MultiChoiceDialog::closeEvent( QCloseEvent* e )
 {
     // make sure the dialog can only be closed by the buttons
     // otherwise we may get an undefined return value in exec
@@ -164,7 +164,7 @@ void K3bMultiChoiceDialog::closeEvent( QCloseEvent* e )
 }
 
 
-int K3bMultiChoiceDialog::choose( const QString& caption,
+int K3b::MultiChoiceDialog::choose( const QString& caption,
                                   const QString& text,
                                   QMessageBox::Icon icon,
                                   QWidget* parent,
@@ -176,7 +176,7 @@ int K3bMultiChoiceDialog::choose( const QString& caption,
                                   const KGuiItem& b5,
                                   const KGuiItem& b6 )
 {
-    K3bMultiChoiceDialog dlg( caption, text, icon, parent );
+    K3b::MultiChoiceDialog dlg( caption, text, icon, parent );
     dlg.addButton( b1 );
     if( buttonCount > 1 )
         dlg.addButton( b2 );

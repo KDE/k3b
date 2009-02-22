@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -17,31 +17,31 @@
 #define K3B_DEVICE_OPTIONTAB_H
 
 #include <qwidget.h>
-//Added by qt3to4:
-#include <QLabel>
 
 class QLabel;
-class K3bDeviceWidget;
 
+namespace K3b {
+    class DeviceWidget;
 
-class K3bDeviceOptionTab : public QWidget
-{
-Q_OBJECT
+    class DeviceOptionTab : public QWidget
+    {
+        Q_OBJECT
 
- public:
-  K3bDeviceOptionTab( QWidget* = 0 );
-  ~K3bDeviceOptionTab();
+    public:
+        DeviceOptionTab( QWidget* = 0 );
+        ~DeviceOptionTab();
 
-  void readDevices();
-  void saveDevices();
+        void readDevices();
+        void saveDevices();
 
- private Q_SLOTS:
-  void slotRefreshButtonClicked();
+    private Q_SLOTS:
+        void slotRefreshButtonClicked();
 
- private:
-  QLabel*          m_labelDevicesInfo;
-  K3bDeviceWidget* m_deviceWidget;
-};
+    private:
+        QLabel*          m_labelDevicesInfo;
+        DeviceWidget* m_deviceWidget;
+    };
+}
 
 
 

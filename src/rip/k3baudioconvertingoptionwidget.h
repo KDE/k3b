@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
  *
@@ -20,61 +20,55 @@
 #include <qcheckbox.h>
 #include <kio/global.h>
 
-class K3bAudioEncoder;
-
-class base_K3bAudioRippingOptionWidget : public QWidget, public Ui::base_K3bAudioRippingOptionWidget
-{
-public:
-  base_K3bAudioRippingOptionWidget( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
-};
+namespace K3b {
+    class AudioEncoder;
 
 
-/**
- * Internally used by K3bAudioConvertingDialog
- */
-class K3bAudioConvertingOptionWidget : public base_K3bAudioRippingOptionWidget
-{
-  Q_OBJECT
+    /**
+     * Internally used by AudioConvertingDialog
+     */
+    class AudioConvertingOptionWidget : public QWidget, public Ui::base_K3bAudioRippingOptionWidget
+    {
+        Q_OBJECT
 
- public:
-  K3bAudioConvertingOptionWidget( QWidget* parent );
-  ~K3bAudioConvertingOptionWidget();
+    public:
+        AudioConvertingOptionWidget( QWidget* parent );
+        ~AudioConvertingOptionWidget();
 
-  void setBaseDir( const QString& path );
+        void setBaseDir( const QString& path );
 
-  void setNeededSize( KIO::filesize_t );
+        void setNeededSize( KIO::filesize_t );
 
-  /**
-   * @returns 0 if wave is selected
-   */
-  K3bAudioEncoder* encoder() const;
-  QString extension() const;
+        /**
+         * @returns 0 if wave is selected
+         */
+        AudioEncoder* encoder() const;
+        QString extension() const;
 
-  QString baseDir() const;
+        QString baseDir() const;
 
-  bool createPlaylist() const { return m_checkCreatePlaylist->isChecked(); }
-  bool playlistRelativePath() const { return m_checkPlaylistRelative->isChecked(); }
-  bool createSingleFile() const { return m_checkSingleFile->isChecked(); }
-  bool createCueFile() const { return m_checkWriteCueFile->isChecked(); }
+        bool createPlaylist() const { return m_checkCreatePlaylist->isChecked(); }
+        bool playlistRelativePath() const { return m_checkPlaylistRelative->isChecked(); }
+        bool createSingleFile() const { return m_checkSingleFile->isChecked(); }
+        bool createCueFile() const { return m_checkWriteCueFile->isChecked(); }
 
- public Q_SLOTS:
-  void loadDefaults();
-  void loadConfig( const KConfigGroup& );
-  void saveConfig( KConfigGroup );
+    public Q_SLOTS:
+        void loadDefaults();
+        void loadConfig( const KConfigGroup& );
+        void saveConfig( KConfigGroup );
 
-  Q_SIGNALS:
-  void changed();
+    Q_SIGNALS:
+        void changed();
 
- private Q_SLOTS:
-  void slotConfigurePlugin();
-  void slotUpdateFreeTempSpace();
-  void slotEncoderChanged();
+    private Q_SLOTS:
+        void slotConfigurePlugin();
+        void slotUpdateFreeTempSpace();
+        void slotEncoderChanged();
 
- private:
-  class Private;
-  Private* d;
-};
+    private:
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

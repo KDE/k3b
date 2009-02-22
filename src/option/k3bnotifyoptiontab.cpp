@@ -22,7 +22,7 @@
 
 
 
-K3bNotifyOptionTab::K3bNotifyOptionTab( QWidget* parent )
+K3b::NotifyOptionTab::NotifyOptionTab( QWidget* parent )
     : QWidget( parent )
 {
     m_notifyWidget = new KNotifyConfigWidget(this);
@@ -33,17 +33,17 @@ K3bNotifyOptionTab::K3bNotifyOptionTab( QWidget* parent )
 }
 
 
-K3bNotifyOptionTab::~K3bNotifyOptionTab()
+K3b::NotifyOptionTab::~NotifyOptionTab()
 {
 }
 
 
-void K3bNotifyOptionTab::readSettings()
+void K3b::NotifyOptionTab::readSettings()
 {
 }
 
 
-bool K3bNotifyOptionTab::saveSettings()
+bool K3b::NotifyOptionTab::saveSettings()
 {
     m_notifyWidget->save();
     return true;

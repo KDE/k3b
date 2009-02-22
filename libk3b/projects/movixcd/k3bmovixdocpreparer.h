@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -17,50 +17,51 @@
 
 #include <k3bjob.h>
 
-class K3bMovixDoc;
-class K3bFileItem;
-class K3bDirItem;
+namespace K3b {
+    class MovixDoc;
+    class FileItem;
+    class DirItem;
 
+    /**
+     * This class creates the needed eMovix structures in an eMovix doc
+     * and removes them after creating the image.
+     */
+    class MovixDocPreparer : public Job
+    {
+        Q_OBJECT
 
-/**
- * This class creates the needed eMovix structures in an eMovix doc
- * and removes them after creating the image.
- */
-class K3bMovixDocPreparer : public K3bJob
-{
-  Q_OBJECT
+    public:
+        explicit MovixDocPreparer( MovixDoc* doc, JobHandler*, QObject* parent = 0 );
+        ~MovixDocPreparer();
 
- public:
-  explicit K3bMovixDocPreparer( K3bMovixDoc* doc, K3bJobHandler*, QObject* parent = 0 );
-  ~K3bMovixDocPreparer();
+        MovixDoc* doc() const;
 
-  K3bMovixDoc* doc() const;
+        bool createMovixStructures();
+        void removeMovixStructures();
 
-  bool createMovixStructures();
-  void removeMovixStructures();
+    public Q_SLOTS:
+        /**
+         * use createMovixStructures and removeMovixStructures instead.
+         */
+        void start();
 
- public Q_SLOTS:
-  /**
-   * use createMovixStructures and removeMovixStructures instead.
-   */
-  void start();
+        /**
+         * Useless since this job works syncronously
+         */
+        void cancel();
 
-  /**
-   * Useless since this job works syncronously
-   */
-  void cancel();
+    private:
+        bool writePlaylistFile();
+        bool writeIsolinuxConfigFile( const QString& );
+        bool writeMovixRcFile();
+        bool addMovixFiles();
+        bool addMovixFilesNew();
+        FileItem* createItem( const QString& localPath, const QString& docPath );
+        DirItem* createDir( const QString& docPath );
 
- private:
-  bool writePlaylistFile();
-  bool writeIsolinuxConfigFile( const QString& );
-  bool writeMovixRcFile();
-  bool addMovixFiles();
-  bool addMovixFilesNew();
-  K3bFileItem* createItem( const QString& localPath, const QString& docPath );
-  K3bDirItem* createDir( const QString& docPath );
-
-  class Private;
-  Private* d;
-};
+        class Private;
+        Private* d;
+    };
+}
 
 #endif

@@ -21,33 +21,41 @@
 // K3b Includes
 #include <k3bstandardview.h>
 
-class K3bVcdListView;
+namespace K3b {
+    class VcdListView;
+}
 class QWidget;
-class K3bVcdDoc;
-class K3bProjectBurnDialog;
+namespace K3b {
+    class VcdDoc;
+}
+namespace K3b {
+    class ProjectBurnDialog;
+}
 
 namespace K3b {
     class VcdProjectModel;
 }
 
-class K3bVcdView : public K3bStandardView
+namespace K3b {
+class VcdView : public StandardView
 {
   Q_OBJECT
   
  public:
-  K3bVcdView( K3bVcdDoc* pDoc, QWidget* parent );
-  ~K3bVcdView();
+  VcdView( VcdDoc* pDoc, QWidget* parent );
+  ~VcdView();
   
  protected:
-  K3bProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
+  ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
 
   void init();
   
  private:
-  K3bVcdDoc* m_doc;
+  VcdDoc* m_doc;
   K3b::VcdProjectModel* m_model;
   
-  K3bVcdListView* m_vcdlist;
+  VcdListView* m_vcdlist;
 };
+}
 
 #endif

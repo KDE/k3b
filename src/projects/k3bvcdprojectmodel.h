@@ -17,8 +17,12 @@
 
 #include <QtCore/QAbstractItemModel>
 
-class K3bVcdDoc;
-class K3bVcdTrack;
+namespace K3b {
+    class VcdDoc;
+}
+namespace K3b {
+    class VcdTrack;
+}
 
 namespace K3b {
     class VcdProjectModel : public QAbstractItemModel
@@ -26,7 +30,7 @@ namespace K3b {
         Q_OBJECT
 
         public:
-            VcdProjectModel( K3bVcdDoc* doc, QObject* parent );
+            VcdProjectModel( VcdDoc* doc, QObject* parent );
             ~VcdProjectModel();
 
             enum Columns {
@@ -43,10 +47,10 @@ namespace K3b {
                 NumColumns
             };
 
-            K3bVcdDoc* project() const;
+            VcdDoc* project() const;
 
-            K3bVcdTrack* trackForIndex( const QModelIndex& index ) const;
-            QModelIndex indexForTrack( K3bVcdTrack* track ) const;
+            VcdTrack* trackForIndex( const QModelIndex& index ) const;
+            QModelIndex indexForTrack( VcdTrack* track ) const;
 
             QModelIndex index(int row, int column,
                 const QModelIndex& parent = QModelIndex()) const;

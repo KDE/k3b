@@ -27,7 +27,7 @@
 #include <qregexp.h>
 
 
-class K3bCdda2wavReader::Private
+class K3b::Cdda2wavReader::Private
 {
 public:
     Private()
@@ -38,8 +38,8 @@ public:
           fdToWriteTo(-1) {
     }
 
-    const K3bExternalBin* cdda2wavBin;
-    K3bProcess* process;
+    const K3b::ExternalBin* cdda2wavBin;
+    K3b::Process* process;
 
     bool canceled;
     bool running;
@@ -51,39 +51,39 @@ public:
 };
 
 
-K3bCdda2wavReader::K3bCdda2wavReader( QObject* parent )
-    : K3bJob( parent )
+K3b::Cdda2wavReader::Cdda2wavReader( QObject* parent )
+    : K3b::Job( parent )
 {
     d = new Private();
 }
 
 
-K3bCdda2wavReader::~K3bCdda2wavReader()
+K3b::Cdda2wavReader::~Cdda2wavReader()
 {
     delete d->process;
     delete d;
 }
 
 
-bool K3bCdda2wavReader::active() const
+bool K3b::Cdda2wavReader::active() const
 {
     return d->running;
 }
 
 
-void K3bCdda2wavReader::writeToFd( int fd )
+void K3b::Cdda2wavReader::writeToFd( int fd )
 {
     d->fdToWriteTo = fd;
 }
 
 
-void K3bCdda2wavReader::start()
+void K3b::Cdda2wavReader::start()
 {
     start( false );
 }
 
 
-void K3bCdda2wavReader::start( bool onlyInfo )
+void K3b::Cdda2wavReader::start( bool onlyInfo )
 {
     d->running = true;
     d->canceled = false;
@@ -102,7 +102,7 @@ void K3bCdda2wavReader::start( bool onlyInfo )
 
     // prepare the process
     delete d->process;
-    d->process = new K3bProcess();
+    d->process = new K3b::Process();
     d->process->setSplitStdout(true);
     d->process->setSuppressEmptyLines(true);
     d->process->setWorkingDirectory( m_imagePath );
@@ -114,9 +114,9 @@ void K3bCdda2wavReader::start( bool onlyInfo )
     *d->process << d->cdda2wavBin->path;
     *d->process << "-vall" << ( d->cdda2wavBin->hasFeature( "gui" ) ? "-gui" : "-g" );
     if( d->cdda2wavBin->hasFeature( "dev" ) )
-        *d->process << QString("dev=%1").arg(K3bDevice::externalBinDeviceParameter(m_device, d->cdda2wavBin));
+        *d->process << QString("dev=%1").arg(K3b::Device::externalBinDeviceParameter(m_device, d->cdda2wavBin));
     else
-        *d->process << "-D" << K3bDevice::externalBinDeviceParameter(m_device, d->cdda2wavBin);
+        *d->process << "-D" << K3b::Device::externalBinDeviceParameter(m_device, d->cdda2wavBin);
     *d->process << ( d->cdda2wavBin->hasFeature( "bulk" ) ? "-bulk" : "-B" );
     if( onlyInfo )
         *d->process << ( d->cdda2wavBin->hasFeature( "info-only" ) ? "-info-only" : "-J" );
@@ -132,15 +132,15 @@ void K3bCdda2wavReader::start( bool onlyInfo )
     if( !d->process->start( K3Process::All ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
-        kDebug() << "(K3bCdda2wavReader) could not start cdda2wav";
-        emit infoMessage( i18n("Could not start %1.",QString("cdda2wav")), K3bJob::ERROR );
+        kDebug() << "(K3b::Cdda2wavReader) could not start cdda2wav";
+        emit infoMessage( i18n("Could not start %1.",QString("cdda2wav")), K3b::Job::ERROR );
         d->running = false;
         jobFinished(false);
     }
 }
 
 
-void K3bCdda2wavReader::cancel()
+void K3b::Cdda2wavReader::cancel()
 {
     if( d->running ) {
         d->canceled = true;
@@ -151,7 +151,7 @@ void K3bCdda2wavReader::cancel()
 }
 
 
-void K3bCdda2wavReader::slotProcessLine( const QString& line )
+void K3b::Cdda2wavReader::slotProcessLine( const QString& line )
 {
     // Tracks:11 44:37.30
     // CDINDEX discid: ZvzBXv614ACgzn1bWWy107cs0nA-
@@ -188,7 +188,7 @@ void K3bCdda2wavReader::slotProcessLine( const QString& line )
         if( ok )
             d->trackOffsets.append( offset );
         else
-            kDebug() << "(K3bCdda2wavReader) track offset parsing error: '" << line.mid( pos, endpos-pos ) << "'";
+            kDebug() << "(K3b::Cdda2wavReader) track offset parsing error: '" << line.mid( pos, endpos-pos ) << "'";
     }
 
     else if( line.startsWith( "percent_done" ) ) {
@@ -216,12 +216,12 @@ void K3bCdda2wavReader::slotProcessLine( const QString& line )
             emit percent( overall*100/d->trackOffsets[d->trackOffsets.count()-1] );
         }
         else
-            kDebug() << "(K3bCdda2wavReader) track progress parsing error: '" << line.left(3) << "'";
+            kDebug() << "(K3b::Cdda2wavReader) track progress parsing error: '" << line.left(3) << "'";
     }
 }
 
 
-void K3bCdda2wavReader::slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus )
+void K3b::Cdda2wavReader::slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus )
 {
     d->running = false;
 

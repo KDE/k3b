@@ -30,7 +30,8 @@
 /**
  * Helper class to show and hide a widget in a fancy way.
  */
-class K3bWidgetShowEffect : public QObject
+namespace K3b {
+class WidgetShowEffect : public QObject
 {
     Q_OBJECT
 
@@ -41,24 +42,24 @@ public:
         Slide
     };
 
-    K3bWidgetShowEffect( QWidget* widget, Effect e = Slide );
-    ~K3bWidgetShowEffect();
+    WidgetShowEffect( QWidget* widget, Effect e = Slide );
+    ~WidgetShowEffect();
 
     void setEffect( Effect e ) { m_effect = e; }
 
     /**
      * Using the widget effects the easy way.
-     * \returns the K3bWidgetShowEffect instance used to show the widget.
+     * \returns the WidgetShowEffect instance used to show the widget.
      * Can be used to connect to signals.
      */
-    static K3bWidgetShowEffect* showWidget( QWidget* w, Effect );
+    static WidgetShowEffect* showWidget( QWidget* w, Effect );
 
     /**
      * Using the widget effects the easy way.
-     * \returns the K3bWidgetShowEffect instance used to hide the widget.
+     * \returns the WidgetShowEffect instance used to hide the widget.
      * Can be used to connect to signals.
      */
-    static K3bWidgetShowEffect* hideWidget( QWidget* w, Effect );
+    static WidgetShowEffect* hideWidget( QWidget* w, Effect );
 
 Q_SIGNALS:
     void widgetShown( QWidget* );
@@ -66,19 +67,19 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     /**
-     * \param effectOnly If true K3bWidgetShowEffect will not call QWidget::show().
-     *                   This is only useful in case onw uses K3bWidgetShowEffect
+     * \param effectOnly If true WidgetShowEffect will not call QWidget::show().
+     *                   This is only useful in case onw uses WidgetShowEffect
      *                   to reimplement QWidget::show(). In that case the caller
      *                   has to take care of showing the widget.
      */
     void show( bool effectOnly = false );
 
     /**
-     * \param effectOnly If true K3bWidgetShowEffect will not call QWidget::hide().
-     *                   This is only useful in case onw uses K3bWidgetShowEffect
+     * \param effectOnly If true WidgetShowEffect will not call QWidget::hide().
+     *                   This is only useful in case onw uses WidgetShowEffect
      *                   to reimplement QWidget::hide(). In that case the caller
      *                   has to take care of hiding the widget by connecting to
-     *                   K3bWidgetShowEffect::widgetHidden()
+     *                   WidgetShowEffect::widgetHidden()
      */
     void hide( bool effectOnly = false );
 
@@ -112,5 +113,6 @@ private:
     bool m_deleteSelf;
     bool m_bEffectOnly;
 };
+}
 
 #endif

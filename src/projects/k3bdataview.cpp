@@ -23,14 +23,14 @@
 #include "k3bdataurladdingdialog.h"
 #include "k3bdatamultisessionimportdialog.h"
 #include "k3bdatapropertiesdialog.h"
-#include <k3bdiritem.h>
-#include <k3bdevice.h>
-#include <k3bdeviceselectiondialog.h>
-#include <k3bfillstatusdisplay.h>
-#include <k3bcore.h>
-#include <k3bprojectplugin.h>
-#include <k3bvalidators.h>
-#include <k3baction.h>
+#include "k3bdiritem.h"
+#include "k3bdevice.h"
+#include "k3bdeviceselectiondialog.h"
+#include "k3bfillstatusdisplay.h"
+#include "k3bcore.h"
+#include "k3bprojectplugin.h"
+#include "k3bvalidators.h"
+#include "k3baction.h"
 
 #include <klocale.h>
 #include <kurl.h>
@@ -58,13 +58,13 @@
 #include <KRun>
 
 
-K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent )
-    : K3bStandardView(doc, parent)
+K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
+    : K3b::StandardView(doc, parent)
 {
     m_doc = doc;
 
     m_model = new K3b::DataProjectModel(doc, this);
-    // set the model for the K3bStandardView's views
+    // set the model for the K3b::StandardView's views
     setModel(m_model);
 
     connect( m_doc, SIGNAL(changed()), this, SLOT(slotDocChanged()) );
@@ -92,10 +92,10 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent )
     toolBox()->addAction( actionCollection()->action("parent_dir") );
     toolBox()->addSeparator();
 
-    addPluginButtons( K3bProjectPlugin::DATA_CD );
+    addPluginButtons( K3b::ProjectPlugin::DATA_CD );
 
     m_volumeIDEdit = new QLineEdit( doc->isoOptions().volumeID(), toolBox() );
-    m_volumeIDEdit->setValidator( new K3bLatin1Validator( m_volumeIDEdit ) );
+    m_volumeIDEdit->setValidator( new K3b::Latin1Validator( m_volumeIDEdit ) );
     toolBox()->addWidget( new QLabel( i18n("Volume Name:"), toolBox() ) );
     toolBox()->addWidget( m_volumeIDEdit );
     connect( m_volumeIDEdit, SIGNAL(textChanged(const QString&)),
@@ -104,7 +104,7 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent )
 
     // this is just for testing (or not?)
     // most likely every project type will have it's rc file in the future
-    // we only add the additional actions since K3bView already added the default actions
+    // we only add the additional actions since K3b::View already added the default actions
     setXML( "<!DOCTYPE kpartgui SYSTEM \"kpartgui.dtd\">"
             "<kpartgui name=\"k3bproject\" version=\"1\">"
             "<MenuBar>"
@@ -118,55 +118,55 @@ K3bDataView::K3bDataView(K3bDataDoc* doc, QWidget *parent )
 }
 
 
-K3bDataView::~K3bDataView()
+K3b::DataView::~DataView()
 {
 }
 
 
-void K3bDataView::importSession()
+void K3b::DataView::importSession()
 {
-    K3bDataMultisessionImportDialog::importSession( m_doc, this );
+    K3b::DataMultisessionImportDialog::importSession( m_doc, this );
 }
 
 
-void K3bDataView::clearImportedSession()
+void K3b::DataView::clearImportedSession()
 {
     m_doc->clearImportedSession();
 }
 
 
-void K3bDataView::editBootImages()
+void K3b::DataView::editBootImages()
 {
     KDialog dlg( this );
     dlg.setCaption( i18n("Edit Boot Images") );
     dlg.setButtons( KDialog::Ok );
     dlg.setDefaultButton( KDialog::Ok );
-    dlg.setMainWidget( new K3bBootImageView( m_doc, &dlg ) );
+    dlg.setMainWidget( new K3b::BootImageView( m_doc, &dlg ) );
     dlg.exec();
 }
 
 
-K3bProjectBurnDialog* K3bDataView::newBurnDialog( QWidget* parent )
+K3b::ProjectBurnDialog* K3b::DataView::newBurnDialog( QWidget* parent )
 {
-    return new K3bDataBurnDialog( m_doc, parent );
+    return new K3b::DataBurnDialog( m_doc, parent );
 }
 
 
-void K3bDataView::slotBurn()
+void K3b::DataView::slotBurn()
 {
     if( m_doc->burningSize() == 0 ) {
         KMessageBox::information( this, i18n("Please add files to your project first."),
                                   i18n("No Data to Burn"), QString(), false );
     }
     else {
-        K3bProjectBurnDialog* dlg = newBurnDialog( this );
+        K3b::ProjectBurnDialog* dlg = newBurnDialog( this );
         dlg->execBurnDialog(true);
         delete dlg;
     }
 }
 
 
-void K3bDataView::slotDocChanged()
+void K3b::DataView::slotDocChanged()
 {
     // do not update the editor in case it changed the volume id itself
     if( m_doc->isoOptions().volumeID() != m_volumeIDEdit->text() )
@@ -174,15 +174,15 @@ void K3bDataView::slotDocChanged()
 }
 
 
-void K3bDataView::addUrls( const KUrl::List& urls )
+void K3b::DataView::addUrls( const KUrl::List& urls )
 {
-    K3bDirItem *item = dynamic_cast<K3bDirItem*>(m_model->itemForIndex(currentRoot()));
+    DirItem *item = dynamic_cast<K3b::DirItem*>(m_model->itemForIndex(currentRoot()));
     if (!item)
         item = m_doc->root();
-    K3bDataUrlAddingDialog::addUrls( urls, item);
+    DataUrlAddingDialog::addUrls( urls, item);
 }
 
-void K3bDataView::setupContextMenu()
+void K3b::DataView::setupContextMenu()
 {
     m_actionProperties = new KAction( this );
     m_actionProperties->setText( i18n("Properties") );
@@ -220,7 +220,7 @@ void K3bDataView::setupContextMenu()
     m_popupMenu->addAction( actionCollection()->action("project_burn") );
 }
 
-void K3bDataView::contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos)
+void K3b::DataView::contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos)
 {
     bool open = true, rename = true, remove = true, parent = true;
 
@@ -230,12 +230,12 @@ void K3bDataView::contextMenuForSelection(const QModelIndexList &selectedIndexes
     {
         rename = false;
         open = false;
-    } 
+    }
     else if (selectedIndexes.count() == 1)
     {
         QModelIndex index = selectedIndexes.first();
         rename = (index.flags() & Qt::ItemIsEditable);
-        open = (index.data(K3b::ItemTypeRole).toInt() == (int) K3b::FileItem);
+        open = (index.data(K3b::ItemTypeRole).toInt() == (int) K3b::FileItemType);
     }
     else // selectedIndex.count() == 0
     {
@@ -265,13 +265,13 @@ void K3bDataView::contextMenuForSelection(const QModelIndexList &selectedIndexes
     m_popupMenu->exec(pos);
 }
 
-void K3bDataView::slotNewDir()
+void K3b::DataView::slotNewDir()
 {
-    K3bDirItem *parent = 0;
+    K3b::DirItem *parent = 0;
     QModelIndex index = currentRoot();
 
     if (index.isValid())
-        parent = dynamic_cast<K3bDirItem*>(m_model->itemForIndex(index));
+        parent = dynamic_cast<K3b::DirItem*>(m_model->itemForIndex(index));
 
     if (!parent)
         parent = m_doc->root();
@@ -283,7 +283,7 @@ void K3bDataView::slotNewDir()
                                   i18n("Please insert the name for the new directory:"),
                                   i18n("New Directory"), &ok, this );
 
-    while( ok && K3bDataDoc::nameAlreadyInDir( name, parent ) ) {
+    while( ok && K3b::DataDoc::nameAlreadyInDir( name, parent ) ) {
         name = KInputDialog::getText( i18n("New Directory"),
                                       i18n("A file with that name already exists. "
                                            "Please insert the name for the new directory:"),
@@ -297,35 +297,35 @@ void K3bDataView::slotNewDir()
     m_doc->addEmptyDir( name, parent );
 }
 
-void K3bDataView::slotItemProperties()
+void K3b::DataView::slotItemProperties()
 {
     QModelIndexList selection = currentSelection();
 
-    if ( selection.isEmpty() ) 
+    if ( selection.isEmpty() )
     {
         // show project properties
         slotProperties();
     }
-    else 
+    else
     {
-        QList<K3bDataItem*> items;
+        QList<K3b::DataItem*> items;
 
         foreach(QModelIndex index, selection)
             items.append(m_model->itemForIndex(index));
 
-        K3bDataPropertiesDialog dlg( items, this );
+        K3b::DataPropertiesDialog dlg( items, this );
         dlg.exec();
     }
 }
 
 
-void K3bDataView::slotOpen()
+void K3b::DataView::slotOpen()
 {
     QModelIndexList selection = currentSelection();
     if (selection.isEmpty())
         return;
 
-    K3bDataItem* item = m_model->itemForIndex(selection.first());
+    K3b::DataItem* item = m_model->itemForIndex(selection.first());
 
     if( !item->isFile() ) {
         KUrl url = item->localPath();

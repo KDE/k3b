@@ -20,13 +20,14 @@
 
 class KCModule;
 
-class K3bCddbOptionTab : public QWidget
+namespace K3b {
+class CddbOptionTab : public QWidget
 {
     Q_OBJECT
 
 public:
-    K3bCddbOptionTab( QWidget* parent = 0 );
-    ~K3bCddbOptionTab();
+    CddbOptionTab( QWidget* parent = 0 );
+    ~CddbOptionTab();
 
 public Q_SLOTS:
     void readSettings();
@@ -35,5 +36,6 @@ public Q_SLOTS:
 private:
     KCModule* m_cddbKcm;
 };
+}
 
 #endif

@@ -27,10 +27,10 @@
 #include <libkcddb/client.h>
 
 
-KCDDB::TrackOffsetList K3bCDDB::createTrackOffsetList( const K3bDevice::Toc& toc )
+KCDDB::TrackOffsetList K3b::CDDB::createTrackOffsetList( const K3b::Device::Toc& toc )
 {
     KCDDB::TrackOffsetList trackOffsets;
-    foreach( const K3bDevice::Track& track, toc ) {
+    foreach( const K3b::Device::Track& track, toc ) {
         trackOffsets.append( track.firstSector().lba() + 150 );
     }
     trackOffsets.append( toc.length().lba() + 150 );
@@ -38,7 +38,7 @@ KCDDB::TrackOffsetList K3bCDDB::createTrackOffsetList( const K3bDevice::Toc& toc
 }
 
 
-K3bCDDB::MultiEntriesDialog::MultiEntriesDialog( QWidget* parent )
+K3b::CDDB::MultiEntriesDialog::MultiEntriesDialog( QWidget* parent )
     : KDialog( parent )
 {
     setCaption( i18n("Multiple CDDB Entries Found") );
@@ -62,7 +62,7 @@ K3bCDDB::MultiEntriesDialog::MultiEntriesDialog( QWidget* parent )
 }
 
 
-int K3bCDDB::MultiEntriesDialog::selectCddbEntry( const KCDDB::CDInfoList& entries, QWidget* parent )
+int K3b::CDDB::MultiEntriesDialog::selectCddbEntry( const KCDDB::CDInfoList& entries, QWidget* parent )
 {
     MultiEntriesDialog d( parent );
 
@@ -83,18 +83,18 @@ int K3bCDDB::MultiEntriesDialog::selectCddbEntry( const KCDDB::CDInfoList& entri
 }
 
 
-K3bCDDB::MultiEntriesDialog::~MultiEntriesDialog()
+K3b::CDDB::MultiEntriesDialog::~MultiEntriesDialog()
 {
 }
 
 
 
-class K3bCDDB::CDDBJob::Private
+class K3b::CDDB::CDDBJob::Private
 {
 public:
     KCDDB::Client cddbClient;
-    K3bMedium medium;
-    K3bDevice::Toc toc;
+    K3b::Medium medium;
+    K3b::Device::Toc toc;
 
     KCDDB::CDInfo cddbInfo;
 
@@ -104,14 +104,14 @@ public:
 };
 
 
-void K3bCDDB::CDDBJob::Private::_k_cddbQueryFinished( KCDDB::Result result )
+void K3b::CDDB::CDDBJob::Private::_k_cddbQueryFinished( KCDDB::Result result )
 {
     if( result == KCDDB::Success ) {
         cddbInfo = cddbClient.lookupResponse().first();
     }
     else if ( result == KCDDB::MultipleRecordFound ) {
         KCDDB::CDInfoList results = cddbClient.lookupResponse();
-        int i = K3bCDDB::MultiEntriesDialog::selectCddbEntry( results, qApp->activeWindow() );
+        int i = K3b::CDDB::MultiEntriesDialog::selectCddbEntry( results, qApp->activeWindow() );
         if ( i >= 0 ) {
             cddbInfo = results[i];
         }
@@ -122,14 +122,14 @@ void K3bCDDB::CDDBJob::Private::_k_cddbQueryFinished( KCDDB::Result result )
 
     // save the entry locally
     if ( cddbInfo.isValid() ) {
-        cddbClient.store( cddbInfo, K3bCDDB::createTrackOffsetList( toc ) );
+        cddbClient.store( cddbInfo, K3b::CDDB::createTrackOffsetList( toc ) );
     }
 
     q->emitResult();
 }
 
 
-K3bCDDB::CDDBJob::CDDBJob( QObject* parent )
+K3b::CDDB::CDDBJob::CDDBJob( QObject* parent )
     : KJob( parent ),
       d( new Private() )
 {
@@ -140,19 +140,19 @@ K3bCDDB::CDDBJob::CDDBJob( QObject* parent )
 }
 
 
-K3bCDDB::CDDBJob::~CDDBJob()
+K3b::CDDB::CDDBJob::~CDDBJob()
 {
     delete d;
 }
 
 
-K3bMedium K3bCDDB::CDDBJob::medium() const
+K3b::Medium K3b::CDDB::CDDBJob::medium() const
 {
     return d->medium;
 }
 
 
-void K3bCDDB::CDDBJob::start()
+void K3b::CDDB::CDDBJob::start()
 {
     kDebug();
     d->cddbInfo.clear();
@@ -160,13 +160,13 @@ void K3bCDDB::CDDBJob::start()
 }
 
 
-KCDDB::CDInfo K3bCDDB::CDDBJob::cddbResult() const
+KCDDB::CDInfo K3b::CDDB::CDDBJob::cddbResult() const
 {
     return d->cddbInfo;
 }
 
 
-K3bCDDB::CDDBJob* K3bCDDB::CDDBJob::queryCddb( const K3bMedium& medium )
+K3b::CDDB::CDDBJob* K3b::CDDB::CDDBJob::queryCddb( const K3b::Medium& medium )
 {
     CDDBJob* job = new CDDBJob();
     job->d->medium = medium;
@@ -177,7 +177,7 @@ K3bCDDB::CDDBJob* K3bCDDB::CDDBJob::queryCddb( const K3bMedium& medium )
 }
 
 
-K3bCDDB::CDDBJob* K3bCDDB::CDDBJob::queryCddb( const K3bDevice::Toc& toc )
+K3b::CDDB::CDDBJob* K3b::CDDB::CDDBJob::queryCddb( const K3b::Device::Toc& toc )
 {
     CDDBJob* job = new CDDBJob();
     job->d->toc = toc;

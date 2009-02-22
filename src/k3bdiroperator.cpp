@@ -29,7 +29,7 @@
 #include <KMenu>
 #include <KStandardDirs>
 
-K3bDirOperator::K3bDirOperator(const KUrl& url, QWidget* parent )
+K3b::DirOperator::DirOperator(const KUrl& url, QWidget* parent )
     : KDirOperator( url, parent )
 {
     setMode( KFile::Files );
@@ -61,13 +61,13 @@ K3bDirOperator::K3bDirOperator(const KUrl& url, QWidget* parent )
 }
 
 
-K3bDirOperator::~K3bDirOperator()
+K3b::DirOperator::~DirOperator()
 {
     delete m_bmMenu;
 }
 
 
-void K3bDirOperator::readConfig( const KConfigGroup& grp )
+void K3b::DirOperator::readConfig( const KConfigGroup& grp )
 {
     KDirOperator::readConfig( grp );
     setView( KFile::Default );
@@ -91,20 +91,20 @@ void K3bDirOperator::readConfig( const KConfigGroup& grp )
 }
 
 
-void K3bDirOperator::writeConfig( KConfigGroup& grp )
+void K3b::DirOperator::writeConfig( KConfigGroup& grp )
 {
     KDirOperator::writeConfig(grp );
     grp.writePathEntry( "last url", url().path() );
 }
 
 
-void K3bDirOperator::openBookmark(const KBookmark & bm, Qt::MouseButtons, Qt::KeyboardModifiers)
+void K3b::DirOperator::openBookmark(const KBookmark & bm, Qt::MouseButtons, Qt::KeyboardModifiers)
 {
     setUrl( bm.url(), true );
 }
 
 
-QString K3bDirOperator::currentTitle() const
+QString K3b::DirOperator::currentTitle() const
 {
     const KUrl& u = url();
     if (u.isLocalFile()) {
@@ -115,13 +115,13 @@ QString K3bDirOperator::currentTitle() const
 }
 
 
-QString K3bDirOperator::currentUrl() const
+QString K3b::DirOperator::currentUrl() const
 {
     return url().prettyUrl();
 }
 
 
-void K3bDirOperator::activatedMenu( const KFileItem&, const QPoint& pos )
+void K3b::DirOperator::activatedMenu( const KFileItem&, const QPoint& pos )
 {
     // both from KDirOperator
     setupMenu();
@@ -149,7 +149,7 @@ void K3bDirOperator::activatedMenu( const KFileItem&, const QPoint& pos )
 }
 
 
-void K3bDirOperator::slotAddFilesToProject()
+void K3b::DirOperator::slotAddFilesToProject()
 {
     KUrl::List files;
     QList<KFileItem> items(selectedItems());

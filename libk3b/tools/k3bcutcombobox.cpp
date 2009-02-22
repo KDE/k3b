@@ -26,7 +26,7 @@
 #include <qsizepolicy.h>
 
 
-class K3bCutComboBox::Private
+class K3b::CutComboBox::Private
 {
 public:
     Private() {
@@ -43,7 +43,7 @@ public:
 #ifdef __GNUC__
 #warning Use user data to store the full strings or a custom item delegate to paint the items
 #endif
-K3bCutComboBox::K3bCutComboBox( QWidget* parent )
+K3b::CutComboBox::CutComboBox( QWidget* parent )
     : KComboBox( parent )
 {
     d = new Private();
@@ -51,7 +51,7 @@ K3bCutComboBox::K3bCutComboBox( QWidget* parent )
 }
 
 
-K3bCutComboBox::K3bCutComboBox( int method, QWidget* parent )
+K3b::CutComboBox::CutComboBox( int method, QWidget* parent )
     : KComboBox( parent )
 {
     d = new Private();
@@ -59,20 +59,20 @@ K3bCutComboBox::K3bCutComboBox( int method, QWidget* parent )
 }
 
 
-K3bCutComboBox::~K3bCutComboBox()
+K3b::CutComboBox::CutComboBox()
 {
     delete d;
 }
 
 
-void K3bCutComboBox::setMethod( int m )
+void K3b::CutComboBox::setMethod( int m )
 {
     d->method = m;
     cutText();
 }
 
 
-QSize K3bCutComboBox::sizeHint() const
+QSize K3b::CutComboBox::sizeHint() const
 {
 //   QSize s(KComboBox::sizeHint());
 
@@ -86,13 +86,13 @@ QSize K3bCutComboBox::sizeHint() const
     return KComboBox::sizeHint();
 }
 
-QSize K3bCutComboBox::minimumSizeHint() const
+QSize K3b::CutComboBox::minimumSizeHint() const
 {
     return KComboBox::minimumSizeHint();
 }
 
 
-void K3bCutComboBox::setCurrentText( const QString& s )
+void K3b::CutComboBox::setCurrentText( const QString& s )
 {
     int i;
     for( i = 0; i < count(); i++ )
@@ -108,38 +108,38 @@ void K3bCutComboBox::setCurrentText( const QString& s )
 }
 
 
-void K3bCutComboBox::insertStringList( const QStringList&, int )
+void K3b::CutComboBox::insertStringList( const QStringList&, int )
 {
     // FIXME
 }
 
 
-void K3bCutComboBox::insertStrList( const Q3StrList&, int )
+void K3b::CutComboBox::insertStrList( const Q3StrList&, int )
 {
     // FIXME
 }
 
-void K3bCutComboBox::insertStrList( const Q3StrList*, int )
+void K3b::CutComboBox::insertStrList( const Q3StrList*, int )
 {
     // FIXME
 }
 
-void K3bCutComboBox::insertStrList( const char**, int, int)
+void K3b::CutComboBox::insertStrList( const char**, int, int)
 {
     // FIXME
 }
 
-void K3bCutComboBox::insertItem( const QString& text, int index )
+void K3b::CutComboBox::insertItem( const QString& text, int index )
 {
     insertItem( index, QPixmap(), text );
 }
 
-void K3bCutComboBox::insertItem( const QPixmap& pix, int i )
+void K3b::CutComboBox::insertItem( const QPixmap& pix, int i )
 {
     insertItem( i, pix, "" );
 }
 
-void K3bCutComboBox::insertItem( const QPixmap& pixmap, const QString& text, int index )
+void K3b::CutComboBox::insertItem( const QPixmap& pixmap, const QString& text, int index )
 {
     if( index != -1 )
         d->originalItems.insert( d->originalItems.at(index), text );
@@ -154,26 +154,26 @@ void K3bCutComboBox::insertItem( const QPixmap& pixmap, const QString& text, int
     cutText();
 }
 
-void K3bCutComboBox::removeItem( int i )
+void K3b::CutComboBox::removeItem( int i )
 {
     d->originalItems.erase( d->originalItems.at(i) );
     KComboBox::removeItem( i );
 }
 
-void K3bCutComboBox::changeItem( const QString& s, int i )
+void K3b::CutComboBox::changeItem( const QString& s, int i )
 {
     d->originalItems[i] = s;
     cutText();
 }
 
-void K3bCutComboBox::changeItem( const QPixmap& pix, const QString& s, int i )
+void K3b::CutComboBox::changeItem( const QPixmap& pix, const QString& s, int i )
 {
     KComboBox::changeItem( pix, i );
     changeItem( s, i );
 }
 
 
-QString K3bCutComboBox::text( int i ) const
+QString K3b::CutComboBox::text( int i ) const
 {
     if( i < (int)d->originalItems.count() )
         return d->originalItems[i];
@@ -182,7 +182,7 @@ QString K3bCutComboBox::text( int i ) const
 }
 
 
-QString K3bCutComboBox::currentText() const
+QString K3b::CutComboBox::currentText() const
 {
     if( currentItem() < (int)d->originalItems.count() )
         return d->originalItems[currentItem()];
@@ -191,13 +191,13 @@ QString K3bCutComboBox::currentText() const
 }
 
 
-void K3bCutComboBox::clear()
+void K3b::CutComboBox::clear()
 {
     KComboBox::clear();
     d->originalItems.clear();
 }
 
-void K3bCutComboBox::resizeEvent( QResizeEvent* e )
+void K3b::CutComboBox::resizeEvent( QResizeEvent* e )
 {
     cutText();
 
@@ -205,7 +205,7 @@ void K3bCutComboBox::resizeEvent( QResizeEvent* e )
 }
 
 
-void K3bCutComboBox::cutText()
+void K3b::CutComboBox::cutText()
 {
     d->width = QStyle::visualRect( style().querySubControlMetrics(QStyle::CC_ComboBox, this,
                                                                   QStyle::SC_ComboBoxEditField), this ).width();

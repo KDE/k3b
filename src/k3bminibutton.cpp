@@ -5,7 +5,7 @@
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
  *
- * K3bMiniButton is based on KDockButton_Private
+ * K3b::MiniButton is based on KDockButton_Private
  * Copyright (C) 2000 Max Judin <novaprint@mtu-net.ru>
  * Copyright (C) 2002,2003 Joseph Wenninger <jowenn@kde.org>
  * Copyright (C) 2005 Dominik Haumann <dhdev@gmx.de>
@@ -23,24 +23,24 @@
 #include <QEvent>
 
 
-K3bMiniButton::K3bMiniButton( QWidget* parent )
+K3b::MiniButton::MiniButton( QWidget* parent )
     :QPushButton( parent ),
      m_mouseOver( false )
 {
     setFocusPolicy( Qt::NoFocus );
 }
 
-K3bMiniButton::~K3bMiniButton()
+K3b::MiniButton::~MiniButton()
 {
 }
 
-void K3bMiniButton::paintEvent( QPaintEvent* )
+void K3b::MiniButton::paintEvent( QPaintEvent* )
 {
     QPainter painter(this);
     drawButton(&painter);
 }
 
-void K3bMiniButton::drawButton( QPainter* p )
+void K3b::MiniButton::drawButton( QPainter* p )
 {
     p->fillRect( 0,0, width(), height(), parentWidget()->palette().color( parentWidget()->backgroundRole() ) );
     QPixmap pixmap = icon().pixmap( width(), height() );
@@ -70,14 +70,14 @@ void K3bMiniButton::drawButton( QPainter* p )
     }
 }
 
-void K3bMiniButton::enterEvent( QEvent* )
+void K3b::MiniButton::enterEvent( QEvent* )
 {
     m_mouseOver = true;
     repaint();
 }
 
 
-void K3bMiniButton::leaveEvent( QEvent* )
+void K3b::MiniButton::leaveEvent( QEvent* )
 {
     m_mouseOver = false;
     repaint();

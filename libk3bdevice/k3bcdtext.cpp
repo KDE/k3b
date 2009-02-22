@@ -25,7 +25,7 @@
 #include <string.h>
 
 
-namespace K3bDevice {
+namespace {
 
     struct cdtext_pack {
         unsigned char id1;
@@ -102,7 +102,7 @@ namespace K3bDevice {
     void savePack( cdtext_pack* pack, QByteArray& data, int& dataFill )
     {
         // create CRC
-        quint16 crc = calcX25( reinterpret_cast<unsigned char*>(pack), sizeof(cdtext_pack)-2 );
+        quint16 crc = K3b::Device::calcX25( reinterpret_cast<unsigned char*>(pack), sizeof(cdtext_pack)-2 );
 
         // invert for Redbook compliance
         crc ^= 0xffff;
@@ -159,7 +159,7 @@ namespace K3bDevice {
 }
 
 
-class K3bDevice::TrackCdText::Private : public QSharedData
+class K3b::Device::TrackCdText::Private : public QSharedData
 {
 public:
     QString title;
@@ -172,31 +172,31 @@ public:
 };
 
 
-K3bDevice::TrackCdText::TrackCdText()
+K3b::Device::TrackCdText::TrackCdText()
     : d( new Private() )
 {
 }
 
 
-K3bDevice::TrackCdText::TrackCdText( const TrackCdText& other )
+K3b::Device::TrackCdText::TrackCdText( const TrackCdText& other )
 {
     d = other.d;
 }
 
 
-K3bDevice::TrackCdText::~TrackCdText()
+K3b::Device::TrackCdText::~TrackCdText()
 {
 }
 
 
-K3bDevice::TrackCdText& K3bDevice::TrackCdText::operator=( const TrackCdText& other )
+K3b::Device::TrackCdText& K3b::Device::TrackCdText::operator=( const TrackCdText& other )
 {
     d = other.d;
     return *this;
 }
 
 
-void K3bDevice::TrackCdText::clear()
+void K3b::Device::TrackCdText::clear()
 {
     d->title.truncate(0);
     d->performer.truncate(0);
@@ -208,98 +208,98 @@ void K3bDevice::TrackCdText::clear()
 }
 
 
-QString K3bDevice::TrackCdText::title() const
+QString K3b::Device::TrackCdText::title() const
 {
     return d->title;
 }
 
 
-QString K3bDevice::TrackCdText::performer() const
+QString K3b::Device::TrackCdText::performer() const
 {
     return d->performer;
 }
 
 
-QString K3bDevice::TrackCdText::songwriter() const
+QString K3b::Device::TrackCdText::songwriter() const
 {
     return d->songwriter;
 }
 
 
-QString K3bDevice::TrackCdText::composer() const
+QString K3b::Device::TrackCdText::composer() const
 {
     return d->composer;
 }
 
 
-QString K3bDevice::TrackCdText::arranger() const
+QString K3b::Device::TrackCdText::arranger() const
 {
     return d->arranger;
 }
 
 
-QString K3bDevice::TrackCdText::message() const
+QString K3b::Device::TrackCdText::message() const
 {
     return d->message;
 }
 
 
-QString K3bDevice::TrackCdText::isrc() const
+QString K3b::Device::TrackCdText::isrc() const
 {
     return d->isrc;
 }
 
 
-void K3bDevice::TrackCdText::setTitle( const QString& s )
+void K3b::Device::TrackCdText::setTitle( const QString& s )
 {
     d->title = s;
     fixup(d->title);
 }
 
 
-void K3bDevice::TrackCdText::setPerformer( const QString& s )
+void K3b::Device::TrackCdText::setPerformer( const QString& s )
 {
     d->performer = s;
     fixup(d->performer);
 }
 
 
-void K3bDevice::TrackCdText::setSongwriter( const QString& s )
+void K3b::Device::TrackCdText::setSongwriter( const QString& s )
 {
     d->songwriter = s;
     fixup(d->songwriter);
 }
 
 
-void K3bDevice::TrackCdText::setComposer( const QString& s )
+void K3b::Device::TrackCdText::setComposer( const QString& s )
 {
     d->composer = s;
     fixup(d->composer);
 }
 
 
-void K3bDevice::TrackCdText::setArranger( const QString& s )
+void K3b::Device::TrackCdText::setArranger( const QString& s )
 {
     d->arranger = s;
     fixup(d->arranger);
 }
 
 
-void K3bDevice::TrackCdText::setMessage( const QString& s )
+void K3b::Device::TrackCdText::setMessage( const QString& s )
 {
     d->message = s;
     fixup(d->message);
 }
 
 
-void K3bDevice::TrackCdText::setIsrc( const QString& s )
+void K3b::Device::TrackCdText::setIsrc( const QString& s )
 {
     d->isrc = s;
     fixup(d->isrc);
 }
 
 
-bool K3bDevice::TrackCdText::isEmpty() const
+bool K3b::Device::TrackCdText::isEmpty() const
 {
     if( !d->title.isEmpty() )
         return false;
@@ -320,7 +320,7 @@ bool K3bDevice::TrackCdText::isEmpty() const
 }
 
 
-bool K3bDevice::TrackCdText::operator==( const K3bDevice::TrackCdText& other ) const
+bool K3b::Device::TrackCdText::operator==( const K3b::Device::TrackCdText& other ) const
 {
     return( d->title == other.d->title &&
             d->performer == other.d->performer &&
@@ -332,7 +332,7 @@ bool K3bDevice::TrackCdText::operator==( const K3bDevice::TrackCdText& other ) c
 }
 
 
-bool K3bDevice::TrackCdText::operator!=( const K3bDevice::TrackCdText& other ) const
+bool K3b::Device::TrackCdText::operator!=( const K3b::Device::TrackCdText& other ) const
 {
     return !operator==( other );
 }
@@ -341,7 +341,7 @@ bool K3bDevice::TrackCdText::operator!=( const K3bDevice::TrackCdText& other ) c
 
 // TODO: use the real CD-TEXT charset (a modified ISO8859-1)
 
-class K3bDevice::CdText::Private : public QSharedData
+class K3b::Device::CdText::Private : public QSharedData
 {
 public:
     QString title;
@@ -361,69 +361,69 @@ public:
 };
 
 
-K3bDevice::CdText::CdText()
+K3b::Device::CdText::CdText()
     : d( new Private() )
 {
 }
 
 
-K3bDevice::CdText::CdText( const K3bDevice::CdText& text )
+K3b::Device::CdText::CdText( const K3b::Device::CdText& text )
 {
     d = text.d;
 }
 
 
-K3bDevice::CdText::CdText( const unsigned char* data, int len )
+K3b::Device::CdText::CdText( const unsigned char* data, int len )
     : d( new Private() )
 {
     setRawPackData( data, len );
 }
 
 
-K3bDevice::CdText::CdText( const QByteArray& b )
+K3b::Device::CdText::CdText( const QByteArray& b )
     : d( new Private() )
 {
     setRawPackData( b );
 }
 
 
-K3bDevice::CdText::~CdText()
+K3b::Device::CdText::~CdText()
 {
 }
 
 
-K3bDevice::CdText& K3bDevice::CdText::operator=( const CdText& other )
+K3b::Device::CdText& K3b::Device::CdText::operator=( const CdText& other )
 {
     d = other.d;
     return *this;
 }
 
 
-K3bDevice::TrackCdText K3bDevice::CdText::operator[]( int i ) const
+K3b::Device::TrackCdText K3b::Device::CdText::operator[]( int i ) const
 {
     return d->tracks[i];
 }
 
 
-K3bDevice::TrackCdText& K3bDevice::CdText::operator[]( int i )
+K3b::Device::TrackCdText& K3b::Device::CdText::operator[]( int i )
 {
     return d->tracks[i];
 }
 
 
-int K3bDevice::CdText::count() const
+int K3b::Device::CdText::count() const
 {
     return d->tracks.count();
 }
 
 
-K3bDevice::TrackCdText K3bDevice::CdText::track( int i ) const
+K3b::Device::TrackCdText K3b::Device::CdText::track( int i ) const
 {
     return d->tracks[i];
 }
 
 
-K3bDevice::TrackCdText& K3bDevice::CdText::track( int i )
+K3b::Device::TrackCdText& K3b::Device::CdText::track( int i )
 {
     while ( i >= d->tracks.count() ) {
         d->tracks.append( TrackCdText() );
@@ -432,13 +432,13 @@ K3bDevice::TrackCdText& K3bDevice::CdText::track( int i )
 }
 
 
-void K3bDevice::CdText::insert( int index, const TrackCdText& tt )
+void K3b::Device::CdText::insert( int index, const TrackCdText& tt )
 {
     d->tracks.insert( index, tt );
 }
 
 
-void K3bDevice::CdText::clear()
+void K3b::Device::CdText::clear()
 {
     d->tracks.clear();
 
@@ -453,7 +453,7 @@ void K3bDevice::CdText::clear()
 }
 
 
-bool K3bDevice::CdText::empty() const
+bool K3b::Device::CdText::empty() const
 {
     if( !d->title.isEmpty() )
         return false;
@@ -480,123 +480,123 @@ bool K3bDevice::CdText::empty() const
 }
 
 
-bool K3bDevice::CdText::isEmpty() const
+bool K3b::Device::CdText::isEmpty() const
 {
     return empty();
 }
 
 
-QString K3bDevice::CdText::title() const
+QString K3b::Device::CdText::title() const
 {
     return d->title;
 }
 
 
-QString K3bDevice::CdText::performer() const
+QString K3b::Device::CdText::performer() const
 {
     return d->performer;
 }
 
 
-QString K3bDevice::CdText::songwriter() const
+QString K3b::Device::CdText::songwriter() const
 {
     return d->songwriter;
 }
 
 
-QString K3bDevice::CdText::composer() const
+QString K3b::Device::CdText::composer() const
 {
     return d->composer;
 }
 
 
-QString K3bDevice::CdText::arranger() const
+QString K3b::Device::CdText::arranger() const
 {
     return d->arranger;
 }
 
 
-QString K3bDevice::CdText::message() const
+QString K3b::Device::CdText::message() const
 {
     return d->message;
 }
 
 
-QString K3bDevice::CdText::discId() const
+QString K3b::Device::CdText::discId() const
 {
     return d->discId;
 }
 
 
-QString K3bDevice::CdText::upcEan() const
+QString K3b::Device::CdText::upcEan() const
 {
     return d->upcEan;
 }
 
 
-void K3bDevice::CdText::setTitle( const QString& s )
+void K3b::Device::CdText::setTitle( const QString& s )
 {
     d->title = s;
     fixup(d->title);
 }
 
 
-void K3bDevice::CdText::setPerformer( const QString& s )
+void K3b::Device::CdText::setPerformer( const QString& s )
 {
     d->performer = s;
     fixup(d->performer);
 }
 
 
-void K3bDevice::CdText::setSongwriter( const QString& s )
+void K3b::Device::CdText::setSongwriter( const QString& s )
 {
     d->songwriter = s;
     fixup(d->songwriter);
 }
 
 
-void K3bDevice::CdText::setComposer( const QString& s )
+void K3b::Device::CdText::setComposer( const QString& s )
 {
     d->composer = s;
     fixup(d->composer);
 }
 
 
-void K3bDevice::CdText::setArranger( const QString& s )
+void K3b::Device::CdText::setArranger( const QString& s )
 {
     d->arranger = s;
     fixup(d->arranger);
 }
 
 
-void K3bDevice::CdText::setMessage( const QString& s )
+void K3b::Device::CdText::setMessage( const QString& s )
 {
     d->message = s;
     fixup(d->message);
 }
 
 
-void K3bDevice::CdText::setDiscId( const QString& s )
+void K3b::Device::CdText::setDiscId( const QString& s )
 {
     d->discId = s;
     fixup(d->discId);
 }
 
 
-void K3bDevice::CdText::setUpcEan( const QString& s )
+void K3b::Device::CdText::setUpcEan( const QString& s )
 {
     d->upcEan = s;
     fixup(d->upcEan);
 }
 
 
-void K3bDevice::CdText::setRawPackData( const unsigned char* data, int len )
+void K3b::Device::CdText::setRawPackData( const unsigned char* data, int len )
 {
     clear();
 
     int r = len%18;
     if( r > 0 && r != 4 ) {
-        kDebug() << "(K3bDevice::CdText) invalid cdtext size: " << len;
+        kDebug() << "(K3b::Device::CdText) invalid cdtext size: " << len;
     }
     else if( len-r > 0 ) {
         debugRawTextPackData( &data[r], len-r );
@@ -607,7 +607,7 @@ void K3bDevice::CdText::setRawPackData( const unsigned char* data, int len )
         for( int i = 0; i < (len-r)/18; ++i ) {
 
             if( pack[i].dbcc ) {
-                kDebug() << "(K3bDevice::CdText) Double byte code not supported";
+                kDebug() << "(K3b::Device::CdText) Double byte code not supported";
                 return;
             }
 
@@ -623,7 +623,7 @@ void K3bDevice::CdText::setRawPackData( const unsigned char* data, int len )
             pack[i].crc[1] ^= 0xff;
 
             if( crc != 0x0000 )
-                kDebug() << "(K3bDevice::CdText) CRC invalid!";
+                kDebug() << "(K3b::Device::CdText) CRC invalid!";
 
 
             //
@@ -727,16 +727,16 @@ void K3bDevice::CdText::setRawPackData( const unsigned char* data, int len )
         }
     }
     else
-        kDebug() << "(K3bDevice::CdText) zero-sized CD-TEXT: " << len;
+        kDebug() << "(K3b::Device::CdText) zero-sized CD-TEXT: " << len;
 }
 
 
-void K3bDevice::CdText::setRawPackData( const QByteArray& b )
+void K3b::Device::CdText::setRawPackData( const QByteArray& b )
 {
     setRawPackData( reinterpret_cast<const unsigned char*>(b.data()), b.size() );
 }
 
-QByteArray K3bDevice::CdText::rawPackData() const
+QByteArray K3b::Device::CdText::rawPackData() const
 {
     // FIXME: every pack block may only consist of up to 255 packs.
 
@@ -807,7 +807,7 @@ QByteArray K3bDevice::CdText::rawPackData() const
 
 
 // this method also creates completely empty packs
-QByteArray K3bDevice::CdText::Private::createPackData( int packType, int& packCount ) const
+QByteArray K3b::Device::CdText::Private::createPackData( int packType, int& packCount ) const
 {
     QByteArray data;
     int dataFill = 0;
@@ -888,7 +888,7 @@ QByteArray K3bDevice::CdText::Private::createPackData( int packType, int& packCo
 
 
 // track 0 means global cdtext
-QString K3bDevice::CdText::Private::textForPackType( int packType, int track ) const
+QString K3b::Device::CdText::Private::textForPackType( int packType, int track ) const
 {
     switch( packType ) {
     default:
@@ -950,7 +950,7 @@ QString K3bDevice::CdText::Private::textForPackType( int packType, int track ) c
 
 
 // count the overall length of a certain packtype texts
-int K3bDevice::CdText::Private::textLengthForPackType( int packType ) const
+int K3b::Device::CdText::Private::textLengthForPackType( int packType ) const
 {
     int len = 0;
     for( int i = 0; i <= tracks.count(); ++i )
@@ -959,7 +959,7 @@ int K3bDevice::CdText::Private::textLengthForPackType( int packType ) const
 }
 
 
-void K3bDevice::CdText::debug() const
+void K3b::Device::CdText::debug() const
 {
     // debug the stuff
     kDebug() << "CD-TEXT data:" << endl
@@ -985,7 +985,7 @@ void K3bDevice::CdText::debug() const
 }
 
 
-bool K3bDevice::CdText::operator==( const K3bDevice::CdText& other ) const
+bool K3b::Device::CdText::operator==( const K3b::Device::CdText& other ) const
 {
     return( d->title == other.d->title &&
             d->performer == other.d->performer &&
@@ -999,17 +999,17 @@ bool K3bDevice::CdText::operator==( const K3bDevice::CdText& other ) const
 }
 
 
-bool K3bDevice::CdText::operator!=( const K3bDevice::CdText& other ) const
+bool K3b::Device::CdText::operator!=( const K3b::Device::CdText& other ) const
 {
     return !operator==( other );
 }
 
 
-bool K3bDevice::CdText::checkCrc( const unsigned char* data, int len )
+bool K3b::Device::CdText::checkCrc( const unsigned char* data, int len )
 {
     int r = len%18;
     if( r > 0 && r != 4 ) {
-        kDebug() << "(K3bDevice::CdText) invalid cdtext size: " << len;
+        kDebug() << "(K3b::Device::CdText) invalid cdtext size: " << len;
         return false;
     }
     else {
@@ -1040,7 +1040,7 @@ bool K3bDevice::CdText::checkCrc( const unsigned char* data, int len )
 }
 
 
-bool K3bDevice::CdText::checkCrc( const QByteArray& rawData )
+bool K3b::Device::CdText::checkCrc( const QByteArray& rawData )
 {
     return checkCrc( reinterpret_cast<const unsigned char*>(rawData.data()), rawData.size() );
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -29,199 +29,199 @@
 
 static long usedBlocks( const KIO::filesize_t& bytes )
 {
-  if( bytes % 2048 )
-    return bytes/2048 + 1;
-  else
-    return bytes/2048;
+    if( bytes % 2048 )
+        return bytes/2048 + 1;
+    else
+        return bytes/2048;
 }
 
 
 class InodeInfo
 {
 public:
-  InodeInfo() {
-    number = 0;
-    savedSize = 0;
-  }
+    InodeInfo() {
+        number = 0;
+        savedSize = 0;
+    }
 
-  /**
-   * How often has the file with
-   * the corresponding inode been added
-   */
-  int number;
+    /**
+     * How often has the file with
+     * the corresponding inode been added
+     */
+    int number;
 
-  /**
-   * The size of the first added file. This has to be saved
-   * to check further addings and to avoid the following situation:
-   * A file with inode 1 is added, then deleted. Another file is created 
-   * at inode 1 and added to the project. Now the first file gets
-   * removed and then the second. If we had not saved the size we would
-   * have added the size of the first and removed the size of the second
-   * file resulting in a corrupted project size.
-   * This way we always use the size of the first added file and may
-   * warn the user if sizes differ.
-   */
-  KIO::filesize_t savedSize;
+    /**
+     * The size of the first added file. This has to be saved
+     * to check further addings and to avoid the following situation:
+     * A file with inode 1 is added, then deleted. Another file is created
+     * at inode 1 and added to the project. Now the first file gets
+     * removed and then the second. If we had not saved the size we would
+     * have added the size of the first and removed the size of the second
+     * file resulting in a corrupted project size.
+     * This way we always use the size of the first added file and may
+     * warn the user if sizes differ.
+     */
+    KIO::filesize_t savedSize;
 
-  KIO::filesize_t completeSize() const { return savedSize*number; }
+    KIO::filesize_t completeSize() const { return savedSize*number; }
 
-  /**
-   * In an iso9660 filesystem a file occupies complete blocks of 2048 bytes.
-   */
-  K3b::Msf blocks() const { return K3b::Msf( usedBlocks(savedSize) ); }
+    /**
+     * In an iso9660 filesystem a file occupies complete blocks of 2048 bytes.
+     */
+    K3b::Msf blocks() const { return K3b::Msf( usedBlocks(savedSize) ); }
 
-  Q3PtrList<K3bDataItem> items;
+    Q3PtrList<K3b::DataItem> items;
 };
 
 
-class K3bFileCompilationSizeHandler::Private
+class K3b::FileCompilationSizeHandler::Private
 {
 public:
-  Private() 
-    : size(0) {
-  }
-
-  void clear() {
-    inodeMap.clear();
-    size = 0;
-    blocks = 0;
-  }
-
-  void addFile( K3bFileItem* item, bool followSymlinks ) {
-    InodeInfo& inodeInfo = inodeMap[item->localId(followSymlinks)];
-
-    inodeInfo.items.append( item );
-
-    if( inodeInfo.number == 0 ) {
-      inodeInfo.savedSize = item->itemSize( followSymlinks );
-
-      size += inodeInfo.savedSize;
-      blocks += inodeInfo.blocks();
+    Private()
+        : size(0) {
     }
 
-    inodeInfo.number++;
-  }
-
-  void addSpecialItem( K3bDataItem* item ) {
-    // special files do not have a corresponding local file
-    // so we just add their k3bSize
-    size += item->size();
-    blocks += usedBlocks(item->size());
-    specialItems.append( item );
-  }
-
-  void removeFile( K3bFileItem* item, bool followSymlinks ) {
-    InodeInfo& inodeInfo = inodeMap[item->localId(followSymlinks)];
-    
-    if( inodeInfo.items.findRef( item ) == -1 ) {
-      kError() << "(K3bFileCompilationSizeHandler) " 
-		<< item->localPath()
-		<< " has been removed without being added!" << endl;
+    void clear() {
+        inodeMap.clear();
+        size = 0;
+        blocks = 0;
     }
-    else {
-      if( item->itemSize(followSymlinks) != inodeInfo.savedSize ) {
-	kError() << "(K3bFileCompilationSizeHandler) savedSize differs!" << endl;
-      }
-      
-      inodeInfo.items.removeRef( item );
-      inodeInfo.number--;
-      if( inodeInfo.number == 0 ) {
-	size -= inodeInfo.savedSize;
-	blocks -= inodeInfo.blocks();
-      }
+
+    void addFile( K3b::FileItem* item, bool followSymlinks ) {
+        InodeInfo& inodeInfo = inodeMap[item->localId(followSymlinks)];
+
+        inodeInfo.items.append( item );
+
+        if( inodeInfo.number == 0 ) {
+            inodeInfo.savedSize = item->itemSize( followSymlinks );
+
+            size += inodeInfo.savedSize;
+            blocks += inodeInfo.blocks();
+        }
+
+        inodeInfo.number++;
     }
-  }
 
-  void removeSpecialItem( K3bDataItem* item ) {
-    // special files do not have a corresponding local file
-    // so we just substract their k3bSize
-    if( specialItems.findRef( item ) == -1 ) {
-      kError() << "(K3bFileCompilationSizeHandler) Special item "
-		<< item->k3bName()
-		<< " has been removed without being added!" << endl;
+    void addSpecialItem( K3b::DataItem* item ) {
+        // special files do not have a corresponding local file
+        // so we just add their k3bSize
+        size += item->size();
+        blocks += usedBlocks(item->size());
+        specialItems.append( item );
     }
-    else {
-      specialItems.removeRef( item );
-      size -= item->size();
-      blocks -= usedBlocks(item->size());
+
+    void removeFile( K3b::FileItem* item, bool followSymlinks ) {
+        InodeInfo& inodeInfo = inodeMap[item->localId(followSymlinks)];
+
+        if( inodeInfo.items.findRef( item ) == -1 ) {
+            kError() << "(K3b::FileCompilationSizeHandler) "
+                     << item->localPath()
+                     << " has been removed without being added!" << endl;
+        }
+        else {
+            if( item->itemSize(followSymlinks) != inodeInfo.savedSize ) {
+                kError() << "(K3b::FileCompilationSizeHandler) savedSize differs!" << endl;
+            }
+
+            inodeInfo.items.removeRef( item );
+            inodeInfo.number--;
+            if( inodeInfo.number == 0 ) {
+                size -= inodeInfo.savedSize;
+                blocks -= inodeInfo.blocks();
+            }
+        }
     }
-  }
+
+    void removeSpecialItem( K3b::DataItem* item ) {
+        // special files do not have a corresponding local file
+        // so we just substract their k3bSize
+        if( specialItems.findRef( item ) == -1 ) {
+            kError() << "(K3b::FileCompilationSizeHandler) Special item "
+                     << item->k3bName()
+                     << " has been removed without being added!" << endl;
+        }
+        else {
+            specialItems.removeRef( item );
+            size -= item->size();
+            blocks -= usedBlocks(item->size());
+        }
+    }
 
 
-  /**
-   * This maps from inodes to the number of occurrences of the inode.
-   */
-  QMap<K3bFileItem::Id, InodeInfo> inodeMap;
+    /**
+     * This maps from inodes to the number of occurrences of the inode.
+     */
+    QMap<K3b::FileItem::Id, InodeInfo> inodeMap;
 
-  KIO::filesize_t size;
-  K3b::Msf blocks;
+    KIO::filesize_t size;
+    K3b::Msf blocks;
 
-  Q3PtrList<K3bDataItem> specialItems;
+    Q3PtrList<K3b::DataItem> specialItems;
 };
 
 
 
-K3bFileCompilationSizeHandler::K3bFileCompilationSizeHandler()
+K3b::FileCompilationSizeHandler::FileCompilationSizeHandler()
 {
-  d_symlinks = new Private;
-  d_noSymlinks = new Private;
+    d_symlinks = new Private;
+    d_noSymlinks = new Private;
 }
 
-K3bFileCompilationSizeHandler::~K3bFileCompilationSizeHandler()
+K3b::FileCompilationSizeHandler::~FileCompilationSizeHandler()
 {
-  delete d_symlinks;
-  delete d_noSymlinks;
-}
-
-
-const KIO::filesize_t& K3bFileCompilationSizeHandler::size( bool followSymlinks ) const
-{
-  if( followSymlinks )
-    return d_noSymlinks->size;
-  else
-    return d_symlinks->size;
+    delete d_symlinks;
+    delete d_noSymlinks;
 }
 
 
-const K3b::Msf& K3bFileCompilationSizeHandler::blocks( bool followSymlinks ) const
+const KIO::filesize_t& K3b::FileCompilationSizeHandler::size( bool followSymlinks ) const
 {
-  if( followSymlinks )
-    return d_noSymlinks->blocks;
-  else
-    return d_symlinks->blocks;
+    if( followSymlinks )
+        return d_noSymlinks->size;
+    else
+        return d_symlinks->size;
 }
 
 
-void K3bFileCompilationSizeHandler::addFile( K3bDataItem* item )
+const K3b::Msf& K3b::FileCompilationSizeHandler::blocks( bool followSymlinks ) const
 {
-  if( item->isSpecialFile() ) {
-    d_symlinks->addSpecialItem( item );
-    d_noSymlinks->addSpecialItem( item );
-  }
-  else if( item->isFile() ) {
-    K3bFileItem* fileItem = static_cast<K3bFileItem*>( item );
-    d_symlinks->addFile( fileItem, false );
-    d_noSymlinks->addFile( fileItem, true );
-  }
+    if( followSymlinks )
+        return d_noSymlinks->blocks;
+    else
+        return d_symlinks->blocks;
 }
 
 
-void K3bFileCompilationSizeHandler::removeFile( K3bDataItem* item )
+void K3b::FileCompilationSizeHandler::addFile( K3b::DataItem* item )
 {
-  if( item->isSpecialFile() ) {
-    d_symlinks->removeSpecialItem( item );
-    d_noSymlinks->removeSpecialItem( item );
-  }
-  else if( item->isFile() ) {
-    K3bFileItem* fileItem = static_cast<K3bFileItem*>( item );
-    d_symlinks->removeFile( fileItem, false );
-    d_noSymlinks->removeFile( fileItem, true );
-  }
+    if( item->isSpecialFile() ) {
+        d_symlinks->addSpecialItem( item );
+        d_noSymlinks->addSpecialItem( item );
+    }
+    else if( item->isFile() ) {
+        K3b::FileItem* fileItem = static_cast<K3b::FileItem*>( item );
+        d_symlinks->addFile( fileItem, false );
+        d_noSymlinks->addFile( fileItem, true );
+    }
 }
 
 
-void K3bFileCompilationSizeHandler::clear()
+void K3b::FileCompilationSizeHandler::removeFile( K3b::DataItem* item )
 {
-  d_symlinks->clear();
-  d_noSymlinks->clear();
+    if( item->isSpecialFile() ) {
+        d_symlinks->removeSpecialItem( item );
+        d_noSymlinks->removeSpecialItem( item );
+    }
+    else if( item->isFile() ) {
+        K3b::FileItem* fileItem = static_cast<K3b::FileItem*>( item );
+        d_symlinks->removeFile( fileItem, false );
+        d_noSymlinks->removeFile( fileItem, true );
+    }
+}
+
+
+void K3b::FileCompilationSizeHandler::clear()
+{
+    d_symlinks->clear();
+    d_noSymlinks->clear();
 }

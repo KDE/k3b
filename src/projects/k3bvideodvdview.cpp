@@ -30,42 +30,42 @@
 #include <qsplitter.h>
 
 
-K3bVideoDvdView::K3bVideoDvdView( K3bVideoDvdDoc* doc, QWidget *parent )
-    : K3bStandardView( doc, parent ),
+K3b::VideoDvdView::VideoDvdView( K3b::VideoDvdDoc* doc, QWidget *parent )
+    : K3b::StandardView( doc, parent ),
       m_doc(doc)
 {
 	m_model = new K3b::DataProjectModel(m_doc, this);
-	// set the model for the K3bStandardView's views
+	// set the model for the K3b::StandardView's views
 	setModel(m_model);
 
 #if 0
     // --- setup GUI ---------------------------------------------------
     QSplitter* mainSplitter = new QSplitter( this );
-    m_dataDirTree = new K3bDataDirTreeView( this, doc, mainSplitter );
-    m_dataFileView = new K3bDataFileView( this, doc, mainSplitter );
+    m_dataDirTree = new K3b::DataDirTreeView( this, doc, mainSplitter );
+    m_dataFileView = new K3b::DataFileView( this, doc, mainSplitter );
     mainSplitter->setStretchFactor( 0, 1 );
     mainSplitter->setStretchFactor( 1, 3 );
     setMainWidget( mainSplitter );
 
-    connect( m_dataFileView, SIGNAL(dirSelected(K3bDirItem*)), m_dataDirTree, SLOT(setCurrentDir(K3bDirItem*)) );
+    connect( m_dataFileView, SIGNAL(dirSelected(K3b::DirItem*)), m_dataDirTree, SLOT(setCurrentDir(K3b::DirItem*)) );
 #endif
-    addPluginButtons( K3bProjectPlugin::VIDEO_DVD );
+    addPluginButtons( K3b::ProjectPlugin::VIDEO_DVD );
 }
-#warning get the currentDir connections from K3bDataView or maybe inherit from it
+#warning get the currentDir connections from K3b::DataView or maybe inherit from it
 
 
-K3bVideoDvdView::~K3bVideoDvdView()
+K3b::VideoDvdView::~VideoDvdView()
 {
 }
 
 
-K3bProjectBurnDialog* K3bVideoDvdView::newBurnDialog( QWidget* parent )
+K3b::ProjectBurnDialog* K3b::VideoDvdView::newBurnDialog( QWidget* parent )
 {
-    return new K3bVideoDvdBurnDialog( m_doc, parent );
+    return new K3b::VideoDvdBurnDialog( m_doc, parent );
 }
 
 
-void K3bVideoDvdView::init()
+void K3b::VideoDvdView::init()
 {
     KMessageBox::information( this,
                               i18n("Be aware that you need to provide the complete Video DVD filestructure. "
@@ -77,10 +77,10 @@ void K3bVideoDvdView::init()
 }
 
 
-void K3bVideoDvdView::addUrls( const KUrl::List& urls )
+void K3b::VideoDvdView::addUrls( const KUrl::List& urls )
 {
 	/*
-    K3bDataUrlAddingDialog::addUrls( urls, m_dataFileView->currentDir() );
+    K3b::DataUrlAddingDialog::addUrls( urls, m_dataFileView->currentDir() );
 	*/
 }
 

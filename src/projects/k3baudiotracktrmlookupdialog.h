@@ -20,36 +20,44 @@
 #include <QList>
 
 class QLabel;
-class K3bAudioTrack;
-class K3bMusicBrainzJob;
-class K3bBusyWidget;
+namespace K3b {
+    class AudioTrack;
+}
+namespace K3b {
+    class MusicBrainzJob;
+}
+namespace K3b {
+    class BusyWidget;
+}
 class QEventLoop;
 
 
-class K3bAudioTrackTRMLookupDialog : public KDialog
+namespace K3b {
+class AudioTrackTRMLookupDialog : public KDialog
 {
     Q_OBJECT
 
 public:
-    K3bAudioTrackTRMLookupDialog( QWidget* parent = 0 );
-    ~K3bAudioTrackTRMLookupDialog();
+    AudioTrackTRMLookupDialog( QWidget* parent = 0 );
+    ~AudioTrackTRMLookupDialog();
 
     /**
      * This will show the dialog and start the lookup
      */
-    int lookup( const QList<K3bAudioTrack*>& tracks );
+    int lookup( const QList<AudioTrack*>& tracks );
 
 private Q_SLOTS:
     void slotMbJobFinished( bool );
     void slotMbJobInfoMessage( const QString&, int );
-    void slotTrackFinished( K3bAudioTrack* track, bool success );
+    void slotTrackFinished( AudioTrack* track, bool success );
     void slotCancel();
 
 private:
     QLabel* m_infoLabel;
-    K3bBusyWidget* m_busyWidget;
-    K3bMusicBrainzJob* m_mbJob;
+    BusyWidget* m_busyWidget;
+    MusicBrainzJob* m_mbJob;
     QEventLoop* m_loop;
 };
+}
 
 #endif

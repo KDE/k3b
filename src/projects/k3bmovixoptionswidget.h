@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
@@ -18,30 +18,32 @@
 
 #include "ui_base_k3bmovixoptionswidget.h"
 
-class K3bMovixDoc;
-class K3bMovixBin;
+namespace K3b {
+    class MovixDoc;
+    class MovixBin;
 
-class K3bMovixOptionsWidget : public QWidget, public Ui::base_K3bMovixOptionsWidget
-{
-    Q_OBJECT
+    class MovixOptionsWidget : public QWidget, public Ui::base_K3bMovixOptionsWidget
+    {
+        Q_OBJECT
 
-public:
-    K3bMovixOptionsWidget( QWidget* parent = 0 );
-    ~K3bMovixOptionsWidget();
+    public:
+        MovixOptionsWidget( QWidget* parent = 0 );
+        ~MovixOptionsWidget();
 
-public Q_SLOTS:
-    void init( const K3bMovixBin* );
-    void readSettings( K3bMovixDoc* );
-    void saveSettings( K3bMovixDoc* );
-    void loadConfig( const KConfigGroup & c );
-    void saveConfig( KConfigGroup c );
-    void loadDefaults();
+    public Q_SLOTS:
+        void init( const MovixBin* );
+        void readSettings( MovixDoc* );
+        void saveSettings( MovixDoc* );
+        void loadConfig( const KConfigGroup & c );
+        void saveConfig( KConfigGroup c );
+        void loadDefaults();
 
-private:
-    class LanguageSelectionHelper;
-    LanguageSelectionHelper* m_keyboardLangHelper;
-    LanguageSelectionHelper* m_helpLangHelper;
-};
+    private:
+        class LanguageSelectionHelper;
+        LanguageSelectionHelper* m_keyboardLangHelper;
+        LanguageSelectionHelper* m_helpLangHelper;
+    };
+}
 
 
 #endif

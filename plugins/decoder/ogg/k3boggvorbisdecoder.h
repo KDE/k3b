@@ -23,7 +23,7 @@
 class KUrl;
 
 
-class K3bOggVorbisDecoderFactory : public K3bAudioDecoderFactory
+class K3bOggVorbisDecoderFactory : public K3b::AudioDecoderFactory
 {
     Q_OBJECT
 
@@ -35,14 +35,14 @@ public:
 
     int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-    K3bAudioDecoder* createDecoder( QObject* parent = 0) const;
+    K3b::AudioDecoder* createDecoder( QObject* parent = 0) const;
 };
 
 
 /**
  *@author Sebastian Trueg
  */
-class K3bOggVorbisDecoder : public K3bAudioDecoder
+class K3bOggVorbisDecoder : public K3b::AudioDecoder
 {
     Q_OBJECT
 

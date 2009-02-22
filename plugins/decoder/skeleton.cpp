@@ -19,7 +19,7 @@
 
 
 K3b<name>DecoderFactory::K3b<name>DecoderFactory( QObject* parent, const QVariantList& )
-    : K3bAudioDecoderFactory( parent )
+    : K3b::AudioDecoderFactory( parent )
 {
 }
 
@@ -29,7 +29,7 @@ K3b<name>DecoderFactory::~K3b<name>DecoderFactory()
 }
 
 
-K3bAudioDecoder* K3b<name>DecoderFactory::createDecoder( QObject* parent,
+K3b::AudioDecoder* K3b<name>DecoderFactory::createDecoder( QObject* parent,
     ) const
 {
     return new K3b<name>Decoder( parent, name );
@@ -48,7 +48,7 @@ bool K3b<name>DecoderFactory::canDecode( const KUrl& url )
 
 
 K3b<name>Decoder::K3b<name>Decoder( QObject* parent,  )
-    : K3bAudioDecoder( parent, name )
+    : K3b::AudioDecoder( parent, name )
 {
 }
 
