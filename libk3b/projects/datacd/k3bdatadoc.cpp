@@ -233,10 +233,10 @@ K3bDirItem* K3bDataDoc::addEmptyDir( const QString& name, K3bDirItem* parent )
 KIO::filesize_t K3bDataDoc::size() const
 {
     if( m_isoOptions.doNotCacheInodes() )
-        return root()->blocks().mode1Bytes() + m_oldSessionSize;
+        return root()->blocks().mode1Bytes();
     else
         return m_sizeHandler->blocks( m_isoOptions.followSymbolicLinks() ||
-                                      !m_isoOptions.createRockRidge() ).mode1Bytes() + m_oldSessionSize;
+                                      !m_isoOptions.createRockRidge() ).mode1Bytes();
 }
 
 
@@ -1191,7 +1191,7 @@ bool K3bDataDoc::importSession( K3bDevice::Device* device, int session )
         // TODO: also import some other pd fields
 
         const K3bIso9660Directory* rootDir = iso.firstRRDirEntry();
-        // Jörg Schilling says that it is impossible to import the joliet tree for multisession
+        // Jï¿½rg Schilling says that it is impossible to import the joliet tree for multisession
 //     if( !rootDir )
 //       rootDir = iso.firstJolietDirEntry();
         if( !rootDir )
