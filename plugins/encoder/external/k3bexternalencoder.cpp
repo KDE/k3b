@@ -78,7 +78,7 @@ public:
         : process(0) {
     }
 
-    K3bProcess* process;
+    K3b::Process* process;
     QString fileName;
     QString extension;
     K3b::Msf length;
@@ -204,7 +204,7 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension )
 
     // setup the process
     delete d->process;
-    d->process = new K3bProcess();
+    d->process = new K3b::Process();
     d->process->setSplitStdout(true);
     d->process->setRawStdin(true);
 

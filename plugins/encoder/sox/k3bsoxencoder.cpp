@@ -39,13 +39,14 @@
 #include <sys/types.h>
 
 
+K3B_EXPORT_PLUGIN( k3bsoxencoder, K3bSoxEncoder )
 
 // the sox external program
-class K3bSoxProgram : public K3bExternalProgram
+class K3bSoxProgram : public K3b::ExternalProgram
 {
 public:
     K3bSoxProgram()
-        : K3bExternalProgram( "sox" ) {
+        : K3b::ExternalProgram( "sox" ) {
     }
 
     bool scan( const QString& p ) {
@@ -63,7 +64,7 @@ public:
         if( !QFile::exists( path ) )
             return false;
 
-        K3bExternalBin* bin = 0;
+        K3b::ExternalBin* bin = 0;
 
         // probe version
         KProcess vp;
@@ -79,7 +80,7 @@ public:
             int endPos = out.indexOf( '\n', pos );
             if( pos > 0 && endPos > 0 ) {
                 pos += 17;
-                bin = new K3bExternalBin( this );
+                bin = new K3b::ExternalBin( this );
                 bin->path = path;
                 bin->version = out.mid( pos, endPos-pos );
 
@@ -92,7 +93,7 @@ public:
                 endPos = out.indexOf( '\n', pos );
                 if( pos > 0 && endPos > 0 ) {
                     pos += 13;
-                    bin = new K3bExternalBin( this );
+                    bin = new K3b::ExternalBin( this );
                     bin->path = path;
                     bin->version = out.mid( pos, endPos-pos );
 
@@ -117,7 +118,7 @@ public:
         : process(0) {
     }
 
-    K3bProcess* process;
+    K3b::Process* process;
     QString fileName;
 };
 
@@ -175,10 +176,10 @@ void K3bSoxEncoder::closeFile()
 
 bool K3bSoxEncoder::initEncoderInternal( const QString& extension, const K3b::Msf& /*length*/ )
 {
-    const K3bExternalBin* soxBin = k3bcore->externalBinManager()->binObject( "sox" );
+    const K3b::ExternalBin* soxBin = k3bcore->externalBinManager()->binObject( "sox" );
     if( soxBin ) {
         delete d->process;
-        d->process = new K3bProcess();
+        d->process = new K3b::Process();
         d->process->setSplitStdout(true);
         d->process->setRawStdin(true);
 
@@ -369,13 +370,8 @@ K3b::PluginConfigWidget* K3bSoxEncoder::createConfigWidget( QWidget* parent ) co
 K3bSoxEncoderSettingsWidget::K3bSoxEncoderSettingsWidget( QWidget* parent )
     : K3b::PluginConfigWidget( parent )
 {
-    w = new base_K3bSoxEncoderConfigWidget( this );
-    w->m_editSamplerate->setValidator( new QIntValidator( w->m_editSamplerate ) );
-
-    QHBoxLayout* lay = new QHBoxLayout( this );
-    lay->setMargin( 0 );
-
-    lay->addWidget( w );
+    setupUi( this );
+    m_editSamplerate->setValidator( new QIntValidator( m_editSamplerate ) );
 }
 
 
@@ -389,33 +385,33 @@ void K3bSoxEncoderSettingsWidget::loadConfig()
     KSharedConfig::Ptr c = KGlobal::config();
     KConfigGroup grp(c, "K3bSoxEncoderPlugin" );
 
-    w->m_checkManual->setChecked( grp.readEntry( "manual settings", false ) );
+    m_checkManual->setChecked( grp.readEntry( "manual settings", false ) );
 
     int channels = grp.readEntry( "channels", 2 );
-    w->m_comboChannels->setCurrentIndex( channels == 4 ? 2 : channels-1 );
+    m_comboChannels->setCurrentIndex( channels == 4 ? 2 : channels-1 );
 
-    w->m_editSamplerate->setText( QString::number( grp.readEntry( "samplerate", 44100 ) ) );
+    m_editSamplerate->setText( QString::number( grp.readEntry( "samplerate", 44100 ) ) );
 
     QString encoding = grp.readEntry( "data encoding", "signed" );
     if( encoding == "unsigned" )
-        w->m_comboEncoding->setCurrentIndex(1);
+        m_comboEncoding->setCurrentIndex(1);
     else if( encoding == "u-law" )
-        w->m_comboEncoding->setCurrentIndex(2);
+        m_comboEncoding->setCurrentIndex(2);
     else if( encoding == "A-law" )
-        w->m_comboEncoding->setCurrentIndex(3);
+        m_comboEncoding->setCurrentIndex(3);
     else if( encoding == "ADPCM" )
-        w->m_comboEncoding->setCurrentIndex(4);
+        m_comboEncoding->setCurrentIndex(4);
     else if( encoding == "IMA_ADPCM" )
-        w->m_comboEncoding->setCurrentIndex(5);
+        m_comboEncoding->setCurrentIndex(5);
     else if( encoding == "GSM" )
-        w->m_comboEncoding->setCurrentIndex(6);
+        m_comboEncoding->setCurrentIndex(6);
     else if( encoding == "Floating-point" )
-        w->m_comboEncoding->setCurrentIndex(7);
+        m_comboEncoding->setCurrentIndex(7);
     else
-        w->m_comboEncoding->setCurrentIndex(0);
+        m_comboEncoding->setCurrentIndex(0);
 
     int size = grp.readEntry( "data size", 16 );
-    w->m_comboSize->setCurrentIndex( size == 8 ? 0 : ( size == 32 ? 2 : 1 ) );
+    m_comboSize->setCurrentIndex( size == 8 ? 0 : ( size == 32 ? 2 : 1 ) );
 }
 
 
@@ -425,24 +421,24 @@ void K3bSoxEncoderSettingsWidget::saveConfig()
 
     KConfigGroup grp (c, "K3bSoxEncoderPlugin" );
 
-    grp.writeEntry( "manual settings", w->m_checkManual->isChecked() );
+    grp.writeEntry( "manual settings", m_checkManual->isChecked() );
 
-    grp.writeEntry( "channels", w->m_comboChannels->currentIndex() == 0
+    grp.writeEntry( "channels", m_comboChannels->currentIndex() == 0
                     ? 1
-                    : ( w->m_comboChannels->currentIndex() == 2
+                    : ( m_comboChannels->currentIndex() == 2
                         ? 4
                         : 2 ) );
 
-    grp.writeEntry( "data size", w->m_comboSize->currentIndex() == 0
+    grp.writeEntry( "data size", m_comboSize->currentIndex() == 0
                     ? 8
-                    : ( w->m_comboSize->currentIndex() == 2
+                    : ( m_comboSize->currentIndex() == 2
                         ? 32
                         : 16 ) );
 
-    grp.writeEntry( "samplerate", w->m_editSamplerate->text().toInt() );
+    grp.writeEntry( "samplerate", m_editSamplerate->text().toInt() );
 
     QString enc;
-    switch( w->m_comboEncoding->currentIndex() ) {
+    switch( m_comboEncoding->currentIndex() ) {
     case 1:
         enc = "unsigned";
         break;

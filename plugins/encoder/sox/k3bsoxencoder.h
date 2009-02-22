@@ -1,4 +1,4 @@
-/* 
+/*
  *
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
@@ -22,13 +22,6 @@
 #include <k3bpluginconfigwidget.h>
 #include "ui_base_k3bsoxencoderconfigwidget.h"
 
-class base_K3bSoxEncoderConfigWidget : public QWidget, public Ui::base_K3bSoxEncoderConfigWidget
-{
-public:
-    base_K3bSoxEncoderConfigWidget( QWidget *parent ) : QWidget( parent ) {
-        setupUi( this );
-    }
-};
 
 class K3bSoxEncoder : public K3b::AudioEncoder
 {
@@ -39,7 +32,7 @@ public:
     ~K3bSoxEncoder();
 
     QStringList extensions() const;
-  
+
     QString fileTypeComment( const QString& ) const;
 
     long long fileSize( const QString&, const K3b::Msf& msf ) const;
@@ -68,7 +61,7 @@ private:
 };
 
 
-class K3bSoxEncoderSettingsWidget : public K3b::PluginConfigWidget
+class K3bSoxEncoderSettingsWidget : public K3b::PluginConfigWidget, public Ui::base_K3bSoxEncoderConfigWidget
 {
     Q_OBJECT
 
@@ -79,9 +72,6 @@ public:
     public Q_SLOTS:
     void loadConfig();
     void saveConfig();
-
-private:
-    base_K3bSoxEncoderConfigWidget* w;
 };
 
 #endif

@@ -15,9 +15,5 @@ target_link_libraries(k3bmpcdecoder k3bdevice  ${KDE4_KDECORE_LIBS} k3b
 ${MUSE_LIBRARIES})
 
 install(TARGETS k3bmpcdecoder DESTINATION ${PLUGIN_INSTALL_DIR} )
-
-
-########### install files ###############
-
-install( FILES  k3bmpcdecoder.desktop DESTINATION ${PLUGIN_INSTALL_DIR} )
+install( FILES  k3bmpcdecoder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 
