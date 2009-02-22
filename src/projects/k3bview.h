@@ -102,7 +102,7 @@ namespace K3b {
         FillStatusDisplay* m_fillStatusDisplay;
         KToolBar* m_toolBox;
 
-        QHash<const QObject*, K3bProjectPlugin*> m_plugins;
+        QHash<const QObject*, K3b::ProjectPlugin*> m_plugins;
     };
 }
 

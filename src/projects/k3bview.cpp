@@ -139,7 +139,7 @@ void K3b::View::addPluginButtons( int projectType )
 void K3b::View::slotPluginButtonClicked()
 {
     const QObject* o = sender();
-    if( K3bProjectPlugin* p = m_plugins[o] ) {
+    if( K3b::ProjectPlugin* p = m_plugins[o] ) {
         if( p->hasGUI() ) {
             K3b::ProjectPluginDialog dlg( p, doc(), this );
             dlg.exec();
