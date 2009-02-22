@@ -21,11 +21,11 @@
 #endif
 
 // include files for Qt
-#include <qwidget.h>
-#include <q3ptrdict.h>
+#include <QWidget>
+#include <QHash>
 
-#include <kxmlguiclient.h>
-#include <kurl.h>
+#include <KXMLGUIClient>
+#include <KUrl>
 
 class K3bDoc;
 class K3bFillStatusDisplay;
@@ -95,7 +95,7 @@ protected:
     K3bFillStatusDisplay* fillStatusDisplay() const { return m_fillStatusDisplay; }
     KToolBar* toolBox() const { return m_toolBox; }
 
-    private Q_SLOTS:
+private Q_SLOTS:
     void slotPluginButtonClicked();
 
 private:
@@ -103,7 +103,7 @@ private:
     K3bFillStatusDisplay* m_fillStatusDisplay;
     KToolBar* m_toolBox;
 
-    Q3PtrDict<K3bProjectPlugin> m_plugins;
+    QHash<const QObject*,K3bProjectPlugin*> m_plugins;
 };
 
 #endif // K3BVIEW_H

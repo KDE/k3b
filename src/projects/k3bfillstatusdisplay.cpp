@@ -25,37 +25,35 @@
 #include <k3bmediacache.h>
 #include <k3baction.h>
 
-#include <qevent.h>
-#include <qpainter.h>
-#include <qcolor.h>
-#include <qrect.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qvalidator.h>
-#include <qtoolbutton.h>
-#include <qtooltip.h>
-#include <qlayout.h>
-
-#include <qtimer.h>
-#include <QGridLayout>
-#include <QPixmap>
-#include <QFrame>
-#include <QMouseEvent>
-#include <QPaintEvent>
-#include <QLinearGradient>
 #include <QBrush>
+#include <QColor>
+#include <QEvent>
+#include <QFont>
+#include <QFontMetrics>
+#include <QFrame>
+#include <QGridLayout>
+#include <QLinearGradient>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QPixmap>
+#include <QRect>
+#include <QTimer>
+#include <QToolButton>
+#include <QToolTip>
+#include <QValidator>
 #include <QWhatsThis>
 
-#include <kaction.h>
-#include <kmenu.h>
-#include <klocale.h>
-#include <kinputdialog.h>
-#include <kconfiggroup.h>
-#include <kdebug.h>
-#include <kiconloader.h>
+#include <KAction>
+#include <KConfigGroup>
+#include <KDebug>
+#include <KGlobal>
+#include <KInputDialog>
+#include <KLocale>
+#include <KIconLoader>
 #include <kio/global.h>
-#include <kmessagebox.h>
-#include <kglobal.h>
+#include <KMenu>
+#include <KMessageBox>
 
 
 static const int DEFAULT_CD_SIZE_74 = 74*60*75;

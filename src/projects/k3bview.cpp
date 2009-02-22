@@ -24,19 +24,15 @@
 #include "k3baction.h"
 
 // include files for Qt
-#include <qlayout.h>
-#include <qtooltip.h>
-#include <q3whatsthis.h>
-#include <qlist.h>
-#include <qtoolbutton.h>
 #include <QGridLayout>
+#include <QList>
 
-#include <kaction.h>
-#include <kiconloader.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kdebug.h>
-#include <ktoolbar.h>
+// include files for KDE
+#include <KAction>
+#include <KLocale>
+#include <KMessageBox>
+#include <KDebug>
+#include <KToolBar>
 
 K3bView::K3bView( K3bDoc* pDoc, QWidget *parent )
     : QWidget( parent ),
@@ -121,12 +117,6 @@ void K3bView::slotProperties()
 }
 
 
-// KActionCollection* K3bView::actionCollection() const
-// {
-//   return m_actionCollection;
-// }
-
-
 void K3bView::addPluginButtons( int projectType )
 {
     QList<K3bPlugin*> pl = k3bcore->pluginManager()->plugins( "ProjectPlugin" );
@@ -140,7 +130,7 @@ void K3bView::addPluginButtons( int projectType )
             button->setIcon(QIcon(pp->icon()));
             button->setToolTip (pp->toolTip());
             button->setWhatsThis(pp->whatsThis());
-            m_plugins.insert( static_cast<void*>(button), pp );
+            m_plugins.insert( button, pp );
         }
     }
 }
@@ -148,8 +138,8 @@ void K3bView::addPluginButtons( int projectType )
 
 void K3bView::slotPluginButtonClicked()
 {
-    QObject* o = const_cast<QObject*>(sender());
-    if( K3bProjectPlugin* p = m_plugins[static_cast<void*>(o)] ) {
+    const QObject* o = sender();
+    if( K3bProjectPlugin* p = m_plugins[o] ) {
         if( p->hasGUI() ) {
             K3bProjectPluginDialog dlg( p, doc(), this );
             dlg.exec();

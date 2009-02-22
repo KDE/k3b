@@ -17,7 +17,6 @@
 #ifndef K3BFILLSTATUSDISPLAY_H
 #define K3BFILLSTATUSDISPLAY_H
 
-#include <qtooltip.h>
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QFrame>
@@ -54,7 +53,7 @@ public Q_SLOTS:
     void setShowTime( bool b );
     void setCdSize( const K3b::Msf& );
 
- Q_SIGNALS:
+Q_SIGNALS:
     void contextMenu( const QPoint& );
 
 protected:
@@ -67,8 +66,8 @@ private:
 };
 
 
-class K3bFillStatusDisplay : public QFrame  {
-
+class K3bFillStatusDisplay : public QFrame
+{
     Q_OBJECT
 
 public:
@@ -82,7 +81,7 @@ public Q_SLOTS:
 protected:
     void setupPopupMenu();
 
-    private Q_SLOTS:
+private Q_SLOTS:
     void slotAutoSize();
     void slot74Minutes();
     void slot80Minutes();
