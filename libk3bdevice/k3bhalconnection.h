@@ -36,7 +36,7 @@ namespace K3b {
          */
         class LIBK3BDEVICE_EXPORT HalConnection : public QObject
         {
-            Q_OBJECT;
+            Q_OBJECT
 
         public:
             /**
