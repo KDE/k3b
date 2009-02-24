@@ -1,11 +1,13 @@
 [Desktop Entry]
 Name=K3b Audio Metainfo Renamer
+Name[et]=K3b helifailide metainfo põhjal ümbernimetaja
 Name[ga]=Athainmneoir Meiteafhaisnéise Fuaime K3b
 Name[pt]=Mudança de Meta-Dados de Áudio do K3B
 Name[pt_BR]=Mudança de Meta-Dados de Áudio do K3B
 Name[sv]=K3b namnändring av ljud med metainformation
 Name[uk]=Інструмент перейменування за метаданими K3b
 Comment=Plugin to rename audio files in a data project based on the meta info.
+Comment[et]=Plugin andmeprojekti helifailide ümbernimetamiseks metainfo põhjal.
 Comment[ga]=Breiseán a athainmníonn comhaid fhuaime i dtionscadal sonraí, bunaithe ar an mheiteafhaisnéis.
 Comment[pt]=Um 'plugin' para mudar o nome dos ficheiros de áudio, num projecto de dados, com base nos meta-dados.
 Comment[pt_BR]=Um 'plugin' para mudar o nome dos ficheiros de áudio, num projecto de dados, com base nos meta-dados.
