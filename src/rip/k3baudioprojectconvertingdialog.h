@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,56 +24,46 @@
 
 namespace K3b {
     class ListView;
-}
-namespace K3b {
     class CddbPatternWidget;
-}
-namespace K3b {
     class AudioConvertingOptionWidget;
-}
-namespace K3b {
     class AudioDoc;
-}
 
+    /**
+     *@author Sebastian Trueg
+     */
+    class AudioProjectConvertingDialog : public InteractionDialog
+    {
+        Q_OBJECT
 
-/**
- *@author Sebastian Trueg
- */
-namespace K3b {
-class AudioProjectConvertingDialog : public InteractionDialog
-{
-    Q_OBJECT
+    public:
+        AudioProjectConvertingDialog( AudioDoc*, QWidget *parent = 0);
+        ~AudioProjectConvertingDialog();
 
-public: 
-    AudioProjectConvertingDialog( AudioDoc*, QWidget *parent = 0);
-    ~AudioProjectConvertingDialog();
+        void setBaseDir( const QString& path );
 
-    void setBaseDir( const QString& path );
+    public Q_SLOTS:
+        void refresh();
 
-public Q_SLOTS:  
-    void refresh();
+    protected:
+        void loadSettings( const KConfigGroup& );
+        void saveSettings( KConfigGroup );
 
-protected:
-    void loadK3bDefaults();
-    void loadUserDefaults( const KConfigGroup& );
-    void saveUserDefaults( KConfigGroup );
+    private Q_SLOTS:
+        void slotStartClicked();
 
-private Q_SLOTS:
-    void slotStartClicked();
+    private:
+        CddbPatternWidget* m_patternWidget;
+        AudioConvertingOptionWidget* m_optionWidget;
 
-private:
-    CddbPatternWidget* m_patternWidget;
-    AudioConvertingOptionWidget* m_optionWidget;
+        ListView* m_viewTracks;
+        AudioDoc* m_doc;
 
-    ListView* m_viewTracks;
-    AudioDoc* m_doc;
+        void setupGui();
 
-    void setupGui();
+        class Private;
+        Private* d;
 
-    class Private;
-    Private* d;
-  
-};
+    };
 }
 
 #endif

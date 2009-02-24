@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2004-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2004-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -211,19 +211,6 @@ K3b::AudioEncoder* K3b::AudioConvertingOptionWidget::encoder() const
 QString K3b::AudioConvertingOptionWidget::extension() const
 {
     return d->extensionMap[m_comboFileType->currentIndex()];
-}
-
-
-void K3b::AudioConvertingOptionWidget::loadDefaults()
-{
-    m_editBaseDir->setUrl( QDir::homePath() );
-    m_checkSingleFile->setChecked( false );
-    m_checkWriteCueFile->setChecked( false );
-    m_comboFileType->setCurrentIndex( d->getDefaultFormat() );
-    m_checkCreatePlaylist->setChecked(false);
-    m_checkPlaylistRelative->setChecked(false);
-
-    slotEncoderChanged();
 }
 
 

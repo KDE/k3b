@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,9 +79,9 @@ K3b::VideoDvdBurnDialog::~VideoDvdBurnDialog()
 }
 
 
-void K3b::VideoDvdBurnDialog::saveSettings()
+void K3b::VideoDvdBurnDialog::saveSettingsToProject()
 {
-    K3b::ProjectBurnDialog::saveSettings();
+    K3b::ProjectBurnDialog::saveSettingsToProject();
 
     // save iso image settings
     K3b::IsoOptions o = m_doc->isoOptions();
@@ -95,9 +95,9 @@ void K3b::VideoDvdBurnDialog::saveSettings()
 }
 
 
-void K3b::VideoDvdBurnDialog::readSettings()
+void K3b::VideoDvdBurnDialog::readSettingsFromProject()
 {
-    K3b::ProjectBurnDialog::readSettings();
+    K3b::ProjectBurnDialog::readSettingsFromProject();
 
     if( !doc()->tempDir().isEmpty() )
         m_tempDirSelectionWidget->setTempPath( doc()->tempDir() );
@@ -134,20 +134,9 @@ void K3b::VideoDvdBurnDialog::toggleAll()
 }
 
 
-void K3b::VideoDvdBurnDialog::loadK3bDefaults()
+void K3b::VideoDvdBurnDialog::loadSettings( const KConfigGroup& c )
 {
-    K3b::ProjectBurnDialog::loadK3bDefaults();
-
-    m_imageSettingsWidget->load( K3b::IsoOptions::defaults() );
-    m_checkVerify->setChecked( false );
-
-    toggleAll();
-}
-
-
-void K3b::VideoDvdBurnDialog::loadUserDefaults( const KConfigGroup& c )
-{
-    K3b::ProjectBurnDialog::loadUserDefaults( c );
+    K3b::ProjectBurnDialog::loadSettings( c );
 
     K3b::IsoOptions o = K3b::IsoOptions::load( c );
     m_imageSettingsWidget->load( o );
@@ -158,9 +147,9 @@ void K3b::VideoDvdBurnDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3b::VideoDvdBurnDialog::saveUserDefaults( KConfigGroup c )
+void K3b::VideoDvdBurnDialog::saveSettings( KConfigGroup c )
 {
-    K3b::ProjectBurnDialog::saveUserDefaults(c);
+    K3b::ProjectBurnDialog::saveSettings(c);
 
     K3b::IsoOptions o;
     m_imageSettingsWidget->save( o );

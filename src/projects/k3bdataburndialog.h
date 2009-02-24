@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *
@@ -23,57 +23,48 @@
 class QCheckBox;
 class Q3GroupBox;
 class QLabel;
+
 namespace K3b {
     class DataDoc;
-}
-namespace K3b {
     class DataImageSettingsWidget;
-}
-namespace K3b {
     class DataModeWidget;
-}
-namespace K3b {
     class DataMultiSessionCombobox;
-}
 
+    /**
+     *@author Sebastian Trueg
+     */
+    class DataBurnDialog : public ProjectBurnDialog
+    {
+        Q_OBJECT
 
-/**
- *@author Sebastian Trueg
- */
+    public:
+        DataBurnDialog(DataDoc*, QWidget *parent=0 );
+        ~DataBurnDialog();
 
-namespace K3b {
-class DataBurnDialog : public ProjectBurnDialog
-{
-    Q_OBJECT
+    protected:
+        void setupSettingsTab();
 
-public:
-    DataBurnDialog(DataDoc*, QWidget *parent=0 );
-    ~DataBurnDialog();
+        void loadSettings( const KConfigGroup& );
+        void saveSettings( KConfigGroup );
+        void toggleAll();
 
-protected:
-    void setupSettingsTab();
-    void loadK3bDefaults();
-    void loadUserDefaults( const KConfigGroup& );
-    void saveUserDefaults( KConfigGroup );
-    void toggleAll();
+        // --- settings tab ---------------------------
+        DataImageSettingsWidget* m_imageSettingsWidget;
+        // ----------------------------------------------
 
-    // --- settings tab ---------------------------
-    DataImageSettingsWidget* m_imageSettingsWidget;
-    // ----------------------------------------------
-	
-    Q3GroupBox* m_groupDataMode;
-    DataModeWidget* m_dataModeWidget;
-    DataMultiSessionCombobox* m_comboMultisession;
+        Q3GroupBox* m_groupDataMode;
+        DataModeWidget* m_dataModeWidget;
+        DataMultiSessionCombobox* m_comboMultisession;
 
-    QCheckBox* m_checkVerify;
+        QCheckBox* m_checkVerify;
 
     protected Q_SLOTS:
-    void slotStartClicked();
-    void saveSettings();
-    void readSettings();
+        void slotStartClicked();
+        void saveSettingsToProject();
+        void readSettingsFromProject();
 
-    void slotMultiSessionModeChanged();
-};
+        void slotMultiSessionModeChanged();
+    };
 }
 
 #endif

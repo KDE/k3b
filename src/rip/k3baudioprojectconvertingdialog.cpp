@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -345,15 +345,7 @@ void K3b::AudioProjectConvertingDialog::setBaseDir( const QString& path )
 }
 
 
-void K3b::AudioProjectConvertingDialog::loadK3bDefaults()
-{
-    m_optionWidget->loadDefaults();
-    m_patternWidget->loadDefaults();
-
-    refresh();
-}
-
-void K3b::AudioProjectConvertingDialog::loadUserDefaults( const KConfigGroup& c )
+void K3b::AudioProjectConvertingDialog::loadSettings( const KConfigGroup& c )
 {
     m_optionWidget->loadConfig( c );
     m_patternWidget->loadConfig( c );
@@ -362,7 +354,7 @@ void K3b::AudioProjectConvertingDialog::loadUserDefaults( const KConfigGroup& c 
 }
 
 
-void K3b::AudioProjectConvertingDialog::saveUserDefaults( KConfigGroup c )
+void K3b::AudioProjectConvertingDialog::saveSettings( KConfigGroup c )
 {
     m_optionWidget->saveConfig( c );
     m_patternWidget->saveConfig( c );

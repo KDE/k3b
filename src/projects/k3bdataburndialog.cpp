@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -105,9 +105,9 @@ K3b::DataBurnDialog::~DataBurnDialog(){
 }
 
 
-void K3b::DataBurnDialog::saveSettings()
+void K3b::DataBurnDialog::saveSettingsToProject()
 {
-    K3b::ProjectBurnDialog::saveSettings();
+    K3b::ProjectBurnDialog::saveSettingsToProject();
 
     // save iso image settings
     K3b::IsoOptions o = ((K3b::DataDoc*)doc())->isoOptions();
@@ -126,9 +126,9 @@ void K3b::DataBurnDialog::saveSettings()
 }
 
 
-void K3b::DataBurnDialog::readSettings()
+void K3b::DataBurnDialog::readSettingsFromProject()
 {
-    K3b::ProjectBurnDialog::readSettings();
+    K3b::ProjectBurnDialog::readSettingsFromProject();
 
     // read multisession
     m_comboMultisession->setMultiSessionMode( ((K3b::DataDoc*)doc())->multiSessionMode() );
@@ -209,23 +209,9 @@ void K3b::DataBurnDialog::slotStartClicked()
 }
 
 
-void K3b::DataBurnDialog::loadK3bDefaults()
+void K3b::DataBurnDialog::loadSettings( const KConfigGroup& c )
 {
-    K3b::ProjectBurnDialog::loadK3bDefaults();
-
-    m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
-
-    m_imageSettingsWidget->load( K3b::IsoOptions::defaults() );
-    m_comboMultisession->setMultiSessionMode( K3b::DataDoc::AUTO );
-    m_checkVerify->setChecked( false );
-
-    toggleAll();
-}
-
-
-void K3b::DataBurnDialog::loadUserDefaults( const KConfigGroup& c )
-{
-    K3b::ProjectBurnDialog::loadUserDefaults(c);
+    K3b::ProjectBurnDialog::loadSettings(c);
 
     m_dataModeWidget->loadConfig(c);
     m_comboMultisession->loadConfig( c );
@@ -239,9 +225,9 @@ void K3b::DataBurnDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3b::DataBurnDialog::saveUserDefaults( KConfigGroup c )
+void K3b::DataBurnDialog::saveSettings( KConfigGroup c )
 {
-    K3b::ProjectBurnDialog::saveUserDefaults(c);
+    K3b::ProjectBurnDialog::saveSettings(c);
 
     m_dataModeWidget->saveConfig(c);
     m_comboMultisession->saveConfig( c );

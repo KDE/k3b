@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -499,25 +499,7 @@ QString K3b::VideoDVDRippingDialog::createFilename( const K3b::VideoDVDRippingJo
 }
 
 
-void K3b::VideoDVDRippingDialog::loadK3bDefaults()
-{
-    m_w->m_spinVideoBitrate->setValue( 1800 );
-    m_w->m_checkTwoPassEncoding->setChecked( true );
-    m_w->m_checkAudioResampling->setChecked( false );
-    m_w->m_checkAutoClipping->setChecked( false );
-    m_w->m_checkLowPriority->setChecked( true );
-    m_w->m_checkAudioVBR->setChecked( true );
-    m_w->setSelectedAudioBitrate( 128 );
-    m_w->setSelectedVideoCodec( K3b::VideoDVDTitleTranscodingJob::VIDEO_CODEC_FFMPEG_MPEG4 );
-    m_w->setSelectedAudioCodec( K3b::VideoDVDTitleTranscodingJob::AUDIO_CODEC_MP3 );
-    m_w->m_checkBlankReplace->setChecked( false );
-    m_w->m_editBlankReplace->setText( "_" );
-    m_w->m_comboFilenamePattern->setEditText( m_w->m_comboFilenamePattern->itemText(0) );
-    m_w->m_editBaseDir->setUrl( K3b::defaultTempPath() );
-}
-
-
-void K3b::VideoDVDRippingDialog::loadUserDefaults( const KConfigGroup& c )
+void K3b::VideoDVDRippingDialog::loadSettings( const KConfigGroup& c )
 {
     m_w->m_spinVideoBitrate->setValue( c.readEntry( "video bitrate", 1200 ) );
     m_w->m_checkTwoPassEncoding->setChecked( c.readEntry( "two pass encoding", true ) );
@@ -535,7 +517,7 @@ void K3b::VideoDVDRippingDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3b::VideoDVDRippingDialog::saveUserDefaults( KConfigGroup c )
+void K3b::VideoDVDRippingDialog::saveSettings( KConfigGroup c )
 {
     c.writeEntry( "video bitrate", m_w->m_spinVideoBitrate->value() );
     c.writeEntry( "two pass encoding", m_w->m_checkTwoPassEncoding->isChecked() );

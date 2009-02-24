@@ -160,24 +160,6 @@ void K3b::MovixOptionsWidget::saveSettings( K3b::MovixDoc* doc )
 }
 
 
-void K3b::MovixOptionsWidget::loadDefaults()
-{
-    m_comboSubtitleFontset->setCurrentIndex( 0 ); // default
-    m_comboAudioBackground->setCurrentIndex( 0 ); // default
-    m_comboKeyboardLayout->setCurrentIndex( 0 ); // default
-    m_spinLoop->setValue( 1 );
-    m_editAdditionalMplayerOptions->setText( QString() );
-    m_editUnwantedMplayerOptions->setText( QString() );
-    m_comboBootMessageLanguage->setCurrentIndex( 0 ); // default
-    m_comboDefaultBootLabel->setCurrentIndex( 0 );  // default
-    m_checkShutdown->setChecked( false );
-    m_checkReboot->setChecked( false );
-    m_checkEject->setChecked( false );
-    m_checkRandomPlay->setChecked( false );
-    m_checkNoDma->setChecked( false );
-}
-
-
 void K3b::MovixOptionsWidget::loadConfig( const KConfigGroup & c )
 {
     QString s = c.readEntry("subtitle_fontset");

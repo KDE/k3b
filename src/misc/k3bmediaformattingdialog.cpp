@@ -186,7 +186,7 @@ void K3b::MediaFormattingDialog::toggleAll()
 }
 
 
-void K3b::MediaFormattingDialog::loadUserDefaults( const KConfigGroup& c )
+void K3b::MediaFormattingDialog::loadSettings( const KConfigGroup& c )
 {
     m_checkForce->setChecked( c.readEntry( "force", false ) );
     m_checkQuickFormat->setChecked( c.readEntry( "quick format", true ) );
@@ -195,7 +195,7 @@ void K3b::MediaFormattingDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3b::MediaFormattingDialog::saveUserDefaults( KConfigGroup c )
+void K3b::MediaFormattingDialog::saveSettings( KConfigGroup c )
 {
     c.writeEntry( "force", m_checkForce->isChecked() );
     c.writeEntry( "quick format", m_checkQuickFormat->isChecked() );
@@ -203,13 +203,5 @@ void K3b::MediaFormattingDialog::saveUserDefaults( KConfigGroup c )
     m_writingModeWidget->saveConfig( c );
 }
 
-
-void K3b::MediaFormattingDialog::loadK3bDefaults()
-{
-    m_writerSelectionWidget->loadDefaults();
-    m_checkForce->setChecked( false );
-    m_checkQuickFormat->setChecked( true );
-    m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
-}
 
 #include "k3bmediaformattingdialog.moc"

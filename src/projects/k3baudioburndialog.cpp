@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -142,9 +142,9 @@ void K3b::AudioBurnDialog::slotStartClicked()
 }
 
 
-void K3b::AudioBurnDialog::saveSettings()
+void K3b::AudioBurnDialog::saveSettingsToProject()
 {
-    K3b::ProjectBurnDialog::saveSettings();
+    K3b::ProjectBurnDialog::saveSettingsToProject();
 
     m_doc->setTempDir( m_tempDirSelectionWidget->tempPath() );
     m_doc->setHideFirstTrack( m_checkHideFirstTrack->isChecked() );
@@ -162,9 +162,9 @@ void K3b::AudioBurnDialog::saveSettings()
 }
 
 
-void K3b::AudioBurnDialog::readSettings()
+void K3b::AudioBurnDialog::readSettingsFromProject()
 {
-    K3b::ProjectBurnDialog::readSettings();
+    K3b::ProjectBurnDialog::readSettingsFromProject();
 
     m_checkHideFirstTrack->setChecked( m_doc->hideFirstTrack() );
     m_checkNormalize->setChecked( m_doc->normalize() );
@@ -184,25 +184,9 @@ void K3b::AudioBurnDialog::readSettings()
 }
 
 
-void K3b::AudioBurnDialog::loadK3bDefaults()
+void K3b::AudioBurnDialog::loadSettings( const KConfigGroup& c )
 {
-    K3b::ProjectBurnDialog::loadK3bDefaults();
-
-    m_cdtextWidget->setChecked( true );
-    m_checkHideFirstTrack->setChecked( false );
-    m_checkNormalize->setChecked(false);
-
-    m_comboParanoiaMode->setCurrentIndex( 0 );
-    m_checkAudioRippingIgnoreReadErrors->setChecked( true );
-    m_spinAudioRippingReadRetries->setValue( 5 );
-
-    toggleAll();
-}
-
-
-void K3b::AudioBurnDialog::loadUserDefaults( const KConfigGroup& c )
-{
-    K3b::ProjectBurnDialog::loadUserDefaults( c );
+    K3b::ProjectBurnDialog::loadSettings( c );
 
     m_cdtextWidget->setChecked( c.readEntry( "cd_text", true ) );
     m_checkHideFirstTrack->setChecked( c.readEntry( "hide_first_track", false ) );
@@ -216,9 +200,9 @@ void K3b::AudioBurnDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3b::AudioBurnDialog::saveUserDefaults( KConfigGroup c )
+void K3b::AudioBurnDialog::saveSettings( KConfigGroup c )
 {
-    K3b::ProjectBurnDialog::saveUserDefaults( c );
+    K3b::ProjectBurnDialog::saveSettings( c );
 
     c.writeEntry( "cd_text", m_cdtextWidget->isChecked() );
     c.writeEntry( "hide_first_track", m_checkHideFirstTrack->isChecked() );

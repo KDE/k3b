@@ -120,26 +120,9 @@ void K3b::MovixBurnDialog::setupSettingsPage()
 }
 
 
-void K3b::MovixBurnDialog::loadK3bDefaults()
+void K3b::MovixBurnDialog::loadSettings( const KConfigGroup& c )
 {
-    K3b::ProjectBurnDialog::loadK3bDefaults();
-
-    m_checkStartMultiSesssion->setChecked( false );
-    m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
-
-    m_imageSettingsWidget->load( K3b::IsoOptions::defaults() );
-
-    m_movixOptionsWidget->loadDefaults();
-
-    m_checkVerify->setChecked( false );
-
-    toggleAll();
-}
-
-
-void K3b::MovixBurnDialog::loadUserDefaults( const KConfigGroup& c )
-{
-    K3b::ProjectBurnDialog::loadUserDefaults(c);
+    K3b::ProjectBurnDialog::loadSettings(c);
 
     m_checkStartMultiSesssion->setChecked( c.readEntry( "start_multisession", false ) );
 
@@ -156,9 +139,9 @@ void K3b::MovixBurnDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3b::MovixBurnDialog::saveUserDefaults( KConfigGroup c )
+void K3b::MovixBurnDialog::saveSettings( KConfigGroup c )
 {
-    K3b::ProjectBurnDialog::saveUserDefaults(c);
+    K3b::ProjectBurnDialog::saveSettings(c);
 
     c.writeEntry( "start_multisession", m_checkStartMultiSesssion->isChecked() );
 
@@ -174,9 +157,9 @@ void K3b::MovixBurnDialog::saveUserDefaults( KConfigGroup c )
 }
 
 
-void K3b::MovixBurnDialog::saveSettings()
+void K3b::MovixBurnDialog::saveSettingsToProject()
 {
-    K3b::ProjectBurnDialog::saveSettings();
+    K3b::ProjectBurnDialog::saveSettingsToProject();
 
     m_movixOptionsWidget->saveSettings( m_doc );
 
@@ -196,9 +179,9 @@ void K3b::MovixBurnDialog::saveSettings()
 }
 
 
-void K3b::MovixBurnDialog::readSettings()
+void K3b::MovixBurnDialog::readSettingsFromProject()
 {
-    K3b::ProjectBurnDialog::readSettings();
+    K3b::ProjectBurnDialog::readSettingsFromProject();
 
     m_checkStartMultiSesssion->setChecked( m_doc->multiSessionMode() == K3b::DataDoc::START );
 

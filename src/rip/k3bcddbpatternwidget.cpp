@@ -120,15 +120,6 @@ void K3b::CddbPatternWidget::saveConfig( KConfigGroup c )
 }
 
 
-void K3b::CddbPatternWidget::loadDefaults()
-{
-    m_comboPlaylistPattern->setEditText( m_comboPlaylistPattern->itemText(0) );
-    m_comboFilenamePattern->setEditText( m_comboFilenamePattern->itemText(0) );
-    m_checkBlankReplace->setChecked( false );
-    m_editBlankReplace->setText( "_" );
-}
-
-
 void K3b::CddbPatternWidget::slotSeeSpecialStrings()
 {
     setWhatsThis( i18n( "<p><b>Pattern special strings:</b>"

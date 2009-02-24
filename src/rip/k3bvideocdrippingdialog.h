@@ -1,6 +1,7 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+ * Copyright (C) 2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -27,48 +28,46 @@
 class QCheckBox;
 class QLabel;
 class KUrlRequester;
+
 namespace K3b {
     class TempDirSelectionWidget;
-}
 
-namespace K3b {
-class VideoCdRippingDialog : public InteractionDialog
-{
-  Q_OBJECT
+    class VideoCdRippingDialog : public InteractionDialog
+    {
+        Q_OBJECT
 
- public: 
-  VideoCdRippingDialog( VideoCdRippingOptions* options, QWidget* parent = 0 );
-  ~VideoCdRippingDialog();
+    public:
+        VideoCdRippingDialog( VideoCdRippingOptions* options, QWidget* parent = 0 );
+        ~VideoCdRippingDialog();
 
- private:
-  void setupGui();
-  void setupContextHelp();
+    private:
+        void setupGui();
+        void setupContextHelp();
 
-  void loadK3bDefaults();
-  void loadUserDefaults( const KConfigGroup& );
-  void saveUserDefaults( KConfigGroup );
-  
-  TempDirSelectionWidget* m_tempDirSelectionWidget;
+        void loadSettings( const KConfigGroup& );
+        void saveSettings( KConfigGroup );
 
-  KUrlRequester* m_editDirectory;
+        TempDirSelectionWidget* m_tempDirSelectionWidget;
 
-  QLabel* m_labelFreeSpace;
-  QLabel* m_labelNecessarySize;
-  QCheckBox* m_ignoreExt;
-  QCheckBox* m_sector2336;
-  QCheckBox* m_extractXML;
+        KUrlRequester* m_editDirectory;
 
-  VideoCdRippingOptions* m_videooptions;
+        QLabel* m_labelFreeSpace;
+        QLabel* m_labelNecessarySize;
+        QCheckBox* m_ignoreExt;
+        QCheckBox* m_sector2336;
+        QCheckBox* m_extractXML;
 
-  unsigned long m_freeSpace;
+        VideoCdRippingOptions* m_videooptions;
 
- private Q_SLOTS:
-  void slotStartClicked();
+        unsigned long m_freeSpace;
 
-  void slotUpdateFreeSpace();
-  void slotFreeSpace(const QString&, unsigned long, unsigned long, unsigned long);
+    private Q_SLOTS:
+        void slotStartClicked();
 
-};
+        void slotUpdateFreeSpace();
+        void slotFreeSpace(const QString&, unsigned long, unsigned long, unsigned long);
+
+    };
 }
 
 #endif

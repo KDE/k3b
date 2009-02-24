@@ -175,12 +175,6 @@ QString K3bAudioMetainfoRenamerPluginWidget::subTitle() const
 }
 
 
-void K3bAudioMetainfoRenamerPluginWidget::loadDefaults()
-{
-    d->comboPattern->setEditText( "%a - %t" );
-}
-
-
 void K3bAudioMetainfoRenamerPluginWidget::readSettings( const KConfigGroup& grp )
 {
     d->comboPattern->setEditText( grp.readEntry( "rename pattern", "%a - %t" ) );

@@ -979,7 +979,7 @@ void K3b::ImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, con
 }
 
 
-void K3b::ImageWritingDialog::loadUserDefaults( const KConfigGroup& c )
+void K3b::ImageWritingDialog::loadSettings( const KConfigGroup& c )
 {
     m_writingModeWidget->loadConfig( c );
     m_checkDummy->setChecked( c.readEntry("simulate", false ) );
@@ -1021,7 +1021,7 @@ void K3b::ImageWritingDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3b::ImageWritingDialog::saveUserDefaults( KConfigGroup c )
+void K3b::ImageWritingDialog::saveSettings( KConfigGroup c )
 {
     m_writingModeWidget->saveConfig( c ),
         c.writeEntry( "simulate", m_checkDummy->isChecked() );
@@ -1063,21 +1063,6 @@ void K3b::ImageWritingDialog::saveUserDefaults( KConfigGroup c )
 
     if( m_tempDirSelectionWidget->isEnabled() )
         m_tempDirSelectionWidget->saveConfig();
-}
-
-void K3b::ImageWritingDialog::loadK3bDefaults()
-{
-    m_writerSelectionWidget->loadDefaults();
-    m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
-    m_checkDummy->setChecked( false );
-    m_checkVerify->setChecked( false );
-    m_checkNoFix->setChecked( false );
-    m_checkCacheImage->setChecked( false );
-    m_dataModeWidget->setDataMode( K3b::DATA_MODE_AUTO );
-    m_comboImageType->setCurrentIndex(0);
-    m_spinCopies->setValue( 1 );
-
-    slotToggleAll();
 }
 
 

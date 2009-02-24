@@ -46,13 +46,11 @@ namespace K3b {
         virtual QString title() const = 0;
         virtual QString subTitle() const { return QString(); }
 
+        /**
+         * Used to read settings and defaults.
+         */
         virtual void readSettings( const KConfigGroup& ) {}
         virtual void saveSettings( KConfigGroup ) {}
-
-        /**
-         * Load system defaults for the GUI
-         */
-        virtual void loadDefaults() {}
 
         /**
          * Start the plugin. This method should do the actual work.

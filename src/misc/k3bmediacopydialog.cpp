@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2007-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2007-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -574,7 +574,7 @@ void K3b::MediaCopyDialog::updateOverrideDevice()
 }
 
 
-void K3b::MediaCopyDialog::loadUserDefaults( const KConfigGroup& c )
+void K3b::MediaCopyDialog::loadSettings( const KConfigGroup& c )
 {
     m_writerSelectionWidget->loadConfig( c );
     m_comboSourceDevice->setSelectedDevice( k3bcore->deviceManager()->findDevice( c.readEntry( "source_device" ) ) );
@@ -607,7 +607,7 @@ void K3b::MediaCopyDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3b::MediaCopyDialog::saveUserDefaults( KConfigGroup c )
+void K3b::MediaCopyDialog::saveSettings( KConfigGroup c )
 {
     m_writingModeWidget->saveConfig( c );
     c.writeEntry( "simulate", m_checkSimulate->isChecked() );
@@ -636,30 +636,6 @@ void K3b::MediaCopyDialog::saveUserDefaults( KConfigGroup c )
     else
         s = "normal";
     c.writeEntry( "copy mode", s );
-}
-
-
-void K3b::MediaCopyDialog::loadK3bDefaults()
-{
-    m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
-    m_writerSelectionWidget->loadDefaults();
-    m_checkSimulate->setChecked( false );
-    m_checkCacheImage->setChecked( true );
-    m_checkDeleteImages->setChecked( true );
-    m_checkOnlyCreateImage->setChecked( false );
-    m_comboParanoiaMode->setCurrentIndex(0);
-    m_spinCopies->setValue(1);
-    m_checkReadCdText->setChecked(true);
-    m_checkIgnoreDataReadErrors->setChecked(false);
-    m_checkIgnoreAudioReadErrors->setChecked(true);
-    m_checkNoCorrection->setChecked(false);
-    m_comboCopyMode->setCurrentIndex( 0 ); // normal
-    m_spinDataRetries->setValue(128);
-    m_spinAudioRetries->setValue(5);
-    m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
-    m_checkVerifyData->setChecked( false );
-
-    slotToggleAll();
 }
 
 

@@ -38,7 +38,6 @@ namespace K3b {
     public Q_SLOTS:
         void loadConfig( const KConfigGroup & );
         void saveConfig( KConfigGroup );
-        void loadDefaults();
 
     private Q_SLOTS:
         void slotSeeSpecialStrings();

@@ -46,13 +46,13 @@ namespace K3b {
     public:
         /**
          * The constructor.
-         * loadUserDefaults will be called automatically when the dialog is showing.
+         * loadSettings will be called automatically when the dialog is showing.
          *
          * @param title the text to be displayed in the K3b header (not the widget frame)
          * @param subTitle additional text that will be displayed after the title in smaller size
          * @param buttonMask combination of Buttons
          * @param defaultButton may also be null to deactivate the feature
-         * @param configgroup The config group used for the loadUserDefaults and saveUserDefaults methods
+         * @param configgroup The config group used for the loadSettings and saveSettings methods
          */
         InteractionDialog( QWidget* parent = 0,
                            const QString& title = QString(),
@@ -190,7 +190,7 @@ namespace K3b {
          * The save/load buttons are only activated if the config group is
          * set in the constructor.
          */
-        virtual void saveUserDefaults( KConfigGroup config );
+        virtual void saveSettings( KConfigGroup config );
 
         /**
          * Reimplement this to support the save/load user default buttons.
@@ -198,14 +198,11 @@ namespace K3b {
          *
          * The save/load buttons are only activated if the config group is
          * set in the constructor.
+         *
+         * This method will also be called to load defaults. In that case
+         * \m config will ignore local settings.
          */
-        virtual void loadUserDefaults( const KConfigGroup& config );
-
-        /**
-         * Reimplement this to support the "k3b defaults" button.
-         * set all GUI options to reasonable defaults.
-         */
-        virtual void loadK3bDefaults();
+        virtual void loadSettings( const KConfigGroup& config );
 
         /**
          * This is called after the dialog has been shown.

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  *
@@ -19,68 +19,57 @@
 #include "k3bprojectburndialog.h"
 
 class QCheckBox;
+class QRadioButton;
+
 namespace K3b {
     class MixedDoc;
-}
-namespace K3b {
     class DataImageSettingsWidget;
-}
-class QRadioButton;
-namespace K3b {
     class AudioCdTextWidget;
-}
-namespace K3b {
     class DataModeWidget;
-}
-namespace K3b {
     class IntMapComboBox;
-}
 
+    /**
+     *@author Sebastian Trueg
+     */
+    class MixedBurnDialog : public ProjectBurnDialog
+    {
+        Q_OBJECT
 
-/**
-  *@author Sebastian Trueg
-  */
-namespace K3b {
-class MixedBurnDialog : public ProjectBurnDialog  
-{
- Q_OBJECT
+    public:
+        MixedBurnDialog( MixedDoc*, QWidget *parent=0 );
 
- public:
-   MixedBurnDialog( MixedDoc*, QWidget *parent=0 );
+    protected:
+        void loadSettings( const KConfigGroup& );
+        void saveSettings( KConfigGroup );
+        void toggleAll();
 
- protected:
-   void loadK3bDefaults();
-   void loadUserDefaults( const KConfigGroup& );
-   void saveUserDefaults( KConfigGroup );
-   void toggleAll();
+        DataImageSettingsWidget* m_imageSettingsWidget;
+        AudioCdTextWidget* m_cdtextWidget;
 
-   DataImageSettingsWidget* m_imageSettingsWidget;
-   AudioCdTextWidget* m_cdtextWidget;
+    protected Q_SLOTS:
+        /**
+         * Reimplemented for internal reasons (shut down the audio player)
+         */
+        void slotStartClicked();
+        void saveSettingsToProject();
+        void readSettingsFromProject();
 
- protected Q_SLOTS:
-   /**
-    * Reimplemented for internal reasons (shut down the audio player)
-    */
-   void slotStartClicked();
-   void saveSettings();
-   void readSettings();
+        void slotCacheImageToggled( bool on );
+        void slotNormalizeToggled( bool on );
 
-   void slotCacheImageToggled( bool on );
-   void slotNormalizeToggled( bool on );
+    private:
+        void setupSettingsPage();
+        MixedDoc* m_doc;
 
- private:
-   void setupSettingsPage();
-   MixedDoc* m_doc;
+        IntMapComboBox* m_comboMixedModeType;
+        QRadioButton* m_radioMixedTypeFirstTrack;
+        QRadioButton* m_radioMixedTypeLastTrack;
+        QRadioButton* m_radioMixedTypeSessions;
 
-   IntMapComboBox* m_comboMixedModeType;
-   QRadioButton* m_radioMixedTypeFirstTrack;
-   QRadioButton* m_radioMixedTypeLastTrack;
-   QRadioButton* m_radioMixedTypeSessions;
+        QCheckBox* m_checkNormalize;
 
-   QCheckBox* m_checkNormalize;
-
-   DataModeWidget* m_dataModeWidget;
-};
+        DataModeWidget* m_dataModeWidget;
+    };
 }
 
 #endif

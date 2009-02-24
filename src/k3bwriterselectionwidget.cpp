@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -540,7 +540,7 @@ void K3b::WriterSelectionWidget::slotRefreshWritingApps()
 void K3b::WriterSelectionWidget::loadConfig( const KConfigGroup& c )
 {
     setWriterDevice( k3bcore->deviceManager()->findDevice( c.readEntry( "writer_device" ) ) );
-    setSpeed( c.readEntry( "writing_speed",  0 ) );
+    setSpeed( c.readEntry( "writing_speed",  s_autoSpeedValue ) );
     setWritingApp( K3b::writingAppFromString( c.readEntry( "writing_app" ) ) );
 }
 
@@ -551,14 +551,6 @@ void K3b::WriterSelectionWidget::saveConfig( KConfigGroup c )
     c.writeEntry( "writer_device", writerDevice() ? writerDevice()->blockDeviceName() : QString() );
     c.writeEntry( "writing_app", m_comboWritingApp->currentText() );
 }
-
-void K3b::WriterSelectionWidget::loadDefaults()
-{
-    // ignore the writer
-    m_comboSpeed->setSelectedValue( s_autoSpeedValue ); // Auto
-    setWritingApp( K3b::WRITING_APP_DEFAULT );
-}
-
 
 void K3b::WriterSelectionWidget::setForceAutoSpeed( bool b )
 {

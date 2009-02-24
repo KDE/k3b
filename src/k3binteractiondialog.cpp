@@ -249,35 +249,38 @@ QWidget* K3b::InteractionDialog::mainWidget()
 
 void K3b::InteractionDialog::slotLoadK3bDefaults()
 {
-    loadK3bDefaults();
+    KSharedConfig::Ptr c = KGlobal::config();
+    c->setReadDefaults( true );
+    loadSettings( c->group( m_configGroup ) );
+    c->setReadDefaults( false );
 }
 
 
 void K3b::InteractionDialog::slotLoadUserDefaults()
 {
     KConfigGroup c( KGlobal::config(), m_configGroup );
-    loadUserDefaults( c );
+    loadSettings( c );
 }
 
 
 void K3b::InteractionDialog::slotSaveUserDefaults()
 {
     KConfigGroup c( KGlobal::config(), m_configGroup );
-    saveUserDefaults( c );
+    saveSettings( c );
 }
 
 
 void K3b::InteractionDialog::slotLoadLastSettings()
 {
     KConfigGroup c( KGlobal::config(), "last used " + m_configGroup );
-    loadUserDefaults( c );
+    loadSettings( c );
 }
 
 
 void K3b::InteractionDialog::saveLastSettings()
 {
     KConfigGroup c( KGlobal::config(), "last used " + m_configGroup );
-    saveUserDefaults( c );
+    saveSettings( c );
 }
 
 
@@ -485,17 +488,12 @@ void K3b::InteractionDialog::setSaveButtonText( const QString& text,
 }
 
 
-void K3b::InteractionDialog::saveUserDefaults( KConfigGroup )
+void K3b::InteractionDialog::saveSettings( KConfigGroup )
 {
 }
 
 
-void K3b::InteractionDialog::loadUserDefaults( const KConfigGroup& )
-{
-}
-
-
-void K3b::InteractionDialog::loadK3bDefaults()
+void K3b::InteractionDialog::loadSettings( const KConfigGroup& )
 {
 }
 

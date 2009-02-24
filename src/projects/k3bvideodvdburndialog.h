@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,43 +18,37 @@
 
 #include "k3bprojectburndialog.h"
 
+class QCheckBox;
 
 namespace K3b {
     class VideoDvdDoc;
-}
-namespace K3b {
     class DataImageSettingsWidget;
-}
-class QCheckBox;
 
+    class VideoDvdBurnDialog : public ProjectBurnDialog
+    {
+        Q_OBJECT
 
-namespace K3b {
-class VideoDvdBurnDialog : public ProjectBurnDialog
-{
-    Q_OBJECT
+    public:
+        VideoDvdBurnDialog( VideoDvdDoc*, QWidget *parent = 0 );
+        ~VideoDvdBurnDialog();
 
-public:
-    VideoDvdBurnDialog( VideoDvdDoc*, QWidget *parent = 0 );
-    ~VideoDvdBurnDialog();
+    protected Q_SLOTS:
+        void slotStartClicked();
+        void saveSettingsToProject();
+        void readSettingsFromProject();
 
-protected Q_SLOTS:
-    void slotStartClicked();
-    void saveSettings();
-    void readSettings();
+    protected:
+        void loadSettings( const KConfigGroup& );
+        void saveSettings( KConfigGroup );
+        void toggleAll();
 
-protected:
-    void loadK3bDefaults();
-    void loadUserDefaults( const KConfigGroup& );
-    void saveUserDefaults( KConfigGroup );
-    void toggleAll();
+    private:
+        DataImageSettingsWidget* m_imageSettingsWidget;
 
-private:
-    DataImageSettingsWidget* m_imageSettingsWidget;
+        QCheckBox* m_checkVerify;
 
-    QCheckBox* m_checkVerify;
-
-    VideoDvdDoc* m_doc;
-};
+        VideoDvdDoc* m_doc;
+    };
 }
 
 #endif

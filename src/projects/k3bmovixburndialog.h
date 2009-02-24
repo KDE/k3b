@@ -37,11 +37,10 @@ namespace K3b {
         void slotStartClicked();
 
     protected:
-        void saveSettings();
-        void readSettings();
-        void loadK3bDefaults();
-        void loadUserDefaults( const KConfigGroup& );
-        void saveUserDefaults( KConfigGroup );
+        void saveSettingsToProject();
+        void readSettingsFromProject();
+        void loadSettings( const KConfigGroup& );
+        void saveSettings( KConfigGroup );
         void toggleAll();
 
     private:

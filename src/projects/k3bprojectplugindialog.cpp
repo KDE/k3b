@@ -47,21 +47,15 @@ void K3b::ProjectPluginDialog::slotStartClicked()
 }
 
 
-void K3b::ProjectPluginDialog::saveUserDefaults( KConfigGroup config )
+void K3b::ProjectPluginDialog::saveSettings( KConfigGroup config )
 {
     m_pluginGui->saveSettings( config );
 }
 
 
-void K3b::ProjectPluginDialog::loadUserDefaults( const KConfigGroup& config )
+void K3b::ProjectPluginDialog::loadSettings( const KConfigGroup& config )
 {
     m_pluginGui->readSettings( config );
-}
-
-
-void K3b::ProjectPluginDialog::loadK3bDefaults()
-{
-    m_pluginGui->loadDefaults();
 }
 
 #include "k3bprojectplugindialog.moc"

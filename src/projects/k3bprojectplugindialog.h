@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005 Sebastian Trueg <trueg@k3b.org>
  *
@@ -19,34 +19,26 @@
 
 namespace K3b {
     class ProjectPlugin;
-}
-namespace K3b {
     class ProjectPluginGUIBase;
-}
-namespace K3b {
     class Doc;
-}
 
+    class ProjectPluginDialog : public InteractionDialog
+    {
+        Q_OBJECT
 
-namespace K3b {
-class ProjectPluginDialog : public InteractionDialog
-{
-  Q_OBJECT
+    public:
+        ProjectPluginDialog( ProjectPlugin*, Doc*, QWidget* );
+        ~ProjectPluginDialog();
 
- public:
-  ProjectPluginDialog( ProjectPlugin*, Doc*, QWidget* );
-  ~ProjectPluginDialog();
-  
- protected Q_SLOTS:
-  void slotStartClicked();
-  void saveUserDefaults( KConfigGroup config );
-  void loadUserDefaults( const KConfigGroup& config );
-  void loadK3bDefaults();
+    protected Q_SLOTS:
+        void slotStartClicked();
+        void saveSettings( KConfigGroup config );
+        void loadSettings( const KConfigGroup& config );
 
- private:
-  ProjectPlugin* m_plugin;
-  ProjectPluginGUIBase* m_pluginGui;
-};
+    private:
+        ProjectPlugin* m_plugin;
+        ProjectPluginGUIBase* m_pluginGui;
+    };
 }
 
 #endif

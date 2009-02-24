@@ -1,7 +1,7 @@
 /*
 *
 * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
-* Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
+* Copyright (C) 2008-2009 Sebastian Trueg <trueg@k3b.org>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -231,17 +231,7 @@ void K3b::VideoCdRippingDialog::slotUpdateFreeSpace()
         m_labelFreeSpace->setText("-");
 }
 
-void K3b::VideoCdRippingDialog::loadK3bDefaults()
-{
-    m_editDirectory->setUrl( QDir::homePath() );
-    m_ignoreExt ->setChecked( false );
-    m_sector2336 ->setChecked( false );
-    m_extractXML ->setChecked( false );
-
-    slotUpdateFreeSpace();
-}
-
-void K3b::VideoCdRippingDialog::loadUserDefaults( const KConfigGroup& c )
+void K3b::VideoCdRippingDialog::loadSettings( const KConfigGroup& c )
 {
     m_editDirectory ->setUrl( c.readEntry( "last ripping directory", QDir::homePath() ) );
     m_ignoreExt ->setChecked( c.readEntry( "ignore ext", false ) );
@@ -251,7 +241,7 @@ void K3b::VideoCdRippingDialog::loadUserDefaults( const KConfigGroup& c )
     slotUpdateFreeSpace();
 }
 
-void K3b::VideoCdRippingDialog::saveUserDefaults( KConfigGroup c )
+void K3b::VideoCdRippingDialog::saveSettings( KConfigGroup c )
 {
     c.writeEntry( "last ripping directory", m_editDirectory->url() );
     c.writeEntry( "ignore ext", m_ignoreExt ->isChecked( ) );

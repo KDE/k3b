@@ -49,12 +49,11 @@ namespace K3b {
         void setupAdvancedTab();
         void setupVideoCdTab();
         void setupLabelTab();
-        void saveSettings();
-        void readSettings();
+        void saveSettingsToProject();
+        void readSettingsFromProject();
 
-        void loadK3bDefaults();
-        void loadUserDefaults( const KConfigGroup& );
-        void saveUserDefaults( KConfigGroup );
+        void loadSettings( const KConfigGroup& );
+        void saveSettings( KConfigGroup );
 
         // -----------------------------------------------------------
         // the video-cd-tab

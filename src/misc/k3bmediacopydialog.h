@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2007-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2007-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,9 +53,8 @@ namespace K3b {
         void init();
 
     private:
-        void loadUserDefaults( const KConfigGroup& );
-        void saveUserDefaults( KConfigGroup );
-        void loadK3bDefaults();
+        void loadSettings( const KConfigGroup& );
+        void saveSettings( KConfigGroup );
 
         KIO::filesize_t neededSize() const;
 

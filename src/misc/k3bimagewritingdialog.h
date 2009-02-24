@@ -1,6 +1,5 @@
 /*
  *
- * $Id$
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -65,9 +64,8 @@ namespace K3b {
         void slotUpdateImage( const QString& );
 
     protected:
-        void loadUserDefaults( const KConfigGroup& );
-        void saveUserDefaults( KConfigGroup );
-        void loadK3bDefaults();
+        void loadSettings( const KConfigGroup& );
+        void saveSettings( KConfigGroup );
 
         void calculateMd5Sum( const QString& );
         void dragEnterEvent( QDragEnterEvent* );

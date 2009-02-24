@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -29,57 +29,53 @@ class QComboBox;
 class QGroupBox;
 class QLabel;
 class QSpinBox;
-namespace K3b {
-    class AudioDoc;
-}
-namespace K3b {
-    class AudioCdTextWidget;
-}
 class QShowEvent;
 
-
-/**
- *@author Sebastian Trueg
- */
 namespace K3b {
-class AudioBurnDialog : public ProjectBurnDialog  
-{
-    Q_OBJECT
+    class AudioDoc;
+    class AudioCdTextWidget;
 
-public:
-    AudioBurnDialog(AudioDoc* doc, QWidget *parent=0 );
-    ~AudioBurnDialog();
-   
-protected:
-    void saveSettings();
-    void readSettings();
-    void loadK3bDefaults();
-    void loadUserDefaults( const KConfigGroup& );
-    void saveUserDefaults( KConfigGroup );
-    void showEvent( QShowEvent* );
-    void toggleAll();
-
-protected Q_SLOTS:
     /**
-     * Reimplemented for internal reasons (shut down the audio player)
+     *@author Sebastian Trueg
      */
-    void slotStartClicked();
-    void slotCacheImageToggled( bool on );
-    void slotNormalizeToggled( bool on );
+    class AudioBurnDialog : public ProjectBurnDialog
+    {
+        Q_OBJECT
 
-private:
-    /**
-     * We need this here to be able to hide/show the group
-     */
-    QGroupBox* m_audioRippingGroup;
-    QCheckBox* m_checkHideFirstTrack;
-    QCheckBox* m_checkNormalize;
-    QCheckBox* m_checkAudioRippingIgnoreReadErrors;
-    QSpinBox* m_spinAudioRippingReadRetries;
-    QComboBox* m_comboParanoiaMode;
-    AudioCdTextWidget* m_cdtextWidget;
-    AudioDoc* m_doc;
-};
+    public:
+        AudioBurnDialog(AudioDoc* doc, QWidget *parent=0 );
+        ~AudioBurnDialog();
+
+    protected:
+        void saveSettingsToProject();
+        void readSettingsFromProject();
+
+        void loadSettings( const KConfigGroup& );
+        void saveSettings( KConfigGroup );
+        void showEvent( QShowEvent* );
+        void toggleAll();
+
+    protected Q_SLOTS:
+        /**
+         * Reimplemented for internal reasons (shut down the audio player)
+         */
+        void slotStartClicked();
+        void slotCacheImageToggled( bool on );
+        void slotNormalizeToggled( bool on );
+
+    private:
+        /**
+         * We need this here to be able to hide/show the group
+         */
+        QGroupBox* m_audioRippingGroup;
+        QCheckBox* m_checkHideFirstTrack;
+        QCheckBox* m_checkNormalize;
+        QCheckBox* m_checkAudioRippingIgnoreReadErrors;
+        QSpinBox* m_spinAudioRippingReadRetries;
+        QComboBox* m_comboParanoiaMode;
+        AudioCdTextWidget* m_cdtextWidget;
+        AudioDoc* m_doc;
+    };
 }
 
 #endif

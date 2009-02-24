@@ -39,7 +39,6 @@ public:
     QString title() const;
     QString subTitle() const;
 
-    void loadDefaults();
     void readSettings( const KConfigGroup& );
     void saveSettings( KConfigGroup );
 

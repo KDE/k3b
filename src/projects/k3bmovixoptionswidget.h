@@ -34,9 +34,9 @@ namespace K3b {
         void init( const K3b::MovixBin* );
         void readSettings( K3b::MovixDoc* );
         void saveSettings( K3b::MovixDoc* );
+
         void loadConfig( const KConfigGroup & c );
         void saveConfig( KConfigGroup c );
-        void loadDefaults();
 
     private:
         class LanguageSelectionHelper;

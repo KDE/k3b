@@ -1,7 +1,7 @@
 /*
 *
 * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
-* Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
+* Copyright (C) 2008-2009 Sebastian Trueg <trueg@k3b.org>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -573,68 +573,9 @@ void K3b::VcdBurnDialog::slotStartClicked()
 }
 
 
-void K3b::VcdBurnDialog::loadK3bDefaults()
+void K3b::VcdBurnDialog::saveSettingsToProject()
 {
-    K3b::VcdOptions o = K3b::VcdOptions::defaults();
-
-    m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
-    m_checkSimulate->setChecked( false );
-    m_checkRemoveBufferFiles->setChecked( true );
-    m_checkOnlyCreateImage->setChecked( false );
-
-    m_checkAutoDetect->setChecked( o.AutoDetect() );
-    m_groupVcdFormat->setDisabled( o.AutoDetect() );
-
-    m_check2336->setChecked( o.Sector2336() );
-    m_checkNonCompliant->setChecked( o.NonCompliantMode() );
-    m_checkVCD30interpretation->setChecked( o.VCD30interpretation() );
-    m_spinVolumeCount->setValue( o.volumeCount() );
-    m_spinVolumeNumber->setMaximum( o.volumeCount() );
-    m_spinVolumeNumber->setValue( o.volumeNumber() );
-
-
-    // to not use i18n for this, so user can not use unsupported letters in her language pack
-    if ( m_radioSvcd10->isChecked() ) {
-        m_checkCdiSupport->setEnabled( false );
-        m_checkCdiSupport->setChecked( false );
-        m_checkUpdateScanOffsets->setEnabled( true );
-        m_editVolumeId->setText( "SUPER_VIDEOCD" );
-    } else if ( m_radioHqVcd10->isChecked() ) {
-        m_checkCdiSupport->setEnabled( false );
-        m_checkCdiSupport->setChecked( false );
-        m_checkUpdateScanOffsets->setEnabled( true );
-        m_editVolumeId->setText( "HQ_VIDEOCD" );
-    } else {
-        m_checkCdiSupport->setEnabled( true );
-        m_checkCdiSupport->setChecked( o.CdiSupport() );
-        m_groupCdi->setEnabled( o.CdiSupport() );
-        m_checkUpdateScanOffsets->setEnabled( false );
-        m_editVolumeId->setText( "VIDEOCD" );
-    }
-
-    m_editPublisher->setText( o.publisher() );
-    m_editAlbumId->setText( o.albumId() );
-
-    m_checkPbc->setChecked( o.PbcEnabled() );
-    m_checkSegmentFolder->setChecked( o.SegmentFolder() );
-    m_checkRelaxedAps->setChecked( o.RelaxedAps() );
-    m_checkUpdateScanOffsets->setChecked( o.UpdateScanOffsets() );
-    m_spinRestriction->setValue( o.Restriction() );
-
-    m_checkGaps->setChecked( o.UseGaps() );
-    m_spinPreGapLeadout->setValue( o.PreGapLeadout() );
-    m_spinPreGapTrack->setValue( o.PreGapTrack() );
-    m_spinFrontMarginTrack->setValue( o.FrontMarginTrack() );
-    m_spinRearMarginTrack->setValue( o.RearMarginTrack() );
-    m_spinFrontMarginTrackSVCD->setValue( o.FrontMarginTrackSVCD() );
-    m_spinRearMarginTrackSVCD->setValue( o.RearMarginTrackSVCD() );
-
-    loadDefaultCdiConfig();
-}
-
-void K3b::VcdBurnDialog::saveSettings()
-{
-    K3b::ProjectBurnDialog::saveSettings();
+    K3b::ProjectBurnDialog::saveSettingsToProject();
 
     // set VolumeID if empty
     setVolumeID();
@@ -684,9 +625,9 @@ void K3b::VcdBurnDialog::saveSettings()
 }
 
 
-void K3b::VcdBurnDialog::readSettings()
+void K3b::VcdBurnDialog::readSettingsFromProject()
 {
-    K3b::ProjectBurnDialog::readSettings();
+    K3b::ProjectBurnDialog::readSettingsFromProject();
 
     m_checkNonCompliant->setEnabled( false );
     m_checkVCD30interpretation->setEnabled( false );
@@ -777,9 +718,9 @@ void K3b::VcdBurnDialog::readSettings()
     loadCdiConfig();
 }
 
-void K3b::VcdBurnDialog::loadUserDefaults( const KConfigGroup& c )
+void K3b::VcdBurnDialog::loadSettings( const KConfigGroup& c )
 {
-    K3b::ProjectBurnDialog::loadUserDefaults( c );
+    K3b::ProjectBurnDialog::loadSettings( c );
 
     K3b::VcdOptions o = K3b::VcdOptions::load( c );
 
@@ -829,9 +770,9 @@ void K3b::VcdBurnDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3b::VcdBurnDialog::saveUserDefaults( KConfigGroup c )
+void K3b::VcdBurnDialog::saveSettings( KConfigGroup c )
 {
-    K3b::ProjectBurnDialog::saveUserDefaults( c );
+    K3b::ProjectBurnDialog::saveSettings( c );
 
     K3b::VcdOptions o;
 

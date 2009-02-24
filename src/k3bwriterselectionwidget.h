@@ -60,7 +60,6 @@ namespace K3b {
         int wantedMediumState() const;
         K3b::Msf wantedMediumSize() const;
 
-        void loadDefaults();
         void loadConfig( const KConfigGroup& );
         void saveConfig( KConfigGroup );
 

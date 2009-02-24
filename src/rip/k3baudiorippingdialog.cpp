@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -422,21 +422,7 @@ void K3b::AudioRippingDialog::setStaticDir( const QString& path )
 }
 
 
-void K3b::AudioRippingDialog::loadK3bDefaults()
-{
-    m_comboParanoiaMode->setCurrentIndex( 0 );
-    m_spinRetries->setValue(5);
-    m_checkIgnoreReadErrors->setChecked( true );
-    m_checkUseIndex0->setChecked( false );
-
-    m_optionWidget->loadDefaults();
-    m_patternWidget->loadDefaults();
-
-    refresh();
-}
-
-
-void K3b::AudioRippingDialog::loadUserDefaults( const KConfigGroup& c )
+void K3b::AudioRippingDialog::loadSettings( const KConfigGroup& c )
 {
     m_comboParanoiaMode->setCurrentIndex( c.readEntry( "paranoia_mode", 0 ) );
     m_spinRetries->setValue( c.readEntry( "read_retries", 5 ) );
@@ -450,7 +436,7 @@ void K3b::AudioRippingDialog::loadUserDefaults( const KConfigGroup& c )
 }
 
 
-void K3b::AudioRippingDialog::saveUserDefaults( KConfigGroup c )
+void K3b::AudioRippingDialog::saveSettings( KConfigGroup c )
 {
     c.writeEntry( "paranoia_mode", m_comboParanoiaMode->currentText().toInt() );
     c.writeEntry( "read_retries", m_spinRetries->value() );

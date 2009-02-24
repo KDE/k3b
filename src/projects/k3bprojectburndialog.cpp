@@ -98,7 +98,7 @@ K3b::ProjectBurnDialog::~ProjectBurnDialog(){
 
 void K3b::ProjectBurnDialog::init()
 {
-    readSettings();
+    readSettingsFromProject();
 //   if( !m_writerSelectionWidget->writerDevice() )
 //     m_checkOnlyCreateImage->setChecked(true);
 }
@@ -181,7 +181,7 @@ int K3b::ProjectBurnDialog::execBurnDialog( bool burn )
 
 void K3b::ProjectBurnDialog::slotSaveClicked()
 {
-    saveSettings();
+    saveSettingsToProject();
     done( Saved );
 }
 
@@ -194,7 +194,7 @@ void K3b::ProjectBurnDialog::slotCancelClicked()
 
 void K3b::ProjectBurnDialog::slotStartClicked()
 {
-    saveSettings();
+    saveSettingsToProject();
 
     if( m_tempDirSelectionWidget ) {
         if( !doc()->onTheFly() || doc()->onlyCreateImages() ) {
@@ -351,7 +351,7 @@ void K3b::ProjectBurnDialog::addPage( QWidget* page, const QString& title )
 }
 
 
-void K3b::ProjectBurnDialog::saveSettings()
+void K3b::ProjectBurnDialog::saveSettingsToProject()
 {
     m_doc->setDummy( m_checkSimulate->isChecked() );
     m_doc->setOnTheFly( !m_checkCacheImage->isChecked() );
@@ -365,7 +365,7 @@ void K3b::ProjectBurnDialog::saveSettings()
 }
 
 
-void K3b::ProjectBurnDialog::readSettings()
+void K3b::ProjectBurnDialog::readSettingsFromProject()
 {
     m_checkSimulate->setChecked( doc()->dummy() );
     m_checkCacheImage->setChecked( !doc()->onTheFly() );
@@ -380,7 +380,7 @@ void K3b::ProjectBurnDialog::readSettings()
 }
 
 
-void K3b::ProjectBurnDialog::saveUserDefaults( KConfigGroup c )
+void K3b::ProjectBurnDialog::saveSettings( KConfigGroup c )
 {
     m_writingModeWidget->saveConfig( c );
     c.writeEntry( "simulate", m_checkSimulate->isChecked() );
@@ -394,7 +394,7 @@ void K3b::ProjectBurnDialog::saveUserDefaults( KConfigGroup c )
 }
 
 
-void K3b::ProjectBurnDialog::loadUserDefaults( const KConfigGroup& c )
+void K3b::ProjectBurnDialog::loadSettings( const KConfigGroup& c )
 {
     m_writingModeWidget->loadConfig( c );
     m_checkSimulate->setChecked( c.readEntry( "simulate", false ) );
@@ -405,23 +405,6 @@ void K3b::ProjectBurnDialog::loadUserDefaults( const KConfigGroup& c )
 
     m_tempDirSelectionWidget->readConfig( c );
     m_writerSelectionWidget->loadConfig( c );
-}
-
-
-void K3b::ProjectBurnDialog::loadK3bDefaults()
-{
-    m_writerSelectionWidget->loadDefaults();
-    m_writingModeWidget->setWritingMode( K3b::WRITING_MODE_AUTO );
-    m_checkSimulate->setChecked( false );
-    m_checkCacheImage->setChecked( false );
-    m_checkRemoveBufferFiles->setChecked( true );
-    m_checkOnlyCreateImage->setChecked( false );
-    m_spinCopies->setValue( 1 );
-
-    if( m_tempDirSelectionWidget->selectionMode() == K3b::TempDirSelectionWidget::DIR )
-        m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() );
-    else
-        m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() + doc()->name() + ".iso" );
 }
 
 
