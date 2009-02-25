@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -737,7 +737,7 @@ bool K3b::CdCopyJob::writeNextSession()
         connect( d->cdrecordWriter, SIGNAL(nextTrack(int, int)), this, SLOT(slotWritingNextTrack(int, int)) );
         connect( d->cdrecordWriter, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
         connect( d->cdrecordWriter, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
-        connect( d->cdrecordWriter, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
+        connect( d->cdrecordWriter, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)), this, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)) );
         connect( d->cdrecordWriter, SIGNAL(finished(bool)), this, SLOT(slotWriterFinished(bool)) );
         //    connect( d->cdrecordWriter, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
         connect( d->cdrecordWriter, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );

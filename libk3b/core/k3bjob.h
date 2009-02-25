@@ -20,6 +20,8 @@
 #include "k3bjobhandler.h"
 #include "k3b_export.h"
 #include "k3bglobals.h"
+#include "k3bdevicetypes.h"
+
 
 namespace K3b {
     namespace Device {
@@ -280,7 +282,7 @@ namespace K3b {
          * FIXME: maybe one should be able to ask the burnjob if it burns a CD or a DVD and remove the
          *        multiplicator parameter)
          */
-        void writeSpeed( int speed, int multiplicator );
+        void writeSpeed( int speed, K3b::Device::SpeedMultiplicator multiplicator );
 
         /**
          * This signal may be used to inform when the burning starts or ends

@@ -60,7 +60,7 @@ public:
     KTemporaryFile* cdTextFile;
 
     Device::MediaType burnedMediaType;
-    int usedSpeedFactor;
+    K3b::Device::SpeedMultiplicator usedSpeedFactor;
 };
 
 

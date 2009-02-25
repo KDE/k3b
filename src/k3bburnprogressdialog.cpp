@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-200 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,7 +79,7 @@ void K3b::BurnProgressDialog::setBurnJob( K3b::BurnJob* burnJob )
     if( burnJob ) {
         connect( burnJob, SIGNAL(bufferStatus(int)), this, SLOT(slotBufferStatus(int)) );
         connect( burnJob, SIGNAL(deviceBuffer(int)), this, SLOT(slotDeviceBuffer(int)) );
-        connect( burnJob, SIGNAL(writeSpeed(int, int)), this, SLOT(slotWriteSpeed(int, int)) );
+        connect( burnJob, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)), this, SLOT(slotWriteSpeed(int, K3b::Device::SpeedMultiplicator)) );
         connect( burnJob, SIGNAL(burning(bool)), m_progressWritingBuffer, SLOT(setEnabled(bool)) );
         connect( burnJob, SIGNAL(burning(bool)), m_progressDeviceBuffer, SLOT(setEnabled(bool)) );
         connect( burnJob, SIGNAL(burning(bool)), m_labelWritingSpeed, SLOT(setEnabled(bool)) );
@@ -120,7 +120,7 @@ void K3b::BurnProgressDialog::slotDeviceBuffer( int b )
 }
 
 
-void K3b::BurnProgressDialog::slotWriteSpeed( int s, int multiplicator )
+void K3b::BurnProgressDialog::slotWriteSpeed( int s, K3b::Device::SpeedMultiplicator multiplicator )
 {
     m_labelWritingSpeed->setText( QString("%1 KB/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/(double)multiplicator,2)) );
 }

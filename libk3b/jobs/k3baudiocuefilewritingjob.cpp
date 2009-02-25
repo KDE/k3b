@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,7 +83,7 @@ K3b::AudioCueFileWritingJob::AudioCueFileWritingJob( K3b::JobHandler* jh, QObjec
     connect( d->audioJob, SIGNAL(burning(bool)), this, SIGNAL(burning(bool)) );
     connect( d->audioJob, SIGNAL(bufferStatus(int)), this, SIGNAL(bufferStatus(int)) );
     connect( d->audioJob, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
-    connect( d->audioJob, SIGNAL(writeSpeed(int, int)), this, SIGNAL(writeSpeed(int, int)) );
+    connect( d->audioJob, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)), this, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)) );
 
     d->canceled = false;
     d->audioJobRunning = false;

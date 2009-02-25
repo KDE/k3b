@@ -18,6 +18,7 @@
 
 
 #include "k3bjob.h"
+#include "k3bdevicetypes.h"
 
 #include <qdatetime.h>
 
@@ -67,7 +68,7 @@ namespace K3b {
     Q_SIGNALS:
         void buffer( int );
         void deviceBuffer( int );
-        void writeSpeed( int, int );
+        void writeSpeed( int speed, K3b::Device::SpeedMultiplicator multiplicator );
 
     protected:
         AbstractWriter( Device::Device* dev, JobHandler* hdl,

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -91,7 +91,7 @@ public:
 
     int burnedMediumType;
 
-    int speedMultiplicator() const {
+    K3b::Device::SpeedMultiplicator speedMultiplicator() const {
         return ( burnedMediumType & K3b::Device::MEDIA_BD_ALL ? K3b::Device::SPEED_FACTOR_BD : K3b::Device::SPEED_FACTOR_DVD );
     }
 };
