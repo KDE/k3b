@@ -185,15 +185,15 @@ void K3b::TitleLabel::updatePositioning()
 
     if( d->titleLength > widthAvail/2 ) {
         if( d->subTitleLength <= widthAvail/2 )
-            d->displayTitle = K3b::cutToWidth( titleFm, d->title, widthAvail - d->subTitleLength );
+            d->displayTitle = titleFm.elidedText( d->title, Qt::ElideRight, widthAvail - d->subTitleLength );
         else
-            d->displayTitle = K3b::cutToWidth( titleFm, d->title, widthAvail/2 );
+            d->displayTitle = titleFm.elidedText( d->title, Qt::ElideRight, widthAvail/2 );
     }
     if( d->subTitleLength > widthAvail/2 ) {
         if( d->titleLength <= widthAvail/2 )
-            d->displaySubTitle = K3b::cutToWidth( subTitleFm, d->subTitle, widthAvail - d->titleLength );
+            d->displaySubTitle = subTitleFm.elidedText( d->subTitle, Qt::ElideRight, widthAvail - d->titleLength );
         else
-            d->displaySubTitle = K3b::cutToWidth( subTitleFm, d->subTitle, widthAvail/2 );
+            d->displaySubTitle = subTitleFm.elidedText( d->subTitle, Qt::ElideRight, widthAvail/2 );
     }
 
     d->displayTitleLength = titleFm.width( d->displayTitle );

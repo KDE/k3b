@@ -87,7 +87,7 @@ set(k3b_tools_SRCS
   tools/k3bcdparanoialib.cpp tools/k3blistview.cpp tools/k3bmsfedit.cpp 
   tools/k3bcdtextvalidator.cpp tools/k3bintvalidator.cpp tools/k3bexceptions.cpp 
   tools/k3bprogressdialog.cpp tools/k3bpushbutton.cpp 
-  tools/k3blistviewitemanimator.cpp tools/k3bthreadwidget.cpp tools/k3bradioaction.cpp 
+  tools/k3blistviewitemanimator.cpp tools/k3bthreadwidget.cpp
   tools/k3bsignalwaiter.cpp tools/k3blibdvdcss.cpp tools/k3biso9660backend.cpp 
   tools/k3bpipe.cpp tools/k3bchecksumpipe.cpp 
   tools/k3bintmapcombobox.cpp tools/k3bdirsizejob.cpp tools/k3brichtextlabel.cpp 
