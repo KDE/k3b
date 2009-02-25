@@ -251,9 +251,8 @@ void K3b::AudioRippingDialog::slotStartClicked()
     // prepare list of tracks to rip
     QVector<QPair<int, QString> > tracksToRip;
     unsigned int i = 0;
-    for( QList<int>::const_iterator trackIt = m_trackNumbers.constBegin();
-         trackIt != m_trackNumbers.constEnd(); ++trackIt ) {
-        tracksToRip.append( qMakePair( *trackIt+1, d->filenames[(m_optionWidget->createSingleFile() ? 0 : i)] ) );
+    foreach( int trackIndex, m_trackNumbers ) {
+        tracksToRip.append( qMakePair( trackIndex+1, d->filenames[(m_optionWidget->createSingleFile() ? 0 : i)] ) );
         ++i;
     }
 
@@ -389,7 +388,7 @@ void K3b::AudioRippingDialog::refresh()
             d->trackModel.setItem( i, 2, new QStandardItem( fileSize < 0 ? i18n("unknown") : KIO::convertSize( fileSize ) ) );
             d->trackModel.setItem( i, 3, new QStandardItem( toc[trackIndex].type() == K3b::Device::Track::TYPE_AUDIO ? i18n("Audio") : i18n("Data") ) );
 
-            d->filenames.append( baseDir + "/" + filename );
+            d->filenames.append( baseDir + filename );
         }
     }
 

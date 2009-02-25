@@ -27,6 +27,7 @@
 #include <qcheckbox.h>
 #include <qlayout.h>
 #include <QGridLayout>
+#include <QtGui/QWhatsThis>
 
 
 K3b::CddbPatternWidget::CddbPatternWidget( QWidget* parent )
@@ -122,47 +123,51 @@ void K3b::CddbPatternWidget::saveConfig( KConfigGroup c )
 
 void K3b::CddbPatternWidget::slotSeeSpecialStrings()
 {
-    setWhatsThis( i18n( "<p><b>Pattern special strings:</b>"
-                        "<p>The following strings will be replaced with their respective meaning in every "
-                        "track name.<br>"
-                        "<em>Hint:</em> %A differs from %a only on soundtracks or compilations."
-                        "<p><table border=\"0\">"
-                        "<tr><td></td><td><em>Meaning</em></td><td><em>Alternatives</em></td></tr>"
-                        "<tr><td>%a</td><td>artist of the track</td><td>%{a} or %{artist}</td></tr>"
-                        "<tr><td>%t</td><td>title of the track</td><td>%{t} or %{title}</td></tr>"
-                        "<tr><td>%n</td><td>track number</td><td>%{n} or %{number}</td></tr>"
-                        "<tr><td>%y</td><td>year of the CD</td><td>%{y} or %{year}</td></tr>"
-                        "<tr><td>%c</td><td>extended track information</td><td>%{c} or %{comment}</td></tr>"
-                        "<tr><td>%g</td><td>genre of the CD</td><td>%{g} or %{genre}</td></tr>"
-                        "<tr><td>%A</td><td>album artist</td><td>%{A} or %{albumartist}</td></tr>"
-                        "<tr><td>%T</td><td>album title</td><td>%{T} or %{albumtitle}</td></tr>"
-                        "<tr><td>%C</td><td>extended CD information</td><td>%{C} or %{albumcomment}</td></tr>"
-                        "<tr><td>%d</td><td>current date</td><td>%{d} or %{date}</td></tr>"
-                        "</table>") );
+    QWhatsThis::showText( m_specialStringsLabel->mapToGlobal( m_specialStringsLabel->geometry().topLeft() ),
+                          i18n( "<p><b>Pattern special strings:</b>"
+                                "<p>The following strings will be replaced with their respective meaning in every "
+                                "track name.<br>"
+                                "<em>Hint:</em> %A differs from %a only on soundtracks or compilations."
+                                "<p><table border=\"0\">"
+                                "<tr><td></td><td><em>Meaning</em></td><td><em>Alternatives</em></td></tr>"
+                                "<tr><td>%a</td><td>artist of the track</td><td>%{a} or %{artist}</td></tr>"
+                                "<tr><td>%t</td><td>title of the track</td><td>%{t} or %{title}</td></tr>"
+                                "<tr><td>%n</td><td>track number</td><td>%{n} or %{number}</td></tr>"
+                                "<tr><td>%y</td><td>year of the CD</td><td>%{y} or %{year}</td></tr>"
+                                "<tr><td>%c</td><td>extended track information</td><td>%{c} or %{comment}</td></tr>"
+                                "<tr><td>%g</td><td>genre of the CD</td><td>%{g} or %{genre}</td></tr>"
+                                "<tr><td>%A</td><td>album artist</td><td>%{A} or %{albumartist}</td></tr>"
+                                "<tr><td>%T</td><td>album title</td><td>%{T} or %{albumtitle}</td></tr>"
+                                "<tr><td>%C</td><td>extended CD information</td><td>%{C} or %{albumcomment}</td></tr>"
+                                "<tr><td>%d</td><td>current date</td><td>%{d} or %{date}</td></tr>"
+                                "</table>"),
+                          m_specialStringsLabel );
 }
 
 void K3b::CddbPatternWidget::slotSeeConditionalInclusion()
 {
-  // xgettext: no-c-format
-    setWhatsThis( i18n( "<p><b>Conditional inclusion:</b>"
-                        "<p>These patterns make it possible to selectively include texts, "
-                        "depending on the value of CDDB entries. You can choose only to "
-                        "include or exclude texts if one of the entries is empty, "
-                        "or if it has a specific value. Examples:"
-                        "<ul>"
-                        "<li>@T{TEXT} includes TEXT if the album title is specified"
-                        "<li>!T{TEXT} includes TEXT if the album title is not specified"
-                        "<li>@C=\'Soundtrack\'{TEXT} includes TEXT if the CD's extended "
-                        "information is named Soundtrack"
-                        "<li>!C=\'Soundtrack\'{TEXT} includes TEXT if the CD's extended "
-                        "information is anything else but Soundtrack"
-                        "<li>It is also possible to include special strings in texts and conditions, "
-                        "e.g. !a='%A'{%a} only includes the title's artist information "
-                        "if it does not differ from the album artist."
-                        "</ul>"
-                        "<p>Conditional includes make use of the same characters as the special "
-                        "strings, which means that the X in @X{...} can be one character out of "
-                        "[atnycgATCd]." ) );
+    // xgettext: no-c-format
+    QWhatsThis::showText( m_conditionalInclusionLabel->mapToGlobal( m_conditionalInclusionLabel->geometry().topLeft() ),
+                          i18n( "<p><b>Conditional inclusion:</b>"
+                                "<p>These patterns make it possible to selectively include texts, "
+                                "depending on the value of CDDB entries. You can choose only to "
+                                "include or exclude texts if one of the entries is empty, "
+                                "or if it has a specific value. Examples:"
+                                "<ul>"
+                                "<li>@T{TEXT} includes TEXT if the album title is specified"
+                                "<li>!T{TEXT} includes TEXT if the album title is not specified"
+                                "<li>@C=\'Soundtrack\'{TEXT} includes TEXT if the CD's extended "
+                                "information is named Soundtrack"
+                                "<li>!C=\'Soundtrack\'{TEXT} includes TEXT if the CD's extended "
+                                "information is anything else but Soundtrack"
+                                "<li>It is also possible to include special strings in texts and conditions, "
+                                "e.g. !a='%A'{%a} only includes the title's artist information "
+                                "if it does not differ from the album artist."
+                                "</ul>"
+                                "<p>Conditional includes make use of the same characters as the special "
+                                "strings, which means that the X in @X{...} can be one character out of "
+                                "[atnycgATCd]." ),
+                          m_conditionalInclusionLabel );
 }
 
 #include "k3bcddbpatternwidget.moc"

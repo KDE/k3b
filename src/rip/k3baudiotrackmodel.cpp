@@ -224,16 +224,22 @@ QVariant K3b::AudioTrackModel::data( const QModelIndex& index, int role ) const
 
 Qt::ItemFlags K3b::AudioTrackModel::flags( const QModelIndex& index ) const
 {
-    Qt::ItemFlags f = Qt::ItemIsDragEnabled|Qt::ItemIsSelectable|Qt::ItemIsEnabled;
+    Qt::ItemFlags f = Qt::ItemIsSelectable;
 
-    switch( index.column() ) {
-    case TrackNumberColumn:
-        f |= Qt::ItemIsUserCheckable;
-        break;
-    case ArtistColumn:
-    case TitleColumn:
-        f |= Qt::ItemIsEditable;
-        break;
+    if ( d->medium.toc().count() > index.row() &&
+         d->medium.toc()[index.row()].type() == K3b::Device::Track::TYPE_AUDIO ) {
+
+        f |= Qt::ItemIsDragEnabled|Qt::ItemIsEnabled;
+
+        switch( index.column() ) {
+        case TrackNumberColumn:
+            f |= Qt::ItemIsUserCheckable;
+            break;
+        case ArtistColumn:
+        case TitleColumn:
+            f |= Qt::ItemIsEditable;
+            break;
+        }
     }
 
     return f;
@@ -282,7 +288,9 @@ void K3b::AudioTrackModel::setTrackChecked( int track, bool checked )
 
 bool K3b::AudioTrackModel::trackChecked( int trackIndex ) const
 {
-    if ( trackIndex >= 0 && trackIndex < d->itemCheckedList.count() ) {
+    if ( trackIndex >= 0 &&
+         trackIndex < d->medium.toc().count() &&
+         d->medium.toc()[trackIndex].type() == K3b::Device::Track::TYPE_AUDIO ) {
         return d->itemCheckedList[trackIndex];
     }
     else {
