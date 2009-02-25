@@ -22,7 +22,6 @@ install( FILES
   k3bpushbutton.h
   k3blistviewitemanimator.h
   k3bthreadwidget.h
-  k3bradioaction.h
   k3bsignalwaiter.h
   k3biso9660backend.h
   k3bpipe.h
