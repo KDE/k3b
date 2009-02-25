@@ -245,7 +245,7 @@ namespace K3b {
         };
         Q_DECLARE_FLAGS( MediaTypes, MediaType )
 
-        enum SpeedMultiplicators {
+        enum SpeedMultiplicator {
             SPEED_FACTOR_CD = 175,
             SPEED_FACTOR_CD_MODE1 = 150,
             SPEED_FACTOR_DVD = 1385,
