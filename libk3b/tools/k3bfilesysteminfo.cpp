@@ -79,7 +79,7 @@ public:
 };
 
 
-K3b::FileSystemInfo::~FileSystemInfo()
+K3b::FileSystemInfo::FileSystemInfo()
 {
     d = new Private;
 }
@@ -101,7 +101,7 @@ K3b::FileSystemInfo::FileSystemInfo( const K3b::FileSystemInfo& other )
 }
 
 
-K3b::FileSystemInfo::FileSystemInfo()
+K3b::FileSystemInfo::~FileSystemInfo()
 {
     delete d;
 }
