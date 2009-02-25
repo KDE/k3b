@@ -185,8 +185,10 @@ QString K3b::prepareDir( const QString& dir )
 {
     if(dir.isEmpty())
         return QString();
+    else if ( !dir.endsWith( '/' ) )
+        return dir + '/';
     else
-        return (dir + (dir[dir.length()-1] != '/' ? "/" : ""));
+        return dir;
 }
 
 
