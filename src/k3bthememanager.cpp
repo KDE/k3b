@@ -62,8 +62,11 @@ QPixmap K3b::Theme::pixmap( const QString& name ) const
         return *it;
 
     // try loading the image
-    if( QFile::exists( m_path + name ) )
-        return *m_pixmapMap.insert( name, QPixmap( m_path + name ) );
+    if( QFile::exists( m_path + name ) ) {
+        QPixmap pix( m_path + name );
+        if ( !pix.isNull() )
+            return *m_pixmapMap.insert( name, pix );
+    }
 
     kDebug() << "(K3b::Theme) " << m_name << ": could not load image " << name;
 
