@@ -18,18 +18,16 @@
 
 #include <config-k3b.h>
 
-#include <k3bprocess.h>
 #include <k3bcore.h>
 
 #include <kdebug.h>
 #include <kconfig.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <KProcess>
 
 #include <qregexp.h>
 #include <qfile.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <QList>
 
 #include <sys/types.h>
@@ -74,11 +72,7 @@ static K3bExternalEncoderCommand commandByExtension( const QString& extension )
 class K3bExternalEncoder::Private
 {
 public:
-    Private()
-        : process(0) {
-    }
-
-    K3b::Process* process;
+    KProcess process;
     QString fileName;
     QString extension;
     K3b::Msf length;
@@ -101,15 +95,20 @@ public:
 
 
 K3bExternalEncoder::K3bExternalEncoder( QObject* parent, const QVariantList& )
-    : K3b::AudioEncoder( parent)
+    : K3b::AudioEncoder( parent ),
+      d( new Private() )
 {
-    d = new Private();
+    d->process.setOutputChannelMode( KProcess::MergedChannels );
+
+    connect( &d->process, SIGNAL(finished(int, QProcess::ExitStatus)),
+             this, SLOT(slotExternalProgramFinished(int, QProcess::ExitStatus)) );
+    connect( &d->process, SIGNAL(readyRead()),
+             this, SLOT(slotExternalProgramOutput()) );
 }
 
 
 K3bExternalEncoder::~K3bExternalEncoder()
 {
-    delete d->process;
     delete d;
 }
 
@@ -150,14 +149,12 @@ void K3bExternalEncoder::setMetaDataInternal( K3b::AudioEncoder::MetaDataField f
 
 void K3bExternalEncoder::finishEncoderInternal()
 {
-    if( d->process ) {
-        if( d->process->isRunning() ) {
-            d->process->closeWriteChannel();
+    if( d->process.state() == QProcess::Running ) {
+        d->process.closeWriteChannel();
 
-            // this is kind of evil...
-            // but we need to be sure the process exited when this method returnes
-            d->process->waitForFinished(-1);
-        }
+        // this is kind of evil...
+        // but we need to be sure the process exited when this method returnes
+        d->process.waitForFinished(-1);
     }
 }
 
@@ -190,7 +187,7 @@ void K3bExternalEncoder::closeFile()
 }
 
 
-bool K3bExternalEncoder::initEncoderInternal( const QString& extension )
+bool K3bExternalEncoder::initExternalEncoder( const QString& extension )
 {
     d->initialized = true;
 
@@ -201,20 +198,6 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension )
         setLastError( i18n("Invalid command: the command is empty.") );
         return false;
     }
-
-    // setup the process
-    delete d->process;
-    d->process = new K3b::Process();
-    d->process->setSplitStdout(true);
-    d->process->setRawStdin(true);
-
-    connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)),
-             this, SLOT(slotExternalProgramFinished(int, QProcess::ExitStatus)) );
-    connect( d->process, SIGNAL(stderrLine(const QString&)),
-             this, SLOT(slotExternalProgramOutputLine(const QString&)) );
-    connect( d->process, SIGNAL(stdoutLine(const QString&)),
-             this, SLOT(slotExternalProgramOutputLine(const QString&)) );
-
 
     // create the commandline
     QStringList params = d->cmd.command.split( ' ' );
@@ -229,19 +212,19 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension )
         (*it).replace( "%x", d->cdComment );
         (*it).replace( "%n", d->trackNumber );
         (*it).replace( "%g", d->genre );
-
-        *d->process << *it;
     }
 
 
     kDebug() << "***** external parameters:";
-    QString s = d->process->joinedArgs();
-    kDebug() << s << flush;
+    kDebug() << params.join( " " ) << flush;
 
     // set one general error message
-    setLastError( i18n("Command failed: %1", s ) );
+    setLastError( i18n("Command failed: %1", params.join( " " ) ) );
 
-    if( d->process->start( K3Process::All ) ) {
+    d->process.setProgram( params );
+    d->process.start();
+
+    if( d->process.waitForStarted() ) {
         if( d->cmd.writeWaveHeader )
             return writeWaveHeader();
         else
@@ -262,7 +245,7 @@ bool K3bExternalEncoder::writeWaveHeader()
     kDebug() << "(K3bExternalEncoder) writing wave header";
 
     // write the RIFF thing
-    if( d->process->write( s_riffHeader, 4 ) != 4 ) {
+    if( d->process.write( s_riffHeader, 4 ) != 4 ) {
         kDebug() << "(K3bExternalEncoder) failed to write riff header.";
         return false;
     }
@@ -277,13 +260,13 @@ bool K3bExternalEncoder::writeWaveHeader()
     c[2] = (wavSize   >> 16) & 0xff;
     c[3] = (wavSize   >> 24) & 0xff;
 
-    if( d->process->write( c, 4 ) != 4 ) {
+    if( d->process.write( c, 4 ) != 4 ) {
         kDebug() << "(K3bExternalEncoder) failed to write wave size.";
         return false;
     }
 
     // write static part of the header
-    if( d->process->write( s_riffHeader + 8, 32 ) != 32 ) {
+    if( d->process.write( s_riffHeader + 8, 32 ) != 32 ) {
         kDebug() << "(K3bExternalEncoder) failed to write wave header.";
         return false;
     }
@@ -293,7 +276,7 @@ bool K3bExternalEncoder::writeWaveHeader()
     c[2] = (dataSize   >> 16) & 0xff;
     c[3] = (dataSize   >> 24) & 0xff;
 
-    if( d->process->write( c, 4 ) != 4 ) {
+    if( d->process.write( c, 4 ) != 4 ) {
         kDebug() << "(K3bExternalEncoder) failed to write data size.";
         return false;
     }
@@ -305,48 +288,45 @@ bool K3bExternalEncoder::writeWaveHeader()
 long K3bExternalEncoder::encodeInternal( const char* data, Q_ULONG len )
 {
     if( !d->initialized )
-        if( !initEncoderInternal( d->extension ) )
+        if( !initExternalEncoder( d->extension ) )
             return -1;
 
-    if( d->process ) {
-        if( d->process->isRunning() ) {
+    if( d->process.state() == QProcess::Running ) {
 
-            long written = 0;
+        long written = 0;
 
-            //
-            // we swap the bytes to reduce user irritation ;)
-            // This is a little confused: We used to swap the byte order
-            // in older versions of this encoder since little endian seems
-            // to "feel" more natural.
-            // So now that we have a swap option we have to invert it to ensure
-            // compatibility
-            //
-            if( !d->cmd.swapByteOrder ) {
-                char* buffer = new char[len];
-                for( unsigned int i = 0; i < len-1; i+=2 ) {
-                    buffer[i] = data[i+1];
-                    buffer[i+1] = data[i];
-                }
-
-                written = d->process->write( buffer, len );
-                delete [] buffer;
+        //
+        // we swap the bytes to reduce user irritation ;)
+        // This is a little confused: We used to swap the byte order
+        // in older versions of this encoder since little endian seems
+        // to "feel" more natural.
+        // So now that we have a swap option we have to invert it to ensure
+        // compatibility
+        //
+        if( !d->cmd.swapByteOrder ) {
+            char* buffer = new char[len];
+            for( unsigned int i = 0; i < len-1; i+=2 ) {
+                buffer[i] = data[i+1];
+                buffer[i+1] = data[i];
             }
-            else
-                written = d->process->write( data, len );
 
-            return written;
+            written = d->process.write( buffer, len );
+            delete [] buffer;
         }
         else
-            return -1;
+            written = d->process.write( data, len );
+
+        return written;
     }
     else
         return -1;
 }
 
 
-void K3bExternalEncoder::slotExternalProgramOutputLine( const QString& line )
+void K3bExternalEncoder::slotExternalProgramOutput()
 {
-    kDebug() << "(" << d->cmd.name << ") " << line;
+    while ( d->process.canReadLine() )
+        kDebug() << "(" << d->cmd.name << ") " << d->process.readLine();
 }
 
 

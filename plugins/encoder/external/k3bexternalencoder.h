@@ -1,4 +1,4 @@
-/* 
+/*
  *
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
@@ -29,7 +29,7 @@ public:
     ~K3bExternalEncoder();
 
     QStringList extensions() const;
-  
+
     QString fileTypeComment( const QString& ) const;
 
     int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
@@ -41,14 +41,14 @@ public:
     bool openFile( const QString& ext, const QString& filename, const K3b::Msf& length );
     void closeFile();
 
-    
+
 private Q_SLOTS:
     void slotExternalProgramFinished( int, QProcess::ExitStatus );
-    void slotExternalProgramOutputLine( const QString& );
+    void slotExternalProgramOutput();
 
 private:
     void finishEncoderInternal();
-    bool initEncoderInternal( const QString& extension );
+    bool initExternalEncoder( const QString& extension );
     long encodeInternal( const char* data, Q_ULONG len );
     void setMetaDataInternal( MetaDataField, const QString& );
     bool writeWaveHeader();
