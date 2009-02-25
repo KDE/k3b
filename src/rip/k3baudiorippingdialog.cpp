@@ -337,7 +337,7 @@ void K3b::AudioRippingDialog::refresh()
         d->trackModel.setItem( 0, 2, new QStandardItem( fileSize < 0 ? i18n("unknown") : KIO::convertSize( fileSize ) ) );
         d->trackModel.setItem( 0, 3, new QStandardItem( i18n("Audio") ) );
 
-        d->filenames.append( baseDir + "/" + filename + "." + extension );
+        d->filenames.append( baseDir + filename + "." + extension );
 
         if( m_optionWidget->createCueFile() ) {
             d->trackModel.setItem( 1, 0, new QStandardItem( filename + ".cue" ) );
