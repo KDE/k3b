@@ -157,9 +157,9 @@ bool K3b::Device::Device::readMcn( QByteArray& mcn ) const
 
 
 bool K3b::Device::Device::getPerformance( unsigned char** data, unsigned int& dataLen,
-                                        unsigned int type,
-                                        unsigned int dataType,
-                                        unsigned int lba ) const
+                                          unsigned int type,
+                                          unsigned int dataType,
+                                          unsigned int lba ) const
 {
     unsigned int descLen = 0;
     switch( type ) {
@@ -183,9 +183,9 @@ bool K3b::Device::Device::getPerformance( unsigned char** data, unsigned int& da
         break;
     }
 
-    unsigned char header[8];
-    ::memset( header, 0, 8 );
-    dataLen = 8;
+    unsigned char header[24];
+    ::memset( header, 0, 24 );
+    dataLen = 24;
 
     ScsiCommand cmd( this );
     cmd[0] = MMC_GET_PERFORMANCE;
@@ -197,7 +197,7 @@ bool K3b::Device::Device::getPerformance( unsigned char** data, unsigned int& da
     cmd[9] = 1;      // first we read one descriptor
     cmd[10] = type;
     cmd[11] = 0;     // Necessary to set the proper command length
-    if( cmd.transport( TR_DIR_READ, header, 8 ) ) {
+    if( cmd.transport( TR_DIR_READ, header, 24 ) ) {
         kDebug() << "(K3b::Device::Device) " << blockDeviceName()
                  << ": GET PERFORMANCE length det failed." << endl;
         return false;
