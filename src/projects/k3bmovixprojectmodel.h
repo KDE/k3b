@@ -69,11 +69,16 @@ namespace K3b {
                 Qt::DropAction action, int row, int column,
                 const QModelIndex& parent );
 
+            virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
+
     private:
         class Private;
         Private* const d;
 
-        Q_PRIVATE_SLOT( d, void _k_docChanged())
+        Q_PRIVATE_SLOT( d, void _k_aboutToAddRows(int, int, K3b::MovixFileItem*))
+        Q_PRIVATE_SLOT( d, void _k_addedRows())
+        Q_PRIVATE_SLOT( d, void _k_aboutToRemoveRows(int, int, K3b::MovixFileItem*))
+        Q_PRIVATE_SLOT( d, void _k_removedRows())
     };
 }
 

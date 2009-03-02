@@ -57,7 +57,7 @@ K3b::MovixView::MovixView( K3b::MovixDoc* doc, QWidget* parent )
                                             0, this, SLOT(showPropertiesDialog()),
                                             actionCollection(), "movix_show_props" );
     m_actionRemove = K3b::createAction( this, i18n( "Remove" ), "edit-delete",
-                                        Qt::Key_Delete, this, SLOT(slotRemoveItems()),
+                                        Qt::Key_Delete, this, SLOT(slotRemoveSelectedIndexes()),
                                         actionCollection(), "movix_remove_item" );
     m_actionRemoveSubTitle = K3b::createAction( this, i18n( "Remove Subtitle File" ), "edit-delete",
                                                 0, this, SLOT(slotRemoveSubTitleItems()),
@@ -94,41 +94,42 @@ K3b::MovixView::~MovixView()
 }
 
 
-void K3b::MovixView::slotContextMenuRequested(Q3ListViewItem* item, const QPoint& p, int )
+void K3b::MovixView::contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos)
 {
-    if( item ) {
+    if( selectedIndexes.count() >= 1 ) {
         m_actionRemove->setEnabled(true);
         m_actionRemoveSubTitle->setEnabled( true );
+        m_actionAddSubTitle->setEnabled( true );
     }
     else {
         m_actionRemove->setEnabled(false);
         m_actionRemoveSubTitle->setEnabled( false );
+        m_actionAddSubTitle->setEnabled( false );
     }
 
-    m_popupMenu->popup( p );
+    m_popupMenu->popup( pos );
 }
 
 
 void K3b::MovixView::showPropertiesDialog()
 {
-#if 0
-    QList<K3b::DataItem*> dataItems;
+    QModelIndexList selection = currentSelection();
 
-    // get selected item
-    QList<Q3ListViewItem*> viewItems = m_listView->selectedItems();
-    Q_FOREACH( Q3ListViewItem* item, viewItems ) {
-        if( K3b::MovixListViewItem* viewItem = dynamic_cast<K3b::MovixListViewItem*>( item ) ) {
-            dataItems.append( viewItem->fileItem() );
-        }
-    }
-
-    if( !dataItems.isEmpty() ) {
-        K3b::DataPropertiesDialog d( dataItems, this );
-        d.exec();
+    if ( selection.isEmpty() )
+    {
+        // show project properties
+        slotProperties();
     }
     else
-        slotProperties();
-#endif
+    {
+        QList<K3b::DataItem*> items;
+
+        foreach(QModelIndex index, selection)
+            items.append(m_model->itemForIndex(index));
+
+        K3b::DataPropertiesDialog dlg( items, this );
+        dlg.exec();
+    }
 }
 
 

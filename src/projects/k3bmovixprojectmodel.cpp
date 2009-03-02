@@ -34,9 +34,26 @@ class MovixProjectModel::Private
 
         K3b::MovixDoc* project;
 
-        void _k_docChanged()
+        void _k_aboutToAddRows(int pos, int count, K3b::MovixFileItem* parent)
         {
-            q->reset();
+            if(!parent)
+                q->beginInsertRows(QModelIndex(), pos, pos + count - 1);
+        }
+
+        void _k_addedRows()
+        {
+            q->endInsertRows();
+        }
+
+        void _k_aboutToRemoveRows(int pos, int count, K3b::MovixFileItem* parent)
+        {
+            if(!parent)
+                q->beginRemoveRows(QModelIndex(), pos, pos + count - 1);
+        }
+
+        void _k_removedRows()
+        {
+            q->endRemoveRows();
         }
 
     private:
@@ -49,7 +66,13 @@ MovixProjectModel::MovixProjectModel( K3b::MovixDoc* doc, QObject* parent )
 {
     d->project = doc;
 
-    connect(doc, SIGNAL(newMovixFileItems()), this, SLOT(_k_docChanged()));
+    connect(doc, SIGNAL(aboutToAddMovixItem(int, int, K3b::MovixFileItem*)),
+            this, SLOT(_k_aboutToAddRows(int, int, K3b::MovixFileItem*)));
+    connect(doc, SIGNAL(addedMovixItem()), this, SLOT(_k_addedRows()));
+
+    connect(doc, SIGNAL(aboutToRemoveMovixItem(int, int, K3b::MovixFileItem*)),
+            this, SLOT(_k_aboutToRemoveRows(int, int, K3b::MovixFileItem*)));
+    connect(doc, SIGNAL(removedMovixItem()), this, SLOT(_k_removedRows()));
 }
 
 MovixProjectModel::~MovixProjectModel()
@@ -337,13 +360,27 @@ bool MovixProjectModel::dropMimeData( const QMimeData* data,
 
         KUrl::List urls = KUrl::List::fromMimeData( data );
 
-        foreach( KUrl url, urls )
-            d->project->addMovixFile( url, pos );
+        d->project->addUrlsAt( urls, pos);
 
         return true;
     }
 
     return false;
+}
+
+bool MovixProjectModel::removeRows( int row, int count, const QModelIndex& parent )
+{
+    // remove the indexes from the project
+    while (count > 0)
+    {
+        QModelIndex i = index( row, 0, parent );
+        d->project->removeMovixItem( itemForIndex(i) );
+
+        row++;
+        count--;
+    }
+
+    return true;
 }
 
 #include "k3bmovixprojectmodel.moc"

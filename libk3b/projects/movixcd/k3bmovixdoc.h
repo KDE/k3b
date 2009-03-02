@@ -37,8 +37,7 @@ namespace K3b {
         virtual ~MovixDoc();
 
         virtual int type() const { return MOVIX; }
-
-        virtual BurnJob* newBurnJob( JobHandler* hdl, QObject* parent );
+        virtual QString typeString() const;
 
         bool newDocument();
 
@@ -46,45 +45,65 @@ namespace K3b {
 
         int indexOf( MovixFileItem* );
 
+        virtual BurnJob* newBurnJob( JobHandler* hdl, QObject* parent );
 
+        // Movix project options managed by MovixOptionWidget
+        void setShutdown( bool v ) { m_shutdown = v; }
         bool shutdown() const { return m_shutdown; }
+
+        void setReboot( bool v ) { m_reboot = v; }
         bool reboot() const { return m_reboot; }
+
+        void setEjectDisk( bool v ) { m_ejectDisk = v; }
         bool ejectDisk() const { return m_ejectDisk; }
+
+        void setRandomPlay( bool v ) { m_randomPlay = v; }
         bool randomPlay() const { return m_randomPlay; }
+
+        void setSubtitleFontset( const QString& v ) { m_subtitleFontset = v; }
         QString subtitleFontset() const { return m_subtitleFontset; }
+
+        void setBootMessageLanguage( const QString& v ) { m_bootMessageLanguage = v; }
         QString bootMessageLanguage() const { return m_bootMessageLanguage; }
+
+        void setAudioBackground( const QString& b ) { m_audioBackground = b; }
         QString audioBackground() const { return m_audioBackground; }
+
+        void setKeyboardLayout( const QString& l ) { m_keyboardLayout = l; }
         QString keyboardLayout() const { return m_keyboardLayout; }
+
+        void setCodecs( const QStringList& c ) { m_codecs = c; }
         QStringList codecs() const { return m_codecs; }
+
+        void setDefaultBootLabel( const QString& v ) { m_defaultBootLabel = v; }
         QString defaultBootLabel() const { return m_defaultBootLabel; }
+
+        void setAdditionalMPlayerOptions( const QString& v ) { m_additionalMPlayerOptions = v; }
         QString additionalMPlayerOptions() const { return m_additionalMPlayerOptions; }
+
+        void setUnwantedMPlayerOptions( const QString& v ) { m_unwantedMPlayerOptions = v; }
         QString unwantedMPlayerOptions() const { return m_unwantedMPlayerOptions; }
+
+        void setLoopPlaylist( int v ) { m_loopPlaylist = v; }
         int loopPlaylist() const { return m_loopPlaylist; }
+
+        void setNoDma( bool b ) { m_noDma = b; }
         bool noDma() const { return m_noDma; }
 
-        void setShutdown( bool v ) { m_shutdown = v; }
-        void setReboot( bool v ) { m_reboot = v; }
-        void setEjectDisk( bool v ) { m_ejectDisk = v; }
-        void setRandomPlay( bool v ) { m_randomPlay = v; }
-        void setSubtitleFontset( const QString& v ) { m_subtitleFontset = v; }
-        void setBootMessageLanguage( const QString& v ) { m_bootMessageLanguage = v; }
-        void setAudioBackground( const QString& b ) { m_audioBackground = b; }
-        void setKeyboardLayout( const QString& l ) { m_keyboardLayout = l; }
-        void setCodecs( const QStringList& c ) { m_codecs = c; }
-        void setDefaultBootLabel( const QString& v ) { m_defaultBootLabel = v; }
-        void setAdditionalMPlayerOptions( const QString& v ) { m_additionalMPlayerOptions = v; }
-        void setUnwantedMPlayerOptions( const QString& v ) { m_unwantedMPlayerOptions = v; }
-        void setLoopPlaylist( int v ) { m_loopPlaylist = v; }
-        void setNoDma( bool b ) { m_noDma = b; }
-
     Q_SIGNALS:
+        void aboutToAddMovixItem( int pos, int count, K3b::MovixFileItem* parent );
+        void addedMovixItem();
+        void aboutToRemoveMovixItem( int pos, int count, K3b::MovixFileItem* parent );
+        void removedMovixItem();
         void newMovixFileItems();
         void movixItemRemoved( K3b::MovixFileItem* );
         void subTitleItemRemoved( K3b::MovixFileItem* );
 
     public Q_SLOTS:
         void addUrls( const KUrl::List& urls );
-        void addMovixFile( const KUrl& url, int pos = -1 );
+        void addUrlsAt( const KUrl::List& urls, int pos );
+        void addMovixItems( QList<K3b::MovixFileItem*>& items, int pos = -1 );
+        void removeMovixItem( K3b::MovixFileItem* item);
         void moveMovixItem( K3b::MovixFileItem* item, K3b::MovixFileItem* itemAfter );
         void addSubTitleItem( K3b::MovixFileItem*, const KUrl& );
         void removeSubTitleItem( K3b::MovixFileItem* );
@@ -95,14 +114,10 @@ namespace K3b {
         /** reimplemented from Doc */
         bool saveDocumentData( QDomElement* );
 
-        virtual QString typeString() const { return "movix"; }
-
-    private Q_SLOTS:
-        void slotDataItemRemoved( K3b::DataItem* );
-
     private:
         QList<MovixFileItem*> m_movixFiles;
 
+        //Movix project options
         bool m_shutdown;
         bool m_reboot;
         bool m_ejectDisk;

@@ -36,8 +36,6 @@
 K3b::MovixDoc::MovixDoc( QObject* parent )
     : K3b::DataDoc( parent )
 {
-    connect( this, SIGNAL(itemRemoved(K3b::DataItem*)),
-             this, SLOT(slotDataItemRemoved(K3b::DataItem*)) );
 }
 
 
@@ -49,6 +47,12 @@ K3b::MovixDoc::~MovixDoc()
 K3b::BurnJob* K3b::MovixDoc::newBurnJob( K3b::JobHandler* hdl, QObject* parent )
 {
     return new K3b::MovixJob( this, hdl, parent );
+}
+
+
+QString K3b::MovixDoc::typeString() const
+{
+    return QString::fromLatin1("movix");
 }
 
 
@@ -64,46 +68,151 @@ bool K3b::MovixDoc::newDocument()
 }
 
 
-void K3b::MovixDoc::addUrls( const KUrl::List& urls )
+int K3b::MovixDoc::indexOf( K3b::MovixFileItem* item )
 {
-    for( KUrl::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
-        addMovixFile( *it );
-    }
-
-    emit newMovixFileItems();
+    return m_movixFiles.lastIndexOf(item)+1;
 }
 
 
-void K3b::MovixDoc::addMovixFile( const KUrl& _url, int pos )
+void K3b::MovixDoc::addUrls( const KUrl::List& urls )
 {
-    KUrl url = K3b::convertToLocalUrl( _url );
+    addUrlsAt(urls, -1);
+}
+
+void K3b::MovixDoc::addUrlsAt( const KUrl::List& urls, int pos )
+{
+    QList<K3b::MovixFileItem*> items;
+
+    for( KUrl::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
+        KUrl url = K3b::convertToLocalUrl( *it );
+
+        QFileInfo f( url.path() );
+        if( !f.isFile() || !url.isLocalFile() )
+            continue;
+
+        QString newName = f.fileName();
+        if( nameAlreadyInDir( newName, root() ) )
+        {
+            bool ok = true;
+            do
+            {
+                newName = KInputDialog::getText( i18n("Enter New Filename"),
+                                                 i18n("A file with that name already exists. Please enter a new name:"),
+                                                 newName, &ok, 0 );
+            } while( ok && nameAlreadyInDir( newName, root() ) );
+
+            if( !ok )
+                continue;
+        }
+
+        items.append(new MovixFileItem( f.absoluteFilePath(), this, root(), newName ));
+    }
+
+    if( pos < 0 || pos > (int)m_movixFiles.count() )
+        pos = m_movixFiles.count();
+
+    addMovixItems( items, pos );
+}
+
+
+void K3b::MovixDoc::addMovixItems( QList<K3b::MovixFileItem*>& items, int pos )
+{
+    if( pos < 0 || pos > (int)m_movixFiles.count() )
+        pos = m_movixFiles.count();
+
+    emit aboutToAddMovixItem( pos, items.count(), 0);
+
+    foreach (K3b::MovixFileItem* newItem, items)
+    {
+        m_movixFiles.insert( pos, newItem );
+        pos++;
+    }
+
+    emit addedMovixItem();
+}
+
+void K3b::MovixDoc::removeMovixItem( K3b::MovixFileItem* item)
+{
+    while( m_movixFiles.contains( item ) )
+    {
+        int removedPos = m_movixFiles.lastIndexOf( item );
+
+        emit aboutToRemoveMovixItem( removedPos, 1, 0);
+
+        m_movixFiles.removeAt( removedPos );
+
+        emit removedMovixItem();
+    }
+}
+
+
+void K3b::MovixDoc::moveMovixItem( K3b::MovixFileItem* item, K3b::MovixFileItem* itemAfter )
+{
+    if( item == itemAfter )
+        return;
+
+    // take the current item
+    int removedPos = m_movixFiles.lastIndexOf( item );
+
+    emit aboutToRemoveMovixItem( removedPos, 1, 0);
+
+    item = m_movixFiles.takeAt( removedPos );
+
+    emit removedMovixItem();
+
+    // if after == 0 lastIndexOf returnes -1
+    int pos = m_movixFiles.lastIndexOf( itemAfter ) + 1;
+
+    emit aboutToAddMovixItem( pos, 1, 0);
+
+    m_movixFiles.insert( pos, item );
+
+    emit addedMovixItem();
+
+    setModified(true);
+}
+
+
+void K3b::MovixDoc::addSubTitleItem( K3b::MovixFileItem* item, const KUrl& url )
+{
+#if 0
+    if( item->subTitleItem() )
+        removeSubTitleItem( item );
 
     QFileInfo f( url.path() );
     if( !f.isFile() || !url.isLocalFile() )
         return;
 
-    QString newName = f.fileName();
-    if( nameAlreadyInDir( newName, root() ) ) {
-        bool ok = true;
-        do {
-            newName = KInputDialog::getText( i18n("Enter New Filename"),
-                                             i18n("A file with that name already exists. Please enter a new name:"),
-                                             newName, &ok, 0 );
-        } while( ok && nameAlreadyInDir( newName, root() ) );
+    // check if there already is a file named like we want to name the subTitle file
+    QString name = K3b::MovixFileItem::subTitleFileName( item->k3bName() );
 
-        if( !ok )
-            return;
+    if( nameAlreadyInDir( name, root() ) ) {
+        KMessageBox::error( 0, i18n("Could not rename subtitle file. File with requested name %1 already exists.",name) );
+        return;
     }
 
-    K3b::MovixFileItem* newK3bItem = new MovixFileItem( f.absoluteFilePath(), this, root(), newName );
-    if( pos < 0 || pos > (int)m_movixFiles.count() )
-        pos = m_movixFiles.count();
-
-    m_movixFiles.insert( pos, newK3bItem );
+    K3b::FileItem* subItem = new K3b::FileItem( f.absoluteFilePath(), this, root(), name );
+    item->setSubTitleItem( subItem );
 
     emit newMovixFileItems();
 
     setModified(true);
+#endif
+}
+
+
+void K3b::MovixDoc::removeSubTitleItem( K3b::MovixFileItem* item )
+{
+#if 0
+    if( item->subTitleItem() ) {
+        emit subTitleItemRemoved( item );
+
+        delete item->subTitleItem();
+        item->setSubTitleItem(0);
+
+        setModified(true);
+    }
+#endif
 }
 
 
@@ -354,81 +463,6 @@ bool K3b::MovixDoc::saveDocumentData( QDomElement* docElem )
     docElem->appendChild( movixFilesElem );
 
     return true;
-}
-
-
-void K3b::MovixDoc::slotDataItemRemoved( K3b::DataItem* item )
-{
-    // check if it's a movix item
-    if( K3b::MovixFileItem* fi = dynamic_cast<K3b::MovixFileItem*>(item) )
-        if( m_movixFiles.contains( fi ) ) {
-            emit movixItemRemoved( fi );
-            m_movixFiles.removeAll( fi );
-            setModified(true);
-        }
-}
-
-
-int K3b::MovixDoc::indexOf( K3b::MovixFileItem* item )
-{
-    return m_movixFiles.lastIndexOf(item)+1;
-}
-
-
-void K3b::MovixDoc::moveMovixItem( K3b::MovixFileItem* item, K3b::MovixFileItem* itemAfter )
-{
-    if( item == itemAfter )
-        return;
-
-    // take the current item
-    item = m_movixFiles.takeAt( m_movixFiles.lastIndexOf( item ) );
-
-    // if after == 0 lastIndexOf returnes -1
-    int pos = m_movixFiles.lastIndexOf( itemAfter );
-    m_movixFiles.insert( pos+1, item );
-
-    emit newMovixFileItems();
-
-    setModified(true);
-}
-
-
-void K3b::MovixDoc::addSubTitleItem( K3b::MovixFileItem* item, const KUrl& url )
-{
-    if( item->subTitleItem() )
-        removeSubTitleItem( item );
-
-    QFileInfo f( url.path() );
-    if( !f.isFile() || !url.isLocalFile() )
-        return;
-
-    // check if there already is a file named like we want to name the subTitle file
-    QString name = K3b::MovixFileItem::subTitleFileName( item->k3bName() );
-
-    if( nameAlreadyInDir( name, root() ) ) {
-        KMessageBox::error( 0, i18n("Could not rename subtitle file. File with requested name %1 already exists.",name) );
-        return;
-    }
-
-    K3b::FileItem* subItem = new K3b::FileItem( f.absoluteFilePath(), this, root(), name );
-    item->setSubTitleItem( subItem );
-
-    emit newMovixFileItems();
-
-    setModified(true);
-}
-
-
-void K3b::MovixDoc::removeSubTitleItem( K3b::MovixFileItem* item )
-{
-    if( item->subTitleItem() ) {
-        emit subTitleItemRemoved( item );
-
-        delete item->subTitleItem();
-        item->setSubTitleItem(0);
-
-        setModified(true);
-    }
 }
 
 #include "k3bmovixdoc.moc"

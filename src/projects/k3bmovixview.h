@@ -43,7 +43,7 @@ namespace K3b {
         virtual ~MovixView();
 
     private Q_SLOTS:
-        void slotContextMenuRequested(Q3ListViewItem*, const QPoint& , int );
+        void contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos);
         void slotRemoveSubTitleItems();
         void showPropertiesDialog();
         void slotAddSubTitleFile();
