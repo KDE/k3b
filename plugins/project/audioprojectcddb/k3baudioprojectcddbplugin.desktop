@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=K3b Cddb Audio Plugin
 Name[et]=K3b CDDB plugin
+Name[fr]=Module audio CDDB K3b
 Name[ga]=Breiseán Fuaime Cddb K3b
 Name[nds]=CDDB-Audiomoduul för K3b
 Name[nl]=K3b Cddb Audio-plugin
@@ -10,6 +11,7 @@ Name[sv]=K3b CDDB-ljudinsticksprogram
 Name[uk]=Додаток для роботи з CDDB у K3b
 Comment=Plugin to query a cddb server for information about an audio project.
 Comment[et]=Plugin CDDB serverist teabe hankimiseks audioprojekti kohta.
+Comment[fr]=Module pour interroger un serveur CDDB pour des informations sur un projet audio.
 Comment[ga]=Breiseán a dhéanann iarratais ar eolas faoi thionscadal fuaime ó fhreastalaí cddb.
 Comment[nds]=Moduul för de Söök vun Informatschonen över en Klangprojekt op en CDDB-Server
 Comment[nl]=Plugin om op een cddb-server informatie op te zoeken over een audioproject.
