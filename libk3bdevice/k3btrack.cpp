@@ -289,3 +289,12 @@ bool K3b::Device::Track::operator!=( const Track& other ) const
 {
     return !operator==( other );
 }
+
+
+QDebug operator<<( QDebug s, const K3b::Device::Track& track )
+{
+    s.nospace() << ( track.type() == K3b::Device::Track::TYPE_AUDIO ? " AUDIO" : " DATA" )
+                << " " << track.firstSector().lba() << " - " << track.lastSector().lba()
+                << " (" << track.length().lba() << ")";
+    return s;
+}

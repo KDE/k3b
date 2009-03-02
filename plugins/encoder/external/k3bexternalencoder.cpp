@@ -72,7 +72,7 @@ static K3bExternalEncoderCommand commandByExtension( const QString& extension )
 class K3bExternalEncoder::Private
 {
 public:
-    KProcess process;
+    KProcess* process;
     QString fileName;
     QString extension;
     K3b::Msf length;
@@ -98,17 +98,15 @@ K3bExternalEncoder::K3bExternalEncoder( QObject* parent, const QVariantList& )
     : K3b::AudioEncoder( parent ),
       d( new Private() )
 {
-    d->process.setOutputChannelMode( KProcess::MergedChannels );
+    d->process = 0;
 
-    connect( &d->process, SIGNAL(finished(int, QProcess::ExitStatus)),
-             this, SLOT(slotExternalProgramFinished(int, QProcess::ExitStatus)) );
-    connect( &d->process, SIGNAL(readyRead()),
-             this, SLOT(slotExternalProgramOutput()) );
+    qRegisterMetaType<QProcess::ExitStatus>();
 }
 
 
 K3bExternalEncoder::~K3bExternalEncoder()
 {
+    delete d->process;
     delete d;
 }
 
@@ -149,12 +147,12 @@ void K3bExternalEncoder::setMetaDataInternal( K3b::AudioEncoder::MetaDataField f
 
 void K3bExternalEncoder::finishEncoderInternal()
 {
-    if( d->process.state() == QProcess::Running ) {
-        d->process.closeWriteChannel();
+    if( d->process->state() == QProcess::Running ) {
+        d->process->closeWriteChannel();
 
         // this is kind of evil...
         // but we need to be sure the process exited when this method returnes
-        d->process.waitForFinished(-1);
+        d->process->waitForFinished(-1);
     }
 }
 
@@ -221,10 +219,19 @@ bool K3bExternalEncoder::initExternalEncoder( const QString& extension )
     // set one general error message
     setLastError( i18n("Command failed: %1", params.join( " " ) ) );
 
-    d->process.setProgram( params );
-    d->process.start();
+    // always create a new process since we are called in a separate thread
+    delete d->process;
+    d->process = new KProcess();
+    d->process->setOutputChannelMode( KProcess::MergedChannels );
+    connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)),
+             this, SLOT(slotExternalProgramFinished(int, QProcess::ExitStatus)) );
+    connect( d->process, SIGNAL(readyRead()),
+             this, SLOT(slotExternalProgramOutput()) );
 
-    if( d->process.waitForStarted() ) {
+    d->process->setProgram( params );
+    d->process->start();
+
+    if( d->process->waitForStarted() ) {
         if( d->cmd.writeWaveHeader )
             return writeWaveHeader();
         else
@@ -245,7 +252,7 @@ bool K3bExternalEncoder::writeWaveHeader()
     kDebug() << "(K3bExternalEncoder) writing wave header";
 
     // write the RIFF thing
-    if( d->process.write( s_riffHeader, 4 ) != 4 ) {
+    if( d->process->write( s_riffHeader, 4 ) != 4 ) {
         kDebug() << "(K3bExternalEncoder) failed to write riff header.";
         return false;
     }
@@ -260,13 +267,13 @@ bool K3bExternalEncoder::writeWaveHeader()
     c[2] = (wavSize   >> 16) & 0xff;
     c[3] = (wavSize   >> 24) & 0xff;
 
-    if( d->process.write( c, 4 ) != 4 ) {
+    if( d->process->write( c, 4 ) != 4 ) {
         kDebug() << "(K3bExternalEncoder) failed to write wave size.";
         return false;
     }
 
     // write static part of the header
-    if( d->process.write( s_riffHeader + 8, 32 ) != 32 ) {
+    if( d->process->write( s_riffHeader + 8, 32 ) != 32 ) {
         kDebug() << "(K3bExternalEncoder) failed to write wave header.";
         return false;
     }
@@ -276,7 +283,7 @@ bool K3bExternalEncoder::writeWaveHeader()
     c[2] = (dataSize   >> 16) & 0xff;
     c[3] = (dataSize   >> 24) & 0xff;
 
-    if( d->process.write( c, 4 ) != 4 ) {
+    if( d->process->write( c, 4 ) != 4 ) {
         kDebug() << "(K3bExternalEncoder) failed to write data size.";
         return false;
     }
@@ -291,7 +298,7 @@ long K3bExternalEncoder::encodeInternal( const char* data, Q_ULONG len )
         if( !initExternalEncoder( d->extension ) )
             return -1;
 
-    if( d->process.state() == QProcess::Running ) {
+    if( d->process->state() == QProcess::Running ) {
 
         long written = 0;
 
@@ -310,11 +317,11 @@ long K3bExternalEncoder::encodeInternal( const char* data, Q_ULONG len )
                 buffer[i+1] = data[i];
             }
 
-            written = d->process.write( buffer, len );
+            written = d->process->write( buffer, len );
             delete [] buffer;
         }
         else
-            written = d->process.write( data, len );
+            written = d->process->write( data, len );
 
         return written;
     }
@@ -325,8 +332,8 @@ long K3bExternalEncoder::encodeInternal( const char* data, Q_ULONG len )
 
 void K3bExternalEncoder::slotExternalProgramOutput()
 {
-    while ( d->process.canReadLine() )
-        kDebug() << "(" << d->cmd.name << ") " << d->process.readLine();
+    while ( d->process->canReadLine() )
+        kDebug() << "(" << d->cmd.name << ") " << d->process->readLine();
 }
 
 

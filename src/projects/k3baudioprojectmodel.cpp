@@ -14,6 +14,8 @@
 
 #include "k3baudioprojectmodel.h"
 #include "k3baudiotrackaddingdialog.h"
+#include "k3baudiocdtrackdrag.h"
+#include "k3baudiocdtracksource.h"
 
 #include <k3baudiodoc.h>
 #include <k3baudiotrack.h>
@@ -394,6 +396,7 @@ Qt::DropActions K3b::AudioProjectModel::supportedDropActions() const
 QStringList K3b::AudioProjectModel::mimeTypes() const
 {
     QStringList s = KUrl::List::mimeDataTypes();
+    s += AudioCdTrackDrag::mimeDataTypes();
     s += QString::fromLatin1( "application/x-k3baudiotrack" );
     s += QString::fromLatin1( "application/x-k3baudiodatasource" );
     return s;
@@ -571,7 +574,40 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
     //
     // handle tracks from the audio cd view
     //
-#warning FIXME: handle dragndrop from the audio cd ripping view
+    else if ( AudioCdTrackDrag::canDecode( data ) ) {
+        kDebug() << "audiocdtrack dropped.";
+
+        AudioCdTrackDrag drag = AudioCdTrackDrag::fromMimeData( data );
+
+        // for now we just create one source
+        foreach( int trackNumber, drag.trackNumbers() ) {
+            kDebug() << trackNumber << "dropped";
+            AudioCdTrackSource* source = new AudioCdTrackSource( drag.toc(),
+                                                                 trackNumber,
+                                                                 drag.cddbEntry().track( trackNumber-1 ).get( KCDDB::Artist ).toString(),
+                                                                 drag.cddbEntry().track( trackNumber-1 ).get( KCDDB::Title ).toString(),
+                                                                 drag.cddbEntry().get( KCDDB::Artist ).toString(),
+                                                                 drag.cddbEntry().get( KCDDB::Title ).toString(),
+                                                                 drag.device() );
+            if( dropTrackParent ) {
+                source->moveAfter( dropSourceAfter );
+                if( dropSourceAfter )
+                    dropSourceAfter = source;
+            }
+            else {
+                AudioTrack* track = new AudioTrack();
+                track->setPerformer( drag.cddbEntry().track( trackNumber-1 ).get( KCDDB::Artist ).toString() );
+                track->setTitle( drag.cddbEntry().track( trackNumber-1 ).get( KCDDB::Title ).toString() );
+                track->addSource( source );
+                if( dropTrackAfter )
+                    track->moveAfter( dropTrackAfter );
+                else
+                    d->project->addTrack( track, 0 );
+
+                dropTrackAfter = track;
+            }
+        }
+    }
 
     //
     // add new tracks

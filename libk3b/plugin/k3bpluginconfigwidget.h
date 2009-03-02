@@ -22,6 +22,8 @@
 
 #include "k3b_export.h"
 
+class KConfigGroup;
+
 namespace K3b {
     /**
      * A config widget for a K3b plugin.
@@ -55,8 +57,15 @@ namespace K3b {
         PluginConfigWidget( QWidget* parent = 0, const QVariantList& args = QVariantList() );
         virtual ~PluginConfigWidget();
 
+        // TODO: find a nice way to get the plugin name for the config groups
 #if 0
     public Q_SLOTS:
+        /**
+         * reimplemented from KCModule. Do not change.
+         * implement loadConfig instead.
+         */
+        void defaults();
+
         /**
          * reimplemented from KCModule. Do not change.
          * implement loadConfig instead.
@@ -70,8 +79,19 @@ namespace K3b {
         void save();
 
     protected:
-        virtual void loadConfig( const KConfigGroup& config ) = 0;
-        virtual void saveConfig( KConfigGroup config ) = 0;
+        /**
+         * Load the config. Implement this instead of KCModule::load and
+         * KCModule::defaults (the latter case will be handled by loading
+         * from an invalid KConfigGroup object.
+         *
+         * \param config The config group to load the config From
+         */
+        virtual void loadConfig( const KConfigGroup& config );
+
+        /**
+         * Save the config
+         */
+        virtual void saveConfig( KConfigGroup config );
 #endif
     };
 }

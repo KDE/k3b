@@ -14,7 +14,6 @@
 
 #include "k3baudiocdview.h"
 #include "k3baudiorippingdialog.h"
-#include "k3baudiocdlistview.h"
 #include "k3baudiotrackmodel.h"
 #include "k3bviewcolumnadjuster.h"
 
@@ -105,6 +104,7 @@ K3b::AudioCdView::AudioCdView( QWidget* parent )
     m_trackView->setModel( m_trackModel );
     m_trackView->setRootIsDecorated( false );
     m_trackView->setContextMenuPolicy( Qt::CustomContextMenu );
+    m_trackView->setDragEnabled( true );
     K3b::ViewColumnAdjuster* vca = new K3b::ViewColumnAdjuster( m_trackView );
     vca->setFixedColumns( QList<int>() << 0 << 3 );
     vca->setColumnMargin( K3b::AudioTrackModel::LengthColumn, 10 );

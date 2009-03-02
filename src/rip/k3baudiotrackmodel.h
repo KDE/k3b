@@ -50,7 +50,7 @@ namespace K3b {
             CommentRole,
             LengthRole
         };
-        
+
         void setMedium( const Medium& medium );
         Medium medium() const;
 
@@ -70,6 +70,7 @@ namespace K3b {
         int rowCount( const QModelIndex& parent = QModelIndex() ) const;
         bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
         QMimeData* mimeData( const QModelIndexList& indexes ) const;
+        QStringList mimeTypes() const;
 
     public Q_SLOTS:
         void checkAll();

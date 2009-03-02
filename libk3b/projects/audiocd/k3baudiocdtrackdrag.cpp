@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,86 +21,124 @@
 #include <k3bcore.h>
 
 #include <qdatastream.h>
+#include <QtCore/QMimeData>
 
 
 // FIXME: multiple tracks
-K3b::AudioCdTrackDrag::AudioCdTrackDrag( const K3b::Device::Toc& toc, const QList<int>& cdTrackNumbers,
-                                          const KCDDB::CDInfo& cddb,
-                                          K3b::Device::Device* lastDev, QWidget* dragSource )
-    : Q3StoredDrag( "k3b/audio_track_drag", dragSource, name ),
-      m_toc(toc),
-      m_cdTrackNumbers(cdTrackNumbers),
-      m_cddb(cddb),
-      m_device(lastDev)
+K3b::AudioCdTrackDrag::AudioCdTrackDrag()
+    : m_device( 0 )
 {
-    QByteArray data;
-    QDataStream s( data, QIODevice::WriteOnly );
-    s << (unsigned int)toc.count();
-    for( K3b::Device::Toc::const_iterator it = toc.begin(); it != toc.end(); ++it ) {
-        const K3b::Device::Track& track = *it;
-        s << track.firstSector().lba() << track.lastSector().lba();
-    }
-    QTextStream t( s.device() );
-    t << cddb.get( KCDDB::Artist ).toString() << endl
-      << cddb.get( KCDDB::Title ).toString() << endl;
-    for( unsigned int i = 0; i < toc.count(); ++i ) {
-        t << cddb.track( i ).get( KCDDB::Artist ).toString() << endl
-          << cddb.track( i ).get( KCDDB::Title ).toString() << endl;
-    }
-
-    s << (unsigned int)cdTrackNumbers.count();
-
-    for( QList<int>::const_iterator it = cdTrackNumbers.begin();
-         it != cdTrackNumbers.end(); ++it )
-        s << *it;
-
-    if( lastDev )
-        t << lastDev->blockDeviceName() << endl;
-    else
-        t << endl;
-
-    // TODO: the rest
-    setEncodedData( data );
 }
 
 
-bool K3b::AudioCdTrackDrag::decode( const QMimeSource* e,
-                                  K3b::Device::Toc& toc, QList<int>& trackNumbers,
-                                  KCDDB::CDInfo& cddb, K3b::Device::Device** dev )
+K3b::AudioCdTrackDrag::AudioCdTrackDrag( const K3b::Device::Toc& toc,
+                                         const QList<int>& trackNumbers,
+                                         const KCDDB::CDInfo& cddb,
+                                         K3b::Device::Device* lastDev )
+    : m_toc(toc),
+      m_trackNumbers(trackNumbers),
+      m_cddb(cddb),
+      m_device(lastDev)
 {
-    QByteArray data = e->encodedData( "k3b/audio_track_drag" );
+}
 
-    QDataStream s( data, QIODevice::ReadOnly );
 
-    unsigned int trackCnt;
+void K3b::AudioCdTrackDrag::populateMimeData( QMimeData* mime )
+{
+    QByteArray data;
+    QDataStream s( &data, QIODevice::WriteOnly );
+
+    // encode TOC
+    s << m_toc.count();
+    for( K3b::Device::Toc::const_iterator it = m_toc.begin(); it != m_toc.end(); ++it ) {
+        const K3b::Device::Track& track = *it;
+        s << track.firstSector().lba() << track.lastSector().lba();
+    }
+
+    // encode CDDB
+    s << m_cddb.get( KCDDB::Artist ).toString()
+      << m_cddb.get( KCDDB::Title ).toString();
+    for( int i = 0; i < m_toc.count(); ++i ) {
+        s << m_cddb.track( i ).get( KCDDB::Artist ).toString()
+          << m_cddb.track( i ).get( KCDDB::Title ).toString();
+    }
+
+    // encode dragged track numbers
+    s << m_trackNumbers.count();
+    foreach( int trackNumber, m_trackNumbers )
+        s << trackNumber;
+
+    // encode last used device
+    if( m_device )
+        s << m_device->blockDeviceName();
+    else
+        s << QString();
+
+    // TODO: the rest
+    mime->setData( mimeDataTypes().first(), data );
+}
+
+
+K3b::AudioCdTrackDrag K3b::AudioCdTrackDrag::fromMimeData( const QMimeData* mime )
+{
+    AudioCdTrackDrag drag;
+
+    QByteArray data = mime->data( mimeDataTypes().first() );
+
+    QDataStream s( data );
+
+    // decode TOC
+    int trackCnt;
     s >> trackCnt;
-    for( unsigned int i = 0; i < trackCnt; ++i ) {
+    for( int i = 0; i < trackCnt; ++i ) {
         int fs, ls;
         s >> fs;
         s >> ls;
-        toc.append( K3b::Device::Track( fs, ls, K3b::Device::Track::AUDIO ) );
+        drag.m_toc.append( K3b::Device::Track( fs, ls, K3b::Device::Track::TYPE_AUDIO ) );
+        kDebug() << "decoded track:" << drag.m_toc.last();
     }
 
-    QTextStream t( s.device() );
-    cddb.clear();
-    cddb.set( KCDDB::Artist, t.readLine() );
-    cddb.set( KCDDB::Title, t.readLine() );
-    for( unsigned int i = 0; i < trackCnt; ++i ) {
-        cddb.track( i ).set( KCDDB::Artist, t.readLine() );
-        cddb.track( i ).set( KCDDB::Title, t.readLine() );
+    // decode cddb
+    drag.m_cddb.clear();
+    QString str;
+    s >> str;
+    drag.m_cddb.set( KCDDB::Artist, str );
+    s >> str;
+    drag.m_cddb.set( KCDDB::Title, str );
+    for( int i = 0; i < trackCnt; ++i ) {
+        s >> str;
+        kDebug() << "Decoded artist for track" << ( i+1 ) << str;
+        drag.m_cddb.track( i ).set( KCDDB::Artist, str );
+        s >> str;
+        kDebug() << "Decoded title for track" << ( i+1 ) << str;
+        drag.m_cddb.track( i ).set( KCDDB::Title, str );
     }
 
+    // decode track numbers
     s >> trackCnt;
-    trackNumbers.clear();
-    for( unsigned int i = 0; i < trackCnt; ++i ) {
-        int trackNumber = 0;
-        s >> trackNumber;
-        trackNumbers.append( trackNumber );
+    drag.m_trackNumbers.clear();
+    for( int i = 0; i < trackCnt; ++i ) {
+        int track = 0;
+        s >> track;
+        drag.m_trackNumbers.append( track );
     }
 
-    QString devName = t.readLine();
-    if( dev && !devName.isEmpty() )
-        *dev = k3bcore->deviceManager()->findDevice( devName );
+    // decoce last used device
+    s >> str;
+    if( !str.isEmpty() )
+        drag.m_device = k3bcore->deviceManager()->findDevice( str );
 
-    return true;
+    return drag;
+}
+
+
+QStringList K3b::AudioCdTrackDrag::mimeDataTypes()
+{
+    return QStringList() << QLatin1String( "k3b/audio_track_list" );
+}
+
+
+bool K3b::AudioCdTrackDrag::canDecode( const QMimeData* s )
+{
+    return s->hasFormat( mimeDataTypes().first() );
 }

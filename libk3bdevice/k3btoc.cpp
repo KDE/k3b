@@ -143,24 +143,6 @@ void K3b::Device::Toc::clear()
 }
 
 
-void K3b::Device::Toc::debug() const
-{
-    kDebug() << count() << " in " << sessions() << " sessions";
-    int sessionN = 0;
-    int trackN = 0;
-    for( Toc::const_iterator it = begin(); it != end(); ++it ) {
-        ++trackN;
-        if( sessionN != (*it).session() ) {
-            sessionN = (*it).session();
-            kDebug() << "Session Number " << sessionN;
-        }
-        kDebug() << "  Track " << trackN << ( (*it).type() == Track::TYPE_AUDIO ? " AUDIO" : " DATA" )
-                 << " " << (*it).firstSector().lba() << " - " << (*it).lastSector().lba()
-                 << " (" << (*it).length().lba() << ")" << endl;
-    }
-}
-
-
 bool K3b::Device::Toc::operator==( const Toc& other ) const
 {
     return( QList<Track>::operator==( other ) );
@@ -170,4 +152,21 @@ bool K3b::Device::Toc::operator==( const Toc& other ) const
 bool K3b::Device::Toc::operator!=( const Toc& other ) const
 {
     return( QList<Track>::operator!=( other ) );
+}
+
+
+QDebug operator<<( QDebug s, const K3b::Device::Toc& toc )
+{
+    s.nospace() << toc.count() << " in " << toc.sessions() << " sessions";
+    int sessionN = 0;
+    int trackN = 0;
+    for( K3b::Device::Toc::const_iterator it = toc.constBegin(); it != toc.constEnd(); ++it ) {
+        ++trackN;
+        if( sessionN != it->session() ) {
+            sessionN = it->session();
+            s.nospace() << "Session Number " << sessionN;
+        }
+        s.nospace() << "  Track " << trackN << *it;
+    }
+    return s;
 }

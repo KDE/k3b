@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
@@ -28,26 +28,26 @@ namespace K3b {
         class LIBK3BDEVICE_EXPORT Track
         {
         public:
-            enum TrackType { 
-                TYPE_AUDIO, 
+            enum TrackType {
+                TYPE_AUDIO,
                 TYPE_DATA,
                 TYPE_UNKNOWN = -1
             };
 
-            enum DataMode { 
-                MODE1, 
-                MODE2, 
-                XA_FORM1, 
-                XA_FORM2, 
+            enum DataMode {
+                MODE1,
+                MODE2,
+                XA_FORM1,
+                XA_FORM2,
                 DVD,
                 UNKNOWN
             };
 
             Track();
             Track( const Track& );
-            Track( const K3b::Msf& firstSector, 
-                   const K3b::Msf& lastSector, 
-                   TrackType type, 
+            Track( const K3b::Msf& firstSector,
+                   const K3b::Msf& lastSector,
+                   TrackType type,
                    DataMode mode = UNKNOWN );
             ~Track();
 
@@ -140,5 +140,7 @@ namespace K3b {
         };
     }
 }
+
+LIBK3BDEVICE_EXPORT QDebug operator<<( QDebug s, const K3b::Device::Track& track );
 
 #endif

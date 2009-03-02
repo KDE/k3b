@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
@@ -80,8 +80,6 @@ namespace K3b {
 
             void clear();
 
-            void debug() const;
-
             bool operator==( const Toc& ) const;
             bool operator!=( const Toc& ) const;
 
@@ -90,5 +88,7 @@ namespace K3b {
         };
     }
 }
+
+LIBK3BDEVICE_EXPORT QDebug operator<<( QDebug s, const K3b::Device::Toc& );
 
 #endif

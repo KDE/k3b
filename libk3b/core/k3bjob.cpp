@@ -18,7 +18,6 @@
 #include <k3bcore.h>
 
 #include <klocale.h>
-#include <k3process.h>
 
 #include <qstringlist.h>
 #include <kdebug.h>

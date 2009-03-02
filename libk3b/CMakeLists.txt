@@ -140,7 +140,7 @@ set(k3b_project_audiocd_SRCS
   projects/audiocd/k3baudioimager.cpp 
   projects/audiocd/k3baudiomaxspeedjob.cpp 
   projects/audiocd/k3baudiocdtracksource.cpp 
-  #    projects/audiocd/k3baudiocdtrackdrag.cpp 
+  projects/audiocd/k3baudiocdtrackdrag.cpp 
   projects/audiocd/k3baudiodatasourceiterator.cpp
   )
 

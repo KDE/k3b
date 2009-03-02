@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,36 +15,39 @@
 #ifndef _K3B_AUDIO_CDTRACK_DRAG_H_
 #define _K3B_AUDIO_CDTRACK_DRAG_H_
 
-#include <q3dragobject.h>
-#include <q3cstring.h>
-#include <q3valuelist.h>
-
-#include <k3btoc.h>
-#include <k3bdevice.h>
+#include "k3btoc.h"
+#include "k3bdevice.h"
 #include "k3b_export.h"
 
 #include <libkcddb/cdinfo.h>
 
+class QMimeData;
 
 namespace K3b {
-    class LIBK3B_EXPORT AudioCdTrackDrag : public Q3StoredDrag
+    class LIBK3B_EXPORT AudioCdTrackDrag
     {
     public:
-        AudioCdTrackDrag( const Device::Toc& toc, const QList<int>& cdTrackNumbers, const KCDDB::CDInfo& cddb,
-                          Device::Device* lastDev = 0, QWidget* dragSource = 0 );
+        AudioCdTrackDrag();
+        AudioCdTrackDrag( const Device::Toc& toc,
+                          const QList<int>& trackNumbers,
+                          const KCDDB::CDInfo& cddb,
+                          Device::Device* lastDev = 0 );
 
         Device::Toc toc() const { return m_toc; }
-        QList<int> cdTrackNumbers() const { return m_cdTrackNumbers; }
+        QList<int> trackNumbers() const { return m_trackNumbers; }
         KCDDB::CDInfo cddbEntry() const { return m_cddb; }
+        Device::Device* device() const { return m_device; }
 
-        bool provides( const char* mimetype ) const { return !qstrcmp( mimetype, "k3b/audio_track_drag" ); }
+        void populateMimeData( QMimeData* );
 
-        static bool canDecode( const QMimeSource* s ) { return s->provides( "k3b/audio_track_drag" ); }
-        static bool decode( const QMimeSource* s, Device::Toc&, QList<int>& trackNumbers, KCDDB::CDInfo&, Device::Device** dev = 0 );
+        static QStringList mimeDataTypes();
+
+        static bool canDecode( const QMimeData* s );
+        static AudioCdTrackDrag fromMimeData( const QMimeData* s );
 
     private:
         Device::Toc m_toc;
-        QList<int> m_cdTrackNumbers;
+        QList<int> m_trackNumbers;
         KCDDB::CDInfo m_cddb;
         Device::Device* m_device;
     };

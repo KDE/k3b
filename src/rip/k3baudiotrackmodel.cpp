@@ -13,6 +13,7 @@
  */
 
 #include "k3baudiotrackmodel.h"
+#include "k3baudiocdtrackdrag.h"
 
 #include <k3bmedium.h>
 #include <k3bcdtext.h>
@@ -21,6 +22,7 @@
 
 #include <libkcddb/cdinfo.h>
 
+#include <QtCore/QMimeData>
 
 Q_DECLARE_METATYPE( K3b::Medium )
 Q_DECLARE_METATYPE( K3b::Msf )
@@ -353,13 +355,26 @@ bool K3b::AudioTrackModel::setData( const QModelIndex& index, const QVariant& va
 }
 
 
+QStringList K3b::AudioTrackModel::mimeTypes() const
+{
+    return AudioCdTrackDrag::mimeDataTypes();
+}
+
+
 QMimeData* K3b::AudioTrackModel::mimeData( const QModelIndexList& indexes ) const
 {
-#warning "FIXME: drag'n'drop"
     // FIXME: Add QDataStream operators to K3b::Medium and encode a complete K3b::Medium in
     // the mimedata including the modified cddb. This way, ejecting the medium during the
     // d'n'd is not a problem
-    return 0;
+    QList<int> trackNumbers;
+    foreach( const QModelIndex& index, indexes ) {
+        if ( index.column() == 0 )
+            trackNumbers << index.data( TrackNumberColumn ).toInt();
+    }
+    AudioCdTrackDrag drag( d->medium.toc(), trackNumbers, d->cddbCache, d->medium.device() );
+    QMimeData* mime = new QMimeData();
+    drag.populateMimeData( mime );
+    return mime;
 }
 
 

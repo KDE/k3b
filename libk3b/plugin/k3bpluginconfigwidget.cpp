@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
 #include "k3bpluginconfigwidget.h"
 
 #include <KGlobal>
+#include <KConfigGroup>
+#include <KSharedConfig>
 
 #include <k3bcore.h>
 
@@ -31,18 +33,34 @@ K3b::PluginConfigWidget::~PluginConfigWidget()
 {
 }
 
+#if 0
+void K3b::PluginConfigWidget::load()
+{
+//    loadConfig( KGlobal::config()->group() );
+}
 
-// void K3b::PluginConfigWidget::load()
-// {
 
-//     loadConfig();
-// }
+void K3b::PluginConfigWidget::defaults()
+{
+    KConfigGroup defaultGroup;
+    loadConfig( defaultGroup );
+}
 
 
-// void K3b::PluginConfigWidget::saveConfig()
-// {
+void K3b::PluginConfigWidget::save()
+{
+//    saveConfig( KGlobal::config()->group() );
+}
 
-// }
 
+void K3b::PluginConfigWidget::loadConfig( const KConfigGroup& )
+{
+}
+
+
+void K3b::PluginConfigWidget::saveConfig( KConfigGroup )
+{
+}
+#endif
 
 #include "k3bpluginconfigwidget.moc"

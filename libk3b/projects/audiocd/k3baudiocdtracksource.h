@@ -29,10 +29,6 @@ namespace K3b {
 
     class CdparanoiaLib;
 
-
-#ifdef __GNUC__
-#warning FIXME: move Medium into libk3b, then add KCddb info to Medium, and use Medium for the AudioCdTrackSource
-#endif
     /**
      * Audio data source which reads it's data directly from an audio CD.
      *
@@ -47,17 +43,17 @@ namespace K3b {
          * Default constructor to create a new source.
          */
         AudioCdTrackSource( const Device::Toc& toc,
-                               int cdTrackNumber,
-                               const QString& artist, const QString& title,
-                               const QString& cdartist, const QString& cdtitle,
-                               Device::Device* dev = 0 );
+                            int cdTrackNumber,
+                            const QString& artist, const QString& title,
+                            const QString& cdartist, const QString& cdtitle,
+                            Device::Device* dev = 0 );
 
         /**
          * Constructor to create sources when loading from a project file without toc information
          */
         AudioCdTrackSource( unsigned int discid, const Msf& length, int cdTrackNumber,
-                               const QString& artist, const QString& title,
-                               const QString& cdartist, const QString& cdtitle );
+                            const QString& artist, const QString& title,
+                            const QString& cdartist, const QString& cdtitle );
         AudioCdTrackSource( const AudioCdTrackSource& );
         ~AudioCdTrackSource();
 
