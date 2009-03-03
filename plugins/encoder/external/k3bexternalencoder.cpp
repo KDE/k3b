@@ -35,6 +35,7 @@
 
 K3B_EXPORT_PLUGIN(k3bexternalencoder, K3bExternalEncoder)
 
+Q_DECLARE_METATYPE( QProcess::ExitStatus )
 
 
 static const char s_riffHeader[] =
