@@ -139,7 +139,8 @@ void K3b::MovixDoc::removeMovixItem( K3b::MovixFileItem* item)
 
         emit aboutToRemoveMovixItem( removedPos, 1, 0);
 
-        m_movixFiles.removeAt( removedPos );
+        K3b::MovixFileItem *removedItem = m_movixFiles.takeAt( removedPos );
+        delete removedItem;
 
         emit removedMovixItem();
     }
