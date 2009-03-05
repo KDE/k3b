@@ -32,7 +32,7 @@ static time_t getisotime(int year,int month,int day,int hour,
 	time_t crtime;
 
 	year-=1970;
-	
+
 	if (year < 0) {
 		crtime = 0;
 	} else {
@@ -52,8 +52,8 @@ static time_t getisotime(int year,int month,int day,int hour,
 		/* sign extend */
 		if (tz & 0x80)
 			tz |= (-1 << 8);
-			
-		/* 
+
+		/*
 		 * The timezone offset is unreliable on some disks,
 		 * so we make a sanity check.  In no case is it ever
 		 * more than 13 hours from GMT, which is 52*15min.
@@ -91,7 +91,7 @@ static time_t getisotime(int year,int month,int day,int hour,
 time_t isodate_915(char * p, int hs) {
 
 	return getisotime(1900+p[0],p[1],p[2],p[3],p[4],p[5],hs==0 ? p[6] : 0);
-}		
+}
 
 /**
  * Returns the Unix from the ISO9660 8.4.26.1 time format
@@ -116,12 +116,12 @@ void FreeBootTable(boot_head *boot) {
 	while (be) {
 		next=be->next;
 		free(be);
-		be=next;	
+		be=next;
 	}
 	boot->defentry=NULL;
 }
 
-int BootImageSize(readfunc* read,int media,sector_t start,int len,void* udata) {
+int BootImageSize(readfunc*,int media,sector_t,int len,void*) {
 	int ret;
 
 	switch(media & 0xf) {
@@ -143,13 +143,13 @@ int BootImageSize(readfunc* read,int media,sector_t start,int len,void* udata) {
 			break;
 		default:
 			ret=len;
-	}	
+	}
 	return ret;
 }
 
 static boot_entry *CreateBootEntry(char *be) {
 	boot_entry *entry;
-	
+
 	entry = (boot_entry*) malloc(sizeof(boot_entry));
 	if (!entry) return NULL;
 	memset(entry, 0, sizeof(boot_entry));
@@ -164,11 +164,7 @@ int ReadBootTable(readfunc *read,sector_t sector, boot_head *head, void *udata) 
 	unsigned short sum;
 	boot_entry *defcur=NULL,*deflast=NULL;
 	register struct validation_entry *ventry=NULL;
-	register struct default_entry *dentry=NULL;
-	register struct section_header *sheader=NULL;
-	register struct section_entry *sentry=NULL;
-	register struct section_entry_ext *extsentry=NULL;
-	
+
 	head->sections=NULL;
 	head->defentry=NULL;
 	while (1) {
@@ -198,7 +194,7 @@ int ReadBootTable(readfunc *read,sector_t sector, boot_head *head, void *udata) 
 						head->defentry=defcur;
 					defcur->prev=deflast;
 					deflast=defcur;
-					break;	
+					break;
 				case 0x90:
 				case 0x91:
 					break;
@@ -210,7 +206,7 @@ int ReadBootTable(readfunc *read,sector_t sector, boot_head *head, void *udata) 
 		}
 		if (end) break;
 
-		sector ++;		
+		sector ++;
 	}
 
 	return 0;
@@ -225,7 +221,7 @@ err:
  * Creates the linked list of the volume descriptors
  */
 iso_vol_desc *ReadISO9660(readfunc *read,sector_t sector,void *udata) {
-				
+
 	int i;
 	struct iso_volume_descriptor buf;
 	iso_vol_desc *first=NULL,*current=NULL,*prev=NULL;
@@ -262,7 +258,7 @@ iso_vol_desc *ReadISO9660(readfunc *read,sector_t sector,void *udata) {
 			/* High Sierra format not supported (yet) */
 		}
 	}
-	
+
 	return first;
 }
 
@@ -273,9 +269,9 @@ void FreeISO9660(iso_vol_desc *data) {
 
 	iso_vol_desc *current;
 
-	
+
 	while (data) {
-		current=data;	
+		current=data;
 		data=current->next;
 		free(current);
 	}
@@ -298,7 +294,7 @@ void FreeRR(rr_entry *rrentry) {
 static int str_nappend(char **d,char *s,int n) {
 	int i=0;
 	char *c;
-	
+
 /*	i=strnlen(s,n)+1; */
 	while (i<n && s[i]) i++;
 	i++;
@@ -320,7 +316,7 @@ static int str_nappend(char **d,char *s,int n) {
 static int str_append(char **d, const char *s) {
 	int i;
 	char *c;
-	
+
 	i=strlen(s)+1;
 	if (*d) i+=(strlen(*d)+1);
 	c=(char*) malloc(i);
@@ -354,19 +350,19 @@ int ParseRR(struct iso_directory_record *idr, rr_entry *rrentry) {
 	rr = (struct rock_ridge*) r;
 
 	memset(rrentry,0,sizeof(rr_entry));
-	rrentry->len = sizeof(rr_entry);	
+	rrentry->len = sizeof(rr_entry);
 
 	while (susplen > 0) {
 		if (isonum_711(&rr->len) > susplen || rr->len == 0) break;
 		if (rr->signature[0]=='N' && rr->signature[1]=='M') {
 			if (!(rr->u.NM.flags & 0x26) && rr->len>5 && !rrentry->name) {
-				
+
 				if (str_nappend(&rrentry->name,rr->u.NM.name,isonum_711(&rr->len)-5)) {
 					FreeRR(rrentry); return -ENOMEM;
 				}
 				ret++;
 			}
-		} else if (rr->signature[0]=='P' && rr->signature[1]=='X' && 
+		} else if (rr->signature[0]=='P' && rr->signature[1]=='X' &&
 			(isonum_711(&rr->len)==44 || isonum_711(&rr->len)==36)) {
 				rrentry->mode=isonum_733(rr->u.PX.mode);
 				rrentry->nlink=isonum_733(rr->u.PX.n_links);
@@ -374,20 +370,20 @@ int ParseRR(struct iso_directory_record *idr, rr_entry *rrentry) {
 				rrentry->gid=isonum_733(rr->u.PX.gid);
 				if (isonum_711(&rr->len)==44) rrentry->serno=isonum_733(rr->u.PX.serno);
 				ret++;
-		} else if (rr->signature[0]=='P' && rr->signature[1]=='N' && 
+		} else if (rr->signature[0]=='P' && rr->signature[1]=='N' &&
 			isonum_711(&rr->len)==20) {
 				rrentry->dev_major=isonum_733(rr->u.PN.dev_high);
 				rrentry->dev_minor=isonum_733(rr->u.PN.dev_low);
 				ret++;
-		} else if (rr->signature[0]=='P' && rr->signature[1]=='L' && 
+		} else if (rr->signature[0]=='P' && rr->signature[1]=='L' &&
 			isonum_711(&rr->len)==12) {
 				rrentry->pl=isonum_733(rr->u.PL.location);
 				ret++;
-		} else if (rr->signature[0]=='C' && rr->signature[1]=='L' && 
+		} else if (rr->signature[0]=='C' && rr->signature[1]=='L' &&
 			isonum_711(&rr->len)==12) {
 				rrentry->cl=isonum_733(rr->u.CL.location);
 				ret++;
-		} else if (rr->signature[0]=='R' && rr->signature[1]=='E' && 
+		} else if (rr->signature[0]=='R' && rr->signature[1]=='E' &&
 			isonum_711(&rr->len)==4) {
 				rrentry->re=1;
 				ret++;
@@ -409,7 +405,7 @@ int ParseRR(struct iso_directory_record *idr, rr_entry *rrentry) {
 						}
 						break;
 				}
-				if ( (c[0] & 0x08) == 0x08 || (c[1] && rrentry->sl && 
+				if ( (c[0] & 0x08) == 0x08 || (c[1] && rrentry->sl &&
 					 strlen(rrentry->sl)>1) ) {
 					if (str_append(&rrentry->sl,"/")) {
 						FreeRR(rrentry); return -ENOMEM;
@@ -425,7 +421,7 @@ int ParseRR(struct iso_directory_record *idr, rr_entry *rrentry) {
 				c += ((unsigned char)c[1] + 2);
 			}
 			ret++;
-		} else if (rr->signature[0]=='T' && rr->signature[1]=='F' && 
+		} else if (rr->signature[0]=='T' && rr->signature[1]=='F' &&
 			isonum_711(&rr->len)>5) {
 
 			i = isonum_711(&rr->len)-5;
@@ -462,7 +458,7 @@ int ParseRR(struct iso_directory_record *idr, rr_entry *rrentry) {
 			}
 			ret++;
 
-		} else if (rr->signature[0]=='Z' && rr->signature[1]=='F' && 
+		} else if (rr->signature[0]=='Z' && rr->signature[1]=='F' &&
 			isonum_711(&rr->len)==16) {
 				/* Linux-specific extension: transparent decompression */
 				rrentry->z_algo[0]=rr->u.ZF.algorithm[0];
@@ -474,7 +470,7 @@ int ParseRR(struct iso_directory_record *idr, rr_entry *rrentry) {
 		} else {
 /*			printf("SUSP sign: %c%c\n",rr->signature[0],rr->signature[1]); */
 		}
-		
+
 		susplen -= isonum_711(&rr->len);
 		r += isonum_711(&rr->len);
 		rr = (struct rock_ridge*) r;
@@ -521,18 +517,18 @@ int ProcessDir(readfunc *read,int extent,int size,dircallback *callback,void *ud
 		size-=isonum_711(idr->length);
 		size-=isonum_711(idr->ext_attr_length);
 		if (size<0) break;
-		
+
 		if (isonum_711(idr->length)
 <33 ||
 			isonum_711(idr->length)<33+isonum_711(idr->name_len)) {
-			/* Invalid directory entry */			
+			/* Invalid directory entry */
 			continue;
 		}
 		if ((ret=callback(idr,udata))) break;
 	}
 
 	free(buf);
-	return ret;	
+	return ret;
 }
 
 /**
@@ -541,11 +537,11 @@ int ProcessDir(readfunc *read,int extent,int size,dircallback *callback,void *ud
 int JolietLevel(struct iso_volume_descriptor *ivd) {
 	int ret=0;
 	register struct iso_supplementary_descriptor *isd;
-	
+
 	isd = (struct iso_supplementary_descriptor *) ivd;
-	
+
 	if (isonum_711(ivd->type)==ISO_VD_SUPPLEMENTARY) {
-		if (isd->escape[0]==0x25 && 
+		if (isd->escape[0]==0x25 &&
 			isd->escape[1]==0x2f) {
 
 			switch (isd->escape[2]) {
@@ -581,7 +577,7 @@ int fd;
 
 int readf(char *buf, int start, int len,void *udata) {
 	int ret;
-	
+
 	if ((ret=lseek(fd, start << 11, SEEK_SET))<0) return ret;
 	ret=read(fd, buf, len << 11);
 	if (ret<0) return ret;
@@ -593,7 +589,7 @@ void dumpchars(char *c,int len) {
 		printf("%c",*c);
 		len--;
 		c++;
-	}	
+	}
 }
 
 void sp(int num) {
@@ -613,7 +609,7 @@ void dumpjoliet(char *c,int len) {
 	size_t out;
 	int ret;
 	char *outptr;
-	
+
 	outptr=(char*) &outbuf;
 	out=255;
 	if ((iconv(iconv_d,&c,&len,&outptr,&out))<0) {
@@ -626,7 +622,7 @@ void dumpjoliet(char *c,int len) {
 
 void dumpchardesc(char *c,int len) {
 
-	if (joliet) 
+	if (joliet)
 		dumpjoliet(c,len);
 	else {
 		dumpchars(c,len);
@@ -634,10 +630,10 @@ void dumpchardesc(char *c,int len) {
 }
 
 void dumpiso915time(char *t, int hs) {
-	
+
 	time_t time;
 	char *c;
-	
+
 	time=isodate_915(t,hs);
 	c=(char*) ctime(&time);
 	if (c && c[strlen(c)-1]==0x0a) c[strlen(c)-1]=0;
@@ -645,10 +641,10 @@ void dumpiso915time(char *t, int hs) {
 }
 
 void dumpiso84261time(char *t, int hs) {
-	
+
 	time_t time;
 	char *c;
-	
+
 	time=isodate_84261(t,hs);
 	c=(char*) ctime(&time);
 	if (c && c[strlen(c)-1]==0x0a) c[strlen(c)-1]=0;
@@ -656,7 +652,7 @@ void dumpiso84261time(char *t, int hs) {
 }
 
 void dumpdirrec(struct iso_directory_record *dir) {
-	
+
 	if (isonum_711(dir->name_len)==1) {
 		switch (dir->name[0]) {
 		case 0:
@@ -666,7 +662,7 @@ void dumpdirrec(struct iso_directory_record *dir) {
 			printf("..");
 			break;
 		default:
-			printf("%c",dir->name[0]);	
+			printf("%c",dir->name[0]);
 			break;
 		}
 	}
@@ -728,7 +724,7 @@ void dumpdefentry(struct default_entry *de) {
 		default:
 			printf("Unknown/Invalid");
 			break;
-	}	
+	}
 	printf(")\n");
 	printf("  loadseg=%d\n",isonum_721(de->loadseg));
 	printf("  systype=%d\n",isonum_711(de->systype));
@@ -758,8 +754,8 @@ void dumpdesc(struct iso_primary_descriptor *ipd) {
 	printf("path table size: %d\n",isonum_733(ipd->path_table_size));
 	printf("location of type_l path table: %d\n",isonum_731(ipd->type_l_path_table));
 	printf("location of optional type_l path table: %d\n",isonum_731(ipd->opt_type_l_path_table));
-	printf("location of type_m path table: %d\n",isonum_732(ipd->type_m_path_table));		
-	printf("location of optional type_m path table: %d\n",isonum_732(ipd->opt_type_m_path_table));		
+	printf("location of type_m path table: %d\n",isonum_732(ipd->type_m_path_table));
+	printf("location of optional type_m path table: %d\n",isonum_732(ipd->opt_type_m_path_table));
 /*
 	printf("Root dir record:\n");dumpdirrec((struct iso_directory_record*) &ipd->root_directory_record);
 */
@@ -783,7 +779,7 @@ int mycallb(struct iso_directory_record *idr,void *udata) {
 	sp(level);dumpdirrec(idr);
 	if (level==0) printf(" (Root directory) ");
 	printf("\n");
-	
+
 	if (ParseRR(idr,&rrentry)>0) {
 		sp(level);printf("  ");dumprrentry(&rrentry);printf("\n");
 	}
@@ -801,11 +797,11 @@ int mycallb(struct iso_directory_record *idr,void *udata) {
 /************************************************/
 
 int main(int argc, char *argv[]) {
-	
+
 	int i=1,sector=0;
 	iso_vol_desc *desc;
 	boot_head boot;
-	
+
 	if (argc<2) {
 		fprintf(stderr,"\nUsage: %s iso-file-name or device [starting sector]\n\n",argv[0]);
 		return 0;
@@ -824,14 +820,14 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr,"iconv open error\n");
 		return -1;
 	}
-	
+
 	desc=ReadISO9660(&readf,sector,NULL);
 	if (!desc) {
 		printf("No volume descriptors\n");
 		return -1;
 	}
 	while (desc) {
-		
+
 		printf("\n\n--------------- Volume descriptor (%d.) type %d: ---------------\n\n",
 			i,isonum_711(desc->data.type));
 		switch (isonum_711(desc->data.type)) {
@@ -841,7 +837,7 @@ int main(int argc, char *argv[]) {
 				bootdesc=&(desc->data);
 				dumpboot(bootdesc);
 				if ( !memcmp(EL_TORITO_ID,bootdesc->system_id,ISODCL(8,39)) ) {
-					
+
 					if (ReadBootTable(&readf,isonum_731(bootdesc->boot_catalog),&boot,NULL)) {
 						printf("Boot Catalog Error\n");
 					} else {
