@@ -50,7 +50,7 @@ void K3b::AudioCdTrackDrag::populateMimeData( QMimeData* mime )
 
     // encode TOC
     s << m_toc.count();
-    for( K3b::Device::Toc::const_iterator it = m_toc.begin(); it != m_toc.end(); ++it ) {
+    for( K3b::Device::Toc::const_iterator it = m_toc.constBegin(); it != m_toc.constEnd(); ++it ) {
         const K3b::Device::Track& track = *it;
         s << track.firstSector().lba() << track.lastSector().lba();
     }
