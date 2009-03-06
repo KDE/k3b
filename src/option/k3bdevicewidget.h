@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,56 +17,46 @@
 #define K3BDEVICEWIDGET_H
 
 #include <qwidget.h>
-#include <QFrame>
-#include <QLabel>
-#include "k3bdevice.h"
-#include "k3bdevicemanager.h"
 
 class QLabel;
 class QPushButton;
-namespace K3b {
-    class ListView;
-}
 class QString;
 class QFrame;
-class Q3ListViewItem;
-class QString;
+class QTreeWidget;
+class QTreeWidgetItem;
 
 
-/**
- *@author Sebastian Trueg
- */
 namespace K3b {
-class DeviceWidget : public QWidget
-{
-    Q_OBJECT
+    namespace Device {
+        class DeviceManager;
+    }
 
-public:
-    DeviceWidget( Device::DeviceManager*, QWidget *parent = 0 );
-    ~DeviceWidget();
+    class DeviceWidget : public QWidget
+    {
+        Q_OBJECT
 
-public Q_SLOTS:
-    void init();
+    public:
+        DeviceWidget( Device::DeviceManager*, QWidget *parent = 0 );
+        ~DeviceWidget();
 
-Q_SIGNALS:
-    void refreshButtonClicked();
+    public Q_SLOTS:
+        void init();
 
-private Q_SLOTS:
-    void updateDeviceListViews();
+    Q_SIGNALS:
+        void refreshButtonClicked();
 
-private:
-    class PrivateTempDevice;
-    /** list to save changes to the devices before applying */
-    QList<PrivateTempDevice*> m_tempDevices;
+    private Q_SLOTS:
+        void updateDeviceListViews();
 
-    Q3ListViewItem* m_writerParentViewItem;
-    Q3ListViewItem* m_readerParentViewItem;
+    private:
+        Device::DeviceManager* m_deviceManager;
 
-    Device::DeviceManager* m_deviceManager;
+        QTreeWidgetItem* m_writerParentViewItem;
+        QTreeWidgetItem* m_readerParentViewItem;
 
-    ListView*    m_viewDevices;
-    QPushButton* m_buttonRefreshDevices;
-};
+        QTreeWidget* m_viewDevices;
+        QPushButton* m_buttonRefreshDevices;
+    };
 }
 
 #endif

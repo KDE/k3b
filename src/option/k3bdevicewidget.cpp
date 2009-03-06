@@ -18,7 +18,6 @@
 #include "k3bdevicemanager.h"
 #include "k3bdevice.h"
 #include "k3bdeviceglobals.h"
-#include <k3blistview.h>
 
 #include <kinputdialog.h>
 #include <kmessagebox.h>
@@ -38,28 +37,18 @@
 #include <qstring.h>
 #include <qcolor.h>
 #include <qlist.h>
-#include <q3header.h>
+#include <QtGui/QHeaderView>
 #include <QGridLayout>
 #include <QtGui/QGroupBox>
-
-
-class K3b::DeviceWidget::PrivateTempDevice
-{
-public:
-    PrivateTempDevice( K3b::Device::Device* d ) {
-        device = d;
-        writer = d->burner();
-    }
-
-    K3b::Device::Device* device;
-    bool writer;
-};
+#include <QtGui/QTreeWidget>
 
 
 
 K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *parent )
     : QWidget( parent ),
-      m_deviceManager( manager )
+      m_deviceManager( manager ),
+      m_writerParentViewItem( 0 ),
+      m_readerParentViewItem( 0 )
 {
     QGridLayout* frameLayout = new QGridLayout( this );
     frameLayout->setSpacing( KDialog::spacingHint() );
@@ -86,16 +75,13 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
     groupDevicesLayout->setSpacing( KDialog::spacingHint() );
     groupDevicesLayout->setMargin( KDialog::marginHint() );
 
-    m_viewDevices = new K3b::ListView( groupDevices );
-    m_viewDevices->addColumn( "V" );
-    m_viewDevices->addColumn( "D" );
+    m_viewDevices = new QTreeWidget( groupDevices );
     m_viewDevices->setAllColumnsShowFocus( true );
     m_viewDevices->header()->hide();
-    m_viewDevices->setSorting( -1 );
-    m_viewDevices->setDoubleClickForEdit(false);
-    m_viewDevices->setAlternateBackground( QColor() );
-    m_viewDevices->setSelectionMode( Q3ListView::NoSelection );
-    m_viewDevices->setFullWidth(true);
+    m_viewDevices->setColumnCount( 2 );
+//    m_viewDevices->setDoubleClickForEdit(false);
+    m_viewDevices->setSelectionMode( QAbstractItemView::NoSelection );
+//    m_viewDevices->setFullWidth(true);
 
     groupDevicesLayout->addWidget( m_viewDevices );
     // ------------------------------------------------
@@ -116,20 +102,11 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
 
 K3b::DeviceWidget::~DeviceWidget()
 {
-    qDeleteAll( m_tempDevices );
 }
 
 
 void K3b::DeviceWidget::init()
 {
-    // fill the temporary lists
-    qDeleteAll( m_tempDevices );
-    m_tempDevices.clear();
-
-    // add the reading devices
-    Q_FOREACH( K3b::Device::Device* dev, m_deviceManager->allDevices() )
-        m_tempDevices.append( new PrivateTempDevice( dev ) );
-
     updateDeviceListViews();
 }
 
@@ -142,12 +119,13 @@ void K3b::DeviceWidget::updateDeviceListViews()
 
     // create the parent view items
     // -----------------------------------------
-    m_writerParentViewItem = new Q3ListViewItem( m_viewDevices, i18n("Writer Drives") );
-    m_writerParentViewItem->setPixmap( 0, SmallIcon( "media-optical-recordable" ) );
+    m_writerParentViewItem = new QTreeWidgetItem( m_viewDevices, QStringList() << i18n("Writer Drives") );
+    m_writerParentViewItem->setData( 0, Qt::DecorationRole, SmallIcon( "media-optical-recordable" ) );
     // spacer item
-    (void)new Q3ListViewItem( m_viewDevices );
-    m_readerParentViewItem = new Q3ListViewItem( m_viewDevices, i18n("Readonly Drives") );
-    m_readerParentViewItem->setPixmap( 0, SmallIcon( "media-optical" ) );
+    QTreeWidgetItem* spacer = new QTreeWidgetItem( m_viewDevices );
+    spacer->setFlags( Qt::NoItemFlags );
+    m_readerParentViewItem = new QTreeWidgetItem( m_viewDevices, QStringList() << i18n("Readonly Drives") );
+    m_readerParentViewItem->setData( 0, Qt::DecorationRole, SmallIcon( "media-optical" ) );
     // -----------------------------------------
 
     QFont fBold( m_viewDevices->font() );
@@ -155,83 +133,89 @@ void K3b::DeviceWidget::updateDeviceListViews()
     QFont fItalic( m_viewDevices->font() );
     fItalic.setItalic(true);
 
-    foreach( PrivateTempDevice* dev, m_tempDevices ) {
+    foreach( Device::Device* dev, m_deviceManager->allDevices() ) {
         // create the root device item
-        K3b::ListViewItem* devRoot = new K3b::ListViewItem( (dev->writer ? m_writerParentViewItem : m_readerParentViewItem),
-                                                        dev->device->vendor() + " " + dev->device->description() );
+        QTreeWidgetItem* devRoot = new QTreeWidgetItem( (dev->burner() ? m_writerParentViewItem : m_readerParentViewItem),
+                                                        QStringList() << ( dev->vendor() + " " + dev->description() ) );
         devRoot->setFont( 0, fBold );
 
         // create the read-only info items
-        K3b::ListViewItem* systemDeviceItem = new K3b::ListViewItem( devRoot, i18n("System device name:") );
-        systemDeviceItem->setText( 1, dev->device->blockDeviceName() );
-        systemDeviceItem->setForegroundColor( 1, disabledTextColor );
+        QTreeWidgetItem* systemDeviceItem = new QTreeWidgetItem( devRoot, QStringList() << i18n("System device name:") );
+        systemDeviceItem->setText( 1, dev->blockDeviceName() );
+        systemDeviceItem->setForeground( 1, disabledTextColor );
 
-        K3b::ListViewItem* vendorItem = new K3b::ListViewItem( devRoot, systemDeviceItem,
-                                                           i18n("Vendor:"),
-                                                           dev->device->vendor() );
-        vendorItem->setForegroundColor( 1, disabledTextColor );
-        K3b::ListViewItem* modelItem = new K3b::ListViewItem( devRoot, vendorItem,
-                                                          i18n("Description:"),
-                                                          dev->device->description() );
-        modelItem->setForegroundColor( 1, disabledTextColor );
-        K3b::ListViewItem* versionItem = new K3b::ListViewItem( devRoot, modelItem,
-                                                            i18n("Firmware:"),
-                                                            dev->device->version() );
-        versionItem->setForegroundColor( 1, disabledTextColor );
+        QTreeWidgetItem* vendorItem = new QTreeWidgetItem( devRoot, systemDeviceItem );
+        vendorItem->setText( 0, i18n("Vendor:") );
+        vendorItem->setText( 1, dev->vendor() );
+        vendorItem->setForeground( 1, disabledTextColor );
+
+        QTreeWidgetItem* modelItem = new QTreeWidgetItem( devRoot, vendorItem );
+        modelItem->setText( 0, i18n("Description:") );
+        modelItem->setText( 1, dev->description() );
+        modelItem->setForeground( 1, disabledTextColor );
+
+        QTreeWidgetItem* versionItem = new QTreeWidgetItem( devRoot, modelItem );
+        versionItem->setText( 0, i18n("Firmware:") );
+        versionItem->setText( 1, dev->version() );
+        versionItem->setForeground( 1, disabledTextColor );
 
 
         // drive type
         // --------------------------------
-        K3b::ListViewItem* typeItem = new K3b::ListViewItem( devRoot, versionItem,
-                                                         i18n("Write Capabilities:"),
-                                                         K3b::Device::mediaTypeString( dev->device->writeCapabilities(), true ) );
-        typeItem->setForegroundColor( 1, disabledTextColor );
-        typeItem = new K3b::ListViewItem( devRoot, typeItem,
-                                        i18n("Read Capabilities:"),
-                                        K3b::Device::mediaTypeString( dev->device->readCapabilities(), true ) );
-        typeItem->setForegroundColor( 1, disabledTextColor );
+        QTreeWidgetItem* typeItem = new QTreeWidgetItem( devRoot, versionItem );
+        typeItem->setText( 0, i18n("Write Capabilities:") );
+        typeItem->setText( 1, K3b::Device::mediaTypeString( dev->writeCapabilities(), true ) );
+        typeItem->setForeground( 1, disabledTextColor );
+
+        typeItem = new QTreeWidgetItem( devRoot, typeItem );
+        typeItem->setText( 0, i18n("Read Capabilities:") );
+        typeItem->setText( 1, K3b::Device::mediaTypeString( dev->readCapabilities(), true ) );
+        typeItem->setForeground( 1, disabledTextColor );
         // --------------------------------
 
 
         // now add the reader (both interfaces) items
-        if( dev->device->bufferSize() > 0 ) {
-            typeItem = new K3b::ListViewItem( devRoot, typeItem,
-                                            i18n("Buffer Size:"),
-                                            KIO::convertSizeFromKiB(dev->device->bufferSize()) );
-            typeItem->setForegroundColor( 1, disabledTextColor );
+        if( dev->bufferSize() > 0 ) {
+            typeItem = new QTreeWidgetItem( devRoot, typeItem );
+            typeItem->setText( 0, i18n("Buffer Size:") );
+            typeItem->setText( 1, KIO::convertSizeFromKiB(dev->bufferSize()) );
+            typeItem->setForeground( 1, disabledTextColor );
         }
 
 
         // now add the writer specific items
-        if( dev->writer ) {
-            typeItem = new K3b::ListViewItem( devRoot, typeItem,
-                                            i18n("Supports Burnfree:"),
-                                            dev->device->burnfree() ? i18n("yes") : i18n("no") );
-            typeItem->setForegroundColor( 1, disabledTextColor );
-
+        if( dev->burner() ) {
+            typeItem = new QTreeWidgetItem( devRoot, typeItem );
+            typeItem->setText( 0, i18n("Supports Burnfree:") );
+            typeItem->setText( 1, dev->burnfree() ? i18n("yes") : i18n("no") );
+            typeItem->setForeground( 1, disabledTextColor );
 
             // and at last the write modes
-            (new K3b::ListViewItem( devRoot,
-                                  typeItem,
-                                  i18n("Write modes:"),
-                                  K3b::Device::writingModeString(dev->device->writingModes()) ))->setForegroundColor( 1, disabledTextColor );
+            typeItem = new QTreeWidgetItem( devRoot, typeItem );
+            typeItem->setText( 0, i18n("Write modes:") );
+            typeItem->setText( 1, K3b::Device::writingModeString(dev->writingModes()) );
+            typeItem->setForeground( 1, disabledTextColor );
         }
 
-        devRoot->setOpen(true);
+        m_viewDevices->expandItem( devRoot );
     }
 
     // create empty items
     if( m_writerParentViewItem->childCount() == 0 ) {
-        K3b::ListViewItem* item = new K3b::ListViewItem( m_writerParentViewItem, i18n("none") );
+        QTreeWidgetItem* item = new QTreeWidgetItem( m_writerParentViewItem );
+        item->setText( 0, i18n("none") );
         item->setFont( 0, fItalic );
     }
     if( m_readerParentViewItem->childCount() == 0 ) {
-        K3b::ListViewItem* item = new K3b::ListViewItem( m_readerParentViewItem, i18n("none") );
+        QTreeWidgetItem* item = new QTreeWidgetItem( m_readerParentViewItem );
+        item->setText( 0, i18n("none") );
         item->setFont( 0, fItalic );
     }
 
-    m_writerParentViewItem->setOpen( true );
-    m_readerParentViewItem->setOpen( true );
+    m_viewDevices->expandItem( m_writerParentViewItem );
+    m_viewDevices->expandItem( m_readerParentViewItem );
+
+    m_viewDevices->resizeColumnToContents( 0 );
 }
 
 #include "k3bdevicewidget.moc"
