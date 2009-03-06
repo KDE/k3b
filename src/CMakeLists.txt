@@ -40,7 +40,6 @@ add_subdirectory( sounds )
 set(k3b_project_SRCS
   projects/k3baudioburndialog.cpp 
   projects/k3baudiocdtextwidget.cpp 
-  projects/k3baudiodatasourceviewitem.cpp 
   projects/k3baudioeditorwidget.cpp 
   projects/k3baudiotrackdialog.cpp 
   projects/k3baudiotrackwidget.cpp 
@@ -50,7 +49,6 @@ set(k3b_project_SRCS
   projects/k3baudioview.cpp 
   projects/k3baudioprojectmodel.cpp 
   projects/k3bmixedburndialog.cpp 
-  projects/k3bmixeddirtreeview.cpp 
   projects/k3bmixedview.cpp 
   projects/k3bmixedprojectmodel.cpp
   projects/k3bdataadvancedimagesettingswidget.cpp 
@@ -65,7 +63,6 @@ set(k3b_project_SRCS
   projects/k3bbootimagedialog.cpp 
   projects/k3bbootimageview.cpp 
   projects/k3bmovixburndialog.cpp 
-  projects/k3bmovixlistview.cpp 
   projects/k3bmovixoptionswidget.cpp 
   projects/k3bmovixview.cpp 
   projects/k3bmovixprojectmodel.cpp

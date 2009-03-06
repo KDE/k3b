@@ -14,8 +14,6 @@
 
 
 #include "k3baudiotrackview.h"
-#include "k3baudiotrackviewitem.h"
-#include "k3baudiodatasourceviewitem.h"
 #include "k3baudiotrack.h"
 #include "k3baudiodatasource.h"
 #include "k3baudiotrackdialog.h"
@@ -35,7 +33,6 @@
 #include <config-k3b.h>
 
 #include <k3bview.h>
-#include <k3blistviewitemanimator.h>
 #include <k3baudiodecoder.h>
 #include <k3bmsfedit.h>
 

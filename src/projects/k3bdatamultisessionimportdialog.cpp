@@ -40,21 +40,22 @@
 #include "../k3bapplication.h"
 #include "../k3b.h"
 
+namespace {
+    class SessionInfo
+    {
+    public:
+        SessionInfo()
+            : sessionNumber( 0 ),
+              device( 0 ) {}
 
-class SessionInfo
-{
-public:
-    SessionInfo()
-        : sessionNumber( 0 ),
-          device( 0 ) {}
+        SessionInfo( int num, K3b::Device::Device* dev )
+            : sessionNumber( num ),
+              device( dev ) {}
 
-    SessionInfo( int num, K3b::Device::Device* dev )
-        : sessionNumber( num ),
-          device( dev ) {}
-
-    int sessionNumber;
-    K3b::Device::Device* device;
-};
+        int sessionNumber;
+        K3b::Device::Device* device;
+    };
+}
 
 
 class K3b::DataMultisessionImportDialog::Private

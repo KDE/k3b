@@ -17,7 +17,6 @@
 #include "k3bmovixview.h"
 #include "k3bmovixprojectmodel.h"
 #include "k3bmovixdoc.h"
-#include "k3bmovixlistview.h"
 #include "k3bmovixburndialog.h"
 #include "k3bmovixfileitem.h"
 
