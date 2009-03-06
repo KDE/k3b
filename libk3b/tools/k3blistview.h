@@ -49,7 +49,7 @@ namespace K3b {
     /**
      * \deprecated
      */
-    KDE_DEPRECATED class LIBK3B_EXPORT ListViewItem : public K3ListViewItem
+    class KDE_DEPRECATED LIBK3B_EXPORT ListViewItem : public K3ListViewItem
     {
     public:
         ListViewItem(Q3ListView *parent);
