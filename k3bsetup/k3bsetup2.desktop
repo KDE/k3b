@@ -45,6 +45,7 @@ Keywords[bg]=K3bSetup2,k3bsetup2,Настройване на K3b (2)
 Keywords[de]=K3b, Einrichtungsassistent, Rechte, Setup
 Keywords[eo]=Keywords=K3bSetup2,k3bsetup2
 Keywords[et]=K3bSetup2,k3bsetup2,k3b seadistamine
+Keywords[hne]=के3बी-सेटअप2,के3बीसेटअप२
 Keywords[nds]=K3bSetup2,k3bsetup2,K3b-Inrichthölper
 Keywords[nl]=K3bSetup2,k3bsetup2,branden,cd branden,dvd,dvd branden
 Keywords[pt_BR]=Configurações Avançadas do K3b,configurações avançadas do K3b
@@ -55,6 +56,7 @@ Name[bg]=Настройване на K3b
 Name[de]=K3b-Einrichtungsassistent
 Name[eo]=Name=K3bSetup
 Name[et]=K3b seadistamine
+Name[hne]=के3बीसेटअप
 Name[nds]=K3b-Inrichthölper
 Name[pa]=K3bਸੈੱਟਅੱਪ
 Name[pt_BR]=Configurar K3b
@@ -88,6 +90,7 @@ GenericName[fr]=Configuration de la gravure de CD et de DVD
 GenericName[ga]=Cumraíocht Dóite Dlúthdhioscaí
 GenericName[gl]=Configuración da gravación de CD e DVD
 GenericName[he]=הגדרות צריבת CD ו DVD
+GenericName[hne]=सीडी डीवीडी बर्निंग सेटअप
 GenericName[hsb]=CD & DVD setup za palenje
 GenericName[ja]=CD / DVD 作成の設定
 GenericName[km]=រៀបចំ​ការ​ដុត​ស៊ីឌី និង​ឌីវីឌី
