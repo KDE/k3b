@@ -32,7 +32,11 @@ bool K3b::DirProxyModel::filterAcceptsRow( int source_row, const QModelIndex & s
     QAbstractItemModel *model = sourceModel();
     QModelIndex index = model->index(source_row, 0, source_parent);
 
-    K3b::ItemType type = (K3b::ItemType) index.data(K3b::ItemTypeRole).toInt();
+    QVariant data = index.data(K3b::ItemTypeRole);
+    K3b::ItemType type = K3b::FileItemType;
+
+    if (data.isValid())
+        type = (K3b::ItemType) index.data(K3b::ItemTypeRole).toInt();
 
     return (type == K3b::DirItemType);
 }
