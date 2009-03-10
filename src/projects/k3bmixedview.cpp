@@ -18,6 +18,8 @@
 #include "k3bmixeddoc.h"
 #include "k3bmixedburndialog.h"
 #include "k3bmixedprojectmodel.h"
+#include "k3bdataprojectmodel.h"
+#include "k3baudioprojectmodel.h"
 #include "k3baudiotrackaddingdialog.h"
 #include "k3bdataurladdingdialog.h"
 
@@ -26,6 +28,7 @@
 #include <k3bdatadoc.h>
 #include <k3bfillstatusdisplay.h>
 #include <k3bprojectplugin.h>
+#include <k3bdiritem.h>
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -133,12 +136,25 @@ K3b::ProjectBurnDialog* K3b::MixedView::newBurnDialog( QWidget* parent )
 
 void K3b::MixedView::addUrls( const KUrl::List& urls )
 {
-#if 0
-    if( m_widgetStack->currentWidget() == m_dataFileView )
-        K3b::DataUrlAddingDialog::addUrls( urls, currentDir() );
-    else
+    QAbstractItemModel *model = m_model->subModelForIndex( currentRoot() );
+
+    if (!model)
+        return;
+
+    // use cast to determine which tree is currently selected
+    K3b::DataProjectModel *dataModel = dynamic_cast<K3b::DataProjectModel*>(model);
+    K3b::AudioProjectModel *audioModel = dynamic_cast<K3b::AudioProjectModel*>(model);
+
+    if (dataModel) {
+        K3b::DirItem *item = dynamic_cast<K3b::DirItem*>(dataModel->itemForIndex(m_model->mapToSubModel(currentRoot())));
+        if (!item)
+            item = m_doc->dataDoc()->root();
+
+        K3b::DataUrlAddingDialog::addUrls( urls, item );
+    }
+    else if (audioModel) {
         K3b::AudioTrackAddingDialog::addUrls( urls, m_doc->audioDoc(), 0, 0, 0, this );
-#endif
+    }
 }
 
 #include "k3bmixedview.moc"
