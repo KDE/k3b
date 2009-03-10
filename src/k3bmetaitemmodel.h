@@ -98,9 +98,7 @@ public Q_SLOTS:
     void removeSubModel( QAbstractItemModel* model );
 
 private Q_SLOTS:
-    void slotRowsAboutToBeInserted( const QModelIndex&, int, int );
     void slotRowsInserted( const QModelIndex&, int, int );
-    void slotRowsAboutToBeRemoved( const QModelIndex&, int, int );
     void slotRowsRemoved( const QModelIndex&, int, int );
     void slotDataChanged( const QModelIndex&, const QModelIndex& );
     void slotReset();
