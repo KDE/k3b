@@ -234,8 +234,7 @@ Example: 'my good file.ext' becomes 'my_good_file.ext'</string>
     </layout>
   </widget>
   <layoutdefault spacing="6" margin="11" />
-  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
-  <tabstops>
+    <tabstops>
     <tabstop>m_editReplace</tabstop>
   </tabstops>
 </ui>

@@ -200,8 +200,7 @@ The input will be encoded as a mono signal. If it was a stereo signal, it will b
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <customwidgets>
+  <customwidgets>
   <customwidget>
    <class>Q3GroupBox</class>
    <extends>QGroupBox</extends>

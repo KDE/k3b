@@ -130,8 +130,7 @@ Please insert the command used to encode the audio data. The command has to read
     </layout>
   </widget>
   <layoutdefault spacing="6" margin="11" />
-  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
-  <tabstops>
+    <tabstops>
     <tabstop>m_editName</tabstop>
     <tabstop>m_editExtension</tabstop>
     <tabstop>m_editCommand</tabstop>

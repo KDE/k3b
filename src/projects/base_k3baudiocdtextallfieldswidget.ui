@@ -219,8 +219,7 @@
     </layout>
   </widget>
   <layoutdefault spacing="6" margin="11" />
-  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
-  <includes>
+    <includes>
     <include location="local" >klineedit.h</include>
   </includes>
 </ui>

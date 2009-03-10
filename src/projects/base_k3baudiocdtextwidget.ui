@@ -154,8 +154,7 @@
     </layout>
   </widget>
   <layoutdefault spacing="6" margin="11" />
-  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
-  <tabstops>
+    <tabstops>
     <tabstop>m_editTitle</tabstop>
     <tabstop>m_editPerformer</tabstop>
   </tabstops>
