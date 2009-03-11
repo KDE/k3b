@@ -97,8 +97,19 @@ void K3b::MovixView::contextMenuForSelection(const QModelIndexList &selectedInde
 {
     if( selectedIndexes.count() >= 1 ) {
         m_actionRemove->setEnabled(true);
-        m_actionRemoveSubTitle->setEnabled( true );
-        m_actionAddSubTitle->setEnabled( true );
+
+        bool subtitle = false;
+        // check if any of the items have a subtitle
+        foreach (const QModelIndex &index, selectedIndexes) {
+            K3b::MovixFileItem *item = m_model->itemForIndex(index);
+            if (item && item->subTitleItem()) {
+                subtitle = true;
+                break;
+            }
+        }
+        m_actionRemoveSubTitle->setEnabled( subtitle );
+        // only enable the subtitle adding if there is just one item selected
+        m_actionAddSubTitle->setEnabled( selectedIndexes.count() == 1 );
     }
     else {
         m_actionRemove->setEnabled(false);
