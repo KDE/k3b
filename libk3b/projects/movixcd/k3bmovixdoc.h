@@ -91,12 +91,11 @@ namespace K3b {
         bool noDma() const { return m_noDma; }
 
     Q_SIGNALS:
-        void aboutToAddMovixItem( int pos, int count, K3b::MovixFileItem* parent );
-        void addedMovixItem();
-        void aboutToRemoveMovixItem( int pos, int count, K3b::MovixFileItem* parent );
-        void removedMovixItem();
-        void newMovixFileItems();
-        void movixItemRemoved( K3b::MovixFileItem* );
+        void aboutToAddMovixItems( int pos, int count );
+        void addedMovixItems();
+        void aboutToRemoveMovixItems( int pos, int count );
+        void removedMovixItems();
+        void subTitleItemAdded( K3b::MovixFileItem* );
         void subTitleItemRemoved( K3b::MovixFileItem* );
 
     public Q_SLOTS:

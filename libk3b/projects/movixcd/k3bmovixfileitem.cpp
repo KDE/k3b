@@ -18,6 +18,19 @@
 
 #include <k3bdiritem.h>
 
+K3b::MovixSubtitleItem::MovixSubtitleItem( const QString& fileName,
+                                           K3b::MovixDoc* doc,
+                                           K3b::DirItem* dir,
+                                           K3b::MovixFileItem* parent,
+                                           const QString& k3bName )
+    : K3b::MovixFileItem( fileName, doc, dir, k3bName ), 
+      m_parent( parent )
+{
+}
+
+K3b::MovixSubtitleItem::~MovixSubtitleItem()
+{
+}
 
 K3b::MovixFileItem::MovixFileItem( const QString& fileName,
                                    K3b::MovixDoc* doc,
@@ -54,7 +67,6 @@ void K3b::MovixFileItem::setK3bName( const QString& newName )
     }
 }
 
-
 QString K3b::MovixFileItem::subTitleFileName( const QString& name )
 {
     // remove ending from k3bName
@@ -65,3 +77,4 @@ QString K3b::MovixFileItem::subTitleFileName( const QString& name )
     subName += ".sub";
     return subName;
 }
+

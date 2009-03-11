@@ -134,37 +134,43 @@ void K3b::MovixView::showPropertiesDialog()
 
 void K3b::MovixView::slotRemoveSubTitleItems()
 {
-#if 0
-    QList<Q3ListViewItem*> list = m_listView->selectedItems();
+    QModelIndexList selection = currentSelection();
+    if ( !selection.count() )
+        return;
 
-    if( list.isEmpty() )
-        kDebug() << "nothing to remove";
-
-    Q_FOREACH( Q3ListViewItem* item, list ) {
-        K3b::MovixListViewItem* vi = static_cast<K3b::MovixListViewItem*>(item);
-        m_doc->removeSubTitleItem( vi->fileItem() );
+    K3b::MovixFileItem *item = 0;
+    foreach(QModelIndex index, selection)
+    {
+        item = m_model->itemForIndex(index);
+        if (item)
+            m_doc->removeSubTitleItem( item );
     }
-#endif
 }
 
 
 void K3b::MovixView::slotAddSubTitleFile()
 {
-#if 0
-    if ( m_listView->selectedItems().isEmpty() )
+    QModelIndexList selection = currentSelection();
+    if ( !selection.count() )
         return;
-    Q3ListViewItem* item = m_listView->selectedItems().first();
-    if( K3b::MovixListViewItem* vi = dynamic_cast<K3b::MovixListViewItem*>(item) ) {
 
+    K3b::MovixFileItem *item = 0;
+    foreach(QModelIndex index, selection)
+    {
+        item = m_model->itemForIndex(index);
+        if (item)
+            break;
+    }
+
+    if( item ) {
         KUrl url = KFileDialog::getOpenUrl();
         if( url.isValid() ) {
             if( url.isLocalFile() )
-                m_doc->addSubTitleItem( vi->fileItem(), url );
+                m_doc->addSubTitleItem( item, url );
             else
                 KMessageBox::error( 0, i18n("K3b currently only supports local files.") );
         }
     }
-#endif
 }
 
 

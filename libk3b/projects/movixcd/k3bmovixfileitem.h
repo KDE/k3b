@@ -20,15 +20,18 @@
 
 namespace K3b {
     class MovixDoc;
+    class MovixSubtitleItem;
 
-    class MovixFileItem : public FileItem
+    class LIBK3B_EXPORT MovixFileItem : public FileItem
     {
     public:
         MovixFileItem( const QString& fileName, MovixDoc* doc, DirItem* dir, const QString& k3bName = 0 );
-        ~MovixFileItem();
+        virtual ~MovixFileItem();
 
-        FileItem* subTitleItem() const { return m_subTitleItem; }
-        void setSubTitleItem( FileItem* i ) { m_subTitleItem = i; }
+        virtual bool isSubtitle() { return false; }
+
+        MovixSubtitleItem* subTitleItem() const { return m_subTitleItem; }
+        void setSubTitleItem( MovixSubtitleItem* i ) { m_subTitleItem = i; }
 
         /**
          * reimplemented from DataItem
@@ -42,11 +45,28 @@ namespace K3b {
          */
         static QString subTitleFileName( const QString& );
 
+
     private:
         MovixDoc* m_doc;
 
-        FileItem* m_subTitleItem;
+        MovixSubtitleItem* m_subTitleItem;
     };
+
+    class LIBK3B_EXPORT MovixSubtitleItem : public MovixFileItem
+    {
+    public:
+        MovixSubtitleItem( const QString& fileName, MovixDoc* doc, DirItem* dir, MovixFileItem *parent, const QString& k3bName = 0 );
+        virtual ~MovixSubtitleItem();
+
+        virtual bool isSubtitle() { return true; }
+        MovixFileItem *parent() const { return m_parent; }
+
+
+    private:
+        MovixFileItem *m_parent;
+    };
+
+
 }
 
 #endif

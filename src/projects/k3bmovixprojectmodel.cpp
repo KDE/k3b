@@ -34,10 +34,9 @@ class MovixProjectModel::Private
 
         K3b::MovixDoc* project;
 
-        void _k_aboutToAddRows(int pos, int count, K3b::MovixFileItem* parent)
+        void _k_aboutToAddRows(int pos, int count)
         {
-            if(!parent)
-                q->beginInsertRows(QModelIndex(), pos, pos + count - 1);
+            q->beginInsertRows(QModelIndex(), pos, pos + count - 1);
         }
 
         void _k_addedRows()
@@ -45,14 +44,31 @@ class MovixProjectModel::Private
             q->endInsertRows();
         }
 
-        void _k_aboutToRemoveRows(int pos, int count, K3b::MovixFileItem* parent)
+        void _k_aboutToRemoveRows(int pos, int count)
         {
-            if(!parent)
-                q->beginRemoveRows(QModelIndex(), pos, pos + count - 1);
+            q->beginRemoveRows(QModelIndex(), pos, pos + count - 1);
         }
 
         void _k_removedRows()
         {
+            q->endRemoveRows();
+        }
+
+        void _k_subTitleAdded(K3b::MovixFileItem *item)
+        {
+            q->beginInsertRows(q->indexForItem(item), 0, 0);
+
+            // do nothing :)
+            
+            q->endInsertRows();
+        }
+
+        void _k_subTitleRemoved(K3b::MovixFileItem *item)
+        {
+            q->beginRemoveRows(q->indexForItem(item), 0, 0);
+
+            // do nothing :)
+
             q->endRemoveRows();
         }
 
@@ -66,13 +82,23 @@ MovixProjectModel::MovixProjectModel( K3b::MovixDoc* doc, QObject* parent )
 {
     d->project = doc;
 
-    connect(doc, SIGNAL(aboutToAddMovixItem(int, int, K3b::MovixFileItem*)),
-            this, SLOT(_k_aboutToAddRows(int, int, K3b::MovixFileItem*)));
-    connect(doc, SIGNAL(addedMovixItem()), this, SLOT(_k_addedRows()));
+    // item handling
+    connect(doc, SIGNAL(aboutToAddMovixItems(int, int)),
+            this, SLOT(_k_aboutToAddRows(int, int)));
 
-    connect(doc, SIGNAL(aboutToRemoveMovixItem(int, int, K3b::MovixFileItem*)),
-            this, SLOT(_k_aboutToRemoveRows(int, int, K3b::MovixFileItem*)));
-    connect(doc, SIGNAL(removedMovixItem()), this, SLOT(_k_removedRows()));
+    connect(doc, SIGNAL(addedMovixItems()), this, SLOT(_k_addedRows()));
+
+    connect(doc, SIGNAL(aboutToRemoveMovixItems(int, int)),
+            this, SLOT(_k_aboutToRemoveRows(int, int)));
+
+    connect(doc, SIGNAL(removedMovixItems()), this, SLOT(_k_removedRows()));
+
+    // subtitle handling
+    connect(doc, SIGNAL(subTitleItemAdded(K3b::MovixFileItem*)),
+            this, SLOT(_k_subTitleAdded(K3b::MovixFileItem*)));
+
+    connect(doc, SIGNAL(subTitleItemRemoved(K3b::MovixFileItem*)),
+            this, SLOT(_k_subTitleRemoved(K3b::MovixFileItem*)));
 }
 
 MovixProjectModel::~MovixProjectModel()
@@ -90,42 +116,102 @@ K3b::MovixFileItem* MovixProjectModel::itemForIndex( const QModelIndex& index ) 
     if ( index.isValid() )
     {
         Q_ASSERT( index.internalPointer() );
-        return static_cast<K3b::MovixFileItem*>( index.internalPointer() );
+        K3b::MovixFileItem* item = static_cast<K3b::MovixFileItem*>( index.internalPointer() );
+
+        if (item->isSubtitle())
+            return 0;
+
+        return item;
     }
 
     return 0;
 }
 
+
 QModelIndex MovixProjectModel::indexForItem( K3b::MovixFileItem* track ) const
 {
-    return createIndex( d->project->indexOf(track), 0, track );
+    if (!track || track->isSubtitle())
+        return QModelIndex();
+
+    return index(d->project->indexOf(track) - 1, 0);
+}
+
+
+K3b::MovixSubtitleItem* MovixProjectModel::subtitleForIndex( const QModelIndex& index ) const
+{
+    if ( index.isValid() )
+    {
+        Q_ASSERT( index.internalPointer() );
+        MovixFileItem *item = static_cast<MovixFileItem*>( index.internalPointer() );
+
+        if (!item->isSubtitle())
+            return 0;
+
+        return dynamic_cast<MovixSubtitleItem*>(item);
+    }
+
+    return 0;
+}
+
+QModelIndex MovixProjectModel::indexForSubtitle( K3b::MovixSubtitleItem* sub ) const
+{
+    if (!sub)
+        return QModelIndex();
+
+    QModelIndex parent = indexForItem(sub->parent());
+    return index( 0, 0, parent );
 }
 
 QModelIndex MovixProjectModel::index( int row, int column,
     const QModelIndex& parent ) const
 {
-    Q_UNUSED( parent );
+    if (!parent.isValid())
+    {
+        // just to make sure it won't crash when the model has no items
+        if (row >= d->project->movixFileItems().count())
+            return QModelIndex();
 
-    // just to make sure it won't crash when the model has no items
-    if (row >= d->project->movixFileItems().count())
-        return QModelIndex();
+        return createIndex( row, column, d->project->movixFileItems().at(row) );
+    }
+    else
+    {
+        // if the parent is valid, we are returning a subtitle item
+        K3b::MovixFileItem *item = itemForIndex(parent);
+        if (row > 0 || !item->subTitleItem())
+            return QModelIndex();
 
-    return createIndex( row, column, d->project->movixFileItems().at(row) );
+        return createIndex( row, column, (K3b::MovixFileItem*)item->subTitleItem() );
+    }
 }
 
 QModelIndex MovixProjectModel::parent( const QModelIndex& index ) const
 {
-    Q_UNUSED( index );
+    if (!index.isValid())
+        return QModelIndex();
 
-    return QModelIndex();
+    K3b::MovixSubtitleItem *sub = subtitleForIndex( index );
+
+    // if it is valid and it is not a subtitle, it needs to be a MovixFileItem for sure
+    // and therefore has no parent
+    if (!sub)
+        return QModelIndex();
+
+    // now if it really is a subtitle, the parent is the movix item
+    return indexForItem(sub->parent());
 }
 
 int MovixProjectModel::rowCount( const QModelIndex& parent) const
 {
     if ( parent.isValid() )
-        return 0;
+    {
+        K3b::MovixFileItem *item = itemForIndex(parent);
+        if (!item || !item->subTitleItem())
+            return 0;
+
+        return 1;
+    }
     else
-        return d->project->movixFileItems().size();
+        return d->project->movixFileItems().count();
 }
 
 int MovixProjectModel::columnCount( const QModelIndex& parent) const
@@ -141,6 +227,11 @@ bool MovixProjectModel::setData( const QModelIndex& index,
     if ( index.isValid() )
     {
         K3b::MovixFileItem* item = itemForIndex( index );
+
+        // subtitles are edittable?
+        if (!item)
+            return false;
+
         if ( role == Qt::EditRole )
         {
             if ( index.column() == TitleColumn )
@@ -157,14 +248,19 @@ bool MovixProjectModel::setData( const QModelIndex& index,
 QVariant MovixProjectModel::data( const QModelIndex& index, int role ) const
 {
     if ( index.isValid() ) {
-        K3b::MovixFileItem* item = itemForIndex( index );
+        K3b::FileItem* item = static_cast<K3b::FileItem*>(index.internalPointer());
+        K3b::MovixFileItem* movixItem = itemForIndex(index);
+        K3b::MovixSubtitleItem* subtitleItem = subtitleForIndex(index);
 
         switch( index.column() ) {
             case NoColumn:
                 if( role == Qt::DisplayRole ||
                     role == Qt::EditRole )
                 {
-                    return d->project->indexOf(item);
+                    if (movixItem)
+                        return d->project->indexOf(movixItem);
+                    else
+                        return QVariant();
                 }
                 break;
             case TitleColumn:
@@ -245,18 +341,21 @@ Qt::ItemFlags MovixProjectModel::flags( const QModelIndex& index ) const
     {
         Qt::ItemFlags f = Qt::ItemIsSelectable |
                           Qt::ItemIsEnabled |
-                          Qt::ItemIsDropEnabled |
-                          Qt::ItemIsDragEnabled;
+                          Qt::ItemIsDropEnabled;
 
-        if ( index.column() == TitleColumn )
-        {
-            f |= Qt::ItemIsEditable;
+        K3b::MovixFileItem *item = itemForIndex( index );
+
+        if ( item ) {
+            f |= Qt::ItemIsDragEnabled;
+
+            if ( index.column() == TitleColumn ) {
+                f |= Qt::ItemIsEditable;
+            }
         }
 
         return f;
     }
-    else
-    {
+    else {
         return QAbstractItemModel::flags( index )|Qt::ItemIsDropEnabled;
     }
 }
@@ -275,11 +374,12 @@ QMimeData* MovixProjectModel::mimeData( const QModelIndexList& indexes ) const
 
     foreach( const QModelIndex& index, indexes ) {
         K3b::MovixFileItem* item = itemForIndex( index );
-        items << item;
+        if (item) {
+            items << item;
 
-        if( !urls.contains( KUrl( item->localPath() ) ) )
-        {
-            urls << KUrl( item->localPath() );
+            if( !urls.contains( KUrl( item->localPath() ) ) ) {
+                urls << KUrl( item->localPath() );
+            }
         }
     }
     urls.populateMimeData( mime );
@@ -328,6 +428,12 @@ bool MovixProjectModel::dropMimeData( const QMimeData* data,
         K3b::MovixFileItem *prev;
         if(parent.isValid())
         {
+            K3b::MovixFileItem *item = itemForIndex(parent);
+
+            // TODO: handle drop in subtitles
+            if (!item)
+                return false;
+
             int index = d->project->indexOf(itemForIndex(parent)) - 1;
             if(index == 0)
                 prev = 0;
@@ -370,6 +476,13 @@ bool MovixProjectModel::dropMimeData( const QMimeData* data,
 
 bool MovixProjectModel::removeRows( int row, int count, const QModelIndex& parent )
 {
+    // if the parent item is valid, we are removing a subtitle
+    if (parent.isValid()) {
+        K3b::MovixFileItem *item = itemForIndex(parent);
+        d->project->removeSubTitleItem( item );
+        return true;
+    }
+
     // remove the indexes from the project
     while (count > 0)
     {

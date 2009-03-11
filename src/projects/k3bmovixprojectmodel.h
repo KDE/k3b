@@ -19,9 +19,8 @@
 
 namespace K3b {
     class MovixDoc;
-}
-namespace K3b {
     class MovixFileItem;
+    class MovixSubtitleItem;
 }
 
 namespace K3b {
@@ -47,6 +46,9 @@ namespace K3b {
 
             MovixFileItem* itemForIndex( const QModelIndex& index ) const;
             QModelIndex indexForItem( MovixFileItem* track ) const;
+
+            MovixSubtitleItem* subtitleForIndex( const QModelIndex& index ) const;
+            QModelIndex indexForSubtitle( MovixSubtitleItem* track ) const;
 
             QModelIndex index(int row, int column,
                 const QModelIndex& parent = QModelIndex()) const;
@@ -75,10 +77,13 @@ namespace K3b {
         class Private;
         Private* const d;
 
-        Q_PRIVATE_SLOT( d, void _k_aboutToAddRows(int, int, K3b::MovixFileItem*))
+        Q_PRIVATE_SLOT( d, void _k_aboutToAddRows(int, int))
         Q_PRIVATE_SLOT( d, void _k_addedRows())
-        Q_PRIVATE_SLOT( d, void _k_aboutToRemoveRows(int, int, K3b::MovixFileItem*))
+        Q_PRIVATE_SLOT( d, void _k_aboutToRemoveRows(int, int))
         Q_PRIVATE_SLOT( d, void _k_removedRows())
+        Q_PRIVATE_SLOT( d, void _k_subTitleAdded(K3b::MovixFileItem*))
+        Q_PRIVATE_SLOT( d, void _k_subTitleRemoved(K3b::MovixFileItem*))
+
     };
 }
 

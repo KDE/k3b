@@ -12,6 +12,8 @@ include_directories(
   ${libk3b_SOURCE_DIR}/projects/datacd
   ${libk3b_SOURCE_DIR}/projects/videocd
   ${libk3b_SOURCE_DIR}/projects/mixedcd
+  ${libk3b_SOURCE_DIR}/projects/movixcd/
+  ${libk3b_SOURCE_DIR}/projects/videodvd/
   ${libk3b_SOURCE_DIR}/jobs
   ${libk3b_SOURCE_DIR}/videodvd
   ${libk3b_BINARY_DIR}/core
@@ -19,9 +21,7 @@ include_directories(
   ${libk3b_BINARY_DIR}/tools
   ${libk3b_BINARY_DIR}/projects
   ${libk3b_BINARY_DIR}/jobs
-  ${libk3b_SOURCE_DIR}/projects/movixcd/
   ${CMAKE_CURRENT_SOURCE_DIR}/projects
-  ${libk3b_SOURCE_DIR}/projects/videodvd/
   ${CMAKE_CURRENT_SOURCE_DIR}/projects/kostore/
   ${libk3b_SOURCE_DIR}/cddb
   )
