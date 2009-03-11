@@ -53,6 +53,7 @@ K3b::StandardView::StandardView(K3b::Doc* doc, QWidget *parent )
     m_fileView->setSelectionMode(QTreeView::ExtendedSelection);
     m_fileView->setContextMenuPolicy(Qt::CustomContextMenu);
 
+    m_expanded = false;
     // connect signals/slots
     connect(m_dirView, SIGNAL(customContextMenuRequested(const QPoint&)),
             this, SLOT(slotCustomContextMenu(const QPoint&)));
@@ -79,6 +80,8 @@ void K3b::StandardView::setModel(QAbstractItemModel *model)
     // so that it updates the file view
     connect(m_dirView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection&)),
             this, SLOT(slotCurrentDirChanged()));
+    connect(model, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+            this, SLOT(slotItemsAdded()));
 
     // select the first item from the model
     if (m_dirProxy->rowCount() > 0)
@@ -106,6 +109,13 @@ QModelIndexList K3b::StandardView::currentSelection() const
 QModelIndex K3b::StandardView::currentRoot() const
 {
     return m_fileView->rootIndex();
+}
+
+void K3b::StandardView::setViewExpanded(bool expand)
+{
+    m_expanded = expand;
+    if (expand)
+        m_fileView->expandAll();
 }
 
 void K3b::StandardView::slotCurrentDirChanged()
@@ -188,4 +198,11 @@ void K3b::StandardView::slotRenameItem()
     else
         m_fileView->edit( m_currentSelection.first() );
 }
+
+void K3b::StandardView::slotItemsAdded()
+{
+    if (m_expanded)
+        m_fileView->expandAll();
+}
+
 #include "k3bstandardview.moc"

@@ -56,6 +56,7 @@ K3b::AudioView::AudioView( K3b::AudioDoc* pDoc, QWidget* parent )
     m_model = new K3b::AudioProjectModel(m_doc, this);
     // set the model for the K3b::StandardView's views
     setModel(m_model);
+    setViewExpanded(true);
 
     // and hide the side panel as the audio project has no tree hierarchy
     setShowDirPanel(false);

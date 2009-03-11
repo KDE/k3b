@@ -47,6 +47,7 @@ K3b::MovixView::MovixView( K3b::MovixDoc* doc, QWidget* parent )
     m_model = new K3b::MovixProjectModel(m_doc, this);
     // set the model for the K3b::StandardView's views
     setModel(m_model);
+    setViewExpanded(true);
 
     // and hide the side panel as the movix project has no tree hierarchy
     setShowDirPanel(false);

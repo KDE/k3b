@@ -87,6 +87,13 @@ protected:
 
     QModelIndex currentRoot() const;
 
+    /**
+     * Tells whether to expand the items in the file panel or not.
+     * This is useful for Movix and Audio projects in which tracks
+     * might have a subtitle or audio sources
+     */
+    void setViewExpanded(bool expand);
+
 protected slots:
     void slotCurrentDirChanged();
     void slotCustomContextMenu(const QPoint &pos);
@@ -110,6 +117,13 @@ protected slots:
      */
     void slotRenameItem();
 
+private slots:
+    /**
+     * this slot is here just to decide whether to expand or not items in the 
+     * file view
+     */
+    void slotItemsAdded();
+
 signals:
     void currentRootChanged( const QModelIndex& newRoot );
 
@@ -119,6 +133,7 @@ private:
     QSplitter* m_splitter;
     DirProxyModel* m_dirProxy;
     QModelIndexList m_currentSelection;
+    bool m_expanded;
 };
 }
 
