@@ -1,7 +1,8 @@
 /*
  *
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C) 2009      Arthur Renato Mello <arthur@mandriva.com>
+ *           (C) 2009      Arthur Renato Mello <arthur@mandriva.com>
+ *           (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
