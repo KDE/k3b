@@ -23,6 +23,7 @@
 #include <k3baudiofile.h>
 
 #include <KLocale>
+#include <KIcon>
 
 #include <QtCore/QMimeData>
 #include <QtGui/QApplication>
@@ -140,6 +141,9 @@ QVariant K3b::AudioProjectModel::data( const QModelIndex& index, int role ) cons
                 if( role == Qt::DisplayRole ||
                     role == Qt::EditRole ) {
                     return track->artist();
+                }
+                else if ( role == Qt::DecorationRole ) {
+                    return KIcon( "application-x-cda" );
                 }
                 break;
 

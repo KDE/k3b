@@ -19,6 +19,7 @@
 
 #include <KLocale>
 #include <KUrl>
+#include <KIcon>
 
 #include <QtCore/QMimeData>
 #include <QtCore/QDataStream>
@@ -268,6 +269,10 @@ QVariant MovixProjectModel::data( const QModelIndex& index, int role ) const
                     role == Qt::EditRole )
                 {
                     return item->k3bName();
+                }
+                else if ( role == Qt::DecorationRole  && movixItem )
+                {
+                    return KIcon( movixItem->mimeType()->iconName() );
                 }
                 break;
             case TypeColumn:
