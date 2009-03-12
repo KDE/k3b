@@ -40,7 +40,7 @@ namespace K3b {
         ~JobProgressOSD();
 
         int screen() const { return m_screen; }
-        const QPoint& position() const { return m_position; }
+        QPoint position() const { return m_position; }
 
         void readSettings( const KConfigGroup& );
         void saveSettings( KConfigGroup );
@@ -65,11 +65,7 @@ namespace K3b {
         void mousePressEvent( QMouseEvent* );
         void mouseReleaseEvent( QMouseEvent* );
         void mouseMoveEvent( QMouseEvent* );
-        void renderOSD();
-        void reposition( QSize size = QSize() );
-
-    protected Q_SLOTS:
-        void refresh();
+        void reposition();
 
     private:
         /**
@@ -78,8 +74,6 @@ namespace K3b {
         QPoint fixupPosition( const QPoint& p );
         static const int s_outerMargin = 15;
 
-        QPixmap m_osdBuffer;
-        bool m_dirty;
         QString m_text;
         int m_progress;
         bool m_dragging;

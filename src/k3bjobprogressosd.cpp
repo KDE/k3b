@@ -39,14 +39,12 @@
 
 K3b::JobProgressOSD::JobProgressOSD( QWidget* parent )
     : QWidget( parent, Qt::WType_TopLevel | Qt::WNoAutoErase | Qt::WStyle_Customize | Qt::X11BypassWindowManagerHint | Qt::WStyle_StaysOnTop ),
-      m_dirty(true),
       m_progress(0),
       m_dragging(false),
       m_screen(0),
       m_position(s_outerMargin, s_outerMargin)
 {
     setFocusPolicy( Qt::NoFocus );
-    setBackgroundMode( Qt::NoBackground );
 
     // dummy size
     resize( 20, 20 );
@@ -71,8 +69,8 @@ void K3b::JobProgressOSD::show()
     // start with 0 progress
     setProgress(0);
 
-    if( m_dirty )
-        renderOSD();
+    // reposition the osd
+    reposition();
 
     QWidget::show();
 }
@@ -82,7 +80,7 @@ void K3b::JobProgressOSD::setText( const QString& text )
 {
     if( m_text != text ) {
         m_text = text;
-        refresh();
+        reposition();
     }
 }
 
@@ -91,7 +89,7 @@ void K3b::JobProgressOSD::setProgress( int p )
 {
     if( m_progress != p ) {
         m_progress = p;
-        refresh();
+        update();
     }
 }
 
@@ -103,16 +101,54 @@ void K3b::JobProgressOSD::setPosition( const QPoint& p )
 }
 
 
-void K3b::JobProgressOSD::refresh()
+void K3b::JobProgressOSD::setScreen( int screen )
 {
-    if( isVisible() )
-        renderOSD();
-    else
-        m_dirty = true;
+    const int n = QApplication::desktop()->numScreens();
+    m_screen = (screen >= n) ? n-1 : screen;
+    reposition();
 }
 
 
-void K3b::JobProgressOSD::renderOSD()
+void K3b::JobProgressOSD::reposition()
+{
+    QPixmap icon = KIconLoader::global()->loadIcon( "k3b", KIconLoader::NoGroup, 32 );
+    int margin = 10;
+    int textWidth = fontMetrics().width( m_text );
+
+    // do not change the size every time the text changes, just in case we are too small
+    QSize newSize( qMax( qMax( 2*margin + icon.width() + margin + textWidth, 100 ), width() ),
+                   qMax( 2*margin + icon.height(), 2*margin + fontMetrics().height()*2 ) );
+
+    QPoint newPos = m_position;
+    const QRect screen = QApplication::desktop()->screenGeometry( m_screen );
+
+    // now to properly resize if put into one of the corners we interpret the position
+    // depending on the quadrant
+    int midH = screen.width()/2;
+    int midV = screen.height()/2;
+    if( newPos.x() > midH )
+        newPos.rx() -= newSize.width();
+    if( newPos.y() > midV )
+        newPos.ry() -= newSize.height();
+
+    newPos = fixupPosition( newPos );
+
+    // correct for screen position
+    newPos += screen.topLeft();
+
+    // ensure we are painted before we move
+    if( isVisible() )
+        paintEvent( 0 );
+
+    // fancy X11 move+resize, reduces visual artifacts
+//    XMoveResizeWindow( QX11Info::display(), winId(), newPos.x(), newPos.y(), newSize.width(), newSize.height() );
+    setGeometry( QRect( newPos, newSize ) );
+
+    update();
+}
+
+
+void K3b::JobProgressOSD::paintEvent( QPaintEvent* )
 {
     // ----------------------------------------
     // |        Copying CD                    |
@@ -130,8 +166,7 @@ void K3b::JobProgressOSD::renderOSD()
         QSize newSize( qMax( qMax( 2*margin + icon.width() + margin + textWidth, 100 ), width() ),
                        qMax( 2*margin + icon.height(), 2*margin + fontMetrics().height()*2 ) );
 
-        m_osdBuffer = QPixmap( newSize );
-        QPainter p( &m_osdBuffer );
+        QPainter p( this );
 
         p.setPen( theme->foregroundColor() );
 
@@ -155,59 +190,7 @@ void K3b::JobProgressOSD::renderOSD()
         p.drawRect( progressRect );
         progressRect.setWidth( m_progress > 0 ? m_progress*progressRect.width()/100 : 0 );
         p.fillRect( progressRect, theme->foregroundColor() );
-
-        // reposition the osd
-        reposition( newSize );
-
-        m_dirty = false;
-
-        update();
     }
-}
-
-
-void K3b::JobProgressOSD::setScreen( int screen )
-{
-    const int n = QApplication::desktop()->numScreens();
-    m_screen = (screen >= n) ? n-1 : screen;
-    reposition();
-}
-
-
-void K3b::JobProgressOSD::reposition( QSize newSize )
-{
-    if( !newSize.isValid() )
-        newSize = size();
-
-    QPoint newPos = m_position;
-    const QRect& screen = QApplication::desktop()->screenGeometry( m_screen );
-
-    // now to properly resize if put into one of the corners we interpret the position
-    // depending on the quadrant
-    int midH = screen.width()/2;
-    int midV = screen.height()/2;
-    if( newPos.x() > midH )
-        newPos.rx() -= newSize.width();
-    if( newPos.y() > midV )
-        newPos.ry() -= newSize.height();
-
-    newPos = fixupPosition( newPos );
-
-    // correct for screen position
-    newPos += screen.topLeft();
-
-    // ensure we are painted before we move
-    if( isVisible() )
-        paintEvent( 0 );
-
-    // fancy X11 move+resize, reduces visual artifacts
-    XMoveResizeWindow( QX11Info::display(), winId(), newPos.x(), newPos.y(), newSize.width(), newSize.height() );
-}
-
-
-void K3b::JobProgressOSD::paintEvent( QPaintEvent* )
-{
-    bitBlt( this, 0, 0, &m_osdBuffer );
 }
 
 
@@ -247,7 +230,7 @@ void K3b::JobProgressOSD::mouseMoveEvent( QMouseEvent* e )
         if( currentScreen != -1 )
             m_screen = currentScreen;
 
-        const QRect& screen = QApplication::desktop()->screenGeometry( m_screen );
+        const QRect screen = QApplication::desktop()->screenGeometry( m_screen );
 
         // make sure the position is valid
         m_position = fixupPosition( e->globalPos() - m_dragOffset - screen.topLeft() );
