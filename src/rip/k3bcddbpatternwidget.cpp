@@ -140,6 +140,7 @@ void K3b::CddbPatternWidget::slotSeeSpecialStrings()
                                 "<tr><td>%T</td><td>album title</td><td>%{T} or %{albumtitle}</td></tr>"
                                 "<tr><td>%C</td><td>extended CD information</td><td>%{C} or %{albumcomment}</td></tr>"
                                 "<tr><td>%d</td><td>current date</td><td>%{d} or %{date}</td></tr>"
+                                "<tr><td>%e</td><td>file extension (if left out, it is added automatically)</td><td>%{e} or %{ext}</td></tr>"
                                 "</table>"),
                           m_specialStringsLabel );
 }

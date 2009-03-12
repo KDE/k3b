@@ -1,10 +1,10 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  * Copyright (C) 2004-2005 Jakob Petsovits <jpetso@gmx.at>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,10 +27,11 @@
 
 
 QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
-                                        int trackNumber,
-                                        const QString& pattern,
-                                        bool replace,
-                                        const QString& replaceString )
+                                          int trackNumber,
+                                          const QString& extension,
+                                          const QString& pattern,
+                                          bool replace,
+                                          const QString& replaceString )
 {
     QString dir, s;
     char c = ' ';     // contains the character representation of a special string
@@ -98,6 +99,9 @@ QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
                                 }
                                 else if( s == "date" ) {
                                     c = DATE;
+                                }
+                                else if( s == "ext" ) {
+                                    c = EXTENSION;
                                 }
                                 else {  // no valid pattern in here, don't replace anything
                                     c = ' ';
@@ -172,6 +176,9 @@ QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
                     break;
                 case DATE:
                     dir.append( KGlobal::locale()->formatDate( QDate::currentDate() ) );
+                    break;
+                case EXTENSION:
+                    dir.append( extension );
                     break;
                 default:
                     dir.append( pattern.mid(i, len) );
@@ -251,6 +258,9 @@ QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
             case DATE:
                 s = KGlobal::locale()->formatDate( QDate::currentDate() );
                 break;
+            case EXTENSION:
+                s = extension;
+                break;
             default: // we must never get here,
                 break; // all choices should be covered
             }
@@ -306,6 +316,9 @@ QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
 
     if( replace )
         dir.replace( QRegExp( "\\s" ), replaceString );
+
+    if ( !dir.endsWith( '.' + extension ) )
+        dir.append( '.' + extension );
 
     return dir;
 }

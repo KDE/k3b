@@ -17,6 +17,7 @@
  * Do only reload the medium for verification if necessary (depends on the writer)
  * Support for Blu-Ray writing
  * Support for DVD and Blu-Ray writing via cdrecord
+ * New audio ripping pattern %e which is replaced by the file extension
 
 1.0.5
 =====

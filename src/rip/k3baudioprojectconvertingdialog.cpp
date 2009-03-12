@@ -259,9 +259,10 @@ void K3b::AudioProjectConvertingDialog::refresh()
             overallSize = filesize;
 
         filename = K3b::PatternParser::parsePattern( cddbEntry, 1,
-                                                   m_patternWidget->filenamePattern(),
-                                                   m_patternWidget->replaceBlanks(),
-                                                   m_patternWidget->blankReplaceString() );
+                                                     extension,
+                                                     m_patternWidget->filenamePattern(),
+                                                     m_patternWidget->replaceBlanks(),
+                                                     m_patternWidget->blankReplaceString() );
 
 
         (void)new K3ListViewItem( m_viewTracks,
@@ -270,7 +271,7 @@ void K3b::AudioProjectConvertingDialog::refresh()
                                   m_doc->length().toString(),
                                   filesize < 0 ? i18n("unknown") : KIO::convertSize( filesize ) );
 
-        d->filenames.append( K3b::fixupPath( baseDir + "/" + filename + "." + extension ) );
+        d->filenames.append( K3b::fixupPath( baseDir + "/" + filename ) );
 
         if( m_optionWidget->createCueFile() ) {
             d->cueFilename = K3b::fixupPath( baseDir + "/" + filename + ".cue" );
@@ -298,9 +299,10 @@ void K3b::AudioProjectConvertingDialog::refresh()
                 overallSize += filesize;
 
             QString filename = K3b::PatternParser::parsePattern( cddbEntry, i,
-                                                               m_patternWidget->filenamePattern(),
-                                                               m_patternWidget->replaceBlanks(),
-                                                               m_patternWidget->blankReplaceString() ) + "." + extension;
+                                                                 extension,
+                                                                 m_patternWidget->filenamePattern(),
+                                                                 m_patternWidget->replaceBlanks(),
+                                                                 m_patternWidget->blankReplaceString() );
 
             (void)new K3ListViewItem( m_viewTracks,
                                       m_viewTracks->lastItem(),
@@ -318,9 +320,10 @@ void K3b::AudioProjectConvertingDialog::refresh()
     // create playlist item
     if( m_optionWidget->createPlaylist() ) {
         QString filename = K3b::PatternParser::parsePattern( cddbEntry, 1,
-                                                           m_patternWidget->playlistPattern(),
-                                                           m_patternWidget->replaceBlanks(),
-                                                           m_patternWidget->blankReplaceString() ) + ".m3u";
+                                                             QLatin1String( "m3u" ),
+                                                             m_patternWidget->playlistPattern(),
+                                                             m_patternWidget->replaceBlanks(),
+                                                             m_patternWidget->blankReplaceString() );
 
         (void)new K3ListViewItem( m_viewTracks,
                                   m_viewTracks->lastItem(),

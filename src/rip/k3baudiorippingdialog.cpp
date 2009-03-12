@@ -324,22 +324,26 @@ void K3b::AudioRippingDialog::refresh()
         if( fileSize > 0 )
             overallSize = fileSize;
 
-        filename = K3b::PatternParser::parsePattern( m_cddbEntry, 1,
-                                                   m_patternWidget->filenamePattern(),
-                                                   m_patternWidget->replaceBlanks(),
-                                                   m_patternWidget->blankReplaceString() );
+        filename = d->fsInfo.fixupPath( K3b::PatternParser::parsePattern( m_cddbEntry, 1,
+                                                                          extension,
+                                                                          m_patternWidget->filenamePattern(),
+                                                                          m_patternWidget->replaceBlanks(),
+                                                                          m_patternWidget->blankReplaceString() ) );
 
-        filename = d->fsInfo.fixupPath( filename );
-
-        d->trackModel.setItem( 0, 0, new QStandardItem( filename + "." + extension ) );
+        d->trackModel.setItem( 0, 0, new QStandardItem( filename ) );
         d->trackModel.setItem( 0, 1, new QStandardItem( K3b::Msf(length).toString() ) );
         d->trackModel.setItem( 0, 2, new QStandardItem( fileSize < 0 ? i18n("unknown") : KIO::convertSize( fileSize ) ) );
         d->trackModel.setItem( 0, 3, new QStandardItem( i18n("Audio") ) );
 
-        d->filenames.append( baseDir + filename + "." + extension );
+        d->filenames.append( baseDir + filename );
 
         if( m_optionWidget->createCueFile() ) {
-            d->trackModel.setItem( 1, 0, new QStandardItem( filename + ".cue" ) );
+            QString cueFileName = d->fsInfo.fixupPath( K3b::PatternParser::parsePattern( m_cddbEntry, 1,
+                                                                                         QLatin1String( "cue" ),
+                                                                                         m_patternWidget->filenamePattern(),
+                                                                                         m_patternWidget->replaceBlanks(),
+                                                                                         m_patternWidget->blankReplaceString() ) );
+            d->trackModel.setItem( 1, 0, new QStandardItem( cueFileName ) );
             d->trackModel.setItem( 1, 1, new QStandardItem( "-" ) );
             d->trackModel.setItem( 1, 2, new QStandardItem( "-" ) );
             d->trackModel.setItem( 1, 3, new QStandardItem( i18n("Cue-file") ) );
@@ -375,13 +379,14 @@ void K3b::AudioRippingDialog::refresh()
             QString filename;
 
             filename = K3b::PatternParser::parsePattern( m_cddbEntry, trackIndex+1,
-                                                       m_patternWidget->filenamePattern(),
-                                                       m_patternWidget->replaceBlanks(),
-                                                       m_patternWidget->blankReplaceString() );
+                                                         extension,
+                                                         m_patternWidget->filenamePattern(),
+                                                         m_patternWidget->replaceBlanks(),
+                                                         m_patternWidget->blankReplaceString() );
             if ( filename.isEmpty() ){
                 filename = i18n("Track%1", QString::number( trackIndex+1 ).rightJustified( 2, '0' ) ) + "." + extension;
             }
-            filename = d->fsInfo.fixupPath( filename + "." + extension );
+            filename = d->fsInfo.fixupPath( filename );
 
             d->trackModel.setItem( i, 0, new QStandardItem( filename ) );
             d->trackModel.setItem( i, 1, new QStandardItem( trackLength.toString() ) );
@@ -395,9 +400,10 @@ void K3b::AudioRippingDialog::refresh()
     // create playlist item
     if( m_optionWidget->createPlaylist() ) {
         QString filename = K3b::PatternParser::parsePattern( m_cddbEntry, 1,
-                                                           m_patternWidget->playlistPattern(),
-                                                           m_patternWidget->replaceBlanks(),
-                                                           m_patternWidget->blankReplaceString() ) + ".m3u";
+                                                             QLatin1String( "m3u" ),
+                                                             m_patternWidget->playlistPattern(),
+                                                             m_patternWidget->replaceBlanks(),
+                                                             m_patternWidget->blankReplaceString() );
 
         int i = d->trackModel.rowCount();
         d->trackModel.setItem( i, 0, new QStandardItem( filename ) );

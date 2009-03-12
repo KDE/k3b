@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,29 +27,31 @@ namespace KCDDB {
  *@author Sebastian Trueg
  */
 namespace K3b {
-class PatternParser
-{
-public:
-    static QString parsePattern( const KCDDB::CDInfo& entry,
-                                 int trackNumber,
-                                 const QString& pattern,
-                                 bool replace = false,
-                                 const QString& replaceString = "_" );
+    class PatternParser
+    {
+    public:
+        static QString parsePattern( const KCDDB::CDInfo& entry,
+                                     int trackNumber,
+                                     const QString& fileExtension,
+                                     const QString& pattern,
+                                     bool replace = false,
+                                     const QString& replaceString = "_" );
 
-private:
-    enum {
-        TITLE   = 't',
-        ARTIST  = 'a',
-        NUMBER  = 'n',
-        COMMENT = 'c',
-        YEAR    = 'y',
-        GENRE   = 'g',
-        ALBUMTITLE   = 'T',
-        ALBUMARTIST  = 'A',
-        ALBUMCOMMENT = 'C',
-        DATE = 'd'
+    private:
+        enum {
+            TITLE   = 't',
+            ARTIST  = 'a',
+            NUMBER  = 'n',
+            COMMENT = 'c',
+            YEAR    = 'y',
+            GENRE   = 'g',
+            ALBUMTITLE   = 'T',
+            ALBUMARTIST  = 'A',
+            ALBUMCOMMENT = 'C',
+            DATE = 'd',
+            EXTENSION = 'e'
+        };
     };
-};
 }
 
 #endif
