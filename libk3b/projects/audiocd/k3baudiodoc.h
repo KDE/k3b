@@ -187,6 +187,7 @@ namespace K3b {
         void slotTrackRemoved( K3b::AudioTrack* );
 
     Q_SIGNALS:
+        void trackAdded( K3b::AudioTrack* );
         void trackChanged( K3b::AudioTrack* );
         void trackRemoved( K3b::AudioTrack* );
 

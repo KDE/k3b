@@ -94,6 +94,12 @@ protected:
      */
     void setViewExpanded(bool expand);
 
+    /**
+     * Sets the autoexpand delay of the views. 
+     * This sets the property on both views
+     */
+    void setAutoExpandDelay(int delay);
+
 protected slots:
     void slotCurrentDirChanged();
     void slotCustomContextMenu(const QPoint &pos);

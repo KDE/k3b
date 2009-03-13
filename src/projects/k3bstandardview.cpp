@@ -44,6 +44,7 @@ K3b::StandardView::StandardView(K3b::Doc* doc, QWidget *parent )
     m_dirView->setSelectionMode(QTreeView::SingleSelection);
     m_dirView->setModel(m_dirProxy);
     m_dirView->setContextMenuPolicy(Qt::CustomContextMenu);
+    m_dirView->setAnimated(true);
 
     // File panel
     m_fileView->setAcceptDrops(true);
@@ -52,6 +53,7 @@ K3b::StandardView::StandardView(K3b::Doc* doc, QWidget *parent )
     m_fileView->setRootIsDecorated(false);
     m_fileView->setSelectionMode(QTreeView::ExtendedSelection);
     m_fileView->setContextMenuPolicy(Qt::CustomContextMenu);
+    m_fileView->setAnimated(true);
 
     m_expanded = false;
     // connect signals/slots
@@ -116,6 +118,12 @@ void K3b::StandardView::setViewExpanded(bool expand)
     m_expanded = expand;
     if (expand)
         m_fileView->expandAll();
+}
+
+void K3b::StandardView::setAutoExpandDelay(int delay)
+{
+    m_dirView->setAutoExpandDelay(delay);
+    m_fileView->setAutoExpandDelay(delay);
 }
 
 void K3b::StandardView::slotCurrentDirChanged()
