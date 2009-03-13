@@ -60,11 +60,11 @@
 K3B_EXPORT_PLUGIN( k3baudiometainforenamerplugin, K3bAudioMetainfoRenamerPlugin )
 
 namespace {
-    class KMimeTypeResolver : public TagLib::FileRef::FileTypeResolver
+    class K3bMimeTypeResolver : public TagLib::FileRef::FileTypeResolver
     {
     public:
         // to make gcc shut up
-        virtual ~KMimeTypeResolver() {}
+        virtual ~K3bMimeTypeResolver() {}
 
         TagLib::File* createFile( TagLib::FileName fileName, bool, TagLib::AudioProperties::ReadStyle ) const
         {
@@ -153,7 +153,7 @@ K3bAudioMetainfoRenamerPluginWidget::K3bAudioMetainfoRenamerPluginWidget( K3b::D
                                         "<em>%n</em> (Track number), and <em>%t</em> (Title) ,"
                                         "are supported.") );
 
-    TagLib::FileRef::addFileTypeResolver( new KMimeTypeResolver() );
+    TagLib::FileRef::addFileTypeResolver( new K3bMimeTypeResolver() );
 }
 
 
