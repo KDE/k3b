@@ -326,7 +326,7 @@ bool K3b::CueFileParser::parseLine( QString& line )
     // TODO: create K3b::Device::TrackCdText entries
     //
     else if( titleRx.exactMatch( line ) ) {
-        if( d->inTrack && d->cdText.count()>0 )
+        if( d->inTrack )
             d->cdText[d->currentParsedTrack-1].setTitle( titleRx.cap(1) );
         else
             d->cdText.setTitle( titleRx.cap(1) );
@@ -334,7 +334,7 @@ bool K3b::CueFileParser::parseLine( QString& line )
     }
 
     else if( performerRx.exactMatch( line ) ) {
-        if( d->inTrack && d->cdText.count()>0)
+        if( d->inTrack )
             d->cdText[d->currentParsedTrack-1].setPerformer( performerRx.cap(1) );
         else
             d->cdText.setPerformer( performerRx.cap(1) );
@@ -342,7 +342,7 @@ bool K3b::CueFileParser::parseLine( QString& line )
     }
 
     else if( songwriterRx.exactMatch( line ) ) {
-        if( d->inTrack && d->cdText.count()>0)
+        if( d->inTrack )
             d->cdText[d->currentParsedTrack-1].setSongwriter( songwriterRx.cap(1) );
         else
             d->cdText.setSongwriter( songwriterRx.cap(1) );
