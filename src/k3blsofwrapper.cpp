@@ -85,7 +85,9 @@ bool K3b::LsofWrapper::checkDevice( K3b::Device::Device* dev )
         int pid = (*it).mid(1).toInt();
         ++it;
         if ( it != l.constEnd() ) {
-            QString app = (*(++it)).mid(1);
+            QString app = (*(++it));
+	    if(!app.isEmpty())
+	    	app = app.mid(1);
 
             kDebug() << "(K3b::LsofWrapper) matched: app: " << app << " pid: " << pid;
 
