@@ -53,9 +53,9 @@ K3b::JobProgressOSD::JobProgressOSD( QWidget* parent )
     KWindowSystem::setOnAllDesktops( winId(), true );
 
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
-             this, SLOT(refresh()) );
+             this, SLOT(repaint()) );
     connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()),
-             this, SLOT(refresh()) );
+             this, SLOT(repaint()) );
 }
 
 
