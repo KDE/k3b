@@ -776,7 +776,7 @@ void K3b::ImageWritingDialog::createAudioCueItems( const K3b::CueFileParser& cp 
                                             ? (*it).length().toString()
                                             : QString("??:??:??") ) );
 
-        if( !cp.cdText().isEmpty() && !cp.cdText()[i-1].isEmpty() )
+        if( !cp.cdText().isEmpty() && (cp.cdText().count() > 0) &&!cp.cdText()[i-1].isEmpty() )
             trackItem->setText( 1,
                                 QString("%1 (%2 - %3)")
                                 .arg(trackItem->text(1))
