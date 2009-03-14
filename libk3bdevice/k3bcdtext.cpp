@@ -407,7 +407,7 @@ K3b::Device::TrackCdText K3b::Device::CdText::operator[]( int i ) const
 
 K3b::Device::TrackCdText& K3b::Device::CdText::operator[]( int i )
 {
-    return d->tracks[i];
+    return track( i );
 }
 
 
