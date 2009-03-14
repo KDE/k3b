@@ -84,7 +84,7 @@ bool K3b::LsofWrapper::checkDevice( K3b::Device::Device* dev )
     for( QStringList::ConstIterator it = l.constBegin(); it != l.constEnd(); ++it ) {
         int pid = (*it).mid(1).toInt();
         ++it;
-        if ( it != l.end() ) {
+        if ( it != l.constEnd() ) {
             QString app = (*(++it)).mid(1);
 
             kDebug() << "(K3b::LsofWrapper) matched: app: " << app << " pid: " << pid;
