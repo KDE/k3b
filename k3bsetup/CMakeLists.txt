@@ -11,7 +11,7 @@ kde4_add_ui_files(kcm_k3bsetup2_PART_SRCS base_k3bsetup2.ui )
 
 kde4_add_plugin(kcm_k3bsetup2 ${kcm_k3bsetup2_PART_SRCS})
 
-target_link_libraries(kcm_k3bsetup2  ${KDE4_KDEUI_LIBS} k3b k3bdevice ${KDE4_KDE3SUPPORT_LIBS} )
+target_link_libraries(kcm_k3bsetup2  ${KDE4_KDEUI_LIBS} k3b k3bdevice )
 
 install(TARGETS kcm_k3bsetup2 DESTINATION ${PLUGIN_INSTALL_DIR} )
 

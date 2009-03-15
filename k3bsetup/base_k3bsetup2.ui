@@ -36,12 +36,15 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="m_editBurningGroup">
+           <widget class="KLineEdit" name="m_editBurningGroup">
             <property name="enabled">
              <bool>false</bool>
             </property>
             <property name="text">
              <string>burning</string>
+            </property>
+            <property name="showClearButton" stdset="0">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -76,9 +79,12 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="m_editUsers">
+           <widget class="KLineEdit" name="m_editUsers">
             <property name="enabled">
              <bool>false</bool>
+            </property>
+            <property name="showClearButton" stdset="0">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -194,9 +200,13 @@
    <extends>QGroupBox</extends>
    <header>keditlistbox.h</header>
   </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
  </customwidgets>
  <includes>
-  <include location="local">k3listview.h</include>
   <include location="local">keditlistbox.h</include>
   <include location="local">klineedit.h</include>
  </includes>
@@ -209,12 +219,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>121</x>
+     <y>45</y>
     </hint>
     <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
+     <x>202</x>
+     <y>43</y>
     </hint>
    </hints>
   </connection>
@@ -225,12 +235,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>55</x>
+     <y>46</y>
     </hint>
     <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
+     <x>367</x>
+     <y>80</y>
     </hint>
    </hints>
   </connection>
