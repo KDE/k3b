@@ -2,7 +2,10 @@
 
 include_directories(../libk3b/core/)
 
-set(kcm_k3bsetup2_PART_SRCS k3bsetup2.cpp )
+set(kcm_k3bsetup2_PART_SRCS
+	k3bsetup2.cpp
+	k3bsetupdevices.cpp
+	k3bsetupprograms.cpp )
 
 kde4_add_ui_files(kcm_k3bsetup2_PART_SRCS base_k3bsetup2.ui )
 

@@ -1,9 +1,11 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,38 +16,31 @@
 
 #include <config-k3b.h>
 
-#include <qlayout.h>
-#include <qmap.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <q3scrollview.h>
-#include <qtimer.h>
-//Added by qt3to4:
+#include <QLayout>
+#include <QMap>
+#include <QFile>
+#include <QCheckBox>
+#include <QLineEdit>
+#include <QLabel>
+#include <QPushButton>
+#include <QTimer>
 #include <QHBoxLayout>
 
-#include <klocale.h>
-#include <kglobal.h>
-#include <kgenericfactory.h>
-#include <k3listview.h>
-#include <keditlistbox.h>
-#include <kmessagebox.h>
-#include <kinputdialog.h>
-#include <kstandarddirs.h>
-#include <kconfig.h>
+#include <KAboutData>
+#include <KConfig>
 #include <kdeversion.h>
-#include <ktextedit.h>
+#include <KEditListBox>
+#include <KGenericFactory>
+#include <KGlobal>
+#include <KLocale>
+#include <KMessageBox>
+#include <KTextEdit>
 
 #include "k3bsetup2.h"
+#include "k3bsetupdevices.h"
+#include "k3bsetupprograms.h"
 
-#include <k3bdevicemanager.h>
-#include <k3bdevice.h>
 #include <k3bexternalbinmanager.h>
-#include <k3bdefaultexternalprograms.h>
-#include <k3bglobals.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -53,53 +48,11 @@
 #include <grp.h>
 
 
-
-static bool shouldRunSuidRoot( const K3b::ExternalBin* bin )
-{
-    //
-    // Since kernel 2.6.8 older cdrecord versions are not able to use the SCSI subsystem when running suid root anymore
-    // So for we ignore the suid root issue with kernel >= 2.6.8 and cdrecord < 2.01.01a02
-    //
-    // Some kernel version 2.6.16.something again introduced a problem here. Since I do not know the exact version
-    // and a workaround was introduced in cdrecord 2.01.01a05 just use that version as the first for suid root.
-    //
-    // Seems as if cdrdao never had problems with suid root...
-    //
-
-    if( bin->name() == "cdrecord" ) {
-        return ( K3b::simpleKernelVersion() < K3b::Version( 2, 6, 8 ) ||
-                 bin->version >= K3b::Version( 2, 1, 1, "a05" ) ||
-                 bin->hasFeature( "wodim" ) );
-    }
-    else if( bin->name() == "cdrdao" ) {
-        return true;
-    }
-    else if( bin->name() == "growisofs" ) {
-        //
-        // starting with 6.0 growiofs raises it's priority using nice(-20)
-        // BUT: newer kernels have ridiculously low default memorylocked resource limit, which prevents privileged
-        // users from starting growisofs 6.0 with "unable to anonymously mmap 33554432: Resource temporarily unavailable"
-        // error message. Until Andy releases a version including a workaround we simply never configure growisofs suid root
-        return false; // bin->version >= K3b::Version( 6, 0 );
-    }
-    else
-        return false;
-}
-
-
 class K3bSetup2::Private
 {
 public:
-    K3b::Device::DeviceManager* deviceManager;
-    K3b::ExternalBinManager* externalBinManager;
-
-    bool changesNeeded;
-
-    QMap<Q3CheckListItem*, QString> listDeviceMap;
-    QMap<QString, Q3CheckListItem*> deviceListMap;
-
-    QMap<Q3CheckListItem*, const K3b::ExternalBin*> listBinMap;
-    QMap<const K3b::ExternalBin*, Q3CheckListItem*> binListMap;
+    K3b::SetupDevices* devicesModel;
+    K3b::SetupPrograms* programsModel;
 
     KConfig* config;
 };
@@ -149,24 +102,30 @@ K3bSetup2::K3bSetup2( QWidget *parent, const QVariantList& )
     box->addWidget( label );
     box->addWidget( w );
 
+    d->devicesModel = new K3b::SetupDevices( this );
+    d->programsModel = new K3b::SetupPrograms(this );
+
+    connect( d->devicesModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+             this, SLOT(slotDataChanged()) );
+    connect( d->devicesModel, SIGNAL(modelReset()),
+             this, SLOT(slotDataChanged()) );
+    connect( d->programsModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+             this, SLOT(slotDataChanged()) );
+    connect( d->programsModel, SIGNAL(modelReset()),
+             this, SLOT(slotDataChanged()) );
     connect( m_checkUseBurningGroup, SIGNAL(toggled(bool)),
-             this, SLOT(updateViews()) );
+             this, SLOT(slotBurningGroup()) );
     connect( m_editBurningGroup, SIGNAL(textChanged(const QString&)),
-             this, SLOT(updateViews()) );
+             this, SLOT(slotBurningGroup()) );
     connect( m_editSearchPath, SIGNAL(changed()),
              this, SLOT(slotSearchPrograms()) );
 
-
-    d->externalBinManager = new K3b::ExternalBinManager( this );
-    d->deviceManager = new K3b::Device::DeviceManager( this );
-
-    // these are the only programs that need special permissions
-    d->externalBinManager->addProgram( new K3b::CdrdaoProgram() );
-    d->externalBinManager->addProgram( new K3b::CdrecordProgram(false) );
-    d->externalBinManager->addProgram( new K3b::GrowisofsProgram() );
-
-    d->externalBinManager->search();
-    d->deviceManager->scanBus();
+    m_viewDevices->setModel( d->devicesModel );
+    m_viewDevices->header()->setResizeMode( QHeaderView::ResizeToContents );
+    m_viewDevices->header()->setResizeMode( 0, QHeaderView::Stretch );
+    m_viewPrograms->setModel( d->programsModel );
+    m_viewPrograms->header()->setResizeMode( QHeaderView::ResizeToContents );
+    m_viewPrograms->header()->setResizeMode( 0, QHeaderView::Stretch );
 
     load();
 
@@ -174,10 +133,16 @@ K3bSetup2::K3bSetup2( QWidget *parent, const QVariantList& )
     // This is a hack to work around a kcm bug which makes the faulty assumption that
     // every module starts without anything to apply
     //
-    QTimer::singleShot( 0, this, SLOT(updateViews()) );
+    QTimer::singleShot( 0, this, SLOT(slotDataChanged()) );
 
-    if( getuid() != 0 /*|| !d->config->isConfigWritable()*/ )
-        makeReadOnly();
+    if( getuid() != 0 /*|| !d->config->isConfigWritable()*/ ) {
+        m_checkUseBurningGroup->setEnabled( false );
+        m_editBurningGroup->setEnabled( false );
+        m_editUsers->setEnabled( false );
+        m_viewDevices->setEnabled( false );
+        m_viewPrograms->setEnabled( false );
+        m_editSearchPath->setEnabled( false );
+    }
 }
 
 
@@ -185,295 +150,6 @@ K3bSetup2::~K3bSetup2()
 {
     delete d->config;
     delete d;
-}
-
-
-void K3bSetup2::updateViews()
-{
-    d->changesNeeded = false;
-
-    updatePrograms();
-    updateDevices();
-
-    emit changed( ( getuid() != 0 ) ? false : d->changesNeeded );
-}
-
-
-void K3bSetup2::updatePrograms()
-{
-    // first save which were checked
-    QMap<const K3b::ExternalBin*, bool> checkMap;
-    Q3ListViewItemIterator listIt( m_viewPrograms );
-    for( ; listIt.current(); ++listIt )
-        checkMap.insert( d->listBinMap[(Q3CheckListItem*)*listIt], ((Q3CheckListItem*)*listIt)->isOn() );
-
-    m_viewPrograms->clear();
-    d->binListMap.clear();
-    d->listBinMap.clear();
-
-    // load programs
-    const QMap<QString, K3b::ExternalProgram*>& map = d->externalBinManager->programs();
-    for( QMap<QString, K3b::ExternalProgram*>::const_iterator it = map.constBegin(); it != map.constEnd(); ++it ) {
-        K3b::ExternalProgram* p = *it;
-
-        foreach( const K3b::ExternalBin* b, p->bins() ) {
-            QFileInfo fi( b->path );
-            // we need the uid bit which is not supported by QFileInfo
-            struct stat s;
-            if( ::stat( QFile::encodeName(b->path), &s ) ) {
-                kDebug() << "(K3bSetup2) unable to stat " << b->path;
-            }
-            else {
-                // create a checkviewitem
-                Q3CheckListItem* bi = new Q3CheckListItem( m_viewPrograms, b->name(), Q3CheckListItem::CheckBox );
-                bi->setText( 1, b->version );
-                bi->setText( 2, b->path );
-
-                d->listBinMap.insert( bi, b );
-                d->binListMap.insert( b, bi );
-
-                // check the item on first insertion or if it was checked before
-                bi->setOn( checkMap.contains(b) ? checkMap[b] : true );
-
-                int perm = s.st_mode & 0007777;
-
-                QString wantedGroup("root");
-                if( m_checkUseBurningGroup->isChecked() )
-                    wantedGroup = burningGroup();
-
-                int wantedPerm = 0;
-                if( shouldRunSuidRoot( b ) ) {
-                    if( m_checkUseBurningGroup->isChecked() )
-                        wantedPerm = 0004710;
-                    else
-                        wantedPerm = 0004711;
-                }
-                else {
-                    if( m_checkUseBurningGroup->isChecked() )
-                        wantedPerm = 0000750;
-                    else
-                        wantedPerm = 0000755;
-                }
-
-                bi->setText( 3, QString::number( perm, 8 ).rightJustified( 4, '0' ) + " " + fi.owner() + "." + fi.group() );
-                if( perm != wantedPerm ||
-                    fi.owner() != "root" ||
-                    fi.group() != wantedGroup ) {
-                    bi->setText( 4, QString("%1 root.%2").arg(wantedPerm,0,8).arg(wantedGroup) );
-                    if( bi->isOn() )
-                        d->changesNeeded = true;
-                }
-                else
-                    bi->setText( 4, i18n("no change") );
-            }
-        }
-    }
-}
-
-
-void K3bSetup2::updateDevices()
-{
-    // first save which were checked
-    QMap<QString, bool> checkMap;
-    Q3ListViewItemIterator listIt( m_viewDevices );
-    for( ; listIt.current(); ++listIt )
-        checkMap.insert( d->listDeviceMap[(Q3CheckListItem*)*listIt], ((Q3CheckListItem*)*listIt)->isOn() );
-
-    m_viewDevices->clear();
-    d->listDeviceMap.clear();
-    d->deviceListMap.clear();
-
-    QList<K3b::Device::Device*> items(d->deviceManager->allDevices());
-    for( QList<K3b::Device::Device *>::const_iterator it = items.constBegin();
-         it != items.constEnd(); ++it ) {
-        K3b::Device::Device* device = *it;
-        // check the item on first insertion or if it was checked before
-        Q3CheckListItem* item = createDeviceItem( device->blockDeviceName() );
-        item->setOn( checkMap.contains(device->blockDeviceName()) ? checkMap[device->blockDeviceName()] : true );
-        item->setText( 0, device->vendor() + " " + device->description() );
-    }
-}
-
-
-Q3CheckListItem* K3bSetup2::createDeviceItem( const QString& deviceNode )
-{
-    QFileInfo fi( deviceNode );
-    struct stat s;
-    if( ::stat( QFile::encodeName(deviceNode), &s ) ) {
-        kDebug() << "(K3bSetup2) unable to stat " << deviceNode;
-        return 0;
-    }
-    else {
-        // create a checkviewitem
-        Q3CheckListItem* bi = new Q3CheckListItem( m_viewDevices,
-                                                   deviceNode,
-                                                   Q3CheckListItem::CheckBox );
-
-        d->listDeviceMap.insert( bi, deviceNode );
-        d->deviceListMap.insert( deviceNode, bi );
-
-        bi->setText( 1, deviceNode );
-
-        int perm = s.st_mode & 0000777;
-
-        bi->setText( 2, QString::number( perm, 8 ).rightJustified( 3, '0' ) + " " + fi.owner() + "." + fi.group() );
-        if( m_checkUseBurningGroup->isChecked() ) {
-            // we ignore the device's owner here
-            if( perm != 0000660 ||
-                fi.group() != burningGroup() ) {
-                bi->setText( 3, "660 " + fi.owner() + "." + burningGroup() );
-                if( bi->isOn() )
-                    d->changesNeeded = true;
-            }
-            else
-                bi->setText( 3, i18n("no change") );
-        }
-        else {
-            // we ignore the device's owner and group here
-            if( perm != 0000666 ) {
-                bi->setText( 3, "666 " + fi.owner() + "." + fi.group()  );
-                if( bi->isOn() )
-                    d->changesNeeded = true;
-            }
-            else
-                bi->setText( 3, i18n("no change") );
-        }
-
-        return bi;
-    }
-}
-
-
-void K3bSetup2::load()
-{
-    d->externalBinManager->readConfig( d->config->group( "External Programs" ) );
-    d->deviceManager->readConfig( d->config->group( "Devices" ) );
-
-    KConfigGroup grp(d->config, "General Settings" );
-    m_checkUseBurningGroup->setChecked( grp.readEntry( "use burning group", false ) );
-    m_editBurningGroup->setText( grp.readEntry( "burning group", "burning" ) );
-
-
-    // load search path
-    m_editSearchPath->clear();
-    m_editSearchPath->insertStringList( d->externalBinManager->searchPath() );
-
-    updateViews();
-}
-
-
-void K3bSetup2::defaults()
-{
-    m_checkUseBurningGroup->setChecked(false);
-    m_editBurningGroup->setText( "burning" );
-
-    //
-    // This is a hack to work around a kcm bug which makes the faulty assumption that
-    // every module defaults to a state where nothing is to be applied
-    //
-    QTimer::singleShot( 0, this, SLOT(updateViews()) );
-}
-
-
-void K3bSetup2::save()
-{
-    KConfigGroup grp(d->config, "General Settings" );
-    grp.writeEntry( "use burning group", m_checkUseBurningGroup->isChecked() );
-    grp.writeEntry( "burning group", burningGroup() );
-    grp.sync();
-
-    d->externalBinManager->saveConfig( d->config->group( "External Programs" ) );
-    d->deviceManager->saveConfig( d->config->group( "Devices" ) );
-
-    bool success = true;
-
-    struct group* g = 0;
-    if( m_checkUseBurningGroup->isChecked() ) {
-        // TODO: create the group if it's not there
-        g = getgrnam( burningGroup().toLocal8Bit() );
-        if( !g ) {
-            KMessageBox::error( this, i18n("There is no group %1.",burningGroup()) );
-            return;
-        }
-    }
-
-
-    // save the device permissions
-    Q3ListViewItemIterator listIt( m_viewDevices );
-    for( ; listIt.current(); ++listIt ) {
-
-        Q3CheckListItem* checkItem = (Q3CheckListItem*)listIt.current();
-
-        if( checkItem->isOn() ) {
-            QString dev = d->listDeviceMap[checkItem];
-
-            if( m_checkUseBurningGroup->isChecked() ) {
-                if( ::chmod( QFile::encodeName(dev), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP ) )
-                    success = false;
-
-                if( ::chown( QFile::encodeName(dev), (gid_t)-1, g->gr_gid ) )
-                    success = false;
-            }
-            else {
-                if( ::chmod( QFile::encodeName(dev), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH ) )
-                    success = false;
-            }
-        }
-    }
-
-
-    // save the program permissions
-    listIt = Q3ListViewItemIterator( m_viewPrograms );
-    for( ; listIt.current(); ++listIt ) {
-
-        Q3CheckListItem* checkItem = (Q3CheckListItem*)listIt.current();
-
-        if( checkItem->isOn() ) {
-
-            const K3b::ExternalBin* bin = d->listBinMap[checkItem];
-
-            if( m_checkUseBurningGroup->isChecked() ) {
-                if( ::chown( QFile::encodeName(bin->path), (gid_t)0, g->gr_gid ) )
-                    success = false;
-
-                int perm = 0;
-                if( shouldRunSuidRoot( bin ) )
-                    perm = S_ISUID|S_IRWXU|S_IXGRP;
-                else
-                    perm = S_IRWXU|S_IXGRP|S_IRGRP;
-
-                if( ::chmod( QFile::encodeName(bin->path), perm ) )
-                    success = false;
-            }
-            else {
-                if( ::chown( QFile::encodeName(bin->path), 0, 0 ) )
-                    success = false;
-
-                int perm = 0;
-                if( shouldRunSuidRoot( bin ) )
-                    perm = S_ISUID|S_IRWXU|S_IXGRP|S_IXOTH;
-                else
-                    perm = S_IRWXU|S_IXGRP|S_IRGRP|S_IXOTH|S_IROTH;
-
-                if( ::chmod( QFile::encodeName(bin->path), perm ) )
-                    success = false;
-            }
-        }
-    }
-
-
-    if( success )
-        KMessageBox::information( this, i18n("Successfully updated all permissions.") );
-    else {
-        if( getuid() )
-            KMessageBox::error( this, i18n("Could not update all permissions. You should run K3b::Setup 2 as root.") );
-        else
-            KMessageBox::error( this, i18n("Could not update all permissions.") );
-    }
-
-    // WE MAY USE "newgrp -" to reinitialize the environment if we add users to a group
-
-    updateViews();
 }
 
 
@@ -491,31 +167,139 @@ QString K3bSetup2::quickHelp() const
 }
 
 
-QString K3bSetup2::burningGroup() const
+void K3bSetup2::defaults()
 {
-    QString g = m_editBurningGroup->text();
-    return g.isEmpty() ? QString("burning") : g;
+    m_checkUseBurningGroup->setChecked(false);
+    m_editBurningGroup->setText( "burning" );
+
+    d->devicesModel->defaults();
+    d->programsModel->defaults();
+}
+
+
+void K3bSetup2::load()
+{
+    d->devicesModel->load( *d->config );
+    d->programsModel->load( *d->config );
+
+    KConfigGroup grp(d->config, "General Settings" );
+    m_checkUseBurningGroup->setChecked( grp.readEntry( "use burning group", false ) );
+    m_editBurningGroup->setText( grp.readEntry( "burning group", "burning" ) );
+
+    // load search path
+    m_editSearchPath->clear();
+    m_editSearchPath->insertStringList( d->programsModel->searchPaths() );
+}
+
+
+void K3bSetup2::save()
+{
+    QString burningGroup = m_editBurningGroup->text();
+
+    KConfigGroup grp(d->config, "General Settings" );
+    grp.writeEntry( "use burning group", m_checkUseBurningGroup->isChecked() );
+    grp.writeEntry( "burning group", burningGroup.isEmpty() ? QString("burning") : burningGroup );
+    grp.sync();
+
+    d->devicesModel->save( *d->config );
+    d->programsModel->save( *d->config );
+
+    bool success = true;
+
+    struct group* g = 0;
+    if( m_checkUseBurningGroup->isChecked() && !burningGroup.isEmpty() ) {
+        // TODO: create the group if it's not there
+        g = getgrnam( burningGroup.toLocal8Bit() );
+        if( !g ) {
+            KMessageBox::error( this, i18n("There is no group %1.",burningGroup) );
+            return;
+        }
+    }
+
+    Q_FOREACH( const QString& dev, d->devicesModel->selectedDevices() )
+    {
+        if( g != 0 ) {
+            if( ::chmod( QFile::encodeName(dev), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP ) )
+                success = false;
+
+            if( ::chown( QFile::encodeName(dev), (gid_t)-1, g->gr_gid ) )
+                success = false;
+        }
+        else {
+            if( ::chmod( QFile::encodeName(dev), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH ) )
+                success = false;
+        }
+    }
+
+    Q_FOREACH( const K3b::ExternalBin* bin, d->programsModel->selectedPrograms() )
+    {
+        if( g != 0 ) {
+            if( ::chown( QFile::encodeName(bin->path), (gid_t)0, g->gr_gid ) )
+                success = false;
+
+            int perm = 0;
+            if( K3b::SetupPrograms::shouldRunSuidRoot( bin ) )
+                perm = S_ISUID|S_IRWXU|S_IXGRP;
+            else
+                perm = S_IRWXU|S_IXGRP|S_IRGRP;
+
+            if( ::chmod( QFile::encodeName(bin->path), perm ) )
+                success = false;
+        }
+        else {
+            if( ::chown( QFile::encodeName(bin->path), 0, 0 ) )
+                success = false;
+
+            int perm = 0;
+            if( K3b::SetupPrograms::shouldRunSuidRoot( bin ) )
+                perm = S_ISUID|S_IRWXU|S_IXGRP|S_IXOTH;
+            else
+                perm = S_IRWXU|S_IXGRP|S_IRGRP|S_IXOTH|S_IROTH;
+
+            if( ::chmod( QFile::encodeName(bin->path), perm ) )
+                success = false;
+        }
+    }
+
+
+    if( success )
+        KMessageBox::information( this, i18n("Successfully updated all permissions.") );
+    else {
+        if( getuid() )
+            KMessageBox::error( this, i18n("Could not update all permissions. You should run K3b::Setup 2 as root.") );
+        else
+            KMessageBox::error( this, i18n("Could not update all permissions.") );
+    }
+
+    // WE MAY USE "newgrp -" to reinitialize the environment if we add users to a group
+
+    d->devicesModel->update();
+    d->programsModel->update();
+}
+
+
+void K3bSetup2::slotDataChanged()
+{
+    emit changed( ( getuid() != 0 ) ? false : d->devicesModel->changesNeeded() || d->programsModel->changesNeeded() );
+}
+
+
+void K3bSetup2::slotBurningGroup()
+{
+    if( m_checkUseBurningGroup->isChecked() ) {
+        d->devicesModel->setBurningGroup( m_editBurningGroup->text() );
+        d->programsModel->setBurningGroup( m_editBurningGroup->text() );
+    }
+    else {
+        d->devicesModel->setBurningGroup( QString() );
+        d->programsModel->setBurningGroup( QString() );
+    }
 }
 
 
 void K3bSetup2::slotSearchPrograms()
 {
-    d->externalBinManager->setSearchPath( m_editSearchPath->items() );
-    d->externalBinManager->search();
-    updatePrograms();
-
-    emit changed( d->changesNeeded );
-}
-
-
-void K3bSetup2::makeReadOnly()
-{
-    m_checkUseBurningGroup->setEnabled( false );
-    m_editBurningGroup->setEnabled( false );
-    m_editUsers->setEnabled( false );
-    m_viewDevices->setEnabled( false );
-    m_viewPrograms->setEnabled( false );
-    m_editSearchPath->setEnabled( false );
+    d->programsModel->setSearchPaths( m_editSearchPath->items() );
 }
 
 #include "k3bsetup2.moc"

@@ -1,9 +1,11 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,8 +18,7 @@
 #ifndef _K3BSETUP2_H_
 #define _K3BSETUP2_H_
 
-#include <kcmodule.h>
-#include <kaboutdata.h>
+#include <KCModule>
 #include "ui_base_k3bsetup2.h"
 
 class Q3CheckListItem;
@@ -32,23 +33,16 @@ public:
 
     QString quickHelp() const;
 
+    void defaults();
     void load();
     void save();
-    void defaults();
-
-public Q_SLOTS:
-    void updateViews();
 
 private Q_SLOTS:
+    void slotDataChanged();
+    void slotBurningGroup();
     void slotSearchPrograms();
 
 private:
-    void updatePrograms();
-    void updateDevices();
-    QString burningGroup() const;
-    void makeReadOnly();
-    Q3CheckListItem* createDeviceItem( const QString& deviceNode );
-
     class Private;
     Private* d;
 };
