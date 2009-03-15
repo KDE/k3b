@@ -20,6 +20,7 @@
 #include <QMap>
 #include <QFile>
 #include <QCheckBox>
+#include <QHeaderView>
 #include <QLineEdit>
 #include <QLabel>
 #include <QPushButton>
@@ -46,7 +47,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <grp.h>
-
 
 class K3bSetup2::Private
 {
