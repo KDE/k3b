@@ -221,9 +221,9 @@ void K3b::AudioTrackAddingDialog::slotAnalysingFinished( bool /*success*/ )
             track->setCdTextMessage( dec->metaInfo( K3b::AudioDecoder::META_COMMENT ) );
 
             if( m_trackAfter )
-                track->moveAfter( m_trackAfter );
+                m_doc->addTrack( track, m_trackAfter->trackNumber() );
             else
-                track->moveAhead( m_doc->firstTrack() );
+                m_doc->addTrack( track, 0 );
 
             m_trackAfter = track;
         }

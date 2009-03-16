@@ -1,9 +1,10 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ *           (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -185,11 +186,14 @@ namespace K3b {
     private Q_SLOTS:
         void slotTrackChanged( K3b::AudioTrack* );
         void slotTrackRemoved( K3b::AudioTrack* );
+        void slotAboutToRemoveTrack( K3b::AudioTrack* );
 
     Q_SIGNALS:
         void trackAdded( K3b::AudioTrack* );
         void trackChanged( K3b::AudioTrack* );
         void trackRemoved( K3b::AudioTrack* );
+        // signal for the model
+        void aboutToRemoveTrack( int position );
 
     protected:
         /** reimplemented from Doc */

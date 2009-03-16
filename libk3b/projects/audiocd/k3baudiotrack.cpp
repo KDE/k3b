@@ -1,9 +1,10 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ *           (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -256,6 +257,9 @@ void K3b::AudioTrack::setIndex0( const K3b::Msf& msf )
 K3b::AudioTrack* K3b::AudioTrack::take()
 {
     if( inList() ) {
+        if ( m_parent )
+            m_parent->slotAboutToRemoveTrack(this);
+
         if( !m_prev )
             doc()->setFirstTrack( m_next );
         if( !m_next )

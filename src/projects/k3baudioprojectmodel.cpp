@@ -43,6 +43,9 @@ public:
 
     void _k_trackChanged( K3b::AudioTrack* );
     void _k_docChanged();
+    void _k_trackAdded( K3b::AudioTrack* );
+    void _k_aboutToRemoveTrack( int );
+    void _k_trackRemoved();
 
 private:
     AudioProjectModel* q;
@@ -51,7 +54,30 @@ private:
 
 void K3b::AudioProjectModel::Private::_k_docChanged()
 {
-    q->reset();
+    //q->reset();
+}
+
+void K3b::AudioProjectModel::Private::_k_trackAdded( K3b::AudioTrack* track )
+{
+    int index = track->trackNumber() - 1;
+
+    if (index >= 0) {
+        q->beginInsertRows( QModelIndex(), index, index );
+        // do nothing
+        q->endInsertRows();
+    }
+}
+
+
+void K3b::AudioProjectModel::Private::_k_aboutToRemoveTrack( int index )
+{
+    q->beginRemoveRows( QModelIndex(), index, index );
+}
+
+
+void K3b::AudioProjectModel::Private::_k_trackRemoved()
+{
+    q->endRemoveRows();
 }
 
 
@@ -60,6 +86,10 @@ K3b::AudioProjectModel::AudioProjectModel( K3b::AudioDoc* doc, QObject* parent )
       d( new Private( doc, this ) )
 {
     connect( doc, SIGNAL( changed() ), this, SLOT( _k_docChanged() ) );
+    connect( doc, SIGNAL( aboutToRemoveTrack( int ) ),
+             this, SLOT( _k_aboutToRemoveTrack( int ) ) );
+    connect( doc, SIGNAL( trackAdded( K3b::AudioTrack* ) ),
+             this, SLOT( _k_trackAdded( K3b::AudioTrack* ) ) );
 }
 
 
