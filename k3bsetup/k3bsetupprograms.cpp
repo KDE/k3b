@@ -54,7 +54,7 @@ void K3b::SetupPrograms::Private::buildProgramList()
     programs.clear();
     const QMap<QString, ExternalProgram*>& map = externalBinManager->programs();
     for( QMap<QString, ExternalProgram*>::const_iterator it = map.constBegin(); it != map.constEnd(); ++it ) {
-        programs.append( it.value()->bins() );
+        programs += it.value()->bins();
     }
 }
 
