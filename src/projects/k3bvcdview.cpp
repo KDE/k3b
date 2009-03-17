@@ -19,9 +19,11 @@
 #include "k3bvcddoc.h"
 #include "k3bvcdlistview.h"
 #include "k3bvcdburndialog.h"
+#include "k3bvcdtrackdialog.h"
 #include <k3bfillstatusdisplay.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bcore.h>
+#include <k3baction.h>
 
 // QT-includes
 #include <qlayout.h>
@@ -29,6 +31,8 @@
 
 
 // KDE-includes
+#include <kaction.h>
+#include <kmenu.h>
 #include <klocale.h>
 #include <kapplication.h>
 #include <kdebug.h>
@@ -54,6 +58,19 @@ K3b::VcdView::VcdView( K3b::VcdDoc* pDoc, QWidget* parent )
     connect( m_vcdlist, SIGNAL( lengthReady() ), fillStatusDisplay(), SLOT( update() ) );
     connect( m_doc, SIGNAL( newTracks() ), fillStatusDisplay(), SLOT( update() ) );
 #endif
+    // setup actions
+    m_actionProperties = K3b::createAction( this, i18n("Properties"), "document-properties",
+                                            0, this, SLOT(showPropertiesDialog()),
+                                            actionCollection(), "vcd_show_props" );
+
+    m_actionRemove = K3b::createAction( this, i18n( "Remove" ), "edit-delete",
+                                        Qt::Key_Delete, this, SLOT(slotRemoveSelectedIndexes()),
+                                        actionCollection(), "vcd_remove_track" );
+
+    m_popupMenu = new KMenu( this );
+    m_popupMenu->addAction( m_actionRemove );
+    m_popupMenu->addSeparator();
+    m_popupMenu->addAction( m_actionProperties );
 }
 
 K3b::VcdView::~VcdView()
@@ -76,6 +93,43 @@ void K3b::VcdView::init()
 				    "You can find this on your distribution disks or download "
 				    "it from http://www.vcdimager.org" ) );
   }
+}
+
+
+void K3b::VcdView::contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos)
+{
+    if( selectedIndexes.count() >= 1 ) {
+        m_actionRemove->setEnabled(true);
+    }
+    else {
+        m_actionRemove->setEnabled(false);
+    }
+
+    m_popupMenu->popup( pos );
+}
+
+
+void K3b::VcdView::showPropertiesDialog()
+{
+    QModelIndexList selection = currentSelection();
+
+    if ( selection.isEmpty() )
+    {
+        // show project properties
+        slotProperties();
+    }
+    else
+    {
+        QList<K3b::VcdTrack*> selected;
+
+        foreach(QModelIndex index, selection)
+            selected.append(m_model->trackForIndex(index));
+
+        QList<K3b::VcdTrack*> tracks = *m_doc->tracks();
+
+        K3b::VcdTrackDialog dlg( m_doc, tracks, selected, this );
+        dlg.exec();
+    }
 }
 
 #include "k3bvcdview.moc"

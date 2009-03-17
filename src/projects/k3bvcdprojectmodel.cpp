@@ -395,4 +395,19 @@ bool VcdProjectModel::dropMimeData( const QMimeData* data,
     return false;
 }
 
+bool VcdProjectModel::removeRows( int row, int count, const QModelIndex& parent )
+{
+    // remove the indexes from the project
+    while (count > 0)
+    {
+        QModelIndex i = index( row, 0, parent );
+        d->project->removeTrack( trackForIndex(i) );
+
+        row++;
+        count--;
+    }
+
+    return true;
+}
+
 #include "k3bvcdprojectmodel.moc"

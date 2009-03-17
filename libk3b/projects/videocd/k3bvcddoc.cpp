@@ -342,7 +342,13 @@ void K3b::VcdDoc::removeTrack( K3b::VcdTrack* track )
     // set the current item to track
     if ( m_tracks->lastIndexOf( track ) >= 0 ) {
         // take the current item
-        track = m_tracks->takeAt( m_tracks->lastIndexOf( track ) );
+        int removedPos = m_tracks->lastIndexOf( track );
+
+        emit aboutToRemoveVCDTracks(removedPos, 1);
+
+        track = m_tracks->takeAt( removedPos );
+
+        emit removedVCDTracks();
 
         // remove all pbc references to us?
         if ( track->hasRevRef() )

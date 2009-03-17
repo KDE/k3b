@@ -36,26 +36,37 @@ namespace K3b {
     class VcdProjectModel;
 }
 
-namespace K3b {
-class VcdView : public StandardView
-{
-  Q_OBJECT
-  
- public:
-  VcdView( VcdDoc* pDoc, QWidget* parent );
-  ~VcdView();
-  
- protected:
-  ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
+class KAction;
+class KMenu;
 
-  void init();
-  
- private:
-  VcdDoc* m_doc;
-  K3b::VcdProjectModel* m_model;
-  
-  VcdListView* m_vcdlist;
-};
+namespace K3b {
+    class VcdView : public StandardView
+    {
+        Q_OBJECT
+
+        public:
+            VcdView( VcdDoc* pDoc, QWidget* parent );
+            ~VcdView();
+
+        private Q_SLOTS:
+            void contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos);
+            void showPropertiesDialog();
+
+        protected:
+            ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
+
+            void init();
+
+        private:
+            VcdDoc* m_doc;
+            K3b::VcdProjectModel* m_model;
+
+            KAction* m_actionProperties;
+            KAction* m_actionRemove;
+            KMenu* m_popupMenu;
+
+            VcdListView* m_vcdlist;
+    };
 }
 
 #endif
