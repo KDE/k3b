@@ -41,22 +41,48 @@ namespace K3b {
         //AudioTrackPlayer* player() const { return m_songlist->player(); }
         AudioTrackPlayer* player() const { return 0; }
 
+        void getSelectedItems( QList<AudioTrack*>& tracks,
+                               QList<AudioDataSource*>& sources );
     public Q_SLOTS:
         void addUrls( const KUrl::List& );
 
     protected:
         ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
+        
+        /** 
+         * reimplemented from \ref K3b::StandardView
+         */
+        void contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos);
 
         void init();
 
     private Q_SLOTS:
         void slotAudioConversion();
 
-    private:
-        AudioDoc* m_doc;
+        // action slots
+        void slotAddSilence();
+        void slotRemove();
+        void slotMergeTracks();
+        void slotSplitSource();
+        void slotSplitTrack();
+        void slotProperties();
+        void slotQueryMusicBrainz();
+        void slotEditSource();
 
-        //AudioTrackView* m_songlist;
+    private:
+        void setupActions();
+
+        AudioDoc* m_doc;
         K3b::AudioProjectModel* m_model;
+
+        KAction* m_actionProperties;
+        KAction* m_actionRemove;
+        KAction* m_actionAddSilence;
+        KAction* m_actionMergeTracks;
+        KAction* m_actionSplitSource;
+        KAction* m_actionSplitTrack;
+        KAction* m_actionEditSource;
+        KAction* m_actionPlayTrack;
     };
 }
 
