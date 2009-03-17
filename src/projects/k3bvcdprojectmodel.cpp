@@ -34,9 +34,24 @@ class VcdProjectModel::Private
 
         K3b::VcdDoc* project;
 
-        void _k_docChanged()
+        void _k_aboutToAddRows(int pos, int count)
         {
-            q->reset();
+            q->beginInsertRows(QModelIndex(), pos, pos + count - 1);
+        }
+
+        void _k_addedRows()
+        {
+            q->endInsertRows();
+        }
+
+        void _k_aboutToRemoveRows(int pos, int count)
+        {
+            q->beginRemoveRows(QModelIndex(), pos, pos + count - 1);
+        }
+
+        void _k_removedRows()
+        {
+            q->endRemoveRows();
         }
 
     private:
@@ -49,7 +64,15 @@ VcdProjectModel::VcdProjectModel( K3b::VcdDoc* doc, QObject* parent )
 {
     d->project = doc;
 
-    connect(doc, SIGNAL(changed()), this, SLOT(_k_docChanged()));
+    connect(doc, SIGNAL(aboutToAddVCDTracks(int, int)),
+            this, SLOT(_k_aboutToAddRows(int, int)));
+
+    connect(doc, SIGNAL(addedVCDTracks()), this, SLOT(_k_addedRows()));
+
+    connect(doc, SIGNAL(aboutToRemoveVCDTracks(int, int)),
+            this, SLOT(_k_aboutToRemoveRows(int, int)));
+
+    connect(doc, SIGNAL(removedVCDTracks()), this, SLOT(_k_removedRows()));
 }
 
 VcdProjectModel::~VcdProjectModel()

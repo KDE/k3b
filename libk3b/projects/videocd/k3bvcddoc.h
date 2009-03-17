@@ -141,6 +141,11 @@ namespace K3b {
         void slotWorkUrlQueue();
 
     Q_SIGNALS:
+        void aboutToAddVCDTracks( int pos, int count );
+        void addedVCDTracks();
+        void aboutToRemoveVCDTracks( int pos, int count );
+        void removedVCDTracks();
+
         void newTracks();
 
         void trackRemoved( K3b::VcdTrack* );

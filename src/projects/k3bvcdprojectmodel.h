@@ -77,7 +77,10 @@ namespace K3b {
         class Private;
         Private* const d;
 
-        Q_PRIVATE_SLOT( d, void _k_docChanged())
+        Q_PRIVATE_SLOT( d, void _k_aboutToAddRows(int, int))
+        Q_PRIVATE_SLOT( d, void _k_addedRows())
+        Q_PRIVATE_SLOT( d, void _k_aboutToRemoveRows(int, int))
+        Q_PRIVATE_SLOT( d, void _k_removedRows())
     };
 }
 

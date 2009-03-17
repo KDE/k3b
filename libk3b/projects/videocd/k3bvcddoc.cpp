@@ -316,12 +316,16 @@ void K3b::VcdDoc::addTrack( K3b::VcdTrack* track, uint position )
 
     lastAddedPosition = position;
 
+    emit aboutToAddVCDTracks( position, 1);
+
     m_tracks->insert( position, track );
 
     if ( track->isSegment() )
         vcdOptions() ->increaseSegments( );
     else
         vcdOptions() ->increaseSequence( );
+
+    emit addedVCDTracks();
 
     emit newTracks();
 
@@ -374,11 +378,22 @@ void K3b::VcdDoc::moveTrack( K3b::VcdTrack* track, K3b::VcdTrack* after )
         return ;
 
     // take the current item
-    m_tracks->removeAll( track );
+    int removedPos = m_tracks->lastIndexOf( track );
+
+    emit aboutToRemoveVCDTracks(removedPos, 1);
+
+    m_tracks->removeAt(removedPos);
+
+    emit removedVCDTracks();
 
     // if after == 0 lastIndexOf returnes -1
-    int pos = m_tracks->lastIndexOf( after );
-    m_tracks->insert( pos + 1, track );
+    int pos = (m_tracks->lastIndexOf( after ) + 1);
+
+    emit aboutToAddVCDTracks(pos, 1);
+
+    m_tracks->insert( pos, track );
+
+    emit addedVCDTracks();
 
     // reorder pbc tracks
     setPbcTracks();
