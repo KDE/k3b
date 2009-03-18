@@ -15,5 +15,6 @@ Name[pt]=Copiar com o K3b
 Name[pt_BR]=Copiar com o K3b
 Name[sv]=Kopiera med K3b
 Name[uk]=Скопіювати за допомогою K3b
+Name[x-test]=xxCopy with K3bxx
 Exec=k3b --copy %i
 Icon=k3b
