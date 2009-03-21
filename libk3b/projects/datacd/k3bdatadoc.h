@@ -70,7 +70,7 @@ namespace K3b {
          * and settings (example: if writing mode == TAO we force
          * CD media)
          */
-        virtual int supportedMediaTypes() const;
+        virtual Device::MediaTypes supportedMediaTypes() const;
 
         enum MultiSessionMode {
             /**

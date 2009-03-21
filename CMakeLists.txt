@@ -6,7 +6,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/mod
 
 ##################  K3b version  ################################
 set(K3B_VERSION_MAJOR 1)
-set(K3B_VERSION_MINOR 60)
+set(K3B_VERSION_MINOR 61)
 set(K3B_VERSION_RELEASE 0)
 set(K3B_VERSION_STRING "${K3B_VERSION_MAJOR}.${K3B_VERSION_MINOR}.${K3B_VERSION_RELEASE}")
 
@@ -240,7 +240,8 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/libk3bdevice
   ${CMAKE_CURRENT_BINARY_DIR}/libk3bdevice
   ${CMAKE_CURRENT_SOURCE_DIR}/libk3b/plugin
-  ${CMAKE_CURRENT_SOURCE_DIR}/libk3b/core)
+  ${CMAKE_CURRENT_SOURCE_DIR}/libk3b/core
+  ${CMAKE_CURRENT_SOURCE_DIR}/libk3b/tools/qprocess)
 
 add_subdirectory( libk3bdevice )
 add_subdirectory( libk3b )

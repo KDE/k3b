@@ -78,7 +78,6 @@ namespace K3b {
 //  void slotMediaReloaded( bool success );
         void slotDiskInfoReady( K3b::Device::DeviceHandler* dh );
         void readTrack( int trackIndex );
-        void slotMd5JobFinished( bool success );
         void slotReaderProgress( int p );
         void slotReaderFinished( bool success );
 

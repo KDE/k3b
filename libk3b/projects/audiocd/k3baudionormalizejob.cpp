@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,7 @@ K3b::AudioNormalizeJob::AudioNormalizeJob( K3b::JobHandler* hdl, QObject* parent
 
 K3b::AudioNormalizeJob::~AudioNormalizeJob()
 {
-    if( m_process )
-        delete m_process;
+    delete m_process;
 }
 
 
@@ -78,7 +77,7 @@ void K3b::AudioNormalizeJob::start()
         *m_process << m_files[i];
 
     // now start the process
-    if( !m_process->start( K3Process::AllOutput ) ) {
+    if( !m_process->start( KProcess::OnlyStderrChannel ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
         kDebug() << "(K3b::AudioNormalizeJob) could not start normalize";

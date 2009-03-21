@@ -17,20 +17,18 @@
 
 #include <k3bjob.h>
 #include "k3bmkisofshandler.h"
+#include "k3bprocess.h"
 
 #include <q3ptrqueue.h>
 #include <qstringlist.h>
-#include <qprocess.h>
 
 class QTextStream;
-class K3Process;
 class KTemporaryFile;
 
 namespace K3b {
     class DataDoc;
     class DirItem;
     class FileItem;
-    class Process;
 
     class IsoImager : public Job, public MkisofsHandler
     {
@@ -46,10 +44,7 @@ namespace K3b {
 
         virtual bool hasBeenCanceled() const;
 
-        /**
-         * Get the checksum calculated during the creation of the image.
-         */
-        QByteArray checksum() const;
+        QIODevice* ioDevice() const;
 
     public Q_SLOTS:
         /**
@@ -76,16 +71,6 @@ namespace K3b {
          * multisession info changed.
          */
         virtual void calculateSize();
-
-        /**
-         * lets the isoimager write directly into fd instead of writing
-         * to an image file.
-         * Be aware that this only makes sense before starting the job.
-         * To disable just set @p fd to -1
-         */
-        void writeToFd( int fd );
-
-        void writeToImageFile( const QString& path );
 
         /**
          * If dev == 0 IsoImager will ignore the data in the previous session.
@@ -150,7 +135,7 @@ namespace K3b {
         virtual void slotProcessExited( int, QProcess::ExitStatus );
 
     private Q_SLOTS:
-        void slotCollectMkisofsPrintSizeStderr(K3Process*, char*, int);
+        void slotCollectMkisofsPrintSizeStderr( const QString& );
         void slotCollectMkisofsPrintSizeStdout( const QString& );
         void slotMkisofsPrintSizeFinished();
         void slotDataPreparationDone( bool success );
@@ -175,8 +160,6 @@ namespace K3b {
         int m_mkisofsPrintSizeResult;
 
         QStringList m_tempFiles;
-
-        int m_fdToWriteTo;
 
         bool m_containsFilesWithMultibleBackslashes;
 

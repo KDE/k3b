@@ -16,16 +16,16 @@
 
 #include <config-k3b.h>
 
-#include <QLayout>
-#include <QMap>
-#include <QFile>
-#include <QCheckBox>
-#include <QHeaderView>
-#include <QLineEdit>
-#include <QLabel>
-#include <QPushButton>
-#include <QTimer>
-#include <QHBoxLayout>
+#include <QtGui/QLayout>
+#include <QtCore/QMap>
+#include <QtCore/QFile>
+#include <QtGui/QCheckBox>
+#include <QtGui/QLineEdit>
+#include <QtGui/QLabel>
+#include <QtGui/QPushButton>
+#include <QtCore/QTimer>
+#include <QtGui/QHBoxLayout>
+#include <QtGui/QHeaderView>
 
 #include <KAboutData>
 #include <KConfig>
@@ -47,6 +47,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <grp.h>
+
 
 class K3bSetup2::Private
 {

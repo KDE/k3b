@@ -16,9 +16,12 @@
 #define _K3B_DATATRACK_READER_H_
 
 
-#include <k3bthreadjob.h>
-#include <k3bmsf.h>
-#include <k3bglobals.h>
+#include "k3bthreadjob.h"
+
+#include "k3bmsf.h"
+#include "k3bglobals.h"
+
+class QIODevice;
 
 namespace K3b {
     namespace Device {
@@ -57,6 +60,8 @@ namespace K3b {
 
         void setDevice( Device::Device* );
 
+        void setImagePath( const QString& p );
+
         /**
          * @param start the first sector to be read
          * @end the last sector to be read
@@ -72,14 +77,7 @@ namespace K3b {
 
         void setNoCorrection( bool b );
 
-        /**
-         * the data gets written directly into fd instead of the imagefile.
-         * Be aware that this only makes sense before starting the job.
-         * To disable just set fd to -1
-         */
-        void writeToFd( int fd );
-
-        void setImagePath( const QString& p );
+        void writeTo( QIODevice* ioDev );
 
     private:
         bool run();

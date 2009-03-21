@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,10 +16,9 @@
 
 #include <k3bdevice.h>
 #include <k3bdevicehandler.h>
-#include <k3bmd5job.h>
 #include <k3bglobals.h>
 #include <k3bdatatrackreader.h>
-#include <k3bpipe.h>
+#include <k3bchecksumpipe.h>
 #include <k3biso9660.h>
 
 #include <kdebug.h>
@@ -56,325 +55,296 @@ namespace {
 class K3b::VerificationJob::Private
 {
 public:
-  Private()
-    : md5Job(0),
-      device(0),
-      dataTrackReader(0) {
-  }
+    Private()
+        : device(0),
+          dataTrackReader(0) {
+    }
 
-  bool canceled;
-  K3b::Md5Job* md5Job;
-  K3b::Device::Device* device;
+    bool canceled;
+    K3b::Device::Device* device;
 
-  K3b::Msf grownSessionSize;
+    K3b::Msf grownSessionSize;
 
-  QList<VerificationJobTrackEntry> tracks;
-  int currentTrackIndex;
+    QList<VerificationJobTrackEntry> tracks;
+    int currentTrackIndex;
 
-  K3b::Device::DiskInfo diskInfo;
-  K3b::Device::Toc toc;
+    K3b::Device::DiskInfo diskInfo;
+    K3b::Device::Toc toc;
 
-  K3b::DataTrackReader* dataTrackReader;
+    K3b::DataTrackReader* dataTrackReader;
 
-  K3b::Msf currentTrackSize;
-  K3b::Msf totalSectors;
-  K3b::Msf alreadyReadSectors;
+    K3b::Msf currentTrackSize;
+    K3b::Msf totalSectors;
+    K3b::Msf alreadyReadSectors;
 
-  K3b::Pipe pipe;
+    K3b::ChecksumPipe pipe;
 
-  bool readSuccessful;
+    bool readSuccessful;
 
-  bool mediumHasBeenReloaded;
+    bool mediumHasBeenReloaded;
 };
 
 
 K3b::VerificationJob::VerificationJob( K3b::JobHandler* hdl, QObject* parent )
-  : K3b::Job( hdl, parent )
+    : K3b::Job( hdl, parent )
 {
-  d = new Private();
-
-  d->md5Job = new K3b::Md5Job( this );
-  connect( d->md5Job, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-  connect( d->md5Job, SIGNAL(finished(bool)), this, SLOT(slotMd5JobFinished(bool)) );
-  connect( d->md5Job, SIGNAL(debuggingOutput(const QString&, const QString&)),
-	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+    d = new Private();
 }
 
 
 K3b::VerificationJob::~VerificationJob()
 {
-  delete d;
+    delete d;
 }
 
 
 void K3b::VerificationJob::cancel()
 {
-  d->canceled = true;
-  if( d->md5Job && d->md5Job->active() )
-    d->md5Job->cancel();
-  if( d->dataTrackReader && d->dataTrackReader->active() )
-    d->dataTrackReader->cancel();
+    d->canceled = true;
+    if( d->dataTrackReader && d->dataTrackReader->active() )
+        d->dataTrackReader->cancel();
 }
 
 
 void K3b::VerificationJob::addTrack( int trackNum, const QByteArray& checksum, const K3b::Msf& length )
 {
-  d->tracks.append( VerificationJobTrackEntry( trackNum, checksum, length ) );
+    d->tracks.append( VerificationJobTrackEntry( trackNum, checksum, length ) );
 }
 
 
 void K3b::VerificationJob::clear()
 {
-  d->tracks.clear();
-  d->grownSessionSize = 0;
+    d->tracks.clear();
+    d->grownSessionSize = 0;
 }
 
 
 void K3b::VerificationJob::setDevice( K3b::Device::Device* dev )
 {
-  d->device = dev;
+    d->device = dev;
 }
 
 
 void K3b::VerificationJob::setGrownSessionSize( const K3b::Msf& s )
 {
-  d->grownSessionSize = s;
+    d->grownSessionSize = s;
 }
 
 
 void K3b::VerificationJob::start()
 {
-  jobStarted();
+    jobStarted();
 
-  d->canceled = false;
-  d->currentTrackIndex = 0;
-  d->alreadyReadSectors = 0;
+    d->canceled = false;
+    d->currentTrackIndex = 0;
+    d->alreadyReadSectors = 0;
 
-  waitForMedia( d->device,
-                K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE,
-                K3b::Device::MEDIA_WRITABLE );
+    waitForMedia( d->device,
+                  K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE,
+                  K3b::Device::MEDIA_WRITABLE );
 
-  // make sure the job is initialized
-  if ( d->tracks.isEmpty() ) {
-      emit infoMessage( i18n( "Internal Error: Verification job improperly initialized (%1)",
-                              i18n("no tracks added") ), ERROR );
-      jobFinished( false );
-      return;
-  }
+    // make sure the job is initialized
+    if ( d->tracks.isEmpty() ) {
+        emit infoMessage( i18n( "Internal Error: Verification job improperly initialized (%1)",
+                                i18n("no tracks added") ), ERROR );
+        jobFinished( false );
+        return;
+    }
 
-  emit newTask( i18n("Checking medium") );
+    emit newTask( i18n("Checking medium") );
 
-  d->mediumHasBeenReloaded = false;
-  connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::DISKINFO, d->device ),
-           SIGNAL(finished(K3b::Device::DeviceHandler*)),
-           this,
-           SLOT(slotDiskInfoReady(K3b::Device::DeviceHandler*)) );
+    d->mediumHasBeenReloaded = false;
+    connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::DISKINFO, d->device ),
+             SIGNAL(finished(K3b::Device::DeviceHandler*)),
+             this,
+             SLOT(slotDiskInfoReady(K3b::Device::DeviceHandler*)) );
 }
 
 
 void K3b::VerificationJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
 {
-  if( d->canceled ) {
-    emit canceled();
-    jobFinished(false);
-  }
-
-  d->diskInfo = dh->diskInfo();
-  d->toc = dh->toc();
-  d->totalSectors = 0;
-
-  // just to be sure check if we actually have all the tracks
-  int i = 0;
-  for( QList<VerificationJobTrackEntry>::iterator it = d->tracks.begin();
-       it != d->tracks.end(); ++i, ++it ) {
-
-    // 0 means "last track"
-    if( (*it).trackNumber == 0 )
-      (*it).trackNumber = d->toc.count();
-
-    if( (int)d->toc.count() < (*it).trackNumber ) {
-        if ( d->mediumHasBeenReloaded ) {
-            emit infoMessage( i18n("Internal Error: Verification job improperly initialized (%1)",
-                                   i18n("specified track number not found on medium") ), ERROR );
-            jobFinished( false );
-            return;
-        }
-        else {
-            // many drives need to reload the medium to return to a proper state
-            d->mediumHasBeenReloaded = true;
-            emit infoMessage( i18n( "Need to reload medium to return to proper state." ), INFO );
-            connect( K3b::Device::reload( d->device ),
-                     SIGNAL(finished(K3b::Device::DeviceHandler*)),
-                     this,
-                     SLOT(slotDiskInfoReady(K3b::Device::DeviceHandler*)) );
-            return;
-        }
+    if( d->canceled ) {
+        emit canceled();
+        jobFinished(false);
     }
 
-    d->totalSectors += trackLength( i );
-  }
+    d->diskInfo = dh->diskInfo();
+    d->toc = dh->toc();
+    d->totalSectors = 0;
 
-  readTrack( 0 );
+    // just to be sure check if we actually have all the tracks
+    int i = 0;
+    for( QList<VerificationJobTrackEntry>::iterator it = d->tracks.begin();
+         it != d->tracks.end(); ++i, ++it ) {
+
+        // 0 means "last track"
+        if( (*it).trackNumber == 0 )
+            (*it).trackNumber = d->toc.count();
+
+        if( (int)d->toc.count() < (*it).trackNumber ) {
+            if ( d->mediumHasBeenReloaded ) {
+                emit infoMessage( i18n("Internal Error: Verification job improperly initialized (%1)",
+                                       i18n("specified track number not found on medium") ), ERROR );
+                jobFinished( false );
+                return;
+            }
+            else {
+                // many drives need to reload the medium to return to a proper state
+                d->mediumHasBeenReloaded = true;
+                emit infoMessage( i18n( "Need to reload medium to return to proper state." ), INFO );
+                connect( K3b::Device::reload( d->device ),
+                         SIGNAL(finished(K3b::Device::DeviceHandler*)),
+                         this,
+                         SLOT(slotDiskInfoReady(K3b::Device::DeviceHandler*)) );
+                return;
+            }
+        }
+
+        d->totalSectors += trackLength( i );
+    }
+
+    readTrack( 0 );
 }
 
 
 void K3b::VerificationJob::readTrack( int trackIndex )
 {
-  d->currentTrackIndex = trackIndex;
-  d->readSuccessful = true;
+    d->currentTrackIndex = trackIndex;
+    d->readSuccessful = true;
 
-  d->currentTrackSize = trackLength( trackIndex );
-  if( d->currentTrackSize == 0 ) {
-    jobFinished(false);
-    return;
-  }
-
-  emit newTask( i18n("Verifying track %1", d->tracks[trackIndex].trackNumber ) );
-
-  K3b::Device::Track& track = d->toc[d->tracks[trackIndex].trackNumber-1];
-
-  d->pipe.open();
-
-  if( track.type() == K3b::Device::Track::TYPE_DATA ) {
-    if( !d->dataTrackReader ) {
-      d->dataTrackReader = new K3b::DataTrackReader( this );
-      connect( d->dataTrackReader, SIGNAL(percent(int)), this, SLOT(slotReaderProgress(int)) );
-      //      connect( d->dataTrackReader, SIGNAL(processedSize(int, int)), this, SLOT(slotReaderProcessedSize(int, int)) );
-      connect( d->dataTrackReader, SIGNAL(finished(bool)), this, SLOT(slotReaderFinished(bool)) );
-      connect( d->dataTrackReader, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-      connect( d->dataTrackReader, SIGNAL(newTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-      connect( d->dataTrackReader, SIGNAL(debuggingOutput(const QString&, const QString&)),
-	       this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+    d->currentTrackSize = trackLength( trackIndex );
+    if( d->currentTrackSize == 0 ) {
+        jobFinished(false);
+        return;
     }
 
-    d->dataTrackReader->setDevice( d->device );
-    d->dataTrackReader->setIgnoreErrors( false );
-    d->dataTrackReader->setSectorSize( K3b::DataTrackReader::MODE1 );
+    emit newTask( i18n("Verifying track %1", d->tracks[trackIndex].trackNumber ) );
 
-    // in case a session was grown the track size does not say anything about the verification data size
-    if( d->diskInfo.mediaType() & (K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_RW_OVWR) &&
-	d->grownSessionSize > 0 ) {
-      K3b::Iso9660 isoF( d->device );
-      if( isoF.open() ) {
-	int firstSector = isoF.primaryDescriptor().volumeSpaceSize - d->grownSessionSize.lba();
-	d->dataTrackReader->setSectorRange( firstSector,
-					    isoF.primaryDescriptor().volumeSpaceSize -1 );
-      }
-      else {
-	emit infoMessage( i18n("Unable to determine the ISO9660 filesystem size."), ERROR );
-	jobFinished( false );
-	return;
-      }
+    K3b::Device::Track& track = d->toc[d->tracks[trackIndex].trackNumber-1];
+
+    d->pipe.open();
+
+    if( track.type() == K3b::Device::Track::TYPE_DATA ) {
+        if( !d->dataTrackReader ) {
+            d->dataTrackReader = new K3b::DataTrackReader( this );
+            connect( d->dataTrackReader, SIGNAL(percent(int)), this, SLOT(slotReaderProgress(int)) );
+            //      connect( d->dataTrackReader, SIGNAL(processedSize(int, int)), this, SLOT(slotReaderProcessedSize(int, int)) );
+            connect( d->dataTrackReader, SIGNAL(finished(bool)), this, SLOT(slotReaderFinished(bool)) );
+            connect( d->dataTrackReader, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+            connect( d->dataTrackReader, SIGNAL(newTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
+            connect( d->dataTrackReader, SIGNAL(debuggingOutput(const QString&, const QString&)),
+                     this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+        }
+
+        d->dataTrackReader->setDevice( d->device );
+        d->dataTrackReader->setIgnoreErrors( false );
+        d->dataTrackReader->setSectorSize( K3b::DataTrackReader::MODE1 );
+        d->dataTrackReader->writeTo( &d->pipe );
+
+        // in case a session was grown the track size does not say anything about the verification data size
+        if( d->diskInfo.mediaType() & (K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_RW_OVWR) &&
+            d->grownSessionSize > 0 ) {
+            K3b::Iso9660 isoF( d->device );
+            if( isoF.open() ) {
+                int firstSector = isoF.primaryDescriptor().volumeSpaceSize - d->grownSessionSize.lba();
+                d->dataTrackReader->setSectorRange( firstSector,
+                                                    isoF.primaryDescriptor().volumeSpaceSize -1 );
+            }
+            else {
+                emit infoMessage( i18n("Unable to determine the ISO9660 filesystem size."), ERROR );
+                jobFinished( false );
+                return;
+            }
+        }
+        else
+            d->dataTrackReader->setSectorRange( track.firstSector(),
+                                                track.firstSector() + d->currentTrackSize -1 );
+
+        d->dataTrackReader->writeTo( &d->pipe );
+        d->pipe.open();
+        d->dataTrackReader->start();
     }
-    else
-      d->dataTrackReader->setSectorRange( track.firstSector(),
-					  track.firstSector() + d->currentTrackSize -1 );
-
-    d->md5Job->setMaxReadSize( d->currentTrackSize.mode1Bytes() );
-
-    d->dataTrackReader->writeToFd( d->pipe.in() );
-    d->dataTrackReader->start();
-  }
-  else {
-    // FIXME: handle audio tracks
-  }
-
-  d->md5Job->setFd( d->pipe.out() );
-  d->md5Job->start();
+    else {
+        // FIXME: handle audio tracks
+    }
 }
 
 
 void K3b::VerificationJob::slotReaderProgress( int p )
 {
-  emit subPercent( p );
+    emit subPercent( p );
 
-  emit percent( 100 * ( d->alreadyReadSectors.lba() + ( p*d->currentTrackSize.lba()/100 ) ) / d->totalSectors.lba() );
-}
-
-
-void K3b::VerificationJob::slotMd5JobFinished( bool success )
-{
-  d->pipe.close();
-
-  if( success && !d->canceled && d->readSuccessful ) {
-    // compare the two sums
-    if( d->tracks[d->currentTrackIndex].checksum != d->md5Job->hexDigest() ) {
-      emit infoMessage( i18n("Written data in track %1 differs from original.",d->tracks[d->currentTrackIndex].trackNumber), ERROR );
-      jobFinished(false);
-    }
-    else {
-      emit infoMessage( i18n("Written data verified."), SUCCESS );
-      ++d->currentTrackIndex;
-      if( d->currentTrackIndex < (int)d->tracks.count() )
-	readTrack( d->currentTrackIndex );
-      else
-	jobFinished(true);
-    }
-  }
-  else {
-    // The md5job emitted an error message. So there is no need to do this again
-    jobFinished(false);
-  }
+    emit percent( 100 * ( d->alreadyReadSectors.lba() + ( p*d->currentTrackSize.lba()/100 ) ) / d->totalSectors.lba() );
 }
 
 
 void K3b::VerificationJob::slotReaderFinished( bool success )
 {
-  d->readSuccessful = success;
-  if( !d->readSuccessful )
-    d->md5Job->cancel();
-  else {
-    d->alreadyReadSectors += trackLength( d->currentTrackIndex );
+    d->readSuccessful = success;
+    if( d->readSuccessful && !d->canceled ) {
+        d->alreadyReadSectors += trackLength( d->currentTrackIndex );
 
-    // close the pipe and let the md5 job finish gracefully
-    d->pipe.closeIn();
-    //    d->md5Job->stop();
-  }
+        d->pipe.close();
+
+        // compare the two sums
+        if( d->tracks[d->currentTrackIndex].checksum != d->pipe.checksum() ) {
+            emit infoMessage( i18n("Written data in track %1 differs from original.", d->tracks[d->currentTrackIndex].trackNumber), ERROR );
+            jobFinished(false);
+        }
+        else {
+            emit infoMessage( i18n("Written data verified."), SUCCESS );
+            ++d->currentTrackIndex;
+            if( d->currentTrackIndex < (int)d->tracks.count() )
+                readTrack( d->currentTrackIndex );
+            else
+                jobFinished(true);
+        }
+    }
 }
 
 
 K3b::Msf K3b::VerificationJob::trackLength( int trackIndex )
 {
-  K3b::Msf& trackSize = d->tracks[trackIndex].length;
-  const int& trackNum = d->tracks[trackIndex].trackNumber;
+    K3b::Msf& trackSize = d->tracks[trackIndex].length;
+    const int& trackNum = d->tracks[trackIndex].trackNumber;
 
-  K3b::Device::Track& track = d->toc[trackNum-1];
+    K3b::Device::Track& track = d->toc[trackNum-1];
 
-  if( trackSize == 0 ) {
-    trackSize = track.length();
+    if( trackSize == 0 ) {
+        trackSize = track.length();
 
-    if( d->diskInfo.mediaType() & (K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_RW_OVWR) ) {
-      K3b::Iso9660 isoF( d->device, track.firstSector().lba() );
-      if( isoF.open() ) {
-	trackSize = isoF.primaryDescriptor().volumeSpaceSize;
-      }
-      else {
-	emit infoMessage( i18n("Unable to determine the ISO9660 filesystem size."), ERROR );
-	return 0;
-      }
+        if( d->diskInfo.mediaType() & (K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_RW_OVWR) ) {
+            K3b::Iso9660 isoF( d->device, track.firstSector().lba() );
+            if( isoF.open() ) {
+                trackSize = isoF.primaryDescriptor().volumeSpaceSize;
+            }
+            else {
+                emit infoMessage( i18n("Unable to determine the ISO9660 filesystem size."), ERROR );
+                return 0;
+            }
+        }
+
+        //
+        // A data track recorded in TAO mode has two run-out blocks which cannot be read and contain
+        // zero data anyway. The problem is that I do not know of a valid method to determine if a track
+        // was written in TAO (the control nibble does definitely not work, I never saw one which did not
+        // equal 4).
+        // So the solution for now is to simply try to read the last sector of a data track. If this is not
+        // possible we assume it was written in TAO mode and reduce the length by 2 sectors
+        //
+        if( track.type() == K3b::Device::Track::TYPE_DATA &&
+            d->diskInfo.mediaType() & K3b::Device::MEDIA_CD_ALL ) {
+            // we try twice just to be sure
+            unsigned char buffer[2048];
+            if( !d->device->read10( buffer, 2048, track.lastSector().lba(), 1 ) &&
+                !d->device->read10( buffer, 2048, track.lastSector().lba(), 1 ) ) {
+                trackSize -= 2;
+                kDebug() << "(K3b::CdCopyJob) track " << trackNum << " probably TAO recorded.";
+            }
+        }
     }
 
-    //
-    // A data track recorded in TAO mode has two run-out blocks which cannot be read and contain
-    // zero data anyway. The problem is that I do not know of a valid method to determine if a track
-    // was written in TAO (the control nibble does definitely not work, I never saw one which did not
-    // equal 4).
-    // So the solution for now is to simply try to read the last sector of a data track. If this is not
-    // possible we assume it was written in TAO mode and reduce the length by 2 sectors
-    //
-    if( track.type() == K3b::Device::Track::TYPE_DATA &&
-	d->diskInfo.mediaType() & K3b::Device::MEDIA_CD_ALL ) {
-      // we try twice just to be sure
-      unsigned char buffer[2048];
-      if( !d->device->read10( buffer, 2048, track.lastSector().lba(), 1 ) &&
-	  !d->device->read10( buffer, 2048, track.lastSector().lba(), 1 ) ) {
-	trackSize -= 2;
-	kDebug() << "(K3b::CdCopyJob) track " << trackNum << " probably TAO recorded.";
-      }
-    }
-  }
-
-  return trackSize;
+    return trackSize;
 }
 
 

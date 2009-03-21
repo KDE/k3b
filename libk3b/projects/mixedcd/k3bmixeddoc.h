@@ -35,7 +35,7 @@ namespace K3b {
 
         QString name() const;
 
-        int supportedMediaTypes() const;
+        Device::MediaTypes supportedMediaTypes() const;
 
         bool newDocument();
         void clear();

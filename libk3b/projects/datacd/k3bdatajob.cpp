@@ -17,7 +17,7 @@
 #include "k3bdatadoc.h"
 #include "k3bisoimager.h"
 #include "k3bdatamultisessionparameterjob.h"
-
+#include "k3bchecksumpipe.h"
 #include <k3bcore.h>
 #include <k3bglobals.h>
 #include <k3bversion.h>
@@ -59,7 +59,8 @@ class K3b::DataJob::Private
 public:
     Private()
         : usedWritingApp(K3b::WRITING_APP_CDRECORD),
-          verificationJob(0) {
+          verificationJob( 0 ),
+          pipe( 0 ) {
     }
 
     K3b::DataDoc* doc;
@@ -80,7 +81,7 @@ public:
     K3b::VerificationJob* verificationJob;
 
     K3b::FileSplitter imageFile;
-    K3b::ActivePipe pipe;
+    K3b::ActivePipe* pipe;
 
     K3b::DataMultiSessionParameterJob* multiSessionParameterJob;
 };
@@ -104,8 +105,10 @@ K3b::DataJob::DataJob( K3b::DataDoc* doc, K3b::JobHandler* hdl, QObject* parent 
     d->imageFinished = true;
 }
 
+
 K3b::DataJob::~DataJob()
 {
+    delete d->pipe;
     delete d->tocFile;
     delete d;
 }
@@ -128,6 +131,7 @@ K3b::Device::Device* K3b::DataJob::writer() const
 
 void K3b::DataJob::start()
 {
+    kDebug();
     jobStarted();
 
     d->canceled = false;
@@ -146,7 +150,6 @@ void K3b::DataJob::start()
 
     // there is no harm in setting these even if we write on-the-fly
     d->imageFile.setName( d->doc->tempDir() );
-    d->pipe.readFromIODevice( &d->imageFile );
 
     d->multiSessionParameterJob->start();
 }
@@ -168,6 +171,7 @@ void K3b::DataJob::slotMultiSessionParamterSetupDone( bool success )
 
 void K3b::DataJob::prepareWriting()
 {
+    kDebug();
     if( !d->doc->onlyCreateImages() &&
         ( d->multiSessionParameterJob->usedMultiSessionMode() == K3b::DataDoc::CONTINUE ||
           d->multiSessionParameterJob->usedMultiSessionMode() == K3b::DataDoc::FINISH ) ) {
@@ -192,6 +196,7 @@ void K3b::DataJob::prepareWriting()
 
 void K3b::DataJob::writeImage()
 {
+    kDebug();
     d->initializingImager = false;
 
     emit burning(false);
@@ -203,24 +208,61 @@ void K3b::DataJob::writeImage()
     // TODO: check if the image file is part of the project and if so warn the user
     //       and append some number to make the path unique.
 
+    //
+    // Check the image file
+    if( !d->doc->onTheFly() || d->doc->onlyCreateImages() ) {
+        d->imageFile.setName( d->doc->tempDir() );
+        if( !d->imageFile.open( QIODevice::WriteOnly ) ) {
+            emit infoMessage( i18n("Could not open %1 for writing", d->doc->tempDir() ), ERROR );
+            cleanup();
+            jobFinished(false);
+            return;
+        }
+    }
+
     emit newTask( i18n("Creating image file") );
     emit newSubTask( i18n("Track 1 of 1") );
     emit infoMessage( i18n("Creating image file in %1",d->doc->tempDir()), INFO );
 
-    m_isoImager->writeToImageFile( d->doc->tempDir() );
     m_isoImager->start();
+    startPipe();
+}
+
+
+void K3b::DataJob::startPipe()
+{
+    kDebug();
+    //
+    // Open the active pipe which does the streaming
+    //
+    delete d->pipe;
+    if ( d->imageFinished || !d->doc->verifyData() )
+        d->pipe = new K3b::ActivePipe();
+    else
+        d->pipe = new K3b::ChecksumPipe();
+
+    if( d->imageFinished || ( d->doc->onTheFly() && !d->doc->onlyCreateImages() ) )
+        d->pipe->writeTo( m_writerJob->ioDevice(), true );
+    else
+        d->pipe->writeTo( &d->imageFile, true );
+
+    if ( d->imageFinished )
+        d->pipe->readFrom( &d->imageFile, true );
+    else
+        d->pipe->readFrom( m_isoImager->ioDevice(), true );
+
+    d->pipe->open( true );
 }
 
 
 bool K3b::DataJob::startOnTheFlyWriting()
 {
+    kDebug();
     if( prepareWriterJob() ) {
         if( startWriterJob() ) {
-            // try a direct connection between the processes
-            if( m_writerJob->fd() != -1 )
-                m_isoImager->writeToFd( m_writerJob->fd() );
             d->initializingImager = false;
             m_isoImager->start();
+            startPipe();
             return true;
         }
     }
@@ -243,7 +285,7 @@ void K3b::DataJob::cancel()
     else {
         //
         // Just cancel all and return
-        // This is bad design as we should wait for all subjobs to finish
+        // FIXME: This is bad design as we should wait for all subjobs to finish
         //
         cancelAll();
         jobFinished( false );
@@ -276,6 +318,7 @@ void K3b::DataJob::slotIsoImagerPercent( int p )
 
 void K3b::DataJob::slotIsoImagerFinished( bool success )
 {
+    kDebug();
     if( d->initializingImager ) {
         if( success ) {
             if( d->doc->onTheFly() && !d->doc->onlyCreateImages() ) {
@@ -295,15 +338,11 @@ void K3b::DataJob::slotIsoImagerFinished( bool success )
         }
     }
     else {
-        // tell the writer that there won't be more data
-        if( d->doc->onTheFly() && m_writerJob )
-            m_writerJob->closeFd();
-
         if( !d->doc->onTheFly() ||
             d->doc->onlyCreateImages() ) {
 
             if( success ) {
-                emit infoMessage( i18n("Image successfully created in %1",d->doc->tempDir()), K3b::Job::SUCCESS );
+                emit infoMessage( i18n("Image successfully created in %1", d->doc->tempDir()), K3b::Job::SUCCESS );
                 d->imageFinished = true;
 
                 if( d->doc->onlyCreateImages() ) {
@@ -312,8 +351,7 @@ void K3b::DataJob::slotIsoImagerFinished( bool success )
                 else {
                     if( prepareWriterJob() ) {
                         startWriterJob();
-                        d->pipe.writeToFd( m_writerJob->fd(), true );
-                        d->pipe.open(true);
+                        startPipe();
                     }
                 }
             }
@@ -346,6 +384,7 @@ void K3b::DataJob::slotIsoImagerFinished( bool success )
 
 bool K3b::DataJob::startWriterJob()
 {
+    kDebug();
     if( d->doc->dummy() )
         emit newTask( i18n("Simulating") );
     else if( d->copies > 1 )
@@ -384,7 +423,7 @@ void K3b::DataJob::slotWriterNextTrack( int t, int tt )
 
 void K3b::DataJob::slotWriterJobFinished( bool success )
 {
-    d->pipe.close();
+    kDebug();
 
     //
     // This is a little workaround for the bad cancellation handling in this job
@@ -421,7 +460,7 @@ void K3b::DataJob::slotWriterJobFinished( bool success )
             d->verificationJob->clear();
             d->verificationJob->setDevice( d->doc->burner() );
             d->verificationJob->setGrownSessionSize( m_isoImager->size() );
-            d->verificationJob->addTrack( 0, m_isoImager->checksum(), m_isoImager->size() );
+            d->verificationJob->addTrack( 0, static_cast<ChecksumPipe*>( d->pipe )->checksum(), m_isoImager->size() );
 
             emit burning(false);
 
@@ -447,8 +486,8 @@ void K3b::DataJob::slotWriterJobFinished( bool success )
                     cancel();
                 }
                 else if( !d->doc->onTheFly() ) {
-                    d->pipe.writeToFd( m_writerJob->fd(), true );
-                    d->pipe.open(true);
+                    d->pipe->writeTo( m_writerJob->ioDevice(), true );
+                    d->pipe->open(true);
                 }
             }
             else {
@@ -483,6 +522,7 @@ void K3b::DataJob::slotVerificationProgress( int p )
 
 void K3b::DataJob::slotVerificationFinished( bool success )
 {
+    kDebug();
     d->copiesDone++;
 
     // reconnect our imager which we deconnected for the verification
@@ -501,8 +541,8 @@ void K3b::DataJob::slotVerificationFinished( bool success )
         if( failed )
             cancel();
         else if( !d->doc->onTheFly() ) {
-            d->pipe.writeToFd( m_writerJob->fd(), true );
-            d->pipe.open(true);
+            d->pipe->writeTo( m_writerJob->ioDevice(), true );
+            d->pipe->open(true);
         }
     }
     else {
@@ -514,6 +554,7 @@ void K3b::DataJob::slotVerificationFinished( bool success )
 
 void K3b::DataJob::setWriterJob( K3b::AbstractWriter* writer )
 {
+    kDebug();
     // FIXME: progressedsize for multiple copies
     m_writerJob = writer;
     connect( m_writerJob, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
@@ -534,6 +575,7 @@ void K3b::DataJob::setWriterJob( K3b::AbstractWriter* writer )
 
 void K3b::DataJob::setImager( K3b::IsoImager* imager )
 {
+    kDebug();
     if( m_isoImager != imager ) {
         delete m_isoImager;
 
@@ -546,6 +588,7 @@ void K3b::DataJob::setImager( K3b::IsoImager* imager )
 
 void K3b::DataJob::connectImager()
 {
+    kDebug();
     m_isoImager->disconnect( this );
     connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
     connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
@@ -557,6 +600,7 @@ void K3b::DataJob::connectImager()
 
 void K3b::DataJob::prepareImager()
 {
+    kDebug();
     if( !m_isoImager )
         setImager( new K3b::IsoImager( d->doc, this, this ) );
 }
@@ -564,6 +608,7 @@ void K3b::DataJob::prepareImager()
 
 bool K3b::DataJob::prepareWriterJob()
 {
+    kDebug();
     if( m_writerJob ) {
         delete m_writerJob;
         m_writerJob = 0;
@@ -605,7 +650,7 @@ void K3b::DataJob::cancelAll()
     if( d->verificationJob )
         d->verificationJob->cancel();
 
-    d->pipe.close();
+    d->pipe->close();
 
     cleanup();
 }
@@ -943,6 +988,7 @@ bool K3b::DataJob::hasBeenCanceled() const
 
 bool K3b::DataJob::setupCdrecordJob()
 {
+    kDebug();
     K3b::CdrecordWriter* writer = new K3b::CdrecordWriter( d->doc->burner(), this, this );
 
     // cdrecord manpage says that "not all" writers are able to write

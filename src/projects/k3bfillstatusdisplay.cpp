@@ -599,9 +599,10 @@ void K3b::FillStatusDisplay::slotDetermineSize()
 {
     bool canceled = false;
     K3b::Device::Device* dev = K3b::MediaSelectionDialog::selectMedium( d->doc->supportedMediaTypes(),
-                                                                    K3b::Device::STATE_EMPTY|K3b::Device::STATE_INCOMPLETE,
-                                                                    parentWidget(),
-                                                                    QString(), QString(), &canceled );
+                                                                        K3b::Device::STATE_EMPTY|K3b::Device::STATE_INCOMPLETE,
+                                                                        K3b::Medium::CONTENT_ALL,
+                                                                        parentWidget(),
+                                                                        QString(), QString(), &canceled );
 
     if( dev ) {
         K3b::Msf size = k3bappcore->mediaCache()->diskInfo( dev ).capacity();

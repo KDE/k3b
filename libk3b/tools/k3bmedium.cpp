@@ -496,3 +496,12 @@ bool K3b::Medium::sameMedium( const K3b::Medium& other ) const
             this->content() == other.content() &&
             this->iso9660Descriptor() == other.iso9660Descriptor() );
 }
+
+
+// static
+QString K3b::Medium::mediaRequestString( Device::MediaTypes requestedMediaTypes, Device::MediaStates requestedMediaStates, const K3b::Msf& requestedSize )
+{
+#warning IMPLEMENTME: mediaRequestString and use me in EmptyDiskWaiter and MediaSelectionComboBox
+    // FIXME: do not construct strings as in K3b 1.0. It makes translation to many languages impossible!
+    return QString();
+}

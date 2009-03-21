@@ -18,16 +18,23 @@
 #include <k3b_export.h>
 
 
-class QIODevice;
+#include <QtCore/QIODevice>
 
 
 namespace K3b {
     /**
      * The active pipe pumps data from a source to a sink using an
      * additional thread.
+     *
+     * The active pumping is only performed if both the source and sink
+     * QIODevices are set. Otherwise the pipe only serves as a conduit for
+     * data streams. The latter is mostly interesting when using the ChecksumPipe
+     * in combination with a Job that can only push data (like the DataTrackReader).
      */
-    class LIBK3B_EXPORT ActivePipe
+    class LIBK3B_EXPORT ActivePipe : public QIODevice
     {
+        Q_OBJECT
+
     public:
         ActivePipe();
         virtual ~ActivePipe();
@@ -47,33 +54,22 @@ namespace K3b {
         virtual void close();
 
         /**
-         * Set the file descriptor to write to. If this is -1 (the default) then
-         * data has to read from the out() file descriptor.
-         *
-         * \param fd The file descriptor to write to.
-         * \param close If true the reading file descriptor will be closed on a call to close()
-         */
-        void writeToFd( int fd, bool close = false );
-
-        /**
          * Read from a QIODevice instead of a file descriptor.
          * The device will be opened QIODevice::ReadOnly and closed
          * afterwards.
+         *
+         * \param close If true the device will be closed once close() is called.
          */
-        void readFromIODevice( QIODevice* dev );
+        void readFrom( QIODevice* dev, bool close = false );
 
         /**
-         * Write to a QIODevice instead of a file descriptor.
+         * Write to a QIODevice instead of using the readyRead signal.
          * The device will be opened QIODevice::WriteOnly and closed
          * afterwards.
+         *
+         * \param close If true the device will be closed once close() is called.
          */
-        void writeToIODevice( QIODevice* dev );
-
-        /**
-         * The file descriptor to write into
-         * Only valid if no source has been set
-         */
-        int in() const;
+        void writeTo( QIODevice* dev, bool close = false );
 
         /**
          * The number of bytes that have been read.
@@ -91,7 +87,7 @@ namespace K3b {
          * The default implementation reads from the file desc
          * set via readFromFd or from in()
          */
-        virtual int read( char* data, int max );
+        virtual qint64 readData( char* data, qint64 max );
 
         /**
          * Write the data to the sink.
@@ -100,11 +96,18 @@ namespace K3b {
          *
          * Can be reimplememented to further process the data.
          */
-        virtual int write( char* data, int max );
+        virtual qint64 writeData( const char* data, qint64 max );
+
+        /**
+         * Hidden open method. Use open(bool).
+         */
+        bool open( OpenMode mode );
 
     private:
         class Private;
         Private* d;
+
+        Q_PRIVATE_SLOT( d, void _k3b_close() )
     };
 }
 

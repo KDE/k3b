@@ -79,7 +79,7 @@ namespace K3b {
          * This should NOT take into accout settings like the writing mode
          * or anything that can be changed in the burn dialog.
          */
-        virtual int supportedMediaTypes() const;
+        virtual Device::MediaTypes supportedMediaTypes() const;
 
         /**
          * returns the view widget set with setView() or null if none has been set.

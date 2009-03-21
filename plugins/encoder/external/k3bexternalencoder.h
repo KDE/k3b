@@ -18,7 +18,7 @@
 
 #include <k3baudioencoder.h>
 
-#include <qprocess.h>
+#include "k3bprocess.h"
 
 class K3bExternalEncoder : public K3b::AudioEncoder
 {

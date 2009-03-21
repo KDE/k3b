@@ -22,6 +22,10 @@
 
 #include <qdatetime.h>
 
+#include <kdemacros.h>
+
+class QIODevice;
+
 namespace K3b {
     class JobHandler;
 
@@ -41,8 +45,12 @@ namespace K3b {
          * for example the cdrecordwriter returns the stdin fd which can be
          * connected to the stdout fd of mkisofs in the isoimager
          */
-        virtual int fd() const { return -1; }
-        virtual bool closeFd() { return false; }
+        virtual QIODevice* ioDevice() const { return 0; }
+
+        /**
+         * \deprecated use QIODevice::close() instead
+         */
+        KDE_DEPRECATED virtual bool closeFd() { return false; }
 
     public Q_SLOTS:
         /**

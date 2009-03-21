@@ -210,13 +210,13 @@ K3b::WriterSelectionWidget::~WriterSelectionWidget()
 }
 
 
-void K3b::WriterSelectionWidget::setWantedMediumType( int type )
+void K3b::WriterSelectionWidget::setWantedMediumType( Device::MediaTypes type )
 {
     m_comboMedium->setWantedMediumType( type );
 }
 
 
-void K3b::WriterSelectionWidget::setWantedMediumState( int state )
+void K3b::WriterSelectionWidget::setWantedMediumState( Device::MediaStates state )
 {
     m_comboMedium->setWantedMediumState( state );
 }
@@ -229,13 +229,13 @@ void K3b::WriterSelectionWidget::setWantedMediumSize( const K3b::Msf& minSize )
 }
 
 
-int K3b::WriterSelectionWidget::wantedMediumType() const
+K3b::Device::MediaTypes K3b::WriterSelectionWidget::wantedMediumType() const
 {
     return m_comboMedium->wantedMediumType();
 }
 
 
-int K3b::WriterSelectionWidget::wantedMediumState() const
+K3b::Device::MediaStates K3b::WriterSelectionWidget::wantedMediumState() const
 {
     return m_comboMedium->wantedMediumState();
 }

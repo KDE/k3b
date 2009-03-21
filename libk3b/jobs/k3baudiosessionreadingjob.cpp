@@ -34,7 +34,7 @@ public:
     Private();
     ~Private();
 
-    int fd;
+    QIODevice* ioDev;
     K3b::CdparanoiaLib* paranoia;
     K3b::Device::Device* device;
     K3b::Device::Toc toc;
@@ -47,7 +47,7 @@ public:
 
 
 K3b::AudioSessionReadingJob::Private::Private()
-    : fd(-1),
+    : ioDev( 0 ),
       paranoia(0),
       waveFileWriter(0),
       paranoiaMode(0),
@@ -90,15 +90,15 @@ void K3b::AudioSessionReadingJob::setToc( const K3b::Device::Toc& toc )
 }
 
 
-void K3b::AudioSessionReadingJob::writeToFd( int fd )
+void K3b::AudioSessionReadingJob::writeTo( QIODevice* ioDev )
 {
-    d->fd = fd;
+    d->ioDev = ioDev;
 }
 
 void K3b::AudioSessionReadingJob::setImageNames( const QStringList& l )
 {
     d->filenames = l;
-    d->fd = -1;
+    d->ioDev = 0;
 }
 
 
@@ -174,7 +174,7 @@ bool K3b::AudioSessionReadingJob::run()
     bool newTrack = true;
     int status = 0;
     char* buffer = 0;
-    while( !canceled() && (buffer = d->paranoia->read( &status, &trackNum, d->fd == -1 /*when writing to a wav be want little endian */ )) ) {
+    while( !canceled() && (buffer = d->paranoia->read( &status, &trackNum, !d->ioDev /*when writing to a wav be want little endian */ )) ) {
 
         if( currentTrack != trackNum ) {
             emit nextTrack( trackNum, d->paranoia->toc().count() );
@@ -185,9 +185,9 @@ bool K3b::AudioSessionReadingJob::run()
             newTrack = true;
         }
 
-        if( d->fd > 0 ) {
-            if( ::write( d->fd, buffer, CD_FRAMESIZE_RAW ) != CD_FRAMESIZE_RAW ) {
-                kDebug() << "(K3b::AudioSessionCopyJob::WorkThread) error while writing to fd " << d->fd;
+        if( d->ioDev ) {
+            if( d->ioDev->write( buffer, CD_FRAMESIZE_RAW ) != CD_FRAMESIZE_RAW ) {
+                kDebug() << "(K3b::AudioSessionCopyJob::WorkThread) error while writing to device " << d->ioDev;
                 writeError = true;
                 break;
             }

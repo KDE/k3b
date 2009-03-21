@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,9 +49,9 @@ namespace K3b {
 
         QList<Device::Device*> allDevices() const;
 
-        int wantedMediumType() const;
-        int wantedMediumState() const;
-        int wantedMediumContent() const;
+        Device::MediaTypes wantedMediumType() const;
+        Device::MediaStates wantedMediumState() const;
+        Medium::MediumContents wantedMediumContent() const;
         K3b::Msf wantedMediumSize() const;
 
     Q_SIGNALS:
@@ -81,14 +81,14 @@ namespace K3b {
          *
          * \param type a bitwise combination of the Device::MediaType enum
          */
-        void setWantedMediumType( int type );
+        void setWantedMediumType( K3b::Device::MediaTypes type );
 
         /**
          * Set the wanted medium state. Defaults to empty media.
          *
          * \param state a bitwise combination of the Device::State enum
          */
-        void setWantedMediumState( int state );
+        void setWantedMediumState( K3b::Device::MediaStates state );
 
         /**
          * Set the wanted medium content type. The default is Medium::CONTENT_ALL (i.e. ignore media
@@ -97,7 +97,7 @@ namespace K3b {
          *
          * \param content A bitwise or of Medium::MediumContent
          */
-        void setWantedMediumContent( int content );
+        void setWantedMediumContent( K3b::Medium::MediumContents content );
 
         /**
          * Set the wanted medium size. Defaults to 0 which means

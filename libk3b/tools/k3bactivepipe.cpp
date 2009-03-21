@@ -14,14 +14,10 @@
 
 #include "k3bactivepipe.h"
 
-#include <k3bpipe.h>
-
 #include <kdebug.h>
 
 #include <qthread.h>
 #include <qiodevice.h>
-
-#include <unistd.h>
 
 
 class K3b::ActivePipe::Private : public QThread
@@ -29,22 +25,23 @@ class K3b::ActivePipe::Private : public QThread
 public:
     Private( K3b::ActivePipe* pipe ) :
         m_pipe( pipe ),
-        fdToWriteTo(-1),
         sourceIODevice(0),
         sinkIODevice(0),
-        closeFdToWriteTo(false) {
+        closeSinkIODevice( false ),
+        closeSourceIODevice( false ) {
     }
 
     void run() {
-        kDebug() << "(K3b::ActivePipe) started thread.";
+        kDebug() << "(K3b::ActivePipe) writing from" << sourceIODevice << "to" << sinkIODevice;
+
         bytesRead = bytesWritten = 0;
         buffer.resize( 10*2048 );
-        ssize_t r = 0;
-        while( ( r = m_pipe->read( buffer.data(), buffer.size() ) ) > 0 ) {
 
+        bool fail = false;
+        qint64 r = 0;
+        while( !fail && ( r = m_pipe->readData( buffer.data(), buffer.size() ) ) > 0 ) {
             bytesRead += r;
 
-            // write it out
             ssize_t w = 0;
             ssize_t ww = 0;
             while( w < r ) {
@@ -52,51 +49,37 @@ public:
                     w += ww;
                     bytesWritten += ww;
                 }
+                else {
+                    kDebug() << "write failed." << sinkIODevice->errorString();
+                    fail = true;
+                    break;
+                }
             }
         }
-        //    kDebug() << "(K3b::ActivePipe) thread done: " << r << " (total bytes read/written: " << bytesRead << "/" << bytesWritten << ")";
-        close( closeWhenDone );
-    }
 
-    int readFd() const {
-        return pipeIn.out();
-    }
-
-    int writeFd() const {
-        if( fdToWriteTo == -1 )
-            return pipeOut.in();
-        else
-            return fdToWriteTo;
-    }
-
-    void close( bool closeAll ) {
-        if( sourceIODevice )
-            sourceIODevice->close();
-        if( sinkIODevice )
-            sinkIODevice->close();
-
-        if( closeAll ) {
-            pipeIn.close();
-            pipeOut.close();
-            if( fdToWriteTo != -1 &&
-                closeFdToWriteTo )
-                ::close( fdToWriteTo );
+        if ( r < 0 ) {
+            kDebug() << "Read failed:" << sourceIODevice->errorString();
         }
+
+        kDebug() << "thread done: " << fail << " (total bytes read/written: " << bytesRead << "/" << bytesWritten << ")";
+    }
+
+    void _k3b_close() {
+        kDebug();
+        if ( closeWhenDone )
+            m_pipe->close();
     }
 
 private:
     K3b::ActivePipe* m_pipe;
 
 public:
-    int fdToWriteTo;
-    K3b::Pipe pipeIn;
-    K3b::Pipe pipeOut;
-
     QIODevice* sourceIODevice;
     QIODevice* sinkIODevice;
 
     bool closeWhenDone;
-    bool closeFdToWriteTo;
+    bool closeSinkIODevice;
+    bool closeSourceIODevice;
 
     QByteArray buffer;
 
@@ -108,6 +91,7 @@ public:
 K3b::ActivePipe::ActivePipe()
 {
     d = new Private( this );
+    connect( d, SIGNAL(finished()), this, SLOT(_k3b_close()) );
 }
 
 
@@ -117,87 +101,87 @@ K3b::ActivePipe::~ActivePipe()
 }
 
 
+bool K3b::ActivePipe::open( OpenMode mode )
+{
+    return QIODevice::open( mode );
+}
+
+
 bool K3b::ActivePipe::open( bool closeWhenDone )
 {
     if( d->isRunning() )
         return false;
 
+    QIODevice::open( ReadWrite|Unbuffered );
+
     d->closeWhenDone = closeWhenDone;
 
-    if( d->sourceIODevice ) {
+    if( d->sourceIODevice && !d->sourceIODevice->isOpen() ) {
+        kDebug() << "Need to open source device:" << d->sourceIODevice;
         if( !d->sourceIODevice->open( QIODevice::ReadOnly ) )
             return false;
     }
-    else if( !d->pipeIn.open() ) {
-        return false;
-    }
 
-    if( d->sinkIODevice ) {
+    if( d->sinkIODevice && !d->sinkIODevice->isOpen()  ) {
+        kDebug() << "Need to open sink device:" << d->sinkIODevice;
         if( !d->sinkIODevice->open( QIODevice::WriteOnly ) )
             return false;
-    }
-    else if( d->fdToWriteTo == -1 && !d->pipeOut.open() ) {
-        close();
-        return false;
     }
 
     kDebug() << "(K3b::ActivePipe) successfully opened pipe.";
 
-    d->start();
+    // we only do active piping if both devices are set.
+    // Otherwise we only work as a conduit
+    if ( d->sourceIODevice && d->sinkIODevice ) {
+        d->start();
+    }
+
     return true;
 }
 
 
 void K3b::ActivePipe::close()
 {
-    d->pipeIn.closeIn();
+    kDebug();
+    if( d->sourceIODevice && d->closeSourceIODevice )
+        d->sourceIODevice->close();
+    if( d->sinkIODevice && d->closeSinkIODevice )
+        d->sinkIODevice->close();
     d->wait();
-    d->close( true );
 }
 
 
-void K3b::ActivePipe::writeToFd( int fd, bool close )
-{
-    d->fdToWriteTo = fd;
-    d->sinkIODevice = 0;
-    d->closeFdToWriteTo = close;
-}
-
-
-void K3b::ActivePipe::readFromIODevice( QIODevice* dev )
+void K3b::ActivePipe::readFrom( QIODevice* dev, bool close )
 {
     d->sourceIODevice = dev;
+    d->closeSourceIODevice = close;
 }
 
 
-void K3b::ActivePipe::writeToIODevice( QIODevice* dev )
+void K3b::ActivePipe::writeTo( QIODevice* dev, bool close )
 {
-    d->fdToWriteTo = -1;
     d->sinkIODevice = dev;
+    d->closeSinkIODevice = close;
 }
 
 
-int K3b::ActivePipe::in() const
+qint64 K3b::ActivePipe::readData( char* data, qint64 max )
 {
-    return d->pipeIn.in();
-}
-
-
-int K3b::ActivePipe::read( char* data, int max )
-{
-    if( d->sourceIODevice )
+    if( d->sourceIODevice ) {
         return d->sourceIODevice->read( data, max );
-    else
-        return ::read( d->readFd(), data, max );
+    }
+
+    return -1;
 }
 
 
-int K3b::ActivePipe::write( char* data, int max )
+qint64 K3b::ActivePipe::writeData( const char* data, qint64 max )
 {
-    if( d->sinkIODevice )
+    if( d->sinkIODevice ) {
         return d->sinkIODevice->write( data, max );
+    }
     else
-        return ::write( d->writeFd(), data, max );
+        return -1;
 }
 
 
@@ -211,3 +195,5 @@ quint64 K3b::ActivePipe::bytesWritten() const
 {
     return d->bytesWritten;
 }
+
+#include "k3bactivepipe.moc"

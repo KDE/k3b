@@ -1139,7 +1139,7 @@ void K3b::AudioDoc::setCdTextMessage( const QString& v )
 }
 
 
-int K3b::AudioDoc::supportedMediaTypes() const
+K3b::Device::MediaTypes K3b::AudioDoc::supportedMediaTypes() const
 {
     return K3b::Device::MEDIA_WRITABLE_CD;
 }

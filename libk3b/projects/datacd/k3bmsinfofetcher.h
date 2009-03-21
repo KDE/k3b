@@ -17,10 +17,9 @@
 
 #include <k3bjob.h>
 
-class KProcess;
-
 namespace K3b {
 
+    class Process;
     namespace Device {
         class Device;
         class DeviceHandler;
@@ -46,7 +45,6 @@ namespace K3b {
 
     private Q_SLOTS:
         void slotProcessExited();
-        void slotCollectOutput();
         void slotMediaDetectionFinished( K3b::Device::DeviceHandler* );
         void getMsInfo();
 
@@ -56,7 +54,7 @@ namespace K3b {
         int m_nextSessionStart;
         QString m_collectedOutput;
 
-        KProcess* m_process;
+        Process* m_process;
         Device::Device* m_device;
 
         bool m_canceled;

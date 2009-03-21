@@ -332,10 +332,10 @@ void K3b::AudioJob::start()
 
                 // now the writer is running and we can get it's stdin
                 // we only use this method when writing on-the-fly since
-                // we cannot easily change the audioDecode fd while it's working
+                // we cannot easily change the audioDecode device while it's working
                 // which we would need to do since we write into several
                 // image files.
-                m_audioImager->writeToFd( m_writer->fd() );
+                m_audioImager->writeTo( m_writer->ioDevice() );
             }
             else {
                 // startWriting() already did the cleanup
@@ -373,7 +373,7 @@ void K3b::AudioJob::slotMaxSpeedJobFinished( bool success )
     }
 
     if( startWriting() )
-        m_audioImager->writeToFd( m_writer->fd() );
+        m_audioImager->writeTo( m_writer->ioDevice() );
 
     m_audioImager->start();
 }
@@ -432,7 +432,7 @@ void K3b::AudioJob::slotWriterFinished( bool success )
                     // we cannot easily change the audioDecode fd while it's working
                     // which we would need to do since we write into several
                     // image files.
-                    m_audioImager->writeToFd( m_writer->fd() );
+                    m_audioImager->writeTo( m_writer->ioDevice() );
                     m_audioImager->start();
                 }
             }

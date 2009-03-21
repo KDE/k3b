@@ -19,6 +19,7 @@
 
 #include <qstringlist.h>
 
+class QIODevice;
 
 namespace K3b {
     namespace Device {
@@ -46,10 +47,10 @@ namespace K3b {
         void setToc( const Device::Toc& toc );
 
         /**
-         * the data gets written directly into fd instead of imagefiles.
-         * To disable just set fd to -1 (the default)
+         * the data gets written directly into ioDev instead of imagefiles.
+         * To disable just set ioDev to 0 (the default)
          */
-        void writeToFd( int fd );
+        void writeTo( QIODevice* ioDev );
 
         /**
          * Used if fd == -1

@@ -175,7 +175,7 @@ void K3b::DvdFormattingJob::cancel()
     if( d->running ) {
         d->canceled = true;
         if( d->process )
-            d->process->kill();
+            d->process->terminate();
     }
     else {
         kDebug() << "(K3b::DvdFormattingJob) not running.";
@@ -464,8 +464,6 @@ void K3b::DvdFormattingJob::startFormatting( const K3b::Device::DiskInfo& diskIn
     if( format ) {
         delete d->process;
         d->process = new K3b::Process();
-        d->process->setRunPrivileged(true);
-        //      d->process->setSuppressEmptyLines(false);
         connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStderrLine(const QString&)) );
         connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotProcessFinished(int, QProcess::ExitStatus)) );
 
@@ -508,7 +506,7 @@ void K3b::DvdFormattingJob::startFormatting( const K3b::Device::DiskInfo& diskIn
         kDebug() << s << endl << flush;
         emit debuggingOutput( "dvd+rw-format command:", s );
 
-        if( !d->process->start( K3Process::All ) ) {
+        if( !d->process->start( KProcess::OnlyStderrChannel ) ) {
             // something went wrong when starting the program
             // it "should" be the executable
             kDebug() << "(K3b::DvdFormattingJob) could not start " << d->dvdFormatBin->path;

@@ -313,10 +313,10 @@ QStringList K3b::MovixBin::supported( const QString& type ) const
 
 
 QStringList K3b::MovixBin::files( const QString& kbd,
-                                const QString& font,
-                                const QString& bg,
-                                const QString& lang,
-                                const QStringList& codecs ) const
+                                  const QString& font,
+                                  const QString& bg,
+                                  const QString& lang,
+                                  const QStringList& codecs ) const
 {
     KProcess p;
     p << path + "movix-conf" << "--files";

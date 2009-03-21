@@ -137,15 +137,22 @@ void K3b::Iso9660ImageWritingJob::slotWriterJobFinished( bool success )
             m_verifyJob->start();
         }
         else if( m_currentCopy >= m_copies ) {
+            if ( k3bcore->globalSettings()->ejectMedia() ) {
+                K3b::Device::eject( m_device );
+            }
             m_finished = true;
             jobFinished(true);
         }
         else {
             m_currentCopy++;
+            m_device->eject();
             startWriting();
         }
     }
     else {
+        if ( k3bcore->globalSettings()->ejectMedia() ) {
+            K3b::Device::eject( m_device );
+        }
         m_finished = true;
         jobFinished(false);
     }
@@ -265,12 +272,12 @@ void K3b::Iso9660ImageWritingJob::startWriting()
     d->imageFile.setName( m_imagePath );
     d->imageFile.open( QIODevice::ReadOnly );
     d->checksumPipe.close();
-    d->checksumPipe.readFromIODevice( &d->imageFile );
+    d->checksumPipe.readFrom( &d->imageFile, true );
 
     if( prepareWriter( media ) ) {
         emit burning(true);
         m_writer->start();
-        d->checksumPipe.writeToFd( m_writer->fd(), true );
+        d->checksumPipe.writeTo( m_writer->ioDevice(), true );
         d->checksumPipe.open( K3b::ChecksumPipe::MD5, true );
     }
     else {

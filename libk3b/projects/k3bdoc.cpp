@@ -209,7 +209,7 @@ bool K3b::Doc::readGeneralDocumentData( const QDomElement& elem )
 }
 
 
-int K3b::Doc::supportedMediaTypes() const
+K3b::Device::MediaTypes K3b::Doc::supportedMediaTypes() const
 {
     return K3b::Device::MEDIA_WRITABLE;
 }

@@ -14,7 +14,6 @@
 
 #include <config-k3b.h>
 
-
 #include "k3bglobals.h"
 #include "k3bglobalsettings.h"
 #include "k3bversion.h"

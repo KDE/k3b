@@ -5,6 +5,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/core
   ${CMAKE_CURRENT_SOURCE_DIR}/plugin
   ${CMAKE_CURRENT_SOURCE_DIR}/tools
+  ${CMAKE_CURRENT_SOURCE_DIR}/tools/qprocess
   ${CMAKE_CURRENT_SOURCE_DIR}/projects
   ${CMAKE_CURRENT_SOURCE_DIR}/projects/audiocd
   ${CMAKE_CURRENT_SOURCE_DIR}/projects/datacd
@@ -62,8 +63,6 @@ if(ENABLE_DVD_RIPPING)
 endif(ENABLE_DVD_RIPPING)
 
 set(k3b_core_SRCS 
-  core/k3process.cpp
-  core/k3processcontroller.cpp
   core/k3bcore.cpp 
   core/k3bglobals.cpp 
   core/k3bdefaultexternalprograms.cpp
@@ -89,7 +88,7 @@ set(k3b_tools_SRCS
   tools/k3bprogressdialog.cpp tools/k3bpushbutton.cpp 
   tools/k3blistviewitemanimator.cpp tools/k3bthreadwidget.cpp
   tools/k3bsignalwaiter.cpp tools/k3blibdvdcss.cpp tools/k3biso9660backend.cpp 
-  tools/k3bpipe.cpp tools/k3bchecksumpipe.cpp 
+  tools/k3bchecksumpipe.cpp 
   tools/k3bintmapcombobox.cpp tools/k3bdirsizejob.cpp tools/k3brichtextlabel.cpp 
   tools/k3bactivepipe.cpp tools/k3bfilesplitter.cpp 
   tools/k3bfilesysteminfo.cpp
@@ -97,6 +96,9 @@ set(k3b_tools_SRCS
   tools/k3bmedium.cpp
   tools/k3bmediacache.cpp 
   tools/k3bcddb.cpp
+  tools/qprocess/k3bqprocess.cpp
+  tools/qprocess/k3bqprocess_unix.cpp
+  tools/qprocess/k3bkprocess.cpp
   )
 
 set(k3b_libisofs_SRCS tools/libisofs/isofs.cpp)
@@ -125,8 +127,8 @@ set(k3b_project_SRCS
   projects/k3binffilewriter.cpp 
   projects/k3btocfilewriter.cpp 
   projects/k3bimagefilereader.cpp 
-  projects/k3bcuefileparser.cpp 
-  projects/k3bpipebuffer.cpp)
+  projects/k3bcuefileparser.cpp )
+#  projects/k3bpipebuffer.cpp)
 
 set(k3b_project_audiocd_SRCS
   projects/audiocd/k3baudiojob.cpp 

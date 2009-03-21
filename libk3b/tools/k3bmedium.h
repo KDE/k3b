@@ -152,6 +152,11 @@ namespace K3b {
         bool operator==( const Medium& other ) const;
         bool operator!=( const Medium& other ) const;
 
+        /**
+         * Constructs a user readable string which can be used to request certain media.
+         */
+        static QString mediaRequestString( Device::MediaTypes requestedMediaTypes, Device::MediaStates requestedMediaStates, const K3b::Msf& requestedSize );
+
     private:
         void analyseContent();
 

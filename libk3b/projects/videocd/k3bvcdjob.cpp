@@ -1,10 +1,10 @@
 /*
  *
  * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
- * Copyright (C) 2007-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2007-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -102,7 +102,7 @@ void K3b::VcdJob::cancelAll()
 
     if ( m_process->isRunning() ) {
         m_process->disconnect( this );
-        m_process->kill();
+        m_process->terminate();
     }
 
     // remove bin-file if it is unfinished or the user selected to remove image
@@ -181,6 +181,7 @@ void K3b::VcdJob::vcdxBuild()
     firstTrack = true;
     delete m_process;
     m_process = new K3b::Process();
+    m_process->setSplitStdout( true );
 
     emit infoMessage( i18n( "Creating Cue/Bin files ..." ), K3b::Job::INFO );
     const K3b::ExternalBin* bin = k3bcore ->externalBinManager() ->binObject( "vcdxbuild" );
@@ -227,10 +228,8 @@ void K3b::VcdJob::vcdxBuild()
 
     *m_process << m_xmlFile;
 
-    connect( m_process, SIGNAL( receivedStderr( K3Process*, char*, int ) ),
-             this, SLOT( slotParseVcdxBuildOutput( K3Process*, char*, int ) ) );
-    connect( m_process, SIGNAL( receivedStdout( K3Process*, char*, int ) ),
-             this, SLOT( slotParseVcdxBuildOutput( K3Process*, char*, int ) ) );
+    connect( m_process, SIGNAL(stdoutLine(QString)),
+             this, SLOT(slotParseVcdxBuildOutput(QString)) );
     connect( m_process, SIGNAL( finished( int, QProcess::ExitStatus ) ),
              this, SLOT( slotVcdxBuildFinished( int, QProcess::ExitStatus ) ) );
 
@@ -240,7 +239,7 @@ void K3b::VcdJob::vcdxBuild()
     kDebug() << s << flush;
     emit debuggingOutput( "vcdxbuild command:", s );
 
-    if ( !m_process->start( K3Process::AllOutput ) ) {
+    if ( !m_process->start( KProcess::MergedChannels ) ) {
         kDebug() << "(K3b::VcdJob) could not start vcdxbuild";
         emit infoMessage( i18n( "Could not start %1." , QString("vcdxbuild") ), K3b::Job::ERROR );
         cancelAll();
@@ -248,90 +247,82 @@ void K3b::VcdJob::vcdxBuild()
     }
 }
 
-void K3b::VcdJob::slotParseVcdxBuildOutput( K3Process*, char* output, int len )
+void K3b::VcdJob::slotParseVcdxBuildOutput( const QString& line )
 {
-    QString buffer = QString::fromLocal8Bit( output, len );
-
-    // split to lines
-    QStringList lines = buffer.split( '\n' );
-
     QDomDocument xml_doc;
     QDomElement xml_root;
 
-    // do every line
-    for ( QStringList::Iterator str = lines.begin(); str != lines.end(); ++str ) {
-        *str = ( *str ).trimmed();
+    QString str = line.trimmed();
 
-        emit debuggingOutput( "vcdxbuild", *str );
+    emit debuggingOutput( "vcdxbuild", str );
 
-        xml_doc.setContent( QString( "<?xml version='1.0'?><vcdxbuild>" ) + *str + "</vcdxbuild>" );
+    xml_doc.setContent( QString( "<?xml version='1.0'?><vcdxbuild>" ) + str + "</vcdxbuild>" );
 
-        xml_root = xml_doc.documentElement();
+    xml_root = xml_doc.documentElement();
 
-        // There should be only one... but ...
-        for ( QDomNode node = xml_root.firstChild(); !node.isNull(); node = node.nextSibling() ) {
-            QDomElement el = node.toElement();
-            if ( el.isNull() )
-                continue;
+    // There should be only one... but ...
+    for ( QDomNode node = xml_root.firstChild(); !node.isNull(); node = node.nextSibling() ) {
+        QDomElement el = node.toElement();
+        if ( el.isNull() )
+            continue;
 
-            const QString tagName = el.tagName().toLower();
+        const QString tagName = el.tagName().toLower();
 
-            if ( tagName == "progress" ) {
-                const QString oper = el.attribute( "operation" ).toLower();
-                const unsigned long long pos = el.attribute( "position" ).toLong();
-                const long long size = el.attribute( "size" ).toLong();
+        if ( tagName == "progress" ) {
+            const QString oper = el.attribute( "operation" ).toLower();
+            const unsigned long long pos = el.attribute( "position" ).toLong();
+            const long long size = el.attribute( "size" ).toLong();
 
-                if ( oper == "scan" ) {
-                    // Scan Video Files
-                    if ( m_stage == stageUnknown || pos < m_bytesFinished ) {
-                        const uint index = el.attribute( "id" ).replace( QRegExp( "sequence-" ), "" ).toUInt();
+            if ( oper == "scan" ) {
+                // Scan Video Files
+                if ( m_stage == stageUnknown || pos < m_bytesFinished ) {
+                    const uint index = el.attribute( "id" ).replace( QRegExp( "sequence-" ), "" ).toUInt();
 
-                        m_currentWrittenTrack = m_doc->at( m_currentWrittenTrackNumber );
-                        emit newSubTask( i18n( "Scanning video file %1 of %2 (%3)" , index + 1 , doc() ->numOfTracks() , m_currentWrittenTrack->fileName() ) );
-                        m_bytesFinished = 0;
+                    m_currentWrittenTrack = m_doc->at( m_currentWrittenTrackNumber );
+                    emit newSubTask( i18n( "Scanning video file %1 of %2 (%3)" , index + 1 , doc() ->numOfTracks() , m_currentWrittenTrack->fileName() ) );
+                    m_bytesFinished = 0;
 
-                        if ( !firstTrack ) {
-                            m_bytesFinishedTracks += m_doc->at( m_currentWrittenTrackNumber ) ->size();
-                            m_currentWrittenTrackNumber++;
-                        } else
-                            firstTrack = false;
-                    }
-                    emit subPercent( ( int ) ( 100.0 * ( double ) pos / ( double ) size ) );
-                    emit processedSubSize( pos / 1024 / 1024, size / 1024 / 1024 );
-
-                    // this is the first of three processes.
-                    double relOverallWritten = ( ( double ) m_bytesFinishedTracks + ( double ) pos ) / ( double ) doc() ->size();
-                    emit percent( ( int ) ( m_createimageonlypercent * relOverallWritten ) );
-
-                    m_bytesFinished = pos;
-                    m_stage = stageScan;
-
-                } else if ( oper == "write" ) {
-                    emit subPercent( ( int ) ( 100.0 * ( double ) pos / ( double ) size ) );
-                    emit processedSubSize( ( pos * 2048 ) / 1024 / 1024, ( size * 2048 ) / 1024 / 1024 );
-                    emit percent( ( int ) ( m_createimageonlypercent + ( m_createimageonlypercent * ( double ) pos / ( double ) size ) ) );
-
-                    m_stage = stageWrite;
-                } else {
-                    return ;
+                    if ( !firstTrack ) {
+                        m_bytesFinishedTracks += m_doc->at( m_currentWrittenTrackNumber ) ->size();
+                        m_currentWrittenTrackNumber++;
+                    } else
+                        firstTrack = false;
                 }
-            } else if ( tagName == "log" ) {
-                QDomText tel = el.firstChild().toText();
-                const QString level = el.attribute( "level" ).toLower();
-                if ( tel.isText() ) {
-                    const QString text = tel.data();
-                    if ( m_stage == stageWrite && level == "information" )
-                        kDebug() << QString( "(K3b::VcdJob) VcdxBuild information, %1" ).arg( text );
-                    if ( ( text ).startsWith( "writing track" ) )
-                        emit newSubTask( i18n( "Creating Image for track %1" , ( text ).mid( 14 ) ) );
-                    else {
-                        if ( level != "error" ) {
-                            kDebug() << QString( "(K3b::VcdJob) vcdxbuild warning, %1" ).arg( text );
-                            parseInformation( text );
-                        } else {
-                            kDebug() << QString( "(K3b::VcdJob) vcdxbuild error, %1" ).arg( text );
-                            emit infoMessage( text, K3b::Job::ERROR );
-                        }
+                emit subPercent( ( int ) ( 100.0 * ( double ) pos / ( double ) size ) );
+                emit processedSubSize( pos / 1024 / 1024, size / 1024 / 1024 );
+
+                // this is the first of three processes.
+                double relOverallWritten = ( ( double ) m_bytesFinishedTracks + ( double ) pos ) / ( double ) doc() ->size();
+                emit percent( ( int ) ( m_createimageonlypercent * relOverallWritten ) );
+
+                m_bytesFinished = pos;
+                m_stage = stageScan;
+
+            } else if ( oper == "write" ) {
+                emit subPercent( ( int ) ( 100.0 * ( double ) pos / ( double ) size ) );
+                emit processedSubSize( ( pos * 2048 ) / 1024 / 1024, ( size * 2048 ) / 1024 / 1024 );
+                emit percent( ( int ) ( m_createimageonlypercent + ( m_createimageonlypercent * ( double ) pos / ( double ) size ) ) );
+
+                m_stage = stageWrite;
+            } else {
+                return ;
+            }
+        } else if ( tagName == "log" ) {
+            QDomText tel = el.firstChild().toText();
+            const QString level = el.attribute( "level" ).toLower();
+            if ( tel.isText() ) {
+                const QString text = tel.data();
+                if ( m_stage == stageWrite && level == "information" )
+                    kDebug() << QString( "(K3b::VcdJob) VcdxBuild information, %1" ).arg( text );
+                if ( ( text ).startsWith( "writing track" ) )
+                    emit newSubTask( i18n( "Creating Image for track %1" , ( text ).mid( 14 ) ) );
+                else {
+                    if ( level != "error" ) {
+                        kDebug() << QString( "(K3b::VcdJob) vcdxbuild warning, %1" ).arg( text );
+                        parseInformation( text );
+                    } else {
+                        kDebug() << QString( "(K3b::VcdJob) vcdxbuild error, %1" ).arg( text );
+                        emit infoMessage( text, K3b::Job::ERROR );
                     }
                 }
             }
@@ -375,6 +366,7 @@ void K3b::VcdJob::slotVcdxBuildFinished( int exitCode, QProcess::ExitStatus exit
     else
         jobFinished( true );
 }
+
 
 void K3b::VcdJob::startWriterjob()
 {

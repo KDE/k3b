@@ -59,15 +59,16 @@ namespace K3b {
         void setImagePath( const QString& p ) { m_imagePath = p; }
 
         /**
-         * the data gets written directly into fd instead of the imagefile.
+         * the data gets written directly into device instead of the imagefile.
          * Be aware that this only makes sense before starting the job.
-         * To disable just set fd to -1
+         * To disable just set ioDev to 0
          */
-        void writeToFd( int fd );
+        void writeTo( QIODevice* ioDev );
 
     private Q_SLOTS:
-        void slotStdLine( const QString& line );
+        void slotStderrLine( const QString& line );
         void slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus );
+        void slotReadyRead();
 
     private:
         bool m_noCorr;

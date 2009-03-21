@@ -49,7 +49,7 @@ namespace K3b {
 
         int type() const { return VCD; }
 
-        int supportedMediaTypes() const;
+        Device::MediaTypes supportedMediaTypes() const;
 
         QString name() const;
 

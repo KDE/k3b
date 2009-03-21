@@ -50,7 +50,7 @@ K3b::IsoOptions::IsoOptions()
     m_doNotCacheInodes = true;
     m_doNotImportSession = false;
 
-    m_isoLevel = 2;
+    m_isoLevel = 3;
 
     m_discardSymlinks = false;
     m_discardBrokenSymlinks = false;

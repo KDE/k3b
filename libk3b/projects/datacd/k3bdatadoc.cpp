@@ -1371,9 +1371,9 @@ int K3b::DataDoc::importedSession() const
 }
 
 
-int K3b::DataDoc::supportedMediaTypes() const
+K3b::Device::MediaTypes K3b::DataDoc::supportedMediaTypes() const
 {
-    int m = K3b::Device::MEDIA_WRITABLE;
+    Device::MediaTypes m = K3b::Device::MEDIA_WRITABLE;
 
     // we go bottom-up and remove those media types that are too small
     // (very very rough for now, we need the media size handling in the
@@ -1406,6 +1406,7 @@ int K3b::DataDoc::supportedMediaTypes() const
 //         m = K3b::Device::MEDIA_DVD_RW_OVWR|K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_PLUS_R;
 //     }
 
+#warning BLu-Ray!
     return m;
 }
 

@@ -17,6 +17,8 @@
 
 #include <k3bthreadjob.h>
 
+class QIODevice;
+
 namespace K3b {
     class AudioDoc;
 
@@ -31,9 +33,9 @@ namespace K3b {
         /**
          * the data gets written directly into fd instead of the imagefile.
          * Be aware that this only makes sense before starting the job.
-         * To disable just set fd to -1
+         * To disable just set dev to 0
          */
-        void writeToFd( int fd );
+        void writeTo( QIODevice* dev );
 
         /**
          * Image path. Should be an empty directory or a non-existing

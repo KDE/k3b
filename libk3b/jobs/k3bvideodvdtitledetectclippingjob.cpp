@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -135,7 +135,6 @@ void K3b::VideoDVDTitleDetectClippingJob::startTranscode( int chapter )
     d->process = new K3b::Process();
     d->process->setSuppressEmptyLines(true);
     d->process->setSplitStdout(true);
-    //  connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotTranscodeStderr(const QString&)) );
     connect( d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotTranscodeStderr(const QString&)) );
     connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotTranscodeExited(int, QProcess::ExitStatus)) );
 
@@ -173,7 +172,7 @@ void K3b::VideoDVDTitleDetectClippingJob::startTranscode( int chapter )
     emit debuggingOutput( d->usedTranscodeBin->name() + " command:", s);
 
     // start the process
-    if( !d->process->start( K3Process::All ) ) {
+    if( !d->process->start( KProcess::MergedChannels ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
         emit infoMessage( i18n("Could not start %1.",d->usedTranscodeBin->name()), K3b::Job::ERROR );

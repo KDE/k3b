@@ -1,9 +1,10 @@
 /*
 *
 * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2009 Sebastian Trueg <trueg@k3b.org>
 *
 * This file is part of the K3b project.
-* Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+* Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -54,7 +55,7 @@ namespace K3b {
 
     protected Q_SLOTS:
         void slotVcdxBuildFinished( int, QProcess::ExitStatus );
-        void slotParseVcdxBuildOutput( K3Process*, char* output, int len );
+        void slotParseVcdxBuildOutput( const QString& );
 
         void slotWriterJobPercent( int p );
         void slotProcessedSize( int cs, int ts );

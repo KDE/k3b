@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,9 +47,9 @@ public:
     // medium strings for every entry
     QMap<QString, int> mediaStringMap;
 
-    int wantedMediumType;
-    int wantedMediumState;
-    int wantedMediumContent;
+    Device::MediaTypes wantedMediumType;
+    Device::MediaStates wantedMediumState;
+    Medium::MediumContents wantedMediumContent;
     K3b::Msf wantedMediumSize;
 };
 
@@ -118,7 +118,7 @@ void K3b::MediaSelectionComboBox::setSelectedDevice( K3b::Device::Device* dev )
 }
 
 
-void K3b::MediaSelectionComboBox::setWantedMediumType( int type )
+void K3b::MediaSelectionComboBox::setWantedMediumType( K3b::Device::MediaTypes type )
 {
     if( type != 0 && type != d->wantedMediumType) {
         d->wantedMediumType = type;
@@ -127,7 +127,7 @@ void K3b::MediaSelectionComboBox::setWantedMediumType( int type )
 }
 
 
-void K3b::MediaSelectionComboBox::setWantedMediumState( int state )
+void K3b::MediaSelectionComboBox::setWantedMediumState( K3b::Device::MediaStates state )
 {
     if( state != 0 && state != d->wantedMediumState ) {
         d->wantedMediumState = state;
@@ -136,7 +136,7 @@ void K3b::MediaSelectionComboBox::setWantedMediumState( int state )
 }
 
 
-void K3b::MediaSelectionComboBox::setWantedMediumContent( int content )
+void K3b::MediaSelectionComboBox::setWantedMediumContent( K3b::Medium::MediumContents content )
 {
     if( content != d->wantedMediumContent ) {
         d->wantedMediumContent = content;
@@ -154,19 +154,19 @@ void K3b::MediaSelectionComboBox::setWantedMediumSize( const K3b::Msf& minSize )
 }
 
 
-int K3b::MediaSelectionComboBox::wantedMediumType() const
+K3b::Device::MediaTypes K3b::MediaSelectionComboBox::wantedMediumType() const
 {
     return d->wantedMediumType;
 }
 
 
-int K3b::MediaSelectionComboBox::wantedMediumState() const
+K3b::Device::MediaStates K3b::MediaSelectionComboBox::wantedMediumState() const
 {
     return d->wantedMediumState;
 }
 
 
-int K3b::MediaSelectionComboBox::wantedMediumContent() const
+K3b::Medium::MediumContents K3b::MediaSelectionComboBox::wantedMediumContent() const
 {
     return d->wantedMediumContent;
 }

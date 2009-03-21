@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,8 +40,8 @@ namespace K3b {
          * will create a fd pair which can be obtained by inFd() after
          * the buffer has been started.
          */
-        void readFromFd( int fd );
-        void writeToFd( int fd );
+        void readFrom( QIODevice* dev );
+        void writeTo( QIODevice* dev );
 
         /**
          * This is only valid after the piepbuffer has been started and no fd

@@ -26,7 +26,6 @@
 #include <k3bcore.h>
 #include <k3bversion.h>
 #include <k3bglobals.h>
-#include <k3bchecksumpipe.h>
 #include <k3bfilesplitter.h>
 
 #include <kdebug.h>
@@ -55,15 +54,6 @@ int K3b::IsoImager::s_imagerSessionCounter = 0;
 class K3b::IsoImager::Private
 {
 public:
-    Private()
-        : pipe(0) {
-    }
-
-    ~Private() {
-        delete pipe;
-    }
-
-    QString imagePath;
     K3b::FileSplitter imageFile;
     const K3b::ExternalBin* mkisofsBin;
 
@@ -78,7 +68,6 @@ public:
 
     bool knownError;
 
-    K3b::ActivePipe* pipe;
     K3b::DataPreparationJob* dataPreparationJob;
 };
 
@@ -95,8 +84,7 @@ K3b::IsoImager::IsoImager( K3b::DataDoc* doc, K3b::JobHandler* hdl, QObject* par
       m_noDeepDirectoryRelocation( false ),
       m_importSession( false ),
       m_device(0),
-      m_mkisofsPrintSizeResult( 0 ),
-      m_fdToWriteTo(-1)
+      m_mkisofsPrintSizeResult( 0 )
 {
     d = new Private();
     d->dataPreparationJob = new K3b::DataPreparationJob( doc, this, this );
@@ -116,19 +104,6 @@ K3b::IsoImager::~IsoImager()
 bool K3b::IsoImager::active() const
 {
     return K3b::Job::active();
-}
-
-
-void K3b::IsoImager::writeToFd( int fd )
-{
-    m_fdToWriteTo = fd;
-}
-
-
-void K3b::IsoImager::writeToImageFile( const QString& path )
-{
-    d->imagePath = path;
-    m_fdToWriteTo = -1;
 }
 
 
@@ -158,12 +133,6 @@ void K3b::IsoImager::slotProcessExited( int exitCode, QProcess::ExitStatus exitS
     kDebug() << k_funcinfo;
 
     m_processExited = true;
-
-    d->pipe->close();
-
-    emit debuggingOutput( "K3b::IsoImager",
-                          QString("Pipe throughput: %1 bytes read, %2 bytes written.")
-                          .arg(d->pipe->bytesRead()).arg(d->pipe->bytesWritten()) );
 
     if( d->imageFile.isOpen() ) {
         d->imageFile.close();
@@ -218,7 +187,7 @@ void K3b::IsoImager::slotProcessExited( int exitCode, QProcess::ExitStatus exitS
             }
         }
         else {
-            emit infoMessage( i18n("%1 did not exit cleanly.",QString("mkisofs")), ERROR );
+            emit infoMessage( i18n("%1 crashed.",QString("mkisofs")), ERROR );
             jobFinished( false );
         }
     }
@@ -242,9 +211,6 @@ void K3b::IsoImager::cleanup()
     m_tempFiles.clear();
 
     m_pathSpecFile = m_jolietHideFile = m_rrHideFile = m_sortWeightFile = 0;
-
-    delete m_process;
-    m_process = 0;
 
     clearDummyDirs();
 }
@@ -297,8 +263,7 @@ void K3b::IsoImager::startSizeCalculation()
     initVariables();
 
     delete m_process;
-    m_process = new K3b::Process();
-    m_process->setRunPrivileged(true);
+    m_process = new K3b::Process( this );
     m_process->setSplitStdout(true);
 
     emit debuggingOutput( QLatin1String( "Used versions" ), QLatin1String( "mkisofs: " ) + d->mkisofsBin->version );
@@ -332,12 +297,10 @@ void K3b::IsoImager::startSizeCalculation()
     // everything is written to stderr
     // last line is: "Total extents scheduled to be written = XXXXX"
 
-    // TODO: use K3b::Process::OutputCollector instead iof our own two slots.
-
-    connect( m_process, SIGNAL(receivedStderr(K3Process*, char*, int)),
-             this, SLOT(slotCollectMkisofsPrintSizeStderr(K3Process*, char*, int)) );
     connect( m_process, SIGNAL(stdoutLine(const QString&)),
              this, SLOT(slotCollectMkisofsPrintSizeStdout(const QString&)) );
+    connect( m_process, SIGNAL(stderrLine(const QString&)),
+             this, SLOT(slotCollectMkisofsPrintSizeStderr(const QString&)) );
     connect( m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
              this, SLOT(slotMkisofsPrintSizeFinished()) );
 
@@ -349,7 +312,7 @@ void K3b::IsoImager::startSizeCalculation()
     m_collectedMkisofsPrintSizeStderr = QString();
     m_mkisofsPrintSizeResult = 0;
 
-    if( !m_process->start( K3Process::AllOutput ) ) {
+    if( !m_process->start( KProcess::SeparateChannels ) ) {
         emit infoMessage( i18n("Could not start %1.",QString("mkisofs")), K3b::Job::ERROR );
         cleanup();
 
@@ -359,10 +322,9 @@ void K3b::IsoImager::startSizeCalculation()
 }
 
 
-void K3b::IsoImager::slotCollectMkisofsPrintSizeStderr(K3Process*, char* data , int len)
+void K3b::IsoImager::slotCollectMkisofsPrintSizeStderr( const QString& line )
 {
-    emit debuggingOutput( "mkisofs", QString::fromLocal8Bit( data, len ) );
-    m_collectedMkisofsPrintSizeStderr.append( QString::fromLocal8Bit( data, len ) );
+    m_collectedMkisofsPrintSizeStderr.append( line + '\n' );
 }
 
 
@@ -464,8 +426,8 @@ void K3b::IsoImager::start()
 
     initVariables();
 
-    m_process = new K3b::Process();
-    m_process->setRunPrivileged(true);
+    m_process = new K3b::Process( this );
+    m_process->setFlags( K3bQProcess::RawStdout );
 
     *m_process << d->mkisofsBin;
 
@@ -481,44 +443,15 @@ void K3b::IsoImager::start()
 
     connect( m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
              this, SLOT(slotProcessExited(int, QProcess::ExitStatus)) );
-
     connect( m_process, SIGNAL(stderrLine( const QString& )),
              this, SLOT(slotReceivedStderr( const QString& )) );
-
-    //
-    // Check the image file
-    if( m_fdToWriteTo == -1 ) {
-        d->imageFile.setName( d->imagePath );
-        if( !d->imageFile.open( QIODevice::WriteOnly ) ) {
-            emit infoMessage( i18n("Could not open %1 for writing",d->imagePath), ERROR );
-            cleanup();
-            jobFinished(false);
-            return;
-        }
-    }
-
-    //
-    // Open the active pipe which does the streaming
-    delete d->pipe;
-    if( m_doc->verifyData() )
-        d->pipe = new K3b::ChecksumPipe();
-    else
-        d->pipe = new K3b::ActivePipe();
-
-    if( m_fdToWriteTo == -1 )
-        d->pipe->writeToIODevice( &d->imageFile );
-    else
-        d->pipe->writeToFd( m_fdToWriteTo );
-    d->pipe->open();
-    m_process->writeToFd( d->pipe->in() );
-
 
     kDebug() << "***** mkisofs parameters:\n";
     QString s = m_process->joinedArgs();
     kDebug() << s << endl << flush;
     emit debuggingOutput("mkisofs command:", s);
 
-    if( !m_process->start( K3Process::AllOutput ) ) {
+    if( !m_process->start( KProcess::SeparateChannels ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
         kDebug() << "(K3b::IsoImager) could not start mkisofs";
@@ -1171,18 +1104,15 @@ void K3b::IsoImager::clearDummyDirs()
 }
 
 
-QByteArray K3b::IsoImager::checksum() const
-{
-    if( K3b::ChecksumPipe* p = dynamic_cast<K3b::ChecksumPipe*>( d->pipe ) )
-        return p->checksum();
-    else
-        return QByteArray();
-}
-
-
 bool K3b::IsoImager::hasBeenCanceled() const
 {
     return m_canceled;
+}
+
+
+QIODevice* K3b::IsoImager::ioDevice() const
+{
+    return m_process;
 }
 
 #include "k3bisoimager.moc"

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -156,7 +156,7 @@ void K3b::DvdBooktypeJob::cancel()
     if( d->running ) {
         d->canceled = true;
         if( d->process )
-            d->process->kill();
+            d->process->terminate();
     }
     else {
         kDebug() << "(K3b::DvdBooktypeJob) not running.";
@@ -278,7 +278,6 @@ void K3b::DvdBooktypeJob::startBooktypeChange()
 {
     delete d->process;
     d->process = new K3b::Process();
-    d->process->setRunPrivileged(true);
     d->process->setSuppressEmptyLines(true);
     connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStderrLine(const QString&)) );
     connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotProcessFinished(int, QProcess::ExitStatus)) );
@@ -330,8 +329,7 @@ void K3b::DvdBooktypeJob::startBooktypeChange()
     kDebug() << s << endl << flush;
     emit debuggingOutput( "dvd+rw-booktype command:", s );
 
-
-    if( !d->process->start( K3Process::All ) ) {
+    if( !d->process->start( KProcess::OnlyStderrChannel ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
         emit infoMessage( i18n("Could not start %1.",d->dvdBooktypeBin->name()), K3b::Job::ERROR );

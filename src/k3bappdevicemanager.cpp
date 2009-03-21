@@ -121,7 +121,7 @@ void K3b::AppDeviceManager::removeDevice( const Solid::Device& solidDev )
 {
     if( findDevice( solidDev.as<Solid::Block>()->device() ) == currentDevice() )
         setCurrentDevice( 0 );
-    
+
     K3b::Device::DeviceManager::removeDevice( solidDev );
 
     if( currentDevice() == 0 && !allDevices().isEmpty() )
@@ -132,17 +132,17 @@ void K3b::AppDeviceManager::removeDevice( const Solid::Device& solidDev )
 void K3b::AppDeviceManager::slotMediumChanged( K3b::Device::Device* dev )
 {
     if( dev == currentDevice() ) {
-        
+
         d->actionDiskInfo->setEnabled( dev != 0 );
         d->actionEject->setEnabled( dev != 0 );
         d->actionLoad->setEnabled( dev != 0 );
         d->actionSetReadSpeed->setEnabled( dev != 0 );
-        
+
         if( dev ) {
             bool mediumMountable = k3bappcore->mediaCache()->medium( dev ).content() & K3b::Medium::CONTENT_DATA;
             d->actionMount->setEnabled( mediumMountable );
             d->actionUnmount->setEnabled( mediumMountable );
-            
+
             disconnect( this, SLOT(slotMountChanged(bool,const QString&)) );
             disconnect( this, SLOT(slotMountFinished(Solid::ErrorType,QVariant,const QString&)) );
             disconnect( this, SLOT(slotUnmountFinished(Solid::ErrorType,QVariant,const QString&)) );
@@ -260,9 +260,8 @@ void K3b::AppDeviceManager::unmountDisk()
 
 void K3b::AppDeviceManager::ejectDisk()
 {
-    // FIXME: make this non-blocking
     if ( currentDevice() )
-        K3b::eject( currentDevice() ); // just ignore errors here
+        K3b::Device::eject( currentDevice() );
 }
 
 

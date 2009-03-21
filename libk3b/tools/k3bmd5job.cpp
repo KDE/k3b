@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,17 +25,14 @@
 #include <kio/netaccess.h>
 
 #include <qtimer.h>
-#include <qsocketnotifier.h>
-
-#include <unistd.h>
+#include <qiodevice.h>
 
 
 class K3b::Md5Job::Private
 {
 public:
     Private()
-        : fileDes(-1),
-          fdNotifier(0),
+        : ioDevice(0),
           finished(true),
           data(0),
           isoFile(0),
@@ -47,9 +44,8 @@ public:
     K3b::FileSplitter file;
     QTimer timer;
     QString filename;
-    int fileDes;
+    QIODevice* ioDevice;
     K3b::Device::Device* device;
-    QSocketNotifier* fdNotifier;
 
     bool finished;
     char* data;
@@ -121,20 +117,10 @@ void K3b::Md5Job::start()
 
     d->md5.reset();
     d->finished = false;
-    if( d->fileDes != -1 )
-        setupFdNotifier();
+    if( d->ioDevice )
+        connect( d->ioDevice, SIGNAL(readyRead()), this, SLOT(slotUpdate()) );
     else
         d->timer.start(0);
-}
-
-
-void K3b::Md5Job::setupFdNotifier()
-{
-    // the QSocketNotifier will fire once the fd is closed
-    delete d->fdNotifier;
-    d->fdNotifier = new QSocketNotifier( d->fileDes, QSocketNotifier::Read, this );
-    connect( d->fdNotifier, SIGNAL(activated(int)), this, SLOT(slotUpdate()) );
-    d->fdNotifier->setEnabled( true );
 }
 
 
@@ -153,7 +139,7 @@ void K3b::Md5Job::setFile( const QString& filename )
 {
     d->filename = filename;
     d->isoFile = 0;
-    d->fileDes = -1;
+    d->ioDevice = 0;
     d->device = 0;
 }
 
@@ -161,15 +147,15 @@ void K3b::Md5Job::setFile( const QString& filename )
 void K3b::Md5Job::setFile( const K3b::Iso9660File* file )
 {
     d->isoFile = file;
-    d->fileDes = -1;
+    d->ioDevice = 0;
     d->filename.truncate(0);
     d->device = 0;
 }
 
 
-void K3b::Md5Job::setFd( int fd )
+void K3b::Md5Job::setIODevice( QIODevice* dev )
 {
-    d->fileDes = fd;
+    d->ioDevice = dev;
     d->filename.truncate(0);
     d->isoFile = 0;
     d->device = 0;
@@ -179,7 +165,7 @@ void K3b::Md5Job::setFd( int fd )
 void K3b::Md5Job::setDevice( K3b::Device::Device* dev )
 {
     d->device = dev;
-    d->fileDes = -1;
+    d->ioDevice = 0;
     d->filename.truncate(0);
     d->isoFile = 0;
 }
@@ -238,19 +224,19 @@ void K3b::Md5Job::slotUpdate()
             //
             // read from the file
             //
-            else if( d->fileDes < 0 ) {
+            else if( !d->ioDevice ) {
                 read = d->file.read( d->data, readSize );
             }
 
             //
-            // reading from the file descriptor
+            // reading from the io device
             //
             else {
-                read = ::read( d->fileDes, d->data, readSize );
+                read = d->ioDevice->read( d->data, readSize );
             }
 
             if( read < 0 ) {
-                emit infoMessage( i18n("Error while reading from file %1",d->filename), ERROR );
+                emit infoMessage( i18n("Error while reading from file %1", d->filename), ERROR );
                 stopAll();
                 jobFinished(false);
             }
@@ -309,8 +295,8 @@ void K3b::Md5Job::stop()
 
 void K3b::Md5Job::stopAll()
 {
-    if( d->fdNotifier )
-        d->fdNotifier->setEnabled( false );
+    if( d->ioDevice )
+        disconnect( d->ioDevice, SIGNAL(readyRead()), this, SLOT(slotUpdate()) );
     if( d->file.isOpen() )
         d->file.close();
     d->timer.stop();

@@ -56,8 +56,8 @@ namespace K3b {
          */
         K3b::WritingApp writingApp() const;
 
-        int wantedMediumType() const;
-        int wantedMediumState() const;
+        Device::MediaTypes wantedMediumType() const;
+        Device::MediaStates wantedMediumState() const;
         K3b::Msf wantedMediumSize() const;
 
         void loadConfig( const KConfigGroup& );
@@ -85,14 +85,14 @@ namespace K3b {
          *
          * \param type a bitwise combination of the Device::MediaType enum
          */
-        void setWantedMediumType( int type );
+        void setWantedMediumType( K3b::Device::MediaTypes type );
 
         /**
          * Set the wanted medium state. Defaults to empty media.
          *
          * \param state a bitwise combination of the Device::State enum
          */
-        void setWantedMediumState( int state );
+        void setWantedMediumState( K3b::Device::MediaStates state );
 
         /**
          * Set the wanted medium size. Defaults to 0 which means

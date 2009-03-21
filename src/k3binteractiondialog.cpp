@@ -31,14 +31,12 @@
 #include <qpoint.h>
 #include <qfont.h>
 #include <q3popupmenu.h>
-#include <qeventloop.h>
 #include <qapplication.h>
 #include <qtimer.h>
 
 #include <QGridLayout>
 #include <QKeyEvent>
 #include <QEvent>
-#include <QEventLoop>
 #include <QHBoxLayout>
 #include <QDialogButtonBox>
 #include <QPointer>
@@ -54,18 +52,17 @@
 
 
 K3b::InteractionDialog::InteractionDialog( QWidget* parent,
-                                            const QString& title,
-                                            const QString& subTitle,
-                                            int buttonMask,
-                                            int defaultButton,
-                                            const QString& configGroup )
+                                           const QString& title,
+                                           const QString& subTitle,
+                                           int buttonMask,
+                                           int defaultButton,
+                                           const QString& configGroup )
     : KDialog( parent ),
       m_mainWidget(0),
       m_defaultButton(defaultButton),
       m_configGroup(configGroup),
       m_inToggleMode(false),
-      m_delayedInit(false),
-      m_eventLoop( 0 )
+      m_delayedInit(false)
 {
     installEventFilter( this );
     setButtons( KDialog::None );
@@ -523,42 +520,14 @@ int K3b::InteractionDialog::exec()
 {
     kDebug() << this;
 
-    // the following code is mainly taken from QDialog::exec
-    if( m_eventLoop ) {
-        kError() << "(K3b::InteractionDialog::exec) Recursive call detected." << endl;
-        return -1;
-    }
-
-    bool deleteOnClose = testAttribute(Qt::WA_DeleteOnClose);
-    setAttribute(Qt::WA_DeleteOnClose, false);
-
-    bool wasShowModal = testAttribute(Qt::WA_ShowModal);
-    setAttribute(Qt::WA_ShowModal, true);
-    setResult(0);
-
     loadStartupSettings();
-
-    show();
 
     if( m_delayedInit )
         QMetaObject::invokeMethod( this, "slotInternalInit", Qt::QueuedConnection );
     else
         slotInternalInit();
 
-    QEventLoop eventLoop;
-    m_eventLoop = &eventLoop;
-    QPointer<QDialog> guard = this;
-    (void) eventLoop.exec();
-    if (guard.isNull())
-        return QDialog::Rejected;
-    m_eventLoop = 0;
-
-    setAttribute(Qt::WA_ShowModal, wasShowModal);
-
-    int res = result();
-    if (deleteOnClose)
-        delete this;
-    return res;
+    return KDialog::exec();
 }
 
 
@@ -570,18 +539,12 @@ void K3b::InteractionDialog::hideTemporarily()
 
 void K3b::InteractionDialog::close()
 {
-    if( m_eventLoop ) {
-        m_eventLoop->exit();
-    }
     KDialog::close();
 }
 
 
 void K3b::InteractionDialog::done( int r )
 {
-    if( m_eventLoop ) {
-        m_eventLoop->exit();
-    }
     KDialog::done( r );
 }
 

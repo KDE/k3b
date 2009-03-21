@@ -30,7 +30,7 @@
 #include <qregexp.h>
 #include <qstringlist.h>
 #include <QList>
-
+#include <QtCore/QIODevice>
 
 
 class K3b::ReadcdReader::Private
@@ -38,7 +38,7 @@ class K3b::ReadcdReader::Private
 public:
     Private()
         : process(0),
-          fdToWriteTo(-1),
+          ioDevToWriteTo(0),
           canceled(false) {
     }
 
@@ -47,7 +47,7 @@ public:
     K3b::Process* process;
     const K3b::ExternalBin* readcdBinObject;
 
-    int fdToWriteTo;
+    QIODevice* ioDevToWriteTo;
     bool canceled;
 
     long blocksToRead;
@@ -85,9 +85,9 @@ bool K3b::ReadcdReader::active() const
 }
 
 
-void K3b::ReadcdReader::writeToFd( int fd )
+void K3b::ReadcdReader::writeTo( QIODevice* dev )
 {
-    d->fdToWriteTo = fd;
+    d->ioDevToWriteTo = dev;
 }
 
 
@@ -138,7 +138,7 @@ void K3b::ReadcdReader::start()
     // create the commandline
     delete d->process;
     d->process = new K3b::Process();
-    connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
+    connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStderrLine(const QString&)) );
     connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotProcessExited(int, QProcess::ExitStatus)) );
 
 
@@ -155,13 +155,13 @@ void K3b::ReadcdReader::start()
 
 
     // output
-    if( d->fdToWriteTo != -1 ) {
+    if( d->ioDevToWriteTo ) {
         *d->process << "f=-";
-        d->process->writeToFd( d->fdToWriteTo );
+        connect( d->process, SIGNAL(readyReadStandardOutput()), this, SLOT(slotReadyRead()) );
     }
     else {
-        emit newTask( i18n("Writing image to %1.",m_imagePath) );
-        emit infoMessage( i18n("Writing image to %1.",m_imagePath), INFO );
+        emit newTask( i18n("Writing image to %1.", m_imagePath) );
+        emit infoMessage( i18n("Writing image to %1.", m_imagePath), INFO );
         *d->process << "f=" + m_imagePath;
     }
 
@@ -199,7 +199,7 @@ void K3b::ReadcdReader::start()
 
     d->canceled = false;
 
-    if( !d->process->start( K3Process::AllOutput ) ) {
+    if( !d->process->start( KProcess::SeparateChannels ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
         kError() << "(K3b::ReadcdReader) could not start readcd" << endl;
@@ -220,7 +220,7 @@ void K3b::ReadcdReader::cancel()
 }
 
 
-void K3b::ReadcdReader::slotStdLine( const QString& line )
+void K3b::ReadcdReader::slotStderrLine( const QString& line )
 {
     emit debuggingOutput( "readcd", line );
 
@@ -326,5 +326,13 @@ void K3b::ReadcdReader::setSectorRange( const K3b::Msf& first, const K3b::Msf& l
     d->lastSector = last;
 }
 
-#include "k3breadcdreader.moc"
 
+void K3b::ReadcdReader::slotReadyRead()
+{
+    // FIXME: error handling!
+    if ( d->ioDevToWriteTo ) {
+        d->ioDevToWriteTo->write( d->process->readAllStandardOutput() );
+    }
+}
+
+#include "k3breadcdreader.moc"

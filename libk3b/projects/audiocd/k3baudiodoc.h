@@ -59,7 +59,7 @@ namespace K3b {
 
         void clear();
 
-        int supportedMediaTypes() const;
+        Device::MediaTypes supportedMediaTypes() const;
 
         bool hideFirstTrack() const { return m_hideFirstTrack; }
         int numOfTracks() const;

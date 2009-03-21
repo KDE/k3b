@@ -36,7 +36,7 @@ namespace K3b {
 
     public:
         CdrecordWriter( Device::Device*, JobHandler* hdl,
-                           QObject* parent = 0 );
+                        QObject* parent = 0 );
         ~CdrecordWriter();
 
         bool active() const;
@@ -47,7 +47,14 @@ namespace K3b {
         CdrecordWriter* addArgument( const QString& );
         void clearArguments();
 
-        int fd() const;
+        /**
+         * Write to the writer process.
+         * FIXME: make this an overloaded method from AbstractWriter
+         */
+        qint64 write( const char* data, qint64 maxSize );
+
+        QIODevice* ioDevice() const;
+        bool closeFd();
 
     public Q_SLOTS:
         void start();
@@ -58,7 +65,7 @@ namespace K3b {
         void setCueFile( const QString& s);
         void setClone( bool b );
 
-        void setRawCdText( const QByteArray& a ) { m_rawCdText = a; }
+        void setRawCdText( const QByteArray& a );
 
     protected Q_SLOTS:
         void slotStdLine( const QString& line );
@@ -67,16 +74,6 @@ namespace K3b {
 
     protected:
         virtual void prepareProcess();
-
-        const ExternalBin* m_cdrecordBinObject;
-        Process* m_process;
-
-        WritingMode m_writingMode;
-        bool m_totalTracksParsed;
-        bool m_clone;
-        bool m_cue;
-
-        QString m_cueFile;
 
         enum CdrecordError { UNKNOWN,
                              OVERSIZE,
@@ -96,20 +93,7 @@ namespace K3b {
                              DEVICE_BUSY,
                              BLANK_FAILED };
 
-        QStringList m_arguments;
-
     private:
-        int m_currentTrack;
-        int m_totalTracks;
-        int m_totalSize;
-        int m_alreadyWritten;
-
-        int m_lastFifoValue;
-
-        int m_cdrecordError;
-
-        QByteArray m_rawCdText;
-
         class Private;
         Private* d;
     };

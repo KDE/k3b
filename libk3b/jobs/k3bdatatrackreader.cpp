@@ -47,7 +47,7 @@ public:
     K3b::Msf firstSector;
     K3b::Msf lastSector;
     K3b::Msf nextReadSector;
-    int fd;
+    QIODevice* ioDevice;
     QString imagePath;
     int sectorSize;
     bool useLibdvdcss;
@@ -66,7 +66,7 @@ K3b::DataTrackReader::Private::Private()
       noCorrection(false),
       retries(10),
       device(0),
-      fd(-1),
+      ioDevice(0),
       libcss(0)
 {
 }
@@ -124,16 +124,16 @@ void K3b::DataTrackReader::setNoCorrection( bool b )
 }
 
 
-void K3b::DataTrackReader::writeToFd( int fd )
+void K3b::DataTrackReader::writeTo( QIODevice* ioDev )
 {
-    d->fd = fd;
+    d->ioDevice = ioDev;
 }
 
 
 void K3b::DataTrackReader::setImagePath( const QString& p )
 {
     d->imagePath = p;
-    d->fd = -1;
+    d->ioDevice = 0;
 }
 
 
@@ -231,7 +231,7 @@ bool K3b::DataTrackReader::run()
                           .arg( quint64(d->usedSectorSize) * (quint64)(d->lastSector.lba() - d->firstSector.lba() + 1) ) );
 
     QFile file;
-    if( d->fd == -1 ) {
+    if( !d->ioDevice ) {
         file.setFileName( d->imagePath );
         if( !file.open( QIODevice::WriteOnly ) ) {
             d->device->close();
@@ -309,13 +309,13 @@ bool K3b::DataTrackReader::run()
 
         int readBytes = readSectors * d->usedSectorSize;
 
-        if( d->fd != -1 ) {
-            if( ::write( d->fd, reinterpret_cast<void*>(buffer), readBytes ) != readBytes ) {
-                kDebug() << "(K3b::DataTrackReader::WorkThread) error while writing to fd " << d->fd
+        if( d->ioDevice ) {
+            if( d->ioDevice->write( reinterpret_cast<char*>(buffer ), readBytes ) != readBytes ) {
+                kDebug() << "(K3b::DataTrackReader::WorkThread) error while writing to dev " << d->ioDevice
                          << " current sector: " << (currentSector.lba()-d->firstSector.lba()) << endl;
                 emit debuggingOutput( "K3b::DataTrackReader",
-                                      QString("Error while writing to fd %1. Current sector is %2.")
-                                      .arg(d->fd).arg(currentSector.lba()-d->firstSector.lba()) );
+                                      QString("Error while writing to IO device. Current sector is %2.")
+                                      .arg(currentSector.lba()-d->firstSector.lba()) );
                 writeError = true;
                 break;
             }

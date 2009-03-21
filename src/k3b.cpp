@@ -809,13 +809,12 @@ bool K3b::MainWindow::canCloseDocument( K3b::Doc* doc )
                                               i18n("%1 has unsaved data.", doc->URL().fileName() ),
                                               i18n("Closing Project"),
                                               KStandardGuiItem::save(),
-                                              KGuiItem( i18n("&Discard"), "editshred" ) ) )
-    {
+                                              KGuiItem( i18n("&Discard"), "editshred" ) ) ) {
     case KMessageBox::Yes:
-        fileSave( doc );
+        if ( !fileSave( doc ) )
+            return false;
     case KMessageBox::No:
         return true;
-
     default:
         return false;
     }
@@ -872,19 +871,22 @@ void K3b::MainWindow::slotFileSave()
     }
 }
 
-void K3b::MainWindow::fileSave( K3b::Doc* doc )
+bool K3b::MainWindow::fileSave( K3b::Doc* doc )
 {
     slotStatusMsg(i18n("Saving file..."));
 
     if( doc == 0 ) {
         doc = activeDoc();
     }
+
     if( doc != 0 ) {
         if( !doc->isSaved() )
-            fileSaveAs( doc );
+            return fileSaveAs( doc );
         else if( !k3bappcore->projectManager()->saveProject( doc, doc->URL()) )
             KMessageBox::error (this,i18n("Could not save the current document."), i18n("I/O Error"));
     }
+
+    return false;
 }
 
 
@@ -896,15 +898,15 @@ void K3b::MainWindow::slotFileSaveAs()
 }
 
 
-void K3b::MainWindow::fileSaveAs( K3b::Doc* doc )
+bool K3b::MainWindow::fileSaveAs( K3b::Doc* doc )
 {
     slotStatusMsg(i18n("Saving file with a new filename..."));
 
-    if( doc == 0 ) {
+    if( !doc ) {
         doc = activeDoc();
     }
 
-    if( doc != 0 ) {
+    if( doc ) {
         // we do not use the static KFileDialog method here to be able to specify a filename suggestion
         KFileDialog dlg( KUrl(":k3b-projects-folder"), i18n("*.k3b|K3b Projects"), this);
         dlg.setCaption( i18n("Save As") );
@@ -918,20 +920,22 @@ void K3b::MainWindow::fileSaveAs( K3b::Doc* doc )
 
             bool exists = KIO::NetAccess::exists( url, KIO::NetAccess::DestinationSide, 0 );
             if( !exists ||
-                ( exists &&
-                  KMessageBox::warningContinueCancel( this, i18n("Do you want to overwrite %1?", url.prettyUrl() ),
-                                                      i18n("File Exists"), KGuiItem(i18n("Overwrite")) )
-                  == KMessageBox::Continue ) ) {
+                KMessageBox::warningContinueCancel( this, i18n("Do you want to overwrite %1?", url.prettyUrl() ),
+                                                    i18n("File Exists"), KGuiItem(i18n("Overwrite")) )
+                == KMessageBox::Continue ) {
 
-                if( !k3bappcore->projectManager()->saveProject( doc, url ) ) {
-                    KMessageBox::error (this,i18n("Could not save the current document."), i18n("I/O Error"));
-                    return;
-                }
-                else
+                if( k3bappcore->projectManager()->saveProject( doc, url ) ) {
                     actionFileOpenRecent->addUrl(url);
+                    return true;
+                }
+                else {
+                    KMessageBox::error (this,i18n("Could not save the current document."), i18n("I/O Error"));
+                }
             }
         }
     }
+
+    return false;
 }
 
 

@@ -21,6 +21,7 @@
 #include <k3bcore.h>
 #include <k3bglobals.h>
 #include <k3biso9660.h>
+#include "k3bprocess.h"
 
 #include <klocale.h>
 #include <kprocess.h>
@@ -78,7 +79,7 @@ void K3b::MsInfoFetcher::start()
 void K3b::MsInfoFetcher::getMsInfo()
 {
     delete m_process;
-    m_process = new KProcess(this);
+    m_process = new Process(this);
 
     const K3b::ExternalBin* bin = 0;
     if( m_dvd ) {
@@ -111,10 +112,6 @@ void K3b::MsInfoFetcher::getMsInfo()
         emit debuggingOutput( "msinfo command:", s );
 
 
-        //   connect( m_process, SIGNAL(readyReadStandardError()),
-        // 	   this, SLOT(slotCollectOutput()) );
-        connect( m_process, SIGNAL(readyReadStandardOutput()),
-                 this, SLOT(slotCollectOutput()) );
         connect( m_process, SIGNAL(finished()),
                  this, SLOT(slotProcessExited()) );
 
@@ -122,9 +119,7 @@ void K3b::MsInfoFetcher::getMsInfo()
         m_collectedOutput = QString();
         m_canceled = false;
 
-        m_process->setOutputChannelMode(KProcess::SeparateChannels);
-
-        m_process->start();
+        m_process->start( KProcess::OnlyStdoutChannel );
     }
 }
 
@@ -189,6 +184,10 @@ void K3b::MsInfoFetcher::slotProcessExited()
 
     kDebug() << "(K3b::MsInfoFetcher) msinfo fetched";
 
+    m_collectedOutput = QString::fromLocal8Bit( m_process->readAllStandardOutput() );
+
+    emit debuggingOutput( "msinfo", m_collectedOutput );
+
     // now parse the output
     QString firstLine = m_collectedOutput.left( m_collectedOutput.indexOf('\n') );
     QStringList list = firstLine.split( ',' );
@@ -218,16 +217,6 @@ void K3b::MsInfoFetcher::slotProcessExited()
 }
 
 
-void K3b::MsInfoFetcher::slotCollectOutput()
-{
-    QByteArray a = m_process->readAllStandardOutput();
-
-    emit debuggingOutput( "msinfo", QString::fromLocal8Bit( a ) );
-
-    m_collectedOutput += QString::fromLocal8Bit( a );
-}
-
-
 void K3b::MsInfoFetcher::cancel()
 {
     // FIXME: this does not work if the devicehandler is running
@@ -235,7 +224,7 @@ void K3b::MsInfoFetcher::cancel()
     if( m_process )
         if( m_process->state() != QProcess::NotRunning) {
             m_canceled = true;
-            m_process->kill();
+            m_process->terminate();
             emit canceled();
             jobFinished(false);
         }

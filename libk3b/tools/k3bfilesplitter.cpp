@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 #include <kdebug.h>
 
 #include <qfile.h>
+#include <qfileinfo.h>
 
 
 class K3b::FileSplitter::Private
@@ -33,6 +34,7 @@ public:
 
     qint64 maxFileSize;
 
+    qint64 size;
     qint64 currentOverallPos;
     qint64 currentFilePos;
 
@@ -50,6 +52,14 @@ public:
             return filename + '.' + QString::number(counter).rightJustified( 3, '0' );
         else
             return filename;
+    }
+
+    qint64 partFileSize( int counter ) {
+        QFileInfo fi( buildFileName( counter ) );
+        if ( fi.exists() )
+            return fi.size();
+        else
+            return 0;
     }
 
     QString currentFileName() {
@@ -101,7 +111,7 @@ K3b::FileSplitter::~FileSplitter()
 }
 
 
-const QString& K3b::FileSplitter::name() const
+QString K3b::FileSplitter::name() const
 {
     return d->filename;
 }
@@ -117,6 +127,7 @@ void K3b::FileSplitter::setName( const QString& filename )
 
 bool K3b::FileSplitter::open( OpenMode mode )
 {
+    kDebug() << mode;
     close();
 
     d->determineMaxFileSize();
@@ -124,6 +135,7 @@ bool K3b::FileSplitter::open( OpenMode mode )
     d->counter = 0;
     d->currentFilePos = 0;
     d->currentOverallPos = 0;
+    d->size = 0;
     if ( QIODevice::open( mode ) ) {
         return d->openFile( 0 );
     }
@@ -135,19 +147,12 @@ bool K3b::FileSplitter::open( OpenMode mode )
 
 void K3b::FileSplitter::close()
 {
+    QIODevice::close();
     d->file.close();
     d->counter = 0;
     d->currentFilePos = 0;
     d->currentOverallPos = 0;
 }
-
-
-int K3b::FileSplitter::handle() const
-{
-    // FIXME: use a K3b::Pipe to simulate this
-    return -1;
-}
-
 
 
 void K3b::FileSplitter::flush()
@@ -158,8 +163,17 @@ void K3b::FileSplitter::flush()
 
 qint64 K3b::FileSplitter::size() const
 {
-    // not implemented due to Offset size limitations
-    return 0;
+    if ( d->size == 0 ) {
+        int i = 0;
+        forever {
+            qint64 s = d->partFileSize( i++ );
+            d->size += s;
+            if ( s == 0 )
+                break;
+        }
+    }
+
+    return d->size;
 }
 
 
@@ -171,9 +185,9 @@ qint64 K3b::FileSplitter::pos() const
 
 bool K3b::FileSplitter::seek( qint64 pos )
 {
-    Q_UNUSED( pos );
+    kDebug() << pos;
     // FIXME: implement me (although not used yet)
-    return false;
+    return QIODevice::seek( pos );
 }
 
 
@@ -199,20 +213,24 @@ qint64 K3b::FileSplitter::readData( char *data, qint64 maxlen )
         d->currentOverallPos += r;
         d->currentFilePos += r;
     }
-
+    else {
+        kDebug() << "Read failed from" << d->file.fileName();
+        setErrorString( d->file.errorString() );
+    }
     return r;
 }
 
 
 qint64 K3b::FileSplitter::writeData( const char *data, qint64 len )
 {
-    // We cannot rely on QFile::at since it uses long on most copmpilations
     qint64 max = qMin( len, d->maxFileSize - d->currentFilePos );
 
     qint64 r = d->file.write( data, max );
 
-    if( r < 0 )
+    if( r < 0 ) {
+        setErrorString( d->file.errorString() );
         return r;
+    }
 
     d->currentOverallPos += r;
     d->currentFilePos += r;
@@ -296,8 +314,9 @@ qint64 K3b::FileSplitter::writeData( const char *data, qint64 len )
 void K3b::FileSplitter::remove()
 {
     close();
-    while( QFile::exists( d->buildFileName( d->counter ) ) )
-        QFile::remove( d->buildFileName( d->counter++ ) );
+    int i = 0;
+    while( QFile::exists( d->buildFileName( i ) ) )
+        QFile::remove( d->buildFileName( i++ ) );
 }
 
 
@@ -305,3 +324,27 @@ void K3b::FileSplitter::setMaxFileSize( qint64 size )
 {
     d->maxFileSize = size;
 }
+
+
+bool K3b::FileSplitter::waitForBytesWritten( int )
+{
+    if ( isOpen() && isWritable() ) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+
+bool K3b::FileSplitter::waitForReadyRead( int )
+{
+    if ( isOpen() && isReadable() ) {
+        return !atEnd();
+    }
+    else {
+        return false;
+    }
+}
+
+#include "k3bfilesplitter.moc"

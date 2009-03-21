@@ -1,0 +1,9 @@
+This is a fork of QProcess (KProcess needs to tag along without any changes since K3b::Process is derived from that)
+from Qt 4.5 which adds the following changes:
+
+- New method QProcess::setFlags with flags RawStdin and RawStdout
+- If RawStdin/RawStdout is set the ringbuffer is not used for stdin/stdout. Calls to QProcess::readData/writeData are directly
+  done on the process pipe (only unix has been patched so far)
+  Also the pipe is blocking, i.e. fcntl( .. O_NONBLOCK ) is not called
+  The latter is very important since K3b does its piping in a separate thread and non-blocking pipes make that
+  near to impossible.

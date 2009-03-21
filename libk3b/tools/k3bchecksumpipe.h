@@ -56,9 +56,14 @@ namespace K3b {
         QByteArray checksum() const;
 
     protected:
-        int write( char* data, int max );
+        qint64 writeData( const char* data, qint64 max );
 
     private:
+        /**
+         * Hidden open method. Use open(bool).
+         */
+        bool open( OpenMode mode );
+
         class Private;
         Private* d;
     };

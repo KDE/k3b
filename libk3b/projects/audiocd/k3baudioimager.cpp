@@ -24,6 +24,7 @@
 #include <kdebug.h>
 
 #include <qfile.h>
+#include <QtCore/QIODevice>
 
 #include <unistd.h>
 
@@ -32,10 +33,10 @@ class K3b::AudioImager::Private
 {
 public:
     Private()
-        : fd(-1) {
+        : ioDev(0) {
     }
 
-    int fd;
+    QIODevice* ioDev;
     QStringList imageNames;
     K3b::AudioImager::ErrorType lastError;
     K3b::AudioDoc* doc;
@@ -57,16 +58,16 @@ K3b::AudioImager::~AudioImager()
 }
 
 
-void K3b::AudioImager::writeToFd( int fd )
+void K3b::AudioImager::writeTo( QIODevice* dev )
 {
-    d->fd = fd;
+    d->ioDev = dev;
 }
 
 
 void K3b::AudioImager::setImageFilenames( const QStringList& p )
 {
     d->imageNames = p;
-    d->fd = -1;
+    d->ioDev = 0;
 }
 
 
@@ -110,7 +111,7 @@ bool K3b::AudioImager::run()
         //
         // Create the image file
         //
-        if( d->fd == -1 ) {
+        if( !d->ioDev ) {
             if( !waveFileWriter.open( *imageFileIt ) ) {
                 emit infoMessage( i18n("Could not open %1 for writing", *imageFileIt), K3b::Job::ERROR );
                 return false;
@@ -121,12 +122,13 @@ bool K3b::AudioImager::run()
         // Read data from the track
         //
         while( (read = track->read( buffer, sizeof(buffer) )) > 0 ) {
-            if( d->fd == -1 ) {
+            if( !d->ioDev ) {
                 waveFileWriter.write( buffer, read, K3b::WaveFileWriter::BigEndian );
             }
             else {
-                if( ::write( d->fd, reinterpret_cast<void*>(buffer), read ) != read ) {
-                    kDebug() << "(K3b::AudioImager::WorkThread) writing to fd " << d->fd << " failed.";
+                qint64 w = d->ioDev->write( buffer, read );
+                if ( w != read ) {
+                    kDebug() << "(K3b::AudioImager::WorkThread) writing to device" << d->ioDev << "failed:" << read << w;
                     d->lastError = K3b::AudioImager::ERROR_FD_WRITE;
                     return false;
                 }

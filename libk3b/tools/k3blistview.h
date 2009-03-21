@@ -28,6 +28,8 @@
 #include <QPixmap>
 #include <QEvent>
 
+#include <kdemacros.h>
+
 class QPainter;
 class QPushButton;
 class QResizeEvent;
@@ -36,16 +38,11 @@ class QSpinBox;
 class QLineEdit;
 class QEvent;
 class QValidator;
+
 namespace K3b {
     class MsfEdit;
-}
-
-namespace K3b {
     class ListView;
-}
 
-
-namespace K3b {
     /**
      * \deprecated
      */
@@ -141,14 +138,12 @@ namespace K3b {
 
         int m_vMargin;
     };
-}
 
 
-namespace K3b {
     /**
      * \deprecated
      */
-    KDE_DEPRECATED class LIBK3B_EXPORT CheckListViewItem : public ListViewItem
+    class KDE_DEPRECATED LIBK3B_EXPORT CheckListViewItem : public ListViewItem
     {
     public:
         CheckListViewItem(Q3ListView *parent);
@@ -165,18 +160,13 @@ namespace K3b {
     private:
         bool m_checked;
     };
-}
 
 
-
-namespace K3b {
     /**
      * \deprecated
      */
-    KDE_DEPRECATED class LIBK3B_EXPORT ListView : public K3ListView
+    class LIBK3B_EXPORT ListView : public K3ListView
     {
-        friend class ListViewItem;
-
         Q_OBJECT
 
     public:
@@ -305,6 +295,8 @@ namespace K3b {
 
         class Private;
         Private* d;
+
+        friend class ListViewItem;
     };
 }
 

@@ -54,6 +54,8 @@ K3b::StandardView::StandardView(K3b::Doc* doc, QWidget *parent )
     m_fileView->setSelectionMode(QTreeView::ExtendedSelection);
     m_fileView->setContextMenuPolicy(Qt::CustomContextMenu);
     m_fileView->setAnimated(true);
+    // FIXME: make QHeaderView::Interactive the default but connect to model changes and call header()->resizeSections( QHeaderView::ResizeToContents );
+    m_fileView->header()->setResizeMode( QHeaderView::ResizeToContents );
 
     m_expanded = false;
     // connect signals/slots

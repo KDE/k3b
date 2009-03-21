@@ -25,19 +25,16 @@
 #include <qtextstream.h>
 
 #include <kdebug.h>
-#include <kprocess.h>
+#include <KProcess>
 
-#include <unistd.h>
-#include <sys/stat.h>
-#include <stdlib.h>
 
 namespace {
     class ExternalScanner : public KProcess
     {
     public:
-        ExternalScanner( QObject *parent = 0 );
+        ExternalScanner( QObject* parent = 0 );
 
-        QString getVersion(const int &pos) const;
+        QString getVersion( int pos ) const;
         QByteArray getData() const { return m_data; }
 
         bool run();
@@ -46,7 +43,7 @@ namespace {
         QByteArray m_data;
     };
 
-    ExternalScanner::ExternalScanner( QObject *parent )
+    ExternalScanner::ExternalScanner( QObject* parent )
         : KProcess( parent )
     {
         setOutputChannelMode( MergedChannels );
@@ -58,11 +55,13 @@ namespace {
         if( waitForFinished( -1 ) ) {
             m_data = readAll();
             return true;
-        } else
+        }
+        else {
             return false;
+        }
     }
 
-    QString ExternalScanner::getVersion(const int &pos) const
+    QString ExternalScanner::getVersion( int pos ) const
     {
         QString tmp = m_data;
 

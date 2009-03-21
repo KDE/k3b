@@ -36,7 +36,7 @@ K3b::DebuggingOutputFile::DebuggingOutputFile()
 
 bool K3b::DebuggingOutputFile::open( OpenMode mode )
 {
-    if( !QFile::open( mode|WriteOnly ) )
+    if( !QFile::open( mode|WriteOnly|Unbuffered ) )
         return false;
 
     addOutput( QLatin1String( "System" ), QLatin1String( "K3b Version: " ) + k3bcore->version() );

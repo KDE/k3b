@@ -633,7 +633,7 @@ void K3b::CdCopyJob::readNextSession()
         d->audioSessionReader->setReadRetries( m_audioReadRetries );
         d->audioSessionReader->setNeverSkip( !m_ignoreAudioReadErrors );
         if( m_onTheFly )
-            d->audioSessionReader->writeToFd( d->cdrecordWriter->fd() );
+            d->audioSessionReader->writeTo( d->cdrecordWriter->ioDevice() );
         else
             d->audioSessionReader->setImageNames( d->imageNames );  // the audio tracks are always the first tracks
 
@@ -683,7 +683,7 @@ void K3b::CdCopyJob::readNextSession()
             trackNum = d->toc.count();
 
         if( m_onTheFly )
-            d->dataTrackReader->writeToFd( d->cdrecordWriter->fd() );
+            d->dataTrackReader->writeTo( d->cdrecordWriter->ioDevice() );
         else
             d->dataTrackReader->setImagePath( d->imageNames[trackNum-1] );
 

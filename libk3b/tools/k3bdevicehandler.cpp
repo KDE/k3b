@@ -31,7 +31,7 @@ public:
 
     bool success;
     int errorCode;
-    int command;
+    Commands command;
     DiskInfo ngInfo;
     Toc toc;
     CdText cdText;
@@ -58,7 +58,7 @@ K3b::Device::DeviceHandler::DeviceHandler( QObject* parent )
 }
 
 
-K3b::Device::DeviceHandler::DeviceHandler( int command, Device* dev )
+K3b::Device::DeviceHandler::DeviceHandler( Commands command, Device* dev )
     : K3b::ThreadJob( 0, 0 ),
       d( new Private( false ) )
 {
@@ -147,7 +147,7 @@ void K3b::Device::DeviceHandler::setDevice( Device* dev )
 }
 
 
-void K3b::Device::DeviceHandler::sendCommand( int command )
+void K3b::Device::DeviceHandler::sendCommand( DeviceHandler::Commands command )
 {
     if( active() ) {
         kDebug() << "(K3b::Device::DeviceHandler) thread already running. canceling thread...";
@@ -200,7 +200,7 @@ void K3b::Device::DeviceHandler::eject()
     sendCommand(DeviceHandler::EJECT);
 }
 
-K3b::Device::DeviceHandler* K3b::Device::sendCommand( int command, Device* dev )
+K3b::Device::DeviceHandler* K3b::Device::sendCommand( DeviceHandler::Commands command, Device* dev )
 {
     return new DeviceHandler( command, dev );
 }

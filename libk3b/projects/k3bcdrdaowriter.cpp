@@ -32,9 +32,9 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qdir.h>
-#include <q3url.h>
 #include <q3socket.h>
 #include <q3socketdevice.h>
+#include <QtCore/QFileInfo>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -429,10 +429,10 @@ void K3b::CdrdaoWriter::start()
 
     delete m_process;  // kdelibs want this!
     m_process = new K3b::Process();
-    m_process->setRunPrivileged(true);
     m_process->setSplitStdout(false);
-    m_process->setRawStdin(true);
-    connect( m_process, SIGNAL(stderrLine(const QString&)),
+    m_process->setOutputChannelMode( KProcess::MergedChannels );
+    m_process->setFlags( K3bQProcess::RawStdin );
+    connect( m_process, SIGNAL(stdoutLine(const QString&)),
              this, SLOT(slotStdLine(const QString&)) );
     connect( m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
              this, SLOT(slotProcessExited(int, QProcess::ExitStatus)) );
@@ -500,7 +500,7 @@ void K3b::CdrdaoWriter::start()
     }
     prepareArgumentList();
     // set working dir to dir part of toc file (to allow rel names in toc-file)
-    m_process->setWorkingDirectory(Q3Url(m_tocFile).path());
+    m_process->setWorkingDirectory( QFileInfo( m_tocFile ).absolutePath() );
 
     kDebug() << "***** cdrdao parameters:\n";
     QString s = m_process->joinedArgs();
@@ -540,7 +540,7 @@ void K3b::CdrdaoWriter::start()
     burnDevice()->close();
     burnDevice()->usageLock();
 
-    if( !m_process->start( K3Process::AllOutput ) )
+    if( !m_process->start( KProcess::MergedChannels ) )
     {
         // something went wrong when starting the program
         // it "should" be the executable
@@ -596,7 +596,7 @@ void K3b::CdrdaoWriter::cancel()
     if( m_process ) {
         if( m_process->isRunning() ) {
             m_process->disconnect();
-            m_process->kill();
+            m_process->terminate();
 
             // we need to unlock the device because cdrdao locked it while writing
             //
@@ -756,7 +756,7 @@ void K3b::CdrdaoWriter::slotProcessExited( int exitCode, QProcess::ExitStatus ex
     }
     else
     {
-        emit infoMessage( i18n("%1 did not exit cleanly.",QString("cdrdao")), K3b::Job::ERROR );
+        emit infoMessage( i18n("%1 crashed.", QString("cdrdao")), K3b::Job::ERROR );
         jobFinished( false );
     }
 }

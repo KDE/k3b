@@ -12,9 +12,6 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-
-
-
 #include "k3bmixedjob.h"
 #include "k3bmixeddoc.h"
 
@@ -1059,8 +1056,9 @@ bool K3b::MixedJob::startWriting()
         // we cannot easily change the audioDecode fd while it's working
         // which we would need to do since we write into several
         // image files.
-        m_audioImager->writeToFd( m_writer->fd() );
-        m_isoImager->writeToFd( m_writer->fd() );
+        m_audioImager->writeTo( m_writer->ioDevice() );
+//        m_isoImager->writeTo( m_writer->ioDevice() );
+#warning FIXME
     }
 
     return true;
@@ -1079,7 +1077,8 @@ void K3b::MixedJob::createIsoImage()
     emit newSubTask( i18n("Creating ISO image in %1",m_isoImageFilePath) );
     emit infoMessage( i18n("Creating ISO image in %1",m_isoImageFilePath), INFO );
 
-    m_isoImager->writeToImageFile( m_isoImageFilePath );
+//    m_isoImager->writeToImageFile( m_isoImageFilePath );
+#warning FIXME
     m_isoImager->start();
 }
 

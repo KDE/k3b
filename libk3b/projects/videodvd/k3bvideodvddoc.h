@@ -27,7 +27,7 @@ namespace K3b {
 
         virtual int type() const { return VIDEODVD; }
 
-        int supportedMediaTypes() const;
+        Device::MediaTypes supportedMediaTypes() const;
 
         virtual BurnJob* newBurnJob( JobHandler* hdl, QObject* parent );
 

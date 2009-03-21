@@ -30,11 +30,9 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qapplication.h>
-//Added by qt3to4:
 #include <QPaintEvent>
 #include <QMouseEvent>
 #include <QDesktopWidget>
-#include <X11/Xlib.h>
 
 
 K3b::JobProgressOSD::JobProgressOSD( QWidget* parent )
@@ -53,9 +51,9 @@ K3b::JobProgressOSD::JobProgressOSD( QWidget* parent )
     KWindowSystem::setOnAllDesktops( winId(), true );
 
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
-             this, SLOT(repaint()) );
+             this, SLOT(update()) );
     connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()),
-             this, SLOT(repaint()) );
+             this, SLOT(update()) );
 }
 
 
@@ -136,12 +134,6 @@ void K3b::JobProgressOSD::reposition()
     // correct for screen position
     newPos += screen.topLeft();
 
-    // ensure we are painted before we move
-    if( isVisible() )
-        paintEvent( 0 );
-
-    // fancy X11 move+resize, reduces visual artifacts
-//    XMoveResizeWindow( QX11Info::display(), winId(), newPos.x(), newPos.y(), newSize.width(), newSize.height() );
     setGeometry( QRect( newPos, newSize ) );
 
     update();

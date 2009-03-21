@@ -16,7 +16,7 @@
 #ifndef _K3B_SOX_ENCODER_H_
 #define _K3B_SOX_ENCODER_H_
 
-#include <qprocess.h>
+#include "k3bprocess.h"
 
 #include <k3baudioencoder.h>
 #include <k3bpluginconfigwidget.h>

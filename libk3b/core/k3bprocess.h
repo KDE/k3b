@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,9 +17,8 @@
 #define K3B_PROCESS_H
 
 
-#include "k3process.h"
-#include <qstring.h>
-#include <qprocess.h>
+//#include <KProcess>
+#include "k3bkprocess.h"
 
 #include "k3b_export.h"
 
@@ -37,12 +36,12 @@ namespace K3b {
      * Processes like used in DataJob to duplicate mkisofs' stdout to the stdin of the writer
      * (cdrecord or cdrdao)
      */
-    class LIBK3B_EXPORT Process : public K3Process
+    class LIBK3B_EXPORT Process : public K3bKProcess
     {
         Q_OBJECT
 
     public:
-        Process();
+        Process( QObject* parent = 0 );
         ~Process();
 
         /**
@@ -50,84 +49,34 @@ namespace K3b {
          */
         Process& operator<<( const ExternalBin* );
 
-        Process& operator<<( const QString& arg );
         Process& operator<<( const char* arg );
         Process& operator<<( const QByteArray& arg );
-        Process& operator<<( const QStringList& args );
-
-        bool start( Communication com );
-
-        /**
-         * get stdin file descriptor
-         * Only makes sense while process is running.
-         *
-         * Only use with setRawStdin
-         */
-        int stdinFd() const;
-
-        /**
-         * Make the process write to @fd instead of Stdout.
-         * This means you won't get any stdoutReady() or receivedStdout()
-         * signals anymore.
-         *
-         * Only use this before starting the process.
-         */
-        void writeToFd( int fd );
-
-        /**
-         * Make the process read from @fd instead of Stdin.
-         * This means you won't get any wroteStdin()
-         * signals anymore.
-         *
-         * Only use this before starting the process.
-         */
-        void readFromFd( int fd );
-
-        /**
-         * If set true the process' stdin fd will be available
-         * through @stdinFd.
-         * Be aware that you will not get any wroteStdin signals
-         * anymore.
-         *
-         * Only use this before starting the process.
-         */
-        void setRawStdin(bool b);
-
-        /**
-         * close stdin channel
-         *
-         * Once this class is ported to use KProcess instead of K3Process this
-         * method can be deleted and the QProcess::closeWriteChannel() can be
-         * called directly.
-         */
-        void closeWriteChannel();
-
-        /**
-         * wait until process exited
-         *
-         * Once this class is ported to use KProcess instead of K3Process this
-         * method can be deleted and the QProcess::waitForFinished() can be
-         * called directly.
-         *
-         * The timeout value MUST be -1 for now as everything else is not implemented.
-         */
-        bool waitForFinished(int timeout);
-
-        /**
-         * write data to stdin
-         *
-         * Once this class is ported to use KProcess instead of K3Process this
-         * method can be deleted and the QProcess::write() can be called directly.
-         */
-        qint64 write(const char * data, qint64 maxSize);
+        Process& operator<<( const QLatin1String& arg );
 
         /**
          * returned joined list of program arguments
          */
         QString joinedArgs();
 
+        bool isRunning() const { return state() == QProcess::Running; }
+
+        /**
+         * Reimplemented from QProcess.
+         * Closes the write channel but does not kill the process
+         * as QProcess does.
+         */
+        void close();
+
+        /**
+         * Starts the process in \p mode and then waits for it
+         * to be started.
+         */
+        bool start( KProcess::OutputChannelMode mode );
+
+        using K3bKProcess::operator<<;
+
     public Q_SLOTS:
-        void setSplitStdout( bool b ) { m_bSplitStdout = b; }
+        void setSplitStdout( bool b );
 
         /**
          * default is true
@@ -135,26 +84,16 @@ namespace K3b {
         void setSuppressEmptyLines( bool b );
 
     private Q_SLOTS:
-        void slotSplitStderr( K3Process*, char*, int );
-        void slotSplitStdout( K3Process*, char*, int );
-        void slotProcessExited( K3Process * );
+        void slotReadyReadStandardError();
+        void slotReadyReadStandardOutput();
 
     Q_SIGNALS:
         void stderrLine( const QString& line );
         void stdoutLine( const QString& line );
 
-        /**
-         * the same as QProcess::finished()
-         */
-        void finished( int exitCode, QProcess::ExitStatus exitStatus );
-
     private:
-        static QStringList splitOutput( char*, int, QString&, bool );
-
-        class Data;
-        Data* d;
-
-        bool m_bSplitStdout;
+        class Private;
+        Private* const d;
     };
 }
 

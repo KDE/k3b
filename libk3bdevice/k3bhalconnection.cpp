@@ -54,6 +54,8 @@ K3b::Device::HalConnection::~HalConnection()
 
 int K3b::Device::HalConnection::lock( Device* dev )
 {
+    kDebug() << dev->blockDeviceName();
+
     QDBusInterface halIface( "org.freedesktop.Hal",
                              dev->solidDevice().udi(),
                              "org.freedesktop.Hal.Device",
@@ -91,6 +93,8 @@ int K3b::Device::HalConnection::lock( Device* dev )
 
 int K3b::Device::HalConnection::unlock( Device* dev )
 {
+    kDebug() << dev->blockDeviceName();
+
     QDBusInterface halIface( "org.freedesktop.Hal",
                              dev->solidDevice().udi(),
                              "org.freedesktop.Hal.Device",

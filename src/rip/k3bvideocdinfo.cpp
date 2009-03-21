@@ -1,9 +1,10 @@
 /*
 *
 * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2009 Sebastian Trueg <trueg@k3b.org>
 *
 * This file is part of the K3b project.
-* Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+* Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -65,14 +66,14 @@ void K3b::VideoCdInfo::info( const QString& device )
     *m_process << "-q" << "--norip" << "-i" << device << "-o" << "-";
 
     m_process->setSuppressEmptyLines( false );
-    connect( m_process, SIGNAL( stderrLine( const QString& ) ),
-             this, SLOT( slotParseOutput( const QString& ) ) );
-    connect( m_process, SIGNAL( receivedStdout( const QString& ) ),
-             this, SLOT( slotParseOutput( const QString& ) ) );
+    connect( m_process, SIGNAL(stderrLine(QString)),
+             this, SLOT(slotParseOutput(QString)) );
+    connect( m_process, SIGNAL(receivedStdout(QString)),
+             this, SLOT(slotParseOutput(QString)) );
     connect( m_process, SIGNAL( finished( int, QProcess::ExitStatus ) ),
              this, SLOT( slotInfoFinished( int, QProcess::ExitStatus ) ) );
 
-    if ( !m_process->start( K3Process::AllOutput ) ) {
+    if ( !m_process->start( KProcess::SeparateChannels ) ) {
         kDebug() << "(K3b::VideoCdInfo::info) could not start vcdxrip";
         cancelAll();
         emit infoFinished( false );

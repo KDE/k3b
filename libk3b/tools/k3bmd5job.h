@@ -20,6 +20,8 @@
 #include <qbytearray.h>
 #include "k3b_export.h"
 
+class QIODevice;
+
 namespace K3b {
     namespace Device {
         class Device;
@@ -66,11 +68,11 @@ namespace K3b {
         void setDevice( Device::Device* dev );
 
         /**
-         * read from the opened file descriptor.
+         * read from the opened QIODevice.
          * One needs to set the max read length or call stop()
          * to finish calculation.
          */
-        void setFd( int fd );
+        void setIODevice( QIODevice* ioDev );
 
         /**
          * Set the maximum bytes to read.

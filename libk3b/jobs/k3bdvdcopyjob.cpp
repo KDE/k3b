@@ -55,7 +55,7 @@ public:
           verificationJob(0),
           usedWritingMode(K3b::WRITING_MODE_AUTO),
           verifyData(false) {
-        outPipe.readFromIODevice( &imageFile );
+        outPipe.readFrom( &imageFile );
     }
 
     int doneCopies;
@@ -419,12 +419,12 @@ void K3b::DvdCopyJob::prepareReader()
     d->dataTrackReader->setSectorRange( 0, d->lastSector );
 
     if( m_onTheFly && !m_onlyCreateImage )
-        d->inPipe.writeToFd( d->writerJob->fd(), true );
+        d->inPipe.writeTo( d->writerJob->ioDevice(), true );
     else
-        d->inPipe.writeToIODevice( &d->imageFile );
+        d->inPipe.writeTo( &d->imageFile );
 
     d->inPipe.open( true );
-    d->dataTrackReader->writeToFd( d->inPipe.in() );
+    d->dataTrackReader->writeTo( &d->inPipe );
 }
 
 
@@ -592,7 +592,7 @@ void K3b::DvdCopyJob::slotReaderFinished( bool success )
 
                     d->writerRunning = true;
                     d->writerJob->start();
-                    d->outPipe.writeToFd( d->writerJob->fd(), true );
+                    d->outPipe.writeTo( d->writerJob->ioDevice(), true );
                     d->outPipe.open( true );
                 }
                 else {
@@ -694,7 +694,7 @@ void K3b::DvdCopyJob::slotWriterFinished( bool success )
                 d->dataTrackReader->start();
             }
             else {
-                d->outPipe.writeToFd( d->writerJob->fd(), true );
+                d->outPipe.writeTo( d->writerJob->ioDevice(), true );
                 d->outPipe.open( true );
             }
         }
@@ -746,7 +746,7 @@ void K3b::DvdCopyJob::slotVerificationFinished( bool success )
             d->dataTrackReader->start();
         }
         else {
-            d->outPipe.writeToFd( d->writerJob->fd(), true );
+            d->outPipe.writeTo( d->writerJob->ioDevice(), true );
             d->outPipe.open( true );
         }
     }

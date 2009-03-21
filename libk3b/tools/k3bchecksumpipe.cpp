@@ -23,76 +23,82 @@
 class K3b::ChecksumPipe::Private
 {
 public:
-  Private()
-    : checksumType(MD5) {
-  }
-
-  void update( const char* in, int len ) {
-    switch( checksumType ) {
-    case MD5:
-      md5.update( in, len );
-      break;
+    Private()
+        : checksumType(MD5) {
     }
-  }
 
-  void reset() {
-    switch( checksumType ) {
-    case MD5:
-      md5.reset();
-      break;
+    void update( const char* in, qint64 len ) {
+        switch( checksumType ) {
+        case MD5:
+            md5.update( in, len );
+            break;
+        }
     }
-  }
 
-  int checksumType;
+    void reset() {
+        switch( checksumType ) {
+        case MD5:
+            md5.reset();
+            break;
+        }
+    }
 
-  KMD5 md5;
+    int checksumType;
+
+    KMD5 md5;
 };
 
 
 K3b::ChecksumPipe::ChecksumPipe()
-  : K3b::ActivePipe()
+    : K3b::ActivePipe()
 {
-  d = new Private();
+    d = new Private();
 }
 
 
 K3b::ChecksumPipe::~ChecksumPipe()
 {
-  delete d;
+    delete d;
 }
 
 
 bool K3b::ChecksumPipe::open( bool closeWhenDone )
 {
-  return open( MD5, closeWhenDone );
+    return open( MD5, closeWhenDone );
 }
 
 
 bool K3b::ChecksumPipe::open( Type type, bool closeWhenDone )
 {
-  if( K3b::ActivePipe::open( closeWhenDone ) ) {
-    d->reset();
-    d->checksumType = type;
-    return true;
-  }
-  else
-    return false;
+    if( K3b::ActivePipe::open( closeWhenDone ) ) {
+        d->reset();
+        d->checksumType = type;
+        return true;
+    }
+    else
+        return false;
 }
 
 
 QByteArray K3b::ChecksumPipe::checksum() const
 {
-  switch( d->checksumType ) {
-  case MD5:
-    return d->md5.hexDigest();
-  }
+    switch( d->checksumType ) {
+    case MD5:
+        return d->md5.hexDigest();
+    }
 
-  return QByteArray();
+    return QByteArray();
 }
 
 
-int K3b::ChecksumPipe::write( char* data, int max )
+qint64 K3b::ChecksumPipe::writeData( const char* data, qint64 max )
 {
-  d->update( data, max );
-  return K3b::ActivePipe::write( data, max );
+    d->update( data, max );
+    return K3b::ActivePipe::writeData( data, max );
+}
+
+
+bool K3b::ChecksumPipe::open( OpenMode mode )
+{
+    return ActivePipe::open( mode );
 }

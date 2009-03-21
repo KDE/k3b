@@ -33,10 +33,18 @@ namespace K3b {
 
     public:
         GrowisofsWriter( Device::Device*, JobHandler*,
-                            QObject* parent = 0 );
+                         QObject* parent = 0 );
         ~GrowisofsWriter();
 
         bool active() const;
+
+        /**
+         * Write to the writer process.
+         * FIXME: make this an overloaded method from AbstractWriter
+         */
+        qint64 write( const char* data, qint64 maxSize );
+
+        QIODevice* ioDevice() const;
 
     public Q_SLOTS:
         void start();
@@ -90,7 +98,7 @@ namespace K3b {
         void slotProcessExited( int, QProcess::ExitStatus );
         void slotThroughput( int t );
         void slotFlushingCache();
-        void slotRingBufferFinished( bool );
+//        void slotRingBufferFinished( bool );
 
     private:
         bool closeFd();

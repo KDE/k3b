@@ -252,7 +252,7 @@ K3b::Device::Toc K3b::MixedDoc::toToc( K3b::Device::Track::DataMode dataMode, co
 }
 
 
-int K3b::MixedDoc::supportedMediaTypes() const
+K3b::Device::MediaTypes K3b::MixedDoc::supportedMediaTypes() const
 {
     return K3b::Device::MEDIA_WRITABLE_CD;
 }

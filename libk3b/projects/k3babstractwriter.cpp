@@ -67,10 +67,10 @@ void K3b::AbstractWriter::cancel()
 void K3b::AbstractWriter::slotUnblockWhileCancellationFinished( bool success )
 {
     if( !success )
-        emit infoMessage( i18n("Could not unlock CD drive."), K3b::Job::ERROR ); // FIXME: simply "drive", not "CD drive"
+        emit infoMessage( i18n("Could not unlock drive."), K3b::Job::ERROR );
 
     if( k3bcore->globalSettings()->ejectMedia() ) {
-        emit newSubTask( i18n("Ejecting CD") );  // FIXME: "media" instead of "CD"
+        emit newSubTask( i18n("Ejecting Medium") );
         connect( K3b::Device::eject( burnDevice() ), SIGNAL(finished(bool)),
                  this, SLOT(slotEjectWhileCancellationFinished(bool)) );
     }
@@ -84,7 +84,7 @@ void K3b::AbstractWriter::slotUnblockWhileCancellationFinished( bool success )
 void K3b::AbstractWriter::slotEjectWhileCancellationFinished( bool success )
 {
     if( !success ) {
-        emit infoMessage( i18n("Unable to eject media."), K3b::Job::ERROR );
+        emit infoMessage( i18n("Unable to eject medium."), K3b::Job::ERROR );
     }
 
     emit canceled();

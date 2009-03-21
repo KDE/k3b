@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,8 @@ namespace K3b {
      */
     class LIBK3B_EXPORT FileSplitter : public QIODevice
     {
+        Q_OBJECT
+
     public:
         FileSplitter();
         FileSplitter( const QString& filename );
@@ -53,7 +55,7 @@ namespace K3b {
          */
         void setMaxFileSize( qint64 size );
 
-        const QString& name() const;
+        QString name() const;
 
         void setName( const QString& filename );
 
@@ -61,22 +63,10 @@ namespace K3b {
 
         virtual void close();
 
-        /**
-         * File descriptor to read from and write to.
-         * Not implemented yet!
-         */
-        int handle() const;
-
         virtual void flush();
 
-        /**
-         * Not implemented
-         */
         virtual qint64 size() const;
 
-        /**
-         * Not implemented
-         */
         virtual qint64 pos() const;
 
         /**
@@ -92,6 +82,16 @@ namespace K3b {
          * additional checks.
          */
         void remove();
+
+        /**
+         * \return \p true if the file is open in writable mode
+         */
+        bool waitForBytesWritten( int msecs );
+
+        /**
+         * \return \p true if open and not at end
+         */
+        bool waitForReadyRead( int msecs );
 
     protected:
         virtual qint64 readData( char *data, qint64 maxlen );

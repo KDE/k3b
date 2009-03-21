@@ -26,7 +26,6 @@ class QLabel;
 class KPushButton;
 class KGuiItem;
 class QToolButton;
-class QEventLoop;
 
 
 namespace K3b {
@@ -249,8 +248,6 @@ namespace K3b {
 
         bool m_inToggleMode;
         bool m_delayedInit;
-
-        QEventLoop* m_eventLoop;
     };
 }
 

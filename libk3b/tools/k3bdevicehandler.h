@@ -45,39 +45,8 @@ namespace K3b {
             Q_OBJECT
 
         public:
-            DeviceHandler( Device*, QObject* parent = 0 );
-            DeviceHandler( QObject* parent = 0 );
-
-            /**
-             * This constructor is used by the global "quick" methods and should not be used
-             * otherwise except for the same usage.
-             */
-            DeviceHandler( int command, Device* );
-
-            ~DeviceHandler();
-
-            const DiskInfo& diskInfo() const;
-            const Toc& toc() const;
-            const CdText& cdText() const;
-            const QByteArray& cdTextRaw() const;
-            Msf diskSize() const;
-            Msf remainingSize() const;
-            int tocType() const;
-            int numSessions() const;
-            long long bufferCapacity() const;
-            long long availableBufferCapacity() const;
-
-            Msf nextWritableAddress() const;
-
-            bool success() const;
-
-            /**
-             * Use this when the command
-             * returnes some error code.
-             */
-            int errorCode() const;
-
             enum Command {
+                NO_COMMAND = 0x0,
                 /**
                  * Always successful, even with an empty or no media at all!
                  */
@@ -144,13 +113,46 @@ namespace K3b {
 
                 NEXT_WRITABLE_ADDRESS = 0x4000
             };
+            Q_DECLARE_FLAGS( Commands, Command )
+
+            DeviceHandler( Device*, QObject* parent = 0 );
+            DeviceHandler( QObject* parent = 0 );
+
+            /**
+             * This constructor is used by the global "quick" methods and should not be used
+             * otherwise except for the same usage.
+             */
+            DeviceHandler( Commands command, Device* );
+
+            ~DeviceHandler();
+
+            const DiskInfo& diskInfo() const;
+            const Toc& toc() const;
+            const CdText& cdText() const;
+            const QByteArray& cdTextRaw() const;
+            Msf diskSize() const;
+            Msf remainingSize() const;
+            int tocType() const;
+            int numSessions() const;
+            long long bufferCapacity() const;
+            long long availableBufferCapacity() const;
+
+            Msf nextWritableAddress() const;
+
+            bool success() const;
+
+            /**
+             * Use this when the command
+             * returnes some error code.
+             */
+            int errorCode() const;
 
         Q_SIGNALS:
             void finished( K3b::Device::DeviceHandler* );
 
         public Q_SLOTS:
             void setDevice( K3b::Device::Device* );
-            void sendCommand( int command );
+            void sendCommand( Commands command );
 
             void getToc();
             void getDiskInfo();
@@ -183,7 +185,7 @@ namespace K3b {
          * Be aware that the DeviceHandler will get destroyed once the signal has been
          * emitted.
          */
-        LIBK3B_EXPORT DeviceHandler* sendCommand( int command, Device* );
+        LIBK3B_EXPORT DeviceHandler* sendCommand( DeviceHandler::Commands command, Device* );
 
         inline DeviceHandler* diskInfo(Device* dev) {
             return sendCommand(DeviceHandler::DISKINFO,dev);
@@ -230,5 +232,7 @@ namespace K3b {
         }
     }
 }
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(K3b::Device::DeviceHandler::Commands)
 
 #endif

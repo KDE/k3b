@@ -24,7 +24,6 @@ install( FILES
   k3bthreadwidget.h
   k3bsignalwaiter.h
   k3biso9660backend.h
-  k3bpipe.h
   k3bdirsizejob.h
   k3bchecksumpipe.h
   k3bintmapcombobox.h
