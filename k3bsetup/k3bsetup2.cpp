@@ -122,10 +122,8 @@ K3bSetup2::K3bSetup2( QWidget *parent, const QVariantList& )
 
     m_viewDevices->setModel( d->devicesModel );
     m_viewDevices->header()->setResizeMode( QHeaderView::ResizeToContents );
-    m_viewDevices->header()->setResizeMode( 0, QHeaderView::Stretch );
     m_viewPrograms->setModel( d->programsModel );
     m_viewPrograms->header()->setResizeMode( QHeaderView::ResizeToContents );
-    m_viewPrograms->header()->setResizeMode( 0, QHeaderView::Stretch );
 
     load();
 

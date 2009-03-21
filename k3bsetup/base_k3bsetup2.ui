@@ -178,7 +178,7 @@
                <string>&lt;qt&gt;&lt;b&gt;Hint:&lt;/b&gt; to force K3b to use another than the default name for the executable specify it in the search path.&lt;/qt&gt;</string>
               </property>
               <property name="wordWrap">
-               <bool>false</bool>
+               <bool>true</bool>
               </property>
              </widget>
             </item>
