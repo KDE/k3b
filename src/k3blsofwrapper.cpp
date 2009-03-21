@@ -82,12 +82,10 @@ bool K3b::LsofWrapper::checkDevice( K3b::Device::Device* dev )
     // now process its output
     const QStringList l = QString::fromLocal8Bit( p.readAllStandardOutput() ).split( '\n', QString::SkipEmptyParts );
     for( QStringList::ConstIterator it = l.constBegin(); it != l.constEnd(); ++it ) {
-        int pid = (*it).mid(1).toInt();
-        ++it;
-        if ( it != l.constEnd() ) {
-            QString app = (*(++it));
-	    if(!app.isEmpty())
-	    	app = app.mid(1);
+        int pid = it->mid(1).toInt();
+
+        if ( ++it != l.constEnd() ) {
+            QString app = it->mid( 1 );
 
             kDebug() << "(K3b::LsofWrapper) matched: app: " << app << " pid: " << pid;
 
