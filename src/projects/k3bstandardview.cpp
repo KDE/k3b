@@ -23,7 +23,7 @@
 #include <QHeaderView>
 
 K3b::StandardView::StandardView(K3b::Doc* doc, QWidget *parent )
-: K3b::View(doc, parent)
+    : K3b::View(doc, parent)
 {
     m_dirProxy = new K3b::DirProxyModel(this);
 

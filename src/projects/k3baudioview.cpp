@@ -23,6 +23,7 @@
 #include "k3baudiotracksplitdialog.h"
 #include "k3baudiodatasourceeditwidget.h"
 #include "k3baudiotrackdialog.h"
+#include "../rip/k3bviewcolumnadjuster.h"
 
 #include <config-k3b.h>
 
@@ -57,7 +58,8 @@
 
 
 K3b::AudioView::AudioView( K3b::AudioDoc* pDoc, QWidget* parent )
-    : K3b::StandardView( pDoc, parent )
+    : K3b::StandardView( pDoc, parent ),
+      m_updatingColumnWidths(false)
 {
     m_doc = pDoc;
 
@@ -68,6 +70,10 @@ K3b::AudioView::AudioView( K3b::AudioDoc* pDoc, QWidget* parent )
 
     // and hide the side panel as the audio project has no tree hierarchy
     setShowDirPanel(false);
+
+    // trueg: I don't see why we use StandardView here. IMHO it only makes things a bit weird
+    m_columnAdjuster = new K3b::ViewColumnAdjuster( fileView() );
+    connect( m_columnAdjuster, SIGNAL( columnsNeedAjusting() ), this, SLOT( slotAdjustColumns() ) );
 
     fillStatusDisplay()->showTime();
 
@@ -476,5 +482,58 @@ void K3b::AudioView::slotProperties()
     }
 }
 
+void K3b::AudioView::slotAdjustColumns()
+{
+    kDebug();
+
+    if( m_updatingColumnWidths ) {
+        kDebug() << "already updating column widths.";
+        return;
+    }
+
+    m_updatingColumnWidths = true;
+
+    // now properly resize the columns
+    // minimal width for type, length, pregap
+    // fixed for filename
+    // expand for cd-text
+    int titleWidth = m_columnAdjuster->columnSizeHint( K3b::AudioProjectModel::TitleColumn );
+    int artistWidth = m_columnAdjuster->columnSizeHint( K3b::AudioProjectModel::ArtistColumn );
+    int typeWidth = m_columnAdjuster->columnSizeHint( K3b::AudioProjectModel::TypeColumn );
+    int lengthWidth = m_columnAdjuster->columnSizeHint( K3b::AudioProjectModel::LengthColumn );
+    int filenameWidth = m_columnAdjuster->columnSizeHint( K3b::AudioProjectModel::FilenameColumn );
+
+    // add a margin
+    typeWidth += 10;
+    lengthWidth += 10;
+
+    // these always need to be completely visible
+    fileView()->setColumnWidth( K3b::AudioProjectModel::TrackNumberColumn, m_columnAdjuster->columnSizeHint( K3b::AudioProjectModel::TrackNumberColumn ) );
+    fileView()->setColumnWidth( K3b::AudioProjectModel::TypeColumn, typeWidth );
+    fileView()->setColumnWidth( K3b::AudioProjectModel::LengthColumn, lengthWidth );
+
+    int remaining = fileView()->contentsRect().width() - typeWidth - lengthWidth - fileView()->columnWidth(0);
+
+    // now let's see if there is enough space for all
+    if( remaining >= artistWidth + titleWidth + filenameWidth ) {
+        remaining -= filenameWidth;
+        remaining -= (titleWidth + artistWidth);
+        fileView()->setColumnWidth( K3b::AudioProjectModel::ArtistColumn, artistWidth + remaining/2 );
+        fileView()->setColumnWidth( K3b::AudioProjectModel::TitleColumn, titleWidth + remaining/2 );
+        fileView()->setColumnWidth( K3b::AudioProjectModel::FilenameColumn, filenameWidth );
+    }
+    else if( remaining >= artistWidth + titleWidth + 20 ) {
+        fileView()->setColumnWidth( K3b::AudioProjectModel::ArtistColumn, artistWidth );
+        fileView()->setColumnWidth( K3b::AudioProjectModel::TitleColumn, titleWidth );
+        fileView()->setColumnWidth( K3b::AudioProjectModel::FilenameColumn, remaining - artistWidth - titleWidth );
+    }
+    else {
+        fileView()->setColumnWidth( K3b::AudioProjectModel::ArtistColumn, remaining/3 );
+        fileView()->setColumnWidth( K3b::AudioProjectModel::TitleColumn, remaining/3 );
+        fileView()->setColumnWidth( K3b::AudioProjectModel::FilenameColumn, remaining/3 );
+    }
+
+    m_updatingColumnWidths = false;
+}
 
 #include "k3baudioview.moc"

@@ -29,6 +29,7 @@ namespace K3b {
     class AudioDoc;
     class AudioTrack;
     class AudioProjectModel;
+    class ViewColumnAdjuster;
 
     class AudioView : public StandardView
     {
@@ -48,8 +49,8 @@ namespace K3b {
 
     protected:
         ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
-        
-        /** 
+
+        /**
          * reimplemented from \ref K3b::StandardView
          */
         void contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos);
@@ -69,6 +70,8 @@ namespace K3b {
         void slotQueryMusicBrainz();
         void slotEditSource();
 
+        void slotAdjustColumns();
+
     private:
         void setupActions();
 
@@ -83,6 +86,9 @@ namespace K3b {
         KAction* m_actionSplitTrack;
         KAction* m_actionEditSource;
         KAction* m_actionPlayTrack;
+
+        K3b::ViewColumnAdjuster* m_columnAdjuster;
+        bool m_updatingColumnWidths;
     };
 }
 
