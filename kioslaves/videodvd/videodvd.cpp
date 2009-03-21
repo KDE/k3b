@@ -155,7 +155,7 @@ K3b::Iso9660* kio_videodvdProtocol::openIso( const KUrl& url, QString& plainIsoP
         }
     }
 
-    error( ERR_SLAVE_DEFINED, i18n("No VideoDVD found") );
+    error( ERR_SLAVE_DEFINED, i18n("No Video DVD found") );
     return 0;
 }
 
@@ -283,7 +283,7 @@ void kio_videodvdProtocol::listVideoDVDs()
     if( cnt )
         finished();
     else
-        error( ERR_SLAVE_DEFINED, i18n("No VideoDVD found") );
+        error( ERR_SLAVE_DEFINED, i18n("No Video DVD found") );
 }
 
 
