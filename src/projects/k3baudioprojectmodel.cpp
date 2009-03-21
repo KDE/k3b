@@ -172,9 +172,6 @@ QVariant K3b::AudioProjectModel::data( const QModelIndex& index, int role ) cons
                     role == Qt::EditRole ) {
                     return track->artist();
                 }
-                else if ( role == Qt::DecorationRole ) {
-                    return KIcon( "application-x-cda" );
-                }
                 break;
 
             case TitleColumn:
