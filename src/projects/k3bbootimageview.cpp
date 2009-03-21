@@ -151,7 +151,7 @@ void K3b::BootImageView::slotNewBootImage()
                                                           "directly extracting them from a real floppy disk:"
                                                           "<pre>dd if=/dev/floppy of=/tmp/floppy.img</pre>"
                                                           "or by using one of the many boot floppy generators that can be found on "
-                                                          "<a href=\"http://www.google.com/search?q=linux+boot+floppy&ie=UTF-8&oe=UTF-8\">the internet</a>."),
+                                                          "<a href=\"http://www.google.com/search?q=linux+boot+floppy&ie=UTF-8&oe=UTF-8\">the Internet</a>."),
                                                      i18n("No Floppy image selected"),
                                                      KGuiItem( i18n("Use harddisk emulation") ),
                                                      KGuiItem( i18n("Use no emulation") ),

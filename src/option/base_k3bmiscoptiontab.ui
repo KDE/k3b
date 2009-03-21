@@ -48,8 +48,7 @@
            <string>The directory where K3b stores temporary files</string>
           </property>
           <property name="whatsThis" >
-           <string>&lt;p>This is the default temporary directory. This is where K3b will store temporary files like iso images or decoded audio files.
-&lt;p>Be aware that the temporary directory may also be changed in every project burn dialog.</string>
+           <string>&lt;p>This is the default temporary directory. This is where K3b will store temporary files such as iso images or decoded audio files.&lt;p>Be aware that the temporary directory may also be changed in every project burn dialog.</string>
           </property>
          </widget>
         </item>
@@ -140,7 +139,7 @@
          <string>Do not close action dialogs after finishing the process</string>
         </property>
         <property name="whatsThis" >
-         <string>&lt;p>If this option is checked K3b will not close action dialogs such as the CD Copy dialog after the process has been finished. It will be kept open to start a new process like copying another CD.</string>
+         <string>&lt;p>If this option is checked K3b will not close action dialogs such as the CD Copy dialog after the process has been finished. It will be kept open to start a new process, for instance, copying another CD.</string>
         </property>
         <property name="text" >
          <string>&amp;Keep action dialogs open</string>

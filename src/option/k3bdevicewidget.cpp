@@ -124,7 +124,7 @@ void K3b::DeviceWidget::updateDeviceListViews()
     // spacer item
     QTreeWidgetItem* spacer = new QTreeWidgetItem( m_viewDevices );
     spacer->setFlags( Qt::NoItemFlags );
-    m_readerParentViewItem = new QTreeWidgetItem( m_viewDevices, QStringList() << i18n("Readonly Drives") );
+    m_readerParentViewItem = new QTreeWidgetItem( m_viewDevices, QStringList() << i18n("Read-only Drives") );
     m_readerParentViewItem->setData( 0, Qt::DecorationRole, SmallIcon( "media-optical" ) );
     // -----------------------------------------
 

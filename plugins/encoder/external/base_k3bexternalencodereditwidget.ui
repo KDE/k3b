@@ -61,7 +61,7 @@
               <widget class="K3ActiveLabel" name="kActiveLabel2" >
                 <property name="text" >
                   <string>&lt;p>&lt;b>Command&lt;/b>&lt;br>
-Please insert the command used to encode the audio data. The command has to read raw little endian (see &lt;em>Swap Byte Order&lt;/em>) 16bit stereo audio frames from stdin.
+Please insert the command used to encode the audio data. The command has to read raw little endian (see &lt;em>Swap Byte Order&lt;/em>) 16-bit stereo audio frames from stdin.
 &lt;p>The following strings will be replaced by K3b:&lt;br>
 &lt;b>%f&lt;/b> - The filename of the resulting file. This is where the command has to write its output to.&lt;br>
 &lt;em>The following refer to metadata stored for example in the ID3 tag of am mp3 file (Be aware that these values might be empty).&lt;/em>&lt;br>

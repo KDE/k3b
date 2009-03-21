@@ -298,7 +298,7 @@ void K3b::VideoDVDRippingWidget::slotSeeSpecialStrings()
                                 "<tr><td>%a</td><td>audio format (on the Video DVD)</td><td>%{a} or %{audio_format}</td></tr>"
                                 "<tr><td>%c</td><td>number of audio channels (on the Video DVD)</td><td>%{c} or %{channels}</td></tr>"
                                 "<tr><td>%v</td><td>size of the original video</td><td>%{v} or %{orig_video_size}</td></tr>"
-                                "<tr><td>%s</td><td>size of the resulting video (<em>Caution: auto-clipping values are not taken into account!</em>)</td><td>%{s} or %{video_size}</td></tr>"
+                                "<tr><td>%s</td><td>size of the resulting video (<em>Caution: auto-clipping values are not taken into account.</em>)</td><td>%{s} or %{video_size}</td></tr>"
                                 "<tr><td>%r</td><td>aspect ratio of the original video</td><td>%{r} or %{aspect_ratio}</td></tr>"
                                 "<tr><td>%d</td><td>current date</td><td>%{d} or %{date}</td></tr>"
                                 "</table>"
@@ -346,7 +346,7 @@ void K3b::VideoDVDRippingWidget::slotCustomPictureSize()
                                                          "If one value is set to <em>Auto</em> K3b will choose this value "
                                                          "depending on the aspect ratio of the video picture.<br>"
                                                          "Be aware that setting both the width and the height to fixed values "
-                                                         "will result in no aspect ratio correction to be performed."),
+                                                         "will result in no aspect ratio correction being performed."),
                                                     dlg.mainWidget() );
     QSpinBox* spinWidth = new QSpinBox( dlg.mainWidget() );
     spinWidth->setRange( 0, 20000 );

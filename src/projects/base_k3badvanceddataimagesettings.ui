@@ -85,7 +85,7 @@
                 <property name="whatsThis" stdset="0" >
                   <string>&lt;p>If this option is checked, K3b will add additional Joliet extensions to the ISO-9660 file system.
 &lt;p>Joliet is not an accepted independent international standard like ISO-9660 or Rock Ridge. It is mainly used on Windows systems.
-&lt;p>Joliet does not allow all characters, so the Joliet filenames are not identical to the filenames on disk (as compared to Rock Ridge). Joliet has a filename length limitation of 64 chars (independent from the character coding and type e.g. European vs. Japanese). This is annoying, as modern file systems all allow 255 characters per path name component.
+&lt;p>Joliet does not allow all characters, so the Joliet filenames are not identical to the filenames on disk (as compared to Rock Ridge). Joliet has a filename length limitation of 64 chars (independent from the character coding and type e.g. European vs. Japanese). This is inconvenient, as modern file systems all allow 255 characters per path name component.
 &lt;p>Joliet uses UTF-16 coding.
 &lt;p>&lt;b>Caution:&lt;/b> With the exception of Linux and FreeBSD, there is no POSIX-like OS that supports Joliet. So &lt;b>never create Joliet-only CDs or DVDs&lt;/b> for that reason.</string>
                 </property>

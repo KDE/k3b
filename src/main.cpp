@@ -128,8 +128,8 @@ int main( int argc, char* argv[] )
     options.add("videocdrip <device>", ki18n("Rip Video CD Tracks"));
     options.add("lang <language>", ki18n("Set the GUI language"));
     options.add("nosplash", ki18n("Disable the splash screen"));
-    options.add("device <device>", ki18n( "Set the device to be used for new projects (This option has no effect. "
-                                          "Its main purpose is to enable handling of empty media from the KDE Media Manager)." ));
+    options.add("device <device>", ki18n( "Set the device to be used for new projects. (This option has no effect: "
+                                          "its main purpose is to enable handling of empty media from the KDE Media Manager.)" ));
 
 
     KCmdLineArgs::init( argc, argv, &aboutData );

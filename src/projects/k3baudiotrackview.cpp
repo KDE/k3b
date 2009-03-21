@@ -223,7 +223,7 @@ void K3b::AudioTrackView::setupActions()
     mbAction->setIcon( KIcon( "musicbrainz" ) );
     connect( mbAction, SIGNAL( triggered() ), this, SLOT( slotQueryMusicBrainz() ) );
     actionCollection()->addAction( "project_audio_musicbrainz", mbAction );
-    mbAction->setToolTip( i18n("Try to determine meta information over the internet") );
+    mbAction->setToolTip( i18n("Try to determine meta information over the Internet") );
 #endif
 }
 

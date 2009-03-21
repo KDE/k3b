@@ -182,7 +182,7 @@
       <item row="0" column="0" >
        <widget class="QLabel" name="textLabel1" >
         <property name="text" >
-         <string>eMovix boot messages language:</string>
+         <string>eMovix boot message language:</string>
         </property>
         <property name="wordWrap" >
          <bool>false</bool>
@@ -213,7 +213,7 @@
         </property>
         <property name="whatsThis" >
          <string>&lt;p>&lt;b>eMovix Boot Labels&lt;/b>
-&lt;p>eMovix provides are variety or different boot configurations which can be selected at boot time via a boot label (compare Lilo or Grub). The many different boot configurations mainly influence the Video output.
+&lt;p>eMovix provides a variety of different boot configurations which can be selected at boot time via a boot label (comparable to Lilo or Grub). The many different boot configurations mainly influence the Video output.
 &lt;p>The &lt;b>default&lt;/b>, &lt;b>movix&lt;/b>, or &lt;b>MoviX&lt;/b> labels start a general Vesa video driver.
 &lt;p>The &lt;b>TV&lt;/b> labels can be used to direct video to the TV output of the graphic board. eMovix provides TVout drivers for different brands of graphic boards.
 &lt;p>The &lt;b>FB&lt;/b> labels refer to configurations that start a Frame Buffer driver in different screen resolutions.
@@ -229,7 +229,7 @@
          <string>Select the layout of the keyboard</string>
         </property>
         <property name="whatsThis" >
-         <string>&lt;p>The keyboard layout selected here will be used for the eMovix commands like controlling the media player.</string>
+         <string>&lt;p>The keyboard layout selected here will be used for eMovix commands such as controlling the media player.</string>
         </property>
        </widget>
       </item>

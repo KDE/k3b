@@ -24,7 +24,7 @@
           </property>
           <property name="whatsThis" stdset="0" >
             <string>&lt;p>&lt;b>CD-Text&lt;/b>
-&lt;p>If this option is checked K3b uses some otherwise unused space on the Audio CD to store additional information, like the artist or the CD title.
+&lt;p>If this option is checked K3b uses some otherwise unused space on the Audio CD to store additional information, such as the artist's name or the CD title.
 &lt;p>CD-Text is an extension to the audio CD standard introduced by Sony.
 &lt;p>CD-Text will only be usable on CD players that support this extension (mostly car CD players) and software like K3b, of course.
 &lt;p>Since a CD-Text-enhanced Audio CD will work in any Hifi CD or DVD player even if the player does not support CD-Text explicitly, enabling it is never a bad idea (just remember to fill in the CD-Text information).</string>

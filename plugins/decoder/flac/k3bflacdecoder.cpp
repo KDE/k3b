@@ -392,7 +392,7 @@ QString K3bFLACDecoder::technicalInfo( const QString& info ) const
         else if( info == i18n("Sampling Rate") )
             return i18n("%1 Hz",d->rate);
         else if( info == i18n("Sample Size") )
-            return i18n("%1 bits",d->bitsPerSample);
+            return i18np("1 bit","%1 bits",d->bitsPerSample);
     }
 
     return QString();

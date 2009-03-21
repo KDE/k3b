@@ -382,7 +382,7 @@
             </property>
             <property name="whatsThis" >
              <string>&lt;p>If this option is checked LAME will enforce the 7680 bit limitation on total frame size.&lt;br>
-This  results  in  many  wasted bits for high bitrate encodings but will ensure strict ISO compatibility. This compatibility might be important for hardware players.</string>
+This results in many wasted bits for high bitrate encodings but will ensure strict ISO compatibility. This compatibility might be important for hardware players.</string>
             </property>
             <property name="text" >
              <string>Strict ISO compliance</string>

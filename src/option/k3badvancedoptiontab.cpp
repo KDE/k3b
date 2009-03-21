@@ -101,7 +101,7 @@ void K3b::AdvancedOptionTab::setupGui()
     // -----------------------------------------------------------------------
 
 
-    m_checkOverburn->setToolTip( i18n("Allow burning more than the official media capacity") );
+    m_checkOverburn->setToolTip( i18n("Allow burning more than the official media capacities") );
     m_checkAllowWritingAppSelection->setToolTip( i18n("Allow to choose between cdrecord and cdrdao") );
     m_checkAutoErasingRewritable->setToolTip( i18n("Automatically erase CD-RWs and DVD-RWs without asking") );
     m_checkEject->setToolTip( i18n("Do not eject the burn medium after a completed burn process") );

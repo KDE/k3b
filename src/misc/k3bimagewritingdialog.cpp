@@ -935,7 +935,7 @@ void K3b::ImageWritingDialog::slotMd5JobFinished( bool success )
     else {
         d->md5SumItem->setForegroundColor( 1, Qt::red );
         if( d->md5Job->hasBeenCanceled() )
-            d->md5SumItem->setText( 1, i18n("Calculation cancelled") );
+            d->md5SumItem->setText( 1, i18n("Calculation canceled") );
         else
             d->md5SumItem->setText( 1, i18n("Calculation failed") );
         d->md5SumItem->setPixmap( 0, SmallIcon("dialog-error") );
@@ -966,10 +966,10 @@ void K3b::ImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, con
                                                          this );
         if( ok ) {
             if( md5sumToCompare.toLower().toUtf8() == d->md5Job->hexDigest().toLower() )
-                KMessageBox::information( this, i18n("The MD5 Sum of %1 equals the specified.",imagePath()),
+                KMessageBox::information( this, i18n("The MD5 Sum of %1 equals that specified.",imagePath()),
                                           i18n("MD5 Sums Equal") );
             else
-                KMessageBox::sorry( this, i18n("The MD5 Sum of %1 differs from the specified.",imagePath()),
+                KMessageBox::sorry( this, i18n("The MD5 Sum of %1 differs from that specified.",imagePath()),
                                     i18n("MD5 Sums Differ") );
         }
     }

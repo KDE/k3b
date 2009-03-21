@@ -182,7 +182,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                            i18n("No CD/DVD writer found."),
                                            i18n("K3b did not find an optical writing device in your system. Thus, "
                                                 "you will not be able to burn CDs or DVDs. However, you can still "
-                                                "use other K3b features like audio track extraction or audio "
+                                                "use other K3b features such as audio track extraction, audio "
                                                 "transcoding or ISO9660 image creation."),
                                            false ) );
     }
@@ -232,11 +232,11 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                 problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                    i18n("%1 will be run without root privileges",QString("cdrecord")),
                                                    i18n("It is highly recommended to configure cdrecord "
-                                                        "to run with root privileges. Only then cdrecord "
-                                                        "runs with high priority which increases the overall "
-                                                        "stability of the burning process. Apart from that "
-                                                        "it allows changing the size of the used burning buffer. "
-                                                        "A lot of user problems could be solved this way. This is also "
+                                                        "to run with root privileges, as then cdrecord "
+                                                        "runs with high priority that increases the overall "
+                                                        "stability of the burning process. As well as this, "
+                                                        "it allows the size of the burning buffer to be changed, "
+                                                        "and a lot of user problems can be solved this way. This is also "
                                                         "true when using SuSE's resmgr."),
                                                    QString(),
                                                    true ) );
@@ -272,8 +272,8 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
         if( !k3bcore->externalBinManager()->foundBin( "growisofs" ) ) {
             problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                i18n("Unable to find %1 executable",QString("growisofs")),
-                                               i18n("K3b uses growisofs to actually write dvds. "
-                                                    "Without growisofs you will not be able to write dvds. "
+                                               i18n("K3b uses growisofs to actually write DVDs. "
+                                                    "Without growisofs you will not be able to write DVDs. "
                                                     "Make sure to install at least version 5.10."),
                                                i18n("Install the dvd+rw-tools package."),
                                                false ) );
@@ -282,7 +282,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
             if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3b::Version( 5, 10 ) ) {
                 problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                    i18n("Used %1 version %2 is outdated",QString("growisofs"),k3bcore->externalBinManager()->binObject( "growisofs" )->version),
-                                                   i18n("K3b needs at least growisofs version 5.10 to write dvds. "
+                                                   i18n("K3b needs at least growisofs version 5.10 to write DVDs. "
                                                         "All older versions will not work and K3b will refuse to use them."),
                                                    i18n("Install a more recent version of %1.",QString("growisofs")),
                                                    false ) );

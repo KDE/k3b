@@ -204,9 +204,9 @@
                       <property name="whatsThis" stdset="0" >
                         <string>&lt;p>On an audio CD each track (except for the last) can have a post-gap.
 This does not mean that K3b adds an additional gap of silence to the track. This setting simply influences the display on a Hifi audio CD player. The part of an audio track that is marked as post-gap is counted backwards.
-&lt;p>This setting is irrelevant for most users as todays CD burners can put arbitrary audio data in the post-gap when burning in DAO mode.
+&lt;p>This setting is irrelevant for most users as modern CD burners can put arbitrary audio data in the post-gap when burning in DAO mode.
 &lt;p>&lt;i>In other CD-burning applications the post-gap might be called the pre-gap. The pre-gap of track 2 is the same as the post-gap of track 1.
-&lt;p>&lt;b>Changing the post-gap does not change the length of the track!&lt;/b>
+&lt;p>&lt;b>Changing the post-gap does not change the length of the track.&lt;/b>
 &lt;p>&lt;b>When writing in TAO writing mode (not recommended for Audio CDs) the post-gap will most likely be muted and on some burners forced to 2 seconds.&lt;/b></string>
                       </property>
                     </widget>

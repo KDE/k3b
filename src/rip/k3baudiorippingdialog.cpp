@@ -196,10 +196,10 @@ void K3b::AudioRippingDialog::setupContextHelp()
     m_checkUseIndex0->setWhatsThis( i18n("<p>If this option is checked K3b will not rip the audio "
                                          "data in the pregaps. Most audio tracks contain an empty "
                                          "pregap which does not belong to the track itself.</p>"
-                                         "<p>Although the default behaviour of nearly all ripping "
-                                         "software is to include the pregaps for most CDs it makes more "
-                                         "sense to ignore them. When creating a K3b audio project you "
-                                         "will regenerate these pregaps anyway.</p>") );
+                                         "<p>Although the default behavior of nearly all ripping "
+                                         "software is to include the pregaps for most CDs, it makes more "
+                                         "sense to ignore them. In any case, when creating a K3b audio "
+                                         "project, the pregaps will be regenerated.</p>") );
 }
 
 

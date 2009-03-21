@@ -188,7 +188,7 @@ K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& da
                                          "<p>This option is useful in order to optimize the data layout "
                                          "on a CD/DVD."
                                          "<p><b>Caution:</b> This does not sort the order of the file "
-                                         "names that appear in the ISO9660 directory."
+                                         "names that appear in the ISO9660 directory. "
                                          "It sorts the order in which the file data is "
                                          "written to the image.") );
 

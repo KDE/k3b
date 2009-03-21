@@ -544,7 +544,7 @@ K3b::Doc* K3b::MainWindow::openDocument(const KUrl& url)
             doc = k3bappcore->projectManager()->openProject( url );
 
             if( doc == 0 ) {
-                KMessageBox::error (this,i18n("Could not open document!"), i18n("Error!"));
+                KMessageBox::error (this,i18n("Could not open document."), i18n("Error"));
                 return 0;
             }
 
@@ -883,7 +883,7 @@ void K3b::MainWindow::fileSave( K3b::Doc* doc )
         if( !doc->isSaved() )
             fileSaveAs( doc );
         else if( !k3bappcore->projectManager()->saveProject( doc, doc->URL()) )
-            KMessageBox::error (this,i18n("Could not save the current document!"), i18n("I/O Error"));
+            KMessageBox::error (this,i18n("Could not save the current document."), i18n("I/O Error"));
     }
 }
 
@@ -924,7 +924,7 @@ void K3b::MainWindow::fileSaveAs( K3b::Doc* doc )
                   == KMessageBox::Continue ) ) {
 
                 if( !k3bappcore->projectManager()->saveProject( doc, url ) ) {
-                    KMessageBox::error (this,i18n("Could not save the current document!"), i18n("I/O Error"));
+                    KMessageBox::error (this,i18n("Could not save the current document."), i18n("I/O Error"));
                     return;
                 }
                 else
@@ -1072,7 +1072,7 @@ K3b::Doc* K3b::MainWindow::slotContinueMultisession()
 
 K3b::Doc* K3b::MainWindow::slotNewVideoDvdDoc()
 {
-    slotStatusMsg(i18n("Creating new VideoDVD Project."));
+    slotStatusMsg(i18n("Creating new Video DVD Project."));
 
     K3b::Doc* doc = k3bappcore->projectManager()->createProject( K3b::Doc::VIDEODVD );
 

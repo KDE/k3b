@@ -113,7 +113,7 @@
                       </font>
                     </property>
                     <property name="text" >
-                      <string>no Theme selected</string>
+                      <string>No theme selected</string>
                     </property>
                     <property name="alignment" >
                       <set>Qt::AlignCenter</set>

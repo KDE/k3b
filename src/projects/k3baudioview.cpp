@@ -139,7 +139,7 @@ void K3b::AudioView::init()
 {
     if( k3bcore->pluginManager()->plugins( "AudioDecoder" ).isEmpty() )
         KMessageBox::error( this, i18n("No audio decoder plugins found. You will not be able to add any files "
-                                       "to the audio project!") );
+                                       "to the audio project.") );
 }
 
 void K3b::AudioView::setupActions()
@@ -190,7 +190,7 @@ void K3b::AudioView::setupActions()
     mbAction->setIcon( KIcon( "musicbrainz" ) );
     connect( mbAction, SIGNAL( triggered() ), this, SLOT( slotQueryMusicBrainz() ) );
     actionCollection()->addAction( "project_audio_musicbrainz", mbAction );
-    mbAction->setToolTip( i18n("Try to determine meta information over the internet") );
+    mbAction->setToolTip( i18n("Try to determine meta information over the Internet") );
 #endif
 
 }

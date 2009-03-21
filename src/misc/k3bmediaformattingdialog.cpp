@@ -95,8 +95,8 @@ K3b::MediaFormattingDialog::MediaFormattingDialog( QWidget* parent )
                                      "DVD-RW even if it is empty. It may also be used to "
                                      "force K3b to format a DVD+RW or a DVD-RW in restricted "
                                      "overwrite mode."
-                                     "<p><b>Caution:</b> It is not recommended to often format a DVD "
-                                     "since it may already be unusable after 10-20 reformat procedures."
+                                     "<p><b>Caution:</b> It is not recommended to format a DVD often "
+                                     "as it may become unusable after only 10-20 reformat procedures."
                                      "<p>DVD+RW media only needs to be formatted once. After that it "
                                      "just needs to be overwritten. The same applies to DVD-RW in "
                                      "restricted overwrite mode.") );

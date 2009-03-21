@@ -65,7 +65,7 @@ public:
                          "<p>With all ISO-9660 levels, all filenames are restricted to upper case letters, "
                          "numbers and the underscore (_). The maximum filename length is 31 characters, the "
                          "directory nesting level is restricted to 8 and the maximum path length is limited "
-                         "to 255 characters. (These restrictions may be violated with the additional ISO-9660 K3b offers)." );
+                         "to 255 characters. (These restrictions may be violated with the additional ISO-9660 features K3b offers.)" );
         else
             return i18n("Set special ISO9660 Filesystem preferences.");
     }

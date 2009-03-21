@@ -150,7 +150,7 @@ K3bAudioMetainfoRenamerPluginWidget::K3bAudioMetainfoRenamerPluginWidget( K3b::D
     d->scanButton->setToolTip( i18n("Scan for renamable files") );
     d->comboPattern->setWhatsThis( i18n("<qt>This specifies how the files should be renamed. "
                                         "Currently only the special strings <em>%a</em> (Artist), "
-                                        "<em>%n</em> (Track number), and <em>%t</em> (Title) ,"
+                                        "<em>%n</em> (Track number), and <em>%t</em> (Title) "
                                         "are supported.") );
 
     TagLib::FileRef::addFileTypeResolver( new K3bMimeTypeResolver() );

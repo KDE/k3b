@@ -107,7 +107,7 @@ void K3b::VideoCdRip::vcdxRip()
 
     if( bin->version < K3b::Version("0.7.12") ) {
         kDebug() << "(K3b::VideoCdRip) vcdxrip executable too old!";
-        emit infoMessage( i18n( "%1 executable too old! Need version %2 or greater" , QString("Vcdxrip") , QString("0.7.12") ), K3b::Job::ERROR );
+        emit infoMessage( i18n( "%1 executable too old: need version %2 or greater." , QString("Vcdxrip") , QString("0.7.12") ), K3b::Job::ERROR );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3b::Job::INFO );
         cancelAll();
         jobFinished( false );
