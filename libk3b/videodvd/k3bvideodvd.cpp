@@ -300,15 +300,15 @@ QString K3b::VideoDVD::subPictureCodeExtensionString( int ext )
   case SUBPIC_CODE_EXT_UNSPECIFIED:
     return i18n("Unspecified");
   case SUBPIC_CODE_EXT_CAPTION_NORMAL_SIZE:
-    return i18n("Caption with normal size character");
+    return i18n("Caption with normal size characters");
   case SUBPIC_CODE_EXT_CAPTION_BIGGER_SIZE:
-    return i18n("Caption with bigger size character");
+    return i18n("Caption with bigger size characters");
   case SUBPIC_CODE_EXT_CAPTION_FOR_CHILDREN:
     return i18n("Caption for children");
   case SUBPIC_CODE_EXT_CLOSED_CAPTION_NORMAL_SIZE:
-    return i18n("Closed caption with normal size character");
+    return i18n("Closed caption with normal size characters");
   case SUBPIC_CODE_EXT_CLOSED_CAPTION_BIGGER_SIZE:
-    return i18n("Closed caption with bigger size character");
+    return i18n("Closed caption with bigger size characters");
   case SUBPIC_CODE_EXT_CLOSED_CAPTION_FOR_CHILDREN:
     return i18n("Closed caption for children");
   case SUBPIC_CODE_EXT_FORCED_CAPTION:

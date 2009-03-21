@@ -191,7 +191,7 @@ QString K3b::VcdTrack::video_bitrate()
     if ( mpeg_info->has_video ) {
         for ( int i = 0; i < 2; i++ ) {
             if ( mpeg_info->video[ i ].seen ) {
-                return i18n( "%1 bit/s" , mpeg_info->video[ i ].bitrate ) ;
+                return i18np( "1 bit/s", "%1 bits/s" , mpeg_info->video[ i ].bitrate ) ;
             }
         }
     }
@@ -280,7 +280,7 @@ QString K3b::VcdTrack::audio_bitrate()
     if ( mpeg_info->has_audio ) {
         for ( int i = 0; i < 2; i++ ) {
             if ( mpeg_info->audio[ i ].seen ) {
-                return i18n( "%1 bit/s" , mpeg_info->audio[ i ].bitrate ) ;
+                return i18np( "1 bit/s", "%1 bits/s" , mpeg_info->audio[ i ].bitrate ) ;
             }
         }
     }

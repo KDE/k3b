@@ -387,8 +387,8 @@ bool K3b::Iso9660ImageWritingJob::prepareWriter( int mediaType )
         if( mediaType & K3b::Device::MEDIA_DVD_PLUS_ALL ) {
             if( m_simulate ) {
                 if( questionYesNo( i18n("K3b does not support simulation with DVD+R(W) media. "
-                                        "Do you really want to continue? The media will be written "
-                                        "for real."),
+                                        "Do you really want to continue? The media will actually be "
+                                        "written to."),
                                    i18n("No Simulation with DVD+R(W)") ) ) {
                     return false;
                 }

@@ -838,8 +838,8 @@ bool K3b::DvdCopyJob::waitForDvd()
         else if ( m & K3b::Device::MEDIA_DVD_MINUS_ALL ) {
             if( m_simulate && !m_writerDevice->dvdMinusTestwrite() ) {
                 if( !questionYesNo( i18n("Your writer (%1 %2) does not support simulation with DVD-R(W) media. "
-                                         "Do you really want to continue? The media will be written "
-                                         "for real.",
+                                         "Do you really want to continue? The media will actualy be "
+                                         "written to.",
                                     m_writerDevice->vendor()
                                     ,m_writerDevice->description()),
                                     i18n("No Simulation with DVD-R(W)") ) ) {

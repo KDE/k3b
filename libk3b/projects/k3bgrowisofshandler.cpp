@@ -226,8 +226,8 @@ void K3b::GrowisofsHandler::handleExit( int exitCode )
 {
     switch( m_error ) {
     case ERROR_MEDIA:
-        emit infoMessage( i18n("K3b detected a problem with the media."), K3b::Job::ERROR );
-        emit infoMessage( i18n("Please try another media brand, preferably one explicitly recommended by your writer's vendor."), K3b::Job::ERROR );
+        emit infoMessage( i18n("K3b detected a problem with the medium."), K3b::Job::ERROR );
+        emit infoMessage( i18n("Please try another brand of media, preferably one explicitly recommended by your writer's vendor."), K3b::Job::ERROR );
         emit infoMessage( i18n("Report the problem if it persists anyway."), K3b::Job::ERROR );
         break;
 

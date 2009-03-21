@@ -623,7 +623,7 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
         int pos2 = line.indexOf( "in", pos+9 );
         int speed = static_cast<int>( line.mid( pos+9, pos2-pos-10 ).toDouble() );  // cdrecord-dvd >= 2.01a25 uses 8.0 and stuff
         if( speed != d->usedSpeed ) {
-            emit infoMessage( i18n("Medium or burner do not support writing at %1x speed",d->usedSpeed), K3b::Job::WARNING );
+            emit infoMessage( i18n("Medium or burner does not support writing at %1x speed",d->usedSpeed), K3b::Job::WARNING );
             if( speed > d->usedSpeed )
                 emit infoMessage( i18n("Switching burn speed up to %1x",speed), K3b::Job::WARNING );
             else
@@ -693,13 +693,13 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
         bool ok;
         int num = s_burnfreeCounterRx.cap(1).toInt(&ok);
         if( ok )
-            emit infoMessage( i18np("Burnfree was used 1 time.", "Burnfree was used %1 times.", num), INFO );
+            emit infoMessage( i18np("Burnfree was used once.", "Burnfree was used %1 times.", num), INFO );
     }
     else if( s_burnfreeCounterRxPredict.indexIn( line ) ) {
         bool ok;
         int num = s_burnfreeCounterRxPredict.cap(1).toInt(&ok);
         if( ok )
-            emit infoMessage( i18np("Buffer was low 1 time.", "Buffer was low %1 times.", num), INFO );
+            emit infoMessage( i18np("Buffer was low once.", "Buffer was low %1 times.", num), INFO );
     }
     else if( line.contains("Medium Error") ) {
         d->cdrecordError = MEDIUM_ERROR;

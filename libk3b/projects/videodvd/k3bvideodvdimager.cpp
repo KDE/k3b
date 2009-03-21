@@ -210,7 +210,7 @@ void K3b::VideoDvdImager::cleanup()
 void K3b::VideoDvdImager::slotReceivedStderr( const QString& line )
 {
     if( line.contains( "Unable to make a DVD-Video image" ) ) {
-        emit infoMessage( i18n("The project does not contain all necessary VideoDVD files."), WARNING );
+        emit infoMessage( i18n("The project does not contain all necessary Video DVD files."), WARNING );
         emit infoMessage( i18n("The resulting DVD will most likely not be playable on a Hifi DVD player."), WARNING );
     }
     else

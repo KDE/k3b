@@ -772,7 +772,7 @@ void K3b::CdrdaoWriter::unknownCdrdaoLine( const QString& line )
         int speed = line.mid( pos+9, po2-pos-9 ).toInt();
         if( speed < d->usedSpeed )
         {
-            emit infoMessage( i18n("Medium or burner do not support writing at %1x speed",d->usedSpeed), K3b::Job::WARNING );
+            emit infoMessage( i18n("Medium or burner does not support writing at %1x speed",d->usedSpeed), K3b::Job::WARNING );
             emit infoMessage( i18n("Switching down burn speed to %1x",speed), K3b::Job::WARNING );
         }
     }

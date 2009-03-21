@@ -250,7 +250,7 @@ void K3b::AudioJob::start()
                 if( (d->zeroPregap||d->less4Sec) && writer()->supportsRawWriting() ) {
                     m_usedWritingMode = K3b::WRITING_MODE_RAW;
                     if( d->less4Sec )
-                        emit infoMessage( i18n("Tracklengths below 4 seconds violate the Red Book standard."), WARNING );
+                        emit infoMessage( i18n("Track lengths below 4 seconds violate the Red Book standard."), WARNING );
                 }
                 else
                     m_usedWritingMode = K3b::WRITING_MODE_DAO;

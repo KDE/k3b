@@ -1332,7 +1332,8 @@ QString K3b::MixedJob::jobDescription() const
 
 QString K3b::MixedJob::jobDetails() const
 {
-    return ( i18n("%1 tracks (%2 minutes audio data, %3 ISO9660 data)"
+    return ( i18np("1 track (%2 minutes audio data, %3 ISO9660 data)"
+                  ,"%1 tracks (%2 minutes audio data, %3 ISO9660 data)"
                   ,m_doc->numOfTracks()
                   ,m_doc->audioDoc()->length().toString()
                   ,KIO::convertSize(m_doc->dataDoc()->size()))

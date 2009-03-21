@@ -792,8 +792,8 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
         if( foundMedium & K3b::Device::MEDIA_DVD_PLUS_ALL ) {
             if( d->doc->dummy() ) {
                 if( !questionYesNo( i18n("DVD+R(W) media do not support write simulation. "
-                                         "Do you really want to continue? The media will be written "
-                                         "for real."),
+                                         "Do you really want to continue? The media will actually be "
+                                         "written to."),
                                     i18n("No Simulation with DVD+R(W)") ) ) {
                     return false;
                 }
@@ -828,8 +828,8 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
         else if ( foundMedium & K3b::Device::MEDIA_DVD_MINUS_ALL ) {
             if( d->doc->dummy() && !d->doc->burner()->dvdMinusTestwrite() ) {
                 if( !questionYesNo( i18n("Your writer (%1 %2) does not support simulation with DVD-R(W) media. "
-                                         "Do you really want to continue? The media will be written "
-                                         "for real.",
+                                         "Do you really want to continue? The media will actually be "
+                                         "written to.",
                                          d->doc->burner()->vendor(),
                                          d->doc->burner()->description()),
                                     i18n("No Simulation with DVD-R(W)") ) ) {
@@ -948,10 +948,10 @@ QString K3b::DataJob::jobDetails() const
         !d->doc->dummy() &&
         !(d->doc->multiSessionMode() == K3b::DataDoc::CONTINUE ||
           d->doc->multiSessionMode() == K3b::DataDoc::FINISH) )
-        return i18np("ISO9660 Filesystem (Size: %1) - %2 copy",
-                     "ISO9660 Filesystem (Size: %1) - %2 copies",
-                     KIO::convertSize( d->doc->size() ),
-                     d->doc->copies() );
+        return i18np("ISO9660 Filesystem (Size: %2) - %1 copy",
+                     "ISO9660 Filesystem (Size: %2) - %1 copies",
+                     d->doc->copies(),
+                     KIO::convertSize( d->doc->size() ) );
     else
         return i18n( "ISO9660 Filesystem (Size: %1)",
                      KIO::convertSize( d->doc->size() ) );

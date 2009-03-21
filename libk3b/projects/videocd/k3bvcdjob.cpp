@@ -528,7 +528,16 @@ void K3b::VcdJob::parseInformation( const QString &text )
         int index4 = text.indexOf( "bytes of stream will be ignored" );
 
         emit infoMessage( i18n( "Bad packet at packet #%1 (stream byte offset %2)" , text.mid( index + 11, index2 - index - 11 ).trimmed() , text.mid( index2 + 19, index3 - index2 - 19 ).trimmed() ), K3b::Job::WARNING );
-        emit infoMessage( i18n( "Remaining %1 bytes of stream will be ignored." , text.mid( index3 + 15, index4 - index3 - 15 ).trimmed() ), K3b::Job::WARNING );
+        
+        const QString ignoredString = text.mid( index3 + 15, index4 - index3 - 15 ).trimmed();
+        bool okay = true;
+        const int ignoredBytes = ignoredString.toInt(&okay);
+
+        if (okay) {
+            emit infoMessage( i18np( "The remaining byte of the stream will be ignored.", "The remaining %1 bytes of the stream will be ignored." , ignoredBytes ), K3b::Job::WARNING );
+        } else {
+            emit infoMessage( i18n( "An unknown number of remaining stream bytes will be ignored." ), K3b::Job::WARNING );
+        }
     }
 }
 

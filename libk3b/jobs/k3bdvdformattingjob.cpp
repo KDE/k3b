@@ -381,7 +381,7 @@ void K3b::DvdFormattingJob::startFormatting( const K3b::Device::DiskInfo& diskIn
             if( d->force ) {
                 emit infoMessage( i18n("Forcing formatting anyway."), INFO );
                 emit infoMessage( i18n("It is not recommended to force formatting of DVD+RW media."), INFO );
-                emit infoMessage( i18n("Already after 10-20 reformats the media might be unusable."), INFO );
+                emit infoMessage( i18n("After 10-20 reformats the media might become unusable."), INFO );
                 blank = false;
             }
             else {
@@ -453,7 +453,7 @@ void K3b::DvdFormattingJob::startFormatting( const K3b::Device::DiskInfo& diskIn
             }
         }
         else {
-            emit infoMessage( i18n("Unable to determine the current formatting state of the DVD-RW media."), ERROR );
+            emit infoMessage( i18n("Unable to determine the current formatting state of the DVD-RW medium."), ERROR );
             d->running = false;
             jobFinished(false);
             return;
