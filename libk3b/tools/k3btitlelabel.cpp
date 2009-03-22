@@ -23,6 +23,8 @@
 #include <qtooltip.h>
 #include <QHelpEvent>
 
+#include <KDebug>
+
 
 class K3b::TitleLabel::Private
 {
@@ -98,10 +100,12 @@ QSize K3b::TitleLabel::sizeHint() const
     return QSize( d->titleLength + d->subTitleLength + 2*d->margin, d->titleBaseLine );
 }
 
+
 QSize K3b::TitleLabel::minimumSizeHint() const
 {
     return QSize( d->cachedMinimumWidth, d->titleBaseLine );
 }
+
 
 void K3b::TitleLabel::resizeEvent( QResizeEvent* e )
 {
@@ -110,9 +114,9 @@ void K3b::TitleLabel::resizeEvent( QResizeEvent* e )
     update();
 }
 
+
 void K3b::TitleLabel::paintEvent( QPaintEvent* )
 {
-
     QPainter p(this);
     QRect r = contentsRect();
     p.eraseRect( r );
@@ -169,7 +173,7 @@ void K3b::TitleLabel::updatePositioning()
     d->titleBaseLine = contentsRect().height()/2 + titleFm.height()/2 - titleFm.descent();
     d->titleLength = titleFm.width( d->title );
 
-    d->subTitleBaseLine = d->titleBaseLine - titleFm.underlinePos() + subTitleFm.underlinePos();
+    d->subTitleBaseLine = d->titleBaseLine;
 
     d->subTitleLength = ( d->subTitle.isEmpty() ? 0 : subTitleFm.width( d->subTitle ) );
 
@@ -220,6 +224,8 @@ void K3b::TitleLabel::updatePositioning()
     // 5 pix spacing between title and subtitle
     if( !d->subTitle.isEmpty() )
         d->cachedMinimumWidth += 5;
+
+    kDebug() << d->titleBaseLine << d->subTitleBaseLine;
 }
 
 

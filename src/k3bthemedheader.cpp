@@ -15,8 +15,7 @@
 #include "k3bthemedheader.h"
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
-
-#include <k3btitlelabel.h>
+#include "k3btitlelabel.h"
 
 #include <KGlobalSettings>
 #include <qlabel.h>
