@@ -531,8 +531,10 @@ void K3b::MediaCopyDialog::toggleAll()
     if( sourceMedium.toc().contentType() == K3b::Device::DATA &&
         sourceMedium.toc().count() == 1 ) {
         m_tempDirSelectionWidget->setSelectionMode( K3b::TempDirSelectionWidget::FILE );
-        m_tempDirSelectionWidget->setDefaultImageFileName( sourceMedium.volumeId().toLower()
-                                                           + QString(".iso"), true );
+        QString mediumName = sourceMedium.volumeId().toLower();
+        if ( mediumName.isEmpty() )
+            mediumName = "k3bimage";
+        m_tempDirSelectionWidget->setDefaultImageFileName( mediumName + QLatin1String(".iso"), true );
     }
     else {
         m_tempDirSelectionWidget->setSelectionMode( K3b::TempDirSelectionWidget::DIR );
