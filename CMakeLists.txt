@@ -46,7 +46,7 @@ include(MacroLibrary)
 include(MacroLogFeature)
 
 if(K3B_ENABLE_DVD_RIPPING)
-  macro_optional_find_package(DvdRead)
+  find_package(DvdRead)
   macro_log_feature( DVDREAD_FOUND "libDVDRead"
     "Libdvdread provides a simple foundation for reading DVD video disks."
     "http://www.dtek.chalmers.se/groups/dvd/downloads.shtml"
@@ -54,15 +54,21 @@ if(K3B_ENABLE_DVD_RIPPING)
 endif(K3B_ENABLE_DVD_RIPPING)
 
 if(K3B_ENABLE_TAGLIB)
-  macro_optional_find_package(Taglib)
+  find_package(Taglib)
   macro_log_feature( TAGLIB_FOUND "Taglib"
     "Read and write tags in audio files"
     "http://www.freshmeat.net/projects/taglib"
     FALSE "1.4.0" "")
 endif(K3B_ENABLE_TAGLIB)
 
+macro_optional_find_package(Samplerate)
+macro_log_feature( SAMPLERATE_FOUND "Samplerate"
+  "Audio sampling rate conversion."
+  "http://www.mega-nerd.com/SRC/"
+  TRUE "" "")
+
 if(K3B_ENABLE_MUSICBRAINZ)
-  macro_optional_find_package(MusicBrainz)
+  find_package(MusicBrainz)
   macro_log_feature( MUSICBRAINZ_FOUND "Musicbrainz"
     "Provide information about the CD, about the artist or about related information"
     "http://musicbrainz.org/"
@@ -76,7 +82,7 @@ macro_log_feature( KCDDB_FOUND "KCddb"
   TRUE "" "")
 
 if(K3B_BUILD_FFMPEG_DECODER_PLUGIN)
-  macro_optional_find_package(FFmpeg)
+  find_package(FFmpeg)
   macro_log_feature( FFMPEG_FOUND "FFmpeg"
     "Needed for the K3b FFmpeg decoder plugin which can decode virtually all audio types."
     "http://ffmpeg.org/"
@@ -84,8 +90,8 @@ if(K3B_BUILD_FFMPEG_DECODER_PLUGIN)
 endif(K3B_BUILD_FFMPEG_DECODER_PLUGIN)
 
 if(K3B_BUILD_FLAC_DECODER_PLUGIN)
-  macro_optional_find_package(Flac)
-  macro_optional_find_package(Flac++)
+  find_package(Flac)
+  find_package(Flac++)
   macro_log_feature( FLAC_FOUND "Flac"
     "Needed for the Flac audio decoder plugin."
     "http://flac.sourceforge.net/"
@@ -97,7 +103,7 @@ if(K3B_BUILD_FLAC_DECODER_PLUGIN)
 endif(K3B_BUILD_FLAC_DECODER_PLUGIN)
 
 if(K3B_BUILD_MAD_DECODER_PLUGIN)
-  macro_optional_find_package(Mad)
+  find_package(Mad)
   macro_log_feature( MAD_FOUND "Mad mp3"
     "Needed for the mp3 audio decoder plugin."
     "http://www.underbit.com/products/mad/"
@@ -105,7 +111,7 @@ if(K3B_BUILD_MAD_DECODER_PLUGIN)
 endif(K3B_BUILD_MAD_DECODER_PLUGIN)
 
 if(K3B_BUILD_MUSE_DECODER_PLUGIN)
-  macro_optional_find_package(Muse)
+  find_package(Muse)
   macro_log_feature( MUSE_FOUND "Muse"
     "Needed for the Musepack audio decoder plugin"
     "http://www.musepack.net/"
@@ -113,7 +119,7 @@ if(K3B_BUILD_MUSE_DECODER_PLUGIN)
 endif(K3B_BUILD_MUSE_DECODER_PLUGIN)
 
 if(K3B_BUILD_SNDFILE_DECODER_PLUGIN)
-  macro_optional_find_package(Sndfile)
+  find_package(Sndfile)
   macro_log_feature( SNDFILE_FOUND "Sndfile"
     "Needed for the libsndfile audio decoder plugin."
     "http://www.mega-nerd.com/libsndfile/"
@@ -121,7 +127,7 @@ if(K3B_BUILD_SNDFILE_DECODER_PLUGIN)
 endif(K3B_BUILD_SNDFILE_DECODER_PLUGIN)
 
 if(K3B_BUILD_LAME_ENCODER_PLUGIN)
-  macro_optional_find_package(Lame)
+  find_package(Lame)
   macro_log_feature( LAME_FOUND "Lame mp3 encoder"
     "Needed for the lame mpf encoder encoder plugin."
     "http://lame.sourceforge.net/"
@@ -129,7 +135,7 @@ if(K3B_BUILD_LAME_ENCODER_PLUGIN)
 endif(K3B_BUILD_LAME_ENCODER_PLUGIN)
 
 if(K3B_BUILD_OGGVORBIS_DECODER_PLUGIN OR K3B_BUILD_OGGVORBIS_ENCODER_PLUGIN)
-  macro_optional_find_package(OggVorbis)
+  find_package(OggVorbis)
   macro_log_feature( OGGVORBIS_FOUND "Ogg Vorbis"
     "Needed for the K3b Ogg Vorbis decoder and encoder plugins."
     "http://www.vorbis.com/"

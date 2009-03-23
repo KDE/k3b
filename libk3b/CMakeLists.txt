@@ -32,8 +32,6 @@ add_subdirectory( tools )
 add_subdirectory( projects )
 add_subdirectory( jobs )
 
-macro_optional_find_package(Samplerate)
-
 set(k3b_jobs_SRCS
   jobs/k3bdatatrackreader.cpp 
   jobs/k3breadcdreader.cpp 
@@ -195,13 +193,6 @@ set(k3b_project_videodvd
   )
 
 
-set(k3b_samplerate_SRCS
-  plugin/libsamplerate/samplerate.c 
-  plugin/libsamplerate/src_sinc.c 
-  plugin/libsamplerate/src_zoh.c 
-  plugin/libsamplerate/src_linear.c)
-
-
 set(k3b_LIB_SRCS 
   ${k3b_core_SRCS} 
   ${k3b_tools_SRCS} 
@@ -224,11 +215,6 @@ if (ENABLE_DVD_RIPPING)
     )
 endif (ENABLE_DVD_RIPPING)
 
-if(NOT SAMPLERATE_FOUND)
-  set(k3b_LIB_SRCS ${k3b_LIB_SRCS} ${k3b_samplerate_SRCS})
-endif(NOT SAMPLERATE_FOUND)
-
-
 kde4_add_library(k3b SHARED ${k3b_LIB_SRCS})
 
 target_link_libraries(k3b
@@ -238,12 +224,9 @@ target_link_libraries(k3b
   ${KDE4_KDE3SUPPORT_LIBS}
   ${KDE4_KPTY_LIBS}
   ${KCDDB_LIBRARIES}
+  ${SAMPLERATE_LIBRARIES}
   k3bdevice
   dl )
-
-if(SAMPLERATE_FOUND)
-  target_link_libraries(k3b ${SAMPLERATE_LIBRARIES})
-endif(SAMPLERATE_FOUND)
 
 if(ENABLE_DVD_RIPPING)
   target_link_libraries(k3b ${DVDREAD_LIBRARIES})
