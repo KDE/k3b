@@ -320,10 +320,14 @@ void kio_videodvdProtocol::stat( const KUrl& url )
 
 
 // FIXME: when does this get called? It seems not to be used for the files.
+// This is called by KIO::mimetype, which is called e.g. when dropping an item onto
+// the "places" widget in the file dialog. Indeed not much used these days.
+// Note that you can also implement it as a get() without the "send the data"
+// part of it. (David)
 void kio_videodvdProtocol::mimetype( const KUrl& url )
 {
     if( url.path() == "/" ) {
-        error( ERR_UNSUPPORTED_ACTION, "mimetype(/)" );
+        error( ERR_UNSUPPORTED_ACTION, KIO::unsupportedActionErrorString("videodvd", CMD_MIMETYPE) );
         return;
     }
 
