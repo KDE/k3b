@@ -289,18 +289,18 @@ void K3b::InteractionDialog::slotStartClickedInternal()
     if( !c.readEntry( "action dialog startup settings", 0 ) ) {
         // first time saving last used settings
         switch( K3b::MultiChoiceDialog::choose( i18n("Action Dialog Settings"),
-                                              i18n("<p>K3b handles three sets of settings in action dialogs: "
-                                                   "the defaults, the saved settings, and the last used settings. "
-                                                   "Please choose which of these sets should be loaded if an action "
-                                                   "dialog is opened again."
-                                                   "<p><em>Be aware that this choice can always be changed from the K3b "
-                                                   "configuration dialog.</em>"),
-                                              QMessageBox::Question,
-                                              this,
-                                              3,
-                                              KGuiItem(i18n("Default Settings")),
-                                              KGuiItem(i18n("Saved Settings")),
-                                              KGuiItem(i18n("Last Used Settings")) ) ) {
+                                                i18n("<p>K3b handles three sets of settings in action dialogs: "
+                                                     "the defaults, the saved settings, and the last used settings. "
+                                                     "Please choose which of these sets should be loaded if an action "
+                                                     "dialog is opened again."
+                                                     "<p><em>Be aware that this choice can always be changed from the K3b "
+                                                     "configuration dialog.</em>"),
+                                                QMessageBox::Question,
+                                                this,
+                                                3,
+                                                KGuiItem(i18n("Default Settings")),
+                                                KGuiItem(i18n("Saved Settings")),
+                                                KGuiItem(i18n("Last Used Settings")) ) ) {
         case 1:
             c.writeEntry( "action dialog startup settings", int(LOAD_K3B_DEFAULTS) );
             break;
@@ -409,7 +409,7 @@ KPushButton* K3b::InteractionDialog::getButton( int button )
 
 
 void K3b::InteractionDialog::setButtonGui( int button,
-                                         const KGuiItem& item )
+                                           const KGuiItem& item )
 {
     if( KPushButton* b = getButton( button ) )
         b->setGuiItem( item );
@@ -417,9 +417,9 @@ void K3b::InteractionDialog::setButtonGui( int button,
 
 
 void K3b::InteractionDialog::setButtonText( int button,
-                                          const QString& text,
-                                          const QString& tooltip,
-                                          const QString& whatsthis )
+                                            const QString& text,
+                                            const QString& tooltip,
+                                            const QString& whatsthis )
 {
     if( KPushButton* b = getButton( button ) ) {
         b->setText( text );
@@ -450,8 +450,8 @@ void K3b::InteractionDialog::setButtonShown( int button, bool shown )
 
 
 void K3b::InteractionDialog::setStartButtonText( const QString& text,
-                                               const QString& tooltip,
-                                               const QString& whatsthis )
+                                                 const QString& tooltip,
+                                                 const QString& whatsthis )
 {
     if( m_buttonStart ) {
         m_buttonStart->setText( text );
@@ -462,8 +462,8 @@ void K3b::InteractionDialog::setStartButtonText( const QString& text,
 
 
 void K3b::InteractionDialog::setCancelButtonText( const QString& text,
-                                                const QString& tooltip,
-                                                const QString& whatsthis )
+                                                  const QString& tooltip,
+                                                  const QString& whatsthis )
 {
     if( m_buttonCancel ) {
         m_buttonCancel->setText( text );
@@ -474,8 +474,8 @@ void K3b::InteractionDialog::setCancelButtonText( const QString& text,
 
 
 void K3b::InteractionDialog::setSaveButtonText( const QString& text,
-                                              const QString& tooltip,
-                                              const QString& whatsthis )
+                                                const QString& tooltip,
+                                                const QString& whatsthis )
 {
     if( m_buttonSave ) {
         m_buttonSave->setText( text );

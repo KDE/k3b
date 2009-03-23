@@ -124,8 +124,8 @@ namespace K3b {
          * reimplemented from JobHandler
          */
         virtual int waitForMedia( Device::Device*,
-                                  int mediaState = Device::STATE_EMPTY,
-                                  int mediaType = Device::MEDIA_WRITABLE_CD,
+                                  Device::MediaStates mediaState = Device::STATE_EMPTY,
+                                  Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
                                   const QString& message = QString() );
 
         /**

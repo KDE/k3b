@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -91,7 +91,7 @@ public:
 
 
 K3b::JobProgressDialog::JobProgressDialog( QWidget* parent,
-                                            bool showSubProgress )
+                                           bool showSubProgress )
     : KDialog( parent ),
       m_osd(0)
 {
@@ -655,18 +655,18 @@ void K3b::JobProgressDialog::setVisible( bool visible )
 
 
 int K3b::JobProgressDialog::waitForMedia( K3b::Device::Device* device,
-                                        int mediaState,
-                                        int mediaType,
-                                        const QString& message )
+                                          Device::MediaStates mediaState,
+                                          Device::MediaTypes mediaType,
+                                          const QString& message )
 {
     return K3b::EmptyDiscWaiter::wait( device, mediaState, mediaType, message, this );
 }
 
 
 bool K3b::JobProgressDialog::questionYesNo( const QString& text,
-                                          const QString& caption,
-                                          const QString& yesText,
-                                          const QString& noText )
+                                            const QString& caption,
+                                            const QString& yesText,
+                                            const QString& noText )
 {
     return ( KMessageBox::questionYesNo( this,
                                          text,
@@ -677,7 +677,7 @@ bool K3b::JobProgressDialog::questionYesNo( const QString& text,
 
 
 void K3b::JobProgressDialog::blockingInformation( const QString& text,
-                                                const QString& caption )
+                                                  const QString& caption )
 {
     KMessageBox::information( this, text, caption );
 }

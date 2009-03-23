@@ -179,7 +179,7 @@ K3b::GlobalSettings* K3b::Core::globalSettings() const
 }
 
 
-const K3b::Version& K3b::Core::version() const
+K3b::Version K3b::Core::version() const
 {
     return d->version;
 }
@@ -336,6 +336,12 @@ bool K3b::Core::internalBlockDevice( K3b::Device::Device* dev )
 void K3b::Core::internalUnblockDevice( K3b::Device::Device* dev )
 {
     d->blockedDevices.removeAll( dev );
+}
+
+
+bool K3b::Core::deviceBlocked( Device::Device* dev ) const
+{
+    return d->blockedDevices.contains( dev );
 }
 
 

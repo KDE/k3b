@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,7 +11,6 @@
  * (at your option) any later version.
  * See the file "COPYING" for the exact licensing terms.
  */
-
 
 #ifndef K3BAUDIOTRACKDIALOG_H
 #define K3BAUDIOTRACKDIALOG_H
@@ -25,38 +24,33 @@
 
 namespace K3b {
     class AudioTrack;
-}
-namespace K3b {
     class AudioTrackWidget;
-}
 
-/**
- *@author Sebastian Trueg
- */
+    /**
+     *@author Sebastian Trueg
+     */
+    class AudioTrackDialog : public KDialog
+    {
+        Q_OBJECT
 
-namespace K3b {
-class AudioTrackDialog : public KDialog
-{
-    Q_OBJECT
+    public:
+        AudioTrackDialog( const QList<AudioTrack*>&, QWidget *parent=0);
+        ~AudioTrackDialog();
 
-public:
-    AudioTrackDialog( const QList<AudioTrack*>&, QWidget *parent=0);
-    ~AudioTrackDialog();
-	
-protected Q_SLOTS:
-    void slotOk();
-    void slotApply();
+    protected Q_SLOTS:
+        void slotOk();
+        void slotApply();
 
-    void updateTrackLengthDisplay();
+        void updateTrackLengthDisplay();
 
-private:
-    QList<AudioTrack*> m_tracks;
+    private:
+        QList<AudioTrack*> m_tracks;
 
-    AudioTrackWidget* m_audioTrackWidget;
+        AudioTrackWidget* m_audioTrackWidget;
 
-    void setupGui();
-    void setupConnections();
-};
+        void setupGui();
+        void setupConnections();
+    };
 }
 
 #endif

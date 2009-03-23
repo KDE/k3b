@@ -237,7 +237,7 @@ void K3b::Iso9660ImageWritingJob::startWriting()
     // 8. if writing mode WRITING_MODE_INCR_SEQ: DVD-R(W)
     // 9. if writing mode WRITING_MODE_RES_OVWR: DVD-RW or DVD+RW
 
-    int mt = 0;
+    Device::MediaTypes mt = 0;
     if( m_writingMode == K3b::WRITING_MODE_AUTO ||
         m_writingMode == K3b::WRITING_MODE_DAO ) {
         if( writingApp() == K3b::WRITING_APP_CDRDAO )
@@ -274,7 +274,7 @@ void K3b::Iso9660ImageWritingJob::startWriting()
     d->checksumPipe.close();
     d->checksumPipe.readFrom( &d->imageFile, true );
 
-    if( prepareWriter( media ) ) {
+    if( prepareWriter( Device::MediaTypes( media ) ) ) {
         emit burning(true);
         m_writer->start();
         d->checksumPipe.writeTo( m_writer->ioDevice(), true );
@@ -287,7 +287,7 @@ void K3b::Iso9660ImageWritingJob::startWriting()
 }
 
 
-bool K3b::Iso9660ImageWritingJob::prepareWriter( int mediaType )
+bool K3b::Iso9660ImageWritingJob::prepareWriter( Device::MediaTypes mediaType )
 {
     if( mediaType == 0 ) { // media forced
         // just to get it going...

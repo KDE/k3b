@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2007-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,13 +45,13 @@ K3b::Device::Device* K3b::ThreadJobCommunicationEvent::device() const
 }
 
 
-int K3b::ThreadJobCommunicationEvent::wantedMediaState() const
+K3b::Device::MediaStates K3b::ThreadJobCommunicationEvent::wantedMediaState() const
 {
     return m_wantedMediaState;
 }
 
 
-int K3b::ThreadJobCommunicationEvent::wantedMediaType() const
+K3b::Device::MediaTypes K3b::ThreadJobCommunicationEvent::wantedMediaType() const
 {
     return m_wantedMediaType;
 }
@@ -116,9 +116,9 @@ void K3b::ThreadJobCommunicationEvent::done( int result )
 
 
 K3b::ThreadJobCommunicationEvent* K3b::ThreadJobCommunicationEvent::waitForMedium( K3b::Device::Device* device,
-                                                                               int mediaState,
-                                                                               int mediaType,
-                                                                               const QString& message )
+                                                                                   Device::MediaStates mediaState,
+                                                                                   Device::MediaTypes mediaType,
+                                                                                   const QString& message )
 {
     K3b::ThreadJobCommunicationEvent* event = new K3b::ThreadJobCommunicationEvent( WaitForMedium );
     event->m_device = device;
@@ -130,9 +130,9 @@ K3b::ThreadJobCommunicationEvent* K3b::ThreadJobCommunicationEvent::waitForMediu
 
 
 K3b::ThreadJobCommunicationEvent* K3b::ThreadJobCommunicationEvent::questionYesNo( const QString& text,
-                                                                               const QString& caption,
-                                                                               const QString& yesText,
-                                                                               const QString& noText )
+                                                                                   const QString& caption,
+                                                                                   const QString& yesText,
+                                                                                   const QString& noText )
 {
     K3b::ThreadJobCommunicationEvent* event = new K3b::ThreadJobCommunicationEvent( QuestionYesNo );
     event->m_text = text;
@@ -144,7 +144,7 @@ K3b::ThreadJobCommunicationEvent* K3b::ThreadJobCommunicationEvent::questionYesN
 
 
 K3b::ThreadJobCommunicationEvent* K3b::ThreadJobCommunicationEvent::blockingInformation( const QString& text,
-                                                                                     const QString& caption )
+                                                                                         const QString& caption )
 {
     K3b::ThreadJobCommunicationEvent* event = new K3b::ThreadJobCommunicationEvent( BlockingInfo );
     event->m_text = text;

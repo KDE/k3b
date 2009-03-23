@@ -55,7 +55,7 @@ public:
           verificationJob(0),
           usedWritingMode(K3b::WRITING_MODE_AUTO),
           verifyData(false) {
-        outPipe.readFrom( &imageFile );
+        outPipe.readFrom( &imageFile, true );
     }
 
     int doneCopies;
@@ -421,7 +421,7 @@ void K3b::DvdCopyJob::prepareReader()
     if( m_onTheFly && !m_onlyCreateImage )
         d->inPipe.writeTo( d->writerJob->ioDevice(), true );
     else
-        d->inPipe.writeTo( &d->imageFile );
+        d->inPipe.writeTo( &d->imageFile, true );
 
     d->inPipe.open( true );
     d->dataTrackReader->writeTo( &d->inPipe );
@@ -763,7 +763,7 @@ void K3b::DvdCopyJob::slotVerificationFinished( bool success )
 // perhaps this should be moved to some K3b::GrowisofsHandler which also parses the growisofs output?
 bool K3b::DvdCopyJob::waitForDvd()
 {
-    int mt = 0;
+    Device::MediaTypes mt = 0;
     if ( K3b::Device::isDvdMedia( d->sourceDiskInfo.mediaType() ) ) {
         if( m_writingMode == K3b::WRITING_MODE_RES_OVWR ) // we treat DVD+R(W) as restricted overwrite media
             mt = K3b::Device::MEDIA_DVD_RW_OVWR|K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_PLUS_R;
@@ -838,10 +838,10 @@ bool K3b::DvdCopyJob::waitForDvd()
         else if ( m & K3b::Device::MEDIA_DVD_MINUS_ALL ) {
             if( m_simulate && !m_writerDevice->dvdMinusTestwrite() ) {
                 if( !questionYesNo( i18n("Your writer (%1 %2) does not support simulation with DVD-R(W) media. "
-                                         "Do you really want to continue? The media will actualy be "
+                                         "Do you really want to continue? The media will actually be "
                                          "written to.",
-                                    m_writerDevice->vendor()
-                                    ,m_writerDevice->description()),
+                                         m_writerDevice->vendor(),
+                                         m_writerDevice->description()),
                                     i18n("No Simulation with DVD-R(W)") ) ) {
                     cancel();
                     return false;

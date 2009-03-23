@@ -227,8 +227,9 @@ void K3b::WritingModeWidget::determineSupportedModesFromMedium( const K3b::Mediu
 
     if( m.diskInfo().mediaType() & K3b::Device::MEDIA_DVD_MINUS_ALL ) {
         modes |= K3b::WRITING_MODE_DAO;
-        if( m.device()->featureCurrent( K3b::Device::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) != 0 )
-            modes |= K3b::WRITING_MODE_INCR_SEQ;
+        if ( !k3bcore->deviceBlocked( m.device() ) )
+             if( m.device()->featureCurrent( K3b::Device::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) != 0 )
+                 modes |= K3b::WRITING_MODE_INCR_SEQ;
     }
 
     if( m.diskInfo().mediaType() & (K3b::Device::MEDIA_DVD_RW|

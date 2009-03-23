@@ -57,8 +57,8 @@ public:
 
     K3b::Device::Device* device;
 
-    int wantedMediaType;
-    int wantedMediaState;
+    Device::MediaTypes wantedMediaType;
+    Device::MediaStates wantedMediaState;
 
     QString wantedMediaTypeString;
 
@@ -88,12 +88,23 @@ K3b::EmptyDiscWaiter::EmptyDiscWaiter( K3b::Device::Device* device, QWidget* par
       d( new Private() )
 {
     setCaption(i18n("Waiting for Disk"));
-    setButtons(KDialog::Cancel|KDialog::User1|KDialog::User2|KDialog::User3);
-    setDefaultButton(KDialog::User3);
     setModal(true);
-    setButtonText(KDialog::User1,i18n("Force"));
-    setButtonText(KDialog::User2,i18n("Eject"));
-    setButtonText(KDialog::User3,i18n("Load"));
+
+    KConfigGroup g( KGlobal::config(), "General Options" );
+    const bool showAdvancedGui = g.readEntry( "Show advanced GUI", false );
+    if ( showAdvancedGui ) {
+        setButtons( KDialog::Cancel|KDialog::User1|KDialog::User2|KDialog::User3 );
+        setDefaultButton( KDialog::User3 );
+        setButtonText(KDialog::User1,i18n("Force"));
+        setButtonText(KDialog::User2,i18n("Eject"));
+        setButtonText(KDialog::User3,i18n("Load"));
+    }
+    else {
+        setButtons( KDialog::Cancel|KDialog::User1|KDialog::User2 );
+        setDefaultButton( KDialog::User2 );
+        setButtonText(KDialog::User1,i18n("Eject"));
+        setButtonText(KDialog::User2,i18n("Load"));
+    }
 
     d->device = device;
 
@@ -140,7 +151,7 @@ K3b::EmptyDiscWaiter::~EmptyDiscWaiter()
 }
 
 
-int K3b::EmptyDiscWaiter::waitForDisc( int mediaState, int mediaType, const QString& message )
+int K3b::EmptyDiscWaiter::waitForDisc( Device::MediaStates mediaState, Device::MediaTypes mediaType, const QString& message )
 {
     if ( d->inLoop ) {
         kError() << "(K3b::EmptyDiscWaiter) Recursive call detected." << endl;
@@ -734,20 +745,20 @@ void K3b::EmptyDiscWaiter::slotErasingFinished( bool success )
 }
 
 
-int K3b::EmptyDiscWaiter::wait( K3b::Device::Device* device, bool appendable, int mediaType, QWidget* parent )
+int K3b::EmptyDiscWaiter::wait( K3b::Device::Device* device, bool appendable, Device::MediaTypes mediaType, QWidget* parent )
 {
     K3b::EmptyDiscWaiter d( device, parent ? parent : qApp->activeWindow() );
-    int mediaState = K3b::Device::STATE_EMPTY;
+    Device::MediaStates mediaState = K3b::Device::STATE_EMPTY;
     if( appendable ) mediaState |= K3b::Device::STATE_INCOMPLETE;
     return d.waitForDisc( mediaState, mediaType );
 }
 
 
 int K3b::EmptyDiscWaiter::wait( K3b::Device::Device* device,
-                              int mediaState,
-                              int mediaType,
-                              const QString& message,
-                              QWidget* parent )
+                                Device::MediaStates mediaState,
+                                Device::MediaTypes mediaType,
+                                const QString& message,
+                                QWidget* parent )
 {
     K3b::EmptyDiscWaiter d( device, parent ? parent : qApp->activeWindow() );
     return d.waitForDisc( mediaState, mediaType, message );
@@ -781,9 +792,9 @@ QWidget* K3b::EmptyDiscWaiter::parentWidgetToUse()
 
 
 int K3b::EmptyDiscWaiter::waitForMedia( K3b::Device::Device* device,
-                                      int mediaState,
-                                      int mediaType,
-                                      const QString& message )
+                                        Device::MediaStates mediaState,
+                                        Device::MediaTypes mediaType,
+                                        const QString& message )
 {
     // this is only needed for the formatting
     return wait( device, mediaState, mediaType, message, d->erasingInfoDialog );
@@ -791,9 +802,9 @@ int K3b::EmptyDiscWaiter::waitForMedia( K3b::Device::Device* device,
 
 
 bool K3b::EmptyDiscWaiter::questionYesNo( const QString& text,
-                                        const QString& caption,
-                                        const QString& yesText,
-                                        const QString& noText )
+                                          const QString& caption,
+                                          const QString& yesText,
+                                          const QString& noText )
 {
     return ( KMessageBox::questionYesNo( parentWidgetToUse(),
                                          text,
@@ -804,7 +815,7 @@ bool K3b::EmptyDiscWaiter::questionYesNo( const QString& text,
 
 
 void K3b::EmptyDiscWaiter::blockingInformation( const QString& text,
-                                              const QString& caption )
+                                                const QString& caption )
 {
     KMessageBox::information( this, text, caption );
 }

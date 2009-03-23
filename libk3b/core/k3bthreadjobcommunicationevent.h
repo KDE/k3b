@@ -20,6 +20,8 @@
 #include <qwaitcondition.h>
 #include <QEvent>
 
+#include "k3bdevicetypes.h"
+
 namespace K3b {
     namespace Device {
         class Device;
@@ -41,8 +43,8 @@ namespace K3b {
         int type() const;
 
         Device::Device* device() const;
-        int wantedMediaState() const;
-        int wantedMediaType() const;
+        Device::MediaStates wantedMediaState() const;
+        Device::MediaTypes wantedMediaType() const;
         QString message() const;
 
         QString text() const;
@@ -65,23 +67,23 @@ namespace K3b {
         void done( int result );
 
         static ThreadJobCommunicationEvent* waitForMedium( Device::Device* device,
-                                                              int mediaState,
-                                                              int mediaType,
-                                                              const QString& message );
+                                                           Device::MediaStates mediaState,
+                                                           Device::MediaTypes mediaType,
+                                                           const QString& message );
         static ThreadJobCommunicationEvent* questionYesNo( const QString& text,
-                                                              const QString& caption,
-                                                              const QString& yesText,
-                                                              const QString& noText );
+                                                           const QString& caption,
+                                                           const QString& yesText,
+                                                           const QString& noText );
         static ThreadJobCommunicationEvent* blockingInformation( const QString& text,
-                                                                    const QString& caption );
+                                                                 const QString& caption );
 
     private:
         ThreadJobCommunicationEvent( int type );
 
         int m_type;
         Device::Device* m_device;
-        int m_wantedMediaState;
-        int m_wantedMediaType;
+        Device::MediaStates m_wantedMediaState;
+        Device::MediaTypes m_wantedMediaType;
         QString m_text;
         QString m_caption;
         QString m_yesText;

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,6 @@
 #define K3B_ADVANCED_OPTION_TAB_H
 
 #include <qwidget.h>
-//Added by qt3to4:
-#include <QLabel>
 
 class QCheckBox;
 class QLabel;
@@ -27,32 +25,32 @@ class KIntNumInput;
 
 
 namespace K3b {
-class AdvancedOptionTab : public QWidget
-{
-    Q_OBJECT
+    class AdvancedOptionTab : public QWidget
+    {
+        Q_OBJECT
 
-public:
-    AdvancedOptionTab( QWidget* parent = 0 );
-    ~AdvancedOptionTab();
+    public:
+        AdvancedOptionTab( QWidget* parent = 0 );
+        ~AdvancedOptionTab();
 
-    void saveSettings();
-    void readSettings();
+        void saveSettings();
+        void readSettings();
 
-private Q_SLOTS:
-    void slotSetDefaultBufferSizes( bool );
+    private Q_SLOTS:
+        void slotSetDefaultBufferSizes( bool );
 
-private:
-    void setupGui();
+    private:
+        void setupGui();
 
-    QCheckBox*    m_checkBurnfree;
-    QCheckBox*    m_checkEject;
-    QCheckBox*    m_checkAutoErasingRewritable;
-    QCheckBox*    m_checkOverburn;
-    QCheckBox*    m_checkManualWritingBufferSize;
-    KIntNumInput* m_editWritingBufferSize;
-    QCheckBox*    m_checkAllowWritingAppSelection;
-    QCheckBox*    m_checkForceUnsafeOperations;
-};
+        QCheckBox*    m_checkBurnfree;
+        QCheckBox*    m_checkEject;
+        QCheckBox*    m_checkAutoErasingRewritable;
+        QCheckBox*    m_checkOverburn;
+        QCheckBox*    m_checkManualWritingBufferSize;
+        KIntNumInput* m_editWritingBufferSize;
+        QCheckBox*    m_checkShowForceGuiElements;
+        QCheckBox*    m_checkForceUnsafeOperations;
+    };
 }
 
 

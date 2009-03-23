@@ -250,7 +250,7 @@ K3b::Msf K3b::WriterSelectionWidget::wantedMediumSize() const
 void K3b::WriterSelectionWidget::slotConfigChanged( KSharedConfig::Ptr c )
 {
     KConfigGroup g( c, "General Options" );
-    if( g.readEntry( "Manual writing app selection", false ) ) {
+    if( g.readEntry( "Show advanced GUI", false ) ) {
         m_comboWritingApp->show();
         m_writingAppLabel->show();
     }

@@ -659,7 +659,7 @@ void K3b::DataJob::cancelAll()
 bool K3b::DataJob::waitForMedium()
 {
     // start with all media types supported by the writer
-    int m  = d->doc->supportedMediaTypes() & d->doc->burner()->writeCapabilities();
+    Device::MediaTypes m  = d->doc->supportedMediaTypes() & d->doc->burner()->writeCapabilities();
 
     // if everything goes wrong we are left with no possible media to request
     if ( !m ) {

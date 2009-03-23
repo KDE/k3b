@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,8 +94,8 @@ bool K3b::ThreadJob::canceled() const
 
 
 int K3b::ThreadJob::waitForMedia( K3b::Device::Device* device,
-                                  int mediaState,
-                                  int mediaType,
+                                  Device::MediaStates mediaState,
+                                  Device::MediaTypes mediaType,
                                   const QString& message )
 {
     K3b::ThreadJobCommunicationEvent* event = K3b::ThreadJobCommunicationEvent::waitForMedium( device,

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -135,9 +135,9 @@ void K3b::Job::slotCanceled()
 
 
 int K3b::Job::waitForMedia( K3b::Device::Device* device,
-                          int mediaState,
-                          int mediaType,
-                          const QString& message )
+                            Device::MediaStates mediaState,
+                            Device::MediaTypes mediaType,
+                            const QString& message )
 {
     // TODO: What about:   emit newSubTask( i18n("Waiting for media") );
     return d->jobHandler->waitForMedia( device, mediaState, mediaType, message );
@@ -145,29 +145,29 @@ int K3b::Job::waitForMedia( K3b::Device::Device* device,
 
 
 bool K3b::Job::questionYesNo( const QString& text,
-                            const QString& caption,
-                            const QString& yesText,
-                            const QString& noText )
+                              const QString& caption,
+                              const QString& yesText,
+                              const QString& noText )
 {
     return d->jobHandler->questionYesNo( text, caption, yesText, noText );
 }
 
 
 void K3b::Job::blockingInformation( const QString& text,
-                                  const QString& caption )
+                                    const QString& caption )
 {
     return d->jobHandler->blockingInformation( text, caption );
 }
 
 
 void K3b::Job::connectSubJob( K3b::Job* subJob,
-                            const char* finishedSlot,
-                            const char* newTaskSlot,
-                            const char* newSubTaskSlot,
-                            const char* progressSlot,
-                            const char* subProgressSlot,
-                            const char* processedSizeSlot,
-                            const char* processedSubSizeSlot )
+                              const char* finishedSlot,
+                              const char* newTaskSlot,
+                              const char* newSubTaskSlot,
+                              const char* progressSlot,
+                              const char* subProgressSlot,
+                              const char* processedSizeSlot,
+                              const char* processedSubSizeSlot )
 {
     // standard connections
     connect( subJob, SIGNAL(debuggingOutput(const QString&, const QString&)),

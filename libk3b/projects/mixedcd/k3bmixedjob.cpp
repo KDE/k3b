@@ -14,6 +14,7 @@
 
 #include "k3bmixedjob.h"
 #include "k3bmixeddoc.h"
+#include "k3bactivepipe.h"
 
 #include <k3bdatadoc.h>
 #include <k3bisoimager.h>
@@ -88,6 +89,8 @@ public:
 
     K3b::AudioMaxSpeedJob* maxSpeedJob;
     bool maxSpeed;
+
+    ActivePipe pipe;
 };
 
 

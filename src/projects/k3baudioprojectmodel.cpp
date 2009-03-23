@@ -41,7 +41,6 @@ public:
 
     K3b::AudioDoc* project;
 
-    void _k_trackChanged( K3b::AudioTrack* );
     void _k_docChanged();
     void _k_trackAdded( K3b::AudioTrack* );
     void _k_aboutToRemoveTrack( int );
@@ -56,6 +55,7 @@ void K3b::AudioProjectModel::Private::_k_docChanged()
 {
     //q->reset();
 }
+
 
 void K3b::AudioProjectModel::Private::_k_trackAdded( K3b::AudioTrack* track )
 {

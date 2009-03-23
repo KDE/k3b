@@ -40,8 +40,8 @@ namespace K3b {
          * \return 0
          */
         int waitForMedia( Device::Device*,
-                          int mediaState = Device::STATE_EMPTY,
-                          int mediaType = Device::MEDIA_WRITABLE_CD,
+                          K3b::Device::MediaStates mediaState = Device::STATE_EMPTY,
+                          K3b::Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
                           const QString& message = QString() );
         /**
          * \return true

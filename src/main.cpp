@@ -49,9 +49,9 @@ int main( int argc, char* argv[] )
 
     aboutData.addAuthor(ki18n("Sebastian Trüg"),ki18n("Maintainer and Lead Developer"), "trueg@k3b.org");
     aboutData.addAuthor(ki18n("Christian Kvasny"),ki18n("VideoCD Project and VideoCD ripping"), "chris@k3b.org");
-    aboutData.addAuthor(ki18n("Montel Laurent"), ki18n("Port to kde4"), "montel@kde.org");
-    aboutData.addCredit(ki18n("Klaus-Dieter Krannich"), ki18n("Advanced Cdrdao integration"), "kd@k3b.org" );
+    aboutData.addAuthor(ki18n("Montel Laurent"), ki18n("Initial port to KDE 4"), "montel@kde.org");
 
+    aboutData.addCredit(ki18n("Klaus-Dieter Krannich"), ki18n("Advanced Cdrdao integration"), "kd@k3b.org" );
     aboutData.addCredit(ki18n("Thomas Froescher"),
                         ki18n("VideoDVD ripping and video encoding in pre-1.0 versions."),
                         "tfroescher@k3b.org");

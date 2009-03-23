@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,18 +63,18 @@ void K3b::AdvancedOptionTab::setupGui()
     bufferLayout->setSpacing( KDialog::spacingHint() );
 
     m_checkBurnfree = K3b::StdGuiItems::burnproofCheckbox( groupWritingApp );
-    m_checkOverburn = new QCheckBox( i18n("Allow overburning (&not supported by cdrecord <= 1.10)"), groupWritingApp );
-    m_checkForceUnsafeOperations = new QCheckBox( i18n("Force unsafe operations"), groupWritingApp );
+    m_checkOverburn = new QCheckBox( i18n("Allow &overburning (not supported by cdrecord <= 1.10)"), groupWritingApp );
+    m_checkForceUnsafeOperations = new QCheckBox( i18n("&Force unsafe operations"), groupWritingApp );
     m_checkManualWritingBufferSize = new QCheckBox( i18n("&Manual writing buffer size") + ":", groupWritingApp );
     m_editWritingBufferSize = new KIntNumInput( 4, groupWritingApp );
     m_editWritingBufferSize->setSuffix( " " + i18n("MB") );
-    m_checkAllowWritingAppSelection = new QCheckBox( i18n("Manual writing application &selection"), groupWritingApp );
+    m_checkShowForceGuiElements = new QCheckBox( i18n("Show &advanced GUI elements"), groupWritingApp );
     bufferLayout->addWidget( m_checkBurnfree, 0, 0, 1, 3 );
     bufferLayout->addWidget( m_checkOverburn, 1, 0, 1, 2 );
     bufferLayout->addWidget( m_checkForceUnsafeOperations, 2, 0, 1, 3 );
     bufferLayout->addWidget( m_checkManualWritingBufferSize, 3, 0 );
     bufferLayout->addWidget( m_editWritingBufferSize, 3, 1 );
-    bufferLayout->addWidget( m_checkAllowWritingAppSelection, 4, 0, 1, 3 );
+    bufferLayout->addWidget( m_checkShowForceGuiElements, 4, 0, 1, 3 );
     bufferLayout->setColumnStretch( 2, 1 );
 
     QGroupBox* groupMisc = new QGroupBox( i18n("Miscellaneous"), this );
@@ -102,18 +102,21 @@ void K3b::AdvancedOptionTab::setupGui()
 
 
     m_checkOverburn->setToolTip( i18n("Allow burning more than the official media capacities") );
-    m_checkAllowWritingAppSelection->setToolTip( i18n("Allow to choose between cdrecord and cdrdao") );
+    m_checkShowForceGuiElements->setToolTip( i18n("Show advanced GUI elements like allowing to choose between cdrecord and cdrdao") );
     m_checkAutoErasingRewritable->setToolTip( i18n("Automatically erase CD-RWs and DVD-RWs without asking") );
     m_checkEject->setToolTip( i18n("Do not eject the burn medium after a completed burn process") );
     m_checkForceUnsafeOperations->setToolTip( i18n("Force K3b to continue some operations otherwise deemed as unsafe") );
 
-    m_checkAllowWritingAppSelection->setWhatsThis( i18n("<p>If this option is checked K3b gives "
-                                                        "the possibility to choose between cdrecord "
-                                                        "and cdrdao when writing a cd."
-                                                        "<p>This may be useful if one of the programs "
-                                                        "does not support the used writer."
-                                                        "<p><b>Be aware that K3b does not support both "
-                                                        "programs in all project types.</b>") );
+    m_checkShowForceGuiElements->setWhatsThis( i18n("<p>If this option is checked additional GUI "
+                                                    "elements which allow to influence the behaviour of K3b are shown. "
+                                                    "This includes the manual selection of the used burning tool "
+                                                    "(Choose between cdrecord and cdrdao when writing a CD or between "
+                                                    "cdrecord and growisofs when writing a DVD/BD.) or the forcing of "
+                                                    "a medium in case K3b fails to detect it properly."
+                                                    "<p>This may be useful if one of the programs "
+                                                    "does not support the used writer."
+                                                    "<p><b>Be aware that K3b does not support all possible tools "
+                                                    "in all project types and actions.</b>") );
 
     m_checkOverburn->setWhatsThis( i18n("<p>Each medium has an official maximum capacity which is stored in a read-only "
                                         "area of the medium and is guaranteed by the vendor. However, this official "
@@ -156,7 +159,7 @@ void K3b::AdvancedOptionTab::readSettings()
     KConfigGroup c( KGlobal::config(), "General Options" );
 
     m_checkAutoErasingRewritable->setChecked( c.readEntry( "auto rewritable erasing", false ) );
-    m_checkAllowWritingAppSelection->setChecked( c.readEntry( "Manual writing app selection", false ) );
+    m_checkShowForceGuiElements->setChecked( c.readEntry( "Show advanced GUI", false ) );
 
     m_checkBurnfree->setChecked( k3bcore->globalSettings()->burnfree() );
     m_checkEject->setChecked( !k3bcore->globalSettings()->ejectMedia() );
@@ -173,7 +176,7 @@ void K3b::AdvancedOptionTab::saveSettings()
     KConfigGroup c( KGlobal::config(), "General Options" );
 
     c.writeEntry( "auto rewritable erasing", m_checkAutoErasingRewritable->isChecked() );
-    c.writeEntry( "Manual writing app selection", m_checkAllowWritingAppSelection->isChecked() );
+    c.writeEntry( "Show advanced GUI", m_checkShowForceGuiElements->isChecked() );
 
     k3bcore->globalSettings()->setEjectMedia( !m_checkEject->isChecked() );
     k3bcore->globalSettings()->setOverburn( m_checkOverburn->isChecked() );

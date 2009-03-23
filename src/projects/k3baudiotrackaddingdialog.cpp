@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,11 +67,11 @@ K3b::AudioTrackAddingDialog::~AudioTrackAddingDialog()
 
 
 int K3b::AudioTrackAddingDialog::addUrls( const KUrl::List& urls,
-                                        K3b::AudioDoc* doc,
-                                        K3b::AudioTrack* afterTrack,
-                                        K3b::AudioTrack* parentTrack,
-                                        K3b::AudioDataSource* afterSource,
-                                        QWidget* parent )
+                                          K3b::AudioDoc* doc,
+                                          K3b::AudioTrack* afterTrack,
+                                          K3b::AudioTrack* parentTrack,
+                                          K3b::AudioDataSource* afterSource,
+                                          QWidget* parent )
 {
     if( urls.isEmpty() )
         return 0;
@@ -221,7 +221,9 @@ void K3b::AudioTrackAddingDialog::slotAnalysingFinished( bool /*success*/ )
             track->setCdTextMessage( dec->metaInfo( K3b::AudioDecoder::META_COMMENT ) );
 
             if( m_trackAfter )
-                m_doc->addTrack( track, m_trackAfter->trackNumber() );
+                track->moveAfter( m_trackAfter );
+            else if ( m_doc->lastTrack() )
+                track->moveAfter( m_doc->lastTrack() );
             else
                 m_doc->addTrack( track, 0 );
 

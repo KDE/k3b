@@ -42,8 +42,8 @@ namespace K3b {
          *         and -1 on error (canceled)
          */
         virtual int waitForMedia( Device::Device*,
-                                  int mediaState = Device::STATE_EMPTY,
-                                  int mediaType = Device::MEDIA_WRITABLE_CD,
+                                  Device::MediaStates mediaState = Device::STATE_EMPTY,
+                                  Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
                                   const QString& message = QString() ) = 0;
 
         // FIXME: use KGuiItem

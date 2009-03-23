@@ -112,7 +112,7 @@ namespace K3b {
         /**
          * returns the version of the library as defined by LIBK3B_VERSION
          */
-        const Version& version() const;
+        Version version() const;
 
         /**
          * Used by the writing jobs to block a device.
@@ -125,6 +125,11 @@ namespace K3b {
          */
         bool blockDevice( Device::Device* );
         void unblockDevice( Device::Device* );
+
+        /**
+         * \return \p true if \p dev has been blocked via blockDevice.
+         */
+        bool deviceBlocked( Device::Device* dev ) const;
 
         static Core* k3bCore() { return s_k3bCore; }
 

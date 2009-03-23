@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,8 +60,8 @@ namespace K3b {
          * \internal do not use!
          */
         int waitForMedia( Device::Device*,
-                          int mediaState = Device::STATE_EMPTY,
-                          int mediaType = Device::MEDIA_WRITABLE_CD,
+                          Device::MediaStates mediaState = Device::STATE_EMPTY,
+                          Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
                           const QString& message = QString() );
 
         /**
@@ -83,7 +83,7 @@ namespace K3b {
          */
         static int wait( Device::Device* device,
                          bool appendable = false,
-                         int mediaType = Device::MEDIA_WRITABLE_CD,
+                         Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
                          QWidget* parent = 0 );
 
         /**
@@ -94,8 +94,8 @@ namespace K3b {
          * \return the found MediaType on success, 0 if forced and -1 if canceled
          */
         static int wait( Device::Device*,
-                         int mediaState,
-                         int mediaType = Device::MEDIA_WRITABLE_CD,
+                         Device::MediaStates mediaState,
+                         Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
                          const QString& message = QString(),
                          QWidget* parent = 0 );
 
@@ -115,8 +115,8 @@ namespace K3b {
          */
         explicit EmptyDiscWaiter( Device::Device* device, QWidget* parent = 0 );
 
-        int waitForDisc( int mediaState = Device::STATE_EMPTY,
-                         int mediaType = Device::MEDIA_WRITABLE_CD,
+        int waitForDisc( Device::MediaStates mediaState = Device::STATE_EMPTY,
+                         Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
                          const QString& message = QString() );
 
 

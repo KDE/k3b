@@ -97,7 +97,7 @@ bool K3b::DataMultiSessionParameterJob::run()
                 // determineMultiSessionMode( K3b::Device::DeviceHandler* ) below.
                 //
 
-                int wantedMediaState = K3b::Device::STATE_INCOMPLETE|K3b::Device::STATE_EMPTY;
+                Device::MediaStates wantedMediaState = K3b::Device::STATE_INCOMPLETE|K3b::Device::STATE_EMPTY;
                 if( d->doc->importedSession() >= 0 )
                     wantedMediaState = K3b::Device::STATE_INCOMPLETE;
 

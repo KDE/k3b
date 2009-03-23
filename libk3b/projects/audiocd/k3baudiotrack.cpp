@@ -297,6 +297,7 @@ void K3b::AudioTrack::moveAfter( K3b::AudioTrack* track )
         else {
             doc()->setFirstTrack( take() );
             doc()->setLastTrack( this );
+            emit doc()->trackAdded( this );
         }
     }
     else if( track == this ) {
@@ -325,6 +326,8 @@ void K3b::AudioTrack::moveAfter( K3b::AudioTrack* track )
             doc()->setFirstTrack( this );
         if( !m_next )
             doc()->setLastTrack( this );
+
+        emit doc()->trackAdded( this );
     }
 
     emitChanged();
@@ -345,6 +348,7 @@ void K3b::AudioTrack::moveAhead( K3b::AudioTrack* track )
         else {
             doc()->setFirstTrack( take() );
             doc()->setLastTrack( this );
+            emit doc()->trackAdded( this );
         }
     }
     else if( track == this ) {
@@ -373,6 +377,8 @@ void K3b::AudioTrack::moveAhead( K3b::AudioTrack* track )
             doc()->setFirstTrack( this );
         if( !m_next )
             doc()->setLastTrack( this );
+
+        emit doc()->trackAdded( this );
     }
 
     emitChanged();
