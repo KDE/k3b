@@ -183,6 +183,21 @@ namespace K3b {
          */
         AudioDataSource* getSource( int index ) const;
 
+        /**
+         * Tells the audio doc one source was removed from the list.
+         */
+        void emitSourceRemoved( AudioDataSource* );
+
+        /**
+         * Tells the audio doc one source is about to be removed
+         */
+        void emitAboutToRemoveSource( AudioDataSource* );
+
+        /**
+         * Tells the audio doc one source was added to the list.
+         */
+        void emitSourceAdded( AudioDataSource* );
+
     private:
         /**
          * Tells the doc that the track has changed

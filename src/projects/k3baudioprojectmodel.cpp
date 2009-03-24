@@ -1,9 +1,10 @@
 /*
  *
  * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
+ *           (C) 2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,8 +44,11 @@ public:
 
     void _k_docChanged();
     void _k_trackAdded( K3b::AudioTrack* );
-    void _k_aboutToRemoveTrack( int );
+    void _k_aboutToRemoveTrack( K3b::AudioTrack* );
     void _k_trackRemoved();
+    void _k_sourceAdded( K3b::AudioTrack*, int );
+    void _k_sourceRemoved( K3b::AudioTrack* );
+    void _k_aboutToRemoveSource( K3b::AudioTrack*, int );
 
 private:
     AudioProjectModel* q;
@@ -69,8 +73,9 @@ void K3b::AudioProjectModel::Private::_k_trackAdded( K3b::AudioTrack* track )
 }
 
 
-void K3b::AudioProjectModel::Private::_k_aboutToRemoveTrack( int index )
+void K3b::AudioProjectModel::Private::_k_aboutToRemoveTrack( K3b::AudioTrack* track )
 {
+    int index = track->trackNumber() - 1;
     q->beginRemoveRows( QModelIndex(), index, index );
 }
 
@@ -81,15 +86,46 @@ void K3b::AudioProjectModel::Private::_k_trackRemoved()
 }
 
 
+void K3b::AudioProjectModel::Private::_k_sourceAdded( K3b::AudioTrack* track, int position )
+{
+    QModelIndex parent = q->indexForTrack( track );
+    q->beginInsertRows( parent, position, position );
+    // do nothing
+    q->endInsertRows();
+}
+
+
+void K3b::AudioProjectModel::Private::_k_aboutToRemoveSource( K3b::AudioTrack* track, int position )
+{
+    QModelIndex parent = q->indexForTrack( track );
+    q->beginRemoveRows( parent, position, position );
+}
+
+
+void K3b::AudioProjectModel::Private::_k_sourceRemoved( K3b::AudioTrack* track )
+{
+    Q_UNUSED( track );
+
+    q->endRemoveRows();
+}
+
+
 K3b::AudioProjectModel::AudioProjectModel( K3b::AudioDoc* doc, QObject* parent )
     : QAbstractItemModel( parent ),
       d( new Private( doc, this ) )
 {
     connect( doc, SIGNAL( changed() ), this, SLOT( _k_docChanged() ) );
-    connect( doc, SIGNAL( aboutToRemoveTrack( int ) ),
-             this, SLOT( _k_aboutToRemoveTrack( int ) ) );
+    connect( doc, SIGNAL( aboutToRemoveTrack( K3b::AudioTrack* ) ),
+             this, SLOT( _k_aboutToRemoveTrack( K3b::AudioTrack* ) ) );
     connect( doc, SIGNAL( trackAdded( K3b::AudioTrack* ) ),
              this, SLOT( _k_trackAdded( K3b::AudioTrack* ) ) );
+
+    connect( doc, SIGNAL( sourceAdded( K3b::AudioTrack*, int ) ),
+             this, SLOT( _k_sourceAdded( K3b::AudioTrack*, int ) ) );
+    connect( doc, SIGNAL( sourceRemoved( K3b::AudioTrack* ) ),
+             this, SLOT( _k_sourceRemoved( K3b::AudioTrack* ) ) );
+    connect( doc, SIGNAL( aboutToRemoveSource( K3b::AudioTrack*, int ) ),
+             this, SLOT( _k_aboutToRemoveSource( K3b::AudioTrack*, int ) ) );
 }
 
 
@@ -182,7 +218,7 @@ QVariant K3b::AudioProjectModel::data( const QModelIndex& index, int role ) cons
                 break;
 
             case TypeColumn:
-                if( role == Qt::DisplayRole ) {
+                if( role == Qt::DisplayRole && track->firstSource() ) {
                     return track->firstSource()->type();
                 }
                 break;
@@ -194,7 +230,7 @@ QVariant K3b::AudioProjectModel::data( const QModelIndex& index, int role ) cons
                 break;
 
             case FilenameColumn:
-                if( role == Qt::DisplayRole ) {
+                if( role == Qt::DisplayRole && track->firstSource() ) {
                     return track->firstSource()->sourceComment();
                 }
                 break;
@@ -652,5 +688,6 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
 
     return false;
 }
+
 
 #include "k3baudioprojectmodel.moc"

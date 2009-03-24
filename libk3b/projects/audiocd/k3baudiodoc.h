@@ -186,14 +186,17 @@ namespace K3b {
     private Q_SLOTS:
         void slotTrackChanged( K3b::AudioTrack* );
         void slotTrackRemoved( K3b::AudioTrack* );
-        void slotAboutToRemoveTrack( K3b::AudioTrack* );
 
     Q_SIGNALS:
         void trackAdded( K3b::AudioTrack* );
         void trackChanged( K3b::AudioTrack* );
         void trackRemoved( K3b::AudioTrack* );
-        // signal for the model
-        void aboutToRemoveTrack( int position );
+
+        // signals for the model
+        void aboutToRemoveTrack( K3b::AudioTrack* );
+        void sourceAdded( K3b::AudioTrack*, int position );
+        void sourceRemoved( K3b::AudioTrack* );
+        void aboutToRemoveSource( K3b::AudioTrack*, int position );
 
     protected:
         /** reimplemented from Doc */

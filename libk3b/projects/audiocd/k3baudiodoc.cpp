@@ -999,16 +999,6 @@ void K3b::AudioDoc::slotTrackRemoved( K3b::AudioTrack* track )
     emit changed();
 }
 
-
-void K3b::AudioDoc::slotAboutToRemoveTrack( K3b::AudioTrack* track )
-{
-    int index = track->trackNumber() - 1;
-
-    if ( index >= 0 )
-        emit aboutToRemoveTrack( index );
-}
-
-
 void K3b::AudioDoc::increaseDecoderUsage( K3b::AudioDecoder* decoder )
 {
     kDebug() << "(K3b::AudioDoc::increaseDecoderUsage)";

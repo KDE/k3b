@@ -1,9 +1,10 @@
 /*
  *
  * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
+ *           (C) 2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,8 +74,11 @@ namespace K3b {
 
         Q_PRIVATE_SLOT( d, void _k_docChanged() )
         Q_PRIVATE_SLOT( d, void _k_trackAdded( K3b::AudioTrack* ) )
-        Q_PRIVATE_SLOT( d, void _k_aboutToRemoveTrack( int ) )
+        Q_PRIVATE_SLOT( d, void _k_aboutToRemoveTrack( K3b::AudioTrack* ) )
         Q_PRIVATE_SLOT( d, void _k_trackRemoved() )
+        Q_PRIVATE_SLOT( d, void _k_sourceAdded( K3b::AudioTrack*, int ) )
+        Q_PRIVATE_SLOT( d, void _k_sourceRemoved( K3b::AudioTrack* ) )
+        Q_PRIVATE_SLOT( d, void _k_aboutToRemoveSource( K3b::AudioTrack*, int ) )
     };
 }
 

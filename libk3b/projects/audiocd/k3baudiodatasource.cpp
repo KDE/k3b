@@ -56,17 +56,20 @@ K3b::AudioDataSource* K3b::AudioDataSource::take()
 {
     // if we do not have a track we are not in any list
     if( m_track ) {
-        if( !m_prev )
-            m_track->setFirstSource( m_next );
-
+        m_track->emitAboutToRemoveSource(this);
+        
+        // sets the first source of the track, if necessary
         if( m_prev )
             m_prev->m_next = m_next;
         if( m_next )
             m_next->m_prev = m_prev;
 
-        m_prev = m_next = 0;
+        // the emitSourceRemoved() function will take care of setting the 
+        // first source in the track (to avoid the track accessing a deleted
+        // source, or a source accessing a deleted track
+        m_track->emitSourceRemoved(this);
 
-        emitChange();
+        m_prev = m_next = 0;
         m_track = 0;
     }
 
@@ -98,7 +101,8 @@ void K3b::AudioDataSource::moveAfter( K3b::AudioDataSource* source )
     m_next = oldNext;
 
     m_track = source->track();
-    emitChange();
+
+    m_track->emitSourceAdded( this );
 }
 
 
@@ -130,7 +134,7 @@ void K3b::AudioDataSource::moveAhead( K3b::AudioDataSource* source )
     if( !m_prev )
         m_track->setFirstSource( this );
 
-    emitChange();
+    m_track->emitSourceAdded( this );
 }
 
 
@@ -174,6 +178,15 @@ K3b::Msf K3b::AudioDataSource::length() const
         return 1;
     else
         return lastSector() - m_startOffset + 1;
+}
+
+
+int K3b::AudioDataSource::sourceIndex() const
+{
+    if (!m_prev)
+        return 0;
+
+    return m_prev->sourceIndex() + 1;
 }
 
 

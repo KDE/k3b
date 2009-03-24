@@ -70,6 +70,11 @@ namespace K3b {
         virtual Msf length() const;
 
         /**
+         * @return The index of this track (counting from 0)
+         */
+        int sourceIndex() const;
+
+        /**
          * @return The raw size in pcm samples (16bit, 44800 kHz, stereo)
          */
         KIO::filesize_t size() const { return length().audioBytes(); }
