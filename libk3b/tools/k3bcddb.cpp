@@ -53,7 +53,6 @@ K3b::CDDB::MultiEntriesDialog::MultiEntriesDialog( QWidget* parent )
     m_listBox->setSelectionMode( QAbstractItemView::SingleSelection );
 
     QVBoxLayout* layout = new QVBoxLayout( frame );
-    layout->setSpacing( spacingHint() );
     layout->setMargin( 0 );
     layout->addWidget( infoLabel );
     layout->addWidget( m_listBox );

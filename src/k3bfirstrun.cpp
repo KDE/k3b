@@ -72,7 +72,6 @@ K3b::FirstRun::FirstRun( QWidget* parent )
 
     QHBoxLayout* lay = new QHBoxLayout( plain );
     lay->setMargin( 0 );
-    lay->setSpacing( spacingHint() );
     lay->addWidget( pixLabel );
     lay->addWidget( label );
     lay->setStretchFactor( label, 1 );

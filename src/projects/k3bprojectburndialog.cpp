@@ -255,7 +255,6 @@ void K3b::ProjectBurnDialog::prepareGui()
 {
     QVBoxLayout* mainLay = new QVBoxLayout( mainWidget() );
     mainLay->setMargin( 0 );
-    mainLay->setSpacing( KDialog::spacingHint() );
 
     m_writerSelectionWidget = new K3b::WriterSelectionWidget( mainWidget() );
     m_writerSelectionWidget->setWantedMediumType( m_doc->supportedMediaTypes() );
@@ -272,14 +271,10 @@ void K3b::ProjectBurnDialog::prepareGui()
     QGroupBox* groupWritingMode = new QGroupBox( i18n("Writing Mode"), w );
     m_writingModeWidget = new K3b::WritingModeWidget( groupWritingMode );
     QVBoxLayout* groupWritingModeLayout = new QVBoxLayout( groupWritingMode );
-    groupWritingModeLayout->setMargin( marginHint() );
-    groupWritingModeLayout->setSpacing( spacingHint() );
     groupWritingModeLayout->addWidget( m_writingModeWidget );
 
     m_optionGroup = new QGroupBox( i18n("Settings"), w );
     m_optionGroupLayout = new QVBoxLayout( m_optionGroup );
-    m_optionGroupLayout->setMargin( marginHint() );
-    m_optionGroupLayout->setSpacing( KDialog::spacingHint() );
 
     // add the options
     m_checkCacheImage = K3b::StdGuiItems::createCacheImageCheckbox( m_optionGroup );
@@ -299,15 +294,11 @@ void K3b::ProjectBurnDialog::prepareGui()
     m_spinCopies = new QSpinBox( groupCopies );
     m_spinCopies->setRange( 1, 999 );
     QHBoxLayout* groupCopiesLayout = new QHBoxLayout( groupCopies );
-    groupCopiesLayout->setSpacing( spacingHint() );
-    groupCopiesLayout->setMargin( marginHint() );
     groupCopiesLayout->addWidget( pixLabel );
     groupCopiesLayout->addWidget( m_spinCopies );
 
     // arrange it
     QGridLayout* grid = new QGridLayout( w );
-    grid->setMargin( KDialog::marginHint() );
-    grid->setSpacing( KDialog::spacingHint() );
 
     grid->addWidget( groupWritingMode, 0, 0 );
     grid->addWidget( m_optionGroup, 0, 1, 3, 1 );
@@ -318,8 +309,6 @@ void K3b::ProjectBurnDialog::prepareGui()
 
     QWidget* tempW = new QWidget( m_tabWidget );
     grid = new QGridLayout( tempW );
-    grid->setMargin( KDialog::marginHint() );
-    grid->setSpacing( KDialog::spacingHint() );
     m_tabWidget->addTab( tempW, i18n("Image") );
     m_tempDirSelectionWidget = new K3b::TempDirSelectionWidget( tempW );
     grid->addWidget( m_tempDirSelectionWidget, 0, 0 );

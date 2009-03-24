@@ -354,7 +354,6 @@ void K3b::VcdTrackDialog::prepareGui()
     QWidget * frame = mainWidget();
 
     QGridLayout* mainLayout = new QGridLayout( frame );
-    mainLayout->setSpacing( spacingHint() );
     mainLayout->setMargin( 0 );
 
     m_mainTabbed = new QTabWidget( frame );
@@ -366,8 +365,6 @@ void K3b::VcdTrackDialog::prepareGui()
 
     QGridLayout* groupFileInfoLayout = new QGridLayout( groupFileInfo );
     groupFileInfoLayout->setAlignment( Qt::AlignTop );
-    groupFileInfoLayout->setSpacing( spacingHint() );
-    groupFileInfoLayout->setMargin( marginHint() );
 
     m_labelMimeType = new QLabel( groupFileInfo );
 
@@ -430,8 +427,6 @@ void K3b::VcdTrackDialog::setupPbcTab()
 
     QGridLayout* grid = new QGridLayout( w );
     grid->setAlignment( Qt::AlignTop );
-    grid->setSpacing( spacingHint() );
-    grid->setMargin( marginHint() );
 
 
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -444,8 +439,6 @@ void K3b::VcdTrackDialog::setupPbcTab()
     m_check_reactivity->setEnabled( false );
 
     QVBoxLayout* groupOptionsLayout = new QVBoxLayout( groupOptions );
-    groupOptionsLayout->setSpacing( spacingHint() );
-    groupOptionsLayout->setMargin( marginHint() );
     groupOptionsLayout->addWidget( m_check_pbc );
     groupOptionsLayout->addWidget( m_check_usekeys );
     groupOptionsLayout->addWidget( m_check_reactivity );
@@ -489,8 +482,6 @@ void K3b::VcdTrackDialog::setupPbcTab()
 
     QGridLayout* groupPbcLayout = new QGridLayout( m_groupPbc );
     groupPbcLayout->setAlignment( Qt::AlignTop );
-    groupPbcLayout->setSpacing( spacingHint() );
-    groupPbcLayout->setMargin( marginHint() );
 
     QLabel* labelPbc_previous = new QLabel( i18n( "Previous:" ), m_groupPbc );
     QLabel* labelPbc_next = new QLabel( i18n( "Next:" ), m_groupPbc );
@@ -541,8 +532,6 @@ void K3b::VcdTrackDialog::setupPbcKeyTab()
 
     QGridLayout* grid = new QGridLayout( m_widgetnumkeys );
     grid->setAlignment( Qt::AlignTop );
-    grid->setSpacing( spacingHint() );
-    grid->setMargin( marginHint() );
 
     m_groupKey = new QGroupBox( i18n( "Numeric Keys" ), m_widgetnumkeys );
     m_groupKey->setEnabled( false );
@@ -558,8 +547,6 @@ void K3b::VcdTrackDialog::setupPbcKeyTab()
     m_list_keys->setResizeMode( Q3ListView::LastColumn );
 
     QVBoxLayout* groupKeyLayout = new QVBoxLayout( m_groupKey );
-    groupKeyLayout->setSpacing( spacingHint() );
-    groupKeyLayout->setMargin( marginHint() );
     groupKeyLayout->addWidget( m_list_keys );
 
     m_check_overwritekeys = new QCheckBox( i18n( "Overwrite default assignment" ), m_widgetnumkeys );
@@ -581,8 +568,6 @@ void K3b::VcdTrackDialog::setupAudioTab()
 
     QGridLayout* grid = new QGridLayout( w );
     grid->setAlignment( Qt::AlignTop );
-    grid->setSpacing( spacingHint() );
-    grid->setMargin( marginHint() );
 
     QLabel* labelMpegVer_Audio = new QLabel( i18n( "Type:" ), w );
     QLabel* labelRate_Audio = new QLabel( i18n( "Rate:" ), w );
@@ -638,8 +623,6 @@ void K3b::VcdTrackDialog::setupVideoTab()
 
     QGridLayout* grid = new QGridLayout( w );
     grid->setAlignment( Qt::AlignTop );
-    grid->setSpacing( spacingHint() );
-    grid->setMargin( marginHint() );
 
     QLabel* labelMpegVer_Video = new QLabel( i18n( "Type:" ), w );
     QLabel* labelRate_Video = new QLabel( i18n( "Rate:" ), w );

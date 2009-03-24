@@ -128,8 +128,6 @@ K3b::WriterSelectionWidget::WriterSelectionWidget( QWidget *parent )
 
     QGridLayout* groupWriterLayout = new QGridLayout( groupWriter );
     groupWriterLayout->setAlignment( Qt::AlignTop );
-    groupWriterLayout->setSpacing( KDialog::spacingHint() );
-    groupWriterLayout->setMargin( KDialog::marginHint() );
 
     QLabel* labelSpeed = new QLabel( groupWriter );
     labelSpeed->setText( i18n( "Speed:" ) );
@@ -151,7 +149,6 @@ K3b::WriterSelectionWidget::WriterSelectionWidget( QWidget *parent )
 
     QGridLayout* mainLayout = new QGridLayout( this );
     mainLayout->setAlignment( Qt::AlignTop );
-    mainLayout->setSpacing( KDialog::spacingHint() );
     mainLayout->setMargin( 0 );
 
     mainLayout->addWidget( groupWriter, 0, 0 );

@@ -69,7 +69,6 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
 
     mainGrid = new QGridLayout( KDialog::mainWidget() );
 
-    mainGrid->setSpacing( spacingHint() );
     mainGrid->setMargin( 0 );
 
     // header
@@ -82,7 +81,6 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
     // ---------------------------------------------------------------------------------------------------
     if( !m_configGroup.isEmpty() ) {
         QHBoxLayout* layout2 = new QHBoxLayout;
-        layout2->setSpacing( spacingHint() );
         m_buttonLoadSettings = new QToolButton( KDialog::mainWidget() );
         m_buttonLoadSettings->setIcon( KIcon( "document-revert" ) );
         m_buttonLoadSettings->setPopupMode( QToolButton::InstantPopup );

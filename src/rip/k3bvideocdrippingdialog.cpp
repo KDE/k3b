@@ -69,15 +69,12 @@ void K3b::VideoCdRippingDialog::setupGui()
 {
     QWidget * frame = mainWidget();
     QGridLayout* MainLayout = new QGridLayout( frame );
-    MainLayout->setSpacing( KDialog::spacingHint() );
     MainLayout->setMargin( 0 );
 
     // ---------------------------------------------------- Directory group ---
     QGroupBox* groupDirectory = new QGroupBox( i18n( "Destination Directory" ), frame );
 
     QGridLayout* groupDirectoryLayout = new QGridLayout( groupDirectory );
-    groupDirectoryLayout->setSpacing( KDialog::spacingHint() );
-    groupDirectoryLayout->setMargin( KDialog::marginHint() );
     groupDirectoryLayout->setAlignment( Qt::AlignTop );
 
     QLabel* rippathLabel = new QLabel( i18n( "Rip files to:" ), groupDirectory );
@@ -88,13 +85,11 @@ void K3b::VideoCdRippingDialog::setupGui()
     rippathLabel->setBuddy( m_editDirectory );
 
     KHBox* freeSpaceBox = new KHBox( groupDirectory );
-    freeSpaceBox->setSpacing( KDialog::spacingHint() );
     ( void ) new QLabel( i18n( "Free space in directory:" ), freeSpaceBox );
     m_labelFreeSpace = new QLabel( "                       ", freeSpaceBox );
     m_labelFreeSpace->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
 
     KHBox* necessarySizeBox = new KHBox( groupDirectory );
-    necessarySizeBox->setSpacing( KDialog::spacingHint() );
     ( void ) new QLabel( i18n( "Necessary storage size:" ), necessarySizeBox );
     m_labelNecessarySize = new QLabel( "                        ", necessarySizeBox );
     m_labelNecessarySize->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
@@ -114,8 +109,6 @@ void K3b::VideoCdRippingDialog::setupGui()
     m_sector2336->setChecked( false );
     m_extractXML = new QCheckBox( i18n( "Extract XML structure" ), groupOptions );
     QVBoxLayout* groupOptionsLayout = new QVBoxLayout( groupOptions );
-    groupOptionsLayout->setMargin( marginHint() );
-    groupOptionsLayout->setSpacing( spacingHint() );
     groupOptionsLayout->addWidget( m_ignoreExt );
     groupOptionsLayout->addWidget( m_sector2336 );
     groupOptionsLayout->addWidget( m_extractXML );

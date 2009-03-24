@@ -313,7 +313,6 @@ void K3b::AudioCdView::slotEditTrackCddb()
         line->setFrameShadow( QFrame::Sunken );
 
         QGridLayout* grid = new QGridLayout( w );
-        grid->setSpacing( KDialog::spacingHint() );
 
         grid->addWidget( new QLabel( i18n("Title:"), w ), 0, 0 );
         grid->addWidget( editTitle, 0, 1 );
@@ -376,7 +375,6 @@ void K3b::AudioCdView::slotEditAlbumCddb()
     }
 
     QGridLayout* grid = new QGridLayout( w );
-    grid->setSpacing( KDialog::spacingHint() );
 
     grid->addWidget( new QLabel( i18n("Title:"), w ), 0, 0 );
     grid->addWidget( editTitle, 0, 1 );

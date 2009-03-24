@@ -48,7 +48,6 @@ K3b::AudioTrackSplitDialog::AudioTrackSplitDialog( K3b::AudioTrack* track, QWidg
 
     QGridLayout* layout = new QGridLayout( frame );
     layout->setMargin( 0 );
-    layout->setSpacing( spacingHint() );
 
     // FIXME: After the string freeze replace the text with a better one explaning how to use this dialog
     layout->addWidget( new QLabel( i18n("Please select the position where the track should be split."),

@@ -50,8 +50,6 @@ K3b::AudioTrackTRMLookupDialog::AudioTrackTRMLookupDialog( QWidget* parent )
     setDefaultButton(KDialog::Cancel);
     setModal(true);
     QGridLayout* grid = new QGridLayout( widget );
-    grid->setMargin( marginHint() );
-    grid->setSpacing( spacingHint() );
 
     m_infoLabel = new QLabel( widget );
     QLabel* pixLabel = new QLabel( widget );

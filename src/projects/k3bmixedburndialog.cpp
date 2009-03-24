@@ -137,8 +137,6 @@ void K3b::MixedBurnDialog::setupSettingsPage()
                                                        "hifi audio CD players that try to play the data track.") );
 
     QGridLayout* grid = new QGridLayout( w );
-    grid->setMargin( marginHint() );
-    grid->setSpacing( spacingHint() );
     grid->addWidget( groupMixedType, 0, 0 );
     grid->addWidget( groupDataMode, 1, 0 );
     grid->addWidget( groupNormalize, 2, 0 );

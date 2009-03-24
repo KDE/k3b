@@ -40,8 +40,6 @@ K3b::MediaSelectionDialog::MediaSelectionDialog( QWidget* parent,
     QLabel* label = new QLabel( text.isEmpty() ? i18n("Please select a medium:") : text, widget );
     m_combo = new K3b::MediaSelectionComboBox( widget );
 
-    //  lay->setMargin( marginHint() );
-    lay->setSpacing( spacingHint() );
     lay->addWidget( label, 0, 0 );
     lay->addWidget( m_combo, 1, 0 );
     lay->setRowStretch( 2, 1 );

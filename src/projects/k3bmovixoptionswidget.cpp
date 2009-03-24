@@ -83,7 +83,6 @@ K3b::MovixOptionsWidget::MovixOptionsWidget( QWidget* parent )
     : QWidget( parent )
 {
     setupUi( this );
-    layout()->setMargin( KDialog::marginHint() );
     m_keyboardLangHelper = new LanguageSelectionHelper( m_comboKeyboardLayout );
     m_helpLangHelper = new LanguageSelectionHelper( m_comboBootMessageLanguage );
 }

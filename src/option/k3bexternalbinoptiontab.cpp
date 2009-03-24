@@ -40,7 +40,6 @@ K3b::ExternalBinOptionTab::ExternalBinOptionTab( K3b::ExternalBinManager* manage
     m_manager = manager;
 
     QGridLayout* frameLayout = new QGridLayout( this );
-    frameLayout->setSpacing( KDialog::spacingHint() );
     frameLayout->setMargin( 0 );
 
     m_externalBinWidget = new K3b::ExternalBinWidget( manager, this );

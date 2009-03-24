@@ -47,8 +47,6 @@ K3b::AudioTrackAddingDialog::AudioTrackAddingDialog( QWidget* parent )
     setModal(true);
     setCaption(i18n("Please be patient..."));
     QGridLayout* grid = new QGridLayout( page );
-    grid->setSpacing( spacingHint() );
-    grid->setMargin( marginHint() );
 
     m_infoLabel = new QLabel( page );
     m_busyWidget = new K3b::BusyWidget( page );

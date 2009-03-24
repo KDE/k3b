@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,7 +12,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include "k3bdatavolumedescwidget.h"
+#include "k3bdatavolumedescdialog.h"
 
 #include "k3bisooptions.h"
 #include <k3bvalidators.h>
@@ -23,10 +23,15 @@
 #include <qtoolbutton.h>
 
 
-K3b::DataVolumeDescWidget::DataVolumeDescWidget( QWidget* parent )
-    : QWidget( parent )
+K3b::DataVolumeDescDialog::DataVolumeDescDialog( QWidget* parent )
+    : KDialog( parent)
 {
-    setupUi( this );
+    setupUi( mainWidget() );
+
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    setCaption( i18n("Volume Descriptor") );
+    setModal( true );
 
     // the maximal number of characters that can be inserted are set in the ui file!
 
@@ -52,15 +57,20 @@ K3b::DataVolumeDescWidget::DataVolumeDescWidget( QWidget* parent )
     m_buttonFindAbstract->hide();
     m_buttonFindCopyright->hide();
     m_buttonFindBiblio->hide();
+
+    // give ourselves a reasonable size
+    QSize s = sizeHint();
+    s.setWidth( qMax(s.width(), 300) );
+    resize( s );
 }
 
 
-K3b::DataVolumeDescWidget::~DataVolumeDescWidget()
+K3b::DataVolumeDescDialog::~DataVolumeDescDialog()
 {
 }
 
 
-void K3b::DataVolumeDescWidget::load( const K3b::IsoOptions& o )
+void K3b::DataVolumeDescDialog::load( const K3b::IsoOptions& o )
 {
     m_editVolumeName->setText( o.volumeID() );
     m_editVolumeSetName->setText( o.volumeSetId() );
@@ -73,7 +83,7 @@ void K3b::DataVolumeDescWidget::load( const K3b::IsoOptions& o )
 }
 
 
-void K3b::DataVolumeDescWidget::save( K3b::IsoOptions& o )
+void K3b::DataVolumeDescDialog::save( K3b::IsoOptions& o )
 {
     o.setVolumeID( m_editVolumeName->text() );
     o.setVolumeSetId( m_editVolumeSetName->text() );
@@ -86,9 +96,9 @@ void K3b::DataVolumeDescWidget::save( K3b::IsoOptions& o )
 }
 
 
-void K3b::DataVolumeDescWidget::slotVolumeSetSizeChanged( int i )
+void K3b::DataVolumeDescDialog::slotVolumeSetSizeChanged( int i )
 {
     m_spinVolumeSetNumber->setMaximum( i );
 }
 
-#include "k3bdatavolumedescwidget.moc"
+#include "k3bdatavolumedescdialog.moc"

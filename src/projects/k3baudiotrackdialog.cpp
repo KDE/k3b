@@ -91,7 +91,6 @@ void K3b::AudioTrackDialog::setupGui()
 
 
     QGridLayout* mainLayout = new QGridLayout( frame );
-    mainLayout->setSpacing( spacingHint() );
     mainLayout->setMargin( 0 );
 
     m_audioTrackWidget = new K3b::AudioTrackWidget( m_tracks, frame );

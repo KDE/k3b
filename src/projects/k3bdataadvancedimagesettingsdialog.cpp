@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,7 +12,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include "k3bdataadvancedimagesettingswidget.h"
+#include "k3bdataadvancedimagesettingsdialog.h"
 
 #include "k3bisooptions.h"
 
@@ -20,6 +20,7 @@
 #include <qradiobutton.h>
 #include <q3buttongroup.h>
 #include <q3header.h>
+#include <QtGui/QHelpEvent>
 
 #include <qpoint.h>
 #include <qpainter.h>
@@ -34,49 +35,7 @@
 #include <Q3WhatsThis>
 
 
-class K3b::DataAdvancedImageSettingsWidget::PrivateIsoWhatsThis : public Q3WhatsThis
-{
-public:
-    PrivateIsoWhatsThis( K3b::DataAdvancedImageSettingsWidget* w )
-        : Q3WhatsThis( w->m_viewIsoSettings->viewport() ) {
-        this->w = w;
-    }
-
-    QString text( const QPoint& p ) {
-        Q3ListViewItem* i = w->m_viewIsoSettings->selectedItem(); // dies funktioniert nur bei rechtsklick
-        Q3ListViewItem* i2 = w->m_viewIsoSettings->itemAt( p ); // dies funktioniert nur bei action whatsthis
-
-        if( i2 != 0 )
-            kDebug() << "at p " << i2->text(0);
-
-        if( i == w->m_checkAllowUntranslatedFilenames )
-            return i18n( "Force all options below" );
-        else if( i == w->m_radioIsoLevel1 ||
-                 i == w->m_radioIsoLevel2 ||
-                 i == w->m_radioIsoLevel3 ||
-                 i == w->m_isoLevelController )
-            return i18n( "<p>Set the ISO-9660 conformance level.\n"
-                         "<ul>\n"
-                         "<li>Level 1: Files may only consist of one section and filenames are restricted "
-                         "to 8.3 characters.</li>\n"
-                         "<li>Level 2: Files may only consist of one section.</li>\n"
-                         "<li>Level 3: No restrictions.</li>\n"
-                         "</ul>\n"
-                         "<p>With all ISO-9660 levels, all filenames are restricted to upper case letters, "
-                         "numbers and the underscore (_). The maximum filename length is 31 characters, the "
-                         "directory nesting level is restricted to 8 and the maximum path length is limited "
-                         "to 255 characters. (These restrictions may be violated with the additional ISO-9660 features K3b offers.)" );
-        else
-            return i18n("Set special ISO9660 Filesystem preferences.");
-    }
-
-private:
-    K3b::DataAdvancedImageSettingsWidget* w;
-};
-
-
-
-class K3b::DataAdvancedImageSettingsWidget::PrivateCheckViewItem : public Q3CheckListItem
+class K3b::DataAdvancedImageSettingsDialog::PrivateCheckViewItem : public Q3CheckListItem
 {
 public:
     PrivateCheckViewItem( Q3ListView* parent, const QString& text, Type tt = Controller )
@@ -100,16 +59,22 @@ protected:
 };
 
 
-K3b::DataAdvancedImageSettingsWidget::DataAdvancedImageSettingsWidget( QWidget* parent )
-    : QWidget( parent )
+K3b::DataAdvancedImageSettingsDialog::DataAdvancedImageSettingsDialog( QWidget* parent )
+    : KDialog( parent )
 {
-    setupUi( this );
+    setupUi( mainWidget() );
+
+    setButtons(Ok|Cancel);
+    setDefaultButton(Ok);
+    setCaption(i18n("Custom Data Project Filesystems"));
+    setModal(true);
 
     m_viewIsoSettings->header()->hide();
     m_viewIsoSettings->setSorting( -1 );
+    m_viewIsoSettings->setWhatsThis( i18n("Set special ISO9660 Filesystem preferences.") );
 
-    // create WhatsThis for the isoSettings view
-    (void)new PrivateIsoWhatsThis( this );
+    // handle our custom whatsthis events
+    m_viewIsoSettings->installEventFilter( this );
 
     // create all the view items
     Q3CheckListItem* iso9660Root = new Q3CheckListItem( m_viewIsoSettings,
@@ -212,12 +177,12 @@ K3b::DataAdvancedImageSettingsWidget::DataAdvancedImageSettingsWidget( QWidget* 
 }
 
 
-K3b::DataAdvancedImageSettingsWidget::~DataAdvancedImageSettingsWidget()
+K3b::DataAdvancedImageSettingsDialog::~DataAdvancedImageSettingsDialog()
 {
 }
 
 
-void K3b::DataAdvancedImageSettingsWidget::load( const K3b::IsoOptions& o )
+void K3b::DataAdvancedImageSettingsDialog::load( const K3b::IsoOptions& o )
 {
     m_checkRockRidge->setChecked( o.createRockRidge() );
     m_checkJoliet->setChecked( o.createJoliet() );
@@ -264,7 +229,7 @@ void K3b::DataAdvancedImageSettingsWidget::load( const K3b::IsoOptions& o )
 }
 
 
-void K3b::DataAdvancedImageSettingsWidget::save( K3b::IsoOptions& o )
+void K3b::DataAdvancedImageSettingsDialog::save( K3b::IsoOptions& o )
 {
     o.setCreateRockRidge( m_checkRockRidge->isChecked() );
     o.setCreateJoliet( m_checkJoliet->isChecked() );
@@ -299,9 +264,48 @@ void K3b::DataAdvancedImageSettingsWidget::save( K3b::IsoOptions& o )
 }
 
 
-void K3b::DataAdvancedImageSettingsWidget::slotJolietToggled( bool on )
+void K3b::DataAdvancedImageSettingsDialog::slotJolietToggled( bool on )
 {
     m_checkJolietLong->setEnabled( on );
 }
 
-#include "k3bdataadvancedimagesettingswidget.moc"
+
+bool K3b::DataAdvancedImageSettingsDialog::eventFilter( QObject* watched, QEvent* event )
+{
+    if ( watched == m_viewIsoSettings &&
+         event->type() == QEvent::WhatsThis ) {
+        QHelpEvent* he = static_cast<QHelpEvent*>( event );
+
+        QPoint p = he->pos();
+
+        Q3ListViewItem* i = m_viewIsoSettings->itemAt( p );
+
+        QString text;
+        if( i == m_checkAllowUntranslatedFilenames )
+            text = i18n( "Force all options below" );
+        else if( i == m_radioIsoLevel1 ||
+                 i == m_radioIsoLevel2 ||
+                 i == m_radioIsoLevel3 ||
+                 i == m_isoLevelController )
+            text = i18n( "<p>Set the ISO-9660 conformance level.\n"
+                         "<ul>\n"
+                         "<li>Level 1: Files may only consist of one section and filenames are restricted "
+                         "to 8.3 characters.</li>\n"
+                         "<li>Level 2: Files may only consist of one section.</li>\n"
+                         "<li>Level 3: No restrictions.</li>\n"
+                         "</ul>\n"
+                         "<p>With all ISO-9660 levels, all filenames are restricted to upper case letters, "
+                         "numbers and the underscore (_). The maximum filename length is 31 characters, the "
+                         "directory nesting level is restricted to 8 and the maximum path length is limited "
+                         "to 255 characters. (These restrictions may be violated with the additional ISO-9660 features K3b offers.)" );
+
+        if ( !text.isEmpty() ) {
+            QWhatsThis::showText( he->globalPos(), text, m_viewIsoSettings );
+            return true;
+        }
+    }
+
+    return KDialog::eventFilter( watched, event );
+}
+
+#include "k3bdataadvancedimagesettingsdialog.moc"

@@ -114,8 +114,6 @@ K3bAudioMetainfoRenamerPluginWidget::K3bAudioMetainfoRenamerPluginWidget( K3b::D
     // pattern group
     QGroupBox* patternGroup = new QGroupBox( i18n("Rename Pattern"), this );
     QHBoxLayout* patternGroupLayout = new QHBoxLayout( patternGroup );
-    patternGroupLayout->setMargin( KDialog::marginHint() );
-    patternGroupLayout->setSpacing( KDialog::spacingHint() );
 
     d->comboPattern = new KComboBox( patternGroup );
     d->comboPattern->setEditable( true );
@@ -127,8 +125,6 @@ K3bAudioMetainfoRenamerPluginWidget::K3bAudioMetainfoRenamerPluginWidget( K3b::D
     // the files view
     QGroupBox* filesGroup = new QGroupBox( i18n("Found Files"), this );
     QHBoxLayout* filesGroupLayout = new QHBoxLayout( filesGroup );
-    filesGroupLayout->setMargin( KDialog::marginHint() );
-    filesGroupLayout->setSpacing( KDialog::spacingHint() );
 
     d->viewFiles = new QTreeWidget( filesGroup );
     d->viewFiles->setHeaderLabels( QStringList() << i18n("New Name") << i18n("Old Name") );
@@ -140,7 +136,6 @@ K3bAudioMetainfoRenamerPluginWidget::K3bAudioMetainfoRenamerPluginWidget( K3b::D
     // layout
     QVBoxLayout* box = new QVBoxLayout( this );
     box->setMargin( 0 );
-    box->setSpacing( KDialog::spacingHint() );
 
     box->addWidget( patternGroup );
     box->addWidget( filesGroup );

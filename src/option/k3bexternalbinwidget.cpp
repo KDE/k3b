@@ -102,7 +102,6 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
 {
     QGridLayout* mainGrid = new QGridLayout( this );
     mainGrid->setMargin( 0 );
-    mainGrid->setSpacing( KDialog::spacingHint() );
 
     m_mainTabWidget = new QTabWidget( this );
     m_rescanButton = new QPushButton( i18n("&Search"), this );
@@ -116,8 +115,6 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     // ------------------------------------------------------------
     QWidget* programTab = new QWidget( m_mainTabWidget );
     QGridLayout* programTabLayout = new QGridLayout( programTab );
-    programTabLayout->setMargin( KDialog::marginHint() );
-    programTabLayout->setSpacing( KDialog::spacingHint() );
     m_programView = new K3b::ListView( programTab );
     m_defaultButton = new QPushButton( i18n("Set Default"), programTab );
     m_defaultButton->setToolTip( i18n("Change the versions K3b should use.") );
@@ -146,8 +143,6 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     // ------------------------------------------------------------
     QWidget* parametersTab = new QWidget( m_mainTabWidget );
     QGridLayout* parametersTabLayout = new QGridLayout( parametersTab );
-    parametersTabLayout->setMargin( KDialog::marginHint() );
-    parametersTabLayout->setSpacing( KDialog::spacingHint() );
     m_parameterView = new K3b::ListView( parametersTab );
     parametersTabLayout->addWidget( m_parameterView, 1, 0 );
     parametersTabLayout->addWidget( new QLabel( i18n("User parameters have to be separated by space."), parametersTab ), 0, 0 );
@@ -168,8 +163,6 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     // ------------------------------------------------------------
     QWidget* searchPathTab = new QWidget( m_mainTabWidget );
     QGridLayout* searchPathTabLayout = new QGridLayout( searchPathTab );
-    searchPathTabLayout->setMargin( KDialog::marginHint() );
-    searchPathTabLayout->setSpacing( KDialog::spacingHint() );
     m_searchPathBox = new KEditListBox( i18n("Search Path"), searchPathTab );
     m_searchPathBox->setCheckAtEntering( true );
     searchPathTabLayout->addWidget( m_searchPathBox, 0, 0 );

@@ -65,8 +65,6 @@ K3b::MediaFormattingDialog::MediaFormattingDialog( QWidget* parent )
     m_writingModeWidget = new K3b::WritingModeWidget( K3b::WRITING_MODE_INCR_SEQ|K3b::WRITING_MODE_RES_OVWR,
                                                     groupWritingMode );
     QVBoxLayout* groupWritingModeLayout = new QVBoxLayout( groupWritingMode );
-    groupWritingModeLayout->setMargin( marginHint() );
-    groupWritingModeLayout->setSpacing( spacingHint() );
     groupWritingModeLayout->addWidget( m_writingModeWidget );
     groupWritingModeLayout->addStretch( 1 );
 
@@ -74,15 +72,12 @@ K3b::MediaFormattingDialog::MediaFormattingDialog( QWidget* parent )
     m_checkForce = new QCheckBox( i18n("Force"), groupOptions );
     m_checkQuickFormat = new QCheckBox( i18n("Quick format"), groupOptions );
     QVBoxLayout* groupOptionsLayout = new QVBoxLayout( groupOptions );
-    groupOptionsLayout->setMargin( marginHint() );
-    groupOptionsLayout->setSpacing( spacingHint() );
     groupOptionsLayout->addWidget( m_checkForce );
     groupOptionsLayout->addWidget( m_checkQuickFormat );
     groupOptionsLayout->addStretch( 1 );
 
     QGridLayout* grid = new QGridLayout( frame );
     grid->setMargin( 0 );
-    grid->setSpacing( spacingHint() );
 
     grid->addWidget( m_writerSelectionWidget, 0, 0, 1, 2 );
     grid->addWidget( groupWritingMode, 1, 0 );

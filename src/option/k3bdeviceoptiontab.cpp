@@ -36,7 +36,6 @@ K3b::DeviceOptionTab::DeviceOptionTab( QWidget* parent )
     : QWidget( parent )
 {
     QGridLayout* frameLayout = new QGridLayout( this );
-    frameLayout->setSpacing( KDialog::spacingHint() );
     frameLayout->setMargin( 0 );
 
 

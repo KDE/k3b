@@ -51,13 +51,13 @@ set(k3b_project_SRCS
   projects/k3bmixedburndialog.cpp 
   projects/k3bmixedview.cpp 
   projects/k3bmixedprojectmodel.cpp
-  projects/k3bdataadvancedimagesettingswidget.cpp 
+  projects/k3bdataadvancedimagesettingsdialog.cpp 
   projects/k3bdatadirtreeview.cpp 
   projects/k3bdatafileview.cpp 
   projects/k3bdataimagesettingswidget.cpp 
   projects/k3bdatapropertiesdialog.cpp 
   projects/k3bdataview.cpp 
-  projects/k3bdatavolumedescwidget.cpp 
+  projects/k3bdatavolumedescdialog.cpp 
   projects/k3bdataburndialog.cpp 
   projects/k3bdataprojectmodel.cpp
   projects/k3bbootimagedialog.cpp 

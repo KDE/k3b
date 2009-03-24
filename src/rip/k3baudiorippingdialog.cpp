@@ -127,7 +127,6 @@ void K3b::AudioRippingDialog::setupGui()
 {
     QWidget *frame = mainWidget();
     QGridLayout* Form1Layout = new QGridLayout( frame );
-    Form1Layout->setSpacing( KDialog::spacingHint() );
     Form1Layout->setMargin( 0 );
 
     d->viewTracks = new QTreeView( frame );
@@ -153,8 +152,6 @@ void K3b::AudioRippingDialog::setupGui()
     // -------------------------------------------------------------------------------------------
     QWidget* advancedPage = new QWidget( mainTab );
     QGridLayout* advancedPageLayout = new QGridLayout( advancedPage );
-    advancedPageLayout->setMargin( marginHint() );
-    advancedPageLayout->setSpacing( spacingHint() );
     mainTab->addTab( advancedPage, i18n("Advanced") );
 
     m_comboParanoiaMode = K3b::StdGuiItems::paranoiaModeComboBox( advancedPage );

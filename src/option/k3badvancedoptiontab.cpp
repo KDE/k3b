@@ -53,14 +53,11 @@ void K3b::AdvancedOptionTab::setupGui()
 {
     QGridLayout* groupAdvancedLayout = new QGridLayout( this );
     groupAdvancedLayout->setAlignment( Qt::AlignTop );
-    groupAdvancedLayout->setSpacing( KDialog::spacingHint() );
     groupAdvancedLayout->setMargin( 0 );
 
 
     QGroupBox* groupWritingApp = new QGroupBox( i18n("Burning"), this );
     QGridLayout* bufferLayout = new QGridLayout( groupWritingApp );
-    bufferLayout->setMargin( KDialog::marginHint() );
-    bufferLayout->setSpacing( KDialog::spacingHint() );
 
     m_checkBurnfree = K3b::StdGuiItems::burnproofCheckbox( groupWritingApp );
     m_checkOverburn = new QCheckBox( i18n("Allow &overburning (not supported by cdrecord <= 1.10)"), groupWritingApp );
@@ -79,8 +76,6 @@ void K3b::AdvancedOptionTab::setupGui()
 
     QGroupBox* groupMisc = new QGroupBox( i18n("Miscellaneous"), this );
     QVBoxLayout* groupMiscLayout = new QVBoxLayout( groupMisc );
-    groupMiscLayout->setMargin( KDialog::marginHint() );
-    groupMiscLayout->setSpacing( KDialog::spacingHint() );
     m_checkEject = new QCheckBox( i18n("Do not &eject medium after write process"), groupMisc );
     groupMiscLayout->addWidget( m_checkEject );
     m_checkAutoErasingRewritable = new QCheckBox( i18n("Automatically erase CD-RWs and DVD-RWs"), groupMisc );

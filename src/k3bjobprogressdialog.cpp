@@ -157,7 +157,6 @@ void K3b::JobProgressDialog::setupGUI()
     m_labelJobDetails->setAlignment( Qt::AlignVCenter | Qt::AlignRight  );
 
     QVBoxLayout* jobLabelsLayout = new QVBoxLayout;
-    jobLabelsLayout->setMargin( KDialog::spacingHint() );
     jobLabelsLayout->addWidget( m_labelJob );
     jobLabelsLayout->addWidget( m_labelJobDetails );
     headerLayout->addLayout( jobLabelsLayout );
@@ -197,7 +196,6 @@ void K3b::JobProgressDialog::setupGUI()
     m_labelElapsedTime = new K3b::ThemedLabel( d->progressHeaderFrame );
 
     QVBoxLayout* jobProgressLayout = new QVBoxLayout( d->progressHeaderFrame );
-    jobProgressLayout->setMargin( KDialog::spacingHint() );
     jobProgressLayout->addWidget( m_labelTask );
     jobProgressLayout->addWidget( m_labelElapsedTime );
 
@@ -238,7 +236,6 @@ void K3b::JobProgressDialog::setupGUI()
     m_frameExtraInfo->setFrameShadow( QFrame::Raised );
     m_frameExtraInfoLayout = new QGridLayout( m_frameExtraInfo );
     m_frameExtraInfoLayout->setMargin(0);
-    m_frameExtraInfoLayout->setSpacing( spacingHint() );
     mainLayout->addWidget( m_frameExtraInfo );
 
     m_pixLabel->setThemePixmap( K3b::Theme::PROGRESS_WORKING );

@@ -34,8 +34,6 @@ K3b::ProgressDialog::ProgressDialog( const QString& text,
 
     QWidget* main = mainWidget();
     QGridLayout* mainLayout = new QGridLayout( main );
-    mainLayout->setMargin( marginHint() );
-    mainLayout->setSpacing( spacingHint() );
 
     m_label = new QLabel( text, main );
     m_stack = new QStackedWidget( main );

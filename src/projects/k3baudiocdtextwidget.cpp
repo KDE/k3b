@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -152,6 +152,8 @@ void K3b::AudioCdTextWidget::slotMoreFields()
     QString songwriter = m_allFieldsDlg->m_editSongwriter->text();
     QString composer = m_allFieldsDlg->m_editComposer->text();
     QString message = m_allFieldsDlg->m_editMessage->text();
+
+    m_allFieldsDlg->m_editTitle->setFocus( Qt::PopupFocusReason );
 
     // exec dlg
     if( m_allFieldsDlg->exec() == QDialog::Accepted ) {

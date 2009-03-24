@@ -122,7 +122,6 @@ K3b::EmptyDiscWaiter::EmptyDiscWaiter( K3b::Device::Device* device, QWidget* par
 
     QGridLayout* grid = new QGridLayout( mainWidget() );
     grid->setMargin( 0 );
-    grid->setSpacing( spacingHint() );
 
     grid->addWidget( d->pixLabel, 0, 0, 3, 1 );
     grid->addItem( new QSpacerItem( 20, 1, QSizePolicy::Fixed, QSizePolicy::Fixed ), 0, 1 );

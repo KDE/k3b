@@ -503,7 +503,6 @@ void K3b::AudioTrackView::slotAddSilence()
         dlg.setCaption(i18n("Add Silence"));
 
         QHBoxLayout* dlgLayout = new QHBoxLayout( widget );
-        dlgLayout->setSpacing( KDialog::spacingHint() );
         dlgLayout->setMargin( 0 );
         QLabel* label = new QLabel( i18n("Length of silence:"), widget );
         K3b::MsfEdit* msfEdit = new K3b::MsfEdit( widget );

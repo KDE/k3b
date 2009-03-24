@@ -13,8 +13,8 @@
  */
 
 #include "k3bdataimagesettingswidget.h"
-#include "k3bdataadvancedimagesettingswidget.h"
-#include "k3bdatavolumedescwidget.h"
+#include "k3bdataadvancedimagesettingsdialog.h"
+#include "k3bdatavolumedescdialog.h"
 
 #include "k3bisooptions.h"
 
@@ -120,56 +120,14 @@ static void initializePresets()
 
 
 
-class K3b::DataImageSettingsWidget::CustomFilesystemsDialog : public KDialog
-{
-public:
-    CustomFilesystemsDialog( QWidget* parent )
-        : KDialog( parent) {
-        setButtons(Ok|Cancel);
-        setDefaultButton(Ok);
-        setCaption(i18n("Custom Data Project Filesystems"));
-        setModal(true);
-        w = new K3b::DataAdvancedImageSettingsWidget( this );
-        setMainWidget( w );
-    }
-
-    K3b::DataAdvancedImageSettingsWidget* w;
-};
-
-
-class K3b::DataImageSettingsWidget::VolumeDescDialog : public KDialog
-{
-public:
-    VolumeDescDialog( QWidget* parent )
-        : KDialog( parent) {
-        setButtons(Ok|Cancel);
-        setDefaultButton(Ok);
-        setCaption(i18n("Volume Descriptor"));
-        setModal(true);
-        w = new K3b::DataVolumeDescWidget( this );
-        setMainWidget( w );
-
-        // give ourselves a reasonable size
-        QSize s = sizeHint();
-        s.setWidth( qMax(s.width(), 300) );
-        resize( s );
-    }
-
-    K3b::DataVolumeDescWidget* w;
-};
-
-
-
 K3b::DataImageSettingsWidget::DataImageSettingsWidget( QWidget* parent )
     : QWidget( parent ),
       m_fileSystemOptionsShown(true)
 {
     setupUi( this );
 
-    layout()->setMargin( KDialog::marginHint() );
-
-    m_customFsDlg = new CustomFilesystemsDialog( this );
-    m_volDescDlg = new VolumeDescDialog( this );
+    m_customFsDlg = new DataAdvancedImageSettingsDialog( this );
+    m_volDescDlg = new DataVolumeDescDialog( this );
 
     connect( m_buttonCustomFilesystems, SIGNAL(clicked()),
              this, SLOT(slotCustomFilesystems()) );
@@ -230,19 +188,19 @@ void K3b::DataImageSettingsWidget::slotCustomFilesystems()
 {
     // load settings in custom window
     if( m_comboFilesystems->currentIndex() != FS_CUSTOM ) {
-        m_customFsDlg->w->load( s_fsPresets[m_comboFilesystems->currentIndex()] );
+        m_customFsDlg->load( s_fsPresets[m_comboFilesystems->currentIndex()] );
     }
 
     // store the current settings in case the user cancels the changes
     K3b::IsoOptions o;
-    m_customFsDlg->w->save( o );
+    m_customFsDlg->save( o );
 
     if( m_customFsDlg->exec() == QDialog::Accepted ) {
         slotFilesystemsChanged();
     }
     else {
         // reload the old settings discarding any changes
-        m_customFsDlg->w->load( o );
+        m_customFsDlg->load( o );
     }
 }
 
@@ -254,11 +212,11 @@ void K3b::DataImageSettingsWidget::slotFilesystemsChanged()
 
     // new custom entry
     QStringList s;
-    if( m_customFsDlg->w->m_checkRockRidge->isChecked() )
+    if( m_customFsDlg->m_checkRockRidge->isChecked() )
         s += i18n("Rock Ridge");
-    if( m_customFsDlg->w->m_checkJoliet->isChecked() )
+    if( m_customFsDlg->m_checkJoliet->isChecked() )
         s += i18n("Joliet");
-    if( m_customFsDlg->w->m_checkUdf->isChecked() )
+    if( m_customFsDlg->m_checkUdf->isChecked() )
         s += i18n("UDF");
     if( s.isEmpty() )
         m_comboFilesystems->setItemText( FS_CUSTOM,i18n("Custom (ISO9660 only)") );
@@ -268,7 +226,7 @@ void K3b::DataImageSettingsWidget::slotFilesystemsChanged()
     // see if any of the presets is loaded
     m_comboFilesystems->setCurrentIndex( FS_CUSTOM );
     K3b::IsoOptions o;
-    m_customFsDlg->w->save( o );
+    m_customFsDlg->save( o );
     for( int i = 0; i < FS_CUSTOM; ++i ) {
         if( compareAdvancedOptions( o, s_fsPresets[i] ) ) {
             kDebug() << "(K3b::DataImageSettingsWidget) found preset settings: " << s_fsPresetNames[i];
@@ -278,7 +236,7 @@ void K3b::DataImageSettingsWidget::slotFilesystemsChanged()
     }
 
     if( m_comboFilesystems->currentIndex() == FS_CUSTOM ) {
-        if( !m_customFsDlg->w->m_checkRockRidge->isChecked() ) {
+        if( !m_customFsDlg->m_checkRockRidge->isChecked() ) {
             KMessageBox::information( this,
                                       i18n("<p>Be aware that it is not recommended to disable the Rock Ridge "
                                            "Extensions. There is no disadvantage in enabling Rock Ridge (except "
@@ -290,7 +248,7 @@ void K3b::DataImageSettingsWidget::slotFilesystemsChanged()
                                       "warning_about_rock_ridge" );
         }
 
-        if( !m_customFsDlg->w->m_checkJoliet->isChecked() )
+        if( !m_customFsDlg->m_checkJoliet->isChecked() )
             KMessageBox::information( this,
                                       i18n("<p>Be aware that without the Joliet extensions Windows "
                                            "systems will not be able to display long filenames. You "
@@ -306,29 +264,31 @@ void K3b::DataImageSettingsWidget::slotFilesystemsChanged()
 void K3b::DataImageSettingsWidget::slotMoreVolDescFields()
 {
     // update dlg to current state
-    m_volDescDlg->w->m_editVolumeName->setText( m_editVolumeName->text() );
+    m_volDescDlg->m_editVolumeName->setText( m_editVolumeName->text() );
 
     // remember old settings
     K3b::IsoOptions o;
-    m_volDescDlg->w->save( o );
+    m_volDescDlg->save( o );
+
+    m_volDescDlg->m_editVolumeName->setFocus( Qt::PopupFocusReason );
 
     // exec dlg
     if( m_volDescDlg->exec() == QDialog::Accepted ) {
         // accept new entries
-        m_volDescDlg->w->save( o );
+        m_volDescDlg->save( o );
         m_editVolumeName->setText( o.volumeID() );
     }
     else {
         // restore old settings
-        m_volDescDlg->w->load( o );
+        m_volDescDlg->load( o );
     }
 }
 
 
 void K3b::DataImageSettingsWidget::load( const K3b::IsoOptions& o )
 {
-    m_customFsDlg->w->load( o );
-    m_volDescDlg->w->load( o );
+    m_customFsDlg->load( o );
+    m_volDescDlg->load( o );
 
     slotFilesystemsChanged();
 
@@ -365,10 +325,10 @@ void K3b::DataImageSettingsWidget::load( const K3b::IsoOptions& o )
 void K3b::DataImageSettingsWidget::save( K3b::IsoOptions& o )
 {
     if( m_comboFilesystems->currentIndex() != FS_CUSTOM )
-        m_customFsDlg->w->load( s_fsPresets[m_comboFilesystems->currentIndex()] );
-    m_customFsDlg->w->save( o );
+        m_customFsDlg->load( s_fsPresets[m_comboFilesystems->currentIndex()] );
+    m_customFsDlg->save( o );
 
-    m_volDescDlg->w->save( o );
+    m_volDescDlg->save( o );
 
     o.setDiscardSymlinks( m_comboSymlinkHandling->currentIndex() == SYM_DISCARD_ALL );
     o.setDiscardBrokenSymlinks( m_comboSymlinkHandling->currentIndex() == SYM_DISCARD_BROKEN );

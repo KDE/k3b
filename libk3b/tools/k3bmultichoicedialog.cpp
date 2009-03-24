@@ -92,8 +92,6 @@ K3b::MultiChoiceDialog::MultiChoiceDialog( const QString& caption,
     setWindowTitle( caption );
 
     QGridLayout* mainGrid = new QGridLayout( this );
-    mainGrid->setSpacing( KDialog::spacingHint() );
-    mainGrid->setMargin( KDialog::marginHint() );
 
     QHBoxLayout* contents = new QHBoxLayout;
     contents->setSpacing( KDialog::spacingHint()*2 );
@@ -108,7 +106,6 @@ K3b::MultiChoiceDialog::MultiChoiceDialog( const QString& caption,
     contents->addWidget( label, 1 );
 
     d->buttonLayout = new QHBoxLayout;
-    d->buttonLayout->setSpacing( KDialog::spacingHint() );
     d->buttonLayout->setMargin( 0 );
 
     mainGrid->addLayout( contents, 0, 0, 1, 3 );

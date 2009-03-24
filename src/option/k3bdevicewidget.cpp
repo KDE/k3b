@@ -51,14 +51,12 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
       m_readerParentViewItem( 0 )
 {
     QGridLayout* frameLayout = new QGridLayout( this );
-    frameLayout->setSpacing( KDialog::spacingHint() );
     frameLayout->setMargin( 0 );
 
 
     // buttons
     // ------------------------------------------------
     QGridLayout* refreshButtonGrid = new QGridLayout;
-    refreshButtonGrid->setSpacing( KDialog::spacingHint() );
     refreshButtonGrid->setMargin(0);
     m_buttonRefreshDevices = new QPushButton( i18n( "Refresh" ), this );
     m_buttonRefreshDevices->setToolTip( i18n( "Rescan the devices" ) );
@@ -72,8 +70,6 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
     // ------------------------------------------------
     QGroupBox* groupDevices = new QGroupBox( i18n( "CD/DVD Drives" ), this );
     QVBoxLayout* groupDevicesLayout = new QVBoxLayout( groupDevices );
-    groupDevicesLayout->setSpacing( KDialog::spacingHint() );
-    groupDevicesLayout->setMargin( KDialog::marginHint() );
 
     m_viewDevices = new QTreeWidget( groupDevices );
     m_viewDevices->setAllColumnsShowFocus( true );

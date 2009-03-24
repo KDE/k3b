@@ -114,13 +114,10 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
 
     // layout everything
     QGridLayout* grid = new QGridLayout( widget );
-    grid->setMargin( marginHint() );
-    grid->setSpacing( spacingHint() );
     grid->addWidget( titleFrame, 0, 0, 1, 2 );
     grid->addWidget( view, 1, 0, 1, 2 );
     grid->addWidget( m_checkDontShowAgain, 2, 0 );
     QHBoxLayout* buttonBox = new QHBoxLayout;
-    buttonBox->setSpacing( spacingHint() );
     buttonBox->setMargin( 0 );
 #ifdef BUILD_K3BSETUP
     buttonBox->addWidget( m_k3bsetupButton );

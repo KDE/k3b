@@ -76,8 +76,6 @@ K3b::AudioBurnDialog::AudioBurnDialog(K3b::AudioDoc* _doc, QWidget *parent )
     // ----------------------------------------------------------
     QWidget* advancedTab = new QWidget( this );
     QGridLayout* advancedTabGrid = new QGridLayout( advancedTab );
-    advancedTabGrid->setSpacing( spacingHint() );
-    advancedTabGrid->setMargin( marginHint() );
 
     QGroupBox* advancedSettingsGroup = new QGroupBox( i18n("Settings"), advancedTab );
     m_checkNormalize = K3b::StdGuiItems::normalizeCheckBox( advancedSettingsGroup );
@@ -91,11 +89,9 @@ K3b::AudioBurnDialog::AudioBurnDialog(K3b::AudioDoc* _doc, QWidget *parent )
 
     m_audioRippingGroup = new QGroupBox( i18n("Audio Ripping"), advancedTab );
     KHBox* box = new KHBox( m_audioRippingGroup );
-    box->setSpacing( spacingHint() );
     box->setStretchFactor(new QLabel( i18n("Paranoia mode:"), box ), 1 );
     m_comboParanoiaMode = K3b::StdGuiItems::paranoiaModeComboBox( box );
     box = new KHBox( m_audioRippingGroup );
-    box->setSpacing( spacingHint() );
     box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
     m_spinAudioRippingReadRetries = new QSpinBox( box );
     m_spinAudioRippingReadRetries->setRange( 1, 128 );

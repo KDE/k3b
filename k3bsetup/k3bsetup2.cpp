@@ -79,7 +79,6 @@ K3bSetup2::K3bSetup2( QWidget *parent, const QVariantList& )
 
     QHBoxLayout* box = new QHBoxLayout( this );
     box->setMargin(0);
-    box->setSpacing( KDialog::spacingHint() );
 
     KTextEdit* label = new KTextEdit( this );
     label->setText( "<h2>K3b::Setup</h2>"

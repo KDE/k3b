@@ -264,13 +264,10 @@ void K3b::ImageWritingDialog::setupGui()
     QWidget* optionTab = new QWidget( d->optionTabbed );
     QGridLayout* optionTabLayout = new QGridLayout( optionTab );
     optionTabLayout->setAlignment( Qt::AlignTop );
-    optionTabLayout->setSpacing( spacingHint() );
-    optionTabLayout->setMargin( marginHint() );
 
     QGroupBox* writingModeGroup = new QGroupBox( i18n("Writing Mode"), optionTab );
     m_writingModeWidget = new K3b::WritingModeWidget( writingModeGroup );
     QHBoxLayout* writingModeGroupLayout = new QHBoxLayout( writingModeGroup );
-    writingModeGroupLayout->setMargin( marginHint() );
     writingModeGroupLayout->addWidget( m_writingModeWidget );
 
     // copies --------
@@ -282,8 +279,6 @@ void K3b::ImageWritingDialog::setupGui()
     m_spinCopies->setMinimum( 1 );
     m_spinCopies->setMaximum( 999 );
     QHBoxLayout* groupCopiesLayout = new QHBoxLayout( groupCopies );
-    groupCopiesLayout->setSpacing( spacingHint() );
-    groupCopiesLayout->setMargin( marginHint() );
     groupCopiesLayout->addWidget( pixLabel );
     groupCopiesLayout->addWidget( m_spinCopies );
     // -------- copies
@@ -293,8 +288,6 @@ void K3b::ImageWritingDialog::setupGui()
     m_checkCacheImage = K3b::StdGuiItems::createCacheImageCheckbox( optionGroup );
     m_checkVerify = K3b::StdGuiItems::verifyCheckBox( optionGroup );
     QVBoxLayout* optionGroupLayout = new QVBoxLayout( optionGroup );
-    optionGroupLayout->setMargin( marginHint() );
-    optionGroupLayout->setSpacing( spacingHint() );
     optionGroupLayout->addWidget( m_checkDummy );
     optionGroupLayout->addWidget( m_checkCacheImage );
     optionGroupLayout->addWidget( m_checkVerify );
@@ -312,8 +305,6 @@ void K3b::ImageWritingDialog::setupGui()
     // image tab ------------------------------------
     d->tempPathTab = new QWidget( d->optionTabbed );
     QGridLayout* imageTabGrid = new QGridLayout( d->tempPathTab );
-    imageTabGrid->setSpacing( spacingHint() );
-    imageTabGrid->setMargin( marginHint() );
 
     m_tempDirSelectionWidget = new K3b::TempDirSelectionWidget( d->tempPathTab );
 
@@ -328,8 +319,6 @@ void K3b::ImageWritingDialog::setupGui()
     d->advancedTab = new QWidget( d->optionTabbed );
     QGridLayout* advancedTabLayout = new QGridLayout( d->advancedTab );
     advancedTabLayout->setAlignment( Qt::AlignTop );
-    advancedTabLayout->setSpacing( spacingHint() );
-    advancedTabLayout->setMargin( marginHint() );
 
     m_dataModeWidget = new K3b::DataModeWidget( d->advancedTab );
     m_checkNoFix = K3b::StdGuiItems::startMultisessionCheckBox( d->advancedTab );
@@ -348,7 +337,6 @@ void K3b::ImageWritingDialog::setupGui()
 
 
     QGridLayout* grid = new QGridLayout( frame );
-    grid->setSpacing( spacingHint() );
     grid->setMargin( 0 );
 
     grid->addWidget( groupImageUrl, 0, 0 );

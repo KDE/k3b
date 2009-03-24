@@ -15,7 +15,6 @@
 
 #include "k3bdataburndialog.h"
 #include "k3bdataimagesettingswidget.h"
-#include "k3bdatavolumedescwidget.h"
 #include "k3bdatamultisessioncombobox.h"
 #include "k3bdataview.h"
 #include "../k3bapplication.h"
@@ -153,8 +152,6 @@ void K3b::DataBurnDialog::setupSettingsTab()
 {
     QWidget* frame = new QWidget( this );
     QGridLayout* frameLayout = new QGridLayout( frame );
-    frameLayout->setSpacing( spacingHint() );
-    frameLayout->setMargin( marginHint() );
 
     m_groupDataMode = new Q3GroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), frame );
     m_dataModeWidget = new K3b::DataModeWidget( m_groupDataMode );
@@ -162,8 +159,6 @@ void K3b::DataBurnDialog::setupSettingsTab()
     QGroupBox* groupMultiSession = new QGroupBox( i18n("Multisession Mode"), frame );
     m_comboMultisession = new K3b::DataMultiSessionCombobox( groupMultiSession );
     QVBoxLayout* groupMultiSessionLayout = new QVBoxLayout( groupMultiSession );
-    groupMultiSessionLayout->setMargin( marginHint() );
-    groupMultiSessionLayout->setSpacing( spacingHint() );
     groupMultiSessionLayout->addWidget( m_comboMultisession );
 
     frameLayout->addWidget( m_groupDataMode, 0, 0 );

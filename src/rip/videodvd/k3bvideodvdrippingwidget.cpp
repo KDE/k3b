@@ -365,7 +365,6 @@ void K3b::VideoDVDRippingWidget::slotCustomPictureSize()
 
     QGridLayout* grid = new QGridLayout( dlg.mainWidget() );
     grid->setMargin( 0 );
-    grid->setSpacing( KDialog::spacingHint() );
     grid->addWidget( label, 0, 0, 1, 4 );
     grid->addWidget( labelW, 1, 0 );
     grid->addWidget( spinWidth, 1, 1 );

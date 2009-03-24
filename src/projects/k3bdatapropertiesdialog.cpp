@@ -70,8 +70,6 @@ K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& da
     // layout
     // -----------------------------
     QGridLayout* grid = new QGridLayout( mainWidget() );
-    grid->setSpacing( spacingHint() );
-    grid->setMargin( marginHint() );
 
     grid->addWidget( m_labelIcon, 0, 0 );
     if ( dataItems.count() == 1 ) {
@@ -128,8 +126,6 @@ K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& da
 
     QWidget* hideBox = new QWidget( optionTab );
     QGridLayout* hideBoxGrid = new QGridLayout( hideBox );
-    hideBoxGrid->setSpacing( spacingHint() );
-    hideBoxGrid->setMargin( marginHint() );
     m_checkHideOnRockRidge = new QCheckBox( i18n("Hide on Rockridge"), hideBox );
     m_checkHideOnJoliet = new QCheckBox( i18n("Hide on Joliet"), hideBox );
     hideBoxGrid->addWidget( m_checkHideOnRockRidge, 0, 0 );
@@ -140,8 +136,6 @@ K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& da
 
     QWidget* sortingBox = new QWidget( optionTab );
     QGridLayout* sortingBoxGrid = new QGridLayout( sortingBox );
-    sortingBoxGrid->setSpacing( spacingHint() );
-    sortingBoxGrid->setMargin( marginHint() );
     m_editSortWeight = new KLineEdit( sortingBox );
     m_editSortWeight->setValidator( new QIntValidator( -2147483647, 2147483647, m_editSortWeight ) );
     m_editSortWeight->setAlignment( Qt::AlignRight );

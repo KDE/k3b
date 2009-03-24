@@ -263,8 +263,6 @@ void K3b::VcdBurnDialog::setupAdvancedTab()
     m_checkUpdateScanOffsets = new QCheckBox( i18n( "Update scan offsets" ), m_groupGeneric );
     m_checkUpdateScanOffsets->setEnabled( false );
     QVBoxLayout* groupGenericLayout = new QVBoxLayout( m_groupGeneric );
-    groupGenericLayout->setSpacing( spacingHint() );
-    groupGenericLayout->setMargin( marginHint() );
     groupGenericLayout->addWidget( m_checkPbc );
     groupGenericLayout->addWidget( m_checkSegmentFolder );
     groupGenericLayout->addWidget( m_checkRelaxedAps );
@@ -275,8 +273,6 @@ void K3b::VcdBurnDialog::setupAdvancedTab()
 
     QGridLayout* groupGapsLayout = new QGridLayout( m_groupGaps );
     groupGapsLayout->setAlignment( Qt::AlignTop );
-    groupGapsLayout->setSpacing( spacingHint() );
-    groupGapsLayout->setMargin( marginHint() );
 
     m_checkGaps = new QCheckBox( i18n( "Customize gaps and margins" ), m_groupGaps );
 
@@ -371,8 +367,6 @@ void K3b::VcdBurnDialog::setupAdvancedTab()
 
     QGridLayout* groupMiscLayout = new QGridLayout( m_groupMisc );
     groupMiscLayout->setAlignment( Qt::AlignTop );
-    groupMiscLayout->setSpacing( spacingHint() );
-    groupMiscLayout->setMargin( marginHint() );
 
     m_labelRestriction = new QLabel( i18n( "Restriction category (0..3):" ), m_groupMisc );
     m_spinRestriction = new QSpinBox( m_groupMisc );
@@ -385,8 +379,6 @@ void K3b::VcdBurnDialog::setupAdvancedTab()
 
     // ----------------------------------------------------------------------
     QGridLayout* grid = new QGridLayout( w );
-    grid->setMargin( marginHint() );
-    grid->setSpacing( spacingHint() );
     grid->addWidget( m_groupGeneric, 0, 0 );
     grid->addWidget( m_groupGaps, 1, 0 );
     grid->addWidget( m_groupMisc, 2, 0 );
@@ -412,8 +404,6 @@ void K3b::VcdBurnDialog::setupVideoCdTab()
     m_buttonGroupVcdFormat->addButton( m_radioHqVcd10,K3b::VcdDoc::HQVCD  );
 
     QVBoxLayout* groupVcdFormatLayout = new QVBoxLayout( m_groupVcdFormat );
-    groupVcdFormatLayout->setSpacing( spacingHint() );
-    groupVcdFormatLayout->setMargin( marginHint() );
     groupVcdFormatLayout->addWidget( m_radioVcd11 );
     groupVcdFormatLayout->addWidget( m_radioVcd20 );
     groupVcdFormatLayout->addWidget( m_radioSvcd10 );
@@ -435,8 +425,6 @@ void K3b::VcdBurnDialog::setupVideoCdTab()
     m_check2336 = new QCheckBox( i18n( "Use 2336 byte sectors" ), m_groupOptions );
     m_checkCdiSupport = new QCheckBox( i18n( "Enable CD-i support" ), m_groupOptions );
     QVBoxLayout* groupOptionsLayout = new QVBoxLayout( m_groupOptions );
-    groupOptionsLayout->setMargin( marginHint() );
-    groupOptionsLayout->setSpacing( spacingHint() );
     groupOptionsLayout->addWidget( m_checkAutoDetect );
     groupOptionsLayout->addWidget( m_checkNonCompliant );
     groupOptionsLayout->addWidget( m_checkVCD30interpretation );
@@ -452,8 +440,6 @@ void K3b::VcdBurnDialog::setupVideoCdTab()
 
     // ----------------------------------------------------------------------
     QGridLayout* grid = new QGridLayout( w );
-    grid->setMargin( marginHint() );
-    grid->setSpacing( spacingHint() );
     grid->addWidget( m_groupVcdFormat, 0, 0, 2, 1 );
     grid->addWidget( m_groupOptions, 0, 1 );
     grid->addWidget( m_groupCdi, 1, 1 );
@@ -516,8 +502,6 @@ void K3b::VcdBurnDialog::setupLabelTab()
 
     // ----------------------------------------------------------------------
     QGridLayout* grid = new QGridLayout( w );
-    grid->setMargin( marginHint() );
-    grid->setSpacing( spacingHint() );
 
     grid->addWidget( labelVolumeId, 1, 0 );
     grid->addWidget( m_editVolumeId, 1, 1, 1, 3 );

@@ -76,7 +76,6 @@ K3b::DataUrlAddingDialog::DataUrlAddingDialog( K3b::DataDoc* doc, QWidget* paren
     setCaption(i18n("Adding files to project '%1'",doc->URL().fileName()));
     setModal(true);
     QGridLayout* grid = new QGridLayout( page );
-    grid->setSpacing( spacingHint() );
     grid->setMargin( 0 );
 
     m_counterLabel = new QLabel( page );

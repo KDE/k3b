@@ -22,6 +22,8 @@
 namespace K3b {
 
     class IsoOptions;
+    class DataVolumeDescDialog;
+    class DataAdvancedImageSettingsDialog;
 
     class DataImageSettingsWidget : public QWidget, public Ui::base_K3bDataImageSettings
     {
@@ -43,10 +45,8 @@ namespace K3b {
         void slotFilesystemsChanged();
 
     private:
-        class CustomFilesystemsDialog;
-        class VolumeDescDialog;
-        CustomFilesystemsDialog* m_customFsDlg;
-        VolumeDescDialog* m_volDescDlg;
+        DataAdvancedImageSettingsDialog* m_customFsDlg;
+        DataVolumeDescDialog* m_volDescDlg;
 
         bool m_fileSystemOptionsShown;
     };

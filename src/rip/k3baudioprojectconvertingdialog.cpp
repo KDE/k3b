@@ -122,7 +122,6 @@ void K3b::AudioProjectConvertingDialog::setupGui()
 {
     QWidget *frame = mainWidget();
     QGridLayout* Form1Layout = new QGridLayout( frame );
-    Form1Layout->setSpacing( KDialog::spacingHint() );
     Form1Layout->setMargin( 0 );
 
     m_viewTracks = new K3b::ListView( frame );

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,9 +12,10 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#ifndef K3B_DATA_ADVANCED_IMAGE_SETTINGS_WIDGET_H
-#define K3B_DATA_ADVANCED_IMAGE_SETTINGS_WIDGET_H
+#ifndef K3B_DATA_ADVANCED_IMAGE_SETTINGS_DIALOG_H
+#define K3B_DATA_ADVANCED_IMAGE_SETTINGS_DIALOG_H
 
+#include <KDialog>
 
 #include "ui_base_k3badvanceddataimagesettings.h"
 
@@ -23,13 +24,13 @@ class Q3CheckListItem;
 namespace K3b {
     class IsoOptions;
 
-    class DataAdvancedImageSettingsWidget : public QWidget, public Ui::base_K3bAdvancedDataImageSettings
+    class DataAdvancedImageSettingsDialog : public KDialog, public Ui::base_K3bAdvancedDataImageSettings
     {
         Q_OBJECT
 
     public:
-        DataAdvancedImageSettingsWidget( QWidget* parent = 0 );
-        ~DataAdvancedImageSettingsWidget();
+        DataAdvancedImageSettingsDialog( QWidget* parent = 0 );
+        ~DataAdvancedImageSettingsDialog();
 
         void load( const IsoOptions& );
         void save( IsoOptions& );
@@ -38,6 +39,8 @@ namespace K3b {
         void slotJolietToggled( bool on );
 
     private:
+        bool eventFilter( QObject* watched, QEvent* event );
+
         Q3CheckListItem* m_checkAllowUntranslatedFilenames;
         Q3CheckListItem* m_checkAllowMaxLengthFilenames;
         Q3CheckListItem* m_checkAllowFullAscii;
@@ -61,9 +64,6 @@ namespace K3b {
         Q3CheckListItem* m_radioIsoLevel3;
 
         class PrivateCheckViewItem;
-        class PrivateIsoWhatsThis;
-
-        friend class PrivateIsoWhatsThis;
     };
 }
 

@@ -41,7 +41,6 @@ K3b::AudioDataSourceEditWidget::AudioDataSourceEditWidget( QWidget* parent )
 
     QGridLayout* grid = new QGridLayout( this );
     grid->setMargin( 0 );
-    grid->setSpacing( KDialog::spacingHint() );
 
     grid->addWidget( startLabel, 0, 0 );
     grid->addWidget( m_editStartOffset, 1, 0 );

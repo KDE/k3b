@@ -43,8 +43,6 @@ K3b::TempDirSelectionWidget::TempDirSelectionWidget( QWidget *parent )
       m_defaultImageFileName( "k3b_image.iso" )
 {
     QGridLayout* layout = new QGridLayout( this );
-    layout->setSpacing( KDialog::spacingHint() );
-    layout->setMargin( KDialog::marginHint() );
 
     m_imageFileLabel = new QLabel( this );
     m_editDirectory = new KUrlRequester( this );
