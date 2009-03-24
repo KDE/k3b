@@ -60,8 +60,10 @@ K3b::Job::~Job()
     // Normally a job (or the user of a job should take care of this
     // but we do this here for security reasons.
     //
-    if( d->active )
+    if( d->active ) {
+        kDebug() << "Finishing job in destuctor! This is NOT good. Fix the job.";
         jobFinished( false );
+    }
 
     delete d;
 }

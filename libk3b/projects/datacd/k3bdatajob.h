@@ -69,7 +69,13 @@ namespace K3b {
         void slotVerificationProgress( int );
         void slotVerificationFinished( bool );
         void writeImage();
-        void cancelAll();
+
+        /**
+         * \return true if some job was still running and was
+         * cancelled. Thus, this can be called multiple times
+         * and also to check if the job can be finished.
+         */
+        bool cancelAll();
 
         /**
          * Just a little helper method that makes subclassing easier.

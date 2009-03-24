@@ -108,6 +108,7 @@ K3b::DataJob::DataJob( K3b::DataDoc* doc, K3b::JobHandler* hdl, QObject* parent 
 
 K3b::DataJob::~DataJob()
 {
+    kDebug();
     delete d->pipe;
     delete d->tocFile;
     delete d;
@@ -157,6 +158,7 @@ void K3b::DataJob::start()
 
 void K3b::DataJob::slotMultiSessionParamterSetupDone( bool success )
 {
+    kDebug() << success;
     if ( success ) {
         prepareWriting();
     }
@@ -164,6 +166,7 @@ void K3b::DataJob::slotMultiSessionParamterSetupDone( bool success )
         if ( d->multiSessionParameterJob->hasBeenCanceled() ) {
             emit canceled();
         }
+        cleanup();
         jobFinished( false );
     }
 }
@@ -272,24 +275,51 @@ bool K3b::DataJob::startOnTheFlyWriting()
 
 void K3b::DataJob::cancel()
 {
-    emit infoMessage( i18n("Writing canceled."), K3b::Job::ERROR );
+    kDebug();
+
     emit canceled();
 
-    if( m_writerJob && m_writerJob->active() ) {
-        //
-        // lets wait for the writer job to finish
-        // and let it finish the job for good.
-        //
-        cancelAll();
-    }
-    else {
-        //
-        // Just cancel all and return
-        // FIXME: This is bad design as we should wait for all subjobs to finish
-        //
-        cancelAll();
+    d->canceled = true;
+
+    //
+    // Just cancel all and return, let slotMultiSessionParamterSetupDone,
+    // slotIsoImagerFinished, and slotWriterJobFinished take care of the rest
+    //
+    if ( active() && !cancelAll() ) {
+        kDebug() << "cancellation already done";
+        cleanup();
         jobFinished( false );
     }
+}
+
+
+bool K3b::DataJob::cancelAll()
+{
+    kDebug();
+    bool somethingCanceled = false;
+    if ( m_isoImager->active() ) {
+        kDebug() << "cancelling iso imager";
+        m_isoImager->cancel();
+        somethingCanceled = true;
+    }
+    if( m_writerJob && m_writerJob->active() ) {
+        kDebug() << "cancelling writing job";
+        m_writerJob->cancel();
+        somethingCanceled = true;
+    }
+    if( d->verificationJob && d->verificationJob->active() ) {
+        kDebug() << "cancelling verification job";
+        d->verificationJob->cancel();
+        somethingCanceled = true;
+    }
+    if ( d->multiSessionParameterJob && d->multiSessionParameterJob->active() ) {
+        kDebug() << "cancelling multiSessionParameterJob";
+        d->multiSessionParameterJob->cancel();
+        somethingCanceled = true;
+    }
+
+    kDebug() << somethingCanceled;
+    return somethingCanceled;
 }
 
 
@@ -323,7 +353,7 @@ void K3b::DataJob::slotIsoImagerFinished( bool success )
         if( success ) {
             if( d->doc->onTheFly() && !d->doc->onlyCreateImages() ) {
                 if( !startOnTheFlyWriting() ) {
-                    cancelAll();
+                    cleanup();
                     jobFinished( false );
                 }
             }
@@ -332,9 +362,13 @@ void K3b::DataJob::slotIsoImagerFinished( bool success )
             }
         }
         else {
-            if( m_isoImager->hasBeenCanceled() )
-                emit canceled();
-            jobFinished( false );
+            if( m_isoImager->hasBeenCanceled() ) {
+                cancel();
+            }
+            else if ( !cancelAll() ) {
+                cleanup();
+                jobFinished( false );
+            }
         }
     }
     else {
@@ -362,6 +396,7 @@ void K3b::DataJob::slotIsoImagerFinished( bool success )
                     emit infoMessage( i18n("Error while creating ISO image"), ERROR );
 
                 cancelAll();
+                cleanup();
                 jobFinished( false );
             }
         }
@@ -424,15 +459,6 @@ void K3b::DataJob::slotWriterNextTrack( int t, int tt )
 void K3b::DataJob::slotWriterJobFinished( bool success )
 {
     kDebug();
-
-    //
-    // This is a little workaround for the bad cancellation handling in this job
-    // see cancel()
-    //
-    if( d->canceled ) {
-        if( active() )
-            jobFinished( false );
-    }
 
     if( success ) {
         // allright
@@ -500,8 +526,10 @@ void K3b::DataJob::slotWriterJobFinished( bool success )
         }
     }
     else {
-        cancelAll();
-        jobFinished( false );
+        if ( !cancelAll() ) {
+            cleanup();
+            jobFinished( false );
+        }
     }
 }
 
@@ -637,22 +665,6 @@ bool K3b::DataJob::prepareWriterJob()
     }
 
     return true;
-}
-
-
-void K3b::DataJob::cancelAll()
-{
-    d->canceled = true;
-
-    m_isoImager->cancel();
-    if( m_writerJob )
-        m_writerJob->cancel();
-    if( d->verificationJob )
-        d->verificationJob->cancel();
-
-    d->pipe->close();
-
-    cleanup();
 }
 
 
@@ -966,6 +978,7 @@ K3b::DataDoc::MultiSessionMode K3b::DataJob::usedMultiSessionMode() const
 
 void K3b::DataJob::cleanup()
 {
+    kDebug();
     if( !d->doc->onTheFly() && d->doc->removeImages() ) {
         if( QFile::exists( d->doc->tempDir() ) ) {
             d->imageFile.remove();

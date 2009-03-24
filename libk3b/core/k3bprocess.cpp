@@ -199,6 +199,7 @@ void K3b::Process::close()
 {
     kDebug();
     closeWriteChannel();
+    closeReadChannel( QProcess::StandardOutput );
 }
 
 

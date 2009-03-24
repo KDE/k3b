@@ -127,7 +127,6 @@ namespace K3b {
 
         Process* m_process;
 
-        bool m_processExited;
         bool m_canceled;
 
     protected Q_SLOTS:

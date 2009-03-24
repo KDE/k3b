@@ -79,7 +79,6 @@ K3b::IsoImager::IsoImager( K3b::DataDoc* doc, K3b::JobHandler* hdl, QObject* par
       m_jolietHideFile(0),
       m_sortWeightFile(0),
       m_process( 0 ),
-      m_processExited(false),
       m_doc( doc ),
       m_noDeepDirectoryRelocation( false ),
       m_importSession( false ),
@@ -96,6 +95,7 @@ K3b::IsoImager::IsoImager( K3b::DataDoc* doc, K3b::JobHandler* hdl, QObject* par
 
 K3b::IsoImager::~IsoImager()
 {
+    kDebug();
     cleanup();
     delete d;
 }
@@ -130,9 +130,7 @@ void K3b::IsoImager::handleMkisofsInfoMessage( const QString& line, int type )
 
 void K3b::IsoImager::slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus )
 {
-    kDebug() << k_funcinfo;
-
-    m_processExited = true;
+    kDebug();
 
     if( d->imageFile.isOpen() ) {
         d->imageFile.close();
@@ -198,6 +196,8 @@ void K3b::IsoImager::slotProcessExited( int exitCode, QProcess::ExitStatus exitS
 
 void K3b::IsoImager::cleanup()
 {
+    kDebug();
+
     // remove all temp files
     delete m_pathSpecFile;
     delete m_rrHideFile;
@@ -387,7 +387,6 @@ void K3b::IsoImager::slotMkisofsPrintSizeFinished()
 void K3b::IsoImager::initVariables()
 {
     m_containsFilesWithMultibleBackslashes = false;
-    m_processExited = false;
     m_canceled = false;
     d->knownError = false;
 
@@ -464,10 +463,12 @@ void K3b::IsoImager::start()
 
 void K3b::IsoImager::cancel()
 {
+    kDebug();
     m_canceled = true;
 
-    if( m_process && !m_processExited ) {
-        m_process->kill();
+    if( m_process && m_process->isRunning() ) {
+        kDebug() << "terminating process";
+        m_process->terminate();
     }
     else if( active() ) {
         emit canceled();
