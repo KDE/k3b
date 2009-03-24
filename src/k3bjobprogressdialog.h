@@ -98,9 +98,6 @@ namespace K3b {
         void blockingInformation( const QString& text,
                                   const QString& caption = QString() );
 
-    public Q_SLOTS:
-        void setVisible( bool visible );
-
     protected Q_SLOTS:
         virtual void slotProcessedSize( int processed, int size );
         virtual void slotProcessedSubSize( int processed, int size );
@@ -112,8 +109,10 @@ namespace K3b {
         virtual void slotCanceled();
         virtual void slotStarted();
 
-
-        void slotCancelButtonPressed();
+        /**
+         * \reimpl from KDialog
+         */
+        void slotButtonClicked( int button );
         void slotUpdateTime();
         void slotShowDebuggingOutput();
 
@@ -126,7 +125,6 @@ namespace K3b {
         void keyPressEvent( QKeyEvent* e );
 
         void setupGUI();
-        void setupConnections();
 
         ThemedLabel* m_labelJob;
         ThemedLabel* m_labelJobDetails;

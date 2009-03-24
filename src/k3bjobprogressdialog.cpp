@@ -20,6 +20,7 @@
 #include "k3bdebuggingoutputdialog.h"
 //#include "k3bjobinterface.h"
 #include "k3bthemedlabel.h"
+#include "k3b.h"
 #include <k3bjob.h>
 #include <k3bdevice.h>
 #include <k3bdevicemanager.h>
@@ -36,7 +37,6 @@
 #include <qtooltip.h>
 #include <qdatetime.h>
 #include <qstring.h>
-#include <QEventLoop>
 #include <QPointer>
 
 #include <qscrollbar.h>
@@ -44,7 +44,6 @@
 #include <qfontmetrics.h>
 #include <qtimer.h>
 #include <qfont.h>
-#include <qeventloop.h>
 #include <qfile.h>
 #include <qapplication.h>
 #include <QHBoxLayout>
@@ -77,12 +76,7 @@
 class K3b::JobProgressDialog::Private
 {
 public:
-    Private()
-        : eventLoop( 0 ) {
-    }
-
     int lastProgress;
-    QEventLoop* eventLoop;
 
     QFrame* headerFrame;
     QFrame* progressHeaderFrame;
@@ -97,7 +91,6 @@ K3b::JobProgressDialog::JobProgressDialog( QWidget* parent,
 {
     d = new Private;
     setupGUI();
-    setupConnections();
 
     if( !showSubProgress ) {
         m_progressSubPercent->hide();
@@ -115,6 +108,7 @@ K3b::JobProgressDialog::JobProgressDialog( QWidget* parent,
  */
 K3b::JobProgressDialog::~JobProgressDialog()
 {
+    kDebug();
     delete d;
     delete m_osd;
 }
@@ -254,8 +248,7 @@ void K3b::JobProgressDialog::setupGUI()
 void K3b::JobProgressDialog::show()
 {
     if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "hide main window while writing", false ) )
-        if( QWidget* w = kapp->activeWindow() )
-            w->hide();
+        k3bappcore->k3bMainWindow()->hide();
 
     if( m_osd ) {
         m_osd->readSettings( KGlobal::config()->group( "OSD Position" ) );
@@ -277,12 +270,10 @@ void K3b::JobProgressDialog::closeEvent( QCloseEvent* e )
 {
     if( button( User2 )->isVisible() ) {
         KDialog::closeEvent( e );
-        if( QWidget* w = kapp->activeWindow() )
-            w->show();
+        k3bappcore->k3bMainWindow()->show();
 
         if( !m_plainCaption.isEmpty() )
-            if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->activeWindow()) )
-                w->setPlainCaption( m_plainCaption );
+            k3bappcore->k3bMainWindow()->setPlainCaption( m_plainCaption );
 
         if( m_osd ) {
             m_osd->hide();
@@ -291,14 +282,6 @@ void K3b::JobProgressDialog::closeEvent( QCloseEvent* e )
     }
     else
         e->ignore();
-}
-
-
-void K3b::JobProgressDialog::setupConnections()
-{
-    connect( this, SIGNAL(cancelClicked()), this, SLOT(slotCancelButtonPressed()) );
-    connect( this, SIGNAL(user2Clicked()), this, SLOT(close()) );
-    connect( this, SIGNAL(user1Clicked()), this, SLOT(slotShowDebuggingOutput()) );
 }
 
 
@@ -342,7 +325,7 @@ void K3b::JobProgressDialog::slotInfoMessage( const QString& infoString, int typ
 
 void K3b::JobProgressDialog::slotFinished( bool success )
 {
-    kDebug() << "(K3b::JobProgressDialog) received finished signal!";
+    kDebug() << "received finished signal!";
 
     m_logFile.close();
 
@@ -396,12 +379,14 @@ void K3b::JobProgressDialog::slotFinished( bool success )
 
 void K3b::JobProgressDialog::slotCanceled()
 {
+    kDebug();
     m_bCanceled = true;
 }
 
 
 void K3b::JobProgressDialog::setJob( K3b::Job* job )
 {
+    kDebug();
     m_bCanceled = false;
 
     // clear everything
@@ -426,8 +411,7 @@ void K3b::JobProgressDialog::setJob( K3b::Job* job )
     m_job = job;
 
     if( job ) {
-
-        // connect to all the shit
+        kDebug() << "connecting";
         connect( job, SIGNAL(infoMessage(const QString&,int)), this, SLOT(slotInfoMessage(const QString&,int)) );
 
         connect( job, SIGNAL(percent(int)), m_progressPercent, SLOT(setValue(int)) );
@@ -468,38 +452,56 @@ void K3b::JobProgressDialog::setJob( K3b::Job* job )
 }
 
 
-void K3b::JobProgressDialog::slotCancelButtonPressed()
+void K3b::JobProgressDialog::slotButtonClicked( int button )
 {
-    if( m_job && m_job->active() )
-        if( KMessageBox::questionYesNo( this, i18n("Do you really want to cancel?"), i18n("Cancel Confirmation") ) == KMessageBox::Yes ) {
-            if( m_job ) {
-                m_job->cancel();
-                enableButtonCancel( false );  // do not cancel twice
+    kDebug() << button;
+
+    switch( button ) {
+    case KDialog::Cancel:
+        if( m_job && m_job->active() ) {
+            if( KMessageBox::questionYesNo( this, i18n("Do you really want to cancel?"), i18n("Cancel Confirmation") ) == KMessageBox::Yes ) {
+                if( m_job ) {
+                    m_job->cancel();
+                    enableButtonCancel( false );  // do not cancel twice
+                }
             }
         }
+        break;
+
+    case KDialog::User1:
+        slotShowDebuggingOutput();
+        break;
+
+    case KDialog::User2:
+        close();
+        break;
+    }
 }
 
 
 void K3b::JobProgressDialog::slotNewSubTask(const QString& name)
 {
+    kDebug() << name;
     m_labelSubTask->setText(name);
     m_labelSubProcessedSize->setText("");
     m_progressSubPercent->setValue(0);
 }
 
+
 void K3b::JobProgressDialog::slotNewTask(const QString& name)
 {
+    kDebug() << name;
     m_labelTask->setText( name );
 }
 
 
 void K3b::JobProgressDialog::slotStarted()
 {
+    kDebug();
     d->lastProgress = 0;
     m_timer->start( 1000 );
     m_startTime = QDateTime::currentDateTime();
-    if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->activeWindow()) )
-        m_plainCaption = w->windowTitle();
+    m_plainCaption = k3bappcore->k3bMainWindow()->windowTitle();
 
     m_logFile.open();
 }
@@ -549,9 +551,7 @@ void K3b::JobProgressDialog::slotProgress( int percent )
     if( percent > d->lastProgress ) {
         d->lastProgress = percent;
         m_lastProgressUpdateTime = QDateTime::currentDateTime();
-        if( KMainWindow* w = dynamic_cast<KMainWindow*>(kapp->activeWindow()) ) {
-            w->setPlainCaption( QString( "(%1%) %2" ).arg(percent).arg(m_plainCaption) );
-        }
+        k3bappcore->k3bMainWindow()->setPlainCaption( QString( "(%1%) %2" ).arg(percent).arg(m_plainCaption) );
 
         setCaption( QString( "(%1%) %2" ).arg(percent).arg(m_job->jobDescription()) );
     }
@@ -560,6 +560,7 @@ void K3b::JobProgressDialog::slotProgress( int percent )
 
 void K3b::JobProgressDialog::keyPressEvent( QKeyEvent *e )
 {
+    kDebug() << e;
     e->accept();
 
     switch ( e->key() ) {
@@ -572,7 +573,7 @@ void K3b::JobProgressDialog::keyPressEvent( QKeyEvent *e )
     case Qt::Key_Escape:
         // simulate button clicks
         if( m_job && m_job->active() )
-            slotCancelButtonPressed();
+            slotButtonClicked( KDialog::Cancel );
         else if( button( User2 )->isVisible() )
             close();
         break;
@@ -604,52 +605,8 @@ int K3b::JobProgressDialog::startJob( K3b::Job* job )
         return -1;
     }
 
-    // the following code is mainly taken from QDialog::exec
-
-    if ( d->eventLoop ) {
-        kError() << "(K3b::JobProgressDialog::startJob) Recursive call detected." << endl;
-        return -1;
-    }
-
-    bool deleteOnClose = testAttribute(Qt::WA_DeleteOnClose);
-    setAttribute(Qt::WA_DeleteOnClose, false);
-
-    bool wasShowModal = testAttribute(Qt::WA_ShowModal);
-    setAttribute(Qt::WA_ShowModal, true);
-    setResult(0);
-
-    show();
-
-    // start the job after showing the dialog
-    m_job->start();
-
-    QEventLoop eventLoop;
-    d->eventLoop = &eventLoop;
-    QPointer<QDialog> guard = this;
-    (void) eventLoop.exec();
-    if (guard.isNull())
-        return QDialog::Rejected;
-    d->eventLoop = 0;
-
-    setAttribute(Qt::WA_ShowModal, wasShowModal);
-
-    int res = result();
-    if (deleteOnClose)
-        delete this;
-    return res;
-}
-
-
-void K3b::JobProgressDialog::setVisible( bool visible )
-{
-    // we need to reimplement this since
-    // QDialog does not know if we are in a loop from startJob
-
-    KDialog::setVisible( visible );
-
-    if ( !visible && d->eventLoop ) {
-        d->eventLoop->exit();
-    }
+    QMetaObject::invokeMethod( m_job, "start", Qt::QueuedConnection );
+    return exec();
 }
 
 
