@@ -147,7 +147,7 @@ void K3b::AudioView::setupActions()
     m_actionProperties = new KAction( this );
     m_actionProperties->setText( i18n("Properties") );
     m_actionProperties->setIcon( KIcon( "document-properties" ) );
-    connect( m_actionProperties, SIGNAL( triggered() ), this, SLOT( slotProperties() ) );
+    connect( m_actionProperties, SIGNAL( triggered() ), this, SLOT( slotTrackProperties() ) );
     actionCollection()->addAction( "track_properties", m_actionProperties );
 
     m_actionRemove = new KAction( this );
@@ -337,7 +337,6 @@ void K3b::AudioView::slotAddSilence()
         dlg.setCaption(i18n("Add Silence"));
 
         QHBoxLayout* dlgLayout = new QHBoxLayout( widget );
-        dlgLayout->setSpacing( KDialog::spacingHint() );
         dlgLayout->setMargin( 0 );
         QLabel* label = new QLabel( i18n("Length of silence:"), widget );
         K3b::MsfEdit* msfEdit = new K3b::MsfEdit( widget );
@@ -465,7 +464,7 @@ void K3b::AudioView::slotQueryMusicBrainz()
 }
 
 
-void K3b::AudioView::slotProperties()
+void K3b::AudioView::slotTrackProperties()
 {
     QList<K3b::AudioTrack*> tracks;
     QList<K3b::AudioDataSource*> sources;
@@ -478,7 +477,7 @@ void K3b::AudioView::slotProperties()
         d.exec();
     }
     else {
-        static_cast<K3b::View*>(m_doc->view())->slotProperties();
+        slotProperties();
     }
 }
 

@@ -66,7 +66,7 @@ namespace K3b {
         void slotMergeTracks();
         void slotSplitSource();
         void slotSplitTrack();
-        void slotProperties();
+        void slotTrackProperties();
         void slotQueryMusicBrainz();
         void slotEditSource();
 
