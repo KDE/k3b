@@ -979,7 +979,7 @@ K3b::DataDoc::MultiSessionMode K3b::DataJob::usedMultiSessionMode() const
 void K3b::DataJob::cleanup()
 {
     kDebug();
-    if( !d->doc->onTheFly() && d->doc->removeImages() ) {
+    if( !d->doc->onTheFly() && ( d->doc->removeImages() || d->canceled ) ) {
         if( QFile::exists( d->doc->tempDir() ) ) {
             d->imageFile.remove();
             emit infoMessage( i18n("Removed image file %1",d->doc->tempDir()), K3b::Job::SUCCESS );
