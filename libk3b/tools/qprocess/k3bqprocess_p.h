@@ -222,6 +222,8 @@ public:
     qint64 readFromStderr(char *data, qint64 maxlen);
     qint64 writeToStdin(const char *data, qint64 maxlen);
 
+    qint64 readData( char *data, qint64 len, QProcess::ProcessChannel channel );
+
     void cleanup();
 #ifdef Q_OS_UNIX
     static void initializeProcessManager();

@@ -128,8 +128,6 @@ static qint64 qt_native_write(int fd, const char *data, qint64 len)
     do {
         ret = ::write(fd, data, len);
     } while (ret == -1 && ( errno == EINTR || errno == EAGAIN ));
-    if ( ret == -1 )
-        qDebug() << "write failed:" << ( int )errno << strerror( errno );
     return ret;
 }
 
@@ -189,6 +187,32 @@ static void qt_native_execvp(const char *file, char *const argv[])
     do {
         ret = ::execvp(file, argv);
     } while (ret == -1 && errno == EINTR);
+}
+
+static int qt_native_select(fd_set *fdread, fd_set *fdwrite, int timeout)
+{
+    struct timeval tv;
+    tv.tv_sec = timeout / 1000;
+    tv.tv_usec = (timeout % 1000) * 1000;
+
+    int ret;
+    do {
+        ret = select(FD_SETSIZE, fdread, fdwrite, 0, timeout < 0 ? 0 : &tv);
+    } while (ret < 0 && (errno == EINTR));
+    return ret;
+}
+
+/*
+   Returns the difference between msecs and elapsed. If msecs is -1,
+   however, -1 is returned.
+*/
+static int qt_timeout_value(int msecs, int elapsed)
+{
+    if (msecs == -1)
+        return -1;
+
+    int timeout = msecs - elapsed;
+    return timeout < 0 ? 0 : timeout;
 }
 
 static int qt_qprocess_deadChild_pipe[2];
@@ -939,32 +963,6 @@ void K3bQProcessPrivate::killProcess()
         ::kill(pid_t(pid), SIGKILL);
 }
 
-static int qt_native_select(fd_set *fdread, fd_set *fdwrite, int timeout)
-{
-    struct timeval tv;
-    tv.tv_sec = timeout / 1000;
-    tv.tv_usec = (timeout % 1000) * 1000;
-
-    int ret;
-    do {
-        ret = select(FD_SETSIZE, fdread, fdwrite, 0, timeout < 0 ? 0 : &tv);
-    } while (ret < 0 && (errno == EINTR));
-    return ret;
-}
-
-/*
-   Returns the difference between msecs and elapsed. If msecs is -1,
-   however, -1 is returned.
-*/
-static int qt_timeout_value(int msecs, int elapsed)
-{
-    if (msecs == -1)
-        return -1;
-
-    int timeout = msecs - elapsed;
-    return timeout < 0 ? 0 : timeout;
-}
-
 bool K3bQProcessPrivate::waitForStarted(int msecs)
 {
     Q_Q(K3bQProcess);
@@ -1037,32 +1035,32 @@ bool K3bQProcessPrivate::waitForReadyRead(int msecs)
         if (ret == 0) {
             processError = ::QProcess::Timedout;
             q->setErrorString(K3bQProcess::tr("Process operation timed out"));
-	    return false;
-	}
+            return false;
+        }
 
-	if (childStartedPipe[0] != -1 && FD_ISSET(childStartedPipe[0], &fdread)) {
+        if (childStartedPipe[0] != -1 && FD_ISSET(childStartedPipe[0], &fdread)) {
             if (!_q_startupNotification())
                 return false;
-	}
+        }
 
         bool readyReadEmitted = false;
-	if (stdoutChannel.pipe[0] != -1 && FD_ISSET(stdoutChannel.pipe[0], &fdread)) {
-	    bool canRead = _q_canReadStandardOutput();
+        if (stdoutChannel.pipe[0] != -1 && FD_ISSET(stdoutChannel.pipe[0], &fdread)) {
+            bool canRead = _q_canReadStandardOutput();
             if (processChannel == ::QProcess::StandardOutput && canRead)
                 readyReadEmitted = true;
-	}
-	if (stderrChannel.pipe[0] != -1 && FD_ISSET(stderrChannel.pipe[0], &fdread)) {
-	    bool canRead = _q_canReadStandardError();
+        }
+        if (stderrChannel.pipe[0] != -1 && FD_ISSET(stderrChannel.pipe[0], &fdread)) {
+            bool canRead = _q_canReadStandardError();
             if (processChannel == ::QProcess::StandardError && canRead)
                 readyReadEmitted = true;
-	}
+        }
         if (readyReadEmitted)
             return true;
 
-	if (stdinChannel.pipe[1] != -1 && FD_ISSET(stdinChannel.pipe[1], &fdwrite))
-	    _q_canWrite();
+        if (stdinChannel.pipe[1] != -1 && FD_ISSET(stdinChannel.pipe[1], &fdwrite))
+            _q_canWrite();
 
-	if (deathPipe[0] == -1 || FD_ISSET(deathPipe[0], &fdread)) {
+        if (deathPipe[0] == -1 || FD_ISSET(deathPipe[0], &fdread)) {
             if (_q_processDied())
                 return false;
         }

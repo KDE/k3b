@@ -793,6 +793,55 @@ void K3bQProcessPrivate::closeWriteChannel()
     destroyPipe(stdinChannel.pipe);
 }
 
+qint64 K3bQProcessPrivate::readData( char *data, qint64 maxlen, QProcess::ProcessChannel channel )
+{
+    if (processFlags&K3bQProcess::RawStdout &&
+        channel == ::QProcess::StandardOutput) {
+        return readFromStdout(data, maxlen);
+    }
+    else {
+        QRingBuffer *readBuffer = (channel == ::QProcess::StandardError)
+                                  ? &errorReadBuffer
+                                  : &outputReadBuffer;
+
+        if (maxlen == 1 && !readBuffer->isEmpty()) {
+            int c = readBuffer->getChar();
+            if (c == -1) {
+#if defined QPROCESS_DEBUG
+                qDebug("QProcess::readData(%p \"%s\", %d) == -1",
+                       data, qt_prettyDebug(data, 1, maxlen).constData(), 1);
+#endif
+                return -1;
+            }
+            *data = (char) c;
+#if defined QPROCESS_DEBUG
+            qDebug("QProcess::readData(%p \"%s\", %d) == 1",
+                   data, qt_prettyDebug(data, 1, maxlen).constData(), 1);
+#endif
+            return 1;
+        }
+
+        qint64 bytesToRead = qint64(qMin(readBuffer->size(), (int)maxlen));
+        qint64 readSoFar = 0;
+        while (readSoFar < bytesToRead) {
+            const char *ptr = readBuffer->readPointer();
+            int bytesToReadFromThisBlock = qMin<qint64>(bytesToRead - readSoFar,
+                                                        readBuffer->nextDataBlockSize());
+            memcpy(data + readSoFar, ptr, bytesToReadFromThisBlock);
+            readSoFar += bytesToReadFromThisBlock;
+            readBuffer->free(bytesToReadFromThisBlock);
+        }
+
+#if defined QPROCESS_DEBUG
+        qDebug("QProcess::readData(%p \"%s\", %lld) == %lld",
+               data, qt_prettyDebug(data, readSoFar, 16).constData(), maxlen, readSoFar);
+#endif
+        if (!readSoFar && processState == ::QProcess::NotRunning)
+            return -1;              // EOF
+        return readSoFar;
+    }
+}
+
 /*!
     Constructs a QProcess object with the given \a parent.
 */
@@ -1390,51 +1439,7 @@ void K3bQProcess::setupChildProcess()
 qint64 K3bQProcess::readData(char *data, qint64 maxlen)
 {
     Q_D(K3bQProcess);
-    if (d->processFlags&K3bQProcess::RawStdout &&
-        d->processChannel == ::QProcess::StandardOutput) {
-        return d->readFromStdout(data, maxlen);
-    }
-    else {
-        QRingBuffer *readBuffer = (d->processChannel == ::QProcess::StandardError)
-                                  ? &d->errorReadBuffer
-                                  : &d->outputReadBuffer;
-
-        if (maxlen == 1 && !readBuffer->isEmpty()) {
-            int c = readBuffer->getChar();
-            if (c == -1) {
-#if defined QPROCESS_DEBUG
-                qDebug("QProcess::readData(%p \"%s\", %d) == -1",
-                       data, qt_prettyDebug(data, 1, maxlen).constData(), 1);
-#endif
-                return -1;
-            }
-            *data = (char) c;
-#if defined QPROCESS_DEBUG
-            qDebug("QProcess::readData(%p \"%s\", %d) == 1",
-                   data, qt_prettyDebug(data, 1, maxlen).constData(), 1);
-#endif
-            return 1;
-        }
-
-        qint64 bytesToRead = qint64(qMin(readBuffer->size(), (int)maxlen));
-        qint64 readSoFar = 0;
-        while (readSoFar < bytesToRead) {
-            const char *ptr = readBuffer->readPointer();
-            int bytesToReadFromThisBlock = qMin<qint64>(bytesToRead - readSoFar,
-                                                        readBuffer->nextDataBlockSize());
-            memcpy(data + readSoFar, ptr, bytesToReadFromThisBlock);
-            readSoFar += bytesToReadFromThisBlock;
-            readBuffer->free(bytesToReadFromThisBlock);
-        }
-
-#if defined QPROCESS_DEBUG
-        qDebug("QProcess::readData(%p \"%s\", %lld) == %lld",
-               data, qt_prettyDebug(data, readSoFar, 16).constData(), maxlen, readSoFar);
-#endif
-        if (!readSoFar && d->processState == ::QProcess::NotRunning)
-            return -1;              // EOF
-        return readSoFar;
-    }
+    return d->readData( data, maxlen, d->processChannel );
 }
 
 /*! \reimp
@@ -1500,11 +1505,17 @@ qint64 K3bQProcess::writeData(const char *data, qint64 len)
 */
 QByteArray K3bQProcess::readAllStandardOutput()
 {
-    ::QProcess::ProcessChannel tmp = readChannel();
-    setReadChannel(::QProcess::StandardOutput);
-    QByteArray data = readAll();
-    setReadChannel(tmp);
-    return data;
+    Q_D(K3bQProcess);
+    if (!(d->processFlags&RawStdout)) {
+        ::QProcess::ProcessChannel tmp = readChannel();
+        setReadChannel(::QProcess::StandardOutput);
+        QByteArray data = readAll();
+        setReadChannel(tmp);
+        return data;
+    }
+    else {
+        return QByteArray();
+    }
 }
 
 /*!
@@ -1516,11 +1527,31 @@ QByteArray K3bQProcess::readAllStandardOutput()
 */
 QByteArray K3bQProcess::readAllStandardError()
 {
-    ::QProcess::ProcessChannel tmp = readChannel();
-    setReadChannel(::QProcess::StandardError);
-    QByteArray data = readAll();
-    setReadChannel(tmp);
-    return data;
+    Q_D(K3bQProcess);
+    if (d->processFlags&RawStdout) {
+        //
+        // HACK: this is an ugly hack to get around the following problem:
+        // K3b uses QProcess from different threads. This is no problem unless
+        // the read channel is changed here while the other thread tries to read
+        // from stdout. It will then result in two reads from stderr instead
+        // (this one and the other thread which originally wanted to read from
+        // stdout).
+        // The "solution" atm is to reimplement QIODevice::readAll here, ignoring its
+        // buffer (no real problem since K3b::Process is always opened Unbuffered)
+        //
+        QByteArray tmp;
+        tmp.resize(int(d->errorReadBuffer.size()));
+        qint64 readBytes = d->readData(tmp.data(), tmp.size(), QProcess::StandardError);
+        tmp.resize(readBytes < 0 ? 0 : int(readBytes));
+        return tmp;
+    }
+    else {
+        ::QProcess::ProcessChannel tmp = readChannel();
+        setReadChannel(::QProcess::StandardError);
+        QByteArray data = readAll();
+        setReadChannel(tmp);
+        return data;
+    }
 }
 
 /*!
