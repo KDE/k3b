@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,7 +61,10 @@ public:
             kDebug() << "Read failed:" << sourceIODevice->errorString();
         }
 
-        kDebug() << "thread done: " << fail << " (total bytes read/written: " << bytesRead << "/" << bytesWritten << ")";
+        kDebug() << "Done:"
+                 << ( fail ? QLatin1String( "write failed" ) : QLatin1String( "write succcess" ) )
+                 << ( r != 0 ? QLatin1String( "read failed" ) : QLatin1String( "read success" ) )
+                 << "(total bytes read/written:" << bytesRead << "/" << bytesWritten << ")";
     }
 
     void _k3b_close() {
