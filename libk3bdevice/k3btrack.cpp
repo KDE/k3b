@@ -301,5 +301,6 @@ QDebug operator<<( QDebug s, const K3b::Device::Track& track )
 
 uint qHash(const K3b::Device::Track &key)
 {
+#warning URGH! THIS IS WAAAAAAAAAAAAAY UGLY! Why do we need this method anyway?
 	return qHash((long)&key);
 }
