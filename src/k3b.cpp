@@ -809,7 +809,7 @@ bool K3b::MainWindow::canCloseDocument( K3b::Doc* doc )
                                               i18n("%1 has unsaved data.", doc->URL().fileName() ),
                                               i18n("Closing Project"),
                                               KStandardGuiItem::save(),
-                                              KGuiItem( i18n("&Discard"), "editshred" ) ) ) {
+                                              KStandardGuiItem::dontSave() ) ) {
     case KMessageBox::Yes:
         if ( !fileSave( doc ) )
             return false;
