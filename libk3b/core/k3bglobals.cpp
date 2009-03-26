@@ -517,7 +517,10 @@ bool K3b::unmount( K3b::Device::Device* dev )
     if( KIO::NetAccess::synchronousRun( KIO::unmount( mntDev, false ), 0 ) )
         return true;
 
-    QString mntPath = KMountPoint::currentMountPoints().findByDevice( dev->blockDeviceName() )->mountPoint();
+    QString mntPath;
+    if ( KMountPoint::Ptr mp = KMountPoint::currentMountPoints().findByDevice( dev->blockDeviceName() ) ) {
+        mntPath = mp->mountPoint();
+    }
     if ( mntPath.isEmpty() ) {
         mntPath = dev->blockDeviceName();
     }
