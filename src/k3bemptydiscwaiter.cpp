@@ -92,19 +92,15 @@ K3b::EmptyDiscWaiter::EmptyDiscWaiter( K3b::Device::Device* device, QWidget* par
 
     KConfigGroup g( KGlobal::config(), "General Options" );
     const bool showAdvancedGui = g.readEntry( "Show advanced GUI", false );
+    KDialog::ButtonCodes buttons = KDialog::Cancel|KDialog::User2|KDialog::User3;
     if ( showAdvancedGui ) {
-        setButtons( KDialog::Cancel|KDialog::User1|KDialog::User2|KDialog::User3 );
-        setDefaultButton( KDialog::User3 );
+        buttons |= KDialog::User1;
         setButtonText(KDialog::User1,i18n("Force"));
-        setButtonText(KDialog::User2,i18n("Eject"));
-        setButtonText(KDialog::User3,i18n("Load"));
     }
-    else {
-        setButtons( KDialog::Cancel|KDialog::User1|KDialog::User2 );
-        setDefaultButton( KDialog::User2 );
-        setButtonText(KDialog::User1,i18n("Eject"));
-        setButtonText(KDialog::User2,i18n("Load"));
-    }
+    setButtons( buttons );
+    setButtonText(KDialog::User2,i18n("Eject"));
+    setButtonText(KDialog::User3,i18n("Load"));
+    setDefaultButton( KDialog::User3 );
 
     d->device = device;
 
