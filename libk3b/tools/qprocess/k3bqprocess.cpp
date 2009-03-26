@@ -710,7 +710,16 @@ bool K3bQProcessPrivate::_q_processDied()
     // in case there is data in the pipe line and this slot by chance
     // got called before the read notifications, call these two slots
     // so the data is made available before the process dies.
-    _q_canReadStandardOutput();
+    if ( processFlags&K3bQProcess::RawStdout ) {
+        // wait for all data to be read
+        if ( bytesAvailableFromStdout() > 0 ) {
+            QMetaObject::invokeMethod( q, "_q_processDied", Qt::QueuedConnection );
+            return false;
+        }
+    }
+    else {
+        _q_canReadStandardOutput();
+    }
     _q_canReadStandardError();
 
     findExitCode();
