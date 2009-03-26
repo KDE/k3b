@@ -506,16 +506,16 @@ bool K3b::unmount( K3b::Device::Device* dev )
     if( !dev )
         return false;
 
+    Solid::StorageAccess *sa = dev->solidStorage();
+    if ( sa && sa->teardown() ){
+	    return true;
+    }
+
     QString mntDev = dev->blockDeviceName();
 
     // first try to unmount it the standard way
     if( KIO::NetAccess::synchronousRun( KIO::unmount( mntDev, false ), 0 ) )
         return true;
-
-    Solid::StorageAccess *sa = dev->solidStorage();
-    if ( sa && sa->teardown() ){
-	    return true;
-    }
 
     QString mntPath = KMountPoint::currentMountPoints().findByDevice( dev->blockDeviceName() )->mountPoint();
     if ( mntPath.isEmpty() ) {
