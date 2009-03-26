@@ -54,7 +54,6 @@ int K3b::IsoImager::s_imagerSessionCounter = 0;
 class K3b::IsoImager::Private
 {
 public:
-    K3b::FileSplitter imageFile;
     const K3b::ExternalBin* mkisofsBin;
 
     enum LinkHandling {
@@ -132,15 +131,6 @@ void K3b::IsoImager::slotProcessExited( int exitCode, QProcess::ExitStatus exitS
 {
     kDebug();
 
-    if( d->imageFile.isOpen() ) {
-        d->imageFile.close();
-
-        if( m_canceled || (exitCode != 0) ) {
-            d->imageFile.remove();
-            emit infoMessage( i18n("Removed incomplete image file %1.",d->imageFile.name()), WARNING );
-        }
-    }
-
     if( m_canceled ) {
         emit canceled();
         jobFinished(false);
@@ -175,7 +165,7 @@ void K3b::IsoImager::slotProcessExited( int exitCode, QProcess::ExitStatus exitS
 
                 default:
                     if( !d->knownError && !mkisofsReadError() ) {
-                        emit infoMessage( i18n("%1 returned an unknown error (code %2).",QString("mkisofs"), exitCode ),
+                        emit infoMessage( i18n("%1 returned an unknown error (code %2).", QLatin1String("mkisofs"), exitCode ),
                                           K3b::Job::ERROR );
                         emit infoMessage( i18n("Please send me an email with the last output."), K3b::Job::ERROR );
                     }
@@ -185,7 +175,7 @@ void K3b::IsoImager::slotProcessExited( int exitCode, QProcess::ExitStatus exitS
             }
         }
         else {
-            emit infoMessage( i18n("%1 crashed.",QString("mkisofs")), ERROR );
+            emit infoMessage( i18n("%1 crashed.", QLatin1String("mkisofs")), ERROR );
             jobFinished( false );
         }
     }
