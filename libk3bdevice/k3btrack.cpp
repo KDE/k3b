@@ -298,3 +298,8 @@ QDebug operator<<( QDebug s, const K3b::Device::Track& track )
                 << " (" << track.length().lba() << ")";
     return s;
 }
+
+uint qHash(const K3b::Device::Track &key)
+{
+	return qHash((long)&key);
+}
