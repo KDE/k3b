@@ -15,7 +15,6 @@
 #include "k3bexternalbinmanager.h"
 
 #include <kdebug.h>
-#include <k3process.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdeversion.h>
