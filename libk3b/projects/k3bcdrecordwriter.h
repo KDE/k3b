@@ -73,7 +73,7 @@ namespace K3b {
         void slotThroughput( int t );
 
     protected:
-        virtual void prepareProcess();
+        virtual bool prepareProcess();
 
         enum CdrecordError { UNKNOWN,
                              OVERSIZE,

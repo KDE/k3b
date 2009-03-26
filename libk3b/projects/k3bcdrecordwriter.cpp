@@ -79,7 +79,7 @@ public:
 
     QList<Track> tracks;
 
-    KTemporaryFile* cdTextFile;
+    QTemporaryFile* cdTextFile;
 
     Device::MediaType burnedMediaType;
     K3b::Device::SpeedMultiplicator usedSpeedFactor;
@@ -172,12 +172,14 @@ void K3b::CdrecordWriter::setWritingMode( K3b::WritingMode mode )
 }
 
 
-void K3b::CdrecordWriter::prepareProcess()
+bool K3b::CdrecordWriter::prepareProcess()
 {
     d->cdrecordBinObject = k3bcore->externalBinManager()->binObject("cdrecord");
 
-    if( !d->cdrecordBinObject )
-        return;
+    if( !d->cdrecordBinObject ) {
+        emit infoMessage( i18n("Could not find %1 executable.", QLatin1String("cdrecord")), ERROR );
+        return false;
+    }
 
     d->process.clearProgram();
 
@@ -296,12 +298,16 @@ void K3b::CdrecordWriter::prepareProcess()
 
     if( d->rawCdText.size() > 0 ) {
         delete d->cdTextFile;
-        d->cdTextFile = new KTemporaryFile();
-        d->cdTextFile->setPrefix( "/tmp/" ); // needs to be world readable in case cdrecord runs suid root
-        d->cdTextFile->setSuffix( ".dat" );
-        d->cdTextFile->open();
-        d->cdTextFile->write( d->rawCdText );
-
+        // yes, we do want to use QTemporaryFile and not KTemporaryFile because cdrecord
+        // might be started suid root and the KDE tmp might be on an nfs mounted partition
+        // (Mandriva for example uses ~/tmp)
+        d->cdTextFile = new QTemporaryFile();
+        if ( !d->cdTextFile->open() ||
+             d->cdTextFile->write( d->rawCdText ) != d->rawCdText.size() ||
+            !d->cdTextFile->flush() ) {
+            emit infoMessage( i18n( "Failed to write temporary file '%1'", d->cdTextFile->fileName() ), ERROR );
+            return false;
+        }
         d->process << "textfile=" + d->cdTextFile->fileName();
     }
 
@@ -331,6 +337,8 @@ void K3b::CdrecordWriter::prepareProcess()
     // add the user parameters
     for( QStringList::const_iterator it = d->arguments.constBegin(); it != d->arguments.constEnd(); ++it )
         d->process << *it;
+
+    return true;
 }
 
 
@@ -354,10 +362,7 @@ void K3b::CdrecordWriter::start()
     d->canceled = false;
     d->speedEst->reset();
 
-    prepareProcess();
-
-    if( !d->cdrecordBinObject ) {
-        emit infoMessage( i18n("Could not find %1 executable.",QString("cdrecord")), ERROR );
+    if ( !prepareProcess() ) {
         jobFinished(false);
         return;
     }
