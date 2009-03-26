@@ -58,6 +58,8 @@ public:
         outPipe.readFrom( &imageFile, true );
     }
 
+    K3b::WritingApp usedWritingApp;
+
     int doneCopies;
 
     bool running;
@@ -164,6 +166,19 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
         d->running = false;
     }
     else {
+        // first let's determine which application to use
+        d->usedWritingApp = writingApp();
+        if ( d->usedWritingApp == K3b::WRITING_APP_DEFAULT ) {
+            // let's default to cdrecord for the time being
+            // FIXME: use growisofs for non-dao and non-auto mode
+            if ( K3b::Device::isBdMedia( d->sourceDiskInfo.mediaType() ) ) {
+                if ( k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "blu-ray" ) )
+                    d->usedWritingApp = K3b::WRITING_APP_CDRECORD;
+                else
+                    d->usedWritingApp = K3b::WRITING_APP_GROWISOFS;
+            }
+        }
+
         if( m_readerDevice->copyrightProtectionSystemType() == K3b::Device::COPYRIGHT_PROTECTION_CSS ) { // CSS is the the only one we support ATM
             emit infoMessage( i18n("Found encrypted DVD."), WARNING );
             // check for libdvdcss
@@ -253,7 +268,8 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
             // with version >= 5.15 growisofs supports specifying the size of the track
             if( m_writingMode != K3b::WRITING_MODE_DAO || !m_onTheFly || m_onlyCreateImage ||
                 ( k3bcore->externalBinManager()->binObject( "growisofs" ) &&
-                  k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "daosize" ) ) ) {
+                  k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "daosize" ) ) ||
+                d->usedWritingApp == K3b::WRITING_APP_CDRECORD ) {
                 d->lastSector = dh->toc().lastSector();
                 break;
             }
@@ -390,6 +406,8 @@ void K3b::DvdCopyJob::cancel()
             d->dataTrackReader->cancel();
         if( d->writerRunning )
             d->writerJob->cancel();
+        if ( d->verificationJob && d->verificationJob->active() )
+            d->verificationJob->cancel();
         d->inPipe.close();
         d->outPipe.close();
         d->imageFile.close();
@@ -433,20 +451,7 @@ void K3b::DvdCopyJob::prepareWriter()
 {
     delete d->writerJob;
 
-    // first let's determine which application to use
-    int usedApp = writingApp();
-    if ( usedApp == K3b::WRITING_APP_DEFAULT ) {
-        // let's default to cdrecord for the time being
-        // FIXME: use growisofs for non-dao and non-auto mode
-        if ( K3b::Device::isBdMedia( d->sourceDiskInfo.mediaType() ) ) {
-            if ( k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "blu-ray" ) )
-                usedApp = K3b::WRITING_APP_CDRECORD;
-            else
-                usedApp = K3b::WRITING_APP_GROWISOFS;
-        }
-    }
-
-    if ( usedApp == K3b::WRITING_APP_GROWISOFS ) {
+    if ( d->usedWritingApp == K3b::WRITING_APP_GROWISOFS ) {
         K3b::GrowisofsWriter* job = new K3b::GrowisofsWriter( m_writerDevice, this, this );
 
         // these do only make sense with DVD-R(W)
@@ -545,14 +550,6 @@ void K3b::DvdCopyJob::slotReaderFinished( bool success )
 {
     d->readerRunning = false;
 
-    d->inPipe.close();
-
-    // close the socket
-    // otherwise growisofs will never quit.
-    // FIXME: is it posiible to do this in a generic manner?
-    if( d->writerJob )
-        d->writerJob->closeFd();
-
     // already finished?
     if( !d->running )
         return;
@@ -617,8 +614,6 @@ void K3b::DvdCopyJob::slotReaderFinished( bool success )
 void K3b::DvdCopyJob::slotWriterFinished( bool success )
 {
     d->writerRunning = false;
-
-    d->outPipe.close();
 
     // already finished?
     if( !d->running )
@@ -719,9 +714,14 @@ void K3b::DvdCopyJob::slotWriterFinished( bool success )
 
 void K3b::DvdCopyJob::slotVerificationFinished( bool success )
 {
+    if ( d->canceled ) {
+        emit canceled();
+        jobFinished( false );
+    }
+
     // we simply ignore the results from the verification, the verification
     // job already emits a message
-    if( ++d->doneCopies < m_copies ) {
+    else if( ++d->doneCopies < m_copies ) {
 
         if( waitForDvd() ) {
             prepareWriter();
@@ -806,7 +806,10 @@ bool K3b::DvdCopyJob::waitForDvd()
         // -------------------------------
         if( m & K3b::Device::MEDIA_DVD_PLUS_ALL ) {
 
-            d->usedWritingMode = K3b::WRITING_MODE_RES_OVWR;
+            if ( m & ( Device::MEDIA_DVD_PLUS_R|Device::MEDIA_DVD_PLUS_R_DL ) )
+                d->usedWritingMode = K3b::WRITING_MODE_DAO;
+            else
+                d->usedWritingMode = K3b::WRITING_MODE_RES_OVWR;
 
             if( m_simulate ) {
                 if( !questionYesNo( i18n("K3b does not support simulation with DVD+R(W) media. "
