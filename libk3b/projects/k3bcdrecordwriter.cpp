@@ -64,6 +64,7 @@ public:
     int lastFifoValue;
 
     int cdrecordError;
+    bool writingStarted;
 
     QByteArray rawCdText;
 
@@ -361,6 +362,7 @@ void K3b::CdrecordWriter::start()
 
     d->canceled = false;
     d->speedEst->reset();
+    d->writingStarted = false;
 
     if ( !prepareProcess() ) {
         jobFinished(false);
@@ -415,17 +417,27 @@ void K3b::CdrecordWriter::start()
         // FIXME: these messages should also take DVD into account.
         if( simulate() ) {
             emit newTask( i18n("Simulating") );
-            emit infoMessage( i18n("Starting %1 simulation at %2x speed..."
-                                   ,K3b::writingModeString(d->writingMode)
-                                   ,d->usedSpeed),
-                              K3b::Job::INFO );
+            if ( d->burnedMediaType & Device::MEDIA_DVD_PLUS_ALL )
+                emit infoMessage( i18n("Starting simulation at %2x speed...",
+                                       d->usedSpeed),
+                                  K3b::Job::INFO );
+            else
+                emit infoMessage( i18n("Starting %1 simulation at %2x speed...",
+                                       K3b::writingModeString(d->writingMode),
+                                       d->usedSpeed),
+                                  K3b::Job::INFO );
         }
         else {
             emit newTask( i18n("Writing") );
-            emit infoMessage( i18n("Starting %1 writing at %2x speed..."
-                                   ,K3b::writingModeString(d->writingMode)
-                                   ,d->usedSpeed),
-                              K3b::Job::INFO );
+            if ( d->burnedMediaType & Device::MEDIA_DVD_PLUS_ALL )
+                emit infoMessage( i18n("Starting writing at %2x speed...",
+                                       d->usedSpeed),
+                                  K3b::Job::INFO );
+            else
+                emit infoMessage( i18n("Starting %1 writing at %2x speed...",
+                                       K3b::writingModeString(d->writingMode),
+                                       d->usedSpeed),
+                                  K3b::Job::INFO );
         }
     }
 }
@@ -515,6 +527,11 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
             }
             else {
                 kError() << "(K3b::CdrecordWriter) Did not parse all tracks sizes!" << endl;
+            }
+
+            if( !d->writingStarted ) {
+                d->writingStarted = true;
+                emit newSubTask( i18n("Writing data") );
             }
 
             if( size > 0 ) {
