@@ -61,6 +61,7 @@ public:
     bool statDone;
 
     void stat() {
+#ifndef Q_OS_WIN32	
         struct statfs fs;
         if( !::statfs( QFile::encodeName( QFileInfo(path).absolutePath() ), &fs ) ) {
             switch( fs.f_type ) {
@@ -75,6 +76,9 @@ public:
         else {
             kDebug() << "(K3b::FileSystemInfo) statfs failed: " << ::strerror(errno);
         }
+#else
+		statDone = true;
+#endif
     }
 };
 
