@@ -299,10 +299,9 @@ QDebug operator<<( QDebug s, const K3b::Device::Track& track )
     return s;
 }
 
-uint qHash(const K3b::Device::Track &key)
+
+uint qHash( const K3b::Device::Track& key )
 {
-#ifdef __GNUC__
-#warning Why do we need this method anyway? -> see http://lists.kde.org/?l=kde-commits&m=123807506217451&w=2
-#endif
+    // this is a dummy implementation to make it compile on windows
 	return qHash((long)&key);
 }

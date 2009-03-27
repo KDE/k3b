@@ -143,7 +143,9 @@ namespace K3b {
 
 LIBK3BDEVICE_EXPORT QDebug operator<<( QDebug s, const K3b::Device::Track& track );
 
-// required for QHash template class instances using class K3b::Device::Track as key
-uint qHash(const K3b::Device::Track &key);
- 
+/**
+ * Dummy implementation to allow compilation on Windows
+ */
+uint qHash( const K3b::Device::Track& key );
+
 #endif

@@ -1378,18 +1378,35 @@ int K3b::Device::Device::rawTocDataWithBcdValues( unsigned char* data, unsigned 
 
 K3b::Device::CdText K3b::Device::Device::readCdText() const
 {
+    return CdText( readRawCdText() );
+}
+
+
+QByteArray K3b::Device::Device::readRawCdText( bool* success ) const
+{
     // if the device is already opened we do not close it
     // to allow fast multiple method calls in a row
     bool needToClose = !isOpen();
 
-    K3b::Device::CdText textData;
+    QByteArray textData;
+
+    if ( success )
+        *success = false;
 
     if( open() ) {
         unsigned char* data = 0;
         unsigned int dataLen = 0;
 
         if( readTocPmaAtip( &data, dataLen, 5, false, 0 ) ) {
-            textData.setRawPackData( data, dataLen );
+            // we need more than the header and a multiple of 18 bytes to have valid CD-TEXT
+            if( dataLen > 4 && dataLen%18 == 4 ) {
+                textData.append( reinterpret_cast<char*>(data), dataLen );
+                if ( success )
+                    *success = true;
+            }
+            else {
+                kDebug() << "invalid CD-TEXT length: " << dataLen;
+            }
 
             delete [] data;
         }

@@ -271,10 +271,21 @@ namespace K3b {
             void readIsrcMcn( Toc& toc ) const;
 
             /**
+             * Read the raw CD-Text data without decoding it.
+             * \return An array of bytes as read from the device, suitable to be used in
+             * CdText( const QByteArray& )
+             *
+             * \sa readCdText
+             */
+            QByteArray readRawCdText( bool* success = 0 ) const;
+
+            /**
              * Read the CD-TEXT of an audio or mixed-mode CD.
              *
              * \return A CdText object filled with the CD-TEXT values or an empty one in case of
              *         pure data media or if the CD does not contain CD-TEXT.
+             *
+             * \sa readRawCdText
              */
             CdText readCdText() const;
 
