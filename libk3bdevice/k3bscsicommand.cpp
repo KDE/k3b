@@ -188,7 +188,9 @@ void K3b::Device::ScsiCommand::debugError( int command, int errorCode, int sense
 #ifdef Q_OS_NETBSD
 #include "k3bscsicommand_netbsd.cpp"
 #endif
-
+#ifdef Q_OS_WIN32
+#include "k3bscsicommand_win.cpp"
+#endif
 
 
 K3b::Device::ScsiCommand::ScsiCommand( K3b::Device::Device::Handle handle )
