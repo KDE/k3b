@@ -40,7 +40,6 @@
 #include <qtextstream.h>
 
 // KDE-includes
-#include <k3process.h>
 #include <kurl.h>
 #include <kapplication.h>
 #include <kmessagebox.h>

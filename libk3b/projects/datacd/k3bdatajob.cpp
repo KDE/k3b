@@ -37,7 +37,6 @@
 #include <k3bdeviceglobals.h>
 #include <k3bgrowisofswriter.h>
 
-#include <k3process.h>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kstandarddirs.h>

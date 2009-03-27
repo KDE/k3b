@@ -16,7 +16,6 @@
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <k3process.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <ksimpleconfig.h>
