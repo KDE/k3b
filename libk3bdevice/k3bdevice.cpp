@@ -79,6 +79,18 @@ extern "C" {
 }
 #endif
 
+#ifdef Q_OS_FREEBSD
+#define HANDLE_DEFAULT_VALUE 0
+#endif
+#ifdef Q_OS_WIN32
+#define HANDLE_DEFAULT_VALUE INVALID_HANDLE_VALUE
+#endif
+#ifdef Q_OS_LINUX
+#define HANDLE_DEFAULT_VALUE -1
+#endif
+#ifdef Q_OS_NETBSD
+#define HANDLE_DEFAULT_VALUE -1
+#endif
 
 //
 // Very evil hacking: force the speed values to be acurate
@@ -103,56 +115,12 @@ namespace {
     }
 }
 
-
-#if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
-int K3b::Device::openDevice( const char* name, bool write )
-{
-    int fd = -1;
-    int flags = O_NONBLOCK;
-    if( write )
-        flags |= O_RDWR;
-    else
-        flags |= O_RDONLY;
-
-#ifdef HAVE_RESMGR
-    // first try resmgr
-    fd = ::rsm_open_device( name, flags );
-    //  kDebug() << "(K3b::Device::Device) resmgr open: " << fd;
-#endif
-
-    if( fd < 0 )
-        fd = ::open( name, flags );
-
-    if( fd < 0 ) {
-        kDebug() << "(K3b::Device::Device) could not open device "
-                 << name << ( write ? " for writing" : " for reading" ) << endl;
-        kDebug() << "                    (" << strerror(errno) << ")";
-        fd = -1;
-
-        // at least open it read-only (which is sufficient for kernels < 2.6.8 anyway)
-        if( write )
-            return openDevice( name, false );
-    }
-
-    return fd;
-}
-#endif
-
-
 class K3b::Device::Device::Private
 {
 public:
     Private()
         : supportedProfiles(0),
-#ifdef Q_OS_LINUX
-          deviceFd(-1),
-#endif
-#ifdef Q_OS_NETBSD
-          deviceFd(-1),
-#endif
-#ifdef Q_OS_FREEBSD
-          cam(0),
-#endif
+          deviceHandle(HANDLE_DEFAULT_VALUE),
           openedReadWrite(false),
           burnfree(false) {
     }
@@ -172,29 +140,101 @@ public:
 
     WritingModes writeModes;
 
-    // only needed on FreeBSD
-    QString passDevice;
     QString blockDevice;
     QString genericDevice;
 
     MediaTypes readCapabilities;
     MediaTypes writeCapabilities;
     MediaTypes supportedProfiles;
-#ifdef Q_OS_LINUX
-    int deviceFd;
-#endif
-#ifdef Q_OS_NETBSD
-    int deviceFd;
-#endif
-#ifdef Q_OS_FREEBSD
-    struct cam_device *cam;
-#endif
+    Handle deviceHandle;
     bool openedReadWrite;
     bool burnfree;
 
     QMutex mutex;
     QMutex openCloseMutex;
 };
+
+#ifdef Q_OS_FREEBSD
+K3b::Device::Handle K3b::Device::openDevice( const char* name, bool write )
+{
+    K3b::Device::Handle handle = cad->open_pass (name, O_RDWR,0 /* NULL */);
+        kDebug() << "(K3b::Device::openDevice) open device " << name
+                 << ((handle)?" succeeded.":" failed.") << endl;
+    return handle;
+}
+#endif
+
+
+#if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
+K3b::Device::Handle K3b::Device::openDevice( const char* name, bool write )
+{
+    K3b::Device::Handle fd = HANDLE_DEFAULT_VALUE;
+    int flags = O_NONBLOCK;
+    if( write )
+        flags |= O_RDWR;
+    else
+        flags |= O_RDONLY;
+
+#ifdef HAVE_RESMGR
+    // first try resmgr
+    fd = ::rsm_open_device( name, flags );
+    //  kDebug() << "(K3b::Device::Device) resmgr open: " << fd;
+#endif
+
+    if( fd < 0 )
+        fd = ::open( name, flags );
+
+    if( fd < 0 ) {
+        kDebug() << "(K3b::Device::Device) could not open device "
+                 << name << ( write ? " for writing" : " for reading" ) << endl;
+        kDebug() << "                    (" << strerror(errno) << ")";
+        fd = HANDLE_DEFAULT_VALUE;
+
+        // at least open it read-only (which is sufficient for kernels < 2.6.8 anyway)
+        if( write )
+            return openDevice( name, false );
+    }
+
+    return fd;
+}
+#endif
+
+#ifdef Q_OS_WIN32
+#define NAME_COUNT  25
+
+K3b::Device::Device::Handle K3b::Device::openDevice( const char* name, bool write )
+{
+    bool status = false;
+    K3b::Device::Device::Handle deviceHandle = HANDLE_DEFAULT_VALUE;
+    char string[NAME_COUNT + 1];
+
+    _snprintf(string, NAME_COUNT, "\\\\.\\%s", name);
+    deviceHandle = CreateFileA(string,
+        GENERIC_READ | GENERIC_WRITE , // at least inquiry needs write access 
+        FILE_SHARE_READ | (write ? FILE_SHARE_WRITE : 0),
+        NULL,
+        OPEN_EXISTING,
+        0,
+        NULL);
+
+    if( deviceHandle == INVALID_HANDLE_VALUE )
+        deviceHandle = CreateFileA(string,
+            GENERIC_READ,
+            FILE_SHARE_READ,
+            NULL,
+            OPEN_EXISTING,
+            0,
+            NULL);
+
+    if (deviceHandle == INVALID_HANDLE_VALUE) {
+        int errorCode = GetLastError();
+        kDebug() << "Error opening " << string << "Error:" << errorCode << endl;
+        return HANDLE_DEFAULT_VALUE;
+    }
+
+    return deviceHandle;
+}
+#endif
 
 
 K3b::Device::Device::Device( const Solid::Device& dev )
@@ -426,6 +466,9 @@ bool K3b::Device::Device::furtherInit()
     close();
 
 #endif // Q_OS_LINUX
+#ifdef Q_OS_WIN32
+    kDebug() << __FUNCTION__ << "to be implemented"; 
+#endif
     return true;
 }
 
@@ -1441,7 +1484,7 @@ bool K3b::Device::Device::readTocLinux( K3b::Device::Toc& toc ) const
         // cdth_trk0: First Track Number
         // cdth_trk1: Last Track Number
         //
-        if( ::ioctl( d->deviceFd, CDROMREADTOCHDR, &tochdr ) ) {
+        if( ::ioctl( d->deviceHandle, CDROMREADTOCHDR, &tochdr ) ) {
             kDebug() << "(K3b::Device::Device) could not get toc header !";
             success = false;
         }
@@ -1476,7 +1519,7 @@ bool K3b::Device::Device::readTocLinux( K3b::Device::Toc& toc ) const
                 //                 2: CD-XA Mode2
                 //
 
-                if( ::ioctl( d->deviceFd, CDROMREADTOCENTRY, &tocentry ) ) {
+                if( ::ioctl( d->deviceHandle, CDROMREADTOCENTRY, &tocentry ) ) {
                     kDebug() << "(K3b::Device::Device) error reading tocentry " << i;
                     success = false;
                     break;
@@ -1578,7 +1621,7 @@ bool K3b::Device::Device::block( bool b ) const
     bool needToClose = !isOpen();
     usageLock();
     if( open() ) {
-        success = ( ::ioctl( d->deviceFd, CDROM_LOCKDOOR, b ? 1 : 0 ) == 0 );
+        success = ( ::ioctl( d->deviceHandle, CDROM_LOCKDOOR, b ? 1 : 0 ) == 0 );
         if( needToClose )
             close();
     }
@@ -1591,7 +1634,7 @@ bool K3b::Device::Device::block( bool b ) const
     int arg = b ? 1 : 0;
     usageLock();
     if( open() ) {
-        success = ( ::ioctl( d->deviceFd, DIOCLOCK, &arg ) == 0 );
+        success = ( ::ioctl( d->deviceHandle, DIOCLOCK, &arg ) == 0 );
         if( needToClose )
             close();
     }
@@ -1641,7 +1684,7 @@ bool K3b::Device::Device::eject() const
 
     usageLock();
     if( open() ) {
-        if ( ::ioctl( d->deviceFd, DIOCEJECT, &arg ) >= 0)
+        if ( ::ioctl( d->deviceHandle, DIOCEJECT, &arg ) >= 0)
             success = true;
         if( needToClose )
             close();
@@ -1655,7 +1698,7 @@ bool K3b::Device::Device::eject() const
 
     usageLock();
     if( open() ) {
-        if( ::ioctl( d->deviceFd, CDROMEJECT ) >= 0 )
+        if( ::ioctl( d->deviceHandle, CDROMEJECT ) >= 0 )
             success = true;
         if( needToClose )
             close();
@@ -1688,7 +1731,7 @@ bool K3b::Device::Device::load() const
 
     usageLock();
     if( open() ) {
-        if ( ::ioctl( d->deviceFd, CDIOCCLOSE, &arg ) >= 0)
+        if ( ::ioctl( d->deviceHandle, CDIOCCLOSE, &arg ) >= 0)
             success = true;
         if( needToClose )
             close();
@@ -1702,7 +1745,7 @@ bool K3b::Device::Device::load() const
 
     usageLock();
     if( open() ) {
-        if( ::ioctl( d->deviceFd, CDROMCLOSETRAY ) >= 0 )
+        if( ::ioctl( d->deviceHandle, CDROMCLOSETRAY ) >= 0 )
             success = true;
         if( needToClose )
             close();
@@ -1729,7 +1772,7 @@ bool K3b::Device::Device::setAutoEjectEnabled( bool enabled ) const
     bool needToClose = !isOpen();
     usageLock();
     if ( open() ) {
-        success = ( ::ioctl( d->deviceFd, CDROMEJECT_SW, enabled ? 1 : 0 ) == 0 );
+        success = ( ::ioctl( d->deviceHandle, CDROMEJECT_SW, enabled ? 1 : 0 ) == 0 );
         if ( needToClose ) {
             close();
         }
@@ -1742,11 +1785,7 @@ bool K3b::Device::Device::setAutoEjectEnabled( bool enabled ) const
 
 K3b::Device::Device::Handle K3b::Device::Device::handle() const
 {
-#ifdef Q_OS_FREEBSD
-    return d->cam;
-#else
-    return d->deviceFd;
-#endif
+    return d->deviceHandle;
 }
 
 
@@ -1759,51 +1798,35 @@ bool K3b::Device::Device::open( bool write ) const
 
     d->openedReadWrite = write;
 
-#ifdef Q_OS_FREEBSD
-    if( !d->cam ) {
-        d->cam = cad->open_pass (d->passDevice.toLatin1(), O_RDWR,0 /* NULL */);
-        kDebug() << "(K3b::Device::openDevice) open device " << d->passDevice
-                 << ((d->cam)?" succeeded.":" failed.") << endl;
-    }
+    if( d->deviceHandle == HANDLE_DEFAULT_VALUE)
+        d->deviceHandle = openDevice( QFile::encodeName(blockDeviceName()), write );
 
-    return (d->cam != 0);
-#endif
-#if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
-    if( d->deviceFd == -1 )
-        d->deviceFd = openDevice( QFile::encodeName(blockDeviceName()), write );
-
-    return ( d->deviceFd != -1 );
-#endif
+    return ( d->deviceHandle != HANDLE_DEFAULT_VALUE);
 }
 
 
 void K3b::Device::Device::close() const
 {
-    QMutexLocker ml( &d->openCloseMutex );
+    //QMutexLocker ml( &d->openCloseMutex );
+
+    if( d->deviceHandle == HANDLE_DEFAULT_VALUE)
+        return; 
 
 #ifdef Q_OS_FREEBSD
-    if( d->cam ) {
-        cad->close_device(d->cam);
-        d->cam = 0;
-    }
-#endif
-#if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
-    if( d->deviceFd != -1 ) {
-        ::close( d->deviceFd );
-        d->deviceFd = -1;
-    }
-#endif
+    cad->close_device(d->deviceHandle);
+#endif       
+#if defined(Q_OS_WIN32)
+    CloseHandle(d->deviceHandle);
+#else
+    ::close( d->deviceHandle );
+#endif       
+    d->deviceHandle = HANDLE_DEFAULT_VALUE;
 }
 
 
 bool K3b::Device::Device::isOpen() const
 {
-#ifdef Q_OS_FREEBSD
-    return d->cam;
-#endif
-#if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
-    return ( d->deviceFd != -1 );
-#endif
+    return ( d->deviceHandle != HANDLE_DEFAULT_VALUE);
 }
 
 

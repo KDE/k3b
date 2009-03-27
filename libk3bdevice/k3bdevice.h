@@ -29,6 +29,10 @@
 struct cam_device;
 #endif
 
+#ifdef Q_OS_WIN32
+#include <windows.h>
+#endif
+
 namespace Solid {
     class Device;
     class StorageAccess;
@@ -53,6 +57,10 @@ namespace K3b {
         public:
 #ifdef Q_OS_FREEBSD
             typedef struct cam_device* Handle;
+#endif
+#ifdef Q_OS_WIN32
+            // file handle
+            typedef HANDLE Handle;
 #else
             // file descriptor
             typedef int Handle;
@@ -747,15 +755,13 @@ namespace K3b {
             friend class DeviceManager;
         };
 
-#if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
         /**
          * This should always be used to open a device since it
          * uses the resmgr
          *
          * @internal
          */
-        int openDevice( const char* name, bool write = false );
-#endif
+        K3b::Device::Device::Handle openDevice( const char* name, bool write = false );
     }
 }
 
