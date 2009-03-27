@@ -1111,7 +1111,9 @@ void K3b::MixedJob::cleanupAfterError()
     // remove the temp files
     removeBufferFiles();
 
+#ifdef __GNUC__
 #warning FIXME: eject medium if necessary after cleanupAfterError
+#endif
 }
 
 
