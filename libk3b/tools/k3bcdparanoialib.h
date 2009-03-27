@@ -25,6 +25,10 @@
 #include <sys/types.h>
 #include "k3b_export.h"
 
+#ifdef Q_OS_WIN32
+#undef S_OK
+#endif
+
 namespace K3b {
     namespace Device {
         class Device;
