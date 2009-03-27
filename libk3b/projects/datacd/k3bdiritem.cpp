@@ -52,8 +52,8 @@ K3b::DirItem::DirItem( const K3b::DirItem& item )
       m_dirs(0),
       m_localPath( item.m_localPath )
 {
-    Q_FOREACH( K3b::DataItem* item, item.children() ) {
-        addDataItem( item->copy() );
+    Q_FOREACH( K3b::DataItem* _item, item.children() ) {
+        addDataItem( _item->copy() );
     }
 }
 
