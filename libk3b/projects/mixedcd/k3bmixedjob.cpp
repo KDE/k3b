@@ -347,7 +347,9 @@ void K3b::MixedJob::cancel()
     if ( m_msInfoFetcher->active() )
         m_msInfoFetcher->cancel();
 
+#ifdef __GNUC__
 #warning FIXME: wait for subjobs to finish after cancellation
+#endif
 
     emit infoMessage( i18n("Writing canceled."), K3b::Job::ERROR );
     removeBufferFiles();

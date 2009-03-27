@@ -18,6 +18,11 @@
 // k3b includes
 #include "k3bmpeginfo.h"
 
+#ifdef Q_OS_WIN32
+#define ftello ftell
+#define fseeko fseek
+#endif
+
 static const double frame_rates[ 16 ] =
 {
     0.0, 24000.0 / 1001, 24.0, 25.0,
