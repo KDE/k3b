@@ -150,10 +150,12 @@ K3b::CdrdaoWriter::CdrdaoWriter( K3b::Device::Device* dev, K3b::JobHandler* hdl,
 
     ::memset( &d->oldMsg, 0, sizeof(ProgressMsg2) );
     ::memset( &d->newMsg, 0, sizeof(ProgressMsg2) );
-
+#ifndef Q_OS_WIN32
     if( socketpair(AF_UNIX,SOCK_STREAM,0,m_cdrdaoComm) )
     {
-        kDebug() << "(K3b::CdrdaoWriter) could not open socketpair for cdrdao remote messages";
+#endif
+		kDebug() << "(K3b::CdrdaoWriter) could not open socketpair for cdrdao remote messages";
+#ifndef Q_OS_WIN32
     }
     else
     {
@@ -166,6 +168,7 @@ K3b::CdrdaoWriter::CdrdaoWriter( K3b::Device::Device* dev, K3b::JobHandler* hdl,
         connect( m_comSock, SIGNAL(readyRead()),
                  this, SLOT(parseCdrdaoMessage()));
     }
+#endif
 }
 
 K3b::CdrdaoWriter::~CdrdaoWriter()
@@ -173,11 +176,13 @@ K3b::CdrdaoWriter::~CdrdaoWriter()
     delete d->speedEst;
     delete d;
 
+#ifndef Q_OS_WIN32
     // close the socket
     if( m_comSock ) {
         m_comSock->close();
         ::close( m_cdrdaoComm[0] );
     }
+#endif
     delete m_process;
     delete m_comSock;
 }
