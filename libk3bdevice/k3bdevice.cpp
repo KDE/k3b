@@ -155,9 +155,9 @@ public:
 };
 
 #ifdef Q_OS_FREEBSD
-K3b::Device::Handle K3b::Device::openDevice( const char* name, bool write )
+K3b::Device::Device::Handle K3b::Device::openDevice( const char* name, bool write )
 {
-    K3b::Device::Handle handle = cad->open_pass (name, O_RDWR,0 /* NULL */);
+    K3b::Device::Device::Handle handle = cad->open_pass (name, O_RDWR,0 /* NULL */);
         kDebug() << "(K3b::Device::openDevice) open device " << name
                  << ((handle)?" succeeded.":" failed.") << endl;
     return handle;
@@ -166,9 +166,9 @@ K3b::Device::Handle K3b::Device::openDevice( const char* name, bool write )
 
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_NETBSD)
-K3b::Device::Handle K3b::Device::openDevice( const char* name, bool write )
+K3b::Device::Device::Handle K3b::Device::openDevice( const char* name, bool write )
 {
-    K3b::Device::Handle fd = HANDLE_DEFAULT_VALUE;
+    K3b::Device::Device::Handle fd = HANDLE_DEFAULT_VALUE;
     int flags = O_NONBLOCK;
     if( write )
         flags |= O_RDWR;
