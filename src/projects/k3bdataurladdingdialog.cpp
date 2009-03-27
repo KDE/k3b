@@ -273,7 +273,9 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
 
     ++m_filesHandled;
 
+#ifdef __GNUC__
 #warning PORTME
+#endif
 #if 0
     m_infoLabel->setText( url.path() );
     if( m_totalFiles == 0 )
