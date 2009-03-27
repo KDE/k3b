@@ -648,8 +648,8 @@ void K3b::AudioEditorWidget::mousePressEvent( QMouseEvent* e )
     m_draggedMarker = 0;
 
     bool end;
-	Range* r;
-    if( r = findRangeEdge( e->pos(), &end ) ) {
+	Range* r = findRangeEdge( e->pos(), &end );
+    if( r ) {
         m_draggedRange = r;
         m_draggingRangeEnd = end;
         setSelectedRange( r );
