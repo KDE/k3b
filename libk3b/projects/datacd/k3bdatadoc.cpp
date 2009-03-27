@@ -1405,8 +1405,9 @@ K3b::Device::MediaTypes K3b::DataDoc::supportedMediaTypes() const
 //         // we treat DVD+R(W) as restricted overwrite media
 //         m = K3b::Device::MEDIA_DVD_RW_OVWR|K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_PLUS_R;
 //     }
-
+#ifdef __GNUC__
 #warning BLu-Ray!
+#endif
     return m;
 }
 
