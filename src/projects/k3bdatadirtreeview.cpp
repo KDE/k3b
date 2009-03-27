@@ -38,7 +38,9 @@ public:
     int animationCounter;
     QPixmap beforeAniPixmap;
 
+#ifdef __GNUC__
 #warning Re-enable the iso and ascii validators
+#endif
     QValidator* iso9660Validator;
     QValidator* asciiValidator;
 

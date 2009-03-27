@@ -237,7 +237,9 @@ void K3b::WritingModeWidget::determineSupportedModesFromMedium( const K3b::Mediu
                                     K3b::Device::MEDIA_DVD_RW_OVWR) )
         modes |= K3b::WRITING_MODE_RES_OVWR;
 
+#ifdef __GNUC__
 #warning FIXME: add Blu-Ray media
+#endif
 
     setSupportedModes( modes );
     setDevice( m.device() );

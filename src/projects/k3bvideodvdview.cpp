@@ -51,7 +51,9 @@ K3b::VideoDvdView::VideoDvdView( K3b::VideoDvdDoc* doc, QWidget *parent )
 #endif
     addPluginButtons( K3b::ProjectPlugin::VIDEO_DVD );
 }
+#ifdef __GNUC__
 #warning get the currentDir connections from K3b::DataView or maybe inherit from it
+#endif
 
 
 K3b::VideoDvdView::~VideoDvdView()

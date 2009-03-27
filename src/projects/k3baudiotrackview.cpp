@@ -444,7 +444,9 @@ void K3b::AudioTrackView::getSelectedItems( QList<K3b::AudioTrack*>& tracks,
             tracks << track;
         }
         else if ( K3b::AudioDataSource* source = m_model->sourceForIndex( index ) ) {
+#ifdef __GNUC__
 #warning Do not select hidden sources once the hiding of sources works again
+#endif
             // do not select hidden source items or unfinished source files
             if( source->isValid() && source->length() != 0 ) {
                 sources << source;
