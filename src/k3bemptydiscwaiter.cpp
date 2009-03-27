@@ -609,7 +609,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                                         i18n("Found rewritable media in %1 - %2. "
                                              "Should it be erased?",d->device->vendor(),d->device->description()),
                                         i18n("Found Rewritable Disk"),
-                                        KGuiItem(i18n("&Erase"), "cdrwblank"),
+                                        KGuiItem(i18n("&Erase"), "erasecd"),
                                         KGuiItem(i18n("E&ject")) ) == KMessageBox::Yes ) {
 
 
