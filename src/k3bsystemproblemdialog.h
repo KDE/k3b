@@ -96,8 +96,9 @@ namespace K3b {
         SystemProblemDialog( const QList<SystemProblem>&,
                              QWidget* parent = 0);
         static int dmaActivated( Device::Device* );
+#ifndef Q_OS_WIN32
         static QList<Device::Device*> checkForAutomounting();
-
+#endif
         QPushButton* m_closeButton;
         QPushButton* m_k3bsetupButton;
         QCheckBox* m_checkDontShowAgain;
