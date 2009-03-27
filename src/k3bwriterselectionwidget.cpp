@@ -221,7 +221,9 @@ void K3b::WriterSelectionWidget::setWantedMediumState( Device::MediaStates state
 
 void K3b::WriterSelectionWidget::setWantedMediumSize( const K3b::Msf& minSize )
 {
+#ifdef __GNUC__
 #warning The wanted medium size may not be enough if we need to handle multisession!
+#endif
     m_comboMedium->setWantedMediumSize( minSize );
 }
 

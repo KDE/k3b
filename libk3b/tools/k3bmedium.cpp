@@ -501,7 +501,9 @@ bool K3b::Medium::sameMedium( const K3b::Medium& other ) const
 // static
 QString K3b::Medium::mediaRequestString( Device::MediaTypes requestedMediaTypes, Device::MediaStates requestedMediaStates, const K3b::Msf& requestedSize )
 {
+#ifdef __GNUC__
 #warning IMPLEMENTME: mediaRequestString and use me in EmptyDiskWaiter and MediaSelectionComboBox
+#endif
     // FIXME: do not construct strings as in K3b 1.0. It makes translation to many languages impossible!
     return QString();
 }
