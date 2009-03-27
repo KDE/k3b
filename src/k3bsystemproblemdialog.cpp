@@ -56,7 +56,9 @@
 #include <langinfo.h>
 #endif
 
+#ifndef Q_OS_WIN32
 #include <fstab.h>
+#endif
 #include <unistd.h>
 
 
@@ -339,7 +341,9 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
     }
 
     // 2. device check
+#ifdef __GNUC__
 #warning Make sure we have a proper new kernel and cdrecord for simple dev= stuff
+#endif
     bool atapiWriter = false;
     bool dvd_r_dl = false;
     QList<K3b::Device::Device *> items(k3bcore->deviceManager()->readingDevices());
@@ -349,7 +353,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
             dvd_r_dl = true;
     }
 
-
+#ifndef Q_OS_WIN32
     // check automounted devices
     QList<K3b::Device::Device*> automountedDevices = checkForAutomounting();
     for( QList<K3b::Device::Device *>::const_iterator it = automountedDevices.constBegin();
@@ -366,7 +370,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                            false ) );
     }
 
-
+#endif
     if( atapiWriter ) {
         if( !K3b::plainAtapiSupport() &&
             !K3b::hackedAtapiSupport() ) {
@@ -638,10 +642,10 @@ int K3b::SystemProblemDialog::dmaActivated( K3b::Device::Device* dev )
 }
 
 
+#ifndef Q_OS_WIN32
 QList<K3b::Device::Device*> K3b::SystemProblemDialog::checkForAutomounting()
 {
     QList<K3b::Device::Device *> l;
-
     ::setfsent();
 
     struct fstab * mountInfo = 0;
@@ -667,9 +671,9 @@ QList<K3b::Device::Device*> K3b::SystemProblemDialog::checkForAutomounting()
     } // while mountInfo
 
     ::endfsent();
-
     return l;
 }
+#endif
 
 
 bool K3b::SystemProblemDialog::readCheckSystemConfig()
