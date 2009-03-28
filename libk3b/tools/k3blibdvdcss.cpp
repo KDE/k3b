@@ -23,8 +23,46 @@
 #include <qfile.h>
 #include <qpair.h>
 
-#include <dlfcn.h>
+// TODO replace dlopen/dlsym/dlclose by platform independent QLibrary
+#ifdef Q_OS_WIN32
 
+#include <QLibrary>
+
+inline void *dlopen(char *fileName, int b)
+{
+	static QLibrary lib;
+	lib.setFileName(fileName);
+	if (lib.isLoaded())
+		return &lib;
+	if (lib.load())
+		return &lib;
+	return 0;
+}
+
+inline void *dlsym(void *a, char *b)
+{
+	QLibrary *lib = (QLibrary *)a;
+	return lib->resolve(b);
+}
+
+inline void dlclose(void *a)
+{
+	QLibrary *lib = (QLibrary *)a;
+	lib->unload();
+}
+
+#define RTLD_GLOBAL 0
+#define RTLD_NOW 0
+#define RTLD_LAZY 0
+#else
+#include <dlfcn.h>
+#endif
+
+#ifdef Q_OS_WIN32
+#define LIBDVDCSS_NAME "dvdcss.dll"
+#else
+#define LIBDVDCSS_NAME "libdvdcss.so.2"
+#endif
 
 void* K3b::LibDvdCss::s_libDvdCss = 0;
 int K3b::LibDvdCss::s_counter = 0;
@@ -278,7 +316,7 @@ bool K3b::LibDvdCss::crackAllKeys()
 K3b::LibDvdCss* K3b::LibDvdCss::create()
 {
     if( s_libDvdCss == 0 ) {
-        s_libDvdCss = dlopen( "libdvdcss.so.2", RTLD_LAZY|RTLD_GLOBAL );
+        s_libDvdCss = dlopen( LIBDVDCSS_NAME, RTLD_LAZY|RTLD_GLOBAL );
         if( s_libDvdCss ) {
             k3b_dvdcss_open = (dvdcss_t (*)(char*))dlsym( s_libDvdCss, "dvdcss_open" );
             k3b_dvdcss_close = (int (*)( dvdcss_t ))dlsym( s_libDvdCss, "dvdcss_close" );

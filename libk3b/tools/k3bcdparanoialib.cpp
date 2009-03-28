@@ -22,11 +22,53 @@
 
 #include <kdebug.h>
 
+// TODO replace dlopen/dlsym/dlclose by platform independent QLibrary 
+#ifdef Q_OS_WIN32
+
+#include <QLibrary>
+
+inline void *dlopen(char *fileName, int b)
+{
+	static QLibrary lib;
+	lib.setFileName(fileName);
+	if (lib.isLoaded())
+		return &lib;
+	if (lib.load())
+		return &lib;
+	return 0;
+}
+
+inline void *dlsym(void *a, char *b)
+{
+	QLibrary *lib = (QLibrary *)a;
+	return lib->resolve(b);
+}
+
+inline void dlclose(void *a)
+{
+	QLibrary *lib = (QLibrary *)a;
+	lib->unload();
+}
+
+#define RTLD_GLOBAL 0
+#define RTLD_NOW 0
+#define RTLD_LAZY 0
+
+typedef short int int16_t;
+#else
 #include <dlfcn.h>
+#endif
 
 #include <qfile.h>
 #include <qmutex.h>
 
+#ifdef Q_OS_WIN32
+#define LIBCDIO_CDDA "cdio_cdda.dll"
+#define LIBCDIO_PARANOIA "cdio_paranoia.dll"
+#else
+#define LIBCDIO_CDDA "libcdio_cdda.so"
+#define LIBCDIO_PARANOIA "libcdio_paranoia.so.0"
+#endif
 
 static bool s_haveLibCdio = false;
 
@@ -494,16 +536,16 @@ K3b::CdparanoiaLib* K3b::CdparanoiaLib::create()
     // check if libcdda_interface is avalilable
     if( s_libInterface == 0 ) {
         s_haveLibCdio = false;
-
+#ifndef Q_OS_WIN32
         s_libInterface = dlopen( "libcdda_interface.so.0", RTLD_NOW|RTLD_GLOBAL );
 
         // try the redhat & Co. location
         if( s_libInterface == 0 )
             s_libInterface = dlopen( "cdda/libcdda_interface.so.0", RTLD_NOW|RTLD_GLOBAL );
-
+#endif
         // try the new cdio lib
         if( s_libInterface == 0 ) {
-            s_libInterface = dlopen( "libcdio_cdda.so", RTLD_NOW|RTLD_GLOBAL );
+            s_libInterface = dlopen( LIBCDIO_CDDA, RTLD_NOW|RTLD_GLOBAL );
             s_haveLibCdio = true;
         }
 
@@ -512,16 +554,16 @@ K3b::CdparanoiaLib* K3b::CdparanoiaLib::create()
             return 0;
         }
 
-
+#ifndef Q_OS_WIN32
         s_libParanoia = dlopen( "libcdda_paranoia.so.0", RTLD_NOW );
 
         // try the redhat & Co. location
         if( s_libParanoia == 0 )
             s_libParanoia = dlopen( "cdda/libcdda_paranoia.so.0", RTLD_NOW );
-
+#endif
         // try the new cdio lib
         if( s_haveLibCdio && s_libParanoia == 0 )
-            s_libParanoia = dlopen( "libcdio_paranoia.so.0", RTLD_NOW );
+            s_libParanoia = dlopen( LIBCDIO_PARANOIA, RTLD_NOW );
 
         if( s_libParanoia == 0 ) {
             kDebug() << "(K3b::CdparanoiaLib) Error while loading libcdda_paranoia. ";
