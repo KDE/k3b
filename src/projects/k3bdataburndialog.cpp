@@ -190,7 +190,7 @@ void K3b::DataBurnDialog::slotStartClicked()
         }
     }
 
-    if( m_writingModeWidget->writingMode() == K3b::WRITING_MODE_DAO &&
+    if( m_writingModeWidget->writingMode() == K3b::WritingModeSao &&
         m_comboMultisession->multiSessionMode() != K3b::DataDoc::NONE &&
         m_writerSelectionWidget->writingApp() == K3b::WritingAppCdrecord )
         if( KMessageBox::warningContinueCancel( this,
@@ -253,7 +253,7 @@ void K3b::DataBurnDialog::toggleAll()
                                    !K3b::Device::isCdMedia( k3bappcore->mediaCache()->diskInfo( m_writerSelectionWidget->writerDevice() ).mediaType() ) );
 
     // Multisession in DAO is not possible
-    if( m_writingModeWidget->writingMode() == K3b::WRITING_MODE_DAO ) {
+    if( m_writingModeWidget->writingMode() == K3b::WritingModeSao ) {
         if( m_comboMultisession->multiSessionMode() == K3b::DataDoc::START ||
             m_comboMultisession->multiSessionMode() == K3b::DataDoc::CONTINUE ||
             m_comboMultisession->multiSessionMode() == K3b::DataDoc::FINISH )

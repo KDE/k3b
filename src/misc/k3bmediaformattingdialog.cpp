@@ -62,7 +62,7 @@ K3b::MediaFormattingDialog::MediaFormattingDialog( QWidget* parent )
     m_writerSelectionWidget->setForceAutoSpeed(true);
 
     QGroupBox* groupWritingMode = new QGroupBox( i18n("Writing Mode"), frame );
-    m_writingModeWidget = new K3b::WritingModeWidget( K3b::WRITING_MODE_INCR_SEQ|K3b::WRITING_MODE_RES_OVWR,
+    m_writingModeWidget = new K3b::WritingModeWidget( K3b::WritingModeIncrementalSequential|K3b::WritingModeRestrictedOverwrite,
                                                     groupWritingMode );
     QVBoxLayout* groupWritingModeLayout = new QVBoxLayout( groupWritingMode );
     groupWritingModeLayout->addWidget( m_writingModeWidget );
@@ -174,7 +174,7 @@ void K3b::MediaFormattingDialog::toggleAll()
     K3b::Medium medium = k3bappcore->mediaCache()->medium( m_writerSelectionWidget->writerDevice() );
     K3b::WritingModes modes = 0;
     if ( medium.diskInfo().mediaType() & K3b::Device::MEDIA_DVD_RW ) {
-        modes |=  K3b::WRITING_MODE_INCR_SEQ|K3b::WRITING_MODE_RES_OVWR;
+        modes |=  K3b::WritingModeIncrementalSequential|K3b::WritingModeRestrictedOverwrite;
     }
     m_writingModeWidget->setSupportedModes( modes );
     setButtonEnabled( START_BUTTON, m_writerSelectionWidget->writerDevice() != 0 );

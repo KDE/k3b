@@ -984,7 +984,7 @@ void K3b::VcdBurnDialog::toggleAll()
 {
     K3b::ProjectBurnDialog::toggleAll();
 
-    m_writingModeWidget->setSupportedModes( K3b::WRITING_MODE_DAO );
+    m_writingModeWidget->setSupportedModes( K3b::WritingModeSao );
     m_checkRemoveBufferFiles->setDisabled( m_checkOnlyCreateImage->isChecked() );
 }
 

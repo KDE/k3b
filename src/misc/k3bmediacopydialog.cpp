@@ -467,7 +467,7 @@ void K3b::MediaCopyDialog::toggleAll()
         m_checkCacheImage->setChecked(true);
         m_checkCacheImage->setEnabled(false);
 
-        m_writingModeWidget->setSupportedModes( K3b::WRITING_MODE_RAW );
+        m_writingModeWidget->setSupportedModes( K3b::WritingModeRaw );
     }
 
     // Normal CD/DVD/Blue-Ray copy
@@ -479,14 +479,14 @@ void K3b::MediaCopyDialog::toggleAll()
         if( burnDev == readDev ) {
             K3b::WritingModes modes = 0;
             if ( sourceMedium.diskInfo().mediaType() & K3b::Device::MEDIA_CD_ALL ) {
-                modes = K3b::WRITING_MODE_TAO|K3b::WRITING_MODE_DAO|K3b::WRITING_MODE_RAW;
+                modes = K3b::WritingModeTao|K3b::WritingModeSao|K3b::WritingModeRaw;
             }
             else if ( sourceMedium.diskInfo().mediaType() & K3b::Device::MEDIA_DVD_ALL ) {
                 // only auto for DVD+R(W)
                 if( burnDev->writeCapabilities() & (K3b::Device::MEDIA_DVD_R|K3b::Device::MEDIA_DVD_RW) ) {
-                    modes |= K3b::WRITING_MODE_DAO|K3b::WRITING_MODE_RES_OVWR;
+                    modes |= K3b::WritingModeSao|K3b::WritingModeRestrictedOverwrite;
                     if( burnDev->featureCurrent( K3b::Device::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) != 0 )
-                        modes |= K3b::WRITING_MODE_INCR_SEQ;
+                        modes |= K3b::WritingModeIncrementalSequential;
                 }
 
                 // TODO: once we have layer jump support: this is where it goes

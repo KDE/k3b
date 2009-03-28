@@ -416,7 +416,7 @@ QString K3b::writingAppToString( K3b::WritingApp app )
 
 QString K3b::writingModeString( K3b::WritingModes modes )
 {
-    if( modes == WRITING_MODE_AUTO )
+    if( modes == WritingModeAuto )
         return i18n("Auto");
     else
         return K3b::Device::writingModeString( ( int )modes );

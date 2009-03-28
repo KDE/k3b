@@ -128,7 +128,7 @@ K3b::CdCopyJob::CdCopyJob( K3b::JobHandler* hdl, QObject* parent )
       m_dataReadRetries(128),
       m_audioReadRetries(5),
       m_copyCdText(true),
-      m_writingMode( K3b::WRITING_MODE_AUTO )
+      m_writingMode( K3b::WritingModeAuto )
 {
     d = new Private();
 }
@@ -279,7 +279,7 @@ void K3b::CdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
         //
         // It is not possible to create multisession cds in raw writing mode
         //
-        if( d->numSessions > 1 && m_writingMode == K3b::WRITING_MODE_RAW ) {
+        if( d->numSessions > 1 && m_writingMode == K3b::WritingModeRaw ) {
             if( !questionYesNo( i18n("You will only be able to copy the first session in raw writing mode. "
                                      "Continue anyway?"),
                                 i18n("Multisession CD") ) ) {
@@ -823,7 +823,7 @@ bool K3b::CdCopyJob::writeNextSession()
         // the inf files are ready and named correctly when writing with images
         //
         K3b::WritingMode usedWritingMode = m_writingMode;
-        if( usedWritingMode == K3b::WRITING_MODE_AUTO ) {
+        if( usedWritingMode == K3b::WritingModeAuto ) {
             //
             // there are a lot of writers out there which produce coasters
             // in dao mode if the CD contains pregaps of length 0 (or maybe already != 2 secs?)
@@ -843,16 +843,16 @@ bool K3b::CdCopyJob::writeNextSession()
 
             if( zeroPregap && m_writerDevice->supportsRawWriting() ) {
                 if( d->numSessions == 1 )
-                    usedWritingMode = K3b::WRITING_MODE_RAW;
+                    usedWritingMode = K3b::WritingModeRaw;
                 else
-                    usedWritingMode = K3b::WRITING_MODE_TAO;
+                    usedWritingMode = K3b::WritingModeTao;
             }
             else if( m_writerDevice->dao() )
-                usedWritingMode = K3b::WRITING_MODE_DAO;
+                usedWritingMode = K3b::WritingModeSao;
             else if( m_writerDevice->supportsRawWriting() )
-                usedWritingMode = K3b::WRITING_MODE_RAW;
+                usedWritingMode = K3b::WritingModeRaw;
             else
-                usedWritingMode = K3b::WRITING_MODE_TAO;
+                usedWritingMode = K3b::WritingModeTao;
         }
         d->cdrecordWriter->setWritingMode( usedWritingMode  );
 
@@ -860,7 +860,7 @@ bool K3b::CdCopyJob::writeNextSession()
             d->cdrecordWriter->addArgument( "-multi" );
 
         if( d->haveCddb || d->haveCdText ) {
-            if( usedWritingMode == K3b::WRITING_MODE_TAO ) {
+            if( usedWritingMode == K3b::WritingModeTao ) {
                 emit infoMessage( i18n("It is not possible to write CD-Text in TAO mode."), WARNING );
             }
             else if( d->haveCdText ) {
@@ -906,7 +906,7 @@ bool K3b::CdCopyJob::writeNextSession()
 
         bool multi = d->doNotCloseLastSession || (d->numSessions > 1 && d->currentWrittenSession < d->toc.count());
         K3b::WritingMode usedWritingMode = m_writingMode;
-        if( usedWritingMode == K3b::WRITING_MODE_AUTO ) {
+        if( usedWritingMode == K3b::WritingModeAuto ) {
             // at least the NEC3540a does write 2056 byte sectors only in tao mode. Same for LG4040b
             // since writing data tracks in TAO mode is no loss let's default to TAO in the case of 2056 byte
             // sectors (which is when writing xa form1 sectors here)
@@ -914,9 +914,9 @@ bool K3b::CdCopyJob::writeNextSession()
                 d->toc.count() == 1 &&
                 !multi &&
                 track->mode() == K3b::Device::Track::MODE1 )
-                usedWritingMode = K3b::WRITING_MODE_DAO;
+                usedWritingMode = K3b::WritingModeSao;
             else
-                usedWritingMode = K3b::WRITING_MODE_TAO;
+                usedWritingMode = K3b::WritingModeTao;
         }
         d->cdrecordWriter->setWritingMode( usedWritingMode );
 

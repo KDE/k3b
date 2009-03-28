@@ -266,8 +266,8 @@ void K3b::MixedBurnDialog::toggleAll()
     // cdrdao always knows onthefly and cdtext
     bool onTheFly = true;
     bool cdText = true;
-    if( m_writingModeWidget->writingMode() == K3b::WRITING_MODE_TAO ||
-        m_writingModeWidget->writingMode() == K3b::WRITING_MODE_RAW ||
+    if( m_writingModeWidget->writingMode() == K3b::WritingModeTao ||
+        m_writingModeWidget->writingMode() == K3b::WritingModeRaw ||
         m_writerSelectionWidget->writingApp() == K3b::WritingAppCdrecord ) {
         onTheFly = cdrecordOnTheFly;
         cdText = cdrecordCdText;
@@ -280,8 +280,8 @@ void K3b::MixedBurnDialog::toggleAll()
 
     m_cdtextWidget->setEnabled( !m_checkOnlyCreateImage->isChecked() &&
                                 cdText &&
-                                m_writingModeWidget->writingMode() != K3b::WRITING_MODE_TAO );
-    if( !cdText || m_writingModeWidget->writingMode() == K3b::WRITING_MODE_TAO  )
+                                m_writingModeWidget->writingMode() != K3b::WritingModeTao );
+    if( !cdText || m_writingModeWidget->writingMode() == K3b::WritingModeTao  )
         m_cdtextWidget->setChecked( false );
 }
 

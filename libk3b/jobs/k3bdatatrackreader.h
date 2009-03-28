@@ -51,9 +51,9 @@ namespace K3b {
 
         enum SectorSize {
             AUTO = 0,
-            MODE1 = SECTORSIZE_DATA_2048,
-            MODE2FORM1 = SECTORSIZE_DATA_2048_SUBHEADER,
-            MODE2FORM2 = SECTORSIZE_DATA_2324_SUBHEADER
+            MODE1 = SectorSizeData2048,
+            MODE2FORM1 = SectorSizeData2048_SUBHEADER,
+            MODE2FORM2 = SectorSizeData2324_SUBHEADER
         };
 
         void setSectorSize( SectorSize size );

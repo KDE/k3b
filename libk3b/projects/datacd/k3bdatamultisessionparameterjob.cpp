@@ -86,7 +86,7 @@ bool K3b::DataMultiSessionParameterJob::run()
 
     if( !d->doc->onlyCreateImages() ) {
         if ( d->usedMultiSessionMode == K3b::DataDoc::AUTO ) {
-            if( d->doc->writingMode() == K3b::WRITING_MODE_AUTO ||
+            if( d->doc->writingMode() == K3b::WritingModeAuto ||
                 !( d->doc->writingMode() & (K3b::Device::WRITINGMODE_SAO|K3b::Device::WRITINGMODE_RAW) ) ) {
                 emit newSubTask( i18n("Searching for old session") );
 
@@ -203,12 +203,12 @@ K3b::DataDoc::MultiSessionMode K3b::DataMultiSessionParameterJob::determineMulti
         kDebug() << "(K3b::DataMultiSessionParameterJob) found empty or complete medium.";
 
         if( d->doc->size() >= info.capacity().mode1Bytes()*9/10 ||
-            d->doc->writingMode() == K3b::WRITING_MODE_DAO ) {
+            d->doc->writingMode() == K3b::WritingModeSao ) {
             return K3b::DataDoc::NONE;
         }
         else if( ( info.capacity() < 2621440 /* ~ 5 GB */ &&
                    d->doc->size() + 11400 /* used size + project size + session gap */ > 2097152 /* 4 GB */ ) ||
-                 d->doc->writingMode() == K3b::WRITING_MODE_DAO ) {
+                 d->doc->writingMode() == K3b::WritingModeSao ) {
             return K3b::DataDoc::NONE;
         }
         else {

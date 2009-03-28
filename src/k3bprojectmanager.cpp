@@ -269,13 +269,13 @@ void K3b::ProjectManager::loadDefaults( K3b::Doc* doc )
 
     QString mode = c.readEntry( "writing_mode" );
     if ( mode == "dao" )
-        doc->setWritingMode( K3b::WRITING_MODE_DAO );
+        doc->setWritingMode( K3b::WritingModeSao );
     else if( mode == "tao" )
-        doc->setWritingMode( K3b::WRITING_MODE_TAO );
+        doc->setWritingMode( K3b::WritingModeTao );
     else if( mode == "raw" )
-        doc->setWritingMode( K3b::WRITING_MODE_RAW );
+        doc->setWritingMode( K3b::WritingModeRaw );
     else
-        doc->setWritingMode( K3b::WRITING_MODE_AUTO );
+        doc->setWritingMode( K3b::WritingModeAuto );
 
     doc->setDummy( c.readEntry( "simulate", false ) );
     doc->setOnTheFly( c.readEntry( "on_the_fly", true ) );
@@ -329,11 +329,11 @@ void K3b::ProjectManager::loadDefaults( K3b::Doc* doc )
 
         QString datamode = c.readEntry( "data_track_mode" );
         if( datamode == "mode1" )
-            dataDoc->setDataMode( K3b::DATA_MODE_1 );
+            dataDoc->setDataMode( K3b::DataMode1 );
         else if( datamode == "mode2" )
-            dataDoc->setDataMode( K3b::DATA_MODE_2 );
+            dataDoc->setDataMode( K3b::DataMode2 );
         else
-            dataDoc->setDataMode( K3b::DATA_MODE_AUTO );
+            dataDoc->setDataMode( K3b::DataModeAuto );
 
         dataDoc->setVerifyData( c.readEntry( "verify data", false ) );
 
@@ -376,11 +376,11 @@ void K3b::ProjectManager::loadDefaults( K3b::Doc* doc )
 
         QString datamode = c.readEntry( "data_track_mode" );
         if( datamode == "mode1" )
-            mixedDoc->dataDoc()->setDataMode( K3b::DATA_MODE_1 );
+            mixedDoc->dataDoc()->setDataMode( K3b::DataMode1 );
         else if( datamode == "mode2" )
-            mixedDoc->dataDoc()->setDataMode( K3b::DATA_MODE_2 );
+            mixedDoc->dataDoc()->setDataMode( K3b::DataMode2 );
         else
-            mixedDoc->dataDoc()->setDataMode( K3b::DATA_MODE_AUTO );
+            mixedDoc->dataDoc()->setDataMode( K3b::DataModeAuto );
 
         mixedDoc->dataDoc()->setIsoOptions( K3b::IsoOptions::load( c, false ) );
 

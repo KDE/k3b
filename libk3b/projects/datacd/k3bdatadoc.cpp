@@ -91,7 +91,7 @@ bool K3b::DataDoc::newDocument()
     m_bExistingItemsReplaceAll = m_bExistingItemsIgnoreAll = false;
 
     m_multisessionMode = AUTO;
-    m_dataMode = K3b::DATA_MODE_AUTO;
+    m_dataMode = K3b::DataModeAuto;
 
     m_isoOptions = K3b::IsoOptions();
 
@@ -434,11 +434,11 @@ bool K3b::DataDoc::loadDocumentDataOptions( QDomElement elem )
 
         else if( e.nodeName() == "data_track_mode" ) {
             if( e.text() == "mode1" )
-                m_dataMode = K3b::DATA_MODE_1;
+                m_dataMode = K3b::DataMode1;
             else if( e.text() == "mode2" )
-                m_dataMode = K3b::DATA_MODE_2;
+                m_dataMode = K3b::DataMode2;
             else
-                m_dataMode = K3b::DATA_MODE_AUTO;
+                m_dataMode = K3b::DataModeAuto;
         }
 
         else if( e.nodeName() == "multisession" ) {
@@ -746,9 +746,9 @@ void K3b::DataDoc::saveDocumentDataOptions( QDomElement& optionsElem )
     optionsElem.appendChild( topElem );
 
     topElem = doc.createElement( "data_track_mode" );
-    if( m_dataMode == K3b::DATA_MODE_1 )
+    if( m_dataMode == K3b::DataMode1 )
         topElem.appendChild( doc.createTextNode( "mode1" ) );
-    else if( m_dataMode == K3b::DATA_MODE_2 )
+    else if( m_dataMode == K3b::DataMode2 )
         topElem.appendChild( doc.createTextNode( "mode2" ) );
     else
         topElem.appendChild( doc.createTextNode( "auto" ) );
@@ -1382,7 +1382,7 @@ K3b::Device::MediaTypes K3b::DataDoc::supportedMediaTypes() const
         m ^= K3b::Device::MEDIA_WRITABLE_CD;
     }
     // specal case: writing modes TAO and RAW apply only to CD
-    else if ( writingMode() == K3b::WRITING_MODE_TAO || writingMode() == K3b::WRITING_MODE_RAW ) {
+    else if ( writingMode() == K3b::WritingModeTao || writingMode() == K3b::WritingModeRaw ) {
         m = K3b::Device::MEDIA_WRITABLE_CD;
     }
 
@@ -1401,7 +1401,7 @@ K3b::Device::MediaTypes K3b::DataDoc::supportedMediaTypes() const
         m ^= K3b::Device::MEDIA_WRITABLE_DVD;
     }
 //     // special case: the user selected a specific writing mode
-//     else if( writingMode() == K3b::WRITING_MODE_RES_OVWR ) {
+//     else if( writingMode() == K3b::WritingModeRestrictedOverwrite ) {
 //         // we treat DVD+R(W) as restricted overwrite media
 //         m = K3b::Device::MEDIA_DVD_RW_OVWR|K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_PLUS_R;
 //     }

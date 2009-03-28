@@ -825,7 +825,7 @@ void K3b::ImageWritingDialog::toggleAll()
              currentImageType() == IMAGE_AUDIO_CUE ) )
         m_writingModeWidget->determineSupportedModesFromMedium( medium );
     else
-        m_writingModeWidget->setSupportedModes( K3b::WRITING_MODE_DAO );
+        m_writingModeWidget->setSupportedModes( K3b::WritingModeSao );
 
 
     // some stuff is only available for iso images

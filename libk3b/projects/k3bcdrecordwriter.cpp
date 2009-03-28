@@ -96,7 +96,7 @@ K3b::CdrecordWriter::CdrecordWriter( K3b::Device::Device* dev, K3b::JobHandler* 
     connect( d->speedEst, SIGNAL(throughput(int)),
              this, SLOT(slotThroughput(int)) );
 
-    d->writingMode = K3b::WRITING_MODE_TAO;
+    d->writingMode = K3b::WritingModeTao;
     d->clone = false;
     d->cue = false;
 
@@ -141,7 +141,7 @@ bool K3b::CdrecordWriter::closeFd()
 
 void K3b::CdrecordWriter::setDao( bool b )
 {
-    d->writingMode = ( b ? K3b::WRITING_MODE_DAO : K3b::WRITING_MODE_TAO );
+    d->writingMode = ( b ? K3b::WritingModeSao : K3b::WritingModeTao );
 }
 
 
@@ -151,7 +151,7 @@ void K3b::CdrecordWriter::setCueFile( const QString& s)
     d->cueFile = s;
 
     // cuefile only works in DAO mode
-    setWritingMode( K3b::WRITING_MODE_DAO );
+    setWritingMode( K3b::WritingModeSao );
 }
 
 
@@ -235,7 +235,7 @@ bool K3b::CdrecordWriter::prepareProcess()
         d->process << "-sao";
     }
     else if( K3b::Device::isCdMedia( d->burnedMediaType ) ) {
-        if( d->writingMode == K3b::WRITING_MODE_DAO || d->cue ) {
+        if( d->writingMode == K3b::WritingModeSao || d->cue ) {
             if( burnDevice()->dao() )
                 d->process << "-sao";
             else {
@@ -244,7 +244,7 @@ bool K3b::CdrecordWriter::prepareProcess()
                 emit infoMessage( i18n("Writer does not support disk at once (DAO) recording"), WARNING );
             }
         }
-        else if( d->writingMode == K3b::WRITING_MODE_RAW ) {
+        else if( d->writingMode == K3b::WritingModeRaw ) {
             if( burnDevice()->supportsWritingMode( K3b::Device::RAW_R96R ) )
                 d->process << "-raw96r";
             else if( burnDevice()->supportsWritingMode( K3b::Device::RAW_R16 ) )
@@ -804,7 +804,7 @@ void K3b::CdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus 
                 break;
             case CANNOT_SEND_CUE_SHEET:
                 emit infoMessage( i18n("Unable to send CUE sheet."), ERROR );
-                if( d->writingMode == K3b::WRITING_MODE_DAO )
+                if( d->writingMode == K3b::WritingModeSao )
                     emit infoMessage( i18n("Sometimes using TAO writing mode solves this issue."), ERROR );
                 break;
             case CANNOT_OPEN_NEW_SESSION:
@@ -813,7 +813,7 @@ void K3b::CdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus 
                 break;
             case CANNOT_FIXATE_DISK:
                 emit infoMessage( i18n("The disk might still be readable."), ERROR );
-                if( d->writingMode == K3b::WRITING_MODE_TAO && burnDevice()->dao() )
+                if( d->writingMode == K3b::WritingModeTao && burnDevice()->dao() )
                     emit infoMessage( i18n("Try DAO writing mode."), ERROR );
                 break;
             case PERMISSION_DENIED:
@@ -845,7 +845,7 @@ void K3b::CdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus 
                 break;
             case WRITE_ERROR:
                 emit infoMessage( i18n("A write error occurred."), ERROR );
-                if( d->writingMode == K3b::WRITING_MODE_DAO )
+                if( d->writingMode == K3b::WritingModeSao )
                     emit infoMessage( i18n("Sometimes using TAO writing mode solves this issue."), ERROR );
                 break;
             case BLANK_FAILED:
@@ -862,7 +862,7 @@ void K3b::CdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus 
                                            d->cdrecordBinObject->name(), exitCode),
                                       K3b::Job::ERROR );
 
-                    if( (exitCode >= 254) && d->writingMode == K3b::WRITING_MODE_DAO ) {
+                    if( (exitCode >= 254) && d->writingMode == K3b::WritingModeSao ) {
                         emit infoMessage( i18n("Sometimes using TAO writing mode solves this issue."), ERROR );
                     }
                     else {

@@ -548,11 +548,11 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                 job.setMode( ( (d->wantedMediaType & K3b::Device::MEDIA_DVD_RW_SEQ) &&
                                (d->wantedMediaType & K3b::Device::MEDIA_DVD_RW_OVWR) )
                              ? ( medium.diskInfo().mediaType() == K3b::Device::MEDIA_DVD_RW_OVWR
-                                 ? K3b::WRITING_MODE_RES_OVWR
-                                 : K3b::WRITING_MODE_INCR_SEQ )
+                                 ? K3b::WritingModeRestrictedOverwrite
+                                 : K3b::WritingModeIncrementalSequential )
                              : ( (d->wantedMediaType & K3b::Device::MEDIA_DVD_RW_SEQ)
-                                 ? K3b::WRITING_MODE_INCR_SEQ
-                                 : K3b::WRITING_MODE_RES_OVWR ) );
+                                 ? K3b::WritingModeIncrementalSequential
+                                 : K3b::WritingModeRestrictedOverwrite ) );
                 job.setQuickFormat( true );
                 job.setForce( false );
                 job.setForceNoEject(true);

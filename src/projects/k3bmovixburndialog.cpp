@@ -220,7 +220,7 @@ void K3b::MovixBurnDialog::slotStartClicked()
         }
     }
 
-    if( m_writingModeWidget->writingMode() == K3b::WRITING_MODE_DAO &&
+    if( m_writingModeWidget->writingMode() == K3b::WritingModeSao &&
         m_checkStartMultiSesssion->isChecked() &&
         m_writerSelectionWidget->writingApp() == K3b::WritingAppCdrecord )
         if( KMessageBox::warningContinueCancel( this,

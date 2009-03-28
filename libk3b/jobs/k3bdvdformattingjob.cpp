@@ -40,7 +40,7 @@ public:
     Private()
         : quick(false),
           force(false),
-          mode(K3b::WRITING_MODE_AUTO),
+          mode(K3b::WritingModeAuto),
           device(0),
           process(0),
           dvdFormatBin(0),
@@ -413,10 +413,10 @@ void K3b::DvdFormattingJob::startFormatting( const K3b::Device::DiskInfo& diskIn
             //
 
             if( diskInfo.empty() &&
-                (d->mode == K3b::WRITING_MODE_AUTO ||
-                 (d->mode == K3b::WRITING_MODE_INCR_SEQ &&
+                (d->mode == K3b::WritingModeAuto ||
+                 (d->mode == K3b::WritingModeIncrementalSequential &&
                   diskInfo.currentProfile() == K3b::Device::MEDIA_DVD_RW_SEQ) ||
-                 (d->mode == K3b::WRITING_MODE_RES_OVWR &&
+                 (d->mode == K3b::WritingModeRestrictedOverwrite &&
                   diskInfo.currentProfile() == K3b::Device::MEDIA_DVD_RW_OVWR) )
                 ) {
                 emit infoMessage( i18n("Media is already empty."), INFO );
@@ -426,7 +426,7 @@ void K3b::DvdFormattingJob::startFormatting( const K3b::Device::DiskInfo& diskIn
                     format = false;
             }
             else if( diskInfo.currentProfile() == K3b::Device::MEDIA_DVD_RW_OVWR &&
-                     d->mode != K3b::WRITING_MODE_INCR_SEQ ) {
+                     d->mode != K3b::WritingModeIncrementalSequential ) {
                 emit infoMessage( i18n("No need to format %1 media more than once.",
                                   K3b::Device::mediaTypeString(diskInfo.currentProfile())), INFO );
                 emit infoMessage( i18n("It may simply be overwritten."), INFO );
@@ -438,12 +438,12 @@ void K3b::DvdFormattingJob::startFormatting( const K3b::Device::DiskInfo& diskIn
             }
 
             if( format ) {
-                if( d->mode == K3b::WRITING_MODE_AUTO ) {
+                if( d->mode == K3b::WritingModeAuto ) {
                     // just format in the same mode as the media is currently formatted
                     blank = (diskInfo.currentProfile() == K3b::Device::MEDIA_DVD_RW_SEQ);
                 }
                 else {
-                    blank = (d->mode == K3b::WRITING_MODE_INCR_SEQ);
+                    blank = (d->mode == K3b::WritingModeIncrementalSequential);
                 }
 
                 emit newSubTask( i18n("Formatting"

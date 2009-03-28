@@ -52,12 +52,12 @@ public:
 
 K3b::Iso9660ImageWritingJob::Iso9660ImageWritingJob( K3b::JobHandler* hdl )
     : K3b::BurnJob( hdl ),
-      m_writingMode(K3b::WRITING_MODE_AUTO),
+      m_writingMode(K3b::WritingModeAuto),
       m_simulate(false),
       m_device(0),
       m_noFix(false),
       m_speed(2),
-      m_dataMode(K3b::DATA_MODE_AUTO),
+      m_dataMode(K3b::DataModeAuto),
       m_writer(0),
       m_tocFile(0),
       m_copies(1),
@@ -236,12 +236,12 @@ void K3b::Iso9660ImageWritingJob::startWriting()
     // 5. if writing mode DAO and writing app auto: all writable cd types and DVD-R(W)
     // 6. if writing mode DAO and writing app GROWISOFS: DVD-R(W)
     // 7. if writing mode DAO and writing app CDRDAO or CDRECORD: all writable cd types
-    // 8. if writing mode WRITING_MODE_INCR_SEQ: DVD-R(W)
-    // 9. if writing mode WRITING_MODE_RES_OVWR: DVD-RW or DVD+RW
+    // 8. if writing mode WritingModeIncrementalSequential: DVD-R(W)
+    // 9. if writing mode WritingModeRestrictedOverwrite: DVD-RW or DVD+RW
 
     Device::MediaTypes mt = 0;
-    if( m_writingMode == K3b::WRITING_MODE_AUTO ||
-        m_writingMode == K3b::WRITING_MODE_DAO ) {
+    if( m_writingMode == K3b::WritingModeAuto ||
+        m_writingMode == K3b::WritingModeSao ) {
         if( writingApp() == K3b::WritingAppCdrdao )
             mt = K3b::Device::MEDIA_WRITABLE_CD;
         else if( m_dvd )
@@ -249,10 +249,10 @@ void K3b::Iso9660ImageWritingJob::startWriting()
         else
             mt = K3b::Device::MEDIA_WRITABLE;
     }
-    else if( m_writingMode == K3b::WRITING_MODE_TAO || m_writingMode == K3b::WRITING_MODE_RAW ) {
+    else if( m_writingMode == K3b::WritingModeTao || m_writingMode == K3b::WritingModeRaw ) {
         mt = K3b::Device::MEDIA_WRITABLE_CD;
     }
-    else if( m_writingMode == K3b::WRITING_MODE_RES_OVWR ) {
+    else if( m_writingMode == K3b::WritingModeRestrictedOverwrite ) {
         mt = K3b::Device::MEDIA_DVD_PLUS_R|K3b::Device::MEDIA_DVD_PLUS_R_DL|K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_RW_OVWR;
     }
     else {
@@ -310,19 +310,19 @@ bool K3b::Iso9660ImageWritingJob::prepareWriter( Device::MediaTypes mediaType )
 
     if( mediaType == K3b::Device::MEDIA_CD_R || mediaType == K3b::Device::MEDIA_CD_RW ) {
         K3b::WritingMode usedWritingMode = m_writingMode;
-        if( usedWritingMode == K3b::WRITING_MODE_AUTO ) {
+        if( usedWritingMode == K3b::WritingModeAuto ) {
             // cdrecord seems to have problems when writing in mode2 in dao mode
             // so with cdrecord we use TAO
-            if( m_noFix || m_dataMode == K3b::DATA_MODE_2 || !m_device->dao() )
-                usedWritingMode = K3b::WRITING_MODE_TAO;
+            if( m_noFix || m_dataMode == K3b::DataMode2 || !m_device->dao() )
+                usedWritingMode = K3b::WritingModeTao;
             else
-                usedWritingMode = K3b::WRITING_MODE_DAO;
+                usedWritingMode = K3b::WritingModeSao;
         }
 
         d->usedWritingApp = writingApp();
         if( d->usedWritingApp == K3b::WritingAppDefault ) {
-            if( usedWritingMode == K3b::WRITING_MODE_DAO &&
-                ( m_dataMode == K3b::DATA_MODE_2 || m_noFix ) )
+            if( usedWritingMode == K3b::WritingModeSao &&
+                ( m_dataMode == K3b::DataMode2 || m_noFix ) )
                 d->usedWritingApp = K3b::WritingAppCdrdao;
             else
                 d->usedWritingApp = K3b::WritingAppCdrecord;
@@ -340,8 +340,8 @@ bool K3b::Iso9660ImageWritingJob::prepareWriter( Device::MediaTypes mediaType )
                 writer->addArgument("-multi");
             }
 
-            if( (m_dataMode == K3b::DATA_MODE_AUTO && m_noFix) ||
-                m_dataMode == K3b::DATA_MODE_2 ) {
+            if( (m_dataMode == K3b::DataModeAuto && m_noFix) ||
+                m_dataMode == K3b::DataMode2 ) {
                 if( k3bcore->externalBinManager()->binObject("cdrecord") &&
                     k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "xamix" ) )
                     writer->addArgument( "-xa" );
@@ -372,8 +372,8 @@ bool K3b::Iso9660ImageWritingJob::prepareWriter( Device::MediaTypes mediaType )
             m_tocFile->open();
 
             QTextStream s( m_tocFile );
-            if( (m_dataMode == K3b::DATA_MODE_AUTO && m_noFix) ||
-                m_dataMode == K3b::DATA_MODE_2 ) {
+            if( (m_dataMode == K3b::DataModeAuto && m_noFix) ||
+                m_dataMode == K3b::DataMode2 ) {
                 s << "CD_ROM_XA" << "\n";
                 s << "\n";
                 s << "TRACK MODE2_FORM1" << "\n";
@@ -409,7 +409,7 @@ bool K3b::Iso9660ImageWritingJob::prepareWriter( Device::MediaTypes mediaType )
         K3b::GrowisofsWriter* writer = new K3b::GrowisofsWriter( m_device, this );
         writer->setSimulate( m_simulate );
         writer->setBurnSpeed( m_speed );
-        writer->setWritingMode( m_writingMode == K3b::WRITING_MODE_DAO ? K3b::WRITING_MODE_DAO : K3b::WRITING_MODE_AUTO );
+        writer->setWritingMode( m_writingMode == K3b::WritingModeSao ? K3b::WritingModeSao : K3b::WritingModeAuto );
         writer->setImageToWrite( QString() ); // read from stdin
         writer->setCloseDvd( !m_noFix );
         writer->setTrackSize( K3b::imageFilesize( m_imagePath )/2048 );

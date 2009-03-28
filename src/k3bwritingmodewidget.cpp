@@ -78,7 +78,7 @@ K3b::WritingModeWidget::WritingModeWidget( QWidget* parent )
     : K3b::IntMapComboBox( parent )
 {
     init();
-    setSupportedModes( K3b::WRITING_MODE_DAO | K3b::WRITING_MODE_TAO | K3b::WRITING_MODE_RAW );   // default: support all CD-R(W) modes
+    setSupportedModes( K3b::WritingModeSao | K3b::WritingModeTao | K3b::WritingModeRaw );   // default: support all CD-R(W) modes
 }
 
 
@@ -124,14 +124,14 @@ void K3b::WritingModeWidget::setWritingMode( K3b::WritingMode m )
         setSelectedValue( m );
     }
     else {
-        setSelectedValue( K3b::WRITING_MODE_AUTO );
+        setSelectedValue( K3b::WritingModeAuto );
     }
 }
 
 
 void K3b::WritingModeWidget::setSupportedModes( K3b::WritingModes m )
 {
-    d->supportedModes = m|K3b::WRITING_MODE_AUTO;  // we always support the Auto mode
+    d->supportedModes = m|K3b::WritingModeAuto;  // we always support the Auto mode
     updateModes();
 }
 
@@ -155,38 +155,38 @@ void K3b::WritingModeWidget::updateModes()
     else
         d->selectedModes = d->supportedModes;
 
-    insertItem( K3b::WRITING_MODE_AUTO, i18n("Auto"), s_autoHelp );
-    if( d->selectedModes & K3b::WRITING_MODE_DAO )
-        insertItem( K3b::WRITING_MODE_DAO, i18n("DAO"), s_daoHelp );
-    if( d->selectedModes & K3b::WRITING_MODE_TAO )
-        insertItem( K3b::WRITING_MODE_TAO, i18n("TAO"), s_taoHelp );
-    if( d->selectedModes & K3b::WRITING_MODE_RAW )
-        insertItem( K3b::WRITING_MODE_RAW, i18n("RAW"), s_rawHelp );
-    if( d->selectedModes & K3b::WRITING_MODE_RES_OVWR )
-        insertItem( K3b::WRITING_MODE_RES_OVWR, i18n("Restricted Overwrite"), s_ovwHelp );
-    if( d->selectedModes & K3b::WRITING_MODE_INCR_SEQ )
-        insertItem( K3b::WRITING_MODE_INCR_SEQ, i18n("Incremental"), s_seqHelp );
+    insertItem( K3b::WritingModeAuto, i18n("Auto"), s_autoHelp );
+    if( d->selectedModes & K3b::WritingModeSao )
+        insertItem( K3b::WritingModeSao, i18n("DAO"), s_daoHelp );
+    if( d->selectedModes & K3b::WritingModeTao )
+        insertItem( K3b::WritingModeTao, i18n("TAO"), s_taoHelp );
+    if( d->selectedModes & K3b::WritingModeRaw )
+        insertItem( K3b::WritingModeRaw, i18n("RAW"), s_rawHelp );
+    if( d->selectedModes & K3b::WritingModeRestrictedOverwrite )
+        insertItem( K3b::WritingModeRestrictedOverwrite, i18n("Restricted Overwrite"), s_ovwHelp );
+    if( d->selectedModes & K3b::WritingModeIncrementalSequential )
+        insertItem( K3b::WritingModeIncrementalSequential, i18n("Incremental"), s_seqHelp );
 
-    setWritingMode( currentMode != -1 ? K3b::WritingMode( currentMode ) : K3b::WRITING_MODE_AUTO );
+    setWritingMode( currentMode != -1 ? K3b::WritingMode( currentMode ) : K3b::WritingModeAuto );
 }
 
 
 void K3b::WritingModeWidget::saveConfig( KConfigGroup c )
 {
     switch( writingMode() ) {
-    case K3b::WRITING_MODE_DAO:
+    case K3b::WritingModeSao:
         c.writeEntry( "writing_mode", "dao" );
         break;
-    case K3b::WRITING_MODE_TAO:
+    case K3b::WritingModeTao:
         c.writeEntry( "writing_mode", "tao" );
         break;
-    case K3b::WRITING_MODE_RAW:
+    case K3b::WritingModeRaw:
         c.writeEntry( "writing_mode", "raw" );
         break;
-    case K3b::WRITING_MODE_INCR_SEQ:
+    case K3b::WritingModeIncrementalSequential:
         c.writeEntry( "writing_mode", "incremental" );
         break;
-    case K3b::WRITING_MODE_RES_OVWR:
+    case K3b::WritingModeRestrictedOverwrite:
         c.writeEntry( "writing_mode", "overwrite" );
         break;
     default:
@@ -199,17 +199,17 @@ void K3b::WritingModeWidget::loadConfig( const KConfigGroup& c )
 {
     QString mode = c.readEntry( "writing_mode" );
     if ( mode == "dao" )
-        setWritingMode( K3b::WRITING_MODE_DAO );
+        setWritingMode( K3b::WritingModeSao );
     else if( mode == "tao" )
-        setWritingMode( K3b::WRITING_MODE_TAO );
+        setWritingMode( K3b::WritingModeTao );
     else if( mode == "raw" )
-        setWritingMode( K3b::WRITING_MODE_RAW );
+        setWritingMode( K3b::WritingModeRaw );
     else if( mode == "incremental" )
-        setWritingMode( K3b::WRITING_MODE_INCR_SEQ );
+        setWritingMode( K3b::WritingModeIncrementalSequential );
     else if( mode == "overwrite" )
-        setWritingMode( K3b::WRITING_MODE_RES_OVWR );
+        setWritingMode( K3b::WritingModeRestrictedOverwrite );
     else
-        setWritingMode( K3b::WRITING_MODE_AUTO );
+        setWritingMode( K3b::WritingModeAuto );
 }
 
 
@@ -218,24 +218,24 @@ void K3b::WritingModeWidget::determineSupportedModesFromMedium( const K3b::Mediu
     K3b::WritingModes modes = 0;
 
     if( m.diskInfo().mediaType() & (K3b::Device::MEDIA_CD_R|K3b::Device::MEDIA_CD_RW) ) {
-        modes |= K3b::WRITING_MODE_TAO;
+        modes |= K3b::WritingModeTao;
         if( m.device()->supportsWritingMode( K3b::Device::WRITINGMODE_SAO ) )
-            modes |= K3b::WRITING_MODE_DAO;
+            modes |= K3b::WritingModeSao;
         if( m.device()->supportsWritingMode( K3b::Device::WRITINGMODE_RAW ) )
-            modes |= K3b::WRITING_MODE_RAW;
+            modes |= K3b::WritingModeRaw;
     }
 
     if( m.diskInfo().mediaType() & K3b::Device::MEDIA_DVD_MINUS_ALL ) {
-        modes |= K3b::WRITING_MODE_DAO;
+        modes |= K3b::WritingModeSao;
         if ( !k3bcore->deviceBlocked( m.device() ) )
              if( m.device()->featureCurrent( K3b::Device::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) != 0 )
-                 modes |= K3b::WRITING_MODE_INCR_SEQ;
+                 modes |= K3b::WritingModeIncrementalSequential;
     }
 
     if( m.diskInfo().mediaType() & (K3b::Device::MEDIA_DVD_RW|
                                     K3b::Device::MEDIA_DVD_RW_SEQ|
                                     K3b::Device::MEDIA_DVD_RW_OVWR) )
-        modes |= K3b::WRITING_MODE_RES_OVWR;
+        modes |= K3b::WritingModeRestrictedOverwrite;
 
 #ifdef __GNUC__
 #warning FIXME: add Blu-Ray media

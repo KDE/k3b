@@ -152,7 +152,7 @@ void K3b::ProjectBurnDialog::toggleAll()
 
     // we only support DAO with cdrdao
     if( m_writerSelectionWidget->writingApp() == K3b::WritingAppCdrdao )
-        m_writingModeWidget->setSupportedModes( K3b::WRITING_MODE_DAO );
+        m_writingModeWidget->setSupportedModes( K3b::WritingModeSao );
 
     if( m_checkOnlyCreateImage->isChecked() )
         setButtonText( START_BUTTON,

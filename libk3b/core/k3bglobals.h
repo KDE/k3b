@@ -65,9 +65,9 @@ namespace K3b {
      * CD sectors.
      */
     enum DataMode {
-        DATA_MODE_AUTO, /**< let %K3b determine the best mode */
-        DATA_MODE_1,    /**< refers to the default Yellow book mode1 */
-        DATA_MODE_2     /**< refers to CDROM XA mode2 form1 */
+        DataModeAuto, /**< let %K3b determine the best mode */
+        DataMode1,    /**< refers to the default Yellow book mode1 */
+        DataMode2     /**< refers to CDROM XA mode2 form1 */
     };
 
     /**
@@ -76,29 +76,29 @@ namespace K3b {
      * demand.
      */
     enum SectorSize {
-        SECTORSIZE_AUDIO = 2352,
-        SECTORSIZE_DATA_2048 = 2048,
-        SECTORSIZE_DATA_2048_SUBHEADER = 2056,
-        SECTORSIZE_DATA_2324 = 2324,
-        SECTORSIZE_DATA_2324_SUBHEADER = 2332,
-        SECTORSIZE_RAW = 2448
+        SectorSizeAudio = 2352,
+        SectorSizeData2048 = 2048,
+        SectorSizeData2048_SUBHEADER = 2056,
+        SectorSizeData2324 = 2324,
+        SectorSizeData2324_SUBHEADER = 2332,
+        SectorSizeRaw = 2448
     };
 
     /**
-     * WRITING_MODE_AUTO  - let K3b determine the best mode
-     * WRITING_MODE_TAO   - Track at once
-     * WRITING_MODE_DAO   - Disk at once (or session at once)
-     * WRITING_MODE_RAW   - Raw mode
+     * WritingModeAuto  - let K3b determine the best mode
+     * WritingModeTao   - Track at once
+     * WritingModeSao   - Disk at once (or session at once)
+     * WritingModeRaw   - Raw mode
      *
-     * may be or'ed together (except for WRITING_MODE_AUTO of course)
+     * may be or'ed together (except for WritingModeAuto of course)
      */
     enum WritingMode {
-        WRITING_MODE_AUTO = 0,
-        WRITING_MODE_TAO = Device::WRITINGMODE_TAO,
-        WRITING_MODE_DAO = Device::WRITINGMODE_SAO,
-        WRITING_MODE_RAW = Device::WRITINGMODE_RAW,
-        WRITING_MODE_INCR_SEQ = Device::WRITINGMODE_INCR_SEQ,  // Incremental Sequential
-        WRITING_MODE_RES_OVWR = Device::WRITINGMODE_RES_OVWR // Restricted Overwrite
+        WritingModeAuto = 0,
+        WritingModeTao = Device::WRITINGMODE_TAO,
+        WritingModeSao = Device::WRITINGMODE_SAO,
+        WritingModeRaw = Device::WRITINGMODE_RAW,
+        WritingModeIncrementalSequential = Device::WRITINGMODE_INCR_SEQ,  // Incremental Sequential
+        WritingModeRestrictedOverwrite = Device::WRITINGMODE_RES_OVWR // Restricted Overwrite
     };
     Q_DECLARE_FLAGS( WritingModes, WritingMode )
 

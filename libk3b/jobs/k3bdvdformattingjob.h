@@ -52,7 +52,7 @@ namespace K3b {
         void setDevice( K3b::Device::Device* );
 
         /**
-         * One of: WRITING_MODE_INCR_SEQ, WRITING_MODE_RES_OVWR
+         * One of: WritingModeIncrementalSequential, WritingModeRestrictedOverwrite
          * Ignored for DVD+RW
          */
         void setMode( int );

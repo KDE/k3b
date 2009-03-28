@@ -231,7 +231,7 @@ void K3b::AudioJob::start()
         }
 
         // determine writing mode
-        if( m_doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
+        if( m_doc->writingMode() == K3b::WritingModeAuto ) {
             //
             // DAO is always the first choice
             // RAW second and TAO last
@@ -242,18 +242,18 @@ void K3b::AudioJob::start()
             if( !writer()->dao() && writingApp() == K3b::WritingAppCdrecord ) {
                 if(!writer()->supportsRawWriting() &&
                    ( !d->less4Sec || k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "short-track-raw" ) ) )
-                    m_usedWritingMode = K3b::WRITING_MODE_RAW;
+                    m_usedWritingMode = K3b::WritingModeRaw;
                 else
-                    m_usedWritingMode = K3b::WRITING_MODE_TAO;
+                    m_usedWritingMode = K3b::WritingModeTao;
             }
             else {
                 if( (d->zeroPregap||d->less4Sec) && writer()->supportsRawWriting() ) {
-                    m_usedWritingMode = K3b::WRITING_MODE_RAW;
+                    m_usedWritingMode = K3b::WritingModeRaw;
                     if( d->less4Sec )
                         emit infoMessage( i18n("Track lengths below 4 seconds violate the Red Book standard."), WARNING );
                 }
                 else
-                    m_usedWritingMode = K3b::WRITING_MODE_DAO;
+                    m_usedWritingMode = K3b::WritingModeSao;
             }
         }
         else
@@ -268,7 +268,7 @@ void K3b::AudioJob::start()
 
         // determine writing app
         if( writingApp() == K3b::WritingAppDefault ) {
-            if( m_usedWritingMode == K3b::WRITING_MODE_DAO ) {
+            if( m_usedWritingMode == K3b::WritingModeSao ) {
                 // there are none-DAO writers that are supported by cdrdao
                 if( !writer()->dao() ||
                     ( !cdrecordOnTheFly && m_doc->onTheFly() ) ||
@@ -299,7 +299,7 @@ void K3b::AudioJob::start()
                                        k3bcore->externalBinManager()->binObject("cdrecord")->version), ERROR );
                 d->useCdText = false;
             }
-            else if( m_usedWritingMode == K3b::WRITING_MODE_TAO ) {
+            else if( m_usedWritingMode == K3b::WritingModeTao ) {
                 emit infoMessage( i18n("It is not possible to write CD-Text in TAO mode."), WARNING );
                 d->useCdText = false;
             }
@@ -524,7 +524,7 @@ bool K3b::AudioJob::prepareWriter()
 
         // we only need to pad in one case. cdrecord < 2.01.01a03 cannot handle shorttrack + raw
         if( d->less4Sec ) {
-            if( m_usedWritingMode == K3b::WRITING_MODE_RAW &&
+            if( m_usedWritingMode == K3b::WritingModeRaw &&
                 !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "short-track-raw" ) ) {
                 writer->addArgument( "-pad" );
             }

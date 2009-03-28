@@ -41,7 +41,7 @@ class K3b::GrowisofsWriter::Private
 {
 public:
     Private()
-        : writingMode( K3b::WRITING_MODE_AUTO ),
+        : writingMode( K3b::WritingModeAuto ),
           closeDvd(false),
           multiSession(false),
           growisofsBin( 0 ),
@@ -259,7 +259,7 @@ bool K3b::GrowisofsWriter::prepareProcess()
     if( simulate() )
         d->process << "-use-the-force-luke=dummy";
 
-    if( d->writingMode == K3b::WRITING_MODE_DAO ) {
+    if( d->writingMode == K3b::WritingModeSao ) {
         dvdCompat = true;
         if( d->growisofsBin->hasFeature( "daosize" ) && d->trackSize > 0 )
             d->process << "-use-the-force-luke=dao:" + QString::number(d->trackSize + trackSizePadding);

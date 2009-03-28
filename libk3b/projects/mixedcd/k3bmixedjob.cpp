@@ -748,7 +748,7 @@ bool K3b::MixedJob::writeTocFile()
     //
     // TOC
     //
-    tocFileWriter.setData( m_doc->toToc( m_usedDataMode == K3b::DATA_MODE_2
+    tocFileWriter.setData( m_doc->toToc( m_usedDataMode == K3b::DataMode2
                                          ? K3b::Device::Track::XA_FORM1
                                          : K3b::Device::Track::MODE1,
                                          m_doc->onTheFly()
@@ -839,7 +839,7 @@ void K3b::MixedJob::addAudioTracks( K3b::CdrecordWriter* writer )
 void K3b::MixedJob::addDataTrack( K3b::CdrecordWriter* writer )
 {
     // add data track
-    if(  m_usedDataMode == K3b::DATA_MODE_2 ) {
+    if(  m_usedDataMode == K3b::DataMode2 ) {
         if( k3bcore->externalBinManager()->binObject("cdrecord") &&
             k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "xamix" ) )
             writer->addArgument( "-xa" );
@@ -1143,11 +1143,11 @@ void K3b::MixedJob::determineWritingMode()
 
     // at first we determine the data mode
     // --------------------------------------------------------------
-    if( m_doc->dataDoc()->dataMode() == K3b::DATA_MODE_AUTO ) {
+    if( m_doc->dataDoc()->dataMode() == K3b::DataModeAuto ) {
         if( m_doc->mixedType() == K3b::MixedDoc::DATA_SECOND_SESSION )
-            m_usedDataMode = K3b::DATA_MODE_2;
+            m_usedDataMode = K3b::DataMode2;
         else
-            m_usedDataMode = K3b::DATA_MODE_1;
+            m_usedDataMode = K3b::DataMode1;
     }
     else
         m_usedDataMode = m_doc->dataDoc()->dataMode();
@@ -1173,8 +1173,8 @@ void K3b::MixedJob::determineWritingMode()
     // cdrecord seems to have problems writing xa 1 disks in dao mode? At least on my system!
     if( writingApp() == K3b::WritingAppDefault ) {
         if( m_doc->mixedType() == K3b::MixedDoc::DATA_SECOND_SESSION ) {
-            if( m_doc->writingMode() == K3b::WRITING_MODE_DAO ||
-                ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO && !cdrecordUsable ) ) {
+            if( m_doc->writingMode() == K3b::WritingModeSao ||
+                ( m_doc->writingMode() == K3b::WritingModeAuto && !cdrecordUsable ) ) {
                 m_usedAudioWritingApp = K3b::WritingAppCdrdao;
                 m_usedDataWritingApp = K3b::WritingAppCdrdao;
             }
@@ -1203,20 +1203,20 @@ void K3b::MixedJob::determineWritingMode()
 
     // Writing Mode (TAO/DAO/RAW)
     // --------------------------------------------------------------
-    if( m_doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
+    if( m_doc->writingMode() == K3b::WritingModeAuto ) {
 
         if( m_doc->mixedType() == K3b::MixedDoc::DATA_SECOND_SESSION ) {
             if( m_usedDataWritingApp == K3b::WritingAppCdrecord )
-                m_usedDataWritingMode = K3b::WRITING_MODE_TAO;
+                m_usedDataWritingMode = K3b::WritingModeTao;
             else
-                m_usedDataWritingMode = K3b::WRITING_MODE_DAO;
+                m_usedDataWritingMode = K3b::WritingModeSao;
 
             // default to Session at once for the audio part
-            m_usedAudioWritingMode = K3b::WRITING_MODE_DAO;
+            m_usedAudioWritingMode = K3b::WritingModeSao;
         }
         else {
-            m_usedDataWritingMode = K3b::WRITING_MODE_TAO;
-            m_usedAudioWritingMode = K3b::WRITING_MODE_TAO;
+            m_usedDataWritingMode = K3b::WritingModeTao;
+            m_usedAudioWritingMode = K3b::WritingModeTao;
         }
     }
     else {
@@ -1236,7 +1236,7 @@ void K3b::MixedJob::determineWritingMode()
                 m_doc->audioDoc()->writeCdText( false );
                 emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.",k3bcore->externalBinManager()->binObject("cdrecord")->version), ERROR );
             }
-            else if( m_usedAudioWritingMode == K3b::WRITING_MODE_TAO ) {
+            else if( m_usedAudioWritingMode == K3b::WritingModeTao ) {
                 emit infoMessage( i18n("It is not possible to write CD-Text in TAO mode. Try DAO or RAW."), WARNING );
             }
         }

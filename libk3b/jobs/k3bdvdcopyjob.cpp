@@ -53,7 +53,7 @@ public:
           readcdReader(0),
           dataTrackReader(0),
           verificationJob(0),
-          usedWritingMode(K3b::WRITING_MODE_AUTO),
+          usedWritingMode(K3b::WritingModeAuto),
           verifyData(false) {
         outPipe.readFrom( &imageFile, true );
     }
@@ -98,7 +98,7 @@ K3b::DvdCopyJob::DvdCopyJob( K3b::JobHandler* hdl, QObject* parent )
       m_onlyCreateImage(false),
       m_ignoreReadErrors(false),
       m_readRetries(128),
-      m_writingMode( K3b::WRITING_MODE_AUTO )
+      m_writingMode( K3b::WritingModeAuto )
 {
     d = new Private();
 }
@@ -266,7 +266,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
             // growisofs only uses the size from the PVD for reserving
             // writable space in DAO mode
             // with version >= 5.15 growisofs supports specifying the size of the track
-            if( m_writingMode != K3b::WRITING_MODE_DAO || !m_onTheFly || m_onlyCreateImage ||
+            if( m_writingMode != K3b::WritingModeSao || !m_onTheFly || m_onlyCreateImage ||
                 ( k3bcore->externalBinManager()->binObject( "growisofs" ) &&
                   k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "daosize" ) ) ||
                 d->usedWritingApp == K3b::WritingAppCdrecord ) {
@@ -765,7 +765,7 @@ bool K3b::DvdCopyJob::waitForDvd()
 {
     Device::MediaTypes mt = 0;
     if ( K3b::Device::isDvdMedia( d->sourceDiskInfo.mediaType() ) ) {
-        if( m_writingMode == K3b::WRITING_MODE_RES_OVWR ) // we treat DVD+R(W) as restricted overwrite media
+        if( m_writingMode == K3b::WritingModeRestrictedOverwrite ) // we treat DVD+R(W) as restricted overwrite media
             mt = K3b::Device::MEDIA_DVD_RW_OVWR|K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_PLUS_R;
         else
             mt = K3b::Device::MEDIA_WRITABLE_DVD_SL;
@@ -807,9 +807,9 @@ bool K3b::DvdCopyJob::waitForDvd()
         if( m & K3b::Device::MEDIA_DVD_PLUS_ALL ) {
 
             if ( m & ( Device::MEDIA_DVD_PLUS_R|Device::MEDIA_DVD_PLUS_R_DL ) )
-                d->usedWritingMode = K3b::WRITING_MODE_DAO;
+                d->usedWritingMode = K3b::WritingModeSao;
             else
-                d->usedWritingMode = K3b::WRITING_MODE_RES_OVWR;
+                d->usedWritingMode = K3b::WritingModeRestrictedOverwrite;
 
             if( m_simulate ) {
                 if( !questionYesNo( i18n("K3b does not support simulation with DVD+R(W) media. "
@@ -824,7 +824,7 @@ bool K3b::DvdCopyJob::waitForDvd()
                 emit newTask( i18n("Writing DVD copy") );
             }
 
-            if( m_writingMode != K3b::WRITING_MODE_AUTO && m_writingMode != K3b::WRITING_MODE_RES_OVWR )
+            if( m_writingMode != K3b::WritingModeAuto && m_writingMode != K3b::WritingModeRestrictedOverwrite )
                 emit infoMessage( i18n("Writing mode ignored when writing DVD+R(W) media."), INFO );
 
             if( m & K3b::Device::MEDIA_DVD_PLUS_RW )
@@ -867,37 +867,37 @@ bool K3b::DvdCopyJob::waitForDvd()
 
             if( m & K3b::Device::MEDIA_DVD_RW_OVWR ) {
                 emit infoMessage( i18n("Writing DVD-RW in restricted overwrite mode."), INFO );
-                d->usedWritingMode = K3b::WRITING_MODE_RES_OVWR;
+                d->usedWritingMode = K3b::WritingModeRestrictedOverwrite;
             }
             else if( m & (K3b::Device::MEDIA_DVD_RW_SEQ|
                           K3b::Device::MEDIA_DVD_RW) ) {
-                if( m_writingMode == K3b::WRITING_MODE_DAO ) {
-// 	    ( m_writingMode ==  K3b::WRITING_MODE_AUTO &&
+                if( m_writingMode == K3b::WritingModeSao ) {
+// 	    ( m_writingMode ==  K3b::WritingModeAuto &&
 // 	      ( sizeWithDao || !m_onTheFly ) ) ) {
                     emit infoMessage( i18n("Writing DVD-RW in DAO mode."), INFO );
-                    d->usedWritingMode = K3b::WRITING_MODE_DAO;
+                    d->usedWritingMode = K3b::WritingModeSao;
                 }
                 else {
                     emit infoMessage( i18n("Writing DVD-RW in incremental mode."), INFO );
-                    d->usedWritingMode = K3b::WRITING_MODE_INCR_SEQ;
+                    d->usedWritingMode = K3b::WritingModeIncrementalSequential;
                 }
             }
             else {
 
                 // FIXME: DVD-R DL jump and stuff
 
-                if( m_writingMode == K3b::WRITING_MODE_RES_OVWR )
+                if( m_writingMode == K3b::WritingModeRestrictedOverwrite )
                     emit infoMessage( i18n("Restricted Overwrite is not possible with DVD-R media."), INFO );
 
-                if( m_writingMode == K3b::WRITING_MODE_DAO ) {
-// 	    ( m_writingMode ==  K3b::WRITING_MODE_AUTO &&
+                if( m_writingMode == K3b::WritingModeSao ) {
+// 	    ( m_writingMode ==  K3b::WritingModeAuto &&
 // 	      ( sizeWithDao || !m_onTheFly ) ) ) {
                     emit infoMessage( i18n("Writing %1 in DAO mode.",K3b::Device::mediaTypeString(m, true) ), INFO );
-                    d->usedWritingMode = K3b::WRITING_MODE_DAO;
+                    d->usedWritingMode = K3b::WritingModeSao;
                 }
                 else {
                     emit infoMessage( i18n("Writing %1 in incremental mode.",K3b::Device::mediaTypeString(m, true) ), INFO );
-                    d->usedWritingMode = K3b::WRITING_MODE_INCR_SEQ;
+                    d->usedWritingMode = K3b::WritingModeIncrementalSequential;
                 }
             }
         }
@@ -908,7 +908,7 @@ bool K3b::DvdCopyJob::waitForDvd()
         // -------------------------------
         else {
             emit infoMessage( i18n("Writing %1.", K3b::Device::mediaTypeString(m, true) ), INFO );
-            d->usedWritingMode = K3b::WRITING_MODE_INCR_SEQ; // just to set some mode for now
+            d->usedWritingMode = K3b::WritingModeIncrementalSequential; // just to set some mode for now
         }
     }
 
