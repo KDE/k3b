@@ -125,8 +125,8 @@ void K3b::DvdCopyJob::start()
         k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3b::Version( 5, 12 ) ) {
         m_onTheFly = false;
         emit infoMessage( i18n("K3b does not support writing on-the-fly with growisofs %1.",
-                          k3bcore->externalBinManager()->binObject( "growisofs" )->version), ERROR );
-        emit infoMessage( i18n("Disabling on-the-fly writing."), INFO );
+                          k3bcore->externalBinManager()->binObject( "growisofs" )->version), MessageError );
+        emit infoMessage( i18n("Disabling on-the-fly writing."), MessageInfo );
     }
 
     emit newSubTask( i18n("Waiting for source medium") );
@@ -161,7 +161,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
     d->sourceDiskInfo = dh->diskInfo();
 
     if( dh->diskInfo().empty() || dh->diskInfo().diskState() == K3b::Device::STATE_NO_MEDIA ) {
-        emit infoMessage( i18n("No source medium found."), ERROR );
+        emit infoMessage( i18n("No source medium found."), MessageError );
         jobFinished(false);
         d->running = false;
     }
@@ -180,7 +180,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
         }
 
         if( m_readerDevice->copyrightProtectionSystemType() == K3b::Device::COPYRIGHT_PROTECTION_CSS ) { // CSS is the the only one we support ATM
-            emit infoMessage( i18n("Found encrypted DVD."), WARNING );
+            emit infoMessage( i18n("Found encrypted DVD."), MessageWarning );
             // check for libdvdcss
             bool haveLibdvdcss = false;
             kDebug() << "(K3b::DvdCopyJob) trying to open libdvdcss.";
@@ -196,7 +196,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
                 kDebug() << "(K3b::DvdCopyJob) failed.";
 
             if( !haveLibdvdcss ) {
-                emit infoMessage( i18n("Cannot copy encrypted DVDs."), ERROR );
+                emit infoMessage( i18n("Cannot copy encrypted DVDs."), MessageError );
                 d->running = false;
                 jobFinished( false );
                 return;
@@ -232,7 +232,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
                 if( dh->diskInfo().numLayers() > 1 &&
                     dh->diskInfo().size().mode1Bytes() > 4700372992LL ) {
                     if( !(m_writerDevice->type() & (K3b::Device::DEVICE_DVD_R_DL|K3b::Device::DEVICE_DVD_PLUS_R_DL)) ) {
-                        emit infoMessage( i18n("The writer does not support writing Double Layer DVD."), ERROR );
+                        emit infoMessage( i18n("The writer does not support writing Double Layer DVD."), MessageError );
                         d->running = false;
                         jobFinished(false);
                         return;
@@ -240,7 +240,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
                     // FIXME: check for growisofs 5.22 (or whatever version is needed) for DVD-R DL
                     else if( k3bcore->externalBinManager()->binObject( "growisofs" ) &&
                              k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "dual-layer" ) ) {
-                        emit infoMessage( i18n("Growisofs >= 5.20 is needed to write Double Layer DVD+R."), ERROR );
+                        emit infoMessage( i18n("Growisofs >= 5.20 is needed to write Double Layer DVD+R."), MessageError );
                         d->running = false;
                         jobFinished(false);
                         return;
@@ -257,7 +257,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
         case K3b::Device::MEDIA_BD_R_SRM:
 
             if( dh->diskInfo().numSessions() > 1 ) {
-                emit infoMessage( i18n("K3b does not support copying multi-session DVD or Blu-ray disks."), ERROR );
+                emit infoMessage( i18n("K3b does not support copying multi-session DVD or Blu-ray disks."), MessageError );
                 d->running = false;
                 jobFinished(false);
                 return;
@@ -280,15 +280,15 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
         case K3b::Device::MEDIA_DVD_RW_OVWR:
         case K3b::Device::MEDIA_BD_RE:
         {
-            emit infoMessage( i18n("K3b relies on the size saved in the ISO9660 header."), WARNING );
-            emit infoMessage( i18n("This might result in a corrupt copy if the source was mastered with buggy software."), WARNING );
+            emit infoMessage( i18n("K3b relies on the size saved in the ISO9660 header."), MessageWarning );
+            emit infoMessage( i18n("This might result in a corrupt copy if the source was mastered with buggy software."), MessageWarning );
 
             K3b::Iso9660 isoF( m_readerDevice, 0 );
             if( isoF.open() ) {
                 d->lastSector = ((long long)isoF.primaryDescriptor().logicalBlockSize*isoF.primaryDescriptor().volumeSpaceSize)/2048LL - 1;
             }
             else {
-                emit infoMessage( i18n("Unable to determine the ISO9660 filesystem size."), ERROR );
+                emit infoMessage( i18n("Unable to determine the ISO9660 filesystem size."), MessageError );
                 jobFinished(false);
                 d->running = false;
                 return;
@@ -297,13 +297,13 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
         break;
 
         case K3b::Device::MEDIA_DVD_RAM:
-            emit infoMessage( i18n("K3b does not support copying DVD-RAM."), ERROR );
+            emit infoMessage( i18n("K3b does not support copying DVD-RAM."), MessageError );
             jobFinished(false);
             d->running = false;
             return;
 
         default:
-            emit infoMessage( i18n("Unsupported media type."), ERROR );
+            emit infoMessage( i18n("Unsupported media type."), MessageError );
             jobFinished(false);
             d->running = false;
             return;
@@ -321,12 +321,12 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
                 if( fi.isDir() )
                     m_imagePath = K3b::findTempFile( "iso", m_imagePath );
                 else if( !QFileInfo( m_imagePath.section( '/', 0, -2 ) ).isDir() ) {
-                    emit infoMessage( i18n("Specified an unusable temporary path. Using default."), WARNING );
+                    emit infoMessage( i18n("Specified an unusable temporary path. Using default."), MessageWarning );
                     m_imagePath = K3b::findTempFile( "iso" );
                 }
                 // else the user specified a file in an existing dir
 
-                emit infoMessage( i18n("Writing image file to %1.",m_imagePath), INFO );
+                emit infoMessage( i18n("Writing image file to %1.",m_imagePath), MessageInfo );
                 emit newSubTask( i18n("Reading source medium.") );
             }
 
@@ -337,14 +337,14 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
             unsigned long avail, size;
             QString pathToTest = m_imagePath.left( m_imagePath.lastIndexOf( '/' ) );
             if( !K3b::kbFreeOnFs( pathToTest, size, avail ) ) {
-                emit infoMessage( i18n("Unable to determine free space in temporary directory '%1'.",pathToTest), ERROR );
+                emit infoMessage( i18n("Unable to determine free space in temporary directory '%1'.",pathToTest), MessageError );
                 jobFinished(false);
                 d->running = false;
                 return;
             }
             else {
                 if( avail < imageSpaceNeeded/1024 ) {
-                    emit infoMessage( i18n("Not enough space left in temporary directory."), ERROR );
+                    emit infoMessage( i18n("Not enough space left in temporary directory."), MessageError );
                     jobFinished(false);
                     d->running = false;
                     return;
@@ -353,7 +353,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
 
             d->imageFile.setName( m_imagePath );
             if( !d->imageFile.open( QIODevice::WriteOnly ) ) {
-                emit infoMessage( i18n("Unable to open '%1' for writing.",m_imagePath), ERROR );
+                emit infoMessage( i18n("Unable to open '%1' for writing.",m_imagePath), MessageError );
                 jobFinished( false );
                 d->running = false;
                 return;
@@ -361,7 +361,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
         }
 
         if( K3b::isMounted( m_readerDevice ) ) {
-            emit infoMessage( i18n("Unmounting source medium"), INFO );
+            emit infoMessage( i18n("Unmounting source medium"), MessageInfo );
             K3b::unmount( m_readerDevice );
         }
 
@@ -562,7 +562,7 @@ void K3b::DvdCopyJob::slotReaderFinished( bool success )
     }
 
     if( success ) {
-        emit infoMessage( i18n("Successfully read source medium."), SUCCESS );
+        emit infoMessage( i18n("Successfully read source medium."), MessageSuccess );
         if( m_onlyCreateImage ) {
             jobFinished(true);
             d->running = false;
@@ -628,7 +628,7 @@ void K3b::DvdCopyJob::slotWriterFinished( bool success )
     }
 
     if( success ) {
-        emit infoMessage( i18n("Successfully written copy %1.",d->doneCopies+1), INFO );
+        emit infoMessage( i18n("Successfully written copy %1.",d->doneCopies+1), MessageInfo );
 
         if( d->verifyData && !m_simulate ) {
             if( !d->verificationJob ) {
@@ -785,7 +785,7 @@ bool K3b::DvdCopyJob::waitForDvd()
     }
     else {
         // this should NEVER happen
-        emit infoMessage( i18n( "Unsupported media type: %1" , K3b::Device::mediaTypeString( d->sourceDiskInfo.mediaType() ) ), ERROR );
+        emit infoMessage( i18n( "Unsupported media type: %1" , K3b::Device::mediaTypeString( d->sourceDiskInfo.mediaType() ) ), MessageError );
         return false;
     }
 
@@ -797,7 +797,7 @@ bool K3b::DvdCopyJob::waitForDvd()
     }
 
     if( m == 0 ) {
-        emit infoMessage( i18n("Forced by user. Growisofs will be called without further tests."), INFO );
+        emit infoMessage( i18n("Forced by user. Growisofs will be called without further tests."), MessageInfo );
     }
 
     else {
@@ -825,14 +825,14 @@ bool K3b::DvdCopyJob::waitForDvd()
             }
 
             if( m_writingMode != K3b::WritingModeAuto && m_writingMode != K3b::WritingModeRestrictedOverwrite )
-                emit infoMessage( i18n("Writing mode ignored when writing DVD+R(W) media."), INFO );
+                emit infoMessage( i18n("Writing mode ignored when writing DVD+R(W) media."), MessageInfo );
 
             if( m & K3b::Device::MEDIA_DVD_PLUS_RW )
-                emit infoMessage( i18n("Writing DVD+RW."), INFO );
+                emit infoMessage( i18n("Writing DVD+RW."), MessageInfo );
             else if( m & K3b::Device::MEDIA_DVD_PLUS_R_DL )
-                emit infoMessage( i18n("Writing Double Layer DVD+R."), INFO );
+                emit infoMessage( i18n("Writing Double Layer DVD+R."), MessageInfo );
             else
-                emit infoMessage( i18n("Writing DVD+R."), INFO );
+                emit infoMessage( i18n("Writing DVD+R."), MessageInfo );
         }
 
         // -------------------------------
@@ -866,7 +866,7 @@ bool K3b::DvdCopyJob::waitForDvd()
             // TODO: check for feature 0x21
 
             if( m & K3b::Device::MEDIA_DVD_RW_OVWR ) {
-                emit infoMessage( i18n("Writing DVD-RW in restricted overwrite mode."), INFO );
+                emit infoMessage( i18n("Writing DVD-RW in restricted overwrite mode."), MessageInfo );
                 d->usedWritingMode = K3b::WritingModeRestrictedOverwrite;
             }
             else if( m & (K3b::Device::MEDIA_DVD_RW_SEQ|
@@ -874,11 +874,11 @@ bool K3b::DvdCopyJob::waitForDvd()
                 if( m_writingMode == K3b::WritingModeSao ) {
 // 	    ( m_writingMode ==  K3b::WritingModeAuto &&
 // 	      ( sizeWithDao || !m_onTheFly ) ) ) {
-                    emit infoMessage( i18n("Writing DVD-RW in DAO mode."), INFO );
+                    emit infoMessage( i18n("Writing DVD-RW in DAO mode."), MessageInfo );
                     d->usedWritingMode = K3b::WritingModeSao;
                 }
                 else {
-                    emit infoMessage( i18n("Writing DVD-RW in incremental mode."), INFO );
+                    emit infoMessage( i18n("Writing DVD-RW in incremental mode."), MessageInfo );
                     d->usedWritingMode = K3b::WritingModeIncrementalSequential;
                 }
             }
@@ -887,16 +887,16 @@ bool K3b::DvdCopyJob::waitForDvd()
                 // FIXME: DVD-R DL jump and stuff
 
                 if( m_writingMode == K3b::WritingModeRestrictedOverwrite )
-                    emit infoMessage( i18n("Restricted Overwrite is not possible with DVD-R media."), INFO );
+                    emit infoMessage( i18n("Restricted Overwrite is not possible with DVD-R media."), MessageInfo );
 
                 if( m_writingMode == K3b::WritingModeSao ) {
 // 	    ( m_writingMode ==  K3b::WritingModeAuto &&
 // 	      ( sizeWithDao || !m_onTheFly ) ) ) {
-                    emit infoMessage( i18n("Writing %1 in DAO mode.",K3b::Device::mediaTypeString(m, true) ), INFO );
+                    emit infoMessage( i18n("Writing %1 in DAO mode.",K3b::Device::mediaTypeString(m, true) ), MessageInfo );
                     d->usedWritingMode = K3b::WritingModeSao;
                 }
                 else {
-                    emit infoMessage( i18n("Writing %1 in incremental mode.",K3b::Device::mediaTypeString(m, true) ), INFO );
+                    emit infoMessage( i18n("Writing %1 in incremental mode.",K3b::Device::mediaTypeString(m, true) ), MessageInfo );
                     d->usedWritingMode = K3b::WritingModeIncrementalSequential;
                 }
             }
@@ -907,7 +907,7 @@ bool K3b::DvdCopyJob::waitForDvd()
         // Blue-Ray
         // -------------------------------
         else {
-            emit infoMessage( i18n("Writing %1.", K3b::Device::mediaTypeString(m, true) ), INFO );
+            emit infoMessage( i18n("Writing %1.", K3b::Device::mediaTypeString(m, true) ), MessageInfo );
             d->usedWritingMode = K3b::WritingModeIncrementalSequential; // just to set some mode for now
         }
     }
@@ -921,7 +921,7 @@ void K3b::DvdCopyJob::removeImageFiles()
 {
     if( QFile::exists( m_imagePath ) ) {
         d->imageFile.remove();
-        emit infoMessage( i18n("Removed image file %1",m_imagePath), K3b::Job::SUCCESS );
+        emit infoMessage( i18n("Removed image file %1",m_imagePath), K3b::Job::MessageSuccess );
     }
 }
 

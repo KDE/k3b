@@ -196,7 +196,7 @@ void K3b::BinImageWritingJob::writerFinished(bool ok)
         if ( k3bcore->globalSettings()->ejectMedia() ) {
             K3b::Device::eject( m_device );
         }
-        emit infoMessage( i18np("%1 copy successfully created", "%1 copies successfully created", m_copies),K3b::Job::INFO );
+        emit infoMessage( i18np("%1 copy successfully created", "%1 copies successfully created", m_copies),K3b::Job::MessageInfo );
         jobFinished( true );
     }
     else {

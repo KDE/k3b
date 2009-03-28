@@ -160,14 +160,14 @@ bool K3b::GrowisofsWriter::prepareProcess()
 {
     d->growisofsBin = k3bcore->externalBinManager()->binObject( "growisofs" );
     if( !d->growisofsBin ) {
-        emit infoMessage( i18n("Could not find %1 executable.",QString("growisofs")), ERROR );
+        emit infoMessage( i18n("Could not find %1 executable.",QString("growisofs")), MessageError );
         return false;
     }
 
     if( d->growisofsBin->version < K3b::Version( 5, 10 ) ) {
         emit infoMessage( i18n("Growisofs version %1 is too old. "
                                "K3b needs at least version 5.10.",d->growisofsBin->version),
-                          ERROR );
+                          MessageError );
         return false;
     }
 
@@ -175,7 +175,7 @@ bool K3b::GrowisofsWriter::prepareProcess()
 
     if( !d->growisofsBin->copyright.isEmpty() )
         emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3",QString("growisofs")
-                               ,d->growisofsBin->version,d->growisofsBin->copyright), INFO );
+                               ,d->growisofsBin->version,d->growisofsBin->copyright), MessageInfo );
 
 
     //
@@ -230,7 +230,7 @@ bool K3b::GrowisofsWriter::prepareProcess()
         d->inputFile.setFileName( d->image );
         d->trackSize = (K3b::filesize( d->image ) + 1024) / 2048;
         if( !d->inputFile.open( QIODevice::ReadOnly ) ) {
-            emit infoMessage( i18n("Could not open file %1.",d->image), ERROR );
+            emit infoMessage( i18n("Could not open file %1.",d->image), MessageError );
             return false;
         }
     }
@@ -361,7 +361,7 @@ void K3b::GrowisofsWriter::start()
 
         // FIXME: check the return value
         if( K3b::isMounted( burnDevice() ) ) {
-            emit infoMessage( i18n("Unmounting medium"), INFO );
+            emit infoMessage( i18n("Unmounting medium"), MessageInfo );
             K3b::unmount( burnDevice() );
         }
 
@@ -377,18 +377,18 @@ void K3b::GrowisofsWriter::start()
             // something went wrong when starting the program
             // it "should" be the executable
             kDebug() << "(K3b::GrowisofsWriter) could not start " << d->growisofsBin->path;
-            emit infoMessage( i18n("Could not start %1.",d->growisofsBin->name()), K3b::Job::ERROR );
+            emit infoMessage( i18n("Could not start %1.",d->growisofsBin->name()), K3b::Job::MessageError );
             jobFinished(false);
         }
         else {
             if( simulate() ) {
                 emit newTask( i18n("Simulating") );
                 emit infoMessage( i18n("Starting simulation..."),
-                                  K3b::Job::INFO );
+                                  K3b::Job::MessageInfo );
             }
             else {
                 emit newTask( i18n("Writing") );
-                emit infoMessage( i18n("Starting disc write..."), K3b::Job::INFO );
+                emit infoMessage( i18n("Starting disc write..."), K3b::Job::MessageInfo );
             }
 
             d->gh->handleStart();
@@ -555,12 +555,12 @@ void K3b::GrowisofsWriter::slotProcessExited( int exitCode, QProcess::ExitStatus
         if( s > 0 )
             emit infoMessage( ki18n("Average overall write speed: %1 KB/s (%2x)")
                               .subs( s )
-                              .subs( ( double )s/( double )d->speedMultiplicator(), 0, 'g', 2 ).toString(), INFO );
+                              .subs( ( double )s/( double )d->speedMultiplicator(), 0, 'g', 2 ).toString(), MessageInfo );
 
         if( simulate() )
-            emit infoMessage( i18n("Simulation successfully completed"), K3b::Job::SUCCESS );
+            emit infoMessage( i18n("Simulation successfully completed"), K3b::Job::MessageSuccess );
         else
-            emit infoMessage( i18n("Writing successfully completed"), K3b::Job::SUCCESS );
+            emit infoMessage( i18n("Writing successfully completed"), K3b::Job::MessageSuccess );
 
         d->success = true;
     }

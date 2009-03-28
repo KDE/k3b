@@ -21,9 +21,6 @@
 #include "k3b_export.h"
 #include "k3bglobals.h"
 #include "k3bdevicetypes.h"
-#ifdef Q_OS_WIN32
-#undef ERROR
-#endif
 
 namespace K3b {
     namespace Device {
@@ -113,13 +110,13 @@ namespace K3b {
          * \see infoMessage()
          */
         enum MessageType {
-            INFO,     /**< Informational message. For example a message that informs the user about what is
-                         currently going on */
-            WARNING,  /**< A warning message. Something did not go perfectly but the job may continue. */
-            ERROR,    /**< An error. Only use this message type if the job will actually fail afterwards
-                         with a call to jobFinished( false ) */
-            SUCCESS   /**< This message type may be used to inform the user that a sub job has
-                         been successfully finished. */
+            MessageInfo,     /**< Informational message. For example a message that informs the user about what is
+                                currently going on */
+            MessageWarning,  /**< A warning message. Something did not go perfectly but the job may continue. */
+            MessageError,    /**< An error. Only use this message type if the job will actually fail afterwards
+                                with a call to jobFinished( false ) */
+            MessageSuccess   /**< This message type may be used to inform the user that a sub job has
+                                been successfully finished. */
         };
 
         /**

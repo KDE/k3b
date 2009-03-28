@@ -53,13 +53,13 @@ void K3b::AudioNormalizeJob::start()
     const K3b::ExternalBin* bin = k3bcore->externalBinManager()->binObject( "normalize" );
 
     if( !bin ) {
-        emit infoMessage( i18n("Could not find normalize executable."), ERROR );
+        emit infoMessage( i18n("Could not find normalize executable."), MessageError );
         jobFinished(false);
         return;
     }
 
     if( !bin->copyright.isEmpty() )
-        emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3",bin->name(),bin->version,bin->copyright), INFO );
+        emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3",bin->name(),bin->version,bin->copyright), MessageInfo );
 
     // create the commandline
     *m_process << bin;
@@ -81,7 +81,7 @@ void K3b::AudioNormalizeJob::start()
         // something went wrong when starting the program
         // it "should" be the executable
         kDebug() << "(K3b::AudioNormalizeJob) could not start normalize";
-        emit infoMessage( i18n("Could not start normalize."), K3b::Job::ERROR );
+        emit infoMessage( i18n("Could not start normalize."), K3b::Job::MessageError );
         jobFinished(false);
     }
 }
@@ -121,7 +121,7 @@ void K3b::AudioNormalizeJob::slotStdLine( const QString& line )
 
     else if( line.contains( "already normalized" ) ) {
         // no normalization necessary for the current track
-        emit infoMessage( i18n("Track %1 is already normalized.",m_currentTrack), INFO );
+        emit infoMessage( i18n("Track %1 is already normalized.",m_currentTrack), MessageInfo );
         m_currentTrack++;
     }
 
@@ -178,15 +178,15 @@ void K3b::AudioNormalizeJob::slotProcessExited( int exitCode, QProcess::ExitStat
     if( exitStatus == QProcess::NormalExit ) {
         switch( exitCode ) {
         case 0:
-            emit infoMessage( i18n("Successfully normalized all tracks."), SUCCESS );
+            emit infoMessage( i18n("Successfully normalized all tracks."), MessageSuccess );
             jobFinished(true);
             break;
         default:
             if( !m_canceled ) {
                 emit infoMessage( i18n("%1 returned an unknown error (code %2).",QString("normalize"), exitCode),
-                                  K3b::Job::ERROR );
-                emit infoMessage( i18n("Please send me an email with the last output."), K3b::Job::ERROR );
-                emit infoMessage( i18n("Error while normalizing tracks."), ERROR );
+                                  K3b::Job::MessageError );
+                emit infoMessage( i18n("Please send me an email with the last output."), K3b::Job::MessageError );
+                emit infoMessage( i18n("Error while normalizing tracks."), MessageError );
             }
             else
                 emit canceled();
@@ -195,7 +195,7 @@ void K3b::AudioNormalizeJob::slotProcessExited( int exitCode, QProcess::ExitStat
         }
     }
     else {
-        emit infoMessage( i18n("%1 did not exit cleanly.",QString("Normalize")), K3b::Job::ERROR );
+        emit infoMessage( i18n("%1 did not exit cleanly.",QString("Normalize")), K3b::Job::MessageError );
         jobFinished( false );
     }
 }

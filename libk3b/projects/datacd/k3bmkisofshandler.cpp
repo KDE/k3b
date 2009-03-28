@@ -63,14 +63,14 @@ const K3b::ExternalBin* K3b::MkisofsHandler::initMkisofs()
                                            QString("mkisofs"),
                                            d->mkisofsBin->version,
                                            d->mkisofsBin->copyright),
-                                      K3b::Job::INFO );
+                                      K3b::Job::MessageInfo );
 
         d->firstProgressValue = -1;
         d->readError = false;
     }
     else {
         kDebug() << "(K3b::MkisofsHandler) could not find mkisofs executable";
-        handleMkisofsInfoMessage( i18n("Mkisofs executable not found."), K3b::Job::ERROR );
+        handleMkisofsInfoMessage( i18n("Mkisofs executable not found."), K3b::Job::MessageError );
     }
 
     return d->mkisofsBin;
@@ -85,12 +85,12 @@ void K3b::MkisofsHandler::parseMkisofsOutput( const QString& line )
             QString errorLine = line.mid( d->mkisofsBin->path.length() + 2 );
             if( errorLine.startsWith( "Input/output error. Cannot read from" ) ) {
                 handleMkisofsInfoMessage( i18n("Read error from file '%1'", errorLine.mid( 38, errorLine.length()-40 ) ),
-                                          K3b::Job::ERROR );
+                                          K3b::Job::MessageError );
                 d->readError = true;
             }
             else if( errorLine.startsWith( "Value too large for defined data type" ) ) {
-                handleMkisofsInfoMessage( i18n("Used version of mkisofs does not have large file support."), K3b::Job::ERROR );
-                handleMkisofsInfoMessage( i18n("Files bigger than 2 GB cannot be handled."), K3b::Job::ERROR );
+                handleMkisofsInfoMessage( i18n("Used version of mkisofs does not have large file support."), K3b::Job::MessageError );
+                handleMkisofsInfoMessage( i18n("Files bigger than 2 GB cannot be handled."), K3b::Job::MessageError );
                 d->readError = true;
             }
         }
@@ -104,18 +104,18 @@ void K3b::MkisofsHandler::parseMkisofsOutput( const QString& line )
         }
         else if( line.startsWith( "Incorrectly encoded string" ) ) {
             handleMkisofsInfoMessage( i18n("Encountered an incorrectly encoded filename '%1'",
-                                           line.section( QRegExp("[\\(\\)]"), 1, 1 )), K3b::Job::ERROR );
-            handleMkisofsInfoMessage( i18n("This may be caused by a system update which changed the local character set."), K3b::Job::ERROR );
-            handleMkisofsInfoMessage( i18n("You may use convmv (http://j3e.de/linux/convmv/) to fix the filename encoding."), K3b::Job::ERROR );
+                                           line.section( QRegExp("[\\(\\)]"), 1, 1 )), K3b::Job::MessageError );
+            handleMkisofsInfoMessage( i18n("This may be caused by a system update which changed the local character set."), K3b::Job::MessageError );
+            handleMkisofsInfoMessage( i18n("You may use convmv (http://j3e.de/linux/convmv/) to fix the filename encoding."), K3b::Job::MessageError );
             d->readError = true;
         }
         else if( line.endsWith( "has not an allowable size." ) ) {
-            handleMkisofsInfoMessage( i18n("The boot image has an invalid size."), K3b::Job::ERROR );
+            handleMkisofsInfoMessage( i18n("The boot image has an invalid size."), K3b::Job::MessageError );
             d->readError = true;
         }
         else if( line.endsWith( "has multiple partitions." ) ) {
-            handleMkisofsInfoMessage( i18n("The boot image contains multiple partitions.."), K3b::Job::ERROR );
-            handleMkisofsInfoMessage( i18n("A hard-disk boot image has to contain a single partition."), K3b::Job::ERROR );
+            handleMkisofsInfoMessage( i18n("The boot image contains multiple partitions.."), K3b::Job::MessageError );
+            handleMkisofsInfoMessage( i18n("A hard-disk boot image has to contain a single partition."), K3b::Job::MessageError );
             d->readError = true;
         }
         else {

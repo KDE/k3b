@@ -87,7 +87,7 @@ void K3b::VideoDVDTitleDetectClippingJob::start()
 
     d->usedTranscodeBin = k3bcore->externalBinManager()->binObject("transcode");
     if( !d->usedTranscodeBin ) {
-        emit infoMessage( i18n("%1 executable could not be found.",QString("transcode")), ERROR );
+        emit infoMessage( i18n("%1 executable could not be found.",QString("transcode")), MessageError );
         jobFinished( false );
         return;
     }
@@ -95,7 +95,7 @@ void K3b::VideoDVDTitleDetectClippingJob::start()
     if( d->usedTranscodeBin->version < K3b::Version( 1, 0, 0 ) ){
         emit infoMessage( i18n("%1 version %2 is too old.",
                                QString("transcode")
-                               ,d->usedTranscodeBin->version), ERROR );
+                               ,d->usedTranscodeBin->version), MessageError );
         jobFinished( false );
         return;
     }
@@ -106,7 +106,7 @@ void K3b::VideoDVDTitleDetectClippingJob::start()
         emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3"
                                ,d->usedTranscodeBin->name()
                                ,d->usedTranscodeBin->version
-                               ,d->usedTranscodeBin->copyright), INFO );
+                               ,d->usedTranscodeBin->copyright), MessageInfo );
 
     emit newTask( i18n("Analysing Title %1 of Video DVD %2",m_titleNumber,m_dvd.volumeIdentifier()) );
 
@@ -175,7 +175,7 @@ void K3b::VideoDVDTitleDetectClippingJob::startTranscode( int chapter )
     if( !d->process->start( KProcess::MergedChannels ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
-        emit infoMessage( i18n("Could not start %1.",d->usedTranscodeBin->name()), K3b::Job::ERROR );
+        emit infoMessage( i18n("Could not start %1.",d->usedTranscodeBin->name()), K3b::Job::MessageError );
         jobFinished(false);
     }
     else {
@@ -256,7 +256,7 @@ void K3b::VideoDVDTitleDetectClippingJob::slotTranscodeExited( int exitCode, QPr
                 m_clippingTop = m_clippingLeft = m_clippingBottom = m_clippingRight = 0;
 
             if( d->totalChapters < m_dvd[m_titleNumber-1].numPTTs() )
-                emit infoMessage( i18n("Ignoring last chapter due to its short playback time."), INFO );
+                emit infoMessage( i18n("Ignoring last chapter due to its short playback time."), MessageInfo );
 
             jobFinished( true );
         }
@@ -274,8 +274,8 @@ void K3b::VideoDVDTitleDetectClippingJob::slotTranscodeExited( int exitCode, QPr
         else {
             emit infoMessage( i18n("%1 returned an unknown error (code %2).",
                                    d->usedTranscodeBin->name(), exitCode ),
-                              K3b::Job::ERROR );
-            emit infoMessage( i18n("Please send me an email with the last output."), K3b::Job::ERROR );
+                              K3b::Job::MessageError );
+            emit infoMessage( i18n("Please send me an email with the last output."), K3b::Job::MessageError );
         }
 
         jobFinished( false );

@@ -100,7 +100,7 @@ void K3b::DvdBooktypeJob::start()
     jobStarted();
 
     if( !d->device ) {
-        emit infoMessage( i18n("No device set"), ERROR );
+        emit infoMessage( i18n("No device set"), MessageError );
         jobFinished(false);
         d->running = false;
         return;
@@ -125,7 +125,7 @@ void K3b::DvdBooktypeJob::start()
             return;
         }
 
-        emit infoMessage( i18n("Checking media..."), INFO );
+        emit infoMessage( i18n("Checking media..."), MessageInfo );
         emit newTask( i18n("Checking media") );
 
         connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::CommandDiskInfo, d->device ),
@@ -185,20 +185,20 @@ void K3b::DvdBooktypeJob::slotProcessFinished( int exitCode, QProcess::ExitStatu
     }
     else if( exitStatus == QProcess::NormalExit ) {
         if( exitCode == 0 ) {
-            emit infoMessage( i18n("Booktype successfully changed"), K3b::Job::SUCCESS );
+            emit infoMessage( i18n("Booktype successfully changed"), K3b::Job::MessageSuccess );
             d->success = true;
         }
         else {
             emit infoMessage( i18n("%1 returned an unknown error (code %2).",d->dvdBooktypeBin->name(), exitCode),
-                              K3b::Job::ERROR );
-            emit infoMessage( i18n("Please send me an email with the last output."), K3b::Job::ERROR );
+                              K3b::Job::MessageError );
+            emit infoMessage( i18n("Please send me an email with the last output."), K3b::Job::MessageError );
 
             d->success = false;
         }
     }
     else {
         emit infoMessage( i18n("%1 did not exit cleanly.",d->dvdBooktypeBin->name()),
-                          ERROR );
+                          MessageError );
         d->success = false;
     }
 
@@ -214,7 +214,7 @@ void K3b::DvdBooktypeJob::slotProcessFinished( int exitCode, QProcess::ExitStatu
             jobFinished(d->success);
         }
         else {
-            emit infoMessage( i18n("Ejecting DVD..."), INFO );
+            emit infoMessage( i18n("Ejecting DVD..."), MessageInfo );
             connect( K3b::Device::eject( d->device ),
                      SIGNAL(finished(K3b::Device::DeviceHandler*)),
                      this,
@@ -231,7 +231,7 @@ void K3b::DvdBooktypeJob::slotProcessFinished( int exitCode, QProcess::ExitStatu
 void K3b::DvdBooktypeJob::slotEjectingFinished( K3b::Device::DeviceHandler* dh )
 {
     if( !dh->success() )
-        emit infoMessage( i18n("Unable to eject media."), ERROR );
+        emit infoMessage( i18n("Unable to eject media."), MessageError );
 
     d->running = false;
     jobFinished(d->success);
@@ -254,7 +254,7 @@ void K3b::DvdBooktypeJob::slotDeviceHandlerFinished( K3b::Device::DeviceHandler*
             if( dh->diskInfo().empty() )
                 startBooktypeChange();
             else {
-                emit infoMessage( i18n("Cannot change booktype on non-empty DVD+R media."), ERROR );
+                emit infoMessage( i18n("Cannot change booktype on non-empty DVD+R media."), MessageError );
                 jobFinished(false);
             }
         }
@@ -262,12 +262,12 @@ void K3b::DvdBooktypeJob::slotDeviceHandlerFinished( K3b::Device::DeviceHandler*
             startBooktypeChange();
         }
         else {
-            emit infoMessage( i18n("No DVD+R(W) media found."), ERROR );
+            emit infoMessage( i18n("No DVD+R(W) media found."), MessageError );
             jobFinished(false);
         }
     }
     else {
-        emit infoMessage( i18n("Unable to determine media state."), ERROR );
+        emit infoMessage( i18n("Unable to determine media state."), MessageError );
         d->running = false;
         jobFinished(false);
     }
@@ -284,7 +284,7 @@ void K3b::DvdBooktypeJob::startBooktypeChange()
 
     d->dvdBooktypeBin = k3bcore->externalBinManager()->binObject( "dvd+rw-booktype" );
     if( !d->dvdBooktypeBin ) {
-        emit infoMessage( i18n("Could not find %1 executable.",QString("dvd+rw-booktype")), ERROR );
+        emit infoMessage( i18n("Could not find %1 executable.",QString("dvd+rw-booktype")), MessageError );
         d->running = false;
         jobFinished(false);
         return;
@@ -332,7 +332,7 @@ void K3b::DvdBooktypeJob::startBooktypeChange()
     if( !d->process->start( KProcess::OnlyStderrChannel ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
-        emit infoMessage( i18n("Could not start %1.",d->dvdBooktypeBin->name()), K3b::Job::ERROR );
+        emit infoMessage( i18n("Could not start %1.",d->dvdBooktypeBin->name()), K3b::Job::MessageError );
         d->running = false;
         jobFinished(false);
     }

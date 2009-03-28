@@ -178,7 +178,7 @@ bool K3b::CdrecordWriter::prepareProcess()
     d->cdrecordBinObject = k3bcore->externalBinManager()->binObject("cdrecord");
 
     if( !d->cdrecordBinObject ) {
-        emit infoMessage( i18n("Could not find %1 executable.", QLatin1String("cdrecord")), ERROR );
+        emit infoMessage( i18n("Could not find %1 executable.", QLatin1String("cdrecord")), MessageError );
         return false;
     }
 
@@ -225,7 +225,7 @@ bool K3b::CdrecordWriter::prepareProcess()
 
     if ( K3b::Device::isBdMedia( d->burnedMediaType ) ) {
         if ( !d->cdrecordBinObject->hasFeature( "blu-ray" ) ) {
-            emit infoMessage( i18n( "Cdrecord version %1 does not support Blu-ray writing." ,d->cdrecordBinObject->version ), ERROR );
+            emit infoMessage( i18n( "Cdrecord version %1 does not support Blu-ray writing." ,d->cdrecordBinObject->version ), MessageError );
             // FIXME: add a way to fail the whole thing here
         }
         d->process << "-sao";
@@ -241,7 +241,7 @@ bool K3b::CdrecordWriter::prepareProcess()
             else {
                 if( d->cdrecordBinObject->hasFeature( "tao" ) )
                     d->process << "-tao";
-                emit infoMessage( i18n("Writer does not support disk at once (DAO) recording"), WARNING );
+                emit infoMessage( i18n("Writer does not support disk at once (DAO) recording"), MessageWarning );
             }
         }
         else if( d->writingMode == K3b::WritingModeRaw ) {
@@ -252,7 +252,7 @@ bool K3b::CdrecordWriter::prepareProcess()
             else if( burnDevice()->supportsWritingMode( K3b::Device::WRITINGMODE_RAW_R96P ) )
                 d->process << "-raw96p";
             else {
-                emit infoMessage( i18n("Writer does not support raw writing."), WARNING );
+                emit infoMessage( i18n("Writer does not support raw writing."), MessageWarning );
                 if( d->cdrecordBinObject->hasFeature( "tao" ) )
                     d->process << "-tao";
             }
@@ -261,7 +261,7 @@ bool K3b::CdrecordWriter::prepareProcess()
             d->process << "-tao";
     }
     else {
-        emit infoMessage( i18n( "Cdrecord does not support writing %1 media." , K3b::Device::mediaTypeString( d->burnedMediaType ) ), ERROR );
+        emit infoMessage( i18n( "Cdrecord does not support writing %1 media." , K3b::Device::mediaTypeString( d->burnedMediaType ) ), MessageError );
         // FIXME: add a way to fail the whole thing here
     }
 
@@ -281,12 +281,12 @@ bool K3b::CdrecordWriter::prepareProcess()
                 d->process << "driveropts=burnfree";
         }
         else
-            emit infoMessage( i18n("Writer does not support buffer underrun free recording (Burnfree)"), WARNING );
+            emit infoMessage( i18n("Writer does not support buffer underrun free recording (Burnfree)"), MessageWarning );
     }
 
     if( k3bcore->globalSettings()->force() ) {
         d->process << "-force";
-        emit infoMessage( i18n("'Force unsafe operations' enabled."), WARNING );
+        emit infoMessage( i18n("'Force unsafe operations' enabled."), MessageWarning );
     }
 
     if( d->cue ) {
@@ -306,7 +306,7 @@ bool K3b::CdrecordWriter::prepareProcess()
         if ( !d->cdTextFile->open() ||
              d->cdTextFile->write( d->rawCdText ) != d->rawCdText.size() ||
             !d->cdTextFile->flush() ) {
-            emit infoMessage( i18n( "Failed to write temporary file '%1'", d->cdTextFile->fileName() ), ERROR );
+            emit infoMessage( i18n( "Failed to write temporary file '%1'", d->cdTextFile->fileName() ), MessageError );
             return false;
         }
         d->process << "textfile=" + d->cdTextFile->fileName();
@@ -326,7 +326,7 @@ bool K3b::CdrecordWriter::prepareProcess()
                 d->process << "-overburn";
         }
         else {
-            emit infoMessage( i18n("Cdrecord %1 does not support overburning.",d->cdrecordBinObject->version), WARNING );
+            emit infoMessage( i18n("Cdrecord %1 does not support overburning.",d->cdrecordBinObject->version), MessageWarning );
         }
     }
 
@@ -375,7 +375,7 @@ void K3b::CdrecordWriter::start()
         emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3"
                                ,(d->cdrecordBinObject->hasFeature( "wodim" ) ? "Wodim" : "Cdrecord" )
                                ,d->cdrecordBinObject->version
-                               ,d->cdrecordBinObject->copyright), INFO );
+                               ,d->cdrecordBinObject->copyright), MessageInfo );
 
 
     kDebug() << "***** " << d->cdrecordBinObject->name() << " parameters:\n";
@@ -394,7 +394,7 @@ void K3b::CdrecordWriter::start()
 
     // FIXME: check the return value
     if( K3b::isMounted( burnDevice() ) ) {
-        emit infoMessage( i18n("Unmounting medium"), INFO );
+        emit infoMessage( i18n("Unmounting medium"), MessageInfo );
         K3b::unmount( burnDevice() );
     }
 
@@ -410,7 +410,7 @@ void K3b::CdrecordWriter::start()
         // something went wrong when starting the program
         // it "should" be the executable
         kDebug() << "(K3b::CdrecordWriter) could not start " << d->cdrecordBinObject->name();
-        emit infoMessage( i18n("Could not start %1.",d->cdrecordBinObject->name()), K3b::Job::ERROR );
+        emit infoMessage( i18n("Could not start %1.",d->cdrecordBinObject->name()), K3b::Job::MessageError );
         jobFinished(false);
     }
     else {
@@ -420,24 +420,24 @@ void K3b::CdrecordWriter::start()
             if ( d->burnedMediaType & Device::MEDIA_DVD_PLUS_ALL )
                 emit infoMessage( i18n("Starting simulation at %1x speed...",
                                        d->usedSpeed),
-                                  K3b::Job::INFO );
+                                  K3b::Job::MessageInfo );
             else
                 emit infoMessage( i18n("Starting %1 simulation at %2x speed...",
                                        K3b::writingModeString(d->writingMode),
                                        d->usedSpeed),
-                                  K3b::Job::INFO );
+                                  K3b::Job::MessageInfo );
         }
         else {
             emit newTask( i18n("Writing") );
             if ( d->burnedMediaType & Device::MEDIA_DVD_PLUS_ALL )
                 emit infoMessage( i18n("Starting writing at %1x speed...",
                                        d->usedSpeed),
-                                  K3b::Job::INFO );
+                                  K3b::Job::MessageInfo );
             else
                 emit infoMessage( i18n("Starting %1 writing at %2x speed...",
                                        K3b::writingModeString(d->writingMode),
                                        d->usedSpeed),
-                                  K3b::Job::INFO );
+                                  K3b::Job::MessageInfo );
         }
     }
 }
@@ -560,14 +560,14 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
         QString errStr = line.mid( line.indexOf(':') + 2 );
 
         if( errStr.startsWith( "Drive does not support SAO" ) ) {
-            emit infoMessage( i18n("DAO (Disk At Once) recording not supported with this writer"), K3b::Job::ERROR );
-            emit infoMessage( i18n("Please choose TAO (Track At Once) and try again"), K3b::Job::ERROR );
+            emit infoMessage( i18n("DAO (Disk At Once) recording not supported with this writer"), K3b::Job::MessageError );
+            emit infoMessage( i18n("Please choose TAO (Track At Once) and try again"), K3b::Job::MessageError );
         }
         else if( errStr.startsWith( "Drive does not support RAW" ) ) {
-            emit infoMessage( i18n("RAW recording not supported with this writer"), K3b::Job::ERROR );
+            emit infoMessage( i18n("RAW recording not supported with this writer"), K3b::Job::MessageError );
         }
         else if( errStr.startsWith("Input/output error.") ) {
-            emit infoMessage( i18n("Input/output error. Not necessarily serious."), WARNING );
+            emit infoMessage( i18n("Input/output error. Not necessarily serious."), MessageWarning );
         }
         else if( errStr.startsWith("shmget failed") ) {
             d->cdrecordError = SHMGET_FAILED;
@@ -576,16 +576,16 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
             d->cdrecordError = OPC_FAILED;
         }
         else if( errStr.startsWith( "Drive needs to reload the media" ) ) {
-            emit infoMessage( i18n("Reloading of medium required"), K3b::Job::INFO );
+            emit infoMessage( i18n("Reloading of medium required"), K3b::Job::MessageInfo );
         }
         else if( errStr.startsWith( "The current problem looks like a buffer underrun" ) ) {
             if( d->cdrecordError == UNKNOWN ) // it is almost never a buffer underrun these days.
                 d->cdrecordError = BUFFER_UNDERRUN;
         }
-        else if( errStr.startsWith("WARNING: Data may not fit") ) {
+        else if( errStr.startsWith("MessageWarning: Data may not fit") ) {
             bool overburn = k3bcore->globalSettings()->overburn();
             if( overburn && d->cdrecordBinObject->hasFeature("overburn") )
-                emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3b::Job::WARNING );
+                emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3b::Job::MessageWarning );
             d->cdrecordError = OVERSIZE;
         }
         else if( errStr.startsWith("Bad Option") ) {
@@ -594,7 +594,7 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
             int pos = line.indexOf( "Bad Option" ) + 13;
             int len = line.length() - pos - 1;
             emit infoMessage( i18n("No valid %1 option: %2",d->cdrecordBinObject->name(),line.mid(pos, len)),
-                              ERROR );
+                              MessageError );
         }
         else if( errStr.startsWith("Cannot set speed/dummy") ) {
             d->cdrecordError = CANNOT_SET_SPEED;
@@ -620,10 +620,10 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
             d->cdrecordError = PERMISSION_DENIED;
         }
         else if( errStr.startsWith( "Can only copy session # 1") ) {
-            emit infoMessage( i18n("Only session 1 will be cloned."), WARNING );
+            emit infoMessage( i18n("Only session 1 will be cloned."), MessageWarning );
         }
         else if( errStr == "Cannot fixate disk." ) {
-            emit infoMessage( i18n("Unable to fixate the disk."), ERROR );
+            emit infoMessage( i18n("Unable to fixate the disk."), MessageError );
             if( d->cdrecordError == UNKNOWN )
                 d->cdrecordError = CANNOT_FIXATE_DISK;
         }
@@ -645,11 +645,11 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
         int pos2 = line.indexOf( "in", pos+9 );
         int speed = static_cast<int>( line.mid( pos+9, pos2-pos-10 ).toDouble() );  // cdrecord-dvd >= 2.01a25 uses 8.0 and stuff
         if( speed != d->usedSpeed ) {
-            emit infoMessage( i18n("Medium or burner does not support writing at %1x speed",d->usedSpeed), K3b::Job::WARNING );
+            emit infoMessage( i18n("Medium or burner does not support writing at %1x speed",d->usedSpeed), K3b::Job::MessageWarning );
             if( speed > d->usedSpeed )
-                emit infoMessage( i18n("Switching burn speed up to %1x",speed), K3b::Job::WARNING );
+                emit infoMessage( i18n("Switching burn speed up to %1x",speed), K3b::Job::MessageWarning );
             else
-                emit infoMessage( i18n("Switching burn speed down to %1x",speed), K3b::Job::WARNING );
+                emit infoMessage( i18n("Switching burn speed down to %1x",speed), K3b::Job::MessageWarning );
         }
     }
     else if( line.startsWith( "Starting new" ) ) {
@@ -661,7 +661,7 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
                 kError() << "(K3b::CdrecordWriter) Did not parse all tracks sizes!";
         }
         else
-            emit infoMessage( i18n("Starting disc write"), INFO );
+            emit infoMessage( i18n("Starting disc write"), MessageInfo );
 
         d->currentTrack++;
 
@@ -690,16 +690,16 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
         emit newSubTask( i18n("Writing pregap") );
     }
     else if( line.startsWith( "Performing OPC" ) ) {
-        emit infoMessage( i18n("Performing Optimum Power Calibration"), K3b::Job::INFO );
+        emit infoMessage( i18n("Performing Optimum Power Calibration"), K3b::Job::MessageInfo );
     }
     else if( line.startsWith( "Sending" ) ) {
-        emit infoMessage( i18n("Sending CUE sheet"), K3b::Job::INFO );
+        emit infoMessage( i18n("Sending CUE sheet"), K3b::Job::MessageInfo );
     }
     else if( line.startsWith( "Turning BURN-Free on" ) || line.startsWith( "BURN-Free is ON") ) {
-        emit infoMessage( i18n("Enabled Burnfree"), K3b::Job::INFO );
+        emit infoMessage( i18n("Enabled Burnfree"), K3b::Job::MessageInfo );
     }
     else if( line.startsWith( "Turning BURN-Free off" ) ) {
-        emit infoMessage( i18n("Disabled Burnfree"), K3b::Job::WARNING );
+        emit infoMessage( i18n("Disabled Burnfree"), K3b::Job::MessageWarning );
     }
     else if( line.startsWith( "Re-load disk and hit" ) ) {
         // this happens on some notebooks where cdrecord is not able to close the
@@ -715,13 +715,13 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
         bool ok;
         int num = s_burnfreeCounterRx.cap(1).toInt(&ok);
         if( ok )
-            emit infoMessage( i18np("Burnfree was used once.", "Burnfree was used %1 times.", num), INFO );
+            emit infoMessage( i18np("Burnfree was used once.", "Burnfree was used %1 times.", num), MessageInfo );
     }
     else if( s_burnfreeCounterRxPredict.indexIn( line ) ) {
         bool ok;
         int num = s_burnfreeCounterRxPredict.cap(1).toInt(&ok);
         if( ok )
-            emit infoMessage( i18np("Buffer was low once.", "Buffer was low %1 times.", num), INFO );
+            emit infoMessage( i18np("Buffer was low once.", "Buffer was low %1 times.", num), MessageInfo );
     }
     else if( line.contains("Medium Error") ) {
         d->cdrecordError = MEDIUM_ERROR;
@@ -760,12 +760,12 @@ void K3b::CdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus 
         case 0:
         {
             if( simulate() )
-                emit infoMessage( i18n("Simulation successfully completed"), K3b::Job::SUCCESS );
+                emit infoMessage( i18n("Simulation successfully completed"), K3b::Job::MessageSuccess );
             else
-                emit infoMessage( i18n("Writing successfully completed"), K3b::Job::SUCCESS );
+                emit infoMessage( i18n("Writing successfully completed"), K3b::Job::MessageSuccess );
 
             int s = d->speedEst->average();
-            emit infoMessage( ki18n("Average overall write speed: %1 KB/s (%2x)").subs(s).subs((double)s/( double )d->usedSpeedFactor, 0, 'g', 2).toString(), INFO );
+            emit infoMessage( ki18n("Average overall write speed: %1 KB/s (%2x)").subs(s).subs((double)s/( double )d->usedSpeedFactor, 0, 'g', 2).toString(), MessageInfo );
 
             jobFinished( true );
         }
@@ -781,95 +781,95 @@ void K3b::CdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus 
             case OVERSIZE:
                 if( k3bcore->globalSettings()->overburn() &&
                     d->cdrecordBinObject->hasFeature("overburn") )
-                    emit infoMessage( i18n("Data did not fit on disk."), ERROR );
+                    emit infoMessage( i18n("Data did not fit on disk."), MessageError );
                 else {
-                    emit infoMessage( i18n("Data does not fit on disk."), ERROR );
+                    emit infoMessage( i18n("Data does not fit on disk."), MessageError );
                     if( d->cdrecordBinObject->hasFeature("overburn") )
-                        emit infoMessage( i18n("Enable overburning in the advanced K3b settings to burn anyway."), INFO );
+                        emit infoMessage( i18n("Enable overburning in the advanced K3b settings to burn anyway."), MessageInfo );
                 }
                 break;
             case BAD_OPTION:
                 // error message has already been emitted earlier since we needed the actual line
                 break;
             case SHMGET_FAILED:
-                emit infoMessage( i18n("%1 could not reserve shared memory segment of requested size.",d->cdrecordBinObject->name()), ERROR );
-                emit infoMessage( i18n("Probably you chose a too large buffer size."), ERROR );
+                emit infoMessage( i18n("%1 could not reserve shared memory segment of requested size.",d->cdrecordBinObject->name()), MessageError );
+                emit infoMessage( i18n("Probably you chose a too large buffer size."), MessageError );
                 break;
             case OPC_FAILED:
-                emit infoMessage( i18n("OPC failed. Probably the writer does not like the medium."), ERROR );
+                emit infoMessage( i18n("OPC failed. Probably the writer does not like the medium."), MessageError );
                 break;
             case CANNOT_SET_SPEED:
-                emit infoMessage( i18n("Unable to set write speed to %1.",d->usedSpeed), ERROR );
-                emit infoMessage( i18n("Probably this is lower than your writer's lowest writing speed."), ERROR );
+                emit infoMessage( i18n("Unable to set write speed to %1.",d->usedSpeed), MessageError );
+                emit infoMessage( i18n("Probably this is lower than your writer's lowest writing speed."), MessageError );
                 break;
             case CANNOT_SEND_CUE_SHEET:
-                emit infoMessage( i18n("Unable to send CUE sheet."), ERROR );
+                emit infoMessage( i18n("Unable to send CUE sheet."), MessageError );
                 if( d->writingMode == K3b::WritingModeSao )
-                    emit infoMessage( i18n("Sometimes using TAO writing mode solves this issue."), ERROR );
+                    emit infoMessage( i18n("Sometimes using TAO writing mode solves this issue."), MessageError );
                 break;
             case CANNOT_OPEN_NEW_SESSION:
-                emit infoMessage( i18n("Unable to open new session."), ERROR );
-                emit infoMessage( i18n("Probably a problem with the medium."), ERROR );
+                emit infoMessage( i18n("Unable to open new session."), MessageError );
+                emit infoMessage( i18n("Probably a problem with the medium."), MessageError );
                 break;
             case CANNOT_FIXATE_DISK:
-                emit infoMessage( i18n("The disk might still be readable."), ERROR );
+                emit infoMessage( i18n("The disk might still be readable."), MessageError );
                 if( d->writingMode == K3b::WritingModeTao && burnDevice()->dao() )
-                    emit infoMessage( i18n("Try DAO writing mode."), ERROR );
+                    emit infoMessage( i18n("Try DAO writing mode."), MessageError );
                 break;
             case PERMISSION_DENIED:
-                emit infoMessage( i18n("%1 has no permission to open the device.",QString("cdrecord")), ERROR );
+                emit infoMessage( i18n("%1 has no permission to open the device.",QString("cdrecord")), MessageError );
 #ifdef HAVE_K3BSETUP
-                emit infoMessage( i18n("You may use K3bsetup2 to solve this problem."), ERROR );
+                emit infoMessage( i18n("You may use K3bsetup2 to solve this problem."), MessageError );
 #endif
                 break;
             case BUFFER_UNDERRUN:
-                emit infoMessage( i18n("Probably a buffer underrun occurred."), ERROR );
+                emit infoMessage( i18n("Probably a buffer underrun occurred."), MessageError );
                 if( !d->usingBurnfree && burnDevice()->burnproof() )
-                    emit infoMessage( i18n("Please enable Burnfree or choose a lower burning speed."), ERROR );
+                    emit infoMessage( i18n("Please enable Burnfree or choose a lower burning speed."), MessageError );
                 else
-                    emit infoMessage( i18n("Please choose a lower burning speed."), ERROR );
+                    emit infoMessage( i18n("Please choose a lower burning speed."), MessageError );
                 break;
             case HIGH_SPEED_MEDIUM:
-                emit infoMessage( i18n("Found a high-speed medium not suitable for the writer being used."), ERROR );
-                emit infoMessage( i18n("Use the 'force unsafe operations' option to ignore this."), ERROR );
+                emit infoMessage( i18n("Found a high-speed medium not suitable for the writer being used."), MessageError );
+                emit infoMessage( i18n("Use the 'force unsafe operations' option to ignore this."), MessageError );
                 break;
             case LOW_SPEED_MEDIUM:
-                emit infoMessage( i18n("Found a low-speed medium not suitable for the writer being used."), ERROR );
-                emit infoMessage( i18n("Use the 'force unsafe operations' option to ignore this."), ERROR );
+                emit infoMessage( i18n("Found a low-speed medium not suitable for the writer being used."), MessageError );
+                emit infoMessage( i18n("Use the 'force unsafe operations' option to ignore this."), MessageError );
                 break;
             case MEDIUM_ERROR:
-                emit infoMessage( i18n("Most likely the burning failed due to low-quality media."), ERROR );
+                emit infoMessage( i18n("Most likely the burning failed due to low-quality media."), MessageError );
                 break;
             case DEVICE_BUSY:
-                emit infoMessage( i18n("Another application is blocking the device (most likely automounting)."), ERROR );
+                emit infoMessage( i18n("Another application is blocking the device (most likely automounting)."), MessageError );
                 break;
             case WRITE_ERROR:
-                emit infoMessage( i18n("A write error occurred."), ERROR );
+                emit infoMessage( i18n("A write error occurred."), MessageError );
                 if( d->writingMode == K3b::WritingModeSao )
-                    emit infoMessage( i18n("Sometimes using TAO writing mode solves this issue."), ERROR );
+                    emit infoMessage( i18n("Sometimes using TAO writing mode solves this issue."), MessageError );
                 break;
             case BLANK_FAILED:
-                emit infoMessage( i18n("Some drives do not support all erase types."), ERROR );
-                emit infoMessage( i18n("Try again using 'Complete' erasing."), ERROR );
+                emit infoMessage( i18n("Some drives do not support all erase types."), MessageError );
+                emit infoMessage( i18n("Try again using 'Complete' erasing."), MessageError );
                 break;
             case UNKNOWN:
                 if( (exitCode == 12) && K3b::kernelVersion() >= K3b::Version( 2, 6, 8 ) && d->cdrecordBinObject->hasFeature( "suidroot" ) ) {
-                    emit infoMessage( i18n("Since kernel version 2.6.8 cdrecord cannot use SCSI transport when running suid root anymore."), ERROR );
-                    emit infoMessage( i18n("You may use K3b::Setup to solve this problem or remove the suid bit manually."), ERROR );
+                    emit infoMessage( i18n("Since kernel version 2.6.8 cdrecord cannot use SCSI transport when running suid root anymore."), MessageError );
+                    emit infoMessage( i18n("You may use K3b::Setup to solve this problem or remove the suid bit manually."), MessageError );
                 }
                 else if( !wasSourceUnreadable() ) {
                     emit infoMessage( i18n("%1 returned an unknown error (code %2).",
                                            d->cdrecordBinObject->name(), exitCode),
-                                      K3b::Job::ERROR );
+                                      K3b::Job::MessageError );
 
                     if( (exitCode >= 254) && d->writingMode == K3b::WritingModeSao ) {
-                        emit infoMessage( i18n("Sometimes using TAO writing mode solves this issue."), ERROR );
+                        emit infoMessage( i18n("Sometimes using TAO writing mode solves this issue."), MessageError );
                     }
                     else {
-                        emit infoMessage( i18n("If you are running an unpatched cdrecord version..."), ERROR );
-                        emit infoMessage( i18n("...and this error also occurs with high quality media..."), ERROR );
-                        emit infoMessage( i18n("...and the K3b FAQ does not help you..."), ERROR );
-                        emit infoMessage( i18n("...please include the debugging output in your problem report."), ERROR );
+                        emit infoMessage( i18n("If you are running an unpatched cdrecord version..."), MessageError );
+                        emit infoMessage( i18n("...and this error also occurs with high quality media..."), MessageError );
+                        emit infoMessage( i18n("...and the K3b FAQ does not help you..."), MessageError );
+                        emit infoMessage( i18n("...please include the debugging output in your problem report."), MessageError );
                     }
                 }
                 break;
@@ -879,7 +879,7 @@ void K3b::CdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus 
     }
     else {
         emit infoMessage( i18n("%1 crashed.", d->cdrecordBinObject->name()),
-                          ERROR );
+                          MessageError );
         jobFinished( false );
     }
 }

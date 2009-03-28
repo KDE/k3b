@@ -219,7 +219,7 @@ int K3b::Job::numRunningSubJobs() const
 
 void K3b::Job::slotNewSubTask( const QString& str )
 {
-    emit infoMessage( str, INFO );
+    emit infoMessage( str, MessageInfo );
 }
 
 

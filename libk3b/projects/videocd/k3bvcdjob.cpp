@@ -108,7 +108,7 @@ void K3b::VcdJob::cancelAll()
     // remove bin-file if it is unfinished or the user selected to remove image
     if ( QFile::exists( m_doc->vcdImage() ) ) {
         if ( (!m_doc->onTheFly() && m_doc->removeImages()) || !m_imageFinished ) {
-            emit infoMessage( i18n( "Removing Binary file %1" , m_doc->vcdImage() ), K3b::Job::SUCCESS );
+            emit infoMessage( i18n( "Removing Binary file %1" , m_doc->vcdImage() ), K3b::Job::MessageSuccess );
             QFile::remove
                 ( m_doc->vcdImage() );
             m_doc->setVcdImage( "" );
@@ -118,7 +118,7 @@ void K3b::VcdJob::cancelAll()
     // remove cue-file if it is unfinished or the user selected to remove image
     if ( QFile::exists( m_cueFile ) ) {
         if ( (!m_doc->onTheFly() && m_doc->removeImages()) || !m_imageFinished ) {
-            emit infoMessage( i18n( "Removing Cue file %1" , m_cueFile ), K3b::Job::SUCCESS );
+            emit infoMessage( i18n( "Removing Cue file %1" , m_cueFile ), K3b::Job::MessageSuccess );
             QFile::remove
                 ( m_cueFile );
             m_cueFile = "";
@@ -161,12 +161,12 @@ void K3b::VcdJob::xmlGen()
 
     if ( !xmlView.write( m_xmlFile ) ) {
         kDebug() << "(K3b::VcdJob) could not write xmlfile.";
-        emit infoMessage( i18n( "Could not write correct XML-file." ), K3b::Job::ERROR );
+        emit infoMessage( i18n( "Could not write correct XML-file." ), K3b::Job::MessageError );
         cancelAll();
         jobFinished( false );
     }
 
-    //    emit infoMessage( i18n( "XML-file successfully created" ), K3b::Job::SUCCESS );
+    //    emit infoMessage( i18n( "XML-file successfully created" ), K3b::Job::MessageSuccess );
     emit debuggingOutput( "K3b::VcdXml:", xmlView.xmlString() );
 
     vcdxBuild();
@@ -183,13 +183,13 @@ void K3b::VcdJob::vcdxBuild()
     m_process = new K3b::Process();
     m_process->setSplitStdout( true );
 
-    emit infoMessage( i18n( "Creating Cue/Bin files ..." ), K3b::Job::INFO );
+    emit infoMessage( i18n( "Creating Cue/Bin files ..." ), K3b::Job::MessageInfo );
     const K3b::ExternalBin* bin = k3bcore ->externalBinManager() ->binObject( "vcdxbuild" );
     if ( !bin ) {
         kDebug() << "(K3b::VcdJob) could not find vcdxbuild executable";
-        emit infoMessage( i18n( "Could not find %1 executable." , QString("vcdxbuild") ), K3b::Job::ERROR );
-        emit infoMessage( i18n( "To create VideoCDs you must install VcdImager Version %1." ,QString( ">= 0.7.12") ), K3b::Job::INFO );
-        emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3b::Job::INFO );
+        emit infoMessage( i18n( "Could not find %1 executable." , QString("vcdxbuild") ), K3b::Job::MessageError );
+        emit infoMessage( i18n( "To create VideoCDs you must install VcdImager Version %1." ,QString( ">= 0.7.12") ), K3b::Job::MessageInfo );
+        emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3b::Job::MessageInfo );
         cancelAll();
         jobFinished( false );
         return ;
@@ -197,15 +197,15 @@ void K3b::VcdJob::vcdxBuild()
 
     if ( bin->version < K3b::Version( "0.7.12" ) ) {
         kDebug() << "(K3b::VcdJob) vcdxbuild executable too old!";
-        emit infoMessage( i18n( "%1 executable too old: need version %2 or greater." ,QString( "Vcdxbuild" ),QString( "0.7.12" )), K3b::Job::ERROR );
-        emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3b::Job::INFO );
+        emit infoMessage( i18n( "%1 executable too old: need version %2 or greater." ,QString( "Vcdxbuild" ),QString( "0.7.12" )), K3b::Job::MessageError );
+        emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3b::Job::MessageInfo );
         cancelAll();
         jobFinished( false );
         return ;
     }
 
     if ( !bin->copyright.isEmpty() )
-        emit infoMessage( i18n( "Using %1 %2 - Copyright (C) %3" , bin->name() , bin->version ,bin->copyright ), INFO );
+        emit infoMessage( i18n( "Using %1 %2 - Copyright (C) %3" , bin->name() , bin->version ,bin->copyright ), MessageInfo );
 
     *m_process << bin;
 
@@ -241,7 +241,7 @@ void K3b::VcdJob::vcdxBuild()
 
     if ( !m_process->start( KProcess::MergedChannels ) ) {
         kDebug() << "(K3b::VcdJob) could not start vcdxbuild";
-        emit infoMessage( i18n( "Could not start %1." , QString("vcdxbuild") ), K3b::Job::ERROR );
+        emit infoMessage( i18n( "Could not start %1." , QString("vcdxbuild") ), K3b::Job::MessageError );
         cancelAll();
         jobFinished( false );
     }
@@ -322,7 +322,7 @@ void K3b::VcdJob::slotParseVcdxBuildOutput( const QString& line )
                         parseInformation( text );
                     } else {
                         kDebug() << QString( "(K3b::VcdJob) vcdxbuild error, %1" ).arg( text );
-                        emit infoMessage( text, K3b::Job::ERROR );
+                        emit infoMessage( text, K3b::Job::MessageError );
                     }
                 }
             }
@@ -337,19 +337,19 @@ void K3b::VcdJob::slotVcdxBuildFinished( int exitCode, QProcess::ExitStatus exit
         // TODO: check the process' exitStatus()
         switch ( exitCode ) {
         case 0:
-            emit infoMessage( i18n( "Cue/Bin files successfully created." ), K3b::Job::SUCCESS );
+            emit infoMessage( i18n( "Cue/Bin files successfully created." ), K3b::Job::MessageSuccess );
             m_imageFinished = true;
             break;
         default:
             emit infoMessage( i18n( "%1 returned an unknown error (code %2)." , QString("vcdxbuild") , exitCode ),
-                              K3b::Job::ERROR );
-            emit infoMessage( i18n( "Please send me an email with the last output." ), K3b::Job::ERROR );
+                              K3b::Job::MessageError );
+            emit infoMessage( i18n( "Please send me an email with the last output." ), K3b::Job::MessageError );
             cancelAll();
             jobFinished( false );
             return ;
         }
     } else {
-        emit infoMessage( i18n( "%1 did not exit cleanly." , QString("Vcdxbuild") ), K3b::Job::ERROR );
+        emit infoMessage( i18n( "%1 did not exit cleanly." , QString("Vcdxbuild") ), K3b::Job::MessageError );
         cancelAll();
         jobFinished( false );
         return ;
@@ -462,7 +462,7 @@ void K3b::VcdJob::slotWriterJobFinished( bool success )
         // remove bin-file if it is unfinished or the user selected to remove image
         if ( QFile::exists( m_doc->vcdImage() ) ) {
             if ( (!m_doc->onTheFly() && m_doc->removeImages()) || !m_imageFinished ) {
-                emit infoMessage( i18n( "Removing Binary file %1" , m_doc->vcdImage() ), K3b::Job::SUCCESS );
+                emit infoMessage( i18n( "Removing Binary file %1" , m_doc->vcdImage() ), K3b::Job::MessageSuccess );
                 QFile::remove
                     ( m_doc->vcdImage() );
                 m_doc->setVcdImage( "" );
@@ -472,7 +472,7 @@ void K3b::VcdJob::slotWriterJobFinished( bool success )
         // remove cue-file if it is unfinished or the user selected to remove image
         if ( QFile::exists( m_cueFile ) ) {
             if ( (!m_doc->onTheFly() && m_doc->removeImages()) || !m_imageFinished ) {
-                emit infoMessage( i18n( "Removing Cue file %1" , m_cueFile ), K3b::Job::SUCCESS );
+                emit infoMessage( i18n( "Removing Cue file %1" , m_cueFile ), K3b::Job::MessageSuccess );
                 QFile::remove
                     ( m_cueFile );
                 m_cueFile = "";
@@ -507,19 +507,19 @@ void K3b::VcdJob::parseInformation( const QString &text )
     if ( text.contains( "mpeg user scan data: one or more BCD fields out of range for" ) ) {
         int index = text.indexOf( " for" );
 
-        emit infoMessage( i18n( "One or more BCD fields out of range for %1" , text.mid( index + 4 ).trimmed() ), K3b::Job::WARNING );
+        emit infoMessage( i18n( "One or more BCD fields out of range for %1" , text.mid( index + 4 ).trimmed() ), K3b::Job::MessageWarning );
 
     } else if ( text.contains( "mpeg user scan data: from now on, scan information data errors will not be reported anymore" ) ) {
-        emit infoMessage( i18n( "From now on, scan information data errors will not be reported anymore" ), K3b::Job::INFO );
-        emit infoMessage( i18n( "Consider enabling the 'update scan offsets' option, if it is not enabled already." ), K3b::Job::INFO );
+        emit infoMessage( i18n( "From now on, scan information data errors will not be reported anymore" ), K3b::Job::MessageInfo );
+        emit infoMessage( i18n( "Consider enabling the 'update scan offsets' option, if it is not enabled already." ), K3b::Job::MessageInfo );
 
     } else if ( text.contains( "APS' pts seems out of order (actual pts" ) ) {
         int index = text.indexOf( "(actual pts" );
         int index2 = text.indexOf( ", last seen pts" );
         int index3 = text.indexOf( ") -- ignoring this aps" );
 
-        emit infoMessage( i18n( "APS' pts seems out of order (actual pts %1, last seen pts %2)" , text.mid( index + 12, index2 - index - 12 ).trimmed() , text.mid( index2 + 14, index3 - index2 - 14 ).trimmed() ), K3b::Job::WARNING );
-        emit infoMessage( i18n( "Ignoring this aps" ), K3b::Job::INFO );
+        emit infoMessage( i18n( "APS' pts seems out of order (actual pts %1, last seen pts %2)" , text.mid( index + 12, index2 - index - 12 ).trimmed() , text.mid( index2 + 14, index3 - index2 - 14 ).trimmed() ), K3b::Job::MessageWarning );
+        emit infoMessage( i18n( "Ignoring this aps" ), K3b::Job::MessageInfo );
 
     } else if ( text.contains( "bad packet at packet" ) ) {
         int index = text.indexOf( "at packet #" );
@@ -527,16 +527,16 @@ void K3b::VcdJob::parseInformation( const QString &text )
         int index3 = text.indexOf( ") -- remaining " );
         int index4 = text.indexOf( "bytes of stream will be ignored" );
 
-        emit infoMessage( i18n( "Bad packet at packet #%1 (stream byte offset %2)" , text.mid( index + 11, index2 - index - 11 ).trimmed() , text.mid( index2 + 19, index3 - index2 - 19 ).trimmed() ), K3b::Job::WARNING );
+        emit infoMessage( i18n( "Bad packet at packet #%1 (stream byte offset %2)" , text.mid( index + 11, index2 - index - 11 ).trimmed() , text.mid( index2 + 19, index3 - index2 - 19 ).trimmed() ), K3b::Job::MessageWarning );
         
         const QString ignoredString = text.mid( index3 + 15, index4 - index3 - 15 ).trimmed();
         bool okay = true;
         const int ignoredBytes = ignoredString.toInt(&okay);
 
         if (okay) {
-            emit infoMessage( i18np( "The remaining byte of the stream will be ignored.", "The remaining %1 bytes of the stream will be ignored." , ignoredBytes ), K3b::Job::WARNING );
+            emit infoMessage( i18np( "The remaining byte of the stream will be ignored.", "The remaining %1 bytes of the stream will be ignored." , ignoredBytes ), K3b::Job::MessageWarning );
         } else {
-            emit infoMessage( i18n( "An unknown number of remaining stream bytes will be ignored." ), K3b::Job::WARNING );
+            emit infoMessage( i18n( "An unknown number of remaining stream bytes will be ignored." ), K3b::Job::MessageWarning );
         }
     }
 }

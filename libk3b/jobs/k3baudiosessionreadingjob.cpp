@@ -139,7 +139,7 @@ bool K3b::AudioSessionReadingJob::run()
         d->paranoia = K3b::CdparanoiaLib::create();
 
     if( !d->paranoia ) {
-        emit infoMessage( i18n("Could not load libcdparanoia."), K3b::Job::ERROR );
+        emit infoMessage( i18n("Could not load libcdparanoia."), K3b::Job::MessageError );
         return false;
     }
 
@@ -148,12 +148,12 @@ bool K3b::AudioSessionReadingJob::run()
 
     if( !d->paranoia->initParanoia( d->device, d->toc ) ) {
         emit infoMessage( i18n("Could not open device %1", d->device->blockDeviceName()),
-                          K3b::Job::ERROR );
+                          K3b::Job::MessageError );
         return false;
     }
 
     if( !d->paranoia->initReading() ) {
-        emit infoMessage( i18n("Error while initializing audio ripping."), K3b::Job::ERROR );
+        emit infoMessage( i18n("Error while initializing audio ripping."), K3b::Job::MessageError );
         return false;
     }
 
@@ -206,7 +206,7 @@ bool K3b::AudioSessionReadingJob::run()
                 }
 
                 if( !d->waveFileWriter->open( d->filenames[currentTrack-1] ) ) {
-                    emit infoMessage( i18n("Unable to open '%1' for writing.", d->filenames[currentTrack-1]), K3b::Job::ERROR );
+                    emit infoMessage( i18n("Unable to open '%1' for writing.", d->filenames[currentTrack-1]), K3b::Job::MessageError );
                     writeError = true;
                     break;
                 }
@@ -240,7 +240,7 @@ bool K3b::AudioSessionReadingJob::run()
     d->device->block( false );
 
     if( status != K3b::CdparanoiaLib::S_OK ) {
-        emit infoMessage( i18n("Unrecoverable error while ripping track %1.", trackNum), K3b::Job::ERROR );
+        emit infoMessage( i18n("Unrecoverable error while ripping track %1.", trackNum), K3b::Job::MessageError );
         return false;
     }
 

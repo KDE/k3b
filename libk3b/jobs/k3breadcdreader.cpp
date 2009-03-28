@@ -103,7 +103,7 @@ void K3b::ReadcdReader::start()
     // the first thing to do is to check for readcd
     d->readcdBinObject = k3bcore->externalBinManager()->binObject( "readcd" );
     if( !d->readcdBinObject ) {
-        emit infoMessage( i18n("Could not find %1 executable.",QString("readcd")), ERROR );
+        emit infoMessage( i18n("Could not find %1 executable.",QString("readcd")), MessageError );
         jobFinished(false);
         return;
     }
@@ -120,14 +120,14 @@ void K3b::ReadcdReader::start()
                 const K3b::ExternalBin* bin = *it;
                 if( bin->hasFeature( "clone" ) ) {
                     d->readcdBinObject = bin;
-                    emit infoMessage( i18n("Using readcd %1 instead of default version for clone support.", d->readcdBinObject->version), INFO );
+                    emit infoMessage( i18n("Using readcd %1 instead of default version for clone support.", d->readcdBinObject->version), MessageInfo );
                     foundCloneSupport = true;
                     break;
                 }
             }
 
             if( !foundCloneSupport ) {
-                emit infoMessage( i18n("Could not find readcd executable with cloning support."), ERROR );
+                emit infoMessage( i18n("Could not find readcd executable with cloning support."), MessageError );
                 jobFinished(false);
                 return;
             }
@@ -161,7 +161,7 @@ void K3b::ReadcdReader::start()
     }
     else {
         emit newTask( i18n("Writing image to %1.", m_imagePath) );
-        emit infoMessage( i18n("Writing image to %1.", m_imagePath), INFO );
+        emit infoMessage( i18n("Writing image to %1.", m_imagePath), MessageInfo );
         *d->process << "f=" + m_imagePath;
     }
 
@@ -203,7 +203,7 @@ void K3b::ReadcdReader::start()
         // something went wrong when starting the program
         // it "should" be the executable
         kError() << "(K3b::ReadcdReader) could not start readcd" << endl;
-        emit infoMessage( i18n("Could not start readcd."), K3b::Job::ERROR );
+        emit infoMessage( i18n("Could not start readcd."), K3b::Job::MessageError );
         jobFinished( false );
     }
 }
@@ -259,7 +259,7 @@ void K3b::ReadcdReader::slotStderrLine( const QString& line )
     }
 
     else if( line.contains("Cannot read source disk") ) {
-        emit infoMessage( i18n("Cannot read source disk."), ERROR );
+        emit infoMessage( i18n("Cannot read source disk."), MessageError );
     }
 
     else if( (pos = line.indexOf("Retrying from sector")) >= 0 ) {
@@ -271,7 +271,7 @@ void K3b::ReadcdReader::slotStderrLine( const QString& line )
             kError() << "(K3b::ReadcdReader) problemSector parsing error in line: "
                      << line.mid( pos, line.indexOf( QRegExp("\\D"), pos )-pos ) << endl;
         }
-        emit infoMessage( i18n("Retrying from sector %1.",problemSector), INFO );
+        emit infoMessage( i18n("Retrying from sector %1.",problemSector), MessageInfo );
     }
 
     else if( (pos = line.indexOf("Error on sector")) >= 0 ) {
@@ -286,10 +286,10 @@ void K3b::ReadcdReader::slotStderrLine( const QString& line )
         }
 
         if( line.contains( "not corrected") ) {
-            emit infoMessage( i18n("Uncorrected error in sector %1",problemSector), ERROR );
+            emit infoMessage( i18n("Uncorrected error in sector %1",problemSector), MessageError );
         }
         else {
-            emit infoMessage( i18n("Corrected error in sector %1",problemSector), ERROR );
+            emit infoMessage( i18n("Corrected error in sector %1",problemSector), MessageError );
         }
     }
 
@@ -309,12 +309,12 @@ void K3b::ReadcdReader::slotProcessExited( int exitCode, QProcess::ExitStatus ex
             jobFinished( true );
         }
         else {
-            emit infoMessage( i18n("%1 returned error: %2",QString("Readcd"), exitCode ), ERROR );
+            emit infoMessage( i18n("%1 returned error: %2",QString("Readcd"), exitCode ), MessageError );
             jobFinished( false );
         }
     }
     else {
-        emit infoMessage( i18n("Readcd exited abnormally."), ERROR );
+        emit infoMessage( i18n("Readcd exited abnormally."), MessageError );
         jobFinished( false );
     }
 }

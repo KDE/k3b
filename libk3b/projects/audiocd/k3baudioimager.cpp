@@ -98,7 +98,7 @@ bool K3b::AudioImager::run()
         // Seek to the beginning of the track
         //
         if( !track->seek(0) ) {
-            emit infoMessage( i18n("Unable to seek in track %1.", trackNumber), K3b::Job::ERROR );
+            emit infoMessage( i18n("Unable to seek in track %1.", trackNumber), K3b::Job::MessageError );
             return false;
         }
 
@@ -113,7 +113,7 @@ bool K3b::AudioImager::run()
         //
         if( !d->ioDev ) {
             if( !waveFileWriter.open( *imageFileIt ) ) {
-                emit infoMessage( i18n("Could not open %1 for writing", *imageFileIt), K3b::Job::ERROR );
+                emit infoMessage( i18n("Could not open %1 for writing", *imageFileIt), K3b::Job::MessageError );
                 return false;
             }
         }
@@ -151,7 +151,7 @@ bool K3b::AudioImager::run()
         }
 
         if( read < 0 ) {
-            emit infoMessage( i18n("Error while decoding track %1.", trackNumber), K3b::Job::ERROR );
+            emit infoMessage( i18n("Error while decoding track %1.", trackNumber), K3b::Job::MessageError );
             kDebug() << "(K3b::AudioImager::WorkThread) read error on track " << trackNumber
                      << " at pos " << K3b::Msf(trackRead/2352) << endl;
             d->lastError = K3b::AudioImager::ERROR_DECODING_TRACK;

@@ -193,7 +193,7 @@ void K3b::AudioCueFileWritingJob::slotAnalyserJobFinished( bool )
 {
     if( !d->canceled ) {
         if( d->audioDoc->lastTrack()->length() == 0 ) {
-            emit infoMessage( i18n("Analysing the audio file failed. Corrupt file?"), ERROR );
+            emit infoMessage( i18n("Analysing the audio file failed. Corrupt file?"), MessageError );
             jobFinished(false);
         }
         else {
@@ -269,12 +269,12 @@ void K3b::AudioCueFileWritingJob::importCueInProject()
             d->analyserJob->start();
         }
         else {
-            emit infoMessage( i18n("Unable to handle '%1' due to an unsupported format.", d->cueFile ), ERROR );
+            emit infoMessage( i18n("Unable to handle '%1' due to an unsupported format.", d->cueFile ), MessageError );
             jobFinished(false);
         }
     }
     else {
-        emit infoMessage( i18n("No valid audio cue file: '%1'", d->cueFile ), ERROR );
+        emit infoMessage( i18n("No valid audio cue file: '%1'", d->cueFile ), MessageError );
         jobFinished(false);
     }
 }

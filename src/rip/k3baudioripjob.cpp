@@ -131,7 +131,7 @@ void K3b::AudioRipJob::jobFinished( bool success )
         if( d->currentTrackIndex >= 0 && d->currentTrackIndex < (int)m_tracks.count() ) {
             if( QFile::exists( m_tracks[d->currentTrackIndex].second ) ) {
                 QFile::remove( m_tracks[d->currentTrackIndex].second );
-                emit infoMessage( i18n("Removed partial file '%1'.",m_tracks[d->currentTrackIndex].second), K3b::Job::INFO );
+                emit infoMessage( i18n("Removed partial file '%1'.",m_tracks[d->currentTrackIndex].second), K3b::Job::MessageInfo );
             }
         }
     }
@@ -150,7 +150,7 @@ bool K3b::AudioRipJob::run()
     }
 
     if( !d->paranoiaLib ) {
-        emit infoMessage( i18n("Could not load libcdparanoia."), K3b::Job::ERROR );
+        emit infoMessage( i18n("Could not load libcdparanoia."), K3b::Job::MessageError );
         return false;
     }
 
@@ -161,12 +161,12 @@ bool K3b::AudioRipJob::run()
 
     m_device->block(true);
 
-    emit infoMessage( i18n("Reading CD table of contents."), K3b::Job::INFO );
+    emit infoMessage( i18n("Reading CD table of contents."), K3b::Job::MessageInfo );
     d->toc = m_device->readToc();
 
     if( !d->paranoiaLib->initParanoia( m_device, d->toc ) ) {
         emit infoMessage( i18n("Could not open device %1",m_device->blockDeviceName()),
-                          K3b::Job::ERROR );
+                          K3b::Job::MessageError );
         m_device->block(false);
 
         return false;
@@ -205,7 +205,7 @@ bool K3b::AudioRipJob::run()
         QString dir = filename.left( filename.lastIndexOf('/') );
         if( !KStandardDirs::makeDir( dir, 0777 ) ) {
             d->paranoiaLib->close();
-            emit infoMessage( i18n("Unable to create directory %1",dir), K3b::Job::ERROR );
+            emit infoMessage( i18n("Unable to create directory %1",dir), K3b::Job::MessageError );
             m_device->block(false);
             return false;
         }
@@ -226,7 +226,7 @@ bool K3b::AudioRipJob::run()
                 d->encoder->setMetaData( K3b::AudioEncoder::META_GENRE, m_cddbEntry.get( KCDDB::Genre ).toString() );
             }
             else
-                emit infoMessage( d->encoder->lastErrorString(), K3b::Job::ERROR );
+                emit infoMessage( d->encoder->lastErrorString(), K3b::Job::MessageError );
         }
         else {
             isOpen = d->waveFileWriter->open( filename );
@@ -234,15 +234,15 @@ bool K3b::AudioRipJob::run()
 
         if( !isOpen ) {
             d->paranoiaLib->close();
-            emit infoMessage( i18n("Unable to open '%1' for writing.", filename), K3b::Job::ERROR );
+            emit infoMessage( i18n("Unable to open '%1' for writing.", filename), K3b::Job::MessageError );
             m_device->block(false);
             return false;
         }
 
-        emit infoMessage( i18n("Ripping to single file '%1'.", filename), K3b::Job::INFO );
+        emit infoMessage( i18n("Ripping to single file '%1'.", filename), K3b::Job::MessageInfo );
     }
 
-    emit infoMessage( i18n("Starting digital audio extraction (ripping)."), K3b::Job::INFO );
+    emit infoMessage( i18n("Starting digital audio extraction (ripping)."), K3b::Job::MessageInfo );
 
     bool success = true;
     for( int i = 0; i < m_tracks.count(); ++i ) {
@@ -261,7 +261,7 @@ bool K3b::AudioRipJob::run()
 
         if( success && !canceled() ) {
             QString& filename = m_tracks[0].second;
-            emit infoMessage( i18n("Successfully ripped to %1.", filename), K3b::Job::INFO );
+            emit infoMessage( i18n("Successfully ripped to %1.", filename), K3b::Job::MessageInfo );
         }
     }
 
@@ -306,7 +306,7 @@ bool K3b::AudioRipJob::ripTrack( int track, const QString& filename )
 
         QString dir = filename.left( filename.lastIndexOf('/') );
         if( !KStandardDirs::makeDir( dir, 0777 ) ) {
-            emit infoMessage( i18n("Unable to create directory %1", dir), K3b::Job::ERROR );
+            emit infoMessage( i18n("Unable to create directory %1", dir), K3b::Job::MessageError );
             return false;
         }
 
@@ -329,14 +329,14 @@ bool K3b::AudioRipJob::ripTrack( int track, const QString& filename )
                     d->encoder->setMetaData( K3b::AudioEncoder::META_GENRE, m_cddbEntry.get( KCDDB::Genre ).toString() );
                 }
                 else
-                    emit infoMessage( d->encoder->lastErrorString(), K3b::Job::ERROR );
+                    emit infoMessage( d->encoder->lastErrorString(), K3b::Job::MessageError );
             }
             else {
                 isOpen = d->waveFileWriter->open( filename );
             }
 
             if( !isOpen ) {
-                emit infoMessage( i18n("Unable to open '%1' for writing.", filename), K3b::Job::ERROR );
+                emit infoMessage( i18n("Unable to open '%1' for writing.", filename), K3b::Job::MessageError );
                 return false;
             }
         }
@@ -360,9 +360,9 @@ bool K3b::AudioRipJob::ripTrack( int track, const QString& filename )
             if( status == K3b::CdparanoiaLib::S_OK ) {
                 if( buf == 0 ) {
                     if( m_singleFile )
-                        emit infoMessage( i18n("Successfully ripped track %1.", track), K3b::Job::INFO );
+                        emit infoMessage( i18n("Successfully ripped track %1.", track), K3b::Job::MessageInfo );
                     else
-                        emit infoMessage( i18n("Successfully ripped track %1 to %2.", track, filename), K3b::Job::INFO );
+                        emit infoMessage( i18n("Successfully ripped track %1 to %2.", track, filename), K3b::Job::MessageInfo );
 
                     if( !m_singleFile ) {
                         if( d->encoder )
@@ -378,8 +378,8 @@ bool K3b::AudioRipJob::ripTrack( int track, const QString& filename )
                         if( d->encoder->encode( buf,
                                                 CD_FRAMESIZE_RAW ) < 0 ) {
                             kDebug() << "(K3b::AudioRipJob) error while encoding.";
-                            emit infoMessage( d->encoder->lastErrorString(), K3b::Job::ERROR );
-                            emit infoMessage( i18n("Error while encoding track %1.",track), K3b::Job::ERROR );
+                            emit infoMessage( d->encoder->lastErrorString(), K3b::Job::MessageError );
+                            emit infoMessage( i18n("Error while encoding track %1.",track), K3b::Job::MessageError );
                             return false;
                         }
                     }
@@ -395,14 +395,14 @@ bool K3b::AudioRipJob::ripTrack( int track, const QString& filename )
                 }
             }
             else {
-                emit infoMessage( i18n("Unrecoverable error while ripping track %1.",track), K3b::Job::ERROR );
+                emit infoMessage( i18n("Unrecoverable error while ripping track %1.",track), K3b::Job::MessageError );
                 return false;
             }
         }
         return true;
     }
     else {
-        emit infoMessage( i18n("Error while initializing audio ripping."), K3b::Job::ERROR );
+        emit infoMessage( i18n("Error while initializing audio ripping."), K3b::Job::MessageError );
         return false;
     }
 }
@@ -414,11 +414,11 @@ bool K3b::AudioRipJob::writePlaylist()
     QString playlistDir = m_playlistFilename.left( m_playlistFilename.lastIndexOf( '/' ) );
 
     if( !KStandardDirs::makeDir( playlistDir ) ) {
-        emit infoMessage( i18n("Unable to create directory %1",playlistDir), K3b::Job::ERROR );
+        emit infoMessage( i18n("Unable to create directory %1",playlistDir), K3b::Job::MessageError );
         return false;
     }
 
-    emit infoMessage( i18n("Writing playlist to %1.", m_playlistFilename ), K3b::Job::INFO );
+    emit infoMessage( i18n("Writing playlist to %1.", m_playlistFilename ), K3b::Job::MessageInfo );
 
     QFile f( m_playlistFilename );
     if( f.open( QIODevice::WriteOnly ) ) {
@@ -481,7 +481,7 @@ bool K3b::AudioRipJob::writePlaylist()
         return ( t.status() == QTextStream::Ok );
     }
     else {
-        emit infoMessage( i18n("Unable to open '%1' for writing.",m_playlistFilename), K3b::Job::ERROR );
+        emit infoMessage( i18n("Unable to open '%1' for writing.",m_playlistFilename), K3b::Job::MessageError );
         kDebug() << "(K3b::AudioRipJob) could not open file " << m_playlistFilename << " for writing.";
         return false;
     }
@@ -524,7 +524,7 @@ bool K3b::AudioRipJob::writeCueFile()
     cueFile.truncate( cueFile.lastIndexOf('.') );
     cueFile += ".cue";
 
-    emit infoMessage( i18n("Writing cue file to %1.",cueFile), K3b::Job::INFO );
+    emit infoMessage( i18n("Writing cue file to %1.",cueFile), K3b::Job::MessageInfo );
 
     return cueWriter.save( cueFile );
 }

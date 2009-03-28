@@ -71,12 +71,12 @@ QString K3b::MusicBrainzTrackLookupJob::artist( int i ) const
 bool K3b::MusicBrainzTrackLookupJob::run()
 {
     if ( !d->track ) {
-        emit infoMessage( "Internal error: no track set. This is a bug!", ERROR );
+        emit infoMessage( "Internal error: no track set. This is a bug!", MessageError );
         return false;
     }
 
     emit infoMessage( i18n("Generating fingerprint for track %1.",
-                           d->track->trackNumber()), INFO );
+                           d->track->trackNumber()), MessageInfo );
 
     d->track->seek(0);
     d->trm.start( d->track->length() );
@@ -115,7 +115,7 @@ bool K3b::MusicBrainzTrackLookupJob::run()
     }
 
     emit infoMessage( i18n("Querying MusicBrainz for track %1.",
-                           d->track->trackNumber()), INFO );
+                           d->track->trackNumber()), MessageInfo );
 
     d->results = d->mb.query( d->trm.signature() );
     return( d->results > 0 );

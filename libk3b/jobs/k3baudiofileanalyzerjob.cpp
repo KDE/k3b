@@ -51,7 +51,7 @@ K3b::AudioDecoder* K3b::AudioFileAnalyzerJob::decoder() const
 bool K3b::AudioFileAnalyzerJob::run()
 {
     if ( !d->decoder ) {
-        emit infoMessage( "Internal error: no decoder set. This is a bug.", ERROR );
+        emit infoMessage( "Internal error: no decoder set. This is a bug.", MessageError );
         return false;
     }
 

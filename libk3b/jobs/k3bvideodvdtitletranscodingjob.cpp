@@ -86,7 +86,7 @@ void K3b::VideoDVDTitleTranscodingJob::start()
 
     d->usedTranscodeBin = k3bcore->externalBinManager()->binObject("transcode");
     if( !d->usedTranscodeBin ) {
-        emit infoMessage( i18n("%1 executable could not be found.",QString("transcode")), ERROR );
+        emit infoMessage( i18n("%1 executable could not be found.",QString("transcode")), MessageError );
         jobFinished( false );
         return;
     }
@@ -94,7 +94,7 @@ void K3b::VideoDVDTitleTranscodingJob::start()
     if( d->usedTranscodeBin->version < K3b::Version( 1, 0, 0 ) ){
         emit infoMessage( i18n("%1 version %2 is too old."
                                ,QString("transcode")
-                               ,d->usedTranscodeBin->version), ERROR );
+                               ,d->usedTranscodeBin->version), MessageError );
         jobFinished( false );
         return;
     }
@@ -105,7 +105,7 @@ void K3b::VideoDVDTitleTranscodingJob::start()
         emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3"
                                ,d->usedTranscodeBin->name()
                                ,d->usedTranscodeBin->version
-                               ,d->usedTranscodeBin->copyright), INFO );
+                               ,d->usedTranscodeBin->copyright), MessageInfo );
 
     //
     // Let's take a look at the filename
@@ -118,11 +118,11 @@ void K3b::VideoDVDTitleTranscodingJob::start()
         QFileInfo fileInfo( m_filename );
         QFileInfo dirInfo( fileInfo.path() );
         if( !dirInfo.exists() && !KStandardDirs::makeDir( dirInfo.absoluteFilePath() ) ) {
-            emit infoMessage( i18n("Unable to create folder '%1'",dirInfo.filePath()), ERROR );
+            emit infoMessage( i18n("Unable to create folder '%1'",dirInfo.filePath()), MessageError );
             return;
         }
         else if( !dirInfo.isDir() || !dirInfo.isWritable() ) {
-            emit infoMessage( i18n("Invalid filename: '%1'",m_filename), ERROR );
+            emit infoMessage( i18n("Invalid filename: '%1'",m_filename), MessageError );
             jobFinished( false );
             return;
         }
@@ -158,7 +158,7 @@ void K3b::VideoDVDTitleTranscodingJob::startTranscode( int pass )
         break;
 
     default:
-        emit infoMessage( i18n("Invalid Video codec set: %1",m_videoCodec), ERROR );
+        emit infoMessage( i18n("Invalid Video codec set: %1",m_videoCodec), MessageError );
         jobFinished( false );
         return;
     }
@@ -181,7 +181,7 @@ void K3b::VideoDVDTitleTranscodingJob::startTranscode( int pass )
         break;
 
     default:
-        emit infoMessage( i18n("Invalid Audio codec set: %1",m_audioCodec), ERROR );
+        emit infoMessage( i18n("Invalid Audio codec set: %1",m_audioCodec), MessageError );
         jobFinished( false );
         return;
     }
@@ -315,7 +315,7 @@ void K3b::VideoDVDTitleTranscodingJob::startTranscode( int pass )
 
     // we only give information about the resizing of the video once
     if( pass < 2 )
-        emit infoMessage( i18n("Resizing picture of title %1 to %2x%3",m_titleNumber,usedWidth,usedHeight), INFO );
+        emit infoMessage( i18n("Resizing picture of title %1 to %2x%3",m_titleNumber,usedWidth,usedHeight), MessageInfo );
     *d->process << "-Z" << QString("%1x%2").arg(usedWidth).arg(usedHeight);
 
     // additional user parameters from config
@@ -333,7 +333,7 @@ void K3b::VideoDVDTitleTranscodingJob::startTranscode( int pass )
     if( !d->process->start( KProcess::MergedChannels ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
-        emit infoMessage( i18n("Could not start %1.",d->usedTranscodeBin->name()), K3b::Job::ERROR );
+        emit infoMessage( i18n("Could not start %1.",d->usedTranscodeBin->name()), K3b::Job::MessageError );
         jobFinished(false);
     }
     else {
@@ -366,7 +366,7 @@ void K3b::VideoDVDTitleTranscodingJob::cleanup( bool success )
     }
 
     if( !success && QFile::exists( m_filename ) ) {
-        emit infoMessage( i18n("Removing incomplete video file '%1'",m_filename), INFO );
+        emit infoMessage( i18n("Removing incomplete video file '%1'",m_filename), MessageInfo );
         QFile::remove( m_filename );
     }
 }
@@ -435,8 +435,8 @@ void K3b::VideoDVDTitleTranscodingJob::slotTranscodeExited( int exitCode, QProce
 
             emit infoMessage( i18n("%1 returned an unknown error (code %2).",
                                    d->usedTranscodeBin->name(), exitCode ),
-                              K3b::Job::ERROR );
-            emit infoMessage( i18n("Please send me an email with the last output."), K3b::Job::ERROR );
+                              K3b::Job::MessageError );
+            emit infoMessage( i18n("Please send me an email with the last output."), K3b::Job::MessageError );
 
             cleanup( false );
             jobFinished( false );
@@ -444,8 +444,8 @@ void K3b::VideoDVDTitleTranscodingJob::slotTranscodeExited( int exitCode, QProce
     }
     else {
         cleanup( false );
-        emit infoMessage( i18n("Execution of %1 failed.",QString("transcode")), ERROR );
-        emit infoMessage( i18n("Please consult the debugging output for details."), ERROR );
+        emit infoMessage( i18n("Execution of %1 failed.",QString("transcode")), MessageError );
+        emit infoMessage( i18n("Please consult the debugging output for details."), MessageError );
         jobFinished( false );
     }
 }

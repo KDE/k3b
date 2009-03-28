@@ -215,7 +215,7 @@ void K3b::DataJob::writeImage()
     if( !d->doc->onTheFly() || d->doc->onlyCreateImages() ) {
         d->imageFile.setName( d->doc->tempDir() );
         if( !d->imageFile.open( QIODevice::WriteOnly ) ) {
-            emit infoMessage( i18n("Could not open %1 for writing", d->doc->tempDir() ), ERROR );
+            emit infoMessage( i18n("Could not open %1 for writing", d->doc->tempDir() ), MessageError );
             cleanup();
             jobFinished(false);
             return;
@@ -224,7 +224,7 @@ void K3b::DataJob::writeImage()
 
     emit newTask( i18n("Creating image file") );
     emit newSubTask( i18n("Track 1 of 1") );
-    emit infoMessage( i18n("Creating image file in %1",d->doc->tempDir()), INFO );
+    emit infoMessage( i18n("Creating image file in %1",d->doc->tempDir()), MessageInfo );
 
     m_isoImager->start();
     startPipe();
@@ -375,7 +375,7 @@ void K3b::DataJob::slotIsoImagerFinished( bool success )
             d->doc->onlyCreateImages() ) {
 
             if( success ) {
-                emit infoMessage( i18n("Image successfully created in %1", d->doc->tempDir()), K3b::Job::SUCCESS );
+                emit infoMessage( i18n("Image successfully created in %1", d->doc->tempDir()), K3b::Job::MessageSuccess );
                 d->imageFinished = true;
 
                 if( d->doc->onlyCreateImages() ) {
@@ -392,7 +392,7 @@ void K3b::DataJob::slotIsoImagerFinished( bool success )
                 if( m_isoImager->hasBeenCanceled() )
                     emit canceled();
                 else
-                    emit infoMessage( i18n("Error while creating ISO image"), ERROR );
+                    emit infoMessage( i18n("Error while creating ISO image"), MessageError );
 
                 cancelAll();
                 cleanup();
@@ -674,7 +674,7 @@ bool K3b::DataJob::waitForMedium()
 
     // if everything goes wrong we are left with no possible media to request
     if ( !m ) {
-        emit infoMessage( i18n( "Internal Error: No medium type fits. This project cannot be burned." ), ERROR );
+        emit infoMessage( i18n( "Internal Error: No medium type fits. This project cannot be burned." ), MessageError );
         return false;
     }
 
@@ -691,7 +691,7 @@ bool K3b::DataJob::waitForMedium()
     }
 
     if( foundMedium == 0 ) {
-        emit infoMessage( i18n("Forced by user. Writing will continue without further checks."), INFO );
+        emit infoMessage( i18n("Forced by user. Writing will continue without further checks."), MessageInfo );
         return true;
     }
     else {
@@ -706,7 +706,7 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
     // CD-R(W)
     // -------------------------------
     if ( foundMedium & K3b::Device::MEDIA_CD_ALL ) {
-        emit infoMessage( i18n( "Writing %1" , K3b::Device::mediaTypeString( foundMedium ) ), INFO );
+        emit infoMessage( i18n( "Writing %1" , K3b::Device::mediaTypeString( foundMedium ) ), MessageInfo );
 
         // first of all we determine the data mode
         if( d->doc->dataMode() == K3b::DataModeAuto ) {
@@ -723,7 +723,7 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
                 K3b::Device::Toc toc = d->doc->burner()->readToc();
                 if( toc.isEmpty() ) {
                     kDebug() << "(K3b::DataJob) could not retrieve toc.";
-                    emit infoMessage( i18n("Unable to determine the last track's datamode. Using default."), ERROR );
+                    emit infoMessage( i18n("Unable to determine the last track's datamode. Using default."), MessageError );
                     d->usedDataMode = K3b::DataMode2;
                 }
                 else {
@@ -760,7 +760,7 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
 
 
         if ( writingApp() == K3b::WritingAppGrowisofs ) {
-            emit infoMessage( i18n( "Cannot write %1 media using %2. Falling back to default application." , QString("CD") , QString("growisofs") ), WARNING );
+            emit infoMessage( i18n( "Cannot write %1 media using %2. Falling back to default application." , QString("CD") , QString("growisofs") ), MessageWarning );
             setWritingApp( K3b::WritingAppDefault );
         }
         // cdrecord seems to have problems writing xa 1 disks in dao mode? At least on my system!
@@ -787,7 +787,7 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
     else if ( foundMedium & K3b::Device::MEDIA_DVD_ALL ) {
         if ( writingApp() == K3b::WritingAppCdrdao ) {
             emit infoMessage( i18n( "Cannot write %1 media using %2. Falling back to default application.",
-                                    K3b::Device::mediaTypeString( foundMedium, true ), "cdrdao" ), WARNING );
+                                    K3b::Device::mediaTypeString( foundMedium, true ), "cdrdao" ), MessageWarning );
             setWritingApp( K3b::WritingAppDefault );
         }
 
@@ -814,23 +814,23 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
             }
 
             if( d->doc->writingMode() != K3b::WritingModeAuto && d->doc->writingMode() != K3b::WritingModeRestrictedOverwrite )
-                emit infoMessage( i18n("Writing mode ignored when writing DVD+R(W) media."), INFO );
+                emit infoMessage( i18n("Writing mode ignored when writing DVD+R(W) media."), MessageInfo );
             d->usedWritingMode = K3b::WritingModeSao; // since cdrecord uses -sao for DVD+R(W)
 
             if( foundMedium & K3b::Device::MEDIA_DVD_PLUS_RW ) {
                 if( usedMultiSessionMode() == K3b::DataDoc::NONE ||
                     usedMultiSessionMode() == K3b::DataDoc::START )
-                    emit infoMessage( i18n("Writing DVD+RW."), INFO );
+                    emit infoMessage( i18n("Writing DVD+RW."), MessageInfo );
                 else {
-                    emit infoMessage( i18n("Growing ISO9660 filesystem on DVD+RW."), INFO );
+                    emit infoMessage( i18n("Growing ISO9660 filesystem on DVD+RW."), MessageInfo );
                     // we can only do this with growisofs
                     d->usedWritingApp = K3b::WritingAppGrowisofs;
                 }
             }
             else if( foundMedium & K3b::Device::MEDIA_DVD_PLUS_R_DL )
-                emit infoMessage( i18n("Writing Double Layer DVD+R."), INFO );
+                emit infoMessage( i18n("Writing Double Layer DVD+R."), MessageInfo );
             else
-                emit infoMessage( i18n("Writing DVD+R."), INFO );
+                emit infoMessage( i18n("Writing DVD+R."), MessageInfo );
         }
 
         // -------------------------------
@@ -857,10 +857,10 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
                 if( usedMultiSessionMode() == K3b::DataDoc::NONE ||
                     usedMultiSessionMode() == K3b::DataDoc::START ) {
                     // FIXME: can cdrecord handle this?
-                    emit infoMessage( i18n("Writing DVD-RW in restricted overwrite mode."), INFO );
+                    emit infoMessage( i18n("Writing DVD-RW in restricted overwrite mode."), MessageInfo );
                 }
                 else {
-                    emit infoMessage( i18n("Growing ISO9660 filesystem on DVD-RW in restricted overwrite mode."), INFO );
+                    emit infoMessage( i18n("Growing ISO9660 filesystem on DVD-RW in restricted overwrite mode."), MessageInfo );
                     // we can only do this with growisofs
                     d->usedWritingApp = K3b::WritingAppGrowisofs;
                 }
@@ -874,7 +874,7 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
 
                 if( d->doc->writingMode() == K3b::WritingModeSao ) {
                     d->usedWritingMode = K3b::WritingModeSao;
-                    emit infoMessage( i18n("Writing %1 in DAO mode.", K3b::Device::mediaTypeString(foundMedium, true) ), INFO );
+                    emit infoMessage( i18n("Writing %1 in DAO mode.", K3b::Device::mediaTypeString(foundMedium, true) ), MessageInfo );
                 }
 
                 else {
@@ -891,16 +891,16 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
                         }
                         else {
                             d->usedWritingMode = K3b::WritingModeSao;
-                            emit infoMessage( i18n("Writing %1 in DAO mode.", K3b::Device::mediaTypeString(foundMedium, true) ), INFO );
+                            emit infoMessage( i18n("Writing %1 in DAO mode.", K3b::Device::mediaTypeString(foundMedium, true) ), MessageInfo );
                         }
                     }
                     else {
                         d->usedWritingMode = K3b::WritingModeIncrementalSequential;
                         if( !(foundMedium & (K3b::Device::MEDIA_DVD_RW|K3b::Device::MEDIA_DVD_RW_OVWR|K3b::Device::MEDIA_DVD_RW_SEQ)) &&
                             d->doc->writingMode() == K3b::WritingModeRestrictedOverwrite )
-                            emit infoMessage( i18n("Restricted Overwrite is not possible with DVD-R media."), INFO );
+                            emit infoMessage( i18n("Restricted Overwrite is not possible with DVD-R media."), MessageInfo );
 
-                        emit infoMessage( i18n("Writing %1 in incremental mode.", K3b::Device::mediaTypeString(foundMedium, true) ), INFO );
+                        emit infoMessage( i18n("Writing %1 in incremental mode.", K3b::Device::mediaTypeString(foundMedium, true) ), MessageInfo );
                     }
                 }
             }
@@ -925,7 +925,7 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
         }
 
         // FIXME: what do we need to take care of with BD media?
-        emit infoMessage( i18n( "Writing %1" , K3b::Device::mediaTypeString( foundMedium, true ) ), INFO );
+        emit infoMessage( i18n( "Writing %1" , K3b::Device::mediaTypeString( foundMedium, true ) ), MessageInfo );
     }
 
     return true;
@@ -981,7 +981,7 @@ void K3b::DataJob::cleanup()
     if( !d->doc->onTheFly() && ( d->doc->removeImages() || d->canceled ) ) {
         if( QFile::exists( d->doc->tempDir() ) ) {
             d->imageFile.remove();
-            emit infoMessage( i18n("Removed image file %1",d->doc->tempDir()), K3b::Job::SUCCESS );
+            emit infoMessage( i18n("Removed image file %1",d->doc->tempDir()), K3b::Job::MessageSuccess );
         }
     }
 
@@ -1012,7 +1012,7 @@ bool K3b::DataJob::setupCdrecordJob()
     if( d->usedWritingMode == K3b::WritingModeSao &&
         usedMultiSessionMode() != K3b::DataDoc::NONE )
         emit infoMessage( i18n("Most writers do not support writing "
-                               "multisession CDs in DAO mode."), INFO );
+                               "multisession CDs in DAO mode."), MessageInfo );
 
     writer->setWritingMode( d->usedWritingMode );
     writer->setSimulate( d->doc->dummy() );

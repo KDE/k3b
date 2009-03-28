@@ -119,7 +119,7 @@ void K3b::DvdFormattingJob::start()
     jobStarted();
 
     if( !d->device ) {
-        emit infoMessage( i18n("No device set"), ERROR );
+        emit infoMessage( i18n("No device set"), MessageError );
         d->running = false;
         jobFinished(false);
         return;
@@ -127,7 +127,7 @@ void K3b::DvdFormattingJob::start()
 
     // FIXME: check the return value
     if( K3b::isMounted( d->device ) ) {
-        emit infoMessage( i18n("Unmounting medium"), INFO );
+        emit infoMessage( i18n("Unmounting medium"), MessageInfo );
         K3b::unmount( d->device );
     }
 
@@ -149,7 +149,7 @@ void K3b::DvdFormattingJob::start()
         return;
     }
 
-    emit infoMessage( i18n("Checking media..."), INFO );
+    emit infoMessage( i18n("Checking media..."), MessageInfo );
     emit newTask( i18n("Checking media") );
 
     connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::CommandDiskInfo, d->device ),
@@ -257,26 +257,26 @@ void K3b::DvdFormattingJob::slotProcessFinished( int exitCode, QProcess::ExitSta
     }
     else if( exitStatus == QProcess::NormalExit ) {
         if( !d->error && (exitCode == 0) ) {
-            emit infoMessage( i18n("Formatting successfully completed"), K3b::Job::SUCCESS );
+            emit infoMessage( i18n("Formatting successfully completed"), K3b::Job::MessageSuccess );
 
             if( d->lastProgressValue < 100 ) {
-                emit infoMessage( i18n("Do not be concerned with the progress stopping before 100%."), INFO );
-                emit infoMessage( i18n("The formatting will continue in the background during writing."), INFO );
+                emit infoMessage( i18n("Do not be concerned with the progress stopping before 100%."), MessageInfo );
+                emit infoMessage( i18n("The formatting will continue in the background during writing."), MessageInfo );
             }
 
             d->success = true;
         }
         else {
             emit infoMessage( i18n("%1 returned an unknown error (code %2).",d->dvdFormatBin->name(), exitCode),
-                              K3b::Job::ERROR );
-            emit infoMessage( i18n("Please send me an email with the last output."), K3b::Job::ERROR );
+                              K3b::Job::MessageError );
+            emit infoMessage( i18n("Please send me an email with the last output."), K3b::Job::MessageError );
 
             d->success = false;
         }
     }
     else {
         emit infoMessage( i18n("%1 did not exit cleanly.",d->dvdFormatBin->name()),
-                          ERROR );
+                          MessageError );
         d->success = false;
     }
 
@@ -286,7 +286,7 @@ void K3b::DvdFormattingJob::slotProcessFinished( int exitCode, QProcess::ExitSta
         jobFinished(d->success);
     }
     else {
-        emit infoMessage( i18n("Ejecting medium..."), INFO );
+        emit infoMessage( i18n("Ejecting medium..."), MessageInfo );
         connect( K3b::Device::eject( d->device ),
                  SIGNAL(finished(K3b::Device::DeviceHandler*)),
                  this,
@@ -298,7 +298,7 @@ void K3b::DvdFormattingJob::slotProcessFinished( int exitCode, QProcess::ExitSta
 void K3b::DvdFormattingJob::slotEjectingFinished( K3b::Device::DeviceHandler* dh )
 {
     if( !dh->success() )
-        emit infoMessage( i18n("Unable to eject medium."), ERROR );
+        emit infoMessage( i18n("Unable to eject medium."), MessageError );
 
     d->running = false;
     jobFinished(d->success);
@@ -317,7 +317,7 @@ void K3b::DvdFormattingJob::slotDeviceHandlerFinished( K3b::Device::DeviceHandle
         startFormatting( dh->diskInfo() );
     }
     else {
-        emit infoMessage( i18n("Unable to determine media state."), ERROR );
+        emit infoMessage( i18n("Unable to determine media state."), MessageError );
         d->running = false;
         jobFinished(false);
     }
@@ -341,7 +341,7 @@ void K3b::DvdFormattingJob::startFormatting( const K3b::Device::DiskInfo& diskIn
                                   K3b::Device::MEDIA_DVD_RW_SEQ|
                                   K3b::Device::MEDIA_DVD_RW_OVWR|
                                   K3b::Device::MEDIA_DVD_PLUS_RW)) ) {
-        emit infoMessage( i18n("No rewritable DVD media found. Unable to format."), ERROR );
+        emit infoMessage( i18n("No rewritable DVD media found. Unable to format."), MessageError );
         d->running = false;
         jobFinished(false);
         return;
@@ -363,7 +363,7 @@ void K3b::DvdFormattingJob::startFormatting( const K3b::Device::DiskInfo& diskIn
 
     if( diskInfo.mediaType() == K3b::Device::MEDIA_DVD_PLUS_RW ) {
         emit infoMessage( i18n("Found %1 media.",K3b::Device::mediaTypeString(K3b::Device::MEDIA_DVD_PLUS_RW)),
-                          INFO );
+                          MessageInfo );
 
         // mode is ignored
 
@@ -375,13 +375,13 @@ void K3b::DvdFormattingJob::startFormatting( const K3b::Device::DiskInfo& diskIn
         }
         else {
             emit infoMessage( i18n("No need to format %1 media more than once.",
-                                   K3b::Device::mediaTypeString(K3b::Device::MEDIA_DVD_PLUS_RW)), INFO );
-            emit infoMessage( i18n("It may simply be overwritten."), INFO );
+                                   K3b::Device::mediaTypeString(K3b::Device::MEDIA_DVD_PLUS_RW)), MessageInfo );
+            emit infoMessage( i18n("It may simply be overwritten."), MessageInfo );
 
             if( d->force ) {
-                emit infoMessage( i18n("Forcing formatting anyway."), INFO );
-                emit infoMessage( i18n("It is not recommended to force formatting of DVD+RW media."), INFO );
-                emit infoMessage( i18n("After 10-20 reformats the media might become unusable."), INFO );
+                emit infoMessage( i18n("Forcing formatting anyway."), MessageInfo );
+                emit infoMessage( i18n("It is not recommended to force formatting of DVD+RW media."), MessageInfo );
+                emit infoMessage( i18n("After 10-20 reformats the media might become unusable."), MessageInfo );
                 blank = false;
             }
             else {
@@ -402,10 +402,10 @@ void K3b::DvdFormattingJob::startFormatting( const K3b::Device::DiskInfo& diskIn
 
     else {  // MEDIA_DVD_RW
         emit infoMessage( i18n("Found %1 media.",K3b::Device::mediaTypeString(K3b::Device::MEDIA_DVD_RW)),
-                          INFO );
+                          MessageInfo );
 
         if( diskInfo.currentProfile() != K3b::Device::MEDIA_UNKNOWN ) {
-            emit infoMessage( i18n("Formatted in %1 mode.",K3b::Device::mediaTypeString(diskInfo.currentProfile())), INFO );
+            emit infoMessage( i18n("Formatted in %1 mode.",K3b::Device::mediaTypeString(diskInfo.currentProfile())), MessageInfo );
 
 
             //
@@ -419,20 +419,20 @@ void K3b::DvdFormattingJob::startFormatting( const K3b::Device::DiskInfo& diskIn
                  (d->mode == K3b::WritingModeRestrictedOverwrite &&
                   diskInfo.currentProfile() == K3b::Device::MEDIA_DVD_RW_OVWR) )
                 ) {
-                emit infoMessage( i18n("Media is already empty."), INFO );
+                emit infoMessage( i18n("Media is already empty."), MessageInfo );
                 if( d->force )
-                    emit infoMessage( i18n("Forcing formatting anyway."), INFO );
+                    emit infoMessage( i18n("Forcing formatting anyway."), MessageInfo );
                 else
                     format = false;
             }
             else if( diskInfo.currentProfile() == K3b::Device::MEDIA_DVD_RW_OVWR &&
                      d->mode != K3b::WritingModeIncrementalSequential ) {
                 emit infoMessage( i18n("No need to format %1 media more than once.",
-                                  K3b::Device::mediaTypeString(diskInfo.currentProfile())), INFO );
-                emit infoMessage( i18n("It may simply be overwritten."), INFO );
+                                  K3b::Device::mediaTypeString(diskInfo.currentProfile())), MessageInfo );
+                emit infoMessage( i18n("It may simply be overwritten."), MessageInfo );
 
                 if( d->force )
-                    emit infoMessage( i18n("Forcing formatting anyway."), INFO );
+                    emit infoMessage( i18n("Forcing formatting anyway."), MessageInfo );
                 else
                     format = false;
             }
@@ -453,7 +453,7 @@ void K3b::DvdFormattingJob::startFormatting( const K3b::Device::DiskInfo& diskIn
             }
         }
         else {
-            emit infoMessage( i18n("Unable to determine the current formatting state of the DVD-RW medium."), ERROR );
+            emit infoMessage( i18n("Unable to determine the current formatting state of the DVD-RW medium."), MessageError );
             d->running = false;
             jobFinished(false);
             return;
@@ -469,14 +469,14 @@ void K3b::DvdFormattingJob::startFormatting( const K3b::Device::DiskInfo& diskIn
 
         d->dvdFormatBin = k3bcore->externalBinManager()->binObject( "dvd+rw-format" );
         if( !d->dvdFormatBin ) {
-            emit infoMessage( i18n("Could not find %1 executable.",QString("dvd+rw-format")), ERROR );
+            emit infoMessage( i18n("Could not find %1 executable.",QString("dvd+rw-format")), MessageError );
             d->running = false;
             jobFinished(false);
             return;
         }
 
         if( !d->dvdFormatBin->copyright.isEmpty() )
-            emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3",d->dvdFormatBin->name(),d->dvdFormatBin->version,d->dvdFormatBin->copyright), INFO );
+            emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3",d->dvdFormatBin->name(),d->dvdFormatBin->version,d->dvdFormatBin->copyright), MessageInfo );
 
 
         *d->process << d->dvdFormatBin;
@@ -510,7 +510,7 @@ void K3b::DvdFormattingJob::startFormatting( const K3b::Device::DiskInfo& diskIn
             // something went wrong when starting the program
             // it "should" be the executable
             kDebug() << "(K3b::DvdFormattingJob) could not start " << d->dvdFormatBin->path;
-            emit infoMessage( i18n("Could not start %1.",d->dvdFormatBin->name()), K3b::Job::ERROR );
+            emit infoMessage( i18n("Could not start %1.",d->dvdFormatBin->name()), K3b::Job::MessageError );
             d->running = false;
             jobFinished(false);
         }

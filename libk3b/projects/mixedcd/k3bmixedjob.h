@@ -114,7 +114,7 @@ namespace K3b {
                       CREATING_AUDIO_IMAGE,
                       WRITING_ISO_IMAGE,
                       WRITING_AUDIO_IMAGE,
-                      FETCHING_MSINFO };
+                      FETCHING_MSMessageInfo };
 
         int m_currentAction;
         double m_audioDocPartOfProcess;

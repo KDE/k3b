@@ -53,7 +53,7 @@ void K3b::AbstractWriter::cancel()
 {
     if( burnDevice() ) {
         // we need to unlock the writer because cdrecord locked it while writing
-        emit infoMessage( i18n("Unlocking drive..."), INFO );
+        emit infoMessage( i18n("Unlocking drive..."), MessageInfo );
         connect( K3b::Device::unblock( burnDevice() ), SIGNAL(finished(bool)),
                  this, SLOT(slotUnblockWhileCancellationFinished(bool)) );
     }
@@ -67,7 +67,7 @@ void K3b::AbstractWriter::cancel()
 void K3b::AbstractWriter::slotUnblockWhileCancellationFinished( bool success )
 {
     if( !success )
-        emit infoMessage( i18n("Could not unlock drive."), K3b::Job::ERROR );
+        emit infoMessage( i18n("Could not unlock drive."), K3b::Job::MessageError );
 
     if( k3bcore->globalSettings()->ejectMedia() ) {
         emit newSubTask( i18n("Ejecting Medium") );
@@ -84,7 +84,7 @@ void K3b::AbstractWriter::slotUnblockWhileCancellationFinished( bool success )
 void K3b::AbstractWriter::slotEjectWhileCancellationFinished( bool success )
 {
     if( !success ) {
-        emit infoMessage( i18n("Unable to eject medium."), K3b::Job::ERROR );
+        emit infoMessage( i18n("Unable to eject medium."), K3b::Job::MessageError );
     }
 
     emit canceled();

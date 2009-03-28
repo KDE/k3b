@@ -195,13 +195,13 @@ void K3b::AudioJob::start()
     // Make sure the project is not empty
     //
     if( m_doc->numOfTracks() == 0 ) {
-        emit infoMessage( i18n("Please add files to your project first."), ERROR );
+        emit infoMessage( i18n("Please add files to your project first."), MessageError );
         jobFinished(false);
         return;
     }
 
     if( m_doc->onTheFly() && !checkAudioSources() ) {
-        emit infoMessage( i18n("Unable to write on-the-fly with these audio sources."), WARNING );
+        emit infoMessage( i18n("Unable to write on-the-fly with these audio sources."), MessageWarning );
         m_doc->setOnTheFly(false);
     }
 
@@ -250,7 +250,7 @@ void K3b::AudioJob::start()
                 if( (d->zeroPregap||d->less4Sec) && writer()->supportsRawWriting() ) {
                     m_usedWritingMode = K3b::WritingModeRaw;
                     if( d->less4Sec )
-                        emit infoMessage( i18n("Track lengths below 4 seconds violate the Red Book standard."), WARNING );
+                        emit infoMessage( i18n("Track lengths below 4 seconds violate the Red Book standard."), MessageWarning );
                 }
                 else
                     m_usedWritingMode = K3b::WritingModeSao;
@@ -288,7 +288,7 @@ void K3b::AudioJob::start()
         if( m_usedWritingApp == K3b::WritingAppCdrecord &&
             m_doc->onTheFly() &&
             !cdrecordOnTheFly ) {
-            emit infoMessage( i18n("On-the-fly writing with cdrecord < 2.01a13 not supported."), ERROR );
+            emit infoMessage( i18n("On-the-fly writing with cdrecord < 2.01a13 not supported."), MessageError );
             m_doc->setOnTheFly(false);
         }
 
@@ -296,11 +296,11 @@ void K3b::AudioJob::start()
             d->useCdText ) {
             if( !cdrecordCdText ) {
                 emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.",
-                                       k3bcore->externalBinManager()->binObject("cdrecord")->version), ERROR );
+                                       k3bcore->externalBinManager()->binObject("cdrecord")->version), MessageError );
                 d->useCdText = false;
             }
             else if( m_usedWritingMode == K3b::WritingModeTao ) {
-                emit infoMessage( i18n("It is not possible to write CD-Text in TAO mode."), WARNING );
+                emit infoMessage( i18n("It is not possible to write CD-Text in TAO mode."), MessageWarning );
                 d->useCdText = false;
             }
         }
@@ -345,7 +345,7 @@ void K3b::AudioJob::start()
     }
     else {
         emit burning(false);
-        emit infoMessage( i18n("Creating image files in %1", m_doc->tempDir()), INFO );
+        emit infoMessage( i18n("Creating image files in %1", m_doc->tempDir()), MessageInfo );
         emit newTask( i18n("Creating image files") );
         m_tempData->prepareTempFileNames( doc()->tempDir() );
         QStringList filenames;
@@ -362,7 +362,7 @@ void K3b::AudioJob::slotMaxSpeedJobFinished( bool success )
 {
     d->maxSpeed = success;
     if( !success )
-        emit infoMessage( i18n("Unable to determine maximum speed for some reason. Ignoring."), WARNING );
+        emit infoMessage( i18n("Unable to determine maximum speed for some reason. Ignoring."), MessageWarning );
 
     // now start the writing
     // same code as above. See the commecnts there
@@ -390,7 +390,7 @@ void K3b::AudioJob::cancel()
         m_writer->cancel();
 
     m_audioImager->cancel();
-    emit infoMessage( i18n("Writing canceled."), K3b::Job::ERROR );
+    emit infoMessage( i18n("Writing canceled."), K3b::Job::MessageError );
     removeBufferFiles();
     emit canceled();
     jobFinished(false);
@@ -452,7 +452,7 @@ void K3b::AudioJob::slotAudioDecoderFinished( bool success )
             return;
         }
 
-        emit infoMessage( i18n("Error while decoding audio tracks."), ERROR );
+        emit infoMessage( i18n("Error while decoding audio tracks."), MessageError );
         cleanupAfterError();
         jobFinished(false);
         return;
@@ -460,7 +460,7 @@ void K3b::AudioJob::slotAudioDecoderFinished( bool success )
 
     if( m_doc->onlyCreateImages() || !m_doc->onTheFly() ) {
 
-        emit infoMessage( i18n("Successfully decoded all tracks."), SUCCESS );
+        emit infoMessage( i18n("Successfully decoded all tracks."), MessageSuccess );
 
         if( m_doc->normalize() ) {
             normalizeFiles();
@@ -502,7 +502,7 @@ bool K3b::AudioJob::prepareWriter()
 
         if( !writeInfFiles() ) {
             kDebug() << "(K3b::AudioJob) could not write inf-files.";
-            emit infoMessage( i18n("IO Error. Most likely no space left on harddisk."), ERROR );
+            emit infoMessage( i18n("IO Error. Most likely no space left on harddisk."), MessageError );
 
             return false;
         }
@@ -551,7 +551,7 @@ bool K3b::AudioJob::prepareWriter()
     else {
         if( !writeTocFile() ) {
             kDebug() << "(K3b::DataJob) could not write tocfile.";
-            emit infoMessage( i18n("IO Error"), ERROR );
+            emit infoMessage( i18n("IO Error"), MessageError );
 
             return false;
         }
@@ -698,7 +698,7 @@ void K3b::AudioJob::cleanupAfterError()
 void K3b::AudioJob::removeBufferFiles()
 {
     if ( !m_doc->onTheFly() ) {
-        emit infoMessage( i18n("Removing temporary files."), INFO );
+        emit infoMessage( i18n("Removing temporary files."), MessageInfo );
     }
 
     // removes buffer images and temp toc or inf files

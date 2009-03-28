@@ -304,16 +304,16 @@ void K3b::JobProgressDialog::slotInfoMessage( const QString& infoString, int typ
 
     // set the icon
     switch( type ) {
-    case K3b::Job::ERROR:
+    case K3b::Job::MessageError:
         currentInfoItem->setPixmap( 0, SmallIcon( "dialog-error" ) );
         break;
-    case K3b::Job::WARNING:
+    case K3b::Job::MessageWarning:
         currentInfoItem->setPixmap( 0, SmallIcon( "dialog-warning" ) );
         break;
-    case K3b::Job::SUCCESS:
+    case K3b::Job::MessageSuccess:
         currentInfoItem->setPixmap( 0, SmallIcon( "dialog-ok" ) );
         break;
-    case K3b::Job::INFO:
+    case K3b::Job::MessageInfo:
     default:
         currentInfoItem->setPixmap( 0, SmallIcon( "dialog-information" ) );
     }

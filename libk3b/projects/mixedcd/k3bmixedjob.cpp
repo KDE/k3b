@@ -207,7 +207,7 @@ void K3b::MixedJob::start()
     // Make sure the project is not empty
     //
     if( m_doc->audioDoc()->numOfTracks() == 0 ) {
-        emit infoMessage( i18n("Please add files to your project first."), ERROR );
+        emit infoMessage( i18n("Please add files to your project first."), MessageError );
         jobFinished(false);
         return;
     }
@@ -273,7 +273,7 @@ void K3b::MixedJob::startFirstCopy()
     else {
         emit burning(false);
 
-        emit infoMessage( i18n("Creating audio image files in %1",m_doc->tempDir()), INFO );
+        emit infoMessage( i18n("Creating audio image files in %1",m_doc->tempDir()), MessageInfo );
 
         m_tempFilePrefix = K3b::findUniqueFilePrefix( ( !m_doc->audioDoc()->title().isEmpty()
                                                         ? m_doc->audioDoc()->title()
@@ -302,7 +302,7 @@ void K3b::MixedJob::slotMaxSpeedJobFinished( bool success )
 {
     d->maxSpeed = success;
     if( !success )
-        emit infoMessage( i18n("Unable to determine maximum speed for some reason. Ignoring."), WARNING );
+        emit infoMessage( i18n("Unable to determine maximum speed for some reason. Ignoring."), MessageWarning );
 
     if( m_doc->mixedType() != K3b::MixedDoc::DATA_SECOND_SESSION ) {
         m_currentAction = PREPARING_DATA;
@@ -351,7 +351,7 @@ void K3b::MixedJob::cancel()
 #warning FIXME: wait for subjobs to finish after cancellation
 #endif
 
-    emit infoMessage( i18n("Writing canceled."), K3b::Job::ERROR );
+    emit infoMessage( i18n("Writing canceled."), K3b::Job::MessageError );
     removeBufferFiles();
     emit canceled();
     jobFinished(false);
@@ -450,7 +450,7 @@ void K3b::MixedJob::slotIsoImagerFinished( bool success )
     //
     else {
         if( !success ) {
-            emit infoMessage( i18n("Error while creating ISO image."), ERROR );
+            emit infoMessage( i18n("Error while creating ISO image."), MessageError );
             cleanupAfterError();
 
             jobFinished( false );
@@ -465,7 +465,7 @@ void K3b::MixedJob::slotIsoImagerFinished( bool success )
             }
         }
         else {
-            emit infoMessage( i18n("ISO image successfully created."), SUCCESS );
+            emit infoMessage( i18n("ISO image successfully created."), MessageSuccess );
 
             if( m_doc->mixedType() == K3b::MixedDoc::DATA_SECOND_SESSION ) {
                 m_currentAction = WRITING_ISO_IMAGE;
@@ -501,7 +501,7 @@ void K3b::MixedJob::slotWriterFinished( bool success )
     if( m_doc->mixedType() == K3b::MixedDoc::DATA_SECOND_SESSION && m_currentAction == WRITING_AUDIO_IMAGE ) {
         // many drives need to reload the medium to return to a proper state
         if ( ( int )m_doc->burner()->readToc().count() < m_doc->numOfTracks()-1 ) {
-            emit infoMessage( i18n( "Need to reload medium to return to proper state." ), INFO );
+            emit infoMessage( i18n( "Need to reload medium to return to proper state." ), MessageInfo );
             connect( K3b::Device::reload( m_doc->burner() ),
                      SIGNAL(finished(K3b::Device::DeviceHandler*)),
                      this,
@@ -558,7 +558,7 @@ void K3b::MixedJob::slotMediaReloadedForSecondSession( bool success )
             createIsoImage();
     }
     else {
-        m_currentAction = FETCHING_MSINFO;
+        m_currentAction = FETCHING_MSMessageInfo;
         m_msInfoFetcher->setDevice( m_doc->burner() );
         m_msInfoFetcher->start();
     }
@@ -571,7 +571,7 @@ void K3b::MixedJob::slotAudioDecoderFinished( bool success )
         return;
 
     if( !success ) {
-        emit infoMessage( i18n("Error while decoding audio tracks."), ERROR );
+        emit infoMessage( i18n("Error while decoding audio tracks."), MessageError );
         cleanupAfterError();
         jobFinished(false);
         return;
@@ -587,7 +587,7 @@ void K3b::MixedJob::slotAudioDecoderFinished( bool success )
         }
     }
     else {
-        emit infoMessage( i18n("Audio images successfully created."), SUCCESS );
+        emit infoMessage( i18n("Audio images successfully created."), MessageSuccess );
 
         if( m_doc->audioDoc()->normalize() ) {
             normalizeFiles();
@@ -631,7 +631,7 @@ bool K3b::MixedJob::prepareWriter()
 
         if( !writeInfFiles() ) {
             kDebug() << "(K3b::MixedJob) could not write inf-files.";
-            emit infoMessage( i18n("IO Error"), ERROR );
+            emit infoMessage( i18n("IO Error"), MessageError );
 
             return false;
         }
@@ -672,7 +672,7 @@ bool K3b::MixedJob::prepareWriter()
     else {
         if( !writeTocFile() ) {
             kDebug() << "(K3b::DataJob) could not write tocfile.";
-            emit infoMessage( i18n("IO Error"), ERROR );
+            emit infoMessage( i18n("IO Error"), MessageError );
 
             return false;
         }
@@ -1031,10 +1031,10 @@ bool K3b::MixedJob::startWriting()
             K3b::Msf mediaSize = m_doc->burner()->diskInfo().capacity();
             if( mediaSize < m_projectSize ) {
                 if( k3bcore->globalSettings()->overburn() ) {
-                    emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3b::Job::WARNING );
+                    emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3b::Job::MessageWarning );
                 }
                 else {
-                    emit infoMessage( i18n("Data does not fit on disk."), ERROR );
+                    emit infoMessage( i18n("Data does not fit on disk."), MessageError );
                     return false;
                 }
             }
@@ -1082,7 +1082,7 @@ void K3b::MixedJob::createIsoImage()
     if( !m_doc->onTheFly() )
         emit newTask( i18n("Creating ISO image file") );
     emit newSubTask( i18n("Creating ISO image in %1", m_isoImageFilePath) );
-    emit infoMessage( i18n("Creating ISO image in %1", m_isoImageFilePath), INFO );
+    emit infoMessage( i18n("Creating ISO image in %1", m_isoImageFilePath), MessageInfo );
 
     d->dataImageFile.setName( m_isoImageFilePath );
     if ( d->dataImageFile.open( QIODevice::WriteOnly ) ) {
@@ -1092,7 +1092,7 @@ void K3b::MixedJob::createIsoImage()
         d->pipe.open( true );
     }
     else {
-        emit infoMessage( i18n("Could not open %1 for writing", m_isoImageFilePath ), ERROR );
+        emit infoMessage( i18n("Could not open %1 for writing", m_isoImageFilePath ), MessageError );
         cleanupAfterError();
         jobFinished(false);
     }
@@ -1122,12 +1122,12 @@ void K3b::MixedJob::cleanupAfterError()
 void K3b::MixedJob::removeBufferFiles()
 {
     if ( !m_doc->onTheFly() ) {
-        emit infoMessage( i18n("Removing buffer files."), INFO );
+        emit infoMessage( i18n("Removing buffer files."), MessageInfo );
     }
 
     if( QFile::exists( m_isoImageFilePath ) )
         if( !QFile::remove( m_isoImageFilePath ) )
-            emit infoMessage( i18n("Could not delete file %1.",m_isoImageFilePath), ERROR );
+            emit infoMessage( i18n("Could not delete file %1.",m_isoImageFilePath), MessageError );
 
     // removes buffer images and temp toc or inf files
     m_tempData->cleanup();
@@ -1228,16 +1228,16 @@ void K3b::MixedJob::determineWritingMode()
     if( m_usedDataWritingApp == K3b::WritingAppCdrecord ) {
         if( !cdrecordOnTheFly && m_doc->onTheFly() ) {
             m_doc->setOnTheFly( false );
-            emit infoMessage( i18n("On-the-fly writing with cdrecord < 2.01a13 not supported."), ERROR );
+            emit infoMessage( i18n("On-the-fly writing with cdrecord < 2.01a13 not supported."), MessageError );
         }
 
         if( m_doc->audioDoc()->cdText() ) {
             if( !cdrecordCdText ) {
                 m_doc->audioDoc()->writeCdText( false );
-                emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.",k3bcore->externalBinManager()->binObject("cdrecord")->version), ERROR );
+                emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.",k3bcore->externalBinManager()->binObject("cdrecord")->version), MessageError );
             }
             else if( m_usedAudioWritingMode == K3b::WritingModeTao ) {
-                emit infoMessage( i18n("It is not possible to write CD-Text in TAO mode. Try DAO or RAW."), WARNING );
+                emit infoMessage( i18n("It is not possible to write CD-Text in TAO mode. Try DAO or RAW."), MessageWarning );
             }
         }
     }

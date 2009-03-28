@@ -102,7 +102,7 @@ void K3b::VerificationJob::Private::reloadMedium()
 {
     // many drives need to reload the medium to return to a proper state
     mediumHasBeenReloaded = true;
-    emit q->infoMessage( i18n( "Need to reload medium to return to proper state." ), INFO );
+    emit q->infoMessage( i18n( "Need to reload medium to return to proper state." ), MessageInfo );
     QObject::connect( K3b::Device::sendCommand( Device::DeviceHandler::CommandMediaInfo|Device::DeviceHandler::RECommandLoad, device ),
                       SIGNAL(finished(K3b::Device::DeviceHandler*)),
                       q,
@@ -172,7 +172,7 @@ void K3b::VerificationJob::start()
     // make sure the job is initialized
     if ( d->tracks.isEmpty() ) {
         emit infoMessage( i18n( "Internal Error: Verification job improperly initialized (%1)",
-                                i18n("no tracks added") ), ERROR );
+                                i18n("no tracks added") ), MessageError );
         jobFinished( false );
         return;
     }
@@ -210,7 +210,7 @@ void K3b::VerificationJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
         if( d->toc.count() < it->trackNumber ) {
             if ( d->mediumHasBeenReloaded ) {
                 emit infoMessage( i18n("Internal Error: Verification job improperly initialized (%1)",
-                                       i18n("specified track number '%1' not found on medium", it->trackNumber) ), ERROR );
+                                       i18n("specified track number '%1' not found on medium", it->trackNumber) ), MessageError );
                 jobFinished( false );
                 return;
             }
@@ -271,7 +271,7 @@ void K3b::VerificationJob::readTrack( int trackIndex )
                                                     isoF.primaryDescriptor().volumeSpaceSize -1 );
             }
             else {
-                emit infoMessage( i18n("Unable to determine the ISO9660 filesystem size."), ERROR );
+                emit infoMessage( i18n("Unable to determine the ISO9660 filesystem size."), MessageError );
                 jobFinished( false );
                 return;
             }
@@ -307,11 +307,11 @@ void K3b::VerificationJob::slotReaderFinished( bool success )
 
         // compare the two sums
         if( d->tracks[d->currentTrackIndex].checksum != d->pipe.checksum() ) {
-            emit infoMessage( i18n("Written data in track %1 differs from original.", d->tracks[d->currentTrackIndex].trackNumber), ERROR );
+            emit infoMessage( i18n("Written data in track %1 differs from original.", d->tracks[d->currentTrackIndex].trackNumber), MessageError );
             jobFinished(false);
         }
         else {
-            emit infoMessage( i18n("Written data verified."), SUCCESS );
+            emit infoMessage( i18n("Written data verified."), MessageSuccess );
             ++d->currentTrackIndex;
             if( d->currentTrackIndex < (int)d->tracks.count() )
                 readTrack( d->currentTrackIndex );
@@ -341,7 +341,7 @@ K3b::Msf K3b::VerificationJob::trackLength( int trackIndex )
                 trackSize = isoF.primaryDescriptor().volumeSpaceSize;
             }
             else {
-                emit infoMessage( i18n("Unable to determine the ISO9660 filesystem size."), ERROR );
+                emit infoMessage( i18n("Unable to determine the ISO9660 filesystem size."), MessageError );
                 return 0;
             }
         }

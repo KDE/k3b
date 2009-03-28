@@ -122,7 +122,7 @@ void K3b::IsoImager::handleMkisofsProgress( int p )
 void K3b::IsoImager::handleMkisofsInfoMessage( const QString& line, int type )
 {
     emit infoMessage( line, type );
-    if( type == ERROR )
+    if( type == MessageError )
         d->knownError = true;
 }
 
@@ -157,7 +157,7 @@ void K3b::IsoImager::slotProcessExited( int exitCode, QProcess::ExitStatus exitS
                     if( m_containsFilesWithMultibleBackslashes &&
                         !k3bcore->externalBinManager()->binObject( "mkisofs" )->hasFeature( "backslashed_filenames" ) ) {
                         emit infoMessage( i18n("Due to a bug in mkisofs <= 1.15a40, K3b is unable to handle "
-                                               "filenames that contain more than one backslash:"), ERROR );
+                                               "filenames that contain more than one backslash:"), MessageError );
 
                         break;
                     }
@@ -166,8 +166,8 @@ void K3b::IsoImager::slotProcessExited( int exitCode, QProcess::ExitStatus exitS
                 default:
                     if( !d->knownError && !mkisofsReadError() ) {
                         emit infoMessage( i18n("%1 returned an unknown error (code %2).", QLatin1String("mkisofs"), exitCode ),
-                                          K3b::Job::ERROR );
-                        emit infoMessage( i18n("Please send me an email with the last output."), K3b::Job::ERROR );
+                                          K3b::Job::MessageError );
+                        emit infoMessage( i18n("Please send me an email with the last output."), K3b::Job::MessageError );
                     }
                 }
 
@@ -175,7 +175,7 @@ void K3b::IsoImager::slotProcessExited( int exitCode, QProcess::ExitStatus exitS
             }
         }
         else {
-            emit infoMessage( i18n("%1 crashed.", QLatin1String("mkisofs")), ERROR );
+            emit infoMessage( i18n("%1 crashed.", QLatin1String("mkisofs")), MessageError );
             jobFinished( false );
         }
     }
@@ -303,7 +303,7 @@ void K3b::IsoImager::startSizeCalculation()
     m_mkisofsPrintSizeResult = 0;
 
     if( !m_process->start( KProcess::SeparateChannels ) ) {
-        emit infoMessage( i18n("Could not start %1.",QString("mkisofs")), K3b::Job::ERROR );
+        emit infoMessage( i18n("Could not start %1.",QString("mkisofs")), K3b::Job::MessageError );
         cleanup();
 
         jobFinished( false );
@@ -368,7 +368,7 @@ void K3b::IsoImager::slotMkisofsPrintSizeFinished()
     else {
         m_mkisofsPrintSizeResult = 0;
         kDebug() << "(K3b::IsoImager) Parsing mkisofs -print-size failed: " << m_collectedMkisofsPrintSizeStdout;
-        emit infoMessage( i18n("Could not determine size of resulting image file."), ERROR );
+        emit infoMessage( i18n("Could not determine size of resulting image file."), MessageError );
         jobFinished( false );
     }
 }
@@ -444,7 +444,7 @@ void K3b::IsoImager::start()
         // something went wrong when starting the program
         // it "should" be the executable
         kDebug() << "(K3b::IsoImager) could not start mkisofs";
-        emit infoMessage( i18n("Could not start %1.",QString("mkisofs")), K3b::Job::ERROR );
+        emit infoMessage( i18n("Could not start %1.",QString("mkisofs")), K3b::Job::MessageError );
         jobFinished( false );
         cleanup();
     }
@@ -520,7 +520,7 @@ bool K3b::IsoImager::addMkisofsParameters( bool printSize )
         *m_process << "-volid" << s;
     }
     else {
-        emit infoMessage( i18n("No volume id specified. Using default."), WARNING );
+        emit infoMessage( i18n("No volume id specified. Using default."), MessageWarning );
         *m_process << "-volid" << "CDROM";
     }
 
@@ -615,14 +615,14 @@ bool K3b::IsoImager::addMkisofsParameters( bool printSize )
         if ( !d->mkisofsBin->hasFeature( "no-4gb-limit" ) ) {
             emit infoMessage( i18n( "Found files bigger than 4 GB. K3b needs at least %1 to continue." ,
                               QString( "mkisofs >= 2.01.01a33 / genisoimage >= 1.1.4" ) ),
-                              ERROR );
+                              MessageError );
             return false;
         }
     }
 
     if( filesGreaterThan2Gb ) {
         emit infoMessage( i18n("Found files bigger than 2 GB. These files will only be fully accessible if mounted with UDF."),
-                          WARNING );
+                          MessageWarning );
 
         // in genisoimage 1.1.3 "they" silently introduced this aweful parameter
         if ( d->mkisofsBin->hasFeature( "genisoimage" ) && d->mkisofsBin->version >= K3b::Version( 1, 1, 3 ) ) {
@@ -632,7 +632,7 @@ bool K3b::IsoImager::addMkisofsParameters( bool printSize )
 
     bool udf = m_doc->isoOptions().createUdf();
     if( !udf && filesGreaterThan2Gb ) {
-        emit infoMessage( i18n("Enabling UDF extension."), INFO );
+        emit infoMessage( i18n("Enabling UDF extension."), MessageInfo );
         udf = true;
     }
     if( udf )
@@ -677,7 +677,7 @@ bool K3b::IsoImager::addMkisofsParameters( bool printSize )
 
     int isoLevel = m_doc->isoOptions().ISOLevel();
     if ( filesGreaterThan4Gb && isoLevel < 3 ) {
-        emit infoMessage( i18n( "Setting iso level to 3 to support files bigger than 4 GB." ), WARNING );
+        emit infoMessage( i18n( "Setting iso level to 3 to support files bigger than 4 GB." ), MessageWarning );
         isoLevel = 3;
     }
     *m_process << "-iso-level" << QString::number( isoLevel );
@@ -766,11 +766,11 @@ int K3b::IsoImager::writePathSpecForDir( K3b::DirItem* dirItem, QTextStream& str
             else if( d->usedLinkHandling == Private::FOLLOW ) {
                 QFileInfo f( K3b::resolveLink( item->localPath() ) );
                 if( !f.exists() ) {
-                    emit infoMessage( i18n("Could not follow link %1 to non-existing file %2. Skipping...", item->k3bName(), f.filePath()), WARNING );
+                    emit infoMessage( i18n("Could not follow link %1 to non-existing file %2. Skipping...", item->k3bName(), f.filePath()), MessageWarning );
                     writeItem = false;
                 }
                 else if( f.isDir() ) {
-                    emit infoMessage( i18n("Ignoring link %1 to folder %2. K3b is unable to follow links to folders.", item->k3bName(), f.filePath()), WARNING );
+                    emit infoMessage( i18n("Ignoring link %1 to folder %2. K3b is unable to follow links to folders.", item->k3bName(), f.filePath()), MessageWarning );
                     writeItem = false;
                 }
             }
@@ -778,11 +778,11 @@ int K3b::IsoImager::writePathSpecForDir( K3b::DirItem* dirItem, QTextStream& str
         else if( item->isFile() ) {
             QFileInfo f( item->localPath() );
             if( !f.exists() ) {
-                emit infoMessage( i18n("Could not find file %1. Skipping...",item->localPath()), WARNING );
+                emit infoMessage( i18n("Could not find file %1. Skipping...",item->localPath()), MessageWarning );
                 writeItem = false;
             }
             else if( !f.isReadable() ) {
-                emit infoMessage( i18n("Could not read file %1. Skipping...",item->localPath()), WARNING );
+                emit infoMessage( i18n("Could not read file %1. Skipping...",item->localPath()), MessageWarning );
                 writeItem = false;
             }
         }
@@ -831,7 +831,7 @@ void K3b::IsoImager::writePathSpecForFile( K3b::FileItem* item, QTextStream& str
         temp.remove();
 
         if( !KIO::NetAccess::file_copy( KUrl(item->localPath()), tempPath ) ) {
-            emit infoMessage( i18n("Failed to backup boot image file %1",item->localPath()), ERROR );
+            emit infoMessage( i18n("Failed to backup boot image file %1",item->localPath()), MessageError );
             return;
         }
 
@@ -987,30 +987,30 @@ bool K3b::IsoImager::prepareMkisofsFiles()
     // ----------------------------------------------------
     int num = writePathSpec();
     if( num < 0 ) {
-        emit infoMessage( i18n("Could not write temporary file"), K3b::Job::ERROR );
+        emit infoMessage( i18n("Could not write temporary file"), K3b::Job::MessageError );
         return false;
     }
     else if( num == 0 ) {
-        emit infoMessage( i18n("No files to be written."), K3b::Job::ERROR );
+        emit infoMessage( i18n("No files to be written."), K3b::Job::MessageError );
         return false;
     }
 
     if( m_doc->isoOptions().createRockRidge() ) {
         if( !writeRRHideFile() ) {
-            emit infoMessage( i18n("Could not write temporary file"), K3b::Job::ERROR );
+            emit infoMessage( i18n("Could not write temporary file"), K3b::Job::MessageError );
             return false;
         }
     }
 
     if( m_doc->isoOptions().createJoliet() ) {
         if( !writeJolietHideFile() ) {
-            emit infoMessage( i18n("Could not write temporary file"), K3b::Job::ERROR );
+            emit infoMessage( i18n("Could not write temporary file"), K3b::Job::MessageError );
             return false ;
         }
     }
 
     if( !writeSortWeightFile() ) {
-        emit infoMessage( i18n("Could not write temporary file"), K3b::Job::ERROR );
+        emit infoMessage( i18n("Could not write temporary file"), K3b::Job::MessageError );
         return false;
     }
 

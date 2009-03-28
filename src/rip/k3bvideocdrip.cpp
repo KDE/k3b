@@ -58,7 +58,7 @@ void K3b::VideoCdRip::cancel()
 {
     cancelAll();
 
-    emit infoMessage( i18n( "Job canceled by user." ), K3b::Job::ERROR );
+    emit infoMessage( i18n( "Job canceled by user." ), K3b::Job::MessageError );
     emit canceled();
     jobFinished( false );
 }
@@ -97,9 +97,9 @@ void K3b::VideoCdRip::vcdxRip()
 
     if ( !bin ) {
         kDebug() << "(K3b::VideoCdRip) could not find vcdxrip executable";
-        emit infoMessage( i18n( "Could not find %1 executable." , QString("vcdxrip") ), K3b::Job::ERROR );
-        emit infoMessage( i18n( "To rip VideoCD's you must install VcdImager Version %1." , QString(">= 0.7.12") ), K3b::Job::INFO );
-        emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3b::Job::INFO );
+        emit infoMessage( i18n( "Could not find %1 executable." , QString("vcdxrip") ), K3b::Job::MessageError );
+        emit infoMessage( i18n( "To rip VideoCD's you must install VcdImager Version %1." , QString(">= 0.7.12") ), K3b::Job::MessageInfo );
+        emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3b::Job::MessageInfo );
         cancelAll();
         jobFinished( false );
         return ;
@@ -107,15 +107,15 @@ void K3b::VideoCdRip::vcdxRip()
 
     if( bin->version < K3b::Version("0.7.12") ) {
         kDebug() << "(K3b::VideoCdRip) vcdxrip executable too old!";
-        emit infoMessage( i18n( "%1 executable too old: need version %2 or greater." , QString("Vcdxrip") , QString("0.7.12") ), K3b::Job::ERROR );
-        emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3b::Job::INFO );
+        emit infoMessage( i18n( "%1 executable too old: need version %2 or greater." , QString("Vcdxrip") , QString("0.7.12") ), K3b::Job::MessageError );
+        emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3b::Job::MessageInfo );
         cancelAll();
         jobFinished( false );
         return ;
     }
         
     if ( !bin->copyright.isEmpty() )
-        emit infoMessage( i18n( "Using %1 %2 - Copyright (C) %3" , bin->name() , bin->version , bin->copyright ), INFO );
+        emit infoMessage( i18n( "Using %1 %2 - Copyright (C) %3" , bin->name() , bin->version , bin->copyright ), MessageInfo );
 
 
     *m_process << k3bcore ->externalBinManager() ->binPath( "vcdxrip" );
@@ -167,13 +167,13 @@ void K3b::VideoCdRip::vcdxRip()
     emit debuggingOutput( "vcdxrip command:", s );
 
     emit newTask( i18n( "Extracting" ) );
-    emit infoMessage( i18n( "Start extracting." ), K3b::Job::INFO );
-    emit infoMessage( i18n( "Extract files from %1 to %2." , m_videooptions ->getVideoCdSource() , m_videooptions ->getVideoCdDestination() ), K3b::Job::INFO );
+    emit infoMessage( i18n( "Start extracting." ), K3b::Job::MessageInfo );
+    emit infoMessage( i18n( "Extract files from %1 to %2." , m_videooptions ->getVideoCdSource() , m_videooptions ->getVideoCdDestination() ), K3b::Job::MessageInfo );
 
     m_process->start();
     if ( !m_process->waitForFinished(-1) ) {
         kDebug() << "(K3b::VideoCdRip) could not start vcdxrip";
-        emit infoMessage( i18n( "Could not start %1." , QString("vcdxrip") ), K3b::Job::ERROR );
+        emit infoMessage( i18n( "Could not start %1." , QString("vcdxrip") ), K3b::Job::MessageError );
         cancelAll();
         jobFinished( false );
     }
@@ -247,7 +247,7 @@ void K3b::VideoCdRip::slotParseVcdXRipOutput()
                             parseInformation( text );
                         } else {
                             kDebug() << QString( "(K3b::VideoCdRip) vcdxrip error, %1" ).arg( text );
-                            emit infoMessage( text, K3b::Job::ERROR );
+                            emit infoMessage( text, K3b::Job::MessageError );
                         }
                     }
                 }
@@ -263,17 +263,17 @@ void K3b::VideoCdRip::slotVcdXRipFinished( int exitCode, QProcess::ExitStatus ex
         // TODO: check the process' exitStatus()
         switch ( exitCode ) {
             case 0:
-                emit infoMessage( i18n( "Files successfully extracted." ), K3b::Job::SUCCESS );
+                emit infoMessage( i18n( "Files successfully extracted." ), K3b::Job::MessageSuccess );
                 break;
             default:
-                emit infoMessage( i18n( "%1 returned an unknown error (code %2)." , QString("vcdxrip" ), exitCode ), K3b::Job::ERROR );
-                emit infoMessage( i18n( "Please send me an email with the last output..." ), K3b::Job::ERROR );
+                emit infoMessage( i18n( "%1 returned an unknown error (code %2)." , QString("vcdxrip" ), exitCode ), K3b::Job::MessageError );
+                emit infoMessage( i18n( "Please send me an email with the last output..." ), K3b::Job::MessageError );
                 cancelAll();
                 jobFinished( false );
                 return ;
         }
     } else {
-        emit infoMessage( i18n( "%1 did not exit cleanly." , QString("Vcdxrip") ), K3b::Job::ERROR );
+        emit infoMessage( i18n( "%1 did not exit cleanly." , QString("Vcdxrip") ), K3b::Job::MessageError );
         cancelAll();
         jobFinished( false );
         return ;
@@ -287,8 +287,8 @@ void K3b::VideoCdRip::parseInformation( QString text )
     // parse warning
     if ( text.contains( "encountered non-form2 sector" ) ) {
         // I think this is an error not a warning. Finish ripping with invalid mpegs.
-        emit infoMessage( i18n( "%1 encountered non-form2 sector" ,QString("Vcdxrip")), K3b::Job::ERROR );
-        emit infoMessage( i18n( "leaving loop" ), K3b::Job::ERROR );
+        emit infoMessage( i18n( "%1 encountered non-form2 sector" ,QString("Vcdxrip")), K3b::Job::MessageError );
+        emit infoMessage( i18n( "leaving loop" ), K3b::Job::MessageError );
         cancelAll();
         jobFinished( false );
         return;
@@ -296,7 +296,7 @@ void K3b::VideoCdRip::parseInformation( QString text )
     
     // parse extra info
     else if ( text.contains( "detected extended VCD2.0 PBC files" ) )
-        emit infoMessage( i18n( "detected extended VCD2.0 PBC files" ), K3b::Job::INFO );
+        emit infoMessage( i18n( "detected extended VCD2.0 PBC files" ), K3b::Job::MessageInfo );
 
     // parse startposition and extracting sequence info
     // extracting avseq05.mpg... (start lsn 32603 (+28514))

@@ -86,7 +86,7 @@ void K3b::Iso9660ImageWritingJob::start()
     emit newTask( i18n("Preparing data") );
 
     if( !QFile::exists( m_imagePath ) ) {
-        emit infoMessage( i18n("Could not find image %1",m_imagePath), K3b::Job::ERROR );
+        emit infoMessage( i18n("Could not find image %1",m_imagePath), K3b::Job::MessageError );
         jobFinished( false );
         return;
     }

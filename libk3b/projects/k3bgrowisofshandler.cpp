@@ -80,12 +80,12 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
 
         // :-[ PERFORM OPC failed with SK=3h/ASC=73h/ASCQ=03h
         else if( line.startsWith( ":-[ PERFORM OPC failed" ) )
-            emit infoMessage( i18n("OPC failed. Please try writing speed 1x."), K3b::Job::ERROR );
+            emit infoMessage( i18n("OPC failed. Please try writing speed 1x."), K3b::Job::MessageError );
 
         // :-[ attempt -blank=full or re-run with -dvd-compat -dvd-compat to engage DAO ]
         else if( !m_dao &&
                  ( line.contains( "engage DAO" ) || line.contains( "media is not formatted or unsupported" ) ) )
-            emit infoMessage( i18n("Please try again with writing mode DAO."), K3b::Job::ERROR );
+            emit infoMessage( i18n("Please try again with writing mode DAO."), K3b::Job::MessageError );
 
         else if( line.startsWith( ":-[ Failed to change write speed" ) ) {
             m_error = ERROR_SPEED_SET_FAILED;
@@ -98,7 +98,7 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
         else if( line.contains( "blocks are free" ) && line.contains( "to be written" ) ) {
             m_error = ERROR_OVERSIZE;
             if( k3bcore->globalSettings()->overburn() )
-                emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3b::Job::WARNING );
+                emit infoMessage( i18n("Trying to write more than the official disk capacity"), K3b::Job::MessageWarning );
         }
 
         else if( line.startsWith( ":-( unable to anonymously mmap" ) ) {
@@ -110,7 +110,7 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
         }
 
         else
-            emit infoMessage( line, K3b::Job::ERROR );
+            emit infoMessage( line, K3b::Job::MessageError );
     }
     else if( line.startsWith( "PERFORM OPC" ) ) {
         m_error = ERROR_OPC;
@@ -122,7 +122,7 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
 
         emit flushingCache();
         emit newSubTask( i18n("Flushing Cache")  );
-        emit infoMessage( i18n("Flushing the cache may take some time."), K3b::Job::INFO );
+        emit infoMessage( i18n("Flushing the cache may take some time."), K3b::Job::MessageInfo );
     }
 
     // FIXME: I think this starts with dev->blockDeviceName() so we could improve parsing with:
@@ -141,29 +141,29 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
     }
     else if( line.contains( "updating RMA" ) ) {
         emit newSubTask( i18n("Updating RMA") );
-        emit infoMessage( i18n("Updating RMA") + "...", K3b::Job::INFO );
+        emit infoMessage( i18n("Updating RMA") + "...", K3b::Job::MessageInfo );
     }
     else if( line.contains( "closing session" ) ) {
         emit newSubTask( i18n("Closing Session") );
-        emit infoMessage( i18n("Closing Session") + "...", K3b::Job::INFO );
+        emit infoMessage( i18n("Closing Session") + "...", K3b::Job::MessageInfo );
     }
     else if( line.contains( "writing lead-out" ) ) {
         emit newSubTask( i18n("Writing Lead-out") );
-        emit infoMessage( i18n("Writing the lead-out may take some time."), K3b::Job::INFO );
+        emit infoMessage( i18n("Writing the lead-out may take some time."), K3b::Job::MessageInfo );
     }
     else if( line.contains( "Quick Grow" ) ) {
-        emit infoMessage( i18n("Removing reference to lead-out."), K3b::Job::INFO );
+        emit infoMessage( i18n("Removing reference to lead-out."), K3b::Job::MessageInfo );
     }
     else if( line.contains( "copying volume descriptor" ) ) {
-        emit infoMessage( i18n("Modifying ISO9660 volume descriptor"), K3b::Job::INFO );
+        emit infoMessage( i18n("Modifying ISO9660 volume descriptor"), K3b::Job::MessageInfo );
     }
     else if( line.contains( "FEATURE 21h is not on" ) ) {
         if( !m_dao ) {
             // FIXME: it's not only the writer. It may be the media: something like does not support it with this media
             //        da war was mit: wenn einmal formattiert, dann geht nur noch dao oder wenn einmal als overwrite
             //        formattiert, dann nur noch dao oder sowas
-            emit infoMessage( i18n("Writing mode Incremental Streaming not available"), K3b::Job::WARNING );
-            emit infoMessage( i18n("Engaging DAO"), K3b::Job::WARNING );
+            emit infoMessage( i18n("Writing mode Incremental Streaming not available"), K3b::Job::MessageWarning );
+            emit infoMessage( i18n("Engaging DAO"), K3b::Job::MessageWarning );
         }
     }
     else if( ( pos = line.indexOf( "Current Write Speed" ) ) > 0 ) {
@@ -177,7 +177,7 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
         if( ok )
             emit infoMessage( i18n("Writing speed: %1 KB/s (%2x)",
                                    (int)(speed*1385.0)
-                                   ,KGlobal::locale()->formatNumber(speed)), K3b::Job::INFO );
+                                   ,KGlobal::locale()->formatNumber(speed)), K3b::Job::MessageInfo );
         else
             kDebug() << "(K3b::GrowisofsHandler) parsing error: '" << line.mid( pos, endPos-pos ) << "'";
     }
@@ -226,38 +226,38 @@ void K3b::GrowisofsHandler::handleExit( int exitCode )
 {
     switch( m_error ) {
     case ERROR_MEDIA:
-        emit infoMessage( i18n("K3b detected a problem with the medium."), K3b::Job::ERROR );
-        emit infoMessage( i18n("Please try another brand of media, preferably one explicitly recommended by your writer's vendor."), K3b::Job::ERROR );
-        emit infoMessage( i18n("Report the problem if it persists anyway."), K3b::Job::ERROR );
+        emit infoMessage( i18n("K3b detected a problem with the medium."), K3b::Job::MessageError );
+        emit infoMessage( i18n("Please try another brand of media, preferably one explicitly recommended by your writer's vendor."), K3b::Job::MessageError );
+        emit infoMessage( i18n("Report the problem if it persists anyway."), K3b::Job::MessageError );
         break;
 
     case ERROR_OVERSIZE:
         if( k3bcore->globalSettings()->overburn() )
-            emit infoMessage( i18n("Data did not fit on disk."), K3b::Job::ERROR );
+            emit infoMessage( i18n("Data did not fit on disk."), K3b::Job::MessageError );
         else
-            emit infoMessage( i18n("Data does not fit on disk."), K3b::Job::ERROR );
+            emit infoMessage( i18n("Data does not fit on disk."), K3b::Job::MessageError );
         break;
 
     case ERROR_SPEED_SET_FAILED:
-        emit infoMessage( i18n("Unable to set writing speed."), K3b::Job::ERROR );
-        emit infoMessage( i18n("Please try again with the 'ignore speed' setting."), K3b::Job::ERROR );
+        emit infoMessage( i18n("Unable to set writing speed."), K3b::Job::MessageError );
+        emit infoMessage( i18n("Please try again with the 'ignore speed' setting."), K3b::Job::MessageError );
         break;
 
     case ERROR_OPC:
-        emit infoMessage( i18n("Optimum Power Calibration failed."), K3b::Job::ERROR );
+        emit infoMessage( i18n("Optimum Power Calibration failed."), K3b::Job::MessageError );
         emit infoMessage( i18n("Try adding '-use-the-force-luke=noopc' to the "
-                               "growisofs user parameters in the K3b settings."), K3b::Job::ERROR );
+                               "growisofs user parameters in the K3b settings."), K3b::Job::MessageError );
         break;
 
     case ERROR_MEMLOCK:
-        emit infoMessage( i18n("Unable to allocate software buffer."), K3b::Job::ERROR );
-        emit infoMessage( i18n("This error is caused by the low memorylocked resource limit."), K3b::Job::ERROR );
-        emit infoMessage( i18n("It can be solved by issuing the command 'ulimit -l unlimited'..."), K3b::Job::ERROR );
-        emit infoMessage( i18n("...or by lowering the used software buffer size in the advanced K3b settings."), K3b::Job::ERROR );
+        emit infoMessage( i18n("Unable to allocate software buffer."), K3b::Job::MessageError );
+        emit infoMessage( i18n("This error is caused by the low memorylocked resource limit."), K3b::Job::MessageError );
+        emit infoMessage( i18n("It can be solved by issuing the command 'ulimit -l unlimited'..."), K3b::Job::MessageError );
+        emit infoMessage( i18n("...or by lowering the used software buffer size in the advanced K3b settings."), K3b::Job::MessageError );
         break;
 
     case ERROR_WRITE_FAILED:
-        emit infoMessage( i18n("Write error"), K3b::Job::ERROR );
+        emit infoMessage( i18n("Write error"), K3b::Job::MessageError );
         break;
 
     default:
@@ -274,19 +274,19 @@ void K3b::GrowisofsHandler::handleExit( int exitCode )
             // in the future when I know more about what kinds of errors may occur
             // we will enhance this
             emit infoMessage( i18n("Fatal error at startup: %1",strerror(exitCode-128)),
-                              K3b::Job::ERROR );
+                              K3b::Job::MessageError );
         }
         else if( exitCode == 1 ) {
             // Doku says: warning at exit
             // Example: mkisofs error
             //          unable to reload
             // So basically this is just for mkisofs failure since we do not let growisofs reload the media
-            emit infoMessage( i18n("Warning at exit: (1)"), K3b::Job::ERROR );
-            emit infoMessage( i18n("Most likely mkisofs failed in some way."), K3b::Job::ERROR );
+            emit infoMessage( i18n("Warning at exit: (1)"), K3b::Job::MessageError );
+            emit infoMessage( i18n("Most likely mkisofs failed in some way."), K3b::Job::MessageError );
         }
         else {
             emit infoMessage( i18n("Fatal error during recording: %1",strerror(exitCode)),
-                              K3b::Job::ERROR );
+                              K3b::Job::MessageError );
         }
     }
 

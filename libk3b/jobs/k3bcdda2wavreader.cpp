@@ -94,7 +94,7 @@ void K3b::Cdda2wavReader::start( bool onlyInfo )
 
     d->cdda2wavBin = k3bcore->externalBinManager()->binObject( "cdda2wav" );
     if( !d->cdda2wavBin ) {
-        emit infoMessage( i18n("Could not find %1 executable.",QString("cdda2wav")), ERROR );
+        emit infoMessage( i18n("Could not find %1 executable.",QString("cdda2wav")), MessageError );
         jobFinished(false);
         d->running = false;
         return;
@@ -133,7 +133,7 @@ void K3b::Cdda2wavReader::start( bool onlyInfo )
         // something went wrong when starting the program
         // it "should" be the executable
         kDebug() << "(K3b::Cdda2wavReader) could not start cdda2wav";
-        emit infoMessage( i18n("Could not start %1.",QString("cdda2wav")), K3b::Job::ERROR );
+        emit infoMessage( i18n("Could not start %1.",QString("cdda2wav")), K3b::Job::MessageError );
         d->running = false;
         jobFinished(false);
     }
@@ -239,13 +239,13 @@ void K3b::Cdda2wavReader::slotProcessExited( int exitCode, QProcess::ExitStatus 
         }
         else {
             emit infoMessage( i18n("%1 returned an unknown error (code %2)."
-                                   QString("Cdda2wav"), exitCode ), ERROR );
+                                   QString("Cdda2wav"), exitCode ), MessageError );
             jobFinished( false );
         }
     }
     else {
         emit infoMessage( i18n("%1 did not exit cleanly.",QString("Cdda2wav")),
-                          ERROR );
+                          MessageError );
         jobFinished( false );
     }
 }

@@ -102,7 +102,7 @@ bool K3b::AudioProjectConvertingJob::run()
 
         QString dir = filename.left( filename.lastIndexOf('/') );
         if( !KStandardDirs::makeDir( dir ) ) {
-            emit infoMessage( i18n("Unable to create directory %1",dir), K3b::Job::ERROR );
+            emit infoMessage( i18n("Unable to create directory %1",dir), K3b::Job::MessageError );
             return false;
         }
 
@@ -122,18 +122,18 @@ bool K3b::AudioProjectConvertingJob::run()
                 d->encoder->setMetaData( K3b::AudioEncoder::META_GENRE, m_cddbEntry.get( KCDDB::Genre ).toString() );
             }
             else
-                emit infoMessage( d->encoder->lastErrorString(), K3b::Job::ERROR );
+                emit infoMessage( d->encoder->lastErrorString(), K3b::Job::MessageError );
         }
         else {
             isOpen = d->waveFileWriter->open( filename );
         }
 
         if( !isOpen ) {
-            emit infoMessage( i18n("Unable to open '%1' for writing.",filename), K3b::Job::ERROR );
+            emit infoMessage( i18n("Unable to open '%1' for writing.",filename), K3b::Job::MessageError );
             return false;
         }
 
-        emit infoMessage( i18n("Converting to single file '%1'.",filename), K3b::Job::INFO );
+        emit infoMessage( i18n("Converting to single file '%1'.",filename), K3b::Job::MessageInfo );
     }
 
     bool success = true;
@@ -146,7 +146,7 @@ bool K3b::AudioProjectConvertingJob::run()
             break;
         }
 
-        emit infoMessage( i18n("Successfully converted track %1.",QString::number(i+1)), K3b::Job::INFO );
+        emit infoMessage( i18n("Successfully converted track %1.",QString::number(i+1)), K3b::Job::MessageInfo );
 
         track = track->next();
         ++i;
@@ -171,7 +171,7 @@ bool K3b::AudioProjectConvertingJob::run()
         if( d->currentTrackIndex >= 0 && d->currentTrackIndex < (int)m_tracks.count() ) {
             if( QFile::exists( m_tracks[d->currentTrackIndex].second ) ) {
                 QFile::remove( m_tracks[d->currentTrackIndex].second );
-                emit infoMessage( i18n("Removed partial file '%1'.",m_tracks[d->currentTrackIndex].second), K3b::Job::INFO );
+                emit infoMessage( i18n("Removed partial file '%1'.",m_tracks[d->currentTrackIndex].second), K3b::Job::MessageInfo );
             }
         }
 
@@ -186,7 +186,7 @@ bool K3b::AudioProjectConvertingJob::convertTrack( K3b::AudioTrack* track, const
 {
     QString dir = filename.left( filename.lastIndexOf('/') );
     if( !KStandardDirs::makeDir( dir ) ) {
-        emit infoMessage( i18n("Unable to create directory %1",dir), K3b::Job::ERROR );
+        emit infoMessage( i18n("Unable to create directory %1",dir), K3b::Job::MessageError );
         return false;
     }
 
@@ -207,14 +207,14 @@ bool K3b::AudioProjectConvertingJob::convertTrack( K3b::AudioTrack* track, const
                 d->encoder->setMetaData( K3b::AudioEncoder::META_GENRE, m_cddbEntry.get( KCDDB::Genre ).toString() );
             }
             else
-                emit infoMessage( d->encoder->lastErrorString(), K3b::Job::ERROR );
+                emit infoMessage( d->encoder->lastErrorString(), K3b::Job::MessageError );
         }
         else {
             isOpen = d->waveFileWriter->open( filename );
         }
 
         if( !isOpen ) {
-            emit infoMessage( i18n("Unable to open '%1' for writing.",filename), K3b::Job::ERROR );
+            emit infoMessage( i18n("Unable to open '%1' for writing.",filename), K3b::Job::MessageError );
             return false;
         }
     }
@@ -252,8 +252,8 @@ bool K3b::AudioProjectConvertingJob::convertTrack( K3b::AudioTrack* track, const
 
             if( d->encoder->encode( buffer, readLength ) < 0 ) {
                 kDebug() << "(K3b::AudioProjectConvertingJob) error while encoding.";
-                emit infoMessage( d->encoder->lastErrorString(), K3b::Job::ERROR );
-                emit infoMessage( i18n("Error while encoding track %1.",d->currentTrackIndex+1), K3b::Job::ERROR );
+                emit infoMessage( d->encoder->lastErrorString(), K3b::Job::MessageError );
+                emit infoMessage( i18n("Error while encoding track %1.",d->currentTrackIndex+1), K3b::Job::MessageError );
                 return false;
             }
         }
@@ -286,11 +286,11 @@ bool K3b::AudioProjectConvertingJob::writePlaylist()
     QString playlistDir = m_playlistFilename.left( m_playlistFilename.lastIndexOf( '/' ) );
 
     if( !KStandardDirs::makeDir( playlistDir ) ) {
-        emit infoMessage( i18n("Unable to create directory %1",playlistDir), K3b::Job::ERROR );
+        emit infoMessage( i18n("Unable to create directory %1",playlistDir), K3b::Job::MessageError );
         return false;
     }
 
-    emit infoMessage( i18n("Writing playlist to %1.", m_playlistFilename ), K3b::Job::INFO );
+    emit infoMessage( i18n("Writing playlist to %1.", m_playlistFilename ), K3b::Job::MessageInfo );
 
     QFile f( m_playlistFilename );
     if( f.open( QIODevice::WriteOnly ) ) {
@@ -353,7 +353,7 @@ bool K3b::AudioProjectConvertingJob::writePlaylist()
         return ( t.status() == QTextStream::Ok );
     }
     else {
-        emit infoMessage( i18n("Unable to open '%1' for writing.",m_playlistFilename), K3b::Job::ERROR );
+        emit infoMessage( i18n("Unable to open '%1' for writing.",m_playlistFilename), K3b::Job::MessageError );
         kDebug() << "(K3b::AudioProjectConvertingJob) could not open file " << m_playlistFilename << " for writing.";
         return false;
     }
@@ -397,7 +397,7 @@ bool K3b::AudioProjectConvertingJob::writeCueFile()
     cueFile.truncate( cueFile.lastIndexOf('.') );
     cueFile += ".cue";
 
-    emit infoMessage( i18n("Writing cue file to %1.",cueFile), K3b::Job::INFO );
+    emit infoMessage( i18n("Writing cue file to %1.",cueFile), K3b::Job::MessageInfo );
 
     return cueWriter.save( cueFile );
 }

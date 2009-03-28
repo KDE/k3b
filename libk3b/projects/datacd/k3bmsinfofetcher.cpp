@@ -49,11 +49,11 @@ void K3b::MsInfoFetcher::start()
 {
     jobStarted();
 
-    emit infoMessage( i18n("Searching previous session"), K3b::Job::INFO );
+    emit infoMessage( i18n("Searching previous session"), K3b::Job::MessageInfo );
 
     if( !k3bcore->externalBinManager()->foundBin( "cdrecord" ) ) {
         kDebug() << "(K3b::MsInfoFetcher) could not find cdrecord executable";
-        emit infoMessage( i18n("Could not find %1 executable.",QString("cdrecord")), K3b::Job::ERROR );
+        emit infoMessage( i18n("Could not find %1 executable.",QString("cdrecord")), K3b::Job::MessageError );
         jobFinished(false);
         return;
     }
@@ -89,7 +89,7 @@ void K3b::MsInfoFetcher::getMsInfo()
         bin = k3bcore->externalBinManager()->binObject( "cdrecord" );
 
         if( !bin ) {
-            emit infoMessage( i18n("Could not find %1 executable.", m_dvd ? QString("dvdrecord") : QString("cdrecord" )), ERROR );
+            emit infoMessage( i18n("Could not find %1 executable.", m_dvd ? QString("dvdrecord") : QString("cdrecord" )), MessageError );
             jobFinished(false);
             return;
         }
@@ -150,7 +150,7 @@ void K3b::MsInfoFetcher::slotMediaDetectionFinished( K3b::Device::DeviceHandler*
             }
             else {
                 emit infoMessage( i18n("Could not open Iso9660 filesystem in %1.",
-                                       m_device->vendor() + " " + m_device->description() ), ERROR );
+                                       m_device->vendor() + " " + m_device->description() ), MessageError );
                 jobFinished( false );
             }
         }
@@ -161,7 +161,7 @@ void K3b::MsInfoFetcher::slotMediaDetectionFinished( K3b::Device::DeviceHandler*
                 jobFinished( true );
             }
             else {
-                emit infoMessage( i18n("Could not determine next writable address."), ERROR );
+                emit infoMessage( i18n("Could not determine next writable address."), MessageError );
                 jobFinished( false );
             }
         }
@@ -177,7 +177,7 @@ void K3b::MsInfoFetcher::slotProcessExited()
         return;
 
     if (m_process->error() == QProcess::FailedToStart) {
-        emit infoMessage( i18n("Could not start %1", m_process->program().at(0)), K3b::Job::ERROR );
+        emit infoMessage( i18n("Could not start %1", m_process->program().at(0)), K3b::Job::MessageError );
         jobFinished(false);
         return;
     }
@@ -207,8 +207,8 @@ void K3b::MsInfoFetcher::slotProcessExited()
     kDebug() << "(K3b::MsInfoFetcher) msinfo parsed: " << m_msInfo;
 
     if( m_msInfo.isEmpty() ) {
-        emit infoMessage( i18n("Could not retrieve multisession information from disk."), K3b::Job::ERROR );
-        emit infoMessage( i18n("The disk is either empty or not appendable."), K3b::Job::ERROR );
+        emit infoMessage( i18n("Could not retrieve multisession information from disk."), K3b::Job::MessageError );
+        emit infoMessage( i18n("The disk is either empty or not appendable."), K3b::Job::MessageError );
         jobFinished(false);
     }
     else {

@@ -244,7 +244,7 @@ bool K3b::DataMultiSessionParameterJob::setupMultiSessionParameters()
         }
         else {
             emit infoMessage( i18n("Could not open Iso9660 filesystem in %1.",
-                                   d->doc->burner()->vendor() + " " + d->doc->burner()->description() ), K3b::Job::ERROR );
+                                   d->doc->burner()->vendor() + " " + d->doc->burner()->description() ), K3b::Job::MessageError );
             return false;
         }
     }

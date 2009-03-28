@@ -148,7 +148,7 @@ namespace K3b {
          * The width and height values have to be a multiple of 16. If it is not,
          * they will be changed accordingly.
          *
-         * FIXME: GET INFORMATION: why a multiple of 16 and not 8 or 32?
+         * FIXME: GET MessageInfoRMATION: why a multiple of 16 and not 8 or 32?
          */
         void setSize( int width, int height );
 

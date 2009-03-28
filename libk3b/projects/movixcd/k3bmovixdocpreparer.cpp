@@ -131,7 +131,7 @@ bool K3b::MovixDocPreparer::createMovixStructures()
         return success;
     }
     else {
-        emit infoMessage( i18n("Could not find a valid eMovix installation."), ERROR );
+        emit infoMessage( i18n("Could not find a valid eMovix installation."), MessageError );
         return false;
     }
 }

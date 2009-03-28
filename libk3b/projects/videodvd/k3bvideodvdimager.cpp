@@ -108,26 +108,26 @@ int K3b::VideoDvdImager::writePathSpec()
     d->tempPath = K3b::findUniqueFilePrefix( "k3bVideoDvd", dir.path() );
     kDebug() << "(K3b::VideoDvdImager) creating temp dir: " << d->tempPath;
     if( !dir.mkdir( d->tempPath ) ) {
-        emit infoMessage( i18n("Unable to create temporary directory '%1'.",d->tempPath), ERROR );
+        emit infoMessage( i18n("Unable to create temporary directory '%1'.",d->tempPath), MessageError );
         return -1;
     }
 
     dir.cd( d->tempPath );
     if( !dir.mkdir( "VIDEO_TS" ) ) {
-        emit infoMessage( i18n("Unable to create temporary directory '%1'.",d->tempPath + "/VIDEO_TS"), ERROR );
+        emit infoMessage( i18n("Unable to create temporary directory '%1'.",d->tempPath + "/VIDEO_TS"), MessageError );
         return -1;
     }
 
     Q_FOREACH( K3b::DataItem* item, d->doc->videoTsDir()->children() ) {
         if( item->isDir() ) {
-            emit infoMessage( i18n("Found invalid entry in the VIDEO_TS folder (%1).",item->k3bName()), ERROR );
+            emit infoMessage( i18n("Found invalid entry in the VIDEO_TS folder (%1).",item->k3bName()), MessageError );
             return -1;
         }
 
         // convert to upper case names
         if( ::symlink( QFile::encodeName( item->localPath() ),
                        QFile::encodeName( d->tempPath + "/VIDEO_TS/" + item->k3bName().toUpper() ) ) == -1 ) {
-            emit infoMessage( i18n("Unable to link temporary file in folder %1.", d->tempPath ), ERROR );
+            emit infoMessage( i18n("Unable to link temporary file in folder %1.", d->tempPath ), MessageError );
             return -1;
         }
     }
@@ -210,8 +210,8 @@ void K3b::VideoDvdImager::cleanup()
 void K3b::VideoDvdImager::slotReceivedStderr( const QString& line )
 {
     if( line.contains( "Unable to make a DVD-Video image" ) ) {
-        emit infoMessage( i18n("The project does not contain all necessary Video DVD files."), WARNING );
-        emit infoMessage( i18n("The resulting DVD will most likely not be playable on a Hifi DVD player."), WARNING );
+        emit infoMessage( i18n("The project does not contain all necessary Video DVD files."), MessageWarning );
+        emit infoMessage( i18n("The resulting DVD will most likely not be playable on a Hifi DVD player."), MessageWarning );
     }
     else
         K3b::IsoImager::slotReceivedStderr( line );

@@ -200,33 +200,33 @@ void K3b::CdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
             // check if every track is in it's own session
             // only then we copy the cd
             if( (int)dh->toc().count() != dh->diskInfo().numSessions() ) {
-                emit infoMessage( i18n("K3b does not copy CDs containing multiple data tracks."), ERROR );
+                emit infoMessage( i18n("K3b does not copy CDs containing multiple data tracks."), MessageError );
                 canCopy = false;
             }
             else if( dh->diskInfo().numSessions() > 1 )
-                emit infoMessage( i18n("Copying Multisession Data CD."), INFO );
+                emit infoMessage( i18n("Copying Multisession Data CD."), MessageInfo );
             else
-                emit infoMessage( i18n("Copying Data CD."), INFO );
+                emit infoMessage( i18n("Copying Data CD."), MessageInfo );
             break;
 
         case K3b::Device::MIXED:
             audio = true;
             if( dh->diskInfo().numSessions() != 2 || d->toc[0].type() != K3b::Device::Track::TYPE_AUDIO ) {
-                emit infoMessage( i18n("K3b can only copy CD-Extra mixed mode CDs."), ERROR );
+                emit infoMessage( i18n("K3b can only copy CD-Extra mixed mode CDs."), MessageError );
                 canCopy = false;
             }
             else
-                emit infoMessage( i18n("Copying Enhanced Audio CD (CD-Extra)."), INFO );
+                emit infoMessage( i18n("Copying Enhanced Audio CD (CD-Extra)."), MessageInfo );
             break;
 
         case K3b::Device::AUDIO:
             audio = true;
-            emit infoMessage( i18n("Copying Audio CD."), INFO );
+            emit infoMessage( i18n("Copying Audio CD."), MessageInfo );
             break;
 
         case K3b::Device::NONE:
         default:
-            emit infoMessage( i18n("The source disk is empty."), ERROR );
+            emit infoMessage( i18n("The source disk is empty."), MessageError );
             canCopy = false;
             break;
         }
@@ -268,7 +268,7 @@ void K3b::CdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
                 if( (*it).type() == K3b::Device::Track::TYPE_DATA &&
                     ( (*it).mode() == K3b::Device::Track::XA_FORM1 ||
                       (*it).mode() == K3b::Device::Track::XA_FORM2 ) ) {
-                    emit infoMessage( i18n("K3b needs cdrecord 2.01a12 or newer to copy Mode2 data tracks."), ERROR );
+                    emit infoMessage( i18n("K3b needs cdrecord 2.01a12 or newer to copy Mode2 data tracks."), MessageError );
                     finishJob( true, false );
                     return;
                 }
@@ -287,7 +287,7 @@ void K3b::CdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
                 return;
             }
             else {
-                emit infoMessage( i18n("Only copying first session."), WARNING );
+                emit infoMessage( i18n("Only copying first session."), MessageWarning );
                 // TODO: remove the second session from the progress stuff
             }
         }
@@ -316,13 +316,13 @@ void K3b::CdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
             unsigned long avail, size;
             QString pathToTest = m_tempPath.left( m_tempPath.lastIndexOf( '/' ) );
             if( !K3b::kbFreeOnFs( pathToTest, size, avail ) ) {
-                emit infoMessage( i18n("Unable to determine free space in temporary directory '%1'.",pathToTest), ERROR );
+                emit infoMessage( i18n("Unable to determine free space in temporary directory '%1'.",pathToTest), MessageError );
                 d->error = true;
                 canCopy = false;
             }
             else {
                 if( avail < imageSpaceNeeded/1024 ) {
-                    emit infoMessage( i18n("Not enough space left in temporary directory."), ERROR );
+                    emit infoMessage( i18n("Not enough space left in temporary directory."), MessageError );
                     d->error = true;
                     canCopy = false;
                 }
@@ -331,7 +331,7 @@ void K3b::CdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
 
         if( canCopy ) {
             if( K3b::isMounted( m_readerDevice ) ) {
-                emit infoMessage( i18n("Unmounting source medium"), INFO );
+                emit infoMessage( i18n("Unmounting source medium"), MessageInfo );
                 K3b::unmount( m_readerDevice );
             }
 
@@ -360,7 +360,7 @@ void K3b::CdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
         }
     }
     else {
-        emit infoMessage( i18n("Unable to read Table of contents"), ERROR );
+        emit infoMessage( i18n("Unable to read Table of contents"), MessageError );
         finishJob( false, true );
     }
 }
@@ -382,17 +382,17 @@ void K3b::CdCopyJob::slotCdTextReady( K3b::Device::DeviceHandler* dh )
     if( dh->success() ) {
         if( K3b::Device::CdText::checkCrc( dh->cdTextRaw() ) ) {
             K3b::Device::CdText cdt( dh->cdTextRaw() );
-            emit infoMessage( i18n("Found CD-TEXT (%1 - %2).",cdt.performer(),cdt.title()), SUCCESS );
+            emit infoMessage( i18n("Found CD-TEXT (%1 - %2).",cdt.performer(),cdt.title()), MessageSuccess );
             d->haveCdText = true;
             d->cdTextRaw = dh->cdTextRaw();
         }
         else {
-            emit infoMessage( i18n("Found corrupted CD-TEXT. Ignoring it."), WARNING );
+            emit infoMessage( i18n("Found corrupted CD-TEXT. Ignoring it."), MessageWarning );
             d->haveCdText = false;
         }
     }
     else {
-        emit infoMessage( i18n("No CD-TEXT found."), INFO );
+        emit infoMessage( i18n("No CD-TEXT found."), MessageInfo );
 
         d->haveCdText = false;
     }
@@ -427,7 +427,7 @@ void K3b::CdCopyJob::slotCddbQueryFinished( KCDDB::Result result )
         emit infoMessage( i18n("Found Cddb entry (%1 - %2).",
                                d->cddbInfo.get( KCDDB::Artist ).toString(),
                                d->cddbInfo.get( KCDDB::Title ).toString() ),
-                          SUCCESS );
+                          MessageSuccess );
 
         // save the entry locally
         d->cddb->store( d->cddbInfo, K3b::CDDB::createTrackOffsetList( d->toc ) );
@@ -447,12 +447,12 @@ void K3b::CdCopyJob::slotCddbQueryFinished( KCDDB::Result result )
         }
     }
     else if( result == KCDDB::NoRecordFound ) {
-        emit infoMessage( i18n("No Cddb entry found."), WARNING );
+        emit infoMessage( i18n("No Cddb entry found."), MessageWarning );
     }
     else {
         emit infoMessage( i18n("Cddb error (%1).",
                                KCDDB::resultToString( result ) ),
-                          ERROR );
+                          MessageError );
     }
 
     startCopy();
@@ -539,7 +539,7 @@ bool K3b::CdCopyJob::prepareImageFiles()
                     m_tempPath = m_tempPath.section( '/', 0, -2 );
             }
             else {
-                emit infoMessage( i18n("Specified an unusable temporary path. Using default."), WARNING );
+                emit infoMessage( i18n("Specified an unusable temporary path. Using default."), MessageWarning );
                 m_tempPath = K3b::defaultTempPath();
             }
         }
@@ -550,14 +550,14 @@ bool K3b::CdCopyJob::prepareImageFiles()
             m_tempPath = K3b::findUniqueFilePrefix( "k3bCdCopy", m_tempPath );
             kDebug() << "(K3b::CdCopyJob) creating temp dir: " << m_tempPath;
             if( !dir.mkdir( m_tempPath ) ) {
-                emit infoMessage( i18n("Unable to create temporary directory '%1'.",m_tempPath), ERROR );
+                emit infoMessage( i18n("Unable to create temporary directory '%1'.",m_tempPath), MessageError );
                 return false;
             }
             d->deleteTempDir = true;
         }
 
         m_tempPath = K3b::prepareDir( m_tempPath );
-        emit infoMessage( i18n("Using temporary directory %1.",m_tempPath), INFO );
+        emit infoMessage( i18n("Using temporary directory %1.",m_tempPath), MessageInfo );
 
         // create temp filenames
         int i = 1;
@@ -585,12 +585,12 @@ bool K3b::CdCopyJob::prepareImageFiles()
             if( fi.isDir() )
                 m_tempPath = K3b::findTempFile( "iso", m_tempPath );
             else if( !QFileInfo( m_tempPath.section( '/', 0, -2 ) ).isDir() ) {
-                emit infoMessage( i18n("Specified an unusable temporary path. Using default."), WARNING );
+                emit infoMessage( i18n("Specified an unusable temporary path. Using default."), MessageWarning );
                 m_tempPath = K3b::findTempFile( "iso" );
             }
             // else the user specified a file in an existing dir
 
-            emit infoMessage( i18n("Writing image file to %1.",m_tempPath), INFO );
+            emit infoMessage( i18n("Writing image file to %1.",m_tempPath), MessageInfo );
         }
         else
             return false;
@@ -861,7 +861,7 @@ bool K3b::CdCopyJob::writeNextSession()
 
         if( d->haveCddb || d->haveCdText ) {
             if( usedWritingMode == K3b::WritingModeTao ) {
-                emit infoMessage( i18n("It is not possible to write CD-Text in TAO mode."), WARNING );
+                emit infoMessage( i18n("It is not possible to write CD-Text in TAO mode."), MessageWarning );
             }
             else if( d->haveCdText ) {
                 // use the raw CDTEXT data
@@ -981,9 +981,9 @@ void K3b::CdCopyJob::slotSessionReaderFinished( bool success )
 
     if( success ) {
         if( d->numSessions > 1 )
-            emit infoMessage( i18n("Successfully read session %1.",d->currentReadSession), SUCCESS );
+            emit infoMessage( i18n("Successfully read session %1.",d->currentReadSession), MessageSuccess );
         else
-            emit infoMessage( i18n("Successfully read source disk."), SUCCESS );
+            emit infoMessage( i18n("Successfully read source disk."), MessageSuccess );
 
         if( !m_onTheFly ) {
             if( d->numSessions > d->currentReadSession ) {
@@ -1015,7 +1015,7 @@ void K3b::CdCopyJob::slotSessionReaderFinished( bool success )
     }
     else {
         if( !d->canceled ) {
-            emit infoMessage( i18n("Error while reading session %1.",d->currentReadSession), ERROR );
+            emit infoMessage( i18n("Error while reading session %1.",d->currentReadSession), MessageError );
             if( m_onTheFly )
                 d->cdrecordWriter->setSourceUnreadable(true);
         }
@@ -1043,7 +1043,7 @@ void K3b::CdCopyJob::slotWriterFinished( bool success )
 
             // many drives need to reload the medium to return to a proper state
             if ( m_writerDevice->diskInfo().numSessions() < ( int )d->currentWrittenSession ) {
-                emit infoMessage( i18n( "Need to reload medium to return to proper state." ), INFO );
+                emit infoMessage( i18n( "Need to reload medium to return to proper state." ), MessageInfo );
                 emit newSubTask( i18n("Reloading the medium") );
                 connect( K3b::Device::reload( m_writerDevice ), SIGNAL(finished(K3b::Device::DeviceHandler*)),
                          this, SLOT(slotMediaReloadedForNextSession(K3b::Device::DeviceHandler*)) );
@@ -1115,13 +1115,13 @@ void K3b::CdCopyJob::slotMediaReloadedForNextSession( K3b::Device::DeviceHandler
 void K3b::CdCopyJob::cleanup()
 {
     if( m_onTheFly || !m_keepImage || ((d->canceled || d->error) && !d->readingSuccessful) ) {
-        emit infoMessage( i18n("Removing temporary files."), INFO );
+        emit infoMessage( i18n("Removing temporary files."), MessageInfo );
         for( QStringList::iterator it = d->infNames.begin(); it != d->infNames.end(); ++it )
             QFile::remove( *it );
     }
 
     if( !m_onTheFly && (!m_keepImage || ((d->canceled || d->error) && !d->readingSuccessful)) ) {
-        emit infoMessage( i18n("Removing image files."), INFO );
+        emit infoMessage( i18n("Removing image files."), MessageInfo );
         for( QStringList::iterator it = d->imageNames.begin(); it != d->imageNames.end(); ++it )
             QFile::remove( *it );
 
