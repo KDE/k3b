@@ -49,6 +49,7 @@ int main( int argc, char* argv[] )
     aboutData.addAuthor(ki18n("Sebastian Trüg"),ki18n("Maintainer and Lead Developer"), "trueg@k3b.org");
     aboutData.addAuthor(ki18n("Christian Kvasny"),ki18n("VideoCD Project and VideoCD ripping"), "chris@k3b.org");
     aboutData.addAuthor(ki18n("Montel Laurent"), ki18n("Initial port to KDE 4"), "montel@kde.org");
+    aboutData.addAuthor( ki18n("Ralf Habacker"), ki18n( "Windows port" ), "ralf.habacker@freenet.de" );
 
     aboutData.addCredit(ki18n("Klaus-Dieter Krannich"), ki18n("Advanced Cdrdao integration"), "kd@k3b.org" );
     aboutData.addCredit(ki18n("Thomas Froescher"),
@@ -99,6 +100,9 @@ int main( int argc, char* argv[] )
     aboutData.addCredit( ki18n("Dmitry Novikov"),
                          ki18n( "For the amazing K3b 1.0 theme." ),
                          "quant@trktvs.ru" );
+    aboutData.addCredit( ki18n("Jeremy C. Andrus"),
+                         ki18n( "First Windows port of libk3bdevice." ),
+                         "jeremy@jeremya.com" );
 
     KCmdLineOptions options;
     options.add("+[URL(s)]", ki18n("file(s) to open"));
