@@ -1002,8 +1002,11 @@ void K3bQProcess::closeReadChannel(::QProcess::ProcessChannel channel)
 {
     Q_D(K3bQProcess);
 
-    if (channel == ::QProcess::StandardOutput)
+    if (channel == ::QProcess::StandardOutput) {
         d->stdoutChannel.closed = true;
+        if ( d->processFlags&RawStdout )
+            d->destroyPipe(d->stdoutChannel.pipe);
+    }
     else
         d->stderrChannel.closed = true;
 }

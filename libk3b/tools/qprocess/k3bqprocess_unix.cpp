@@ -118,7 +118,7 @@ static qint64 qt_native_read(int fd, char *data, qint64 maxlen)
     qint64 ret = 0;
     do {
         ret = ::read(fd, data, maxlen);
-    } while (ret == -1 && ( errno == EINTR || errno == EAGAIN ));
+    } while (ret == -1 && errno == EINTR);
     return ret;
 }
 
@@ -127,7 +127,7 @@ static qint64 qt_native_write(int fd, const char *data, qint64 len)
     qint64 ret = 0;
     do {
         ret = ::write(fd, data, len);
-    } while (ret == -1 && ( errno == EINTR || errno == EAGAIN ));
+    } while (ret == -1 && errno == EINTR);
     return ret;
 }
 
