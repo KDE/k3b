@@ -36,7 +36,7 @@
 
 K3b::MediumPrivate::MediumPrivate()
     : device( 0 ),
-      content( K3b::Medium::CONTENT_NONE )
+      content( K3b::Medium::ContentNone )
 {
 }
 
@@ -141,7 +141,7 @@ void K3b::Medium::reset()
     d->toc.clear();
     d->cdText.clear();
     d->writingSpeeds.clear();
-    d->content = CONTENT_NONE;
+    d->content = ContentNone;
     d->cddbInfo.clear();
 
     // clear the desc
@@ -188,21 +188,21 @@ void K3b::Medium::analyseContent()
     // set basic content types
     switch( d->toc.contentType() ) {
     case K3b::Device::AUDIO:
-        d->content = CONTENT_AUDIO;
+        d->content = ContentAudio;
         break;
     case K3b::Device::DATA:
     case K3b::Device::DVD:
-        d->content = CONTENT_DATA;
+        d->content = ContentData;
         break;
     case K3b::Device::MIXED:
-        d->content = CONTENT_AUDIO|CONTENT_DATA;
+        d->content = ContentAudio|ContentData;
         break;
     default:
-        d->content = CONTENT_NONE;
+        d->content = ContentNone;
     }
 
     // analyze filesystem
-    if( d->content & CONTENT_DATA ) {
+    if( d->content & ContentData ) {
         //kDebug() << "(K3b::Medium) Checking file system.";
 
         unsigned long startSec = 0;
@@ -239,7 +239,7 @@ void K3b::Medium::analyseContent()
             if( diskInfo().isDvdMedia() ) {
                 // Every VideoDVD needs to have a VIDEO_TS.IFO file
                 if( iso.firstIsoDirEntry()->entry( "VIDEO_TS/VIDEO_TS.IFO" ) != 0 )
-                    d->content |= CONTENT_VIDEO_DVD;
+                    d->content |= ContentVideoDVD;
             }
             else {
                 kDebug() << "(K3b::Medium) checking for VCD.";
@@ -266,7 +266,7 @@ void K3b::Medium::analyseContent()
                          ( !qstrncmp( buffer, "VIDEO_CD", 8 ) ||
                            !qstrncmp( buffer, "SUPERVCD", 8 ) ||
                            !qstrncmp( buffer, "HQ-VCD  ", 8 ) ) )
-                        d->content |= CONTENT_VIDEO_CD;
+                        d->content |= ContentVideoCD;
                 }
             }
         }  // opened iso9660
@@ -319,10 +319,10 @@ QString K3b::Medium::shortString( bool useContent ) const
 
             // DATA CD and DVD
             else if( !volumeId().isEmpty() ) {
-                if( content() & CONTENT_VIDEO_DVD ) {
+                if( content() & ContentVideoDVD ) {
                     return QString("%1 (%2)").arg(beautifiedVolumeId()).arg( i18n("Video DVD") );
                 }
-                else if( content() & CONTENT_VIDEO_CD ) {
+                else if( content() & ContentVideoCD ) {
                     return QString("%1 (%2)").arg(beautifiedVolumeId()).arg(i18n("Video CD") );
                 }
                 else if( diskInfo().diskState() == K3b::Device::STATE_INCOMPLETE ) {
@@ -444,7 +444,7 @@ KIcon K3b::Medium::icon() const
     if ( diskInfo().empty() ) {
         return KIcon( "media-optical-recordable" );
     }
-    else if ( content() & CONTENT_AUDIO ) {
+    else if ( content() & ContentAudio ) {
         return KIcon( "media-optical-audio" );
     }
     else {

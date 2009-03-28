@@ -56,7 +56,7 @@ namespace {
 
 K3b::DiskInfoView::DiskInfoView( QWidget* parent )
     : K3b::MediaContentsView( true,
-                            K3b::Medium::CONTENT_ALL,
+                            K3b::Medium::ContentAll,
                             K3b::Device::MEDIA_ALL|K3b::Device::MEDIA_UNKNOWN,
                             K3b::Device::STATE_EMPTY|K3b::Device::STATE_INCOMPLETE|K3b::Device::STATE_COMPLETE|K3b::Device::STATE_UNKNOWN,
                             parent )
@@ -100,7 +100,7 @@ void K3b::DiskInfoView::reloadMedium()
         s += sectionHeader( i18n( "Medium" ) );
         s += createMediaInfoItems( medium() );
 
-        if( medium().content() & K3b::Medium::CONTENT_DATA ) {
+        if( medium().content() & K3b::Medium::ContentData ) {
             s += sectionHeader( i18n("ISO9660 Filesystem Info") );
             s += createIso9660InfoItems( medium().iso9660Descriptor() );
         }
@@ -135,7 +135,7 @@ void K3b::DiskInfoView::updateTitle()
                 setRightPixmap( K3b::Theme::MEDIA_AUDIO );
                 break;
             case K3b::Device::DATA: {
-                if( medium().content() & K3b::Medium::CONTENT_VIDEO_DVD ) {
+                if( medium().content() & K3b::Medium::ContentVideoDVD ) {
                     setRightPixmap( K3b::Theme::MEDIA_VIDEO );
                 }
                 else {

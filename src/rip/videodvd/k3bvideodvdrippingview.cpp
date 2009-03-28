@@ -45,7 +45,7 @@
 
 K3b::VideoDVDRippingView::VideoDVDRippingView( QWidget* parent )
     : K3b::MediaContentsView( true,
-                            K3b::Medium::CONTENT_VIDEO_DVD,
+                            K3b::Medium::ContentVideoDVD,
                             K3b::Device::MEDIA_DVD_ALL,
                             K3b::Device::STATE_INCOMPLETE|K3b::Device::STATE_COMPLETE,
                             parent )

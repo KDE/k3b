@@ -143,7 +143,7 @@ public:
 
 K3b::VideoCdView::VideoCdView( QWidget* parent )
     : K3b::MediaContentsView( true,
-                            K3b::Medium::CONTENT_VIDEO_CD,
+                            K3b::Medium::ContentVideoCD,
                             K3b::Device::MEDIA_CD_ALL,
                             K3b::Device::STATE_INCOMPLETE|K3b::Device::STATE_COMPLETE,
                             parent )

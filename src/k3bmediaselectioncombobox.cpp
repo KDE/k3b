@@ -62,7 +62,7 @@ K3b::MediaSelectionComboBox::MediaSelectionComboBox( QWidget* parent )
     // set defaults
     d->wantedMediumType = K3b::Device::MEDIA_WRITABLE_CD;
     d->wantedMediumState = K3b::Device::STATE_EMPTY;
-    d->wantedMediumContent = K3b::Medium::CONTENT_ALL;
+    d->wantedMediumContent = K3b::Medium::ContentAll;
 
     connect( this, SIGNAL(activated(int)),
              this, SLOT(slotActivated(int)) );
@@ -393,7 +393,7 @@ QString K3b::MediaSelectionComboBox::mediumToolTip( const K3b::Medium& m ) const
 QString K3b::MediaSelectionComboBox::noMediumMessage() const
 {
     KLocalizedString stateString;
-    if( d->wantedMediumContent == K3b::Medium::CONTENT_ALL ) {
+    if( d->wantedMediumContent == K3b::Medium::ContentAll ) {
         if( d->wantedMediumState == K3b::Device::STATE_EMPTY )
             stateString = ki18n("an empty %1 medium");
         else if( d->wantedMediumState == K3b::Device::STATE_INCOMPLETE )
@@ -414,16 +414,16 @@ QString K3b::MediaSelectionComboBox::noMediumMessage() const
         // and if content is requested in does not make sense to
         // also request a specific type of medium (like DVD+RW or DVD-R)
         //
-        if( d->wantedMediumContent & K3b::Medium::CONTENT_VIDEO_CD )
+        if( d->wantedMediumContent & K3b::Medium::ContentVideoCD )
             stateString = ki18n("a Video CD medium");
-        else if ( d->wantedMediumContent & K3b::Medium::CONTENT_VIDEO_DVD )
+        else if ( d->wantedMediumContent & K3b::Medium::ContentVideoDVD )
             stateString = ki18n("a Video DVD medium");
-        else if( d->wantedMediumContent & K3b::Medium::CONTENT_AUDIO &&
-                 d->wantedMediumContent & K3b::Medium::CONTENT_DATA )
+        else if( d->wantedMediumContent & K3b::Medium::ContentAudio &&
+                 d->wantedMediumContent & K3b::Medium::ContentData )
             stateString = ki18n("a Mixed Mode CD medium");
-        else if( d->wantedMediumContent & K3b::Medium::CONTENT_AUDIO )
+        else if( d->wantedMediumContent & K3b::Medium::ContentAudio )
             stateString = ki18n("an Audio CD medium");
-        else if( d->wantedMediumContent & K3b::Medium::CONTENT_DATA ) {
+        else if( d->wantedMediumContent & K3b::Medium::ContentData ) {
             if ( d->wantedMediumType == K3b::Device::MEDIA_ALL )
                 stateString = ki18n("a Data medium");
             else if ( d->wantedMediumType == (K3b::Device::MEDIA_CD_ALL|K3b::Device::MEDIA_DVD_ALL) )

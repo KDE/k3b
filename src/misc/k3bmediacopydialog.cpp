@@ -425,7 +425,7 @@ void K3b::MediaCopyDialog::toggleAll()
 
     // FIXME: no verification for CD yet
     m_checkVerifyData->setDisabled( sourceMedium.diskInfo().mediaType() & K3b::Device::MEDIA_CD_ALL ||
-                                    sourceMedium.content() & K3b::Medium::CONTENT_AUDIO ||
+                                    sourceMedium.content() & K3b::Medium::ContentAudio ||
                                     m_checkSimulate->isChecked() );
 
     // we can only clone single session CDs
@@ -518,10 +518,10 @@ void K3b::MediaCopyDialog::toggleAll()
     else {
         m_tempDirSelectionWidget->setSelectionMode( K3b::TempDirSelectionWidget::DIR );
 
-        if ( sourceMedium.content() & K3b::Medium::CONTENT_DATA && !sourceMedium.volumeId().isEmpty() ) {
+        if ( sourceMedium.content() & K3b::Medium::ContentData && !sourceMedium.volumeId().isEmpty() ) {
             m_tempDirSelectionWidget->setTempPath( m_tempDirSelectionWidget->tempDirectory() + sourceMedium.volumeId().toLower() );
         }
-        else if ( sourceMedium.content() & K3b::Medium::CONTENT_AUDIO && !sourceMedium.cdText().title().isEmpty() ) {
+        else if ( sourceMedium.content() & K3b::Medium::ContentAudio && !sourceMedium.cdText().title().isEmpty() ) {
             m_tempDirSelectionWidget->setTempPath( m_tempDirSelectionWidget->tempDirectory() + sourceMedium.cdText().title() );
         }
         else {
@@ -529,8 +529,8 @@ void K3b::MediaCopyDialog::toggleAll()
         }
     }
 
-    m_groupAdvancedAudioOptions->setEnabled( sourceMedium.content() & K3b::Medium::CONTENT_AUDIO && m_comboCopyMode->currentIndex() == 0 );
-    m_groupAdvancedDataOptions->setEnabled( sourceMedium.content() & K3b::Medium::CONTENT_DATA );
+    m_groupAdvancedAudioOptions->setEnabled( sourceMedium.content() & K3b::Medium::ContentAudio && m_comboCopyMode->currentIndex() == 0 );
+    m_groupAdvancedDataOptions->setEnabled( sourceMedium.content() & K3b::Medium::ContentData );
 
     setButtonEnabled( START_BUTTON,
                       m_comboSourceDevice->selectedDevice() &&

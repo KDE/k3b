@@ -139,7 +139,7 @@ void K3b::AppDeviceManager::slotMediumChanged( K3b::Device::Device* dev )
         d->actionSetReadSpeed->setEnabled( dev != 0 );
 
         if( dev ) {
-            bool mediumMountable = k3bappcore->mediaCache()->medium( dev ).content() & K3b::Medium::CONTENT_DATA;
+            bool mediumMountable = k3bappcore->mediaCache()->medium( dev ).content() & K3b::Medium::ContentData;
             d->actionMount->setEnabled( mediumMountable );
             d->actionUnmount->setEnabled( mediumMountable );
 

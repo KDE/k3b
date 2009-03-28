@@ -600,7 +600,7 @@ void K3b::FillStatusDisplay::slotDetermineSize()
     bool canceled = false;
     K3b::Device::Device* dev = K3b::MediaSelectionDialog::selectMedium( d->doc->supportedMediaTypes(),
                                                                         K3b::Device::STATE_EMPTY|K3b::Device::STATE_INCOMPLETE,
-                                                                        K3b::Medium::CONTENT_ALL,
+                                                                        K3b::Medium::ContentAll,
                                                                         parentWidget(),
                                                                         QString(), QString(), &canceled );
 

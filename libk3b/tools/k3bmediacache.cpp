@@ -126,7 +126,7 @@ public:
 // called from the device thread which updated the medium
 void K3b::MediaCache::Private::_k_mediumChanged( K3b::Device::Device* dev )
 {
-    if ( q->medium( dev ).content() & K3b::Medium::CONTENT_AUDIO ) {
+    if ( q->medium( dev ).content() & K3b::Medium::ContentAudio ) {
         K3b::CDDB::CDDBJob* job = K3b::CDDB::CDDBJob::queryCddb( q->medium( dev ) );
         connect( job, SIGNAL( result( KJob* ) ),
                  q, SLOT( _k_cddbJobFinished( KJob* ) ) );
@@ -365,7 +365,7 @@ K3b::MediaCache::DeviceEntry* K3b::MediaCache::findDeviceEntry( K3b::Device::Dev
 void K3b::MediaCache::lookupCddb( K3b::Device::Device* dev )
 {
     K3b::Medium m = medium( dev );
-    if ( m.content() & K3b::Medium::CONTENT_AUDIO ) {
+    if ( m.content() & K3b::Medium::ContentAudio ) {
         K3b::CDDB::CDDBJob* job = K3b::CDDB::CDDBJob::queryCddb( m );
         connect( job, SIGNAL( result( KJob* ) ),
                  this, SLOT( _k_cddbJobFinished( KJob* ) ) );

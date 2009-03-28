@@ -228,14 +228,14 @@
 //         tooltip->setPaletteForegroundColor( theme->foregroundColor() );
 //         K3b::Theme::PixmapType pm;
 //         int c = k3bappcore->mediaCache()->medium( dev ).content();
-//         if( c & (K3b::Medium::CONTENT_VIDEO_CD|K3b::Medium::CONTENT_VIDEO_DVD) )
+//         if( c & (K3b::Medium::ContentVideoCD|K3b::Medium::ContentVideoDVD) )
 //             pm = K3b::Theme::MEDIA_VIDEO;
-//         else if( c & K3b::Medium::CONTENT_AUDIO &&
-//                  c & K3b::Medium::CONTENT_DATA )
+//         else if( c & K3b::Medium::ContentAudio &&
+//                  c & K3b::Medium::ContentData )
 //             pm = K3b::Theme::MEDIA_MIXED;
-//         else if( c & K3b::Medium::CONTENT_AUDIO )
+//         else if( c & K3b::Medium::ContentAudio )
 //             pm = K3b::Theme::MEDIA_AUDIO;
-//         else if( c & K3b::Medium::CONTENT_DATA )
+//         else if( c & K3b::Medium::ContentData )
 //             pm = K3b::Theme::MEDIA_DATA;
 //         else {
 //             K3b::Device::DiskInfo di = k3bappcore->mediaCache()->diskInfo( dev );

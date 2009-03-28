@@ -78,7 +78,7 @@ namespace {
 
 K3b::AudioCdView::AudioCdView( QWidget* parent )
     : K3b::MediaContentsView( true,
-                            K3b::Medium::CONTENT_AUDIO,
+                            K3b::Medium::ContentAudio,
                             K3b::Device::MEDIA_CD_ALL,
                             K3b::Device::STATE_INCOMPLETE|K3b::Device::STATE_COMPLETE,
                             parent )

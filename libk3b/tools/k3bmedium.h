@@ -106,19 +106,19 @@ namespace K3b {
          * Content type. May be combined by a binary OR.
          */
         enum MediumContent {
-            CONTENT_NONE = 0x1,
-            CONTENT_AUDIO = 0x2,
-            CONTENT_DATA = 0x4,
-            CONTENT_VIDEO_CD = 0x8,
-            CONTENT_VIDEO_DVD = 0x10,
-            CONTENT_ALL = 0xFF
+            ContentNone = 0x1,
+            ContentAudio = 0x2,
+            ContentData = 0x4,
+            ContentVideoCD = 0x8,
+            ContentVideoDVD = 0x10,
+            ContentAll = 0xFF
         };
         Q_DECLARE_FLAGS( MediumContents, MediumContent )
 
         /**
          * \return a bitwise combination of MediumContent.
          * A VideoCD for example may have the following content:
-         * CONTENT_AUDIO|CONTENT_DATA|CONTENT_VIDEO_CD
+         * ContentAudio|ContentData|ContentVideoCD
          */
         MediumContents content() const;
 

@@ -87,7 +87,7 @@ void K3b::DeviceMenu::Private::_k_aboutToShow()
     K3b::Medium medium = k3bcore->mediaCache()->medium( k3bappcore->appDeviceManager()->currentDevice() );
 
     actionContinueMultisession->setVisible(
-        medium.content() == K3b::Medium::CONTENT_DATA &&
+        medium.content() == K3b::Medium::ContentData &&
         medium.diskInfo().appendable() );
 
     // non-empty cd/dvd/bd: copy
@@ -100,13 +100,13 @@ void K3b::DeviceMenu::Private::_k_aboutToShow()
         medium.diskInfo().mediaType() != K3b::Device::MEDIA_DVD_PLUS_RW );
 
     // audio content: rip audio
-    actionRipAudio->setVisible( medium.content() & K3b::Medium::CONTENT_AUDIO );
+    actionRipAudio->setVisible( medium.content() & K3b::Medium::ContentAudio );
 
     // video dvd: videodvd rip
-    actionRipVideoDVD->setVisible( medium.content() & K3b::Medium::CONTENT_VIDEO_DVD );
+    actionRipVideoDVD->setVisible( medium.content() & K3b::Medium::ContentVideoDVD );
 
     // video cd: vcd rip
-    actionRipVcd->setVisible( medium.content() & K3b::Medium::CONTENT_VIDEO_CD );
+    actionRipVcd->setVisible( medium.content() & K3b::Medium::ContentVideoCD );
 }
 
 

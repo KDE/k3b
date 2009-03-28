@@ -91,9 +91,9 @@ namespace K3b {
         void setWantedMediumState( K3b::Device::MediaStates state );
 
         /**
-         * Set the wanted medium content type. The default is Medium::CONTENT_ALL (i.e. ignore media
+         * Set the wanted medium content type. The default is Medium::ContentAll (i.e. ignore media
          * content)
-         * Be aware that 0 maps to Medium::CONTENT_NONE, i.e. empty media.
+         * Be aware that 0 maps to Medium::ContentNone, i.e. empty media.
          *
          * \param content A bitwise or of Medium::MediumContent
          */

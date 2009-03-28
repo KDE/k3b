@@ -1457,10 +1457,10 @@ void K3b::MainWindow::slotCddaRip()
 void K3b::MainWindow::cddaRip( K3b::Device::Device* dev )
 {
     if( !dev ||
-        !(k3bappcore->mediaCache()->medium( dev ).content() & K3b::Medium::CONTENT_AUDIO ) )
+        !(k3bappcore->mediaCache()->medium( dev ).content() & K3b::Medium::ContentAudio ) )
         dev = K3b::MediaSelectionDialog::selectMedium( K3b::Device::MEDIA_CD_ALL,
                                                      K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE,
-                                                     K3b::Medium::CONTENT_AUDIO,
+                                                     K3b::Medium::ContentAudio,
                                                      this,
                                                      i18n("Audio CD Rip") );
 
@@ -1472,10 +1472,10 @@ void K3b::MainWindow::cddaRip( K3b::Device::Device* dev )
 void K3b::MainWindow::videoDvdRip( K3b::Device::Device* dev )
 {
     if( !dev ||
-        !(k3bappcore->mediaCache()->medium( dev ).content() & K3b::Medium::CONTENT_VIDEO_DVD ) )
+        !(k3bappcore->mediaCache()->medium( dev ).content() & K3b::Medium::ContentVideoDVD ) )
         dev = K3b::MediaSelectionDialog::selectMedium( K3b::Device::MEDIA_DVD_ALL,
                                                      K3b::Device::STATE_COMPLETE,
-                                                     K3b::Medium::CONTENT_VIDEO_DVD,
+                                                     K3b::Medium::ContentVideoDVD,
                                                      this,
                                                      i18n("Video DVD Rip") );
 
@@ -1493,10 +1493,10 @@ void K3b::MainWindow::slotVideoDvdRip()
 void K3b::MainWindow::videoCdRip( K3b::Device::Device* dev )
 {
     if( !dev ||
-        !(k3bappcore->mediaCache()->medium( dev ).content() & K3b::Medium::CONTENT_VIDEO_CD ) )
+        !(k3bappcore->mediaCache()->medium( dev ).content() & K3b::Medium::ContentVideoCD ) )
         dev = K3b::MediaSelectionDialog::selectMedium( K3b::Device::MEDIA_CD_ALL,
                                                      K3b::Device::STATE_COMPLETE,
-                                                     K3b::Medium::CONTENT_VIDEO_CD,
+                                                     K3b::Medium::ContentVideoCD,
                                                      this,
                                                      i18n("Video CD Rip") );
 
