@@ -210,7 +210,7 @@ K3b::Device::Device::Handle K3b::Device::openDevice( const char* name, bool writ
 
     _snprintf(string, NAME_COUNT, "\\\\.\\%s", name);
     deviceHandle = CreateFileA(string,
-        GENERIC_READ | GENERIC_WRITE , // at least inquiry needs write access 
+        GENERIC_READ | GENERIC_WRITE , // at least inquiry needs write access
         FILE_SHARE_READ | (write ? FILE_SHARE_WRITE : 0),
         NULL,
         OPEN_EXISTING,
@@ -467,7 +467,7 @@ bool K3b::Device::Device::furtherInit()
 
 #endif // Q_OS_LINUX
 #ifdef Q_OS_WIN32
-    kDebug() << __FUNCTION__ << "to be implemented"; 
+    kDebug() << __FUNCTION__ << "to be implemented";
 #endif
     return true;
 }
@@ -507,7 +507,7 @@ void K3b::Device::Device::checkForAncientWriters()
     }
     else if( vendor().startsWith("TEAC") ) {
         if( description().startsWith("CD-R56S") ) {
-            d->writeModes |= TAO;
+            d->writeModes |= WRITINGMODE_TAO;
             d->readCapabilities = MEDIA_CD_ROM|MEDIA_CD_R;
             d->writeCapabilities = MEDIA_CD_ROM|MEDIA_CD_R;
             d->maxWriteSpeed = 6;
@@ -516,7 +516,7 @@ void K3b::Device::Device::checkForAncientWriters()
             d->burnfree = false;
         }
         if( description().startsWith("CD-R58S") ) {
-            d->writeModes |= TAO;
+            d->writeModes |= WRITINGMODE_TAO;
             d->readCapabilities = MEDIA_CD_ROM|MEDIA_CD_R;
             d->writeCapabilities = MEDIA_CD_ROM|MEDIA_CD_R;
             d->maxWriteSpeed = 8;
@@ -1810,16 +1810,16 @@ void K3b::Device::Device::close() const
     //QMutexLocker ml( &d->openCloseMutex );
 
     if( d->deviceHandle == HANDLE_DEFAULT_VALUE)
-        return; 
+        return;
 
 #ifdef Q_OS_FREEBSD
     cad->close_device(d->deviceHandle);
-#endif       
+#endif
 #if defined(Q_OS_WIN32)
     CloseHandle(d->deviceHandle);
 #else
     ::close( d->deviceHandle );
-#endif       
+#endif
     d->deviceHandle = HANDLE_DEFAULT_VALUE;
 }
 

@@ -96,16 +96,7 @@ namespace K3b {
             DEVICE_HD_DVD_RAM = 0x2000,   /**< Device writes HD DVD-RAM media */
             DEVICE_BD_ROM = 0x4000,       /**< Device reads BD-ROM media */
             DEVICE_BD_R = 0x8000,         /**< Device writes BD-R media */
-            DEVICE_BD_RE = 0x10000,       /**< Device writes BD-RE media */
-            CDR = DEVICE_CD_R,            /**< \deprecated {use DEVICE_CD_R instead) */
-            CDRW = DEVICE_CD_RW,          /**< \deprecated {use DEVICE_CD_RW instead) */
-            CDROM = DEVICE_CD_ROM,        /**< \deprecated {use DEVICE_CD_ROM instead) */
-            DVD = DEVICE_DVD_ROM,         /**< \deprecated {use DEVICE_DVD_ROM instead) */
-            DVDRAM = DEVICE_DVD_RAM,      /**< \deprecated {use DEVICE_DVD_RAM instead) */
-            DVDR = DEVICE_DVD_R,          /**< \deprecated {use DEVICE_DVD_R instead) */
-            DVDRW = DEVICE_DVD_RW,        /**< \deprecated {use DEVICE_DVD_RW instead) */
-            DVDPR = DEVICE_DVD_PLUS_R,    /**< \deprecated {use DEVICE_DVD_PLUS_R instead) */
-            DVDPRW = DEVICE_DVD_PLUS_RW   /**< \deprecated {use DEVICE_DVD_PLUS_RW instead) */
+            DEVICE_BD_RE = 0x10000        /**< Device writes BD-RE media */
         };
         Q_DECLARE_FLAGS( DeviceTypes, DeviceType )
 
@@ -126,15 +117,7 @@ namespace K3b {
             WRITINGMODE_LAYER_JUMP = 0x400,  /**< Device writes DVD-R Dual layer media in Layer Jump writing mode */
             WRITINGMODE_RRM = 0x800,         /**< Device writes BD-R media in Random Recording Mode */
             WRITINGMODE_SRM = 0x1000,        /**< Device writes BD-R media in Sequential recording mode */
-            WRITINGMODE_SRM_POW = 0x2000,    /**< Device writes BD-R media in Pseudo overwrite Sequential recording mode */
-            SAO = WRITINGMODE_SAO,           /**< \deprecated {use WRITINGMODE_SAO instead) */
-            TAO = WRITINGMODE_TAO,           /**< \deprecated {use WRITINGMODE_TAO instead) */
-            RAW = WRITINGMODE_RAW,           /**< \deprecated {use WRITINGMODE_RAW instead) */
-            SAO_R96P = WRITINGMODE_SAO_R96P, /**< \deprecated {use WRITINGMODE_SAO_R96P instead) */
-            SAO_R96R = WRITINGMODE_SAO_R96R, /**< \deprecated {use WRITINGMODE_SAO_R96R instead) */
-            RAW_R16 = WRITINGMODE_RAW_R16,   /**< \deprecated {use WRITINGMODE_RAW_R16 instead) */
-            RAW_R96P = WRITINGMODE_RAW_R96P, /**< \deprecated {use WRITINGMODE_RAW_R96P instead) */
-            RAW_R96R = WRITINGMODE_RAW_R96R  /**< \deprecated {use WRITINGMODE_RAW_R96R instead) */
+            WRITINGMODE_SRM_POW = 0x2000     /**< Device writes BD-R media in Pseudo overwrite Sequential recording mode */
         };
         Q_DECLARE_FLAGS( WritingModes, WritingMode )
 

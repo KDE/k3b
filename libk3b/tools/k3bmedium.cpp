@@ -191,7 +191,6 @@ void K3b::Medium::analyseContent()
         d->content = ContentAudio;
         break;
     case K3b::Device::DATA:
-    case K3b::Device::DVD:
         d->content = ContentData;
         break;
     case K3b::Device::MIXED:

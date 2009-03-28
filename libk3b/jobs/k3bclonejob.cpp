@@ -106,8 +106,8 @@ void K3b::CloneJob::start()
     }
 
     if( !m_onlyCreateImage ) {
-        if( !writer()->supportsWritingMode( K3b::Device::RAW_R96R ) &&
-            !writer()->supportsWritingMode( K3b::Device::RAW_R16 ) ) {
+        if( !writer()->supportsWritingMode( K3b::Device::WRITINGMODE_RAW_R96R ) &&
+            !writer()->supportsWritingMode( K3b::Device::WRITINGMODE_RAW_R16 ) ) {
             emit infoMessage( i18n("CD writer %1 (%2) does not support cloning.",
                                    writer()->vendor(),
                                    writer()->description()), ERROR );
