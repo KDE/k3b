@@ -133,7 +133,7 @@ void K3b::VideoDVDTitleTranscodingJob::start()
     //
     d->twoPassEncodingLogFile = K3b::findTempFile( "log" );
 
-    emit newTask( i18n("Transcoding title %1 from Video DVD %2",m_titleNumber,m_dvd.volumeIdentifier()) );
+    emit newTask( i18n("Transcoding title %1 from Video DVD %2", m_titleNumber, m_dvd.volumeIdentifier()) );
 
     //
     // Ok then, let's begin
@@ -202,6 +202,9 @@ void K3b::VideoDVDTitleTranscodingJob::startTranscode( int pass )
     // low priority
     if( m_lowPriority )
         *d->process << "--nice" << "19";
+
+    if ( d->usedTranscodeBin->version >= Version( 1, 1, 0 ) )
+        *d->process << "--log_no_color";
 
     // we only need 100 steps, but to make sure we use 150
     int progressRate = qMax( 1, ( int )m_dvd[m_titleNumber-1].playbackTime().totalFrames()/150 );

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,15 +36,15 @@ K3b::VideoDVDRippingJob::TitleRipInfo::TitleRipInfo()
 
 
 K3b::VideoDVDRippingJob::TitleRipInfo::TitleRipInfo( int _title,
-						   int _audioStream,
-						   const QString& fn,
-						   int _width,
-						   int _height,
-						   int _videoBitrate,
-						   int _clipTop,
-						   int _clipLeft,
-						   int _clipBottom,
-						   int _clipRight )
+                                                     int _audioStream,
+                                                     const QString& fn,
+                                                     int _width,
+                                                     int _height,
+                                                     int _videoBitrate,
+                                                     int _clipTop,
+                                                     int _clipLeft,
+                                                     int _clipBottom,
+                                                     int _clipRight )
     : title(_title),
       audioStream(_audioStream),
       filename(fn),
@@ -114,8 +114,8 @@ QString K3b::VideoDVDRippingJob::jobDescription() const
 QString K3b::VideoDVDRippingJob::jobDetails() const
 {
     return i18np("Transcoding 1 title to %2/%3", "Transcoding %1 titles to %2/%3", m_titleRipInfos.count(),
-        K3b::VideoDVDTitleTranscodingJob::videoCodecString( m_transcodingJob->videoCodec() ) ,
-        K3b::VideoDVDTitleTranscodingJob::audioCodecString( m_transcodingJob->audioCodec() ) );
+                 K3b::VideoDVDTitleTranscodingJob::videoCodecString( m_transcodingJob->videoCodec() ) ,
+                 K3b::VideoDVDTitleTranscodingJob::audioCodecString( m_transcodingJob->audioCodec() ) );
 }
 
 
@@ -142,10 +142,12 @@ void K3b::VideoDVDRippingJob::slotTranscodingJobFinished( bool success )
     }
     else {
         if( success )
-            emit infoMessage( i18n("Successfully ripped title %1",m_titleRipInfos[d->currentTitleInfoIndex].title), MessageSuccess );
+            emit infoMessage( i18n("Successfully ripped title %1 to '%2'",
+                                   m_titleRipInfos[d->currentTitleInfoIndex].title,
+                                   m_titleRipInfos[d->currentTitleInfoIndex].filename ), MessageSuccess );
         else {
             d->failedTitles++;
-            emit infoMessage( i18n("Failed to rip title %1",m_titleRipInfos[d->currentTitleInfoIndex].title), MessageError );
+            emit infoMessage( i18n("Failed to rip title %1", m_titleRipInfos[d->currentTitleInfoIndex].title), MessageError );
         }
 
         ++d->currentTitleInfoIndex ;

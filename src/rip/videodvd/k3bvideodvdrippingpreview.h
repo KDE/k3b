@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,46 +23,47 @@
 
 
 class KTempDir;
-class KProcess;
 
 namespace K3b {
-class VideoDVDRippingPreview : public QObject
-{
-    Q_OBJECT
+    class Process;
 
-public:
-    VideoDVDRippingPreview( QObject* parent = 0 );
-    ~VideoDVDRippingPreview();
+    class VideoDVDRippingPreview : public QObject
+    {
+        Q_OBJECT
 
-    QImage preview() const { return m_preview; }
+    public:
+        VideoDVDRippingPreview( QObject* parent = 0 );
+        ~VideoDVDRippingPreview();
 
-public Q_SLOTS:
-    /**
-     * \param dvd The Video DVD object
-     * \param title The Video DVD title to generate the preview for
-     * \param chapter The Chapter number to use for the preview. 
-     *                If 0 the middle of the title is used.
-     */
-    void generatePreview( const VideoDVD::VideoDVD& dvd, int title, int chapter = 0 );
+        QImage preview() const { return m_preview; }
 
-    void cancel();
+    public Q_SLOTS:
+        /**
+         * \param dvd The Video DVD object
+         * \param title The Video DVD title to generate the preview for
+         * \param chapter The Chapter number to use for the preview.
+         *                If 0 the middle of the title is used.
+         */
+        void generatePreview( const VideoDVD::VideoDVD& dvd, int title, int chapter = 0 );
 
-Q_SIGNALS:
-    void previewDone( bool );
+        void cancel();
 
-private Q_SLOTS:
-    void slotTranscodeFinished( int exitCode, QProcess::ExitStatus status );
+    Q_SIGNALS:
+        void previewDone( bool );
 
-private:
-    QImage m_preview;
-    KTempDir* m_tempDir;
-    KProcess* m_process;
-    int m_title;
-    int m_chapter;
-    VideoDVD::VideoDVD m_dvd;
+    private Q_SLOTS:
+        void slotTranscodeFinished( int exitCode, QProcess::ExitStatus status );
 
-    bool m_canceled;
-};
+    private:
+        QImage m_preview;
+        KTempDir* m_tempDir;
+        Process* m_process;
+        int m_title;
+        int m_chapter;
+        VideoDVD::VideoDVD m_dvd;
+
+        bool m_canceled;
+    };
 }
 
 #endif

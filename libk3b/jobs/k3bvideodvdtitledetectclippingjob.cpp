@@ -145,6 +145,9 @@ void K3b::VideoDVDTitleDetectClippingJob::startTranscode( int chapter )
     if( m_lowPriority )
         *d->process << "--nice" << "19";
 
+    if ( d->usedTranscodeBin->version >= Version( 1, 1, 0 ) )
+        *d->process << "--log_no_color";
+
     // the input
     *d->process << "-i" << m_dvd.device()->blockDeviceName();
 

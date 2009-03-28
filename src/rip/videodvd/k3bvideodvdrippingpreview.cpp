@@ -18,7 +18,7 @@
 #include <k3bexternalbinmanager.h>
 #include <k3bdevice.h>
 
-#include <kprocess.h>
+#include "k3bprocess.h"
 #include <ktempdir.h>
 #include <kdebug.h>
 
@@ -73,12 +73,20 @@ void K3b::VideoDVDRippingPreview::generatePreview( const K3b::VideoDVD::VideoDVD
     m_tempDir = new KTempDir();
     m_tempDir->setAutoRemove( true );
 
-    m_process = new KProcess();
+    m_process = new Process();
     *m_process << bin->path;
+    if ( bin->version >= Version( 1, 1, 0 ) )
+        *m_process << "--log_no_color";
     *m_process << "-i" << dvd.device()->blockDeviceName();
     *m_process << "-T" << QString("%1,%2").arg(title).arg(chapter);
     *m_process << "-x" << "dvd,null";
-    *m_process << "--dvd_access_delay" << "0";
+    if ( bin->version < Version( 1, 1, 0 ) )
+        *m_process << "--dvd_access_delay" << "0";
+    else
+#ifdef __GNUC__
+#warning FIXME: How can one specify the delay module option? I could not find anything in the transcode manpage!
+#endif
+        *m_process << "delay" << "0";
     *m_process << "-y" << "ppm,null";
     *m_process << "-c" << QString("%1-%2").arg( frame ).arg( frame+1 );
     *m_process << "-Z" << "x200";
@@ -86,9 +94,7 @@ void K3b::VideoDVDRippingPreview::generatePreview( const K3b::VideoDVD::VideoDVD
 
     connect( m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
              this, SLOT(slotTranscodeFinished(int, QProcess::ExitStatus)) );
-    m_process->setOutputChannelMode(KProcess::SeparateChannels); // we use SeparateChannels to not pollute stdout
-    m_process->start();
-    if (!m_process->waitForStarted(-1)) {
+    if ( !m_process->start(KProcess::ForwardedChannels) ) {
         // something went wrong when starting the program
         // it "should" be the executable
         kDebug() << "(K3b::VideoDVDRippingPreview) Could not start transcode.";
@@ -103,7 +109,7 @@ void K3b::VideoDVDRippingPreview::generatePreview( const K3b::VideoDVD::VideoDVD
 
 void K3b::VideoDVDRippingPreview::cancel()
 {
-    if( m_process && (m_process->state() != QProcess::NotRunning) ) {
+    if( m_process && m_process->isRunning() ) {
         m_canceled = true;
         m_process->kill();
     }
@@ -125,6 +131,8 @@ void K3b::VideoDVDRippingPreview::slotTranscodeFinished( int, QProcess::ExitStat
     // clean up
     delete m_process;
     m_process = 0;
+
+    kDebug() << "Preview done:" << success;
 
     // retry the first chapter in case another failed
     if( !success && m_chapter > 1 )
