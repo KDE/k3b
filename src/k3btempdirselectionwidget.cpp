@@ -92,7 +92,7 @@ K3b::TempDirSelectionWidget::~TempDirSelectionWidget()
 
 unsigned long K3b::TempDirSelectionWidget::freeTempSpace() const
 {
-    QString path = m_editDirectory->url().path();
+    QString path = m_editDirectory->url().toLocalFile();
 
     if( !QFile::exists( path ) )
         path.truncate( path.lastIndexOf('/') );
@@ -147,7 +147,7 @@ void K3b::TempDirSelectionWidget::setTempPath( const QString& dir )
 
 QString K3b::TempDirSelectionWidget::tempPath() const
 {
-    QFileInfo fi( m_editDirectory->url().path() );
+    QFileInfo fi( m_editDirectory->url().toLocalFile() );
 
     if( fi.exists() ) {
         if( m_mode == DIR ) {
@@ -171,13 +171,13 @@ QString K3b::TempDirSelectionWidget::tempPath() const
 
 QString K3b::TempDirSelectionWidget::plainTempPath() const
 {
-    return m_editDirectory->url().path();
+    return m_editDirectory->url().toLocalFile();
 }
 
 
 QString K3b::TempDirSelectionWidget::tempDirectory() const
 {
-    QString td( m_editDirectory->url().path() );
+    QString td( m_editDirectory->url().toLocalFile() );
 
     // remove a trailing slash
     while( !td.isEmpty() && td[td.length()-1] == '/' )
