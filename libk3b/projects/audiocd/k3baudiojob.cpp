@@ -239,7 +239,7 @@ void K3b::AudioJob::start()
             //
             // older cdrecord versions do not support the -shorttrack option in RAW writing mode
             //
-            if( !writer()->dao() && writingApp() == K3b::WRITING_APP_CDRECORD ) {
+            if( !writer()->dao() && writingApp() == K3b::WritingAppCdrecord ) {
                 if(!writer()->supportsRawWriting() &&
                    ( !d->less4Sec || k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "short-track-raw" ) ) )
                     m_usedWritingMode = K3b::WRITING_MODE_RAW;
@@ -267,32 +267,32 @@ void K3b::AudioJob::start()
         }
 
         // determine writing app
-        if( writingApp() == K3b::WRITING_APP_DEFAULT ) {
+        if( writingApp() == K3b::WritingAppDefault ) {
             if( m_usedWritingMode == K3b::WRITING_MODE_DAO ) {
                 // there are none-DAO writers that are supported by cdrdao
                 if( !writer()->dao() ||
                     ( !cdrecordOnTheFly && m_doc->onTheFly() ) ||
                     ( d->useCdText && !cdrecordCdText ) ||
                     m_doc->hideFirstTrack() )
-                    m_usedWritingApp = K3b::WRITING_APP_CDRDAO;
+                    m_usedWritingApp = K3b::WritingAppCdrdao;
                 else
-                    m_usedWritingApp = K3b::WRITING_APP_CDRECORD;
+                    m_usedWritingApp = K3b::WritingAppCdrecord;
             }
             else
-                m_usedWritingApp = K3b::WRITING_APP_CDRECORD;
+                m_usedWritingApp = K3b::WritingAppCdrecord;
         }
         else
             m_usedWritingApp = writingApp();
 
         // on-the-fly writing with cdrecord >= 2.01a13
-        if( m_usedWritingApp == K3b::WRITING_APP_CDRECORD &&
+        if( m_usedWritingApp == K3b::WritingAppCdrecord &&
             m_doc->onTheFly() &&
             !cdrecordOnTheFly ) {
             emit infoMessage( i18n("On-the-fly writing with cdrecord < 2.01a13 not supported."), ERROR );
             m_doc->setOnTheFly(false);
         }
 
-        if( m_usedWritingApp == K3b::WRITING_APP_CDRECORD &&
+        if( m_usedWritingApp == K3b::WritingAppCdrecord &&
             d->useCdText ) {
             if( !cdrecordCdText ) {
                 emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.",
@@ -498,7 +498,7 @@ bool K3b::AudioJob::prepareWriter()
 {
     delete m_writer;
 
-    if( m_usedWritingApp == K3b::WRITING_APP_CDRECORD ) {
+    if( m_usedWritingApp == K3b::WritingAppCdrecord ) {
 
         if( !writeInfFiles() ) {
             kDebug() << "(K3b::AudioJob) could not write inf-files.";

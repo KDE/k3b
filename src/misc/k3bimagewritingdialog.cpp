@@ -792,19 +792,19 @@ void K3b::ImageWritingDialog::toggleAll()
     // for now we only restrict ourselves in case of CD images
     switch( currentImageType() ) {
     case IMAGE_CDRDAO_TOC:
-        m_writerSelectionWidget->setSupportedWritingApps( K3b::WRITING_APP_CDRDAO );
+        m_writerSelectionWidget->setSupportedWritingApps( K3b::WritingAppCdrdao );
         break;
     case IMAGE_CDRECORD_CLONE:
-        m_writerSelectionWidget->setSupportedWritingApps( K3b::WRITING_APP_CDRECORD );
+        m_writerSelectionWidget->setSupportedWritingApps( K3b::WritingAppCdrecord );
         break;
     default: {
-        K3b::WritingApps apps = K3b::WRITING_APP_CDRECORD;
+        K3b::WritingApps apps = K3b::WritingAppCdrecord;
         if ( currentImageType() == IMAGE_ISO ) {
             // DVD/BD is always ISO here
-            apps |= K3b::WRITING_APP_GROWISOFS;
+            apps |= K3b::WritingAppGrowisofs;
         }
         if ( K3b::Device::isCdMedia( medium.diskInfo().mediaType() ) )
-            apps |= K3b::WRITING_APP_CDRDAO;
+            apps |= K3b::WritingAppCdrdao;
 
         m_writerSelectionWidget->setSupportedWritingApps( apps );
         break;
@@ -820,7 +820,7 @@ void K3b::ImageWritingDialog::toggleAll()
     }
 
     // cdrecord clone and cue both need DAO
-    if( m_writerSelectionWidget->writingApp() != K3b::WRITING_APP_CDRDAO
+    if( m_writerSelectionWidget->writingApp() != K3b::WritingAppCdrdao
         && ( currentImageType() == IMAGE_ISO ||
              currentImageType() == IMAGE_AUDIO_CUE ) )
         m_writingModeWidget->determineSupportedModesFromMedium( medium );

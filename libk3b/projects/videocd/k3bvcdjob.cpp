@@ -394,10 +394,10 @@ bool K3b::VcdJob::prepareWriterJob()
         delete m_writerJob;
 
     const K3b::ExternalBin* cdrecordBin = k3bcore->externalBinManager() ->binObject( "cdrecord" );
-    if ( writingApp() == K3b::WRITING_APP_DEFAULT && cdrecordBin->hasFeature( "cuefile" ) && m_doc->burner() ->dao() )
-        setWritingApp( K3b::WRITING_APP_CDRECORD );
+    if ( writingApp() == K3b::WritingAppDefault && cdrecordBin->hasFeature( "cuefile" ) && m_doc->burner() ->dao() )
+        setWritingApp( K3b::WritingAppCdrecord );
 
-    if ( writingApp() == K3b::WRITING_APP_CDRDAO || writingApp() == K3b::WRITING_APP_DEFAULT ) {
+    if ( writingApp() == K3b::WritingAppCdrdao || writingApp() == K3b::WritingAppDefault ) {
         K3b::CdrdaoWriter * writer = new K3b::CdrdaoWriter( m_doc->burner(), this, this );
         // create cdrdao job
         writer->setCommand( K3b::CdrdaoWriter::WRITE );
@@ -408,7 +408,7 @@ bool K3b::VcdJob::prepareWriterJob()
 
         m_writerJob = writer;
 
-    } else if ( writingApp() == K3b::WRITING_APP_CDRECORD ) {
+    } else if ( writingApp() == K3b::WritingAppCdrecord ) {
         K3b::CdrecordWriter * writer = new K3b::CdrecordWriter( m_doc->burner(), this, this );
         // create cdrecord job
 

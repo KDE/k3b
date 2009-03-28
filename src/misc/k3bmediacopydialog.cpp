@@ -431,7 +431,7 @@ void K3b::MediaCopyDialog::toggleAll()
     // we can only clone single session CDs
     if( K3b::Device::isCdMedia( sourceMedium.diskInfo().mediaType() ) ) {
         m_writerSelectionWidget->setWantedMediumType( K3b::Device::MEDIA_WRITABLE_CD );
-        m_writerSelectionWidget->setSupportedWritingApps( K3b::WRITING_APP_CDRECORD );
+        m_writerSelectionWidget->setSupportedWritingApps( K3b::WritingAppCdrecord );
 
         if ( sourceMedium.toc().sessions() == 1 ) {
             m_comboCopyMode->setEnabled( true );
@@ -442,7 +442,7 @@ void K3b::MediaCopyDialog::toggleAll()
         }
     }
     else {
-        m_writerSelectionWidget->setSupportedWritingApps( K3b::WRITING_APP_GROWISOFS|K3b::WRITING_APP_CDRECORD );
+        m_writerSelectionWidget->setSupportedWritingApps( K3b::WritingAppGrowisofs|K3b::WritingAppCdrecord );
 
         m_comboCopyMode->setEnabled( false );
         m_comboCopyMode->setCurrentIndex( 0 );

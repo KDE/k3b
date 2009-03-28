@@ -242,7 +242,7 @@ void K3b::Iso9660ImageWritingJob::startWriting()
     Device::MediaTypes mt = 0;
     if( m_writingMode == K3b::WRITING_MODE_AUTO ||
         m_writingMode == K3b::WRITING_MODE_DAO ) {
-        if( writingApp() == K3b::WRITING_APP_CDRDAO )
+        if( writingApp() == K3b::WritingAppCdrdao )
             mt = K3b::Device::MEDIA_WRITABLE_CD;
         else if( m_dvd )
             mt = K3b::Device::MEDIA_WRITABLE_DVD;
@@ -282,7 +282,7 @@ void K3b::Iso9660ImageWritingJob::startWriting()
 #ifdef __GNUC__
 #warning Growisofs needs stdin to be closed in order to exit gracefully. Cdrecord does not. However,  if closed with cdrecord we loose parts of stderr. Why? This does not happen in the data job!
 #endif
-        d->checksumPipe.writeTo( m_writer->ioDevice(), d->usedWritingApp == K3b::WRITING_APP_GROWISOFS );
+        d->checksumPipe.writeTo( m_writer->ioDevice(), d->usedWritingApp == K3b::WritingAppGrowisofs );
         d->checksumPipe.open( K3b::ChecksumPipe::MD5, true );
     }
     else {
@@ -296,7 +296,7 @@ bool K3b::Iso9660ImageWritingJob::prepareWriter( Device::MediaTypes mediaType )
 {
     if( mediaType == 0 ) { // media forced
         // just to get it going...
-        if( writingApp() != K3b::WRITING_APP_GROWISOFS && !m_dvd )
+        if( writingApp() != K3b::WritingAppGrowisofs && !m_dvd )
             mediaType = K3b::Device::MEDIA_CD_R;
         else
             mediaType = K3b::Device::MEDIA_DVD_R;
@@ -320,16 +320,16 @@ bool K3b::Iso9660ImageWritingJob::prepareWriter( Device::MediaTypes mediaType )
         }
 
         d->usedWritingApp = writingApp();
-        if( d->usedWritingApp == K3b::WRITING_APP_DEFAULT ) {
+        if( d->usedWritingApp == K3b::WritingAppDefault ) {
             if( usedWritingMode == K3b::WRITING_MODE_DAO &&
                 ( m_dataMode == K3b::DATA_MODE_2 || m_noFix ) )
-                d->usedWritingApp = K3b::WRITING_APP_CDRDAO;
+                d->usedWritingApp = K3b::WritingAppCdrdao;
             else
-                d->usedWritingApp = K3b::WRITING_APP_CDRECORD;
+                d->usedWritingApp = K3b::WritingAppCdrecord;
         }
 
 
-        if( d->usedWritingApp == K3b::WRITING_APP_CDRECORD ) {
+        if( d->usedWritingApp == K3b::WritingAppCdrecord ) {
             K3b::CdrecordWriter* writer = new K3b::CdrecordWriter( m_device, this );
 
             writer->setWritingMode( usedWritingMode );

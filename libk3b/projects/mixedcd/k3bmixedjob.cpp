@@ -364,7 +364,7 @@ void K3b::MixedJob::slotMsInfoFetched( bool success )
         return;
 
     if( success ) {
-        if( m_usedDataWritingApp == K3b::WRITING_APP_CDRECORD )
+        if( m_usedDataWritingApp == K3b::WritingAppCdrecord )
             m_isoImager->setMultiSessionInfo( m_msInfoFetcher->msInfo() );
         else  // cdrdao seems to write a 150 blocks pregap that is not used by cdrecord
             m_isoImager->setMultiSessionInfo( QString("%1,%2")
@@ -626,8 +626,8 @@ bool K3b::MixedJob::prepareWriter()
     delete m_writer;
     m_writer = 0;
 
-    if( ( m_currentAction == WRITING_ISO_IMAGE && m_usedDataWritingApp == K3b::WRITING_APP_CDRECORD ) ||
-        ( m_currentAction == WRITING_AUDIO_IMAGE && m_usedAudioWritingApp == K3b::WRITING_APP_CDRECORD ) )  {
+    if( ( m_currentAction == WRITING_ISO_IMAGE && m_usedDataWritingApp == K3b::WritingAppCdrecord ) ||
+        ( m_currentAction == WRITING_AUDIO_IMAGE && m_usedAudioWritingApp == K3b::WritingAppCdrecord ) )  {
 
         if( !writeInfFiles() ) {
             kDebug() << "(K3b::MixedJob) could not write inf-files.";
@@ -1171,26 +1171,26 @@ void K3b::MixedJob::determineWritingMode()
     // Writing Application
     // --------------------------------------------------------------
     // cdrecord seems to have problems writing xa 1 disks in dao mode? At least on my system!
-    if( writingApp() == K3b::WRITING_APP_DEFAULT ) {
+    if( writingApp() == K3b::WritingAppDefault ) {
         if( m_doc->mixedType() == K3b::MixedDoc::DATA_SECOND_SESSION ) {
             if( m_doc->writingMode() == K3b::WRITING_MODE_DAO ||
                 ( m_doc->writingMode() == K3b::WRITING_MODE_AUTO && !cdrecordUsable ) ) {
-                m_usedAudioWritingApp = K3b::WRITING_APP_CDRDAO;
-                m_usedDataWritingApp = K3b::WRITING_APP_CDRDAO;
+                m_usedAudioWritingApp = K3b::WritingAppCdrdao;
+                m_usedDataWritingApp = K3b::WritingAppCdrdao;
             }
             else {
-                m_usedAudioWritingApp = K3b::WRITING_APP_CDRECORD;
-                m_usedDataWritingApp = K3b::WRITING_APP_CDRECORD;
+                m_usedAudioWritingApp = K3b::WritingAppCdrecord;
+                m_usedDataWritingApp = K3b::WritingAppCdrecord;
             }
         }
         else {
             if( cdrecordUsable ) {
-                m_usedAudioWritingApp = K3b::WRITING_APP_CDRECORD;
-                m_usedDataWritingApp = K3b::WRITING_APP_CDRECORD;
+                m_usedAudioWritingApp = K3b::WritingAppCdrecord;
+                m_usedDataWritingApp = K3b::WritingAppCdrecord;
             }
             else {
-                m_usedAudioWritingApp = K3b::WRITING_APP_CDRDAO;
-                m_usedDataWritingApp = K3b::WRITING_APP_CDRDAO;
+                m_usedAudioWritingApp = K3b::WritingAppCdrdao;
+                m_usedDataWritingApp = K3b::WritingAppCdrdao;
             }
         }
     }
@@ -1206,7 +1206,7 @@ void K3b::MixedJob::determineWritingMode()
     if( m_doc->writingMode() == K3b::WRITING_MODE_AUTO ) {
 
         if( m_doc->mixedType() == K3b::MixedDoc::DATA_SECOND_SESSION ) {
-            if( m_usedDataWritingApp == K3b::WRITING_APP_CDRECORD )
+            if( m_usedDataWritingApp == K3b::WritingAppCdrecord )
                 m_usedDataWritingMode = K3b::WRITING_MODE_TAO;
             else
                 m_usedDataWritingMode = K3b::WRITING_MODE_DAO;
@@ -1225,7 +1225,7 @@ void K3b::MixedJob::determineWritingMode()
     }
 
 
-    if( m_usedDataWritingApp == K3b::WRITING_APP_CDRECORD ) {
+    if( m_usedDataWritingApp == K3b::WritingAppCdrecord ) {
         if( !cdrecordOnTheFly && m_doc->onTheFly() ) {
             m_doc->setOnTheFly( false );
             emit infoMessage( i18n("On-the-fly writing with cdrecord < 2.01a13 not supported."), ERROR );

@@ -268,7 +268,7 @@ void K3b::MixedBurnDialog::toggleAll()
     bool cdText = true;
     if( m_writingModeWidget->writingMode() == K3b::WRITING_MODE_TAO ||
         m_writingModeWidget->writingMode() == K3b::WRITING_MODE_RAW ||
-        m_writerSelectionWidget->writingApp() == K3b::WRITING_APP_CDRECORD ) {
+        m_writerSelectionWidget->writingApp() == K3b::WritingAppCdrecord ) {
         onTheFly = cdrecordOnTheFly;
         cdText = cdrecordCdText;
     }

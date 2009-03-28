@@ -58,7 +58,7 @@ K3b::MediaFormattingDialog::MediaFormattingDialog( QWidget* parent )
     m_writerSelectionWidget->setWantedMediumState( K3b::Device::STATE_COMPLETE|
                                                    K3b::Device::STATE_INCOMPLETE|
                                                    K3b::Device::STATE_EMPTY );
-    m_writerSelectionWidget->setSupportedWritingApps( K3b::WRITING_APP_DVD_RW_FORMAT );
+    m_writerSelectionWidget->setSupportedWritingApps( K3b::WritingAppDvdRwFormat );
     m_writerSelectionWidget->setForceAutoSpeed(true);
 
     QGroupBox* groupWritingMode = new QGroupBox( i18n("Writing Mode"), frame );

@@ -57,7 +57,7 @@ class K3b::DataJob::Private
 {
 public:
     Private()
-        : usedWritingApp(K3b::WRITING_APP_CDRECORD),
+        : usedWritingApp(K3b::WritingAppCdrecord),
           verificationJob( 0 ),
           pipe( 0 ) {
     }
@@ -179,7 +179,7 @@ void K3b::DataJob::prepareWriting()
           d->multiSessionParameterJob->usedMultiSessionMode() == K3b::DataDoc::FINISH ) ) {
         unsigned int nextSessionStart = d->multiSessionParameterJob->nextSessionStart();
         // for some reason cdrdao needs 150 additional sectors in the ms info
-        if( writingApp() == K3b::WRITING_APP_CDRDAO ) {
+        if( writingApp() == K3b::WritingAppCdrdao ) {
             nextSessionStart += 150;
         }
         m_isoImager->setMultiSessionInfo( QString().sprintf( "%u,%u",
@@ -647,12 +647,12 @@ bool K3b::DataJob::prepareWriterJob()
     }
 
     // It seems as if cdrecord is not able to append sessions in dao mode whereas cdrdao is
-    if( d->usedWritingApp == K3b::WRITING_APP_CDRECORD )  {
+    if( d->usedWritingApp == K3b::WritingAppCdrecord )  {
         if( !setupCdrecordJob() ) {
             return false;
         }
     }
-    else if ( d->usedWritingApp == K3b::WRITING_APP_CDRDAO ) {
+    else if ( d->usedWritingApp == K3b::WritingAppCdrdao ) {
         if ( !setupCdrdaoJob() ) {
             return false;
         }
@@ -759,22 +759,22 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
             d->usedWritingMode = d->doc->writingMode();
 
 
-        if ( writingApp() == K3b::WRITING_APP_GROWISOFS ) {
+        if ( writingApp() == K3b::WritingAppGrowisofs ) {
             emit infoMessage( i18n( "Cannot write %1 media using %2. Falling back to default application." , QString("CD") , QString("growisofs") ), WARNING );
-            setWritingApp( K3b::WRITING_APP_DEFAULT );
+            setWritingApp( K3b::WritingAppDefault );
         }
         // cdrecord seems to have problems writing xa 1 disks in dao mode? At least on my system!
-        if( writingApp() == K3b::WRITING_APP_DEFAULT ) {
+        if( writingApp() == K3b::WritingAppDefault ) {
             if( d->usedWritingMode == K3b::WRITING_MODE_DAO ) {
                 if( usedMultiSessionMode() != K3b::DataDoc::NONE )
-                    d->usedWritingApp = K3b::WRITING_APP_CDRDAO;
+                    d->usedWritingApp = K3b::WritingAppCdrdao;
                 else if( d->usedDataMode == K3b::DATA_MODE_2 )
-                    d->usedWritingApp = K3b::WRITING_APP_CDRDAO;
+                    d->usedWritingApp = K3b::WritingAppCdrdao;
                 else
-                    d->usedWritingApp = K3b::WRITING_APP_CDRECORD;
+                    d->usedWritingApp = K3b::WritingAppCdrecord;
             }
             else
-                d->usedWritingApp = K3b::WRITING_APP_CDRECORD;
+                d->usedWritingApp = K3b::WritingAppCdrecord;
         }
         else {
             d->usedWritingApp = writingApp();
@@ -785,10 +785,10 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
     // DVD Plus
     // -------------------------------
     else if ( foundMedium & K3b::Device::MEDIA_DVD_ALL ) {
-        if ( writingApp() == K3b::WRITING_APP_CDRDAO ) {
+        if ( writingApp() == K3b::WritingAppCdrdao ) {
             emit infoMessage( i18n( "Cannot write %1 media using %2. Falling back to default application.",
                                     K3b::Device::mediaTypeString( foundMedium, true ), "cdrdao" ), WARNING );
-            setWritingApp( K3b::WRITING_APP_DEFAULT );
+            setWritingApp( K3b::WritingAppDefault );
         }
 
         // make sure that we use the proper parameters for cdrecord
@@ -796,8 +796,8 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
 
         d->usedWritingApp = writingApp();
         // let's default to cdrecord for the time being (except for special cases below)
-        if ( d->usedWritingApp == K3b::WRITING_APP_DEFAULT ) {
-            d->usedWritingApp = K3b::WRITING_APP_CDRECORD;
+        if ( d->usedWritingApp == K3b::WritingAppDefault ) {
+            d->usedWritingApp = K3b::WritingAppCdrecord;
         }
 
         if( foundMedium & K3b::Device::MEDIA_DVD_PLUS_ALL ) {
@@ -824,7 +824,7 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
                 else {
                     emit infoMessage( i18n("Growing ISO9660 filesystem on DVD+RW."), INFO );
                     // we can only do this with growisofs
-                    d->usedWritingApp = K3b::WRITING_APP_GROWISOFS;
+                    d->usedWritingApp = K3b::WritingAppGrowisofs;
                 }
             }
             else if( foundMedium & K3b::Device::MEDIA_DVD_PLUS_R_DL )
@@ -862,7 +862,7 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
                 else {
                     emit infoMessage( i18n("Growing ISO9660 filesystem on DVD-RW in restricted overwrite mode."), INFO );
                     // we can only do this with growisofs
-                    d->usedWritingApp = K3b::WRITING_APP_GROWISOFS;
+                    d->usedWritingApp = K3b::WritingAppGrowisofs;
                 }
             }
 
@@ -912,16 +912,16 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
     // --------------------
     else if ( foundMedium & K3b::Device::MEDIA_BD_ALL ) {
         d->usedWritingApp = writingApp();
-        if ( d->usedWritingApp == K3b::WRITING_APP_DEFAULT ) {
+        if ( d->usedWritingApp == K3b::WritingAppDefault ) {
             if ( k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "blu-ray" ) )
-                d->usedWritingApp = K3b::WRITING_APP_CDRECORD;
+                d->usedWritingApp = K3b::WritingAppCdrecord;
             else
-                d->usedWritingApp = K3b::WRITING_APP_GROWISOFS;
+                d->usedWritingApp = K3b::WritingAppGrowisofs;
         }
 
-        if ( d->usedWritingApp == K3b::WRITING_APP_CDRECORD &&
+        if ( d->usedWritingApp == K3b::WritingAppCdrecord &&
              !k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "blu-ray" ) ) {
-            d->usedWritingApp = K3b::WRITING_APP_GROWISOFS;
+            d->usedWritingApp = K3b::WritingAppGrowisofs;
         }
 
         // FIXME: what do we need to take care of with BD media?

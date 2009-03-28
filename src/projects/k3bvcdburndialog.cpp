@@ -77,9 +77,9 @@ K3b::VcdBurnDialog::VcdBurnDialog( K3b::VcdDoc* _doc, QWidget *parent )
 
     const K3b::ExternalBin* cdrecordBin = k3bcore->externalBinManager() ->binObject( "cdrecord" );
     if ( cdrecordBin && cdrecordBin->hasFeature( "cuefile" ) )
-        m_writerSelectionWidget->setSupportedWritingApps( K3b::WRITING_APP_CDRDAO | K3b::WRITING_APP_CDRECORD );
+        m_writerSelectionWidget->setSupportedWritingApps( K3b::WritingAppCdrdao | K3b::WritingAppCdrecord );
     else
-        m_writerSelectionWidget->setSupportedWritingApps( K3b::WRITING_APP_CDRDAO );
+        m_writerSelectionWidget->setSupportedWritingApps( K3b::WritingAppCdrdao );
 
     m_checkCacheImage->hide();
 

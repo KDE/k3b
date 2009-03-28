@@ -385,28 +385,28 @@ QString K3b::externalBinDeviceParameter( K3b::Device::Device* dev, const K3b::Ex
 K3b::WritingApp K3b::writingAppFromString( const QString& s )
 {
     if( s.toLower() == "cdrdao" )
-        return K3b::WRITING_APP_CDRDAO;
+        return K3b::WritingAppCdrdao;
     else if( s.toLower() == "cdrecord" )
-        return K3b::WRITING_APP_CDRECORD;
+        return K3b::WritingAppCdrecord;
     else if( s.toLower() == "growisofs" )
-        return K3b::WRITING_APP_GROWISOFS;
+        return K3b::WritingAppGrowisofs;
     else if( s.toLower() == "dvd+rw-format" )
-        return K3b::WRITING_APP_DVD_RW_FORMAT;
+        return K3b::WritingAppDvdRwFormat;
     else
-        return K3b::WRITING_APP_DEFAULT;
+        return K3b::WritingAppDefault;
 }
 
 
 QString K3b::writingAppToString( K3b::WritingApp app )
 {
     switch( app ) {
-    case WRITING_APP_CDRECORD:
+    case WritingAppCdrecord:
         return "cdrecord";
-    case WRITING_APP_CDRDAO:
+    case WritingAppCdrdao:
         return "cdrdao";
-    case WRITING_APP_GROWISOFS:
+    case WritingAppGrowisofs:
         return "growisofs";
-    case WRITING_APP_DVD_RW_FORMAT:
+    case WritingAppDvdRwFormat:
         return "dvd+rw-format";
     default:
         return "auto";

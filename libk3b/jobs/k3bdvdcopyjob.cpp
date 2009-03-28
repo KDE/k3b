@@ -168,14 +168,14 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
     else {
         // first let's determine which application to use
         d->usedWritingApp = writingApp();
-        if ( d->usedWritingApp == K3b::WRITING_APP_DEFAULT ) {
+        if ( d->usedWritingApp == K3b::WritingAppDefault ) {
             // let's default to cdrecord for the time being
             // FIXME: use growisofs for non-dao and non-auto mode
             if ( K3b::Device::isBdMedia( d->sourceDiskInfo.mediaType() ) ) {
                 if ( k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "blu-ray" ) )
-                    d->usedWritingApp = K3b::WRITING_APP_CDRECORD;
+                    d->usedWritingApp = K3b::WritingAppCdrecord;
                 else
-                    d->usedWritingApp = K3b::WRITING_APP_GROWISOFS;
+                    d->usedWritingApp = K3b::WritingAppGrowisofs;
             }
         }
 
@@ -269,7 +269,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
             if( m_writingMode != K3b::WRITING_MODE_DAO || !m_onTheFly || m_onlyCreateImage ||
                 ( k3bcore->externalBinManager()->binObject( "growisofs" ) &&
                   k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "daosize" ) ) ||
-                d->usedWritingApp == K3b::WRITING_APP_CDRECORD ) {
+                d->usedWritingApp == K3b::WritingAppCdrecord ) {
                 d->lastSector = dh->toc().lastSector();
                 break;
             }
@@ -451,7 +451,7 @@ void K3b::DvdCopyJob::prepareWriter()
 {
     delete d->writerJob;
 
-    if ( d->usedWritingApp == K3b::WRITING_APP_GROWISOFS ) {
+    if ( d->usedWritingApp == K3b::WritingAppGrowisofs ) {
         K3b::GrowisofsWriter* job = new K3b::GrowisofsWriter( m_writerDevice, this, this );
 
         // these do only make sense with DVD-R(W)

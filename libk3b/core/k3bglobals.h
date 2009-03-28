@@ -49,11 +49,11 @@ namespace K3b {
     }
 
     enum WritingApp {
-        WRITING_APP_DEFAULT = 1,
-        WRITING_APP_CDRECORD = 2,
-        WRITING_APP_CDRDAO = 4,
-        WRITING_APP_GROWISOFS = 16,
-        WRITING_APP_DVD_RW_FORMAT = 32
+        WritingAppDefault = 1,
+        WritingAppCdrecord = 2,
+        WritingAppCdrdao = 4,
+        WritingAppGrowisofs = 16,
+        WritingAppDvdRwFormat = 32
     };
     Q_DECLARE_FLAGS( WritingApps, WritingApp )
 

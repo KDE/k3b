@@ -115,7 +115,7 @@ bool K3b::Doc::newDocument()
     m_onlyCreateImages = false;
     m_removeImages = true;
     m_dummy = false;
-    m_writingApp = K3b::WRITING_APP_DEFAULT;
+    m_writingApp = K3b::WritingAppDefault;
     m_writingMode = K3b::WRITING_MODE_AUTO;
     m_saved = false;
 
