@@ -93,12 +93,14 @@ FILE_PATTERNS          = *.h
 RECURSIVE              = YES
 EXCLUDE                = ${k3b_SOURCE_DIR}/libk3b/images \
                          ${k3b_SOURCE_DIR}/libk3b/tools/libisofs \
+                         ${k3b_SOURCE_DIR}/libk3b/tools/qprocess \
                          ${k3b_SOURCE_DIR}/libk3b/plugin/libsamplerate \
                          ${k3b_SOURCE_DIR}/src/fastscale \
                          ${k3b_SOURCE_DIR}/src/projects/kostore \
                          ${k3b_SOURCE_DIR}/libk3bdevice/k3bmmc.h \
                          ${k3b_SOURCE_DIR}/libk3bdevice/k3bdiskinfo_p.h \
                          ${k3b_SOURCE_DIR}/libk3bdevice/k3bscsicommand.h \
+                         ${k3b_SOURCE_DIR}/libk3bdevice/winspti.h \
                          ${k3b_SOURCE_DIR}/libk3b/core/k3process.h \
                          ${k3b_SOURCE_DIR}/libk3b/core/k3processcontroller.h \
                          ${k3b_SOURCE_DIR}/libk3b/projects/videocd/mpeginfo
