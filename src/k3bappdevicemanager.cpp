@@ -57,7 +57,7 @@ K3b::AppDeviceManager::AppDeviceManager( QObject* parent )
                                         actionCollection(), "device_unmount");
     d->actionMount = K3b::createAction(this, i18n("&Mount"), "media-optical", 0, this, SLOT(mountDisk()),
                                       actionCollection(), "device_mount");
-    d->actionEject = K3b::createAction(this, i18n("&Eject"), 0, 0, this, SLOT(ejectDisk()),
+    d->actionEject = K3b::createAction(this, i18n("&Eject"), "media-eject", 0, this, SLOT(ejectDisk()),
                                       actionCollection(), "device_eject");
     d->actionLoad = K3b::createAction(this, i18n("L&oad"), 0, 0, this, SLOT(loadDisk()),
                                      actionCollection(), "device_load");

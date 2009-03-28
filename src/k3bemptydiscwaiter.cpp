@@ -98,8 +98,9 @@ K3b::EmptyDiscWaiter::EmptyDiscWaiter( K3b::Device::Device* device, QWidget* par
         setButtonText(KDialog::User1,i18n("Force"));
     }
     setButtons( buttons );
-    setButtonText(KDialog::User2,i18n("Eject"));
-    setButtonText(KDialog::User3,i18n("Load"));
+    setButtonText(KDialog::User2, i18n("Eject"));
+    setButtonIcon( KDialog::User2, KIcon( "media-eject" ) );
+    setButtonText(KDialog::User3, i18n("Load"));
     setDefaultButton( KDialog::User3 );
 
     d->device = device;
@@ -610,7 +611,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                                              "Should it be erased?",d->device->vendor(),d->device->description()),
                                         i18n("Found Rewritable Disk"),
                                         KGuiItem(i18n("&Erase"), "erasecd"),
-                                        KGuiItem(i18n("E&ject")) ) == KMessageBox::Yes ) {
+                                        KGuiItem(i18n("E&ject"), "media-eject") ) == KMessageBox::Yes ) {
 
 
             prepareErasingDialog();
