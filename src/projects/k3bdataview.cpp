@@ -61,6 +61,9 @@
 K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
     : K3b::StandardView(doc, parent)
 {
+    // FIXME: always sort folders first in fileview
+    // FIXME: allow sorting by clicking fileview headers
+
     m_doc = doc;
 
     m_model = new K3b::DataProjectModel(doc, this);

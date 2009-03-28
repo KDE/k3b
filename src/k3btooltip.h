@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2005-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,61 +24,61 @@
 
 class QTimer;
 
-/**
- * More beautiful tooltip
- */
 namespace K3b {
-class ToolTip : public QObject
-{
-    Q_OBJECT
-
-public:
-    ToolTip( QWidget* widget );
-    ~ToolTip();
-
-    QWidget* parentWidget() const { return m_parentWidget; }
-
-public Q_SLOTS:
     /**
-     * default is 700 mseconds (same as QToolTip)
+     * More beautiful tooltip
      */
-    void setTipTimeout( int msec ) { m_tipTimeout = msec; }
+    class ToolTip : public QObject
+    {
+        Q_OBJECT
 
-protected:
-    /**
-     * \see QToolTip::maybeTip
-     */
-    virtual void maybeTip( const QPoint& ) = 0;
+    public:
+        ToolTip( QWidget* widget );
+        ~ToolTip();
 
-    /**
-     * Show a tooltip.
-     */
-    void tip( const QRect&, const QString&, int effect = WidgetShowEffect::Dissolve );
-    void tip( const QRect& rect, const QPixmap& pix, int effect = WidgetShowEffect::Dissolve );
+        QWidget* parentWidget() const { return m_parentWidget; }
 
-    /**
-     * Use some arbitrary widget as the tooltip
-     * \param effect Use 0 for no effect
-     */
-    void tip( const QRect&, QWidget* w, int effect = WidgetShowEffect::Dissolve );
+    public Q_SLOTS:
+        /**
+         * default is 700 mseconds (same as QToolTip)
+         */
+        void setTipTimeout( int msec ) { m_tipTimeout = msec; }
 
-    bool eventFilter( QObject* o, QEvent* e );
+    protected:
+        /**
+         * \see QToolTip::maybeTip
+         */
+        virtual void maybeTip( const QPoint& ) = 0;
 
-private Q_SLOTS:
-    void slotCheckShowTip();
+        /**
+         * Show a tooltip.
+         */
+        void tip( const QRect&, const QString&, int effect = WidgetShowEffect::Dissolve );
+        void tip( const QRect& rect, const QPixmap& pix, int effect = WidgetShowEffect::Dissolve );
 
-private:
-    void hideTip();
+        /**
+         * Use some arbitrary widget as the tooltip
+         * \param effect Use 0 for no effect
+         */
+        void tip( const QRect&, QWidget* w, int effect = WidgetShowEffect::Dissolve );
 
-    QWidget* m_parentWidget;
-    QWidget* m_currentTip;
-    QRect m_currentTipRect;
+        bool eventFilter( QObject* o, QEvent* e );
 
-    QTimer* m_tipTimer;
-    QPoint m_lastMousePos;
+    private Q_SLOTS:
+        void slotCheckShowTip();
 
-    int m_tipTimeout;
-};
+    private:
+        void hideTip();
+
+        QWidget* m_parentWidget;
+        QWidget* m_currentTip;
+        QRect m_currentTipRect;
+
+        QTimer* m_tipTimer;
+        QPoint m_lastMousePos;
+
+        int m_tipTimeout;
+    };
 }
 
 #endif

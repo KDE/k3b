@@ -61,7 +61,7 @@ class MovixProjectModel::Private
             q->beginInsertRows(q->indexForItem(item), 0, 0);
 
             // do nothing :)
-            
+
             q->endInsertRows();
         }
 
@@ -472,7 +472,7 @@ bool MovixProjectModel::dropMimeData( const QMimeData* data,
 
         KUrl::List urls = KUrl::List::fromMimeData( data );
 
-        d->project->addUrlsAt( urls, pos);
+        d->project->addUrlsAt( urls, pos );
 
         return true;
     }

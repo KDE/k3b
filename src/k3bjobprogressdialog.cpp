@@ -558,10 +558,9 @@ void K3b::JobProgressDialog::slotProgress( int percent )
 }
 
 
-void K3b::JobProgressDialog::keyPressEvent( QKeyEvent *e )
+void K3b::JobProgressDialog::keyPressEvent( QKeyEvent* e )
 {
     kDebug() << e;
-    e->accept();
 
     switch ( e->key() ) {
     case Qt::Key_Enter:
@@ -570,6 +569,7 @@ void K3b::JobProgressDialog::keyPressEvent( QKeyEvent *e )
         if( button( User2 )->isVisible() )
             close();
         break;
+
     case Qt::Key_Escape:
         // simulate button clicks
         if( m_job && m_job->active() )
@@ -577,8 +577,9 @@ void K3b::JobProgressDialog::keyPressEvent( QKeyEvent *e )
         else if( button( User2 )->isVisible() )
             close();
         break;
+
     default:
-        // nothing
+        KDialog::keyPressEvent( e );
         break;
     }
 }
