@@ -80,7 +80,7 @@ K3b::DirView::DirView(K3b::FileTreeView* treeView, QWidget *parent )
     m_viewStack->addWidget( m_videoView );
     m_infoView     = new K3b::DiskInfoView( m_viewStack );
     m_viewStack->addWidget( m_infoView );
-#ifdef HAVE_LIBDVDREAD
+#ifdef ENABLE_DVD_RIPPING
     m_movieView    = new K3b::VideoDVDRippingView( m_viewStack );
     m_viewStack->addWidget( m_movieView );
 #endif
@@ -157,7 +157,7 @@ void K3b::DirView::showMediumInfo( const K3b::Medium& medium )
         return;
     }
 
-#ifdef HAVE_LIBDVDREAD
+#ifdef ENABLE_DVD_RIPPING
     else if( medium.content() & K3b::Medium::ContentVideoDVD ) {
         KMessageBox::ButtonCode r = KMessageBox::Yes;
         if( KMessageBox::shouldBeShownYesNo( "videodvdripping", r ) ) {
