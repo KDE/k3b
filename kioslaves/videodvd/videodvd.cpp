@@ -35,6 +35,11 @@
 
 #include "videodvd.h"
 
+#ifdef Q_OS_WIN32
+#undef LIBK3B_EXPORT
+#define LIBK3B_EXPORT
+#endif
+
 using namespace KIO;
 
 extern "C"
