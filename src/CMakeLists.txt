@@ -267,7 +267,11 @@ MESSAGE(STATUS "DCOP stuff was remove into kde4, convert it to dbus please.kde4_
 #k3bmixedprojectinterface.h )
 
 kde4_add_executable(k3b_bin ${k3b_bin_SRCS})
-set_target_properties(k3b_bin PROPERTIES OUTPUT_NAME k3b)
+
+# cmake 2.6-3 failed on win32 using a output name of k3b when a dependency is named k3b - skipped for now
+if (NOT WIN32)
+	set_target_properties(k3b_bin PROPERTIES OUTPUT_NAME k3b)
+endif(NOT WIN32)
 
 target_link_libraries(k3b_bin
   k3bdevice

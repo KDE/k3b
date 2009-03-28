@@ -143,6 +143,10 @@ if(K3B_BUILD_OGGVORBIS_DECODER_PLUGIN OR K3B_BUILD_OGGVORBIS_ENCODER_PLUGIN)
 endif(K3B_BUILD_OGGVORBIS_DECODER_PLUGIN OR K3B_BUILD_OGGVORBIS_ENCODER_PLUGIN)
 
 
+if (WIN32)
+find_library(SAMPLERATE_LIBRARIES samplerate-0)
+endif(WIN32)
+
 ##################  K3b build settings #################################
 include(ConfigureChecks.cmake)
 
