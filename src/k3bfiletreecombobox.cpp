@@ -105,7 +105,7 @@ void K3b::FileTreeComboBox::slotUrlExecuted( const KUrl& url )
 
 void K3b::FileTreeComboBox::setUrl( const KUrl& url )
 {
-    setEditText( K3b::convertToLocalUrl(url).path() );
+    setEditText( K3b::convertToLocalUrl(url).toLocalFile() );
 }
 
 

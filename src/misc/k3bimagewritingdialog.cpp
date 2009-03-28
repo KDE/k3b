@@ -1065,7 +1065,7 @@ int K3b::ImageWritingDialog::currentImageType()
 
 QString K3b::ImageWritingDialog::imagePath() const
 {
-    return K3b::convertToLocalUrl( m_editImagePath->url() ).path();
+    return K3b::convertToLocalUrl( m_editImagePath->url() ).toLocalFile();
 }
 
 
@@ -1079,7 +1079,7 @@ void K3b::ImageWritingDialog::dropEvent( QDropEvent* e )
 {
     KUrl::List urls;
     K3URLDrag::decode( e, urls );
-    m_editImagePath->setUrl( urls.first().path() );
+    m_editImagePath->setUrl( urls.first().toLocalFile() );
 }
 
 #include "k3bimagewritingdialog.moc"

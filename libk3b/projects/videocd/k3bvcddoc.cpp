@@ -138,7 +138,7 @@ K3b::Msf K3b::VcdDoc::length() const
 bool K3b::VcdDoc::isImage( const KUrl& url )
 {
     QImage p;
-    return p.load( QFile::encodeName( url.path() ) );
+    return p.load( QFile::encodeName( url.toLocalFile() ) );
 }
 
 void K3b::VcdDoc::addUrls( const KUrl::List& urls )
@@ -168,13 +168,13 @@ void K3b::VcdDoc::slotWorkUrlQueue()
             lastAddedPosition = m_tracks->count();
 
         if ( !item->url.isLocalFile() ) {
-            kDebug() << item->url.path() << " no local file";
+            kDebug() << item->url.toLocalFile() << " no local file";
             return ;
         }
 
-        if ( !QFile::exists( item->url.path() ) ) {
-            kDebug() << "(K3b::VcdDoc) file not found: " << item->url.path();
-            m_notFoundFiles.append( item->url.path() );
+        if ( !QFile::exists( item->url.toLocalFile() ) ) {
+            kDebug() << "(K3b::VcdDoc) file not found: " << item->url.toLocalFile();
+            m_notFoundFiles.append( item->url.toLocalFile() );
             return ;
         }
 
@@ -200,7 +200,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const KUrl& url )
 {
     char filename[ 255 ];
     QString error_string = "";
-    strcpy( filename, QFile::encodeName( url.path() ) );
+    strcpy( filename, QFile::encodeName( url.toLocalFile() ) );
     K3b::MpegInfo* Mpeg = new K3b::MpegInfo( filename );
 
     if ( Mpeg ) {
@@ -244,7 +244,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const KUrl& url )
 
 
             if ( numOfTracks() > 0 && vcdOptions() ->mpegVersion() != mpegVersion ) {
-                KMessageBox::error( kapp->activeWindow(), "(" + url.path() + ")\n" +
+                KMessageBox::error( kapp->activeWindow(), "(" + url.toLocalFile() + ")\n" +
                                     i18n( "You cannot mix MPEG1 and MPEG2 video files.\nPlease start a new Project for this filetype.\nResample not implemented in K3b yet." ),
                                     i18n( "Wrong File Type for This Project" ) );
 
@@ -252,7 +252,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const KUrl& url )
                 return 0;
             }
 
-            K3b::VcdTrack* newTrack = new K3b::VcdTrack( m_tracks, url.path() );
+            K3b::VcdTrack* newTrack = new K3b::VcdTrack( m_tracks, url.toLocalFile() );
             *( newTrack->mpeg_info ) = *( Mpeg->mpeg_info );
 
             if ( newTrack->isSegment() && !vcdOptions()->PbcEnabled() ) {
@@ -288,7 +288,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const KUrl& url )
     }
 
     // error (unsupported files)
-    KMessageBox::error( kapp->activeWindow(), "(" + url.path() + ")\n" +
+    KMessageBox::error( kapp->activeWindow(), "(" + url.toLocalFile() + ")\n" +
                         i18n( "Only MPEG1 and MPEG2 video files are supported.\n" ) + error_string ,
                         i18n( "Wrong File Format" ) );
 

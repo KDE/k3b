@@ -97,7 +97,7 @@ void K3b::ProjectManager::addProject( K3b::Doc* doc )
     kDebug() << doc;
 
     if( !d->projects.contains( doc ) ) {
-        kDebug() << "(K3b::ProjectManager) adding doc " << doc->URL().path();
+        kDebug() << "(K3b::ProjectManager) adding doc " << doc->URL().toLocalFile();
 
         d->projects.append(doc);
 
@@ -132,7 +132,7 @@ void K3b::ProjectManager::removeProject( K3b::Doc* docRemove )
             return;
         }
     }
-    kDebug() << "(K3b::ProjectManager) unable to find doc: " << docRemove->URL().path();
+    kDebug() << "(K3b::ProjectManager) unable to find doc: " << docRemove->URL().toLocalFile();
 }
 
 
@@ -480,7 +480,7 @@ K3b::Doc* K3b::ProjectManager::openProject( const KUrl& url )
             char test[5];
             if( f.read( test, 5 ) ) {
                 if( ::strncmp( test, "<?xml", 5 ) ) {
-                    kDebug() << "(K3b::Doc) " << url.path() << " seems to be no xml file.";
+                    kDebug() << "(K3b::Doc) " << url.toLocalFile() << " seems to be no xml file.";
                     QApplication::restoreOverrideCursor();
                     return 0;
                 }
@@ -501,7 +501,7 @@ K3b::Doc* K3b::ProjectManager::openProject( const KUrl& url )
     KIO::NetAccess::removeTempFile( tmpfile );
 
     if( !success ) {
-        kDebug() << "(K3b::Doc) could not open file " << url.path();
+        kDebug() << "(K3b::Doc) could not open file " << url.toLocalFile();
         QApplication::restoreOverrideCursor();
         return 0;
     }

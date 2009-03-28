@@ -148,7 +148,7 @@ void K3b::DataDoc::addUrlsToDir( const KUrl::List& l, K3b::DirItem* dir )
 
     for( KUrl::List::ConstIterator it = urls.constBegin(); it != urls.constEnd(); ++it ) {
         const KUrl& url = *it;
-        QFileInfo f( url.path() );
+        QFileInfo f( url.toLocalFile() );
         QString k3bname = f.absoluteFilePath().section( "/", -1 );
 
         // filenames cannot end in backslashes (mkisofs problem. See comments in k3bisoimager.cpp (escapeGraftPoint()))
@@ -192,7 +192,7 @@ void K3b::DataDoc::addUrlsToDir( const KUrl::List& l, K3b::DirItem* dir )
         if( f.isDir() && !f.isSymLink() ) {
             if( !newDirItem ) {
                 newDirItem = new K3b::DirItem( k3bname, this, dir );
-                newDirItem->setLocalPath( url.path() ); // HACK: see k3bdiritem.h
+                newDirItem->setLocalPath( url.toLocalFile() ); // HACK: see k3bdiritem.h
             }
 
             // recursively add all the files in the directory
@@ -203,7 +203,7 @@ void K3b::DataDoc::addUrlsToDir( const KUrl::List& l, K3b::DirItem* dir )
             addUrlsToDir( newUrls, newDirItem );
         }
         else if( f.isSymLink() || f.isFile() )
-            (void)new K3b::FileItem( url.path(), this, dir, k3bname );
+            (void)new K3b::FileItem( url.toLocalFile(), this, dir, k3bname );
     }
 
     emit changed();

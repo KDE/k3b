@@ -114,7 +114,7 @@ bool K3b::DirSizeJob::run()
             return false;
         }
 
-        l.append( url.path() );
+        l.append( url.toLocalFile() );
     }
 
     return countFiles( l, QString() );

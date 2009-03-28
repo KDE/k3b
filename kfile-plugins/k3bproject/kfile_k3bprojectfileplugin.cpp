@@ -57,7 +57,7 @@ bool K3b::ProjectFilePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
   QDomDocument xmlDoc;
 
   // try opening a store
-  KoStore* store = KoStore::createStore( info.url().path(), KoStore::Read );
+  KoStore* store = KoStore::createStore( info.url().toLocalFile(), KoStore::Read );
   if( store && !store->bad() && store->open( "maindata.xml" ) ) {
     QIODevice* dev = store->device();
     dev->open( QIODevice::ReadOnly );

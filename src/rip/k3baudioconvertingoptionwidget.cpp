@@ -137,7 +137,7 @@ K3b::AudioConvertingOptionWidget::~AudioConvertingOptionWidget()
 
 QString K3b::AudioConvertingOptionWidget::baseDir() const
 {
-    return m_editBaseDir->url().path();
+    return m_editBaseDir->url().toLocalFile();
 }
 
 

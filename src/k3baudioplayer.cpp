@@ -634,8 +634,8 @@ void K3b::AudioPlayer::slotDropped( QDropEvent* e, Q3ListViewItem* after )
   K3URLDrag::decode( e, urls );
 
   for( KUrl::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
-    if( QFile::exists( (*it).path() ) ) {
-      Q3ListViewItem* newItem = new K3b::PlayListViewItem( (*it).path(), m_viewPlayList, after );
+    if( QFile::exists( (*it).toLocalFile() ) ) {
+      Q3ListViewItem* newItem = new K3b::PlayListViewItem( (*it).toLocalFile(), m_viewPlayList, after );
       after = newItem;
     }
   }

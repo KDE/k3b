@@ -287,7 +287,7 @@ KIO::filesize_t K3b::filesize( const KUrl& url )
     KIO::filesize_t fSize = 0;
     if( url.isLocalFile() ) {
         k3b_struct_stat buf;
-        k3b_stat( QFile::encodeName( url.path() ), &buf );
+        k3b_stat( QFile::encodeName( url.toLocalFile() ), &buf );
         fSize = (KIO::filesize_t)buf.st_size;
     }
     else {
