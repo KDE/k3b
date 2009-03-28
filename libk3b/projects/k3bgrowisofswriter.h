@@ -25,8 +25,6 @@ namespace K3b {
         class Device;
     }
 
-
-
     class GrowisofsWriter : public AbstractWriter
     {
         Q_OBJECT
@@ -98,7 +96,6 @@ namespace K3b {
         void slotProcessExited( int, QProcess::ExitStatus );
         void slotThroughput( int t );
         void slotFlushingCache();
-//        void slotRingBufferFinished( bool );
 
     private:
         bool closeFd();

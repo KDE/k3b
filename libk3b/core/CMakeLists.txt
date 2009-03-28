@@ -3,7 +3,6 @@ install( FILES
   k3bcore.h
   k3bdefaultexternalprograms.h
   k3bexternalbinmanager.h
-  k3bprocess.h
   k3bversion.h
   k3bglobals.h
   k3bjob.h

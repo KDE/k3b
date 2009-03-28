@@ -67,7 +67,6 @@ set(k3b_core_SRCS
   core/k3bdefaultexternalprograms.cpp
   core/k3bexternalbinmanager.cpp 
   core/k3bversion.cpp 
-  core/k3bprocess.cpp 
   core/k3bjob.cpp 
   core/k3bthread.cpp 
   core/k3bthreadjob.cpp 
@@ -95,6 +94,7 @@ set(k3b_tools_SRCS
   tools/k3bmedium.cpp
   tools/k3bmediacache.cpp 
   tools/k3bcddb.cpp
+  tools/k3bprocess.cpp 
   tools/qprocess/k3bqprocess.cpp
   tools/qprocess/k3bkprocess.cpp
   )
@@ -141,7 +141,6 @@ set(k3b_project_SRCS
   projects/k3btocfilewriter.cpp 
   projects/k3bimagefilereader.cpp 
   projects/k3bcuefileparser.cpp )
-#  projects/k3bpipebuffer.cpp)
 
 set(k3b_project_audiocd_SRCS
   projects/audiocd/k3baudiojob.cpp 

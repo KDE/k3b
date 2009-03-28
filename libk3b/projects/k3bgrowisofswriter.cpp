@@ -24,7 +24,6 @@
 #include <k3bglobals.h>
 #include <k3bthroughputestimator.h>
 #include "k3bgrowisofshandler.h"
-#include <k3bpipebuffer.h>
 #include <k3bglobalsettings.h>
 #include <k3bdeviceglobals.h>
 
@@ -46,10 +45,7 @@ public:
           multiSession(false),
           growisofsBin( 0 ),
           trackSize(-1),
-          layerBreak(0)
-//         , usingRingBuffer(false),
-//           ringBuffer(0)
-    {
+          layerBreak(0) {
     }
 
     K3b::WritingMode writingMode;
@@ -83,9 +79,6 @@ public:
     long long firstSizeFromOutput;
 
     QFile inputFile;
-
-//     bool usingRingBuffer;
-//     K3b::PipeBuffer* ringBuffer;
 
     QString multiSessionInfo;
 
@@ -166,7 +159,7 @@ bool K3b::GrowisofsWriter::prepareProcess()
 
     if( d->growisofsBin->version < K3b::Version( 5, 10 ) ) {
         emit infoMessage( i18n("Growisofs version %1 is too old. "
-                               "K3b needs at least version 5.10.",d->growisofsBin->version),
+                               "K3b needs at least version 5.10.", d->growisofsBin->version ),
                           MessageError );
         return false;
     }
@@ -177,6 +170,11 @@ bool K3b::GrowisofsWriter::prepareProcess()
         emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3",QString("growisofs")
                                ,d->growisofsBin->version,d->growisofsBin->copyright), MessageInfo );
 
+
+    if ( !d->growisofsBin->hasFeature( "buffer" ) ) {
+        emit infoMessage( i18n( "Growisofs version %1 does not feature a software buffer which may result in an unstable burn process.", d->growisofsBin->version ),
+                          MessageWarning );
+    }
 
     //
     // The growisofs bin is ready. Now we add the parameters
@@ -205,12 +203,9 @@ bool K3b::GrowisofsWriter::prepareProcess()
 
     d->process << d->growisofsBin;
 
-    // set this var to true to enable the ringbuffer
-//    d->usingRingBuffer = !d->growisofsBin->hasFeature( "buffer" );
-
     QString s = burnDevice()->blockDeviceName() + "=";
-    if( /*d->usingRingBuffer || */d->image.isEmpty() ) {
-        // we always read from stdin since the ringbuffer does the actual reading from the source
+    if( d->image.isEmpty() ) {
+        // we always read from stdin
         s += "/dev/fd/0";
     }
     else
@@ -226,7 +221,7 @@ bool K3b::GrowisofsWriter::prepareProcess()
     d->process << s;
 
 
-    if( !d->image.isEmpty() /*&& d->usingRingBuffer*/ ) {
+    if( !d->image.isEmpty() ) {
         d->inputFile.setFileName( d->image );
         d->trackSize = (K3b::filesize( d->image ) + 1024) / 2048;
         if( !d->inputFile.open( QIODevice::ReadOnly ) ) {
@@ -314,7 +309,7 @@ bool K3b::GrowisofsWriter::prepareProcess()
     if( k3bcore->globalSettings()->overburn() )
         d->process << "-overburn";
 
-    if( /*!d->usingRingBuffer && */d->growisofsBin->hasFeature( "buffer" ) ) {
+    if( d->growisofsBin->hasFeature( "buffer" ) ) {
         bool manualBufferSize = k3bcore->globalSettings()->useManualBufferSize();
         int bufSize = ( manualBufferSize ? k3bcore->globalSettings()->bufferSize() : 32 );
         d->process << QString("-use-the-force-luke=bufsize:%1m").arg(bufSize);
@@ -392,25 +387,6 @@ void K3b::GrowisofsWriter::start()
             }
 
             d->gh->handleStart();
-
-            // create the ring buffer
-//             if( d->usingRingBuffer ) {
-//                 if( !d->ringBuffer ) {
-//                     d->ringBuffer = new K3b::PipeBuffer( this, this );
-//                     connect( d->ringBuffer, SIGNAL(percent(int)), this, SIGNAL(buffer(int)) );
-//                     connect( d->ringBuffer, SIGNAL(finished(bool)), this, SLOT(slotRingBufferFinished(bool)) );
-//                 }
-
-//                 d->ringBuffer->writeTo( d->process );
-//                 bool manualBufferSize = k3bcore->globalSettings()->useManualBufferSize();
-//                 int bufSize = ( manualBufferSize ? k3bcore->globalSettings()->bufferSize() : 20 );
-//                 d->ringBuffer->setBufferSize( bufSize );
-
-//                 if( !d->image.isEmpty() )
-//                     d->ringBuffer->readFrom( &d->inputFile );
-
-//                 d->ringBuffer->start();
-//             }
         }
     }
 }
@@ -421,8 +397,6 @@ void K3b::GrowisofsWriter::cancel()
     if( active() ) {
         d->canceled = true;
         closeFd();
-//         if( d->usingRingBuffer && d->ringBuffer )
-//             d->ringBuffer->cancel();
         d->process.terminate();
     }
 }
@@ -572,16 +546,6 @@ void K3b::GrowisofsWriter::slotProcessExited( int exitCode, QProcess::ExitStatus
 
     jobFinished(d->success);
 }
-
-
-// void K3b::GrowisofsWriter::slotRingBufferFinished( bool )
-// {
-//     if( !d->finished ) {
-//         d->finished = true;
-//         // this will unblock and eject the drive and emit the finished/canceled signals
-//         K3b::AbstractWriter::cancel();
-//     }
-// }
 
 
 void K3b::GrowisofsWriter::slotThroughput( int t )
