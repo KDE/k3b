@@ -128,9 +128,9 @@ void K3b::AudioTrackAddingDialog::slotAddUrls()
     KUrl url = m_urls.first();
     bool valid = true;
 
-    if( url.path().right(3).toLower() == "cue" ) {
+    if( url.toLocalFile().right(3).toLower() == "cue" ) {
         // see if its a cue file
-        K3b::CueFileParser parser( url.path() );
+        K3b::CueFileParser parser( url.toLocalFile() );
         if( parser.isValid() && parser.toc().contentType() == K3b::Device::AUDIO ) {
             // remember cue url and set the new audio file url
             m_cueUrl = url;
@@ -142,17 +142,17 @@ void K3b::AudioTrackAddingDialog::slotAddUrls()
 
     if( !url.isLocalFile() ) {
         valid = false;
-        m_nonLocalFiles.append( url.path() );
+        m_nonLocalFiles.append( url.toLocalFile() );
     }
     else {
-        QFileInfo fi( url.path() );
+        QFileInfo fi( url.toLocalFile() );
         if( !fi.exists() ) {
             valid = false;
-            m_notFoundFiles.append( url.path() );
+            m_notFoundFiles.append( url.toLocalFile() );
         }
         else if( !fi.isReadable() ) {
             valid = false;
-            m_unreadableFiles.append( url.path() );
+            m_unreadableFiles.append( url.toLocalFile() );
         }
     }
 
@@ -168,7 +168,7 @@ void K3b::AudioTrackAddingDialog::slotAddUrls()
         }
         else {
             valid = false;
-            m_unsupportedFiles.append( url.path() );
+            m_unsupportedFiles.append( url.toLocalFile() );
         }
     }
 
@@ -194,7 +194,7 @@ void K3b::AudioTrackAddingDialog::slotAnalysingFinished( bool /*success*/ )
 
     if( m_cueUrl.isValid() ) {
         // import the cue file
-        m_doc->importCueFile( m_cueUrl.path(), m_trackAfter, m_analyserJob->decoder() );
+        m_doc->importCueFile( m_cueUrl.toLocalFile(), m_trackAfter, m_analyserJob->decoder() );
         m_cueUrl = KUrl();
     }
     else {
@@ -249,7 +249,7 @@ KUrl::List K3b::AudioTrackAddingDialog::extractUrlList( const KUrl::List& urls )
     while( it != allUrls.end() ) {
 
         const KUrl& url = *it;
-        QFileInfo fi( url.path() );
+        QFileInfo fi( url.toLocalFile() );
 
         if( fi.isDir() ) {
             it = allUrls.erase( it );

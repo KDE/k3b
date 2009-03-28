@@ -181,9 +181,9 @@ void K3b::AudioDoc::addTracks( const KUrl::List& urls, int position )
     KUrl::List::iterator end( allUrls.end());
     for( KUrl::List::iterator it = allUrls.begin(); it != end; it++, position++ ) {
         KUrl& url = *it;
-        if( url.path().right(3).toLower() == "cue" ) {
+        if( url.toLocalFile().right(3).toLower() == "cue" ) {
             // try adding a cue file
-            if( K3b::AudioTrack* newAfter = importCueFile( url.path(), getTrack(position) ) ) {
+            if( K3b::AudioTrack* newAfter = importCueFile( url.toLocalFile(), getTrack(position) ) ) {
                 position = newAfter->trackNumber();
                 continue;
             }
@@ -215,16 +215,16 @@ KUrl::List K3b::AudioDoc::extractUrlList( const KUrl::List& urls )
     while( it != allUrls.end() ) {
 
         const KUrl& url = *it;
-        QFileInfo fi( url.path() );
+        QFileInfo fi( url.toLocalFile() );
 
         if( !url.isLocalFile() ) {
-            kDebug() << url.path() << " no local file";
+            kDebug() << url.toLocalFile() << " no local file";
             it = allUrls.erase( it );
             m_notFoundFiles.append( url );
         }
         else if( !fi.exists() ) {
             it = allUrls.erase( it );
-            kDebug() << url.path() << " not found";
+            kDebug() << url.toLocalFile() << " not found";
             m_notFoundFiles.append( url );
         }
         else if( fi.isDir() ) {
@@ -259,7 +259,7 @@ bool K3b::AudioDoc::readPlaylistFile( const KUrl& url, KUrl::List& playlist )
     // check if the file is a m3u playlist
     // and if so add all listed files
 
-    QFile f( url.path() );
+    QFile f( url.toLocalFile() );
     if( !f.open( QIODevice::ReadOnly ) )
         return false;
 
@@ -297,7 +297,7 @@ void K3b::AudioDoc::addSources( K3b::AudioTrack* parent,
                               K3b::AudioDataSource* sourceAfter )
 {
     kDebug() << "(K3b::AudioDoc::addSources( " << parent << ", "
-             << urls.first().path() << ", "
+             << urls.first().toLocalFile() << ", "
              << sourceAfter << " )" << endl;
     KUrl::List allUrls = extractUrlList( urls );
     KUrl::List::const_iterator end(allUrls.constEnd());
@@ -387,15 +387,15 @@ K3b::AudioDecoder* K3b::AudioDoc::getDecoderForUrl( const KUrl& url, bool* reuse
     K3b::AudioDecoder* decoder = 0;
 
     // check if we already have a proper decoder
-    if( m_decoderPresenceMap.contains( url.path() ) ) {
-        decoder = m_decoderPresenceMap[url.path()];
+    if( m_decoderPresenceMap.contains( url.toLocalFile() ) ) {
+        decoder = m_decoderPresenceMap[url.toLocalFile()];
         *reused = true;
     }
     else if( (decoder = K3b::AudioDecoderFactory::createDecoder( url )) ) {
         kDebug() << "(K3b::AudioDoc) using " << decoder->metaObject()->className()
-                 << " for decoding of " << url.path() << endl;
+                 << " for decoding of " << url.toLocalFile() << endl;
 
-        decoder->setFilename( url.path() );
+        decoder->setFilename( url.toLocalFile() );
         *reused = false;
     }
 
@@ -405,9 +405,9 @@ K3b::AudioDecoder* K3b::AudioDoc::getDecoderForUrl( const KUrl& url, bool* reuse
 
 K3b::AudioFile* K3b::AudioDoc::createAudioFile( const KUrl& url )
 {
-    if( !QFile::exists( url.path() ) ) {
-        m_notFoundFiles.append( url.path() );
-        kDebug() << "(K3b::AudioDoc) could not find file " << url.path();
+    if( !QFile::exists( url.toLocalFile() ) ) {
+        m_notFoundFiles.append( url.toLocalFile() );
+        kDebug() << "(K3b::AudioDoc) could not find file " << url.toLocalFile();
         return 0;
     }
 
@@ -419,8 +419,8 @@ K3b::AudioFile* K3b::AudioDoc::createAudioFile( const KUrl& url )
         return new K3b::AudioFile( decoder, this );
     }
     else {
-        m_unknownFileFormatFiles.append( url.path() );
-        kDebug() << "(K3b::AudioDoc) unknown file type in file " << url.path();
+        m_unknownFileFormatFiles.append( url.toLocalFile() );
+        kDebug() << "(K3b::AudioDoc) unknown file type in file " << url.toLocalFile();
         return 0;
     }
 }
@@ -428,7 +428,7 @@ K3b::AudioFile* K3b::AudioDoc::createAudioFile( const KUrl& url )
 
 K3b::AudioTrack* K3b::AudioDoc::createTrack( const KUrl& url )
 {
-    kDebug() << "(K3b::AudioDoc::createTrack( " << url.path() << " )";
+    kDebug() << "(K3b::AudioDoc::createTrack( " << url.toLocalFile() << " )";
     if( K3b::AudioFile* file = createAudioFile( url ) ) {
         K3b::AudioTrack* newTrack = new K3b::AudioTrack( this );
         newTrack->setFirstSource( file );
@@ -933,7 +933,7 @@ void K3b::AudioDoc::informAboutNotFoundFiles()
         QStringList l;
         for( KUrl::List::const_iterator it = m_notFoundFiles.constBegin();
              it != m_notFoundFiles.constEnd(); ++it )
-            l.append( (*it).path() );
+            l.append( (*it).toLocalFile() );
         KMessageBox::informationList( qApp->activeWindow(),
                                       i18n("Could not find the following files:"),
                                       l,
@@ -945,7 +945,7 @@ void K3b::AudioDoc::informAboutNotFoundFiles()
         QStringList l;
         for( KUrl::List::const_iterator it = m_unknownFileFormatFiles.constBegin();
              it != m_unknownFileFormatFiles.constEnd(); ++it )
-            l.append( (*it).path() );
+            l.append( (*it).toLocalFile() );
         KMessageBox::informationList( qApp->activeWindow(),
                                       i18n("<p>Unable to handle the following files due to an unsupported format:"
                                            "<p>You may manually convert these audio files to wave using another "

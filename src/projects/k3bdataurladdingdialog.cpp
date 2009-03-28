@@ -114,7 +114,7 @@ int K3b::DataUrlAddingDialog::addUrls( const KUrl::List& urls,
     // with a data project. Let's warn them
     //
     if( urls.count() == 1 ) {
-        K3b::Iso9660 isoF( urls.first().path() );
+        K3b::Iso9660 isoF( urls.first().toLocalFile() );
         if( isoF.open() ) {
             if( KMessageBox::warningYesNo( parent,
                                            i18n("<p>The file you are about to add to the project is an ISO9660 image. As such "
@@ -261,7 +261,7 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
     // both do not cause QFileInfo to stat, thus no speed improvement
     // can come from removing QFileInfo usage here.
     //
-    QFileInfo info(url.path());
+    QFileInfo info(url.toLocalFile());
     QString absoluteFilePath( info.absoluteFilePath() );
     QString resolved( absoluteFilePath );
 
@@ -277,7 +277,7 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
 #warning PORTME
 #endif
 #if 0
-    m_infoLabel->setText( url.path() );
+    m_infoLabel->setText( url.toLocalFile() );
     if( m_totalFiles == 0 )
         m_counterLabel->setText( QString("(%1)").arg(m_filesHandled) );
     else
@@ -290,17 +290,17 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
 
     if( !url.isLocalFile() ) {
         valid = false;
-        m_nonLocalFiles.append( url.path() );
+        m_nonLocalFiles.append( url.toLocalFile() );
     }
 
     else if( k3b_lstat( QFile::encodeName(absoluteFilePath), &statBuf ) != 0 ) {
         valid = false;
-        m_notFoundFiles.append( url.path() );
+        m_notFoundFiles.append( url.toLocalFile() );
     }
 
-    else if( !m_encodingConverter->encodedLocally( QFile::encodeName( url.path() ) ) ) {
+    else if( !m_encodingConverter->encodedLocally( QFile::encodeName( url.toLocalFile() ) ) ) {
         valid = false;
-        m_invalidFilenameEncodingFiles.append( url.path() );
+        m_invalidFilenameEncodingFiles.append( url.toLocalFile() );
     }
 
     else {
@@ -319,12 +319,12 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
         else {
             if( ::access( QFile::encodeName( absoluteFilePath ), R_OK ) != 0 ) {
                 valid = false;
-                m_unreadableFiles.append( url.path() );
+                m_unreadableFiles.append( url.toLocalFile() );
             }
             else if( isFile && (unsigned long long)statBuf.st_size >= 0xFFFFFFFFULL ) {
                 if ( !k3bcore->externalBinManager()->binObject( "mkisofs" )->hasFeature( "no-4gb-limit" ) ) {
                     valid = false;
-                    m_tooBigFiles.append( url.path() );
+                    m_tooBigFiles.append( url.toLocalFile() );
                 }
             }
         }
@@ -367,7 +367,7 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
         bsAtEnd = true;
     }
     if( bsAtEnd )
-        m_mkisofsLimitationRenamedFiles.append( url.path() + " -> " + newName );
+        m_mkisofsLimitationRenamedFiles.append( url.toLocalFile() + " -> " + newName );
 
     // backup dummy name
     if( newName.isEmpty() )
@@ -549,7 +549,7 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
         if( isDir && !isSymLink ) {
             if( !newDirItem ) { // maybe we reuse an already existing dir
                 newDirItem = new K3b::DirItem( newName , dir->doc(), dir );
-                newDirItem->setLocalPath( url.path() ); // HACK: see k3bdiritem.h
+                newDirItem->setLocalPath( url.toLocalFile() ); // HACK: see k3bdiritem.h
             }
 
             QDir newDir( absoluteFilePath );
@@ -558,7 +558,7 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
             }
         }
         else {
-            (void)new K3b::FileItem( &statBuf, &resolvedStatBuf, url.path(), dir->doc(), dir, newName );
+            (void)new K3b::FileItem( &statBuf, &resolvedStatBuf, url.toLocalFile(), dir->doc(), dir, newName );
         }
     }
 
