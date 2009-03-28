@@ -143,7 +143,7 @@ void K3b::DvdCopyJob::start()
 
     emit newSubTask( i18n("Checking source medium") );
 
-    connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::DISKINFO, m_readerDevice ),
+    connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::MEDIAINFO, m_readerDevice ),
              SIGNAL(finished(K3b::Device::DeviceHandler*)),
              this,
              SLOT(slotDiskInfoReady(K3b::Device::DeviceHandler*)) );

@@ -30,9 +30,8 @@ public:
     bool selfDelete;
 
     bool success;
-    int errorCode;
     Commands command;
-    DiskInfo ngInfo;
+    DiskInfo diskInfo;
     Toc toc;
     CdText cdText;
     QByteArray cdTextRaw;
@@ -72,35 +71,30 @@ K3b::Device::DeviceHandler::~DeviceHandler()
 }
 
 
-int K3b::Device::DeviceHandler::errorCode() const
-{
-    return d->errorCode;
-}
-
 bool K3b::Device::DeviceHandler::success() const
 {
     return d->success;
 }
 
 
-const K3b::Device::DiskInfo& K3b::Device::DeviceHandler::diskInfo() const
+K3b::Device::DiskInfo K3b::Device::DeviceHandler::diskInfo() const
 {
-    return d->ngInfo;
+    return d->diskInfo;
 }
 
 
-const K3b::Device::Toc& K3b::Device::DeviceHandler::toc() const
+K3b::Device::Toc K3b::Device::DeviceHandler::toc() const
 {
     return d->toc;
 }
 
-const K3b::Device::CdText& K3b::Device::DeviceHandler::cdText() const
+K3b::Device::CdText K3b::Device::DeviceHandler::cdText() const
 {
     return d->cdText;
 }
 
 
-const QByteArray& K3b::Device::DeviceHandler::cdTextRaw() const
+QByteArray K3b::Device::DeviceHandler::cdTextRaw() const
 {
     return d->cdTextRaw;
 }
@@ -108,12 +102,12 @@ const QByteArray& K3b::Device::DeviceHandler::cdTextRaw() const
 
 K3b::Msf K3b::Device::DeviceHandler::diskSize() const
 {
-    return d->ngInfo.capacity();
+    return d->diskInfo.capacity();
 }
 
 K3b::Msf K3b::Device::DeviceHandler::remainingSize() const
 {
-    return d->ngInfo.remainingSize();
+    return d->diskInfo.remainingSize();
 }
 
 int K3b::Device::DeviceHandler::tocType() const
@@ -123,7 +117,7 @@ int K3b::Device::DeviceHandler::tocType() const
 
 int K3b::Device::DeviceHandler::numSessions() const
 {
-    return d->ngInfo.numSessions();
+    return d->diskInfo.numSessions();
 }
 
 long long K3b::Device::DeviceHandler::bufferCapacity() const
@@ -150,7 +144,7 @@ void K3b::Device::DeviceHandler::setDevice( Device* dev )
 void K3b::Device::DeviceHandler::sendCommand( DeviceHandler::Commands command )
 {
     if( active() ) {
-        kDebug() << "(K3b::Device::DeviceHandler) thread already running. canceling thread...";
+        kDebug() << "thread already running. canceling thread...";
         cancel();
         wait();
     }
@@ -219,62 +213,18 @@ void K3b::Device::DeviceHandler::jobFinished( bool success )
 
 bool K3b::Device::DeviceHandler::run()
 {
-    kDebug() << "(K3b::Device::DeviceHandler) starting command: " << d->command;
+    kDebug() << "starting command: " << d->command;
 
     d->success = false;
 
     // clear data
     d->toc.clear();
-    d->ngInfo = DiskInfo();
+    d->diskInfo = DiskInfo();
     d->cdText.clear();
-    d->cdTextRaw.resize(0);
+    d->cdTextRaw.clear();
 
     if( d->dev ) {
         d->success = d->dev->open();
-        if( !canceled() && d->command & DISKINFO ) {
-            d->ngInfo = d->dev->diskInfo();
-            if( !canceled() && !d->ngInfo.empty() ) {
-                d->toc = d->dev->readToc();
-                if( d->toc.contentType() == AUDIO ||
-                    d->toc.contentType() == MIXED )
-                    d->cdText = d->dev->readCdText();
-            }
-        }
-
-        if( !canceled() && d->command & (NG_DISKINFO|
-                                         DISKSIZE|
-                                         REMAININGSIZE|
-                                         NUMSESSIONS) ) {
-            d->ngInfo = d->dev->diskInfo();
-        }
-
-        if( !canceled() && d->command & (TOC|TOCTYPE) ) {
-            d->toc = d->dev->readToc();
-        }
-
-        if( !canceled() && d->command & CD_TEXT ) {
-            d->cdText = d->dev->readCdText();
-            d->success = (d->success && !d->cdText.isEmpty());
-        }
-
-        if( !canceled() && d->command & CD_TEXT_RAW ) {
-            unsigned char* data = 0;
-            unsigned int dataLen = 0;
-            if( d->dev->readTocPmaAtip( &data, dataLen, 5, false, 0 ) ) {
-                // we need more than the header and a multiple of 18 bytes to have valid CD-TEXT
-                if( dataLen > 4 && dataLen%18 == 4 ) {
-                    d->cdTextRaw = QByteArray::fromRawData( reinterpret_cast<char*>(data), dataLen );
-                }
-                else {
-                    kDebug() << "(K3b::Device::DeviceHandler) invalid CD-TEXT length: " << dataLen;
-                    delete [] data;
-                    d->success = false;
-                }
-            }
-            else
-                d->success = false;
-        }
-
         if( !canceled() && d->command & BLOCK )
             d->success = (d->success && d->dev->block( true ));
 
@@ -292,6 +242,33 @@ bool K3b::Device::DeviceHandler::run()
         if( !canceled() && d->command & LOAD )
             d->success = (d->success && d->dev->load());
 
+        if( !canceled() && d->command & (DISKINFO|
+                                         DISKSIZE|
+                                         REMAININGSIZE|
+                                         NUMSESSIONS) ) {
+            d->diskInfo = d->dev->diskInfo();
+        }
+
+        if( !canceled() && d->command & (TOC|TOCTYPE) ) {
+            d->toc = d->dev->readToc();
+        }
+
+        if( !canceled() &&
+            d->command & CD_TEXT &&
+              !( d->command & TOC &&
+                 d->toc.contentType() == DATA )
+            ) {
+            d->cdText = d->dev->readCdText();
+            if ( d->command != MEDIAINFO )
+                d->success = (d->success && !d->cdText.isEmpty());
+        }
+
+        if( !canceled() && d->command & CD_TEXT_RAW ) {
+            bool cdTextSuccess = true;
+            d->cdTextRaw = d->dev->readRawCdText( &cdTextSuccess );
+            d->success = d->success && cdTextSuccess;
+        }
+
         if( !canceled() && d->command & BUFFER_CAPACITY )
             d->success = d->dev->readBufferCapacity( d->bufferCapacity, d->availableBufferCapacity );
 
@@ -304,9 +281,45 @@ bool K3b::Device::DeviceHandler::run()
         d->dev->close();
     }
 
-    kDebug() << "(K3b::Device::DeviceHandler) finished command: " << d->command;
+    kDebug() << "finished command: " << d->command;
 
     return d->success;
+}
+
+
+QDebug operator<<( QDebug dbg, K3b::Device::DeviceHandler::Commands commands )
+{
+    QStringList commandStrings;
+    if ( commands & K3b::Device::DeviceHandler::DISKINFO )
+        commandStrings << QLatin1String( "DISKINFO" );
+    if ( commands & K3b::Device::DeviceHandler::TOC )
+        commandStrings << QLatin1String( "TOC" );
+    if ( commands & K3b::Device::DeviceHandler::CD_TEXT )
+        commandStrings << QLatin1String( "CD_TEXT" );
+    if ( commands & K3b::Device::DeviceHandler::CD_TEXT_RAW )
+        commandStrings << QLatin1String( "CD_TEXT_RAW" );
+    if ( commands & K3b::Device::DeviceHandler::DISKSIZE )
+        commandStrings << QLatin1String( "DISKSIZE" );
+    if ( commands & K3b::Device::DeviceHandler::REMAININGSIZE )
+        commandStrings << QLatin1String( "REMAININGSIZE" );
+    if ( commands & K3b::Device::DeviceHandler::TOCTYPE )
+        commandStrings << QLatin1String( "TOCTYPE" );
+    if ( commands & K3b::Device::DeviceHandler::NUMSESSIONS )
+        commandStrings << QLatin1String( "NUMSESSIONS" );
+    if ( commands & K3b::Device::DeviceHandler::BLOCK )
+        commandStrings << QLatin1String( "BLOCK" );
+    if ( commands & K3b::Device::DeviceHandler::UNBLOCK )
+        commandStrings << QLatin1String( "UNBLOCK" );
+    if ( commands & K3b::Device::DeviceHandler::EJECT )
+        commandStrings << QLatin1String( "EJECT" );
+    if ( commands & K3b::Device::DeviceHandler::LOAD )
+        commandStrings << QLatin1String( "LOAD" );
+    if ( commands & K3b::Device::DeviceHandler::BUFFER_CAPACITY )
+        commandStrings << QLatin1String( "BUFFER_CAPACITY" );
+    if ( commands & K3b::Device::DeviceHandler::NEXT_WRITABLE_ADDRESS )
+        commandStrings << QLatin1String( "NEXT_WRITABLE_ADDRESS" );
+    dbg.nospace() << "(" + commandStrings.join( "|" ) + ")";
+    return dbg.space();
 }
 
 #include "k3bdevicehandler.moc"

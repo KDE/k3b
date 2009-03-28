@@ -47,71 +47,107 @@ namespace K3b {
         public:
             enum Command {
                 NO_COMMAND = 0x0,
+
                 /**
+                 * Retrieve basic disk information.
                  * Always successful, even with an empty or no media at all!
+                 *
+                 * \sa diskInfo()
                  */
-                NG_DISKINFO = 0x1, // TODO: rename this into DISKINFO
+                DISKINFO = 0x1,
+
                 /**
+                 * Retrieve the Toc.
                  * Always successful, even with an empty or no media at all!
+                 *
+                 * \sa toc()
                  */
                 TOC = 0x2,
+
                 /**
+                 * Retrieve the CD-Text.
+                 *
                  * Successful if the media contains CD-Text.
+                 *
+                 * \sa cdText()
                  */
                 CD_TEXT = 0x4,
+
                 /**
+                 * Retrieve the raw, undecoded CD-Text.
+                 *
                  * Successful if the media contains CD-Text.
+                 *
+                 * \sa rawCdText()
                  */
                 CD_TEXT_RAW = 0x8,
+
                 /**
+                 * Retrieve the size of the disk.
+                 *
                  * Always successful, even with an empty or no media at all!
+                 *
+                 * \sa diskSize()
                  */
                 DISKSIZE = 0x10,
+
                 /**
+                 * Retrieve the remaining size of the disk.
+                 *
                  * Always successful, even with an empty or no media at all!
+                 *
+                 * \sa remainingSize()
                  */
                 REMAININGSIZE = 0x20,
+
                 /**
                  * Always successful, even with an empty or no media at all!
                  */
                 TOCTYPE = 0x40,
+
                 /**
                  * Always successful, even with an empty or no media at all!
                  */
                 NUMSESSIONS = 0x80,
+
                 /**
                  * Successful if the drive could be blocked.
                  */
                 BLOCK = 0x100,
+
                 /**
                  * Successful if the drive could be unblocked.
                  */
                 UNBLOCK = 0x200,
+
                 /**
                  * Successful if the media was ejected.
                  */
                 EJECT = 0x400,
+
                 /**
                  * Successful if the media was loaded
                  */
                 LOAD = 0x800,
 
                 RELOAD = EJECT|LOAD,
-                /**
-                 * Retrieves NG_DISKINFO, TOC, and CD-Text in case of an audio or mixed
-                 * mode cd.
-                 * The only difference to NG_DISKINFO|TOC|CD_TEXT is that no CD-Text is not
-                 * considered an error.
-                 *
-                 * Always successful, even with an empty or no media at all!
-                 */
-                DISKINFO = 0x1000,  // TODO: rename this in somthing like: DISKINFO_COMPLETE
+
                 /**
                  * Determine the device buffer state.
                  */
-                BUFFER_CAPACITY = 0x2000,
+                BUFFER_CAPACITY = 0x1000,
 
-                NEXT_WRITABLE_ADDRESS = 0x4000
+                NEXT_WRITABLE_ADDRESS = 0x2000,
+
+                /**
+                 * Retrieves all medium information: DISKINFO, TOC, and CD_TEXT in case of an audio or mixed
+                 * mode cd.
+                 *
+                 * Always successful, even with an empty or no media at all!
+                 *
+                 * \sa diskInfo(), toc(), cdText()
+                 */
+                MEDIAINFO = DISKINFO|TOC|CD_TEXT
             };
             Q_DECLARE_FLAGS( Commands, Command )
 
@@ -126,10 +162,10 @@ namespace K3b {
 
             ~DeviceHandler();
 
-            const DiskInfo& diskInfo() const;
-            const Toc& toc() const;
-            const CdText& cdText() const;
-            const QByteArray& cdTextRaw() const;
+            DiskInfo diskInfo() const;
+            Toc toc() const;
+            CdText cdText() const;
+            QByteArray cdTextRaw() const;
             Msf diskSize() const;
             Msf remainingSize() const;
             int tocType() const;
@@ -140,12 +176,6 @@ namespace K3b {
             Msf nextWritableAddress() const;
 
             bool success() const;
-
-            /**
-             * Use this when the command
-             * returnes some error code.
-             */
-            int errorCode() const;
 
         Q_SIGNALS:
             void finished( K3b::Device::DeviceHandler* );
@@ -174,7 +204,7 @@ namespace K3b {
         /**
          * Usage:
          * \code
-         *  connect( Device::sendCommand( Device::DeviceHandler::MOUNT, dev ),
+         *  connect( Device::sendCommand( Device::DeviceHandler::DISKINFO, dev ),
          *           SIGNAL(finished(DeviceHandler*)),
          *           this, SLOT(someSlot(DeviceHandler*)) );
          *
@@ -187,8 +217,8 @@ namespace K3b {
          */
         LIBK3B_EXPORT DeviceHandler* sendCommand( DeviceHandler::Commands command, Device* );
 
-        inline DeviceHandler* diskInfo(Device* dev) {
-            return sendCommand(DeviceHandler::DISKINFO,dev);
+        inline DeviceHandler* mediaInfo(Device* dev) {
+            return sendCommand(DeviceHandler::MEDIAINFO,dev);
         }
 
         inline DeviceHandler* toc(Device* dev) {
@@ -234,5 +264,7 @@ namespace K3b {
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(K3b::Device::DeviceHandler::Commands)
+
+LIBK3B_EXPORT QDebug operator<<( QDebug dbg, K3b::Device::DeviceHandler::Commands commands );
 
 #endif

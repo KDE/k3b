@@ -49,6 +49,15 @@ namespace {
         QByteArray checksum;
         K3b::Msf length;
     };
+
+    class NullSinkChecksumPipe : public K3b::ChecksumPipe
+    {
+    protected:
+        qint64 writeData( const char* data, qint64 max ) {
+            ChecksumPipe::writeData( data, max );
+            return max;
+        }
+    };
 }
 
 
@@ -59,6 +68,8 @@ public:
         : device(0),
           dataTrackReader(0) {
     }
+
+    void reloadMedium();
 
     bool canceled;
     K3b::Device::Device* device;
@@ -77,18 +88,33 @@ public:
     K3b::Msf totalSectors;
     K3b::Msf alreadyReadSectors;
 
-    K3b::ChecksumPipe pipe;
+    NullSinkChecksumPipe pipe;
 
     bool readSuccessful;
 
     bool mediumHasBeenReloaded;
+
+    VerificationJob* q;
 };
+
+
+void K3b::VerificationJob::Private::reloadMedium()
+{
+    // many drives need to reload the medium to return to a proper state
+    mediumHasBeenReloaded = true;
+    emit q->infoMessage( i18n( "Need to reload medium to return to proper state." ), INFO );
+    QObject::connect( K3b::Device::sendCommand( Device::DeviceHandler::MEDIAINFO|Device::DeviceHandler::RELOAD, device ),
+                      SIGNAL(finished(K3b::Device::DeviceHandler*)),
+                      q,
+                      SLOT(slotDiskInfoReady(K3b::Device::DeviceHandler*)) );
+}
 
 
 K3b::VerificationJob::VerificationJob( K3b::JobHandler* hdl, QObject* parent )
     : K3b::Job( hdl, parent )
 {
     d = new Private();
+    d->q = this;
 }
 
 
@@ -154,7 +180,7 @@ void K3b::VerificationJob::start()
     emit newTask( i18n("Checking medium") );
 
     d->mediumHasBeenReloaded = false;
-    connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::DISKINFO, d->device ),
+    connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::MEDIAINFO, d->device ),
              SIGNAL(finished(K3b::Device::DeviceHandler*)),
              this,
              SLOT(slotDiskInfoReady(K3b::Device::DeviceHandler*)) );
@@ -178,24 +204,18 @@ void K3b::VerificationJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
          it != d->tracks.end(); ++i, ++it ) {
 
         // 0 means "last track"
-        if( (*it).trackNumber == 0 )
-            (*it).trackNumber = d->toc.count();
+        if( it->trackNumber == 0 )
+            it->trackNumber = d->toc.count();
 
-        if( (int)d->toc.count() < (*it).trackNumber ) {
+        if( d->toc.count() < it->trackNumber ) {
             if ( d->mediumHasBeenReloaded ) {
                 emit infoMessage( i18n("Internal Error: Verification job improperly initialized (%1)",
-                                       i18n("specified track number not found on medium") ), ERROR );
+                                       i18n("specified track number '%1' not found on medium", it->trackNumber) ), ERROR );
                 jobFinished( false );
                 return;
             }
             else {
-                // many drives need to reload the medium to return to a proper state
-                d->mediumHasBeenReloaded = true;
-                emit infoMessage( i18n( "Need to reload medium to return to proper state." ), INFO );
-                connect( K3b::Device::reload( d->device ),
-                         SIGNAL(finished(K3b::Device::DeviceHandler*)),
-                         this,
-                         SLOT(slotDiskInfoReady(K3b::Device::DeviceHandler*)) );
+                d->reloadMedium();
                 return;
             }
         }
@@ -260,7 +280,6 @@ void K3b::VerificationJob::readTrack( int trackIndex )
             d->dataTrackReader->setSectorRange( track.firstSector(),
                                                 track.firstSector() + d->currentTrackSize -1 );
 
-        d->dataTrackReader->writeTo( &d->pipe );
         d->pipe.open();
         d->dataTrackReader->start();
     }
@@ -299,6 +318,9 @@ void K3b::VerificationJob::slotReaderFinished( bool success )
             else
                 jobFinished(true);
         }
+    }
+    else {
+        jobFinished( false );
     }
 }
 

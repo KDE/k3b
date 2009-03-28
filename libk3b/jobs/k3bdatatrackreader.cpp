@@ -261,7 +261,7 @@ bool K3b::DataTrackReader::run()
     while( s_bufferSizeSectors > 0 && read( buffer, d->firstSector.lba(), s_bufferSizeSectors ) < 0 ) {
         kDebug() << "(K3b::DataTrackReader) determine max read sectors: "
                  << s_bufferSizeSectors << " too high." << endl;
-        s_bufferSizeSectors--;
+        s_bufferSizeSectors /= 2;
     }
     kDebug() << "(K3b::DataTrackReader) determine max read sectors: "
              << s_bufferSizeSectors << " is max." << endl;

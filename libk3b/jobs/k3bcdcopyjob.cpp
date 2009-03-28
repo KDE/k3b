@@ -154,6 +154,9 @@ void K3b::CdCopyJob::start()
     d->haveCdText = false;
     d->haveCddb = false;
 
+    if ( m_onlyCreateImages )
+        m_onTheFly = false;
+
     jobStarted();
 
     emit newTask( i18n("Checking Source Medium") );
@@ -173,7 +176,7 @@ void K3b::CdCopyJob::start()
 
     // FIXME: read ISRCs and MCN
 
-    connect( K3b::Device::diskInfo( m_readerDevice ), SIGNAL(finished(K3b::Device::DeviceHandler*)),
+    connect( K3b::Device::mediaInfo( m_readerDevice ), SIGNAL(finished(K3b::Device::DeviceHandler*)),
              this, SLOT(slotDiskInfoReady(K3b::Device::DeviceHandler*)) );
 }
 
@@ -476,7 +479,7 @@ void K3b::CdCopyJob::startCopy()
         }
     }
 
-    if( m_onTheFly ) {
+    if( m_onTheFly && !m_onlyCreateImages ) {
         emit newSubTask( i18n("Preparing write process...") );
 
         if( writeNextSession() )

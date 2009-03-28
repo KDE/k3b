@@ -152,7 +152,7 @@ void K3b::DvdFormattingJob::start()
     emit infoMessage( i18n("Checking media..."), INFO );
     emit newTask( i18n("Checking media") );
 
-    connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::NG_DISKINFO, d->device ),
+    connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::DISKINFO, d->device ),
              SIGNAL(finished(K3b::Device::DeviceHandler*)),
              this,
              SLOT(slotDeviceHandlerFinished(K3b::Device::DeviceHandler*)) );
