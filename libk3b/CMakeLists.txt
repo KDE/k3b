@@ -6,6 +6,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/plugin
   ${CMAKE_CURRENT_SOURCE_DIR}/tools
   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qprocess
+  ${CMAKE_CURRENT_SOURCE_DIR}/tools/qprocess/private
   ${CMAKE_CURRENT_SOURCE_DIR}/projects
   ${CMAKE_CURRENT_SOURCE_DIR}/projects/audiocd
   ${CMAKE_CURRENT_SOURCE_DIR}/projects/datacd
@@ -95,10 +96,24 @@ set(k3b_tools_SRCS
   tools/k3bmediacache.cpp 
   tools/k3bcddb.cpp
   tools/qprocess/k3bqprocess.cpp
-  tools/qprocess/k3bqprocess_unix.cpp
   tools/qprocess/k3bkprocess.cpp
   )
-
+  
+if(WIN32)
+	list(APPEND k3b_tools_SRCS 
+		tools/qprocess/k3bqprocess_win.cpp
+		tools/qprocess/private/qwineventnotifier_p.cpp
+		tools/qprocess/private/qfsfileengine_win.cpp
+		tools/qprocess/private/qfsfileengine.cpp
+		tools/qprocess/private/qfsfileengine_iterator.cpp
+		tools/qprocess/private/qfsfileengine_iterator_win.cpp
+)
+else(WIN32)
+  	list(APPEND k3b_tools_SRCS 
+		tools/qprocess/k3bqprocess_unix.cpp
+	)
+endif(WIN32)
+  
 set(k3b_libisofs_SRCS tools/libisofs/isofs.cpp)
 
 set(k3b_videodvd_SRCS 
@@ -226,8 +241,11 @@ target_link_libraries(k3b
   ${KCDDB_LIBRARIES}
   ${SAMPLERATE_LIBRARIES}
   k3bdevice
-  dl )
-
+)
+if(NOT WIN32)
+	target_link_libraries(k3b dl)
+endif(NOT WIN32)
+  
 if(ENABLE_DVD_RIPPING)
   target_link_libraries(k3b ${DVDREAD_LIBRARIES})
 endif(ENABLE_DVD_RIPPING)

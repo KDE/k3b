@@ -450,6 +450,9 @@ K3bQProcessPrivate::~K3bQProcessPrivate()
 
 /*! \internal
 */
+
+void qDeleteInEventHandler(QObject *o);
+
 void K3bQProcessPrivate::cleanup()
 {
     q_func()->setProcessState(::QProcess::NotRunning);
