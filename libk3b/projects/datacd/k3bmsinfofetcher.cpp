@@ -69,7 +69,7 @@ void K3b::MsInfoFetcher::start()
     // read the info on our own
     //
 
-    connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::DISKINFO, m_device ),
+    connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::CommandDiskInfo, m_device ),
              SIGNAL(finished(K3b::Device::DeviceHandler*)),
              this,
              SLOT(slotMediaDetectionFinished(K3b::Device::DeviceHandler*)) );

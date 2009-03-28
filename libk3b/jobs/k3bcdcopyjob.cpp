@@ -360,7 +360,7 @@ void K3b::CdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
         }
     }
     else {
-        emit infoMessage( i18n("Unable to read TOC"), ERROR );
+        emit infoMessage( i18n("Unable to read Table of contents"), ERROR );
         finishJob( false, true );
     }
 }
@@ -370,7 +370,7 @@ void K3b::CdCopyJob::searchCdText()
 {
     emit newSubTask( i18n("Searching CD-TEXT") );
 
-    connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::CD_TEXT_RAW, m_readerDevice ),
+    connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::CommandCdText_RAW, m_readerDevice ),
              SIGNAL(finished(K3b::Device::DeviceHandler*)),
              this,
              SLOT(slotCdTextReady(K3b::Device::DeviceHandler*)) );

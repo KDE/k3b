@@ -46,7 +46,7 @@ namespace K3b {
 
         public:
             enum Command {
-                NO_COMMAND = 0x0,
+                CommandNone = 0x0,
 
                 /**
                  * Retrieve basic disk information.
@@ -54,7 +54,7 @@ namespace K3b {
                  *
                  * \sa diskInfo()
                  */
-                DISKINFO = 0x1,
+                CommandDiskInfo = 0x1,
 
                 /**
                  * Retrieve the Toc.
@@ -62,7 +62,7 @@ namespace K3b {
                  *
                  * \sa toc()
                  */
-                TOC = 0x2,
+                CommandToc = 0x2,
 
                 /**
                  * Retrieve the CD-Text.
@@ -71,7 +71,7 @@ namespace K3b {
                  *
                  * \sa cdText()
                  */
-                CD_TEXT = 0x4,
+                CommandCdText = 0x4,
 
                 /**
                  * Retrieve the raw, undecoded CD-Text.
@@ -80,7 +80,7 @@ namespace K3b {
                  *
                  * \sa rawCdText()
                  */
-                CD_TEXT_RAW = 0x8,
+                CommandCdText_RAW = 0x8,
 
                 /**
                  * Retrieve the size of the disk.
@@ -89,7 +89,7 @@ namespace K3b {
                  *
                  * \sa diskSize()
                  */
-                DISKSIZE = 0x10,
+                CommandDiskSize = 0x10,
 
                 /**
                  * Retrieve the remaining size of the disk.
@@ -98,56 +98,56 @@ namespace K3b {
                  *
                  * \sa remainingSize()
                  */
-                REMAININGSIZE = 0x20,
+                CommandRemainingSize = 0x20,
 
                 /**
                  * Always successful, even with an empty or no media at all!
                  */
-                TOCTYPE = 0x40,
+                CommandTocTYPE = 0x40,
 
                 /**
                  * Always successful, even with an empty or no media at all!
                  */
-                NUMSESSIONS = 0x80,
+                CommandNumSessions = 0x80,
 
                 /**
                  * Successful if the drive could be blocked.
                  */
-                BLOCK = 0x100,
+                CommandBlock = 0x100,
 
                 /**
                  * Successful if the drive could be unblocked.
                  */
-                UNBLOCK = 0x200,
+                UNCommandBlock = 0x200,
 
                 /**
                  * Successful if the media was ejected.
                  */
-                EJECT = 0x400,
+                CommandEject = 0x400,
 
                 /**
                  * Successful if the media was loaded
                  */
-                LOAD = 0x800,
+                CommandLoad = 0x800,
 
-                RELOAD = EJECT|LOAD,
+                RECommandLoad = CommandEject|CommandLoad,
 
                 /**
                  * Determine the device buffer state.
                  */
-                BUFFER_CAPACITY = 0x1000,
+                CommandBufferCapacity = 0x1000,
 
-                NEXT_WRITABLE_ADDRESS = 0x2000,
+                CommandNextWritableAddress = 0x2000,
 
                 /**
-                 * Retrieves all medium information: DISKINFO, TOC, and CD_TEXT in case of an audio or mixed
+                 * Retrieves all medium information: CommandDiskInfo, CommandToc, and CommandCdText in case of an audio or mixed
                  * mode cd.
                  *
                  * Always successful, even with an empty or no media at all!
                  *
                  * \sa diskInfo(), toc(), cdText()
                  */
-                MEDIAINFO = DISKINFO|TOC|CD_TEXT
+                CommandMediaInfo = CommandDiskInfo|CommandToc|CommandCdText
             };
             Q_DECLARE_FLAGS( Commands, Command )
 
@@ -204,7 +204,7 @@ namespace K3b {
         /**
          * Usage:
          * \code
-         *  connect( Device::sendCommand( Device::DeviceHandler::DISKINFO, dev ),
+         *  connect( Device::sendCommand( Device::DeviceHandler::CommandDiskInfo, dev ),
          *           SIGNAL(finished(DeviceHandler*)),
          *           this, SLOT(someSlot(DeviceHandler*)) );
          *
@@ -218,47 +218,47 @@ namespace K3b {
         LIBK3B_EXPORT DeviceHandler* sendCommand( DeviceHandler::Commands command, Device* );
 
         inline DeviceHandler* mediaInfo(Device* dev) {
-            return sendCommand(DeviceHandler::MEDIAINFO,dev);
+            return sendCommand(DeviceHandler::CommandMediaInfo,dev);
         }
 
         inline DeviceHandler* toc(Device* dev) {
-            return sendCommand(DeviceHandler::TOC,dev);
+            return sendCommand(DeviceHandler::CommandToc,dev);
         }
 
         inline DeviceHandler* diskSize(Device* dev) {
-            return sendCommand(DeviceHandler::DISKSIZE,dev);
+            return sendCommand(DeviceHandler::CommandDiskSize,dev);
         }
 
         inline DeviceHandler* remainingSize(Device* dev) {
-            return sendCommand(DeviceHandler::REMAININGSIZE,dev);
+            return sendCommand(DeviceHandler::CommandRemainingSize,dev);
         }
 
         inline DeviceHandler* tocType(Device* dev) {
-            return sendCommand(DeviceHandler::TOCTYPE,dev);
+            return sendCommand(DeviceHandler::CommandTocTYPE,dev);
         }
 
         inline DeviceHandler* numSessions(Device* dev) {
-            return sendCommand(DeviceHandler::NUMSESSIONS,dev);
+            return sendCommand(DeviceHandler::CommandNumSessions,dev);
         }
 
         inline DeviceHandler* block(Device* dev) {
-            return sendCommand(DeviceHandler::BLOCK,dev);
+            return sendCommand(DeviceHandler::CommandBlock,dev);
         }
 
         inline DeviceHandler* unblock(Device* dev) {
-            return sendCommand(DeviceHandler::UNBLOCK,dev);
+            return sendCommand(DeviceHandler::UNCommandBlock,dev);
         }
 
         inline DeviceHandler* eject(Device* dev) {
-            return sendCommand(DeviceHandler::EJECT,dev);
+            return sendCommand(DeviceHandler::CommandEject,dev);
         }
 
         inline DeviceHandler* reload(Device* dev) {
-            return sendCommand(DeviceHandler::RELOAD,dev);
+            return sendCommand(DeviceHandler::RECommandLoad,dev);
         }
 
         inline DeviceHandler* load(Device* dev) {
-            return sendCommand(DeviceHandler::LOAD,dev);
+            return sendCommand(DeviceHandler::CommandLoad,dev);
         }
     }
 }

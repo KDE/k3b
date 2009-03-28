@@ -155,43 +155,43 @@ void K3b::Device::DeviceHandler::sendCommand( DeviceHandler::Commands command )
 
 void K3b::Device::DeviceHandler::getToc()
 {
-    sendCommand(DeviceHandler::TOC);
+    sendCommand(DeviceHandler::CommandToc);
 }
 
 void K3b::Device::DeviceHandler::getDiskInfo()
 {
-    sendCommand(DeviceHandler::DISKINFO);
+    sendCommand(DeviceHandler::CommandDiskInfo);
 }
 
 void K3b::Device::DeviceHandler::getDiskSize()
 {
-    sendCommand(DeviceHandler::DISKSIZE);
+    sendCommand(DeviceHandler::CommandDiskSize);
 }
 
 void K3b::Device::DeviceHandler::getRemainingSize()
 {
-    sendCommand(DeviceHandler::REMAININGSIZE);
+    sendCommand(DeviceHandler::CommandRemainingSize);
 }
 
 void K3b::Device::DeviceHandler::getTocType()
 {
-    sendCommand(DeviceHandler::TOCTYPE);
+    sendCommand(DeviceHandler::CommandTocTYPE);
 }
 
 void K3b::Device::DeviceHandler::getNumSessions()
 {
-    sendCommand(DeviceHandler::NUMSESSIONS);
+    sendCommand(DeviceHandler::CommandNumSessions);
 }
 
 
 void K3b::Device::DeviceHandler::block( bool b )
 {
-    sendCommand(b ? DeviceHandler::BLOCK : DeviceHandler::UNBLOCK);
+    sendCommand(b ? DeviceHandler::CommandBlock : DeviceHandler::UNCommandBlock);
 }
 
 void K3b::Device::DeviceHandler::eject()
 {
-    sendCommand(DeviceHandler::EJECT);
+    sendCommand(DeviceHandler::CommandEject);
 }
 
 K3b::Device::DeviceHandler* K3b::Device::sendCommand( DeviceHandler::Commands command, Device* dev )
@@ -225,54 +225,54 @@ bool K3b::Device::DeviceHandler::run()
 
     if( d->dev ) {
         d->success = d->dev->open();
-        if( !canceled() && d->command & BLOCK )
+        if( !canceled() && d->command & CommandBlock )
             d->success = (d->success && d->dev->block( true ));
 
-        if( !canceled() && d->command & UNBLOCK )
+        if( !canceled() && d->command & UNCommandBlock )
             d->success = (d->success && d->dev->block( false ));
 
         //
         // It is important that eject is performed before load
-        // since the RELOAD command is a combination of both
+        // since the RECommandLoad command is a combination of both
         //
 
-        if( !canceled() && d->command & EJECT )
+        if( !canceled() && d->command & CommandEject )
             d->success = (d->success && d->dev->eject());
 
-        if( !canceled() && d->command & LOAD )
+        if( !canceled() && d->command & CommandLoad )
             d->success = (d->success && d->dev->load());
 
-        if( !canceled() && d->command & (DISKINFO|
-                                         DISKSIZE|
-                                         REMAININGSIZE|
-                                         NUMSESSIONS) ) {
+        if( !canceled() && d->command & (CommandDiskInfo|
+                                         CommandDiskSize|
+                                         CommandRemainingSize|
+                                         CommandNumSessions) ) {
             d->diskInfo = d->dev->diskInfo();
         }
 
-        if( !canceled() && d->command & (TOC|TOCTYPE) ) {
+        if( !canceled() && d->command & (CommandToc|CommandTocTYPE) ) {
             d->toc = d->dev->readToc();
         }
 
         if( !canceled() &&
-            d->command & CD_TEXT &&
-              !( d->command & TOC &&
+            d->command & CommandCdText &&
+              !( d->command & CommandToc &&
                  d->toc.contentType() == DATA )
             ) {
             d->cdText = d->dev->readCdText();
-            if ( d->command != MEDIAINFO )
+            if ( d->command != CommandMediaInfo )
                 d->success = (d->success && !d->cdText.isEmpty());
         }
 
-        if( !canceled() && d->command & CD_TEXT_RAW ) {
+        if( !canceled() && d->command & CommandCdText_RAW ) {
             bool cdTextSuccess = true;
             d->cdTextRaw = d->dev->readRawCdText( &cdTextSuccess );
             d->success = d->success && cdTextSuccess;
         }
 
-        if( !canceled() && d->command & BUFFER_CAPACITY )
+        if( !canceled() && d->command & CommandBufferCapacity )
             d->success = d->dev->readBufferCapacity( d->bufferCapacity, d->availableBufferCapacity );
 
-        if ( !canceled() && d->command & NEXT_WRITABLE_ADDRESS ) {
+        if ( !canceled() && d->command & CommandNextWritableAddress ) {
             int nwa = d->dev->nextWritableAddress();
             d->nextWritableAddress = nwa;
             d->success = ( d->success && ( nwa > 0 ) );
@@ -290,34 +290,34 @@ bool K3b::Device::DeviceHandler::run()
 QDebug operator<<( QDebug dbg, K3b::Device::DeviceHandler::Commands commands )
 {
     QStringList commandStrings;
-    if ( commands & K3b::Device::DeviceHandler::DISKINFO )
-        commandStrings << QLatin1String( "DISKINFO" );
-    if ( commands & K3b::Device::DeviceHandler::TOC )
-        commandStrings << QLatin1String( "TOC" );
-    if ( commands & K3b::Device::DeviceHandler::CD_TEXT )
-        commandStrings << QLatin1String( "CD_TEXT" );
-    if ( commands & K3b::Device::DeviceHandler::CD_TEXT_RAW )
-        commandStrings << QLatin1String( "CD_TEXT_RAW" );
-    if ( commands & K3b::Device::DeviceHandler::DISKSIZE )
-        commandStrings << QLatin1String( "DISKSIZE" );
-    if ( commands & K3b::Device::DeviceHandler::REMAININGSIZE )
-        commandStrings << QLatin1String( "REMAININGSIZE" );
-    if ( commands & K3b::Device::DeviceHandler::TOCTYPE )
-        commandStrings << QLatin1String( "TOCTYPE" );
-    if ( commands & K3b::Device::DeviceHandler::NUMSESSIONS )
-        commandStrings << QLatin1String( "NUMSESSIONS" );
-    if ( commands & K3b::Device::DeviceHandler::BLOCK )
-        commandStrings << QLatin1String( "BLOCK" );
-    if ( commands & K3b::Device::DeviceHandler::UNBLOCK )
-        commandStrings << QLatin1String( "UNBLOCK" );
-    if ( commands & K3b::Device::DeviceHandler::EJECT )
-        commandStrings << QLatin1String( "EJECT" );
-    if ( commands & K3b::Device::DeviceHandler::LOAD )
-        commandStrings << QLatin1String( "LOAD" );
-    if ( commands & K3b::Device::DeviceHandler::BUFFER_CAPACITY )
-        commandStrings << QLatin1String( "BUFFER_CAPACITY" );
-    if ( commands & K3b::Device::DeviceHandler::NEXT_WRITABLE_ADDRESS )
-        commandStrings << QLatin1String( "NEXT_WRITABLE_ADDRESS" );
+    if ( commands & K3b::Device::DeviceHandler::CommandDiskInfo )
+        commandStrings << QLatin1String( "CommandDiskInfo" );
+    if ( commands & K3b::Device::DeviceHandler::CommandToc )
+        commandStrings << QLatin1String( "CommandToc" );
+    if ( commands & K3b::Device::DeviceHandler::CommandCdText )
+        commandStrings << QLatin1String( "CommandCdText" );
+    if ( commands & K3b::Device::DeviceHandler::CommandCdText_RAW )
+        commandStrings << QLatin1String( "CommandCdText_RAW" );
+    if ( commands & K3b::Device::DeviceHandler::CommandDiskSize )
+        commandStrings << QLatin1String( "CommandDiskSize" );
+    if ( commands & K3b::Device::DeviceHandler::CommandRemainingSize )
+        commandStrings << QLatin1String( "CommandRemainingSize" );
+    if ( commands & K3b::Device::DeviceHandler::CommandTocTYPE )
+        commandStrings << QLatin1String( "CommandTocTYPE" );
+    if ( commands & K3b::Device::DeviceHandler::CommandNumSessions )
+        commandStrings << QLatin1String( "CommandNumSessions" );
+    if ( commands & K3b::Device::DeviceHandler::CommandBlock )
+        commandStrings << QLatin1String( "CommandBlock" );
+    if ( commands & K3b::Device::DeviceHandler::UNCommandBlock )
+        commandStrings << QLatin1String( "UNCommandBlock" );
+    if ( commands & K3b::Device::DeviceHandler::CommandEject )
+        commandStrings << QLatin1String( "CommandEject" );
+    if ( commands & K3b::Device::DeviceHandler::CommandLoad )
+        commandStrings << QLatin1String( "CommandLoad" );
+    if ( commands & K3b::Device::DeviceHandler::CommandBufferCapacity )
+        commandStrings << QLatin1String( "CommandBufferCapacity" );
+    if ( commands & K3b::Device::DeviceHandler::CommandNextWritableAddress )
+        commandStrings << QLatin1String( "CommandNextWritableAddress" );
     dbg.nospace() << "(" + commandStrings.join( "|" ) + ")";
     return dbg.space();
 }

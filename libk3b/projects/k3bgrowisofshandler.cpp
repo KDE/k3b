@@ -296,7 +296,7 @@ void K3b::GrowisofsHandler::handleExit( int exitCode )
 
 void K3b::GrowisofsHandler::slotCheckBufferStatus()
 {
-    connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::BUFFER_CAPACITY, m_device ),
+    connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::CommandBufferCapacity, m_device ),
              SIGNAL(finished(K3b::Device::DeviceHandler*)),
              this,
              SLOT(slotCheckBufferStatusDone(K3b::Device::DeviceHandler*)) );

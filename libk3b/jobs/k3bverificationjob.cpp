@@ -103,7 +103,7 @@ void K3b::VerificationJob::Private::reloadMedium()
     // many drives need to reload the medium to return to a proper state
     mediumHasBeenReloaded = true;
     emit q->infoMessage( i18n( "Need to reload medium to return to proper state." ), INFO );
-    QObject::connect( K3b::Device::sendCommand( Device::DeviceHandler::MEDIAINFO|Device::DeviceHandler::RELOAD, device ),
+    QObject::connect( K3b::Device::sendCommand( Device::DeviceHandler::CommandMediaInfo|Device::DeviceHandler::RECommandLoad, device ),
                       SIGNAL(finished(K3b::Device::DeviceHandler*)),
                       q,
                       SLOT(slotDiskInfoReady(K3b::Device::DeviceHandler*)) );
@@ -180,7 +180,7 @@ void K3b::VerificationJob::start()
     emit newTask( i18n("Checking medium") );
 
     d->mediumHasBeenReloaded = false;
-    connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::MEDIAINFO, d->device ),
+    connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::CommandMediaInfo, d->device ),
              SIGNAL(finished(K3b::Device::DeviceHandler*)),
              this,
              SLOT(slotDiskInfoReady(K3b::Device::DeviceHandler*)) );
