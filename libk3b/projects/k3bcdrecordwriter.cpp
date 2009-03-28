@@ -418,7 +418,7 @@ void K3b::CdrecordWriter::start()
         if( simulate() ) {
             emit newTask( i18n("Simulating") );
             if ( d->burnedMediaType & Device::MEDIA_DVD_PLUS_ALL )
-                emit infoMessage( i18n("Starting simulation at %2x speed...",
+                emit infoMessage( i18n("Starting simulation at %1x speed...",
                                        d->usedSpeed),
                                   K3b::Job::INFO );
             else
@@ -430,7 +430,7 @@ void K3b::CdrecordWriter::start()
         else {
             emit newTask( i18n("Writing") );
             if ( d->burnedMediaType & Device::MEDIA_DVD_PLUS_ALL )
-                emit infoMessage( i18n("Starting writing at %2x speed...",
+                emit infoMessage( i18n("Starting writing at %1x speed...",
                                        d->usedSpeed),
                                   K3b::Job::INFO );
             else
