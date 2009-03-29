@@ -136,6 +136,7 @@ K3b::CdrecordProgram::CdrecordProgram( bool dvdPro )
 // But since it may be that someone manually installed cdrecord
 // replacing the wrapper we check if cdrecord is a script.
 //
+#ifndef Q_OS_WIN32
 static QString& debianWeirdnessHack( QString& path )
 {
     if( QFile::exists( path + ".mmap" ) ) {
@@ -162,6 +163,7 @@ static QString& debianWeirdnessHack( QString& path )
 
     return path;
 }
+#endif
 
 
 bool K3b::CdrecordProgram::scan( const QString& p )
@@ -176,18 +178,20 @@ bool K3b::CdrecordProgram::scan( const QString& p )
         if( path[path.length()-1] != '/' )
             path.append("/");
 
-        if( QFile::exists( path + "wodim" ) ) {
+        if( exists( path + "wodim" ) ) {
             wodim = true;
             path += "wodim";
         }
-        else if( QFile::exists( path + "cdrecord" ) ) {
+        else if( exists( path + "cdrecord" ) ) {
             path += "cdrecord";
         }
         else
             return false;
     }
 
+#ifndef Q_OS_WIN32    
     debianWeirdnessHack( path );
+#endif
 
     K3b::ExternalBin* bin = 0;
 
@@ -329,11 +333,11 @@ bool K3b::MkisofsProgram::scan( const QString& p )
         if( path[path.length()-1] != '/' )
             path.append("/");
 
-        if( QFile::exists( path + "genisoimage" ) ) {
+        if( exists( path + "genisoimage" ) ) {
             genisoimage = true;
             path += "genisoimage";
         }
-        else if( QFile::exists( path + "mkisofs" ) ) {
+        else if( exists( path + "mkisofs" ) ) {
             path += "mkisofs";
         }
         else
@@ -439,11 +443,11 @@ bool K3b::ReadcdProgram::scan( const QString& p )
         if( path[path.length()-1] != '/' )
             path.append("/");
 
-        if( QFile::exists( path + "readom" ) ) {
+        if( exists( path + "readom" ) ) {
             readom = true;
             path += "readom";
         }
-        else if( QFile::exists( path + "readcd" ) ) {
+        else if( exists( path + "readcd" ) ) {
             path += "readcd";
         }
         else

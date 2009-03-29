@@ -18,6 +18,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdeversion.h>
+#include <kde_file.h>
 
 #include <qstring.h>
 #include <qregexp.h>
@@ -172,6 +173,16 @@ void K3b::ExternalProgram::addUserParameter( const QString& p )
 }
 
 
+bool K3b::ExternalProgram::exists( const QString& path )
+{
+#ifdef Q_OS_WIN32
+    return QFile::exists( path +".exe" );
+#else    
+    return QFile::exists( path );
+#endif
+}
+
+
 
 // ///////////////////////////////////////////////////////////
 //
@@ -307,9 +318,11 @@ void K3b::ExternalBinManager::search()
     // get the environment path variable
     char* env_path = ::getenv("PATH");
     if( env_path ) {
-        QStringList env_pathList = QString::fromLocal8Bit(env_path).split( ':' );
+        QStringList env_pathList = QString::fromLocal8Bit(env_path).split( KPATH_SEPARATOR );
         for( QStringList::const_iterator it = env_pathList.constBegin(); it != env_pathList.constEnd(); ++it ) {
             QString p = *it;
+            if (p.length() == 0)
+                continue;
             if( p[p.length()-1] == '/' )
                 p.truncate( p.length()-1 );
             if( !paths.contains( p ) && !paths.contains( p + "/" ) )
@@ -358,12 +371,15 @@ K3b::ExternalProgram* K3b::ExternalBinManager::program( const QString& name ) co
 
 void K3b::ExternalBinManager::loadDefaultSearchPath()
 {
-    static const char* defaultSearchPaths[] = { "/usr/bin/",
+    static const char* defaultSearchPaths[] = { 
+#ifndef Q_OS_WIN32                                                
+                                                "/usr/bin/",
                                                 "/usr/local/bin/",
                                                 "/usr/sbin/",
                                                 "/usr/local/sbin/",
                                                 "/opt/schily/bin/",
                                                 "/sbin",
+#endif                                                
                                                 0 };
 
     m_searchPath.clear();
