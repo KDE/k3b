@@ -87,7 +87,7 @@ void K3b::MovixDoc::addUrlsAt( const KUrl::List& urls, int pos )
     for( KUrl::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
         KUrl url = K3b::convertToLocalUrl( *it );
 
-        QFileInfo f( url.path() );
+        QFileInfo f( url.toLocalFile() );
         if( !f.isFile() || !url.isLocalFile() )
             continue;
 
@@ -174,7 +174,7 @@ void K3b::MovixDoc::moveMovixItem( K3b::MovixFileItem* item, K3b::MovixFileItem*
 
 void K3b::MovixDoc::addSubTitleItem( K3b::MovixFileItem* item, const KUrl& url )
 {
-    QFileInfo f( url.path() );
+    QFileInfo f( url.toLocalFile() );
     if( !f.isFile() || !url.isLocalFile() )
         return;
 
