@@ -88,12 +88,6 @@ namespace K3b {
 
         QList<const ExternalBin*> bins() const { return m_bins; }
 
-        /** 
-         * this checks if the given executable path exists in the given path. 
-         * The executable path must not have any extension. 
-         */
-        bool exists( const QString& path );
-
         /**
          * this scans for the program in the given path,
          * adds the found bin object to the list and returnes true.
@@ -106,6 +100,12 @@ namespace K3b {
          * to specify additional parameters
          */
         virtual bool supportsUserParameters() const { return true; }
+
+        /**
+         * Builds the path to the program from the \p dir and the \p programName.
+         * On Windows the .exe extension is added autoamtically.
+         */
+        static QString buildProgramPath( const QString& dir, const QString& programName );
 
     private:
         QString m_name;

@@ -126,6 +126,7 @@ K3b::CdrecordProgram::CdrecordProgram( bool dvdPro )
 }
 
 
+#ifndef Q_OS_WIN32
 //
 // This is a hack for Debian based systems which use
 // a wrapper cdrecord script to call cdrecord.mmap or cdrecord.shm
@@ -136,7 +137,6 @@ K3b::CdrecordProgram::CdrecordProgram( bool dvdPro )
 // But since it may be that someone manually installed cdrecord
 // replacing the wrapper we check if cdrecord is a script.
 //
-#ifndef Q_OS_WIN32
 static QString& debianWeirdnessHack( QString& path )
 {
     if( QFile::exists( path + ".mmap" ) ) {
@@ -175,21 +175,21 @@ bool K3b::CdrecordProgram::scan( const QString& p )
     QString path = p;
     QFileInfo fi( path );
     if( fi.isDir() ) {
-        if( path[path.length()-1] != '/' )
-            path.append("/");
+        QString wodimPath = ExternalProgram::buildProgramPath( path, "wodim" );
+        QString cdrecordPath = ExternalProgram::buildProgramPath( path, "cdrecord" );
 
-        if( exists( path + "wodim" ) ) {
+        if( QFile::exists( wodimPath ) ) {
             wodim = true;
-            path += "wodim";
+            path = wodimPath;
         }
-        else if( exists( path + "cdrecord" ) ) {
-            path += "cdrecord";
+        else if( QFile::exists( cdrecordPath ) ) {
+            path = cdrecordPath;
         }
         else
             return false;
     }
 
-#ifndef Q_OS_WIN32    
+#ifndef Q_OS_WIN32
     debianWeirdnessHack( path );
 #endif
 
@@ -330,15 +330,15 @@ bool K3b::MkisofsProgram::scan( const QString& p )
     QString path = p;
     QFileInfo fi( path );
     if( fi.isDir() ) {
-        if( path[path.length()-1] != '/' )
-            path.append("/");
+        QString genisoimagePath = buildProgramPath( path, "genisoimage" );
+        QString mkisofsPath = buildProgramPath( path, "mkisofs" );
 
-        if( exists( path + "genisoimage" ) ) {
+        if( QFile::exists( genisoimagePath ) ) {
             genisoimage = true;
-            path += "genisoimage";
+            path = genisoimagePath;
         }
-        else if( exists( path + "mkisofs" ) ) {
-            path += "mkisofs";
+        else if( QFile::exists( mkisofsPath ) ) {
+            path = mkisofsPath;
         }
         else
             return false;
@@ -440,15 +440,15 @@ bool K3b::ReadcdProgram::scan( const QString& p )
     QString path = p;
     QFileInfo fi( path );
     if( fi.isDir() ) {
-        if( path[path.length()-1] != '/' )
-            path.append("/");
+        QString readomPath = buildProgramPath( path, "readom" );
+        QString readcdPath = buildProgramPath( path, "readcd" );
 
-        if( exists( path + "readom" ) ) {
+        if( QFile::exists( readomPath ) ) {
             readom = true;
-            path += "readom";
+            path = readomPath;
         }
-        else if( exists( path + "readcd" ) ) {
-            path += "readcd";
+        else if( QFile::exists( readcdPath ) ) {
+            path = readcdPath;
         }
         else
             return false;
@@ -538,9 +538,7 @@ bool K3b::CdrdaoProgram::scan( const QString& p )
     QString path = p;
     QFileInfo fi( path );
     if( fi.isDir() ) {
-        if( path[path.length()-1] != '/' )
-            path.append("/");
-        path.append("cdrdao");
+        path = buildProgramPath( path, "cdrdao" );
     }
 
     if( !QFile::exists( path ) )
@@ -636,19 +634,19 @@ bool K3b::TranscodeProgram::scan( const QString& p )
         return false;
 
     QString path = p;
-    if( path[path.length()-1] != '/' )
-        path.append("/");
+    QFileInfo fi( path );
+    if( fi.isDir() ) {
+        path = buildProgramPath( path, m_transcodeProgram );
+    }
 
-    QString appPath = path + m_transcodeProgram;
-
-    if( !QFile::exists( appPath ) )
+    if( !QFile::exists( path ) )
         return false;
 
     K3b::ExternalBin* bin = 0;
 
     // probe version
     ExternalScanner vp;
-    vp << appPath << "-v";
+    vp << path << "-v";
 
     if( vp.run() ) {
         QString out = vp.getData();
@@ -663,11 +661,11 @@ bool K3b::TranscodeProgram::scan( const QString& p )
             return false;
 
         bin = new K3b::ExternalBin( this );
-        bin->path = appPath;
+        bin->path = path;
         bin->version = out.mid( pos, endPos-pos );
     }
     else {
-        kDebug() << "(K3b::TranscodeProgram) could not start " << appPath;
+        kDebug() << "(K3b::TranscodeProgram) could not start " << path;
         return false;
     }
 
@@ -711,9 +709,7 @@ bool K3b::VcdbuilderProgram::scan( const QString& p )
     QString path = p;
     QFileInfo fi( path );
     if( fi.isDir() ) {
-        if( path[path.length()-1] != '/' )
-            path.append("/");
-        path.append(m_vcdbuilderProgram);
+        path = buildProgramPath( path, m_vcdbuilderProgram );
     }
 
     if( !QFile::exists( path ) )
@@ -769,9 +765,7 @@ bool K3b::NormalizeProgram::scan( const QString& p )
     QString path = p;
     QFileInfo fi( path );
     if( fi.isDir() ) {
-        if( path[path.length()-1] != '/' )
-            path.append("/");
-        path.append("normalize");
+        path = buildProgramPath( path, "normalize" );
     }
 
     if( !QFile::exists( path ) )
@@ -824,9 +818,7 @@ bool K3b::GrowisofsProgram::scan( const QString& p )
     QString path = p;
     QFileInfo fi( path );
     if( fi.isDir() ) {
-        if( path[path.length()-1] != '/' )
-            path.append("/");
-        path.append("growisofs");
+        path = buildProgramPath( path, "growisofs" );
     }
 
     if( !QFile::exists( path ) )
@@ -904,9 +896,7 @@ bool K3b::DvdformatProgram::scan( const QString& p )
     QString path = p;
     QFileInfo fi( path );
     if( fi.isDir() ) {
-        if( path[path.length()-1] != '/' )
-            path.append("/");
-        path.append("dvd+rw-format");
+        path = buildProgramPath( path, "dvd+rw-format" );
     }
 
     if( !QFile::exists( path ) )
@@ -974,9 +964,7 @@ bool K3b::DvdBooktypeProgram::scan( const QString& p )
     QString path = p;
     QFileInfo fi( path );
     if( fi.isDir() ) {
-        if( path[path.length()-1] != '/' )
-            path.append("/");
-        path.append("dvd+rw-booktype");
+        path = buildProgramPath( path, "dvd+rw-booktype" );
     }
 
     if( !QFile::exists( path ) )
@@ -1023,9 +1011,7 @@ bool K3b::Cdda2wavProgram::scan( const QString& p )
     QString path = p;
     QFileInfo fi( path );
     if( fi.isDir() ) {
-        if( path[path.length()-1] != '/' )
-            path.append("/");
-        path.append("cdda2wav");
+        path = buildProgramPath( path, "cdda2wav" );
     }
 
     if( !QFile::exists( path ) )

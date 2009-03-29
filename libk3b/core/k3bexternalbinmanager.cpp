@@ -13,6 +13,7 @@
  */
 
 #include "k3bexternalbinmanager.h"
+#include "k3bglobals.h"
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -30,9 +31,11 @@
 #include <stdlib.h>
 
 
-bool compareVersions( const K3b::ExternalBin* bin1, const K3b::ExternalBin* bin2 )
-{
-    return bin1->version > bin2->version;
+namespace {
+    bool compareVersions( const K3b::ExternalBin* bin1, const K3b::ExternalBin* bin2 )
+    {
+        return bin1->version > bin2->version;
+    }
 }
 
 
@@ -173,15 +176,15 @@ void K3b::ExternalProgram::addUserParameter( const QString& p )
 }
 
 
-bool K3b::ExternalProgram::exists( const QString& path )
+// static
+QString K3b::ExternalProgram::buildProgramPath( const QString& dir, const QString& programName )
 {
+    QString p = K3b::prepareDir( dir ) + programName;
 #ifdef Q_OS_WIN32
-    return QFile::exists( path +".exe" );
-#else    
-    return QFile::exists( path );
+    p += ".exe";
 #endif
+    return p;
 }
-
 
 
 // ///////////////////////////////////////////////////////////
@@ -371,15 +374,15 @@ K3b::ExternalProgram* K3b::ExternalBinManager::program( const QString& name ) co
 
 void K3b::ExternalBinManager::loadDefaultSearchPath()
 {
-    static const char* defaultSearchPaths[] = { 
-#ifndef Q_OS_WIN32                                                
+    static const char* defaultSearchPaths[] = {
+#ifndef Q_OS_WIN32
                                                 "/usr/bin/",
                                                 "/usr/local/bin/",
                                                 "/usr/sbin/",
                                                 "/usr/local/sbin/",
                                                 "/opt/schily/bin/",
                                                 "/sbin",
-#endif                                                
+#endif
                                                 0 };
 
     m_searchPath.clear();

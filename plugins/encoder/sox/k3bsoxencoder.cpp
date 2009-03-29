@@ -54,9 +54,7 @@ public:
         QString path = p;
         QFileInfo fi( path );
         if( fi.isDir() ) {
-            if( path[path.length()-1] != '/' )
-                path.append("/");
-            path.append("sox");
+            path = buildProgramPath( path, "sox" );
         }
 
         if( !QFile::exists( path ) )
