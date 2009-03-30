@@ -454,7 +454,7 @@ void K3b::ExternalBinManager::search()
 
     // do not search one path twice
     QStringList paths;
-    const QStringList possiblePaths = m_searchPath + KStandardDirs::systemPaths( QLatin1String( "PATH" ) );
+    const QStringList possiblePaths = m_searchPath + KStandardDirs::systemPaths();
     foreach( QString p, possiblePaths ) {
         if (p.length() == 0)
             continue;
