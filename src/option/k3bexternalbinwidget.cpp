@@ -52,7 +52,6 @@ K3b::ExternalBinWidget::ExternalProgramViewItem::ExternalProgramViewItem( K3b::E
     setBackgroundColor( 0, parent->palette().alternateBase().color() );
     setBackgroundColor( 1, parent->palette().alternateBase().color() );
     setBackgroundColor( 2, parent->palette().alternateBase().color() );
-    setBackgroundColor( 3, parent->palette().alternateBase().color() );
     setText( 0, p->name() );
     setSelectable( false );
 }
@@ -63,8 +62,7 @@ K3b::ExternalBinWidget::ExternalBinViewItem::ExternalBinViewItem( const K3b::Ext
 {
     setText( 0, bin->path );
     setText( 1, bin->version );
-    setText( 2, bin->copyright );
-    setText( 3, bin->features().join(", ") );
+    setText( 2, bin->features().join(", ") );
 
     setDefault(false);
 }
@@ -133,7 +131,6 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
 
     m_programView->addColumn( i18n("Path") );
     m_programView->addColumn( i18n("Version") );
-    m_programView->addColumn( i18n("Copyright") );
     m_programView->addColumn( i18n("Features") );
     m_programView->setAllColumnsShowFocus(true);
     m_programView->setFullWidth(true);
