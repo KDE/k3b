@@ -21,6 +21,7 @@
 #include <kdeversion.h>
 #include <kde_file.h>
 #include <KProcess>
+#include <KStandardDirs>
 
 #include <qstring.h>
 #include <qregexp.h>
@@ -305,6 +306,7 @@ QString K3b::SimpleExternalProgram::parseCopyright( const QString& out )
 
 void K3b::SimpleExternalProgram::parseFeatures( const QString&, ExternalBin* )
 {
+    // do nothing
 }
 
 
@@ -452,55 +454,20 @@ void K3b::ExternalBinManager::search()
 
     // do not search one path twice
     QStringList paths;
-    for( QStringList::const_iterator it = m_searchPath.constBegin(); it != m_searchPath.constEnd(); ++it ) {
-        QString p = *it;
+    const QStringList possiblePaths = m_searchPath + KStandardDirs::systemPaths( QLatin1String( "PATH" ) );
+    foreach( QString p, possiblePaths ) {
+        if (p.length() == 0)
+            continue;
         if( p[p.length()-1] == '/' )
             p.truncate( p.length()-1 );
         if( !paths.contains( p ) && !paths.contains( p + "/" ) )
             paths.append(p);
     }
 
-    // get the environment path variable
-    char* env_path = ::getenv("PATH");
-    if( env_path ) {
-        QStringList env_pathList = QString::fromLocal8Bit(env_path).split( KPATH_SEPARATOR );
-        for( QStringList::const_iterator it = env_pathList.constBegin(); it != env_pathList.constEnd(); ++it ) {
-            QString p = *it;
-            if (p.length() == 0)
-                continue;
-            if( p[p.length()-1] == '/' )
-                p.truncate( p.length()-1 );
-            if( !paths.contains( p ) && !paths.contains( p + "/" ) )
-                paths.append(p);
-        }
-    }
-
-
-    Q_FOREACH( QString path, paths ) {
+    Q_FOREACH( const QString& path, paths ) {
         Q_FOREACH( K3b::ExternalProgram* program, m_programs ) {
             program->scan( path );
         }
-    }
-
-    // TESTING
-    // /////////////////////////
-    const K3b::ExternalBin* bin = program("cdrecord")->defaultBin();
-
-    if( !bin ) {
-        kDebug() << "(K3b::ExternalBinManager) Probing cdrecord failed";
-    }
-    else {
-        kDebug() << "(K3b::ExternalBinManager) Cdrecord " << bin->version << " features: "
-                 << bin->features().join( ", " ) ;
-
-        if( bin->version >= K3b::Version("1.11a02") )
-            kDebug() << "(K3b::ExternalBinManager) "
-                     << bin->version.majorVersion() << " " << bin->version.minorVersion() << " " << bin->version.patchLevel()
-                     << " " << bin->version.suffix()
-                     << " seems to be cdrecord version >= 1.11a02, using burnfree instead of burnproof" ;
-        if( bin->version >= K3b::Version("1.11a31") )
-            kDebug() << "(K3b::ExternalBinManager) seems to be cdrecord version >= 1.11a31, support for Just Link via burnfree "
-                     << "driveroption" ;
     }
 }
 
