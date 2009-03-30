@@ -27,7 +27,7 @@ namespace K3b {
     LIBK3B_EXPORT void addTranscodePrograms( ExternalBinManager* );
     LIBK3B_EXPORT void addVcdimagerPrograms( ExternalBinManager* );
 
-    class AbstractCdrtoolsProgram : public SimpleExternalProgram
+    class LIBK3B_EXPORT AbstractCdrtoolsProgram : public SimpleExternalProgram
     {
     public:
         AbstractCdrtoolsProgram( const QString& program, const QString& cdrkitAlternative );
