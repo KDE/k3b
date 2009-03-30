@@ -119,7 +119,7 @@ K3b::SetupPrograms::SetupPrograms( QObject* parent )
     d->externalBinManager = new ExternalBinManager( this );
     // these are the only programs that need special permissions
     d->externalBinManager->addProgram( new K3b::CdrdaoProgram() );
-    d->externalBinManager->addProgram( new K3b::CdrecordProgram(false) );
+    d->externalBinManager->addProgram( new K3b::CdrecordProgram() );
     d->externalBinManager->addProgram( new K3b::GrowisofsProgram() );
     d->buildProgramList();
 }

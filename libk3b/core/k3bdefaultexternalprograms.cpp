@@ -28,6 +28,7 @@
 #include <KProcess>
 
 
+
 namespace {
     class ExternalScanner : public KProcess
     {
@@ -63,24 +64,24 @@ namespace {
 
     QString ExternalScanner::getVersion( int pos ) const
     {
-        QString tmp = m_data;
+        QString out = QString::fromLocal8Bit( m_data );
 
-        int sPos = tmp.indexOf( QRegExp("\\d"), pos );
+        int sPos = out.indexOf( QRegExp("\\d"), pos );
         if( sPos < 0 )
             return QString();
 
-        int endPos = tmp.indexOf( QRegExp("\\s"), sPos + 1 );
+        int endPos = out.indexOf( QRegExp("\\s"), sPos + 1 );
         if( endPos < 0 )
             return QString();
 
-        return tmp.mid( sPos, endPos - sPos );
+        return out.mid( sPos, endPos - sPos );
     }
 }
 
 
 void K3b::addDefaultPrograms( K3b::ExternalBinManager* m )
 {
-    m->addProgram( new K3b::CdrecordProgram(false) );
+    m->addProgram( new K3b::CdrecordProgram() );
     m->addProgram( new K3b::MkisofsProgram() );
     m->addProgram( new K3b::ReadcdProgram() );
     m->addProgram( new K3b::CdrdaoProgram() );
@@ -119,11 +120,12 @@ void K3b::addVcdimagerPrograms( K3b::ExternalBinManager* m )
 }
 
 
-K3b::CdrecordProgram::CdrecordProgram( bool dvdPro )
-    : K3b::ExternalProgram( dvdPro ? "cdrecord-prodvd" : "cdrecord" ),
-      m_dvdPro(dvdPro)
+K3b::AbstractCdrtoolsProgram::AbstractCdrtoolsProgram( const QString& program, const QString& cdrkitAlternative )
+    : SimpleExternalProgram( program ),
+      m_cdrkitAlt( cdrkitAlternative )
 {
 }
+
 
 
 #ifndef Q_OS_WIN32
@@ -140,21 +142,21 @@ K3b::CdrecordProgram::CdrecordProgram( bool dvdPro )
 static QString& debianWeirdnessHack( QString& path )
 {
     if( QFile::exists( path + ".mmap" ) ) {
-        kDebug() << "(K3b::CdrecordProgram) checking for Debian cdrecord wrapper script.";
+        kDebug() << "checking for Debian cdrtools wrapper script.";
         if( QFileInfo( path ).size() < 1024 ) {
-            kDebug() << "(K3b::CdrecordProgram) Debian Wrapper script size fits. Checking file.";
+            kDebug() << "Debian Wrapper script size fits. Checking file.";
             QFile f( path );
             f.open( QIODevice::ReadOnly );
             QString s = QTextStream( &f ).readAll();
             if( s.contains( "cdrecord.mmap" ) && s.contains( "cdrecord.shm" ) ) {
-                kDebug() << "(K3b::CdrecordProgram) Found Debian Wrapper script.";
+                kDebug() << "Found Debian Wrapper script.";
                 QString ext;
                 if( K3b::kernelVersion().versionString().left(3) > "2.2" )
                     ext = ".mmap";
                 else
                     ext = ".shm";
 
-                kDebug() << "(K3b::CdrecordProgram) Using cdrecord" << ext;
+                kDebug() << "Using crtools" << ext;
 
                 path += ext;
             }
@@ -166,420 +168,205 @@ static QString& debianWeirdnessHack( QString& path )
 #endif
 
 
-bool K3b::CdrecordProgram::scan( const QString& p )
+QString K3b::AbstractCdrtoolsProgram::getProgramPath( const QString& dir )
 {
-    if( p.isEmpty() )
-        return false;
+    QString cdrtoolsPath = ExternalProgram::buildProgramPath( dir, name() );
+    QString cdrkitPath = ExternalProgram::buildProgramPath( dir, m_cdrkitAlt );
 
-    bool wodim = false;
-    QString path = p;
-    QFileInfo fi( path );
-    if( fi.isDir() ) {
-        QString wodimPath = ExternalProgram::buildProgramPath( path, "wodim" );
-        QString cdrecordPath = ExternalProgram::buildProgramPath( path, "cdrecord" );
-
-        if( QFile::exists( wodimPath ) ) {
-            wodim = true;
-            path = wodimPath;
-        }
-        else if( QFile::exists( cdrecordPath ) ) {
-            path = cdrecordPath;
-        }
-        else
-            return false;
+    QString path;
+    if( QFile::exists( cdrtoolsPath ) ) {
+        m_usingCdrkit = false;
+        path = cdrtoolsPath;
+    }
+    else if( QFile::exists( cdrkitPath ) ) {
+        m_usingCdrkit = true;
+        path = cdrkitPath;
     }
 
 #ifndef Q_OS_WIN32
-    debianWeirdnessHack( path );
+    if ( !path.isEmpty() && name() == QLatin1String( "cdrecord" ) ) {
+        debianWeirdnessHack( path );
+    }
 #endif
 
-    K3b::ExternalBin* bin = 0;
+    return path;
+}
 
-    // probe version
-    ExternalScanner vp;
-    vp << path << "-version";
 
-    if( vp.run() ) {
-        QString out = vp.getData();
-        int pos = -1;
-        if( wodim ) {
-            pos = out.indexOf( "Wodim" );
-        }
-        else if( m_dvdPro ) {
-            pos = out.indexOf( "Cdrecord-ProDVD" );
-        }
-        else {
-            pos = out.indexOf( "Cdrecord" );
-        }
-
-        if( pos < 0 )
-            return false;
-
-        QString ver = vp.getVersion( pos );
-        if (ver.isEmpty())
-            return false;
-
-        bin = new K3b::ExternalBin( this );
-        bin->path = path;
-        bin->version = ver;
-
-        if( wodim )
-            bin->addFeature( "wodim" );
-
-        pos = out.indexOf( "Copyright") + 14;
-        int endPos = out.indexOf( "\n", pos );
-
-        // cdrecord does not use local encoding for the copyright statement but plain latin1
-        bin->copyright = QString::fromLatin1( out.mid( pos, endPos-pos ).toLocal8Bit() ).trimmed();
+K3b::Version K3b::AbstractCdrtoolsProgram::parseVersion( const QString& out )
+{
+    int pos = -1;
+    if( m_usingCdrkit ) {
+        pos = out.toLower().indexOf( m_cdrkitAlt );
     }
     else {
-        kDebug() << "(K3b::CdrecordProgram) could not start " << path;
-        return false;
+        pos = out.toLower().indexOf( name() );
     }
 
-    if( !m_dvdPro && bin->version.suffix().endsWith( "-dvd" ) ) {
+    if( pos < 0 )
+        return Version();
+
+    return parseVersionAt( out, pos );
+}
+
+
+K3b::CdrecordProgram::CdrecordProgram()
+    : K3b::AbstractCdrtoolsProgram( QLatin1String( "cdrecord" ), QLatin1String( "wodim" ) )
+{
+}
+
+
+void K3b::CdrecordProgram::parseFeatures( const QString& out, ExternalBin* bin )
+{
+    if( m_usingCdrkit )
+        bin->addFeature( "wodim" );
+
+    if( bin->version.suffix().endsWith( "-dvd" ) ) {
         bin->addFeature( "dvd-patch" );
         bin->version = QString(bin->version.versionString()).remove("-dvd");
     }
 
-    // probe features
-    ExternalScanner fp;
-    fp << path << "-help";
+    if( out.contains( "gracetime" ) )
+        bin->addFeature( "gracetime" );
+    if( out.contains( "-overburn" ) )
+        bin->addFeature( "overburn" );
+    if( out.contains( "-text" ) )
+        bin->addFeature( "cdtext" );
+    if( out.contains( "-clone" ) )
+        bin->addFeature( "clone" );
+    if( out.contains( "-tao" ) )
+        bin->addFeature( "tao" );
+    if( out.contains( "cuefile=" ) &&
+        ( m_usingCdrkit || bin->version > K3b::Version( 2, 1, -1, "a14") ) ) // cuefile handling was still buggy in a14
+        bin->addFeature( "cuefile" );
 
-    if( fp.run() ) {
-        QByteArray out = fp.getData();
+    // new mode 2 options since cdrecord 2.01a12
+    // we use both checks here since the help was not updated in 2.01a12 yet (well, I
+    // just double-checked and the help page is proper but there is no harm in having
+    // two checks)
+    // and the version check does not handle versions like 2.01-dvd properly
+    if( out.contains( "-xamix" ) ||
+        bin->version >= K3b::Version( 2, 1, -1, "a12" ) ||
+        m_usingCdrkit )
+        bin->addFeature( "xamix" );
 
-        if( out.contains( "gracetime" ) )
-            bin->addFeature( "gracetime" );
-        if( out.contains( "-overburn" ) )
-            bin->addFeature( "overburn" );
-        if( out.contains( "-text" ) )
-            bin->addFeature( "cdtext" );
-        if( out.contains( "-clone" ) )
-            bin->addFeature( "clone" );
-        if( out.contains( "-tao" ) )
-            bin->addFeature( "tao" );
-        if( out.contains( "cuefile=" ) &&
-            ( wodim || bin->version > K3b::Version( 2, 1, -1, "a14") ) ) // cuefile handling was still buggy in a14
-            bin->addFeature( "cuefile" );
-
-        // new mode 2 options since cdrecord 2.01a12
-        // we use both checks here since the help was not updated in 2.01a12 yet (well, I
-        // just double-checked and the help page is proper but there is no harm in having
-        // two checks)
-        // and the version check does not handle versions like 2.01-dvd properly
-        if( out.contains( "-xamix" ) ||
-            bin->version >= K3b::Version( 2, 1, -1, "a12" ) ||
-            wodim )
-            bin->addFeature( "xamix" );
-
-        // check if we run cdrecord as root
-        struct stat s;
-        if( !::stat( QFile::encodeName(path), &s ) ) {
-            if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
-                bin->addFeature( "suidroot" );
-        }
-    }
-    else {
-        kDebug() << "(K3b::CdrecordProgram) could not start " << bin->path;
-        delete bin;
-        return false;
-    }
-
-    if( bin->version < K3b::Version( 2, 0 ) && !wodim )
+    if( bin->version < K3b::Version( 2, 0 ) && !m_usingCdrkit )
         bin->addFeature( "outdated" );
 
     // FIXME: are these version correct?
-    if( bin->version >= K3b::Version("1.11a38") || wodim )
+    if( bin->version >= K3b::Version("1.11a38") || m_usingCdrkit )
         bin->addFeature( "plain-atapi" );
-    if( bin->version > K3b::Version("1.11a17") || wodim )
+    if( bin->version > K3b::Version("1.11a17") || m_usingCdrkit )
         bin->addFeature( "hacked-atapi" );
 
-    if( bin->version >= K3b::Version( 2, 1, 1, "a02" ) || wodim )
+    if( bin->version >= K3b::Version( 2, 1, 1, "a02" ) || m_usingCdrkit )
         bin->addFeature( "short-track-raw" );
 
-    if( bin->version >= K3b::Version( 2, 1, -1, "a13" ) || wodim )
+    if( bin->version >= K3b::Version( 2, 1, -1, "a13" ) || m_usingCdrkit )
         bin->addFeature( "audio-stdin" );
 
-    if( bin->version >= K3b::Version( "1.11a02" ) || wodim )
+    if( bin->version >= K3b::Version( "1.11a02" ) || m_usingCdrkit )
         bin->addFeature( "burnfree" );
     else
         bin->addFeature( "burnproof" );
 
-    // FIXME: cdrecord Blu-ray support not 100% yet
-//   if ( bin->version >= K3b::Version( 2, 1, 1, "a29" ) && !wodim )
+// FIXME: cdrecord Blu-ray support not 100% yet
+//   if ( bin->version >= K3b::Version( 2, 1, 1, "a29" ) && !m_usingCdrkit )
 //       bin->addFeature( "blu-ray" );
-
-    addBin( bin );
-    return true;
 }
 
 
 
 K3b::MkisofsProgram::MkisofsProgram()
-    : K3b::ExternalProgram( "mkisofs" )
+    : K3b::AbstractCdrtoolsProgram( QLatin1String( "mkisofs" ), QLatin1String( "genisoimage" ) )
 {
 }
 
-bool K3b::MkisofsProgram::scan( const QString& p )
+void K3b::MkisofsProgram::parseFeatures( const QString& out, ExternalBin* bin )
 {
-    if( p.isEmpty() )
-        return false;
+    if( m_usingCdrkit )
+        bin->addFeature( "genisoimage" );
 
-    bool genisoimage = false;
-    QString path = p;
-    QFileInfo fi( path );
-    if( fi.isDir() ) {
-        QString genisoimagePath = buildProgramPath( path, "genisoimage" );
-        QString mkisofsPath = buildProgramPath( path, "mkisofs" );
+    if( out.contains( "-udf" ) )
+        bin->addFeature( "udf" );
+    if( out.contains( "-dvd-video" ) )
+        bin->addFeature( "dvd-video" );
+    if( out.contains( "-joliet-long" ) )
+        bin->addFeature( "joliet-long" );
+    if( out.contains( "-xa" ) )
+        bin->addFeature( "xa" );
+    if( out.contains( "-sectype" ) )
+        bin->addFeature( "sectype" );
 
-        if( QFile::exists( genisoimagePath ) ) {
-            genisoimage = true;
-            path = genisoimagePath;
-        }
-        else if( QFile::exists( mkisofsPath ) ) {
-            path = mkisofsPath;
-        }
-        else
-            return false;
-    }
-
-    K3b::ExternalBin* bin = 0;
-
-    // probe version
-    ExternalScanner vp;
-    vp << path << "-version";
-
-    if( vp.run() ) {
-        QString out = vp.getData();
-        int pos = -1;
-        if( genisoimage )
-            pos = out.indexOf( "genisoimage" );
-        else
-            pos = out.indexOf( "mkisofs" );
-
-        if( pos < 0 )
-            return false;
-
-        QString ver = vp.getVersion( pos );
-        if( ver.isEmpty() )
-            return false;
-
-        bin = new K3b::ExternalBin( this );
-        bin->path = path;
-        bin->version = ver;
-
-        if( genisoimage )
-            bin->addFeature( "genisoimage" );
-    }
-    else {
-        kDebug() << "(K3b::MkisofsProgram) could not start " << path;
-        return false;
-    }
-
-
-
-    // probe features
-    ExternalScanner fp;
-    fp << path << "-help";
-
-    if( fp.run() ) {
-        QByteArray out = fp.getData();
-        if( out.contains( "-udf" ) )
-            bin->addFeature( "udf" );
-        if( out.contains( "-dvd-video" ) )
-            bin->addFeature( "dvd-video" );
-        if( out.contains( "-joliet-long" ) )
-            bin->addFeature( "joliet-long" );
-        if( out.contains( "-xa" ) )
-            bin->addFeature( "xa" );
-        if( out.contains( "-sectype" ) )
-            bin->addFeature( "sectype" );
-
-        // check if we run mkisofs as root
-        struct stat s;
-        if( !::stat( QFile::encodeName(path), &s ) ) {
-            if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
-                bin->addFeature( "suidroot" );
-        }
-    }
-    else {
-        kDebug() << "(K3b::MkisofsProgram) could not start " << bin->path;
-        delete bin;
-        return false;
-    }
-
-    if( bin->version < K3b::Version( 1, 14) && !genisoimage )
+    if( bin->version < K3b::Version( 1, 14) && !m_usingCdrkit )
         bin->addFeature( "outdated" );
 
-    if( bin->version >= K3b::Version( 1, 15, -1, "a40" ) || genisoimage )
+    if( bin->version >= K3b::Version( 1, 15, -1, "a40" ) || m_usingCdrkit )
         bin->addFeature( "backslashed_filenames" );
 
-    if ( genisoimage && bin->version >= K3b::Version( 1, 1, 4 ) )
+    if ( m_usingCdrkit && bin->version >= K3b::Version( 1, 1, 4 ) )
         bin->addFeature( "no-4gb-limit" );
 
-    if ( !genisoimage && bin->version >= K3b::Version( 2, 1, 1, "a32" ) )
+    if ( !m_usingCdrkit && bin->version >= K3b::Version( 2, 1, 1, "a32" ) )
         bin->addFeature( "no-4gb-limit" );
-
-    addBin(bin);
-    return true;
 }
 
 
 K3b::ReadcdProgram::ReadcdProgram()
-    : K3b::ExternalProgram( "readcd" )
+    : K3b::AbstractCdrtoolsProgram( QLatin1String( "readcd" ), QLatin1String( "readom" ) )
 {
 }
 
-bool K3b::ReadcdProgram::scan( const QString& p )
+void K3b::ReadcdProgram::parseFeatures( const QString& out, ExternalBin* bin )
 {
-    if( p.isEmpty() )
-        return false;
+    if( m_usingCdrkit )
+        bin->addFeature( "readom" );
 
-    bool readom = false;
-    QString path = p;
-    QFileInfo fi( path );
-    if( fi.isDir() ) {
-        QString readomPath = buildProgramPath( path, "readom" );
-        QString readcdPath = buildProgramPath( path, "readcd" );
-
-        if( QFile::exists( readomPath ) ) {
-            readom = true;
-            path = readomPath;
-        }
-        else if( QFile::exists( readcdPath ) ) {
-            path = readcdPath;
-        }
-        else
-            return false;
-    }
-
-    if( !QFile::exists( path ) )
-        return false;
-
-    K3b::ExternalBin* bin = 0;
-
-    // probe version
-    ExternalScanner vp;
-    vp << path << "-version";
-
-    if( vp.run() ) {
-        QString out = vp.getData();
-        int pos = -1;
-        if( readom )
-            pos = out.indexOf( "readom" );
-        else
-            pos = out.indexOf( "readcd" );
-        if( pos < 0 )
-            return false;
-
-        QString ver = vp.getVersion( pos );
-        if( ver.isEmpty() )
-            return false;
-
-        bin = new K3b::ExternalBin( this );
-        bin->path = path;
-        bin->version = ver;
-
-        if( readom )
-            bin->addFeature( "readom" );
-    }
-    else {
-        kDebug() << "(K3b::MkisofsProgram) could not start " << path;
-        return false;
-    }
-
-
-
-    // probe features
-    ExternalScanner fp;
-    fp << path << "-help";
-
-    if( fp.run() ) {
-        QByteArray out = fp.getData();
-        if( out.contains( "-clone" ) )
-            bin->addFeature( "clone" );
-
-        // check if we run mkisofs as root
-        struct stat s;
-        if( !::stat( QFile::encodeName(path), &s ) ) {
-            if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
-                bin->addFeature( "suidroot" );
-        }
-    }
-    else {
-        kDebug() << "(K3b::ReadcdProgram) could not start " << bin->path;
-        delete bin;
-        return false;
-    }
-
+    if( out.contains( "-clone" ) )
+        bin->addFeature( "clone" );
 
     // FIXME: are these version correct?
-    if( bin->version >= K3b::Version("1.11a38") || readom )
+    if( bin->version >= K3b::Version("1.11a38") || m_usingCdrkit )
         bin->addFeature( "plain-atapi" );
-    if( bin->version > K3b::Version("1.11a17") || readom )
+    if( bin->version > K3b::Version("1.11a17") || m_usingCdrkit )
         bin->addFeature( "hacked-atapi" );
+}
 
-    addBin(bin);
-    return true;
+
+K3b::Cdda2wavProgram::Cdda2wavProgram()
+    : K3b::AbstractCdrtoolsProgram( QLatin1String( "cdda2wav" ), QLatin1String( "icedax" ) )
+{
+}
+
+void K3b::Cdda2wavProgram::parseFeatures( const QString& out, ExternalBin* bin )
+{
+    // features (we do this since the cdda2wav help says that the short
+    //           options will disappear soon)
+    if( out.indexOf( "-info-only" ) )
+        bin->addFeature( "info-only" ); // otherwise use the -J option
+    if( out.indexOf( "-no-infofile" ) )
+        bin->addFeature( "no-infofile" ); // otherwise use the -H option
+    if( out.indexOf( "-gui" ) )
+        bin->addFeature( "gui" ); // otherwise use the -g option
+    if( out.indexOf( "-bulk" ) )
+        bin->addFeature( "bulk" ); // otherwise use the -B option
+    if( out.indexOf( "dev=" ) )
+        bin->addFeature( "dev" ); // otherwise use the -B option
 }
 
 
 K3b::CdrdaoProgram::CdrdaoProgram()
-    : K3b::ExternalProgram( "cdrdao" )
+    : K3b::SimpleExternalProgram( "cdrdao" )
 {
+    setVersionIdentifier( QLatin1String( "Cdrdao version" ) );
 }
 
-bool K3b::CdrdaoProgram::scan( const QString& p )
+
+bool K3b::CdrdaoProgram::scanFeatures( ExternalBin* bin )
 {
-    if( p.isEmpty() )
-        return false;
-
-    QString path = p;
-    QFileInfo fi( path );
-    if( fi.isDir() ) {
-        path = buildProgramPath( path, "cdrdao" );
-    }
-
-    if( !QFile::exists( path ) )
-        return false;
-
-    K3b::ExternalBin* bin = 0;
-
-    // probe version
-    ExternalScanner vp;
-    vp << path ;
-
-    if( vp.run() ) {
-        QString out = vp.getData();
-        int pos = out.indexOf( "Cdrdao version" );
-        if( pos < 0 )
-            return false;
-
-        QString ver = vp.getVersion( pos );
-        if( ver.isEmpty() )
-            return false;
-
-        bin = new K3b::ExternalBin( this );
-        bin->path = path;
-        bin->version = ver;
-
-        int endPos = out.indexOf( QRegExp("[0-9]"), pos );
-        endPos = out.indexOf( QRegExp("\\s"), endPos + 1 );
-        pos = out.indexOf( "(C)", endPos+1 ) + 4;
-        endPos = out.indexOf( '\n', pos );
-        bin->copyright = out.mid( pos, endPos-pos );
-    }
-    else {
-        kDebug() << "(K3b::CdrdaoProgram) could not start " << path;
-        return false;
-    }
-
-
-
     // probe features
     ExternalScanner fp;
-    fp << path << "write" << "-h";
+    fp << bin->path << "write" << "-h";
 
     if( fp.run() ) {
         QByteArray out = fp.getData();
@@ -591,88 +378,39 @@ bool K3b::CdrdaoProgram::scan( const QString& p )
         if( out.contains( "--buffer-under-run-protection" ) )
             bin->addFeature( "disable-burnproof" );
 
-        // check if we run cdrdao as root
-        struct stat s;
-        if( !::stat( QFile::encodeName(path), &s ) ) {
-            if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
-                bin->addFeature( "suidroot" );
+        // SuSE 9.0 ships with a patched cdrdao 1.1.7 which contains an updated libschily
+        // Gentoo ships with a patched cdrdao 1.1.7 which contains scglib support
+        if( bin->version > K3b::Version( 1, 1, 7 ) ||
+            bin->version == K3b::Version( 1, 1, 7, "-gentoo" ) ||
+            bin->version == K3b::Version( 1, 1, 7, "-suse" ) ) {
+            //    bin->addFeature( "plain-atapi" );
+            bin->addFeature( "hacked-atapi" );
         }
+
+        if( bin->version >= K3b::Version( 1, 1, 8 ) )
+            bin->addFeature( "plain-atapi" );
+
+        return SimpleExternalProgram::scanFeatures( bin );
     }
     else {
-        kDebug() << "(K3b::CdrdaoProgram) could not start " << bin->path;
-        delete bin;
+        kDebug() << "could not start " << bin->path;
         return false;
     }
-
-
-    // SuSE 9.0 ships with a patched cdrdao 1.1.7 which contains an updated libschily
-    // Gentoo ships with a patched cdrdao 1.1.7 which contains scglib support
-    if( bin->version > K3b::Version( 1, 1, 7 ) ||
-        bin->version == K3b::Version( 1, 1, 7, "-gentoo" ) ||
-        bin->version == K3b::Version( 1, 1, 7, "-suse" ) ) {
-        //    bin->addFeature( "plain-atapi" );
-        bin->addFeature( "hacked-atapi" );
-    }
-
-    if( bin->version >= K3b::Version( 1, 1, 8 ) )
-        bin->addFeature( "plain-atapi" );
-
-    addBin(bin);
-    return true;
 }
 
 
 K3b::TranscodeProgram::TranscodeProgram( const QString& transcodeProgram )
-    : K3b::ExternalProgram( transcodeProgram ),
-      m_transcodeProgram( transcodeProgram )
+    : K3b::SimpleExternalProgram( transcodeProgram )
 {
+    setVersionIdentifier( QLatin1String( "transcode v" ) );
 }
 
-bool K3b::TranscodeProgram::scan( const QString& p )
+bool K3b::TranscodeProgram::scanFeatures( ExternalBin* bin )
 {
-    if( p.isEmpty() )
-        return false;
-
-    QString path = p;
-    QFileInfo fi( path );
-    if( fi.isDir() ) {
-        path = buildProgramPath( path, m_transcodeProgram );
-    }
-
-    if( !QFile::exists( path ) )
-        return false;
-
-    K3b::ExternalBin* bin = 0;
-
-    // probe version
-    ExternalScanner vp;
-    vp << path << "-v";
-
-    if( vp.run() ) {
-        QString out = vp.getData();
-        int pos = out.indexOf( "transcode v" );
-        if( pos < 0 )
-            return false;
-
-        pos += 11;
-
-        int endPos = out.indexOf( QRegExp("[\\s\\)]"), pos+1 );
-        if( endPos < 0 )
-            return false;
-
-        bin = new K3b::ExternalBin( this );
-        bin->path = path;
-        bin->version = out.mid( pos, endPos-pos );
-    }
-    else {
-        kDebug() << "(K3b::TranscodeProgram) could not start " << path;
-        return false;
-    }
-
     //
     // Check features
     //
-    QString modInfoBin = path + "tcmodinfo";
+    QString modInfoBin = buildProgramPath( QFileInfo( bin->path ).absolutePath(), QLatin1String( "tcmodinfo" ) );
     ExternalScanner modp;
     modp << modInfoBin << "-p";
 
@@ -687,181 +425,39 @@ bool K3b::TranscodeProgram::scan( const QString& p )
             bin->addFeature( "ffmpeg" );
         if( !modDir.entryList( QStringList() << "*export_ac3*", QDir::Files ).isEmpty() )
             bin->addFeature( "ac3" );
+
+        return true;
     }
-
-    addBin(bin);
-    return true;
+    else {
+        kDebug() << "Failed to start" << modp.program();
+        return false;
+    }
 }
-
 
 
 K3b::VcdbuilderProgram::VcdbuilderProgram( const QString& p )
-    : K3b::ExternalProgram( p ),
-      m_vcdbuilderProgram( p )
+    : K3b::SimpleExternalProgram( p )
 {
+    setVersionIdentifier( QLatin1String( "GNU VCDImager" ) );
 }
 
-bool K3b::VcdbuilderProgram::scan( const QString& p )
-{
-    if( p.isEmpty() )
-        return false;
-
-    QString path = p;
-    QFileInfo fi( path );
-    if( fi.isDir() ) {
-        path = buildProgramPath( path, m_vcdbuilderProgram );
-    }
-
-    if( !QFile::exists( path ) )
-        return false;
-
-    K3b::ExternalBin* bin = 0;
-
-    // probe version
-    ExternalScanner vp;
-    vp << path << "-V";
-
-    if( vp.run() ) {
-        QString out = vp.getData();
-        int pos = out.indexOf( "GNU VCDImager" );
-        if( pos < 0 )
-            return false;
-
-        pos += 14;
-
-        int endPos = out.indexOf( QRegExp("[\\n\\)]"), pos+1 );
-        if( endPos < 0 )
-            return false;
-
-        bin = new K3b::ExternalBin( this );
-        bin->path = path;
-        bin->version = out.mid( pos, endPos-pos ).trimmed();
-
-        pos = out.indexOf( "Copyright" ) + 14;
-        endPos = out.indexOf( "\n", pos );
-        bin->copyright = out.mid( pos, endPos-pos ).trimmed();
-    }
-    else {
-        kDebug() << "(K3b::VcdbuilderProgram) could not start " << path;
-        return false;
-    }
-
-    addBin(bin);
-    return true;
-}
 
 
 K3b::NormalizeProgram::NormalizeProgram()
-    : K3b::ExternalProgram( "normalize" )
+    : K3b::SimpleExternalProgram( "normalize" )
 {
-}
-
-
-bool K3b::NormalizeProgram::scan( const QString& p )
-{
-    if( p.isEmpty() )
-        return false;
-
-    QString path = p;
-    QFileInfo fi( path );
-    if( fi.isDir() ) {
-        path = buildProgramPath( path, "normalize" );
-    }
-
-    if( !QFile::exists( path ) )
-        return false;
-
-    K3b::ExternalBin* bin = 0;
-
-    // probe version
-    ExternalScanner vp;
-    vp << path << "--version";
-
-    if( vp.run() ) {
-        QString out = vp.getData();
-        int pos = out.indexOf( "normalize" );
-        if( pos < 0 )
-            return false;
-
-        QString ver = vp.getVersion( pos );
-        if( ver.isEmpty() )
-            return false;
-
-        bin = new K3b::ExternalBin( this );
-        bin->path = path;
-        bin->version = ver;
-
-        pos = out.indexOf( "Copyright" )+14;
-        int endPos = out.indexOf( "\n", pos );
-        bin->copyright = out.mid( pos, endPos-pos ).trimmed();
-    }
-    else {
-        kDebug() << "(K3b::CdrecordProgram) could not start " << path;
-        return false;
-    }
-
-    addBin( bin );
-    return true;
 }
 
 
 K3b::GrowisofsProgram::GrowisofsProgram()
-    : K3b::ExternalProgram( "growisofs" )
+    : K3b::SimpleExternalProgram( "growisofs" )
 {
 }
 
-bool K3b::GrowisofsProgram::scan( const QString& p )
+bool K3b::GrowisofsProgram::scanFeatures( ExternalBin* bin )
 {
-    if( p.isEmpty() )
-        return false;
-
-    QString path = p;
-    QFileInfo fi( path );
-    if( fi.isDir() ) {
-        path = buildProgramPath( path, "growisofs" );
-    }
-
-    if( !QFile::exists( path ) )
-        return false;
-
-    K3b::ExternalBin* bin = 0;
-
-    // probe version
-    ExternalScanner vp;
-    vp << path << "-version";
-
-    if( vp.run() ) {
-        QString out = vp.getData();
-        int pos = out.indexOf( "growisofs" );
-        if( pos < 0 )
-            return false;
-
-        pos = out.indexOf( QRegExp("\\d"), pos );
-        if( pos < 0 )
-            return false;
-
-        int endPos = out.indexOf( ',', pos+1 );
-        if( endPos < 0 )
-            return false;
-
-        bin = new K3b::ExternalBin( this );
-        bin->path = path;
-        bin->version = out.mid( pos, endPos-pos );
-    }
-    else {
-        kDebug() << "(K3b::GrowisofsProgram) could not start " << path;
-        return false;
-    }
-
     // fixed Copyright:
     bin->copyright = "Andy Polyakov <appro@fy.chalmers.se>";
-
-    // check if we run growisofs as root
-    struct stat s;
-    if( !::stat( QFile::encodeName(path), &s ) ) {
-        if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
-            bin->addFeature( "suidroot" );
-    }
 
     if ( bin->version >= K3b::Version( 5, 20 ) )
         bin->addFeature( "dual-layer" );
@@ -878,197 +474,61 @@ bool K3b::GrowisofsProgram::scan( const QString& p )
     if ( bin->version >= K3b::Version( 7, 0 ) )
         bin->addFeature( "blu-ray" );
 
-    addBin( bin );
-    return true;
+    return SimpleExternalProgram::scanFeatures( bin );
 }
 
 
 K3b::DvdformatProgram::DvdformatProgram()
-    : K3b::ExternalProgram( "dvd+rw-format" )
+    : K3b::SimpleExternalProgram( "dvd+rw-format" )
 {
 }
 
-bool K3b::DvdformatProgram::scan( const QString& p )
+K3b::Version K3b::DvdformatProgram::parseVersion( const QString& out )
 {
-    if( p.isEmpty() )
-        return false;
+    // different locales make searching for the +- char difficult
+    // so we simply ignore it.
+    int pos = out.indexOf( QRegExp("DVD.*RW(/-RAM)? format utility") );
+    if( pos < 0 )
+        return Version();
 
-    QString path = p;
-    QFileInfo fi( path );
-    if( fi.isDir() ) {
-        path = buildProgramPath( path, "dvd+rw-format" );
-    }
+    pos = out.indexOf( "version", pos );
+    if( pos < 0 )
+        return Version();
 
-    if( !QFile::exists( path ) )
-        return false;
+    pos += 8;
 
-    K3b::ExternalBin* bin = 0;
+    // the version ends in a dot.
+    int endPos = out.indexOf( QRegExp("\\.\\D"), pos );
+    if( endPos < 0 )
+        return Version();
 
-    // probe version
-    ExternalScanner vp;
-    vp << path;
+    return out.mid( pos, endPos-pos );
+}
 
-    if( vp.run() ) {
-        // different locales make searching for the +- char difficult
-        // so we simply ignore it.
-        QString out = vp.getData();
-        int pos = out.indexOf( QRegExp("DVD.*RW(/-RAM)? format utility") );
-        if( pos < 0 )
-            return false;
-
-        pos = out.indexOf( "version", pos );
-        if( pos < 0 )
-            return false;
-
-        pos += 8;
-
-        // the version ends in a dot.
-        int endPos = out.indexOf( QRegExp("\\.\\D"), pos );
-        if( endPos < 0 )
-            return false;
-
-        bin = new K3b::ExternalBin( this );
-        bin->path = path;
-        bin->version = out.mid( pos, endPos-pos );
-    }
-    else {
-        kDebug() << "(K3b::DvdformatProgram) could not start " << path;
-        return false;
-    }
-
+QString K3b::DvdformatProgram::parseCopyright( const QString& )
+{
     // fixed Copyright:
-    bin->copyright = "Andy Polyakov <appro@fy.chalmers.se>";
-
-    // check if we run dvd+rw-format as root
-    struct stat s;
-    if( !::stat( QFile::encodeName(path), &s ) ) {
-        if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
-            bin->addFeature( "suidroot" );
-    }
-
-    addBin( bin );
-    return true;
+    return QLatin1String( "Andy Polyakov <appro@fy.chalmers.se>" );
 }
 
 
 K3b::DvdBooktypeProgram::DvdBooktypeProgram()
-    : K3b::ExternalProgram( "dvd+rw-booktype" )
+    : K3b::SimpleExternalProgram( "dvd+rw-booktype" )
 {
 }
 
-bool K3b::DvdBooktypeProgram::scan( const QString& p )
+K3b::Version K3b::DvdBooktypeProgram::parseVersion( const QString& out )
 {
-    if( p.isEmpty() )
-        return false;
+    int pos = out.indexOf( "dvd+rw-booktype" );
+    if( pos < 0 )
+        return Version();
 
-    QString path = p;
-    QFileInfo fi( path );
-    if( fi.isDir() ) {
-        path = buildProgramPath( path, "dvd+rw-booktype" );
-    }
-
-    if( !QFile::exists( path ) )
-        return false;
-
-    K3b::ExternalBin* bin = 0;
-
-    // probe version
-    ExternalScanner vp;
-    vp << path;
-
-    if( vp.run() ) {
-        QString out = vp.getData();
-        int pos = out.indexOf( "dvd+rw-booktype" );
-        if( pos < 0 )
-            return false;
-
-        bin = new K3b::ExternalBin( this );
-        bin->path = path;
-        // No version information. Create dummy version
-        bin->version = K3b::Version( 1, 0, 0 );
-    }
-    else {
-        kDebug() << "(K3b::DvdBooktypeProgram) could not start " << path;
-        return false;
-    }
-
-    addBin( bin );
-    return true;
+    // No version information. Create dummy version
+    return K3b::Version( 1, 0, 0 );
 }
 
-
-
-K3b::Cdda2wavProgram::Cdda2wavProgram()
-    : K3b::ExternalProgram( "cdda2wav" )
+QString K3b::DvdBooktypeProgram::parseCopyright( const QString& )
 {
-}
-
-bool K3b::Cdda2wavProgram::scan( const QString& p )
-{
-    if( p.isEmpty() )
-        return false;
-
-    QString path = p;
-    QFileInfo fi( path );
-    if( fi.isDir() ) {
-        path = buildProgramPath( path, "cdda2wav" );
-    }
-
-    if( !QFile::exists( path ) )
-        return false;
-
-    K3b::ExternalBin* bin = 0;
-
-    // probe version
-    ExternalScanner vp;
-    vp << path << "-h";
-
-    if( vp.run() ) {
-        QString out = vp.getData();
-        int pos = out.indexOf( "cdda2wav" );
-        if( pos < 0 )
-            return false;
-
-        pos = out.indexOf( "Version", pos );
-        if( pos < 0 )
-            return false;
-
-        pos += 8;
-
-        // the version does not end in a space but the kernel info
-        int endPos = out.indexOf( QRegExp("[^\\d\\.]"), pos );
-        if( endPos < 0 )
-            return false;
-
-        bin = new K3b::ExternalBin( this );
-        bin->path = path;
-        bin->version = out.mid( pos, endPos-pos );
-
-        // features (we do this since the cdda2wav help says that the short
-        //           options will disappear soon)
-        if( out.indexOf( "-info-only" ) )
-            bin->addFeature( "info-only" ); // otherwise use the -J option
-        if( out.indexOf( "-no-infofile" ) )
-            bin->addFeature( "no-infofile" ); // otherwise use the -H option
-        if( out.indexOf( "-gui" ) )
-            bin->addFeature( "gui" ); // otherwise use the -g option
-        if( out.indexOf( "-bulk" ) )
-            bin->addFeature( "bulk" ); // otherwise use the -B option
-        if( out.indexOf( "dev=" ) )
-            bin->addFeature( "dev" ); // otherwise use the -B option
-    }
-    else {
-        kDebug() << "(K3b::Cdda2wavProgram) could not start " << path;
-        return false;
-    }
-
-    // check if we run as root
-    struct stat s;
-    if( !::stat( QFile::encodeName(path), &s ) ) {
-        if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
-            bin->addFeature( "suidroot" );
-    }
-
-    addBin( bin );
-    return true;
+    // fixed Copyright:
+    return QLatin1String( "Andy Polyakov <appro@fy.chalmers.se>" );
 }

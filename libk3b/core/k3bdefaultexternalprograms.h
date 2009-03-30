@@ -27,114 +27,127 @@ namespace K3b {
     LIBK3B_EXPORT void addTranscodePrograms( ExternalBinManager* );
     LIBK3B_EXPORT void addVcdimagerPrograms( ExternalBinManager* );
 
-    class LIBK3B_EXPORT CdrecordProgram : public ExternalProgram
+    class AbstractCdrtoolsProgram : public SimpleExternalProgram
     {
     public:
-        CdrecordProgram( bool dvdPro );
+        AbstractCdrtoolsProgram( const QString& program, const QString& cdrkitAlternative );
 
-        bool scan( const QString& );
+    protected:
+        QString getProgramPath( const QString& dir );
+        K3b::Version parseVersion( const QString& out );
+
+        bool m_usingCdrkit;
 
     private:
-        bool m_dvdPro;
+        QString m_cdrkitAlt;
+    };
+
+    class LIBK3B_EXPORT CdrecordProgram : public AbstractCdrtoolsProgram
+    {
+    public:
+        CdrecordProgram();
+
+    private:
+        void parseFeatures( const QString& output, ExternalBin* bin );
     };
 
 
-    class LIBK3B_EXPORT MkisofsProgram : public ExternalProgram
+    class LIBK3B_EXPORT MkisofsProgram : public AbstractCdrtoolsProgram
     {
     public:
         MkisofsProgram();
 
-        bool scan( const QString& );
+    private:
+        void parseFeatures( const QString& output, ExternalBin* bin );
     };
 
 
-    class LIBK3B_EXPORT ReadcdProgram : public ExternalProgram
+    class LIBK3B_EXPORT ReadcdProgram : public AbstractCdrtoolsProgram
     {
     public:
         ReadcdProgram();
 
-        bool scan( const QString& );
-    };
-
-
-    class LIBK3B_EXPORT CdrdaoProgram : public ExternalProgram
-    {
-    public:
-        CdrdaoProgram();
-
-        bool scan( const QString& );
-    };
-
-
-    class LIBK3B_EXPORT TranscodeProgram : public ExternalProgram
-    {
-    public:
-        TranscodeProgram( const QString& transcodeProgram );
-
-        bool scan( const QString& );
-
-        // no user parameters (yet)
-        bool supportsUserParameters() const { return false; }
-
     private:
-        QString m_transcodeProgram;
+        void parseFeatures( const QString& output, ExternalBin* bin );
     };
 
 
-    class LIBK3B_EXPORT VcdbuilderProgram : public ExternalProgram
-    {
-    public:
-        VcdbuilderProgram( const QString& );
-
-        bool scan( const QString& );
-
-    private:
-        QString m_vcdbuilderProgram;
-    };
-
-
-    class LIBK3B_EXPORT NormalizeProgram : public ExternalProgram
-    {
-    public:
-        NormalizeProgram();
-
-        bool scan( const QString& );
-    };
-
-
-    class LIBK3B_EXPORT GrowisofsProgram : public ExternalProgram
-    {
-    public:
-        GrowisofsProgram();
-
-        bool scan( const QString& );
-    };
-
-
-    class LIBK3B_EXPORT DvdformatProgram : public ExternalProgram
-    {
-    public:
-        DvdformatProgram();
-
-        bool scan( const QString& );
-    };
-
-
-    class LIBK3B_EXPORT DvdBooktypeProgram : public ExternalProgram
-    {
-    public:
-        DvdBooktypeProgram();
-
-        bool scan( const QString& );
-    };
-
-
-    class LIBK3B_EXPORT Cdda2wavProgram : public ExternalProgram
+    class LIBK3B_EXPORT Cdda2wavProgram : public AbstractCdrtoolsProgram
     {
     public:
         Cdda2wavProgram();
 
-        bool scan( const QString& );
+    private:
+        void parseFeatures( const QString& output, ExternalBin* bin );
+    };
+
+
+    class LIBK3B_EXPORT CdrdaoProgram : public SimpleExternalProgram
+    {
+    public:
+        CdrdaoProgram();
+
+    protected:
+        bool scanFeatures( ExternalBin* bin );
+    };
+
+
+    class LIBK3B_EXPORT TranscodeProgram : public SimpleExternalProgram
+    {
+    public:
+        TranscodeProgram( const QString& transcodeProgram );
+
+        // no user parameters (yet)
+        bool supportsUserParameters() const { return false; }
+
+    protected:
+        bool scanFeatures( ExternalBin* bin );
+    };
+
+
+    class LIBK3B_EXPORT VcdbuilderProgram : public SimpleExternalProgram
+    {
+    public:
+        VcdbuilderProgram( const QString& );
+    };
+
+
+    class LIBK3B_EXPORT NormalizeProgram : public SimpleExternalProgram
+    {
+    public:
+        NormalizeProgram();
+    };
+
+
+    class LIBK3B_EXPORT GrowisofsProgram : public SimpleExternalProgram
+    {
+    public:
+        GrowisofsProgram();
+
+    protected:
+        bool scanFeatures( ExternalBin* bin );
+    };
+
+
+    class LIBK3B_EXPORT DvdformatProgram : public SimpleExternalProgram
+    {
+    public:
+        DvdformatProgram();
+
+    protected:
+        Version parseVersion( const QString& output );
+        QString parseCopyright( const QString& );
+    };
+
+
+    class LIBK3B_EXPORT DvdBooktypeProgram : public SimpleExternalProgram
+    {
+    public:
+        DvdBooktypeProgram();
+
+    protected:
+        Version parseVersion( const QString& output );
+        QString parseCopyright( const QString& );
     };
 }
 

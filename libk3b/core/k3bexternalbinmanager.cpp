@@ -20,6 +20,7 @@
 #include <kconfiggroup.h>
 #include <kdeversion.h>
 #include <kde_file.h>
+#include <KProcess>
 
 #include <qstring.h>
 #include <qregexp.h>
@@ -32,6 +33,37 @@
 
 
 namespace {
+    class ExternalScanner : public KProcess
+    {
+    public:
+        ExternalScanner( QObject* parent = 0 );
+
+        QByteArray getData() const { return m_data; }
+
+        bool run();
+
+    private:
+        QByteArray m_data;
+    };
+
+    ExternalScanner::ExternalScanner( QObject* parent )
+        : KProcess( parent )
+    {
+        setOutputChannelMode( MergedChannels );
+    }
+
+    bool ExternalScanner::run()
+    {
+        start();
+        if( waitForFinished( -1 ) ) {
+            m_data = readAll();
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     bool compareVersions( const K3b::ExternalBin* bin1, const K3b::ExternalBin* bin2 )
     {
         return bin1->version > bin2->version;
@@ -184,6 +216,149 @@ QString K3b::ExternalProgram::buildProgramPath( const QString& dir, const QStrin
     p += ".exe";
 #endif
     return p;
+}
+
+
+// ///////////////////////////////////////////////////////////
+//
+// SIMPLEEXTERNALPROGRAM
+//
+// ///////////////////////////////////////////////////////////
+
+class K3b::SimpleExternalProgram::Private
+{
+public:
+    QString versionIdentifier;
+};
+
+
+K3b::SimpleExternalProgram::SimpleExternalProgram( const QString& name )
+    : ExternalProgram( name ),
+      d( new Private() )
+{
+}
+
+
+K3b::SimpleExternalProgram::~SimpleExternalProgram()
+{
+    delete d;
+}
+
+
+QString K3b::SimpleExternalProgram::getProgramPath( const QString& dir )
+{
+    return buildProgramPath( dir, name() );
+}
+
+
+bool K3b::SimpleExternalProgram::scan( const QString& p )
+{
+    if( p.isEmpty() )
+        return false;
+
+    QString path = getProgramPath( p );
+
+    K3b::ExternalBin* bin = new ExternalBin( this );
+    bin->path = path;
+
+    if ( !scanVersion( bin ) ||
+         !scanFeatures( bin ) ) {
+        delete bin;
+        return false;
+    }
+
+    addBin(bin);
+    return true;
+}
+
+
+bool K3b::SimpleExternalProgram::scanVersion( ExternalBin* bin )
+{
+    // probe version
+    ExternalScanner vp;
+    vp << bin->path << "--version";
+
+    if( vp.run() ) {
+        bin->version = parseVersion( vp.getData() );
+        bin->copyright = parseCopyright( vp.getData() );
+        return bin->version.isValid();
+    }
+    else {
+        kDebug() << "could not start " << bin->path;
+        return false;
+    }
+}
+
+
+bool K3b::SimpleExternalProgram::scanFeatures( ExternalBin* bin )
+{
+    // check if we run as root
+    struct stat s;
+    if( !::stat( QFile::encodeName(bin->path), &s ) ) {
+        if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
+            bin->addFeature( "suidroot" );
+    }
+
+    // probe features
+    ExternalScanner fp;
+    fp << bin->path << "--help";
+
+    if( fp.run() ) {
+        parseFeatures( fp.getData(), bin );
+        return true;
+    }
+    else {
+        kDebug() << "could not start " << bin->path;
+        return false;
+    }
+}
+
+
+K3b::Version K3b::SimpleExternalProgram::parseVersion( const QString& out )
+{
+    int pos = out.indexOf( d->versionIdentifier.isEmpty() ? name() : d->versionIdentifier );
+
+    if( pos < 0 )
+        return Version();
+
+    return parseVersionAt( out, pos );
+}
+
+
+QString K3b::SimpleExternalProgram::parseCopyright( const QString& out )
+{
+    int pos = out.indexOf( "(C)", 0 );
+    if ( pos < 0 )
+        return QString();
+    pos += 4;
+    int endPos = out.indexOf( '\n', pos );
+    return out.mid( pos, endPos-pos );
+}
+
+
+void K3b::SimpleExternalProgram::parseFeatures( const QString&, ExternalBin* )
+{
+}
+
+
+void K3b::SimpleExternalProgram::setVersionIdentifier( const QString& s )
+{
+    d->versionIdentifier = s;
+}
+
+
+// static
+K3b::Version K3b::SimpleExternalProgram::parseVersionAt( const QString& data, int pos )
+{
+    int sPos = data.indexOf( QRegExp("\\d"), pos );
+    if( sPos < 0 )
+        return Version();
+
+    int endPos = data.indexOf( QRegExp("[\\s,]"), sPos + 1 );
+    if( endPos < 0 )
+        return Version();
+
+    return data.mid( sPos, endPos - sPos );
 }
 
 

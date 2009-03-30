@@ -78,8 +78,8 @@ namespace K3b {
         void addUserParameter( const QString& );
         void setUserParameters( const QStringList& list ) { m_userParameters = list; }
 
-        const QStringList& userParameters() const { return m_userParameters; }
-        const QString& name() const { return m_name; }
+        QStringList userParameters() const { return m_userParameters; }
+        QString name() const { return m_name; }
 
         void addBin( ExternalBin* );
         void clear() { m_bins.clear(); }
@@ -112,6 +112,71 @@ namespace K3b {
         QStringList m_userParameters;
         QList<const ExternalBin*> m_bins;
         const ExternalBin* m_defaultBin;
+    };
+
+
+    /**
+     * Simple implementation of the ExternalProgram scan functionality based on calling the
+     * program twice: once for the version and once for the features.
+     */
+    class LIBK3B_EXPORT SimpleExternalProgram : public ExternalProgram
+    {
+    public:
+        SimpleExternalProgram( const QString& name );
+        virtual ~SimpleExternalProgram();
+
+        bool scan( const QString& path );
+
+        /**
+         * Parses a version starting at \p pos by looking for the first digit
+         * followed by the first space char.
+         */
+        static Version parseVersionAt( const QString& data, int pos );
+
+    protected:
+        /**
+         * Build the program's path. The default implementation simply calls
+         * buildProgramPath on the program's name and the given path.
+         */
+        virtual QString getProgramPath( const QString& dir );
+
+        /**
+         * Scan the version. The default implementation calls the program with
+         * parameter --version and then calls parseVersion and parseCopyright.
+         */
+        virtual bool scanVersion( ExternalBin* bin );
+
+        /**
+         * Scan for features. The default implementation checks for suidroot and
+         * calls the program with parameter --help and then calls parseFeatures.
+         */
+        virtual bool scanFeatures( ExternalBin* bin );
+
+        /**
+         * Determine the version from the program's version output.
+         * The default implementation searches for the program's name
+         * and parses the version from there.
+         */
+        virtual Version parseVersion( const QString& output );
+
+        /**
+         * Determine the copyright statement from the program's version output.
+         * The default implementation looks for "(C)" and uses the rest of the line
+         * from there.
+         */
+        virtual QString parseCopyright( const QString& output );
+
+        /**
+         * Parse the features from the \p output of --help and add them to the \p bin.
+         * The default implementation does nothing.
+         */
+        virtual void parseFeatures( const QString& output, ExternalBin* bin );
+
+        void setVersionIdentifier( const QString& );
+
+    private:
+        class Private;
+        Private* const d;
     };
 
 
