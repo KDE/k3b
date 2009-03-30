@@ -284,7 +284,13 @@ bool K3b::SimpleExternalProgram::scanFeatures( ExternalBin* bin )
 
 K3b::Version K3b::SimpleExternalProgram::parseVersion( const QString& out )
 {
-    int pos = out.indexOf( d->versionIdentifier.isEmpty() ? name() : d->versionIdentifier );
+    // we first look for the program name with first upper char so we do not catch
+    // the warning messages on stderr (cdrecord sometimes produces those)
+    QString programName = d->versionIdentifier.isEmpty() ? name() : d->versionIdentifier;
+    QString programNameCap = programName[0].toUpper() + programName.mid( 1 );
+    int pos = out.indexOf( programNameCap );
+    if ( pos < 0 )
+        pos = out.indexOf( programName );
 
     if( pos < 0 )
         return Version();

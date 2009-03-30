@@ -139,24 +139,10 @@ QString K3b::AbstractCdrtoolsProgram::getProgramPath( const QString& dir )
     }
 #endif
 
+    if ( m_usingCdrkit )
+        setVersionIdentifier( m_cdrkitAlt );
+
     return path;
-}
-
-
-K3b::Version K3b::AbstractCdrtoolsProgram::parseVersion( const QString& out )
-{
-    int pos = -1;
-    if( m_usingCdrkit ) {
-        pos = out.toLower().indexOf( m_cdrkitAlt );
-    }
-    else {
-        pos = out.toLower().indexOf( name() );
-    }
-
-    if( pos < 0 )
-        return Version();
-
-    return parseVersionAt( out, pos );
 }
 
 

@@ -34,7 +34,6 @@ namespace K3b {
 
     protected:
         QString getProgramPath( const QString& dir );
-        K3b::Version parseVersion( const QString& out );
 
         bool m_usingCdrkit;
 
