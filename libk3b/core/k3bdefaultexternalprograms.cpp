@@ -15,7 +15,8 @@
 
 #include "k3bdefaultexternalprograms.h"
 #include "k3bexternalbinmanager.h"
-#include <k3bglobals.h>
+#include "k3bglobals.h"
+#include "k3bprocess.h"
 
 #include <qfile.h>
 #include <qdir.h>
@@ -26,57 +27,6 @@
 
 #include <kdebug.h>
 #include <KProcess>
-
-
-
-namespace {
-    class ExternalScanner : public KProcess
-    {
-    public:
-        ExternalScanner( QObject* parent = 0 );
-
-        QString getVersion( int pos ) const;
-        QByteArray getData() const { return m_data; }
-
-        bool run();
-
-    private:
-        QByteArray m_data;
-    };
-
-    ExternalScanner::ExternalScanner( QObject* parent )
-        : KProcess( parent )
-    {
-        setOutputChannelMode( MergedChannels );
-    }
-
-    bool ExternalScanner::run()
-    {
-        start();
-        if( waitForFinished( -1 ) ) {
-            m_data = readAll();
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    QString ExternalScanner::getVersion( int pos ) const
-    {
-        QString out = QString::fromLocal8Bit( m_data );
-
-        int sPos = out.indexOf( QRegExp("\\d"), pos );
-        if( sPos < 0 )
-            return QString();
-
-        int endPos = out.indexOf( QRegExp("\\s"), sPos + 1 );
-        if( endPos < 0 )
-            return QString();
-
-        return out.mid( sPos, endPos - sPos );
-    }
-}
 
 
 void K3b::addDefaultPrograms( K3b::ExternalBinManager* m )
@@ -365,11 +315,12 @@ K3b::CdrdaoProgram::CdrdaoProgram()
 bool K3b::CdrdaoProgram::scanFeatures( ExternalBin* bin )
 {
     // probe features
-    ExternalScanner fp;
+    KProcess fp;
+    fp.setOutputChannelMode( KProcess::MergedChannels );
     fp << bin->path << "write" << "-h";
 
-    if( fp.run() ) {
-        QByteArray out = fp.getData();
+    if( fp.execute() >= 0 ) {
+        QByteArray out = fp.readAll();
         if( out.contains( "--overburn" ) )
             bin->addFeature( "overburn" );
         if( out.contains( "--multi" ) )
@@ -411,11 +362,12 @@ bool K3b::TranscodeProgram::scanFeatures( ExternalBin* bin )
     // Check features
     //
     QString modInfoBin = buildProgramPath( QFileInfo( bin->path ).absolutePath(), QLatin1String( "tcmodinfo" ) );
-    ExternalScanner modp;
+    Process modp;
+    modp.setOutputChannelMode( KProcess::MergedChannels );
     modp << modInfoBin << "-p";
 
-    if( modp.run() ) {
-        QString modPath = modp.getData().simplified();
+    if( !modp.execute() ) {
+        QString modPath = QString::fromLocal8Bit( modp.readAll() ).simplified();
         QDir modDir( modPath );
         if( !modDir.entryList( QStringList() << "*export_xvid*", QDir::Files ).isEmpty() )
             bin->addFeature( "xvid" );

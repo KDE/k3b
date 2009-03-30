@@ -33,37 +33,6 @@
 
 
 namespace {
-    class ExternalScanner : public KProcess
-    {
-    public:
-        ExternalScanner( QObject* parent = 0 );
-
-        QByteArray getData() const { return m_data; }
-
-        bool run();
-
-    private:
-        QByteArray m_data;
-    };
-
-    ExternalScanner::ExternalScanner( QObject* parent )
-        : KProcess( parent )
-    {
-        setOutputChannelMode( MergedChannels );
-    }
-
-    bool ExternalScanner::run()
-    {
-        start();
-        if( waitForFinished( -1 ) ) {
-            m_data = readAll();
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
     bool compareVersions( const K3b::ExternalBin* bin1, const K3b::ExternalBin* bin2 )
     {
         return bin1->version > bin2->version;
@@ -258,35 +227,37 @@ bool K3b::SimpleExternalProgram::scan( const QString& p )
 
     QString path = getProgramPath( p );
 
-    K3b::ExternalBin* bin = new ExternalBin( this );
-    bin->path = path;
+    if ( QFile::exists( path ) ) {
+        K3b::ExternalBin* bin = new ExternalBin( this );
+        bin->path = path;
 
-    if ( !scanVersion( bin ) ||
-         !scanFeatures( bin ) ) {
-        delete bin;
+        if ( !scanVersion( bin ) ||
+             !scanFeatures( bin ) ) {
+            delete bin;
+            return false;
+        }
+
+        addBin(bin);
+        return true;
+    }
+    else {
         return false;
     }
-
-    addBin(bin);
-    return true;
 }
 
 
 bool K3b::SimpleExternalProgram::scanVersion( ExternalBin* bin )
 {
     // probe version
-    ExternalScanner vp;
+    KProcess vp;
+    vp.setOutputChannelMode( KProcess::MergedChannels );
     vp << bin->path << "--version";
+    vp.execute();
 
-    if( vp.run() ) {
-        bin->version = parseVersion( vp.getData() );
-        bin->copyright = parseCopyright( vp.getData() );
-        return bin->version.isValid();
-    }
-    else {
-        kDebug() << "could not start " << bin->path;
-        return false;
-    }
+    QString s = QString::fromLocal8Bit( vp.readAll() );
+    bin->version = parseVersion( s );
+    bin->copyright = parseCopyright( s );
+    return bin->version.isValid();
 }
 
 
@@ -300,17 +271,13 @@ bool K3b::SimpleExternalProgram::scanFeatures( ExternalBin* bin )
     }
 
     // probe features
-    ExternalScanner fp;
+    KProcess fp;
+    fp.setOutputChannelMode( KProcess::MergedChannels );
     fp << bin->path << "--help";
+    fp.execute();
 
-    if( fp.run() ) {
-        parseFeatures( fp.getData(), bin );
-        return true;
-    }
-    else {
-        kDebug() << "could not start " << bin->path;
-        return false;
-    }
+    parseFeatures( QString::fromLocal8Bit( fp.readAll() ), bin );
+    return true;
 }
 
 
