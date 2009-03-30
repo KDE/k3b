@@ -33,6 +33,7 @@
 #include <kio/netaccess.h>
 #include <kurl.h>
 #include <kprocess.h>
+#include <KDiskFreeSpaceInfo>
 
 #include <kmountpoint.h>
 #include <Solid/Device>
@@ -45,7 +46,6 @@
 
 #include <cmath>
 #include <sys/utsname.h>
-#include <sys/stat.h>
 
 #if defined(__FreeBSD__) || defined(__NetBSD__) || defined(__DragonFly__)
 #  include <sys/param.h>
@@ -56,12 +56,6 @@
 #  define bswap_64(x) bswap64(x)
 #else
 #  include <byteswap.h>
-#endif
-#ifdef HAVE_SYS_STATVFS_H
-#  include <sys/statvfs.h>
-#endif
-#ifdef HAVE_SYS_VFS_H
-#  include <sys/vfs.h>
 #endif
 
 #ifdef Q_OS_WIN32
@@ -269,29 +263,15 @@ QString K3b::systemName()
 
 bool K3b::kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& avail )
 {
-#ifdef Q_OS_WIN32
-    ULARGE_INTEGER freeBytesAvailable,totalNumberOfBytes,totalNumberOfFreeBytes;
-    
-    if (GetDiskFreeSpaceExA(path.toLatin1().data(),&freeBytesAvailable,&totalNumberOfBytes,&totalNumberOfFreeBytes)) {
-        size = (unsigned long)(totalNumberOfBytes.QuadPart/1024);
-        avail = (unsigned long)(freeBytesAvailable.QuadPart/1024);
+    KDiskFreeSpaceInfo fs = KDiskFreeSpaceInfo::freeSpaceInfo( path );
+    if ( fs.isValid() ) {
+        size = fs.size();
+        avail = fs.available();
         return true;
     }
-    return true;
-#endif
-#ifdef HAVE_SYS_STATVFS_H
-    struct statvfs fs;
-    if( ::statvfs( QFile::encodeName(path), &fs ) == 0 ) {
-        unsigned long kBfak = fs.f_frsize/1024;
-
-        size = fs.f_blocks*kBfak;
-        avail = fs.f_bavail*kBfak;
-
-        return true;
-    }
-    else
-#endif
+    else {
         return false;
+    }
 }
 
 
@@ -299,9 +279,8 @@ KIO::filesize_t K3b::filesize( const KUrl& url )
 {
     KIO::filesize_t fSize = 0;
     if( url.isLocalFile() ) {
-        k3b_struct_stat buf;
-        k3b_stat( QFile::encodeName( url.toLocalFile() ), &buf );
-        fSize = (KIO::filesize_t)buf.st_size;
+        QFileInfo fi( url.toLocalFile() );
+        fSize = fi.size();
     }
     else {
         KIO::UDSEntry uds;

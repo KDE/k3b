@@ -117,6 +117,8 @@ namespace K3b {
      * This checks the free space on the filesystem path is in.
      * We use this since we encountered problems with the KDE version.
      * @returns true on success.
+     *
+     * \deprecated Use KDiskFreeSpaceInfo
      */
     LIBK3B_EXPORT bool kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& avail );
 
