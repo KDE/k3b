@@ -64,6 +64,9 @@
 #  include <sys/vfs.h>
 #endif
 
+#ifdef Q_OS_WIN32
+#include <windows.h>
+#endif
 
 /*
   struct Sample {
@@ -266,6 +269,16 @@ QString K3b::systemName()
 
 bool K3b::kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& avail )
 {
+#ifdef Q_OS_WIN32
+    ULARGE_INTEGER freeBytesAvailable,totalNumberOfBytes,totalNumberOfFreeBytes;
+    
+    if (GetDiskFreeSpaceExA(path.toLatin1().data(),&freeBytesAvailable,&totalNumberOfBytes,&totalNumberOfFreeBytes)) {
+        size = (unsigned long)(totalNumberOfBytes.QuadPart/1024);
+        avail = (unsigned long)(freeBytesAvailable.QuadPart/1024);
+        return true;
+    }
+    return true;
+#endif
 #ifdef HAVE_SYS_STATVFS_H
     struct statvfs fs;
     if( ::statvfs( QFile::encodeName(path), &fs ) == 0 ) {
