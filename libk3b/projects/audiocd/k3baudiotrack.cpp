@@ -86,14 +86,15 @@ K3b::AudioTrack::~AudioTrack()
     //
     m_currentlyDeleting = true;
 
-    // fix the list
-    take();
 
     kDebug() << "deleting sources.";
 
     // delete all sources
     while( m_firstSource )
-        delete m_firstSource->take();
+        delete m_firstSource;
+
+    // fix the list
+    take();
 
     kDebug() << "finished";
 
@@ -103,7 +104,7 @@ K3b::AudioTrack::~AudioTrack()
 
 void K3b::AudioTrack::emitChanged()
 {
-    if( m_parent )
+    if( m_parent  && !m_currentlyDeleting )
         m_parent->slotTrackChanged( this );
 }
 
@@ -651,7 +652,7 @@ K3b::AudioDataSource* K3b::AudioTrack::getSource( int index ) const
 
 void K3b::AudioTrack::emitSourceRemoved( K3b::AudioDataSource *source )
 {
-    if ( !m_currentlyDeleting && doc() ) {
+    if ( doc() ) {
         // set the first source by hand (without using setFirstSource() )
         // just to avoid the model to read invalid firstSources
         if ( !source->prev() )
@@ -659,16 +660,17 @@ void K3b::AudioTrack::emitSourceRemoved( K3b::AudioDataSource *source )
 
         emit doc()->sourceRemoved( this );
 
-        // and now call the setFirstSource() to make sure the proper signals
-        // are emitted
-        if ( !source->prev() )
-            setFirstSource( source->next() );
     }
+
+    // and now call the setFirstSource() to make sure the proper signals
+    // are emitted
+    if ( !source->prev() )
+        setFirstSource( source->next() );
 }
 
 void K3b::AudioTrack::emitAboutToRemoveSource( AudioDataSource* source )
 {
-    if ( !m_currentlyDeleting && doc() ) {
+    if ( doc() ) {
         emit doc()->aboutToRemoveSource( this, source->sourceIndex() );
     }
 }
