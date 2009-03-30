@@ -26,6 +26,7 @@
 #include <kurllabel.h>
 #include <kdialog.h>
 #include <klineedit.h>
+#include <KDiskFreeSpaceInfo>
 
 #include <qcombobox.h>
 #include <qspinbox.h>
@@ -254,10 +255,10 @@ void K3b::VideoDVDRippingWidget::slotUpdateFreeTempSpace()
         path.truncate( path.lastIndexOf('/') );
 
     QPalette pal( m_labelFreeSpace->palette() );
-    unsigned long size, avail;
-    if( K3b::kbFreeOnFs( path, size, avail ) ) {
-        m_labelFreeSpace->setText( KIO::convertSizeFromKiB(avail) );
-        if( avail < m_neededSize/1024 )
+    KDiskFreeSpaceInfo free = KDiskFreeSpaceInfo::freeSpaceInfo( path );
+    if( free.isValid() ) {
+        m_labelFreeSpace->setText( KIO::convertSizeFromKiB(free.available()) );
+        if( free.available() < m_neededSize/1024 )
             pal.setColor( QPalette::Text, Qt::red );
         else
             pal.setColor( QPalette::Text, palette().color( QPalette::Text ) );

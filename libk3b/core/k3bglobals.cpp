@@ -62,54 +62,6 @@
 #include <windows.h>
 #endif
 
-/*
-  struct Sample {
-  unsigned char msbLeft;
-  unsigned char lsbLeft;
-  unsigned char msbRight;
-  unsigned char lsbRight;
-
-  short left() const {
-  return ( msbLeft << 8 ) | lsbLeft;
-  }
-  short right() const {
-  return ( msbRight << 8 ) | lsbRight;
-  }
-  void left( short d ) {
-  msbLeft = d >> 8;
-  lsbLeft = d;
-  }
-  void right( short d ) {
-  msbRight = d >> 8;
-  lsbRight = d;
-  }
-  };
-*/
-
-QString K3b::framesToString( int h, bool showFrames )
-{
-    int m = h / 4500;
-    int s = (h % 4500) / 75;
-    int f = h % 75;
-
-    QString str;
-
-    if( showFrames ) {
-        // cdrdao needs the MSF format where 1 second has 75 frames!
-        str.sprintf( "%.2i:%.2i:%.2i", m, s, f );
-    }
-    else
-        str.sprintf( "%.2i:%.2i", m, s );
-
-    return str;
-}
-
-/*QString K3b::sizeToTime(long size)
-  {
-  int h = size / sizeof(Sample) / 588;
-  return framesToString(h, false);
-  }*/
-
 
 qint16 K3b::swapByteOrder( const qint16& i )
 {
@@ -128,12 +80,6 @@ qint32 K3b::swapByteOrder( const qint32& i )
 qint64 K3b::swapByteOrder( const qint64& i )
 {
     return bswap_64( i );
-}
-
-
-int K3b::round( double d )
-{
-    return (int)( floor(d) + 0.5 <= d ? ceil(d) : floor(d) );
 }
 
 

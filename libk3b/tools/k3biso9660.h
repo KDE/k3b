@@ -80,15 +80,15 @@ namespace K3b {
     {
     public:
         Iso9660Entry( Iso9660* archive,
-                         const QString& isoName,
-                         const QString& name,
-                         int access,
-                         int date,
-                         int adate,
-                         int cdate,
-                         const QString& user,
-                         const QString& group,
-                         const QString& symlink );
+                      const QString& isoName,
+                      const QString& name,
+                      int access,
+                      int date,
+                      int adate,
+                      int cdate,
+                      const QString& user,
+                      const QString& group,
+                      const QString& symlink );
         virtual ~Iso9660Entry();
 
         int adate() const { return m_adate; }
@@ -174,17 +174,17 @@ namespace K3b {
     {
     public:
         Iso9660Directory( Iso9660* archive,
-                             const QString& isoName,
-                             const QString& name,
-                             int access,
-                             int date,
-                             int adate,
-                             int cdate,
-                             const QString& user,
-                             const QString& group,
-                             const QString& symlink,
-                             unsigned int pos = 0,
-                             unsigned int size = 0 );
+                          const QString& isoName,
+                          const QString& name,
+                          int access,
+                          int date,
+                          int adate,
+                          int cdate,
+                          const QString& user,
+                          const QString& group,
+                          const QString& symlink,
+                          unsigned int pos = 0,
+                          unsigned int size = 0 );
         ~Iso9660Directory();
 
         /**
@@ -261,17 +261,17 @@ namespace K3b {
          * @param pos start sector
          */
         Iso9660File( Iso9660* archive,
-                        const QString& isoName,
-                        const QString& name,
-                        int access,
-                        int date,
-                        int adate,
-                        int cdate,
-                        const QString& user,
-                        const QString& group,
-                        const QString& symlink,
-                        unsigned int pos,
-                        unsigned int size );
+                     const QString& isoName,
+                     const QString& name,
+                     int access,
+                     int date,
+                     int adate,
+                     int cdate,
+                     const QString& user,
+                     const QString& group,
+                     const QString& symlink,
+                     unsigned int pos,
+                     unsigned int size );
         ~Iso9660File();
 
         bool isFile() const { return true; }

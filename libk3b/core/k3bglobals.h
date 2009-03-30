@@ -78,9 +78,9 @@ namespace K3b {
     enum SectorSize {
         SectorSizeAudio = 2352,
         SectorSizeData2048 = 2048,
-        SectorSizeData2048_SUBHEADER = 2056,
+        SectorSizeData2048Subheader = 2056,
         SectorSizeData2324 = 2324,
-        SectorSizeData2324_SUBHEADER = 2332,
+        SectorSizeData2324Subheader = 2332,
         SectorSizeRaw = 2448
     };
 
@@ -104,14 +104,9 @@ namespace K3b {
 
     LIBK3B_EXPORT QString writingModeString( WritingModes );
 
-    LIBK3B_EXPORT QString framesToString( int h, bool showFrames = true );
-    /*LIBK3B_EXPORT QString sizeToTime( long size );*/
-
     LIBK3B_EXPORT qint16 swapByteOrder( const qint16& i );
     LIBK3B_EXPORT qint32 swapByteOrder( const qint32& i );
     LIBK3B_EXPORT qint64 swapByteOrder( const qint64& i );
-
-    int round( double );
 
     /**
      * This checks the free space on the filesystem path is in.
@@ -166,7 +161,7 @@ namespace K3b {
      *
      * Example: /usr/share/doc -> /usr/share/
      */
-    QString parentDir( const QString& path );
+    LIBK3B_EXPORT QString parentDir( const QString& path );
 
     /**
      * For now this just replaces multiple occurrences of / with a single /
@@ -185,7 +180,7 @@ namespace K3b {
      */
     LIBK3B_EXPORT Version simpleKernelVersion();
 
-    QString systemName();
+    LIBK3B_EXPORT QString systemName();
 
     LIBK3B_EXPORT KIO::filesize_t filesize( const KUrl& );
 
@@ -214,7 +209,7 @@ namespace K3b {
      * Used to create a parameter for cdrecord, cdrdao or readcd.
      * Takes care of SCSI and ATAPI.
      */
-    QString externalBinDeviceParameter( Device::Device* dev, const ExternalBin* );
+    LIBK3B_EXPORT QString externalBinDeviceParameter( Device::Device* dev, const ExternalBin* );
 
     /**
      * Tries to convert urls from local protocols != "file" to file (for now supports media:/)
