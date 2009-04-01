@@ -1807,7 +1807,7 @@ bool K3b::Device::Device::open( bool write ) const
 
 void K3b::Device::Device::close() const
 {
-    //QMutexLocker ml( &d->openCloseMutex );
+    QMutexLocker ml( &d->openCloseMutex );
 
     if( d->deviceHandle == HANDLE_DEFAULT_VALUE)
         return;
