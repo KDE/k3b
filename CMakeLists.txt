@@ -251,6 +251,7 @@ include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}/libk3bdevice
   ${CMAKE_CURRENT_SOURCE_DIR}/libk3b/plugin
   ${CMAKE_CURRENT_SOURCE_DIR}/libk3b/core
+  ${CMAKE_CURRENT_SOURCE_DIR}/libk3b/tools
   ${CMAKE_CURRENT_SOURCE_DIR}/libk3b/tools/qprocess)
 
 add_subdirectory( libk3bdevice )
