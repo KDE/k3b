@@ -2,6 +2,7 @@
  *
  * k3bscsicommand_win32.cpp
  * Copyright (C) 2007 Jeremy C. Andrus <jeremy@jeremya.com>
+ * Copyright (C) 2009 Ralf Habacker <ralf.habacker@freenet.de>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -61,8 +62,6 @@ int K3b::Device::ScsiCommand::transport( TransportDirection dir,
     ULONG returned = 0;
     BOOL status = TRUE;
 
-    BYTE * buf;
-
     if( m_device ) {
         needToClose = !m_device->isOpen();
         m_device->open( dir == TR_DIR_WRITE );
@@ -79,15 +78,13 @@ int K3b::Device::ScsiCommand::transport( TransportDirection dir,
     else if ( dir == TR_DIR_WRITE )
         d->m_cmd.spt.DataIn           = SCSI_IOCTL_DATA_OUT;
     else
-        d->m_cmd.spt.DataIn           = SCSI_IOCTL_DATA_IN;
-
-    buf = new BYTE[len];
+        d->m_cmd.spt.DataIn           = SCSI_IOCTL_DATA_UNSPECIFIED;
 
     d->m_cmd.spt.Length             = sizeof(SCSI_PASS_THROUGH_DIRECT);
     d->m_cmd.spt.SenseInfoLength    = SENSE_LEN_SPTI;
     d->m_cmd.spt.DataTransferLength = len;
     d->m_cmd.spt.TimeOutValue       = 2;
-    d->m_cmd.spt.DataBuffer         = buf;
+    d->m_cmd.spt.DataBuffer         = len ? data : NULL;
     d->m_cmd.spt.SenseInfoOffset    = offsetof(SCSI_PASS_THROUGH_DIRECT_WITH_BUFFER, ucSenseBuf);
 
     status = DeviceIoControl( m_deviceHandle,
@@ -95,9 +92,6 @@ int K3b::Device::ScsiCommand::transport( TransportDirection dir,
                 &(d->m_cmd), sizeof(SCSI_PASS_THROUGH_DIRECT_WITH_BUFFER),
                 &(d->m_cmd), sizeof(SCSI_PASS_THROUGH_DIRECT_WITH_BUFFER),
                 &returned, NULL);
-
-    memcpy( data, buf, len );
-    delete [] buf;
 
     if( needToClose )
         m_device->close();
