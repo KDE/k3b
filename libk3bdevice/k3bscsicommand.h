@@ -89,7 +89,9 @@ namespace K3b {
         class ScsiCommand
         {
         public:
+#ifndef Q_OS_WIN32        
             ScsiCommand( Device::Handle handle );
+#endif            
             ScsiCommand( const Device* );
             ~ScsiCommand();
 
