@@ -89,14 +89,11 @@ namespace K3b {
         class ScsiCommand
         {
         public:
-#ifndef Q_OS_WIN32        
-            ScsiCommand( Device::Handle handle );
-#endif            
             ScsiCommand( const Device* );
             ~ScsiCommand();
 
             /**
-             * Enales or disables printing of debugging messages for failed
+             * Enables or disables printing of debugging messages for failed
              * commands.
              *
              * Default is enabled.
@@ -121,7 +118,7 @@ namespace K3b {
             /**
              * \return 0 on success, -1 if the device could not be opened, and
              *         an error code otherwise. The error code is constructed from
-             *         the scsi error code, the sense key, asc, and ascq. These four values are 
+             *         the scsi error code, the sense key, asc, and ascq. These four values are
              *         combined into the lower 32 bit of an integer in the order used above.
              */
             int transport( TransportDirection dir = TR_DIR_NONE,
@@ -134,7 +131,6 @@ namespace K3b {
 
             class Private;
             Private *d;
-            Device::Handle m_deviceHandle;
             const Device* m_device;
 
             bool m_printErrors;

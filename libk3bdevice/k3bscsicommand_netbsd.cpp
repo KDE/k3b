@@ -53,16 +53,17 @@ int K3b::Device::ScsiCommand::transport( TransportDirection dir,
                                          size_t len )
 {
     bool needToClose = false;
+    int deviceHandler = -1;
     if( m_device ) {
         m_device->usageLock();
         if( !m_device->isOpen() ) {
             needToClose = true;
         }
         m_device->open( dir == TR_DIR_WRITE );
-        m_deviceHandle = m_device->handle();
+        deviceHandle = m_device->handle();
     }
 
-    if( m_deviceHandle == -1 ) {
+    if( deviceHandle == -1 ) {
         if ( m_device ) {
             m_device->usageUnlock();
         }
@@ -88,7 +89,7 @@ int K3b::Device::ScsiCommand::transport( TransportDirection dir,
         break;
     }
 
-    int i = ::ioctl( m_deviceHandle, SCIOCCOMMAND, &d->cmd );
+    int i = ::ioctl( deviceHandle, SCIOCCOMMAND, &d->cmd );
 
     if ( m_device ) {
         if( needToClose )

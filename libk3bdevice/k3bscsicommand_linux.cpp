@@ -93,6 +93,7 @@ int K3b::Device::ScsiCommand::transport( TransportDirection dir,
                                          size_t len )
 {
     bool needToClose = false;
+    int deviceHandle = -1;
     if( m_device ) {
         m_device->usageLock();
         if( !m_device->isOpen() ) {
@@ -102,10 +103,10 @@ int K3b::Device::ScsiCommand::transport( TransportDirection dir,
             m_device->usageUnlock();
             return -1;
         }
-        m_deviceHandle = m_device->handle();
+        deviceHandle = m_device->handle();
     }
 
-    if( m_deviceHandle == -1 ) {
+    if( deviceHandle == -1 ) {
         return -1;
     }
 
@@ -128,7 +129,7 @@ int K3b::Device::ScsiCommand::transport( TransportDirection dir,
         else
             d->sgIo.dxfer_direction = SG_DXFER_NONE;
 
-        i = ::ioctl( m_deviceHandle, SG_IO, &d->sgIo );
+        i = ::ioctl( deviceHandle, SG_IO, &d->sgIo );
 
         if( ( d->sgIo.info&SG_INFO_OK_MASK ) != SG_INFO_OK )
             i = -1;
@@ -144,7 +145,7 @@ int K3b::Device::ScsiCommand::transport( TransportDirection dir,
         else
             d->cmd.data_direction = CGC_DATA_NONE;
 
-        i = ::ioctl( m_deviceHandle, CDROM_SEND_PACKET, &d->cmd );
+        i = ::ioctl( deviceHandle, CDROM_SEND_PACKET, &d->cmd );
 #ifdef SG_IO
     }
 #endif

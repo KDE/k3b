@@ -193,18 +193,6 @@ void K3b::Device::ScsiCommand::debugError( int command, int errorCode, int sense
 #endif
 
 
-#ifndef Q_OS_WIN32
-K3b::Device::ScsiCommand::ScsiCommand( K3b::Device::Device::Handle handle )
-    : d(new Private),
-      m_device(0),
-      m_printErrors(true)
-{
-    m_deviceHandle = handle;
-    clear();
-}
-#endif    
-
-
 K3b::Device::ScsiCommand::ScsiCommand( const K3b::Device::Device* dev )
     : d(new Private),
       m_device(dev),
