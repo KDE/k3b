@@ -211,8 +211,8 @@ bool K3b::kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& a
 {
     KDiskFreeSpaceInfo fs = KDiskFreeSpaceInfo::freeSpaceInfo( path );
     if ( fs.isValid() ) {
-        size = fs.size();
-        avail = fs.available();
+        size = fs.size()/1024;
+        avail = fs.available()/1024;
         return true;
     }
     else {
