@@ -132,7 +132,7 @@ KIO::UDSEntry kio_videodvdProtocol::createUDSEntry( const K3b::Iso9660Entry* e )
 K3b::Iso9660* kio_videodvdProtocol::openIso( const KUrl& url, QString& plainIsoPath )
 {
     // get the volume id from the url
-    QString volumeId = url.path().section( '/', 1, 1 );
+    QString volumeId = url.toLocalFile().section( '/', 1, 1 );
 
     kDebug() << "(kio_videodvdProtocol) searching for Video dvd: " << volumeId;
 
@@ -152,7 +152,7 @@ K3b::Iso9660* kio_videodvdProtocol::openIso( const KUrl& url, QString& plainIsoP
             K3b::Iso9660* iso = new K3b::Iso9660( dev );
             iso->setPlainIso9660( true );
             if( iso->open() && iso->primaryDescriptor().volumeId == volumeId ) {
-                plainIsoPath = url.path().section( "/", 2, -1 ) + "/";
+                plainIsoPath = url.toLocalFile().section( "/", 2, -1 ) + "/";
                 kDebug() << "(kio_videodvdProtocol) using iso path: " << plainIsoPath;
                 return iso;
             }
@@ -204,14 +204,17 @@ void kio_videodvdProtocol::get(const KUrl& url )
                 error( ERR_SLAVE_DEFINED, i18n("Read error.") );
         }
         else
-            error( ERR_DOES_NOT_EXIST, url.path() );
+            error( ERR_DOES_NOT_EXIST, url.toLocalFile() );
     }
 }
 
 
 void kio_videodvdProtocol::listDir( const KUrl& url )
 {
-    if( url.path() == "/" ) {
+    if( url.toLocalFile() == "/" ) {
+#ifdef Q_OS_WIN32
+    kDebug() << "fix of root path required"; 
+#endif    
         listVideoDVDs();
     }
     else {
@@ -233,11 +236,11 @@ void kio_videodvdProtocol::listDir( const KUrl& url )
                     finished();
                 }
                 else {
-                    error( ERR_CANNOT_ENTER_DIRECTORY, url.path() );
+                    error( ERR_CANNOT_ENTER_DIRECTORY, url.toLocalFile() );
                 }
             }
             else {
-                error( ERR_CANNOT_ENTER_DIRECTORY, url.path() );
+                error( ERR_CANNOT_ENTER_DIRECTORY, url.toLocalFile() );
             }
 
             // for testing we always do the whole thing
@@ -294,7 +297,10 @@ void kio_videodvdProtocol::listVideoDVDs()
 
 void kio_videodvdProtocol::stat( const KUrl& url )
 {
-    if( url.path() == "/" ) {
+    if( url.toLocalFile() == "/" ) {
+#ifdef Q_OS_WIN32
+    kDebug() << "fix root path detection";
+#endif    
         //
         // stat the root path
         //
@@ -316,7 +322,7 @@ void kio_videodvdProtocol::stat( const KUrl& url )
                 finished();
             }
             else
-                error( ERR_DOES_NOT_EXIST, url.path() );
+                error( ERR_DOES_NOT_EXIST, url.toLocalFile() );
 
             delete iso;
         }
@@ -331,7 +337,7 @@ void kio_videodvdProtocol::stat( const KUrl& url )
 // part of it. (David)
 void kio_videodvdProtocol::mimetype( const KUrl& url )
 {
-    if( url.path() == "/" ) {
+    if( url.toLocalFile() == "/" ) {
         error( ERR_UNSUPPORTED_ACTION, KIO::unsupportedActionErrorString("videodvd", CMD_MIMETYPE) );
         return;
     }
