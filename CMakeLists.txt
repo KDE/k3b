@@ -19,7 +19,9 @@ set(K3B_LIB_VERSION_RELEASE 0)
 
 
 ##################  K3b options #################################
-option(K3B_BUILD_K3BSETUP "Build k3bsetup" ON)
+if (NOT WIN32)
+    option(K3B_BUILD_K3BSETUP "Build k3bsetup" ON)
+endif(NOT WIN32)
 option(K3B_DEBUG "K3b additional debugging support")
 option(K3B_ENABLE_MUSICBRAINZ "Support for querying metadata about audio tracks from Musicbrainz." ON)
 option(K3B_ENABLE_DVD_RIPPING "Support for ripping Video DVDs with optional decryption." ON)
