@@ -31,20 +31,14 @@
 #include <k3bdevice.h>
 #include <k3biso9660.h>
 #include <k3biso9660backend.h>
-#include <k3b_export.h>
 
 #include "videodvd.h"
-
-#ifdef Q_OS_WIN32
-#undef LIBK3B_EXPORT
-#define LIBK3B_EXPORT
-#endif
 
 using namespace KIO;
 
 extern "C"
 {
-    LIBK3B_EXPORT int kdemain( int argc, char **argv )
+    KDE_EXPORT int kdemain( int argc, char **argv )
     {
         KComponentData componentData( "kio_videodvd" );
 
