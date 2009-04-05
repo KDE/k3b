@@ -27,7 +27,9 @@
 #include <QDesktopWidget>
 
 #include <kdebug.h>
+#ifdef Q_WS_X11
 #include <fixx11h.h>
+#endif
 
 
 K3b::ToolTip::ToolTip( QWidget* widget )
@@ -88,7 +90,11 @@ void K3b::ToolTip::tip( const QRect& rect, QWidget* w, int effect )
 
     // make sure the widget is displayed correcly
     w->setParent( QApplication::desktop()->screen( scr ),
-                  Qt::WStyle_StaysOnTop | Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool | Qt::X11BypassWindowManagerHint );
+                  Qt::WStyle_StaysOnTop | Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool
+#ifdef Q_WS_X11
+                  | Qt::X11BypassWindowManagerHint 
+#endif
+                  );
     w->adjustSize();
 
     // positioning code from qtooltip.cpp
