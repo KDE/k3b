@@ -297,7 +297,7 @@ void K3b::DirView::slotDirActivated( const KUrl& url )
 {
     kDebug() << url;
     m_fileView->setUrl( url, true );
-//   m_urlCombo->setEditText( url.path() );
+//   m_urlCombo->setEditText( url.toLocalFile() );
 
     m_viewStack->setCurrentWidget( m_fileView );
 }

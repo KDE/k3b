@@ -568,7 +568,7 @@ void K3b::AudioDecoder::addTechnicalInfo( const QString& key, const QString& val
 
 K3b::AudioDecoder* K3b::AudioDecoderFactory::createDecoder( const KUrl& url )
 {
-    kDebug() << "(K3b::AudioDecoderFactory::createDecoder( " << url.path() << " )";
+    kDebug() << "(K3b::AudioDecoderFactory::createDecoder( " << url.toLocalFile() << " )";
     QList<K3b::Plugin*> fl = k3bcore->pluginManager()->plugins( "AudioDecoder" );
 
     // first search for a single format decoder
@@ -585,7 +585,7 @@ K3b::AudioDecoder* K3b::AudioDecoderFactory::createDecoder( const KUrl& url )
             kDebug() << "2"; return f->createDecoder();}
     }
 
-    kDebug() << "(K3b::AudioDecoderFactory::createDecoder( " << url.path() << " ) no success";
+    kDebug() << "(K3b::AudioDecoderFactory::createDecoder( " << url.toLocalFile() << " ) no success";
 
     // nothing found
     return 0;

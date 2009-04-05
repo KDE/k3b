@@ -100,7 +100,7 @@ const KUrl& K3b::Doc::URL() const
 
 QString K3b::Doc::name() const
 {
-    return URL().path().section( '/', -1 );
+    return URL().toLocalFile().section( '/', -1 );
 }
 
 
