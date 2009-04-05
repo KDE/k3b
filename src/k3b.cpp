@@ -527,7 +527,7 @@ K3b::Doc* K3b::MainWindow::openDocument(const KUrl& url)
     if( !isCdDvdImageAndIfSoOpenDialog( url ) ) {
 
         // see if it's an audio cue file
-        K3b::CueFileParser parser( url.path() );
+        K3b::CueFileParser parser( url.toLocalFile() );
         if( parser.isValid() && parser.toc().contentType() == K3b::Device::AUDIO ) {
             K3b::Doc* doc = k3bappcore->projectManager()->createProject( K3b::Doc::AUDIO );
             doc->addUrl( url );
@@ -693,11 +693,11 @@ void K3b::MainWindow::readProperties( const KConfigGroup& grp )
             doc->setSaved( saved );
         }
         else
-            kDebug() << "(K3b::MainWindow) could not open session saved doc " << url.path();
+            kDebug() << "(K3b::MainWindow) could not open session saved doc " << url.toLocalFile();
 
         // remove the temp file
         if( !saved || modified )
-            QFile::remove( saveUrl.path() );
+            QFile::remove( saveUrl.toLocalFile() );
     }
 
     // and now remove the temp dir
@@ -1384,7 +1384,7 @@ void K3b::MainWindow::addUrls( const KUrl::List& urls )
         for( KUrl::List::const_iterator it = urls.begin(); it != urls.end(); ++it ) {
             const KUrl& url = *it;
 
-            if( QFileInfo(url.path()).isDir() ) {
+            if( QFileInfo(url.toLocalFile()).isDir() ) {
                 audio = false;
                 break;
             }
@@ -1404,7 +1404,7 @@ void K3b::MainWindow::addUrls( const KUrl::List& urls )
 
         if( !audio && urls.count() == 1 ) {
             // see if it's an audio cue file
-            K3b::CueFileParser parser( urls.first().path() );
+            K3b::CueFileParser parser( urls.first().toLocalFile() );
             if( parser.isValid() && parser.toc().contentType() == K3b::Device::AUDIO ) {
                 audio = true;
             }
@@ -1437,7 +1437,7 @@ void K3b::MainWindow::slotClearProject()
 
 bool K3b::MainWindow::isCdDvdImageAndIfSoOpenDialog( const KUrl& url )
 {
-    K3b::Iso9660 iso( url.path() );
+    K3b::Iso9660 iso( url.toLocalFile() );
     if( iso.open() ) {
         iso.close();
         slotWriteImage( url );

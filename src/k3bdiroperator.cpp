@@ -94,7 +94,7 @@ void K3b::DirOperator::readConfig( const KConfigGroup& grp )
 void K3b::DirOperator::writeConfig( KConfigGroup& grp )
 {
     KDirOperator::writeConfig(grp );
-    grp.writePathEntry( "last url", url().path() );
+    grp.writePathEntry( "last url", url().toLocalFile() );
 }
 
 
