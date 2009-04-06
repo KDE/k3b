@@ -1,4 +1,4 @@
-project(k3bdevice)
+project(libk3bdevice)
 
 ########### next target ###############
 

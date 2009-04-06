@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -89,6 +89,8 @@ namespace K3b
          * frames will be rounded up
          */
         static Msf fromSeconds( double ms );
+
+        static Msf fromAudioBytes( qint64 bytes );
 
         static QRegExp regExp();
 
