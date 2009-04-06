@@ -70,13 +70,9 @@ bool K3b::ChecksumPipe::open( bool closeWhenDone )
 
 bool K3b::ChecksumPipe::open( Type type, bool closeWhenDone )
 {
-    if( K3b::ActivePipe::open( closeWhenDone ) ) {
-        d->reset();
-        d->checksumType = type;
-        return true;
-    }
-    else
-        return false;
+    d->reset();
+    d->checksumType = type;
+    return K3b::ActivePipe::open( closeWhenDone );
 }
 
 
