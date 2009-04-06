@@ -245,7 +245,6 @@ add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 include_directories( 
-  BEFORE
   ${k3b_BINARY_DIR}
   ${libk3bdevice_SOURCE_DIR}
   ${libk3b_SOURCE_DIR}/core
