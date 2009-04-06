@@ -16,7 +16,7 @@
 
 #include <k3bcdtext.h>
 #include <k3btrack.h>
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 #include <k3bcore.h>
 #include <k3bversion.h>
 

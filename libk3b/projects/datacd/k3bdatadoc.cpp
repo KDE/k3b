@@ -24,7 +24,7 @@
 #include "k3bmkisofshandler.h"
 #include <k3bcore.h>
 #include <k3bglobals.h>
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 #include <k3biso9660.h>
 #include <k3bdevicehandler.h>
 #include <k3bdevice.h>

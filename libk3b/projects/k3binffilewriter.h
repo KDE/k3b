@@ -15,7 +15,7 @@
 #ifndef _K3B_INF_FILE_WRITER_H_
 #define _K3B_INF_FILE_WRITER_H_
 
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 
 
 namespace K3b {

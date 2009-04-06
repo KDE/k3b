@@ -13,19 +13,18 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-
-#include <k3bglobals.h>
+#include "k3bglobals.h"
 #include "k3baudiodoc.h"
 #include "k3baudiotrack.h"
 #include "k3baudiojob.h"
 #include "k3baudiofile.h"
 #include "k3baudiozerodata.h"
 #include "k3baudiocdtracksource.h"
-
-#include <k3bcuefileparser.h>
-#include <k3bcdtextvalidator.h>
-#include <k3bcore.h>
-#include <k3baudiodecoder.h>
+#include "k3brawaudiodatasource.h"
+#include "k3bcuefileparser.h"
+#include "k3bcdtextvalidator.h"
+#include "k3bcore.h"
+#include "k3baudiodecoder.h"
 
 
 // QT-includes
@@ -333,51 +332,56 @@ K3b::AudioTrack* K3b::AudioDoc::importCueFile( const QString& cuefile, K3b::Audi
         if( !parser.cdText().performer().isEmpty() )
             setPerformer( parser.cdText().performer() );
 
+        bool isBin = parser.imageFileType() == QLatin1String( "bin" );
+
         bool reused = true;
-        if( !decoder )
-            decoder = getDecoderForUrl( KUrl(parser.imageFilename()), &reused );
+        if( !decoder && !isBin )
+            if ( !( decoder = getDecoderForUrl( KUrl(parser.imageFilename()), &reused ) ) )
+                return 0;
 
-        if( decoder ) {
-            if( !reused )
-                decoder->analyseFile();
+        AudioDataSource* source = 0;
+        int i = 0;
+        foreach( const K3b::Device::Track& track, parser.toc() ) {
+            if ( isBin ) {
+                source = new RawAudioDataSource( parser.imageFilename() );
+            }
+            else {
+                if( !reused )
+                    decoder->analyseFile();
 
-            K3b::AudioFile* newFile = 0;
-            int i = 0;
-            for( K3b::Device::Toc::const_iterator it = parser.toc().constBegin();
-                 it != parser.toc().constEnd(); ++it ) {
-                const K3b::Device::Track& track = *it;
-
-                newFile = new K3b::AudioFile( decoder, this );
-                newFile->setStartOffset( track.firstSector() );
-                newFile->setEndOffset( track.lastSector()+1 );
-
-                K3b::AudioTrack* newTrack = new K3b::AudioTrack( this );
-                newTrack->addSource( newFile );
-                newTrack->moveAfter( after );
-                emit trackAdded(newTrack);
-
-                // we do not know the length of the source yet so we have to force the index value
-                if( track.index0() > 0 )
-                    newTrack->m_index0Offset = track.length() - track.index0();
-                else
-                    newTrack->m_index0Offset = 0;
-
-                // cd-text
-                newTrack->setTitle( parser.cdText()[i].title() );
-                newTrack->setPerformer( parser.cdText()[i].performer() );
-
-                // add the next track after this one
-                after = newTrack;
-                ++i;
+                source = new K3b::AudioFile( decoder, this );
             }
 
-            // let the last source use the data up to the end of the file
-            if( newFile )
-                newFile->setEndOffset(0);
+            source->setStartOffset( track.firstSector() );
+            source->setEndOffset( track.lastSector()+1 );
 
-            return after;
+            K3b::AudioTrack* newTrack = new K3b::AudioTrack( this );
+            newTrack->addSource( source );
+            newTrack->moveAfter( after );
+            emit trackAdded(newTrack);
+
+            // we do not know the length of the source yet so we have to force the index value
+            if( track.index0() > 0 )
+                newTrack->m_index0Offset = track.length() - track.index0();
+            else
+                newTrack->m_index0Offset = 0;
+
+            // cd-text
+            newTrack->setTitle( parser.cdText()[i].title() );
+            newTrack->setPerformer( parser.cdText()[i].performer() );
+
+            // add the next track after this one
+            after = newTrack;
+            ++i;
         }
+
+        // let the last source use the data up to the end of the file
+        if( source )
+            source->setEndOffset(0);
+
+        return after;
     }
+
     return 0;
 }
 

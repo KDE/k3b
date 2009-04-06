@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,12 +35,12 @@ namespace K3b {
         /**
          * Return the current set filename;
          */
-        const QString& filename() const;
+        QString filename() const;
 
         /**
          * returns the name of the corresponding image file.
          */
-        virtual const QString& imageFilename() const;
+        virtual QString imageFilename() const;
 
     protected:
         virtual void readFile() = 0;

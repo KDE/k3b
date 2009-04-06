@@ -155,7 +155,7 @@ void K3b::AudioProjectConvertingDialog::setupGui()
 void K3b::AudioProjectConvertingDialog::slotStartClicked()
 {
     // make sure we have the tracks just for ourselves
-    //FIXME kde4
+#warning FIXME kde4: port audio player
     //static_cast<K3b::AudioView*>(m_doc->view())->player()->stop();
 
     // check if all filenames differ
@@ -231,6 +231,7 @@ void K3b::AudioProjectConvertingDialog::slotStartClicked()
 
 void K3b::AudioProjectConvertingDialog::refresh()
 {
+#warning Reuse the code from AudioRippingDialog
     m_viewTracks->clear();
     d->filenames.clear();
 
@@ -266,17 +267,23 @@ void K3b::AudioProjectConvertingDialog::refresh()
 
         (void)new K3ListViewItem( m_viewTracks,
                                   m_viewTracks->lastItem(),
-                                  filename + "." + extension,
+                                  filename,
                                   m_doc->length().toString(),
                                   filesize < 0 ? i18n("unknown") : KIO::convertSize( filesize ) );
 
         d->filenames.append( K3b::fixupPath( baseDir + "/" + filename ) );
 
         if( m_optionWidget->createCueFile() ) {
-            d->cueFilename = K3b::fixupPath( baseDir + "/" + filename + ".cue" );
+            QString cueFilename = K3b::PatternParser::parsePattern( cddbEntry, 1,
+                                                                    QLatin1String( "cue" ),
+                                                                    m_patternWidget->filenamePattern(),
+                                                                    m_patternWidget->replaceBlanks(),
+                                                                    m_patternWidget->blankReplaceString() );
+
+            d->cueFilename = K3b::fixupPath( baseDir + "/" + cueFilename );
             (void)new K3ListViewItem( m_viewTracks,
                                       m_viewTracks->lastItem(),
-                                      filename + ".cue",
+                                      cueFilename,
                                       "-",
                                       "-",
                                       i18n("Cue-file") );

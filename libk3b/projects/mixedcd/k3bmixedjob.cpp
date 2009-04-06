@@ -29,7 +29,7 @@
 #include <k3bdevicemanager.h>
 #include <k3bdevice.h>
 #include <k3bdevicehandler.h>
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 #include <k3bglobals.h>
 #include <k3bexternalbinmanager.h>
 #include <k3bversion.h>

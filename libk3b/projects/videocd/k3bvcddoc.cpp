@@ -38,7 +38,7 @@
 #include "k3bvcdtrack.h"
 #include "k3bvcdjob.h"
 #include <k3bglobals.h>
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 
 #if 0
 bool desperate_mode = false;

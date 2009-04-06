@@ -17,7 +17,7 @@
 #define _K3B_AUDIO_JOB_TEMPDATA_H_
 
 #include <qobject.h>
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 
 namespace K3b {
     class AudioTrack;

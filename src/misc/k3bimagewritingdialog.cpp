@@ -754,14 +754,13 @@ void K3b::ImageWritingDialog::createAudioCueItems( const K3b::CueFileParser& cp 
                               .arg(cp.cdText().title()) );
 
     int i = 1;
-    for( K3b::Device::Toc::const_iterator it = cp.toc().begin();
-         it != cp.toc().end(); ++it ) {
+    foreach( const K3b::Device::Track& track, cp.toc() ) {
 
         K3b::ListViewItem* trackItem =
             new K3b::ListViewItem( trackParent, m_infoView->lastItem(),
                                  i18n("Track") + " " + QString::number(i).rightJustified( 2, '0' ),
                                  "    " + ( i < cp.toc().count()
-                                            ? (*it).length().toString()
+                                            ? track.length().toString()
                                             : QString("??:??:??") ) );
 
         if( !cp.cdText().isEmpty() && (cp.cdText().count() > 0) &&!cp.cdText()[i-1].isEmpty() )

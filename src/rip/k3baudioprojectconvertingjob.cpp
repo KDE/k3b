@@ -371,17 +371,19 @@ bool K3b::AudioProjectConvertingJob::writeCueFile()
     text.setTitle( m_cddbEntry.get( KCDDB::Title ).toString() );
     K3b::Msf currentSector;
     K3b::AudioTrack* track = m_doc->firstTrack();
-    int trackNum = 1;
+    int trackIdx = 0;
     while( track ) {
+        kDebug() << "creating track" << currentSector << ( currentSector+track->length() );
 
-        K3b::Device::Track newTrack( currentSector, (currentSector+=track->length()) - 1, K3b::Device::Track::TYPE_AUDIO );
+        K3b::Device::Track newTrack( currentSector, currentSector + track->length() - 1, K3b::Device::Track::TYPE_AUDIO );
         toc.append( newTrack );
+        kDebug() << "created track" << newTrack;
+        text[trackIdx].setPerformer( m_cddbEntry.track( trackIdx ).get( KCDDB::Artist ).toString() );
+        text[trackIdx].setTitle( m_cddbEntry.track( trackIdx ).get( KCDDB::Title ).toString() );
 
-        text[trackNum-1].setPerformer( m_cddbEntry.track( trackNum-1 ).get( KCDDB::Artist ).toString() );
-        text[trackNum-1].setTitle( m_cddbEntry.track( trackNum-1 ).get( KCDDB::Title ).toString() );
-
+        currentSector += track->length();
         track = track->next();
-        ++trackNum;
+        ++trackIdx;
     }
 
     cueWriter.setData( toc );

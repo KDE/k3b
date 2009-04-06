@@ -14,7 +14,7 @@
 
 #include "k3bcuefileparser.h"
 
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 #include <k3bglobals.h>
 #include <k3btrack.h>
 #include <k3bcdtext.h>
@@ -64,6 +64,8 @@ public:
     int currentParsedTrack;
 
     K3b::Device::CdText cdText;
+
+    QString imageFileType;
 };
 
 
@@ -137,7 +139,7 @@ void K3b::CueFileParser::readFile()
 bool K3b::CueFileParser::parseLine( QString& line )
 {
     // use cap(1) for the filename
-    static QRegExp fileRx( "FILE\\s\"?([^\"]*)\"?\\s[^\"\\s]*" );
+    static QRegExp fileRx( "FILE\\s\"?([^\"]*)\"?\\s([^\"\\s]*)" );
 
     // use cap(1) for the flags
     static QRegExp flagsRx( "FLAGS(\\s(DCP|4CH|PRE|SCMS)){1,4}" );
@@ -185,6 +187,7 @@ bool K3b::CueFileParser::parseLine( QString& line )
         d->inFile = true;
         d->inTrack = false;
         d->haveIndex1 = false;
+        d->imageFileType = fileRx.cap( 2 ).toLower();
         return true;
     }
 
@@ -376,15 +379,21 @@ void K3b::CueFileParser::simplified( QString& s )
 }
 
 
-const K3b::Device::Toc& K3b::CueFileParser::toc() const
+K3b::Device::Toc K3b::CueFileParser::toc() const
 {
     return d->toc;
 }
 
 
-const K3b::Device::CdText& K3b::CueFileParser::cdText() const
+K3b::Device::CdText K3b::CueFileParser::cdText() const
 {
     return d->cdText;
+}
+
+
+QString K3b::CueFileParser::imageFileType() const
+{
+    return d->imageFileType;
 }
 
 

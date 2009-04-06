@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
 
 #include "k3bimagefilereader.h"
 
-#include <k3btoc.h>
-#include <k3bcdtext.h>
+#include "k3btoc.h"
+#include "k3bcdtext.h"
 #include "k3b_export.h"
 
 namespace K3b {
@@ -40,8 +40,14 @@ namespace K3b {
          */
         bool imageFilenameInCue() const { return m_imageFilenameInCue; }
 
-        const Device::Toc& toc() const;
-        const Device::CdText& cdText() const;
+        Device::Toc toc() const;
+        Device::CdText cdText() const;
+
+        /**
+         * lower case variant of the image type as specified behind the image
+         * file name in the cue file. Can be one of "bin", "mp3", "wav", ...
+         */
+        QString imageFileType() const;
 
     private:
         void readFile();

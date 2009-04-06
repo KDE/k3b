@@ -132,9 +132,18 @@ void K3b::AudioTrackAddingDialog::slotAddUrls()
         // see if its a cue file
         K3b::CueFileParser parser( url.toLocalFile() );
         if( parser.isValid() && parser.toc().contentType() == K3b::Device::AUDIO ) {
-            // remember cue url and set the new audio file url
-            m_cueUrl = url;
-            url = m_urls[0] = KUrl( parser.imageFilename() );
+            if ( parser.imageFileType() == QLatin1String( "bin" ) ) {
+                // no need to analyse -> raw audio data
+                m_doc->importCueFile( url.toLocalFile(), m_trackAfter, 0 );
+                m_urls.erase( m_urls.begin() );
+                QTimer::singleShot( 0, this, SLOT(slotAddUrls()) );
+                return;
+            }
+            else {
+                // remember cue url and set the new audio file url
+                m_cueUrl = url;
+                url = m_urls[0] = KUrl( parser.imageFilename() );
+            }
         }
     }
 

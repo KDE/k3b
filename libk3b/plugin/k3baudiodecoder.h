@@ -17,7 +17,7 @@
 
 
 #include <k3bplugin.h>
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 #include "k3b_export.h"
 #include <kurl.h>
 

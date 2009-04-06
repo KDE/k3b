@@ -17,7 +17,7 @@
 
 #include <QtCore/QObject>
 
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 #include "k3b_export.h"
 
 namespace K3b {

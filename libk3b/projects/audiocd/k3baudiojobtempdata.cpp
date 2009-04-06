@@ -17,7 +17,7 @@
 #include "k3baudiotrack.h"
 #include <k3bglobals.h>
 #include <k3bversion.h>
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 #include <k3bcore.h>
 
 #include <qfile.h>

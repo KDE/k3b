@@ -2,18 +2,6 @@ project(libk3b)
 
 include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
-  ${CMAKE_CURRENT_SOURCE_DIR}/core
-  ${CMAKE_CURRENT_SOURCE_DIR}/plugin
-  ${CMAKE_CURRENT_SOURCE_DIR}/tools
-  ${CMAKE_CURRENT_SOURCE_DIR}/tools/qprocess
-  ${CMAKE_CURRENT_SOURCE_DIR}/tools/qprocess/private
-  ${CMAKE_CURRENT_SOURCE_DIR}/projects
-  ${CMAKE_CURRENT_SOURCE_DIR}/projects/audiocd
-  ${CMAKE_CURRENT_SOURCE_DIR}/projects/datacd
-  ${CMAKE_CURRENT_SOURCE_DIR}/projects/videocd
-  ${CMAKE_CURRENT_SOURCE_DIR}/projects/mixedcd
-  ${CMAKE_CURRENT_SOURCE_DIR}/jobs
-  ${CMAKE_CURRENT_SOURCE_DIR}/videodvd
   ${CMAKE_CURRENT_BINARY_DIR}/core
   ${CMAKE_CURRENT_BINARY_DIR}/plugin
   ${CMAKE_CURRENT_BINARY_DIR}/tools
@@ -149,6 +137,7 @@ set(k3b_project_audiocd_SRCS
   projects/audiocd/k3baudiofile.cpp 
   projects/audiocd/k3baudiozerodata.cpp 
   projects/audiocd/k3baudiodatasource.cpp 
+  projects/audiocd/k3brawaudiodatasource.cpp 
   projects/audiocd/k3baudionormalizejob.cpp 
   projects/audiocd/k3baudiojobtempdata.cpp 
   projects/audiocd/k3baudioimager.cpp 

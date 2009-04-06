@@ -17,7 +17,7 @@
 
 
 #include <kio/global.h>
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 
 namespace K3b {
     class DataItem;

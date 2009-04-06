@@ -20,7 +20,6 @@
 
 #include <k3bdevicemanager.h>
 #include <k3bdeviceglobals.h>
-#include <k3bscsicommand.h>
 #include <k3bcore.h>
 
 #include <kdebug.h>

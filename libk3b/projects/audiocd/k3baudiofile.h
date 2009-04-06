@@ -17,7 +17,7 @@
 
 #include "k3baudiodatasource.h"
 
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 #include <kurl.h>
 #include "k3b_export.h"
 

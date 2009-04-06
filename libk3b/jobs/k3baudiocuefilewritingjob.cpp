@@ -15,15 +15,15 @@
 #include "k3baudiocuefilewritingjob.h"
 #include "k3baudiofileanalyzerjob.h"
 
-#include <k3baudiodoc.h>
-#include <k3baudiojob.h>
-#include <k3bdevice.h>
-#include <k3baudiodecoder.h>
-#include <k3baudiotrack.h>
-#include <k3baudiofile.h>
-#include <k3bcuefileparser.h>
-#include <k3bthread.h>
-#include <k3bthreadjob.h>
+#include "k3baudiodoc.h"
+#include "k3baudiojob.h"
+#include "k3bdevice.h"
+#include "k3baudiodecoder.h"
+#include "k3baudiotrack.h"
+#include "k3baudiofile.h"
+#include "k3bcuefileparser.h"
+#include "k3bthread.h"
+#include "k3bthreadjob.h"
 
 #include <kdebug.h>
 #include <klocale.h>

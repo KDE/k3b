@@ -26,7 +26,7 @@
 #include "k3bdoc.h"
 #include <k3bglobals.h>
 #include <k3bdevice.h>
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 #include <k3bcore.h>
 #include <k3bdevicemanager.h>
 
