@@ -66,16 +66,22 @@ public:
         KProcess vp;
         vp.setOutputChannelMode( KProcess::MergedChannels );
 
-        vp << path << "-h";
+        vp << path << "--version";
         vp.start();
         if( vp.waitForFinished( -1 ) ) {
             QByteArray out = vp.readAll();
             int pos = out.indexOf( "sox: SoX Version" );
-            if ( pos < 0 )
-                pos = out.indexOf( "sox: SoX v" ); // newer sox versions
+            if ( pos >= 0 ) {
+                pos += 17;
+            }
+            else if ( ( pos = out.indexOf( "sox: SoX v" ) ) >= 0 ) {
+                pos += 10;
+            }
+            else if ( ( pos = out.indexOf( "sox: Version" ) ) >= 0 ) {
+                pos += 13;
+            }
             int endPos = out.indexOf( '\n', pos );
             if( pos > 0 && endPos > 0 ) {
-                pos += 17;
                 bin = new K3b::ExternalBin( this );
                 bin->path = path;
                 bin->version = out.mid( pos, endPos-pos );
@@ -84,25 +90,9 @@ public:
 
                 return true;
             }
-            else {
-                pos = out.indexOf( "sox: Version" );
-                endPos = out.indexOf( '\n', pos );
-                if( pos > 0 && endPos > 0 ) {
-                    pos += 13;
-                    bin = new K3b::ExternalBin( this );
-                    bin->path = path;
-                    bin->version = out.mid( pos, endPos-pos );
-
-                    addBin( bin );
-
-                    return true;
-                }
-                else
-                    return false;
-            }
         }
-        else
-            return false;
+
+        return false;
     }
 };
 
@@ -110,7 +100,7 @@ public:
 class K3bSoxEncoder::Private
 {
 public:
-    K3b::Process process;
+    K3b::Process* process;
     QString fileName;
 };
 
@@ -122,29 +112,25 @@ K3bSoxEncoder::K3bSoxEncoder( QObject* parent, const QVariantList& )
         k3bcore->externalBinManager()->addProgram( new K3bSoxProgram() );
 
     d = new Private();
-    d->process.setSplitStdout(true);
-
-    connect( &d->process, SIGNAL(finished(int, QProcess::ExitStatus)),
-             this, SLOT(slotSoxFinished(int, QProcess::ExitStatus)) );
-    connect( &d->process, SIGNAL(stdoutLine(QString)),
-             this, SLOT(slotSoxOutputLine(QString)) );
+    d->process = 0;
 }
 
 
 K3bSoxEncoder::~K3bSoxEncoder()
 {
+    delete d->process;
     delete d;
 }
 
 
 void K3bSoxEncoder::finishEncoderInternal()
 {
-    if( d->process.isRunning() ) {
-        d->process.closeWriteChannel();
+    if( d->process && d->process->isRunning() ) {
+        d->process->closeWriteChannel();
 
         // this is kind of evil...
         // but we need to be sure the process exited when this method returnes
-        d->process.waitForFinished(-1);
+        d->process->waitForFinished(-1);
     }
 }
 
@@ -173,54 +159,66 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension, const K3b::Ms
 {
     const K3b::ExternalBin* soxBin = k3bcore->externalBinManager()->binObject( "sox" );
     if( soxBin ) {
+        // we want to be thread-safe
+        delete d->process;
+        d->process = new K3b::Process();
+        d->process->setSplitStdout(true);
+
+        connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)),
+                 this, SLOT(slotSoxFinished(int, QProcess::ExitStatus)) );
+        connect( d->process, SIGNAL(stdoutLine(QString)),
+                 this, SLOT(slotSoxOutputLine(QString)) );
 
         // input settings
-        d->process << soxBin->path
-                   << "-t" << "raw"    // raw samples
-                   << "-r" << "44100"  // samplerate
-                   << "-s"             // signed linear
-                   << "-w"             // 16-bit words
-                   << "-c" << "2"      // stereo
-                   << "-";             // read from stdin
+        *d->process << soxBin->path
+                    << "-t" << "raw"    // raw samples
+                    << "-r" << "44100"  // samplerate
+                    << "-s";            // signed linear
+        if ( soxBin->version >= K3b::Version( 13, 0, 0 ) )
+            *d->process << "-2";
+        else
+            *d->process << "-w";        // 16-bit words
+        *d->process << "-c" << "2"      // stereo
+                    << "-";             // read from stdin
 
         // output settings
-        d->process << "-t" << extension;
+        *d->process << "-t" << extension;
 
         KSharedConfig::Ptr c = KGlobal::config();
         KConfigGroup grp(c,"K3bSoxEncoderPlugin" );
         if( grp.readEntry( "manual settings", false ) ) {
-            d->process << "-r" << QString::number( grp.readEntry( "samplerate", 44100 ) )
-                       << "-c" << QString::number( grp.readEntry( "channels", 2 ) );
+            *d->process << "-r" << QString::number( grp.readEntry( "samplerate", 44100 ) )
+                        << "-c" << QString::number( grp.readEntry( "channels", 2 ) );
 
             int size = grp.readEntry( "data size", 16 );
-            d->process << ( size == 8 ? QString("-b") : ( size == 32 ? QString("-l") : QString("-w") ) );
+            *d->process << ( size == 8 ? QString("-b") : ( size == 32 ? QString("-l") : QString("-w") ) );
 
             QString encoding = grp.readEntry( "data encoding", "signed" );
             if( encoding == "unsigned" )
-                d->process << "-u";
+                *d->process << "-u";
             else if( encoding == "u-law" )
-                d->process << "-U";
+                *d->process << "-U";
             else if( encoding == "A-law" )
-                d->process << "-A";
+                *d->process << "-A";
             else if( encoding == "ADPCM" )
-                d->process << "-a";
+                *d->process << "-a";
             else if( encoding == "IMA_ADPCM" )
-                d->process << "-i";
+                *d->process << "-i";
             else if( encoding == "GSM" )
-                d->process << "-g";
+                *d->process << "-g";
             else if( encoding == "Floating-point" )
-                d->process << "-f";
+                *d->process << "-f";
             else
-                d->process << "-s";
+                *d->process << "-s";
         }
 
-        d->process << d->fileName;
+        *d->process << d->fileName;
 
         kDebug() << "***** sox parameters:";
-        QString s = d->process.joinedArgs();
+        QString s = d->process->joinedArgs();
         kDebug() << s << flush;
 
-        return d->process.start( KProcess::MergedChannels );
+        return d->process->start( KProcess::MergedChannels );
     }
     else {
         kDebug() << "(K3bSoxEncoder) could not find sox bin.";
@@ -231,8 +229,8 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension, const K3b::Ms
 
 long K3bSoxEncoder::encodeInternal( const char* data, Q_ULONG len )
 {
-    if( d->process.isRunning() )
-        return d->process.write( data, len );
+    if( d->process && d->process->isRunning() )
+        return d->process->write( data, len );
     else
         return -1;
 }
