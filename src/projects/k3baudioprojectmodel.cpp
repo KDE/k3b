@@ -57,7 +57,7 @@ private:
 
 void K3b::AudioProjectModel::Private::_k_docChanged()
 {
-    //q->reset();
+    q->reset();
 }
 
 
