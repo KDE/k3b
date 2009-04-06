@@ -6,7 +6,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/mod
 
 ##################  K3b version  ################################
 set(K3B_VERSION_MAJOR 1)
-set(K3B_VERSION_MINOR 63)
+set(K3B_VERSION_MINOR 64)
 set(K3B_VERSION_RELEASE 0)
 set(K3B_VERSION_STRING "${K3B_VERSION_MAJOR}.${K3B_VERSION_MINOR}.${K3B_VERSION_RELEASE}")
 
@@ -228,7 +228,7 @@ if(K3B_BUILD_API_DOCS)
     if(EXISTS ${QT_DOC_DIR}/html)
       set(QTDOCS "${QT_DOC_DIR}/html")
     else(EXISTS ${QT_DOC_DIR}/html)
-      set(QTDOCS "http://doc.trolltech.com/4.3/")
+      set(QTDOCS "http://doc.trolltech.com/4.5/")
     endif(EXISTS ${QT_DOC_DIR}/html)
 
     add_custom_target(
@@ -245,24 +245,31 @@ add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 include_directories( 
+  BEFORE
+  ${k3b_BINARY_DIR}
+  ${libk3bdevice_SOURCE_DIR}
+  ${libk3b_SOURCE_DIR}/core
+  ${libk3b_SOURCE_DIR}/plugin
+  ${libk3b_SOURCE_DIR}/tools
+  ${libk3b_SOURCE_DIR}/tools/qprocess
+  ${libk3b_SOURCE_DIR}/tools/qprocess/private
+  ${libk3b_SOURCE_DIR}/projects
+  ${libk3b_SOURCE_DIR}/projects/audiocd
+  ${libk3b_SOURCE_DIR}/projects/datacd
+  ${libk3b_SOURCE_DIR}/projects/videocd
+  ${libk3b_SOURCE_DIR}/projects/mixedcd
+  ${libk3b_SOURCE_DIR}/jobs
+  ${libk3b_SOURCE_DIR}/videodvd
   ${KDE4_INCLUDES}
   ${KDE4_INCLUDE_DIR}
   ${QT_INCLUDES}
-  ${CMAKE_CURRENT_BINARY_DIR}
-  ${CMAKE_CURRENT_SOURCE_DIR}/libk3bdevice
-  ${CMAKE_CURRENT_BINARY_DIR}/libk3bdevice
-  ${CMAKE_CURRENT_SOURCE_DIR}/libk3b/plugin
-  ${CMAKE_CURRENT_SOURCE_DIR}/libk3b/core
-  ${CMAKE_CURRENT_SOURCE_DIR}/libk3b/tools
-  ${CMAKE_CURRENT_SOURCE_DIR}/libk3b/tools/qprocess)
+)
 
 add_subdirectory( libk3bdevice )
 add_subdirectory( libk3b )
 add_subdirectory( src )
 add_subdirectory( kioslaves )
 add_subdirectory( plugins )
-# TODO port to strigi
-#add_subdirectory( kfile-plugins )
 if(K3B_BUILD_K3BSETUP)
    add_subdirectory(k3bsetup)
 endif(K3B_BUILD_K3BSETUP)
