@@ -1238,10 +1238,9 @@ void K3b::MainWindow::slotProjectAddFiles()
 
 void K3b::MainWindow::slotK3bSetup()
 {
-    QStringList args("kcmshell4 k3bsetup2 --lang " + KGlobal::locale()->language());
-    if( !KProcess::startDetached( K3b::findExe("kdesu"), args ) )
-        KMessageBox::error( 0, i18n("Could not find kdesu to run K3b::Setup with root privileges. "
-                                    "Please run it manually as root.") );
+    QStringList args("k3bsetup2 --lang " + KGlobal::locale()->language());
+    if( !KProcess::startDetached( K3b::findExe("kcmshell4"), args ) )
+        KMessageBox::error( 0, i18n("Unable to start K3b::Setup2.") );
 }
 
 

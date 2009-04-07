@@ -80,8 +80,9 @@ K3b::SetupDevices::~SetupDevices()
 
 void K3b::SetupDevices::load( const KConfig& config )
 {
+    d->unselectedDevices.clear();
     d->deviceManager->readConfig( config.group( "Devices" ) );
-    update();
+    reset();
 }
 
 

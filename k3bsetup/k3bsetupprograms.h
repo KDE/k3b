@@ -17,6 +17,7 @@
 #ifndef _K3BSETUPPROGRAMS_H_
 #define _K3BSETUPPROGRAMS_H_
 
+#include "k3bsetupprogramitem.h"
 #include <QAbstractItemModel>
 #include <QList>
 #include <QStringList>
@@ -24,8 +25,6 @@
 class KConfig;
 
 namespace K3b {
-
-    class ExternalBin;
 
     class SetupPrograms : public QAbstractItemModel
     {
@@ -39,9 +38,8 @@ namespace K3b {
         void save( KConfig& config ) const;
         void defaults();
 
-        QList<const ExternalBin*> selectedPrograms() const;
+        QList<K3b::Setup::ProgramItem> selectedPrograms() const;
         bool changesNeeded() const;
-        static bool shouldRunSuidRoot( const ExternalBin* bin );
         QStringList searchPaths() const;
 
         QVariant data( const QModelIndex& index, int role ) const;

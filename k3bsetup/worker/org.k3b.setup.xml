@@ -1,0 +1,19 @@
+<!DOCTYPE node PUBLIC
+ "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" 
+ "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.k3b.setup">
+    <method name="updatePermissions">
+        <arg name="burningGroup" type="s" direction="in" />
+        <arg name="devices" type="as" direction="in" />
+        <arg name="programs" type="av" direction="in" />
+    </method>
+
+    <signal name="done">
+      <arg name="updated" type="as" direction="out" />
+      <arg name="failedToUpdate" type="as" direction="out" />
+    </signal>
+    <signal name="authorizationFailed">
+    </signal>
+  </interface>
+</node>

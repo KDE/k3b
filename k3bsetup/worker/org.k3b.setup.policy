@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1.0/policyconfig.dtd">
+
+<policyconfig>
+  <vendor>K3b</vendor>
+  <vendor_url>http://k3b.org/</vendor_url>
+  <icon_name>k3b</icon_name>
+
+  <action id="org.k3b.setup.update-permissions">
+    <description>Update device and programs permissions</description>
+    <message>Privileges are required to update permissions of devices and programs</message>
+    <defaults>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep_session</allow_active>
+    </defaults>
+  </action>
+
+</policyconfig>

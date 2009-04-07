@@ -32,6 +32,42 @@
 #include <sys/stat.h>
 
 
+namespace {
+    
+bool shouldRunSuidRoot( const K3b::ExternalBin* bin )
+{
+    //
+    // Since kernel 2.6.8 older cdrecord versions are not able to use the SCSI subsystem when running suid root anymore
+    // So for we ignore the suid root issue with kernel >= 2.6.8 and cdrecord < 2.01.01a02
+    //
+    // Some kernel version 2.6.16.something again introduced a problem here. Since I do not know the exact version
+    // and a workaround was introduced in cdrecord 2.01.01a05 just use that version as the first for suid root.
+    //
+    // Seems as if cdrdao never had problems with suid root...
+    //
+
+    if( bin->name() == "cdrecord" ) {
+        return ( K3b::simpleKernelVersion() < K3b::Version( 2, 6, 8 ) ||
+                 bin->version >= K3b::Version( 2, 1, 1, "a05" ) ||
+                 bin->hasFeature( "wodim" ) );
+    }
+    else if( bin->name() == "cdrdao" ) {
+        return true;
+    }
+    else if( bin->name() == "growisofs" ) {
+        //
+        // starting with 6.0 growiofs raises it's priority using nice(-20)
+        // BUT: newer kernels have ridiculously low default memorylocked resource limit, which prevents privileged
+        // users from starting growisofs 6.0 with "unable to anonymously mmap 33554432: Resource temporarily unavailable"
+        // error message. Until Andy releases a version including a workaround we simply never configure growisofs suid root
+        return false; // bin->version >= K3b::Version( 6, 0 );
+    }
+    else
+        return false;
+}
+
+} // namespace
+
 class K3b::SetupPrograms::Private
 {
 public:
@@ -77,7 +113,7 @@ bool K3b::SetupPrograms::Private::getProgramInfo( const K3b::ExternalBin* progra
         else
             wantedGroup = "root";
 
-        if( K3b::SetupPrograms::shouldRunSuidRoot( program ) ) {
+        if( shouldRunSuidRoot( program ) ) {
             if( !burningGroup.isEmpty() )
                 wantedPerm = 0004710;
             else
@@ -132,8 +168,10 @@ K3b::SetupPrograms::~SetupPrograms()
 
 void K3b::SetupPrograms::load( const KConfig& config )
 {
+    d->unselectedPrograms.clear();
     d->externalBinManager->readConfig( config.group( "External Programs" ) );
-    update();
+    d->buildProgramList();
+    reset();
 }
 
 
@@ -151,13 +189,15 @@ void K3b::SetupPrograms::defaults()
 }
 
 
-QList<const K3b::ExternalBin*> K3b::SetupPrograms::selectedPrograms() const
+QList<K3b::Setup::ProgramItem> K3b::SetupPrograms::selectedPrograms() const
 {
-    QList<const ExternalBin*> selectedPrograms;
+    QList<K3b::Setup::ProgramItem> selectedPrograms;
     Q_FOREACH( const ExternalBin* program, d->programs )
     {
         if( !d->unselectedPrograms.contains( program ) && d->needChangePermissions( program ) )
-            selectedPrograms.push_back( program );
+        {
+            selectedPrograms << K3b::Setup::ProgramItem( program->path, shouldRunSuidRoot( program ) );
+        }
     }
     return selectedPrograms;
 }
@@ -166,39 +206,6 @@ QList<const K3b::ExternalBin*> K3b::SetupPrograms::selectedPrograms() const
 bool K3b::SetupPrograms::changesNeeded() const
 {
     return !selectedPrograms().isEmpty();
-}
-
-
-bool K3b::SetupPrograms::shouldRunSuidRoot( const K3b::ExternalBin* bin )
-{
-    //
-    // Since kernel 2.6.8 older cdrecord versions are not able to use the SCSI subsystem when running suid root anymore
-    // So for we ignore the suid root issue with kernel >= 2.6.8 and cdrecord < 2.01.01a02
-    //
-    // Some kernel version 2.6.16.something again introduced a problem here. Since I do not know the exact version
-    // and a workaround was introduced in cdrecord 2.01.01a05 just use that version as the first for suid root.
-    //
-    // Seems as if cdrdao never had problems with suid root...
-    //
-
-    if( bin->name() == "cdrecord" ) {
-        return ( K3b::simpleKernelVersion() < K3b::Version( 2, 6, 8 ) ||
-                 bin->version >= K3b::Version( 2, 1, 1, "a05" ) ||
-                 bin->hasFeature( "wodim" ) );
-    }
-    else if( bin->name() == "cdrdao" ) {
-        return true;
-    }
-    else if( bin->name() == "growisofs" ) {
-        //
-        // starting with 6.0 growiofs raises it's priority using nice(-20)
-        // BUT: newer kernels have ridiculously low default memorylocked resource limit, which prevents privileged
-        // users from starting growisofs 6.0 with "unable to anonymously mmap 33554432: Resource temporarily unavailable"
-        // error message. Until Andy releases a version including a workaround we simply never configure growisofs suid root
-        return false; // bin->version >= K3b::Version( 6, 0 );
-    }
-    else
-        return false;
 }
 
 

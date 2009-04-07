@@ -16,19 +16,28 @@
 
 #include <config-k3b.h>
 
-#include <QtGui/QLayout>
-#include <QtCore/QMap>
-#include <QtCore/QFile>
-#include <QtGui/QCheckBox>
-#include <QtGui/QLineEdit>
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
-#include <QtCore/QTimer>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
+#include "k3bsetup2.h"
+#include "k3bsetupdevices.h"
+#include "k3bsetupprograms.h"
+#include <k3bexternalbinmanager.h>
+
+#include <QCheckBox>
+#include <QDBusConnection>
+#include <QDBusMessage>
+#include <QDBusMetaType>
+#include <QFile>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
+#include <QLayout>
+#include <QLineEdit>
+#include <QMap>
+#include <QPushButton>
+#include <QTimer>
 
 #include <KAboutData>
 #include <KConfig>
+#include <KDebug>
 #include <kdeversion.h>
 #include <KEditListBox>
 #include <KGenericFactory>
@@ -37,11 +46,8 @@
 #include <KMessageBox>
 #include <KTextEdit>
 
-#include "k3bsetup2.h"
-#include "k3bsetupdevices.h"
-#include "k3bsetupprograms.h"
-
-#include <k3bexternalbinmanager.h>
+#include <PolicyKit/polkit-qt/Action>
+#include <PolicyKit/polkit-qt/Auth>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -52,10 +58,10 @@
 class K3bSetup2::Private
 {
 public:
+    KConfig* config;
+    PolkitQt::Action* authAction;
     K3b::SetupDevices* devicesModel;
     K3b::SetupPrograms* programsModel;
-
-    KConfig* config;
 };
 
 
@@ -69,6 +75,7 @@ K3bSetup2::K3bSetup2( QWidget *parent, const QVariantList& )
 {
     d = new Private();
     d->config = new KConfig( "k3bsetup2rc" );
+    d->authAction = new PolkitQt::Action( "org.k3b.setup.update-permissions", this );
 
     KAboutData* aboutData = new KAboutData("k3bsetup2", 0,
                                            ki18n("K3bSetup 2"), "2.0",
@@ -105,6 +112,10 @@ K3bSetup2::K3bSetup2( QWidget *parent, const QVariantList& )
     d->devicesModel = new K3b::SetupDevices( this );
     d->programsModel = new K3b::SetupPrograms(this );
 
+    connect( d->authAction, SIGNAL(activated()),
+             this, SLOT(slotPerformPermissionUpdating()) );
+    connect( d->authAction, SIGNAL(dataChanged()),
+             this, SLOT(slotDataChanged()) );
     connect( d->devicesModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
              this, SLOT(slotDataChanged()) );
     connect( d->devicesModel, SIGNAL(modelReset()),
@@ -124,23 +135,12 @@ K3bSetup2::K3bSetup2( QWidget *parent, const QVariantList& )
     m_viewDevices->header()->setResizeMode( QHeaderView::ResizeToContents );
     m_viewPrograms->setModel( d->programsModel );
     m_viewPrograms->header()->setResizeMode( QHeaderView::ResizeToContents );
+    
+    // Register ProgramItem as meta type
+    // to be able to send it through D-BUS
+    qDBusRegisterMetaType<K3b::Setup::ProgramItem>();
 
     load();
-
-    //
-    // This is a hack to work around a kcm bug which makes the faulty assumption that
-    // every module starts without anything to apply
-    //
-    QTimer::singleShot( 0, this, SLOT(slotDataChanged()) );
-
-    if( getuid() != 0 /*|| !d->config->isConfigWritable()*/ ) {
-        m_checkUseBurningGroup->setEnabled( false );
-        m_editBurningGroup->setEnabled( false );
-        m_editUsers->setEnabled( false );
-        m_viewDevices->setEnabled( false );
-        m_viewPrograms->setEnabled( false );
-        m_editSearchPath->setEnabled( false );
-    }
 }
 
 
@@ -187,12 +187,26 @@ void K3bSetup2::load()
     // load search path
     m_editSearchPath->clear();
     m_editSearchPath->insertStringList( d->programsModel->searchPaths() );
+
+    //
+    // This is a hack to work around a kcm bug which makes the faulty assumption that
+    // every module starts without anything to apply
+    //
+    QTimer::singleShot( 0, this, SLOT(slotDataChanged()) );
 }
 
 
 void K3bSetup2::save()
 {
     QString burningGroup = m_editBurningGroup->text();
+
+    if( m_checkUseBurningGroup->isChecked() && !burningGroup.isEmpty() ) {
+        if( !getgrnam( burningGroup.toLocal8Bit() ) ) {
+            KMessageBox::error( this, i18n( "There is no group \"%1\".", burningGroup ) );
+            QTimer::singleShot( 0, this, SLOT(slotDataChanged()) );
+            return;
+        }
+    }
 
     KConfigGroup grp(d->config, "General Settings" );
     grp.writeEntry( "use burning group", m_checkUseBurningGroup->isChecked() );
@@ -202,72 +216,60 @@ void K3bSetup2::save()
     d->devicesModel->save( *d->config );
     d->programsModel->save( *d->config );
 
-    bool success = true;
-
-    struct group* g = 0;
-    if( m_checkUseBurningGroup->isChecked() && !burningGroup.isEmpty() ) {
-        // TODO: create the group if it's not there
-        g = getgrnam( burningGroup.toLocal8Bit() );
-        if( !g ) {
-            KMessageBox::error( this, i18n("There is no group %1.",burningGroup) );
-            return;
-        }
+    if( !d->authAction->activate() ) {
+        QTimer::singleShot( 0, this, SLOT(slotDataChanged()) );
     }
+}
 
-    Q_FOREACH( const QString& dev, d->devicesModel->selectedDevices() )
+
+void K3bSetup2::slotPerformPermissionUpdating()
+{
+    QDBusConnection::systemBus().connect( "org.k3b.setup",
+        "/", "org.k3b.setup", QLatin1String("done"),
+        this, SLOT(slotPermissionsUpdated(QStringList,QStringList)) );
+    QDBusConnection::systemBus().connect( "org.k3b.setup",
+        "/", "org.k3b.setup", QLatin1String("authorizationFailed"),
+        this, SLOT(slotAuthFailed()) );
+    
+    QDBusMessage message = QDBusMessage::createMethodCall( "org.k3b.setup",
+        "/", "org.k3b.setup", QLatin1String("updatePermissions"));
+    
+    // Set burning group name as first argument
+    if( m_checkUseBurningGroup->isChecked() && !m_editBurningGroup->text().isEmpty() )
+        message << m_editBurningGroup->text();
+    else
+        message << QString();
+    
+    // Set devices list as second argument
+    message << d->devicesModel->selectedDevices();
+    
+    // Set programs list as third argument
+    QVariantList programs;
+    Q_FOREACH( const K3b::Setup::ProgramItem& item, d->programsModel->selectedPrograms() )
     {
-        if( g != 0 ) {
-            if( ::chmod( QFile::encodeName(dev), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP ) )
-                success = false;
-
-            if( ::chown( QFile::encodeName(dev), (gid_t)-1, g->gr_gid ) )
-                success = false;
-        }
-        else {
-            if( ::chmod( QFile::encodeName(dev), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH ) )
-                success = false;
-        }
+        programs << QVariant::fromValue( item );
     }
-
-    Q_FOREACH( const K3b::ExternalBin* bin, d->programsModel->selectedPrograms() )
+    message << programs;
+    
+    // Invoke D-BUS method
+    QDBusMessage reply = QDBusConnection::systemBus().call( message, QDBus::NoBlock );
+    if( reply.type() == QDBusMessage::ErrorMessage )
     {
-        if( g != 0 ) {
-            if( ::chown( QFile::encodeName(bin->path), (gid_t)0, g->gr_gid ) )
-                success = false;
-
-            int perm = 0;
-            if( K3b::SetupPrograms::shouldRunSuidRoot( bin ) )
-                perm = S_ISUID|S_IRWXU|S_IXGRP;
-            else
-                perm = S_IRWXU|S_IXGRP|S_IRGRP;
-
-            if( ::chmod( QFile::encodeName(bin->path), perm ) )
-                success = false;
-        }
-        else {
-            if( ::chown( QFile::encodeName(bin->path), 0, 0 ) )
-                success = false;
-
-            int perm = 0;
-            if( K3b::SetupPrograms::shouldRunSuidRoot( bin ) )
-                perm = S_ISUID|S_IRWXU|S_IXGRP|S_IXOTH;
-            else
-                perm = S_IRWXU|S_IXGRP|S_IRGRP|S_IXOTH|S_IROTH;
-
-            if( ::chmod( QFile::encodeName(bin->path), perm ) )
-                success = false;
-        }
+        KMessageBox::error( this, i18n("Cannot run helper!") );
+        emit changed( true );
     }
+}
 
 
-    if( success )
+void K3bSetup2::slotPermissionsUpdated( QStringList updated, QStringList failedToUpdate )
+{
+    kDebug() << "Objects updated: " << updated;
+    kDebug() << "Objects failed to update: " << failedToUpdate;
+    
+    if( failedToUpdate.isEmpty() )
         KMessageBox::information( this, i18n("Successfully updated all permissions.") );
-    else {
-        if( getuid() )
-            KMessageBox::error( this, i18n("Could not update all permissions. You should run K3b::Setup 2 as root.") );
-        else
-            KMessageBox::error( this, i18n("Could not update all permissions.") );
-    }
+    else
+        KMessageBox::errorList( this, i18n("Following devices and programs could not be updated:"), failedToUpdate );
 
     // WE MAY USE "newgrp -" to reinitialize the environment if we add users to a group
 
@@ -276,9 +278,16 @@ void K3bSetup2::save()
 }
 
 
+void K3bSetup2::slotAuthFailed()
+{
+    KMessageBox::error( this, i18n("Authorization failed.") );
+    emit changed( true );
+}
+
+
 void K3bSetup2::slotDataChanged()
 {
-    emit changed( ( getuid() != 0 ) ? false : d->devicesModel->changesNeeded() || d->programsModel->changesNeeded() );
+    emit changed( d->devicesModel->changesNeeded() || d->programsModel->changesNeeded() );
 }
 
 

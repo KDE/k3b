@@ -47,6 +47,14 @@ include(KDE4Defaults)
 include(MacroLibrary)
 include(MacroLogFeature)
 
+if(K3B_BUILD_K3BSETUP)
+  macro_optional_find_package(PolkitQt)
+  macro_log_feature(POLKITQT_FOUND "Polkit-Qt"
+    "Needed for K3bSetup to acquire administrator privileges"
+	"http://api.kde.org/kdesupport-api/kdesupport-apidocs/polkit-qt/html"
+	FALSE "" "")
+endif(K3B_BUILD_K3BSETUP)
+
 if(K3B_ENABLE_DVD_RIPPING)
   find_package(DvdRead)
   macro_log_feature( DVDREAD_FOUND "libDVDRead"
@@ -152,7 +160,10 @@ endif(WIN32)
 ##################  K3b build settings #################################
 include(ConfigureChecks.cmake)
 
-macro_bool_to_01(K3B_BUILD_K3BSETUP BUILD_K3BSETUP)
+if(K3B_BUILD_K3BSETUP AND POLKITQT_FOUND)
+  set(BUILD_K3BSETUP 1)
+endif(K3B_BUILD_K3BSETUP AND POLKITQT_FOUND)
+
 macro_bool_to_01(ADD_K3B_DEBUG K3B_DEBUG)
 
 if(K3B_ENABLE_DVD_RIPPING AND DVDREAD_FOUND)
@@ -204,11 +215,11 @@ if(K3B_BUILD_WAVE_DECODER_PLUGIN)
 endif(K3B_BUILD_WAVE_DECODER_PLUGIN)
 
 if(K3B_BUILD_SOX_ENCODER_PLUGIN)
-  set(BUILD_SOX_ENCODER_PLUGIN 1)
+ set(BUILD_SOX_ENCODER_PLUGIN 1)
 endif(K3B_BUILD_SOX_ENCODER_PLUGIN)
 
 if(K3B_BUILD_EXTERNAL_ENCODER_PLUGIN)
-  set(BUILD_EXTERNAL_ENCODER_PLUGIN 1)
+ set(BUILD_EXTERNAL_ENCODER_PLUGIN 1)
 endif(K3B_BUILD_EXTERNAL_ENCODER_PLUGIN)
 
 if(NOT WIN32 AND NOT APPLE)
@@ -269,9 +280,9 @@ add_subdirectory( libk3b )
 add_subdirectory( src )
 add_subdirectory( kioslaves )
 add_subdirectory( plugins )
-if(K3B_BUILD_K3BSETUP)
+if(BUILD_K3BSETUP)
    add_subdirectory(k3bsetup)
-endif(K3B_BUILD_K3BSETUP)
+endif(BUILD_K3BSETUP)
 
 
 ##################  K3b config summary ################################

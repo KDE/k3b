@@ -18,12 +18,11 @@
 #ifndef _K3BSETUP2_H_
 #define _K3BSETUP2_H_
 
-#include <KCModule>
 #include "ui_base_k3bsetup2.h"
+#include <KCModule>
+#include <QStringList>
 
-class Q3CheckListItem;
-
-class K3bSetup2: public KCModule, public Ui::base_K3bSetup2
+class K3bSetup2 : public KCModule, public Ui::base_K3bSetup2
 {
     Q_OBJECT
 
@@ -38,6 +37,9 @@ public:
     void save();
 
 private Q_SLOTS:
+    void slotPerformPermissionUpdating();
+    void slotPermissionsUpdated( QStringList updated, QStringList failedToUpdate );
+    void slotAuthFailed();
     void slotDataChanged();
     void slotBurningGroup();
     void slotSearchPrograms();

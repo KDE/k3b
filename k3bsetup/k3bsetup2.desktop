@@ -68,7 +68,6 @@ Type=Service
 Icon=k3b
 X-KDE-ServiceTypes=KCModule
 X-KDE-Library=kcm_k3bsetup2
-X-KDE-RootOnly=true
 X-KDE-ParentApp=kcontrol
 X-KDE-System-Settings-Parent-Category=system
 X-KDE-Keywords=k3b,k3bsetup2,cd,dvd
