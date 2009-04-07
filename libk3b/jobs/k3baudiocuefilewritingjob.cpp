@@ -235,8 +235,8 @@ void K3b::AudioCueFileWritingJob::importCueInProject()
             K3b::AudioTrack* after = 0;
             K3b::AudioFile* newFile = 0;
             unsigned int i = 0;
-            for( K3b::Device::Toc::const_iterator it = parser.toc().begin();
-                 it != parser.toc().end(); ++it ) {
+            for( K3b::Device::Toc::const_iterator it = parser.toc().constBegin();
+                 it != parser.toc().constEnd(); ++it ) {
                 const K3b::Device::Track& track = *it;
 
                 newFile = new K3b::AudioFile( d->decoder, d->audioDoc );
