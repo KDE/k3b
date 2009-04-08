@@ -248,7 +248,7 @@ void K3b::DataView::contextMenuForSelection(const QModelIndexList &selectedIndex
     }
 
     // check if all selected items can be removed
-    foreach(QModelIndex index, selectedIndexes)
+    foreach(const QModelIndex &index, selectedIndexes)
     {
         if (!index.data(K3b::CustomFlagsRole).toInt() & K3b::ItemIsRemovable)
         {
@@ -313,7 +313,7 @@ void K3b::DataView::slotItemProperties()
     {
         QList<K3b::DataItem*> items;
 
-        foreach(QModelIndex index, selection)
+        foreach(const QModelIndex &index, selection)
             items.append(m_model->itemForIndex(index));
 
         K3b::DataPropertiesDialog dlg( items, this );

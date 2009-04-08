@@ -122,7 +122,7 @@ void K3b::VcdView::showPropertiesDialog()
     {
         QList<K3b::VcdTrack*> selected;
 
-        foreach(QModelIndex index, selection)
+        foreach(const QModelIndex &index, selection)
             selected.append(m_model->trackForIndex(index));
 
         QList<K3b::VcdTrack*> tracks = *m_doc->tracks();

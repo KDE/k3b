@@ -158,7 +158,7 @@ void K3b::StandardView::slotCustomContextMenu(const QPoint &pos)
     // source model
     if (view == m_dirView)
     {
-        foreach(QModelIndex index, view->selectionModel()->selectedRows())
+        foreach(const QModelIndex &index, view->selectionModel()->selectedRows())
             selection.append( m_dirProxy->mapToSource(index) );
     }
     else
@@ -186,12 +186,12 @@ void K3b::StandardView::slotRemoveSelectedIndexes()
 
     // create a list of persistent model indexes to be able to remove all of them
     QList<QPersistentModelIndex> indexes;
-    foreach(QModelIndex index, m_currentSelection)
+    foreach(const QModelIndex &index, m_currentSelection)
         indexes.append( QPersistentModelIndex(index) );
 
 
     // and now ask the indexes to be removed
-    foreach(QPersistentModelIndex index, indexes)
+    foreach(const QPersistentModelIndex &index, indexes)
         model->removeRow(index.row(), index.parent());
 
     // clear the selection, just to make sure

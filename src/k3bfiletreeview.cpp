@@ -348,7 +348,7 @@ void K3b::FileTreeView::slotAddFilesToProject()
 {
     QModelIndexList indexes = selectedIndexes();
     KUrl::List files;
-    foreach(QModelIndex index, indexes)
+    foreach(const QModelIndex &index, indexes)
     {
         KFileItem item = d->model->itemForIndex(index);
         if (item.isNull())

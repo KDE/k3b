@@ -136,7 +136,7 @@ void K3b::MovixView::showPropertiesDialog()
     {
         QList<K3b::DataItem*> items;
 
-        foreach(QModelIndex index, selection)
+        foreach(const QModelIndex &index, selection)
             items.append(m_model->itemForIndex(index));
 
         K3b::DataPropertiesDialog dlg( items, this );
@@ -152,7 +152,7 @@ void K3b::MovixView::slotRemoveSubTitleItems()
         return;
 
     K3b::MovixFileItem *item = 0;
-    foreach(QModelIndex index, selection)
+    foreach(const QModelIndex &index, selection)
     {
         item = m_model->itemForIndex(index);
         if (item)
@@ -168,7 +168,7 @@ void K3b::MovixView::slotAddSubTitleFile()
         return;
 
     K3b::MovixFileItem *item = 0;
-    foreach(QModelIndex index, selection)
+    foreach(const QModelIndex &index, selection)
     {
         item = m_model->itemForIndex(index);
         if (item)
