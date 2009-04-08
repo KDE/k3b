@@ -14,30 +14,34 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#ifndef _K3BSETUPDEVICES_H_
-#define _K3BSETUPDEVICES_H_
+#ifndef _K3BSETUPPROGRAMSMODEL_H_
+#define _K3BSETUPPROGRAMSMODEL_H_
 
+#include "k3bsetupprogramitem.h"
 #include <QAbstractItemModel>
+#include <QList>
 #include <QStringList>
 
 class KConfig;
 
 namespace K3b {
+namespace Setup {
 
-    class SetupDevices : public QAbstractItemModel
+    class ProgramsModel : public QAbstractItemModel
     {
-    Q_OBJECT
+        Q_OBJECT
 
     public:
-        SetupDevices( QObject* parent = 0 );
-        ~SetupDevices();
+        ProgramsModel( QObject* parent = 0 );
+        ~ProgramsModel();
 
         void load( const KConfig& config );
         void save( KConfig& config ) const;
         void defaults();
 
-        QStringList selectedDevices() const;
+        QList<ProgramItem> selectedPrograms() const;
         bool changesNeeded() const;
+        QStringList searchPaths() const;
 
         QVariant data( const QModelIndex& index, int role ) const;
         bool setData( const QModelIndex& index, const QVariant& value, int role );
@@ -50,6 +54,7 @@ namespace K3b {
 
     public Q_SLOTS:
         void setBurningGroup( const QString& burningGroup );
+        void setSearchPaths( const QStringList& searchPaths );
         void update();
 
     private:
@@ -57,6 +62,7 @@ namespace K3b {
         Private* d;
     };
 
-}
+} // namespace Setup
+} // namespace K3b
 
 #endif

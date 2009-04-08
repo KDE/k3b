@@ -14,7 +14,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include "k3bsetupdevices.h"
+#include "k3bsetupdevicesmodel.h"
 #include <k3bdevicemanager.h>
 #include <k3bdevice.h>
 
@@ -29,8 +29,10 @@
 
 #include <sys/stat.h>
 
+namespace K3b {
+namespace Setup {
 
-class K3b::SetupDevices::Private
+class DevicesModel::Private
 {
 public:
     Device::DeviceManager* deviceManager;
@@ -41,7 +43,7 @@ public:
 };
 
 
-bool K3b::SetupDevices::Private::needChangePermissions( const K3b::Device::Device* device )
+bool DevicesModel::Private::needChangePermissions( const K3b::Device::Device* device )
 {
     struct stat s;
     if( ::stat( QFile::encodeName( device->blockDeviceName() ), &s ) == 0 ) {
@@ -61,7 +63,7 @@ bool K3b::SetupDevices::Private::needChangePermissions( const K3b::Device::Devic
 }
 
 
-K3b::SetupDevices::SetupDevices( QObject* parent )
+DevicesModel::DevicesModel( QObject* parent )
 :
     QAbstractItemModel( parent ),
     d( new Private )
@@ -72,13 +74,13 @@ K3b::SetupDevices::SetupDevices( QObject* parent )
 }
 
 
-K3b::SetupDevices::~SetupDevices()
+DevicesModel::~DevicesModel()
 {
     delete d;
 }
 
 
-void K3b::SetupDevices::load( const KConfig& config )
+void DevicesModel::load( const KConfig& config )
 {
     d->unselectedDevices.clear();
     d->deviceManager->readConfig( config.group( "Devices" ) );
@@ -86,20 +88,20 @@ void K3b::SetupDevices::load( const KConfig& config )
 }
 
 
-void K3b::SetupDevices::defaults()
+void DevicesModel::defaults()
 {
     d->unselectedDevices.clear();
     reset();
 }
 
 
-void K3b::SetupDevices::save( KConfig& config ) const
+void DevicesModel::save( KConfig& config ) const
 {
     d->deviceManager->saveConfig( config.group( "Devices" ) );
 }
 
 
-QStringList K3b::SetupDevices::selectedDevices() const
+QStringList DevicesModel::selectedDevices() const
 {
     QStringList deviceNodes;
     Q_FOREACH( Device::Device* device, d->deviceManager->allDevices() )
@@ -111,13 +113,13 @@ QStringList K3b::SetupDevices::selectedDevices() const
 }
 
 
-bool K3b::SetupDevices::changesNeeded() const
+bool DevicesModel::changesNeeded() const
 {
     return !selectedDevices().isEmpty();
 }
 
 
-QVariant K3b::SetupDevices::data( const QModelIndex& index, int role ) const
+QVariant DevicesModel::data( const QModelIndex& index, int role ) const
 {
     if( index.isValid() && role == Qt::DisplayRole &&  index.column() >= 0 && index.column() <= 3 ) {
         Device::Device* device = static_cast<Device::Device*>( index.internalPointer() );
@@ -167,7 +169,7 @@ QVariant K3b::SetupDevices::data( const QModelIndex& index, int role ) const
 }
 
 
-bool K3b::SetupDevices::setData( const QModelIndex& index, const QVariant& value, int role )
+bool DevicesModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
     if( index.isValid() && role == Qt::CheckStateRole ) {
         Device::Device* device = static_cast<Device::Device*>( index.internalPointer() );
@@ -189,7 +191,7 @@ bool K3b::SetupDevices::setData( const QModelIndex& index, const QVariant& value
 }
 
 
-Qt::ItemFlags K3b::SetupDevices::flags( const QModelIndex& index ) const
+Qt::ItemFlags DevicesModel::flags( const QModelIndex& index ) const
 {
     if( index.isValid() && index.column() != 0 )
         return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
@@ -200,7 +202,7 @@ Qt::ItemFlags K3b::SetupDevices::flags( const QModelIndex& index ) const
 }
 
 
-QVariant K3b::SetupDevices::headerData( int section, Qt::Orientation orientation, int role ) const
+QVariant DevicesModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     if( orientation == Qt::Horizontal && role == Qt::DisplayRole ) {
         switch( section )
@@ -217,7 +219,7 @@ QVariant K3b::SetupDevices::headerData( int section, Qt::Orientation orientation
 }
 
 
-QModelIndex K3b::SetupDevices::index( int row, int column, const QModelIndex& parent ) const
+QModelIndex DevicesModel::index( int row, int column, const QModelIndex& parent ) const
 {
     if( hasIndex(row, column, parent) && !parent.isValid() ) {
         Device::Device* device = d->deviceManager->allDevices().at( row );
@@ -233,14 +235,14 @@ QModelIndex K3b::SetupDevices::index( int row, int column, const QModelIndex& pa
 }
 
 
-QModelIndex K3b::SetupDevices::parent( const QModelIndex& index ) const
+QModelIndex DevicesModel::parent( const QModelIndex& index ) const
 {
     Q_UNUSED( index );
     return QModelIndex();
 }
 
 
-int K3b::SetupDevices::rowCount( const QModelIndex& parent ) const
+int DevicesModel::rowCount( const QModelIndex& parent ) const
 {
     if( !parent.isValid() )
         return d->deviceManager->allDevices().size();
@@ -249,14 +251,14 @@ int K3b::SetupDevices::rowCount( const QModelIndex& parent ) const
 }
 
 
-int K3b::SetupDevices::columnCount( const QModelIndex& parent ) const
+int DevicesModel::columnCount( const QModelIndex& parent ) const
 {
     Q_UNUSED( parent );
     return 4;
 }
 
 
-void K3b::SetupDevices::setBurningGroup( const QString& burningGroup )
+void DevicesModel::setBurningGroup( const QString& burningGroup )
 {
     if( burningGroup != d->burningGroup ) {
         d->burningGroup = burningGroup;
@@ -265,7 +267,7 @@ void K3b::SetupDevices::setBurningGroup( const QString& burningGroup )
 }
 
 
-void K3b::SetupDevices::update()
+void DevicesModel::update()
 {
     // Remove from unselected devices list all devices
     // that are not present anymore in device manager
@@ -274,4 +276,7 @@ void K3b::SetupDevices::update()
     reset();
 }
 
-#include "k3bsetupdevices.moc"
+} // namespace Setup
+} // namespace K3b
+
+#include "k3bsetupdevicesmodel.moc"

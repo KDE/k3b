@@ -17,8 +17,8 @@
 #include <config-k3b.h>
 
 #include "k3bsetup2.h"
-#include "k3bsetupdevices.h"
-#include "k3bsetupprograms.h"
+#include "k3bsetupdevicesmodel.h"
+#include "k3bsetupprogramsmodel.h"
 #include <k3bexternalbinmanager.h>
 
 #include <QCheckBox>
@@ -60,8 +60,8 @@ class K3bSetup2::Private
 public:
     KConfig* config;
     PolkitQt::Action* authAction;
-    K3b::SetupDevices* devicesModel;
-    K3b::SetupPrograms* programsModel;
+    K3b::Setup::DevicesModel* devicesModel;
+    K3b::Setup::ProgramsModel* programsModel;
 };
 
 
@@ -109,8 +109,8 @@ K3bSetup2::K3bSetup2( QWidget *parent, const QVariantList& )
     box->addWidget( label );
     box->addWidget( w );
 
-    d->devicesModel = new K3b::SetupDevices( this );
-    d->programsModel = new K3b::SetupPrograms(this );
+    d->devicesModel = new K3b::Setup::DevicesModel( this );
+    d->programsModel = new K3b::Setup::ProgramsModel(this );
 
     connect( d->authAction, SIGNAL(activated()),
              this, SLOT(slotPerformPermissionUpdating()) );

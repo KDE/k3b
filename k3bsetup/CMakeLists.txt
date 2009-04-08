@@ -8,9 +8,9 @@ include_directories(
 
 set(kcm_k3bsetup2_PART_SRCS
     k3bsetup2.cpp
-    k3bsetupdevices.cpp
+    k3bsetupdevicesmodel.cpp
     k3bsetupprogramitem.cpp
-    k3bsetupprograms.cpp )
+    k3bsetupprogramsmodel.cpp )
 
 kde4_add_ui_files(kcm_k3bsetup2_PART_SRCS base_k3bsetup2.ui )
 

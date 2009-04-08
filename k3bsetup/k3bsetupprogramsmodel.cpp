@@ -14,7 +14,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include "k3bsetupprograms.h"
+#include "k3bsetupprogramsmodel.h"
 #include <k3bexternalbinmanager.h>
 #include <k3bdefaultexternalprograms.h>
 #include <k3bglobals.h>
@@ -68,7 +68,10 @@ bool shouldRunSuidRoot( const K3b::ExternalBin* bin )
 
 } // namespace
 
-class K3b::SetupPrograms::Private
+namespace K3b {
+namespace Setup {
+
+class ProgramsModel::Private
 {
 public:
     ExternalBinManager* externalBinManager;
@@ -84,7 +87,7 @@ public:
 };
 
 
-void K3b::SetupPrograms::Private::buildProgramList()
+void ProgramsModel::Private::buildProgramList()
 {
     externalBinManager->search();
     programs.clear();
@@ -95,7 +98,7 @@ void K3b::SetupPrograms::Private::buildProgramList()
 }
 
 
-bool K3b::SetupPrograms::Private::getProgramInfo( const K3b::ExternalBin* program,
+bool ProgramsModel::Private::getProgramInfo( const K3b::ExternalBin* program,
                                                   QString& owner, QString& group, QString& wantedGroup,
                                                   int& perm, int& wantedPerm ) const
 {
@@ -135,7 +138,7 @@ bool K3b::SetupPrograms::Private::getProgramInfo( const K3b::ExternalBin* progra
 }
 
 
-bool K3b::SetupPrograms::Private::needChangePermissions( const K3b::ExternalBin* program ) const
+bool ProgramsModel::Private::needChangePermissions( const K3b::ExternalBin* program ) const
 {
     QString owner, group, wantedGroup;
     int perm, wantedPerm;
@@ -147,7 +150,7 @@ bool K3b::SetupPrograms::Private::needChangePermissions( const K3b::ExternalBin*
 }
 
 
-K3b::SetupPrograms::SetupPrograms( QObject* parent )
+ProgramsModel::ProgramsModel( QObject* parent )
 :
     QAbstractItemModel( parent ),
     d( new Private )
@@ -161,12 +164,12 @@ K3b::SetupPrograms::SetupPrograms( QObject* parent )
 }
 
 
-K3b::SetupPrograms::~SetupPrograms()
+ProgramsModel::~ProgramsModel()
 {
 }
 
 
-void K3b::SetupPrograms::load( const KConfig& config )
+void ProgramsModel::load( const KConfig& config )
 {
     d->unselectedPrograms.clear();
     d->externalBinManager->readConfig( config.group( "External Programs" ) );
@@ -175,13 +178,13 @@ void K3b::SetupPrograms::load( const KConfig& config )
 }
 
 
-void K3b::SetupPrograms::save( KConfig& config ) const
+void ProgramsModel::save( KConfig& config ) const
 {
     d->externalBinManager->saveConfig( config.group( "External Programs" ) );
 }
 
 
-void K3b::SetupPrograms::defaults()
+void ProgramsModel::defaults()
 {
     d->unselectedPrograms.clear();
     d->buildProgramList();
@@ -189,33 +192,33 @@ void K3b::SetupPrograms::defaults()
 }
 
 
-QList<K3b::Setup::ProgramItem> K3b::SetupPrograms::selectedPrograms() const
+QList<ProgramItem> ProgramsModel::selectedPrograms() const
 {
-    QList<K3b::Setup::ProgramItem> selectedPrograms;
+    QList<ProgramItem> selectedPrograms;
     Q_FOREACH( const ExternalBin* program, d->programs )
     {
         if( !d->unselectedPrograms.contains( program ) && d->needChangePermissions( program ) )
         {
-            selectedPrograms << K3b::Setup::ProgramItem( program->path, shouldRunSuidRoot( program ) );
+            selectedPrograms << ProgramItem( program->path, shouldRunSuidRoot( program ) );
         }
     }
     return selectedPrograms;
 }
 
 
-bool K3b::SetupPrograms::changesNeeded() const
+bool ProgramsModel::changesNeeded() const
 {
     return !selectedPrograms().isEmpty();
 }
 
 
-QStringList K3b::SetupPrograms::searchPaths() const
+QStringList ProgramsModel::searchPaths() const
 {
     return d->externalBinManager->searchPath();
 }
 
 
-QVariant K3b::SetupPrograms::data( const QModelIndex& index, int role ) const
+QVariant ProgramsModel::data( const QModelIndex& index, int role ) const
 {
     if( index.isValid() && role == Qt::DisplayRole &&  index.column() >= 0 && index.column() <= 4 ) {
         const ExternalBin* program = static_cast<const ExternalBin*>( index.internalPointer() );
@@ -257,7 +260,7 @@ QVariant K3b::SetupPrograms::data( const QModelIndex& index, int role ) const
 }
 
 
-bool K3b::SetupPrograms::setData( const QModelIndex& index, const QVariant& value, int role )
+bool ProgramsModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
     if( index.isValid() && role == Qt::CheckStateRole ) {
         const ExternalBin* program = static_cast<const ExternalBin*>( index.internalPointer() );
@@ -279,7 +282,7 @@ bool K3b::SetupPrograms::setData( const QModelIndex& index, const QVariant& valu
 }
 
 
-Qt::ItemFlags K3b::SetupPrograms::flags( const QModelIndex& index ) const
+Qt::ItemFlags ProgramsModel::flags( const QModelIndex& index ) const
 {
     if( index.isValid() && index.column() != 0 )
         return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
@@ -290,7 +293,7 @@ Qt::ItemFlags K3b::SetupPrograms::flags( const QModelIndex& index ) const
 }
 
 
-QVariant K3b::SetupPrograms::headerData( int section, Qt::Orientation orientation, int role ) const
+QVariant ProgramsModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     if( orientation == Qt::Horizontal && role == Qt::DisplayRole ) {
         switch( section )
@@ -308,7 +311,7 @@ QVariant K3b::SetupPrograms::headerData( int section, Qt::Orientation orientatio
 }
 
 
-QModelIndex K3b::SetupPrograms::index( int row, int column, const QModelIndex& parent ) const
+QModelIndex ProgramsModel::index( int row, int column, const QModelIndex& parent ) const
 {
     if( hasIndex(row, column, parent) && !parent.isValid() ) {
         const ExternalBin* program = d->programs.at( row );
@@ -322,14 +325,14 @@ QModelIndex K3b::SetupPrograms::index( int row, int column, const QModelIndex& p
 }
 
 
-QModelIndex K3b::SetupPrograms::parent( const QModelIndex& index ) const
+QModelIndex ProgramsModel::parent( const QModelIndex& index ) const
 {
     Q_UNUSED( index );
     return QModelIndex();
 }
 
 
-int K3b::SetupPrograms::rowCount( const QModelIndex& parent ) const
+int ProgramsModel::rowCount( const QModelIndex& parent ) const
 {
     if( !parent.isValid() )
         return d->externalBinManager->programs().size();
@@ -338,14 +341,14 @@ int K3b::SetupPrograms::rowCount( const QModelIndex& parent ) const
 }
 
 
-int K3b::SetupPrograms::columnCount( const QModelIndex& parent ) const
+int ProgramsModel::columnCount( const QModelIndex& parent ) const
 {
     Q_UNUSED( parent );
     return 5;
 }
 
 
-void K3b::SetupPrograms::setBurningGroup( const QString& burningGroup )
+void ProgramsModel::setBurningGroup( const QString& burningGroup )
 {
     if( burningGroup != d->burningGroup ) {
         d->burningGroup = burningGroup;
@@ -353,7 +356,7 @@ void K3b::SetupPrograms::setBurningGroup( const QString& burningGroup )
     }
 }
 
-void K3b::SetupPrograms::setSearchPaths( const QStringList& searchPaths )
+void ProgramsModel::setSearchPaths( const QStringList& searchPaths )
 {
     if( searchPaths != d->externalBinManager->searchPath() ) {
         d->externalBinManager->setSearchPath( searchPaths );
@@ -361,11 +364,14 @@ void K3b::SetupPrograms::setSearchPaths( const QStringList& searchPaths )
     }
 }
 
-void K3b::SetupPrograms::update()
+void ProgramsModel::update()
 {
     d->buildProgramList();
     d->unselectedPrograms.intersect( d->programs.toSet() );
     reset();
 }
 
-#include "k3bsetupprograms.moc"
+} // namespace Setup
+} // namespace K3b
+
+#include "k3bsetupprogramsmodel.moc"
