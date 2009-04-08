@@ -393,6 +393,11 @@ bool K3b::Iso9660ImageWritingJob::prepareWriter( Device::MediaTypes mediaType )
         }
     }
     else {  // DVD
+#ifdef __GNUC__
+#warning Support cdrecord for DVD/Blu-Ray writing
+#endif
+        d->usedWritingApp = WritingAppGrowisofs;
+
         if( mediaType & K3b::Device::MEDIA_DVD_PLUS_ALL ) {
             if( m_simulate ) {
                 if( questionYesNo( i18n("K3b does not support simulation with DVD+R(W) media. "
