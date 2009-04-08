@@ -258,18 +258,18 @@ add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 include_directories( 
   ${k3b_BINARY_DIR}
   ${libk3bdevice_SOURCE_DIR}
-  ${libk3b_SOURCE_DIR}/core
-  ${libk3b_SOURCE_DIR}/plugin
-  ${libk3b_SOURCE_DIR}/tools
-  ${libk3b_SOURCE_DIR}/tools/qprocess
-  ${libk3b_SOURCE_DIR}/tools/qprocess/private
-  ${libk3b_SOURCE_DIR}/projects
-  ${libk3b_SOURCE_DIR}/projects/audiocd
-  ${libk3b_SOURCE_DIR}/projects/datacd
-  ${libk3b_SOURCE_DIR}/projects/videocd
-  ${libk3b_SOURCE_DIR}/projects/mixedcd
-  ${libk3b_SOURCE_DIR}/jobs
-  ${libk3b_SOURCE_DIR}/videodvd
+  ${k3b_SOURCE_DIR}/libk3b/core
+  ${k3b_SOURCE_DIR}/libk3b/plugin
+  ${k3b_SOURCE_DIR}/libk3b/tools
+  ${k3b_SOURCE_DIR}/libk3b/tools/qprocess
+  ${k3b_SOURCE_DIR}/libk3b/tools/qprocess/private
+  ${k3b_SOURCE_DIR}/libk3b/projects
+  ${k3b_SOURCE_DIR}/libk3b/projects/audiocd
+  ${k3b_SOURCE_DIR}/libk3b/projects/datacd
+  ${k3b_SOURCE_DIR}/libk3b/projects/videocd
+  ${k3b_SOURCE_DIR}/libk3b/projects/mixedcd
+  ${k3b_SOURCE_DIR}/libk3b/jobs
+  ${k3b_SOURCE_DIR}/libk3b/videodvd
   ${KDE4_INCLUDES}
   ${KDE4_INCLUDE_DIR}
   ${QT_INCLUDES}
