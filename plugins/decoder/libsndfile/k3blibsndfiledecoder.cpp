@@ -216,7 +216,7 @@ bool K3bLibsndfileDecoderFactory::canDecode( const KUrl& url )
 {
     SF_INFO infos;
     infos.format = 0;
-    SNDFILE* sndfile = sf_open (QFile::encodeName(url.path()), SFM_READ, &infos);
+    SNDFILE* sndfile = sf_open (QFile::encodeName(url.toLocalFile()), SFM_READ, &infos);
 
     //is it supported by libsndfile?
     if ( !sndfile ) {
@@ -236,7 +236,7 @@ bool K3bLibsndfileDecoderFactory::canDecode( const KUrl& url )
         return true;
     }
     else {
-        kDebug() << "(K3bLibsndfileDecoder) " << url.path() << "not supported";
+        kDebug() << "(K3bLibsndfileDecoder) " << url.toLocalFile() << "not supported";
         sf_close( sndfile );
         return false;
     }
