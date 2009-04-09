@@ -255,7 +255,7 @@ void K3bSetup2::slotPerformPermissionUpdating()
     QDBusMessage reply = QDBusConnection::systemBus().call( message, QDBus::NoBlock );
     if( reply.type() == QDBusMessage::ErrorMessage )
     {
-        KMessageBox::error( this, i18n("Cannot run helper!") );
+        KMessageBox::error( this, i18n("Cannot run helper.") );
         emit changed( true );
     }
 }
