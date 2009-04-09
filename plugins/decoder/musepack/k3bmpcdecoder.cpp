@@ -43,7 +43,7 @@ K3b::AudioDecoder* K3bMpcDecoderFactory::createDecoder( QObject* parent
 bool K3bMpcDecoderFactory::canDecode( const KUrl& url )
 {
     K3bMpcWrapper w;
-    return w.open( url.path() );
+    return w.open( url.toLocalFile() );
 }
 
 
