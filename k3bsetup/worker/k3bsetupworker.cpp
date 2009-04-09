@@ -110,12 +110,12 @@ Worker::~Worker()
 
 void Worker::updatePermissions( QString burningGroup, QStringList devices, QVariantList programs )
 {
-    PolKitResult result = PolkitQt::Auth::isCallerAuthorized(
+    PolkitQt::Auth::Result result = PolkitQt::Auth::isCallerAuthorized(
             "org.k3b.setup.update-permissions",
             message().service(),
             true );
 
-    if( result == POLKIT_RESULT_YES ) {
+    if( result == PolkitQt::Auth::Yes ) {
         qDebug() << message().service() << QString(" authorized");
         
         struct group* g = 0;

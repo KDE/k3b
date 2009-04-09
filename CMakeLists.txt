@@ -48,9 +48,10 @@ include(MacroLibrary)
 include(MacroLogFeature)
 
 if(K3B_BUILD_K3BSETUP)
+  set(POLKITQT_MIN_VERSION 0.9.2)
   macro_optional_find_package(PolkitQt)
   macro_log_feature(POLKITQT_FOUND "Polkit-Qt"
-    "Needed for K3bSetup to acquire administrator privileges"
+    "Needed for K3bSetup to acquire administrator privileges. Version >= 0.9.2 is required."
 	"http://api.kde.org/kdesupport-api/kdesupport-apidocs/polkit-qt/html"
 	FALSE "" "")
 endif(K3B_BUILD_K3BSETUP)
