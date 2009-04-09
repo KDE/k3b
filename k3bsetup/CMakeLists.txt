@@ -1,6 +1,19 @@
+pkg_check_modules (POLKIT polkit>=0.8)
+pkg_check_modules (POLKITDBUS polkit-dbus>=0.8)
+pkg_check_modules (POLKITGRANT polkit-grant>=0.8)
+
+if (POLKIT_FOUND AND POLKITDBUS_FOUND AND POLKITGRANT_FOUND)
+   include_directories(
+      ${POLKIT_INCLUDE_DIRS}
+      ${POLKITDBUS_INCLUDE_DIRS}
+      ${POLKITQT_INCLUDE_DIR}
+    )
+
 add_subdirectory(worker)
 
 ########### next target ###############
+
+
 
 include_directories(
     ../libk3b/core/
@@ -25,3 +38,4 @@ install(TARGETS kcm_k3bsetup2 DESTINATION ${PLUGIN_INSTALL_DIR} )
 install( PROGRAMS  k3bsetup DESTINATION ${BIN_INSTALL_DIR} )
 install( FILES  k3bsetup2.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 
+endif (POLKIT_FOUND AND POLKITDBUS_FOUND AND POLKITGRANT_FOUND)
