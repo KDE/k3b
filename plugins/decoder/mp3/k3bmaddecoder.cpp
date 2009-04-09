@@ -475,7 +475,7 @@ bool K3bMadDecoderFactory::canDecode( const KUrl& url )
     // It always takes waves for mp3 files so we introduce this hack to
     // filter out wave files. :(
     //
-    QFile f( url.path() );
+    QFile f( url.toLocalFile() );
     if( !f.open( QIODevice::ReadOnly ) )
         return false;
     char buffer[12];
@@ -488,7 +488,7 @@ bool K3bMadDecoderFactory::canDecode( const KUrl& url )
 
 
     K3bMad handle;
-    if( !handle.open( url.path() ) )
+    if( !handle.open( url.toLocalFile() ) )
         return false;
 
     handle.skipTag();
@@ -525,7 +525,7 @@ bool K3bMadDecoderFactory::canDecode( const KUrl& url )
         }
     }
 
-    kDebug() << "(K3bMadDecoder) unsupported format: " << url.path();
+    kDebug() << "(K3bMadDecoder) unsupported format: " << url.toLocalFile();
 
     return false;
 }
