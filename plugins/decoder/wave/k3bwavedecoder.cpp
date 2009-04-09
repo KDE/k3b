@@ -369,9 +369,9 @@ K3b::AudioDecoder* K3bWaveDecoderFactory::createDecoder( QObject* parent ) const
 
 bool K3bWaveDecoderFactory::canDecode( const KUrl& url )
 {
-    QFile f( url.path() );
+    QFile f( url.toLocalFile() );
     if( !f.open(	QIODevice::ReadOnly ) ) {
-        kDebug() << "(K3bWaveDecoder) could not open file " << url.path();
+        kDebug() << "(K3bWaveDecoder) could not open file " << url.toLocalFile();
         return false;
     }
 
