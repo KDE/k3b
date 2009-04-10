@@ -147,7 +147,15 @@ QString K3b::AbstractCdrtoolsProgram::getProgramPath( const QString& dir )
 
 
 K3b::CdrecordProgram::CdrecordProgram()
-    : K3b::AbstractCdrtoolsProgram( QLatin1String( "cdrecord" ), QLatin1String( "wodim" ) )
+    : K3b::AbstractCdrtoolsProgram( QLatin1String( "cdrecord" ), 
+#ifdef Q_OS_WIN32
+// for unknown reasons name() return "wodim" in K3b::Version K3b::SimpleExternalProgram::parseVersion( const QString& out )
+// added a temporary hack - perhaps Sebastian knows a way to fix this issue
+    QLatin1String( "" ) 
+#else
+    QLatin1String( "wodim" ) 
+#endif
+    )
 {
 }
 
