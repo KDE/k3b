@@ -27,7 +27,7 @@ endif(NOT POLKITQT_MIN_VERSION)
 pkgconfig(polkit-qt-core _PQTIncDir _PQTLinkDir _PQTLinkFlags _PQTCflags)
 
 if(_PQTLinkFlags)
-  # query pkg-config asking for a Exiv2 >= 0.12
+  # query pkg-config asking for a Polkit >= ${POLKITQT_MIN_VERSION}
   exec_program(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=${POLKITQT_MIN_VERSION} polkit-qt-core RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
   if(_return_VALUE STREQUAL "0")
     message(STATUS "Found Polkit-Qt release >= ${POLKITQT_MIN_VERSION}")
