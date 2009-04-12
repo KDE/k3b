@@ -155,7 +155,9 @@ void K3b::AudioProjectConvertingDialog::setupGui()
 void K3b::AudioProjectConvertingDialog::slotStartClicked()
 {
     // make sure we have the tracks just for ourselves
+#ifdef __GNUC__
 #warning FIXME kde4: port audio player
+#endif
     //static_cast<K3b::AudioView*>(m_doc->view())->player()->stop();
 
     // check if all filenames differ
@@ -231,7 +233,9 @@ void K3b::AudioProjectConvertingDialog::slotStartClicked()
 
 void K3b::AudioProjectConvertingDialog::refresh()
 {
+#ifdef __GNUC__
 #warning Reuse the code from AudioRippingDialog
+#endif
     m_viewTracks->clear();
     d->filenames.clear();
 
