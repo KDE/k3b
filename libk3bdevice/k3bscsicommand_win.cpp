@@ -62,7 +62,8 @@ int K3b::Device::ScsiCommand::transport( TransportDirection dir,
     ULONG returned = 0;
     BOOL status = TRUE;
 
-    needToClose = !m_device->isOpen();
+	// closing device every time breaks scsi operation, disabled for now
+    //needToClose = !m_device->isOpen();
     m_device->open( dir == TR_DIR_WRITE );
 
     if( !m_device->isOpen() ) {
