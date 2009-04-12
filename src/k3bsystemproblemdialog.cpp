@@ -453,7 +453,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
     for( QList<K3b::Device::Device *>::const_iterator it = items2.constBegin();
          it != items2.constEnd(); ++it ) {
         K3b::Device::Device* dev = (*it);
-
+#ifndef Q_OS_WIN32
         if( !QFileInfo( dev->blockDeviceName() ).isWritable() )
             problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                i18n("No write access to device %1",dev->blockDeviceName()),
@@ -471,6 +471,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                     "read/write performance. If you experience very low writing speeds "
                                                     "this is probably the cause."),
                                                i18n("Enable DMA temporarily as root with 'hdparm -d 1 %1'.",dev->blockDeviceName()) ) );
+#endif
     }
 
 
