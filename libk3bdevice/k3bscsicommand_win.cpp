@@ -113,6 +113,22 @@ int K3b::Device::ScsiCommand::transport( TransportDirection dir,
 
         return ( errCode != 0 ? errCode : 1 );
     }
+    kDebug() 
+        << "len:" << d->m_cmd.spt.CdbLength  
+        << "cmd:" << commandString(d->m_cmd.spt.Cdb[0]) 
+        << d->m_cmd.spt.Cdb[0]
+        << d->m_cmd.spt.Cdb[1] 
+        << d->m_cmd.spt.Cdb[2] 
+        << d->m_cmd.spt.Cdb[3] 
+        << d->m_cmd.spt.Cdb[4] 
+        << d->m_cmd.spt.Cdb[5] 
+        << d->m_cmd.spt.Cdb[6] 
+        << d->m_cmd.spt.Cdb[7] 
+        << d->m_cmd.spt.Cdb[8] 
+        << d->m_cmd.spt.Cdb[9] 
+        << "datalen=" << d->m_cmd.spt.DataTransferLength
+        << "returned=" << returned
+    ;
 
     return 0;
 }
