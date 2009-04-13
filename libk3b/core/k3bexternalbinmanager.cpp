@@ -464,6 +464,9 @@ void K3b::ExternalBinManager::search()
     foreach( QString p, possiblePaths ) {
         if (p.length() == 0)
             continue;
+#ifdef Q_OS_WIN32
+        p = p.replace('\\','/');
+#endif        
         if( p[p.length()-1] == '/' )
             p.truncate( p.length()-1 );
         if( !paths.contains( p ) && !paths.contains( p + "/" ) )
