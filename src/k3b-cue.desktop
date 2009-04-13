@@ -1,4 +1,3 @@
-# KDE Config File
 [Desktop Entry]
 Type=Application
 NoDisplay=true
@@ -11,5 +10,3 @@ Name[hne]=के3बी
 Name[ne]=केथ्रीबी
 Name[x-test]=xxK3bxx
 MimeType=application/x-cue;
-
-Encoding=UTF-8
