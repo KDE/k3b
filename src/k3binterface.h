@@ -16,9 +16,9 @@
 #ifndef _K3B_INTERFACE_H_
 #define _K3B_INTERFACE_H_
 
-#include <q3valuelist.h>
+#include <QList>
 
-#include <kurl.h>
+#include <KUrl>
 
 namespace K3b {
     class MainWindow;

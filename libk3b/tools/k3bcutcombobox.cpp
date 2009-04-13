@@ -113,17 +113,6 @@ void K3b::CutComboBox::insertStringList( const QStringList&, int )
     // FIXME
 }
 
-
-void K3b::CutComboBox::insertStrList( const Q3StrList&, int )
-{
-    // FIXME
-}
-
-void K3b::CutComboBox::insertStrList( const Q3StrList*, int )
-{
-    // FIXME
-}
-
 void K3b::CutComboBox::insertStrList( const char**, int, int)
 {
     // FIXME

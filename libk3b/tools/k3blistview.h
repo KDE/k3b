@@ -19,8 +19,6 @@
 
 #include <k3listview.h>
 #include "k3b_export.h"
-#include <q3ptrvector.h>
-#include <q3ptrlist.h>
 #include <qstringlist.h>
 //Added by qt3to4:
 #include <QPaintEvent>

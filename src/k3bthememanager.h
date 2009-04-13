@@ -16,7 +16,6 @@
 #define _K3B_THEME_MANAGER_H_
 
 #include <qobject.h>
-#include <q3valuelist.h>
 #include <qstring.h>
 #include <qmap.h>
 #include <qcolor.h>

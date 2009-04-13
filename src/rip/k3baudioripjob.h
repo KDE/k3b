@@ -17,8 +17,8 @@
 #define K3B_AUDIO_RIP_THREAD_H
 
 #include <k3bthreadjob.h>
-#include <q3valuevector.h>
-#include <qpair.h>
+#include <QVector>
+#include <QPair>
 
 #include <libkcddb/cdinfo.h>
 

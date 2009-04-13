@@ -29,7 +29,7 @@
 #include <q3header.h>
 #include <qevent.h>
 #include <q3dragobject.h>
-#include <q3ptrlist.h>
+#include <QList>
 //Added by qt3to4:
 #include <QDropEvent>
 #include <QGridLayout>
@@ -142,12 +142,12 @@ bool K3b::PlayListView::acceptDrag( QDropEvent* e ) const
 
 Q3DragObject* K3b::PlayListView::dragObject()
 {
-  Q3PtrList<Q3ListViewItem> list = selectedItems();
+  QList<Q3ListViewItem*> list = selectedItems();
 
   if( list.isEmpty() )
     return 0;
 
-  Q3PtrListIterator<Q3ListViewItem> it(list);
+  QListIterator<Q3ListViewItem*> it(list);
   KUrl::List urls;
 
   for( ; it.current(); ++it )
@@ -644,7 +644,7 @@ void K3b::AudioPlayer::slotDropped( QDropEvent* e, Q3ListViewItem* after )
 
 void K3b::AudioPlayer::slotRemoveSelected()
 {
-  Q3PtrList<Q3ListViewItem> selected = m_viewPlayList->selectedItems();
+  QList<Q3ListViewItem*> selected = m_viewPlayList->selectedItems();
   for( Q3ListViewItem* item = selected.first(); item; item = selected.next() ) {
     if( item == m_currentItem )
       setCurrentItem(0);

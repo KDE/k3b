@@ -16,7 +16,6 @@
 
 #include <k3bjob.h>
 
-#include <q3cstring.h>
 #include <qdatastream.h>
 
 

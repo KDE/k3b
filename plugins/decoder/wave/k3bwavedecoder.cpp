@@ -17,7 +17,6 @@
 #include <config-k3b.h>
 
 #include <qfile.h>
-#include <q3cstring.h>
 
 #include <kdebug.h>
 #include <klocale.h>

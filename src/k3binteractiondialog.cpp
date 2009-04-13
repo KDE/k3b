@@ -22,33 +22,31 @@
 #include <k3bapplication.h>
 #include <k3bmultichoicedialog.h>
 
-#include <qlabel.h>
-#include <qtoolbutton.h>
-#include <qlayout.h>
-#include <qtooltip.h>
-
-#include <qstring.h>
-#include <qpoint.h>
-#include <qfont.h>
-#include <q3popupmenu.h>
-#include <qapplication.h>
-#include <qtimer.h>
-
-#include <QGridLayout>
-#include <QKeyEvent>
-#include <QEvent>
-#include <QHBoxLayout>
+#include <QApplication>
 #include <QDialogButtonBox>
+#include <QEvent>
+#include <QFont>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QKeyEvent>
+#include <QLabel>
+#include <QLayout>
+#include <QMenu>
+#include <QPoint>
 #include <QPointer>
+#include <QString>
+#include <QTimer>
+#include <QToolButton>
+#include <QToolTip>
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <kstandarddirs.h>
+#include <KConfig>
+#include <KDebug>
+#include <KGlobalSettings>
+#include <KIconLoader>
+#include <KLocale>
+#include <KPushButton>
+#include <KStandardDirs>
 #include <kstdguiitem.h>
-#include <kpushbutton.h>
-#include <kconfig.h>
-#include <kiconloader.h>
-#include <kglobalsettings.h>
 
 
 K3b::InteractionDialog::InteractionDialog( QWidget* parent,

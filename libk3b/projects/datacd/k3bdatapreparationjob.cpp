@@ -22,11 +22,11 @@
 #include <k3bfileitem.h>
 #include <k3bglobals.h>
 
-#include <klocale.h>
-#include <kstringhandler.h>
+#include <KLocale>
+#include <KStringHandler>
 
-#include <qfile.h>
-#include <q3valuelist.h>
+#include <QFile>
+#include <QList>
 
 namespace {
     QString createItemsString( const QList<K3b::DataItem*>& items, int max )

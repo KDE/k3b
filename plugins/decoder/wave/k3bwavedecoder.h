@@ -19,7 +19,6 @@
 #include <k3baudiodecoder.h>
 
 #include <kurl.h>
-#include <q3cstring.h>
 
 
 

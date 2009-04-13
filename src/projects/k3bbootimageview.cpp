@@ -26,7 +26,6 @@
 
 #include <qpushbutton.h>
 #include <qstring.h>
-#include <q3groupbox.h>
 #include <qlineedit.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>

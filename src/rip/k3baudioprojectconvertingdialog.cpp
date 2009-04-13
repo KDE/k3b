@@ -39,7 +39,6 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 
-#include <q3groupbox.h>
 #include <q3header.h>
 #include <qcheckbox.h>
 #include <qlabel.h>

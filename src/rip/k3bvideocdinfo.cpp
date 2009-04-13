@@ -16,7 +16,6 @@
 #include "k3bvideocdinfo.h"
 
 #include <qstring.h>
-#include <q3valuelist.h>
 #include <qstringlist.h>
 #include <qtimer.h>
 #include <qdom.h>

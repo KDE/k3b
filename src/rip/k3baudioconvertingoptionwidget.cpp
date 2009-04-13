@@ -19,26 +19,25 @@
 #include <k3bcore.h>
 #include <k3bglobals.h>
 
-#include <kcombobox.h>
-#include <kurlrequester.h>
-#include <kio/global.h>
-#include <kconfig.h>
-#include <klocale.h>
-#include <kiconloader.h>
+#include <KComboBox>
+#include <KUrlRequester>
+#include <KConfig>
+#include <KLocale>
+#include <KIconLoader>
 
-#include <q3intdict.h>
-#include <qmap.h>
-#include <qlabel.h>
-#include <qtimer.h>
-#include <qtoolbutton.h>
-#include <qcheckbox.h>
+#include <QHash>
+#include <QMap>
+#include <QLabel>
+#include <QTimer>
+#include <QToolButton>
+#include <QCheckBox>
 
 
 
 class K3b::AudioConvertingOptionWidget::Private
 {
 public:
-    Q3IntDict<K3b::AudioEncoder> encoderMap;
+    QHash<int, K3b::AudioEncoder*> encoderMap;
     QMap<int, QString> extensionMap;
 
     QTimer freeSpaceUpdateTimer;

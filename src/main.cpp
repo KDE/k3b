@@ -24,7 +24,6 @@
 #include <kurl.h>
 
 #include <qfile.h>
-#include <q3cstring.h>
 #include <qdatastream.h>
 #include <qtimer.h>
 

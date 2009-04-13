@@ -18,9 +18,7 @@
 
 #include <kcombobox.h>
 #include "k3b_export.h"
-//Added by qt3to4:
 #include <QResizeEvent>
-#include <Q3StrList>
 #include <QPixmap>
 class QResizeEvent;
 
@@ -66,8 +64,6 @@ namespace K3b {
         virtual void setCurrentText( const QString& );
 
         void	insertStringList( const QStringList &, int index=-1 );
-        void	insertStrList( const Q3StrList &, int index=-1 );
-        void	insertStrList( const Q3StrList *, int index=-1 );
         void	insertStrList( const char **, int numStrings=-1, int index=-1);
 
         void	insertItem( const QString &text, int index=-1 );

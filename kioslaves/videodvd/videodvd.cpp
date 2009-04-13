@@ -14,10 +14,8 @@
 
 #include <config-k3b.h>
 
-#include <q3cstring.h>
 #include <qdatetime.h>
 #include <qbitarray.h>
-#include <q3ptrlist.h>
 
 #include <kdebug.h>
 #include <KComponentData>

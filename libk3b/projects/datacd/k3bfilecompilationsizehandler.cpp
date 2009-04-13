@@ -15,11 +15,11 @@
 #include "k3bfilecompilationsizehandler.h"
 #include "k3bfileitem.h"
 
-#include <kdebug.h>
+#include <KDebug>
 
-#include <qfile.h>
-#include <qmap.h>
-#include <q3ptrlist.h>
+#include <QFile>
+#include <QMap>
+#include <QList>
 
 
 // TODO: remove the items from the project if the savedSize differs
@@ -70,7 +70,7 @@ public:
      */
     K3b::Msf blocks() const { return K3b::Msf( usedBlocks(savedSize) ); }
 
-    Q3PtrList<K3b::DataItem> items;
+    QList<K3b::DataItem*> items;
 };
 
 
@@ -113,7 +113,7 @@ public:
     void removeFile( K3b::FileItem* item, bool followSymlinks ) {
         InodeInfo& inodeInfo = inodeMap[item->localId(followSymlinks)];
 
-        if( inodeInfo.items.findRef( item ) == -1 ) {
+        if( !inodeInfo.items.contains( item ) ) {
             kError() << "(K3b::FileCompilationSizeHandler) "
                      << item->localPath()
                      << " has been removed without being added!" << endl;
@@ -123,7 +123,7 @@ public:
                 kError() << "(K3b::FileCompilationSizeHandler) savedSize differs!" << endl;
             }
 
-            inodeInfo.items.removeRef( item );
+            inodeInfo.items.removeOne( item );
             inodeInfo.number--;
             if( inodeInfo.number == 0 ) {
                 size -= inodeInfo.savedSize;
@@ -135,13 +135,13 @@ public:
     void removeSpecialItem( K3b::DataItem* item ) {
         // special files do not have a corresponding local file
         // so we just substract their k3bSize
-        if( specialItems.findRef( item ) == -1 ) {
+        if( !specialItems.contains( item ) ) {
             kError() << "(K3b::FileCompilationSizeHandler) Special item "
                      << item->k3bName()
                      << " has been removed without being added!" << endl;
         }
         else {
-            specialItems.removeRef( item );
+            specialItems.removeOne( item );
             size -= item->size();
             blocks -= usedBlocks(item->size());
         }
@@ -156,7 +156,7 @@ public:
     KIO::filesize_t size;
     K3b::Msf blocks;
 
-    Q3PtrList<K3b::DataItem> specialItems;
+    QList<K3b::DataItem*> specialItems;
 };
 
 

@@ -18,11 +18,10 @@
 
 #include <k3bglobals.h>
 
-#include <klocale.h>
-#include <kconfig.h>
+#include <KLocale>
+#include <KConfig>
 
-#include <qtooltip.h>
-#include <q3whatsthis.h>
+#include <QToolTip>
 
 static const QString s_autoHelp = i18n("Let K3b select the best-suited mode. This is the recommended selection.");
 static const QString s_daoHelp = i18n("<em>Disk At Once</em> or more properly <em>Session At Once</em>. "

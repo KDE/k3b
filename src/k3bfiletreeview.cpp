@@ -43,11 +43,9 @@
 
 #include <qdir.h>
 #include <qevent.h>
-#include <q3dragobject.h>
 #include <qcursor.h>
 #include <qnamespace.h>
 #include <qmap.h>
-#include <q3ptrdict.h>
 #include <qpainter.h>
 #include <qfont.h>
 #include <qstyle.h>

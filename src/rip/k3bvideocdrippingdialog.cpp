@@ -32,7 +32,6 @@
 #include <kstandarddirs.h>
 
 // qt includes
-#include <q3groupbox.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qtimer.h>

@@ -17,8 +17,6 @@
 #define _K3B_SYSTEM_DIALOG_H_
 
 #include <qstring.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
 #include <QCloseEvent>
 
 #include <kdialog.h>

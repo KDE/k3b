@@ -16,23 +16,22 @@
 
 #include "k3bisooptions.h"
 
-#include <qcheckbox.h>
-#include <qradiobutton.h>
 #include <q3buttongroup.h>
 #include <q3header.h>
-#include <QtGui/QHelpEvent>
-
-#include <qpoint.h>
-#include <qpainter.h>
-#include <qpalette.h>
-#include <qvalidator.h>
-#include <qregexp.h>
+#include <QCheckBox>
+#include <QHelpEvent>
+#include <QPainter>
+#include <QPalette>
+#include <QPoint>
+#include <QRadioButton>
+#include <QRegExp>
+#include <QValidator>
+#include <QWhatsThis>
 
 #include <k3listview.h>
-#include <kcombobox.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <Q3WhatsThis>
+#include <KComboBox>
+#include <KDebug>
+#include <KLocale>
 
 
 class K3b::DataAdvancedImageSettingsDialog::PrivateCheckViewItem : public Q3CheckListItem

@@ -24,11 +24,8 @@
 
 #include <k3bglobals.h>
 
-#include <q3ptrlist.h>
-#include <qtimer.h>
-//Added by qt3to4:
 #include <QList>
-
+#include <QTimer>
 
 
 K3b::Interface::Interface()
@@ -124,8 +121,8 @@ DCOPRef K3b::Interface::openProject( const KUrl& url )
 QList<DCOPRef> K3b::Interface::projects()
 {
   QList<DCOPRef> lst;
-  const Q3PtrList<K3b::Doc>& docs = k3bappcore->projectManager()->projects();
-  for( Q3PtrListIterator<K3b::Doc> it( docs ); it.current(); ++it )
+  QList<Doc*> docs = k3bappcore->projectManager()->projects();
+  for( QListIterator<Doc*> it( docs ); it.current(); ++it )
     lst.append( DCOPRef( kapp->dcopClient()->appId(), k3bappcore->projectManager()->dcopInterface( it.current() )->objId() ) );
 
   return lst;

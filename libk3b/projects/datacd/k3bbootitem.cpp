@@ -16,9 +16,7 @@
 #include "k3bdatadoc.h"
 #include "k3bdiritem.h"
 
-#include <klocale.h>
-
-#include <q3ptrlist.h>
+#include <KLocale>
 
 
 K3b::BootItem::BootItem( const QString& fileName, K3b::DataDoc* doc, K3b::DirItem* dir, const QString& k3bName )

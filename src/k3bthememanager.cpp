@@ -28,7 +28,6 @@
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qstringlist.h>
-#include <q3valuelist.h>
 
 
 K3b::Theme::Theme()

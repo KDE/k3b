@@ -33,10 +33,8 @@
 
 #include <qlayout.h>
 #include <qcheckbox.h>
-#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
 
 
 K3b::VideoDvdBurnDialog::VideoDvdBurnDialog( K3b::VideoDvdDoc* doc, QWidget *parent )

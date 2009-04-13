@@ -45,7 +45,6 @@
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qtooltip.h>
-#include <q3whatsthis.h>
 
 #include <q3buttongroup.h>
 #include <qradiobutton.h>

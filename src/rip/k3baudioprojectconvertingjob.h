@@ -18,7 +18,6 @@
 
 #include <k3bthreadjob.h>
 #include <qobject.h>
-#include <q3valuevector.h>
 #include <qpair.h>
 
 #include <libkcddb/cdinfo.h>

@@ -18,10 +18,10 @@
 #include "k3bsessionimportitem.h"
 #include "k3bfileitem.h"
 
-#include <qstring.h>
-#include <q3ptrlist.h>
+#include <QString>
+#include <QList>
 
-#include <kdebug.h>
+#include <KDebug>
 #include <KLocale>
 
 

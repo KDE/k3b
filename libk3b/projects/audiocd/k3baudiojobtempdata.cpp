@@ -22,7 +22,6 @@
 
 #include <qfile.h>
 #include <q3textstream.h>
-#include <q3valuevector.h>
 
 #include <kdebug.h>
 

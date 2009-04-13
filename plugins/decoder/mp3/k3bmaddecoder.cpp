@@ -28,13 +28,13 @@
 
 #include <config-k3b.h>
 
-#include <kurl.h>
-#include <kdebug.h>
-#include <klocale.h>
+#include <KUrl>
+#include <KDebug>
+#include <KLocale>
 
-#include <qstring.h>
-#include <qfile.h>
-#include <q3valuevector.h>
+#include <QString>
+#include <QFile>
+#include <QVector>
 
 #include <stdlib.h>
 #include <cmath>

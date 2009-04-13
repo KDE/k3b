@@ -17,7 +17,7 @@
 
 #include "ui_base_k3baudiorippingoptionwidget.h"
 
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <kio/global.h>
 
 namespace K3b {

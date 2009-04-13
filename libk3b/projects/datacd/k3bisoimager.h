@@ -19,8 +19,7 @@
 #include "k3bmkisofshandler.h"
 #include "k3bprocess.h"
 
-#include <q3ptrqueue.h>
-#include <qstringlist.h>
+#include <QStringList>
 
 class QTextStream;
 class KTemporaryFile;
