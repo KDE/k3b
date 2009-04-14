@@ -207,8 +207,11 @@ K3b::Device::Device::Handle K3b::Device::openDevice( const char* name, bool writ
     bool status = false;
     K3b::Device::Device::Handle deviceHandle = HANDLE_DEFAULT_VALUE;
     char string[NAME_COUNT + 1];
-
-    _snprintf(string, NAME_COUNT, "\\\\.\\%s", name);
+    // check if name is already a device name
+    if (name[0] == '\\')
+        strncpy(string, name, NAME_COUNT);
+    else
+        _snprintf(string, NAME_COUNT, "\\\\.\\%s", name);
     deviceHandle = CreateFileA(string,
         GENERIC_READ | GENERIC_WRITE , // at least inquiry needs write access
         FILE_SHARE_READ | (write ? FILE_SHARE_WRITE : 0),
