@@ -11,6 +11,7 @@ Name[pt_BR]=Plug-in de áudio Cddb do K3b
 Name[ro]=Modul K3b Cddb Audio
 Name[ru]=Модуль K3b Cddb Audio
 Name[sv]=K3b CDDB-ljudinsticksprogram
+Name[tr]=K3b Cddb Ses Eklentisi
 Name[uk]=Додаток для роботи з CDDB у K3b
 Name[x-test]=xxK3b Cddb Audio Pluginxx
 Comment=Plugin to query a cddb server for information about an audio project.
