@@ -266,12 +266,17 @@ MESSAGE(STATUS "DCOP stuff was remove into kde4, convert it to dbus please.kde4_
 #k3baudioprojectinterface.h 
 #k3bmixedprojectinterface.h )
 
+if (MSVC)
+    # msvc creates importlibs by default also for executables when symbols are exported.
+    # Because the output name of the executable is the same as one of the used library (k3b)  creating 
+    # the importlibrary fails with LINK : fatal error LNK1149: output filename matches input filename
+    # we worked around this issue by using a different name for the unused import library created by the linker
+    string(REPLACE "/implib:<TARGET_IMPLIB>" "/implib:<TARGET_IMPLIB>_" CMAKE_CXX_LINK_EXECUTABLE ${CMAKE_CXX_LINK_EXECUTABLE})
+endif (MSVC)
+
 kde4_add_executable(k3b_bin ${k3b_bin_SRCS})
 
-# cmake 2.6-3 failed on win32 using a output name of k3b when a dependency is named k3b - skipped for now
-if (NOT WIN32)
-	set_target_properties(k3b_bin PROPERTIES OUTPUT_NAME k3b)
-endif(NOT WIN32)
+set_target_properties(k3b_bin PROPERTIES OUTPUT_NAME k3b)
 
 target_link_libraries(k3b_bin
   k3bdevice
