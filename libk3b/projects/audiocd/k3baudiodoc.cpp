@@ -277,12 +277,8 @@ bool K3b::AudioDoc::readPlaylistFile( const KUrl& url, KUrl::List& playlist )
         QString line = t.readLine();
         if( line[0] != '#' ) {
             KUrl mp3url;
-#ifdef Q_OS_WIN32
-            QFileInfo path(line);
-            if (path.isRelative())
-#else
-            if( line[0] != '/' )
-#endif
+            QFileInfo pathInfo(line);
+            if (pathInfo.isRelative())
                 mp3url.setPath( url.directory(false) + line );
             else
                 mp3url.setPath( line );
