@@ -455,7 +455,7 @@ K3b::WritingApp K3b::WriterSelectionWidget::writingApp() const
         return selectedWritingApp();
     }
     else
-        return K3b::WritingAppDefault;
+        return K3b::WritingAppAuto;
 }
 
 
@@ -521,7 +521,7 @@ void K3b::WriterSelectionWidget::slotRefreshWritingApps()
     i &= d->supportedWritingApps;
 
     m_comboWritingApp->clear();
-    m_comboWritingApp->insertItem( K3b::WritingAppDefault, i18n("Auto") );
+    m_comboWritingApp->insertItem( K3b::WritingAppAuto, i18n("Auto") );
 
     if( i & K3b::WritingAppCdrdao )
         m_comboWritingApp->insertItem( K3b::WritingAppCdrdao, "cdrdao" );

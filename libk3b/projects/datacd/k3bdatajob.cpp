@@ -761,10 +761,10 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
 
         if ( writingApp() == K3b::WritingAppGrowisofs ) {
             emit infoMessage( i18n( "Cannot write %1 media using %2. Falling back to default application." , QString("CD") , QString("growisofs") ), MessageWarning );
-            setWritingApp( K3b::WritingAppDefault );
+            setWritingApp( K3b::WritingAppAuto );
         }
         // cdrecord seems to have problems writing xa 1 disks in dao mode? At least on my system!
-        if( writingApp() == K3b::WritingAppDefault ) {
+        if( writingApp() == K3b::WritingAppAuto ) {
             if( d->usedWritingMode == K3b::WritingModeSao ) {
                 if( usedMultiSessionMode() != K3b::DataDoc::NONE )
                     d->usedWritingApp = K3b::WritingAppCdrdao;
@@ -788,7 +788,7 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
         if ( writingApp() == K3b::WritingAppCdrdao ) {
             emit infoMessage( i18n( "Cannot write %1 media using %2. Falling back to default application.",
                                     K3b::Device::mediaTypeString( foundMedium, true ), "cdrdao" ), MessageWarning );
-            setWritingApp( K3b::WritingAppDefault );
+            setWritingApp( K3b::WritingAppAuto );
         }
 
         // make sure that we use the proper parameters for cdrecord
@@ -796,7 +796,7 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
 
         d->usedWritingApp = writingApp();
         // let's default to cdrecord for the time being (except for special cases below)
-        if ( d->usedWritingApp == K3b::WritingAppDefault ) {
+        if ( d->usedWritingApp == K3b::WritingAppAuto ) {
             d->usedWritingApp = K3b::WritingAppCdrecord;
         }
 
@@ -912,7 +912,7 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
     // --------------------
     else if ( foundMedium & K3b::Device::MEDIA_BD_ALL ) {
         d->usedWritingApp = writingApp();
-        if ( d->usedWritingApp == K3b::WritingAppDefault ) {
+        if ( d->usedWritingApp == K3b::WritingAppAuto ) {
             if ( k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "blu-ray" ) )
                 d->usedWritingApp = K3b::WritingAppCdrecord;
             else
@@ -1019,10 +1019,8 @@ bool K3b::DataJob::setupCdrecordJob()
     writer->setBurnSpeed( d->doc->speed() );
 
     // multisession
-    if( usedMultiSessionMode() == K3b::DataDoc::START ||
-        usedMultiSessionMode() == K3b::DataDoc::CONTINUE ) {
-        writer->addArgument("-multi");
-    }
+    writer->setMulti( usedMultiSessionMode() == K3b::DataDoc::START ||
+                      usedMultiSessionMode() == K3b::DataDoc::CONTINUE );
 
     if( d->doc->onTheFly() &&
         ( usedMultiSessionMode() == K3b::DataDoc::CONTINUE ||

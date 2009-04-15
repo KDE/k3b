@@ -331,7 +331,7 @@ K3b::WritingApp K3b::writingAppFromString( const QString& s )
     else if( s.toLower() == "dvd+rw-format" )
         return K3b::WritingAppDvdRwFormat;
     else
-        return K3b::WritingAppDefault;
+        return K3b::WritingAppAuto;
 }
 
 

@@ -49,7 +49,7 @@ public:
     K3b::Msf nextReadSector;
     QIODevice* ioDevice;
     QString imagePath;
-    int sectorSize;
+    ReadSectorSize sectorSize;
     bool useLibdvdcss;
     K3b::LibDvdCss* libcss;
 
@@ -57,7 +57,7 @@ public:
 
     int errorSectorCount;
 
-    int usedSectorSize;
+    ReadSectorSize usedSectorSize;
 };
 
 
@@ -137,7 +137,7 @@ void K3b::DataTrackReader::setImagePath( const QString& p )
 }
 
 
-void K3b::DataTrackReader::setSectorSize( SectorSize size )
+void K3b::DataTrackReader::setSectorSize( ReadSectorSize size )
 {
     d->sectorSize = size;
 }

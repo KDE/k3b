@@ -106,12 +106,13 @@ namespace K3b {
          * Content type. May be combined by a binary OR.
          */
         enum MediumContent {
+            ContentIgnore = 0x0,
             ContentNone = 0x1,
             ContentAudio = 0x2,
             ContentData = 0x4,
             ContentVideoCD = 0x8,
             ContentVideoDVD = 0x10,
-            ContentAll = 0xFF
+            ContentAll = ContentNone|ContentAudio|ContentData|ContentVideoCD|ContentVideoDVD
         };
         Q_DECLARE_FLAGS( MediumContents, MediumContent )
 
@@ -155,7 +156,12 @@ namespace K3b {
         /**
          * Constructs a user readable string which can be used to request certain media.
          */
-        static QString mediaRequestString( Device::MediaTypes requestedMediaTypes, Device::MediaStates requestedMediaStates, const K3b::Msf& requestedSize );
+        static QString mediaRequestString( Device::MediaTypes requestedMediaTypes, 
+                                           Device::MediaStates requestedMediaStates, 
+                                           const K3b::Msf& requestedSize = Msf(),
+                                           Device::Device* dev = 0 );
+
+        static QString mediaRequestString( MediumContents content, Device::Device* dev = 0 );
 
     private:
         void analyseContent();

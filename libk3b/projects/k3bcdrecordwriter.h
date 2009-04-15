@@ -64,6 +64,7 @@ namespace K3b {
         void setWritingMode( WritingMode mode );
         void setCueFile( const QString& s);
         void setClone( bool b );
+        void setMulti( bool b );
 
         void setRawCdText( const QByteArray& a );
 

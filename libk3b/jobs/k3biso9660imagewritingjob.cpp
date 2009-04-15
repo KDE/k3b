@@ -302,102 +302,124 @@ bool K3b::Iso9660ImageWritingJob::prepareWriter( Device::MediaTypes mediaType )
             mediaType = K3b::Device::MEDIA_DVD_R;
     }
 
-#ifdef __GNUC__
-#warning Determine which app to use - also use cdrecord for DVD and BD if possible!
-#endif
-
     delete m_writer;
 
-    if( mediaType == K3b::Device::MEDIA_CD_R || mediaType == K3b::Device::MEDIA_CD_RW ) {
-        K3b::WritingMode usedWritingMode = m_writingMode;
-        if( usedWritingMode == K3b::WritingModeAuto ) {
-            // cdrecord seems to have problems when writing in mode2 in dao mode
-            // so with cdrecord we use TAO
-            if( m_noFix || m_dataMode == K3b::DataMode2 || !m_device->dao() )
-                usedWritingMode = K3b::WritingModeTao;
-            else
-                usedWritingMode = K3b::WritingModeSao;
+#warning FIXME: use the correct writing mode for DVD and Blu-Ray. ATM we only use TAO/SAO. Also fail if datamode is != 1 for non-cd.
+#warning FIXME: there is similar code in the dvd copy job (including info messages). The same is true for audiojob/cdcopyjob Find a way to merge the writing app and writing mode selection into one class. How about CdrecordWriter and GrowisofsWriter?
+    K3b::WritingMode usedWritingMode = m_writingMode;
+    if( usedWritingMode == K3b::WritingModeAuto ) {
+        if( Device::isDvdMedia( mediaType ) ) {
+            // FIXME: growisofswriting uses DAO for dvdcompat mode, better make the cdrecord writer support other modes, too
+            usedWritingMode = K3b::WritingModeSao;
         }
+        // cdrecord seems to have problems when writing in mode2 in dao mode
+        // so with cdrecord we use TAO
+        else if( m_noFix ||
+                 m_dataMode == K3b::DataMode2 ||
+                 !m_device->dao() ) {
+            usedWritingMode = K3b::WritingModeTao;
+        }
+        else {
+            usedWritingMode = K3b::WritingModeSao;
+        }
+    }
 
-        d->usedWritingApp = writingApp();
-        if( d->usedWritingApp == K3b::WritingAppDefault ) {
+    d->usedWritingApp = writingApp();
+    if( d->usedWritingApp == K3b::WritingAppAuto ) {
+        if( Device::isCdMedia( mediaType ) ) {
             if( usedWritingMode == K3b::WritingModeSao &&
                 ( m_dataMode == K3b::DataMode2 || m_noFix ) )
                 d->usedWritingApp = K3b::WritingAppCdrdao;
             else
                 d->usedWritingApp = K3b::WritingAppCdrecord;
         }
-
-
-        if( d->usedWritingApp == K3b::WritingAppCdrecord ) {
-            K3b::CdrecordWriter* writer = new K3b::CdrecordWriter( m_device, this );
-
-            writer->setWritingMode( usedWritingMode );
-            writer->setSimulate( m_simulate );
-            writer->setBurnSpeed( m_speed );
-
-            if( m_noFix ) {
-                writer->addArgument("-multi");
-            }
-
-            if( (m_dataMode == K3b::DataModeAuto && m_noFix) ||
-                m_dataMode == K3b::DataMode2 ) {
-                if( k3bcore->externalBinManager()->binObject("cdrecord") &&
-                    k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "xamix" ) )
-                    writer->addArgument( "-xa" );
-                else
-                    writer->addArgument( "-xa1" );
-            }
-            else
-                writer->addArgument("-data");
-
-            // read from stdin
-            writer->addArgument( QString("-tsize=%1s").arg( K3b::imageFilesize( m_imagePath )/2048 ) )->addArgument( "-" );
-
-            m_writer = writer;
-        }
-        else {
-            // create cdrdao job
-            K3b::CdrdaoWriter* writer = new K3b::CdrdaoWriter( m_device, this );
-            writer->setCommand( K3b::CdrdaoWriter::WRITE );
-            writer->setSimulate( m_simulate );
-            writer->setBurnSpeed( m_speed );
-            // multisession
-            writer->setMulti( m_noFix );
-
-            // now write the tocfile
-            delete m_tocFile;
-            m_tocFile = new KTemporaryFile();
-            m_tocFile->setSuffix( ".toc" );
-            m_tocFile->open();
-
-            QTextStream s( m_tocFile );
-            if( (m_dataMode == K3b::DataModeAuto && m_noFix) ||
-                m_dataMode == K3b::DataMode2 ) {
-                s << "CD_ROM_XA" << "\n";
-                s << "\n";
-                s << "TRACK MODE2_FORM1" << "\n";
+        else if( mediaType & Device::MEDIA_DVD_ALL ) {
+            if( k3bcore->externalBinManager()->binObject( "cdrecord" ) &&
+                k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "dvd" ) ) {
+                d->usedWritingApp = K3b::WritingAppCdrecord;
             }
             else {
-                s << "CD_ROM" << "\n";
-                s << "\n";
-                s << "TRACK MODE1" << "\n";
+                d->usedWritingApp = K3b::WritingAppGrowisofs;
             }
-            s << "DATAFILE \"-\" " << QString::number( K3b::imageFilesize( m_imagePath ) ) << "\n";
-
-            m_tocFile->close();
-
-            writer->setTocFile( m_tocFile->fileName() );
-
-            m_writer = writer;
+        }
+        else {
+            // Blu-Ray
+            if( k3bcore->externalBinManager()->binObject( "cdrecord" ) &&
+                k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "blu-ray" ) ) {
+                d->usedWritingApp = K3b::WritingAppCdrecord;
+            }
+            else if( k3bcore->externalBinManager()->binObject( "growisofs" ) &&
+                     k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "blu-ray" ) ) {
+                d->usedWritingApp = K3b::WritingAppGrowisofs;
+            }
+            else {
+                emit infoMessage( i18n("Missing tools for Blu-Ray writing. Please update your system."), MessageError );
+                return false;
+            }
         }
     }
-    else {  // DVD
-#ifdef __GNUC__
-#warning Support cdrecord for DVD/Blu-Ray writing
-#endif
-        d->usedWritingApp = WritingAppGrowisofs;
 
+
+    if( d->usedWritingApp == K3b::WritingAppCdrecord ) {
+        K3b::CdrecordWriter* writer = new K3b::CdrecordWriter( m_device, this );
+
+        writer->setWritingMode( usedWritingMode );
+        writer->setSimulate( m_simulate );
+        writer->setBurnSpeed( m_speed );
+        writer->setMulti( m_noFix );
+
+        if( (m_dataMode == K3b::DataModeAuto && m_noFix) ||
+            m_dataMode == K3b::DataMode2 ) {
+            if( k3bcore->externalBinManager()->binObject("cdrecord") &&
+                k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "xamix" ) )
+                writer->addArgument( "-xa" );
+            else
+                writer->addArgument( "-xa1" );
+        }
+        else
+            writer->addArgument("-data");
+
+        // read from stdin
+        writer->addArgument( QString("-tsize=%1s").arg( K3b::imageFilesize( m_imagePath )/2048 ) )->addArgument( "-" );
+
+        m_writer = writer;
+    }
+    else if( usedWritingMode == K3b::WritingAppCdrdao ) {
+        // create cdrdao job
+        K3b::CdrdaoWriter* writer = new K3b::CdrdaoWriter( m_device, this );
+        writer->setCommand( K3b::CdrdaoWriter::WRITE );
+        writer->setSimulate( m_simulate );
+        writer->setBurnSpeed( m_speed );
+        // multisession
+        writer->setMulti( m_noFix );
+
+        // now write the tocfile
+        delete m_tocFile;
+        m_tocFile = new KTemporaryFile();
+        m_tocFile->setSuffix( ".toc" );
+        m_tocFile->open();
+
+        QTextStream s( m_tocFile );
+        if( (m_dataMode == K3b::DataModeAuto && m_noFix) ||
+            m_dataMode == K3b::DataMode2 ) {
+            s << "CD_ROM_XA" << "\n";
+            s << "\n";
+            s << "TRACK MODE2_FORM1" << "\n";
+        }
+        else {
+            s << "CD_ROM" << "\n";
+            s << "\n";
+            s << "TRACK MODE1" << "\n";
+        }
+        s << "DATAFILE \"-\" " << QString::number( K3b::imageFilesize( m_imagePath ) ) << "\n";
+
+        m_tocFile->close();
+
+        writer->setTocFile( m_tocFile->fileName() );
+
+        m_writer = writer;
+    }
+    else {  // growisofs
         if( mediaType & K3b::Device::MEDIA_DVD_PLUS_ALL ) {
             if( m_simulate ) {
                 if( questionYesNo( i18n("K3b does not support simulation with DVD+R(W) media. "
@@ -414,7 +436,7 @@ bool K3b::Iso9660ImageWritingJob::prepareWriter( Device::MediaTypes mediaType )
         K3b::GrowisofsWriter* writer = new K3b::GrowisofsWriter( m_device, this );
         writer->setSimulate( m_simulate );
         writer->setBurnSpeed( m_speed );
-        writer->setWritingMode( m_writingMode == K3b::WritingModeSao ? K3b::WritingModeSao : K3b::WritingModeAuto );
+        writer->setWritingMode( usedWritingMode );
         writer->setImageToWrite( QString() ); // read from stdin
         writer->setCloseDvd( !m_noFix );
         writer->setTrackSize( K3b::imageFilesize( m_imagePath )/2048 );

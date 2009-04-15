@@ -80,7 +80,7 @@ namespace K3b {
                  *
                  * \sa rawCdText()
                  */
-                CommandCdText_RAW = 0x8,
+                CommandCdTextRaw = 0x8,
 
                 /**
                  * Retrieve the size of the disk.
@@ -103,7 +103,7 @@ namespace K3b {
                 /**
                  * Always successful, even with an empty or no media at all!
                  */
-                CommandTocTYPE = 0x40,
+                CommandTocType = 0x40,
 
                 /**
                  * Always successful, even with an empty or no media at all!
@@ -118,7 +118,7 @@ namespace K3b {
                 /**
                  * Successful if the drive could be unblocked.
                  */
-                UNCommandBlock = 0x200,
+                CommandUnblock = 0x200,
 
                 /**
                  * Successful if the media was ejected.
@@ -130,7 +130,7 @@ namespace K3b {
                  */
                 CommandLoad = 0x800,
 
-                RECommandLoad = CommandEject|CommandLoad,
+                CommandReload = CommandEject|CommandLoad,
 
                 /**
                  * Determine the device buffer state.
@@ -234,7 +234,7 @@ namespace K3b {
         }
 
         inline DeviceHandler* tocType(Device* dev) {
-            return sendCommand(DeviceHandler::CommandTocTYPE,dev);
+            return sendCommand(DeviceHandler::CommandTocType,dev);
         }
 
         inline DeviceHandler* numSessions(Device* dev) {
@@ -246,7 +246,7 @@ namespace K3b {
         }
 
         inline DeviceHandler* unblock(Device* dev) {
-            return sendCommand(DeviceHandler::UNCommandBlock,dev);
+            return sendCommand(DeviceHandler::CommandUnblock,dev);
         }
 
         inline DeviceHandler* eject(Device* dev) {
@@ -254,7 +254,7 @@ namespace K3b {
         }
 
         inline DeviceHandler* reload(Device* dev) {
-            return sendCommand(DeviceHandler::RECommandLoad,dev);
+            return sendCommand(DeviceHandler::CommandReload,dev);
         }
 
         inline DeviceHandler* load(Device* dev) {

@@ -1,12 +1,28 @@
 project(libk3b)
 
 include_directories(
+  ${libk3bdevice_SOURCE_DIR}
+  ${libk3b_SOURCE_DIR}/core
+  ${libk3b_SOURCE_DIR}/plugin
+  ${libk3b_SOURCE_DIR}/tools
+  ${libk3b_SOURCE_DIR}/tools/qprocess
+  ${libk3b_SOURCE_DIR}/tools/qprocess/private
+  ${libk3b_SOURCE_DIR}/projects
+  ${libk3b_SOURCE_DIR}/projects/audiocd
+  ${libk3b_SOURCE_DIR}/projects/datacd
+  ${libk3b_SOURCE_DIR}/projects/videocd
+  ${libk3b_SOURCE_DIR}/projects/mixedcd
+  ${libk3b_SOURCE_DIR}/jobs
+  ${libk3b_SOURCE_DIR}/videodvd
   ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}/core
   ${CMAKE_CURRENT_BINARY_DIR}/plugin
   ${CMAKE_CURRENT_BINARY_DIR}/tools
   ${CMAKE_CURRENT_BINARY_DIR}/projects
   ${CMAKE_CURRENT_BINARY_DIR}/jobs
+  ${KDE4_INCLUDES}
+  ${KDE4_INCLUDE_DIR}
+  ${QT_INCLUDES}
   )
 
 set(CMAKE_REQUIRED_LIBRARIES m)

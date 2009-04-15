@@ -393,7 +393,7 @@ QString K3b::Medium::volumeId() const
 
 QString K3b::Medium::beautifiedVolumeId() const
 {
-    const QString& oldId = volumeId();
+    const QString oldId = volumeId();
     QString newId;
 
     bool newWord = true;
@@ -498,11 +498,190 @@ bool K3b::Medium::sameMedium( const K3b::Medium& other ) const
 
 
 // static
-QString K3b::Medium::mediaRequestString( Device::MediaTypes requestedMediaTypes, Device::MediaStates requestedMediaStates, const K3b::Msf& requestedSize )
+QString K3b::Medium::mediaRequestString( Device::MediaTypes requestedMediaTypes, Device::MediaStates requestedMediaStates, const K3b::Msf& requestedSize, Device::Device* dev )
 {
+    //
+    // The following cases make sense and are used in K3b:
+    //  0. empty writable medium (data/emovix project and image)
+    //  1. empty writable CD (audio/vcd project and copy and image)
+    //  2. empty writable DVD (video dvd project and copy)
+    //  2.1 empty writable DL DVD (video dvd project and copy)
+    //  3. empty writable Blu-Ray (copy and image)
+    //  3.1 empty writable DL Blu-Ray (image, copy)
+    //  3.2 empty writable DVD or Blu-Ray (image)
+    //  4. non-empty rewritable medium (format)
+    //  5. empty or appendable medium (data/emovix project)
+    //  6. empty or appendable DVD or Blu-Ray (could be handled via size)
+    //  7. empty or appendable Blu-Ray (could be handled via size)
+    //  8. non-empty CD (CD cloning)
+    //  9. non-empty medium (copy)
+
+    QString deviceString;
+    if( dev )
+        deviceString = dev->vendor() + ' ' + dev->description() + QLatin1String(" (") + dev->blockDeviceName() + ')';
+
+    // restrict according to requested size
+    // FIXME: this does not handle all cases, for example: we have SL and DL DVD in the media types, but only plain BD
+    if( requestedSize > 0 ) {
+        if( requestedSize > K3b::MediaSizeCd100Min )
+            requestedMediaTypes ^= Device::MEDIA_CD_ALL;
+        if( requestedSize > K3b::MediaSizeDvd4Gb )
+            requestedMediaTypes ^= Device::MEDIA_WRITABLE_DVD_SL;
+        if( requestedSize > K3b::MediaSizeDvd8Gb )
+            requestedMediaTypes ^= Device::MEDIA_WRITABLE_DVD_DL;
+    }
+
 #ifdef __GNUC__
-#warning IMPLEMENTME: mediaRequestString and use me in EmptyDiskWaiter and MediaSelectionComboBox
+#warning Use the i18n string formatting like <strong> or whatever instead of normal html/rtf like <b>
 #endif
-    // FIXME: do not construct strings as in K3b 1.0. It makes translation to many languages impossible!
-    return QString();
+    if( requestedMediaStates == Device::STATE_EMPTY ) {
+        if( requestedMediaTypes == Device::MEDIA_WRITABLE ) {
+            if( dev )
+                return i18n("Please insert an empty medium into drive<p><b>%1</b>").arg(deviceString);
+            else
+                return i18n("Please insert an empty medium");
+        }
+        else if( requestedMediaTypes == (Device::MEDIA_WRITABLE_DVD|Device::MEDIA_WRITABLE_BD) ) {
+            if( dev )
+                return i18n("Please insert an empty DVD or Blu-Ray medium into drive<p><b>%1</b>").arg(deviceString);
+            else
+                return i18n("Please insert an empty DVD or Blu-Ray medium");
+        }
+        else if( requestedMediaTypes == Device::MEDIA_WRITABLE_BD ) {
+            if( dev )
+                return i18n("Please insert an empty Blu-Ray medium into drive<p><b>%1</b>").arg(deviceString);
+            else
+                return i18n("Please insert an empty Blu-Ray medium");
+        }
+        else if( requestedMediaTypes == Device::MEDIA_WRITABLE_CD ) {
+            if( dev )
+                return i18n("Please insert an empty CD medium into drive<p><b>%1</b>").arg(deviceString);
+            else
+                return i18n("Please insert an empty CD medium");
+        }
+        else if( requestedMediaTypes == Device::MEDIA_WRITABLE_DVD ) {
+            if( dev )
+                return i18n("Please insert an empty DVD medium into drive<p><b>%1</b>").arg(deviceString);
+            else
+                return i18n("Please insert an empty DVD medium");
+        }
+        else if( requestedMediaTypes == Device::MEDIA_WRITABLE_DVD_DL ) {
+            if( dev )
+                return i18n("Please insert an empty DVD-DL medium into drive<p><b>%1</b>").arg(deviceString);
+            else
+                return i18n("Please insert an empty DVD-DL medium");
+        }
+    }
+    else if( requestedMediaStates == (Device::STATE_EMPTY|Device::STATE_INCOMPLETE) ) {
+        if( requestedMediaTypes == Device::MEDIA_WRITABLE ) {
+            if( dev )
+                return i18n("Please insert an empty or appendable medium into drive<p><b>%1</b>").arg(deviceString);
+            else
+                return i18n("Please insert an empty or appendable medium");
+        }
+        else if( requestedMediaTypes == (Device::MEDIA_WRITABLE_DVD|Device::MEDIA_WRITABLE_BD) ) {
+            if( dev )
+                return i18n("Please insert an empty or appendable DVD or Blu-Ray medium into drive<p><b>%1</b>").arg(deviceString);
+            else
+                return i18n("Please insert an empty or appendable DVD or Blu-Ray medium");
+        }
+        else if( requestedMediaTypes == Device::MEDIA_WRITABLE_BD ) {
+            if( dev )
+                return i18n("Please insert an empty or appendable Blu-Ray medium into drive<p><b>%1</b>").arg(deviceString);
+            else
+                return i18n("Please insert an empty or appendable Blu-Ray medium");
+        }
+        else if( requestedMediaTypes == Device::MEDIA_WRITABLE_CD ) {
+            if( dev )
+                return i18n("Please insert an empty or appendable CD medium into drive<p><b>%1</b>").arg(deviceString);
+            else
+                return i18n("Please insert an empty or appendable CD medium");
+        }
+        else if( requestedMediaTypes == Device::MEDIA_WRITABLE_DVD ) {
+            if( dev )
+                return i18n("Please insert an empty or appendable DVD medium into drive<p><b>%1</b>").arg(deviceString);
+            else
+                return i18n("Please insert an empty or appendable DVD medium");
+        }
+        else if( requestedMediaTypes == Device::MEDIA_WRITABLE_DVD_DL ) {
+            if( dev )
+                return i18n("Please insert an empty or appendable DVD-DL medium into drive<p><b>%1</b>").arg(deviceString);
+            else
+                return i18n("Please insert an empty or appendable DVD-DL medium");
+        }
+    }
+    else if( requestedMediaStates == (Device::STATE_COMPLETE|Device::STATE_INCOMPLETE) ) {
+        if( requestedMediaTypes == Device::MEDIA_ALL ) {
+            if( dev )
+                return i18n("Please insert a non-empty medium into drive<p><b>%1</b>").arg(deviceString);
+            else
+                return i18n("Please insert a non-empty medium");
+        }
+        else if( requestedMediaTypes == Device::MEDIA_REWRITABLE ) {
+            if( dev )
+                return i18n("Please insert a non-empty rewritable medium into drive<p><b>%1</b>").arg(deviceString);
+            else
+                return i18n("Please insert a non-empty rewritable medium");
+        }
+    }
+    else if( requestedMediaStates == (Device::STATE_COMPLETE|Device::STATE_INCOMPLETE|Device::STATE_EMPTY) ) {
+        if( requestedMediaTypes == Device::MEDIA_REWRITABLE ) {
+            if( dev )
+                return i18n("Please insert a rewritable medium into drive<p><b>%1</b>").arg(deviceString);
+            else
+                return i18n("Please insert a rewritable medium");
+        }
+    }
+
+    // fallback
+    if( dev )
+        return i18n("Please insert a suitable medium into drive<p><b>%1</b>").arg(deviceString);
+    else
+        return i18n("Please insert a suitable medium");
+}
+
+
+// static
+QString K3b::Medium::mediaRequestString( MediumContents content, Device::Device* dev )
+{
+    QString deviceString;
+    if( dev )
+        deviceString = dev->vendor() + ' ' + dev->description() + QLatin1String(" (") + dev->blockDeviceName() + ')';
+
+    if( content == K3b::Medium::ContentVideoCD ) {
+        if( dev )
+            return i18n("Please insert a Video CD medium into drive<p><b>%1</b>").arg(deviceString);
+        else
+            return i18n("Please insert a Video CD medium");
+    }
+    else if ( content == K3b::Medium::ContentVideoDVD ) {
+        if( dev )
+            return i18n("Please insert a Video DVD medium into drive<p><b>%1</b>").arg(deviceString);
+        else
+            return i18n("Please insert a Video DVD medium");
+    }
+    else if( content == (K3b::Medium::ContentAudio|K3b::Medium::ContentData) ) {
+        if( dev )
+            return i18n("Please insert a Mixed Mode CD medium into drive<p><b>%1</b>").arg(deviceString);
+        else
+            return i18n("Please insert a Mixed Mode CD medium");
+    }
+    else if( content == K3b::Medium::ContentAudio ) {
+        if( dev )
+            return i18n("Please insert an Audio CD medium into drive<p><b>%1</b>").arg(deviceString);
+        else
+            return i18n("Please insert an Audio CD medium");
+    }
+    else if( content == K3b::Medium::ContentData ) {
+        if( dev )
+            return i18n("Please insert a Data medium into drive<p><b>%1</b>").arg(deviceString);
+        else
+            return i18n("Please insert a Data medium");
+    }
+
+    // fallback
+    if( dev )
+        return i18n("Please insert a suitable medium into drive<p><b>%1</b>").arg(deviceString);
+    else
+        return i18n("Please insert a suitable medium");
 }

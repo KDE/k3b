@@ -15,11 +15,10 @@
 #ifndef _K3B_DATATRACK_READER_H_
 #define _K3B_DATATRACK_READER_H_
 
-
 #include "k3bthreadjob.h"
 
-#include "k3bmsf.h"
 #include "k3bglobals.h"
+#include "k3bmsf.h"
 
 class QIODevice;
 
@@ -27,7 +26,6 @@ namespace K3b {
     namespace Device {
         class Device;
     }
-
 
     /**
      * This is a replacement for readcd. We need this since
@@ -49,14 +47,14 @@ namespace K3b {
         DataTrackReader( JobHandler*, QObject* parent = 0 );
         ~DataTrackReader();
 
-        enum SectorSize {
-            AUTO = 0,
-            MODE1 = SectorSizeData2048,
-            MODE2FORM1 = SectorSizeData2048Subheader,
-            MODE2FORM2 = SectorSizeData2324Subheader
+        enum ReadSectorSize {
+            AUTO = K3b::SectorSizeAuto,
+            MODE1 = K3b::SectorSizeData2048,
+            MODE2FORM1 = K3b::SectorSizeData2048Subheader,
+            MODE2FORM2 = K3b::SectorSizeData2324Subheader
         };
 
-        void setSectorSize( SectorSize size );
+        void setSectorSize( ReadSectorSize size );
 
         void setDevice( Device::Device* );
 

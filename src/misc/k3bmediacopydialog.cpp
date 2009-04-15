@@ -455,9 +455,13 @@ void K3b::MediaCopyDialog::toggleAll()
                                                           ? K3b::Device::MEDIA_WRITABLE_DVD_DL
                                                           : K3b::Device::MEDIA_WRITABLE_DVD );
         }
-        else {
+        else if( Device::isBdMedia( sourceMedium.diskInfo().mediaType() ) ) {
             // FIXME: do the same single layer/dual layer thing like with DVD
             m_writerSelectionWidget->setWantedMediumType( K3b::Device::MEDIA_WRITABLE_BD );
+        }
+        else {
+            // generic media request in case we have no source medium
+            m_writerSelectionWidget->setWantedMediumType( K3b::Device::MEDIA_WRITABLE );
         }
     }
 

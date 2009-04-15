@@ -210,9 +210,11 @@ void K3b::CdrecordProgram::parseFeatures( const QString& out, ExternalBin* bin )
     else
         bin->addFeature( "burnproof" );
 
-// FIXME: cdrecord Blu-ray support not 100% yet
-//   if ( bin->version >= K3b::Version( 2, 1, 1, "a29" ) && !m_usingCdrkit )
-//       bin->addFeature( "blu-ray" );
+    if ( bin->version >= K3b::Version( 2, 1, 1, "a29" ) && !m_usingCdrkit )
+        bin->addFeature( "blu-ray" );
+
+    // FIXME: when did cdrecord introduce free dvd support?
+    bin->addFeature( "dvd" );
 }
 
 

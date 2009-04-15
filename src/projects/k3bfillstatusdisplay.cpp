@@ -55,17 +55,6 @@
 #include <KMessageBox>
 
 
-static const int DEFAULT_CD_SIZE_74 = 74*60*75;
-static const int DEFAULT_CD_SIZE_80 = 80*60*75;
-static const int DEFAULT_CD_SIZE_100 = 100*60*75;
-static const int DEFAULT_DVD_SIZE_4_4 = 2295104;
-static const int DEFAULT_DVD_SIZE_8_0 = 4173824;
-
-// FIXME: get the proper BD sizes
-static const int DEFAULT_BD_SIZE_25 = 13107200;
-static const int DEFAULT_BD_SIZE_50 = 26214400;
-
-
 class K3b::FillStatusDisplayWidget::Private
 {
 public:
@@ -479,43 +468,43 @@ void K3b::FillStatusDisplay::slotAutoSize()
 
 void K3b::FillStatusDisplay::slot74Minutes()
 {
-    d->displayWidget->setCdSize( DEFAULT_CD_SIZE_74 );
+    d->displayWidget->setCdSize( K3b::MediaSizeCd74Min );
 }
 
 
 void K3b::FillStatusDisplay::slot80Minutes()
 {
-    d->displayWidget->setCdSize( DEFAULT_CD_SIZE_80 );
+    d->displayWidget->setCdSize( K3b::MediaSizeCd80Min );
 }
 
 
 void K3b::FillStatusDisplay::slot100Minutes()
 {
-    d->displayWidget->setCdSize( DEFAULT_CD_SIZE_100 );
+    d->displayWidget->setCdSize( K3b::MediaSizeCd100Min );
 }
 
 
 void K3b::FillStatusDisplay::slotDvd4_7GB()
 {
-    d->displayWidget->setCdSize( DEFAULT_DVD_SIZE_4_4 );
+    d->displayWidget->setCdSize( K3b::MediaSizeDvd4Gb );
 }
 
 
 void K3b::FillStatusDisplay::slotDvdDoubleLayer()
 {
-    d->displayWidget->setCdSize( DEFAULT_DVD_SIZE_8_0 );
+    d->displayWidget->setCdSize( K3b::MediaSizeDvd8Gb );
 }
 
 
 void K3b::FillStatusDisplay::slotBD25()
 {
-    d->displayWidget->setCdSize( DEFAULT_BD_SIZE_25 );
+    d->displayWidget->setCdSize( K3b::MediaSizeBluRay25Gb );
 }
 
 
 void K3b::FillStatusDisplay::slotBD50()
 {
-    d->displayWidget->setCdSize( DEFAULT_BD_SIZE_50 );
+    d->displayWidget->setCdSize( K3b::MediaSizeBluRay50Gb );
 }
 
 
@@ -637,25 +626,25 @@ void K3b::FillStatusDisplay::slotLoadUserDefaults()
         // automatic mode
         d->actionAuto->setChecked( true );
         break;
-    case DEFAULT_CD_SIZE_74:
+    case MediaSizeCd74Min:
         d->action74Min->setChecked( true );
         break;
-    case DEFAULT_CD_SIZE_80:
+    case MediaSizeCd80Min:
         d->action80Min->setChecked( true );
         break;
-    case DEFAULT_CD_SIZE_100:
+    case MediaSizeCd100Min:
         d->action100Min->setChecked( true );
         break;
-    case DEFAULT_DVD_SIZE_4_4:
+    case MediaSizeDvd4Gb:
         d->actionDvd4_7GB->setChecked( true );
         break;
-    case DEFAULT_DVD_SIZE_8_0:
+    case MediaSizeDvd8Gb:
         d->actionDvdDoubleLayer->setChecked( true );
         break;
-    case DEFAULT_BD_SIZE_25:
+    case MediaSizeBluRay25Gb:
         d->actionBD25->setChecked( true );
         break;
-    case DEFAULT_BD_SIZE_50:
+    case MediaSizeBluRay50Gb:
         d->actionBD50->setChecked( true );
         break;
     default:
@@ -730,26 +719,26 @@ void K3b::FillStatusDisplay::slotMediumChanged( K3b::Device::Device* )
             // default fallback
             // we do not have BD- or HD-DVD only projects
             if( ( d->doc->supportedMediaTypes() & K3b::Device::MEDIA_CD_ALL &&
-                  d->doc->length().lba() <= DEFAULT_CD_SIZE_80 ) ||
+                  d->doc->length().lba() <= MediaSizeCd80Min ) ||
                 !( d->doc->supportedMediaTypes() & ( K3b::Device::MEDIA_DVD_ALL|K3b::Device::MEDIA_BD_ALL ) ) ||
                 ( !haveDVD && !haveBD ) ) {
-                d->displayWidget->setCdSize( DEFAULT_CD_SIZE_80 );
+                d->displayWidget->setCdSize( MediaSizeCd80Min );
             }
             else if ( haveDVD && (
                           ( d->doc->supportedMediaTypes() & K3b::Device::MEDIA_DVD_ALL &&
-                            d->doc->length().lba() <= DEFAULT_DVD_SIZE_8_0 ) ||
+                            d->doc->length().lba() <= MediaSizeDvd8Gb ) ||
                           !( d->doc->supportedMediaTypes() & K3b::Device::MEDIA_BD_ALL ) ||
                           !haveBD ) ) {
-                if( d->doc->length().lba() > DEFAULT_DVD_SIZE_4_4 )
-                    d->displayWidget->setCdSize( DEFAULT_DVD_SIZE_8_0 );
+                if( d->doc->length().lba() > MediaSizeDvd4Gb )
+                    d->displayWidget->setCdSize( MediaSizeDvd8Gb );
                 else
-                    d->displayWidget->setCdSize( DEFAULT_DVD_SIZE_4_4 );
+                    d->displayWidget->setCdSize( MediaSizeDvd4Gb );
             }
-            else if ( d->doc->length().lba() <= DEFAULT_BD_SIZE_25 ) {
-                d->displayWidget->setCdSize( DEFAULT_BD_SIZE_25 );
+            else if ( d->doc->length().lba() <= MediaSizeBluRay25Gb ) {
+                d->displayWidget->setCdSize( MediaSizeBluRay25Gb );
             }
             else {
-                d->displayWidget->setCdSize( DEFAULT_BD_SIZE_50 );
+                d->displayWidget->setCdSize( MediaSizeBluRay50Gb );
             }
         }
     }

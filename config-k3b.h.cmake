@@ -9,10 +9,6 @@
 
 #cmakedefine ENABLE_TAGLIB
 
-#define SIZEOF_INT ${SIZEOF_INT}
-
-#define SIZEOF_LONG ${SIZEOF_LONG}
-
 #cmakedefine HAVE_SYS_VFS_H 1
 
 #cmakedefine HAVE_SYS_STATVFS_H 1

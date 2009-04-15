@@ -80,21 +80,17 @@ K3b::AudioTrack::AudioTrack( K3b::AudioDoc* parent )
 K3b::AudioTrack::~AudioTrack()
 {
     kDebug() << this;
-    //
-    // It is crucial that we do not emit the changed signal here because otherwise
-    // the doc will delete us again once we are empty!
-    //
+
     m_currentlyDeleting = true;
 
+    // fix the list
+    take();
 
     kDebug() << "deleting sources.";
 
     // delete all sources
     while( m_firstSource )
         delete m_firstSource;
-
-    // fix the list
-    take();
 
     kDebug() << "finished";
 
@@ -104,7 +100,7 @@ K3b::AudioTrack::~AudioTrack()
 
 void K3b::AudioTrack::emitChanged()
 {
-    if( m_parent  && !m_currentlyDeleting )
+    if( m_parent && !m_currentlyDeleting )
         m_parent->slotTrackChanged( this );
 }
 

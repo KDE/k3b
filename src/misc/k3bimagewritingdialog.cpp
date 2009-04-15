@@ -210,21 +210,19 @@ void K3b::ImageWritingDialog::setupGui()
                                 + "\n"
                                 + i18n("*|All Files") );
     QHBoxLayout* groupImageUrlLayout = new QHBoxLayout( groupImageUrl );
-    groupImageUrlLayout->setMargin( 0 );
     groupImageUrlLayout->addWidget( m_editImagePath );
 
     QGroupBox* groupImageType = new QGroupBox( i18n("Image Type"), frame );
     QHBoxLayout* groupImageTypeLayout = new QHBoxLayout( groupImageType );
-    groupImageTypeLayout->setMargin( 0 );
     m_comboImageType = new QComboBox( groupImageType );
     groupImageTypeLayout->addWidget( m_comboImageType );
     groupImageTypeLayout->addStretch( 1 );
     m_comboImageType->addItem( i18n("Auto Detection") );
-    m_comboImageType->addItem( i18n("ISO9660 Image") );
-    m_comboImageType->addItem( i18n("Cue/Bin Image") );
-    m_comboImageType->addItem( i18n("Audio Cue File") );
-    m_comboImageType->addItem( i18n("Cdrdao TOC File") );
-    m_comboImageType->addItem( i18n("Cdrecord Clone Image") );
+    m_comboImageType->addItem( i18n("Plain data image") );
+    m_comboImageType->addItem( i18n("Cue/bin image") );
+    m_comboImageType->addItem( i18n("Audio cue file") );
+    m_comboImageType->addItem( i18n("Cdrdao TOC file") );
+    m_comboImageType->addItem( i18n("Cdrecord clone image") );
     d->imageTypeSelectionMap[1] = IMAGE_ISO;
     d->imageTypeSelectionMap[2] = IMAGE_CUE_BIN;
     d->imageTypeSelectionMap[3] = IMAGE_AUDIO_CUE;
@@ -347,6 +345,32 @@ void K3b::ImageWritingDialog::setupGui()
     grid->addWidget( d->optionTabbed, 3, 0, 1, 2 );
 
     grid->setRowStretch( 1, 1 );
+
+
+    m_comboImageType->setWhatsThis( i18n("<p><b>Image types supported by K3b:</p>"
+                                         "<p><b>Plain image</b><br/>"
+                                         "Plain images are written as is to the medium using "
+                                         "a single data track. Typical plain images are iso "
+                                         "images as created by K3b's data project."
+                                         "<p><b>Cue/bin images</b><br/>"
+                                         "Cue/bin images consist of a cue file describing the "
+                                         "table of contents of the medium and an image file "
+                                         "which contains the actual data. The data will be "
+                                         "written to the medium according to the cue file."
+                                         "<p><b>Audio Cue image</b><br/>"
+                                         "Audio cue images are a special kind of cue/bin image "
+                                         "containing an image of an audio CD. The actual audio "
+                                         "data can be encoded using any audio format supported "
+                                         "by K3b. Audio cue files can also be imported into "
+                                         "K3b audio projects which allows to change the order "
+                                         "and add or remove tracks."
+                                         "<p><b>Cdrecord clone images</b><br/>"
+                                         "K3b creates a cdrecord clone image of a single-session "
+                                         "CD when copying a CD in clone mode. These images can "
+                                         "be reused here."
+                                         "<p><b>Cdrdao TOC files</b><br/>"
+                                         "K3b supports writing cdrdao's own image format, the toc "
+                                         "files.") );
 }
 
 
@@ -811,7 +835,8 @@ void K3b::ImageWritingDialog::toggleAll()
     }
 
     // set a wanted media type (DVD/BD -> only ISO)
-    if ( currentImageType() == IMAGE_ISO ) {
+    if ( currentImageType() == IMAGE_ISO ||
+         currentImageType() == IMAGE_UNKNOWN ) {
         m_writerSelectionWidget->setWantedMediumType( K3b::Device::MEDIA_WRITABLE );
     }
     else {

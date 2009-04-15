@@ -243,19 +243,19 @@ namespace K3b {
             COPYRIGHT_PROTECTION_AACS_BD = 0x10
         };
 
-        inline bool isDvdMedia( MediaType mediaType ) {
+        inline bool isDvdMedia( MediaTypes mediaType ) {
             return ( mediaType & MEDIA_DVD_ALL );
         }
 
-        inline bool isCdMedia( MediaType mediaType ) {
+        inline bool isCdMedia( MediaTypes mediaType ) {
             return ( mediaType & MEDIA_CD_ALL );
         }
 
-        inline bool isBdMedia( MediaType mediaType ) {
+        inline bool isBdMedia( MediaTypes mediaType ) {
             return ( mediaType & MEDIA_BD_ALL );
         }
 
-        inline bool isRewritableMedia( MediaType mediaType ) {
+        inline bool isRewritableMedia( MediaTypes mediaType ) {
             return ( mediaType == MEDIA_DVD_RW ||
                      mediaType == MEDIA_DVD_RW_OVWR ||
                      mediaType == MEDIA_DVD_RW_SEQ ||

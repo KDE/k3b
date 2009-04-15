@@ -39,6 +39,7 @@ K3b::CddbOptionTab::CddbOptionTab( QWidget* parent )
 //     }
 
     if ( m_cddbKcm ) {
+        m_cddbKcm->layout()->setMargin(0);
         layout->addWidget( m_cddbKcm );
     }
     else {

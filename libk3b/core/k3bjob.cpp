@@ -260,7 +260,7 @@ K3b::BurnJob::BurnJob( K3b::JobHandler* handler, QObject* parent )
     : K3b::Job( handler, parent ),
       d( new Private() )
 {
-    d->writeMethod = K3b::WritingAppDefault;
+    d->writeMethod = K3b::WritingAppAuto;
 }
 
 
@@ -284,7 +284,7 @@ void K3b::BurnJob::setWritingApp( K3b::WritingApp w )
 
 K3b::WritingApps K3b::BurnJob::supportedWritingApps() const
 {
-    return K3b::WritingAppDefault | K3b::WritingAppCdrdao | K3b::WritingAppCdrecord;
+    return K3b::WritingAppAuto | K3b::WritingAppCdrdao | K3b::WritingAppCdrecord;
 }
 
 #include "k3bjob.moc"

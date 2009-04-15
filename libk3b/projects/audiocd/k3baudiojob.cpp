@@ -267,7 +267,7 @@ void K3b::AudioJob::start()
         }
 
         // determine writing app
-        if( writingApp() == K3b::WritingAppDefault ) {
+        if( writingApp() == K3b::WritingAppAuto ) {
             if( m_usedWritingMode == K3b::WritingModeSao ) {
                 // there are none-DAO writers that are supported by cdrdao
                 if( !writer()->dao() ||

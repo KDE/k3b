@@ -370,7 +370,7 @@ void K3b::CdCopyJob::searchCdText()
 {
     emit newSubTask( i18n("Searching CD-TEXT") );
 
-    connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::CommandCdText_RAW, m_readerDevice ),
+    connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::CommandCdTextRaw, m_readerDevice ),
              SIGNAL(finished(K3b::Device::DeviceHandler*)),
              this,
              SLOT(slotCdTextReady(K3b::Device::DeviceHandler*)) );
@@ -856,8 +856,7 @@ bool K3b::CdCopyJob::writeNextSession()
         }
         d->cdrecordWriter->setWritingMode( usedWritingMode  );
 
-        if( d->numSessions > 1 )
-            d->cdrecordWriter->addArgument( "-multi" );
+        d->cdrecordWriter->setMulti( d->numSessions > 1 );
 
         if( d->haveCddb || d->haveCdText ) {
             if( usedWritingMode == K3b::WritingModeTao ) {
@@ -924,8 +923,7 @@ bool K3b::CdCopyJob::writeNextSession()
         // all but the last session of a multisession disk are written in multi mode
         // and every data track has it's own session which we forced above
         //
-        if( multi )
-            d->cdrecordWriter->addArgument( "-multi" );
+        d->cdrecordWriter->setMulti( multi );
 
         // just to let the reader init
         if( m_onTheFly )

@@ -49,7 +49,6 @@ namespace K3b {
 
         void setWriter( K3b::Device::Device* dev ) { m_device = dev; }
         void setSimulate( bool b ) { m_simulate = b; }
-        void setForce(bool b) { m_force = b; }
         void setMulti( bool b ) { m_noFix = b; }
         void setTocFile( const QString& s);
         void setCopies(int c) { m_copies = c; }

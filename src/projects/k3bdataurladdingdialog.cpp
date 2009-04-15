@@ -273,16 +273,11 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
 
     ++m_filesHandled;
 
-#ifdef __GNUC__
-#warning PORTME
-#endif
-#if 0
     m_infoLabel->setText( url.toLocalFile() );
     if( m_totalFiles == 0 )
         m_counterLabel->setText( QString("(%1)").arg(m_filesHandled) );
     else
         m_counterLabel->setText( QString("(%1/%2)").arg(m_filesHandled).arg(m_totalFiles) );
-#endif
 
     //
     // 1. Check if we want and can add the url

@@ -31,6 +31,7 @@
 #include <qlist.h>
 #include <qpair.h>
 
+
 namespace {
     class VerificationJobTrackEntry
     {
@@ -100,10 +101,11 @@ public:
 
 void K3b::VerificationJob::Private::reloadMedium()
 {
+#warning FIXME: loks like the reload does not work
     // many drives need to reload the medium to return to a proper state
     mediumHasBeenReloaded = true;
     emit q->infoMessage( i18n( "Need to reload medium to return to proper state." ), MessageInfo );
-    QObject::connect( K3b::Device::sendCommand( Device::DeviceHandler::CommandMediaInfo|Device::DeviceHandler::RECommandLoad, device ),
+    QObject::connect( K3b::Device::sendCommand( Device::DeviceHandler::CommandReload|Device::DeviceHandler::CommandMediaInfo, device ),
                       SIGNAL(finished(K3b::Device::DeviceHandler*)),
                       q,
                       SLOT(slotDiskInfoReady(K3b::Device::DeviceHandler*)) );
@@ -127,8 +129,13 @@ K3b::VerificationJob::~VerificationJob()
 void K3b::VerificationJob::cancel()
 {
     d->canceled = true;
-    if( d->dataTrackReader && d->dataTrackReader->active() )
+    if( d->dataTrackReader && d->dataTrackReader->active() ) {
         d->dataTrackReader->cancel();
+    }
+    else if( active() ) {
+        emit canceled();
+        jobFinished( false );
+    }
 }
 
 
@@ -190,8 +197,8 @@ void K3b::VerificationJob::start()
 void K3b::VerificationJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
 {
     if( d->canceled ) {
-        emit canceled();
-        jobFinished(false);
+        // signal already emitted in cancel()
+        return;
     }
 
     d->diskInfo = dh->diskInfo();

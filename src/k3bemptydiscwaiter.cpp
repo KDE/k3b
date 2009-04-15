@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,8 +59,6 @@ public:
 
     Device::MediaTypes wantedMediaType;
     Device::MediaStates wantedMediaState;
-
-    QString wantedMediaTypeString;
 
     int result;
     int dialogVisible;
@@ -122,7 +120,7 @@ K3b::EmptyDiscWaiter::EmptyDiscWaiter( K3b::Device::Device* device, QWidget* par
 
     grid->addWidget( d->pixLabel, 0, 0, 3, 1 );
     grid->addItem( new QSpacerItem( 20, 1, QSizePolicy::Fixed, QSizePolicy::Fixed ), 0, 1 );
-    grid->addWidget( new QLabel( i18n("Found media:"), mainWidget() ), 0, 2 );
+    grid->addWidget( new QLabel( i18n("Found medium:"), mainWidget() ), 0, 2 );
     grid->addWidget( d->labelFoundMedia, 0, 3 );
     grid->addWidget( d->labelRequest, 1, 2, 1, 2 );
     grid->setRowStretch( 2, 1 );
@@ -163,65 +161,8 @@ int K3b::EmptyDiscWaiter::waitForDisc( Device::MediaStates mediaState, Device::M
     d->blockMediaChange = false;
     d->mediumChanged = 0;
 
-    //
-    // We do not cover every case here but just the ones that really make sense
-    //
-    if( (d->wantedMediaType & K3b::Device::MEDIA_WRITABLE_DVD) &&
-        (d->wantedMediaType & K3b::Device::MEDIA_WRITABLE_CD) )
-        d->wantedMediaTypeString = i18n("CD-R(W) or DVD%1R(W)",QString("±"));
-    else if( d->wantedMediaType & K3b::Device::MEDIA_WRITABLE_DVD_SL )
-        d->wantedMediaTypeString = i18n("DVD%1R(W)",QString("±"));
-    else if( d->wantedMediaType & K3b::Device::MEDIA_WRITABLE_DVD_DL )
-        d->wantedMediaTypeString = i18n("Double Layer DVD%1R",QString("±"));
-    else if( d->wantedMediaType & K3b::Device::MEDIA_WRITABLE_BD )
-        d->wantedMediaTypeString = i18n("Blu-ray BD-R(E)");
-    else
-        d->wantedMediaTypeString = i18n("CD-R(W)");
-
-    if( message.isEmpty() ) {
-        if( (d->wantedMediaState & K3b::Device::STATE_COMPLETE) && (d->wantedMediaState & K3b::Device::STATE_INCOMPLETE) )
-            d->labelRequest->setText( i18n("Please insert a complete or appendable %4 medium "
-                                           "into drive<p><b>%1 %2 (%3)</b>."
-                                           ,d->device->vendor()
-                                           ,d->device->description()
-                                           ,d->device->blockDeviceName()
-                                           , d->wantedMediaTypeString ) );
-        else if( d->wantedMediaState & K3b::Device::STATE_COMPLETE )
-            d->labelRequest->setText( i18n("Please insert a complete %4 medium "
-                                           "into drive<p><b>%1 %2 (%3)</b>."
-                                           ,d->device->vendor()
-                                           ,d->device->description()
-                                           ,d->device->blockDeviceName()
-                                           , d->wantedMediaTypeString ) );
-        else if( (d->wantedMediaState & K3b::Device::STATE_INCOMPLETE) && (d->wantedMediaState & K3b::Device::STATE_EMPTY) )
-            d->labelRequest->setText( i18n("Please insert an empty or appendable %4 medium "
-                                           "into drive<p><b>%1 %2 (%3)</b>."
-                                           ,d->device->vendor()
-                                           ,d->device->description()
-                                           ,d->device->blockDeviceName()
-                                           , d->wantedMediaTypeString ) );
-        else if( d->wantedMediaState & K3b::Device::STATE_INCOMPLETE )
-            d->labelRequest->setText( i18n("Please insert an appendable %4 medium "
-                                           "into drive<p><b>%1 %2 (%3)</b>."
-                                           ,d->device->vendor()
-                                           ,d->device->description()
-                                           ,d->device->blockDeviceName()
-                                           , d->wantedMediaTypeString ) );
-        else if( d->wantedMediaState & K3b::Device::STATE_EMPTY )
-            d->labelRequest->setText( i18n("Please insert an empty %4 medium "
-                                           "into drive<p><b>%1 %2 (%3)</b>."
-                                           ,d->device->vendor()
-                                           ,d->device->description()
-                                           ,d->device->blockDeviceName()
-                                           , d->wantedMediaTypeString ) );
-        else // fallback case (this should not happen in K3b)
-            d->labelRequest->setText( i18n("Please insert a suitable medium "
-                                           "into drive<p><b>%1 %2 (%3)</b>."
-                                           ,d->device->vendor()
-                                           ,d->device->description()
-                                           ,d->device->blockDeviceName()) );
-
-    }
+    if( message.isEmpty() )
+        d->labelRequest->setText( Medium::mediaRequestString( d->wantedMediaType, d->wantedMediaState, 0, d->device ) );
     else
         d->labelRequest->setText( message );
 
@@ -322,7 +263,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
             if( formatWithoutAsking ||
                 !hasIso ||
                 KMessageBox::warningContinueCancel( parentWidgetToUse(),
-                                                    i18n("Found %1 media in %2 - %3. "
+                                                    i18n("Found %1 medium in %2 - %3. "
                                                          "Should it be overwritten?"
                                                          ,QString("BD-RE")
                                                          ,d->device->vendor()
@@ -404,7 +345,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                 if( formatWithoutAsking ||
                     !hasIso ||
                     KMessageBox::warningContinueCancel( parentWidgetToUse(),
-                                                        i18n("Found %1 media in %2 - %3. "
+                                                        i18n("Found %1 medium in %2 - %3. "
                                                              "Should it be overwritten?",
                                                              QString("DVD+RW"),
                                                              d->device->vendor(),
@@ -474,7 +415,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                 if( formatWithoutAsking ||
                     !hasIso ||
                     KMessageBox::warningContinueCancel( parentWidgetToUse(),
-                                                        i18n("Found %1 media in %2 - %3. "
+                                                        i18n("Found %1 medium in %2 - %3. "
                                                              "Should it be overwritten?",
                                                              K3b::Device::mediaTypeString(medium.diskInfo().mediaType()),
                                                              d->device->vendor(),
@@ -531,7 +472,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
 
             if( formatWithoutAsking ||
                 KMessageBox::warningContinueCancel( parentWidgetToUse(),
-                                                    i18n("Found %1 media in %2 - %3. "
+                                                    i18n("Found %1 medium in %2 - %3. "
                                                          "Should it be formatted?",
                                                          K3b::Device::mediaTypeString(medium.diskInfo().mediaType()),
                                                          d->device->vendor(),
@@ -607,7 +548,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
 
         if( formatWithoutAsking ||
             KMessageBox::questionYesNo( parentWidgetToUse(),
-                                        i18n("Found rewritable media in %1 - %2. "
+                                        i18n("Found rewritable medium in %1 - %2. "
                                              "Should it be erased?",d->device->vendor(),d->device->description()),
                                         i18n("Found Rewritable Disk"),
                                         KGuiItem(i18n("&Erase"), "erasecd"),
@@ -620,7 +561,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
             d->erasingInfoDialog->setText( i18n("Erasing CD-RW") );
 
             // the user may be using cdrdao for erasing as cdrecord does not work
-            int erasingApp = K3b::WritingAppDefault;
+            int erasingApp = K3b::WritingAppAuto;
             if( KGlobal::config()->group( "General Options" ).readEntry( "Manual writing app selection", false ) ) {
                 erasingApp = K3b::writingAppFromString( KGlobal::config()->group( "CDRW Erasing" ).readEntry( "writing_app" ) );
             }

@@ -13,8 +13,8 @@
  */
 
 
-#ifndef K3BGLOBALS_H
-#define K3BGLOBALS_H
+#ifndef _K3B_GLOBALS_H_
+#define _K3B_GLOBALS_H_
 
 #include <config-k3b.h>
 
@@ -40,20 +40,31 @@
 
 
 namespace K3b {
-
     class Version;
     class ExternalBin;
-
     namespace Device {
         class Device;
     }
 
+    enum MediaSize {
+        MediaSizeCd74Min = 74*60*75,
+        MediaSizeCd80Min = 80*60*75,
+        MediaSizeCd100Min = 100*60*75,
+
+        MediaSizeDvd4Gb = 2295104,
+        MediaSizeDvd8Gb = 4173824,
+
+        // FIXME: get the proper BD sizes
+        MediaSizeBluRay25Gb = 13107200,
+        MediaSizeBluRay50Gb = 26214400
+    };
+
     enum WritingApp {
-        WritingAppDefault = 1,
-        WritingAppCdrecord = 2,
-        WritingAppCdrdao = 4,
-        WritingAppGrowisofs = 16,
-        WritingAppDvdRwFormat = 32
+        WritingAppAuto = 0,
+        WritingAppCdrecord = 1,
+        WritingAppCdrdao = 2,
+        WritingAppGrowisofs = 4,
+        WritingAppDvdRwFormat = 8
     };
     Q_DECLARE_FLAGS( WritingApps, WritingApp )
 
@@ -76,6 +87,7 @@ namespace K3b {
      * demand.
      */
     enum SectorSize {
+        SectorSizeAuto = 0,
         SectorSizeAudio = 2352,
         SectorSizeData2048 = 2048,
         SectorSizeData2048Subheader = 2056,

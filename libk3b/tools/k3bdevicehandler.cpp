@@ -175,7 +175,7 @@ void K3b::Device::DeviceHandler::getRemainingSize()
 
 void K3b::Device::DeviceHandler::getTocType()
 {
-    sendCommand(DeviceHandler::CommandTocTYPE);
+    sendCommand(DeviceHandler::CommandTocType);
 }
 
 void K3b::Device::DeviceHandler::getNumSessions()
@@ -186,7 +186,7 @@ void K3b::Device::DeviceHandler::getNumSessions()
 
 void K3b::Device::DeviceHandler::block( bool b )
 {
-    sendCommand(b ? DeviceHandler::CommandBlock : DeviceHandler::UNCommandBlock);
+    sendCommand(b ? DeviceHandler::CommandBlock : DeviceHandler::CommandUnblock);
 }
 
 void K3b::Device::DeviceHandler::eject()
@@ -228,12 +228,12 @@ bool K3b::Device::DeviceHandler::run()
         if( !canceled() && d->command & CommandBlock )
             d->success = (d->success && d->dev->block( true ));
 
-        if( !canceled() && d->command & UNCommandBlock )
+        if( !canceled() && d->command & CommandUnblock )
             d->success = (d->success && d->dev->block( false ));
 
         //
         // It is important that eject is performed before load
-        // since the RECommandLoad command is a combination of both
+        // since the CommandReload command is a combination of both
         //
 
         if( !canceled() && d->command & CommandEject )
@@ -249,7 +249,7 @@ bool K3b::Device::DeviceHandler::run()
             d->diskInfo = d->dev->diskInfo();
         }
 
-        if( !canceled() && d->command & (CommandToc|CommandTocTYPE) ) {
+        if( !canceled() && d->command & (CommandToc|CommandTocType) ) {
             d->toc = d->dev->readToc();
         }
 
@@ -263,7 +263,7 @@ bool K3b::Device::DeviceHandler::run()
                 d->success = (d->success && !d->cdText.isEmpty());
         }
 
-        if( !canceled() && d->command & CommandCdText_RAW ) {
+        if( !canceled() && d->command & CommandCdTextRaw ) {
             bool cdTextSuccess = true;
             d->cdTextRaw = d->dev->readRawCdText( &cdTextSuccess );
             d->success = d->success && cdTextSuccess;
@@ -296,20 +296,20 @@ QDebug operator<<( QDebug dbg, K3b::Device::DeviceHandler::Commands commands )
         commandStrings << QLatin1String( "CommandToc" );
     if ( commands & K3b::Device::DeviceHandler::CommandCdText )
         commandStrings << QLatin1String( "CommandCdText" );
-    if ( commands & K3b::Device::DeviceHandler::CommandCdText_RAW )
-        commandStrings << QLatin1String( "CommandCdText_RAW" );
+    if ( commands & K3b::Device::DeviceHandler::CommandCdTextRaw )
+        commandStrings << QLatin1String( "CommandCdTextRaw" );
     if ( commands & K3b::Device::DeviceHandler::CommandDiskSize )
         commandStrings << QLatin1String( "CommandDiskSize" );
     if ( commands & K3b::Device::DeviceHandler::CommandRemainingSize )
         commandStrings << QLatin1String( "CommandRemainingSize" );
-    if ( commands & K3b::Device::DeviceHandler::CommandTocTYPE )
-        commandStrings << QLatin1String( "CommandTocTYPE" );
+    if ( commands & K3b::Device::DeviceHandler::CommandTocType )
+        commandStrings << QLatin1String( "CommandTocType" );
     if ( commands & K3b::Device::DeviceHandler::CommandNumSessions )
         commandStrings << QLatin1String( "CommandNumSessions" );
     if ( commands & K3b::Device::DeviceHandler::CommandBlock )
         commandStrings << QLatin1String( "CommandBlock" );
-    if ( commands & K3b::Device::DeviceHandler::UNCommandBlock )
-        commandStrings << QLatin1String( "UNCommandBlock" );
+    if ( commands & K3b::Device::DeviceHandler::CommandUnblock )
+        commandStrings << QLatin1String( "CommandUnblock" );
     if ( commands & K3b::Device::DeviceHandler::CommandEject )
         commandStrings << QLatin1String( "CommandEject" );
     if ( commands & K3b::Device::DeviceHandler::CommandLoad )

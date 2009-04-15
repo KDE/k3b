@@ -52,6 +52,7 @@ public:
     bool totalTracksParsed;
     bool clone;
     bool cue;
+    bool multi;
 
     QString cueFile;
     QStringList arguments;
@@ -99,6 +100,7 @@ K3b::CdrecordWriter::CdrecordWriter( K3b::Device::Device* dev, K3b::JobHandler* 
     d->writingMode = K3b::WritingModeTao;
     d->clone = false;
     d->cue = false;
+    d->multi = false;
 
     d->process.setSplitStdout(true);
     d->process.setSuppressEmptyLines(true);
@@ -173,6 +175,12 @@ void K3b::CdrecordWriter::setWritingMode( K3b::WritingMode mode )
 }
 
 
+void K3b::CdrecordWriter::setMulti( bool b )
+{
+    d->multi = b;
+}
+
+
 bool K3b::CdrecordWriter::prepareProcess()
 {
     d->cdrecordBinObject = k3bcore->externalBinManager()->binObject("cdrecord");
@@ -231,8 +239,13 @@ bool K3b::CdrecordWriter::prepareProcess()
         d->process << "-sao";
     }
     else if ( K3b::Device::isDvdMedia( d->burnedMediaType ) ) {
-        // cdrecord only supports SAo for DVD
+        // cdrecord only supports SAO for DVD
         d->process << "-sao";
+
+#warning Enable layer jump mode: add it to K3b::WritingMode and to the GUI
+        // if( d->writingMode == Device::WRITINGMODE_LAYER_JUMP ) {
+//             d->process << "-driveropts=layerbreak";
+//         }
     }
     else if( K3b::Device::isCdMedia( d->burnedMediaType ) ) {
         if( d->writingMode == K3b::WritingModeSao || d->cue ) {
@@ -296,6 +309,9 @@ bool K3b::CdrecordWriter::prepareProcess()
 
     if( d->clone )
         d->process << "-clone";
+
+    if( d->multi )
+        d->process << "-multi";
 
     if( d->rawCdText.size() > 0 ) {
         delete d->cdTextFile;

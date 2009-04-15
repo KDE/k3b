@@ -39,7 +39,7 @@ K3b::BlankingJob::BlankingJob( K3b::JobHandler* hdl, QObject* parent )
     m_device(0),
     m_speed(0),
     m_mode(Fast),
-    m_writingApp(K3b::WritingAppDefault),
+    m_writingApp(K3b::WritingAppAuto),
     m_canceled(false),
     m_forceNoEject(false)
 {

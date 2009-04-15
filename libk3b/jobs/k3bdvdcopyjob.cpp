@@ -168,7 +168,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
     else {
         // first let's determine which application to use
         d->usedWritingApp = writingApp();
-        if ( d->usedWritingApp == K3b::WritingAppDefault ) {
+        if ( d->usedWritingApp == K3b::WritingAppAuto ) {
             // let's default to cdrecord for the time being
             // FIXME: use growisofs for non-dao and non-auto mode
             if ( K3b::Device::isBdMedia( d->sourceDiskInfo.mediaType() ) ) {

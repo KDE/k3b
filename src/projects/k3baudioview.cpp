@@ -311,14 +311,12 @@ void K3b::AudioView::slotRemove()
     //
     // Now delete all the tracks
     //
-    foreach( K3b::AudioTrack* track, tracks )
-        delete track;
+    qDeleteAll( tracks );
 
     //
     // Now delete all the sources
     //
-    foreach( K3b::AudioDataSource* source, sources )
-        delete source;
+    qDeleteAll( sources );
 }
 
 

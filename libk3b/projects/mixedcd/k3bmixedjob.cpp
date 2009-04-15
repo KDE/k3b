@@ -655,7 +655,7 @@ bool K3b::MixedJob::prepareWriter()
                 addDataTrack( writer );
             }
             else {
-                writer->addArgument("-multi");
+                writer->setMulti( true );
                 addAudioTracks( writer );
             }
         }
@@ -1171,7 +1171,7 @@ void K3b::MixedJob::determineWritingMode()
     // Writing Application
     // --------------------------------------------------------------
     // cdrecord seems to have problems writing xa 1 disks in dao mode? At least on my system!
-    if( writingApp() == K3b::WritingAppDefault ) {
+    if( writingApp() == K3b::WritingAppAuto ) {
         if( m_doc->mixedType() == K3b::MixedDoc::DATA_SECOND_SESSION ) {
             if( m_doc->writingMode() == K3b::WritingModeSao ||
                 ( m_doc->writingMode() == K3b::WritingModeAuto && !cdrecordUsable ) ) {

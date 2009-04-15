@@ -62,7 +62,7 @@ namespace K3b {
 
         static Device::Device* selectMedium( Device::MediaTypes type,
                                              Device::MediaStates state,
-                                             Medium::MediumContents content = Medium::ContentAll,
+                                             Medium::MediumContents content = Medium::ContentIgnore,
                                              QWidget* parent = 0,
                                              const QString& title = QString(),
                                              const QString& text = QString(),
