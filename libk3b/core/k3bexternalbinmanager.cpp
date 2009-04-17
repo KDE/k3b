@@ -23,6 +23,7 @@
 #include <KProcess>
 #include <KStandardDirs>
 
+#include <qdir.h>
 #include <qstring.h>
 #include <qregexp.h>
 #include <qfile.h>
@@ -464,9 +465,6 @@ void K3b::ExternalBinManager::search()
     foreach( QString p, possiblePaths ) {
         if (p.length() == 0)
             continue;
-#ifdef Q_OS_WIN32
-        p = p.replace('\\','/');
-#endif        
         if( p[p.length()-1] == '/' )
             p.truncate( p.length()-1 );
         if( !paths.contains( p ) && !paths.contains( p + "/" ) )
@@ -515,16 +513,18 @@ void K3b::ExternalBinManager::setSearchPath( const QStringList& list )
     loadDefaultSearchPath();
 
     for( QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it ) {
-        if( !m_searchPath.contains( *it ) )
-            m_searchPath.append( *it );
+        QString aPath = QDir::fromNativeSeparators( *it );
+        if( !m_searchPath.contains( aPath ) )
+            m_searchPath.append( aPath );
     }
 }
 
 
 void K3b::ExternalBinManager::addSearchPath( const QString& path )
 {
-    if( !m_searchPath.contains( path ) )
-        m_searchPath.append( path );
+    QString aPath = QDir::fromNativeSeparators( path );
+    if( !m_searchPath.contains( aPath ) )
+        m_searchPath.append( aPath );
 }
 
 
