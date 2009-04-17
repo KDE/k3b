@@ -304,8 +304,10 @@ bool K3b::Iso9660ImageWritingJob::prepareWriter( Device::MediaTypes mediaType )
 
     delete m_writer;
 
+#ifdef __GNUC__
 #warning FIXME: use the correct writing mode for DVD and Blu-Ray. ATM we only use TAO/SAO. Also fail if datamode is != 1 for non-cd.
 #warning FIXME: there is similar code in the dvd copy job (including info messages). The same is true for audiojob/cdcopyjob Find a way to merge the writing app and writing mode selection into one class. How about CdrecordWriter and GrowisofsWriter?
+#endif
     K3b::WritingMode usedWritingMode = m_writingMode;
     if( usedWritingMode == K3b::WritingModeAuto ) {
         if( Device::isDvdMedia( mediaType ) ) {

@@ -630,6 +630,7 @@ bool K3b::Iso9660::open()
     int access,c_i,c_j;
     struct el_torito_boot_descriptor* bootdesc;
 
+    // TODO implement win32 support 
 
     /* We'll use the permission and user/group of the 'host' file except
      * in Rock Ridge, where the permissions are stored on the file system

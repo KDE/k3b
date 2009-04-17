@@ -242,7 +242,10 @@ bool K3b::CdrecordWriter::prepareProcess()
         // cdrecord only supports SAO for DVD
         d->process << "-sao";
 
+
+#ifdef __GNUC__
 #warning Enable layer jump mode: add it to K3b::WritingMode and to the GUI
+#endif
         // if( d->writingMode == Device::WRITINGMODE_LAYER_JUMP ) {
 //             d->process << "-driveropts=layerbreak";
 //         }

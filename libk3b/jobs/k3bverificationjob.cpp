@@ -101,7 +101,9 @@ public:
 
 void K3b::VerificationJob::Private::reloadMedium()
 {
+#ifdef _GNUC_
 #warning FIXME: loks like the reload does not work
+#endif
     // many drives need to reload the medium to return to a proper state
     mediumHasBeenReloaded = true;
     emit q->infoMessage( i18n( "Need to reload medium to return to proper state." ), MessageInfo );
