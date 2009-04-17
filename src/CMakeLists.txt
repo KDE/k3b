@@ -266,6 +266,8 @@ MESSAGE(STATUS "DCOP stuff was remove into kde4, convert it to dbus please.kde4_
 #k3baudioprojectinterface.h 
 #k3bmixedprojectinterface.h )
 
+kde4_add_app_icon(k3b_bin_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/icons/hi*-app-k3b.png)
+
 if (MSVC)
     # msvc creates importlibs by default also for executables when symbols are exported.
     # Because the output name of the executable is the same as one of the used library (k3b)  creating 
