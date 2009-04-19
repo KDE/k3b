@@ -268,7 +268,7 @@ namespace K3b {
         KAction* actionFileCloseAll;
         KAction* actionFileQuit;
         KAction* actionSettingsConfigure;
-        KAction* actionSettingsSetup;
+        KAction* actionSettingsK3bSetup;
         KAction* actionToolsWriteImage;
         KAction* actionToolsCddaRip;
         KAction* actionToolsVideoDvdRip;

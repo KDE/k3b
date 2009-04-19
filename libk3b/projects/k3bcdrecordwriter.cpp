@@ -837,7 +837,7 @@ void K3b::CdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus 
                 break;
             case PERMISSION_DENIED:
                 emit infoMessage( i18n("%1 has no permission to open the device.",QString("cdrecord")), MessageError );
-#ifdef HAVE_K3BSETUP
+#ifdef BUILD_K3BSETUP
                 emit infoMessage( i18n("You may use K3bsetup2 to solve this problem."), MessageError );
 #endif
                 break;

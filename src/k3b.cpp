@@ -349,7 +349,7 @@ void K3b::MainWindow::initActions()
     actionFileQuit->setToolTip(i18n("Quits the application"));
     actionSettingsConfigure->setToolTip( i18n("Configure K3b settings") );
 #ifdef BUILD_K3BSETUP
-    actionSettingsK3bSetup->setToolTip( i18n("Setup the system permissions (requires root privileges)") );
+    actionSettingsK3bSetup->setToolTip( i18n("Setup the system permissions") );
 #endif
     actionToolsCddaRip->setToolTip( i18n("Digitally extract tracks from an audio CD") );
     actionToolsVideoDvdRip->setToolTip( i18n("Transcode Video DVD titles") );
@@ -1238,7 +1238,8 @@ void K3b::MainWindow::slotProjectAddFiles()
 
 void K3b::MainWindow::slotK3bSetup()
 {
-    QStringList args("k3bsetup2 --lang " + KGlobal::locale()->language());
+    QStringList args;
+    args << "k3bsetup2" << "--lang" << KGlobal::locale()->language();
     if( !KProcess::startDetached( K3b::findExe("kcmshell4"), args ) )
         KMessageBox::error( 0, i18n("Unable to start K3b::Setup2.") );
 }
