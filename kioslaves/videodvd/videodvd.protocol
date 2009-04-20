@@ -39,6 +39,7 @@ Description[pt_BR]=Um kioslave que permite que arquivos sejam copiados de um DVD
 Description[ro]=Un sclav kio ce permite copierea fișierelor de pe un DVD Video (inclusiv decriptarea)
 Description[ru]=Позволяет копировать файлы с Video DVD (с дешифровкой)
 Description[sk]=kioslave, ktorý umožňuje kopírovať súbory z Video DVD (vrátane dešifrovania)
+Description[sl]=KIOSlave, ki omogoča kopiranje datotek z Video DVD-ja (vključno z dešifriranjem)
 Description[sv]=En I/O-slav som gör det möjligt att kopiera filer från en video-dvd (inklusive avkodning)
 Description[th]=kioslave ที่อนุญาตมีการคัดลอกแฟ้มจากวิดีโอดีวีดีได้ (รวมทั้งมีการถอดรหัสด้วย)
 Description[tr]=Bir Görüntü DVD'sinden dosyaların kopyalanmasını (ve kodunun çözülmesini) sağlayan kioslave
