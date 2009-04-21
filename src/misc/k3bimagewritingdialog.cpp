@@ -843,6 +843,12 @@ void K3b::ImageWritingDialog::toggleAll()
         m_writerSelectionWidget->setWantedMediumType( K3b::Device::MEDIA_WRITABLE_CD );
     }
 
+    // set wanted image size
+    if ( currentImageType() == IMAGE_ISO )
+        m_writerSelectionWidget->setWantedMediumSize( K3b::filesize( KUrl(imagePath()) )/2048 );
+    else
+        m_writerSelectionWidget->setWantedMediumSize( Msf() );
+
     // cdrecord clone and cue both need DAO
     if( m_writerSelectionWidget->writingApp() != K3b::WritingAppCdrdao
         && ( currentImageType() == IMAGE_ISO ||
