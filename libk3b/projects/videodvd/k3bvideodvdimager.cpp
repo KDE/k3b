@@ -14,10 +14,10 @@
 
 #include "k3bvideodvdimager.h"
 #include "k3bvideodvddoc.h"
-#include <k3bdiritem.h>
-#include <k3bfileitem.h>
-#include <k3bprocess.h>
-#include <k3bglobals.h>
+#include "k3bdiritem.h"
+#include "k3bfileitem.h"
+#include "k3bprocess.h"
+#include "k3bglobals.h"
 
 #include <ktemporaryfile.h>
 #include <kglobal.h>

@@ -15,9 +15,9 @@
  */
 
 #include "k3bsetupprogramsmodel.h"
-#include <k3bexternalbinmanager.h>
-#include <k3bdefaultexternalprograms.h>
-#include <k3bglobals.h>
+#include "k3bexternalbinmanager.h"
+#include "k3bdefaultexternalprograms.h"
+#include "k3bglobals.h"
 
 #include <KConfig>
 #include <KConfigGroup>

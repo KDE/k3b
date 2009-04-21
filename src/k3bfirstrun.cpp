@@ -15,7 +15,7 @@
 #include "k3bfirstrun.h"
 #include "k3b.h"
 #include "k3bservicemenuinstaller.h"
-#include <k3bcore.h>
+#include "k3bcore.h"
 
 #include <klocale.h>
 #include <kiconloader.h>

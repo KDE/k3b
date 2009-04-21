@@ -14,8 +14,8 @@
 
 
 #include "k3btempdirselectionwidget.h"
-#include <k3bglobals.h>
-#include <k3bcore.h>
+#include "k3bglobals.h"
+#include "k3bcore.h"
 
 #include <qlabel.h>
 #include <qgroupbox.h>

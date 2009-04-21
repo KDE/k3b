@@ -20,10 +20,10 @@
 #include "k3bvcdlistview.h"
 #include "k3bvcdburndialog.h"
 #include "k3bvcdtrackdialog.h"
-#include <k3bfillstatusdisplay.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bcore.h>
-#include <k3baction.h>
+#include "k3bfillstatusdisplay.h"
+#include "k3bexternalbinmanager.h"
+#include "k3bcore.h"
+#include "k3baction.h"
 
 // QT-includes
 #include <qlayout.h>

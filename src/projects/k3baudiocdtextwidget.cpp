@@ -17,7 +17,7 @@
 
 #include "k3baudiodoc.h"
 #include "k3baudiotrack.h"
-#include <k3bcdtextvalidator.h>
+#include "k3bcdtextvalidator.h"
 
 #include <qcheckbox.h>
 #include <qtoolbutton.h>

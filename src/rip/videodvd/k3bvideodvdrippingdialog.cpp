@@ -14,13 +14,13 @@
 
 #include "k3bvideodvdrippingdialog.h"
 #include "k3bvideodvdrippingwidget.h"
-#include <k3bvideodvdtitletranscodingjob.h>
-#include <k3bjobprogressdialog.h>
-#include <k3bapplication.h>
-#include <k3bmedium.h>
-#include <k3bmediacache.h>
-#include <k3bglobals.h>
-#include <k3bfilesysteminfo.h>
+#include "k3bvideodvdtitletranscodingjob.h"
+#include "k3bjobprogressdialog.h"
+#include "k3bapplication.h"
+#include "k3bmedium.h"
+#include "k3bmediacache.h"
+#include "k3bglobals.h"
+#include "k3bfilesysteminfo.h"
 
 #include <klocale.h>
 #include <k3listview.h>

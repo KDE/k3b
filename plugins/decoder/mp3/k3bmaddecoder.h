@@ -17,7 +17,7 @@
 #define K3BMP3MODULE_H
 
 
-#include <k3baudiodecoder.h>
+#include "k3baudiodecoder.h"
 
 extern "C" {
 #include <mad.h>

@@ -17,7 +17,7 @@
 
 #include "ui_base_k3baudiotrackwidget.h"
 
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 
 #include <QtCore/QList>
 

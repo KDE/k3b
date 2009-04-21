@@ -16,15 +16,15 @@
 #include "k3bvideodvdrippingtitlelistview.h"
 #include "k3bvideodvdrippingdialog.h"
 
-#include <k3bvideodvd.h>
-#include <k3bvideodvdtitletranscodingjob.h>
-#include <k3bthememanager.h>
-#include <k3bglobals.h>
-#include <k3blibdvdcss.h>
-#include <k3bcore.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bmediacache.h>
-#include <k3bmedium.h>
+#include "k3bvideodvd.h"
+#include "k3bvideodvdtitletranscodingjob.h"
+#include "k3bthememanager.h"
+#include "k3bglobals.h"
+#include "k3blibdvdcss.h"
+#include "k3bcore.h"
+#include "k3bexternalbinmanager.h"
+#include "k3bmediacache.h"
+#include "k3bmedium.h"
 
 #include <qcursor.h>
 #include <qlayout.h>

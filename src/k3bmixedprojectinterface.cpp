@@ -19,9 +19,9 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 
-#include <k3bmixeddoc.h>
-#include <k3bdatadoc.h>
-#include <k3baudiodoc.h>
+#include "k3bmixeddoc.h"
+#include "k3bdatadoc.h"
+#include "k3baudiodoc.h"
 
 
 K3b::MixedProjectInterface::MixedProjectInterface( K3b::MixedDoc* doc )

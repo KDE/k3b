@@ -17,7 +17,7 @@
 #include "k3bmediacache.h"
 #include "k3bcore.h"
 
-#include <k3bdevice.h>
+#include "k3bdevice.h"
 
 #include <KLocale>
 

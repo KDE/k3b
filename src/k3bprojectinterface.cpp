@@ -15,12 +15,12 @@
 
 #include "k3bprojectinterface.h"
 #include "k3bburnprogressdialog.h"
-#include <k3bdoc.h>
-#include <k3bview.h>
-#include <k3bmsf.h>
-#include <k3bcore.h>
-#include <k3bdevicemanager.h>
-#include <k3bjob.h>
+#include "k3bdoc.h"
+#include "k3bview.h"
+#include "k3bmsf.h"
+#include "k3bcore.h"
+#include "k3bdevicemanager.h"
+#include "k3bjob.h"
 
 #include <qtimer.h>
 //Added by qt3to4:

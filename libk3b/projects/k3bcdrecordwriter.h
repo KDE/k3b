@@ -92,7 +92,8 @@ namespace K3b {
                              LOW_SPEED_MEDIUM,
                              MEDIUM_ERROR,
                              DEVICE_BUSY,
-                             BLANK_FAILED };
+                             BLANK_FAILED,
+                             SHORT_READ };
 
     private:
         class Private;

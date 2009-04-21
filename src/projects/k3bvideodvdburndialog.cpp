@@ -15,16 +15,16 @@
 #include "k3bvideodvdburndialog.h"
 #include "k3bvideodvddoc.h"
 
-#include <k3bdevice.h>
-#include <k3bwriterselectionwidget.h>
-#include <k3btempdirselectionwidget.h>
-#include <k3bcore.h>
-#include <k3bwritingmodewidget.h>
-#include <k3bglobals.h>
-#include <k3bdataimagesettingswidget.h>
-#include <k3bisooptions.h>
-#include <k3bstdguiitems.h>
-#include <k3bglobalsettings.h>
+#include "k3bdevice.h"
+#include "k3bwriterselectionwidget.h"
+#include "k3btempdirselectionwidget.h"
+#include "k3bcore.h"
+#include "k3bwritingmodewidget.h"
+#include "k3bglobals.h"
+#include "k3bdataimagesettingswidget.h"
+#include "k3bisooptions.h"
+#include "k3bstdguiitems.h"
+#include "k3bglobalsettings.h"
 
 #include <kconfig.h>
 #include <klocale.h>

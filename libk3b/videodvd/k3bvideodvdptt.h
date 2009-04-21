@@ -15,10 +15,10 @@
 #ifndef _K3B_VIDEODVD_PTT_H_
 #define _K3B_VIDEODVD_PTT_H_
 
-#include <k3b_export.h>
+#include "k3b_export.h"
 
-#include <k3bvideodvd.h>
-#include <k3bvideodvdtime.h>
+#include "k3bvideodvd.h"
+#include "k3bvideodvdtime.h"
 
 namespace K3b {
     namespace VideoDVD

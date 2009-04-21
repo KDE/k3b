@@ -19,17 +19,17 @@
 #include "k3bmovixoptionswidget.h"
 #include "../k3bapplication.h"
 
-#include <k3bdataimagesettingswidget.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bwriterselectionwidget.h>
-#include <k3btempdirselectionwidget.h>
-#include <k3bstdguiitems.h>
-#include <k3bglobals.h>
-#include <k3bdatamodewidget.h>
-#include <k3bisooptions.h>
-#include <k3bwritingmodewidget.h>
-#include <k3bcore.h>
-#include <k3bmediacache.h>
+#include "k3bdataimagesettingswidget.h"
+#include "k3bexternalbinmanager.h"
+#include "k3bwriterselectionwidget.h"
+#include "k3btempdirselectionwidget.h"
+#include "k3bstdguiitems.h"
+#include "k3bglobals.h"
+#include "k3bdatamodewidget.h"
+#include "k3bisooptions.h"
+#include "k3bwritingmodewidget.h"
+#include "k3bcore.h"
+#include "k3bmediacache.h"
 
 #include <klocale.h>
 #include <kdebug.h>

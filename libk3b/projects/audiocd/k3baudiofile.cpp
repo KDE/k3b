@@ -16,7 +16,7 @@
 #include "k3baudiodoc.h"
 #include "k3baudiotrack.h"
 
-#include <k3baudiodecoder.h>
+#include "k3baudiodecoder.h"
 
 
 K3b::AudioFile::AudioFile( K3b::AudioDecoder* dec, K3b::AudioDoc* doc )

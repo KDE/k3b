@@ -19,7 +19,7 @@
 
 #include "k3bvideodvd.h"
 
-#include <k3bdevice.h>
+#include "k3bdevice.h"
 
 #include <qfile.h>
 

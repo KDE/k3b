@@ -14,18 +14,18 @@
 
 #include "k3bgrowisofswriter.h"
 
-#include <k3bcore.h>
-#include <k3bdevice.h>
-#include <k3bdevicehandler.h>
-#include <k3bprocess.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bversion.h>
-#include <k3bdiskinfo.h>
-#include <k3bglobals.h>
-#include <k3bthroughputestimator.h>
+#include "k3bcore.h"
+#include "k3bdevice.h"
+#include "k3bdevicehandler.h"
+#include "k3bprocess.h"
+#include "k3bexternalbinmanager.h"
+#include "k3bversion.h"
+#include "k3bdiskinfo.h"
+#include "k3bglobals.h"
+#include "k3bthroughputestimator.h"
 #include "k3bgrowisofshandler.h"
-#include <k3bglobalsettings.h>
-#include <k3bdeviceglobals.h>
+#include "k3bglobalsettings.h"
+#include "k3bdeviceglobals.h"
 
 #include <klocale.h>
 #include <kdebug.h>

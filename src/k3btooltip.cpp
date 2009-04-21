@@ -15,8 +15,8 @@
 #include "k3btooltip.h"
 #include "k3bwidgetshoweffect.h"
 
-#include <k3bthememanager.h>
-#include <k3bapplication.h>
+#include "k3bthememanager.h"
+#include "k3bapplication.h"
 
 #include <qtimer.h>
 #include <qapplication.h>

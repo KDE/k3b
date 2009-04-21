@@ -15,9 +15,9 @@
 #ifndef _K3B_VIDEODVD_RIPPING_JOB_H_
 #define _K3B_VIDEODVD_RIPPING_JOB_H_
 
-#include <k3bjob.h>
-#include <k3bvideodvd.h>
-#include <k3bvideodvdtitletranscodingjob.h>
+#include "k3bjob.h"
+#include "k3bvideodvd.h"
+#include "k3bvideodvdtitletranscodingjob.h"
 
 #include <qvector.h>
 

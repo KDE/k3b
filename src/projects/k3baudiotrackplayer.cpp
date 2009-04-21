@@ -13,9 +13,9 @@
  */
 
 #include "k3baudiotrackplayer.h"
-#include <k3baudiodoc.h>
-#include <k3baudiotrack.h>
-#include <k3baudioserver.h>
+#include "k3baudiodoc.h"
+#include "k3baudiotrack.h"
+#include "k3baudioserver.h"
 
 #include <kactionclasses.h>
 #include <klocale.h>

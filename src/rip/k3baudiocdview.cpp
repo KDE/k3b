@@ -17,19 +17,19 @@
 #include "k3baudiotrackmodel.h"
 #include "k3bviewcolumnadjuster.h"
 
-#include <k3bpassivepopup.h>
-#include <k3btoc.h>
-#include <k3bdiskinfo.h>
-#include <k3bdevicehandler.h>
-#include <k3bmsf.h>
-#include <k3bstdguiitems.h>
-#include <k3bapplication.h>
-#include <k3bthememanager.h>
-#include <k3baudiocdtrackdrag.h>
-#include <k3bthemedlabel.h>
-#include <k3baction.h>
-#include <k3bcddb.h>
-#include <k3bmediacache.h>
+#include "k3bpassivepopup.h"
+#include "k3btoc.h"
+#include "k3bdiskinfo.h"
+#include "k3bdevicehandler.h"
+#include "k3bmsf.h"
+#include "k3bstdguiitems.h"
+#include "k3bapplication.h"
+#include "k3bthememanager.h"
+#include "k3baudiocdtrackdrag.h"
+#include "k3bthemedlabel.h"
+#include "k3baction.h"
+#include "k3bcddb.h"
+#include "k3bmediacache.h"
 
 #include <ktoolbar.h>
 #include <klocale.h>

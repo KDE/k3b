@@ -25,25 +25,25 @@
 #include "k3bfirstrun.h"
 #include "config-k3b.h"
 
-#include <k3bcore.h>
-#include <k3bdevicemanager.h>
-#include <k3bthreadjob.h>
+#include "k3bcore.h"
+#include "k3bdevicemanager.h"
+#include "k3bthreadjob.h"
 #ifdef ENABLE_HAL_SUPPORT
-#include <k3bhalconnection.h>
+#include "k3bhalconnection.h"
 #endif
-#include <k3bexternalbinmanager.h>
-#include <k3bdefaultexternalprograms.h>
-#include <k3bglobals.h>
-#include <k3bversion.h>
-#include <k3bdoc.h>
+#include "k3bexternalbinmanager.h"
+#include "k3bdefaultexternalprograms.h"
+#include "k3bglobals.h"
+#include "k3bversion.h"
+#include "k3bdoc.h"
 #include "k3bsystemproblemdialog.h"
-#include <k3bpluginmanager.h>
-#include <k3bthememanager.h>
-#include <k3bmsf.h>
-#include <k3bmovixprogram.h>
-#include <k3bview.h>
-#include <k3bjob.h>
-#include <k3bmediacache.h>
+#include "k3bpluginmanager.h"
+#include "k3bthememanager.h"
+#include "k3bmsf.h"
+#include "k3bmovixprogram.h"
+#include "k3bview.h"
+#include "k3bjob.h"
+#include "k3bmediacache.h"
 
 #include <ktip.h>
 #include <klocale.h>

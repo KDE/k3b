@@ -21,8 +21,8 @@
 //Added by qt3to4:
 #include <QLabel>
 
-#include <k3binteractiondialog.h>
-#include <k3bdiskinfo.h>
+#include "k3binteractiondialog.h"
+#include "k3bdiskinfo.h"
 #include "k3bvideocdrippingoptions.h"
 
 class QCheckBox;

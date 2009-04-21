@@ -16,9 +16,9 @@
 
 #include "k3blibdvdcss.h"
 
-#include <k3bdevice.h>
-#include <k3biso9660.h>
-#include <k3biso9660backend.h>
+#include "k3bdevice.h"
+#include "k3biso9660.h"
+#include "k3biso9660backend.h"
 
 #include <qfile.h>
 #include <qpair.h>

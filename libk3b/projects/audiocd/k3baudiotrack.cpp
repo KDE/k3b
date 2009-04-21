@@ -18,9 +18,9 @@
 #include "k3baudiodoc.h"
 #include "k3baudiodatasource.h"
 
-#include <k3baudiodecoder.h>
-#include <k3bcore.h>
-#include <k3bcdtextvalidator.h>
+#include "k3baudiodecoder.h"
+#include "k3bcore.h"
+#include "k3bcdtextvalidator.h"
 
 #include <qstring.h>
 

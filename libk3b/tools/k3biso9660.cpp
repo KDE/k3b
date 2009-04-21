@@ -13,12 +13,12 @@
  */
 
 #include <config-k3b.h>
-#include <k3bglobals.h>
+#include "k3bglobals.h"
 
 #include "k3biso9660.h"
 #include "k3biso9660backend.h"
 
-#include <k3bdevice.h>
+#include "k3bdevice.h"
 
 #include "libisofs/isofs.h"
 

@@ -17,7 +17,7 @@
 #define _K3B_OGG_VORBIS_ENCODER_H_
 
 
-#include <k3baudioencoder.h>
+#include "k3baudioencoder.h"
 
 class K3bOggVorbisEncoder : public K3b::AudioEncoder
 {

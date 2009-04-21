@@ -45,6 +45,8 @@
 #include <QSplitter>
 #include <QString>
 #include <QStackedWidget>
+#include <QtGui/QVBoxLayout>
+
 
 class K3b::DirView::Private
 {
@@ -54,22 +56,27 @@ public:
 
 
 
-K3b::DirView::DirView(K3b::FileTreeView* treeView, QWidget *parent )
-    : KVBox(parent),
+K3b::DirView::DirView( K3b::FileTreeView* treeView, QWidget* parent )
+    : QWidget(parent),
       m_fileTreeView(treeView),
       m_bViewDiskInfo(false)
 {
     d = new Private;
     d->contextMediaInfoRequested = false;
 
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    layout->setMargin( 0 );
+
     if( !m_fileTreeView ) {
         m_mainSplitter = new QSplitter( this );
         m_fileTreeView = new K3b::FileTreeView( m_mainSplitter );
         m_viewStack    = new QStackedWidget( m_mainSplitter );
+        layout->addWidget( m_mainSplitter );
     }
     else {
         m_viewStack    = new QStackedWidget( this );
         m_mainSplitter = 0;
+        layout->addWidget( m_viewStack );
     }
 
     m_fileView     = new K3b::FileView( m_viewStack );

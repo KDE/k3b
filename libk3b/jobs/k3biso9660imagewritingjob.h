@@ -15,7 +15,7 @@
 #ifndef K3BISO9660_IMAGE_WRITING_JOB_H
 #define K3BISO9660_IMAGE_WRITING_JOB_H
 
-#include <k3bjob.h>
+#include "k3bjob.h"
 #include "k3b_export.h"
 
 class QString;
@@ -23,7 +23,7 @@ class KTemporaryFile;
 
 namespace K3b {
 
-    class AbstractWriter;
+    class MetaWriter;
     class VerificationJob;
 
     namespace Device {
@@ -79,7 +79,7 @@ namespace K3b {
 
         QString m_imagePath;
 
-        AbstractWriter* m_writer;
+        MetaWriter* m_writer;
         KTemporaryFile* m_tocFile;
 
         bool m_canceled;

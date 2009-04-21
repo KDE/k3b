@@ -16,7 +16,7 @@
 #ifndef K3B_AUDIO_PROJECT_CONVERTING_JOB_H
 #define K3B_AUDIO_PROJECT_CONVERTING_JOB_H
 
-#include <k3bthreadjob.h>
+#include "k3bthreadjob.h"
 #include <qobject.h>
 #include <qpair.h>
 

@@ -16,7 +16,7 @@
 #ifndef _K3B_VIDEO_DVD_JOB_H_
 #define _K3B_VIDEO_DVD_JOB_H_
 
-#include <k3bdatajob.h>
+#include "k3bdatajob.h"
 
 
 namespace K3b {

@@ -14,12 +14,12 @@
 
 #include "k3bdatatrackreader.h"
 
-#include <k3blibdvdcss.h>
-#include <k3bdevice.h>
-#include <k3bdeviceglobals.h>
-#include <k3btrack.h>
-#include <k3bthread.h>
-#include <k3bcore.h>
+#include "k3blibdvdcss.h"
+#include "k3bdevice.h"
+#include "k3bdeviceglobals.h"
+#include "k3btrack.h"
+#include "k3bthread.h"
+#include "k3bcore.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -480,3 +480,5 @@ bool K3b::DataTrackReader::setErrorRecovery( K3b::Device::Device* dev, int code 
 
     return success;
 }
+
+#include "k3bdatatrackreader.moc"

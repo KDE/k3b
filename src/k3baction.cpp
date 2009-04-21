@@ -12,7 +12,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <k3baction.h>
+#include "k3baction.h"
 
 KAction* K3b::createAction( QObject* parent,
                             const QString& text, const QString& icon, const

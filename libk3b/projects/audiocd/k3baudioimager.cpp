@@ -17,8 +17,8 @@
 #include "k3baudiotrack.h"
 #include "k3baudiodatasource.h"
 
-#include <k3bthread.h>
-#include <k3bwavefilewriter.h>
+#include "k3bthread.h"
+#include "k3bwavefilewriter.h"
 
 #include <klocale.h>
 #include <kdebug.h>

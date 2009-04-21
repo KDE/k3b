@@ -16,7 +16,7 @@
 #ifndef K3BSTANDARDVIEW_H
 #define K3BSTANDARDVIEW_H
 
-#include <k3bview.h>
+#include "k3bview.h"
 
 /**
  * This view is a standard dir/file view that can be used by K3b projects that
@@ -34,7 +34,7 @@
  *@author Gustavo Pichorim Boiko
  */
 
-#include <k3bview.h>
+#include "k3bview.h"
 #include <QModelIndex>
 
 class QAbstractItemModel;

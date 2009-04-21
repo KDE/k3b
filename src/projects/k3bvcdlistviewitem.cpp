@@ -15,7 +15,7 @@
 // K3b Includes
 #include "k3bvcdlistviewitem.h"
 #include "k3bvcdtrack.h"
-#include <k3bglobals.h>
+#include "k3bglobals.h"
 
 #include <kio/global.h>
 #include <kiconloader.h>

@@ -19,7 +19,7 @@
 #include <qstringlist.h>
 
 // K3b Includes
-#include <k3bstandardview.h>
+#include "k3bstandardview.h"
 
 namespace K3b {
     class VcdListView;

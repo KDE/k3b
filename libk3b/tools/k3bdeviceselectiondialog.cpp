@@ -15,10 +15,10 @@
 
 
 #include "k3bdeviceselectiondialog.h"
-#include <k3bdevice.h>
-#include <k3bdevicecombobox.h>
-#include <k3bcore.h>
-#include <k3bdevicemanager.h>
+#include "k3bdevice.h"
+#include "k3bdevicecombobox.h"
+#include "k3bcore.h"
+#include "k3bdevicemanager.h"
 
 #include <qcombobox.h>
 #include <qlayout.h>

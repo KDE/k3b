@@ -16,16 +16,16 @@
 
 #include "k3bcdrecordwriter.h"
 
-#include <k3bcore.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bprocess.h>
-#include <k3bdevice.h>
-#include <k3bdeviceglobals.h>
-#include <k3bdevicemanager.h>
-#include <k3bdevicehandler.h>
-#include <k3bglobals.h>
-#include <k3bthroughputestimator.h>
-#include <k3bglobalsettings.h>
+#include "k3bcore.h"
+#include "k3bexternalbinmanager.h"
+#include "k3bprocess.h"
+#include "k3bdevice.h"
+#include "k3bdeviceglobals.h"
+#include "k3bdevicemanager.h"
+#include "k3bdevicehandler.h"
+#include "k3bglobals.h"
+#include "k3bthroughputestimator.h"
+#include "k3bglobalsettings.h"
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -652,6 +652,9 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
         else if( errStr.startsWith( "Try again with cdrecord blank=all." ) ) {
             d->cdrecordError = BLANK_FAILED;
         }
+        else if( errStr.startsWith( "faio_wait_on_buffer for reader timed out" ) ) {
+            d->cdrecordError = SHORT_READ;
+        }
     }
 
     //
@@ -870,6 +873,9 @@ void K3b::CdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus 
             case BLANK_FAILED:
                 emit infoMessage( i18n("Some drives do not support all erase types."), MessageError );
                 emit infoMessage( i18n("Try again using 'Complete' erasing."), MessageError );
+                break;
+            case SHORT_READ:
+                emit infoMessage( QLatin1String("Internal error: short read. Please report!"), MessageError );
                 break;
             case UNKNOWN:
                 if( (exitCode == 12) && K3b::kernelVersion() >= K3b::Version( 2, 6, 8 ) && d->cdrecordBinObject->hasFeature( "suidroot" ) ) {

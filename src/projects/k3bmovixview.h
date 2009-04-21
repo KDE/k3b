@@ -19,7 +19,7 @@
 #ifndef _K3B_MOVIX_VIEW_H_
 #define _K3B_MOVIX_VIEW_H_
 
-#include <k3bstandardview.h>
+#include "k3bstandardview.h"
 
 namespace K3b {
     class MovixDoc;

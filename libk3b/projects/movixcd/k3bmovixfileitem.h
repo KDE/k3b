@@ -17,7 +17,7 @@
 #ifndef _K3B_MOVIX_FILEITEM_H_
 #define _K3B_MOVIX_FILEITEM_H_
 
-#include <k3bfileitem.h>
+#include "k3bfileitem.h"
 
 namespace K3b {
     class MovixDoc;

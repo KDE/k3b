@@ -17,8 +17,8 @@
 #define _K3B_<name>_ENCODER_H_
 
 
-#include <k3baudioencoder.h>
-#include <k3bpluginconfigwidget.h>
+#include "k3baudioencoder.h"
+#include "k3bpluginconfigwidget.h"
 
 
 class K3b<name>Encoder : public K3b::AudioEncoder

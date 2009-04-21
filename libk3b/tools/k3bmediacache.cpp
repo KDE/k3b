@@ -18,9 +18,9 @@
 #include "k3bmedium_p.h"
 #include "k3bcddb.h"
 
-#include <k3bdevicemanager.h>
-#include <k3bdeviceglobals.h>
-#include <k3bcore.h>
+#include "k3bdevicemanager.h"
+#include "k3bdeviceglobals.h"
+#include "k3bcore.h"
 
 #include <kdebug.h>
 #include <kapplication.h>
@@ -294,7 +294,7 @@ QList<int> K3b::MediaCache::writingSpeeds( K3b::Device::Device* dev )
 QString K3b::MediaCache::mediumString( K3b::Device::Device* device, bool useContent )
 {
     if( DeviceEntry* e = findDeviceEntry( device ) ) {
-        return e->medium.shortString( useContent );
+        return e->medium.shortString( useContent ? Medium::WithContents : Medium::NoStringFlags );
     }
     else
         return QString();

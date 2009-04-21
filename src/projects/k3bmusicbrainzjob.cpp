@@ -15,9 +15,9 @@
 #include "k3bmusicbrainzjob.h"
 #include "k3bmusicbrainztrackloopupjob.h"
 
-#include <k3baudiotrack.h>
-#include <k3baudiodatasource.h>
-#include <k3bsimplejobhandler.h>
+#include "k3baudiotrack.h"
+#include "k3baudiodatasource.h"
+#include "k3bsimplejobhandler.h"
 
 #include <kmessagebox.h>
 #include <kinputdialog.h>

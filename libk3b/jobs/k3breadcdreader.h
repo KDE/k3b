@@ -16,7 +16,7 @@
 #ifndef _K3B_READCD_READER_H_
 #define _K3B_READCD_READER_H_
 
-#include <k3bjob.h>
+#include "k3bjob.h"
 
 #include <qprocess.h>
 

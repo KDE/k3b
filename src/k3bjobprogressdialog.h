@@ -21,7 +21,7 @@
 #include "k3bdebuggingoutputfile.h"
 #include "k3bdebuggingoutputcache.h"
 
-#include <k3bjobhandler.h>
+#include "k3bjobhandler.h"
 
 #include <qdatetime.h>
 #include <qfile.h>
@@ -79,10 +79,10 @@ namespace K3b {
         /**
          * @reimplemented from JobHandler
          */
-        int waitForMedia( Device::Device*,
-                          Device::MediaStates mediaState = Device::STATE_EMPTY,
-                          Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
-                          const QString& message = QString() );
+        Device::MediaType waitForMedia( Device::Device*,
+                                        Device::MediaStates mediaState = Device::STATE_EMPTY,
+                                        Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
+                                        const QString& message = QString() );
 
         /**
          * @reimplemented from JobHandler

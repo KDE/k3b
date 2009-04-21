@@ -14,7 +14,7 @@
 
 #include "k3bprogressdialog.h"
 
-#include <k3bbusywidget.h>
+#include "k3bbusywidget.h"
 
 #include <qlabel.h>
 #include <qpushbutton.h>

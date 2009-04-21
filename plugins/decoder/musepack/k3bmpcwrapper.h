@@ -16,11 +16,11 @@
 #ifndef _K3B_MPC_WRAPPER_H_
 #define _K3B_MPC_WRAPPER_H_
 
-#include <k3bmpc_config.h>
+#include "k3bmpc_config.h"
 
 #include <qstring.h>
 
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 
 #include MPC_HEADER_FILE
 

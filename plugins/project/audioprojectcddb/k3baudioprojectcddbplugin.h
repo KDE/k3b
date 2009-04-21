@@ -14,7 +14,7 @@
 #ifndef _K3B_AUDIO_PROJECT_CDDB_PLUGIN_H_
 #define _K3B_AUDIO_PROJECT_CDDB_PLUGIN_H_
 
-#include <k3bprojectplugin.h>
+#include "k3bprojectplugin.h"
 
 namespace K3b {
     class Cddb;

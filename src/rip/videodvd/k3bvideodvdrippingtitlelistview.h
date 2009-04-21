@@ -15,9 +15,9 @@
 #ifndef _K3B_VIDEODVD_RIPPING_TITLE_LISTVIEW_H_
 #define _K3B_VIDEODVD_RIPPING_TITLE_LISTVIEW_H_
 
-#include <k3blistview.h>
-#include <k3bvideodvd.h>
-#include <k3bmedium.h>
+#include "k3blistview.h"
+#include "k3bvideodvd.h"
+#include "k3bmedium.h"
 
 #include <QHideEvent>
 #include <QtCore/QVector>

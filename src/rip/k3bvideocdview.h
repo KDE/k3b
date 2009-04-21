@@ -21,8 +21,8 @@
 #include <QLabel>
 #include <QList>
 
-#include <k3bmediacontentsview.h>
-#include <k3bmedium.h>
+#include "k3bmediacontentsview.h"
+#include "k3bmedium.h"
 
 #include "k3bvideocdinfo.h"
 

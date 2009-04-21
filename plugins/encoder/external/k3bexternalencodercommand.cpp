@@ -17,7 +17,7 @@
 #include <config-k3b.h>
 
 
-#include <k3bcore.h>
+#include "k3bcore.h"
 
 #include <kconfig.h>
 #include <KConfigGroup>

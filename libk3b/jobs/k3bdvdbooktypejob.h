@@ -17,7 +17,7 @@
 
 
 #include <qprocess.h>
-#include <k3bjob.h>
+#include "k3bjob.h"
 
 
 namespace K3b {

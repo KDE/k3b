@@ -14,13 +14,13 @@
 
 #include "k3bmsinfofetcher.h"
 
-#include <k3bexternalbinmanager.h>
-#include <k3bdevicemanager.h>
-#include <k3bdevicehandler.h>
-#include <k3bdevice.h>
-#include <k3bcore.h>
-#include <k3bglobals.h>
-#include <k3biso9660.h>
+#include "k3bexternalbinmanager.h"
+#include "k3bdevicemanager.h"
+#include "k3bdevicehandler.h"
+#include "k3bdevice.h"
+#include "k3bcore.h"
+#include "k3bglobals.h"
+#include "k3biso9660.h"
 #include "k3bprocess.h"
 
 #include <klocale.h>

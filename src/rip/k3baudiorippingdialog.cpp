@@ -20,15 +20,15 @@
 #include "k3baudioconvertingoptionwidget.h"
 #include "k3bviewcolumnadjuster.h"
 
-#include <k3bjobprogressdialog.h>
-#include <k3bcore.h>
-#include <k3bglobals.h>
-#include <k3btrack.h>
-#include <k3bstdguiitems.h>
-#include <k3bfilesysteminfo.h>
-#include <k3bpluginmanager.h>
-#include <k3baudioencoder.h>
-#include <k3bmediacache.h>
+#include "k3bjobprogressdialog.h"
+#include "k3bcore.h"
+#include "k3bglobals.h"
+#include "k3btrack.h"
+#include "k3bstdguiitems.h"
+#include "k3bfilesysteminfo.h"
+#include "k3bpluginmanager.h"
+#include "k3baudioencoder.h"
+#include "k3bmediacache.h"
 
 #include <kcombobox.h>
 #include <klocale.h>

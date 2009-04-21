@@ -15,7 +15,7 @@
 #ifndef _K3B_CLONE_JOB_H_
 #define _K3B_CLONE_JOB_H_
 
-#include <k3bjob.h>
+#include "k3bjob.h"
 #include "k3b_export.h"
 #include <qstring.h>
 

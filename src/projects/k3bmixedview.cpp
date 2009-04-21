@@ -23,12 +23,12 @@
 #include "k3baudiotrackaddingdialog.h"
 #include "k3bdataurladdingdialog.h"
 
-//#include <k3baudiotrackplayer.h>
-#include <k3baudiodoc.h>
-#include <k3bdatadoc.h>
-#include <k3bfillstatusdisplay.h>
-#include <k3bprojectplugin.h>
-#include <k3bdiritem.h>
+//#include "k3baudiotrackplayer.h"
+#include "k3baudiodoc.h"
+#include "k3bdatadoc.h"
+#include "k3bfillstatusdisplay.h"
+#include "k3bprojectplugin.h"
+#include "k3bdiritem.h"
 
 #include <kdialog.h>
 #include <klocale.h>

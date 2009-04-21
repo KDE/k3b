@@ -14,10 +14,10 @@
 
 #include "k3baudioconvertingoptionwidget.h"
 
-#include <k3bpluginmanager.h>
-#include <k3baudioencoder.h>
-#include <k3bcore.h>
-#include <k3bglobals.h>
+#include "k3bpluginmanager.h"
+#include "k3baudioencoder.h"
+#include "k3bcore.h"
+#include "k3bglobals.h"
 
 #include <KComboBox>
 #include <KUrlRequester>

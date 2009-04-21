@@ -15,13 +15,13 @@
 #include "k3baudiotrackaddingdialog.h"
 #include "k3baudiofileanalyzerjob.h"
 
-#include <k3baudiodoc.h>
-#include <k3baudiotrack.h>
-#include <k3baudiofile.h>
-#include <k3baudiodecoder.h>
-#include <k3bbusywidget.h>
-#include <k3bglobals.h>
-#include <k3bcuefileparser.h>
+#include "k3baudiodoc.h"
+#include "k3baudiotrack.h"
+#include "k3baudiofile.h"
+#include "k3baudiodecoder.h"
+#include "k3bbusywidget.h"
+#include "k3bglobals.h"
+#include "k3bcuefileparser.h"
 
 #include <klocale.h>
 #include <kdebug.h>

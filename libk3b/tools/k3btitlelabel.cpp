@@ -14,7 +14,7 @@
 
 #include "k3btitlelabel.h"
 
-#include <k3bstringutils.h>
+#include "k3bstringutils.h"
 
 #include <qpainter.h>
 #include <qevent.h>

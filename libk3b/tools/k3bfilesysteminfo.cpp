@@ -16,7 +16,7 @@
 
 #include "k3bfilesysteminfo.h"
 
-#include <k3bglobals.h>
+#include "k3bglobals.h"
 
 #include <qfile.h>
 #include <qfileinfo.h>

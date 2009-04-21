@@ -15,7 +15,7 @@
 #ifndef K3B_MSINFO_FETCHER_H
 #define K3B_MSINFO_FETCHER_H
 
-#include <k3bjob.h>
+#include "k3bjob.h"
 
 namespace K3b {
 

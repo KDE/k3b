@@ -85,6 +85,22 @@ namespace K3b {
         static const char* DEFAULT_SIGNAL_CONNECTION;
 
         /**
+         * Connect a job 1-to-1. Useful for wrapper jobs.
+         *
+         * If a parameter is set to 0 it will not be connected at all
+         */
+        void connectJob( Job* subJob,
+                         const char* finishedSlot = DEFAULT_SIGNAL_CONNECTION,
+                         const char* newTaskSlot = DEFAULT_SIGNAL_CONNECTION,
+                         const char* newSubTaskSlot = DEFAULT_SIGNAL_CONNECTION,
+                         const char* progressSlot = DEFAULT_SIGNAL_CONNECTION,
+                         const char* subProgressSlot = DEFAULT_SIGNAL_CONNECTION,
+                         const char* processedSizeSlot = DEFAULT_SIGNAL_CONNECTION,
+                         const char* processedSubSizeSlot = DEFAULT_SIGNAL_CONNECTION );
+
+        /**
+         * Connect a subjob.
+         *
          * \param newTaskSlot    If DEFAULT_SIGNAL_CONNECTION the newTask signal from the subjob will
          *                       be connected to the newSubTask signal
          * \param newSubTaskSlot If DEFAULT_SIGNAL_CONNECTION the newSubTask signal from the subjob
@@ -95,14 +111,14 @@ namespace K3b {
          *
          * If a parameter is set to 0 it will not be connected at all
          */
-        virtual void connectSubJob( Job* subJob,
-                                    const char* finishedSlot = DEFAULT_SIGNAL_CONNECTION,
-                                    const char* newTaskSlot = DEFAULT_SIGNAL_CONNECTION,
-                                    const char* newSubTaskSlot = DEFAULT_SIGNAL_CONNECTION,
-                                    const char* progressSlot = DEFAULT_SIGNAL_CONNECTION,
-                                    const char* subProgressSlot = DEFAULT_SIGNAL_CONNECTION,
-                                    const char* processedSizeSlot = DEFAULT_SIGNAL_CONNECTION,
-                                    const char* processedSubSizeSlot = DEFAULT_SIGNAL_CONNECTION );
+        void connectSubJob( Job* subJob,
+                            const char* finishedSlot = DEFAULT_SIGNAL_CONNECTION,
+                            const char* newTaskSlot = DEFAULT_SIGNAL_CONNECTION,
+                            const char* newSubTaskSlot = DEFAULT_SIGNAL_CONNECTION,
+                            const char* progressSlot = DEFAULT_SIGNAL_CONNECTION,
+                            const char* subProgressSlot = DEFAULT_SIGNAL_CONNECTION,
+                            const char* processedSizeSlot = DEFAULT_SIGNAL_CONNECTION,
+                            const char* processedSubSizeSlot = DEFAULT_SIGNAL_CONNECTION );
 
         /**
          * Message types to be used in combination with the infoMessage signal.
@@ -122,10 +138,10 @@ namespace K3b {
         /**
          * reimplemented from JobHandler
          */
-        virtual int waitForMedia( Device::Device*,
-                                  Device::MediaStates mediaState = Device::STATE_EMPTY,
-                                  Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
-                                  const QString& message = QString() );
+        virtual Device::MediaType waitForMedia( Device::Device*,
+                                                Device::MediaStates mediaState = Device::STATE_EMPTY,
+                                                Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
+                                                const QString& message = QString() );
 
         /**
          * reimplemented from JobHandler

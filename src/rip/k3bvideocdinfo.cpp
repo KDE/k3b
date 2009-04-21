@@ -24,8 +24,8 @@
 #include <kconfig.h>
 #include <kdebug.h>
 
-#include <k3bprocess.h>
-#include <k3bexternalbinmanager.h>
+#include "k3bprocess.h"
+#include "k3bexternalbinmanager.h"
 
 
 K3b::VideoCdInfo::VideoCdInfo( QObject* parent )

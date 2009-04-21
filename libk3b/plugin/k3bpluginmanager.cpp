@@ -15,7 +15,7 @@
 #include "k3bpluginmanager.h"
 #include "k3bplugin.h"
 #include "k3bpluginconfigwidget.h"
-#include <k3bversion.h>
+#include "k3bversion.h"
 
 #include <kdebug.h>
 #include <klocale.h>

@@ -15,7 +15,7 @@
 
 #include "k3boggvorbisencoderconfigwidget.h"
 
-#include <k3bcore.h>
+#include "k3bcore.h"
 
 #include <knuminput.h>
 #include <klocale.h>

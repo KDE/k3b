@@ -14,7 +14,7 @@
 
 #include "k3bjobinterface.h"
 
-#include <k3bjob.h>
+#include "k3bjob.h"
 
 #include <qdatastream.h>
 

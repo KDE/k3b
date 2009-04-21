@@ -18,8 +18,8 @@
 #include "k3bvcdtrack.h"
 #include "k3bvcdtrackdialog.h"
 #include "k3bvcddoc.h"
-#include <k3bview.h>
-#include <k3baction.h>
+#include "k3bview.h"
+#include "k3baction.h"
 
 #include <q3header.h>
 #include <qtimer.h>

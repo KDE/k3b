@@ -16,8 +16,8 @@
 #include "k3baudiotrack.h"
 #include "k3baudioeditorwidget.h"
 
-#include <k3bmsf.h>
-#include <k3bmsfedit.h>
+#include "k3bmsf.h"
+#include "k3bmsfedit.h"
 
 #include <klocale.h>
 #include <kactioncollection.h>

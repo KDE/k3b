@@ -16,11 +16,11 @@
 #include <config-k3b.h>
 
 // the k3b stuff we need
-#include <k3bcore.h>
-#include <k3bdatadoc.h>
-#include <k3bdiritem.h>
-#include <k3bfileitem.h>
-#include <k3blistview.h>
+#include "k3bcore.h"
+#include "k3bdatadoc.h"
+#include "k3bdiritem.h"
+#include "k3bfileitem.h"
+#include "k3blistview.h"
 
 #include <kdebug.h>
 #include <kcomponentdata.h>

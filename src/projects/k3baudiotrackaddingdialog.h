@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #ifndef _K3B_AUDIO_TRACK_ADDING_DIALOG_H_
 #define _K3B_AUDIO_TRACK_ADDING_DIALOG_H_
 
-#include <k3bjobhandler.h>
+#include "k3bjobhandler.h"
 #include <kdialog.h>
 #include <kurl.h>
 #include <qstringlist.h>
@@ -40,10 +40,10 @@ namespace K3b {
         /**
          * @reimplemented from JobHandler
          */
-        int waitForMedia( Device::Device*,
-                          Device::MediaStates = Device::STATE_EMPTY,
-                          Device::MediaTypes = Device::MEDIA_WRITABLE_CD,
-                          const QString& = QString() ) { return 0; }
+        Device::MediaType waitForMedia( Device::Device*,
+                                        Device::MediaStates = Device::STATE_EMPTY,
+                                        Device::MediaTypes = Device::MEDIA_WRITABLE_CD,
+                                        const QString& = QString() ) { return Device::MEDIA_UNKNOWN; }
 
         /**
          * @reimplemented from JobHandler

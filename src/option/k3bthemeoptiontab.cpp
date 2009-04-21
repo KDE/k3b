@@ -17,7 +17,7 @@
 
 #include "k3bthememanager.h"
 
-#include <k3bapplication.h>
+#include "k3bapplication.h"
 #include <klocale.h>
 #include <kconfig.h>
 #include <kmessagebox.h>

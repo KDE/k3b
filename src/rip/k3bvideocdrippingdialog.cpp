@@ -17,10 +17,10 @@
 #include "k3bvideocdrippingdialog.h"
 #include "k3bvideocdrip.h"
 
-#include <k3bjobprogressdialog.h>
-#include <k3bcore.h>
-#include <k3bglobals.h>
-#include <k3bstdguiitems.h>
+#include "k3bjobprogressdialog.h"
+#include "k3bcore.h"
+#include "k3bglobals.h"
+#include "k3bstdguiitems.h"
 
 // kde include
 #include <klocale.h>

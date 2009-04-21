@@ -16,7 +16,7 @@
 #include "k3bmediacache.h"
 #include "k3bapplication.h"
 
-#include <k3bglobals.h>
+#include "k3bglobals.h"
 
 #include <KLocale>
 #include <KConfig>

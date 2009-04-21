@@ -18,8 +18,8 @@
 
 #include "k3bprocess.h"
 
-#include <k3baudioencoder.h>
-#include <k3bpluginconfigwidget.h>
+#include "k3baudioencoder.h"
+#include "k3bpluginconfigwidget.h"
 #include "ui_base_k3bsoxencoderconfigwidget.h"
 
 

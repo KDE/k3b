@@ -15,7 +15,7 @@
 #ifndef _K3B_APP_DEVICE_MANAGER_H_
 #define _K3B_APP_DEVICE_MANAGER_H_
 
-#include <k3bdevicemanager.h>
+#include "k3bdevicemanager.h"
 #include <KXMLGUIClient>
 #include <solid/solidnamespace.h>
 

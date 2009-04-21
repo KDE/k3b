@@ -18,28 +18,28 @@
 #include "k3bcuefileparser.h"
 #include "k3bclonetocreader.h"
 #include "k3baudiocuefilewritingjob.h"
-#include <k3bclonejob.h>
+#include "k3bclonejob.h"
 #include "k3bmediacache.h"
 #include "k3bapplication.h"
 
 #include <config-k3b.h>
 
-#include <k3btempdirselectionwidget.h>
-#include <k3bdevicemanager.h>
-#include <k3bdevice.h>
-#include <k3bwriterselectionwidget.h>
-#include <k3bburnprogressdialog.h>
-#include <k3bstdguiitems.h>
-#include <k3bmd5job.h>
-#include <k3bdatamodewidget.h>
-#include <k3bglobals.h>
-#include <k3bwritingmodewidget.h>
-#include <k3bcore.h>
-#include <k3blistview.h>
-#include <k3biso9660.h>
-#include <k3btoc.h>
-#include <k3btrack.h>
-#include <k3bcdtext.h>
+#include "k3btempdirselectionwidget.h"
+#include "k3bdevicemanager.h"
+#include "k3bdevice.h"
+#include "k3bwriterselectionwidget.h"
+#include "k3bburnprogressdialog.h"
+#include "k3bstdguiitems.h"
+#include "k3bmd5job.h"
+#include "k3bdatamodewidget.h"
+#include "k3bglobals.h"
+#include "k3bwritingmodewidget.h"
+#include "k3bcore.h"
+#include "k3blistview.h"
+#include "k3biso9660.h"
+#include "k3btoc.h"
+#include "k3btrack.h"
+#include "k3bcdtext.h"
 
 #include <kapplication.h>
 #include <klocale.h>

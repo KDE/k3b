@@ -20,7 +20,7 @@
 #include <qwidget.h>
 #include <qlist.h>
 
-#include <k3blistview.h>
+#include "k3blistview.h"
 
 
 class QPushButton;

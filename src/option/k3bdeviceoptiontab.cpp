@@ -13,10 +13,10 @@
  */
 
 #include "k3bdeviceoptiontab.h"
-#include <k3bdevicemanager.h>
+#include "k3bdevicemanager.h"
 #include "k3bdevicewidget.h"
-#include <k3bglobals.h>
-#include <k3bcore.h>
+#include "k3bglobals.h"
+#include "k3bcore.h"
 
 #include <qlabel.h>
 #include <qstring.h>

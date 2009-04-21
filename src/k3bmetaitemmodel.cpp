@@ -18,7 +18,7 @@
 // places items
 #include "projects/k3bmodeltypes.h"
 
-#include <k3bcore.h>
+#include "k3bcore.h"
 
 #include <KIcon>
 #include <KDebug>

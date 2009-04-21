@@ -14,7 +14,7 @@
 
 
 #include "k3baudioplayer.h"
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 
 #include <qlabel.h>
 #include <qtoolbutton.h>

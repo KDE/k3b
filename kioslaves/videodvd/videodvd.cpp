@@ -25,10 +25,10 @@
 
 #include <stdlib.h>
 
-#include <k3bdevicemanager.h>
-#include <k3bdevice.h>
-#include <k3biso9660.h>
-#include <k3biso9660backend.h>
+#include "k3bdevicemanager.h"
+#include "k3bdevice.h"
+#include "k3biso9660.h"
+#include "k3biso9660backend.h"
 
 #include "videodvd.h"
 

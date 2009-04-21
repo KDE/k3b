@@ -16,8 +16,8 @@
 #ifndef K3BDATAJOB_H
 #define K3BDATAJOB_H
 
-#include <k3bjob.h>
-#include <k3bdatadoc.h>
+#include "k3bjob.h"
+#include "k3bdatadoc.h"
 
 #include <qfile.h>
 

@@ -14,7 +14,7 @@
 
 #include "k3bprojectplugindialog.h"
 
-#include <k3bprojectplugin.h>
+#include "k3bprojectplugin.h"
 
 #include <qwidget.h>
 

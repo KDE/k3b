@@ -18,7 +18,7 @@
 
 #include <qlist.h>
 
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 
 #include "k3btrack.h"
 #include "k3bdevice_export.h"

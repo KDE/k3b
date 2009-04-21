@@ -17,7 +17,7 @@
 #define K3BVCDBURNDIALOG_H
 
 #include "k3bprojectburndialog.h"
-#include <k3bvcdoptions.h>
+#include "k3bvcdoptions.h"
 
 class QCheckBox;
 class QGroupBox;

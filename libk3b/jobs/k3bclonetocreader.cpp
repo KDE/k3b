@@ -17,8 +17,8 @@
 
 #include "k3bclonetocreader.h"
 
-#include <k3bdeviceglobals.h>
-#include <k3bglobals.h>
+#include "k3bdeviceglobals.h"
+#include "k3bglobals.h"
 
 #include <qfile.h>
 

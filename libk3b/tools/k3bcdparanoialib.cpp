@@ -16,8 +16,8 @@
 
 #include "k3bcdparanoialib.h"
 
-#include <k3bdevice.h>
-#include <k3btoc.h>
+#include "k3bdevice.h"
+#include "k3btoc.h"
 #include "k3bmsf.h"
 
 #include <kdebug.h>

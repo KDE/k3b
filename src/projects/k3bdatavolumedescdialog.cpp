@@ -15,7 +15,7 @@
 #include "k3bdatavolumedescdialog.h"
 
 #include "k3bisooptions.h"
-#include <k3bvalidators.h>
+#include "k3bvalidators.h"
 
 #include <qlineedit.h>
 #include <qspinbox.h>

@@ -15,7 +15,7 @@
 #define _K3B_AUDIO_METAINFO_RENAMER_PLUGIN_H_
 
 
-#include <k3bprojectplugin.h>
+#include "k3bprojectplugin.h"
 #include <qwidget.h>
 
 namespace K3b {

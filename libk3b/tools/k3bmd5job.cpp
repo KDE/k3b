@@ -14,10 +14,10 @@
 
 
 #include "k3bmd5job.h"
-#include <k3biso9660.h>
-#include <k3bglobals.h>
-#include <k3bdevice.h>
-#include <k3bfilesplitter.h>
+#include "k3biso9660.h"
+#include "k3bglobals.h"
+#include "k3bdevice.h"
+#include "k3bfilesplitter.h"
 
 #include <kcodecs.h>
 #include <klocale.h>

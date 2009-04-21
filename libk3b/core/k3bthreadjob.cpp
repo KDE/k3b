@@ -93,10 +93,10 @@ bool K3b::ThreadJob::canceled() const
 }
 
 
-int K3b::ThreadJob::waitForMedia( K3b::Device::Device* device,
-                                  Device::MediaStates mediaState,
-                                  Device::MediaTypes mediaType,
-                                  const QString& message )
+K3b::Device::MediaType K3b::ThreadJob::waitForMedia( K3b::Device::Device* device,
+                                                     Device::MediaStates mediaState,
+                                                     Device::MediaTypes mediaType,
+                                                     const QString& message )
 {
     K3b::ThreadJobCommunicationEvent* event = K3b::ThreadJobCommunicationEvent::waitForMedium( device,
                                                                                                mediaState,
@@ -104,7 +104,7 @@ int K3b::ThreadJob::waitForMedia( K3b::Device::Device* device,
                                                                                                message );
     QApplication::postEvent( this, event );
     event->wait();
-    return event->intResult();
+    return (Device::MediaType)event->intResult();
 }
 
 

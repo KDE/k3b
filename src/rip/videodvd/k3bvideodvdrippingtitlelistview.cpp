@@ -15,14 +15,14 @@
 #include "k3bvideodvdrippingtitlelistview.h"
 #include "k3bvideodvdrippingpreview.h"
 
-#include <k3btooltip.h>
-#include <k3bapplication.h>
-#include <k3bmediacache.h>
+#include "k3btooltip.h"
+#include "k3bapplication.h"
+#include "k3bmediacache.h"
 
-#include <k3bvideodvd.h>
-#include <k3bvideodvdaudiostream.h>
-#include <k3bvideodvdvideostream.h>
-#include <k3bvideodvdsubpicturestream.h>
+#include "k3bvideodvd.h"
+#include "k3bvideodvdaudiostream.h"
+#include "k3bvideodvdvideostream.h"
+#include "k3bvideodvdsubpicturestream.h"
 
 #include <q3simplerichtext.h>
 #include <qfontmetrics.h>

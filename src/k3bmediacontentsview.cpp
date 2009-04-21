@@ -14,8 +14,8 @@
 
 #include "k3bmediacontentsview.h"
 
-#include <k3bmediacache.h>
-#include <k3bapplication.h>
+#include "k3bmediacache.h"
+#include "k3bapplication.h"
 
 #include <qlabel.h>
 #include <qlayout.h>
@@ -36,10 +36,10 @@ public:
 
 
 K3b::MediaContentsView::MediaContentsView( bool withHeader,
-                                            int mediumContent,
-                                            int mediumTypes,
-                                            int mediumState,
-                                            QWidget* parent )
+                                           int mediumContent,
+                                           int mediumTypes,
+                                           int mediumState,
+                                           QWidget* parent )
     : K3b::ContentsView( withHeader, parent )
 {
     d = new Private;

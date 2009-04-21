@@ -15,7 +15,7 @@
 #include "k3bmusicbrainztrackloopupjob.h"
 #include "k3btrm.h"
 #include "k3bmusicbrainz.h"
-#include <k3baudiotrack.h>
+#include "k3baudiotrack.h"
 
 #include <KLocale>
 

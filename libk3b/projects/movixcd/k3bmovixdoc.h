@@ -18,7 +18,7 @@
 #define _K3B_MOVIX_DOC_H_
 
 
-#include <k3bdatadoc.h>
+#include "k3bdatadoc.h"
 
 #include <qlist.h>
 #include "k3b_export.h"

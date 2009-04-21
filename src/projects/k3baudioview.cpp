@@ -27,20 +27,20 @@
 
 #include <config-k3b.h>
 
-#include <k3bapplication.h>
-#include <k3baudiodoc.h>
-#include <k3baudiotrack.h>
-#include <k3baudiofile.h>
-#include <k3bpluginmanager.h>
-#include <k3bmsfedit.h>
-#include <k3baudiodecoder.h>
+#include "k3bapplication.h"
+#include "k3baudiodoc.h"
+#include "k3baudiotrack.h"
+#include "k3baudiofile.h"
+#include "k3bpluginmanager.h"
+#include "k3bmsfedit.h"
+#include "k3baudiodecoder.h"
 
 // this is not here becasue of base_*.ui troubles
 #include "../rip/k3baudioprojectconvertingdialog.h"
 
-#include <k3bfillstatusdisplay.h>
-#include <k3bmsf.h>
-#include <k3bprojectplugin.h>
+#include "k3bfillstatusdisplay.h"
+#include "k3bmsf.h"
+#include "k3bprojectplugin.h"
 
 // QT-includes
 #include <qlayout.h>

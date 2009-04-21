@@ -15,9 +15,9 @@
 #include "k3bcuefileparser.h"
 
 #include "k3bmsf.h"
-#include <k3bglobals.h>
-#include <k3btrack.h>
-#include <k3bcdtext.h>
+#include "k3bglobals.h"
+#include "k3btrack.h"
+#include "k3bcdtext.h"
 
 #include <qfile.h>
 #include <qfileinfo.h>

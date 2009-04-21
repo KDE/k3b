@@ -16,7 +16,7 @@
 #include "k3bdiskinfo_p.h"
 #include "k3bdeviceglobals.h"
 
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 
 #include <klocale.h>
 #include <kdebug.h>

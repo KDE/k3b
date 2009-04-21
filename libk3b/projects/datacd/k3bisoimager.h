@@ -15,7 +15,7 @@
 #ifndef K3B_ISO_IMAGER_H
 #define K3B_ISO_IMAGER_H
 
-#include <k3bjob.h>
+#include "k3bjob.h"
 #include "k3bmkisofshandler.h"
 #include "k3bprocess.h"
 

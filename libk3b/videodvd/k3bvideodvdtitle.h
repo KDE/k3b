@@ -15,13 +15,13 @@
 #ifndef _K3B_VIDEODVD_TITLE_H_
 #define _K3B_VIDEODVD_TITLE_H_
 
-#include <k3b_export.h>
+#include "k3b_export.h"
 
-#include <k3bvideodvdtime.h>
-#include <k3bvideodvdvideostream.h>
-#include <k3bvideodvdaudiostream.h>
-#include <k3bvideodvdsubpicturestream.h>
-#include <k3bvideodvdptt.h>
+#include "k3bvideodvdtime.h"
+#include "k3bvideodvdvideostream.h"
+#include "k3bvideodvdaudiostream.h"
+#include "k3bvideodvdsubpicturestream.h"
+#include "k3bvideodvdptt.h"
 
 #include <qvector.h>
 

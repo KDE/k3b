@@ -18,10 +18,10 @@
 #include "k3baudiocdtrackdrag.h"
 #include "k3baudiocdtracksource.h"
 
-#include <k3baudiodoc.h>
-#include <k3baudiotrack.h>
-#include <k3baudiodatasource.h>
-#include <k3baudiofile.h>
+#include "k3baudiodoc.h"
+#include "k3baudiotrack.h"
+#include "k3baudiodatasource.h"
+#include "k3baudiofile.h"
 
 #include <KLocale>
 #include <KIcon>

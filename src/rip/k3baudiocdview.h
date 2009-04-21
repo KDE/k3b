@@ -16,8 +16,8 @@
 #ifndef _K3B_AUDIOCD_VIEW_H_
 #define _K3B_AUDIOCD_VIEW_H_
 
-#include <k3bmediacontentsview.h>
-#include <k3bmedium.h>
+#include "k3bmediacontentsview.h"
+#include "k3bmedium.h"
 
 #include <QLabel>
 

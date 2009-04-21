@@ -16,11 +16,11 @@
 #include "k3bdatadoc.h"
 #include "k3bisooptions.h"
 
-#include <k3bthreadjob.h>
-#include <k3bthread.h>
-#include <k3bdiritem.h>
-#include <k3bfileitem.h>
-#include <k3bglobals.h>
+#include "k3bthreadjob.h"
+#include "k3bthread.h"
+#include "k3bdiritem.h"
+#include "k3bfileitem.h"
+#include "k3bglobals.h"
 
 #include <KLocale>
 #include <KStringHandler>

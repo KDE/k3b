@@ -13,20 +13,20 @@
  */
 
 #include <config-k3b.h>
-#include <k3bglobals.h>
+#include "k3bglobals.h"
 
 #include "k3bisoimager.h"
 #include "k3bdiritem.h"
 #include "k3bbootitem.h"
 #include "k3bdatadoc.h"
 #include "k3bdatapreparationjob.h"
-#include <k3bexternalbinmanager.h>
-#include <k3bdevice.h>
-#include <k3bprocess.h>
-#include <k3bcore.h>
-#include <k3bversion.h>
-#include <k3bglobals.h>
-#include <k3bfilesplitter.h>
+#include "k3bexternalbinmanager.h"
+#include "k3bdevice.h"
+#include "k3bprocess.h"
+#include "k3bcore.h"
+#include "k3bversion.h"
+#include "k3bglobals.h"
+#include "k3bfilesplitter.h"
 
 #include <kdebug.h>
 #include <kstandarddirs.h>

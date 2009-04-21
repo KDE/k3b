@@ -18,9 +18,9 @@
 #include "k3bmovixfileitem.h"
 #include "k3bmovixdocpreparer.h"
 
-#include <k3bcore.h>
-#include <k3bdatajob.h>
-#include <k3bdevice.h>
+#include "k3bcore.h"
+#include "k3bdatajob.h"
+#include "k3bdevice.h"
 
 #include <klocale.h>
 #include <kdebug.h>

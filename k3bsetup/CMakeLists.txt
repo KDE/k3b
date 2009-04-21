@@ -2,8 +2,6 @@ add_subdirectory(worker)
 
 ########### next target ###############
 
-
-
 include_directories(
     ../libk3b/core/
     ${POLKITQT_INCLUDE_DIR} )

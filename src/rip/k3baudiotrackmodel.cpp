@@ -15,8 +15,8 @@
 #include "k3baudiotrackmodel.h"
 #include "k3baudiocdtrackdrag.h"
 
-#include <k3bmedium.h>
-#include <k3bcdtext.h>
+#include "k3bmedium.h"
+#include "k3bcdtext.h"
 
 #include <KLocale>
 

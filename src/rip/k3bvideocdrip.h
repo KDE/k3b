@@ -15,8 +15,8 @@
 #ifndef K3BVIDEOCDRIP_H
 #define K3BVIDEOCDRIP_H
 
-#include <k3bjob.h>
-#include <k3bdiskinfo.h>
+#include "k3bjob.h"
+#include "k3bdiskinfo.h"
 #include "k3bvideocdrippingoptions.h"
 
 #include <qprocess.h>

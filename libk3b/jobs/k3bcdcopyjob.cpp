@@ -16,20 +16,20 @@
 #include "k3bcdcopyjob.h"
 #include "k3baudiosessionreadingjob.h"
 
-#include <k3bexternalbinmanager.h>
-#include <k3bdevice.h>
-#include <k3bdiskinfo.h>
-#include <k3btoc.h>
-#include <k3bglobals.h>
-#include <k3bdevicehandler.h>
-#include <k3breadcdreader.h>
-#include <k3bdatatrackreader.h>
-#include <k3bcdrecordwriter.h>
-#include <k3bcdtext.h>
-#include <k3bcore.h>
-#include <k3binffilewriter.h>
-#include <k3bglobalsettings.h>
-#include <k3bcddb.h>
+#include "k3bexternalbinmanager.h"
+#include "k3bdevice.h"
+#include "k3bdiskinfo.h"
+#include "k3btoc.h"
+#include "k3bglobals.h"
+#include "k3bdevicehandler.h"
+#include "k3breadcdreader.h"
+#include "k3bdatatrackreader.h"
+#include "k3bcdrecordwriter.h"
+#include "k3bcdtext.h"
+#include "k3bcore.h"
+#include "k3binffilewriter.h"
+#include "k3bglobalsettings.h"
+#include "k3bcddb.h"
 
 #include <kconfig.h>
 #include <kstandarddirs.h>
@@ -167,7 +167,7 @@ void K3b::CdCopyJob::start()
     // wait for a source disk
     if( waitForMedia( m_readerDevice,
                       K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE,
-                      K3b::Device::MEDIA_WRITABLE_CD|K3b::Device::MEDIA_CD_ROM ) < 0 ) {
+                      K3b::Device::MEDIA_WRITABLE_CD|K3b::Device::MEDIA_CD_ROM ) == Device::MEDIA_UNKNOWN ) {
         finishJob( true, false );
         return;
     }
@@ -724,7 +724,7 @@ bool K3b::CdCopyJob::writeNextSession()
 
         if( waitForMedia( m_writerDevice,
                           K3b::Device::STATE_EMPTY,
-                          K3b::Device::MEDIA_WRITABLE_CD ) < 0 ) {
+                          K3b::Device::MEDIA_WRITABLE_CD ) == Device::MEDIA_UNKNOWN ) {
             finishJob( true, false );
             return false;
         }

@@ -15,11 +15,11 @@
 
 #include "k3bmiscoptiontab.h"
 
-#include <k3bpluginmanager.h>
-#include <k3bcore.h>
-#include <k3bservicemenuinstaller.h>
-#include <k3binteractiondialog.h>
-#include <k3bintmapcombobox.h>
+#include "k3bpluginmanager.h"
+#include "k3bcore.h"
+#include "k3bservicemenuinstaller.h"
+#include "k3binteractiondialog.h"
+#include "k3bintmapcombobox.h"
 
 #include <qcheckbox.h>
 #include <qfileinfo.h>

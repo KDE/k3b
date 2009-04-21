@@ -17,13 +17,13 @@
  #include "k3bvideocdview.h"
 #include "k3bvideocdrippingdialog.h"
 
-#include <k3bdevice.h>
-#include <k3bmsf.h>
-#include <k3btoc.h>
-#include <k3bcore.h>
-#include <k3blistview.h>
-#include <k3bstdguiitems.h>
-#include <k3baction.h>
+#include "k3bdevice.h"
+#include "k3bmsf.h"
+#include "k3btoc.h"
+#include "k3bcore.h"
+#include "k3blistview.h"
+#include "k3bstdguiitems.h"
+#include "k3baction.h"
 
 
 // kde includes

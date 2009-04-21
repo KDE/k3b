@@ -19,18 +19,18 @@
 #include "k3bdataview.h"
 #include "../k3bapplication.h"
 
-#include <k3bisooptions.h>
-#include <k3bdatadoc.h>
-#include <k3bdevice.h>
-#include <k3bwriterselectionwidget.h>
-#include <k3btempdirselectionwidget.h>
-#include <k3bjob.h>
-#include <k3bcore.h>
-#include <k3bstdguiitems.h>
-#include <k3bdatamodewidget.h>
-#include <k3bglobals.h>
-#include <k3bwritingmodewidget.h>
-#include <k3bmediacache.h>
+#include "k3bisooptions.h"
+#include "k3bdatadoc.h"
+#include "k3bdevice.h"
+#include "k3bwriterselectionwidget.h"
+#include "k3btempdirselectionwidget.h"
+#include "k3bjob.h"
+#include "k3bcore.h"
+#include "k3bstdguiitems.h"
+#include "k3bdatamodewidget.h"
+#include "k3bglobals.h"
+#include "k3bwritingmodewidget.h"
+#include "k3bmediacache.h"
 
 #include <qcheckbox.h>
 #include <qgroupbox.h>

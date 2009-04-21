@@ -16,7 +16,7 @@
 #ifndef _K3B_MD5_JOB_H_
 #define _K3B_MD5_JOB_H_
 
-#include <k3bjob.h>
+#include "k3bjob.h"
 #include <qbytearray.h>
 #include "k3b_export.h"
 

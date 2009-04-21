@@ -14,12 +14,12 @@
 
 #include "k3bdebuggingoutputfile.h"
 
-#include <k3bdevicemanager.h>
-#include <k3bdevice.h>
-#include <k3bcore.h>
-#include <k3bversion.h>
-#include <k3bdeviceglobals.h>
-#include <k3bglobals.h>
+#include "k3bdevicemanager.h"
+#include "k3bdevice.h"
+#include "k3bcore.h"
+#include "k3bversion.h"
+#include "k3bdeviceglobals.h"
+#include "k3bglobals.h"
 
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>

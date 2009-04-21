@@ -22,7 +22,7 @@
 
 #include <qfile.h>
 
-#include <k3bdevice.h>
+#include "k3bdevice.h"
 
 
 //

@@ -19,7 +19,7 @@
 #include <QtGui/QImage>
 #include <QtCore/QProcess>
 
-#include <k3bvideodvd.h>
+#include "k3bvideodvd.h"
 
 
 class KTempDir;

@@ -15,7 +15,7 @@
 
 #include "k3bexternalencoderconfigwidget.h"
 
-#include <k3bcore.h>
+#include "k3bcore.h"
 
 #include <qcheckbox.h>
 #include <qlayout.h>

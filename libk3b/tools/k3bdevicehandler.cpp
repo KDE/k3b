@@ -14,10 +14,10 @@
 
 
 #include "k3bdevicehandler.h"
-#include <k3bprogressinfoevent.h>
-#include <k3bthread.h>
-#include <k3bdevice.h>
-#include <k3bcdtext.h>
+#include "k3bprogressinfoevent.h"
+#include "k3bthread.h"
+#include "k3bdevice.h"
+#include "k3bcdtext.h"
 
 
 class K3b::Device::DeviceHandler::Private

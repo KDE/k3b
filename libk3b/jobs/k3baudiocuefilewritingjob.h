@@ -15,7 +15,7 @@
 #ifndef _K3B_AUDIO_CUE_FILEWRITING_JOB_H_
 #define _K3B_AUDIO_CUE_FILEWRITING_JOB_H_
 
-#include <k3bjob.h>
+#include "k3bjob.h"
 #include "k3b_export.h"
 #include "k3bglobals.h"
 

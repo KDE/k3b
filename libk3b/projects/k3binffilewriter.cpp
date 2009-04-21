@@ -14,11 +14,11 @@
 
 #include "k3binffilewriter.h"
 
-#include <k3bcdtext.h>
-#include <k3btrack.h>
+#include "k3bcdtext.h"
+#include "k3btrack.h"
 #include "k3bmsf.h"
-#include <k3bcore.h>
-#include <k3bversion.h>
+#include "k3bcore.h"
+#include "k3bversion.h"
 
 #include <qfile.h>
 #include <qdatetime.h>

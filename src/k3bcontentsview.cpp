@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
 
 #include "k3bcontentsview.h"
 
-#include <k3bthemedheader.h>
+#include "k3bthemedheader.h"
 
 #include <qlabel.h>
 #include <qlayout.h>
@@ -23,7 +23,7 @@
 
 
 K3b::ContentsView::ContentsView( bool withHeader,
-                                  QWidget* parent )
+                                 QWidget* parent )
     : QWidget( parent ),
       m_header(0),
       m_centerWidget(0)
@@ -62,10 +62,10 @@ QWidget* K3b::ContentsView::mainWidget()
 }
 
 
-void K3b::ContentsView::setTitle( const QString& s )
+void K3b::ContentsView::setTitle( const QString& title, const QString& subtitle )
 {
     if( m_header )
-        m_header->setTitle( s );
+        m_header->setTitle( title, subtitle );
 }
 
 

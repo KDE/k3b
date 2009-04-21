@@ -16,7 +16,7 @@
 
 #include "k3bdatadoc.h"
 #include "k3bbootitem.h"
-#include <k3bintvalidator.h>
+#include "k3bintvalidator.h"
 
 #include <klocale.h>
 #include <k3listview.h>

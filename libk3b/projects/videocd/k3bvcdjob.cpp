@@ -34,16 +34,16 @@
 #include "k3bvcddoc.h"
 #include "k3bvcdtrack.h"
 #include "k3bvcdxmlview.h"
-#include <k3bcore.h>
-#include <k3bdoc.h>
-#include <k3bprocess.h>
-#include <k3bdevice.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bglobals.h>
-#include <k3bcdrecordwriter.h>
-#include <k3bcdrdaowriter.h>
-#include <k3bglobalsettings.h>
-#include <k3bdevicehandler.h>
+#include "k3bcore.h"
+#include "k3bdoc.h"
+#include "k3bprocess.h"
+#include "k3bdevice.h"
+#include "k3bexternalbinmanager.h"
+#include "k3bglobals.h"
+#include "k3bcdrecordwriter.h"
+#include "k3bcdrdaowriter.h"
+#include "k3bglobalsettings.h"
+#include "k3bdevicehandler.h"
 
 
 K3b::VcdJob::VcdJob( K3b::VcdDoc* doc, K3b::JobHandler* jh, QObject* parent )
@@ -372,7 +372,7 @@ void K3b::VcdJob::startWriterjob()
 {
     kDebug() << QString( "(K3b::VcdJob) writing copy %1 of %2" ).arg( m_currentcopy ).arg( m_doc->copies() );
     if ( prepareWriterJob() ) {
-        if ( waitForMedia( m_doc->burner() ) < 0 ) {
+        if ( waitForMedia( m_doc->burner() ) == Device::MEDIA_UNKNOWN ) {
             cancel();
             return ;
         }
@@ -528,7 +528,7 @@ void K3b::VcdJob::parseInformation( const QString &text )
         int index4 = text.indexOf( "bytes of stream will be ignored" );
 
         emit infoMessage( i18n( "Bad packet at packet #%1 (stream byte offset %2)" , text.mid( index + 11, index2 - index - 11 ).trimmed() , text.mid( index2 + 19, index3 - index2 - 19 ).trimmed() ), K3b::Job::MessageWarning );
-        
+
         const QString ignoredString = text.mid( index3 + 15, index4 - index3 - 15 ).trimmed();
         bool okay = true;
         const int ignoredBytes = ignoredString.toInt(&okay);

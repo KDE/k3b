@@ -16,11 +16,11 @@
 #include "k3baudioeditorwidget.h"
 #include "k3baudiotrackwidget.h"
 #include "k3baudiotrack.h"
-#include <k3bvalidators.h>
-#include <k3bmsf.h>
-#include <k3bcdtextvalidator.h>
-#include <k3baudiodecoder.h>
-#include <k3bmsfedit.h>
+#include "k3bvalidators.h"
+#include "k3bmsf.h"
+#include "k3bcdtextvalidator.h"
+#include "k3baudiodecoder.h"
+#include "k3bmsfedit.h"
 
 #include <qlabel.h>
 #include <qlayout.h>

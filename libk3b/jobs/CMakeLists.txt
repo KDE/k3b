@@ -20,6 +20,7 @@ install( FILES
   k3bdvdformattingjob.h
   k3bblankingjob.h
   k3bverificationjob.h
+  k3bmetawriter.h
   DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel )
 
 

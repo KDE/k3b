@@ -20,7 +20,7 @@
 #include <qdom.h>
 #include <ktemporaryfile.h>
 
-#include <k3bvcddoc.h>
+#include "k3bvcddoc.h"
 
 namespace K3b {
     class VcdTrack;

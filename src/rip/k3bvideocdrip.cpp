@@ -14,9 +14,9 @@
 
 // K3b Includes
 #include "k3bvideocdrip.h"
-#include <k3bcore.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bglobals.h>
+#include "k3bcore.h"
+#include "k3bexternalbinmanager.h"
+#include "k3bglobals.h"
 
 #include <kconfig.h>
 #include <kdebug.h>

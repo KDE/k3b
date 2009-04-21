@@ -16,8 +16,8 @@
 
 #include <kprocess.h>
 
-#include <k3bdevice.h>
-#include <k3bglobals.h>
+#include "k3bdevice.h"
+#include "k3bglobals.h"
 
 #include <qfile.h>
 #include <qfileinfo.h>

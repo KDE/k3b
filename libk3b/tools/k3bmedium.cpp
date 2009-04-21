@@ -1,6 +1,4 @@
-
 /*
- *
  * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
@@ -273,7 +271,41 @@ void K3b::Medium::analyseContent()
 }
 
 
-QString K3b::Medium::shortString( bool useContent ) const
+QString K3b::Medium::contentTypeString() const
+{
+    QString mediaTypeString = K3b::Device::mediaTypeString( diskInfo().mediaType(), true );
+
+    switch( d->toc.contentType() ) {
+    case K3b::Device::AUDIO:
+        return i18n("Audio CD");
+
+    case K3b::Device::MIXED:
+        return i18n("Mixed CD");
+
+    case K3b::Device::DATA:
+        if( content() & ContentVideoDVD ) {
+            return i18n("Video DVD");
+        }
+        else if( content() & ContentVideoCD ) {
+            return i18n("Video CD");
+        }
+        else if( diskInfo().diskState() == K3b::Device::STATE_INCOMPLETE ) {
+            return i18n("Appendable Data %1", mediaTypeString );
+        }
+        else {
+            return i18n("Complete Data %1", mediaTypeString );
+        }
+
+    case K3b::Device::NONE:
+        return i18n("Empty");
+    }
+
+    // make gcc shut up
+    return QString();
+}
+
+
+QString K3b::Medium::shortString( MediumStringFlags flags ) const
 {
     QString mediaTypeString = K3b::Device::mediaTypeString( diskInfo().mediaType(), true );
 
@@ -290,7 +322,7 @@ QString K3b::Medium::shortString( bool useContent ) const
     }
 
     else {
-        if( useContent ) {
+        if( flags & WithContents ) {
             // AUDIO + MIXED
             if( d->toc.contentType() == K3b::Device::AUDIO ||
                 d->toc.contentType() == K3b::Device::MIXED ) {
@@ -303,41 +335,24 @@ QString K3b::Medium::shortString( bool useContent ) const
                     performer = cddbInfo().get( KCDDB::Artist ).toString();
                 }
                 if( !performer.isEmpty() && !title.isEmpty() ) {
-                    return QString("%1 - %2 (%3)")
+                    return QString("%1 - %2")
                         .arg( performer )
-                        .arg( title )
-                        .arg( d->toc.contentType() == K3b::Device::AUDIO ? i18n("Audio CD") : i18n("Mixed CD") );
+                        .arg( title );
                 }
                 else if( d->toc.contentType() == K3b::Device::AUDIO ) {
-                    return i18n("Audio CD");
+                    return contentTypeString();
                 }
                 else {
-                    return i18n("%1 (Mixed CD)", beautifiedVolumeId() );
+                    return beautifiedVolumeId();
                 }
             }
 
             // DATA CD and DVD
             else if( !volumeId().isEmpty() ) {
-                if( content() & ContentVideoDVD ) {
-                    return QString("%1 (%2)").arg(beautifiedVolumeId()).arg( i18n("Video DVD") );
-                }
-                else if( content() & ContentVideoCD ) {
-                    return QString("%1 (%2)").arg(beautifiedVolumeId()).arg(i18n("Video CD") );
-                }
-                else if( diskInfo().diskState() == K3b::Device::STATE_INCOMPLETE ) {
-                    return i18n("%1 (Appendable Data %2)", beautifiedVolumeId(), mediaTypeString );
-                }
-                else {
-                    return i18n("%1 (Complete Data %2)", beautifiedVolumeId(), mediaTypeString );
-                }
+                return beautifiedVolumeId();
             }
             else {
-                if( diskInfo().diskState() == K3b::Device::STATE_INCOMPLETE ) {
-                    return i18n("Appendable Data %1", mediaTypeString );
-                }
-                else {
-                    return i18n("Complete Data %1", mediaTypeString );
-                }
+                return contentTypeString();
             }
         }
 
@@ -354,32 +369,37 @@ QString K3b::Medium::shortString( bool useContent ) const
 }
 
 
-QString K3b::Medium::longString() const
+QString K3b::Medium::longString( MediumStringFlags flags ) const
 {
-    QString s = QString("<p><nobr><b>%1 %2</b> (%3)</nobr>"
-                        "<p>")
-                .arg( d->device->vendor() )
-                .arg( d->device->description() )
-                .arg( d->device->blockDeviceName() )
-                + shortString( true )
-                + " (" + K3b::Device::mediaTypeString( diskInfo().mediaType(), true ) + ')';
+    QString s = QString("<p><nobr><b style=\"font-size:large;\">%1</b></nobr><br/>(%2)")
+                .arg( shortString( flags ) )
+                .arg( flags & WithContents
+                      ? contentTypeString()
+                      : K3b::Device::mediaTypeString( diskInfo().mediaType(), true ) );
 
     if( diskInfo().diskState() == K3b::Device::STATE_COMPLETE ||
         diskInfo().diskState() == K3b::Device::STATE_INCOMPLETE  ) {
-        s += "<br>" + i18np("1 in %2 track", "%1 in %2 tracks", d->toc.count(),
-                            KIO::convertSize(diskInfo().size().mode1Bytes() ) );
+        s += "<br/>" + i18np("%1 in 1 track", "%1 in %2 tracks",
+                             KIO::convertSize(diskInfo().size().mode1Bytes() ),
+                             d->toc.count() );
         if( diskInfo().numSessions() > 1 )
             s += i18np(" and %1 session", " and %1 sessions", diskInfo().numSessions() );
     }
 
     if( diskInfo().diskState() == K3b::Device::STATE_EMPTY ||
         diskInfo().diskState() == K3b::Device::STATE_INCOMPLETE  )
-        s += "<br>" + i18n("Free space: %1",
-                           KIO::convertSize( diskInfo().remainingSize().mode1Bytes() ) );
+        s += "<br/>" + i18n("Free space: %1",
+                            KIO::convertSize( diskInfo().remainingSize().mode1Bytes() ) );
 
     if( !diskInfo().empty() && diskInfo().rewritable() )
-        s += "<br>" + i18n("Capacity: %1",
-                           KIO::convertSize( diskInfo().capacity().mode1Bytes() ) );
+        s += "<br/>" + i18n("Capacity: %1",
+                            KIO::convertSize( diskInfo().capacity().mode1Bytes() ) );
+
+    if( flags & WithDevice )
+        s += QString("<br/><small><nobr>%1 %2 (%3)</nobr></small>")
+             .arg( d->device->vendor() )
+             .arg( d->device->description() )
+             .arg( d->device->blockDeviceName() );
 
     return s;
 }

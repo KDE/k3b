@@ -21,14 +21,14 @@
 //#include "k3bjobinterface.h"
 #include "k3bthemedlabel.h"
 #include "k3b.h"
-#include <k3bjob.h>
-#include <k3bdevice.h>
-#include <k3bdevicemanager.h>
-#include <k3bdeviceglobals.h>
-#include <k3bglobals.h>
-#include <k3bstdguiitems.h>
-#include <k3bversion.h>
-#include <k3bthememanager.h>
+#include "k3bjob.h"
+#include "k3bdevice.h"
+#include "k3bdevicemanager.h"
+#include "k3bdeviceglobals.h"
+#include "k3bglobals.h"
+#include "k3bstdguiitems.h"
+#include "k3bversion.h"
+#include "k3bthememanager.h"
 
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -611,10 +611,10 @@ int K3b::JobProgressDialog::startJob( K3b::Job* job )
 }
 
 
-int K3b::JobProgressDialog::waitForMedia( K3b::Device::Device* device,
-                                          Device::MediaStates mediaState,
-                                          Device::MediaTypes mediaType,
-                                          const QString& message )
+K3b::Device::MediaType K3b::JobProgressDialog::waitForMedia( K3b::Device::Device* device,
+                                                             Device::MediaStates mediaState,
+                                                             Device::MediaTypes mediaType,
+                                                             const QString& message )
 {
     return K3b::EmptyDiscWaiter::wait( device, mediaState, mediaType, message, this );
 }

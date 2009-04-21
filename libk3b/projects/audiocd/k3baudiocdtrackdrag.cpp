@@ -14,11 +14,11 @@
 
 #include "k3baudiocdtrackdrag.h"
 
-#include <k3bdevice.h>
-#include <k3bdevicemanager.h>
-#include <k3btoc.h>
-#include <k3btrack.h>
-#include <k3bcore.h>
+#include "k3bdevice.h"
+#include "k3bdevicemanager.h"
+#include "k3btoc.h"
+#include "k3btrack.h"
+#include "k3bcore.h"
 
 #include <qdatastream.h>
 #include <QtCore/QMimeData>

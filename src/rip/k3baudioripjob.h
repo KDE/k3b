@@ -16,7 +16,7 @@
 #ifndef K3B_AUDIO_RIP_THREAD_H
 #define K3B_AUDIO_RIP_THREAD_H
 
-#include <k3bthreadjob.h>
+#include "k3bthreadjob.h"
 #include <QVector>
 #include <QPair>
 

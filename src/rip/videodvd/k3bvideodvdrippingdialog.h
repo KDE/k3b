@@ -15,8 +15,8 @@
 #ifndef _K3B_VIDEODVD_RIPPING_DIALOG_H_
 #define _K3B_VIDEODVD_RIPPING_DIALOG_H_
 
-#include <k3binteractiondialog.h>
-#include <k3bvideodvd.h>
+#include "k3binteractiondialog.h"
+#include "k3bvideodvd.h"
 #include "k3bvideodvdrippingjob.h"
 
 #include <qmap.h>

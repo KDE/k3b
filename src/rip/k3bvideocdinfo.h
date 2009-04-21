@@ -22,8 +22,8 @@
 #include <QList>
 #include <QProcess>
 
-#include <k3btoc.h>
-#include <k3bcore.h>
+#include "k3btoc.h"
+#include "k3bcore.h"
 
 namespace K3b {
     class Process;

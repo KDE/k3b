@@ -17,7 +17,7 @@
 #ifndef _K3B_VIDEO_DVDVIEW_H_
 #define _K3B_VIDEO_DVDVIEW_H_
 
-#include <k3bstandardview.h>
+#include "k3bstandardview.h"
 
 namespace K3b {
     class VideoDvdDoc;

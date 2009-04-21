@@ -16,7 +16,7 @@
 #ifndef K3BAUDIOJOB_H
 #define K3BAUDIOJOB_H
 
-#include <k3bjob.h>
+#include "k3bjob.h"
 
 class KTemporaryFile;
 

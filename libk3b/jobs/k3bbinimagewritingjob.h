@@ -16,7 +16,7 @@
 #ifndef K3BBINIMAGEWRITINGJOB_H
 #define K3BBINIMAGEWRITINGJOB_H
 
-#include <k3bjob.h>
+#include "k3bjob.h"
 #include "k3b_export.h"
 
 namespace K3b {

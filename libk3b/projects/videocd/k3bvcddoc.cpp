@@ -37,7 +37,7 @@
 #include "k3bvcddoc.h"
 #include "k3bvcdtrack.h"
 #include "k3bvcdjob.h"
-#include <k3bglobals.h>
+#include "k3bglobals.h"
 #include "k3bmsf.h"
 
 #if 0

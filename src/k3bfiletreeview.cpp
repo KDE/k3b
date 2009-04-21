@@ -26,9 +26,9 @@
 #include "k3baction.h"
 #include "k3b.h"
 
-#include <k3bdevice.h>
-#include <k3bdiskinfo.h>
-#include <k3bglobals.h>
+#include "k3bdevice.h"
+#include "k3bdiskinfo.h"
+#include "k3bglobals.h"
 
 #include <kiconloader.h>
 #include <klocale.h>

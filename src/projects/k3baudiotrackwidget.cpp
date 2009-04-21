@@ -16,9 +16,9 @@
 #include "k3baudioeditorwidget.h"
 #include "k3baudiotrack.h"
 
-#include <k3bmsfedit.h>
-#include <k3bvalidators.h>
-#include <k3bcdtextvalidator.h>
+#include "k3bmsfedit.h"
+#include "k3bvalidators.h"
+#include "k3bcdtextvalidator.h"
 
 #include <qlabel.h>
 #include <qcheckbox.h>

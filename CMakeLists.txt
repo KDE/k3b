@@ -258,7 +258,7 @@ add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 include_directories( 
   ${k3b_BINARY_DIR}
-  ${libk3bdevice_SOURCE_DIR}
+  ${k3b_SOURCE_DIR}/libk3bdevice
   ${k3b_SOURCE_DIR}/libk3b/core
   ${k3b_SOURCE_DIR}/libk3b/plugin
   ${k3b_SOURCE_DIR}/libk3b/tools

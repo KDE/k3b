@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
@@ -69,6 +69,10 @@ namespace K3b {
         public:
             CdText();
             CdText( const unsigned char* data, int len );
+
+            /**
+             * \sa setRawPackData
+             */
             CdText( const QByteArray& );
             CdText( const CdText& );
             ~CdText();
@@ -92,6 +96,10 @@ namespace K3b {
 
             TrackCdText track( int i ) const;
 
+            /**
+             * Parse cd text from raw pack data. The data as provided is cached
+             * and will be returned by rawPackData until the cdtext object is changed.
+             */
             void setRawPackData( const unsigned char*, int );
             void setRawPackData( const QByteArray& );
 
@@ -132,7 +140,7 @@ namespace K3b {
 
             bool operator==( const CdText& ) const;
             bool operator!=( const CdText& ) const;
-	
+
         private:
             class Private;
             QSharedDataPointer<Private> d;

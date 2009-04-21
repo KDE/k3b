@@ -13,13 +13,13 @@
  */
 
 #include <config-k3b.h>
-#include <k3bglobals.h>
+#include "k3bglobals.h"
 
 #include "k3bfileitem.h"
 #include "k3bdatadoc.h"
 #include "k3bdiritem.h"
 #include "k3bisooptions.h"
-#include <k3bglobals.h>
+#include "k3bglobals.h"
 
 #include <qfileinfo.h>
 #include <qstring.h>

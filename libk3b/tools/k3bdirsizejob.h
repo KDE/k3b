@@ -15,11 +15,11 @@
 #ifndef _K3B_DIR_SIZE_JOB_H_
 #define _K3B_DIR_SIZE_JOB_H_
 
-#include <k3bthreadjob.h>
+#include "k3bthreadjob.h"
 #include <kio/global.h>
 #include <kurl.h>
 
-#include <k3b_export.h>
+#include "k3b_export.h"
 
 namespace K3b {
     /**

@@ -14,7 +14,7 @@
 
 #include <config-libk3b.h>
 
-#include <k3bcore.h>
+#include "k3bcore.h"
 
 #include "k3baudiodecoder.h"
 #include "k3bpluginmanager.h"
@@ -29,8 +29,8 @@
 #include <samplerate.h>
 
 #if !(HAVE_LRINT && HAVE_LRINTF)
-#define lrint(dbl)              ((int) (dbl))
-#define lrintf(flt)             ((int) (flt))
+#define lrint(dbl)              ((int) (dbl+0.5))
+#define lrintf(flt)             ((int) (flt+0.5))
 #endif
 
 // use a one second buffer

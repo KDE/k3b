@@ -15,9 +15,9 @@
 #ifndef _K3B_CHECKSUM_PIPE_H_
 #define _K3B_CHECKSUM_PIPE_H_
 
-#include <k3bactivepipe.h>
+#include "k3bactivepipe.h"
 
-#include <k3b_export.h>
+#include "k3b_export.h"
 
 
 namespace K3b {

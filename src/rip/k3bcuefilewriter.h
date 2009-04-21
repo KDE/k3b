@@ -18,8 +18,8 @@
 #include <q3textstream.h>
 #include <qstringlist.h>
 
-#include <k3btoc.h>
-#include <k3bcdtext.h>
+#include "k3btoc.h"
+#include "k3bcdtext.h"
 
 /**
  * Write a CDRWIN cue file.

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +16,11 @@
 #include "k3bcdrecordwriter.h"
 #include "k3bcdrdaowriter.h"
 
-#include <k3bglobals.h>
-#include <k3bdevice.h>
-#include <k3bdevicehandler.h>
-#include <k3bcore.h>
-#include <k3bglobalsettings.h>
+#include "k3bglobals.h"
+#include "k3bdevice.h"
+#include "k3bdevicehandler.h"
+#include "k3bcore.h"
+#include "k3bglobalsettings.h"
 
 #include <kconfig.h>
 #include <klocale.h>
@@ -33,124 +33,124 @@
 
 
 K3b::BlankingJob::BlankingJob( K3b::JobHandler* hdl, QObject* parent )
-  : K3b::BurnJob( hdl, parent ),
-    m_writerJob(0),
-    m_force(true),
-    m_device(0),
-    m_speed(0),
-    m_mode(Fast),
-    m_writingApp(K3b::WritingAppAuto),
-    m_canceled(false),
-    m_forceNoEject(false)
+    : K3b::BurnJob( hdl, parent ),
+      m_writerJob(0),
+      m_force(true),
+      m_device(0),
+      m_speed(0),
+      m_mode(Fast),
+      m_writingApp(K3b::WritingAppAuto),
+      m_canceled(false),
+      m_forceNoEject(false)
 {
 }
 
 
 K3b::BlankingJob::~BlankingJob()
 {
-  delete m_writerJob;
+    delete m_writerJob;
 }
 
 
 K3b::Device::Device* K3b::BlankingJob::writer() const
 {
-  return m_device;
+    return m_device;
 }
 
 
 void K3b::BlankingJob::setDevice( K3b::Device::Device* dev )
 {
-  m_device = dev;
+    m_device = dev;
 }
 
 
 void K3b::BlankingJob::start()
 {
-  if( m_device == 0 )
-    return;
+    if( m_device == 0 )
+        return;
 
-  jobStarted();
+    jobStarted();
 
-  emit newTask( i18n( "Erasing CD-RW" ) );
-  emit infoMessage( i18n( "When erasing a CD-RW no progress information is available." ), MessageWarning );
+    emit newTask( i18n( "Erasing CD-RW" ) );
+    emit infoMessage( i18n( "When erasing a CD-RW no progress information is available." ), MessageWarning );
 
-  slotStartErasing();
+    slotStartErasing();
 }
 
 void K3b::BlankingJob::slotStartErasing()
 {
-  m_canceled = false;
+    m_canceled = false;
 
-  if( m_writerJob )
-    delete m_writerJob;
+    if( m_writerJob )
+        delete m_writerJob;
 
-  if( m_writingApp == K3b::WritingAppCdrdao ) {
-    K3b::CdrdaoWriter* writer = new K3b::CdrdaoWriter( m_device, this );
-    m_writerJob = writer;
+    if( m_writingApp == K3b::WritingAppCdrdao ) {
+        K3b::CdrdaoWriter* writer = new K3b::CdrdaoWriter( m_device, this );
+        m_writerJob = writer;
 
-    writer->setCommand(K3b::CdrdaoWriter::BLANK);
-    writer->setBlankMode( m_mode == Fast ? K3b::CdrdaoWriter::MINIMAL : K3b::CdrdaoWriter::FULL );
-    writer->setForce(m_force);
-    writer->setBurnSpeed(m_speed);
-  }
-  else {
-    K3b::CdrecordWriter* writer = new K3b::CdrecordWriter( m_device, this );
-    m_writerJob = writer;
+        writer->setCommand(K3b::CdrdaoWriter::BLANK);
+        writer->setBlankMode( m_mode == Fast ? K3b::CdrdaoWriter::MINIMAL : K3b::CdrdaoWriter::FULL );
+        writer->setForce(m_force);
+        writer->setBurnSpeed(m_speed);
+    }
+    else {
+        K3b::CdrecordWriter* writer = new K3b::CdrecordWriter( m_device, this );
+        m_writerJob = writer;
 
-    QString mode;
-    switch( m_mode ) {
-    case Fast:
-      mode = "fast";
-      break;
-    case Complete:
-      mode = "all";
-      break;
-    case Track:
-      mode = "track";
-      break;
-    case Unclose:
-      mode = "unclose";
-      break;
-    case Session:
-      mode = "session";
-      break;
+        QString mode;
+        switch( m_mode ) {
+        case Fast:
+            mode = "fast";
+            break;
+        case Complete:
+            mode = "all";
+            break;
+        case Track:
+            mode = "track";
+            break;
+        case Unclose:
+            mode = "unclose";
+            break;
+        case Session:
+            mode = "session";
+            break;
+        }
+
+        writer->addArgument("blank="+ mode);
+
+        if (m_force)
+            writer->addArgument("-force");
+        writer->setBurnSpeed(m_speed);
     }
 
-    writer->addArgument("blank="+ mode);
+    connect(m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)));
+    connect(m_writerJob, SIGNAL(infoMessage( const QString&, int)),
+            this,SIGNAL(infoMessage( const QString&, int)));
+    connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
+             this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
-    if (m_force)
-      writer->addArgument("-force");
-    writer->setBurnSpeed(m_speed);
-  }
+    if( waitForMedia( m_device,
+                      K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE,
+                      K3b::Device::MEDIA_CD_RW,
+                      i18n("Please insert a rewritable CD medium into drive<p><b>%1 %2 (%3)</b>.",
+                           m_device->vendor(),
+                           m_device->description(),
+                           m_device->blockDeviceName()) ) == Device::MEDIA_UNKNOWN ) {
+        emit canceled();
+        jobFinished(false);
+        return;
+    }
 
-  connect(m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)));
-  connect(m_writerJob, SIGNAL(infoMessage( const QString&, int)),
-          this,SIGNAL(infoMessage( const QString&, int)));
-  connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
-	   this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
-
-  if( waitForMedia( m_device,
-		    K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE,
-		    K3b::Device::MEDIA_CD_RW,
-		    i18n("Please insert a rewritable CD medium into drive<p><b>%1 %2 (%3)</b>.",
-		    m_device->vendor(),
-		    m_device->description(),
-		    m_device->blockDeviceName()) ) < 0 ) {
-    emit canceled();
-    jobFinished(false);
-    return;
-  }
-
-  m_writerJob->start();
+    m_writerJob->start();
 }
 
 
 void K3b::BlankingJob::cancel()
 {
-  m_canceled = true;
+    m_canceled = true;
 
-  if( m_writerJob )
-    m_writerJob->cancel();
+    if( m_writerJob )
+        m_writerJob->cancel();
 }
 
 
@@ -179,16 +179,16 @@ void K3b::BlankingJob::slotFinished(bool success)
 
 QString K3b::BlankingJob::jobDescription() const
 {
-  return i18n("Erasing CD-RW");
+    return i18n("Erasing CD-RW");
 }
 
 
 QString K3b::BlankingJob::jobDetails() const
 {
-  if( m_mode == Fast )
-    return i18n("Quick Format");
-  else
-    return QString();
+    if( m_mode == Fast )
+        return i18n("Quick Format");
+    else
+        return QString();
 }
 
 #include "k3bblankingjob.moc"

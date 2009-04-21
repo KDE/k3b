@@ -18,7 +18,7 @@
 
 #include <qobject.h>
 #include <qlist.h>
-#include <k3bdoc.h>
+#include "k3bdoc.h"
 
 
 class KUrl;

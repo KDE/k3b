@@ -16,7 +16,7 @@
 #ifndef _K3B_LAME_ENCODER_CONFIG_WIDGET_H_
 #define _K3B_LAME_ENCODER_CONFIG_WIDGET_H_
 
-#include <k3bpluginconfigwidget.h>
+#include "k3bpluginconfigwidget.h"
 
 #include "ui_base_k3blameencodersettingswidget.h"
 #include "ui_base_k3bmanualbitratesettingswidget.h"

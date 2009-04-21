@@ -14,8 +14,8 @@
 
 #include "k3bjobprogressosd.h"
 
-#include <k3bthememanager.h>
-#include <k3bapplication.h>
+#include "k3bthememanager.h"
+#include "k3bapplication.h"
 
 #include <kwindowsystem.h>
 #include <kiconloader.h>

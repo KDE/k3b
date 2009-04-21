@@ -15,8 +15,8 @@
  */
 
 #include "k3bsetupdevicesmodel.h"
-#include <k3bdevicemanager.h>
-#include <k3bdevice.h>
+#include "k3bdevicemanager.h"
+#include "k3bdevice.h"
 
 #include <KConfig>
 #include <KConfigGroup>

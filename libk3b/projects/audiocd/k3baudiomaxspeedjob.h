@@ -15,7 +15,7 @@
 #ifndef _K3B_AUDIO_MAX_SPEED_JOB_H_
 #define _K3B_AUDIO_MAX_SPEED_JOB_H_
 
-#include <k3bthreadjob.h>
+#include "k3bthreadjob.h"
 
 namespace K3b {
     class AudioDoc;

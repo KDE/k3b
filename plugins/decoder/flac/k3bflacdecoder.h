@@ -16,7 +16,7 @@
 #define _K3B_FLAC_DECODER_H_
 
 
-#include <k3baudiodecoder.h>
+#include "k3baudiodecoder.h"
 
 class KUrl;
 

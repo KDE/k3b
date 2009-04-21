@@ -15,8 +15,8 @@
 
 #include "k3bmovixprojectmodel.h"
 
-#include <k3bmovixdoc.h>
-#include <k3bmovixfileitem.h>
+#include "k3bmovixdoc.h"
+#include "k3bmovixfileitem.h"
 
 #include <KLocale>
 #include <KUrl>

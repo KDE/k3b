@@ -16,18 +16,18 @@
 #include "k3baudioripjob.h"
 #include "k3bpatternparser.h"
 
-#include <k3bcdparanoialib.h>
-#include <k3bjob.h>
-#include <k3baudioencoder.h>
-#include <k3bwavefilewriter.h>
-#include <k3bglobalsettings.h>
-#include <k3bcore.h>
+#include "k3bcdparanoialib.h"
+#include "k3bjob.h"
+#include "k3baudioencoder.h"
+#include "k3bwavefilewriter.h"
+#include "k3bglobalsettings.h"
+#include "k3bcore.h"
 #include "k3bcuefilewriter.h"
 
-#include <k3bdevice.h>
-#include <k3btoc.h>
-#include <k3btrack.h>
-#include <k3bglobals.h>
+#include "k3bdevice.h"
+#include "k3btoc.h"
+#include "k3btrack.h"
+#include "k3bglobals.h"
 
 #include <qfile.h>
 #include <qfileinfo.h>

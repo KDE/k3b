@@ -18,16 +18,16 @@
 #include "k3bmediacache.h"
 #include "k3bmedium.h"
 
-#include <k3bdvdformattingjob.h>
-#include <k3bblankingjob.h>
+#include "k3bdvdformattingjob.h"
+#include "k3bblankingjob.h"
 
-#include <k3bdevice.h>
-#include <k3bdevicemanager.h>
-#include <k3bglobals.h>
-#include <k3bcore.h>
-#include <k3bwriterselectionwidget.h>
-#include <k3bwritingmodewidget.h>
-#include <k3bjobprogressdialog.h>
+#include "k3bdevice.h"
+#include "k3bdevicemanager.h"
+#include "k3bglobals.h"
+#include "k3bcore.h"
+#include "k3bwriterselectionwidget.h"
+#include "k3bwritingmodewidget.h"
+#include "k3bjobprogressdialog.h"
 
 #include <klocale.h>
 #include <kmessagebox.h>

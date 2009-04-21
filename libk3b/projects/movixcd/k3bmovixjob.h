@@ -16,7 +16,7 @@
 #ifndef _K3B_MOVIX_JOB_H_
 #define _K3B_MOVIX_JOB_H_
 
-#include <k3bjob.h>
+#include "k3bjob.h"
 
 namespace K3b {
     class MovixDoc;

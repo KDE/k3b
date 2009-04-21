@@ -17,10 +17,10 @@
 #include "k3bdataurladdingdialog.h"
 #include "k3bmodeltypes.h"
 
-#include <k3bdatadoc.h>
-#include <k3bdiritem.h>
-#include <k3bfileitem.h>
-#include <k3bspecialdataitem.h>
+#include "k3bdatadoc.h"
+#include "k3bdiritem.h"
+#include "k3bfileitem.h"
+#include "k3bspecialdataitem.h"
 
 #include <kmimetype.h>
 #include <KIcon>

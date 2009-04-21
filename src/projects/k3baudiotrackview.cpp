@@ -32,9 +32,9 @@
 
 #include <config-k3b.h>
 
-#include <k3bview.h>
-#include <k3baudiodecoder.h>
-#include <k3bmsfedit.h>
+#include "k3bview.h"
+#include "k3baudiodecoder.h"
+#include "k3bmsfedit.h"
 
 #include <qtimer.h>
 #include <qpoint.h>

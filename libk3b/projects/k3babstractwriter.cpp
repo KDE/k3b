@@ -15,10 +15,10 @@
 
 #include "k3babstractwriter.h"
 
-#include <k3bcore.h>
-#include <k3bdevicemanager.h>
-#include <k3bdevicehandler.h>
-#include <k3bglobalsettings.h>
+#include "k3bcore.h"
+#include "k3bdevicemanager.h"
+#include "k3bdevicehandler.h"
+#include "k3bglobalsettings.h"
 
 #include <klocale.h>
 #include <kglobal.h>

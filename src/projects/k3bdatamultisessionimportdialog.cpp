@@ -26,16 +26,16 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 
-#include <k3bcore.h>
-#include <k3bdatadoc.h>
-#include <k3blistview.h>
-#include <k3btoc.h>
-#include <k3bdevice.h>
-#include <k3bdevicemanager.h>
-#include <k3bdiskinfo.h>
-#include <k3biso9660.h>
-#include <k3bmedium.h>
-#include <k3bmediacache.h>
+#include "k3bcore.h"
+#include "k3bdatadoc.h"
+#include "k3blistview.h"
+#include "k3btoc.h"
+#include "k3bdevice.h"
+#include "k3bdevicemanager.h"
+#include "k3bdiskinfo.h"
+#include "k3biso9660.h"
+#include "k3bmedium.h"
+#include "k3bmediacache.h"
 
 #include "../k3bapplication.h"
 #include "../k3b.h"
@@ -172,7 +172,7 @@ void K3b::DataMultisessionImportDialog::updateMedia()
 
 void K3b::DataMultisessionImportDialog::addMedium( const K3b::Medium& medium )
 {
-    K3b::ListViewItem* mediumItem = new K3b::ListViewItem( d->sessionView, medium.shortString( true ) );
+    K3b::ListViewItem* mediumItem = new K3b::ListViewItem( d->sessionView, medium.shortString() );
     QFont fnt( font() );
     fnt.setBold( true );
     mediumItem->setFont( 0, fnt );

@@ -17,7 +17,7 @@
 #define _K3B_THREAD_H_
 
 #include <qthread.h>
-#include <k3bdevicetypes.h>
+#include "k3bdevicetypes.h"
 
 
 namespace K3b {

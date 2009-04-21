@@ -18,8 +18,8 @@
 #include "k3bapplication.h"
 #include "k3bprojectmanager.h"
 
-#include <k3bview.h>
-#include <k3bdoc.h>
+#include "k3bview.h"
+#include "k3bdoc.h"
 
 #include <kaction.h>
 #include <kiconloader.h>

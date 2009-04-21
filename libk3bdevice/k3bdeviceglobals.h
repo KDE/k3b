@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
@@ -17,16 +17,18 @@
 #define _K3B_DEVICE_GLOBALS_H_
 
 #include <qstring.h>
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 #include "k3bdevice_export.h"
+#include "k3bdevicetypes.h"
 
 namespace K3b {
-    namespace Device 
+    namespace Device
     {
         class Device;
 
         LIBK3BDEVICE_EXPORT QString deviceTypeString( int );
         LIBK3BDEVICE_EXPORT QString writingModeString( int );
+        LIBK3BDEVICE_EXPORT QString mediaStateString( int );
         /**
          * @param simplyfied if true the formatting state of DVD media is left out.
          */
@@ -35,7 +37,7 @@ namespace K3b {
 
         LIBK3BDEVICE_EXPORT quint16 from2Byte( unsigned char* );
         LIBK3BDEVICE_EXPORT quint32 from4Byte( unsigned char* );
-  
+
         LIBK3BDEVICE_EXPORT char fromBcd( const char& );
         LIBK3BDEVICE_EXPORT char toBcd( const char& );
         LIBK3BDEVICE_EXPORT bool isValidBcd( const char& );
@@ -45,7 +47,17 @@ namespace K3b {
          * at sector @p firstSector.
          */
         int determineMaxReadingBufferSize( Device* dev, const K3b::Msf& firstSector );
+
+        LIBK3BDEVICE_EXPORT QDebug& operator<<( QDebug& dbg, MediaType );
+        LIBK3BDEVICE_EXPORT QDebug& operator<<( QDebug& dbg, MediaTypes );
+
+        LIBK3BDEVICE_EXPORT QDebug& operator<<( QDebug& dbg, MediaState );
+        LIBK3BDEVICE_EXPORT QDebug& operator<<( QDebug& dbg, MediaStates );
+
+        LIBK3BDEVICE_EXPORT QDebug& operator<<( QDebug& dbg, WritingMode );
+        LIBK3BDEVICE_EXPORT QDebug& operator<<( QDebug& dbg, WritingModes );
     }
 }
+
 
 #endif

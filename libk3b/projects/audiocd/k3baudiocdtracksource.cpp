@@ -16,13 +16,13 @@
 #include "k3baudiotrack.h"
 #include "k3baudiodoc.h"
 
-#include <k3bthreadwidget.h>
-#include <k3btoc.h>
-#include <k3bdevice.h>
-#include <k3bdevicemanager.h>
-#include <k3bcdparanoialib.h>
-#include <k3bdeviceselectiondialog.h>
-#include <k3bcore.h>
+#include "k3bthreadwidget.h"
+#include "k3btoc.h"
+#include "k3bdevice.h"
+#include "k3bdevicemanager.h"
+#include "k3bcdparanoialib.h"
+#include "k3bdeviceselectiondialog.h"
+#include "k3bcore.h"
 
 #include <klocale.h>
 #include <kdebug.h>

@@ -16,7 +16,7 @@
 #ifndef _K3B_EXTERNAL_ENCODER_H_
 #define _K3B_EXTERNAL_ENCODER_H_
 
-#include <k3baudioencoder.h>
+#include "k3baudioencoder.h"
 
 #include "k3bprocess.h"
 

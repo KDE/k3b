@@ -15,23 +15,23 @@
 #include "k3bdvdcopyjob.h"
 #include "k3blibdvdcss.h"
 
-#include <k3breadcdreader.h>
-#include <k3bdatatrackreader.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bdevice.h>
-#include <k3bdeviceglobals.h>
-#include <k3bdevicehandler.h>
-#include <k3bdiskinfo.h>
-#include <k3bglobals.h>
-#include <k3bcore.h>
-#include <k3bgrowisofswriter.h>
-#include <k3bcdrecordwriter.h>
-#include <k3bversion.h>
-#include <k3biso9660.h>
-#include <k3bfilesplitter.h>
-#include <k3bchecksumpipe.h>
-#include <k3bverificationjob.h>
-#include <k3bglobalsettings.h>
+#include "k3breadcdreader.h"
+#include "k3bdatatrackreader.h"
+#include "k3bexternalbinmanager.h"
+#include "k3bdevice.h"
+#include "k3bdeviceglobals.h"
+#include "k3bdevicehandler.h"
+#include "k3bdiskinfo.h"
+#include "k3bglobals.h"
+#include "k3bcore.h"
+#include "k3bgrowisofswriter.h"
+#include "k3bcdrecordwriter.h"
+#include "k3bversion.h"
+#include "k3biso9660.h"
+#include "k3bfilesplitter.h"
+#include "k3bchecksumpipe.h"
+#include "k3bverificationjob.h"
+#include "k3bglobalsettings.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -134,7 +134,7 @@ void K3b::DvdCopyJob::start()
     // wait for a source disk
     if( waitForMedia( m_readerDevice,
                       K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE,
-                      K3b::Device::MEDIA_WRITABLE_DVD|K3b::Device::MEDIA_DVD_ROM|K3b::Device::MEDIA_BD_ALL ) < 0 ) {
+                      K3b::Device::MEDIA_WRITABLE_DVD|K3b::Device::MEDIA_DVD_ROM|K3b::Device::MEDIA_BD_ALL ) == Device::MEDIA_UNKNOWN ) {
         emit canceled();
         d->running = false;
         jobFinished( false );
@@ -796,15 +796,11 @@ bool K3b::DvdCopyJob::waitForDvd()
         return false;
     }
 
-    int m = waitForMedia( m_writerDevice, K3b::Device::STATE_EMPTY, mt );
+    Device::MediaType m = waitForMedia( m_writerDevice, K3b::Device::STATE_EMPTY, mt );
 
-    if( m < 0 ) {
+    if( m == Device::MEDIA_UNKNOWN ) {
         cancel();
         return false;
-    }
-
-    if( m == 0 ) {
-        emit infoMessage( i18n("Forced by user. Growisofs will be called without further tests."), MessageInfo );
     }
 
     else {

@@ -16,7 +16,7 @@
 #define K3BVCDLISTVIEW_H
 
 
-#include <k3blistview.h>
+#include "k3blistview.h"
 
 #include <qmap.h>
 //Added by qt3to4:

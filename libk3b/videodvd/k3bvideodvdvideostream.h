@@ -15,7 +15,7 @@
 #ifndef _K3B_VIDEODVD_VIDEO_STREAM_H_
 #define _K3B_VIDEODVD_VIDEO_STREAM_H_
 
-#include <k3b_export.h>
+#include "k3b_export.h"
 
 namespace K3b {
     namespace VideoDVD

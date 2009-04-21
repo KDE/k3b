@@ -14,11 +14,11 @@
 
 #include "k3bcdda2wavreader.h"
 
-#include <k3bexternalbinmanager.h>
-#include <k3bdevice.h>
-#include <k3bdevicemanager.h>
-#include <k3bcore.h>
-#include <k3bprocess.h>
+#include "k3bexternalbinmanager.h"
+#include "k3bdevice.h"
+#include "k3bdevicemanager.h"
+#include "k3bcore.h"
+#include "k3bprocess.h"
 
 #include <kdebug.h>
 #include <klocale.h>

@@ -17,7 +17,7 @@
 
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
-#include <k3bvalidators.h>
+#include "k3bvalidators.h"
 
 #include <qpushbutton.h>
 #include <qlayout.h>

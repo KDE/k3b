@@ -14,7 +14,7 @@
 
 #include "k3bmultichoicedialog.h"
 #include "k3bstdguiitems.h"
-#include <k3brichtextlabel.h>
+#include "k3brichtextlabel.h"
 
 #include <kpushbutton.h>
 #include <kapplication.h>

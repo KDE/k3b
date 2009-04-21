@@ -18,15 +18,15 @@
 #include "k3bjob.h"
 #include "k3bmediacache.h"
 
-#include <k3bdevicemanager.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bdefaultexternalprograms.h>
-#include <k3bglobals.h>
-#include <k3bversion.h>
-#include <k3bjob.h>
-#include <k3bthreadwidget.h>
-#include <k3bglobalsettings.h>
-#include <k3bpluginmanager.h>
+#include "k3bdevicemanager.h"
+#include "k3bexternalbinmanager.h"
+#include "k3bdefaultexternalprograms.h"
+#include "k3bglobals.h"
+#include "k3bversion.h"
+#include "k3bjob.h"
+#include "k3bthreadwidget.h"
+#include "k3bglobalsettings.h"
+#include "k3bpluginmanager.h"
 
 #include <klocale.h>
 #include <kconfig.h>

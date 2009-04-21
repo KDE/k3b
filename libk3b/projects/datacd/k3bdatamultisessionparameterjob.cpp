@@ -14,14 +14,14 @@
 
 #include "k3bdatamultisessionparameterjob.h"
 
-#include <k3bthread.h>
-#include <k3biso9660.h>
-#include <k3bdevice.h>
-#include <k3bdiskinfo.h>
-#include <k3bdevicetypes.h>
-#include <k3bglobals.h>
-#include <k3btoc.h>
-#include <k3btrack.h>
+#include "k3bthread.h"
+#include "k3biso9660.h"
+#include "k3bdevice.h"
+#include "k3bdiskinfo.h"
+#include "k3bdevicetypes.h"
+#include "k3bglobals.h"
+#include "k3btoc.h"
+#include "k3btrack.h"
 
 #include "k3bdatadoc.h"
 
@@ -101,11 +101,11 @@ bool K3b::DataMultiSessionParameterJob::run()
                 if( d->doc->importedSession() >= 0 )
                     wantedMediaState = K3b::Device::STATE_INCOMPLETE;
 
-                int m = waitForMedia( d->doc->burner(),
-                                      wantedMediaState,
-                                      K3b::Device::MEDIA_WRITABLE );
+                Device::MediaType m = waitForMedia( d->doc->burner(),
+                                                    wantedMediaState,
+                                                    K3b::Device::MEDIA_WRITABLE );
 
-                if( m < 0 ) {
+                if( m == Device::MEDIA_UNKNOWN ) {
                     cancel();
                     return false;
                 }

@@ -16,8 +16,8 @@
 #ifndef K3BDATADOC_H
 #define K3BDATADOC_H
 
-#include <k3bdoc.h>
-#include <k3bdataitem.h>
+#include "k3bdoc.h"
+#include "k3bdataitem.h"
 
 #include "k3bisooptions.h"
 

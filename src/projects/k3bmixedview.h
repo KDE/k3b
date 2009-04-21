@@ -16,7 +16,7 @@
 #ifndef K3B_MIXED_VIEW_H
 #define K3B_MIXED_VIEW_H
 
-#include <k3bstandardview.h>
+#include "k3bstandardview.h"
 
 #include <kurl.h>
 

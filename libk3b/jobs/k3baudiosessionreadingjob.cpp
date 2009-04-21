@@ -14,13 +14,13 @@
 
 #include "k3baudiosessionreadingjob.h"
 
-#include <k3bthread.h>
-#include <k3btoc.h>
-#include <k3bcdparanoialib.h>
-#include <k3bwavefilewriter.h>
-#include <k3bglobals.h>
-#include <k3bdevice.h>
-#include <k3bcore.h>
+#include "k3bthread.h"
+#include "k3btoc.h"
+#include "k3bcdparanoialib.h"
+#include "k3bwavefilewriter.h"
+#include "k3bglobals.h"
+#include "k3bdevice.h"
+#include "k3bcore.h"
 
 #include <kdebug.h>
 #include <klocale.h>

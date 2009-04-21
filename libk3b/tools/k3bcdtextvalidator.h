@@ -17,7 +17,7 @@
 #define _K3BCDTEXTVALIDATOR_H_
 
 
-#include <k3bvalidators.h>
+#include "k3bvalidators.h"
 #include "k3b_export.h"
 
 namespace K3b {

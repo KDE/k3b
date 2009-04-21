@@ -14,10 +14,10 @@
 
 #include "k3bdirsizejob.h"
 
-#include <k3bthread.h>
-#include <k3bthreadjob.h>
-#include <k3bsimplejobhandler.h>
-#include <k3bglobals.h>
+#include "k3bthread.h"
+#include "k3bthreadjob.h"
+#include "k3bsimplejobhandler.h"
+#include "k3bglobals.h"
 
 #include <kdebug.h>
 #include <kglobal.h>

@@ -27,7 +27,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 
-#include <k3bcore.h>
+#include "k3bcore.h"
 
 #include <kconfig.h>
 #include <kdebug.h>

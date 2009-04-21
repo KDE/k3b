@@ -15,7 +15,7 @@
 #ifndef _K3B_AUDIO_IMAGER_H_
 #define _K3B_AUDIO_IMAGER_H_
 
-#include <k3bthreadjob.h>
+#include "k3bthreadjob.h"
 
 class QIODevice;
 

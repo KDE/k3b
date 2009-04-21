@@ -30,8 +30,8 @@
 #include <stdlib.h>
 
 #include "k3bapplication.h"
-#include <k3bglobals.h>
-#include <k3bcore.h>
+#include "k3bglobals.h"
+#include "k3bcore.h"
 
 
 #include <config-k3b.h>

@@ -15,7 +15,7 @@
 #ifndef K3B_BLANKING_JOB_H
 #define K3B_BLANKING_JOB_H
 
-#include <k3bjob.h>
+#include "k3bjob.h"
 #include "k3b_export.h"
 
 class QString;

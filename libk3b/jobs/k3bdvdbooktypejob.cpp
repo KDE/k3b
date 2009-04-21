@@ -14,16 +14,16 @@
 
 #include "k3bdvdbooktypejob.h"
 
-#include <k3bglobals.h>
-#include <k3bprocess.h>
-#include <k3bdevice.h>
-#include <k3bdeviceglobals.h>
-#include <k3bdevicehandler.h>
-#include <k3bdiskinfo.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bcore.h>
-#include <k3bversion.h>
-#include <k3bglobalsettings.h>
+#include "k3bglobals.h"
+#include "k3bprocess.h"
+#include "k3bdevice.h"
+#include "k3bdeviceglobals.h"
+#include "k3bdevicehandler.h"
+#include "k3bdiskinfo.h"
+#include "k3bexternalbinmanager.h"
+#include "k3bcore.h"
+#include "k3bversion.h"
+#include "k3bglobalsettings.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -118,7 +118,7 @@ void K3b::DvdBooktypeJob::start()
                           i18n("Please insert an empty DVD+R or a DVD+RW medium into drive<p><b>%1 %2 (%3)</b>.",
                                d->device->vendor(),
                                d->device->description(),
-                               d->device->blockDeviceName()) ) == -1 ) {
+                               d->device->blockDeviceName()) ) == Device::MEDIA_UNKNOWN ) {
             emit canceled();
             jobFinished(false);
             d->running = false;

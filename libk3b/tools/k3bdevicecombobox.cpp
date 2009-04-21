@@ -15,9 +15,9 @@
 #include "k3bdevicecombobox.h"
 #include "k3bdevicemodel.h"
 
-#include <k3bdevice.h>
-#include <k3bdevicemanager.h>
-#include <k3bcore.h>
+#include "k3bdevice.h"
+#include "k3bdevicemanager.h"
+#include "k3bcore.h"
 
 #include <klocale.h>
 

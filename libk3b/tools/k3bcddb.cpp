@@ -15,7 +15,7 @@
 #include "k3bcddb.h"
 #include "k3bmedium.h"
 
-#include <k3btoc.h>
+#include "k3btoc.h"
 
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QListWidget>

@@ -13,19 +13,19 @@
  */
 
 #include "k3bstatusbarmanager.h"
-#include <k3bcore.h>
+#include "k3bcore.h"
 #include "k3bbusywidget.h"
 #include "k3b.h"
-#include <k3bversion.h>
-#include <k3bglobals.h>
+#include "k3bversion.h"
+#include "k3bglobals.h"
 #include "k3bprojectmanager.h"
 #include "k3bapplication.h"
-#include <k3baudiodoc.h>
-#include <k3bdatadoc.h>
-#include <k3bmixeddoc.h>
-#include <k3bvcddoc.h>
-#include <k3bdiritem.h>
-#include <k3bview.h>
+#include "k3baudiodoc.h"
+#include "k3bdatadoc.h"
+#include "k3bmixeddoc.h"
+#include "k3bvcddoc.h"
+#include "k3bdiritem.h"
+#include "k3bview.h"
 
 #include <kiconloader.h>
 #include <klocale.h>

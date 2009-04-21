@@ -17,10 +17,10 @@
 
 #include <config-k3b.h>
 
-#include <k3bbusywidget.h>
-#include <k3baudiotrack.h>
-#include <k3baudiofile.h>
-#include <k3bpassivepopup.h>
+#include "k3bbusywidget.h"
+#include "k3baudiotrack.h"
+#include "k3baudiofile.h"
+#include "k3bpassivepopup.h"
 
 #include <kmessagebox.h>
 #include <kinputdialog.h>

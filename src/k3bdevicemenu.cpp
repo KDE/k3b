@@ -20,10 +20,10 @@
 #include "misc/k3bmediaformattingdialog.h"
 #include "misc/k3bmediacopydialog.h"
 
-#include <k3bmedium.h>
-#include <k3bdevice.h>
-#include <k3bmediacache.h>
-#include <k3bdevicehandler.h>
+#include "k3bmedium.h"
+#include "k3bdevice.h"
+#include "k3bmediacache.h"
+#include "k3bdevicehandler.h"
 
 #include <KAction>
 #include <KActionCollection>
@@ -60,25 +60,28 @@ K3b::DeviceMenu::Private::Private( DeviceMenu* parent )
 :
     q( parent )
 {
-    // FIXME: Should we move these actions to K3b::AppDeviceManager?
-    actionContinueMultisession = q->addAction( KIcon( "datacd" ), i18n("Continue Multisession Project"), q, SLOT( _k_continueMultisession() ) );
-    actionCopy = q->addAction( KIcon( "cdcopy" ), i18n("Copy &Medium..."), q, SLOT( _k_copy() ) );
-    actionCopy->setToolTip( i18n("Open the media copy dialog") );
-    actionFormat = q->addAction( KIcon( "formatdvd" ), i18n("&Format/Erase rewritable disk..."), q, SLOT( _k_format() ) );
-    actionFormat->setToolTip( i18n("Open the rewritable disk formatting/erasing dialog") );
-    actionRipAudio = q->addAction( KIcon( "cddarip" ), i18n("Rip Audio CD..."), q, SLOT( _k_ripAudio() ) );
-    actionRipVideoDVD = q->addAction( KIcon( "videodvd" ), i18n("Rip Video DVD..."), q, SLOT( _k_ripVideoDVD() ) );
-    actionRipVcd = q->addAction( KIcon( "videocd"), i18n("Rip Video CD..."), q, SLOT( _k_ripVcd() ) );
-    
-    q->addSeparator();
-    
     KActionCollection* dmActions = k3bappcore->appDeviceManager()->actionCollection();
     q->addAction( dmActions->action( "device_diskinfo" ) );
+    q->addSeparator();
     q->addAction( dmActions->action( "device_unmount" ) );
     q->addAction( dmActions->action( "device_mount" ) );
     q->addAction( dmActions->action( "device_eject" ) );
     q->addAction( dmActions->action( "device_load" ) );
+    q->addSeparator();
     q->addAction( dmActions->action( "device_set_read_speed" ) );
+
+    q->addSeparator();
+
+    // FIXME: Should we move these actions to K3b::AppDeviceManager?
+    actionContinueMultisession = q->addAction( KIcon( "datacd" ), i18n("Continue Multisession Project"), q, SLOT( _k_continueMultisession() ) );
+    actionCopy = q->addAction( KIcon( "cdcopy" ), i18n("Copy &Medium..."), q, SLOT( _k_copy() ) );
+    actionFormat = q->addAction( KIcon( "formatdvd" ), i18n("&Format/Erase rewritable disk..."), q, SLOT( _k_format() ) );
+    actionRipAudio = q->addAction( KIcon( "cddarip" ), i18n("Rip Audio CD..."), q, SLOT( _k_ripAudio() ) );
+    actionRipVideoDVD = q->addAction( KIcon( "videodvd" ), i18n("Rip Video DVD..."), q, SLOT( _k_ripVideoDVD() ) );
+    actionRipVcd = q->addAction( KIcon( "videocd"), i18n("Rip Video CD..."), q, SLOT( _k_ripVcd() ) );
+
+    actionCopy->setToolTip( i18n("Open the media copy dialog") );
+    actionFormat->setToolTip( i18n("Open the rewritable disk formatting/erasing dialog") );
 }
 
 

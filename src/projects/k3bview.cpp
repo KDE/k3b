@@ -18,9 +18,9 @@
 #include "k3bfillstatusdisplay.h"
 #include "k3bprojectburndialog.h"
 #include "k3bprojectplugindialog.h"
-#include <k3bpluginmanager.h>
-#include <k3bprojectplugin.h>
-#include <k3bcore.h>
+#include "k3bpluginmanager.h"
+#include "k3bprojectplugin.h"
+#include "k3bcore.h"
 #include "k3baction.h"
 
 // include files for Qt

@@ -17,7 +17,7 @@
 #include "k3bmovixfileitem.h"
 #include "k3bmovixdoc.h"
 
-#include <k3bdiritem.h>
+#include "k3bdiritem.h"
 
 K3b::MovixSubtitleItem::MovixSubtitleItem( const QString& fileName,
                                            K3b::MovixDoc* doc,

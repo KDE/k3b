@@ -19,7 +19,7 @@
 
 #ifdef HAVE_MUSICBRAINZ
 
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 #include <QtCore/QByteArray>
 
 /**

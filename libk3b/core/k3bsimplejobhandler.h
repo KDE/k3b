@@ -15,10 +15,10 @@
 #ifndef _K3B_SIMPLE_JOB_HANDLER_H_
 #define _K3B_SIMPLE_JOB_HANDLER_H_
 
-#include <k3b_export.h>
+#include "k3bjobhandler.h"
+#include "k3b_export.h"
 
 #include <qobject.h>
-#include <k3bjobhandler.h>
 
 
 namespace K3b {
@@ -37,12 +37,12 @@ namespace K3b {
         ~SimpleJobHandler();
 
         /*
-         * \return 0
+         * \return MEDIA_UNKNOWN
          */
-        int waitForMedia( Device::Device*,
-                          K3b::Device::MediaStates mediaState = Device::STATE_EMPTY,
-                          K3b::Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
-                          const QString& message = QString() );
+        Device::MediaType waitForMedia( Device::Device*,
+                                        K3b::Device::MediaStates mediaState = Device::STATE_EMPTY,
+                                        K3b::Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
+                                        const QString& message = QString() );
         /**
          * \return true
          */

@@ -14,9 +14,9 @@
 
 #include "k3baudiodatasourceeditwidget.h"
 #include "k3baudioeditorwidget.h"
-#include <k3bmsfedit.h>
+#include "k3bmsfedit.h"
 
-#include <k3baudiodatasource.h>
+#include "k3baudiodatasource.h"
 
 #include <qlayout.h>
 #include <qlabel.h>

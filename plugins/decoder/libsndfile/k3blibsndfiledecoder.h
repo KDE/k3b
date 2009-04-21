@@ -17,7 +17,7 @@
 #ifndef _K3B_AIFF_DECODER_H_
 #define _K3B_AIFF_DECODER_H_
 
-#include <k3baudiodecoder.h>
+#include "k3baudiodecoder.h"
 
 class KUrl;
 

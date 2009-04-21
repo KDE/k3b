@@ -14,7 +14,7 @@
 
 
 #include "k3bdatamodewidget.h"
-#include <k3bglobals.h>
+#include "k3bglobals.h"
 
 #include <klocale.h>
 #include <kconfig.h>

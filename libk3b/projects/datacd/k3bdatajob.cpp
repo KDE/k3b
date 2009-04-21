@@ -18,24 +18,24 @@
 #include "k3bisoimager.h"
 #include "k3bdatamultisessionparameterjob.h"
 #include "k3bchecksumpipe.h"
-#include <k3bcore.h>
-#include <k3bglobals.h>
-#include <k3bversion.h>
-#include <k3bdevice.h>
-#include <k3bdevicehandler.h>
-#include <k3btoc.h>
-#include <k3btrack.h>
-#include <k3bdevicehandler.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bcdrecordwriter.h>
-#include <k3bcdrdaowriter.h>
-#include <k3bglobalsettings.h>
-#include <k3bactivepipe.h>
-#include <k3bfilesplitter.h>
-#include <k3bverificationjob.h>
-#include <k3biso9660.h>
-#include <k3bdeviceglobals.h>
-#include <k3bgrowisofswriter.h>
+#include "k3bcore.h"
+#include "k3bglobals.h"
+#include "k3bversion.h"
+#include "k3bdevice.h"
+#include "k3bdevicehandler.h"
+#include "k3btoc.h"
+#include "k3btrack.h"
+#include "k3bdevicehandler.h"
+#include "k3bexternalbinmanager.h"
+#include "k3bcdrecordwriter.h"
+#include "k3bcdrdaowriter.h"
+#include "k3bglobalsettings.h"
+#include "k3bactivepipe.h"
+#include "k3bfilesplitter.h"
+#include "k3bverificationjob.h"
+#include "k3biso9660.h"
+#include "k3bdeviceglobals.h"
+#include "k3bgrowisofswriter.h"
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -679,21 +679,17 @@ bool K3b::DataJob::waitForMedium()
     }
 
     emit newSubTask( i18n("Waiting for a medium") );
-    int foundMedium = waitForMedia( d->doc->burner(),
-                                    usedMultiSessionMode() == K3b::DataDoc::CONTINUE ||
-                                    usedMultiSessionMode() == K3b::DataDoc::FINISH ?
-                                    K3b::Device::STATE_INCOMPLETE :
-                                    K3b::Device::STATE_EMPTY,
-                                    m );
+    Device::MediaType foundMedium = waitForMedia( d->doc->burner(),
+                                                  usedMultiSessionMode() == K3b::DataDoc::CONTINUE ||
+                                                  usedMultiSessionMode() == K3b::DataDoc::FINISH ?
+                                                  K3b::Device::STATE_INCOMPLETE :
+                                                  K3b::Device::STATE_EMPTY,
+                                                  m );
 
-    if( foundMedium < 0 || hasBeenCanceled() ) {
+    if( foundMedium == Device::MEDIA_UNKNOWN || hasBeenCanceled() ) {
         return false;
     }
 
-    if( foundMedium == 0 ) {
-        emit infoMessage( i18n("Forced by user. Writing will continue without further checks."), MessageInfo );
-        return true;
-    }
     else {
         return analyseBurnMedium( foundMedium );
     }

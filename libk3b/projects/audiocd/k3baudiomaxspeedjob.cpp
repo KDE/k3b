@@ -19,9 +19,9 @@
 #include "k3baudiocdtracksource.h"
 #include "k3baudiodatasourceiterator.h"
 
-#include <k3bdevice.h>
+#include "k3bdevice.h"
 
-#include <k3bthread.h>
+#include "k3bthread.h"
 
 #include <kdebug.h>
 #include <klocale.h>

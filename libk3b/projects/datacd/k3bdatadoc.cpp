@@ -22,17 +22,17 @@
 #include "k3bspecialdataitem.h"
 #include "k3bfilecompilationsizehandler.h"
 #include "k3bmkisofshandler.h"
-#include <k3bcore.h>
-#include <k3bglobals.h>
+#include "k3bcore.h"
+#include "k3bglobals.h"
 #include "k3bmsf.h"
-#include <k3biso9660.h>
-#include <k3bdevicehandler.h>
-#include <k3bdevice.h>
-#include <k3btoc.h>
-#include <k3btrack.h>
-#include <k3bmultichoicedialog.h>
-#include <k3bvalidators.h>
-#include <k3bglobalsettings.h>
+#include "k3biso9660.h"
+#include "k3bdevicehandler.h"
+#include "k3bdevice.h"
+#include "k3btoc.h"
+#include "k3btrack.h"
+#include "k3bmultichoicedialog.h"
+#include "k3bvalidators.h"
+#include "k3bglobalsettings.h"
 
 #include <qdir.h>
 #include <qstring.h>

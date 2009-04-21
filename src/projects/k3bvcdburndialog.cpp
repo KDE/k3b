@@ -16,15 +16,15 @@
 #include "k3bvcdburndialog.h"
 #include "k3bvcddoc.h"
 #include "k3bvcdoptions.h"
-#include <k3bdevice.h>
-#include <k3bcore.h>
-#include <k3bwriterselectionwidget.h>
-#include <k3btempdirselectionwidget.h>
-#include <k3bstdguiitems.h>
-#include <k3bglobals.h>
-#include <k3bwritingmodewidget.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bvalidators.h>
+#include "k3bdevice.h"
+#include "k3bcore.h"
+#include "k3bwriterselectionwidget.h"
+#include "k3btempdirselectionwidget.h"
+#include "k3bstdguiitems.h"
+#include "k3bglobals.h"
+#include "k3bwritingmodewidget.h"
+#include "k3bexternalbinmanager.h"
+#include "k3bvalidators.h"
 
 
 #include <qcheckbox.h>

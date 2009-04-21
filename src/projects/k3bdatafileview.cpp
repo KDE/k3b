@@ -15,14 +15,14 @@
 
 #include "k3bdatafileview.h"
 #include "k3bdataview.h"
-#include <k3bdatadoc.h>
-#include <k3bdataitem.h>
-#include <k3bdiritem.h>
-#include <k3bfileitem.h>
-#include <k3bspecialdataitem.h>
-#include <k3bsessionimportitem.h>
-#include <k3bvalidators.h>
-#include <k3bview.h>
+#include "k3bdatadoc.h"
+#include "k3bdataitem.h"
+#include "k3bdiritem.h"
+#include "k3bfileitem.h"
+#include "k3bspecialdataitem.h"
+#include "k3bsessionimportitem.h"
+#include "k3bvalidators.h"
+#include "k3bview.h"
 #include "k3bdataprojectmodel.h"
 
 #include <QList>

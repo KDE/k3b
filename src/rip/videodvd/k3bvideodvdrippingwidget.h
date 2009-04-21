@@ -17,7 +17,7 @@
 
 #include "ui_base_k3bvideodvdrippingwidget.h"
 
-#include <k3bvideodvdtitletranscodingjob.h>
+#include "k3bvideodvdtitletranscodingjob.h"
 
 #include <qvector.h>
 #include <qmap.h>

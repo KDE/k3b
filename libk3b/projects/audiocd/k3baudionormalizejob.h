@@ -17,7 +17,7 @@
 #define _K3B_AUDIO_NORMALIZE_JOB_H_
 
 
-#include <k3bjob.h>
+#include "k3bjob.h"
 
 #include <qprocess.h>
 #include <qlist.h>

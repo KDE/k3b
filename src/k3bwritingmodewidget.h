@@ -16,8 +16,8 @@
 #ifndef _K3B_WRITING_MODE_WIDGET_H_
 #define _K3B_WRITING_MODE_WIDGET_H_
 
-#include <k3bintmapcombobox.h>
-#include <k3bmedium.h>
+#include "k3bintmapcombobox.h"
+#include "k3bmedium.h"
 #include "k3bglobals.h"
 
 #include <kconfiggroup.h>

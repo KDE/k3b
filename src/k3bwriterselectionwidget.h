@@ -21,7 +21,7 @@
 
 #include <ksharedconfig.h>
 
-#include <k3bglobals.h>
+#include "k3bglobals.h"
 
 class QLabel;
 

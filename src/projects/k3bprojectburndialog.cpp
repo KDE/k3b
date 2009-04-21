@@ -25,10 +25,10 @@
 #include "k3bmediacache.h"
 #include "k3bmedium.h"
 
-#include <k3bdevice.h>
-#include <k3bdevicemanager.h>
-#include <k3bglobals.h>
-#include <k3bcore.h>
+#include "k3bdevice.h"
+#include "k3bdevicemanager.h"
+#include "k3bglobals.h"
+#include "k3bcore.h"
 
 #include <qstring.h>
 #include <qpushbutton.h>

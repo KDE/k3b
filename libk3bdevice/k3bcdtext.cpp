@@ -344,6 +344,23 @@ bool K3b::Device::TrackCdText::operator!=( const K3b::Device::TrackCdText& other
 class K3b::Device::CdText::Private : public QSharedData
 {
 public:
+    Private() {
+    }
+
+    Private( const Private& other )
+        : QSharedData( other ),
+          title(other.title),
+          performer(other.performer),
+          songwriter(other.songwriter),
+          composer(other.composer),
+          arranger(other.arranger),
+          message(other.message),
+          discId(other.discId),
+          upcEan(other.upcEan),
+          tracks(other.tracks) {
+        // do not copy rawData. it needs to be recreated if the cdtext changes
+    }
+
     QString title;
     QString performer;
     QString songwriter;
@@ -354,6 +371,8 @@ public:
     QString upcEan;
 
     QList<TrackCdText> tracks;
+
+    mutable QByteArray rawData;
 
     QString textForPackType( int packType, int track ) const;
     int textLengthForPackType( int packType ) const;
@@ -725,6 +744,9 @@ void K3b::Device::CdText::setRawPackData( const unsigned char* data, int len )
         while( !d->tracks.isEmpty() && d->tracks.last().isEmpty() ) {
             d->tracks.removeLast();
         }
+
+        // we preserve the original data for clean 1-to-1 copies
+        d->rawData = QByteArray( reinterpret_cast<const char*>(data), len );
     }
     else
         kDebug() << "(K3b::Device::CdText) zero-sized CD-TEXT: " << len;
@@ -738,71 +760,75 @@ void K3b::Device::CdText::setRawPackData( const QByteArray& b )
 
 QByteArray K3b::Device::CdText::rawPackData() const
 {
-    // FIXME: every pack block may only consist of up to 255 packs.
+    if( d->rawData.isEmpty() ) {
+        // FIXME: every pack block may only consist of up to 255 packs.
 
-    int pc = 0;
-    int alreadyCountedPacks = 0;
-
-
-    //
-    // prepare the size information block
-    //
-    text_size_block tsize;
-    ::memset( &tsize, 0, sizeof(text_size_block) );
-    tsize.charcode = 0;              // ISO 8859-1
-    tsize.first_track = 1;
-    tsize.last_track = count();
-    tsize.pack_count[0xF] = 3;
-    tsize.language_codes[0] = 0x09;  // English (from cdrecord)
+        int pc = 0;
+        int alreadyCountedPacks = 0;
 
 
-    //
-    // create the CD-Text packs
-    //
-    QByteArray data;
-    for( int i = 0; i <= 6; ++i ) {
-        if( d->textLengthForPackType( 0x80 | i ) ) {
-            appendByteArray( data, d->createPackData( 0x80 | i, pc ) );
-            tsize.pack_count[i] = pc - alreadyCountedPacks;
+        //
+        // prepare the size information block
+        //
+        text_size_block tsize;
+        ::memset( &tsize, 0, sizeof(text_size_block) );
+        tsize.charcode = 0;              // ISO 8859-1
+        tsize.first_track = 1;
+        tsize.last_track = count();
+        tsize.pack_count[0xF] = 3;
+        tsize.language_codes[0] = 0x09;  // English (from cdrecord)
+
+
+        //
+        // create the CD-Text packs
+        //
+        QByteArray data;
+        for( int i = 0; i <= 6; ++i ) {
+            if( d->textLengthForPackType( 0x80 | i ) ) {
+                appendByteArray( data, d->createPackData( 0x80 | i, pc ) );
+                tsize.pack_count[i] = pc - alreadyCountedPacks;
+                alreadyCountedPacks = pc;
+            }
+        }
+        if( d->textLengthForPackType( 0x8E ) ) {
+            appendByteArray( data, d->createPackData( 0x8E, pc ) );
+            tsize.pack_count[0xE] = pc - alreadyCountedPacks;
             alreadyCountedPacks = pc;
         }
+
+
+        // pc is the number of the next pack and we add 3 size packs
+        tsize.last_seqnum[0] = pc + 2;
+
+
+        //
+        // create the size info packs
+        //
+        int dataFill = data.size();
+        data.resize( data.size() + 3 * sizeof(cdtext_pack) );
+        for( int i = 0; i < 3; ++i ) {
+            cdtext_pack pack;
+            ::memset( &pack, 0, sizeof(cdtext_pack) );
+            pack.id1 = 0x8F;
+            pack.id2 = i;
+            pack.id3 = pc+i;
+            ::memcpy( pack.data, &reinterpret_cast<char*>(&tsize)[i*12], 12 );
+            savePack( &pack, data, dataFill );
+        }
+
+        //
+        // add MMC header
+        //
+        QByteArray a( 4, 0 );
+        a[0] = (data.size()+2)>>8 & 0xff;
+        a[1] = (data.size()+2) & 0xff;
+        a[2] = a[3] = 0;
+        appendByteArray( a, data );
+
+        d->rawData = a;
     }
-    if( d->textLengthForPackType( 0x8E ) ) {
-        appendByteArray( data, d->createPackData( 0x8E, pc ) );
-        tsize.pack_count[0xE] = pc - alreadyCountedPacks;
-        alreadyCountedPacks = pc;
-    }
 
-
-    // pc is the number of the next pack and we add 3 size packs
-    tsize.last_seqnum[0] = pc + 2;
-
-
-    //
-    // create the size info packs
-    //
-    int dataFill = data.size();
-    data.resize( data.size() + 3 * sizeof(cdtext_pack) );
-    for( int i = 0; i < 3; ++i ) {
-        cdtext_pack pack;
-        ::memset( &pack, 0, sizeof(cdtext_pack) );
-        pack.id1 = 0x8F;
-        pack.id2 = i;
-        pack.id3 = pc+i;
-        ::memcpy( pack.data, &reinterpret_cast<char*>(&tsize)[i*12], 12 );
-        savePack( &pack, data, dataFill );
-    }
-
-    //
-    // add MMC header
-    //
-    QByteArray a( 4, 0 );
-    a[0] = (data.size()+2)>>8 & 0xff;
-    a[1] = (data.size()+2) & 0xff;
-    a[2] = a[3] = 0;
-    appendByteArray( a, data );
-
-    return a;
+    return d->rawData;
 }
 
 

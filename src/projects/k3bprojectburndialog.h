@@ -16,7 +16,7 @@
 #ifndef K3BPROJECTBURNDIALOG_H
 #define K3BPROJECTBURNDIALOG_H
 
-#include <k3binteractiondialog.h>
+#include "k3binteractiondialog.h"
 #include "k3bglobals.h"
 
 #include <QVBoxLayout>

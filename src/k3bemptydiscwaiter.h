@@ -17,9 +17,9 @@
 #define K3BEMPTYDISCWAITER_H
 
 #include <kdialog.h>
-#include <k3bjobhandler.h>
+#include "k3bjobhandler.h"
 
-#include <k3bdiskinfo.h>
+#include "k3bdiskinfo.h"
 //Added by qt3to4:
 #include <QCloseEvent>
 
@@ -44,13 +44,6 @@ namespace K3b {
         ~EmptyDiscWaiter();
 
         /**
-         * This should be replaced by the mediaType that was found or -1 for forced.
-         * MEDIA_NONE if canceled.
-         */
-        enum returnValue { DISK_READY = 0,
-                           CANCELED = -1 };
-
-        /**
          * the same as waitForEmptyDisc( false );
          */
         int exec();
@@ -59,10 +52,10 @@ namespace K3b {
          * @reimplemented from JobHandler
          * \internal do not use!
          */
-        int waitForMedia( Device::Device*,
-                          Device::MediaStates mediaState = Device::STATE_EMPTY,
-                          Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
-                          const QString& message = QString() );
+        Device::MediaType waitForMedia( Device::Device*,
+                                        Device::MediaStates mediaState = Device::STATE_EMPTY,
+                                        Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
+                                        const QString& message = QString() );
 
         /**
          * @reimplemented from JobHandler
@@ -81,10 +74,10 @@ namespace K3b {
         /**
          * This only openes a dialog if the first check failed.
          */
-        static int wait( Device::Device* device,
-                         bool appendable = false,
-                         Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
-                         QWidget* parent = 0 );
+        KDE_DEPRECATED static Device::MediaType wait( Device::Device* device,
+                                                      bool appendable = false,
+                                                      Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
+                                                      QWidget* parent = 0 );
 
         /**
          * Starts the emptydiskwaiter.
@@ -93,17 +86,16 @@ namespace K3b {
          * \param mediaType a bitwise combination of the Device::MediaType enum
          * \return the found MediaType on success, 0 if forced and -1 if canceled
          */
-        static int wait( Device::Device*,
-                         Device::MediaStates mediaState,
-                         Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
-                         const QString& message = QString(),
-                         QWidget* parent = 0 );
+        static Device::MediaType wait( Device::Device*,
+                                       Device::MediaStates mediaState,
+                                       Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
+                                       const QString& message = QString(),
+                                       QWidget* parent = 0 );
 
     protected Q_SLOTS:
         void slotCancel();
         void slotUser1();
         void slotUser2();
-        void slotUser3();
         void slotMediumChanged( K3b::Device::Device* );
         void showDialog();
         void continueWaiting();
@@ -115,9 +107,9 @@ namespace K3b {
          */
         explicit EmptyDiscWaiter( Device::Device* device, QWidget* parent = 0 );
 
-        int waitForDisc( Device::MediaStates mediaState = Device::STATE_EMPTY,
-                         Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
-                         const QString& message = QString() );
+        Device::MediaType waitForDisc( Device::MediaStates mediaState = Device::STATE_EMPTY,
+                                       Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
+                                       const QString& message = QString() );
 
 
         /**
@@ -130,7 +122,7 @@ namespace K3b {
 
     private:
         void enterLoop();
-        void finishWaiting( int );
+        void finishWaiting( Device::MediaType );
         void prepareErasingDialog();
 
         QWidget* parentWidgetToUse();

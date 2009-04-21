@@ -15,13 +15,14 @@
 #include "k3bmediaselectioncombobox.h"
 #include "k3bapplication.h"
 #include "k3bmediacache.h"
+#include "k3bmediumdelegate.h"
 
-#include <k3bdevice.h>
-#include <k3bdevicemanager.h>
-#include <k3bdeviceglobals.h>
-#include <k3bdiskinfo.h>
-#include <k3btoc.h>
-#include <k3bcdtext.h>
+#include "k3bdevice.h"
+#include "k3bdevicemanager.h"
+#include "k3bdeviceglobals.h"
+#include "k3bdiskinfo.h"
+#include "k3btoc.h"
+#include "k3bcdtext.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -31,6 +32,7 @@
 #include <qvector.h>
 #include <QList>
 
+Q_DECLARE_METATYPE(K3b::Medium)
 
 class K3b::MediaSelectionComboBox::Private
 {
@@ -51,6 +53,8 @@ public:
     Device::MediaStates wantedMediumState;
     Medium::MediumContents wantedMediumContent;
     K3b::Msf wantedMediumSize;
+
+    QFont origFont;
 };
 
 
@@ -58,11 +62,14 @@ K3b::MediaSelectionComboBox::MediaSelectionComboBox( QWidget* parent )
     : KComboBox( false, parent )
 {
     d = new Private();
+    d->origFont = font();
 
     // set defaults
     d->wantedMediumType = K3b::Device::MEDIA_WRITABLE_CD;
     d->wantedMediumState = K3b::Device::STATE_EMPTY;
-    d->wantedMediumContent = K3b::Medium::ContentIgnore;
+    d->wantedMediumContent = K3b::Medium::ContentAll;
+
+    setItemDelegate( new MediumDelegate( this ) );
 
     connect( this, SIGNAL(activated(int)),
              this, SLOT(slotActivated(int)) );
@@ -196,6 +203,7 @@ void K3b::MediaSelectionComboBox::clear()
     d->mediaStringMap.clear();
     d->devices.clear();
     KComboBox::clear();
+    setFont( d->origFont );
 }
 
 
@@ -316,6 +324,7 @@ void K3b::MediaSelectionComboBox::addMedium( K3b::Device::Device* dev )
         // insert the modified string
         //
         addItem( s + QString(" (%1 - %2)").arg(dev->vendor()).arg(dev->description()) );
+        setItemData( count()-1, QVariant::fromValue(k3bappcore->mediaCache()->medium( dev )), MediumDelegate::MediumRole );
 
         //
         // change the already existing string if we did not already do so
@@ -335,6 +344,7 @@ void K3b::MediaSelectionComboBox::addMedium( K3b::Device::Device* dev )
         // insert the plain medium string
         //
         addItem( s );
+        setItemData( count()-1, QVariant::fromValue(k3bappcore->mediaCache()->medium( dev )), MediumDelegate::MediumRole );
         d->mediaStringMap[s] = count()-1;
     }
 
@@ -363,7 +373,8 @@ bool K3b::MediaSelectionComboBox::showMedium( const K3b::Medium& m ) const
     // DVD+RW and DVD-RW restr. ovwr. are never reported as appendable
     //
     return( m.diskInfo().mediaType() & d->wantedMediumType &&
-            m.content() & d->wantedMediumContent &&
+            ( m.content() & d->wantedMediumContent ||
+              d->wantedMediumState & Device::STATE_EMPTY ) && // we need this to handle Medium::ContentNone
             ( m.diskInfo().diskState() & d->wantedMediumState
               ||
               ( d->wantedMediumState & K3b::Device::STATE_EMPTY &&
@@ -380,19 +391,19 @@ bool K3b::MediaSelectionComboBox::showMedium( const K3b::Medium& m ) const
 
 QString K3b::MediaSelectionComboBox::mediumString( const K3b::Medium& medium ) const
 {
-    return medium.shortString( d->wantedMediumState != K3b::Device::STATE_EMPTY );
+    return medium.shortString();
 }
 
 
 QString K3b::MediaSelectionComboBox::mediumToolTip( const K3b::Medium& m ) const
 {
-    return m.longString();
+    return m.longString( Medium::WithContents|Medium::WithDevice );
 }
 
 
 QString K3b::MediaSelectionComboBox::noMediumMessage() const
 {
-    if( d->wantedMediumContent )
+    if( d->wantedMediumContent && d->wantedMediumContent != Medium::ContentAll )
         return Medium::mediaRequestString( d->wantedMediumContent );
     else
         return Medium::mediaRequestString( d->wantedMediumType, d->wantedMediumState, d->wantedMediumSize );

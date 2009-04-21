@@ -20,7 +20,7 @@
 #include "ui_base_k3bexternalencoderconfigwidget.h"
 #include "k3bexternalencodercommand.h"
 
-#include <k3bpluginconfigwidget.h>
+#include "k3bpluginconfigwidget.h"
 #include <kdialog.h>
 
 class base_K3bExternalEncoderConfigWidget : public QWidget, public Ui::base_K3bExternalEncoderConfigWidget

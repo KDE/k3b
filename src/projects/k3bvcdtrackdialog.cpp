@@ -16,8 +16,8 @@
 // K3b Includes
 #include "k3bvcdtrackdialog.h"
 #include "k3bvcdtrack.h"
-#include <k3bmsf.h>
-#include <k3bglobals.h>
+#include "k3bmsf.h"
+#include "k3bglobals.h"
 
 // Qt Includes
 #include <q3buttongroup.h>

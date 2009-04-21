@@ -15,7 +15,7 @@
 #ifndef _K3B_DATA_MULTISESSION_PARAMETER_JOB_H
 #define _K3B_DATA_MULTISESSION_PARAMETER_JOB_H
 
-#include <k3bthreadjob.h>
+#include "k3bthreadjob.h"
 
 #include "k3bdatadoc.h"
 

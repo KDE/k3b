@@ -17,7 +17,7 @@
 #define _K3B_VIDEODVD_IMAGER_H_
 
 
-#include <k3bisoimager.h>
+#include "k3bisoimager.h"
 
 namespace K3b {
     class VideoDvdDoc;

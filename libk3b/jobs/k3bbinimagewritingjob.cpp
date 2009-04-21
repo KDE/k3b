@@ -15,14 +15,14 @@
 
 
 #include "k3bbinimagewritingjob.h"
-#include <k3bcdrecordwriter.h>
-//#include <k3bcdrdaowriter.h>
-#include <k3bcore.h>
-#include <k3bdevice.h>
-#include <k3bglobals.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bglobalsettings.h>
-#include <k3bdevicehandler.h>
+#include "k3bcdrecordwriter.h"
+//#include "k3bcdrdaowriter.h"
+#include "k3bcore.h"
+#include "k3bdevice.h"
+#include "k3bglobals.h"
+#include "k3bexternalbinmanager.h"
+#include "k3bglobalsettings.h"
+#include "k3bdevicehandler.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -156,7 +156,7 @@ bool K3b::BinImageWritingJob::prepareWriter()
 void K3b::BinImageWritingJob::writerStart()
 {
 
-    if( waitForMedia( m_device ) < 0 ) {
+    if( waitForMedia( m_device ) == Device::MEDIA_UNKNOWN ) {
         cancel();
     }
     // just to be sure we did not get canceled during the async discWaiting

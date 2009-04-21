@@ -16,7 +16,7 @@
 // Kde Includes
 #include <kapplication.h>
 #include <kconfig.h>
-#include <k3bcore.h>
+#include "k3bcore.h"
 #include <klocale.h>
 #include <kstandarddirs.h>
 
@@ -26,7 +26,7 @@
 
 // K3b Includes
 #include "k3bvcdoptions.h"
-#include <k3bversion.h>
+#include "k3bversion.h"
 
 K3b::VcdOptions::VcdOptions()
     : m_restriction( 0 ),

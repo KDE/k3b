@@ -16,16 +16,16 @@
 #include "k3bemptydiscwaiter.h"
 #include "k3bmediacache.h"
 #include "k3bapplication.h"
-#include <k3bdevice.h>
-#include <k3bdeviceglobals.h>
-#include <k3bdevicehandler.h>
-#include <k3bglobals.h>
-#include <k3bcore.h>
-#include <k3biso9660.h>
+#include "k3bdevice.h"
+#include "k3bdeviceglobals.h"
+#include "k3bdevicehandler.h"
+#include "k3bglobals.h"
+#include "k3bcore.h"
+#include "k3biso9660.h"
 #include "k3bblankingjob.h"
-#include <k3bbusywidget.h>
-#include <k3bprogressdialog.h>
-#include <k3bdvdformattingjob.h>
+#include "k3bbusywidget.h"
+#include "k3bprogressdialog.h"
+#include "k3bdvdformattingjob.h"
 
 #include <qtimer.h>
 #include <qlabel.h>
@@ -60,14 +60,13 @@ public:
     Device::MediaTypes wantedMediaType;
     Device::MediaStates wantedMediaState;
 
-    int result;
+    Device::MediaType result;
     int dialogVisible;
     bool inLoop;
 
     bool blockMediaChange;
     int mediumChanged;
 
-    bool forced;
     bool canceled;
 
     bool waitingDone;
@@ -88,18 +87,12 @@ K3b::EmptyDiscWaiter::EmptyDiscWaiter( K3b::Device::Device* device, QWidget* par
     setCaption(i18n("Waiting for Disk"));
     setModal(true);
 
-    KConfigGroup g( KGlobal::config(), "General Options" );
-    const bool showAdvancedGui = g.readEntry( "Show advanced GUI", false );
-    KDialog::ButtonCodes buttons = KDialog::Cancel|KDialog::User2|KDialog::User3;
-    if ( showAdvancedGui ) {
-        buttons |= KDialog::User1;
-        setButtonText(KDialog::User1,i18n("Force"));
-    }
+    KDialog::ButtonCodes buttons = KDialog::Cancel|KDialog::User1|KDialog::User2;
     setButtons( buttons );
-    setButtonText(KDialog::User2, i18n("Eject"));
-    setButtonIcon( KDialog::User2, KIcon( "media-eject" ) );
-    setButtonText(KDialog::User3, i18n("Load"));
-    setDefaultButton( KDialog::User3 );
+    setButtonText(KDialog::User1, i18n("Eject"));
+    setButtonIcon( KDialog::User1, KIcon( "media-eject" ) );
+    setButtonText(KDialog::User2, i18n("Load"));
+    setDefaultButton( KDialog::User2 );
 
     d->device = device;
 
@@ -130,12 +123,9 @@ K3b::EmptyDiscWaiter::EmptyDiscWaiter( K3b::Device::Device* device, QWidget* par
     connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3b::Device::Device*)),
              this, SLOT(slotMediumChanged(K3b::Device::Device*)) );
 
-    setButtonToolTip(KDialog::User1,
-                     i18n("Force K3b to continue if it seems not to detect your empty CD/DVD.") );
     connect( this, SIGNAL( cancelClicked() ), this, SLOT( slotCancel() ) );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT( slotUser1() ) );
     connect( this, SIGNAL( user2Clicked() ), this, SLOT( slotUser2() ) );
-    connect( this, SIGNAL( user3Clicked() ), this, SLOT( slotUser3() ) );
 }
 
 
@@ -145,17 +135,16 @@ K3b::EmptyDiscWaiter::~EmptyDiscWaiter()
 }
 
 
-int K3b::EmptyDiscWaiter::waitForDisc( Device::MediaStates mediaState, Device::MediaTypes mediaType, const QString& message )
+K3b::Device::MediaType K3b::EmptyDiscWaiter::waitForDisc( Device::MediaStates mediaState, Device::MediaTypes mediaType, const QString& message )
 {
     if ( d->inLoop ) {
         kError() << "(K3b::EmptyDiscWaiter) Recursive call detected." << endl;
-        return -1;
+        return Device::MEDIA_UNKNOWN;
     }
 
     d->wantedMediaState = mediaState;
     d->wantedMediaType = mediaType;
     d->dialogVisible = false;
-    d->forced = false;
     d->canceled = false;
     d->waitingDone = false;
     d->blockMediaChange = false;
@@ -180,7 +169,7 @@ int K3b::EmptyDiscWaiter::waitForDisc( Device::MediaStates mediaState, Device::M
     //
     // in case we already found a medium and thus the dialog is not shown entering
     // the loop only causes problems (since there is no dialog yet the user could
-    // not have forced or canceled yet
+    // not have canceled yet
     //
     if( !d->waitingDone ) {
         d->inLoop = true;
@@ -206,7 +195,7 @@ int K3b::EmptyDiscWaiter::exec()
 void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
 {
     kDebug() << "(K3b::EmptyDiscWaiter) slotMediumChanged() ";
-    if( d->forced || d->canceled || d->device != dev )
+    if( d->canceled || d->device != dev )
         return;
 
     //
@@ -225,7 +214,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
 
     K3b::Medium medium = k3bappcore->mediaCache()->medium( dev );
 
-    d->labelFoundMedia->setText( medium.shortString( false ) );
+    d->labelFoundMedia->setText( medium.shortString( Medium::NoStringFlags ) );
 
     if( medium.diskInfo().diskState() == K3b::Device::STATE_NO_MEDIA ) {
         continueWaiting();
@@ -626,36 +615,29 @@ void K3b::EmptyDiscWaiter::slotCancel()
 {
     kDebug() << "(K3b::EmptyDiscWaiter) slotCancel() ";
     d->canceled = true;
-    finishWaiting( CANCELED );
+    finishWaiting( Device::MEDIA_UNKNOWN );
 }
 
 
 void K3b::EmptyDiscWaiter::slotUser1()
-{
-    d->forced = true;
-    finishWaiting( DISK_READY );
-}
-
-
-void K3b::EmptyDiscWaiter::slotUser2()
 {
     K3b::unmount( d->device );
     K3b::Device::eject( d->device );
 }
 
 
-void K3b::EmptyDiscWaiter::slotUser3()
+void K3b::EmptyDiscWaiter::slotUser2()
 {
     K3b::Device::load( d->device );
 }
 
 
-void K3b::EmptyDiscWaiter::finishWaiting( int code )
+void K3b::EmptyDiscWaiter::finishWaiting( Device::MediaType type )
 {
     kDebug() << "(K3b::EmptyDiscWaiter) finishWaiting() ";
 
     d->waitingDone = true;
-    d->result = code;
+    d->result = type;
 
     if( d->dialogVisible )
         hide();
@@ -682,7 +664,7 @@ void K3b::EmptyDiscWaiter::slotErasingFinished( bool success )
 }
 
 
-int K3b::EmptyDiscWaiter::wait( K3b::Device::Device* device, bool appendable, Device::MediaTypes mediaType, QWidget* parent )
+K3b::Device::MediaType K3b::EmptyDiscWaiter::wait( K3b::Device::Device* device, bool appendable, Device::MediaTypes mediaType, QWidget* parent )
 {
     K3b::EmptyDiscWaiter d( device, parent ? parent : qApp->activeWindow() );
     Device::MediaStates mediaState = K3b::Device::STATE_EMPTY;
@@ -691,11 +673,11 @@ int K3b::EmptyDiscWaiter::wait( K3b::Device::Device* device, bool appendable, De
 }
 
 
-int K3b::EmptyDiscWaiter::wait( K3b::Device::Device* device,
-                                Device::MediaStates mediaState,
-                                Device::MediaTypes mediaType,
-                                const QString& message,
-                                QWidget* parent )
+K3b::Device::MediaType K3b::EmptyDiscWaiter::wait( K3b::Device::Device* device,
+                                                   Device::MediaStates mediaState,
+                                                   Device::MediaTypes mediaType,
+                                                   const QString& message,
+                                                   QWidget* parent )
 {
     K3b::EmptyDiscWaiter d( device, parent ? parent : qApp->activeWindow() );
     return d.waitForDisc( mediaState, mediaType, message );
@@ -728,10 +710,10 @@ QWidget* K3b::EmptyDiscWaiter::parentWidgetToUse()
 }
 
 
-int K3b::EmptyDiscWaiter::waitForMedia( K3b::Device::Device* device,
-                                        Device::MediaStates mediaState,
-                                        Device::MediaTypes mediaType,
-                                        const QString& message )
+K3b::Device::MediaType K3b::EmptyDiscWaiter::waitForMedia( K3b::Device::Device* device,
+                                                           Device::MediaStates mediaState,
+                                                           Device::MediaTypes mediaType,
+                                                           const QString& message )
 {
     // this is only needed for the formatting
     return wait( device, mediaState, mediaType, message, d->erasingInfoDialog );

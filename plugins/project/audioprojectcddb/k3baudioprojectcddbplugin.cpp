@@ -16,15 +16,15 @@
 #include <config-k3b.h>
 
 // the k3b stuff we need
-#include <k3bcore.h>
-#include <k3bglobals.h>
-#include <k3baudiodoc.h>
-#include <k3baudiotrack.h>
-#include <k3btoc.h>
-#include <k3btrack.h>
-#include <k3bmsf.h>
-#include <k3bprogressdialog.h>
-#include <k3bcddb.h>
+#include "k3bcore.h"
+#include "k3bglobals.h"
+#include "k3baudiodoc.h"
+#include "k3baudiotrack.h"
+#include "k3btoc.h"
+#include "k3btrack.h"
+#include "k3bmsf.h"
+#include "k3bprogressdialog.h"
+#include "k3bcddb.h"
 
 #include <kdebug.h>
 #include <kaction.h>

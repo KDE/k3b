@@ -17,10 +17,10 @@
 #ifndef K3BAUDIODOC_H
 #define K3BAUDIODOC_H
 
-#include <k3bdoc.h>
+#include "k3bdoc.h"
 
-#include <k3bcdtext.h>
-#include <k3btoc.h>
+#include "k3bcdtext.h"
+#include "k3btoc.h"
 
 #include <qfile.h>
 #include <qstring.h>

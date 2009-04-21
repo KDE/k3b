@@ -14,7 +14,7 @@
 
 #include "k3bthememanager.h"
 
-#include <k3bversion.h>
+#include "k3bversion.h"
 
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>

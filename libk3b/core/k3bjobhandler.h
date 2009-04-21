@@ -16,8 +16,8 @@
 #define _K3B_JOB_HANDLER_H_
 
 
-#include <k3bdiskinfo.h>
-#include <k3bdevice.h>
+#include "k3bdiskinfo.h"
+#include "k3bdevice.h"
 
 
 namespace K3b {
@@ -38,13 +38,12 @@ namespace K3b {
 
         /**
          * @return Device::MediaType on success,
-         *         0 if forced (no media info available),
-         *         and -1 on error (canceled)
+         *         Device::MEDIA_UNKNOWN on error (canceled)
          */
-        virtual int waitForMedia( Device::Device*,
-                                  Device::MediaStates mediaState = Device::STATE_EMPTY,
-                                  Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
-                                  const QString& message = QString() ) = 0;
+        virtual Device::MediaType waitForMedia( Device::Device*,
+                                                Device::MediaStates mediaState = Device::STATE_EMPTY,
+                                                Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
+                                                const QString& message = QString() ) = 0;
 
         // FIXME: use KGuiItem
         virtual bool questionYesNo( const QString& text,

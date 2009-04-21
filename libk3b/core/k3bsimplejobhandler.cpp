@@ -25,17 +25,17 @@ K3b::SimpleJobHandler::~SimpleJobHandler()
 {
 }
 
-int K3b::SimpleJobHandler::waitForMedia( K3b::Device::Device* dev,
-                                         Device::MediaStates mediaState,
-                                         Device::MediaTypes mediaType,
-                                         const QString& message )
+K3b::Device::MediaType K3b::SimpleJobHandler::waitForMedia( K3b::Device::Device* dev,
+                                                            Device::MediaStates mediaState,
+                                                            Device::MediaTypes mediaType,
+                                                            const QString& message )
 {
     Q_UNUSED( dev );
     Q_UNUSED( mediaState );
     Q_UNUSED( mediaType );
     Q_UNUSED( message );
 
-    return 0;
+    return Device::MEDIA_UNKNOWN;
 }
 
 bool K3b::SimpleJobHandler::questionYesNo( const QString& text,

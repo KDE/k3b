@@ -18,7 +18,7 @@
 
 
 #include "k3bdataitem.h"
-#include <k3bglobals.h>
+#include "k3bglobals.h"
 
 #include <kio/global.h>
 #include <kmimetype.h>

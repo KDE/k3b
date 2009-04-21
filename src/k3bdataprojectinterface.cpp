@@ -14,9 +14,9 @@
 
 #include "k3bdataprojectinterface.h"
 
-#include <k3bdatadoc.h>
-#include <k3bdiritem.h>
-#include <k3bisooptions.h>
+#include "k3bdatadoc.h"
+#include "k3bdiritem.h"
+#include "k3bisooptions.h"
 #include <QList>
 
 

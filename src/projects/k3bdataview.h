@@ -16,7 +16,7 @@
 #ifndef K3BDATAVIEW_H
 #define K3BDATAVIEW_H
 
-#include <k3bstandardview.h>
+#include "k3bstandardview.h"
 
 class QLineEdit;
 class KMenu;

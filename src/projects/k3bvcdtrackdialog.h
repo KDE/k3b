@@ -21,8 +21,8 @@
 #include <qtabwidget.h>
 #include <QLabel>
 
-#include <k3bvcddoc.h>
-#include <k3blistview.h>
+#include "k3bvcddoc.h"
+#include "k3blistview.h"
 
 #include <KComboBox>
 

@@ -15,7 +15,7 @@
 #ifndef _K3B_VIDEODVD_DOC_H_
 #define _K3B_VIDEODVD_DOC_H_
 
-#include <k3bdatadoc.h>
+#include "k3bdatadoc.h"
 #include "k3b_export.h"
 
 namespace K3b {

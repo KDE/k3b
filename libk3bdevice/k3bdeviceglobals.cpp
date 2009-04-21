@@ -179,6 +179,28 @@ QString K3b::Device::mediaTypeString( int m, bool simple )
 }
 
 
+QString K3b::Device::mediaStateString( int state )
+{
+    if( state == K3b::Device::STATE_UNKNOWN )
+        return i18n("Unknown");
+
+    QStringList s;
+    if( state & STATE_NO_MEDIA )
+        s += i18n("no medium");
+    if( state & STATE_COMPLETE )
+        s += i18n("complete medium");
+    if( state & STATE_INCOMPLETE )
+        s += i18n("incomplete medium");
+    if( state & STATE_EMPTY )
+        s += i18n("empty medium");
+
+    if( s.isEmpty() )
+        return i18n("Error");
+    else
+        return s.join( ", " );
+}
+
+
 void K3b::Device::debugBitfield( unsigned char* data, long len )
 {
     for( int i = 0; i < len; ++i ) {
@@ -243,4 +265,40 @@ int K3b::Device::determineMaxReadingBufferSize( K3b::Device::Device* dev, const 
              << bufferSizeSectors << " is max." << endl;
 
     return bufferSizeSectors;
+}
+
+
+QDebug& K3b::Device::operator<<( QDebug& dbg, K3b::Device::MediaType type )
+{
+    return dbg << mediaTypeString( type );
+}
+
+
+QDebug& K3b::Device::operator<<( QDebug& dbg, K3b::Device::MediaTypes types )
+{
+    return dbg << mediaTypeString( types );
+}
+
+
+QDebug& K3b::Device::operator<<( QDebug& dbg, K3b::Device::WritingMode mode )
+{
+    return dbg << writingModeString( mode );
+}
+
+
+QDebug& K3b::Device::operator<<( QDebug& dbg, K3b::Device::WritingModes modes )
+{
+    return dbg << writingModeString( modes );
+}
+
+
+QDebug& K3b::Device::operator<<( QDebug& dbg, K3b::Device::MediaState state )
+{
+    return dbg << mediaStateString( state );
+}
+
+
+QDebug& K3b::Device::operator<<( QDebug& dbg, K3b::Device::MediaStates states )
+{
+    return dbg << mediaStateString( states );
 }

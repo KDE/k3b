@@ -16,7 +16,7 @@
 #include "k3bfileitem.h"
 #include "k3bdiritem.h"
 
-#include <k3biso9660.h>
+#include "k3biso9660.h"
 
 #include <KLocale>
 

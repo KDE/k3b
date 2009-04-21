@@ -14,10 +14,10 @@
 
 #include "k3bvideodvdrippingwidget.h"
 
-#include <k3bvideodvdtitletranscodingjob.h>
-#include <k3bglobals.h>
-#include <k3brichtextlabel.h>
-#include <k3bintmapcombobox.h>
+#include "k3bvideodvdtitletranscodingjob.h"
+#include "k3bglobals.h"
+#include "k3brichtextlabel.h"
+#include "k3bintmapcombobox.h"
 
 #include <k3listview.h>
 #include <klocale.h>

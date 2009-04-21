@@ -14,9 +14,9 @@
 
 #include "k3bmkisofshandler.h"
 
-#include <k3bexternalbinmanager.h>
-#include <k3bcore.h>
-#include <k3bjob.h>
+#include "k3bexternalbinmanager.h"
+#include "k3bcore.h"
+#include "k3bjob.h"
 
 #include <kdebug.h>
 #include <klocale.h>

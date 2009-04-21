@@ -15,41 +15,30 @@
 #ifndef K3BDIRVIEW_H
 #define K3BDIRVIEW_H
 
-#include <k3bmedium.h>
-#include <KVBox>
+#include "k3bmedium.h"
+#include <QtGui/QWidget>
 
-namespace K3b {
-    class AudioCdView;
-}
-namespace K3b {
-    class DiskInfoView;
-}
-namespace K3b {
-    class FileTreeView;
-}
-namespace K3b {
-    class FileView;
-}
-namespace K3b {
-    class VideoCdView;
-}
-namespace K3b {
-    class VideoDVDRippingView;
-}
 class KComboBox;
 class KConfigGroup;
 class KUrl;
 class QSplitter;
 class QStackedWidget;
-namespace Device {
-    class Device;
-}
 
-/**
- *@author Sebastian Trueg
- */
 namespace K3b {
-    class DirView : public KVBox
+    class AudioCdView;
+    class DiskInfoView;
+    class FileTreeView;
+    class FileView;
+    class VideoCdView;
+    class VideoDVDRippingView;
+    namespace Device {
+        class Device;
+    }
+    
+    /**
+     * @author Sebastian Trueg
+     */
+    class DirView : public QWidget
     {
         Q_OBJECT
 

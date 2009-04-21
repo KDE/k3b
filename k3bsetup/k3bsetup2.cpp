@@ -19,7 +19,7 @@
 #include "k3bsetup2.h"
 #include "k3bsetupdevicesmodel.h"
 #include "k3bsetupprogramsmodel.h"
-#include <k3bexternalbinmanager.h>
+#include "k3bexternalbinmanager.h"
 
 #include <QCheckBox>
 #include <QDBusConnection>

@@ -20,8 +20,8 @@
 //#include "k3bdatadirtreeview.h"
 //#include "k3bdatafileview.h"
 #include "k3bdataurladdingdialog.h"
-#include <k3bfillstatusdisplay.h>
-#include <k3bprojectplugin.h>
+#include "k3bfillstatusdisplay.h"
+#include "k3bprojectplugin.h"
 
 #include <klocale.h>
 #include <kmessagebox.h>

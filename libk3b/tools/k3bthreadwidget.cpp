@@ -14,7 +14,7 @@
 
 #include "k3bthreadwidget.h"
 #include "k3bdeviceselectiondialog.h"
-#include <k3bdevice.h>
+#include "k3bdevice.h"
 
 #include <qevent.h>
 #include <qapplication.h>

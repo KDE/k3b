@@ -17,12 +17,12 @@
 #include "k3bapplication.h"
 #include "k3bmediacache.h"
 
-#include <k3bmediaselectioncombobox.h>
-#include <k3bdevice.h>
-#include <k3bdevicemanager.h>
-#include <k3bglobals.h>
-#include <k3bcore.h>
-#include <k3bintmapcombobox.h>
+#include "k3bmediaselectioncombobox.h"
+#include "k3bdevice.h"
+#include "k3bdevicemanager.h"
+#include "k3bglobals.h"
+#include "k3bcore.h"
+#include "k3bintmapcombobox.h"
 
 #include <klocale.h>
 #include <kdialog.h>

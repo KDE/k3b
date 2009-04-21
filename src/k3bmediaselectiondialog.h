@@ -16,7 +16,7 @@
 #define _K3B_MEDIA_SELECTION_DIALOG_H_
 
 #include <kdialog.h>
-#include <k3bmedium.h>
+#include "k3bmedium.h"
 
 namespace K3b {
     class MediaSelectionComboBox;
@@ -62,7 +62,7 @@ namespace K3b {
 
         static Device::Device* selectMedium( Device::MediaTypes type,
                                              Device::MediaStates state,
-                                             Medium::MediumContents content = Medium::ContentIgnore,
+                                             Medium::MediumContents content = Medium::ContentAll,
                                              QWidget* parent = 0,
                                              const QString& title = QString(),
                                              const QString& text = QString(),

@@ -18,16 +18,16 @@
 //#include "k3baudiotrackplayer.h"
 #include "k3baudiotrack.h"
 #include "k3baudiocdtracksource.h"
-#include <k3bcore.h>
+#include "k3bcore.h"
 #include "k3baudiodoc.h"
-#include <k3bdevice.h>
-#include <k3bwriterselectionwidget.h>
-#include <k3btempdirselectionwidget.h>
+#include "k3bdevice.h"
+#include "k3bwriterselectionwidget.h"
+#include "k3btempdirselectionwidget.h"
 #include "k3baudiocdtextwidget.h"
-#include <k3bglobals.h>
-#include <k3bstdguiitems.h>
-#include <k3bwritingmodewidget.h>
-#include <k3bexternalbinmanager.h>
+#include "k3bglobals.h"
+#include "k3bstdguiitems.h"
+#include "k3bwritingmodewidget.h"
+#include "k3bexternalbinmanager.h"
 
 #include <qcheckbox.h>
 #include <qcombobox.h>

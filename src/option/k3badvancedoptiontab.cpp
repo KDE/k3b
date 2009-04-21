@@ -13,10 +13,10 @@
  */
 
 #include "k3badvancedoptiontab.h"
-#include <k3bmsfedit.h>
-#include <k3bcore.h>
-#include <k3bstdguiitems.h>
-#include <k3bglobalsettings.h>
+#include "k3bmsfedit.h"
+#include "k3bcore.h"
+#include "k3bstdguiitems.h"
+#include "k3bglobalsettings.h"
 
 #include <qlabel.h>
 #include <qcombobox.h>

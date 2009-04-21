@@ -16,7 +16,7 @@
 #ifndef _K3B_MPC_DECODER_H_
 #define _K3B_MPC_DECODER_H_
 
-#include <k3baudiodecoder.h>
+#include "k3baudiodecoder.h"
 
 class K3bMpcWrapper;
 

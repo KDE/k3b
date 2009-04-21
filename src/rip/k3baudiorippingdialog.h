@@ -16,9 +16,9 @@
 #ifndef _K3B_AUDIO_RIPPING_DIALOG_H_
 #define _K3B_AUDIO_RIPPING_DIALOG_H_
 
-#include <k3binteractiondialog.h>
-#include <k3btoc.h>
-#include <k3bmedium.h>
+#include "k3binteractiondialog.h"
+#include "k3btoc.h"
+#include "k3bmedium.h"
 
 #include <qstringlist.h>
 #include <QList>

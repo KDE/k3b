@@ -14,12 +14,12 @@
 
 #include "k3bverificationjob.h"
 
-#include <k3bdevice.h>
-#include <k3bdevicehandler.h>
-#include <k3bglobals.h>
-#include <k3bdatatrackreader.h>
-#include <k3bchecksumpipe.h>
-#include <k3biso9660.h>
+#include "k3bdevice.h"
+#include "k3bdevicehandler.h"
+#include "k3bglobals.h"
+#include "k3bdatatrackreader.h"
+#include "k3bchecksumpipe.h"
+#include "k3biso9660.h"
 
 #include <kdebug.h>
 #include <klocale.h>

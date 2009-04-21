@@ -16,14 +16,14 @@
 #include "k3baudioprojectconvertingjob.h"
 #include "k3bpatternparser.h"
 
-#include <k3bjob.h>
-#include <k3baudiodoc.h>
-#include <k3baudiotrack.h>
-#include <k3baudioencoder.h>
-#include <k3bwavefilewriter.h>
+#include "k3bjob.h"
+#include "k3baudiodoc.h"
+#include "k3baudiotrack.h"
+#include "k3baudioencoder.h"
+#include "k3bwavefilewriter.h"
 #include "k3bcuefilewriter.h"
 
-#include <k3bglobals.h>
+#include "k3bglobals.h"
 
 #include <qfile.h>
 #include <qtimer.h>

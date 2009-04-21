@@ -14,8 +14,8 @@
 
 #include "k3baudioprojectinterface.h"
 
-#include <k3baudiodoc.h>
-#include <k3baudiotrack.h>
+#include "k3baudiodoc.h"
+#include "k3baudiotrack.h"
 
 
 K3b::AudioProjectInterface::AudioProjectInterface( K3b::AudioDoc* doc )

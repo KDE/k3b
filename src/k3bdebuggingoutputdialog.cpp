@@ -14,12 +14,12 @@
 
 #include "k3bdebuggingoutputdialog.h"
 
-#include <k3bdevicemanager.h>
-#include <k3bdevice.h>
-#include <k3bdeviceglobals.h>
-#include <k3bcore.h>
-#include <k3bversion.h>
-#include <k3bglobals.h>
+#include "k3bdevicemanager.h"
+#include "k3bdevice.h"
+#include "k3bdeviceglobals.h"
+#include "k3bcore.h"
+#include "k3bversion.h"
+#include "k3bglobals.h"
 
 #include <QTextEdit>
 #include <qcursor.h>

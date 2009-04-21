@@ -1,9 +1,9 @@
-/* 
+/*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,35 +17,32 @@
 #define _K3B_CONTENTS_VIEW_H_
 
 #include <qwidget.h>
-#include <k3bthememanager.h>
+#include "k3bthememanager.h"
 
 namespace K3b {
     class ThemedHeader;
-}
 
+    class ContentsView : public QWidget
+    {
+        Q_OBJECT
 
-namespace K3b {
-class ContentsView : public QWidget
-{
-    Q_OBJECT
+    public:
+        virtual ~ContentsView();
 
-public:
-    virtual ~ContentsView();
+    protected:
+        ContentsView( bool withHeader,
+                      QWidget* parent = 0 );
 
-protected:
-    ContentsView( bool withHeader,
-                     QWidget* parent = 0 );
+        QWidget* mainWidget();
+        void setMainWidget( QWidget* );
+        void setTitle( const QString& title, const QString& subtitle = QString() );
+        void setLeftPixmap( Theme::PixmapType );
+        void setRightPixmap( Theme::PixmapType );
 
-    QWidget* mainWidget();
-    void setMainWidget( QWidget* );
-    void setTitle( const QString& );
-    void setLeftPixmap( Theme::PixmapType );
-    void setRightPixmap( Theme::PixmapType );
-
-private:
-    ThemedHeader* m_header;
-    QWidget* m_centerWidget;
-};
+    private:
+        ThemedHeader* m_header;
+        QWidget* m_centerWidget;
+    };
 }
 
 #endif

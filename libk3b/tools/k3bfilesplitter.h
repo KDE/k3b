@@ -18,7 +18,7 @@
 #include <qiodevice.h>
 #include <qstring.h>
 
-#include <k3b_export.h>
+#include "k3b_export.h"
 
 
 namespace K3b {

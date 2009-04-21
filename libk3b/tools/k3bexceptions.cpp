@@ -13,7 +13,7 @@
  */
 
 #include "k3bexceptions.h"
-#include <k3bdevice.h>
+#include "k3bdevice.h"
 
 bool K3b::Exceptions::brokenDaoAudio( K3b::Device::Device* dev )
 {

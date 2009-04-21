@@ -14,15 +14,15 @@
 
 #include "k3bclonejob.h"
 
-#include <k3breadcdreader.h>
-#include <k3bcdrecordwriter.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bdevice.h>
-#include <k3bdevicehandler.h>
-#include <k3bglobals.h>
-#include <k3bcore.h>
-#include <k3bclonetocreader.h>
-#include <k3bglobalsettings.h>
+#include "k3breadcdreader.h"
+#include "k3bcdrecordwriter.h"
+#include "k3bexternalbinmanager.h"
+#include "k3bdevice.h"
+#include "k3bdevicehandler.h"
+#include "k3bglobals.h"
+#include "k3bcore.h"
+#include "k3bclonetocreader.h"
+#include "k3bglobalsettings.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -134,7 +134,7 @@ void K3b::CloneJob::start()
 
         if( waitForMedia( readingDevice(),
                           K3b::Device::STATE_COMPLETE,
-                          K3b::Device::MEDIA_WRITABLE_CD|K3b::Device::MEDIA_CD_ROM ) < 0 ) {
+                          K3b::Device::MEDIA_WRITABLE_CD|K3b::Device::MEDIA_CD_ROM ) == Device::MEDIA_UNKNOWN ) {
             m_running = false;
             emit canceled();
             jobFinished(false);
@@ -323,7 +323,7 @@ void K3b::CloneJob::startWriting()
 
     if( waitForMedia( writer(),
                       K3b::Device::STATE_EMPTY,
-                      K3b::Device::MEDIA_WRITABLE_CD ) < 0 ) {
+                      K3b::Device::MEDIA_WRITABLE_CD ) == Device::MEDIA_UNKNOWN ) {
         removeImageFiles();
         m_running = false;
         emit canceled();

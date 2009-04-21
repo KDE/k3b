@@ -16,7 +16,7 @@
 #include "k3baudiojob.h"
 
 #include "k3baudioimager.h"
-#include <k3baudiodoc.h>
+#include "k3baudiodoc.h"
 #include "k3baudiotrack.h"
 #include "k3baudiodatasource.h"
 #include "k3baudionormalizejob.h"
@@ -24,19 +24,19 @@
 #include "k3baudiomaxspeedjob.h"
 #include "k3baudiocdtracksource.h"
 #include "k3baudiofile.h"
-#include <k3bdevicemanager.h>
-#include <k3bdevicehandler.h>
-#include <k3bdevice.h>
-#include <k3bcdtext.h>
+#include "k3bdevicemanager.h"
+#include "k3bdevicehandler.h"
+#include "k3bdevice.h"
+#include "k3bcdtext.h"
 #include "k3bmsf.h"
-#include <k3bglobals.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bcore.h>
-#include <k3bcdrecordwriter.h>
-#include <k3bcdrdaowriter.h>
-#include <k3btocfilewriter.h>
-#include <k3binffilewriter.h>
-#include <k3bglobalsettings.h>
+#include "k3bglobals.h"
+#include "k3bexternalbinmanager.h"
+#include "k3bcore.h"
+#include "k3bcdrecordwriter.h"
+#include "k3bcdrdaowriter.h"
+#include "k3btocfilewriter.h"
+#include "k3binffilewriter.h"
+#include "k3bglobalsettings.h"
 
 #include <qfile.h>
 
@@ -661,7 +661,7 @@ bool K3b::AudioJob::startWriting()
 
 
     emit newSubTask( i18n("Waiting for media") );
-    if( waitForMedia( m_doc->burner() ) < 0 ) {
+    if( waitForMedia( m_doc->burner() ) == Device::MEDIA_UNKNOWN ) {
         cancel();
         return false;
     }

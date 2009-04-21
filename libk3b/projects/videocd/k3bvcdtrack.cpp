@@ -28,7 +28,7 @@
 
 // K3b Includes
 #include "k3bvcdtrack.h"
-#include <k3bglobals.h>
+#include "k3bglobals.h"
 
 K3b::VcdTrack::VcdTrack( QList<K3b::VcdTrack*>* parent, const QString& filename )
         : m_pbcnumkeys( true ),

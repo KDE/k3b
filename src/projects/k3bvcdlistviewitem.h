@@ -15,7 +15,7 @@
 #ifndef K3BVCDLISTVIEWITEM_H
 #define K3BVCDLISTVIEWITEM_H
 
-#include <k3blistview.h>
+#include "k3blistview.h"
 
 namespace K3b {
     class VcdTrack;

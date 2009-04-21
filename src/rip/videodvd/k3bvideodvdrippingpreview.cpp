@@ -14,9 +14,9 @@
 
 #include "k3bvideodvdrippingpreview.h"
 
-#include <k3bcore.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bdevice.h>
+#include "k3bcore.h"
+#include "k3bexternalbinmanager.h"
+#include "k3bdevice.h"
 
 #include "k3bprocess.h"
 #include <ktempdir.h>

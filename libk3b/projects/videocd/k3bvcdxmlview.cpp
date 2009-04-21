@@ -22,8 +22,8 @@
 
 #include "k3bvcdxmlview.h"
 #include "k3bvcdtrack.h"
-#include <k3bcore.h>
-#include <k3bversion.h>
+#include "k3bcore.h"
+#include "k3bversion.h"
 
 K3b::VcdXmlView::VcdXmlView( K3b::VcdDoc* pDoc )
 {

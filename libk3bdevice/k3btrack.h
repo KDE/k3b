@@ -17,7 +17,7 @@
 #ifndef K3BTRACK_H
 #define K3BTRACK_H
 
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 #include "k3bdevice_export.h"
 
 #include <QtCore/QSharedDataPointer>

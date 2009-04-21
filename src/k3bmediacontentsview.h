@@ -17,8 +17,8 @@
 #define _K3B_MEDIUM_CONTENTS_VIEW_H_
 
 #include "k3bcontentsview.h"
-#include <k3bthememanager.h>
-#include <k3bmedium.h>
+#include "k3bthememanager.h"
+#include "k3bmedium.h"
 
 
 

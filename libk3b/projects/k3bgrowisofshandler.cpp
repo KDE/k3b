@@ -14,11 +14,11 @@
 
 #include "k3bgrowisofshandler.h"
 
-#include <k3bjob.h>
-#include <k3bcore.h>
-#include <k3bglobalsettings.h>
-#include <k3bdevice.h>
-#include <k3bdevicehandler.h>
+#include "k3bjob.h"
+#include "k3bcore.h"
+#include "k3bglobalsettings.h"
+#include "k3bdevice.h"
+#include "k3bdevicehandler.h"
 
 #include <klocale.h>
 #include <kglobal.h>

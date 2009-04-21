@@ -16,8 +16,8 @@
 #ifndef _K3B_AUDIO_PROJECT_CONVERTING_DIALOG_H_
 #define _K3B_AUDIO_PROJECT_CONVERTING_DIALOG_H_
 
-#include <k3binteractiondialog.h>
-#include <k3bmsf.h>
+#include "k3binteractiondialog.h"
+#include "k3bmsf.h"
 
 #include <qstringlist.h>
 

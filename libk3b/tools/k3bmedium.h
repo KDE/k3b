@@ -106,13 +106,12 @@ namespace K3b {
          * Content type. May be combined by a binary OR.
          */
         enum MediumContent {
-            ContentIgnore = 0x0,
-            ContentNone = 0x1,
-            ContentAudio = 0x2,
-            ContentData = 0x4,
-            ContentVideoCD = 0x8,
-            ContentVideoDVD = 0x10,
-            ContentAll = ContentNone|ContentAudio|ContentData|ContentVideoCD|ContentVideoDVD
+            ContentNone = 0x0,
+            ContentAudio = 0x1,
+            ContentData = 0x2,
+            ContentVideoCD = 0x4,
+            ContentVideoDVD = 0x8,
+            ContentAll = ContentAudio|ContentData|ContentVideoCD|ContentVideoDVD
         };
         Q_DECLARE_FLAGS( MediumContents, MediumContent )
 
@@ -129,20 +128,36 @@ namespace K3b {
         const Iso9660SimplePrimaryDescriptor& iso9660Descriptor() const;
 
         /**
+         * Format strings for methods shortString and longString
+         */
+        enum MediumStringFlag {
+            NoStringFlags = 0x0, /**< no flags */
+            WithContents = 0x1,  /**< Include the contents, i.e. the volume id or cd text/cddb values. */
+            WithDevice = 0x2     /**< Include the device vendor, name, and system name in the long string. */
+        };
+        Q_DECLARE_FLAGS( MediumStringFlags, MediumStringFlag )
+
+        QString contentTypeString() const;
+
+        /**
          * \return A short one-liner string representing the medium.
          *         This string may be used for labels or selection boxes.
-         * \param useContent if true the content of the CD/DVD will be used, otherwise
-         *                   the string will simply be something like "empty DVD-R medium".
+         * \param flags Can be WithContents in which case the content of the CD/DVD will be used, otherwise
+         *              the string will simply be something like "empty DVD-R medium".
+         *
+         * \sa longString, MediumStringFlag
          */
-        QString shortString( bool useContent = true ) const;
+        QString shortString( MediumStringFlags flags = WithContents ) const;
 
         /**
          * \return A HTML formatted string decribing this medium. This includes the device, the
          *         medium type, the contents type, and some detail information like the number of
          *         tracks.
          *         This string may be used for tooltips or short descriptions.
+         *
+         * \sa shortString, MediumStringFlag
          */
-        QString longString() const;
+        QString longString( MediumStringFlags flags = WithContents ) const;
 
         /**
          * Compares the plain medium ignoring the cddb information which can differ
@@ -156,8 +171,8 @@ namespace K3b {
         /**
          * Constructs a user readable string which can be used to request certain media.
          */
-        static QString mediaRequestString( Device::MediaTypes requestedMediaTypes, 
-                                           Device::MediaStates requestedMediaStates, 
+        static QString mediaRequestString( Device::MediaTypes requestedMediaTypes,
+                                           Device::MediaStates requestedMediaStates,
                                            const K3b::Msf& requestedSize = Msf(),
                                            Device::Device* dev = 0 );
 
@@ -173,5 +188,6 @@ namespace K3b {
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( K3b::Medium::MediumContents )
+Q_DECLARE_OPERATORS_FOR_FLAGS( K3b::Medium::MediumStringFlags )
 
 #endif

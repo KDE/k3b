@@ -18,8 +18,8 @@
 #include <qtextstream.h>
 #include <qstringlist.h>
 
-#include <k3btoc.h>
-#include <k3bcdtext.h>
+#include "k3btoc.h"
+#include "k3bcdtext.h"
 
 namespace K3b {
     namespace Device {

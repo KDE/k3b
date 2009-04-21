@@ -13,5 +13,15 @@ add_subdirectory( videodvd )
 
 ########### install files ###############
 
-install( FILES  k3bdoc.h  	                   k3bgrowisofswriter.h                             k3bcdrdaowriter.h                             k3bcdrecordwriter.h  			   k3binffilewriter.h  			   k3btocfilewriter.h  			   k3bcuefileparser.h  			   k3bimagefilereader.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel )
+install( FILES
+  k3bdoc.h
+  k3bgrowisofswriter.h
+  k3bcdrdaowriter.h
+  k3bcdrecordwriter.h
+  k3binffilewriter.h
+  k3btocfilewriter.h
+  k3bcuefileparser.h
+  k3bimagefilereader.h
+  DESTINATION ${INCLUDE_INSTALL_DIR}
+  COMPONENT Devel )
 

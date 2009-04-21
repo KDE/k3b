@@ -16,7 +16,7 @@
 #ifndef _K3B_FFMPEG_WRAPPER_H_
 #define _K3B_FFMPEG_WRAPPER_H_
 
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 
 
 

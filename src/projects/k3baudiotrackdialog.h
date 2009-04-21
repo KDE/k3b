@@ -18,7 +18,7 @@
 
 #include <kdialog.h>
 
-#include <k3bmsf.h>
+#include "k3bmsf.h"
 
 #include <QtCore/QList>
 

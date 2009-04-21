@@ -22,7 +22,7 @@
 #include "k3bcore.h"
 #include "k3b.h"
 
-#include <k3bglobals.h>
+#include "k3bglobals.h"
 
 #include <QList>
 #include <QTimer>

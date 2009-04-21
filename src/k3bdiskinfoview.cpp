@@ -19,11 +19,11 @@
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
 
-#include <k3bdiskinfo.h>
-#include <k3bcdtext.h>
-#include <k3bdeviceglobals.h>
-#include <k3bglobals.h>
-#include <k3biso9660.h>
+#include "k3bdiskinfo.h"
+#include "k3bcdtext.h"
+#include "k3bdeviceglobals.h"
+#include "k3bglobals.h"
+#include "k3biso9660.h"
 
 #include <qlabel.h>
 #include <qlayout.h>
@@ -56,10 +56,10 @@ namespace {
 
 K3b::DiskInfoView::DiskInfoView( QWidget* parent )
     : K3b::MediaContentsView( true,
-                            K3b::Medium::ContentAll,
-                            K3b::Device::MEDIA_ALL|K3b::Device::MEDIA_UNKNOWN,
-                            K3b::Device::STATE_EMPTY|K3b::Device::STATE_INCOMPLETE|K3b::Device::STATE_COMPLETE|K3b::Device::STATE_UNKNOWN,
-                            parent )
+                              K3b::Medium::ContentAll,
+                              K3b::Device::MEDIA_ALL|K3b::Device::MEDIA_UNKNOWN,
+                              K3b::Device::STATE_EMPTY|K3b::Device::STATE_INCOMPLETE|K3b::Device::STATE_COMPLETE|K3b::Device::STATE_UNKNOWN,
+                              parent )
 {
     m_infoView = new QWebView( this );
     setMainWidget( m_infoView );
@@ -120,7 +120,11 @@ void K3b::DiskInfoView::reloadMedium()
 
 void K3b::DiskInfoView::updateTitle()
 {
-    setTitle( medium().shortString( true ) );
+    QString title = medium().shortString();
+    QString subTitle = medium().shortString( Medium::NoStringFlags );
+    if( title == subTitle )
+        subTitle.truncate(0);
+    setTitle( title, subTitle );
 
     if( medium().diskInfo().diskState() == K3b::Device::STATE_NO_MEDIA ) {
         setRightPixmap( K3b::Theme::MEDIA_NONE );

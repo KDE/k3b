@@ -17,10 +17,10 @@
 #include "k3bvideodvddoc.h"
 #include "k3bvideodvdimager.h"
 
-#include <k3bcore.h>
-#include <k3bisoimager.h>
-#include <k3bgrowisofswriter.h>
-#include <k3bglobals.h>
+#include "k3bcore.h"
+#include "k3bisoimager.h"
+#include "k3bgrowisofswriter.h"
+#include "k3bglobals.h"
 
 #include <klocale.h>
 #include <kmessagebox.h>

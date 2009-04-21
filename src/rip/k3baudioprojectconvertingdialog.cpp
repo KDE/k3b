@@ -19,15 +19,15 @@
 #include "k3bcddbpatternwidget.h"
 #include "k3baudioconvertingoptionwidget.h"
 
-#include <k3baudiodoc.h>
-#include <k3baudioview.h>
-#include <k3baudiotrackplayer.h>
-#include <k3baudiotrack.h>
-#include <k3bjobprogressdialog.h>
-#include <k3bcore.h>
-#include <k3bglobals.h>
-#include <k3blistview.h>
-#include <k3baudioencoder.h>
+#include "k3baudiodoc.h"
+#include "k3baudioview.h"
+#include "k3baudiotrackplayer.h"
+#include "k3baudiotrack.h"
+#include "k3bjobprogressdialog.h"
+#include "k3bcore.h"
+#include "k3bglobals.h"
+#include "k3blistview.h"
+#include "k3baudioencoder.h"
 
 #include <kcombobox.h>
 #include <klocale.h>

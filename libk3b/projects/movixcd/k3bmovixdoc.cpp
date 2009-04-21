@@ -18,9 +18,9 @@
 #include "k3bmovixjob.h"
 #include "k3bmovixfileitem.h"
 
-#include <k3bdiritem.h>
-#include <k3bfileitem.h>
-#include <k3bglobals.h>
+#include "k3bdiritem.h"
+#include "k3bfileitem.h"
+#include "k3bglobals.h"
 
 #include <klocale.h>
 #include <kdebug.h>

@@ -14,8 +14,8 @@
 
 #include "k3bvideodvdrippingjob.h"
 
-#include <k3bvideodvdtitletranscodingjob.h>
-#include <k3bvideodvdtitledetectclippingjob.h>
+#include "k3bvideodvdtitletranscodingjob.h"
+#include "k3bvideodvdtitledetectclippingjob.h"
 
 #include <kdebug.h>
 #include <klocale.h>

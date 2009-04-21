@@ -19,8 +19,8 @@
 #include "k3bpushbutton.h"
 #include "k3bthemedheader.h"
 #include "k3bthememanager.h"
-#include <k3bapplication.h>
-#include <k3bmultichoicedialog.h>
+#include "k3bapplication.h"
+#include "k3bmultichoicedialog.h"
 
 #include <QApplication>
 #include <QDialogButtonBox>

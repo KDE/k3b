@@ -17,29 +17,29 @@
 #include "k3bactivepipe.h"
 #include "k3bfilesplitter.h"
 
-#include <k3bdatadoc.h>
-#include <k3bisoimager.h>
-#include <k3bmsinfofetcher.h>
-#include <k3baudioimager.h>
-#include <k3baudiodoc.h>
-#include <k3baudiotrack.h>
-#include <k3baudionormalizejob.h>
-#include <k3baudiojobtempdata.h>
-#include <k3baudiomaxspeedjob.h>
-#include <k3bdevicemanager.h>
-#include <k3bdevice.h>
-#include <k3bdevicehandler.h>
+#include "k3bdatadoc.h"
+#include "k3bisoimager.h"
+#include "k3bmsinfofetcher.h"
+#include "k3baudioimager.h"
+#include "k3baudiodoc.h"
+#include "k3baudiotrack.h"
+#include "k3baudionormalizejob.h"
+#include "k3baudiojobtempdata.h"
+#include "k3baudiomaxspeedjob.h"
+#include "k3bdevicemanager.h"
+#include "k3bdevice.h"
+#include "k3bdevicehandler.h"
 #include "k3bmsf.h"
-#include <k3bglobals.h>
-#include <k3bexternalbinmanager.h>
-#include <k3bversion.h>
-#include <k3bcore.h>
-#include <k3bcdrecordwriter.h>
-#include <k3bcdrdaowriter.h>
-#include <k3btocfilewriter.h>
-#include <k3binffilewriter.h>
-#include <k3bglobalsettings.h>
-#include <k3baudiofile.h>
+#include "k3bglobals.h"
+#include "k3bexternalbinmanager.h"
+#include "k3bversion.h"
+#include "k3bcore.h"
+#include "k3bcdrecordwriter.h"
+#include "k3bcdrdaowriter.h"
+#include "k3btocfilewriter.h"
+#include "k3binffilewriter.h"
+#include "k3bglobalsettings.h"
+#include "k3baudiofile.h"
 
 #include <qfile.h>
 #include <qdatastream.h>
@@ -1016,7 +1016,7 @@ bool K3b::MixedJob::startWriting()
           && m_currentAction == WRITING_ISO_IMAGE) ) {
 
         emit newSubTask( i18n("Waiting for media") );
-        if( waitForMedia( m_doc->burner() ) < 0 ) {
+        if( waitForMedia( m_doc->burner() ) == Device::MEDIA_UNKNOWN ) {
             cancel();
             return false;
         }

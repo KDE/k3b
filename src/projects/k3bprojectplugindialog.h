@@ -15,7 +15,7 @@
 #ifndef _K3B_PROJECTPLUGIN_DIALOG_H_
 #define _K3B_PROJECTPLUGIN_DIALOG_H_
 
-#include <k3binteractiondialog.h>
+#include "k3binteractiondialog.h"
 
 namespace K3b {
     class ProjectPlugin;

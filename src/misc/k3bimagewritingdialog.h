@@ -16,7 +16,7 @@
 #ifndef _K3B_IMAGEWRITINGDIALOG_H_
 #define _K3B_IMAGEWRITINGDIALOG_H_
 
-#include <k3binteractiondialog.h>
+#include "k3binteractiondialog.h"
 
 class QSpinBox;
 class QComboBox;

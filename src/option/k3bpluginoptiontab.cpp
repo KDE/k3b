@@ -14,9 +14,9 @@
 
 #include "k3bpluginoptiontab.h"
 
-#include <k3bpluginmanager.h>
-#include <k3bplugin.h>
-#include <k3bcore.h>
+#include "k3bpluginmanager.h"
+#include "k3bplugin.h"
+#include "k3bcore.h"
 
 #include <KLocale>
 #include <KDebug>

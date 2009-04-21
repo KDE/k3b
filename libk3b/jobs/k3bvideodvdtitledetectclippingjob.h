@@ -16,9 +16,9 @@
 #define _K3B_VIDEODVD_TITLE_DETECTCLIPPING_JOB_H_
 
 #include <qprocess.h>
-#include <k3b_export.h>
-#include <k3bjob.h>
-#include <k3bvideodvd.h>
+#include "k3b_export.h"
+#include "k3bjob.h"
+#include "k3bvideodvd.h"
 
 namespace K3b {
     /**

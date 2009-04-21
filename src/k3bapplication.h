@@ -17,7 +17,7 @@
 #define _K3B_APPLICATION_H_
 
 #include <kuniqueapplication.h>
-#include <k3bcore.h>
+#include "k3bcore.h"
 
 #include <qmap.h>
 
