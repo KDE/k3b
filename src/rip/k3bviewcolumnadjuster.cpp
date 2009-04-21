@@ -180,7 +180,7 @@ void K3b::ViewColumnAdjuster::adjustColumns()
     if ( otherCols.count() ) {
         QList<int> otherColSizes;
         int xx = 0;
-        int widthLeft = d->view->contentsRect().width() - x;
+        int widthLeft = d->view->viewport()->contentsRect().width() - x;
         int max = widthLeft / otherCols.count();
         for ( int i = 0; i < otherCols.count(); ++i ) {
             kDebug() << i << otherCols[i];
