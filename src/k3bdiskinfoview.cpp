@@ -85,14 +85,15 @@ void K3b::DiskInfoView::reloadMedium()
             "<title></title>"
             "<style type=\"text/css\">";
         if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
-            s += QString( ".title { padding:4px; font-size:medium; background-color:%1; foreground-color:%2 } " )
+            s += QString( ".title { padding:4px; font-size:medium; background-color:%1; color:%2 } " )
                  .arg(theme->palette().color( QPalette::Background ).name() )
                  .arg(theme->palette().color( QPalette::Foreground ).name() );
         }
         s +=  ".infovalue { font-weight:bold; padding-left:10px; } "
               ".trackheader { text-align:left; } "
               ".session { font-style:italic; } "
-              ".cdtext { font-weight:bold; font-style:italic; } ";
+              ".cdtext { font-weight:bold; font-style:italic; } "
+              "td { vertical-align:top; } ";
         s += "</style>"
              "</head>"
              "<body>";
