@@ -630,7 +630,7 @@ bool K3b::Iso9660::open()
     int access,c_i,c_j;
     struct el_torito_boot_descriptor* bootdesc;
 
-    // TODO implement win32 support 
+    // TODO implement win32 support
 
     /* We'll use the permission and user/group of the 'host' file except
      * in Rock Ridge, where the permissions are stored on the file system
@@ -778,25 +778,37 @@ void K3b::Iso9660::close()
 
 const K3b::Iso9660Directory* K3b::Iso9660::firstJolietDirEntry() const
 {
-    return d->jolietDirs.first();
+    if ( !d->jolietDirs.isEmpty() )
+        return d->jolietDirs.first();
+    else
+        return 0;
 }
 
 
 const K3b::Iso9660Directory* K3b::Iso9660::firstIsoDirEntry() const
 {
-    return d->isoDirs.first();
+    if ( !d->isoDirs.isEmpty() )
+        return d->isoDirs.first();
+    else
+        return 0;
 }
 
 
 const K3b::Iso9660Directory* K3b::Iso9660::firstElToritoEntry() const
 {
-    return d->elToritoDirs.first();
+    if ( !d->elToritoDirs.isEmpty() )
+        return d->elToritoDirs.first();
+    else
+        return 0;
 }
 
 
 const K3b::Iso9660Directory* K3b::Iso9660::firstRRDirEntry() const
 {
-    return d->rrDirs.first();
+    if ( !d->rrDirs.isEmpty() )
+        return d->rrDirs.first();
+    else
+        return 0;
 }
 
 
