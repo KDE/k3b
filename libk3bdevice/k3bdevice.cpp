@@ -1446,7 +1446,9 @@ QByteArray K3b::Device::Device::readRawCdText( bool* success ) const
         if( readTocPmaAtip( &data, dataLen, 5, false, 0 ) ) {
             // we need more than the header and a multiple of 18 bytes to have valid CD-TEXT
             if( dataLen > 4 && dataLen%18 == 4 ) {
-                textData.append( reinterpret_cast<char*>(data), dataLen );
+                // keep building with Qt 4.4
+                QByteArray cdtext( reinterpret_cast<char*>(data), dataLen );
+                textData.append( cdtext );
                 if ( success )
                     *success = true;
             }
