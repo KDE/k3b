@@ -125,11 +125,11 @@ K3bSetup2::K3bSetup2( QWidget *parent, const QVariantList& )
     connect( d->programsModel, SIGNAL(modelReset()),
              this, SLOT(slotDataChanged()) );
     connect( m_checkUseBurningGroup, SIGNAL(toggled(bool)),
-             this, SLOT(slotBurningGroup()) );
+             this, SLOT(slotBurningGroupChanged()) );
     connect( m_editBurningGroup, SIGNAL(textChanged(const QString&)),
-             this, SLOT(slotBurningGroup()) );
+             this, SLOT(slotBurningGroupChanged()) );
     connect( m_editSearchPath, SIGNAL(changed()),
-             this, SLOT(slotSearchPrograms()) );
+             this, SLOT(slotSearchPathChanged()) );
 
     m_viewDevices->setModel( d->devicesModel );
     m_viewDevices->header()->setResizeMode( QHeaderView::ResizeToContents );
@@ -216,6 +216,8 @@ void K3bSetup2::save()
     d->devicesModel->save( *d->config );
     d->programsModel->save( *d->config );
 
+    // Here we are trying to authorizate user. By default
+    // authorization dialog will be shown after calling this method.
     if( !d->authAction->activate() ) {
         QTimer::singleShot( 0, this, SLOT(slotDataChanged()) );
     }
@@ -251,11 +253,13 @@ void K3bSetup2::slotPerformPermissionUpdating()
     }
     message << programs;
     
-    // Invoke D-BUS method
+    // Invoke D-BUS method. At this point:
+    // - k3bsetup_worker will be lanuched by D-BUS
+    // - method "updatePermissions" from "org.k3b.setup" will be invoked
     QDBusMessage reply = QDBusConnection::systemBus().call( message, QDBus::NoBlock );
     if( reply.type() == QDBusMessage::ErrorMessage )
     {
-        KMessageBox::error( this, i18n("Cannot run helper.") );
+        KMessageBox::error( this, i18n("Cannot run worker.") );
         emit changed( true );
     }
 }
@@ -291,7 +295,7 @@ void K3bSetup2::slotDataChanged()
 }
 
 
-void K3bSetup2::slotBurningGroup()
+void K3bSetup2::slotBurningGroupChanged()
 {
     if( m_checkUseBurningGroup->isChecked() ) {
         d->devicesModel->setBurningGroup( m_editBurningGroup->text() );
@@ -304,7 +308,7 @@ void K3bSetup2::slotBurningGroup()
 }
 
 
-void K3bSetup2::slotSearchPrograms()
+void K3bSetup2::slotSearchPathChanged()
 {
     d->programsModel->setSearchPaths( m_editSearchPath->items() );
 }

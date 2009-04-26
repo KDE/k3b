@@ -41,8 +41,8 @@ private Q_SLOTS:
     void slotPermissionsUpdated( QStringList updated, QStringList failedToUpdate );
     void slotAuthFailed();
     void slotDataChanged();
-    void slotBurningGroup();
-    void slotSearchPrograms();
+    void slotBurningGroupChanged();
+    void slotSearchPathChanged();
 
 private:
     class Private;

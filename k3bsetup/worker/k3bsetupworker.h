@@ -34,10 +34,27 @@ public:
     virtual ~Worker();
 
 public Q_SLOTS:
+    /**
+     * Updates permissions of devices and programs
+     * @param burningGroup name of the burning group. If not set burning group will not be used
+     * @param devices list of devices which will have updated permissions
+     * @param programs list of the programs which will have updated permissions. Each element
+     *                 of the list is a @see K3b::Setup::ProgramItem object
+     */
     void updatePermissions( QString burningGroup, QStringList devices, QVariantList programs );
 
 Q_SIGNALS:
+    /**
+     * Confirmes successful authorization. Emitted after updating permissions of all elements.
+     * @param updated list of devices and programs with successfully updated permissions
+     * @param failedToUpdate list of devices and programs which permissons
+     *                       could not be updated for some reason
+     */
     void done( QStringList updated, QStringList failedToUpdate );
+    
+    /**
+     * Emitted when worker didn't get authorization from PolicyKit
+     */
     void authorizationFailed();
     
 };

@@ -110,6 +110,7 @@ Worker::~Worker()
 
 void Worker::updatePermissions( QString burningGroup, QStringList devices, QVariantList programs )
 {
+    // Check whether this action has been authorized before being called
     PolkitQt::Auth::Result result = PolkitQt::Auth::isCallerAuthorized(
             "org.k3b.setup.update-permissions",
             message().service(),
