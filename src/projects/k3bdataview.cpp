@@ -32,29 +32,27 @@
 #include "k3bvalidators.h"
 #include "k3baction.h"
 
-#include <klocale.h>
-#include <kurl.h>
-#include <kapplication.h>
-#include <kmenu.h>
-#include <kaction.h>
-#include <kmessagebox.h>
+#include <KAction>
+#include <KApplication>
+#include <KDebug>
+#include <KDialog>
+#include <KInputDialog>
 #include <kio/global.h>
-#include <kio/job.h>
-#include <kdialog.h>
-#include <ktoolbar.h>
-#include <kinputdialog.h>
-
-#include <qpixmap.h>
-#include <qsplitter.h>
-#include <qlayout.h>
-#include <q3header.h>
-#include <qlist.h>
-#include <qlineedit.h>
-#include <QtCore/QModelIndex>
-
-#include <assert.h>
-#include <kdebug.h>
+#include <KIO/Job>
+#include <KLocale>
+#include <KMenu>
+#include <KMessageBox>
 #include <KRun>
+#include <KToolBar>
+#include <KUrl>
+
+#include <QLayout>
+#include <QLineEdit>
+#include <QList>
+#include <QModelIndex>
+#include <QPixmap>
+#include <QSplitter>
+#include <QTreeView>
 
 
 K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
