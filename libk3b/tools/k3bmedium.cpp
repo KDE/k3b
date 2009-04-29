@@ -593,10 +593,10 @@ QString K3b::Medium::mediaRequestString( Device::MediaTypes requestedMediaTypes,
         }
         else if ( requestedSize > 0 ) {
             if ( dev )
-                return i18n( "Please insert an empty medium of size %1 or higher into drive<p><b>%2</b>",
+                return i18n( "Please insert an empty medium of size %1 or larger into drive<p><b>%2</b>",
                              KIO::convertSize( requestedSize.mode1Bytes() ), deviceString);
             else
-                return i18n( "Please insert an empty medium of size %1 or higher", KIO::convertSize( requestedSize.mode1Bytes() ) );
+                return i18n( "Please insert an empty medium of size %1 or larger", KIO::convertSize( requestedSize.mode1Bytes() ) );
         }
     }
     else if( requestedMediaStates == (Device::STATE_EMPTY|Device::STATE_INCOMPLETE) ) {
