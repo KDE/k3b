@@ -15,20 +15,20 @@
  */
 
 
-#ifndef _K3BSETUP2_H_
-#define _K3BSETUP2_H_
+#ifndef _K3BSETUP_H_
+#define _K3BSETUP_H_
 
-#include "ui_base_k3bsetup2.h"
+#include "ui_base_k3bsetup.h"
 #include <KCModule>
 #include <QStringList>
 
-class K3bSetup2 : public KCModule, public Ui::base_K3bSetup2
+class K3bSetup : public KCModule, public Ui::base_K3bSetup
 {
     Q_OBJECT
 
 public:
-    K3bSetup2( QWidget* parent = 0, const QVariantList& args = QVariantList() );
-    ~K3bSetup2();
+    K3bSetup( QWidget* parent = 0, const QVariantList& args = QVariantList() );
+    ~K3bSetup();
 
     QString quickHelp() const;
 

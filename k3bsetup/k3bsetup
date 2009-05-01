@@ -15,4 +15,4 @@
 
 #!/usr/bin/sh
 
-kcmshell4 k3bsetup2
+kcmshell4 k3bsetup

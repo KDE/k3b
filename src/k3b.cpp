@@ -1239,9 +1239,9 @@ void K3b::MainWindow::slotProjectAddFiles()
 void K3b::MainWindow::slotK3bSetup()
 {
     QStringList args;
-    args << "k3bsetup2" << "--lang" << KGlobal::locale()->language();
+    args << "k3bsetup" << "--lang" << KGlobal::locale()->language();
     if( !KProcess::startDetached( K3b::findExe("kcmshell4"), args ) )
-        KMessageBox::error( 0, i18n("Unable to start K3b::Setup2.") );
+        KMessageBox::error( 0, i18n("Unable to start K3b::Setup.") );
 }
 
 

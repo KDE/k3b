@@ -16,7 +16,7 @@
 
 #include <config-k3b.h>
 
-#include "k3bsetup2.h"
+#include "k3bsetup.h"
 #include "k3bsetupdevicesmodel.h"
 #include "k3bsetupprogramsmodel.h"
 #include "k3bexternalbinmanager.h"
@@ -55,7 +55,7 @@
 #include <grp.h>
 
 
-class K3bSetup2::Private
+class K3bSetup::Private
 {
 public:
     KConfig* config;
@@ -65,20 +65,20 @@ public:
 };
 
 
-K_PLUGIN_FACTORY(K3bSetup2Factory, registerPlugin<K3bSetup2>();)
-K_EXPORT_PLUGIN(K3bSetup2Factory("k3bsetup"))
+K_PLUGIN_FACTORY(K3bSetupFactory, registerPlugin<K3bSetup>();)
+K_EXPORT_PLUGIN(K3bSetupFactory("k3bsetup"))
 
 
 
-K3bSetup2::K3bSetup2( QWidget *parent, const QVariantList& )
-    : KCModule( K3bSetup2Factory::componentData(), parent )
+K3bSetup::K3bSetup( QWidget *parent, const QVariantList& )
+    : KCModule( K3bSetupFactory::componentData(), parent )
 {
     d = new Private();
-    d->config = new KConfig( "k3bsetup2rc" );
+    d->config = new KConfig( "k3bsetuprc" );
     d->authAction = new PolkitQt::Action( "org.k3b.setup.update-permissions", this );
 
-    KAboutData* aboutData = new KAboutData("k3bsetup2", 0,
-                                           ki18n("K3bSetup 2"), "2.0",
+    KAboutData* aboutData = new KAboutData("k3bsetup", 0,
+                                           ki18n("K3bSetup"), "2.0",
                                            KLocalizedString(), KAboutData::License_GPL,
                                            ki18n("(C) 2003-2007 Sebastian Trueg"), ki18n(0L));
     aboutData->addAuthor(ki18n("Sebastian Trueg"), KLocalizedString(), "trueg@k3b.org");
@@ -94,7 +94,7 @@ K3bSetup2::K3bSetup2( QWidget *parent, const QVariantList& )
                            "<p>It does not take things like devfs or resmgr into account. In most cases this is not a "
                            "problem but on some systems the permissions may be altered the next time you login or restart "
                            "your computer. In those cases it is best to consult the distribution documentation."
-                           "<p><b>Caution:</b> Although K3b::Setup 2 should not be able "
+                           "<p><b>Caution:</b> Although K3b::Setup should not be able "
                            "to mess up your system no guarantee can be given.") );
     label->setReadOnly( true );
     label->setFixedWidth( 200 );
@@ -144,28 +144,28 @@ K3bSetup2::K3bSetup2( QWidget *parent, const QVariantList& )
 }
 
 
-K3bSetup2::~K3bSetup2()
+K3bSetup::~K3bSetup()
 {
     delete d->config;
     delete d;
 }
 
 
-QString K3bSetup2::quickHelp() const
+QString K3bSetup::quickHelp() const
 {
-    return i18n("<h2>K3b::Setup 2</h2>"
+    return i18n("<h2>K3b::Setup</h2>"
                 "<p>This simple setup assistant is able to set the permissions needed by K3b in order to "
                 "burn CDs and DVDs."
                 "<p>It does not take into account devfs or resmgr, or similar. In most cases this is not a "
                 "problem, but on some systems the permissions may be altered the next time you login or restart "
                 "your computer. In these cases it is best to consult the distribution's documentation."
-                "<p>The important task that K3b::Setup 2 performs is grant write access to the CD and DVD devices."
-                "<p><b>Caution:</b> Although K3b::Setup 2 should not be able "
+                "<p>The important task that K3b::Setup performs is grant write access to the CD and DVD devices."
+                "<p><b>Caution:</b> Although K3b::Setup should not be able "
                 "to damage your system, no guarantee can be given.");
 }
 
 
-void K3bSetup2::defaults()
+void K3bSetup::defaults()
 {
     m_checkUseBurningGroup->setChecked(false);
     m_editBurningGroup->setText( "burning" );
@@ -175,7 +175,7 @@ void K3bSetup2::defaults()
 }
 
 
-void K3bSetup2::load()
+void K3bSetup::load()
 {
     d->devicesModel->load( *d->config );
     d->programsModel->load( *d->config );
@@ -196,7 +196,7 @@ void K3bSetup2::load()
 }
 
 
-void K3bSetup2::save()
+void K3bSetup::save()
 {
     QString burningGroup = m_editBurningGroup->text();
 
@@ -224,7 +224,7 @@ void K3bSetup2::save()
 }
 
 
-void K3bSetup2::slotPerformPermissionUpdating()
+void K3bSetup::slotPerformPermissionUpdating()
 {
     QDBusConnection::systemBus().connect( "org.k3b.setup",
         "/", "org.k3b.setup", QLatin1String("done"),
@@ -265,7 +265,7 @@ void K3bSetup2::slotPerformPermissionUpdating()
 }
 
 
-void K3bSetup2::slotPermissionsUpdated( QStringList updated, QStringList failedToUpdate )
+void K3bSetup::slotPermissionsUpdated( QStringList updated, QStringList failedToUpdate )
 {
     kDebug() << "Objects updated: " << updated;
     kDebug() << "Objects failed to update: " << failedToUpdate;
@@ -282,20 +282,20 @@ void K3bSetup2::slotPermissionsUpdated( QStringList updated, QStringList failedT
 }
 
 
-void K3bSetup2::slotAuthFailed()
+void K3bSetup::slotAuthFailed()
 {
     KMessageBox::error( this, i18n("Authorization failed.") );
     emit changed( true );
 }
 
 
-void K3bSetup2::slotDataChanged()
+void K3bSetup::slotDataChanged()
 {
     emit changed( d->devicesModel->changesNeeded() || d->programsModel->changesNeeded() );
 }
 
 
-void K3bSetup2::slotBurningGroupChanged()
+void K3bSetup::slotBurningGroupChanged()
 {
     if( m_checkUseBurningGroup->isChecked() ) {
         d->devicesModel->setBurningGroup( m_editBurningGroup->text() );
@@ -308,9 +308,9 @@ void K3bSetup2::slotBurningGroupChanged()
 }
 
 
-void K3bSetup2::slotSearchPathChanged()
+void K3bSetup::slotSearchPathChanged()
 {
     d->programsModel->setSearchPaths( m_editSearchPath->items() );
 }
 
-#include "k3bsetup2.moc"
+#include "k3bsetup.moc"

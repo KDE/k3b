@@ -155,7 +155,7 @@ QVariant DevicesModel::data( const QModelIndex& index, int role ) const
                 }
             }
             else {
-                kDebug() << "(K3bSetup2) unable to stat " << device->blockDeviceName();
+                kDebug() << "(K3bSetup) unable to stat " << device->blockDeviceName();
                 return QVariant();
             }
         }

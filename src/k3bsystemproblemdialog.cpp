@@ -104,7 +104,7 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
     m_checkDontShowAgain = new QCheckBox( i18n("Do not show again"), widget );
 
 #ifdef BUILD_K3BSETUP
-    m_k3bsetupButton = new QPushButton( i18n("Start K3b::Setup2"), widget );
+    m_k3bsetupButton = new QPushButton( i18n("Start K3b::Setup"), widget );
     connect( m_k3bsetupButton, SIGNAL(clicked()), this, SLOT(slotK3bSetup()) );
 #endif
 
@@ -606,9 +606,9 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
 void K3b::SystemProblemDialog::slotK3bSetup()
 {
     QStringList args;
-    args << "k3bsetup2" << "--lang" << KGlobal::locale()->language();
+    args << "k3bsetup" << "--lang" << KGlobal::locale()->language();
     if( !KProcess::startDetached( K3b::findExe("kcmshell4"), args ) )
-        KMessageBox::error( 0, i18n("Unable to start K3b::Setup2.") );
+        KMessageBox::error( 0, i18n("Unable to start K3b::Setup.") );
 }
 
 

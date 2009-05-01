@@ -132,7 +132,7 @@ bool ProgramsModel::Private::getProgramInfo( const K3b::ExternalBin* program,
         return true;
     }
     else {
-        kDebug() << "(K3bSetup2) unable to stat " << program->path;
+        kDebug() << "(K3bSetup) unable to stat " << program->path;
         return false;
     }
 }
