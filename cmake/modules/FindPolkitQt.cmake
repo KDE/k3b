@@ -59,7 +59,7 @@ set(POLKITQT_LIBRARIES ${POLKITQT_CORE_LIBRARY} ${POLKITQT_GUI_LIBRARY})
 
 set(POLKITQT_INCLUDE_DIR ${POLKITQT_INCLUDE_DIR}/PolicyKit/polkit-qt ${POLKITQT_INCLUDE_DIR}/PolicyKit/)
 
-set(POLICY_FILES_INSTALL_DIR ${POLKITQT_PREFIX}/share/PolicyKit/policy/)
+set(POLICY_FILES_INSTALL_DIR ${SHARE_INSTALL_PREFIX}/PolicyKit/policy/)
 
 if (POLKITQT_FOUND)
   if (NOT POLKITQT_FIND_QUIETLY)
@@ -74,12 +74,12 @@ endif (POLKITQT_FOUND)
 mark_as_advanced(POLKITQT_INCLUDE_DIR POLKITQT_LIB)
 
 macro(dbus_add_activation_system_service _sources)
-    pkg_search_module( DBUS dbus-1 )
+    #pkg_search_module( DBUS dbus-1 )
     foreach (_i ${_sources})
         get_filename_component(_service_file ${_i} ABSOLUTE)
         string(REGEX REPLACE "\\.service.*$" ".service" _output_file ${_i})
         set(_target ${CMAKE_CURRENT_BINARY_DIR}/${_output_file})
         configure_file(${_service_file} ${_target})
-        install(FILES ${_target} DESTINATION ${DBUS_PREFIX}/share/dbus-1/system-services )
+        install(FILES ${_target} DESTINATION ${SHARE_INSTALL_PREFIX}/dbus-1/system-services )
     endforeach (_i ${ARGN})
 endmacro(dbus_add_activation_system_service _sources)

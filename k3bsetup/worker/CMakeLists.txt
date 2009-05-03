@@ -35,6 +35,6 @@ target_link_libraries(k3bsetup_worker
 
 dbus_add_activation_system_service(org.k3b.setup.service.in)
 install(TARGETS k3bsetup_worker DESTINATION ${K3BSETUPWORKER_INSTALL_DIR})
-install(FILES org.k3b.setup.conf DESTINATION ${KDE4_SYSCONF_INSTALL_DIR}/dbus-1/system.d)
+install(FILES org.k3b.setup.conf DESTINATION ${SYSCONF_INSTALL_DIR}/dbus-1/system.d)
 install(FILES org.k3b.setup.policy DESTINATION ${POLICY_FILES_INSTALL_DIR})
-install(FILES org.k3b.setup.xml DESTINATION ${KDE4_DBUS_INTERFACES_DIR})
+install(FILES org.k3b.setup.xml DESTINATION ${DBUS_INTERFACES_INSTALL_DIR})
