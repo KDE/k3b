@@ -2,6 +2,7 @@
 Name=K3b SoX Audio Encoder
 Name[cs]=K3b SoX audio enkodér
 Name[csb]=Kòder SoX Audio dlô K3b
+Name[da]=K3b SoX-lydindkodning
 Name[de]=K3b-SoX-Audio-Kodierer
 Name[el]=Αποκωδικοποιητής ήχου SoX του K3b
 Name[es]=Codificador de audio SoX de K3b
@@ -36,6 +37,7 @@ Comment=Encoding module to encode many file formats using SoX
 Comment[bg]=Кодиращ модул (с SoX) за много файлови формати
 Comment[cs]=Modul pro kompresi do mnoha formátů pomocí SoX
 Comment[csb]=Mòdul kòdërëjący wiele fòrmôtów z pòmòcą SoX
+Comment[da]=Indkodningsmodul til mange filformater med brug af SoX
 Comment[de]=Kodierungsmodul zur Kodierung von vielen Audioformaten mittels SoX
 Comment[el]=Άρθρωμα κωδικοποίησης αρχείων ήχου SoX
 Comment[es]=Módulo de codificación para codificar muchos formatos de archivo que usan SoX

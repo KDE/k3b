@@ -2,6 +2,7 @@
 Name=K3b ??? Decoder
 Name[cs]=K3b ??? dekodér
 Name[csb]=Dekòder ??? dlô K3b
+Name[da]=K3b ???-dekoder
 Name[de]=K3b-???-Dekoder
 Name[el]=Αποκωδικοποιητής ??? του K3b
 Name[es]=Descodificador ??? de K3b
@@ -35,6 +36,7 @@ Comment=Decoding module to decode ??? files
 Comment[bg]=Декодиращ модул за ??? файлове
 Comment[cs]=Modul pro dekódování souborů ???
 Comment[csb]=Mòdul dekòdërëjący lopczi ???
+Comment[da]=Dekodermodul til dekodning af ???-filer
 Comment[de]=Dekodierungsmodul für ???-Dateien
 Comment[el]=Άρθρωμα αποκωδικοποίησης αρχείων ???
 Comment[es]=Módulo de decodificación para descodificar archivos ???

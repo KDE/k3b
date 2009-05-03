@@ -2,6 +2,7 @@
 Name=K3b FLAC Decoder
 Name[cs]=FLAC dekodér K3b
 Name[csb]=Dekòder FLAC dlô K3b
+Name[da]=K3b FLAC-dekoder
 Name[de]=K3b-FLAC-Dekoder
 Name[el]=Αποκωδικοποιητής FLAC του K3b
 Name[es]=Descodificador FLAC de K3b
@@ -37,6 +38,7 @@ Comment=Decoding module to decode FLAC files
 Comment[bg]=Декодиращ модул за FLAC файлове
 Comment[cs]=Modul pro dekódování souborů FLAC
 Comment[csb]=Mòdul dekòdërëjący lopczi FLAC
+Comment[da]=Dekodermodul til dekodning af FLAC-filer
 Comment[de]=Dekodierungsmodul für FLAC-Dateien
 Comment[el]=Άρθρωμα αποκωδικοποίησης αρχείων FLAC
 Comment[es]=Módulo de decodificación para descodificar archivos FLAC

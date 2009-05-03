@@ -1,8 +1,14 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=K3bSetup - modify permission for CD/DVD burning with K3b
+Comment[pt]=K3bSetup - modificar as permissões para a gravação de CDs/DVDs com o K3b
+Comment[pt_BR]=Configurações Avançadas do K3b - modificar permissões para a queima de CD/DVD com o K3b
+Comment[sv]=Ställ in K3b: ändra rättigheter för att bränna cd/dvd med K3b
+Comment[uk]=K3bSetup — змініть права для запису КД/DVD у K3b
 Exec=k3bsetup
 Keywords=K3bSetup,k3bsetup
+Keywords[pt_BR]=Configurações Avançadas do K3b,configurações avançadas do K3b
+Keywords[sv]=Ställ in K3b,k3bsetup
 Name=K3bSetup
 Name[bg]=Настройване на K3b
 Name[de]=K3b-Einrichtungsassistent
@@ -31,6 +37,7 @@ GenericName[bg]=Настройване записа на CD и DVD
 GenericName[ca]=Configuració de gravació de CD i DVD
 GenericName[cs]=Nastavení vypalování CD a DVD
 GenericName[csb]=Ùstôwë wëpôlaniô CD ë DVD
+GenericName[da]=Opsætning af cd- og dvd-brænding
 GenericName[de]=CD/DVD-Brennen einrichten
 GenericName[el]=Ρύθμιση εγγραφής CD & DVD
 GenericName[eo]=KD kaj DVD enskriba agordo

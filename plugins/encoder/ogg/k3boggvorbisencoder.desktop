@@ -2,6 +2,7 @@
 Name=K3b Ogg Vorbis Encoder
 Name[cs]=K3b Ogg Vorbis enkodér
 Name[csb]=Kòder Ogg Vorbis dlô K3b
+Name[da]=K3b Ogg Vorbis-indkodning
 Name[de]=K3b-Ogg-Vorbis-Kodierer
 Name[el]=Κωδικοποιητής Ogg Vorbis του K3b
 Name[es]=Codificador Ogg Vorbis de K3b
@@ -36,6 +37,7 @@ Comment=Encoding module to encode Ogg Vorbis files
 Comment[bg]=Кодиращ модул за Ogg Vorbis файлове
 Comment[cs]=Modul pro kompresi do souborů Ogg Vorbis
 Comment[csb]=Mòdul kòdërëjący lopczi Ogg Vorbis
+Comment[da]=Indkodnignsmodul til Ogg Vorbis-filer
 Comment[de]=Kodierungsmodul zur Kodierung von Ogg Vorbis-Dateien
 Comment[el]=Άρθρωμα κωδικοποίησης αρχείων Ogg Vorbis
 Comment[es]=Módulo de codificación para codificar archivos Ogg Vorbis

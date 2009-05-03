@@ -2,6 +2,7 @@
 Name=K3b External Audio Encoder
 Name[cs]=Externí audio dekodér K3b
 Name[csb]=Bùtnowi kòder audio dlô K3b
+Name[da]=K3b ekstern lydindkodning
 Name[de]=K3b-externer Audio-Dekoder
 Name[el]=Εξωτερικός κωδικοποιητής ήχου του K3b
 Name[es]=Codificador de audio externo de K3b
@@ -36,6 +37,7 @@ Name[zh_CN]=K3b 扩展音频编码器
 Comment=Encoding module that allows specifying an encoding command
 Comment[bg]=Кодиращ модул, позволяващ задаването на команда
 Comment[csb]=Mòdul kòdërëjący, jaczi zezwôlô na wpisanié kòderëjącegò pòletu
+Comment[da]=Indkodningsmodul som muliggør angivelse af en indkodningskommando
 Comment[de]=Kodierungsmodul zur Unterstützung externer Kodierprogramme
 Comment[el]=Άρθρωμα κωδικοποίησης που επιτρέπει τον ορισμό εντολής για κωδικοποίηση
 Comment[es]=Módulo de codificación que permite especificar una orden de codificación
