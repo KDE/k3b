@@ -1,12 +1,14 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=K3bSetup - modify permission for CD/DVD burning with K3b
+Comment[et]=K3b seadistamine - võimalus muuta õigusi CD/DVD kirjutamiseks K3b-ga
 Comment[pt]=K3bSetup - modificar as permissões para a gravação de CDs/DVDs com o K3b
 Comment[pt_BR]=Configurações Avançadas do K3b - modificar permissões para a queima de CD/DVD com o K3b
 Comment[sv]=Ställ in K3b: ändra rättigheter för att bränna cd/dvd med K3b
 Comment[uk]=K3bSetup — змініть права для запису КД/DVD у K3b
 Exec=k3bsetup
 Keywords=K3bSetup,k3bsetup
+Keywords[et]=K3bSetup,k3bsetup,k3b seadistamine
 Keywords[pt_BR]=Configurações Avançadas do K3b,configurações avançadas do K3b
 Keywords[sv]=Ställ in K3b,k3bsetup
 Name=K3bSetup
