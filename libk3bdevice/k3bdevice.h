@@ -55,10 +55,9 @@ namespace K3b {
         class LIBK3BDEVICE_EXPORT Device
         {
         public:
-#ifdef Q_OS_FREEBSD
+#if defined(Q_OS_FREEBSD)
             typedef struct cam_device* Handle;
-#endif
-#ifdef Q_OS_WIN32
+#elif defined(Q_OS_WIN32)
             // file handle
             typedef HANDLE Handle;
 #else

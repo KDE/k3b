@@ -157,7 +157,7 @@ public:
 #ifdef Q_OS_FREEBSD
 K3b::Device::Device::Handle K3b::Device::openDevice( const char* name, bool write )
 {
-    K3b::Device::Device::Handle handle = cad->open_pass (name, O_RDWR,0 /* NULL */);
+    K3b::Device::Device::Handle handle = cam_open_pass (name, O_RDWR,0 /* NULL */);
         kDebug() << "(K3b::Device::openDevice) open device " << name
                  << ((handle)?" succeeded.":" failed.") << endl;
     return handle;
@@ -1446,9 +1446,7 @@ QByteArray K3b::Device::Device::readRawCdText( bool* success ) const
         if( readTocPmaAtip( &data, dataLen, 5, false, 0 ) ) {
             // we need more than the header and a multiple of 18 bytes to have valid CD-TEXT
             if( dataLen > 4 && dataLen%18 == 4 ) {
-                // keep building with Qt 4.4
-                QByteArray cdtext( reinterpret_cast<char*>(data), dataLen );
-                textData.append( cdtext );
+                textData.append( QByteArray( reinterpret_cast<char*>(data), dataLen ) );
                 if ( success )
                     *success = true;
             }
@@ -1813,10 +1811,9 @@ void K3b::Device::Device::close() const
     if( d->deviceHandle == HANDLE_DEFAULT_VALUE)
         return;
 
-#ifdef Q_OS_FREEBSD
-    cad->close_device(d->deviceHandle);
-#endif
-#if defined(Q_OS_WIN32)
+#if defined(Q_OS_FREEBSD)
+    cam_close_device(d->deviceHandle);
+#elif defined(Q_OS_WIN32)
     CloseHandle(d->deviceHandle);
 #else
     ::close( d->deviceHandle );
