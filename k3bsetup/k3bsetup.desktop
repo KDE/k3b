@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Comment=K3bSetup - modify permission for CD/DVD burning with K3b
 Comment[et]=K3b seadistamine - võimalus muuta õigusi CD/DVD kirjutamiseks K3b-ga
+Comment[nb]=K3bSetup  – endre tillatelser for CD-/DVD-brenning med K3b
 Comment[pt]=K3bSetup - modificar as permissões para a gravação de CDs/DVDs com o K3b
 Comment[pt_BR]=Configurações Avançadas do K3b - modificar permissões para a queima de CD/DVD com o K3b
 Comment[sv]=Ställ in K3b: ändra rättigheter för att bränna cd/dvd med K3b
