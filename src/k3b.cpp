@@ -443,13 +443,13 @@ void K3b::MainWindow::initView()
 
     // --- filetreecombobox-toolbar ----------------------------------------------------------------
 	KFilePlacesModel* filePlacesModel = new KFilePlacesModel;
-    K3b::UrlNavigator* urlNavigator = new K3b::UrlNavigator( filePlacesModel, this );
-    connect( urlNavigator, SIGNAL(activated(const KUrl&)), m_dirView, SLOT(showUrl(const KUrl& )) );
-    connect( urlNavigator, SIGNAL(activated(K3b::Device::Device*)), m_dirView, SLOT(showDevice(K3b::Device::Device* )) );
-    connect( m_dirView, SIGNAL(urlEntered(const KUrl&)), urlNavigator, SLOT(setUrl(const KUrl&)) );
-    connect( m_dirView, SIGNAL(deviceSelected(K3b::Device::Device*)), urlNavigator, SLOT(setDevice(K3b::Device::Device*)) );
+    m_urlNavigator = new K3b::UrlNavigator( filePlacesModel, this );
+    connect( m_urlNavigator, SIGNAL(activated(const KUrl&)), m_dirView, SLOT(showUrl(const KUrl& )) );
+    connect( m_urlNavigator, SIGNAL(activated(K3b::Device::Device*)), m_dirView, SLOT(showDevice(K3b::Device::Device* )) );
+    connect( m_dirView, SIGNAL(urlEntered(const KUrl&)), m_urlNavigator, SLOT(setUrl(const KUrl&)) );
+    connect( m_dirView, SIGNAL(deviceSelected(K3b::Device::Device*)), m_urlNavigator, SLOT(setDevice(K3b::Device::Device*)) );
     QWidgetAction * urlNavigatorAction = new QWidgetAction(this);
-    urlNavigatorAction->setDefaultWidget(urlNavigator);
+    urlNavigatorAction->setDefaultWidget(m_urlNavigator);
     urlNavigatorAction->setText(i18n("&Quick Dir Selector"));
     actionCollection()->addAction( "quick_dir_selector", urlNavigatorAction );
     // ---------------------------------------------------------------------------------------------
@@ -576,6 +576,7 @@ void K3b::MainWindow::saveOptions()
 
     KConfigGroup grpOption( config(), "General Options" );
     grpOption.writeEntry( "Show Document Header", actionViewDocumentHeader->isChecked() );
+    grpOption.writeEntry( "Navigator breadcrumb mode", !m_urlNavigator->isUrlEditable() );
 
     config()->sync();
 }
@@ -587,6 +588,7 @@ void K3b::MainWindow::readOptions()
 
     bool bViewDocumentHeader = grp.readEntry("Show Document Header", true);
     actionViewDocumentHeader->setChecked(bViewDocumentHeader);
+    m_urlNavigator->setUrlEditable( !grp.readEntry( "Navigator breadcrumb mode", true ) );
 
     // initialize the recent file list
     KConfigGroup recentGrp(config(), "Recent Files");

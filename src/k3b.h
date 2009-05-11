@@ -51,6 +51,7 @@ namespace K3b {
     class ProjectTabWidget;
     class StatusBarManager;
     class ThemedHeader;
+    class UrlNavigator;
 
     namespace Device {
         class DeviceManager;
@@ -295,6 +296,8 @@ namespace K3b {
 
         // the funny header
         ThemedHeader* m_documentHeader;
+
+        K3b::UrlNavigator* m_urlNavigator;
 
         class Private;
         Private* d;
