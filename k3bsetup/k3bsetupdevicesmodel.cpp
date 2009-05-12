@@ -118,11 +118,35 @@ bool DevicesModel::changesNeeded() const
     return !selectedDevices().isEmpty();
 }
 
+        
+Device::Device* DevicesModel::deviceForIndex( const QModelIndex& index ) const
+{
+    if( index.isValid() )
+        return static_cast<Device::Device*>( index.internalPointer() );
+    else
+        return 0;
+}
+
+
+QModelIndex DevicesModel::indexForDevice( Device::Device* device ) const
+{
+    if( device != 0 )
+    {
+        int row = d->deviceManager->allDevices().indexOf( device );
+        return createIndex( row, 0, device );
+    }
+    else
+        return QModelIndex();
+}
+
 
 QVariant DevicesModel::data( const QModelIndex& index, int role ) const
 {
-    if( index.isValid() && role == Qt::DisplayRole &&  index.column() >= 0 && index.column() <= 3 ) {
-        Device::Device* device = static_cast<Device::Device*>( index.internalPointer() );
+    Device::Device* device = deviceForIndex( index );
+    if( device == 0 )
+        return QVariant();
+    
+    if( role == Qt::DisplayRole &&  index.column() >= 0 && index.column() <= 3 ) {
         if( index.column() == 0 ) {
             return device->vendor() + " " + device->description();
         }
@@ -160,8 +184,7 @@ QVariant DevicesModel::data( const QModelIndex& index, int role ) const
             }
         }
     }
-    else if( index.isValid() && role == Qt::CheckStateRole && index.column() == 0 ) {
-        Device::Device* device = static_cast<Device::Device*>( index.internalPointer() );
+    else if( role == Qt::CheckStateRole && index.column() == 0 ) {
         return d->unselectedDevices.contains( device ) ? Qt::Unchecked : Qt::Checked;
     }
     else
@@ -171,23 +194,22 @@ QVariant DevicesModel::data( const QModelIndex& index, int role ) const
 
 bool DevicesModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
-    if( index.isValid() && role == Qt::CheckStateRole ) {
-        Device::Device* device = static_cast<Device::Device*>( index.internalPointer() );
-        if( value.toInt() == Qt::Checked && d->unselectedDevices.contains( device ) ) {
-            d->unselectedDevices.remove( device );
-            emit dataChanged( index, index );
-            return true;
+    if( Device::Device* device = deviceForIndex( index ) )
+    {
+        if( role == Qt::CheckStateRole ) {
+            if( value.toInt() == Qt::Checked && d->unselectedDevices.contains( device ) ) {
+                d->unselectedDevices.remove( device );
+                emit dataChanged( index, index );
+                return true;
+            }
+            else if( value.toInt() == Qt::Unchecked && !d->unselectedDevices.contains( device ) ) {
+                d->unselectedDevices.insert( device );
+                emit dataChanged( index, index );
+                return true;
+            }
         }
-        else if( value.toInt() == Qt::Unchecked && !d->unselectedDevices.contains( device ) ) {
-            d->unselectedDevices.insert( device );
-            emit dataChanged( index, index );
-            return true;
-        }
-        else
-            return false;
     }
-    else
-        return false;
+    return false;
 }
 
 

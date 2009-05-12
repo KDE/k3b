@@ -25,6 +25,9 @@
 class KConfig;
 
 namespace K3b {
+    
+    class ExternalBin;
+    
 namespace Setup {
 
     class ProgramsModel : public QAbstractItemModel
@@ -42,6 +45,9 @@ namespace Setup {
         QList<ProgramItem> selectedPrograms() const;
         bool changesNeeded() const;
         QStringList searchPaths() const;
+        
+        const ExternalBin* programForIndex( const QModelIndex& index ) const;
+        QModelIndex indexForProgram( const ExternalBin* program ) const;
 
         QVariant data( const QModelIndex& index, int role ) const;
         bool setData( const QModelIndex& index, const QVariant& value, int role );

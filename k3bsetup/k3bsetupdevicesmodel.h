@@ -23,6 +23,11 @@
 class KConfig;
 
 namespace K3b {
+    
+namespace Device {
+    class Device;
+}
+    
 namespace Setup {
 
     class DevicesModel : public QAbstractItemModel
@@ -39,6 +44,9 @@ namespace Setup {
 
         QStringList selectedDevices() const;
         bool changesNeeded() const;
+        
+        Device::Device* deviceForIndex( const QModelIndex& index ) const;
+        QModelIndex indexForDevice( Device::Device* device ) const;
 
         QVariant data( const QModelIndex& index, int role ) const;
         bool setData( const QModelIndex& index, const QVariant& value, int role );

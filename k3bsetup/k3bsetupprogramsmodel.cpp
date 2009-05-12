@@ -80,10 +80,10 @@ public:
     QSet<const ExternalBin*> unselectedPrograms;
 
     void buildProgramList();
-    bool getProgramInfo( const K3b::ExternalBin* program,
+    bool getProgramInfo( const ExternalBin* program,
                          QString& owner, QString& group, QString& wantedGroup,
                          int& perm, int& wantedPerm ) const;
-    bool needChangePermissions( const K3b::ExternalBin* program ) const;
+    bool needChangePermissions( const ExternalBin* program ) const;
 };
 
 
@@ -98,7 +98,7 @@ void ProgramsModel::Private::buildProgramList()
 }
 
 
-bool ProgramsModel::Private::getProgramInfo( const K3b::ExternalBin* program,
+bool ProgramsModel::Private::getProgramInfo( const ExternalBin* program,
                                                   QString& owner, QString& group, QString& wantedGroup,
                                                   int& perm, int& wantedPerm ) const
 {
@@ -138,7 +138,7 @@ bool ProgramsModel::Private::getProgramInfo( const K3b::ExternalBin* program,
 }
 
 
-bool ProgramsModel::Private::needChangePermissions( const K3b::ExternalBin* program ) const
+bool ProgramsModel::Private::needChangePermissions( const ExternalBin* program ) const
 {
     QString owner, group, wantedGroup;
     int perm, wantedPerm;
@@ -157,9 +157,9 @@ ProgramsModel::ProgramsModel( QObject* parent )
 {
     d->externalBinManager = new ExternalBinManager( this );
     // these are the only programs that need special permissions
-    d->externalBinManager->addProgram( new K3b::CdrdaoProgram() );
-    d->externalBinManager->addProgram( new K3b::CdrecordProgram() );
-    d->externalBinManager->addProgram( new K3b::GrowisofsProgram() );
+    d->externalBinManager->addProgram( new CdrdaoProgram() );
+    d->externalBinManager->addProgram( new CdrecordProgram() );
+    d->externalBinManager->addProgram( new GrowisofsProgram() );
     d->buildProgramList();
 }
 
@@ -218,67 +218,82 @@ QStringList ProgramsModel::searchPaths() const
 }
 
 
-QVariant ProgramsModel::data( const QModelIndex& index, int role ) const
+const ExternalBin* ProgramsModel::programForIndex( const QModelIndex& index ) const
 {
-    if( index.isValid() && role == Qt::DisplayRole &&  index.column() >= 0 && index.column() <= 4 ) {
-        const ExternalBin* program = static_cast<const ExternalBin*>( index.internalPointer() );
-        if( index.column() == 0 ) {
-            return program->name();
-        }
-        else if( index.column() == 1 ) {
-            return program->version.toString();
-        }
-        else if( index.column() == 2 ) {
-            return program->path;
-        }
-        else {
-            QString owner, group, wantedGroup;
-            int perm, wantedPerm;
+    if( index.isValid() )
+        return static_cast<const ExternalBin*>( index.internalPointer() );
+    else
+        return 0;
+}
 
-            if( d->getProgramInfo( program, owner, group, wantedGroup, perm, wantedPerm ) ) {
 
-                if( index.column() == 3 ) {
-                    return QString::number( perm, 8 ).rightJustified( 4, '0' ) + " " + owner + "." + group;
-                }
-                else {
-                    if( perm != wantedPerm || owner != "root" || group != wantedGroup )
-                        return QString("%1 root.%2").arg(wantedPerm,0,8).arg(wantedGroup);
-                    else
-                        return i18n("no change");
-                }
-            }
-            else
-                return QVariant();
-        }
-    }
-    else if( index.isValid() && role == Qt::CheckStateRole && index.column() == 0 ) {
-        const ExternalBin* program = static_cast<const ExternalBin*>( index.internalPointer() );
-        return d->unselectedPrograms.contains( program ) ? Qt::Unchecked : Qt::Checked;
+QModelIndex ProgramsModel::indexForProgram( const ExternalBin* program ) const
+{
+    if( program != 0 ) {
+        int row = d->programs.indexOf( program );
+        return createIndex( row, 0, const_cast<ExternalBin*>( program ) );
     }
     else
-        return QVariant();
+        return QModelIndex();
+}
+
+
+QVariant ProgramsModel::data( const QModelIndex& index, int role ) const
+{
+    if( const ExternalBin* program = programForIndex( index ) ) {
+        if( role == Qt::DisplayRole ) {
+            if( index.column() == 0 ) {
+                return program->name();
+            }
+            else if( index.column() == 1 ) {
+                return program->version.toString();
+            }
+            else if( index.column() == 2 ) {
+                return program->path;
+            }
+            else {
+                QString owner, group, wantedGroup;
+                int perm, wantedPerm;
+
+                if( d->getProgramInfo( program, owner, group, wantedGroup, perm, wantedPerm ) ) {
+
+                    if( index.column() == 3 ) {
+                        return QString::number( perm, 8 ).rightJustified( 4, '0' ) + " " + owner + "." + group;
+                    }
+                    else if ( index.column() == 4 ) {
+                        if( perm != wantedPerm || owner != "root" || group != wantedGroup )
+                            return QString("%1 root.%2").arg(wantedPerm,0,8).arg(wantedGroup);
+                        else
+                            return i18n("no change");
+                    }
+                }
+            }
+        }
+        else if( role == Qt::CheckStateRole && index.column() == 0 ) {
+            return d->unselectedPrograms.contains( program ) ? Qt::Unchecked : Qt::Checked;
+        }
+    }
+    return QVariant();
 }
 
 
 bool ProgramsModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
-    if( index.isValid() && role == Qt::CheckStateRole ) {
-        const ExternalBin* program = static_cast<const ExternalBin*>( index.internalPointer() );
-        if( value.toInt() == Qt::Checked && d->unselectedPrograms.contains( program ) ) {
-            d->unselectedPrograms.remove( program );
-            emit dataChanged( index, index );
-            return true;
+    if( role == Qt::CheckStateRole ) {
+        if( const ExternalBin* program = programForIndex( index ) ) {
+            if( value.toInt() == Qt::Checked && d->unselectedPrograms.contains( program ) ) {
+                d->unselectedPrograms.remove( program );
+                emit dataChanged( index, index );
+                return true;
+            }
+            else if( value.toInt() == Qt::Unchecked && !d->unselectedPrograms.contains( program ) ) {
+                d->unselectedPrograms.insert( program );
+                emit dataChanged( index, index );
+                return true;
+            }
         }
-        else if( value.toInt() == Qt::Unchecked && !d->unselectedPrograms.contains( program ) ) {
-            d->unselectedPrograms.insert( program );
-            emit dataChanged( index, index );
-            return true;
-        }
-        else
-            return false;
     }
-    else
-        return false;
+    return false;
 }
 
 
