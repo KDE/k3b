@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=K3bSetup - modify permission for CD/DVD burning with K3b
+Comment[de]=K3b-Einrichtungsassistent - Zugriffsrechte zum Brennen mit K3b anpassen
 Comment[et]=K3b seadistamine - võimalus muuta õigusi CD/DVD kirjutamiseks K3b-ga
 Comment[nb]=K3bSetup  – endre tillatelser for CD-/DVD-brenning med K3b
 Comment[nl]=K3bSetup - stelt de toegangsrechten in voor cd/dvd-branden met K3b
@@ -11,6 +12,7 @@ Comment[tr]=K3bSetup - K3b ile CD/DVD yazdırma izinlerini ayarlayın
 Comment[uk]=K3bSetup — змініть права для запису КД/DVD у K3b
 Exec=k3bsetup
 Keywords=K3bSetup,k3bsetup
+Keywords[de]=K3b, Einrichtungsassistent, Rechte, Setup
 Keywords[et]=K3bSetup,k3bsetup,k3b seadistamine
 Keywords[pt_BR]=Configurações Avançadas do K3b,configurações avançadas do K3b
 Keywords[sv]=Ställ in K3b,k3bsetup

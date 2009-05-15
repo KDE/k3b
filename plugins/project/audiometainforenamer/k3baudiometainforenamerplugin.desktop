@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=K3b Audio Metainfo Renamer
 Name[da]=K3b omdøber til lyd-metainfo
+Name[de]=K3b-Audio-Metadaten-Umbenennungs-Modul
 Name[es]=Renombrador de meta información de audio de K3b
 Name[et]=K3b helifailide metainfo põhjal ümbernimetaja
 Name[fr]=Renommeur de méta-données audio K3b
@@ -16,6 +17,7 @@ Name[uk]=Інструмент перейменування за метадани
 Name[x-test]=xxK3b Audio Metainfo Renamerxx
 Comment=Plugin to rename audio files in a data project based on the meta info.
 Comment[da]=Plugin til at omdøbe lydfiler i et dataprojekt baseret på metainfo.
+Comment[de]=Modul zum Umbenennen von Audio-Dateien in einem Daten-Projekt, basierend auf den Metadaten.
 Comment[es]=Complemento basado en la meta información para renombrar archivos de audio en un proyecto de datos .
 Comment[et]=Plugin andmeprojekti helifailide ümbernimetamiseks metainfo põhjal.
 Comment[fr]=Module pour renommer des fichiers audio dans un projet de données fondé sur les informations de méta-données.
