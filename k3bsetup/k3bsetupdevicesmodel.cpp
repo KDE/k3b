@@ -130,7 +130,7 @@ Device::Device* DevicesModel::deviceForIndex( const QModelIndex& index ) const
 
 QModelIndex DevicesModel::indexForDevice( Device::Device* device ) const
 {
-    if( device != 0 )
+    if( device != 0 && !d->deviceManager->allDevices().isEmpty() )
     {
         int row = d->deviceManager->allDevices().indexOf( device );
         return createIndex( row, 0, device );

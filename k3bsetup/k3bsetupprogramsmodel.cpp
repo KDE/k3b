@@ -229,7 +229,7 @@ const ExternalBin* ProgramsModel::programForIndex( const QModelIndex& index ) co
 
 QModelIndex ProgramsModel::indexForProgram( const ExternalBin* program ) const
 {
-    if( program != 0 ) {
+    if( program != 0 && !d->programs.isEmpty() ) {
         int row = d->programs.indexOf( program );
         return createIndex( row, 0, const_cast<ExternalBin*>( program ) );
     }
@@ -350,7 +350,7 @@ QModelIndex ProgramsModel::parent( const QModelIndex& index ) const
 int ProgramsModel::rowCount( const QModelIndex& parent ) const
 {
     if( !parent.isValid() )
-        return d->externalBinManager->programs().size();
+        return d->programs.size();
     else
         return 0;
 }
