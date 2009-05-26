@@ -1,10 +1,9 @@
-/* 
+/*
  *
- *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,19 +21,20 @@
 class K3bExternalEncoderCommand
 {
 public:
-  K3bExternalEncoderCommand()
-    : swapByteOrder(false),
-      writeWaveHeader(false) {
-  }
+    K3bExternalEncoderCommand()
+        : swapByteOrder(false),
+          writeWaveHeader(false) {
+    }
 
-  QString name;
-  QString extension;
-  QString command;
+    QString name;
+    QString extension;
+    QString command;
 
-  bool swapByteOrder;
-  bool writeWaveHeader;
+    bool swapByteOrder;
+    bool writeWaveHeader;
 
-  static QList<K3bExternalEncoderCommand> readCommands();
+    static QList<K3bExternalEncoderCommand> readCommands();
+    static void saveCommands( const QList<K3bExternalEncoderCommand>& );
 };
 
 #endif

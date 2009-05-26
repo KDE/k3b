@@ -1,10 +1,8 @@
-/* 
- *
- *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+/*
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,28 +19,17 @@
 #include "k3bexternalencodercommand.h"
 
 #include "k3bpluginconfigwidget.h"
-#include <kdialog.h>
 
-class base_K3bExternalEncoderConfigWidget : public QWidget, public Ui::base_K3bExternalEncoderConfigWidget
-{
-public:
-    base_K3bExternalEncoderConfigWidget( QWidget *parent ) : QWidget( parent ) {
-        setupUi( this );
-    }
-};
+#include <KDialog>
+#include <QtCore/QList>
 
-class base_K3bExternalEncoderEditWidget : public QWidget, public Ui::base_K3bExternalEncoderEditWidget
-{
-public:
-    base_K3bExternalEncoderEditWidget( QWidget *parent ) : QWidget( parent ) {
-        setupUi( this );
-    }
-};
 
-class K3bExternalEncoderEditDialog : public KDialog
+class QTreeWidgetItem;
+
+class K3bExternalEncoderEditDialog : public KDialog, public Ui::base_K3bExternalEncoderEditWidget
 {
     Q_OBJECT
-  
+
 public:
     K3bExternalEncoderEditDialog( QWidget* parent );
     ~K3bExternalEncoderEditDialog();
@@ -51,14 +38,11 @@ public:
     void setCommand( const K3bExternalEncoderCommand& cmd );
 
 private Q_SLOTS:
-    void slotOk();
-
-private:
-    base_K3bExternalEncoderEditWidget* m_editW;
+    void slotButtonClicked( int button );
 };
 
 
-class K3bExternalEncoderSettingsWidget : public K3b::PluginConfigWidget
+class K3bExternalEncoderSettingsWidget : public K3b::PluginConfigWidget, public Ui::base_K3bExternalEncoderConfigWidget
 {
     Q_OBJECT
 
@@ -71,17 +55,17 @@ public Q_SLOTS:
     void save();
 
 private Q_SLOTS:
-    void slotSelectionChanged();
+    void slotSelectionChanged( QTreeWidgetItem* current );
     void slotNewCommand();
     void slotEditCommand();
     void slotRemoveCommand();
 
 private:
-    base_K3bExternalEncoderConfigWidget* w;
-    K3bExternalEncoderEditDialog* m_editDlg;
+    QTreeWidgetItem* createItem( const K3bExternalEncoderCommand& cmd );
+    void fillItem( QTreeWidgetItem* item, const K3bExternalEncoderCommand& cmd );
 
-    class Private;
-    Private* d;
+    K3bExternalEncoderEditDialog* m_editDlg;
+    QMap<QTreeWidgetItem*, K3bExternalEncoderCommand> m_commands;
 };
 
 #endif
