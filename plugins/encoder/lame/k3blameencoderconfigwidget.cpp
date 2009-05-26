@@ -27,8 +27,6 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 
-#include "k3bcore.h"
-
 #include <kconfig.h>
 #include <kdebug.h>
 #include <KAboutData>
@@ -130,7 +128,6 @@ void K3bLameEncoderSettingsWidget::load()
 {
     kDebug();
 
-    Q_ASSERT( k3bcore );
     KSharedConfig::Ptr c = KGlobal::config();
     KConfigGroup grp(c, "K3bLameEncoderPlugin" );
 
@@ -180,7 +177,6 @@ void K3bLameEncoderSettingsWidget::save()
 {
     kDebug();
 
-    Q_ASSERT( k3bcore );
     KSharedConfig::Ptr c = KGlobal::config();
     KConfigGroup grp(c, "K3bLameEncoderPlugin" );
 
