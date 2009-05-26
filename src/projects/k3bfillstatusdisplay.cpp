@@ -656,7 +656,7 @@ void K3b::FillStatusDisplay::slotLoadUserDefaults()
         slotMediumChanged( 0 );
     }
     else {
-        d->displayWidget->setCdSize( size*60*75 );
+        d->displayWidget->setCdSize( size );
     }
 }
 
