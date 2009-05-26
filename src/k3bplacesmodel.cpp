@@ -20,6 +20,7 @@
 #include "k3bcore.h"
 
 #include <KDirModel>
+#include <KDirSortFilterProxyModel>
 #include <KDirLister>
 #include <KIcon>
 
@@ -28,7 +29,7 @@ class K3b::PlacesModel::Private
 {
 public:
     K3b::DeviceModel* deviceModel;
-    QList<KDirModel*> dirModels;
+    QMap<KDirModel*, KDirSortFilterProxyModel*> dirModels;
 };
 
 
@@ -58,9 +59,10 @@ K3b::PlacesModel::~PlacesModel()
 
 KFileItem K3b::PlacesModel::itemForIndex( const QModelIndex& index ) const
 {
-    KDirModel* model = qobject_cast<KDirModel*>( subModelForIndex( index ) );
+    KDirSortFilterProxyModel* proxy = static_cast<KDirSortFilterProxyModel*>( subModelForIndex( index ) );
+    KDirModel* model = qobject_cast<KDirModel*>( proxy->sourceModel() );
     if ( model ) {
-        return model->itemForIndex( mapToSubModel( index ) );
+        return model->itemForIndex( proxy->mapToSource( mapToSubModel( index ) ) );
     }
     return KFileItem();
 }
@@ -84,13 +86,26 @@ QModelIndex K3b::PlacesModel::indexForDevice( K3b::Device::Device* dev ) const
 void K3b::PlacesModel::expandToUrl( const KUrl& url )
 {
     kDebug() << url;
-    // search for a place that contains this URL
-    foreach( KDirModel* model, d->dirModels ) {
-        if ( model->dirLister()->url().isParentOf( url ) ) {
-            kDebug() << model->dirLister()->url() << "will be expanded.";
-            model->expandToUrl( url );
-            break;
+
+    // search for the best suited place that contains this URL
+    int maxDepth = 0;
+    KDirModel* modelToExpand = 0;
+
+    for( QMap<KDirModel*, KDirSortFilterProxyModel*>::iterator it = d->dirModels.begin();
+         it != d->dirModels.end(); ++it ) {
+        KDirModel* model = it.key();
+        KUrl url = model->dirLister()->url();
+        if ( url.isParentOf( url ) ) {
+            if ( url.path().length() > maxDepth ) {
+                maxDepth = url.path().length();
+                modelToExpand = model;
+            }
         }
+    }
+
+    if ( modelToExpand ) {
+        kDebug() << modelToExpand->dirLister()->url() << "will be expanded.";
+        modelToExpand->expandToUrl( url );
     }
 }
 
@@ -101,15 +116,19 @@ void K3b::PlacesModel::addPlace( const QString& name, const KIcon& icon, const K
     connect( model, SIGNAL( expand( const QModelIndex& ) ), this, SLOT( slotExpand( const QModelIndex& ) ) );
     model->dirLister()->setDirOnlyMode( true );
     model->dirLister()->openUrl( rootUrl, KDirLister::Keep );
-    d->dirModels.append( model );
-    addSubModel( name, icon, model );
+
+    KDirSortFilterProxyModel* proxy = new KDirSortFilterProxyModel( model );
+    proxy->setSourceModel( model );
+    d->dirModels.insert( model, proxy );
+    addSubModel( name, icon, proxy );
 }
 
 
 void K3b::PlacesModel::slotExpand( const QModelIndex& index )
 {
-    kDebug();
-    emit expand( mapFromSubModel( index ) );
+    kDebug() << index;
+    KDirModel* model = ( KDirModel* )index.model();
+    emit expand( mapFromSubModel( d->dirModels[model]->mapFromSource( index ) ) );
 }
 
 
