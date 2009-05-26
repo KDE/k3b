@@ -64,6 +64,7 @@ K3b::Iso9660ImageWritingJob::Iso9660ImageWritingJob( K3b::JobHandler* hdl )
 
 K3b::Iso9660ImageWritingJob::~Iso9660ImageWritingJob()
 {
+    delete m_writer;
     delete m_tocFile;
     delete d;
 }
