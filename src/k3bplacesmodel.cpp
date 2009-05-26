@@ -59,9 +59,10 @@ K3b::PlacesModel::~PlacesModel()
 
 KFileItem K3b::PlacesModel::itemForIndex( const QModelIndex& index ) const
 {
-    KDirSortFilterProxyModel* proxy = static_cast<KDirSortFilterProxyModel*>( subModelForIndex( index ) );
-    KDirModel* model = qobject_cast<KDirModel*>( proxy->sourceModel() );
-    if ( model ) {
+    // KDirSortFilterProxyModel does not have the Q_OBJECT macro. Thus, we need to use dynamic_cast
+    KDirSortFilterProxyModel* proxy = dynamic_cast<KDirSortFilterProxyModel*>( subModelForIndex( index ) );
+    if ( proxy ) {
+        KDirModel* model = qobject_cast<KDirModel*>( proxy->sourceModel() );
         return model->itemForIndex( proxy->mapToSource( mapToSubModel( index ) ) );
     }
     return KFileItem();
