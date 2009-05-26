@@ -17,6 +17,7 @@
 #include "k3bmediacache.h"
 #include "k3bmediumdelegate.h"
 
+#include "k3bglobalsettings.h"
 #include "k3bdevice.h"
 #include "k3bdevicemanager.h"
 #include "k3bdeviceglobals.h"
@@ -372,9 +373,15 @@ bool K3b::MediaSelectionComboBox::showMedium( const K3b::Medium& m ) const
     //
     // DVD+RW and DVD-RW restr. ovwr. are never reported as appendable
     //
-    return( m.diskInfo().mediaType() & d->wantedMediumType &&
+    return( m.diskInfo().mediaType() & d->wantedMediumType
+
+            &&
+
             ( m.content() & d->wantedMediumContent ||
-              d->wantedMediumState & Device::STATE_EMPTY ) && // we need this to handle Medium::ContentNone
+              d->wantedMediumState & Device::STATE_EMPTY ) // we need this to handle Medium::ContentNone
+
+            &&
+
             ( m.diskInfo().diskState() & d->wantedMediumState
               ||
               ( d->wantedMediumState & K3b::Device::STATE_EMPTY &&
@@ -382,9 +389,15 @@ bool K3b::MediaSelectionComboBox::showMedium( const K3b::Medium& m ) const
               ||
               ( d->wantedMediumState & K3b::Device::STATE_INCOMPLETE &&
                 !m.diskInfo().empty() &&
-                m.diskInfo().mediaType() & (K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_RW_OVWR) ) ) &&
-            ( d->wantedMediumSize == 0 ||
-              d->wantedMediumSize <= m.diskInfo().capacity() )
+                m.diskInfo().mediaType() & (K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_RW_OVWR) ) )
+
+            &&
+
+            ( d->wantedMediumSize == 0 ||                                    // no specific size requested
+              d->wantedMediumSize <= m.diskInfo().capacity() ||              // size fits
+              ( !( d->wantedMediumState & K3b::Device::STATE_COMPLETE ) &&   // size does not fit but an empty/appendable medium in overburn mode is requested
+                k3bcore->globalSettings()->overburn() &&
+                d->wantedMediumSize <= ( m.diskInfo().capacity().lba() * 110 / 100 ) ) ) // 10% tolerance in overburn mode
         );
 }
 
