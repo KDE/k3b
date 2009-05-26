@@ -20,7 +20,7 @@
 #include "k3bcore.h"
 
 #include <KDirModel>
-#include <KDirSortFilterProxyModel>
+#include <kdirsortfilterproxymodel.h> // use .h to build with KDE 4.2
 #include <KDirLister>
 #include <KIcon>
 
