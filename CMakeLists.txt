@@ -6,7 +6,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/mod
 
 ##################  K3b version  ################################
 set(K3B_VERSION_MAJOR 1)
-set(K3B_VERSION_MINOR 65)
+set(K3B_VERSION_MINOR 66)
 set(K3B_VERSION_RELEASE 0)
 set(K3B_VERSION_STRING "${K3B_VERSION_MAJOR}.${K3B_VERSION_MINOR}.${K3B_VERSION_RELEASE}")
 
@@ -49,7 +49,7 @@ include(MacroLogFeature)
 
 if(K3B_BUILD_K3BSETUP)
   set(POLKITQT_MIN_VERSION 0.9.2)
-  macro_optional_find_package(PolkitQt)
+#  macro_optional_find_package(PolkitQt)
   macro_log_feature(POLKITQT_FOUND "Polkit-Qt"
     "Needed for K3bSetup to acquire administrator privileges. Version >= 0.9.2 is required."
 	"http://api.kde.org/kdesupport-api/kdesupport-apidocs/polkit-qt/html"

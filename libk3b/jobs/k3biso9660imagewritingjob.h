@@ -18,14 +18,7 @@
 #include "k3bjob.h"
 #include "k3b_export.h"
 
-class QString;
-class KTemporaryFile;
-
 namespace K3b {
-
-    class MetaWriter;
-    class VerificationJob;
-
     namespace Device {
         class Device;
     }
@@ -38,7 +31,7 @@ namespace K3b {
         Iso9660ImageWritingJob( JobHandler* );
         ~Iso9660ImageWritingJob();
 
-        Device::Device* writer() const { return m_device; };
+        Device::Device* writer() const { return m_device; }
 
         QString jobDescription() const;
         QString jobDetails() const;
@@ -75,20 +68,8 @@ namespace K3b {
         int m_speed;
         int m_dataMode;
         bool m_verifyData;
-        bool m_dvd;
-
         QString m_imagePath;
-
-        MetaWriter* m_writer;
-        KTemporaryFile* m_tocFile;
-
-        bool m_canceled;
-        bool m_finished;
-
         int m_copies;
-        int m_currentCopy;
-
-        VerificationJob* m_verifyJob;
 
         class Private;
         Private* d;

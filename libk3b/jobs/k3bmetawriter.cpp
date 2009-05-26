@@ -126,6 +126,7 @@ K3b::MetaWriter::MetaWriter( Device::Device* dev, JobHandler* hdl, QObject* pare
 
 K3b::MetaWriter::~MetaWriter()
 {
+    delete d->writingJob;
     delete d;
 }
 
@@ -735,8 +736,6 @@ void K3b::MetaWriter::slotWritingJobFinished( bool success )
 {
     d->cleanupTempFiles();
     jobFinished( success );
-    delete d->writingJob;
-    d->writingJob = 0;
 }
 
 

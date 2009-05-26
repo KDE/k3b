@@ -43,6 +43,14 @@ class K3b::Iso9660ImageWritingJob::Private
 public:
     K3b::ChecksumPipe checksumPipe;
     K3b::FileSplitter imageFile;
+
+    bool isDvdImage;
+    int currentCopy;
+    bool canceled;
+    bool finished;
+
+    VerificationJob* verifyJob;
+    MetaWriter* writer;
 };
 
 
@@ -54,26 +62,25 @@ K3b::Iso9660ImageWritingJob::Iso9660ImageWritingJob( K3b::JobHandler* hdl )
       m_noFix(false),
       m_speed(2),
       m_dataMode(K3b::DataModeAuto),
-      m_writer(0),
-      m_tocFile(0),
-      m_copies(1),
-      m_verifyJob(0)
+      m_copies(1)
 {
     d = new Private;
+    d->verifyJob = 0;
+    d->writer = 0;
 }
+
 
 K3b::Iso9660ImageWritingJob::~Iso9660ImageWritingJob()
 {
-    delete m_writer;
-    delete m_tocFile;
+    delete d->writer;
     delete d;
 }
 
 
 void K3b::Iso9660ImageWritingJob::start()
 {
-    m_canceled = m_finished = false;
-    m_currentCopy = 1;
+    d->canceled = d->finished = false;
+    d->currentCopy = 1;
 
     jobStarted();
 
@@ -83,7 +90,7 @@ void K3b::Iso9660ImageWritingJob::start()
     emit newTask( i18n("Preparing data") );
 
     if( !QFile::exists( m_imagePath ) ) {
-        emit infoMessage( i18n("Could not find image %1",m_imagePath), K3b::Job::MessageError );
+        emit infoMessage( i18n("Could not find image %1", m_imagePath), K3b::Job::MessageError );
         jobFinished( false );
         return;
     }
@@ -91,7 +98,7 @@ void K3b::Iso9660ImageWritingJob::start()
     KIO::filesize_t mb = K3b::imageFilesize( m_imagePath )/1024ULL/1024ULL;
 
     // very rough test but since most dvd images are 4,x or 8,x GB it should be enough
-    m_dvd = ( mb > 900ULL );
+    d->isDvdImage = ( mb > 900ULL );
 
     startWriting();
 }
@@ -99,8 +106,8 @@ void K3b::Iso9660ImageWritingJob::start()
 
 void K3b::Iso9660ImageWritingJob::slotWriterJobFinished( bool success )
 {
-    if( m_canceled ) {
-        m_finished = true;
+    if( d->canceled ) {
+        d->finished = true;
         emit canceled();
         jobFinished(false);
         return;
@@ -115,35 +122,35 @@ void K3b::Iso9660ImageWritingJob::slotWriterJobFinished( bool success )
             // allright
             // the writerJob should have emitted the "simulation/writing successful" signal
 
-            if( !m_verifyJob ) {
-                m_verifyJob = new K3b::VerificationJob( this );
-                connectSubJob( m_verifyJob,
+            if( !d->verifyJob ) {
+                d->verifyJob = new K3b::VerificationJob( this );
+                connectSubJob( d->verifyJob,
                                SLOT(slotVerificationFinished(bool)),
                                K3b::Job::DEFAULT_SIGNAL_CONNECTION,
                                K3b::Job::DEFAULT_SIGNAL_CONNECTION,
                                SLOT(slotVerificationProgress(int)),
                                SIGNAL(subPercent(int)) );
             }
-            m_verifyJob->setDevice( m_device );
-            m_verifyJob->clear();
-            m_verifyJob->addTrack( 1, d->checksumPipe.checksum(), K3b::imageFilesize( m_imagePath )/2048 );
+            d->verifyJob->setDevice( m_device );
+            d->verifyJob->clear();
+            d->verifyJob->addTrack( 1, d->checksumPipe.checksum(), K3b::imageFilesize( m_imagePath )/2048 );
 
             if( m_copies == 1 )
                 emit newTask( i18n("Verifying written data") );
             else
-                emit newTask( i18n("Verifying written copy %1 of %2",m_currentCopy,m_copies) );
+                emit newTask( i18n("Verifying written copy %1 of %2", d->currentCopy, m_copies) );
 
-            m_verifyJob->start();
+            d->verifyJob->start();
         }
-        else if( m_currentCopy >= m_copies ) {
+        else if( d->currentCopy >= m_copies ) {
             if ( k3bcore->globalSettings()->ejectMedia() ) {
                 K3b::Device::eject( m_device );
             }
-            m_finished = true;
+            d->finished = true;
             jobFinished(true);
         }
         else {
-            m_currentCopy++;
+            d->currentCopy++;
             m_device->eject();
             startWriting();
         }
@@ -152,7 +159,7 @@ void K3b::Iso9660ImageWritingJob::slotWriterJobFinished( bool success )
         if ( k3bcore->globalSettings()->ejectMedia() ) {
             K3b::Device::eject( m_device );
         }
-        m_finished = true;
+        d->finished = true;
         jobFinished(false);
     }
 }
@@ -160,15 +167,15 @@ void K3b::Iso9660ImageWritingJob::slotWriterJobFinished( bool success )
 
 void K3b::Iso9660ImageWritingJob::slotVerificationFinished( bool success )
 {
-    if( m_canceled ) {
-        m_finished = true;
+    if( d->canceled ) {
+        d->finished = true;
         emit canceled();
         jobFinished(false);
         return;
     }
 
-    if( success && m_currentCopy < m_copies ) {
-        m_currentCopy++;
+    if( success && d->currentCopy < m_copies ) {
+        d->currentCopy++;
         connect( K3b::Device::eject( m_device ), SIGNAL(finished(bool)),
                  this, SLOT(startWriting()) );
         return;
@@ -177,14 +184,14 @@ void K3b::Iso9660ImageWritingJob::slotVerificationFinished( bool success )
     if( k3bcore->globalSettings()->ejectMedia() )
         K3b::Device::eject( m_device );
 
-    m_finished = true;
+    d->finished = true;
     jobFinished( success );
 }
 
 
 void K3b::Iso9660ImageWritingJob::slotVerificationProgress( int p )
 {
-    emit percent( (int)(100.0 / (double)m_copies * ( (double)(m_currentCopy-1) + 0.5 + (double)p/200.0 )) );
+    emit percent( (int)(100.0 / (double)m_copies * ( (double)(d->currentCopy-1) + 0.5 + (double)p/200.0 )) );
 }
 
 
@@ -193,9 +200,9 @@ void K3b::Iso9660ImageWritingJob::slotWriterPercent( int p )
     emit subPercent( p );
 
     if( m_verifyData )
-        emit percent( (int)(100.0 / (double)m_copies * ( (double)(m_currentCopy-1) + ((double)p/200.0) )) );
+        emit percent( (int)(100.0 / (double)m_copies * ( (double)(d->currentCopy-1) + ((double)p/200.0) )) );
     else
-        emit percent( (int)(100.0 / (double)m_copies * ( (double)(m_currentCopy-1) + ((double)p/100.0) )) );
+        emit percent( (int)(100.0 / (double)m_copies * ( (double)(d->currentCopy-1) + ((double)p/100.0) )) );
 }
 
 
@@ -204,19 +211,19 @@ void K3b::Iso9660ImageWritingJob::slotNextTrack( int, int )
     if( m_copies == 1 )
         emit newSubTask( i18n("Writing image") );
     else
-        emit newSubTask( i18n("Writing copy %1 of %2",m_currentCopy,m_copies) );
+        emit newSubTask( i18n("Writing copy %1 of %2", d->currentCopy, m_copies) );
 }
 
 
 void K3b::Iso9660ImageWritingJob::cancel()
 {
-    if( !m_finished ) {
-        m_canceled = true;
+    if( !d->finished ) {
+        d->canceled = true;
 
-        if( m_writer )
-            m_writer->cancel();
-        if( m_verifyData && m_verifyJob )
-            m_verifyJob->cancel();
+        if( d->writer )
+            d->writer->cancel();
+        if( m_verifyData && d->verifyJob )
+            d->verifyJob->cancel();
     }
 }
 
@@ -241,7 +248,7 @@ void K3b::Iso9660ImageWritingJob::startWriting()
         m_writingMode == K3b::WritingModeSao ) {
         if( writingApp() == K3b::WritingAppCdrdao )
             mt = K3b::Device::MEDIA_WRITABLE_CD;
-        else if( m_dvd )
+        else if( d->isDvdImage )
             mt = K3b::Device::MEDIA_WRITABLE_DVD;
         else
             mt = K3b::Device::MEDIA_WRITABLE;
@@ -260,7 +267,7 @@ void K3b::Iso9660ImageWritingJob::startWriting()
     // wait for the media
     Device::MediaType media = waitForMedia( m_device, K3b::Device::STATE_EMPTY, mt );
     if( media == Device::MEDIA_UNKNOWN ) {
-        m_finished = true;
+        d->finished = true;
         emit canceled();
         jobFinished(false);
         return;
@@ -275,15 +282,15 @@ void K3b::Iso9660ImageWritingJob::startWriting()
 
     if( prepareWriter( Device::MediaTypes( media ) ) ) {
         emit burning(true);
-        m_writer->start();
+        d->writer->start();
 #ifdef __GNUC__
 #warning Growisofs needs stdin to be closed in order to exit gracefully. Cdrecord does not. However,  if closed with cdrecord we loose parts of stderr. Why? This does not happen in the data job!
 #endif
-        d->checksumPipe.writeTo( m_writer->ioDevice(), m_writer->usedWritingApp() == K3b::WritingAppGrowisofs );
+        d->checksumPipe.writeTo( d->writer->ioDevice(), d->writer->usedWritingApp() == K3b::WritingAppGrowisofs );
         d->checksumPipe.open( K3b::ChecksumPipe::MD5, true );
     }
     else {
-        m_finished = true;
+        d->finished = true;
         jobFinished(false);
     }
 }
@@ -291,15 +298,15 @@ void K3b::Iso9660ImageWritingJob::startWriting()
 
 bool K3b::Iso9660ImageWritingJob::prepareWriter( Device::MediaTypes mediaType )
 {
-    delete m_writer;
+    delete d->writer;
 
-    m_writer = new MetaWriter( m_device, this );
+    d->writer = new MetaWriter( m_device, this );
 
-    m_writer->setWritingMode( m_writingMode );
-    m_writer->setWritingApp( writingApp() );
-    m_writer->setSimulate( m_simulate );
-    m_writer->setBurnSpeed( m_speed );
-    m_writer->setMultiSession( m_noFix );
+    d->writer->setWritingMode( m_writingMode );
+    d->writer->setWritingApp( writingApp() );
+    d->writer->setSimulate( m_simulate );
+    d->writer->setBurnSpeed( m_speed );
+    d->writer->setMultiSession( m_noFix );
 
     Device::Toc toc;
     toc << Device::Track( 0, Msf(K3b::imageFilesize( m_imagePath )/2048)-1,
@@ -308,19 +315,19 @@ bool K3b::Iso9660ImageWritingJob::prepareWriter( Device::MediaTypes mediaType )
                           m_dataMode == K3b::DataMode2
                           ? Device::Track::XA_FORM2
                           : Device::Track::MODE1 );
-    m_writer->setSessionToWrite( toc );
+    d->writer->setSessionToWrite( toc );
 
-    connect( m_writer, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-    connect( m_writer, SIGNAL(nextTrack(int, int)), this, SLOT(slotNextTrack(int, int)) );
-    connect( m_writer, SIGNAL(percent(int)), this, SLOT(slotWriterPercent(int)) );
-    connect( m_writer, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
-    connect( m_writer, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
-    connect( m_writer, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
-    connect( m_writer, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)), this, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)) );
-    connect( m_writer, SIGNAL(finished(bool)), this, SLOT(slotWriterJobFinished(bool)) );
-    connect( m_writer, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
-    connect( m_writer, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-    connect( m_writer, SIGNAL(debuggingOutput(const QString&, const QString&)),
+    connect( d->writer, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+    connect( d->writer, SIGNAL(nextTrack(int, int)), this, SLOT(slotNextTrack(int, int)) );
+    connect( d->writer, SIGNAL(percent(int)), this, SLOT(slotWriterPercent(int)) );
+    connect( d->writer, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
+    connect( d->writer, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
+    connect( d->writer, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
+    connect( d->writer, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)), this, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)) );
+    connect( d->writer, SIGNAL(finished(bool)), this, SLOT(slotWriterJobFinished(bool)) );
+    connect( d->writer, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
+    connect( d->writer, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
+    connect( d->writer, SIGNAL(debuggingOutput(const QString&, const QString&)),
              this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
     return true;
