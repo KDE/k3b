@@ -27,6 +27,8 @@ namespace K3b {
      */
     class LIBK3B_EXPORT ChecksumPipe : public ActivePipe
     {
+        Q_OBJECT
+
     public:
         ChecksumPipe();
         ~ChecksumPipe();
