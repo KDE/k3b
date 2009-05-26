@@ -542,3 +542,15 @@ bool K3b::eject( K3b::Device::Device* dev )
         return dev->eject();
     }
 }
+
+
+QDebug& K3b::operator<<( QDebug& dbg, K3b::WritingMode mode )
+{
+    return dbg << K3b::Device::WritingMode( mode );
+}
+
+
+QDebug& K3b::operator<<( QDebug& dbg, K3b::WritingModes modes )
+{
+    return dbg << K3b::Device::WritingModes( ( int )modes );
+}

@@ -253,6 +253,9 @@ namespace K3b {
      * unmounts before ejecting and introduces HAL support.
      */
     LIBK3B_EXPORT bool eject( Device::Device* );
+
+    QDebug& operator<<( QDebug& dbg, WritingMode );
+    QDebug& operator<<( QDebug& dbg, WritingModes );
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(K3b::WritingApps)
