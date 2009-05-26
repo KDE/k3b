@@ -83,6 +83,8 @@ public:
     K3b::ActivePipe* pipe;
 
     K3b::DataMultiSessionParameterJob* multiSessionParameterJob;
+
+    QByteArray checksumCache;
 };
 
 
@@ -99,9 +101,7 @@ K3b::DataJob::DataJob( K3b::DataDoc* doc, K3b::JobHandler* hdl, QObject* parent 
     d->doc = doc;
     m_writerJob = 0;
     d->tocFile = 0;
-
     m_isoImager = 0;
-    d->imageFinished = true;
 }
 
 
@@ -371,6 +371,10 @@ void K3b::DataJob::slotIsoImagerFinished( bool success )
         }
     }
     else {
+        // cache the calculated checksum since the ChecksumPipe may be deleted below
+        if ( ChecksumPipe* cp = qobject_cast<ChecksumPipe*>( d->pipe ) )
+            d->checksumCache = cp->checksum();
+
         if( !d->doc->onTheFly() ||
             d->doc->onlyCreateImages() ) {
 
@@ -485,7 +489,7 @@ void K3b::DataJob::slotWriterJobFinished( bool success )
             d->verificationJob->clear();
             d->verificationJob->setDevice( d->doc->burner() );
             d->verificationJob->setGrownSessionSize( m_isoImager->size() );
-            d->verificationJob->addTrack( 0, static_cast<ChecksumPipe*>( d->pipe )->checksum(), m_isoImager->size() );
+            d->verificationJob->addTrack( 0, d->checksumCache, m_isoImager->size() );
 
             emit burning(false);
 
