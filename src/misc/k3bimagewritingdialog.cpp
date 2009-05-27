@@ -182,9 +182,10 @@ void K3b::ImageWritingDialog::init()
         QString image = c.readPathEntry( "last written image", QString() );
         if( QFile::exists( image ) )
             m_editImagePath->setUrl( image );
+
+        m_comboRecentImages->clear();
     }
 
-    m_comboRecentImages->clear();
     m_comboRecentImages->addItems( c.readPathEntry( "recent images", QStringList() ) );
 }
 
