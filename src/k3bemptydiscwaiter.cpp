@@ -142,6 +142,8 @@ K3b::Device::MediaType K3b::EmptyDiscWaiter::waitForDisc( Device::MediaStates me
         return Device::MEDIA_UNKNOWN;
     }
 
+    kDebug() << "Waiting for medium" << mediaState << mediaType << message;
+
     d->wantedMediaState = mediaState;
     d->wantedMediaType = mediaType;
     d->dialogVisible = false;
@@ -252,18 +254,18 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
             if( formatWithoutAsking ||
                 !hasIso ||
                 KMessageBox::warningContinueCancel( parentWidgetToUse(),
-                                                    i18n("Found %1 medium in %2 - %3. "
-                                                         "Should it be overwritten?"
-                                                         ,QString("BD-RE")
-                                                         ,d->device->vendor()
-                                                         ,d->device->description()),
-                                                    i18n("Found %1",QString("BD-RE")),KGuiItem(i18n("Overwrite")) ) == KMessageBox::Continue ) {
+                                                    i18n("Found %1 medium in %2 - %3. Should it be overwritten?",
+                                                         QLatin1String("BD-RE"),
+                                                         d->device->vendor(),
+                                                         d->device->description()),
+                                                    i18n("Found %1", QLatin1String("BD-RE")),
+                                                    KGuiItem(i18n("&Overwrite"), "erasecd"),
+                                                    KGuiItem(i18n("&Eject"), "media-eject") ) == KMessageBox::Continue ) {
                 finishWaiting( K3b::Device::MEDIA_BD_RE );
             }
             else {
                 kDebug() << "(K3b::EmptyDiscWaiter) starting devicehandler: no BD-RE overwrite";
-                K3b::unmount( d->device );
-                d->device->eject();
+                K3b::eject( d->device );
                 continueWaiting();
             }
         }
@@ -339,13 +341,14 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                                                              QString("DVD+RW"),
                                                              d->device->vendor(),
                                                              d->device->description()),
-                                                        i18n("Found %1",QString("DVD+RW")),KGuiItem(i18n("Overwrite")) ) == KMessageBox::Continue ) {
+                                                        i18n("Found %1",QString("DVD+RW")),
+                                                        KGuiItem(i18n("&Overwrite")),
+                                                        KGuiItem(i18n("&Eject"), "media-eject") ) == KMessageBox::Continue ) {
                     finishWaiting( K3b::Device::MEDIA_DVD_PLUS_RW );
                 }
                 else {
                     kDebug() << "(K3b::EmptyDiscWaiter) starting devicehandler: no DVD+RW overwrite";
-                    K3b::unmount( d->device );
-                    d->device->eject();
+                    K3b::eject( d->device );
                     continueWaiting();
                 }
             }
@@ -409,13 +412,14 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                                                              K3b::Device::mediaTypeString(medium.diskInfo().mediaType()),
                                                              d->device->vendor(),
                                                              d->device->description()),
-                                                        i18n("Found %1",QString("DVD-RW")),KGuiItem(i18n("Overwrite")) ) == KMessageBox::Continue ) {
+                                                        i18n("Found %1",QString("DVD-RW")),
+                                                        KGuiItem(i18n("&Overwrite")),
+                                                        KGuiItem(i18n("&Eject"), "media-eject")) == KMessageBox::Continue ) {
                     finishWaiting( K3b::Device::MEDIA_DVD_RW_OVWR );
                 }
                 else {
                     kDebug() << "(K3b::EmptyDiscWaiter) starting devicehandler: no DVD-RW overwrite.";
-                    K3b::unmount( d->device );
-                    d->device->eject();
+                    K3b::eject( d->device );
                     continueWaiting();
                 }
             }
@@ -466,7 +470,9 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                                                          K3b::Device::mediaTypeString(medium.diskInfo().mediaType()),
                                                          d->device->vendor(),
                                                          d->device->description()),
-                                                    i18n("Found %1",QString("DVD-RW")), KGuiItem(i18n("Format")) ) == KMessageBox::Continue ) {
+                                                    i18n("Found %1",QString("DVD-RW")),
+                                                    KGuiItem(i18n("&Format"), "erasecd"),
+                                                    KGuiItem(i18n("&Eject"), "media-eject")) == KMessageBox::Continue ) {
 
                 kDebug() << "(K3b::EmptyDiscWaiter) ------ formatting DVD-RW.";
 
@@ -496,8 +502,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
             }
             else {
                 kDebug() << "(K3b::EmptyDiscWaiter) starting devicehandler: no DVD-RW formatting.";
-                K3b::unmount( d->device );
-                d->device->eject();
+                K3b::eject( d->device );
                 continueWaiting();
             }
         }
@@ -540,8 +545,8 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                                         i18n("Found rewritable medium in %1 - %2. "
                                              "Should it be erased?",d->device->vendor(),d->device->description()),
                                         i18n("Found Rewritable Disk"),
-                                        KGuiItem(i18n("&Erase"), "erasecd"),
-                                        KGuiItem(i18n("E&ject"), "media-eject") ) == KMessageBox::Yes ) {
+                                        KGuiItem(i18n("E&rase"), "erasecd"),
+                                        KGuiItem(i18n("&Eject"), "media-eject") ) == KMessageBox::Yes ) {
 
 
             prepareErasingDialog();
@@ -569,8 +574,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
         }
         else {
             kDebug() << "(K3b::EmptyDiscWaiter) starting devicehandler: no CD-RW overwrite.";
-            K3b::unmount( d->device );
-            d->device->eject();
+            K3b::eject( d->device );
             continueWaiting();
         }
     }

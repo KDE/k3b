@@ -995,7 +995,7 @@ void K3b::CdCopyJob::slotSessionReaderFinished( bool success )
                         // eject the media (we do this blocking to know if it worked
                         // becasue if it did not it might happen that k3b overwrites a CD-RW
                         // source)
-                        if( !m_readerDevice->eject() ) {
+                        if( !K3b::eject( m_readerDevice ) ) {
                             blockingInformation( i18n("K3b was unable to eject the source disk. Please do so manually.") );
                         }
                     }
@@ -1059,7 +1059,7 @@ void K3b::CdCopyJob::slotWriterFinished( bool success )
 
             if( !m_simulate && d->doneCopies < m_copies ) {
                 // start next copy
-                if( !m_writerDevice->eject() ) {
+                if( !K3b::eject( m_writerDevice ) ) {
                     blockingInformation( i18n("K3b was unable to eject the written disk. Please do so manually.") );
                 }
 
@@ -1099,7 +1099,7 @@ void K3b::CdCopyJob::slotMediaReloadedForNextSession( K3b::Device::DeviceHandler
 {
     if( !dh->success() )
         blockingInformation( i18n("Please reload the medium and press 'ok'"),
-                             i18n("Unable to close the tray") );
+                             i18n("Failed to reload the medium") );
 
     if( !writeNextSession() ) {
         // nothing is running here...

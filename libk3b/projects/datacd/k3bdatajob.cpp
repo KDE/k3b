@@ -243,8 +243,11 @@ void K3b::DataJob::startPipe()
     else
         d->pipe = new K3b::ChecksumPipe();
 
+#ifdef __GNUC__
+#warning Growisofs needs stdin to be closed in order to exit gracefully. Cdrecord does not. However,  if closed with cdrecord we loose parts of stderr. Why?
+#endif
     if( d->imageFinished || ( d->doc->onTheFly() && !d->doc->onlyCreateImages() ) )
-        d->pipe->writeTo( m_writerJob->ioDevice(), true );
+        d->pipe->writeTo( m_writerJob->ioDevice(), d->usedWritingApp != K3b::WritingAppCdrecord );
     else
         d->pipe->writeTo( &d->imageFile, true );
 
@@ -501,7 +504,7 @@ void K3b::DataJob::slotWriterJobFinished( bool success )
             d->copiesDone++;
 
             if( d->copiesDone < d->copies ) {
-                if( !d->doc->burner()->eject() ) {
+                if( !K3b::eject( d->doc->burner() ) ) {
                     blockingInformation( i18n("K3b was unable to eject the written disk. Please do so manually.") );
                 }
 
@@ -515,7 +518,10 @@ void K3b::DataJob::slotWriterJobFinished( bool success )
                     cancel();
                 }
                 else if( !d->doc->onTheFly() ) {
-                    d->pipe->writeTo( m_writerJob->ioDevice(), true );
+#ifdef __GNUC__
+#warning Growisofs needs stdin to be closed in order to exit gracefully. Cdrecord does not. However,  if closed with cdrecord we loose parts of stderr. Why?
+#endif
+                    d->pipe->writeTo( m_writerJob->ioDevice(), d->usedWritingApp != K3b::WritingAppCdrecord );
                     d->pipe->open(true);
                 }
             }
@@ -572,7 +578,10 @@ void K3b::DataJob::slotVerificationFinished( bool success )
         if( failed )
             cancel();
         else if( !d->doc->onTheFly() ) {
-            d->pipe->writeTo( m_writerJob->ioDevice(), true );
+#ifdef __GNUC__
+#warning Growisofs needs stdin to be closed in order to exit gracefully. Cdrecord does not. However,  if closed with cdrecord we loose parts of stderr. Why?
+#endif
+            d->pipe->writeTo( m_writerJob->ioDevice(), d->usedWritingApp != K3b::WritingAppCdrecord );
             d->pipe->open(true);
         }
     }

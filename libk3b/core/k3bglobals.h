@@ -251,6 +251,13 @@ namespace K3b {
      * Ejects the medium in the device or simply opens the tray.
      * This method improves over Device::Device::eject in that it
      * unmounts before ejecting and introduces HAL support.
+     *
+     * It also makes sure the MediaCache is up to date. This is very
+     * important in case one uses the EmptyDiscWaiter directly after
+     * ejecting. If the MediaCache would not be updated, it might still
+     * contain the old media information.
+     *
+     * \sa MediaCache::reset
      */
     LIBK3B_EXPORT bool eject( Device::Device* );
 

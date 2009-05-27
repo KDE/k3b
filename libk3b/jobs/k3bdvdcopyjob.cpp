@@ -439,9 +439,9 @@ void K3b::DvdCopyJob::prepareReader()
     if( m_onTheFly && !m_onlyCreateImage )
         // there are several uses of pipe->writeTo( d->writerJob->ioDevice(), ... ) in this file!
 #ifdef __GNUC__
-#warning Growisofs needs stdin to be closed in order to exit gracefully. Cdrecord does not. However,  if closed with cdrecord we loose parts of stderr. Why? This does not happen in the data job!
+#warning Growisofs needs stdin to be closed in order to exit gracefully. Cdrecord does not. However,  if closed with cdrecord we loose parts of stderr. Why?
 #endif
-        d->inPipe.writeTo( d->writerJob->ioDevice(), true/*d->usedWritingApp == K3b::WritingAppGrowisofs*/ );
+        d->inPipe.writeTo( d->writerJob->ioDevice(), d->usedWritingApp == K3b::WritingAppGrowisofs );
     else
         d->inPipe.writeTo( &d->imageFile, true );
 
@@ -576,7 +576,8 @@ void K3b::DvdCopyJob::slotReaderFinished( bool success )
                 // eject the media (we do this blocking to know if it worked
                 // because if it did not it might happen that k3b overwrites a CD-RW
                 // source)
-                if( !m_readerDevice->eject() ) {
+                kDebug() << "Ejecting read medium" << m_readerDevice->blockDeviceName();
+                if( !K3b::eject( m_readerDevice ) ) {
                     blockingInformation( i18n("K3b was unable to eject the source medium. Please do so manually.") );
                 }
             }
@@ -596,7 +597,10 @@ void K3b::DvdCopyJob::slotReaderFinished( bool success )
 
                     d->writerRunning = true;
                     d->writerJob->start();
-                    d->outPipe.writeTo( d->writerJob->ioDevice(), true/*d->usedWritingApp == K3b::WritingAppGrowisofs*/ );
+#ifdef __GNUC__
+#warning Growisofs needs stdin to be closed in order to exit gracefully. Cdrecord does not. However,  if closed with cdrecord we loose parts of stderr. Why?
+#endif
+                    d->outPipe.writeTo( d->writerJob->ioDevice(), d->usedWritingApp == K3b::WritingAppGrowisofs );
                     d->outPipe.open( true );
                 }
                 else {
@@ -669,7 +673,7 @@ void K3b::DvdCopyJob::slotWriterFinished( bool success )
 
         else if( ++d->doneCopies < m_copies ) {
 
-            if( !m_writerDevice->eject() ) {
+            if( !K3b::eject( m_writerDevice ) ) {
                 blockingInformation( i18n("K3b was unable to eject the written medium. Please do so manually.") );
             }
 
@@ -696,6 +700,9 @@ void K3b::DvdCopyJob::slotWriterFinished( bool success )
                 d->dataTrackReader->start();
             }
             else {
+#ifdef __GNUC__
+#warning Growisofs needs stdin to be closed in order to exit gracefully. Cdrecord does not. However,  if closed with cdrecord we loose parts of stderr. Why?
+#endif
                 d->outPipe.writeTo( d->writerJob->ioDevice(), true/*d->usedWritingApp == K3b::WritingAppGrowisofs*/ );
                 d->outPipe.open( true );
             }
@@ -753,7 +760,10 @@ void K3b::DvdCopyJob::slotVerificationFinished( bool success )
             d->dataTrackReader->start();
         }
         else {
-            d->outPipe.writeTo( d->writerJob->ioDevice(), true/*d->usedWritingApp == K3b::WritingAppGrowisofs*/ );
+#ifdef __GNUC__
+#warning Growisofs needs stdin to be closed in order to exit gracefully. Cdrecord does not. However,  if closed with cdrecord we loose parts of stderr. Why?
+#endif
+            d->outPipe.writeTo( d->writerJob->ioDevice(), d->usedWritingApp == K3b::WritingAppGrowisofs );
             d->outPipe.open( true );
         }
     }
@@ -936,9 +946,9 @@ QString K3b::DvdCopyJob::jobDescription() const
     }
     else {
         if( m_onTheFly )
-            return i18n("Copying DVD/BD On-The-Fly");
+            return i18n("Copying DVD or BD On-The-Fly");
         else
-            return i18n("Copying DVD/BD");
+            return i18n("Copying DVD or BD");
     }
 }
 

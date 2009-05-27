@@ -498,6 +498,9 @@ void K3b::MixedJob::slotWriterFinished( bool success )
 
     emit burning(false);
 
+#ifdef __GNUC__
+#warning slotDiskInfoReady does not exist! reloading will result in an idle job!
+#endif
     if( m_doc->mixedType() == K3b::MixedDoc::DATA_SECOND_SESSION && m_currentAction == WRITING_AUDIO_IMAGE ) {
         // many drives need to reload the medium to return to a proper state
         if ( ( int )m_doc->burner()->readToc().count() < m_doc->numOfTracks()-1 ) {
@@ -514,7 +517,7 @@ void K3b::MixedJob::slotWriterFinished( bool success )
     else {
         d->copiesDone++;
         if( d->copiesDone < d->copies ) {
-            if( !m_doc->burner()->eject() ) {
+            if( !K3b::eject( m_doc->burner() ) ) {
                 blockingInformation( i18n("K3b was unable to eject the written disk. Please do so manually.") );
             }
             writeNextCopy();

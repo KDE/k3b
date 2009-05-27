@@ -22,6 +22,7 @@
 #include "k3bdeviceglobals.h"
 #include "k3bexternalbinmanager.h"
 #include "k3bcore.h"
+#include "k3bmediacache.h"
 
 #include <kdeversion.h>
 #include <kglobal.h>
@@ -535,11 +536,15 @@ bool K3b::eject( K3b::Device::Device* dev )
     if( K3b::isMounted( dev ) )
         K3b::unmount( dev );
 
-    if ( dev->solidDevice().as<Solid::OpticalDrive>()->eject() ) {
+    if ( dev->solidDevice().as<Solid::OpticalDrive>()->eject() ||
+         dev->eject() ) {
+        // to be on the safe side, especially with respect to the EmptyDiscWaiter
+        // we reset the device in the cache.
+        k3bcore->mediaCache()->resetDevice( dev );
         return true;
     }
     else {
-        return dev->eject();
+        return false;
     }
 }
 

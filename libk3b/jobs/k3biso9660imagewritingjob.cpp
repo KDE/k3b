@@ -151,7 +151,9 @@ void K3b::Iso9660ImageWritingJob::slotWriterJobFinished( bool success )
         }
         else {
             d->currentCopy++;
-            m_device->eject();
+            if( !K3b::eject( m_device ) ) {
+                blockingInformation( i18n("K3b was unable to eject the written medium. Please do so manually.") );
+            }
             startWriting();
         }
     }
@@ -284,7 +286,7 @@ void K3b::Iso9660ImageWritingJob::startWriting()
         emit burning(true);
         d->writer->start();
 #ifdef __GNUC__
-#warning Growisofs needs stdin to be closed in order to exit gracefully. Cdrecord does not. However,  if closed with cdrecord we loose parts of stderr. Why? This does not happen in the data job!
+#warning Growisofs needs stdin to be closed in order to exit gracefully. Cdrecord does not. However,  if closed with cdrecord we loose parts of stderr. Why?
 #endif
         d->checksumPipe.writeTo( d->writer->ioDevice(), d->writer->usedWritingApp() == K3b::WritingAppGrowisofs );
         d->checksumPipe.open( K3b::ChecksumPipe::MD5, true );

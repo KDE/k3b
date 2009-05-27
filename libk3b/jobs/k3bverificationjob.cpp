@@ -203,6 +203,11 @@ void K3b::VerificationJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
         return;
     }
 
+    if ( !dh->success() ) {
+        blockingInformation( i18n("Please reload the medium and press 'ok'"),
+                             i18n("Failed to reload the medium") );
+    }
+
     d->diskInfo = dh->diskInfo();
     d->toc = dh->toc();
     d->totalSectors = 0;

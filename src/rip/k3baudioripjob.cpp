@@ -285,7 +285,7 @@ bool K3b::AudioRipJob::run()
     }
     else {
         if( k3bcore->globalSettings()->ejectMedia() )
-            m_device->eject();
+            K3b::eject( m_device );
 
         return success;
     }

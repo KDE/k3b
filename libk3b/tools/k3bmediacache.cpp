@@ -372,5 +372,17 @@ void K3b::MediaCache::lookupCddb( K3b::Device::Device* dev )
     }
 }
 
+
+void K3b::MediaCache::resetDevice( K3b::Device::Device* dev )
+{
+    if( DeviceEntry* e = findDeviceEntry( dev ) ) {
+        e->mutex.lock();
+        kDebug() << "Resetting medium in" << dev->blockDeviceName();
+        e->medium.reset();
+        e->mutex.unlock();
+        emit mediumChanged( dev );
+    }
+}
+
 #include "k3bmediacache.moc"
 #include "k3bmediacache_p.moc"

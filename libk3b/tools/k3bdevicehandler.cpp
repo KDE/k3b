@@ -18,6 +18,8 @@
 #include "k3bthread.h"
 #include "k3bdevice.h"
 #include "k3bcdtext.h"
+#include "k3bcore.h"
+#include "k3bmediacache.h"
 
 
 class K3b::Device::DeviceHandler::Private
@@ -236,8 +238,13 @@ bool K3b::Device::DeviceHandler::run()
         // since the CommandReload command is a combination of both
         //
 
-        if( !canceled() && d->command & CommandEject )
+        if( !canceled() && d->command & CommandEject ) {
             d->success = (d->success && d->dev->eject());
+
+            // to be on the safe side, especially with respect to the EmptyDiscWaiter
+            // we reset the device in the cache.
+            k3bcore->mediaCache()->resetDevice( d->dev );
+        }
 
         if( !canceled() && d->command & CommandLoad )
             d->success = (d->success && d->dev->load());

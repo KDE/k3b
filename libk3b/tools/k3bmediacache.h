@@ -155,6 +155,13 @@ namespace K3b {
          */
         void lookupCddb( K3b::Device::Device* );
 
+        /**
+         * Reset a device, i.e. force an update of the device.
+         *
+         * This is useful to ensure that after an eject the cache is still valid.
+         */
+        void resetDevice( K3b::Device::Device* );
+
     private:
         class PollThread;
         class DeviceEntry;

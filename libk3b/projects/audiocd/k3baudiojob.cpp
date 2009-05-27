@@ -421,7 +421,7 @@ void K3b::AudioJob::slotWriterFinished( bool success )
             jobFinished(true);
         }
         else {
-            if( !m_doc->burner()->eject() ) {
+            if( !K3b::eject( m_doc->burner() ) ) {
                 blockingInformation( i18n("K3b was unable to eject the written disk. Please do so manually.") );
             }
 

@@ -106,7 +106,9 @@ K3b::CdrecordWriter::CdrecordWriter( K3b::Device::Device* dev, K3b::JobHandler* 
     d->process.setSuppressEmptyLines(true);
     d->process.setFlags( K3bQProcess::RawStdin );
     connect( &d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
-    connect( &d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotProcessExited(int, QProcess::ExitStatus)) );
+
+    // we use a queued connection to give the process object time to wrap up and return to a correct state
+    connect( &d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotProcessExited(int, QProcess::ExitStatus)), Qt::QueuedConnection );
 }
 
 
