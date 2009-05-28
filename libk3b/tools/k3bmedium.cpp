@@ -155,10 +155,13 @@ void K3b::Medium::update()
         d->diskInfo = d->device->diskInfo();
 
         if( d->diskInfo.diskState() != K3b::Device::STATE_NO_MEDIA ) {
-            kDebug() << "(K3b::Medium) found medium: (" << d->device->blockDeviceName() << ')' << endl
+            kDebug() << "found medium: (" << d->device->blockDeviceName() << ')' << endl
                      << "=====================================================";
             d->diskInfo.debug();
             kDebug() << "=====================================================";
+        }
+        else {
+            kDebug() << "no medium found";
         }
 
         if( diskInfo().diskState() == K3b::Device::STATE_COMPLETE ||

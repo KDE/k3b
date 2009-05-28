@@ -75,13 +75,19 @@ void K3b::MediaCache::PollThread::run()
                 emit checkingMedium( m_deviceEntry->medium.device(), QString() );
 
             //
+            // we block for writing before the update
+            // This is important to make sure we do not overwrite a reset operation
+            //
+            m_deviceEntry->writeMutex.lock();
+
+            //
             // The medium has changed. We need to update the information.
             //
             K3b::Medium m( m_deviceEntry->medium.device() );
             m.update();
 
             // block the info since it is not valid anymore
-            m_deviceEntry->mutex.lock();
+            m_deviceEntry->readMutex.lock();
 
             m_deviceEntry->medium = m;
 
@@ -92,7 +98,8 @@ void K3b::MediaCache::PollThread::run()
                 emit mediumChanged( m_deviceEntry->medium.device() );
 
             // the information is valid. let the info go.
-            m_deviceEntry->mutex.unlock();
+            m_deviceEntry->readMutex.unlock();
+            m_deviceEntry->writeMutex.unlock();
         }
 
         if( m_deviceEntry->blockedId == 0 )
@@ -173,19 +180,20 @@ K3b::MediaCache::~MediaCache()
 
 int K3b::MediaCache::blockDevice( K3b::Device::Device* dev )
 {
+    kDebug() << dev->blockDeviceName();
     DeviceEntry* e = findDeviceEntry( dev );
     if( e ) {
         if( e->blockedId )
             return -1;
         else {
             // block the information
-            e->mutex.lock();
+            e->readMutex.lock();
 
             // create (hopefully) unique id
             e->blockedId = KRandom::random();
 
             // let the info go
-            e->mutex.unlock();
+            e->readMutex.unlock();
 
             // wait for the thread to stop
             e->thread->wait();
@@ -200,12 +208,12 @@ int K3b::MediaCache::blockDevice( K3b::Device::Device* dev )
 
 bool K3b::MediaCache::unblockDevice( K3b::Device::Device* dev, int id )
 {
+    kDebug() << dev->blockDeviceName();
     DeviceEntry* e = findDeviceEntry( dev );
     if( e && e->blockedId && e->blockedId == id ) {
         e->blockedId = 0;
 
         e->medium = K3b::Medium( dev );
-        emit mediumChanged( dev );
 
         // restart the poll thread
         e->thread->start();
@@ -229,9 +237,9 @@ bool K3b::MediaCache::isBlocked( K3b::Device::Device* dev )
 K3b::Medium K3b::MediaCache::medium( K3b::Device::Device* dev )
 {
     if( DeviceEntry* e = findDeviceEntry( dev ) ) {
-        e->mutex.lock();
+        e->readMutex.lock();
         K3b::Medium m = e->medium;
-        e->mutex.unlock();
+        e->readMutex.unlock();
         return m;
     }
     else
@@ -242,9 +250,9 @@ K3b::Medium K3b::MediaCache::medium( K3b::Device::Device* dev )
 K3b::Device::DiskInfo K3b::MediaCache::diskInfo( K3b::Device::Device* dev )
 {
     if( DeviceEntry* e = findDeviceEntry( dev ) ) {
-        e->mutex.lock();
+        e->readMutex.lock();
         K3b::Device::DiskInfo di = e->medium.diskInfo();
-        e->mutex.unlock();
+        e->readMutex.unlock();
         return di;
     }
     else
@@ -255,9 +263,9 @@ K3b::Device::DiskInfo K3b::MediaCache::diskInfo( K3b::Device::Device* dev )
 K3b::Device::Toc K3b::MediaCache::toc( K3b::Device::Device* dev )
 {
     if( DeviceEntry* e = findDeviceEntry( dev ) ) {
-        e->mutex.lock();
+        e->readMutex.lock();
         K3b::Device::Toc toc = e->medium.toc();
-        e->mutex.unlock();
+        e->readMutex.unlock();
         return toc;
     }
     else
@@ -268,9 +276,9 @@ K3b::Device::Toc K3b::MediaCache::toc( K3b::Device::Device* dev )
 K3b::Device::CdText K3b::MediaCache::cdText( K3b::Device::Device* dev )
 {
     if( DeviceEntry* e = findDeviceEntry( dev ) ) {
-        e->mutex.lock();
+        e->readMutex.lock();
         K3b::Device::CdText cdt = e->medium.cdText();
-        e->mutex.unlock();
+        e->readMutex.unlock();
         return cdt;
     }
     else
@@ -281,9 +289,9 @@ K3b::Device::CdText K3b::MediaCache::cdText( K3b::Device::Device* dev )
 QList<int> K3b::MediaCache::writingSpeeds( K3b::Device::Device* dev )
 {
     if( DeviceEntry* e = findDeviceEntry( dev ) ) {
-        e->mutex.lock();
+        e->readMutex.lock();
         QList<int> ws = e->medium.writingSpeeds();
-        e->mutex.unlock();
+        e->readMutex.unlock();
         return ws;
     }
     else
@@ -376,10 +384,12 @@ void K3b::MediaCache::lookupCddb( K3b::Device::Device* dev )
 void K3b::MediaCache::resetDevice( K3b::Device::Device* dev )
 {
     if( DeviceEntry* e = findDeviceEntry( dev ) ) {
-        e->mutex.lock();
+        e->readMutex.lock();
+        e->writeMutex.lock();
         kDebug() << "Resetting medium in" << dev->blockDeviceName();
         e->medium.reset();
-        e->mutex.unlock();
+        e->writeMutex.unlock();
+        e->readMutex.unlock();
         emit mediumChanged( dev );
     }
 }

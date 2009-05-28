@@ -28,7 +28,8 @@ public:
 
     int blockedId;
 
-    QMutex mutex;
+    QMutex readMutex;
+    QMutex writeMutex;
 
     MediaCache::PollThread* thread;
 
