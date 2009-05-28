@@ -91,15 +91,15 @@ void K3b::MediaCache::PollThread::run()
 
             m_deviceEntry->medium = m;
 
+            // the information is valid. let the info go.
+            m_deviceEntry->readMutex.unlock();
+            m_deviceEntry->writeMutex.unlock();
+
             //
             // inform the media cache about the media change
             //
             if( m_deviceEntry->blockedId == 0 )
                 emit mediumChanged( m_deviceEntry->medium.device() );
-
-            // the information is valid. let the info go.
-            m_deviceEntry->readMutex.unlock();
-            m_deviceEntry->writeMutex.unlock();
         }
 
         if( m_deviceEntry->blockedId == 0 )
@@ -384,13 +384,13 @@ void K3b::MediaCache::lookupCddb( K3b::Device::Device* dev )
 void K3b::MediaCache::resetDevice( K3b::Device::Device* dev )
 {
     if( DeviceEntry* e = findDeviceEntry( dev ) ) {
-        e->readMutex.lock();
-        e->writeMutex.lock();
         kDebug() << "Resetting medium in" << dev->blockDeviceName();
+        e->writeMutex.lock();
+        e->readMutex.lock();
         e->medium.reset();
-        e->writeMutex.unlock();
         e->readMutex.unlock();
-        emit mediumChanged( dev );
+        e->writeMutex.unlock();
+        // no need to emit mediumChanged here. The poll thread will act on it soon
     }
 }
 
