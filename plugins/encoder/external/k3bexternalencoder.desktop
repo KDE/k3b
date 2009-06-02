@@ -35,7 +35,6 @@ Name[uk]=Зовнішній кодувальник аудіо для K3b
 Name[x-test]=xxK3b External Audio Encoderxx
 Name[zh_CN]=K3b 扩展音频编码器
 Comment=Encoding module that allows specifying an encoding command
-Comment[bg]=Кодиращ модул, позволяващ задаването на команда
 Comment[csb]=Mòdul kòdërëjący, jaczi zezwôlô na wpisanié kòderëjącegò pòletu
 Comment[da]=Indkodningsmodul som muliggør angivelse af en indkodningskommando
 Comment[de]=Kodierungsmodul zur Unterstützung externer Kodierprogramme

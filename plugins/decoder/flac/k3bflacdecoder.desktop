@@ -35,7 +35,6 @@ Name[uk]=K3b декодувальник FLAC
 Name[x-test]=xxK3b FLAC Decoderxx
 Name[zh_CN]=K3b FLAC 解码器
 Comment=Decoding module to decode FLAC files
-Comment[bg]=Декодиращ модул за FLAC файлове
 Comment[cs]=Modul pro dekódování souborů FLAC
 Comment[csb]=Mòdul dekòdërëjący lopczi FLAC
 Comment[da]=Dekodermodul til dekodning af FLAC-filer

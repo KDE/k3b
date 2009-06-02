@@ -33,7 +33,6 @@ Name[uk]=Кодувальник ??? для K3b
 Name[x-test]=xxK3b ??? Encoderxx
 Name[zh_CN]=K3b ??? 编码器
 Comment=Encoding module to encode <name> files
-Comment[bg]=Кодиращ модул за <name> файлове
 Comment[cs]=Modul pro kompresi do souborů <name>
 Comment[csb]=Mòdul kòdërëjący lopczi <name>
 Comment[da]=Indkodningsmodul til <name>-filer

@@ -35,7 +35,6 @@ Name[uk]=Декодер MAD для K3b
 Name[x-test]=xxK3b MAD Decoderxx
 Name[zh_CN]=K3b MAD 解码器
 Comment=Decoding module to decode MPEG 1 Layer III files
-Comment[bg]=Декодиращ модул за MPEG 1 Layer III файлове
 Comment[cs]=Modul pro dekódování souborů MPEG 1 Layer III
 Comment[csb]=Mòdul dekòdërëjący lopczi MPEG Layer III
 Comment[da]=Dekodermodul til dekodning af MPEG 1 Layer III-filer 

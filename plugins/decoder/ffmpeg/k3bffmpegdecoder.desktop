@@ -35,7 +35,6 @@ Name[uk]=K3b декодувальник FFMpeg
 Name[x-test]=xxK3b FFMpeg Decoderxx
 Name[zh_CN]=K3b FFMpeg 解码器
 Comment=Decoding module to decode wma files
-Comment[bg]=Декодиращ модул за wma файлове
 Comment[cs]=Modul pro dekódování souborů wma
 Comment[csb]=Mòdul dekòdërëjący lopczi wma
 Comment[da]=Dekodermodul til dekodning af WMA-filer

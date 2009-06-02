@@ -35,7 +35,6 @@ Name[uk]=Декодер Libsndfile для K3b
 Name[x-test]=xxK3b Libsndfile Decoderxx
 Name[zh_CN]=K3b Libsndfile 解码器
 Comment=Decoding module to decode audio files supported by libsndfile
-Comment[bg]=Декодиращ модул за декодиране на аудио файлове с поддръжка на libsndfile
 Comment[cs]=Modul pro dekódování audio souborů posporovaných libsndfile
 Comment[csb]=Mòdul dekòdërëjący lopczi aùdio wpiséróné przez libsndfile
 Comment[da]=Dekodermodul til dekodning af filer som undersøttes af libsndfile

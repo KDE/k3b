@@ -36,7 +36,6 @@ Name[x-test]=xxK3b Ogg Vorbis Decoderxx
 Name[zh_CN]=K3b Ogg Vorbis 解码器
 X-KDE-ServiceTypes=K3b/Plugin
 Comment=Decoding module to decode Ogg Vorbis files
-Comment[bg]=Декодиращ модул за Ogg Vorbis файлове
 Comment[cs]=Modul pro dekódování souborů Ogg Vorbis
 Comment[csb]=Mòdul dekòdërëjący lopczi Ogg Vorbis
 Comment[da]=Dekodermodul til dekodning af Ogg Vorbis-filer

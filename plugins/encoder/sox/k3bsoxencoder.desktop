@@ -34,7 +34,6 @@ Name[uk]=Кодувальник звуку SoX для K3b
 Name[x-test]=xxK3b SoX Audio Encoderxx
 Name[zh_CN]=K3b SoX 音频编码器
 Comment=Encoding module to encode many file formats using SoX
-Comment[bg]=Кодиращ модул (с SoX) за много файлови формати
 Comment[cs]=Modul pro kompresi do mnoha formátů pomocí SoX
 Comment[csb]=Mòdul kòdërëjący wiele fòrmôtów z pòmòcą SoX
 Comment[da]=Indkodningsmodul til mange filformater med brug af SoX

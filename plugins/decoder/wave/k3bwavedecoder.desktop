@@ -35,7 +35,6 @@ Name[uk]=Декодер Wave для K3b
 Name[x-test]=xxK3b Wave Decoderxx
 Name[zh_CN]=K3b Wave 解码器
 Comment=Decoding module to decode wave files
-Comment[bg]=Декодиращ модул за wave файлове
 Comment[cs]=Modul pro dekódování souborů wave
 Comment[csb]=Mòdul dekòdërëjący lopczi wave
 Comment[da]=Dekodermodul til dekodning af wave-filer

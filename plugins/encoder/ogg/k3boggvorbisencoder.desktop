@@ -34,7 +34,6 @@ Name[uk]=Кодувальник Ogg Vorbis для K3b
 Name[x-test]=xxK3b Ogg Vorbis Encoderxx
 Name[zh_CN]=K3b Ogg Vorbis 编码器
 Comment=Encoding module to encode Ogg Vorbis files
-Comment[bg]=Кодиращ модул за Ogg Vorbis файлове
 Comment[cs]=Modul pro kompresi do souborů Ogg Vorbis
 Comment[csb]=Mòdul kòdërëjący lopczi Ogg Vorbis
 Comment[da]=Indkodnignsmodul til Ogg Vorbis-filer
