@@ -296,10 +296,6 @@ K3b::FileTreeView::FileTreeView( QWidget *parent )
     connect( d->model, SIGNAL( expand( const QModelIndex& ) ),
              this, SLOT( slotExpandUrl( const QModelIndex& ) ) );
 
-    // add the default places
-    d->model->addPlace( i18n( "Home" ), KIcon("user-home"), QDir::homePath() );
-    d->model->addPlace( i18n( "Root" ), KIcon("folder-red"), KUrl( "/" ) );
-
     connect( this, SIGNAL(clicked(const QModelIndex&)), SLOT(slotClicked(const QModelIndex&)) );
     connect( this, SIGNAL(customContextMenuRequested( const QPoint& )), SLOT( slotContextMenu( const QPoint& ) ) );
 }

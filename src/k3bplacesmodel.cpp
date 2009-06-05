@@ -22,14 +22,20 @@
 #include <KDirModel>
 #include <kdirsortfilterproxymodel.h> // use .h to build with KDE 4.2
 #include <KDirLister>
+#include <KFilePlacesModel>
 #include <KIcon>
+#include <Solid/StorageAccess>
+
+
+typedef QMap<KDirModel*, KDirSortFilterProxyModel*> DirModels;
 
 
 class K3b::PlacesModel::Private
 {
 public:
     K3b::DeviceModel* deviceModel;
-    QMap<KDirModel*, KDirSortFilterProxyModel*> dirModels;
+    KFilePlacesModel* filePlacesModel;
+    DirModels dirModels;
 };
 
 
@@ -39,7 +45,20 @@ K3b::PlacesModel::PlacesModel( QObject* parent )
       d( new Private() )
 {
     d->deviceModel = new K3b::DeviceModel( this );
+    d->filePlacesModel = new KFilePlacesModel( this );
     addSubModel( "Devices", KIcon( "media-optical" ), d->deviceModel, true );
+    
+    // TODO: Currently our place list doesn't follow changes KFilePlacesModel.
+    //       This needs to be changed. Adding, removing and editing places would be also nice.
+    for( int i = 0; i < d->filePlacesModel->rowCount(); ++i ) {
+        QModelIndex place = d->filePlacesModel->index( i, 0 );
+        if( !d->filePlacesModel->isDevice( place ) ) {
+            addPlace(
+                d->filePlacesModel->text( place ),
+                d->filePlacesModel->icon( place ),
+                d->filePlacesModel->url( place ) );
+        }
+    }
 
     connect( d->deviceModel, SIGNAL( modelAboutToBeReset() ),
              this, SIGNAL( modelAboutToBeReset() ) );
@@ -87,26 +106,43 @@ QModelIndex K3b::PlacesModel::indexForDevice( K3b::Device::Device* dev ) const
 void K3b::PlacesModel::expandToUrl( const KUrl& url )
 {
     kDebug() << url;
+    
+    // Check if url is not device's
+    Q_FOREACH( Device::Device* device, d->deviceModel->devices() )
+    {
+        if( Solid::StorageAccess* solidStorage = device->solidStorage() ) {
+            KUrl parent( solidStorage->filePath() );
+            if( parent.isParentOf( url ) ) {
+                kDebug() << url << " will be expanded to device " << device->description();
+                emit expand( mapFromSubModel( d->deviceModel->indexForDevice( device ) ) );
+                return;
+            }
+        }
+    }
 
     // search for the best suited place that contains this URL
     int maxDepth = 0;
     KDirModel* modelToExpand = 0;
 
-    for( QMap<KDirModel*, KDirSortFilterProxyModel*>::iterator it = d->dirModels.begin();
-         it != d->dirModels.end(); ++it ) {
+    for( DirModels::iterator it = d->dirModels.begin(); it != d->dirModels.end(); ++it ) {
         KDirModel* model = it.key();
-        KUrl url = model->dirLister()->url();
-        if ( url.isParentOf( url ) ) {
-            if ( url.path().length() > maxDepth ) {
-                maxDepth = url.path().length();
+        KUrl parent = model->dirLister()->url();
+        if ( parent.isParentOf( url ) ) {
+            if ( parent.path().length() > maxDepth ) {
+                maxDepth = parent.path().length();
                 modelToExpand = model;
             }
         }
     }
 
     if ( modelToExpand ) {
-        kDebug() << modelToExpand->dirLister()->url() << "will be expanded.";
-        modelToExpand->expandToUrl( url );
+        kDebug() << modelToExpand->dirLister()->url() << " will be expanded.";
+        if( modelToExpand->dirLister()->url().equals( url, KUrl::CompareWithoutTrailingSlash ) ) {
+            emit expand( indexForSubModel( d->dirModels[ modelToExpand ] ) );
+        }
+        else {
+            modelToExpand->expandToUrl( url );
+        }
     }
 }
 

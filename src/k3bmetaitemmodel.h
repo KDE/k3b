@@ -41,6 +41,7 @@ namespace K3b {
         MetaItemModel( QObject* parent = 0 );
         ~MetaItemModel();
 
+        QModelIndex indexForSubModel( QAbstractItemModel* model ) const;
         QAbstractItemModel* subModelForIndex( const QModelIndex& index ) const;
 
         /**

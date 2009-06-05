@@ -324,6 +324,16 @@ K3b::MetaItemModel::~MetaItemModel()
 }
 
 
+QModelIndex K3b::MetaItemModel::indexForSubModel( QAbstractItemModel* model ) const
+{
+    if( !d->places.empty() ) {
+        if( Place* place = d->placeForModel( model ) )
+            return createIndex( place->row, 0, place );
+    }
+    return QModelIndex();
+}
+
+
 QAbstractItemModel* K3b::MetaItemModel::subModelForIndex( const QModelIndex& index ) const
 {
     if ( index.isValid() ) {
