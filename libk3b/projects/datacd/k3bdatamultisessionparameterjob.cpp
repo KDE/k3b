@@ -200,15 +200,13 @@ K3b::DataDoc::MultiSessionMode K3b::DataMultiSessionParameterJob::determineMulti
         // 2. Special case for the 4GB boundary which seems to be enforced by a linux kernel issue
         //
 
-        kDebug() << "(K3b::DataMultiSessionParameterJob) found empty or complete medium.";
-
         if( d->doc->size() >= info.capacity().mode1Bytes()*9/10 ||
             d->doc->writingMode() == K3b::WritingModeSao ) {
             return K3b::DataDoc::NONE;
         }
-        else if( ( info.capacity() < 2621440 /* ~ 5 GB */ &&
-                   d->doc->size() + 11400 /* used size + project size + session gap */ > 2097152 /* 4 GB */ ) ||
-                 d->doc->writingMode() == K3b::WritingModeSao ) {
+        else if( info.isDvdMedia() &&
+                 info.capacity() < 2621440 /* ~ 5 GB */ &&
+                 d->doc->length() + 11400 /* used size + project size + session gap */ > 2097152 /* 4 GB */ ) {
             return K3b::DataDoc::NONE;
         }
         else {
