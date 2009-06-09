@@ -618,6 +618,8 @@ bool K3b::Iso9660::open()
             else
                 d->backend = new K3b::Iso9660DeviceBackend( d->cdDevice );
         }
+        else
+            return false;
     }
 
     d->isOpen = d->backend->open();
