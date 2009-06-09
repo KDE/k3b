@@ -32,6 +32,7 @@ Name[tr]=K3b ??? Kod Çözücü
 Name[uk]=Декодер ??? для K3b
 Name[x-test]=xxK3b ??? Decoderxx
 Name[zh_CN]=K3b ??? 解码器
+Name[zh_TW]=K3b ??? 解碼器
 Comment=Decoding module to decode ??? files
 Comment[cs]=Modul pro dekódování souborů ???
 Comment[csb]=Mòdul dekòdërëjący lopczi ???
@@ -65,6 +66,7 @@ Comment[tr]=??? dosyalarının kodlarını çözen kod çözme modülü
 Comment[uk]=Модуль декодування файлів ???
 Comment[x-test]=xxDecoding module to decode ??? filesxx
 Comment[zh_CN]=用于解码 ??? 文件的解码模块
+Comment[zh_TW]=解碼 ??? 檔案的模組
 Type=Service
 X-KDE-ServiceTypes=K3b/Plugin
 

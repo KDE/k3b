@@ -26,5 +26,6 @@ Name[sv]=Kopiera med K3b
 Name[tr]=K3b ile Kopyala
 Name[uk]=Скопіювати за допомогою K3b
 Name[x-test]=xxCopy with K3bxx
+Name[zh_TW]=使用 K3b 複製
 Exec=k3b --copy %i
 Icon=k3b

@@ -44,6 +44,7 @@ Name[tr]=Video DVD Tarayıcı
 Name[uk]=Навігатор відео-DVD
 Name[x-test]=xxVideo DVD Browserxx
 Name[zh_CN]=视频 DVD 浏览器
+Name[zh_TW]=影像 DVD 瀏覽器
 Open=false
 X-KDE-TreeModule=Directory
 X-KDE-KonqSidebarModule=konqsidebar_tree

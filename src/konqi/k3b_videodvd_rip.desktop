@@ -45,5 +45,6 @@ Name[tr]=K3b ile Görüntü DVD'si Başlıklarını Aktar
 Name[uk]=Видерти відео DVD з K3b
 Name[x-test]=xxRip Video DVD Titles with K3bxx
 Name[zh_CN]=用 K3b 提取视频 DVD
+Name[zh_TW]=用 K3b 擷取影像 DVD 標題
 Exec=k3b --videodvdrip %i
 Icon=k3b

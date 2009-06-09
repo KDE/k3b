@@ -33,6 +33,7 @@ Name[tr]=K3b Harici Ses Kodlaması Yapılandırma Parçacığı
 Name[uk]=Віджет налаштування зовнішнього кодувальника звуку для K3b
 Name[x-test]=xxK3b External Audio Encoder Config Widgetxx
 Name[zh_CN]=K3b 扩展音频编码器配置部件
+Name[zh_TW]=K3b 外部音效編碼器設定元件
 Type=Service
 X-KDE-ServiceTypes=KCModule
 X-KDE-Library=kcm_k3bexternalencoder
