@@ -1,10 +1,8 @@
 /*
- *
- *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,9 +24,9 @@
 #include <kstandarddirs.h>
 #include <KProcess>
 
-#include <qregexp.h>
-#include <qfile.h>
-#include <QList>
+#include <QtCore/QRegExp>
+#include <QtCore/QFile>
+#include <QtCore/QList>
 
 #include <sys/types.h>
 
@@ -289,7 +287,7 @@ bool K3bExternalEncoder::writeWaveHeader()
         return false;
     }
 
-    return true;
+    return d->process->waitForBytesWritten( -1 );
 }
 
 
@@ -303,15 +301,7 @@ long K3bExternalEncoder::encodeInternal( const char* data, Q_ULONG len )
 
         long written = 0;
 
-        //
-        // we swap the bytes to reduce user irritation ;)
-        // This is a little confused: We used to swap the byte order
-        // in older versions of this encoder since little endian seems
-        // to "feel" more natural.
-        // So now that we have a swap option we have to invert it to ensure
-        // compatibility
-        //
-        if( !d->cmd.swapByteOrder ) {
+        if( d->cmd.swapByteOrder ) {
             char* buffer = new char[len];
             for( unsigned int i = 0; i < len-1; i+=2 ) {
                 buffer[i] = data[i+1];
@@ -323,6 +313,8 @@ long K3bExternalEncoder::encodeInternal( const char* data, Q_ULONG len )
         }
         else
             written = d->process->write( data, len );
+
+        d->process->waitForBytesWritten( -1 );
 
         return written;
     }

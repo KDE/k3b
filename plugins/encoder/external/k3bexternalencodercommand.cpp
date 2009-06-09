@@ -28,7 +28,7 @@ QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::readCommands()
     KSharedConfig::Ptr c = KGlobal::config();
     KConfigGroup grp(c,"K3bExternalEncoderPlugin" );
 
-    QList<K3bExternalEncoderCommand> cl;
+    QHash<QString, K3bExternalEncoderCommand> cl;
 
     QStringList cmds = grp.readEntry( "commands",QStringList() );
     for( QStringList::iterator it = cmds.begin(); it != cmds.end(); ++it ) {
@@ -43,21 +43,36 @@ QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::readCommands()
             else if( cmdString[i] == "wave" )
                 cmd.writeWaveHeader = true;
         }
-        cl.append(cmd);
+        cl.insert( cmd.name, cmd );
     }
 
     // some defaults
-    if( cmds.isEmpty() ) {
-        // check if the lame encoding plugin has been compiled
+    // check if the lame encoding plugin has been compiled
 #ifndef HAVE_LAME
-        K3bExternalEncoderCommand lameCmd;
-        lameCmd.name = "Mp3 (Lame)";
-        lameCmd.extension = "mp3";
-        lameCmd.command = "lame -h --tt %t --ta %a --tl %m --ty %y --tc %c - %f";
+    if ( !cl.contains( "Mp3 (Lame)" ) ) {
+        if( !KStandardDirs::findExe( "lame" ).isEmpty() ) {
+            K3bExternalEncoderCommand lameCmd;
+            lameCmd.name = "Mp3 (Lame)";
+            lameCmd.extension = "mp3";
+            lameCmd.command = "lame "
+                              "-r "
+                              "--bitwidth 16 "
+                              "--little-endian "
+                              "-s 44.1 "
+                              "-h "
+                              "--tt %t "
+                              "--ta %a "
+                              "--tl %m "
+                              "--ty %y "
+                              "--tc %c "
+                              "- %f";
 
-        cl.append( lameCmd );
+            cl.insert( lameCmd.name, lameCmd );
+        }
+    }
 #endif
 
+    if ( !cl.contains( "Flac" ) ) {
         if( !KStandardDirs::findExe( "flac" ).isEmpty() ) {
             K3bExternalEncoderCommand flacCmd;
             flacCmd.name = "Flac";
@@ -66,7 +81,7 @@ QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::readCommands()
                               "-V "
                               "-o %f "
                               "--force-raw-format "
-                              "--endian=big "
+                              "--endian=little "
                               "--channels=2 "
                               "--sample-rate=44100 "
                               "--sign=signed "
@@ -78,9 +93,11 @@ QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::readCommands()
                               "-T ALBUM=%m "
                               "-";
 
-            cl.append( flacCmd );
+            cl.insert( flacCmd.name, flacCmd );
         }
+    }
 
+    if ( !cl.contains( "Musepack" ) ) {
         if( !KStandardDirs::findExe( "mppenc" ).isEmpty() ) {
             K3bExternalEncoderCommand mppCmd;
             mppCmd.name = "Musepack";
@@ -97,14 +114,13 @@ QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::readCommands()
                              "--year %y "
                              "- "
                              "%f";
-            mppCmd.swapByteOrder = true;
             mppCmd.writeWaveHeader = true;
 
-            cl.append( mppCmd );
+            cl.insert( mppCmd.name, mppCmd );
         }
     }
 
-    return cl;
+    return cl.values();
 }
 
 
