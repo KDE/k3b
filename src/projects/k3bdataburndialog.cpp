@@ -153,8 +153,10 @@ void K3b::DataBurnDialog::setupSettingsTab()
     QWidget* frame = new QWidget( this );
     QGridLayout* frameLayout = new QGridLayout( frame );
 
-    m_groupDataMode = new Q3GroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), frame );
+    m_groupDataMode = new QGroupBox( i18n("Datatrack Mode"), frame );
     m_dataModeWidget = new K3b::DataModeWidget( m_groupDataMode );
+    QVBoxLayout* groupDataModeLayout = new QVBoxLayout( m_groupDataMode );
+    groupDataModeLayout->addWidget( m_dataModeWidget );
 
     QGroupBox* groupMultiSession = new QGroupBox( i18n("Multisession Mode"), frame );
     m_comboMultisession = new K3b::DataMultiSessionCombobox( groupMultiSession );

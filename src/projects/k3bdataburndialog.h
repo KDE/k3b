@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,11 +17,9 @@
 #define K3BDATABURNDIALOG_H
 
 #include "k3bprojectburndialog.h"
-//Added by qt3to4:
-#include <QLabel>
 
 class QCheckBox;
-class Q3GroupBox;
+class QGroupBox;
 class QLabel;
 
 namespace K3b {
@@ -52,7 +50,7 @@ namespace K3b {
         DataImageSettingsWidget* m_imageSettingsWidget;
         // ----------------------------------------------
 
-        Q3GroupBox* m_groupDataMode;
+        QGroupBox* m_groupDataMode;
         DataModeWidget* m_dataModeWidget;
         DataMultiSessionCombobox* m_comboMultisession;
 
