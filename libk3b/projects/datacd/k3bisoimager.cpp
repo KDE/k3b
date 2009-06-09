@@ -131,6 +131,8 @@ void K3b::IsoImager::slotProcessExited( int exitCode, QProcess::ExitStatus exitS
 {
     kDebug();
 
+    cleanup();
+
     if( m_canceled ) {
         emit canceled();
         jobFinished(false);
@@ -179,8 +181,6 @@ void K3b::IsoImager::slotProcessExited( int exitCode, QProcess::ExitStatus exitS
             jobFinished( false );
         }
     }
-
-    cleanup();
 }
 
 
@@ -444,7 +444,7 @@ void K3b::IsoImager::start()
         // something went wrong when starting the program
         // it "should" be the executable
         kDebug() << "(K3b::IsoImager) could not start mkisofs";
-        emit infoMessage( i18n("Could not start %1.",QString("mkisofs")), K3b::Job::MessageError );
+        emit infoMessage( i18n("Could not start %1.", QLatin1String("mkisofs")), K3b::Job::MessageError );
         jobFinished( false );
         cleanup();
     }

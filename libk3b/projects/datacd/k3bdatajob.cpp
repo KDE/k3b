@@ -406,18 +406,24 @@ void K3b::DataJob::slotIsoImagerFinished( bool success )
                 jobFinished( false );
             }
         }
-        else if( !success ) { // on-the-fly
-            //
-            // In case the imager failed let's make sure the writer does not emit an unusable
-            // error message.
-            //
-            if( m_writerJob && m_writerJob->active() )
-                m_writerJob->setSourceUnreadable( true );
+        else { // on-the-fly
+            if( success ) {
+                if ( !m_writerJob->active() )
+                    finishCopy();
+            }
+            else {
+                //
+                // In case the imager failed let's make sure the writer does not emit an unusable
+                // error message.
+                //
+                if( m_writerJob && m_writerJob->active() )
+                    m_writerJob->setSourceUnreadable( true );
 
-            // there is one special case which we need to handle here: the iso imager might be canceled
-            // FIXME: the iso imager should not be able to cancel itself
-            if( m_isoImager->hasBeenCanceled() && !this->hasBeenCanceled() )
-                cancel();
+                // there is one special case which we need to handle here: the iso imager might be canceled
+                // FIXME: the iso imager should not be able to cancel itself
+                if( m_isoImager->hasBeenCanceled() && !this->hasBeenCanceled() )
+                    cancel();
+            }
         }
     }
 }
@@ -467,77 +473,85 @@ void K3b::DataJob::slotWriterJobFinished( bool success )
     kDebug();
 
     if( success ) {
-        // allright
-        // the writerJob should have emitted the "simulation/writing successful" signal
-
-        if( d->doc->verifyData() ) {
-            if( !d->verificationJob ) {
-                d->verificationJob = new K3b::VerificationJob( this, this );
-                connect( d->verificationJob, SIGNAL(infoMessage(const QString&, int)),
-                         this, SIGNAL(infoMessage(const QString&, int)) );
-                connect( d->verificationJob, SIGNAL(newTask(const QString&)),
-                         this, SIGNAL(newSubTask(const QString&)) );
-                connect( d->verificationJob, SIGNAL(newSubTask(const QString&)),
-                         this, SIGNAL(newSubTask(const QString&)) );
-                connect( d->verificationJob, SIGNAL(percent(int)),
-                         this, SLOT(slotVerificationProgress(int)) );
-                connect( d->verificationJob, SIGNAL(percent(int)),
-                         this, SIGNAL(subPercent(int)) );
-                connect( d->verificationJob, SIGNAL(finished(bool)),
-                         this, SLOT(slotVerificationFinished(bool)) );
-                connect( d->verificationJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
-                         this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
-
-            }
-            d->verificationJob->clear();
-            d->verificationJob->setDevice( d->doc->burner() );
-            d->verificationJob->setGrownSessionSize( m_isoImager->size() );
-            d->verificationJob->addTrack( 0, d->checksumCache, m_isoImager->size() );
-
-            emit burning(false);
-
-            emit newTask( i18n("Verifying written data") );
-
-            d->verificationJob->start();
-        }
-        else {
-            d->copiesDone++;
-
-            if( d->copiesDone < d->copies ) {
-                if( !K3b::eject( d->doc->burner() ) ) {
-                    blockingInformation( i18n("K3b was unable to eject the written disk. Please do so manually.") );
-                }
-
-                bool failed = false;
-                if( d->doc->onTheFly() )
-                    failed = !startOnTheFlyWriting();
-                else
-                    failed = !prepareWriterJob() || !startWriterJob();
-
-                if( failed ) {
-                    cancel();
-                }
-                else if( !d->doc->onTheFly() ) {
-#ifdef __GNUC__
-#warning Growisofs needs stdin to be closed in order to exit gracefully. Cdrecord does not. However,  if closed with cdrecord we loose parts of stderr. Why?
-#endif
-                    d->pipe->writeTo( m_writerJob->ioDevice(), d->usedWritingApp != K3b::WritingAppCdrecord );
-                    d->pipe->open(true);
-                }
-            }
-            else {
-                cleanup();
-                if ( k3bcore->globalSettings()->ejectMedia() ) {
-                    K3b::Device::eject( d->doc->burner() );
-                }
-                jobFinished(true);
-            }
+        if ( !d->doc->onTheFly() ||
+             !m_isoImager->active() ) {
+            finishCopy();
         }
     }
     else {
         if ( !cancelAll() ) {
             cleanup();
             jobFinished( false );
+        }
+    }
+}
+
+
+void K3b::DataJob::finishCopy()
+{
+    // the writerJob should have emitted the "simulation/writing successful" signal
+
+    if( d->doc->verifyData() ) {
+        if( !d->verificationJob ) {
+            d->verificationJob = new K3b::VerificationJob( this, this );
+            connect( d->verificationJob, SIGNAL(infoMessage(const QString&, int)),
+                     this, SIGNAL(infoMessage(const QString&, int)) );
+            connect( d->verificationJob, SIGNAL(newTask(const QString&)),
+                     this, SIGNAL(newSubTask(const QString&)) );
+            connect( d->verificationJob, SIGNAL(newSubTask(const QString&)),
+                     this, SIGNAL(newSubTask(const QString&)) );
+            connect( d->verificationJob, SIGNAL(percent(int)),
+                     this, SLOT(slotVerificationProgress(int)) );
+            connect( d->verificationJob, SIGNAL(percent(int)),
+                     this, SIGNAL(subPercent(int)) );
+            connect( d->verificationJob, SIGNAL(finished(bool)),
+                     this, SLOT(slotVerificationFinished(bool)) );
+            connect( d->verificationJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
+                     this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+
+        }
+        d->verificationJob->clear();
+        d->verificationJob->setDevice( d->doc->burner() );
+        d->verificationJob->setGrownSessionSize( m_isoImager->size() );
+        d->verificationJob->addTrack( 0, d->checksumCache, m_isoImager->size() );
+
+        emit burning(false);
+
+        emit newTask( i18n("Verifying written data") );
+
+        d->verificationJob->start();
+    }
+    else {
+        d->copiesDone++;
+
+        if( d->copiesDone < d->copies ) {
+            if( !K3b::eject( d->doc->burner() ) ) {
+                blockingInformation( i18n("K3b was unable to eject the written disk. Please do so manually.") );
+            }
+
+            bool failed = false;
+            if( d->doc->onTheFly() )
+                failed = !startOnTheFlyWriting();
+            else
+                failed = !prepareWriterJob() || !startWriterJob();
+
+            if( failed ) {
+                cancel();
+            }
+            else if( !d->doc->onTheFly() ) {
+#ifdef __GNUC__
+#warning Growisofs needs stdin to be closed in order to exit gracefully. Cdrecord does not. However,  if closed with cdrecord we loose parts of stderr. Why?
+#endif
+                d->pipe->writeTo( m_writerJob->ioDevice(), d->usedWritingApp != K3b::WritingAppCdrecord );
+                d->pipe->open(true);
+            }
+        }
+        else {
+            cleanup();
+            if ( k3bcore->globalSettings()->ejectMedia() ) {
+                K3b::Device::eject( d->doc->burner() );
+            }
+            jobFinished(true);
         }
     }
 }

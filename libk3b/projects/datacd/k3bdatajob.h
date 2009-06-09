@@ -106,6 +106,7 @@ namespace K3b {
         bool setupCdrdaoJob();
         bool setupGrowisofsJob();
         void startPipe();
+        void finishCopy();
 
         class Private;
         Private* d;
