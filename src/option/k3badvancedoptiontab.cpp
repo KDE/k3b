@@ -106,10 +106,7 @@ void K3b::AdvancedOptionTab::setupGui()
                                                     "elements which allow to influence the behaviour of K3b are shown. "
                                                     "This includes the manual selection of the used burning tool "
                                                     "(Choose between cdrecord and cdrdao when writing a CD or between "
-                                                    "cdrecord and growisofs when writing a DVD/BD.) or the forcing of "
-                                                    "a medium in case K3b fails to detect it properly."
-                                                    "<p>This may be useful if one of the programs "
-                                                    "does not support the used writer."
+                                                    "cdrecord and growisofs when writing a DVD/BD)."
                                                     "<p><b>Be aware that K3b does not support all possible tools "
                                                     "in all project types and actions.</b>") );
 
