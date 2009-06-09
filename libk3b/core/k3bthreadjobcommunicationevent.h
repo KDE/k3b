@@ -42,29 +42,55 @@ namespace K3b {
 
         int type() const;
 
-        Device::Device* device() const;
-        Device::MediaStates wantedMediaState() const;
-        Device::MediaTypes wantedMediaType() const;
-        QString message() const;
-
-        QString text() const;
-        QString caption() const;
-
-        QString yesText() const;
-        QString noText() const;
-
-        int intResult() const;
-        bool boolResult() const;
-
         /**
-         * Used by the calling thread to wait for the result
+         * Separate data object are used since events are deleted once delivered.
+         * However, we need the data after the event has been delivered.
          */
-        void wait();
+        class Data {
+        public:
+            Data();
 
-        /**
-         * Signal back to the calling thread.
-         */
-        void done( int result );
+            Device::Device* device() const;
+            Device::MediaStates wantedMediaState() const;
+            Device::MediaTypes wantedMediaType() const;
+            QString message() const;
+
+            QString text() const;
+            QString caption() const;
+
+            QString yesText() const;
+            QString noText() const;
+
+            int intResult() const;
+            bool boolResult() const;
+
+
+            /**
+             * Used by the calling thread to wait for the result
+             */
+            void wait();
+
+            /**
+             * Signal back to the calling thread.
+             */
+            void done( int result );
+
+        private:
+            Device::Device* m_device;
+            Device::MediaStates m_wantedMediaState;
+            Device::MediaTypes m_wantedMediaType;
+            QString m_text;
+            QString m_caption;
+            QString m_yesText;
+            QString m_noText;
+
+            QWaitCondition m_threader;
+            int m_result;
+
+            friend class ThreadJobCommunicationEvent;
+        };
+
+        Data* data() const { return m_data; }
 
         static ThreadJobCommunicationEvent* waitForMedium( Device::Device* device,
                                                            Device::MediaStates mediaState,
@@ -81,16 +107,7 @@ namespace K3b {
         ThreadJobCommunicationEvent( int type );
 
         int m_type;
-        Device::Device* m_device;
-        Device::MediaStates m_wantedMediaState;
-        Device::MediaTypes m_wantedMediaType;
-        QString m_text;
-        QString m_caption;
-        QString m_yesText;
-        QString m_noText;
-
-        QWaitCondition m_threader;
-        int m_result;
+        Data* m_data;
     };
 }
 

@@ -20,6 +20,8 @@
 #include <kdebug.h>
 #include <kapplication.h>
 
+#include <QtCore/QSharedPointer>
+
 
 class K3b::ThreadJob::Private
 {
@@ -102,9 +104,10 @@ K3b::Device::MediaType K3b::ThreadJob::waitForMedia( K3b::Device::Device* device
                                                                                                mediaState,
                                                                                                mediaType,
                                                                                                message );
+    QSharedPointer<K3b::ThreadJobCommunicationEvent::Data> data( event->data() );
     QApplication::postEvent( this, event );
-    event->wait();
-    return (Device::MediaType)event->intResult();
+    data->wait();
+    return (Device::MediaType)data->intResult();
 }
 
 
@@ -117,9 +120,10 @@ bool K3b::ThreadJob::questionYesNo( const QString& text,
                                                                                                caption,
                                                                                                yesText,
                                                                                                noText );
+    QSharedPointer<K3b::ThreadJobCommunicationEvent::Data> data( event->data() );
     QApplication::postEvent( this, event );
-    event->wait();
-    return event->boolResult();
+    data->wait();
+    return data->boolResult();
 }
 
 
@@ -128,36 +132,38 @@ void K3b::ThreadJob::blockingInformation( const QString& text,
 {
     K3b::ThreadJobCommunicationEvent* event = K3b::ThreadJobCommunicationEvent::blockingInformation( text,
                                                                                                      caption );
+    QSharedPointer<K3b::ThreadJobCommunicationEvent::Data> data( event->data() );
     QApplication::postEvent( this, event );
-    event->wait();
+    data->wait();
 }
 
 
 void K3b::ThreadJob::customEvent( QEvent* e )
 {
     if( K3b::ThreadJobCommunicationEvent* ce = dynamic_cast<K3b::ThreadJobCommunicationEvent*>(e) ) {
+        K3b::ThreadJobCommunicationEvent::Data* data = ce->data();
         int result = 0;
         switch( ce->type() ) {
         case K3b::ThreadJobCommunicationEvent::WaitForMedium:
-            result = K3b::Job::waitForMedia( ce->device(),
-                                             ce->wantedMediaState(),
-                                             ce->wantedMediaType(),
-                                             ce->text() );
+            result = K3b::Job::waitForMedia( data->device(),
+                                             data->wantedMediaState(),
+                                             data->wantedMediaType(),
+                                             data->text() );
             break;
 
         case K3b::ThreadJobCommunicationEvent::QuestionYesNo:
-            result = K3b::Job::questionYesNo( ce->text(),
-                                              ce->caption(),
-                                              ce->yesText(),
-                                              ce->noText() )
+            result = K3b::Job::questionYesNo( data->text(),
+                                              data->caption(),
+                                              data->yesText(),
+                                              data->noText() )
                      ? 1 : 0;
             break;
 
         case K3b::ThreadJobCommunicationEvent::BlockingInfo:
-            K3b::Job::blockingInformation( ce->text(), ce->caption() );
+            K3b::Job::blockingInformation( data->text(), data->caption() );
             break;
         }
-        ce->done( result );
+        data->done( result );
     }
 }
 
