@@ -3,6 +3,7 @@ IconName=k3b
 Comment=K3b
 Comment[hi]=के3बी
 Comment[hne]=के3बी
+Comment[it]=Comment=K3b
 Comment[ne]=केथ्रीबी
 Comment[x-test]=xxK3bxx
 
@@ -25,6 +26,7 @@ Name[he]=התהליך מוצלח
 Name[hi]=प्रक्रिया सफल
 Name[hne]=काम सफल
 Name[hsb]=Proces wuspěšny
+Name[it]=Name=Processo riuscito
 Name[ja]=プロセス成功
 Name[km]=ដំណើរការ​ដោយ​ជោគជ័យ
 Name[ko]=진행 성공
@@ -66,6 +68,7 @@ Comment[gl]=O proceso rematou satisfactoriamente
 Comment[he]=תהליך הסתיים בהצלחה
 Comment[hne]=काम सफलता के साथ पूरा
 Comment[hsb]=Proces wuspěšnje zakónčeny
+Comment[it]=Comment=Processo terminato correttamente
 Comment[ja]=プロセスが正常に終了しました
 Comment[km]=បាន​បញ្ចប់​ដំណើរការ​ដោយ​ជោគជ័យ
 Comment[ko]=진행이 성공적으로 끝났습니다
@@ -112,6 +115,7 @@ Name[he]=שגיאת תהליך
 Name[hi]=प्रक्रिया त्रुटि
 Name[hne]=काम गलती
 Name[hsb]=Zmylk procesa
+Name[it]=Name=Errore del processo
 Name[ja]=プロセスエラー
 Name[km]=កំហុស​ដំណើរការ
 Name[ko]=진행 오류
@@ -154,6 +158,7 @@ Comment[he]=התהליך הסתיים עם שגיאות
 Comment[hi]=प्रक्रिया त्रुटि के साथ पूर्ण
 Comment[hne]=काम गलती के साथ पूरा
 Comment[hsb]=Proces ze zmylkami zakónčeny
+Comment[it]=Comment=Processo terminato con errori
 Comment[ja]=プロセスがエラーで終了しました
 Comment[km]=បាន​បញ្ចប់​ដំណើរការ ដោយ​មាន​កំហុស
 Comment[ko]=진행 중 오류가 발생했습니다
@@ -200,6 +205,7 @@ Name[gl]=Á espera do medio
 Name[he]=מחכה למדיה
 Name[hne]=मीडियम के इंतजार करत हे
 Name[hsb]=Čakam na medium
+Name[it]=Name=Si è in attesa di un supporto
 Name[ja]=メディア待ち
 Name[km]=រង់ចាំ​ឧបករណ៍​ផ្ទុក
 Name[ko]=미디어 기다리는 중
@@ -241,6 +247,7 @@ Comment[gl]=O usuario debe inserir un medio
 Comment[he]=המשתמש צריך להכניס מדיה
 Comment[hne]=कमइया ल एक मीडियम डालना पड़ही
 Comment[hsb]=Wužiwar dyrbi medium do palaka tyknyć
+Comment[it]=Comment=L'utente deve inserire un supporto
 Comment[ja]=ユーザがメディアを挿入する必要があります
 Comment[km]=អ្នកប្រើ​ត្រូវ​បញ្ចូល​ឧបករណ៍​ផ្ទុក
 Comment[ko]=사용자가 미디어를 삽입해야 합니다
