@@ -236,7 +236,7 @@ void K3b::ThemeManager::setCurrentTheme( const QString& name )
 
 void K3b::ThemeManager::setCurrentTheme( K3b::Theme* theme )
 {
-    if( !theme )
+    if( !theme && !d->themes.isEmpty() )
         theme = d->themes.first();
 
     if( theme ) {
