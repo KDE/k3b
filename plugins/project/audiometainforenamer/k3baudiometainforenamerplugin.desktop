@@ -6,7 +6,7 @@ Name[es]=Renombrador de meta información de audio de K3b
 Name[et]=K3b helifailide metainfo põhjal ümbernimetaja
 Name[fr]=Renommeur de méta-données audio K3b
 Name[ga]=Athainmneoir Meiteafhaisnéise Fuaime K3b
-Name[it]=Name=Rinominatore di Meta informazioni audio di K3b
+Name[it]=Rinominatore di Meta informazioni audio di K3b
 Name[km]=កម្មវិធីប្ដូរ​ឈ្មោះ​ព័ត៌មាន​មេតា​អូឌីយ៉ូ K3b
 Name[nb]=K3b metainfo-omnavner for lyd
 Name[nds]=Audiometadaten-Ümnömer för K3b
@@ -25,7 +25,7 @@ Comment[es]=Complemento basado en la meta información para renombrar archivos d
 Comment[et]=Plugin andmeprojekti helifailide ümbernimetamiseks metainfo põhjal.
 Comment[fr]=Module pour renommer des fichiers audio dans un projet de données fondé sur les informations de méta-données.
 Comment[ga]=Breiseán a athainmníonn comhaid fhuaime i dtionscadal sonraí, bunaithe ar an mheiteafhaisnéis.
-Comment[it]=Comment=Estensione usata per rinominare i file audio in un progetto dati basato su meta informazioni.
+Comment[it]=Estensione usata per rinominare i file audio in un progetto dati basato su meta informazioni.
 Comment[km]=កម្មវិធី​ជំនួយ​ត្រូវ​ប្ដូរ​ឈ្មោះ​ឯកសារ​អូឌីយ៉ូ​នៅ​ក្នុង​គម្រោង​ទិន្នន័យ ដែលមាន​មូលដ្ឋាន​លើ​ព័ត៌មាន​មេតា ។
 Comment[nb]=Programtillegg som gir nytt navn til lydfiler i et dataprosjekt basert på deres metainfo.
 Comment[nds]=Moduul för't Ümnömen vun Klangdateien binnen en Datenprojekt na ehr Meta-Informatschonen

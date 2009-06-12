@@ -7,7 +7,7 @@ Comment[de]=K3b-Einrichtungsassistent - Zugriffsrechte zum Brennen mit K3b anpas
 Comment[es]=K3bSetup - modificar los permisos para la grabación de CD o DVD con K3b
 Comment[et]=K3b seadistamine - võimalus muuta õigusi CD/DVD kirjutamiseks K3b-ga
 Comment[fr]=K3bSetup - modification des droits d'accès pour la gravure de CD / DVD avec K3b
-Comment[it]=Comment=K3bSetup - modifica i permessi per CD/DVD per scrivere con K3b
+Comment[it]=K3bSetup - modifica i permessi per CD/DVD per scrivere con K3b
 Comment[km]=K3bSetup - កែប្រែ​សិទ្ធិ​សម្រាប់​ដុត​ស៊ីឌី/ឌីវីឌី​ដែល​មាន K3b
 Comment[nb]=K3bSetup  – endre tillatelser for CD-/DVD-brenning med K3b
 Comment[nl]=K3bSetup - stelt de toegangsrechten in voor cd/dvd-branden met K3b
@@ -24,7 +24,6 @@ Keywords=K3bSetup,k3bsetup
 Keywords[bg]=K3bSetup2,k3bsetup2,Настройване на K3b
 Keywords[de]=K3b, Einrichtungsassistent, Rechte, Setup
 Keywords[et]=K3bSetup,k3bsetup,k3b seadistamine
-Keywords[it]=Keywords=K3bSetup,k3bsetup
 Keywords[pt_BR]=Configurações Avançadas do K3b,configurações avançadas do K3b
 Keywords[sv]=Ställ in K3b,k3bsetup
 Keywords[x-test]=xxK3bSetup,k3bsetupxx
@@ -34,7 +33,6 @@ Name[de]=K3b-Einrichtungsassistent
 Name[eo]=Name=K3bSetup
 Name[et]=K3b seadistamine
 Name[hne]=के3बीसेटअप
-Name[it]=Name=K3bSetup
 Name[nds]=K3b-Inrichthölper
 Name[pa]=K3bਸੈੱਟਅੱਪ
 Name[pt_BR]=Configurar K3b
@@ -71,7 +69,7 @@ GenericName[gl]=Configuración da gravación de CD e DVD
 GenericName[he]=הגדרות צריבת CD ו DVD
 GenericName[hne]=सीडी डीवीडी बर्निंग सेटअप
 GenericName[hsb]=CD & DVD setup za palenje
-GenericName[it]=GenericName=Impostazioni di scrittura per CD e DVD
+GenericName[it]=Impostazioni di scrittura per CD e DVD
 GenericName[ja]=CD / DVD 作成の設定
 GenericName[km]=រៀបចំ​ការ​ដុត​ស៊ីឌី និង​ឌីវីឌី
 GenericName[ko]=CD와 DVD 쓰기 설정

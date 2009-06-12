@@ -14,7 +14,7 @@ Name[ga]=Ionchódóir Seachtrach Fuaime K3b
 Name[gl]=Codificador externo de son para K3b
 Name[he]=מקודד שמע חיצוני של K3b
 Name[hne]=के३बी बाहरी आडियो एनकोडर
-Name[it]=Name=Codificatore audio esterno di K3b
+Name[it]=Codificatore audio esterno di K3b
 Name[ja]=K3b 外部オーディオエンコーダ
 Name[km]=កម្មវិធី​អ៊ិនកូដ​អូឌីយ៉ូ​ខាងក្រៅ​របស់ K3b
 Name[ko]=K3b 외부 오디오 인코더
@@ -49,7 +49,7 @@ Comment[fr]=Module qui permet la spécification d'une commande d'encodage
 Comment[ga]=Modúl ionchódaithe a cheadaíonn duit ordú ionchódaithe a roghnú
 Comment[gl]=Módulo de codificación que permite especificar un comando
 Comment[he]=מודול קידוד אשר מאפשר לציין פקודת קידוד ספציפית
-Comment[it]=Comment=Codifica modulare che permette di specificare un comando di codifica
+Comment[it]=Codifica modulare che permette di specificare un comando di codifica
 Comment[ja]=エンコードコマンドの指定を可能にするエンコードモジュール
 Comment[km]=ម៉ូឌុល​អ៊ិនកូដ ដែល​អនុញ្ញាត​ឲ្យ​បញ្ជាក់​ពាក្យបញ្ជា​អ៊ិនកូដ
 Comment[lv]=Kodēšanas modulis, kurš ļauj norādīt kodēšanas komandu

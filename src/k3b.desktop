@@ -22,7 +22,7 @@ GenericName[gl]=Gravación de CD e DVD
 GenericName[he]=צריבת CD ו- DVD
 GenericName[hne]=सीडी अउ डीवीडी बर्निंग
 GenericName[hsb]=Palenje CD & DVD
-GenericName[it]=GenericName=Masterizzazione CD e DVD
+GenericName[it]=Masterizzazione CD e DVD
 GenericName[ja]=CD / DVD 作成
 GenericName[km]=ការ​ដុត​ស៊ីឌី និង​ឌីវីឌី
 GenericName[ko]=CD와 DVD 쓰기
@@ -67,7 +67,7 @@ Comment[gl]=Programa de gravación de CD
 Comment[he]=תוכנת כתיבת CD
 Comment[hne]=सीडी लिखइया प्रोग्राम
 Comment[hsb]=Program za pisanje CDow
-Comment[it]=Comment=Programma di masterizzazione CD
+Comment[it]=Programma di masterizzazione CD
 Comment[ja]=CD 書き込みプログラム
 Comment[km]=កម្មវិធី​សរសេរ​ស៊ីឌី
 Comment[ko]=CD 쓰기 프로그램
@@ -96,7 +96,6 @@ Terminal=false
 Name=K3b
 Name[hi]=के3बी
 Name[hne]=के3बी
-Name[it]=Name=K3b
 Name[ne]=केथ्रीबी
 Name[x-test]=xxK3bxx
 MimeType=application/x-k3b;
