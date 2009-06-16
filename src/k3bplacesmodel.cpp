@@ -52,11 +52,15 @@ K3b::PlacesModel::PlacesModel( QObject* parent )
     //       This needs to be changed. Adding, removing and editing places would be also nice.
     for( int i = 0; i < d->filePlacesModel->rowCount(); ++i ) {
         QModelIndex place = d->filePlacesModel->index( i, 0 );
-        if( !d->filePlacesModel->isDevice( place ) ) {
+        KUrl url = d->filePlacesModel->url( place );
+        
+        // Let's filter out device-related places
+        // and custom protocols (we doesn't support burning from them)
+        if( !d->filePlacesModel->isDevice( place ) && url.isLocalFile() ) {
             addPlace(
                 d->filePlacesModel->text( place ),
                 d->filePlacesModel->icon( place ),
-                d->filePlacesModel->url( place ) );
+                url );
         }
     }
 

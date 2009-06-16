@@ -25,6 +25,9 @@
 K3b::UrlNavigator::UrlNavigator( KFilePlacesModel* model, QWidget* parent )
     : KUrlNavigator( model, KUrl(QDir::home().absolutePath()), parent )
 {
+    // Curently we don't support burning from custom protocols so let's filter them out
+    KUrlNavigator::setCustomProtocols( QStringList() << "file" );
+    
 	connect( this, SIGNAL(urlChanged(const KUrl&)), this, SLOT(urlActivated(const KUrl&)) );
 }
 
