@@ -3,14 +3,14 @@
 
 ########### next target ###############
 
-find_file(newffmpegavcodecpath avcodec.h /usr/include/libavcodec)
-
-if(newffmpegavcodecpath)
+if(FFMPEG_INCLUDE_DIR_OLD_STYLE)
+    message(STATUS "didn't find new ffmpegcodecpath")
+    include_directories (${FFMPEG_INCLUDE_DIR_OLD_STYLE})
+else(FFMPEG_INCLUDE_DIR_OLD_STYLE)
     message(STATUS "found new ffmpegcodecpath")
     add_definitions(-DNEWFFMPEGAVCODECPATH)
-else(newffmpegavcodecpath)
-    message(STATUS "didn't find new ffmpegcodecpath")
-endif(newffmpegavcodecpath)
+    include_directories (${FFMPEG_INCLUDE_DIR})
+endif(FFMPEG_INCLUDE_DIR_OLD_STYLE)
 
 set(k3bffmpegdecoder_PART_SRCS k3bffmpegdecoder.cpp k3bffmpegwrapper.cpp )
 
