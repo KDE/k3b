@@ -187,6 +187,19 @@ QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
     if ( index.isValid() ) {
         K3b::DataItem* item = itemForIndex( index );
 
+        if ( role == K3b::ItemTypeRole ) {
+            if (item->isDir())
+                return (int) K3b::DirItemType;
+            else
+                return (int) K3b::FileItemType;
+        }
+        else if ( role == K3b::CustomFlagsRole ) {
+            if (item->isRemoveable())
+                return (int) K3b::ItemIsRemovable;
+            else
+                return 0;
+        }
+        
         switch( index.column() ) {
         case FilenameColumn:
             if( role == Qt::DisplayRole ||
@@ -203,18 +216,6 @@ QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
                 else {
                     return KIcon( item->mimeType()->iconName() );
                 }
-            }
-            else if ( role == K3b::ItemTypeRole ) {
-                if (item->isDir())
-                    return (int) K3b::DirItemType;
-                else
-                    return (int) K3b::FileItemType;
-            }
-            else if ( role == K3b::CustomFlagsRole ) {
-                if (item->isRemoveable())
-                    return (int) K3b::ItemIsRemovable;
-                else
-                    return 0;
             }
             break;
 

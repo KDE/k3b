@@ -68,6 +68,7 @@ K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
     setModel(m_model);
 
     connect( m_doc, SIGNAL(changed()), this, SLOT(slotDocChanged()) );
+    connect( this, SIGNAL(activated(QModelIndex)), SLOT(slotFileItemActivated(QModelIndex)) );
 
     setupContextMenu();
 
@@ -340,5 +341,23 @@ void K3b::DataView::slotOpen()
         }
     }
 }
+
+
+void K3b::DataView::slotFileItemActivated( const QModelIndex& index )
+{
+    if( index.isValid() ) {
+        int type = index.data(ItemTypeRole).toInt();
+        if( type == (int)DirItemType ) {
+            StandardView::setCurrentRoot( index );
+        }
+        else if( type == (int)FileItemType ) {
+            QList<DataItem*> items;
+            items.append( m_model->itemForIndex(index) );
+            DataPropertiesDialog dlg( items, this );
+            dlg.exec();
+        }
+    }
+}
+
 
 #include "k3bdataview.moc"

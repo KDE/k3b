@@ -55,6 +55,7 @@ namespace K3b {
         void slotNewDir();
         void slotItemProperties();
         void slotOpen();
+        void slotFileItemActivated( const QModelIndex& index );
 
     protected:
         QLineEdit* m_volumeIDEdit;

@@ -84,6 +84,7 @@ namespace K3b {
          */
         QModelIndexList currentSelection() const;
 
+        void setCurrentRoot( const QModelIndex& index );
         QModelIndex currentRoot() const;
 
         /**
@@ -133,6 +134,7 @@ namespace K3b {
 
     signals:
         void currentRootChanged( const QModelIndex& newRoot );
+        void activated( const QModelIndex& index );
 
     private:
         QTreeView* m_dirView;

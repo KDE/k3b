@@ -50,12 +50,14 @@ K3b::StandardView::StandardView(K3b::Doc* doc, QWidget *parent )
     m_fileView->setAcceptDrops(true);
     m_fileView->setDragEnabled(true);
     m_fileView->setDragDropMode(QTreeView::DragDrop);
+    m_fileView->setItemsExpandable(false);
     m_fileView->setRootIsDecorated(false);
     m_fileView->setSelectionMode(QTreeView::ExtendedSelection);
     m_fileView->setContextMenuPolicy(Qt::CustomContextMenu);
     m_fileView->setAnimated(true);
     // FIXME: make QHeaderView::Interactive the default but connect to model changes and call header()->resizeSections( QHeaderView::ResizeToContents );
     m_fileView->header()->setResizeMode( QHeaderView::ResizeToContents );
+    m_fileView->setEditTriggers( QAbstractItemView::NoEditTriggers );
 
     m_expanded = false;
     // connect signals/slots
@@ -84,6 +86,8 @@ void K3b::StandardView::setModel(QAbstractItemModel *model)
     // so that it updates the file view
     connect(m_dirView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection&)),
             this, SLOT(slotCurrentDirChanged()));
+    connect(m_fileView, SIGNAL(doubleClicked(QModelIndex)),
+                        SIGNAL(activated(QModelIndex)));
     connect(model, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
             this, SLOT(slotItemsAdded()));
 
@@ -108,6 +112,11 @@ void K3b::StandardView::contextMenuForSelection(const QModelIndexList &selectedI
 QModelIndexList K3b::StandardView::currentSelection() const
 {
     return m_currentSelection;
+}
+
+void K3b::StandardView::setCurrentRoot( const QModelIndex& index )
+{
+    m_dirView->setCurrentIndex( m_dirProxy->mapFromSource( index ) );
 }
 
 QModelIndex K3b::StandardView::currentRoot() const
@@ -140,7 +149,7 @@ void K3b::StandardView::slotCurrentDirChanged()
     // directory from dir view
     m_fileView->setRootIndex(currentDir);
     m_fileView->header()->resizeSections( QHeaderView::Stretch );
-
+    
     emit currentRootChanged( currentDir );
 }
 
