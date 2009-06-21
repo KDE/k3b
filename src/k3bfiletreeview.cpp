@@ -276,6 +276,7 @@ K3b::FileTreeView::FileTreeView( QWidget *parent )
     header()->hide();
 
     setContextMenuPolicy( Qt::CustomContextMenu );
+    setEditTriggers( QAbstractItemView::NoEditTriggers );
     setSelectionMode(QAbstractItemView::SingleSelection);
 //    setSortingEnabled( true );
 //    setRootIsDecorated( false );
