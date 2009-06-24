@@ -3,6 +3,7 @@
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *           (C) 2009      Arthur Renato Mello <arthur@mandriva.com>
  *           (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ *           (C) 2009      Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -44,13 +45,18 @@ namespace K3b {
         virtual ~MovixView();
 
     private Q_SLOTS:
-        void contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos);
         void slotRemoveSubTitleItems();
         void showPropertiesDialog();
         void slotAddSubTitleFile();
         void slotDocChanged();
 
     protected:
+        /**
+         * reimplemented from @ref StandardView
+         */
+        virtual void selectionChanged( const QModelIndexList& indexes );
+        virtual void contextMenu( const QPoint& pos );
+        
         virtual ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
 
     private:

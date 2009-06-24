@@ -3,6 +3,7 @@
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *           (C) 2009      Arthur Mello <arthur@mandriva.com>
  *           (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ *           (C) 2009      Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -192,17 +193,45 @@ void K3b::AudioView::setupActions()
     actionCollection()->addAction( "project_audio_musicbrainz", mbAction );
     mbAction->setToolTip( i18n("Try to determine meta information over the Internet") );
 #endif
-
+    
+    m_popupMenu = new KMenu( this );
+    if( m_actionPlayTrack != 0 ) {
+        m_popupMenu->addAction( m_actionPlayTrack );
+        m_popupMenu->addSeparator();
+    }
+    m_popupMenu->addAction( m_actionRemove );
+    m_popupMenu->addAction( m_actionAddSilence );
+    m_popupMenu->addSeparator();
+    m_popupMenu->addAction( m_actionSplitSource );
+    m_popupMenu->addAction( m_actionSplitTrack );
+    m_popupMenu->addAction( m_actionEditSource );
+    m_popupMenu->addAction( m_actionMergeTracks );
+    m_popupMenu->addAction( m_actionProperties );
+    m_popupMenu->addSeparator();
+    m_popupMenu->addAction( actionCollection()->action("project_burn") );
 }
 
 
 void K3b::AudioView::getSelectedItems( QList<K3b::AudioTrack*>& tracks,
                                           QList<K3b::AudioDataSource*>& sources )
 {
+    getSelectedItems( tracks, sources, currentSelection() );
+}
+
+
+
+K3b::ProjectBurnDialog* K3b::AudioView::newBurnDialog( QWidget* parent )
+{
+    return new K3b::AudioBurnDialog( m_doc, parent );
+}
+
+
+void K3b::AudioView::getSelectedItems( QList<AudioTrack*>& tracks,
+                                       QList<AudioDataSource*>& sources,
+                                       const QModelIndexList& indexes )
+{
     tracks.clear();
     sources.clear();
-
-    QModelIndexList indexes = currentSelection();
 
     foreach( const QModelIndex& index, indexes ) {
         if ( K3b::AudioTrack* track = m_model->trackForIndex( index ) ) {
@@ -221,60 +250,45 @@ void K3b::AudioView::getSelectedItems( QList<K3b::AudioTrack*>& tracks,
 }
 
 
-
-K3b::ProjectBurnDialog* K3b::AudioView::newBurnDialog( QWidget* parent )
-{
-    return new K3b::AudioBurnDialog( m_doc, parent );
-}
-
-
-void K3b::AudioView::contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos)
+void K3b::AudioView::selectionChanged( const QModelIndexList& indexes )
 {
     QList<K3b::AudioTrack*> tracks;
     QList<K3b::AudioDataSource*> sources;
-    getSelectedItems( tracks, sources );
+    getSelectedItems( tracks, sources, indexes );
 
     int numTracks = tracks.count();
     int numSources = sources.count();
 
-    // build the menu
-    KMenu popupMenu;
-
-    if( m_actionPlayTrack && numTracks >= 1 ) {
-        popupMenu.addAction( m_actionPlayTrack );
-        popupMenu.addSeparator();
+    if( m_actionPlayTrack != 0 ) {
+        m_actionPlayTrack->setVisible( numTracks >= 1 );
     }
-
-    if( numTracks + numSources )
-        popupMenu.addAction( m_actionRemove );
-
-    if( numSources + numTracks == 1 )
-        popupMenu.addAction( m_actionAddSilence );
+    m_actionRemove->setVisible( numTracks + numSources );
+    m_actionAddSilence->setVisible( numSources + numTracks == 1 );
 
     if( numSources == 1 && numTracks == 0 ) {
-        popupMenu.addSeparator();
-        popupMenu.addAction( m_actionSplitSource );
-        popupMenu.addAction( m_actionEditSource );
+        m_actionSplitSource->setVisible( true );
+        m_actionSplitTrack->setVisible( false );
+        m_actionEditSource->setVisible( true );
+        m_actionMergeTracks->setVisible( false );
     }
     else if( numTracks == 1 && numSources == 0 ) {
-        popupMenu.addSeparator();
-
-        if( tracks.first()->length().lba() > 60 )
-            popupMenu.addAction( m_actionSplitTrack );
-
-        popupMenu.addAction( m_actionEditSource );
-
+        m_actionSplitSource->setVisible( false );
+        m_actionSplitTrack->setVisible( tracks.first()->length().lba() > 60 );
+        m_actionEditSource->setVisible( true );
+        m_actionMergeTracks->setVisible( false );
     }
-    else if( numTracks > 1 ) {
-        popupMenu.addSeparator();
-        popupMenu.addAction( m_actionMergeTracks );
+    else {
+        m_actionSplitSource->setVisible( false );
+        m_actionSplitTrack->setVisible( false );
+        m_actionEditSource->setVisible( false );
+        m_actionMergeTracks->setVisible( numTracks > 1 );
     }
+}
 
-    popupMenu.addAction( m_actionProperties );
-    popupMenu.addSeparator();
-    popupMenu.addAction( static_cast<K3b::View*>(m_doc->view())->actionCollection()->action( "project_burn" ) );
-
-    popupMenu.exec( pos );
+        
+void K3b::AudioView::contextMenu( const QPoint& pos )
+{
+    m_popupMenu->exec( pos );
 }
 
 

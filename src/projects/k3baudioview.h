@@ -3,6 +3,7 @@
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *           (C) 2009      Arthur Mello <arthur@mandriva.com>
  *           (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ *           (C) 2009      Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -23,6 +24,7 @@
 
 #include <qstringlist.h>
 
+class KMenu;
 
 namespace K3b {
 
@@ -50,10 +52,15 @@ namespace K3b {
     protected:
         ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
 
+        void getSelectedItems( QList<AudioTrack*>& tracks,
+                               QList<AudioDataSource*>& sources,
+                               const QModelIndexList& indexes );
+
         /**
          * reimplemented from \ref K3b::StandardView
          */
-        void contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos);
+        virtual void selectionChanged( const QModelIndexList& indexes );
+        virtual void contextMenu( const QPoint& pos );
 
         void init();
 
@@ -86,6 +93,7 @@ namespace K3b {
         KAction* m_actionSplitTrack;
         KAction* m_actionEditSource;
         KAction* m_actionPlayTrack;
+        KMenu* m_popupMenu;
 
         K3b::ViewColumnAdjuster* m_columnAdjuster;
         bool m_updatingColumnWidths;

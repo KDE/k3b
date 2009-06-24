@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2009       Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ *           (C) 2009       Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -16,11 +17,13 @@
 #include "k3bdirproxymodel.h"
 
 #include <QAbstractItemModel>
+#include <QApplication>
 #include <QTreeView>
 #include <QSplitter>
 #include <QLayout>
-#include <QDebug>
 #include <QHeaderView>
+#include <KDebug>
+#include <KGlobalSettings>
 
 K3b::StandardView::StandardView(K3b::Doc* doc, QWidget *parent )
     : K3b::View(doc, parent)
@@ -44,7 +47,8 @@ K3b::StandardView::StandardView(K3b::Doc* doc, QWidget *parent )
     m_dirView->setSelectionMode(QTreeView::SingleSelection);
     m_dirView->setModel(m_dirProxy);
     m_dirView->setContextMenuPolicy(Qt::CustomContextMenu);
-    m_dirView->setAnimated(true);
+    m_dirView->setAnimated( KGlobalSettings::graphicEffectsLevel() == KGlobalSettings::SimpleAnimationEffects ||
+                            KGlobalSettings::graphicEffectsLevel() == KGlobalSettings::ComplexAnimationEffects );
 
     // File panel
     m_fileView->setAcceptDrops(true);
@@ -54,7 +58,8 @@ K3b::StandardView::StandardView(K3b::Doc* doc, QWidget *parent )
     m_fileView->setRootIsDecorated(false);
     m_fileView->setSelectionMode(QTreeView::ExtendedSelection);
     m_fileView->setContextMenuPolicy(Qt::CustomContextMenu);
-    m_fileView->setAnimated(true);
+    m_fileView->setAnimated( KGlobalSettings::graphicEffectsLevel() == KGlobalSettings::SimpleAnimationEffects ||
+                             KGlobalSettings::graphicEffectsLevel() == KGlobalSettings::ComplexAnimationEffects );
     // FIXME: make QHeaderView::Interactive the default but connect to model changes and call header()->resizeSections( QHeaderView::ResizeToContents );
     m_fileView->header()->setResizeMode( QHeaderView::ResizeToContents );
     m_fileView->setEditTriggers( QAbstractItemView::NoEditTriggers );
@@ -65,6 +70,8 @@ K3b::StandardView::StandardView(K3b::Doc* doc, QWidget *parent )
             this, SLOT(slotCustomContextMenu(const QPoint&)));
     connect(m_fileView, SIGNAL(customContextMenuRequested(const QPoint&)),
             this, SLOT(slotCustomContextMenu(const QPoint&)));
+    connect(qApp, SIGNAL(focusChanged(QWidget*,QWidget*)),
+            this, SLOT(slotFocusChanged(QWidget*,QWidget*)) );
 }
 
 K3b::StandardView::~StandardView()
@@ -84,12 +91,14 @@ void K3b::StandardView::setModel(QAbstractItemModel *model)
     // connect signals/slots
     // this signal is better to get connected before the setCurrentIndex is called,
     // so that it updates the file view
-    connect(m_dirView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection&)),
+    connect(m_dirView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(slotCurrentDirChanged()));
     connect(m_fileView, SIGNAL(doubleClicked(QModelIndex)),
                         SIGNAL(activated(QModelIndex)));
     connect(model, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
             this, SLOT(slotItemsAdded()));
+    connect(m_fileView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(slotFileViewSelectionChanged()));
 
     // select the first item from the model
     if (m_dirProxy->rowCount() > 0)
@@ -103,15 +112,31 @@ void K3b::StandardView::setShowDirPanel(bool show)
         m_fileView->setRootIndex(QModelIndex());
 }
 
-void K3b::StandardView::contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos)
+void K3b::StandardView::selectionChanged( const QModelIndexList& indexes )
 {
     // do nothing in the default implementation (at least for now)
-    qDebug() << "Gotta show a menu for " << selectedIndexes.count() << " items at " << pos;
+    kDebug() << "Selected " << indexes.count() << " items";
+}
+
+void K3b::StandardView::contextMenu( const QPoint& pos )
+{
+    // do nothing in the default implementation (at least for now)
+    kDebug() << "Gotta show a menu at " << pos;
 }
 
 QModelIndexList K3b::StandardView::currentSelection() const
 {
-    return m_currentSelection;
+    QModelIndexList selected;
+    if( m_dirView->hasFocus() ) {
+        // if dirview has focus, we need to map the indexes to the source model
+        foreach( const QModelIndex& index, m_dirView->selectionModel()->selectedRows() ) {
+            selected.append( m_dirProxy->mapToSource( index ) );
+        }
+    }
+    else if( m_fileView->hasFocus() ) {
+        selected = m_fileView->selectionModel()->selectedRows();
+    }
+    return selected;
 }
 
 void K3b::StandardView::setCurrentRoot( const QModelIndex& index )
@@ -142,8 +167,13 @@ void K3b::StandardView::slotCurrentDirChanged()
     QModelIndexList indexes = m_dirView->selectionModel()->selectedRows();
 
     QModelIndex currentDir;
-    if (indexes.count())
+    if (indexes.count()) {
         currentDir = m_dirProxy->mapToSource(indexes.first());
+        
+        if( m_dirView->hasFocus() ) {
+            selectionChanged( QModelIndexList() << currentDir );
+        }
+    }
 
     // make the file view show only the child nodes of the currently selected
     // directory from dir view
@@ -153,33 +183,14 @@ void K3b::StandardView::slotCurrentDirChanged()
     emit currentRootChanged( currentDir );
 }
 
-void K3b::StandardView::slotCustomContextMenu(const QPoint &pos)
+void K3b::StandardView::slotCustomContextMenu( const QPoint &pos )
 {
-    QModelIndexList selection;
     // detect which view emitted the signal
-    QTreeView *view = dynamic_cast<QTreeView*>(sender());
-
-    // this should not happen, but just in case...
-    if (!view)
-        return;
-
-    // if the signal was emitted by the dirview, we need to map the indexes to the
-    // source model
-    if (view == m_dirView)
-    {
-        foreach(const QModelIndex &index, view->selectionModel()->selectedRows())
-            selection.append( m_dirProxy->mapToSource(index) );
+    if( QTreeView *view = dynamic_cast<QTreeView*>(sender()) ) {
+        // call the context menu method so that derived classes can place customized
+        // context menus
+        contextMenu( view->viewport()->mapToGlobal(pos) );
     }
-    else
-    {
-        selection = view->selectionModel()->selectedRows();
-    }
-
-    m_currentSelection = selection;
-
-    // call the context menu method so that derived classes can place customized
-    // context menus
-    contextMenuForSelection(selection, view->viewport()->mapToGlobal(pos));
 }
 
 void K3b::StandardView::slotParentDir()
@@ -195,33 +206,46 @@ void K3b::StandardView::slotRemoveSelectedIndexes()
 
     // create a list of persistent model indexes to be able to remove all of them
     QList<QPersistentModelIndex> indexes;
-    foreach(const QModelIndex &index, m_currentSelection)
+    foreach( const QModelIndex &index, currentSelection() ) {
         indexes.append( QPersistentModelIndex(index) );
-
+    }
 
     // and now ask the indexes to be removed
-    foreach(const QPersistentModelIndex &index, indexes)
+    foreach(const QPersistentModelIndex &index, indexes) {
         model->removeRow(index.row(), index.parent());
-
-    // clear the selection, just to make sure
-    m_currentSelection.clear();
+    }
 }
 
 void K3b::StandardView::slotRenameItem()
 {
-    if (m_currentSelection.isEmpty())
-        return;
-
-    if (m_dirView->hasFocus())
-        m_dirView->edit( m_dirProxy->mapFromSource(m_currentSelection.first()) );
-    else
-        m_fileView->edit( m_currentSelection.first() );
+    QModelIndexList selected = currentSelection();
+    
+    if (!selected.isEmpty()) {
+        if (m_dirView->hasFocus())
+            m_dirView->edit( m_dirProxy->mapFromSource(selected.first()) );
+        else
+            m_fileView->edit( selected.first() );
+    }
 }
 
 void K3b::StandardView::slotItemsAdded()
 {
     if (m_expanded)
         m_fileView->expandAll();
+}
+
+void K3b::StandardView::slotFileViewSelectionChanged()
+{
+    if( m_fileView->hasFocus() ) {
+        selectionChanged( m_fileView->selectionModel()->selectedRows() );
+    }
+}
+
+void K3b::StandardView::slotFocusChanged( QWidget*, QWidget* now )
+{
+    if( now == m_dirView || now == m_fileView ) {
+        selectionChanged( currentSelection() );
+    }
 }
 
 #include "k3bstandardview.moc"

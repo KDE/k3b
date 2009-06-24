@@ -2,6 +2,7 @@
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *           (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ *           (C) 2009      Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -68,6 +69,7 @@ K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
     setModel(m_model);
 
     connect( m_doc, SIGNAL(changed()), this, SLOT(slotDocChanged()) );
+    connect( this, SIGNAL(currentRootChanged(QModelIndex)), SLOT(slotCurrentRootChanged(QModelIndex)) );
     connect( this, SIGNAL(activated(QModelIndex)), SLOT(slotFileItemActivated(QModelIndex)) );
 
     setupContextMenu();
@@ -102,6 +104,9 @@ K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
     connect( m_volumeIDEdit, SIGNAL(textChanged(const QString&)),
              m_doc,
              SLOT(setVolumeID(const QString&)) );
+    
+    // Update actions associated with current directory
+    slotCurrentRootChanged( currentRoot() );
 
     // this is just for testing (or not?)
     // most likely every project type will have it's rc file in the future
@@ -221,20 +226,21 @@ void K3b::DataView::setupContextMenu()
     m_popupMenu->addAction( actionCollection()->action("project_burn") );
 }
 
-void K3b::DataView::contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos)
+
+void K3b::DataView::selectionChanged( const QModelIndexList& indexes )
 {
-    bool open = true, rename = true, remove = true, parent = true;
+    bool open = true, rename = true, remove = true;
 
     // we can only rename one item at a time
     // also, we can only create a new dir over a single directory
-    if (selectedIndexes.count() > 1)
+    if (indexes.count() > 1)
     {
         rename = false;
         open = false;
     }
-    else if (selectedIndexes.count() == 1)
+    else if (indexes.count() == 1)
     {
-        QModelIndex index = selectedIndexes.first();
+        QModelIndex index = indexes.first();
         rename = (index.flags() & Qt::ItemIsEditable);
         open = (index.data(K3b::ItemTypeRole).toInt() == (int) K3b::FileItemType);
     }
@@ -246,7 +252,7 @@ void K3b::DataView::contextMenuForSelection(const QModelIndexList &selectedIndex
     }
 
     // check if all selected items can be removed
-    foreach(const QModelIndex &index, selectedIndexes)
+    foreach(const QModelIndex &index, indexes)
     {
         if (!index.data(K3b::CustomFlagsRole).toInt() & K3b::ItemIsRemovable)
         {
@@ -255,16 +261,17 @@ void K3b::DataView::contextMenuForSelection(const QModelIndexList &selectedIndex
         }
     }
 
-    if (m_model->indexForItem(m_doc->root()) == currentRoot())
-        parent = false;
-
     m_actionRename->setEnabled( rename );
     m_actionRemove->setEnabled( remove );
     m_actionOpen->setEnabled( open );
-    m_actionParentDir->setEnabled( parent );
-
-    m_popupMenu->exec(pos);
 }
+
+
+void K3b::DataView::contextMenu( const QPoint& pos )
+{
+    m_popupMenu->exec( pos );
+}
+
 
 void K3b::DataView::slotNewDir()
 {
@@ -297,6 +304,7 @@ void K3b::DataView::slotNewDir()
 
     m_doc->addEmptyDir( name, parent );
 }
+
 
 void K3b::DataView::slotItemProperties()
 {
@@ -340,6 +348,12 @@ void K3b::DataView::slotOpen()
             KRun::displayOpenWithDialog( KUrl::List() << url, false, this );
         }
     }
+}
+
+
+void K3b::DataView::slotCurrentRootChanged( const QModelIndex& newRoot )
+{
+    m_actionParentDir->setEnabled( m_model->indexForItem(m_doc->root()) != newRoot );
 }
 
 

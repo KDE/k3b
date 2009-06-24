@@ -2,6 +2,7 @@
 *
 * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
 *           (C) 2009      Arthur Renato Mello <arthur@mandriva.com>
+*           (C) 2009      Michal Malek <michalm@jabster.pl>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -49,7 +50,11 @@ namespace K3b {
             ~VcdView();
 
         private Q_SLOTS:
-            void contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos);
+            /**
+            * reimplemented from @ref StandardView
+            */
+            virtual void selectionChanged( const QModelIndexList& indexes );
+            virtual void contextMenu( const QPoint& pos );
             void showPropertiesDialog();
 
         protected:

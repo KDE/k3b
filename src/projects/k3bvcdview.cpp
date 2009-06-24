@@ -2,6 +2,7 @@
 *
 * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
 *           (C) 2009      Arthur Renato Mello <arthur@mandriva.com>
+*           (C) 2009      Michal Malek <michalm@jabster.pl>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -96,15 +97,19 @@ void K3b::VcdView::init()
 }
 
 
-void K3b::VcdView::contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos)
+void K3b::VcdView::selectionChanged( const QModelIndexList& indexes )
 {
-    if( selectedIndexes.count() >= 1 ) {
+    if( indexes.count() >= 1 ) {
         m_actionRemove->setEnabled(true);
     }
     else {
         m_actionRemove->setEnabled(false);
     }
+}
 
+
+void K3b::VcdView::contextMenu( const QPoint& pos )
+{
     m_popupMenu->popup( pos );
 }
 

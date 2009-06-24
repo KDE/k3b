@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ *           (C) 2009      Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -63,21 +64,26 @@ namespace K3b {
          * or not.
          */
         void setShowDirPanel(bool show);
-
+        
         /**
-         * Context menu for a list of indexes.
-         * This method should be reimplemented in derived classes to get
-         * custom context menus for the selected items.
+         * Called when set of selected items is changed.
+         * Can be used to updated state of actions working on selected items.
          *
          * The default implementation does nothing (at least for now)
          */
-        virtual void contextMenuForSelection(const QModelIndexList &selectedIndexes, const QPoint &pos);
+        virtual void selectionChanged( const QModelIndexList& indexes );
+
+        /**
+         * Called when context menu is supposed to show at specified point.
+         * This method should be reimplemented in derived classes to show
+         * custom context menus.
+         *
+         * The default implementation does nothing (at least for now)
+         */
+        virtual void contextMenu( const QPoint& pos );
 
         /**
          * Returns a list of the currently selected indexes.
-         * This method is meant to be used together with @ref contextMenuForSelection()
-         * meaning that when @ref contextMenuForSelection() is called, currentSelection()
-         * will provide the same list as the one used in the previous slot.
          *
          * The main purpose of its existence is for slots connected to actions in the context menu
          * to know which items they should operate in
@@ -131,6 +137,8 @@ namespace K3b {
          * file view
          */
         void slotItemsAdded();
+        void slotFileViewSelectionChanged();
+        void slotFocusChanged( QWidget* old, QWidget* now );
 
     signals:
         void currentRootChanged( const QModelIndex& newRoot );
@@ -141,7 +149,6 @@ namespace K3b {
         QTreeView* m_fileView;
         QSplitter* m_splitter;
         DirProxyModel* m_dirProxy;
-        QModelIndexList m_currentSelection;
         bool m_expanded;
     };
 }
