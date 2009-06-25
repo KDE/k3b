@@ -62,6 +62,8 @@ K3b::AudioView::AudioView( K3b::AudioDoc* pDoc, QWidget* parent )
     : K3b::StandardView( pDoc, parent ),
       m_updatingColumnWidths(false)
 {
+    connect( this, SIGNAL(activated(QModelIndex)), SLOT(slotItemActivated(QModelIndex)) );
+    
     m_doc = pDoc;
 
     m_model = new K3b::AudioProjectModel(m_doc, this);
@@ -212,6 +214,24 @@ void K3b::AudioView::setupActions()
 }
 
 
+void K3b::AudioView::trackProperties( const QModelIndexList& indexes )
+{
+    QList<K3b::AudioTrack*> tracks;
+    QList<K3b::AudioDataSource*> sources;
+    getSelectedItems( tracks, sources, indexes );
+
+    // TODO: add tracks from sources to tracks
+
+    if( !tracks.isEmpty() ) {
+        K3b::AudioTrackDialog d( tracks, this );
+        d.exec();
+    }
+    else {
+        slotProperties();
+    }
+}
+
+
 void K3b::AudioView::getSelectedItems( QList<K3b::AudioTrack*>& tracks,
                                           QList<K3b::AudioDataSource*>& sources )
 {
@@ -289,6 +309,12 @@ void K3b::AudioView::selectionChanged( const QModelIndexList& indexes )
 void K3b::AudioView::contextMenu( const QPoint& pos )
 {
     m_popupMenu->exec( pos );
+}
+
+
+void K3b::AudioView::slotItemActivated( const QModelIndex& index )
+{
+    trackProperties( QModelIndexList() << index );
 }
 
 
@@ -480,19 +506,7 @@ void K3b::AudioView::slotQueryMusicBrainz()
 
 void K3b::AudioView::slotTrackProperties()
 {
-    QList<K3b::AudioTrack*> tracks;
-    QList<K3b::AudioDataSource*> sources;
-    getSelectedItems( tracks, sources );
-
-    // TODO: add tracks from sources to tracks
-
-    if( !tracks.isEmpty() ) {
-        K3b::AudioTrackDialog d( tracks, this );
-        d.exec();
-    }
-    else {
-        slotProperties();
-    }
+    trackProperties( currentSelection() );
 }
 
 void K3b::AudioView::slotAdjustColumns()

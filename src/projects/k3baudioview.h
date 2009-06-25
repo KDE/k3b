@@ -65,6 +65,7 @@ namespace K3b {
         void init();
 
     private Q_SLOTS:
+        void slotItemActivated( const QModelIndex& index );
         void slotAudioConversion();
 
         // action slots
@@ -81,6 +82,7 @@ namespace K3b {
 
     private:
         void setupActions();
+        void trackProperties( const QModelIndexList& indexes );
 
         AudioDoc* m_doc;
         K3b::AudioProjectModel* m_model;
