@@ -2,6 +2,7 @@
  *
  * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
  *           (C) 2009      Arthur Renato Mello <arthur@mandriva.com>
+ *           (C) 2009      Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -17,21 +18,18 @@
 #ifndef _K3B_VIDEO_DVDVIEW_H_
 #define _K3B_VIDEO_DVDVIEW_H_
 
-#include "k3bstandardview.h"
+#include "k3bdataview.h"
 
 namespace K3b {
     class VideoDvdDoc;
-	class DataProjectModel;
 
-    class VideoDvdView : public StandardView
+    class VideoDvdView : public DataView
     {
         Q_OBJECT
 
     public:
         VideoDvdView( VideoDvdDoc* doc, QWidget *parent = 0 );
         ~VideoDvdView();
-
-        void addUrls( const KUrl::List& );
 
     protected:
         virtual ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
@@ -40,9 +38,6 @@ namespace K3b {
 
     private:
         VideoDvdDoc* m_doc;
-        //DataDirTreeView* m_dataDirTree;
-        //DataFileView* m_dataFileView;
-        K3b::DataProjectModel* m_model;
     };
 }
 

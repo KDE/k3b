@@ -15,14 +15,16 @@
 #ifndef _K3B_PROJECT_PLUGIN_H_
 #define _K3B_PROJECT_PLUGIN_H_
 
+#include "k3bdoc.h"
 #include "k3bplugin.h"
 
 #include "k3b_export.h"
 
+#include <QFlags>
+
 class KConfigGroup;
 
 namespace K3b {
-    class Doc;
 
     /**
      * In case your plugin provides a GUI it is recommended to use the
@@ -71,30 +73,18 @@ namespace K3b {
         Q_OBJECT
 
     public:
+        Q_DECLARE_FLAGS( Type, Doc::DocType );
+        
         /**
-         * @param type The type of the plugin
+         * @param type The type of the plugin which can be a combination of @see Doc::DocType
          * @param gui If true the plugin is supposed to provide a widget via @p createGUI(). In that case
          *            @p activate() will not be used. A plugin has a GUI if it's functionality is started
          *            by some user input.
          */
-        ProjectPlugin( int type, bool gui = false, QObject* parent = 0 );
+        ProjectPlugin( Type type, bool gui = false, QObject* parent = 0 );
 
         virtual ~ProjectPlugin() {
         }
-
-        // TODO: move this to Doc?
-        enum Type {
-            AUDIO_CD = 0x1,
-            DATA_CD = 0x2,
-            MIXED_CD = 0x4,
-            VIDEO_CD = 0x8,
-            MOVIX_CD = 0x10,
-            DATA_DVD = 0x20,
-            VIDEO_DVD = 0x40,
-            MOVIX_DVD = 0x80,
-            DATA_PROJECTS = DATA_CD|DATA_DVD,
-            MOVIX_PROJECTS = MOVIX_CD|MOVIX_DVD
-        };
 
         // TODO: maybe we should use something like "ProjectPlugin/AudioCD" based on the type?
         QString category() const { return "ProjectPlugin"; }
@@ -106,7 +96,7 @@ namespace K3b {
          * Needs to return a proper type. The default implementation returns the type specified
          * in the constructor.
          */
-        virtual int type() const { return m_type; }
+        virtual Type type() const { return m_type; }
 
         /**
          * Text used for menu entries and the like.
@@ -148,7 +138,7 @@ namespace K3b {
         void setIcon( const QString& s ) { m_icon = s; }
 
     private:
-        int m_type;
+        Type m_type;
         bool m_hasGUI;
         QString m_text;
         QString m_toolTip;
@@ -157,5 +147,6 @@ namespace K3b {
     };
 }
 
+Q_DECLARE_OPERATORS_FOR_FLAGS( K3b::ProjectPlugin::Type );
 
 #endif

@@ -86,10 +86,8 @@ namespace K3b {
         /**
          * Call this to add the projectplugin buttons to the toolbox. It is not called
          * automatically to make it possible to add other buttons before.
-         *
-         * @param projectType the type of the project (@see ProjectPlugin)
          */
-        void addPluginButtons( int projectType );
+        void addPluginButtons();
 
         FillStatusDisplay* fillStatusDisplay() const { return m_fillStatusDisplay; }
         KToolBar* toolBox() const { return m_toolBox; }

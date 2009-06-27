@@ -52,12 +52,12 @@ namespace K3b {
         virtual ~Doc();
 
         enum DocType {
-            AUDIO = 1,
-            DATA,
-            MIXED,
-            VCD,
-            MOVIX,
-            VIDEODVD
+            AUDIO = 0x1,
+            DATA = 0x2,
+            MIXED = 0x4,
+            VCD = 0x8,
+            MOVIX = 0x10,
+            VIDEODVD = 0x20
         };
 
         virtual int type() const { return m_docType; }

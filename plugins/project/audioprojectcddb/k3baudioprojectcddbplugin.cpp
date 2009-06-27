@@ -41,7 +41,7 @@ K3B_EXPORT_PLUGIN( k3baudioprojectcddbplugin, K3bAudioProjectCddbPlugin )
 
 
 K3bAudioProjectCddbPlugin::K3bAudioProjectCddbPlugin( QObject* parent, const QVariantList& )
-    : K3b::ProjectPlugin( AUDIO_CD, false, parent ),
+    : K3b::ProjectPlugin( K3b::Doc::AUDIO, false, parent ),
       m_progress(0)
 {
     setText( i18n("Query Cddb") );

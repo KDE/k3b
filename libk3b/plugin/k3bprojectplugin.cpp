@@ -13,7 +13,7 @@
  */
 #include "k3bprojectplugin.h"
 
-K3b::ProjectPlugin::ProjectPlugin( int type, bool gui, QObject* parent )
+K3b::ProjectPlugin::ProjectPlugin( Type type, bool gui, QObject* parent )
   : K3b::Plugin( parent ),
     m_type(type),
     m_hasGUI(gui)

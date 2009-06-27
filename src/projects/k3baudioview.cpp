@@ -41,7 +41,6 @@
 
 #include "k3bfillstatusdisplay.h"
 #include "k3bmsf.h"
-#include "k3bprojectplugin.h"
 
 // QT-includes
 #include <qlayout.h>
@@ -112,7 +111,7 @@ K3b::AudioView::AudioView( K3b::AudioDoc* pDoc, QWidget* parent )
 #endif
 #endif
 
-    addPluginButtons( K3b::ProjectPlugin::AUDIO_CD );
+    addPluginButtons();
 
     // this is just for testing (or not?)
     // most likely every project type will have it's rc file in the future

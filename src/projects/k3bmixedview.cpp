@@ -27,7 +27,6 @@
 #include "k3baudiodoc.h"
 #include "k3bdatadoc.h"
 #include "k3bfillstatusdisplay.h"
-#include "k3bprojectplugin.h"
 #include "k3bdiritem.h"
 
 #include <kdialog.h>
@@ -69,7 +68,7 @@ K3b::MixedView::MixedView( K3b::MixedDoc* doc, QWidget* parent )
     toolBox()->addSeparator();
 #endif
 #endif
-    addPluginButtons( K3b::ProjectPlugin::MIXED_CD );
+    addPluginButtons();
 }
 
 

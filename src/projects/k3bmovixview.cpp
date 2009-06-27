@@ -24,7 +24,6 @@
 
 #include "k3bfillstatusdisplay.h"
 #include "k3bdatapropertiesdialog.h"
-#include "k3bprojectplugin.h"
 #include "k3baction.h"
 
 #include <klocale.h>
@@ -78,7 +77,7 @@ K3b::MovixView::MovixView( K3b::MovixDoc* doc, QWidget* parent )
     //  k3bMain()->actionCollection()->action("file_burn")->plug( m_popupMenu );
 
 
-    addPluginButtons( K3b::ProjectPlugin::MOVIX_CD );
+    addPluginButtons();
 
     m_volumeIDEdit = new QLineEdit( doc->isoOptions().volumeID(), toolBox() );
     toolBox()->addWidget( new QLabel( i18n("Volume Name:"), toolBox() ) );

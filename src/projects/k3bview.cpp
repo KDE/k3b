@@ -117,13 +117,13 @@ void K3b::View::slotProperties()
 }
 
 
-void K3b::View::addPluginButtons( int projectType )
+void K3b::View::addPluginButtons()
 {
     QList<K3b::Plugin*> pl = k3bcore->pluginManager()->plugins( "ProjectPlugin" );
     for( QList<K3b::Plugin*>::const_iterator it = pl.constBegin();
          it != pl.constEnd(); ++it ) {
         K3b::ProjectPlugin* pp = dynamic_cast<K3b::ProjectPlugin*>( *it );
-        if( pp && (pp->type() & projectType) ) {
+        if( pp && (pp->type() & m_doc->type()) ) {
             QAction* button = toolBox()->addAction(     pp->text(),
                                                         this,
                                                         SLOT(slotPluginButtonClicked()) );

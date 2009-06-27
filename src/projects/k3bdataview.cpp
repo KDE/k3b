@@ -29,7 +29,6 @@
 #include "k3bdeviceselectiondialog.h"
 #include "k3bfillstatusdisplay.h"
 #include "k3bcore.h"
-#include "k3bprojectplugin.h"
 #include "k3bvalidators.h"
 #include "k3baction.h"
 
@@ -72,30 +71,9 @@ K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
     connect( this, SIGNAL(currentRootChanged(QModelIndex)), SLOT(slotCurrentRootChanged(QModelIndex)) );
     connect( this, SIGNAL(activated(QModelIndex)), SLOT(slotFileItemActivated(QModelIndex)) );
 
-    setupContextMenu();
+    setupActions();
 
-    // the data actions
-    KAction* actionImportSession = K3b::createAction( this, i18n("&Import Session..."), "document-import", 0, this, SLOT(importSession()),
-                                                      actionCollection(), "project_data_import_session" );
-    KAction* actionClearSession = K3b::createAction( this, i18n("&Clear Imported Session"), "edit-clear", 0, this,
-                                                     SLOT(clearImportedSession()), actionCollection(),
-                                                     "project_data_clear_imported_session" );
-    KAction* actionEditBootImages = K3b::createAction( this, i18n("&Edit Boot Images..."), "document-properties", 0, this,
-                                                       SLOT(editBootImages()), actionCollection(),
-                                                       "project_data_edit_boot_images" );
-
-    actionImportSession->setToolTip( i18n("Import a previously burned session into the current project") );
-    actionClearSession->setToolTip( i18n("Remove the imported items from a previous session") );
-    actionEditBootImages->setToolTip( i18n("Modify the bootable settings of the current project") );
-
-    toolBox()->addAction( actionImportSession );
-    toolBox()->addAction( actionClearSession );
-    toolBox()->addAction( actionEditBootImages );
-    toolBox()->addSeparator();
-    toolBox()->addAction( actionCollection()->action("parent_dir") );
-    toolBox()->addSeparator();
-
-    addPluginButtons( K3b::ProjectPlugin::DATA_CD );
+    addPluginButtons();
 
     m_volumeIDEdit = new QLineEdit( doc->isoOptions().volumeID(), toolBox() );
     m_volumeIDEdit->setValidator( new K3b::Latin1Validator( m_volumeIDEdit ) );
@@ -188,8 +166,22 @@ void K3b::DataView::addUrls( const KUrl::List& urls )
     DataUrlAddingDialog::addUrls( urls, item);
 }
 
-void K3b::DataView::setupContextMenu()
+void K3b::DataView::setupActions()
 {
+    // the data actions
+    m_actionImportSession = K3b::createAction( this, i18n("&Import Session..."), "document-import", 0, this, SLOT(importSession()),
+                                                      actionCollection(), "project_data_import_session" );
+    m_actionClearSession = K3b::createAction( this, i18n("&Clear Imported Session"), "edit-clear", 0, this,
+                                                     SLOT(clearImportedSession()), actionCollection(),
+                                                     "project_data_clear_imported_session" );
+    m_actionEditBootImages = K3b::createAction( this, i18n("&Edit Boot Images..."), "document-properties", 0, this,
+                                                       SLOT(editBootImages()), actionCollection(),
+                                                       "project_data_edit_boot_images" );
+
+    m_actionImportSession->setToolTip( i18n("Import a previously burned session into the current project") );
+    m_actionClearSession->setToolTip( i18n("Remove the imported items from a previous session") );
+    m_actionEditBootImages->setToolTip( i18n("Modify the bootable settings of the current project") );
+    
     m_actionProperties = new KAction( this );
     m_actionProperties->setText( i18n("Properties") );
     m_actionProperties->setIcon( KIcon( "document-properties" ) );
@@ -211,7 +203,16 @@ void K3b::DataView::setupContextMenu()
                                            actionCollection(), "parent_dir" );
     m_actionOpen = K3b::createAction( this, i18n("Open"), "document-open", 0, this, SLOT(slotOpen()),
                                       actionCollection(), "open" );
-
+    
+    // Setup toolbar
+    toolBox()->addAction( m_actionImportSession );
+    toolBox()->addAction( m_actionClearSession );
+    toolBox()->addAction( m_actionEditBootImages );
+    toolBox()->addSeparator();
+    toolBox()->addAction( m_actionParentDir );
+    toolBox()->addSeparator();
+    
+    // Create context menu
     m_popupMenu = new KMenu( this );
     m_popupMenu->addAction( m_actionParentDir );
     m_popupMenu->addSeparator();

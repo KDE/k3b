@@ -69,12 +69,16 @@ namespace K3b {
          */
         virtual void selectionChanged( const QModelIndexList& indexes );
         virtual void contextMenu( const QPoint& pos );
+        
+        KAction* m_actionImportSession;
+        KAction* m_actionClearSession;
+        KAction* m_actionEditBootImages;
 
     private:
+        void setupActions();
+        
         DataDoc* m_doc;
         K3b::DataProjectModel* m_model;
-
-        void setupContextMenu();
 
         KMenu* m_popupMenu;
         KAction* m_actionParentDir;
