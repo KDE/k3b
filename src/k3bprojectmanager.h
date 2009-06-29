@@ -41,7 +41,7 @@ namespace K3b {
          * Create a new project including loading user defaults and creating
          * the dcop interface.
          */
-        Doc* createProject( Doc::DocType type );
+        Doc* createProject( Doc::Type type );
 
         /**
          * Opens a K3b project.
@@ -82,7 +82,7 @@ namespace K3b {
 
     private:
         // used internal
-        Doc* createEmptyProject( Doc::DocType );
+        Doc* createEmptyProject( Doc::Type );
 
         class Private;
         Private* d;

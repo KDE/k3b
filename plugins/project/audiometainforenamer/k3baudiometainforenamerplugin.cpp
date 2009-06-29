@@ -380,7 +380,7 @@ bool K3bAudioMetainfoRenamerPluginWidget::existsOtherItemWithSameName( K3b::File
 
 
 K3bAudioMetainfoRenamerPlugin::K3bAudioMetainfoRenamerPlugin( QObject* parent, const QVariantList& )
-    : K3b::ProjectPlugin( K3b::Doc::DATA, true, parent )
+    : K3b::ProjectPlugin( K3b::Doc::DataProject, true, parent )
 {
     setText( i18n("Rename Audio Files") );
     setToolTip( i18n("Rename audio files based on their meta info.") );

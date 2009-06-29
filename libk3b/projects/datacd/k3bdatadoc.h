@@ -18,20 +18,16 @@
 
 #include "k3bdoc.h"
 #include "k3bdataitem.h"
-
 #include "k3bisooptions.h"
 
-#include <qfileinfo.h>
-#include <qstringlist.h>
-//Added by qt3to4:
+#include <QStringList>
 
-#include <kurl.h>
 #include <kio/global.h>
+
 #include "k3b_export.h"
 
 class KConfig;
 class QString;
-class QStringList;
 class QDomDocument;
 class QDomElement;
 
@@ -60,8 +56,8 @@ namespace K3b {
         DataDoc( QObject* parent = 0 );
         virtual ~DataDoc();
 
-        virtual int type() const { return DATA; }
-        virtual QString typeString() const;
+        virtual Type type() const { return DataProject; }
+        virtual QString typeString() const { return QString::fromLatin1("data"); }
 
         virtual QString name() const;
 

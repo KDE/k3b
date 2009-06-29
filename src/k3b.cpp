@@ -463,13 +463,13 @@ void K3b::MainWindow::createClient( K3b::Doc* doc )
     // create the proper K3b::View (maybe we should put this into some other class like K3b::ProjectManager)
     K3b::View* view = 0;
     switch( doc->type() ) {
-    case K3b::Doc::AUDIO:
+    case K3b::Doc::AudioProject:
         view = new K3b::AudioView( static_cast<K3b::AudioDoc*>(doc), m_documentTab );
         break;
-    case K3b::Doc::DATA:
+    case K3b::Doc::DataProject:
         view = new K3b::DataView( static_cast<K3b::DataDoc*>(doc), m_documentTab );
         break;
-    case K3b::Doc::MIXED:
+    case K3b::Doc::MixedProject:
     {
         K3b::MixedDoc* mixedDoc = static_cast<K3b::MixedDoc*>(doc);
         view = new K3b::MixedView( mixedDoc, m_documentTab );
@@ -477,13 +477,13 @@ void K3b::MainWindow::createClient( K3b::Doc* doc )
         mixedDoc->audioDoc()->setView( view );
         break;
     }
-    case K3b::Doc::VCD:
+    case K3b::Doc::VcdProject:
         view = new K3b::VcdView( static_cast<K3b::VcdDoc*>(doc), m_documentTab );
         break;
-    case K3b::Doc::MOVIX:
+    case K3b::Doc::MovixProject:
         view = new K3b::MovixView( static_cast<K3b::MovixDoc*>(doc), m_documentTab );
         break;
-    case K3b::Doc::VIDEODVD:
+    case K3b::Doc::VideoDvdProject:
         view = new K3b::VideoDvdView( static_cast<K3b::VideoDvdDoc*>(doc), m_documentTab );
         break;
     }
@@ -529,7 +529,7 @@ K3b::Doc* K3b::MainWindow::openDocument(const KUrl& url)
         // see if it's an audio cue file
         K3b::CueFileParser parser( url.toLocalFile() );
         if( parser.isValid() && parser.toc().contentType() == K3b::Device::AUDIO ) {
-            K3b::Doc* doc = k3bappcore->projectManager()->createProject( K3b::Doc::AUDIO );
+            K3b::Doc* doc = k3bappcore->projectManager()->createProject( K3b::Doc::AudioProject );
             doc->addUrl( url );
             return doc;
         }
@@ -1055,7 +1055,7 @@ K3b::Doc* K3b::MainWindow::slotNewAudioDoc()
 {
     slotStatusMsg(i18n("Creating new Audio CD Project."));
 
-    K3b::Doc* doc = k3bappcore->projectManager()->createProject( K3b::Doc::AUDIO );
+    K3b::Doc* doc = k3bappcore->projectManager()->createProject( K3b::Doc::AudioProject );
 
     return doc;
 }
@@ -1064,7 +1064,7 @@ K3b::Doc* K3b::MainWindow::slotNewDataDoc()
 {
     slotStatusMsg(i18n("Creating new Data CD Project."));
 
-    K3b::Doc* doc = k3bappcore->projectManager()->createProject( K3b::Doc::DATA );
+    K3b::Doc* doc = k3bappcore->projectManager()->createProject( K3b::Doc::DataProject );
 
     return doc;
 }
@@ -1080,7 +1080,7 @@ K3b::Doc* K3b::MainWindow::slotNewVideoDvdDoc()
 {
     slotStatusMsg(i18n("Creating new Video DVD Project."));
 
-    K3b::Doc* doc = k3bappcore->projectManager()->createProject( K3b::Doc::VIDEODVD );
+    K3b::Doc* doc = k3bappcore->projectManager()->createProject( K3b::Doc::VideoDvdProject );
 
     return doc;
 }
@@ -1090,7 +1090,7 @@ K3b::Doc* K3b::MainWindow::slotNewMixedDoc()
 {
     slotStatusMsg(i18n("Creating new Mixed Mode CD Project."));
 
-    K3b::Doc* doc = k3bappcore->projectManager()->createProject( K3b::Doc::MIXED );
+    K3b::Doc* doc = k3bappcore->projectManager()->createProject( K3b::Doc::MixedProject );
 
     return doc;
 }
@@ -1099,7 +1099,7 @@ K3b::Doc* K3b::MainWindow::slotNewVcdDoc()
 {
     slotStatusMsg(i18n("Creating new Video CD Project."));
 
-    K3b::Doc* doc = k3bappcore->projectManager()->createProject( K3b::Doc::VCD );
+    K3b::Doc* doc = k3bappcore->projectManager()->createProject( K3b::Doc::VcdProject );
 
     return doc;
 }
@@ -1109,7 +1109,7 @@ K3b::Doc* K3b::MainWindow::slotNewMovixDoc()
 {
     slotStatusMsg(i18n("Creating new eMovix Project."));
 
-    K3b::Doc* doc = k3bappcore->projectManager()->createProject( K3b::Doc::MOVIX );
+    K3b::Doc* doc = k3bappcore->projectManager()->createProject( K3b::Doc::MovixProject );
 
     return doc;
 }

@@ -25,7 +25,8 @@ namespace K3b {
         VideoDvdDoc( QObject* parent = 0 );
         virtual ~VideoDvdDoc();
 
-        virtual int type() const { return VIDEODVD; }
+        virtual Type type() const { return VideoDvdProject; }
+        virtual QString typeString() const { return QString::fromLatin1("video_dvd"); }
 
         Device::MediaTypes supportedMediaTypes() const;
 
@@ -36,9 +37,6 @@ namespace K3b {
         DirItem* videoTsDir() const { return m_videoTsDir; }
 
         // TODO: implement load- and saveDocumentData since we do not need all those options
-
-    protected:
-        virtual QString typeString() const { return "video_dvd"; }
 
     private:
         DirItem* m_videoTsDir;

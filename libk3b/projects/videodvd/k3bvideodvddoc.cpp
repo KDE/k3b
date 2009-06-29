@@ -15,12 +15,10 @@
 
 #include "k3bvideodvddoc.h"
 #include "k3bvideodvdjob.h"
-
 #include "k3bdiritem.h"
-
 #include "k3bisooptions.h"
 
-#include <kconfig.h>
+#include <KConfig>
 
 
 K3b::VideoDvdDoc::VideoDvdDoc( QObject* parent )

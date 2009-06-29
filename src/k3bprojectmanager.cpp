@@ -179,7 +179,7 @@ K3b::Doc* K3b::ProjectManager::activeProject() const
 }
 
 
-K3b::Doc* K3b::ProjectManager::createEmptyProject( K3b::Doc::DocType type )
+K3b::Doc* K3b::ProjectManager::createEmptyProject( K3b::Doc::Type type )
 {
     kDebug() << type;
 
@@ -187,37 +187,37 @@ K3b::Doc* K3b::ProjectManager::createEmptyProject( K3b::Doc::DocType type )
     QString fileName;
 
     switch( type ) {
-    case K3b::Doc::AUDIO: {
+    case K3b::Doc::AudioProject: {
         doc = new K3b::AudioDoc( this );
         fileName = i18n("AudioCD%1",d->audioUntitledCount++);
         break;
     }
 
-    case K3b::Doc::DATA: {
+    case K3b::Doc::DataProject: {
         doc = new K3b::DataDoc( this );
         fileName = i18n("Data%1",d->dataUntitledCount++);
         break;
     }
 
-    case K3b::Doc::MIXED: {
+    case K3b::Doc::MixedProject: {
         doc = new K3b::MixedDoc( this );
         fileName=i18n("MixedCD%1",d->mixedUntitledCount++);
         break;
     }
 
-    case K3b::Doc::VCD: {
+    case K3b::Doc::VcdProject: {
         doc = new K3b::VcdDoc( this );
         fileName=i18n("VideoCD%1",d->vcdUntitledCount++);
         break;
     }
 
-    case K3b::Doc::MOVIX: {
+    case K3b::Doc::MovixProject: {
         doc = new K3b::MovixDoc( this );
         fileName=i18n("eMovix%1",d->movixUntitledCount++);
         break;
     }
 
-    case K3b::Doc::VIDEODVD: {
+    case K3b::Doc::VideoDvdProject: {
         doc = new K3b::VideoDvdDoc( this );
         fileName = i18n("VideoDVD%1",d->videoDvdUntitledCount++);
         break;
@@ -236,7 +236,7 @@ K3b::Doc* K3b::ProjectManager::createEmptyProject( K3b::Doc::DocType type )
 }
 
 
-K3b::Doc* K3b::ProjectManager::createProject( K3b::Doc::DocType type )
+K3b::Doc* K3b::ProjectManager::createProject( K3b::Doc::Type type )
 {
     kDebug() << type;
 
@@ -288,7 +288,7 @@ void K3b::ProjectManager::loadDefaults( K3b::Doc* doc )
 
 
     switch( doc->type() ) {
-    case K3b::Doc::AUDIO: {
+    case K3b::Doc::AudioProject: {
         K3b::AudioDoc* audioDoc = static_cast<K3b::AudioDoc*>(doc);
 
         audioDoc->writeCdText( c.readEntry( "cd_text", true ) );
@@ -301,7 +301,7 @@ void K3b::ProjectManager::loadDefaults( K3b::Doc* doc )
         break;
     }
 
-    case K3b::Doc::MOVIX: {
+    case K3b::Doc::MovixProject: {
         K3b::MovixDoc* movixDoc = static_cast<K3b::MovixDoc*>(doc);
 
         movixDoc->setSubtitleFontset( c.readEntry("subtitle_fontset") );
@@ -322,7 +322,7 @@ void K3b::ProjectManager::loadDefaults( K3b::Doc* doc )
         // fallthrough
     }
 
-    case K3b::Doc::DATA: {
+    case K3b::Doc::DataProject: {
         K3b::DataDoc* dataDoc = static_cast<K3b::DataDoc*>(doc);
 
         dataDoc->setIsoOptions( K3b::IsoOptions::load( c, false ) );
@@ -352,7 +352,7 @@ void K3b::ProjectManager::loadDefaults( K3b::Doc* doc )
         break;
     }
 
-    case K3b::Doc::VIDEODVD: {
+    case K3b::Doc::VideoDvdProject: {
         // the only defaults we need here are the volume id and stuff
         K3b::DataDoc* dataDoc = static_cast<K3b::DataDoc*>(doc);
         dataDoc->setIsoOptions( K3b::IsoOptions::load( c, false ) );
@@ -360,7 +360,7 @@ void K3b::ProjectManager::loadDefaults( K3b::Doc* doc )
         break;
     }
 
-    case K3b::Doc::MIXED: {
+    case K3b::Doc::MixedProject: {
         K3b::MixedDoc* mixedDoc = static_cast<K3b::MixedDoc*>(doc);
 
         mixedDoc->audioDoc()->writeCdText( c.readEntry( "cd_text", true ) );
@@ -390,7 +390,7 @@ void K3b::ProjectManager::loadDefaults( K3b::Doc* doc )
         break;
     }
 
-    case K3b::Doc::VCD: {
+    case K3b::Doc::VcdProject: {
         K3b::VcdDoc* vcdDoc = static_cast<K3b::VcdDoc*>(doc);
 
         // FIXME: I think we miss a lot here!
@@ -407,9 +407,9 @@ void K3b::ProjectManager::loadDefaults( K3b::Doc* doc )
     }
     }
 
-    if( doc->type() == K3b::Doc::DATA ||
-        doc->type() == K3b::Doc::MOVIX ||
-        doc->type() == K3b::Doc::VIDEODVD ) {
+    if( doc->type() == K3b::Doc::DataProject ||
+        doc->type() == K3b::Doc::MovixProject ||
+        doc->type() == K3b::Doc::VideoDvdProject ) {
         if( static_cast<K3b::DataDoc*>(doc)->isoOptions().volumeID().isEmpty() )
             static_cast<K3b::DataDoc*>(doc)->setVolumeID( doc->URL().fileName() );
     }
@@ -507,23 +507,23 @@ K3b::Doc* K3b::ProjectManager::openProject( const KUrl& url )
     }
 
     // check the documents DOCTYPE
-    K3b::Doc::DocType type = K3b::Doc::AUDIO;
+    K3b::Doc::Type type = K3b::Doc::AudioProject;
     if( xmlDoc.doctype().name() == "k3b_audio_project" )
-        type = K3b::Doc::AUDIO;
+        type = K3b::Doc::AudioProject;
     else if( xmlDoc.doctype().name() == "k3b_data_project" )
-        type = K3b::Doc::DATA;
+        type = K3b::Doc::DataProject;
     else if( xmlDoc.doctype().name() == "k3b_vcd_project" )
-        type = K3b::Doc::VCD;
+        type = K3b::Doc::VcdProject;
     else if( xmlDoc.doctype().name() == "k3b_mixed_project" )
-        type = K3b::Doc::MIXED;
+        type = K3b::Doc::MixedProject;
     else if( xmlDoc.doctype().name() == "k3b_movix_project" )
-        type = K3b::Doc::MOVIX;
+        type = K3b::Doc::MovixProject;
     else if( xmlDoc.doctype().name() == "k3b_movixdvd_project" )
-        type = K3b::Doc::MOVIX; // backward compatibility
+        type = K3b::Doc::MovixProject; // backward compatibility
     else if( xmlDoc.doctype().name() == "k3b_dvd_project" )
-        type = K3b::Doc::DATA; // backward compatibility
+        type = K3b::Doc::DataProject; // backward compatibility
     else if( xmlDoc.doctype().name() == "k3b_video_dvd_project" ) {
-        type = K3b::Doc::VIDEODVD;
+        type = K3b::Doc::VideoDvdProject;
     } else {
         kDebug() << "(K3b::Doc) unknown doc type: " << xmlDoc.doctype().name();
         QApplication::restoreOverrideCursor();

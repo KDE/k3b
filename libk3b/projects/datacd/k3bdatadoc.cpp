@@ -34,25 +34,21 @@
 #include "k3bvalidators.h"
 #include "k3bglobalsettings.h"
 
-#include <qdir.h>
-#include <qstring.h>
-#include <qfileinfo.h>
-#include <qfile.h>
-#include <q3textstream.h>
-#include <qtimer.h>
-#include <qdom.h>
+#include <QDir>
+#include <QDomElement>
+#include <QFile>
+#include <QFileInfo>
+#include <QTimer>
 
-#include <kstandarddirs.h>
-#include <kurl.h>
-#include <kstatusbar.h>
-#include <klocale.h>
-#include <kinputdialog.h>
-#include <kmessagebox.h>
-#include <kdebug.h>
-#include <kglobal.h>
-#include <kconfig.h>
-#include <kapplication.h>
-
+#include <KApplication>
+#include <KConfig>
+#include <KDebug>
+#include <KGlobal>
+#include <KInputDialog>
+#include <KLocale>
+#include <KMessageBox>
+#include <KStandardDirs>
+#include <KStatusBar>
 
 #include <string.h>
 #include <stdlib.h>
@@ -260,12 +256,6 @@ K3b::Msf K3b::DataDoc::length() const
 K3b::Msf K3b::DataDoc::burningLength() const
 {
     return K3b::Msf( burningSize() / 2048 );
-}
-
-
-QString K3b::DataDoc::typeString() const
-{
-    return QString::fromLatin1("data");
 }
 
 

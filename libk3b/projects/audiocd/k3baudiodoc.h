@@ -18,16 +18,10 @@
 #define K3BAUDIODOC_H
 
 #include "k3bdoc.h"
-
 #include "k3bcdtext.h"
 #include "k3btoc.h"
 
-#include <qfile.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qdatetime.h>
 #include "k3b_export.h"
-#include <kurl.h>
 
 class QDomElement;
 
@@ -52,6 +46,9 @@ namespace K3b {
     public:
         AudioDoc( QObject* );
         ~AudioDoc();
+
+        virtual Type type() const { return AudioProject; }
+        virtual QString typeString() const { return QString::fromLatin1("audio"); }
 
         QString name() const;
 
@@ -203,8 +200,6 @@ namespace K3b {
         bool loadDocumentData( QDomElement* );
         /** reimplemented from Doc */
         bool saveDocumentData( QDomElement* );
-
-        QString typeString() const;
 
     private:
         // the stuff for adding files

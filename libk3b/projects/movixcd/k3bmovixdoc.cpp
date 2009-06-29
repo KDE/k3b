@@ -17,21 +17,19 @@
 #include "k3bmovixdoc.h"
 #include "k3bmovixjob.h"
 #include "k3bmovixfileitem.h"
-
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
 #include "k3bglobals.h"
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <kurl.h>
-#include <kinputdialog.h>
-#include <kmessagebox.h>
-#include <kapplication.h>
+#include <QDomElement>
+#include <QFileInfo>
 
-#include <qdom.h>
-#include <qfileinfo.h>
-#include <kglobal.h>
+#include <KApplication>
+#include <KDebug>
+#include <KGlobal>
+#include <KInputDialog>
+#include <KLocale>
+#include <KMessageBox>
 
 
 K3b::MovixDoc::MovixDoc( QObject* parent )
@@ -48,12 +46,6 @@ K3b::MovixDoc::~MovixDoc()
 K3b::BurnJob* K3b::MovixDoc::newBurnJob( K3b::JobHandler* hdl, QObject* parent )
 {
     return new K3b::MovixJob( this, hdl, parent );
-}
-
-
-QString K3b::MovixDoc::typeString() const
-{
-    return QString::fromLatin1("movix");
 }
 
 

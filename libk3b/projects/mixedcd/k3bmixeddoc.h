@@ -32,6 +32,9 @@ namespace K3b {
     public:
         MixedDoc( QObject* parent = 0 );
         ~MixedDoc();
+        
+        virtual Type type() const { return MixedProject; }
+        virtual QString typeString() const { return QString::fromLatin1("mixed"); }
 
         QString name() const;
 
@@ -58,7 +61,6 @@ namespace K3b {
                          DATA_SECOND_SESSION };
 
         int mixedType() const { return m_mixedType; }
-        int type() const { return MIXED; }
 
         void setURL( const KUrl& url );
 
@@ -79,7 +81,6 @@ namespace K3b {
     protected:
         bool loadDocumentData( QDomElement* );
         bool saveDocumentData( QDomElement* );
-        QString typeString() const { return "mixed"; }
 
     private:
         DataDoc* m_dataDoc;

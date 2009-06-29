@@ -13,32 +13,27 @@
 * See the file "COPYING" for the exact licensing terms.
 */
 
-// QT-includes
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qfile.h>
-#include <qdatastream.h>
-#include <qdom.h>
-#include <qdatetime.h>
-#include <qtimer.h>
-
-// KDE-includes
-#include <kurl.h>
-#include <kapplication.h>
-#include <kmessagebox.h>
-#include <kconfig.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
-#include <kio/global.h>
-#include <kdebug.h>
-#include <kstdguiitem.h>
-
-// K3b-includes
 #include "k3bvcddoc.h"
 #include "k3bvcdtrack.h"
 #include "k3bvcdjob.h"
 #include "k3bglobals.h"
 #include "k3bmsf.h"
+
+#include <QDataStream>
+#include <QDomElement>
+#include <QFile>
+#include <QImage>
+#include <QTimer>
+
+#include <KApplication>
+#include <KConfig>
+#include <KDebug>
+#include <kio/global.h>
+#include <KLocale>
+#include <KMessageBox>
+#include <KStandardDirs>
+#include <kstdguiitem.h>
+
 
 #if 0
 bool desperate_mode = false;
@@ -54,7 +49,6 @@ K3b::VcdDoc::VcdDoc( QObject* parent )
     m_tracks = 0L;
     m_vcdOptions = new K3b::VcdOptions();
 
-    m_docType = VCD;
     m_vcdType = NONE;
 
     m_urlAddingTimer = new QTimer( this );
@@ -404,12 +398,6 @@ void K3b::VcdDoc::moveTrack( K3b::VcdTrack* track, K3b::VcdTrack* after )
     setPbcTracks();
 
     emit changed();
-}
-
-
-QString K3b::VcdDoc::typeString() const
-{
-    return "vcd";
 }
 
 

@@ -16,21 +16,13 @@
 #ifndef K3BVCDDOC_H
 #define K3BVCDDOC_H
 
-// Qt Includes
-#include <qfile.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qdatetime.h>
-#include <qimage.h>
-#include <qqueue.h>
-
-// Kde Includes
-#include <kurl.h>
-
-// K3b Includes
+#include "k3bdoc.h"
 #include "k3bvcdoptions.h"
 #include "mpeginfo/k3bmpeginfo.h"
-#include "k3bdoc.h"
+
+#include <QStringList>
+#include <QQueue>
+
 #include "k3b_export.h"
 
 class QTimer;
@@ -47,7 +39,8 @@ namespace K3b {
         VcdDoc( QObject* );
         ~VcdDoc();
 
-        int type() const { return VCD; }
+        virtual Type type() const { return VcdProject; }
+        virtual QString typeString() const { return QString::fromLatin1("vcd"); }
 
         Device::MediaTypes supportedMediaTypes() const;
 
@@ -155,8 +148,6 @@ namespace K3b {
         bool loadDocumentData( QDomElement* root );
         /** reimplemented from Doc */
         bool saveDocumentData( QDomElement* );
-
-        QString typeString() const;
 
     private:
         VcdTrack* createTrack( const KUrl& url );

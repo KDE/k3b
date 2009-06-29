@@ -17,10 +17,10 @@
 #ifndef _K3B_MOVIX_DOC_H_
 #define _K3B_MOVIX_DOC_H_
 
-
 #include "k3bdatadoc.h"
 
-#include <qlist.h>
+#include <QList>
+
 #include "k3b_export.h"
 
 class KUrl;
@@ -37,8 +37,8 @@ namespace K3b {
         MovixDoc( QObject* parent = 0 );
         virtual ~MovixDoc();
 
-        virtual int type() const { return MOVIX; }
-        virtual QString typeString() const;
+        virtual Type type() const { return MovixProject; }
+        virtual QString typeString() const { return QString::fromLatin1("movix"); }
 
         bool newDocument();
 

@@ -31,6 +31,7 @@
 #include <kio/global.h>
 #include <kmessagebox.h>
 
+#include <QFileInfo>
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qlabel.h>

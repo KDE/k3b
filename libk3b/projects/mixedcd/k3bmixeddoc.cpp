@@ -14,19 +14,18 @@
 
 #include "k3bmixeddoc.h"
 #include "k3bmixedjob.h"
-
 #include "k3bdatadoc.h"
 #include "k3baudiodoc.h"
 #include "k3bglobals.h"
 #include "k3bmsf.h"
 
-#include <qfileinfo.h>
-#include <qdom.h>
+#include <QFileInfo>
+#include <QDomElement>
 
-#include <klocale.h>
-#include <kconfig.h>
-#include <kapplication.h>
-#include <kmessagebox.h>
+#include <KLocale>
+#include <KConfig>
+#include <KApplication>
+#include <KMessageBox>
 
 
 

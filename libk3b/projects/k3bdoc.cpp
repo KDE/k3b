@@ -12,23 +12,19 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-
-// include files for Qt
-#include <qwidget.h>
-#include <qstring.h>
-#include <qdom.h>
-
-// include files for KDE
-#include <klocale.h>
-#include <kdebug.h>
-
-// application specific includes
 #include "k3bdoc.h"
 #include "k3bglobals.h"
 #include "k3bdevice.h"
 #include "k3bmsf.h"
 #include "k3bcore.h"
 #include "k3bdevicemanager.h"
+
+#include <QDomElement>
+#include <QString>
+#include <QWidget>
+
+#include <KDebug>
+#include <KLocale>
 
 
 K3b::Doc::Doc( QObject* parent )

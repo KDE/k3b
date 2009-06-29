@@ -26,29 +26,21 @@
 #include "k3bcore.h"
 #include "k3baudiodecoder.h"
 
+#include <QFile>
+#include <QFileInfo>
+#include <QDataStream>
+#include <QDir>
+#include <QDomElement>
+#include <QStringList>
+#include <QTextStream>
 
-// QT-includes
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qdatastream.h>
-#include <qdir.h>
-#include <qdom.h>
-#include <qdatetime.h>
-#include <qtextstream.h>
-
-// KDE-includes
-#include <kurl.h>
-#include <kapplication.h>
-#include <kmessagebox.h>
-#include <kconfig.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
+#include <KApplication>
+#include <KConfig>
+#include <KDebug>
+#include <KLocale>
+#include <KMessageBox>
 #include <kio/global.h>
-#include <kdebug.h>
-
-#include <iostream>
+#include <KStandardDirs>
 
 
 class K3b::AudioDoc::Private
@@ -72,7 +64,6 @@ K3b::AudioDoc::AudioDoc( QObject* parent )
       m_lastTrack(0)
 {
     d = new Private;
-    m_docType = AUDIO;
 }
 
 K3b::AudioDoc::~AudioDoc()
@@ -494,12 +485,6 @@ void K3b::AudioDoc::removeTrack( K3b::AudioTrack* track )
 void K3b::AudioDoc::moveTrack( K3b::AudioTrack* track, K3b::AudioTrack* after )
 {
     track->moveAfter( after );
-}
-
-
-QString K3b::AudioDoc::typeString() const
-{
-    return "audio";
 }
 
 

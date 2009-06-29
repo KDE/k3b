@@ -18,9 +18,9 @@
 #include "k3bdoc.h"
 #include "k3bplugin.h"
 
-#include "k3b_export.h"
-
 #include <QFlags>
+
+#include "k3b_export.h"
 
 class KConfigGroup;
 
@@ -73,10 +73,10 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        Q_DECLARE_FLAGS( Type, Doc::DocType );
+        Q_DECLARE_FLAGS( Type, Doc::Type );
         
         /**
-         * @param type The type of the plugin which can be a combination of @see Doc::DocType
+         * @param type The type of the plugin which can be a combination of @see Doc::Type
          * @param gui If true the plugin is supposed to provide a widget via @p createGUI(). In that case
          *            @p activate() will not be used. A plugin has a GUI if it's functionality is started
          *            by some user input.

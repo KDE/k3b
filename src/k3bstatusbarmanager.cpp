@@ -194,19 +194,19 @@ void K3b::StatusBarManager::slotUpdateProjectStats()
     K3b::Doc* doc = k3bappcore->projectManager()->activeProject();
     if( doc ) {
         switch( doc->type() ) {
-        case K3b::Doc::AUDIO: {
+        case K3b::Doc::AudioProject: {
             K3b::AudioDoc* audioDoc = static_cast<K3b::AudioDoc*>( doc );
             m_labelProjectInfo->setText( i18np("Audio CD (1 track)", "Audio CD (%1 tracks)", audioDoc->numOfTracks() ) );
             break;
         }
 
-        case K3b::Doc::DATA: {
+        case K3b::Doc::DataProject: {
             K3b::DataDoc* dataDoc = static_cast<K3b::DataDoc*>( doc );
             m_labelProjectInfo->setText( i18n("Data Project (%1)",dataDocStats(dataDoc)) );
             break;
         }
 
-        case K3b::Doc::MIXED: {
+        case K3b::Doc::MixedProject: {
             K3b::AudioDoc* audioDoc = static_cast<K3b::MixedDoc*>( doc )->audioDoc();
             K3b::DataDoc* dataDoc = static_cast<K3b::MixedDoc*>( doc )->dataDoc();
             m_labelProjectInfo->setText( i18np("Mixed CD (1 track and %2)", "Mixed CD (%1 tracks and %2)", audioDoc->numOfTracks(),
@@ -214,19 +214,19 @@ void K3b::StatusBarManager::slotUpdateProjectStats()
             break;
         }
 
-        case K3b::Doc::VCD: {
+        case K3b::Doc::VcdProject: {
             K3b::VcdDoc* vcdDoc = static_cast<K3b::VcdDoc*>( doc );
             m_labelProjectInfo->setText( i18np("Video CD (1 track)", "Video CD (%1 tracks)", vcdDoc->numOfTracks() ) );
             break;
         }
 
-        case K3b::Doc::MOVIX: {
+        case K3b::Doc::MovixProject: {
             K3b::DataDoc* dataDoc = static_cast<K3b::DataDoc*>( doc );
             m_labelProjectInfo->setText( i18n("eMovix Project (%1)",dataDocStats(dataDoc)) );
             break;
         }
 
-        case K3b::Doc::VIDEODVD: {
+        case K3b::Doc::VideoDvdProject: {
             K3b::DataDoc* dataDoc = static_cast<K3b::DataDoc*>( doc );
             m_labelProjectInfo->setText( i18n("Video DVD (%1)",dataDocStats(dataDoc)) );
             break;

@@ -19,14 +19,12 @@
 #include "config-k3b.h"
 #include "k3bglobals.h"
 
-// include files for QT
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 
-
-// include files for KDE
-#include <kurl.h>
+#include <KUrl>
 #include <kio/global.h>
+
 #include "k3b_export.h"
 
 class QDomElement;
@@ -51,27 +49,27 @@ namespace K3b {
         Doc( QObject* = 0 );
         virtual ~Doc();
 
-        enum DocType {
-            AUDIO = 0x1,
-            DATA = 0x2,
-            MIXED = 0x4,
-            VCD = 0x8,
-            MOVIX = 0x10,
-            VIDEODVD = 0x20
+        enum Type {
+            AudioProject = 0x1,
+            DataProject = 0x2,
+            MixedProject = 0x4,
+            VcdProject = 0x8,
+            MovixProject = 0x10,
+            VideoDvdProject = 0x20
         };
 
-        virtual int type() const { return m_docType; }
+        virtual Type type() const = 0;
+
+        /**
+         * \return A string representation of the document type.
+         */
+        virtual QString typeString() const = 0;
 
         /**
          * \return A name for the project which might for example be used as a suggestion for a file name
          *         when saving. The default implementation extracts a name from the URL.
          */
         virtual QString name() const;
-
-        /**
-         * \return A string representation of the document type.
-         */
-        virtual QString typeString() const = 0;
 
         /**
          * The media types that are supported by this project type.
@@ -199,8 +197,6 @@ namespace K3b {
         virtual void addUrls( const KUrl::List& urls ) = 0;
 
     protected:
-        int m_docType;
-
         bool saveGeneralDocumentData( QDomElement* );
 
         bool readGeneralDocumentData( const QDomElement& );

@@ -26,6 +26,7 @@
 #include <KStringHandler>
 
 #include <QFile>
+#include <QFileInfo>
 #include <QList>
 
 namespace {
