@@ -1,5 +1,5 @@
 [Desktop Entry]
-X-KDE-Solid-Predicate=[StorageVolume.ignored == false AND OpticalDisc.isBlank == true]
+X-KDE-Solid-Predicate=[StorageVolume.ignored == false AND OpticalDisc.blank == true]
 Actions=K3bDataProject;
 Type=Service
 X-KDE-Priority=TopLevel
