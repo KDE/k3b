@@ -73,7 +73,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        Q_DECLARE_FLAGS( Type, Doc::Type );
+        Q_DECLARE_FLAGS( Type, Doc::Type )
         
         /**
          * @param type The type of the plugin which can be a combination of @see Doc::Type
@@ -147,6 +147,6 @@ namespace K3b {
     };
 }
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( K3b::ProjectPlugin::Type );
+Q_DECLARE_OPERATORS_FOR_FLAGS( K3b::ProjectPlugin::Type )
 
 #endif
