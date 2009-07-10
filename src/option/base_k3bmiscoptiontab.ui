@@ -69,7 +69,7 @@
          <string>Check system Configuration</string>
         </property>
         <property name="whatsThis" >
-         <string>&lt;p>If this option is checked K3b will check the system configuration for any problems on startup and when the the user changes the settings.</string>
+         <string>&lt;p>If this option is checked K3b will check the system configuration for any problems on startup and when the user changes the settings.</string>
         </property>
         <property name="text" >
          <string>&amp;Check system configuration</string>
