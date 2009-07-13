@@ -243,7 +243,7 @@ private:
         case 1:
             // Title X + length
             return i18n("<p><b>Title %1 (%2)</b><br>%3",
-                        QString::number( m_title.titleNumber(), 2 ),
+                        QString::number( m_title.titleNumber() ).rightJustified( 2 ),
                         m_title.playbackTime().toString( false ),
                         i18np("%1 chapter", "%1 chapters", m_title.numPTTs() ) );
 
