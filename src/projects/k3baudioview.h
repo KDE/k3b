@@ -31,6 +31,7 @@ namespace K3b {
     class AudioDoc;
     class AudioTrack;
     class AudioProjectModel;
+    class AudioViewImpl;
     class ViewColumnAdjuster;
 
     class AudioView : public StandardView
@@ -38,23 +39,17 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AudioView( AudioDoc* pDoc, QWidget* parent );
+        AudioView( AudioDoc* doc, QWidget* parent );
         ~AudioView();
 
         //AudioTrackPlayer* player() const { return m_songlist->player(); }
         AudioTrackPlayer* player() const { return 0; }
 
-        void getSelectedItems( QList<AudioTrack*>& tracks,
-                               QList<AudioDataSource*>& sources );
     public Q_SLOTS:
         void addUrls( const KUrl::List& );
 
     protected:
         ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
-
-        void getSelectedItems( QList<AudioTrack*>& tracks,
-                               QList<AudioDataSource*>& sources,
-                               const QModelIndexList& indexes );
 
         /**
          * reimplemented from \ref K3b::StandardView
@@ -65,9 +60,6 @@ namespace K3b {
         void init();
 
     private Q_SLOTS:
-        void slotItemActivated( const QModelIndex& index );
-        void slotAudioConversion();
-
         // action slots
         void slotAddSilence();
         void slotRemove();
@@ -81,23 +73,11 @@ namespace K3b {
         void slotAdjustColumns();
 
     private:
-        void setupActions();
-        void trackProperties( const QModelIndexList& indexes );
-
         AudioDoc* m_doc;
-        K3b::AudioProjectModel* m_model;
+        AudioProjectModel* m_model;
+        AudioViewImpl* m_audioViewImpl;
 
-        KAction* m_actionProperties;
-        KAction* m_actionRemove;
-        KAction* m_actionAddSilence;
-        KAction* m_actionMergeTracks;
-        KAction* m_actionSplitSource;
-        KAction* m_actionSplitTrack;
-        KAction* m_actionEditSource;
-        KAction* m_actionPlayTrack;
-        KMenu* m_popupMenu;
-
-        K3b::ViewColumnAdjuster* m_columnAdjuster;
+        ViewColumnAdjuster* m_columnAdjuster;
         bool m_updatingColumnWidths;
     };
 }

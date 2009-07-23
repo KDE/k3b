@@ -40,6 +40,9 @@ namespace K3b
         MixedProjectModel( MixedDoc* doc, QObject* parent = 0 );
         ~MixedProjectModel();
         QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+        
+        DataProjectModel* dataModel() const { return m_dataModel; }
+        AudioProjectModel* audioModel() const { return m_audioModel; }
 
     public slots:
         /**

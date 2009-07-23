@@ -47,6 +47,7 @@ set(k3b_project_SRCS
   projects/k3baudiotracksplitdialog.cpp 
   projects/k3baudiotrackview.cpp 
   projects/k3baudioview.cpp 
+  projects/k3baudioviewimpl.cpp 
   projects/k3baudioprojectmodel.cpp 
   projects/k3bmixedburndialog.cpp 
   projects/k3bmixedview.cpp 
@@ -57,6 +58,7 @@ set(k3b_project_SRCS
   projects/k3bdataimagesettingswidget.cpp 
   projects/k3bdatapropertiesdialog.cpp 
   projects/k3bdataview.cpp 
+  projects/k3bdataviewimpl.cpp 
   projects/k3bdatavolumedescdialog.cpp 
   projects/k3bdataburndialog.cpp 
   projects/k3bdataprojectmodel.cpp

@@ -90,7 +90,6 @@ namespace K3b {
          */
         QModelIndexList currentSelection() const;
 
-        void setCurrentRoot( const QModelIndex& index );
         QModelIndex currentRoot() const;
 
         /**
@@ -111,6 +110,11 @@ namespace K3b {
     protected slots:
         void slotCurrentDirChanged();
         void slotCustomContextMenu(const QPoint &pos);
+        
+        /**
+         * Sets current directory of the right pane
+         */
+        void setCurrentRoot( const QModelIndex& index );
 
         /**
          * Go to the parent dir (meaning that the parent of the current dir is going

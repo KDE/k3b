@@ -20,15 +20,16 @@
 #include "k3bstandardview.h"
 
 class QLineEdit;
-class KMenu;
-class KAction;
 class QModelIndex;
+class KAction;
+class KMenu;
 
 namespace K3b {
     class DataDoc;
     class DirItem;
     class DataItem;
     class DataProjectModel;
+    class DataViewImpl;
 
     namespace Device {
         class Device;
@@ -56,8 +57,6 @@ namespace K3b {
         void slotNewDir();
         void slotItemProperties();
         void slotOpen();
-        void slotCurrentRootChanged( const QModelIndex& newRoot );
-        void slotFileItemActivated( const QModelIndex& index );
 
     protected:
         QLineEdit* m_volumeIDEdit;
@@ -69,10 +68,6 @@ namespace K3b {
          */
         virtual void selectionChanged( const QModelIndexList& indexes );
         virtual void contextMenu( const QPoint& pos );
-        
-        KAction* m_actionImportSession;
-        KAction* m_actionClearSession;
-        KAction* m_actionEditBootImages;
 
     private:
         void setupActions();
@@ -80,14 +75,7 @@ namespace K3b {
         DataDoc* m_doc;
         K3b::DataProjectModel* m_model;
 
-        KMenu* m_popupMenu;
-        KAction* m_actionParentDir;
-        KAction* m_actionRemove;
-        KAction* m_actionRename;
-        KAction* m_actionNewDir;
-        KAction* m_actionProperties;
-        KAction* m_actionOpen;
-        QModelIndexList m_currentSelection;
+        DataViewImpl* m_dataViewImpl;
 
         // used for mounting when importing old session
         Device::Device* m_device;

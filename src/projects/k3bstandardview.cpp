@@ -139,11 +139,6 @@ QModelIndexList K3b::StandardView::currentSelection() const
     return selected;
 }
 
-void K3b::StandardView::setCurrentRoot( const QModelIndex& index )
-{
-    m_dirView->setCurrentIndex( m_dirProxy->mapFromSource( index ) );
-}
-
 QModelIndex K3b::StandardView::currentRoot() const
 {
     return m_fileView->rootIndex();
@@ -169,10 +164,6 @@ void K3b::StandardView::slotCurrentDirChanged()
     QModelIndex currentDir;
     if (indexes.count()) {
         currentDir = m_dirProxy->mapToSource(indexes.first());
-        
-        if( m_dirView->hasFocus() ) {
-            selectionChanged( QModelIndexList() << currentDir );
-        }
     }
 
     // make the file view show only the child nodes of the currently selected
@@ -181,6 +172,10 @@ void K3b::StandardView::slotCurrentDirChanged()
     m_fileView->header()->resizeSections( QHeaderView::Stretch );
     
     emit currentRootChanged( currentDir );
+    
+    if( m_dirView->hasFocus() && currentDir.isValid() ) {
+        selectionChanged( QModelIndexList() << currentDir );
+    }
 }
 
 void K3b::StandardView::slotCustomContextMenu( const QPoint &pos )
@@ -191,6 +186,11 @@ void K3b::StandardView::slotCustomContextMenu( const QPoint &pos )
         // context menus
         contextMenu( view->viewport()->mapToGlobal(pos) );
     }
+}
+
+void K3b::StandardView::setCurrentRoot( const QModelIndex& index )
+{
+    m_dirView->setCurrentIndex( m_dirProxy->mapFromSource( index ) );
 }
 
 void K3b::StandardView::slotParentDir()

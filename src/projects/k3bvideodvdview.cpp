@@ -18,21 +18,26 @@
 #include "k3bvideodvdburndialog.h"
 #include "k3bvideodvddoc.h"
 
-#include <KAction>
+#include <KActionCollection>
 #include <KLocale>
 #include <KMessageBox>
+#include <QAction>
 
 
 K3b::VideoDvdView::VideoDvdView( K3b::VideoDvdDoc* doc, QWidget *parent )
     : K3b::DataView( doc, parent ),
       m_doc(doc)
 {
-    m_actionImportSession->setEnabled( false );
-    m_actionImportSession->setVisible( false );
-    m_actionClearSession->setEnabled( false );
-    m_actionClearSession->setVisible( false );
-    m_actionEditBootImages->setEnabled( false );
-    m_actionEditBootImages->setVisible( false );
+    QAction* actionImportSession = actionCollection()->action( "project_data_import_session" );
+    QAction* actionClearSession = actionCollection()->action( "project_data_clear_imported_session" );
+    QAction* actionEditBootImages = actionCollection()->action( "project_data_edit_boot_images" );
+    
+    actionImportSession->setEnabled( false );
+    actionImportSession->setVisible( false );
+    actionClearSession->setEnabled( false );
+    actionClearSession->setVisible( false );
+    actionEditBootImages->setEnabled( false );
+    actionEditBootImages->setVisible( false );
 }
 
 
