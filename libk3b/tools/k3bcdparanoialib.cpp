@@ -22,7 +22,7 @@
 
 #include <kdebug.h>
 
-// TODO replace dlopen/dlsym/dlclose by platform independent QLibrary 
+// TODO replace dlopen/dlsym/dlclose by platform independent QLibrary
 #ifdef Q_OS_WIN32
 
 #include <QLibrary>
@@ -265,10 +265,10 @@ QMap<K3b::Device::Device*, K3b::CdparanoiaLibData*> K3b::CdparanoiaLibData::s_da
 
 bool K3b::CdparanoiaLibData::paranoiaInit()
 {
-    mutex.lock();
-
     if( m_drive )
         paranoiaFree();
+
+    mutex.lock();
 
     // since we use cdparanoia to open the device it is important to close
     // the device here
