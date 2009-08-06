@@ -58,7 +58,7 @@ K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
     connect( actionCollection()->action( "new_dir" ), SIGNAL( triggered() ),
              this, SLOT(slotNewDir()) );
     connect( actionCollection()->action( "remove" ), SIGNAL( triggered() ),
-             this, SLOT(slotRemove()) );
+             this, SLOT(slotRemoveSelectedIndexes()) );
     connect( actionCollection()->action( "rename" ), SIGNAL( triggered() ),
              this, SLOT(slotRenameItem()) );
     connect( actionCollection()->action( "parent_dir" ), SIGNAL( triggered() ),
