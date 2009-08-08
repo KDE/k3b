@@ -40,6 +40,7 @@ Comment[pt]=Um 'plugin' para consultar um servidor de CDDB por informações ace
 Comment[pt_BR]=Plug-in para consultar o servidor cddb por informações sobre um projeto de áudio.
 Comment[ru]=Модуль получения сведений о аудиопроекте с сервера CDDB.
 Comment[sv]=Insticksprogram för att hämta information om ett ljudprojekt från en CDDB-server.
+Comment[tr]=Bir ses projesi için cddb sunucusundan bilgi sorgulayabilen bir eklenti.
 Comment[uk]=Додаток для опитування сервера cddb щодо даних про аудіо-проект.
 Comment[x-test]=xxPlugin to query a cddb server for information about an audio project.xx
 Comment[zh_TW]=到 cddb 伺服器查詢音效專案的資訊的外掛程式。
