@@ -134,7 +134,7 @@ namespace K3b {
         long m_dirs;
 
         // HACK: store the original path to be able to use it's permissions
-        //        ´remove this once we have a backup project
+        //       remove this once we have a backup project
         QString m_localPath;
     };
 
