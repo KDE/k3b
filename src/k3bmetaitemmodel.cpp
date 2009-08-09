@@ -774,7 +774,6 @@ void K3b::MetaItemModel::slotRowsAboutToBeInserted( const QModelIndex& parent, i
     else {
         // insert the newly created items in the children list
         for( int i = start; i <= end; ++i) {
-            kDebug() << "Inserting new node at " << i;
             Node *newChild = new Node();
             newChild->parent = parentNode;
             newChild->setPlace( parentNode->place() );
