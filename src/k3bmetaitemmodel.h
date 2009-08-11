@@ -57,16 +57,17 @@ namespace K3b {
          */
         virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
 
-        QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-        QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
-        QModelIndex parent( const QModelIndex& index ) const;
-        int rowCount( const QModelIndex& parent = QModelIndex() ) const;
+        virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
+        virtual QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
+        virtual QModelIndex parent( const QModelIndex& index ) const;
+        virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
         virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
-        bool hasChildren( const QModelIndex& parent = QModelIndex() ) const;
-        bool canFetchMore( const QModelIndex& parent ) const;
-        void fetchMore( const QModelIndex& parent );
-        bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
-        bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
+        virtual bool hasChildren( const QModelIndex& parent = QModelIndex() ) const;
+        virtual bool canFetchMore( const QModelIndex& parent ) const;
+        virtual void fetchMore( const QModelIndex& parent );
+        virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
+        virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
+        virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
 
         /**
          * Can handle lists of indexes from a single submodel. Mixing indexes
@@ -101,6 +102,7 @@ namespace K3b {
     private Q_SLOTS:
         void slotRowsAboutToBeInserted( const QModelIndex&, int, int );
         void slotRowsInserted( const QModelIndex&, int, int );
+        void slotRowsAboutToBeRemoved( const QModelIndex&, int, int );
         void slotRowsRemoved( const QModelIndex&, int, int );
         void slotDataChanged( const QModelIndex&, const QModelIndex& );
         void slotReset();

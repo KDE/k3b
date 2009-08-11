@@ -465,16 +465,21 @@ bool K3b::DataProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction 
 
 bool K3b::DataProjectModel::removeRows( int row, int count, const QModelIndex& parent)
 {
-    // remove the indexes from the project
-    while (count > 0)
-    {
-        QModelIndex i = index( row, 0, parent );
-        d->project->removeItem( itemForIndex(i) );
+    if( row >= 0 && count > 0 ) {
+        // remove the indexes from the project
+        while (count > 0)
+        {
+            QModelIndex i = index( row, 0, parent );
+            d->project->removeItem( itemForIndex(i) );
 
-        row++;
-        count--;
+            row++;
+            count--;
+        }
+        return true;
     }
-    return true;
+    else {
+        return false;
+    }
 }
 
 #include "k3bdataprojectmodel.moc"
