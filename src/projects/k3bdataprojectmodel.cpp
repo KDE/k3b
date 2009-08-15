@@ -2,6 +2,7 @@
  *
  * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
  *           (C) 2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ *           (C) 2009 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -310,10 +311,13 @@ Qt::ItemFlags K3b::DataProjectModel::flags( const QModelIndex& index ) const
 
 QModelIndex K3b::DataProjectModel::index( int row, int column, const QModelIndex& parent ) const
 {
-    if ( parent.isValid() ) {
+    if ( !hasIndex( row, column, parent ) ) {
+        return QModelIndex();
+    }
+    else if ( parent.isValid() ) {
         K3b::DirItem* dir = itemForIndex( parent )->getDirItem();
         K3b::DataItem* child = d->getChild( dir, row );
-        if ( child ) {
+        if ( child && parent.column() == 0 ) {
             return createIndex( row, column, child );
         }
         else {
@@ -330,23 +334,21 @@ QModelIndex K3b::DataProjectModel::index( int row, int column, const QModelIndex
 QModelIndex K3b::DataProjectModel::parent( const QModelIndex& index ) const
 {
     //kDebug() << index;
-    if ( index.isValid() ) {
-        K3b::DataItem* item = itemForIndex( index );
-        K3b::DirItem* dir = item->parent();
-        if( dir ) {
+    if( K3b::DataItem* item = itemForIndex( index ) ) {
+        if( K3b::DirItem* dir = item->parent() ) {
             return createIndex( d->findChildIndex( dir ), 0, dir );
         }
     }
-
     return QModelIndex();
 }
 
 
-int K3b::DataProjectModel::rowCount( const QModelIndex& index ) const
+int K3b::DataProjectModel::rowCount( const QModelIndex& parent ) const
 {
-    if ( index.isValid() ) {
-        K3b::DataItem* item = itemForIndex( index );
-        if ( K3b::DirItem* dir = dynamic_cast<K3b::DirItem*>( item ) ) {
+    if ( parent.isValid() ) {
+        K3b::DataItem* item = itemForIndex( parent );
+        K3b::DirItem* dir = dynamic_cast<K3b::DirItem*>( item );
+        if ( dir != 0 && parent.column() == 0 ) {
             return( dir->children().count() );
         }
         else {
