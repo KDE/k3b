@@ -125,12 +125,18 @@ K3b::DirItem* K3b::DirItem::addDataItem( K3b::DataItem* item )
             }
             item->setK3bName( name );
         }
+        
+        // Detach item from its parent in case it's moved from elsewhere.
+        // It is essential to do this before calling doc()->aboutToAddItemToDir()
+        // avoid situation when beginRemoveRows() is called after beginInsertRows()
+        // in DataProjectModel
+        item->take();
 
         // inform the doc
         if( doc() )
             doc()->aboutToAddItemToDir( this, item );
 
-        m_children.append( item->take() );
+        m_children.append( item );
         updateSize( item, false );
         if( item->isDir() )
             updateFiles( ((K3b::DirItem*)item)->numFiles(), ((K3b::DirItem*)item)->numDirs()+1 );
