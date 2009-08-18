@@ -24,7 +24,8 @@
 #include <KIcon>
 #include <KDebug>
 
-#include <QtCore/QVector>
+#include <QMimeData>
+#include <QVector>
 
 // IDEA: K3b::MetaItemModel::placeData( int row, int column );
 
@@ -39,19 +40,20 @@ namespace {
         
         }
 
-        ~Node() {
+        virtual ~Node() {
             qDeleteAll(children);
         }
 
         virtual bool isPlace() const { return false; }
-        virtual Place* place();
+        virtual Place* place() const;
         void setPlace( Place* place );
-        virtual QAbstractItemModel* model();
+        virtual QAbstractItemModel* model() const;
         Node* findNodeForOriginalIndex( const QModelIndex& index );
         Node* createNodeForOriginalIndex( const QModelIndex& index );
         Node* getChildNode( const QModelIndex& originalIndex );
         void updateChildren();
         void reset();
+        bool supportsMimeData( const QMimeData* data ) const;
 
         // the parent node, 0 for Place instances
         Node* parent;
@@ -75,9 +77,9 @@ namespace {
             : m_model( model ) {
         }
 
-        Place* place();
+        Place* place() const;
         bool isPlace() const { return true; }
-        QAbstractItemModel* model();
+        QAbstractItemModel* model() const;
 
         // a name and icon for the place (used for display)
         // FIXME: better use something like placeData(...)
@@ -94,19 +96,19 @@ namespace {
     };
 
 
-    QAbstractItemModel* Node::model()
+    QAbstractItemModel* Node::model() const
     {
         return place()->model();
     }
 
 
-    QAbstractItemModel* Place::model()
+    QAbstractItemModel* Place::model() const
     {
         return m_model;
     }
 
 
-    Place* Node::place()
+    Place* Node::place() const
     {
         return m_place;
     }
@@ -118,9 +120,9 @@ namespace {
     }
 
 
-    Place* Place::place()
+    Place* Place::place() const
     {
-        return this;
+        return const_cast<Place*>( this );
     }
 
 
@@ -195,7 +197,19 @@ namespace {
         qDeleteAll(children);
         children.clear();
     }
-}
+    
+    bool Node::supportsMimeData( const QMimeData* data ) const
+    {
+        QStringList supportedFormats = model()->mimeTypes();
+        QStringList formats = data->formats();
+        Q_FOREACH( const QString& format, formats )
+        {
+            if( supportedFormats.indexOf( format ) >= 0 )
+                return true;
+        }
+        return false;
+    }
+} // namespace
 
 
 
@@ -492,7 +506,8 @@ Qt::ItemFlags K3b::MetaItemModel::flags( const QModelIndex& index ) const
     if ( index.isValid() ) {
         Node* node = d->nodeForIndex( index );
         if ( node->isPlace() ) {
-            return Qt::ItemIsSelectable|Qt::ItemIsEnabled;
+            // flags from invalid index can be helpful when model is drop-enabled
+            return node->model()->flags( QModelIndex() )|Qt::ItemIsSelectable|Qt::ItemIsEnabled;
         }
         else {
             return mapToSubModel( index ).flags();
@@ -595,33 +610,53 @@ bool K3b::MetaItemModel::setData( const QModelIndex& index, const QVariant& valu
 }
 
 
+QStringList K3b::MetaItemModel::mimeTypes() const
+{
+    QSet<QString> types;
+    for( QList<Place>::const_iterator it = d->places.constBegin();
+        it != d->places.constEnd(); ++it )
+    {
+        types += it->model()->mimeTypes().toSet();
+    }
+    return types.toList();
+}
+
+
 bool K3b::MetaItemModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
 {
 //    kDebug();
 
     if ( parent.isValid() ) {
         Node* parentNode = d->nodeForIndex( parent );
-        // for places the originalModelIndex will be invalid
-        return parentNode->model()->dropMimeData( data, action, row, column, mapToSubModel( parent ) );
+        
+        if( !parentNode->supportsMimeData( data ) ) {
+            return false;
+        }
+        else {
+            // for places the originalModelIndex will be invalid
+            return parentNode->model()->dropMimeData( data, action, row, column, mapToSubModel( parent ) );
+        }
     }
-    else if ( row != -1 ) {
+    else if ( row >= 0 ) {
         Node *node = d->getRootNode(row);
 
-        if (node->isPlace())
-        {
+        if( !node->supportsMimeData( data ) ) {
+            return false;
+        }
+        else if (node->isPlace()) {
             // if the node is place, threat it like if it was being dropped on an empty space of the 
             // original model
             return node->model()->dropMimeData(data, action, -1, column, QModelIndex());
         }
-        else
-        {
+        else {
             // if it is not a place (which means the original model is a flat model)
             // drop like if it was being dropped in the row/col of the original index
-            node->model()->dropMimeData(data, action, node->originalModelIndex.row(), column, QModelIndex());
+            return node->model()->dropMimeData(data, action, node->originalModelIndex.row(), column, QModelIndex());
         }
     }
-
-    return false;
+    else {
+        return false;
+    }
 }
 
 
@@ -635,6 +670,10 @@ bool K3b::MetaItemModel::removeRows( int row, int count, const QModelIndex& pare
         for( int i = 0; i < count; ++i ) {
             d->places.removeAt( row );
         }
+        return true;
+    }
+    else {
+        return false;
     }
 }
 

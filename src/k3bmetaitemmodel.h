@@ -21,8 +21,7 @@
 
 class KIcon;
 
-// TODO: * implement the mimestuff
-//       * Have a MetaItemView which allows to set delegates for submodel header painting
+// TODO: * Have a MetaItemView which allows to set delegates for submodel header painting
 //       * implement something like modelHeaderData() to get data for the root elements
 
 namespace K3b {
@@ -66,6 +65,7 @@ namespace K3b {
         virtual bool canFetchMore( const QModelIndex& parent ) const;
         virtual void fetchMore( const QModelIndex& parent );
         virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
+        virtual QStringList mimeTypes() const;
         virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
         virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
 
