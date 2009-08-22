@@ -334,7 +334,6 @@ KUrl K3b::FileTreeView::selectedUrl() const
 void K3b::FileTreeView::slotExpandUrl( const QModelIndex& index )
 {
     kDebug();
-    expand( index );
     setCurrentIndex( index );
     scrollTo( index );
 }
