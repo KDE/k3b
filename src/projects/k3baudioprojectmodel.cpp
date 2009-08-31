@@ -43,12 +43,14 @@ public:
     K3b::AudioDoc* project;
 
     void _k_docChanged();
+    void _k_aboutToAddTrack( int position );
     void _k_trackAdded( K3b::AudioTrack* );
     void _k_aboutToRemoveTrack( K3b::AudioTrack* );
     void _k_trackRemoved();
+    void _k_aboutToAddSource( K3b::AudioTrack*, int );
     void _k_sourceAdded( K3b::AudioTrack*, int );
-    void _k_sourceRemoved( K3b::AudioTrack* );
     void _k_aboutToRemoveSource( K3b::AudioTrack*, int );
+    void _k_sourceRemoved( K3b::AudioTrack* );
 
 private:
     AudioProjectModel* q;
@@ -61,12 +63,18 @@ void K3b::AudioProjectModel::Private::_k_docChanged()
 }
 
 
+void K3b::AudioProjectModel::Private::_k_aboutToAddTrack( int position )
+{
+    if (position >= 0) {
+        q->beginInsertRows( QModelIndex(), position, position );
+    }
+}
+
+
 void K3b::AudioProjectModel::Private::_k_trackAdded( K3b::AudioTrack* track )
 {
     int index = track->trackNumber() - 1;
-
     if (index >= 0) {
-        q->beginInsertRows( QModelIndex(), index, index );
         // do nothing
         q->endInsertRows();
     }
@@ -86,10 +94,15 @@ void K3b::AudioProjectModel::Private::_k_trackRemoved()
 }
 
 
-void K3b::AudioProjectModel::Private::_k_sourceAdded( K3b::AudioTrack* track, int position )
+void K3b::AudioProjectModel::Private::_k_aboutToAddSource( K3b::AudioTrack* track, int position )
 {
     QModelIndex parent = q->indexForTrack( track );
     q->beginInsertRows( parent, position, position );
+}
+
+
+void K3b::AudioProjectModel::Private::_k_sourceAdded( K3b::AudioTrack*, int )
+{
     // do nothing
     q->endInsertRows();
 }
@@ -117,15 +130,19 @@ K3b::AudioProjectModel::AudioProjectModel( K3b::AudioDoc* doc, QObject* parent )
     connect( doc, SIGNAL( changed() ), this, SLOT( _k_docChanged() ) );
     connect( doc, SIGNAL( aboutToRemoveTrack( K3b::AudioTrack* ) ),
              this, SLOT( _k_aboutToRemoveTrack( K3b::AudioTrack* ) ) );
+    connect( doc, SIGNAL( aboutToAddTrack( int ) ),
+             this, SLOT( _k_aboutToAddTrack( int ) ) );
     connect( doc, SIGNAL( trackAdded( K3b::AudioTrack* ) ),
              this, SLOT( _k_trackAdded( K3b::AudioTrack* ) ) );
 
+    connect( doc, SIGNAL( aboutToAddSource( K3b::AudioTrack*, int ) ),
+             this, SLOT( _k_aboutToAddSource( K3b::AudioTrack*, int ) ) );
     connect( doc, SIGNAL( sourceAdded( K3b::AudioTrack*, int ) ),
              this, SLOT( _k_sourceAdded( K3b::AudioTrack*, int ) ) );
-    connect( doc, SIGNAL( sourceRemoved( K3b::AudioTrack* ) ),
-             this, SLOT( _k_sourceRemoved( K3b::AudioTrack* ) ) );
     connect( doc, SIGNAL( aboutToRemoveSource( K3b::AudioTrack*, int ) ),
              this, SLOT( _k_aboutToRemoveSource( K3b::AudioTrack*, int ) ) );
+    connect( doc, SIGNAL( sourceRemoved( K3b::AudioTrack* ) ),
+             this, SLOT( _k_sourceRemoved( K3b::AudioTrack* ) ) );
 }
 
 
@@ -333,8 +350,12 @@ Qt::ItemFlags K3b::AudioProjectModel::flags( const QModelIndex& index ) const
 
 QModelIndex K3b::AudioProjectModel::index( int row, int column, const QModelIndex& parent ) const
 {
+    if ( !hasIndex( row, column, parent ) ) {
+        return QModelIndex();
+    }
+    
     // source
-    if ( parent.isValid() ) {
+    else if ( parent.isValid() && parent.column() == 0 ) {
         if ( K3b::AudioTrack* track = trackForIndex( parent ) ) {
             if ( K3b::AudioDataSource* source = track->getSource( row ) ) {
                 return createIndex( row, column, source );
@@ -343,7 +364,7 @@ QModelIndex K3b::AudioProjectModel::index( int row, int column, const QModelInde
     }
 
     // track
-    else if ( row >= 0 && row < d->project->numOfTracks() ) {
+    else if ( !parent.isValid() && row >= 0 && row < d->project->numOfTracks() ) {
         return createIndex( row, column, d->project->getTrack( row+1 ) );
     }
 
@@ -366,7 +387,8 @@ QModelIndex K3b::AudioProjectModel::parent( const QModelIndex& index ) const
 int K3b::AudioProjectModel::rowCount( const QModelIndex& parent ) const
 {
     if ( parent.isValid() ) {
-        if ( K3b::AudioTrack* track = trackForIndex( parent ) ) {
+        K3b::AudioTrack* track = trackForIndex( parent );
+        if ( track != 0 && parent.column() == 0 ) {
             // first level
             return track->numberSources();
         }

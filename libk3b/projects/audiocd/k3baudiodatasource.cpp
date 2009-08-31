@@ -85,6 +85,8 @@ void K3b::AudioDataSource::moveAfter( K3b::AudioDataSource* source )
 
     if( source == this )
         return;
+    
+    source->track()->emitAboutToAddSource( source->sourceIndex()+1 );
 
     // remove this from the list
     take();
@@ -114,6 +116,8 @@ void K3b::AudioDataSource::moveAhead( K3b::AudioDataSource* source )
 
     if( source == this )
         return;
+    
+    source->track()->emitAboutToAddSource( source->sourceIndex() );
 
     // remove this from the list
     take();

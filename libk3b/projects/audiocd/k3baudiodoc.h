@@ -190,10 +190,12 @@ namespace K3b {
         void trackRemoved( K3b::AudioTrack* );
 
         // signals for the model
+        void aboutToAddTrack( int position );
         void aboutToRemoveTrack( K3b::AudioTrack* );
+        void aboutToAddSource( K3b::AudioTrack*, int position );
         void sourceAdded( K3b::AudioTrack*, int position );
-        void sourceRemoved( K3b::AudioTrack* );
         void aboutToRemoveSource( K3b::AudioTrack*, int position );
+        void sourceRemoved( K3b::AudioTrack* );
 
     protected:
         /** reimplemented from Doc */

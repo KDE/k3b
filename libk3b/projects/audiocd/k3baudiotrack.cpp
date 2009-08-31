@@ -293,6 +293,7 @@ void K3b::AudioTrack::moveAfter( K3b::AudioTrack* track )
         if( doc()->lastTrack() )
             moveAfter( doc()->lastTrack() );
         else {
+            emit doc()->aboutToAddTrack( 0 );
             doc()->setFirstTrack( take() );
             doc()->setLastTrack( this );
             emit doc()->trackAdded( this );
@@ -303,6 +304,8 @@ void K3b::AudioTrack::moveAfter( K3b::AudioTrack* track )
         return;
     }
     else {
+        emit track->doc()->aboutToAddTrack( track->trackNumber() );
+        
         // remove this from the list
         take();
 
@@ -344,6 +347,7 @@ void K3b::AudioTrack::moveAhead( K3b::AudioTrack* track )
         if( doc()->firstTrack() )
             moveAhead( doc()->firstTrack() );
         else {
+            emit doc()->aboutToAddTrack( 0 );
             doc()->setFirstTrack( take() );
             doc()->setLastTrack( this );
             emit doc()->trackAdded( this );
@@ -354,6 +358,8 @@ void K3b::AudioTrack::moveAhead( K3b::AudioTrack* track )
         return;
     }
     else {
+        emit track->doc()->aboutToAddTrack( track->trackNumber()-1 );
+        
         // remove this from the list
         take();
 
@@ -664,10 +670,19 @@ void K3b::AudioTrack::emitSourceRemoved( K3b::AudioDataSource *source )
         setFirstSource( source->next() );
 }
 
+
 void K3b::AudioTrack::emitAboutToRemoveSource( AudioDataSource* source )
 {
     if ( doc() ) {
         emit doc()->aboutToRemoveSource( this, source->sourceIndex() );
+    }
+}
+
+
+void K3b::AudioTrack::emitAboutToAddSource( int position )
+{
+    if ( doc() ) {
+        emit doc()->aboutToAddSource( this, position );
     }
 }
 

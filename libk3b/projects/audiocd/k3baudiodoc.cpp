@@ -349,7 +349,6 @@ K3b::AudioTrack* K3b::AudioDoc::importCueFile( const QString& cuefile, K3b::Audi
             K3b::AudioTrack* newTrack = new K3b::AudioTrack( this );
             newTrack->addSource( source );
             newTrack->moveAfter( after );
-            emit trackAdded(newTrack);
 
             // we do not know the length of the source yet so we have to force the index value
             if( track.index0() > 0 )
@@ -458,7 +457,8 @@ K3b::AudioTrack* K3b::AudioDoc::getTrack( int trackNum )
 
 void K3b::AudioDoc::addTrack( K3b::AudioTrack* track, int position )
 {
-    kDebug() << "(K3b::AudioDoc::addTrack( " << track << ", " << position << " )";
+    kDebug() << "(" << track << "," << position << ")";
+    
     track->m_parent = this;
     if( !m_firstTrack )
         m_firstTrack = m_lastTrack = track;
@@ -472,7 +472,6 @@ void K3b::AudioDoc::addTrack( K3b::AudioTrack* track, int position )
             track->moveAfter( m_lastTrack );  // just to be sure it's anywhere...
     }
 
-    emit trackAdded(track);
     emit changed();
 }
 

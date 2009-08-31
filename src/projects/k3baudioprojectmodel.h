@@ -73,12 +73,14 @@ namespace K3b {
         Private* const d;
 
         Q_PRIVATE_SLOT( d, void _k_docChanged() )
+        Q_PRIVATE_SLOT( d, void _k_aboutToAddTrack( int position ) )
         Q_PRIVATE_SLOT( d, void _k_trackAdded( K3b::AudioTrack* ) )
         Q_PRIVATE_SLOT( d, void _k_aboutToRemoveTrack( K3b::AudioTrack* ) )
         Q_PRIVATE_SLOT( d, void _k_trackRemoved() )
+        Q_PRIVATE_SLOT( d, void _k_aboutToAddSource( K3b::AudioTrack*, int ) )
         Q_PRIVATE_SLOT( d, void _k_sourceAdded( K3b::AudioTrack*, int ) )
-        Q_PRIVATE_SLOT( d, void _k_sourceRemoved( K3b::AudioTrack* ) )
         Q_PRIVATE_SLOT( d, void _k_aboutToRemoveSource( K3b::AudioTrack*, int ) )
+        Q_PRIVATE_SLOT( d, void _k_sourceRemoved( K3b::AudioTrack* ) )
     };
 }
 

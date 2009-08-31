@@ -192,6 +192,11 @@ namespace K3b {
          * Tells the audio doc one source is about to be removed
          */
         void emitAboutToRemoveSource( AudioDataSource* );
+        
+        /**
+         * Tells the audio doc one source is about to be added
+         */
+        void emitAboutToAddSource( int position );
 
         /**
          * Tells the audio doc one source was added to the list.
