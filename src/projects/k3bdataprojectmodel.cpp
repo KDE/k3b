@@ -382,13 +382,15 @@ QMimeData* K3b::DataProjectModel::mimeData( const QModelIndexList& indexes ) con
 {
     QMimeData* mime = new QMimeData();
 
-    QList<K3b::DataItem*> items;
+    QSet<K3b::DataItem*> items;
     KUrl::List urls;
     foreach( const QModelIndex& index, indexes ) {
         K3b::DataItem* item = itemForIndex( index );
         items << item;
-        if ( item->isFile() ) {
-            urls << KUrl( item->localPath() );
+        
+        KUrl url( item->localPath() );
+        if ( item->isFile() && !urls.contains(url) ) {
+            urls << url;
         }
     }
     urls.populateMimeData( mime );
