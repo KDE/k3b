@@ -189,14 +189,13 @@ private:
      * Makes sure that \a r does not overlap any other range by modifying and
      * deleting other ranges.
      */
-    void fixupOverlappingRanges( Range* r );
+    void fixupOverlappingRanges( int rangeId );
 
     Range* getRange( int i ) const;
     Marker* getMarker( int i ) const;
     Range* findRange( const QPoint& p ) const;
     Range* findRangeEdge( const QPoint& p, bool* end = 0 ) const;
     Marker* findMarker( const QPoint& p ) const;
-    void setSelectedRange( Range* );
 
     int m_maxMarkers;
     K3b::Msf m_length;
@@ -208,7 +207,6 @@ private:
      */
     int m_margin;
 
-    Range* m_draggedRange;
     bool m_draggingRangeEnd;
     Marker* m_draggedMarker;
 

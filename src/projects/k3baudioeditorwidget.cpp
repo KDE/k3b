@@ -14,17 +14,16 @@
 
 #include "k3baudioeditorwidget.h"
 
-#include <qpainter.h>
-#include <qcolor.h>
-#include <qpixmap.h>
-#include <qcursor.h>
-#include <qapplication.h>
-#include <qdesktopwidget.h>
-#include <qtooltip.h>
-#include <QPolygon>
+#include <QApplication>
+#include <QCursor>
+#include <QDesktopWidget>
 #include <QFrame>
-#include <QMouseEvent>
 #include <QList>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QPixmap>
+#include <QPolygon>
+#include <QToolTip>
 
 
 
@@ -145,8 +144,9 @@ public:
     Private()
         : allowOverlappingRanges(true),
           rangeSelectionEnabled(false),
-          selectedRange(0),
-          movedRange(0) {
+          selectedRangeId(0),
+          draggedRangeId(0),
+          movedRangeId(0) {
     }
 
     QBrush selectedRangeBrush;
@@ -154,8 +154,9 @@ public:
     bool allowOverlappingRanges;
     bool rangeSelectionEnabled;
 
-    Range* selectedRange;
-    Range* movedRange;
+    int selectedRangeId;
+    int draggedRangeId;
+    int movedRangeId;
     K3b::Msf lastMovePosition;
 
     Range::List ranges;
@@ -168,7 +169,6 @@ K3b::AudioEditorWidget::AudioEditorWidget( QWidget* parent )
       m_maxMarkers(1),
       m_idCnt(1),
       m_mouseAt(true),
-      m_draggedRange(0),
       m_draggedMarker(0)
 {
     d = new Private;
@@ -258,32 +258,23 @@ void K3b::AudioEditorWidget::enableRangeSelection( bool b )
 
 bool K3b::AudioEditorWidget::rangeSelectedEnabled() const
 {
-    return d->selectedRange;
+    return d->selectedRangeId != 0;
 }
 
 
 void K3b::AudioEditorWidget::setSelectedRange( int id )
 {
-    setSelectedRange( getRange( id ) );
-}
-
-
-void K3b::AudioEditorWidget::setSelectedRange( K3b::AudioEditorWidget::Range* r )
-{
-    d->selectedRange = r;
+    d->selectedRangeId = id;
     if( rangeSelectedEnabled() ) {
         update();
-        emit selectedRangeChanged( d->selectedRange ? d->selectedRange->id : 0 );
+        emit selectedRangeChanged( d->selectedRangeId );
     }
 }
 
 
 int K3b::AudioEditorWidget::selectedRange() const
 {
-    if( d->selectedRange )
-        return d->selectedRange->id;
-    else
-        return 0;
+    return d->selectedRangeId;
 }
 
 
@@ -322,8 +313,7 @@ int K3b::AudioEditorWidget::findRange( int pos ) const
 
 int K3b::AudioEditorWidget::findRangeEdge( int pos, bool* end ) const
 {
-    Range* r = findRangeEdge( QPoint( pos, 0 ), end );
-    if( r )
+    if( Range* r = findRangeEdge( QPoint( pos, 0 ), end ) )
         return r->id;
     else
         return 0;
@@ -332,8 +322,7 @@ int K3b::AudioEditorWidget::findRangeEdge( int pos, bool* end ) const
 
 bool K3b::AudioEditorWidget::modifyRange( int identifier, const K3b::Msf& start, const K3b::Msf& end )
 {
-    Range* range = getRange( identifier );
-    if( range ) {
+    if( Range* range = getRange( identifier ) ) {
         if( start > end )
             return false;
 
@@ -344,7 +333,7 @@ bool K3b::AudioEditorWidget::modifyRange( int identifier, const K3b::Msf& start,
         range->end = end;
 
         if( !d->allowOverlappingRanges )
-            fixupOverlappingRanges( range );
+            fixupOverlappingRanges( range->id );
 
         repaint();
 
@@ -365,7 +354,7 @@ bool K3b::AudioEditorWidget::removeRange( int identifier )
         rect.setLeft( msfToPos( range->start ) );
         rect.setRight( msfToPos( range->end ) );
 
-        if( *d->selectedRange == *range )
+        if( d->selectedRangeId == range->id )
             setSelectedRange( 0 );
 
         d->ranges.removeAll( *range );
@@ -501,8 +490,8 @@ void K3b::AudioEditorWidget::drawAll( QPainter* p, const QRect& drawRect )
         drawRange( p, drawRect, *it );
 
     // Hack to make sure the currently selected range is always on top
-    if( d->selectedRange )
-        drawRange( p, drawRect, *d->selectedRange );
+    if( Range* selectedRange = getRange( d->selectedRangeId ) )
+        drawRange( p, drawRect, *selectedRange );
 
     for( Marker::List::const_iterator it = d->markers.constBegin(); it != d->markers.constEnd(); ++it )
         drawMarker( p, drawRect, *it );
@@ -563,7 +552,7 @@ void K3b::AudioEditorWidget::drawRange( QPainter* p, const QRect& drawRect, cons
     int start = msfToPos( r.start );
     int end = msfToPos( r.end );
 
-    if( rangeSelectedEnabled() && r == *d->selectedRange )
+    if( rangeSelectedEnabled() && r.id == d->selectedRangeId )
         p->fillRect( start, drawRect.top() + 6 , end-start+1, drawRect.height() - 6, selectedRangeBrush() );
     else
         p->fillRect( start, drawRect.top() + 6 , end-start+1, drawRect.height() - 6, r.brush );
@@ -594,21 +583,26 @@ void K3b::AudioEditorWidget::drawMarker( QPainter* p, const QRect& drawRect, con
 }
 
 
-void K3b::AudioEditorWidget::fixupOverlappingRanges( Range* r )
+void K3b::AudioEditorWidget::fixupOverlappingRanges( int rangeId )
 {
-    // copy the list to avoid problems with the iterator
-    Range::List ranges( d->ranges );
-    Range::List::iterator it = d->ranges.begin();
-    while( it != d->ranges.end() ) {
-        Range* range = &( *it );
-        if( range != r ) {
+    Range* r = getRange( rangeId );
+    if( r == 0 )
+        return;
+    
+    Range::List::iterator range = d->ranges.begin();
+    while( range != d->ranges.end() ) {
+        if( range->id != rangeId ) {
+            
             // remove the range if it is covered completely
             if( range->start >= r->start &&
                 range->end <= r->end ) {
-                it = d->ranges.erase( it );
-                emit rangeRemoved( range->id );
-                if( *d->selectedRange == *range )
+                if( d->selectedRangeId == range->id )
                     setSelectedRange( 0 );
+                
+                range = d->ranges.erase( range );
+                emit rangeRemoved( rangeId );
+                // "r" may be invalid at this point, let's find it once again
+                Range* r = getRange( rangeId );
             }
             else {
                 // split the range if it contains r completely
@@ -632,11 +626,11 @@ void K3b::AudioEditorWidget::fixupOverlappingRanges( Range* r )
                     range->end = r->start-1;
                     emit rangeChanged( range->id, range->start, range->end );
                 }
-                ++it;
+                ++range;
             }
         }
         else {
-            ++it;
+            ++range;
         }
     }
 }
@@ -644,21 +638,19 @@ void K3b::AudioEditorWidget::fixupOverlappingRanges( Range* r )
 
 void K3b::AudioEditorWidget::mousePressEvent( QMouseEvent* e )
 {
-    m_draggedRange = 0;
+    d->draggedRangeId = 0;
     m_draggedMarker = 0;
 
     bool end;
-    Range* r = findRangeEdge( e->pos(), &end );
-    if( r ) {
-        m_draggedRange = r;
+    if( Range* r = findRangeEdge( e->pos(), &end ) ) {
+        d->draggedRangeId = r->id;
         m_draggingRangeEnd = end;
-        setSelectedRange( r );
+        setSelectedRange( r->id );
     }
-    else {
-        r = findRange( e->pos() );
-        d->movedRange = r;
+    else if( Range* r = findRange( e->pos() ) ) {
+        d->movedRangeId = r->id;
         d->lastMovePosition = posToMsf( e->pos().x() );
-        setSelectedRange( r );
+        setSelectedRange( r->id );
         m_draggedMarker = findMarker( e->pos() );
     }
 
@@ -672,19 +664,19 @@ void K3b::AudioEditorWidget::mouseReleaseEvent( QMouseEvent* e )
         //
         // modify and even delete ranges that we touched
         //
-        if( m_draggedRange ) {
-            fixupOverlappingRanges( m_draggedRange );
+        if( d->draggedRangeId != 0 ) {
+            fixupOverlappingRanges( d->draggedRangeId );
             repaint();
         }
-        else if( d->movedRange ) {
-            fixupOverlappingRanges( d->movedRange );
+        else if( d->movedRangeId != 0 ) {
+            fixupOverlappingRanges( d->movedRangeId );
             repaint();
         }
     }
 
-    m_draggedRange = 0;
+    d->draggedRangeId = 0;
     m_draggedMarker = 0;
-    d->movedRange = 0;
+    d->movedRangeId = 0;
 
     QFrame::mouseReleaseEvent(e);
 }
@@ -702,26 +694,26 @@ void K3b::AudioEditorWidget::mouseMoveEvent( QMouseEvent* e )
         emit mouseAt( posToMsf( e->pos().x() ) );
 
     if( e->buttons() & Qt::LeftButton ) {
-        if( m_draggedRange ) {
+        if( Range* draggedRange = getRange( d->draggedRangeId ) ) {
             // determine the position the range's end was dragged to and its other end
             K3b::Msf msfPos = qMax( K3b::Msf(), qMin( posToMsf( e->pos().x() ), m_length-1 ) );
-            K3b::Msf otherEnd = ( m_draggingRangeEnd ? m_draggedRange->start : m_draggedRange->end );
+            K3b::Msf otherEnd = ( m_draggingRangeEnd ? draggedRange->start : draggedRange->end );
 
             // move it to the new pos
             if( m_draggingRangeEnd )
-                m_draggedRange->end = msfPos;
+                draggedRange->end = msfPos;
             else
-                m_draggedRange->start = msfPos;
+                draggedRange->start = msfPos;
 
             // if we pass the other end switch them
-            if( m_draggedRange->start > m_draggedRange->end ) {
-                K3b::Msf buf = m_draggedRange->start;
-                m_draggedRange->start = m_draggedRange->end;
-                m_draggedRange->end = buf;
+            if( draggedRange->start > draggedRange->end ) {
+                K3b::Msf buf = draggedRange->start;
+                draggedRange->start = draggedRange->end;
+                draggedRange->end = buf;
                 m_draggingRangeEnd = !m_draggingRangeEnd;
             }
 
-            emit rangeChanged( m_draggedRange->id, m_draggedRange->start, m_draggedRange->end );
+            emit rangeChanged( draggedRange->id, draggedRange->start, draggedRange->end );
 
             repaint();
         }
@@ -731,21 +723,21 @@ void K3b::AudioEditorWidget::mouseMoveEvent( QMouseEvent* e )
 
             repaint();
         }
-        else if( d->movedRange ) {
+        else if( Range* movedRange = getRange( d->movedRangeId ) ) {
             int diff = posToMsf( e->pos().x() ).lba() - d->lastMovePosition.lba();
-            if( d->movedRange->end + diff >= m_length )
-                diff = m_length.lba() - d->movedRange->end.lba() - 1;
-            else if( d->movedRange->start - diff < 0 )
-                diff = -1 * d->movedRange->start.lba();
-            d->movedRange->start += diff;
-            d->movedRange->end += diff;
+            if( movedRange->end + diff >= m_length )
+                diff = m_length.lba() - movedRange->end.lba() - 1;
+            else if( movedRange->start - diff < 0 )
+                diff = -1 * movedRange->start.lba();
+            movedRange->start += diff;
+            movedRange->end += diff;
 
 //       if( !d->allowOverlappingRanges )
-// 	fixupOverlappingRanges( d->movedRange );
+// 	fixupOverlappingRanges( d->movedRangeId );
 
             d->lastMovePosition = posToMsf( e->pos().x() );
 
-            emit rangeChanged( d->movedRange->id, d->movedRange->start, d->movedRange->end );
+            emit rangeChanged( movedRange->id, movedRange->start, movedRange->end );
 
             repaint();
         }
