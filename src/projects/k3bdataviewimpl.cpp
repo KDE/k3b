@@ -51,9 +51,9 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, DataProjectModel* mod
                                  actionCollection, "open" );
     m_actionImportSession = createAction( m_view, i18n("&Import Session..."), "document-import", 0, this, SLOT(slotImportSession()),
                                           actionCollection, "project_data_import_session" );
-    m_actionClearSession = createAction( m_view, i18n("&Clear Imported Session"), "edit-clear", 0, this, SLOT(slotImportSession()),
+    m_actionClearSession = createAction( m_view, i18n("&Clear Imported Session"), "edit-clear", 0, this, SLOT(slotClearImportedSession()),
                                          actionCollection, "project_data_clear_imported_session" );
-    m_actionEditBootImages = createAction( m_view, i18n("&Edit Boot Images..."), "document-properties", 0, this, SLOT(slotImportSession()),
+    m_actionEditBootImages = createAction( m_view, i18n("&Edit Boot Images..."), "document-properties", 0, this, SLOT(slotEditBootImages()),
                                            actionCollection, "project_data_edit_boot_images" );
     
     m_actionImportSession->setToolTip( i18n("Import a previously burned session into the current project") );
