@@ -23,13 +23,13 @@
 #include "k3bfileitem.h"
 #include "k3bspecialdataitem.h"
 
-#include <kmimetype.h>
 #include <KIcon>
 #include <KLocale>
 #include <KUrl>
 
-#include <QtCore/QMimeData>
-#include <QtCore/QDataStream>
+#include <QApplication>
+#include <QDataStream>
+#include <QMimeData>
 
 
 class K3b::DataProjectModel::Private
@@ -453,13 +453,13 @@ bool K3b::DataProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction 
             items << ( K3b::DataItem* )p;
         }
         // always move the items, no copy from within the views
-        K3b::DataUrlAddingDialog::copyMoveItems( items, dir, 0, false );
+        K3b::DataUrlAddingDialog::moveItems( items, dir, qApp->activeWindow() );
         return true;
     }
     else if ( KUrl::List::canDecode( data ) ) {
         kDebug() << "url list drop";
         KUrl::List urls = KUrl::List::fromMimeData( data );
-        K3b::DataUrlAddingDialog::addUrls( urls, dir, 0 );
+        K3b::DataUrlAddingDialog::addUrls( urls, dir, qApp->activeWindow() );
         return true;
     }
     else {

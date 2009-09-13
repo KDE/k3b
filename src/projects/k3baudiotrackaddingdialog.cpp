@@ -23,96 +23,100 @@
 #include "k3bglobals.h"
 #include "k3bcuefileparser.h"
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <kmessagebox.h>
+#include <KDebug>
+#include <KLocale>
+#include <KMessageBox>
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qfileinfo.h>
-#include <qtimer.h>
-#include <qdir.h>
-#include <QtGui/QGridLayout>
+#include <QDir>
+#include <QFileInfo>
+#include <QGridLayout>
+#include <QLabel>
+#include <QLayout>
+#include <QThread>
+#include <QTimer>
 
 
 
-K3b::AudioTrackAddingDialog::AudioTrackAddingDialog( QWidget* parent )
+K3b::AudioTrackAddingDialog::AudioTrackAddingDialog( const KUrl::List& urls,
+                                                     AudioDoc* doc,
+                                                     AudioTrack* afterTrack,
+                                                     AudioTrack* parentTrack,
+                                                     AudioDataSource* afterSource,
+                                                     QWidget* parent )
     : KDialog( parent),
-      m_bCanceled(false)
+      m_urls( extractUrlList( urls ) ),
+      m_doc( doc ),
+      m_trackAfter( afterTrack ),
+      m_parentTrack( parentTrack ),
+      m_sourceAfter( afterSource ),
+      m_bCanceled( false )
 {
     QWidget* page = new QWidget();
     setMainWidget(page);
     setButtons(Cancel);
     setDefaultButton(Cancel);
-    setModal(true);
     setCaption(i18n("Please be patient..."));
     QGridLayout* grid = new QGridLayout( page );
 
     m_infoLabel = new QLabel( page );
+    m_infoLabel->setText( i18n("Adding files to project \"%1\"...",doc->URL().fileName()) );
     m_busyWidget = new K3b::BusyWidget( page );
+    m_busyWidget->showBusy( true );
 
     grid->addWidget( m_infoLabel, 0, 0 );
     grid->addWidget( m_busyWidget, 1, 0 );
 
     m_analyserJob = new K3b::AudioFileAnalyzerJob( this, this );
     connect( m_analyserJob, SIGNAL(finished(bool)), this, SLOT(slotAnalysingFinished(bool)) );
+    
+    QTimer::singleShot( 0, this, SLOT(slotAddUrls()) );
 }
 
 
 K3b::AudioTrackAddingDialog::~AudioTrackAddingDialog()
 {
+    QString message;
+    if( !m_unreadableFiles.isEmpty() )
+        message += QString("<p><b>%1:</b><br>%2")
+                   .arg( i18n("Insufficient permissions to read the following files") )
+                   .arg( m_unreadableFiles.join( "<br>" ) );
+    if( !m_notFoundFiles.isEmpty() )
+        message += QString("<p><b>%1:</b><br>%2")
+                   .arg( i18n("Unable to find the following files") )
+                   .arg( m_notFoundFiles.join( "<br>" ) );
+    if( !m_nonLocalFiles.isEmpty() )
+        message += QString("<p><b>%1:</b><br>%2")
+                   .arg( i18n("No non-local files supported") )
+                   .arg( m_unreadableFiles.join( "<br>" ) );
+    if( !m_unsupportedFiles.isEmpty() )
+        message += QString("<p><b>%1:</b><br><i>%2</i><br>%3")
+                   .arg( i18n("Unable to handle the following files due to an unsupported format" ) )
+                   .arg( i18n("You may manually convert these audio files to wave using another "
+                              "application supporting the audio format and then add the wave files "
+                              "to the K3b project.") )
+                   .arg( m_unsupportedFiles.join( "<br>" ) );
+
+    if( !message.isEmpty() )
+        KMessageBox::detailedSorry( parentWidget(), i18n("Problems while adding files to the project."), message );
 }
 
 
-int K3b::AudioTrackAddingDialog::addUrls( const KUrl::List& urls,
+void K3b::AudioTrackAddingDialog::addUrls( const KUrl::List& urls,
                                           K3b::AudioDoc* doc,
                                           K3b::AudioTrack* afterTrack,
                                           K3b::AudioTrack* parentTrack,
                                           K3b::AudioDataSource* afterSource,
                                           QWidget* parent )
 {
-    if( urls.isEmpty() )
-        return 0;
-
-    K3b::AudioTrackAddingDialog dlg( parent );
-    dlg.m_urls = extractUrlList( urls );
-    dlg.m_doc = doc;
-    dlg.m_trackAfter = afterTrack;
-    dlg.m_parentTrack = parentTrack;
-    dlg.m_sourceAfter = afterSource;
-    dlg.m_infoLabel->setText( i18n("Adding files to project \"%1\"...",doc->URL().fileName()) );
-
-    dlg.m_busyWidget->showBusy(true);
-    QTimer::singleShot( 0, &dlg, SLOT(slotAddUrls()) );
-    int ret = dlg.exec();
-
-    QString message;
-    if( !dlg.m_unreadableFiles.isEmpty() )
-        message += QString("<p><b>%1:</b><br>%2")
-                   .arg( i18n("Insufficient permissions to read the following files") )
-                   .arg( dlg.m_unreadableFiles.join( "<br>" ) );
-    if( !dlg.m_notFoundFiles.isEmpty() )
-        message += QString("<p><b>%1:</b><br>%2")
-                   .arg( i18n("Unable to find the following files") )
-                   .arg( dlg.m_notFoundFiles.join( "<br>" ) );
-    if( !dlg.m_nonLocalFiles.isEmpty() )
-        message += QString("<p><b>%1:</b><br>%2")
-                   .arg( i18n("No non-local files supported") )
-                   .arg( dlg.m_unreadableFiles.join( "<br>" ) );
-    if( !dlg.m_unsupportedFiles.isEmpty() )
-        message += QString("<p><b>%1:</b><br><i>%2</i><br>%3")
-                   .arg( i18n("Unable to handle the following files due to an unsupported format" ) )
-                   .arg( i18n("You may manually convert these audio files to wave using another "
-                              "application supporting the audio format and then add the wave files "
-                              "to the K3b project.") )
-                   .arg( dlg.m_unsupportedFiles.join( "<br>" ) );
-
-    if( !message.isEmpty() )
-        KMessageBox::detailedSorry( parent, i18n("Problems while adding files to the project."), message );
-
-    return ret;
+    if( !urls.isEmpty() )
+    {
+        K3b::AudioTrackAddingDialog* dlg = new K3b::AudioTrackAddingDialog(
+            urls, doc, afterTrack, parentTrack, afterSource, parent );
+        dlg->setModal( false );
+        dlg->setAttribute( Qt::WA_DeleteOnClose );
+        dlg->show();
+    }
 }
-
 
 
 void K3b::AudioTrackAddingDialog::slotAddUrls()

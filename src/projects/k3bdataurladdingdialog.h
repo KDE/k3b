@@ -44,19 +44,17 @@ namespace K3b {
         ~DataUrlAddingDialog();
 
         /**
-         * \return \see QDialog::exec()
+         * shows modeless DataUrlAddingDialog and returns
+         * (doesn't wait till dialog is closed)
          */
-        static int addUrls( const KUrl::List& urls, DirItem* dir = 0,
+        static void addUrls( const KUrl::List& urls, DirItem* dir,
                             QWidget* parent = 0 );
 
-        static int moveItems( const QList<DataItem*>& items, DirItem* dir,
+        static void moveItems( const QList<DataItem*>& items, DirItem* dir,
                               QWidget* parent = 0 );
 
-        static int copyItems( const QList<DataItem*>& items, DirItem* dir,
+        static void copyItems( const QList<DataItem*>& items, DirItem* dir,
                               QWidget* parent = 0 );
-
-        static int copyMoveItems( const QList<DataItem*>& items, DirItem* dir,
-                                  QWidget* parent, bool copy );
 
     private Q_SLOTS:
         void slotAddUrls();
@@ -67,12 +65,11 @@ namespace K3b {
 
     private:
         DataUrlAddingDialog( DataDoc* doc, QWidget* parent = 0 );
-
+        static void copyMoveItems( const QList<DataItem*>& items, DirItem* dir,
+                                  QWidget* parent, bool copy );
         bool getNewName( const QString& oldName, DirItem* dir, QString& newName );
-
         bool addHiddenFiles();
         bool addSystemFiles();
-
         QString resultMessage() const;
 
         QProgressBar* m_progressWidget;
@@ -82,9 +79,7 @@ namespace K3b {
 
         KUrl::List m_urls;
         QList< QPair<KUrl, DirItem*> > m_urlQueue;
-
         QList< QPair<DataItem*, DirItem*> > m_items;
-
         QList<KUrl> m_dirSizeQueue;
 
         bool m_bExistingItemsReplaceAll;
@@ -102,7 +97,6 @@ namespace K3b {
         QStringList m_invalidFilenameEncodingFiles;
 
         bool m_bCanceled;
-
         bool m_copyItems;
 
         KIO::filesize_t m_totalFiles;

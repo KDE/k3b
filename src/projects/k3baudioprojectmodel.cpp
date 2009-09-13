@@ -14,20 +14,19 @@
  */
 
 #include "k3baudioprojectmodel.h"
-#include "k3baudiotrackaddingdialog.h"
 #include "k3baudiocdtrackdrag.h"
 #include "k3baudiocdtracksource.h"
-
-#include "k3baudiodoc.h"
-#include "k3baudiotrack.h"
 #include "k3baudiodatasource.h"
+#include "k3baudiodoc.h"
 #include "k3baudiofile.h"
+#include "k3baudiotrack.h"
+#include "k3baudiotrackaddingdialog.h"
 
 #include <KLocale>
 #include <KIcon>
 
-#include <QtCore/QMimeData>
-#include <QtGui/QApplication>
+#include <QApplication>
+#include <QMimeData>
 
 
 // we have K3b::AudioTracks in the first level and K3b::AudioDataSources in the second level

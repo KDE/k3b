@@ -35,8 +35,31 @@ namespace K3b {
         Q_OBJECT
 
     public:
+        AudioTrackAddingDialog( const KUrl::List& urls,
+                                AudioDoc* doc,
+                                AudioTrack* afterTrack = 0,
+                                AudioTrack* parentTrack = 0,
+                                AudioDataSource* afterSource = 0,
+                                QWidget* parent = 0 );
         ~AudioTrackAddingDialog();
 
+        /**
+         * shows modeless AudioTrackAddingDialog and returns
+         * (doesn't wait till dialog is closed)
+         */
+        static void addUrls( const KUrl::List& urls,
+                            AudioDoc* doc,
+                            AudioTrack* afterTrack = 0,
+                            AudioTrack* parentTrack = 0,
+                            AudioDataSource* afterSource = 0,
+                            QWidget* parent = 0 );
+
+    private Q_SLOTS:
+        void slotAddUrls();
+        void slotAnalysingFinished( bool );
+        void slotCancel();
+
+    private:
         /**
          * @reimplemented from JobHandler
          */
@@ -54,28 +77,10 @@ namespace K3b {
                             const QString& = QString() ) { return false; }
 
         /**
-         * reimplemented from JobHandler
+         * @reimplemented from JobHandler
          */
         void blockingInformation( const QString&,
                                   const QString& = QString() ) {}
-
-        /**
-         * \return \see QDialog::exec()
-         */
-        static int addUrls( const KUrl::List& urls,
-                            AudioDoc* doc,
-                            AudioTrack* afterTrack = 0,
-                            AudioTrack* parentTrack = 0,
-                            AudioDataSource* afterSource = 0,
-                            QWidget* parent = 0 );
-
-    private Q_SLOTS:
-        void slotAddUrls();
-        void slotAnalysingFinished( bool );
-        void slotCancel();
-
-    private:
-        AudioTrackAddingDialog( QWidget* parent = 0 );
 
         static KUrl::List extractUrlList( const KUrl::List& urls );
 
