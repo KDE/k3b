@@ -209,7 +209,7 @@ QVariant K3b::AudioTrackModel::data( const QModelIndex& index, int role ) const
 
     case Qt::CheckStateRole:
         if ( index.column() == TrackNumberColumn ) {
-            return trackChecked( trackIndex );
+            return trackChecked( trackIndex ) ? Qt::Checked : Qt::Unchecked;
         }
         break;
 
@@ -331,7 +331,7 @@ bool K3b::AudioTrackModel::setData( const QModelIndex& index, const QVariant& va
             }
 
         case Qt::CheckStateRole:
-            setTrackChecked( index.row(), !trackChecked( index.row() ) );
+            setTrackChecked( index.row(), value.toInt() == Qt::Checked );
             return true;
 
         case ArtistRole:
