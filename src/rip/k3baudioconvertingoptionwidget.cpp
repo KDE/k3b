@@ -163,7 +163,13 @@ void K3b::AudioConvertingOptionWidget::slotConfigurePlugin()
     // 0 for wave
     K3b::AudioEncoder* encoder = d->encoderMap[m_comboFileType->currentIndex()];
     if( encoder )
-        k3bcore->pluginManager()->execPluginDialog( encoder, this );
+    {
+        int ret = k3bcore->pluginManager()->execPluginDialog( encoder, this );
+        if( ret == QDialog::Accepted )
+        {
+            emit changed();
+        }
+    }
 }
 
 

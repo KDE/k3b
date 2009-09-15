@@ -161,8 +161,14 @@ int K3b::PluginManager::execPluginDialog( K3b::Plugin* plugin, QWidget* parent )
         QVBoxLayout* layout = new QVBoxLayout( dlg.mainWidget() );
         layout->setMargin( 0 );
         layout->addWidget( currentModuleProxy );
-
-        return dlg.exec();
+        connect( &dlg, SIGNAL(defaultClicked()), currentModuleProxy, SLOT(defaults()) );
+        
+        int ret = dlg.exec();
+        if( ret == QDialog::Accepted )
+        {
+            currentModuleProxy->save();
+        }
+        return ret;
     }
     else {
         KMessageBox::sorry( parent, i18n("No settings available for plugin %1.", plugin->pluginInfo().name() ) );
