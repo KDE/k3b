@@ -1351,7 +1351,8 @@ QString K3b::MixedJob::jobDescription() const
 
 QString K3b::MixedJob::jobDetails() const
 {
-    return ( i18np("1 track (%2 minutes audio data, %3 ISO9660 data)"
+    return ( i18ncp("%2 is of form XX:YY:ZZ, no pluralization needed"
+                  ,"1 track (%2 minutes audio data, %3 ISO9660 data)"
                   ,"%1 tracks (%2 minutes audio data, %3 ISO9660 data)"
                   ,m_doc->numOfTracks()
                   ,m_doc->audioDoc()->length().toString()

@@ -858,7 +858,8 @@ QString K3b::AudioJob::jobDescription() const
 
 QString K3b::AudioJob::jobDetails() const
 {
-    return ( i18np( "1 track (%2 minutes)",
+    return ( i18ncp("%2 is of form XX:YY:ZZ, no pluralization needed",
+                    "1 track (%2 minutes)",
                     "%1 tracks (%2 minutes)",
                     m_doc->numOfTracks(), m_doc->length().toString())
              + ( m_doc->copies() > 1 && !m_doc->dummy()
