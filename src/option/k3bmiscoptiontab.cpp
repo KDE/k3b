@@ -17,24 +17,25 @@
 
 #include "k3bpluginmanager.h"
 #include "k3bcore.h"
+#include "k3bglobalsettings.h"
 #include "k3bservicemenuinstaller.h"
 #include "k3binteractiondialog.h"
 #include "k3bintmapcombobox.h"
 
-#include <qcheckbox.h>
-#include <qfileinfo.h>
-#include <qradiobutton.h>
+#include <QCheckBox>
+#include <QFileInfo>
+#include <QRadioButton>
 
-#include <kapplication.h>
-#include <klocale.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <kdialog.h>
-#include <kstandarddirs.h>
-#include <kmessagebox.h>
-#include <kurlrequester.h>
-#include <kcombobox.h>
+#include <KApplication>
+#include <KComboBox>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KDialog>
 #include <kglobal.h>
+#include <KLocale>
+#include <KMessageBox>
+#include <KStandardDirs>
+#include <KUrlRequester>
 
 
 K3b::MiscOptionTab::MiscOptionTab(QWidget *parent )
@@ -79,8 +80,7 @@ void K3b::MiscOptionTab::readSettings()
                                                                 ( int )K3b::InteractionDialog::LOAD_SAVED_SETTINGS ) );
     m_checkSystemConfig->setChecked( c.readEntry( "check system config", true ) );
 
-    QString tempdir = c.readPathEntry( "Temp Dir", KGlobal::dirs()->resourceDirs( "tmp" ).first() );
-    m_editTempDir->setUrl( tempdir );
+    m_editTempDir->setUrl( k3bcore->globalSettings()->defaultTempPath() );
 
 //   if( c.readEntry( "Multiple Instances", "smart" ) == "smart" )
 //     m_radioMultipleInstancesSmart->setChecked(true);
@@ -106,7 +106,7 @@ bool K3b::MiscOptionTab::saveSettings()
 
     QString tempDir = m_editTempDir->url().toLocalFile();
     QFileInfo fi( tempDir );
-
+    
     if( fi.isRelative() ) {
         fi.setFile( fi.absoluteFilePath() );
     }
@@ -141,10 +141,11 @@ bool K3b::MiscOptionTab::saveSettings()
         KMessageBox::error( this, i18n("You do not have permission to write to %1.",fi.absoluteFilePath()) );
         return false;
     }
+    
 
     m_editTempDir->setUrl( fi.absoluteFilePath() );
 
-    c.writePathEntry( "Temp Dir", m_editTempDir->url().toLocalFile() );
+    k3bcore->globalSettings()->setDefaultTempPath( m_editTempDir->url().toLocalFile() );
 
 //   if( m_radioMultipleInstancesSmart->isChecked() )
 //     c.writeEntry( "Multiple Instances", "smart" );

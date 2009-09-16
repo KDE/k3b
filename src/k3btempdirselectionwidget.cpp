@@ -16,25 +16,24 @@
 #include "k3btempdirselectionwidget.h"
 #include "k3bglobals.h"
 #include "k3bcore.h"
+#include "k3bglobalsettings.h"
 
-#include <qlabel.h>
-#include <qgroupbox.h>
-#include <qlayout.h>
-#include <qtimer.h>
+#include <QFileInfo>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLayout>
+#include <QTimer>
+#include <QToolTip>
 
-#include <qtooltip.h>
-
-#include <qfileinfo.h>
-
-#include <kconfig.h>
-#include <klocale.h>
-#include <kfiledialog.h>
-#include <kdialog.h>
-#include <kstandarddirs.h>
-#include <kiconloader.h>
-#include <kurlrequester.h>
+#include <KConfig>
+#include <KDialog>
+#include <KFileDialog>
+#include <KIconLoader>
 #include <kio/global.h>
-#include <klineedit.h>
+#include <KLineEdit>
+#include <KLocale>
+#include <KStandardDirs>
+#include <KUrlRequester>
 
 
 K3b::TempDirSelectionWidget::TempDirSelectionWidget( QWidget *parent )
@@ -71,7 +70,7 @@ K3b::TempDirSelectionWidget::TempDirSelectionWidget( QWidget *parent )
     // choose a default
     setSelectionMode( DIR );
 
-    m_editDirectory->setUrl( K3b::defaultTempPath() );
+    m_editDirectory->setUrl( k3bcore->globalSettings()->defaultTempPath() );
     slotUpdateFreeTempSpace();
 
     // ToolTips
@@ -225,14 +224,13 @@ void K3b::TempDirSelectionWidget::setNeededSize( KIO::filesize_t bytes )
 
 void K3b::TempDirSelectionWidget::saveConfig()
 {
-    KConfigGroup grp( KGlobal::config(), "General Options" );
-    grp.writePathEntry( "Temp Dir", tempDirectory() );
+    k3bcore->globalSettings()->setDefaultTempPath( tempDirectory() );
 }
 
 
 void K3b::TempDirSelectionWidget::readConfig( const KConfigGroup& c )
 {
-    setTempPath( c.readPathEntry( "image path", K3b::defaultTempPath() ) );
+    setTempPath( c.readPathEntry( "image path", k3bcore->globalSettings()->defaultTempPath() ) );
 }
 
 
