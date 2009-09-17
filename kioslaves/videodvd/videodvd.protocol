@@ -15,6 +15,7 @@ Description[csb]=Wtëkôcz protokòlu jaczi zezwôlô na kòpérowanié lopków 
 Description[da]=En kioslave som muliggør kopiering af filer fra en video-dvd (inklusiv dekryptering)
 Description[de]=Ein-/Ausgabemodul, mit dem man Dateien von einer Video-DVD kopieren kann (inkl. Entschlüsselung)
 Description[el]=Ένα kioslave που επιτρέπει την αντιγραφή αρχείων από ένα DVD βίντεο (δυνατότητα αποκρυπτογράφησης)
+Description[en_GB]=A kioslave that allows files to be copied from a Video DVD (including decryption)
 Description[eo]=Kioslave kiu permesas kopii dosierojn el Video-DVD (inkluzive malĉifrado)
 Description[es]=Un kioslave que permite copiar archivos de un DVD de vídeo (incluye descifrado)
 Description[et]=KIO-moodul, mis võimaldab kopeerida faile video-DVD-lt (vajadusel krüptib lahti)
