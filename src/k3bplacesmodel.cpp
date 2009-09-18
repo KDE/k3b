@@ -15,9 +15,11 @@
 #include "k3bplacesmodel.h"
 #include "k3bdevicemodel.h"
 
+#include "k3bcore.h"
 #include "k3bdevice.h"
 #include "k3bdevicemanager.h"
-#include "k3bcore.h"
+#include "k3bmediacache.h"
+#include "k3bmedium.h"
 
 #include <KDirModel>
 #include <kdirsortfilterproxymodel.h> // use .h to build with KDE 4.2
@@ -117,7 +119,17 @@ void K3b::PlacesModel::expandToUrl( const KUrl& url )
         if( Solid::StorageAccess* solidStorage = device->solidStorage() ) {
             KUrl parent( solidStorage->filePath() );
             if( parent.isParentOf( url ) ) {
-                kDebug() << url << " will be expanded to device " << device->description();
+                kDebug() << url << "will be expanded to device" << device->description();
+                emit expand( mapFromSubModel( d->deviceModel->indexForDevice( device ) ) );
+                return;
+            }
+        }
+        else if( url.protocol() == "audiocd" )
+        {
+            const Medium& medium = k3bcore->mediaCache()->medium( device );
+            if( medium.content() & Medium::ContentAudio )
+            {
+                kDebug() << url << "will be expanded to device" << device->description();
                 emit expand( mapFromSubModel( d->deviceModel->indexForDevice( device ) ) );
                 return;
             }

@@ -17,7 +17,8 @@
 #include "k3bdevice.h"
 #include "k3bdevicemanager.h"
 #include "k3bglobals.h"
-#include "k3bplacesmodel.h"
+#include "k3bmediacache.h"
+#include "k3bmedium.h"
 
 #include <kmountpoint.h>
 #include <QDir>
@@ -26,7 +27,7 @@ K3b::UrlNavigator::UrlNavigator( KFilePlacesModel* model, QWidget* parent )
     : KUrlNavigator( model, KUrl(QDir::home().absolutePath()), parent )
 {
     // Curently we don't support burning from custom protocols so let's filter them out
-    KUrlNavigator::setCustomProtocols( QStringList() << "file" );
+    KUrlNavigator::setCustomProtocols( QStringList() << "file" << "audiocd" );
     
 	connect( this, SIGNAL(urlChanged(const KUrl&)), this, SLOT(urlActivated(const KUrl&)) );
 }
@@ -37,19 +38,39 @@ K3b::UrlNavigator::~UrlNavigator()
 
 void K3b::UrlNavigator::setDevice( K3b::Device::Device* dev )
 {
-	// Check if device is mounted. If so, switch to the mount path
-	KSharedPtr<KMountPoint> mountPoint = KMountPoint::currentMountPoints().findByDevice( dev->blockDeviceName() );
-	if( !mountPoint.isNull() )
-	{
-		QString mntPath = mountPoint->mountPoint();
-		if( !mntPath.isEmpty() ) {
-			setUrl( KUrl( mntPath ) );
-		}
-	}
+    // Check if device is mounted. If so, switch to the mount path
+    KSharedPtr<KMountPoint> mountPoint = KMountPoint::currentMountPoints().findByDevice( dev->blockDeviceName() );
+    if( !mountPoint.isNull() )
+    {
+        QString mntPath = mountPoint->mountPoint();
+        if( !mntPath.isEmpty() ) {
+            setUrl( KUrl( mntPath ) );
+            return;
+        }
+    }
+    
+    const Medium& medium = k3bcore->mediaCache()->medium( dev );
+    if( medium.content() & Medium::ContentAudio )
+    {
+        setUrl( KUrl( "audiocd:/" ) );
+    }
 }
 
 void K3b::UrlNavigator::urlActivated( const KUrl& url )
 {
+    if( url.protocol() == "audiocd" )
+    {
+        Q_FOREACH( Device::Device* device, k3bcore->deviceManager()->cdReader() )
+        {
+            const Medium& medium = k3bcore->mediaCache()->medium( device );
+            if( medium.content() & Medium::ContentAudio )
+            {
+                emit activated( device );
+                return;
+            }
+        }
+    }
+    
     emit activated( url );
 }
 
