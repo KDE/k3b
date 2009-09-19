@@ -285,11 +285,13 @@ void K3b::Device::DeviceManager::clear()
 
     // to make sure no one crashes lets keep the devices around until the changed
     // signals return
-    qDeleteAll( d->allDevices );
+    QList<Device*> devicesToDelete( d->allDevices );
     d->allDevices.clear();
 
     emit changed( this );
     emit changed();
+    
+    qDeleteAll( devicesToDelete );
 }
 
 
