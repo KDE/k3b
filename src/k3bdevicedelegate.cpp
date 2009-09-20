@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -15,7 +16,9 @@
 #include "k3bdevicedelegate.h"
 #include "k3bdevicemodel.h"
 
-#include <QtGui/QPainter>
+#include <QApplication>
+#include <QPainter>
+#include <QStyle>
 
 #include <KIconEffect>
 #include <KIconLoader>
@@ -57,7 +60,50 @@ namespace {
 
         return pixmap;
     }
-}
+    
+    QFont cloneFont( const QFont& font, int pointSize, bool bold, bool italic )
+    {
+        QFont cloned( font );
+        cloned.setPointSize( pointSize );
+        cloned.setBold( bold );
+        cloned.setItalic( italic );
+        return cloned;
+    }
+    
+    struct FontsAndMetrics
+    {
+        FontsAndMetrics( const QStyleOptionViewItem& option );
+        
+        QFont mediumFont;
+        QFont blockDeviceFont;
+        QFontMetrics fontM;
+        QFontMetrics mediumFontM;
+        QFontMetrics blockDeviceFontM;
+        int margin;
+        int iconHeight;
+        QRect mediumRect;
+        QRect deviceRect;
+    };
+    
+    FontsAndMetrics::FontsAndMetrics( const QStyleOptionViewItem& option )
+    :
+        mediumFont( cloneFont( option.font, option.font.pointSize()+2, true, false ) ),
+        blockDeviceFont( cloneFont( option.font, option.font.pointSize()-2, false, true ) ),
+        fontM( option.font ),
+        mediumFontM( mediumFont ),
+        blockDeviceFontM( blockDeviceFont ),
+        margin( 4 ),
+        iconHeight( blockDeviceFontM.height() + margin + mediumFontM.height() ),
+        mediumRect( option.rect ),
+        deviceRect( option.rect )
+    {
+        mediumRect.setLeft( option.rect.left() + iconHeight + margin );
+        mediumRect.setBottom( option.rect.top() + mediumFontM.height() + margin/2 );
+        deviceRect.setLeft( option.rect.left() + iconHeight + margin );
+        deviceRect.setTop( option.rect.top() + mediumFontM.height() + margin/2 );
+    }
+    
+} // namespace
 
 
 K3b::DeviceDelegate::DeviceDelegate( QObject* parent )
@@ -74,32 +120,14 @@ K3b::DeviceDelegate::~DeviceDelegate()
 QSize K3b::DeviceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     if ( index.data( K3b::DeviceModel::IsDevice ).toBool() ) {
-        const int margin = 4;
-
-        QFont font( option.font );
-        QFont blockDeviceFont( font );
-        blockDeviceFont.setPointSize( blockDeviceFont.pointSize()-2 );
-        blockDeviceFont.setBold( false );
-        blockDeviceFont.setItalic( true );
-        QFont mediumFont( font );
-        mediumFont.setBold( true );
-        mediumFont.setPointSize( mediumFont.pointSize()+2 );
-
-        QFontMetrics fontM( font );
-        QFontMetrics blockDeviceFontM( blockDeviceFont );
-        QFontMetrics mediumFontM( mediumFont );
-
-        int iconHeight = blockDeviceFontM.height() + margin + mediumFontM.height();
+        FontsAndMetrics fam( option );
 
         QString text1 = index.data( K3b::DeviceModel::Vendor ).toString() + " - " + index.data( K3b::DeviceModel::Description ).toString();
-
         QString text2 = index.data( K3b::DeviceModel::BlockDevice ).toString();
-
         QString text3 = index.data( Qt::DisplayRole ).toString();
 
-
-        return QSize( iconHeight + margin + qMax( blockDeviceFontM.width( text1 + " " + text2 ), mediumFontM.width( text3 ) ),
-                      iconHeight + margin );
+        return QSize( fam.iconHeight + fam.margin + qMax( fam.blockDeviceFontM.width( text1 + " " + text2 ), fam.mediumFontM.width( text3 ) ),
+                      fam.iconHeight + fam.margin );
     }
     else {
         return KFileItemDelegate::sizeHint( option, index );
@@ -107,64 +135,48 @@ QSize K3b::DeviceDelegate::sizeHint( const QStyleOptionViewItem& option, const Q
 }
 
 
-void K3b::DeviceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+void K3b::DeviceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& optionOrig, const QModelIndex& index ) const
 {
     if ( index.data( K3b::DeviceModel::IsDevice ).toBool() ) {
         painter->save();
         painter->setRenderHint(QPainter::Antialiasing);
 
         // HACK: we erase the branch
-        QRect rect( option.rect );
-        rect.setLeft( 0 );
+        QStyleOptionViewItemV4 option( optionOrig );
+        option.rect.setLeft( 0 );
 
-        if ( option.state & QStyle::State_Selected ) {
-            painter->fillRect( rect, option.palette.highlight() );
-            painter->setPen( option.palette.color( QPalette::HighlightedText ) );
-        }
-        else {
-            painter->fillRect( rect, option.palette.base() );
-            painter->setPen( option.palette.color( QPalette::WindowText ) );
-        }
-
-        const int margin = 4;
-
-        QFont font( option.font );
-        QFont blockDeviceFont( font );
-        blockDeviceFont.setPointSize( blockDeviceFont.pointSize()-2 );
-        blockDeviceFont.setBold( false );
-        blockDeviceFont.setItalic( true );
-        QFont mediumFont( font );
-        mediumFont.setBold( true );
-        mediumFont.setPointSize( mediumFont.pointSize()+2 );
-
-        QFontMetrics fontM( font );
-        QFontMetrics blockDeviceFontM( blockDeviceFont );
-        QFontMetrics mediumFontM( mediumFont );
-
-        int iconHeight = fontM.height() + margin + blockDeviceFontM.height();
+        QStyle* style = QApplication::style();
+        FontsAndMetrics fam( option );
+        QPalette::ColorRole textRole = (option.state & QStyle::State_Selected) ?
+                                        QPalette::HighlightedText : QPalette::WindowText;
+        
+        // draw background
+        style->drawPrimitive( QStyle::PE_PanelItemViewItem, &option, painter );
 
         // draw decoration
-        QPixmap pix = decoration( option, index, QSize( iconHeight, iconHeight ) );
-        painter->drawPixmap( rect.topLeft(), pix );
+        QPixmap pix = decoration( option, index, QSize( fam.iconHeight, fam.iconHeight ) );
+        style->drawItemPixmap( painter, option.rect, Qt::AlignLeft | Qt::AlignVCenter, pix );
 
         // draw medium text
-        painter->setFont( mediumFont );
+        painter->setFont( fam.mediumFont );
         QString text = index.data( Qt::DisplayRole ).toString();
-        painter->drawText( rect.left() + pix.width() + margin, rect.top() + mediumFontM.height(), text );
+        style->drawItemText( painter, fam.mediumRect, option.displayAlignment, option.palette,
+                             option.state & QStyle::State_Enabled,
+                             fam.mediumFontM.elidedText( text, option.textElideMode, fam.mediumRect.width() ),
+                             textRole );
 
         // draw fixed device text
-        painter->setFont( blockDeviceFont );
+        painter->setFont( fam.blockDeviceFont );
         text = index.data( K3b::DeviceModel::Vendor ).toString() + " - " + index.data( K3b::DeviceModel::Description ).toString();
-        painter->drawText( rect.left() + pix.width() + margin, rect.top() + mediumFontM.height() + margin + blockDeviceFontM.height(), text );
-//         painter->setFont( blockDeviceFont );
-//         text = index.data( K3b::DeviceModel::BlockDevice ).toString();
-//         painter->drawText( rect.left() + pix.width() + margin, rect.top() + fontM.height() + margin + blockDeviceFontM.height(), text );
-
+        style->drawItemText( painter, fam.deviceRect, option.displayAlignment, option.palette,
+                             option.state & QStyle::State_Enabled,
+                             fam.blockDeviceFontM.elidedText( text, option.textElideMode, fam.deviceRect.width() ),
+                             textRole );
 
         painter->restore();
     }
     else {
-        KFileItemDelegate::paint( painter, option, index );
+        KFileItemDelegate::paint( painter, optionOrig, index );
     }
 }
 
