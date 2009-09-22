@@ -469,6 +469,10 @@ KIcon K3b::Medium::icon() const
     else if ( content() & ContentAudio ) {
         return KIcon( "media-optical-audio" );
     }
+    else if ( (content() & ContentVideoDVD) ||
+              (content() & ContentVideoCD) ) {
+        return KIcon( "media-optical-video" );
+    }
     else {
         return KIcon( "media-optical" );
     }
