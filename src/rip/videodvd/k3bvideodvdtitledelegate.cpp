@@ -15,53 +15,69 @@
 #include "k3bvideodvdtitledelegate.h"
 #include "k3bvideodvdtitlemodel.h"
 
+#include <KIcon>
+
 #include <QAbstractTextDocumentLayout>
 #include <QApplication>
 #include <QPainter>
+#include <QPixmap>
 #include <QStyle>
 #include <QStyleOptionButton>
+#include <QStyleOptionViewItemV4>
 
 namespace K3b {
+    
+namespace {
+    const int indicatorSpacing = 4;
+    const int margin = 2;
+} // namespace
 
 VideoDVDTitleDelegate::VideoDVDTitleDelegate( QObject* parent )
     : QStyledItemDelegate( parent )
 {
 }
 
+
 VideoDVDTitleDelegate::~VideoDVDTitleDelegate()
 {
 }
 
-void VideoDVDTitleDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+
+void VideoDVDTitleDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opt, const QModelIndex& index ) const
 {
     painter->save();
     
     QStyle& style = *QApplication::style();
-    style.drawPrimitive( QStyle::PE_PanelItemViewItem, &option, painter );
+    QStyleOptionViewItemV4 option = opt;
+    initStyleOption( &option, index );
+    style.drawControl( QStyle::CE_ItemViewItem, &option, painter );
+    
     QPalette::ColorRole textRole = (option.state & QStyle::State_Selected) ?
                                     QPalette::HighlightedText : QPalette::WindowText;
+                                    
     if( index.column() == VideoDVDTitleModel::TitleColumn ) {
+        QFont bold = option.font;
+        bold.setBold( true );
+        QFontMetrics boldMetrics( bold );
+        
         QStyleOptionButton checkOption;
         checkOption.direction = option.direction;
         checkOption.fontMetrics = option.fontMetrics;
-        checkOption.palette = option.palette;
-        checkOption.state |= (option.state & QStyle::State_Enabled) ? QStyle::State_Enabled : QStyle::State_None;
-        checkOption.state |= (index.data( Qt::CheckStateRole ).toInt() == Qt::Checked) ? QStyle::State_On : QStyle::State_Off;
-        QSize checkSize( style.pixelMetric( QStyle::PM_IndicatorWidth, &checkOption ),
-                            style.pixelMetric( QStyle::PM_IndicatorHeight, &checkOption ) );
-        checkOption.rect.setRect( option.rect.left(), option.rect.top() + option.rect.height()/2-checkSize.height()/2,
-                                    checkSize.width(), checkSize.height() );
-        QRect titleRect( option.rect.left() + checkSize.width(), option.rect.top(),
-                        option.rect.width()-checkSize.width(), option.rect.height() );
-        QRect chaptersRect( option.rect.left() + checkSize.width(), option.rect.top()+option.fontMetrics.height(),
-                            option.rect.width()-checkSize.width(), option.rect.height() );
+        int checkWidth = style.pixelMetric( QStyle::PM_IndicatorWidth, &checkOption ) + 2*indicatorSpacing;
+        QRect titleRect( option.rect.left()+checkWidth, option.rect.top()+margin,
+                         option.rect.width()-checkWidth-margin, option.rect.height()-2*margin );
+        QRect chaptersRect( option.rect.left()+checkWidth, option.rect.top()+boldMetrics.height()+margin,
+                            option.rect.width()-checkWidth-margin, option.rect.height()-2*margin );
         
-        style.drawPrimitive( QStyle::PE_IndicatorCheckBox, &checkOption, painter );
+
+        painter->setFont( bold );
         style.drawItemText( painter, titleRect, Qt::AlignTop | Qt::AlignLeft, option.palette,
                             option.state & QStyle::State_Enabled,
-                            option.fontMetrics.elidedText( index.data().toString(),
-                                                           option.textElideMode, titleRect.width() ),
+                            boldMetrics.elidedText( index.data().toString(),
+                                                    option.textElideMode, titleRect.width() ),
                             textRole );
+        
+        painter->setFont( option.font );
         style.drawItemText( painter, chaptersRect, Qt::AlignTop | Qt::AlignLeft, option.palette,
                             option.state & QStyle::State_Enabled,
                             option.fontMetrics.elidedText( index.data(VideoDVDTitleModel::ChaptersRole).toString(),
@@ -69,15 +85,27 @@ void VideoDVDTitleDelegate::paint( QPainter* painter, const QStyleOptionViewItem
                             textRole );
     }
     else if( index.column() == VideoDVDTitleModel::PreviewColumn ) {
-        QVariant pixmap = index.data( VideoDVDTitleModel::PreviewRole );
-        if( !pixmap.isNull() )
-            style.drawItemPixmap( painter, option.rect, Qt::AlignCenter, pixmap.value<QPixmap>() );
+        QVariant data = index.data( VideoDVDTitleModel::PreviewRole );
+        QPixmap preview;
+        if( !data.isNull() )
+        {
+            preview = data.value<QPixmap>().scaled( option.rect.width()-margin,
+                                                    option.rect.height()-margin, Qt::KeepAspectRatio );
+        }
+        else
+        {
+            preview = KIcon( "image-missing" ).pixmap( qMin( option.rect.width()-margin,
+                                                             option.rect.height()-margin ) );
+        }
+        style.drawItemPixmap( painter, option.rect, Qt::AlignCenter, preview );
     }
     else if( index.column() == VideoDVDTitleModel::VideoColumn ) {
-        QRect ratiosRect( option.rect.left(), option.rect.top()+option.fontMetrics.height(),
-                          option.rect.width(), option.rect.height() );
+        QRect videoRect( option.rect.left()+margin, option.rect.top()+margin,
+                         option.rect.width()-2*margin, option.rect.height()-2*margin );
+        QRect ratiosRect( option.rect.left()+margin, option.rect.top()+option.fontMetrics.height()+margin,
+                          option.rect.width()-2*margin, option.rect.height()-2*margin );
         
-        style.drawItemText( painter, option.rect, Qt::AlignTop | Qt::AlignLeft, option.palette,
+        style.drawItemText( painter, videoRect, Qt::AlignTop | Qt::AlignLeft, option.palette,
                             option.state & QStyle::State_Enabled,
                             option.fontMetrics.elidedText( index.data().toString(),
                                                            option.textElideMode, option.rect.width() ),
@@ -88,45 +116,98 @@ void VideoDVDTitleDelegate::paint( QPainter* painter, const QStyleOptionViewItem
                                                            option.textElideMode, ratiosRect.width() ),
                             textRole );
     }
+    else if( index.column() == VideoDVDTitleModel::AudioColumn ) {
+        QRect rect( option.rect.left()+margin, option.rect.top()+margin,
+                    option.rect.width()-2*margin, option.rect.height()-2*margin );
+        int lineHeight = option.fontMetrics.height();
+        Q_FOREACH( const QString& line, index.data( VideoDVDTitleModel::AudioStreamsRole ).toStringList() )
+        {
+            style.drawItemText( painter, rect, Qt::AlignTop | Qt::AlignLeft, option.palette,
+                                option.state & QStyle::State_Enabled,
+                                option.fontMetrics.elidedText( line, option.textElideMode, option.rect.width() ),
+                                textRole );
+            rect.setTop( rect.top() + lineHeight );
+        }
+    }
+    else if( index.column() == VideoDVDTitleModel::SubpictureColumn ) {
+        QRect rect( option.rect.left()+margin, option.rect.top()+margin,
+                    option.rect.width()-2*margin, option.rect.height()-2*margin );
+        int lineHeight = option.fontMetrics.height();
+        Q_FOREACH( const QString& line, index.data( VideoDVDTitleModel::SubpictureStreamsRole ).toStringList() )
+        {
+            style.drawItemText( painter, rect, Qt::AlignTop | Qt::AlignLeft, option.palette,
+                                option.state & QStyle::State_Enabled,
+                                option.fontMetrics.elidedText( line, option.textElideMode, option.rect.width() ),
+                                textRole );
+            rect.setTop( rect.top() + lineHeight );
+        }
+    }
     
     painter->restore();
 }
 
+
 QSize VideoDVDTitleDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    if( index.column() == VideoDVDTitleModel::PreviewColumn )
-    {
-        return QSize();
+    QStyle& style = *QApplication::style();
+    if( index.column() == VideoDVDTitleModel::TitleColumn ) {
+        QStyleOptionButton checkOption;
+        checkOption.direction = option.direction;
+        checkOption.fontMetrics = option.fontMetrics;
+        int checkWidth = style.pixelMetric( QStyle::PM_IndicatorWidth, &checkOption ) + 2*indicatorSpacing;
+        QFont bold = option.font;
+        bold.setBold( true );
+        QFontMetrics boldMetrics( bold );
+        QSize titleSize = boldMetrics.size( 0, index.data().toString() );
+        QSize chaptersSize = option.fontMetrics.size( 0, index.data( VideoDVDTitleModel::ChaptersRole ).toString() );
+        return QSize( qMax( titleSize.width(), chaptersSize.width() ) + checkWidth + margin,
+                        titleSize.height() + titleSize.height() + 2*margin );
     }
-    else
-    {
-        if( index.column() == VideoDVDTitleModel::TitleColumn )
+    else if( index.column() == VideoDVDTitleModel::VideoColumn ) {
+        QSize videoSize = option.fontMetrics.size( 0, index.data().toString() );
+        QSize ratioSize = option.fontMetrics.size( 0, index.data( VideoDVDTitleModel::AspectRatioRole ).toString() );
+        return QSize( qMax( videoSize.width(), ratioSize.width() + 2*margin ),
+                        videoSize.height() + videoSize.height() + 2*margin );
+    }
+    else if( index.column() == VideoDVDTitleModel::AudioColumn ) {
+        QSize overallSize;
+        Q_FOREACH( const QString& line, index.data( VideoDVDTitleModel::AudioStreamsRole ).toStringList() )
         {
-            QSize titleSize = option.fontMetrics.size( 0, index.data().toString() );
-            QSize chaptersSize = option.fontMetrics.size( 0, index.data( VideoDVDTitleModel::ChaptersRole ).toString() );
-            return QSize( qMax( titleSize.width(), chaptersSize.width() ),
-                          titleSize.height() + titleSize.height() );
+            QSize lineSize = option.fontMetrics.size( 0, line );
+            overallSize.setWidth( qMax( overallSize.width(), lineSize.width() ) );
+            overallSize.setHeight( overallSize.height() + lineSize.height() );
         }
-        else if( index.column() == VideoDVDTitleModel::VideoColumn ) {
-            QSize videoSize = option.fontMetrics.size( 0, index.data().toString() );
-            QSize ratioSize = option.fontMetrics.size( 0, index.data( VideoDVDTitleModel::AspectRatioRole ).toString() );
-            return QSize( qMax( videoSize.width(), ratioSize.width() ),
-                          videoSize.height() + videoSize.height() );
-        }
-        else
+        return overallSize + QSize( 2*margin, 2*margin );
+    }
+    else if( index.column() == VideoDVDTitleModel::SubpictureColumn ) {
+        QSize overallSize;
+        Q_FOREACH( const QString& line, index.data( VideoDVDTitleModel::SubpictureStreamsRole ).toStringList() )
         {
-            return QSize();
+            QSize lineSize = option.fontMetrics.size( 0, line );
+            overallSize.setWidth( qMax( overallSize.width(), lineSize.width() ) );
+            overallSize.setHeight( overallSize.height() + lineSize.height() );
         }
+        return overallSize + QSize( 2*margin, 2*margin );
+    }
+    else {
+        return QSize();
     }
 }
 
+
 void VideoDVDTitleDelegate::initStyleOption( QStyleOptionViewItem* option, const QModelIndex& index ) const
 {
-    QStyledItemDelegate::initStyleOption( option, index );
-//     if( index.isValid() && index.column() == VideoDVDTitleModel::TitleColumn )
-//     {
-//         option->state = (index.data( Qt::CheckStateRole ).toInt() == Qt::Checked) ? QStyle::State_On : QStyle::State_Off;
-//     }
+    if( index.isValid() && index.column() == VideoDVDTitleModel::TitleColumn )
+    {
+        if( QStyleOptionViewItemV4 *v4 = qstyleoption_cast<QStyleOptionViewItemV4 *>(option) ) {
+            v4->index = index;
+            QVariant value = index.data( Qt::CheckStateRole );
+            if( value.isValid() && !value.isNull() ) {
+                v4->features |= QStyleOptionViewItemV2::HasCheckIndicator;
+                v4->checkState = static_cast<Qt::CheckState>( value.toInt() );
+            }
+        }
+    }
 }
 
 } // namespace K3b

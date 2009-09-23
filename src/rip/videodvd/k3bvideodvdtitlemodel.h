@@ -40,9 +40,11 @@ public:
     };
 
     enum Roles {
-        ChaptersRole = Qt::UserRole,
-        PreviewRole,
-        AspectRatioRole,
+        ChaptersRole = Qt::UserRole,    // returns QString
+        PreviewRole,                    // returns QPixmap
+        AspectRatioRole,                // returns QString
+        AudioStreamsRole,               // returns QStringList
+        SubpictureStreamsRole,          // returns QStringList
         LengthRole
     };
     

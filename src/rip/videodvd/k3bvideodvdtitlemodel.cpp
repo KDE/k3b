@@ -25,19 +25,50 @@
 #include <KLocale>
 
 #include <QHash>
-#include <QSet>
 #include <QImage>
 #include <QPixmap>
+#include <QSet>
+#include <QStringList>
 
 namespace K3b {
 
 namespace
 {
 
-QString audioStreamString( const K3b::VideoDVD::Title& title, unsigned int maxLines = 9999, bool includeExtInfo = true )
+const unsigned int MAX_LINES = 2;
+const unsigned int TOOLTIP_MAX_LINES = 9999;
+
+
+QStringList audioStreamString( const K3b::VideoDVD::Title& title )
 {
-    QString s = "<p>";
-    for( unsigned int i = 0; i < qMin( title.numAudioStreams(), maxLines ); ++i ) {
+    QStringList list;
+    
+    if( title.numAudioStreams() > 0 )
+    {
+        for( unsigned int i = 0; i < qMin( title.numAudioStreams(), MAX_LINES ); ++i ) {
+            list << QString::number(i+1) + ": "
+                + i18n("%1 %2Ch (%3)",
+                        K3b::VideoDVD::audioFormatString( title.audioStream(i).format() ),
+                        title.audioStream(i).channels(),
+                        title.audioStream(i).langCode().isEmpty()
+                            ? i18n("unknown language")
+                            : KGlobal::locale()->languageCodeToName( title.audioStream(i).langCode() ) );
+        }
+        if( title.numAudioStreams() > MAX_LINES )
+            list.last() += "...";
+    }
+    else
+    {
+        list << i18n("No audio streams");
+    }
+    return list;
+}
+
+
+QString audioStreamStringToolTip( const K3b::VideoDVD::Title& title )
+{
+    QString s = "<p><b>" + i18n("Audio Streams") + "</b><p>";
+    for( unsigned int i = 0; i < qMin( title.numAudioStreams(), TOOLTIP_MAX_LINES ); ++i ) {
         if( i > 0 )
             s += "<br>";
         s += QString::number(i+1) + ": "
@@ -45,23 +76,50 @@ QString audioStreamString( const K3b::VideoDVD::Title& title, unsigned int maxLi
                     K3b::VideoDVD::audioFormatString( title.audioStream(i).format() ),
                     title.audioStream(i).channels(),
                     title.audioStream(i).langCode().isEmpty()
-                    ? i18n("unknown language")
-                    : KGlobal::locale()->languageCodeToName( title.audioStream(i).langCode() ),
-                    includeExtInfo && title.audioStream(i).codeExtension() != K3b::VideoDVD::AUDIO_CODE_EXT_UNSPECIFIED
-                    ? QString(" ") + K3b::VideoDVD::audioCodeExtensionString( title.audioStream(i).codeExtension() )
-                    : QString() );
+                        ? i18n("unknown language")
+                        : KGlobal::locale()->languageCodeToName( title.audioStream(i).langCode() ),
+                    title.audioStream(i).codeExtension() != K3b::VideoDVD::AUDIO_CODE_EXT_UNSPECIFIED
+                        ? QString(" ") + K3b::VideoDVD::audioCodeExtensionString( title.audioStream(i).codeExtension() )
+                        : QString() );
     }
-    if( title.numAudioStreams() > maxLines )
+    if( title.numAudioStreams() > TOOLTIP_MAX_LINES )
         s += "...";
 
     return s;
 }
 
 
-QString subpictureStreamString( const K3b::VideoDVD::Title& title, unsigned int maxLines = 9999, bool includeExtInfo = true )
+QStringList subpictureStreamString( const K3b::VideoDVD::Title& title )
 {
-    QString s = "<p>";
-    for( unsigned int i = 0; i < qMin( title.numSubPictureStreams(), maxLines ); ++i ) {
+    QStringList list;
+    
+    if( title.numSubPictureStreams() > 0 )
+    {
+        for( unsigned int i = 0; i < qMin( title.numSubPictureStreams(), MAX_LINES ); ++i ) {
+            list << QString::number(i+1) + ": "
+                + QString("%1 (%2)")
+                .arg( title.subPictureStream(i).codeMode() == K3b::VideoDVD::SUBPIC_CODE_MODE_RLE
+                    ? i18n("RLE")
+                    : i18n("Extended") )
+                .arg( title.subPictureStream(i).langCode().isEmpty()
+                    ? i18n("unknown language")
+                    : KGlobal::locale()->languageCodeToName( title.subPictureStream(i).langCode() ) );
+        }
+        if( title.numSubPictureStreams() > MAX_LINES )
+            list.last() += "...";
+    }
+    else
+    {
+        list << i18n("No Subpicture streams");
+    }
+    return list;
+}
+
+
+QString subpictureStreamStringToolTip( const K3b::VideoDVD::Title& title )
+{
+    QString s = "<p><b>" + i18n("Subpicture Streams") + "</b><p>";
+    for( unsigned int i = 0; i < qMin( title.numSubPictureStreams(), TOOLTIP_MAX_LINES ); ++i ) {
         if( i > 0 )
             s += "<br>";
         s += QString::number(i+1) + ": "
@@ -72,11 +130,11 @@ QString subpictureStreamString( const K3b::VideoDVD::Title& title, unsigned int 
              .arg( title.subPictureStream(i).langCode().isEmpty()
                    ? i18n("unknown language")
                    : KGlobal::locale()->languageCodeToName( title.subPictureStream(i).langCode() ) )
-             .arg( includeExtInfo && title.subPictureStream(i).codeExtension() != K3b::VideoDVD::SUBPIC_CODE_EXT_UNSPECIFIED
+             .arg( title.subPictureStream(i).codeExtension() != K3b::VideoDVD::SUBPIC_CODE_EXT_UNSPECIFIED
                    ? QString(" ") + K3b::VideoDVD::subPictureCodeExtensionString( title.subPictureStream(i).codeExtension() )
                    : QString() );
     }
-    if( title.numSubPictureStreams() > maxLines )
+    if( title.numSubPictureStreams() > TOOLTIP_MAX_LINES )
         s += "...";
 
     return s;
@@ -88,7 +146,7 @@ class VideoDVDTitleModel::Private
 {
 public:
     typedef QSet<int> Titles;
-    typedef QHash<const VideoDVD::Title*,QImage> Previews;
+    typedef QHash<const VideoDVD::Title*,QPixmap> Previews;
     
     VideoDVD::VideoDVD dvd;
     Titles selectedTitles;
@@ -166,18 +224,10 @@ QVariant VideoDVDTitleModel::data( const QModelIndex& index, int role ) const
                     .arg( title.videoStream().pictureHeight() );
             
             case AudioColumn:
-                // audio streams info
-                if( title.numAudioStreams() > 0 )
-                    return audioStreamString( title, 2, false );
-                else
-                    return "<p><small><em>" + i18n("No audio streams") + "</em>";
+                return audioStreamString( title ).join( ", " );
                 
             case SubpictureColumn:
-                // subpicture streams info
-                if( title.numSubPictureStreams() > 0 )
-                    return subpictureStreamString( title, 2, false );
-                else
-                    return "<p><small><em>" + i18n("No Subpicture streams") + "</em>";
+                return subpictureStreamString( title ).join( "," );
                 
             default:
                 break;
@@ -185,13 +235,11 @@ QVariant VideoDVDTitleModel::data( const QModelIndex& index, int role ) const
         
     }
     else if( Qt::ToolTipRole == role ) {
-        switch( index.column() ) {
-            case AudioColumn:
-                return "<p><b>" + i18n("Audio Streams") + "</b><p>" + audioStreamString( title );
-            case SubpictureColumn:
-                return "<p><b>" + i18n("Subpicture Streams") + "</b><p>" + subpictureStreamString( title );
-            default:
-                break;
+        if( AudioColumn == index.column() && title.numAudioStreams() > 0 ) {
+            return audioStreamStringToolTip( title );
+        }
+        else if( SubpictureColumn == index.column() && title.numSubPictureStreams() > 0 ) {
+            return subpictureStreamStringToolTip( title );
         }
     }
     else if( Qt::CheckStateRole == role && index.column() == TitleColumn ) {
@@ -206,7 +254,7 @@ QVariant VideoDVDTitleModel::data( const QModelIndex& index, int role ) const
     else if( PreviewRole == role ) {
         Private::Previews::const_iterator preview = d->previews.find( &title );
         if( preview != d->previews.end() )
-            return QPixmap::fromImage( preview.value() );
+            return preview.value();
     }
     else if( AspectRatioRole == role ) {
         QString aspectRatio( title.videoStream().displayAspectRatio() == K3b::VideoDVD::VIDEO_ASPECT_RATIO_4_3 ? "4:3" : "16:9" );
@@ -216,6 +264,12 @@ QVariant VideoDVDTitleModel::data( const QModelIndex& index, int role ) const
             return aspectRatio + " - " + i18n("anamorph");
         else
             return aspectRatio;
+    }
+    else if( AudioStreamsRole == role ) {
+        return audioStreamString( title );
+    }
+    else if( SubpictureStreamsRole == role ) {
+        return subpictureStreamString( title );
     }
     return QVariant();
 }
@@ -299,14 +353,11 @@ void VideoDVDTitleModel::slotPreviewDone( bool success )
     const VideoDVD::Title& title = d->dvd.title( d->currentPreviewTitle );
     
     if( success )
-    {
-        d->previews.insert( &title, d->previewGen->preview() );
-        emit dataChanged( index(d->currentPreviewTitle,PreviewColumn), index(d->currentPreviewTitle,PreviewColumn) );
-    }
+        d->previews.insert( &title, QPixmap::fromImage( d->previewGen->preview() ) );
     else
-    {
         d->previews.remove( &title );
-    }
+    
+    emit dataChanged( index(d->currentPreviewTitle,PreviewColumn), index(d->currentPreviewTitle,PreviewColumn) );
 
     // cancel if the medium changed.
     if( d->medium == k3bappcore->mediaCache()->medium( d->dvd.device() ) ) {
