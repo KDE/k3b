@@ -30,10 +30,11 @@ What you need to run K3b:
 
 After that it's all the same:
 
-  ./cmake ./
+  mkdir build
+  cd build
+  cmake ..
 
-
-If configure was successful you are presented with a list of configure results that shows
+If the cmake run was successful you are presented with a list of configure results that shows
 which optional features are enabled. Now just compile K3b:
 
   make
