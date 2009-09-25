@@ -144,6 +144,7 @@ void K3b::DeviceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& 
         // HACK: we erase the branch
         QStyleOptionViewItemV4 option( optionOrig );
         option.rect.setLeft( 0 );
+        painter->fillRect( option.rect, option.palette.base() );
 
         QStyle* style = QApplication::style();
         FontsAndMetrics fam( option );
