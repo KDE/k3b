@@ -60,11 +60,11 @@ K3b::VideoDVDRippingView::VideoDVDRippingView( QWidget* parent )
     QHBoxLayout* toolBoxLayout = new QHBoxLayout;
     m_toolBox = new KToolBar( mainWidget() );
     toolBoxLayout->addWidget( m_toolBox );
-    QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    toolBoxLayout->addItem( spacer );
+    toolBoxLayout->addStretch( 0 );
     m_labelLength = new QLabel( mainWidget() );
     m_labelLength->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     toolBoxLayout->addWidget( m_labelLength );
+    toolBoxLayout->addSpacing( style()->pixelMetric( QStyle::PM_LayoutRightMargin ) );
 
     m_delegate = new VideoDVDTitleDelegate( this );
     m_model = new VideoDVDTitleModel( this );
@@ -85,6 +85,7 @@ K3b::VideoDVDRippingView::VideoDVDRippingView( QWidget* parent )
     mainGrid->addLayout( toolBoxLayout, 0, 0 );
     mainGrid->addWidget( m_view, 1, 0 );
     mainGrid->setMargin( 0 );
+    mainGrid->setSpacing( 0 );
 
     initActions();
 

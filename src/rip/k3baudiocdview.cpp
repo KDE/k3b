@@ -89,11 +89,11 @@ K3b::AudioCdView::AudioCdView( QWidget* parent )
     QHBoxLayout* toolBoxLayout = new QHBoxLayout;
     m_toolBox = new KToolBar( mainWidget() );
     toolBoxLayout->addWidget( m_toolBox );
-    QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    toolBoxLayout->addItem( spacer );
+    toolBoxLayout->addStretch( 0 );
     m_labelLength = new QLabel( mainWidget() );
     m_labelLength->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     toolBoxLayout->addWidget( m_labelLength );
+    toolBoxLayout->addSpacing( style()->pixelMetric( QStyle::PM_LayoutRightMargin ) );
 
 
     // the track view
@@ -115,6 +115,8 @@ K3b::AudioCdView::AudioCdView( QWidget* parent )
 
     mainGrid->addLayout( toolBoxLayout, 0, 0 );
     mainGrid->addWidget( m_trackView, 1, 0 );
+    mainGrid->setSpacing( 0 );
+    mainGrid->setMargin( 0 );
 
     initActions();
     slotTrackSelectionChanged();

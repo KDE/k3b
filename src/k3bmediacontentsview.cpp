@@ -17,9 +17,8 @@
 #include "k3bmediacache.h"
 #include "k3bapplication.h"
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpixmap.h>
+#include <QLabel>
+#include <QLayout>
 #include <QStackedWidget>
 
 

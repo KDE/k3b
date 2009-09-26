@@ -16,9 +16,7 @@
 
 #include "k3bthemedheader.h"
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpixmap.h>
+#include <QLabel>
 #include <QVBoxLayout>
 
 
@@ -30,7 +28,7 @@ K3b::ContentsView::ContentsView( bool withHeader,
 {
     if( withHeader ) {
         QVBoxLayout* lay = new QVBoxLayout( this );
-        lay->setMargin( 2 );
+        lay->setMargin( 0 );
         lay->setSpacing( 0 );
 
         m_header = new K3b::ThemedHeader( this );
