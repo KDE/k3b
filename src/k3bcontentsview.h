@@ -38,10 +38,19 @@ namespace K3b {
         void setTitle( const QString& title, const QString& subtitle = QString() );
         void setLeftPixmap( Theme::PixmapType );
         void setRightPixmap( Theme::PixmapType );
+        
+        /**
+         * \return true if content view is a currently selected view
+         */
+        bool isActive() const { return m_active; }
+        
+    public Q_SLOTS:
+        virtual void activate( bool active );
 
     private:
         ThemedHeader* m_header;
         QWidget* m_centerWidget;
+        bool m_active;
     };
 }
 

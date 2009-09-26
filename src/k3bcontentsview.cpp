@@ -24,7 +24,8 @@ K3b::ContentsView::ContentsView( bool withHeader,
                                  QWidget* parent )
     : QWidget( parent ),
       m_header(0),
-      m_centerWidget(0)
+      m_centerWidget(0),
+      m_active(false)
 {
     if( withHeader ) {
         QVBoxLayout* lay = new QVBoxLayout( this );
@@ -78,6 +79,12 @@ void K3b::ContentsView::setRightPixmap( K3b::Theme::PixmapType s )
 {
     if( m_header )
         m_header->setRightPixmap( s );
+}
+
+
+void K3b::ContentsView::activate( bool active )
+{
+    m_active = active;
 }
 
 #include "k3bcontentsview.moc"

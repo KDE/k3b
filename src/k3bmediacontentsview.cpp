@@ -19,7 +19,6 @@
 
 #include <QLabel>
 #include <QLayout>
-#include <QStackedWidget>
 
 
 class K3b::MediaContentsView::Private
@@ -128,13 +127,7 @@ void K3b::MediaContentsView::enableInteraction( bool enable )
 
 void K3b::MediaContentsView::slotMediumChanged( K3b::Device::Device* dev )
 {
-    // FIXME: derive a K3b::ContentsStack from QWidgetStack and let it set an active flag
-    // to replace this hack
-    if( QStackedWidget* stack = dynamic_cast<QStackedWidget*>( parentWidget() ) )
-        if( stack->currentWidget() != this )
-            return;
-
-    if( !d->autoReload /*|| !isActive()*/ )
+    if( !d->autoReload || !isActive() )
         return;
 
     if( dev == device() ) {

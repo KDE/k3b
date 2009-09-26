@@ -18,19 +18,11 @@
 #include "k3bmedium.h"
 #include <QtGui/QWidget>
 
-class KComboBox;
 class KConfigGroup;
 class KUrl;
-class QSplitter;
-class QStackedWidget;
 
 namespace K3b {
-    class AudioCdView;
-    class DiskInfoView;
     class FileTreeView;
-    class FileView;
-    class VideoCdView;
-    class VideoDVDRippingView;
     namespace Device {
         class Device;
     }
@@ -66,20 +58,6 @@ namespace K3b {
         void deviceSelected( K3b::Device::Device* );
 
     private:
-        QStackedWidget* m_viewStack;
-
-        AudioCdView*   m_cdView;
-        VideoCdView*   m_videoView;
-        VideoDVDRippingView* m_movieView;
-        FileView* m_fileView;
-        DiskInfoView* m_infoView;
-
-        KComboBox* m_urlCombo;
-        QSplitter* m_mainSplitter;
-        FileTreeView* m_fileTreeView;
-
-        bool m_bViewDiskInfo;
-
         class Private;
         Private* d;
     };

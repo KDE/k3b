@@ -220,16 +220,18 @@ void K3b::VideoDVDRippingView::enableInteraction( bool enable )
 }
 
 
-void K3b::VideoDVDRippingView::hideEvent( QHideEvent* event )
+void K3b::VideoDVDRippingView::activate( bool active )
 {
-    kDebug() << "Stopping preview generation";
-    //
-    // For now we do it the easy way: just stop the preview generation
-    // once this view is hidden
-    //
-    m_model->stopPreviewGen();
+    if( !active )
+    {
+        //
+        // For now we do it the easy way: just stop the preview generation
+        // once this view is no longer selected one
+        //
+        m_model->stopPreviewGen();
+    }
     
-    MediaContentsView::hideEvent( event );
+    MediaContentsView::activate( active );
 }
 
 

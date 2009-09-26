@@ -53,7 +53,7 @@ class VideoDVDRippingView : public MediaContentsView
  private:
   virtual void reloadMedium();
   virtual void enableInteraction( bool enable );
-  virtual void hideEvent( QHideEvent* event );
+  virtual void activate( bool active );
   void initActions();
 
   KActionCollection* m_actionCollection;

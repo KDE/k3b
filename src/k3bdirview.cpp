@@ -45,77 +45,101 @@
 #include <QSplitter>
 #include <QString>
 #include <QStackedWidget>
-#include <QtGui/QVBoxLayout>
+#include <QVBoxLayout>
 
 
 class K3b::DirView::Private
 {
 public:
+    QStackedWidget* viewStack;
+
+    AudioCdView* cdView;
+    VideoCdView* videoView;
+    VideoDVDRippingView* movieView;
+    FileView* fileView;
+    DiskInfoView* infoView;
+
+    QSplitter* mainSplitter;
+    FileTreeView* fileTreeView;
+
+    bool bViewDiskInfo;
     bool contextMediaInfoRequested;
+    
+    void setCurrentView( K3b::ContentsView* view );
 };
 
+
+void K3b::DirView::Private::setCurrentView( K3b::ContentsView* view )
+{
+    if( ContentsView* previous = qobject_cast<ContentsView*>( viewStack->currentWidget() ) ) {
+        previous->activate( false );
+    }
+    
+    viewStack->setCurrentWidget( view );
+    view->activate( true );
+}
 
 
 K3b::DirView::DirView( K3b::FileTreeView* treeView, QWidget* parent )
     : QWidget(parent),
-      m_fileTreeView(treeView),
-      m_bViewDiskInfo(false)
+      d( new Private )
 {
-    d = new Private;
+    d->fileTreeView = treeView;
+    d->bViewDiskInfo = false;
     d->contextMediaInfoRequested = false;
 
     QVBoxLayout* layout = new QVBoxLayout( this );
     layout->setMargin( 0 );
 
-    if( !m_fileTreeView ) {
-        m_mainSplitter = new QSplitter( this );
-        m_fileTreeView = new K3b::FileTreeView( m_mainSplitter );
-        m_viewStack    = new QStackedWidget( m_mainSplitter );
-        layout->addWidget( m_mainSplitter );
+    if( !d->fileTreeView ) {
+        d->mainSplitter = new QSplitter( this );
+        d->fileTreeView = new K3b::FileTreeView( d->mainSplitter );
+        d->viewStack    = new QStackedWidget( d->mainSplitter );
+        layout->addWidget( d->mainSplitter );
     }
     else {
-        m_viewStack    = new QStackedWidget( this );
-        m_mainSplitter = 0;
-        layout->addWidget( m_viewStack );
+        d->viewStack    = new QStackedWidget( this );
+        d->mainSplitter = 0;
+        layout->addWidget( d->viewStack );
     }
 
-    m_fileView     = new K3b::FileView( m_viewStack );
-    m_viewStack->addWidget( m_fileView );
-    m_cdView       = new K3b::AudioCdView( m_viewStack );
-    m_viewStack->addWidget( m_cdView );
-    m_videoView    = new K3b::VideoCdView( m_viewStack );
-    m_viewStack->addWidget( m_videoView );
-    m_infoView     = new K3b::DiskInfoView( m_viewStack );
-    m_viewStack->addWidget( m_infoView );
+    d->fileView     = new K3b::FileView( d->viewStack );
+    d->viewStack->addWidget( d->fileView );
+    d->cdView       = new K3b::AudioCdView( d->viewStack );
+    d->viewStack->addWidget( d->cdView );
+    d->videoView    = new K3b::VideoCdView( d->viewStack );
+    d->viewStack->addWidget( d->videoView );
+    d->infoView     = new K3b::DiskInfoView( d->viewStack );
+    d->viewStack->addWidget( d->infoView );
 #ifdef ENABLE_DVD_RIPPING
-    m_movieView    = new K3b::VideoDVDRippingView( m_viewStack );
-    m_viewStack->addWidget( m_movieView );
+    d->movieView    = new K3b::VideoDVDRippingView( d->viewStack );
+    d->viewStack->addWidget( d->movieView );
 #endif
 
-    m_viewStack->setCurrentWidget( m_fileView );
+    d->setCurrentView( d->fileView );
 
-//     m_fileTreeView->setCurrentDevice( k3bappcore->appDeviceManager()->currentDevice() );
+//     d->fileTreeView->setCurrentDevice( k3bappcore->appDeviceManager()->currentDevice() );
 
-    m_fileView->setAutoUpdate( true ); // in case we look at the mounted path
+    d->fileView->setAutoUpdate( true ); // in case we look at the mounted path
 
-    if( m_mainSplitter ) {
+    if( d->mainSplitter ) {
         // split
-        QList<int> sizes = m_mainSplitter->sizes();
+        QList<int> sizes = d->mainSplitter->sizes();
         int all = sizes[0] + sizes[1];
         sizes[1] = all*2/3;
         sizes[0] = all - sizes[1];
-        m_mainSplitter->setSizes( sizes );
+        d->mainSplitter->setSizes( sizes );
     }
 
-    connect( m_fileTreeView, SIGNAL(activated(const KUrl&)),
+    connect( d->fileTreeView, SIGNAL(activated(const KUrl&)),
              this, SLOT(slotDirActivated(const KUrl&)) );
-    connect( m_fileTreeView, SIGNAL(activated(K3b::Device::Device*)),
+    connect( d->fileTreeView, SIGNAL(activated(K3b::Device::Device*)),
              this, SLOT(showDevice(K3b::Device::Device*)) );
-    connect( m_fileTreeView, SIGNAL(activated(K3b::Device::Device*)),
+    connect( d->fileTreeView, SIGNAL(activated(K3b::Device::Device*)),
              this, SIGNAL(deviceSelected(K3b::Device::Device*)) );
 
-    connect( m_fileView, SIGNAL(urlEntered(const KUrl&)), m_fileTreeView, SLOT(setSelectedUrl(const KUrl&)) );
-    connect( m_fileView, SIGNAL(urlEntered(const KUrl&)), this, SIGNAL(urlEntered(const KUrl&)) );
+    connect( d->fileView, SIGNAL(urlEntered(const KUrl&)), d->fileTreeView, SLOT(setSelectedUrl(const KUrl&)) );
+    connect( d->fileView, SIGNAL(urlEntered(const KUrl&)), this, SIGNAL(urlEntered(const KUrl&)) );
 
     connect( k3bappcore->appDeviceManager(), SIGNAL(mountFinished(const QString&)),
              this, SLOT(slotMountFinished(const QString&)) );
@@ -139,7 +163,7 @@ void K3b::DirView::showUrl( const KUrl& url )
 void K3b::DirView::showDevice( K3b::Device::Device* dev )
 {
     d->contextMediaInfoRequested = true;
-    m_fileTreeView->setSelectedDevice( dev );
+    d->fileTreeView->setSelectedDevice( dev );
     showMediumInfo( k3bappcore->mediaCache()->medium( dev ) );
 }
 
@@ -147,7 +171,7 @@ void K3b::DirView::showDevice( K3b::Device::Device* dev )
 void K3b::DirView::showDiskInfo( K3b::Device::Device* dev )
 {
     d->contextMediaInfoRequested = false;
-    m_fileTreeView->setSelectedDevice( dev );
+    d->fileTreeView->setSelectedDevice( dev );
     showMediumInfo( k3bappcore->mediaCache()->medium( dev ) );
 }
 
@@ -159,8 +183,8 @@ void K3b::DirView::showMediumInfo( const K3b::Medium& medium )
         medium.diskInfo().diskState() == K3b::Device::STATE_NO_MEDIA ) {
 
         // show cd info
-        m_viewStack->setCurrentWidget( m_infoView );
-        m_infoView->reload( medium );
+        d->setCurrentView( d->infoView );
+        d->infoView->reload( medium );
         return;
     }
 
@@ -191,15 +215,15 @@ void K3b::DirView::showMediumInfo( const K3b::Medium& medium )
         }
 
         if( r == KMessageBox::Cancel ) {
-            //      m_viewStack->raiseWidget( m_fileView );
+            //      d->viewStack->raiseWidget( d->fileView );
         }
         else if( r == KMessageBox::No ) {
-            m_viewStack->setCurrentWidget( m_fileView );
+            d->setCurrentView( d->fileView );
             static_cast<K3b::MainWindow*>( kapp->activeWindow() )->slotMediaCopy();
         }
         else {
-            m_movieView->reload( medium );
-            m_viewStack->setCurrentWidget( m_movieView );
+            d->movieView->reload( medium );
+            d->setCurrentView( d->movieView );
         }
 
         return;
@@ -222,8 +246,8 @@ void K3b::DirView::showMediumInfo( const K3b::Medium& medium )
                                                 KGuiItem(i18n("Mount CD")),
                                                 KGuiItem(i18n("Show Video Tracks")) ) == KMessageBox::No ) {
                     mount = false;
-                    m_viewStack->setCurrentWidget( m_videoView );
-                    m_videoView->reload( medium );
+                    d->setCurrentView( d->videoView );
+                    d->videoView->reload( medium );
                 }
             }
         }
@@ -235,8 +259,8 @@ void K3b::DirView::showMediumInfo( const K3b::Medium& medium )
                                             KGuiItem(i18n("Mount CD")),
                                             KGuiItem(i18n("Show Audio Tracks")) ) == KMessageBox::No ) {
                 mount = false;
-                m_viewStack->setCurrentWidget( m_cdView );
-                m_cdView->reload( medium );
+                d->setCurrentView( d->cdView );
+                d->cdView->reload( medium );
             }
         }
 
@@ -245,14 +269,14 @@ void K3b::DirView::showMediumInfo( const K3b::Medium& medium )
     }
 
     else if( medium.content() & K3b::Medium::ContentAudio ) {
-        m_viewStack->setCurrentWidget( m_cdView );
-        m_cdView->reload( medium );
+        d->setCurrentView( d->cdView );
+        d->cdView->reload( medium );
     }
 
     else {
         // show cd info
-        m_viewStack->setCurrentWidget( m_infoView );
-        m_infoView->reload( medium );
+        d->setCurrentView( d->infoView );
+        d->infoView->reload( medium );
     }
 
     d->contextMediaInfoRequested = false;
@@ -263,10 +287,10 @@ void K3b::DirView::slotMountFinished( const QString& mp )
 {
     if( !mp.isEmpty() ) {
         slotDirActivated( mp );
-        m_fileView->reload(); // HACK to get the contents shown... FIXME
+        d->fileView->reload(); // HACK to get the contents shown... FIXME
     }
     else {
-        m_viewStack->setCurrentWidget( m_fileView );
+        d->setCurrentView( d->fileView );
         K3b::PassivePopup::showPopup( i18n("<p>K3b was unable to mount medium <b>%1</b> in device <em>%2 - %3</em>"
                                          ,k3bappcore->mediaCache()->medium( k3bappcore->appDeviceManager()->currentDevice() ).shortString()
                                          ,k3bappcore->appDeviceManager()->currentDevice()->vendor()
@@ -295,7 +319,6 @@ void K3b::DirView::slotUnmountFinished( bool success )
 
 void K3b::DirView::slotDirActivated( const QString& url )
 {
-//   m_urlCombo->insertItem( url, 0 );
     slotDirActivated( KUrl(url) );
 }
 
@@ -303,10 +326,8 @@ void K3b::DirView::slotDirActivated( const QString& url )
 void K3b::DirView::slotDirActivated( const KUrl& url )
 {
     kDebug() << url;
-    m_fileView->setUrl( url, true );
-//   m_urlCombo->setEditText( url.toLocalFile() );
-
-    m_viewStack->setCurrentWidget( m_fileView );
+    d->fileView->setUrl( url, true );
+    d->setCurrentView( d->fileView );
 }
 
 
@@ -318,13 +339,13 @@ void K3b::DirView::home()
 
 void K3b::DirView::saveConfig( KConfigGroup grp )
 {
-    m_fileView->saveConfig(grp);
+    d->fileView->saveConfig(grp);
 }
 
 
 void K3b::DirView::readConfig( const KConfigGroup &grp )
 {
-    m_fileView->readConfig(grp);
+    d->fileView->readConfig(grp);
 }
 
 #include "k3bdirview.moc"
