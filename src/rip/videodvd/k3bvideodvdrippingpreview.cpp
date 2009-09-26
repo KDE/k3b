@@ -36,6 +36,7 @@ K3b::VideoDVDRippingPreview::VideoDVDRippingPreview( QObject* parent )
 
 K3b::VideoDVDRippingPreview::~VideoDVDRippingPreview()
 {
+    cancel();
     delete m_process;
     delete m_tempDir;
 }
@@ -44,6 +45,7 @@ K3b::VideoDVDRippingPreview::~VideoDVDRippingPreview()
 void K3b::VideoDVDRippingPreview::generatePreview( const K3b::VideoDVD::VideoDVD& dvd, int title, int chapter )
 {
     // cleanup first
+    cancel();
     delete m_process;
     delete m_tempDir;
     m_process = 0;
@@ -111,6 +113,7 @@ void K3b::VideoDVDRippingPreview::cancel()
     if( m_process && m_process->isRunning() ) {
         m_canceled = true;
         m_process->kill();
+        m_process->waitForFinished();
     }
 }
 

@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C)      2009 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -13,11 +14,12 @@
  */
 
 #include "k3bvideodvdrippingview.h"
-#include "k3bvideodvdrippingtitlelistview.h"
-#include "k3bvideodvdrippingdialog.h"
-
 #include "k3bvideodvd.h"
+#include "k3bvideodvdrippingdialog.h"
 #include "k3bvideodvdtitletranscodingjob.h"
+#include "k3bvideodvdtitledelegate.h"
+#include "k3bvideodvdtitlemodel.h"
+
 #include "k3bthememanager.h"
 #include "k3bglobals.h"
 #include "k3blibdvdcss.h"
@@ -26,20 +28,21 @@
 #include "k3bmediacache.h"
 #include "k3bmedium.h"
 
-#include <qcursor.h>
-#include <qlayout.h>
-#include <qlabel.h>
-//Added by qt3to4:
-#include <QHBoxLayout>
+#include <QCursor>
 #include <QGridLayout>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
+#include <QLayout>
+#include <QTreeView>
 
-#include <kapplication.h>
-#include <kmessagebox.h>
-#include <klocale.h>
-#include <kaction.h>
-#include <kconfig.h>
-#include <KMenu>
+#include <KAction>
 #include <KActionCollection>
+#include <KApplication>
+#include <KConfig>
+#include <KLocale>
+#include <KMenu>
+#include <KMessageBox>
 #include <KToolBar>
 
 
@@ -55,7 +58,7 @@ K3b::VideoDVDRippingView::VideoDVDRippingView( QWidget* parent )
     // toolbox
     // ----------------------------------------------------------------------------------
     QHBoxLayout* toolBoxLayout = new QHBoxLayout;
-    m_toolBox = new KToolBar( mainWidget(), true, true );
+    m_toolBox = new KToolBar( mainWidget() );
     toolBoxLayout->addWidget( m_toolBox );
     QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
     toolBoxLayout->addItem( spacer );
@@ -63,19 +66,25 @@ K3b::VideoDVDRippingView::VideoDVDRippingView( QWidget* parent )
     m_labelLength->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     toolBoxLayout->addWidget( m_labelLength );
 
+    m_delegate = new VideoDVDTitleDelegate( this );
+    m_model = new VideoDVDTitleModel( this );
 
     // the title view
     // ----------------------------------------------------------------------------------
-    m_titleView = new K3b::VideoDVDRippingTitleListView( mainWidget() );
-
-    connect( m_titleView, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)),
-             this, SLOT(slotContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)) );
+    m_view = new QTreeView( mainWidget() );
+    m_view->setItemDelegate( m_delegate );
+    m_view->setModel( m_model );
+    m_view->setRootIsDecorated( false );
+    m_view->header()->setResizeMode( QHeaderView::ResizeToContents );
+    m_view->setContextMenuPolicy( Qt::CustomContextMenu );
+    connect( m_view, SIGNAL(customContextMenuRequested(const QPoint&)),
+             this, SLOT(slotContextMenu(const QPoint&)) );
 
     // general layout
     // ----------------------------------------------------------------------------------
     mainGrid->addLayout( toolBoxLayout, 0, 0 );
-    mainGrid->addWidget( m_titleView, 1, 0 );
-
+    mainGrid->addWidget( m_view, 1, 0 );
+    mainGrid->setMargin( 0 );
 
     initActions();
 
@@ -88,6 +97,45 @@ K3b::VideoDVDRippingView::VideoDVDRippingView( QWidget* parent )
 
 K3b::VideoDVDRippingView::~VideoDVDRippingView()
 {
+}
+
+
+void K3b::VideoDVDRippingView::slotStartRipping()
+{
+    QList<int> titles = m_model->selectedTitles();
+
+    if( titles.isEmpty() ) {
+        KMessageBox::error( this, i18n("Please select the titles to rip."),
+                            i18n("No Titles Selected") );
+    }
+    else {
+        K3b::VideoDVDRippingDialog dlg( m_dvd, titles, this );
+        dlg.exec();
+    }
+}
+
+
+void K3b::VideoDVDRippingView::slotContextMenu( const QPoint& pos )
+{
+    m_popupMenu->popup( m_view->viewport()->mapToGlobal( pos ) );
+}
+
+
+void K3b::VideoDVDRippingView::slotCheck()
+{
+    Q_FOREACH( const QModelIndex& index, m_view->selectionModel()->selectedRows() )
+    {
+        m_model->setData( index, Qt::Checked, Qt::CheckStateRole );
+    }
+}
+
+
+void K3b::VideoDVDRippingView::slotUncheck()
+{
+    Q_FOREACH( const QModelIndex& index, m_view->selectionModel()->selectedRows() )
+    {
+        m_model->setData( index, Qt::Unchecked, Qt::CheckStateRole );
+    }
 }
 
 
@@ -126,7 +174,7 @@ void K3b::VideoDVDRippingView::reloadMedium()
     if( m_dvd.open( device() ) ) {
         setTitle( medium().beautifiedVolumeId() + " (" + i18n("Video DVD") + ")" );
         m_labelLength->setText( i18np("%1 title", "%1 titles", m_dvd.numTitles() ) );
-        m_titleView->setVideoDVD( m_dvd );
+        m_model->setVideoDVD( m_dvd );
         QApplication::restoreOverrideCursor();
 
         bool transcodeUsable = true;
@@ -165,58 +213,22 @@ void K3b::VideoDVDRippingView::reloadMedium()
 }
 
 
-void K3b::VideoDVDRippingView::slotStartRipping()
+void K3b::VideoDVDRippingView::enableInteraction( bool enable )
 {
-    QList<int> titles;
-    int i = 1;
-    for( Q3ListViewItemIterator it( m_titleView ); *it; ++it, ++i )
-        if( static_cast<K3b::CheckListViewItem*>( *it )->isChecked() )
-            titles.append( i );
-
-    if( titles.isEmpty() ) {
-        KMessageBox::error( this, i18n("Please select the titles to rip."),
-                            i18n("No Titles Selected") );
-    }
-    else {
-        K3b::VideoDVDRippingDialog dlg( m_dvd, titles, this );
-        dlg.exec();
-    }
+    actionCollection()->action( "start_rip" )->setEnabled( enable );
 }
 
 
-void K3b::VideoDVDRippingView::slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& p )
+void K3b::VideoDVDRippingView::hideEvent( QHideEvent* event )
 {
-    m_popupMenu->popup(p);
-}
-
-
-void K3b::VideoDVDRippingView::slotCheckAll()
-{
-    for( Q3ListViewItemIterator it( m_titleView ); it.current(); ++it )
-        dynamic_cast<K3b::CheckListViewItem*>(it.current())->setChecked(true);
-}
-
-
-void K3b::VideoDVDRippingView::slotUncheckAll()
-{
-    for( Q3ListViewItemIterator it( m_titleView ); it.current(); ++it )
-        dynamic_cast<K3b::CheckListViewItem*>(it.current())->setChecked(false);
-}
-
-
-void K3b::VideoDVDRippingView::slotCheck()
-{
-    QList<Q3ListViewItem*> items( m_titleView->selectedItems() );
-    Q_FOREACH( Q3ListViewItem* item, items )
-        dynamic_cast<K3b::CheckListViewItem*>(item)->setChecked(true);
-}
-
-
-void K3b::VideoDVDRippingView::slotUncheck()
-{
-    QList<Q3ListViewItem*> items( m_titleView->selectedItems() );
-    Q_FOREACH( Q3ListViewItem* item, items )
-        dynamic_cast<K3b::CheckListViewItem*>(item)->setChecked(false);
+    kDebug() << "Stopping preview generation";
+    //
+    // For now we do it the easy way: just stop the preview generation
+    // once this view is hidden
+    //
+    m_model->stopPreviewGen();
+    
+    MediaContentsView::hideEvent( event );
 }
 
 
@@ -226,12 +238,12 @@ void K3b::VideoDVDRippingView::initActions()
 
     KAction* actionSelectAll = new KAction( this );
     actionSelectAll->setText( i18n("Check All") );
-    connect( actionSelectAll, SIGNAL( triggered() ), this, SLOT( slotCheckAll() ) );
+    connect( actionSelectAll, SIGNAL( triggered() ), m_model, SLOT( checkAll() ) );
     actionCollection()->addAction( "check_all", actionSelectAll );
 
     KAction* actionDeselectAll = new KAction( this );
     actionDeselectAll->setText( i18n("Uncheck All") );
-    connect( actionDeselectAll, SIGNAL( triggered() ), this, SLOT( slotUncheckAll() ) );
+    connect( actionDeselectAll, SIGNAL( triggered() ), m_model, SLOT( uncheckAll() ) );
     actionCollection()->addAction( "uncheck_all", actionSelectAll );
 
     KAction* actionSelect = new KAction( this );
@@ -259,12 +271,6 @@ void K3b::VideoDVDRippingView::initActions()
     m_popupMenu->addAction( actionDeselectAll );
     m_popupMenu->addSeparator();
     m_popupMenu->addAction( actionStartRip );
-}
-
-
-void K3b::VideoDVDRippingView::enableInteraction( bool enable )
-{
-    actionCollection()->action( "start_rip" )->setEnabled( enable );
 }
 
 

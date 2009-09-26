@@ -234,6 +234,8 @@ if(ENABLE_DVD_RIPPING)
     rip/videodvd/k3bvideodvdrippingwidget.cpp 
     rip/videodvd/k3bvideodvdrippingdialog.cpp 
     rip/videodvd/k3bvideodvdrippingpreview.cpp
+    rip/videodvd/k3bvideodvdtitledelegate.cpp
+    rip/videodvd/k3bvideodvdtitlemodel.cpp
     )
 
   kde4_add_ui_files(k3b_videodvd_SRCS

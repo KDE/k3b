@@ -17,7 +17,6 @@
 
 #include <KIcon>
 
-#include <QAbstractTextDocumentLayout>
 #include <QApplication>
 #include <QPainter>
 #include <QPixmap>
@@ -160,13 +159,13 @@ QSize VideoDVDTitleDelegate::sizeHint( const QStyleOptionViewItem& option, const
         QFontMetrics boldMetrics( bold );
         QSize titleSize = boldMetrics.size( 0, index.data().toString() );
         QSize chaptersSize = option.fontMetrics.size( 0, index.data( VideoDVDTitleModel::ChaptersRole ).toString() );
-        return QSize( qMax( titleSize.width(), chaptersSize.width() ) + checkWidth + margin,
+        return QSize( qMax( titleSize.width(), chaptersSize.width() ) + checkWidth + margin + option.fontMetrics.averageCharWidth(),
                         titleSize.height() + titleSize.height() + 2*margin );
     }
     else if( index.column() == VideoDVDTitleModel::VideoColumn ) {
         QSize videoSize = option.fontMetrics.size( 0, index.data().toString() );
         QSize ratioSize = option.fontMetrics.size( 0, index.data( VideoDVDTitleModel::AspectRatioRole ).toString() );
-        return QSize( qMax( videoSize.width(), ratioSize.width() + 2*margin ),
+        return QSize( qMax( videoSize.width(), ratioSize.width() ) + 2*margin + option.fontMetrics.averageCharWidth(),
                         videoSize.height() + videoSize.height() + 2*margin );
     }
     else if( index.column() == VideoDVDTitleModel::AudioColumn ) {
@@ -177,7 +176,7 @@ QSize VideoDVDTitleDelegate::sizeHint( const QStyleOptionViewItem& option, const
             overallSize.setWidth( qMax( overallSize.width(), lineSize.width() ) );
             overallSize.setHeight( overallSize.height() + lineSize.height() );
         }
-        return overallSize + QSize( 2*margin, 2*margin );
+        return overallSize + QSize( 2*margin + option.fontMetrics.averageCharWidth(), 2*margin );
     }
     else if( index.column() == VideoDVDTitleModel::SubpictureColumn ) {
         QSize overallSize;
@@ -187,7 +186,7 @@ QSize VideoDVDTitleDelegate::sizeHint( const QStyleOptionViewItem& option, const
             overallSize.setWidth( qMax( overallSize.width(), lineSize.width() ) );
             overallSize.setHeight( overallSize.height() + lineSize.height() );
         }
-        return overallSize + QSize( 2*margin, 2*margin );
+        return overallSize + QSize( 2*margin + option.fontMetrics.averageCharWidth(), 2*margin );
     }
     else {
         return QSize();

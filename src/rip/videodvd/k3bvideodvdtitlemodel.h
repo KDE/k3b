@@ -61,6 +61,7 @@ public:
 public Q_SLOTS:
     void checkAll();
     void uncheckAll();
+    void stopPreviewGen();
     
 private Q_SLOTS:
     void slotPreviewDone( bool success );

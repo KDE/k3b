@@ -22,14 +22,14 @@
 #include <QLabel>
 
 namespace K3b {
-    class VideoDVDRippingTitleListView;
+    class VideoDVDTitleDelegate;
+    class VideoDVDTitleModel;
 }
 class KToolBar;
 class QLabel;
+class QTreeView;
 class KActionCollection;
 class KMenu;
-class K3ListView;
-class Q3ListViewItem;
 
 namespace K3b {
 class VideoDVDRippingView : public MediaContentsView
@@ -45,16 +45,15 @@ class VideoDVDRippingView : public MediaContentsView
  private Q_SLOTS:
   void slotStartRipping();
 
-  void slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& );
+  void slotContextMenu( const QPoint& pos );
 
-  void slotCheckAll();
-  void slotUncheckAll();
   void slotCheck();
   void slotUncheck();
 
  private:
-  void reloadMedium();
-  void enableInteraction( bool enable );
+  virtual void reloadMedium();
+  virtual void enableInteraction( bool enable );
+  virtual void hideEvent( QHideEvent* event );
   void initActions();
 
   KActionCollection* m_actionCollection;
@@ -62,7 +61,10 @@ class VideoDVDRippingView : public MediaContentsView
 
   KToolBar* m_toolBox;
   QLabel* m_labelLength;
-  VideoDVDRippingTitleListView* m_titleView;  
+  VideoDVDTitleDelegate* m_delegate;
+  VideoDVDTitleModel* m_model;
+  QTreeView* m_view;
+  
 
   VideoDVD::VideoDVD m_dvd;
 };

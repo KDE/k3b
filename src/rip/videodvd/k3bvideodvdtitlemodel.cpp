@@ -43,8 +43,7 @@ QStringList audioStreamString( const K3b::VideoDVD::Title& title )
 {
     QStringList list;
     
-    if( title.numAudioStreams() > 0 )
-    {
+    if( title.numAudioStreams() > 0 ) {
         for( unsigned int i = 0; i < qMin( title.numAudioStreams(), MAX_LINES ); ++i ) {
             list << QString::number(i+1) + ": "
                 + i18n("%1 %2Ch (%3)",
@@ -57,8 +56,7 @@ QStringList audioStreamString( const K3b::VideoDVD::Title& title )
         if( title.numAudioStreams() > MAX_LINES )
             list.last() += "...";
     }
-    else
-    {
+    else {
         list << i18n("No audio streams");
     }
     return list;
@@ -93,8 +91,7 @@ QStringList subpictureStreamString( const K3b::VideoDVD::Title& title )
 {
     QStringList list;
     
-    if( title.numSubPictureStreams() > 0 )
-    {
+    if( title.numSubPictureStreams() > 0 ) {
         for( unsigned int i = 0; i < qMin( title.numSubPictureStreams(), MAX_LINES ); ++i ) {
             list << QString::number(i+1) + ": "
                 + QString("%1 (%2)")
@@ -108,8 +105,7 @@ QStringList subpictureStreamString( const K3b::VideoDVD::Title& title )
         if( title.numSubPictureStreams() > MAX_LINES )
             list.last() += "...";
     }
-    else
-    {
+    else {
         list << i18n("No Subpicture streams");
     }
     return list;
@@ -142,6 +138,7 @@ QString subpictureStreamStringToolTip( const K3b::VideoDVD::Title& title )
     
 } // namespace
 
+
 class VideoDVDTitleModel::Private
 {
 public:
@@ -153,8 +150,10 @@ public:
     Previews previews;
     VideoDVDRippingPreview* previewGen;
     unsigned int currentPreviewTitle;
+    bool previewGenStopped;
     Medium medium;
 };
+
 
 VideoDVDTitleModel::VideoDVDTitleModel( QObject* parent )
 :
@@ -163,37 +162,42 @@ VideoDVDTitleModel::VideoDVDTitleModel( QObject* parent )
 {
     d->currentPreviewTitle = 0;
     d->previewGen = new K3b::VideoDVDRippingPreview( this );
+    d->previewGenStopped = true;
     connect( d->previewGen, SIGNAL(previewDone(bool)),
              this, SLOT(slotPreviewDone(bool)) );
 }
 
+
 VideoDVDTitleModel::~VideoDVDTitleModel()
 {
-    d->previewGen->cancel();
     delete d;
 }
 
+
 void VideoDVDTitleModel::setVideoDVD( const VideoDVD::VideoDVD& dvd )
 {
+    d->previewGen->cancel();
     d->dvd = dvd;
     d->selectedTitles.clear();
     d->previews.clear();
     d->currentPreviewTitle = 0;
     d->medium = k3bappcore->mediaCache()->medium( d->dvd.device() );
+    d->previewGenStopped = false;
     d->previewGen->generatePreview( d->dvd, d->currentPreviewTitle+1 );
     reset();
     checkAll();
 }
+
 
 QList<int> VideoDVDTitleModel::selectedTitles() const
 {
     return d->selectedTitles.toList();
 }
 
+
 Qt::ItemFlags VideoDVDTitleModel::flags( const QModelIndex& index ) const
 {
-    if( index.isValid() )
-    {
+    if( index.isValid() ) {
         if( index.column() == TitleColumn )
             return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
         else
@@ -202,6 +206,7 @@ Qt::ItemFlags VideoDVDTitleModel::flags( const QModelIndex& index ) const
     else
         return QAbstractTableModel::flags( index );
 }
+
 
 QVariant VideoDVDTitleModel::data( const QModelIndex& index, int role ) const
 {
@@ -274,6 +279,7 @@ QVariant VideoDVDTitleModel::data( const QModelIndex& index, int role ) const
     return QVariant();
 }
 
+
 bool VideoDVDTitleModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
     if( !index.isValid() || index.row() >= static_cast<int>( d->dvd.numTitles() ) || role != Qt::CheckStateRole )
@@ -289,6 +295,7 @@ bool VideoDVDTitleModel::setData( const QModelIndex& index, const QVariant& valu
     emit dataChanged( index, index );
     return true;
 }
+
 
 QVariant VideoDVDTitleModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
@@ -313,6 +320,7 @@ QVariant VideoDVDTitleModel::headerData( int section, Qt::Orientation orientatio
     return QVariant();
 }
 
+
 int VideoDVDTitleModel::rowCount( const QModelIndex& parent ) const
 {
     if( d->dvd.valid() && !parent.isValid() )
@@ -321,32 +329,40 @@ int VideoDVDTitleModel::rowCount( const QModelIndex& parent ) const
         return 0;
 }
 
+
 int VideoDVDTitleModel::columnCount( const QModelIndex& parent ) const
 {
     Q_UNUSED( parent );
     return NumColumns;
 }
 
+
 void VideoDVDTitleModel::checkAll()
 {
-    if( d->dvd.valid() )
-    {
-        for( unsigned int i = 0; i < d->dvd.numTitles(); ++i )
-        {
+    if( d->dvd.valid() ) {
+        for( unsigned int i = 0; i < d->dvd.numTitles(); ++i ) {
             d->selectedTitles.insert( d->dvd.title(i).titleNumber() );
         }
         emit dataChanged( index(0,TitleColumn), index(d->dvd.numTitles()-1,TitleColumn) );
     }
 }
 
+
 void VideoDVDTitleModel::uncheckAll()
 {
-    if( d->dvd.valid() )
-    {
+    if( d->dvd.valid() ) {
         d->selectedTitles.clear();
         emit dataChanged( index(0,TitleColumn), index(d->dvd.numTitles()-1,TitleColumn) );
     }
 }
+
+
+void VideoDVDTitleModel::stopPreviewGen()
+{
+    d->previewGenStopped = true;
+    d->previewGen->cancel();
+}
+
 
 void VideoDVDTitleModel::slotPreviewDone( bool success )
 {
@@ -359,8 +375,8 @@ void VideoDVDTitleModel::slotPreviewDone( bool success )
     
     emit dataChanged( index(d->currentPreviewTitle,PreviewColumn), index(d->currentPreviewTitle,PreviewColumn) );
 
-    // cancel if the medium changed.
-    if( d->medium == k3bappcore->mediaCache()->medium( d->dvd.device() ) ) {
+    // cancel if we previously stopped preview generation or if the medium changed.
+    if( !d->previewGenStopped && d->medium == k3bappcore->mediaCache()->medium( d->dvd.device() ) ) {
         ++d->currentPreviewTitle;
         if( d->currentPreviewTitle < d->dvd.numTitles() )
             d->previewGen->generatePreview( d->dvd, d->currentPreviewTitle+1 );
