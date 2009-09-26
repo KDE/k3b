@@ -74,9 +74,9 @@ void K3b::FileView::setupGUI()
     QAction* actionUp = m_dirOp->actionCollection()->action("up");
     QAction* actionReload = m_dirOp->actionCollection()->action("reload");
 
-    m_toolBox->addAction( actionUp );
     m_toolBox->addAction( actionBack );
     m_toolBox->addAction( actionForward );
+    m_toolBox->addAction( actionUp );
     m_toolBox->addAction( actionReload );
     m_toolBox->addSeparator();
     m_toolBox->addAction( m_dirOp->actionCollection()->action("short view") );
@@ -91,6 +91,7 @@ void K3b::FileView::setupGUI()
     filterLayout->addWidget( new QLabel( i18n("Filter:"), filterBox ) );
     m_filterWidget = new KFileFilterCombo( filterBox );
     filterLayout->addWidget( m_filterWidget );
+    filterLayout->setMargin( 0 );
     m_toolBox->addWidget( filterBox );
 
     m_filterWidget->setEditable( true );
