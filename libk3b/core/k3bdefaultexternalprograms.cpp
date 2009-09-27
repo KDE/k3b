@@ -124,7 +124,8 @@ QString K3b::AbstractCdrtoolsProgram::getProgramPath( const QString& dir )
     QString cdrkitPath = ExternalProgram::buildProgramPath( dir, m_cdrkitAlt );
 
     QString path;
-    if( QFile::exists( cdrtoolsPath ) ) {
+    if( QFile::exists( cdrtoolsPath ) &&
+        QFileInfo(K3b::resolveLink( cdrtoolsPath )).baseName() != m_cdrkitAlt ) {
         m_usingCdrkit = false;
         path = cdrtoolsPath;
     }
