@@ -221,6 +221,7 @@ void K3b::VideoCdView::reloadMedium()
     m_toolBox->setEnabled( false );
     QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 
+    m_contentList.clear();
     m_contentList.append( new VideoTrackViewCheckItem( m_trackView, i18n("Video CD MPEG tracks") ) );
     m_contentList.append( new VideoTrackViewCheckItem( m_trackView, i18n("Video CD DATA track" ) ) );
 
