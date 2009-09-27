@@ -78,6 +78,8 @@ K3b::StatusBarManager::StatusBarManager( K3b::MainWindow* parent )
     // a spacer item
     m_mainWindow->statusBar()->addPermanentWidget( new QLabel( "  ", m_mainWindow->statusBar() ), 0 );
     m_mainWindow->statusBar()->addPermanentWidget( m_versionBox, 0 );
+    // a spacer item
+    m_mainWindow->statusBar()->addPermanentWidget( new QLabel( "  ", m_mainWindow->statusBar() ), 0 );
 
     connect( m_mainWindow, SIGNAL(configChanged(KSharedConfig::Ptr)), this, SLOT(update()) );
     //FIXME kde4
