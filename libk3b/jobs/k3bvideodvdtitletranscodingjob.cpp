@@ -412,15 +412,12 @@ void K3b::VideoDVDTitleTranscodingJob::cleanup( bool success )
 void K3b::VideoDVDTitleTranscodingJob::slotTranscodeStderr( const QString& line )
 {
     emit debuggingOutput( "transcode", line );
-
-    // parse progress
+    
     int encodedFrames;
     
+    // parse progress
     if( d->getEncodedFrames( line, encodedFrames ) ) {
-        kDebug() << line;
         int totalFrames = m_dvd[m_titleNumber-1].playbackTime().totalFrames();
-        kDebug() << "encodedFrames:" << encodedFrames;
-        kDebug() << "totalFrames:" << totalFrames;
         if( totalFrames > 0 ) {
             int progress = 100 * encodedFrames / totalFrames;
 
