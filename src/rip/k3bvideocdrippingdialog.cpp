@@ -78,7 +78,6 @@ void K3b::VideoCdRippingDialog::setupGui()
 
     QLabel* rippathLabel = new QLabel( i18n( "Rip files to:" ), groupDirectory );
     m_editDirectory = new KUrlRequester( groupDirectory );
-    m_editDirectory->setUrl( QDir::homePath() );
     m_editDirectory->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
     rippathLabel->setBuddy( m_editDirectory );
@@ -150,7 +149,7 @@ void K3b::VideoCdRippingDialog::slotStartClicked()
 
     QStringList filesExists;
     QDir d;
-    d.setPath( m_editDirectory ->url().url() );
+    d.setPath( m_editDirectory ->url().toLocalFile() );
     if( !d.exists() ) {
         if( KMessageBox::warningYesNo( this, i18n("Image folder '%1' does not exist. Do you want K3b to create it?", m_editDirectory->url().url() ) )
             == KMessageBox::Yes ) {
@@ -158,6 +157,9 @@ void K3b::VideoCdRippingDialog::slotStartClicked()
                 KMessageBox::error( this, i18n("Failed to create folder '%1'.", m_editDirectory->url().url() ) );
                 return;
             }
+        }
+        else {
+            return;
         }
     }
     foreach( const QFileInfo& fi, d.entryInfoList() )
@@ -211,7 +213,7 @@ void K3b::VideoCdRippingDialog::slotFreeSpace(const QString&,
 
 void K3b::VideoCdRippingDialog::slotUpdateFreeSpace()
 {
-    QString path = m_editDirectory->url().url();
+    QString path = m_editDirectory->url().toLocalFile();
 
     if( !QFile::exists( path ) )
         path.truncate( path.lastIndexOf('/') );
@@ -225,7 +227,7 @@ void K3b::VideoCdRippingDialog::slotUpdateFreeSpace()
 
 void K3b::VideoCdRippingDialog::loadSettings( const KConfigGroup& c )
 {
-    m_editDirectory ->setUrl( c.readEntry( "last ripping directory", QDir::homePath() ) );
+    m_editDirectory ->setUrl( c.readEntry( "last ripping directory", K3b::defaultTempPath() ) );
     m_ignoreExt ->setChecked( c.readEntry( "ignore ext", false ) );
     m_sector2336 ->setChecked( c.readEntry( "sector 2336", false ) );
     m_extractXML ->setChecked( c.readEntry( "extract xml", false ) );
