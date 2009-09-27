@@ -74,7 +74,8 @@ static const char* s_pictureSizeNames[] = {
 
 
 K3b::VideoDVDRippingWidget::VideoDVDRippingWidget( QWidget* parent )
-    : QWidget( parent )
+    : QWidget( parent ),
+      m_neededSize( 0 )
 {
     setupUi( this );
 
@@ -257,8 +258,8 @@ void K3b::VideoDVDRippingWidget::slotUpdateFreeTempSpace()
     QPalette pal( m_labelFreeSpace->palette() );
     KDiskFreeSpaceInfo free = KDiskFreeSpaceInfo::freeSpaceInfo( path );
     if( free.isValid() ) {
-        m_labelFreeSpace->setText( KIO::convertSizeFromKiB(free.available()) );
-        if( free.available() < m_neededSize/1024 )
+        m_labelFreeSpace->setText( KIO::convertSizeFromKiB(free.available()/1024) );
+        if( free.available() < m_neededSize )
             pal.setColor( QPalette::Text, Qt::red );
         else
             pal.setColor( QPalette::Text, palette().color( QPalette::Text ) );
