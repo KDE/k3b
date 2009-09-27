@@ -32,28 +32,26 @@ namespace K3b {
             Time( unsigned short hour,
                   unsigned short min,
                   unsigned short sec,
-                  unsigned short frame );
+                  unsigned short frame,
+                  double frameRate );
 
             unsigned short hour() const { return m_hour; }
             unsigned short minute() const { return m_minute; }
             unsigned short second() const { return m_second; }
             unsigned short frame() const { return m_frame; }
+            double frameRate() const { return m_frameRate; }
 
             double totalSeconds() const;
             unsigned int totalFrames() const;
 
-            // FIXME: is this useful?
-            double frameRate() const;
-
             QString toString( bool includeFrames = true ) const;
 
         private:
-            void makeValid();
-
-            unsigned int m_hour;
-            unsigned int m_minute;
-            unsigned int m_second;
-            unsigned int m_frame;
+            unsigned short m_hour;
+            unsigned short m_minute;
+            unsigned short m_second;
+            unsigned short m_frame;
+            double m_frameRate;
         };
     }
 }

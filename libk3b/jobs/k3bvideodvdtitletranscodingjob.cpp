@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2006-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C)      2009 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -42,8 +43,40 @@ public:
 
     int lastProgress;
     int lastSubProgress;
+    
+    bool getEncodedFrames( const QString& line, int& encodedFrames ) const;
 };
 
+
+bool K3b::VideoDVDTitleTranscodingJob::Private::getEncodedFrames( const QString& line, int& encodedFrames ) const
+{
+    int pos1 = 0;
+    int pos2 = 0;
+    
+    if ( usedTranscodeBin->version >= Version( 1, 1, 0 ) ) {
+        // encoding=1 frame=1491 first=0 last=-1 fps=14.815 done=-1.000000 timestamp=59.640 timeleft=-1 decodebuf=12 filterbuf=5 encodebuf=3
+        if( line.startsWith( "encoding=" ) ) {
+            pos1 = line.indexOf( '=', 9 );
+            pos2 = line.indexOf( ' ', pos1+1 );
+        }
+    }
+    else {
+        // encoding frames [000000-000144],  27.58 fps, EMT: 0:00:05, ( 0| 0| 0)
+        if( line.startsWith( "encoding frame" ) ) {
+            pos1 = line.indexOf( '-', 15 );
+            pos2 = line.indexOf( ']', pos1+1 );
+        }
+    }
+    
+    if( pos1 > 0 && pos2 > 0 ) {
+        bool ok;
+        encodedFrames = line.mid( pos1+1, pos2-pos1-1 ).toInt( &ok );
+        return ok;
+    }
+    else {
+        return false;
+    }
+}
 
 
 K3b::VideoDVDTitleTranscodingJob::VideoDVDTitleTranscodingJob( K3b::JobHandler* hdl, QObject* parent )
@@ -381,31 +414,30 @@ void K3b::VideoDVDTitleTranscodingJob::slotTranscodeStderr( const QString& line 
     emit debuggingOutput( "transcode", line );
 
     // parse progress
-    // encoding frames [000000-000144],  27.58 fps, EMT: 0:00:05, ( 0| 0| 0)
-    if( line.startsWith( "encoding frame" ) ) {
-        int pos1 = line.indexOf( '-', 15 );
-        int pos2 = line.indexOf( ']', pos1+1 );
-        if( pos1 > 0 && pos2 > 0 ) {
-            bool ok;
-            int encodedFrames = line.mid( pos1+1, pos2-pos1-1 ).toInt( &ok );
-            if( ok ) {
-                int progress = 100 * encodedFrames / m_dvd[m_titleNumber-1].playbackTime().totalFrames();
+    int encodedFrames;
+    
+    if( d->getEncodedFrames( line, encodedFrames ) ) {
+        kDebug() << line;
+        int totalFrames = m_dvd[m_titleNumber-1].playbackTime().totalFrames();
+        kDebug() << "encodedFrames:" << encodedFrames;
+        kDebug() << "totalFrames:" << totalFrames;
+        if( totalFrames > 0 ) {
+            int progress = 100 * encodedFrames / totalFrames;
 
-                if( progress > d->lastSubProgress ) {
-                    d->lastSubProgress = progress;
-                    emit subPercent( progress );
-                }
+            if( progress > d->lastSubProgress ) {
+                d->lastSubProgress = progress;
+                emit subPercent( progress );
+            }
 
-                if( m_twoPassEncoding ) {
-                    progress /= 2;
-                    if( d->currentEncodingPass == 2 )
-                        progress += 50;
-                }
+            if( m_twoPassEncoding ) {
+                progress /= 2;
+                if( d->currentEncodingPass == 2 )
+                    progress += 50;
+            }
 
-                if( progress > d->lastProgress ) {
-                    d->lastProgress = progress;
-                    emit percent( progress );
-                }
+            if( progress > d->lastProgress ) {
+                d->lastProgress = progress;
+                emit percent( progress );
             }
         }
     }

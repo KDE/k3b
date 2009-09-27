@@ -26,12 +26,19 @@ K3b::VideoDVD::Time::Time()
 K3b::VideoDVD::Time::Time( unsigned short hour,
                            unsigned short min,
                            unsigned short sec,
-                           unsigned short frame )
+                           unsigned short frame,
+                           double frameRate )
     : m_hour(hour),
       m_minute(min),
       m_second(sec),
-      m_frame(frame)
+      m_frame(frame),
+      m_frameRate(frameRate)
 {
+    // FIXME: how to handle the frames?
+    m_minute += m_second/60;
+    m_second = m_second % 60;
+    m_hour += m_minute/60;
+    m_minute = m_minute % 60;
 }
 
 
@@ -41,7 +48,7 @@ double K3b::VideoDVD::Time::totalSeconds() const
     s += 60.0 * (double)minute();
     s += 3600.0 * (double)hour();
 
-    return s + (double)( frame() / frameRate() );
+    return s + double( frame() ) / frameRate();
 }
 
 
@@ -51,55 +58,21 @@ unsigned int K3b::VideoDVD::Time::totalFrames() const
     f += 60.0 * (double)minute();
     f += 3600.0 * (double)hour();
 
-    return (int)( f * frameRate() ) + frame();
-}
-
-
-double K3b::VideoDVD::Time::frameRate() const
-{
-    //
-    // This is how it is done in libdvdread
-    // I don't really understand it, though... :(
-    //
-    switch( (frame() & 0xc0) >> 6 ) {
-    case 1:
-        // PAL?
-        return 25.0;
-    case 3:
-        // NTSC?
-        return 29.97;
-    default:
-        // should only happen for time == 0?
-        return 0.0;
-    }
+    return unsigned( f * frameRate() ) + frame();
 }
 
 
 QString K3b::VideoDVD::Time::toString( bool includeFrames ) const
 {
-    // FIXME: use a d-pointer
-    const_cast<K3b::VideoDVD::Time*>(this)->makeValid();
-
     if( includeFrames )
         return QString().sprintf( "%02d:%02d:%02d.%02d",
-                                  m_hour,
-                                  m_minute,
-                                  m_second,
-                                  m_frame & 0x3f );
+                                  hour(),
+                                  minute(),
+                                  second(),
+                                  frame() );
     else
         return QString().sprintf( "%02d:%02d:%02d",
-                                  m_hour,
-                                  m_minute,
-                                  m_second + ( m_frame > 0 ? 1 : 0 ) );
-}
-
-
-void K3b::VideoDVD::Time::makeValid()
-{
-    // FIXME: how to handle the frames?
-
-    m_minute += m_second/60;
-    m_second = m_second % 60;
-    m_hour += m_minute/60;
-    m_minute = m_minute % 60;
+                                  hour(),
+                                  minute(),
+                                  second() + ( frame() > 0 ? 1 : 0 ) );
 }

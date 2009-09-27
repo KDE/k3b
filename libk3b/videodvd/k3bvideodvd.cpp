@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2006-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C)      2009 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -30,10 +31,41 @@
 #include <dvdread/ifo_types.h>
 #include <dvdread/ifo_read.h>
 
-
-// I don't get this stuff, I should read something about VideoDVD some day...
-#define CONVERT_TIME(x) (((x & 0xf0) >> 3) * 5 + (x & 0x0f))
-#define CONVERT_FRAME(x) (((x & 0x30) >> 3) * 5 + (x & 0x0f))
+namespace {
+    
+    unsigned short convertTime( uint8_t time )
+    {
+        // I don't get this stuff, I should read something about VideoDVD some day...
+        return (((time & 0xf0) >> 3) * 5 + (time & 0x0f));
+    }
+    
+    unsigned short convertFrame( uint8_t frame_u )
+    {
+        // lower 6 bits store frame number
+        return frame_u & 0x3f;
+    }
+    
+    double convertFrameRate( uint8_t frame_u )
+    {
+        //
+        // higher 2 bits store frame rate
+        // This is how it is done in libdvdread
+        // I don't really understand it, though... :(
+        //
+        switch( (frame_u & 0xc0) >> 6 ) {
+        case 1:
+            // PAL?
+            return 25.0;
+        case 3:
+            // NTSC?
+            return 29.97;
+        default:
+            // should only happen for time == 0?
+            return 0.0;
+        }
+    }
+    
+} // namespace
 
 
 K3b::VideoDVD::VideoDVD::VideoDVD()
@@ -125,10 +157,11 @@ bool K3b::VideoDVD::VideoDVD::open( K3b::Device::Device* dev )
         // (first?) program chain of the first partoftitle of the current title
         pgc_t* cur_pgc = titleIfo->vts_pgcit->pgci_srp[ pgc_id - 1 ].pgc;
 
-        m_titles[i].m_playbackTime = Time( CONVERT_TIME(cur_pgc->playback_time.hour),
-                                           CONVERT_TIME(cur_pgc->playback_time.minute),
-                                           CONVERT_TIME(cur_pgc->playback_time.second),
-                                           CONVERT_FRAME(cur_pgc->playback_time.frame_u) );
+        m_titles[i].m_playbackTime = Time( convertTime(cur_pgc->playback_time.hour),
+                                           convertTime(cur_pgc->playback_time.minute),
+                                           convertTime(cur_pgc->playback_time.second),
+                                           convertFrame(cur_pgc->playback_time.frame_u),
+                                           convertFrameRate(cur_pgc->playback_time.frame_u) );
 
         //
         // Video stream information
@@ -183,10 +216,11 @@ bool K3b::VideoDVD::VideoDVD::open( K3b::Device::Device* dev )
         m_titles[i].m_ptts.resize( m_titles[i].numPTTs() );
         for( unsigned int j = 0; j < m_titles[i].numPTTs(); ++j ) {
             m_titles[i].m_ptts[j].m_pttNum = j+1;
-            m_titles[i].m_ptts[j].m_playbackTime = Time( CONVERT_TIME(cur_pgc->cell_playback[j].playback_time.hour),
-                                                         CONVERT_TIME(cur_pgc->cell_playback[j].playback_time.minute),
-                                                         CONVERT_TIME(cur_pgc->cell_playback[j].playback_time.second),
-                                                         CONVERT_FRAME(cur_pgc->cell_playback[j].playback_time.frame_u) );
+            m_titles[i].m_ptts[j].m_playbackTime = Time( convertTime(cur_pgc->cell_playback[j].playback_time.hour),
+                                                         convertTime(cur_pgc->cell_playback[j].playback_time.minute),
+                                                         convertTime(cur_pgc->cell_playback[j].playback_time.second),
+                                                         convertFrame(cur_pgc->cell_playback[j].playback_time.frame_u),
+                                                         convertFrameRate(cur_pgc->cell_playback[j].playback_time.frame_u) );
             m_titles[i].m_ptts[j].m_firstSector = cur_pgc->cell_playback[j].first_sector;
             m_titles[i].m_ptts[j].m_lastSector = cur_pgc->cell_playback[j].last_sector;
         }
