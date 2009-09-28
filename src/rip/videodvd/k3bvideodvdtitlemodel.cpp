@@ -257,8 +257,8 @@ QVariant VideoDVDTitleModel::data( const QModelIndex& index, int role ) const
         return i18np("%1 chapter", "%1 chapters", title.numPTTs() );
     }
     else if( PreviewRole == role ) {
-        Private::Previews::const_iterator preview = d->previews.find( &title );
-        if( preview != d->previews.end() )
+        Private::Previews::const_iterator preview = d->previews.constFind( &title );
+        if( preview != d->previews.constEnd() )
             return preview.value();
     }
     else if( AspectRatioRole == role ) {
