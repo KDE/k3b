@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2004-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C)      2009 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -25,8 +26,7 @@
 #include <KLocale>
 #include <KIconLoader>
 
-#include <QHash>
-#include <QMap>
+#include <QList>
 #include <QLabel>
 #include <QTimer>
 #include <QToolButton>
@@ -37,42 +37,111 @@
 class K3b::AudioConvertingOptionWidget::Private
 {
 public:
-    QHash<int, K3b::AudioEncoder*> encoderMap;
-    QMap<int, QString> extensionMap;
+    QList<AudioEncoder*> encoders;
+    QList<QString> extensions;
 
     QTimer freeSpaceUpdateTimer;
 
     KIO::filesize_t neededSize;
-
-    int getDefaultFormat() {
-        // we prefere formats in this order:
-        // 1. ogg
-        // 2. mp3
-        // 3. flac
-        // 4. wave
-        int ogg = -1;
-        int mp3 = -1;
-        int flac = -1;
-        for( QMap<int, QString>::const_iterator it = extensionMap.constBegin();
-             it != extensionMap.constEnd(); ++it ) {
-            if( it.value() == "ogg" )
-                ogg = it.key();
-            else if( it.value() == "mp3" )
-                mp3 = it.key();
-            else if( it.value() == "flac" )
-                flac = it.key();
-        }
-
-        if( ogg > -1 )
-            return ogg;
-        else if( mp3 > -1 )
-            return mp3;
-        else if( flac > -1 )
-            return flac;
-        else
-            return 0;
-    }
+    
+    AudioEncoder* encoderForIndex( int index ) const;
+    QString pluginNameForIndex( int index ) const;
+    QString extForIndex( int index ) const;
+    int indexForFileType( const QString& pluginName, const QString& ext ) const;
+    
+    QString defaultPluginName() const;
+    QString defaultExtension() const;
 };
+
+
+K3b::AudioEncoder* K3b::AudioConvertingOptionWidget::Private::encoderForIndex( int index ) const
+{
+    if( index >= 0 && index < encoders.size() )
+        return encoders.at( index );
+    else
+        return 0;
+}
+
+
+QString K3b::AudioConvertingOptionWidget::Private::pluginNameForIndex( int index ) const
+{
+    if( AudioEncoder* encoder = encoderForIndex( index ) )
+        return encoder->pluginInfo().pluginName();
+    else
+        return QString();
+}
+
+
+QString K3b::AudioConvertingOptionWidget::Private::extForIndex( int index ) const
+{
+    if( index >= 0 && index < extensions.size() )
+        return extensions.at( index );
+    else
+        return "wav";
+}
+
+
+int K3b::AudioConvertingOptionWidget::Private::indexForFileType( const QString& pluginName, const QString& ext ) const
+{
+    if( pluginName.isEmpty() ) {
+        int i = extensions.indexOf( ext );
+        if( i >= 0 )
+            return i;
+    }
+    
+    for( int i = 0; i < encoders.size(); ++i ) {
+        AudioEncoder* encoder = encoders.at( i );
+        if( encoder != 0 &&
+            encoder->pluginInfo().pluginName() == pluginName &&
+            extensions.at( i ) == ext ) {
+            return i;
+        }
+    }
+    return 0;
+}
+
+
+QString K3b::AudioConvertingOptionWidget::Private::defaultPluginName() const
+{
+    QString defaultExt = defaultExtension();
+    for( int i = 0; i < extensions.size(); ++i ) {
+        AudioEncoder* encoder = encoders.at( i );
+        if( extensions.at( i ) == defaultExt && encoder != 0 ) {
+            return encoder->pluginInfo().pluginName();
+        }
+    }
+    return QString();
+}
+
+
+QString K3b::AudioConvertingOptionWidget::Private::defaultExtension() const
+{
+    // we prefere formats in this order:
+    // 1. ogg
+    // 2. mp3
+    // 3. flac
+    // 4. wave
+    bool ogg = false;
+    bool mp3 = false;
+    bool flac = false;
+    Q_FOREACH( const QString& ext, extensions ) {
+        if( ext == "ogg" )
+            ogg = true;
+        else if( ext == "mp3" )
+            mp3 = true;
+        else if( ext == "flac" )
+            flac = true;
+    }
+    
+    if( ogg )
+        return "ogg";
+    else if( mp3 )
+        return "mp3";
+    else if( flac )
+        return "flac";
+    else
+        return "wav";
+}
 
 
 K3b::AudioConvertingOptionWidget::AudioConvertingOptionWidget( QWidget* parent )
@@ -97,28 +166,25 @@ K3b::AudioConvertingOptionWidget::AudioConvertingOptionWidget( QWidget* parent )
 
     m_editBaseDir->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
     m_buttonConfigurePlugin->setIcon( KIcon( "system-run" ) );
-
+    
     // FIXME: see if sox and the sox encoder are installed and if so do not put the internal wave
     //        writer in the list of encoders.
-
-    d->encoderMap.clear();
-    d->extensionMap.clear();
-    m_comboFileType->clear();
     m_comboFileType->addItem( i18n("Wave") );
-    d->extensionMap[0] = "wav";
+    d->encoders.append( 0 );
+    d->extensions.append( "wav" );
 
     // check the available encoding plugins
     QList<K3b::Plugin*> fl = k3bcore->pluginManager()->plugins( "AudioEncoder" );
     for( QList<K3b::Plugin *>::const_iterator it = fl.constBegin();
-         it != fl.constEnd(); ++it ) {
-        K3b::AudioEncoder* f = (K3b::AudioEncoder*)(*it);
+        it != fl.constEnd(); ++it ) {
+        AudioEncoder* f = (AudioEncoder*)(*it);
         QStringList exL = f->extensions();
 
         for( QStringList::const_iterator exIt = exL.constBegin();
-             exIt != exL.constEnd(); ++exIt ) {
-            d->extensionMap.insert( m_comboFileType->count(), *exIt );
-            d->encoderMap.insert( m_comboFileType->count(), f );
+            exIt != exL.constEnd(); ++exIt ) {
             m_comboFileType->addItem( f->fileTypeComment(*exIt) );
+            d->encoders.append( f );
+            d->extensions.append( *exIt );
         }
     }
 
@@ -161,10 +227,9 @@ void K3b::AudioConvertingOptionWidget::setNeededSize( KIO::filesize_t size )
 void K3b::AudioConvertingOptionWidget::slotConfigurePlugin()
 {
     // 0 for wave
-    K3b::AudioEncoder* encoder = d->encoderMap[m_comboFileType->currentIndex()];
-    if( encoder )
+    if( AudioEncoder* enc = encoder() )
     {
-        int ret = k3bcore->pluginManager()->execPluginDialog( encoder, this );
+        int ret = k3bcore->pluginManager()->execPluginDialog( enc, this );
         if( ret == QDialog::Accepted )
         {
             emit changed();
@@ -203,19 +268,19 @@ void K3b::AudioConvertingOptionWidget::slotUpdateFreeTempSpace()
 void K3b::AudioConvertingOptionWidget::slotEncoderChanged()
 {
     // 0 for wave
-    m_buttonConfigurePlugin->setEnabled( d->encoderMap[m_comboFileType->currentIndex()] != 0 );
+    m_buttonConfigurePlugin->setEnabled( encoder() != 0 );
 }
 
 
 K3b::AudioEncoder* K3b::AudioConvertingOptionWidget::encoder() const
 {
-    return d->encoderMap[m_comboFileType->currentIndex()];  // 0 for wave
+    return d->encoderForIndex( m_comboFileType->currentIndex() );  // 0 for wave
 }
 
 
 QString K3b::AudioConvertingOptionWidget::extension() const
 {
-    return d->extensionMap[m_comboFileType->currentIndex()];
+    return d->extForIndex( m_comboFileType->currentIndex() );
 }
 
 
@@ -229,18 +294,17 @@ void K3b::AudioConvertingOptionWidget::loadConfig( const KConfigGroup& c )
     m_checkCreatePlaylist->setChecked( c.readEntry( "create_playlist", false ) );
     m_checkPlaylistRelative->setChecked( c.readEntry( "relative_path_in_playlist", false ) );
 
-    QString filetype = c.readEntry( "filetype", d->extensionMap[d->getDefaultFormat()] );
-    if( filetype == "wav" )
-        m_comboFileType->setCurrentIndex(0);
-    else {
-        for( QMap<int, QString>::ConstIterator it = d->extensionMap.constBegin();
-             it != d->extensionMap.constEnd(); ++it ) {
-            if( it.value() == filetype ) {
-                m_comboFileType->setCurrentIndex( it.key() );
-                break;
-            }
-        }
+    QString encoder;
+    QString filetype;
+    if( c.hasKey( "encoder" ) && c.hasKey( "filetype" ) ) {
+        encoder = c.readEntry( "encoder" );
+        filetype = c.readEntry( "filetype" );
     }
+    else {
+        encoder = d->defaultPluginName();
+        filetype = d->defaultExtension();
+    }
+    m_comboFileType->setCurrentIndex( d->indexForFileType( encoder, filetype ) );
 
     slotEncoderChanged();
 }
@@ -255,11 +319,9 @@ void K3b::AudioConvertingOptionWidget::saveConfig( KConfigGroup c )
 
     c.writeEntry( "create_playlist", m_checkCreatePlaylist->isChecked() );
     c.writeEntry( "relative_path_in_playlist", m_checkPlaylistRelative->isChecked() );
-
-    if( d->extensionMap.contains(m_comboFileType->currentIndex()) )
-        c.writeEntry( "filetype", d->extensionMap[m_comboFileType->currentIndex()] );
-    else
-        c.writeEntry( "filetype", "wav" );
+    
+    c.writeEntry( "encoder", d->pluginNameForIndex( m_comboFileType->currentIndex() ) );
+    c.writeEntry( "filetype", d->extForIndex( m_comboFileType->currentIndex() ) );
 }
 
 #include "k3baudioconvertingoptionwidget.moc"
