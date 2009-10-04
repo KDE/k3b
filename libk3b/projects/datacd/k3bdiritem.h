@@ -31,7 +31,7 @@ namespace K3b {
     class LIBK3B_EXPORT DirItem : public DataItem
     {
     public:
-        DirItem( const QString& name, DataDoc*, DirItem* parentDir = 0 );
+        DirItem( const QString& name, DataDoc*, DirItem* parentDir = 0, const ItemFlags& flags = ItemFlags() );
 
         /**
          * Default copy constructor. Copies the dir including all children. However, none of the
@@ -68,14 +68,7 @@ namespace K3b {
          */
         bool isSubItem( DataItem* item ) const;
 
-        bool isDir() const { return true; }
-
         virtual bool isRemoveable() const;
-
-        /**
-         * \return true if some child is from an old session.
-         */
-        virtual bool isFromOldSession() const;
 
         /**
          * Recursively creates a directory.
@@ -119,6 +112,11 @@ namespace K3b {
          * just used for user information.
          */
         void updateFiles( long files, long dirs );
+        /**
+         * Unsets OLD_SESSION flag when directory no longer has
+         * children from previous sessions
+         */
+        void updateOldSessionFlag();
 
         mutable QList<DataItem*> m_children;
 

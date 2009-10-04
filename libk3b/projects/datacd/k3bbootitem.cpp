@@ -20,7 +20,7 @@
 
 
 K3b::BootItem::BootItem( const QString& fileName, K3b::DataDoc* doc, K3b::DirItem* dir, const QString& k3bName )
-    : K3b::FileItem( fileName, doc, dir, k3bName, FILE|BOOT_IMAGE ),
+    : K3b::FileItem( fileName, doc, dir, k3bName, ItemFlags(FILE|BOOT_IMAGE) ),
       m_noBoot(false),
       m_bootInfoTable(false),
       m_loadSegment(0),

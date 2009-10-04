@@ -36,7 +36,7 @@ namespace K3b {
         /**
          * Creates a new FileItem
          */
-        FileItem( const QString& fileName, DataDoc* doc, DirItem* dir, const QString& k3bName = 0, int flags = 0 );
+        FileItem( const QString& fileName, DataDoc* doc, DirItem* dir, const QString& k3bName = 0, const ItemFlags& flags = ItemFlags() );
 
         /**
          * Constructor for optimized file item creation which does no additional stat.
@@ -45,7 +45,7 @@ namespace K3b {
          */
         FileItem( const k3b_struct_stat* stat,
                   const k3b_struct_stat* followedStat,
-                  const QString& fileName, DataDoc* doc, DirItem* dir, const QString& k3bName = 0 );
+                  const QString& fileName, DataDoc* doc, DirItem* dir, const QString& k3bName = 0, const ItemFlags& flags = ItemFlags() );
 
         /**
          * Default copy constructor
@@ -86,9 +86,7 @@ namespace K3b {
 
         DirItem* getDirItem() const;
 
-        bool isSymLink() const;
         QString linkDest() const;
-        bool isFile() const { return true; }
 
         virtual KMimeType::Ptr mimeType() const;
 
@@ -113,7 +111,6 @@ namespace K3b {
         Id m_idFollowed;
 
         QString m_localPath;
-        bool m_bSymLink;
 
         KMimeType::Ptr m_mimeType;
     };

@@ -22,9 +22,8 @@
 
 
 K3b::SessionImportItem::SessionImportItem( const K3b::Iso9660File* isoF, K3b::DataDoc* doc, K3b::DirItem* dir )
-    : K3b::SpecialDataItem( doc, isoF->size(), dir, isoF->name() ),
+    : K3b::SpecialDataItem( doc, isoF->size(), dir, isoF->name(), OLD_SESSION ),
       m_replaceItem(0)
-
 {
     // add automagically like a qlistviewitem
     if( parent() )

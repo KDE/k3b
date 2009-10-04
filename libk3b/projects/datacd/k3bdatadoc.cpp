@@ -231,7 +231,7 @@ K3b::DirItem* K3b::DataDoc::addEmptyDir( const QString& name, K3b::DirItem* pare
 KIO::filesize_t K3b::DataDoc::size() const
 {
     if( m_isoOptions.doNotCacheInodes() )
-        return root()->blocks().mode1Bytes();
+        return root()->blocks().mode1Bytes() + m_oldSessionSize;
     else
         return m_sizeHandler->blocks( m_isoOptions.followSymbolicLinks() ||
                                       !m_isoOptions.createRockRidge() ).mode1Bytes();

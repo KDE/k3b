@@ -25,8 +25,8 @@
 #include <KLocale>
 
 
-K3b::DirItem::DirItem(const QString& name, K3b::DataDoc* doc, K3b::DirItem* parentDir)
-    : K3b::DataItem( doc, parentDir ),
+K3b::DirItem::DirItem(const QString& name, K3b::DataDoc* doc, K3b::DirItem* parentDir, const ItemFlags& flags)
+    : K3b::DataItem( doc, parentDir, flags | DIR ),
       m_size(0),
       m_followSymlinksSize(0),
       m_blocks(0),
@@ -143,7 +143,12 @@ K3b::DirItem* K3b::DirItem::addDataItem( K3b::DataItem* item )
         else
             updateFiles( 1, 0 );
 
-        item->m_parentDir = this;
+        item->setParentDir( this );
+        
+        // If item is from previous session,flag this directory as such also
+        if( !isFromOldSession() && item->isFromOldSession() ) {
+            setFlags( flags() | OLD_SESSION );
+        }
 
         // inform the doc
         if( doc() )
@@ -168,7 +173,10 @@ K3b::DataItem* K3b::DirItem::takeDataItem( K3b::DataItem* item )
         else
             updateFiles( -1, 0 );
 
-        item->m_parentDir = 0;
+        item->setParentDir( 0 );
+        
+        // unset OLD_SESSION flag if it was the last child from previous sessions
+        updateOldSessionFlag();
 
         // inform the doc
         if( doc() )
@@ -377,14 +385,17 @@ void K3b::DirItem::updateFiles( long files, long dirs )
 }
 
 
-bool K3b::DirItem::isFromOldSession() const
+void K3b::DirItem::updateOldSessionFlag()
 {
-    QList<K3b::DataItem*>::const_iterator end( m_children.constEnd() );
-    for( QList<K3b::DataItem*>::const_iterator it = m_children.constBegin(); it != end; ++it ) {
-        if( (*it)->isFromOldSession() )
-            return true;
+    if( flags().testFlag( OLD_SESSION ) ) {
+        QList<K3b::DataItem*>::const_iterator end( m_children.constEnd() );
+        for( QList<K3b::DataItem*>::const_iterator it = m_children.constBegin(); it != end; ++it ) {
+            if( (*it)->isFromOldSession() ) {
+                return;
+            }
+        }
+        setFlags( flags() & ~OLD_SESSION );
     }
-    return false;
 }
 
 

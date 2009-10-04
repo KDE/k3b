@@ -56,8 +56,8 @@ bool K3b::operator>( const K3b::FileItem::Id& id1, const K3b::FileItem::Id& id2 
 
 
 
-K3b::FileItem::FileItem( const QString& filePath, K3b::DataDoc* doc, K3b::DirItem* dir, const QString& k3bName, int flags )
-    : K3b::DataItem( doc, dir, flags ),
+K3b::FileItem::FileItem( const QString& filePath, K3b::DataDoc* doc, K3b::DirItem* dir, const QString& k3bName, const ItemFlags& flags )
+    : K3b::DataItem( doc, dir, flags | FILE ),
       m_replacedItemFromOldSession(0),
       m_localPath(filePath)
 {
@@ -74,7 +74,6 @@ K3b::FileItem::FileItem( const QString& filePath, K3b::DataDoc* doc, K3b::DirIte
         m_size = K3b::filesize( filePath );
         m_id.inode = 0;
         m_id.device = 0;
-        m_bSymLink = false;
 
         kError() << "(KFileItem) lstat failed: " << strerror(errno) << endl;
 
@@ -88,7 +87,8 @@ K3b::FileItem::FileItem( const QString& filePath, K3b::DataDoc* doc, K3b::DirIte
     else {
         m_size = (KIO::filesize_t)statBuf.st_size;
 
-        m_bSymLink = S_ISLNK(statBuf.st_mode);
+        if( S_ISLNK(statBuf.st_mode) )
+            setFlags( flags | FILE | SYMLINK );
 
         //
         // integrate the device number into the inode since files on different
@@ -121,8 +121,8 @@ K3b::FileItem::FileItem( const QString& filePath, K3b::DataDoc* doc, K3b::DirIte
 
 K3b::FileItem::FileItem( const k3b_struct_stat* stat,
                           const k3b_struct_stat* followedStat,
-                          const QString& filePath, K3b::DataDoc* doc, K3b::DirItem* dir, const QString& k3bName )
-    : K3b::DataItem( doc, dir ),
+                          const QString& filePath, K3b::DataDoc* doc, K3b::DirItem* dir, const QString& k3bName, const ItemFlags& flags )
+    : K3b::DataItem( doc, dir, flags | FILE ),
       m_replacedItemFromOldSession(0),
       m_localPath(filePath)
 {
@@ -132,7 +132,8 @@ K3b::FileItem::FileItem( const k3b_struct_stat* stat,
         m_k3bName = k3bName;
 
     m_size = (KIO::filesize_t)stat->st_size;
-    m_bSymLink = S_ISLNK(stat->st_mode);
+    if( S_ISLNK(stat->st_mode) )
+        setFlags( flags | FILE | SYMLINK );
 
     //
     // integrate the device number into the inode since files on different
@@ -167,7 +168,6 @@ K3b::FileItem::FileItem( const K3b::FileItem& item )
       m_id( item.m_id ),
       m_idFollowed( item.m_idFollowed ),
       m_localPath( item.m_localPath ),
-      m_bSymLink( item.m_bSymLink ),
       m_mimeType( item.m_mimeType )
 {
 }
@@ -236,12 +236,6 @@ QString K3b::FileItem::localPath() const
 K3b::DirItem* K3b::FileItem::getDirItem() const
 {
     return getParent();
-}
-
-
-bool K3b::FileItem::isSymLink() const
-{
-    return m_bSymLink;
 }
 
 

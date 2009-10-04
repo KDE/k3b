@@ -24,11 +24,11 @@
 class K3b::DataItem::Private
 {
 public:
-    int flags;
+    K3b::DataItem::ItemFlags flags;
 };
 
 
-K3b::DataItem::DataItem( K3b::DataDoc* doc, K3b::DataItem* parent, int flags )
+K3b::DataItem::DataItem( K3b::DataDoc* doc, K3b::DataItem* parent, const ItemFlags& flags )
     : m_sortWeight(0),
       m_bHideOnRockRidge(false),
       m_bHideOnJoliet(false),
@@ -75,20 +75,52 @@ K3b::DataItem::~DataItem()
     delete d;
 }
 
-int K3b::DataItem::flags() const
+
+const K3b::DataItem::ItemFlags& K3b::DataItem::flags() const
 {
    return d->flags;
 }
 
-void K3b::DataItem::setFlags( int flags )
+
+void K3b::DataItem::setFlags( const ItemFlags& flags )
 {
     d->flags = flags;
 }
 
 
+bool K3b::DataItem::isDir() const
+{
+   return d->flags & DIR;
+}
+
+
+bool K3b::DataItem::isFile() const
+{
+   return d->flags & FILE;
+}
+
+
+bool K3b::DataItem::isSpecialFile() const
+{
+   return d->flags & SPECIALFILE;
+}
+
+
+bool K3b::DataItem::isSymLink() const
+{
+   return d->flags & SYMLINK;
+}
+
+
+bool K3b::DataItem::isFromOldSession() const
+{
+   return d->flags & OLD_SESSION;
+}
+
+
 bool K3b::DataItem::isBootItem() const
 {
-    return d->flags & BOOT_IMAGE;
+   return d->flags & BOOT_IMAGE;
 }
 
 

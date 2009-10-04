@@ -29,8 +29,6 @@ namespace K3b {
 
         bool isHideable() const { return false; }
 
-        bool isBootItem() const { return true; }
-
         enum imageType { FLOPPY, HARDDISK, NONE };
 
         void setNoBoot( bool b ) { m_noBoot = b; }

@@ -35,9 +35,6 @@ namespace K3b {
         FileItem* replaceItem() const { return m_replaceItem; }
         void setReplaceItem( FileItem* item ) { m_replaceItem = item; }
 
-        bool isFile() const { return false; }
-        bool isFromOldSession() const { return true; }
-
         bool isRemoveable() const { return false; }
         bool isMoveable() const { return false; }
         bool isRenameable() const { return false; }

@@ -34,7 +34,18 @@ namespace K3b {
     class LIBK3B_EXPORT DataItem
     {
     public:
-        DataItem( DataDoc* doc, DataItem* parent = 0, int flags = 0 );
+        enum ItemFlag {
+            DIR = 0x1,
+            FILE = 0x2,
+            SPECIALFILE = 0x4,
+            SYMLINK = 0x8,
+            OLD_SESSION = 0x10,
+            BOOT_IMAGE = 0x20
+        };
+        Q_DECLARE_FLAGS( ItemFlags, ItemFlag )
+        
+    public:
+        DataItem( DataDoc* doc, DataItem* parent = 0, const ItemFlags& flags = ItemFlags() );
 
         /**
          * Default copy constructor.
@@ -131,25 +142,12 @@ namespace K3b {
 
         virtual void reparent( DirItem* );
 
-        // FIXME: use all these flags and make the isXXX methods
-        // non-virtual. Then move the parent()->addDataItem call
-        // to the DataItem constructor
-        enum ItemFlags {
-            DIR = 0x1,
-            FILE = 0x2,
-            SPECIALFILE = 0x4,
-            SYMLINK = 0x8,
-            OLD_SESSION = 0x10,
-            BOOT_IMAGE = 0x11
-        };
-
-        int flags() const;
-
-        virtual bool isDir() const { return false; }
-        virtual bool isFile() const { return false; }
-        virtual bool isSpecialFile() const { return false; }
-        virtual bool isSymLink() const { return false; }
-        virtual bool isFromOldSession() const { return false; }
+        const ItemFlags& flags() const;
+        bool isDir() const;
+        bool isFile() const;
+        bool isSpecialFile() const;
+        bool isSymLink() const;
+        bool isFromOldSession() const;
         bool isBootItem() const;
 
         bool hideOnRockRidge() const;
@@ -200,7 +198,8 @@ namespace K3b {
 
         QString m_k3bName;
 
-        void setFlags( int flags );
+        void setFlags( const ItemFlags& flags );
+        void setParentDir( DirItem* parentDir ) { m_parentDir = parentDir; }
 
     private:
         class Private;
@@ -221,7 +220,7 @@ namespace K3b {
         bool m_bMovable;
         bool m_bHideable;
         bool m_bWriteToCd;
-
+        
         friend class DirItem;
     };
 }
