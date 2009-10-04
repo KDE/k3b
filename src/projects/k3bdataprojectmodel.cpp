@@ -49,6 +49,7 @@ public:
     void _k_aboutToRemoveItem( K3b::DataItem* item );
     void _k_itemAdded( K3b::DataItem* item );
     void _k_itemRemoved( K3b::DataItem* item );
+    void _k_volumeIdChanged();
 
 private:
     DataProjectModel* q;
@@ -132,6 +133,13 @@ void K3b::DataProjectModel::Private::_k_itemRemoved( K3b::DataItem* item )
 }
 
 
+void K3b::DataProjectModel::Private::_k_volumeIdChanged()
+{
+    QModelIndex index = q->index( 0, 0 );
+    emit q->dataChanged( index, index );
+}
+
+
 K3b::DataProjectModel::DataProjectModel( K3b::DataDoc* doc, QObject* parent )
     : QAbstractItemModel( parent ),
       d( new Private(this) )
@@ -142,6 +150,7 @@ K3b::DataProjectModel::DataProjectModel( K3b::DataDoc* doc, QObject* parent )
     connect( doc, SIGNAL( aboutToRemoveItem(K3b::DataItem*) ), this, SLOT( _k_aboutToRemoveItem(K3b::DataItem*) ) );
     connect( doc, SIGNAL( itemAdded(K3b::DataItem*) ), this, SLOT( _k_itemAdded(K3b::DataItem*) ) );
     connect( doc, SIGNAL( itemRemoved(K3b::DataItem*) ), this, SLOT( _k_itemRemoved(K3b::DataItem*) ) );
+    connect( doc, SIGNAL( volumeIdChanged() ), this, SLOT( _k_volumeIdChanged() ) );
 }
 
 

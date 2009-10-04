@@ -126,6 +126,7 @@ void K3b::DataDoc::setVolumeID( const QString& v )
 {
     m_isoOptions.setVolumeID( v );
     emit changed();
+    emit volumeIdChanged();
 }
 
 

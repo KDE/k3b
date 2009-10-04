@@ -66,6 +66,7 @@ namespace K3b {
         Q_PRIVATE_SLOT( d, void _k_aboutToRemoveItem( K3b::DataItem* item ) )
         Q_PRIVATE_SLOT( d, void _k_itemAdded( K3b::DataItem* item ) )
         Q_PRIVATE_SLOT( d, void _k_itemRemoved( K3b::DataItem* item ) )
+        Q_PRIVATE_SLOT( d, void _k_volumeIdChanged() )
     };
 }
 
