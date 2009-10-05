@@ -111,6 +111,9 @@ public:
 
     K3b::WelcomeWidget* welcomeWidget;
     QWidget* documentHull;
+    QWidget* documentDummyTitleBarWidget;
+    QWidget* dirTreeDummyTitleBarWidget;
+    QWidget* contentsDummyTitleBarWidget;
 };
 
 
@@ -124,6 +127,9 @@ K3b::MainWindow::MainWindow()
 
     d = new Private;
     d->lastDoc = 0;
+    d->documentDummyTitleBarWidget = new QWidget( this );
+    d->dirTreeDummyTitleBarWidget = new QWidget( this );
+    d->contentsDummyTitleBarWidget = new QWidget( this );
 
     setPlainCaption( i18n("K3b - The CD and DVD Kreator") );
 
@@ -246,10 +252,15 @@ void K3b::MainWindow::initActions()
                                                     this, SLOT(slotClearProject()), actionCollection(), "project_clear_project" );
 
 
-    actionViewDocumentHeader = new KToggleAction(i18n("Show Document Header"),this);
-    QAction *action= actionCollection()->addAction("view_document_header",actionViewDocumentHeader);
-    connect( action , SIGNAL(toggled(bool)) , this , SLOT(slotViewDocumentHeader()) );
-
+    actionViewLockPanels = new KToggleAction( i18n("Lock Panels"), this );
+    actionCollection()->addAction("view_lock_panels", actionViewLockPanels);
+    connect( actionViewLockPanels, SIGNAL(toggled(bool)),
+             this, SLOT(slotViewLockPanels(bool)) );
+    
+    actionViewDocumentHeader = new KToggleAction(i18n("Show Projects Header"),this);
+    actionCollection()->addAction("view_document_header", actionViewDocumentHeader);
+    connect( actionViewDocumentHeader, SIGNAL(toggled(bool)),
+             this, SLOT(slotViewDocumentHeader()) );
 
     KAction* actionToolsFormatMedium = K3b::createAction( this,
                                                           i18n("&Format/Erase rewritable disk..."),
@@ -383,13 +394,18 @@ void K3b::MainWindow::initStatusBar()
 
 void K3b::MainWindow::initView()
 {
-    setDockOptions( AnimatedDocks );
+    setDockOptions( QMainWindow::AnimatedDocks | QMainWindow::AllowNestedDocks );
 
     // setup main docking things
-
+    
     // --- Document Dock ----------------------------------------------------------------------------
-    d->documentHull = new QWidget( this );
-    setCentralWidget( d->documentHull );
+    m_documentDock = new QDockWidget( i18n("Projects"), this );
+    m_documentDock->setObjectName("documentdock");
+    m_documentDock->setFeatures( QDockWidget::DockWidgetMovable|QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetFloatable );
+    addDockWidget( Qt::BottomDockWidgetArea, m_documentDock );
+    actionCollection()->addAction( "view_projects", m_documentDock->toggleViewAction() );
+    d->documentHull = new QWidget( m_documentDock );
+    m_documentDock->setWidget( d->documentHull );
     QGridLayout* documentHullLayout = new QGridLayout( d->documentHull );
     documentHullLayout->setMargin( 2 );
     documentHullLayout->setSpacing( 0 );
@@ -413,13 +429,11 @@ void K3b::MainWindow::initView()
     // ---------------------------------------------------------------------------------------------
 
     // --- Directory Dock --------------------------------------------------------------------------
-    m_dirTreeDock = new QDockWidget( this );
+    m_dirTreeDock = new QDockWidget(  i18n("Directories"), this );
     m_dirTreeDock->setObjectName("dirtreedock");
-    m_dirTreeDock->setFeatures( QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable );
+    m_dirTreeDock->setFeatures( QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable|QDockWidget::DockWidgetFloatable );
     addDockWidget( Qt::TopDockWidgetArea, m_dirTreeDock );
-    QAction *action = m_dirTreeDock->toggleViewAction();
-    action->setText(i18n("Show Directories"));
-    actionCollection()->addAction( "view_dir_tree", action );
+    actionCollection()->addAction( "view_dir_tree", m_dirTreeDock->toggleViewAction() );
 
     K3b::FileTreeView* sidePanel = new K3b::FileTreeView( m_dirTreeDock );
     //K3b::SidePanel* sidePanel = new K3b::SidePanel( this, m_dirTreeDock, "sidePanel" );
@@ -429,13 +443,11 @@ void K3b::MainWindow::initView()
 
 
     // --- Contents Dock ---------------------------------------------------------------------------
-    m_contentsDock = new QDockWidget( this );
+    m_contentsDock = new QDockWidget( i18n("Contents"), this );
     m_contentsDock->setObjectName("contentsdock");
-    m_contentsDock->setFeatures( QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable );
+    m_contentsDock->setFeatures( QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable|QDockWidget::DockWidgetFloatable );
     addDockWidget ( Qt::TopDockWidgetArea, m_contentsDock );
-    action = m_contentsDock->toggleViewAction();
-    action->setText( i18n("Show Contents") );
-    actionCollection()->addAction( "view_contents", action );
+    actionCollection()->addAction( "view_contents", m_contentsDock->toggleViewAction() );
 
     m_dirView = new K3b::DirView( sidePanel/*->fileTreeView()*/, m_contentsDock );
     m_contentsDock->setWidget( m_dirView );
@@ -453,6 +465,15 @@ void K3b::MainWindow::initView()
     urlNavigatorAction->setText(i18n("&Quick Dir Selector"));
     actionCollection()->addAction( "quick_dir_selector", urlNavigatorAction );
     // ---------------------------------------------------------------------------------------------
+}
+
+
+QMenu* K3b::MainWindow::createPopupMenu()
+{
+    QMenu* popupMenu = KXmlGuiWindow::createPopupMenu();
+    popupMenu->addSeparator();
+    popupMenu->addAction( actionViewLockPanels );
+    return popupMenu;
 }
 
 
@@ -493,6 +514,9 @@ void K3b::MainWindow::createClient( K3b::Doc* doc )
 
     m_documentTab->insertTab( doc );
     m_documentTab->setCurrentWidget( view );
+    
+    if( m_documentDock->isHidden() )
+        m_documentDock->show();
 
     slotCurrentDocChanged();
 }
@@ -575,6 +599,7 @@ void K3b::MainWindow::saveOptions()
     d->welcomeWidget->saveConfig( grp );
 
     KConfigGroup grpOption( config(), "General Options" );
+    grpOption.writeEntry( "Lock Panels", actionViewLockPanels->isChecked() );
     grpOption.writeEntry( "Show Document Header", actionViewDocumentHeader->isChecked() );
     grpOption.writeEntry( "Navigator breadcrumb mode", !m_urlNavigator->isUrlEditable() );
 
@@ -586,8 +611,8 @@ void K3b::MainWindow::readOptions()
 {
     KConfigGroup grp( config(), "General Options" );
 
-    bool bViewDocumentHeader = grp.readEntry("Show Document Header", true);
-    actionViewDocumentHeader->setChecked(bViewDocumentHeader);
+    actionViewLockPanels->setChecked( grp.readEntry( "Lock Panels", true ) );
+    actionViewDocumentHeader->setChecked( grp.readEntry("Show Document Header", true) );
     m_urlNavigator->setUrlEditable( !grp.readEntry( "Navigator breadcrumb mode", true ) );
 
     // initialize the recent file list
@@ -600,6 +625,7 @@ void K3b::MainWindow::readOptions()
     KConfigGroup grpFileView( config(), "file view" );
     m_dirView->readConfig( grpFileView );
 
+    slotViewLockPanels( actionViewLockPanels->isChecked() );
     slotViewDocumentHeader();
 }
 
@@ -1297,6 +1323,22 @@ void K3b::MainWindow::slotShowTips()
     KTipDialog::showTip( this, QString(), true );
 }
 
+
+void K3b::MainWindow::slotViewLockPanels( bool checked )
+{
+    if( checked )
+    {
+        m_documentDock->setTitleBarWidget( d->documentDummyTitleBarWidget );
+        m_dirTreeDock->setTitleBarWidget( d->dirTreeDummyTitleBarWidget );
+        m_contentsDock->setTitleBarWidget( d->contentsDummyTitleBarWidget );
+    }
+    else
+    {
+        m_documentDock->setTitleBarWidget( 0 );
+        m_dirTreeDock->setTitleBarWidget( 0 );
+        m_contentsDock->setTitleBarWidget( 0 );
+    }
+}
 
 
 void K3b::MainWindow::slotViewDocumentHeader()

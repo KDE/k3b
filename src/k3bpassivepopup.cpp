@@ -263,7 +263,7 @@ void K3b::PassivePopup::showPopup( const QString& message,
                                  bool countdown,
                                  bool button )
 {
-    K3b::PassivePopup* pop = new K3b::PassivePopup( k3bappcore->k3bMainWindow()->centralWidget() );
+    K3b::PassivePopup* pop = new K3b::PassivePopup( k3bappcore->k3bMainWindow() );
     pop->setMessage( message );
     pop->setTitle( title );
     pop->setMessageType( messageType );

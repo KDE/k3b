@@ -99,6 +99,11 @@ namespace K3b {
         void initView();
 
         KSystemTray* systemTray() const { return m_systemTray; }
+        
+        /**
+         * Reimplemented from QMainWindow, adds "Lock Panels" action
+         */
+        virtual QMenu* createPopupMenu();
 
     public Q_SLOTS:
         K3b::Doc* slotNewAudioDoc();
@@ -202,6 +207,7 @@ namespace K3b {
          */
         void slotViewStatusBar();
 
+        void slotViewLockPanels( bool checked );
         void slotViewDocumentHeader();
 
         /** changes the statusbar contents for the standard label permanently, used to indicate current actions.
@@ -276,11 +282,13 @@ namespace K3b {
         KAction* actionToolsVideoCdRip;
         KAction* actionProjectAddFiles;
         KToggleAction* actionViewStatusBar;
+        KToggleAction* actionViewLockPanels;
         KToggleAction* actionViewDocumentHeader;
 
         // project actions
         QList<KAction*> m_dataProjectActions;
 
+        QDockWidget* m_documentDock;
         QDockWidget* m_contentsDock;
         QDockWidget* m_dirTreeDock;
 
