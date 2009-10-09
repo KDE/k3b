@@ -415,6 +415,7 @@ void K3b::IsoImager::start()
 
     initVariables();
 
+    delete m_process;
     m_process = new K3b::Process( this );
     m_process->setFlags( K3bQProcess::RawStdout );
 
