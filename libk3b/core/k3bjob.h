@@ -233,7 +233,7 @@ namespace K3b {
 
         /**
          * Call this at the end of the job to properly deregister the job and emit the finished() signal.
-         * Do never emit the started() signal manually.
+         * Do never emit the finished() signal manually.
          *
          * Always call Job::jobFinished in reimplementations.
          */
