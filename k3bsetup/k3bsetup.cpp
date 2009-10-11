@@ -187,12 +187,6 @@ void K3bSetup::load()
     // load search path
     m_editSearchPath->clear();
     m_editSearchPath->insertStringList( d->programsModel->searchPaths() );
-
-    //
-    // This is a hack to work around a kcm bug which makes the faulty assumption that
-    // every module starts without anything to apply
-    //
-    QTimer::singleShot( 0, this, SLOT(slotDataChanged()) );
 }
 
 
@@ -270,9 +264,7 @@ void K3bSetup::slotPermissionsUpdated( QStringList updated, QStringList failedTo
     kDebug() << "Objects updated: " << updated;
     kDebug() << "Objects failed to update: " << failedToUpdate;
     
-    if( failedToUpdate.isEmpty() )
-        KMessageBox::information( this, i18n("Successfully updated all permissions.") );
-    else
+    if( !failedToUpdate.isEmpty() )
         KMessageBox::errorList( this, i18n("Following devices and programs could not be updated:"), failedToUpdate );
 
     // WE MAY USE "newgrp -" to reinitialize the environment if we add users to a group

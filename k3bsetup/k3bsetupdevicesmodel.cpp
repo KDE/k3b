@@ -36,14 +36,14 @@ class DevicesModel::Private
 {
 public:
     Device::DeviceManager* deviceManager;
-    QSet<Device::Device*> unselectedDevices;
+    QSet<Device::Device*> selectedDevices;
     QString burningGroup;
 
-    bool needChangePermissions( const K3b::Device::Device* device );
+    bool needChangePermissions( const Device::Device* device );
 };
 
 
-bool DevicesModel::Private::needChangePermissions( const K3b::Device::Device* device )
+bool DevicesModel::Private::needChangePermissions( const Device::Device* device )
 {
     struct stat s;
     if( ::stat( QFile::encodeName( device->blockDeviceName() ), &s ) == 0 ) {
@@ -68,7 +68,7 @@ DevicesModel::DevicesModel( QObject* parent )
     QAbstractItemModel( parent ),
     d( new Private )
 {
-    d->deviceManager = new K3b::Device::DeviceManager( this );
+    d->deviceManager = new Device::DeviceManager( this );
     d->deviceManager->scanBus();
     connect( d->deviceManager, SIGNAL(changed()), this, SLOT(update()) );
 }
@@ -82,7 +82,7 @@ DevicesModel::~DevicesModel()
 
 void DevicesModel::load( const KConfig& config )
 {
-    d->unselectedDevices.clear();
+    d->selectedDevices.clear();
     d->deviceManager->readConfig( config.group( "Devices" ) );
     reset();
 }
@@ -90,7 +90,7 @@ void DevicesModel::load( const KConfig& config )
 
 void DevicesModel::defaults()
 {
-    d->unselectedDevices.clear();
+    d->selectedDevices.clear();
     reset();
 }
 
@@ -104,10 +104,9 @@ void DevicesModel::save( KConfig& config ) const
 QStringList DevicesModel::selectedDevices() const
 {
     QStringList deviceNodes;
-    Q_FOREACH( Device::Device* device, d->deviceManager->allDevices() )
+    Q_FOREACH( Device::Device* device, d->selectedDevices )
     {
-        if( !d->unselectedDevices.contains( device ) && d->needChangePermissions( device ) )
-            deviceNodes.push_back( device->blockDeviceName() );
+        deviceNodes.push_back( device->blockDeviceName() );
     }
     return deviceNodes;
 }
@@ -184,8 +183,11 @@ QVariant DevicesModel::data( const QModelIndex& index, int role ) const
             }
         }
     }
-    else if( role == Qt::CheckStateRole && index.column() == 0 ) {
-        return d->unselectedDevices.contains( device ) ? Qt::Unchecked : Qt::Checked;
+    else if( role == Qt::CheckStateRole && index.column() == 0 && d->needChangePermissions( device ) ) {
+        if( d->selectedDevices.contains( device ) )
+            return Qt::Checked;
+        else
+            return Qt::Unchecked;
     }
     else
         return QVariant();
@@ -197,13 +199,13 @@ bool DevicesModel::setData( const QModelIndex& index, const QVariant& value, int
     if( Device::Device* device = deviceForIndex( index ) )
     {
         if( role == Qt::CheckStateRole ) {
-            if( value.toInt() == Qt::Checked && d->unselectedDevices.contains( device ) ) {
-                d->unselectedDevices.remove( device );
+            if( value.toInt() == Qt::Unchecked && d->selectedDevices.contains( device ) ) {
+                d->selectedDevices.remove( device );
                 emit dataChanged( index, index );
                 return true;
             }
-            else if( value.toInt() == Qt::Unchecked && !d->unselectedDevices.contains( device ) ) {
-                d->unselectedDevices.insert( device );
+            else if( value.toInt() == Qt::Checked && !d->selectedDevices.contains( device ) ) {
+                d->selectedDevices.insert( device );
                 emit dataChanged( index, index );
                 return true;
             }
@@ -215,10 +217,13 @@ bool DevicesModel::setData( const QModelIndex& index, const QVariant& value, int
 
 Qt::ItemFlags DevicesModel::flags( const QModelIndex& index ) const
 {
-    if( index.isValid() && index.column() != 0 )
-        return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-    else if( index.isValid() && index.column() == 0 )
-        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+    if( Device::Device* device = deviceForIndex( index ) )
+    {
+        if( index.column() == 0 && d->needChangePermissions( device ) )
+            return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+        else
+            return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    }
     else
         return 0;
 }
@@ -284,6 +289,17 @@ void DevicesModel::setBurningGroup( const QString& burningGroup )
 {
     if( burningGroup != d->burningGroup ) {
         d->burningGroup = burningGroup;
+        
+        // Remove from the selected list all devices
+        // whose permissions don't need to be changed anymore
+        for( QSet<Device::Device*>::iterator device = d->selectedDevices.begin();
+             device != d->selectedDevices.end(); )
+        {
+            if( !d->needChangePermissions( *device ) )
+                device = d->selectedDevices.erase( device );
+            else
+                ++device;
+        }
         reset();
     }
 }
@@ -294,7 +310,7 @@ void DevicesModel::update()
     // Remove from unselected devices list all devices
     // that are not present anymore in device manager
     QSet<Device::Device*> devices = d->deviceManager->allDevices().toSet();
-    d->unselectedDevices.intersect( devices );
+    d->selectedDevices.intersect( devices );
     reset();
 }
 

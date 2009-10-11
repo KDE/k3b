@@ -77,7 +77,7 @@ public:
     ExternalBinManager* externalBinManager;
     QString burningGroup;
     QList<const ExternalBin*> programs;
-    QSet<const ExternalBin*> unselectedPrograms;
+    QSet<const ExternalBin*> selectedPrograms;
 
     void buildProgramList();
     bool getProgramInfo( const ExternalBin* program,
@@ -171,7 +171,7 @@ ProgramsModel::~ProgramsModel()
 
 void ProgramsModel::load( const KConfig& config )
 {
-    d->unselectedPrograms.clear();
+    d->selectedPrograms.clear();
     d->externalBinManager->readConfig( config.group( "External Programs" ) );
     d->buildProgramList();
     reset();
@@ -186,7 +186,7 @@ void ProgramsModel::save( KConfig& config ) const
 
 void ProgramsModel::defaults()
 {
-    d->unselectedPrograms.clear();
+    d->selectedPrograms.clear();
     d->buildProgramList();
     reset();
 }
@@ -195,12 +195,10 @@ void ProgramsModel::defaults()
 QList<ProgramItem> ProgramsModel::selectedPrograms() const
 {
     QList<ProgramItem> selectedPrograms;
-    Q_FOREACH( const ExternalBin* program, d->programs )
+    Q_FOREACH( const ExternalBin* program, d->selectedPrograms )
     {
-        if( !d->unselectedPrograms.contains( program ) && d->needChangePermissions( program ) )
-        {
+        if( d->needChangePermissions( program ) )
             selectedPrograms << ProgramItem( program->path, shouldRunSuidRoot( program ) );
-        }
     }
     return selectedPrograms;
 }
@@ -269,8 +267,11 @@ QVariant ProgramsModel::data( const QModelIndex& index, int role ) const
                 }
             }
         }
-        else if( role == Qt::CheckStateRole && index.column() == 0 ) {
-            return d->unselectedPrograms.contains( program ) ? Qt::Unchecked : Qt::Checked;
+        else if( role == Qt::CheckStateRole && index.column() == 0 && d->needChangePermissions( program ) ) {
+            if( d->selectedPrograms.contains( program ) )
+                return Qt::Checked;
+            else
+                return Qt::Unchecked;
         }
     }
     return QVariant();
@@ -281,13 +282,13 @@ bool ProgramsModel::setData( const QModelIndex& index, const QVariant& value, in
 {
     if( role == Qt::CheckStateRole ) {
         if( const ExternalBin* program = programForIndex( index ) ) {
-            if( value.toInt() == Qt::Checked && d->unselectedPrograms.contains( program ) ) {
-                d->unselectedPrograms.remove( program );
+            if( value.toInt() == Qt::Unchecked && d->selectedPrograms.contains( program ) ) {
+                d->selectedPrograms.remove( program );
                 emit dataChanged( index, index );
                 return true;
             }
-            else if( value.toInt() == Qt::Unchecked && !d->unselectedPrograms.contains( program ) ) {
-                d->unselectedPrograms.insert( program );
+            else if( value.toInt() == Qt::Checked && !d->selectedPrograms.contains( program ) ) {
+                d->selectedPrograms.insert( program );
                 emit dataChanged( index, index );
                 return true;
             }
@@ -299,10 +300,13 @@ bool ProgramsModel::setData( const QModelIndex& index, const QVariant& value, in
 
 Qt::ItemFlags ProgramsModel::flags( const QModelIndex& index ) const
 {
-    if( index.isValid() && index.column() != 0 )
-        return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-    else if( index.isValid() && index.column() == 0 )
-        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+    if( const ExternalBin* program = programForIndex( index ) )
+    {
+        if( index.column() == 0 && d->needChangePermissions( program ) )
+            return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+        else
+            return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    }
     else
         return 0;
 }
@@ -367,6 +371,17 @@ void ProgramsModel::setBurningGroup( const QString& burningGroup )
 {
     if( burningGroup != d->burningGroup ) {
         d->burningGroup = burningGroup;
+        
+        // Remove from the selected list all programs
+        // whose permissions don't need to be changed anymore
+        for( QSet<const ExternalBin*>::iterator program = d->selectedPrograms.begin();
+             program != d->selectedPrograms.end(); )
+        {
+            if( !d->needChangePermissions( *program ) )
+                program = d->selectedPrograms.erase( program );
+            else
+                ++program;
+        }
         reset();
     }
 }
@@ -382,7 +397,7 @@ void ProgramsModel::setSearchPaths( const QStringList& searchPaths )
 void ProgramsModel::update()
 {
     d->buildProgramList();
-    d->unselectedPrograms.intersect( d->programs.toSet() );
+    d->selectedPrograms.intersect( d->programs.toSet() );
     reset();
 }
 
