@@ -18,23 +18,25 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bglobals.h"
 
-#include <kconfig.h>
-#include <kdebug.h>
+#include <KConfig>
+#include <KDebug>
 #include <kio/global.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
-#include <ktemporaryfile.h>
-#include <kurl.h>
-#include <kprocess.h>
+#include <KLocale>
+#include <KProcess>
+#include <KStandardDirs>
+#include <KTemporaryFile>
+#include <KUrl>
 
-#include <qdatetime.h>
-#include <qdom.h>
-#include <qfile.h>
-#include <qstring.h>
-#include <qregexp.h>
-#include <qtimer.h>
-#include <q3url.h>
+#include <QDateTime>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QDomNode>
+#include <QFile>
 #include <QList>
+#include <QRegExp>
+#include <QString>
+#include <QTimer>
+
 
 K3b::VideoCdRip::VideoCdRip( K3b::JobHandler* hdl, K3b::VideoCdRippingOptions* options, QObject* parent )
   : K3b::Job( hdl, parent ),
@@ -50,7 +52,6 @@ K3b::VideoCdRip::~VideoCdRip()
 {
     if ( m_process )
         delete m_process;
-
 }
 
 
@@ -156,7 +157,7 @@ void K3b::VideoCdRip::vcdxRip()
     connect( m_process, SIGNAL( finished( int, QProcess::ExitStatus ) ),
              this, SLOT( slotVcdXRipFinished( int, QProcess::ExitStatus ) ) );
 
-    m_process->setWorkingDirectory( Q3Url( m_videooptions ->getVideoCdDestination() ).path() );
+    m_process->setWorkingDirectory( m_videooptions ->getVideoCdDestination() );
 
     // vcdxrip commandline parameters
     kDebug() << "***** vcdxrip parameters:";
@@ -171,7 +172,7 @@ void K3b::VideoCdRip::vcdxRip()
     emit infoMessage( i18n( "Extract files from %1 to %2." , m_videooptions ->getVideoCdSource() , m_videooptions ->getVideoCdDestination() ), K3b::Job::MessageInfo );
 
     m_process->start();
-    if ( !m_process->waitForFinished(-1) ) {
+    if ( !m_process->waitForStarted() ) {
         kDebug() << "(K3b::VideoCdRip) could not start vcdxrip";
         emit infoMessage( i18n( "Could not start %1." , QString("vcdxrip") ), K3b::Job::MessageError );
         cancelAll();

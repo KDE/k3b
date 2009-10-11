@@ -23,26 +23,25 @@
 #include "k3bstdguiitems.h"
 
 // kde include
-#include <klocale.h>
-#include <kapplication.h>
-#include <kconfig.h>
-#include <kurlrequester.h>
-#include <kdebug.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
+#include <KApplication>
+#include <KConfig>
+#include <KDebug>
+#include <KLocale>
+#include <KMessageBox>
+#include <KStandardDirs>
+#include <KUrlRequester>
 
 // qt includes
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qtimer.h>
-#include <qlayout.h>
-#include <qtooltip.h>
-
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qstringlist.h>
+#include <QCheckBox>
+#include <QDir>
+#include <QFileInfo>
 #include <QGridLayout>
-#include <kvbox.h>
+#include <QLabel>
+#include <QLayout>
+#include <QStringList>
+#include <QTimer>
+#include <QToolTip>
+#include <KVBox>
 
 
 K3b::VideoCdRippingDialog::VideoCdRippingDialog( K3b::VideoCdRippingOptions* options, QWidget* parent )
@@ -151,10 +150,10 @@ void K3b::VideoCdRippingDialog::slotStartClicked()
     QDir d;
     d.setPath( m_editDirectory ->url().toLocalFile() );
     if( !d.exists() ) {
-        if( KMessageBox::warningYesNo( this, i18n("Image folder '%1' does not exist. Do you want K3b to create it?", m_editDirectory->url().url() ) )
+        if( KMessageBox::warningYesNo( this, i18n("Image folder '%1' does not exist. Do you want K3b to create it?", m_editDirectory->url().toLocalFile() ) )
             == KMessageBox::Yes ) {
-            if( !KStandardDirs::makeDir( m_editDirectory->url().url() ) ) {
-                KMessageBox::error( this, i18n("Failed to create folder '%1'.", m_editDirectory->url().url() ) );
+            if( !KStandardDirs::makeDir( m_editDirectory->url().toLocalFile() ) ) {
+                KMessageBox::error( this, i18n("Failed to create folder '%1'.", m_editDirectory->url().toLocalFile() ) );
                 return;
             }
         }
@@ -178,16 +177,13 @@ void K3b::VideoCdRippingDialog::slotStartClicked()
     m_videooptions ->setVideoCdIgnoreExt( m_ignoreExt ->isChecked() );
     m_videooptions ->setVideoCdSector2336( m_sector2336 ->isChecked() );
     m_videooptions ->setVideoCdExtractXml( m_extractXML ->isChecked() );
-    m_videooptions ->setVideoCdDestination( m_editDirectory ->url().url() );
+    m_videooptions ->setVideoCdDestination( m_editDirectory ->url().toLocalFile() );
 
-    K3b::JobProgressDialog ripDialog( kapp->activeWindow(), "Ripping" );
-    K3b::VideoCdRip * rip = new K3b::VideoCdRip( &ripDialog, m_videooptions );
+    K3b::JobProgressDialog dlg( parentWidget(), "Ripping" );
+    K3b::VideoCdRip* job = new K3b::VideoCdRip( &dlg, m_videooptions, &dlg );
 
     hide();
-    ripDialog.startJob( rip );
-
-    delete rip;
-
+    dlg.startJob( job );
     close();
 }
 
