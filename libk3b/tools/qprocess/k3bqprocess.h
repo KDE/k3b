@@ -209,6 +209,7 @@ private:
     Q_PRIVATE_SLOT(d_func(), bool _q_canWrite())
     Q_PRIVATE_SLOT(d_func(), bool _q_startupNotification())
     Q_PRIVATE_SLOT(d_func(), bool _q_processDied())
+    Q_PRIVATE_SLOT(d_func(), bool _q_notifyProcessDied())
     Q_PRIVATE_SLOT(d_func(), void _q_notified())
     friend class K3bQProcessManager;
 };

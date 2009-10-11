@@ -680,7 +680,6 @@ bool K3bQProcessPrivate::_q_canWrite()
 */
 bool K3bQProcessPrivate::_q_processDied()
 {
-    Q_Q(K3bQProcess);
 #if defined QPROCESS_DEBUG
     qDebug("K3bQProcessPrivate::_q_processDied()");
 #endif
@@ -700,6 +699,28 @@ bool K3bQProcessPrivate::_q_processDied()
         if (!_q_startupNotification())
             return true;
     }
+    
+    return _q_notifyProcessDied();
+}
+
+bool K3bQProcessPrivate::_q_notifyProcessDied()
+{
+    Q_Q(K3bQProcess);
+#if defined QPROCESS_DEBUG
+    qDebug("K3bQProcessPrivate::_q_notifyProcessDied()");
+#endif
+
+    if ( processFlags&K3bQProcess::RawStdout ) {
+        qint64 bytes = bytesAvailableFromStdout();
+#if defined QPROCESS_DEBUG
+        qDebug() << "bytesAvailableFromStdout:" << bytes;
+#endif
+        // wait for all data to be read
+        if ( bytes > 0 ) {
+            QMetaObject::invokeMethod( q, "_q_notifyProcessDied", Qt::QueuedConnection );
+            return false;
+        }
+    }
 
     if (dying) {
         // at this point we know the process is dead. prevent
@@ -709,22 +730,14 @@ bool K3bQProcessPrivate::_q_processDied()
         return true;
     }
     dying = true;
-
+    
     // in case there is data in the pipe line and this slot by chance
     // got called before the read notifications, call these two slots
     // so the data is made available before the process dies.
-    if ( processFlags&K3bQProcess::RawStdout ) {
-        // wait for all data to be read
-        if ( bytesAvailableFromStdout() > 0 ) {
-            QMetaObject::invokeMethod( q, "_q_processDied", Qt::QueuedConnection );
-            return false;
-        }
-    }
-    else {
+    if ( !processFlags.testFlag( K3bQProcess::RawStdout ) ) {
         _q_canReadStandardOutput();
     }
     _q_canReadStandardError();
-
     findExitCode();
 
     if (crashed) {
@@ -749,7 +762,7 @@ bool K3bQProcessPrivate::_q_processDied()
         emit q->finished(exitCode, exitStatus);
     }
 #if defined QPROCESS_DEBUG
-    qDebug("K3bQProcessPrivate::_q_processDied() process is dead");
+    qDebug("K3bQProcessPrivate::_q_notifyProcessDied() process is dead");
 #endif
     return true;
 }

@@ -141,6 +141,7 @@ public:
     bool _q_canWrite();
     bool _q_startupNotification();
     bool _q_processDied();
+    bool _q_notifyProcessDied();
     void _q_notified();
 
     ::QProcess::ProcessChannel processChannel;
