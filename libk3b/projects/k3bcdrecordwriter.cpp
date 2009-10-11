@@ -38,6 +38,9 @@
 #include <ktemporaryfile.h>
 
 
+Q_DECLARE_METATYPE( QProcess::ExitStatus )
+
+
 class K3b::CdrecordWriter::Private
 {
 public:
@@ -108,6 +111,7 @@ K3b::CdrecordWriter::CdrecordWriter( K3b::Device::Device* dev, K3b::JobHandler* 
     connect( &d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
 
     // we use a queued connection to give the process object time to wrap up and return to a correct state
+    qRegisterMetaType<QProcess::ExitStatus>();
     connect( &d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotProcessExited(int, QProcess::ExitStatus)), Qt::QueuedConnection );
 }
 
