@@ -51,44 +51,49 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout">
-          <item>
-           <spacer name="spacer1">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>10</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QLabel" name="textLabel2">
-            <property name="text">
-             <string>Users allowed to burn (separated by space):</string>
-            </property>
-            <property name="wordWrap">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="KLineEdit" name="m_editUsers">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="showClearButton" stdset="0">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <widget class="QFrame" name="m_frameUsers">
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="margin">
+            <number>0</number>
+           </property>
+           <item>
+            <spacer name="spacer1">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>10</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="textLabel2">
+             <property name="text">
+              <string>Users allowed to burn (separated by space):</string>
+             </property>
+             <property name="wordWrap">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KLineEdit" name="m_editUsers">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="showClearButton" stdset="0">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -130,6 +135,9 @@
        <layout class="QVBoxLayout">
         <item>
          <widget class="QTabWidget" name="tabWidget2">
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
           <widget class="QWidget" name="tab">
            <attribute name="title">
             <string>Found Programs</string>

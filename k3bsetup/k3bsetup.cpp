@@ -103,8 +103,7 @@ K3bSetup::K3bSetup( QWidget *parent, const QVariantList& )
     setupUi( w );
 
     // TODO: enable this and let root specify users
-    m_editUsers->hide();
-    textLabel2->hide();
+    m_frameUsers->hide();
 
     box->addWidget( label );
     box->addWidget( w );
