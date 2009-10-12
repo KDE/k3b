@@ -1,5 +1,5 @@
 [Desktop Entry]
-X-KDE-Solid-Predicate=[[StorageVolume.ignored == false AND OpticalDisc.blank == true ] AND OpticalDisc.discType == 'CdRecordable|CdRewritable']
+X-KDE-Solid-Predicate=[[StorageVolume.ignored == false AND OpticalDisc.blank == true ] AND [OpticalDisc.discType == 'CdRecordable' OR OpticalDisc.discType == 'CdRewritable']]
 Actions=K3bAudioCDProject;
 Type=Service
 X-KDE-Priority=TopLevel
