@@ -556,7 +556,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
 
             // the user may be using cdrdao for erasing as cdrecord does not work
             int erasingApp = K3b::WritingAppAuto;
-            if( KGlobal::config()->group( "General Options" ).readEntry( "Manual writing app selection", false ) ) {
+            if( KGlobal::config()->group( "General Options" ).readEntry( "Show advanced GUI", false ) ) {
                 erasingApp = K3b::writingAppFromString( KGlobal::config()->group( "CDRW Erasing" ).readEntry( "writing_app" ) );
             }
 

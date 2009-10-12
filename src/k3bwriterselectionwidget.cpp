@@ -451,7 +451,7 @@ int K3b::WriterSelectionWidget::writerSpeed() const
 K3b::WritingApp K3b::WriterSelectionWidget::writingApp() const
 {
     KConfigGroup g( KGlobal::config(), "General Options" );
-    if( g.readEntry( "Manual writing app selection", false ) ) {
+    if( g.readEntry( "Show advanced GUI", false ) ) {
         return selectedWritingApp();
     }
     else
@@ -508,6 +508,8 @@ void K3b::WriterSelectionWidget::setSupportedWritingApps( K3b::WritingApps i )
 void K3b::WriterSelectionWidget::slotRefreshWritingApps()
 {
     K3b::WritingApps i = 0;
+    
+    int lastSelected = m_comboWritingApp->selectedValue();
 
     // select the ones that make sense
     if( k3bappcore->mediaCache()->diskInfo( writerDevice() ).isDvdMedia() )
@@ -531,6 +533,8 @@ void K3b::WriterSelectionWidget::slotRefreshWritingApps()
         m_comboWritingApp->insertItem( K3b::WritingAppGrowisofs, "growisofs" );
     if( i & K3b::WritingAppDvdRwFormat )
         m_comboWritingApp->insertItem( K3b::WritingAppDvdRwFormat, "dvd+rw-format" );
+    
+    m_comboWritingApp->setSelectedValue( lastSelected );
 
     m_comboWritingApp->setEnabled( writerDevice() != 0 );
 }
