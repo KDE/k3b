@@ -51,7 +51,7 @@ bool K3b::Device::Device::getFeature( unsigned char** data, unsigned int& dataLe
 
     // we only read the data length first
     dataLen = 8;
-    if( cmd.transport( TR_DIR_READ, header, 8 ) )
+    if( !cmd.transport( TR_DIR_READ, header, 8 ) )
         dataLen = from4Byte( header ) + 4;
     else
         kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": GET CONFIGURATION length det failed.";
