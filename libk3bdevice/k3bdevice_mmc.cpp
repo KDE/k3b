@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -183,9 +183,9 @@ bool K3b::Device::Device::getPerformance( unsigned char** data, unsigned int& da
         break;
     }
 
-    unsigned char header[24];
-    ::memset( header, 0, 24 );
-    dataLen = 24;
+    dataLen = descLen + 8;
+    unsigned char header[dataLen];
+    ::memset( header, 0, dataLen );
 
     ScsiCommand cmd( this );
     cmd[0] = MMC_GET_PERFORMANCE;
@@ -197,7 +197,7 @@ bool K3b::Device::Device::getPerformance( unsigned char** data, unsigned int& da
     cmd[9] = 1;      // first we read one descriptor
     cmd[10] = type;
     cmd[11] = 0;     // Necessary to set the proper command length
-    if( cmd.transport( TR_DIR_READ, header, 24 ) ) {
+    if( cmd.transport( TR_DIR_READ, header, dataLen ) ) {
         kDebug() << "(K3b::Device::Device) " << blockDeviceName()
                  << ": GET PERFORMANCE length det failed." << endl;
         return false;
