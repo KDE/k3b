@@ -105,11 +105,13 @@ namespace K3b {
 
         QString m_tempPath;
         QString m_cueFile;
-        QString m_xmlFile;
         QString m_collectedOutput;
 
         AbstractWriter* m_writerJob;
         Process* m_process;
+        
+        class Private;
+        Private* d;
     };
 }
 

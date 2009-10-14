@@ -46,9 +46,19 @@
 #include "k3bdevicehandler.h"
 
 
-K3b::VcdJob::VcdJob( K3b::VcdDoc* doc, K3b::JobHandler* jh, QObject* parent )
-    : K3b::BurnJob( jh, parent )
+class K3b::VcdJob::Private
 {
+public:
+    KTemporaryFile* xmlFile;
+};
+
+
+K3b::VcdJob::VcdJob( K3b::VcdDoc* doc, K3b::JobHandler* jh, QObject* parent )
+    : K3b::BurnJob( jh, parent ),
+      d( new Private )
+{
+    d->xmlFile = 0;
+    
     m_doc = doc;
     m_doc->setCopies( m_doc->dummy() || m_doc->onlyCreateImages() ? 1 : m_doc->copies() );
     m_process = 0;
@@ -64,6 +74,9 @@ K3b::VcdJob::VcdJob( K3b::VcdDoc* doc, K3b::JobHandler* jh, QObject* parent )
 
 K3b::VcdJob::~VcdJob()
 {
+    delete d->xmlFile;
+    delete d;
+    
     delete m_process;
 
     delete m_writerJob;
@@ -152,25 +165,26 @@ void K3b::VcdJob::start()
 
 void K3b::VcdJob::xmlGen()
 {
-    KTemporaryFile tempF;
-    tempF.open();
-    m_xmlFile = tempF.fileName();
-    tempF.remove();
+    delete d->xmlFile;
+    d->xmlFile = new KTemporaryFile;
+    
+    if( d->xmlFile->open() ) {
+        kDebug() << "(K3b::VcdJob) writing XML data to" << d->xmlFile->fileName();
 
-    K3b::VcdXmlView xmlView( m_doc );
+        K3b::VcdXmlView xmlView( m_doc );
+        xmlView.write( *d->xmlFile );
 
-    if ( !xmlView.write( m_xmlFile ) ) {
+        //    emit infoMessage( i18n( "XML-file successfully created" ), K3b::Job::MessageSuccess );
+        emit debuggingOutput( "K3b::VcdXml:", xmlView.xmlString() );
+
+        vcdxBuild();
+    }
+    else {
         kDebug() << "(K3b::VcdJob) could not write xmlfile.";
         emit infoMessage( i18n( "Could not write correct XML-file." ), K3b::Job::MessageError );
         cancelAll();
         jobFinished( false );
     }
-
-    //    emit infoMessage( i18n( "XML-file successfully created" ), K3b::Job::MessageSuccess );
-    emit debuggingOutput( "K3b::VcdXml:", xmlView.xmlString() );
-
-    vcdxBuild();
-
 }
 
 void K3b::VcdJob::vcdxBuild()
@@ -226,7 +240,7 @@ void K3b::VcdJob::vcdxBuild()
 
     *m_process << QString( "--bin-file=%1" ).arg( m_doc->vcdImage() );
 
-    *m_process << m_xmlFile;
+    *m_process << d->xmlFile->fileName();
 
     connect( m_process, SIGNAL(stdoutLine(QString)),
              this, SLOT(slotParseVcdxBuildOutput(QString)) );
@@ -356,9 +370,8 @@ void K3b::VcdJob::slotVcdxBuildFinished( int exitCode, QProcess::ExitStatus exit
     }
 
     //remove xml-file
-    if ( QFile::exists( m_xmlFile ) )
-        QFile::remove
-            ( m_xmlFile );
+    delete d->xmlFile;
+    d->xmlFile = 0;
 
     kDebug() << QString( "(K3b::VcdJob) create only image: %1" ).arg( vcdDoc() ->onlyCreateImages() );
     if ( !vcdDoc() ->onlyCreateImages() )

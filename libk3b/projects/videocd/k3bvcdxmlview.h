@@ -16,11 +16,11 @@
 #ifndef K3B_VCD_XMLVIEW_H
 #define K3B_VCD_XMLVIEW_H
 
-#include <qstring.h>
-#include <qdom.h>
-#include <ktemporaryfile.h>
+#include <QString>
 
 #include "k3bvcddoc.h"
+
+class QFile;
 
 namespace K3b {
     class VcdTrack;
@@ -29,29 +29,15 @@ namespace K3b {
     {
 
     public:
-        VcdXmlView( VcdDoc* );
+        VcdXmlView( VcdDoc* doc );
         ~VcdXmlView();
 
-        bool write( const QString& );
-        QString xmlString()
-        {
-            return m_xmlstring;
-        }
+        void write( QFile& file );
+        const QString& xmlString() const;
 
     private:
-        QString m_xmlstring;
-
-        void addComment( QDomDocument& doc, QDomElement& parent, const QString& text );
-        QDomElement addSubElement( QDomDocument&, QDomElement&, const QString& name, const QString& value = QString() );
-        QDomElement addSubElement( QDomDocument&, QDomElement&, const QString& name, const int& value );
-
-        QDomElement addFolderElement( QDomDocument&, QDomElement&, const QString& name );
-        void addFileElement( QDomDocument&, QDomElement&, const QString& src, const QString& name, bool mixed = false );
-        void doPbc( QDomDocument&, QDomElement&, VcdTrack* );
-        void setNumkeyBSN( QDomDocument& , QDomElement&, VcdTrack* );
-        void setNumkeySEL( QDomDocument& , QDomElement&, VcdTrack* );
-        VcdDoc* m_doc;
-        int m_startkey;
+        class Private;
+        Private* d;
     };
 }
 
