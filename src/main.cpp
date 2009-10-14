@@ -52,6 +52,7 @@ int main( int argc, char* argv[] )
                           ki18n("(C) 1998 - 2009 Sebastian Trüg"), KLocalizedString(), I18N_NOOP("http://www.k3b.org" ));
 
     aboutData.addAuthor(ki18n("Sebastian Trüg"),ki18n("Maintainer and Lead Developer"), "trueg@k3b.org");
+    aboutData.addAuthor(ki18n("Michał Małek"),ki18n("Developer"), "michalm@jabster.pl");
     aboutData.addAuthor(ki18n("Christian Kvasny"),ki18n("VideoCD Project and VideoCD ripping"), "chris@k3b.org");
     aboutData.addAuthor(ki18n("Montel Laurent"), ki18n("Initial port to KDE 4"), "montel@kde.org");
     aboutData.addAuthor( ki18n("Ralf Habacker"), ki18n( "Windows port" ), "ralf.habacker@freenet.de" );
