@@ -259,7 +259,7 @@ void K3b::VideoDVDTitleDetectClippingJob::slotTranscodeExited( int exitCode, QPr
                 m_clippingTop = m_clippingLeft = m_clippingBottom = m_clippingRight = 0;
 
             if( d->totalChapters < m_dvd[m_titleNumber-1].numPTTs() )
-                emit infoMessage( i18n("Ignoring last chapter due to its short playback time."), MessageInfo );
+                emit infoMessage( i18n("Ignoring clipping values of last chapter due to its short playback time."), MessageInfo );
 
             jobFinished( true );
         }
