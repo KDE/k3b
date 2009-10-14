@@ -13,7 +13,7 @@
  */
 
 #include "k3bmediumdelegate.h"
-#include "k3bmedium.h"f
+#include "k3bmedium.h"
 
 #include <QtGui/QPainter>
 #include <QtCore/QModelIndex>
