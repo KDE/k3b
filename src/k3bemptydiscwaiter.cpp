@@ -196,7 +196,7 @@ int K3b::EmptyDiscWaiter::exec()
 
 void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
 {
-    kDebug() << "(K3b::EmptyDiscWaiter) slotMediumChanged() ";
+    kDebug() << dev->blockDeviceName();
     if( d->canceled || d->device != dev )
         return;
 
