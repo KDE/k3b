@@ -82,7 +82,7 @@ bool K3b::VcdDoc::newDocument()
 void K3b::VcdDoc::clear()
 {
     if ( m_tracks )
-        while ( m_tracks->first() )
+        while ( !m_tracks->isEmpty() )
             removeTrack( m_tracks->first() );
 }
 
