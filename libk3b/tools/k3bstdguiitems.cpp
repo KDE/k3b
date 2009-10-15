@@ -123,7 +123,7 @@ QCheckBox* K3b::StdGuiItems::cdTextCheckbox( QWidget* parent )
                           "<p>CD-TEXT is an extension to the audio CD standard introduced by Sony."
                           "<p>CD-TEXT will only be usable on CD players that support this extension "
                           "(mostly car CD players)."
-                          "<p>Since a CD-TEXT-enhanced CDs will work in any CD player it is never a bad "
+                          "<p>Since a CD-TEXT-enhanced CD will work in any CD player it is never a bad "
                           "idea to enable this (if you specify CD-TEXT data.)") );
     return c;
 }

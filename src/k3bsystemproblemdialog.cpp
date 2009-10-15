@@ -236,7 +236,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                         "stability of the burning process. As well as this, "
                                                         "it allows the size of the burning buffer to be changed, "
                                                         "and a lot of user problems can be solved this way. This is also "
-                                                        "true when using SuSE's resmgr."),
+                                                        "true when using SUSE's resmgr."),
                                                    QString(),
                                                    true ) );
 #endif // CDRECORD_SUID_ROOT_CHECK
@@ -517,7 +517,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                            i18n("To enable Mp3 support, please install the MAD Mp3 decoding library as well as the "
                                                 "K3b MAD Mp3 decoder plugin (the latter may already be installed but not functional "
                                                 "due to the missing libmad). Some distributions allow installation of Mp3 support "
-                                                "via an online update tool (e.g. SuSE's YOU)."),
+                                                "via an online update tool (e.g. SUSE's YOU)."),
                                            false ) );
     }
 

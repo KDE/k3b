@@ -38,11 +38,11 @@
 
 static const char* description = I18N_NOOP("<p>K3b is a full-featured <b>CD/DVD/Blu-Ray burning and ripping application</b>.<br/>"
                                            "It supports a variety of project types as well as <i>copying</i> of optical media, "
-                                           "burning if different types of <i>images</i>, and <i>ripping</i> Audio CDs, Video CDs, and "
+                                           "burning of different types of <i>images</i>, and <i>ripping</i> Audio CDs, Video CDs, and "
                                            "Video DVDs.<br/>"
                                            "Its <i>convenient user interface</i> is targetted at all audiences, trying "
                                            "to be <i>as simple as possible</i> for novice users while also providing all features "
-                                           "and <i>advanced user</i> might need.");
+                                           "an <i>advanced user</i> might need.");
 
 
 int main( int argc, char* argv[] )
