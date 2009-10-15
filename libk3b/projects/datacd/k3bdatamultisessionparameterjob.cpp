@@ -131,6 +131,7 @@ bool K3b::DataMultiSessionParameterJob::run()
             }
 
             if ( !setupMultiSessionParameters() ) {
+                cancel();
                 return false;
             }
         }
