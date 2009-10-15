@@ -220,6 +220,13 @@ bool K3b::DataMultiSessionParameterJob::setupMultiSessionParameters()
 {
     K3b::Device::DiskInfo info = d->doc->burner()->diskInfo();
     K3b::Device::Toc toc = d->doc->burner()->readToc();
+    
+    if( toc.isEmpty() )
+    {
+        emit infoMessage( i18n("No medium inserted or an empty medium in %1. Cannot continue multisession disk.",
+                               d->doc->burner()->vendor() + " " + d->doc->burner()->description() ), K3b::Job::MessageError );
+        return false;
+    }
 
     //
     // determine the multisession import info
