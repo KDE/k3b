@@ -157,7 +157,7 @@ public:
 #ifdef Q_OS_FREEBSD
 K3b::Device::Device::Handle K3b::Device::openDevice( const char* name, bool write )
 {
-    K3b::Device::Device::Handle handle = cam_open_pass (name, O_RDWR,0 /* NULL */);
+    K3b::Device::Device::Handle handle = cam_open_device (name, O_RDWR);
         kDebug() << "(K3b::Device::openDevice) open device " << name
                  << ((handle)?" succeeded.":" failed.") << endl;
     return handle;
