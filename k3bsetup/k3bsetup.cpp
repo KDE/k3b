@@ -209,10 +209,12 @@ void K3bSetup::save()
     d->devicesModel->save( *d->config );
     d->programsModel->save( *d->config );
 
-    // Here we are trying to authorizate user. By default
-    // authorization dialog will be shown after calling this method.
-    if( !d->authAction->activate() ) {
-        QTimer::singleShot( 0, this, SLOT(slotDataChanged()) );
+    if( d->devicesModel->changesNeeded() || d->programsModel->changesNeeded() ) {
+        // Here we are trying to authorizate user. By default
+        // authorization dialog will be shown after calling this method.
+        if( !d->authAction->activate() ) {
+            QTimer::singleShot( 0, this, SLOT(slotDataChanged()) );
+        }
     }
 }
 
@@ -282,7 +284,15 @@ void K3bSetup::slotAuthFailed()
 
 void K3bSetup::slotDataChanged()
 {
-    emit changed( d->devicesModel->changesNeeded() || d->programsModel->changesNeeded() );
+    KConfigGroup grp(d->config, "General Settings" );
+    bool useBurningGroupChanged = m_checkUseBurningGroup->isChecked() != grp.readEntry( "use burning group", false );
+    bool burningGroupChanged = m_checkUseBurningGroup->isChecked() && m_editBurningGroup->text() != grp.readEntry( "burning group", "burning" );
+    
+    emit changed(
+        useBurningGroupChanged ||
+        burningGroupChanged ||
+        d->devicesModel->changesNeeded() ||
+        d->programsModel->changesNeeded() );
 }
 
 
@@ -296,6 +306,8 @@ void K3bSetup::slotBurningGroupChanged()
         d->devicesModel->setBurningGroup( QString() );
         d->programsModel->setBurningGroup( QString() );
     }
+    
+    slotDataChanged();
 }
 
 
