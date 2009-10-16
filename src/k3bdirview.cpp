@@ -55,7 +55,9 @@ public:
 
     AudioCdView* cdView;
     VideoCdView* videoView;
+#ifdef ENABLE_DVD_RIPPING
     VideoDVDRippingView* movieView;
+#endif
     FileView* fileView;
     DiskInfoView* infoView;
 
