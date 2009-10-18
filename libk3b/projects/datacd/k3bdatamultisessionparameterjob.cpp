@@ -183,11 +183,11 @@ K3b::DataDoc::MultiSessionMode K3b::DataMultiSessionParameterJob::determineMulti
             d->doc->importedSession() < 0 ) {
             return K3b::DataDoc::NONE;
         }
-        else if( d->doc->size() >= info.remainingSize().mode1Bytes()*9/10 ) {
+        else if( d->doc->size() >= info.capacity().mode1Bytes()*9/10 ) {
             return K3b::DataDoc::FINISH;
         }
         else if( info.capacity() < 2621440 /* ~ 5 GB */ &&
-                 info.size() + d->doc->burningLength() + 11400 /* used size + project size + session gap */ > 2097152 /* 4 GB */ ) {
+                    info.size() + d->doc->burningLength() + 11400 /* used size + project size + session gap */ > 2097152 /* 4 GB */ ) {
             return K3b::DataDoc::FINISH;
         }
         else {

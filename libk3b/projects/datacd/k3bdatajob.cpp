@@ -839,15 +839,19 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
             if( d->doc->writingMode() != K3b::WritingModeAuto && d->doc->writingMode() != K3b::WritingModeRestrictedOverwrite )
                 emit infoMessage( i18n("Writing mode ignored when writing DVD+R(W) media."), MessageInfo );
             d->usedWritingMode = K3b::WritingModeSao; // since cdrecord uses -sao for DVD+R(W)
-
+            
+            // Cdrecord doesn't support multisession DVD+R(W) disks
+            if( usedMultiSessionMode() != DataDoc::NONE &&
+                d->usedWritingApp == K3b::WritingAppCdrecord ) {
+                d->usedWritingApp = WritingAppGrowisofs;
+            }
+            
             if( foundMedium & K3b::Device::MEDIA_DVD_PLUS_RW ) {
                 if( usedMultiSessionMode() == K3b::DataDoc::NONE ||
                     usedMultiSessionMode() == K3b::DataDoc::START )
                     emit infoMessage( i18n("Writing DVD+RW."), MessageInfo );
                 else {
                     emit infoMessage( i18n("Growing ISO9660 filesystem on DVD+RW."), MessageInfo );
-                    // we can only do this with growisofs
-                    d->usedWritingApp = K3b::WritingAppGrowisofs;
                 }
             }
             else if( foundMedium & K3b::Device::MEDIA_DVD_PLUS_R_DL )
