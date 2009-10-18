@@ -25,7 +25,7 @@
 
 K3b::IsoOptions::IsoOptions()
     : m_volumeID( i18n( "K3b data project" ) ),
-      m_applicationID( QString("K3B THE CD KREATOR (C) 1998-2007 SEBASTIAN TRUEG") ),
+      m_applicationID( QString("K3B THE CD KREATOR (C) 1998-2009 SEBASTIAN TRUEG") ),
       m_systemId( K3b::systemName().toUpper() ),
       m_whiteSpaceTreatmentReplaceString( "_" )
 {

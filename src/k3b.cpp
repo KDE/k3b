@@ -336,12 +336,6 @@ void K3b::MainWindow::initActions()
                                                 "settings_k3bsetup" );
 #endif
 
-#ifdef K3B_DEBUG
-    (void)K3b::createAction(this, "Test Media Selection ComboBox", 0, 0, this,
-                            SLOT(slotMediaSelectionTester()), actionCollection(),
-                            "test_media_selection" );
-#endif
-
     actionFileNewMenu->setToolTip(i18n("Creates a new project"));
     actionFileNewData->setToolTip( i18n("Creates a new data project") );
     actionFileNewAudio->setToolTip( i18n("Creates a new audio CD project") );
