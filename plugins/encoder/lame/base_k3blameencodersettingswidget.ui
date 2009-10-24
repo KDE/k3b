@@ -381,7 +381,7 @@
              <string>Enforce strict ISO compliance</string>
             </property>
             <property name="whatsThis" >
-             <string>&lt;p>If this option is checked LAME will enforce the 7680 bit limitation on total frame size.&lt;br>
+             <string>&lt;p>If this option is checked, LAME will enforce the 7680 bit limitation on total frame size.&lt;br>
 This results in many wasted bits for high bitrate encodings but will ensure strict ISO compatibility. This compatibility might be important for hardware players.</string>
             </property>
             <property name="text" >
@@ -395,7 +395,7 @@ This results in many wasted bits for high bitrate encodings but will ensure stri
              <string>Turn on CRC error protection.</string>
             </property>
             <property name="whatsThis" >
-             <string>&lt;p>If this option is checked a cyclic redundancy check (CRC) code will be added to each frame, allowing transmission errors that could occur on the MP3 stream to be detected; however, it takes 16 bits per frame that would otherwise be used for encoding, thus slightly reducing the sound quality.</string>
+             <string>&lt;p>If this option is checked, a cyclic redundancy check (CRC) code will be added to each frame, allowing transmission errors that could occur on the MP3 stream to be detected; however, it takes 16 bits per frame that would otherwise be used for encoding, thus slightly reducing the sound quality.</string>
             </property>
             <property name="text" >
              <string>Error protection</string>
