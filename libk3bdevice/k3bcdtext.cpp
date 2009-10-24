@@ -921,38 +921,50 @@ QString K3b::Device::CdText::Private::textForPackType( int packType, int track )
     case 0x80:
         if( track == 0 )
             return title;
-        else
+        else if( track > 0 && track <= tracks.count() )
             return tracks[track-1].title();
+        else
+            return QString();
 
     case 0x81:
         if( track == 0 )
             return performer;
-        else
+        else if( track > 0 && track <= tracks.count() )
             return tracks[track-1].performer();
+        else
+            return QString();
 
     case 0x82:
         if( track == 0 )
             return songwriter;
-        else
+        else if( track > 0 && track <= tracks.count() )
             return tracks[track-1].songwriter();
+        else
+            return QString();
 
     case 0x83:
         if( track == 0 )
             return composer;
-        else
+        else if( track > 0 && track <= tracks.count() )
             return tracks[track-1].composer();
+        else
+            return QString();
 
     case 0x84:
         if( track == 0 )
             return arranger;
-        else
+        else if( track > 0 && track <= tracks.count() )
             return tracks[track-1].arranger();
+        else
+            return QString();
 
     case 0x85:
         if( track == 0 )
             return message;
-        else
+        else if( track > 0 && track <= tracks.count() )
             return tracks[track-1].message();
+        else
+            return QString();
 
     case 0x86:
         if( track == 0 )
@@ -960,17 +972,21 @@ QString K3b::Device::CdText::Private::textForPackType( int packType, int track )
         else
             return QString();
 
-//   case 0x87:
-//     if( track == 0 )
-//       return genre;
-//     else
-//       return tracks[track-1].title();
+//     case 0x87:
+//         if( track == 0 )
+//             return genre;
+//         else if( track > 0 && track <= tracks.count() )
+//             return tracks[track-1].title();
+//         else
+//             return QString();
 
     case 0x8E:
         if( track == 0 )
             return upcEan;
-        else
+        else if( track > 0 && track <= tracks.count() )
             return tracks[track-1].isrc();
+        else
+            return QString();
     }
 }
 
