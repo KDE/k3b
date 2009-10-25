@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+    <mime-type type="application/x-k3b">
+        <sub-class-of type="application/zip"/>
+        <comment>K3b project</comment>
+        <comment xml:lang="pl">Projekt K3b</comment>
+        <glob pattern="*.k3b"/>
+    </mime-type>
+</mime-info>

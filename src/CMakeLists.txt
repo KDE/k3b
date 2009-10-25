@@ -313,4 +313,7 @@ install( FILES  k3b.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 #install( FILES  k3b-iso.desktop k3b-cue.desktop DESTINATION ${APPLNK_INSTALL_DIR}/.hidden/ )
 install( FILES  k3bui.rc k3bdeviceui.rc k3b.notifyrc tips DESTINATION ${DATA_INSTALL_DIR}/k3b )
 
-
+set( SHARED_MIME_INFO_MINIMUM_VERSION "0.23" )
+find_package( SharedMimeInfo REQUIRED )
+install( FILES x-k3b.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
+update_xdg_mimetypes( ${XDG_MIME_INSTALL_DIR} )

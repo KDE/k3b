@@ -2,7 +2,7 @@
 Type=Service
 Actions=WriteCdImage;
 ServiceTypes=KonqPopupMenu/Plugin
-MimeType=application/x-iso;inode/ISO-image;
+MimeType=application/x-iso;application/x-cd-image;inode/ISO-image;
 
 [Desktop Action WriteCdImage]
 Exec=k3b --image %F
