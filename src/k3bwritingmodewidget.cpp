@@ -237,7 +237,7 @@ void K3b::WritingModeWidget::determineSupportedModesFromMedium( const K3b::Mediu
         modes |= K3b::WritingModeRestrictedOverwrite;
 
 #ifdef __GNUC__
-#warning FIXME: add Blu-Ray media
+#warning FIXME: add Blu-ray media
 #endif
 
     setSupportedModes( modes );

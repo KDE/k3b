@@ -474,7 +474,7 @@ void K3b::MediaCopyDialog::toggleAll()
         m_writingModeWidget->setSupportedModes( K3b::WritingModeRaw );
     }
 
-    // Normal CD/DVD/Blue-Ray copy
+    // Normal CD/DVD/Blu-ray copy
     else {
         //
         // If the same device is used for reading and writing all we can present is a fuzzy

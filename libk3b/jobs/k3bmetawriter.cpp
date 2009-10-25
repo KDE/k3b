@@ -307,7 +307,7 @@ bool K3b::MetaWriter::determineUsedAppAndMode()
             }
 
             if( d->toc.count() != 1 || d->toc.first().mode() != Device::Track::MODE1 ) {
-                emit infoMessage( i18n("DVD and Blu-Ray tracks can only be written in MODE1."), MessageWarning );
+                emit infoMessage( i18n("DVD and Blu-ray tracks can only be written in MODE1."), MessageWarning );
             }
 
             if( mediaType & (K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_RW_OVWR) &&
@@ -326,7 +326,7 @@ bool K3b::MetaWriter::determineUsedAppAndMode()
                     d->usedWritingApp = WritingAppGrowisofs;
                 }
                 else {
-                    emit infoMessage( i18n("Missing Blu-Ray support in cdrecord and growisofs. Please update the system."),  MessageError );
+                    emit infoMessage( i18n("Missing Blu-ray support in cdrecord and growisofs. Please update the system."),  MessageError );
                     return false;
                 }
             }

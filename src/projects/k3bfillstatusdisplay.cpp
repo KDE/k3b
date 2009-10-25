@@ -420,7 +420,7 @@ void K3b::FillStatusDisplay::setupPopupMenu()
         d->popup->addAction( d->actionDvdDoubleLayer );
     }
     if ( d->doc->supportedMediaTypes() & K3b::Device::MEDIA_BD_ALL ) {
-        d->popup->addTitle( i18n("Blu-Ray Size") );
+        d->popup->addTitle( i18n("Blu-ray Size") );
         d->popup->addAction( d->actionBD25 );
         d->popup->addAction( d->actionBD50 );
     }

@@ -36,7 +36,7 @@
 
 #include <config-k3b.h>
 
-static const char* description = I18N_NOOP("<p>K3b is a full-featured <b>CD/DVD/Blu-Ray burning and ripping application</b>.<br/>"
+static const char* description = I18N_NOOP("<p>K3b is a full-featured <b>CD/DVD/Blu-ray burning and ripping application</b>.<br/>"
                                            "It supports a variety of project types as well as <i>copying</i> of optical media, "
                                            "burning of different types of <i>images</i>, and <i>ripping</i> Audio CDs, Video CDs, and "
                                            "Video DVDs.<br/>"

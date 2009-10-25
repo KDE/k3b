@@ -536,13 +536,13 @@ QString K3b::Medium::mediaRequestString( Device::MediaTypes requestedMediaTypes,
     //  1. empty writable CD (audio/vcd project and copy and image)
     //  2. empty writable DVD (video dvd project and copy)
     //  2.1 empty writable DL DVD (video dvd project and copy)
-    //  3. empty writable Blu-Ray (copy and image)
-    //  3.1 empty writable DL Blu-Ray (image, copy)
-    //  3.2 empty writable DVD or Blu-Ray (image)
+    //  3. empty writable Blu-ray (copy and image)
+    //  3.1 empty writable DL Blu-ray (image, copy)
+    //  3.2 empty writable DVD or Blu-ray (image)
     //  4. non-empty rewritable medium (format)
     //  5. empty or appendable medium (data/emovix project)
-    //  6. empty or appendable DVD or Blu-Ray (could be handled via size)
-    //  7. empty or appendable Blu-Ray (could be handled via size)
+    //  6. empty or appendable DVD or Blu-ray (could be handled via size)
+    //  7. empty or appendable Blu-ray (could be handled via size)
     //  8. non-empty CD (CD cloning)
     //  9. non-empty medium (copy)
 
@@ -573,15 +573,15 @@ QString K3b::Medium::mediaRequestString( Device::MediaTypes requestedMediaTypes,
         }
         else if( requestedMediaTypes == (Device::MEDIA_WRITABLE_DVD|Device::MEDIA_WRITABLE_BD) ) {
             if( dev )
-                return i18n("Please insert an empty DVD or Blu-Ray medium into drive<p><b>%1</b>", deviceString);
+                return i18n("Please insert an empty DVD or Blu-ray medium into drive<p><b>%1</b>", deviceString);
             else
-                return i18n("Please insert an empty DVD or Blu-Ray medium");
+                return i18n("Please insert an empty DVD or Blu-ray medium");
         }
         else if( requestedMediaTypes == Device::MEDIA_WRITABLE_BD ) {
             if( dev )
-                return i18n("Please insert an empty Blu-Ray medium into drive<p><b>%1</b>", deviceString);
+                return i18n("Please insert an empty Blu-ray medium into drive<p><b>%1</b>", deviceString);
             else
-                return i18n("Please insert an empty Blu-Ray medium");
+                return i18n("Please insert an empty Blu-ray medium");
         }
         else if( requestedMediaTypes == Device::MEDIA_WRITABLE_CD ) {
             if( dev )
@@ -618,15 +618,15 @@ QString K3b::Medium::mediaRequestString( Device::MediaTypes requestedMediaTypes,
         }
         else if( requestedMediaTypes == (Device::MEDIA_WRITABLE_DVD|Device::MEDIA_WRITABLE_BD) ) {
             if( dev )
-                return i18n("Please insert an empty or appendable DVD or Blu-Ray medium into drive<p><b>%1</b>", deviceString);
+                return i18n("Please insert an empty or appendable DVD or Blu-ray medium into drive<p><b>%1</b>", deviceString);
             else
-                return i18n("Please insert an empty or appendable DVD or Blu-Ray medium");
+                return i18n("Please insert an empty or appendable DVD or Blu-ray medium");
         }
         else if( requestedMediaTypes == Device::MEDIA_WRITABLE_BD ) {
             if( dev )
-                return i18n("Please insert an empty or appendable Blu-Ray medium into drive<p><b>%1</b>", deviceString);
+                return i18n("Please insert an empty or appendable Blu-ray medium into drive<p><b>%1</b>", deviceString);
             else
-                return i18n("Please insert an empty or appendable Blu-Ray medium");
+                return i18n("Please insert an empty or appendable Blu-ray medium");
         }
         else if( requestedMediaTypes == Device::MEDIA_WRITABLE_CD ) {
             if( dev )

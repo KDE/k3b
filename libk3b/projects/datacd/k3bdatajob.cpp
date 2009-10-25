@@ -935,7 +935,7 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
     }
 
     // --------------------
-    // Blu-Ray
+    // Blu-ray
     // --------------------
     else if ( foundMedium & K3b::Device::MEDIA_BD_ALL ) {
         d->usedWritingApp = writingApp();

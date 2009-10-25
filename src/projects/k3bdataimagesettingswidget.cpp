@@ -152,7 +152,7 @@ K3b::DataImageSettingsWidget::DataImageSettingsWidget( QWidget* parent )
                "compatible file permissions.")
         + "<p><b>" + i18n(s_fsPresetNames[1]) + "</b><br>"
         + i18n("In addition to the settings for Linux/Unix the file system contains a Joliet tree which "
-               "allows for long file names on Windows which does not support the Rock Ridget extensions. "
+               "allows for long file names on Windows which does not support the Rock Ridge extensions. "
                "Be aware that the file name length is restricted to 103 characters.")
         + "<p><b>" + i18n(s_fsPresetNames[2]) + "</b><br>"
         + i18n("The file system has additional UDF entries attached to it. This raises the maximal file "

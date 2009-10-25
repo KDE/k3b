@@ -917,7 +917,7 @@ bool K3b::DvdCopyJob::waitForDvd()
 
 
         // -------------------------------
-        // Blue-Ray
+        // Blu-ray
         // -------------------------------
         else {
             emit infoMessage( i18n("Writing %1.", K3b::Device::mediaTypeString(m, true) ), MessageInfo );
