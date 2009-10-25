@@ -283,10 +283,10 @@ void K3b::MediaCopyDialog::slotStartClicked()
 
     K3b::JobProgressDialog* dlg = 0;
     if( m_checkOnlyCreateImage->isChecked() ) {
-        dlg = new K3b::JobProgressDialog( kapp->activeWindow() );
+        dlg = new K3b::JobProgressDialog( parentWidget() );
     }
     else {
-        dlg = new K3b::BurnProgressDialog( kapp->activeWindow() );
+        dlg = new K3b::BurnProgressDialog( parentWidget() );
     }
 
     K3b::BurnJob* burnJob = 0;

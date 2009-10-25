@@ -124,7 +124,7 @@ void K3b::MediaFormattingDialog::slotStartClicked()
 {
     K3b::Medium medium = k3bappcore->mediaCache()->medium( m_writerSelectionWidget->writerDevice() );
 
-    K3b::JobProgressDialog dlg( kapp->activeWindow() );
+    K3b::JobProgressDialog dlg( parentWidget() );
 
     K3b::Job* theJob = 0;
 
