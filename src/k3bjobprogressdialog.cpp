@@ -509,22 +509,22 @@ void K3b::JobProgressDialog::slotStarted()
 
 void K3b::JobProgressDialog::slotUpdateTime()
 {
-    int elapsedDays = m_startTime.daysTo( QDateTime::currentDateTime() );
-    int elapsedSecs = m_startTime.secsTo( QDateTime::currentDateTime() ) % (24*60*60);
+    const int SECS_PER_DAY = 24*60*60;
+    int elapsedSecs = m_startTime.secsTo( QDateTime::currentDateTime() );
 
     QString s = i18n("Elapsed time") + ": ";
-    if ( elapsedDays > 0 ) {
-        s += i18np( "1 Day", "%1 Days", elapsedDays ) + ", ";
+    if ( elapsedSecs >= SECS_PER_DAY ) {
+        s += i18np( "1 Day", "%1 Days", elapsedSecs/SECS_PER_DAY ) + ", ";
     }
-    s += QTime().addSecs(elapsedSecs).toString();
+    s += QTime().addSecs( elapsedSecs%SECS_PER_DAY ).toString();
 
     if( d->lastProgress > 0 && d->lastProgress < 100 ) {
-        int rem = m_startTime.secsTo( m_lastProgressUpdateTime ) * (100-d->lastProgress) / d->lastProgress;
+        int remainingSecs = m_startTime.secsTo( m_lastProgressUpdateTime ) * (100-d->lastProgress) / d->lastProgress;
         s += " / " + i18n("Remaining" ) + ": ";
-        if ( rem >= 24*60*60 ) {
-            s += i18np( "1 Day", "%1 Days", rem/(24*60*60) ) + ", ";
+        if ( remainingSecs >= SECS_PER_DAY ) {
+            s += i18np( "1 Day", "%1 Days", remainingSecs/SECS_PER_DAY ) + ", ";
         }
-        s += QTime().addSecs(rem%(24*60*60)).toString();
+        s += QTime().addSecs( remainingSecs%SECS_PER_DAY ).toString();
     }
 
     m_labelElapsedTime->setText( s );
