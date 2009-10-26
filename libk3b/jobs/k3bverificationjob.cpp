@@ -321,7 +321,7 @@ void K3b::VerificationJob::slotReaderFinished( bool success )
 
         // compare the two sums
         if( d->tracks[d->currentTrackIndex].checksum != d->pipe.checksum() ) {
-            emit infoMessage( i18n("Written data in track %1 differ from original.", d->tracks[d->currentTrackIndex].trackNumber), MessageError );
+            emit infoMessage( i18n("Written data in track %1 differs from original.", d->tracks[d->currentTrackIndex].trackNumber), MessageError );
             jobFinished(false);
         }
         else {
