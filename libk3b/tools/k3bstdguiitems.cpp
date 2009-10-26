@@ -58,7 +58,7 @@ QCheckBox* K3b::StdGuiItems::burnproofCheckbox( QWidget* parent )
                           "data a buffer underrun would occur, since the writer needs "
                           "a constant stream of data to write the CD."
                           "<p>With <em>burnfree</em> the writer can <em>mark</em> the current "
-                          "position of the laser and get back to it when the buffer is filled again;"
+                          "position of the laser and get back to it when the buffer is filled again; "
                           "but, since this means having little data gaps on the CD, <b>it is "
                           "highly recommended to always choose an appropriate writing "
                           "speed to prevent the usage of burnfree, especially for audio CDs</b> "

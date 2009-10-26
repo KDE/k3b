@@ -217,7 +217,7 @@
 &lt;p>The &lt;b>default&lt;/b>, &lt;b>movix&lt;/b>, or &lt;b>MoviX&lt;/b> labels start a general Vesa video driver.
 &lt;p>The &lt;b>TV&lt;/b> labels can be used to direct video to the TV output of the graphic board. eMovix provides TVout drivers for different brands of graphic boards.
 &lt;p>The &lt;b>FB&lt;/b> labels refer to configurations that start a Frame Buffer driver in different screen resolutions.
-&lt;p>The &lt;b>AA&lt;/b> labels make eMovix output the video through the Ascii-Art library which displays the picture in text mode through the usage of simple Acsii characters.
+&lt;p>The &lt;b>AA&lt;/b> labels make eMovix output the video through the ASCII-Art library which displays the picture in text mode through the usage of simple ASCII characters.
 &lt;p>The &lt;b>hd&lt;/b> label makes eMovix boot from the local harddisk instead of the medium. This can be used to prevent accidental starting of an eMovix medium.
 &lt;p>The &lt;b>floppy&lt;/b> label makes eMovix boot from the local floppy drive instead of the medium.</string>
         </property>

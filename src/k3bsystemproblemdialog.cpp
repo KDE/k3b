@@ -382,7 +382,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                     "SCSI emulation."),
                                                i18n("The best and recommended solution is to enable "
                                                     "ide-scsi (SCSI emulation) for all devices. "
-                                                    "This way you will not have any problems."
+                                                    "This way you will not have any problems. "
                                                     "Be aware that you may still enable DMA on ide-scsi "
                                                     "emulated drives."),
                                                false ) );
