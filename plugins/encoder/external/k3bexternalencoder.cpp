@@ -105,8 +105,10 @@ K3bExternalEncoder::K3bExternalEncoder( QObject* parent, const QVariantList& )
 
 K3bExternalEncoder::~K3bExternalEncoder()
 {
-    if( d->process )
+    if( d->process ) {
+        disconnect( d->process );
         d->process->deleteLater();
+    }
     delete d;
 }
 
@@ -220,8 +222,10 @@ bool K3bExternalEncoder::initExternalEncoder( const QString& extension )
     setLastError( i18n("Command failed: %1", params.join( " " ) ) );
 
     // always create a new process since we are called in a separate thread
-    if( d->process )
+    if( d->process ) {
+        disconnect( d->process );
         d->process->deleteLater();
+    }
     d->process = new KProcess();
     d->process->setOutputChannelMode( KProcess::MergedChannels );
     connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)),

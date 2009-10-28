@@ -105,8 +105,10 @@ K3b::VideoDVDTitleTranscodingJob::VideoDVDTitleTranscodingJob( K3b::JobHandler* 
 
 K3b::VideoDVDTitleTranscodingJob::~VideoDVDTitleTranscodingJob()
 {
-    if( d->process )
+    if( d->process ) {
+        disconnect( d->process );
         d->process->deleteLater();
+    }
     delete d;
 }
 
@@ -223,8 +225,10 @@ void K3b::VideoDVDTitleTranscodingJob::startTranscode( int pass )
     //
     // prepare the process
     //
-    if( d->process )
+    if( d->process ) {
+        disconnect( d->process );
         d->process->deleteLater();
+    }
     d->process = new K3b::Process();
     d->process->setSuppressEmptyLines(true);
     d->process->setSplitStdout(true);
