@@ -24,7 +24,7 @@
 #include "k3baction.h"
 
 // include files for Qt
-#include <QGridLayout>
+#include <QVBoxLayout>
 #include <QList>
 
 // include files for KDE
@@ -38,18 +38,19 @@ K3b::View::View( K3b::Doc* pDoc, QWidget *parent )
     : QWidget( parent ),
       m_doc( pDoc )
 {
-    QGridLayout* grid = new QGridLayout( this );
-
     m_toolBox = new KToolBar( this );
     m_fillStatusDisplay = new K3b::FillStatusDisplay( m_doc, this );
-
-    grid->addWidget( m_toolBox, 0, 0, 1, 2 );
-    grid->addWidget( m_fillStatusDisplay, 2, 0, 1, 2 );
-    //  grid->addWidget( m_buttonBurn, 2, 1 );
-    grid->setRowStretch( 1, 1 );
-    grid->setColumnStretch( 0, 1 );
-    grid->setSpacing( 5 );
-    grid->setMargin( 2 );
+    
+    m_layout = new QVBoxLayout;
+    m_layout->addWidget( m_fillStatusDisplay );
+    m_layout->setSpacing( 5 );
+    m_layout->setMargin( 0 );
+    
+    QVBoxLayout* mainLayout = new QVBoxLayout( this );
+    mainLayout->addWidget( m_toolBox );
+    mainLayout->addLayout( m_layout );
+    mainLayout->setSpacing( 0 );
+    mainLayout->setContentsMargins( 2, 0, 2, 2 );
 
     KAction* burnAction = K3b::createAction(this,i18n("&Burn"), "tools-media-optical-burn", Qt::CTRL + Qt::Key_B, this, SLOT(slotBurn()),
                                             actionCollection(), "project_burn");
@@ -81,7 +82,7 @@ K3b::View::~View()
 
 void K3b::View::setMainWidget( QWidget* w )
 {
-    static_cast<QGridLayout*>(layout())->addWidget( w, 1, 0, 1, 2 );
+    m_layout->insertWidget( 0, w, 1 );
 }
 
 

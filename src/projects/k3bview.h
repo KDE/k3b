@@ -27,6 +27,7 @@
 #include <KXMLGUIClient>
 #include <KUrl>
 
+class QVBoxLayout;
 class KToolBar;
 
 namespace K3b {
@@ -99,6 +100,7 @@ namespace K3b {
         Doc* m_doc;
         FillStatusDisplay* m_fillStatusDisplay;
         KToolBar* m_toolBox;
+        QVBoxLayout* m_layout;
 
         QHash<const QObject*, K3b::ProjectPlugin*> m_plugins;
     };
