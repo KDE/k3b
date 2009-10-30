@@ -16,7 +16,7 @@
 
 #include "k3bbinimagewritingjob.h"
 #include "k3bcdrecordwriter.h"
-//#include "k3bcdrdaowriter.h"
+#include "k3bcdrdaowriter.h"
 #include "k3bcore.h"
 #include "k3bdevice.h"
 #include "k3bglobals.h"
@@ -24,11 +24,11 @@
 #include "k3bglobalsettings.h"
 #include "k3bdevicehandler.h"
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <KLocale>
+#include <KDebug>
 
-#include <qfile.h>
-#include <qtextstream.h>
+#include <QFile>
+#include <QTextStream>
 
 
 
@@ -122,18 +122,16 @@ bool K3b::BinImageWritingJob::prepareWriter()
         m_writer = writer;
     }
     else {
-//     // create cdrdao job
-//     K3b::CdrdaoWriter* writer = new K3b::CdrdaoWriter( m_device, this );
-//     writer->setCommand( K3b::CdrdaoWriter::WRITE );
-//     writer->setSimulate( m_simulate );
-//     writer->setBurnSpeed( m_speed );
-
-//     // multisession
-//     writer->setMulti( m_noFix );
-
-//     writer->setTocFile( m_tocFile );
-
-//     m_writer = writer;
+        // create cdrdao job
+        K3b::CdrdaoWriter* writer = new K3b::CdrdaoWriter( m_device, this );
+        
+        writer->setCommand( K3b::CdrdaoWriter::WRITE );
+        writer->setSimulate( m_simulate );
+        writer->setBurnSpeed( m_speed );
+        writer->setTocFile( m_tocFile );
+        writer->setMulti( m_noFix );
+        
+        m_writer = writer;
     }
 
     connect( m_writer, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
