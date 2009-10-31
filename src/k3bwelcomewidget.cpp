@@ -44,7 +44,6 @@ static const char* s_allActions[] = {
     "file_continue_multisession",
     "_sep_",
     "file_new_audio",
-    "_sep_",
     "file_new_mixed",
     "_sep_",
     "file_new_vcd",
@@ -53,14 +52,12 @@ static const char* s_allActions[] = {
     "file_new_movix",
     "_sep_",
     "tools_copy_medium",
-    "_sep_",
     "tools_format_medium",
-    "_sep_",
     "tools_write_image",
     "_sep_",
     "tools_cdda_rip",
-    "tools_videodvd_rip",
     "tools_videocd_rip",
+    "tools_videodvd_rip",
     0
 };
 

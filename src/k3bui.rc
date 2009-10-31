@@ -1,66 +1,66 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui name="k3b" version="15">
 <MenuBar>
-  <Menu name="project"><text>&amp;Project</text>
-  	<Action name="project_add_files" />
-	<Action name="project_clear_project" />
-  </Menu>
-
-  <Menu name="tools"><text>&amp;Tools</text>
-  	<Action name="tools_copy_medium" />
-	<Action name="tools_format_medium" />
-	<Action name="tools_write_image" />
-	<Separator />
-	<Action name="tools_cdda_rip" />
-	<Action name="tools_videodvd_rip" />
-	<Action name="tools_videocd_rip" />
-  </Menu>
-
-  <Menu name="device"><text>&amp;Device</text>
-  </Menu>
-
-  <Menu name="settings">
-    <Menu name="view_panels" append="show_merge"><text>Panels</text>
-        <Action name="view_projects" />
-        <Action name="view_dir_tree" />
-        <Action name="view_contents" />
-        <Separator />
-        <Action name="view_lock_panels" />
-        <Action name="view_document_header" />
+    <Menu name="project"><text>&amp;Project</text>
+        <Action name="project_add_files" />
+        <Action name="project_clear_project" />
     </Menu>
-  	<Action name="view_audio_player" append="show_merge" />
-	<Action name="settings_k3bsetup" append="configure_merge" />
-  </Menu>
 
-  <Menu name="help"><text>&amp;Help</text>
-	<Action name="help_check_system" />	
-  </Menu>
+    <Menu name="tools"><text>&amp;Tools</text>
+        <Action name="tools_copy_medium" />
+        <Action name="tools_format_medium" />
+        <Action name="tools_write_image" />
+        <Separator />
+        <Action name="tools_cdda_rip" />
+        <Action name="tools_videocd_rip" />
+        <Action name="tools_videodvd_rip" />
+    </Menu>
+
+    <Menu name="device"><text>&amp;Device</text>
+    </Menu>
+
+    <Menu name="settings">
+        <Menu name="view_panels" append="show_merge"><text>Panels</text>
+            <Action name="view_projects" />
+            <Action name="view_dir_tree" />
+            <Action name="view_contents" />
+            <Separator />
+            <Action name="view_lock_panels" />
+            <Action name="view_document_header" />
+        </Menu>
+        <Action name="view_audio_player" append="show_merge" />
+        <Action name="settings_k3bsetup" append="configure_merge" />
+    </Menu>
+
+    <Menu name="help"><text>&amp;Help</text>
+        <Action name="help_check_system" />    
+    </Menu>
 </MenuBar>
 
 <ToolBar name="mainToolBar" noMerge="1"><text>Main Toolbar</text>
-	<Action name="file_new" />
-	<Action name="file_open" />
-	<Action name="file_save" />
+    <Action name="file_new" />
+    <Action name="file_open" />
+    <Action name="file_save" />
 </ToolBar>
 
 <ToolBar name="toolsToolBar"><text>Tools</text>
-	<Action name="tools_copy_media" />
-	<Action name="tools_format_medium" />
+    <Action name="tools_copy_media" />
+    <Action name="tools_format_medium" />
 </ToolBar>
-	
+    
 <ToolBar name="quickDirSelector" fullWidth="true"><text>Quick Dir Selector</text>
-	<Action name="quick_dir_selector" />
-	<Action name="go_url" />
+    <Action name="quick_dir_selector" />
+    <Action name="go_url" />
 </ToolBar>
 
 <State name="state_project_active">
-	<enable>
-		<Action name="file_save" />
-		<Action name="file_save_as" />
-		<Action name="file_close" />
-		<Action name="file_close_all" />
-	  	<Action name="project_add_files" />		
-		<Action name="project_clear_project" />
-	</enable>
+    <enable>
+        <Action name="file_save" />
+        <Action name="file_save_as" />
+        <Action name="file_close" />
+        <Action name="file_close_all" />
+        <Action name="project_add_files" />        
+        <Action name="project_clear_project" />
+    </enable>
 </State>
 </kpartgui>
