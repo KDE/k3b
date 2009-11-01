@@ -288,6 +288,7 @@ void K3b::AudioCdView::startRip()
                                    m_trackModel->cddbInfo(),
                                    trackIndices,
                                    this );
+        rip.setDelayedInitialization( true );
         rip.exec();
     }
 }

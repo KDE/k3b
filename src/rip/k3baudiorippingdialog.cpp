@@ -76,6 +76,8 @@ class K3b::AudioRippingDialog::Private
 public:
     Private() {
     }
+    
+    void addTrack( const QString& name, const QString& length, const QString& size, const QString& type );
 
     QVector<QString> filenames;
     QString playlistFilename;
@@ -84,6 +86,22 @@ public:
 
     QTreeView* viewTracks;
 };
+
+
+void K3b::AudioRippingDialog::Private::addTrack( const QString& name, const QString& length, const QString& size, const QString& type )
+{
+    QList< QStandardItem* > items;
+    items.append( new QStandardItem( name ) );
+    items.append( new QStandardItem( length ) );
+    items.append( new QStandardItem( size ) );
+    items.append( new QStandardItem( type ) );
+    Q_FOREACH( QStandardItem* item, items )
+    {
+        item->setSelectable( false );
+        item->setEditable( false );
+    }
+    trackModel.appendRow( items );
+}
 
 
 K3b::AudioRippingDialog::AudioRippingDialog( const K3b::Medium& medium,
@@ -247,10 +265,9 @@ void K3b::AudioRippingDialog::slotStartClicked()
 
     // prepare list of tracks to rip
     QVector<QPair<int, QString> > tracksToRip;
-    unsigned int i = 0;
-    foreach( int trackIndex, m_trackNumbers ) {
-        tracksToRip.append( qMakePair( trackIndex+1, d->filenames[(m_optionWidget->createSingleFile() ? 0 : i)] ) );
-        ++i;
+    for( int i = 0; i < m_trackNumbers.count() && i < d->filenames.count(); ++i ) {
+        int file = m_optionWidget->createSingleFile() ? 0 : i;
+        tracksToRip.append( qMakePair( m_trackNumbers[i]+1, d->filenames[ file ] ) );
     }
 
     K3b::JobProgressDialog ripDialog( parentWidget(), "Ripping" );
@@ -327,10 +344,10 @@ void K3b::AudioRippingDialog::refresh()
                                                                           m_patternWidget->replaceBlanks(),
                                                                           m_patternWidget->blankReplaceString() ) );
 
-        d->trackModel.setItem( 0, 0, new QStandardItem( filename ) );
-        d->trackModel.setItem( 0, 1, new QStandardItem( K3b::Msf(length).toString() ) );
-        d->trackModel.setItem( 0, 2, new QStandardItem( fileSize < 0 ? i18n("unknown") : KIO::convertSize( fileSize ) ) );
-        d->trackModel.setItem( 0, 3, new QStandardItem( i18n("Audio") ) );
+        d->addTrack( filename,
+                     K3b::Msf(length).toString(),
+                     fileSize < 0 ? i18n("unknown") : KIO::convertSize( fileSize ),
+                     i18n("Audio") );
 
         d->filenames.append( baseDir + filename );
 
@@ -340,10 +357,7 @@ void K3b::AudioRippingDialog::refresh()
                                                                                          m_patternWidget->filenamePattern(),
                                                                                          m_patternWidget->replaceBlanks(),
                                                                                          m_patternWidget->blankReplaceString() ) );
-            d->trackModel.setItem( 1, 0, new QStandardItem( cueFileName ) );
-            d->trackModel.setItem( 1, 1, new QStandardItem( "-" ) );
-            d->trackModel.setItem( 1, 2, new QStandardItem( "-" ) );
-            d->trackModel.setItem( 1, 3, new QStandardItem( i18n("Cue-file") ) );
+            d->addTrack( cueFileName, "-", "-", i18n("Cue-file") );
         }
     }
     else {
@@ -385,10 +399,10 @@ void K3b::AudioRippingDialog::refresh()
             }
             filename = d->fsInfo.fixupPath( filename );
 
-            d->trackModel.setItem( i, 0, new QStandardItem( filename ) );
-            d->trackModel.setItem( i, 1, new QStandardItem( trackLength.toString() ) );
-            d->trackModel.setItem( i, 2, new QStandardItem( fileSize < 0 ? i18n("unknown") : KIO::convertSize( fileSize ) ) );
-            d->trackModel.setItem( i, 3, new QStandardItem( toc[trackIndex].type() == K3b::Device::Track::TYPE_AUDIO ? i18n("Audio") : i18n("Data") ) );
+            d->addTrack( filename,
+                         trackLength.toString(),
+                         fileSize < 0 ? i18n("unknown") : KIO::convertSize( fileSize ),
+                         toc[trackIndex].type() == K3b::Device::Track::TYPE_AUDIO ? i18n("Audio") : i18n("Data") );
 
             d->filenames.append( baseDir + filename );
         }
