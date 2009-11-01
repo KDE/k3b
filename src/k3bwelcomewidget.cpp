@@ -30,7 +30,6 @@
 #include <QShowEvent>
 #include <QTextDocument>
 
-#include <k3urldrag.h>
 #include <KActionCollection>
 #include <KAboutData>
 #include <KConfigGroup>
@@ -319,14 +318,18 @@ void K3b::WelcomeWidget::Display::paintEvent( QPaintEvent* )
 
 void K3b::WelcomeWidget::Display::dragEnterEvent( QDragEnterEvent* event )
 {
-    event->setAccepted( K3URLDrag::canDecode(event) );
+    event->setAccepted( event->mimeData()->hasUrls() );
 }
 
 
 void K3b::WelcomeWidget::Display::dropEvent( QDropEvent* e )
 {
     KUrl::List urls;
-    K3URLDrag::decode( e, urls );
+    Q_FOREACH( const QUrl& url, e->mimeData()->urls() )
+    {
+        urls.push_back( url );
+    }
+    
     emit dropped( urls );
 }
 
