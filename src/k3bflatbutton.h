@@ -15,12 +15,9 @@
 #ifndef FLATBUTTON_H
 #define FLATBUTTON_H
 
-#include <QFrame>
-#include <qcolor.h>
-#include <qpixmap.h>
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <QEvent>
+#include <QWidget>
+#include <QColor>
+#include <QPixmap>
 
 class QEvent;
 class QMouseEvent;
@@ -31,51 +28,49 @@ class QPaintEvent;
    @author Sebastian Trueg
 */
 namespace K3b {
-class FlatButton : public QFrame
-{
-    Q_OBJECT
+    class FlatButton : public QWidget
+    {
+        Q_OBJECT
 
-public:
-    FlatButton( QWidget *parent = 0);
-    FlatButton( const QString& text, QWidget *parent = 0 );
-    FlatButton( QAction*, QWidget *parent = 0);
-  
-    ~FlatButton();
+    public:
+        FlatButton( QWidget *parent = 0);
+        FlatButton( const QString& text, QWidget *parent = 0 );
+        FlatButton( QAction*, QWidget *parent = 0);
+    
+        ~FlatButton();
 
-    QSize sizeHint() const;
+        QSize sizeHint() const;
 
-public Q_SLOTS:
-    void setColors( const QColor& fore, const QColor& back );
-    void setText( const QString& );
-    void setPixmap( const QPixmap& );
-    void setMargin( int margin );
+    public Q_SLOTS:
+        void setColors( const QColor& fore, const QColor& back );
+        void setText( const QString& );
+        void setPixmap( const QPixmap& );
 
- Q_SIGNALS:
-    void pressed();
-    void clicked();
+    Q_SIGNALS:
+        void pressed();
+        void clicked();
 
     private Q_SLOTS:
-    void slotThemeChanged();
+        void slotThemeChanged();
 
-private:
-    void init();
+    private:
+        void init();
 
-    void mousePressEvent(QMouseEvent* e);
-    void mouseReleaseEvent(QMouseEvent* e);
-    void enterEvent( QEvent* );
-    void leaveEvent( QEvent* );
-    void paintEvent ( QPaintEvent * event );
-    void setHover( bool );
+        void mousePressEvent(QMouseEvent* e);
+        void mouseReleaseEvent(QMouseEvent* e);
+        void enterEvent( QEvent* );
+        void leaveEvent( QEvent* );
+        void paintEvent ( QPaintEvent* event );
+        void setHover( bool );
 
-    bool m_pressed;
-    QColor m_backColor;
-    QColor m_foreColor;
-    QString m_text;
-    QPixmap m_pixmap;
-    int m_margin;
+        bool m_pressed;
+        QColor m_backColor;
+        QColor m_foreColor;
+        QString m_text;
+        QPixmap m_pixmap;
 
-    bool m_hover;
-};
+        bool m_hover;
+    };
 }
 
 #endif

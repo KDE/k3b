@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
+ *           (C)      2009 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -16,22 +17,32 @@
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
 
-#include <kaction.h>
-#include <kiconloader.h>
-#include <kglobal.h>
+#include <KGlobal>
 #include <KGlobalSettings>
+#include <KIconLoader>
 
-#include <qpainter.h>
-#include <qtooltip.h>
-#include <qfontmetrics.h>
-#include <qpixmap.h>
+#include <QAction>
 #include <QEvent>
-#include <QMouseEvent>
+#include <QFontMetrics>
 #include <QFrame>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QPixmap>
+#include <QToolTip>
+
+
+namespace {
+    
+    const int FRAME_WIDTH = 1;
+    const int FRAME_HEIGHT = 1;
+    const int ICON_LABEL_SPACE = 5;
+    const int MARGIN_SIZE = 5;
+    
+} // namespace
 
 
 K3b::FlatButton::FlatButton( QWidget *parent)
-    : QFrame( parent/*, WNoAutoErase*/ ),
+    : QWidget( parent ),
       m_pressed(false)
 {
     init();
@@ -39,7 +50,7 @@ K3b::FlatButton::FlatButton( QWidget *parent)
 
 
 K3b::FlatButton::FlatButton( const QString& text, QWidget *parent )
-    : QFrame( parent/*, WNoAutoErase*/ ),
+    : QWidget( parent ),
       m_pressed(false)
 {
     init();
@@ -48,7 +59,7 @@ K3b::FlatButton::FlatButton( const QString& text, QWidget *parent )
 
 
 K3b::FlatButton::FlatButton( QAction* a, QWidget *parent)
-    : QFrame( parent/*, WNoAutoErase*/ ),
+    : QWidget( parent ),
       m_pressed(false)
 {
     init();
@@ -66,20 +77,13 @@ K3b::FlatButton::~FlatButton() {}
 
 void K3b::FlatButton::init()
 {
+    setContentsMargins( MARGIN_SIZE + FRAME_WIDTH, MARGIN_SIZE + FRAME_HEIGHT,
+                        MARGIN_SIZE + FRAME_WIDTH, MARGIN_SIZE + FRAME_HEIGHT );
     setHover(false);
-    setMargin(5);
-    setFrameStyle( QFrame::Box|QFrame::Plain );
-    setAutoFillBackground( true );
 
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
     connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()), this, SLOT(slotThemeChanged()) );
     slotThemeChanged();
-}
-
-
-void K3b::FlatButton::setMargin( int margin )
-{
-    m_margin = margin;
 }
 
 
@@ -136,58 +140,38 @@ void K3b::FlatButton::mouseReleaseEvent( QMouseEvent* e )
 
 void K3b::FlatButton::setHover( bool b )
 {
-    QPalette pal( palette() );
-    if( b ) {
-        pal.setColor( QPalette::WindowText, m_backColor );
-        pal.setColor( QPalette::Window, m_foreColor );
-    } else {
-        pal.setColor( QPalette::WindowText, m_foreColor );
-        pal.setColor( QPalette::Window, m_backColor );
-    }
-    setPalette( pal );
-
     m_hover = b;
-
     update();
 }
 
 
 QSize K3b::FlatButton::sizeHint() const
 {
-    // height: pixmap + 5 spacing + font height + frame width
+    // height: pixmap + spacing + font height + frame width
     // width: max( pixmap, text) + frame width
-    return QSize( qMax( m_pixmap.width(), fontMetrics().width( m_text ) ) + ( m_margin + frameWidth() )*2,
-                  m_pixmap.height() + fontMetrics().height() + 5 + ( m_margin + frameWidth() )*2 );
+    return QSize( qMax( m_pixmap.width(), fontMetrics().width( m_text ) ) + ( MARGIN_SIZE + FRAME_WIDTH )*2,
+                  m_pixmap.height() + fontMetrics().height() + ICON_LABEL_SPACE + ( MARGIN_SIZE + FRAME_HEIGHT )*2 );
 }
 
 
-void K3b::FlatButton::paintEvent ( QPaintEvent * event )
+void K3b::FlatButton::paintEvent ( QPaintEvent* event )
 {
-    QFrame::paintEvent( event );
-    QRect rect = contentsRect();
-    rect.setLeft( rect.left() + m_margin );
-    rect.setRight( rect.right() - m_margin );
-    rect.setTop( rect.top() + m_margin );
-    rect.setBottom( rect.bottom() - m_margin );
-
     QPainter p(this);
-    QRect textRect = fontMetrics().boundingRect( m_text );
-    int textX = qMax( 0, ( rect.width() - textRect.width() ) / 2 );
-    int textY = textRect.height();
+    p.setPen( m_hover ? m_backColor : m_foreColor );
+    p.fillRect( event->rect(), m_hover ? m_foreColor : m_backColor );
+    p.drawRect( event->rect().x(), event->rect().y(), event->rect().width()-1, event->rect().height()-1 );
+    
+    QRect rect = contentsRect();
 
     if( !m_pixmap.isNull() ) {
-        p.translate( rect.left(), rect.top() );
-        textX = qMax( textX, (m_pixmap.width() - textRect.width()) / 2 );
-        textY += 5 + m_pixmap.height();
-
-        int pixX = qMax( qMax( 0, (textRect.width() - m_pixmap.width()) / 2 ),
-                         ( rect.width() - m_pixmap.width() ) / 2 );
-        p.drawPixmap( pixX, 0, m_pixmap );
-        p.drawText( textX, textY, m_text );
+        int pixX = rect.left() + qMax( 0, (rect.width() - m_pixmap.width()) / 2 );
+        int pixY = rect.top();
+        p.drawPixmap( pixX, pixY, m_pixmap );
+        p.drawText( rect, Qt::AlignBottom | Qt::AlignHCenter, m_text );
     }
-    else
+    else {
         p.drawText( rect, Qt::AlignCenter, m_text );
-
+    }
 }
 
 
