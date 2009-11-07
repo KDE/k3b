@@ -29,6 +29,7 @@
 
 #include <QApplication>
 #include <QDataStream>
+#include <QFont>
 #include <QMimeData>
 
 
@@ -227,6 +228,11 @@ QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
                     return KIcon( item->mimeType()->iconName() );
                 }
             }
+            else if( role == Qt::FontRole && item->isSymLink() ) {
+                QFont font;
+                font.setItalic( true );
+                return font;
+            }
             break;
 
         case TypeColumn:
@@ -260,7 +266,7 @@ QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
                         s = K3b::resolveLink( item->localPath() );
                     }
                     else {
-                        s = QFileInfo( item->localPath() ).readLink();
+                        s = QFileInfo( item->localPath() ).symLinkTarget();
                     }
                     if( !item->isValid() ) {
                         s += " (" + i18n("outside of project") + ")";
