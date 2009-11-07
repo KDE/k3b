@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ *           (C)      2009 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -12,23 +13,21 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <config-k3b.h>
-#include "k3bglobals.h"
-
 #include "k3bfileitem.h"
 #include "k3bdatadoc.h"
 #include "k3bdiritem.h"
-#include "k3bisooptions.h"
 #include "k3bglobals.h"
+#include "k3bisooptions.h"
+#include <config-k3b.h>
 
-#include <qfileinfo.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qregexp.h>
-#include <qfile.h>
+#include <KDebug>
+#include <KUrl>
 
-#include <kurl.h>
-#include <kdebug.h>
+#include <QFile>
+#include <QFileInfo>
+#include <QRegExp>
+#include <QString>
+#include <QStringList>
 
 #include <errno.h>
 #include <string.h>
@@ -61,61 +60,30 @@ K3b::FileItem::FileItem( const QString& filePath, K3b::DataDoc* doc, K3b::DirIte
       m_replacedItemFromOldSession(0),
       m_localPath(filePath)
 {
-    if( k3bName.isEmpty() )
-        m_k3bName = filePath.section( '/', -1 );
-    else
-        m_k3bName = k3bName;
-
+    k3b_struct_stat statBuf;
+    k3b_struct_stat followedStatBuf;
     // we determine the size here to avoid problems with removed or renamed files
     // we need to use lstat here since for symlinks both KDE and QT return the size of the file pointed to
     // instead the size of the link.
-    k3b_struct_stat statBuf;
-    if( k3b_lstat( QFile::encodeName(filePath), &statBuf ) ) {
-        m_size = K3b::filesize( filePath );
-        m_id.inode = 0;
-        m_id.device = 0;
-
-        kError() << "(KFileItem) lstat failed: " << strerror(errno) << endl;
-
-        // since we have no proper inode info, disable the inode caching in the doc
-        if( doc ) {
-            K3b::IsoOptions o( doc->isoOptions() );
-            o.setDoNotCacheInodes( true );
-            doc->setIsoOptions( o );
+    if( k3b_lstat( QFile::encodeName(filePath), &statBuf ) == 0 ) {
+        if( k3b_stat( QFile::encodeName(filePath), &followedStatBuf ) == 0 ) {
+            init( filePath, k3bName, doc, &statBuf, &followedStatBuf );
+        }
+        else {
+            init( filePath, k3bName, doc, &statBuf, 0 );
+            kError() << "(KFileItem) stat failed: " << strerror(errno) << endl;
         }
     }
     else {
-        m_size = (KIO::filesize_t)statBuf.st_size;
-
-        if( S_ISLNK(statBuf.st_mode) )
-            setFlags( flags | FILE | SYMLINK );
-
-        //
-        // integrate the device number into the inode since files on different
-        // devices may have the same inode number!
-        //
-        m_id.inode = statBuf.st_ino;
-        m_id.device = statBuf.st_dev;
-    }
-
-    m_idFollowed = m_id;
-    m_sizeFollowed = m_size;
-
-    if( isSymLink() ) {
-        k3b_struct_stat statBuf;
-        if( k3b_stat( QFile::encodeName(filePath), &statBuf ) == 0 ) {
-            m_idFollowed.inode = statBuf.st_ino;
-            m_idFollowed.device = statBuf.st_dev;
-
-            m_sizeFollowed = (KIO::filesize_t)statBuf.st_size;
+        kError() << "(KFileItem) lstat failed: " << strerror(errno) << endl;
+        if( k3b_stat( QFile::encodeName(filePath), &followedStatBuf ) == 0 ) {
+            init( filePath, k3bName, doc, 0, &followedStatBuf );
+        }
+        else {
+            init( filePath, k3bName, doc, 0, 0 );
+            kError() << "(KFileItem) stat failed: " << strerror(errno) << endl;
         }
     }
-
-    m_mimeType = KMimeType::findByUrl( KUrl(filePath) );
-
-    // add automagically like a qlistviewitem
-    if( parent() )
-        parent()->addDataItem( this );
 }
 
 
@@ -126,37 +94,7 @@ K3b::FileItem::FileItem( const k3b_struct_stat* stat,
       m_replacedItemFromOldSession(0),
       m_localPath(filePath)
 {
-    if( k3bName.isEmpty() )
-        m_k3bName = filePath.section( '/', -1 );
-    else
-        m_k3bName = k3bName;
-
-    m_size = (KIO::filesize_t)stat->st_size;
-    if( S_ISLNK(stat->st_mode) )
-        setFlags( flags | FILE | SYMLINK );
-
-    //
-    // integrate the device number into the inode since files on different
-    // devices may have the same inode number!
-    //
-    m_id.inode = stat->st_ino;
-    m_id.device = stat->st_dev;
-
-    if( isSymLink() ) {
-        m_idFollowed.inode = followedStat->st_ino;
-        m_idFollowed.device = followedStat->st_dev;
-
-        m_sizeFollowed = (KIO::filesize_t)followedStat->st_size;
-    }
-    else {
-        m_idFollowed = m_id;
-        m_sizeFollowed = m_size;
-    }
-
-    m_mimeType = KMimeType::findByUrl( KUrl(filePath) );
-
-    if( parent() )
-        parent()->addDataItem( this );
+    init( filePath, k3bName, doc, stat, followedStat );
 }
 
 
@@ -233,6 +171,7 @@ QString K3b::FileItem::localPath() const
     return m_localPath;
 }
 
+
 K3b::DirItem* K3b::FileItem::getDirItem() const
 {
     return getParent();
@@ -241,7 +180,7 @@ K3b::DirItem* K3b::FileItem::getDirItem() const
 
 QString K3b::FileItem::linkDest() const
 {
-    return QFileInfo( localPath() ).readLink();
+    return QFileInfo( localPath() ).symLinkTarget();
 }
 
 
@@ -301,4 +240,69 @@ bool K3b::FileItem::isValid() const
     }
     else
         return true;
+}
+
+
+void K3b::FileItem::init( const QString& filePath,
+                          const QString& k3bName,
+                          DataDoc* doc,
+                          const k3b_struct_stat* stat,
+                          const k3b_struct_stat* followedStat )
+{
+    if( k3bName.isEmpty() )
+        m_k3bName = filePath.section( '/', -1 );
+    else
+        m_k3bName = k3bName;
+
+    if( stat != 0 ) {
+        m_size = (KIO::filesize_t)stat->st_size;
+        if( S_ISLNK(stat->st_mode) )
+            setFlags( flags() | SYMLINK );
+        
+        //
+        // integrate the device number into the inode since files on different
+        // devices may have the same inode number!
+        //
+        m_id.inode = stat->st_ino;
+        m_id.device = stat->st_dev;
+    }
+    else {
+        m_size = K3b::filesize( filePath );
+        m_id.inode = 0;
+        m_id.device = 0;
+
+        // since we have no proper inode info, disable the inode caching in the doc
+        if( doc ) {
+            K3b::IsoOptions o( doc->isoOptions() );
+            o.setDoNotCacheInodes( true );
+            doc->setIsoOptions( o );
+        }
+    }
+
+    if( isSymLink() ) {
+        if( QFile::exists( K3b::resolveLink( filePath ) ) && followedStat != 0 ) {
+            m_sizeFollowed = (KIO::filesize_t)followedStat->st_size;
+            m_idFollowed.inode = followedStat->st_ino;
+            m_idFollowed.device = followedStat->st_dev;
+        }
+        else if( followedStat == 0 ) {
+            m_sizeFollowed = m_size;
+            m_idFollowed.inode = 0;
+            m_idFollowed.device = 0;
+        }
+        else {
+            // This means the link is broken, so size of target equals 0
+            m_sizeFollowed = 0;
+        }
+    }
+    else {
+        m_sizeFollowed = m_size;
+        m_idFollowed = m_id;
+    }
+
+    m_mimeType = KMimeType::findByUrl( KUrl(filePath) );
+
+    // add automagically like a qlistviewitem
+    if( parent() )
+        parent()->addDataItem( this );
 }
