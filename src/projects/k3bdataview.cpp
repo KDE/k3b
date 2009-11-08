@@ -68,8 +68,15 @@ K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
     connect( actionCollection()->action( "open" ), SIGNAL( triggered() ),
              this, SLOT(slotOpen()) );
 
-    m_volumeIDEdit = new QLineEdit( doc->isoOptions().volumeID(), toolBox() );
+    QWidget* volumeNameBox = new QWidget( toolBox() );
+    QHBoxLayout* volumeNameLayout = new QHBoxLayout( volumeNameBox );
+    m_volumeIDEdit = new QLineEdit( doc->isoOptions().volumeID(), volumeNameBox );
     m_volumeIDEdit->setValidator( new Latin1Validator( m_volumeIDEdit ) );
+    volumeNameLayout->addWidget( new QLabel( i18n("Volume Name:"), volumeNameBox ) );
+    volumeNameLayout->addWidget( m_volumeIDEdit );
+    volumeNameLayout->setMargin( 0 );
+    connect( m_volumeIDEdit, SIGNAL(textChanged(const QString&)),
+             m_doc, SLOT(setVolumeID(const QString&)) );
     
     // Setup toolbar
     toolBox()->addAction( actionCollection()->action( "project_data_import_session" ) );
@@ -79,10 +86,8 @@ K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
     toolBox()->addAction( actionCollection()->action( "parent_dir" ) );
     toolBox()->addSeparator();
     addPluginButtons();
-    toolBox()->addWidget( new QLabel( i18n("Volume Name:"), toolBox() ) );
-    toolBox()->addWidget( m_volumeIDEdit );
-    connect( m_volumeIDEdit, SIGNAL(textChanged(const QString&)),
-             m_doc, SLOT(setVolumeID(const QString&)) );
+    toolBox()->addSeparator();
+    toolBox()->addWidget( volumeNameBox );
     
     // set the model for the StandardView's views
     setModel(m_model);
