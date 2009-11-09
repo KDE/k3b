@@ -39,6 +39,8 @@ namespace {
     {
         return bin1->version > bin2->version;
     }
+    
+    const int EXECUTE_TIMEOUT = 5000; // in seconds
 }
 
 
@@ -254,7 +256,8 @@ bool K3b::SimpleExternalProgram::scanVersion( ExternalBin* bin )
     KProcess vp;
     vp.setOutputChannelMode( KProcess::MergedChannels );
     vp << bin->path << "--version";
-    vp.execute();
+    if( vp.execute( EXECUTE_TIMEOUT ) < 0 )
+        return false;
 
     QString s = QString::fromLocal8Bit( vp.readAll() );
     bin->version = parseVersion( s );
@@ -276,7 +279,8 @@ bool K3b::SimpleExternalProgram::scanFeatures( ExternalBin* bin )
     KProcess fp;
     fp.setOutputChannelMode( KProcess::MergedChannels );
     fp << bin->path << "--help";
-    fp.execute();
+    if( fp.execute( EXECUTE_TIMEOUT ) < 0 )
+        return false;
 
     parseFeatures( QString::fromLocal8Bit( fp.readAll() ), bin );
     return true;
