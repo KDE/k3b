@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
+ *           (C)      2009 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -23,6 +24,7 @@
 #include <QLayout>
 #include <QList>
 #include <QString>
+#include <QStackedWidget>
 #include <QTimer>
 
 // include files for KDE
@@ -110,6 +112,7 @@ public:
     K3b::Doc* lastDoc;
 
     K3b::WelcomeWidget* welcomeWidget;
+    QStackedWidget* documentStack;
     QWidget* documentHull;
     QWidget* documentDummyTitleBarWidget;
     QWidget* dirTreeDummyTitleBarWidget;
@@ -259,8 +262,6 @@ void K3b::MainWindow::initActions()
     
     actionViewDocumentHeader = new KToggleAction(i18n("Show Projects Header"),this);
     actionCollection()->addAction("view_document_header", actionViewDocumentHeader);
-    connect( actionViewDocumentHeader, SIGNAL(toggled(bool)),
-             this, SLOT(slotViewDocumentHeader()) );
 
     KAction* actionToolsFormatMedium = K3b::createAction( this,
                                                           i18n("&Format/Erase rewritable disk..."),
@@ -398,8 +399,9 @@ void K3b::MainWindow::initView()
     m_documentDock->setFeatures( QDockWidget::DockWidgetMovable|QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetFloatable );
     addDockWidget( Qt::BottomDockWidgetArea, m_documentDock );
     actionCollection()->addAction( "view_projects", m_documentDock->toggleViewAction() );
-    d->documentHull = new QWidget( m_documentDock );
-    m_documentDock->setWidget( d->documentHull );
+    d->documentStack = new QStackedWidget( m_documentDock );
+    m_documentDock->setWidget( d->documentStack );
+    d->documentHull = new QWidget( d->documentStack );
     QGridLayout* documentHullLayout = new QGridLayout( d->documentHull );
     documentHullLayout->setMargin( 2 );
     documentHullLayout->setSpacing( 0 );
@@ -409,6 +411,8 @@ void K3b::MainWindow::initView()
     m_documentHeader->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
     m_documentHeader->setLeftPixmap( K3b::Theme::PROJECT_LEFT );
     m_documentHeader->setRightPixmap( K3b::Theme::PROJECT_RIGHT );
+    connect( actionViewDocumentHeader, SIGNAL(toggled(bool)),
+             m_documentHeader, SLOT(setVisible(bool)) );
 
     // add the document tab to the styled document box
     m_documentTab = new K3b::ProjectTabWidget( d->documentHull );
@@ -416,10 +420,13 @@ void K3b::MainWindow::initView()
     documentHullLayout->addWidget( m_documentHeader, 0, 0 );
     documentHullLayout->addWidget( m_documentTab, 1, 0 );
 
-    connect( m_documentTab, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotCurrentDocChanged()) );
+    connect( m_documentTab, SIGNAL(currentChanged(int)), this, SLOT(slotCurrentDocChanged()) );
+    connect( m_documentTab, SIGNAL(docCloseRequested(Doc*)), this, SLOT(slotFileClose(Doc*)) );
 
-    d->welcomeWidget = new K3b::WelcomeWidget( this, m_documentTab );
-    m_documentTab->addTab( d->welcomeWidget, i18n("Quickstart") );
+    d->welcomeWidget = new K3b::WelcomeWidget( this, d->documentStack );
+    d->documentStack->addWidget( d->welcomeWidget );
+    d->documentStack->addWidget( d->documentHull );
+    d->documentStack->setCurrentWidget( d->welcomeWidget );
     // ---------------------------------------------------------------------------------------------
 
     // --- Directory Dock --------------------------------------------------------------------------
@@ -503,16 +510,18 @@ void K3b::MainWindow::createClient( K3b::Doc* doc )
         break;
     }
 
-    doc->setView( view );
-    view->setWindowTitle( doc->URL().fileName() );
+    if( view != 0 ) {
+        doc->setView( view );
+        view->setWindowTitle( doc->URL().fileName() );
 
-    m_documentTab->insertTab( doc );
-    m_documentTab->setCurrentWidget( view );
-    
-    if( m_documentDock->isHidden() )
-        m_documentDock->show();
-
-    slotCurrentDocChanged();
+        m_documentTab->insertTab( doc );
+        m_documentTab->setCurrentWidget( view );
+        
+        if( m_documentDock->isHidden() )
+            m_documentDock->show();
+        
+        slotCurrentDocChanged();
+    }
 }
 
 
@@ -620,7 +629,7 @@ void K3b::MainWindow::readOptions()
     m_dirView->readConfig( grpFileView );
 
     slotViewLockPanels( actionViewLockPanels->isChecked() );
-    slotViewDocumentHeader();
+    m_documentHeader->setVisible( actionViewDocumentHeader->isChecked() );
 }
 
 
@@ -963,32 +972,32 @@ bool K3b::MainWindow::fileSaveAs( K3b::Doc* doc )
 
 void K3b::MainWindow::slotFileClose()
 {
-    slotStatusMsg(i18n("Closing file..."));
-    if( K3b::View* pView = activeView() ) {
-        if( pView ) {
-            K3b::Doc* pDoc = pView->doc();
-
-            if( canCloseDocument(pDoc) ) {
-                closeProject(pDoc);
-            }
-        }
+    if( K3b::View* view = activeView() ) {
+        slotFileClose( view->doc() );
     }
+}
 
+
+void K3b::MainWindow::slotFileClose( Doc* doc )
+{
+    slotStatusMsg(i18n("Closing file..."));
+    if( doc && canCloseDocument(doc) ) {
+        closeProject(doc);
+    }
+    
     slotCurrentDocChanged();
 }
 
 
 void K3b::MainWindow::slotFileCloseAll()
 {
-    while( K3b::View* pView = activeView() ) {
-        if( pView ) {
-            K3b::Doc* pDoc = pView->doc();
+    while( K3b::View* view = activeView() ) {
+        K3b::Doc* doc = view->doc();
 
-            if( canCloseDocument(pDoc) )
-                closeProject(pDoc);
-            else
-                break;
-        }
+        if( canCloseDocument(doc) )
+            closeProject(doc);
+        else
+            break;
     }
 
     slotCurrentDocChanged();
@@ -1005,8 +1014,8 @@ void K3b::MainWindow::closeProject( K3b::Doc* doc )
         }
     }
 
-    // remove the view from the project tab
-    m_documentTab->removePage( doc->view() );
+    // remove the doc from the project tab
+    m_documentTab->removePage( doc );
 
     // remove the project from the manager
     k3bappcore->projectManager()->removeProject( doc );
@@ -1176,8 +1185,10 @@ void K3b::MainWindow::slotCurrentDocChanged()
         slotStateChanged( "state_project_active", KXMLGUIClient::StateNoReverse );
     }
 
-    // make sure the document header is shown (or not)
-    slotViewDocumentHeader();
+    if( k3bappcore->projectManager()->isEmpty() )
+        d->documentStack->setCurrentWidget( d->welcomeWidget );
+    else
+        d->documentStack->setCurrentWidget( d->documentHull );
 }
 
 
@@ -1331,18 +1342,6 @@ void K3b::MainWindow::slotViewLockPanels( bool checked )
         m_documentDock->setTitleBarWidget( 0 );
         m_dirTreeDock->setTitleBarWidget( 0 );
         m_contentsDock->setTitleBarWidget( 0 );
-    }
-}
-
-
-void K3b::MainWindow::slotViewDocumentHeader()
-{
-    if( actionViewDocumentHeader->isChecked() &&
-        !k3bappcore->projectManager()->isEmpty() ) {
-        m_documentHeader->show();
-    }
-    else {
-        m_documentHeader->hide();
     }
 }
 

@@ -45,13 +45,13 @@ public:
           modified(false) {
     }
 
-    ProjectData( K3b::Doc* doc_ )
+    ProjectData( Doc* doc_ )
         : doc(doc_),
           modified(false) {
     }
 
     // the project
-    K3b::Doc* doc;
+    Doc* doc;
 
     // is the project marked modified here
     bool modified;
@@ -62,10 +62,14 @@ public:
 K3b::ProjectTabWidget::ProjectTabWidget( QWidget *parent )
     : QTabWidget( parent )
 {
+    setTabsClosable( true );
+    setMovable( true );
     tabBar()->setAcceptDrops(true);
     tabBar()->installEventFilter( this );
 
     m_projectActionMenu = new KActionMenu( i18n("Project"), this );
+    
+    connect( this, SIGNAL(tabCloseRequested(int)), SLOT(slotTabCloseRequested(int)));
 }
 
 
@@ -77,43 +81,39 @@ K3b::ProjectTabWidget::~ProjectTabWidget()
 void K3b::ProjectTabWidget::addTab( QWidget* child, const QString& label )
 {
     QTabWidget::addTab( child, label );
-    tabBar()->setVisible( count() != 1 );
 }
 
 
 void K3b::ProjectTabWidget::addTab( QWidget* child, const QIcon& iconset, const QString& label )
 {
     QTabWidget::addTab( child, iconset, label );
-    tabBar()->setVisible( count() != 1 );
 }
 
 void K3b::ProjectTabWidget::tabInserted ( int index )
 {
     QTabWidget::tabInserted ( index );
-    tabBar()->setVisible( count() != 1 );
 }
 
 void K3b::ProjectTabWidget::insertTab( QWidget* child, const QString& label, int index )
 {
     QTabWidget::insertTab( index, child, label );
-    tabBar()->setVisible( count() != 1 );
 }
 
 
 void K3b::ProjectTabWidget::insertTab( QWidget* child, const QIcon& iconset, const QString& label, int index )
 {
     QTabWidget::insertTab( index, child, iconset, label );
-    tabBar()->setVisible( count() != 1 );
 }
 
-void K3b::ProjectTabWidget::removePage( QWidget* w )
+void K3b::ProjectTabWidget::removePage( Doc* doc )
 {
-    QTabWidget::removeTab( indexOf( w ) );
-    tabBar()->setVisible( count() != 1 );
+    if( doc != 0 ) {
+        QTabWidget::removeTab( indexOf( doc->view() ) );
+    }
 }
 
 
-void K3b::ProjectTabWidget::insertTab( K3b::Doc* doc )
+void K3b::ProjectTabWidget::insertTab( Doc* doc )
 {
     QTabWidget::addTab( doc->view(), doc->URL().fileName() );
     connect( k3bappcore->projectManager(), SIGNAL(projectSaved(K3b::Doc*)), this, SLOT(slotDocSaved(K3b::Doc*)) );
@@ -154,13 +154,22 @@ void K3b::ProjectTabWidget::slotDocSaved( K3b::Doc* doc )
 }
 
 
+void K3b::ProjectTabWidget::slotTabCloseRequested( int index )
+{
+    QWidget* w = widget( index );
+    if( View* view = dynamic_cast<View*>(w) ) {  
+        emit docCloseRequested( view->doc() );
+    }
+}
+
+
 K3b::Doc* K3b::ProjectTabWidget::projectAt( const QPoint& pos ) const
 {
     int tabPos = tabBar()->tabAt(pos);
     if( tabPos != -1 )
     {
         QWidget *w = widget(tabPos);
-        if(K3b::View* view = dynamic_cast<K3b::View*>(w) )
+        if(View* view = dynamic_cast<View*>(w) )
             return view->doc();
     }
     return 0;
@@ -195,8 +204,8 @@ bool K3b::ProjectTabWidget::eventFilter( QObject* o, QEvent* e )
             QDropEvent* de = static_cast<QDropEvent*>(e);
             KUrl::List l;
             if( K3URLDrag::decode( de, l ) ) {
-                if( K3b::Doc* doc = projectAt( de->pos() ) )
-                    dynamic_cast<K3b::View*>(doc->view())->addUrls( l );
+                if( Doc* doc = projectAt( de->pos() ) )
+                    dynamic_cast<View*>(doc->view())->addUrls( l );
             }
             return true;
         }

@@ -62,16 +62,20 @@ namespace K3b {
         void insertAction( KAction* );
 
         bool eventFilter( QObject* o, QEvent* e );
+        
+    Q_SIGNALS:
+        void docCloseRequested( Doc* doc );
 
     protected:
         virtual void tabInserted ( int index );
 
     public Q_SLOTS:
-        void removePage( QWidget* );
+        void removePage( Doc* doc );
 
     private Q_SLOTS:
         void slotDocChanged( K3b::Doc* );
         void slotDocSaved( K3b::Doc* );
+        void slotTabCloseRequested( int index );
 
     private:
         KActionMenu* m_projectActionMenu;

@@ -193,6 +193,7 @@ namespace K3b {
         void slotFileSaveAll();
         /** asks for saving if the file is modified, then closes the actual file and window*/
         void slotFileClose();
+        void slotFileClose( Doc* doc );
         void slotFileCloseAll();
 
         void slotSettingsConfigure();
@@ -208,7 +209,6 @@ namespace K3b {
         void slotViewStatusBar();
 
         void slotViewLockPanels( bool checked );
-        void slotViewDocumentHeader();
 
         /** changes the statusbar contents for the standard label permanently, used to indicate current actions.
          * @param text the text that is displayed in the statusbar
