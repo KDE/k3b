@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ *           (C)      2009 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -21,53 +22,62 @@
 #include "k3bview.h"
 #include "k3bdoc.h"
 
-#include <kaction.h>
-#include <kiconloader.h>
-#include <kdebug.h>
-#include <k3urldrag.h>
-#include <klocale.h>
-#include <kactionmenu.h>
-#include <kmenu.h>
+#include <KAction>
+#include <KActionMenu>
+#include <KDebug>
+#include <KIconLoader>
+#include <KLocale>
+#include <KMenu>
+#include <KUrl>
 
-#include <qevent.h>
-#include <qtabbar.h>
-//Added by qt3to4:
+#include <QDragEnterEvent>
 #include <QDropEvent>
+#include <QMimeData>
 #include <QMouseEvent>
-#include <QDragMoveEvent>
+#include <QTabBar>
 
+namespace {
+    
+    class ProjectData
+    {
+    public:
+        ProjectData()
+            : doc(0),
+            modified(false) {
+        }
 
-class K3b::ProjectTabWidget::ProjectData
+        ProjectData( K3b::Doc* doc_ )
+            : doc(doc_),
+            modified(false) {
+        }
+
+        // the project
+        K3b::Doc* doc;
+
+        // is the project marked modified here
+        bool modified;
+    };
+    
+} // namespace
+
+class K3b::ProjectTabWidget::Private
 {
 public:
-    ProjectData()
-        : doc(0),
-          modified(false) {
-    }
-
-    ProjectData( Doc* doc_ )
-        : doc(doc_),
-          modified(false) {
-    }
-
-    // the project
-    Doc* doc;
-
-    // is the project marked modified here
-    bool modified;
+    KActionMenu* projectActionMenu;
+    QMap<Doc*, ProjectData> projectDataMap;
 };
 
 
-
 K3b::ProjectTabWidget::ProjectTabWidget( QWidget *parent )
-    : QTabWidget( parent )
+    : QTabWidget( parent ),
+      d( new Private )
 {
     setTabsClosable( true );
     setMovable( true );
     tabBar()->setAcceptDrops(true);
     tabBar()->installEventFilter( this );
 
-    m_projectActionMenu = new KActionMenu( i18n("Project"), this );
+    d->projectActionMenu = new KActionMenu( i18n("Project"), this );
     
     connect( this, SIGNAL(tabCloseRequested(int)), SLOT(slotTabCloseRequested(int)));
 }
@@ -75,6 +85,7 @@ K3b::ProjectTabWidget::ProjectTabWidget( QWidget *parent )
 
 K3b::ProjectTabWidget::~ProjectTabWidget()
 {
+    delete d;
 }
 
 
@@ -119,7 +130,7 @@ void K3b::ProjectTabWidget::insertTab( Doc* doc )
     connect( k3bappcore->projectManager(), SIGNAL(projectSaved(K3b::Doc*)), this, SLOT(slotDocSaved(K3b::Doc*)) );
     connect( doc, SIGNAL(changed(K3b::Doc*)), this, SLOT(slotDocChanged(K3b::Doc*)) );
 
-    m_projectDataMap[doc] = ProjectData( doc );
+    d->projectDataMap[doc] = ProjectData( doc );
 
     if( doc->isModified() )
         slotDocChanged( doc );
@@ -130,16 +141,16 @@ void K3b::ProjectTabWidget::insertTab( Doc* doc )
 
 void K3b::ProjectTabWidget::insertAction( KAction* action )
 {
-    m_projectActionMenu->addAction( action );
+    d->projectActionMenu->addAction( action );
 }
 
 
 void K3b::ProjectTabWidget::slotDocChanged( K3b::Doc* doc )
 {
     // we need to cache the icon changes since the changed() signal will be emitted very often
-    if( !m_projectDataMap[doc].modified ) {
+    if( !d->projectDataMap[doc].modified ) {
         setTabIcon( indexOf( doc->view() ), KIcon( "document-save" ) );
-        m_projectDataMap[doc].modified = true;
+        d->projectDataMap[doc].modified = true;
 
         // we need this one for the session management
         setTabText( indexOf( doc->view() ), doc->URL().fileName() );
@@ -187,25 +198,29 @@ bool K3b::ProjectTabWidget::eventFilter( QObject* o, QEvent* e )
                     if(tabPos!=-1){
                         setCurrentIndex(tabPos);
                         // show the popup menu
-                        m_projectActionMenu->menu()->exec( me->globalPos() );
+                        d->projectActionMenu->menu()->exec( me->globalPos() );
                     }
                 }
                 return true;
             }
         }
 
-        else if( e->type() == QEvent::DragMove ) {
-            QDragMoveEvent* de = static_cast<QDragMoveEvent*>(e);
-            de->setAccepted( K3URLDrag::canDecode(de) && projectAt(de->pos()) );
+        else if( e->type() == QEvent::DragEnter ) {
+            QDragEnterEvent* de = static_cast<QDragEnterEvent*>(e);
+            de->setAccepted( de->mimeData()->hasUrls() && projectAt(de->pos()) );
             return true;
         }
 
         else if( e->type() == QEvent::Drop ) {
             QDropEvent* de = static_cast<QDropEvent*>(e);
-            KUrl::List l;
-            if( K3URLDrag::decode( de, l ) ) {
-                if( Doc* doc = projectAt( de->pos() ) )
-                    dynamic_cast<View*>(doc->view())->addUrls( l );
+            if( de->mimeData()->hasUrls() ) {
+                if( Doc* doc = projectAt( de->pos() ) ) {
+                    KUrl::List urls;
+                    Q_FOREACH( const QUrl& url, de->mimeData()->urls() ) {
+                        urls.append( url );
+                    }
+                    dynamic_cast<View*>(doc->view())->addUrls( urls );
+                }
             }
             return true;
         }

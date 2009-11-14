@@ -16,10 +16,7 @@
 #ifndef K3BPROJECTTABWIDGET_H
 #define K3BPROJECTTABWIDGET_H
 
-#include <qtabwidget.h>
-//Added by qt3to4:
-#include <QEvent>
-#include <kurl.h>
+#include <QTabWidget>
 
 class KAction;
 class KActionMenu;
@@ -78,10 +75,8 @@ namespace K3b {
         void slotTabCloseRequested( int index );
 
     private:
-        KActionMenu* m_projectActionMenu;
-
-        class ProjectData;
-        QMap<Doc*, ProjectData> m_projectDataMap;
+        class Private;
+        Private* d;
     };
 }
 
