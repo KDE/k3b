@@ -70,12 +70,9 @@ K3b::DirOperator::~DirOperator()
 void K3b::DirOperator::readConfig( const KConfigGroup& grp )
 {
     KDirOperator::readConfig( grp );
-    setView( KFile::Default );
-
-    //
+    
     // There seems to be a bug in the KDELibs which makes setURL crash on
     // some systems when used with a non-existing url
-    //
     QString lastUrl = grp.readPathEntry( "last url", QDir::home().absolutePath() );
     while( !QFile::exists(lastUrl) ) {
         QString urlUp = lastUrl.section( '/', 0, -2 );
@@ -84,8 +81,12 @@ void K3b::DirOperator::readConfig( const KConfigGroup& grp )
         else
             lastUrl = urlUp;
     }
-
+    
+    // There seems to be another bug in KDELibs which shows
+    // neverending busy cursor when we call setUrl() after setView()
+    // so we call it in the right order (see bug 113649)
     setUrl( KUrl(lastUrl), true );
+    setView( KFile::Default );
 
     emit urlEntered( url() );
 }
