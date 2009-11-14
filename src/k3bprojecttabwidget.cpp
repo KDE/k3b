@@ -72,6 +72,7 @@ K3b::ProjectTabWidget::ProjectTabWidget( QWidget *parent )
     : QTabWidget( parent ),
       d( new Private )
 {
+    setDocumentMode( true );
     setTabsClosable( true );
     setMovable( true );
     tabBar()->setAcceptDrops(true);

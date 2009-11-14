@@ -403,7 +403,7 @@ void K3b::MainWindow::initView()
     m_documentDock->setWidget( d->documentStack );
     d->documentHull = new QWidget( d->documentStack );
     QGridLayout* documentHullLayout = new QGridLayout( d->documentHull );
-    documentHullLayout->setMargin( 2 );
+    documentHullLayout->setMargin( 0 );
     documentHullLayout->setSpacing( 0 );
 
     m_documentHeader = new K3b::ThemedHeader( d->documentHull );
