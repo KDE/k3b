@@ -27,7 +27,6 @@
 #include <QFrame>
 #include <QMouseEvent>
 #include <QPainter>
-#include <QPixmap>
 #include <QToolTip>
 
 
@@ -41,65 +40,48 @@ namespace {
 } // namespace
 
 
-K3b::FlatButton::FlatButton( QWidget *parent)
-    : QWidget( parent ),
-      m_pressed(false)
+K3b::FlatButton::FlatButton( QWidget* parent)
+    : QAbstractButton( parent )
 {
     init();
 }
 
 
-K3b::FlatButton::FlatButton( const QString& text, QWidget *parent )
-    : QWidget( parent ),
-      m_pressed(false)
+K3b::FlatButton::FlatButton( const QString& text, QWidget* parent )
+    : QAbstractButton( parent )
 {
-    init();
     setText( text );
+    init();
 }
 
 
-K3b::FlatButton::FlatButton( QAction* a, QWidget *parent)
-    : QWidget( parent ),
-      m_pressed(false)
+K3b::FlatButton::FlatButton( QAction* action, QWidget* parent )
+    : QAbstractButton( parent )
 {
+    setText( action->text() );
+    setToolTip( action->toolTip() );
+    setIcon( action->icon() );
     init();
 
-    setText( a->text() );
-    setToolTip( a->toolTip() );
-    setPixmap( a->icon().pixmap( KIconLoader::SizeMedium, KIconLoader::SizeMedium ) );
-
-    connect( this, SIGNAL(clicked()), a, SLOT(trigger()) );
+    connect( this, SIGNAL(clicked(bool)), action, SLOT(trigger()) );
 }
 
 
-K3b::FlatButton::~FlatButton() {}
+K3b::FlatButton::~FlatButton()
+{
+}
 
 
 void K3b::FlatButton::init()
 {
     setContentsMargins( MARGIN_SIZE + FRAME_WIDTH, MARGIN_SIZE + FRAME_HEIGHT,
                         MARGIN_SIZE + FRAME_WIDTH, MARGIN_SIZE + FRAME_HEIGHT );
+    setIconSize( QSize( KIconLoader::SizeMedium, KIconLoader::SizeMedium ) );
     setHover(false);
 
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
     connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()), this, SLOT(slotThemeChanged()) );
     slotThemeChanged();
-}
-
-
-void K3b::FlatButton::setText( const QString& s )
-{
-    m_text = s;
-    m_text.remove( '&' );
-
-    update();
-}
-
-
-void K3b::FlatButton::setPixmap( const QPixmap& p )
-{
-    m_pixmap = p;
-    update();
 }
 
 
@@ -115,29 +97,6 @@ void K3b::FlatButton::leaveEvent( QEvent* )
 }
 
 
-void K3b::FlatButton::mousePressEvent( QMouseEvent* e )
-{
-    if( e->button() == Qt::LeftButton ) {
-        emit pressed();
-        m_pressed = true;
-    }
-    else
-        e->ignore();
-}
-
-
-void K3b::FlatButton::mouseReleaseEvent( QMouseEvent* e )
-{
-    if( e->button() == Qt::LeftButton ) {
-        if( m_pressed  )
-            emit clicked();
-        m_pressed = false;
-    }
-    else
-        e->ignore();
-}
-
-
 void K3b::FlatButton::setHover( bool b )
 {
     m_hover = b;
@@ -149,28 +108,28 @@ QSize K3b::FlatButton::sizeHint() const
 {
     // height: pixmap + spacing + font height + frame width
     // width: max( pixmap, text) + frame width
-    return QSize( qMax( m_pixmap.width(), fontMetrics().width( m_text ) ) + ( MARGIN_SIZE + FRAME_WIDTH )*2,
-                  m_pixmap.height() + fontMetrics().height() + ICON_LABEL_SPACE + ( MARGIN_SIZE + FRAME_HEIGHT )*2 );
+    return QSize( qMax( iconSize().width(), fontMetrics().width( text() ) ) + ( MARGIN_SIZE + FRAME_WIDTH )*2,
+                  iconSize().height() + fontMetrics().height() + ICON_LABEL_SPACE + ( MARGIN_SIZE + FRAME_HEIGHT )*2 );
 }
 
 
-void K3b::FlatButton::paintEvent ( QPaintEvent* event )
+void K3b::FlatButton::paintEvent( QPaintEvent* event )
 {
-    QPainter p(this);
+    QPainter p( this );
     p.setPen( m_hover ? m_backColor : m_foreColor );
     p.fillRect( event->rect(), m_hover ? m_foreColor : m_backColor );
     p.drawRect( event->rect().x(), event->rect().y(), event->rect().width()-1, event->rect().height()-1 );
     
     QRect rect = contentsRect();
 
-    if( !m_pixmap.isNull() ) {
-        int pixX = rect.left() + qMax( 0, (rect.width() - m_pixmap.width()) / 2 );
+    if( !icon().isNull() ) {
+        int pixX = rect.left() + qMax( 0, (rect.width() - iconSize().width()) / 2 );
         int pixY = rect.top();
-        p.drawPixmap( pixX, pixY, m_pixmap );
-        p.drawText( rect, Qt::AlignBottom | Qt::AlignHCenter, m_text );
+        p.drawPixmap( pixX, pixY, icon().pixmap( iconSize() ) );
+        p.drawText( rect, Qt::AlignBottom | Qt::AlignHCenter | Qt::TextHideMnemonic, text() );
     }
     else {
-        p.drawText( rect, Qt::AlignCenter, m_text );
+        p.drawText( rect, Qt::AlignCenter | Qt::TextHideMnemonic, text() );
     }
 }
 

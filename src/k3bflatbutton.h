@@ -15,9 +15,8 @@
 #ifndef FLATBUTTON_H
 #define FLATBUTTON_H
 
-#include <QWidget>
+#include <QAbstractButton>
 #include <QColor>
-#include <QPixmap>
 
 class QEvent;
 class QMouseEvent;
@@ -28,27 +27,21 @@ class QPaintEvent;
    @author Sebastian Trueg
 */
 namespace K3b {
-    class FlatButton : public QWidget
+    class FlatButton : public QAbstractButton
     {
         Q_OBJECT
 
     public:
-        FlatButton( QWidget *parent = 0);
-        FlatButton( const QString& text, QWidget *parent = 0 );
-        FlatButton( QAction*, QWidget *parent = 0);
+        FlatButton( QWidget* parent = 0 );
+        FlatButton( const QString& text, QWidget* parent = 0 );
+        FlatButton( QAction* action, QWidget* parent = 0 );
     
         ~FlatButton();
 
-        QSize sizeHint() const;
+        virtual QSize sizeHint() const;
 
     public Q_SLOTS:
         void setColors( const QColor& fore, const QColor& back );
-        void setText( const QString& );
-        void setPixmap( const QPixmap& );
-
-    Q_SIGNALS:
-        void pressed();
-        void clicked();
 
     private Q_SLOTS:
         void slotThemeChanged();
@@ -56,18 +49,13 @@ namespace K3b {
     private:
         void init();
 
-        void mousePressEvent(QMouseEvent* e);
-        void mouseReleaseEvent(QMouseEvent* e);
-        void enterEvent( QEvent* );
-        void leaveEvent( QEvent* );
-        void paintEvent ( QPaintEvent* event );
+        virtual void enterEvent( QEvent* event );
+        virtual void leaveEvent( QEvent* event );
+        virtual void paintEvent( QPaintEvent* event );
         void setHover( bool );
 
-        bool m_pressed;
         QColor m_backColor;
         QColor m_foreColor;
-        QString m_text;
-        QPixmap m_pixmap;
 
         bool m_hover;
     };
