@@ -237,10 +237,9 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
                         jobFinished(false);
                         return;
                     }
-                    // FIXME: check for growisofs 5.22 (or whatever version is needed) for DVD-R DL
                     else if( k3bcore->externalBinManager()->binObject( "growisofs" ) &&
-                             k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "dual-layer" ) ) {
-                        emit infoMessage( i18n("Growisofs >= 5.20 is needed to write Double Layer DVD+R."), MessageError );
+                             !k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "dual-layer" ) ) {
+                        emit infoMessage( i18n("This growisofs version does not support writing Double Layer DVD."), MessageError );
                         d->running = false;
                         jobFinished(false);
                         return;
