@@ -457,7 +457,10 @@ void K3b::FileTreeView::slotClicked( const QModelIndex& index )
         emit activated( dev );
     }
     else if ( index.isValid() ) {
-        emit activated( d->model->itemForIndex( index ).url() );
+        KFileItem fileItem = d->model->itemForIndex( index );
+        if ( !fileItem.isNull() ) {
+            emit activated( fileItem.url() );
+        }
     }
 }
 
