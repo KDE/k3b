@@ -548,9 +548,11 @@ void K3b::VcdBurnDialog::slotStartClicked()
 {
 
     if ( QFile::exists( vcdDoc() ->vcdImage() ) ) {
-        if ( KMessageBox::warningContinueCancel( this, i18n( "Do you want to overwrite %1?" , vcdDoc() ->vcdImage() ), i18n( "File Exists" ), KGuiItem(i18n("Overwrite")) )
-             != KMessageBox::Continue )
-            return ;
+        if ( KMessageBox::warningContinueCancel( this,
+                                                 i18n( "Do you want to overwrite %1?" , vcdDoc() ->vcdImage() ),
+                                                 i18n( "File Exists" ), KStandardGuiItem::overwrite() )
+            != KMessageBox::Continue )
+            return;
     }
 
     K3b::ProjectBurnDialog::slotStartClicked();

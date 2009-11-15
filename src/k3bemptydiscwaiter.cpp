@@ -259,7 +259,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                                                          d->device->vendor(),
                                                          d->device->description()),
                                                     i18n("Found %1", QLatin1String("BD-RE")),
-                                                    KGuiItem(i18n("&Overwrite"), "erasecd"),
+                                                    KStandardGuiItem::overwrite(),
                                                     KGuiItem(i18n("&Eject"), "media-eject") ) == KMessageBox::Continue ) {
                 finishWaiting( K3b::Device::MEDIA_BD_RE );
             }
@@ -342,7 +342,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                                                              d->device->vendor(),
                                                              d->device->description()),
                                                         i18n("Found %1",QString("DVD+RW")),
-                                                        KGuiItem(i18n("&Overwrite")),
+                                                        KStandardGuiItem::overwrite(),
                                                         KGuiItem(i18n("&Eject"), "media-eject") ) == KMessageBox::Continue ) {
                     finishWaiting( K3b::Device::MEDIA_DVD_PLUS_RW );
                 }
@@ -413,7 +413,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                                                              d->device->vendor(),
                                                              d->device->description()),
                                                         i18n("Found %1",QString("DVD-RW")),
-                                                        KGuiItem(i18n("&Overwrite")),
+                                                        KStandardGuiItem::overwrite(),
                                                         KGuiItem(i18n("&Eject"), "media-eject")) == KMessageBox::Continue ) {
                     finishWaiting( K3b::Device::MEDIA_DVD_RW_OVWR );
                 }

@@ -952,7 +952,7 @@ bool K3b::MainWindow::fileSaveAs( K3b::Doc* doc )
             bool exists = KIO::NetAccess::exists( url, KIO::NetAccess::DestinationSide, 0 );
             if( !exists ||
                 KMessageBox::warningContinueCancel( this, i18n("Do you want to overwrite %1?", url.prettyUrl() ),
-                                                    i18n("File Exists"), KGuiItem(i18n("Overwrite")) )
+                                                    i18n("File Exists"), KStandardGuiItem::overwrite() )
                 == KMessageBox::Continue ) {
 
                 if( k3bappcore->projectManager()->saveProject( doc, url ) ) {
@@ -1460,10 +1460,10 @@ void K3b::MainWindow::slotClearProject()
     K3b::Doc* doc = k3bappcore->projectManager()->activeDoc();
     if( doc ) {
         if( KMessageBox::warningContinueCancel( this,
-                                                i18n("Clear Project"),
                                                 i18n("Do you really want to clear the current project?"),
-                                                KGuiItem(i18n("Clear Project")),
-                                                KGuiItem(i18n("Clear")),
+                                                i18n("Clear Project"),
+                                                KStandardGuiItem::clear(),
+                                                KStandardGuiItem::cancel(),
                                                 QString("clear_current_project_dontAskAgain") ) == KMessageBox::Continue ) {
             doc->clear();
         }

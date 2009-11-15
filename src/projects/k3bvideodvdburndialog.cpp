@@ -169,7 +169,7 @@ void K3b::VideoDvdBurnDialog::slotStartClicked()
         if( QFile::exists( m_tempDirSelectionWidget->tempPath() ) ) {
             if( KMessageBox::warningContinueCancel( this,
                                                     i18n("Do you want to overwrite %1?",m_tempDirSelectionWidget->tempPath()),
-                                                    i18n("File Exists"), KGuiItem(i18n("Overwrite")) )
+                                                    i18n("File Exists"), KStandardGuiItem::overwrite() )
                 == KMessageBox::Continue ) {
                 // delete the file here to avoid problems with free space in K3b::ProjectBurnDialog::slotStartClicked
                 QFile::remove( m_tempDirSelectionWidget->tempPath() );

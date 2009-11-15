@@ -204,11 +204,11 @@ void K3b::ThemeOptionTab::slotRemoveTheme()
     ThemeViewItem* item = (ThemeViewItem*)m_viewTheme->selectedItem();
     if( item ) {
         QString question=i18n("<qt>Are you sure you want to remove the "
-                              "<strong>%1</strong> icon theme?<br>"
+                              "<strong>%1</strong> theme?<br>"
                               "<br>"
                               "This will delete the files installed by this theme.</qt>",item->text(0));
 
-        if( KMessageBox::warningContinueCancel( this, question, i18n("Delete") ) != KMessageBox::Continue )
+        if( KMessageBox::warningContinueCancel( this, question, i18n("Delete"), KStandardGuiItem::del() ) != KMessageBox::Continue )
             return;
 
         K3b::Theme* theme = item->theme;

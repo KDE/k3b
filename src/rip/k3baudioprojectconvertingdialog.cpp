@@ -193,7 +193,8 @@ void K3b::AudioProjectConvertingDialog::slotStartClicked()
         if( KMessageBox::warningContinueCancelList( this,
                                                     i18n("Do you want to overwrite these files?"),
                                                     filesToOverwrite,
-                                                    i18n("Files Exist"), KGuiItem(i18n("Overwrite")) ) == KMessageBox::Cancel )
+                                                    i18n("Files Exist"), KStandardGuiItem::overwrite() )
+            == KMessageBox::Cancel )
             return;
 
 

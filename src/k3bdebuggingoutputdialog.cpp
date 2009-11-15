@@ -79,7 +79,7 @@ void K3b::DebuggingOutputDialog::slotUser1()
     QFile f( filename );
     if( !f.exists() || KMessageBox::warningContinueCancel( this,
 						  i18n("Do you want to overwrite %1?",filename),
-						  i18n("File Exists"), KGuiItem(i18n("Overwrite")) )
+						  i18n("File Exists"), KStandardGuiItem::overwrite() )
 	== KMessageBox::Continue ) {
 
       if( f.open( QIODevice::WriteOnly ) ) {
