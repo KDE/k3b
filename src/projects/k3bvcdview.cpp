@@ -18,7 +18,6 @@
 #include "k3bvcdprojectmodel.h"
 #include "k3bvcdview.h"
 #include "k3bvcddoc.h"
-#include "k3bvcdlistview.h"
 #include "k3bvcdburndialog.h"
 #include "k3bvcdtrackdialog.h"
 #include "k3bfillstatusdisplay.h"
@@ -27,17 +26,16 @@
 #include "k3baction.h"
 
 // QT-includes
-#include <qlayout.h>
-#include <qstring.h>
-
+#include <QLayout>
+#include <QString>
 
 // KDE-includes
-#include <kaction.h>
-#include <kmenu.h>
-#include <klocale.h>
-#include <kapplication.h>
-#include <kdebug.h>
-#include <kmessagebox.h>
+#include <KAction>
+#include <KApplication>
+#include <KDebug>
+#include <KLocale>
+#include <KMenu>
+#include <KMessageBox>
 
 K3b::VcdView::VcdView( K3b::VcdDoc* pDoc, QWidget* parent )
         : K3b::StandardView( pDoc, parent )
@@ -49,16 +47,6 @@ K3b::VcdView::VcdView( K3b::VcdDoc* pDoc, QWidget* parent )
     setModel(m_model);
     setShowDirPanel(false);
 
-#if 0
-    // --- setup GUI ---------------------------------------------------
-
-    m_vcdlist = new K3b::VcdListView( this, pDoc, this );
-    setMainWidget( m_vcdlist );
-    fillStatusDisplay() ->showSize();
-
-    connect( m_vcdlist, SIGNAL( lengthReady() ), fillStatusDisplay(), SLOT( update() ) );
-    connect( m_doc, SIGNAL( newTracks() ), fillStatusDisplay(), SLOT( update() ) );
-#endif
     // setup actions
     m_actionProperties = K3b::createAction( this, i18n("Properties"), "document-properties",
                                             0, this, SLOT(showPropertiesDialog()),
@@ -72,6 +60,8 @@ K3b::VcdView::VcdView( K3b::VcdDoc* pDoc, QWidget* parent )
     m_popupMenu->addAction( m_actionRemove );
     m_popupMenu->addSeparator();
     m_popupMenu->addAction( m_actionProperties );
+    m_popupMenu->addSeparator();
+    m_popupMenu->addAction( actionCollection()->action("project_burn") );
 }
 
 K3b::VcdView::~VcdView()

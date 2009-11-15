@@ -25,19 +25,19 @@
 #include "k3bfillstatusdisplay.h"
 #include "k3bdatapropertiesdialog.h"
 #include "k3baction.h"
+#include "k3bvalidators.h"
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <kaction.h>
-#include <kmenu.h>
-#include <kfiledialog.h>
-#include <kmessagebox.h>
-#include <kurl.h>
+#include <KAction>
+#include <KDebug>
+#include <KFileDialog>
+#include <KLocale>
+#include <KMenu>
+#include <KMessageBox>
+#include <KUrl>
 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-//Added by qt3to4:
+#include <QLabel>
+#include <QLayout>
+#include <QLineEdit>
 #include <QList>
 #include <KToolBar>
 
@@ -74,17 +74,22 @@ K3b::MovixView::MovixView( K3b::MovixDoc* doc, QWidget* parent )
     m_popupMenu->addSeparator();
     m_popupMenu->addAction( m_actionProperties );
     m_popupMenu->addSeparator();
-    //  k3bMain()->actionCollection()->action("file_burn")->plug( m_popupMenu );
-
-
-    addPluginButtons();
-
-    m_volumeIDEdit = new QLineEdit( doc->isoOptions().volumeID(), toolBox() );
-    toolBox()->addWidget( new QLabel( i18n("Volume Name:"), toolBox() ) );
-    toolBox()->addWidget( m_volumeIDEdit );
+    m_popupMenu->addAction( actionCollection()->action("project_burn") );
+    
+    QWidget* volumeNameBox = new QWidget( toolBox() );
+    QHBoxLayout* volumeNameLayout = new QHBoxLayout( volumeNameBox );
+    m_volumeIDEdit = new QLineEdit( doc->isoOptions().volumeID(), volumeNameBox );
+    m_volumeIDEdit->setValidator( new Latin1Validator( m_volumeIDEdit ) );
+    m_volumeIDEdit->setMaximumWidth( m_volumeIDEdit->fontMetrics().width('A')*50 );
+    volumeNameLayout->addWidget( new QLabel( i18n("Volume Name:"), volumeNameBox ), 1, Qt::AlignRight );
+    volumeNameLayout->addWidget( m_volumeIDEdit, 2 );
+    volumeNameLayout->setMargin( 0 );
     connect( m_volumeIDEdit, SIGNAL(textChanged(const QString&)),
-             m_doc,
-             SLOT(setVolumeID(const QString&)) );
+             m_doc, SLOT(setVolumeID(const QString&)) );
+
+    // Setup toolbar
+    addPluginButtons();
+    toolBox()->addWidget( volumeNameBox );
 
     connect( m_doc, SIGNAL(changed()), this, SLOT(slotDocChanged()) );
 }

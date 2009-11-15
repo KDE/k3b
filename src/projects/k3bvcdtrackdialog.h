@@ -22,16 +22,17 @@
 #include <QLabel>
 
 #include "k3bvcddoc.h"
-#include "k3blistview.h"
 
 #include <KComboBox>
 
 class QLabel;
 class QCheckBox;
 class QGroupBox;
+class QSpinBox;
 class KSqueezedTextLabel;
 
 namespace K3b {
+    class ListView;
     class VcdTrack;
 
 #ifdef __GNUC__

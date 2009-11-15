@@ -72,8 +72,9 @@ K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
     QHBoxLayout* volumeNameLayout = new QHBoxLayout( volumeNameBox );
     m_volumeIDEdit = new QLineEdit( doc->isoOptions().volumeID(), volumeNameBox );
     m_volumeIDEdit->setValidator( new Latin1Validator( m_volumeIDEdit ) );
-    volumeNameLayout->addWidget( new QLabel( i18n("Volume Name:"), volumeNameBox ) );
-    volumeNameLayout->addWidget( m_volumeIDEdit );
+    m_volumeIDEdit->setMaximumWidth( m_volumeIDEdit->fontMetrics().width('A')*50 );
+    volumeNameLayout->addWidget( new QLabel( i18n("Volume Name:"), volumeNameBox ), 1, Qt::AlignRight );
+    volumeNameLayout->addWidget( m_volumeIDEdit, 2 );
     volumeNameLayout->setMargin( 0 );
     connect( m_volumeIDEdit, SIGNAL(textChanged(const QString&)),
              m_doc, SLOT(setVolumeID(const QString&)) );

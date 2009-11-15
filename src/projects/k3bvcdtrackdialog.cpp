@@ -18,6 +18,7 @@
 #include "k3bvcdtrack.h"
 #include "k3bmsf.h"
 #include "k3bglobals.h"
+#include "k3blistview.h"
 
 // Qt Includes
 #include <q3buttongroup.h>

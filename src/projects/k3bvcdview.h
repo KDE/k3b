@@ -17,14 +17,8 @@
 #ifndef K3BVCDVIEW_H
 #define K3BVCDVIEW_H
 
-#include <qstringlist.h>
-
-// K3b Includes
 #include "k3bstandardview.h"
 
-namespace K3b {
-    class VcdListView;
-}
 class QWidget;
 namespace K3b {
     class VcdDoc;
@@ -69,8 +63,6 @@ namespace K3b {
             KAction* m_actionProperties;
             KAction* m_actionRemove;
             KMenu* m_popupMenu;
-
-            VcdListView* m_vcdlist;
     };
 }
 
