@@ -31,6 +31,7 @@
 #include <KUrl>
 
 #include <QDragEnterEvent>
+#include <QDragMoveEvent>
 #include <QDropEvent>
 #include <QMimeData>
 #include <QMouseEvent>
@@ -208,7 +209,13 @@ bool K3b::ProjectTabWidget::eventFilter( QObject* o, QEvent* e )
 
         else if( e->type() == QEvent::DragEnter ) {
             QDragEnterEvent* de = static_cast<QDragEnterEvent*>(e);
-            de->setAccepted( de->mimeData()->hasUrls() && projectAt(de->pos()) );
+            de->setAccepted( de->mimeData()->hasUrls() );
+            return true;
+        }
+
+        else if( e->type() == QEvent::DragMove ) {
+            QDragMoveEvent* de = static_cast<QDragMoveEvent*>(e);
+            de->setAccepted( projectAt(de->pos()) != 0 );
             return true;
         }
 
