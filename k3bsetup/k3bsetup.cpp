@@ -46,8 +46,8 @@
 #include <KMessageBox>
 #include <KTextEdit>
 
-#include <PolicyKit/polkit-qt/Action>
-#include <PolicyKit/polkit-qt/Auth>
+#include <polkit-qt/Action>
+#include <polkit-qt/Auth>
 
 #include <sys/types.h>
 #include <sys/stat.h>

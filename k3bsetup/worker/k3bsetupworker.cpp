@@ -18,7 +18,7 @@
 #include "k3bsetupprogramitem.h"
 
 #include <QString>
-#include <PolicyKit/polkit-qt/Auth>
+#include <polkit-qt/Auth>
 
 #include <sys/types.h>
 #include <sys/stat.h>
