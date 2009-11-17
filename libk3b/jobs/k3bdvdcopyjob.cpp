@@ -232,14 +232,14 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
                 if( dh->diskInfo().numLayers() > 1 &&
                     dh->diskInfo().size().mode1Bytes() > 4700372992LL ) {
                     if( !(m_writerDevice->type() & (K3b::Device::DEVICE_DVD_R_DL|K3b::Device::DEVICE_DVD_PLUS_R_DL)) ) {
-                        emit infoMessage( i18n("The writer does not support writing Double Layer DVD."), MessageError );
+                        emit infoMessage( i18n("The writer does not support writing Double Layer DVDs."), MessageError );
                         d->running = false;
                         jobFinished(false);
                         return;
                     }
                     else if( k3bcore->externalBinManager()->binObject( "growisofs" ) &&
                              !k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "dual-layer" ) ) {
-                        emit infoMessage( i18n("This growisofs version does not support writing Double Layer DVD."), MessageError );
+                        emit infoMessage( i18n("This growisofs version does not support writing Double Layer DVDs."), MessageError );
                         d->running = false;
                         jobFinished(false);
                         return;
