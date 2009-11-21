@@ -1,1 +1,2 @@
 #define MPC_HEADER_FILE ${MPC_HEADER_FILE}
+#cmakedefine MPC_OLD_API

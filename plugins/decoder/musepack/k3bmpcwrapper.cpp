@@ -19,32 +19,60 @@
 #include <qfile.h>
 
 
+#ifdef MPC_OLD_API
 mpc_int32_t read_impl( void* data, void* ptr, mpc_int32_t size )
 {
   QFile* input = static_cast<QFile*>( data );
+#else
+mpc_int32_t read_impl( mpc_reader* data, void* ptr, mpc_int32_t size )
+{
+  QFile* input = static_cast<QFile*>( data->data );
+#endif
   return input->read( (char*)ptr, size );
 }
 
 
+#ifdef MPC_OLD_API
 mpc_bool_t seek_impl( void* data, mpc_int32_t offset )
 {
   QFile* input = static_cast<QFile*>( data );
+#else
+mpc_bool_t seek_impl( mpc_reader* data, mpc_int32_t offset )
+{
+  QFile* input = static_cast<QFile*>( data->data );
+#endif
   return input->seek( offset );
 }
 
+#ifdef MPC_OLD_API
 mpc_int32_t tell_impl( void* data )
 {
   QFile* input = static_cast<QFile*>( data );
+#else
+mpc_int32_t tell_impl( mpc_reader* data )
+{
+  QFile* input = static_cast<QFile*>( data->data );
+#endif
   return input->pos();
 }
 
+#ifdef MPC_OLD_API
 mpc_int32_t get_size_impl( void* data )
 {
   QFile* input = static_cast<QFile*>( data );
+#else
+mpc_int32_t get_size_impl( mpc_reader* data )
+{
+  QFile* input = static_cast<QFile*>( data->data );
+#endif
   return input->size();
 }
 
+#ifdef MPC_OLD_API
 mpc_bool_t canseek_impl( void* )
+#else
+mpc_bool_t canseek_impl( mpc_reader* )
+#endif
 {
   return true;
 }
@@ -74,7 +102,9 @@ K3bMpcWrapper::K3bMpcWrapper()
   m_reader->canseek  = canseek_impl;
   m_reader->data     = m_input;
 
+#ifdef MPC_OLD_API
   m_decoder          = new mpc_decoder;
+#endif
 
   m_info             = new mpc_streaminfo;
 }
@@ -85,7 +115,12 @@ K3bMpcWrapper::~K3bMpcWrapper()
   close();
 
   delete m_reader;
+#ifdef MPC_OLD_API
   delete m_decoder;
+#else
+  if( m_decoder )
+    mpc_demux_exit( m_decoder );
+#endif
   delete m_info;
   delete m_input;
 }
@@ -98,6 +133,7 @@ bool K3bMpcWrapper::open( const QString& filename )
   m_input->setFileName( filename );
 
   if( m_input->open( QIODevice::ReadOnly ) ) {
+#ifdef MPC_OLD_API
     mpc_streaminfo_init( m_info );
     if( mpc_streaminfo_read( m_info, m_reader ) != ERROR_CODE_OK ) {
       kDebug() << "(K3bMpcWrapper) Not a valid musepack file: \"" << filename << "\"";
@@ -106,16 +142,25 @@ bool K3bMpcWrapper::open( const QString& filename )
     else {
       mpc_decoder_setup( m_decoder, m_reader );
       if( !mpc_decoder_initialize( m_decoder, m_info ) ) {
+#else
+      m_decoder = mpc_demux_init( m_reader );
+      if( !m_decoder ) {
+#endif
 	kDebug() << "(K3bMpcWrapper) failed to initialize the Musepack decoder.";
 	close();
 	return false;
       }
       else {
+#ifndef MPC_OLD_API
+	mpc_demux_get_info( m_decoder, m_info );
+#endif
 	kDebug() << "(K3bMpcWrapper) valid musepack file. " 
 		  << channels() << " Channels and Samplerate: " << samplerate() << endl;
 	return true;
       }
+#ifdef MPC_OLD_API
     }
+#endif
   }
   else
     return false;
@@ -133,7 +178,16 @@ int K3bMpcWrapper::decode( char* data, int max )
   // FIXME: make this a member variable
   MPC_SAMPLE_FORMAT sample_buffer[MPC_DECODER_BUFFER_LENGTH];
 
+#ifdef MPC_OLD_API
   unsigned int samples = mpc_decoder_decode( m_decoder, sample_buffer, 0, 0 );
+#else
+  unsigned int samples;
+  mpc_frame_info frame;
+
+  frame.buffer = sample_buffer;
+  mpc_demux_decode( m_decoder, &frame );
+  samples = frame.samples;
+#endif
 
   if( samples*channels()*2 > (unsigned int)max ) {
     kDebug() << "(K3bMpcWrapper) buffer not big enough.";
@@ -170,7 +224,11 @@ int K3bMpcWrapper::decode( char* data, int max )
 
 bool K3bMpcWrapper::seek( const K3b::Msf& msf )
 {
+#ifdef MPC_OLD_API
   return mpc_decoder_seek_seconds( m_decoder, (double)msf.totalFrames()/75.0 );
+#else
+  return mpc_demux_seek_second( m_decoder, (double)msf.totalFrames()/75.0 );
+#endif
 }
 
 

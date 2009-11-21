@@ -49,7 +49,11 @@ class K3bMpcWrapper
  private:
   QFile* m_input;
   mpc_reader* m_reader;
+#ifdef MPC_OLD_API
   mpc_decoder* m_decoder;
+#else
+  mpc_demux* m_decoder;
+#endif
   mpc_streaminfo* m_info;
 };
 
