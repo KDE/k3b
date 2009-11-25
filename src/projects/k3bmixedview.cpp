@@ -19,12 +19,13 @@
 #include "k3baudioprojectmodel.h"
 //#include "k3baudiotrackplayer.h"
 #include "k3baudioviewimpl.h"
-#include "k3bmixeddoc.h"
-#include "k3bmixedburndialog.h"
-#include "k3bmixedprojectmodel.h"
 #include "k3bdatadoc.h"
 #include "k3bdataprojectmodel.h"
 #include "k3bdataviewimpl.h"
+#include "k3bmixeddoc.h"
+#include "k3bmixedburndialog.h"
+#include "k3bmixedprojectmodel.h"
+#include "k3bvolumenamewidget.h"
 
 #include <KAction>
 #include <KActionCollection>
@@ -88,6 +89,7 @@ K3b::MixedView::MixedView( K3b::MixedDoc* doc, QWidget* parent )
     toolBox()->addAction( actionCollection()->action( "parent_dir" ) );
     toolBox()->addSeparator();
     addPluginButtons();
+    toolBox()->addWidget( new VolumeNameWidget( doc->dataDoc(), toolBox() ) );
 
 #ifdef __GNUC__
 #warning enable player once ported to Phonon

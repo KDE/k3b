@@ -27,9 +27,7 @@ namespace K3b {
 }
 class KAction;
 class KMenu;
-class Q3ListViewItem;
 class QPoint;
-class QLineEdit;
 
 namespace K3b {
     class MovixProjectModel;
@@ -48,7 +46,6 @@ namespace K3b {
         void slotRemoveSubTitleItems();
         void showPropertiesDialog();
         void slotAddSubTitleFile();
-        void slotDocChanged();
 
     protected:
         /**
@@ -68,8 +65,6 @@ namespace K3b {
         KAction* m_actionRemoveSubTitle;
         KAction* m_actionAddSubTitle;
         KMenu* m_popupMenu;
-
-        QLineEdit* m_volumeIDEdit;
     };
 }
 

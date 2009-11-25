@@ -20,7 +20,7 @@
 #include "k3bdatadoc.h"
 #include "k3bdataprojectmodel.h"
 #include "k3bdataviewimpl.h"
-#include "k3bvalidators.h"
+#include "k3bvolumenamewidget.h"
 
 #include <KAction>
 #include <KActionCollection>
@@ -30,10 +30,6 @@
 #include <KMenu>
 #include <KToolBar>
 #include <KUrl>
-
-#include <QLabel>
-#include <QLayout>
-#include <QLineEdit>
 
 
 K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
@@ -46,7 +42,6 @@ K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
     m_model = new DataProjectModel(doc, this);
     m_dataViewImpl = new DataViewImpl( this, m_doc, m_model, actionCollection() );
 
-    connect( m_doc, SIGNAL(changed()), this, SLOT(slotDocChanged()) );
     connect( this, SIGNAL(currentRootChanged(QModelIndex)),
              m_dataViewImpl, SLOT(slotCurrentRootChanged(QModelIndex)) );
     connect( this, SIGNAL(activated(QModelIndex)),
@@ -67,17 +62,6 @@ K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
              this, SLOT(slotItemProperties()) );
     connect( actionCollection()->action( "open" ), SIGNAL( triggered() ),
              this, SLOT(slotOpen()) );
-
-    QWidget* volumeNameBox = new QWidget( toolBox() );
-    QHBoxLayout* volumeNameLayout = new QHBoxLayout( volumeNameBox );
-    m_volumeIDEdit = new QLineEdit( doc->isoOptions().volumeID(), volumeNameBox );
-    m_volumeIDEdit->setValidator( new Latin1Validator( m_volumeIDEdit ) );
-    m_volumeIDEdit->setMaximumWidth( m_volumeIDEdit->fontMetrics().width('A')*50 );
-    volumeNameLayout->addWidget( new QLabel( i18n("Volume Name:"), volumeNameBox ), 1, Qt::AlignRight );
-    volumeNameLayout->addWidget( m_volumeIDEdit, 2 );
-    volumeNameLayout->setMargin( 0 );
-    connect( m_volumeIDEdit, SIGNAL(textChanged(const QString&)),
-             m_doc, SLOT(setVolumeID(const QString&)) );
     
     // Setup toolbar
     toolBox()->addAction( actionCollection()->action( "project_data_import_session" ) );
@@ -88,7 +72,7 @@ K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
     toolBox()->addSeparator();
     addPluginButtons();
     toolBox()->addSeparator();
-    toolBox()->addWidget( volumeNameBox );
+    toolBox()->addWidget( new VolumeNameWidget( m_doc, toolBox() ) );
     
     // set the model for the StandardView's views
     setModel(m_model);
@@ -149,14 +133,6 @@ void K3b::DataView::slotBurn()
         dlg->execBurnDialog(true);
         delete dlg;
     }
-}
-
-
-void K3b::DataView::slotDocChanged()
-{
-    // do not update the editor in case it changed the volume id itself
-    if( m_doc->isoOptions().volumeID() != m_volumeIDEdit->text() )
-        m_volumeIDEdit->setText( m_doc->isoOptions().volumeID() );
 }
 
 

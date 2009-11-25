@@ -26,9 +26,6 @@ include_directories(
   ${libk3b_SOURCE_DIR}/cddb
   )
 
-add_subdirectory( option )
-add_subdirectory( rip )
-add_subdirectory( projects )
 add_subdirectory( pics )
 add_subdirectory( icons )
 add_subdirectory( konqi )
@@ -88,6 +85,7 @@ set(k3b_project_SRCS
   projects/k3baudiotrackaddingdialog.cpp 
   projects/k3bencodingconverter.cpp 
   projects/k3bdatamultisessionimportdialog.cpp
+  projects/k3bvolumenamewidget.cpp
   )
 
 kde4_add_ui_files(k3b_project_SRCS

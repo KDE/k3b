@@ -22,10 +22,9 @@
 #include "k3bmovixburndialog.h"
 #include "k3bmovixfileitem.h"
 
-#include "k3bfillstatusdisplay.h"
 #include "k3bdatapropertiesdialog.h"
 #include "k3baction.h"
-#include "k3bvalidators.h"
+#include "k3bvolumenamewidget.h"
 
 #include <KAction>
 #include <KDebug>
@@ -35,9 +34,6 @@
 #include <KMessageBox>
 #include <KUrl>
 
-#include <QLabel>
-#include <QLayout>
-#include <QLineEdit>
 #include <QList>
 #include <KToolBar>
 
@@ -75,23 +71,10 @@ K3b::MovixView::MovixView( K3b::MovixDoc* doc, QWidget* parent )
     m_popupMenu->addAction( m_actionProperties );
     m_popupMenu->addSeparator();
     m_popupMenu->addAction( actionCollection()->action("project_burn") );
-    
-    QWidget* volumeNameBox = new QWidget( toolBox() );
-    QHBoxLayout* volumeNameLayout = new QHBoxLayout( volumeNameBox );
-    m_volumeIDEdit = new QLineEdit( doc->isoOptions().volumeID(), volumeNameBox );
-    m_volumeIDEdit->setValidator( new Latin1Validator( m_volumeIDEdit ) );
-    m_volumeIDEdit->setMaximumWidth( m_volumeIDEdit->fontMetrics().width('A')*50 );
-    volumeNameLayout->addWidget( new QLabel( i18n("Volume Name:"), volumeNameBox ), 1, Qt::AlignRight );
-    volumeNameLayout->addWidget( m_volumeIDEdit, 2 );
-    volumeNameLayout->setMargin( 0 );
-    connect( m_volumeIDEdit, SIGNAL(textChanged(const QString&)),
-             m_doc, SLOT(setVolumeID(const QString&)) );
 
     // Setup toolbar
     addPluginButtons();
-    toolBox()->addWidget( volumeNameBox );
-
-    connect( m_doc, SIGNAL(changed()), this, SLOT(slotDocChanged()) );
+    toolBox()->addWidget( new VolumeNameWidget( doc, toolBox() ) );
 }
 
 
@@ -199,14 +182,6 @@ void K3b::MovixView::contextMenu( const QPoint& pos )
 K3b::ProjectBurnDialog* K3b::MovixView::newBurnDialog( QWidget* parent )
 {
     return new K3b::MovixBurnDialog( m_doc, parent );
-}
-
-
-void K3b::MovixView::slotDocChanged()
-{
-    // do not update the editor in case it changed the volume id itself
-    if( m_doc->isoOptions().volumeID() != m_volumeIDEdit->text() )
-        m_volumeIDEdit->setText( m_doc->isoOptions().volumeID() );
 }
 
 #include "k3bmovixview.moc"

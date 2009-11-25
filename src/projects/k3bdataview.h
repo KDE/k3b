@@ -19,7 +19,6 @@
 
 #include "k3bstandardview.h"
 
-class QLineEdit;
 class QModelIndex;
 class KAction;
 class KMenu;
@@ -49,8 +48,6 @@ namespace K3b {
         void clearImportedSession();
         void editBootImages();
 
-        void slotDocChanged();
-
         void addUrls( const KUrl::List& );
 
     private Q_SLOTS:
@@ -59,8 +56,6 @@ namespace K3b {
         void slotOpen();
 
     protected:
-        QLineEdit* m_volumeIDEdit;
-
         virtual ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
 
         /**
