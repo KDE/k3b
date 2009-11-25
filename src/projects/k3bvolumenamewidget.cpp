@@ -19,6 +19,7 @@
 #include <KLineEdit>
 #include <KLocale>
 
+#include <QEvent>
 #include <QHBoxLayout>
 #include <QLabel>
 
@@ -29,7 +30,15 @@ class VolumeNameWidget::Private
 public:
     DataDoc* doc;
     KLineEdit* volumeNameEdit;
+    
+    void fontChanged( const QFontMetrics& fontMetrics );
 };
+
+
+void VolumeNameWidget::Private::fontChanged( const QFontMetrics& fontMetrics )
+{
+    volumeNameEdit->setMaximumWidth( fontMetrics.width('A')*50 );
+}
 
 
 VolumeNameWidget::VolumeNameWidget( DataDoc* doc, QWidget* parent )
@@ -40,8 +49,8 @@ VolumeNameWidget::VolumeNameWidget( DataDoc* doc, QWidget* parent )
     
     d->volumeNameEdit = new KLineEdit( doc->isoOptions().volumeID(), this );
     d->volumeNameEdit->setValidator( new Latin1Validator( d->volumeNameEdit ) );
-    d->volumeNameEdit->setMaximumWidth( d->volumeNameEdit->fontMetrics().width('A')*50 );
     d->volumeNameEdit->setClearButtonShown( true );
+    d->fontChanged( fontMetrics() );
     
     QHBoxLayout* layout = new QHBoxLayout( this );
     layout->addWidget( new QLabel( i18n("Volume Name:"), this ), 1, Qt::AlignRight );
@@ -58,6 +67,15 @@ VolumeNameWidget::VolumeNameWidget( DataDoc* doc, QWidget* parent )
 VolumeNameWidget::~VolumeNameWidget()
 {
     delete d;
+}
+
+
+void VolumeNameWidget::changeEvent( QEvent* event )
+{
+    if( event->type() == QEvent::FontChange ) {
+        d->fontChanged( fontMetrics() );
+    }
+    QWidget::changeEvent( event );
 }
 
 

@@ -17,6 +17,8 @@
 
 #include <QWidget>
 
+class QEvent;
+
 namespace K3b {
     
     class DataDoc;
@@ -33,6 +35,9 @@ namespace K3b {
     public:
         VolumeNameWidget( DataDoc* doc, QWidget* parent = 0 );
         ~VolumeNameWidget();
+        
+    protected:
+        void changeEvent( QEvent* event );
         
     private Q_SLOTS:
         void slotDocChanged();
