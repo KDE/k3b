@@ -510,14 +510,14 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
     }
     if( !haveMp3Decoder ) {
         problems.append( K3b::SystemProblem( K3b::SystemProblem::WARNING,
-                                           i18n("Mp3 Audio Decoder plugin not found."),
-                                           i18n("K3b could not load or find the Mp3 decoder plugin. This means that you will not "
-                                                "be able to create Audio CDs from Mp3 files. Many Linux distributions do not "
-                                                "include Mp3 support for legal reasons."),
-                                           i18n("To enable Mp3 support, please install the MAD Mp3 decoding library as well as the "
-                                                "K3b MAD Mp3 decoder plugin (the latter may already be installed but not functional "
-                                                "due to the missing libmad). Some distributions allow installation of Mp3 support "
-                                                "via an online update tool (e.g. SUSE's YOU)."),
+                                           i18n("MP3 Audio Decoder plugin not found."),
+                                           i18n("K3b could not load or find the MP3 decoder plugin. This means that you will not "
+                                                "be able to create Audio CDs from MP3 files. Many Linux distributions do not "
+                                                "include MP3 support for legal reasons."),
+                                           i18n("To enable MP3 support, please install the MAD MP3 decoding library as well as the "
+                                                "K3b MAD MP3 decoder plugin (the latter may already be installed but not functional "
+                                                "due to the missing libmad). Some distributions allow installation of MP3 support "
+                                                "via an online update tool."),
                                            false ) );
     }
 
