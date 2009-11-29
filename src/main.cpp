@@ -53,8 +53,8 @@ int main( int argc, char* argv[] )
 
     aboutData.addAuthor(ki18n("Sebastian Trüg"),ki18n("Maintainer and Lead Developer"), "trueg@k3b.org");
     aboutData.addAuthor(ki18n("Michał Małek"),ki18n("Developer"), "michalm@jabster.pl");
-    aboutData.addAuthor(ki18n("Christian Kvasny"),ki18n("VideoCD Project and VideoCD ripping"), "chris@k3b.org");
-    aboutData.addAuthor(ki18n("Montel Laurent"), ki18n("Initial port to KDE 4"), "montel@kde.org");
+    aboutData.addAuthor(ki18n("Christian Kvasny"),ki18n("Video CD Project and Video CD ripping"), "chris@k3b.org");
+    aboutData.addAuthor(ki18n("Montel Laurent"), ki18n("Initial port to KDE Platform 4"), "montel@kde.org");
     aboutData.addAuthor( ki18n("Ralf Habacker"), ki18n( "Windows port" ), "ralf.habacker@freenet.de" );
 
     aboutData.addCredit(ki18n("Klaus-Dieter Krannich"), ki18n("Advanced Cdrdao integration"), "kd@k3b.org" );
@@ -113,25 +113,15 @@ int main( int argc, char* argv[] )
     KCmdLineOptions options;
     options.add("+[URL(s)]", ki18n("file(s) to open"));
     options.add("data", ki18n("Create a new data CD project and add all given files"));
-    options.add("datacd", ki18n("Create a new data CD project and add all given files (DEPRECATED. Use --data)"));
     options.add("audiocd", ki18n("Create a new audio CD project and add all given files"));
     options.add("videocd", ki18n("Create a new video CD project and add all given files"));
     options.add("mixedcd", ki18n("Create a new mixed mode CD project and add all given files"));
     options.add("emovix", ki18n("Create a new eMovix CD project and add all given files"));
-    options.add("emovixcd", ki18n("Create a new eMovix CD project and add all given files (DEPRECATED. Use --emovix)"));
-    options.add("datadvd", ki18n("Create a new data DVD project and add all given files (DEPRECATED. Use --data)"));
-    options.add("emovixdvd", ki18n("Create a new eMovix DVD project and add all given files (DEPRECATED. Use --emovix)"));
     options.add("videodvd", ki18n("Create a new Video DVD project and add all given files"));
     options.add("burn", ki18n("Open the project burn dialog for the current project"));
     options.add("copy <device>", ki18n("Open the copy dialog, optionally specify the source device"));
-    options.add("copycd <device>", ki18n("Open the CD copy dialog, optionally specify the source device (DEPRECATED: Use --copy)"));
-    options.add("copydvd <device>", ki18n("Open the DVD copy dialog (DEPRECATED: Use --copy)"));
     options.add("image <url>", ki18n("Write an image to a CD or DVD"));
-    options.add("cdimage <url>", ki18n("Write a CD image to a CD (DEPRECATED: Use --image)"));
-    options.add("dvdimage <url>", ki18n("Write a DVD ISO9660 image to a DVD (DEPRECATED: Use --image)"));
     options.add("format <device>", ki18n("Format a rewritable medium"));
-    options.add("erasecd <device>", ki18n("Erase a CDRW (DEPRECATED: Use --format)"));
-    options.add("formatdvd <device>", ki18n("Format a DVD-RW or DVD+RW (DEPRECATED: Use --format)"));
     options.add("cddarip <device>", ki18n("Extract Audio tracks digitally (+encoding)"));
     options.add("videodvdrip <device>", ki18n("Rip Video DVD Titles (+transcoding)"));
     options.add("videocdrip <device>", ki18n("Rip Video CD Tracks"));
