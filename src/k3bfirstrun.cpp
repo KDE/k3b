@@ -58,17 +58,17 @@ K3b::FirstRun::FirstRun( QWidget* parent )
     setButtons(Ok|Cancel);
     setDefaultButton(Ok);
 
-    setButtonText(Ok, i18n("Enable Konqueror integration") );
-    setButtonText(Cancel, i18n("No Konqueror integration") );
+    setButtonText(Ok, i18n("Enable KDE file manager integration") );
+    setButtonText(Cancel, i18n("No KDE file manager integration") );
 
     QFrame* plain = new QFrame();
     setMainWidget(plain);
-    QLabel* label = new QLabel( i18n("<p>K3b can integrate itself into Konqueror. This integration "
+    QLabel* label = new QLabel( i18n("<p>K3b can integrate itself into KDE file managers like Dolphin or Konqueror. This integration "
                                      "allows K3b to be started from the context menu in the file manager."
-                                     "<p><em>Konqueror integration can always be disabled and "
+                                     "<p><em>File manager integration can always be disabled and "
                                      "enabled again from the K3b settings.</em>"), plain );
     QLabel* pixLabel = new QLabel( plain );
-    pixLabel->setPixmap( DesktopIcon( "konqueror" ) );
+    pixLabel->setPixmap( DesktopIcon( "system-file-manager" ) );
 
     QHBoxLayout* lay = new QHBoxLayout( plain );
     lay->setMargin( 0 );

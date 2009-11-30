@@ -121,15 +121,15 @@
       <item>
        <widget class="QCheckBox" name="m_checkKonqiIntegration" >
         <property name="toolTip" >
-         <string>Enable integration of K3b actions into Konqueror menus</string>
+         <string>Enable integration of K3b actions into KDE file manager menus</string>
         </property>
         <property name="whatsThis" >
-         <string>&lt;p>K3b can integrate itself into Konqueror. This integration allows to start K3b from the context menu in the file manager.
+         <string>&lt;p>K3b can integrate itself into KDE file managers like Dolphin or Konqueror. This integration allows to start K3b from the context menu in the file manager.
 &lt;p>A typical example is: in order to burn a folder to a data CD one clicks on the folder using the right mouse button. In the appearing context menu one selects "Create Data CD with K3b..." and a new K3b project containing the folder is created.
-&lt;p>&lt;em>Konqueror integration is not enabled by default to prevent unwanted cluttering of the Konqueror menus.&lt;/em></string>
+&lt;p>&lt;em>File manager integration is not enabled by default to prevent unwanted cluttering of the menus.&lt;/em></string>
         </property>
         <property name="text" >
-         <string>E&amp;nable Konqueror integration</string>
+         <string>E&amp;nable KDE file manager integration</string>
         </property>
        </widget>
       </item>
