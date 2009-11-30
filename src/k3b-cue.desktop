@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 NoDisplay=true
-Exec=k3b --cdimage %U
+Exec=k3b --image %U
 Icon=k3b
 Terminal=false
 Name=K3b
