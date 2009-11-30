@@ -4,8 +4,7 @@ libk3b
 This is the k3b library which provides a lot of CD/DVD writing classes.
 
 If you want to use it please be aware that the API is far from stable and
-there will be no binary compatibility (or even source compatibility) before
-K3b 1.0.
+there will be no binary compatibility (or even source compatibility).
 
 But you are welcome to help fix the API and improve it whereever it is needed.
 
