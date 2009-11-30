@@ -36,20 +36,20 @@
 
 #include <config-k3b.h>
 
-static const char* description = I18N_NOOP("<p>K3b is a full-featured <b>CD/DVD/Blu-ray burning and ripping application</b>.<br/>"
-                                           "It supports a variety of project types as well as <i>copying</i> of optical media, "
-                                           "burning of different types of <i>images</i>, and <i>ripping</i> Audio CDs, Video CDs, and "
+static const char* description = I18N_NOOP("<p>K3b is a full-featured CD/DVD/Blu-ray burning and ripping application.<br/>"
+                                           "It supports a variety of project types as well as copying of optical media, "
+                                           "burning of different types of images, and ripping Audio CDs, Video CDs, and "
                                            "Video DVDs.<br/>"
-                                           "Its <i>convenient user interface</i> is targetted at all audiences, trying "
-                                           "to be <i>as simple as possible</i> for novice users while also providing all features "
-                                           "an <i>advanced user</i> might need.");
+                                           "Its convenient user interface is targeted at all audiences, trying "
+                                           "to be as simple as possible for novice users while also providing all features "
+                                           "an advanced user might need.");
 
 
 int main( int argc, char* argv[] )
 {
     KAboutData aboutData( "k3b",0, ki18n("K3b"),
                           LIBK3B_VERSION, ki18n(description), KAboutData::License_GPL,
-                          ki18n("(C) 1998 - 2009 Sebastian Trüg"), KLocalizedString(), I18N_NOOP("http://www.k3b.org" ));
+                          ki18n("(C) 1998-2009 Sebastian Trüg"), KLocalizedString(), I18N_NOOP("http://www.k3b.org" ));
 
     aboutData.addAuthor(ki18n("Sebastian Trüg"),ki18n("Maintainer and Lead Developer"), "trueg@k3b.org");
     aboutData.addAuthor(ki18n("Michał Małek"),ki18n("Developer"), "michalm@jabster.pl");
