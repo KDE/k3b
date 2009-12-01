@@ -235,8 +235,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                         "runs with high priority that increases the overall "
                                                         "stability of the burning process. As well as this, "
                                                         "it allows the size of the burning buffer to be changed, "
-                                                        "and a lot of user problems can be solved this way. This is also "
-                                                        "true when using SUSE's resmgr."),
+                                                        "and a lot of user problems can be solved this way."),
                                                    QString(),
                                                    true ) );
 #endif // CDRECORD_SUID_ROOT_CHECK
