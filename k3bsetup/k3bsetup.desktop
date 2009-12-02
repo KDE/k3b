@@ -1,6 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=K3bSetup – modify permission for CD/DVD burning with K3b
+Comment[de]=K3b-Einrichtungsassistent – Zugriffsrechte zum Brennen mit K3b anpassen
+Comment[en_GB]=K3bSetup – modify permission for CD/DVD burning with K3b
+Comment[pt]=K3bSetup - modificar as permissões para a gravação de CDs/DVDs com o K3b
+Comment[sv]=Ställ in K3b: ändra rättigheter för att bränna cd/dvd med K3b
+Comment[uk]=K3bSetup — змініть права для запису КД/DVD у K3b
+Comment[x-test]=xxK3bSetup – modify permission for CD/DVD burning with K3bxx
 Exec=k3bsetup
 Keywords=K3bSetup,k3bsetup
 Keywords[bg]=K3bSetup2,k3bsetup2,Настройване на K3b
@@ -84,3 +90,9 @@ X-KDE-Keywords=k3b,k3bsetup,cd,dvd
 Categories=Application;System;X-KDE-System;
 
 GenericName=CD/DVD/BD Burning Setup
+GenericName[de]=CD/DVD/BD brennen einrichten
+GenericName[en_GB]=CD/DVD/BD Burning Setup
+GenericName[pt]=Configuração da Gravação de CDs/DVDs/BDs
+GenericName[sv]=Cd, dvd och bd-bränninställning
+GenericName[uk]=Налаштування запису КД, DVD та BD
+GenericName[x-test]=xxCD/DVD/BD Burning Setupxx
