@@ -182,9 +182,7 @@ bool K3b::Application::processCmdLineArgs()
     }
 
     K3b::Doc* doc = 0;
-    if( args->isSet( "data" ) ||
-        args->isSet( "datacd" ) ||
-        args->isSet( "datadvd" )) {
+    if( args->isSet( "data" ) ) {
         doc = m_mainWindow->slotNewDataDoc();
     }
     else if( args->isSet( "audiocd" ) ) {
@@ -196,9 +194,7 @@ bool K3b::Application::processCmdLineArgs()
     else if( args->isSet( "videocd" ) ) {
         doc = m_mainWindow->slotNewVcdDoc();
     }
-    else if( args->isSet( "emovix" ) ||
-             args->isSet( "emovixcd" ) ||
-             args->isSet( "emovixdvd" ) ) {
+    else if( args->isSet( "emovix" ) ) {
         doc = m_mainWindow->slotNewMovixDoc();
     }
     else if( args->isSet( "videodvd" ) ) {
@@ -220,40 +216,22 @@ bool K3b::Application::processCmdLineArgs()
     }
 
     // we only allow one dialog to be opened
-    if( args->isSet( "cdimage" ) ) {
-        showTips = false;
-        dialogOpen = true;
-        if( k3bcore->jobsRunning() == 0 ) {
-            m_mainWindow->slotWriteImage( KUrl(  args->getOption( "cdimage" )  ) );
-        }
-    }
-    else if( args->isSet( "dvdimage" ) ) {
-        showTips = false;
-        dialogOpen = true;
-        if( k3bcore->jobsRunning() == 0 ) {
-            m_mainWindow->slotWriteImage( KUrl(args->getOption( "dvdimage" ) ) );
-        }
-    }
-    else if( args->isSet( "image" ) ) {
+    if( args->isSet( "image" ) ) {
         showTips = false;
         dialogOpen = true;
         if( k3bcore->jobsRunning() == 0 ) {
             m_mainWindow->slotWriteImage( KUrl(args->getOption( "image" ) ) );
         }
     }
-    else if( args->isSet("copy") ||
-             args->isSet("copycd") ||
-             args->isSet("copydvd")) {
+    else if( args->isSet("copy") ) {
         showTips = false;
         dialogOpen = true;
-        m_mainWindow->mediaCopy( m_core->deviceManager()->findDeviceByUdi( args->getOption( "copycd"  ) ) );
+        m_mainWindow->mediaCopy( m_core->deviceManager()->findDeviceByUdi( args->getOption( "copy"  ) ) );
     }
-    else if( args->isSet("erasecd") ||
-             args->isSet("formatdvd") ||
-             args->isSet("format")) {
+    else if( args->isSet("format") ) {
         showTips = false;
         dialogOpen = true;
-        m_mainWindow->formatMedium( m_core->deviceManager()->findDeviceByUdi( args->getOption( "erasecd" ) ) );
+        m_mainWindow->formatMedium( m_core->deviceManager()->findDeviceByUdi( args->getOption( "format" ) ) );
     }
 
     // no dialog used here

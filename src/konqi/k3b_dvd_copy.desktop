@@ -50,5 +50,5 @@ Name[uk]=Скопіювати DVD через K3b
 Name[x-test]=xxCopy DVD with K3bxx
 Name[zh_CN]=用 K3b 复制 DVD
 Name[zh_TW]=用 K3b 複製 DVD
-Exec=k3b --copydvd %u
+Exec=k3b --copy %u
 Icon=k3b
