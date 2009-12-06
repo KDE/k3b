@@ -27,6 +27,7 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 
+inline const int qMax(const int a, const int b) { if (a < b) return b; return a; }
 
 class K3bVideoDVDTitleTranscodingJob::Private
 {
