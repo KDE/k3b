@@ -37,13 +37,13 @@
 K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, DataProjectModel* model, KActionCollection* actionCollection )
     : QObject( view ), m_view( view ), m_doc( doc ), m_model( model )
 {
-    m_actionNewDir = createAction( m_view, i18n("New Directory..."), "folder-new", Qt::CTRL+Qt::Key_N, 0, 0,
+    m_actionNewDir = createAction( m_view, i18n("New Folder..."), "folder-new", Qt::CTRL+Qt::Key_N, 0, 0,
                                    actionCollection, "new_dir" );
     m_actionRemove = createAction( m_view, i18n("Remove"), "edit-delete", Qt::Key_Delete, 0, 0,
                                    actionCollection, "remove" );
     m_actionRename = createAction( m_view, i18n("Rename"), "edit-rename", Qt::Key_F2, 0, 0,
                                    actionCollection, "rename" );
-    m_actionParentDir = createAction( m_view, i18n("Parent Directory"), "go-up", 0, 0, 0,
+    m_actionParentDir = createAction( m_view, i18n("Parent Folder"), "go-up", 0, 0, 0,
                                       actionCollection, "parent_dir" );
     m_actionProperties = createAction( m_view, i18n("Properties"), "document-properties", 0, 0, 0,
                                        actionCollection, "properties" );
@@ -99,15 +99,15 @@ void K3b::DataViewImpl::newDir( const QModelIndex& parent )
     QString name;
     bool ok;
 
-    name = KInputDialog::getText( i18n("New Directory"),
-                                i18n("Please insert the name for the new directory:"),
-                                i18n("New Directory"), &ok, m_view );
+    name = KInputDialog::getText( i18n("New Folder"),
+                                i18n("Please insert the name for the new folder:"),
+                                i18n("New Folder"), &ok, m_view );
 
     while( ok && DataDoc::nameAlreadyInDir( name, parentDir ) ) {
-        name = KInputDialog::getText( i18n("New Directory"),
+        name = KInputDialog::getText( i18n("New Folder"),
                                     i18n("A file with that name already exists. "
-                                        "Please insert the name for the new directory:"),
-                                    i18n("New Directory"), &ok, m_view );
+                                        "Please insert the name for the new folder:"),
+                                    i18n("New Folder"), &ok, m_view );
     }
 
     if( !ok )

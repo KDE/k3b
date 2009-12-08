@@ -161,14 +161,14 @@ K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& da
     m_checkHideOnRockRidge->setToolTip( i18n("Hide this file in the RockRidge filesystem") );
     m_checkHideOnJoliet->setToolTip( i18n("Hide this file in the Joliet filesystem") );
     m_editSortWeight->setToolTip( i18n("Modify the physical sorting") );
-    m_checkHideOnRockRidge->setWhatsThis( i18n("<p>If this option is checked, the file or directory "
+    m_checkHideOnRockRidge->setWhatsThis( i18n("<p>If this option is checked, the file or folder "
                                                "(and its entire contents) will be hidden on the "
                                                "ISO9660 and RockRidge filesystem.</p>"
                                                "<p>This is useful, for example, for having different README "
                                                "files for RockRidge and Joliet, which can be managed "
                                                "by hiding README.joliet on RockRidge and README.rr "
                                                "on the Joliet filesystem.</p>") );
-    m_checkHideOnJoliet->setWhatsThis( i18n("<p>If this option is checked, the file or directory "
+    m_checkHideOnJoliet->setWhatsThis( i18n("<p>If this option is checked, the file or folder "
                                             "(and its entire contents) will be hidden on the "
                                             "Joliet filesystem.</p>"
                                             "<p>This is useful, for example, for having different README "
@@ -182,7 +182,7 @@ K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& da
                                          "<p>This option is useful in order to optimize the data layout "
                                          "on a medium."
                                          "<p><b>Caution:</b> This does not sort the order of the file "
-                                         "names that appear in the ISO9660 directory. "
+                                         "names that appear in the ISO9660 folder. "
                                          "It sorts the order in which the file data is "
                                          "written to the image.") );
 
@@ -213,7 +213,7 @@ void K3b::DataPropertiesDialog::loadItemProperties( K3b::DataItem* dataItem )
     }
     else if( K3b::DirItem* dirItem = dynamic_cast<K3b::DirItem*>(dataItem) ) {
         m_labelIcon->setPixmap( KIO::pixmapForUrl( KUrl( "/" )) );
-        m_labelType->setText( i18n("Directory") );
+        m_labelType->setText( i18n("Folder") );
         m_labelLocalNameText->hide();
         m_labelLocalLocationText->hide();
         m_labelLocalName->hide();
@@ -221,7 +221,7 @@ void K3b::DataPropertiesDialog::loadItemProperties( K3b::DataItem* dataItem )
         m_spacerLine->hide();
         m_labelSize->setText( KIO::convertSize(dataItem->size()) + "\n(" +
                               i18np("in 1 file", "in %1 files", dirItem->numFiles()) + " " +
-                              i18np("and 1 directory", "and %1 directories", dirItem->numDirs()) + ")" );
+                              i18np("and 1 folder", "and %1 folders", dirItem->numDirs()) + ")" );
     }
     else {
         m_labelIcon->setPixmap( DesktopIcon("unknown", KIconLoader::SizeLarge) );

@@ -336,14 +336,14 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
             unsigned long avail, size;
             QString pathToTest = m_imagePath.left( m_imagePath.lastIndexOf( '/' ) );
             if( !K3b::kbFreeOnFs( pathToTest, size, avail ) ) {
-                emit infoMessage( i18n("Unable to determine free space in temporary directory '%1'.",pathToTest), MessageError );
+                emit infoMessage( i18n("Unable to determine free space in temporary folder '%1'.",pathToTest), MessageError );
                 jobFinished(false);
                 d->running = false;
                 return;
             }
             else {
                 if( avail < imageSpaceNeeded/1024 ) {
-                    emit infoMessage( i18n("Not enough space left in temporary directory."), MessageError );
+                    emit infoMessage( i18n("Not enough space left in temporary folder."), MessageError );
                     jobFinished(false);
                     d->running = false;
                     return;

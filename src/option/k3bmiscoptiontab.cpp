@@ -113,12 +113,12 @@ bool K3b::MiscOptionTab::saveSettings()
 
     if( !fi.exists() ) {
         if( KMessageBox::questionYesNo( this,
-                                        i18n("Directory (%1) does not exist. Create?",tempDir),
-                                        i18n("Create Directory"),
+                                        i18n("Folder (%1) does not exist. Create?",tempDir),
+                                        i18n("Create Folder"),
                                         KGuiItem( i18n("Create") ),
                                         KStandardGuiItem::cancel() ) == KMessageBox::Yes ) {
             if( !KStandardDirs::makeDir( fi.absoluteFilePath() ) ) {
-                KMessageBox::error( this, i18n("Unable to create directory %1",tempDir) );
+                KMessageBox::error( this, i18n("Unable to create folder %1",tempDir) );
                 return false;
             }
         }
@@ -129,8 +129,8 @@ bool K3b::MiscOptionTab::saveSettings()
     }
 
     if( fi.isFile() ) {
-        KMessageBox::information( this, i18n("You specified a file for the temporary directory. "
-                                             "K3b will use its base path as the temporary directory."),
+        KMessageBox::information( this, i18n("You specified a file for the temporary folder. "
+                                             "K3b will use its base path as the temporary folder."),
                                   i18n("Warning"),
                                   "temp file only using base path" );
         fi.setFile( fi.path() );

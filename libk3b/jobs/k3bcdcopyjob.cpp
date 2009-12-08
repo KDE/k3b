@@ -316,13 +316,13 @@ void K3b::CdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
             unsigned long avail, size;
             QString pathToTest = m_tempPath.left( m_tempPath.lastIndexOf( '/' ) );
             if( !K3b::kbFreeOnFs( pathToTest, size, avail ) ) {
-                emit infoMessage( i18n("Unable to determine free space in temporary directory '%1'.",pathToTest), MessageError );
+                emit infoMessage( i18n("Unable to determine free space in temporary folder '%1'.",pathToTest), MessageError );
                 d->error = true;
                 canCopy = false;
             }
             else {
                 if( avail < imageSpaceNeeded/1024 ) {
-                    emit infoMessage( i18n("Not enough space left in temporary directory."), MessageError );
+                    emit infoMessage( i18n("Not enough space left in temporary folder."), MessageError );
                     d->error = true;
                     canCopy = false;
                 }
@@ -550,14 +550,14 @@ bool K3b::CdCopyJob::prepareImageFiles()
             m_tempPath = K3b::findUniqueFilePrefix( "k3bCdCopy", m_tempPath );
             kDebug() << "(K3b::CdCopyJob) creating temp dir: " << m_tempPath;
             if( !dir.mkdir( m_tempPath ) ) {
-                emit infoMessage( i18n("Unable to create temporary directory '%1'.",m_tempPath), MessageError );
+                emit infoMessage( i18n("Unable to create temporary folder '%1'.",m_tempPath), MessageError );
                 return false;
             }
             d->deleteTempDir = true;
         }
 
         m_tempPath = K3b::prepareDir( m_tempPath );
-        emit infoMessage( i18n("Using temporary directory %1.",m_tempPath), MessageInfo );
+        emit infoMessage( i18n("Using temporary folder %1.",m_tempPath), MessageInfo );
 
         // create temp filenames
         int i = 1;

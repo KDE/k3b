@@ -52,7 +52,7 @@ K3b::DataFileView::DataFileView( K3b::View* view, K3b::DataDoc* doc, QWidget* pa
 //     setItemsMovable( false );
 //     setShowSortIndicator( true );
 
-//     setNoItemText( i18n("Use drag'n'drop to add files and directories to the project.\n"
+//     setNoItemText( i18n("Use drag'n'drop to add files and folders to the project.\n"
 //                         "To remove or rename files use the context menu.\n"
 //                         "After that press the burn button to write the CD.") );
 

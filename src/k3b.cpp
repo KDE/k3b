@@ -436,7 +436,7 @@ void K3b::MainWindow::initView()
     // ---------------------------------------------------------------------------------------------
 
     // --- Directory Dock --------------------------------------------------------------------------
-    m_dirTreeDock = new QDockWidget(  i18n("Directories"), this );
+    m_dirTreeDock = new QDockWidget(  i18n("Folders"), this );
     m_dirTreeDock->setObjectName("dirtreedock");
     m_dirTreeDock->setFeatures( QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable|QDockWidget::DockWidgetFloatable );
     addDockWidget( Qt::TopDockWidgetArea, m_dirTreeDock );

@@ -102,7 +102,7 @@ bool K3b::AudioProjectConvertingJob::run()
 
         QString dir = filename.left( filename.lastIndexOf('/') );
         if( !KStandardDirs::makeDir( dir ) ) {
-            emit infoMessage( i18n("Unable to create directory %1",dir), K3b::Job::MessageError );
+            emit infoMessage( i18n("Unable to create folder %1",dir), K3b::Job::MessageError );
             return false;
         }
 
@@ -186,7 +186,7 @@ bool K3b::AudioProjectConvertingJob::convertTrack( K3b::AudioTrack* track, const
 {
     QString dir = filename.left( filename.lastIndexOf('/') );
     if( !KStandardDirs::makeDir( dir ) ) {
-        emit infoMessage( i18n("Unable to create directory %1",dir), K3b::Job::MessageError );
+        emit infoMessage( i18n("Unable to create folder %1",dir), K3b::Job::MessageError );
         return false;
     }
 
@@ -286,7 +286,7 @@ bool K3b::AudioProjectConvertingJob::writePlaylist()
     QString playlistDir = m_playlistFilename.left( m_playlistFilename.lastIndexOf( '/' ) );
 
     if( !KStandardDirs::makeDir( playlistDir ) ) {
-        emit infoMessage( i18n("Unable to create directory %1",playlistDir), K3b::Job::MessageError );
+        emit infoMessage( i18n("Unable to create folder %1",playlistDir), K3b::Job::MessageError );
         return false;
     }
 

@@ -70,7 +70,7 @@ void K3b::VideoCdRippingDialog::setupGui()
     MainLayout->setMargin( 0 );
 
     // ---------------------------------------------------- Directory group ---
-    QGroupBox* groupDirectory = new QGroupBox( i18n( "Destination Directory" ), frame );
+    QGroupBox* groupDirectory = new QGroupBox( i18n( "Destination Folder" ), frame );
 
     QGridLayout* groupDirectoryLayout = new QGridLayout( groupDirectory );
     groupDirectoryLayout->setAlignment( Qt::AlignTop );
@@ -82,7 +82,7 @@ void K3b::VideoCdRippingDialog::setupGui()
     rippathLabel->setBuddy( m_editDirectory );
 
     KHBox* freeSpaceBox = new KHBox( groupDirectory );
-    ( void ) new QLabel( i18n( "Free space in directory:" ), freeSpaceBox );
+    ( void ) new QLabel( i18n( "Free space in folder:" ), freeSpaceBox );
     m_labelFreeSpace = new QLabel( "                       ", freeSpaceBox );
     m_labelFreeSpace->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
 
@@ -125,7 +125,7 @@ void K3b::VideoCdRippingDialog::setupGui()
 
 void K3b::VideoCdRippingDialog::setupContextHelp()
 {
-    m_labelFreeSpace->setToolTip( i18n("Free space on destination directory: %1", m_editDirectory ->url().url() ) );
+    m_labelFreeSpace->setToolTip( i18n("Free space on destination folder: %1", m_editDirectory ->url().url() ) );
 
     m_labelNecessarySize->setToolTip( i18n("Necessary space for extracted files") );
 

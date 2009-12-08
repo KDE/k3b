@@ -205,7 +205,7 @@ bool K3b::AudioRipJob::run()
         QString dir = filename.left( filename.lastIndexOf('/') );
         if( !KStandardDirs::makeDir( dir, 0777 ) ) {
             d->paranoiaLib->close();
-            emit infoMessage( i18n("Unable to create directory %1",dir), K3b::Job::MessageError );
+            emit infoMessage( i18n("Unable to create folder %1",dir), K3b::Job::MessageError );
             m_device->block(false);
             return false;
         }
@@ -303,7 +303,7 @@ bool K3b::AudioRipJob::ripTrack( int track, const QString& filename )
 
         QString dir = filename.left( filename.lastIndexOf('/') );
         if( !KStandardDirs::makeDir( dir, 0777 ) ) {
-            emit infoMessage( i18n("Unable to create directory %1", dir), K3b::Job::MessageError );
+            emit infoMessage( i18n("Unable to create folder %1", dir), K3b::Job::MessageError );
             return false;
         }
 
@@ -411,7 +411,7 @@ bool K3b::AudioRipJob::writePlaylist()
     QString playlistDir = m_playlistFilename.left( m_playlistFilename.lastIndexOf( '/' ) );
 
     if( !KStandardDirs::makeDir( playlistDir ) ) {
-        emit infoMessage( i18n("Unable to create directory %1",playlistDir), K3b::Job::MessageError );
+        emit infoMessage( i18n("Unable to create folder %1",playlistDir), K3b::Job::MessageError );
         return false;
     }
 

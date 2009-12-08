@@ -115,7 +115,7 @@ K3b::VcdBurnDialog::VcdBurnDialog( K3b::VcdDoc* _doc, QWidget *parent )
     m_editCdiCfg->setToolTip( i18n( "Configuration parameters (only for VCD 2.0)" ) );
 
     m_checkPbc->setToolTip( i18n( "Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats." ) );
-    m_checkSegmentFolder->setToolTip( i18n( "Add always an empty `/SEGMENT' directory" ) );
+    m_checkSegmentFolder->setToolTip( i18n( "Add always an empty `/SEGMENT' folder" ) );
     m_checkRelaxedAps->setToolTip( i18n( "This controls whether APS constraints are strict or relaxed. " ) );
     m_checkUpdateScanOffsets->setToolTip( i18n( "This controls whether to update the scan data information contained in the MPEG-2 video streams." ) );
     m_labelRestriction->setToolTip( i18n( "This element allows to set viewing restrictions which may be interpreted by the playing device." ) );

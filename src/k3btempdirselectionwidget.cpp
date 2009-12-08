@@ -48,7 +48,7 @@ K3b::TempDirSelectionWidget::TempDirSelectionWidget( QWidget *parent )
 
     m_imageFileLabel->setBuddy( m_editDirectory );
 
-    QLabel* freeSpaceLabel = new QLabel( i18n( "Free space in temporary directory:" ), this );
+    QLabel* freeSpaceLabel = new QLabel( i18n( "Free space in temporary folder:" ), this );
     m_labelFreeSpace = new QLabel( this );
     m_labelFreeSpace->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
 
@@ -75,11 +75,11 @@ K3b::TempDirSelectionWidget::TempDirSelectionWidget( QWidget *parent )
 
     // ToolTips
     // --------------------------------------------------------------------------------
-    m_editDirectory->setToolTip( i18n("The directory in which to save the image files") );
+    m_editDirectory->setToolTip( i18n("The folder in which to save the image files") );
 
     // What's This info
     // --------------------------------------------------------------------------------
-    m_editDirectory->setWhatsThis( i18n("<p>This is the directory in which K3b will save the <em>image files</em>."
+    m_editDirectory->setWhatsThis( i18n("<p>This is the folder in which K3b will save the <em>image files</em>."
                                         "<p>Please make sure that it resides on a partition that has enough free space.") );
 }
 
@@ -127,7 +127,7 @@ void K3b::TempDirSelectionWidget::slotTempDirButtonPressed( KUrlRequester* r )
 {
     // set the correct mode for the filedialog
     if( m_mode == DIR ) {
-        r->setWindowTitle( i18n("Select Temporary Directory") );
+        r->setWindowTitle( i18n("Select Temporary Folder") );
         r->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
     }
     else {
@@ -199,7 +199,7 @@ void K3b::TempDirSelectionWidget::setSelectionMode( int mode )
 
     if( m_mode == DIR ) {
         m_imageFileLabel->setText( i18n( "Wri&te image files to:" ) );
-        setTitle( i18n("Temporary Directory") );
+        setTitle( i18n("Temporary Folder") );
     }
     else {
         m_imageFileLabel->setText( i18n( "Wri&te image file to:" ) );

@@ -124,7 +124,7 @@ void K3b::AudioProjectConvertingDialog::setupGui()
     Form1Layout->setMargin( 0 );
 
     m_viewTracks = new K3b::ListView( frame );
-    m_viewTracks->addColumn(i18n( "Filename (relative to base directory)") );
+    m_viewTracks->addColumn(i18n( "Filename (relative to base folder)") );
     m_viewTracks->addColumn(i18n( "Length") );
     m_viewTracks->addColumn(i18n( "File Size") );
     m_viewTracks->setSorting(-1);

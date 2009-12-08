@@ -108,13 +108,13 @@ int K3b::VideoDvdImager::writePathSpec()
     d->tempPath = K3b::findUniqueFilePrefix( "k3bVideoDvd", dir.path() );
     kDebug() << "(K3b::VideoDvdImager) creating temp dir: " << d->tempPath;
     if( !dir.mkdir( d->tempPath ) ) {
-        emit infoMessage( i18n("Unable to create temporary directory '%1'.",d->tempPath), MessageError );
+        emit infoMessage( i18n("Unable to create temporary folder '%1'.",d->tempPath), MessageError );
         return -1;
     }
 
     dir.cd( d->tempPath );
     if( !dir.mkdir( "VIDEO_TS" ) ) {
-        emit infoMessage( i18n("Unable to create temporary directory '%1'.",d->tempPath + "/VIDEO_TS"), MessageError );
+        emit infoMessage( i18n("Unable to create temporary folder '%1'.",d->tempPath + "/VIDEO_TS"), MessageError );
         return -1;
     }
 
