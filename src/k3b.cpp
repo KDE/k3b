@@ -119,6 +119,12 @@ public:
     QWidget* contentsDummyTitleBarWidget;
 };
 
+class K3bDummyWidget : public QWidget
+{
+public:
+    explicit K3bDummyWidget(QWidget* parent) : QWidget(parent) { }
+    QSize sizeHint() const { return QSize(0, 0); }
+};
 
 K3b::MainWindow::MainWindow()
     : KXmlGuiWindow(0)
@@ -130,9 +136,9 @@ K3b::MainWindow::MainWindow()
 
     d = new Private;
     d->lastDoc = 0;
-    d->documentDummyTitleBarWidget = new QWidget( this );
-    d->dirTreeDummyTitleBarWidget = new QWidget( this );
-    d->contentsDummyTitleBarWidget = new QWidget( this );
+    d->documentDummyTitleBarWidget = new K3bDummyWidget( this );
+    d->dirTreeDummyTitleBarWidget = new K3bDummyWidget( this );
+    d->contentsDummyTitleBarWidget = new K3bDummyWidget( this );
 
     setPlainCaption( i18n("K3b - The CD and DVD Kreator") );
 
