@@ -388,11 +388,14 @@ void K3b::DataJob::slotIsoImagerFinished( bool success )
                 if( d->doc->onlyCreateImages() ) {
                     jobFinished( true );
                 }
-                else {
-                    if( prepareWriterJob() ) {
-                        startWriterJob();
-                        startPipe();
-                    }
+                else if( !d->imageFile.open( QIODevice::ReadOnly ) ) {
+                    emit infoMessage( i18n("Could not open file %1", d->doc->tempDir() ), MessageError );
+                    cleanup();
+                    jobFinished(false);
+                }
+                else if( prepareWriterJob() ) {
+                    startWriterJob();                    
+                    startPipe();
                 }
             }
             else {
