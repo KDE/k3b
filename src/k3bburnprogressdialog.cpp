@@ -24,6 +24,7 @@
 
 #include <KLocale>
 
+#include <QGridLayout>
 #include <QLabel>
 #include <QProgressBar>
 

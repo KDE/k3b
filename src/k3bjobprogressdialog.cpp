@@ -30,48 +30,34 @@
 #include "k3bversion.h"
 #include "k3bthememanager.h"
 
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qvariant.h>
-#include <qtooltip.h>
-#include <qdatetime.h>
-#include <qstring.h>
-#include <QPointer>
+#include <K3ListView>
+#include <KConfig>
+#include <KDebug>
+#include <KGlobal>
+#include <KGlobalSettings>
+#include <KLocale>
+#include <KMessageBox>
+#include <KNotification>
+#include <KProgressDialog>
+#include <KPushButton>
+#include <KStandardGuiItem>
+#include <KSqueezedTextLabel>
 
-#include <qscrollbar.h>
-#include <qpoint.h>
-#include <qfontmetrics.h>
-#include <qtimer.h>
-#include <qfont.h>
-#include <qfile.h>
-#include <qapplication.h>
+#include <Q3Header>
+#include <QCloseEvent>
+#include <QDateTime>
+#include <QFont>
+#include <QFrame>
+#include <QGridLayout>
 #include <QHBoxLayout>
 #include <QKeyEvent>
-#include <QGridLayout>
-#include <QFrame>
+#include <QLabel>
+#include <QPushButton>
+#include <QScrollBar>
+#include <QString>
+#include <QTimer>
 #include <QVBoxLayout>
-#include <QCloseEvent>
-#include <q3header.h>
 
-#include <kprogressdialog.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kiconloader.h>
-#include <kconfig.h>
-#include <kdebug.h>
-#include <kglobal.h>
-#include <kstandarddirs.h>
-#include <kapplication.h>
-#include <kmainwindow.h>
-#include <kstdguiitem.h>
-#include <kpushbutton.h>
-#include <ksqueezedtextlabel.h>
-#include <KNotification>
-#include <kvbox.h>
-#include <KStandardGuiItem>
-#include <KGlobalSettings>
-#include <k3listview.h>
 
 class K3b::JobProgressDialog::Private
 {
@@ -245,24 +231,26 @@ void K3b::JobProgressDialog::setupGUI()
 }
 
 
-void K3b::JobProgressDialog::show()
-{
-    if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "hide main window while writing", false ) )
-        k3bappcore->k3bMainWindow()->hide();
-
-    if( m_osd ) {
-        m_osd->readSettings( KGlobal::config()->group( "OSD Position" ) );
-        m_osd->show();
-    }
-
-    KDialog::show();
-}
-
-
 void K3b::JobProgressDialog::setExtraInfo( QWidget *extra )
 {
     extra->setParent( m_frameExtraInfo );
     m_frameExtraInfoLayout->addWidget( extra, 0, 0 );
+}
+
+
+void K3b::JobProgressDialog::showEvent( QShowEvent* e )
+{
+    if( !e->spontaneous() ) {
+        if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "hide main window while writing", false ) ) {
+            k3bappcore->k3bMainWindow()->hide();
+        }
+
+        if( m_osd ) {
+            m_osd->readSettings( KGlobal::config()->group( "OSD Position" ) );
+            m_osd->show();
+        }
+    }
+    KDialog::showEvent( e );
 }
 
 

@@ -16,29 +16,25 @@
 #ifndef _K3B_JOB_PROGRESSDIALOG_H_
 #define _K3B_JOB_PROGRESSDIALOG_H_
 
-#include <kdialog.h>
 
 #include "k3bdebuggingoutputfile.h"
 #include "k3bdebuggingoutputcache.h"
-
 #include "k3bjobhandler.h"
 
-#include <qdatetime.h>
-#include <qfile.h>
-#include <QGridLayout>
-#include <QLabel>
-#include <QFrame>
-#include <QKeyEvent>
-#include <QCloseEvent>
+#include <KDialog>
+
+#include <QDateTime>
 
 class K3ListView;
-class QFrame;
-class QLabel;
-class QProgressBar;
-class QTimer;
 class KSqueezedTextLabel;
 class QCloseEvent;
+class QFrame;
+class QGridLayout;
 class QKeyEvent;
+class QLabel;
+class QProgressBar;
+class QShowEvent;
+class QTimer;
 
 namespace K3b {
     class Job;
@@ -58,23 +54,13 @@ namespace K3b {
         void setExtraInfo( QWidget *extra );
 
         /**
-         * reimplemented for internal reasons
-         */
-        void show();
-
-        /**
-         * reimplemented for internal reasons
-         */
-        void hide();
-
-        /**
          * This will show the dialog and then start the given job or
          * if job == 0 the job set with setJob
          * Use instead of exec()
          */
         int startJob( Job* job = 0 );
 
-        QSize sizeHint() const;
+        virtual QSize sizeHint() const;
 
         /**
          * @reimplemented from JobHandler
@@ -112,7 +98,7 @@ namespace K3b {
         /**
          * \reimpl from KDialog
          */
-        void slotButtonClicked( int button );
+        virtual void slotButtonClicked( int button );
         void slotUpdateTime();
         void slotShowDebuggingOutput();
 
@@ -121,8 +107,9 @@ namespace K3b {
         virtual void slotThemeChanged();
 
     protected:
-        void closeEvent( QCloseEvent* );
-        void keyPressEvent( QKeyEvent* e );
+        virtual void showEvent( QShowEvent* e );
+        virtual void closeEvent( QCloseEvent* e );
+        virtual void keyPressEvent( QKeyEvent* e );
 
         void setupGUI();
 
