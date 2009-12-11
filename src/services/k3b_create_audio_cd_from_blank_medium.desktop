@@ -7,6 +7,7 @@ X-KDE-Priority=TopLevel
 [Desktop Action K3bAudioCDProject]
 Exec=k3b --device %i --audiocd
 Name=Create Audio CD with K3b
+Name[da]=Opret lyd-cd med K3b
 Name[en_GB]=Create Audio CD with K3b
 Name[pt]=Criar um CD de Áudio com o K3b
 Name[pt_BR]=Criar CD de áudio com o K3b

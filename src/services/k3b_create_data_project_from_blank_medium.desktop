@@ -7,6 +7,7 @@ X-KDE-Priority=TopLevel
 [Desktop Action K3bDataProject]
 Exec=k3b --device %i --data
 Name=Create file project with K3b
+Name[da]=Opret filprojekt med K3b
 Name[en_GB]=Create file project with K3b
 Name[pt]=Criar um projecto de ficheiros com o K3b
 Name[pt_BR]=Criar um projeto de arquivos com o K3b
