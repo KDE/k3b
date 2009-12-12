@@ -112,7 +112,15 @@ public:
     int tempPathTabIndex;
 
     bool imageForced;
+    
+    static KIO::filesize_t volumeSpaceSize( const Iso9660& iso );
 };
+
+
+KIO::filesize_t K3b::ImageWritingDialog::Private::volumeSpaceSize( const Iso9660& isoFs )
+{
+    return static_cast<KIO::filesize_t>( isoFs.primaryDescriptor().volumeSpaceSize*2048 );
+}
 
 
 K3b::ImageWritingDialog::ImageWritingDialog( QWidget* parent )
@@ -446,7 +454,7 @@ void K3b::ImageWritingDialog::slotStartClicked()
     {
         K3b::Iso9660 isoFs( d->imageFile );
         if( isoFs.open() ) {
-            if( K3b::filesize( KUrl(d->imageFile) ) < (KIO::filesize_t)(isoFs.primaryDescriptor().volumeSpaceSize*2048) ) {
+            if( K3b::filesize( KUrl(d->imageFile) ) < Private::volumeSpaceSize( isoFs ) ) {
                 if( KMessageBox::questionYesNo( this,
                                                 i18n("<p>This image has an invalid file size. "
                                                      "If it has been downloaded make sure the download is complete."
@@ -641,11 +649,25 @@ void K3b::ImageWritingDialog::createIso9660InfoItems( K3b::Iso9660* isoF )
     isoRootItem->setForegroundColor( 0, infoTextColor );
     isoRootItem->setPixmap( 0, SmallIcon( "application-x-cd-image") );
 
-    KIO::filesize_t size = K3b::filesize( KUrl(isoF->fileName()) );
+    const KIO::filesize_t size = K3b::filesize( KUrl(isoF->fileName()) );
+    const KIO::filesize_t volumeSpaceSize = Private::volumeSpaceSize( *isoF );
+    
     K3b::ListViewItem* item = new K3b::ListViewItem( isoRootItem, m_infoView->lastItem(),
-                                                 i18n("Filesize:"),
-                                                 KIO::convertSize( size ) );
+                                                i18n("Filesize:"),
+                                                ( size < volumeSpaceSize )
+                                                ? i18n("%1 (different than declared volume size)", KIO::convertSize( size ))
+                                                : KIO::convertSize( size ) );
     item->setForegroundColor( 0, infoTextColor );
+    
+    if( size < volumeSpaceSize ) {
+        item->setForegroundColor( 1, Qt::red );
+        
+        item = new ListViewItem( isoRootItem,
+                                m_infoView->lastItem(),
+                                i18n("Volume Size:"),
+                                KIO::convertSize( volumeSpaceSize ) );
+        item->setForegroundColor( 0, infoTextColor );
+    }
 
     item = new K3b::ListViewItem( isoRootItem,
                                 m_infoView->lastItem(),
