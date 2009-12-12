@@ -125,7 +125,7 @@ void K3b::VideoCdRippingDialog::setupGui()
 
 void K3b::VideoCdRippingDialog::setupContextHelp()
 {
-    m_labelFreeSpace->setToolTip( i18n("Free space on destination folder: %1", m_editDirectory ->url().url() ) );
+    m_labelFreeSpace->setToolTip( i18n("Free space in destination folder: %1", m_editDirectory ->url().url() ) );
 
     m_labelNecessarySize->setToolTip( i18n("Necessary space for extracted files") );
 
