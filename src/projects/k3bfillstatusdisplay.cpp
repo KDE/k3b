@@ -128,6 +128,7 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     const QColor neutralBg = colorScheme.background( KColorScheme::NeutralBackground ).color();
     const QColor negativeBg = colorScheme.background( KColorScheme::NegativeBackground ).color();
     const QColor normalFg = colorScheme.foreground( KColorScheme::NormalText ).color();
+    const QColor negativeFg = colorScheme.foreground( KColorScheme::NegativeText ).color();
     
     QPainter p( this );
     p.setPen( normalFg );
@@ -258,6 +259,7 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     docTextRect.setLeft( docSizeTextPos );
     p.drawText( docTextRect, Qt::AlignLeft | Qt::AlignVCenter, docSizeText );
 
+    p.setPen( d->cdSize.mode1Bytes() >= d->doc->size() ? normalFg : negativeFg );
     p.setFont(fnt);
     p.drawText( overSizeTextRect, Qt::AlignLeft | Qt::AlignVCenter, overSizeText );
     // ====================================================================================
