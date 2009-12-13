@@ -41,42 +41,43 @@
 #include "k3btrack.h"
 #include "k3bcdtext.h"
 
-#include <kapplication.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kurlrequester.h>
-#include <kfiledialog.h>
-#include <kstdguiitem.h>
-#include <kguiitem.h>
-#include <kiconloader.h>
-#include <kconfig.h>
+#include <K3URLDrag>
+#include <KApplication>
+#include <KComboBox>
+#include <KConfig>
+#include <KColorScheme>
+#include <KFileDialog>
+#include <KGuiItem>
+#include <KIconLoader>
+#include <KInputDialog>
 #include <kio/global.h>
-#include <kurl.h>
-#include <kinputdialog.h>
-#include <kcombobox.h>
+#include <KLocale>
+#include <KMessageBox>
+#include <KStandardGuiItem>
+#include <KUrl>
+#include <KUrlRequester>
 
-#include <q3header.h>
-#include <qgroupbox.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qcombobox.h>
-#include <qlayout.h>
-#include <qlist.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qpushbutton.h>
-#include <qtabwidget.h>
-#include <qtooltip.h>
-#include <qspinbox.h>
-#include <qmap.h>
-#include <qclipboard.h>
-#include <qmenu.h>
-#include <QGridLayout>
+#include <Q3Header>
+#include <QCheckBox>
+#include <QClipboard>
+#include <QComboBox>
 #include <QDragEnterEvent>
 #include <QDropEvent>
-#include <K3URLDrag>
+#include <QFile>
+#include <QFileInfo>
+#include <QFont>
+#include <QFontMetrics>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLayout>
+#include <QList>
+#include <QMap>
+#include <QMenu>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QTabWidget>
+#include <QToolTip>
 
 class K3b::ImageWritingDialog::Private
 {
@@ -113,6 +114,10 @@ public:
 
     bool imageForced;
     
+    QColor infoTextColor;
+    QColor negativeTextColor;
+    QColor normalTextColor;
+    
     static KIO::filesize_t volumeSpaceSize( const Iso9660& iso );
 };
 
@@ -132,6 +137,10 @@ K3b::ImageWritingDialog::ImageWritingDialog( QWidget* parent )
                             "image writing" ) // config group
 {
     d = new Private();
+    const KColorScheme colorScheme( QPalette::Normal, KColorScheme::View );
+    d->infoTextColor = palette().color( QPalette::Disabled, QPalette::Text );
+    d->negativeTextColor = colorScheme.foreground( KColorScheme::NegativeText ).color();
+    d->normalTextColor = colorScheme.foreground( KColorScheme::NormalText ).color();
 
     setAcceptDrops( true );
 
@@ -616,7 +625,7 @@ void K3b::ImageWritingDialog::slotUpdateImage( const QString& )
         if( d->foundImageType == IMAGE_UNKNOWN ) {
             K3b::ListViewItem* item = new K3b::ListViewItem( m_infoView, m_infoView->lastItem(),
                                                          i18n("Seems not to be a usable image") );
-            item->setForegroundColor( 0, Qt::red );
+            item->setForegroundColor( 0, d->negativeTextColor );
             item->setPixmap( 0, SmallIcon( "dialog-error") );
         }
         else {
@@ -631,7 +640,7 @@ void K3b::ImageWritingDialog::slotUpdateImage( const QString& )
     else {
         K3b::ListViewItem* item = new K3b::ListViewItem( m_infoView, m_infoView->lastItem(),
                                                      i18n("File not found") );
-        item->setForegroundColor( 0, Qt::red );
+        item->setForegroundColor( 0, d->negativeTextColor );
         item->setPixmap( 0, SmallIcon( "dialog-error") );
     }
 
@@ -641,12 +650,10 @@ void K3b::ImageWritingDialog::slotUpdateImage( const QString& )
 
 void K3b::ImageWritingDialog::createIso9660InfoItems( K3b::Iso9660* isoF )
 {
-    QColor infoTextColor = palette().color( QPalette::Disabled, QPalette::Text );
-
     K3b::ListViewItem* isoRootItem = new K3b::ListViewItem( m_infoView, m_infoView->lastItem(),
                                                         i18n("Detected:"),
                                                         i18n("Iso9660 image") );
-    isoRootItem->setForegroundColor( 0, infoTextColor );
+    isoRootItem->setForegroundColor( 0, d->infoTextColor );
     isoRootItem->setPixmap( 0, SmallIcon( "application-x-cd-image") );
 
     const KIO::filesize_t size = K3b::filesize( KUrl(isoF->fileName()) );
@@ -657,16 +664,16 @@ void K3b::ImageWritingDialog::createIso9660InfoItems( K3b::Iso9660* isoF )
                                                 ( size < volumeSpaceSize )
                                                 ? i18n("%1 (different than declared volume size)", KIO::convertSize( size ))
                                                 : KIO::convertSize( size ) );
-    item->setForegroundColor( 0, infoTextColor );
+    item->setForegroundColor( 0, d->infoTextColor );
     
     if( size < volumeSpaceSize ) {
-        item->setForegroundColor( 1, Qt::red );
+        item->setForegroundColor( 1, d->negativeTextColor );
         
         item = new ListViewItem( isoRootItem,
                                 m_infoView->lastItem(),
                                 i18n("Volume Size:"),
                                 KIO::convertSize( volumeSpaceSize ) );
-        item->setForegroundColor( 0, infoTextColor );
+        item->setForegroundColor( 0, d->infoTextColor );
     }
 
     item = new K3b::ListViewItem( isoRootItem,
@@ -675,7 +682,7 @@ void K3b::ImageWritingDialog::createIso9660InfoItems( K3b::Iso9660* isoF )
                                 isoF->primaryDescriptor().systemId.isEmpty()
                                 ? QString("-")
                                 : isoF->primaryDescriptor().systemId );
-    item->setForegroundColor( 0, infoTextColor );
+    item->setForegroundColor( 0, d->infoTextColor );
 
     item = new K3b::ListViewItem( isoRootItem,
                                 m_infoView->lastItem(),
@@ -683,7 +690,7 @@ void K3b::ImageWritingDialog::createIso9660InfoItems( K3b::Iso9660* isoF )
                                 isoF->primaryDescriptor().volumeId.isEmpty()
                                 ? QString("-")
                                 : isoF->primaryDescriptor().volumeId );
-    item->setForegroundColor( 0, infoTextColor );
+    item->setForegroundColor( 0, d->infoTextColor );
 
     item = new K3b::ListViewItem( isoRootItem,
                                 m_infoView->lastItem(),
@@ -691,7 +698,7 @@ void K3b::ImageWritingDialog::createIso9660InfoItems( K3b::Iso9660* isoF )
                                 isoF->primaryDescriptor().volumeSetId.isEmpty()
                                 ? QString("-")
                                 : isoF->primaryDescriptor().volumeSetId );
-    item->setForegroundColor( 0, infoTextColor );
+    item->setForegroundColor( 0, d->infoTextColor );
 
     item = new K3b::ListViewItem( isoRootItem,
                                 m_infoView->lastItem(),
@@ -699,14 +706,14 @@ void K3b::ImageWritingDialog::createIso9660InfoItems( K3b::Iso9660* isoF )
                                 isoF->primaryDescriptor().publisherId.isEmpty()
                                 ? QString("-")
                                 : isoF->primaryDescriptor().publisherId );
-    item->setForegroundColor( 0, infoTextColor );
+    item->setForegroundColor( 0, d->infoTextColor );
 
     item = new K3b::ListViewItem( isoRootItem,
                                 m_infoView->lastItem(),
                                 i18n("Preparer Id:"),
                                 isoF->primaryDescriptor().preparerId.isEmpty()
                                 ? QString("-") : isoF->primaryDescriptor().preparerId );
-    item->setForegroundColor( 0, infoTextColor );
+    item->setForegroundColor( 0, d->infoTextColor );
 
     item = new K3b::ListViewItem( isoRootItem,
                                 m_infoView->lastItem(),
@@ -714,7 +721,7 @@ void K3b::ImageWritingDialog::createIso9660InfoItems( K3b::Iso9660* isoF )
                                 isoF->primaryDescriptor().applicationId.isEmpty()
                                 ? QString("-")
                                 : isoF->primaryDescriptor().applicationId );
-    item->setForegroundColor( 0, infoTextColor );
+    item->setForegroundColor( 0, d->infoTextColor );
 
     isoRootItem->setOpen( true );
 }
@@ -722,29 +729,27 @@ void K3b::ImageWritingDialog::createIso9660InfoItems( K3b::Iso9660* isoF )
 
 void K3b::ImageWritingDialog::createCdrecordCloneItems( const QString& tocFile, const QString& imageFile )
 {
-    QColor infoTextColor = palette().color( QPalette::Disabled, QPalette::Text );
-
     K3b::ListViewItem* isoRootItem = new K3b::ListViewItem( m_infoView, m_infoView->lastItem(),
                                                         i18n("Detected:"),
                                                         i18n("Cdrecord clone image") );
-    isoRootItem->setForegroundColor( 0, infoTextColor );
+    isoRootItem->setForegroundColor( 0, d->infoTextColor );
     isoRootItem->setPixmap( 0, SmallIcon( "application-x-cd-image") );
 
     K3b::ListViewItem* item = new K3b::ListViewItem( isoRootItem, m_infoView->lastItem(),
                                                  i18n("Filesize:"), KIO::convertSize( K3b::filesize(KUrl(imageFile)) ) );
-    item->setForegroundColor( 0, infoTextColor );
+    item->setForegroundColor( 0, d->infoTextColor );
 
     item = new K3b::ListViewItem( isoRootItem,
                                 m_infoView->lastItem(),
                                 i18n("Image file:"),
                                 imageFile );
-    item->setForegroundColor( 0, infoTextColor );
+    item->setForegroundColor( 0, d->infoTextColor );
 
     item = new K3b::ListViewItem( isoRootItem,
                                 m_infoView->lastItem(),
                                 i18n("TOC file:"),
                                 tocFile );
-    item->setForegroundColor( 0, infoTextColor );
+    item->setForegroundColor( 0, d->infoTextColor );
 
     isoRootItem->setOpen( true );
 }
@@ -752,29 +757,27 @@ void K3b::ImageWritingDialog::createCdrecordCloneItems( const QString& tocFile, 
 
 void K3b::ImageWritingDialog::createCueBinItems( const QString& cueFile, const QString& imageFile )
 {
-    QColor infoTextColor = palette().color( QPalette::Disabled, QPalette::Text );
-
     K3b::ListViewItem* isoRootItem = new K3b::ListViewItem( m_infoView, m_infoView->lastItem(),
                                                         i18n("Detected:"),
                                                         i18n("Cue/bin image") );
-    isoRootItem->setForegroundColor( 0, infoTextColor );
+    isoRootItem->setForegroundColor( 0, d->infoTextColor );
     isoRootItem->setPixmap( 0, SmallIcon( "application-x-cd-image") );
 
     K3b::ListViewItem* item = new K3b::ListViewItem( isoRootItem, m_infoView->lastItem(),
                                                  i18n("Filesize:"), KIO::convertSize( K3b::filesize(KUrl(imageFile)) ) );
-    item->setForegroundColor( 0, infoTextColor );
+    item->setForegroundColor( 0, d->infoTextColor );
 
     item = new K3b::ListViewItem( isoRootItem,
                                 m_infoView->lastItem(),
                                 i18n("Image file:"),
                                 imageFile );
-    item->setForegroundColor( 0, infoTextColor );
+    item->setForegroundColor( 0, d->infoTextColor );
 
     item = new K3b::ListViewItem( isoRootItem,
                                 m_infoView->lastItem(),
                                 i18n("Cue file:"),
                                 cueFile );
-    item->setForegroundColor( 0, infoTextColor );
+    item->setForegroundColor( 0, d->infoTextColor );
 
     isoRootItem->setOpen( true );
 }
@@ -782,12 +785,10 @@ void K3b::ImageWritingDialog::createCueBinItems( const QString& cueFile, const Q
 
 void K3b::ImageWritingDialog::createAudioCueItems( const K3b::CueFileParser& cp )
 {
-    QColor infoTextColor = palette().color( QPalette::Disabled, QPalette::Text );
-
     K3b::ListViewItem* rootItem = new K3b::ListViewItem( m_infoView, m_infoView->lastItem(),
                                                      i18n("Detected:"),
                                                      i18n("Audio Cue Image") );
-    rootItem->setForegroundColor( 0, infoTextColor );
+    rootItem->setForegroundColor( 0, d->infoTextColor );
     rootItem->setPixmap( 0, SmallIcon( "audio-x-generic") );
 
     K3b::ListViewItem* trackParent = new K3b::ListViewItem( rootItem,
@@ -926,8 +927,7 @@ void K3b::ImageWritingDialog::toggleAll()
     if( item )
         item->setForegroundColor( 1,
                                   currentImageType() != d->foundImageType
-                                  ? Qt::red
-                                  : m_infoView->palette().color( QPalette::Text ) );
+                                  ? d->negativeTextColor : d->normalTextColor );
 }
 
 
@@ -946,7 +946,7 @@ void K3b::ImageWritingDialog::calculateMd5Sum( const QString& file )
         d->md5SumItem = new K3b::ListViewItem( m_infoView, m_infoView->firstChild() );
 
     d->md5SumItem->setText( 0, i18n("Md5 Sum:") );
-    d->md5SumItem->setForegroundColor( 0, palette().color( QPalette::Disabled, QPalette::Text ) );
+    d->md5SumItem->setForegroundColor( 0, d->infoTextColor );
     d->md5SumItem->setProgress( 1, 0 );
     d->md5SumItem->setPixmap( 0, SmallIcon("system-run") );
 
@@ -974,7 +974,7 @@ void K3b::ImageWritingDialog::slotMd5JobFinished( bool success )
         d->haveMd5Sum = true;
     }
     else {
-        d->md5SumItem->setForegroundColor( 1, Qt::red );
+        d->md5SumItem->setForegroundColor( 1, d->negativeTextColor );
         if( d->md5Job->hasBeenCanceled() )
             d->md5SumItem->setText( 1, i18n("Calculation canceled") );
         else

@@ -24,6 +24,7 @@
 
 // kde include
 #include <KApplication>
+#include <KColorScheme>
 #include <KConfig>
 #include <KDebug>
 #include <KLocale>
@@ -196,11 +197,15 @@ void K3b::VideoCdRippingDialog::slotFreeSpace(const QString&,
 
     m_freeSpace = kbAvail;
 
+    const KColorScheme colorScheme( isEnabled() ? QPalette::Normal : QPalette::Disabled, KColorScheme::Window );
+    QColor textColor;
+    if( m_freeSpace < m_videooptions ->getVideoCdSize() / 1024 )
+        textColor = colorScheme.foreground( KColorScheme::NegativeText ).color();
+    else
+        textColor = colorScheme.foreground( KColorScheme::NormalText ).color();
+    
     QPalette pal( m_labelNecessarySize->palette() );
-    pal.setColor( m_labelNecessarySize->foregroundRole(),
-                  m_freeSpace < m_videooptions ->getVideoCdSize() /1024
-                  ? Qt::red
-                  : m_labelFreeSpace->palette().color( QPalette::Text ) );
+    pal.setColor( m_labelNecessarySize->foregroundRole(), textColor );
     m_labelNecessarySize->setPalette( pal );
 
     QTimer::singleShot( 1000, this, SLOT(slotUpdateFreeSpace()) );

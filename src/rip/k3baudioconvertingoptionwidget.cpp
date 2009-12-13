@@ -20,6 +20,7 @@
 #include "k3bcore.h"
 #include "k3bglobals.h"
 
+#include <KColorScheme>
 #include <KComboBox>
 #include <KUrlRequester>
 #include <KConfig>
@@ -245,22 +246,25 @@ void K3b::AudioConvertingOptionWidget::slotUpdateFreeTempSpace()
     if( !QFile::exists( path ) )
         path.truncate( path.lastIndexOf('/') );
 
-    QPalette pal( m_labelNeededSpace->palette() );
+    const KColorScheme colorScheme( isEnabled() ? QPalette::Normal : QPalette::Disabled, KColorScheme::Window );
+    QColor textColor;
 
     unsigned long size, avail;
     if( K3b::kbFreeOnFs( path, size, avail ) ) {
         m_labelFreeSpace->setText( KIO::convertSizeFromKiB(avail) );
 
-        pal.setColor( m_labelNeededSpace->foregroundRole(),
-                      avail < d->neededSize/1024
-                      ? Qt::red
-                      : palette().color( QPalette::Text ) );
+        if( avail < d->neededSize/1024 )
+            textColor = colorScheme.foreground( KColorScheme::NegativeText ).color();
+        else
+            textColor = colorScheme.foreground( KColorScheme::NormalText ).color();
     }
     else {
+        textColor = colorScheme.foreground( KColorScheme::NormalText ).color();
         m_labelFreeSpace->setText("-");
-        pal.setColor( m_labelNeededSpace->foregroundRole(), palette().color( QPalette::Text ) );
     }
 
+    QPalette pal( m_labelNeededSpace->palette() );
+    pal.setColor( m_labelNeededSpace->foregroundRole(), textColor );
     m_labelNeededSpace->setPalette( pal );
 }
 

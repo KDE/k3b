@@ -25,6 +25,7 @@
 #include <QTimer>
 #include <QToolTip>
 
+#include <KColorScheme>
 #include <KConfig>
 #include <KDialog>
 #include <KFileDialog>
@@ -111,11 +112,15 @@ void K3b::TempDirSelectionWidget::slotUpdateFreeTempSpace()
     m_labelFreeSpace->setText( KIO::convertSizeFromKiB(m_freeTempSpace) );
 
     if( m_labelCdSize ) {
-        QPalette pal( m_labelCdSize->palette() );
+        const KColorScheme colorScheme( isEnabled() ? QPalette::Normal : QPalette::Disabled, KColorScheme::Window );
+        QColor textColor;
         if( m_freeTempSpace < m_requestedSize/1024 )
-            pal.setColor( QPalette::Text, Qt::red );
+            textColor = colorScheme.foreground( KColorScheme::NegativeText ).color();
         else
-            pal.setColor( QPalette::Text, palette().color( QPalette::Text ) );
+            textColor = colorScheme.foreground( KColorScheme::NormalText ).color();
+        
+        QPalette pal( m_labelCdSize->palette() );
+        pal.setColor( QPalette::Text, textColor );
         m_labelCdSize->setPalette( pal );
     }
 

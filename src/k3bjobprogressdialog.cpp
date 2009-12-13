@@ -31,6 +31,7 @@
 #include "k3bthememanager.h"
 
 #include <K3ListView>
+#include <KColorScheme>
 #include <KConfig>
 #include <KDebug>
 #include <KGlobal>
@@ -317,11 +318,14 @@ void K3b::JobProgressDialog::slotFinished( bool success )
 
     m_logFile.close();
 
+    const KColorScheme colorScheme( QPalette::Normal, KColorScheme::Window );
     QPalette taskPalette( m_labelTask->palette() );
+    
     if( success ) {
         m_pixLabel->setThemePixmap( K3b::Theme::PROGRESS_SUCCESS );
 
-        taskPalette.setColor( QPalette::WindowText, Qt::darkGreen );
+        taskPalette.setColor( QPalette::WindowText,
+                              colorScheme.foreground( KColorScheme::PositiveText ).color() );
 
         m_labelTask->setText( i18n("Success.") );
         m_labelSubTask->setText( QString() );
@@ -341,7 +345,8 @@ void K3b::JobProgressDialog::slotFinished( bool success )
     else {
         m_pixLabel->setThemePixmap( K3b::Theme::PROGRESS_FAIL );
 
-        taskPalette.setColor( QPalette::WindowText, Qt::red );
+        taskPalette.setColor( QPalette::WindowText,
+                              colorScheme.foreground( KColorScheme::NegativeText ).color() );
 
         if( m_bCanceled ) {
             m_labelTask->setText( i18n("Canceled.") );

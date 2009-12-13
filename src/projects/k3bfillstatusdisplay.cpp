@@ -44,6 +44,7 @@
 #include <QWhatsThis>
 
 #include <KAction>
+#include <KColorScheme>
 #include <KConfigGroup>
 #include <KDebug>
 #include <KGlobal>
@@ -122,8 +123,14 @@ void K3b::FillStatusDisplayWidget::mousePressEvent( QMouseEvent* e )
 
 void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
 {
+    const KColorScheme colorScheme( isEnabled() ? QPalette::Normal : QPalette::Disabled, KColorScheme::Window );
+    const QColor positiveBg = colorScheme.background( KColorScheme::PositiveBackground ).color();
+    const QColor neutralBg = colorScheme.background( KColorScheme::NeutralBackground ).color();
+    const QColor negativeBg = colorScheme.background( KColorScheme::NegativeBackground ).color();
+    const QColor normalFg = colorScheme.foreground( KColorScheme::NormalText ).color();
+    
     QPainter p( this );
-    p.setPen( Qt::black ); // we use a fixed bar color (which is not very nice btw, so we also fix the text color)
+    p.setPen( normalFg );
 
     K3b::Msf docSize;
     K3b::Msf cdSize;
@@ -142,31 +149,31 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
 
     p.setClipping(true);
     p.setClipRect(crect);
-
-    p.fillRect( crect, Qt::green );
+    
+    p.fillRect( crect, positiveBg );
 
     QRect oversizeRect(crect);
 
     // draw red if docSize > cdSize + tolerance
     if( docSize > cdSize + tolerance ) {
         oversizeRect.setLeft( oversizeRect.left() + (int)(one * (cdSize - tolerance).totalFrames()) );
-        p.fillRect( oversizeRect, Qt::red );
+        p.fillRect( oversizeRect, negativeBg );
         QLinearGradient gradient( QPoint( oversizeRect.left() - rect().height(), 0 ),
                                   QPoint( oversizeRect.left() + rect().height(), 0 ) );
-        gradient.setColorAt( 0.1, Qt::green );
-        gradient.setColorAt( 0.5, Qt::yellow );
-        gradient.setColorAt( 0.9, Qt::red );
+        gradient.setColorAt( 0.1, positiveBg );
+        gradient.setColorAt( 0.5, neutralBg );
+        gradient.setColorAt( 0.9, negativeBg );
         p.fillRect( oversizeRect.left() - rect().height(), 0, rect().height()*2, rect().height(), gradient );
     }
 
     // draw yellow if cdSize - tolerance < docSize
     else if( docSize > cdSize - tolerance ) {
         oversizeRect.setLeft( oversizeRect.left() + (int)(one * (cdSize - tolerance).lba()) );
-        p.fillRect( oversizeRect, Qt::yellow );
+        p.fillRect( oversizeRect, neutralBg );
         QLinearGradient gradient( QPoint( oversizeRect.left() - rect().height(), 0 ),
                                   QPoint( oversizeRect.left() + rect().height(), 0 ) );
-        gradient.setColorAt( 0.1, Qt::green );
-        gradient.setColorAt( 0.9, Qt::yellow );
+        gradient.setColorAt( 0.1, positiveBg );
+        gradient.setColorAt( 0.9, neutralBg );
         p.fillRect( oversizeRect.left() - rect().height(), 0, rect().height()*2, rect().height(), gradient );
     }
 

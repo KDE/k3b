@@ -26,6 +26,7 @@
 #include <kurllabel.h>
 #include <kdialog.h>
 #include <klineedit.h>
+#include <KColorScheme>
 #include <KDiskFreeSpaceInfo>
 
 #include <qcombobox.h>
@@ -255,19 +256,24 @@ void K3b::VideoDVDRippingWidget::slotUpdateFreeTempSpace()
     if( !QFile::exists( path ) )
         path.truncate( path.lastIndexOf('/') );
 
-    QPalette pal( m_labelFreeSpace->palette() );
+    const KColorScheme colorScheme( isEnabled() ? QPalette::Normal : QPalette::Disabled, KColorScheme::Window );
+    QColor textColor;
+    
     KDiskFreeSpaceInfo free = KDiskFreeSpaceInfo::freeSpaceInfo( path );
     if( free.isValid() ) {
         m_labelFreeSpace->setText( KIO::convertSizeFromKiB(free.available()/1024) );
         if( free.available() < m_neededSize )
-            pal.setColor( QPalette::Text, Qt::red );
+            textColor = colorScheme.foreground( KColorScheme::NegativeText ).color();
         else
-            pal.setColor( QPalette::Text, palette().color( QPalette::Text ) );
+            textColor = colorScheme.foreground( KColorScheme::NormalText ).color();
     }
     else {
+        textColor = colorScheme.foreground( KColorScheme::NormalText ).color();
         m_labelFreeSpace->setText("-");
-        pal.setColor( QPalette::Text, palette().color( QPalette::Text ) );
     }
+    
+    QPalette pal( m_labelFreeSpace->palette() );
+    pal.setColor( QPalette::Text, textColor );
     m_labelFreeSpace->setPalette( pal );
 }
 
