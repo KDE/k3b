@@ -277,6 +277,7 @@ public:
     KActionCollection* actionCollection;
     KAction* actionShowMinutes;
     KAction* actionShowMegs;
+    QActionGroup* cdSizeGroup;
     KAction* actionAuto;
     KAction* action74Min;
     KAction* action80Min;
@@ -302,7 +303,59 @@ public:
     K3b::Doc* doc;
 
     QTimer updateTimer;
+    
+    void setCdSize( const K3b::Msf& size );
 };
+
+
+void K3b::FillStatusDisplay::Private::setCdSize( const K3b::Msf& size )
+{
+    // Remove check mark from the currently checked action
+    if( QAction* checked = cdSizeGroup->checkedAction() ) {
+        checked->setChecked( false );
+    }
+    
+    switch( size.totalFrames() ) {
+        case MediaSizeCd74Min:
+        case 650*512:
+            displayWidget->setCdSize( MediaSizeCd74Min );
+            action74Min->setChecked( true );
+            break;
+        case MediaSizeCd80Min:
+        case 700*512:
+            displayWidget->setCdSize( MediaSizeCd80Min );
+            action80Min->setChecked( true );
+            break;
+        case MediaSizeCd100Min:
+        case 880*512:
+            displayWidget->setCdSize( MediaSizeCd100Min );
+            action100Min->setChecked( true );
+            break;
+        case MediaSizeDvd4Gb:
+        case 2306867: // rounded 4.4*1024*512
+            displayWidget->setCdSize( MediaSizeDvd4Gb );
+            actionDvd4_7GB->setChecked( true );
+            break;
+        case MediaSizeDvd8Gb:
+        case 8*1024*512:
+            displayWidget->setCdSize( MediaSizeDvd8Gb );
+            actionDvdDoubleLayer->setChecked( true );
+            break;
+        case MediaSizeBluRay25Gb:
+        //case 25*1024*512:
+            displayWidget->setCdSize( MediaSizeBluRay25Gb );
+            actionBD25->setChecked( true );
+            break;
+        case MediaSizeBluRay50Gb:
+        //case 50*1024*512:
+            displayWidget->setCdSize( MediaSizeBluRay50Gb );
+            actionBD50->setChecked( true );
+            break;
+        default:
+            displayWidget->setCdSize( size );
+            break;
+    }
+}
 
 
 K3b::FillStatusDisplay::FillStatusDisplay( K3b::Doc* doc, QWidget *parent )
@@ -373,32 +426,25 @@ void K3b::FillStatusDisplay::setupPopupMenu()
     d->actionBD50 = K3b::createToggleAction( this, KIO::convertSizeFromKiB( 50*1024*1024 ), 0, 0, this, SLOT( slotBD50() ),
                                              d->actionCollection, "fillstatus_bd_50" );
 
-    d->actionCustomSize = K3b::createToggleAction( this, i18n("Custom..."), 0, 0, this, SLOT(slotCustomSize()),
-                                                   d->actionCollection, "fillstatus_custom_size" );
-#ifdef __GNUC__
-#warning setAlwaysEmitActivated
-#endif
-    //    d->actionCustomSize->setAlwaysEmitActivated(true);
-    d->actionDetermineSize = K3b::createToggleAction( this, i18n("From Medium..."), "media-optical", 0,
-                                                      this, SLOT(slotDetermineSize()),
-                                                 d->actionCollection, "fillstatus_size_from_disk" );
-//    d->actionDetermineSize->setAlwaysEmitActivated(true);
+    d->actionCustomSize = K3b::createAction( this, i18n("Custom..."), 0, 0, this, SLOT(slotCustomSize()),
+                                             d->actionCollection, "fillstatus_custom_size" );
+    d->actionDetermineSize = K3b::createAction( this, i18n("From Medium..."), "media-optical", 0,
+                                                this, SLOT(slotDetermineSize()),
+                                                d->actionCollection, "fillstatus_size_from_disk" );
 
     QActionGroup* showSizeInGroup = new QActionGroup( this );
     showSizeInGroup->addAction( d->actionShowMegs );
     showSizeInGroup->addAction( d->actionShowMinutes );
 
-    QActionGroup* cdSizeGroup = new QActionGroup( this );
-    cdSizeGroup->addAction( d->actionAuto );
-    cdSizeGroup->addAction( d->action74Min );
-    cdSizeGroup->addAction( d->action80Min );
-    cdSizeGroup->addAction( d->action100Min );
-    cdSizeGroup->addAction( d->actionDvd4_7GB );
-    cdSizeGroup->addAction( d->actionDvdDoubleLayer );
-    cdSizeGroup->addAction( d->actionBD25 );
-    cdSizeGroup->addAction( d->actionBD50 );
-    cdSizeGroup->addAction( d->actionCustomSize );
-    cdSizeGroup->addAction( d->actionDetermineSize );
+    d->cdSizeGroup = new QActionGroup( this );
+    d->cdSizeGroup->addAction( d->actionAuto );
+    d->cdSizeGroup->addAction( d->action74Min );
+    d->cdSizeGroup->addAction( d->action80Min );
+    d->cdSizeGroup->addAction( d->action100Min );
+    d->cdSizeGroup->addAction( d->actionDvd4_7GB );
+    d->cdSizeGroup->addAction( d->actionDvdDoubleLayer );
+    d->cdSizeGroup->addAction( d->actionBD25 );
+    d->cdSizeGroup->addAction( d->actionBD50 );
 
     d->actionLoadUserDefaults = K3b::createAction( this, i18n("User Defaults"), "", 0,
                                                    this, SLOT(slotLoadUserDefaults()),
@@ -533,8 +579,8 @@ void K3b::FillStatusDisplay::slotWhy44()
 void K3b::FillStatusDisplay::slotCustomSize()
 {
     // allow the units to be translated
-    QString gbS = i18n("gb");
-    QString mbS = i18n("mb");
+    QString gbS = i18n("GB");
+    QString mbS = i18n("MB");
     QString minS = i18n("min");
 
     // we certainly do not have BD- or HD-DVD-only projects
@@ -543,13 +589,13 @@ void K3b::FillStatusDisplay::slotCustomSize()
         defaultCustom = d->showTime ? QString("74") + minS : QString("650") + mbS;
     }
     else {
-        defaultCustom = QString("4%14%2").arg( KGlobal::locale()->decimalSymbol() ).arg( gbS );
+        defaultCustom = KGlobal::locale()->formatNumber(4.4,1) + gbS;
     }
 
     QRegExp rx( "(\\d+\\" + KGlobal::locale()->decimalSymbol() + "?\\d*)(" + gbS + "|" + mbS + "|" + minS + ")?" );
     bool ok;
     QString size = KInputDialog::getText( i18n("Custom Size"),
-                                          i18n("<p>Please specify the size of the media. Use suffixes <b>gb</b>,<b>mb</b>, "
+                                          i18n("<p>Please specify the size of the media. Use suffixes <b>GB</b>,<b>MB</b>, "
                                                "and <b>min</b> for <em>gigabytes</em>, <em>megabytes</em>, and <em>minutes</em>"
                                                " respectively."),
                                           defaultCustom,
@@ -571,8 +617,7 @@ void K3b::FillStatusDisplay::slotCustomSize()
                     val *= 512;
                 else
                     val *= 60*75;
-                d->displayWidget->setCdSize( (int)val );
-                update();
+                d->setCdSize( static_cast<int>( val ) );
             }
         }
     }
@@ -604,11 +649,8 @@ void K3b::FillStatusDisplay::slotDetermineSize()
 
     if( dev ) {
         K3b::Msf size = k3bappcore->mediaCache()->diskInfo( dev ).capacity();
-        if( size > 0 ) {
-            d->displayWidget->setCdSize( size );
-            d->actionCustomSize->setChecked(true);
-            update();
-        }
+        if( size > 0 )
+            d->setCdSize( size );
         else
             KMessageBox::error( parentWidget(), i18n("Medium is not empty.") );
     }
@@ -629,6 +671,11 @@ void K3b::FillStatusDisplay::slotLoadUserDefaults()
     d->actionShowMinutes->setChecked( d->showTime );
 
     long size = c.readEntry( "default media size", 0 );
+    
+    // Remove check mark from current checked action
+    if( QAction* checked = d->cdSizeGroup->checkedAction() ) {
+        checked->setChecked( false );
+    }
 
     switch( size ) {
     case 0:
@@ -657,7 +704,6 @@ void K3b::FillStatusDisplay::slotLoadUserDefaults()
         d->actionBD50->setChecked( true );
         break;
     default:
-        d->actionCustomSize->setChecked( true );
         break;
     }
 

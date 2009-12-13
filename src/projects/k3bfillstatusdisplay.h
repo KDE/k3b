@@ -46,7 +46,7 @@ namespace K3b {
 
     public Q_SLOTS:
         void setShowTime( bool b );
-        void setCdSize( const K3b::Msf& );
+        void setCdSize( const K3b::Msf& size );
 
     Q_SIGNALS:
         void contextMenu( const QPoint& );
