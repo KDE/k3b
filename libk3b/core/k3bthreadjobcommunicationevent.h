@@ -15,6 +15,7 @@
 #ifndef _K3B_THREAD_JOB_COMMUNICATION_EVENT_H_
 #define _K3B_THREAD_JOB_COMMUNICATION_EVENT_H_
 
+#include <KGuiItem>
 #include <qevent.h>
 #include <qstring.h>
 #include <qwaitcondition.h>
@@ -58,8 +59,8 @@ namespace K3b {
             QString text() const;
             QString caption() const;
 
-            QString yesText() const;
-            QString noText() const;
+            const KGuiItem& buttonYes() const;
+            const KGuiItem& buttonNo() const;
 
             int intResult() const;
             bool boolResult() const;
@@ -81,8 +82,8 @@ namespace K3b {
             Device::MediaTypes m_wantedMediaType;
             QString m_text;
             QString m_caption;
-            QString m_yesText;
-            QString m_noText;
+            KGuiItem m_buttonYes;
+            KGuiItem m_buttonNo;
 
             QWaitCondition m_threader;
             int m_result;
@@ -98,8 +99,8 @@ namespace K3b {
                                                            const QString& message );
         static ThreadJobCommunicationEvent* questionYesNo( const QString& text,
                                                            const QString& caption,
-                                                           const QString& yesText,
-                                                           const QString& noText );
+                                                           const KGuiItem& buttonYes,
+                                                           const KGuiItem& buttonNo );
         static ThreadJobCommunicationEvent* blockingInformation( const QString& text,
                                                                  const QString& caption );
 

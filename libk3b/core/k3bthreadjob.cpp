@@ -113,13 +113,13 @@ K3b::Device::MediaType K3b::ThreadJob::waitForMedia( K3b::Device::Device* device
 
 bool K3b::ThreadJob::questionYesNo( const QString& text,
                                     const QString& caption,
-                                    const QString& yesText,
-                                    const QString& noText )
+                                    const KGuiItem& buttonYes,
+                                    const KGuiItem& buttonNo )
 {
     K3b::ThreadJobCommunicationEvent* event = K3b::ThreadJobCommunicationEvent::questionYesNo( text,
                                                                                                caption,
-                                                                                               yesText,
-                                                                                               noText );
+                                                                                               buttonYes,
+                                                                                               buttonNo );
     QSharedPointer<K3b::ThreadJobCommunicationEvent::Data> data( event->data() );
     QApplication::postEvent( this, event );
     data->wait();
@@ -154,8 +154,8 @@ void K3b::ThreadJob::customEvent( QEvent* e )
         case K3b::ThreadJobCommunicationEvent::QuestionYesNo:
             result = K3b::Job::questionYesNo( data->text(),
                                               data->caption(),
-                                              data->yesText(),
-                                              data->noText() )
+                                              data->buttonYes(),
+                                              data->buttonNo() )
                      ? 1 : 0;
             break;
 

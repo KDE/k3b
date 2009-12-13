@@ -615,14 +615,14 @@ K3b::Device::MediaType K3b::JobProgressDialog::waitForMedia( K3b::Device::Device
 
 bool K3b::JobProgressDialog::questionYesNo( const QString& text,
                                             const QString& caption,
-                                            const QString& yesText,
-                                            const QString& noText )
+                                            const KGuiItem& buttonYes,
+                                            const KGuiItem& buttonNo )
 {
     return ( KMessageBox::questionYesNo( this,
                                          text,
                                          caption,
-                                         yesText.isEmpty() ? KStandardGuiItem::yes() : KGuiItem(yesText),
-                                         noText.isEmpty() ? KStandardGuiItem::no() : KGuiItem(noText) ) == KMessageBox::Yes );
+                                         buttonYes,
+                                         buttonNo ) == KMessageBox::Yes );
 }
 
 

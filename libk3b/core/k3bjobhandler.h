@@ -18,6 +18,7 @@
 
 #include "k3bdiskinfo.h"
 #include "k3bdevice.h"
+#include <KStandardGuiItem>
 
 
 namespace K3b {
@@ -45,11 +46,10 @@ namespace K3b {
                                                 Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
                                                 const QString& message = QString() ) = 0;
 
-        // FIXME: use KGuiItem
         virtual bool questionYesNo( const QString& text,
                                     const QString& caption = QString(),
-                                    const QString& yesText = QString(),
-                                    const QString& noText = QString() ) = 0;
+                                    const KGuiItem& buttonYes = KStandardGuiItem::yes(),
+                                    const KGuiItem& buttonNo = KStandardGuiItem::no() ) = 0;
 
         /**
          * Use this if you need the user to do something before the job is able to continue.

@@ -63,15 +63,15 @@ QString K3b::ThreadJobCommunicationEvent::Data::caption() const
 }
 
 
-QString K3b::ThreadJobCommunicationEvent::Data::yesText() const
+const KGuiItem& K3b::ThreadJobCommunicationEvent::Data::buttonYes() const
 {
-    return m_yesText;
+    return m_buttonYes;
 }
 
 
-QString K3b::ThreadJobCommunicationEvent::Data::noText() const
+const KGuiItem& K3b::ThreadJobCommunicationEvent::Data::buttonNo() const
 {
-    return m_noText;
+    return m_buttonNo;
 }
 
 
@@ -139,14 +139,14 @@ K3b::ThreadJobCommunicationEvent* K3b::ThreadJobCommunicationEvent::waitForMediu
 
 K3b::ThreadJobCommunicationEvent* K3b::ThreadJobCommunicationEvent::questionYesNo( const QString& text,
                                                                                    const QString& caption,
-                                                                                   const QString& yesText,
-                                                                                   const QString& noText )
+                                                                                   const KGuiItem& buttonYes,
+                                                                                   const KGuiItem& buttonNo )
 {
     K3b::ThreadJobCommunicationEvent* event = new K3b::ThreadJobCommunicationEvent( QuestionYesNo );
     event->m_data->m_text = text;
     event->m_data->m_caption = caption;
-    event->m_data->m_yesText = yesText;
-    event->m_data->m_noText = noText;
+    event->m_data->m_buttonYes = buttonYes;
+    event->m_data->m_buttonNo = buttonNo;
     return event;
 }
 

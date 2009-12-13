@@ -48,8 +48,8 @@ namespace K3b {
          */
         bool questionYesNo( const QString& text,
                             const QString& caption = QString(),
-                            const QString& yesText = QString(),
-                            const QString& noText = QString() );
+                            const KGuiItem& buttonYes = KStandardGuiItem::yes(),
+                            const KGuiItem& buttonNo = KStandardGuiItem::no() );
 
         /**
          * Does nothing

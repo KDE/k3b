@@ -188,8 +188,8 @@ void K3b::MixedJob::start()
                                         "project and continue without adding them to the image?") +
                            "<p>" + createNonExistingFilesString( nonExistingFiles, 10 ),
                            i18n("Warning"),
-                           i18n("Remove missing files and continue"),
-                           i18n("Cancel and go back") ) ) {
+                           KGuiItem( i18n("Remove missing files and continue") ),
+                           KGuiItem( i18n("Cancel and go back") ) ) ) {
             for( QList<K3b::AudioFile*>::const_iterator it = nonExistingFiles.constBegin();
                  it != nonExistingFiles.constEnd(); ++it ) {
                 delete *it;

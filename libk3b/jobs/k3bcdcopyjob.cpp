@@ -473,8 +473,8 @@ void K3b::CdCopyJob::startCopy()
                                    d->cddbInfo.get( KCDDB::Artist ).toString(),
                                    d->cddbInfo.get( KCDDB::Title ).toString() ),
                              i18n( "CD-TEXT" ),
-                             i18n( "Use CD-TEXT data" ),
-                             i18n( "Use Cddb entry" ) ) ) {
+                             KGuiItem( i18n( "Use CD-TEXT data" ) ),
+                             KGuiItem( i18n( "Use Cddb entry" ) ) ) ) {
             d->haveCdText = false;
         }
     }

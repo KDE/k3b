@@ -148,10 +148,10 @@ K3b::Device::MediaType K3b::Job::waitForMedia( K3b::Device::Device* device,
 
 bool K3b::Job::questionYesNo( const QString& text,
                               const QString& caption,
-                              const QString& yesText,
-                              const QString& noText )
+                              const KGuiItem& buttonYes,
+                              const KGuiItem& buttonNo )
 {
-    return d->jobHandler->questionYesNo( text, caption, yesText, noText );
+    return d->jobHandler->questionYesNo( text, caption, buttonYes, buttonNo );
 }
 
 

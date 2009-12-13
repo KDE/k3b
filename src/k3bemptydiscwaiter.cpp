@@ -726,14 +726,14 @@ K3b::Device::MediaType K3b::EmptyDiscWaiter::waitForMedia( K3b::Device::Device* 
 
 bool K3b::EmptyDiscWaiter::questionYesNo( const QString& text,
                                           const QString& caption,
-                                          const QString& yesText,
-                                          const QString& noText )
+                                          const KGuiItem& buttonYes,
+                                          const KGuiItem& buttonNo )
 {
     return ( KMessageBox::questionYesNo( parentWidgetToUse(),
                                          text,
                                          caption,
-                                         yesText.isEmpty() ? KStandardGuiItem::yes() : KGuiItem(yesText),
-                                         noText.isEmpty() ? KStandardGuiItem::no() : KGuiItem(noText) ) == KMessageBox::Yes );
+                                         buttonYes,
+                                         buttonNo ) == KMessageBox::Yes );
 }
 
 

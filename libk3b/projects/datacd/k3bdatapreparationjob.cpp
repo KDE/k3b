@@ -146,8 +146,8 @@ bool K3b::DataPreparationJob::run()
                                          d->doc->isoOptions().jolietLong() ? 103 : 64 )
                             + "<p>" + d->listOfRenamedItems,
                             i18n("Warning"),
-                            i18n("Shorten Filenames"),
-                            i18n("Disable Joliet extensions") ) ) {
+                            KGuiItem( i18n("Shorten Filenames") ),
+                            KGuiItem( i18n("Disable Joliet extensions") ) ) ) {
             // No -> disable joliet
             // for now we enable RockRidge to be sure we did not lie above (keep long filenames)
             K3b::IsoOptions op = d->doc->isoOptions();
@@ -170,8 +170,8 @@ bool K3b::DataPreparationJob::run()
                                          "want it to be cut or do you want to go back and change it manually?",
                                          QString::number( 16 ), d->doc->isoOptions().volumeID() ),
                             i18n("Warning"),
-                            i18n("Cut volume descriptor in the Joliet tree"),
-                            i18n("Cancel and go back") ) ) {
+                            KGuiItem( i18n("Cut volume descriptor in the Joliet tree") ),
+                            KGuiItem( i18n("Cancel and go back") ) ) ) {
             cancel();
             return false;
         }
@@ -185,8 +185,8 @@ bool K3b::DataPreparationJob::run()
                                         "project and continue without adding them to the image?") +
                            "<p>" + createItemsString( d->nonExistingItems, 10 ),
                            i18n("Warning"),
-                           i18n("Remove missing files and continue"),
-                           i18n("Cancel and go back") ) ) {
+                           KGuiItem( i18n("Remove missing files and continue") ),
+                           KGuiItem( i18n("Cancel and go back") ) ) ) {
             for( QList<K3b::DataItem*>::const_iterator it = d->nonExistingItems.constBegin();
                  it != d->nonExistingItems.constEnd(); ++it ) {
                 delete *it;
@@ -207,8 +207,8 @@ bool K3b::DataPreparationJob::run()
                                          "without writing the symbolic links to the image?") +
                             "<p>" + createItemsString( d->folderSymLinkItems, 10 ),
                             i18n("Warning"),
-                            i18n("Discard symbolic links to folders"),
-                            i18n("Cancel and go back") ) ) {
+                            KGuiItem( i18n("Discard symbolic links to folders") ),
+                            KGuiItem( i18n("Cancel and go back") ) ) ) {
             cancel();
             return false;
         }

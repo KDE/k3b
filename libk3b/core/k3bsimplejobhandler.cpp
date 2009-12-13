@@ -40,13 +40,13 @@ K3b::Device::MediaType K3b::SimpleJobHandler::waitForMedia( K3b::Device::Device*
 
 bool K3b::SimpleJobHandler::questionYesNo( const QString& text,
                                            const QString& caption,
-                                           const QString& yesText,
-                                           const QString& noText )
+                                           const KGuiItem& buttonYes,
+                                           const KGuiItem& buttonNo )
 {
     Q_UNUSED( text );
     Q_UNUSED( caption );
-    Q_UNUSED( yesText );
-    Q_UNUSED( noText );
+    Q_UNUSED( buttonYes );
+    Q_UNUSED( buttonNo );
 
     return true;
 }
