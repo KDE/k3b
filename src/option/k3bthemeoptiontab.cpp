@@ -185,7 +185,7 @@ void K3b::ThemeOptionTab::slotInstallTheme()
                                        i18n("A theme with the name '%1' already exists. Do you want to "
                                             "overwrite it?", themeName),
                                        i18n("Theme exists"),
-                                       KGuiItem( i18n("Overwrite") ),
+                                       KStandardGuiItem::overwrite(),
                                        KStandardGuiItem::cancel() ) == KMessageBox::Yes ) {
             // install the theme
             archive.directory()->copyTo( themeBasePath );

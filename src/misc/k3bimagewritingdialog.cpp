@@ -47,7 +47,6 @@
 #include <KConfig>
 #include <KColorScheme>
 #include <KFileDialog>
-#include <KGuiItem>
 #include <KIconLoader>
 #include <KInputDialog>
 #include <kio/global.h>
@@ -465,12 +464,12 @@ void K3b::ImageWritingDialog::slotStartClicked()
         if( isoFs.open() ) {
             if( K3b::filesize( KUrl(d->imageFile) ) < Private::volumeSpaceSize( isoFs ) ) {
                 if( KMessageBox::questionYesNo( this,
-                                                i18n("<p>This image has an invalid file size. "
-                                                     "If it has been downloaded make sure the download is complete."
-                                                     "<p>Only continue if you know what you are doing."),
+                                                i18n("<p>The actual file size does not match the size declared in the file header. "
+                                                     "If it has been downloaded make sure the download is complete.</p>"
+                                                     "<p>Only continue if you know what you are doing.</p>"),
                                                 i18n("Warning"),
-                                                KGuiItem( i18n("Continue") ),
-                                                KGuiItem( i18n("Cancel") ) ) == KMessageBox::No )
+                                                KStandardGuiItem::cont(),
+                                                KStandardGuiItem::cancel() ) == KMessageBox::No )
                     return;
             }
         }

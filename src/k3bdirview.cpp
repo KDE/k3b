@@ -206,7 +206,7 @@ void K3b::DirView::showMediumInfo( const K3b::Medium& medium )
                                                        "<p>If you intend to make a copy of the entire Video DVD including all menus "
                                                        "and extras it is recommended to use the K3b DVD Copy tool."),
                                                   i18n("Video DVD ripping"),
-                                                  KGuiItem( i18n("Continue") ),
+                                                  KStandardGuiItem::cont(),
                                                   KGuiItem( i18n("Open DVD Copy Dialog") ),
                                                   KStandardGuiItem::cancel(),
                                                   "videodvdripping",
