@@ -1,67 +1,78 @@
-<ui version="4.0" stdsetdef="1" >
-  <author>Sebastian Trueg</author>
-  <comment></comment>
-  <exportmacro></exportmacro>
-  <class>base_K3bExternalEncoderEditWidget</class>
-  <widget class="QWidget" name="base_K3bExternalEncoderEditWidget" >
-    <property name="geometry" >
-      <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>529</width>
-        <height>514</height>
-      </rect>
-    </property>
-    <layout class="QVBoxLayout" >
-      <property name="margin" >
-        <number>0</number>
-      </property>
-      <item>
-        <widget class="Q3GroupBox" name="groupBox3" >
-          <property name="title" >
-            <string>General</string>
-          </property>
-          <layout class="QGridLayout" >
-            <item row="1" column="1" >
-              <widget class="KLineEdit" name="m_editExtension" />
-            </item>
-            <item row="1" column="0" >
-              <widget class="KLineEdit" name="m_editName" />
-            </item>
-            <item row="0" column="0" >
-              <widget class="QLabel" name="textLabel1" >
-                <property name="text" >
-                  <string>Name:</string>
-                </property>
-                <property name="wordWrap" >
-                  <bool>false</bool>
-                </property>
-              </widget>
-            </item>
-            <item row="0" column="1" >
-              <widget class="QLabel" name="textLabel3" >
-                <property name="text" >
-                  <string>Filename extension:</string>
-                </property>
-                <property name="wordWrap" >
-                  <bool>false</bool>
-                </property>
-              </widget>
-            </item>
-          </layout>
-        </widget>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>Sebastian Trueg</author>
+ <class>base_K3bExternalEncoderEditWidget</class>
+ <widget class="QWidget" name="base_K3bExternalEncoderEditWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>533</width>
+    <height>532</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>General</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="textLabel1">
+        <property name="text">
+         <string>Name:</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
       </item>
+      <item row="0" column="1">
+       <widget class="KLineEdit" name="m_editName"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="textLabel3">
+        <property name="text">
+         <string>Filename extension:</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="KLineEdit" name="m_editExtension"/>
+      </item>
+     </layout>
+     <zorder>m_editExtension</zorder>
+     <zorder>textLabel3</zorder>
+     <zorder>m_editExtension</zorder>
+     <zorder>m_editName</zorder>
+     <zorder>textLabel1</zorder>
+     <zorder>textLabel3</zorder>
+     <zorder>m_editExtension</zorder>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Command</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-        <widget class="Q3GroupBox" name="groupBox2" >
-          <property name="title" >
-            <string>Command</string>
-          </property>
-          <layout class="QVBoxLayout" >
-            <item>
-              <widget class="K3ActiveLabel" name="kActiveLabel2" >
-                <property name="text" >
-                  <string>&lt;p>&lt;b>Command&lt;/b>&lt;br>
-Please insert the command used to encode the audio data. The command has to read raw little endian (see &lt;em>Swap Byte Order&lt;/em>) 16-bit stereo audio frames from stdin.
+       <widget class="QLabel" name="label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Please insert the command used to encode the audio data. The command has to read raw little endian (see &lt;em>Swap Byte Order&lt;/em>) 16-bit stereo audio frames from stdin.
 &lt;p>The following strings will be replaced by K3b:&lt;br>
 &lt;b>%f&lt;/b> - The filename of the resulting file. This is where the command has to write its output to.&lt;br>
 &lt;em>The following refer to metadata stored for example in the ID3 tag of an mp3 file (Be aware that these values might be empty).&lt;/em>&lt;br>
@@ -73,72 +84,71 @@ Please insert the command used to encode the audio data. The command has to read
 &lt;b>%r&lt;/b> - Album Artist&lt;br>
 &lt;b>%x&lt;/b> - Album comment&lt;br>
 &lt;b>%y&lt;/b> - Release Year</string>
-                </property>
-              </widget>
-            </item>
-            <item>
-              <widget class="KLineEdit" name="m_editCommand" >
-                <property name="sizePolicy" >
-                  <sizepolicy>
-                    <hsizetype>7</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                  </sizepolicy>
-                </property>
-              </widget>
-            </item>
-          </layout>
-        </widget>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item>
-        <widget class="Q3GroupBox" name="groupBox4" >
-          <property name="title" >
-            <string>Options</string>
-          </property>
-          <layout class="QVBoxLayout" >
-            <item>
-              <widget class="QCheckBox" name="m_checkSwapByteOrder" >
-                <property name="text" >
-                  <string>Swap &amp;Byte Order</string>
-                </property>
-                <property name="toolTip" stdset="0" >
-                  <string>Swap the byte order of the input data</string>
-                </property>
-                <property name="whatsThis" stdset="0" >
-                  <string>&lt;p> If this option is checked K3b will swap the byte order of the input data. Thus, the command has to read big endian audio frames.
-&lt;p>If the resulting audio file sounds bad it is highly likely that the byte order is wrong and this option has to be checked.</string>
-                </property>
-              </widget>
-            </item>
-            <item>
-              <widget class="QCheckBox" name="m_checkWriteWaveHeader" >
-                <property name="text" >
-                  <string>Write W&amp;ave Header</string>
-                </property>
-                <property name="toolTip" stdset="0" >
-                  <string>Create a wave header for the input data</string>
-                </property>
-                <property name="whatsThis" stdset="0" >
-                  <string>&lt;p>If this option is checked K3b will write a wave header. This is useful in case the encoder application cannot read plain raw audio data.</string>
-                </property>
-              </widget>
-            </item>
-          </layout>
-        </widget>
+       <widget class="KLineEdit" name="m_editCommand">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
       </item>
-    </layout>
-  </widget>
-  <layoutdefault spacing="6" margin="11" />
-    <tabstops>
-    <tabstop>m_editName</tabstop>
-    <tabstop>m_editExtension</tabstop>
-    <tabstop>m_editCommand</tabstop>
-  </tabstops>
-  <includes>
-    <include location="local" >klineedit.h</include>
-    <include location="local" >klineedit.h</include>
-    <include location="local" >k3activelabel.h</include>
-    <include location="local" >klineedit.h</include>
-  </includes>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>Options</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QCheckBox" name="m_checkSwapByteOrder">
+        <property name="toolTip">
+         <string>Swap the byte order of the input data</string>
+        </property>
+        <property name="whatsThis">
+         <string>&lt;p&gt; If this option is checked K3b will swap the byte order of the input data. Thus, the command has to read big endian audio frames.
+&lt;p&gt;If the resulting audio file sounds bad it is highly likely that the byte order is wrong and this option has to be checked.</string>
+        </property>
+        <property name="text">
+         <string>Swap &amp;Byte Order</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="m_checkWriteWaveHeader">
+        <property name="toolTip">
+         <string>Create a wave header for the input data</string>
+        </property>
+        <property name="whatsThis">
+         <string>&lt;p&gt;If this option is checked K3b will write a wave header. This is useful in case the encoder application cannot read plain raw audio data.</string>
+        </property>
+        <property name="text">
+         <string>Write W&amp;ave Header</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
 </ui>

@@ -27,13 +27,7 @@
     </widget>
    </item>
    <item>
-    <widget class="Q3GroupBox" name="groupBox1">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>1</verstretch>
-      </sizepolicy>
-     </property>
+    <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Configured Encoders</string>
      </property>
@@ -110,17 +104,6 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
- <includes>
-  <include location="local">k3activelabel.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>
