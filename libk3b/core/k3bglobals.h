@@ -113,6 +113,11 @@ namespace K3b {
         WritingModeRestrictedOverwrite = Device::WRITINGMODE_RES_OVWR // Restricted Overwrite
     };
     Q_DECLARE_FLAGS( WritingModes, WritingMode )
+    
+    enum FormattingMode {
+        FormattingComplete = 0,
+        FormattingQuick = 1
+    };
 
     LIBK3B_EXPORT QString writingModeString( WritingModes );
 

@@ -58,9 +58,9 @@ namespace K3b {
         void setMode( int );
 
         /**
-         * Not all writers support this
+         * Not all writers supports quick mode
          */
-        void setQuickFormat( bool );
+        void setFormattingMode( FormattingMode mode );
 
         /**
          * @param b If true empty DVDs will also be formatted

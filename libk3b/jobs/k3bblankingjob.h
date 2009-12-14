@@ -38,16 +38,14 @@ namespace K3b {
 
         bool hasBeenCanceled() const { return m_canceled; }
 
-        enum blank_mode { Fast, Complete, Track, Unclose, Session };
-
     public Q_SLOTS:
         void start();
         void cancel();
         void setForce( bool f ) { m_force = f; }
         void setDevice( K3b::Device::Device* d );
         void setSpeed( int s ) { m_speed = s; }
-        void setMode( int m ) { m_mode = m; }
-        void setWritingApp (int app) { m_writingApp = app; }
+        void setFormattingMode( FormattingMode mode ) { m_mode = mode; }
+        void setWritingApp( WritingApp app ) { m_writingApp = app; }
 
         /**
          * If set true the job ignores the global K3b setting
@@ -64,8 +62,8 @@ namespace K3b {
         bool m_force;
         Device::Device* m_device;
         int m_speed;
-        int m_mode;
-        int m_writingApp;
+        FormattingMode m_mode;
+        WritingApp m_writingApp;
         bool m_canceled;
         bool m_forceNoEject;
     };

@@ -307,7 +307,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
 
                     K3b::DvdFormattingJob job( this );
                     job.setDevice( d->device );
-                    job.setQuickFormat( true );
+                    job.setFormattingMode( FormattingQuick );
                     job.setForce( false );
                     job.setForceNoEject( true );
 
@@ -489,7 +489,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                              : ( (d->wantedMediaType & K3b::Device::MEDIA_DVD_RW_SEQ)
                                  ? K3b::WritingModeIncrementalSequential
                                  : K3b::WritingModeRestrictedOverwrite ) );
-                job.setQuickFormat( true );
+                job.setFormattingMode( FormattingQuick );
                 job.setForce( false );
                 job.setForceNoEject(true);
 
@@ -555,14 +555,14 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
             d->erasingInfoDialog->setText( i18n("Erasing CD-RW") );
 
             // the user may be using cdrdao for erasing as cdrecord does not work
-            int erasingApp = K3b::WritingAppAuto;
+            WritingApp erasingApp = K3b::WritingAppAuto;
             if( KGlobal::config()->group( "General Options" ).readEntry( "Show advanced GUI", false ) ) {
                 erasingApp = K3b::writingAppFromString( KGlobal::config()->group( "CDRW Erasing" ).readEntry( "writing_app" ) );
             }
 
             K3b::BlankingJob job( this );
             job.setDevice( d->device );
-            job.setMode( K3b::BlankingJob::Fast );
+            job.setFormattingMode( FormattingQuick );
             job.setForce(true);
             job.setForceNoEject(true);
             job.setSpeed( 0 ); // Auto

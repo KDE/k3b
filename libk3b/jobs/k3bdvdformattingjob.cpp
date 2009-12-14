@@ -38,7 +38,7 @@ class K3b::DvdFormattingJob::Private
 {
 public:
     Private()
-        : quick(false),
+        : formattingMode(FormattingComplete),
           force(false),
           mode(K3b::WritingModeAuto),
           device(0),
@@ -49,7 +49,7 @@ public:
           forceNoEject(false) {
     }
 
-    bool quick;
+    FormattingMode formattingMode;
     bool force;
     int mode;
 
@@ -103,7 +103,7 @@ QString K3b::DvdFormattingJob::jobDescription() const
 
 QString K3b::DvdFormattingJob::jobDetails() const
 {
-    if( d->quick )
+    if( d->formattingMode == FormattingQuick )
         return i18n("Quick Format");
     else
         return QString();
@@ -195,9 +195,9 @@ void K3b::DvdFormattingJob::setMode( int m )
 }
 
 
-void K3b::DvdFormattingJob::setQuickFormat( bool b )
+void K3b::DvdFormattingJob::setFormattingMode( FormattingMode mode )
 {
-    d->quick = b;
+    d->formattingMode = mode;
 }
 
 
@@ -489,7 +489,7 @@ void K3b::DvdFormattingJob::startFormatting( const K3b::Device::DiskInfo& diskIn
             p = "-blank";
         else
             p = "-force";
-        if( !d->quick )
+        if( d->formattingMode == FormattingComplete )
             p += "=full";
 
         *d->process << p;

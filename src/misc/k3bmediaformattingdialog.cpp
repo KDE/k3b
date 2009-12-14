@@ -136,7 +136,7 @@ void K3b::MediaFormattingDialog::slotStartClicked()
         job->setForce( m_checkForce->isChecked() );
         job->setWritingApp( m_writerSelectionWidget->writingApp() );
         // no support for all the strange erasing modes anymore, they did not work anyway
-        job->setMode( m_checkQuickFormat->isChecked() ? K3b::BlankingJob::Fast : K3b::BlankingJob::Complete );
+        job->setFormattingMode( m_checkQuickFormat->isChecked() ? FormattingQuick : FormattingComplete );
 
         theJob = job;
     }
@@ -146,7 +146,7 @@ void K3b::MediaFormattingDialog::slotStartClicked()
         job->setDevice( m_writerSelectionWidget->writerDevice() );
         job->setMode( m_writingModeWidget->writingMode() );
         job->setForce( m_checkForce->isChecked() );
-        job->setQuickFormat( m_checkQuickFormat->isChecked() );
+        job->setFormattingMode( m_checkQuickFormat->isChecked() ? FormattingQuick : FormattingComplete );
 
         theJob = job;
     }

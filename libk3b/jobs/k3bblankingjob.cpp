@@ -38,8 +38,8 @@ K3b::BlankingJob::BlankingJob( K3b::JobHandler* hdl, QObject* parent )
       m_force(true),
       m_device(0),
       m_speed(0),
-      m_mode(Fast),
-      m_writingApp(K3b::WritingAppAuto),
+      m_mode(FormattingQuick),
+      m_writingApp(WritingAppAuto),
       m_canceled(false),
       m_forceNoEject(false)
 {
@@ -88,39 +88,18 @@ void K3b::BlankingJob::slotStartErasing()
         K3b::CdrdaoWriter* writer = new K3b::CdrdaoWriter( m_device, this );
         m_writerJob = writer;
 
-        writer->setCommand(K3b::CdrdaoWriter::BLANK);
-        writer->setBlankMode( m_mode == Fast ? K3b::CdrdaoWriter::MINIMAL : K3b::CdrdaoWriter::FULL );
-        writer->setForce(m_force);
-        writer->setBurnSpeed(m_speed);
+        writer->setCommand( K3b::CdrdaoWriter::BLANK );
+        writer->setBlankMode( m_mode );
+        writer->setForce( m_force );
+        writer->setBurnSpeed( m_speed );
     }
     else {
         K3b::CdrecordWriter* writer = new K3b::CdrecordWriter( m_device, this );
         m_writerJob = writer;
-
-        QString mode;
-        switch( m_mode ) {
-        case Fast:
-            mode = "fast";
-            break;
-        case Complete:
-            mode = "all";
-            break;
-        case Track:
-            mode = "track";
-            break;
-        case Unclose:
-            mode = "unclose";
-            break;
-        case Session:
-            mode = "session";
-            break;
-        }
-
-        writer->addArgument("blank="+ mode);
-
-        if (m_force)
-            writer->addArgument("-force");
-        writer->setBurnSpeed(m_speed);
+        
+        writer->setFormattingMode( m_mode );
+        writer->setForce( m_force );
+        writer->setBurnSpeed( m_speed );
     }
 
     connect(m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)));
@@ -185,7 +164,7 @@ QString K3b::BlankingJob::jobDescription() const
 
 QString K3b::BlankingJob::jobDetails() const
 {
-    if( m_mode == Fast )
+    if( m_mode == FormattingQuick )
         return i18n("Quick Format");
     else
         return QString();

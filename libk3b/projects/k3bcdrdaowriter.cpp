@@ -126,7 +126,7 @@ K3b::CdrdaoWriter::CdrdaoWriter( K3b::Device::Device* dev, K3b::JobHandler* hdl,
                                  QObject* parent )
     : K3b::AbstractWriter( dev, hdl, parent ),
       m_command(WRITE),
-      m_blankMode(MINIMAL),
+      m_blankMode(FormattingQuick),
       m_sourceDevice(0),
       m_readRaw(false),
       m_multi(false),
@@ -373,14 +373,13 @@ void K3b::CdrdaoWriter::setBlankArguments()
         *m_process << "--speed" << QString("%1").arg(d->usedSpeed);
 
     // blank-mode
-    *m_process << "--blank-mode";
     switch (m_blankMode)
     {
-    case FULL:
-        *m_process << "full";
+    case FormattingComplete:
+        *m_process << "--blank-mode" << "full";
         break;
-    case MINIMAL:
-        *m_process << "minimal";
+    case FormattingQuick:
+        *m_process << "--blank-mode" << "minimal";
         break;
     }
 }

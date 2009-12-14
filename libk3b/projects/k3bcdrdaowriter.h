@@ -34,7 +34,6 @@ namespace K3b {
 
     public:
         enum Command { WRITE, COPY, READ, BLANK };
-        enum BlankMode { FULL, MINIMAL };
         enum SubMode { None, RW, RW_RAW };
 
         CdrdaoWriter( Device::Device* dev, JobHandler*,
@@ -62,7 +61,7 @@ namespace K3b {
         // options
         // ---------------------
         void setCommand( int c ) { m_command = c; }
-        void setBlankMode( int b ) { m_blankMode = b; }
+        void setBlankMode( FormattingMode b ) { m_blankMode = b; }
         void setMulti( bool b ) { m_multi = b; }
         void setForce( bool b ) { m_force = b; }
         void setOnTheFly( bool b ) { m_onTheFly = b; }

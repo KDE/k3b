@@ -52,10 +52,13 @@ public:
     Process process;
 
     WritingMode writingMode;
+    FormattingMode formattingMode;
     bool totalTracksParsed;
     bool clone;
     bool cue;
     bool multi;
+    bool force;
+    bool formatting;
 
     QString cueFile;
     QStringList arguments;
@@ -101,9 +104,12 @@ K3b::CdrecordWriter::CdrecordWriter( K3b::Device::Device* dev, K3b::JobHandler* 
              this, SLOT(slotThroughput(int)) );
 
     d->writingMode = K3b::WritingModeTao;
+    d->formattingMode = K3b::FormattingQuick;
     d->clone = false;
     d->cue = false;
     d->multi = false;
+    d->force = false;
+    d->formatting = false;
 
     d->process.setSplitStdout(true);
     d->process.setSuppressEmptyLines(true);
@@ -181,9 +187,22 @@ void K3b::CdrecordWriter::setWritingMode( K3b::WritingMode mode )
 }
 
 
+void K3b::CdrecordWriter::setFormattingMode( FormattingMode mode )
+{
+    d->formattingMode = mode;
+    d->formatting = true;
+}
+
+
 void K3b::CdrecordWriter::setMulti( bool b )
 {
     d->multi = b;
+}
+
+
+void K3b::CdrecordWriter::setForce( bool b )
+{
+    d->force = b;
 }
 
 
@@ -306,7 +325,7 @@ bool K3b::CdrecordWriter::prepareProcess()
             emit infoMessage( i18n("Writer does not support buffer underrun free recording (Burnfree)"), MessageWarning );
     }
 
-    if( k3bcore->globalSettings()->force() ) {
+    if( k3bcore->globalSettings()->force() || d->force ) {
         d->process << "-force";
         emit infoMessage( i18n("'Force unsafe operations' enabled."), MessageWarning );
     }
@@ -321,6 +340,17 @@ bool K3b::CdrecordWriter::prepareProcess()
 
     if( d->multi )
         d->process << "-multi";
+    
+    if( d->formatting ) {
+        switch( d->formattingMode ) {
+            case FormattingComplete: 
+                d->process << "blank=all";
+                break;
+            case FormattingQuick:
+                d->process << "blank=fast";
+                break;
+        }
+    }
 
     if( d->rawCdText.size() > 0 ) {
         delete d->cdTextFile;
@@ -787,13 +817,17 @@ void K3b::CdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus 
         switch( exitCode ) {
         case 0:
         {
-            if( simulate() )
+            if( d->formatting )
+                emit infoMessage( i18n("Erasing successfully completed"), K3b::Job::MessageSuccess );
+            else if( simulate() )
                 emit infoMessage( i18n("Simulation successfully completed"), K3b::Job::MessageSuccess );
             else
                 emit infoMessage( i18n("Writing successfully completed"), K3b::Job::MessageSuccess );
 
-            int s = d->speedEst->average();
-            emit infoMessage( ki18n("Average overall write speed: %1 KB/s (%2x)").subs(s).subs((double)s/( double )d->usedSpeedFactor, 0, 'g', 2).toString(), MessageInfo );
+            if( !d->formatting ) {
+                int s = d->speedEst->average();
+                emit infoMessage( ki18n("Average overall write speed: %1 KB/s (%2x)").subs(s).subs((double)s/( double )d->usedSpeedFactor, 0, 'g', 2).toString(), MessageInfo );
+            }
 
             jobFinished( true );
         }

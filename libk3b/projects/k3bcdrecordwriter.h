@@ -62,9 +62,11 @@ namespace K3b {
 
         void setDao( bool b );
         void setWritingMode( WritingMode mode );
+        void setFormattingMode( FormattingMode mode );
         void setCueFile( const QString& s);
         void setClone( bool b );
         void setMulti( bool b );
+        void setForce( bool b );
 
         void setRawCdText( const QByteArray& a );
 
