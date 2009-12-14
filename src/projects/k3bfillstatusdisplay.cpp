@@ -595,7 +595,7 @@ void K3b::FillStatusDisplay::slotCustomSize()
     QRegExp rx( "(\\d+\\" + KGlobal::locale()->decimalSymbol() + "?\\d*)(" + gbS + "|" + mbS + "|" + minS + ")?" );
     bool ok;
     QString size = KInputDialog::getText( i18n("Custom Size"),
-                                          i18n("<p>Please specify the size of the media. Use suffixes <b>GB</b>,<b>MB</b>, "
+                                          i18n("<p>Please specify the size of the medium. Use suffixes <b>GB</b>,<b>MB</b>, "
                                                "and <b>min</b> for <em>gigabytes</em>, <em>megabytes</em>, and <em>minutes</em>"
                                                " respectively."),
                                           defaultCustom,
