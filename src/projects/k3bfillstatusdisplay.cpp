@@ -128,6 +128,8 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     const QColor neutralBg = colorScheme.background( KColorScheme::NeutralBackground ).color();
     const QColor negativeBg = colorScheme.background( KColorScheme::NegativeBackground ).color();
     const QColor normalFg = colorScheme.foreground( KColorScheme::NormalText ).color();
+    const QColor positiveFg = colorScheme.foreground( KColorScheme::PositiveText ).color();
+    const QColor neutralFg = colorScheme.foreground( KColorScheme::NeutralText ).color();
     const QColor negativeFg = colorScheme.foreground( KColorScheme::NegativeText ).color();
     
     QPainter p( this );
@@ -165,6 +167,9 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
         gradient.setColorAt( 0.5, neutralBg );
         gradient.setColorAt( 0.9, negativeBg );
         p.fillRect( oversizeRect.left() - rect().height(), 0, rect().height()*2, rect().height(), gradient );
+        
+        p.setPen( negativeFg );
+        p.drawLine( oversizeRect.topRight(), oversizeRect.bottomRight() );
     }
 
     // draw yellow if cdSize - tolerance < docSize
@@ -176,6 +181,15 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
         gradient.setColorAt( 0.1, positiveBg );
         gradient.setColorAt( 0.9, neutralBg );
         p.fillRect( oversizeRect.left() - rect().height(), 0, rect().height()*2, rect().height(), gradient );
+        
+        p.setPen( neutralFg );
+        p.drawLine( oversizeRect.topRight(), oversizeRect.bottomRight() );
+    }
+    
+    // draw end column with foreground color to make bar more readable
+    else {
+        p.setPen( positiveFg );
+        p.drawLine( crect.topRight(), crect.bottomRight() );
     }
 
     p.setClipping(false);
@@ -212,6 +226,7 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     // draw the medium size marker
     // ====================================================================================
     int mediumSizeMarkerPos = rect().left() + (int)(one*cdSize.lba());
+    p.setPen( normalFg );
     p.drawLine( mediumSizeMarkerPos, rect().bottom(),
                 mediumSizeMarkerPos, rect().top() + ((rect().bottom()-rect().top())/2) );
     // ====================================================================================
@@ -259,7 +274,6 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     docTextRect.setLeft( docSizeTextPos );
     p.drawText( docTextRect, Qt::AlignLeft | Qt::AlignVCenter, docSizeText );
 
-    p.setPen( d->cdSize.mode1Bytes() >= d->doc->size() ? normalFg : negativeFg );
     p.setFont(fnt);
     p.drawText( overSizeTextRect, Qt::AlignLeft | Qt::AlignVCenter, overSizeText );
     // ====================================================================================
