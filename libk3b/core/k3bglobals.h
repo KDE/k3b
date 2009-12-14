@@ -114,6 +114,9 @@ namespace K3b {
     };
     Q_DECLARE_FLAGS( WritingModes, WritingMode )
     
+    /**
+     * Unified mode for erasing/formatting of CD-RW/DVD-RW/BD-RW
+     */
     enum FormattingMode {
         FormattingComplete = 0,
         FormattingQuick = 1
