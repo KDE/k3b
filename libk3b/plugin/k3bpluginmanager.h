@@ -52,11 +52,13 @@ namespace K3b {
         QStringList categories() const;
 
         int pluginSystemVersion() const;
+        
+        bool hasPluginDialog( Plugin* plugin ) const;
 
     public Q_SLOTS:
         void loadAll();
 
-        int execPluginDialog( K3b::Plugin*, QWidget* parent = 0 );
+        int execPluginDialog( Plugin* plugin, QWidget* parent = 0 );
 
     private:
         class Private;

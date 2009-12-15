@@ -271,8 +271,10 @@ void K3b::AudioConvertingOptionWidget::slotUpdateFreeTempSpace()
 
 void K3b::AudioConvertingOptionWidget::slotEncoderChanged()
 {
-    // 0 for wave
-    m_buttonConfigurePlugin->setEnabled( encoder() != 0 );
+    if( Plugin* plugin = encoder() )
+        m_buttonConfigurePlugin->setEnabled( k3bcore->pluginManager()->hasPluginDialog( plugin ) );
+    else
+        m_buttonConfigurePlugin->setEnabled( false );
 }
 
 

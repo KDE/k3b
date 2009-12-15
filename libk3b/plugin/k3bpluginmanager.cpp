@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C)      2009 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -17,25 +18,23 @@
 #include "k3bpluginconfigwidget.h"
 #include "k3bversion.h"
 
-#include <kdebug.h>
-#include <klocale.h>
-#include <kglobal.h>
-#include <kstandarddirs.h>
-#include <kmessagebox.h>
-#include <klibloader.h>
-#include <kdialog.h>
-#include <kservice.h>
-#include <kcmoduleinfo.h>
-
-#include <KServiceTypeTrader>
-#include <KService>
-#include <KPluginInfo>
+#include <KCModuleInfo>
 #include <KCModuleProxy>
+#include <KDebug>
+#include <KDialog>
+#include <KGlobal>
+#include <KLibLoader>
+#include <KLocale>
+#include <KMessageBox>
+#include <KPluginInfo>
+#include <KService>
+#include <KServiceTypeTrader>
+#include <KStandardDirs>
 
-#include <qlist.h>
-#include <qmap.h>
-#include <qdir.h>
-#include <QtGui/QVBoxLayout>
+#include <QDir>
+#include <QList>
+#include <QMap>
+#include <QSharedPointer>
 
 
 
@@ -49,6 +48,7 @@ public:
     QList<K3b::Plugin*> plugins;
 
     void loadPlugin( const KService::Ptr &service );
+    KCModuleProxy* getModuleProxy( Plugin* plugin ) const;
 
 private:
     K3b::PluginManager* m_parent;
@@ -132,6 +132,24 @@ void K3b::PluginManager::Private::loadPlugin( const KService::Ptr &service )
 }
 
 
+KCModuleProxy* K3b::PluginManager::Private::getModuleProxy( Plugin* plugin ) const
+{
+    foreach( const KService::Ptr& service, plugin->pluginInfo().kcmServices() ) {
+        if( !service->noDisplay() ) {
+            KCModuleInfo moduleInfo( service );
+            KCModuleProxy* moduleProxy = new KCModuleProxy( moduleInfo );
+            if( moduleProxy->realModule() ) {
+                return moduleProxy;
+            }
+            else {
+                delete moduleProxy;
+            }
+        }
+    }
+    return 0;
+}
+
+
 void K3b::PluginManager::loadAll()
 {
     kDebug();
@@ -147,26 +165,29 @@ int K3b::PluginManager::pluginSystemVersion() const
 }
 
 
-int K3b::PluginManager::execPluginDialog( K3b::Plugin* plugin, QWidget* parent )
+bool K3b::PluginManager::hasPluginDialog( Plugin* plugin ) const
 {
-    QList<KService::Ptr> kcmServices = plugin->pluginInfo().kcmServices();
-    if ( !kcmServices.isEmpty() ) {
+    QSharedPointer<KCModuleProxy> moduleProxy( d->getModuleProxy( plugin ) );
+    return moduleProxy;
+    
+}
+
+
+int K3b::PluginManager::execPluginDialog( Plugin* plugin, QWidget* parent )
+{
+    if( KCModuleProxy* moduleProxy = d->getModuleProxy( plugin ) ) {
         KDialog dlg( parent );
         dlg.setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Default);
-        dlg.setCaption( i18n("Configure plugin %1", plugin->pluginInfo().name() ) );
-
-        // In K3b we only have at most one KCM for each plugin
-        KCModuleInfo kcmModuleInfo( kcmServices.first() );
-        KCModuleProxy* currentModuleProxy = new KCModuleProxy( kcmModuleInfo, dlg.mainWidget() );
-        QVBoxLayout* layout = new QVBoxLayout( dlg.mainWidget() );
-        layout->setMargin( 0 );
-        layout->addWidget( currentModuleProxy );
-        connect( &dlg, SIGNAL(defaultClicked()), currentModuleProxy, SLOT(defaults()) );
+        dlg.setWindowTitle( plugin->pluginInfo().name() );
+        moduleProxy->setParent( &dlg );
+        dlg.setMainWidget( moduleProxy );
+        
+        connect( &dlg, SIGNAL(defaultClicked()), moduleProxy, SLOT(defaults()) );
         
         int ret = dlg.exec();
         if( ret == QDialog::Accepted )
         {
-            currentModuleProxy->save();
+            moduleProxy->save();
         }
         return ret;
     }
