@@ -51,8 +51,9 @@ public:
     ~K3bExternalEncoderSettingsWidget();
 
 public Q_SLOTS:
-    void load();
-    void save();
+    virtual void load();
+    virtual void save();
+    virtual void defaults();
 
 private Q_SLOTS:
     void slotSelectionChanged( QTreeWidgetItem* current );
@@ -63,6 +64,7 @@ private Q_SLOTS:
 private:
     QTreeWidgetItem* createItem( const K3bExternalEncoderCommand& cmd );
     void fillItem( QTreeWidgetItem* item, const K3bExternalEncoderCommand& cmd );
+    void fillEncoderView( const QList<K3bExternalEncoderCommand>& commands );
 
     K3bExternalEncoderEditDialog* m_editDlg;
     QMap<QTreeWidgetItem*, K3bExternalEncoderCommand> m_commands;

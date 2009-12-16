@@ -33,6 +33,7 @@ public:
     bool swapByteOrder;
     bool writeWaveHeader;
 
+    static QList<K3bExternalEncoderCommand> defaultCommands();
     static QList<K3bExternalEncoderCommand> readCommands();
     static void saveCommands( const QList<K3bExternalEncoderCommand>& );
 };

@@ -176,15 +176,7 @@ void K3bExternalEncoderSettingsWidget::slotRemoveCommand()
 void K3bExternalEncoderSettingsWidget::load()
 {
     kDebug();
-    m_commands.clear();
-    m_viewEncoders->clear();
-
-    QList<K3bExternalEncoderCommand> cmds( K3bExternalEncoderCommand::readCommands() );
-    for( QList<K3bExternalEncoderCommand>::iterator it = cmds.begin();
-         it != cmds.end(); ++it ) {
-        K3bExternalEncoderCommand& cmd = *it;
-        createItem( cmd );
-    }
+    fillEncoderView( K3bExternalEncoderCommand::readCommands() );
 }
 
 
@@ -193,6 +185,14 @@ void K3bExternalEncoderSettingsWidget::save()
     kDebug();
     K3bExternalEncoderCommand::saveCommands( m_commands.values() );
     emit changed( false );
+}
+
+
+void K3bExternalEncoderSettingsWidget::defaults()
+{
+    kDebug();
+    fillEncoderView( K3bExternalEncoderCommand::defaultCommands() );
+    emit changed( true );
 }
 
 
@@ -210,6 +210,20 @@ void K3bExternalEncoderSettingsWidget::fillItem( QTreeWidgetItem* item, const K3
     item->setText( 0, cmd.name );
     item->setText( 1, cmd.extension );
     item->setText( 2, cmd.command );
+}
+
+
+void K3bExternalEncoderSettingsWidget::fillEncoderView( const QList<K3bExternalEncoderCommand>& commands )
+{
+    m_commands.clear();
+    m_viewEncoders->clear();
+
+    QList<K3bExternalEncoderCommand> cmds( commands );
+    for( QList<K3bExternalEncoderCommand>::iterator it = cmds.begin();
+         it != cmds.end(); ++it ) {
+        K3bExternalEncoderCommand& cmd = *it;
+        createItem( cmd );
+    }
 }
 
 #include "k3bexternalencoderconfigwidget.moc"

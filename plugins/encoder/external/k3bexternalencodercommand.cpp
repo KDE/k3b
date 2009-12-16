@@ -17,18 +17,95 @@
 
 #include "k3bcore.h"
 
-#include <kconfig.h>
+#include <KConfig>
 #include <KConfigGroup>
-#include <kstandarddirs.h>
-#include <QList>
+#include <KStandardDirs>
 
+#include <QSet>
+
+
+QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::defaultCommands()
+{
+    QList<K3bExternalEncoderCommand> commands;
+    
+    // check if the lame encoding plugin has been compiled
+#ifndef HAVE_LAME
+    if( !KStandardDirs::findExe( "lame" ).isEmpty() ) {
+        K3bExternalEncoderCommand lameCmd;
+        lameCmd.name = "Mp3 (Lame)";
+        lameCmd.extension = "mp3";
+        lameCmd.command = "lame "
+                            "-r "
+                            "--bitwidth 16 "
+                            "--little-endian "
+                            "-s 44.1 "
+                            "-h "
+                            "--tt %t "
+                            "--ta %a "
+                            "--tl %m "
+                            "--ty %y "
+                            "--tc %c "
+                            "--tn %n "
+                            "- %f";
+
+        commands.append( lameCmd );
+    }
+#endif
+
+    if( !KStandardDirs::findExe( "flac" ).isEmpty() ) {
+        K3bExternalEncoderCommand flacCmd;
+        flacCmd.name = "Flac";
+        flacCmd.extension = "flac";
+        flacCmd.command = "flac "
+                            "-V "
+                            "-o %f "
+                            "--force-raw-format "
+                            "--endian=little "
+                            "--channels=2 "
+                            "--sample-rate=44100 "
+                            "--sign=signed "
+                            "--bps=16 "
+                            "-T ARTIST=%a "
+                            "-T TITLE=%t "
+                            "-T TRACKNUMBER=%n "
+                            "-T DATE=%y "
+                            "-T ALBUM=%m "
+                            "-";
+
+        commands.append( flacCmd );
+    }
+
+    if( !KStandardDirs::findExe( "mppenc" ).isEmpty() ) {
+        K3bExternalEncoderCommand mppCmd;
+        mppCmd.name = "Musepack";
+        mppCmd.extension = "mpc";
+        mppCmd.command = "mppenc "
+                            "--standard "
+                            "--overwrite "
+                            "--silent "
+                            "--artist %a "
+                            "--title %t "
+                            "--track %n "
+                            "--album %m "
+                            "--comment %c "
+                            "--year %y "
+                            "- "
+                            "%f";
+        mppCmd.writeWaveHeader = true;
+
+        commands.append( mppCmd );
+    }
+    
+    return commands;
+}
 
 QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::readCommands()
 {
     KSharedConfig::Ptr c = KGlobal::config();
     KConfigGroup grp(c,"K3bExternalEncoderPlugin" );
 
-    QHash<QString, K3bExternalEncoderCommand> cl;
+    QList<K3bExternalEncoderCommand> commands;
+    QSet<QString> commandNames;
 
     QStringList cmds = grp.readEntry( "commands",QStringList() );
     for( QStringList::iterator it = cmds.begin(); it != cmds.end(); ++it ) {
@@ -43,84 +120,22 @@ QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::readCommands()
             else if( cmdString[i] == "wave" )
                 cmd.writeWaveHeader = true;
         }
-        cl.insert( cmd.name, cmd );
+        
+        commands.append( cmd );
+        commandNames.insert( cmd.name );
     }
 
     // some defaults
-    // check if the lame encoding plugin has been compiled
-#ifndef HAVE_LAME
-    if ( !cl.contains( "Mp3 (Lame)" ) ) {
-        if( !KStandardDirs::findExe( "lame" ).isEmpty() ) {
-            K3bExternalEncoderCommand lameCmd;
-            lameCmd.name = "Mp3 (Lame)";
-            lameCmd.extension = "mp3";
-            lameCmd.command = "lame "
-                              "-r "
-                              "--bitwidth 16 "
-                              "--little-endian "
-                              "-s 44.1 "
-                              "-h "
-                              "--tt %t "
-                              "--ta %a "
-                              "--tl %m "
-                              "--ty %y "
-                              "--tc %c "
-                              "- %f";
-
-            cl.insert( lameCmd.name, lameCmd );
-        }
-    }
-#endif
-
-    if ( !cl.contains( "Flac" ) ) {
-        if( !KStandardDirs::findExe( "flac" ).isEmpty() ) {
-            K3bExternalEncoderCommand flacCmd;
-            flacCmd.name = "Flac";
-            flacCmd.extension = "flac";
-            flacCmd.command = "flac "
-                              "-V "
-                              "-o %f "
-                              "--force-raw-format "
-                              "--endian=little "
-                              "--channels=2 "
-                              "--sample-rate=44100 "
-                              "--sign=signed "
-                              "--bps=16 "
-                              "-T ARTIST=%a "
-                              "-T TITLE=%t "
-                              "-T TRACKNUMBER=%n "
-                              "-T DATE=%y "
-                              "-T ALBUM=%m "
-                              "-";
-
-            cl.insert( flacCmd.name, flacCmd );
+    QList<K3bExternalEncoderCommand> defaults = defaultCommands();
+    Q_FOREACH( const K3bExternalEncoderCommand& command, defaults )
+    {
+        if ( !commandNames.contains( command.name ) ) {
+            commands.append( command );
+            commandNames.insert( command.name );
         }
     }
 
-    if ( !cl.contains( "Musepack" ) ) {
-        if( !KStandardDirs::findExe( "mppenc" ).isEmpty() ) {
-            K3bExternalEncoderCommand mppCmd;
-            mppCmd.name = "Musepack";
-            mppCmd.extension = "mpc";
-            mppCmd.command = "mppenc "
-                             "--standard "
-                             "--overwrite "
-                             "--silent "
-                             "--artist %a "
-                             "--title %t "
-                             "--track %n "
-                             "--album %m "
-                             "--comment %c "
-                             "--year %y "
-                             "- "
-                             "%f";
-            mppCmd.writeWaveHeader = true;
-
-            cl.insert( mppCmd.name, mppCmd );
-        }
-    }
-
-    return cl.values();
+    return commands;
 }
 
 
