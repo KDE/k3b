@@ -9,6 +9,7 @@ Exec=k3b --device %i --data
 Name=Create file project with K3b
 Name[da]=Opret filprojekt med K3b
 Name[en_GB]=Create file project with K3b
+Name[et]=Loo failiprojekt K3b abil
 Name[fr]=Créer un projet de fichiers avec K3b
 Name[nb]=Lag filprosjekt med K3b
 Name[pt]=Criar um projecto de ficheiros com o K3b
