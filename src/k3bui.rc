@@ -43,14 +43,13 @@
     <Action name="file_save" />
 </ToolBar>
 
-<ToolBar name="toolsToolBar"><text>Tools</text>
+<ToolBar name="toolsToolBar"><text>Tools Toolbar</text>
     <Action name="tools_copy_media" />
     <Action name="tools_format_medium" />
 </ToolBar>
     
-<ToolBar name="quickDirSelector" fullWidth="true"><text>Quick Dir Selector</text>
-    <Action name="quick_dir_selector" />
-    <Action name="go_url" />
+<ToolBar name="locationToolBar" fullWidth="true"><text>Location Toolbar</text>
+    <Action name="location_bar" />
 </ToolBar>
 
 <State name="state_project_active">

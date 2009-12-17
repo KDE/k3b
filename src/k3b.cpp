@@ -469,8 +469,8 @@ void K3b::MainWindow::initView()
     connect( m_dirView, SIGNAL(deviceSelected(K3b::Device::Device*)), m_urlNavigator, SLOT(setDevice(K3b::Device::Device*)) );
     QWidgetAction * urlNavigatorAction = new QWidgetAction(this);
     urlNavigatorAction->setDefaultWidget(m_urlNavigator);
-    urlNavigatorAction->setText(i18n("&Quick Dir Selector"));
-    actionCollection()->addAction( "quick_dir_selector", urlNavigatorAction );
+    urlNavigatorAction->setText(i18n("&Location Bar"));
+    actionCollection()->addAction( "location_bar", urlNavigatorAction );
     // ---------------------------------------------------------------------------------------------
 }
 
