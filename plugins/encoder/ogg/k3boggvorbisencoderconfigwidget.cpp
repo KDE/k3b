@@ -14,43 +14,53 @@
  */
 
 #include "k3boggvorbisencoderconfigwidget.h"
-
 #include "k3bcore.h"
 
-#include <knuminput.h>
-#include <klocale.h>
-#include <kconfig.h>
-#include <kdebug.h>
+#include <KConfig>
+#include <KDebug>
+#include <KLocale>
+#include <KNumInput>
 
-#include <qlayout.h>
-#include <qradiobutton.h>
-#include <qslider.h>
-#include <qlcdnumber.h>
-#include <qcheckbox.h>
-#include <qtooltip.h>
-
-#include <qlabel.h>
+#include <QCheckBox>
 #include <QHBoxLayout>
+#include <QLabel>
+#include <QLayout>
+#include <QLCDNumber>
+#include <QRadioButton>
+#include <QSlider>
+#include <QToolTip>
+
 
 
 K3B_EXPORT_PLUGIN_CONFIG_WIDGET( kcm_k3bexternalencoder, K3bOggVorbisEncoderSettingsWidget )
 
+namespace {
 
-// quality levels -1 to 10 map to 0 to 11
-static const int s_rough_average_quality_level_bitrates[] = {
-    45,
-    64,
-    80,
-    96,
-    112,
-    128,
-    160,
-    192,
-    224,
-    256,
-    320,
-    400
-};
+    // quality levels -1 to 10 map to 0 to 11
+    const int s_rough_average_quality_level_bitrates[] = {
+        45,
+        64,
+        80,
+        96,
+        112,
+        128,
+        160,
+        192,
+        224,
+        256,
+        320,
+        400
+    };
+    
+    
+    const bool DEFAULT_MANUAL_BITRATE = false;
+    const int DEFAULT_QUALITY_LEVEL = 4;
+    const int DEFAULT_BITRATE_UPPER = -1;
+    const int DEFAULT_BITRATE_NOMINAL = -1;
+    const int DEFAULT_BITRATE_LOWER = -1;
+    const int DEFAULT_SAMPLERATE = 44100;
+    
+} // namespace
 
 K3bOggVorbisEncoderSettingsWidget::K3bOggVorbisEncoderSettingsWidget( QWidget* parent, const QVariantList& args )
     : K3b::PluginConfigWidget( parent, args )
@@ -116,18 +126,18 @@ void K3bOggVorbisEncoderSettingsWidget::load()
 
     KConfigGroup grp(c, "K3bOggVorbisEncoderPlugin" );
 
-    if( grp.readEntry( "manual bitrate", false ) )
+    if( grp.readEntry( "manual bitrate", DEFAULT_MANUAL_BITRATE ) )
         w->m_radioManual->setChecked(true);
     else
         w->m_radioQualityLevel->setChecked(true);
-    w->m_slideQualityLevel->setValue( grp.readEntry( "quality level", 4 ) );
-    w->m_inputBitrateUpper->setValue( grp.readEntry( "bitrate upper", -1 ) );
-    w->m_checkBitrateUpper->setChecked( grp.readEntry( "bitrate upper", -1 ) != -1 );
-    w->m_inputBitrateNominal->setValue( grp.readEntry( "bitrate nominal", -1 ) );
-    w->m_checkBitrateNominal->setChecked( grp.readEntry( "bitrate nominal", -1 ) != -1 );
-    w->m_inputBitrateLower->setValue( grp.readEntry( "bitrate lower", -1 ) );
-    w->m_checkBitrateLower->setChecked( grp.readEntry( "bitrate lower", -1 ) != -1 );
-    //  w->m_inputSamplerate->setValue( c->readEntry( "samplerate", 44100 ) );
+    w->m_slideQualityLevel->setValue( grp.readEntry( "quality level", DEFAULT_QUALITY_LEVEL ) );
+    w->m_inputBitrateUpper->setValue( grp.readEntry( "bitrate upper", DEFAULT_BITRATE_UPPER ) );
+    w->m_checkBitrateUpper->setChecked( grp.readEntry( "bitrate upper", DEFAULT_BITRATE_UPPER ) != -1 );
+    w->m_inputBitrateNominal->setValue( grp.readEntry( "bitrate nominal", DEFAULT_BITRATE_NOMINAL ) );
+    w->m_checkBitrateNominal->setChecked( grp.readEntry( "bitrate nominal", DEFAULT_BITRATE_NOMINAL ) != -1 );
+    w->m_inputBitrateLower->setValue( grp.readEntry( "bitrate lower", DEFAULT_BITRATE_LOWER ) );
+    w->m_checkBitrateLower->setChecked( grp.readEntry( "bitrate lower", DEFAULT_BITRATE_LOWER ) != -1 );
+    //  w->m_inputSamplerate->setValue( grp.readEntry( "samplerate", DEFAULT_SAMPLERATE ) );
 }
 
 
@@ -143,6 +153,24 @@ void K3bOggVorbisEncoderSettingsWidget::save()
     grp.writeEntry( "bitrate nominal", w->m_checkBitrateNominal->isChecked() ? w->m_inputBitrateNominal->value() : -1 );
     grp.writeEntry( "bitrate lower", w->m_checkBitrateLower->isChecked() ? w->m_inputBitrateLower->value() : -1 );
     //  c->writeEntry( "samplerate", w->m_inputSamplerate->value() );
+}
+
+
+void K3bOggVorbisEncoderSettingsWidget::defaults()
+{
+    if( DEFAULT_MANUAL_BITRATE )
+        w->m_radioManual->setChecked(true);
+    else
+        w->m_radioQualityLevel->setChecked(true);
+    w->m_slideQualityLevel->setValue( DEFAULT_QUALITY_LEVEL );
+    w->m_inputBitrateUpper->setValue( DEFAULT_BITRATE_UPPER );
+    w->m_checkBitrateUpper->setChecked( DEFAULT_BITRATE_UPPER != -1 );
+    w->m_inputBitrateNominal->setValue( DEFAULT_BITRATE_NOMINAL );
+    w->m_checkBitrateNominal->setChecked( DEFAULT_BITRATE_NOMINAL != -1 );
+    w->m_inputBitrateLower->setValue( DEFAULT_BITRATE_LOWER );
+    w->m_checkBitrateLower->setChecked( DEFAULT_BITRATE_LOWER != -1 );
+    //  w->m_inputSamplerate->setValue( DEFAULT_SAMPLERATE );
+    emit changed( true );
 }
 
 #include "k3boggvorbisencoderconfigwidget.moc"

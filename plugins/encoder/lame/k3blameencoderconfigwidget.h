@@ -32,9 +32,9 @@ public:
     ~K3bLameEncoderSettingsWidget();
 
 public Q_SLOTS:
-    void load();
-    void save();
-    void defaults();
+    virtual void load();
+    virtual void save();
+    virtual void defaults();
 
 private Q_SLOTS:
     void slotQualityLevelChanged( int val );

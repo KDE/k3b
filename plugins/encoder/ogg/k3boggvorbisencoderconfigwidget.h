@@ -36,8 +36,9 @@ public:
     ~K3bOggVorbisEncoderSettingsWidget();
 
 public Q_SLOTS:
-    void load();
-    void save();
+    virtual void load();
+    virtual void save();
+    virtual void defaults();
 
 private Q_SLOTS:
     void slotQualityLevelChanged( int val );

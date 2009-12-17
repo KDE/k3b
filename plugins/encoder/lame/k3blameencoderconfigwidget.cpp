@@ -17,19 +17,51 @@
 #include "k3blamemanualsettingsdialog.h"
 #include "k3blametyes.h"
 
-#include <qlayout.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <qspinbox.h>
-#include <qtextcodec.h>
-#include <qfile.h>
-#include <qslider.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
+#include <QCheckBox>
+#include <QFile>
+#include <QLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QSlider>
+#include <QSpinBox>
+#include <QTextCodec>
 
-#include <kconfig.h>
-#include <kdebug.h>
 #include <KAboutData>
+#include <KConfig>
+#include <KDebug>
+
+
+namespace {
+    
+    const char* DEFAULT_MODE = "stereo";
+    const bool DEFAULT_MANUAL_BITRATE = false;
+    const bool DEFAULT_VBR = false;
+    const int DEFAULT_CONSTANT_BITRATE = 128;
+    const int DEFAULT_MAXIMUM_BITRATE = 224;
+    const int DEFAULT_MINIMUM_BITRATE = 32;
+    const int DEFAULT_AVERAGE_BITRATE = 128;
+    const bool DEFAULT_USE_MAXIMUM_BITRATE = false;
+    const bool DEFAULT_USE_MINIMUM_BITRATE = false;
+    const bool DEFAULT_USE_AVERAGE_BITRATE = true;
+    const int DEFAULT_QUALITY_LEVEL = 5;
+    const bool DEFAULT_COPYRIGHT = false;
+    const bool DEFAULT_ORIGINAL = true;
+    const bool DEFAULT_ISO_COMPLIANCE = false;
+    const bool DEFAULT_ERROR_PROTECTION = false;
+    const int DEFAULT_ENCODER_QUALITY = 7;
+    
+    int mode2Index( const QString& mode )
+    {
+        if( mode == "stereo" )
+            return 0;
+        else if( mode == "joint" )
+            return 1;
+        else // mono
+            return 2;
+    }
+    
+} // namespace
 
 
 K3B_EXPORT_PLUGIN_CONFIG_WIDGET( kcm_k3blameencoder, K3bLameEncoderSettingsWidget )
@@ -131,43 +163,38 @@ void K3bLameEncoderSettingsWidget::load()
     KSharedConfig::Ptr c = KGlobal::config();
     KConfigGroup grp(c, "K3bLameEncoderPlugin" );
 
-    QString mode = grp.readEntry( "Mode", "stereo" );
-    if( mode == "stereo" )
-        m_manualSettingsDialog->m_comboMode->setCurrentIndex( 0 );
-    else if( mode == "joint" )
-        m_manualSettingsDialog->m_comboMode->setCurrentIndex( 1 );
-    else // mono
-        m_manualSettingsDialog->m_comboMode->setCurrentIndex( 2 );
+    QString mode = grp.readEntry( "Mode", DEFAULT_MODE );
+    m_manualSettingsDialog->m_comboMode->setCurrentIndex( mode2Index( mode ) );
 
-    bool manual = grp.readEntry( "Manual Bitrate Settings", false );
+    bool manual = grp.readEntry( "Manual Bitrate Settings", DEFAULT_MANUAL_BITRATE );
     if( manual )
         m_radioManual->setChecked(true);
     else
         m_radioQualityLevel->setChecked(true);
 
-    if(grp.readEntry( "VBR", false ) )
+    if(grp.readEntry( "VBR", DEFAULT_VBR ) )
         m_manualSettingsDialog->m_radioVariableBitrate->setChecked( true );
     else
         m_manualSettingsDialog->m_radioConstantBitrate->setChecked( true );
 
-    m_manualSettingsDialog->m_comboConstantBitrate->setCurrentItem( i18n("%1 kbps",grp.readEntry( "Constant Bitrate", 128 )) );
-    m_manualSettingsDialog->m_comboMaximumBitrate->setCurrentItem( i18n("%1 kbps",grp.readEntry( "Maximum Bitrate", 224 )) );
-    m_manualSettingsDialog->m_comboMinimumBitrate->setCurrentItem( i18n("%1 kbps",grp.readEntry( "Minimum Bitrate", 32 )) );
-    m_manualSettingsDialog->m_spinAverageBitrate->setValue( grp.readEntry( "Average Bitrate", 128) );
+    m_manualSettingsDialog->m_comboConstantBitrate->setCurrentItem( i18n("%1 kbps",grp.readEntry( "Constant Bitrate", DEFAULT_CONSTANT_BITRATE )) );
+    m_manualSettingsDialog->m_comboMaximumBitrate->setCurrentItem( i18n("%1 kbps",grp.readEntry( "Maximum Bitrate", DEFAULT_MAXIMUM_BITRATE )) );
+    m_manualSettingsDialog->m_comboMinimumBitrate->setCurrentItem( i18n("%1 kbps",grp.readEntry( "Minimum Bitrate", DEFAULT_MINIMUM_BITRATE )) );
+    m_manualSettingsDialog->m_spinAverageBitrate->setValue( grp.readEntry( "Average Bitrate", DEFAULT_AVERAGE_BITRATE) );
 
-    m_manualSettingsDialog->m_checkBitrateMaximum->setChecked( grp.readEntry( "Use Maximum Bitrate", false ) );
-    m_manualSettingsDialog->m_checkBitrateMinimum->setChecked( grp.readEntry( "Use Minimum Bitrate", false ) );
-    m_manualSettingsDialog->m_checkBitrateAverage->setChecked( grp.readEntry( "Use Average Bitrate", true ) );
+    m_manualSettingsDialog->m_checkBitrateMaximum->setChecked( grp.readEntry( "Use Maximum Bitrate", DEFAULT_USE_MAXIMUM_BITRATE ) );
+    m_manualSettingsDialog->m_checkBitrateMinimum->setChecked( grp.readEntry( "Use Minimum Bitrate", DEFAULT_USE_MINIMUM_BITRATE ) );
+    m_manualSettingsDialog->m_checkBitrateAverage->setChecked( grp.readEntry( "Use Average Bitrate", DEFAULT_USE_AVERAGE_BITRATE ) );
 
-    m_sliderQuality->setValue( grp.readEntry( "Quality Level", 5 ) );
+    m_sliderQuality->setValue( grp.readEntry( "Quality Level", DEFAULT_QUALITY_LEVEL ) );
 
-    m_checkCopyright->setChecked( grp.readEntry( "Copyright", false ) );
-    m_checkOriginal->setChecked( grp.readEntry( "Original", true ) );
-    m_checkISO->setChecked( grp.readEntry( "ISO compliance", false ) );
-    m_checkError->setChecked( grp.readEntry( "Error Protection", false ) );
+    m_checkCopyright->setChecked( grp.readEntry( "Copyright", DEFAULT_COPYRIGHT ) );
+    m_checkOriginal->setChecked( grp.readEntry( "Original", DEFAULT_ORIGINAL ) );
+    m_checkISO->setChecked( grp.readEntry( "ISO compliance", DEFAULT_ISO_COMPLIANCE ) );
+    m_checkError->setChecked( grp.readEntry( "Error Protection", DEFAULT_ERROR_PROTECTION ) );
 
     // default to 2 which is the same as the -h lame option
-    m_spinEncoderQuality->setValue( grp.readEntry( "Encoder Quality", 7 ) );
+    m_spinEncoderQuality->setValue( grp.readEntry( "Encoder Quality", DEFAULT_ENCODER_QUALITY ) );
 
     updateManualSettingsLabel();
 }
@@ -221,7 +248,40 @@ void K3bLameEncoderSettingsWidget::save()
 void K3bLameEncoderSettingsWidget::defaults()
 {
     kDebug();
-    // FIXME
+
+    m_manualSettingsDialog->m_comboMode->setCurrentIndex( mode2Index( DEFAULT_MODE ) );
+
+    if( DEFAULT_MANUAL_BITRATE )
+        m_radioManual->setChecked(true);
+    else
+        m_radioQualityLevel->setChecked(true);
+
+    if( DEFAULT_VBR )
+        m_manualSettingsDialog->m_radioVariableBitrate->setChecked( true );
+    else
+        m_manualSettingsDialog->m_radioConstantBitrate->setChecked( true );
+
+    m_manualSettingsDialog->m_comboConstantBitrate->setCurrentItem( i18n("%1 kbps", DEFAULT_CONSTANT_BITRATE ) );
+    m_manualSettingsDialog->m_comboMaximumBitrate->setCurrentItem( i18n("%1 kbps", DEFAULT_MAXIMUM_BITRATE ) );
+    m_manualSettingsDialog->m_comboMinimumBitrate->setCurrentItem( i18n("%1 kbps", DEFAULT_MINIMUM_BITRATE ) );
+    m_manualSettingsDialog->m_spinAverageBitrate->setValue( DEFAULT_AVERAGE_BITRATE );
+
+    m_manualSettingsDialog->m_checkBitrateMaximum->setChecked(  DEFAULT_USE_MAXIMUM_BITRATE );
+    m_manualSettingsDialog->m_checkBitrateMinimum->setChecked( DEFAULT_USE_MINIMUM_BITRATE );
+    m_manualSettingsDialog->m_checkBitrateAverage->setChecked( DEFAULT_USE_AVERAGE_BITRATE );
+
+    m_sliderQuality->setValue( DEFAULT_QUALITY_LEVEL );
+
+    m_checkCopyright->setChecked( DEFAULT_COPYRIGHT );
+    m_checkOriginal->setChecked( DEFAULT_ORIGINAL );
+    m_checkISO->setChecked( DEFAULT_ISO_COMPLIANCE );
+    m_checkError->setChecked( DEFAULT_ERROR_PROTECTION );
+
+    // default to 2 which is the same as the -h lame option
+    m_spinEncoderQuality->setValue( DEFAULT_ENCODER_QUALITY );
+
+    updateManualSettingsLabel();
+    emit changed( true );
 }
 
 #include "k3blameencoderconfigwidget.moc"
