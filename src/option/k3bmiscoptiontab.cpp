@@ -18,7 +18,6 @@
 #include "k3bpluginmanager.h"
 #include "k3bcore.h"
 #include "k3bglobalsettings.h"
-#include "k3bservicemenuinstaller.h"
 #include "k3binteractiondialog.h"
 #include "k3bintmapcombobox.h"
 
@@ -86,9 +85,6 @@ void K3b::MiscOptionTab::readSettings()
 //     m_radioMultipleInstancesSmart->setChecked(true);
 //   else
 //     m_radioMultipleInstancesNew->setChecked(true);
-
-    K3b::ServiceInstaller si;
-    m_checkKonqiIntegration->setChecked( si.allInstalled() );
 }
 
 
@@ -151,12 +147,6 @@ bool K3b::MiscOptionTab::saveSettings()
 //     c.writeEntry( "Multiple Instances", "smart" );
 //   else
 //     c.writeEntry( "Multiple Instances", "always_new" );
-
-    K3b::ServiceInstaller si;
-    if( m_checkKonqiIntegration->isChecked() )
-        si.install( this );
-    else
-        si.remove( this );
 
     return true;
 }

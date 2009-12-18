@@ -209,7 +209,6 @@ set(k3b_SRCS
   k3bthemedlabel.cpp 
   k3blsofwrapper.cpp 
   k3blsofwrapperdialog.cpp 
-  k3bservicemenuinstaller.cpp 
   k3bfirstrun.cpp 
   k3baction.cpp
   k3bdevicemenu.cpp
