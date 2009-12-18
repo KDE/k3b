@@ -22,7 +22,6 @@
 #include "k3bappdevicemanager.h"
 #include "k3bpassivepopup.h"
 #include "k3blsofwrapperdialog.h"
-#include "k3bfirstrun.h"
 #include "config-k3b.h"
 
 #include "k3bcore.h"
@@ -136,8 +135,6 @@ void K3b::Application::init()
         emit initializationInfo( i18n("Ready.") );
 
         emit initializationDone();
-
-        K3b::FirstRun::run( m_mainWindow );
 
         if( K3b::SystemProblemDialog::readCheckSystemConfig() ) {
             emit initializationInfo( i18n("Checking System") );
