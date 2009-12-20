@@ -252,8 +252,6 @@ namespace K3b {
          */
         void initStatusBar();
 
-        bool isCdDvdImageAndIfSoOpenDialog( const KUrl& url );
-
         /** The MDI-Interface is managed by this tabbed view */
         ProjectTabWidget* m_documentTab;
 

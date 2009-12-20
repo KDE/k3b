@@ -37,6 +37,7 @@
 #include <KGlobal>
 #include <KMessageBox>
 #include <KMenuBar>
+#include <KMimeType>
 #include <KProcess>
 #include <KRecentDocument>
 #include <KRecentFilesAction>
@@ -104,6 +105,66 @@
 #include "misc/k3bmediaformattingdialog.h"
 #include "option/k3boptiondialog.h"
 #include "projects/k3bdatamultisessionimportdialog.h"
+
+
+namespace {
+
+    bool isProjectFile( const KUrl& url )
+    {
+        KMimeType::Ptr mimeType = KMimeType::findByUrl( url );
+        return mimeType->is( "application/x-k3b" );
+    }
+
+
+    bool isCdDvdImage( const KUrl& url )
+    {
+        K3b::Iso9660 iso( url.toLocalFile() );
+        if( iso.open() ) {
+            iso.close();
+            return true;
+        }
+        else
+            return false;
+    }
+
+
+    bool areAudioFiles( const KUrl::List& urls )
+    {
+        // check if the files are all audio we can handle. If so create an audio project
+        bool audio = true;
+        QList<K3b::Plugin*> fl = k3bcore->pluginManager()->plugins( "AudioDecoder" );
+        for( KUrl::List::const_iterator it = urls.begin(); it != urls.end(); ++it ) {
+            const KUrl& url = *it;
+
+            if( QFileInfo(url.toLocalFile()).isDir() ) {
+                audio = false;
+                break;
+            }
+
+            bool a = false;
+            Q_FOREACH( K3b::Plugin* plugin, fl ) {
+                if( static_cast<K3b::AudioDecoderFactory*>( plugin )->canDecode( url ) ) {
+                    a = true;
+                    break;
+                }
+            }
+            if( !a ) {
+                audio = a;
+                break;
+            }
+        }
+
+        if( !audio && urls.count() == 1 ) {
+            // see if it's an audio cue file
+            K3b::CueFileParser parser( urls.first().toLocalFile() );
+            if( parser.isValid() && parser.toc().contentType() == K3b::Device::AUDIO ) {
+                audio = true;
+            }
+        }
+        return audio;
+    }
+    
+} // namespace
 
 
 class K3b::MainWindow::Private
@@ -557,8 +618,11 @@ K3b::Doc* K3b::MainWindow::openDocument(const KUrl& url)
     //
     // First we check if this is an iso image in case someone wants to open one this way
     //
-    if( !isCdDvdImageAndIfSoOpenDialog( url ) ) {
-
+    if( isCdDvdImage( url ) ) {
+        slotWriteImage( url );
+        return 0;
+    }
+    else {
         // see if it's an audio cue file
         K3b::CueFileParser parser( url.toLocalFile() );
         if( parser.isValid() && parser.toc().contentType() == K3b::Device::AUDIO ) {
@@ -586,8 +650,6 @@ K3b::Doc* K3b::MainWindow::openDocument(const KUrl& url)
             return doc;
         }
     }
-    else
-        return 0;
 }
 
 
@@ -1417,46 +1479,20 @@ void K3b::MainWindow::slotManualCheckSystem()
 
 void K3b::MainWindow::addUrls( const KUrl::List& urls )
 {
-    if( K3b::View* view = activeView() ) {
+    if( urls.count() == 1 && isProjectFile( urls.first() ) ) {
+        openDocument( urls.first() );
+    }
+    else if( K3b::View* view = activeView() ) {
         view->addUrls( urls );
     }
+    else if( urls.count() == 1 && isCdDvdImage( urls.first() ) ) {
+        slotWriteImage( urls.first() );
+    }
+    else if( areAudioFiles( urls ) ) {
+        static_cast<K3b::View*>(slotNewAudioDoc()->view())->addUrls( urls );
+    }
     else {
-        // check if the files are all audio we can handle. If so create an audio project
-        bool audio = true;
-        QList<K3b::Plugin*> fl = k3bcore->pluginManager()->plugins( "AudioDecoder" );
-        for( KUrl::List::const_iterator it = urls.begin(); it != urls.end(); ++it ) {
-            const KUrl& url = *it;
-
-            if( QFileInfo(url.toLocalFile()).isDir() ) {
-                audio = false;
-                break;
-            }
-
-            bool a = false;
-            Q_FOREACH( K3b::Plugin* plugin, fl ) {
-                if( static_cast<K3b::AudioDecoderFactory*>( plugin )->canDecode( url ) ) {
-                    a = true;
-                    break;
-                }
-            }
-            if( !a ) {
-                audio = a;
-                break;
-            }
-        }
-
-        if( !audio && urls.count() == 1 ) {
-            // see if it's an audio cue file
-            K3b::CueFileParser parser( urls.first().toLocalFile() );
-            if( parser.isValid() && parser.toc().contentType() == K3b::Device::AUDIO ) {
-                audio = true;
-            }
-        }
-
-        if( audio )
-            static_cast<K3b::View*>(slotNewAudioDoc()->view())->addUrls( urls );
-        else if( urls.count() > 1 || !isCdDvdImageAndIfSoOpenDialog( urls.first() ) )
-            static_cast<K3b::View*>(slotNewDataDoc()->view())->addUrls( urls );
+        static_cast<K3b::View*>(slotNewDataDoc()->view())->addUrls( urls );
     }
 }
 
@@ -1475,19 +1511,6 @@ void K3b::MainWindow::slotClearProject()
         }
     }
 
-}
-
-
-bool K3b::MainWindow::isCdDvdImageAndIfSoOpenDialog( const KUrl& url )
-{
-    K3b::Iso9660 iso( url.toLocalFile() );
-    if( iso.open() ) {
-        iso.close();
-        slotWriteImage( url );
-        return true;
-    }
-    else
-        return false;
 }
 
 
