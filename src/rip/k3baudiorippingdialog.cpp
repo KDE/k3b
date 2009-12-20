@@ -74,10 +74,9 @@
 class K3b::AudioRippingDialog::Private
 {
 public:
-    Private() {
-    }
-    
+    Private();
     void addTrack( const QString& name, const QString& length, const QString& size, const QString& type );
+    void addPlaylist( const QString& filename );
 
     QVector<QString> filenames;
     QString playlistFilename;
@@ -87,6 +86,10 @@ public:
     QTreeView* viewTracks;
 };
 
+K3b::AudioRippingDialog::Private::Private()
+    : viewTracks( 0 )
+{
+}
 
 void K3b::AudioRippingDialog::Private::addTrack( const QString& name, const QString& length, const QString& size, const QString& type )
 {
@@ -95,6 +98,22 @@ void K3b::AudioRippingDialog::Private::addTrack( const QString& name, const QStr
     items.append( new QStandardItem( length ) );
     items.append( new QStandardItem( size ) );
     items.append( new QStandardItem( type ) );
+    Q_FOREACH( QStandardItem* item, items )
+    {
+        item->setSelectable( false );
+        item->setEditable( false );
+    }
+    trackModel.appendRow( items );
+}
+
+
+void K3b::AudioRippingDialog::Private::addPlaylist( const QString& filename )
+{
+    QList< QStandardItem* > items;
+    items.append( new QStandardItem( filename ) );
+    items.append( new QStandardItem( "-" ) );
+    items.append( new QStandardItem( "-" ) );
+    items.append( new QStandardItem( i18n("Playlist") ) );
     Q_FOREACH( QStandardItem* item, items )
     {
         item->setSelectable( false );
@@ -416,11 +435,7 @@ void K3b::AudioRippingDialog::refresh()
                                                              m_patternWidget->replaceBlanks(),
                                                              m_patternWidget->blankReplaceString() );
 
-        int i = d->trackModel.rowCount();
-        d->trackModel.setItem( i, 0, new QStandardItem( filename ) );
-        d->trackModel.setItem( i, 1, new QStandardItem( "-" ) );
-        d->trackModel.setItem( i, 2, new QStandardItem( "-" ) );
-        d->trackModel.setItem( i, 3, new QStandardItem( i18n("Playlist") ) );
+        d->addPlaylist( filename );
 
         d->playlistFilename = d->fsInfo.fixupPath( baseDir + "/" + filename );
     }
