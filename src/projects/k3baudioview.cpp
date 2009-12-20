@@ -47,7 +47,6 @@ K3b::AudioView::AudioView( K3b::AudioDoc* doc, QWidget* parent )
     m_model = new AudioProjectModel(m_doc, this);
     m_audioViewImpl = new AudioViewImpl( this, m_doc, m_model, actionCollection() );
     
-    setAutoExpandDelay(200);
     // and hide the side panel as the audio project has no tree hierarchy
     setShowDirPanel(false);
 

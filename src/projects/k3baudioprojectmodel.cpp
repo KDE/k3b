@@ -126,6 +126,8 @@ K3b::AudioProjectModel::AudioProjectModel( K3b::AudioDoc* doc, QObject* parent )
     : QAbstractItemModel( parent ),
       d( new Private( doc, this ) )
 {
+    setSupportedDragActions( Qt::MoveAction );
+    
     connect( doc, SIGNAL( changed() ), this, SLOT( _k_docChanged() ) );
     connect( doc, SIGNAL( aboutToRemoveTrack( K3b::AudioTrack* ) ),
              this, SLOT( _k_aboutToRemoveTrack( K3b::AudioTrack* ) ) );
