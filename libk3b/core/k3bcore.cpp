@@ -35,8 +35,9 @@
 #include <kstandarddirs.h>
 #include <kapplication.h>
 
-#include <qthread.h>
-#include <qmutex.h>
+#include <QThread>
+#include <QMutex>
+#include <QMutexLocker>
 #include <QEvent>
 
 
@@ -51,16 +52,14 @@ public:
     }
 
     void done() {
-        m_doneMutex.lock();
+        QMutexLocker locker( &m_doneMutex );
         m_done = true;
-        m_doneMutex.unlock();
     }
 
     void wait() {
         while( true ) {
-            m_doneMutex.lock();
+            QMutexLocker locker( &m_doneMutex );
             bool done = m_done;
-            m_doneMutex.unlock();
             if( done )
                 return;
         }

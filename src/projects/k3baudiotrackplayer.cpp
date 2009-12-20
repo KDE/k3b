@@ -21,10 +21,11 @@
 #include <klocale.h>
 #include <kaction.h>
 
-#include <qslider.h>
-#include <qtimer.h>
-#include <qmutex.h>
-#include <qtooltip.h>
+#include <QSlider>
+#include <QTimer>
+#include <QMutex>
+#include <QMutexLocker>
+#include <QToolTip>
 
 #if 0
 K3b::AudioTrackPlayerSeekAction::AudioTrackPlayerSeekAction( K3b::AudioTrackPlayer* player, QObject* parent )
@@ -318,11 +319,10 @@ void K3b::AudioTrackPlayer::seek( const K3b::Msf& msf )
 {
   if( m_currentTrack ) {
     if( msf < m_currentTrack->length() ) {
-      d->mutex.lock();
+      QMutexLocker locker( &d->mutex );
       m_currentTrack->seek( msf );
       m_currentPosition = msf;
       slotUpdateSlider();
-      d->mutex.unlock();
     }
     else
       next();
@@ -339,9 +339,9 @@ void K3b::AudioTrackPlayer::slotSeek( int frames )
 int K3b::AudioTrackPlayer::read( char* data, int maxlen )
 {
   if( m_currentTrack ) {
-    d->mutex.lock();
+    QMutexLocker locker( &d->mutex );
     int len = m_currentTrack->read( data, maxlen );
-    d->mutex.unlock();
+    locker.unlock();
     if( len > 0 ) {
       m_currentPosition += (int)( (double)len / 2352.0 + 0.5 );
     }

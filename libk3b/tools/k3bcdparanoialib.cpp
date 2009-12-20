@@ -20,7 +20,7 @@
 #include "k3btoc.h"
 #include "k3bmsf.h"
 
-#include <kdebug.h>
+#include <KDebug>
 
 // TODO replace dlopen/dlsym/dlclose by platform independent QLibrary
 #ifdef Q_OS_WIN32
@@ -59,8 +59,9 @@ typedef short int int16_t;
 #include <dlfcn.h>
 #endif
 
-#include <qfile.h>
-#include <qmutex.h>
+#include <QFile>
+#include <QMutex>
+#include <QMutexLocker>
 
 #ifdef Q_OS_WIN32
 #define LIBCDIO_CDDA "cdio_cdda.dll"
@@ -257,7 +258,7 @@ namespace K3b {
 
         long m_currentSector;
 
-        QMutex mutex;
+        QMutex m_mutex;
     };
 }
 
@@ -268,7 +269,7 @@ bool K3b::CdparanoiaLibData::paranoiaInit()
     if( m_drive )
         paranoiaFree();
 
-    mutex.lock();
+    QMutexLocker locker( &m_mutex );
 
     // since we use cdparanoia to open the device it is important to close
     // the device here
@@ -276,7 +277,6 @@ bool K3b::CdparanoiaLibData::paranoiaInit()
 
     m_drive = cdda_cdda_identify( QFile::encodeName(m_device->blockDeviceName()), 0, 0 );
     if( m_drive == 0 ) {
-        mutex.unlock();
         return false;
     }
 
@@ -285,14 +285,11 @@ bool K3b::CdparanoiaLibData::paranoiaInit()
     cdda_cdda_open( m_drive );
     m_paranoia = cdda_paranoia_init( m_drive );
     if( m_paranoia == 0 ) {
-        mutex.unlock();
         paranoiaFree();
         return false;
     }
 
     m_currentSector = 0;
-
-    mutex.unlock();
 
     return true;
 }
@@ -300,7 +297,7 @@ bool K3b::CdparanoiaLibData::paranoiaInit()
 
 void K3b::CdparanoiaLibData::paranoiaFree()
 {
-    mutex.lock();
+    QMutexLocker locker( &m_mutex );
 
     if( m_paranoia ) {
         cdda_paranoia_free( m_paranoia );
@@ -310,27 +307,23 @@ void K3b::CdparanoiaLibData::paranoiaFree()
         cdda_cdda_close( m_drive );
         m_drive = 0;
     }
-
-    mutex.unlock();
 }
 
 
 void K3b::CdparanoiaLibData::paranoiaModeSet( int mode )
 {
-    mutex.lock();
+    QMutexLocker locker( &m_mutex );
     cdda_paranoia_modeset( m_paranoia, mode );
-    mutex.unlock();
 }
 
 
 int16_t* K3b::CdparanoiaLibData::paranoiaRead( void(*callback)(long,int), int maxRetries )
 {
     if( m_paranoia ) {
-        mutex.lock();
+        QMutexLocker locker( &m_mutex );
         int16_t* data = cdda_paranoia_read_limited( m_paranoia, callback, maxRetries );
         if( data )
             m_currentSector++;
-        mutex.unlock();
         return data;
     }
     else
@@ -341,9 +334,8 @@ int16_t* K3b::CdparanoiaLibData::paranoiaRead( void(*callback)(long,int), int ma
 long K3b::CdparanoiaLibData::firstSector( int track )
 {
     if( m_drive ) {
-        mutex.lock();
+        QMutexLocker locker( &m_mutex );
         long sector = cdda_cdda_track_firstsector( m_drive, track );
-        mutex.unlock();
         return sector;
     }
     else
@@ -353,9 +345,8 @@ long K3b::CdparanoiaLibData::firstSector( int track )
 long K3b::CdparanoiaLibData::lastSector( int track )
 {
     if( m_drive ) {
-        mutex.lock();
+        QMutexLocker locker( &m_mutex );
         long sector = cdda_cdda_track_lastsector(m_drive, track );
-        mutex.unlock();
         return sector;
     }
     else
@@ -366,9 +357,8 @@ long K3b::CdparanoiaLibData::lastSector( int track )
 long K3b::CdparanoiaLibData::paranoiaSeek( long sector, int mode )
 {
     if( m_paranoia ) {
-        mutex.lock();
+        QMutexLocker locker( &m_mutex );
         m_currentSector = cdda_paranoia_seek( m_paranoia, sector, mode );
-        mutex.unlock();
         return m_currentSector;
     }
     else
