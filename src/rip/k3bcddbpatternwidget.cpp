@@ -50,7 +50,7 @@ K3b::CddbPatternWidget::CddbPatternWidget( QWidget* parent )
     m_editBlankReplace->setValidator( dirValidator );
 
     // default pattern
-    m_comboFilenamePattern->addItem( i18n("%A - %T/%n - !a='%A'{%a - }%t") );
+    m_comboFilenamePattern->addItem( i18nc("Please do NOT modify/translate the quotes, they are part of the pattern!", "%A - %T/%n - !a='%A'{%a - }%t") );
     m_comboFilenamePattern->addItem( i18n( "%{albumartist} - %{albumtitle}/%{number} - %{artist} - %{title}" ) );
     m_comboFilenamePattern->addItem( i18n( "%{genre}/%{albumartist} - %{albumtitle}/Track%{number}" ) );
     m_comboFilenamePattern->addItem( i18n( "music/ripped-tracks/%a - %t" ) );
