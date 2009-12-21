@@ -307,7 +307,7 @@ void K3b::AudioTrack::moveAfter( K3b::AudioTrack* track )
         // remove this from the list
         take();
         
-        emit track->doc()->aboutToAddTrack( track->trackNumber() );
+        emit track->doc()->aboutToAddTrack( track->trackNumber()-1 );
 
         // set the new parent doc
         m_parent = track->doc();
