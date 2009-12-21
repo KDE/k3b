@@ -149,25 +149,26 @@ void K3b::CddbPatternWidget::slotSeeConditionalInclusion()
 {
     // xgettext: no-c-format
     QWhatsThis::showText( m_conditionalInclusionLabel->mapToGlobal( m_conditionalInclusionLabel->geometry().topLeft() ),
-                          i18n( "<p><b>Conditional inclusion:</b>"
-                                "<p>These patterns make it possible to selectively include texts, "
-                                "depending on the value of CDDB entries. You can choose only to "
-                                "include or exclude texts if one of the entries is empty, "
-                                "or if it has a specific value. Examples:"
-                                "<ul>"
-                                "<li>@T{TEXT} includes TEXT if the album title is specified"
-                                "<li>!T{TEXT} includes TEXT if the album title is not specified"
-                                "<li>@C=\'Soundtrack\'{TEXT} includes TEXT if the CD's extended "
-                                "information is named Soundtrack"
-                                "<li>!C=\'Soundtrack\'{TEXT} includes TEXT if the CD's extended "
-                                "information is anything else but Soundtrack"
-                                "<li>It is also possible to include special strings in texts and conditions, "
-                                "e.g. !a='%A'{%a} only includes the title's artist information "
-                                "if it does not differ from the album artist."
-                                "</ul>"
-                                "<p>Conditional includes make use of the same characters as the special "
-                                "strings, which means that the X in @X{...} can be one character out of "
-                                "[atnycgATCd]." ),
+                          i18nc( "Please do NOT modify/translate the quotes, they are part of the pattern!",
+                                 "<p><b>Conditional inclusion:</b>"
+                                 "<p>These patterns make it possible to selectively include texts, "
+                                 "depending on the value of CDDB entries. You can choose only to "
+                                 "include or exclude texts if one of the entries is empty, "
+                                 "or if it has a specific value. Examples:"
+                                 "<ul>"
+                                 "<li>@T{TEXT} includes TEXT if the album title is specified"
+                                 "<li>!T{TEXT} includes TEXT if the album title is not specified"
+                                 "<li>@C=\'Soundtrack\'{TEXT} includes TEXT if the CD's extended "
+                                 "information is named Soundtrack"
+                                 "<li>!C=\'Soundtrack\'{TEXT} includes TEXT if the CD's extended "
+                                 "information is anything else but Soundtrack"
+                                 "<li>It is also possible to include special strings in texts and conditions, "
+                                 "e.g. !a='%A'{%a} only includes the title's artist information "
+                                 "if it does not differ from the album artist."
+                                 "</ul>"
+                                 "<p>Conditional includes make use of the same characters as the special "
+                                 "strings, which means that the X in @X{...} can be one character out of "
+                                 "[atnycgATCd]." ),
                           m_conditionalInclusionLabel );
 }
 
