@@ -258,6 +258,10 @@ void K3b::MixedView::slotOpen()
 void K3b::MixedView::slotCurrentRootChanged( const QModelIndex& newRoot )
 {
     QAbstractItemModel* currentSubModel = m_model->subModelForIndex( newRoot );
+    if( currentSubModel != 0 ) {
+        m_model->setSupportedDragActions( currentSubModel->supportedDragActions() );
+    }
+    
     if( currentSubModel == m_model->dataModel() ) {
         m_dataViewImpl->slotCurrentRootChanged( m_model->mapToSubModel( newRoot ) );
     }

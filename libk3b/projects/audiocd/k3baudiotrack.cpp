@@ -304,10 +304,10 @@ void K3b::AudioTrack::moveAfter( K3b::AudioTrack* track )
         return;
     }
     else {
-        emit track->doc()->aboutToAddTrack( track->trackNumber() );
-        
         // remove this from the list
         take();
+        
+        emit track->doc()->aboutToAddTrack( track->trackNumber() );
 
         // set the new parent doc
         m_parent = track->doc();
@@ -358,10 +358,10 @@ void K3b::AudioTrack::moveAhead( K3b::AudioTrack* track )
         return;
     }
     else {
-        emit track->doc()->aboutToAddTrack( track->trackNumber()-1 );
-        
         // remove this from the list
         take();
+        
+        emit track->doc()->aboutToAddTrack( track->trackNumber()-1 );
 
         // set the new parent doc
         m_parent = track->doc();
