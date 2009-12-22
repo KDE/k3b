@@ -8,6 +8,7 @@ ExcludeServiceTypes=application/x-iso;
 [Desktop Action CreateK3bDataProject]
 Exec=k3b --data %F
 Name=Create file project with K3b
+Name[csb]=Ùsôdzë lopkòwi projekt z pòmòca K3b
 Name[da]=Opret filprojekt med K3b
 Name[en_GB]=Create file project with K3b
 Name[et]=Loo failiprojekt K3b abil
