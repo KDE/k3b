@@ -10,6 +10,7 @@ Exec=k3b --data %F
 Name=Create file project with K3b
 Name[csb]=Ùsôdzë lopkòwi projekt z pòmòca K3b
 Name[da]=Opret filprojekt med K3b
+Name[de]=Daten-CD mit K3b erstellen
 Name[en_GB]=Create file project with K3b
 Name[et]=Loo failiprojekt K3b abil
 Name[fr]=Créer un projet de fichiers avec K3b

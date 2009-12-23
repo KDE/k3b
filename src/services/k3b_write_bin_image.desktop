@@ -9,6 +9,7 @@ Exec=k3b --image %F
 Name=Write CD Image with K3b
 Name[csb]=Zapiszë òbrôz CD z pòmòcą K3b
 Name[da]=Brænd cd-image-fil med K3b
+Name[de]=CD-Abbild mit K3b brennen
 Name[en_GB]=Write CD Image with K3b
 Name[et]=Kirjuta CD-tõmmis K3b abil plaadile
 Name[fr]=Graver une image de CD avec K3b
