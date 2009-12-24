@@ -8,6 +8,7 @@ MimeType=audio/*;
 [Desktop Action CreateK3bAudioProject]
 Exec=k3b --audiocd %F
 Name=Create Audio CD with K3b
+Name[cs]=Vytvořit pomocí K3b zvukové CD...
 Name[csb]=Ùsôdzë CD audio z pòmòcą K3b
 Name[da]=Opret lyd-cd med K3b
 Name[de]=Audio-CD mit K3b erstellen
