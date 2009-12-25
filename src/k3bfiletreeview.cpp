@@ -281,6 +281,7 @@ K3b::FileTreeView::FileTreeView( QWidget *parent )
 //    setSortingEnabled( true );
 //    setRootIsDecorated( false );
     setDragEnabled( true );
+    setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 
     K3b::DeviceDelegate* delegate = new K3b::DeviceDelegate(this);
     setItemDelegate(delegate);

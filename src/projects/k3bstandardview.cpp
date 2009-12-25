@@ -45,10 +45,10 @@ K3b::StandardView::StandardView(K3b::Doc* doc, QWidget *parent )
     m_dirView->setDragEnabled(true);
     m_dirView->setDragDropMode(QTreeView::DragDrop);
     m_dirView->setSelectionMode(QTreeView::SingleSelection);
+    m_dirView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     m_dirView->setModel(m_dirProxy);
     m_dirView->setContextMenuPolicy(Qt::CustomContextMenu);
-    m_dirView->setAnimated( KGlobalSettings::graphicEffectsLevel() == KGlobalSettings::SimpleAnimationEffects ||
-                            KGlobalSettings::graphicEffectsLevel() == KGlobalSettings::ComplexAnimationEffects );
+    m_dirView->setAnimated( KGlobalSettings::graphicEffectsLevel().testFlag( KGlobalSettings::SimpleAnimationEffects ) );
 
     // File panel
     m_fileView->setAcceptDrops(true);
@@ -57,9 +57,9 @@ K3b::StandardView::StandardView(K3b::Doc* doc, QWidget *parent )
     m_fileView->setItemsExpandable(false);
     m_fileView->setRootIsDecorated(false);
     m_fileView->setSelectionMode(QTreeView::ExtendedSelection);
+    m_fileView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     m_fileView->setContextMenuPolicy(Qt::CustomContextMenu);
-    m_fileView->setAnimated( KGlobalSettings::graphicEffectsLevel() == KGlobalSettings::SimpleAnimationEffects ||
-                             KGlobalSettings::graphicEffectsLevel() == KGlobalSettings::ComplexAnimationEffects );
+    m_fileView->setAnimated( KGlobalSettings::graphicEffectsLevel().testFlag( KGlobalSettings::SimpleAnimationEffects ) );
     // FIXME: make QHeaderView::Interactive the default but connect to model changes and call header()->resizeSections( QHeaderView::ResizeToContents );
     m_fileView->header()->setResizeMode( QHeaderView::ResizeToContents );
     m_fileView->setEditTriggers( QAbstractItemView::NoEditTriggers );
