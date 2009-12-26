@@ -26,6 +26,9 @@ namespace K3b {
         class DeviceHandler;
     }
 
+    /**
+     * Formats and blanks DVD-RW, DVD+RW and BD-RE discs
+     */
     class LIBK3B_EXPORT DvdFormattingJob : public BurnJob
     {
         Q_OBJECT
@@ -53,7 +56,7 @@ namespace K3b {
 
         /**
          * One of: WritingModeIncrementalSequential, WritingModeRestrictedOverwrite
-         * Ignored for DVD+RW
+         * Ignored for DVD+RW and BD-RE
          */
         void setMode( int );
 
@@ -63,7 +66,7 @@ namespace K3b {
         void setFormattingMode( FormattingMode mode );
 
         /**
-         * @param b If true empty DVDs will also be formatted
+         * @param b If true empty discs will also be formatted
          */
         void setForce( bool b );
 

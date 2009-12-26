@@ -45,7 +45,7 @@
 K3b::MediaFormattingDialog::MediaFormattingDialog( QWidget* parent )
     : K3b::InteractionDialog( parent,
                             i18n("Format and Erase"),
-                            i18n( "CD-RW" ) + '/' + i18n( "DVD±RW" ) + '/' + i18n( "BD-RW" ),
+                            i18n( "CD-RW" ) + '/' + i18n( "DVD±RW" ) + '/' + i18n( "BD-RE" ),
                             START_BUTTON|CANCEL_BUTTON,
                             START_BUTTON,
                             "Formatting and Erasing" ) // config group
@@ -84,15 +84,14 @@ K3b::MediaFormattingDialog::MediaFormattingDialog( QWidget* parent )
     grid->addWidget( groupOptions, 1, 1 );
     grid->setRowStretch( 1, 1 );
 
-// FIXME: check if we need Blu-ray comments here
     m_checkForce->setToolTip( i18n("Force formatting of empty DVDs") );
     m_checkForce->setWhatsThis( i18n("<p>If this option is checked K3b will format a "
                                      "DVD-RW even if it is empty. It may also be used to "
-                                     "force K3b to format a DVD+RW or a DVD-RW in restricted "
+                                     "force K3b to format a DVD+RW, BD-RE or a DVD-RW in restricted "
                                      "overwrite mode."
                                      "<p><b>Caution:</b> It is not recommended to format a DVD often "
                                      "as it may become unusable after only 10-20 reformat procedures."
-                                     "<p>DVD+RW media only needs to be formatted once. After that it "
+                                     "<p>DVD+RW and BD-RE media only needs to be formatted once. After that it "
                                      "just needs to be overwritten. The same applies to DVD-RW in "
                                      "restricted overwrite mode.") );
 
@@ -140,7 +139,7 @@ void K3b::MediaFormattingDialog::slotStartClicked()
 
         theJob = job;
     }
-    else if ( medium.diskInfo().mediaType() & K3b::Device::MEDIA_DVD_ALL ) {
+    else { // DVDFormattingJob handles DVD and BD discs
         K3b::DvdFormattingJob* job = new K3b::DvdFormattingJob( &dlg, this );
 
         job->setDevice( m_writerSelectionWidget->writerDevice() );
@@ -149,11 +148,6 @@ void K3b::MediaFormattingDialog::slotStartClicked()
         job->setFormattingMode( m_checkQuickFormat->isChecked() ? FormattingQuick : FormattingComplete );
 
         theJob = job;
-    }
-    else {
-        // do not translate this as it is not intended to be included in the stable version!
-        KMessageBox::sorry( this, "Ups", "No formatting support for this source media type yet." );
-        return;
     }
 
     hide();
