@@ -45,7 +45,7 @@
 K3b::MediaFormattingDialog::MediaFormattingDialog( QWidget* parent )
     : K3b::InteractionDialog( parent,
                             i18n("Format and Erase"),
-                            i18n( "CD-RW" ) + '/' + i18n("DVD%1RW",QString(0x00B1)) + '/' + i18n( "BD-RW" ),
+                            i18n( "CD-RW" ) + '/' + i18n( "DVD±RW" ) + '/' + i18n( "BD-RW" ),
                             START_BUTTON|CANCEL_BUTTON,
                             START_BUTTON,
                             "Formatting and Erasing" ) // config group
@@ -124,7 +124,7 @@ void K3b::MediaFormattingDialog::slotStartClicked()
 {
     K3b::Medium medium = k3bappcore->mediaCache()->medium( m_writerSelectionWidget->writerDevice() );
 
-    K3b::JobProgressDialog dlg( parentWidget() );
+    K3b::JobProgressDialog dlg( parentWidget(), false );
 
     K3b::Job* theJob = 0;
 
