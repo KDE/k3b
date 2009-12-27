@@ -38,7 +38,7 @@ inline void *dlopen(char *fileName, int b)
 	return 0;
 }
 
-inline void *dlsym(void *a, char *b)
+inline void *dlsym(void *a, const char *b)
 {
 	QLibrary *lib = (QLibrary *)a;
 	return lib->resolve(b);
