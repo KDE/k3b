@@ -233,11 +233,15 @@ target_link_libraries(k3b
 )
 if(NOT WIN32)
 	target_link_libraries(k3b dl)
+else(NOT WIN32)
+	target_link_libraries(k3b uuid ole32)
 endif(NOT WIN32)
   
 if(ENABLE_DVD_RIPPING)
   target_link_libraries(k3b ${DVDREAD_LIBRARIES})
 endif(ENABLE_DVD_RIPPING)
+
+set_target_properties(k3b PROPERTIES OUTPUT_NAME k3blib)
 
 set_target_properties(k3b PROPERTIES VERSION ${K3B_LIB_VERSION_MAJOR}.${K3B_LIB_VERSION_MINOR}.${K3B_LIB_VERSION_RELEASE} SOVERSION ${K3B_LIB_VERSION_MAJOR})
 install(TARGETS k3b ${INSTALL_TARGETS_DEFAULT_ARGS} )
