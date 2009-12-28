@@ -327,7 +327,7 @@ void K3b::ProjectBurnDialog::prepareGui()
     connect( m_checkCacheImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
     connect( m_checkSimulate, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
     connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotToggleAll()) );
-    connect( m_writingModeWidget, SIGNAL(writingModeChanged(K3b::WritingMode)), this, SLOT(slotToggleAll()) );
+    connect( m_writingModeWidget, SIGNAL(writingModeChanged(WritingMode)), this, SLOT(slotToggleAll()) );
 
     connect( m_checkOnlyCreateImage, SIGNAL(toggled(bool)), this, SLOT(slotShowImageTip(bool)) );
     connect( m_checkCacheImage, SIGNAL(toggled(bool)), this, SLOT(slotShowImageTip(bool)) );

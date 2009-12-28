@@ -824,10 +824,10 @@ bool K3b::DvdCopyJob::waitForDvd()
                 d->usedWritingMode = K3b::WritingModeRestrictedOverwrite;
 
             if( m_simulate ) {
-                if( !questionYesNo( i18n("K3b does not support simulation with DVD+R(W) media. "
+                if( !questionYesNo( i18n("%1 media do not support write simulation. "
                                          "Do you really want to continue? The media will actually be "
-                                         "written to."),
-                                    i18n("No Simulation with DVD+R(W)") ) ) {
+                                         "written to.", Device::mediaTypeString(m, true)),
+                                    i18n("No Simulation with %1", Device::mediaTypeString(m, true)) ) ) {
                     cancel();
                     return false;
                 }
@@ -839,12 +839,7 @@ bool K3b::DvdCopyJob::waitForDvd()
             if( m_writingMode != K3b::WritingModeAuto && m_writingMode != K3b::WritingModeRestrictedOverwrite )
                 emit infoMessage( i18n("Writing mode ignored when writing DVD+R(W) media."), MessageInfo );
 
-            if( m & K3b::Device::MEDIA_DVD_PLUS_RW )
-                emit infoMessage( i18n("Writing DVD+RW."), MessageInfo );
-            else if( m & K3b::Device::MEDIA_DVD_PLUS_R_DL )
-                emit infoMessage( i18n("Writing Double Layer DVD+R."), MessageInfo );
-            else
-                emit infoMessage( i18n("Writing DVD+R."), MessageInfo );
+            emit infoMessage( i18n("Writing %1.", Device::mediaTypeString( m, true ) ), MessageInfo );
         }
 
         // -------------------------------
@@ -919,8 +914,22 @@ bool K3b::DvdCopyJob::waitForDvd()
         // Blu-ray
         // -------------------------------
         else {
-            emit infoMessage( i18n("Writing %1.", K3b::Device::mediaTypeString(m, true) ), MessageInfo );
-            d->usedWritingMode = K3b::WritingModeIncrementalSequential; // just to set some mode for now
+            d->usedWritingMode = K3b::WritingModeSao;
+            
+            if( m_simulate ) {
+                if( !questionYesNo( i18n("%1 media do not support write simulation. "
+                                         "Do you really want to continue? The media will actually be "
+                                         "written to.", Device::mediaTypeString(m, true)),
+                                    i18n("No Simulation with %1", Device::mediaTypeString(m, true)) ) ) {
+                    cancel();
+                    return false;
+                }
+
+                m_simulate = false;
+                emit newTask( i18n("Writing BD copy") );
+            }
+            
+            emit infoMessage( i18n("Writing %1.", Device::mediaTypeString(m, true) ), MessageInfo );
         }
     }
 

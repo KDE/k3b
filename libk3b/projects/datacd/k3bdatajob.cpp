@@ -807,9 +807,6 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
         }
     }
 
-    // -------------------------------
-    // DVD Plus
-    // -------------------------------
     else if ( foundMedium & K3b::Device::MEDIA_DVD_ALL ) {
         if ( writingApp() == K3b::WritingAppCdrdao ) {
             emit infoMessage( i18n( "Cannot write %1 media using %2. Falling back to default application.",
@@ -826,21 +823,23 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
             d->usedWritingApp = K3b::WritingAppCdrecord;
         }
 
+        // -------------------------------
+        // DVD Plus
+        // -------------------------------
         if( foundMedium & K3b::Device::MEDIA_DVD_PLUS_ALL ) {
             if( d->doc->dummy() ) {
-                if( !questionYesNo( i18n("DVD+R(W) media do not support write simulation. "
+                if( !questionYesNo( i18n("%1 media do not support write simulation. "
                                          "Do you really want to continue? The media will actually be "
-                                         "written to."),
-                                    i18n("No Simulation with DVD+R(W)") ) ) {
+                                         "written to.", Device::mediaTypeString(foundMedium, true)),
+                                    i18n("No Simulation with %1", Device::mediaTypeString(foundMedium, true)) ) ) {
                     return false;
                 }
 
                 d->doc->setDummy( false );
-                emit newTask( i18n("Writing") );
             }
 
             if( d->doc->writingMode() != K3b::WritingModeAuto && d->doc->writingMode() != K3b::WritingModeRestrictedOverwrite )
-                emit infoMessage( i18n("Writing mode ignored when writing DVD+R(W) media."), MessageInfo );
+                emit infoMessage( i18n("Writing mode ignored when writing %1 media.", Device::mediaTypeString(foundMedium, true)), MessageInfo );
             d->usedWritingMode = K3b::WritingModeSao; // since cdrecord uses -sao for DVD+R(W)
             
             // Cdrecord doesn't support multisession DVD+R(W) disks
@@ -849,18 +848,12 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
                 d->usedWritingApp = WritingAppGrowisofs;
             }
             
-            if( foundMedium & K3b::Device::MEDIA_DVD_PLUS_RW ) {
-                if( usedMultiSessionMode() == K3b::DataDoc::NONE ||
-                    usedMultiSessionMode() == K3b::DataDoc::START )
-                    emit infoMessage( i18n("Writing DVD+RW."), MessageInfo );
-                else {
-                    emit infoMessage( i18n("Growing ISO9660 filesystem on DVD+RW."), MessageInfo );
-                }
-            }
-            else if( foundMedium & K3b::Device::MEDIA_DVD_PLUS_R_DL )
-                emit infoMessage( i18n("Writing Double Layer DVD+R."), MessageInfo );
+            if( foundMedium & K3b::Device::MEDIA_DVD_PLUS_RW &&
+                ( usedMultiSessionMode() == K3b::DataDoc::NONE ||
+                  usedMultiSessionMode() == K3b::DataDoc::START ) )
+                emit infoMessage( i18n("Growing ISO9660 filesystem on %1.", Device::mediaTypeString(foundMedium, true)), MessageInfo );
             else
-                emit infoMessage( i18n("Writing DVD+R."), MessageInfo );
+                emit infoMessage( i18n("Writing %1.", Device::mediaTypeString(foundMedium, true)), MessageInfo );
         }
 
         // -------------------------------
@@ -942,20 +935,43 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
     // --------------------
     else if ( foundMedium & K3b::Device::MEDIA_BD_ALL ) {
         d->usedWritingApp = writingApp();
-        if ( d->usedWritingApp == K3b::WritingAppAuto ) {
-            if ( k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "blu-ray" ) )
-                d->usedWritingApp = K3b::WritingAppCdrecord;
-            else
-                d->usedWritingApp = K3b::WritingAppGrowisofs;
+        if( d->usedWritingApp == K3b::WritingAppAuto ) {
+            d->usedWritingApp = K3b::WritingAppCdrecord;
         }
 
         if ( d->usedWritingApp == K3b::WritingAppCdrecord &&
              !k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "blu-ray" ) ) {
             d->usedWritingApp = K3b::WritingAppGrowisofs;
         }
+        
+        if( d->doc->dummy() ) {
+            if( !questionYesNo( i18n("%1 media do not support write simulation. "
+                                     "Do you really want to continue? The media will actually be "
+                                     "written to.", Device::mediaTypeString(foundMedium, true)),
+                                i18n("No Simulation with %1", Device::mediaTypeString(foundMedium, true)) ) ) {
+                return false;
+            }
 
-        // FIXME: what do we need to take care of with BD media?
-        emit infoMessage( i18n( "Writing %1" , K3b::Device::mediaTypeString( foundMedium, true ) ), MessageInfo );
+            d->doc->setDummy( false );
+        }
+
+        if( d->doc->writingMode() != K3b::WritingModeAuto )
+            emit infoMessage( i18n("Writing mode ignored when writing %1 media.", Device::mediaTypeString(foundMedium, true)), MessageInfo );
+        d->usedWritingMode = K3b::WritingModeSao; // cdrecord uses -sao for DVD+R(W), let's assume it's used also for BD-R(E)
+        
+        // Cdrecord probably doesn't support multisession BD-R disks
+        // FIXME: check if above is actually true
+        if( usedMultiSessionMode() != DataDoc::NONE &&
+            d->usedWritingApp == K3b::WritingAppCdrecord ) {
+            d->usedWritingApp = WritingAppGrowisofs;
+        }
+        
+        if( foundMedium & K3b::Device::MEDIA_BD_RE &&
+            ( usedMultiSessionMode() == K3b::DataDoc::NONE ||
+                usedMultiSessionMode() == K3b::DataDoc::START ) )
+            emit infoMessage( i18n("Growing ISO9660 filesystem on %1.", Device::mediaTypeString(foundMedium, true)), MessageInfo );
+        else
+            emit infoMessage( i18n("Writing %1.", Device::mediaTypeString(foundMedium, true)), MessageInfo );
     }
 
     return true;

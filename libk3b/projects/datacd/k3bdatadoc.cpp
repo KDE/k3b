@@ -1364,41 +1364,44 @@ int K3b::DataDoc::importedSession() const
 
 K3b::Device::MediaTypes K3b::DataDoc::supportedMediaTypes() const
 {
-    Device::MediaTypes m = K3b::Device::MEDIA_WRITABLE;
+    Device::MediaTypes m = Device::MEDIA_WRITABLE;
 
     // we go bottom-up and remove those media types that are too small
     // (very very rough for now, we need the media size handling in the
     // empty disk waiter)
     if ( size() >= 1024ULL*1024ULL*1024ULL ) { // 1 GB -> no CD
-        m ^= K3b::Device::MEDIA_WRITABLE_CD;
+        m ^= Device::MEDIA_WRITABLE_CD;
     }
     // specal case: writing modes TAO and RAW apply only to CD
-    else if ( writingMode() == K3b::WritingModeTao || writingMode() == K3b::WritingModeRaw ) {
-        m = K3b::Device::MEDIA_WRITABLE_CD;
+    else if ( writingMode() == WritingModeTao || writingMode() == WritingModeRaw ) {
+        m = Device::MEDIA_WRITABLE_CD;
     }
 
     // 4.3 GB -> no SL-DVD
     // in case overburn is enabled we allow some made up max size
     // before we force a DL medium
-    if( size() > 4700372992LL ) {
+    if( size() > 4700372992ULL ) {
         if( !k3bcore->globalSettings()->overburn() ||
-            size() > 4900000000LL ) {
-            m ^= K3b::Device::MEDIA_WRITABLE_DVD_SL;
+            size() > 4900000000ULL ) {
+            m ^= Device::MEDIA_WRITABLE_DVD_SL;
         }
     }
 
     // 9 GB -> no DVD at all
     if ( size() >= 9ULL*1024ULL*1024ULL*1024ULL ) {
-        m ^= K3b::Device::MEDIA_WRITABLE_DVD;
+        m ^= Device::MEDIA_WRITABLE_DVD;
     }
 //     // special case: the user selected a specific writing mode
-//     else if( writingMode() == K3b::WritingModeRestrictedOverwrite ) {
+//     else if( writingMode() == WritingModeRestrictedOverwrite ) {
 //         // we treat DVD+R(W) as restricted overwrite media
-//         m = K3b::Device::MEDIA_DVD_RW_OVWR|K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_PLUS_R;
+//         m = Device::MEDIA_DVD_RW_OVWR|Device::MEDIA_DVD_PLUS_RW|Device::MEDIA_DVD_PLUS_R;
 //     }
-#ifdef __GNUC__
-#warning BLu-Ray!
-#endif
+
+    // 50 GB -> no Blu-ray either
+    if( size() > 50050629632ULL ) {
+        m ^= Device::MEDIA_WRITABLE_BD;
+    }
+    
     return m;
 }
 

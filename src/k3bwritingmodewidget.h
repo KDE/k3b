@@ -33,17 +33,17 @@ namespace K3b {
 
     public:
         WritingModeWidget( QWidget* parent = 0 );
-        WritingModeWidget( K3b::WritingModes modes, QWidget* parent = 0 );
+        WritingModeWidget( WritingModes modes, QWidget* parent = 0 );
         ~WritingModeWidget();
 
-        K3b::WritingMode writingMode() const;
+        WritingMode writingMode() const;
 
         /**
          * \return All supported writing modes. The list
          * is optionally filtered according to the device
          * set via setDevice.
          */
-        K3b::WritingModes supportedWritingModes() const;
+        WritingModes supportedWritingModes() const;
 
         void saveConfig( KConfigGroup );
 
@@ -56,14 +56,14 @@ namespace K3b {
         /**
          * This will not emit the writingModeChanged signal
          */
-        void setWritingMode( K3b::WritingMode m );
-        void setSupportedModes( K3b::WritingModes modes );
+        void setWritingMode( WritingMode m );
+        void setSupportedModes( WritingModes modes );
 
         /**
          * If the device is set the supported writing modes
          * will be filtered by the ones supported by the drive.
          */
-        void setDevice( K3b::Device::Device* );
+        void setDevice( Device::Device* );
 
         /**
          * Set the writing modes which make sense with the provided medium.
@@ -74,7 +74,7 @@ namespace K3b {
          *
          * \sa setDevice
          */
-        void determineSupportedModesFromMedium( const K3b::Medium& m );
+        void determineSupportedModesFromMedium( const Medium& m );
 
         /**
          * Convenience method. Does the same as the one above.
@@ -82,10 +82,10 @@ namespace K3b {
          * \param dev The device which contains the medium. May even be 0 in
          *            which case only the auto mode will be selected.
          */
-        void determineSupportedModesFromMedium( K3b::Device::Device* dev );
+        void determineSupportedModesFromMedium( Device::Device* dev );
 
     Q_SIGNALS:
-        void writingModeChanged( K3b::WritingMode );
+        void writingModeChanged( WritingMode mode );
 
     private:
         void init();

@@ -159,7 +159,7 @@ K3b::ImageWritingDialog::ImageWritingDialog( QWidget* parent )
              m_writingModeWidget, SLOT(setDevice(K3b::Device::Device*)) );
     connect( m_comboImageType, SIGNAL(activated(int)),
              this, SLOT(slotToggleAll()) );
-    connect( m_writingModeWidget, SIGNAL(writingModeChanged(K3b::WritingMode)),
+    connect( m_writingModeWidget, SIGNAL(writingModeChanged(WritingMode)),
              this, SLOT(slotToggleAll()) );
     connect( m_editImagePath, SIGNAL(textChanged(const QString&)),
              this, SLOT(slotUpdateImage(const QString&)) );
