@@ -283,10 +283,18 @@ void K3b::AudioRippingDialog::slotStartClicked()
 
 
     // prepare list of tracks to rip
-    QVector<QPair<int, QString> > tracksToRip;
-    for( int i = 0; i < m_trackNumbers.count() && i < d->filenames.count(); ++i ) {
-        int file = m_optionWidget->createSingleFile() ? 0 : i;
-        tracksToRip.append( qMakePair( m_trackNumbers[i]+1, d->filenames[ file ] ) );
+    AudioRipJob::Tracks tracksToRip;
+    if( m_optionWidget->createSingleFile() && !d->filenames.isEmpty() ) {
+        // Since QMultiMap stores multiple values "from most recently to least recently inserted"
+        // we will add it in reverse order to rip in ascending order
+        for( int i = m_trackNumbers.count()-1; i >= 0; --i ) {
+            tracksToRip.insert( d->filenames.first(), m_trackNumbers[i]+1 );
+        }
+    }
+    else {
+        for( int i = 0; i < m_trackNumbers.count() && i < d->filenames.count(); ++i ) {
+            tracksToRip.insert( d->filenames[ i ], m_trackNumbers[i]+1 );
+        }
     }
 
     K3b::JobProgressDialog ripDialog( parentWidget(), "Ripping" );
@@ -299,7 +307,6 @@ void K3b::AudioRippingDialog::slotStartClicked()
     job->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
     job->setMaxRetries( m_spinRetries->value() );
     job->setNeverSkip( !m_checkIgnoreReadErrors->isChecked() );
-    job->setSingleFile( m_optionWidget->createSingleFile() );
     job->setWriteCueFile( m_optionWidget->createCueFile() );
     job->setEncoder( encoder );
     job->setWritePlaylist( m_optionWidget->createPlaylist() );
@@ -359,7 +366,7 @@ void K3b::AudioRippingDialog::refresh()
 
         filename = d->fsInfo.fixupPath( K3b::PatternParser::parsePattern( m_cddbEntry, 1,
                                                                           extension,
-                                                                          m_patternWidget->filenamePattern(),
+                                                                          m_patternWidget->playlistPattern(),
                                                                           m_patternWidget->replaceBlanks(),
                                                                           m_patternWidget->blankReplaceString() ) );
 
@@ -373,7 +380,7 @@ void K3b::AudioRippingDialog::refresh()
         if( m_optionWidget->createCueFile() ) {
             QString cueFileName = d->fsInfo.fixupPath( K3b::PatternParser::parsePattern( m_cddbEntry, 1,
                                                                                          QLatin1String( "cue" ),
-                                                                                         m_patternWidget->filenamePattern(),
+                                                                                         m_patternWidget->playlistPattern(),
                                                                                          m_patternWidget->replaceBlanks(),
                                                                                          m_patternWidget->blankReplaceString() ) );
             d->addTrack( cueFileName, "-", "-", i18n("Cue-file") );

@@ -17,8 +17,7 @@
 #define K3B_AUDIO_RIP_THREAD_H
 
 #include "k3bthreadjob.h"
-#include <QVector>
-#include <QPair>
+#include <QMultiMap>
 
 #include <libkcddb/cdinfo.h>
 
@@ -35,6 +34,14 @@ namespace K3b {
         Q_OBJECT
 
     public:
+        /**
+         * Maps filenames to track 1-based track indexes
+         * When multiple tracks are associated with one filename
+         * they are merged and ripped into one file.
+         */
+        typedef QMultiMap<QString,int> Tracks;
+        
+    public:
         AudioRipJob( JobHandler* hdl, QObject* parent );
         ~AudioRipJob();
 
@@ -45,8 +52,6 @@ namespace K3b {
         void setParanoiaMode( int mode );
         void setMaxRetries( int r );
         void setNeverSkip( bool b );
-
-        void setSingleFile( bool b ) { m_singleFile = b; }
 
         void setUseIndex0( bool b ) { m_useIndex0 = b; }
 
@@ -62,10 +67,7 @@ namespace K3b {
          */
         void setFileType( const QString& );
 
-        /**
-         * 1 is the first track
-         */
-        void setTracksToRip( const QVector<QPair<int, QString> >& t ) { m_tracks = t; }
+        void setTracksToRip( const Tracks& tracks );
 
         void setWritePlaylist( bool b ) { m_writePlaylist = b; }
         void setPlaylistFilename( const QString& s ) { m_playlistFilename = s; }
@@ -79,7 +81,7 @@ namespace K3b {
         bool run();
         void jobFinished( bool );
 
-        bool ripTrack( int track, const QString& filename );
+        bool ripTrack( int track, const QString& filename, const QString& prevFilename );
         void cleanupAfterCancellation();
         bool writePlaylist();
         bool writeCueFile();
@@ -93,7 +95,6 @@ namespace K3b {
         Device::Device* m_device;
 
         bool m_bUsePattern;
-        bool m_singleFile;
         bool m_useIndex0;
 
         bool m_writePlaylist;
@@ -101,8 +102,6 @@ namespace K3b {
         QString m_playlistFilename;
 
         bool m_writeCueFile;
-
-        QVector<QPair<int, QString> > m_tracks;
 
         class Private;
         Private* d;
