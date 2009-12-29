@@ -343,7 +343,7 @@ void K3b::DvdFormattingJob::startFormatting( const Device::DiskInfo& diskInfo )
                         MessageInfo );
     }
     else {
-        emit infoMessage( i18n("No rewritable DVD or BD media found. Unable to format."), MessageError );
+        emit infoMessage( i18n("No rewritable DVD or BD medium found. Unable to format."), MessageError );
         d->running = false;
         jobFinished(false);
         return;

@@ -829,7 +829,7 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
         if( foundMedium & K3b::Device::MEDIA_DVD_PLUS_ALL ) {
             if( d->doc->dummy() ) {
                 if( !questionYesNo( i18n("%1 media do not support write simulation. "
-                                         "Do you really want to continue? The media will actually be "
+                                         "Do you really want to continue? The disc will actually be "
                                          "written to.", Device::mediaTypeString(foundMedium, true)),
                                     i18n("No Simulation with %1", Device::mediaTypeString(foundMedium, true)) ) ) {
                     return false;
@@ -946,7 +946,7 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
         
         if( d->doc->dummy() ) {
             if( !questionYesNo( i18n("%1 media do not support write simulation. "
-                                     "Do you really want to continue? The media will actually be "
+                                     "Do you really want to continue? The disc will actually be "
                                      "written to.", Device::mediaTypeString(foundMedium, true)),
                                 i18n("No Simulation with %1", Device::mediaTypeString(foundMedium, true)) ) ) {
                 return false;

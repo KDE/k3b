@@ -825,7 +825,7 @@ bool K3b::DvdCopyJob::waitForDvd()
 
             if( m_simulate ) {
                 if( !questionYesNo( i18n("%1 media do not support write simulation. "
-                                         "Do you really want to continue? The media will actually be "
+                                         "Do you really want to continue? The disc will actually be "
                                          "written to.", Device::mediaTypeString(m, true)),
                                     i18n("No Simulation with %1", Device::mediaTypeString(m, true)) ) ) {
                     cancel();
@@ -918,7 +918,7 @@ bool K3b::DvdCopyJob::waitForDvd()
             
             if( m_simulate ) {
                 if( !questionYesNo( i18n("%1 media do not support write simulation. "
-                                         "Do you really want to continue? The media will actually be "
+                                         "Do you really want to continue? The disc will actually be "
                                          "written to.", Device::mediaTypeString(m, true)),
                                     i18n("No Simulation with %1", Device::mediaTypeString(m, true)) ) ) {
                     cancel();
