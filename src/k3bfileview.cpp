@@ -120,7 +120,6 @@ K3b::FileView::FileView(QWidget *parent )
         action->setShortcutContext( Qt::ApplicationShortcut );
     }
     
-    connect( d->dirOp, SIGNAL(fileHighlighted(const KFileItem &)), this, SLOT(slotFileHighlighted(const KFileItem &)) );
     connect( d->dirOp, SIGNAL(urlEntered(const KUrl&)), this, SIGNAL(urlEntered(const KUrl&)) );
     connect( d->filterWidget, SIGNAL(filterChanged()), SLOT(slotFilterChanged()) );
     connect( d->actionShowBookmarks, SIGNAL(toggled(bool)), d->dirOp->bookmarkMenu(), SLOT(setVisible(bool)) );
