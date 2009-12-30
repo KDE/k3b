@@ -20,15 +20,8 @@
 #include "k3bcontentsview.h"
 
 
-namespace K3b {
-    class DirOperator;
-}
 class KUrl;
-class KFileFilterCombo;
-class KFileItem;
 class KActionCollection;
-class KConfig;
-class KToolBar;
 class KConfigGroup;
 
 /**
@@ -58,16 +51,12 @@ public Q_SLOTS:
     void readConfig( const KConfigGroup &grp );
     void setAutoUpdate( bool );
 
-private:
-    KToolBar* m_toolBox;
-    DirOperator* m_dirOp;
-    KFileFilterCombo* m_filterWidget;
-
-    void setupGUI();
-
 private Q_SLOTS:
     void slotFilterChanged();
-    void slotFileHighlighted( const KFileItem & );
+
+private:
+    class Private;
+    Private* d;
 };
 }
 

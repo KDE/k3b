@@ -71,6 +71,8 @@ void K3b::DirOperator::readConfig( const KConfigGroup& grp )
 {
     KDirOperator::readConfig( grp );
     
+    m_bmPopup->setVisible( grp.readEntry( "show bookmarks", false ) );
+    
     // There seems to be a bug in the KDELibs which makes setURL crash on
     // some systems when used with a non-existing url
     QString lastUrl = grp.readPathEntry( "last url", QDir::home().absolutePath() );
@@ -95,6 +97,7 @@ void K3b::DirOperator::readConfig( const KConfigGroup& grp )
 void K3b::DirOperator::writeConfig( KConfigGroup& grp )
 {
     KDirOperator::writeConfig(grp );
+    grp.writeEntry( "show bookmarks", m_bmPopup->isVisible() );
     grp.writePathEntry( "last url", url().toLocalFile() );
 }
 

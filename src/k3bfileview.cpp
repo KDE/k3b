@@ -35,137 +35,162 @@
 #include <KLocale>
 #include <KProgressDialog>
 #include <KToolBar>
+#include <KToolBarSpacerAction>
 #include <KUrl>
 #include <KDebug>
 
+
+class K3b::FileView::Private
+{
+public:
+    KToolBar* toolBox;
+    DirOperator* dirOp;
+    KFileFilterCombo* filterWidget;
+    KAction* actionShowBookmarks;
+};
+
+
 K3b::FileView::FileView(QWidget *parent )
-    : K3b::ContentsView( false, parent)
+    : K3b::ContentsView( false, parent),
+      d( new Private )
 {
-    setupGUI();
-}
-
-
-K3b::FileView::~FileView()
-{
-}
-
-
-KActionCollection* K3b::FileView::actionCollection() const
-{
-    return m_dirOp->actionCollection();
-}
-
-
-void K3b::FileView::setupGUI()
-{
-    m_dirOp = new K3b::DirOperator( KUrl(QDir::home().absolutePath()), this );
-    m_toolBox = new KToolBar( this );
-    m_toolBox->setToolButtonStyle( Qt::ToolButtonIconOnly );
+    d->dirOp = new K3b::DirOperator( KUrl(QDir::home().absolutePath()), this );
+    d->toolBox = new KToolBar( this );
+    d->toolBox->setToolButtonStyle( Qt::ToolButtonIconOnly );
 
     QVBoxLayout* layout = new QVBoxLayout( this );
     layout->setMargin( 0 );
     layout->setSpacing( 0 );
-    layout->addWidget( m_toolBox );
-    layout->addWidget( m_dirOp, 1 );
+    layout->addWidget( d->toolBox );
+    layout->addWidget( d->dirOp, 1 );
 
     // setup actions
-    QAction* actionBack = m_dirOp->actionCollection()->action("back");
-    QAction* actionForward = m_dirOp->actionCollection()->action("forward");
-    QAction* actionUp = m_dirOp->actionCollection()->action("up");
-    QAction* actionReload = m_dirOp->actionCollection()->action("reload");
-
-    m_toolBox->addAction( actionBack );
-    m_toolBox->addAction( actionForward );
-    m_toolBox->addAction( actionUp );
-    m_toolBox->addAction( actionReload );
-    m_toolBox->addSeparator();
-    m_toolBox->addAction( m_dirOp->actionCollection()->action("short view") );
-    m_toolBox->addAction( m_dirOp->actionCollection()->action("detailed view") );
-    m_toolBox->addSeparator();
-    m_toolBox->addAction( m_dirOp->bookmarkMenu() );
-    m_toolBox->addSeparator();
+    QAction* actionBack = d->dirOp->actionCollection()->action("back");
+    QAction* actionForward = d->dirOp->actionCollection()->action("forward");
+    QAction* actionUp = d->dirOp->actionCollection()->action("up");
+    QAction* actionReload = d->dirOp->actionCollection()->action("reload");
 
     // create filter selection combobox
-    QWidget* filterBox = new QWidget( m_toolBox );
+    QWidget* filterBox = new QWidget( d->toolBox );
     QHBoxLayout* filterLayout = new QHBoxLayout( filterBox );
     filterLayout->addWidget( new QLabel( i18n("Filter:"), filterBox ) );
-    m_filterWidget = new KFileFilterCombo( filterBox );
-    filterLayout->addWidget( m_filterWidget );
+    d->filterWidget = new KFileFilterCombo( filterBox );
+    filterLayout->addWidget( d->filterWidget );
     filterLayout->setMargin( 0 );
-    m_toolBox->addWidget( filterBox );
 
-    m_filterWidget->setEditable( true );
+    d->filterWidget->setEditable( true );
     QString filter = i18n("*|All Files");
     filter += "\n" + i18n("audio/x-mp3 audio/x-wav application/x-ogg |Sound Files");
     filter += "\n" + i18n("audio/x-wav |Wave Sound Files");
     filter += "\n" + i18n("audio/x-mp3 |MP3 Sound Files");
     filter += "\n" + i18n("application/x-ogg |Ogg Vorbis Sound Files");
     filter += "\n" + i18n("video/mpeg |MPEG Video Files");
-    m_filterWidget->setFilter(filter);
+    d->filterWidget->setFilter(filter);
+    
+    d->actionShowBookmarks = new KAction( i18n("Show Bookmarks"), d->toolBox );
+    d->actionShowBookmarks->setCheckable( true );
+    
+    KActionMenu* actionOptions = new KActionMenu( KIcon("configure"), i18n("Options"), d->toolBox );
+    actionOptions->setDelayed( false );
+    actionOptions->addAction( d->dirOp->actionCollection()->action("sorting menu") );
+    actionOptions->addAction( d->dirOp->actionCollection()->action("view menu") );
+    actionOptions->addSeparator();
+    actionOptions->addAction( d->dirOp->actionCollection()->action("decoration menu") );
+    actionOptions->addSeparator();
+    actionOptions->addAction( d->dirOp->actionCollection()->action("show hidden") );
+    actionOptions->addAction( d->actionShowBookmarks );
+    actionOptions->addAction( d->dirOp->actionCollection()->action("preview") );
 
-    connect( m_filterWidget, SIGNAL(filterChanged()), SLOT(slotFilterChanged()) );
+    d->toolBox->addAction( actionBack );
+    d->toolBox->addAction( actionForward );
+    d->toolBox->addAction( actionUp );
+    d->toolBox->addAction( actionReload );
+    d->toolBox->addSeparator();
+    d->toolBox->addAction( d->dirOp->actionCollection()->action("short view") );
+    d->toolBox->addAction( d->dirOp->actionCollection()->action("detailed view") );
+    d->toolBox->addSeparator();
+    d->toolBox->addSeparator();
+    d->toolBox->addWidget( filterBox );
+    d->toolBox->addAction( new KToolBarSpacerAction( d->toolBox ) );
+    d->toolBox->addAction( actionOptions );
+    d->toolBox->addAction( d->dirOp->bookmarkMenu() );
+    
+    if( QAction* action = d->dirOp->actionCollection()->action("show hidden") ) {
+        action->setShortcut( Qt::ALT + Qt::Key_Period );
+        action->setShortcutContext( Qt::ApplicationShortcut );
+    }
+    
+    connect( d->dirOp, SIGNAL(fileHighlighted(const KFileItem &)), this, SLOT(slotFileHighlighted(const KFileItem &)) );
+    connect( d->dirOp, SIGNAL(urlEntered(const KUrl&)), this, SIGNAL(urlEntered(const KUrl&)) );
+    connect( d->filterWidget, SIGNAL(filterChanged()), SLOT(slotFilterChanged()) );
+    connect( d->actionShowBookmarks, SIGNAL(toggled(bool)), d->dirOp->bookmarkMenu(), SLOT(setVisible(bool)) );
+}
 
-    connect( m_dirOp, SIGNAL(fileHighlighted(const KFileItem &)), this, SLOT(slotFileHighlighted(const KFileItem &)) );
-    connect( m_dirOp, SIGNAL(urlEntered(const KUrl&)), this, SIGNAL(urlEntered(const KUrl&)) );
+
+K3b::FileView::~FileView()
+{
+    delete d;
+}
+
+
+KActionCollection* K3b::FileView::actionCollection() const
+{
+    return d->dirOp->actionCollection();
 }
 
 
 void K3b::FileView::setUrl(const KUrl& url, bool forward)
 {
     kDebug() << url;
-    m_dirOp->setUrl( url, forward );
+    d->dirOp->setUrl( url, forward );
 }
 
 
 KUrl K3b::FileView::url()
 {
-    return m_dirOp->url();
+    return d->dirOp->url();
 }
 
 
 void K3b::FileView::setAutoUpdate( bool b )
 {
-    m_dirOp->dirLister()->setAutoUpdate( b );
-}
-
-
-void K3b::FileView::slotFileHighlighted( const KFileItem & )
-{
+    d->dirOp->dirLister()->setAutoUpdate( b );
 }
 
 
 void K3b::FileView::slotFilterChanged()
 {
-    QString filter = m_filterWidget->currentFilter();
-    m_dirOp->clearFilter();
+    QString filter = d->filterWidget->currentFilter();
+    d->dirOp->clearFilter();
 
     if( filter.indexOf( '/' ) > -1 ) {
         QStringList types = filter.split( ' ' );
         types.prepend( "inode/directory" );
-        m_dirOp->setMimeFilter( types );
+        d->dirOp->setMimeFilter( types );
     }
     else
-        m_dirOp->setNameFilter( filter );
+        d->dirOp->setNameFilter( filter );
 
-    m_dirOp->rereadDir();
+    d->dirOp->rereadDir();
 }
 
 
 void K3b::FileView::reload()
 {
-    m_dirOp->rereadDir();
+    d->dirOp->rereadDir();
 }
 
 
 void K3b::FileView::saveConfig( KConfigGroup grp )
 {
-    m_dirOp->writeConfig(grp);
+    d->dirOp->writeConfig(grp);
 }
 
 
 void K3b::FileView::readConfig( const KConfigGroup& grp )
 {
-    m_dirOp->readConfig(grp);
+    d->dirOp->readConfig(grp);
+    d->actionShowBookmarks->setChecked( d->dirOp->bookmarkMenu()->isVisible() );
 }
 
 #include "k3bfileview.moc"
