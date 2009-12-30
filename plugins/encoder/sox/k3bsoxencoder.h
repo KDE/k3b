@@ -31,30 +31,31 @@ public:
     K3bSoxEncoder( QObject* parent, const QVariantList& );
     ~K3bSoxEncoder();
 
-    QStringList extensions() const;
+    virtual QStringList extensions() const;
 
-    QString fileTypeComment( const QString& ) const;
+    virtual QString fileTypeComment( const QString& ) const;
 
-    long long fileSize( const QString&, const K3b::Msf& msf ) const;
+    virtual long long fileSize( const QString&, const K3b::Msf& msf ) const;
 
-    int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
+    virtual int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-    K3b::PluginConfigWidget* createConfigWidget( QWidget* parent = 0) const;
+    virtual K3b::PluginConfigWidget* createConfigWidget( QWidget* parent = 0) const;
 
     /**
      * reimplemented since sox writes the file itself
      */
-    bool openFile( const QString& ext, const QString& filename, const K3b::Msf& );
-    void closeFile();
+    virtual bool openFile( const QString& ext, const QString& filename, const K3b::Msf& );
+    virtual bool isOpen() const;
+    virtual void closeFile();
 
 private Q_SLOTS:
     void slotSoxFinished( int, QProcess::ExitStatus );
     void slotSoxOutputLine( const QString& );
 
 private:
-    void finishEncoderInternal();
-    bool initEncoderInternal( const QString& extension, const K3b::Msf& length );
-    long encodeInternal( const char* data, Q_ULONG len );
+    virtual bool initEncoderInternal( const QString& extension, const K3b::Msf& length );
+    virtual void finishEncoderInternal();
+    virtual long encodeInternal( const char* data, Q_ULONG len );
 
     class Private;
     Private* d;

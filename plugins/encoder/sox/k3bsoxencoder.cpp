@@ -149,6 +149,12 @@ bool K3bSoxEncoder::openFile( const QString& ext, const QString& filename, const
 }
 
 
+bool K3bSoxEncoder::isOpen() const
+{
+    return d->process && d->process->isRunning();
+}
+
+
 void K3bSoxEncoder::closeFile()
 {
     finishEncoderInternal();

@@ -73,7 +73,6 @@ class K3bExternalEncoder::Private
 public:
     KProcess* process;
     QString fileName;
-    QString extension;
     K3b::Msf length;
 
     K3bExternalEncoderCommand cmd;
@@ -98,6 +97,7 @@ K3bExternalEncoder::K3bExternalEncoder( QObject* parent, const QVariantList& )
       d( new Private() )
 {
     d->process = 0;
+    d->initialized = false;
 
     qRegisterMetaType<QProcess::ExitStatus>();
 }
@@ -156,6 +156,7 @@ void K3bExternalEncoder::finishEncoderInternal()
         // but we need to be sure the process exited when this method returnes
         d->process->waitForFinished(-1);
     }
+    d->initialized = false;
 }
 
 
@@ -169,15 +170,19 @@ void K3bExternalEncoder::slotExternalProgramFinished( int exitCode, QProcess::Ex
 bool K3bExternalEncoder::openFile( const QString& ext, const QString& filename, const K3b::Msf& length )
 {
     d->fileName = filename;
-    d->extension = ext;
-    d->initialized = false;
     d->length = length;
 
     // delete existing files as some programs (like flac for example) might refuse to overwrite files
     if( QFile::exists( filename ) )
         QFile::remove( filename );
 
-    return true;
+    return initEncoderInternal( ext, length );
+}
+
+
+bool K3bExternalEncoder::isOpen() const
+{
+    return d->initialized;
 }
 
 
@@ -187,68 +192,70 @@ void K3bExternalEncoder::closeFile()
 }
 
 
-bool K3bExternalEncoder::initExternalEncoder( const QString& extension )
+bool K3bExternalEncoder::initEncoderInternal( const QString& extension, const K3b::Msf& )
 {
-    d->initialized = true;
-
     // find the correct command
     d->cmd = commandByExtension( extension );
 
-    if( d->cmd.command.isEmpty() ) {
-        setLastError( i18n("Invalid command: the command is empty.") );
-        return false;
-    }
-
-    // create the commandline
-    QStringList params = d->cmd.command.split( ' ' );
-    for( QStringList::iterator it = params.begin(); it != params.end(); ++it ) {
-        (*it).replace( "%f", d->fileName );
-        (*it).replace( "%a", d->artist );
-        (*it).replace( "%t", d->title );
-        (*it).replace( "%c", d->comment );
-        (*it).replace( "%y", d->year );
-        (*it).replace( "%m", d->cdTitle );
-        (*it).replace( "%r", d->cdArtist );
-        (*it).replace( "%x", d->cdComment );
-        (*it).replace( "%n", d->trackNumber );
-        (*it).replace( "%g", d->genre );
-    }
+    if( !d->cmd.command.isEmpty() ) {
+        // create the commandline
+        QStringList params = d->cmd.command.split( ' ' );
+        for( QStringList::iterator it = params.begin(); it != params.end(); ++it ) {
+            (*it).replace( "%f", d->fileName );
+            (*it).replace( "%a", d->artist );
+            (*it).replace( "%t", d->title );
+            (*it).replace( "%c", d->comment );
+            (*it).replace( "%y", d->year );
+            (*it).replace( "%m", d->cdTitle );
+            (*it).replace( "%r", d->cdArtist );
+            (*it).replace( "%x", d->cdComment );
+            (*it).replace( "%n", d->trackNumber );
+            (*it).replace( "%g", d->genre );
+        }
 
 
-    kDebug() << "***** external parameters:";
-    kDebug() << params.join( " " ) << flush;
+        kDebug() << "***** external parameters:";
+        kDebug() << params.join( " " ) << flush;
 
-    // set one general error message
-    setLastError( i18n("Command failed: %1", params.join( " " ) ) );
+        // set one general error message
+        setLastError( i18n("Command failed: %1", params.join( " " ) ) );
 
-    // always create a new process since we are called in a separate thread
-    if( d->process ) {
-        disconnect( d->process );
-        d->process->deleteLater();
-    }
-    d->process = new KProcess();
-    d->process->setOutputChannelMode( KProcess::MergedChannels );
-    connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)),
-             this, SLOT(slotExternalProgramFinished(int, QProcess::ExitStatus)) );
-    connect( d->process, SIGNAL(readyRead()),
-             this, SLOT(slotExternalProgramOutput()) );
+        // always create a new process since we are called in a separate thread
+        if( d->process ) {
+            disconnect( d->process );
+            d->process->deleteLater();
+        }
+        d->process = new KProcess();
+        d->process->setOutputChannelMode( KProcess::MergedChannels );
+        connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)),
+                this, SLOT(slotExternalProgramFinished(int, QProcess::ExitStatus)) );
+        connect( d->process, SIGNAL(readyRead()),
+                this, SLOT(slotExternalProgramOutput()) );
 
-    d->process->setProgram( params );
-    d->process->start();
+        d->process->setProgram( params );
+        d->process->start();
 
-    if( d->process->waitForStarted() ) {
-        if( d->cmd.writeWaveHeader )
-            return writeWaveHeader();
-        else
-            return true;
+        if( d->process->waitForStarted() ) {
+            if( d->cmd.writeWaveHeader )
+                d->initialized = writeWaveHeader();
+            else
+                d->initialized = true;
+        }
+        else {
+            QString commandName = d->cmd.command.section( QRegExp("\\s+"), 0 );
+            if( !KStandardDirs::findExe( commandName ).isEmpty() )
+                setLastError( i18n("Could not find program '%1'",commandName) );
+
+            d->initialized = false;
+        }
+        
     }
     else {
-        QString commandName = d->cmd.command.section( QRegExp("\\s+"), 0 );
-        if( !KStandardDirs::findExe( commandName ).isEmpty() )
-            setLastError( i18n("Could not find program '%1'",commandName) );
-
-        return false;
+        setLastError( i18n("Invalid command: the command is empty.") );
+        d->initialized = false;
     }
+
+    return d->initialized;
 }
 
 
@@ -300,8 +307,7 @@ bool K3bExternalEncoder::writeWaveHeader()
 long K3bExternalEncoder::encodeInternal( const char* data, Q_ULONG len )
 {
     if( !d->initialized )
-        if( !initExternalEncoder( d->extension ) )
-            return -1;
+        return -1;
 
     if( d->process->state() == QProcess::Running ) {
 

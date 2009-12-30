@@ -26,29 +26,29 @@ public:
     K3bExternalEncoder( QObject* parent, const QVariantList& );
     ~K3bExternalEncoder();
 
-    QStringList extensions() const;
+    virtual QStringList extensions() const;
 
-    QString fileTypeComment( const QString& ) const;
+    virtual QString fileTypeComment( const QString& ) const;
 
-    int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
+    virtual int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
     /**
      * reimplemented since the external program is intended to write the file
      * TODO: allow writing to stdout.
      */
-    bool openFile( const QString& ext, const QString& filename, const K3b::Msf& length );
-    void closeFile();
-
+    virtual bool openFile( const QString& ext, const QString& filename, const K3b::Msf& length );
+    virtual bool isOpen() const;
+    virtual void closeFile();
 
 private Q_SLOTS:
     void slotExternalProgramFinished( int, QProcess::ExitStatus );
     void slotExternalProgramOutput();
 
 private:
-    void finishEncoderInternal();
-    bool initExternalEncoder( const QString& extension );
-    long encodeInternal( const char* data, Q_ULONG len );
-    void setMetaDataInternal( MetaDataField, const QString& );
+    virtual bool initEncoderInternal( const QString& extension, const K3b::Msf& length );
+    virtual void finishEncoderInternal();
+    virtual long encodeInternal( const char* data, Q_ULONG len );
+    virtual void setMetaDataInternal( MetaDataField, const QString& );
     bool writeWaveHeader();
 
     class Private;
