@@ -149,7 +149,7 @@ void K3bExternalEncoder::setMetaDataInternal( K3b::AudioEncoder::MetaDataField f
 
 void K3bExternalEncoder::finishEncoderInternal()
 {
-    if( d->process->state() == QProcess::Running ) {
+    if( d->process && d->process->state() == QProcess::Running ) {
         d->process->closeWriteChannel();
 
         // this is kind of evil...
