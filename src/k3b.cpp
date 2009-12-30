@@ -116,15 +116,21 @@ namespace {
     }
 
 
-    bool isCdDvdImage( const KUrl& url )
+    bool isDiscImage( const KUrl& url )
     {
         K3b::Iso9660 iso( url.toLocalFile() );
         if( iso.open() ) {
             iso.close();
             return true;
         }
-        else
-            return false;
+        
+        K3b::CueFileParser parser( url.toLocalFile() );
+        if( parser.isValid() &&
+            (parser.toc().contentType() == K3b::Device::DATA || parser.toc().contentType() == K3b::Device::MIXED) ) {
+            return true;
+        }
+            
+        return false;
     }
 
 
@@ -618,7 +624,7 @@ K3b::Doc* K3b::MainWindow::openDocument(const KUrl& url)
     //
     // First we check if this is an iso image in case someone wants to open one this way
     //
-    if( isCdDvdImage( url ) ) {
+    if( isDiscImage( url ) ) {
         slotWriteImage( url );
         return 0;
     }
@@ -1485,7 +1491,7 @@ void K3b::MainWindow::addUrls( const KUrl::List& urls )
     else if( K3b::View* view = activeView() ) {
         view->addUrls( urls );
     }
-    else if( urls.count() == 1 && isCdDvdImage( urls.first() ) ) {
+    else if( urls.count() == 1 && isDiscImage( urls.first() ) ) {
         slotWriteImage( urls.first() );
     }
     else if( areAudioFiles( urls ) ) {
