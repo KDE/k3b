@@ -19,8 +19,6 @@
 #include "k3bprocess.h"
 
 #include "k3baudioencoder.h"
-#include "k3bpluginconfigwidget.h"
-#include "ui_base_k3bsoxencoderconfigwidget.h"
 
 
 class K3bSoxEncoder : public K3b::AudioEncoder
@@ -38,8 +36,6 @@ public:
     virtual long long fileSize( const QString&, const K3b::Msf& msf ) const;
 
     virtual int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
-
-    virtual K3b::PluginConfigWidget* createConfigWidget( QWidget* parent = 0) const;
 
     /**
      * reimplemented since sox writes the file itself
@@ -61,18 +57,6 @@ private:
     Private* d;
 };
 
-
-class K3bSoxEncoderSettingsWidget : public K3b::PluginConfigWidget, public Ui::base_K3bSoxEncoderConfigWidget
-{
-    Q_OBJECT
-
-public:
-    K3bSoxEncoderSettingsWidget( QWidget* parent = 0 );
-    ~K3bSoxEncoderSettingsWidget();
-
-    public Q_SLOTS:
-    void loadConfig();
-    void saveConfig();
-};
+K3B_EXPORT_PLUGIN( k3bsoxencoder, K3bSoxEncoder )
 
 #endif

@@ -14,6 +14,7 @@
  */
 
 #include "k3bsoxencoder.h"
+#include "k3bsoxencoderdefaults.h"
 
 #include <config-k3b.h>
 
@@ -37,13 +38,13 @@
 #include <sys/types.h>
 
 
-K3B_EXPORT_PLUGIN( k3bsoxencoder, K3bSoxEncoder )
+namespace {
 
 // the sox external program
-class K3bSoxProgram : public K3b::ExternalProgram
+class SoxProgram : public K3b::ExternalProgram
 {
 public:
-    K3bSoxProgram()
+    SoxProgram()
         : K3b::ExternalProgram( "sox" ) {
     }
 
@@ -96,6 +97,7 @@ public:
     }
 };
 
+} // namespace
 
 class K3bSoxEncoder::Private
 {
@@ -109,7 +111,7 @@ K3bSoxEncoder::K3bSoxEncoder( QObject* parent, const QVariantList& )
     : K3b::AudioEncoder( parent )
 {
     if( k3bcore->externalBinManager()->program( "sox" ) == 0 )
-        k3bcore->externalBinManager()->addProgram( new K3bSoxProgram() );
+        k3bcore->externalBinManager()->addProgram( new SoxProgram() );
 
     d = new Private();
     d->process = 0;
@@ -192,14 +194,14 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension, const K3b::Ms
 
         KSharedConfig::Ptr c = KGlobal::config();
         KConfigGroup grp(c,"K3bSoxEncoderPlugin" );
-        if( grp.readEntry( "manual settings", false ) ) {
-            *d->process << "-r" << QString::number( grp.readEntry( "samplerate", 44100 ) )
-                        << "-c" << QString::number( grp.readEntry( "channels", 2 ) );
+        if( grp.readEntry( "manual settings", DEFAULT_MANUAL_SETTINGS ) ) {
+            *d->process << "-r" << QString::number( grp.readEntry( "samplerate", DEFAULT_SAMPLE_RATE ) )
+                        << "-c" << QString::number( grp.readEntry( "channels", DEFAULT_CHANNELS ) );
 
-            int size = grp.readEntry( "data size", 16 );
+            int size = grp.readEntry( "data size", DEFAULT_DATA_SIZE );
             *d->process << ( size == 8 ? QString("-b") : ( size == 32 ? QString("-l") : QString("-w") ) );
 
-            QString encoding = grp.readEntry( "data encoding", "signed" );
+            QString encoding = grp.readEntry( "data encoding", DEFAULT_DATA_ENCODING );
             if( encoding == "unsigned" )
                 *d->process << "-u";
             else if( encoding == "u-law" )
@@ -330,10 +332,10 @@ long long K3bSoxEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
     // for now we make a rough assumption based on the settings
     KSharedConfig::Ptr c = KGlobal::config();
     KConfigGroup grp(c, "K3bSoxEncoderPlugin" );
-    if( grp.readEntry( "manual settings", false ) ) {
-        int sr =  grp.readEntry( "samplerate", 44100 );
-        int ch = grp.readEntry( "channels", 2 );
-        int wsize = grp.readEntry( "data size", 16 );
+    if( grp.readEntry( "manual settings", DEFAULT_MANUAL_SETTINGS ) ) {
+        int sr =  grp.readEntry( "samplerate", DEFAULT_SAMPLE_RATE );
+        int ch = grp.readEntry( "channels", DEFAULT_CHANNELS );
+        int wsize = grp.readEntry( "data size", DEFAULT_DATA_SIZE );
 
         return msf.totalFrames()*sr*ch*wsize/75;
     }
@@ -342,114 +344,5 @@ long long K3bSoxEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
         return msf.audioBytes();
     }
 }
-
-
-K3b::PluginConfigWidget* K3bSoxEncoder::createConfigWidget( QWidget* parent ) const
-{
-    return new K3bSoxEncoderSettingsWidget( parent );
-}
-
-
-
-K3bSoxEncoderSettingsWidget::K3bSoxEncoderSettingsWidget( QWidget* parent )
-    : K3b::PluginConfigWidget( parent )
-{
-    setupUi( this );
-    m_editSamplerate->setValidator( new QIntValidator( m_editSamplerate ) );
-}
-
-
-K3bSoxEncoderSettingsWidget::~K3bSoxEncoderSettingsWidget()
-{
-}
-
-
-void K3bSoxEncoderSettingsWidget::loadConfig()
-{
-    KSharedConfig::Ptr c = KGlobal::config();
-    KConfigGroup grp(c, "K3bSoxEncoderPlugin" );
-
-    m_checkManual->setChecked( grp.readEntry( "manual settings", false ) );
-
-    int channels = grp.readEntry( "channels", 2 );
-    m_comboChannels->setCurrentIndex( channels == 4 ? 2 : channels-1 );
-
-    m_editSamplerate->setText( QString::number( grp.readEntry( "samplerate", 44100 ) ) );
-
-    QString encoding = grp.readEntry( "data encoding", "signed" );
-    if( encoding == "unsigned" )
-        m_comboEncoding->setCurrentIndex(1);
-    else if( encoding == "u-law" )
-        m_comboEncoding->setCurrentIndex(2);
-    else if( encoding == "A-law" )
-        m_comboEncoding->setCurrentIndex(3);
-    else if( encoding == "ADPCM" )
-        m_comboEncoding->setCurrentIndex(4);
-    else if( encoding == "IMA_ADPCM" )
-        m_comboEncoding->setCurrentIndex(5);
-    else if( encoding == "GSM" )
-        m_comboEncoding->setCurrentIndex(6);
-    else if( encoding == "Floating-point" )
-        m_comboEncoding->setCurrentIndex(7);
-    else
-        m_comboEncoding->setCurrentIndex(0);
-
-    int size = grp.readEntry( "data size", 16 );
-    m_comboSize->setCurrentIndex( size == 8 ? 0 : ( size == 32 ? 2 : 1 ) );
-}
-
-
-void K3bSoxEncoderSettingsWidget::saveConfig()
-{
-    KSharedConfig::Ptr c = KGlobal::config();
-
-    KConfigGroup grp (c, "K3bSoxEncoderPlugin" );
-
-    grp.writeEntry( "manual settings", m_checkManual->isChecked() );
-
-    grp.writeEntry( "channels", m_comboChannels->currentIndex() == 0
-                    ? 1
-                    : ( m_comboChannels->currentIndex() == 2
-                        ? 4
-                        : 2 ) );
-
-    grp.writeEntry( "data size", m_comboSize->currentIndex() == 0
-                    ? 8
-                    : ( m_comboSize->currentIndex() == 2
-                        ? 32
-                        : 16 ) );
-
-    grp.writeEntry( "samplerate", m_editSamplerate->text().toInt() );
-
-    QString enc;
-    switch( m_comboEncoding->currentIndex() ) {
-    case 1:
-        enc = "unsigned";
-        break;
-    case 2:
-        enc = "u-law";
-        break;
-    case 3:
-        enc = "A-law";
-        break;
-    case 4:
-        enc = "ADPCM";
-        break;
-    case 5:
-        enc = "IMA_ADPCM";
-        break;
-    case 6:
-        enc = "GSM";
-        break;
-    case 7:
-        enc = "Floating-point";
-        break;
-    default:
-        enc = "signed";
-        break;
-    }
-    grp.writeEntry( "data encoding", enc );
-}
-
 
 #include "k3bsoxencoder.moc"

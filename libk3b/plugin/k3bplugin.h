@@ -25,10 +25,8 @@
 #define K3B_PLUGIN_SYSTEM_VERSION 4
 
 
-class QWidget;
 
 namespace K3b {
-    class PluginConfigWidget;
 
 
     /**
@@ -57,13 +55,6 @@ namespace K3b {
         virtual QString category() const = 0;
 
         virtual QString categoryName() const = 0;
-
-        /**
-         * Returns a widget which configures the plugin.
-         *
-         * The caller has to destroy the widget
-         */
-        virtual PluginConfigWidget* createConfigWidget( QWidget* parent = 0 ) const;
 
     private:
         KPluginInfo m_pluginInfo;

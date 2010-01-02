@@ -21,6 +21,7 @@
 #include <kconfig.h>
 #include <kdebug.h>
 
+K3B_EXPORT_PLUGIN_CONFIG_WIDGET( kcm_<name>, K3b<name>EncoderConfigWidget )
 
 K3b<name>Encoder::K3b<name>Encoder( QObject* parent, const QVariantList& )
     : K3b::AudioEncoder( parent )
@@ -80,25 +81,19 @@ long long K3b<name>Encoder::fileSize( const QString&, const K3b::Msf& msf ) cons
 }
 
 
-K3b::PluginConfigWidget* K3b<name>Encoder::createConfigWidget( QWidget* parent ) const
-{
-    return new K3b<name>EncoderSettingsWidget( parent, name );
-}
 
-
-
-K3b<name>EncoderSettingsWidget::K3b<name>EncoderSettingsWidget( QWidget* parent )
+K3b<name>EncoderConfigWidget::K3b<name>EncoderConfigWidget( QWidget* parent )
     : K3b::PluginConfigWidget( parent )
 {
 }
 
 
-K3b<name>EncoderSettingsWidget::~K3b<name>EncoderSettingsWidget()
+K3b<name>EncoderConfigWidget::~K3b<name>EncoderConfigWidget()
 {
 }
 
 
-void K3b<name>EncoderSettingsWidget::loadConfig()
+void K3b<name>EncoderConfigWidget::load()
 {
     KSharedConfig::Ptr c = KGlobal::config();
     c->setGroup( "K3b<name>EncoderPlugin" );
@@ -107,11 +102,17 @@ void K3b<name>EncoderSettingsWidget::loadConfig()
 }
 
 
-void K3b<name>EncoderSettingsWidget::saveConfig()
+void K3b<name>EncoderConfigWidget::save()
 {
     KSharedConfig::Ptr c = KGlobal::config();
     c->setGroup( "K3b<name>EncoderPlugin" );
 
+    // PUT YOUR CODE HERE
+}
+
+
+void K3b<name>EncoderConfigWidget::defaults()
+{
     // PUT YOUR CODE HERE
 }
 

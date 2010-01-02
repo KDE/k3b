@@ -1,20 +1,36 @@
+#KCM
+set(k3bsoxencoderconfig_PART_SRCS
+    k3bsoxencoderconfigwidget.cpp)
 
+kde4_add_ui_files(k3bsoxencoderconfig_PART_SRCS
+    base_k3bsoxencoderconfigwidget.ui)
 
+kde4_add_plugin(kcm_k3bsoxencoder
+  ${k3bsoxencoderconfig_PART_SRCS})
 
-########### next target ###############
+target_link_libraries(kcm_k3bsoxencoder
+  k3bdevice
+  k3b
+  ${KDE4_KDECORE_LIBS}
+  ${KDE4_KDEUI_LIBS}
+  ${QT_QTGUI_LIBRARY})
 
-set(k3bsoxencoder_PART_SRCS k3bsoxencoder.cpp )
+#Plugin
+kde4_add_plugin(k3bsoxencoder
+  k3bsoxencoder.cpp)
 
-kde4_add_ui_files(k3bsoxencoder_PART_SRCS base_k3bsoxencoderconfigwidget.ui )
+target_link_libraries(k3bsoxencoder
+    k3bdevice
+    k3b
+    ${KDE4_KDE3SUPPORT_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${QT_QTGUI_LIBRARY} )
 
-kde4_add_plugin(k3bsoxencoder ${k3bsoxencoder_PART_SRCS})
-
-target_link_libraries(k3bsoxencoder k3bdevice ${KDE4_KDE3SUPPORT_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} k3b )
-
-install(TARGETS k3bsoxencoder DESTINATION ${PLUGIN_INSTALL_DIR} )
-
-
-########### install files ###############
-
-install( FILES  k3bsoxencoder.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(TARGETS
+    k3bsoxencoder kcm_k3bsoxencoder
+    DESTINATION ${PLUGIN_INSTALL_DIR} )
+    
+install(FILES
+    k3bsoxencoder.desktop kcm_k3bsoxencoder.desktop
+    DESTINATION ${SERVICES_INSTALL_DIR})
 

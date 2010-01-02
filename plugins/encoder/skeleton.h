@@ -37,8 +37,6 @@ public:
 
     int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-    K3b::PluginConfigWidget* createConfigWidget( QWidget* parent = 0 ) const;
-
 private:
     void finishEncoderInternal();
     bool initEncoderInternal( const QString& extension );
@@ -47,17 +45,18 @@ private:
 };
 
 
-class K3b<name>EncoderSettingsWidget : public K3b::PluginConfigWidget
+class K3b<name>EncoderConfigWidget : public K3b::PluginConfigWidget
 {
     Q_OBJECT
 
 public:
-    K3b<name>EncoderSettingsWidget( QWidget* parent = 0 );
-    ~K3b<name>EncoderSettingsWidget();
+    K3b<name>EncoderConfigWidget( QWidget* parent = 0 );
+    ~K3b<name>EncoderConfigWidget();
 
     public Q_SLOTS:
-    void loadConfig();
-    void saveConfig();
+    virtual void load();
+    virtual void save();
+    virtual void defaults();
 };
 
 K3B_EXPORT_PLUGIN(k3b<name>encoder, K3b<name>Encoder)
