@@ -221,20 +221,20 @@ void K3b::AudioCdView::initActions()
     KAction* actionDeselect = K3b::createAction(this, i18n("Uncheck Track"), 0, 0, this,
                                                 SLOT(slotDeselect()), actionCollection(),
                                                 "deselect_track" );
-    KAction* actionEditTrackCddbInfo = K3b::createAction(this, i18n("Edit Track cddb Info"), "document-properties", 0, this,
+    KAction* actionEditTrackCddbInfo = K3b::createAction(this, i18n("Edit Track CDDB Info"), "document-properties", 0, this,
                                                          SLOT(slotEditTrackCddb()), actionCollection(),
                                                          "edit_track_cddb" );
-    KAction* actionEditAlbumCddbInfo = K3b::createAction(this, i18n("Edit Album cddb Info"), "help-about", 0, this,
+    KAction* actionEditAlbumCddbInfo = K3b::createAction(this, i18n("Edit Album CDDB Info"), "help-about", 0, this,
                                                          SLOT(slotEditAlbumCddb()), actionCollection(),
                                                          "edit_album_cddb" );
 
     KAction* actionStartRip = K3b::createAction(this, i18n("Start Ripping"), "cddarip", 0, this,
                                                 SLOT(startRip()), actionCollection(), "start_rip" );
 
-    KAction* actionQueryCddb = K3b::createAction(this, i18n("Query cddb"), "view-refresh", 0, this,
+    KAction* actionQueryCddb = K3b::createAction(this, i18n("Query CDDB"), "view-refresh", 0, this,
                                                  SLOT(queryCddb()), actionCollection(), "query_cddb" );
 
-    KAction* actionSaveCddbLocally = K3b::createAction(this, i18n("Save Cddb Entry Locally"), "document-save", 0, this,
+    KAction* actionSaveCddbLocally = K3b::createAction(this, i18n("Save CDDB Entry Locally"), "document-save", 0, this,
                                                        SLOT(slotSaveCddbLocally()), actionCollection(), "save_cddb_local" );
 
     // TODO: set the actions tooltips and whatsthis infos
@@ -301,7 +301,7 @@ void K3b::AudioCdView::slotEditTrackCddb()
         int trackIndex = items.first();
 
         KDialog d( this);
-        d.setCaption(i18n("Cddb Track %1", trackIndex) );
+        d.setCaption(i18n("CDDB Track %1", trackIndex) );
         d.setButtons(KDialog::Ok|KDialog::Cancel);
         d.setDefaultButton(KDialog::Ok);
         d.setModal(true);

@@ -22,32 +22,31 @@
 #include "k3bfileitem.h"
 #include "k3blistview.h"
 
-#include <kdebug.h>
-#include <kcomponentdata.h>
-#include <kmessagebox.h>
-#include <klocale.h>
-#include <kfilemetainfo.h>
-#include <kcombobox.h>
-#include <kconfig.h>
-#include <kmimetype.h>
-#include <kdialog.h>
+#include <KComboBox>
+#include <KComponentData>
+#include <KConfig>
+#include <KDebug>
+#include <KDialog>
+#include <KFileMetaInfo>
 #include <KIcon>
+#include <KLocale>
+#include <KMessageBox>
+#include <KMimeType>
 
-#include <qstring.h>
-#include <qfile.h>
-#include <qcheckbox.h>
-#include <qradiobutton.h>
-#include <qpushbutton.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qtooltip.h>
-
-#include <qpair.h>
-#include <qlayout.h>
+#include <QCheckBox>
+#include <QFile>
+#include <QGroupBox>
+#include <QHash>
+#include <QLabel>
+#include <QLatin1String>
+#include <QLayout>
+#include <QPair>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QString>
+#include <QToolTip>
+#include <QTreeWidget>
 #include <QVBoxLayout>
-#include <QtCore/QHash>
-#include <QtCore/QLatin1String>
-#include <QtGui/QTreeWidget>
 
 #include <taglib/tag.h>
 #include <taglib/fileref.h>
@@ -384,6 +383,7 @@ K3bAudioMetainfoRenamerPlugin::K3bAudioMetainfoRenamerPlugin( QObject* parent, c
 {
     setText( i18n("Rename Audio Files") );
     setToolTip( i18n("Rename audio files based on their meta info.") );
+    setIcon( KIcon( "edit-rename" ) );
 }
 
 

@@ -26,13 +26,13 @@
 #include "k3bprogressdialog.h"
 #include "k3bcddb.h"
 
-#include <kdebug.h>
-#include <kaction.h>
-#include <kmessagebox.h>
-#include <klocale.h>
-#include <kconfig.h>
+#include <KAction>
+#include <KConfig>
+#include <KDebug>
+#include <KLocale>
+#include <KMessageBox>
 
-#include <qstring.h>
+#include <QString>
 
 #include <libkcddb/cdinfo.h>
 
@@ -44,8 +44,9 @@ K3bAudioProjectCddbPlugin::K3bAudioProjectCddbPlugin( QObject* parent, const QVa
     : K3b::ProjectPlugin( K3b::Doc::AudioProject, false, parent ),
       m_progress(0)
 {
-    setText( i18n("Query Cddb") );
-    setToolTip( i18n("Query a cddb entry for the current audio project.") );
+    setText( i18n("Query CDDB") );
+    setToolTip( i18n("Query a CDDB entry for the current audio project.") );
+    setIcon( KIcon( "view-refresh" ) );
 }
 
 
@@ -62,7 +63,7 @@ void K3bAudioProjectCddbPlugin::activate( K3b::Doc* doc, QWidget* parent )
     m_canceled = false;
 
     if( !m_doc || m_doc->numOfTracks() == 0 ) {
-        KMessageBox::sorry( parent, i18n("Please select a non-empty audio project for a cddb query.") );
+        KMessageBox::sorry( parent, i18n("Please select a non-empty audio project for a CDDB query.") );
     }
     else {
         if( !m_progress ) {

@@ -124,12 +124,12 @@ void K3b::View::addPluginButtons()
          it != pl.constEnd(); ++it ) {
         K3b::ProjectPlugin* pp = dynamic_cast<K3b::ProjectPlugin*>( *it );
         if( pp && (pp->type() & m_doc->type()) ) {
-            QAction* button = toolBox()->addAction(     pp->text(),
-                                                        this,
-                                                        SLOT(slotPluginButtonClicked()) );
-            button->setIcon(QIcon(pp->icon()));
-            button->setToolTip (pp->toolTip());
-            button->setWhatsThis(pp->whatsThis());
+            QAction* button = toolBox()->addAction( pp->text(),
+                                                    this,
+                                                    SLOT(slotPluginButtonClicked()) );
+            button->setIcon( pp->icon() );
+            button->setToolTip( pp->toolTip() );
+            button->setWhatsThis( pp->whatsThis() );
             m_plugins.insert( button, pp );
         }
     }

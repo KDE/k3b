@@ -18,6 +18,7 @@
 #include "k3bdoc.h"
 #include "k3bplugin.h"
 
+#include <KIcon>
 #include <QFlags>
 
 #include "k3b_export.h"
@@ -104,7 +105,7 @@ namespace K3b {
         QString text() const { return m_text; }
         QString toolTip() const { return m_toolTip; }
         QString whatsThis() const { return m_whatsThis; }
-        QString icon() const { return m_icon; }
+        KIcon icon() const { return m_icon; }
 
         bool hasGUI() const { return m_hasGUI; }
 
@@ -135,7 +136,7 @@ namespace K3b {
         void setText( const QString& s ) { m_text = s; }
         void setToolTip( const QString& s ) { m_toolTip = s; }
         void setWhatsThis( const QString& s ) { m_whatsThis = s; }
-        void setIcon( const QString& s ) { m_icon = s; }
+        void setIcon( const KIcon& i ) { m_icon = i; }
 
     private:
         Type m_type;
@@ -143,7 +144,7 @@ namespace K3b {
         QString m_text;
         QString m_toolTip;
         QString m_whatsThis;
-        QString m_icon;
+        KIcon m_icon;
     };
 }
 
