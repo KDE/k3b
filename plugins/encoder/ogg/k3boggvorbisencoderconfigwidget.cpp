@@ -14,6 +14,7 @@
  */
 
 #include "k3boggvorbisencoderconfigwidget.h"
+#include "k3boggvorbisencoderdefaults.h"
 #include "k3bcore.h"
 
 #include <KConfig>
@@ -51,14 +52,6 @@ namespace {
         320,
         400
     };
-    
-    
-    const bool DEFAULT_MANUAL_BITRATE = false;
-    const int DEFAULT_QUALITY_LEVEL = 4;
-    const int DEFAULT_BITRATE_UPPER = -1;
-    const int DEFAULT_BITRATE_NOMINAL = -1;
-    const int DEFAULT_BITRATE_LOWER = -1;
-    const int DEFAULT_SAMPLERATE = 44100;
     
 } // namespace
 

@@ -14,6 +14,7 @@
  */
 
 #include "k3boggvorbisencoder.h"
+#include "k3boggvorbisencoderdefaults.h"
 #include <config-k3b.h>
 
 #include "k3bcore.h"
@@ -398,12 +399,12 @@ void K3bOggVorbisEncoder::loadConfig()
     KSharedConfig::Ptr c = KGlobal::config();
     KConfigGroup grp(c, "K3bOggVorbisEncoderPlugin" );
 
-    d->manualBitrate = grp.readEntry( "manual bitrate", false );
-    d->qualityLevel = grp.readEntry( "quality level", 4 );
-    d->bitrateUpper = grp.readEntry( "bitrate upper", -1 );
-    d->bitrateNominal = grp.readEntry( "bitrate nominal", -1 );
-    d->bitrateLower = grp.readEntry( "bitrate lower", -1 );
-    //  d->sampleRate = c->readEntry( "samplerate", 44100 );
+    d->manualBitrate = grp.readEntry( "manual bitrate", DEFAULT_MANUAL_BITRATE );
+    d->qualityLevel = grp.readEntry( "quality level", DEFAULT_QUALITY_LEVEL );
+    d->bitrateUpper = grp.readEntry( "bitrate upper", DEFAULT_BITRATE_UPPER );
+    d->bitrateNominal = grp.readEntry( "bitrate nominal", DEFAULT_BITRATE_NOMINAL );
+    d->bitrateLower = grp.readEntry( "bitrate lower", DEFAULT_BITRATE_LOWER );
+    //  d->sampleRate = c->readEntry( "samplerate", DEFAULT_SAMPLERATE );
 }
 
 
@@ -421,14 +422,14 @@ long long K3bOggVorbisEncoder::fileSize( const QString&, const K3b::Msf& msf ) c
     // the following code is based on the size estimation from the audiocd kioslave
     // TODO: reimplement.
 
-    if( !grp.readEntry( "manual bitrate", false ) ) {
+    if( !grp.readEntry( "manual bitrate", DEFAULT_MANUAL_BITRATE ) ) {
         // Estimated numbers based on the Vorbis FAQ:
         // http://www.xiph.org/archives/vorbis-faq/200203/0030.html
 
 //     static long vorbis_q_bitrate[] = { 45, 60,  74,  86,  106, 120, 152,
 // 				       183, 207, 239, 309, 440 };
 
-        int qualityLevel = grp.readEntry( "quality level", 4 );
+        int qualityLevel = grp.readEntry( "quality level", DEFAULT_QUALITY_LEVEL );
 
         if( qualityLevel < -1 )
             qualityLevel = -1;

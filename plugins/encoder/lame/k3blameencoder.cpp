@@ -14,6 +14,7 @@
  */
 
 #include "k3blameencoder.h"
+#include "k3blameencoderdefaults.h"
 #include "k3blametyes.h"
 
 #include <config-k3b.h>
@@ -132,11 +133,11 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
     //
     // Choose the quality level
     //
-    if( grp.readEntry( "Manual Bitrate Settings", false ) ) {
+    if( grp.readEntry( "Manual Bitrate Settings", DEFAULT_MANUAL_BITRATE ) ) {
         //
         // Mode
         //
-        QString mode = grp.readEntry( "Mode", "stereo" );
+        QString mode = grp.readEntry( "Mode", DEFAULT_MODE );
         if( mode == "stereo" )
             lame_set_mode( d->flags, STEREO );
         else if( mode == "joint" )
@@ -147,21 +148,21 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
         //
         // Variable Bitrate
         //
-        if( grp.readEntry( "VBR", false ) ) {
+        if( grp.readEntry( "VBR", DEFAULT_VBR ) ) {
             // we use the default algorithm here
             lame_set_VBR( d->flags, vbr_default );
 
-            if( grp.readEntry( "Use Maximum Bitrate", false ) ) {
-                lame_set_VBR_max_bitrate_kbps( d->flags, grp.readEntry( "Maximum Bitrate", 224 ) );
+            if( grp.readEntry( "Use Maximum Bitrate", DEFAULT_USE_MAXIMUM_BITRATE ) ) {
+                lame_set_VBR_max_bitrate_kbps( d->flags, grp.readEntry( "Maximum Bitrate", DEFAULT_MAXIMUM_BITRATE ) );
             }
-            if( grp.readEntry( "Use Minimum Bitrate", false ) ) {
-                lame_set_VBR_min_bitrate_kbps( d->flags, grp.readEntry( "Minimum Bitrate", 32 ) );
+            if( grp.readEntry( "Use Minimum Bitrate", DEFAULT_USE_MINIMUM_BITRATE ) ) {
+                lame_set_VBR_min_bitrate_kbps( d->flags, grp.readEntry( "Minimum Bitrate", DEFAULT_MINIMUM_BITRATE ) );
 
                 // TODO: lame_set_hard_min
             }
-            if( grp.readEntry( "Use Average Bitrate", true ) ) {
+            if( grp.readEntry( "Use Average Bitrate", DEFAULT_USE_AVERAGE_BITRATE ) ) {
                 lame_set_VBR( d->flags, vbr_abr );
-                lame_set_VBR_mean_bitrate_kbps( d->flags, grp.readEntry( "Average Bitrate", 128 ) );
+                lame_set_VBR_mean_bitrate_kbps( d->flags, grp.readEntry( "Average Bitrate", DEFAULT_AVERAGE_BITRATE ) );
             }
         }
 
@@ -170,7 +171,7 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
         //
         else {
             lame_set_VBR( d->flags, vbr_off );
-            lame_set_brate( d->flags, grp.readEntry( "Constant Bitrate", 128 ) );
+            lame_set_brate( d->flags, grp.readEntry( "Constant Bitrate", DEFAULT_CONSTANT_BITRATE ) );
         }
     }
 
@@ -179,7 +180,7 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
         // In lame 0 is the highest quality. Since that is just confusing for the user
         // if we call the setting "Quality" we simply invert the value.
         //
-        int q = grp.readEntry( "Quality Level", 5 );
+        int q = grp.readEntry( "Quality Level", DEFAULT_QUALITY_LEVEL );
         if( q < 0 ) q = 0;
         if( q > 9 ) q = 9;
 
@@ -201,10 +202,10 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
     //
     // file options
     //
-    lame_set_copyright( d->flags, grp.readEntry( "Copyright", false ) );
-    lame_set_original( d->flags, grp.readEntry( "Original", true ) );
-    lame_set_strict_ISO( d->flags, grp.readEntry( "ISO compliance", false ) );
-    lame_set_error_protection( d->flags, grp.readEntry( "Error Protection", false ) );
+    lame_set_copyright( d->flags, grp.readEntry( "Copyright", DEFAULT_COPYRIGHT ) );
+    lame_set_original( d->flags, grp.readEntry( "Original", DEFAULT_ORIGINAL ) );
+    lame_set_strict_ISO( d->flags, grp.readEntry( "ISO compliance", DEFAULT_ISO_COMPLIANCE ) );
+    lame_set_error_protection( d->flags, grp.readEntry( "Error Protection", DEFAULT_ERROR_PROTECTION ) );
 
 
     //
@@ -217,7 +218,7 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
     // In lame 0 is the highest quality. Since that is just confusing for the user
     // if we call the setting "Quality" we simply invert the value.
     //
-    int q = grp.readEntry( "Encoder Quality", 7 );
+    int q = grp.readEntry( "Encoder Quality", DEFAULT_ENCODER_QUALITY );
     if( q < 0 ) q = 0;
     if( q > 9 ) q = 9;
     lame_set_quality( d->flags, 9-q );
@@ -322,23 +323,23 @@ long long K3bLameEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
     KSharedConfig::Ptr c = KGlobal::config();
     KConfigGroup grp(c, "K3bLameEncoderPlugin" );
     int bitrate = 0;
-    if( grp.readEntry( "Manual Bitrate Settings", false ) ) {
-        if( grp.readEntry( "VBR", false ) ) {
-            if( grp.readEntry( "Use Maximum Bitrate", false ) )
-                bitrate = grp.readEntry( "Maximum Bitrate", 224 );
-            if( grp.readEntry( "Use Minimum Bitrate", false ) )
+    if( grp.readEntry( "Manual Bitrate Settings", DEFAULT_MANUAL_BITRATE ) ) {
+        if( grp.readEntry( "VBR", DEFAULT_VBR ) ) {
+            if( grp.readEntry( "Use Maximum Bitrate", DEFAULT_USE_MAXIMUM_BITRATE ) )
+                bitrate = grp.readEntry( "Maximum Bitrate", DEFAULT_MAXIMUM_BITRATE );
+            if( grp.readEntry( "Use Minimum Bitrate", DEFAULT_USE_MINIMUM_BITRATE ) )
                 bitrate = ( bitrate > 0
-                            ? (bitrate - grp.readEntry( "Minimum Bitrate", 32 )) / 2
-                            : grp.readEntry( "Minimum Bitrate", 32 ) );
-            if( grp.readEntry( "Use Average Bitrate", true ) )
-                bitrate = grp.readEntry( "Average Bitrate", 128 );
+                            ? (bitrate - grp.readEntry( "Minimum Bitrate", DEFAULT_MINIMUM_BITRATE )) / 2
+                            : grp.readEntry( "Minimum Bitrate", DEFAULT_MINIMUM_BITRATE ) );
+            if( grp.readEntry( "Use Average Bitrate", DEFAULT_USE_AVERAGE_BITRATE ) )
+                bitrate = grp.readEntry( "Average Bitrate", DEFAULT_AVERAGE_BITRATE );
         }
         else {
-            bitrate = grp.readEntry( "Constant Bitrate", 128 );
+            bitrate = grp.readEntry( "Constant Bitrate", DEFAULT_CONSTANT_BITRATE );
         }
     }
     else {
-        int q = grp.readEntry( "Quality Level", 5 );
+        int q = grp.readEntry( "Quality Level", DEFAULT_ENCODER_QUALITY );
         if( q < 0 ) q = 0;
         if( q > 9 ) q = 9;
         bitrate = s_lame_preset_approx_bitrates[q];
