@@ -14,7 +14,7 @@ kde4_add_ui_files(kcm_k3boggvorbisencoder_PART_SRCS
 kde4_add_plugin(kcm_k3boggvorbisencoder
   ${kcm_k3boggvorbisencoder_PART_SRCS})
 target_link_libraries(kcm_k3boggvorbisencoder
-  ${KDE4_KDEUI_LIBS} ${QT_QT3SUPPORT_LIBRARY}
+  ${KDE4_KDEUI_LIBS}
   k3b k3bdevice
   ${OGGVORBIS_LIBRARIES})
 

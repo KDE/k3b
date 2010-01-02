@@ -20,7 +20,6 @@
 #include "k3bdatadoc.h"
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
-#include "k3blistview.h"
 
 #include <KComboBox>
 #include <KComponentData>

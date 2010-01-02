@@ -1,362 +1,417 @@
-<ui version="4.0" stdsetdef="1" >
-  <author>Sebastian Trueg</author>
-  <comment></comment>
-  <exportmacro></exportmacro>
-  <class>base_K3bOggVorbisEncoderSettingsWidget</class>
-  <widget class="QWidget" name="Form1" >
-    <property name="geometry" >
-      <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>335</width>
-        <height>271</height>
-      </rect>
-    </property>
-    <layout class="QVBoxLayout" >
-      <property name="margin" >
-        <number>0</number>
-      </property>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>Sebastian Trueg</author>
+ <class>base_K3bOggVorbisEncoderSettingsWidget</class>
+ <widget class="QWidget" name="base_K3bOggVorbisEncoderSettingsWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>335</width>
+    <height>271</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QGroupBox" name="groupBox1" native="true">
+     <property name="title" stdset="0">
+      <string>File Quality</string>
+     </property>
+     <layout class="QVBoxLayout">
       <item>
-        <widget class="Q3ButtonGroup" name="buttonGroup1" >
-          <property name="title" >
-            <string>File Quality</string>
+       <layout class="QHBoxLayout">
+        <item>
+         <widget class="QRadioButton" name="m_radioQualityLevel">
+          <property name="toolTip">
+           <string>Controls the quality of the encoded files</string>
           </property>
-          <layout class="QVBoxLayout" >
-            <item>
-              <layout class="QHBoxLayout" >
-                <item>
-                  <widget class="QRadioButton" name="m_radioQualityLevel" >
-                    <property name="text" >
-                      <string>&amp;Quality level:</string>
-                    </property>
-                    <property name="checked" >
-                      <bool>true</bool>
-                    </property>
-                    <property name="toolTip" stdset="0" >
-                      <string>Controls the quality of the encoded files</string>
-                    </property>
-                    <property name="whatsThis" stdset="0" >
-                      <string>&lt;p>Vorbis' audio quality is not best measured in kilobits per second, but on a scale from -1 to 10 called "quality". &lt;p>For now, quality -1 is roughly equivalent to 45kbps average, 5 is roughly 160kbps, and 10 gives about 400kbps. Most people seeking very-near-CD-quality audio encode at a quality of 5 or, for lossless stereo coupling, 6. The default setting is quality 3, which at approximately 110kbps gives a smaller filesize and significantly better fidelity than .mp3 compression at 128kbps. &lt;p>&lt;em>This explanation was copied from the www.vorbis.com FAQ.&lt;/em></string>
-                    </property>
-                  </widget>
-                </item>
-                <item>
-                  <widget class="QLabel" name="m_labelQualityLevel" >
-                    <property name="font" >
-                      <font>
-                        <bold>true</bold>
-                      </font>
-                    </property>
-                    <property name="text" >
-                      <string>textLabel1</string>
-                    </property>
-                    <property name="alignment" >
-                      <set>Qt::AlignVCenter|Qt::AlignRight</set>
-                    </property>
-                    <property name="wordWrap" >
-                      <bool>false</bool>
-                    </property>
-                  </widget>
-                </item>
-              </layout>
-            </item>
-            <item>
-              <widget class="Q3Frame" name="frame6" >
-                <property name="frameShape" >
-                  <enum>NoFrame</enum>
-                </property>
-                <property name="frameShadow" >
-                  <enum>Plain</enum>
-                </property>
-                <layout class="QHBoxLayout" >
-                  <property name="margin" >
-                    <number>0</number>
-                  </property>
-                  <item>
-                    <spacer name="spacer2_2" >
-                      <property name="sizeHint" >
-                        <size>
-                          <width>20</width>
-                          <height>20</height>
-                        </size>
-                      </property>
-                      <property name="sizeType" >
-                        <enum>QSizePolicy::Fixed</enum>
-                      </property>
-                      <property name="orientation" >
-                        <enum>Qt::Horizontal</enum>
-                      </property>
-                    </spacer>
-                  </item>
-                  <item>
-                    <layout class="QGridLayout" >
-                      <item rowspan="1" row="0" column="0" colspan="2" >
-                        <widget class="QSlider" name="m_slideQualityLevel" >
-                          <property name="minimum" >
-                            <number>-1</number>
-                          </property>
-                          <property name="maximum" >
-                            <number>10</number>
-                          </property>
-                          <property name="pageStep" >
-                            <number>3</number>
-                          </property>
-                          <property name="value" >
-                            <number>3</number>
-                          </property>
-                          <property name="orientation" >
-                            <enum>Qt::Horizontal</enum>
-                          </property>
-                        </widget>
-                      </item>
-                      <item row="1" column="1" >
-                        <widget class="QLabel" name="textLabel4" >
-                          <property name="font" >
-                            <font>
-                              <italic>true</italic>
-                            </font>
-                          </property>
-                          <property name="text" >
-                            <string>high quality</string>
-                          </property>
-                          <property name="alignment" >
-                            <set>Qt::AlignVCenter|Qt::AlignRight</set>
-                          </property>
-                          <property name="wordWrap" >
-                            <bool>false</bool>
-                          </property>
-                        </widget>
-                      </item>
-                      <item row="1" column="0" >
-                        <widget class="QLabel" name="textLabel3_2" >
-                          <property name="font" >
-                            <font>
-                              <italic>true</italic>
-                            </font>
-                          </property>
-                          <property name="text" >
-                            <string>small file</string>
-                          </property>
-                          <property name="wordWrap" >
-                            <bool>false</bool>
-                          </property>
-                        </widget>
-                      </item>
-                    </layout>
-                  </item>
-                </layout>
-              </widget>
-            </item>
-            <item>
-              <spacer name="spacer9" >
-                <property name="sizeHint" >
-                  <size>
-                    <width>20</width>
-                    <height>20</height>
-                  </size>
-                </property>
-                <property name="sizeType" >
-                  <enum>QSizePolicy::Fixed</enum>
-                </property>
-                <property name="orientation" >
-                  <enum>Qt::Vertical</enum>
-                </property>
-              </spacer>
-            </item>
-            <item>
-              <widget class="QRadioButton" name="m_radioManual" >
-                <property name="text" >
-                  <string>M&amp;anual settings:</string>
-                </property>
-              </widget>
-            </item>
-            <item>
-              <layout class="QHBoxLayout" >
-                <item>
-                  <spacer name="spacer2" >
-                    <property name="sizeHint" >
-                      <size>
-                        <width>20</width>
-                        <height>21</height>
-                      </size>
-                    </property>
-                    <property name="sizeType" >
-                      <enum>QSizePolicy::Fixed</enum>
-                    </property>
-                    <property name="orientation" >
-                      <enum>Qt::Horizontal</enum>
-                    </property>
-                  </spacer>
-                </item>
-                <item>
-                  <widget class="Q3Frame" name="frame3" >
-                    <property name="enabled" >
-                      <bool>false</bool>
-                    </property>
-                    <property name="frameShape" >
-                      <enum>NoFrame</enum>
-                    </property>
-                    <property name="frameShadow" >
-                      <enum>Raised</enum>
-                    </property>
-                    <layout class="QGridLayout" >
-                      <property name="margin" >
-                        <number>0</number>
-                      </property>
-                      <item row="0" column="0" >
-                        <widget class="QCheckBox" name="m_checkBitrateUpper" >
-                          <property name="text" >
-                            <string>&amp;Upper bitrate:</string>
-                          </property>
-                        </widget>
-                      </item>
-                      <item row="2" column="0" >
-                        <widget class="QCheckBox" name="m_checkBitrateLower" >
-                          <property name="text" >
-                            <string>Lower &amp;bitrate:</string>
-                          </property>
-                        </widget>
-                      </item>
-                      <item row="0" column="1" >
-                        <widget class="KIntNumInput" name="m_inputBitrateUpper" >
-                          <property name="enabled" >
-                            <bool>false</bool>
-                          </property>
-                          <property name="sizePolicy" >
-                            <sizepolicy>
-                              <hsizetype>1</hsizetype>
-                              <vsizetype>0</vsizetype>
-                              <horstretch>0</horstretch>
-                              <verstretch>0</verstretch>
-                            </sizepolicy>
-                          </property>
-                        </widget>
-                      </item>
-                      <item row="1" column="1" >
-                        <widget class="KIntNumInput" name="m_inputBitrateNominal" >
-                          <property name="enabled" >
-                            <bool>false</bool>
-                          </property>
-                          <property name="sizePolicy" >
-                            <sizepolicy>
-                              <hsizetype>1</hsizetype>
-                              <vsizetype>0</vsizetype>
-                              <horstretch>0</horstretch>
-                              <verstretch>0</verstretch>
-                            </sizepolicy>
-                          </property>
-                        </widget>
-                      </item>
-                      <item row="2" column="1" >
-                        <widget class="KIntNumInput" name="m_inputBitrateLower" >
-                          <property name="enabled" >
-                            <bool>false</bool>
-                          </property>
-                        </widget>
-                      </item>
-                      <item row="1" column="2" >
-                        <widget class="QLabel" name="textLabel2" >
-                          <property name="text" >
-                            <string>kbps</string>
-                          </property>
-                          <property name="wordWrap" >
-                            <bool>false</bool>
-                          </property>
-                        </widget>
-                      </item>
-                      <item row="2" column="2" >
-                        <widget class="QLabel" name="textLabel3" >
-                          <property name="text" >
-                            <string>kbps</string>
-                          </property>
-                          <property name="wordWrap" >
-                            <bool>false</bool>
-                          </property>
-                        </widget>
-                      </item>
-                      <item row="0" column="2" >
-                        <widget class="QLabel" name="textLabel1" >
-                          <property name="text" >
-                            <string>kbps</string>
-                          </property>
-                          <property name="wordWrap" >
-                            <bool>false</bool>
-                          </property>
-                        </widget>
-                      </item>
-                      <item row="1" column="0" >
-                        <widget class="QCheckBox" name="m_checkBitrateNominal" >
-                          <property name="sizePolicy" >
-                            <sizepolicy>
-                              <hsizetype>1</hsizetype>
-                              <vsizetype>0</vsizetype>
-                              <horstretch>1</horstretch>
-                              <verstretch>0</verstretch>
-                            </sizepolicy>
-                          </property>
-                          <property name="text" >
-                            <string>&amp;Nominal bitrate:</string>
-                          </property>
-                        </widget>
-                      </item>
-                    </layout>
-                  </widget>
-                </item>
-              </layout>
-            </item>
-          </layout>
-        </widget>
+          <property name="whatsThis">
+           <string>&lt;p&gt;Vorbis' audio quality is not best measured in kilobits per second, but on a scale from -1 to 10 called &quot;quality&quot;. &lt;p&gt;For now, quality -1 is roughly equivalent to 45kbps average, 5 is roughly 160kbps, and 10 gives about 400kbps. Most people seeking very-near-CD-quality audio encode at a quality of 5 or, for lossless stereo coupling, 6. The default setting is quality 3, which at approximately 110kbps gives a smaller filesize and significantly better fidelity than .mp3 compression at 128kbps. &lt;p&gt;&lt;em&gt;This explanation was copied from the www.vorbis.com FAQ.&lt;/em&gt;</string>
+          </property>
+          <property name="text">
+           <string>&amp;Quality level:</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="m_labelQualityLevel">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>textLabel1</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="wordWrap">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
-    </layout>
-  </widget>
-  <layoutdefault spacing="6" margin="11" />
-    <customwidgets>
-    <customwidget>
-      <class>KIntNumInput</class>
-      <extends>QWidget</extends>
-      <header>knuminput.h</header>
-      <container>1</container>
-    </customwidget>
-  </customwidgets>
-  <includes>
-    <include location="local" >knuminput.h</include>
-  </includes>
-  <connections>
-    <connection>
-      <sender>m_radioManual</sender>
-      <signal>toggled(bool)</signal>
-      <receiver>frame3</receiver>
-      <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-      <sender>m_checkBitrateUpper</sender>
-      <signal>toggled(bool)</signal>
-      <receiver>m_inputBitrateUpper</receiver>
-      <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-      <sender>m_checkBitrateNominal</sender>
-      <signal>toggled(bool)</signal>
-      <receiver>m_inputBitrateNominal</receiver>
-      <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-      <sender>m_checkBitrateLower</sender>
-      <signal>toggled(bool)</signal>
-      <receiver>m_inputBitrateLower</receiver>
-      <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-      <sender>m_radioQualityLevel</sender>
-      <signal>toggled(bool)</signal>
-      <receiver>m_labelQualityLevel</receiver>
-      <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-      <sender>m_radioQualityLevel</sender>
-      <signal>toggled(bool)</signal>
-      <receiver>frame6</receiver>
-      <slot>setEnabled(bool)</slot>
-    </connection>
-  </connections>
+      <item>
+       <widget class="QFrame" name="frame6">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <layout class="QHBoxLayout">
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item>
+          <spacer name="spacer2_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <layout class="QGridLayout">
+           <item row="0" column="0" colspan="2">
+            <widget class="QSlider" name="m_slideQualityLevel">
+             <property name="minimum">
+              <number>-1</number>
+             </property>
+             <property name="maximum">
+              <number>10</number>
+             </property>
+             <property name="pageStep">
+              <number>3</number>
+             </property>
+             <property name="value">
+              <number>3</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="textLabel4">
+             <property name="font">
+              <font>
+               <italic>true</italic>
+              </font>
+             </property>
+             <property name="text">
+              <string>high quality</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="wordWrap">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="textLabel3_2">
+             <property name="font">
+              <font>
+               <italic>true</italic>
+              </font>
+             </property>
+             <property name="text">
+              <string>small file</string>
+             </property>
+             <property name="wordWrap">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <spacer name="spacer9">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="m_radioManual">
+        <property name="text">
+         <string>M&amp;anual settings:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout">
+        <item>
+         <spacer name="spacer2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>21</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QFrame" name="frame3">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QGridLayout">
+           <property name="margin">
+            <number>0</number>
+           </property>
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="m_checkBitrateUpper">
+             <property name="text">
+              <string>&amp;Upper bitrate:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QCheckBox" name="m_checkBitrateLower">
+             <property name="text">
+              <string>Lower &amp;bitrate:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="KIntNumInput" name="m_inputBitrateUpper">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="KIntNumInput" name="m_inputBitrateNominal">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="KIntNumInput" name="m_inputBitrateLower">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QLabel" name="textLabel2">
+             <property name="text">
+              <string>kbps</string>
+             </property>
+             <property name="wordWrap">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QLabel" name="textLabel3">
+             <property name="text">
+              <string>kbps</string>
+             </property>
+             <property name="wordWrap">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QLabel" name="textLabel1">
+             <property name="text">
+              <string>kbps</string>
+             </property>
+             <property name="wordWrap">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QCheckBox" name="m_checkBitrateNominal">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>1</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>&amp;Nominal bitrate:</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>KIntNumInput</class>
+   <extends>QWidget</extends>
+   <header>knuminput.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <includes>
+  <include location="local">knuminput.h</include>
+ </includes>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>m_radioManual</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame3</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_checkBitrateUpper</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_inputBitrateUpper</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_checkBitrateNominal</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_inputBitrateNominal</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_checkBitrateLower</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_inputBitrateLower</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_radioQualityLevel</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_labelQualityLevel</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_radioQualityLevel</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame6</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

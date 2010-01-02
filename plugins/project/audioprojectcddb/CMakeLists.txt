@@ -9,7 +9,6 @@ target_link_libraries(k3baudioprojectcddbplugin
   ${KDE4_KDECORE_LIBS}
   ${KDE4_KDEUI_LIBS}
   ${KCDDB_LIBRARIES}
-  ${KDE4_KDE3SUPPORT_LIBS}
   k3b
   k3bdevice
   )
