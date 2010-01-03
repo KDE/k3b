@@ -242,7 +242,7 @@ void K3b::WritingModeWidget::determineSupportedModesFromMedium( const Medium& m 
 }
 
 
-void K3b::WritingModeWidget::determineSupportedModesFromMedium( Device::Device* dev )
+void K3b::WritingModeWidget::determineSupportedModesFromMedium( K3b::Device::Device* dev )
 {
     if( dev )
         determineSupportedModesFromMedium( k3bappcore->mediaCache()->medium( dev ) );

@@ -82,7 +82,7 @@ namespace K3b {
          * \param dev The device which contains the medium. May even be 0 in
          *            which case only the auto mode will be selected.
          */
-        void determineSupportedModesFromMedium( Device::Device* dev );
+        void determineSupportedModesFromMedium( K3b::Device::Device* dev );
 
     Q_SIGNALS:
         void writingModeChanged( WritingMode mode );
