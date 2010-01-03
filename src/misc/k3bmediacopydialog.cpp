@@ -269,7 +269,7 @@ void K3b::MediaCopyDialog::slotStartClicked()
     // Let's check the available size
     //
     if( m_checkCacheImage->isChecked() || m_checkOnlyCreateImage->isChecked() ) {
-        if( neededSize()/1024 > m_tempDirSelectionWidget->freeTempSpace() ) {
+        if( neededSize() > m_tempDirSelectionWidget->freeTempSpace() ) {
             if( KMessageBox::warningContinueCancel( this, i18n("There does not seem to be enough free space in the temporary folder. "
                                                                "Write anyway?") ) == KMessageBox::Cancel )
                 return;

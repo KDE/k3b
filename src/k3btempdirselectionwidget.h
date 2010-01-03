@@ -44,10 +44,9 @@ public:
     int selectionMode() const { return m_mode; }
 
     /**
-     * \return Free space in KB
-     * FIXME: use KIO::filesize_t and return the number of bytes
+     * \return Free space in bytes
      */
-    unsigned long freeTempSpace() const;
+    KIO::filesize_t freeTempSpace() const;
     QString tempPath() const;
     QString tempDirectory() const;
 
@@ -90,8 +89,7 @@ private:
     QLabel* m_labelFreeSpace;
     KUrlRequester* m_editDirectory;
 
-    mutable unsigned long m_freeTempSpace;
-    unsigned long m_requestedSize;
+    KIO::filesize_t m_requestedSize;
 
     int m_mode;
 

@@ -14,7 +14,6 @@
 
 
 #include "k3btempdirselectionwidget.h"
-#include "k3bglobals.h"
 #include "k3bcore.h"
 #include "k3bglobalsettings.h"
 
@@ -28,6 +27,7 @@
 #include <KColorScheme>
 #include <KConfig>
 #include <KDialog>
+#include <KDiskFreeSpaceInfo>
 #include <KFileDialog>
 #include <KIconLoader>
 #include <kio/global.h>
@@ -40,6 +40,7 @@
 K3b::TempDirSelectionWidget::TempDirSelectionWidget( QWidget *parent )
     : QGroupBox( parent ),
       m_labelCdSize(0),
+      m_requestedSize(0),
       m_defaultImageFileName( "k3b_image.iso" )
 {
     QGridLayout* layout = new QGridLayout( this );
@@ -90,39 +91,37 @@ K3b::TempDirSelectionWidget::~TempDirSelectionWidget()
 }
 
 
-unsigned long K3b::TempDirSelectionWidget::freeTempSpace() const
+KIO::filesize_t K3b::TempDirSelectionWidget::freeTempSpace() const
 {
     QString path = m_editDirectory->url().toLocalFile();
 
     if( !QFile::exists( path ) )
         path.truncate( path.lastIndexOf('/') );
 
-    unsigned long size;
-    K3b::kbFreeOnFs( path, size, m_freeTempSpace );
-
-    return m_freeTempSpace;
+    KDiskFreeSpaceInfo diskFreeSpaceInfo = KDiskFreeSpaceInfo::freeSpaceInfo( path );
+    return diskFreeSpaceInfo.available();
 }
 
 
 void K3b::TempDirSelectionWidget::slotUpdateFreeTempSpace()
 {
     // update the temp space
-    freeTempSpace();
+    KIO::filesize_t tempFreeSpace = freeTempSpace();
 
-    m_labelFreeSpace->setText( KIO::convertSizeFromKiB(m_freeTempSpace) );
-
-    if( m_labelCdSize ) {
-        const KColorScheme colorScheme( isEnabled() ? QPalette::Normal : QPalette::Disabled, KColorScheme::Window );
-        QColor textColor;
-        if( m_freeTempSpace < m_requestedSize/1024 )
-            textColor = colorScheme.foreground( KColorScheme::NegativeText ).color();
-        else
-            textColor = colorScheme.foreground( KColorScheme::NormalText ).color();
-        
-        QPalette pal( m_labelCdSize->palette() );
-        pal.setColor( QPalette::Text, textColor );
-        m_labelCdSize->setPalette( pal );
-    }
+    KColorScheme::ForegroundRole role;
+    if( tempFreeSpace < m_requestedSize )
+        role = KColorScheme::NegativeText;
+    else
+        role = KColorScheme::NormalText;
+    
+    QPalette pal( m_labelFreeSpace->palette() );
+    pal.setBrush( QPalette::Disabled, QPalette::WindowText, KColorScheme( QPalette::Disabled, KColorScheme::Window ).foreground( role ) );
+    pal.setBrush( QPalette::Active,   QPalette::WindowText, KColorScheme( QPalette::Active,   KColorScheme::Window ).foreground( role ) );
+    pal.setBrush( QPalette::Inactive, QPalette::WindowText, KColorScheme( QPalette::Inactive, KColorScheme::Window ).foreground( role ) );
+    pal.setBrush( QPalette::Normal,   QPalette::WindowText, KColorScheme( QPalette::Normal,   KColorScheme::Window ).foreground( role ) );
+    
+    m_labelFreeSpace->setPalette( pal );
+    m_labelFreeSpace->setText( KIO::convertSize(tempFreeSpace) );
 
     QTimer::singleShot( 1000, this, SLOT(slotUpdateFreeTempSpace()) );
 }
@@ -219,11 +218,11 @@ void K3b::TempDirSelectionWidget::setNeededSize( KIO::filesize_t bytes )
     if( !m_labelCdSize ) {
         QGridLayout* grid = static_cast<QGridLayout*>( layout() );
         grid->addWidget( new QLabel( i18n( "Size of project:" ), this ), 3, 0 );
-        m_labelCdSize = new QLabel( KIO::convertSize(bytes), this );
+        m_labelCdSize = new QLabel( KIO::convertSize(m_requestedSize), this );
         m_labelCdSize->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
         grid->addWidget( m_labelCdSize, 3, 1 );
     }
-    m_labelCdSize->setText( KIO::convertSize(bytes) );
+    m_labelCdSize->setText( KIO::convertSize(m_requestedSize) );
 }
 
 
