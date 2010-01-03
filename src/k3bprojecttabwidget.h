@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -26,8 +27,7 @@ namespace K3b {
 
 
 /**
- * An enhanced Tab Widget that hides the tabbar in case only one page has been inserted
- * and shows a context menu fpr K3b projects.
+ * An enhanced Tab Widget that shows a context menu fpr K3b projects.
  *
  * @author Sebastian Trueg
  */
@@ -40,34 +40,27 @@ namespace K3b {
         ProjectTabWidget( QWidget *parent = 0 );
         ~ProjectTabWidget();
 
-        void insertTab( Doc* );
+        void addTab( Doc* doc );
+        void removeTab( Doc* doc );
+        void setCurrentTab( Doc* doc );
+        Doc* currentTab() const;
 
-        void addTab( QWidget * child, const QString & label );
-        void addTab( QWidget * child, const QIcon & iconset, const QString & label );
-        void insertTab( QWidget * child, const QString & label, int index = -1 );
-        void insertTab( QWidget * child, const QIcon & iconset, const QString & label, int index = -1 );
-
+        /**
+         * adds the given action into the popup menu for the tabs
+         */
+        void addAction( KAction* action );
+        
+    Q_SIGNALS:
+        void tabCloseRequested( Doc* doc );
+        
+    protected:
         /**
          * \return the project for the tab at position \p pos or 0 in case the tab is
          * not a project tab.
          */
         Doc* projectAt( const QPoint& pos ) const;
 
-        /**
-         * inserts the given action into the popup menu for the tabs
-         */
-        void insertAction( KAction* );
-
         bool eventFilter( QObject* o, QEvent* e );
-        
-    Q_SIGNALS:
-        void docCloseRequested( Doc* doc );
-
-    protected:
-        virtual void tabInserted ( int index );
-
-    public Q_SLOTS:
-        void removePage( Doc* doc );
 
     private Q_SLOTS:
         void slotDocChanged( K3b::Doc* );

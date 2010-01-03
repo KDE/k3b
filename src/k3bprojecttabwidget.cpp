@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
- *           (C)      2009 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -91,42 +91,7 @@ K3b::ProjectTabWidget::~ProjectTabWidget()
 }
 
 
-void K3b::ProjectTabWidget::addTab( QWidget* child, const QString& label )
-{
-    QTabWidget::addTab( child, label );
-}
-
-
-void K3b::ProjectTabWidget::addTab( QWidget* child, const QIcon& iconset, const QString& label )
-{
-    QTabWidget::addTab( child, iconset, label );
-}
-
-void K3b::ProjectTabWidget::tabInserted ( int index )
-{
-    QTabWidget::tabInserted ( index );
-}
-
-void K3b::ProjectTabWidget::insertTab( QWidget* child, const QString& label, int index )
-{
-    QTabWidget::insertTab( index, child, label );
-}
-
-
-void K3b::ProjectTabWidget::insertTab( QWidget* child, const QIcon& iconset, const QString& label, int index )
-{
-    QTabWidget::insertTab( index, child, iconset, label );
-}
-
-void K3b::ProjectTabWidget::removePage( Doc* doc )
-{
-    if( doc != 0 ) {
-        QTabWidget::removeTab( indexOf( doc->view() ) );
-    }
-}
-
-
-void K3b::ProjectTabWidget::insertTab( Doc* doc )
+void K3b::ProjectTabWidget::addTab( Doc* doc )
 {
     QTabWidget::addTab( doc->view(), doc->URL().fileName() );
     connect( k3bappcore->projectManager(), SIGNAL(projectSaved(K3b::Doc*)), this, SLOT(slotDocSaved(K3b::Doc*)) );
@@ -141,38 +106,36 @@ void K3b::ProjectTabWidget::insertTab( Doc* doc )
 }
 
 
-void K3b::ProjectTabWidget::insertAction( KAction* action )
+void K3b::ProjectTabWidget::removeTab( Doc* doc )
+{
+    if( doc != 0 ) {
+        QTabWidget::removeTab( indexOf( doc->view() ) );
+    }
+}
+
+
+void K3b::ProjectTabWidget::setCurrentTab( Doc* doc )
+{
+    if( doc != 0 ) {
+        setCurrentWidget( doc->view() );
+        doc->view()->setFocus();
+    }
+}
+
+
+K3b::Doc* K3b::ProjectTabWidget::currentTab() const
+{
+    QWidget* widget = currentWidget();
+    if( K3b::View* view = qobject_cast<K3b::View*>(widget) )
+        return view->doc();
+    else
+        return 0;
+}
+
+
+void K3b::ProjectTabWidget::addAction( KAction* action )
 {
     d->projectActionMenu->addAction( action );
-}
-
-
-void K3b::ProjectTabWidget::slotDocChanged( K3b::Doc* doc )
-{
-    // we need to cache the icon changes since the changed() signal will be emitted very often
-    if( !d->projectDataMap[doc].modified ) {
-        setTabIcon( indexOf( doc->view() ), KIcon( "document-save" ) );
-        d->projectDataMap[doc].modified = true;
-
-        // we need this one for the session management
-        setTabText( indexOf( doc->view() ), doc->URL().fileName() );
-    }
-}
-
-
-void K3b::ProjectTabWidget::slotDocSaved( K3b::Doc* doc )
-{
-    setTabIcon( indexOf( doc->view() ), QIcon() );
-    setTabText( indexOf( doc->view() ), doc->URL().fileName() );
-}
-
-
-void K3b::ProjectTabWidget::slotTabCloseRequested( int index )
-{
-    QWidget* w = widget( index );
-    if( View* view = dynamic_cast<View*>(w) ) {  
-        emit docCloseRequested( view->doc() );
-    }
 }
 
 
@@ -182,7 +145,7 @@ K3b::Doc* K3b::ProjectTabWidget::projectAt( const QPoint& pos ) const
     if( tabPos != -1 )
     {
         QWidget *w = widget(tabPos);
-        if(View* view = dynamic_cast<View*>(w) )
+        if(View* view = qobject_cast<View*>(w) )
             return view->doc();
     }
     return 0;
@@ -227,7 +190,7 @@ bool K3b::ProjectTabWidget::eventFilter( QObject* o, QEvent* e )
                     Q_FOREACH( const QUrl& url, de->mimeData()->urls() ) {
                         urls.append( url );
                     }
-                    dynamic_cast<View*>(doc->view())->addUrls( urls );
+                    qobject_cast<View*>(doc->view())->addUrls( urls );
                 }
             }
             return true;
@@ -235,6 +198,35 @@ bool K3b::ProjectTabWidget::eventFilter( QObject* o, QEvent* e )
     }
 
     return QTabWidget::eventFilter( o, e );
+}
+
+
+void K3b::ProjectTabWidget::slotDocChanged( K3b::Doc* doc )
+{
+    // we need to cache the icon changes since the changed() signal will be emitted very often
+    if( !d->projectDataMap[doc].modified ) {
+        setTabIcon( indexOf( doc->view() ), KIcon( "document-save" ) );
+        d->projectDataMap[doc].modified = true;
+
+        // we need this one for the session management
+        setTabText( indexOf( doc->view() ), doc->URL().fileName() );
+    }
+}
+
+
+void K3b::ProjectTabWidget::slotDocSaved( K3b::Doc* doc )
+{
+    setTabIcon( indexOf( doc->view() ), QIcon() );
+    setTabText( indexOf( doc->view() ), doc->URL().fileName() );
+}
+
+
+void K3b::ProjectTabWidget::slotTabCloseRequested( int index )
+{
+    QWidget* w = widget( index );
+    if( View* view = qobject_cast<View*>(w) ) {  
+        emit tabCloseRequested( view->doc() );
+    }
 }
 
 #include "k3bprojecttabwidget.moc"

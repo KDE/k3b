@@ -227,9 +227,9 @@ K3b::MainWindow::MainWindow()
     d->welcomeWidget->loadConfig( grp );
 
     // fill the tabs action menu
-    m_documentTab->insertAction( actionFileSave );
-    m_documentTab->insertAction( actionFileSaveAs );
-    m_documentTab->insertAction( actionFileClose );
+    m_documentTab->addAction( actionFileSave );
+    m_documentTab->addAction( actionFileSaveAs );
+    m_documentTab->addAction( actionFileClose );
 
     // /////////////////////////////////////////////////////////////////
     // disable actions at startup
@@ -494,7 +494,7 @@ void K3b::MainWindow::initView()
     documentHullLayout->addWidget( m_documentTab, 1, 0 );
 
     connect( m_documentTab, SIGNAL(currentChanged(int)), this, SLOT(slotCurrentDocChanged()) );
-    connect( m_documentTab, SIGNAL(docCloseRequested(Doc*)), this, SLOT(slotFileClose(Doc*)) );
+    connect( m_documentTab, SIGNAL(tabCloseRequested(Doc*)), this, SLOT(slotFileClose(Doc*)) );
 
     d->welcomeWidget = new K3b::WelcomeWidget( this, d->documentStack );
     d->documentStack->addWidget( d->welcomeWidget );
@@ -587,8 +587,8 @@ void K3b::MainWindow::createClient( K3b::Doc* doc )
         doc->setView( view );
         view->setWindowTitle( doc->URL().fileName() );
 
-        m_documentTab->insertTab( doc );
-        m_documentTab->setCurrentWidget( view );
+        m_documentTab->addTab( doc );
+        m_documentTab->setCurrentTab( doc );
         
         if( m_documentDock->isHidden() )
             m_documentDock->show();
@@ -600,9 +600,8 @@ void K3b::MainWindow::createClient( K3b::Doc* doc )
 
 K3b::View* K3b::MainWindow::activeView() const
 {
-    QWidget* w = m_documentTab->currentWidget();
-    if( K3b::View* view = dynamic_cast<K3b::View*>(w) )
-        return view;
+    if( Doc* doc = activeDoc() )
+        return qobject_cast<View*>( doc->view() );
     else
         return 0;
 }
@@ -610,10 +609,7 @@ K3b::View* K3b::MainWindow::activeView() const
 
 K3b::Doc* K3b::MainWindow::activeDoc() const
 {
-    if( activeView() )
-        return activeView()->getDocument();
-    else
-        return 0;
+    return m_documentTab->currentTab();
 }
 
 
@@ -640,7 +636,7 @@ K3b::Doc* K3b::MainWindow::openDocument(const KUrl& url)
             // check, if document already open. If yes, set the focus to the first view
             K3b::Doc* doc = k3bappcore->projectManager()->findByUrl( url );
             if( doc ) {
-                doc->view()->setFocus();
+                m_documentTab->setCurrentTab( doc );
                 return doc;
             }
 
@@ -1089,7 +1085,7 @@ void K3b::MainWindow::closeProject( K3b::Doc* doc )
     }
 
     // remove the doc from the project tab
-    m_documentTab->removePage( doc );
+    m_documentTab->removeTab( doc );
 
     // remove the project from the manager
     k3bappcore->projectManager()->removeProject( doc );
@@ -1435,7 +1431,7 @@ K3b::Device::DeviceManager* K3b::MainWindow::deviceManager() const
 void K3b::MainWindow::slotDataImportSession()
 {
     if( activeView() ) {
-        if( K3b::DataView* view = dynamic_cast<K3b::DataView*>(activeView()) ) {
+        if( K3b::DataView* view = qobject_cast<K3b::DataView*>(activeView()) ) {
             view->importSession();
         }
     }
@@ -1445,7 +1441,7 @@ void K3b::MainWindow::slotDataImportSession()
 void K3b::MainWindow::slotDataClearImportedSession()
 {
     if( activeView() ) {
-        if( K3b::DataView* view = dynamic_cast<K3b::DataView*>(activeView()) ) {
+        if( K3b::DataView* view = qobject_cast<K3b::DataView*>(activeView()) ) {
             view->clearImportedSession();
         }
     }
@@ -1455,7 +1451,7 @@ void K3b::MainWindow::slotDataClearImportedSession()
 void K3b::MainWindow::slotEditBootImages()
 {
     if( activeView() ) {
-        if( K3b::DataView* view = dynamic_cast<K3b::DataView*>(activeView()) ) {
+        if( K3b::DataView* view = qobject_cast<K3b::DataView*>(activeView()) ) {
             view->editBootImages();
         }
     }
