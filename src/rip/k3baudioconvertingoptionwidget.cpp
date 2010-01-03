@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (C) 2004-2009 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C)      2009 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -18,20 +18,20 @@
 #include "k3bpluginmanager.h"
 #include "k3baudioencoder.h"
 #include "k3bcore.h"
-#include "k3bglobals.h"
 
 #include <KColorScheme>
 #include <KComboBox>
-#include <KUrlRequester>
 #include <KConfig>
+#include <KDiskFreeSpaceInfo>
 #include <KLocale>
 #include <KIconLoader>
+#include <KUrlRequester>
 
-#include <QList>
+#include <QCheckBox>
 #include <QLabel>
+#include <QList>
 #include <QTimer>
 #include <QToolButton>
-#include <QCheckBox>
 
 
 
@@ -216,8 +216,8 @@ void K3b::AudioConvertingOptionWidget::setBaseDir( const QString& path )
 void K3b::AudioConvertingOptionWidget::setNeededSize( KIO::filesize_t size )
 {
     d->neededSize = size;
-    if( size > 0 )
-        m_labelNeededSpace->setText( KIO::convertSize( size ) );
+    if( d->neededSize > 0 )
+        m_labelNeededSpace->setText( KIO::convertSize( d->neededSize ) );
     else
         m_labelNeededSpace->setText( i18n("unknown") );
 
@@ -241,31 +241,28 @@ void K3b::AudioConvertingOptionWidget::slotConfigurePlugin()
 
 void K3b::AudioConvertingOptionWidget::slotUpdateFreeTempSpace()
 {
-    QString path = m_editBaseDir->url().url();
+    KColorScheme::ForegroundRole textColor;
 
-    if( !QFile::exists( path ) )
-        path.truncate( path.lastIndexOf('/') );
+    KDiskFreeSpaceInfo diskInfo = KDiskFreeSpaceInfo::freeSpaceInfo( m_editBaseDir->url().toLocalFile() );
+    if( diskInfo.isValid() ) {
+        m_labelFreeSpace->setText( KIO::convertSize(diskInfo.available()) );
 
-    const KColorScheme colorScheme( isEnabled() ? QPalette::Normal : QPalette::Disabled, KColorScheme::Window );
-    QColor textColor;
-
-    unsigned long size, avail;
-    if( K3b::kbFreeOnFs( path, size, avail ) ) {
-        m_labelFreeSpace->setText( KIO::convertSizeFromKiB(avail) );
-
-        if( avail < d->neededSize/1024 )
-            textColor = colorScheme.foreground( KColorScheme::NegativeText ).color();
+        if( d->neededSize > diskInfo.available() )
+            textColor = KColorScheme::NegativeText;
         else
-            textColor = colorScheme.foreground( KColorScheme::NormalText ).color();
+            textColor = KColorScheme::NormalText;
     }
     else {
-        textColor = colorScheme.foreground( KColorScheme::NormalText ).color();
-        m_labelFreeSpace->setText("-");
+        m_labelFreeSpace->setText( i18n("unknown") );
+        textColor = KColorScheme::NormalText;
     }
 
-    QPalette pal( m_labelNeededSpace->palette() );
-    pal.setColor( m_labelNeededSpace->foregroundRole(), textColor );
-    m_labelNeededSpace->setPalette( pal );
+    QPalette pal( m_labelFreeSpace->palette() );
+    pal.setBrush( QPalette::Disabled, QPalette::WindowText, KColorScheme( QPalette::Disabled, KColorScheme::Window ).foreground( textColor ) );
+    pal.setBrush( QPalette::Active,   QPalette::WindowText, KColorScheme( QPalette::Active,   KColorScheme::Window ).foreground( textColor ) );
+    pal.setBrush( QPalette::Inactive, QPalette::WindowText, KColorScheme( QPalette::Inactive, KColorScheme::Window ).foreground( textColor ) );
+    pal.setBrush( QPalette::Normal,   QPalette::WindowText, KColorScheme( QPalette::Normal,   KColorScheme::Window ).foreground( textColor ) );
+    m_labelFreeSpace->setPalette( pal );
 }
 
 
