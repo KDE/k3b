@@ -75,14 +75,12 @@ class ProjectInterface : public DCOPObject
 
   /**
    * \return A string representation of the project type. One of:
-   * \li "datacd" - Data CD
+   * \li "data" - Data
    * \li "audiocd" - Audio CD
    * \li "mixedcd" - Mixed Mode CD
-   * \li "videocd" - Video
-   * \li "emovixcd" - eMovix CD
-   * \li "datadvd" - Data DVD
+   * \li "videocd" - Video CD
+   * \li "emovix" - eMovix
    * \li "videodvd" - Video DVD
-   * \li "emovixdvd" - eMovix DVD
    *
    * Be aware that this is not the same as Doc::documentType for historical reasons.
    */
