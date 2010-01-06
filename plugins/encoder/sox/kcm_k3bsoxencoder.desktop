@@ -7,6 +7,7 @@ Name[pt]=Módulo de Configuração do Codificador de Áudio SoX do K3b
 Name[pt_BR]=Módulo de configuração do codificador de áudio SoX do K3b
 Name[sv]=Inställningsmodul för K3b Sox ljudkodare
 Name[uk]=Модуль налаштування аудіокодувальника SoX K3b
+Name[x-test]=xxK3b SoX Audio Encoder Config Modulexx
 Type=Service
 X-KDE-ServiceTypes=KCModule
 X-KDE-Library=kcm_k3bsoxencoder
