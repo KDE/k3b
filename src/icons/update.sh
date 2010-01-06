@@ -22,10 +22,10 @@ update_icons "application-x-k3b" mimetypes
 update_icons "tools-rip-audio-cd" actions
 update_icons "tools-rip-video-cd" actions
 update_icons "tools-rip-video-dvd" actions
+update_icons "k3b" apps
 update_icons "media-optical-data" devices
 update_icons "media-optical-audio" devices
 update_icons "media-optical-mixed-cd" devices
 update_icons "media-optical-video" devices
 update_icons "media-optical-cd-video" devices
 update_icons "media-optical-dvd-video" devices
-
