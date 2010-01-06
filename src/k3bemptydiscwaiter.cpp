@@ -471,7 +471,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                                                          d->device->vendor(),
                                                          d->device->description()),
                                                     i18n("Found %1",QString("DVD-RW")),
-                                                    KGuiItem(i18n("&Format"), "erasecd"),
+                                                    KGuiItem(i18n("&Format"), "tools-media-optical-format"),
                                                     KGuiItem(i18n("&Eject"), "media-eject")) == KMessageBox::Continue ) {
 
                 kDebug() << "(K3b::EmptyDiscWaiter) ------ formatting DVD-RW.";
@@ -545,7 +545,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                                         i18n("Found rewritable medium in %1 - %2. "
                                              "Should it be erased?",d->device->vendor(),d->device->description()),
                                         i18n("Found Rewritable Disk"),
-                                        KGuiItem(i18n("E&rase"), "erasecd"),
+                                        KGuiItem(i18n("E&rase"), "tools-media-optical-erase"),
                                         KGuiItem(i18n("&Eject"), "media-eject") ) == KMessageBox::Yes ) {
 
 

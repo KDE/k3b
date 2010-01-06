@@ -228,7 +228,7 @@ void K3b::AudioCdView::initActions()
                                                          SLOT(slotEditAlbumCddb()), actionCollection(),
                                                          "edit_album_cddb" );
 
-    KAction* actionStartRip = K3b::createAction(this, i18n("Start Ripping"), "cddarip", 0, this,
+    KAction* actionStartRip = K3b::createAction(this, i18n("Start Ripping"), "tools-rip-audio-cd", 0, this,
                                                 SLOT(startRip()), actionCollection(), "start_rip" );
 
     KAction* actionQueryCddb = K3b::createAction(this, i18n("Query CDDB"), "view-refresh", 0, this,

@@ -290,19 +290,19 @@ void K3b::MainWindow::initActions()
     actionFileNewMenu = new KActionMenu( i18n("&New Project"),this );
     actionFileNewMenu->setIcon( KIcon( "document-new" ) );
     actionCollection()->addAction( "file_new", actionFileNewMenu );
-    actionFileNewAudio = K3b::createAction(this,i18n("New &Audio CD Project"), "audiocd", 0, this, SLOT(slotNewAudioDoc()),
+    actionFileNewAudio = K3b::createAction(this,i18n("New &Audio CD Project"), "media-optical-audio", 0, this, SLOT(slotNewAudioDoc()),
                                            actionCollection(), "file_new_audio");
-    actionFileNewData = K3b::createAction(this,i18n("New &Data Project"), "datacd", 0, this, SLOT(slotNewDataDoc()),
+    actionFileNewData = K3b::createAction(this,i18n("New &Data Project"), "media-optical-data", 0, this, SLOT(slotNewDataDoc()),
                                           actionCollection(), "file_new_data");
-    actionFileNewMixed = K3b::createAction(this,i18n("New &Mixed Mode CD Project"), "mixedcd", 0, this, SLOT(slotNewMixedDoc()),
+    actionFileNewMixed = K3b::createAction(this,i18n("New &Mixed Mode CD Project"), "media-optical-mixed-cd", 0, this, SLOT(slotNewMixedDoc()),
                                            actionCollection(), "file_new_mixed");
-    actionFileNewVcd = K3b::createAction(this,i18n("New &Video CD Project"), "videocd", 0, this, SLOT(slotNewVcdDoc()),
+    actionFileNewVcd = K3b::createAction(this,i18n("New &Video CD Project"), "media-optical-cd-video", 0, this, SLOT(slotNewVcdDoc()),
                                          actionCollection(), "file_new_vcd");
-    actionFileNewMovix = K3b::createAction(this,i18n("New &eMovix Project"), "emovix", 0, this, SLOT(slotNewMovixDoc()),
+    actionFileNewMovix = K3b::createAction(this,i18n("New &eMovix Project"), "media-optical-video", 0, this, SLOT(slotNewMovixDoc()),
                                            actionCollection(), "file_new_movix");
-    actionFileNewVideoDvd = K3b::createAction(this,i18n("New V&ideo DVD Project"), "videodvd", 0, this, SLOT(slotNewVideoDvdDoc()),
+    actionFileNewVideoDvd = K3b::createAction(this,i18n("New V&ideo DVD Project"), "media-optical-dvd-video", 0, this, SLOT(slotNewVideoDvdDoc()),
                                               actionCollection(), "file_new_video_dvd");
-    actionFileContinueMultisession = K3b::createAction(this,i18n("Continue Multisession Project"), "datacd", 0, this, SLOT(slotContinueMultisession()),
+    actionFileContinueMultisession = K3b::createAction(this,i18n("Continue Multisession Project"), "media-optical-data", 0, this, SLOT(slotContinueMultisession()),
                                                        actionCollection(), "file_continue_multisession" );
 
     actionFileNewMenu->setDelayed( false );
@@ -338,7 +338,7 @@ void K3b::MainWindow::initActions()
 
     KAction* actionToolsFormatMedium = K3b::createAction( this,
                                                           i18n("&Format/Erase rewritable disk..."),
-                                                          "formatdvd",
+                                                          "tools-media-optical-format",
                                                           0,
                                                           this,
                                                           SLOT(slotFormatMedium()),
@@ -348,7 +348,7 @@ void K3b::MainWindow::initActions()
 
     actionToolsWriteImage = K3b::createAction( this,
                                                i18n("&Burn Image..."),
-                                               "burn_cdimage",
+                                               "tools-media-optical-burn-image",
                                                0,
                                                this,
                                                SLOT(slotWriteImage()),
@@ -357,7 +357,7 @@ void K3b::MainWindow::initActions()
 
     KAction* actionToolsMediaCopy = K3b::createAction( this,
                                                        i18n("Copy &Medium..."),
-                                                       "cdcopy",
+                                                       "tools-media-optical-copy",
                                                        0,
                                                        this,
                                                        SLOT(slotMediaCopy()),
@@ -367,7 +367,7 @@ void K3b::MainWindow::initActions()
 
     actionToolsCddaRip = K3b::createAction( this,
                                             i18n("Rip Audio CD..."),
-                                            "cddarip",
+                                            "tools-rip-audio-cd",
                                             0,
                                             this,
                                             SLOT(slotCddaRip()),
@@ -375,7 +375,7 @@ void K3b::MainWindow::initActions()
                                             "tools_cdda_rip" );
     actionToolsVideoDvdRip = K3b::createAction( this,
                                                 i18n("Rip Video DVD..."),
-                                                "videodvd",
+                                                "tools-rip-video-dvd",
                                                 0,
                                                 this,
                                                 SLOT(slotVideoDvdRip()),
@@ -383,7 +383,7 @@ void K3b::MainWindow::initActions()
                                                 "tools_videodvd_rip" );
     actionToolsVideoCdRip = K3b::createAction( this,
                                                i18n("Rip Video CD..."),
-                                               "videocd",
+                                               "tools-rip-video-cd",
                                                0,
                                                this,
                                                SLOT(slotVideoCdRip()),
