@@ -166,7 +166,7 @@ K3b::AudioConvertingOptionWidget::AudioConvertingOptionWidget( QWidget* parent )
     connect( m_buttonConfigurePlugin, SIGNAL(clicked()), this, SLOT(slotConfigurePlugin()) );
 
     m_editBaseDir->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
-    m_buttonConfigurePlugin->setIcon( KIcon( "system-run" ) );
+    m_buttonConfigurePlugin->setIcon( KIcon( "configure" ) );
     
     // FIXME: see if sox and the sox encoder are installed and if so do not put the internal wave
     //        writer in the list of encoders.
