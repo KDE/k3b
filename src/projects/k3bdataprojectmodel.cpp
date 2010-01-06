@@ -222,7 +222,7 @@ QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
                     return( static_cast<K3b::DirItem*>( item )->depth() > 7 ? KIcon( "folder-root" ) : KIcon( "folder" ) );
                 }
                 else if ( item->isDir() ) {
-                    return KIcon( "media-optical" );
+                    return KIcon( "media-optical-data" );
                 }
                 else {
                     return KIcon( item->mimeType()->iconName() );

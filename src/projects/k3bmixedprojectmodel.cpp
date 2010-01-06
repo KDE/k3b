@@ -27,7 +27,7 @@ namespace K3b
         m_dataModel = new DataProjectModel( doc->dataDoc(), this );
         m_audioModel = new AudioProjectModel( doc->audioDoc(), this );
 
-        addSubModel( i18n("Data Section"), KIcon("media-optical"), m_dataModel, true );
+        addSubModel( i18n("Data Section"), KIcon("media-optical-data"), m_dataModel, true );
         addSubModel( i18n("Audio Section"), KIcon("media-optical-audio"), m_audioModel);
     }
 
