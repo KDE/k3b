@@ -60,7 +60,7 @@ void K3b::AdvancedOptionTab::setupGui()
     QGridLayout* bufferLayout = new QGridLayout( groupWritingApp );
 
     m_checkBurnfree = K3b::StdGuiItems::burnproofCheckbox( groupWritingApp );
-    m_checkOverburn = new QCheckBox( i18n("Allow &overburning (not supported by cdrecord <= 1.10)"), groupWritingApp );
+    m_checkOverburn = new QCheckBox( i18n("Allow &overburning"), groupWritingApp );
     m_checkForceUnsafeOperations = new QCheckBox( i18n("&Force unsafe operations"), groupWritingApp );
     m_checkManualWritingBufferSize = new QCheckBox( i18n("&Manual writing buffer size") + ":", groupWritingApp );
     m_editWritingBufferSize = new KIntNumInput( 4, groupWritingApp );
