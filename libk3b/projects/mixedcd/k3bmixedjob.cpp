@@ -298,6 +298,34 @@ void K3b::MixedJob::startFirstCopy()
 }
 
 
+void K3b::MixedJob::startSecondSession()
+{
+    // start the next session
+    m_currentAction = WRITING_ISO_IMAGE;
+    if( d->copiesDone > 0 ) {
+        // we only create the image once. This should not be a problem???
+        if( !prepareWriter() || !startWriting() ) {
+            cleanupAfterError();
+            jobFinished(false);
+        }
+    }
+    else if( m_doc->dummy() ) {
+        // do not try to get ms info in simulation mode since the cd is empty!
+        if( m_doc->onTheFly() ) {
+            m_currentAction = PREPARING_DATA;
+            m_isoImager->calculateSize();
+        }
+        else
+            createIsoImage();
+    }
+    else {
+        m_currentAction = FETCHING_MSMessageInfo;
+        m_msInfoFetcher->setDevice( m_doc->burner() );
+        m_msInfoFetcher->start();
+    }
+}
+
+
 void K3b::MixedJob::slotMaxSpeedJobFinished( bool success )
 {
     d->maxSpeed = success;
@@ -498,9 +526,6 @@ void K3b::MixedJob::slotWriterFinished( bool success )
 
     emit burning(false);
 
-#ifdef __GNUC__
-#warning slotDiskInfoReady does not exist! reloading will result in an idle job!
-#endif
     if( m_doc->mixedType() == K3b::MixedDoc::DATA_SECOND_SESSION && m_currentAction == WRITING_AUDIO_IMAGE ) {
         // many drives need to reload the medium to return to a proper state
         if ( ( int )m_doc->burner()->readToc().count() < m_doc->numOfTracks()-1 ) {
@@ -508,10 +533,10 @@ void K3b::MixedJob::slotWriterFinished( bool success )
             connect( K3b::Device::reload( m_doc->burner() ),
                      SIGNAL(finished(K3b::Device::DeviceHandler*)),
                      this,
-                     SLOT(slotDiskInfoReady(K3b::Device::DeviceHandler*)) );
+                     SLOT(slotMediaReloadedForSecondSession(K3b::Device::DeviceHandler*)) );
         }
         else {
-            slotMediaReloadedForSecondSession( true );
+            startSecondSession();
         }
     }
     else {
@@ -536,35 +561,14 @@ void K3b::MixedJob::slotWriterFinished( bool success )
 }
 
 
-void K3b::MixedJob::slotMediaReloadedForSecondSession( bool success )
+void K3b::MixedJob::slotMediaReloadedForSecondSession( K3b::Device::DeviceHandler* dh )
 {
-    if( !success )
+    if( !dh->success() ) {
         blockingInformation( i18n("Please reload the medium and press 'ok'"),
                              i18n("Unable to close the tray") );
+    }
 
-    // start the next session
-    m_currentAction = WRITING_ISO_IMAGE;
-    if( d->copiesDone > 0 ) {
-        // we only create the image once. This should not be a problem???
-        if( !prepareWriter() || !startWriting() ) {
-            cleanupAfterError();
-            jobFinished(false);
-        }
-    }
-    else if( m_doc->dummy() ) {
-        // do not try to get ms info in simulation mode since the cd is empty!
-        if( m_doc->onTheFly() ) {
-            m_currentAction = PREPARING_DATA;
-            m_isoImager->calculateSize();
-        }
-        else
-            createIsoImage();
-    }
-    else {
-        m_currentAction = FETCHING_MSMessageInfo;
-        m_msInfoFetcher->setDevice( m_doc->burner() );
-        m_msInfoFetcher->start();
-    }
+    startSecondSession();
 }
 
 

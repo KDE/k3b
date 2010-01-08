@@ -21,6 +21,10 @@
 class KTemporaryFile;
 
 namespace K3b {
+    
+    namespace Device {
+        class DeviceHandler;
+    }
     class MixedDoc;
     class IsoImager;
     class AudioImager;
@@ -75,7 +79,7 @@ namespace K3b {
         void slotNormalizeSubProgress( int );
 
         // misc slots
-        void slotMediaReloadedForSecondSession( bool );
+        void slotMediaReloadedForSecondSession( K3b::Device::DeviceHandler* dh );
         void slotMaxSpeedJobFinished( bool );
 
     private:
@@ -84,6 +88,7 @@ namespace K3b {
         bool writeInfFiles();
         bool startWriting();
         void startFirstCopy();
+        void startSecondSession();
         void addAudioTracks( CdrecordWriter* writer );
         void addDataTrack( CdrecordWriter* writer );
         void cleanupAfterError();
