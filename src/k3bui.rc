@@ -41,14 +41,10 @@
     <Action name="file_new" />
     <Action name="file_open" />
     <Action name="file_save" />
-</ToolBar>
-
-<ToolBar name="toolsToolBar"><text>Tools Toolbar</text>
+    <Separator />
     <Action name="tools_copy_media" />
     <Action name="tools_format_medium" />
-</ToolBar>
-    
-<ToolBar name="locationToolBar" fullWidth="true"><text>Location Toolbar</text>
+    <Separator />
     <Action name="location_bar" />
 </ToolBar>
 
