@@ -86,7 +86,6 @@ public:
 
     QVector<QString> filenames;
     QString playlistFilename;
-    QString cueFilename;
 };
 
 
@@ -200,13 +199,16 @@ void K3b::AudioProjectConvertingDialog::slotStartClicked()
 
     // just generate a fake m_tracks list for now so we can keep most of the methods
     // like they are in K3b::AudioRipJob. This way future combination is easier
-    QVector<QPair<int, QString> > tracksToRip;
-    int i = 0;
-    K3b::AudioTrack* track = m_doc->firstTrack();
-    while( track ) {
-        tracksToRip.append( qMakePair( i+1, d->filenames[(m_optionWidget->createSingleFile() ? 0 : i)] ) );
-        ++i;
-        track = track->next();
+    AudioProjectConvertingJob::Tracks tracksToRip;
+    if( m_optionWidget->createSingleFile() && !d->filenames.isEmpty() ) {
+        // Since QMultiMap stores multiple values "from most recently to least recently inserted"
+        // we will add it in reverse order to rip in ascending order
+        for( AudioTrack* track = m_doc->lastTrack(); track != 0; track = track->prev() )
+            tracksToRip.insert( d->filenames.front(), track->trackNumber() );
+    }
+    else {
+        for( AudioTrack* track = m_doc->firstTrack(); track != 0; track = track->next() )
+            tracksToRip.insert( d->filenames[ track->trackNumber()-1 ], track->trackNumber() );
     }
 
     K3b::AudioEncoder* encoder = m_optionWidget->encoder();
@@ -215,12 +217,10 @@ void K3b::AudioProjectConvertingDialog::slotStartClicked()
     K3b::AudioProjectConvertingJob job( m_doc, &progressDialog, 0 );
     job.setCddbEntry( createCddbEntryFromDoc( m_doc ) );
     job.setTracksToRip( tracksToRip );
-    job.setSingleFile( m_optionWidget->createSingleFile() );
     job.setWriteCueFile( m_optionWidget->createCueFile() );
     job.setEncoder( encoder );
-    job.setWritePlaylist( m_optionWidget->createPlaylist() );
-    job.setPlaylistFilename( d->playlistFilename );
-    job.setUseRelativePathInPlaylist( m_optionWidget->playlistRelativePath() );
+    if( m_optionWidget->createPlaylist() )
+        job.setWritePlaylist( d->playlistFilename, m_optionWidget->playlistRelativePath() );
     if( encoder )
         job.setFileType( m_optionWidget->extension() );
 
@@ -264,7 +264,7 @@ void K3b::AudioProjectConvertingDialog::refresh()
 
         filename = K3b::PatternParser::parsePattern( cddbEntry, 1,
                                                      extension,
-                                                     m_patternWidget->filenamePattern(),
+                                                     m_patternWidget->playlistPattern(),
                                                      m_patternWidget->replaceBlanks(),
                                                      m_patternWidget->blankReplaceString() );
 
@@ -279,12 +279,11 @@ void K3b::AudioProjectConvertingDialog::refresh()
 
         if( m_optionWidget->createCueFile() ) {
             QString cueFilename = K3b::PatternParser::parsePattern( cddbEntry, 1,
-                                                                    QLatin1String( "cue" ),
-                                                                    m_patternWidget->filenamePattern(),
-                                                                    m_patternWidget->replaceBlanks(),
-                                                                    m_patternWidget->blankReplaceString() );
-
-            d->cueFilename = K3b::fixupPath( baseDir + "/" + cueFilename );
+                                                               QLatin1String( "cue" ),
+                                                               m_patternWidget->playlistPattern(),
+                                                               m_patternWidget->replaceBlanks(),
+                                                               m_patternWidget->blankReplaceString() );
+            
             (void)new K3ListViewItem( m_viewTracks,
                                       m_viewTracks->lastItem(),
                                       cueFilename,
@@ -294,9 +293,8 @@ void K3b::AudioProjectConvertingDialog::refresh()
         }
     }
     else {
-        K3b::AudioTrack* track = m_doc->firstTrack();
-        unsigned int i = 1;
-        while( track ) {
+        d->filenames.resize( m_doc->numOfTracks() );
+        for( AudioTrack* track = m_doc->firstTrack(); track != 0; track = track->next() ) {
             long long filesize = 0;
             if( m_optionWidget->encoder() == 0 ) {
                 filesize = track->length().audioBytes() + 44;
@@ -308,7 +306,7 @@ void K3b::AudioProjectConvertingDialog::refresh()
             if( filesize > 0 )
                 overallSize += filesize;
 
-            QString filename = K3b::PatternParser::parsePattern( cddbEntry, i,
+            QString filename = K3b::PatternParser::parsePattern( cddbEntry, track->trackNumber(),
                                                                  extension,
                                                                  m_patternWidget->filenamePattern(),
                                                                  m_patternWidget->replaceBlanks(),
@@ -320,10 +318,7 @@ void K3b::AudioProjectConvertingDialog::refresh()
                                       track->length().toString(),
                                       filesize < 0 ? i18n("unknown") : KIO::convertSize( filesize ) );
 
-            d->filenames.append( K3b::fixupPath( baseDir + "/" + filename ) );
-
-            track = track->next();
-            ++i;
+            d->filenames[ track->trackNumber()-1 ] = K3b::fixupPath( baseDir + "/" + filename );
         }
     }
 

@@ -449,7 +449,7 @@ bool K3b::AudioRipJob::writeCueFile()
         text.setTitle( m_cddbEntry.get( KCDDB::Title ).toString() );
         K3b::Msf currentSector;
         
-        QList<int> trackNums = d->tracks.values();
+        QList<int> trackNums = d->tracks.values( filename );
         for( int i = 0; i < trackNums.size(); ++i ) {
             int trackNum = trackNums[ i ];
             const K3b::Device::Track& oldTrack = d->toc[trackNum-1];

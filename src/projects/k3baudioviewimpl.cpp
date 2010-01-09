@@ -20,6 +20,7 @@
 #include "k3baction.h"
 #include "k3baudiodatasourceeditwidget.h"
 #include "k3baudiodecoder.h"
+#include "k3baudiodoc.h"
 #include "k3baudiofile.h"
 #include "k3baudioprojectmodel.h"
 #include "k3baudiotrack.h"
@@ -38,6 +39,7 @@
 #include <KActionCollection>
 #include <KLocale>
 #include <KMenu>
+#include <KMessageBox>
 
 
 K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, AudioProjectModel* model, KActionCollection* actionCollection )
@@ -339,8 +341,14 @@ void K3b::AudioViewImpl::slotItemActivated( const QModelIndex& index )
 
 void K3b::AudioViewImpl::slotAudioConversion()
 {
-    AudioProjectConvertingDialog dlg( m_doc, m_view );
-    dlg.exec();
+    if( m_doc->numOfTracks() > 0 ) {
+        AudioProjectConvertingDialog dlg( m_doc, m_view );
+        dlg.exec();
+    }
+    else {
+        KMessageBox::information( m_view, i18n("Please add files to your project first."),
+                                  i18n("No tracks to convert"), QString(), false );
+    }
 }
 
 

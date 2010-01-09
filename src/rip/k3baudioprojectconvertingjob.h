@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C)      2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -17,61 +18,60 @@
 #define K3B_AUDIO_PROJECT_CONVERTING_JOB_H
 
 #include "k3bthreadjob.h"
-#include <qobject.h>
-#include <qpair.h>
-
-#include <libkcddb/cdinfo.h>
+#include <QMultiMap>
 
 
-namespace K3b {
-    class AudioEncoder;
-}
-namespace K3b {
-    class AudioDoc;
-}
-namespace K3b {
-    class AudioTrack;
+namespace KCDDB {
+    class CDInfo;
 }
 
-
 namespace K3b {
+    
+class AudioEncoder;
+class AudioDoc;
+class AudioTrack;
+    
 class AudioProjectConvertingJob : public ThreadJob
 {
     Q_OBJECT
 
 public:
-    AudioProjectConvertingJob( AudioDoc*, JobHandler* hdl, QObject* parent );
+    /**
+        * Maps filenames to track 1-based track indexes
+        * When multiple tracks are associated with one filename
+        * they are merged into one file.
+        */
+    typedef QMultiMap<QString,int> Tracks;
+
+public:
+    AudioProjectConvertingJob( AudioDoc* doc, JobHandler* hdl, QObject* parent );
     ~AudioProjectConvertingJob();
 
     QString jobDescription() const;
     QString jobDetails() const;
 
-    void setSingleFile( bool b ) { m_singleFile = b; }
-
-    void setCddbEntry( const KCDDB::CDInfo& e ) { m_cddbEntry = e; }
+    void setCddbEntry( const KCDDB::CDInfo& cddbEntry );
 
     // if 0 (default) wave files are created
-    void setEncoder( AudioEncoder* f );
+    void setEncoder( AudioEncoder* encoder );
 
     /**
      * Used for encoders that support multiple formats
      */
-    void setFileType( const QString& );
+    void setFileType( const QString& fileType );
 
     /**
      * 1 is the first track
      */
-    void setTracksToRip( const QVector<QPair<int, QString> >& t ) { m_tracks = t; }
+    void setTracksToRip( const Tracks& tracks );
 
-    void setWritePlaylist( bool b ) { m_writePlaylist = b; }
-    void setPlaylistFilename( const QString& s ) { m_playlistFilename = s; }
-    void setUseRelativePathInPlaylist( bool b ) { m_relativePathInPlaylist = b; }
-    void setWriteCueFile( bool b ) { m_writeCueFile = b; }
+    void setWritePlaylist( const QString& filename, bool useRelativePaths );
+    void setWriteCueFile( bool b );
 
 private:
     bool run();
 
-    bool convertTrack( AudioTrack*, const QString& filename );
+    bool convertTrack( AudioTrack& track, const QString& filename, const QString& prevFilename );
     bool writePlaylist();
     bool writeCueFile();
 
@@ -79,19 +79,6 @@ private:
      * Finds a relative path from baseDir to absPath
      */
     QString findRelativePath( const QString& absPath, const QString& baseDir );
-
-    KCDDB::CDInfo m_cddbEntry;
-
-    bool m_singleFile;
-    bool m_writePlaylist;
-    bool m_relativePathInPlaylist;
-    QString m_playlistFilename;
-
-    bool m_writeCueFile;
-
-    QVector<QPair<int, QString> > m_tracks;
-
-    AudioDoc* m_doc;
 
     class Private;
     Private* d;
