@@ -307,12 +307,11 @@ void K3b::AudioRippingDialog::slotStartClicked()
     job->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
     job->setMaxRetries( m_spinRetries->value() );
     job->setNeverSkip( !m_checkIgnoreReadErrors->isChecked() );
-    job->setWriteCueFile( m_optionWidget->createCueFile() );
     job->setEncoder( encoder );
-    job->setWritePlaylist( m_optionWidget->createPlaylist() );
-    job->setPlaylistFilename( d->playlistFilename );
-    job->setUseRelativePathInPlaylist( m_optionWidget->playlistRelativePath() );
     job->setUseIndex0( m_checkUseIndex0->isChecked() );
+    job->setWriteCueFile( m_optionWidget->createSingleFile() && m_optionWidget->createCueFile() );
+    if( m_optionWidget->createPlaylist() )
+        job->setWritePlaylist( d->playlistFilename, m_optionWidget->playlistRelativePath() );
     if( encoder )
         job->setFileType( m_optionWidget->extension() );
 

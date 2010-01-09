@@ -60,12 +60,9 @@ public:
      */
     void setFileType( const QString& fileType );
 
-    /**
-     * 1 is the first track
-     */
     void setTracksToRip( const Tracks& tracks );
 
-    void setWritePlaylist( const QString& filename, bool useRelativePaths );
+    void setWritePlaylist( const QString& filename, bool relativePaths );
     void setWriteCueFile( bool b );
 
 private:

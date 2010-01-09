@@ -50,29 +50,26 @@ namespace K3b {
 
         // paranoia settings
         void setParanoiaMode( int mode );
-        void setMaxRetries( int r );
+        void setMaxRetries( int retries );
         void setNeverSkip( bool b );
+        void setUseIndex0( bool b );
 
-        void setUseIndex0( bool b ) { m_useIndex0 = b; }
+        void setDevice( Device::Device* device );
 
-        void setDevice( Device::Device* dev ) { m_device = dev; }
-
-        void setCddbEntry( const KCDDB::CDInfo& e ) { m_cddbEntry = e; }
+        void setCddbEntry( const KCDDB::CDInfo& e );
 
         // if 0 (default) wave files are created
-        void setEncoder( AudioEncoder* f );
+        void setEncoder( AudioEncoder* encoder );
 
         /**
          * Used for encoders that support multiple formats
          */
-        void setFileType( const QString& );
+        void setFileType( const QString& fileType );
 
         void setTracksToRip( const Tracks& tracks );
 
-        void setWritePlaylist( bool b ) { m_writePlaylist = b; }
-        void setPlaylistFilename( const QString& s ) { m_playlistFilename = s; }
-        void setUseRelativePathInPlaylist( bool b ) { m_relativePathInPlaylist = b; }
-        void setWriteCueFile( bool b ) { m_writeCueFile = b; }
+        void setWritePlaylist( const QString& filename, bool relativePaths );
+        void setWriteCueFile( bool b );
 
     public Q_SLOTS:
         void start();
@@ -90,18 +87,6 @@ namespace K3b {
          * Finds a relative path from baseDir to absPath
          */
         QString findRelativePath( const QString& absPath, const QString& baseDir );
-
-        KCDDB::CDInfo m_cddbEntry;
-        Device::Device* m_device;
-
-        bool m_bUsePattern;
-        bool m_useIndex0;
-
-        bool m_writePlaylist;
-        bool m_relativePathInPlaylist;
-        QString m_playlistFilename;
-
-        bool m_writeCueFile;
 
         class Private;
         Private* d;

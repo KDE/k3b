@@ -107,10 +107,10 @@ void K3b::AudioProjectConvertingJob::setTracksToRip( const Tracks& tracks )
 }
 
 
-void K3b::AudioProjectConvertingJob::setWritePlaylist( const QString& filename, bool useRelativePaths )
+void K3b::AudioProjectConvertingJob::setWritePlaylist( const QString& filename, bool relativePaths )
 {
     d->playlistFilename = filename;
-    d->relativePathInPlaylist = useRelativePaths;
+    d->relativePathInPlaylist = relativePaths;
 }
 
 
