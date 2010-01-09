@@ -262,7 +262,7 @@ void kio_videodvdProtocol::listVideoDVDs()
             //
             K3b::Iso9660 iso( new K3b::Iso9660DeviceBackend(dev) );
             iso.setPlainIso9660( true );
-            if( iso.open() /*&& iso.firstIsoDirEntry()->entry( "VIDEO_TS" )*/ ) {
+            if( iso.open() && iso.firstIsoDirEntry()->entry( "VIDEO_TS" ) != 0 ) {
                 // FIXME: cache the entry for speedup
                 
                 UDSEntry uds;
