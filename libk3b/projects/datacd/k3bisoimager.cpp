@@ -827,6 +827,7 @@ void K3b::IsoImager::writePathSpecForFile( K3b::FileItem* item, QTextStream& str
 
         // create temp file
         KTemporaryFile temp;
+        temp.setAutoRemove( false );
         temp.open();
         QString tempPath = temp.fileName();
         temp.remove();
