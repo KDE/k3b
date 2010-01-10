@@ -233,6 +233,7 @@ namespace K3b {
         void itemRemoved( K3b::DataItem* );
         void itemAdded( K3b::DataItem* );
         void volumeIdChanged();
+        void importedSessionChanged( int importedSession );
 
     protected:
         /** reimplemented from Doc */

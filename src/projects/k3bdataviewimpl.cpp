@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  * Copyright (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
- * Copyright (C) 2009      Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -59,6 +59,9 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, DataProjectModel* mod
     m_actionImportSession->setToolTip( i18n("Import a previously burned session into the current project") );
     m_actionClearSession->setToolTip( i18n("Remove the imported items from a previous session") );
     m_actionEditBootImages->setToolTip( i18n("Modify the bootable settings of the current project") );
+    
+    m_actionClearSession->setEnabled( m_doc->importedSession() > -1 );
+    connect( m_doc, SIGNAL(importedSessionChanged(int)), this, SLOT(slotImportedSessionChanged(int)) );
     
     // Create data context menu
     m_popupMenu = new KMenu( m_view );
@@ -239,6 +242,12 @@ void K3b::DataViewImpl::slotEditBootImages()
     dlg.setDefaultButton( KDialog::Ok );
     dlg.setMainWidget( new K3b::BootImageView( m_doc, &dlg ) );
     dlg.exec();
+}
+
+
+void K3b::DataViewImpl::slotImportedSessionChanged( int importedSession )
+{
+    m_actionClearSession->setEnabled( importedSession > -1 );
 }
 
 #include "k3bdataviewimpl.moc"

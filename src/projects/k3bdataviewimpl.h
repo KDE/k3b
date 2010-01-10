@@ -56,6 +56,9 @@ namespace K3b {
         void slotClearImportedSession();
         void slotEditBootImages();
         
+    private Q_SLOTS:
+        void slotImportedSessionChanged( int importedSession );
+        
     private:
         View* m_view;
         DataDoc* m_doc;

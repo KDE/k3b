@@ -106,6 +106,7 @@ void K3b::DataDoc::clear()
             removeItem( m_root->children().first() );
     }
     m_sizeHandler->clear();
+    emit importedSessionChanged( importedSession() );
 }
 
 
@@ -1192,6 +1193,7 @@ bool K3b::DataDoc::importSession( K3b::Device::Device* device, int session )
         if( rootDir ) {
             createSessionImportItems( rootDir, root() );
             emit changed();
+            emit importedSessionChanged( importedSession() );
             return true;
         }
         else {
@@ -1256,6 +1258,7 @@ void K3b::DataDoc::createSessionImportItems( const K3b::Iso9660Directory* import
 void K3b::DataDoc::clearImportedSession()
 {
     //  m_oldSessionSizeHandler->clear();
+    m_importedSession = -1;
     m_oldSessionSize = 0;
 
     while( !m_oldSession.isEmpty() ) {
@@ -1291,6 +1294,7 @@ void K3b::DataDoc::clearImportedSession()
     m_multisessionMode = AUTO;
 
     emit changed();
+    emit importedSessionChanged( importedSession() );
 }
 
 
