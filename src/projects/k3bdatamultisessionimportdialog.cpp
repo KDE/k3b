@@ -14,21 +14,20 @@
 
 #include "k3bdatamultisessionimportdialog.h"
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <q3header.h>
-#include <qfont.h>
-#include <qmap.h>
-#include <qcursor.h>
+#include <QCursor>
+#include <QFont>
+#include <QLabel>
+#include <QLayout>
+#include <QMap>
+#include <QTreeWidget>
 #include <QVBoxLayout>
 
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kmessagebox.h>
+#include <KIconLoader>
+#include <KLocale>
+#include <KMessageBox>
 
 #include "k3bcore.h"
 #include "k3bdatadoc.h"
-#include "k3blistview.h"
 #include "k3btoc.h"
 #include "k3bdevice.h"
 #include "k3bdevicemanager.h"
@@ -55,6 +54,8 @@ namespace {
         int sessionNumber;
         K3b::Device::Device* device;
     };
+    
+    typedef QMap<QTreeWidgetItem*, SessionInfo> Sessions;
 }
 
 
@@ -62,9 +63,9 @@ class K3b::DataMultisessionImportDialog::Private
 {
 public:
     K3b::DataDoc* doc;
-    K3b::ListView* sessionView;
+    QTreeWidget* sessionView;
 
-    QMap<K3b::ListViewItem*, SessionInfo> sessions;
+    Sessions sessions;
 };
 
 
@@ -79,12 +80,11 @@ K3b::DataDoc* K3b::DataMultisessionImportDialog::importSession( K3b::DataDoc* do
 
 void K3b::DataMultisessionImportDialog::slotOk()
 {
-    K3b::ListViewItem* selected = static_cast<K3b::ListViewItem*>( d->sessionView->selectedItem() );
-    if ( selected ) {
+    Sessions::const_iterator session = d->sessions.find( d->sessionView->currentItem() );
+    if ( session != d->sessions.end() ) {
         QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
-
-        const SessionInfo& info = d->sessions[selected];
-        K3b::Device::Device* dev = info.device;
+        
+        K3b::Device::Device* dev = session->device;
 
         //
         // Mkisofs does not properly import joliet filenames from an old session
@@ -109,7 +109,7 @@ void K3b::DataMultisessionImportDialog::slotOk()
         }
 
         d->doc->setBurner( dev );
-        d->doc->importSession( dev, info.sessionNumber );
+        d->doc->importSession( dev, session->sessionNumber );
 
         QApplication::restoreOverrideCursor();
 
@@ -159,11 +159,17 @@ void K3b::DataMultisessionImportDialog::updateMedia()
     }
 
     if ( !haveMedium ) {
-        K3b::ListViewItem* noMediaItem = new K3b::ListViewItem( d->sessionView,
-                                                            i18n( "Please insert an appendable medium" ) );
-        QFont fnt( font() );
+        QTreeWidgetItem* noMediaItem = new QTreeWidgetItem( d->sessionView );
+        QFont fnt( noMediaItem->font(0) );
         fnt.setItalic( true );
+        noMediaItem->setText( 0, i18n( "Please insert an appendable medium" ) );
         noMediaItem->setFont( 0, fnt );
+    }
+    else if( QTreeWidgetItem* firstMedium = d->sessionView->topLevelItem(0) ) {
+        if( firstMedium->childCount() > 0 )
+            d->sessionView->setCurrentItem( firstMedium->child( firstMedium->childCount()-1 ) );
+        else
+            d->sessionView->setCurrentItem( firstMedium );
     }
 
     d->sessionView->setEnabled( haveMedium );
@@ -172,17 +178,15 @@ void K3b::DataMultisessionImportDialog::updateMedia()
 
 void K3b::DataMultisessionImportDialog::addMedium( const K3b::Medium& medium )
 {
-    K3b::ListViewItem* mediumItem = new K3b::ListViewItem( d->sessionView, medium.shortString() );
-    QFont fnt( font() );
+    QTreeWidgetItem* mediumItem = new QTreeWidgetItem( d->sessionView );
+    QFont fnt( mediumItem->font(0) );
     fnt.setBold( true );
+    mediumItem->setText( 0, medium.shortString() );
     mediumItem->setFont( 0, fnt );
-    mediumItem->setPixmap( 0, SmallIcon("media-optical-recordable") );
-
-    // the medium item in case we have no session info (will always use the last session)
-    d->sessions.insert( mediumItem, SessionInfo( 0, medium.device() ) );
+    mediumItem->setIcon( 0, KIcon("media-optical-recordable") );
 
     const K3b::Device::Toc& toc = medium.toc();
-    K3b::ListViewItem* sessionItem = 0;
+    QTreeWidgetItem* sessionItem = 0;
     int lastSession = 0;
     for ( K3b::Device::Toc::const_iterator it = toc.begin(); it != toc.end(); ++it ) {
         const K3b::Device::Track& track = *it;
@@ -208,33 +212,36 @@ void K3b::DataMultisessionImportDialog::addMedium( const K3b::Medium& medium )
                 sessionInfo = i18np("1 audio track", "%1 audio tracks", numAudioTracks );
             }
 
-            sessionItem = new K3b::ListViewItem( mediumItem,
-                                               sessionItem,
-                                               i18n( "Session %1" ,
-                                                     lastSession )
-                                               + ( sessionInfo.isEmpty() ? QString() : " (" + sessionInfo + ')' ) );
+            sessionItem = new QTreeWidgetItem( mediumItem, sessionItem );
+            sessionItem->setText( 0, i18n( "Session %1", lastSession )
+                                     + ( sessionInfo.isEmpty() ? QString() : " (" + sessionInfo + ')' ) );
             if ( track.type() == K3b::Device::Track::TYPE_AUDIO )
-                sessionItem->setPixmap( 0, SmallIcon( "audio-x-generic" ) );
+                sessionItem->setIcon( 0, KIcon( "audio-x-generic" ) );
             else
-                sessionItem->setPixmap( 0, SmallIcon( "application-x-tar" ) );
+                sessionItem->setIcon( 0, KIcon( "application-x-tar" ) );
 
             d->sessions.insert( sessionItem, SessionInfo( lastSession, medium.device() ) );
-
-            // we have a session item, there is no need to select the medium as a whole
-            mediumItem->setSelectable( false );
         }
     }
-
-    mediumItem->setOpen( true );
+    
+    if( 0 == lastSession ) {
+        // the medium item in case we have no session info (will always use the last session)
+        d->sessions.insert( mediumItem, SessionInfo( 0, medium.device() ) );
+    }
+    else {
+        // we have a session item, there is no need to select the medium as a whole
+        mediumItem->setFlags( mediumItem->flags() ^ Qt::ItemIsSelectable );
+    }
+    
+    mediumItem->setExpanded( true );
 }
 
 
 void K3b::DataMultisessionImportDialog::slotSelectionChanged()
 {
-    K3b::ListViewItem* selected = static_cast<K3b::ListViewItem*>( d->sessionView->selectedItem() );
-    if ( selected ) {
-        const SessionInfo& info = d->sessions[selected];
-        showSessionInfo( info.device, info.sessionNumber );
+    Sessions::const_iterator session = d->sessions.find( d->sessionView->currentItem() );
+    if ( session != d->sessions.end() ) {
+        showSessionInfo( session->device, session->sessionNumber );
         enableButton( Ok, true );
     }
     else {
@@ -270,17 +277,18 @@ K3b::DataMultisessionImportDialog::DataMultisessionImportDialog( QWidget* parent
     layout->setMargin( 0 );
 
     QLabel* label = new QLabel( i18n( "Please select a session to import." ), widget );
-    d->sessionView = new K3b::ListView( widget );
-    d->sessionView->addColumn( "1" );
-    d->sessionView->header()->hide();
-    d->sessionView->setFullWidth( true );
+    d->sessionView = new QTreeWidget( widget );
+    d->sessionView->setHeaderHidden( true );
+    d->sessionView->setItemsExpandable( false );
+    d->sessionView->setRootIsDecorated( false );
 
     layout->addWidget( label );
     layout->addWidget( d->sessionView );
 
     connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3b::Device::Device*)),
              this, SLOT(updateMedia()) );
-    connect( d->sessionView, SIGNAL( selectionChanged() ), this, SLOT( slotSelectionChanged() ) );
+    connect( d->sessionView, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
+             this, SLOT( slotSelectionChanged() ) );
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
     connect(this,SIGNAL(cancelClicked()),this,SLOT(slotCancel()));
 }
