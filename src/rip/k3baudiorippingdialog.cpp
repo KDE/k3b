@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C)      2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -18,7 +19,6 @@
 #include "k3bpatternparser.h"
 #include "k3bcddbpatternwidget.h"
 #include "k3baudioconvertingoptionwidget.h"
-#include "k3bviewcolumnadjuster.h"
 
 #include "k3bjobprogressdialog.h"
 #include "k3bcore.h"
@@ -30,44 +30,38 @@
 #include "k3baudioencoder.h"
 #include "k3bmediacache.h"
 
-#include <kcombobox.h>
-#include <klocale.h>
-#include <kapplication.h>
-#include <kconfig.h>
-#include <kurlrequester.h>
-#include <kfiledialog.h>
+#include <KApplication>
+#include <KComboBox>
+#include <KConfig>
+#include <KDebug>
+#include <KFileDialog>
 #include <kio/global.h>
-#include <kiconloader.h>
-#include <kstdguiitem.h>
-#include <kdebug.h>
-#include <kmessagebox.h>
-#include <kurllabel.h>
+#include <KLocale>
+#include <KMessageBox>
+#include <KUrlLabel>
+#include <KUrlRequester>
 
-#include <qgroupbox.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qvariant.h>
-#include <qtooltip.h>
-
-#include <qdir.h>
-#include <qstringlist.h>
-#include <qmessagebox.h>
-#include <qfont.h>
-
-#include <qtoolbutton.h>
-#include <qtabwidget.h>
-#include <qspinbox.h>
-#include <qlist.h>
-#include <qhash.h>
-#include <qpair.h>
-#include <qvalidator.h>
+#include <QCheckBox>
+#include <QDir>
+#include <QFont>
 #include <QGridLayout>
+#include <QGroupBox>
+#include <QHash>
+#include <QHeaderView>
+#include <QLabel>
+#include <QLayout>
 #include <QList>
-#include <QtGui/QStandardItemModel>
-#include <QtGui/QTreeView>
-#include <QtGui/QHeaderView>
+#include <QMessageBox>
+#include <QPair>
+#include <QPushButton>
+#include <QTabWidget>
+#include <QToolButton>
+#include <QToolTip>
+#include <QTreeWidget>
+#include <QSpinBox>
+#include <QStringList>
+#include <QValidator>
+#include <QVariant>
 
 
 
@@ -76,50 +70,28 @@ class K3b::AudioRippingDialog::Private
 public:
     Private();
     void addTrack( const QString& name, const QString& length, const QString& size, const QString& type );
-    void addPlaylist( const QString& filename );
 
     QVector<QString> filenames;
     QString playlistFilename;
     K3b::FileSystemInfo fsInfo;
-    QStandardItemModel trackModel;
 
-    QTreeView* viewTracks;
+    QTreeWidget* viewTracks;
 };
+
 
 K3b::AudioRippingDialog::Private::Private()
     : viewTracks( 0 )
 {
 }
 
+
 void K3b::AudioRippingDialog::Private::addTrack( const QString& name, const QString& length, const QString& size, const QString& type )
 {
-    QList< QStandardItem* > items;
-    items.append( new QStandardItem( name ) );
-    items.append( new QStandardItem( length ) );
-    items.append( new QStandardItem( size ) );
-    items.append( new QStandardItem( type ) );
-    Q_FOREACH( QStandardItem* item, items )
-    {
-        item->setSelectable( false );
-        item->setEditable( false );
-    }
-    trackModel.appendRow( items );
-}
-
-
-void K3b::AudioRippingDialog::Private::addPlaylist( const QString& filename )
-{
-    QList< QStandardItem* > items;
-    items.append( new QStandardItem( filename ) );
-    items.append( new QStandardItem( "-" ) );
-    items.append( new QStandardItem( "-" ) );
-    items.append( new QStandardItem( i18n("Playlist") ) );
-    Q_FOREACH( QStandardItem* item, items )
-    {
-        item->setSelectable( false );
-        item->setEditable( false );
-    }
-    trackModel.appendRow( items );
+    QTreeWidgetItem* item = new QTreeWidgetItem( viewTracks );
+    item->setText( 0, name );
+    item->setText( 1, length );
+    item->setText( 2, size );
+    item->setText( 3, type );
 }
 
 
@@ -165,12 +137,25 @@ void K3b::AudioRippingDialog::setupGui()
     QWidget *frame = mainWidget();
     QGridLayout* Form1Layout = new QGridLayout( frame );
     Form1Layout->setMargin( 0 );
-
-    d->viewTracks = new QTreeView( frame );
-    d->viewTracks->setModel( &d->trackModel );
+    
+    QTreeWidgetItem* header = new QTreeWidgetItem;
+    header->setText( 0, i18n( "Filename") );
+    header->setText( 1, i18n( "Length") );
+    header->setText( 2, i18n( "File Size") );
+    header->setText( 3, i18n( "Type") );
+    
+    d->viewTracks = new QTreeWidget( frame );
+    d->viewTracks->setSortingEnabled( false );
+    d->viewTracks->setAllColumnsShowFocus( true );
+    d->viewTracks->setHeaderItem( header );
     d->viewTracks->setRootIsDecorated( false );
-    K3b::ViewColumnAdjuster* vca = new K3b::ViewColumnAdjuster( d->viewTracks );
-    vca->setFixedColumns( QList<int>() << 1 << 2 << 3 );
+    d->viewTracks->setSelectionMode( QAbstractItemView::NoSelection );
+    d->viewTracks->setFocusPolicy( Qt::NoFocus );
+    d->viewTracks->header()->setStretchLastSection( false );
+    d->viewTracks->header()->setResizeMode( 0, QHeaderView::Stretch );
+    d->viewTracks->header()->setResizeMode( 1, QHeaderView::ResizeToContents );
+    d->viewTracks->header()->setResizeMode( 2, QHeaderView::ResizeToContents );
+    d->viewTracks->header()->setResizeMode( 3, QHeaderView::ResizeToContents );
 
     QTabWidget* mainTab = new QTabWidget( frame );
 
@@ -327,10 +312,8 @@ void K3b::AudioRippingDialog::slotStartClicked()
 
 void K3b::AudioRippingDialog::refresh()
 {
-    d->trackModel.clear();
+    d->viewTracks->clear();
     d->filenames.clear();
-
-    d->trackModel.setHorizontalHeaderLabels( QStringList() << i18n( "Filename") << i18n( "Length") << i18n( "File Size") << i18n( "Type") );
 
     QString baseDir = K3b::prepareDir( m_optionWidget->baseDir() );
     d->fsInfo.setPath( baseDir );
@@ -441,7 +424,7 @@ void K3b::AudioRippingDialog::refresh()
                                                              m_patternWidget->replaceBlanks(),
                                                              m_patternWidget->blankReplaceString() );
 
-        d->addPlaylist( filename );
+        d->addTrack( filename, "-", "-", i18n("Playlist") );
 
         d->playlistFilename = d->fsInfo.fixupPath( baseDir + "/" + filename );
     }

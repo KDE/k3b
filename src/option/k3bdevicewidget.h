@@ -16,12 +16,9 @@
 #ifndef K3BDEVICEWIDGET_H
 #define K3BDEVICEWIDGET_H
 
-#include <qwidget.h>
+#include <QWidget>
 
-class QLabel;
 class QPushButton;
-class QString;
-class QFrame;
 class QTreeWidget;
 class QTreeWidgetItem;
 

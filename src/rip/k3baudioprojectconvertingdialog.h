@@ -19,11 +19,10 @@
 #include "k3binteractiondialog.h"
 #include "k3bmsf.h"
 
-#include <qstringlist.h>
+#include <QStringList>
 
 
 namespace K3b {
-    class ListView;
     class CddbPatternWidget;
     class AudioConvertingOptionWidget;
     class AudioDoc;
@@ -54,8 +53,7 @@ namespace K3b {
     private:
         CddbPatternWidget* m_patternWidget;
         AudioConvertingOptionWidget* m_optionWidget;
-
-        ListView* m_viewTracks;
+        
         AudioDoc* m_doc;
 
         void setupGui();

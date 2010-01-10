@@ -1,7 +1,7 @@
 /*
  *
- * $Id$
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C)      2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -19,28 +19,23 @@
 #include "k3bdevice.h"
 #include "k3bdeviceglobals.h"
 
-#include <kinputdialog.h>
-#include <kmessagebox.h>
-#include <knuminput.h>
-#include <kdialog.h>
-#include <klocale.h>
-#include <kconfig.h>
-#include <ksimpleconfig.h>
-#include <kiconloader.h>
-#include <kstandarddirs.h>
+#include <KConfig>
+#include <KIcon>
+#include <KLocale>
+#include <KStandardDirs>
 #include <kio/global.h>
 
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qvariant.h>
-#include <qtooltip.h>
-#include <qstring.h>
-#include <qcolor.h>
-#include <qlist.h>
-#include <QtGui/QHeaderView>
+#include <QColor>
 #include <QGridLayout>
-#include <QtGui/QGroupBox>
-#include <QtGui/QTreeWidget>
+#include <QGroupBox>
+#include <QHeaderView>
+#include <QLayout>
+#include <QList>
+#include <QPushButton>
+#include <QString>
+#include <QToolTip>
+#include <QTreeWidget>
+#include <QVariant>
 
 
 
@@ -68,16 +63,18 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
 
     // Devices Box
     // ------------------------------------------------
-    QGroupBox* groupDevices = new QGroupBox( i18n( "CD/DVD Drives" ), this );
+    QGroupBox* groupDevices = new QGroupBox( i18n( "CD/DVD/BD Drives" ), this );
     QVBoxLayout* groupDevicesLayout = new QVBoxLayout( groupDevices );
 
     m_viewDevices = new QTreeWidget( groupDevices );
     m_viewDevices->setAllColumnsShowFocus( true );
-    m_viewDevices->header()->hide();
+    m_viewDevices->setHeaderHidden( true );
     m_viewDevices->setColumnCount( 2 );
-//    m_viewDevices->setDoubleClickForEdit(false);
     m_viewDevices->setSelectionMode( QAbstractItemView::NoSelection );
-//    m_viewDevices->setFullWidth(true);
+    m_viewDevices->setItemsExpandable( false );
+    m_viewDevices->setRootIsDecorated( false );
+    m_viewDevices->header()->setResizeMode( 0, QHeaderView::ResizeToContents );
+    m_viewDevices->setFocusPolicy( Qt::NoFocus );
 
     groupDevicesLayout->addWidget( m_viewDevices );
     // ------------------------------------------------
@@ -116,12 +113,12 @@ void K3b::DeviceWidget::updateDeviceListViews()
     // create the parent view items
     // -----------------------------------------
     m_writerParentViewItem = new QTreeWidgetItem( m_viewDevices, QStringList() << i18n("Writer Drives") );
-    m_writerParentViewItem->setData( 0, Qt::DecorationRole, SmallIcon( "media-optical-recordable" ) );
+    m_writerParentViewItem->setIcon( 0, KIcon( "media-optical-recordable" ) );
     // spacer item
     QTreeWidgetItem* spacer = new QTreeWidgetItem( m_viewDevices );
     spacer->setFlags( Qt::NoItemFlags );
     m_readerParentViewItem = new QTreeWidgetItem( m_viewDevices, QStringList() << i18n("Read-only Drives") );
-    m_readerParentViewItem->setData( 0, Qt::DecorationRole, SmallIcon( "media-optical" ) );
+    m_readerParentViewItem->setIcon( 0, KIcon( "media-optical" ) );
     // -----------------------------------------
 
     QFont fBold( m_viewDevices->font() );
@@ -192,8 +189,6 @@ void K3b::DeviceWidget::updateDeviceListViews()
             typeItem->setText( 1, K3b::Device::writingModeString(dev->writingModes()) );
             typeItem->setForeground( 1, disabledTextColor );
         }
-
-        m_viewDevices->expandItem( devRoot );
     }
 
     // create empty items
@@ -207,11 +202,8 @@ void K3b::DeviceWidget::updateDeviceListViews()
         item->setText( 0, i18n("none") );
         item->setFont( 0, fItalic );
     }
-
-    m_viewDevices->expandItem( m_writerParentViewItem );
-    m_viewDevices->expandItem( m_readerParentViewItem );
-
-    m_viewDevices->resizeColumnToContents( 0 );
+    
+    m_viewDevices->expandAll();
 }
 
 #include "k3bdevicewidget.moc"

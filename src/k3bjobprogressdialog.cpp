@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C)      2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -30,7 +31,6 @@
 #include "k3bversion.h"
 #include "k3bthememanager.h"
 
-#include <K3ListView>
 #include <KColorScheme>
 #include <KConfig>
 #include <KDebug>
@@ -44,7 +44,6 @@
 #include <KStandardGuiItem>
 #include <KSqueezedTextLabel>
 
-#include <Q3Header>
 #include <QCloseEvent>
 #include <QDateTime>
 #include <QFont>
@@ -57,6 +56,7 @@
 #include <QScrollBar>
 #include <QString>
 #include <QTimer>
+#include <QTreeWidget>
 #include <QVBoxLayout>
 
 
@@ -67,6 +67,7 @@ public:
 
     QFrame* headerFrame;
     QFrame* progressHeaderFrame;
+    QTreeWidget* viewInfo;
 };
 
 
@@ -147,13 +148,14 @@ void K3b::JobProgressDialog::setupGUI()
     mainLayout->addWidget( d->headerFrame );
     // ------------------------------------------------------------------------------------------
 
-    m_viewInfo = new K3ListView( mainWidget() );
-    m_viewInfo->addColumn( "" );
-    m_viewInfo->addColumn( i18n( "Message" ) );
-    m_viewInfo->setFullWidth( true );
-    m_viewInfo->header()->hide();
-    m_viewInfo->setSorting(-1);
-    mainLayout->addWidget( m_viewInfo, 1 );
+    d->viewInfo = new QTreeWidget( mainWidget() );
+    d->viewInfo->setAllColumnsShowFocus( true );
+    d->viewInfo->setHeaderHidden( true );
+    d->viewInfo->setSortingEnabled( false );
+    d->viewInfo->setRootIsDecorated( false );
+    d->viewInfo->setSelectionMode( QAbstractItemView::NoSelection );
+    d->viewInfo->setFocusPolicy( Qt::NoFocus );
+    mainLayout->addWidget( d->viewInfo, 1 );
 
 
     // progress header
@@ -288,27 +290,26 @@ void K3b::JobProgressDialog::slotProcessedSubSize( int processedTrackSize, int t
 
 void K3b::JobProgressDialog::slotInfoMessage( const QString& infoString, int type )
 {
-    Q3ListViewItem* currentInfoItem = new Q3ListViewItem( m_viewInfo, m_viewInfo->lastItem(), QString(), infoString );
-    currentInfoItem->setSelectable( false );
+    QTreeWidgetItem* currentInfoItem = new QTreeWidgetItem( d->viewInfo );
+    currentInfoItem->setText( 0, infoString );
 
     // set the icon
     switch( type ) {
     case K3b::Job::MessageError:
-        currentInfoItem->setPixmap( 0, SmallIcon( "dialog-error" ) );
+        currentInfoItem->setIcon( 0, KIcon( "dialog-error" ) );
         break;
     case K3b::Job::MessageWarning:
-        currentInfoItem->setPixmap( 0, SmallIcon( "dialog-warning" ) );
+        currentInfoItem->setIcon( 0, KIcon( "dialog-warning" ) );
         break;
     case K3b::Job::MessageSuccess:
-        currentInfoItem->setPixmap( 0, SmallIcon( "dialog-ok" ) );
+        currentInfoItem->setIcon( 0, KIcon( "dialog-ok" ) );
         break;
     case K3b::Job::MessageInfo:
     default:
-        currentInfoItem->setPixmap( 0, SmallIcon( "dialog-information" ) );
+        currentInfoItem->setIcon( 0, KIcon( "dialog-information" ) );
     }
 
-    // This should scroll down (hopefully!)
-    m_viewInfo->ensureItemVisible( currentInfoItem );
+    d->viewInfo->scrollToItem( currentInfoItem, QAbstractItemView::EnsureVisible );
 }
 
 
@@ -388,7 +389,7 @@ void K3b::JobProgressDialog::setJob( K3b::Job* job )
     showButton( User2, false );
     enableButtonCancel( true );
 
-    m_viewInfo->clear();
+    d->viewInfo->clear();
     m_progressPercent->setValue(0);
     m_progressSubPercent->setValue(0);
     m_labelTask->setText("");

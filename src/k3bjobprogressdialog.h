@@ -25,7 +25,6 @@
 
 #include <QDateTime>
 
-class K3ListView;
 class KSqueezedTextLabel;
 class QCloseEvent;
 class QFrame;
@@ -115,7 +114,6 @@ namespace K3b {
 
         ThemedLabel* m_labelJob;
         ThemedLabel* m_labelJobDetails;
-        K3ListView* m_viewInfo;
         ThemedLabel* m_labelTask;
         ThemedLabel* m_labelElapsedTime;
         KSqueezedTextLabel* m_labelSubTask;

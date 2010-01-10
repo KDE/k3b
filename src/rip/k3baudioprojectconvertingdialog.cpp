@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C)      2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -26,28 +27,26 @@
 #include "k3bjobprogressdialog.h"
 #include "k3bcore.h"
 #include "k3bglobals.h"
-#include "k3blistview.h"
 #include "k3baudioencoder.h"
 
-#include <kcombobox.h>
-#include <klocale.h>
-#include <kconfig.h>
-#include <k3listview.h>
-#include <kurlrequester.h>
-#include <kfiledialog.h>
+#include <KComboBox>
+#include <KConfig>
+#include <KDebug>
+#include <KFileDialog>
 #include <kio/global.h>
-#include <kdebug.h>
-#include <kmessagebox.h>
+#include <KLocale>
+#include <KMessageBox>
+#include <KUrlRequester>
 
-#include <q3header.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qdir.h>
-#include <qstringlist.h>
-#include <qtabwidget.h>
-//Added by qt3to4:
+#include <QCheckBox>
+#include <QDir>
 #include <QGridLayout>
+#include <QHeaderView>
+#include <QLabel>
+#include <QLayout>
+#include <QStringList>
+#include <QTabWidget>
+#include <QTreeWidget>
 
 #include <libkcddb/cdinfo.h>
 
@@ -84,6 +83,7 @@ public:
     Private() {
     }
 
+    QTreeWidget* viewTracks;
     QVector<QString> filenames;
     QString playlistFilename;
 };
@@ -122,13 +122,22 @@ void K3b::AudioProjectConvertingDialog::setupGui()
     QGridLayout* Form1Layout = new QGridLayout( frame );
     Form1Layout->setMargin( 0 );
 
-    m_viewTracks = new K3b::ListView( frame );
-    m_viewTracks->addColumn(i18n( "Filename (relative to base folder)") );
-    m_viewTracks->addColumn(i18n( "Length") );
-    m_viewTracks->addColumn(i18n( "File Size") );
-    m_viewTracks->setSorting(-1);
-    m_viewTracks->setAllColumnsShowFocus(true);
-    m_viewTracks->setFullWidth(true);
+    QTreeWidgetItem* header = new QTreeWidgetItem;
+    header->setText( 0, i18n( "Filename (relative to base folder)") );
+    header->setText( 1, i18n( "Length") );
+    header->setText( 2, i18n( "File Size") );
+    
+    d->viewTracks = new QTreeWidget( frame );
+    d->viewTracks->setSortingEnabled( false );
+    d->viewTracks->setAllColumnsShowFocus( true );
+    d->viewTracks->setRootIsDecorated( false );
+    d->viewTracks->setSelectionMode( QAbstractItemView::NoSelection );
+    d->viewTracks->setFocusPolicy( Qt::NoFocus );
+    d->viewTracks->setHeaderItem( header );
+    d->viewTracks->header()->setStretchLastSection( false );
+    d->viewTracks->header()->setResizeMode( 0, QHeaderView::Stretch );
+    d->viewTracks->header()->setResizeMode( 1, QHeaderView::ResizeToContents );
+    d->viewTracks->header()->setResizeMode( 2, QHeaderView::ResizeToContents );
 
     QTabWidget* mainTab = new QTabWidget( frame );
 
@@ -142,7 +151,7 @@ void K3b::AudioProjectConvertingDialog::setupGui()
     mainTab->addTab( m_patternWidget, i18n("File Naming") );
     connect( m_patternWidget, SIGNAL(changed()), this, SLOT(refresh()) );
 
-    Form1Layout->addWidget( m_viewTracks, 0, 0 );
+    Form1Layout->addWidget( d->viewTracks, 0, 0 );
     Form1Layout->addWidget( mainTab, 1, 0 );
     Form1Layout->setRowStretch( 0, 1 );
 
@@ -178,7 +187,6 @@ void K3b::AudioProjectConvertingDialog::slotStartClicked()
     }
 
     // check if we need to overwrite some files...
-    Q3ListViewItemIterator it( m_viewTracks );
     QStringList filesToOverwrite;
     for( int i = 0; i < d->filenames.count(); ++i ) {
         if( QFile::exists( d->filenames[i] ) )
@@ -236,7 +244,7 @@ void K3b::AudioProjectConvertingDialog::refresh()
 #ifdef __GNUC__
 #warning Reuse the code from AudioRippingDialog
 #endif
-    m_viewTracks->clear();
+    d->viewTracks->clear();
     d->filenames.clear();
 
     // FIXME: this is bad and needs to be improved
@@ -268,12 +276,10 @@ void K3b::AudioProjectConvertingDialog::refresh()
                                                      m_patternWidget->replaceBlanks(),
                                                      m_patternWidget->blankReplaceString() );
 
-
-        (void)new K3ListViewItem( m_viewTracks,
-                                  m_viewTracks->lastItem(),
-                                  filename,
-                                  m_doc->length().toString(),
-                                  filesize < 0 ? i18n("unknown") : KIO::convertSize( filesize ) );
+        QTreeWidgetItem* item = new QTreeWidgetItem( d->viewTracks );
+        item->setText( 0, filename );
+        item->setText( 1, m_doc->length().toString() );
+        item->setText( 2, filesize < 0 ? i18n("unknown") : KIO::convertSize( filesize ) );
 
         d->filenames.append( K3b::fixupPath( baseDir + "/" + filename ) );
 
@@ -283,13 +289,10 @@ void K3b::AudioProjectConvertingDialog::refresh()
                                                                m_patternWidget->playlistPattern(),
                                                                m_patternWidget->replaceBlanks(),
                                                                m_patternWidget->blankReplaceString() );
-            
-            (void)new K3ListViewItem( m_viewTracks,
-                                      m_viewTracks->lastItem(),
-                                      cueFilename,
-                                      "-",
-                                      "-",
-                                      i18n("Cue-file") );
+            item = new QTreeWidgetItem( d->viewTracks );
+            item->setText( 0, cueFilename );
+            item->setText( 1, "-" );
+            item->setText( 2, "-" );
         }
     }
     else {
@@ -311,12 +314,11 @@ void K3b::AudioProjectConvertingDialog::refresh()
                                                                  m_patternWidget->filenamePattern(),
                                                                  m_patternWidget->replaceBlanks(),
                                                                  m_patternWidget->blankReplaceString() );
-
-            (void)new K3ListViewItem( m_viewTracks,
-                                      m_viewTracks->lastItem(),
-                                      filename,
-                                      track->length().toString(),
-                                      filesize < 0 ? i18n("unknown") : KIO::convertSize( filesize ) );
+            
+            QTreeWidgetItem* item = new QTreeWidgetItem( d->viewTracks );
+            item->setText( 0, filename );
+            item->setText( 1, track->length().toString() );
+            item->setText( 2, filesize < 0 ? i18n("unknown") : KIO::convertSize( filesize ) );
 
             d->filenames[ track->trackNumber()-1 ] = K3b::fixupPath( baseDir + "/" + filename );
         }
@@ -329,13 +331,11 @@ void K3b::AudioProjectConvertingDialog::refresh()
                                                              m_patternWidget->playlistPattern(),
                                                              m_patternWidget->replaceBlanks(),
                                                              m_patternWidget->blankReplaceString() );
-
-        (void)new K3ListViewItem( m_viewTracks,
-                                  m_viewTracks->lastItem(),
-                                  filename,
-                                  "-",
-                                  "-",
-                                  i18n("Playlist") );
+        
+        QTreeWidgetItem* item = new QTreeWidgetItem( d->viewTracks );
+        item->setText( 0, filename );
+        item->setText( 1, "-" );
+        item->setText( 2, "-" );
 
         d->playlistFilename = K3b::fixupPath( baseDir + "/" + filename );
     }
