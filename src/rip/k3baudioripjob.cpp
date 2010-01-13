@@ -180,7 +180,7 @@ void K3b::AudioRipJob::start()
 void K3b::AudioRipJob::jobFinished( bool success )
 {
     if ( !success && canceled() ) {
-        if( d->currentTrack != d->tracks.end() ) {
+        if( d->currentTrack != d->tracks.constEnd() ) {
             if( QFile::exists( d->currentTrack.key() ) ) {
                 QFile::remove( d->currentTrack.key() );
                 emit infoMessage( i18n("Removed partial file '%1'.",d->currentTrack.key()), K3b::Job::MessageInfo );
@@ -256,7 +256,7 @@ bool K3b::AudioRipJob::run()
 
     bool success = true;
     QString lastFilename;
-    for( d->currentTrack = d->tracks.begin(); d->currentTrack != d->tracks.end(); ++d->currentTrack ) {
+    for( d->currentTrack = d->tracks.constBegin(); d->currentTrack != d->tracks.constEnd(); ++d->currentTrack ) {
         if( !ripTrack( d->currentTrack.value(), d->currentTrack.key(), lastFilename ) ) {
             success = false;
             break;

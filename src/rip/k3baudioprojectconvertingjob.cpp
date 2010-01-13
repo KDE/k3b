@@ -145,7 +145,7 @@ bool K3b::AudioProjectConvertingJob::run()
     bool success = true;
     QString lastFilename;
     Tracks::const_iterator track;
-    for( track = d->tracks.begin(); success && track != d->tracks.end(); ++track ) {
+    for( track = d->tracks.constBegin(); success && track != d->tracks.constEnd(); ++track ) {
         if( AudioTrack* audioTrack = d->doc->getTrack( track.value() ) ) {
             success = convertTrack( *audioTrack, track.key(), lastFilename );
         }
@@ -166,7 +166,7 @@ bool K3b::AudioProjectConvertingJob::run()
     }
 
     if( canceled() ) {
-        if( track != d->tracks.end() ) {
+        if( track != d->tracks.constEnd() ) {
             if( QFile::exists( track.key() ) ) {
                 QFile::remove( track.key() );
                 emit infoMessage( i18n("Removed partial file '%1'.", track.key()), K3b::Job::MessageInfo );

@@ -80,8 +80,8 @@ K3b::DataDoc* K3b::DataMultisessionImportDialog::importSession( K3b::DataDoc* do
 
 void K3b::DataMultisessionImportDialog::slotOk()
 {
-    Sessions::const_iterator session = d->sessions.find( d->sessionView->currentItem() );
-    if ( session != d->sessions.end() ) {
+    Sessions::const_iterator session = d->sessions.constFind( d->sessionView->currentItem() );
+    if ( session != d->sessions.constEnd() ) {
         QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
         
         K3b::Device::Device* dev = session->device;
@@ -239,8 +239,8 @@ void K3b::DataMultisessionImportDialog::addMedium( const K3b::Medium& medium )
 
 void K3b::DataMultisessionImportDialog::slotSelectionChanged()
 {
-    Sessions::const_iterator session = d->sessions.find( d->sessionView->currentItem() );
-    if ( session != d->sessions.end() ) {
+    Sessions::const_iterator session = d->sessions.constFind( d->sessionView->currentItem() );
+    if ( session != d->sessions.constEnd() ) {
         showSessionInfo( session->device, session->sessionNumber );
         enableButton( Ok, true );
     }
