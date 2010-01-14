@@ -166,6 +166,7 @@ ProgramsModel::ProgramsModel( QObject* parent )
 
 ProgramsModel::~ProgramsModel()
 {
+    delete d;
 }
 
 
