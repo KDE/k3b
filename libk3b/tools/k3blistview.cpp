@@ -35,7 +35,6 @@
 #include <qpalette.h>
 #include <qstyle.h>
 #include <qapplication.h>
-#include <q3progressbar.h>
 #include <qimage.h>
 //Added by qt3to4:
 #include <QKeyEvent>
@@ -44,6 +43,7 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
+#include <QStyleOptionProgressBar>
 
 
 #include <limits.h>
@@ -407,62 +407,47 @@ void K3b::ListViewItem::paintK3bCell( QPainter* p, const QColorGroup& cg, int co
 
 void K3b::ListViewItem::paintProgressBar( QPainter* p, const QColorGroup& cgh, int col, int width )
 {
-//   ColumnInfo* info = getColumnInfo( col );
+    ColumnInfo* info = getColumnInfo( col );
 
-//   QStyle::SFlags flags = QStyle::Style_Default;
-//   if( listView()->isEnabled() )
-//     flags |= QStyle::Style_Enabled;
-//   if( listView()->hasFocus() )
-//     flags |= QStyle::Style_HasFocus;
+    // FIXME: the QPainter is translated so 0, m_vMargin is the upper left of our paint rect
+    QRect r( 0, m_vMargin, width, height()-2*m_vMargin );
 
-//   // FIXME: the QPainter is translated so 0, m_vMargin is the upper left of our paint rect
-//   QRect r( 0, m_vMargin, width, height()-2*m_vMargin );
+    // create the double buffer pixmap
+    static QPixmap *doubleBuffer = 0;
+    if( !doubleBuffer )
+        doubleBuffer = new QPixmap;
+    doubleBuffer->resize( width, height() );
 
-//   // create the double buffer pixmap
-//   static QPixmap *doubleBuffer = 0;
-//   if( !doubleBuffer )
-//     doubleBuffer = new QPixmap;
-//   doubleBuffer->resize( width, height() );
+    QPainter dbPainter( doubleBuffer );
 
-//   QPainter dbPainter( doubleBuffer );
+    // clear the background (we cannot use paintEmptyArea since it's protected in QListView)
+    if( K3b::ListView* lv = dynamic_cast<K3b::ListView*>(listView()) )
+        lv->paintEmptyArea( &dbPainter, r );
+    else
+        dbPainter.fillRect( 0, 0, width, height(), cgh.brush( QColorGroup::Base ) );
 
-//   // clear the background (we cannot use paintEmptyArea since it's protected in QListView)
-//   if( K3b::ListView* lv = dynamic_cast<K3b::ListView*>(listView()) )
-//     lv->paintEmptyArea( &dbPainter, r );
-//   else
-//     dbPainter.fillRect( 0, 0, width, height(),
-// 			cgh.brush( QPalette::backgroundRoleFromMode(listView()->viewport()->backgroundMode()) ) );
+    // we want a little additional margin
+    r.setLeft( r.left()+1 );
+    r.setWidth( r.width()-2 );
+    r.setTop( r.top()+1 );
+    r.setHeight( r.height()-2 );
 
-//   // we want a little additional margin
-//   r.setLeft( r.left()+1 );
-//   r.setWidth( r.width()-2 );
-//   r.setTop( r.top()+1 );
-//   r.setHeight( r.height()-2 );
+    QStyleOptionProgressBar option;
+    option.initFrom( listView() );
+    option.minimum = 1;
+    option.maximum = info->totalProgressSteps;
+    option.progress = info->progressValue;
+    option.rect = r;
+    option.text = QString( "%1%%" ).arg( info->progressValue );
+    option.textVisible = ( info->progressValue > 0 );
+    option.textAlignment = Qt::AlignCenter;
 
-//   // this might be a stupid hack but most styles do not reimplement drawPrimitive PE_ProgressBarChunk
-//   // so this way the user is happy....
-//   static Q3ProgressBar* s_dummyProgressBar = 0;
-//   if( !s_dummyProgressBar ) {
-//     s_dummyProgressBar = new Q3ProgressBar();
-//   }
+    listView()->style()->drawControl(QStyle::CE_ProgressBarContents, &option, &dbPainter );
+    listView()->style()->drawControl(QStyle::CE_ProgressBarLabel, &option, &dbPainter );
 
-//   s_dummyProgressBar->setTotalSteps( info->totalProgressSteps );
-//   s_dummyProgressBar->setProgress( info->progressValue );
-
-//   // some styles use the widget's geometry
-//   s_dummyProgressBar->setGeometry( r );
-
-//   listView()->style().drawControl(QStyle::CE_ProgressBarContents, &dbPainter, s_dummyProgressBar, r, cgh, flags );
-//   listView()->style().drawControl(QStyle::CE_ProgressBarLabel, &dbPainter, s_dummyProgressBar, r, cgh, flags );
-
-//   // now we really paint the progress in the listview
-//   p->drawPixmap( 0, 0, *doubleBuffer );
+    // now we really paint the progress in the listview
+    p->drawPixmap( 0, 0, *doubleBuffer );
 }
-
-
-
-
-
 
 
 K3b::CheckListViewItem::CheckListViewItem(Q3ListView *parent)
