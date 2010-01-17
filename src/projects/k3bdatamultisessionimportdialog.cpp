@@ -115,8 +115,6 @@ void K3b::DataMultisessionImportDialog::slotOk()
 
         done( 0 );
     }
-    else
-        done( 1 );
 }
 
 
@@ -289,6 +287,7 @@ K3b::DataMultisessionImportDialog::DataMultisessionImportDialog( QWidget* parent
              this, SLOT(updateMedia()) );
     connect( d->sessionView, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
              this, SLOT( slotSelectionChanged() ) );
+    connect( d->sessionView, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SIGNAL(okClicked()) );
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
     connect(this,SIGNAL(cancelClicked()),this,SLOT(slotCancel()));
 }
