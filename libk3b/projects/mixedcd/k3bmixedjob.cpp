@@ -19,6 +19,7 @@
 
 #include "k3bdatadoc.h"
 #include "k3bisoimager.h"
+#include "k3bisooptions.h"
 #include "k3bmsinfofetcher.h"
 #include "k3baudioimager.h"
 #include "k3baudiodoc.h"

@@ -14,11 +14,10 @@
 
 #include "k3bdatamultisessioncombobox.h"
 
-#include <klocale.h>
-#include <kconfig.h>
+#include <KConfigGroup>
+#include <KLocale>
 
-
-#include <qtooltip.h>
+#include <QToolTip>
 
 
 static const int s_autoIndex = 0;

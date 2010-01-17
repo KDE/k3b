@@ -19,6 +19,7 @@
 
 #include "k3bcore.h"
 #include "k3bisoimager.h"
+#include "k3bisooptions.h"
 #include "k3bgrowisofswriter.h"
 #include "k3bglobals.h"
 

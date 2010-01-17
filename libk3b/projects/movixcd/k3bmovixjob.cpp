@@ -21,6 +21,7 @@
 #include "k3bcore.h"
 #include "k3bdatajob.h"
 #include "k3bdevice.h"
+#include "k3bisooptions.h"
 
 #include <klocale.h>
 #include <kdebug.h>

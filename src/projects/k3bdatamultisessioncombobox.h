@@ -19,6 +19,7 @@
 #include "k3bdatadoc.h"
 
 
+class KConfigGroup;
 
 namespace K3b {
     class DataMultiSessionCombobox : public QComboBox

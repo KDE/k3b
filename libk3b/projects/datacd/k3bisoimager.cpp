@@ -27,6 +27,7 @@
 #include "k3bversion.h"
 #include "k3bglobals.h"
 #include "k3bfilesplitter.h"
+#include "k3bisooptions.h"
 
 #include <kdebug.h>
 #include <kstandarddirs.h>

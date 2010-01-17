@@ -15,6 +15,7 @@
 
 #include "k3bdatadoc.h"
 #include "k3bfileitem.h"
+#include "k3bdataitem.h"
 #include "k3bdiritem.h"
 #include "k3bsessionimportitem.h"
 #include "k3bdatajob.h"
@@ -26,6 +27,7 @@
 #include "k3bglobals.h"
 #include "k3bmsf.h"
 #include "k3biso9660.h"
+#include "k3bisooptions.h"
 #include "k3bdevicehandler.h"
 #include "k3bdevice.h"
 #include "k3btoc.h"
@@ -38,6 +40,7 @@
 #include <QDomElement>
 #include <QFile>
 #include <QFileInfo>
+#include <QStringList>
 #include <QTimer>
 
 #include <KApplication>
@@ -55,6 +58,63 @@
 #include <ctype.h>
 
 
+class K3b::DataDoc::Private
+{
+public:
+    Private()
+    :
+        oldSessionSize( 0 ),
+        root( 0 ),
+        dataMode( 0 ),
+        verifyData( false ),
+        importedSession( -1 ),
+        bootCataloge( 0 ),
+        bExistingItemsReplaceAll( false ),
+        bExistingItemsIgnoreAll( false ),
+        needToCutFilenames( false )
+    {
+        sizeHandler = new K3b::FileCompilationSizeHandler();
+    }
+    
+    ~Private()
+    {
+        delete root;
+        delete sizeHandler;
+        //  delete oldSessionSizeHandler;
+    }
+
+    FileCompilationSizeHandler* sizeHandler;
+
+    //  FileCompilationSizeHandler* oldSessionSizeHandler;
+    KIO::filesize_t oldSessionSize;
+
+    QStringList notFoundFiles;
+    QStringList noPermissionFiles;
+
+    RootItem* root;
+
+    int dataMode;
+
+    bool verifyData;
+
+    IsoOptions isoOptions;
+
+    MultiSessionMode multisessionMode;
+    QList<DataItem*> oldSession;
+    int importedSession;
+
+    // boot cd stuff
+    DataItem* bootCataloge;
+    QList<BootItem*> bootImages;
+
+    bool bExistingItemsReplaceAll;
+    bool bExistingItemsIgnoreAll;
+
+    bool needToCutFilenames;
+    QList<DataItem*> needToCutFilenameItems;
+};
+
+
 /**
  * There are two ways to fill a data project with files and folders:
  * \li Use the addUrl and addUrlsT methods
@@ -62,34 +122,30 @@
  *     by the constructors of the items.
  */
 K3b::DataDoc::DataDoc( QObject* parent )
-    : K3b::Doc( parent )
+    : K3b::Doc( parent ),
+      d( new Private )
 {
-    m_root = 0;
-
-    m_sizeHandler = new K3b::FileCompilationSizeHandler();
 }
 
 
 K3b::DataDoc::~DataDoc()
 {
-    delete m_root;
-    delete m_sizeHandler;
-    //  delete m_oldSessionSizeHandler;
+    delete d;
 }
 
 
 bool K3b::DataDoc::newDocument()
 {
     clear();
-    if ( !m_root )
-        m_root = new K3b::RootItem( this );
+    if ( !d->root )
+        d->root = new K3b::RootItem( this );
 
-    m_bExistingItemsReplaceAll = m_bExistingItemsIgnoreAll = false;
+    d->bExistingItemsReplaceAll = d->bExistingItemsIgnoreAll = false;
 
-    m_multisessionMode = AUTO;
-    m_dataMode = K3b::DataModeAuto;
+    d->multisessionMode = AUTO;
+    d->dataMode = K3b::DataModeAuto;
 
-    m_isoOptions = K3b::IsoOptions();
+    d->isoOptions = K3b::IsoOptions();
 
     return K3b::Doc::newDocument();
 }
@@ -98,34 +154,40 @@ bool K3b::DataDoc::newDocument()
 void K3b::DataDoc::clear()
 {
     clearImportedSession();
-    m_importedSession = -1;
-    m_oldSessionSize = 0;
-    m_bootCataloge = 0;
-    if( m_root ) {
-        while( !m_root->children().isEmpty() )
-            removeItem( m_root->children().first() );
+    d->importedSession = -1;
+    d->oldSessionSize = 0;
+    d->bootCataloge = 0;
+    if( d->root ) {
+        while( !d->root->children().isEmpty() )
+            removeItem( d->root->children().first() );
     }
-    m_sizeHandler->clear();
+    d->sizeHandler->clear();
     emit importedSessionChanged( importedSession() );
 }
 
 
 QString K3b::DataDoc::name() const
 {
-    return m_isoOptions.volumeID();
+    return d->isoOptions.volumeID();
 }
 
 
-void K3b::DataDoc::setIsoOptions( const K3b::IsoOptions& o )
+const K3b::IsoOptions& K3b::DataDoc::isoOptions() const
 {
-    m_isoOptions = o;
+    return d->isoOptions;
+}
+
+
+void K3b::DataDoc::setIsoOptions( const K3b::IsoOptions& isoOptions )
+{
+    d->isoOptions = isoOptions;
     emit changed();
 }
 
 
 void K3b::DataDoc::setVolumeID( const QString& v )
 {
-    m_isoOptions.setVolumeID( v );
+    d->isoOptions.setVolumeID( v );
     emit changed();
     emit volumeIdChanged();
 }
@@ -231,17 +293,17 @@ K3b::DirItem* K3b::DataDoc::addEmptyDir( const QString& name, K3b::DirItem* pare
 
 KIO::filesize_t K3b::DataDoc::size() const
 {
-    if( m_isoOptions.doNotCacheInodes() )
-        return root()->blocks().mode1Bytes() + m_oldSessionSize;
+    if( d->isoOptions.doNotCacheInodes() )
+        return root()->blocks().mode1Bytes() + d->oldSessionSize;
     else
-        return m_sizeHandler->blocks( m_isoOptions.followSymbolicLinks() ||
-                                      !m_isoOptions.createRockRidge() ).mode1Bytes();
+        return d->sizeHandler->blocks( d->isoOptions.followSymbolicLinks() ||
+                                      !d->isoOptions.createRockRidge() ).mode1Bytes();
 }
 
 
 KIO::filesize_t K3b::DataDoc::burningSize() const
 {
-    return size() - m_oldSessionSize; //m_oldSessionSizeHandler->size();
+    return size() - d->oldSessionSize; //d->oldSessionSizeHandler->size();
 }
 
 
@@ -307,8 +369,8 @@ bool K3b::DataDoc::loadDocumentData( QDomElement* rootElem )
         return false;
     }
 
-    if( m_root == 0 )
-        m_root = new K3b::RootItem( this );
+    if( d->root == 0 )
+        d->root = new K3b::RootItem( this );
 
     QDomNodeList filesList = nodes.item(3).childNodes();
     for( int i = 0; i < filesList.count(); i++ ) {
@@ -325,8 +387,8 @@ bool K3b::DataDoc::loadDocumentData( QDomElement* rootElem )
     // and name. So to ensure we have one around even if loading an old project
     // file we create a default one here.
     //
-    if( !m_bootImages.isEmpty() && !m_bootCataloge )
-        createBootCatalogeItem( m_bootImages.first()->parent() );
+    if( !d->bootImages.isEmpty() && !d->bootCataloge )
+        createBootCatalogeItem( d->bootImages.first()->parent() );
 
 
     informAboutNotFoundFiles();
@@ -345,92 +407,92 @@ bool K3b::DataDoc::loadDocumentDataOptions( QDomElement elem )
             return false;
 
         if( e.nodeName() == "rock_ridge")
-            m_isoOptions.setCreateRockRidge( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setCreateRockRidge( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "joliet")
-            m_isoOptions.setCreateJoliet( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setCreateJoliet( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "udf")
-            m_isoOptions.setCreateUdf( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setCreateUdf( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "joliet_allow_103_characters")
-            m_isoOptions.setJolietLong( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setJolietLong( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "iso_allow_lowercase")
-            m_isoOptions.setISOallowLowercase( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setISOallowLowercase( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "iso_allow_period_at_begin")
-            m_isoOptions.setISOallowPeriodAtBegin( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setISOallowPeriodAtBegin( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "iso_allow_31_char")
-            m_isoOptions.setISOallow31charFilenames( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setISOallow31charFilenames( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "iso_omit_version_numbers")
-            m_isoOptions.setISOomitVersionNumbers( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setISOomitVersionNumbers( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "iso_omit_trailing_period")
-            m_isoOptions.setISOomitTrailingPeriod( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setISOomitTrailingPeriod( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "iso_max_filename_length")
-            m_isoOptions.setISOmaxFilenameLength( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setISOmaxFilenameLength( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "iso_relaxed_filenames")
-            m_isoOptions.setISOrelaxedFilenames( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setISOrelaxedFilenames( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "iso_no_iso_translate")
-            m_isoOptions.setISOnoIsoTranslate( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setISOnoIsoTranslate( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "iso_allow_multidot")
-            m_isoOptions.setISOallowMultiDot( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setISOallowMultiDot( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "iso_untranslated_filenames")
-            m_isoOptions.setISOuntranslatedFilenames( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setISOuntranslatedFilenames( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "follow_symbolic_links")
-            m_isoOptions.setFollowSymbolicLinks( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setFollowSymbolicLinks( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "create_trans_tbl")
-            m_isoOptions.setCreateTRANS_TBL( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setCreateTRANS_TBL( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "hide_trans_tbl")
-            m_isoOptions.setHideTRANS_TBL( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setHideTRANS_TBL( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "iso_level")
-            m_isoOptions.setISOLevel( e.text().toInt() );
+            d->isoOptions.setISOLevel( e.text().toInt() );
 
         else if( e.nodeName() == "discard_symlinks")
-            m_isoOptions.setDiscardSymlinks( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setDiscardSymlinks( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "discard_broken_symlinks")
-            m_isoOptions.setDiscardBrokenSymlinks( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setDiscardBrokenSymlinks( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "preserve_file_permissions")
-            m_isoOptions.setPreserveFilePermissions( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setPreserveFilePermissions( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "do_not_cache_inodes" )
-            m_isoOptions.setDoNotCacheInodes( e.attributeNode( "activated" ).value() == "yes" );
+            d->isoOptions.setDoNotCacheInodes( e.attributeNode( "activated" ).value() == "yes" );
 
         else if( e.nodeName() == "whitespace_treatment" ) {
             if( e.text() == "strip" )
-                m_isoOptions.setWhiteSpaceTreatment( K3b::IsoOptions::strip );
+                d->isoOptions.setWhiteSpaceTreatment( K3b::IsoOptions::strip );
             else if( e.text() == "extended" )
-                m_isoOptions.setWhiteSpaceTreatment( K3b::IsoOptions::extended );
+                d->isoOptions.setWhiteSpaceTreatment( K3b::IsoOptions::extended );
             else if( e.text() == "extended" )
-                m_isoOptions.setWhiteSpaceTreatment( K3b::IsoOptions::replace );
+                d->isoOptions.setWhiteSpaceTreatment( K3b::IsoOptions::replace );
             else
-                m_isoOptions.setWhiteSpaceTreatment( K3b::IsoOptions::noChange );
+                d->isoOptions.setWhiteSpaceTreatment( K3b::IsoOptions::noChange );
         }
 
         else if( e.nodeName() == "whitespace_replace_string")
-            m_isoOptions.setWhiteSpaceTreatmentReplaceString( e.text() );
+            d->isoOptions.setWhiteSpaceTreatmentReplaceString( e.text() );
 
         else if( e.nodeName() == "data_track_mode" ) {
             if( e.text() == "mode1" )
-                m_dataMode = K3b::DataMode1;
+                d->dataMode = K3b::DataMode1;
             else if( e.text() == "mode2" )
-                m_dataMode = K3b::DataMode2;
+                d->dataMode = K3b::DataMode2;
             else
-                m_dataMode = K3b::DataModeAuto;
+                d->dataMode = K3b::DataModeAuto;
         }
 
         else if( e.nodeName() == "multisession" ) {
@@ -468,28 +530,28 @@ bool K3b::DataDoc::loadDocumentDataHeader( QDomElement headerElem )
             return false;
 
         if( e.nodeName() == "volume_id" )
-            m_isoOptions.setVolumeID( e.text() );
+            d->isoOptions.setVolumeID( e.text() );
 
         else if( e.nodeName() == "application_id" )
-            m_isoOptions.setApplicationID( e.text() );
+            d->isoOptions.setApplicationID( e.text() );
 
         else if( e.nodeName() == "publisher" )
-            m_isoOptions.setPublisher( e.text() );
+            d->isoOptions.setPublisher( e.text() );
 
         else if( e.nodeName() == "preparer" )
-            m_isoOptions.setPreparer( e.text() );
+            d->isoOptions.setPreparer( e.text() );
 
         else if( e.nodeName() == "volume_set_id" )
-            m_isoOptions.setVolumeSetId( e.text() );
+            d->isoOptions.setVolumeSetId( e.text() );
 
         else if( e.nodeName() == "volume_set_size" )
-            m_isoOptions.setVolumeSetSize( e.text().toInt() );
+            d->isoOptions.setVolumeSetSize( e.text().toInt() );
 
         else if( e.nodeName() == "volume_set_number" )
-            m_isoOptions.setVolumeSetNumber( e.text().toInt() );
+            d->isoOptions.setVolumeSetNumber( e.text().toInt() );
 
         else if( e.nodeName() == "system_id" )
-            m_isoOptions.setSystemId( e.text() );
+            d->isoOptions.setSystemId( e.text() );
 
         else
             kDebug() << "(K3b::DataDoc) unknown header entry: " << e.nodeName();
@@ -514,11 +576,11 @@ bool K3b::DataDoc::loadDataItem( QDomElement& elem, K3b::DirItem* parent )
 
         // We canot use exists() here since this always disqualifies broken symlinks
         if( !f.isFile() && !f.isSymLink() )
-            m_notFoundFiles.append( urlElem.text() );
+            d->notFoundFiles.append( urlElem.text() );
 
         // broken symlinks are not readable according to QFileInfo which is wrong in our case
         else if( f.isFile() && !f.isReadable() )
-            m_noPermissionFiles.append( urlElem.text() );
+            d->noPermissionFiles.append( urlElem.text() );
 
         else if( !elem.attribute( "bootimage" ).isEmpty() ) {
             K3b::BootItem* bootItem = new K3b::BootItem( urlElem.text(),
@@ -738,9 +800,9 @@ void K3b::DataDoc::saveDocumentDataOptions( QDomElement& optionsElem )
     optionsElem.appendChild( topElem );
 
     topElem = doc.createElement( "data_track_mode" );
-    if( m_dataMode == K3b::DataMode1 )
+    if( d->dataMode == K3b::DataMode1 )
         topElem.appendChild( doc.createTextNode( "mode1" ) );
-    else if( m_dataMode == K3b::DataMode2 )
+    else if( d->dataMode == K3b::DataMode2 )
         topElem.appendChild( doc.createTextNode( "mode2" ) );
     else
         topElem.appendChild( doc.createTextNode( "auto" ) );
@@ -749,7 +811,7 @@ void K3b::DataDoc::saveDocumentDataOptions( QDomElement& optionsElem )
 
     // save multisession
     topElem = doc.createElement( "multisession" );
-    switch( m_multisessionMode ) {
+    switch( d->multisessionMode ) {
     case START:
         topElem.appendChild( doc.createTextNode( "start" ) );
         break;
@@ -817,7 +879,7 @@ void K3b::DataDoc::saveDocumentDataHeader( QDomElement& headerElem )
 void K3b::DataDoc::saveDataItem( K3b::DataItem* item, QDomDocument* doc, QDomElement* parent )
 {
     if( K3b::FileItem* fileItem = dynamic_cast<K3b::FileItem*>( item ) ) {
-        if( m_oldSession.contains( fileItem ) ) {
+        if( d->oldSession.contains( fileItem ) ) {
             kDebug() << "(K3b::DataDoc) ignoring fileitem " << fileItem->k3bName() << " from old session while saving...";
         }
         else {
@@ -848,9 +910,9 @@ void K3b::DataDoc::saveDataItem( K3b::DataItem* item, QDomDocument* doc, QDomEle
             }
         }
     }
-    else if( item == m_bootCataloge ) {
+    else if( item == d->bootCataloge ) {
         QDomElement topElem = doc->createElement( "special" );
-        topElem.setAttribute( "name", m_bootCataloge->k3bName() );
+        topElem.setAttribute( "name", d->bootCataloge->k3bName() );
         topElem.setAttribute( "type", "boot cataloge" );
 
         parent->appendChild( topElem );
@@ -900,14 +962,14 @@ void K3b::DataDoc::itemRemovedFromDir( K3b::DirItem*, K3b::DataItem* removedItem
 {
     // update the project size
     if( !removedItem->isFromOldSession() )
-        m_sizeHandler->removeFile( removedItem );
+        d->sizeHandler->removeFile( removedItem );
 
     // update the boot item list
     if( removedItem->isBootItem() ) {
-        m_bootImages.removeAll( static_cast<K3b::BootItem*>( removedItem ) );
-        if( m_bootImages.isEmpty() ) {
-            delete m_bootCataloge;
-            m_bootCataloge = 0;
+        d->bootImages.removeAll( static_cast<K3b::BootItem*>( removedItem ) );
+        if( d->bootImages.isEmpty() ) {
+            delete d->bootCataloge;
+            d->bootCataloge = 0;
         }
     }
 
@@ -920,11 +982,11 @@ void K3b::DataDoc::itemAddedToDir( K3b::DirItem*, K3b::DataItem* item )
 {
     // update the project size
     if( !item->isFromOldSession() )
-        m_sizeHandler->addFile( item );
+        d->sizeHandler->addFile( item );
 
     // update the boot item list
     if( item->isBootItem() )
-        m_bootImages.append( static_cast<K3b::BootItem*>( item ) );
+        d->bootImages.append( static_cast<K3b::BootItem*>( item ) );
 
     emit itemAdded( item );
     emit changed();
@@ -1015,8 +1077,8 @@ QString K3b::DataDoc::treatWhitespace( const QString& path )
 
 void K3b::DataDoc::prepareFilenames()
 {
-    m_needToCutFilenames = false;
-    m_needToCutFilenameItems.clear();
+    d->needToCutFilenames = false;
+    d->needToCutFilenameItems.clear();
 
     //
     // if joliet is used cut the names and rename if necessary
@@ -1033,9 +1095,9 @@ void K3b::DataDoc::prepareFilenames()
         item->setWrittenName( treatWhitespace( item->k3bName() ) );
 
         if( isoOptions().createJoliet() && item->writtenName().length() > maxlen ) {
-            m_needToCutFilenames = true;
+            d->needToCutFilenames = true;
             item->setWrittenName( K3b::cutFilename( item->writtenName(), maxlen ) );
-            m_needToCutFilenameItems.append( item );
+            d->needToCutFilenameItems.append( item );
         }
 
         // TODO: check the Joliet charset
@@ -1102,29 +1164,71 @@ void K3b::DataDoc::prepareFilenamesInDir( K3b::DirItem* dir )
 }
 
 
+bool K3b::DataDoc::needToCutFilenames() const
+{
+    return d->needToCutFilenames;
+}
+
+
+QList<K3b::DataItem*> K3b::DataDoc::needToCutFilenameItems() const
+{
+    return d->needToCutFilenameItems;
+}
+
+
 void K3b::DataDoc::informAboutNotFoundFiles()
 {
-    if( !m_notFoundFiles.isEmpty() ) {
+    if( !d->notFoundFiles.isEmpty() ) {
         KMessageBox::informationList( qApp->activeWindow(), i18n("Could not find the following files:"),
-                                      m_notFoundFiles, i18n("Not Found") );
-        m_notFoundFiles.clear();
+                                      d->notFoundFiles, i18n("Not Found") );
+        d->notFoundFiles.clear();
     }
 
-    if( !m_noPermissionFiles.isEmpty() ) {
+    if( !d->noPermissionFiles.isEmpty() ) {
         KMessageBox::informationList( qApp->activeWindow(), i18n("No permission to read the following files:"),
-                                      m_noPermissionFiles, i18n("No Read Permission") );
+                                      d->noPermissionFiles, i18n("No Read Permission") );
 
-        m_noPermissionFiles.clear();
+        d->noPermissionFiles.clear();
     }
+}
+
+
+K3b::DataDoc::MultiSessionMode K3b::DataDoc::multiSessionMode() const
+{
+    return d->multisessionMode;
 }
 
 
 void K3b::DataDoc::setMultiSessionMode( K3b::DataDoc::MultiSessionMode mode )
 {
-    if( m_multisessionMode == NONE || m_multisessionMode == START )
+    if( d->multisessionMode == NONE || d->multisessionMode == START )
         clearImportedSession();
 
-    m_multisessionMode = mode;
+    d->multisessionMode = mode;
+}
+
+
+int K3b::DataDoc::dataMode() const
+{
+    return d->dataMode;
+}
+
+
+void K3b::DataDoc::setDataMode( int m )
+{
+    d->dataMode = m;
+}
+
+
+void K3b::DataDoc::setVerifyData( bool b )
+{
+    d->verifyData = b;
+}
+
+
+bool K3b::DataDoc::verifyData() const
+{
+    return d->verifyData;
 }
 
 
@@ -1157,30 +1261,30 @@ bool K3b::DataDoc::importSession( K3b::Device::Device* device, int session )
         clearImportedSession();
 
         // set multisession option
-        if( m_multisessionMode != FINISH && m_multisessionMode != AUTO )
-            m_multisessionMode = CONTINUE;
+        if( d->multisessionMode != FINISH && d->multisessionMode != AUTO )
+            d->multisessionMode = CONTINUE;
 
         // since in iso9660 it is possible that two files share it's data
         // simply summing the file sizes could result in wrong values
         // that's why we use the size from the toc. This is more accurate
         // anyway since there might be files overwritten or removed
-        m_oldSessionSize = toc.last().lastSector().mode1Bytes();
-        m_importedSession = session;
+        d->oldSessionSize = toc.last().lastSector().mode1Bytes();
+        d->importedSession = session;
 
-        kDebug() << "(K3b::DataDoc) imported session size: " << KIO::convertSize(m_oldSessionSize);
+        kDebug() << "(K3b::DataDoc) imported session size: " << KIO::convertSize(d->oldSessionSize);
 
         // the track size for DVD+RW media and DVD-RW Overwrite media has nothing to do with the filesystem
         // size. in that case we need to use the filesystem's size (which is ok since it's one track anyway,
         // no real multisession)
         if( diskInfo.mediaType() & (K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_RW_OVWR) ) {
-            m_oldSessionSize = iso.primaryDescriptor().volumeSpaceSize
+            d->oldSessionSize = iso.primaryDescriptor().volumeSpaceSize
                                * iso.primaryDescriptor().logicalBlockSize;
         }
 
         // import some former settings
-        m_isoOptions.setCreateRockRidge( iso.firstRRDirEntry() != 0 );
-        m_isoOptions.setCreateJoliet( iso.firstJolietDirEntry() != 0 );
-        m_isoOptions.setVolumeID( iso.primaryDescriptor().volumeId );
+        d->isoOptions.setCreateRockRidge( iso.firstRRDirEntry() != 0 );
+        d->isoOptions.setCreateJoliet( iso.firstJolietDirEntry() != 0 );
+        d->isoOptions.setVolumeID( iso.primaryDescriptor().volumeId );
         // TODO: also import some other pd fields
 
         const K3b::Iso9660Directory* rootDir = iso.firstRRDirEntry();
@@ -1236,7 +1340,7 @@ void K3b::DataDoc::createSessionImportItems( const K3b::Iso9660Directory* import
             dir->setHideable(false);
             dir->setWriteToCd(false);
             dir->setExtraInfo( i18n("From previous session") );
-            m_oldSession.append( dir );
+            d->oldSession.append( dir );
 
             createSessionImportItems( static_cast<const K3b::Iso9660Directory*>(entry), dir );
         }
@@ -1249,7 +1353,7 @@ void K3b::DataDoc::createSessionImportItems( const K3b::Iso9660Directory* import
 
             K3b::SessionImportItem* item = new K3b::SessionImportItem( file, this, parent );
             item->setExtraInfo( i18n("From previous session") );
-            m_oldSession.append( item );
+            d->oldSession.append( item );
         }
     }
 }
@@ -1257,12 +1361,12 @@ void K3b::DataDoc::createSessionImportItems( const K3b::Iso9660Directory* import
 
 void K3b::DataDoc::clearImportedSession()
 {
-    //  m_oldSessionSizeHandler->clear();
-    m_importedSession = -1;
-    m_oldSessionSize = 0;
+    //  d->oldSessionSizeHandler->clear();
+    d->importedSession = -1;
+    d->oldSessionSize = 0;
 
-    while( !m_oldSession.isEmpty() ) {
-        K3b::DataItem* item = m_oldSession.takeFirst();
+    while( !d->oldSession.isEmpty() ) {
+        K3b::DataItem* item = d->oldSession.takeFirst();
 
         if( item->isDir() ) {
             K3b::DirItem* dir = (K3b::DirItem*)item;
@@ -1273,7 +1377,7 @@ void K3b::DataDoc::clearImportedSession()
             }
             else {
                 Q_FOREACH( K3b::DataItem* item, dir->children() ) {
-                    if( !m_oldSession.contains( item ) ) {
+                    if( !d->oldSession.contains( item ) ) {
                         // now the dir becomes a totally normal dir
                         dir->setRemoveable(true);
                         dir->setRenameable(true);
@@ -1291,24 +1395,35 @@ void K3b::DataDoc::clearImportedSession()
         }
     }
 
-    m_multisessionMode = AUTO;
+    d->multisessionMode = AUTO;
 
     emit changed();
     emit importedSessionChanged( importedSession() );
 }
 
+QList<K3b::BootItem*> K3b::DataDoc::bootImages()
+{
+    return d->bootImages;
+}
+
+
+K3b::DataItem* K3b::DataDoc::bootCataloge()
+{
+    return d->bootCataloge;
+}
+
 
 K3b::DirItem* K3b::DataDoc::bootImageDir()
 {
-    K3b::DataItem* b = m_root->find( "boot" );
+    K3b::DataItem* b = d->root->find( "boot" );
     if( !b ) {
-        b = new K3b::DirItem( "boot", this, m_root );
+        b = new K3b::DirItem( "boot", this, d->root );
         setModified( true );
     }
 
     // if we cannot create the dir because there is a file named boot just use the root dir
     if( !b->isDir() )
-        return m_root;
+        return d->root;
     else
         return static_cast<K3b::DirItem*>(b);
 }
@@ -1321,7 +1436,7 @@ K3b::BootItem* K3b::DataDoc::createBootItem( const QString& filename, K3b::DirIt
 
     K3b::BootItem* boot = new K3b::BootItem( filename, this, dir );
 
-    if( !m_bootCataloge )
+    if( !d->bootCataloge )
         createBootCatalogeItem(dir);
 
     return boot;
@@ -1330,7 +1445,7 @@ K3b::BootItem* K3b::DataDoc::createBootItem( const QString& filename, K3b::DirIt
 
 K3b::DataItem* K3b::DataDoc::createBootCatalogeItem( K3b::DirItem* dir )
 {
-    if( !m_bootCataloge ) {
+    if( !d->bootCataloge ) {
         QString newName = "boot.catalog";
         int i = 0;
         while( dir->alreadyInDirectory( "boot.catalog" ) ) {
@@ -1339,17 +1454,17 @@ K3b::DataItem* K3b::DataDoc::createBootCatalogeItem( K3b::DirItem* dir )
         }
 
         K3b::SpecialDataItem* b = new K3b::SpecialDataItem( this, 0, dir, newName );
-        m_bootCataloge = b;
-        m_bootCataloge->setRemoveable(false);
-        m_bootCataloge->setHideable(false);
-        m_bootCataloge->setWriteToCd(false);
-        m_bootCataloge->setExtraInfo( i18n("El Torito boot catalog file") );
+        d->bootCataloge = b;
+        d->bootCataloge->setRemoveable(false);
+        d->bootCataloge->setHideable(false);
+        d->bootCataloge->setWriteToCd(false);
+        d->bootCataloge->setExtraInfo( i18n("El Torito boot catalog file") );
         b->setSpecialType( i18n("Boot catalog") );
     }
     else
-        m_bootCataloge->reparent( dir );
+        d->bootCataloge->reparent( dir );
 
-    return m_bootCataloge;
+    return d->bootCataloge;
 }
 
 
@@ -1362,7 +1477,7 @@ QList<K3b::DataItem*> K3b::DataDoc::findItemByLocalPath( const QString& path ) c
 
 int K3b::DataDoc::importedSession() const
 {
-    return ( m_oldSession.isEmpty() ? -1 : m_importedSession );
+    return ( d->oldSession.isEmpty() ? -1 : d->importedSession );
 }
 
 
@@ -1407,6 +1522,12 @@ K3b::Device::MediaTypes K3b::DataDoc::supportedMediaTypes() const
     }
     
     return m;
+}
+
+
+K3b::RootItem* K3b::DataDoc::root() const
+{
+    return d->root;
 }
 
 #include "k3bdatadoc.moc"

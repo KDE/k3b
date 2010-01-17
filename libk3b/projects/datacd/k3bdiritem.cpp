@@ -17,6 +17,7 @@
 #include "k3bdatadoc.h"
 #include "k3bsessionimportitem.h"
 #include "k3bfileitem.h"
+#include "k3bisooptions.h"
 
 #include <QString>
 #include <QList>

@@ -21,6 +21,7 @@
 #include "k3bdatadoc.h"
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
+#include "k3bisooptions.h"
 #include "k3bspecialdataitem.h"
 
 #include <KIcon>

@@ -14,6 +14,7 @@
 
 #include "k3bvolumenamewidget.h"
 #include "k3bdatadoc.h"
+#include "k3bisooptions.h"
 #include "k3bvalidators.h"
 
 #include <KLineEdit>

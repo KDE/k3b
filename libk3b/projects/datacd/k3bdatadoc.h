@@ -17,16 +17,11 @@
 #define K3BDATADOC_H
 
 #include "k3bdoc.h"
-#include "k3bdataitem.h"
-#include "k3bisooptions.h"
-
-#include <QStringList>
 
 #include <kio/global.h>
 
 #include "k3b_export.h"
 
-class KConfig;
 class QString;
 class QDomDocument;
 class QDomElement;
@@ -37,8 +32,8 @@ namespace K3b {
     class DirItem;
     class Job;
     class BootItem;
-    class FileCompilationSizeHandler;
     class Iso9660Directory;
+    class IsoOptions;
 
     namespace Device {
         class Device;
@@ -82,7 +77,7 @@ namespace K3b {
             FINISH
         };
 
-        RootItem* root() const { return m_root; }
+        RootItem* root() const;
 
         virtual bool newDocument();
         virtual void clear();
@@ -115,14 +110,14 @@ namespace K3b {
 
         virtual BurnJob* newBurnJob( JobHandler* hdl, QObject* parent = 0 );
 
-        MultiSessionMode multiSessionMode() const { return m_multisessionMode; }
+        MultiSessionMode multiSessionMode() const;
         void setMultiSessionMode( MultiSessionMode mode );
 
-        int dataMode() const { return m_dataMode; }
-        void setDataMode( int m ) { m_dataMode = m; }
+        int dataMode() const;
+        void setDataMode( int m );
 
-        void setVerifyData( bool b ) { m_verifyData = b; }
-        bool verifyData() const { return m_verifyData; }
+        void setVerifyData( bool b );
+        bool verifyData() const;
 
         static bool nameAlreadyInDir( const QString&, DirItem* );
 
@@ -131,11 +126,11 @@ namespace K3b {
          * together in the IsoOptions class to allow easy saving to and loading
          * from a KConfig object.
          */
-        const IsoOptions& isoOptions() const { return m_isoOptions; }
-        void setIsoOptions( const IsoOptions& );
+        const IsoOptions& isoOptions() const;
+        void setIsoOptions( const IsoOptions& isoOptions );
 
-        QList<BootItem*> bootImages() { return m_bootImages; }
-        DataItem* bootCataloge() { return m_bootCataloge; }
+        QList<BootItem*> bootImages();
+        DataItem* bootCataloge();
 
         DirItem* bootImageDir();
 
@@ -175,9 +170,9 @@ namespace K3b {
          *
          * This is only valid after a call to @p prepareFilenames()
          */
-        bool needToCutFilenames() const { return m_needToCutFilenames; }
+        bool needToCutFilenames() const;
 
-        QList<DataItem*> needToCutFilenameItems() const { return m_needToCutFilenameItems; }
+        QList<DataItem*> needToCutFilenameItems() const;
 
         /**
          * Imports a session into the project. This will create SessionImportItems
@@ -246,11 +241,6 @@ namespace K3b {
         bool loadDocumentDataOptions( QDomElement optionsElem );
         bool loadDocumentDataHeader( QDomElement optionsElem );
 
-        FileCompilationSizeHandler* m_sizeHandler;
-
-        //  FileCompilationSizeHandler* m_oldSessionSizeHandler;
-        KIO::filesize_t m_oldSessionSize;
-
     private:
         void prepareFilenamesInDir( DirItem* dir );
         void createSessionImportItems( const Iso9660Directory*, DirItem* parent );
@@ -274,32 +264,8 @@ namespace K3b {
 
         void informAboutNotFoundFiles();
 
-        // FIXME: move all the members into a private d-pointer structure
-
-        QStringList m_notFoundFiles;
-        QStringList m_noPermissionFiles;
-
-        RootItem* m_root;
-
-        int m_dataMode;
-
-        bool m_verifyData;
-
-        IsoOptions m_isoOptions;
-
-        MultiSessionMode m_multisessionMode;
-        QList<DataItem*> m_oldSession;
-        int m_importedSession;
-
-        // boot cd stuff
-        DataItem* m_bootCataloge;
-        QList<BootItem*> m_bootImages;
-
-        bool m_bExistingItemsReplaceAll;
-        bool m_bExistingItemsIgnoreAll;
-
-        bool m_needToCutFilenames;
-        QList<DataItem*> m_needToCutFilenameItems;
+        class Private;
+        Private* d;
 
         friend class MixedDoc;
         friend class DirItem;

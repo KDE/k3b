@@ -16,6 +16,7 @@
 #include "k3bdataitem.h"
 #include "k3bdiritem.h"
 #include "k3bdatadoc.h"
+#include "k3bisooptions.h"
 #include <kdebug.h>
 
 #include <math.h>

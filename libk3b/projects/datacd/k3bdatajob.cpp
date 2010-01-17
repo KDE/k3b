@@ -34,6 +34,7 @@
 #include "k3bfilesplitter.h"
 #include "k3bverificationjob.h"
 #include "k3biso9660.h"
+#include "k3bisooptions.h"
 #include "k3bdeviceglobals.h"
 #include "k3bgrowisofswriter.h"
 

@@ -18,6 +18,7 @@
 #include "k3bfileitem.h"
 #include "k3bprocess.h"
 #include "k3bglobals.h"
+#include "k3bisooptions.h"
 
 #include <ktemporaryfile.h>
 #include <kglobal.h>
