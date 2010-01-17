@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -37,6 +38,7 @@
 #include <QPaintEvent>
 #include <QPixmap>
 #include <QRect>
+#include <QStyle>
 #include <QTimer>
 #include <QToolButton>
 #include <QToolTip>
@@ -151,45 +153,54 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     crect.setWidth( (int)(one*(double)docSize.totalFrames()) );
 
     p.setClipping(true);
-    p.setClipRect(crect);
+    p.setClipRect( QStyle::visualRect( layoutDirection(), rect(), crect ) );
     
-    p.fillRect( crect, positiveBg );
+    p.fillRect( QStyle::visualRect( layoutDirection(), rect(), crect ), positiveBg );
 
     QRect oversizeRect(crect);
 
     // draw red if docSize > cdSize + tolerance
     if( docSize > cdSize + tolerance ) {
         oversizeRect.setLeft( oversizeRect.left() + (int)(one * (cdSize - tolerance).totalFrames()) );
-        p.fillRect( oversizeRect, negativeBg );
-        QLinearGradient gradient( QPoint( oversizeRect.left() - rect().height(), 0 ),
-                                  QPoint( oversizeRect.left() + rect().height(), 0 ) );
+        QRect negativeRect( oversizeRect.left() - rect().height(), 0, rect().height()*2, rect().height() );
+        QPoint gradientStart( oversizeRect.left() - rect().height(), 0 );
+        QPoint gradientEnd( oversizeRect.left() + rect().height(), 0 );
+        
+        QLinearGradient gradient( QStyle::visualPos( layoutDirection(), rect(), gradientStart ),
+                                  QStyle::visualPos( layoutDirection(), rect(), gradientEnd ) );
         gradient.setColorAt( 0.1, positiveBg );
         gradient.setColorAt( 0.5, neutralBg );
         gradient.setColorAt( 0.9, negativeBg );
-        p.fillRect( oversizeRect.left() - rect().height(), 0, rect().height()*2, rect().height(), gradient );
-        
+        p.fillRect( QStyle::visualRect( layoutDirection(), rect(), oversizeRect ), negativeBg );
+        p.fillRect( QStyle::visualRect( layoutDirection(), rect(), negativeRect ), gradient );
         p.setPen( negativeFg );
-        p.drawLine( oversizeRect.topRight(), oversizeRect.bottomRight() );
+        p.drawLine( QStyle::visualPos( layoutDirection(), rect(), oversizeRect.topRight() ),
+                    QStyle::visualPos( layoutDirection(), rect(), oversizeRect.bottomRight() ) );
     }
 
     // draw yellow if cdSize - tolerance < docSize
     else if( docSize > cdSize - tolerance ) {
         oversizeRect.setLeft( oversizeRect.left() + (int)(one * (cdSize - tolerance).lba()) );
-        p.fillRect( oversizeRect, neutralBg );
-        QLinearGradient gradient( QPoint( oversizeRect.left() - rect().height(), 0 ),
-                                  QPoint( oversizeRect.left() + rect().height(), 0 ) );
+        QRect neutralRect( oversizeRect.left() - rect().height(), 0, rect().height()*2, rect().height() );
+        QPoint gradientStart( oversizeRect.left() - rect().height(), 0 );
+        QPoint gradientEnd( oversizeRect.left() + rect().height(), 0 );
+        
+        QLinearGradient gradient( QStyle::visualPos( layoutDirection(), rect(), gradientStart ),
+                                  QStyle::visualPos( layoutDirection(), rect(), gradientEnd ) );
         gradient.setColorAt( 0.1, positiveBg );
         gradient.setColorAt( 0.9, neutralBg );
-        p.fillRect( oversizeRect.left() - rect().height(), 0, rect().height()*2, rect().height(), gradient );
-        
+        p.fillRect( QStyle::visualRect( layoutDirection(), rect(), oversizeRect ), neutralBg );
+        p.fillRect( QStyle::visualRect( layoutDirection(), rect(), neutralRect ), gradient );
         p.setPen( neutralFg );
-        p.drawLine( oversizeRect.topRight(), oversizeRect.bottomRight() );
+        p.drawLine( QStyle::visualPos( layoutDirection(), rect(), oversizeRect.topRight() ),
+                    QStyle::visualPos( layoutDirection(), rect(), oversizeRect.bottomRight() ) );
     }
     
     // draw end column with foreground color to make bar more readable
     else {
         p.setPen( positiveFg );
-        p.drawLine( crect.topRight(), crect.bottomRight() );
+        p.drawLine( QStyle::visualPos( layoutDirection(), rect(), crect.topRight() ),
+                    QStyle::visualPos( layoutDirection(), rect(), crect.bottomRight() ) );
     }
 
     p.setClipping(false);
@@ -226,9 +237,11 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     // draw the medium size marker
     // ====================================================================================
     int mediumSizeMarkerPos = rect().left() + (int)(one*cdSize.lba());
+    QPoint mediumSizeMarkerFrom( mediumSizeMarkerPos, rect().bottom() );
+    QPoint mediumSizeMarkerTo( mediumSizeMarkerPos, rect().top() + ((rect().bottom()-rect().top())/2) );
     p.setPen( normalFg );
-    p.drawLine( mediumSizeMarkerPos, rect().bottom(),
-                mediumSizeMarkerPos, rect().top() + ((rect().bottom()-rect().top())/2) );
+    p.drawLine( QStyle::visualPos( layoutDirection(), rect(), mediumSizeMarkerFrom ),
+                QStyle::visualPos( layoutDirection(), rect(), mediumSizeMarkerTo ) );
     // ====================================================================================
 
 
@@ -272,10 +285,12 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
 
     QRect docTextRect( rect() );
     docTextRect.setLeft( docSizeTextPos );
-    p.drawText( docTextRect, Qt::AlignLeft | Qt::AlignVCenter, docSizeText );
+    p.drawText( QStyle::visualRect( layoutDirection(), rect(), docTextRect ),
+                QStyle::visualAlignment( layoutDirection(), Qt::AlignLeft | Qt::AlignVCenter ), docSizeText );
 
     p.setFont(fnt);
-    p.drawText( overSizeTextRect, Qt::AlignLeft | Qt::AlignVCenter, overSizeText );
+    p.drawText( QStyle::visualRect( layoutDirection(), rect(), overSizeTextRect ),
+                QStyle::visualAlignment( layoutDirection(), Qt::AlignLeft | Qt::AlignVCenter ), overSizeText );
     // ====================================================================================
 }
 
