@@ -28,6 +28,7 @@
 #include <QPaintEvent>
 #include <QResizeEvent>
 #include <QShowEvent>
+#include <QStyle>
 #include <QTextDocument>
 
 #include <KActionCollection>
@@ -184,9 +185,9 @@ void K3b::WelcomeWidget::Display::repositionButtons()
     {
         K3b::FlatButton* b = m_buttons.at( i );
 
-        b->setGeometry( QRect( QPoint( leftMargin + (col*(m_buttonSize.width()+4) + 2 ),
-                                       topOffset + (row*(m_buttonSize.height()+4)) + 2 ),
-                               m_buttonSize ) );
+        QRect rect( QPoint( leftMargin + (col*(m_buttonSize.width()+4) + 2 ),
+                            topOffset + (row*(m_buttonSize.height()+4)) + 2 ), m_buttonSize );
+        b->setGeometry( QStyle::visualRect( layoutDirection(), contentsRect(), rect ) );
         b->show();
 
         col++;
@@ -197,10 +198,10 @@ void K3b::WelcomeWidget::Display::repositionButtons()
     }
     if( col > 0 )
         ++row;
-
-    m_buttonMore->setGeometry( QRect( QPoint( leftMargin + 2,
-                                              topOffset + (row*(m_buttonSize.height()+4)) + 2 ),
-                                      QSize( m_cols*(m_buttonSize.width()+4) - 4, m_buttonMore->height() ) ) );
+    
+    QRect rect( leftMargin + 2, topOffset + (row*(m_buttonSize.height()+4)) + 2,
+                m_cols*(m_buttonSize.width()+4) - 4, m_buttonMore->height() );
+    m_buttonMore->setGeometry( QStyle::visualRect( layoutDirection(), contentsRect(), rect ) );
 }
 
 
