@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -70,14 +70,16 @@ void VideoDVDTitleDelegate::paint( QPainter* painter, const QStyleOptionViewItem
         
 
         painter->setFont( bold );
-        style.drawItemText( painter, titleRect, Qt::AlignTop | Qt::AlignLeft, option.palette,
+        style.drawItemText( painter, QStyle::visualRect( option.direction, option.rect, titleRect ),
+                            Qt::AlignTop | Qt::AlignLeft, option.palette,
                             option.state & QStyle::State_Enabled,
                             boldMetrics.elidedText( index.data().toString(),
                                                     option.textElideMode, titleRect.width() ),
                             textRole );
         
         painter->setFont( option.font );
-        style.drawItemText( painter, chaptersRect, Qt::AlignTop | Qt::AlignLeft, option.palette,
+        style.drawItemText( painter, QStyle::visualRect( option.direction, option.rect, chaptersRect ),
+                            Qt::AlignTop | Qt::AlignLeft, option.palette,
                             option.state & QStyle::State_Enabled,
                             option.fontMetrics.elidedText( index.data(VideoDVDTitleModel::ChaptersRole).toString(),
                                                            option.textElideMode, chaptersRect.width() ),
@@ -104,12 +106,14 @@ void VideoDVDTitleDelegate::paint( QPainter* painter, const QStyleOptionViewItem
         QRect ratiosRect( option.rect.left()+margin, option.rect.top()+option.fontMetrics.height()+margin,
                           option.rect.width()-2*margin, option.rect.height()-2*margin );
         
-        style.drawItemText( painter, videoRect, Qt::AlignTop | Qt::AlignLeft, option.palette,
+        style.drawItemText( painter, QStyle::visualRect( option.direction, option.rect, videoRect ),
+                            Qt::AlignTop | Qt::AlignLeft, option.palette,
                             option.state & QStyle::State_Enabled,
                             option.fontMetrics.elidedText( index.data().toString(),
                                                            option.textElideMode, option.rect.width() ),
                             textRole );
-        style.drawItemText( painter, ratiosRect, Qt::AlignTop | Qt::AlignLeft, option.palette,
+        style.drawItemText( painter, QStyle::visualRect( option.direction, option.rect, ratiosRect ),
+                            Qt::AlignTop | Qt::AlignLeft, option.palette,
                             option.state & QStyle::State_Enabled,
                             option.fontMetrics.elidedText( index.data(VideoDVDTitleModel::AspectRatioRole).toString(),
                                                            option.textElideMode, ratiosRect.width() ),
@@ -121,7 +125,8 @@ void VideoDVDTitleDelegate::paint( QPainter* painter, const QStyleOptionViewItem
         int lineHeight = option.fontMetrics.height();
         Q_FOREACH( const QString& line, index.data( VideoDVDTitleModel::AudioStreamsRole ).toStringList() )
         {
-            style.drawItemText( painter, rect, Qt::AlignTop | Qt::AlignLeft, option.palette,
+            style.drawItemText( painter, QStyle::visualRect( option.direction, option.rect, rect ),
+                                Qt::AlignTop | Qt::AlignLeft, option.palette,
                                 option.state & QStyle::State_Enabled,
                                 option.fontMetrics.elidedText( line, option.textElideMode, option.rect.width() ),
                                 textRole );
@@ -134,7 +139,8 @@ void VideoDVDTitleDelegate::paint( QPainter* painter, const QStyleOptionViewItem
         int lineHeight = option.fontMetrics.height();
         Q_FOREACH( const QString& line, index.data( VideoDVDTitleModel::SubpictureStreamsRole ).toStringList() )
         {
-            style.drawItemText( painter, rect, Qt::AlignTop | Qt::AlignLeft, option.palette,
+            style.drawItemText( painter, QStyle::visualRect( option.direction, option.rect, rect ),
+                                Qt::AlignTop | Qt::AlignLeft, option.palette,
                                 option.state & QStyle::State_Enabled,
                                 option.fontMetrics.elidedText( line, option.textElideMode, option.rect.width() ),
                                 textRole );
