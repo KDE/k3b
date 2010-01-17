@@ -15,9 +15,9 @@
 #ifndef _K3B_THEMED_HEADER_H_
 #define _K3B_THEMED_HEADER_H_
 
-#include <QFrame>
-
 #include "k3bthememanager.h"
+
+#include <QFrame>
 
 namespace K3b {
     class TitleLabel;
@@ -37,7 +37,7 @@ public:
 public Q_SLOTS:
     void setTitle( const QString& title, const QString& subtitle = QString() );
     void setSubTitle( const QString& subtitle );
-    void setAlignment( int );
+    void setAlignment( Qt::Alignment alignment );
     void setLeftPixmap( Theme::PixmapType );
     void setRightPixmap( Theme::PixmapType );
 

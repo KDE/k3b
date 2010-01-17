@@ -16,7 +16,7 @@
 #ifndef _K3B_TITLE_LABEL_H_
 #define _K3B_TITLE_LABEL_H_
 
-#include <QtGui/QFrame>
+#include <QFrame>
 #include <QResizeEvent>
 
 #include "k3b_export.h"
@@ -51,8 +51,7 @@ namespace K3b {
          *
          * Default alignment is left.
          */
-        // FIXME: honor right-to-left languages
-        void setAlignment( int align );
+        void setAlignment( Qt::Alignment alignment );
 
     protected:
         void resizeEvent( QResizeEvent* );

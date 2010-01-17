@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C)      2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -16,25 +17,33 @@
 
 #include "k3bstringutils.h"
 
-#include <qpainter.h>
-#include <qevent.h>
-#include <qfontmetrics.h>
-#include <qfont.h>
-#include <qtooltip.h>
-#include <QHelpEvent>
-
 #include <KDebug>
+
+#include <QEvent>
+#include <QFont>
+#include <QFontMetrics>
+#include <QHelpEvent>
+#include <QPainter>
+#include <QStyle>
+#include <QToolTip>
 
 
 class K3b::TitleLabel::Private
 {
 public:
-    Private() {
-        titleLength = subTitleLength = 0;
-        margin = 2;
-        alignment = Qt::AlignLeft;
-        cachedMinimumWidth = 0;
-        titleBaseLine = 0;
+    Private()
+    :
+        alignment( Qt::AlignLeft | Qt::AlignVCenter ),
+        titleLength( 0 ),
+        subTitleLength( 0 ),
+        displayTitleLength( 0 ),
+        displaySubTitleLength( 0 ),
+        titleBaseLine( 0 ),
+        subTitleBaseLine( 0 ),
+        margin( 2 ),
+        spacing( 5 ),
+        cachedMinimumWidth( 0 )
+    {
     }
 
     QString title;
@@ -43,7 +52,7 @@ public:
     QString displayTitle;
     QString displaySubTitle;
 
-    int alignment;
+    Qt::Alignment alignment;
 
     int titleLength;
     int subTitleLength;
@@ -52,10 +61,40 @@ public:
     int titleBaseLine;
     int subTitleBaseLine;
     int margin;
+    int spacing;
 
     int cachedMinimumWidth;
+    
+    QRect titleRect( const QRect& boundingRect ) const;
+    QRect subTitleRect( const QRect& subTitleRect, const QRect& titleRect ) const;
 };
 
+
+QRect K3b::TitleLabel::Private::titleRect( const QRect& boundingRect ) const
+{
+    int neededWidth = displayTitleLength;
+    if( !displaySubTitle.isEmpty() )
+        neededWidth += displaySubTitleLength + spacing;
+    
+    QRect titleRect;
+    if( alignment & Qt::AlignHCenter )
+        titleRect.setLeft( boundingRect.left() + ( boundingRect.width() - neededWidth ) / 2 );
+    else if( alignment & Qt::AlignRight )
+        titleRect.setLeft( boundingRect.right() - neededWidth );
+    else
+        titleRect.setLeft( boundingRect.left() );
+    titleRect.setTop( boundingRect.top() );
+    titleRect.setWidth( displayTitleLength );
+    titleRect.setHeight( boundingRect.height() );
+    return titleRect;
+}
+
+
+QRect K3b::TitleLabel::Private::subTitleRect( const QRect& boundingRect, const QRect& titleRect ) const
+{
+    return QRect( titleRect.left() + displayTitleLength + spacing, boundingRect.top(),
+                  displaySubTitleLength, boundingRect.height() );
+}
 
 
 K3b::TitleLabel::TitleLabel( QWidget* parent )
@@ -88,9 +127,9 @@ void K3b::TitleLabel::setSubTitle( const QString& subTitle )
 }
 
 
-void K3b::TitleLabel::setAlignment( int align )
+void K3b::TitleLabel::setAlignment( Qt::Alignment alignment )
 {
-    d->alignment = align;
+    d->alignment = alignment;
     update();
 }
 
@@ -115,38 +154,33 @@ void K3b::TitleLabel::resizeEvent( QResizeEvent* e )
 }
 
 
-void K3b::TitleLabel::paintEvent( QPaintEvent* )
+void K3b::TitleLabel::paintEvent( QPaintEvent* e )
 {
-    QPainter p(this);
-    QRect r = contentsRect();
-    p.eraseRect( r );
+    QPainter p( this );
+    p.eraseRect( e->rect() );
+    p.setLayoutDirection( layoutDirection() );
 
-    QFont f(font());
+    const QRect rect = e->rect().adjusted( d->margin, d->margin, -d->margin, -d->margin );
+    const QRect titleRect = d->titleRect( rect );
+
+    QFont f( font() );
     f.setBold(true);
     f.setPointSize( f.pointSize() + 2 );
 
-    p.setFont(f);
-
-    int neededWidth = d->displayTitleLength;
-    if( !d->displaySubTitle.isEmpty() )
-        neededWidth += d->displaySubTitleLength + 5;
-
-    int startPos = 0;
-    if( d->alignment & Qt::AlignHCenter )
-        startPos = r.left() + ( r.width() - 2*d->margin - neededWidth ) / 2;
-    else if( d->alignment & Qt::AlignRight )
-        startPos = r.right() - d->margin - neededWidth;
-    else
-        startPos = r.left() + d->margin;
-
     // paint title
-    p.drawText( startPos, r.top() + d->titleBaseLine, d->displayTitle );
+    p.setFont(f);
+    p.drawText( QStyle::visualRect( layoutDirection(), rect, titleRect ),
+                QStyle::visualAlignment( layoutDirection(), d->alignment ),
+                d->displayTitle );
 
     if( !d->subTitle.isEmpty() ) {
         f.setBold(false);
         f.setPointSize( f.pointSize() - 4 );
         p.setFont(f);
-        p.drawText( startPos + d->displayTitleLength + 5, r.top() + d->subTitleBaseLine, d->displaySubTitle );
+        const QRect subTitleRect = d->subTitleRect( rect, titleRect );
+        p.drawText( QStyle::visualRect( layoutDirection(), rect, subTitleRect ),
+                    QStyle::visualAlignment( layoutDirection(), d->alignment ),
+                    d->displaySubTitle );
     }
 }
 
@@ -183,9 +217,8 @@ void K3b::TitleLabel::updatePositioning()
     //FIXME add margin
     int widthAvail = contentsRect().width() /*- 2*margin()*/;
 
-    // 5 pix spacing between title and subtitle
     if( !d->subTitle.isEmpty() )
-        widthAvail -= 5;
+        widthAvail -= d->spacing;
 
     if( d->titleLength > widthAvail/2 ) {
         if( d->subTitleLength <= widthAvail/2 )
@@ -221,9 +254,8 @@ void K3b::TitleLabel::updatePositioning()
     }
 
     d->cachedMinimumWidth += titleFm.width( cutTitle ) + subTitleFm.width( cutSubTitle );
-    // 5 pix spacing between title and subtitle
     if( !d->subTitle.isEmpty() )
-        d->cachedMinimumWidth += 5;
+        d->cachedMinimumWidth += d->spacing;
 
     kDebug() << d->titleBaseLine << d->subTitleBaseLine;
 }
@@ -235,30 +267,17 @@ bool K3b::TitleLabel::event( QEvent* event )
         QHelpEvent* he = ( QHelpEvent* )event;
         QPoint pos = he->pos();
 
-        QRect r = contentsRect();
+        const QRect rect = contentsRect().adjusted( d->margin, d->margin, -d->margin, -d->margin );
+        const QRect titleRect = d->titleRect( rect );
+        const QRect subTitleRect = d->subTitleRect( rect, titleRect );
+        const QRect actualTitleRect = QStyle::visualRect( layoutDirection(), rect, titleRect );
+        const QRect actualSubTitleRect = QStyle::visualRect( layoutDirection(), rect, subTitleRect );
 
-        int neededWidth = d->displayTitleLength;
-        if( !d->displaySubTitle.isEmpty() )
-            neededWidth += d->displaySubTitleLength + 5;
-
-        int startPos = 0;
-        if( d->alignment & Qt::AlignHCenter )
-            startPos = r.left() + ( r.width() - 2*d->margin - neededWidth ) / 2;
-        else if( d->alignment & Qt::AlignRight )
-            startPos = r.right() - d->margin - neededWidth;
-        else
-            startPos = r.left() + d->margin;
-
-        QRect titleTipRect( startPos, 0, d->displayTitleLength, height() );
-        QRect subTitleTipRect( startPos + d->displayTitleLength, 0, d->displaySubTitleLength, height() );
-
-        if( titleTipRect.contains( pos ) &&
-            d->displayTitle != d->title ) {
-            QToolTip::showText( he->globalPos(), d->title, this, titleTipRect );
+        if( actualTitleRect.contains( pos ) && d->displayTitle != d->title ) {
+            QToolTip::showText( he->globalPos(), d->title, this, actualTitleRect );
         }
-        else if( subTitleTipRect.contains( pos ) &&
-                 d->displaySubTitle != d->subTitle ) {
-            QToolTip::showText( he->globalPos(), d->subTitle, this, subTitleTipRect );
+        else if( actualSubTitleRect.contains( pos ) && d->displaySubTitle != d->subTitle ) {
+            QToolTip::showText( he->globalPos(), d->subTitle, this, actualSubTitleRect );
         }
 
         event->accept();

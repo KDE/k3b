@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C)      2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -18,9 +19,10 @@
 #include "k3btitlelabel.h"
 
 #include <KGlobalSettings>
-#include <qlabel.h>
-#include <qlayout.h>
+
+#include <QApplication>
 #include <QHBoxLayout>
+#include <QLabel>
 
 
 K3b::ThemedHeader::ThemedHeader( QWidget* parent )
@@ -71,33 +73,38 @@ void K3b::ThemedHeader::setRightPixmap( K3b::Theme::PixmapType p )
 }
 
 
-void K3b::ThemedHeader::setAlignment( int align )
+void K3b::ThemedHeader::setAlignment( Qt::Alignment alignment )
 {
-    m_titleLabel->setAlignment( align );
+    m_titleLabel->setAlignment( alignment );
 }
 
 
 void K3b::ThemedHeader::init()
 {
+    // Hardcode layou direction to LTR to prevent
+    // switching places of our left/right pixmaps.
+    // Usually our themes aren't designed for this
+    setLayoutDirection( Qt::LeftToRight );
     setFrameShape( QFrame::StyledPanel );
     setFrameShadow( QFrame::Sunken );
     setLineWidth( 1 );
     //setMargin( 1 );
-
-    QHBoxLayout* layout = new QHBoxLayout( this );
-    layout->setMargin( 2 ); // to make sure the frame gets displayed
-    layout->setSpacing( 0 );
 
     m_leftLabel = new QLabel( this );
     m_leftLabel->setScaledContents( false );
     m_leftLabel->setAutoFillBackground( true );
 
     m_titleLabel = new K3b::TitleLabel( this );
+    // Bring back default layout direction for label
+    m_titleLabel->setLayoutDirection( QApplication::layoutDirection() );
 
     m_rightLabel = new QLabel( this );
     m_rightLabel->setScaledContents( false );
     m_rightLabel->setAutoFillBackground( true );
 
+    QHBoxLayout* layout = new QHBoxLayout( this );
+    layout->setMargin( 2 ); // to make sure the frame gets displayed
+    layout->setSpacing( 0 );
     layout->addWidget( m_leftLabel );
     layout->addWidget( m_titleLabel );
     layout->setStretchFactor( m_titleLabel, 1 );
