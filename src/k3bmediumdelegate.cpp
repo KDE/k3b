@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -15,13 +16,46 @@
 #include "k3bmediumdelegate.h"
 #include "k3bmedium.h"
 
-#include <QtGui/QPainter>
-#include <QtCore/QModelIndex>
-#include <QtGui/QTextDocument>
+#include <KLocale>
+
+#include <QApplication>
+#include <QModelIndex>
+#include <QPainter>
+#include <QStyle>
 
 Q_DECLARE_METATYPE(K3b::Medium)
 
-static const int s_margin = 4;
+namespace
+{
+
+    QFont cloneFont( const QFont& font, int pointSize, bool bold )
+    {
+        QFont cloned( font );
+        cloned.setPointSize( pointSize );
+        cloned.setBold( bold );
+        return cloned;
+    }
+    
+    struct FontsAndMetrics
+    {
+        FontsAndMetrics( const QFont& font );
+        
+        QFont titleFont;
+        QFontMetrics fontM;
+        QFontMetrics titleFontM;
+        int margin;
+    };
+    
+    FontsAndMetrics::FontsAndMetrics( const QFont& font )
+    :
+        titleFont( cloneFont( font, font.pointSize()+2, true ) ),
+        fontM( font ),
+        titleFontM( font ),
+        margin( fontM.descent() )
+    {
+    }
+    
+} // namespace
 
 K3b::MediumDelegate::MediumDelegate( QObject* parent )
     : QStyledItemDelegate( parent )
@@ -38,9 +72,19 @@ QSize K3b::MediumDelegate::sizeHint( const QStyleOptionViewItem& option, const Q
 {
     Medium medium = index.data( MediumRole ).value<Medium>();
     if( medium.isValid() ) {
-        QTextDocument doc;
-        doc.setHtml( medium.longString() );
-        return doc.size().toSize() + QSize( s_margin, s_margin );
+        const FontsAndMetrics fam( option.font );
+        
+        int height = fam.margin + fam.titleFontM.height() + fam.fontM.height() + fam.margin;
+        if( medium.diskInfo().diskState() == K3b::Device::STATE_COMPLETE ||
+            medium.diskInfo().diskState() == K3b::Device::STATE_INCOMPLETE  )
+            height += fam.fontM.height();
+        if( medium.diskInfo().diskState() == K3b::Device::STATE_EMPTY ||
+            medium.diskInfo().diskState() == K3b::Device::STATE_INCOMPLETE  )
+            height += fam.fontM.height();
+        if( !medium.diskInfo().empty() && medium.diskInfo().rewritable() )
+            height += fam.fontM.height();
+        
+        return QSize( 0, height );
     }
     else {
         return QStyledItemDelegate::sizeHint( option, index );
@@ -54,33 +98,83 @@ void K3b::MediumDelegate::paint( QPainter* painter, const QStyleOptionViewItem& 
     if( medium.isValid() ) {
         painter->save();
 
-        if ( option.state & QStyle::State_Selected ) {
-            painter->fillRect( option.rect, option.palette.highlight() );
-        }
+        const FontsAndMetrics fam( option.font );
+        const QPalette::ColorRole textRole = (option.state & QStyle::State_Selected) ?
+                                              QPalette::HighlightedText : QPalette::Text;
+        
+        QStyle* style = QApplication::style();
 
-        QRect rect = option.rect.adjusted( s_margin, s_margin, -s_margin, -s_margin );
+        style->drawPrimitive( QStyle::PE_PanelItemViewItem, &option, painter );
 
-        QTextDocument doc;
-
-        // QTextDocument ignores the QPainter color settings
-        doc.setHtml( QString("<html><body><div style=\"color:%1\">%2</div></body></html>")
-                     .arg( option.state & QStyle::State_Selected
-                           ? option.palette.color( QPalette::HighlightedText ).name()
-                           : option.palette.color( QPalette::Text ).name() )
-                     .arg( medium.longString() ) );
-
-        int iconSize = doc.size().height();
-        QPixmap icon = medium.icon().pixmap( iconSize, iconSize );
-        int iconPos = option.rect.top() + (option.rect.height() - icon.height())/2;
+        const QRect rect = option.rect.adjusted( fam.margin, fam.margin, -fam.margin, -fam.margin );
+        const QRect titleRect( rect.left(), rect.top(),
+                               rect.width(), fam.titleFontM.height() );
+        const QRect contentRect( rect.left(), rect.top() + fam.titleFontM.height(),
+                                 rect.width(), fam.fontM.height() );
+        const QPixmap icon = medium.icon().pixmap( rect.height() );
 
         painter->save();
         painter->setOpacity( 0.3 );
-        painter->drawPixmap( rect.right() - icon.width(), iconPos, icon );
+        style->drawItemPixmap( painter, rect, Qt::AlignRight | Qt::AlignVCenter, icon );
         painter->restore();
+        
+        painter->setFont( fam.titleFont );
+        style->drawItemText( painter, titleRect, option.displayAlignment, option.palette,
+                             option.state & QStyle::State_Enabled,
+                             fam.titleFontM.elidedText( medium.shortString(), option.textElideMode, titleRect.width() ),
+                             textRole );
+        
+        painter->setFont( option.font );
+        
+        QString contentText = QString("(%1)").arg( medium.contentTypeString() );
+        style->drawItemText( painter, contentRect, option.displayAlignment, option.palette,
+                             option.state & QStyle::State_Enabled,
+                             fam.titleFontM.elidedText( contentText, option.textElideMode, contentRect.width() ),
+                             textRole );
+        
+        int previousHeights = fam.titleFontM.height() + fam.fontM.height();
+        if( medium.diskInfo().diskState() == K3b::Device::STATE_COMPLETE ||
+            medium.diskInfo().diskState() == K3b::Device::STATE_INCOMPLETE  ) {
+            const QRect tracksRect( rect.left(), rect.top() + previousHeights,
+                                    rect.width(), fam.fontM.height() );
+            previousHeights += tracksRect.height();
+            QString tracksText =  i18np("%1 in 1 track", "%1 in %2 tracks",
+                                        KIO::convertSize(medium.diskInfo().size().mode1Bytes() ),
+                                        medium.toc().count() );
+            if( medium.diskInfo().numSessions() > 1 )
+                tracksText += i18np(" and %1 session", " and %1 sessions", medium.diskInfo().numSessions() );
+            
+            style->drawItemText( painter, tracksRect, option.displayAlignment, option.palette,
+                                option.state & QStyle::State_Enabled,
+                                fam.titleFontM.elidedText( tracksText, option.textElideMode, tracksRect.width() ),
+                                textRole );
+        }
 
-        painter->translate( rect.topLeft() );
-        doc.drawContents( painter );
+        if( medium.diskInfo().diskState() == K3b::Device::STATE_EMPTY ||
+            medium.diskInfo().diskState() == K3b::Device::STATE_INCOMPLETE  ) {
+            const QRect freeSpaceRect( rect.left(), rect.top() + previousHeights,
+                                    rect.width(), fam.fontM.height() );
+            previousHeights += freeSpaceRect.height();
+            QString freeSpaceText =  i18n("Free space: %1",
+                                          KIO::convertSize( medium.diskInfo().remainingSize().mode1Bytes() ) );
+            style->drawItemText( painter, freeSpaceRect, option.displayAlignment, option.palette,
+                                option.state & QStyle::State_Enabled,
+                                fam.titleFontM.elidedText( freeSpaceText, option.textElideMode, freeSpaceRect.width() ),
+                                textRole );
+        }
 
+        if( !medium.diskInfo().empty() && medium.diskInfo().rewritable() ) {
+            const QRect capacityRect( rect.left(), rect.top() + previousHeights,
+                                    rect.width(), fam.fontM.height() );
+            previousHeights += capacityRect.height();
+            QString capacityText =  i18n("Capacity: %1",
+                                         KIO::convertSize( medium.diskInfo().capacity().mode1Bytes() ) );
+            style->drawItemText( painter, capacityRect, option.displayAlignment, option.palette,
+                                option.state & QStyle::State_Enabled,
+                                fam.titleFontM.elidedText( capacityText, option.textElideMode, capacityRect.width() ),
+                                textRole );
+        }
+        
         painter->restore();
     }
     else {

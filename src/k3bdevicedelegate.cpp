@@ -137,7 +137,7 @@ void K3b::DeviceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& 
         QStyle* style = QApplication::style();
         const FontsAndMetrics fam( option.font );
         const QPalette::ColorRole textRole = (option.state & QStyle::State_Selected) ?
-                                              QPalette::HighlightedText : QPalette::WindowText;
+                                              QPalette::HighlightedText : QPalette::Text;
         
         const QRect itemRect( option.rect.left() + fam.margin, option.rect.top() + fam.margin,
                               option.rect.width() - 2*fam.margin, option.rect.height() - 2*fam.margin );
