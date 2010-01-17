@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -72,35 +72,27 @@ namespace {
     
     struct FontsAndMetrics
     {
-        FontsAndMetrics( const QStyleOptionViewItem& option );
+        FontsAndMetrics( const QFont& font );
         
         QFont mediumFont;
-        QFont blockDeviceFont;
+        QFont deviceFont;
         QFontMetrics fontM;
         QFontMetrics mediumFontM;
-        QFontMetrics blockDeviceFontM;
+        QFontMetrics deviceFontM;
         int margin;
-        int iconHeight;
-        QRect mediumRect;
-        QRect deviceRect;
+        int spacing;
     };
     
-    FontsAndMetrics::FontsAndMetrics( const QStyleOptionViewItem& option )
+    FontsAndMetrics::FontsAndMetrics( const QFont& font )
     :
-        mediumFont( cloneFont( option.font, option.font.pointSize()+2, true, false ) ),
-        blockDeviceFont( cloneFont( option.font, option.font.pointSize()-2, false, true ) ),
-        fontM( option.font ),
+        mediumFont( cloneFont( font, font.pointSize()+2, true, false ) ),
+        deviceFont( cloneFont( font, font.pointSize()-2, false, true ) ),
+        fontM( font ),
         mediumFontM( mediumFont ),
-        blockDeviceFontM( blockDeviceFont ),
-        margin( 4 ),
-        iconHeight( blockDeviceFontM.height() + margin + mediumFontM.height() ),
-        mediumRect( option.rect ),
-        deviceRect( option.rect )
+        deviceFontM( deviceFont ),
+        margin( fontM.descent() ),
+        spacing( 0 )
     {
-        mediumRect.setLeft( option.rect.left() + iconHeight + margin );
-        mediumRect.setBottom( option.rect.top() + mediumFontM.height() + margin/2 );
-        deviceRect.setLeft( option.rect.left() + iconHeight + margin );
-        deviceRect.setTop( option.rect.top() + mediumFontM.height() + margin/2 );
     }
     
 } // namespace
@@ -120,14 +112,10 @@ K3b::DeviceDelegate::~DeviceDelegate()
 QSize K3b::DeviceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     if ( index.data( K3b::DeviceModel::IsDevice ).toBool() ) {
-        FontsAndMetrics fam( option );
-
-        QString text1 = index.data( K3b::DeviceModel::Vendor ).toString() + " - " + index.data( K3b::DeviceModel::Description ).toString();
-        QString text2 = index.data( K3b::DeviceModel::BlockDevice ).toString();
-        QString text3 = index.data( Qt::DisplayRole ).toString();
-
-        return QSize( fam.iconHeight + fam.margin + qMax( fam.blockDeviceFontM.width( text1 + " " + text2 ), fam.mediumFontM.width( text3 ) ),
-                      fam.iconHeight + fam.margin );
+        const FontsAndMetrics fam( option.font );
+        // It seems that width-part of size hint is not used anwyay so
+        // we're ommiting here a computation of text's width
+        return QSize( 0, fam.margin + fam.mediumFontM.height() + fam.spacing + fam.deviceFontM.height() + fam.margin );
     }
     else {
         return KFileItemDelegate::sizeHint( option, index );
@@ -147,31 +135,42 @@ void K3b::DeviceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& 
         painter->fillRect( option.rect, option.palette.base() );
 
         QStyle* style = QApplication::style();
-        FontsAndMetrics fam( option );
-        QPalette::ColorRole textRole = (option.state & QStyle::State_Selected) ?
-                                        QPalette::HighlightedText : QPalette::WindowText;
+        const FontsAndMetrics fam( option.font );
+        const QPalette::ColorRole textRole = (option.state & QStyle::State_Selected) ?
+                                              QPalette::HighlightedText : QPalette::WindowText;
+        
+        const QRect itemRect( option.rect.left() + fam.margin, option.rect.top() + fam.margin,
+                              option.rect.width() - 2*fam.margin, option.rect.height() - 2*fam.margin );
+        const QSize iconSize( itemRect.height(), itemRect.height() );
+        const QSize mediumSize( itemRect.width() - iconSize.width() - fam.margin,
+                                itemRect.height() - fam.spacing - fam.deviceFontM.height() );
+        const QSize devicemSize( itemRect.width() - iconSize.width() - fam.margin,
+                                 itemRect.height() - fam.spacing - fam.mediumFontM.height() );
+        const QRect iconRect = style->alignedRect( option.direction, Qt::AlignLeft | Qt::AlignVCenter, iconSize, itemRect );
+        const QRect mediumRect = style->alignedRect( option.direction, Qt::AlignRight | Qt::AlignTop, mediumSize, itemRect );
+        const QRect deviceRect = style->alignedRect( option.direction, Qt::AlignRight | Qt::AlignBottom, devicemSize, itemRect );
         
         // draw background
         style->drawPrimitive( QStyle::PE_PanelItemViewItem, &option, painter );
 
         // draw decoration
-        QPixmap pix = decoration( option, index, QSize( fam.iconHeight, fam.iconHeight ) );
-        style->drawItemPixmap( painter, option.rect, Qt::AlignLeft | Qt::AlignVCenter, pix );
+        QPixmap pixmap = decoration( option, index, iconSize );
+        painter->drawPixmap( iconRect, pixmap );
 
         // draw medium text
         painter->setFont( fam.mediumFont );
         QString text = index.data( Qt::DisplayRole ).toString();
-        style->drawItemText( painter, fam.mediumRect, option.displayAlignment, option.palette,
+        style->drawItemText( painter, mediumRect, option.displayAlignment, option.palette,
                              option.state & QStyle::State_Enabled,
-                             fam.mediumFontM.elidedText( text, option.textElideMode, fam.mediumRect.width() ),
+                             fam.mediumFontM.elidedText( text, option.textElideMode, mediumRect.width() ),
                              textRole );
 
         // draw fixed device text
-        painter->setFont( fam.blockDeviceFont );
+        painter->setFont( fam.deviceFont );
         text = index.data( K3b::DeviceModel::Vendor ).toString() + " - " + index.data( K3b::DeviceModel::Description ).toString();
-        style->drawItemText( painter, fam.deviceRect, option.displayAlignment, option.palette,
+        style->drawItemText( painter, deviceRect, option.displayAlignment, option.palette,
                              option.state & QStyle::State_Enabled,
-                             fam.blockDeviceFontM.elidedText( text, option.textElideMode, fam.deviceRect.width() ),
+                             fam.deviceFontM.elidedText( text, option.textElideMode, deviceRect.width() ),
                              textRole );
 
         painter->restore();
