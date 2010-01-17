@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
- *           (C)      2009 Michal Malek <michalm@jabster.pl>
+ *           (C) 2009-2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -506,7 +506,6 @@ void K3b::MainWindow::initView()
     m_dirTreeDock = new QDockWidget(  i18n("Folders"), this );
     m_dirTreeDock->setObjectName("dirtreedock");
     m_dirTreeDock->setFeatures( QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable|QDockWidget::DockWidgetFloatable );
-    addDockWidget( Qt::TopDockWidgetArea, m_dirTreeDock );
     actionCollection()->addAction( "view_dir_tree", m_dirTreeDock->toggleViewAction() );
 
     K3b::FileTreeView* sidePanel = new K3b::FileTreeView( m_dirTreeDock );
@@ -520,12 +519,21 @@ void K3b::MainWindow::initView()
     m_contentsDock = new QDockWidget( i18n("Contents"), this );
     m_contentsDock->setObjectName("contentsdock");
     m_contentsDock->setFeatures( QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable|QDockWidget::DockWidgetFloatable );
-    addDockWidget ( Qt::TopDockWidgetArea, m_contentsDock );
     actionCollection()->addAction( "view_contents", m_contentsDock->toggleViewAction() );
 
     m_dirView = new K3b::DirView( sidePanel/*->fileTreeView()*/, m_contentsDock );
     m_contentsDock->setWidget( m_dirView );
-    //m_contentsDock->manualDock( m_dirTreeDock, K3DockWidget::DockRight, 2000 );
+    
+    if( layoutDirection() == Qt::LeftToRight )
+    {
+        addDockWidget( Qt::TopDockWidgetArea, m_dirTreeDock, Qt::Horizontal );
+        addDockWidget ( Qt::TopDockWidgetArea, m_contentsDock, Qt::Horizontal );
+    }
+    else
+    {
+        addDockWidget ( Qt::TopDockWidgetArea, m_contentsDock, Qt::Horizontal );
+        addDockWidget( Qt::TopDockWidgetArea, m_dirTreeDock, Qt::Horizontal );
+    }
 
     // --- filetreecombobox-toolbar ----------------------------------------------------------------
 	KFilePlacesModel* filePlacesModel = new KFilePlacesModel;
