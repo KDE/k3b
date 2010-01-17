@@ -263,6 +263,7 @@ void K3b::ImageWritingDialog::setupGui()
     m_infoView->setAlternateBackground( QColor() );
     m_infoView->setFullWidth(true);
     m_infoView->setSelectionMode( Q3ListView::NoSelection );
+    m_infoView->setHScrollBarMode( Q3ScrollView::AlwaysOff );
 
     connect( m_infoView, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)),
              this, SLOT(slotContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)) );

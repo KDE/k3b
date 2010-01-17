@@ -438,7 +438,7 @@ void K3b::ListViewItem::paintProgressBar( QPainter* p, const QColorGroup& cgh, i
     option.maximum = info->totalProgressSteps;
     option.progress = info->progressValue;
     option.rect = r;
-    option.text = QString( "%1%%" ).arg( info->progressValue );
+    option.text = QString( "%1%" ).arg( info->progressValue );
     option.textVisible = ( info->progressValue > 0 );
     option.textAlignment = Qt::AlignCenter;
 
