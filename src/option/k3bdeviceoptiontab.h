@@ -16,7 +16,7 @@
 #ifndef K3B_DEVICE_OPTIONTAB_H
 #define K3B_DEVICE_OPTIONTAB_H
 
-#include <qwidget.h>
+#include <QWidget>
 
 class QLabel;
 
@@ -35,10 +35,11 @@ namespace K3b {
         void saveDevices();
 
     private Q_SLOTS:
+        void slotModifyPermissionsButtonClicked();
         void slotRefreshButtonClicked();
 
     private:
-        QLabel*          m_labelDevicesInfo;
+        QLabel* m_labelDevicesInfo;
         DeviceWidget* m_deviceWidget;
     };
 }

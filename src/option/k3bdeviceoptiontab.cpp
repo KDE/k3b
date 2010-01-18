@@ -18,18 +18,17 @@
 #include "k3bglobals.h"
 #include "k3bcore.h"
 
-#include <qlabel.h>
-#include <qstring.h>
-#include <qlayout.h>
-#include <qcursor.h>
-#include <qapplication.h>
+#include <KConfigGroup>
+#include <KGlobal>
+#include <KLocale>
+#include <KMessageBox>
+#include <KProcess>
 
-#include <kapplication.h>
-#include <kdialog.h>
-#include <klocale.h>
-#include <kconfig.h>
-#include <kstandarddirs.h>
-#include <kglobal.h>
+#include <QApplication>
+#include <QCursor>
+#include <QGridLayout>
+#include <QLabel>
+#include <QString>
 
 
 K3b::DeviceOptionTab::DeviceOptionTab( QWidget* parent )
@@ -44,10 +43,8 @@ K3b::DeviceOptionTab::DeviceOptionTab( QWidget* parent )
     m_labelDevicesInfo = new QLabel( this );
     m_labelDevicesInfo->setAlignment( Qt::AlignVCenter | Qt::AlignLeft );
     m_labelDevicesInfo->setText( "<p>" + i18n( "K3b tries to detect all your devices properly. "
-                                               "You can add devices that have not been detected and change "
-                                               "the black values by clicking in the list. If K3b is unable "
-                                               "to detect your drive, you need to modify their permissions "
-                                               "to give K3b write access to all devices." ) );
+                                               "If K3b is unable to detect your drive, you need to modify "
+                                               "their permissions to give K3b write access to all devices." ) );
     m_labelDevicesInfo->setWordWrap(true);
     // ------------------------------------------------
 
@@ -56,6 +53,7 @@ K3b::DeviceOptionTab::DeviceOptionTab( QWidget* parent )
     frameLayout->addWidget( m_labelDevicesInfo, 0, 0 );
     frameLayout->addWidget( m_deviceWidget, 1, 0 );
 
+    connect( m_deviceWidget, SIGNAL(modifyPermissionsButtonClicked()), this, SLOT(slotModifyPermissionsButtonClicked()) );
     connect( m_deviceWidget, SIGNAL(refreshButtonClicked()), this, SLOT(slotRefreshButtonClicked()) );
 }
 
@@ -76,6 +74,15 @@ void K3b::DeviceOptionTab::saveDevices()
 {
     // save the config
     k3bcore->deviceManager()->saveConfig( KGlobal::config()->group( "Devices" ) );
+}
+
+
+void K3b::DeviceOptionTab::slotModifyPermissionsButtonClicked()
+{
+    QStringList args;
+    args << "k3bsetup" << "--lang" << KGlobal::locale()->language();
+    if( !KProcess::startDetached( K3b::findExe("kcmshell4"), args ) )
+        KMessageBox::error( this, i18n("Unable to start K3b::Setup.") );
 }
 
 

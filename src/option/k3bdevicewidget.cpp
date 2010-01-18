@@ -18,6 +18,7 @@
 #include "k3bdevicemanager.h"
 #include "k3bdevice.h"
 #include "k3bdeviceglobals.h"
+#include "config-k3b.h"
 
 #include <KConfig>
 #include <KIcon>
@@ -26,6 +27,7 @@
 #include <kio/global.h>
 
 #include <QColor>
+#include <QHBoxLayout>
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QHeaderView>
@@ -36,6 +38,7 @@
 #include <QToolTip>
 #include <QTreeWidget>
 #include <QVariant>
+#include <QVBoxLayout>
 
 
 
@@ -45,21 +48,25 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
       m_writerParentViewItem( 0 ),
       m_readerParentViewItem( 0 )
 {
-    QGridLayout* frameLayout = new QGridLayout( this );
+    QVBoxLayout* frameLayout = new QVBoxLayout( this );
     frameLayout->setMargin( 0 );
 
 
     // buttons
     // ------------------------------------------------
-    QGridLayout* refreshButtonGrid = new QGridLayout;
+    QPushButton* modifyPermissions = new QPushButton( i18n( "Modify Permissions..." ), this );
+    QPushButton* buttonRefreshDevices = new QPushButton( i18n( "Refresh" ), this );
+    buttonRefreshDevices->setToolTip( i18n( "Rescan the devices" ) );
+    QHBoxLayout* refreshButtonGrid = new QHBoxLayout;
     refreshButtonGrid->setMargin(0);
-    m_buttonRefreshDevices = new QPushButton( i18n( "Refresh" ), this );
-    m_buttonRefreshDevices->setToolTip( i18n( "Rescan the devices" ) );
-    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    refreshButtonGrid->addItem( spacer, 0, 0 );
-    refreshButtonGrid->addWidget( m_buttonRefreshDevices, 0, 2 );
+    refreshButtonGrid->addStretch();
+    refreshButtonGrid->addWidget( modifyPermissions );
+    refreshButtonGrid->addWidget( buttonRefreshDevices );
     // ------------------------------------------------
 
+#ifndef BUILD_K3BSETUP
+    modifyPermissions->setVisible( false );
+#endif
 
     // Devices Box
     // ------------------------------------------------
@@ -80,14 +87,14 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
     // ------------------------------------------------
 
 
-    frameLayout->addWidget( groupDevices, 0, 0 );
-    frameLayout->addLayout( refreshButtonGrid, 1, 0 );
+    frameLayout->addWidget( groupDevices );
+    frameLayout->addLayout( refreshButtonGrid );
     // ------------------------------------------------
 
     // connections
     // ------------------------------------------------
-    //  connect( m_buttonRefreshDevices, SIGNAL(clicked()), this, SLOT(slotRefreshDevices()) );
-    connect( m_buttonRefreshDevices, SIGNAL(clicked()), this, SIGNAL(refreshButtonClicked()) );
+    connect( modifyPermissions, SIGNAL(clicked()), this, SIGNAL(modifyPermissionsButtonClicked()) );
+    connect( buttonRefreshDevices, SIGNAL(clicked()), this, SIGNAL(refreshButtonClicked()) );
     connect( m_deviceManager, SIGNAL(changed()), this, SLOT(init()) );
     // ------------------------------------------------
 }

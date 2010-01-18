@@ -18,7 +18,6 @@
 
 #include <QWidget>
 
-class QPushButton;
 class QTreeWidget;
 class QTreeWidgetItem;
 
@@ -40,6 +39,7 @@ namespace K3b {
         void init();
 
     Q_SIGNALS:
+        void modifyPermissionsButtonClicked();
         void refreshButtonClicked();
 
     private Q_SLOTS:
@@ -52,7 +52,6 @@ namespace K3b {
         QTreeWidgetItem* m_readerParentViewItem;
 
         QTreeWidget* m_viewDevices;
-        QPushButton* m_buttonRefreshDevices;
     };
 }
 
