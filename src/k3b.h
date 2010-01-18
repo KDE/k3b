@@ -17,24 +17,14 @@
 #ifndef K3B_H
 #define K3B_H
 
-
-#include <config-k3b.h>
-
-// include files for Qt
-#include <qworkspace.h>
-#include <QDockWidget>
-
 // include files for KDE
-#include <kapplication.h>
-#include <kxmlguiwindow.h>
-#include <k3dockwidget.h>
-#include <kaction.h>
-#include <dockmainwindow3.h>
-#include <kurl.h>
-#include <kvbox.h>
+#include <KSharedConfig>
+#include <KUrl>
+#include <KXmlGuiWindow>
 
 #include "option/k3boptiondialog.h"
 
+class QDockWidget;
 
 class KSystemTray;
 class KToggleAction;

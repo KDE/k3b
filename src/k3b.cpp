@@ -13,46 +13,6 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <config-k3b.h>
-
-
-// include files for QT
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
-#include <QGridLayout>
-#include <QLayout>
-#include <QList>
-#include <QString>
-#include <QStackedWidget>
-#include <QTimer>
-
-// include files for KDE
-#include <kaboutdata.h>
-#include <KActionMenu>
-#include <KConfig>
-#include <KEditToolBar>
-#include <KFileDialog>
-#include <kfileplacesmodel.h>
-#include <KGlobal>
-#include <KMessageBox>
-#include <KMenuBar>
-#include <KMimeType>
-#include <KProcess>
-#include <KRecentDocument>
-#include <KRecentFilesAction>
-#include <KShortcutsDialog>
-#include <KStandardAction>
-#include <KStandardDirs>
-#include <KStatusBar>
-#include <ktip.h>
-#include <KToggleAction>
-#include <KUrl>
-#include <KXMLGUIFactory>
-#include <kio/netaccess.h>
-#include <kio/deletejob.h>
-#include <cstdlib>
-
 // application specific includes
 #include "k3b.h"
 #include "k3baction.h"
@@ -105,6 +65,47 @@
 #include "misc/k3bmediaformattingdialog.h"
 #include "option/k3boptiondialog.h"
 #include "projects/k3bdatamultisessionimportdialog.h"
+#include "config-k3b.h"
+
+// include files for KDE
+#include <kaboutdata.h>
+#include <KAction>
+#include <KActionMenu>
+#include <KConfig>
+#include <KEditToolBar>
+#include <KFileDialog>
+#include <kfileplacesmodel.h>
+#include <KGlobal>
+#include <KMessageBox>
+#include <KMenuBar>
+#include <KMimeType>
+#include <KProcess>
+#include <KRecentDocument>
+#include <KRecentFilesAction>
+#include <KShortcutsDialog>
+#include <KStandardAction>
+#include <KStandardDirs>
+#include <KStatusBar>
+#include <ktip.h>
+#include <KToggleAction>
+#include <KUrl>
+#include <KXMLGUIFactory>
+#include <kio/netaccess.h>
+#include <kio/deletejob.h>
+
+// include files for QT
+#include <QDir>
+#include <QDockWidget>
+#include <QFile>
+#include <QFileInfo>
+#include <QGridLayout>
+#include <QLayout>
+#include <QList>
+#include <QString>
+#include <QStackedWidget>
+#include <QTimer>
+
+#include <cstdlib>
 
 
 namespace {
