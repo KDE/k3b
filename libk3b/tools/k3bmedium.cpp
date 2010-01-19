@@ -238,39 +238,44 @@ void K3b::Medium::analyseContent()
             d->isoDesc = iso.primaryDescriptor();
             kDebug() << "(K3b::Medium) found volume id from start sector " << startSec
                      << ": '" << d->isoDesc.volumeId << "'" ;
+                     
+            if( const Iso9660Directory* firstDirEntry = iso.firstIsoDirEntry() ) {
+                if( diskInfo().isDvdMedia() ) {
+                    // Every VideoDVD needs to have a VIDEO_TS.IFO file
+                    if( firstDirEntry->entry( "VIDEO_TS/VIDEO_TS.IFO" ) != 0 )
+                        d->content |= ContentVideoDVD;
+                }
+                else {
+                    kDebug() << "(K3b::Medium) checking for VCD.";
 
-            if( diskInfo().isDvdMedia() ) {
-                // Every VideoDVD needs to have a VIDEO_TS.IFO file
-                if( iso.firstIsoDirEntry()->entry( "VIDEO_TS/VIDEO_TS.IFO" ) != 0 )
-                    d->content |= ContentVideoDVD;
+                    // check for VCD
+                    const K3b::Iso9660Entry* vcdEntry = firstDirEntry->entry( "VCD/INFO.VCD" );
+                    const K3b::Iso9660Entry* svcdEntry = firstDirEntry->entry( "SVCD/INFO.SVD" );
+                    const K3b::Iso9660File* vcdInfoFile = 0;
+                    if( vcdEntry ) {
+                        kDebug() << "(K3b::Medium) found vcd entry.";
+                        if( vcdEntry->isFile() )
+                            vcdInfoFile = static_cast<const K3b::Iso9660File*>(vcdEntry);
+                    }
+                    if( svcdEntry && !vcdInfoFile ) {
+                        kDebug() << "(K3b::Medium) found svcd entry.";
+                        if( svcdEntry->isFile() )
+                            vcdInfoFile = static_cast<const K3b::Iso9660File*>(svcdEntry);
+                    }
+
+                    if( vcdInfoFile ) {
+                        char buffer[8];
+
+                        if ( vcdInfoFile->read( 0, buffer, 8 ) == 8 &&
+                            ( !qstrncmp( buffer, "VIDEO_CD", 8 ) ||
+                            !qstrncmp( buffer, "SUPERVCD", 8 ) ||
+                            !qstrncmp( buffer, "HQ-VCD  ", 8 ) ) )
+                            d->content |= ContentVideoCD;
+                    }
+                }
             }
             else {
-                kDebug() << "(K3b::Medium) checking for VCD.";
-
-                // check for VCD
-                const K3b::Iso9660Entry* vcdEntry = iso.firstIsoDirEntry()->entry( "VCD/INFO.VCD" );
-                const K3b::Iso9660Entry* svcdEntry = iso.firstIsoDirEntry()->entry( "SVCD/INFO.SVD" );
-                const K3b::Iso9660File* vcdInfoFile = 0;
-                if( vcdEntry ) {
-                    kDebug() << "(K3b::Medium) found vcd entry.";
-                    if( vcdEntry->isFile() )
-                        vcdInfoFile = static_cast<const K3b::Iso9660File*>(vcdEntry);
-                }
-                if( svcdEntry && !vcdInfoFile ) {
-                    kDebug() << "(K3b::Medium) found svcd entry.";
-                    if( svcdEntry->isFile() )
-                        vcdInfoFile = static_cast<const K3b::Iso9660File*>(svcdEntry);
-                }
-
-                if( vcdInfoFile ) {
-                    char buffer[8];
-
-                    if ( vcdInfoFile->read( 0, buffer, 8 ) == 8 &&
-                         ( !qstrncmp( buffer, "VIDEO_CD", 8 ) ||
-                           !qstrncmp( buffer, "SUPERVCD", 8 ) ||
-                           !qstrncmp( buffer, "HQ-VCD  ", 8 ) ) )
-                        d->content |= ContentVideoCD;
-                }
+                kDebug() << "(K3b::Medium) root ISO directory is null, disk is probably broken!";
             }
         }  // opened iso9660
     }
