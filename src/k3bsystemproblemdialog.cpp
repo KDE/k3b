@@ -38,6 +38,8 @@
 #include <KLocale>
 #include <KMessageBox>
 #include <KProcess>
+#include <KPushButton>
+#include <KStandardGuiItem>
 #include <KTextEdit>
 
 #include <QCheckBox>
@@ -46,7 +48,6 @@
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QList>
-#include <QPushButton>
 
 #ifdef HAVE_ICONV_H
 #include <langinfo.h>
@@ -68,15 +69,13 @@ static QString markupString( const QString& s_ )
 
 
 K3b::SystemProblem::SystemProblem( Type t,
-                                    const QString& p,
-                                    const QString& d,
-                                    const QString& s,
-                                    bool k )
+                                   const QString& p,
+                                   const QString& d,
+                                   const QString& s )
     : type(t),
       problem(p),
       details(d),
-      solution(s),
-      solvableByK3bSetup(k)
+      solution(s)
 {
 }
 
@@ -95,12 +94,12 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
     titleFrame->setTitle( i18n("System Configuration Problems"),
                           i18np("1 problem", "%1 problems", problems.count() ) );
 
-    m_closeButton = new QPushButton( i18n("Close"), widget );
+    m_closeButton = new KPushButton( KStandardGuiItem::close(), widget );
     connect( m_closeButton, SIGNAL(clicked()), this, SLOT(close()) );
     m_checkDontShowAgain = new QCheckBox( i18n("Do not show again"), widget );
 
 #ifdef BUILD_K3BSETUP
-    m_k3bsetupButton = new QPushButton( i18n("Start K3b::Setup"), widget );
+    m_k3bsetupButton = new QPushButton( i18n("Modify Permissions..."), widget );
     connect( m_k3bsetupButton, SIGNAL(clicked()), this, SLOT(slotK3bSetup()) );
 #endif
 
@@ -145,10 +144,6 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
         text.append( markupString( p.details ) + "<br>" );
         if( !p.solution.isEmpty() )
             text.append( "<i>" + i18n("Solution") + "</i>: " + p.solution );
-#ifdef BUILD_K3BSETUP
-        else if( p.solvableByK3bSetup )
-            text.append( "<i>" + i18n("Solution") + "</i>: " + i18n("Use K3b::Setup to solve this problem.") );
-#endif
         text.append( "</p>" );
     }
 
@@ -176,14 +171,23 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
 {
     QList<K3b::SystemProblem> problems;
 
-    if( k3bcore->deviceManager()->cdWriter().isEmpty() ) {
+    if( k3bcore->deviceManager()->allDevices().isEmpty() ) {
+        problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
+                                           i18n("No optical drive found."),
+                                           i18n("K3b did not find any optical device in your system."),
+#ifdef Q_OS_LINUX
+                                           i18n("Make sure HAL daemon is running, it is used by K3b for finding devices.")
+#endif
+                                           ) );
+    }
+    else if( k3bcore->deviceManager()->cdWriter().isEmpty() ) {
         problems.append( K3b::SystemProblem( K3b::SystemProblem::NON_CRITICAL,
-                                           i18n("No CD/DVD writer found."),
+                                           i18n("No CD/DVD/BD writer found."),
                                            i18n("K3b did not find an optical writing device in your system. Thus, "
                                                 "you will not be able to burn CDs or DVDs. However, you can still "
                                                 "use other K3b features such as audio track extraction, audio "
                                                 "transcoding or ISO9660 image creation."),
-                                           false ) );
+                                           QString() ) );
     }
     else {
         // 1. cdrecord, cdrdao
@@ -192,8 +196,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                i18n("Unable to find %1 executable",QString("cdrecord")),
                                                i18n("K3b uses cdrecord to actually write CDs."),
                                                i18n("Install the cdrtools package which contains "
-                                                    "cdrecord."),
-                                               false ) );
+                                                    "cdrecord.") ) );
         }
         else {
             if( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "outdated" ) ) {
@@ -202,8 +205,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                    i18n("Although K3b supports all cdrtools versions since "
                                                         "1.10 it is highly recommended to at least use "
                                                         "version 2.0."),
-                                                   i18n("Install a more recent version of the cdrtools."),
-                                                   false ) );
+                                                   i18n("Install a more recent version of the cdrtools.") ) );
             }
 
 #ifdef Q_OS_LINUX
@@ -223,8 +225,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                        i18n("Since Linux kernel 2.6.8 %1 will not work when run suid "
                                                             "root for security reasons anymore.",
                                                             QLatin1String( "cdrecord <= 2.01.01a05") ),
-                                                       QString(),
-                                                       true ) );
+                                                       i18n("Click \"Modify Permissions...\" to solve this problem.") ) );
             }
 #ifdef CDRECORD_SUID_ROOT_CHECK
             else if( !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) && getuid() != 0 ) // not root
@@ -236,8 +237,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                         "stability of the burning process. As well as this, "
                                                         "it allows the size of the burning buffer to be changed, "
                                                         "and a lot of user problems can be solved this way."),
-                                                   QString(),
-                                                   true ) );
+                                                   i18n("Click \"Modify Permissions...\" to solve this problem.") ) );
 #endif // CDRECORD_SUID_ROOT_CHECK
 #endif
         }
@@ -246,8 +246,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
             problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                i18n("Unable to find %1 executable",QString("cdrdao")),
                                                i18n("K3b uses cdrdao to actually write CDs."),
-                                               i18n("Install the cdrdao package."),
-                                               false ) );
+                                               i18n("Install the cdrdao package.") ) );
         }
         else {
 #ifdef Q_OS_LINUX
@@ -258,8 +257,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                    i18n("It is highly recommended to configure cdrdao "
                                                         "to run with root privileges to increase the "
                                                         "overall stability of the burning process."),
-                                                   QString(),
-                                                   true ) );
+                                                   i18n("Click \"Modify Permissions...\" to solve this problem.") ) );
 #endif // CDRECORD_SUID_ROOT_CHECK
 #endif
         }
@@ -273,8 +271,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                i18n("K3b uses growisofs to actually write DVDs. "
                                                     "Without growisofs you will not be able to write DVDs. "
                                                     "Make sure to install at least version 5.10."),
-                                               i18n("Install the dvd+rw-tools package."),
-                                               false ) );
+                                               i18n("Install the dvd+rw-tools package.") ) );
         }
         else {
             if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3b::Version( 5, 10 ) ) {
@@ -282,8 +279,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                    i18n("Used %1 version %2 is outdated",QString("growisofs"),k3bcore->externalBinManager()->binObject( "growisofs" )->version),
                                                    i18n("K3b needs at least growisofs version 5.10 to write DVDs. "
                                                         "All older versions will not work and K3b will refuse to use them."),
-                                                   i18n("Install a more recent version of %1.",QString("growisofs")),
-                                                   false ) );
+                                                   i18n("Install a more recent version of %1.",QString("growisofs")) ) );
             }
             else if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3b::Version( 5, 12 ) ) {
                 problems.append( K3b::SystemProblem( K3b::SystemProblem::NON_CRITICAL,
@@ -291,8 +287,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                    i18n("K3b will not be able to copy DVDs on-the-fly or write a DVD+RW in multiple "
                                                         "sessions using a growisofs "
                                                         "version older than 5.12."),
-                                                   i18n("Install a more recent version of %1.",QString("growisofs")),
-                                                   false ) );
+                                                   i18n("Install a more recent version of %1.",QString("growisofs")) ) );
             }
             else if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3b::Version( 7, 0 ) ) {
                 problems.append( K3b::SystemProblem( K3b::SystemProblem::NON_CRITICAL,
@@ -300,8 +295,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                    i18n("It is highly recommended to use growisofs 7.0 or higher. "
                                                         "K3b will not be able to write a DVD+RW in multiple "
                                                         "sessions using a growisofs version older than 7.0." ),
-                                                   i18n("Install a more recent version of %1.",QString("growisofs")),
-                                                   false ) );
+                                                   i18n("Install a more recent version of %1.",QString("growisofs")) ) );
             }
             // for now we ignore the suid root bit becasue of the memorylocked issue
 //       else if( !k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "suidroot" ) ) {
@@ -311,8 +305,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
 // 						"to run with root privileges. Only then growisofs "
 // 						"runs with high priority which increases the overall "
 // 						"stability of the burning process."),
-// 					   QString(),
-// 					   true ) );
+// 					   i18n("Click \"Modify Permissions...\" to solve this problem.") ) );
 //       }
         }
 
@@ -320,8 +313,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
             problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                i18n("Unable to find %1 executable",QString("dvd+rw-format")),
                                                i18n("K3b uses dvd+rw-format to format DVD-RWs and DVD+RWs."),
-                                               i18n("Install the dvd+rw-tools package."),
-                                               false ) );
+                                               i18n("Install the dvd+rw-tools package.") ) );
         }
     }
 
@@ -335,8 +327,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                 k3bcore->externalBinManager()->binObject( "mkisofs" )->version),
                                            i18n("K3b needs at least mkisofs version 1.14. Older versions may introduce problems "
                                                 "when creating data projects."),
-                                           i18n("Install a more recent version of %1.",QString("mkisofs")),
-                                           false ) );
+                                           i18n("Install a more recent version of %1.",QString("mkisofs")) ) );
     }
 
     // 2. device check
@@ -365,8 +356,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                 "a bug or feature wish; it is not possible to solve this problem "
                                                 "from within K3b."),
                                            i18n("Replace the automounting entries in /etc/fstab with old-fashioned "
-                                                "ones or use a user-space mounting solution like pmount or ivman."),
-                                           false ) );
+                                                "ones or use a user-space mounting solution like pmount or ivman.") ) );
     }
 
 #endif
@@ -383,8 +373,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                     "ide-scsi (SCSI emulation) for all devices. "
                                                     "This way you will not have any problems. "
                                                     "Be aware that you may still enable DMA on ide-scsi "
-                                                    "emulated drives."),
-                                               false ) );
+                                                    "emulated drives.") ) );
         }
         else {
             // we have atapi support in some way in the kernel
@@ -405,8 +394,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                        i18n("The best and recommended solution is to enable "
                                                             "ide-scsi (SCSI emulation) for all devices. "
                                                             "This way you will not have any problems. Or you install "
-                                                            "(or select as the default) a more recent version of %1.",QString("cdrtools")),
-                                                       false ) );
+                                                            "(or select as the default) a more recent version of %1.",QString("cdrtools")) ) );
                 }
             }
 
@@ -431,8 +419,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                               "ide-scsi (SCSI emulation) for all writer devices: "
                                                               "this way you will not have any problems; or, you can install "
                                                               "(or select as the default) a more recent version of %1.",
-                                                              QString("cdrdao")),
-                                                       false ) );
+                                                              QString("cdrdao")) ) );
                 }
             }
         }
@@ -444,8 +431,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                i18n("Used %1 version %2 is outdated",QString("growisofs"),k3bcore->externalBinManager()->binObject( "growisofs" )->version),
                                                i18n("K3b will not be able to write DVD-R Dual Layer media using a growisofs "
                                                     "version older than 6.0."),
-                                               i18n("Install a more recent version of growisofs."),
-                                               false ) );
+                                               i18n("Install a more recent version of growisofs.") ) );
     }
 
     QList<K3b::Device::Device *> items2(k3bcore->deviceManager()->allDevices());
@@ -459,14 +445,13 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                i18n("K3b needs write access to all the devices to perform certain tasks. "
                                                     "Without it you might encounter problems with %1 - %2",dev->vendor(),dev->description()),
                                                i18n("Make sure you have write access to %1. In case you are not using "
-                                                    "devfs or udev K3b::Setup is able to do this for you.",dev->blockDeviceName()),
-                                               false ) );
+                                                    "devfs or udev click \"Modify Permissions...\" and setup permissions by hand.",dev->blockDeviceName()) ) );
 
 
         if( !dmaActivated( dev ) )
             problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                i18n("DMA disabled on device %1 - %2",dev->vendor(),dev->description()),
-                                               i18n("With most modern CD/DVD devices enabling DMA highly increases "
+                                               i18n("With most modern CD/DVD/BD devices enabling DMA highly increases "
                                                     "read/write performance. If you experience very low writing speeds "
                                                     "this is probably the cause."),
                                                i18n("Enable DMA temporarily as root with 'hdparm -d 1 %1'.",dev->blockDeviceName()) ) );
@@ -489,8 +474,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                     "these parameters are really wanted and will not be part of some bug report."),
                                                i18n("To remove the user parameters for the external program %1 open the "
                                                     "K3b settings page 'Programs' and choose the tab 'User Parameters'."
-                                                    ,p->name()),
-                                               false ) );
+                                                    ,p->name()) ) );
         }
     }
 
@@ -516,8 +500,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                            i18n("To enable MP3 support, please install the MAD MP3 decoding library as well as the "
                                                 "K3b MAD MP3 decoder plugin (the latter may already be installed but not functional "
                                                 "due to the missing libmad). Some distributions allow installation of MP3 support "
-                                                "via an online update tool."),
-                                           false ) );
+                                                "via an online update tool.") ) );
     }
 
 #ifdef HAVE_ICONV_H
@@ -535,8 +518,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                 "intentionally. Most likely the locale is not set at all. An invalid setting "
                                                 "will result in problems when creating data projects."),
                                            i18n("To properly set the locale charset make sure the LC_* environment variables "
-                                                "are set. Normally the distribution setup tools take care of this."),
-                                           false ) );
+                                                "are set. Normally the distribution setup tools take care of this.") ) );
     }
 #endif
 
@@ -553,10 +535,9 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                            i18n("Run K3b from a proper user account and setup the device and "
                                                 "external tool permissions appropriately.")
 #ifdef BUILD_K3BSETUP
-                                           + ' ' + i18n("The latter can be done via K3b::Setup.")
+                                           + ' ' + i18n("The latter can be done via \"Modify Permissions...\".")
 #endif
-                                           ,
-                                           true ) );
+                                           ) );
     }
 
 

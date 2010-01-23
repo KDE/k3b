@@ -42,14 +42,12 @@ namespace K3b {
         SystemProblem( Type type = NON_CRITICAL,
                        const QString& problem = QString(),
                        const QString& details = QString(),
-                       const QString& solution = QString(),
-                       bool k3bsetup = false );
+                       const QString& solution = QString() );
 
         Type type;
         QString problem;
         QString details;
         QString solution;
-        bool solvableByK3bSetup;
     };
 
 
