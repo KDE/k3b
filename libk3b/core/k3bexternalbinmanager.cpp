@@ -15,23 +15,23 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bglobals.h"
 
-#include <kdebug.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
+#include <KConfigGroup>
+#include <KDebug>
 #include <kdeversion.h>
 #include <kde_file.h>
 #include <KProcess>
 #include <KStandardDirs>
 
-#include <qdir.h>
-#include <qstring.h>
-#include <qregexp.h>
-#include <qfile.h>
-#include <qfileinfo.h>
+#include <QDir>
+#include <QFileInfo>
+#include <QFile>
+#include <QRegExp>
 
+#ifndef Q_OS_WIN32
 #include <unistd.h>
 #include <sys/stat.h>
 #include <stdlib.h>
+#endif
 
 
 namespace {
@@ -268,12 +268,14 @@ bool K3b::SimpleExternalProgram::scanVersion( ExternalBin* bin )
 
 bool K3b::SimpleExternalProgram::scanFeatures( ExternalBin* bin )
 {
+#ifndef Q_OS_WIN32
     // check if we run as root
     struct stat s;
     if( !::stat( QFile::encodeName(bin->path), &s ) ) {
         if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
             bin->addFeature( "suidroot" );
     }
+#endif
 
     // probe features
     KProcess fp;

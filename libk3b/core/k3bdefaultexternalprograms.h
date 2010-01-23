@@ -34,11 +34,11 @@ namespace K3b {
 
     protected:
         QString getProgramPath( const QString& dir );
-
-        bool m_usingCdrkit;
+        bool usingCdrkit() const { return m_usingCdrkit; }
 
     private:
         QString m_cdrkitAlt;
+        bool m_usingCdrkit;
     };
 
     class LIBK3B_EXPORT CdrecordProgram : public AbstractCdrtoolsProgram

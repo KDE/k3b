@@ -15,10 +15,10 @@
 #ifndef K3B_EXTERNAL_BIN_MANAGER_H
 #define K3B_EXTERNAL_BIN_MANAGER_H
 
-#include <qmap.h>
-#include <qobject.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QMap>
+#include <QObject>
+#include <QString>
+#include <QStringList>
 #include "k3b_export.h"
 #include "k3bversion.h"
 

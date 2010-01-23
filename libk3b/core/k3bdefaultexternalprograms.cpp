@@ -72,7 +72,8 @@ void K3b::addVcdimagerPrograms( K3b::ExternalBinManager* m )
 
 K3b::AbstractCdrtoolsProgram::AbstractCdrtoolsProgram( const QString& program, const QString& cdrkitAlternative )
     : SimpleExternalProgram( program ),
-      m_cdrkitAlt( cdrkitAlternative )
+      m_cdrkitAlt( cdrkitAlternative ),
+      m_usingCdrkit( false )
 {
 }
 
@@ -159,7 +160,7 @@ K3b::CdrecordProgram::CdrecordProgram()
 
 void K3b::CdrecordProgram::parseFeatures( const QString& out, ExternalBin* bin )
 {
-    if( m_usingCdrkit )
+    if( usingCdrkit() )
         bin->addFeature( "wodim" );
 
     if( bin->version.suffix().endsWith( "-dvd" ) ) {
@@ -178,7 +179,7 @@ void K3b::CdrecordProgram::parseFeatures( const QString& out, ExternalBin* bin )
     if( out.contains( "-tao" ) )
         bin->addFeature( "tao" );
     if( out.contains( "cuefile=" ) &&
-        ( m_usingCdrkit || bin->version > K3b::Version( 2, 1, -1, "a14") ) ) // cuefile handling was still buggy in a14
+        ( usingCdrkit() || bin->version > K3b::Version( 2, 1, -1, "a14") ) ) // cuefile handling was still buggy in a14
         bin->addFeature( "cuefile" );
 
     // new mode 2 options since cdrecord 2.01a12
@@ -188,30 +189,30 @@ void K3b::CdrecordProgram::parseFeatures( const QString& out, ExternalBin* bin )
     // and the version check does not handle versions like 2.01-dvd properly
     if( out.contains( "-xamix" ) ||
         bin->version >= K3b::Version( 2, 1, -1, "a12" ) ||
-        m_usingCdrkit )
+        usingCdrkit() )
         bin->addFeature( "xamix" );
 
-    if( bin->version < K3b::Version( 2, 0 ) && !m_usingCdrkit )
+    if( bin->version < K3b::Version( 2, 0 ) && !usingCdrkit() )
         bin->addFeature( "outdated" );
 
     // FIXME: are these version correct?
-    if( bin->version >= K3b::Version("1.11a38") || m_usingCdrkit )
+    if( bin->version >= K3b::Version("1.11a38") || usingCdrkit() )
         bin->addFeature( "plain-atapi" );
-    if( bin->version > K3b::Version("1.11a17") || m_usingCdrkit )
+    if( bin->version > K3b::Version("1.11a17") || usingCdrkit() )
         bin->addFeature( "hacked-atapi" );
 
-    if( bin->version >= K3b::Version( 2, 1, 1, "a02" ) || m_usingCdrkit )
+    if( bin->version >= K3b::Version( 2, 1, 1, "a02" ) || usingCdrkit() )
         bin->addFeature( "short-track-raw" );
 
-    if( bin->version >= K3b::Version( 2, 1, -1, "a13" ) || m_usingCdrkit )
+    if( bin->version >= K3b::Version( 2, 1, -1, "a13" ) || usingCdrkit() )
         bin->addFeature( "audio-stdin" );
 
-    if( bin->version >= K3b::Version( "1.11a02" ) || m_usingCdrkit )
+    if( bin->version >= K3b::Version( "1.11a02" ) || usingCdrkit() )
         bin->addFeature( "burnfree" );
     else
         bin->addFeature( "burnproof" );
 
-    if ( bin->version >= K3b::Version( 2, 1, 1, "a29" ) && !m_usingCdrkit )
+    if ( bin->version >= K3b::Version( 2, 1, 1, "a29" ) && !usingCdrkit() )
         bin->addFeature( "blu-ray" );
 
     // FIXME: when did cdrecord introduce free dvd support?
@@ -227,7 +228,7 @@ K3b::MkisofsProgram::MkisofsProgram()
 
 void K3b::MkisofsProgram::parseFeatures( const QString& out, ExternalBin* bin )
 {
-    if( m_usingCdrkit )
+    if( usingCdrkit() )
         bin->addFeature( "genisoimage" );
 
     if( out.contains( "-udf" ) )
@@ -241,16 +242,16 @@ void K3b::MkisofsProgram::parseFeatures( const QString& out, ExternalBin* bin )
     if( out.contains( "-sectype" ) )
         bin->addFeature( "sectype" );
 
-    if( bin->version < K3b::Version( 1, 14) && !m_usingCdrkit )
+    if( bin->version < K3b::Version( 1, 14) && !usingCdrkit() )
         bin->addFeature( "outdated" );
 
-    if( bin->version >= K3b::Version( 1, 15, -1, "a40" ) || m_usingCdrkit )
+    if( bin->version >= K3b::Version( 1, 15, -1, "a40" ) || usingCdrkit() )
         bin->addFeature( "backslashed_filenames" );
 
-    if ( m_usingCdrkit && bin->version >= K3b::Version( 1, 1, 4 ) )
+    if ( usingCdrkit() && bin->version >= K3b::Version( 1, 1, 4 ) )
         bin->addFeature( "no-4gb-limit" );
 
-    if ( !m_usingCdrkit && bin->version >= K3b::Version( 2, 1, 1, "a32" ) )
+    if ( !usingCdrkit() && bin->version >= K3b::Version( 2, 1, 1, "a32" ) )
         bin->addFeature( "no-4gb-limit" );
 }
 
@@ -262,16 +263,16 @@ K3b::ReadcdProgram::ReadcdProgram()
 
 void K3b::ReadcdProgram::parseFeatures( const QString& out, ExternalBin* bin )
 {
-    if( m_usingCdrkit )
+    if( usingCdrkit() )
         bin->addFeature( "readom" );
 
     if( out.contains( "-clone" ) )
         bin->addFeature( "clone" );
 
     // FIXME: are these version correct?
-    if( bin->version >= K3b::Version("1.11a38") || m_usingCdrkit )
+    if( bin->version >= K3b::Version("1.11a38") || usingCdrkit() )
         bin->addFeature( "plain-atapi" );
-    if( bin->version > K3b::Version("1.11a17") || m_usingCdrkit )
+    if( bin->version > K3b::Version("1.11a17") || usingCdrkit() )
         bin->addFeature( "hacked-atapi" );
 }
 
