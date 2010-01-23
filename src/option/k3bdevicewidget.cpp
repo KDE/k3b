@@ -82,6 +82,7 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
     m_viewDevices->setRootIsDecorated( false );
     m_viewDevices->header()->setResizeMode( 0, QHeaderView::ResizeToContents );
     m_viewDevices->setFocusPolicy( Qt::NoFocus );
+    m_viewDevices->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 
     groupDevicesLayout->addWidget( m_viewDevices );
     // ------------------------------------------------
@@ -143,21 +144,25 @@ void K3b::DeviceWidget::updateDeviceListViews()
         QTreeWidgetItem* systemDeviceItem = new QTreeWidgetItem( devRoot, QStringList() << i18n("System device name:") );
         systemDeviceItem->setText( 1, dev->blockDeviceName() );
         systemDeviceItem->setForeground( 1, disabledTextColor );
+        systemDeviceItem->setTextAlignment( 0, Qt::AlignRight );
 
         QTreeWidgetItem* vendorItem = new QTreeWidgetItem( devRoot, systemDeviceItem );
         vendorItem->setText( 0, i18n("Vendor:") );
         vendorItem->setText( 1, dev->vendor() );
         vendorItem->setForeground( 1, disabledTextColor );
+        vendorItem->setTextAlignment( 0, Qt::AlignRight );
 
         QTreeWidgetItem* modelItem = new QTreeWidgetItem( devRoot, vendorItem );
         modelItem->setText( 0, i18n("Description:") );
         modelItem->setText( 1, dev->description() );
         modelItem->setForeground( 1, disabledTextColor );
+        modelItem->setTextAlignment( 0, Qt::AlignRight );
 
         QTreeWidgetItem* versionItem = new QTreeWidgetItem( devRoot, modelItem );
         versionItem->setText( 0, i18n("Firmware:") );
         versionItem->setText( 1, dev->version() );
         versionItem->setForeground( 1, disabledTextColor );
+        versionItem->setTextAlignment( 0, Qt::AlignRight );
 
 
         // drive type
@@ -165,12 +170,16 @@ void K3b::DeviceWidget::updateDeviceListViews()
         QTreeWidgetItem* typeItem = new QTreeWidgetItem( devRoot, versionItem );
         typeItem->setText( 0, i18n("Write Capabilities:") );
         typeItem->setText( 1, K3b::Device::mediaTypeString( dev->writeCapabilities(), true ) );
+        typeItem->setToolTip( 1, typeItem->text(1) );
         typeItem->setForeground( 1, disabledTextColor );
+        typeItem->setTextAlignment( 0, Qt::AlignRight );
 
         typeItem = new QTreeWidgetItem( devRoot, typeItem );
         typeItem->setText( 0, i18n("Read Capabilities:") );
         typeItem->setText( 1, K3b::Device::mediaTypeString( dev->readCapabilities(), true ) );
+        typeItem->setToolTip( 1, typeItem->text(1) );
         typeItem->setForeground( 1, disabledTextColor );
+        typeItem->setTextAlignment( 0, Qt::AlignRight );
         // --------------------------------
 
 
@@ -180,6 +189,7 @@ void K3b::DeviceWidget::updateDeviceListViews()
             typeItem->setText( 0, i18n("Buffer Size:") );
             typeItem->setText( 1, KIO::convertSizeFromKiB(dev->bufferSize()) );
             typeItem->setForeground( 1, disabledTextColor );
+            typeItem->setTextAlignment( 0, Qt::AlignRight );
         }
 
 
@@ -189,12 +199,15 @@ void K3b::DeviceWidget::updateDeviceListViews()
             typeItem->setText( 0, i18n("Supports Burnfree:") );
             typeItem->setText( 1, dev->burnfree() ? i18n("yes") : i18n("no") );
             typeItem->setForeground( 1, disabledTextColor );
+            typeItem->setTextAlignment( 0, Qt::AlignRight );
 
             // and at last the write modes
             typeItem = new QTreeWidgetItem( devRoot, typeItem );
             typeItem->setText( 0, i18n("Write modes:") );
             typeItem->setText( 1, K3b::Device::writingModeString(dev->writingModes()) );
+            typeItem->setToolTip( 1, typeItem->text(1) );
             typeItem->setForeground( 1, disabledTextColor );
+            typeItem->setTextAlignment( 0, Qt::AlignRight );
         }
     }
 

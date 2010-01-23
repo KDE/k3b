@@ -32,25 +32,21 @@
 #include "k3bthememanager.h"
 #include "k3bcore.h"
 
-#include <qpushbutton.h>
-#include <qcheckbox.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qfileinfo.h>
-//Added by qt3to4:
-#include <QHBoxLayout>
-#include <QCloseEvent>
-#include <QGridLayout>
-#include <QList>
+#include <KColorScheme>
+#include <KConfigGroup>
+#include <KGlobal>
+#include <KLocale>
+#include <KMessageBox>
+#include <KProcess>
+#include <KTextEdit>
 
-#include <klocale.h>
-#include <kstandarddirs.h>
-#include <ktextedit.h>
-#include <kconfig.h>
-#include <kapplication.h>
-#include <kmessagebox.h>
-#include <kprocess.h>
-#include <kglobal.h>
+#include <QCheckBox>
+#include <QCloseEvent>
+#include <QFileInfo>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QList>
+#include <QPushButton>
 
 #ifdef HAVE_ICONV_H
 #include <langinfo.h>
@@ -71,7 +67,7 @@ static QString markupString( const QString& s_ )
 }
 
 
-K3b::SystemProblem::SystemProblem( int t,
+K3b::SystemProblem::SystemProblem( Type t,
                                     const QString& p,
                                     const QString& d,
                                     const QString& s,
@@ -128,6 +124,9 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
     grid->addLayout( buttonBox, 2, 1 );
     grid->setColumnStretch( 0, 1 );
     grid->setRowStretch( 1, 1 );
+    
+    const KColorScheme colorScheme( QPalette::Normal, KColorScheme::Button );
+    const QColor negativeTextColor = colorScheme.foreground( KColorScheme::NegativeText ).color();
 
     QString text = "<html>";
 
@@ -136,8 +135,9 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
         const K3b::SystemProblem& p = *it;
 
         text.append( "<p><b>" );
-        if( p.type == K3b::SystemProblem::CRITICAL )
-            text.append( "<span style=\"color:red\">" );
+        if( p.type == K3b::SystemProblem::CRITICAL ) {
+            text.append( QString("<span style=\"color:%1\">").arg( negativeTextColor.name() ) );
+        }
         text.append( markupString( p.problem ) );
         if( p.type == K3b::SystemProblem::CRITICAL )
             text.append( "</span>" );

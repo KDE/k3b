@@ -16,10 +16,9 @@
 #ifndef _K3B_SYSTEM_DIALOG_H_
 #define _K3B_SYSTEM_DIALOG_H_
 
-#include <qstring.h>
-#include <QCloseEvent>
+#include <KDialog>
 
-#include <kdialog.h>
+#include <QString>
 
 class QPushButton;
 class QCheckBox;
@@ -33,19 +32,20 @@ namespace K3b {
     class SystemProblem
     {
     public:
-        SystemProblem( int type = NON_CRITICAL,
+        enum Type
+        {
+            CRITICAL,
+            NON_CRITICAL,
+            WARNING
+        };
+        
+        SystemProblem( Type type = NON_CRITICAL,
                        const QString& problem = QString(),
                        const QString& details = QString(),
                        const QString& solution = QString(),
                        bool k3bsetup = false );
 
-        enum {
-            CRITICAL,
-            NON_CRITICAL,
-            WARNING
-        };
-
-        int type;
+        Type type;
         QString problem;
         QString details;
         QString solution;
