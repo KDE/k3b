@@ -59,11 +59,14 @@ namespace K3b {
             /**
              * Error codes named as the HAL daemon raises them
              */
-            enum ErrorCodes {
+            enum ErrorCode {
                 org_freedesktop_Hal_Success = 0, //*< The operation was successful. This code does not match any in HAL
                 org_freedesktop_Hal_CommunicationError, //*< DBus communication error. This code does not match any in HAL
                 org_freedesktop_Hal_NoSuchDevice,
                 org_freedesktop_Hal_DeviceAlreadyLocked,
+                org_freedesktop_Hal_DeviceNotLocked,
+                org_freedesktop_Hal_Device_InterfaceAlreadyLocked,
+                org_freedesktop_Hal_Device_InterfaceNotLocked,
                 org_freedesktop_Hal_PermissionDenied,
                 org_freedesktop_Hal_Device_Volume_NoSuchDevice,
                 org_freedesktop_Hal_Device_Volume_PermissionDenied,
@@ -74,7 +77,8 @@ namespace K3b {
                 org_freedesktop_Hal_Device_Volume_MountPointNotAvailable,
                 org_freedesktop_Hal_Device_Volume_PermissionDeniedByPolicy,
                 org_freedesktop_Hal_Device_Volume_InvalidUnmountOption,
-                org_freedesktop_Hal_Device_Volume_InvalidEjectOption
+                org_freedesktop_Hal_Device_Volume_InvalidEjectOption,
+                org_freedesktop_Hal_Unknown //*< Unknown error. This code does not match any in HAL
             };
 
         public Q_SLOTS:
@@ -89,7 +93,7 @@ namespace K3b {
              *
              * \see ErrorCode
              */
-            int lock( Device* );
+            ErrorCode lock( Device* );
 
             /**
              * Unlock a previously locked device in HAL
@@ -102,7 +106,7 @@ namespace K3b {
              *
              * \see ErrorCode
              */
-            int unlock( Device* );
+            ErrorCode unlock( Device* );
 
         private:
             class Private;
