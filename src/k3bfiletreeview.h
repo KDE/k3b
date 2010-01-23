@@ -17,16 +17,10 @@
 #ifndef K3BFILETREEVIEW_H
 #define K3BFILETREEVIEW_H
 
-
+#include <KUrl>
 #include <QTreeView>
-#include <QPixmap>
-#include <QDragEnterEvent>
-#include <QDropEvent>
 
 class QPoint;
-class QDropEvent;
-class QDragEnterEvent;
-class KUrl;
 
 namespace K3b {
     namespace Device {
