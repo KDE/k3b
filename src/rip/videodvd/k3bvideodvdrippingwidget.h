@@ -19,9 +19,6 @@
 
 #include "k3bvideodvdtitletranscodingjob.h"
 
-#include <qvector.h>
-#include <qmap.h>
-
 #include <kio/global.h>
 
 class QTimer;

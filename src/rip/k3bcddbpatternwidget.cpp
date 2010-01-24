@@ -14,20 +14,20 @@
 
 #include "k3bcddbpatternwidget.h"
 
-#include <kconfig.h>
-#include <klocale.h>
-#include <kcombobox.h>
-#include <klineedit.h>
-#include <kurllabel.h>
-#include <kdebug.h>
+#include <KComboBox>
+#include <KConfigGroup>
+#include <KDebug>
+#include <KLineEdit>
+#include <KLocale>
+#include <KUrlLabel>
 
-#include <qregexp.h>
-#include <qvalidator.h>
+#include <QRegExp>
+#include <QValidator>
 
-#include <qcheckbox.h>
-#include <qlayout.h>
+#include <QCheckBox>
+#include <QLayout>
 #include <QGridLayout>
-#include <QtGui/QWhatsThis>
+#include <QWhatsThis>
 
 
 K3b::CddbPatternWidget::CddbPatternWidget( QWidget* parent )

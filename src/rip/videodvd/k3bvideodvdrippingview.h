@@ -1,6 +1,7 @@
 /* 
  *
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -16,58 +17,38 @@
 #define _K3B_VIDEODVD_RIPPING_VIEW_H_
 
 #include "k3bmediacontentsview.h"
-#include "k3bmedium.h"
-#include "k3bvideodvd.h"
 
-#include <QLabel>
-
-namespace K3b {
-    class VideoDVDTitleDelegate;
-    class VideoDVDTitleModel;
-}
-class KToolBar;
-class QLabel;
-class QTreeView;
 class KActionCollection;
-class KMenu;
 
 namespace K3b {
-class VideoDVDRippingView : public MediaContentsView
-{
-  Q_OBJECT
 
- public:
-  VideoDVDRippingView( QWidget* parent = 0 );
-  ~VideoDVDRippingView();
+    class VideoDVDRippingView : public MediaContentsView
+    {
+        Q_OBJECT
 
-  KActionCollection* actionCollection() const { return m_actionCollection; }
+    public:
+        VideoDVDRippingView( QWidget* parent = 0 );
+        ~VideoDVDRippingView();
 
- private Q_SLOTS:
-  void slotStartRipping();
+        KActionCollection* actionCollection() const;
 
-  void slotContextMenu( const QPoint& pos );
+    private Q_SLOTS:
+        void slotStartRipping();
+        void slotContextMenu( const QPoint& pos );
+        void slotCheck();
+        void slotUncheck();
+        void slotShowFiles();
 
-  void slotCheck();
-  void slotUncheck();
+    private:
+        virtual void reloadMedium();
+        virtual void enableInteraction( bool enable );
+        virtual void activate( bool active );
+        void initActions();
+        
+        class Private;
+        Private* d;
+    };
 
- private:
-  virtual void reloadMedium();
-  virtual void enableInteraction( bool enable );
-  virtual void activate( bool active );
-  void initActions();
-
-  KActionCollection* m_actionCollection;
-  KMenu* m_popupMenu;
-
-  KToolBar* m_toolBox;
-  QLabel* m_labelLength;
-  VideoDVDTitleDelegate* m_delegate;
-  VideoDVDTitleModel* m_model;
-  QTreeView* m_view;
-  
-
-  VideoDVD::VideoDVD m_dvd;
-};
-}
+} // namespace K3b
 
 #endif

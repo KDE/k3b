@@ -19,26 +19,24 @@
 #include "k3brichtextlabel.h"
 #include "k3bintmapcombobox.h"
 
-#include <k3listview.h>
-#include <klocale.h>
-#include <kurlrequester.h>
-#include <kio/global.h>
-#include <kurllabel.h>
-#include <kdialog.h>
-#include <klineedit.h>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QGridLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QTimer>
+#include <QWhatsThis>
+
+#include <K3ListView>
 #include <KColorScheme>
+#include <KDialog>
 #include <KDiskFreeSpaceInfo>
-
-#include <qcombobox.h>
-#include <qspinbox.h>
-#include <qlabel.h>
-#include <qtimer.h>
-
-#include <qpushbutton.h>
-#include <qcheckbox.h>
-#include <qlayout.h>
-#include <QtGui/QWhatsThis>
-#include <QtGui/QGridLayout>
+#include <kio/global.h>
+#include <KLineEdit>
+#include <KLocale>
+#include <KUrlRequester>
+#include <KUrlLabel>
 
 
 static const int s_mp3Bitrates[] = {
@@ -320,13 +318,13 @@ void K3b::VideoDVDRippingWidget::slotAudioCodecChanged( int codec )
 {
     switch( codec ) {
     case K3b::VideoDVDTitleTranscodingJob::AUDIO_CODEC_MP3:
-        m_stackAudioQuality->raiseWidget( m_stackPageAudioQualityMp3 );
+        m_stackAudioQuality->setCurrentWidget( m_stackPageAudioQualityMp3 );
         break;
     case K3b::VideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_STEREO:
-        m_stackAudioQuality->raiseWidget( m_stackPageAudioQualityAC3 );
+        m_stackAudioQuality->setCurrentWidget( m_stackPageAudioQualityAC3 );
         break;
     case K3b::VideoDVDTitleTranscodingJob::AUDIO_CODEC_AC3_PASSTHROUGH:
-        m_stackAudioQuality->raiseWidget( m_stackPageAudioQualityAC3Pt );
+        m_stackAudioQuality->setCurrentWidget( m_stackPageAudioQualityAC3Pt );
         break;
     }
 

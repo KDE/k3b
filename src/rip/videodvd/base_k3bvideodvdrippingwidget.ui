@@ -44,7 +44,7 @@
             </attribute>
             <layout class="QGridLayout" >
               <item row="0" column="1" >
-                <widget class="Q3GroupBox" name="groupBox6" >
+                <widget class="QGroupBox" name="groupBox6" >
                   <property name="title" >
                     <string>Video Quality</string>
                   </property>
@@ -124,7 +124,7 @@
                 </widget>
               </item>
               <item row="1" column="0" >
-                <widget class="Q3GroupBox" name="groupBox1_2" >
+                <widget class="QGroupBox" name="groupBox1_2" >
                   <property name="sizePolicy" >
                     <sizepolicy>
                       <hsizetype>5</hsizetype>
@@ -190,13 +190,13 @@
                 </widget>
               </item>
               <item row="1" column="1" >
-                <widget class="Q3GroupBox" name="groupBox4" >
+                <widget class="QGroupBox" name="groupBox4" >
                   <property name="title" >
                     <string>Audio Quality</string>
                   </property>
                   <layout class="QVBoxLayout" >
                     <item>
-                      <widget class="Q3WidgetStack" name="m_stackAudioQuality" >
+                      <widget class="QStackedWidget" name="m_stackAudioQuality" >
                         <widget class="QWidget" name="m_stackPageAudioQualityMp3" >
                           <attribute name="id" >
                             <number>0</number>
@@ -325,7 +325,7 @@
                 </widget>
               </item>
               <item row="0" column="0" >
-                <widget class="Q3GroupBox" name="groupBox1" >
+                <widget class="QGroupBox" name="groupBox1" >
                   <property name="title" >
                     <string>Filetype</string>
                   </property>
@@ -587,11 +587,6 @@
       </sizepolicy>
       <pixmap>image0</pixmap>
     </customwidget>
-    <customwidget>
-      <class>K3ListView</class>
-      <extends>Q3ListView</extends>
-      <header location="global" >k3listview.h</header>
-    </customwidget>
   </customwidgets>
   <images>
     <image name="image0" >
@@ -602,12 +597,9 @@
     <include location="local" >k3listview.h</include>
     <include location="local" >kurlrequester.h</include>
     <include location="local" >klineedit.h</include>
-    <include location="local" >kpushbutton.h</include>
     <include location="local" >k3activelabel.h</include>
     <include location="local" >k3bintmapcombobox.h</include>
-    <include location="local" >k3bintmapcombobox.h</include>
     <include location="local" >kurllabel.h</include>
-    <include location="local" >klineedit.h</include>
   </includes>
   <connections>
     <connection>

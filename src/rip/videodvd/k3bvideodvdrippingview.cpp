@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C)      2009 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -29,8 +29,8 @@
 #include "k3bmedium.h"
 
 #include <QCursor>
-#include <QGridLayout>
-#include <QHBoxLayout>
+#include <QDesktopServices>
+#include <QVBoxLayout>
 #include <QHeaderView>
 #include <QLabel>
 #include <QLayout>
@@ -44,52 +44,76 @@
 #include <KMenu>
 #include <KMessageBox>
 #include <KToolBar>
+#include <KToolBarSpacerAction>
+#include <KUrlLabel>
 
+
+class K3b::VideoDVDRippingView::Private
+{
+public:
+    KActionCollection* actionCollection;
+    KMenu* popupMenu;
+
+    KToolBar* toolBox;
+    QLabel* labelLength;
+    VideoDVDTitleDelegate* delegate;
+    VideoDVDTitleModel* model;
+    QTreeView* view;
+
+    VideoDVD::VideoDVD dvd;
+};
 
 K3b::VideoDVDRippingView::VideoDVDRippingView( QWidget* parent )
     : K3b::MediaContentsView( true,
                             K3b::Medium::ContentVideoDVD,
                             K3b::Device::MEDIA_DVD_ALL,
                             K3b::Device::STATE_INCOMPLETE|K3b::Device::STATE_COMPLETE,
-                            parent )
+                            parent ),
+      d( new Private )
 {
-    QGridLayout* mainGrid = new QGridLayout( mainWidget() );
-
     // toolbox
     // ----------------------------------------------------------------------------------
-    QHBoxLayout* toolBoxLayout = new QHBoxLayout;
-    m_toolBox = new KToolBar( mainWidget() );
-    toolBoxLayout->addWidget( m_toolBox );
-    toolBoxLayout->addStretch( 0 );
-    m_labelLength = new QLabel( mainWidget() );
-    m_labelLength->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    toolBoxLayout->addWidget( m_labelLength );
-    toolBoxLayout->addSpacing( style()->pixelMetric( QStyle::PM_LayoutRightMargin ) );
+    d->toolBox = new KToolBar( mainWidget() );
+    
+    KUrlLabel* showFilesLabel = new KUrlLabel( d->toolBox );
+    showFilesLabel->setText( i18n("Show files") );
+    showFilesLabel->setWhatsThis( i18n("Shows plain Video DVD vob files from the DVD "
+                                       "(including decryption) for further processing with another application") );
+    connect( showFilesLabel, SIGNAL(leftClickedUrl()), this, SLOT(slotShowFiles()) );
+    
+    d->labelLength = new QLabel( d->toolBox );
+    d->labelLength->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    d->labelLength->setContentsMargins( 0, 0, style()->pixelMetric( QStyle::PM_LayoutRightMargin ), 0 );
 
-    m_delegate = new VideoDVDTitleDelegate( this );
-    m_model = new VideoDVDTitleModel( this );
+    d->delegate = new VideoDVDTitleDelegate( this );
+    d->model = new VideoDVDTitleModel( this );
+
+    initActions();
+
+    d->toolBox->addAction( actionCollection()->action("start_rip") );
+    d->toolBox->addSeparator();
+    d->toolBox->addWidget( showFilesLabel );
+    d->toolBox->addAction( new KToolBarSpacerAction( d->toolBox ) );
+    d->toolBox->addWidget( d->labelLength );
 
     // the title view
     // ----------------------------------------------------------------------------------
-    m_view = new QTreeView( mainWidget() );
-    m_view->setItemDelegate( m_delegate );
-    m_view->setModel( m_model );
-    m_view->setRootIsDecorated( false );
-    m_view->header()->setResizeMode( QHeaderView::ResizeToContents );
-    m_view->setContextMenuPolicy( Qt::CustomContextMenu );
-    connect( m_view, SIGNAL(customContextMenuRequested(const QPoint&)),
+    d->view = new QTreeView( mainWidget() );
+    d->view->setItemDelegate( d->delegate );
+    d->view->setModel( d->model );
+    d->view->setRootIsDecorated( false );
+    d->view->header()->setResizeMode( QHeaderView::ResizeToContents );
+    d->view->setContextMenuPolicy( Qt::CustomContextMenu );
+    connect( d->view, SIGNAL(customContextMenuRequested(const QPoint&)),
              this, SLOT(slotContextMenu(const QPoint&)) );
 
     // general layout
     // ----------------------------------------------------------------------------------
-    mainGrid->addLayout( toolBoxLayout, 0, 0 );
-    mainGrid->addWidget( m_view, 1, 0 );
+    QVBoxLayout* mainGrid = new QVBoxLayout( mainWidget() );
+    mainGrid->addWidget( d->toolBox );
+    mainGrid->addWidget( d->view );
     mainGrid->setMargin( 0 );
     mainGrid->setSpacing( 0 );
-
-    initActions();
-
-    m_toolBox->addAction( actionCollection()->action("start_rip") );
 
     setLeftPixmap( K3b::Theme::MEDIA_LEFT );
     setRightPixmap( K3b::Theme::MEDIA_VIDEO );
@@ -98,19 +122,26 @@ K3b::VideoDVDRippingView::VideoDVDRippingView( QWidget* parent )
 
 K3b::VideoDVDRippingView::~VideoDVDRippingView()
 {
+    delete d;
+}
+
+
+KActionCollection* K3b::VideoDVDRippingView::actionCollection() const
+{
+    return d->actionCollection;
 }
 
 
 void K3b::VideoDVDRippingView::slotStartRipping()
 {
-    QList<int> titles = m_model->selectedTitles();
+    QList<int> titles = d->model->selectedTitles();
 
     if( titles.isEmpty() ) {
         KMessageBox::error( this, i18n("Please select the titles to rip."),
                             i18n("No Titles Selected") );
     }
     else {
-        K3b::VideoDVDRippingDialog dlg( m_dvd, titles, this );
+        K3b::VideoDVDRippingDialog dlg( d->dvd, titles, this );
         dlg.exec();
     }
 }
@@ -118,25 +149,36 @@ void K3b::VideoDVDRippingView::slotStartRipping()
 
 void K3b::VideoDVDRippingView::slotContextMenu( const QPoint& pos )
 {
-    m_popupMenu->popup( m_view->viewport()->mapToGlobal( pos ) );
+    d->popupMenu->popup( d->view->viewport()->mapToGlobal( pos ) );
 }
 
 
 void K3b::VideoDVDRippingView::slotCheck()
 {
-    Q_FOREACH( const QModelIndex& index, m_view->selectionModel()->selectedRows() )
+    Q_FOREACH( const QModelIndex& index, d->view->selectionModel()->selectedRows() )
     {
-        m_model->setData( index, Qt::Checked, Qt::CheckStateRole );
+        d->model->setData( index, Qt::Checked, Qt::CheckStateRole );
     }
 }
 
 
 void K3b::VideoDVDRippingView::slotUncheck()
 {
-    Q_FOREACH( const QModelIndex& index, m_view->selectionModel()->selectedRows() )
+    Q_FOREACH( const QModelIndex& index, d->view->selectionModel()->selectedRows() )
     {
-        m_model->setData( index, Qt::Unchecked, Qt::CheckStateRole );
+        d->model->setData( index, Qt::Unchecked, Qt::CheckStateRole );
     }
+}
+
+
+void K3b::VideoDVDRippingView::slotShowFiles()
+{
+    QUrl url;
+    url.setScheme( "videodvd" );
+    if( d->dvd.valid() ) {
+        url.setPath( "/" + d->dvd.volumeIdentifier() );
+    }
+    QDesktopServices::openUrl( url );
 }
 
 
@@ -172,10 +214,10 @@ void K3b::VideoDVDRippingView::reloadMedium()
 
     QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 
-    if( m_dvd.open( device() ) ) {
+    if( d->dvd.open( device() ) ) {
         setTitle( medium().beautifiedVolumeId() + " (" + i18n("Video DVD") + ")" );
-        m_labelLength->setText( i18np("%1 title", "%1 titles", m_dvd.numTitles() ) );
-        m_model->setVideoDVD( m_dvd );
+        d->labelLength->setText( i18np("%1 title", "%1 titles", d->dvd.numTitles() ) );
+        d->model->setVideoDVD( d->dvd );
         QApplication::restoreOverrideCursor();
 
         bool transcodeUsable = true;
@@ -228,7 +270,7 @@ void K3b::VideoDVDRippingView::activate( bool active )
         // For now we do it the easy way: just stop the preview generation
         // once this view is no longer selected one
         //
-        m_model->stopPreviewGen();
+        d->model->stopPreviewGen();
     }
     
     MediaContentsView::activate( active );
@@ -237,16 +279,16 @@ void K3b::VideoDVDRippingView::activate( bool active )
 
 void K3b::VideoDVDRippingView::initActions()
 {
-    m_actionCollection = new KActionCollection( this );
+    d->actionCollection = new KActionCollection( this );
 
     KAction* actionSelectAll = new KAction( this );
     actionSelectAll->setText( i18n("Check All") );
-    connect( actionSelectAll, SIGNAL( triggered() ), m_model, SLOT( checkAll() ) );
+    connect( actionSelectAll, SIGNAL( triggered() ), d->model, SLOT( checkAll() ) );
     actionCollection()->addAction( "check_all", actionSelectAll );
 
     KAction* actionDeselectAll = new KAction( this );
     actionDeselectAll->setText( i18n("Uncheck All") );
-    connect( actionDeselectAll, SIGNAL( triggered() ), m_model, SLOT( uncheckAll() ) );
+    connect( actionDeselectAll, SIGNAL( triggered() ), d->model, SLOT( uncheckAll() ) );
     actionCollection()->addAction( "uncheck_all", actionSelectAll );
 
     KAction* actionSelect = new KAction( this );
@@ -263,17 +305,24 @@ void K3b::VideoDVDRippingView::initActions()
     actionStartRip->setText( i18n("Start Ripping") );
     actionStartRip->setIcon( KIcon( "tools-rip-video-dvd" ) );
     actionStartRip->setToolTip( i18n("Open the Video DVD ripping dialog") );
+    actionStartRip->setWhatsThis( i18n("<p>Rips single titles from a video DVD "
+                                       "into a compressed format such as XviD. Menu structures are completely ignored."
+                                       "<p>If you intend to copy the plain Video DVD vob files from the DVD "
+                                       "(including decryption) for further processing with another application, "
+                                       "please use \"Show files\" button."
+                                       "<p>If you intend to make a copy of the entire Video DVD including all menus "
+                                       "and extras it is recommended to use the K3b Copy tool.") );
     connect( actionStartRip, SIGNAL( triggered() ), this, SLOT( slotStartRipping() ) );
     actionCollection()->addAction( "start_rip", actionStartRip );
 
     // setup the popup menu
-    m_popupMenu = new KMenu( this );
-    m_popupMenu->addAction( actionSelect );
-    m_popupMenu->addAction( actionDeselect );
-    m_popupMenu->addAction( actionSelectAll );
-    m_popupMenu->addAction( actionDeselectAll );
-    m_popupMenu->addSeparator();
-    m_popupMenu->addAction( actionStartRip );
+    d->popupMenu = new KMenu( this );
+    d->popupMenu->addAction( actionSelect );
+    d->popupMenu->addAction( actionDeselect );
+    d->popupMenu->addAction( actionSelectAll );
+    d->popupMenu->addAction( actionDeselectAll );
+    d->popupMenu->addSeparator();
+    d->popupMenu->addAction( actionStartRip );
 }
 
 

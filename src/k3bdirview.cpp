@@ -38,7 +38,6 @@
 #include <KLocale>
 #include <KMessageBox>
 #include <KUrl>
-#include <unistd.h>
 
 // QT-includes
 #include <QDir>
@@ -46,7 +45,6 @@
 #include <QString>
 #include <QStackedWidget>
 #include <QVBoxLayout>
-
 
 class K3b::DirView::Private
 {
@@ -192,42 +190,8 @@ void K3b::DirView::showMediumInfo( const K3b::Medium& medium )
 
 #ifdef ENABLE_DVD_RIPPING
     else if( medium.content() & K3b::Medium::ContentVideoDVD ) {
-        KMessageBox::ButtonCode r = KMessageBox::Yes;
-        if( KMessageBox::shouldBeShownYesNo( "videodvdripping", r ) ) {
-            r = (KMessageBox::ButtonCode)
-                KMessageBox::questionYesNoCancel( this,
-                                                  i18n("<p>You have selected the K3b Video DVD ripping tool."
-                                                       "<p>It is intended to <em>rip single titles</em> from a video DVD "
-                                                       "into a compressed format such as XviD. Menu structures are completely ignored."
-                                                       "<p>If you intend to copy the plain Video DVD vob files from the DVD "
-                                                       "(including decryption) for further processing with another application, "
-                                                       "please use the following link to access the Video DVD file structure: "
-                                                       "<a href=\"videodvd:/\">videodvd:/</a>"
-                                                       "<p>If you intend to make a copy of the entire Video DVD including all menus "
-                                                       "and extras it is recommended to use the K3b DVD Copy tool."),
-                                                  i18n("Video DVD ripping"),
-                                                  KStandardGuiItem::cont(),
-                                                  KGuiItem( i18n("Open DVD Copy Dialog") ),
-                                                  KStandardGuiItem::cancel(),
-                                                  "videodvdripping",
-                                                  KMessageBox::AllowLink );
-        }
-        else { // if we do not show the dialog we always continue with the ripping. Everything else would be confusing
-            r = KMessageBox::Yes;
-        }
-
-        if( r == KMessageBox::Cancel ) {
-            //      d->viewStack->raiseWidget( d->fileView );
-        }
-        else if( r == KMessageBox::No ) {
-            d->setCurrentView( d->fileView );
-            static_cast<K3b::MainWindow*>( kapp->activeWindow() )->slotMediaCopy();
-        }
-        else {
-            d->movieView->reload( medium );
-            d->setCurrentView( d->movieView );
-        }
-
+        d->movieView->reload( medium );
+        d->setCurrentView( d->movieView );
         return;
     }
 #endif
