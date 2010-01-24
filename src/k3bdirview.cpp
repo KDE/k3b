@@ -196,35 +196,25 @@ void K3b::DirView::showMediumInfo( const K3b::Medium& medium )
     }
 #endif
 
+    else if( medium.content() & K3b::Medium::ContentVideoCD ) {
+        if( k3bcore ->externalBinManager() ->foundBin( "vcdxrip" ) ) {
+            d->setCurrentView( d->videoView );
+            d->videoView->reload( medium );
+        }
+        else {
+            KMessageBox::sorry( this, i18n("K3b uses vcdxrip from the vcdimager package to rip Video CDs. "
+                                           "Please make sure it is installed.") );
+            k3bappcore->appDeviceManager()->mountDisk( medium.device() );
+        }
+    }
+
     else if( medium.content() & K3b::Medium::ContentAudio ) {
         d->setCurrentView( d->cdView );
         d->cdView->reload( medium );
     }
 
     else if( medium.content() & K3b::Medium::ContentData ) {
-        bool mount = true;
-        if( medium.content() & K3b::Medium::ContentVideoCD ) {
-            if( !k3bcore ->externalBinManager() ->foundBin( "vcdxrip" ) ) {
-                KMessageBox::sorry( this,
-                                    i18n("K3b uses vcdxrip from the vcdimager package to rip Video CDs. "
-                                         "Please make sure it is installed.") );
-            }
-            else {
-                if( KMessageBox::questionYesNo( this,
-                                                i18n("Found %1. Do you want K3b to mount the data part "
-                                                     "or show all the tracks?", i18n("Video CD") ),
-                                                i18n("Video CD"),
-                                                KGuiItem(i18n("Mount CD")),
-                                                KGuiItem(i18n("Show Video Tracks")) ) == KMessageBox::No ) {
-                    mount = false;
-                    d->setCurrentView( d->videoView );
-                    d->videoView->reload( medium );
-                }
-            }
-        }
-
-        if( mount )
-            k3bappcore->appDeviceManager()->mountDisk( medium.device() );
+        k3bappcore->appDeviceManager()->mountDisk( medium.device() );
     }
 
     else {

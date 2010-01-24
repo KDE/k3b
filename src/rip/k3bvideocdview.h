@@ -16,36 +16,12 @@
 #ifndef _K3B_VIDEOCDVIEW_H_
 #define _K3B_VIDEOCDVIEW_H_
 
-#include <qdom.h>
-//Added by qt3to4:
-#include <QLabel>
-#include <QList>
-
 #include "k3bmediacontentsview.h"
-#include "k3bmedium.h"
 
-#include "k3bvideocdinfo.h"
-
-class KActionCollection;
-class KActionMenu;
 class K3ListView;
-
-class QLabel;
+class KActionCollection;
 class Q3ListViewItem;
-class KToolBar;
-namespace K3b {
-    class ListView;
-}
-namespace K3b {
-    class VideoCdRippingOptions;
-}
-
-namespace Device
-{
-  class Toc;
-  class Device;
-}
-
+class QDomElement;
 
 namespace K3b {
 class VideoCdView : public MediaContentsView
@@ -56,10 +32,7 @@ class VideoCdView : public MediaContentsView
         VideoCdView( QWidget* parent = 0 );
         ~VideoCdView();
 
-        KActionCollection* actionCollection() const
-        {
-            return m_actionCollection;
-        }
+        KActionCollection* actionCollection() const;
 
     private Q_SLOTS:
         void slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& );
@@ -68,43 +41,21 @@ class VideoCdView : public MediaContentsView
         void slotVideoCdInfoFinished( bool );
 
         void startRip();
-        void slotSelectAll();
-        void slotDeselectAll();
-        void slotSelect();
-        void slotDeselect();
+        void slotCheckAll();
+        void slotUncheckAll();
+        void slotCheck();
+        void slotUncheck();
+        void slotViewFiles();
 
     private:
-
-        class VideoTrackViewCheckItem;
-        class VideoTrackViewItem;
-
-	void reloadMedium();
-
+        void reloadMedium();
         void initActions();
         void updateDisplay();
         void enableInteraction( bool );
         void buildTree( Q3ListViewItem *parentItem, const QDomElement &parentElement, const QString& pname = QString() );
-
-        Device::Toc m_toc;
-
-        KActionCollection* m_actionCollection;
-        KActionMenu* m_popupMenu;
-
-        VideoCdInfoResult m_videocdinfoResult;
-        VideoCdInfo* m_videocdinfo;
-        VideoCdRippingOptions* m_videooptions;
-
-        ListView* m_trackView;
-        KToolBar* m_toolBox;
-        QLabel* m_labelLength;
-
-        QDomDocument domTree;
-
-        QList<VideoTrackViewCheckItem *> m_contentList;
-
-        unsigned long m_videocddatasize;
-        unsigned long m_videocdmpegsize;
         
+        class Private;
+        Private* d;
 };
 }
 
