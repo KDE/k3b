@@ -46,8 +46,7 @@ namespace K3b {
         void showDiskInfo( K3b::Device::Device* );
 
     protected Q_SLOTS:
-        void slotDirActivated( const KUrl& );
-        void slotDirActivated( const QString& );
+        void slotDirActivated( const KUrl& url );
         void slotMountFinished( const QString& );
         void slotUnmountFinished( bool );
         void showMediumInfo( const Medium& );

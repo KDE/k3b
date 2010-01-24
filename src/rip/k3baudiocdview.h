@@ -1,6 +1,7 @@
 /* 
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -17,21 +18,10 @@
 #define _K3B_AUDIOCD_VIEW_H_
 
 #include "k3bmediacontentsview.h"
-#include "k3bmedium.h"
 
-#include <QLabel>
-
-class QTreeView;
 class QPoint;
 class KActionCollection;
-class KMenu;
-class QLabel;
-class KToolBar;
 
-
-namespace K3b {
-    class AudioTrackModel;
-}
 
 namespace K3b {
 class AudioCdView : public MediaContentsView
@@ -42,7 +32,7 @@ public:
     AudioCdView( QWidget* parent = 0 );
     ~AudioCdView();
 
-    KActionCollection* actionCollection() const { return m_actionCollection; }
+    KActionCollection* actionCollection() const;
 
 public Q_SLOTS:
     void queryCddb();
@@ -57,6 +47,7 @@ private Q_SLOTS:
     void startRip();
     void slotSelect();
     void slotDeselect();
+    void slotShowDataPart();
 
 private:
     void reloadMedium();
@@ -65,17 +56,9 @@ private:
     void enableInteraction( bool );
     void showBusyLabel( bool );
     void updateTitle();
-
-    KActionCollection* m_actionCollection;
-    KMenu* m_popupMenu;
-
-    K3b::AudioTrackModel* m_trackModel;
-    QTreeView* m_trackView;
-    KToolBar* m_toolBox;
-    QLabel* m_labelLength;
-
     
-    QLabel* m_busyInfoLabel;
+    class Private;
+    Private* d;
 };
 }
 

@@ -196,6 +196,11 @@ void K3b::DirView::showMediumInfo( const K3b::Medium& medium )
     }
 #endif
 
+    else if( medium.content() & K3b::Medium::ContentAudio ) {
+        d->setCurrentView( d->cdView );
+        d->cdView->reload( medium );
+    }
+
     else if( medium.content() & K3b::Medium::ContentData ) {
         bool mount = true;
         if( medium.content() & K3b::Medium::ContentVideoCD ) {
@@ -217,26 +222,9 @@ void K3b::DirView::showMediumInfo( const K3b::Medium& medium )
                 }
             }
         }
-        else if( medium.content() & K3b::Medium::ContentAudio ) {
-            if( KMessageBox::questionYesNo( this,
-                                            i18n("Found %1. Do you want K3b to mount the data part "
-                                                 "or show all the tracks?", i18n("Audio CD") ),
-                                            i18n("Audio CD"),
-                                            KGuiItem(i18n("Mount CD")),
-                                            KGuiItem(i18n("Show Audio Tracks")) ) == KMessageBox::No ) {
-                mount = false;
-                d->setCurrentView( d->cdView );
-                d->cdView->reload( medium );
-            }
-        }
 
         if( mount )
             k3bappcore->appDeviceManager()->mountDisk( medium.device() );
-    }
-
-    else if( medium.content() & K3b::Medium::ContentAudio ) {
-        d->setCurrentView( d->cdView );
-        d->cdView->reload( medium );
     }
 
     else {
@@ -252,7 +240,7 @@ void K3b::DirView::showMediumInfo( const K3b::Medium& medium )
 void K3b::DirView::slotMountFinished( const QString& mp )
 {
     if( !mp.isEmpty() ) {
-        slotDirActivated( mp );
+        slotDirActivated( KUrl(mp) );
         d->fileView->reload(); // HACK to get the contents shown... FIXME
     }
     else {
@@ -283,12 +271,6 @@ void K3b::DirView::slotUnmountFinished( bool success )
 }
 
 
-void K3b::DirView::slotDirActivated( const QString& url )
-{
-    slotDirActivated( KUrl(url) );
-}
-
-
 void K3b::DirView::slotDirActivated( const KUrl& url )
 {
     kDebug() << url;
@@ -299,7 +281,7 @@ void K3b::DirView::slotDirActivated( const KUrl& url )
 
 void K3b::DirView::home()
 {
-    slotDirActivated( QDir::homePath() );
+    slotDirActivated( KUrl(QDir::homePath()) );
 }
 
 
