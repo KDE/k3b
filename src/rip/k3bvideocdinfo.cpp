@@ -67,7 +67,7 @@ void K3b::VideoCdInfo::info( const QString& device )
     m_process->setSuppressEmptyLines( false );
     connect( m_process, SIGNAL(stderrLine(QString)),
              this, SLOT(slotParseOutput(QString)) );
-    connect( m_process, SIGNAL(receivedStdout(QString)),
+    connect( m_process, SIGNAL(stdoutLine(QString)),
              this, SLOT(slotParseOutput(QString)) );
     connect( m_process, SIGNAL( finished( int, QProcess::ExitStatus ) ),
              this, SLOT( slotInfoFinished( int, QProcess::ExitStatus ) ) );
