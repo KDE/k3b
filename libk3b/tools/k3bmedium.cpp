@@ -210,18 +210,21 @@ void K3b::Medium::analyseContent()
         if( diskInfo().numSessions() > 1 && !d->toc.isEmpty() ) {
             // We use the last data track
             // this way we get the latest session on a ms cd
-            K3b::Device::Toc::const_iterator it = d->toc.constEnd();
-            --it; // this is valid since there is at least one data track
-            while( it != d->toc.constBegin() && (*it).type() != K3b::Device::Track::TYPE_DATA )
-                --it;
-            startSec = (*it).firstSector().lba();
+            for( int i = d->toc.size()-1; i >= 0; --i ) {
+                if( d->toc.at(i).type() == K3b::Device::Track::TYPE_DATA ) {
+                    startSec = d->toc.at(i).firstSector().lba();
+                    break;
+                }
+            }
         }
         else if( !d->toc.isEmpty() ) {
             // use first data track
-            K3b::Device::Toc::const_iterator it = d->toc.constBegin();
-            while( it != d->toc.constEnd() && (*it).type() != K3b::Device::Track::TYPE_DATA )
-                ++it;
-            startSec = (*it).firstSector().lba();
+            for( int i = 0; i < d->toc.size(); ++i ) {
+                if( d->toc.at(i).type() == K3b::Device::Track::TYPE_DATA ) {
+                    startSec = d->toc.at(i).firstSector().lba();
+                    break;
+                }
+            }
         }
         else {
             kDebug() << "(K3b::Medium) ContentData is set and Toc is empty, disk is probably broken!";
