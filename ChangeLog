@@ -19,6 +19,67 @@
  * Support for DVD and Blu-Ray writing via cdrecord
  * New audio ripping pattern %e which is replaced by the file extension
 
+2.0-beta1 (1.70)
+================
+Changes:
+ * Added Blu-ray support
+ * Added "Options" button to file browser toolbar with view options menu (e.g. "Show Hidden Files") (196992)
+ * Image and project files can be opened directly from K3b file browser
+ * Using Oxygen icons (many thanks for Oxygen Team!)
+
+Bugfixes:
+ * Fixed visual glitch when panes are in "locked" state. Patch by Craig Drummond <craig@kde.org>
+ * Fixed hang up when "Create Image" option is checked (217301)
+ * "Hide main window while writing" option is working again
+ * "Show OSD progress" option is working again
+ * Improved message when ISO with incorrect size is detected (216812)
+ * Improved consistency: K3b now uses system-wide Positive/Neutral/Negative colors where possible instead of hard-coded green/yellow/red
+ * Fixed incorrect default value "4gb." in "Custom Size" dialog (215539)
+ * Fixed usability issues with project size menu: "Custom..." and "From Medium..." menu entries are non-checkable now (215539)
+ * Show correct message at the end of CD-RW erasing (207972)
+ * Fixed issue with too small configuration dialog for external encoder (218613)
+ * Track number is now stored in ripped MP3 files when using lame (218614)
+ * "Defaults" button in encoder configuration dialogs are working now
+ * Fixed usability problems of audio project list
+ * Fixed linking error on Windows
+ * Fixed crash during verification process (219962)
+ * Fixed crash in external encoder plug-in
+ * Brought back SOX encoder configuration dialog
+ * Fixed checking free space in temporary folder
+ * Fixed videodvd:/ KIO slave
+ * Fixed hang-up for mixed projects after reloading medium for verification
+ * Converting audio tracks from audio project is working again
+ * Fixed burning bootable discs
+ * Custom widgets are now properly rendered for Right-to-Left languages
+ * Progress bar in image writing dialog is shown again
+ * Fixed crash while analysing invalid medium (223362)
+ * Acquire lock also on storage interface. This prevents HAL from polling medium during burning which might disrupt burning process.
+ * Fixed bug in external programs detection (221638)
+ * Improved usability: don't show popups when clicking on DVD, VCD or audio discs. Added appriopriate actions on toolbars instead.
+ * Fixed crash while analysing invalid medium (195436)
+
+2.0-alpha4 (1.69)
+=================
+Changes:
+ * Added close buttons on project tabs (159751)
+ * Added support for new libmpcdec API (214149)
+
+Bugfixes:
+ * Crash at the beginning of burning (204333)
+ * Crash during DVD ripping (207958)
+ * Crash right after burn (195436)
+ * Crash during Audio CD ripping (198015)
+ * Crash at the beginning of ripping Audio CD with data tracks (186555)
+ * Crash at the beginning of burning cue/bin image (190775)
+ * Fixed various typos in UI (208401, 209512)
+ * Fixed potential aliasing issues (210890)
+ * Show only one entry on the task list even when dialog window is opened (211680)
+ * Show correct size when project contains invalid links (212609)
+ * Show correct elapsed time when burning over midnight (211604)
+ * Added timeout when checking version number and features of executable (212582)
+ * Fixed visually endless busy status when opening an empty folder (113649)
+ * Burning double-layer DVDs should be possible again (214115)
+
 1.0.5
 =====
  * Fix CD Copy device selection (Bug 151924)
