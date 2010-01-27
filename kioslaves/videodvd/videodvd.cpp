@@ -55,6 +55,12 @@ extern "C"
         kDebug(7101) << "*** kio_videodvd Done";
         return 0;
     }
+    
+    bool isRootDirectory( const KUrl& url )
+    {
+        QString path = url.path();
+        return( path.isEmpty() || path == "/" );
+    }
 }
 
 
@@ -204,7 +210,7 @@ void kio_videodvdProtocol::get(const KUrl& url )
 
 void kio_videodvdProtocol::listDir( const KUrl& url )
 {
-    if( url.path() == "/" ) {
+    if( isRootDirectory( url ) ) {
 #ifdef Q_OS_WIN32
     kDebug() << "fix of root path required"; 
 #endif    
@@ -289,7 +295,7 @@ void kio_videodvdProtocol::listVideoDVDs()
 
 void kio_videodvdProtocol::stat( const KUrl& url )
 {
-    if( url.path() == "/" ) {
+    if( isRootDirectory( url ) ) {
 #ifdef Q_OS_WIN32
     kDebug() << "fix root path detection";
 #endif    
@@ -329,7 +335,7 @@ void kio_videodvdProtocol::stat( const KUrl& url )
 // part of it. (David)
 void kio_videodvdProtocol::mimetype( const KUrl& url )
 {
-    if( url.path() == "/" ) {
+    if( isRootDirectory( url ) ) {
         error( ERR_UNSUPPORTED_ACTION, KIO::unsupportedActionErrorString("videodvd", CMD_MIMETYPE) );
         return;
     }
