@@ -362,7 +362,7 @@ void K3b::WelcomeWidget::loadConfig( const KConfigGroup& c )
     if( sl.isEmpty() ) {
         sl.append( "file_new_data" );
         sl.append( "file_new_audio" );
-        sl.append( "tools_copy_medium" );
+        sl.append( "tools_write_image" );
     }
 
     QList<QAction*> actions;
