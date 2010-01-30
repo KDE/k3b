@@ -42,7 +42,6 @@
     <Action name="file_open" />
     <Action name="file_save" />
     <Separator />
-    <Action name="tools_copy_medium" />
     <Action name="tools_format_medium" />
     <Separator />
     <Action name="location_bar" />
