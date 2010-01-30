@@ -63,7 +63,7 @@ namespace K3b {
          * If the device is set the supported writing modes
          * will be filtered by the ones supported by the drive.
          */
-        void setDevice( Device::Device* );
+        void setDevice( K3b::Device::Device* );
 
         /**
          * Set the writing modes which make sense with the provided medium.
