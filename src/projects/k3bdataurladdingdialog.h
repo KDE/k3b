@@ -44,7 +44,7 @@ namespace K3b {
         ~DataUrlAddingDialog();
 
         /**
-         * shows DataUrlAddingDialog and returns
+         * shows DataUrlAddingDialog in non-blocking fashion
          * (doesn't wait till dialog is closed)
          */
         static void addUrls( const KUrl::List& urls, DirItem* dir,
@@ -57,6 +57,8 @@ namespace K3b {
                               QWidget* parent = 0 );
 
     private Q_SLOTS:
+        void slotStartAddUrls();
+        void slotStartCopyMoveItems();
         void slotAddUrls();
         void slotCopyMoveItems();
         void slotCancel();
@@ -64,9 +66,9 @@ namespace K3b {
         void updateProgress();
 
     private:
-        DataUrlAddingDialog( DataDoc* doc, QWidget* parent = 0 );
-        static void copyMoveItems( const QList<DataItem*>& items, DirItem* dir,
-                                  QWidget* parent, bool copy );
+        DataUrlAddingDialog( const KUrl::List& urls, DirItem* dir, QWidget* parent = 0 );
+        DataUrlAddingDialog( const QList<DataItem*>& items, DirItem* dir, bool copy, QWidget* parent = 0 );
+        void init();
         bool getNewName( const QString& oldName, DirItem* dir, QString& newName );
         bool addHiddenFiles();
         bool addSystemFiles();
@@ -82,6 +84,7 @@ namespace K3b {
         QList< QPair<DataItem*, DirItem*> > m_items;
         QList<KUrl> m_dirSizeQueue;
 
+        DataDoc* m_doc;
         bool m_bExistingItemsReplaceAll;
         bool m_bExistingItemsIgnoreAll;
         bool m_bFolderLinksFollowAll;

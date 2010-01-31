@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C)      2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -53,8 +54,9 @@
 #include <unistd.h>
 
 
-K3b::DataUrlAddingDialog::DataUrlAddingDialog( K3b::DataDoc* doc, QWidget* parent )
+K3b::DataUrlAddingDialog::DataUrlAddingDialog( const KUrl::List& urls, DirItem* dir, QWidget* parent )
     : KDialog( parent),
+      m_doc( dir->doc() ),
       m_bExistingItemsReplaceAll(false),
       m_bExistingItemsIgnoreAll(false),
       m_bFolderLinksFollowAll(false),
@@ -66,20 +68,60 @@ K3b::DataUrlAddingDialog::DataUrlAddingDialog( K3b::DataDoc* doc, QWidget* paren
       m_filesHandled(0),
       m_lastProgress(0)
 {
+    init();
+
+    m_urls = urls;
+    for( KUrl::List::ConstIterator it = urls.begin(); it != urls.end(); ++it )
+        m_urlQueue.append( qMakePair( K3b::convertToLocalUrl(*it), dir ) );
+}
+
+
+K3b::DataUrlAddingDialog::DataUrlAddingDialog( const QList<DataItem*>& items, DirItem* dir, bool copy, QWidget* parent )
+    : KDialog( parent),
+      m_doc( dir->doc() ),
+      m_bExistingItemsReplaceAll(false),
+      m_bExistingItemsIgnoreAll(false),
+      m_bFolderLinksFollowAll(false),
+      m_bFolderLinksAddAll(false),
+      m_iAddHiddenFiles(0),
+      m_iAddSystemFiles(0),
+      m_bCanceled(false),
+      m_totalFiles(0),
+      m_filesHandled(0),
+      m_lastProgress(0)
+{
+    init();
+    
+    m_infoLabel->setText( i18n("Moving files to project \"%1\"...", dir->doc()->URL().fileName()) );
+    m_copyItems = copy;
+
+    for( QList<K3b::DataItem*>::const_iterator it = items.begin(); it != items.end(); ++it ) {
+        m_items.append( qMakePair( *it, dir ) );
+        ++m_totalFiles;
+        if( (*it)->isDir() ) {
+            m_totalFiles += static_cast<K3b::DirItem*>( *it )->numFiles();
+            m_totalFiles += static_cast<K3b::DirItem*>( *it )->numDirs();
+        }
+    }
+}
+
+
+void K3b::DataUrlAddingDialog::init()
+{
     m_encodingConverter = new K3b::EncodingConverter();
 
     QWidget* page = new QWidget();
     setMainWidget(page);
     setButtons(Cancel);
     setDefaultButton(Cancel);
-    setCaption(i18n("Adding files to project '%1'",doc->URL().fileName()));
+    setCaption(i18n("Adding files to project '%1'",m_doc->URL().fileName()));
     setAttribute( Qt::WA_DeleteOnClose );
     QGridLayout* grid = new QGridLayout( page );
     grid->setMargin( 0 );
 
     m_counterLabel = new QLabel( page );
     m_infoLabel = new KSqueezedTextLabel( i18n("Adding files to project '%1'"
-                                               ,doc->URL().fileName()) + "...", page );
+                                               ,m_doc->URL().fileName()) + "...", page );
     m_progressWidget = new QProgressBar( page );
 
     grid->addWidget( m_counterLabel, 0, 1 );
@@ -113,41 +155,9 @@ void K3b::DataUrlAddingDialog::addUrls( const KUrl::List& urls,
                                      K3b::DirItem* dir,
                                      QWidget* parent )
 {
-    if( urls.isEmpty() )
-        return;
-
-    //
-    // A common mistake by beginners is to try to burn an iso image
-    // with a data project. Let's warn them
-    //
-    if( urls.count() == 1 ) {
-        K3b::Iso9660 isoF( urls.first().toLocalFile() );
-        if( isoF.open() ) {
-            if( KMessageBox::warningYesNo( parent,
-                                           i18n("<p>The file you are about to add to the project is an ISO9660 image. As such "
-                                                "it can be burned to a medium directly since it already contains a file "
-                                                "system.<br>"
-                                                "Are you sure you want to add this file to the project?"),
-                                           i18n("Adding image file to project"),
-                                           KGuiItem(i18n("Add the file to the project"),"list-add"),
-                                           KGuiItem(i18n("Burn the image directly"),"tools-media-optical-burn") ) == KMessageBox::No ) {
-                k3bappcore->k3bMainWindow()->slotWriteImage( urls.first() );
-                return;
-            }
-        }
-    }
-
-    K3b::DataUrlAddingDialog* dlg = new K3b::DataUrlAddingDialog( dir->doc(), parent );
-    dlg->m_urls = urls;
-    for( KUrl::List::ConstIterator it = urls.begin(); it != urls.end(); ++it )
-        dlg->m_urlQueue.append( qMakePair( K3b::convertToLocalUrl(*it), dir ) );
-
-    dlg->slotAddUrls();
-    if( !dlg->m_urlQueue.isEmpty() ) {
-        dlg->m_dirSizeJob->setUrls( urls );
-        dlg->m_dirSizeJob->setFollowSymlinks( dir->doc()->isoOptions().followSymbolicLinks() );
-        dlg->m_dirSizeJob->start();
-        QMetaObject::invokeMethod( dlg, "exec", Qt::QueuedConnection );
+    if( !urls.isEmpty() ) {
+        K3b::DataUrlAddingDialog* dlg = new K3b::DataUrlAddingDialog( urls, dir, parent );
+        QMetaObject::invokeMethod( dlg, "slotStartAddUrls", Qt::QueuedConnection );
     }
 }
 
@@ -156,7 +166,10 @@ void K3b::DataUrlAddingDialog::moveItems( const QList<K3b::DataItem*>& items,
                                        K3b::DirItem* dir,
                                        QWidget* parent )
 {
-    copyMoveItems( items, dir, parent, false );
+    if( !items.isEmpty() ) {
+        DataUrlAddingDialog* dlg = new DataUrlAddingDialog( items, dir, false, parent );
+        QMetaObject::invokeMethod( dlg, "slotStartCopyMoveItems", Qt::QueuedConnection );
+    }
 }
 
 
@@ -164,35 +177,53 @@ void K3b::DataUrlAddingDialog::copyItems( const QList<K3b::DataItem*>& items,
                                        K3b::DirItem* dir,
                                        QWidget* parent )
 {
-    copyMoveItems( items, dir, parent, true );
+    if( !items.isEmpty() ) {
+        DataUrlAddingDialog* dlg = new DataUrlAddingDialog( items, dir, true, parent );
+        QMetaObject::invokeMethod( dlg, "slotStartCopyMoveItems", Qt::QueuedConnection );
+    }
 }
 
 
-void K3b::DataUrlAddingDialog::copyMoveItems( const QList<K3b::DataItem*>& items,
-                                           K3b::DirItem* dir,
-                                           QWidget* parent,
-                                           bool copy )
+void K3b::DataUrlAddingDialog::slotStartAddUrls()
 {
-    if( items.isEmpty() )
-        return;
-
-    K3b::DataUrlAddingDialog* dlg = new K3b::DataUrlAddingDialog( dir->doc(), parent );
-    dlg->m_infoLabel->setText( i18n("Moving files to project \"%1\"...", dir->doc()->URL().fileName()) );
-    dlg->m_copyItems = copy;
-
-    for( QList<K3b::DataItem*>::const_iterator it = items.begin(); it != items.end(); ++it ) {
-        dlg->m_items.append( qMakePair( *it, dir ) );
-        ++dlg->m_totalFiles;
-        if( (*it)->isDir() ) {
-            dlg->m_totalFiles += static_cast<K3b::DirItem*>( *it )->numFiles();
-            dlg->m_totalFiles += static_cast<K3b::DirItem*>( *it )->numDirs();
+    //
+    // A common mistake by beginners is to try to burn an iso image
+    // with a data project. Let's warn them
+    //
+    if( m_urls.count() == 1 ) {
+        K3b::Iso9660 isoF( m_urls.first().toLocalFile() );
+        if( isoF.open() ) {
+            if( KMessageBox::warningYesNo( parentWidget(),
+                                           i18n("<p>The file you are about to add to the project is an ISO9660 image. As such "
+                                                "it can be burned to a medium directly since it already contains a file "
+                                                "system.<br>"
+                                                "Are you sure you want to add this file to the project?"),
+                                           i18n("Adding image file to project"),
+                                           KGuiItem(i18n("Add the file to the project"),"list-add"),
+                                           KGuiItem(i18n("Burn the image directly"),"tools-media-optical-burn") ) == KMessageBox::No ) {
+                k3bappcore->k3bMainWindow()->slotWriteImage( m_urls.first() );
+                reject();
+                return;
+            }
         }
     }
 
-    dlg->slotCopyMoveItems();
-    if( !dlg->m_items.isEmpty() ) {
-        dlg->m_progressWidget->setMaximum( dlg->m_totalFiles );
-        QMetaObject::invokeMethod( dlg, "exec", Qt::QueuedConnection );
+    slotAddUrls();
+    if( !m_urlQueue.isEmpty() ) {
+        m_dirSizeJob->setUrls( m_urls );
+        m_dirSizeJob->setFollowSymlinks( m_doc->isoOptions().followSymbolicLinks() );
+        m_dirSizeJob->start();
+        exec();
+    }
+}
+
+
+void K3b::DataUrlAddingDialog::slotStartCopyMoveItems()
+{
+    slotCopyMoveItems();
+    if( !m_items.isEmpty() ) {
+        m_progressWidget->setMaximum( m_totalFiles );
+        exec();
     }
 }
 
