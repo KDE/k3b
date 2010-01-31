@@ -39,7 +39,6 @@
 #include <QLabel>
 #include <QLayout>
 #include <QList>
-#include <QTimer>
 
 #include <KConfig>
 #include <KGlobal>
@@ -74,7 +73,6 @@ K3b::DataUrlAddingDialog::DataUrlAddingDialog( K3b::DataDoc* doc, QWidget* paren
     setButtons(Cancel);
     setDefaultButton(Cancel);
     setCaption(i18n("Adding files to project '%1'",doc->URL().fileName()));
-    setModal( false );
     setAttribute( Qt::WA_DeleteOnClose );
     QGridLayout* grid = new QGridLayout( page );
     grid->setMargin( 0 );
@@ -149,7 +147,7 @@ void K3b::DataUrlAddingDialog::addUrls( const KUrl::List& urls,
         dlg->m_dirSizeJob->setUrls( urls );
         dlg->m_dirSizeJob->setFollowSymlinks( dir->doc()->isoOptions().followSymbolicLinks() );
         dlg->m_dirSizeJob->start();
-        dlg->show();
+        QMetaObject::invokeMethod( dlg, "exec", Qt::QueuedConnection );
     }
 }
 
@@ -194,7 +192,7 @@ void K3b::DataUrlAddingDialog::copyMoveItems( const QList<K3b::DataItem*>& items
     dlg->slotCopyMoveItems();
     if( !dlg->m_items.isEmpty() ) {
         dlg->m_progressWidget->setMaximum( dlg->m_totalFiles );
-        dlg->show();
+        QMetaObject::invokeMethod( dlg, "exec", Qt::QueuedConnection );
     }
 }
 
@@ -517,7 +515,7 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
     }
     else {
         updateProgress();
-        QTimer::singleShot( 0, this, SLOT(slotAddUrls()) );
+        QMetaObject::invokeMethod( this, "slotAddUrls", Qt::QueuedConnection );
     }
 }
 
@@ -670,7 +668,7 @@ void K3b::DataUrlAddingDialog::slotCopyMoveItems()
     }
     else {
         updateProgress();
-        QTimer::singleShot( 0, this, SLOT(slotCopyMoveItems()) );
+        QMetaObject::invokeMethod( this, "slotCopyMoveItems", Qt::QueuedConnection );
     }
 }
 

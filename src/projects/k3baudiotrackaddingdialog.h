@@ -44,7 +44,7 @@ namespace K3b {
         ~AudioTrackAddingDialog();
 
         /**
-         * shows modeless AudioTrackAddingDialog and returns
+         * shows AudioTrackAddingDialog and returns
          * (doesn't wait till dialog is closed)
          */
         static void addUrls( const KUrl::List& urls,

@@ -44,7 +44,7 @@ namespace K3b {
         ~DataUrlAddingDialog();
 
         /**
-         * shows modeless DataUrlAddingDialog and returns
+         * shows DataUrlAddingDialog and returns
          * (doesn't wait till dialog is closed)
          */
         static void addUrls( const KUrl::List& urls, DirItem* dir,

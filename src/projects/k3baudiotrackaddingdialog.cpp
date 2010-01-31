@@ -33,7 +33,6 @@
 #include <QLabel>
 #include <QLayout>
 #include <QThread>
-#include <QTimer>
 
 
 
@@ -69,7 +68,7 @@ K3b::AudioTrackAddingDialog::AudioTrackAddingDialog( const KUrl::List& urls,
     m_analyserJob = new K3b::AudioFileAnalyzerJob( this, this );
     connect( m_analyserJob, SIGNAL(finished(bool)), this, SLOT(slotAnalysingFinished(bool)) );
     
-    QTimer::singleShot( 0, this, SLOT(slotAddUrls()) );
+    QMetaObject::invokeMethod( this, "slotAddUrls", Qt::QueuedConnection );
 }
 
 
@@ -112,9 +111,8 @@ void K3b::AudioTrackAddingDialog::addUrls( const KUrl::List& urls,
     {
         K3b::AudioTrackAddingDialog* dlg = new K3b::AudioTrackAddingDialog(
             urls, doc, afterTrack, parentTrack, afterSource, parent );
-        dlg->setModal( false );
         dlg->setAttribute( Qt::WA_DeleteOnClose );
-        dlg->show();
+        QMetaObject::invokeMethod( dlg, "exec", Qt::QueuedConnection );
     }
 }
 
@@ -140,7 +138,7 @@ void K3b::AudioTrackAddingDialog::slotAddUrls()
                 // no need to analyse -> raw audio data
                 m_doc->importCueFile( url.toLocalFile(), m_trackAfter, 0 );
                 m_urls.erase( m_urls.begin() );
-                QTimer::singleShot( 0, this, SLOT(slotAddUrls()) );
+                QMetaObject::invokeMethod( this, "slotAddUrls", Qt::QueuedConnection );
                 return;
             }
             else {
@@ -188,7 +186,7 @@ void K3b::AudioTrackAddingDialog::slotAddUrls()
     // invalid file, next url
     if( !valid ) {
         m_urls.erase( m_urls.begin() );
-        QTimer::singleShot( 0, this, SLOT(slotAddUrls()) );
+        QMetaObject::invokeMethod( this, "slotAddUrls", Qt::QueuedConnection );
     }
 }
 
@@ -242,7 +240,7 @@ void K3b::AudioTrackAddingDialog::slotAnalysingFinished( bool /*success*/ )
         }
     }
 
-    QTimer::singleShot( 0, this, SLOT(slotAddUrls()) );
+    QMetaObject::invokeMethod( this, "slotAddUrls", Qt::QueuedConnection );
 }
 
 

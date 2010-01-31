@@ -344,7 +344,7 @@ K3b::WelcomeWidget::WelcomeWidget( K3b::MainWindow* mw, QWidget* parent )
     setWidget( main );
     setFrameStyle( QFrame::NoFrame );
 
-    connect( main, SIGNAL(dropped(const KUrl::List&)), m_mainWindow, SLOT(addUrls(const KUrl::List&)) );
+    connect( main, SIGNAL(dropped(const KUrl::List&)), m_mainWindow, SLOT(addUrls(const KUrl::List&)), Qt::QueuedConnection );
 
     connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()), main, SLOT(update()) );
 }

@@ -85,7 +85,7 @@ void K3b::DataViewImpl::addUrls( const QModelIndex& parent, const KUrl::List& ur
     if (!item)
         item = m_doc->root();
 
-    DataUrlAddingDialog::addUrls( urls, item );
+    DataUrlAddingDialog::addUrls( urls, item, m_view );
 }
 
 
