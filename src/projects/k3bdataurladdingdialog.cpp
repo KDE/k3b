@@ -131,8 +131,8 @@ void K3b::DataUrlAddingDialog::addUrls( const KUrl::List& urls,
                                                 "system.<br>"
                                                 "Are you sure you want to add this file to the project?"),
                                            i18n("Adding image file to project"),
-                                           KGuiItem(i18n("Add the file to the project")),
-                                           KGuiItem(i18n("Burn the image directly")) ) == KMessageBox::No ) {
+                                           KGuiItem(i18n("Add the file to the project"),"list-add"),
+                                           KGuiItem(i18n("Burn the image directly"),"tools-media-optical-burn") ) == KMessageBox::No ) {
                 k3bappcore->k3bMainWindow()->slotWriteImage( urls.first() );
                 return;
             }
