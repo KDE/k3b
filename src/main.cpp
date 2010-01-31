@@ -19,7 +19,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <ksimpleconfig.h>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 #include <kdebug.h>
 #include <kurl.h>
 

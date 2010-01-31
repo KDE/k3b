@@ -32,7 +32,7 @@
 #include <KLocale>
 #include <KMessageBox>
 #include <KStandardDirs>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 
 
 #if 0

@@ -36,7 +36,7 @@
 
 #include <kguiitem.h>
 #include <klocale.h>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kconfig.h>

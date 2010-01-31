@@ -48,7 +48,7 @@
 #include <KLocale>
 #include <KMessageBox>
 #include <KUrl>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 #include <KSqueezedTextLabel>
 
 #include <unistd.h>

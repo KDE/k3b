@@ -28,7 +28,7 @@
 #include <QTextStream>
 
 #include <klocale.h>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 #include <kglobalsettings.h>
 #include <kapplication.h>
 #include <kfiledialog.h>

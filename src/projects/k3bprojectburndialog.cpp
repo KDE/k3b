@@ -47,7 +47,7 @@
 #include <kconfig.h>
 #include <kmessagebox.h>
 #include <kguiitem.h>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>

@@ -16,7 +16,7 @@
 #define _K3B_MULTI_CHOICE_DIALOG_H_
 
 #include <QtGui/QDialog>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 #include "k3b_export.h"
 
 #include <qmessagebox.h>

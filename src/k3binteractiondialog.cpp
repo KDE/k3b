@@ -46,7 +46,7 @@
 #include <KLocale>
 #include <KPushButton>
 #include <KStandardDirs>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 
 
 K3b::InteractionDialog::InteractionDialog( QWidget* parent,
