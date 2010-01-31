@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2006-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C)      2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -67,8 +68,6 @@ K3b::AudioTrackAddingDialog::AudioTrackAddingDialog( const KUrl::List& urls,
 
     m_analyserJob = new K3b::AudioFileAnalyzerJob( this, this );
     connect( m_analyserJob, SIGNAL(finished(bool)), this, SLOT(slotAnalysingFinished(bool)) );
-    
-    QMetaObject::invokeMethod( this, "slotAddUrls", Qt::QueuedConnection );
 }
 
 
@@ -113,6 +112,7 @@ void K3b::AudioTrackAddingDialog::addUrls( const KUrl::List& urls,
             urls, doc, afterTrack, parentTrack, afterSource, parent );
         dlg->setAttribute( Qt::WA_DeleteOnClose );
         QMetaObject::invokeMethod( dlg, "exec", Qt::QueuedConnection );
+        QMetaObject::invokeMethod( dlg, "slotAddUrls", Qt::QueuedConnection );
     }
 }
 
