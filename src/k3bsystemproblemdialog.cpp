@@ -177,6 +177,8 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                            i18n("K3b did not find any optical device in your system."),
 #ifdef Q_OS_LINUX
                                            i18n("Make sure HAL daemon is running, it is used by K3b for finding devices.")
+#else
+                                           QString()
 #endif
                                            ) );
     }
