@@ -175,7 +175,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
         problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                            i18n("No optical drive found."),
                                            i18n("K3b did not find any optical device in your system."),
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
                                            i18n("Make sure HAL daemon is running, it is used by K3b for finding devices.")
 #else
                                            QString()
