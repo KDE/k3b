@@ -47,15 +47,6 @@ include(KDE4Defaults)
 include(MacroLibrary)
 include(MacroLogFeature)
 
-if(K3B_BUILD_K3BSETUP)
-  set(POLKITQT_MIN_VERSION 0.9.2)
-  macro_optional_find_package(PolkitQt)
-  macro_log_feature(POLKITQT_FOUND "Polkit-Qt"
-    "Needed for K3bSetup to acquire administrator privileges. Version >= 0.9.2 is required."
-	"http://api.kde.org/kdesupport-api/kdesupport-apidocs/polkit-qt/html"
-	FALSE "" "")
-endif(K3B_BUILD_K3BSETUP)
-
 if(K3B_ENABLE_DVD_RIPPING)
   find_package(DvdRead)
   macro_log_feature( DVDREAD_FOUND "libDVDRead"
@@ -161,9 +152,9 @@ endif(WIN32)
 ##################  K3b build settings #################################
 include(ConfigureChecks.cmake)
 
-if(K3B_BUILD_K3BSETUP AND POLKITQT_FOUND)
+if(K3B_BUILD_K3BSETUP)
   set(BUILD_K3BSETUP 1)
-endif(K3B_BUILD_K3BSETUP AND POLKITQT_FOUND)
+endif(K3B_BUILD_K3BSETUP)
 
 macro_bool_to_01(ADD_K3B_DEBUG K3B_DEBUG)
 

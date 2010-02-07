@@ -1,10 +1,10 @@
 /*
  *
  * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2010 Dario Freddi <drf@kde.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,25 +15,19 @@
 
 #ifndef _K3BSETUPWORKER_H_
 #define _K3BSETUPWORKER_H_
- 
-#include <QDBusContext>
-#include <QObject>
-#include <QStringList>
-#include <QVariantList>
+
+#include <kauth.h>
+
+using namespace KAuth;
  
 namespace K3b {
 namespace Setup {
  
-class Worker : public QObject, protected QDBusContext
+class Worker : public QObject
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.k3b.setup")
 
-public:
-	Worker( QObject *parent = 0 );
-    virtual ~Worker();
-
-public Q_SLOTS:
+public slots:
     /**
      * Updates permissions of devices and programs
      * @param burningGroup name of the burning group. If not set burning group will not be used
@@ -41,22 +35,8 @@ public Q_SLOTS:
      * @param programs list of the programs which will have updated permissions. Each element
      *                 of the list is a @see K3b::Setup::ProgramItem object
      */
-    void updatePermissions( QString burningGroup, QStringList devices, QVariantList programs );
+    ActionReply save(const QVariantMap &args);
 
-Q_SIGNALS:
-    /**
-     * Confirmes successful authorization. Emitted after updating permissions of all elements.
-     * @param updated list of devices and programs with successfully updated permissions
-     * @param failedToUpdate list of devices and programs which permissons
-     *                       could not be updated for some reason
-     */
-    void done( QStringList updated, QStringList failedToUpdate );
-    
-    /**
-     * Emitted when worker didn't get authorization from PolicyKit
-     */
-    void authorizationFailed();
-    
 };
 
 } // namespace Setup

@@ -2,10 +2,10 @@
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2010 Dario Freddi <drf@kde.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,9 +45,7 @@
 #include <KLocale>
 #include <KMessageBox>
 #include <KTextEdit>
-
-#include <polkit-qt/Action>
-#include <polkit-qt/Auth>
+#include <KAuth/Action>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -59,7 +57,6 @@ class K3bSetup::Private
 {
 public:
     KConfig* config;
-    PolkitQt::Action* authAction;
     K3b::Setup::DevicesModel* devicesModel;
     K3b::Setup::ProgramsModel* programsModel;
 };
@@ -75,7 +72,6 @@ K3bSetup::K3bSetup( QWidget *parent, const QVariantList& )
 {
     d = new Private();
     d->config = new KConfig( "k3bsetuprc" );
-    d->authAction = new PolkitQt::Action( "org.k3b.setup.update-permissions", this );
 
     KAboutData* aboutData = new KAboutData("k3bsetup", 0,
                                            ki18n("K3bSetup"), "2.0",
@@ -111,10 +107,6 @@ K3bSetup::K3bSetup( QWidget *parent, const QVariantList& )
     d->devicesModel = new K3b::Setup::DevicesModel( this );
     d->programsModel = new K3b::Setup::ProgramsModel(this );
 
-    connect( d->authAction, SIGNAL(activated()),
-             this, SLOT(slotPerformPermissionUpdating()) );
-    connect( d->authAction, SIGNAL(dataChanged()),
-             this, SLOT(slotDataChanged()) );
     connect( d->devicesModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
              this, SLOT(slotDataChanged()) );
     connect( d->devicesModel, SIGNAL(modelReset()),
@@ -138,6 +130,8 @@ K3bSetup::K3bSetup( QWidget *parent, const QVariantList& )
     // Register ProgramItem as meta type
     // to be able to send it through D-BUS
     qDBusRegisterMetaType<K3b::Setup::ProgramItem>();
+    
+    setNeedsAuthorization(true);
 
     load();
 }
@@ -208,37 +202,16 @@ void K3bSetup::save()
 
     d->devicesModel->save( *d->config );
     d->programsModel->save( *d->config );
-
-    if( d->devicesModel->changesNeeded() || d->programsModel->changesNeeded() ) {
-        // Here we are trying to authorizate user. By default
-        // authorization dialog will be shown after calling this method.
-        if( !d->authAction->activate() ) {
-            QTimer::singleShot( 0, this, SLOT(slotDataChanged()) );
-        }
-    }
-}
-
-
-void K3bSetup::slotPerformPermissionUpdating()
-{
-    QDBusConnection::systemBus().connect( "org.k3b.setup",
-        "/", "org.k3b.setup", QLatin1String("done"),
-        this, SLOT(slotPermissionsUpdated(QStringList,QStringList)) );
-    QDBusConnection::systemBus().connect( "org.k3b.setup",
-        "/", "org.k3b.setup", QLatin1String("authorizationFailed"),
-        this, SLOT(slotAuthFailed()) );
     
-    QDBusMessage message = QDBusMessage::createMethodCall( "org.k3b.setup",
-        "/", "org.k3b.setup", QLatin1String("updatePermissions"));
-    
+    QVariantMap args;
     // Set burning group name as first argument
     if( m_checkUseBurningGroup->isChecked() && !m_editBurningGroup->text().isEmpty() )
-        message << m_editBurningGroup->text();
+        args["burningGroup"] = m_editBurningGroup->text();
     else
-        message << QString();
+        args["burningGroup"] = QString();
     
     // Set devices list as second argument
-    message << d->devicesModel->selectedDevices();
+    args["devices"] =  d->devicesModel->selectedDevices();
     
     // Set programs list as third argument
     QVariantList programs;
@@ -246,39 +219,33 @@ void K3bSetup::slotPerformPermissionUpdating()
     {
         programs << QVariant::fromValue( item );
     }
-    message << programs;
+    args["programs"] = programs;
     
-    // Invoke D-BUS method. At this point:
-    // - k3bsetup_worker will be lanuched by D-BUS
-    // - method "updatePermissions" from "org.k3b.setup" will be invoked
-    QDBusMessage reply = QDBusConnection::systemBus().call( message, QDBus::NoBlock );
-    if( reply.type() == QDBusMessage::ErrorMessage )
-    {
+    KAuth::Action *action = authAction();
+    action->setArguments(args);
+    
+    KAuth::ActionReply reply = action->execute();
+    
+    if (reply.failed()) {
+        // TODO: We can give some more details about the error here
+        kDebug() << reply.errorCode() << reply.errorDescription();
         KMessageBox::error( this, i18n("Cannot run worker.") );
         emit changed( true );
-    }
-}
-
-
-void K3bSetup::slotPermissionsUpdated( QStringList updated, QStringList failedToUpdate )
-{
-    kDebug() << "Objects updated: " << updated;
-    kDebug() << "Objects failed to update: " << failedToUpdate;
+    } else {
+        // Success!!
+        QStringList updated = reply.data()["updated"].toStringList();
+        QStringList failedToUpdate = reply.data()["failedToUpdate"].toStringList();
+        kDebug() << "Objects updated: " << updated;
+        kDebug() << "Objects failed to update: " << failedToUpdate;
     
-    if( !failedToUpdate.isEmpty() )
-        KMessageBox::errorList( this, i18n("Following devices and programs could not be updated:"), failedToUpdate );
+        if( !failedToUpdate.isEmpty() )
+            KMessageBox::errorList( this, i18n("Following devices and programs could not be updated:"), failedToUpdate );
 
-    // WE MAY USE "newgrp -" to reinitialize the environment if we add users to a group
+        // WE MAY USE "newgrp -" to reinitialize the environment if we add users to a group
 
-    d->devicesModel->update();
-    d->programsModel->update();
-}
-
-
-void K3bSetup::slotAuthFailed()
-{
-    KMessageBox::error( this, i18n("Authorization failed.") );
-    emit changed( true );
+        d->devicesModel->update();
+        d->programsModel->update();
+    }
 }
 
 

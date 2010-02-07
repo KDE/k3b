@@ -1,0 +1,4 @@
+[org.kde.kcontrol.k3bsetup.save]
+Name=Update device and programs permissions
+Description=Authentication is required to update permissions of devices and programs
+Policy=auth_admin

@@ -2,10 +2,10 @@
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
  * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2010 Dario Freddi <drf@kde.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,9 +37,6 @@ public:
     void save();
 
 private Q_SLOTS:
-    void slotPerformPermissionUpdating();
-    void slotPermissionsUpdated( QStringList updated, QStringList failedToUpdate );
-    void slotAuthFailed();
     void slotDataChanged();
     void slotBurningGroupChanged();
     void slotSearchPathChanged();

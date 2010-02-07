@@ -1,4 +1,0 @@
-[D-BUS Service]
-Name=org.k3b.setup
-Exec=@K3BSETUPWORKER_INSTALL_DIR@/k3bsetup_worker
-User=root

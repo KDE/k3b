@@ -1,10 +1,10 @@
 /*
  *
  * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2010 Dario Freddi <drf@kde.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,4 +46,16 @@ const QDBusArgument& operator>>( const QDBusArgument& argument, K3b::Setup::Prog
     argument >> item.m_path >> item.m_needSuid;
     argument.endStructure();
     return argument;
+}
+
+QDataStream& operator<<( QDataStream& data, const K3b::Setup::ProgramItem& item )
+{
+    data << item.m_needSuid << item.m_path;
+    return data;
+}
+
+const QDataStream& operator>>( QDataStream& data, K3b::Setup::ProgramItem& item )
+{
+    data >> item.m_needSuid >> item.m_path;
+    return data;
 }
