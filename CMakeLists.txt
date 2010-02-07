@@ -1,8 +1,8 @@
 project(k3b)
 
+cmake_minimum_required(VERSION 2.6.2)
+
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
-
-
 
 ##################  K3b version  ################################
 set(K3B_VERSION_MAJOR 1)
@@ -42,10 +42,20 @@ option(K3B_BUILD_EXTERNAL_ENCODER_PLUGIN "Build external app encoder plugin" ON)
 option(K3B_BUILD_WAVE_DECODER_PLUGIN "Build Wave decoder plugin" ON)
 
 ##################  K3b requirements #################################
+if(K3B_BUILD_K3BSETUP)
+    set(KDE_MIN_VERSION 4.3.85)
+else(K3B_BUILD_K3BSETUP)
+    set(KDE_MIN_VERSION 4.3.0)
+endif(K3B_BUILD_K3BSETUP)
+
 find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
 include(MacroLibrary)
 include(MacroLogFeature)
+macro_log_feature( KDE4_FOUND "kdelibs"
+    "The toolkit K3b uses to build"
+    "http://www.kde.org"
+    TRUE ${KDE_MIN_VERSION} "" )
 
 if(K3B_ENABLE_DVD_RIPPING)
   find_package(DvdRead)
