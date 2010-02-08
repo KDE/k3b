@@ -25,6 +25,11 @@
 #include "k3bmsf.h"
 #include "k3bdevice_export.h"
 
+#if defined(__FreeBSD_kernel__)
+#undef Q_OS_LINUX
+#define Q_OS_FREEBSD 1
+#endif
+
 #ifdef Q_OS_FREEBSD
 struct cam_device;
 #endif

@@ -29,6 +29,10 @@ target_link_libraries(k3bdevice
   ${KDE4_SOLID_LIBS}
 )
 
+if (CMAKE_SYSTEM_NAME MATCHES "kFreeBSD")
+  target_link_libraries(k3bdevice cam)
+endif (CMAKE_SYSTEM_NAME MATCHES "kFreeBSD")
+
 set_target_properties(k3bdevice PROPERTIES VERSION ${K3B_LIB_VERSION_MAJOR}.${K3B_LIB_VERSION_MINOR}.${K3B_LIB_VERSION_RELEASE} SOVERSION ${K3B_LIB_VERSION_MAJOR})
 install(TARGETS k3bdevice ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
