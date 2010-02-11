@@ -1,11 +1,13 @@
 [org.kde.kcontrol.k3bsetup.save]
 Name=Update device and programs permissions
+Name[de]=Berechtigungen von Geräten und Programmen aktualisieren
 Name[en_GB]=Update device and programs permissions
 Name[pt_BR]=Atualizar as permissões dos programas e dispositivos
 Name[sv]=Uppdatera rättigheter för enheter och program
 Name[uk]=Оновлення прав доступу до пристроїв і програм
 Name[x-test]=xxUpdate device and programs permissionsxx
 Description=Authentication is required to update permissions of devices and programs
+Description[de]=Sie müssen sich authentifizieren, um die Berechtigungen von Geräten und Programmen zu aktualisieren.
 Description[en_GB]=Authentication is required to update permissions of devices and programs
 Description[pt_BR]=É necessária autenticação para atualizar as permissões dos programas e dispositivos
 Description[sv]=Behörighetskontroll krävs för att uppdatera rättigheter för enheter och program
