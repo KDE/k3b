@@ -411,34 +411,53 @@ void K3b::MainWindow::initActions()
 #endif
 
     actionFileNewMenu->setToolTip(i18n("Creates a new project"));
+    actionFileNewMenu->setStatusTip( actionFileNewMenu->toolTip() );
     actionFileNewData->setToolTip( i18n("Creates a new data project") );
+    actionFileNewData->setStatusTip( actionFileNewData->toolTip() );
     actionFileNewAudio->setToolTip( i18n("Creates a new audio CD project") );
+    actionFileNewAudio->setStatusTip( actionFileNewAudio->toolTip() );
     actionFileNewMovix->setToolTip( i18n("Creates a new eMovix project") );
+    actionFileNewMovix->setStatusTip( actionFileNewMovix->toolTip() );
     actionFileNewVcd->setToolTip( i18n("Creates a new Video CD project") );
+    actionFileNewVcd->setStatusTip( actionFileNewVcd->toolTip() );
     actionToolsFormatMedium->setToolTip( i18n("Open the rewritable disk formatting/erasing dialog") );
+    actionToolsFormatMedium->setStatusTip( actionToolsFormatMedium->toolTip() );
     actionToolsWriteImage->setToolTip( i18n("Write an Iso9660, cue/bin, or cdrecord clone image to an optical disc") );
+    actionToolsWriteImage->setStatusTip( actionToolsWriteImage->toolTip() );
     actionToolsMediaCopy->setToolTip( i18n("Open the media copy dialog") );
+    actionToolsMediaCopy->setStatusTip( actionToolsMediaCopy->toolTip() );
     actionFileOpen->setToolTip(i18n("Opens an existing project"));
+    actionFileOpen->setStatusTip( actionFileOpen->toolTip() );
     actionFileOpenRecent->setToolTip(i18n("Opens a recently used file"));
+    actionFileOpenRecent->setStatusTip( actionFileOpenRecent->toolTip() );
     actionFileSave->setToolTip(i18n("Saves the current project"));
+    actionFileSave->setStatusTip( actionFileSave->toolTip() );
     actionFileSaveAs->setToolTip(i18n("Saves the current project to a new url"));
+    actionFileSaveAs->setStatusTip( actionFileSaveAs->toolTip() );
     actionFileSaveAll->setToolTip(i18n("Saves all open projects"));
+    actionFileSaveAll->setStatusTip( actionFileSaveAll->toolTip() );
     actionFileClose->setToolTip(i18n("Closes the current project"));
+    actionFileClose->setStatusTip( actionFileClose->toolTip() );
     actionFileCloseAll->setToolTip(i18n("Closes all open projects"));
+    actionFileCloseAll->setStatusTip( actionFileCloseAll->toolTip() );
     actionFileQuit->setToolTip(i18n("Quits the application"));
+    actionFileQuit->setStatusTip( actionFileQuit->toolTip() );
     actionSettingsConfigure->setToolTip( i18n("Configure K3b settings") );
+    actionSettingsConfigure->setStatusTip( actionSettingsConfigure->toolTip() );
 #ifdef BUILD_K3BSETUP
     actionSettingsK3bSetup->setToolTip( i18n("Setup the system permissions") );
+    actionSettingsK3bSetup->setStatusTip( actionSettingsK3bSetup->toolTip() );
 #endif
     actionToolsCddaRip->setToolTip( i18n("Digitally extract tracks from an audio CD") );
+    actionToolsCddaRip->setStatusTip( actionToolsCddaRip->toolTip() );
     actionToolsVideoDvdRip->setToolTip( i18n("Transcode Video DVD titles") );
+    actionToolsVideoDvdRip->setStatusTip( actionToolsVideoDvdRip->toolTip() );
     actionToolsVideoCdRip->setToolTip( i18n("Extract tracks from a Video CD") );
+    actionToolsVideoCdRip->setStatusTip( actionToolsVideoCdRip->toolTip() );
     actionProjectAddFiles->setToolTip( i18n("Add files to the current project") );
+    actionProjectAddFiles->setStatusTip( actionProjectAddFiles->toolTip() );
     actionClearProject->setToolTip( i18n("Clear the current project") );
-
-    //FIXME kde4
-    // make sure the tooltips are used for the menu
-    //actionCollection()->setHighlightingEnabled( true );
+    actionClearProject->setStatusTip( actionClearProject->toolTip() );
 }
 
 

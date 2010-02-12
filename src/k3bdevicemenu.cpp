@@ -81,7 +81,9 @@ K3b::DeviceMenu::Private::Private( DeviceMenu* parent )
     actionRipVcd = q->addAction( KIcon( "tools-rip-video-cd"), i18n("Rip Video CD..."), q, SLOT( _k_ripVcd() ) );
 
     actionCopy->setToolTip( i18n("Open the media copy dialog") );
+    actionCopy->setStatusTip( actionCopy->toolTip() );
     actionFormat->setToolTip( i18n("Open the rewritable disk formatting/erasing dialog") );
+    actionFormat->setStatusTip( actionFormat->toolTip() );
 }
 
 

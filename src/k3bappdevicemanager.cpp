@@ -69,11 +69,17 @@ K3b::AppDeviceManager::AppDeviceManager( QObject* parent )
                                              actionCollection(), "device_set_read_speed" );
 
     d->actionDiskInfo->setToolTip( i18n("Display generic medium information") );
+    d->actionDiskInfo->setStatusTip( d->actionDiskInfo->toolTip() );
     d->actionUnmount->setToolTip( i18n("Unmount the medium") );
+    d->actionUnmount->setStatusTip( d->actionUnmount->toolTip() );
     d->actionMount->setToolTip( i18n("Mount the medium") );
+    d->actionMount->setStatusTip( d->actionMount->toolTip() );
     d->actionEject->setToolTip( i18n("Eject the medium") );
+    d->actionEject->setStatusTip( d->actionEject->toolTip() );
     d->actionLoad->setToolTip( i18n("(Re)Load the medium") );
+    d->actionLoad->setStatusTip( d->actionLoad->toolTip() );
     d->actionSetReadSpeed->setToolTip( i18n("Force the drive's read speed") );
+    d->actionSetReadSpeed->setStatusTip( d->actionSetReadSpeed->toolTip() );
 
     setXMLFile( "k3bdeviceui.rc", true );
 
