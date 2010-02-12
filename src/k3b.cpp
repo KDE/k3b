@@ -45,7 +45,6 @@
 #include "k3bpluginmanager.h"
 #include "k3bprojectmanager.h"
 #include "k3bprojecttabwidget.h"
-#include "k3bsidepanel.h"
 #include "k3bsignalwaiter.h"
 #include "k3bstdguiitems.h"
 #include "k3bsystemproblemdialog.h"
@@ -509,10 +508,9 @@ void K3b::MainWindow::initView()
     m_dirTreeDock->setFeatures( QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable|QDockWidget::DockWidgetFloatable );
     actionCollection()->addAction( "view_dir_tree", m_dirTreeDock->toggleViewAction() );
 
-    K3b::FileTreeView* sidePanel = new K3b::FileTreeView( m_dirTreeDock );
-    //K3b::SidePanel* sidePanel = new K3b::SidePanel( this, m_dirTreeDock, "sidePanel" );
+    K3b::FileTreeView* fileTreeView = new K3b::FileTreeView( m_dirTreeDock );
 
-    m_dirTreeDock->setWidget( sidePanel );
+    m_dirTreeDock->setWidget( fileTreeView );
     // ---------------------------------------------------------------------------------------------
 
 
@@ -522,7 +520,7 @@ void K3b::MainWindow::initView()
     m_contentsDock->setFeatures( QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable|QDockWidget::DockWidgetFloatable );
     actionCollection()->addAction( "view_contents", m_contentsDock->toggleViewAction() );
 
-    m_dirView = new K3b::DirView( sidePanel/*->fileTreeView()*/, m_contentsDock );
+    m_dirView = new K3b::DirView( fileTreeView, m_contentsDock );
     m_contentsDock->setWidget( m_dirView );
     
     if( layoutDirection() == Qt::LeftToRight )
