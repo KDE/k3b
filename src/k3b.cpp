@@ -176,6 +176,37 @@ namespace {
 class K3b::MainWindow::Private
 {
 public:
+    KRecentFilesAction* actionFileOpenRecent;
+    KAction* actionFileSave;
+    KAction* actionFileSaveAs;
+    KAction* actionFileClose;
+    KAction* actionViewStatusBar;
+    KToggleAction* actionViewDocumentHeader;
+    KToggleAction* actionViewLockPanels;
+
+    /** The MDI-Interface is managed by this tabbed view */
+    ProjectTabWidget* documentTab;
+
+    // project actions
+    QList<KAction*> dataProjectActions;
+
+    QDockWidget* documentDock;
+    QDockWidget* contentsDock;
+    QDockWidget* dirTreeDock;
+
+    // The K3b-specific widgets
+    DirView* dirView;
+    OptionDialog* optionDialog;
+
+    StatusBarManager* statusBarManager;
+
+    bool initialized;
+
+    // the funny header
+    ThemedHeader* documentHeader;
+
+    K3b::UrlNavigator* urlNavigator;
+    
     K3b::Doc* lastDoc;
 
     K3b::WelcomeWidget* welcomeWidget;
@@ -194,14 +225,9 @@ public:
 };
 
 K3b::MainWindow::MainWindow()
-    : KXmlGuiWindow(0)
+    : KXmlGuiWindow(0),
+      d( new Private )
 {
-    //setup splitter behavior
-    //manager()->setSplitterHighResolution(true);
-    //manager()->setSplitterOpaqueResize(true);
-    //manager()->setSplitterKeepSize(true);
-
-    d = new Private;
     d->lastDoc = 0;
     d->documentDummyTitleBarWidget = new K3bDummyWidget( this );
     d->dirTreeDummyTitleBarWidget = new K3bDummyWidget( this );
@@ -227,9 +253,9 @@ K3b::MainWindow::MainWindow()
     d->welcomeWidget->loadConfig( grp );
 
     // fill the tabs action menu
-    m_documentTab->addAction( actionFileSave );
-    m_documentTab->addAction( actionFileSaveAs );
-    m_documentTab->addAction( actionFileClose );
+    d->documentTab->addAction( d->actionFileSave );
+    d->documentTab->addAction( d->actionFileSaveAs );
+    d->documentTab->addAction( d->actionFileClose );
 
     // /////////////////////////////////////////////////////////////////
     // disable actions at startup
@@ -241,7 +267,7 @@ K3b::MainWindow::MainWindow()
     // FIXME: now make sure the welcome screen is displayed completely
     resize( 780, 550 );
 //   getMainDockWidget()->resize( getMainDockWidget()->size().expandedTo( d->welcomeWidget->sizeHint() ) );
-//   m_dirTreeDock->resize( QSize( m_dirTreeDock->sizeHint().width(), m_dirTreeDock->height() ) );
+//   d->dirTreeDock->resize( QSize( d->dirTreeDock->sizeHint().width(), d->dirTreeDock->height() ) );
 
     readOptions();
 }
@@ -265,18 +291,18 @@ void K3b::MainWindow::initActions()
     // need to have all actions in the mainwindow's actioncollection anyway (or am I just to stupid to
     // see the correct solution?)
 
-    actionFileOpen = KStandardAction::open(this, SLOT(slotFileOpen()), actionCollection());
-    actionFileOpenRecent = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection());
-    actionFileSave = KStandardAction::save(this, SLOT(slotFileSave()), actionCollection());
-    actionFileSaveAs = KStandardAction::saveAs(this, SLOT(slotFileSaveAs()), actionCollection());
-    actionFileSaveAll = K3b::createAction(this, i18n("Save All"), "document-save-all", 0, this, SLOT(slotFileSaveAll()),
-                                          actionCollection(), "file_save_all" );
-    actionFileClose = KStandardAction::close(this, SLOT(slotFileClose()), actionCollection());
-    actionFileCloseAll = K3b::createAction(this, i18n("Close All"), 0, 0, this, SLOT(slotFileCloseAll()),
-                                           actionCollection(), "file_close_all" );
-    actionFileQuit = KStandardAction::quit(this, SLOT(slotFileQuit()), actionCollection());
-    actionViewStatusBar = KStandardAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
-    actionSettingsConfigure = KStandardAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
+    KAction* actionFileOpen = KStandardAction::open(this, SLOT(slotFileOpen()), actionCollection());
+    d->actionFileOpenRecent = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection());
+    d->actionFileSave = KStandardAction::save(this, SLOT(slotFileSave()), actionCollection());
+    d->actionFileSaveAs = KStandardAction::saveAs(this, SLOT(slotFileSaveAs()), actionCollection());
+    KAction* actionFileSaveAll = K3b::createAction(this, i18n("Save All"), "document-save-all", 0, this, SLOT(slotFileSaveAll()),
+                                                   actionCollection(), "file_save_all" );
+    d->actionFileClose = KStandardAction::close(this, SLOT(slotFileClose()), actionCollection());
+    KAction* actionFileCloseAll = K3b::createAction(this, i18n("Close All"), 0, 0, this, SLOT(slotFileCloseAll()),
+                                                    actionCollection(), "file_close_all" );
+    KAction* actionFileQuit = KStandardAction::quit(this, SLOT(slotFileQuit()), actionCollection());
+    d->actionViewStatusBar = KStandardAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
+    KAction* actionSettingsConfigure = KStandardAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
 
     // the tip action
     (void)KStandardAction::tipOfDay(this, SLOT(slotShowTips()), actionCollection() );
@@ -287,23 +313,23 @@ void K3b::MainWindow::initActions()
     KStandardAction::showMenubar( this, SLOT(slotShowMenuBar()), actionCollection() );
 
     //FIXME kde4 verify it
-    actionFileNewMenu = new KActionMenu( i18n("&New Project"),this );
+    KActionMenu* actionFileNewMenu = new KActionMenu( i18n("&New Project"),this );
     actionFileNewMenu->setIcon( KIcon( "document-new" ) );
     actionCollection()->addAction( "file_new", actionFileNewMenu );
-    actionFileNewAudio = K3b::createAction(this,i18n("New &Audio CD Project"), "media-optical-audio", 0, this, SLOT(slotNewAudioDoc()),
-                                           actionCollection(), "file_new_audio");
-    actionFileNewData = K3b::createAction(this,i18n("New &Data Project"), "media-optical-data", 0, this, SLOT(slotNewDataDoc()),
-                                          actionCollection(), "file_new_data");
-    actionFileNewMixed = K3b::createAction(this,i18n("New &Mixed Mode CD Project"), "media-optical-mixed-cd", 0, this, SLOT(slotNewMixedDoc()),
-                                           actionCollection(), "file_new_mixed");
-    actionFileNewVcd = K3b::createAction(this,i18n("New &Video CD Project"), "media-optical-cd-video", 0, this, SLOT(slotNewVcdDoc()),
-                                         actionCollection(), "file_new_vcd");
-    actionFileNewMovix = K3b::createAction(this,i18n("New &eMovix Project"), "media-optical-video", 0, this, SLOT(slotNewMovixDoc()),
-                                           actionCollection(), "file_new_movix");
-    actionFileNewVideoDvd = K3b::createAction(this,i18n("New V&ideo DVD Project"), "media-optical-dvd-video", 0, this, SLOT(slotNewVideoDvdDoc()),
-                                              actionCollection(), "file_new_video_dvd");
-    actionFileContinueMultisession = K3b::createAction(this,i18n("Continue Multisession Project"), "media-optical-data", 0, this, SLOT(slotContinueMultisession()),
-                                                       actionCollection(), "file_continue_multisession" );
+    KAction* actionFileNewAudio = K3b::createAction(this,i18n("New &Audio CD Project"), "media-optical-audio", 0, this, SLOT(slotNewAudioDoc()),
+                                                    actionCollection(), "file_new_audio");
+    KAction* actionFileNewData = K3b::createAction(this,i18n("New &Data Project"), "media-optical-data", 0, this, SLOT(slotNewDataDoc()),
+                                                   actionCollection(), "file_new_data");
+    KAction* actionFileNewMixed = K3b::createAction(this,i18n("New &Mixed Mode CD Project"), "media-optical-mixed-cd", 0, this, SLOT(slotNewMixedDoc()),
+                                                    actionCollection(), "file_new_mixed");
+    KAction* actionFileNewVcd = K3b::createAction(this,i18n("New &Video CD Project"), "media-optical-cd-video", 0, this, SLOT(slotNewVcdDoc()),
+                                                  actionCollection(), "file_new_vcd");
+    KAction* actionFileNewMovix = K3b::createAction(this,i18n("New &eMovix Project"), "media-optical-video", 0, this, SLOT(slotNewMovixDoc()),
+                                                    actionCollection(), "file_new_movix");
+    KAction* actionFileNewVideoDvd = K3b::createAction(this,i18n("New V&ideo DVD Project"), "media-optical-dvd-video", 0, this, SLOT(slotNewVideoDvdDoc()),
+                                                       actionCollection(), "file_new_video_dvd");
+    KAction* actionFileContinueMultisession = K3b::createAction(this,i18n("Continue Multisession Project"), "media-optical-data", 0, this, SLOT(slotContinueMultisession()),
+                                                                actionCollection(), "file_continue_multisession" );
 
     actionFileNewMenu->setDelayed( false );
     actionFileNewMenu->addAction( actionFileNewData );
@@ -321,20 +347,20 @@ void K3b::MainWindow::initActions()
 
 
 
-    actionProjectAddFiles = K3b::createAction(this, i18n("&Add Files..."), "document-open", 0, this, SLOT(slotProjectAddFiles()),
-                                              actionCollection(), "project_add_files");
+    KAction* actionProjectAddFiles = K3b::createAction(this, i18n("&Add Files..."), "document-open", 0, this, SLOT(slotProjectAddFiles()),
+                                                       actionCollection(), "project_add_files");
 
     KAction* actionClearProject = K3b::createAction(this,i18n("&Clear Project"), QApplication::isRightToLeft() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar-ltr", 0,
                                                     this, SLOT(slotClearProject()), actionCollection(), "project_clear_project" );
 
 
-    actionViewLockPanels = new KToggleAction( i18n("Lock Panels"), this );
-    actionCollection()->addAction("view_lock_panels", actionViewLockPanels);
-    connect( actionViewLockPanels, SIGNAL(toggled(bool)),
+    d->actionViewLockPanels = new KToggleAction( i18n("Lock Panels"), this );
+    actionCollection()->addAction("view_lock_panels", d->actionViewLockPanels);
+    connect( d->actionViewLockPanels, SIGNAL(toggled(bool)),
              this, SLOT(slotViewLockPanels(bool)) );
     
-    actionViewDocumentHeader = new KToggleAction(i18n("Show Projects Header"),this);
-    actionCollection()->addAction("view_document_header", actionViewDocumentHeader);
+    d->actionViewDocumentHeader = new KToggleAction(i18n("Show Projects Header"),this);
+    actionCollection()->addAction("view_document_header", d->actionViewDocumentHeader);
 
     KAction* actionToolsFormatMedium = K3b::createAction( this,
                                                           i18n("&Format/Erase rewritable disk..."),
@@ -346,14 +372,14 @@ void K3b::MainWindow::initActions()
                                                           "tools_format_medium" );
     actionToolsFormatMedium->setIconText( i18n( "Format" ) );
 
-    actionToolsWriteImage = K3b::createAction( this,
-                                               i18n("&Burn Image..."),
-                                               "tools-media-optical-burn-image",
-                                               0,
-                                               this,
-                                               SLOT(slotWriteImage()),
-                                               actionCollection(),
-                                               "tools_write_image" );
+    KAction* actionToolsWriteImage = K3b::createAction( this,
+                                                        i18n("&Burn Image..."),
+                                                        "tools-media-optical-burn-image",
+                                                        0,
+                                                        this,
+                                                        SLOT(slotWriteImage()),
+                                                        actionCollection(),
+                                                        "tools_write_image" );
 
     KAction* actionToolsMediaCopy = K3b::createAction( this,
                                                        i18n("Copy &Medium..."),
@@ -365,30 +391,30 @@ void K3b::MainWindow::initActions()
                                                        "tools_copy_medium" );
     actionToolsMediaCopy->setIconText( i18n( "Copy" ) );
 
-    actionToolsCddaRip = K3b::createAction( this,
-                                            i18n("Rip Audio CD..."),
-                                            "tools-rip-audio-cd",
-                                            0,
-                                            this,
-                                            SLOT(slotCddaRip()),
-                                            actionCollection(),
-                                            "tools_cdda_rip" );
-    actionToolsVideoDvdRip = K3b::createAction( this,
-                                                i18n("Rip Video DVD..."),
-                                                "tools-rip-video-dvd",
-                                                0,
-                                                this,
-                                                SLOT(slotVideoDvdRip()),
-                                                actionCollection(),
-                                                "tools_videodvd_rip" );
-    actionToolsVideoCdRip = K3b::createAction( this,
-                                               i18n("Rip Video CD..."),
-                                               "tools-rip-video-cd",
-                                               0,
-                                               this,
-                                               SLOT(slotVideoCdRip()),
-                                               actionCollection(),
-                                               "tools_videocd_rip" );
+    KAction* actionToolsCddaRip = K3b::createAction( this,
+                                                     i18n("Rip Audio CD..."),
+                                                     "tools-rip-audio-cd",
+                                                     0,
+                                                     this,
+                                                     SLOT(slotCddaRip()),
+                                                     actionCollection(),
+                                                     "tools_cdda_rip" );
+    KAction* actionToolsVideoDvdRip = K3b::createAction( this,
+                                                         i18n("Rip Video DVD..."),
+                                                         "tools-rip-video-dvd",
+                                                         0,
+                                                         this,
+                                                         SLOT(slotVideoDvdRip()),
+                                                         actionCollection(),
+                                                         "tools_videodvd_rip" );
+    KAction* actionToolsVideoCdRip = K3b::createAction( this,
+                                                        i18n("Rip Video CD..."),
+                                                        "tools-rip-video-cd",
+                                                        0,
+                                                        this,
+                                                        SLOT(slotVideoCdRip()),
+                                                        actionCollection(),
+                                                        "tools_videocd_rip" );
 
     (void)K3b::createAction( this,
                              i18n("System Check"),
@@ -400,14 +426,14 @@ void K3b::MainWindow::initActions()
                              "help_check_system" );
 
 #ifdef BUILD_K3BSETUP
-    actionSettingsK3bSetup = K3b::createAction( this,
-                                                i18n("&Setup System Permissions..."),
-                                                "configure",
-                                                0,
-                                                this,
-                                                SLOT(slotK3bSetup()),
-                                                actionCollection(),
-                                                "settings_k3bsetup" );
+    KAction* actionSettingsK3bSetup = K3b::createAction( this,
+                                                         i18n("&Setup System Permissions..."),
+                                                         "configure",
+                                                         0,
+                                                         this,
+                                                         SLOT(slotK3bSetup()),
+                                                         actionCollection(),
+                                                         "settings_k3bsetup" );
 #endif
 
     actionFileNewMenu->setToolTip(i18n("Creates a new project"));
@@ -428,16 +454,16 @@ void K3b::MainWindow::initActions()
     actionToolsMediaCopy->setStatusTip( actionToolsMediaCopy->toolTip() );
     actionFileOpen->setToolTip(i18n("Opens an existing project"));
     actionFileOpen->setStatusTip( actionFileOpen->toolTip() );
-    actionFileOpenRecent->setToolTip(i18n("Opens a recently used file"));
-    actionFileOpenRecent->setStatusTip( actionFileOpenRecent->toolTip() );
-    actionFileSave->setToolTip(i18n("Saves the current project"));
-    actionFileSave->setStatusTip( actionFileSave->toolTip() );
-    actionFileSaveAs->setToolTip(i18n("Saves the current project to a new url"));
-    actionFileSaveAs->setStatusTip( actionFileSaveAs->toolTip() );
+    d->actionFileOpenRecent->setToolTip(i18n("Opens a recently used file"));
+    d->actionFileOpenRecent->setStatusTip( d->actionFileOpenRecent->toolTip() );
+    d->actionFileSave->setToolTip(i18n("Saves the current project"));
+    d->actionFileSave->setStatusTip( d->actionFileSave->toolTip() );
+    d->actionFileSaveAs->setToolTip(i18n("Saves the current project to a new url"));
+    d->actionFileSaveAs->setStatusTip( d->actionFileSaveAs->toolTip() );
     actionFileSaveAll->setToolTip(i18n("Saves all open projects"));
     actionFileSaveAll->setStatusTip( actionFileSaveAll->toolTip() );
-    actionFileClose->setToolTip(i18n("Closes the current project"));
-    actionFileClose->setStatusTip( actionFileClose->toolTip() );
+    d->actionFileClose->setToolTip(i18n("Closes the current project"));
+    d->actionFileClose->setStatusTip( d->actionFileClose->toolTip() );
     actionFileCloseAll->setToolTip(i18n("Closes all open projects"));
     actionFileCloseAll->setStatusTip( actionFileCloseAll->toolTip() );
     actionFileQuit->setToolTip(i18n("Quits the application"));
@@ -475,7 +501,7 @@ void K3b::MainWindow::slotConfigureKeys()
 
 void K3b::MainWindow::initStatusBar()
 {
-    m_statusBarManager = new K3b::StatusBarManager( this );
+    d->statusBarManager = new K3b::StatusBarManager( this );
 }
 
 
@@ -486,34 +512,34 @@ void K3b::MainWindow::initView()
     // setup main docking things
     
     // --- Document Dock ----------------------------------------------------------------------------
-    m_documentDock = new QDockWidget( i18n("Projects"), this );
-    m_documentDock->setObjectName("documentdock");
-    m_documentDock->setFeatures( QDockWidget::DockWidgetMovable|QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetFloatable );
-    addDockWidget( Qt::BottomDockWidgetArea, m_documentDock );
-    actionCollection()->addAction( "view_projects", m_documentDock->toggleViewAction() );
-    d->documentStack = new QStackedWidget( m_documentDock );
-    m_documentDock->setWidget( d->documentStack );
+    d->documentDock = new QDockWidget( i18n("Projects"), this );
+    d->documentDock->setObjectName("documentdock");
+    d->documentDock->setFeatures( QDockWidget::DockWidgetMovable|QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetFloatable );
+    addDockWidget( Qt::BottomDockWidgetArea, d->documentDock );
+    actionCollection()->addAction( "view_projects", d->documentDock->toggleViewAction() );
+    d->documentStack = new QStackedWidget( d->documentDock );
+    d->documentDock->setWidget( d->documentStack );
     d->documentHull = new QWidget( d->documentStack );
     QGridLayout* documentHullLayout = new QGridLayout( d->documentHull );
     documentHullLayout->setMargin( 0 );
     documentHullLayout->setSpacing( 0 );
 
-    m_documentHeader = new K3b::ThemedHeader( d->documentHull );
-    m_documentHeader->setTitle( i18n("Current Projects") );
-    m_documentHeader->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
-    m_documentHeader->setLeftPixmap( K3b::Theme::PROJECT_LEFT );
-    m_documentHeader->setRightPixmap( K3b::Theme::PROJECT_RIGHT );
-    connect( actionViewDocumentHeader, SIGNAL(toggled(bool)),
-             m_documentHeader, SLOT(setVisible(bool)) );
+    d->documentHeader = new K3b::ThemedHeader( d->documentHull );
+    d->documentHeader->setTitle( i18n("Current Projects") );
+    d->documentHeader->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
+    d->documentHeader->setLeftPixmap( K3b::Theme::PROJECT_LEFT );
+    d->documentHeader->setRightPixmap( K3b::Theme::PROJECT_RIGHT );
+    connect( d->actionViewDocumentHeader, SIGNAL(toggled(bool)),
+             d->documentHeader, SLOT(setVisible(bool)) );
 
     // add the document tab to the styled document box
-    m_documentTab = new K3b::ProjectTabWidget( d->documentHull );
+    d->documentTab = new K3b::ProjectTabWidget( d->documentHull );
 
-    documentHullLayout->addWidget( m_documentHeader, 0, 0 );
-    documentHullLayout->addWidget( m_documentTab, 1, 0 );
+    documentHullLayout->addWidget( d->documentHeader, 0, 0 );
+    documentHullLayout->addWidget( d->documentTab, 1, 0 );
 
-    connect( m_documentTab, SIGNAL(currentChanged(int)), this, SLOT(slotCurrentDocChanged()) );
-    connect( m_documentTab, SIGNAL(tabCloseRequested(Doc*)), this, SLOT(slotFileClose(Doc*)) );
+    connect( d->documentTab, SIGNAL(currentChanged(int)), this, SLOT(slotCurrentDocChanged()) );
+    connect( d->documentTab, SIGNAL(tabCloseRequested(Doc*)), this, SLOT(slotFileClose(Doc*)) );
 
     d->welcomeWidget = new K3b::WelcomeWidget( this, d->documentStack );
     d->documentStack->addWidget( d->welcomeWidget );
@@ -522,46 +548,46 @@ void K3b::MainWindow::initView()
     // ---------------------------------------------------------------------------------------------
 
     // --- Directory Dock --------------------------------------------------------------------------
-    m_dirTreeDock = new QDockWidget(  i18n("Folders"), this );
-    m_dirTreeDock->setObjectName("dirtreedock");
-    m_dirTreeDock->setFeatures( QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable|QDockWidget::DockWidgetFloatable );
-    actionCollection()->addAction( "view_dir_tree", m_dirTreeDock->toggleViewAction() );
+    d->dirTreeDock = new QDockWidget(  i18n("Folders"), this );
+    d->dirTreeDock->setObjectName("dirtreedock");
+    d->dirTreeDock->setFeatures( QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable|QDockWidget::DockWidgetFloatable );
+    actionCollection()->addAction( "view_dir_tree", d->dirTreeDock->toggleViewAction() );
 
-    K3b::FileTreeView* fileTreeView = new K3b::FileTreeView( m_dirTreeDock );
+    K3b::FileTreeView* fileTreeView = new K3b::FileTreeView( d->dirTreeDock );
 
-    m_dirTreeDock->setWidget( fileTreeView );
+    d->dirTreeDock->setWidget( fileTreeView );
     // ---------------------------------------------------------------------------------------------
 
 
     // --- Contents Dock ---------------------------------------------------------------------------
-    m_contentsDock = new QDockWidget( i18n("Contents"), this );
-    m_contentsDock->setObjectName("contentsdock");
-    m_contentsDock->setFeatures( QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable|QDockWidget::DockWidgetFloatable );
-    actionCollection()->addAction( "view_contents", m_contentsDock->toggleViewAction() );
+    d->contentsDock = new QDockWidget( i18n("Contents"), this );
+    d->contentsDock->setObjectName("contentsdock");
+    d->contentsDock->setFeatures( QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable|QDockWidget::DockWidgetFloatable );
+    actionCollection()->addAction( "view_contents", d->contentsDock->toggleViewAction() );
 
-    m_dirView = new K3b::DirView( fileTreeView, m_contentsDock );
-    m_contentsDock->setWidget( m_dirView );
+    d->dirView = new K3b::DirView( fileTreeView, d->contentsDock );
+    d->contentsDock->setWidget( d->dirView );
     
     if( layoutDirection() == Qt::LeftToRight )
     {
-        addDockWidget( Qt::TopDockWidgetArea, m_dirTreeDock, Qt::Horizontal );
-        addDockWidget ( Qt::TopDockWidgetArea, m_contentsDock, Qt::Horizontal );
+        addDockWidget( Qt::TopDockWidgetArea, d->dirTreeDock, Qt::Horizontal );
+        addDockWidget ( Qt::TopDockWidgetArea, d->contentsDock, Qt::Horizontal );
     }
     else
     {
-        addDockWidget ( Qt::TopDockWidgetArea, m_contentsDock, Qt::Horizontal );
-        addDockWidget( Qt::TopDockWidgetArea, m_dirTreeDock, Qt::Horizontal );
+        addDockWidget ( Qt::TopDockWidgetArea, d->contentsDock, Qt::Horizontal );
+        addDockWidget( Qt::TopDockWidgetArea, d->dirTreeDock, Qt::Horizontal );
     }
 
     // --- filetreecombobox-toolbar ----------------------------------------------------------------
 	KFilePlacesModel* filePlacesModel = new KFilePlacesModel;
-    m_urlNavigator = new K3b::UrlNavigator( filePlacesModel, this );
-    connect( m_urlNavigator, SIGNAL(activated(const KUrl&)), m_dirView, SLOT(showUrl(const KUrl& )) );
-    connect( m_urlNavigator, SIGNAL(activated(K3b::Device::Device*)), m_dirView, SLOT(showDevice(K3b::Device::Device* )) );
-    connect( m_dirView, SIGNAL(urlEntered(const KUrl&)), m_urlNavigator, SLOT(setUrl(const KUrl&)) );
-    connect( m_dirView, SIGNAL(deviceSelected(K3b::Device::Device*)), m_urlNavigator, SLOT(setDevice(K3b::Device::Device*)) );
+    d->urlNavigator = new K3b::UrlNavigator( filePlacesModel, this );
+    connect( d->urlNavigator, SIGNAL(activated(const KUrl&)), d->dirView, SLOT(showUrl(const KUrl& )) );
+    connect( d->urlNavigator, SIGNAL(activated(K3b::Device::Device*)), d->dirView, SLOT(showDevice(K3b::Device::Device* )) );
+    connect( d->dirView, SIGNAL(urlEntered(const KUrl&)), d->urlNavigator, SLOT(setUrl(const KUrl&)) );
+    connect( d->dirView, SIGNAL(deviceSelected(K3b::Device::Device*)), d->urlNavigator, SLOT(setDevice(K3b::Device::Device*)) );
     QWidgetAction * urlNavigatorAction = new QWidgetAction(this);
-    urlNavigatorAction->setDefaultWidget(m_urlNavigator);
+    urlNavigatorAction->setDefaultWidget(d->urlNavigator);
     urlNavigatorAction->setText(i18n("&Location Bar"));
     actionCollection()->addAction( "location_bar", urlNavigatorAction );
     // ---------------------------------------------------------------------------------------------
@@ -572,7 +598,7 @@ QMenu* K3b::MainWindow::createPopupMenu()
 {
     QMenu* popupMenu = KXmlGuiWindow::createPopupMenu();
     popupMenu->addSeparator();
-    popupMenu->addAction( actionViewLockPanels );
+    popupMenu->addAction( d->actionViewLockPanels );
     return popupMenu;
 }
 
@@ -585,27 +611,27 @@ void K3b::MainWindow::createClient( K3b::Doc* doc )
     K3b::View* view = 0;
     switch( doc->type() ) {
     case K3b::Doc::AudioProject:
-        view = new K3b::AudioView( static_cast<K3b::AudioDoc*>(doc), m_documentTab );
+        view = new K3b::AudioView( static_cast<K3b::AudioDoc*>(doc), d->documentTab );
         break;
     case K3b::Doc::DataProject:
-        view = new K3b::DataView( static_cast<K3b::DataDoc*>(doc), m_documentTab );
+        view = new K3b::DataView( static_cast<K3b::DataDoc*>(doc), d->documentTab );
         break;
     case K3b::Doc::MixedProject:
     {
         K3b::MixedDoc* mixedDoc = static_cast<K3b::MixedDoc*>(doc);
-        view = new K3b::MixedView( mixedDoc, m_documentTab );
+        view = new K3b::MixedView( mixedDoc, d->documentTab );
         mixedDoc->dataDoc()->setView( view );
         mixedDoc->audioDoc()->setView( view );
         break;
     }
     case K3b::Doc::VcdProject:
-        view = new K3b::VcdView( static_cast<K3b::VcdDoc*>(doc), m_documentTab );
+        view = new K3b::VcdView( static_cast<K3b::VcdDoc*>(doc), d->documentTab );
         break;
     case K3b::Doc::MovixProject:
-        view = new K3b::MovixView( static_cast<K3b::MovixDoc*>(doc), m_documentTab );
+        view = new K3b::MovixView( static_cast<K3b::MovixDoc*>(doc), d->documentTab );
         break;
     case K3b::Doc::VideoDvdProject:
-        view = new K3b::VideoDvdView( static_cast<K3b::VideoDvdDoc*>(doc), m_documentTab );
+        view = new K3b::VideoDvdView( static_cast<K3b::VideoDvdDoc*>(doc), d->documentTab );
         break;
     }
 
@@ -613,11 +639,11 @@ void K3b::MainWindow::createClient( K3b::Doc* doc )
         doc->setView( view );
         view->setWindowTitle( doc->URL().fileName() );
 
-        m_documentTab->addTab( doc );
-        m_documentTab->setCurrentTab( doc );
+        d->documentTab->addTab( doc );
+        d->documentTab->setCurrentTab( doc );
         
-        if( m_documentDock->isHidden() )
-            m_documentDock->show();
+        if( d->documentDock->isHidden() )
+            d->documentDock->show();
         
         slotCurrentDocChanged();
     }
@@ -635,7 +661,7 @@ K3b::View* K3b::MainWindow::activeView() const
 
 K3b::Doc* K3b::MainWindow::activeDoc() const
 {
-    return m_documentTab->currentTab();
+    return d->documentTab->currentTab();
 }
 
 
@@ -662,7 +688,7 @@ K3b::Doc* K3b::MainWindow::openDocument(const KUrl& url)
             // check, if document already open. If yes, set the focus to the first view
             K3b::Doc* doc = k3bappcore->projectManager()->findByUrl( url );
             if( doc ) {
-                m_documentTab->setCurrentTab( doc );
+                d->documentTab->setCurrentTab( doc );
                 return doc;
             }
 
@@ -673,7 +699,7 @@ K3b::Doc* K3b::MainWindow::openDocument(const KUrl& url)
                 return 0;
             }
 
-            actionFileOpenRecent->addUrl(url);
+            d->actionFileOpenRecent->addUrl(url);
 
             return doc;
         }
@@ -684,10 +710,10 @@ K3b::Doc* K3b::MainWindow::openDocument(const KUrl& url)
 void K3b::MainWindow::saveOptions()
 {
     KConfigGroup recentGrp(config(),"Recent Files");
-    actionFileOpenRecent->saveEntries( recentGrp );
+    d->actionFileOpenRecent->saveEntries( recentGrp );
 
     KConfigGroup grpFileView( config(), "file view" );
-    m_dirView->saveConfig( grpFileView );
+    d->dirView->saveConfig( grpFileView );
 
     KConfigGroup grpWindows(config(), "main_window_settings");
     saveMainWindowSettings( grpWindows );
@@ -698,9 +724,9 @@ void K3b::MainWindow::saveOptions()
     d->welcomeWidget->saveConfig( grp );
 
     KConfigGroup grpOption( config(), "General Options" );
-    grpOption.writeEntry( "Lock Panels", actionViewLockPanels->isChecked() );
-    grpOption.writeEntry( "Show Document Header", actionViewDocumentHeader->isChecked() );
-    grpOption.writeEntry( "Navigator breadcrumb mode", !m_urlNavigator->isUrlEditable() );
+    grpOption.writeEntry( "Lock Panels", d->actionViewLockPanels->isChecked() );
+    grpOption.writeEntry( "Show Document Header", d->actionViewDocumentHeader->isChecked() );
+    grpOption.writeEntry( "Navigator breadcrumb mode", !d->urlNavigator->isUrlEditable() );
 
     config()->sync();
 }
@@ -710,22 +736,22 @@ void K3b::MainWindow::readOptions()
 {
     KConfigGroup grp( config(), "General Options" );
 
-    actionViewLockPanels->setChecked( grp.readEntry( "Lock Panels", true ) );
-    actionViewDocumentHeader->setChecked( grp.readEntry("Show Document Header", true) );
-    m_urlNavigator->setUrlEditable( !grp.readEntry( "Navigator breadcrumb mode", true ) );
+    d->actionViewLockPanels->setChecked( grp.readEntry( "Lock Panels", true ) );
+    d->actionViewDocumentHeader->setChecked( grp.readEntry("Show Document Header", true) );
+    d->urlNavigator->setUrlEditable( !grp.readEntry( "Navigator breadcrumb mode", true ) );
 
     // initialize the recent file list
     KConfigGroup recentGrp(config(), "Recent Files");
-    actionFileOpenRecent->loadEntries( recentGrp );
+    d->actionFileOpenRecent->loadEntries( recentGrp );
 
     KConfigGroup grpWindow(config(), "main_window_settings");
     applyMainWindowSettings( grpWindow );
 
     KConfigGroup grpFileView( config(), "file view" );
-    m_dirView->readConfig( grpFileView );
+    d->dirView->readConfig( grpFileView );
 
-    slotViewLockPanels( actionViewLockPanels->isChecked() );
-    m_documentHeader->setVisible( actionViewDocumentHeader->isChecked() );
+    slotViewLockPanels( d->actionViewLockPanels->isChecked() );
+    d->documentHeader->setVisible( d->actionViewDocumentHeader->isChecked() );
 }
 
 
@@ -971,7 +997,7 @@ void K3b::MainWindow::slotFileOpen()
                                                 i18n("Open Files") );
     for( KUrl::List::iterator it = urls.begin(); it != urls.end(); ++it ) {
         openDocument( *it );
-        actionFileOpenRecent->addUrl( *it );
+        d->actionFileOpenRecent->addUrl( *it );
     }
 }
 
@@ -1052,7 +1078,7 @@ bool K3b::MainWindow::fileSaveAs( K3b::Doc* doc )
                 == KMessageBox::Continue ) {
 
                 if( k3bappcore->projectManager()->saveProject( doc, url ) ) {
-                    actionFileOpenRecent->addUrl(url);
+                    d->actionFileOpenRecent->addUrl(url);
                     return true;
                 }
                 else {
@@ -1111,7 +1137,7 @@ void K3b::MainWindow::closeProject( K3b::Doc* doc )
     }
 
     // remove the doc from the project tab
-    m_documentTab->removeTab( doc );
+    d->documentTab->removeTab( doc );
 
     // remove the project from the manager
     k3bappcore->projectManager()->removeProject( doc );
@@ -1131,7 +1157,7 @@ void K3b::MainWindow::slotFileQuit()
 void K3b::MainWindow::slotViewStatusBar()
 {
     //turn Statusbar on or off
-    if(actionViewStatusBar->isChecked()) {
+    if(d->actionViewStatusBar->isChecked()) {
         statusBar()->show();
     }
     else {
@@ -1429,15 +1455,15 @@ void K3b::MainWindow::slotViewLockPanels( bool checked )
 {
     if( checked )
     {
-        m_documentDock->setTitleBarWidget( d->documentDummyTitleBarWidget );
-        m_dirTreeDock->setTitleBarWidget( d->dirTreeDummyTitleBarWidget );
-        m_contentsDock->setTitleBarWidget( d->contentsDummyTitleBarWidget );
+        d->documentDock->setTitleBarWidget( d->documentDummyTitleBarWidget );
+        d->dirTreeDock->setTitleBarWidget( d->dirTreeDummyTitleBarWidget );
+        d->contentsDock->setTitleBarWidget( d->contentsDummyTitleBarWidget );
     }
     else
     {
-        m_documentDock->setTitleBarWidget( 0 );
-        m_dirTreeDock->setTitleBarWidget( 0 );
-        m_contentsDock->setTitleBarWidget( 0 );
+        d->documentDock->setTitleBarWidget( 0 );
+        d->dirTreeDock->setTitleBarWidget( 0 );
+        d->contentsDock->setTitleBarWidget( 0 );
     }
 }
 
@@ -1559,7 +1585,7 @@ void K3b::MainWindow::cddaRip( K3b::Device::Device* dev )
                                                      i18n("Audio CD Rip") );
 
     if( dev )
-        m_dirView->showDevice( dev );
+        d->dirView->showDevice( dev );
 }
 
 
@@ -1574,7 +1600,7 @@ void K3b::MainWindow::videoDvdRip( K3b::Device::Device* dev )
                                                      i18n("Video DVD Rip") );
 
     if( dev )
-        m_dirView->showDevice( dev );
+        d->dirView->showDevice( dev );
 }
 
 
@@ -1595,7 +1621,7 @@ void K3b::MainWindow::videoCdRip( K3b::Device::Device* dev )
                                                      i18n("Video CD Rip") );
 
     if( dev )
-        m_dirView->showDevice( dev );
+        d->dirView->showDevice( dev );
 }
 
 
@@ -1607,7 +1633,7 @@ void K3b::MainWindow::slotVideoCdRip()
 
 void K3b::MainWindow::showDiskInfo( K3b::Device::Device* dev )
 {
-    m_dirView->showDiskInfo( dev );
+    d->dirView->showDiskInfo( dev );
 }
 
 #include "k3b.moc"

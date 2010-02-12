@@ -17,31 +17,18 @@
 #ifndef K3B_H
 #define K3B_H
 
-// include files for KDE
+#include "option/k3boptiondialog.h"
+
 #include <KSharedConfig>
 #include <KUrl>
 #include <KXmlGuiWindow>
 
-#include "option/k3boptiondialog.h"
-
-class QDockWidget;
-
-class KSystemTray;
-class KToggleAction;
-class KAction;
-class KRecentFilesAction;
-class KActionMenu;
+#include <QList>
 
 namespace K3b {
     class Doc;
     class View;
-    class DirView;
     class ExternalBinManager;
-    class OptionDialog;
-    class ProjectTabWidget;
-    class StatusBarManager;
-    class ThemedHeader;
-    class UrlNavigator;
 
     namespace Device {
         class DeviceManager;
@@ -62,12 +49,10 @@ namespace K3b {
         /** opens a file specified by commandline option */
         Doc* openDocument( const KUrl& url = KUrl() );
 
-        Device::DeviceManager*      deviceManager() const;
+        Device::DeviceManager* deviceManager() const;
         ExternalBinManager* externalBinManager() const;
         KSharedConfig::Ptr config() const;
 
-        // return main window with browser/cd/dvd view, used for DND
-        DirView*            mainWindow() const        { return m_dirView; }
         /**
          * @returns a pointer to the currently visible view or 0 if no project was created
          */
@@ -87,8 +72,6 @@ namespace K3b {
          *  must be called after construction
          */
         void initView();
-
-        KSystemTray* systemTray() const { return m_systemTray; }
         
         /**
          * Reimplemented from QMainWindow, adds "Lock Panels" action
@@ -241,59 +224,6 @@ namespace K3b {
         /** sets up the statusbar for the main window by initialzing a statuslabel.
          */
         void initStatusBar();
-
-        /** The MDI-Interface is managed by this tabbed view */
-        ProjectTabWidget* m_documentTab;
-
-        // KAction pointers to enable/disable actions
-        KActionMenu* actionFileNewMenu;
-        KAction* actionFileNewAudio;
-        KAction* actionFileNewData;
-        KAction* actionFileNewMixed;
-        KAction* actionFileNewVcd;
-        KAction* actionFileNewMovix;
-        KAction* actionFileNewVideoDvd;
-        KAction* actionFileContinueMultisession;
-        KAction* actionFileOpen;
-        KRecentFilesAction* actionFileOpenRecent;
-        KAction* actionFileSave;
-        KAction* actionFileSaveAs;
-        KAction* actionFileSaveAll;
-        KAction* actionFileClose;
-        KAction* actionFileCloseAll;
-        KAction* actionFileQuit;
-        KAction* actionSettingsConfigure;
-        KAction* actionSettingsK3bSetup;
-        KAction* actionToolsWriteImage;
-        KAction* actionToolsCddaRip;
-        KAction* actionToolsVideoDvdRip;
-        KAction* actionToolsVideoCdRip;
-        KAction* actionProjectAddFiles;
-        KToggleAction* actionViewStatusBar;
-        KToggleAction* actionViewLockPanels;
-        KToggleAction* actionViewDocumentHeader;
-
-        // project actions
-        QList<KAction*> m_dataProjectActions;
-
-        QDockWidget* m_documentDock;
-        QDockWidget* m_contentsDock;
-        QDockWidget* m_dirTreeDock;
-
-        // The K3b-specific widgets
-        DirView* m_dirView;
-        OptionDialog* m_optionDialog;
-
-        StatusBarManager* m_statusBarManager;
-
-        KSystemTray* m_systemTray;
-
-        bool m_initialized;
-
-        // the funny header
-        ThemedHeader* m_documentHeader;
-
-        K3b::UrlNavigator* m_urlNavigator;
 
         class Private;
         Private* d;
