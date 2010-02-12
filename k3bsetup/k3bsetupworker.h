@@ -26,6 +26,9 @@ namespace Setup {
 class Worker : public QObject
 {
     Q_OBJECT
+    
+public:
+    Worker();
 
 public slots:
     /**
@@ -35,7 +38,7 @@ public slots:
      * @param programs list of the programs which will have updated permissions. Each element
      *                 of the list is a @see K3b::Setup::ProgramItem object
      */
-    ActionReply save(const QVariantMap &args);
+    ActionReply save( QVariantMap args );
 
 };
 

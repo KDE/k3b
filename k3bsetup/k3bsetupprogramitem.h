@@ -1,7 +1,7 @@
 /*
  *
- * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
- * Copyright (C) 2010 Dario Freddi <drf@kde.org>
+ * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
+ * Copyright (C)      2010 Dario Freddi <drf@kde.org>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -16,7 +16,6 @@
 #ifndef _K3BSETUPPROGRAMITEM_H_
 #define _K3BSETUPPROGRAMITEM_H_
 
-#include <QDBusArgument>
 #include <QMetaType>
 #include <QString>
 
@@ -38,8 +37,6 @@ public:
 
 Q_DECLARE_METATYPE( K3b::Setup::ProgramItem )
 
-QDBusArgument& operator<<( QDBusArgument& argument, const K3b::Setup::ProgramItem& item );
-const QDBusArgument& operator>>( const QDBusArgument& argument, K3b::Setup::ProgramItem& item );
 QDataStream& operator<<( QDataStream& stream, const K3b::Setup::ProgramItem& item );
 const QDataStream& operator>>( QDataStream& stream, K3b::Setup::ProgramItem& item );
 

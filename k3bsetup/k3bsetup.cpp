@@ -22,9 +22,6 @@
 #include "k3bexternalbinmanager.h"
 
 #include <QCheckBox>
-#include <QDBusConnection>
-#include <QDBusMessage>
-#include <QDBusMetaType>
 #include <QFile>
 #include <QHBoxLayout>
 #include <QHeaderView>
@@ -72,6 +69,9 @@ K3bSetup::K3bSetup( QWidget *parent, const QVariantList& )
 {
     d = new Private();
     d->config = new KConfig( "k3bsetuprc" );
+    
+    qRegisterMetaType<K3b::Setup::ProgramItem>();
+    qRegisterMetaTypeStreamOperators<K3b::Setup::ProgramItem>( "K3b::Setup::ProgramItem" );
 
     KAboutData* aboutData = new KAboutData("k3bsetup", 0,
                                            ki18n("K3bSetup"), "2.0",
@@ -126,10 +126,6 @@ K3bSetup::K3bSetup( QWidget *parent, const QVariantList& )
     m_viewDevices->header()->setResizeMode( QHeaderView::ResizeToContents );
     m_viewPrograms->setModel( d->programsModel );
     m_viewPrograms->header()->setResizeMode( QHeaderView::ResizeToContents );
-    
-    // Register ProgramItem as meta type
-    // to be able to send it through D-BUS
-    qDBusRegisterMetaType<K3b::Setup::ProgramItem>();
     
     setNeedsAuthorization(true);
 

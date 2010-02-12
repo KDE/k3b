@@ -18,6 +18,7 @@
 
 #include <QFile>
 #include <QString>
+#include <QStringList>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -81,8 +82,14 @@ bool updateProgramPermissions( struct group* g, const QString& path, bool suid )
 
 namespace K3b {
 namespace Setup {
+
+Worker::Worker()
+{
+    qRegisterMetaType<ProgramItem>();
+    qRegisterMetaTypeStreamOperators<ProgramItem>( "K3b::Setup::ProgramItem" );
+}
   
-ActionReply Worker::save(const QVariantMap &args)
+ActionReply Worker::save( QVariantMap args )
 {
     QString burningGroup = args["burningGroup"].toString();
     QStringList devices = args["devices"].toStringList();
@@ -99,21 +106,20 @@ ActionReply Worker::save(const QVariantMap &args)
     
     Q_FOREACH( const QString& dev, devices )
     {
-	if( updateDevicePermissions( g, dev ) )
-	    updated.push_back( dev );
-	else
-	    failedToUpdate.push_back( dev );
+        if( updateDevicePermissions( g, dev ) )
+            updated.push_back( dev );
+        else
+            failedToUpdate.push_back( dev );
     }
     
     Q_FOREACH( const QVariant& v, programs )
     {
-	ProgramItem program;
-	v.value<QDBusArgument>() >> program;
-	
-	if( updateProgramPermissions( g, program.m_path, program.m_needSuid ) )
-	    updated.push_back( program.m_path );
-	else
-	    failedToUpdate.push_back( program.m_path );
+        ProgramItem program = v.value<ProgramItem>();
+        
+        if( !program.m_path.isEmpty() && updateProgramPermissions( g, program.m_path, program.m_needSuid ) )
+            updated.push_back( program.m_path );
+        else
+            failedToUpdate.push_back( program.m_path );
     }
     
     ActionReply reply = ActionReply::SuccessReply;
