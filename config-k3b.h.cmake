@@ -18,3 +18,7 @@
 #define K3B_VERSION_STRING "${K3B_VERSION_STRING}"
 
 #cmakedefine ENABLE_HAL_SUPPORT
+
+#cmakedefine HAVE_BYTESWAP_H 1
+
+#cmakedefine WORDS_BIGENDIAN 1
