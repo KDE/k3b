@@ -266,7 +266,7 @@ KUrl::List K3b::AudioTrackAddingDialog::extractUrlList( const KUrl::List& urls )
             it = allUrls.erase( it );
             // add all files in the dir
             QDir dir(fi.filePath());
-            const QStringList entries = dir.entryList( QDir::Files );
+            const QStringList entries = dir.entryList( QDir::Files, QDir::Name | QDir::LocaleAware );
             KUrl::List::iterator oldIt = it;
             // add all files into the list after the current item
             for( QStringList::ConstIterator dirIt = entries.constBegin();

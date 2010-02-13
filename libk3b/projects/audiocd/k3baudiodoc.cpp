@@ -221,7 +221,7 @@ KUrl::List K3b::AudioDoc::extractUrlList( const KUrl::List& urls )
             it = allUrls.erase( it );
             // add all files in the dir
             QDir dir(fi.filePath());
-            QStringList entries = dir.entryList( QDir::Files );
+            QStringList entries = dir.entryList( QDir::Files, QDir::Name );
             KUrl::List::iterator oldIt = it;
             // add all files into the list after the current item
             for( QStringList::iterator dirIt = entries.begin();
