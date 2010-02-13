@@ -198,7 +198,6 @@ set(k3b_SRCS
   k3bdebuggingoutputfile.cpp 
   k3bappdevicemanager.cpp 
   k3bmediaselectioncombobox.cpp 
-  k3btooltip.cpp 
   k3bwidgetshoweffect.cpp 
   k3bmediaselectiondialog.cpp 
   k3bdiskinfoview.cpp 
@@ -225,7 +224,6 @@ set(k3b_bin_SRCS
 if(ENABLE_DVD_RIPPING)
   set(k3b_videodvd_SRCS
     rip/videodvd/k3bvideodvdrippingview.cpp 
-    rip/videodvd/k3bvideodvdrippingtitlelistview.cpp 
     rip/videodvd/k3bvideodvdrippingjob.cpp 
     rip/videodvd/k3bvideodvdrippingwidget.cpp 
     rip/videodvd/k3bvideodvdrippingdialog.cpp 
