@@ -1,5 +1,6 @@
 2.0
 ===
+Changes (since 1.0.5):
  * Port to KDE 4
  * Always allow manual writing speed selection.
  * Use proper toolbars instead of the toolboxes -> nicer layouting with different styles
@@ -18,6 +19,12 @@
  * Support for Blu-Ray writing
  * Support for DVD and Blu-Ray writing via cdrecord
  * New audio ripping pattern %e which is replaced by the file extension
+ 
+Changes (since 2.0-beta1):
+ * K3bSetup ported from PolicyKit to KAuth framework
+ 
+Bugfixes (since 2.0-beta1):
+ * Crash on start of Audio Ripping Dialog (226595)
 
 2.0-beta1 (1.70)
 ================

@@ -176,16 +176,16 @@ K3b::AudioConvertingOptionWidget::AudioConvertingOptionWidget( QWidget* parent )
 
     // check the available encoding plugins
     QList<K3b::Plugin*> fl = k3bcore->pluginManager()->plugins( "AudioEncoder" );
-    for( QList<K3b::Plugin *>::const_iterator it = fl.constBegin();
-        it != fl.constEnd(); ++it ) {
-        AudioEncoder* f = (AudioEncoder*)(*it);
-        QStringList exL = f->extensions();
+    for( QList<K3b::Plugin *>::const_iterator it = fl.constBegin(); it != fl.constEnd(); ++it ) {
+        if( AudioEncoder* encoder = qobject_cast<AudioEncoder*>( *it ) ) {
+            QStringList ext = encoder->extensions();
 
-        for( QStringList::const_iterator exIt = exL.constBegin();
-            exIt != exL.constEnd(); ++exIt ) {
-            m_comboFileType->addItem( f->fileTypeComment(*exIt) );
-            d->encoders.append( f );
-            d->extensions.append( *exIt );
+            for( QStringList::const_iterator exIt = ext.constBegin();
+                exIt != ext.constEnd(); ++exIt ) {
+                m_comboFileType->addItem( encoder->fileTypeComment(*exIt) );
+                d->encoders.append( encoder );
+                d->extensions.append( *exIt );
+            }
         }
     }
 
