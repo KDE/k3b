@@ -1,7 +1,8 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
- *           (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ * Copyright (C)      2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ * Copyright (C)      2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -58,10 +59,10 @@ namespace K3b {
 
         Device::MediaTypes supportedMediaTypes() const;
 
-        bool hideFirstTrack() const { return m_hideFirstTrack; }
+        bool hideFirstTrack() const;
         int numOfTracks() const;
 
-        bool normalize() const { return m_normalize; }
+        bool normalize() const;
 
         AudioTrack* firstTrack() const;
         AudioTrack* lastTrack() const;
@@ -82,24 +83,24 @@ namespace K3b {
         Msf length() const;
 
         // CD-Text
-        bool cdText() const { return m_cdText; }
-        QString title() const { return m_cdTextData.title(); }
-        QString artist() const { return m_cdTextData.performer(); }
-        QString disc_id() const { return m_cdTextData.discId(); }
-        QString arranger() const { return m_cdTextData.arranger(); }
-        QString songwriter() const { return m_cdTextData.songwriter(); }
-        QString composer() const { return m_cdTextData.composer(); }
-        QString upc_ean() const { return m_cdTextData.upcEan(); }
-        QString cdTextMessage() const { return m_cdTextData.message(); }
+        bool cdText() const;
+        QString title() const;
+        QString artist() const;
+        QString disc_id() const;
+        QString arranger() const;
+        QString songwriter() const;
+        QString composer() const;
+        QString upc_ean() const;
+        QString cdTextMessage() const;
 
         /**
          * Create complete CD-Text including the tracks' data.
          */
         Device::CdText cdTextData() const;
 
-        int audioRippingParanoiaMode() const { return m_audioRippingParanoiaMode; }
-        int audioRippingRetries() const { return m_audioRippingRetries; }
-        bool audioRippingIgnoreReadErrors() const { return m_audioRippingIgnoreReadErrors; }
+        int audioRippingParanoiaMode() const;
+        int audioRippingRetries() const;
+        bool audioRippingIgnoreReadErrors() const;
 
         /**
          * Represent the structure of the doc as CD Table of Contents.
@@ -107,11 +108,6 @@ namespace K3b {
         Device::Toc toToc() const;
 
         BurnJob* newBurnJob( JobHandler*, QObject* parent = 0 );
-
-        /**
-         * Shows dialogs.
-         */
-        void informAboutNotFoundFiles();
 
         /**
          * returns the new after track, ie. the the last added track or null if
@@ -140,6 +136,13 @@ namespace K3b {
          */
         AudioDecoder* getDecoderForUrl( const KUrl& url, bool* reused = 0 );
 
+        /**
+         * Transforms given url list into flat file list.
+         * Each directory and M3U playlist is expanded into the files.
+         * Note: directories are not expanded recursively.
+         */
+        static KUrl::List extractUrlList( const KUrl::List& urls );
+
         static bool readPlaylistFile( const KUrl& url, KUrl::List& playlist );
 
     public Q_SLOTS:
@@ -158,11 +161,11 @@ namespace K3b {
         void removeTrack( AudioTrack* );
         void moveTrack( AudioTrack* track, AudioTrack* after );
 
-        void setHideFirstTrack( bool b ) { m_hideFirstTrack = b; }
-        void setNormalize( bool b ) { m_normalize = b; }
+        void setHideFirstTrack( bool b );
+        void setNormalize( bool b );
 
         // CD-Text
-        void writeCdText( bool b ) { m_cdText = b; }
+        void writeCdText( bool b );
         void setTitle( const QString& v );
         void setArtist( const QString& v );
         void setPerformer( const QString& v );
@@ -174,11 +177,9 @@ namespace K3b {
         void setCdTextMessage( const QString& v );
 
         // Audio-CD Ripping
-        void setAudioRippingParanoiaMode( int i ) { m_audioRippingParanoiaMode = i; }
-        void setAudioRippingRetries( int r ) { m_audioRippingRetries = r; }
-        void setAudioRippingIgnoreReadErrors( bool b ) { m_audioRippingIgnoreReadErrors = b; }
-
-        void removeCorruptTracks();
+        void setAudioRippingParanoiaMode( int i );
+        void setAudioRippingRetries( int r );
+        void setAudioRippingIgnoreReadErrors( bool b );
 
     private Q_SLOTS:
         void slotTrackChanged( K3b::AudioTrack* );
@@ -209,12 +210,6 @@ namespace K3b {
         AudioTrack* createTrack( const KUrl& url );
 
         /**
-         * Handle directories and M3u files
-         */
-        KUrl::List extractUrlList( const KUrl::List& urls );
-        // ---------------------------------------------------------
-
-        /**
          * Used by AudioTrack to update the track list
          */
         void setFirstTrack( AudioTrack* track );
@@ -228,34 +223,6 @@ namespace K3b {
          */
         void decreaseDecoderUsage( AudioDecoder* );
         void increaseDecoderUsage( AudioDecoder* );
-
-        AudioTrack* m_firstTrack;
-        AudioTrack* m_lastTrack;
-
-        bool m_hideFirstTrack;
-        bool m_normalize;
-
-        KUrl::List m_notFoundFiles;
-        KUrl::List m_unknownFileFormatFiles;
-
-        // CD-Text
-        // --------------------------------------------------
-        Device::CdText m_cdTextData;
-        bool m_cdText;
-        // --------------------------------------------------
-
-        // Audio ripping
-        int m_audioRippingParanoiaMode;
-        int m_audioRippingRetries;
-        bool m_audioRippingIgnoreReadErrors;
-
-        //
-        // decoder housekeeping
-        // --------------------------------------------------
-        // used to check if we may delete a decoder
-        QMap<AudioDecoder*, int> m_decoderUsageCounterMap;
-        // used to check if we already have a decoder for a specific file
-        QMap<QString, AudioDecoder*> m_decoderPresenceMap;
 
         class Private;
         Private* d;

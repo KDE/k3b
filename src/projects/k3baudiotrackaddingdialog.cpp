@@ -44,7 +44,7 @@ K3b::AudioTrackAddingDialog::AudioTrackAddingDialog( const KUrl::List& urls,
                                                      AudioDataSource* afterSource,
                                                      QWidget* parent )
     : KDialog( parent),
-      m_urls( extractUrlList( urls ) ),
+      m_urls( AudioDoc::extractUrlList( urls ) ),
       m_doc( doc ),
       m_trackAfter( afterTrack ),
       m_parentTrack( parentTrack ),
@@ -249,43 +249,6 @@ void K3b::AudioTrackAddingDialog::slotCancel()
     m_bCanceled = true;
     m_analyserJob->cancel();
     reject();
-}
-
-
-KUrl::List K3b::AudioTrackAddingDialog::extractUrlList( const KUrl::List& urls )
-{
-    KUrl::List allUrls = urls;
-    KUrl::List urlsFromPlaylist;
-    KUrl::List::iterator it = allUrls.begin();
-    while( it != allUrls.end() ) {
-
-        const KUrl& url = *it;
-        QFileInfo fi( url.toLocalFile() );
-
-        if( fi.isDir() ) {
-            it = allUrls.erase( it );
-            // add all files in the dir
-            QDir dir(fi.filePath());
-            const QStringList entries = dir.entryList( QDir::Files, QDir::Name | QDir::LocaleAware );
-            KUrl::List::iterator oldIt = it;
-            // add all files into the list after the current item
-            for( QStringList::ConstIterator dirIt = entries.constBegin();
-                 dirIt != entries.constEnd(); ++dirIt )
-                it = allUrls.insert( oldIt, KUrl( dir.absolutePath() + "/" + *dirIt ) );
-        }
-        else if( K3b::AudioDoc::readPlaylistFile( url, urlsFromPlaylist ) ) {
-            it = allUrls.erase( it );
-            KUrl::List::iterator oldIt = it;
-            // add all files into the list after the current item
-            for( KUrl::List::iterator dirIt = urlsFromPlaylist.begin();
-                 dirIt != urlsFromPlaylist.end(); ++dirIt )
-                it = allUrls.insert( oldIt, *dirIt );
-        }
-        else
-            ++it;
-    }
-
-    return allUrls;
 }
 
 #include "k3baudiotrackaddingdialog.moc"

@@ -1,7 +1,8 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
- *           (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ * Copyright (C)      2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ * Copyright (C)      2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -38,7 +39,6 @@
 #include <KConfig>
 #include <KDebug>
 #include <KLocale>
-#include <KMessageBox>
 #include <kio/global.h>
 #include <KStandardDirs>
 
@@ -46,22 +46,49 @@
 class K3b::AudioDoc::Private
 {
 public:
-    Private() {
-        cdTextValidator = new K3b::CdTextValidator();
+    Private()
+    :
+        firstTrack( 0 ),
+        lastTrack( 0 ),
+        cdTextValidator( new K3b::CdTextValidator() )
+    {
     }
 
     ~Private() {
         delete cdTextValidator;
     }
 
+    AudioTrack* firstTrack;
+    AudioTrack* lastTrack;
+
+    bool hideFirstTrack;
+    bool normalize;
+
+    // CD-Text
+    // --------------------------------------------------
+    Device::CdText cdTextData;
+    bool cdText;
+    // --------------------------------------------------
+
+    // Audio ripping
+    int audioRippingParanoiaMode;
+    int audioRippingRetries;
+    bool audioRippingIgnoreReadErrors;
+
+    //
+    // decoder housekeeping
+    // --------------------------------------------------
+    // used to check if we may delete a decoder
+    QMap<AudioDecoder*, int> decoderUsageCounterMap;
+    // used to check if we already have a decoder for a specific file
+    QMap<QString, AudioDecoder*> decoderPresenceMap;
+
     K3b::CdTextValidator* cdTextValidator;
 };
 
 
 K3b::AudioDoc::AudioDoc( QObject* parent )
-    : K3b::Doc( parent ),
-      m_firstTrack(0),
-      m_lastTrack(0)
+    : K3b::Doc( parent )
 {
     d = new Private;
 }
@@ -71,9 +98,9 @@ K3b::AudioDoc::~AudioDoc()
     // delete all tracks
     int i = 1;
     int cnt = numOfTracks();
-    while( m_firstTrack ) {
+    while( d->firstTrack ) {
         kDebug() << "(K3b::AudioDoc::AudioDoc) deleting track " << i << " of " << cnt;
-        delete m_firstTrack->take();
+        delete d->firstTrack->take();
         kDebug() << "(K3b::AudioDoc::AudioDoc) deleted.";
         ++i;
     }
@@ -84,13 +111,13 @@ K3b::AudioDoc::~AudioDoc()
 bool K3b::AudioDoc::newDocument()
 {
     clear();
-    m_normalize = false;
-    m_hideFirstTrack = false;
-    m_cdText = false;
-    m_cdTextData.clear();
-    m_audioRippingParanoiaMode = 0;
-    m_audioRippingRetries = 5;
-    m_audioRippingIgnoreReadErrors = true;
+    d->normalize = false;
+    d->hideFirstTrack = false;
+    d->cdText = false;
+    d->cdTextData.clear();
+    d->audioRippingParanoiaMode = 0;
+    d->audioRippingRetries = 5;
+    d->audioRippingIgnoreReadErrors = true;
 
     return K3b::Doc::newDocument();
 }
@@ -99,15 +126,15 @@ bool K3b::AudioDoc::newDocument()
 void K3b::AudioDoc::clear()
 {
     // delete all tracks
-    while( m_firstTrack )
-        delete m_firstTrack->take();
+    while( d->firstTrack )
+        delete d->firstTrack->take();
 }
 
 
 QString K3b::AudioDoc::name() const
 {
-    if( !m_cdTextData.title().isEmpty() )
-        return m_cdTextData.title();
+    if( !d->cdTextData.title().isEmpty() )
+        return d->cdTextData.title();
     else
         return K3b::Doc::name();
 }
@@ -115,26 +142,26 @@ QString K3b::AudioDoc::name() const
 
 K3b::AudioTrack* K3b::AudioDoc::firstTrack() const
 {
-    return m_firstTrack;
+    return d->firstTrack;
 }
 
 
 K3b::AudioTrack* K3b::AudioDoc::lastTrack() const
 {
-    return m_lastTrack;
+    return d->lastTrack;
 }
 
 
 // this one is called by K3b::AudioTrack to update the list
 void K3b::AudioDoc::setFirstTrack( K3b::AudioTrack* track )
 {
-    m_firstTrack = track;
+    d->firstTrack = track;
 }
 
 // this one is called by K3b::AudioTrack to update the list
 void K3b::AudioDoc::setLastTrack( K3b::AudioTrack* track )
 {
-    m_lastTrack = track;
+    d->lastTrack = track;
 }
 
 
@@ -148,13 +175,67 @@ KIO::filesize_t K3b::AudioDoc::size() const
 K3b::Msf K3b::AudioDoc::length() const
 {
     K3b::Msf length = 0;
-    K3b::AudioTrack* track = m_firstTrack;
+    K3b::AudioTrack* track = d->firstTrack;
     while( track ) {
         length += track->length();
         track = track->next();
     }
 
     return length;
+}
+
+
+bool K3b::AudioDoc::cdText() const
+{
+    return d->cdText;
+}
+
+
+QString K3b::AudioDoc::title() const
+{
+    return d->cdTextData.title();
+}
+
+
+QString K3b::AudioDoc::artist() const
+{
+    return d->cdTextData.performer();
+}
+
+
+QString K3b::AudioDoc::disc_id() const
+{
+    return d->cdTextData.discId();
+}
+
+
+QString K3b::AudioDoc::arranger() const
+{
+    return d->cdTextData.arranger();
+}
+
+
+QString K3b::AudioDoc::songwriter() const
+{
+    return d->cdTextData.songwriter();
+}
+
+
+QString K3b::AudioDoc::composer() const
+{
+    return d->cdTextData.composer();
+}
+
+
+QString K3b::AudioDoc::upc_ean() const
+{
+    return d->cdTextData.upcEan();
+}
+
+
+QString K3b::AudioDoc::cdTextMessage() const
+{
+    return d->cdTextData.message();
 }
 
 
@@ -192,55 +273,39 @@ void K3b::AudioDoc::addTracks( const KUrl::List& urls, int position )
     }
 
     emit changed();
-
-    informAboutNotFoundFiles();
 }
 
 
 KUrl::List K3b::AudioDoc::extractUrlList( const KUrl::List& urls )
 {
-    KUrl::List allUrls = urls;
-    KUrl::List urlsFromPlaylist;
-    KUrl::List::iterator it = allUrls.begin();
-    while( it != allUrls.end() ) {
+    KUrl::List files;
+    
+    Q_FOREACH( const KUrl& url, urls ) {
 
-        const KUrl& url = *it;
         QFileInfo fi( url.toLocalFile() );
 
-        if( !url.isLocalFile() ) {
-            kDebug() << url.toLocalFile() << " no local file";
-            it = allUrls.erase( it );
-            m_notFoundFiles.append( url );
-        }
-        else if( !fi.exists() ) {
-            it = allUrls.erase( it );
-            kDebug() << url.toLocalFile() << " not found";
-            m_notFoundFiles.append( url );
-        }
-        else if( fi.isDir() ) {
-            it = allUrls.erase( it );
+        if( fi.isDir() ) {
             // add all files in the dir
-            QDir dir(fi.filePath());
-            QStringList entries = dir.entryList( QDir::Files, QDir::Name );
-            KUrl::List::iterator oldIt = it;
-            // add all files into the list after the current item
-            for( QStringList::iterator dirIt = entries.begin();
-                 dirIt != entries.end(); ++dirIt )
-                it = allUrls.insert( oldIt, KUrl( dir.absolutePath() + "/" + *dirIt ) );
+            QDir dir( fi.filePath() );
+            
+            const QStringList entries = dir.entryList( QDir::Files, QDir::Name | QDir::LocaleAware );
+            Q_FOREACH( const QString& entry, entries )
+            {
+                files.push_back( KUrl( dir.filePath( entry ) ) );
+            }
         }
-        else if( readPlaylistFile( url, urlsFromPlaylist ) ) {
-            it = allUrls.erase( it );
-            KUrl::List::iterator oldIt = it;
-            // add all files into the list after the current item
-            for( KUrl::List::iterator dirIt = urlsFromPlaylist.begin();
-                 dirIt != urlsFromPlaylist.end(); ++dirIt )
-                it = allUrls.insert( oldIt, *dirIt );
+        else {
+            KUrl::List playlistFiles;
+            if( readPlaylistFile( url, playlistFiles ) ) {
+                files += playlistFiles;
+            }
+            else {
+                files.push_back( url );
+            }
         }
-        else
-            ++it;
     }
 
-    return allUrls;
+    return files;
 }
 
 
@@ -301,7 +366,6 @@ void K3b::AudioDoc::addSources( K3b::AudioTrack* parent,
         }
     }
 
-    informAboutNotFoundFiles();
     kDebug() << "(K3b::AudioDoc::addSources) finished.";
 }
 
@@ -309,7 +373,7 @@ void K3b::AudioDoc::addSources( K3b::AudioTrack* parent,
 K3b::AudioTrack* K3b::AudioDoc::importCueFile( const QString& cuefile, K3b::AudioTrack* after, K3b::AudioDecoder* decoder )
 {
     if( !after )
-        after = m_lastTrack;
+        after = d->lastTrack;
 
     kDebug() << "(K3b::AudioDoc::importCueFile( " << cuefile << ", " << after << ")";
     K3b::CueFileParser parser( cuefile );
@@ -381,8 +445,8 @@ K3b::AudioDecoder* K3b::AudioDoc::getDecoderForUrl( const KUrl& url, bool* reuse
     K3b::AudioDecoder* decoder = 0;
 
     // check if we already have a proper decoder
-    if( m_decoderPresenceMap.contains( url.toLocalFile() ) ) {
-        decoder = m_decoderPresenceMap[url.toLocalFile()];
+    if( d->decoderPresenceMap.contains( url.toLocalFile() ) ) {
+        decoder = d->decoderPresenceMap[url.toLocalFile()];
         *reused = true;
     }
     else if( (decoder = K3b::AudioDecoderFactory::createDecoder( url )) ) {
@@ -400,7 +464,6 @@ K3b::AudioDecoder* K3b::AudioDoc::getDecoderForUrl( const KUrl& url, bool* reuse
 K3b::AudioFile* K3b::AudioDoc::createAudioFile( const KUrl& url )
 {
     if( !QFile::exists( url.toLocalFile() ) ) {
-        m_notFoundFiles.append( url.toLocalFile() );
         kDebug() << "(K3b::AudioDoc) could not find file " << url.toLocalFile();
         return 0;
     }
@@ -413,7 +476,6 @@ K3b::AudioFile* K3b::AudioDoc::createAudioFile( const KUrl& url )
         return new K3b::AudioFile( decoder, this );
     }
     else {
-        m_unknownFileFormatFiles.append( url.toLocalFile() );
         kDebug() << "(K3b::AudioDoc) unknown file type in file " << url.toLocalFile();
         return 0;
     }
@@ -442,7 +504,7 @@ void K3b::AudioDoc::addTrack( const KUrl& url, int position )
 
 K3b::AudioTrack* K3b::AudioDoc::getTrack( int trackNum )
 {
-    K3b::AudioTrack* track = m_firstTrack;
+    K3b::AudioTrack* track = d->firstTrack;
     int i = 1;
     while( track ) {
         if( i == trackNum )
@@ -460,16 +522,16 @@ void K3b::AudioDoc::addTrack( K3b::AudioTrack* track, int position )
     kDebug() << "(" << track << "," << position << ")";
     
     track->m_parent = this;
-    if( !m_firstTrack )
-        m_firstTrack = m_lastTrack = track;
+    if( !d->firstTrack )
+        d->firstTrack = d->lastTrack = track;
     else if( position == 0 )
-        track->moveAhead( m_firstTrack );
+        track->moveAhead( d->firstTrack );
     else {
         K3b::AudioTrack* after = getTrack( position );
         if( after )
             track->moveAfter( after );
         else
-            track->moveAfter( m_lastTrack );  // just to be sure it's anywhere...
+            track->moveAfter( d->lastTrack );  // just to be sure it's anywhere...
     }
 
     emit changed();
@@ -484,6 +546,24 @@ void K3b::AudioDoc::removeTrack( K3b::AudioTrack* track )
 void K3b::AudioDoc::moveTrack( K3b::AudioTrack* track, K3b::AudioTrack* after )
 {
     track->moveAfter( after );
+}
+
+
+void K3b::AudioDoc::setHideFirstTrack( bool b )
+{
+    d->hideFirstTrack = b;
+}
+
+
+void K3b::AudioDoc::setNormalize( bool b )
+{
+    d->normalize = b;
+}
+
+
+void K3b::AudioDoc::writeCdText( bool b )
+{
+    d->cdText = b;
 }
 
 
@@ -699,8 +779,6 @@ bool K3b::AudioDoc::loadDocumentData( QDomElement* root )
         }
     }
 
-    informAboutNotFoundFiles();
-
     setModified(false);
 
     return true;
@@ -903,62 +981,27 @@ bool K3b::AudioDoc::saveDocumentData( QDomElement* docElem )
 }
 
 
+bool K3b::AudioDoc::hideFirstTrack() const
+{
+    return d->hideFirstTrack;
+}
+
+
 int K3b::AudioDoc::numOfTracks() const
 {
-    return ( m_lastTrack ? m_lastTrack->trackNumber() : 0 );
+    return ( d->lastTrack ? d->lastTrack->trackNumber() : 0 );
+}
+
+
+bool K3b::AudioDoc::normalize() const
+{
+    return d->normalize;
 }
 
 
 K3b::BurnJob* K3b::AudioDoc::newBurnJob( K3b::JobHandler* hdl, QObject* parent )
 {
     return new K3b::AudioJob( this, hdl, parent );
-}
-
-
-void K3b::AudioDoc::informAboutNotFoundFiles()
-{
-    if( !m_notFoundFiles.isEmpty() ) {
-        QStringList l;
-        for( KUrl::List::const_iterator it = m_notFoundFiles.constBegin();
-             it != m_notFoundFiles.constEnd(); ++it )
-            l.append( (*it).toLocalFile() );
-        KMessageBox::informationList( qApp->activeWindow(),
-                                      i18n("Could not find the following files:"),
-                                      l,
-                                      i18n("Not Found") );
-
-        m_notFoundFiles.clear();
-    }
-    if( !m_unknownFileFormatFiles.isEmpty() ) {
-        QStringList l;
-        for( KUrl::List::const_iterator it = m_unknownFileFormatFiles.constBegin();
-             it != m_unknownFileFormatFiles.constEnd(); ++it )
-            l.append( (*it).toLocalFile() );
-        KMessageBox::informationList( qApp->activeWindow(),
-                                      i18n("<p>Unable to handle the following files due to an unsupported format:"
-                                           "<p>You may manually convert these audio files to wave using another "
-                                           "application supporting the audio format and then add the wave files "
-                                           "to the K3b project."),
-                                      l,
-                                      i18n("Unsupported Format") );
-
-        m_unknownFileFormatFiles.clear();
-    }
-}
-
-
-
-void K3b::AudioDoc::removeCorruptTracks()
-{
-//   K3b::AudioTrack* track = m_tracks->first();
-//   while( track ) {
-//     if( track->status() != 0 ) {
-//       removeTrack(track);
-//       track = m_tracks->current();
-//     }
-//     else
-//       track = m_tracks->next();
-//   }
 }
 
 
@@ -989,22 +1032,22 @@ void K3b::AudioDoc::slotTrackRemoved( K3b::AudioTrack* track )
 void K3b::AudioDoc::increaseDecoderUsage( K3b::AudioDecoder* decoder )
 {
     kDebug() << "(K3b::AudioDoc::increaseDecoderUsage)";
-    if( !m_decoderUsageCounterMap.contains( decoder ) ) {
-        m_decoderUsageCounterMap[decoder] = 1;
-        m_decoderPresenceMap[decoder->filename()] = decoder;
+    if( !d->decoderUsageCounterMap.contains( decoder ) ) {
+        d->decoderUsageCounterMap[decoder] = 1;
+        d->decoderPresenceMap[decoder->filename()] = decoder;
     }
     else
-        m_decoderUsageCounterMap[decoder]++;
+        d->decoderUsageCounterMap[decoder]++;
     kDebug() << "(K3b::AudioDoc::increaseDecoderUsage) finished";
 }
 
 
 void K3b::AudioDoc::decreaseDecoderUsage( K3b::AudioDecoder* decoder )
 {
-    m_decoderUsageCounterMap[decoder]--;
-    if( m_decoderUsageCounterMap[decoder] <= 0 ) {
-        m_decoderUsageCounterMap.remove(decoder);
-        m_decoderPresenceMap.remove(decoder->filename());
+    d->decoderUsageCounterMap[decoder]--;
+    if( d->decoderUsageCounterMap[decoder] <= 0 ) {
+        d->decoderUsageCounterMap.remove(decoder);
+        d->decoderPresenceMap.remove(decoder->filename());
         delete decoder;
     }
 }
@@ -1012,7 +1055,7 @@ void K3b::AudioDoc::decreaseDecoderUsage( K3b::AudioDecoder* decoder )
 
 K3b::Device::CdText K3b::AudioDoc::cdTextData() const
 {
-    K3b::Device::CdText text( m_cdTextData );
+    K3b::Device::CdText text( d->cdTextData );
     K3b::AudioTrack* track = firstTrack();
     int i = 0;
     while( track ) {
@@ -1020,6 +1063,24 @@ K3b::Device::CdText K3b::AudioDoc::cdTextData() const
         track = track->next();
     }
     return text;
+}
+
+
+int K3b::AudioDoc::audioRippingParanoiaMode() const
+{
+    return d->audioRippingParanoiaMode;
+}
+
+
+int K3b::AudioDoc::audioRippingRetries() const
+{
+    return d->audioRippingRetries;
+}
+
+
+bool K3b::AudioDoc::audioRippingIgnoreReadErrors() const
+{
+    return d->audioRippingIgnoreReadErrors;
 }
 
 
@@ -1042,7 +1103,7 @@ K3b::Device::Toc K3b::AudioDoc::toToc() const
 
 void K3b::AudioDoc::setTitle( const QString& v )
 {
-    m_cdTextData.setTitle( v );
+    d->cdTextData.setTitle( v );
     emit changed();
 }
 
@@ -1057,7 +1118,7 @@ void K3b::AudioDoc::setPerformer( const QString& v )
 {
     QString s( v );
     d->cdTextValidator->fixup( s );
-    m_cdTextData.setPerformer( s );
+    d->cdTextData.setPerformer( s );
     emit changed();
 }
 
@@ -1066,7 +1127,7 @@ void K3b::AudioDoc::setDisc_id( const QString& v )
 {
     QString s( v );
     d->cdTextValidator->fixup( s );
-    m_cdTextData.setDiscId( s );
+    d->cdTextData.setDiscId( s );
     emit changed();
 }
 
@@ -1075,7 +1136,7 @@ void K3b::AudioDoc::setArranger( const QString& v )
 {
     QString s( v );
     d->cdTextValidator->fixup( s );
-    m_cdTextData.setArranger( s );
+    d->cdTextData.setArranger( s );
     emit changed();
 }
 
@@ -1084,7 +1145,7 @@ void K3b::AudioDoc::setSongwriter( const QString& v )
 {
     QString s( v );
     d->cdTextValidator->fixup( s );
-    m_cdTextData.setSongwriter( s );
+    d->cdTextData.setSongwriter( s );
     emit changed();
 }
 
@@ -1093,7 +1154,7 @@ void K3b::AudioDoc::setComposer( const QString& v )
 {
     QString s( v );
     d->cdTextValidator->fixup( s );
-    m_cdTextData.setComposer( s );
+    d->cdTextData.setComposer( s );
     emit changed();
 }
 
@@ -1102,7 +1163,7 @@ void K3b::AudioDoc::setUpc_ean( const QString& v )
 {
     QString s( v );
     d->cdTextValidator->fixup( s );
-    m_cdTextData.setUpcEan( s );
+    d->cdTextData.setUpcEan( s );
     emit changed();
 }
 
@@ -1111,8 +1172,26 @@ void K3b::AudioDoc::setCdTextMessage( const QString& v )
 {
     QString s( v );
     d->cdTextValidator->fixup( s );
-    m_cdTextData.setMessage( s );
+    d->cdTextData.setMessage( s );
     emit changed();
+}
+
+
+void K3b::AudioDoc::setAudioRippingParanoiaMode( int i )
+{
+    d->audioRippingParanoiaMode = i;
+}
+
+
+void K3b::AudioDoc::setAudioRippingRetries( int r )
+{
+    d->audioRippingRetries = r;
+}
+
+
+void K3b::AudioDoc::setAudioRippingIgnoreReadErrors( bool b )
+{
+    d->audioRippingIgnoreReadErrors = b;
 }
 
 

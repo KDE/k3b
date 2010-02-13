@@ -82,8 +82,6 @@ namespace K3b {
         void blockingInformation( const QString&,
                                   const QString& = QString() ) {}
 
-        static KUrl::List extractUrlList( const KUrl::List& urls );
-
         BusyWidget* m_busyWidget;
         QLabel* m_infoLabel;
 
