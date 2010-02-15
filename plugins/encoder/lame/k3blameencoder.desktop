@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=K3b Lame Mp3 Encoder
 Name[bg]=Lame Mp3 кодиране (K3b)
+Name[ca]=Codificador Mp3 Lame del K3b
 Name[cs]=K3b Lame Mp3 enkodér
 Name[csb]=Kòder Lame Mp3 dlô K3b
 Name[da]=K3b Lame mp3-indkodning
@@ -41,6 +42,7 @@ Name[zh_CN]=K3b Lame Mp3 编码器
 Name[zh_TW]=K3b Lame MP3 編碼器
 Comment=Encoding module to encode MPEG1 Layer III (mp3) files
 Comment[bg]=Кодиращ модул за MPEG1 Layer III (mp3) файлове
+Comment[ca]=Mòdul de codificació per codificar fitxers MPEG 1 Layer III (mp3)
 Comment[csb]=Mòdul kòdërëjący lopczi MPEG1 Layer III (mp3)
 Comment[da]=Indkodningsmodul til MPEG 1 Layer III-filer (mp3)
 Comment[de]=Kodierungsmodul zur Kodierung von MPEG1 Layer III-Dateien (MP3)
