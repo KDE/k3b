@@ -9,6 +9,7 @@ ExcludeServiceTypes=application/x-iso;
 Exec=k3b --data %F
 Name=Create file project with K3b
 Name[ca]=Crea un fitxer de projecte amb el K3b
+Name[ca@valencia]=Crea un fitxer de projecte amb el K3b
 Name[cs]=Vytvořit pomocí K3b souborový projekt...
 Name[csb]=Ùsôdzë lopkòwi projekt z pòmòca K3b
 Name[da]=Opret filprojekt med K3b

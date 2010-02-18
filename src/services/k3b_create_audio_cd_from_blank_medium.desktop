@@ -8,6 +8,7 @@ X-KDE-Priority=TopLevel
 Exec=k3b --device %i --audiocd
 Name=Create Audio CD with K3b
 Name[ca]=Crea un CD d'àudio amb el K3b
+Name[ca@valencia]=Crea un CD d'àudio amb el K3b
 Name[cs]=Vytvořit pomocí K3b zvukové CD...
 Name[csb]=Ùsôdzë CD audio z pòmòcą K3b
 Name[da]=Opret lyd-cd med K3b

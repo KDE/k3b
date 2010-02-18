@@ -8,6 +8,7 @@ MimeType=application/x-cue;
 Exec=k3b --image %F
 Name=Write CD Image with K3b
 Name[ca]=Escriu imatge de CD amb el K3b
+Name[ca@valencia]=Escriu imatge de CD amb el K3b
 Name[cs]=Vypálit pomocí K3b obraz CD...
 Name[csb]=Zapiszë òbrôz CD z pòmòcą K3b
 Name[da]=Brænd cd-image-fil med K3b
