@@ -26,6 +26,7 @@ Changes (since 2.0-beta1):
 Bugfixes (since 2.0-beta1):
  * Crash on start of Audio Ripping Dialog (226595)
  * Fixed ordering of files added to Audio Project (224649)
+ * Fixed too wide Image Burn Dialog when file path was long (225735)
 
 2.0-beta1 (1.70)
 ================
