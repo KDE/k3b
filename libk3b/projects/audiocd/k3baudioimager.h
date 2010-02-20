@@ -21,27 +21,22 @@ class QIODevice;
 
 namespace K3b {
     class AudioDoc;
+    class AudioJobTempData;
 
     class AudioImager : public ThreadJob
     {
         Q_OBJECT
 
     public:
-        AudioImager( AudioDoc*, JobHandler*, QObject* parent = 0 );
+        AudioImager( AudioDoc* doc, AudioJobTempData* tempData, JobHandler* jh, QObject* parent = 0 );
         ~AudioImager();
 
         /**
-         * the data gets written directly into fd instead of the imagefile.
+         * The data gets written directly into fd instead of the imagefiles.
          * Be aware that this only makes sense before starting the job.
          * To disable just set dev to 0
          */
         void writeTo( QIODevice* dev );
-
-        /**
-         * Image path. Should be an empty directory or a non-existing
-         * directory in which case it will be created.
-         */
-        void setImageFilenames( const QStringList& p );
 
         enum ErrorType {
             ERROR_FD_WRITE,

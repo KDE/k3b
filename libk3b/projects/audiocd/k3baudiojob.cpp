@@ -99,7 +99,8 @@ K3b::AudioJob::AudioJob( K3b::AudioDoc* doc, K3b::JobHandler* hdl, QObject* pare
 {
     d = new Private;
 
-    m_audioImager = new K3b::AudioImager( m_doc, this, this );
+    m_tempData = new K3b::AudioJobTempData( m_doc, this );
+    m_audioImager = new K3b::AudioImager( m_doc, m_tempData, this, this );
     connect( m_audioImager, SIGNAL(infoMessage(const QString&, int)),
              this, SIGNAL(infoMessage(const QString&, int)) );
     connect( m_audioImager, SIGNAL(percent(int)),
@@ -112,7 +113,6 @@ K3b::AudioJob::AudioJob( K3b::AudioDoc* doc, K3b::JobHandler* hdl, QObject* pare
              this, SLOT(slotAudioDecoderNextTrack(int, int)) );
 
     m_writer = 0;
-    m_tempData = new K3b::AudioJobTempData( m_doc, this );
 }
 
 
@@ -348,10 +348,6 @@ void K3b::AudioJob::start()
         emit infoMessage( i18n("Creating image files in %1", m_doc->tempDir()), MessageInfo );
         emit newTask( i18n("Creating image files") );
         m_tempData->prepareTempFileNames( doc()->tempDir() );
-        QStringList filenames;
-        for( int i = 1; i <= m_doc->numOfTracks(); ++i )
-            filenames += m_tempData->bufferFileName( i );
-        m_audioImager->setImageFilenames( filenames );
     }
 
     m_audioImager->start();

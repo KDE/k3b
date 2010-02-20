@@ -112,7 +112,8 @@ K3b::MixedJob::MixedJob( K3b::MixedDoc* doc, K3b::JobHandler* hdl, QObject* pare
     connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)),
              this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
-    m_audioImager = new K3b::AudioImager( doc->audioDoc(), this, this );
+    m_tempData = new K3b::AudioJobTempData( m_doc->audioDoc(), this );
+    m_audioImager = new K3b::AudioImager( doc->audioDoc(), m_tempData, this, this );
     connect( m_audioImager, SIGNAL(infoMessage(const QString&, int)),
              this, SIGNAL(infoMessage(const QString&, int)) );
     connect( m_audioImager, SIGNAL(percent(int)), this, SLOT(slotAudioDecoderPercent(int)) );
@@ -126,7 +127,6 @@ K3b::MixedJob::MixedJob( K3b::MixedDoc* doc, K3b::JobHandler* hdl, QObject* pare
 
     m_writer = 0;
     m_tocFile = 0;
-    m_tempData = new K3b::AudioJobTempData( m_doc->audioDoc(), this );
 }
 
 
@@ -282,10 +282,6 @@ void K3b::MixedJob::startFirstCopy()
                                                       m_doc->tempDir() );
 
         m_tempData->prepareTempFileNames( m_doc->tempDir() );
-        QStringList filenames;
-        for( K3b::AudioTrack* track = m_doc->audioDoc()->firstTrack(); track; track = track->next() )
-            filenames += m_tempData->bufferFileName( track );
-        m_audioImager->setImageFilenames( filenames );
 
         if( m_doc->mixedType() != K3b::MixedDoc::DATA_SECOND_SESSION ) {
             createIsoImage();
