@@ -21,10 +21,11 @@ Changes (since 1.0.5):
  * New audio ripping pattern %e which is replaced by the file extension
  
 Changes (since 2.0-beta1):
- * K3bSetup ported from PolicyKit to KAuth framework
+ * K3bSetup ported to KAuth framework
  
 Bugfixes (since 2.0-beta1):
  * Crash on start of Audio Ripping Dialog (226595)
+ * Fixed ordering of files added to Audio Project (224649)
 
 2.0-beta1 (1.70)
 ================
