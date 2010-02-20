@@ -160,7 +160,7 @@ find_library(SAMPLERATE_LIBRARIES samplerate-0)
 endif(WIN32)
 
 ##################  K3b build settings #################################
-include(ConfigureChecks.cmake)
+include(ConfigureChecks)
 
 if(K3B_BUILD_K3BSETUP)
   set(BUILD_K3BSETUP 1)
