@@ -68,8 +68,6 @@ set(k3b_project_SRCS
   projects/k3bvideodvdburndialog.cpp 
   projects/k3bvideodvdview.cpp 
   projects/k3bvcdburndialog.cpp 
-  projects/k3bvcdlistview.cpp 
-  projects/k3bvcdlistviewitem.cpp 
   projects/k3bvcdtrackdialog.cpp 
   projects/k3bvcdview.cpp 
   projects/k3bvcdprojectmodel.cpp

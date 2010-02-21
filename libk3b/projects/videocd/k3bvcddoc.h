@@ -1,17 +1,18 @@
 /*
-*
-* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
-* Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
-*
-* This file is part of the K3b project.
-* Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-* See the file "COPYING" for the exact licensing terms.
-*/
+ *
+ * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
+ * Copyright (C) 2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
 #ifndef K3BVCDDOC_H
 #define K3BVCDDOC_H
@@ -65,30 +66,10 @@ namespace K3b {
             m_vcdImage = s;
         }
 
-/*         VcdTrack* first() */
-/*         { */
-/*             return m_tracks->first(); */
-/*         } */
-/*         VcdTrack* current() const */
-/*         { */
-/*             return m_tracks->current(); */
-/*         } */
-/*         VcdTrack* next() */
-/*         { */
-/*             return m_tracks->next(); */
-/*         } */
-/*         VcdTrack* prev() */
-/*         { */
-/*             return m_tracks->prev(); */
-/*         } */
         VcdTrack* at( uint i )
         {
             return m_tracks->at( i );
         }
-/*         VcdTrack* take( uint i ) */
-/*         { */
-/*             return m_tracks->take( i ); */
-/*         } */
 
         const QList<VcdTrack*>* tracks() const
         {
@@ -126,8 +107,14 @@ namespace K3b {
         void addTrack( K3b::VcdTrack* track, uint position = 0 );
 
         // --- TODO: this should read: removeTrack( VcdTrack* )
-        void removeTrack( K3b::VcdTrack* );
-        void moveTrack( K3b::VcdTrack* track, K3b::VcdTrack* after );
+        void removeTrack( K3b::VcdTrack* track );
+        
+        /**
+         * @arg track - track about to be moved
+         * @arg before - place where track is to be moved.
+         *               If before=0 the track will be moved to the end
+         */
+        void moveTrack( K3b::VcdTrack* track, K3b::VcdTrack* before );
 
     protected Q_SLOTS:
         /** processes queue "urlsToAdd" **/

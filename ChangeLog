@@ -28,6 +28,7 @@ Bugfixes (since 2.0-beta1):
  * Fixed ordering of files added to Audio Project (224649)
  * Fixed too wide Image Burn Dialog when file path was long (225735)
  * Fixed crash when creating image files for AudioCD project (219500)
+ * Fixed crash when manipulating VCD project items (227855)
 
 2.0-beta1 (1.70)
 ================

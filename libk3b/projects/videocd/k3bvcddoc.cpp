@@ -1,17 +1,18 @@
 /*
-*
-* Copyright (C) 2003-2005 Christian Kvasny <chris@k3b.org>
-* Copyright (C) 2007-2008 Sebastian Trueg <trueg@k3b.org>
-*
-* This file is part of the K3b project.
-* Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-* See the file "COPYING" for the exact licensing terms.
-*/
+ *
+ * Copyright (C) 2003-2005 Christian Kvasny <chris@k3b.org>
+ * Copyright (C) 2007-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
 #include "k3bvcddoc.h"
 #include "k3bvcdtrack.h"
@@ -371,9 +372,9 @@ void K3b::VcdDoc::removeTrack( K3b::VcdTrack* track )
     }
 }
 
-void K3b::VcdDoc::moveTrack( K3b::VcdTrack* track, K3b::VcdTrack* after )
+void K3b::VcdDoc::moveTrack( K3b::VcdTrack* track, K3b::VcdTrack* before )
 {
-    if ( track == after )
+    if ( track == before )
         return ;
 
     // take the current item
@@ -385,12 +386,15 @@ void K3b::VcdDoc::moveTrack( K3b::VcdTrack* track, K3b::VcdTrack* after )
 
     emit removedVCDTracks();
 
-    // if after == 0 lastIndexOf returnes -1
-    int pos = (m_tracks->lastIndexOf( after ) + 1);
-
-    emit aboutToAddVCDTracks(pos, 1);
-
-    m_tracks->insert( pos, track );
+    if( before != 0 ) {
+        int pos = m_tracks->lastIndexOf( before );
+        emit aboutToAddVCDTracks(pos, 1);
+        m_tracks->insert( pos, track );
+    }
+    else {
+        emit aboutToAddVCDTracks( m_tracks->count(), 1 );
+        m_tracks->append( track );
+    }
 
     emit addedVCDTracks();
 

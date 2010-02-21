@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
  * Copyright (C) 2009 Arthur Mello <arthur@mandriva.com>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -20,19 +21,19 @@
 #include <KLocale>
 #include <KUrl>
 
-#include <QtCore/QMimeData>
-#include <QtCore/QDataStream>
+#include <QDataStream>
+#include <QMimeData>
 
-using namespace K3b;
+namespace K3b {
 
 class VcdProjectModel::Private
 {
     public:
         Private( VcdProjectModel* parent )
-            : project( 0 ),
+            : doc( 0 ),
             q( parent ) { }
 
-        K3b::VcdDoc* project;
+        VcdDoc* doc;
 
         void _k_aboutToAddRows(int pos, int count)
         {
@@ -58,85 +59,74 @@ class VcdProjectModel::Private
         VcdProjectModel* q;
 };
 
-VcdProjectModel::VcdProjectModel( K3b::VcdDoc* doc, QObject* parent )
-    : QAbstractItemModel( parent ),
+
+VcdProjectModel::VcdProjectModel( VcdDoc* doc, QObject* parent )
+    : QAbstractTableModel( parent ),
     d( new Private(this) )
 {
-    d->project = doc;
+    d->doc = doc;
 
     connect(doc, SIGNAL(aboutToAddVCDTracks(int, int)),
             this, SLOT(_k_aboutToAddRows(int, int)));
-
     connect(doc, SIGNAL(addedVCDTracks()), this, SLOT(_k_addedRows()));
-
     connect(doc, SIGNAL(aboutToRemoveVCDTracks(int, int)),
             this, SLOT(_k_aboutToRemoveRows(int, int)));
-
     connect(doc, SIGNAL(removedVCDTracks()), this, SLOT(_k_removedRows()));
+    
+    setSupportedDragActions( Qt::MoveAction );
 }
+
 
 VcdProjectModel::~VcdProjectModel()
 {
     delete d;
 }
 
-K3b::VcdDoc* VcdProjectModel::project() const
+
+VcdDoc* VcdProjectModel::doc() const
 {
-    return d->project;
+    return d->doc;
 }
 
-K3b::VcdTrack* VcdProjectModel::trackForIndex( const QModelIndex& index ) const
-{
-    if ( index.isValid() )
-    {
-        Q_ASSERT( index.internalPointer() );
-        return static_cast<K3b::VcdTrack*>( index.internalPointer() );
-    }
 
-    return 0;
+VcdTrack* VcdProjectModel::trackForIndex( const QModelIndex& index ) const
+{
+    if( index.isValid() && index.row() >= 0 && index.row() < d->doc->numOfTracks() )
+        return d->doc->at( index.row() );
+    else
+        return 0;
 }
 
-QModelIndex VcdProjectModel::indexForTrack( K3b::VcdTrack* track ) const
+
+QModelIndex VcdProjectModel::indexForTrack( VcdTrack* track, int column ) const
 {
-    return createIndex( track->index(), 0, track );
+    if( track != 0 && column >= 0 && column < NumColumns )
+        return createIndex( track->index(), column, track );
+    else
+        return QModelIndex();
 }
 
-QModelIndex VcdProjectModel::index( int row, int column,
-    const QModelIndex& parent ) const
-{
-    Q_UNUSED( parent );
-
-    return createIndex( row, column, d->project->at(row) );
-}
-
-QModelIndex VcdProjectModel::parent( const QModelIndex& index ) const
-{
-    Q_UNUSED( index );
-
-    return QModelIndex();
-}
 
 int VcdProjectModel::rowCount( const QModelIndex& parent) const
 {
-    if ( parent.isValid() )
+    if( parent.isValid() )
         return 0;
     else
-        return d->project->numOfTracks();
+        return d->doc->numOfTracks();
 }
 
-int VcdProjectModel::columnCount( const QModelIndex& parent) const
-{
-    Q_UNUSED( parent );
 
+int VcdProjectModel::columnCount( const QModelIndex& /*parent*/) const
+{
     return NumColumns;
 }
 
-bool VcdProjectModel::setData( const QModelIndex& index,
-    const QVariant& value, int role )
+
+bool VcdProjectModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
     if ( index.isValid() )
     {
-        K3b::VcdTrack* track = trackForIndex( index );
+        VcdTrack* track = trackForIndex( index );
         if ( role == Qt::EditRole )
         {
             if ( index.column() == TitleColumn )
@@ -150,10 +140,11 @@ bool VcdProjectModel::setData( const QModelIndex& index,
     return false;
 }
 
+
 QVariant VcdProjectModel::data( const QModelIndex& index, int role ) const
 {
     if ( index.isValid() ) {
-        K3b::VcdTrack* track = trackForIndex( index );
+        VcdTrack* track = trackForIndex( index );
 
         switch( index.column() ) {
             case NoColumn:
@@ -232,12 +223,10 @@ QVariant VcdProjectModel::data( const QModelIndex& index, int role ) const
     return QVariant();
 }
 
-QVariant VcdProjectModel::headerData( int section,
-    Qt::Orientation orientation, int role ) const
-{
-    Q_UNUSED( orientation );
 
-    if ( role == Qt::DisplayRole ) {
+QVariant VcdProjectModel::headerData( int section, Qt::Orientation orientation, int role ) const
+{
+    if( orientation == Qt::Horizontal && role == Qt::DisplayRole ) {
         switch( section ) {
             case NoColumn:
                 return i18nc( "VideoCD Track Number", "No." );
@@ -260,22 +249,26 @@ QVariant VcdProjectModel::headerData( int section,
                 return i18nc( "VideoCD Track File Size", "File Size" );
             case FilenameColumn:
                 return i18nc( "VideoCD Track Filename", "Filename" );
+            default:
+                return QVariant();
         }
     }
-
-    return QVariant();
+    else {
+        return QVariant();
+    }
 }
+
 
 Qt::ItemFlags VcdProjectModel::flags( const QModelIndex& index ) const
 {
-    if ( index.isValid() )
+    if( index.isValid() )
     {
         Qt::ItemFlags f = Qt::ItemIsSelectable |
                           Qt::ItemIsEnabled |
                           Qt::ItemIsDropEnabled |
                           Qt::ItemIsDragEnabled;
 
-        if ( index.column() == TitleColumn )
+        if( index.column() == TitleColumn )
         {
             f |= Qt::ItemIsEditable;
         }
@@ -288,20 +281,22 @@ Qt::ItemFlags VcdProjectModel::flags( const QModelIndex& index ) const
     }
 }
 
+
 Qt::DropActions VcdProjectModel::supportedDropActions() const
 {
     return Qt::CopyAction | Qt::MoveAction;
 }
 
+
 QMimeData* VcdProjectModel::mimeData( const QModelIndexList& indexes ) const
 {
     QMimeData* mime = new QMimeData();
 
-    QList<K3b::VcdTrack*> tracks;
+    QList<VcdTrack*> tracks;
     KUrl::List urls;
 
     foreach( const QModelIndex& index, indexes ) {
-        K3b::VcdTrack* track = trackForIndex( index );
+        VcdTrack* track = trackForIndex( index );
         tracks << track;
 
         if( !urls.contains( KUrl( track->absolutePath() ) ) )
@@ -315,7 +310,7 @@ QMimeData* VcdProjectModel::mimeData( const QModelIndexList& indexes ) const
     QByteArray trackData;
     QDataStream trackDataStream( &trackData, QIODevice::WriteOnly );
 
-    foreach( K3b::VcdTrack* track, tracks ) {
+    foreach( VcdTrack* track, tracks ) {
         trackDataStream << ( qint64 )track;
     }
 
@@ -323,6 +318,7 @@ QMimeData* VcdProjectModel::mimeData( const QModelIndexList& indexes ) const
 
     return mime;
 }
+
 
 QStringList VcdProjectModel::mimeTypes() const
 {
@@ -333,67 +329,54 @@ QStringList VcdProjectModel::mimeTypes() const
     return s;
 }
 
-bool VcdProjectModel::dropMimeData( const QMimeData* data,
-    Qt::DropAction action, int row, int column, const QModelIndex& parent )
+
+bool VcdProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int /*column*/, const QModelIndex& parent )
 {
-    Q_UNUSED( column );
-
-    if (action == Qt::IgnoreAction)
+    if( action == Qt::IgnoreAction ) {
         return true;
-
-    QList<K3b::VcdTrack*> tracks;
-    if ( data->hasFormat( "application/x-k3bvcdtrack" ) )
-    {
+    }
+    else if( data->hasFormat( "application/x-k3bvcdtrack" ) ) {
+        VcdTrack* before;
+        if( parent.isValid() ) 
+            row = parent.row();
+        
+        if( row >= 0 && row < d->doc->numOfTracks() )
+            before = d->doc->at( row );
+        else
+            before = 0;
+        
         QByteArray trackData = data->data( "application/x-k3bvcdtrack" );
         QDataStream trackDataStream( trackData );
         while ( !trackDataStream.atEnd() )
         {
             qint64 p;
             trackDataStream >> p;
-            tracks << ( K3b::VcdTrack* )p;
-        }
-
-        K3b::VcdTrack *prev;
-        if(parent.isValid())
-        {
-            int index = trackForIndex(parent)->index();
-            if(index == 0)
-                prev = 0;
-            else
-                prev = d->project->at(index - 1);
-        }
-        else if(row >= 0)
-            prev = d->project->at(row - 1);
-        else
-            prev = d->project->tracks()->last();
-
-        foreach( K3b::VcdTrack* track, tracks )
-        {
-            d->project->moveTrack(track, prev);
-            prev = track;
+            VcdTrack* track = reinterpret_cast< VcdTrack* >( p );
+            d->doc->moveTrack( track, before );
         }
 
         return true;
     }
-
-    if ( KUrl::List::canDecode( data ) )
-    {
+    else if( KUrl::List::canDecode( data ) ) {
         int pos;
-        if(parent.isValid())
-            pos = trackForIndex(parent)->index();
-        else if(row >= 0)
+        if( parent.isValid() ) 
+            row = parent.row();
+        
+        if( row >= 0 )
             pos = row;
         else
-            pos = d->project->numOfTracks();
+            pos = d->doc->numOfTracks();
 
         KUrl::List urls = KUrl::List::fromMimeData( data );
-        d->project->addTracks( urls, pos );
+        d->doc->addTracks( urls, pos );
 
         return true;
     }
-
-    return false;
+    else {
+        return false;
+    }
 }
+
 
 bool VcdProjectModel::removeRows( int row, int count, const QModelIndex& parent )
 {
@@ -401,7 +384,7 @@ bool VcdProjectModel::removeRows( int row, int count, const QModelIndex& parent 
     while (count > 0)
     {
         QModelIndex i = index( row, 0, parent );
-        d->project->removeTrack( trackForIndex(i) );
+        d->doc->removeTrack( trackForIndex(i) );
 
         row++;
         count--;
@@ -409,5 +392,7 @@ bool VcdProjectModel::removeRows( int row, int count, const QModelIndex& parent 
 
     return true;
 }
+
+} // namespace K3b
 
 #include "k3bvcdprojectmodel.moc"
