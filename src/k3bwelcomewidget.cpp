@@ -198,7 +198,7 @@ void K3b::WelcomeWidget::Display::repositionButtons()
     }
     if( col > 0 )
         ++row;
-    
+
     QRect rect( leftMargin + 2, topOffset + (row*(m_buttonSize.height()+4)) + 2,
                 m_cols*(m_buttonSize.width()+4) - 4, m_buttonMore->height() );
     m_buttonMore->setGeometry( QStyle::visualRect( layoutDirection(), contentsRect(), rect ) );
@@ -256,7 +256,7 @@ void K3b::WelcomeWidget::Display::slotThemeChanged()
     }
 
     m_header->setHtml( "<html><body align=\"center\">" + i18n("Welcome to K3b - The CD and DVD Kreator") + "</body></html>" );
-    m_infoText->setHtml( QString::fromUtf8("<html><body align=\"center\">K3b %1 (c) 1999 - 2009 Sebastian Trüg</body></html>")
+    m_infoText->setHtml( QString::fromUtf8("<html><body align=\"center\">K3b %1 &copy; 1999&ndash;2010 Sebastian Trüg et al.</body></html>")
                          .arg(KGlobal::mainComponent().aboutData()->version()) );
     updateBgPix();
     update();
@@ -330,7 +330,7 @@ void K3b::WelcomeWidget::Display::dropEvent( QDropEvent* e )
     {
         urls.push_back( url );
     }
-    
+
     emit dropped( urls );
 }
 
