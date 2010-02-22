@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -18,15 +19,15 @@
 
 #include "k3bcore.h"
 
-#include <kdebug.h>
-#include <kconfig.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
+#include <KDebug>
+#include <KConfig>
+#include <KLocale>
 #include <KProcess>
+#include <KStandardDirs>
 
-#include <QtCore/QRegExp>
-#include <QtCore/QFile>
-#include <QtCore/QList>
+#include <QFile>
+#include <QList>
+#include <QRegExp>
 
 #include <sys/types.h>
 
@@ -78,17 +79,6 @@ public:
     K3bExternalEncoderCommand cmd;
 
     bool initialized;
-
-    // the metaData we support
-    QString artist;
-    QString title;
-    QString comment;
-    QString trackNumber;
-    QString cdArtist;
-    QString cdTitle;
-    QString cdComment;
-    QString year;
-    QString genre;
 };
 
 
@@ -113,40 +103,6 @@ K3bExternalEncoder::~K3bExternalEncoder()
 }
 
 
-void K3bExternalEncoder::setMetaDataInternal( K3b::AudioEncoder::MetaDataField f, const QString& value )
-{
-    switch( f ) {
-    case META_TRACK_TITLE:
-        d->title = value;
-        break;
-    case META_TRACK_ARTIST:
-        d->artist = value;
-        break;
-    case META_TRACK_COMMENT:
-        d->comment = value;
-        break;
-    case META_TRACK_NUMBER:
-        d->trackNumber = value;
-        break;
-    case META_ALBUM_TITLE:
-        d->cdTitle = value;
-        break;
-    case META_ALBUM_ARTIST:
-        d->cdArtist = value;
-        break;
-    case META_ALBUM_COMMENT:
-        d->cdComment = value;
-        break;
-    case META_YEAR:
-        d->year = value;
-        break;
-    case META_GENRE:
-        d->genre = value;
-        break;
-    }
-}
-
-
 void K3bExternalEncoder::finishEncoderInternal()
 {
     if( d->process && d->process->state() == QProcess::Running ) {
@@ -167,7 +123,7 @@ void K3bExternalEncoder::slotExternalProgramFinished( int exitCode, QProcess::Ex
 }
 
 
-bool K3bExternalEncoder::openFile( const QString& ext, const QString& filename, const K3b::Msf& length )
+bool K3bExternalEncoder::openFile( const QString& ext, const QString& filename, const K3b::Msf& length, const MetaData& metaData )
 {
     d->fileName = filename;
     d->length = length;
@@ -176,7 +132,7 @@ bool K3bExternalEncoder::openFile( const QString& ext, const QString& filename, 
     if( QFile::exists( filename ) )
         QFile::remove( filename );
 
-    return initEncoderInternal( ext, length );
+    return initEncoderInternal( ext, length, metaData );
 }
 
 
@@ -192,7 +148,7 @@ void K3bExternalEncoder::closeFile()
 }
 
 
-bool K3bExternalEncoder::initEncoderInternal( const QString& extension, const K3b::Msf& )
+bool K3bExternalEncoder::initEncoderInternal( const QString& extension, const K3b::Msf& /*length*/, const MetaData& metaData )
 {
     // find the correct command
     d->cmd = commandByExtension( extension );
@@ -202,15 +158,15 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension, const K3
         QStringList params = d->cmd.command.split( ' ' );
         for( QStringList::iterator it = params.begin(); it != params.end(); ++it ) {
             (*it).replace( "%f", d->fileName );
-            (*it).replace( "%a", d->artist );
-            (*it).replace( "%t", d->title );
-            (*it).replace( "%c", d->comment );
-            (*it).replace( "%y", d->year );
-            (*it).replace( "%m", d->cdTitle );
-            (*it).replace( "%r", d->cdArtist );
-            (*it).replace( "%x", d->cdComment );
-            (*it).replace( "%n", d->trackNumber );
-            (*it).replace( "%g", d->genre );
+            (*it).replace( "%a", metaData[META_TRACK_ARTIST].toString() );
+            (*it).replace( "%t", metaData[META_TRACK_TITLE].toString() );
+            (*it).replace( "%c", metaData[META_TRACK_COMMENT].toString() );
+            (*it).replace( "%y", metaData[META_YEAR].toString() );
+            (*it).replace( "%m", metaData[META_ALBUM_TITLE].toString() );
+            (*it).replace( "%r", metaData[META_ALBUM_ARTIST].toString() );
+            (*it).replace( "%x", metaData[META_ALBUM_COMMENT].toString() );
+            (*it).replace( "%n", metaData[META_TRACK_NUMBER].toString() );
+            (*it).replace( "%g", metaData[META_GENRE].toString() );
         }
 
 

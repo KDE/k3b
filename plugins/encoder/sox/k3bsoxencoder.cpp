@@ -1,7 +1,7 @@
 /*
  *
- *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -22,18 +22,12 @@
 #include "k3bcore.h"
 #include "k3bexternalbinmanager.h"
 
-#include <kdebug.h>
-#include <kconfig.h>
-#include <klocale.h>
+#include <KConfig>
+#include <KDebug>
+#include <KLocale>
 
-#include <qfileinfo.h>
-#include <qfile.h>
-#include <qvalidator.h>
-#include <qlineedit.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qlayout.h>
-#include <QHBoxLayout>
+#include <QFile>
+#include <QFileInfo>
 
 #include <sys/types.h>
 
@@ -144,10 +138,10 @@ void K3bSoxEncoder::slotSoxFinished( int exitCode, QProcess::ExitStatus exitStat
 }
 
 
-bool K3bSoxEncoder::openFile( const QString& ext, const QString& filename, const K3b::Msf& length )
+bool K3bSoxEncoder::openFile( const QString& extension, const QString& filename, const K3b::Msf& length, const MetaData& metaData )
 {
     d->fileName = filename;
-    return initEncoderInternal( ext, length );
+    return initEncoderInternal( extension, length, metaData );
 }
 
 
@@ -163,7 +157,7 @@ void K3bSoxEncoder::closeFile()
 }
 
 
-bool K3bSoxEncoder::initEncoderInternal( const QString& extension, const K3b::Msf& /*length*/ )
+bool K3bSoxEncoder::initEncoderInternal( const QString& extension, const K3b::Msf& /*length*/, const MetaData& /*metaData*/ )
 {
     const K3b::ExternalBin* soxBin = k3bcore->externalBinManager()->binObject( "sox" );
     if( soxBin ) {

@@ -1,7 +1,7 @@
 /* 
  *
- *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -27,20 +27,19 @@ public:
     K3bOggVorbisEncoder( QObject* parent, const QVariantList& );
     ~K3bOggVorbisEncoder();
 
-    QStringList extensions() const { return QStringList("ogg"); }
+    virtual QStringList extensions() const { return QStringList("ogg"); }
   
-    QString fileTypeComment( const QString& ) const;
+    virtual QString fileTypeComment( const QString& ) const;
 
-    long long fileSize( const QString&, const K3b::Msf& msf ) const;
+    virtual long long fileSize( const QString&, const K3b::Msf& msf ) const;
 
-    int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
+    virtual int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
 private:
     void loadConfig();
-    void finishEncoderInternal();
-    bool initEncoderInternal( const QString& extension, const K3b::Msf& length );
-    long encodeInternal( const char* data, Q_ULONG len );
-    void setMetaDataInternal( MetaDataField, const QString& );
+    virtual void finishEncoderInternal();
+    virtual bool initEncoderInternal( const QString& extension, const K3b::Msf& length, const MetaData& metaData );
+    virtual long encodeInternal( const char* data, Q_ULONG len );
 
     bool writeOggHeaders();
     void cleanup();

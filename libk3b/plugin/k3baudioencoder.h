@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -19,6 +20,8 @@
 
 #include "k3bmsf.h"
 #include "k3b_export.h"
+
+#include <QHash>
 
 
 namespace K3b {
@@ -77,13 +80,31 @@ namespace K3b {
          */
         virtual long long fileSize( const QString&, const Msf& ) const { return -1; }
 
+        enum MetaDataField {
+            META_TRACK_TITLE,
+            META_TRACK_ARTIST,
+            META_TRACK_COMMENT,
+            META_TRACK_NUMBER,
+            META_ALBUM_TITLE,
+            META_ALBUM_ARTIST,
+            META_ALBUM_COMMENT,
+            META_YEAR,
+            META_GENRE };
+            
+        typedef QHash<MetaDataField, QVariant> MetaData;
+
         /**
          * The default implementation openes the file for writing with
          * writeData. Normally this does not need to be reimplemented.
          * @param extension the filetype to be used.
-         *
+         * @param filename path to an output file
+         * @param length length of the track
+         * @param metaData meta data associated with the track
          */
-        virtual bool openFile( const QString& extension, const QString& filename, const Msf& length );
+        virtual bool openFile( const QString& extension,
+                               const QString& filename,
+                               const Msf& length,
+                               const MetaData& metaData );
 
 
         /**
@@ -109,24 +130,6 @@ namespace K3b {
          */
         virtual QString filename() const;
 
-        enum MetaDataField {
-            META_TRACK_TITLE,
-            META_TRACK_ARTIST,
-            META_TRACK_COMMENT,
-            META_TRACK_NUMBER,
-            META_ALBUM_TITLE,
-            META_ALBUM_ARTIST,
-            META_ALBUM_COMMENT,
-            META_YEAR,
-            META_GENRE };
-
-        /**
-         * Calling this method does only make sense after successfully
-         * calling openFile and before calling encode.
-         * This calls setMetaDataInternal.
-         */
-        void setMetaData( MetaDataField, const QString& );
-
         /**
          * Returnes the amount of actually written bytes or -1 if an error
          * occurred.
@@ -147,7 +150,7 @@ namespace K3b {
          * Called by the default implementation of openFile
          * This calls initEncoderInternal.
          */
-        bool initEncoder( const QString& extension, const Msf& length );
+        bool initEncoder( const QString& extension, const Msf& length, const MetaData& metaData );
 
         /**
          * Called by the deafult implementation of openFile
@@ -167,7 +170,7 @@ namespace K3b {
          * default implementation does nothing
          * this may already write data.
          */
-        virtual bool initEncoderInternal( const QString& extension, const Msf& length );
+        virtual bool initEncoderInternal( const QString& extension, const Msf& length, const MetaData& metaData );
 
         /**
          * reimplement this if the encoder needs to do some
@@ -185,12 +188,6 @@ namespace K3b {
         // TODO: use qint16* instead of char*
         // FIXME: why little endian while CDs use big endian???
         virtual long encodeInternal( const char*, Q_ULONG len ) = 0;
-
-        /**
-         * default implementation does nothing
-         * this may already write data.
-         */
-        virtual void setMetaDataInternal( MetaDataField, const QString& );
 
         /**
          * Use this in combination with the default implementation of lastError()

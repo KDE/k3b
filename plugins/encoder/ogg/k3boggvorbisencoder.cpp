@@ -1,7 +1,7 @@
 /*
  *
- *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -19,9 +19,9 @@
 
 #include "k3bcore.h"
 
-#include <klocale.h>
-#include <kconfig.h>
-#include <kdebug.h>
+#include <KConfig>
+#include <KDebug>
+#include <KLocale>
 
 #include <vorbis/vorbisenc.h>
 
@@ -123,7 +123,7 @@ K3bOggVorbisEncoder::~K3bOggVorbisEncoder()
 }
 
 
-bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
+bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& /*length*/, const MetaData& metaData )
 {
     cleanup();
 
@@ -193,6 +193,41 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
     d->oggStream = new ogg_stream_state;
     srand( time(0) );
     ogg_stream_init( d->oggStream, rand() );
+    
+    // Set meta data
+    for( MetaData::const_iterator it = metaData.constBegin(); it != metaData.constEnd(); ++it ) {
+        QByteArray key;
+
+        switch( it.key() ) {
+        case META_TRACK_TITLE:
+            key = "TITLE";
+            break;
+        case META_TRACK_ARTIST:
+            key = "ARTIST";
+            break;
+        case META_ALBUM_TITLE:
+            key = "ALBUM";
+            break;
+        case META_ALBUM_COMMENT:
+            key = "DESCRIPTION";
+            break;
+        case META_YEAR:
+            key = "DATE";
+            break;
+        case META_TRACK_NUMBER:
+            key = "TRACKNUMBER";
+            break;
+        case META_GENRE:
+            key = "GENRE";
+            break;
+        default:
+            break;
+        }
+
+        if( !key.isEmpty() ) {
+            vorbis_comment_add_tag( d->vorbisComment, key.data(), it.value().toString().toUtf8().data() );
+        }
+    }
 
     return true;
 }
@@ -310,44 +345,6 @@ void K3bOggVorbisEncoder::finishEncoderInternal()
     }
     else
         kDebug() << "(K3bOggVorbisEncoder) call to finishEncoderInternal without init.";
-}
-
-
-void K3bOggVorbisEncoder::setMetaDataInternal( K3b::AudioEncoder::MetaDataField f, const QString& value )
-{
-    if( d->vorbisComment ) {
-        QByteArray key;
-
-        switch( f ) {
-        case META_TRACK_TITLE:
-            key = "TITLE";
-            break;
-        case META_TRACK_ARTIST:
-            key = "ARTIST";
-            break;
-        case META_ALBUM_TITLE:
-            key = "ALBUM";
-            break;
-        case META_ALBUM_COMMENT:
-            key = "DESCRIPTION";
-            break;
-        case META_YEAR:
-            key = "DATE";
-            break;
-        case META_TRACK_NUMBER:
-            key = "TRACKNUMBER";
-            break;
-        case META_GENRE:
-            key = "GENRE";
-            break;
-        default:
-            return;
-        }
-
-        vorbis_comment_add_tag( d->vorbisComment, key.data(), value.toUtf8().data() );
-    }
-    else
-        kDebug() << "(K3bOggVorbisEncoder) call to setMetaDataInternal without init.";
 }
 
 

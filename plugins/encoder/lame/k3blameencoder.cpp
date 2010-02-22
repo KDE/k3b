@@ -1,7 +1,7 @@
 /*
  *
- *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -21,17 +21,14 @@
 
 #include "k3bcore.h"
 
-#include <klocale.h>
-#include <kconfig.h>
-#include <kdebug.h>
-#include <knuminput.h>
-#include <kcombobox.h>
-#include <kdialog.h>
+#include <KLocale>
+#include <KConfig>
+#include <KDebug>
 
 #include <stdio.h>
 #include <lame/lame.h>
 
-#include <QtCore/QFile>
+#include <QFile>
 
 
 class K3bLameEncoder::Private
@@ -68,14 +65,14 @@ K3bLameEncoder::~K3bLameEncoder()
 }
 
 
-bool K3bLameEncoder::openFile( const QString& extension, const QString& filename, const K3b::Msf& length )
+bool K3bLameEncoder::openFile( const QString& extension, const QString& filename, const K3b::Msf& length, const MetaData& metaData )
 {
     closeFile();
 
     d->filename = filename;
     d->fid = ::fopen( QFile::encodeName( filename ), "w+" );
     if( d->fid )
-        return initEncoder( extension, length );
+        return initEncoder( extension, length, metaData );
     else
         return false;
 }
@@ -104,7 +101,7 @@ QString K3bLameEncoder::filename() const
 }
 
 
-bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length )
+bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length, const MetaData& metaData )
 {
     KSharedConfig::Ptr c = KGlobal::config();
     KConfigGroup grp(c, "K3bLameEncoderPlugin" );
@@ -229,6 +226,43 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
     // for now we default to both v1 and v2 tags
     id3tag_add_v2( d->flags );
     id3tag_pad_v2( d->flags );
+    
+    // let's not use UTF-8 here since I don't know how to tell lame...
+    // FIXME: when we use the codec we only get garbage. Why?
+    QTextCodec* codec = 0;//QTextCodec::codecForName( "ISO8859-1" );
+//  if( !codec )
+//    kDebug() << "(K3bLameEncoder) could not find codec ISO8859-1.";
+
+    for( MetaData::const_iterator it = metaData.constBegin(); it != metaData.constEnd(); ++it ) {
+        QByteArray value = codec ? codec->fromUnicode( it.value().toString() ).data()
+                                 : it.value().toString().toLatin1().data();
+        switch( it.key() ) {
+        case META_TRACK_TITLE:
+            id3tag_set_title( d->flags, value );
+            break;
+        case META_TRACK_ARTIST:
+            id3tag_set_artist( d->flags, value );
+            break;
+        case META_ALBUM_TITLE:
+            id3tag_set_album( d->flags, value );
+            break;
+        case META_ALBUM_COMMENT:
+            id3tag_set_comment( d->flags, value );
+            break;
+        case META_YEAR:
+            id3tag_set_year( d->flags, value );
+            break;
+        case META_TRACK_NUMBER:
+            id3tag_set_track( d->flags, value );
+            break;
+        case META_GENRE:
+            if( id3tag_set_genre( d->flags, value ) )
+                kDebug() << "(K3bLameEncoder) unable to set genre.";
+            break;
+        default:
+            break;
+        }
+    }
 
     return( lame_init_params( d->flags ) != -1 );
 }
@@ -263,46 +297,6 @@ void K3bLameEncoder::finishEncoderInternal()
 
     lame_close( d->flags );
     d->flags = 0;
-}
-
-
-void K3bLameEncoder::setMetaDataInternal( K3b::AudioEncoder::MetaDataField f, const QString& value )
-{
-    // let's not use UTF-8 here since I don't know how to tell lame...
-    // FIXME: when we use the codec we only get garbage. Why?
-    QTextCodec* codec = 0;//QTextCodec::codecForName( "ISO8859-1" );
-//  if( !codec )
-//    kDebug() << "(K3bLameEncoder) could not find codec ISO8859-1.";
-
-    switch( f ) {
-    case META_TRACK_TITLE:
-        id3tag_set_title( d->flags, codec ? codec->fromUnicode(value).data() : value.toLatin1().data() );
-        break;
-    case META_TRACK_ARTIST:
-        id3tag_set_artist( d->flags, codec ? codec->fromUnicode(value).data() : value.toLatin1().data() );
-        break;
-    case META_ALBUM_TITLE:
-        id3tag_set_album( d->flags, codec ? codec->fromUnicode(value).data() : value.toLatin1().data() );
-        break;
-    case META_ALBUM_COMMENT:
-        id3tag_set_comment( d->flags, codec ? codec->fromUnicode(value).data() : value.toLatin1().data() );
-        break;
-    case META_YEAR:
-        id3tag_set_year( d->flags, codec ? codec->fromUnicode(value).data() : value.toLatin1().data() );
-        break;
-    case META_TRACK_NUMBER:
-        id3tag_set_track( d->flags, codec ? codec->fromUnicode(value).data() : value.toLatin1().data() );
-        break;
-    case META_GENRE:
-        if( id3tag_set_genre( d->flags, codec ? codec->fromUnicode(value).data() : value.toLatin1().data() ) )
-            kDebug() << "(K3bLameEncoder) unable to set genre.";
-        break;
-    default:
-        return;
-    }
-
-    if( lame_init_params( d->flags ) < 0 )
-        kDebug() << "(K3bLameEncoder) lame_init_params failed.";
 }
 
 

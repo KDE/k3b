@@ -1,7 +1,7 @@
 /*
  *
- *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -40,7 +40,7 @@ public:
     /**
      * reimplemented since sox writes the file itself
      */
-    virtual bool openFile( const QString& ext, const QString& filename, const K3b::Msf& );
+    virtual bool openFile( const QString& extension, const QString& filename, const K3b::Msf& length, const MetaData& metaData );
     virtual bool isOpen() const;
     virtual void closeFile();
 
@@ -49,7 +49,7 @@ private Q_SLOTS:
     void slotSoxOutputLine( const QString& );
 
 private:
-    virtual bool initEncoderInternal( const QString& extension, const K3b::Msf& length );
+    virtual bool initEncoderInternal( const QString& extension, const K3b::Msf& length, const MetaData& metaData );
     virtual void finishEncoderInternal();
     virtual long encodeInternal( const char* data, Q_ULONG len );
 

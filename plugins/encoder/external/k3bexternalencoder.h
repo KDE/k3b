@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -36,7 +37,7 @@ public:
      * reimplemented since the external program is intended to write the file
      * TODO: allow writing to stdout.
      */
-    virtual bool openFile( const QString& ext, const QString& filename, const K3b::Msf& length );
+    virtual bool openFile( const QString& ext, const QString& filename, const K3b::Msf& length, const MetaData& metaData );
     virtual bool isOpen() const;
     virtual void closeFile();
 
@@ -45,10 +46,9 @@ private Q_SLOTS:
     void slotExternalProgramOutput();
 
 private:
-    virtual bool initEncoderInternal( const QString& extension, const K3b::Msf& length );
+    virtual bool initEncoderInternal( const QString& extension, const K3b::Msf& length, const MetaData& metaData );
     virtual void finishEncoderInternal();
     virtual long encodeInternal( const char* data, Q_ULONG len );
-    virtual void setMetaDataInternal( MetaDataField, const QString& );
     bool writeWaveHeader();
 
     class Private;

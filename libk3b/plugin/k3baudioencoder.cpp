@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -14,9 +15,9 @@
 
 #include "k3baudioencoder.h"
 
-#include <qfile.h>
+#include <QFile>
 
-#include <kdebug.h>
+#include <KDebug>
 
 
 class K3b::AudioEncoder::Private
@@ -53,13 +54,13 @@ QString K3b::AudioEncoder::categoryName() const
 }
 
 
-bool K3b::AudioEncoder::openFile( const QString& ext, const QString& filename, const K3b::Msf& length )
+bool K3b::AudioEncoder::openFile( const QString& extension, const QString& filename, const K3b::Msf& length, const MetaData& metaData )
 {
     closeFile();
 
     d->outputFile = new QFile( filename );
     if( d->outputFile->open( QIODevice::WriteOnly ) ) {
-        return initEncoder( ext, length );
+        return initEncoder( extension, length, metaData );
     }
     else {
         kDebug() << "(K3b::AudioEncoder) unable to open file " << filename;
@@ -100,28 +101,20 @@ QString K3b::AudioEncoder::filename() const
 }
 
 
-
-void K3b::AudioEncoder::setMetaData( K3b::AudioEncoder::MetaDataField f, const QString& data )
-{
-    if( !data.isEmpty() )
-        return setMetaDataInternal( f, data );
-}
-
-
 long K3b::AudioEncoder::encode( const char* data, Q_ULONG len )
 {
     return encodeInternal( data, len );
 }
 
 
-bool K3b::AudioEncoder::initEncoder( const QString& ext, const K3b::Msf& length )
+bool K3b::AudioEncoder::initEncoder( const QString& extension, const K3b::Msf& length, const MetaData& metaData )
 {
     if( !isOpen() ) {
         kDebug() << "(K3b::AudioEncoder) call to initEncoder without openFile!";
         return false;
     }
 
-    return initEncoderInternal( ext, length );
+    return initEncoderInternal( extension, length, metaData );
 }
 
 
@@ -137,16 +130,10 @@ Q_LONG K3b::AudioEncoder::writeData( const char* data, Q_ULONG len )
 }
 
 
-bool K3b::AudioEncoder::initEncoderInternal( const QString&, const K3b::Msf& )
+bool K3b::AudioEncoder::initEncoderInternal( const QString& /*extension*/, const K3b::Msf& /*length*/, const MetaData& /*metaData*/ )
 {
     // do nothing
     return true;
-}
-
-
-void K3b::AudioEncoder::setMetaDataInternal( K3b::AudioEncoder::MetaDataField, const QString& )
-{
-    // do nothing
 }
 
 

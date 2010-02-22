@@ -1,7 +1,7 @@
-/* 
- *
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -27,7 +27,7 @@ public:
     K3bLameEncoder( QObject* parent, const QVariantList& );
     ~K3bLameEncoder();
 
-    bool openFile( const QString& extension, const QString& filename, const K3b::Msf& length );
+    bool openFile( const QString& extension, const QString& filename, const K3b::Msf& length, const MetaData& metaData );
     bool isOpen() const;
     void closeFile();
     QString filename() const;
@@ -42,9 +42,8 @@ public:
 
 private:
     void finishEncoderInternal();
-    bool initEncoderInternal( const QString& extension, const K3b::Msf& length );
+    bool initEncoderInternal( const QString& extension, const K3b::Msf& length, const MetaData& metaData );
     long encodeInternal( const char* data, Q_ULONG len );
-    void setMetaDataInternal( MetaDataField, const QString& );
 
     class Private;
     Private* d;

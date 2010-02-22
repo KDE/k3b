@@ -34,7 +34,7 @@ K3b<name>Encoder::~K3b<name>Encoder()
 }
 
 
-bool K3b<name>Encoder::initEncoderInternal( const QString& )
+bool K3b<name>Encoder::initEncoderInternal( const QString& extension, const Msf& length, const MetaData& metaData )
 {
     // PUT YOUR CODE HERE
     return false;
@@ -49,12 +49,6 @@ long K3b<name>Encoder::encodeInternal( const char* data, Q_ULONG len )
 
 
 void K3b<name>Encoder::finishEncoderInternal()
-{
-    // PUT YOUR CODE HERE
-}
-
-
-void K3b<name>Encoder::setMetaDataInternal( K3b::AudioEncoder::MetaDataField f, const QString& value )
 {
     // PUT YOUR CODE HERE
 }

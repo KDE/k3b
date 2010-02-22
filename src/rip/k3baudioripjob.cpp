@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C)      2009 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -326,26 +326,26 @@ bool K3b::AudioRipJob::ripTrack( int track, const QString& filename, const QStri
             (d->waveFileWriter && !d->waveFileWriter->isOpen()) ) {
             bool isOpen = true;
             if( d->encoder ) {
-                isOpen = d->encoder->openFile( d->fileType, filename, d->lengths[ filename ] );
-                if( isOpen ) {
-                    d->encoder->setMetaData( K3b::AudioEncoder::META_ALBUM_ARTIST, d->cddbEntry.get( KCDDB::Artist ).toString() );
-                    d->encoder->setMetaData( K3b::AudioEncoder::META_ALBUM_TITLE, d->cddbEntry.get( KCDDB::Title ).toString() );
-                    d->encoder->setMetaData( K3b::AudioEncoder::META_ALBUM_COMMENT, d->cddbEntry.get( KCDDB::Comment ).toString() );
-                    d->encoder->setMetaData( K3b::AudioEncoder::META_YEAR, QString::number(d->cddbEntry.get( KCDDB::Year ).toInt()) );
-                    d->encoder->setMetaData( K3b::AudioEncoder::META_GENRE, d->cddbEntry.get( KCDDB::Genre ).toString() );
-                    if( d->tracks.count( filename ) == 1 ) {
-                        d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_NUMBER, QString::number(track).rightJustified( 2, '0' ) );
-                        d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_ARTIST, d->cddbEntry.track( track-1 ).get( KCDDB::Artist ).toString() );
-                        d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_TITLE, d->cddbEntry.track( track-1 ).get( KCDDB::Title ).toString() );
-                        d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_COMMENT, d->cddbEntry.track( track-1 ).get( KCDDB::Comment ).toString() );
-                    }
-                    else {
-                        d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_ARTIST, d->cddbEntry.get( KCDDB::Artist ).toString() );
-                        d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_TITLE, d->cddbEntry.get( KCDDB::Title ).toString() );
-                        d->encoder->setMetaData( K3b::AudioEncoder::META_TRACK_COMMENT, d->cddbEntry.get( KCDDB::Comment ).toString() );
-                    }
+                AudioEncoder::MetaData metaData;
+                metaData.insert( AudioEncoder::META_ALBUM_ARTIST, d->cddbEntry.get( KCDDB::Artist ) );
+                metaData.insert( AudioEncoder::META_ALBUM_TITLE, d->cddbEntry.get( KCDDB::Title ) );
+                metaData.insert( AudioEncoder::META_ALBUM_COMMENT, d->cddbEntry.get( KCDDB::Comment ) );
+                metaData.insert( AudioEncoder::META_YEAR, d->cddbEntry.get( KCDDB::Year ) );
+                metaData.insert( AudioEncoder::META_GENRE, d->cddbEntry.get( KCDDB::Genre ) );
+                if( d->tracks.count( filename ) == 1 ) {
+                    metaData.insert( AudioEncoder::META_TRACK_NUMBER, QString::number(track).rightJustified( 2, '0' ) );
+                    metaData.insert( AudioEncoder::META_TRACK_ARTIST, d->cddbEntry.track( track-1 ).get( KCDDB::Artist ) );
+                    metaData.insert( AudioEncoder::META_TRACK_TITLE, d->cddbEntry.track( track-1 ).get( KCDDB::Title ) );
+                    metaData.insert( AudioEncoder::META_TRACK_COMMENT, d->cddbEntry.track( track-1 ).get( KCDDB::Comment ) );
                 }
-                else
+                else {
+                    metaData.insert( AudioEncoder::META_TRACK_ARTIST, d->cddbEntry.get( KCDDB::Artist ) );
+                    metaData.insert( AudioEncoder::META_TRACK_TITLE, d->cddbEntry.get( KCDDB::Title ) );
+                    metaData.insert( AudioEncoder::META_TRACK_COMMENT, d->cddbEntry.get( KCDDB::Comment ) );
+                }
+                
+                isOpen = d->encoder->openFile( d->fileType, filename, d->lengths[ filename ], metaData );
+                if( !isOpen )
                     emit infoMessage( d->encoder->lastErrorString(), K3b::Job::MessageError );
             }
             else {

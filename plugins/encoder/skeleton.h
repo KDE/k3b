@@ -39,9 +39,8 @@ public:
 
 private:
     void finishEncoderInternal();
-    bool initEncoderInternal( const QString& extension );
+    bool initEncoderInternal( const QString& extension, const Msf& length, const MetaData& metaData );
     long encodeInternal( const char* data, Q_ULONG len );
-    void setMetaDataInternal( MetaDataField, const QString& );
 };
 
 
