@@ -55,6 +55,9 @@ K3b::VcdView::VcdView( K3b::VcdDoc* pDoc, QWidget* parent )
     m_actionRemove = K3b::createAction( this, i18n( "Remove" ), "edit-delete",
                                         Qt::Key_Delete, this, SLOT(slotRemoveSelectedIndexes()),
                                         actionCollection(), "vcd_remove_track" );
+                                        
+    connect( this, SIGNAL(activated(QModelIndex)),
+             this, SLOT(slotItemActivated(QModelIndex)) );
 
     m_popupMenu = new KMenu( this );
     m_popupMenu->addAction( m_actionRemove );
@@ -122,6 +125,18 @@ void K3b::VcdView::showPropertiesDialog()
 
         QList<K3b::VcdTrack*> tracks = *m_doc->tracks();
 
+        K3b::VcdTrackDialog dlg( m_doc, tracks, selected, this );
+        dlg.exec();
+    }
+}
+
+
+void K3b::VcdView::slotItemActivated( const QModelIndex& index )
+{
+    if( VcdTrack* track = m_model->trackForIndex( index ) ) {
+        QList<VcdTrack*> tracks = *m_doc->tracks();
+        QList<VcdTrack*> selected;
+        selected.append( track );
         K3b::VcdTrackDialog dlg( m_doc, tracks, selected, this );
         dlg.exec();
     }

@@ -50,6 +50,7 @@ namespace K3b {
             virtual void selectionChanged( const QModelIndexList& indexes );
             virtual void contextMenu( const QPoint& pos );
             void showPropertiesDialog();
+            void slotItemActivated( const QModelIndex& index );
 
         protected:
             ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
