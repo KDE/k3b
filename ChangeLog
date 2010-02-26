@@ -1,7 +1,7 @@
 2.0
 ===
 Changes (since 1.0.5):
- * Port to KDE 4
+ * Port to KDE Platform 4
  * Always allow manual writing speed selection.
  * Use proper toolbars instead of the toolboxes -> nicer layouting with different styles
  * Merged CD and DVD copy dialogs
@@ -19,10 +19,10 @@ Changes (since 1.0.5):
  * Support for Blu-Ray writing
  * Support for DVD and Blu-Ray writing via cdrecord
  * New audio ripping pattern %e which is replaced by the file extension
- 
+
 Changes (since 2.0-beta1):
  * K3bSetup ported to KAuth framework
- 
+
 Bugfixes (since 2.0-beta1):
  * Crash on start of Audio Ripping Dialog (226595)
  * Incorrect ordering of files added to Audio Project (224649)
@@ -107,7 +107,7 @@ Bugfixes:
  * Do only reload the medium before verification if necessary, i.e. if the newly written
    track cannot be read otherwise (many old drives depend on this). Hopefully this will
    at least work around the aweful "DMA disabled" bug for many users.
-	
+
 1.0.3
 =====
  * Reverted to old behaviour of reloading medium before verification. Not enough
@@ -126,7 +126,7 @@ Bugfixes:
  * Properly determine the capacity of complete CD-R(W) media.
  * Mark a data project as modified if files are renamed.
  * Allow adding of all actions to the welcome window (Bug 145866)
- * Added "NoDisplay=true" property to k3b-cue.desktop and k3b-iso.desktop 
+ * Added "NoDisplay=true" property to k3b-cue.desktop and k3b-iso.desktop
  * Fixed supported write speed detection on some devices
  * No reload before verification and between writing sessions (CD copy + Mixed Mode CD) anymore
 
@@ -157,7 +157,7 @@ Bugfixes:
  * New Audio Track source editor dialog to cut audio track sources at the beginning and the end.
  * Splitted "read retries" and "ignore read errors" for data and audio sectors in cd copy and set new
    defaults for audio sectors which make more sense: 5 retires and skip unreadable sectors.
- * New Mediamanager which makes K3b always know which device contains which medium. This makes medium handling 
+ * New Mediamanager which makes K3b always know which device contains which medium. This makes medium handling
    more smooth and the user now selects a medium instead of a device.
    Other advantages:
     - No waiting time anymore when asking for information on media (including for example Audio CD ripping).
@@ -294,7 +294,7 @@ Bugfixes:
     setBurnDevice(QString) - set the burn device to be used
  * Disable the cd-text fields if cd-text writing is disabled.
  * New Alsa audio output plugin.
- * If a DVD project does not fill up the DVD completely do not close the DVD in automatic 
+ * If a DVD project does not fill up the DVD completely do not close the DVD in automatic
    multisession mode.
  * Fixed problems with filenames ending in backslashes.
  * Fixed verification problems with localized characters.
@@ -316,7 +316,7 @@ Bugfixes:
 ======
  * Fixed crash when refreshing the device list.
  * Fixed cancellation of adding files to a data project.
- * Fixed on-the-fly data project burning.	
+ * Fixed on-the-fly data project burning.
  * Backported a warning about following links to folders (K3b cannot do that after the link has
    been added to the project).
 
@@ -353,7 +353,7 @@ Bugfixes:
  * Fixed DVD-RW Restricted Overwrite media handling
  * Use RAW writing mode for audio CDs in case the writer does not support DAO but RAW.
  * Fixed compile problems with latest ffmpeg builds.
-	
+
 0.12.3
 ======
  * Ignore dock config from K3b versions older than 0.12
@@ -368,7 +368,7 @@ Bugfixes:
  * After for example copying a CD when the dialog comes up again keep the last settings.
  * Default to incremental sequential writing mode when copying a DVD to a DVD-R.
  * Fixed a crash when the DVD copy dialog is reused.
- * Fixed inline editing in the audio CD view (without bigger changes this only works with a 
+ * Fixed inline editing in the audio CD view (without bigger changes this only works with a
    rather strange selection mode.)
  * Show the configured splash screen image instead of the default.
  * Fixed eMovix 0.9 default settings handling.
@@ -429,7 +429,7 @@ Use DAO writing mode for data CDs when overwrite is enabled.
 Added option to load the last used settings in addition to the default user settings in every
 	action dialog.
 Show system device name in case the string representing two devices are equal.
-Fixed the docking issues. No floating dock windows anymore. :) I have no idea why I wasn't able to do this 
+Fixed the docking issues. No floating dock windows anymore. :) I have no idea why I wasn't able to do this
 	before... it was so easy after all.
 Plugin based Audio Output system for Audio project "preview".
 Dropped id3lib in favor of TagLib (great work Scott :)
@@ -438,7 +438,7 @@ Do not close dialogs after the action is done (for example cd copy)
 Directly copy Audio tracks from an Audio CD to an Audio project.
 Session management
 Made K3b a unique application only allowing one instance.
-Improved dcop interface for data projects which allows to add and remove items 
+Improved dcop interface for data projects which allows to add and remove items
 	to and from specific folders in the project.
 Conditional audio ripping pattern. Now what does that mean? It means that you can do stuff like:
 	"if the track has a genre encoded use it, otherwise use 'misc'" and stuff like that.
@@ -449,16 +449,16 @@ Replaced the system tray by an OSD inspired by the one in amaroK
 Better symlink handling with proper size information if "follow symlinks" is activated.
 HAL support (turn on your USB writer while K3b is running and see it getting detected automatically)
 eMovix 0.9.0 support
-	
+
 0.11.10
 Support Mp3 files starting with multiple ID3 tags.
 Improved ~ handling in the QuickDirSelector.
 Save/Load composer fields in audio projects
 Save/Load default DVD Copy reading device
-	
+
 0.11.9
 Fixed data project size calculation (for good this time).
-	
+
 0.11.8
 K3b now searches for the Debian cdrecord wrapper script and properly selects the cdrecord version to use
 	(cdrecord.mmap or cdrecord.shm) based on the kernel version. This should fix all problems with
@@ -490,12 +490,12 @@ Again fixed some disk detection problems which were introduced with the previous
 Fixed a crash which occured if the last boot image was displayed in the fileview while removing it.
 Support for ID3 Tags in FLAC files.
 Support for cdrdao 1.1.8.
-	
+
 0.11.4
 Fixed adding of hidden files (wrong naming of config entries)
 Use a default imagefile name for cloning if none was specified.
 Use the Joliet names if no Rockridge is available in session import
-	
+
 0.11.3
 fixed features detection with some devices.
 fixed multisession writing on some systems (K3b used to open the device instead of leaving it to mkisofs to
@@ -516,7 +516,7 @@ removed the "query cddb" option from the copy dialog since this is configured gl
 fixed loading of VideoDVD projects
 Fixed VideoDVD project with a HACK. mkisofs is not able to create a VideoDVD using graft-points which
 	is the default in K3b. So now K3b links all VIDEO_TS files in a temp directory.
-	
+
 0.11.1
 fixed an issue introduced with KDE 3.2rc1 which caused on-the-fly data writing to fail all the time.
   (If you need to know: For some reason KProcess makes the Stdin fd O_NONBLOCK. This way mkisofs is
@@ -530,7 +530,7 @@ fixed CD-TEXT reading. On some systems some senseless characters where appended.
 fixed Id3lib detection in configure.in.in
 added primitive supermount support
 kernel 2.5 compile fixes (thanks to ismail (cartman) d�mez <ismail.donmez@boun.edu.tr>)
-K3b now defaults to the generic-mmc cdrdao driver if the used burner is not listed in 
+K3b now defaults to the generic-mmc cdrdao driver if the used burner is not listed in
 	cdrdao's driver table. As all modern drives use the generic-mmc driver anyway this
 	is valid and prevents from a lot of newbie problems.
 Added a thememanager and the new crystal look by Everaldo
@@ -574,7 +574,7 @@ Completely rewritten CD copy:
 Support for new growisofs option to specify the size of a written image in DAO mode
 Added check for free space in temp dir to dvd copy
 Added a script to simplify the start of K3bSetup2.
-	
+
 0.10
 DVD writing support with the DVD+RW-tools by Andy Polyakov <appro@fy.chalmers.se>
 DVD formatting
@@ -588,7 +588,7 @@ dragging files from a data project to the audio player (basically it's just a KU
 K3b is now divided in three libs and the main application: libk3bcore, libk3btools, and libk3bproject
 	this makes creating KParts-plugins easy. Two examples can be found in the tests/kpartplugins dir
 	one of them is a former K3b option which allowed to use audio meta data to rename files while
-	adding them to a data project. Now this is done by a plugin and a much higher degree of user 
+	adding them to a data project. Now this is done by a plugin and a much higher degree of user
 	interaction.
 Iso9660 file sorting (mkisofs -sort)
 libid3 support for better mp3 tag access (we had that in some very old version but back then
@@ -604,7 +604,7 @@ K3b now also compiles without aRts. In this case the audioplayer will be useless
 no need for special mkisofs permissons anymore. K3b now openes the device itself when importing
 	an old session.
 added a little color animation when dropping files onto a directory in data projects
-	it is always hard to tell if one dropped on the correct dir. If some one has a better animation 
+	it is always hard to tell if one dropped on the correct dir. If some one has a better animation
 	I would be interested in replacing this simple one.
 Added CD-TEXT reading (used for Audio CD ripping)
 sox encoder plugin to encode to all audio formats supported by sox (will anyone ever use this??)
@@ -616,7 +616,7 @@ replaced the old K3bSetup with a quite simple KControl Module which is only able
 	needed permission for devices and external programs. Everything else is nowadays done
 	by the distros.
 
-	
+
 0.9
 support for eMovix 0.8.0rc2
 better data project size calculation
@@ -628,7 +628,7 @@ no gui blocking when reloading the media while writing a two-session mixed-mode 
 nodma option in eMovix project
 fixed problems with audio decoding (the process sometimes stalled)
 
-0.9pre1	
+0.9pre1
 added system notification
 added eMovix project
 added bootable cd support (multible images)
@@ -663,19 +663,19 @@ videocd:
    fixed autodetection VCD Typ (now the user can turn off this feature)
 added audio volume normalization
 added udf support to data project
-user commands for external programs are separated by space now since the comma just 
+user commands for external programs are separated by space now since the comma just
    made problems for options like "--driver generic-mmc" which had to be specified
    as "--driver, generic-mmc"
 support for newer versions of cdrecord which have a slighly changed user interface
 support for cuefile writing with cdrecord > 2.01a14
-    
+
 0.8.1
 fixed compiling problems with kernel < 2.4.3
 fixed onlyCreateImage in data project
 fixed handling of cdrecord burnfree/burnproof driveroption in versions < 1.10
 fixed error with localized docking config that caused empty windows when changing the language
 introduced workaround for serious cdrdao bug that caused tocfiles to be deleted
-disabled the delete shortcut in the fileview (way too many users deleted files by accident when they 
+disabled the delete shortcut in the fileview (way too many users deleted files by accident when they
 	wanted to remove project items)
 
 0.8
@@ -688,7 +688,7 @@ fixed problems with first pregap in audio project:
   no 4 second pregap before first tracks anymore
 
 fixed problems with detecting some audio tracks that had flags like preemp set
-	
+
 removed cdparanoia dependancy (dynamic linking)
 big internal changes
 split bin/cue writing from iso-image-writing
@@ -743,7 +743,7 @@ fixed compile problem when ogg-vorbis is not installed
 fixed iso-image volume descriptor problem that caused all descriptors to be enclosed in quotation marks
 added raw-copy option
 better external program handling
-	
+
 0.7.1
 audio:
  fixed mp3 resampling problems
@@ -758,7 +758,7 @@ device:
 misc:
  progress display in the K3b titlebar
  better progress display in systray
-	
+
 0.7
 DivX/XviD encoding
 enhanced cddb support
@@ -805,7 +805,7 @@ Fixed bug that caused K3b to crash while detecting devices
 highly improved adding of files and directories to a data project
 adding empty directories to data project via context menu
 disabled audio on-the-fly burning due to a problem that caused faulty cds
-	
+
 0.4.2
 added new DirTree (code from Konqueror)
 added new device-management (the scsi-bus is checked directly)
