@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -38,6 +39,7 @@
 #include <KGlobalSettings>
 #include <KLocale>
 #include <KMenu>
+#include <KUrl>
 
 static const char* s_allActions[] = {
     "file_new_data",
@@ -61,30 +63,34 @@ static const char* s_allActions[] = {
     0
 };
 
-K3b::WelcomeWidget::Display::Display( K3b::WelcomeWidget* parent )
-    : QWidget( parent->viewport() )
+K3b::WelcomeWidget::WelcomeWidget( MainWindow* mainWindow, QWidget* parent )
+    : QWidget( parent ),
+      m_mainWindow( mainWindow )
 {
     m_header = new QTextDocument( this );
     m_infoText = new QTextDocument( this );
 
     setAcceptDrops( true );
+    setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
+    
     m_rows = m_cols = 1;
 
     m_buttonMore = new K3b::FlatButton( i18n("More actions..."), this );
-    connect( m_buttonMore, SIGNAL(pressed()), parent, SLOT(slotMoreActions()) );
-
+    
+    connect( m_buttonMore, SIGNAL(pressed()), this, SLOT(slotMoreActions()) );
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
+    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()), this, SLOT(update()) );
 
     slotThemeChanged();
 }
 
 
-K3b::WelcomeWidget::Display::~Display()
+K3b::WelcomeWidget::~WelcomeWidget()
 {
 }
 
 
-void K3b::WelcomeWidget::Display::addAction( QAction* action )
+void K3b::WelcomeWidget::addAction( QAction* action )
 {
     if( action ) {
         m_actions.append(action);
@@ -93,7 +99,7 @@ void K3b::WelcomeWidget::Display::addAction( QAction* action )
 }
 
 
-void K3b::WelcomeWidget::Display::removeAction( QAction* action )
+void K3b::WelcomeWidget::removeAction( QAction* action )
 {
     if( action ) {
         m_actions.removeAll( action );
@@ -102,13 +108,13 @@ void K3b::WelcomeWidget::Display::removeAction( QAction* action )
 }
 
 
-void K3b::WelcomeWidget::Display::removeButton( K3b::FlatButton* b )
+void K3b::WelcomeWidget::removeButton( K3b::FlatButton* b )
 {
     removeAction( m_buttonMap[b] );
 }
 
 
-void K3b::WelcomeWidget::Display::rebuildGui( const QList<QAction*>& actions )
+void K3b::WelcomeWidget::rebuildGui( const QList<QAction*>& actions )
 {
     m_actions = actions;
     rebuildGui();
@@ -133,7 +139,7 @@ static void calculateButtons( int width, int numActions, int buttonWidth, int& c
 }
 
 
-void K3b::WelcomeWidget::Display::rebuildGui()
+void K3b::WelcomeWidget::rebuildGui()
 {
     // step 1: delete all old buttons in the buttons QPtrList<K3b::FlatButton>
     m_buttonMap.clear();
@@ -167,7 +173,7 @@ void K3b::WelcomeWidget::Display::rebuildGui()
 }
 
 
-void K3b::WelcomeWidget::Display::repositionButtons()
+void K3b::WelcomeWidget::repositionButtons()
 {
     // calculate rows and columns
     calculateButtons( width(), m_actions.count(), m_buttonSize.width(), m_cols, m_rows );
@@ -205,36 +211,41 @@ void K3b::WelcomeWidget::Display::repositionButtons()
 }
 
 
-QSizePolicy K3b::WelcomeWidget::Display::sizePolicy () const
-{
-    return QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
-}
+// int K3b::WelcomeWidget::heightForWidth( int w ) const
+// {
+//     int ow = ( int )m_infoText->idealWidth();
+//     m_infoText->setTextWidth( w );
+//     int h = ( int )m_infoText->size().height();
+//     m_infoText->setTextWidth( ow );
+// 
+//     int cols, rows;
+//     calculateButtons( w, m_actions.count(), m_buttonSize.width(), cols, rows );
+// 
+//     return (20 + ( int )m_header->size().height() + 20 + 10 + ((m_buttonSize.height()+4)*rows) + 4 + m_buttonMore->height() + 10 + h + 20);
+// }
 
 
-int K3b::WelcomeWidget::Display::heightForWidth( int w ) const
+QSize K3b::WelcomeWidget::minimumSizeHint() const
 {
+    //QSize size( qMax(40+( int )m_header->idealWidth(), 40+m_buttonSize.width()),
+    //            20 + ( int )m_header->size().height() + 20 + 10 + m_buttonSize.height() + 10 + ( int )m_infoText->size().height() + 20 );
+    QSize size;
+    size.setWidth( qMax(40+( int )m_header->idealWidth(), 40+m_buttonSize.width()) );
+    
     int ow = ( int )m_infoText->idealWidth();
-    m_infoText->setTextWidth( w );
+    m_infoText->setTextWidth( size.width() );
     int h = ( int )m_infoText->size().height();
     m_infoText->setTextWidth( ow );
 
     int cols, rows;
-    calculateButtons( w, m_actions.count(), m_buttonSize.width(), cols, rows );
+    calculateButtons( size.width(), m_actions.count(), m_buttonSize.width(), cols, rows );
 
-    return (20 + ( int )m_header->size().height() + 20 + 10 + ((m_buttonSize.height()+4)*rows) + 4 + m_buttonMore->height() + 10 + h + 20);
-}
-
-
-QSize K3b::WelcomeWidget::Display::minimumSizeHint() const
-{
-    QSize size( qMax(40+( int )m_header->idealWidth(), 40+m_buttonSize.width()),
-                20 + ( int )m_header->size().height() + 20 + 10 + m_buttonSize.height() + 10 + ( int )m_infoText->size().height() + 20 );
-
+    size.setHeight(20 + ( int )m_header->size().height() + 20 + 10 + ((m_buttonSize.height()+4)*rows) + 4 + m_buttonMore->height() + 10 + h + 20);
     return size;
 }
 
 
-void K3b::WelcomeWidget::Display::resizeEvent( QResizeEvent* e )
+void K3b::WelcomeWidget::resizeEvent( QResizeEvent* e )
 {
     m_infoText->setTextWidth( width() - 20 );
     QWidget::resizeEvent(e);
@@ -244,7 +255,7 @@ void K3b::WelcomeWidget::Display::resizeEvent( QResizeEvent* e )
 }
 
 
-void K3b::WelcomeWidget::Display::slotThemeChanged()
+void K3b::WelcomeWidget::slotThemeChanged()
 {
     if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
 //         if( theme->backgroundMode() == K3b::Theme::BG_SCALE )
@@ -263,7 +274,24 @@ void K3b::WelcomeWidget::Display::slotThemeChanged()
 }
 
 
-void K3b::WelcomeWidget::Display::updateBgPix()
+void K3b::WelcomeWidget::slotMoreActions()
+{
+    KMenu popup;
+
+    for ( int i = 0; s_allActions[i]; ++i ) {
+        if ( s_allActions[i][0] == '_' ) {
+            popup.addSeparator();
+        }
+        else {
+            popup.addAction(m_mainWindow->actionCollection()->action( s_allActions[i] ));
+        }
+    }
+
+    popup.exec( QCursor::pos() );
+}
+
+
+void K3b::WelcomeWidget::updateBgPix()
 {
     if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
         if( theme->backgroundMode() == K3b::Theme::BG_SCALE )
@@ -274,7 +302,7 @@ void K3b::WelcomeWidget::Display::updateBgPix()
 }
 
 
-void K3b::WelcomeWidget::Display::paintEvent( QPaintEvent* )
+void K3b::WelcomeWidget::paintEvent( QPaintEvent* )
 {
     if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
         QPainter p( this );
@@ -317,13 +345,13 @@ void K3b::WelcomeWidget::Display::paintEvent( QPaintEvent* )
 }
 
 
-void K3b::WelcomeWidget::Display::dragEnterEvent( QDragEnterEvent* event )
+void K3b::WelcomeWidget::dragEnterEvent( QDragEnterEvent* event )
 {
     event->setAccepted( event->mimeData()->hasUrls() );
 }
 
 
-void K3b::WelcomeWidget::Display::dropEvent( QDropEvent* e )
+void K3b::WelcomeWidget::dropEvent( QDropEvent* e )
 {
     KUrl::List urls;
     Q_FOREACH( const QUrl& url, e->mimeData()->urls() )
@@ -331,27 +359,7 @@ void K3b::WelcomeWidget::Display::dropEvent( QDropEvent* e )
         urls.push_back( url );
     }
 
-    emit dropped( urls );
-}
-
-
-
-K3b::WelcomeWidget::WelcomeWidget( K3b::MainWindow* mw, QWidget* parent )
-    : QScrollArea( parent ),
-      m_mainWindow( mw )
-{
-    main = new Display( this );
-    setWidget( main );
-    setFrameStyle( QFrame::NoFrame );
-
-    connect( main, SIGNAL(dropped(const KUrl::List&)), m_mainWindow, SLOT(addUrls(const KUrl::List&)), Qt::QueuedConnection );
-
-    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()), main, SLOT(update()) );
-}
-
-
-K3b::WelcomeWidget::~WelcomeWidget()
-{
+    QMetaObject::invokeMethod( m_mainWindow, "addUrls", Qt::QueuedConnection, Q_ARG( KUrl::List, urls ) );
 }
 
 
@@ -370,46 +378,19 @@ void K3b::WelcomeWidget::loadConfig( const KConfigGroup& c )
         if( QAction* a = m_mainWindow->actionCollection()->action( *it ) )
             actions.append(a);
 
-    main->rebuildGui( actions );
-
-    fixSize();
+    rebuildGui( actions );
 }
 
 
 void K3b::WelcomeWidget::saveConfig( KConfigGroup c )
 {
     QStringList sl;
-    QList<QAction *> items(main->m_actions);
+    QList<QAction *> items(m_actions);
     for( QList<QAction *>::const_iterator it = items.constBegin();
             it != items.constEnd(); ++it )
         sl.append( (*it)->objectName() );
 
     c.writeEntry( "welcome_actions", sl );
-}
-
-
-void K3b::WelcomeWidget::resizeEvent( QResizeEvent* e )
-{
-    fixSize();
-    QScrollArea::resizeEvent( e );
-}
-
-
-void K3b::WelcomeWidget::showEvent( QShowEvent* e )
-{
-    fixSize();
-    QScrollArea::showEvent( e );
-}
-
-
-void K3b::WelcomeWidget::fixSize()
-{
-    QSize s = contentsRect().size();
-    s.setWidth( qMax( main->minimumSizeHint().width(), s.width() ) );
-    s.setHeight( qMax( main->heightForWidth(s.width()), s.height() ) );
-
-    main->resize( s );
-    viewport()->resize( s );
 }
 
 
@@ -424,7 +405,7 @@ void K3b::WelcomeWidget::mousePressEvent ( QMouseEvent* e )
         for ( int i = 0; s_allActions[i]; ++i ) {
             if ( s_allActions[i][0] != '_' ) {
                 QAction* a = m_mainWindow->actionCollection()->action( s_allActions[i] );
-                if ( a && !main->m_actions.contains(a) ) {
+                if ( a && !m_actions.contains(a) ) {
                     QAction* addAction = addPop.addAction( a->icon(), a->text() );
                     map.insert( addAction, a );
                     if ( !firstAction )
@@ -438,7 +419,7 @@ void K3b::WelcomeWidget::mousePressEvent ( QMouseEvent* e )
         QAction *r = 0;
         QAction *removeAction = 0;
 
-        QWidget* widgetAtPos = viewport()->childAt(e->pos());
+        QWidget* widgetAtPos = childAt(e->pos());
         if( widgetAtPos && widgetAtPos->inherits( "K3b::FlatButton" ) ) {
             KMenu pop;
             removeAction = pop.addAction( SmallIcon("list-remove"), i18n("Remove Button") );
@@ -453,30 +434,11 @@ void K3b::WelcomeWidget::mousePressEvent ( QMouseEvent* e )
 
         if( r != 0 ) {
             if( r == removeAction )
-                main->removeButton( static_cast<K3b::FlatButton*>(widgetAtPos) );
+                removeButton( static_cast<K3b::FlatButton*>(widgetAtPos) );
             else
-                main->addAction( map[r] );
-        }
-
-        fixSize();
-    }
-}
-
-
-void K3b::WelcomeWidget::slotMoreActions()
-{
-    KMenu popup;
-
-    for ( int i = 0; s_allActions[i]; ++i ) {
-        if ( s_allActions[i][0] == '_' ) {
-            popup.addSeparator();
-        }
-        else {
-            popup.addAction(m_mainWindow->actionCollection()->action( s_allActions[i] ));
+                addAction( map[r] );
         }
     }
-
-    popup.exec( QCursor::pos() );
 }
 
 #include "k3bwelcomewidget.moc"

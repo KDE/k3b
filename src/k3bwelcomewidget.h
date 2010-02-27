@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -20,112 +21,77 @@
 #include <QMap>
 #include <QImage>
 #include <QPixmap>
-#include <QScrollArea>
+#include <QWidget>
 
-#include <KUrl>
-
-namespace K3b {
-    class FlatButton;
-}
-namespace K3b {
-    class MainWindow;
-}
 class KConfigGroup;
 class QDragEnterEvent;
 class QDropEvent;
 class QMouseEvent;
 class QPaintEvent;
 class QResizeEvent;
-class QShowEvent;
 class QTextDocument;
 
 
 namespace K3b {
-class WelcomeWidget : public QScrollArea
-{
-    Q_OBJECT
 
-public:
-    WelcomeWidget( MainWindow*, QWidget* parent = 0 );
-    ~WelcomeWidget();
+    class FlatButton;
+    class MainWindow;
 
-    void loadConfig( const KConfigGroup& c );
-    void saveConfig( KConfigGroup c );
+    class WelcomeWidget : public QWidget
+    {
+        Q_OBJECT
 
-    class Display;
+    public:
+        WelcomeWidget( MainWindow* mainWindow, QWidget* parent = 0 );
+        ~WelcomeWidget();
 
-public Q_SLOTS:
-    void slotMoreActions();
+        void loadConfig( const KConfigGroup& c );
+        void saveConfig( KConfigGroup c );
 
-protected:
-    void resizeEvent( QResizeEvent* );
-    void showEvent( QShowEvent* );
-    void mousePressEvent ( QMouseEvent* e );
+        virtual QSize minimumSizeHint() const;
 
-private:
-    void fixSize();
+        void addAction( QAction* );
+        void removeAction( QAction* );
+        void removeButton( FlatButton* );
+        void rebuildGui();
+        void rebuildGui( const QList<QAction*>& );
 
-    MainWindow* m_mainWindow;
-    Display* main;
-};
-}
+    protected:
+        virtual void resizeEvent( QResizeEvent* );
+        virtual void paintEvent( QPaintEvent* );
+        virtual void dropEvent( QDropEvent* event );
+        virtual void dragEnterEvent( QDragEnterEvent* event );
+        virtual void mousePressEvent ( QMouseEvent* e );
 
+    private Q_SLOTS:
+        void slotThemeChanged();
+        void slotMoreActions();
 
-namespace K3b {
-class WelcomeWidget::Display : public QWidget
-{
-    Q_OBJECT
+    private:
+        void repositionButtons();
+        void updateBgPix();
+        
+        MainWindow* m_mainWindow;
 
-public:
-    Display( WelcomeWidget* parent );
-    ~Display();
+        QTextDocument* m_header;
+        QTextDocument* m_infoText;
 
-    QSize minimumSizeHint() const;
-    QSizePolicy sizePolicy () const;
-    int heightForWidth ( int w ) const;
+        QSize m_buttonSize;
+        int m_cols;
+        int m_rows;
 
-    void addAction( QAction* );
-    void removeAction( QAction* );
-    void removeButton( FlatButton* );
-    void rebuildGui();
-    void rebuildGui( const QList<QAction*>& );
+        QList<QAction*> m_actions;
+        QList<FlatButton*> m_buttons;
+        QMap<FlatButton*, QAction*> m_buttonMap;
 
-Q_SIGNALS:
-    void dropped( const KUrl::List& );
+        FlatButton* m_buttonMore;
 
-protected:
-    void resizeEvent( QResizeEvent* );
-    void paintEvent( QPaintEvent* );
-    void dropEvent( QDropEvent* event );
-    void dragEnterEvent( QDragEnterEvent* event );
+        bool m_infoTextVisible;
 
-private Q_SLOTS:
-    void slotThemeChanged();
+        QPixmap m_bgPixmap;
+        QImage m_bgImage;
+    };
 
-private:
-    void repositionButtons();
-    void updateBgPix();
-
-    QTextDocument* m_header;
-    QTextDocument* m_infoText;
-
-    QSize m_buttonSize;
-    int m_cols;
-    int m_rows;
-
-    QList<QAction*> m_actions;
-    QList<FlatButton*> m_buttons;
-    QMap<FlatButton*, QAction*> m_buttonMap;
-
-    FlatButton* m_buttonMore;
-
-    bool m_infoTextVisible;
-
-    QPixmap m_bgPixmap;
-    QImage m_bgImage;
-
-    friend class K3b::WelcomeWidget;
-};
-}
+} // namespace K3b
 
 #endif
