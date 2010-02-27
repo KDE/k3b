@@ -142,13 +142,19 @@ void K3b::FileTreeView::slotAddFilesToProject()
 void K3b::FileTreeView::setSelectedUrl( const KUrl& url )
 {
     kDebug();
-    d->model->expandToUrl( url );
+    KFileItem fileItem = d->model->itemForIndex( currentIndex() );
+    if( fileItem.isNull() || !fileItem.url().equals( url, KUrl::CompareWithoutTrailingSlash ) ) {
+        d->model->expandToUrl( url );
+    }
 }
 
 
 void K3b::FileTreeView::setSelectedDevice( K3b::Device::Device* dev )
 {
-    setCurrentIndex( d->model->indexForDevice( dev ) );
+    Device::Device* currentDev = d->model->deviceForIndex( currentIndex() );
+    if( currentDev != dev ) {
+        setCurrentIndex( d->model->indexForDevice( dev ) );
+    }
 }
 
 
