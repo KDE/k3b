@@ -3333,7 +3333,7 @@ bool K3b::Device::Device::getSupportedWriteSpeedsViaGP( QList<int>& list, MediaT
 {
     unsigned char* data = 0;
     unsigned int dataLen = 0;
-    if( getPerformance( &data, dataLen, 0x3, 0x0 ) ) {
+    if( getPerformance( &data, dataLen, 0x3, 0x0 ) && dataLen >= 8 ) {
         int numDesc = (dataLen - 8)/16;
         kDebug() << "(K3b::Device::Device) " << blockDeviceName()
                  << ":  Number of supported write speeds via GET PERFORMANCE: "

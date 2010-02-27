@@ -229,7 +229,16 @@ bool K3b::Device::Device::getPerformance( unsigned char** data, unsigned int& da
     cmd[9] = numDesc;
     if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
         dataLen = qMin( dataLen, from4Byte( *data ) + 4 );
-        return true;
+        
+        if( dataLen > 8 ) {
+            return true;
+        }
+        else {
+            kDebug() << "(K3b::Device::Device) " << blockDeviceName()
+                    << ": GET PERFORMANCE reports invalid dataLen:" << dataLen << endl;
+            delete [] *data;
+            return false;
+        }
     }
     else {
         kDebug() << "(K3b::Device::Device) " << blockDeviceName()
