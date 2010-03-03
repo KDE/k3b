@@ -733,11 +733,11 @@ bool K3b::AudioEditorWidget::event( QEvent* e )
     if( e->type() == QEvent::ToolTip ) {
         QHelpEvent* helpEvent = dynamic_cast<QHelpEvent*>( e );
         const QPoint pos = mapFromGlobal( helpEvent->globalPos() );
+        
         if( Marker* m = findMarker( pos ) ) {
             QToolTip::showText( helpEvent->globalPos(),
                                 m->toolTip.isEmpty() ? m->pos.toString() : QString("%1 (%2)").arg(m->toolTip).arg(m->pos.toString()),
                                 this );
-            e->accept();
         }
         else if( Range* range = findRange( pos ) ) {
             QToolTip::showText( helpEvent->globalPos(), 
@@ -745,8 +745,13 @@ bool K3b::AudioEditorWidget::event( QEvent* e )
                                 ? QString("%1 - %2").arg(range->start.toString()).arg(range->end.toString())
                                 : QString("%1 (%2 - %3)").arg(range->toolTip).arg(range->start.toString()).arg(range->end.toString()),
                                 this );
-            e->accept();
+            
         }
+        else {
+            QToolTip::hideText();
+        }
+        
+        e->accept();
         return true;
     }
     else {
