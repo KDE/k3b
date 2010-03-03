@@ -126,7 +126,8 @@ namespace K3b {
             STATE_NO_MEDIA = 0x2,   /**< No media inserted. */
             STATE_COMPLETE = 0x4,   /**< The inserted media is complete. */
             STATE_INCOMPLETE = 0x8, /**< The inserted media is incomplete/appendable. */
-            STATE_EMPTY = 0x10      /**< The inserted media is empty. */
+            STATE_EMPTY = 0x10,     /**< The inserted media is empty. */
+            STATE_ALL = STATE_COMPLETE|STATE_INCOMPLETE|STATE_EMPTY
         };
         Q_DECLARE_FLAGS( MediaStates, MediaState )
 

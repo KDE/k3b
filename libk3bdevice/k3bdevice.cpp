@@ -2317,7 +2317,6 @@ K3b::Device::DiskInfo K3b::Device::Device::diskInfo() const
             case MEDIA_BD_R_SRM:
             case MEDIA_BD_R_SRM_POW:
             case MEDIA_BD_R_RRM:
-            case MEDIA_BD_RE:
                 //
                 // get the invisible track's first sector
                 // or the next writable address of the last open track
@@ -2339,6 +2338,24 @@ K3b::Device::DiskInfo K3b::Device::Device::diskInfo() const
                     }
                 }
                 break;
+
+            case MEDIA_BD_RE: {
+                K3b::Msf currentMax;
+                int currentMaxFormat = 0;
+                if ( readFormatCapacity( 0x00, inf.d->capacity, &currentMax, &currentMaxFormat ) ) {
+                    if( currentMaxFormat == 0x1 ) { // unformatted or blank media
+                        inf.d->usedCapacity = 0;
+                        inf.d->capacity = currentMax;
+                    }
+                    else {
+                        inf.d->usedCapacity = currentMax;
+                    }
+                }
+                else
+                    kDebug() << "(K3b::Device::Device) " << blockDeviceName()
+                             << " READ FORMAT CAPACITIES for BD-RE failed." << endl;
+                break;
+            }
 
             case MEDIA_BD_ROM: {
                 K3b::Msf readCap;

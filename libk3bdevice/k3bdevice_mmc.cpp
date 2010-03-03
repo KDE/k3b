@@ -229,7 +229,7 @@ bool K3b::Device::Device::getPerformance( unsigned char** data, unsigned int& da
     cmd[9] = numDesc;
     if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
         dataLen = qMin( dataLen, from4Byte( *data ) + 4 );
-        
+
         if( dataLen > 8 ) {
             return true;
         }
@@ -777,7 +777,7 @@ bool K3b::Device::Device::readCapacity( K3b::Msf& r ) const
 
 
 bool K3b::Device::Device::readFormatCapacity( int wantedFormat, K3b::Msf& r,
-                                            K3b::Msf* currentMax, int* currentMaxFormat ) const
+                                              K3b::Msf* currentMax, int* currentMaxFormat ) const
 {
     bool success = false;
 
