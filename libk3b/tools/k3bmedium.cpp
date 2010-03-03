@@ -133,6 +133,20 @@ const K3b::Iso9660SimplePrimaryDescriptor& K3b::Medium::iso9660Descriptor() cons
 }
 
 
+K3b::Msf K3b::Medium::remainingSize() const
+{
+    // DVD+RW, BD-RE, and DVD-RW in restricted overwrite mode have a single track that does not
+    // change in size. Thus, the remainingSize value from the disk info is of no great value.
+    if ( !d->diskInfo.empty() &&
+         d->diskInfo.mediaType() & ( Device::MEDIA_DVD_PLUS_RW|Device::MEDIA_DVD_RW_OVWR|Device::MEDIA_BD_RE ) ) {
+        return d->diskInfo.capacity() - d->isoDesc.volumeSpaceSize;
+    }
+    else {
+        return d->diskInfo.remainingSize();
+    }
+}
+
+
 void K3b::Medium::reset()
 {
     d->diskInfo = K3b::Device::DiskInfo();
@@ -241,7 +255,7 @@ void K3b::Medium::analyseContent()
             d->isoDesc = iso.primaryDescriptor();
             kDebug() << "(K3b::Medium) found volume id from start sector " << startSec
                      << ": '" << d->isoDesc.volumeId << "'" ;
-                     
+
             if( const Iso9660Directory* firstDirEntry = iso.firstIsoDirEntry() ) {
                 if( diskInfo().isDvdMedia() ) {
                     // Every VideoDVD needs to have a VIDEO_TS.IFO file
@@ -590,7 +604,8 @@ QString K3b::Medium::mediaRequestString( Device::MediaTypes requestedMediaTypes,
             else
                 return i18n("Please insert an empty medium");
         }
-        else if( requestedMediaTypes == (Device::MEDIA_WRITABLE_DVD|Device::MEDIA_WRITABLE_BD) ) {
+        else if( requestedMediaTypes == (Device::MEDIA_WRITABLE_DVD|Device::MEDIA_WRITABLE_BD) ||
+                 requestedMediaTypes == (Device::MEDIA_WRITABLE_DVD_DL|Device::MEDIA_WRITABLE_BD) ) { // special case for data job
             if( dev )
                 return i18n("Please insert an empty DVD or Blu-ray medium into drive<p><b>%1</b>", deviceString);
             else

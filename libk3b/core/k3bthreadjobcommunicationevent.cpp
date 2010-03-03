@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2007-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2007-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,6 +42,12 @@ K3b::Device::MediaStates K3b::ThreadJobCommunicationEvent::Data::wantedMediaStat
 K3b::Device::MediaTypes K3b::ThreadJobCommunicationEvent::Data::wantedMediaType() const
 {
     return m_wantedMediaType;
+}
+
+
+K3b::Msf K3b::ThreadJobCommunicationEvent::Data::wantedMediaSize() const
+{
+    return m_wantedMediaSize;
 }
 
 
@@ -126,12 +132,14 @@ int K3b::ThreadJobCommunicationEvent::type() const
 K3b::ThreadJobCommunicationEvent* K3b::ThreadJobCommunicationEvent::waitForMedium( K3b::Device::Device* device,
                                                                                    Device::MediaStates mediaState,
                                                                                    Device::MediaTypes mediaType,
+                                                                                   const K3b::Msf& minMediaSize,
                                                                                    const QString& message )
 {
     K3b::ThreadJobCommunicationEvent* event = new K3b::ThreadJobCommunicationEvent( WaitForMedium );
     event->m_data->m_device = device;
     event->m_data->m_wantedMediaState = mediaState;
     event->m_data->m_wantedMediaType = mediaType;
+    event->m_data->m_wantedMediaSize = minMediaSize;
     event->m_data->m_text = message;
     return event;
 }

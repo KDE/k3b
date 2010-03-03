@@ -101,9 +101,9 @@ bool K3b::DataMultiSessionParameterJob::run()
                 if( d->doc->importedSession() >= 0 )
                     wantedMediaState = K3b::Device::STATE_INCOMPLETE;
 
-                Device::MediaType m = waitForMedia( d->doc->burner(),
-                                                    wantedMediaState,
-                                                    K3b::Device::MEDIA_WRITABLE );
+                Device::MediaType m = waitForMedium( d->doc->burner(),
+                                                     wantedMediaState,
+                                                     K3b::Device::MEDIA_WRITABLE );
 
                 if( m == Device::MEDIA_UNKNOWN ) {
                     cancel();
@@ -121,7 +121,7 @@ bool K3b::DataMultiSessionParameterJob::run()
         // FIXME: not sure if it is good to always wait for a medium this early
         if( d->usedMultiSessionMode == K3b::DataDoc::CONTINUE ||
             d->usedMultiSessionMode == K3b::DataDoc::FINISH ) {
-            int m = waitForMedia( d->doc->burner(),
+            int m = waitForMedium( d->doc->burner(),
                                   K3b::Device::STATE_INCOMPLETE,
                                   K3b::Device::MEDIA_WRITABLE );
 
@@ -221,7 +221,7 @@ bool K3b::DataMultiSessionParameterJob::setupMultiSessionParameters()
 {
     K3b::Device::DiskInfo info = d->doc->burner()->diskInfo();
     K3b::Device::Toc toc = d->doc->burner()->readToc();
-    
+
     if( toc.isEmpty() )
     {
         emit infoMessage( i18n("No medium inserted or an empty medium in %1. Cannot continue multisession disk.",

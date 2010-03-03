@@ -1,10 +1,10 @@
 /*
  *
- * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2010 Sebastian Trueg <trueg@k3b.org>
  * Copyright (C)      2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -278,13 +278,45 @@ void K3b::JobProgressDialog::closeEvent( QCloseEvent* e )
 
 void K3b::JobProgressDialog::slotProcessedSize( int processed, int size )
 {
-    m_labelProcessedSize->setText( i18n("%1 of %2 MB", processed, size ) );
+#if KDE_IS_VERSION( 4, 3, 80 )
+    m_labelProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
+                                          "%1 of %2",
+                                          KGlobal::locale()->formatByteSize( ( double )( processed*1024*1024 ),
+                                                                             1,
+                                                                             KLocale::DefaultBinaryDialect,
+                                                                             KLocale::UnitMegaByte ),
+                                          KGlobal::locale()->formatByteSize( ( double )( size*1024*1024 ),
+                                                                             1,
+                                                                             KLocale::DefaultBinaryDialect,
+                                                                             KLocale::UnitMegaByte ) ) );
+#else
+    m_labelProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
+                                          "%1 of %2",
+                                          KGlobal::locale()->formatByteSize( ( double )( processed*1024*1024 ) ),
+                                          KGlobal::locale()->formatByteSize( ( double )( size*1024*1024 ) ) ) );
+#endif
 }
 
 
 void K3b::JobProgressDialog::slotProcessedSubSize( int processedTrackSize, int trackSize )
 {
-    m_labelSubProcessedSize->setText( i18n("%1 of %2 MB",processedTrackSize, trackSize) );
+#if KDE_IS_VERSION( 4, 3, 80 )
+    m_labelSubProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
+                                             "%1 of %2",
+                                             KGlobal::locale()->formatByteSize( ( double )( processedTrackSize*1024*1024 ),
+                                                                                1,
+                                                                                KLocale::DefaultBinaryDialect,
+                                                                                KLocale::UnitMegaByte ),
+                                             KGlobal::locale()->formatByteSize( ( double )( trackSize*1024*1024 ),
+                                                                                1,
+                                                                                KLocale::DefaultBinaryDialect,
+                                                                                KLocale::UnitMegaByte ) ) );
+#else
+    m_labelSubProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
+                                             "%1 of %2",
+                                             KGlobal::locale()->formatByteSize( ( double )( processedTrackSize*1024*1024 ) ),
+                                             KGlobal::locale()->formatByteSize( ( double )( trackSize*1024*1024 ) ) ) );
+#endif
 }
 
 
@@ -321,7 +353,7 @@ void K3b::JobProgressDialog::slotFinished( bool success )
 
     const KColorScheme colorScheme( QPalette::Normal, KColorScheme::Window );
     QPalette taskPalette( m_labelTask->palette() );
-    
+
     if( success ) {
         m_pixLabel->setThemePixmap( K3b::Theme::PROGRESS_SUCCESS );
 
@@ -503,22 +535,18 @@ void K3b::JobProgressDialog::slotStarted()
 
 void K3b::JobProgressDialog::slotUpdateTime()
 {
-    const int SECS_PER_DAY = 24*60*60;
     int elapsedSecs = m_startTime.secsTo( QDateTime::currentDateTime() );
 
-    QString s = i18n("Elapsed time") + ": ";
-    if ( elapsedSecs >= SECS_PER_DAY ) {
-        s += i18np( "1 Day", "%1 Days", elapsedSecs/SECS_PER_DAY ) + ", ";
-    }
-    s += QTime().addSecs( elapsedSecs%SECS_PER_DAY ).toString();
+    QString s = i18nc( "@info %1 is a duration formatted using KLocale::prettyFormatDuration",
+                       "Elaped time: %1",
+                       KGlobal::locale()->prettyFormatDuration( elapsedSecs*1000 ) );
 
     if( d->lastProgress > 0 && d->lastProgress < 100 ) {
         int remainingSecs = m_startTime.secsTo( m_lastProgressUpdateTime ) * (100-d->lastProgress) / d->lastProgress;
-        s += " / " + i18n("Remaining" ) + ": ";
-        if ( remainingSecs >= SECS_PER_DAY ) {
-            s += i18np( "1 Day", "%1 Days", remainingSecs/SECS_PER_DAY ) + ", ";
-        }
-        s += QTime().addSecs( remainingSecs%SECS_PER_DAY ).toString();
+        s += " / ";
+        s += i18nc( "@info %1 is a duration formatted using KLocale::prettyFormatDuration",
+                    "Remaining: %1",
+                    KGlobal::locale()->prettyFormatDuration( remainingSecs*1000 ) );
     }
 
     m_labelElapsedTime->setText( s );
@@ -605,12 +633,13 @@ int K3b::JobProgressDialog::startJob( K3b::Job* job )
 }
 
 
-K3b::Device::MediaType K3b::JobProgressDialog::waitForMedia( K3b::Device::Device* device,
-                                                             Device::MediaStates mediaState,
-                                                             Device::MediaTypes mediaType,
-                                                             const QString& message )
+K3b::Device::MediaType K3b::JobProgressDialog::waitForMedium( K3b::Device::Device* device,
+                                                              Device::MediaStates mediaState,
+                                                              Device::MediaTypes mediaType,
+                                                              const K3b::Msf& minMediaSize,
+                                                              const QString& message )
 {
-    return K3b::EmptyDiscWaiter::wait( device, mediaState, mediaType, message, this );
+    return K3b::EmptyDiscWaiter::wait( device, mediaState, mediaType, minMediaSize, message, this );
 }
 
 

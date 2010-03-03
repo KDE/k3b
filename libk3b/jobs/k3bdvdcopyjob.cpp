@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -132,9 +132,9 @@ void K3b::DvdCopyJob::start()
     emit newSubTask( i18n("Waiting for source medium") );
 
     // wait for a source disk
-    if( waitForMedia( m_readerDevice,
-                      K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE,
-                      K3b::Device::MEDIA_WRITABLE_DVD|K3b::Device::MEDIA_DVD_ROM|K3b::Device::MEDIA_BD_ALL ) == Device::MEDIA_UNKNOWN ) {
+    if( waitForMedium( m_readerDevice,
+                       K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE,
+                       K3b::Device::MEDIA_WRITABLE_DVD|K3b::Device::MEDIA_DVD_ROM|K3b::Device::MEDIA_BD_ALL ) == Device::MEDIA_UNKNOWN ) {
         emit canceled();
         d->running = false;
         jobFinished( false );
@@ -780,32 +780,17 @@ void K3b::DvdCopyJob::slotVerificationFinished( bool success )
 bool K3b::DvdCopyJob::waitForDvd()
 {
     Device::MediaTypes mt = 0;
-    if ( K3b::Device::isDvdMedia( d->sourceDiskInfo.mediaType() ) ) {
-        if( m_writingMode == K3b::WritingModeRestrictedOverwrite ) // we treat DVD+R(W) as restricted overwrite media
-            mt = K3b::Device::MEDIA_DVD_RW_OVWR|K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_PLUS_R;
-        else
-            mt = K3b::Device::MEDIA_WRITABLE_DVD_SL;
-
-        //
-        // in case the source is a double layer DVD we made sure above that the writer
-        // is capable of writing DVD+R-DL or DVD-R DL and here we wait for a DL DVD
-        //
-        if( d->sourceDiskInfo.numLayers() > 1 &&
-            d->sourceDiskInfo.size().mode1Bytes() > 4700372992LL ) {
-            mt = K3b::Device::MEDIA_WRITABLE_DVD_DL;
-        }
-    }
-    else if ( K3b::Device::isBdMedia( d->sourceDiskInfo.mediaType() ) ) {
-        // FIXME: what about the size? layers and stuff?
-        mt = K3b::Device::MEDIA_WRITABLE_BD;
-    }
-    else {
+    if ( !K3b::Device::isDvdMedia( d->sourceDiskInfo.mediaType() ) &&
+         !K3b::Device::isBdMedia( d->sourceDiskInfo.mediaType() ) ) {
         // this should NEVER happen
         emit infoMessage( i18n( "Unsupported media type: %1" , K3b::Device::mediaTypeString( d->sourceDiskInfo.mediaType() ) ), MessageError );
         return false;
     }
 
-    Device::MediaType m = waitForMedia( m_writerDevice, K3b::Device::STATE_EMPTY, mt );
+    Device::MediaType m = waitForMedium( m_writerDevice,
+                                         K3b::Device::STATE_EMPTY,
+                                         Device::MEDIA_WRITABLE_DVD|Device::MEDIA_WRITABLE_BD,
+                                         d->sourceDiskInfo.size() );
 
     if( m == Device::MEDIA_UNKNOWN ) {
         cancel();
@@ -915,7 +900,7 @@ bool K3b::DvdCopyJob::waitForDvd()
         // -------------------------------
         else {
             d->usedWritingMode = K3b::WritingModeSao;
-            
+
             if( m_simulate ) {
                 if( !questionYesNo( i18n("%1 media do not support write simulation. "
                                          "Do you really want to continue? The disc will actually be "
@@ -928,7 +913,7 @@ bool K3b::DvdCopyJob::waitForDvd()
                 m_simulate = false;
                 emit newTask( i18n("Writing BD copy") );
             }
-            
+
             emit infoMessage( i18n("Writing %1.", Device::mediaTypeString(m, true) ), MessageInfo );
         }
     }

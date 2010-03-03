@@ -129,6 +129,13 @@ namespace K3b {
         const Iso9660SimplePrimaryDescriptor& iso9660Descriptor() const;
 
         /**
+         * The remaining size on the medium. This only differs from DiskInfo::remainingSize()
+         * in that it handles rewritable media properly. It uses the size of the filesystem
+         * for overwrite media.
+         */
+        K3b::Msf remainingSize() const;
+
+        /**
          * Format strings for methods shortString and longString
          */
         enum MediumStringFlag {

@@ -41,10 +41,11 @@ namespace K3b {
          * @return Device::MediaType on success,
          *         Device::MEDIA_UNKNOWN on error (canceled)
          */
-        virtual Device::MediaType waitForMedia( Device::Device*,
-                                                Device::MediaStates mediaState = Device::STATE_EMPTY,
-                                                Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
-                                                const QString& message = QString() ) = 0;
+        virtual Device::MediaType waitForMedium( Device::Device*,
+                                                 Device::MediaStates mediaState = Device::STATE_EMPTY,
+                                                 Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
+                                                 const K3b::Msf& minMediaSize = K3b::Msf(),
+                                                 const QString& message = QString() ) = 0;
 
         virtual bool questionYesNo( const QString& text,
                                     const QString& caption = QString(),

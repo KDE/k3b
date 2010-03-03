@@ -154,7 +154,7 @@ bool K3b::BinImageWritingJob::prepareWriter()
 void K3b::BinImageWritingJob::writerStart()
 {
 
-    if( waitForMedia( m_device ) == Device::MEDIA_UNKNOWN ) {
+    if( waitForMedium( m_device ) == Device::MEDIA_UNKNOWN ) {
         cancel();
     }
     // just to be sure we did not get canceled during the async discWaiting

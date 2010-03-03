@@ -395,7 +395,7 @@ void K3b::DataJob::slotIsoImagerFinished( bool success )
                     jobFinished(false);
                 }
                 else if( prepareWriterJob() ) {
-                    startWriterJob();                    
+                    startWriterJob();
                     startPipe();
                 }
             }
@@ -673,7 +673,7 @@ bool K3b::DataJob::prepareWriterJob()
     }
 
     // if we append a new session we asked for an appendable cd already
-    if( !waitForMedium() ) {
+    if( !waitForBurnMedium() ) {
         return false;
     }
 
@@ -698,7 +698,7 @@ bool K3b::DataJob::prepareWriterJob()
 }
 
 
-bool K3b::DataJob::waitForMedium()
+bool K3b::DataJob::waitForBurnMedium()
 {
     // start with all media types supported by the writer
     Device::MediaTypes m  = d->doc->supportedMediaTypes() & d->doc->burner()->writeCapabilities();
@@ -710,29 +710,22 @@ bool K3b::DataJob::waitForMedium()
     }
 
     emit newSubTask( i18n("Waiting for a medium") );
-    Device::MediaType foundMedium = waitForMedia( d->doc->burner(),
-                                                  usedMultiSessionMode() == K3b::DataDoc::CONTINUE ||
-                                                  usedMultiSessionMode() == K3b::DataDoc::FINISH ?
-                                                  K3b::Device::STATE_INCOMPLETE :
-                                                  K3b::Device::STATE_EMPTY,
-                                                  m );
+    Device::MediaType foundMedium = waitForMedium( d->doc->burner(),
+                                                   usedMultiSessionMode() == K3b::DataDoc::CONTINUE ||
+                                                   usedMultiSessionMode() == K3b::DataDoc::FINISH ?
+                                                   K3b::Device::STATE_INCOMPLETE :
+                                                   K3b::Device::STATE_EMPTY,
+                                                   m,
+                                                   d->doc->length() );
 
     if( foundMedium == Device::MEDIA_UNKNOWN || hasBeenCanceled() ) {
         return false;
     }
 
-    else {
-        return analyseBurnMedium( foundMedium );
-    }
-}
-
-
-bool K3b::DataJob::analyseBurnMedium( int foundMedium )
-{
     // -------------------------------
     // CD-R(W)
     // -------------------------------
-    if ( foundMedium & K3b::Device::MEDIA_CD_ALL ) {
+    else if ( foundMedium & K3b::Device::MEDIA_CD_ALL ) {
         emit infoMessage( i18n( "Writing %1" , K3b::Device::mediaTypeString( foundMedium ) ), MessageInfo );
 
         // first of all we determine the data mode
@@ -842,13 +835,13 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
             if( d->doc->writingMode() != K3b::WritingModeAuto && d->doc->writingMode() != K3b::WritingModeRestrictedOverwrite )
                 emit infoMessage( i18n("Writing mode ignored when writing %1 media.", Device::mediaTypeString(foundMedium, true)), MessageInfo );
             d->usedWritingMode = K3b::WritingModeSao; // since cdrecord uses -sao for DVD+R(W)
-            
+
             // Cdrecord doesn't support multisession DVD+R(W) disks
             if( usedMultiSessionMode() != DataDoc::NONE &&
                 d->usedWritingApp == K3b::WritingAppCdrecord ) {
                 d->usedWritingApp = WritingAppGrowisofs;
             }
-            
+
             if( foundMedium & K3b::Device::MEDIA_DVD_PLUS_RW &&
                 ( usedMultiSessionMode() == K3b::DataDoc::NONE ||
                   usedMultiSessionMode() == K3b::DataDoc::START ) )
@@ -944,7 +937,7 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
              !k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "blu-ray" ) ) {
             d->usedWritingApp = K3b::WritingAppGrowisofs;
         }
-        
+
         if( d->doc->dummy() ) {
             if( !questionYesNo( i18n("%1 media do not support write simulation. "
                                      "Do you really want to continue? The disc will actually be "
@@ -959,14 +952,14 @@ bool K3b::DataJob::analyseBurnMedium( int foundMedium )
         if( d->doc->writingMode() != K3b::WritingModeAuto )
             emit infoMessage( i18n("Writing mode ignored when writing %1 media.", Device::mediaTypeString(foundMedium, true)), MessageInfo );
         d->usedWritingMode = K3b::WritingModeSao; // cdrecord uses -sao for DVD+R(W), let's assume it's used also for BD-R(E)
-        
+
         // Cdrecord probably doesn't support multisession BD-R disks
         // FIXME: check if above is actually true
         if( usedMultiSessionMode() != DataDoc::NONE &&
             d->usedWritingApp == K3b::WritingAppCdrecord ) {
             d->usedWritingApp = WritingAppGrowisofs;
         }
-        
+
         if( foundMedium & K3b::Device::MEDIA_BD_RE &&
             ( usedMultiSessionMode() == K3b::DataDoc::NONE ||
                 usedMultiSessionMode() == K3b::DataDoc::START ) )

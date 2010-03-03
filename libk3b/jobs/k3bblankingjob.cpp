@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -96,7 +96,7 @@ void K3b::BlankingJob::slotStartErasing()
     else {
         K3b::CdrecordWriter* writer = new K3b::CdrecordWriter( m_device, this );
         m_writerJob = writer;
-        
+
         writer->setFormattingMode( m_mode );
         writer->setForce( m_force );
         writer->setBurnSpeed( m_speed );
@@ -108,13 +108,14 @@ void K3b::BlankingJob::slotStartErasing()
     connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
              this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
 
-    if( waitForMedia( m_device,
-                      K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE,
-                      K3b::Device::MEDIA_CD_RW,
-                      i18n("Please insert a rewritable CD medium into drive<p><b>%1 %2 (%3)</b>.",
-                           m_device->vendor(),
-                           m_device->description(),
-                           m_device->blockDeviceName()) ) == Device::MEDIA_UNKNOWN ) {
+    if( waitForMedium( m_device,
+                       K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE,
+                       K3b::Device::MEDIA_CD_RW,
+                       0,
+                       i18n("Please insert a rewritable CD medium into drive<p><b>%1 %2 (%3)</b>.",
+                            m_device->vendor(),
+                            m_device->description(),
+                            m_device->blockDeviceName()) ) == Device::MEDIA_UNKNOWN ) {
         emit canceled();
         jobFinished(false);
         return;

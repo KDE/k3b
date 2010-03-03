@@ -1,10 +1,10 @@
 /*
  *
- * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2010 Sebastian Trueg <trueg@k3b.org>
  * Copyright (C)      2009 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -137,21 +137,22 @@ void K3b::DvdFormattingJob::start()
     // Be aware that an empty DVD-RW might be reformatted to another writing mode
     // so we also wait for empty dvds
     //
-    if( waitForMedia( d->device,
-                      Device::STATE_COMPLETE|Device::STATE_INCOMPLETE|Device::STATE_EMPTY,
-                      Device::MEDIA_WRITABLE_DVD,
-                      i18n("Please insert a rewritable DVD medium into drive<p><b>%1 %2 (%3)</b>.",
-                           d->device->vendor(),
-                           d->device->description(),
-                           d->device->blockDeviceName()) ) == Device::MEDIA_UNKNOWN ) {
+    if( waitForMedium( d->device,
+                       Device::STATE_COMPLETE|Device::STATE_INCOMPLETE|Device::STATE_EMPTY,
+                       Device::MEDIA_REWRITABLE_DVD|Device::MEDIA_BD_RE,
+                       0,
+                       i18n("Please insert a rewritable DVD or Blu-ray medium into drive<p><b>%1 %2 (%3)</b>.",
+                            d->device->vendor(),
+                            d->device->description(),
+                            d->device->blockDeviceName()) ) == Device::MEDIA_UNKNOWN ) {
         emit canceled();
         d->running = false;
         jobFinished(false);
         return;
     }
 
-    emit infoMessage( i18n("Checking media..."), MessageInfo );
-    emit newTask( i18n("Checking media") );
+    emit infoMessage( i18n("Checking medium"), MessageInfo );
+    emit newTask( i18n("Checking medium") );
 
     connect( Device::sendCommand( Device::DeviceHandler::CommandDiskInfo, d->device ),
              SIGNAL(finished(K3b::Device::DeviceHandler*)),
@@ -360,7 +361,7 @@ void K3b::DvdFormattingJob::startFormatting( const Device::DiskInfo& diskInfo )
     //
 
     if( diskInfo.mediaType() & (Device::MEDIA_DVD_PLUS_ALL | Device::MEDIA_BD_RE) ) {
-        
+
         if( diskInfo.empty() ) {
             //
             // The DVD+RW/BD is blank and needs to be initially formatted

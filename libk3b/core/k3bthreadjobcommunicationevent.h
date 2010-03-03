@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2007-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2007-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include <QEvent>
 
 #include "k3bdevicetypes.h"
+#include "k3bmsf.h"
 
 namespace K3b {
     namespace Device {
@@ -54,6 +55,7 @@ namespace K3b {
             Device::Device* device() const;
             Device::MediaStates wantedMediaState() const;
             Device::MediaTypes wantedMediaType() const;
+            K3b::Msf wantedMediaSize() const;
             QString message() const;
 
             QString text() const;
@@ -80,6 +82,7 @@ namespace K3b {
             Device::Device* m_device;
             Device::MediaStates m_wantedMediaState;
             Device::MediaTypes m_wantedMediaType;
+            Msf m_wantedMediaSize;
             QString m_text;
             QString m_caption;
             KGuiItem m_buttonYes;
@@ -96,6 +99,7 @@ namespace K3b {
         static ThreadJobCommunicationEvent* waitForMedium( Device::Device* device,
                                                            Device::MediaStates mediaState,
                                                            Device::MediaTypes mediaType,
+                                                           const K3b::Msf& minMediaSize,
                                                            const QString& message );
         static ThreadJobCommunicationEvent* questionYesNo( const QString& text,
                                                            const QString& caption,

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,21 +112,22 @@ void K3b::DvdBooktypeJob::start()
     if( m_action == SET_MEDIA_DVD_ROM ||
         m_action == SET_MEDIA_DVD_R_W ) {
         emit newSubTask( i18n("Waiting for media") );
-        if( waitForMedia( d->device,
-                          K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE|K3b::Device::STATE_EMPTY,
-                          K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_PLUS_R,
-                          i18n("Please insert an empty DVD+R or a DVD+RW medium into drive<p><b>%1 %2 (%3)</b>.",
-                               d->device->vendor(),
-                               d->device->description(),
-                               d->device->blockDeviceName()) ) == Device::MEDIA_UNKNOWN ) {
+        if( waitForMedium( d->device,
+                           K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE|K3b::Device::STATE_EMPTY,
+                           K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_PLUS_R,
+                           0,
+                           i18n("Please insert an empty DVD+R or a DVD+RW medium into drive<p><b>%1 %2 (%3)</b>.",
+                                d->device->vendor(),
+                                d->device->description(),
+                                d->device->blockDeviceName()) ) == Device::MEDIA_UNKNOWN ) {
             emit canceled();
             jobFinished(false);
             d->running = false;
             return;
         }
 
-        emit infoMessage( i18n("Checking media..."), MessageInfo );
-        emit newTask( i18n("Checking media") );
+        emit infoMessage( i18n("Checking medium"), MessageInfo );
+        emit newTask( i18n("Checking medium") );
 
         connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::CommandDiskInfo, d->device ),
                  SIGNAL(finished(K3b::Device::DeviceHandler*)),

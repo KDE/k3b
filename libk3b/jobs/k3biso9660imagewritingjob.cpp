@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -267,7 +267,7 @@ void K3b::Iso9660ImageWritingJob::startWriting()
 
 
     // wait for the media
-    Device::MediaType media = waitForMedia( m_device, K3b::Device::STATE_EMPTY, mt );
+    Device::MediaType media = waitForMedium( m_device, K3b::Device::STATE_EMPTY, mt, K3b::imageFilesize( m_imagePath )/2048 );
     if( media == Device::MEDIA_UNKNOWN ) {
         d->finished = true;
         emit canceled();

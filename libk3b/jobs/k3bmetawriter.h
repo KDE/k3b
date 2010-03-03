@@ -17,6 +17,9 @@
 #include "k3babstractwriter.h"
 #include "k3b_export.h"
 
+// TODO: - handle media and project size.
+//       - Use the MetaWriter in all projects
+
 namespace K3b {
     /**
      * Meta writer which wraps around the cdrecord, cdrdao, and growisofs writers.

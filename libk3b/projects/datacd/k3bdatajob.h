@@ -77,12 +77,6 @@ namespace K3b {
          */
         bool cancelAll();
 
-        /**
-         * Just a little helper method that makes subclassing easier.
-         * Basically used for DVD writing.
-         */
-        virtual bool waitForMedium();
-
     private Q_SLOTS:
         void slotMultiSessionParamterSetupDone( bool );
 
@@ -97,7 +91,7 @@ namespace K3b {
         IsoImager* m_isoImager;
 
     private:
-        bool analyseBurnMedium( int medium );
+        bool waitForBurnMedium();
         bool startWriterJob();
         bool startOnTheFlyWriting();
         void prepareWriting();

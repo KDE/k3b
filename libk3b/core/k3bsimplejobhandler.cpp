@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2006-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,14 +25,16 @@ K3b::SimpleJobHandler::~SimpleJobHandler()
 {
 }
 
-K3b::Device::MediaType K3b::SimpleJobHandler::waitForMedia( K3b::Device::Device* dev,
-                                                            Device::MediaStates mediaState,
-                                                            Device::MediaTypes mediaType,
-                                                            const QString& message )
+K3b::Device::MediaType K3b::SimpleJobHandler::waitForMedium( K3b::Device::Device* dev,
+                                                             Device::MediaStates mediaState,
+                                                             Device::MediaTypes mediaType,
+                                                             const K3b::Msf& minMediaSize,
+                                                             const QString& message )
 {
     Q_UNUSED( dev );
     Q_UNUSED( mediaState );
     Q_UNUSED( mediaType );
+    Q_UNUSED( minMediaSize );
     Q_UNUSED( message );
 
     return Device::MEDIA_UNKNOWN;

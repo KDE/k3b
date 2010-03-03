@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -95,14 +95,16 @@ bool K3b::ThreadJob::canceled() const
 }
 
 
-K3b::Device::MediaType K3b::ThreadJob::waitForMedia( K3b::Device::Device* device,
-                                                     Device::MediaStates mediaState,
-                                                     Device::MediaTypes mediaType,
-                                                     const QString& message )
+K3b::Device::MediaType K3b::ThreadJob::waitForMedium( K3b::Device::Device* device,
+                                                      Device::MediaStates mediaState,
+                                                      Device::MediaTypes mediaType,
+                                                      const K3b::Msf& minMediaSize,
+                                                      const QString& message )
 {
     K3b::ThreadJobCommunicationEvent* event = K3b::ThreadJobCommunicationEvent::waitForMedium( device,
                                                                                                mediaState,
                                                                                                mediaType,
+                                                                                               minMediaSize,
                                                                                                message );
     QSharedPointer<K3b::ThreadJobCommunicationEvent::Data> data( event->data() );
     QApplication::postEvent( this, event );
@@ -145,10 +147,11 @@ void K3b::ThreadJob::customEvent( QEvent* e )
         int result = 0;
         switch( ce->type() ) {
         case K3b::ThreadJobCommunicationEvent::WaitForMedium:
-            result = K3b::Job::waitForMedia( data->device(),
-                                             data->wantedMediaState(),
-                                             data->wantedMediaType(),
-                                             data->text() );
+            result = K3b::Job::waitForMedium( data->device(),
+                                              data->wantedMediaState(),
+                                              data->wantedMediaType(),
+                                              data->wantedMediaSize(),
+                                              data->text() );
             break;
 
         case K3b::ThreadJobCommunicationEvent::QuestionYesNo:

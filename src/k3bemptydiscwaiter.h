@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,10 +52,11 @@ namespace K3b {
          * @reimplemented from JobHandler
          * \internal do not use!
          */
-        Device::MediaType waitForMedia( Device::Device*,
-                                        Device::MediaStates mediaState = Device::STATE_EMPTY,
-                                        Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
-                                        const QString& message = QString() );
+        Device::MediaType waitForMedium( Device::Device*,
+                                         Device::MediaStates mediaState = Device::STATE_EMPTY,
+                                         Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
+                                         const K3b::Msf& minMediaSize = K3b::Msf(),
+                                         const QString& message = QString() );
 
         /**
          * @reimplemented from JobHandler
@@ -89,6 +90,7 @@ namespace K3b {
         static Device::MediaType wait( Device::Device*,
                                        Device::MediaStates mediaState,
                                        Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
+                                       const K3b::Msf& minMediaSize = K3b::Msf(),
                                        const QString& message = QString(),
                                        QWidget* parent = 0 );
 
@@ -109,6 +111,7 @@ namespace K3b {
 
         Device::MediaType waitForDisc( Device::MediaStates mediaState = Device::STATE_EMPTY,
                                        Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
+                                       const K3b::Msf& minMediaSize = K3b::Msf(),
                                        const QString& message = QString() );
 
 

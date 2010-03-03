@@ -385,7 +385,7 @@ void K3b::VcdJob::startWriterjob()
 {
     kDebug() << QString( "(K3b::VcdJob) writing copy %1 of %2" ).arg( m_currentcopy ).arg( m_doc->copies() );
     if ( prepareWriterJob() ) {
-        if ( waitForMedia( m_doc->burner() ) == Device::MEDIA_UNKNOWN ) {
+        if ( waitForMedium( m_doc->burner() ) == Device::MEDIA_UNKNOWN ) {
             cancel();
             return ;
         }

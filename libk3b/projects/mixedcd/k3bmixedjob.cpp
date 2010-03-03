@@ -1020,7 +1020,7 @@ bool K3b::MixedJob::startWriting()
           && m_currentAction == WRITING_ISO_IMAGE) ) {
 
         emit newSubTask( i18n("Waiting for media") );
-        if( waitForMedia( m_doc->burner() ) == Device::MEDIA_UNKNOWN ) {
+        if( waitForMedium( m_doc->burner() ) == Device::MEDIA_UNKNOWN ) {
             cancel();
             return false;
         }

@@ -68,14 +68,6 @@ K3b::ProjectBurnDialog::ProjectBurnDialog( K3b::Doc* doc, QWidget *parent )
 {
     m_doc = doc;
 
-    /**
-     * There is at least one scenario in which this is useful: change the volume id (or rename a file)
-     * without explicit confirmation (by pressing enter for example). Then click the "burn" button.
-     * The "focus out" event which results in a rename in the listviewitem will be processed after the
-     * initialization of the burn dialog. Thus, the burn dialog will read the old volume id.
-     */
-    setDelayedInitialization( true );
-
     setButtonGui( SAVE_BUTTON,
                   KStandardGuiItem::close() );
     setButtonText( SAVE_BUTTON,

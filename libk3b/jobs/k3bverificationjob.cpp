@@ -46,7 +46,7 @@ namespace {
         QByteArray checksum;
         mutable K3b::Msf length; // it's a cache, let's make it modifiable
     };
-    
+
     typedef QLinkedList<TrackEntry> TrackEntries;
 
     class NullSinkChecksumPipe : public K3b::ChecksumPipe
@@ -218,9 +218,9 @@ void K3b::VerificationJob::start()
     d->canceled = false;
     d->alreadyReadSectors = 0;
 
-    waitForMedia( d->device,
-                  K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE,
-                  K3b::Device::MEDIA_WRITABLE );
+    waitForMedium( d->device,
+                   K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE,
+                   K3b::Device::MEDIA_WRITABLE );
 
     // make sure the job is initialized
     if( !d->trackEntries.isEmpty() ) {
@@ -281,9 +281,9 @@ void K3b::VerificationJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
 
         d->totalSectors += d->trackLength( *it );
     }
-    
+
     Q_ASSERT( d->currentTrackEntry != d->trackEntries.end() );
-    
+
     if( d->currentTrackEntry->trackNumber >= d->toc.count() ) {
         readTrack();
     }
@@ -304,7 +304,7 @@ void K3b::VerificationJob::readTrack()
         jobFinished(true);
         return;
     }
-    
+
     d->readSuccessful = true;
 
     d->currentTrackSize = d->trackLength( *d->currentTrackEntry );
@@ -386,7 +386,7 @@ void K3b::VerificationJob::slotReaderFinished( bool success )
         }
         else {
             emit infoMessage( i18n("Written data verified."), MessageSuccess );
-            
+
             ++d->currentTrackEntry;
             if( d->currentTrackEntry != d->trackEntries.end() )
                 readTrack();

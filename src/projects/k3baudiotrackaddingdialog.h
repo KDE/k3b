@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2006-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,10 +63,11 @@ namespace K3b {
         /**
          * @reimplemented from JobHandler
          */
-        Device::MediaType waitForMedia( Device::Device*,
-                                        Device::MediaStates = Device::STATE_EMPTY,
-                                        Device::MediaTypes = Device::MEDIA_WRITABLE_CD,
-                                        const QString& = QString() ) { return Device::MEDIA_UNKNOWN; }
+        Device::MediaType waitForMedium( Device::Device*,
+                                         Device::MediaStates = Device::STATE_EMPTY,
+                                         Device::MediaTypes = Device::MEDIA_WRITABLE_CD,
+                                         const K3b::Msf& = K3b::Msf(),
+                                         const QString& = QString() ) { return Device::MEDIA_UNKNOWN; }
 
         /**
          * @reimplemented from JobHandler

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2006-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2006-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,10 +39,11 @@ namespace K3b {
         /*
          * \return MEDIA_UNKNOWN
          */
-        Device::MediaType waitForMedia( Device::Device*,
-                                        K3b::Device::MediaStates mediaState = Device::STATE_EMPTY,
-                                        K3b::Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
-                                        const QString& message = QString() );
+        Device::MediaType waitForMedium( Device::Device*,
+                                         K3b::Device::MediaStates mediaState = Device::STATE_EMPTY,
+                                         K3b::Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
+                                         const K3b::Msf& minMediaSize = K3b::Msf(),
+                                         const QString& message = QString() );
         /**
          * \return true
          */

@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -657,7 +657,7 @@ bool K3b::AudioJob::startWriting()
 
 
     emit newSubTask( i18n("Waiting for media") );
-    if( waitForMedia( m_doc->burner() ) == Device::MEDIA_UNKNOWN ) {
+    if( waitForMedium( m_doc->burner() ) == Device::MEDIA_UNKNOWN ) {
         cancel();
         return false;
     }

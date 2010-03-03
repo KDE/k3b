@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -165,9 +165,9 @@ void K3b::CdCopyJob::start()
     emit newSubTask( i18n("Waiting for source medium") );
 
     // wait for a source disk
-    if( waitForMedia( m_readerDevice,
-                      K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE,
-                      K3b::Device::MEDIA_WRITABLE_CD|K3b::Device::MEDIA_CD_ROM ) == Device::MEDIA_UNKNOWN ) {
+    if( waitForMedium( m_readerDevice,
+                       K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE,
+                       K3b::Device::MEDIA_WRITABLE_CD|K3b::Device::MEDIA_CD_ROM ) == Device::MEDIA_UNKNOWN ) {
         finishJob( true, false );
         return;
     }
@@ -722,7 +722,7 @@ bool K3b::CdCopyJob::writeNextSession()
     if ( d->currentWrittenSession == 1 ) {
         emit newSubTask( i18n("Waiting for media") );
 
-        if( waitForMedia( m_writerDevice,
+        if( waitForMedium( m_writerDevice,
                           K3b::Device::STATE_EMPTY,
                           K3b::Device::MEDIA_WRITABLE_CD ) == Device::MEDIA_UNKNOWN ) {
             finishJob( true, false );

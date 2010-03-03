@@ -132,7 +132,7 @@ void K3b::CloneJob::start()
 
         prepareReader();
 
-        if( waitForMedia( readingDevice(),
+        if( waitForMedium( readingDevice(),
                           K3b::Device::STATE_COMPLETE,
                           K3b::Device::MEDIA_WRITABLE_CD|K3b::Device::MEDIA_CD_ROM ) == Device::MEDIA_UNKNOWN ) {
             m_running = false;
@@ -321,7 +321,7 @@ void K3b::CloneJob::startWriting()
     // start writing
     prepareWriter();
 
-    if( waitForMedia( writer(),
+    if( waitForMedium( writer(),
                       K3b::Device::STATE_EMPTY,
                       K3b::Device::MEDIA_WRITABLE_CD ) == Device::MEDIA_UNKNOWN ) {
         removeImageFiles();

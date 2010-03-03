@@ -246,7 +246,7 @@ bool K3b::MetaWriter::determineUsedAppAndMode()
     else if( d->writingMode == K3b::WritingModeRaw )
         mt ^= (Device::MEDIA_DVD_ALL|Device::MEDIA_BD_ALL);
 
-    Device::MediaType mediaType = waitForMedia( burnDevice(), Device::STATE_EMPTY, mt );
+    Device::MediaType mediaType = waitForMedium( burnDevice(), Device::STATE_EMPTY, mt );
     if( mediaType == Device::MEDIA_UNKNOWN )
         return false;
 
