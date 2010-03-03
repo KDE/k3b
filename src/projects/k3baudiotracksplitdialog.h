@@ -15,22 +15,9 @@
 #ifndef _K3B_AUDIO_TRACK_SPLIT_DIALOG_H_
 #define _K3B_AUDIO_TRACK_SPLIT_DIALOG_H_
 
-#include <kdialog.h>
-//Added by qt3to4:
+#include <KDialog>
 #include <QEvent>
 
-namespace K3b {
-    class Msf;
-}
-namespace K3b {
-    class AudioTrack;
-}
-namespace K3b {
-    class AudioEditorWidget;
-}
-namespace K3b {
-    class MsfEdit;
-}
 class KMenu;
 
 
@@ -38,6 +25,12 @@ class KMenu;
  * Internally used by AudioTrackView to get an msf value from the user.
  */
 namespace K3b {
+
+class AudioTrack;
+class AudioEditorWidget;
+class Msf;
+class MsfEdit;
+    
 class AudioTrackSplitDialog : public KDialog
 {
     Q_OBJECT
