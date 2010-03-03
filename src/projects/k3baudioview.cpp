@@ -3,7 +3,7 @@
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *           (C) 2009      Arthur Mello <arthur@mandriva.com>
  *           (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
- *           (C) 2009      Michal Malek <michalm@jabster.pl>
+ *           (C) 2009-2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -29,6 +29,7 @@
 
 #include <QLayout>
 #include <QString>
+#include <QScrollBar>
 
 #include <KAction>
 #include <KActionCollection>
@@ -47,8 +48,12 @@ K3b::AudioView::AudioView( K3b::AudioDoc* doc, QWidget* parent )
     m_model = new AudioProjectModel(m_doc, this);
     m_audioViewImpl = new AudioViewImpl( this, m_doc, m_model, actionCollection() );
     
+    // set the model for the StandardView's views
+    setModel(m_model);
+    
     // and hide the side panel as the audio project has no tree hierarchy
     setShowDirPanel(false);
+    fileView()->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 
     // trueg: I don't see why we use StandardView here. IMHO it only makes things a bit weird
     m_columnAdjuster = new ViewColumnAdjuster( fileView() );
@@ -77,9 +82,6 @@ K3b::AudioView::AudioView( K3b::AudioDoc* doc, QWidget* parent )
              this, SLOT(slotRemove()) );
 
     fillStatusDisplay()->showTime();
-    
-    // set the model for the StandardView's views
-    setModel(m_model);
 
     toolBox()->addAction( actionCollection()->action( "project_audio_convert" ) );
     toolBox()->addSeparator();
@@ -236,6 +238,9 @@ void K3b::AudioView::slotAdjustColumns()
     fileView()->setColumnWidth( AudioProjectModel::LengthColumn, lengthWidth );
 
     int remaining = fileView()->contentsRect().width() - typeWidth - lengthWidth - fileView()->columnWidth(0);
+    if( fileView()->verticalScrollBar()->isVisible() ) {
+        remaining -= fileView()->verticalScrollBar()->style()->pixelMetric( QStyle::PM_ScrollBarExtent );
+    }
 
     // now let's see if there is enough space for all
     if( remaining >= artistWidth + titleWidth + filenameWidth ) {
