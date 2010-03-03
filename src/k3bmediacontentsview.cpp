@@ -140,7 +140,8 @@ void K3b::MediaContentsView::slotMediumChanged( K3b::Device::Device* dev )
             kDebug() << k_funcinfo << " medium did not change";
             enableInteraction( true );
         }
-        else if( m.content() & supportedMediumContent() &&
+        else if( ( m.diskInfo().mediaType() == Device::MEDIA_NONE ||
+                   m.content() & supportedMediumContent() ) &&
                  m.diskInfo().mediaType() & supportedMediumTypes() &&
                  m.diskInfo().diskState() & supportedMediumStates() ) {
             kDebug() << k_funcinfo << " new supported medium found";

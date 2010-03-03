@@ -56,9 +56,9 @@ namespace {
 
 K3b::DiskInfoView::DiskInfoView( QWidget* parent )
     : K3b::MediaContentsView( true,
-                              K3b::Medium::ContentAll,
-                              K3b::Device::MEDIA_ALL|K3b::Device::MEDIA_UNKNOWN,
-                              K3b::Device::STATE_EMPTY|K3b::Device::STATE_INCOMPLETE|K3b::Device::STATE_COMPLETE|K3b::Device::STATE_UNKNOWN,
+                              Medium::ContentAll,
+                              Device::MEDIA_ALL|Device::MEDIA_NONE|Device::MEDIA_UNKNOWN,
+                              Device::STATE_ALL|Device::STATE_NO_MEDIA|Device::STATE_UNKNOWN,
                               parent )
 {
     m_infoView = new QWebView( this );
@@ -299,11 +299,13 @@ QString K3b::DiskInfoView::createMediaInfoItems( const K3b::Medium& medium )
         s += tableRow( i18n("Media ID:"), !info.mediaId().isEmpty() ? QString::fromLatin1( info.mediaId() ) : i18n("unknown") );
     s += tableRow( i18n("Capacity:"), i18n("%1 min",info.capacity().toString()) + " (" + KIO::convertSize(info.capacity().mode1Bytes()) + ')' );
     if( !info.empty() )
-        s += tableRow( i18n("Used Capacity:"), i18n("%1 min",info.size().toString()) + " (" + KIO::convertSize(info.size().mode1Bytes()) + ')' );
-    if( info.appendable() )
-        s += tableRow( i18n("Remaining:"), i18n("%1 min",info.remainingSize().toString() ) + " (" + KIO::convertSize(info.remainingSize().mode1Bytes()) + ')' );
+        s += tableRow( i18n("Used Capacity:"), i18n("%1 min", medium.actuallyUsedCapacity().toString()) + " (" + KIO::convertSize(medium.actuallyUsedCapacity().mode1Bytes()) + ')' );
+    if( !info.empty() ||
+        info.appendable() ||
+        ( info.mediaType() & ( Device::MEDIA_DVD_PLUS_RW|Device::MEDIA_DVD_RW_OVWR|Device::MEDIA_BD_RE ) ) )
+        s += tableRow( i18n("Remaining:"), i18n("%1 min", medium.actuallyRemainingSize().toString() ) + " (" + KIO::convertSize(medium.actuallyRemainingSize().mode1Bytes()) + ')' );
     s += tableRow( i18n("Rewritable:"), info.rewritable() ? i18nc("Availability", "yes") : i18nc("Availability", "no") );
-    s += tableRow( i18n("Appendable:"), info.appendable() ? i18nc("Availability", "yes") : i18nc("Availability", "no") );
+    s += tableRow( i18n("Appendable:"), info.appendable() || ( info.mediaType() & ( Device::MEDIA_DVD_PLUS_RW|Device::MEDIA_DVD_RW_OVWR|Device::MEDIA_BD_RE ) ) ? i18nc("Availability", "yes") : i18nc("Availability", "no") );
     s += tableRow( i18n("Empty:"), info.empty() ? i18nc("Availability", "yes") : i18nc("Availability", "no") );
     if( !( info.mediaType() & K3b::Device::MEDIA_CD_ALL ) )
         s += tableRow( i18nc("Number of layers on an optical medium", "Layers:"), QString::number( info.numLayers() ) );
