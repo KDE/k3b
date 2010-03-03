@@ -283,7 +283,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
         // are handled the same everywhere (isofs is grown).
         //
         else if ( d->wantedMediaState != Device::STATE_EMPTY &&
-                  d->wantedMinMediaSize <= medium.remainingSize() ) {
+                  d->wantedMinMediaSize <= medium.actuallyRemainingSize() ) {
             finishWaiting( K3b::Device::MEDIA_BD_RE );
         }
         else {
@@ -377,7 +377,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
             // We want a DVD+RW not nessessarily empty. No problem, just use this one. Becasue incomplete and complete
             // are handled the same everywhere (isofs is grown).
             //
-            else if ( d->wantedMinMediaSize <= medium.remainingSize() ) {
+            else if ( d->wantedMinMediaSize <= medium.actuallyRemainingSize() ) {
                 finishWaiting( K3b::Device::MEDIA_DVD_PLUS_RW );
             }
             else {
@@ -415,7 +415,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
         // size for read-only cases, thus using remainingSize() is perfectly fine)
         if( (d->wantedMediaType & medium.diskInfo().mediaType()) &&
             (d->wantedMediaState & medium.diskInfo().diskState()) &&
-            d->wantedMinMediaSize <= medium.remainingSize() ) {
+            d->wantedMinMediaSize <= medium.actuallyRemainingSize() ) {
             finishWaiting( medium.diskInfo().mediaType() );
         }
 
@@ -470,7 +470,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
             // We want a DVD-RW overwrite not nessessarily empty. No problem, just use this one. Becasue incomplete and complete
             // are handled the same everywhere (isofs is grown).
             //
-            else if ( d->wantedMinMediaSize <= medium.remainingSize() ) {
+            else if ( d->wantedMinMediaSize <= medium.actuallyRemainingSize() ) {
                 finishWaiting( K3b::Device::MEDIA_DVD_RW_OVWR );
             }
             else {
@@ -607,7 +607,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
     // size for read-only cases, thus using remainingSize() is perfectly fine)
     else if( (d->wantedMediaType & medium.diskInfo().mediaType()) &&
              (d->wantedMediaState & medium.diskInfo().diskState()) &&
-             d->wantedMinMediaSize <= medium.remainingSize() ) {
+             d->wantedMinMediaSize <= medium.actuallyRemainingSize() ) {
         finishWaiting( medium.diskInfo().mediaType() );
     }
 

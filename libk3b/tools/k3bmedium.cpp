@@ -133,7 +133,21 @@ const K3b::Iso9660SimplePrimaryDescriptor& K3b::Medium::iso9660Descriptor() cons
 }
 
 
-K3b::Msf K3b::Medium::remainingSize() const
+K3b::Msf K3b::Medium::actuallyUsedCapacity() const
+{
+    // DVD+RW, BD-RE, and DVD-RW in restricted overwrite mode have a single track that does not
+    // change in size. Thus, the remainingSize value from the disk info is of no great value.
+    if ( !d->diskInfo.empty() &&
+         d->diskInfo.mediaType() & ( Device::MEDIA_DVD_PLUS_RW|Device::MEDIA_DVD_RW_OVWR|Device::MEDIA_BD_RE ) ) {
+        return d->isoDesc.volumeSpaceSize;
+    }
+    else {
+        return d->diskInfo.size();
+    }
+}
+
+
+K3b::Msf K3b::Medium::actuallyRemainingSize() const
 {
     // DVD+RW, BD-RE, and DVD-RW in restricted overwrite mode have a single track that does not
     // change in size. Thus, the remainingSize value from the disk info is of no great value.
