@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2004-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -146,7 +147,13 @@ public:
           rangeSelectionEnabled(false),
           selectedRangeId(0),
           draggedRangeId(0),
-          movedRangeId(0) {
+          movedRangeId(0),
+          maxMarkers(1),
+          idCnt(1),
+          mouseAt(true),
+          draggingRangeEnd(false),
+          draggedMarker(0),
+          margin(5) {
     }
 
     QBrush selectedRangeBrush;
@@ -161,15 +168,24 @@ public:
 
     Range::List ranges;
     Marker::List markers;
+
+    int maxMarkers;
+    K3b::Msf length;
+    int idCnt;
+    bool mouseAt;
+
+    bool draggingRangeEnd;
+    Marker* draggedMarker;
+
+    /**
+     * Margin around the timethingy
+     */
+    int margin;
 };
 
 
 K3b::AudioEditorWidget::AudioEditorWidget( QWidget* parent )
-    : QFrame( parent ),
-      m_maxMarkers(1),
-      m_idCnt(1),
-      m_mouseAt(true),
-      m_draggedMarker(0)
+    : QFrame( parent )
 {
     d = new Private;
     d->selectedRangeBrush = palette().highlight();
@@ -178,10 +194,6 @@ K3b::AudioEditorWidget::AudioEditorWidget( QWidget* parent )
     setFrameStyle( StyledPanel|Sunken );
     setMouseTracking(true);
     setCursor( Qt::PointingHandCursor );
-
-    m_margin = 5;
-    //TODO port me
-    //m_toolTip = new ToolTip( this );
 }
 
 
@@ -198,9 +210,9 @@ QSize K3b::AudioEditorWidget::minimumSizeHint() const
     // FIXME: this is still bad for long sources and there might be 60 minutes sources!
 
     int maxWidth = QApplication::desktop()->width()*2/3;
-    int wantedWidth = 2*m_margin + 2*frameWidth() + (m_length.totalFrames()/75/60 + 1) * fontMetrics().width( "000" );
+    int wantedWidth = 2*d->margin + 2*frameWidth() + (d->length.totalFrames()/75/60 + 1) * fontMetrics().width( "000" );
     return QSize( qMin( maxWidth, wantedWidth ),
-                  2*m_margin + 12 + 6 /*12 for the tickmarks and 6 for the markers */ + fontMetrics().height() + 2*frameWidth() );
+                  2*d->margin + 12 + 6 /*12 for the tickmarks and 6 for the markers */ + fontMetrics().height() + 2*frameWidth() );
 }
 
 
@@ -212,7 +224,7 @@ QSize K3b::AudioEditorWidget::sizeHint() const
 
 void K3b::AudioEditorWidget::setLength( const K3b::Msf& length )
 {
-    m_length = length;
+    d->length = length;
     // TODO: remove markers beyond length
     // TODO: shorten ranges if nesseccary
     update();
@@ -221,7 +233,7 @@ void K3b::AudioEditorWidget::setLength( const K3b::Msf& length )
 
 const K3b::Msf K3b::AudioEditorWidget::length() const
 {
-    return m_length;
+    return d->length;
 }
 
 
@@ -283,10 +295,10 @@ int K3b::AudioEditorWidget::addRange( const K3b::Msf& start, const K3b::Msf& end
                                     const QString& toolTip,
                                     const QBrush& brush )
 {
-    if( start > end || end > m_length-1 )
+    if( start > end || end > d->length-1 )
         return -1;
 
-    Range r( m_idCnt++, start, end, startFixed, endFixed, toolTip,
+    Range r( d->idCnt++, start, end, startFixed, endFixed, toolTip,
              brush.style() != Qt::NoBrush ? brush : palette().background() );
     d->ranges.append( r );
     qSort( d->ranges );
@@ -326,7 +338,7 @@ bool K3b::AudioEditorWidget::modifyRange( int identifier, const K3b::Msf& start,
         if( start > end )
             return false;
 
-        if( end > m_length )
+        if( end > d->length )
             return false;
 
         range->start = start;
@@ -398,10 +410,10 @@ QList<int> K3b::AudioEditorWidget::allRanges() const
 
 void K3b::AudioEditorWidget::setMaxNumberOfMarkers( int i )
 {
-    m_maxMarkers = i;
+    d->maxMarkers = i;
 
     // remove last markers
-    while( d->markers.count() > qMax( 1, m_maxMarkers ) ) {
+    while( d->markers.count() > qMax( 1, d->maxMarkers ) ) {
         removeMarker( d->markers.last().id );
     }
 }
@@ -409,8 +421,8 @@ void K3b::AudioEditorWidget::setMaxNumberOfMarkers( int i )
 
 int K3b::AudioEditorWidget::addMarker( const K3b::Msf& pos, bool fixed, const QString& toolTip, const QColor& color )
 {
-    if( pos < m_length ) {
-        Marker m( m_idCnt++, pos, fixed, color.isValid() ? color : palette().foreground().color(), toolTip );
+    if( pos < d->length ) {
+        Marker m( d->idCnt++, pos, fixed, color.isValid() ? color : palette().foreground().color(), toolTip );
         d->markers.append( m );
         return m.id;
     }
@@ -442,7 +454,7 @@ bool K3b::AudioEditorWidget::removeMarker( int identifier )
 
 bool K3b::AudioEditorWidget::moveMarker( int identifier, const K3b::Msf& pos )
 {
-    if( pos < m_length )
+    if( pos < d->length )
         if( Marker* m = getMarker( identifier ) ) {
             QRect rect = contentsRect();
             rect.setLeft( qMin( msfToPos( pos ), msfToPos( m->pos ) ) );
@@ -460,15 +472,21 @@ bool K3b::AudioEditorWidget::moveMarker( int identifier, const K3b::Msf& pos )
 }
 
 
-void K3b::AudioEditorWidget::paintEvent( QPaintEvent* event )
+void K3b::AudioEditorWidget::enableMouseAtSignal( bool b )
 {
-    Q_UNUSED( event );
+    d->mouseAt = b;
+}
+
+
+void K3b::AudioEditorWidget::paintEvent( QPaintEvent* e )
+{
+    Q_UNUSED( e );
 
     QPainter p( this );
 
     QRect drawRect( contentsRect() );
-    drawRect.setLeft( drawRect.left() + m_margin );
-    drawRect.setRight( drawRect.right() - m_margin );
+    drawRect.setLeft( drawRect.left() + d->margin );
+    drawRect.setRight( drawRect.right() - d->margin );
 
     // from minimumSizeHint()
 //   int neededHeight = fontMetrics().height() + 12 + 6;
@@ -476,8 +494,8 @@ void K3b::AudioEditorWidget::paintEvent( QPaintEvent* event )
 //   drawRect.setTop( drawRect.top() + (drawRect.height() - neededHeight)/2 );
 //   drawRect.setHeight( neededHeight );
 
-    drawRect.setTop( drawRect.top() + m_margin );
-    drawRect.setBottom( drawRect.bottom() - m_margin );
+    drawRect.setTop( drawRect.top() + d->margin );
+    drawRect.setBottom( drawRect.bottom() - d->margin );
 
     drawAll( &p, drawRect );
 }
@@ -513,10 +531,10 @@ void K3b::AudioEditorWidget::drawAll( QPainter* p, const QRect& drawRect )
     int minute = 1;
     int minuteStep = 1;
     int markerVPos = drawRect.bottom();
-    int maxMarkerWidth = fontMetrics().width( QString::number(m_length.minutes()) );
+    int maxMarkerWidth = fontMetrics().width( QString::number(d->length.minutes()) );
     int minNeededSpace = maxMarkerWidth + 1;
     int x = 0;
-    while( minute*60*75 < m_length ) {
+    while( minute*60*75 < d->length ) {
         int newX = msfToPos( minute*60*75 );
 
         // only draw the mark if we have anough space
@@ -637,19 +655,19 @@ void K3b::AudioEditorWidget::fixupOverlappingRanges( int rangeId )
 void K3b::AudioEditorWidget::mousePressEvent( QMouseEvent* e )
 {
     d->draggedRangeId = 0;
-    m_draggedMarker = 0;
+    d->draggedMarker = 0;
 
     bool end;
     if( Range* r = findRangeEdge( e->pos(), &end ) ) {
         d->draggedRangeId = r->id;
-        m_draggingRangeEnd = end;
+        d->draggingRangeEnd = end;
         setSelectedRange( r->id );
     }
     else if( Range* r = findRange( e->pos() ) ) {
         d->movedRangeId = r->id;
         d->lastMovePosition = posToMsf( e->pos().x() );
         setSelectedRange( r->id );
-        m_draggedMarker = findMarker( e->pos() );
+        d->draggedMarker = findMarker( e->pos() );
     }
 
     QFrame::mousePressEvent(e);
@@ -673,7 +691,7 @@ void K3b::AudioEditorWidget::mouseReleaseEvent( QMouseEvent* e )
     }
 
     d->draggedRangeId = 0;
-    m_draggedMarker = 0;
+    d->draggedMarker = 0;
     d->movedRangeId = 0;
 
     QFrame::mouseReleaseEvent(e);
@@ -688,17 +706,17 @@ void K3b::AudioEditorWidget::mouseDoubleClickEvent( QMouseEvent* e )
 
 void K3b::AudioEditorWidget::mouseMoveEvent( QMouseEvent* e )
 {
-    if( m_mouseAt )
+    if( d->mouseAt )
         emit mouseAt( posToMsf( e->pos().x() ) );
 
     if( e->buttons() & Qt::LeftButton ) {
         if( Range* draggedRange = getRange( d->draggedRangeId ) ) {
             // determine the position the range's end was dragged to and its other end
-            K3b::Msf msfPos = qMax( K3b::Msf(), qMin( posToMsf( e->pos().x() ), m_length-1 ) );
-            K3b::Msf otherEnd = ( m_draggingRangeEnd ? draggedRange->start : draggedRange->end );
+            K3b::Msf msfPos = qMax( K3b::Msf(), qMin( posToMsf( e->pos().x() ), d->length-1 ) );
+            K3b::Msf otherEnd = ( d->draggingRangeEnd ? draggedRange->start : draggedRange->end );
 
             // move it to the new pos
-            if( m_draggingRangeEnd )
+            if( d->draggingRangeEnd )
                 draggedRange->end = msfPos;
             else
                 draggedRange->start = msfPos;
@@ -708,23 +726,23 @@ void K3b::AudioEditorWidget::mouseMoveEvent( QMouseEvent* e )
                 K3b::Msf buf = draggedRange->start;
                 draggedRange->start = draggedRange->end;
                 draggedRange->end = buf;
-                m_draggingRangeEnd = !m_draggingRangeEnd;
+                d->draggingRangeEnd = !d->draggingRangeEnd;
             }
 
             emit rangeChanged( draggedRange->id, draggedRange->start, draggedRange->end );
 
             repaint();
         }
-        else if( m_draggedMarker ) {
-            m_draggedMarker->pos = posToMsf( e->pos().x() );
-            emit markerMoved( m_draggedMarker->id, m_draggedMarker->pos );
+        else if( d->draggedMarker ) {
+            d->draggedMarker->pos = posToMsf( e->pos().x() );
+            emit markerMoved( d->draggedMarker->id, d->draggedMarker->pos );
 
             repaint();
         }
         else if( Range* movedRange = getRange( d->movedRangeId ) ) {
             int diff = posToMsf( e->pos().x() ).lba() - d->lastMovePosition.lba();
-            if( movedRange->end + diff >= m_length )
-                diff = m_length.lba() - movedRange->end.lba() - 1;
+            if( movedRange->end + diff >= d->length )
+                diff = d->length.lba() - movedRange->end.lba() - 1;
             else if( movedRange->start - diff < 0 )
                 diff = -1 * movedRange->start.lba();
             movedRange->start += diff;
@@ -833,18 +851,18 @@ K3b::AudioEditorWidget::Marker* K3b::AudioEditorWidget::findMarker( const QPoint
 // p is in widget coordinates
 K3b::Msf K3b::AudioEditorWidget::posToMsf( int p ) const
 {
-    int w = contentsRect().width() - 2*m_margin;
-    int x = qMin( p-frameWidth()-m_margin, w );
-    return ( (int)((double)(m_length.lba()-1) / (double)w * (double)x) );
+    int w = contentsRect().width() - 2*d->margin;
+    int x = qMin( p-frameWidth()-d->margin, w );
+    return ( (int)((double)(d->length.lba()-1) / (double)w * (double)x) );
 }
 
 
 // returns widget coordinates
 int K3b::AudioEditorWidget::msfToPos( const K3b::Msf& msf ) const
 {
-    int w = contentsRect().width() - 2*m_margin;
-    int pos = (int)((double)w / (double)(m_length.lba()-1) * (double)msf.lba());
-    return frameWidth() + m_margin + qMin( pos, w-1 );
+    int w = contentsRect().width() - 2*d->margin;
+    int pos = (int)((double)w / (double)(d->length.lba()-1) * (double)msf.lba());
+    return frameWidth() + d->margin + qMin( pos, w-1 );
 }
 
 

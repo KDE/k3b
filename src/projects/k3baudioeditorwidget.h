@@ -1,6 +1,7 @@
 /* 
  *
  * Copyright (C) 2004-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -33,8 +34,8 @@ public:
     AudioEditorWidget( QWidget* parent = 0 );
     ~AudioEditorWidget();
 
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
+    virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const;
 
     /**
      * For now the Editor has only one parameter: the length data.
@@ -107,7 +108,7 @@ public:
      */
     bool moveMarker( int identifier, const K3b::Msf& );
 
-    void enableMouseAtSignal( bool b ) { m_mouseAt = b; }
+    void enableMouseAtSignal( bool b );
 
     /**
      * By default ranges can overlap. If overlapping ranges are not allowed
@@ -167,20 +168,21 @@ Q_SIGNALS:
     void markerMoved( int identifier, const K3b::Msf& pos );
     void markerAdded( int identifier, const K3b::Msf& pos );
     void markerRemoved( int identifier );
+    
+protected:
+    virtual void paintEvent( QPaintEvent* e );
+    virtual void mousePressEvent( QMouseEvent* e );
+    virtual void mouseReleaseEvent( QMouseEvent* e );
+    virtual void mouseDoubleClickEvent( QMouseEvent* e );
+    virtual void mouseMoveEvent( QMouseEvent* e );
 
 private:
     class Range;
     class Marker;
-    class ToolTip;
 
     class Private;
     Private* d;
 
-    void mousePressEvent( QMouseEvent* e );
-    void mouseReleaseEvent( QMouseEvent* e );
-    void mouseDoubleClickEvent( QMouseEvent* e );
-    void mouseMoveEvent( QMouseEvent* e );
-    void paintEvent(QPaintEvent *);
     void drawAll( QPainter*, const QRect& );
     void drawRange( QPainter* p, const QRect&, const Range& r );
     void drawMarker( QPainter* p, const QRect&, const Marker& m );
@@ -196,21 +198,6 @@ private:
     Range* findRange( const QPoint& p ) const;
     Range* findRangeEdge( const QPoint& p, bool* end = 0 ) const;
     Marker* findMarker( const QPoint& p ) const;
-
-    int m_maxMarkers;
-    K3b::Msf m_length;
-    int m_idCnt;
-    bool m_mouseAt;
-
-    /**
-     * Margin around the timethingy
-     */
-    int m_margin;
-
-    bool m_draggingRangeEnd;
-    Marker* m_draggedMarker;
-
-    ToolTip* m_toolTip;
 };
 }
 
