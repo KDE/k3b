@@ -23,7 +23,7 @@
         <number>6</number>
       </property>
       <item rowspan="1" row="1" column="0" colspan="2" >
-        <widget class="Q3GroupBox" name="groupIsoSettings" >
+        <widget class="QGroupBox" name="groupIsoSettings" >
           <property name="title" >
             <string>File System Settings</string>
           </property>
@@ -50,7 +50,7 @@
         </widget>
       </item>
       <item row="0" column="0" >
-        <widget class="Q3GroupBox" name="groupBox3" >
+        <widget class="QGroupBox" name="groupBox3" >
           <property name="title" >
             <string>File Systems</string>
           </property>
@@ -109,7 +109,7 @@
         </widget>
       </item>
       <item row="0" column="1" >
-        <widget class="Q3GroupBox" name="groupBox5" >
+        <widget class="QGroupBox" name="groupBox5" >
           <property name="title" >
             <string>Other Settings</string>
           </property>

@@ -1,237 +1,231 @@
-<ui version="4.0" stdsetdef="1" >
-  <author>Sebastian Trueg</author>
-  <comment></comment>
-  <exportmacro></exportmacro>
-  <class>base_K3bDataImageSettings</class>
-  <widget class="QWidget" name="base_K3bDataImageSetings" >
-    <property name="windowTitle" >
-      <string>Data Image Settings</string>
-    </property>
-    <layout class="QVBoxLayout" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>Sebastian Trueg</author>
+ <class>base_K3bDataImageSettings</class>
+ <widget class="QWidget" name="base_K3bDataImageSettings">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>496</width>
+    <height>240</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Data Image Settings</string>
+  </property>
+  <layout class="QVBoxLayout">
+   <item>
+    <widget class="QGroupBox" name="m_groupVolumeName">
+     <property name="title">
+      <string>Volume Name</string>
+     </property>
+     <layout class="QHBoxLayout">
       <item>
-        <widget class="Q3GroupBox" name="m_groupVolumeName" >
-          <property name="title" >
-            <string>Volume Name</string>
-          </property>
-          <layout class="QHBoxLayout" >
-            <item>
-              <widget class="QLineEdit" name="m_editVolumeName" >
-                <property name="maxLength" >
-                  <number>32</number>
-                </property>
-              </widget>
-            </item>
-            <item>
-              <widget class="QPushButton" name="m_buttonMoreVolDescFields" >
-                <property name="text" >
-                  <string>&amp;More fields...</string>
-                </property>
-              </widget>
-            </item>
-          </layout>
-        </widget>
+       <widget class="QLineEdit" name="m_editVolumeName">
+        <property name="maxLength">
+         <number>32</number>
+        </property>
+       </widget>
       </item>
       <item>
-        <widget class="Q3GroupBox" name="m_groupFileSystem" >
-          <property name="title" >
-            <string>File System</string>
-          </property>
-          <layout class="QHBoxLayout" >
-            <property name="margin" >
-              <number>11</number>
-            </property>
-            <property name="spacing" >
-              <number>6</number>
-            </property>
-            <item>
-              <widget class="QComboBox" name="m_comboFilesystems" >
-                <property name="sizePolicy" >
-                  <sizepolicy>
-                    <hsizetype>1</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>1</horstretch>
-                    <verstretch>0</verstretch>
-                  </sizepolicy>
-                </property>
-                <property name="toolTip" stdset="0" >
-                  <string>File system presets</string>
-                </property>
-              </widget>
-            </item>
-            <item>
-              <widget class="QPushButton" name="m_buttonCustomFilesystems" >
-                <property name="text" >
-                  <string>&amp;Custom...</string>
-                </property>
-              </widget>
-            </item>
-          </layout>
-        </widget>
+       <widget class="QPushButton" name="m_buttonMoreVolDescFields">
+        <property name="text">
+         <string>&amp;More fields...</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="m_groupFileSystem">
+     <property name="title">
+      <string>File System</string>
+     </property>
+     <layout class="QHBoxLayout">
+      <item>
+       <widget class="QComboBox" name="m_comboFilesystems">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>File system presets</string>
+        </property>
+       </widget>
       </item>
       <item>
-        <layout class="QHBoxLayout" >
-          <item>
-            <widget class="Q3GroupBox" name="m_groupSymlinks" >
-              <property name="title" >
-                <string>Symbolic Links</string>
-              </property>
-              <layout class="QVBoxLayout" >
-                <item>
-                  <widget class="QComboBox" name="m_comboSymlinkHandling" >
-                    <property name="sizePolicy" >
-                      <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>0</vsizetype>
-                        <horstretch>1</horstretch>
-                        <verstretch>0</verstretch>
-                      </sizepolicy>
-                    </property>
-                    <property name="toolTip" stdset="0" >
-                      <string>Symbolic link handling in the project</string>
-                    </property>
-                    <property name="whatsThis" stdset="0" >
-                      <string>&lt;p>K3b can create ISO9660 filesystems that contain symlinks if the Rock Ridge extensions are enabled (they are by default). You can change the way symlinks are handled in a K3b project.
+       <widget class="QPushButton" name="m_buttonCustomFilesystems">
+        <property name="text">
+         <string>&amp;Custom...</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout">
+     <item>
+      <widget class="QGroupBox" name="m_groupSymlinks">
+       <property name="title">
+        <string>Symbolic Links</string>
+       </property>
+       <layout class="QVBoxLayout">
+        <item>
+         <widget class="QComboBox" name="m_comboSymlinkHandling">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>1</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>Symbolic link handling in the project</string>
+          </property>
+          <property name="whatsThis">
+           <string>&lt;p&gt;K3b can create ISO9660 filesystems that contain symlinks if the Rock Ridge extensions are enabled (they are by default). You can change the way symlinks are handled in a K3b project.
 
-&lt;p>&lt;b>No Change&lt;/b>&lt;br>
+&lt;p&gt;&lt;b&gt;No Change&lt;/b&gt;&lt;br&gt;
 Symlinks are used as they have been added to the project. 
 
-&lt;p>&lt;b>Discard broken symlinks&lt;/b>&lt;br>
+&lt;p&gt;&lt;b&gt;Discard broken symlinks&lt;/b&gt;&lt;br&gt;
 K3b will discard all symbolic links that do not point to a file inside the project. That includes all links to absolute paths like '/home/myhome/testfile'.
 
-&lt;p>&lt;b>Discard all symlinks&lt;/b>&lt;br>
+&lt;p&gt;&lt;b&gt;Discard all symlinks&lt;/b&gt;&lt;br&gt;
 K3b will discard all symbolic links that have been added to the project; meaning that the resulting file system will have no links at all.
 
-&lt;p>&lt;b>Follow symlinks&lt;/b>&lt;br>
-Each symbolic link in the project will be replaced with the contents of the file it is pointing to. Thus, the resulting filesystem will not contain any symbolic links.&lt;br>
+&lt;p&gt;&lt;b&gt;Follow symlinks&lt;/b&gt;&lt;br&gt;
+Each symbolic link in the project will be replaced with the contents of the file it is pointing to. Thus, the resulting filesystem will not contain any symbolic links.&lt;br&gt;
 Be aware that in case Rock Ridge extensions are disabled (which is not recommended) symbolic links are always followed because ISO9660 does not support symbolic links.
 
-&lt;p>&lt;b>Caution:&lt;/b> Symbolic links require Rock Ridge extensions.</string>
-                    </property>
-                    <item>
-                      <property name="text" >
-                        <string>No Change</string>
-                      </property>
-                    </item>
-                    <item>
-                      <property name="text" >
-                        <string>Discard broken symlinks</string>
-                      </property>
-                    </item>
-                    <item>
-                      <property name="text" >
-                        <string>Discard all symlinks</string>
-                      </property>
-                    </item>
-                    <item>
-                      <property name="text" >
-                        <string>Follow symlinks</string>
-                      </property>
-                    </item>
-                  </widget>
-                </item>
-              </layout>
-            </widget>
+&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; Symbolic links require Rock Ridge extensions.</string>
+          </property>
+          <item>
+           <property name="text">
+            <string>No Change</string>
+           </property>
           </item>
           <item>
-            <widget class="Q3GroupBox" name="m_groupWhitespace" >
-              <property name="title" >
-                <string>White space handling</string>
-              </property>
-              <layout class="QHBoxLayout" >
-                <item>
-                  <widget class="QComboBox" name="m_comboSpaceHandling" >
-                    <property name="sizePolicy" >
-                      <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>0</vsizetype>
-                        <horstretch>1</horstretch>
-                        <verstretch>0</verstretch>
-                      </sizepolicy>
-                    </property>
-                    <property name="toolTip" stdset="0" >
-                      <string>Handling of spaces in filenames</string>
-                    </property>
-                    <property name="whatsThis" stdset="0" >
-                      <string>&lt;p>&lt;b>No Change&lt;/b>&lt;br>
-If this option is checked, K3b will leave all spaces in filenames as they are.
-&lt;p>&lt;b>Strip&lt;/b>&lt;br>
-If this option is checked, K3b will remove all spaces from all filenames.&lt;br>
-Example: 'my good file.ext' becomes 'mygoodfile.ext'
-&lt;p>&lt;b>Extended Strip&lt;/b>&lt;br>
-If this option is checked K3b will remove all spaces in all filenames and capitalize all letters following a space.&lt;br>
-Example: 'my good file.ext' becomes 'myGoodFile.ext'
-&lt;p>&lt;b>Replace&lt;/b>&lt;br>
-If this option is checked, K3b will replace all spaces in all filenames with the specified characters.&lt;br>
-Example: 'my good file.ext' becomes 'my_good_file.ext'</string>
-                    </property>
-                    <item>
-                      <property name="text" >
-                        <string>No Change</string>
-                      </property>
-                    </item>
-                    <item>
-                      <property name="text" >
-                        <string>Strip</string>
-                      </property>
-                    </item>
-                    <item>
-                      <property name="text" >
-                        <string>Extended Strip</string>
-                      </property>
-                    </item>
-                    <item>
-                      <property name="text" >
-                        <string>Replace</string>
-                      </property>
-                    </item>
-                  </widget>
-                </item>
-                <item>
-                  <widget class="QLineEdit" name="m_editReplace" >
-                    <property name="enabled" >
-                      <bool>false</bool>
-                    </property>
-                    <property name="sizePolicy" >
-                      <sizepolicy>
-                        <hsizetype>0</hsizetype>
-                        <vsizetype>0</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                      </sizepolicy>
-                    </property>
-                    <property name="text" >
-                      <string>_</string>
-                    </property>
-                    <property name="toolTip" stdset="0" >
-                      <string>The string to replace spaces with</string>
-                    </property>
-                  </widget>
-                </item>
-              </layout>
-            </widget>
+           <property name="text">
+            <string>Discard broken symlinks</string>
+           </property>
           </item>
-        </layout>
-      </item>
-      <item>
-        <spacer name="spacer1" >
-          <property name="sizeHint" >
-            <size>
-              <width>21</width>
-              <height>0</height>
-            </size>
+          <item>
+           <property name="text">
+            <string>Discard all symlinks</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Follow symlinks</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="m_groupWhitespace">
+       <property name="title">
+        <string>White space handling</string>
+       </property>
+       <layout class="QHBoxLayout">
+        <item>
+         <widget class="QComboBox" name="m_comboSpaceHandling">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>1</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
-          <property name="sizeType" >
-            <enum>QSizePolicy::Expanding</enum>
+          <property name="toolTip">
+           <string>Handling of spaces in filenames</string>
           </property>
-          <property name="orientation" >
-            <enum>Qt::Vertical</enum>
+          <property name="whatsThis">
+           <string>&lt;p&gt;&lt;b&gt;No Change&lt;/b&gt;&lt;br&gt;
+If this option is checked, K3b will leave all spaces in filenames as they are.
+&lt;p&gt;&lt;b&gt;Strip&lt;/b&gt;&lt;br&gt;
+If this option is checked, K3b will remove all spaces from all filenames.&lt;br&gt;
+Example: 'my good file.ext' becomes 'mygoodfile.ext'
+&lt;p&gt;&lt;b&gt;Extended Strip&lt;/b&gt;&lt;br&gt;
+If this option is checked K3b will remove all spaces in all filenames and capitalize all letters following a space.&lt;br&gt;
+Example: 'my good file.ext' becomes 'myGoodFile.ext'
+&lt;p&gt;&lt;b&gt;Replace&lt;/b&gt;&lt;br&gt;
+If this option is checked, K3b will replace all spaces in all filenames with the specified characters.&lt;br&gt;
+Example: 'my good file.ext' becomes 'my_good_file.ext'</string>
           </property>
-        </spacer>
-      </item>
+          <item>
+           <property name="text">
+            <string>No Change</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Strip</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Extended Strip</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Replace</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="m_editReplace">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>The string to replace spaces with</string>
+          </property>
+          <property name="text">
+           <string>_</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
     </layout>
-  </widget>
-  <layoutdefault spacing="6" margin="11" />
-    <tabstops>
-    <tabstop>m_editReplace</tabstop>
-  </tabstops>
+   </item>
+   <item>
+    <spacer name="spacer1">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>21</width>
+       <height>0</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>m_editReplace</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
 </ui>

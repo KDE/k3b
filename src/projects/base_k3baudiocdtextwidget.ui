@@ -9,7 +9,7 @@
     </property>
     <layout class="QVBoxLayout" >
       <item>
-        <widget class="Q3GroupBox" name="m_groupCdText" >
+        <widget class="QGroupBox" name="m_groupCdText" >
           <property name="title" >
             <string>Write CD-Text</string>
           </property>
@@ -31,7 +31,7 @@
           </property>
           <layout class="QVBoxLayout" >
             <item>
-              <widget class="Q3Frame" name="frame3" >
+              <widget class="QFrame" name="frame3" >
                 <property name="frameShape" >
                   <enum>NoFrame</enum>
                 </property>

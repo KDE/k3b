@@ -7,15 +7,9 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="Q3GroupBox" name="groupBox2" >
+    <widget class="QGroupBox" name="groupBox2" >
      <property name="title" >
       <string>Playback Settings</string>
-     </property>
-     <property name="frameShape" >
-      <enum>Q3GroupBox::GroupBoxPanel</enum>
-     </property>
-     <property name="frameShadow" >
-      <enum>Q3GroupBox::Sunken</enum>
      </property>
      <layout class="QGridLayout" >
       <item row="0" column="0" >
@@ -164,7 +158,7 @@
     </widget>
    </item>
    <item>
-    <widget class="Q3GroupBox" name="groupBox3" >
+    <widget class="QGroupBox" name="groupBox3" >
      <property name="title" >
       <string>Startup Behavior</string>
      </property>
@@ -237,7 +231,7 @@
     </widget>
    </item>
    <item>
-    <widget class="Q3GroupBox" name="groupBox1" >
+    <widget class="QGroupBox" name="groupBox1" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
        <horstretch>0</horstretch>
@@ -294,12 +288,6 @@
  </widget>
  <layoutdefault spacing="6" margin="11" />
   <customwidgets>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>

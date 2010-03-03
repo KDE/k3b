@@ -133,7 +133,7 @@
         </widget>
       </item>
       <item>
-        <widget class="Q3GroupBox" name="m_groupOptions" >
+        <widget class="QGroupBox" name="m_groupOptions" >
           <property name="sizePolicy" >
             <sizepolicy>
               <hsizetype>5</hsizetype>

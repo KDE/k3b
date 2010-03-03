@@ -17,7 +17,7 @@
         <number>0</number>
       </property>
       <item>
-        <widget class="Q3GroupBox" name="groupBox4" >
+        <widget class="QGroupBox" name="groupBox4" >
           <property name="title" >
             <string>Theme Selection</string>
           </property>
@@ -77,7 +77,7 @@
         </widget>
       </item>
       <item>
-        <widget class="Q3GroupBox" name="groupBox5" >
+        <widget class="QGroupBox" name="groupBox5" >
           <property name="title" >
             <string>Preview</string>
           </property>
