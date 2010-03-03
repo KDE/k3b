@@ -553,11 +553,11 @@ void K3b::AudioEditorWidget::drawRange( QPainter* p, const QRect& drawRect, cons
     int end = msfToPos( r.end );
 
     if( rangeSelectedEnabled() && r.id == d->selectedRangeId )
-        p->fillRect( start, drawRect.top() + 6 , end-start+1, drawRect.height() - 6, selectedRangeBrush() );
+        p->setBrush( selectedRangeBrush() );
     else
-        p->fillRect( start, drawRect.top() + 6 , end-start+1, drawRect.height() - 6, r.brush );
+        p->setBrush( r.brush );
 
-    p->drawRect( start, drawRect.top() + 6 , end-start+1, drawRect.height() - 6 );
+    p->drawRect( start, drawRect.top()+6 , end-start+1-1, drawRect.height()-6-1 );
 
     p->restore();
 }
@@ -586,11 +586,9 @@ void K3b::AudioEditorWidget::drawMarker( QPainter* p, const QRect& drawRect, con
 void K3b::AudioEditorWidget::fixupOverlappingRanges( int rangeId )
 {
     Range* r = getRange( rangeId );
-    if( r == 0 )
-        return;
-    
     Range::List::iterator range = d->ranges.begin();
-    while( range != d->ranges.end() ) {
+    
+    while( r != 0 && range != d->ranges.end() ) {
         if( range->id != rangeId ) {
             
             // remove the range if it is covered completely
@@ -602,7 +600,7 @@ void K3b::AudioEditorWidget::fixupOverlappingRanges( int rangeId )
                 range = d->ranges.erase( range );
                 emit rangeRemoved( rangeId );
                 // "r" may be invalid at this point, let's find it once again
-                Range* r = getRange( rangeId );
+                r = getRange( rangeId );
             }
             else {
                 // split the range if it contains r completely
