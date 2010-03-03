@@ -281,19 +281,19 @@ void K3b::JobProgressDialog::slotProcessedSize( int processed, int size )
 #if KDE_IS_VERSION( 4, 3, 80 )
     m_labelProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
                                           "%1 of %2",
-                                          KGlobal::locale()->formatByteSize( ( double )( processed*1024*1024 ),
+                                          KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )processed*1024ULL*1024ULL ),
                                                                              1,
                                                                              KLocale::DefaultBinaryDialect,
                                                                              KLocale::UnitMegaByte ),
-                                          KGlobal::locale()->formatByteSize( ( double )( size*1024*1024 ),
+                                          KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )size*1024ULL*1024ULL ),
                                                                              1,
                                                                              KLocale::DefaultBinaryDialect,
                                                                              KLocale::UnitMegaByte ) ) );
 #else
     m_labelProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
                                           "%1 of %2",
-                                          KGlobal::locale()->formatByteSize( ( double )( processed*1024*1024 ) ),
-                                          KGlobal::locale()->formatByteSize( ( double )( size*1024*1024 ) ) ) );
+                                          KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )processed*1024ULL*1024ULL ) ),
+                                          KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )size*1024ULL*1024ULL ) ) ) );
 #endif
 }
 
@@ -303,19 +303,19 @@ void K3b::JobProgressDialog::slotProcessedSubSize( int processedTrackSize, int t
 #if KDE_IS_VERSION( 4, 3, 80 )
     m_labelSubProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
                                              "%1 of %2",
-                                             KGlobal::locale()->formatByteSize( ( double )( processedTrackSize*1024*1024 ),
+                                             KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )processedTrackSize*1024ULL*1024ULL ),
                                                                                 1,
                                                                                 KLocale::DefaultBinaryDialect,
                                                                                 KLocale::UnitMegaByte ),
-                                             KGlobal::locale()->formatByteSize( ( double )( trackSize*1024*1024 ),
+                                             KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )trackSize*1024ULL*1024ULL ),
                                                                                 1,
                                                                                 KLocale::DefaultBinaryDialect,
                                                                                 KLocale::UnitMegaByte ) ) );
 #else
     m_labelSubProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
                                              "%1 of %2",
-                                             KGlobal::locale()->formatByteSize( ( double )( processedTrackSize*1024*1024 ) ),
-                                             KGlobal::locale()->formatByteSize( ( double )( trackSize*1024*1024 ) ) ) );
+                                             KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )processedTrackSize*1024ULL*1024ULL ) ),
+                                             KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )trackSize*1024ULL*1024ULL ) ) ) );
 #endif
 }
 
