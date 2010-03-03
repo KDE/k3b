@@ -377,8 +377,7 @@ bool K3b::MediaSelectionComboBox::showMedium( const K3b::Medium& m ) const
 
             &&
 
-            ( m.content() & d->wantedMediumContent ||
-              d->wantedMediumState & Device::STATE_EMPTY ) // we need this to handle Medium::ContentNone
+            ( m.content() & d->wantedMediumContent )
 
             &&
 

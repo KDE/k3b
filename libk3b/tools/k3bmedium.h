@@ -106,12 +106,13 @@ namespace K3b {
          * Content type. May be combined by a binary OR.
          */
         enum MediumContent {
-            ContentNone = 0x0,
-            ContentAudio = 0x1,
-            ContentData = 0x2,
-            ContentVideoCD = 0x4,
-            ContentVideoDVD = 0x8,
-            ContentAll = ContentAudio|ContentData|ContentVideoCD|ContentVideoDVD
+            ContentUnknown = 0x0,
+            ContentNone = 0x1,
+            ContentAudio = 0x2,
+            ContentData = 0x4,
+            ContentVideoCD = 0x8,
+            ContentVideoDVD = 0x10,
+            ContentAll = ContentNone|ContentAudio|ContentData|ContentVideoCD|ContentVideoDVD
         };
         Q_DECLARE_FLAGS( MediumContents, MediumContent )
 
