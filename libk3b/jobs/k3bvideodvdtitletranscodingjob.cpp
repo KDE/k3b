@@ -19,6 +19,8 @@
 #include "k3bprocess.h"
 #include "k3bcore.h"
 #include "k3bglobals.h"
+#include "k3bmediacache.h"
+#include "k3bmedium.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -43,7 +45,7 @@ public:
 
     int lastProgress;
     int lastSubProgress;
-    
+
     bool getEncodedFrames( const QString& line, int& encodedFrames ) const;
 };
 
@@ -52,7 +54,7 @@ bool K3b::VideoDVDTitleTranscodingJob::Private::getEncodedFrames( const QString&
 {
     int pos1 = 0;
     int pos2 = 0;
-    
+
     if ( usedTranscodeBin->version >= Version( 1, 1, 0 ) ) {
         // encoding=1 frame=1491 first=0 last=-1 fps=14.815 done=-1.000000 timestamp=59.640 timeleft=-1 decodebuf=12 filterbuf=5 encodebuf=3
         if( line.startsWith( "encoding=" ) ) {
@@ -67,7 +69,7 @@ bool K3b::VideoDVDTitleTranscodingJob::Private::getEncodedFrames( const QString&
             pos2 = line.indexOf( ']', pos1+1 );
         }
     }
-    
+
     if( pos1 > 0 && pos2 > 0 ) {
         bool ok;
         encodedFrames = line.mid( pos1+1, pos2-pos1-1 ).toInt( &ok );
@@ -157,10 +159,13 @@ void K3b::VideoDVDTitleTranscodingJob::start()
             emit infoMessage( i18n("Unable to create folder '%1'",dirInfo.filePath()), MessageError );
             return;
         }
-        else if( !dirInfo.isDir() || !dirInfo.isWritable() ) {
-            emit infoMessage( i18n("Invalid filename: '%1'",m_filename), MessageError );
-            jobFinished( false );
-            return;
+        else {
+            dirInfo.refresh();
+            if( !dirInfo.isDir() || !dirInfo.isWritable() ) {
+                emit infoMessage( i18n("Invalid filename: '%1'",m_filename), MessageError );
+                jobFinished( false );
+                return;
+            }
         }
     }
 
@@ -169,7 +174,7 @@ void K3b::VideoDVDTitleTranscodingJob::start()
     //
     d->twoPassEncodingLogFile = K3b::findTempFile( "log" );
 
-    emit newTask( i18n("Transcoding title %1 from Video DVD %2", m_titleNumber, m_dvd.volumeIdentifier()) );
+    emit newTask( i18n("Transcoding title %1 from Video DVD %2", m_titleNumber, k3bcore->mediaCache()->medium( m_dvd.device() ).beautifiedVolumeId()) );
 
     //
     // Ok then, let's begin
@@ -418,9 +423,9 @@ void K3b::VideoDVDTitleTranscodingJob::cleanup( bool success )
 void K3b::VideoDVDTitleTranscodingJob::slotTranscodeStderr( const QString& line )
 {
     emit debuggingOutput( "transcode", line );
-    
+
     int encodedFrames;
-    
+
     // parse progress
     if( d->getEncodedFrames( line, encodedFrames ) ) {
         int totalFrames = m_dvd[m_titleNumber-1].playbackTime().totalFrames();
