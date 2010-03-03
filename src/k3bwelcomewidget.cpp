@@ -211,24 +211,8 @@ void K3b::WelcomeWidget::repositionButtons()
 }
 
 
-// int K3b::WelcomeWidget::heightForWidth( int w ) const
-// {
-//     int ow = ( int )m_infoText->idealWidth();
-//     m_infoText->setTextWidth( w );
-//     int h = ( int )m_infoText->size().height();
-//     m_infoText->setTextWidth( ow );
-// 
-//     int cols, rows;
-//     calculateButtons( w, m_actions.count(), m_buttonSize.width(), cols, rows );
-// 
-//     return (20 + ( int )m_header->size().height() + 20 + 10 + ((m_buttonSize.height()+4)*rows) + 4 + m_buttonMore->height() + 10 + h + 20);
-// }
-
-
 QSize K3b::WelcomeWidget::minimumSizeHint() const
 {
-    //QSize size( qMax(40+( int )m_header->idealWidth(), 40+m_buttonSize.width()),
-    //            20 + ( int )m_header->size().height() + 20 + 10 + m_buttonSize.height() + 10 + ( int )m_infoText->size().height() + 20 );
     QSize size;
     size.setWidth( qMax(40+( int )m_header->idealWidth(), 40+m_buttonSize.width()) );
     
@@ -240,7 +224,7 @@ QSize K3b::WelcomeWidget::minimumSizeHint() const
     int cols, rows;
     calculateButtons( size.width(), m_actions.count(), m_buttonSize.width(), cols, rows );
 
-    size.setHeight(20 + ( int )m_header->size().height() + 20 + 10 + ((m_buttonSize.height()+4)*rows) + 4 + m_buttonMore->height() + 10 + h + 20);
+    size.setHeight(20 + ( int )m_header->size().height() + 10 + ((m_buttonSize.height()+4)*rows) + 4 + m_buttonMore->height() + 10 + h + 20);
     return size;
 }
 
