@@ -19,6 +19,7 @@
 #include <QCursor>
 #include <QDesktopWidget>
 #include <QFrame>
+#include <QHelpEvent>
 #include <QList>
 #include <QMouseEvent>
 #include <QPainter>
@@ -99,45 +100,6 @@ public:
     typedef QList<Marker> List;
 };
 
-
-
-
-#if 0
-class K3b::AudioEditorWidget::ToolTip : public QToolTip
-{
-public:
-    ToolTip( K3b::AudioEditorWidget* w )
-        : QToolTip( w ),
-          m_editorWidget( w ) {
-    }
-
-protected:
-    void maybeTip( const QPoint& p ) {
-        QRect r = m_editorWidget->contentsRect();
-        Marker* m = m_editorWidget->findMarker( p );
-        if( m ) {
-            r.setLeft( p.x() - 1 );
-            r.setRight( p.x() + 1 );
-            tip( r, m->toolTip.isEmpty() ? m->pos.toString() : QString("%1 (%2)").arg(m->toolTip).arg(m->pos.toString()) );
-        }
-        else {
-            Range* range = m_editorWidget->findRange( p );
-            if( range ) {
-                r.setLeft( m_editorWidget->msfToPos( range->start ) );
-                r.setRight( m_editorWidget->msfToPos( range->end ) );
-                tip( r,
-                     range->toolTip.isEmpty()
-                     ? QString("%1 - %2").arg(range->start.toString()).arg(range->end.toString())
-                     : QString("%1 (%2 - %3)").arg(range->toolTip).arg(range->start.toString()).arg(range->end.toString()) );
-            }
-        }
-    }
-
-private:
-    K3b::AudioEditorWidget* m_editorWidget;
-};
-
-#endif
 
 class K3b::AudioEditorWidget::Private
 {
@@ -764,6 +726,32 @@ void K3b::AudioEditorWidget::mouseMoveEvent( QMouseEvent* e )
         setCursor( Qt::PointingHandCursor );
 
     QFrame::mouseMoveEvent(e);
+}
+
+bool K3b::AudioEditorWidget::event( QEvent* e )
+{
+    if( e->type() == QEvent::ToolTip ) {
+        QHelpEvent* helpEvent = dynamic_cast<QHelpEvent*>( e );
+        const QPoint pos = mapFromGlobal( helpEvent->globalPos() );
+        if( Marker* m = findMarker( pos ) ) {
+            QToolTip::showText( helpEvent->globalPos(),
+                                m->toolTip.isEmpty() ? m->pos.toString() : QString("%1 (%2)").arg(m->toolTip).arg(m->pos.toString()),
+                                this );
+            e->accept();
+        }
+        else if( Range* range = findRange( pos ) ) {
+            QToolTip::showText( helpEvent->globalPos(), 
+                                range->toolTip.isEmpty()
+                                ? QString("%1 - %2").arg(range->start.toString()).arg(range->end.toString())
+                                : QString("%1 (%2 - %3)").arg(range->toolTip).arg(range->start.toString()).arg(range->end.toString()),
+                                this );
+            e->accept();
+        }
+        return true;
+    }
+    else {
+        return QWidget::event( e );
+    }
 }
 
 

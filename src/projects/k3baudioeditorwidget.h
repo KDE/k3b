@@ -175,6 +175,7 @@ protected:
     virtual void mouseReleaseEvent( QMouseEvent* e );
     virtual void mouseDoubleClickEvent( QMouseEvent* e );
     virtual void mouseMoveEvent( QMouseEvent* e );
+    virtual bool event( QEvent* e );
 
 private:
     class Range;
