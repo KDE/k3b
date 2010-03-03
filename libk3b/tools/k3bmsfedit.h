@@ -17,23 +17,13 @@
 #define K3B_MSF_EDIT_H
 
 
-#include <QtGui/QSpinBox>
-#include <qvalidator.h>
+#include <QAbstractSpinBox>
 
 #include "k3bmsf.h"
 #include "k3b_export.h"
 
 namespace K3b {
-    class MsfValidator : public QRegExpValidator
-    {
-    public:
-        MsfValidator( QObject* parent = 0 );
-    };
-}
-
-
-namespace K3b {
-    class LIBK3B_EXPORT MsfEdit : public QSpinBox
+    class LIBK3B_EXPORT MsfEdit : public QAbstractSpinBox
     {
         Q_OBJECT
 
@@ -41,24 +31,28 @@ namespace K3b {
         MsfEdit( QWidget* parent = 0 );
         ~MsfEdit();
 
-        Msf msfValue() const;
+        Msf value() const;
+        
+        Msf maximum() const;
+        void setMaximum( const Msf& max );
 
-        void stepBy( int steps );
+        virtual void stepBy( int steps );
+        virtual QSize sizeHint() const;
 
     Q_SIGNALS:
-        void valueChanged( const K3b::Msf& );
+        void valueChanged( const K3b::Msf& value );
 
     public Q_SLOTS:
-        void setMsfValue( const K3b::Msf& );
+        void setValue( const K3b::Msf& value );
+        
+    protected:
+        virtual StepEnabled stepEnabled () const;
 
     private:
-        QString textFromValue( int value ) const ;
-        int valueFromText( const QString & text ) const;
-
         class Private;
         Private* d;
 
-        Q_PRIVATE_SLOT( d, void _k_valueChanged(int) )
+        Q_PRIVATE_SLOT( d, void _k_editingFinished() )
     };
 }
 

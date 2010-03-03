@@ -102,11 +102,11 @@ void K3b::AudioDataSourceEditWidget::loadSource( K3b::AudioDataSource* source )
                                     i18n("Used part of the audio source"),
                                     palette().highlight() );
 
-    m_editStartOffset->setMaximum( source->originalLength().lba() );
-    m_editEndOffset->setMaximum( source->originalLength().lba() );
+    m_editStartOffset->setMaximum( source->originalLength() );
+    m_editEndOffset->setMaximum( source->originalLength() );
 
-    m_editStartOffset->setMsfValue( startOffset() );
-    m_editEndOffset->setMsfValue( endOffset() );
+    m_editStartOffset->setValue( startOffset() );
+    m_editEndOffset->setValue( endOffset() );
 }
 
 
@@ -143,8 +143,8 @@ void K3b::AudioDataSourceEditWidget::setEndOffset( const K3b::Msf& msf )
 
 void K3b::AudioDataSourceEditWidget::slotRangeModified( int, const K3b::Msf& start, const K3b::Msf& end )
 {
-    m_editStartOffset->setMsfValue( start );
-    m_editEndOffset->setMsfValue( end );
+    m_editStartOffset->setValue( start );
+    m_editEndOffset->setValue( end );
 }
 
 void K3b::AudioDataSourceEditWidget::slotStartOffsetEdited( const K3b::Msf& msf )

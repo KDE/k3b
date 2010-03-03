@@ -46,18 +46,20 @@ K3b::AudioTrackSplitDialog::AudioTrackSplitDialog( K3b::AudioTrack* track, QWidg
     m_msfEditStart = new K3b::MsfEdit( frame );
     m_msfEditEnd = new K3b::MsfEdit( frame );
 
-    QGridLayout* layout = new QGridLayout( frame );
+    QVBoxLayout* layout = new QVBoxLayout( frame );
     layout->setMargin( 0 );
 
     // FIXME: After the string freeze replace the text with a better one explaning how to use this dialog
     layout->addWidget( new QLabel( i18n("Please select the position where the track should be split."),
-                                   frame ), 0, 0, 1, 4 );
-    layout->addWidget( m_editorWidget, 1, 0, 1, 4 );
-    layout->addWidget( m_msfEditStart, 2, 1 );
-    layout->addWidget( new QLabel( " - ", frame ), 2, 2 );
-    layout->addWidget( m_msfEditEnd, 2, 3 );
-    layout->addWidget( new QLabel( i18n("Split track at:"), frame ), 2, 0 );
-    layout->setColumnStretch( 0, 1 );
+                                   frame ) );
+    layout->addWidget( m_editorWidget );
+    
+    QHBoxLayout* rangeLayout = new QHBoxLayout;
+    rangeLayout->addWidget( new QLabel( i18n("Split track at:"), frame ), 1 );
+    rangeLayout->addWidget( m_msfEditStart, 0 );
+    rangeLayout->addWidget( new QLabel( " - ", frame ), 0, Qt::AlignCenter );
+    rangeLayout->addWidget( m_msfEditEnd, 0 );
+    layout->addLayout( rangeLayout );
 
     m_editorWidget->setAllowOverlappingRanges( false );
     m_editorWidget->enableRangeSelection( true );
@@ -114,8 +116,8 @@ void K3b::AudioTrackSplitDialog::slotRangeModified( int id, const K3b::Msf& star
         m_msfEditStart->blockSignals( true );
         m_msfEditEnd->blockSignals( true );
 
-        m_msfEditStart->setMsfValue( start );
-        m_msfEditEnd->setMsfValue( end );
+        m_msfEditStart->setValue( start );
+        m_msfEditEnd->setValue( end );
 
         m_msfEditStart->blockSignals( false );
         m_msfEditEnd->blockSignals( false );
@@ -125,7 +127,7 @@ void K3b::AudioTrackSplitDialog::slotRangeModified( int id, const K3b::Msf& star
 
 void K3b::AudioTrackSplitDialog::slotMsfEditChanged( const K3b::Msf& )
 {
-    m_editorWidget->modifyRange( m_editorWidget->selectedRange(), m_msfEditStart->msfValue(), m_msfEditEnd->msfValue() );
+    m_editorWidget->modifyRange( m_editorWidget->selectedRange(), m_msfEditStart->value(), m_msfEditEnd->value() );
 }
 
 
@@ -135,8 +137,8 @@ void K3b::AudioTrackSplitDialog::slotRangeSelectionChanged( int id )
         m_msfEditStart->blockSignals( true );
         m_msfEditEnd->blockSignals( true );
 
-        m_msfEditStart->setMsfValue( m_editorWidget->rangeStart( id ) );
-        m_msfEditEnd->setMsfValue( m_editorWidget->rangeEnd( id ) );
+        m_msfEditStart->setValue( m_editorWidget->rangeStart( id ) );
+        m_msfEditEnd->setValue( m_editorWidget->rangeEnd( id ) );
         m_msfEditStart->setEnabled( true );
         m_msfEditEnd->setEnabled( true );
 

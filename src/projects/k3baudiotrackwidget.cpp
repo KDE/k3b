@@ -69,7 +69,7 @@ void K3b::AudioTrackWidget::load()
 
         K3b::AudioTrack* track = m_tracks.first();
 
-        m_editPostGap->setMsfValue( track->postGap() );
+        m_editPostGap->setValue( track->postGap() );
 
         m_editTitle->setText( track->title() );
         m_editPerformer->setText( track->artist() );
@@ -154,7 +154,7 @@ void K3b::AudioTrackWidget::save()
         if( m_checkPreemphasis->checkState() != Qt::PartiallyChecked )
             track->setPreEmp( m_checkPreemphasis->isChecked() );
 
-        track->setIndex0( track->length() - m_editPostGap->msfValue() );
+        track->setIndex0( track->length() - m_editPostGap->value() );
     }
 }
 

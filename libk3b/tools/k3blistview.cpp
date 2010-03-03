@@ -777,7 +777,7 @@ QWidget* K3b::ListView::prepareEditor( K3b::ListViewItem* item, int col )
             //      m_editorMsfEdit->installEventFilter( this );
             d->msfEditLineEdit->installEventFilter( this );
         }
-        m_editorMsfEdit->setMsfValue( K3b::Msf::fromString( item->text(col) ) );
+        m_editorMsfEdit->setValue( K3b::Msf::fromString( item->text(col) ) );
         return m_editorMsfEdit;
 
     default:
@@ -943,7 +943,7 @@ bool K3b::ListView::doRename()
             newValue = QString::number(m_editorSpinBox->value());
             break;
         case K3b::ListViewItem::MSF:
-            newValue = QString::number(m_editorMsfEdit->value());
+            newValue = QString::number(m_editorMsfEdit->value().lba());
             break;
         }
 
@@ -969,7 +969,7 @@ bool K3b::ListView::doRename()
                 m_editorSpinBox->setValue( m_currentEditItem->text( m_currentEditColumn ).toInt() );
                 break;
             case K3b::ListViewItem::MSF:
-                m_editorMsfEdit->setMsfValue( K3b::Msf::fromString( m_currentEditItem->text( m_currentEditColumn ) ) );
+                m_editorMsfEdit->setValue( K3b::Msf::fromString( m_currentEditItem->text( m_currentEditColumn ) ) );
                 break;
             }
         }

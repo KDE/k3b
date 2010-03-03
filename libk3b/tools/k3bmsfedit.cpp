@@ -17,65 +17,56 @@
 #include "k3bmsfedit.h"
 #include "k3bglobals.h"
 
-#include <qstringlist.h>
-#include <qlineedit.h>
-#include <qstyle.h>
-#include <qfontmetrics.h>
-#include <qapplication.h>
+#include <QApplication>
+#include <QFontMetrics>
+#include <QLineEdit>
+#include <QStringList>
+#include <QStyle>
+#include <QStyleOptionSpinBox>
 
-
-K3b::MsfValidator::MsfValidator( QObject* parent )
-    : QRegExpValidator( K3b::Msf::regExp(), parent )
-{
-}
+#include <KDebug>
 
 
 class K3b::MsfEdit::Private
 {
 public:
-    void _k_valueChanged( int );
-    int currentStepValue() const;
+    void _k_editingFinished();
 
-    K3b::MsfEdit* q;
+    Msf value;
+    Msf minimum;
+    Msf maximum;
+    MsfEdit* q;
+    
+    QSize cachedSizeHint;
 };
 
 
-void K3b::MsfEdit::Private::_k_valueChanged( int val )
+void K3b::MsfEdit::Private::_k_editingFinished()
 {
-    emit q->valueChanged( K3b::Msf( val ) );
-}
-
-
-int K3b::MsfEdit::Private::currentStepValue() const
-{
-    int val = 1;
-
-    // look if we are currently editing minutes or seconds
-    QString text = q->lineEdit()->text();
-    if( text.length() == 8 ) {
-        text = text.mid( q->lineEdit()->cursorPosition() );
-        int num = text.count( ':' );
-        if( num == 1 )
-            val = 75;
-        else if( num == 2 )
-            val = 60*75;
+    Msf newValue = Msf::fromString( q->lineEdit()->text() );
+    if( newValue != value ) {
+        value = newValue;
+        emit q->valueChanged( value );
     }
-
-    return val;
 }
 
 
 K3b::MsfEdit::MsfEdit( QWidget* parent )
-    : QSpinBox( parent ),
+    : QAbstractSpinBox( parent ),
       d( new Private() )
 {
     d->q = this;
 
     // some very high value (10000 minutes)
-    setRange( 0, 10000*60*75 );
+    setMaximum( 10000*60*75 );
+    
+    lineEdit()->setInputMask( "99:99:99" );
+    lineEdit()->setText( d->value.toString() );
+    //setSpecialValueText( QString() );
+    //setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum, QSizePolicy::SpinBox ) );
 
-    connect( this, SIGNAL(valueChanged(int)),
-             this, SLOT(_k_valueChanged(int)) );
+    connect( this, SIGNAL(editingFinished()),
+             this, SLOT(_k_editingFinished()) );
 }
 
 
@@ -87,31 +78,97 @@ K3b::MsfEdit::~MsfEdit()
 
 void K3b::MsfEdit::stepBy( int steps )
 {
-    QSpinBox::stepBy( steps * d->currentStepValue() );
+    // look if we are currently editing minutes or seconds
+    QString text = lineEdit()->text();
+    if( text.length() == 8 ) {
+        const int pos = lineEdit()->cursorPosition();
+        text = text.mid( pos );
+        int num = text.count( ':' );
+        if( num == 1 ) {
+            d->value.addSeconds( steps );
+        }
+        else if( num == 2 ) {
+            d->value.addMinutes( steps );
+        }
+        else {
+            d->value.addFrames( steps );
+        }
+        lineEdit()->setText( d->value.toString() );
+        lineEdit()->setCursorPosition( pos );
+        emit valueChanged( d->value );
+    }
 }
 
 
-K3b::Msf K3b::MsfEdit::msfValue() const
+QSize K3b::MsfEdit::sizeHint() const
 {
-    return value();
+    if (d->cachedSizeHint.isEmpty()) {
+        ensurePolished();
+
+        const QFontMetrics fm(fontMetrics());
+        int h = lineEdit()->sizeHint().height();
+        int w = qMax(w, fm.width( lineEdit()->inputMask() ));
+        w += 2; // cursor blinking space
+
+        QStyleOptionSpinBox opt;
+        initStyleOption(&opt);
+        QSize hint(w, h);
+        QSize extra(35, 6);
+        opt.rect.setSize(hint + extra);
+        extra += hint - style()->subControlRect(QStyle::CC_SpinBox, &opt,
+                                                QStyle::SC_SpinBoxEditField, this).size();
+        // get closer to final result by repeating the calculation
+        opt.rect.setSize(hint + extra);
+        extra += hint - style()->subControlRect(QStyle::CC_SpinBox, &opt,
+                                                QStyle::SC_SpinBoxEditField, this).size();
+        hint += extra;
+
+        opt.rect = rect();
+        d->cachedSizeHint = style()->sizeFromContents(QStyle::CT_SpinBox, &opt, hint, this)
+                            .expandedTo(QApplication::globalStrut());
+    }
+    return d->cachedSizeHint;
 }
 
 
-void K3b::MsfEdit::setMsfValue( const K3b::Msf& msf )
+K3b::Msf K3b::MsfEdit::value() const
 {
-    setValue( msf.totalFrames() );
+    return d->value;
 }
 
 
-QString K3b::MsfEdit::textFromValue( int value ) const
+K3b::Msf K3b::MsfEdit::maximum() const
 {
-    return K3b::Msf( value ).toString();
+    return d->maximum;
 }
 
 
-int K3b::MsfEdit::valueFromText( const QString& text ) const
+void K3b::MsfEdit::setMaximum( const Msf& max )
 {
-    return K3b::Msf::fromString( text ).lba();
+    d->maximum = max;
+    if( d->value > d->maximum )
+        d->value = d->maximum;
+}
+
+
+void K3b::MsfEdit::setValue( const K3b::Msf& value )
+{
+    if( d->value != value ) {
+        d->value = value;
+        lineEdit()->setText( d->value.toString() );
+        emit valueChanged( d->value );
+    }
+}
+
+
+QAbstractSpinBox::StepEnabled K3b::MsfEdit::stepEnabled () const
+{
+    StepEnabled stepEnabled;
+    if( d->value > d->minimum )
+        stepEnabled |= StepDownEnabled;
+    if( d->value < d->maximum || d->maximum.totalFrames() == 0 )
+        stepEnabled |= StepUpEnabled;
+    return stepEnabled;
 }
 
 #include "k3bmsfedit.moc"
