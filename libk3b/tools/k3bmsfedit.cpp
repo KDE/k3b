@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -43,11 +44,7 @@ public:
 
 void K3b::MsfEdit::Private::_k_editingFinished()
 {
-    Msf newValue = Msf::fromString( q->lineEdit()->text() );
-    if( newValue != value ) {
-        value = newValue;
-        emit q->valueChanged( value );
-    }
+    q->setValue( Msf::fromString( q->lineEdit()->text() ) );
 }
 
 
@@ -62,8 +59,6 @@ K3b::MsfEdit::MsfEdit( QWidget* parent )
     
     lineEdit()->setInputMask( "99:99:99" );
     lineEdit()->setText( d->value.toString() );
-    //setSpecialValueText( QString() );
-    //setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum, QSizePolicy::SpinBox ) );
 
     connect( this, SIGNAL(editingFinished()),
              this, SLOT(_k_editingFinished()) );
@@ -84,18 +79,20 @@ void K3b::MsfEdit::stepBy( int steps )
         const int pos = lineEdit()->cursorPosition();
         text = text.mid( pos );
         int num = text.count( ':' );
+        
+        Msf newValue = d->value;
         if( num == 1 ) {
-            d->value.addSeconds( steps );
+            newValue.addSeconds( steps );
         }
         else if( num == 2 ) {
-            d->value.addMinutes( steps );
+            newValue.addMinutes( steps );
         }
         else {
-            d->value.addFrames( steps );
+            newValue.addFrames( steps );
         }
-        lineEdit()->setText( d->value.toString() );
+        
+        setValue( newValue );
         lineEdit()->setCursorPosition( pos );
-        emit valueChanged( d->value );
     }
 }
 
@@ -137,9 +134,25 @@ K3b::Msf K3b::MsfEdit::value() const
 }
 
 
+K3b::Msf K3b::MsfEdit::minimum() const
+{
+    return d->minimum;
+}
+
+
 K3b::Msf K3b::MsfEdit::maximum() const
 {
     return d->maximum;
+}
+
+
+void K3b::MsfEdit::setMinimum( const Msf& min )
+{
+    d->minimum = min;
+    if( d->value < d->minimum )
+        d->value = d->minimum;
+    if( d->maximum < d->minimum )
+        d->maximum = d->minimum;
 }
 
 
@@ -148,6 +161,8 @@ void K3b::MsfEdit::setMaximum( const Msf& max )
     d->maximum = max;
     if( d->value > d->maximum )
         d->value = d->maximum;
+    if( d->minimum > d->maximum )
+        d->minimum = d->maximum;
 }
 
 
@@ -155,6 +170,11 @@ void K3b::MsfEdit::setValue( const K3b::Msf& value )
 {
     if( d->value != value ) {
         d->value = value;
+        if( d->value < d->minimum )
+            d->value = d->minimum;
+        else if( d->value > d->maximum )
+            d->value = d->maximum;
+        
         lineEdit()->setText( d->value.toString() );
         emit valueChanged( d->value );
     }

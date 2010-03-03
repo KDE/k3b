@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -31,10 +32,9 @@ namespace K3b {
         MsfEdit( QWidget* parent = 0 );
         ~MsfEdit();
 
-        Msf value() const;
-        
+        Msf minimum() const;
         Msf maximum() const;
-        void setMaximum( const Msf& max );
+        Msf value() const;
 
         virtual void stepBy( int steps );
         virtual QSize sizeHint() const;
@@ -43,6 +43,8 @@ namespace K3b {
         void valueChanged( const K3b::Msf& value );
 
     public Q_SLOTS:
+        void setMinimum( const Msf& min );
+        void setMaximum( const Msf& max );
         void setValue( const K3b::Msf& value );
         
     protected:
