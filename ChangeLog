@@ -32,6 +32,7 @@ Bugfixes (since 2.0-beta1):
  * Mixed-up metadata in files created with external encoder (227927)
  * Cannot edit time values in "Split Audio Track" and "Edit Audio Track" dialogs (229042)
  * Empty Blu-ray medium not detected properly (227339, 229039)
+ * Crash during splitting/editing audio tracks
 
 2.0-beta1 (1.70)
 ================

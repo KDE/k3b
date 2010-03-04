@@ -20,7 +20,7 @@
 #include <QDesktopWidget>
 #include <QFrame>
 #include <QHelpEvent>
-#include <QList>
+#include <QLinkedList>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPixmap>
@@ -66,7 +66,7 @@ public:
         return id == r.id;
     }
 
-    typedef QList<Range> List;
+    typedef QLinkedList<Range> List;
 };
 
 
@@ -97,7 +97,7 @@ public:
         return id == r.id;
     }
 
-    typedef QList<Marker> List;
+    typedef QLinkedList<Marker> List;
 };
 
 
@@ -263,7 +263,6 @@ int K3b::AudioEditorWidget::addRange( const K3b::Msf& start, const K3b::Msf& end
     Range r( d->idCnt++, start, end, startFixed, endFixed, toolTip,
              brush.style() != Qt::NoBrush ? brush : palette().background() );
     d->ranges.append( r );
-    qSort( d->ranges );
 
     // only update the changed range
     QRect rect = contentsRect();
@@ -362,11 +361,12 @@ K3b::Msf K3b::AudioEditorWidget::rangeEnd( int identifier ) const
 
 QList<int> K3b::AudioEditorWidget::allRanges() const
 {
-    QList<int> l;
-    qSort( d->ranges );
-    for( Range::List::const_iterator it = d->ranges.constBegin(); it != d->ranges.constEnd(); ++it )
-        l.append( it->id );
-    return l;
+    QList<int> identifiers;
+    for( Range::List::const_iterator it = d->ranges.constBegin(); it != d->ranges.constEnd(); ++it ) {
+        identifiers.append( it->id );
+    }
+    qSort( identifiers );
+    return identifiers;
 }
 
 
