@@ -4,14 +4,6 @@
   <exportmacro></exportmacro>
   <class>base_K3bThemeOptionTab</class>
   <widget class="QWidget" name="base_K3bThemeOptionTab" >
-    <property name="geometry" >
-      <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>661</width>
-        <height>499</height>
-      </rect>
-    </property>
     <layout class="QVBoxLayout" >
       <property name="margin" >
         <number>0</number>
@@ -147,8 +139,8 @@
             <spacer name="spacer3" >
               <property name="sizeHint" >
                 <size>
-                  <width>161</width>
-                  <height>2</height>
+                  <width>1</width>
+                  <height>1</height>
                 </size>
               </property>
               <property name="sizeType" >

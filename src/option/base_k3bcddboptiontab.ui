@@ -5,14 +5,6 @@
     <property name="name">
         <cstring>base_K3bCddbOptionTab</cstring>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>648</width>
-            <height>553</height>
-        </rect>
-    </property>
     <property name="caption">
         <string>CDDB Options</string>
     </property>
