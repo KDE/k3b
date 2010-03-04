@@ -122,10 +122,12 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
                                         "it will choose one as the <em>default</em>, which will be used "
                                         "to do the work. If you want to change the default, select the "
                                         "desired version and press this button.") );
+    QLabel* defaultLabel = new QLabel( i18n("Use the 'Default' button to change the versions K3b should use."),
+                                       programTab );
+    defaultLabel->setWordWrap( true );
     programTabLayout->addWidget( m_programView, 1, 0, 1, 2 );
     programTabLayout->addWidget( m_defaultButton, 0, 1 );
-    programTabLayout->addWidget( new QLabel( i18n("Use the 'Default' button to change the versions K3b should use."),
-                                             programTab ), 0, 0 );
+    programTabLayout->addWidget( defaultLabel, 0, 0 );
     programTabLayout->setColumnStretch( 0, 1 );
     programTabLayout->setRowStretch( 1, 1 );
 
@@ -144,8 +146,10 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     QWidget* parametersTab = new QWidget( m_mainTabWidget );
     QGridLayout* parametersTabLayout = new QGridLayout( parametersTab );
     m_parameterView = new K3b::ListView( parametersTab );
+    QLabel* parametersLabel = new QLabel( i18n("User parameters have to be separated by space."), parametersTab );
+    parametersLabel->setWordWrap( true );
     parametersTabLayout->addWidget( m_parameterView, 1, 0 );
-    parametersTabLayout->addWidget( new QLabel( i18n("User parameters have to be separated by space."), parametersTab ), 0, 0 );
+    parametersTabLayout->addWidget( parametersLabel, 0, 0 );
 
     parametersTabLayout->setRowStretch( 1, 1 );
 
@@ -162,14 +166,15 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     // setup search path tab
     // ------------------------------------------------------------
     QWidget* searchPathTab = new QWidget( m_mainTabWidget );
-    QGridLayout* searchPathTabLayout = new QGridLayout( searchPathTab );
     m_searchPathBox = new KEditListBox( i18n("Search Path"), searchPathTab );
     m_searchPathBox->setCheckAtEntering( true );
+    QLabel* hintLabel = new QLabel( i18n("<qt><b>Hint:</b> to force K3b to use another than the "
+                                         "default name for the executable specify it in the search path.</qt>"),
+                                    searchPathTab );
+    hintLabel->setWordWrap( true );
+    QGridLayout* searchPathTabLayout = new QGridLayout( searchPathTab );
     searchPathTabLayout->addWidget( m_searchPathBox, 0, 0 );
-    searchPathTabLayout->addWidget( new QLabel( i18n("<qt><b>Hint:</b> to force K3b to use another than the "
-                                                     "default name for the executable specify it in the search path.</qt>"),
-                                                searchPathTab ), 1, 0 );
-
+    searchPathTabLayout->addWidget( hintLabel, 1, 0 );
     searchPathTabLayout->setRowStretch( 0, 1 );
 
     m_mainTabWidget->addTab( searchPathTab, i18n("Search Path") );
