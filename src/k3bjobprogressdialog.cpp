@@ -538,7 +538,7 @@ void K3b::JobProgressDialog::slotUpdateTime()
     int elapsedSecs = m_startTime.secsTo( QDateTime::currentDateTime() );
 
     QString s = i18nc( "@info %1 is a duration formatted using KLocale::prettyFormatDuration",
-                       "Elaped time: %1",
+                       "Elapsed time: %1",
                        KGlobal::locale()->prettyFormatDuration( elapsedSecs*1000 ) );
 
     if( d->lastProgress > 0 && d->lastProgress < 100 ) {
