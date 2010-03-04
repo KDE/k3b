@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -62,8 +63,6 @@ K3b::TempDirSelectionWidget::TempDirSelectionWidget( QWidget *parent )
     // do not use row 3 here since that could be used in setNeededSize below
     layout->setRowStretch( 4, 1 );
 
-    connect( m_editDirectory, SIGNAL(openFileDialog(KUrlRequester*)),
-             this, SLOT(slotTempDirButtonPressed(KUrlRequester*)) );
     connect( m_editDirectory, SIGNAL(textChanged(const QString&)),
              this, SLOT(slotUpdateFreeTempSpace()) );
     connect( m_editDirectory->lineEdit(), SIGNAL(lostFocus()),
@@ -124,20 +123,6 @@ void K3b::TempDirSelectionWidget::slotUpdateFreeTempSpace()
     m_labelFreeSpace->setText( KIO::convertSize(tempFreeSpace) );
 
     QTimer::singleShot( 1000, this, SLOT(slotUpdateFreeTempSpace()) );
-}
-
-
-void K3b::TempDirSelectionWidget::slotTempDirButtonPressed( KUrlRequester* r )
-{
-    // set the correct mode for the filedialog
-    if( m_mode == DIR ) {
-        r->setWindowTitle( i18n("Select Temporary Folder") );
-        r->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
-    }
-    else {
-        r->setWindowTitle( i18n("Select Temporary File") );
-        r->setMode( KFile::File | KFile::LocalOnly );
-    }
 }
 
 
@@ -202,10 +187,14 @@ void K3b::TempDirSelectionWidget::setSelectionMode( int mode )
     m_mode = mode;
 
     if( m_mode == DIR ) {
+        m_editDirectory->setWindowTitle( i18n("Select Temporary Folder") );
+        m_editDirectory->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
         m_imageFileLabel->setText( i18n( "Wri&te image files to:" ) );
         setTitle( i18n("Temporary Folder") );
     }
     else {
+        m_editDirectory->setWindowTitle( i18n("Select Temporary File") );
+        m_editDirectory->setMode( KFile::File | KFile::LocalOnly );
         m_imageFileLabel->setText( i18n( "Wri&te image file to:" ) );
         setTitle( i18n("Temporary File") );
     }

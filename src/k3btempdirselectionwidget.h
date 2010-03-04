@@ -78,7 +78,6 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void slotUpdateFreeTempSpace();
-    void slotTempDirButtonPressed( KUrlRequester* );
     void slotFixTempPath();
 
 private:
