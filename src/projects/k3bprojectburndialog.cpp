@@ -391,7 +391,7 @@ void K3b::ProjectBurnDialog::loadSettings( const KConfigGroup& c )
 
 void K3b::ProjectBurnDialog::slotShowImageTip( bool buttonActivated )
 {
-    if ( buttonActivated ) {
+    if ( buttonActivated && isVisible() ) {
         // FIXME: use the tab bar's position
         QWhatsThis::showText( mapToGlobal( QPoint( rect().center().x(), rect().top() ) ),i18n( "Use the 'Image' tab to optionally adjust the path of the image." ));
     }

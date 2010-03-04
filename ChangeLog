@@ -33,6 +33,7 @@ Bugfixes (since 2.0-beta1):
  * Cannot edit time values in "Split Audio Track" and "Edit Audio Track" dialogs (229042)
  * Empty Blu-ray medium not detected properly (227339, 229039)
  * Crash during splitting/editing audio tracks
+ * Entry fields doesn't work in burn window when "Only Create Image" option is checked (220970)
 
 2.0-beta1 (1.70)
 ================
