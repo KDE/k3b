@@ -31,6 +31,8 @@
 #include <KToolBar>
 #include <KUrl>
 
+#include <QTreeView>
+
 
 K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
     : K3b::StandardView(doc, parent)
@@ -76,6 +78,9 @@ K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
     
     // set the model for the StandardView's views
     setModel(m_model);
+    
+    // Show first-level directories directories by default
+    dirView()->expandToDepth( 1 );
 
     // this is just for testing (or not?)
     // most likely every project type will have it's rc file in the future

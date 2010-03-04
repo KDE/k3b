@@ -105,6 +105,7 @@ namespace K3b {
          */
         void setAutoExpandDelay(int delay);
 
+        QTreeView* dirView() const { return m_dirView; }
         QTreeView* fileView() const { return m_fileView; }
 
     protected slots:
