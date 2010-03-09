@@ -18,6 +18,11 @@ Changes (since 1.0.5):
  * Support for DVD and Blu-Ray writing via cdrecord
  * New audio ripping pattern %e which is replaced by the file extension
  * Better support for RTL languages
+ 
+2.0-rc2 (1.91)
+==============
+Bugfixes:
+ * Added missing translation files for libk3b, libk3bdevice and K3bSetup
 
 2.0-rc1 (1.90)
 ==============
