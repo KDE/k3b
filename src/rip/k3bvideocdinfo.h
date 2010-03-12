@@ -33,7 +33,7 @@ namespace K3b {
 class VideoCdInfoResultEntry
 {
     public:
-        VideoCdInfoResultEntry() : name( 0 ), id( 0 )
+        VideoCdInfoResultEntry() : name(), id()
         {}
 
         VideoCdInfoResultEntry( const QString& name, const QString& id )
