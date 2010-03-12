@@ -37,7 +37,7 @@ K3b::BinImageWritingJob::BinImageWritingJob( K3b::JobHandler* hdl, QObject* pare
       m_device(0),
       m_simulate(false),
       m_noFix(false),
-      m_tocFile(0),
+      m_tocFile(),
       m_speed(2),
       m_copies(1),
       m_writer(0)
