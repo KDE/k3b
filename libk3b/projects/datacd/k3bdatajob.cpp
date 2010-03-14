@@ -716,7 +716,7 @@ bool K3b::DataJob::waitForBurnMedium()
                                                    K3b::Device::STATE_INCOMPLETE :
                                                    K3b::Device::STATE_EMPTY,
                                                    m,
-                                                   d->doc->length() );
+                                                   d->doc->burningLength() );
 
     if( foundMedium == Device::MEDIA_UNKNOWN || hasBeenCanceled() ) {
         return false;
