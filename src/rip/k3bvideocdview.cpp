@@ -79,9 +79,8 @@ namespace {
                             const K3b::Msf& length )
             : Q3ListViewItem( parent )
         {
-            Q_UNUSED( name );
             setText( 0, QString( "%1. %2" ).arg( _trackNumber ).arg( id ) );
-            setText( 1,"" );
+            setText( 1, name );
             if ( length > 0 ) {
                 setText( 2, length.toString() );
                 setText( 3, KIO::convertSize( length.mode2Form2Bytes() ) );

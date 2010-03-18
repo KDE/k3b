@@ -19,6 +19,12 @@ Changes (since 1.0.5):
  * New audio ripping pattern %e which is replaced by the file extension
  * Better support for RTL languages
  
+2.0-rc3 (1.92)
+==============
+Bugfixes:
+ * In some cases medium doesn't get accepted for multisession burning (230742)
+ * Data files in VCD ripping view are not listed
+ 
 2.0-rc2 (1.91)
 ==============
 Bugfixes:

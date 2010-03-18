@@ -64,6 +64,7 @@ void K3b::VideoCdInfo::info( const QString& device )
 
     *m_process << "-q" << "--norip" << "-i" << device << "-o" << "-";
 
+    m_process->setSplitStdout( true );
     m_process->setSuppressEmptyLines( false );
     connect( m_process, SIGNAL(stderrLine(QString)),
              this, SLOT(slotParseOutput(QString)) );
