@@ -1,9 +1,9 @@
 /*
  *
- * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2003-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 K3b::AbstractWriter::AbstractWriter( K3b::Device::Device* dev, K3b::JobHandler* jh, QObject* parent )
     : K3b::Job( jh, parent ),
       m_burnDevice(dev),
-      m_burnSpeed(1),
+      m_burnSpeed(0),
       m_simulate(false),
       m_sourceUnreadable(false)
 {

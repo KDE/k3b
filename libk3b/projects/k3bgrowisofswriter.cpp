@@ -82,10 +82,10 @@ public:
 
     QString multiSessionInfo;
 
-    int burnedMediumType;
+    Device::MediaType burnedMediumType;
 
     K3b::Device::SpeedMultiplicator speedMultiplicator() const {
-        return ( burnedMediumType & K3b::Device::MEDIA_BD_ALL ? K3b::Device::SPEED_FACTOR_BD : K3b::Device::SPEED_FACTOR_DVD );
+        return K3b::speedMultiplicatorForMediaType( burnedMediumType );
     }
 };
 
@@ -294,15 +294,7 @@ bool K3b::GrowisofsWriter::prepareProcess()
         }
 
         if( speed != 0 ) {
-            if ( d->burnedMediumType & K3b::Device::MEDIA_DVD_ALL ) {
-                // speed may be a float number. example: DVD+R(W): 2.4x
-                d->process << QString("-speed=%1").arg( speed%1385 > 0
-                                                         ? QString::number( (float)speed/1385.0, 'f', 1 )
-                                                         : QString::number( speed/1385 ) );
-            }
-            else if ( d->burnedMediumType & K3b::Device::MEDIA_BD_ALL ) {
-                d->process << QString("-speed=%1").arg( QString::number( speed/4496 ) );
-            }
+            d->process << QString("-speed=%1").arg( K3b::formatWritingSpeedFactor( speed, d->burnedMediumType ) );
         }
     }
 

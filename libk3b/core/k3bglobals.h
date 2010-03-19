@@ -113,7 +113,7 @@ namespace K3b {
         WritingModeRestrictedOverwrite = Device::WRITINGMODE_RES_OVWR // Restricted Overwrite
     };
     Q_DECLARE_FLAGS( WritingModes, WritingMode )
-    
+
     /**
      * Unified mode for erasing/formatting of CD-RW/DVD-RW/BD-RW
      */
@@ -268,6 +268,25 @@ namespace K3b {
      * \sa MediaCache::reset
      */
     LIBK3B_EXPORT bool eject( Device::Device* );
+
+    /**
+     * Get the speed multiplicator for a media type.
+     * \sa K3b::Device::SpeedMultiplicator
+     */
+    LIBK3B_EXPORT K3b::Device::SpeedMultiplicator speedMultiplicatorForMediaType( K3b::Device::MediaType mediaType );
+
+    /**
+     * Create a string representation of the speed factor to be used in command line
+     * commands like cdrecord and growisofs.
+     *
+     * \param speed The speed in KB/s
+     * \param mediaType The media type that is going to be written. This is used to
+     * determine the multiplicator factor.
+     *
+     * This method takes small variances into account and rounds them properly. Also
+     * the "weird" burn speeds like 2.4 are handled.
+     */
+    LIBK3B_EXPORT QString formatWritingSpeedFactor( int speed, K3b::Device::MediaType mediaType );
 
     QDebug& operator<<( QDebug& dbg, WritingMode );
     QDebug& operator<<( QDebug& dbg, WritingModes );

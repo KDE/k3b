@@ -549,6 +549,41 @@ bool K3b::eject( K3b::Device::Device* dev )
 }
 
 
+K3b::Device::SpeedMultiplicator K3b::speedMultiplicatorForMediaType( K3b::Device::MediaType mediaType )
+{
+    if ( mediaType & K3b::Device::MEDIA_DVD_ALL ) {
+        return K3b::Device::SPEED_FACTOR_DVD;
+    }
+    else if ( mediaType & K3b::Device::MEDIA_BD_ALL ) {
+        return K3b::Device::SPEED_FACTOR_BD;
+    }
+    else {
+        return K3b::Device::SPEED_FACTOR_CD;
+    }
+}
+
+
+QString K3b::formatWritingSpeedFactor( int speed, K3b::Device::MediaType mediaType )
+{
+    const int speedFactor = speedMultiplicatorForMediaType( mediaType );
+    int normalizedSpeed = speed;
+    int diff = normalizedSpeed%speedFactor;
+    if ( diff < 5 )
+        normalizedSpeed = speed-diff;
+    else if ( diff > speedFactor-5 )
+        normalizedSpeed = speed+speedFactor-diff;
+
+    // speed may be a float number. example: DVD+R(W): 2.4x
+    if ( mediaType & K3b::Device::MEDIA_DVD_ALL &&
+         normalizedSpeed%speedFactor > 0 ) {
+         return QString::number( ( float )normalizedSpeed/( float )speedFactor, 'f', 1 );
+    }
+    else {
+        return QString::number( normalizedSpeed/speedFactor );
+    }
+}
+
+
 QDebug& K3b::operator<<( QDebug& dbg, K3b::WritingMode mode )
 {
     return dbg << K3b::Device::WritingMode( mode );
