@@ -843,8 +843,8 @@ bool K3b::DataJob::waitForBurnMedium()
             }
 
             if( foundMedium & K3b::Device::MEDIA_DVD_PLUS_RW &&
-                ( usedMultiSessionMode() == K3b::DataDoc::NONE ||
-                  usedMultiSessionMode() == K3b::DataDoc::START ) )
+                ( usedMultiSessionMode() == K3b::DataDoc::CONTINUE ||
+                  usedMultiSessionMode() == K3b::DataDoc::FINISH ) )
                 emit infoMessage( i18n("Growing ISO9660 filesystem on %1.", Device::mediaTypeString(foundMedium, true)), MessageInfo );
             else
                 emit infoMessage( i18n("Writing %1.", Device::mediaTypeString(foundMedium, true)), MessageInfo );
@@ -961,8 +961,8 @@ bool K3b::DataJob::waitForBurnMedium()
         }
 
         if( foundMedium & K3b::Device::MEDIA_BD_RE &&
-            ( usedMultiSessionMode() == K3b::DataDoc::NONE ||
-                usedMultiSessionMode() == K3b::DataDoc::START ) )
+            ( usedMultiSessionMode() == K3b::DataDoc::CONTINUE ||
+              usedMultiSessionMode() == K3b::DataDoc::FINISH ) )
             emit infoMessage( i18n("Growing ISO9660 filesystem on %1.", Device::mediaTypeString(foundMedium, true)), MessageInfo );
         else
             emit infoMessage( i18n("Writing %1.", Device::mediaTypeString(foundMedium, true)), MessageInfo );
@@ -1153,7 +1153,7 @@ bool K3b::DataJob::setupGrowisofsJob()
     if( usedMultiSessionMode() != K3b::DataDoc::NONE ) {
         //
         // growisofs wants a valid -C parameter for multisession, so we get it from the
-        // K3b::MsInfoFetcher (see K3b::DataJob::slotMsInfoFetched)
+        // K3b::MsInfoFetcher (see K3b::DataJob::prepareWriting)
         //
         writer->setMultiSessionInfo( m_isoImager->multiSessionInfo() );
     }
