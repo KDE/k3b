@@ -155,8 +155,7 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
     text.append( "</html>" );
 
     view->setText(text);
-    //TODO port me kde4
-    //view->setCursorPosition(0,0);
+    view->moveCursor( QTextCursor::Start );
     view->ensureCursorVisible();
 }
 
