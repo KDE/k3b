@@ -20,7 +20,6 @@
 
 #include <QString>
 
-class QPushButton;
 class QCheckBox;
 class QCloseEvent;
 
@@ -89,14 +88,13 @@ namespace K3b {
         void slotK3bSetup();
 
     private:
-        SystemProblemDialog( const QList<SystemProblem>&,
+        SystemProblemDialog( const QList<SystemProblem>& problems,
+                             bool showK3bSetupButton,
                              QWidget* parent = 0);
         static int dmaActivated( Device::Device* );
 #ifndef Q_OS_WIN32
         static QList<Device::Device*> checkForAutomounting();
 #endif
-        QPushButton* m_closeButton;
-        QPushButton* m_k3bsetupButton;
         QCheckBox* m_checkDontShowAgain;
     };
 }

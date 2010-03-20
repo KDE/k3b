@@ -24,6 +24,7 @@ Changes (since 1.0.5):
 Bugfixes:
  * In some cases medium doesn't get accepted for multisession burning (230742)
  * Data files in VCD ripping view are not listed
+ * Show "Modify Permissions" button in System Problem Dialog only when it makes sense (230706)
  
 2.0-rc2 (1.91)
 ==============
