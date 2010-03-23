@@ -559,12 +559,14 @@ void K3b::CdrdaoWriter::start()
         case WRITE:
             if( simulate() )
             {
+                // xgettext: no-c-format
                 emit infoMessage(i18n("Starting DAO simulation at %1x speed...",d->usedSpeed),
                                  K3b::Job::MessageInfo );
                 emit newTask( i18n("Simulating") );
             }
             else
             {
+                // xgettext: no-c-format
                 emit infoMessage( i18n("Starting DAO writing at %1x speed...",d->usedSpeed), K3b::Job::MessageInfo );
                 emit newTask( i18n("Writing") );
             }
@@ -576,11 +578,13 @@ void K3b::CdrdaoWriter::start()
         case COPY:
             if( simulate() )
             {
+                // xgettext: no-c-format
                 emit infoMessage(i18n("Starting simulation copy at %1x speed...",d->usedSpeed), K3b::Job::MessageInfo );
                 emit newTask( i18n("Simulating") );
             }
             else
             {
+                // xgettext: no-c-format
                 emit infoMessage( i18n("Starting copy at %1x speed...",d->usedSpeed), K3b::Job::MessageInfo );
                 emit newTask( i18n("Copying") );
             }
@@ -776,7 +780,9 @@ void K3b::CdrdaoWriter::unknownCdrdaoLine( const QString& line )
         int speed = line.mid( pos+9, po2-pos-9 ).toInt();
         if( speed < d->usedSpeed )
         {
+            // xgettext: no-c-format
             emit infoMessage( i18n("Medium or burner does not support writing at %1x speed",d->usedSpeed), K3b::Job::MessageWarning );
+            // xgettext: no-c-format
             emit infoMessage( i18n("Switching down burn speed to %1x",speed), K3b::Job::MessageWarning );
         }
     }

@@ -460,6 +460,7 @@ void K3b::CdrecordWriter::start()
         if( simulate() ) {
             emit newTask( i18n("Simulating") );
             if ( d->burnedMediaType & Device::MEDIA_DVD_PLUS_ALL )
+                // xgettext: no-c-format
                 emit infoMessage( i18n("Starting simulation at %1x speed...",
                                        K3b::formatWritingSpeedFactor( d->usedSpeed, d->burnedMediaType ) ),
                                   K3b::Job::MessageInfo );
@@ -472,6 +473,7 @@ void K3b::CdrecordWriter::start()
         else {
             emit newTask( i18n("Writing") );
             if ( d->burnedMediaType & Device::MEDIA_DVD_PLUS_ALL )
+                // xgettext: no-c-format
                 emit infoMessage( i18n("Starting writing at %1x speed...",
                                        K3b::formatWritingSpeedFactor( d->usedSpeed, d->burnedMediaType ) ),
                                   K3b::Job::MessageInfo );
@@ -690,11 +692,14 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
         int pos2 = line.indexOf( "in", pos+9 );
         int speed = K3b::speedMultiplicatorForMediaType( d->burnedMediaType ) * line.mid( pos+9, pos2-pos-10 ).toDouble();  // cdrecord-dvd >= 2.01a25 uses 8.0 and stuff
         if( speed > 0 && qAbs( speed - d->usedSpeed ) > 5 ) {
+            // xgettext: no-c-format
             emit infoMessage( i18n("Medium or burner does not support writing at %1x speed", K3b::formatWritingSpeedFactor( d->usedSpeed, d->burnedMediaType ) ),
                               K3b::Job::MessageWarning );
             if( speed > d->usedSpeed )
+                // xgettext: no-c-format
                 emit infoMessage( i18n("Switching burn speed up to %1x",speed), K3b::Job::MessageWarning );
             else
+                // xgettext: no-c-format
                 emit infoMessage( i18n("Switching burn speed down to %1x",speed), K3b::Job::MessageWarning );
         }
     }
