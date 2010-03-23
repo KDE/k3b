@@ -26,7 +26,7 @@
 
 #include "k3bcore.h"
 #include "k3bdevicemanager.h"
-#include "k3bthreadjob.h"
+#include "k3bthread.h"
 #ifdef ENABLE_HAL_SUPPORT
 #include "k3bhalconnection.h"
 #endif
@@ -259,7 +259,7 @@ bool K3b::Application::processCmdLineArgs()
 void K3b::Application::slotShutDown()
 {
     k3bcore->mediaCache()->clearDeviceList();
-    K3b::ThreadJob::waitUntilFinished();
+    K3b::Thread::waitUntilFinished();
 }
 
 

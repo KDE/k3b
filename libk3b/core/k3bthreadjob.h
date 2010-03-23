@@ -18,6 +18,7 @@
 
 #include "k3bjob.h"
 #include "k3b_export.h"
+#include <climits>
 
 
 namespace K3b {
@@ -70,10 +71,10 @@ namespace K3b {
 
 
         /**
-         * waits until all running Thread have finished.
-         * This is used by Application.
+         * Call QThread::wait() on job's thread
+         * \see QThread::wait()
          */
-        static void waitUntilFinished();
+        bool wait( unsigned long time = ULONG_MAX );
 
     public Q_SLOTS:
         /**

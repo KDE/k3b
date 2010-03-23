@@ -68,6 +68,7 @@ K3b::AudioTrackAddingDialog::AudioTrackAddingDialog( const KUrl::List& urls,
 
     m_analyserJob = new K3b::AudioFileAnalyzerJob( this, this );
     connect( m_analyserJob, SIGNAL(finished(bool)), this, SLOT(slotAnalysingFinished(bool)) );
+    connect( this, SIGNAL(cancelClicked()), this, SLOT(slotCancelClicked()) );
 }
 
 
@@ -244,11 +245,11 @@ void K3b::AudioTrackAddingDialog::slotAnalysingFinished( bool /*success*/ )
 }
 
 
-void K3b::AudioTrackAddingDialog::slotCancel()
+void K3b::AudioTrackAddingDialog::slotCancelClicked()
 {
     m_bCanceled = true;
     m_analyserJob->cancel();
-    reject();
+    m_analyserJob->wait();
 }
 
 #include "k3baudiotrackaddingdialog.moc"

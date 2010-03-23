@@ -16,8 +16,9 @@
 #ifndef _K3B_THREAD_H_
 #define _K3B_THREAD_H_
 
-#include <qthread.h>
 #include "k3bdevicetypes.h"
+#include "k3b_export.h"
+#include <QThread>
 
 
 namespace K3b {
@@ -31,7 +32,7 @@ namespace K3b {
      *
      * See ThreadJob for more information.
      */
-    class Thread : public QThread
+    class LIBK3B_EXPORT Thread : public QThread
     {
         Q_OBJECT
 

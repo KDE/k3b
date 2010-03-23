@@ -17,10 +17,11 @@
 #include "k3bprogressinfoevent.h"
 #include "k3bthreadjobcommunicationevent.h"
 
-#include <kdebug.h>
-#include <kapplication.h>
+#include <KDebug>
+#include <KApplication>
 
-#include <QtCore/QSharedPointer>
+#include <QSharedPointer>
+#include <QThread>
 
 
 class K3b::ThreadJob::Private
@@ -171,9 +172,9 @@ void K3b::ThreadJob::customEvent( QEvent* e )
 }
 
 
-void K3b::ThreadJob::waitUntilFinished()
+bool K3b::ThreadJob::wait( unsigned long time )
 {
-    K3b::Thread::waitUntilFinished();
+    return d->thread->wait( time );
 }
 
 #include "k3bthreadjob.moc"

@@ -57,7 +57,7 @@ namespace K3b {
     private Q_SLOTS:
         void slotAddUrls();
         void slotAnalysingFinished( bool );
-        void slotCancel();
+        void slotCancelClicked();
 
     private:
         /**
