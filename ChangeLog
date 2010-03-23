@@ -25,6 +25,8 @@ Bugfixes:
  * In some cases medium doesn't get accepted for multisession burning (230742)
  * Data files in VCD ripping view are not listed
  * Show "Modify Permissions" button in System Problem Dialog only when it makes sense (230706)
+ * Crash after "Cancel" was clicked while adding audio files to AudioCD project (231348)
+ * Error window at the start when a place on the left pane is not accessible (230194)
  
 2.0-rc2 (1.91)
 ==============

@@ -167,6 +167,7 @@ void K3b::PlacesModel::addPlace( const QString& name, const KIcon& icon, const K
 {
     KDirModel* model = new KDirModel( this );
     connect( model, SIGNAL( expand( const QModelIndex& ) ), this, SLOT( slotExpand( const QModelIndex& ) ) );
+    model->dirLister()->setAutoErrorHandlingEnabled( false, 0 );
     model->dirLister()->setDirOnlyMode( true );
     model->dirLister()->openUrl( rootUrl, KDirLister::Keep );
 
