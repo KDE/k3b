@@ -3,8 +3,8 @@
     <mime-type type="application/x-k3b">
         <sub-class-of type="application/zip"/>
         <comment>K3b project</comment>
-        <comment xml:lang="pl">Projekt K3b</comment>
         <comment xml:lang="de">K3b-Projekt</comment>
+        <comment xml:lang="pl">Projekt K3b</comment>
         <glob pattern="*.k3b"/>
     </mime-type>
 </mime-info>
