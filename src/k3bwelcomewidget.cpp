@@ -41,7 +41,9 @@
 #include <KMenu>
 #include <KUrl>
 
-static const char* s_allActions[] = {
+namespace {
+
+const char* s_allActions[] = {
     "file_new_data",
     "file_continue_multisession",
     "_sep_",
@@ -62,6 +64,12 @@ static const char* s_allActions[] = {
     "tools_videodvd_rip",
     0
 };
+
+const int MARGIN = 20;
+const int HEADER_BUTTON_SPACING = 10;
+const int BUTTON_SPACING = 4;
+
+} // namespace
 
 K3b::WelcomeWidget::WelcomeWidget( MainWindow* mainWindow, QWidget* parent )
     : QWidget( parent ),
@@ -124,8 +132,8 @@ void K3b::WelcomeWidget::rebuildGui( const QList<QAction*>& actions )
 static void calculateButtons( int width, int numActions, int buttonWidth, int& cols, int& rows )
 {
     // always try to avoid horizontal scrollbars
-    int wa = width - 40;
-    cols = qMax( 1, qMin( wa / (buttonWidth+4), numActions ) );
+    int wa = width - 2*MARGIN;
+    cols = qMax( 1, qMin( wa / (buttonWidth+BUTTON_SPACING), numActions ) );
     rows = numActions/cols;
     int over = numActions%cols;
     if( over ) {
@@ -178,11 +186,11 @@ void K3b::WelcomeWidget::repositionButtons()
     // calculate rows and columns
     calculateButtons( width(), m_actions.count(), m_buttonSize.width(), m_cols, m_rows );
 
-    int availHor = width() - 40;
-    int availVert = height() - 20 - 10 - ( int )m_header->size().height() - 10;
-    availVert -= ( int )m_infoText->size().height() - 10;
-    int leftMargin = 20 + (availHor - (m_buttonSize.width()+4)*m_cols)/2;
-    int topOffset = ( int )m_header->size().height() + 20 + ( availVert - (m_buttonSize.height()+4)*m_rows - m_buttonMore->height() )/2;
+    int availHor = width() - 2*MARGIN;
+    int availVert = height() - MARGIN - HEADER_BUTTON_SPACING - ( int )m_header->size().height() - HEADER_BUTTON_SPACING;
+    availVert -= ( int )m_infoText->size().height() - HEADER_BUTTON_SPACING;
+    int leftMargin = MARGIN + (availHor - (m_buttonSize.width()+BUTTON_SPACING)*m_cols)/2;
+    int topOffset = ( int )m_header->size().height() + MARGIN + ( availVert - (m_buttonSize.height()+BUTTON_SPACING)*m_rows - m_buttonMore->height() )/2;
 
     int row = 0;
     int col = 0;
@@ -191,8 +199,8 @@ void K3b::WelcomeWidget::repositionButtons()
     {
         K3b::FlatButton* b = m_buttons.at( i );
 
-        QRect rect( QPoint( leftMargin + (col*(m_buttonSize.width()+4) + 2 ),
-                            topOffset + (row*(m_buttonSize.height()+4)) + 2 ), m_buttonSize );
+        QRect rect( QPoint( leftMargin + (col*(m_buttonSize.width()+BUTTON_SPACING) + 2 ),
+                            topOffset + (row*(m_buttonSize.height()+BUTTON_SPACING)) + 2 ), m_buttonSize );
         b->setGeometry( QStyle::visualRect( layoutDirection(), contentsRect(), rect ) );
         b->show();
 
@@ -205,33 +213,35 @@ void K3b::WelcomeWidget::repositionButtons()
     if( col > 0 )
         ++row;
 
-    QRect rect( leftMargin + 2, topOffset + (row*(m_buttonSize.height()+4)) + 2,
-                m_cols*(m_buttonSize.width()+4) - 4, m_buttonMore->height() );
+    QRect rect( leftMargin + 2, topOffset + (row*(m_buttonSize.height()+BUTTON_SPACING)) + 2,
+                m_cols*(m_buttonSize.width()+BUTTON_SPACING) - BUTTON_SPACING, m_buttonMore->height() );
     m_buttonMore->setGeometry( QStyle::visualRect( layoutDirection(), contentsRect(), rect ) );
+    
+    setMinimumHeight( heightForWidth( width() ) );
 }
 
 
-QSize K3b::WelcomeWidget::minimumSizeHint() const
+int K3b::WelcomeWidget::heightForWidth( int width ) const
 {
-    QSize size;
-    size.setWidth( qMax(40+( int )m_header->idealWidth(), 40+m_buttonSize.width()) );
-    
     int ow = ( int )m_infoText->idealWidth();
-    m_infoText->setTextWidth( size.width() );
+    m_infoText->setTextWidth( width );
     int h = ( int )m_infoText->size().height();
     m_infoText->setTextWidth( ow );
-
+    
     int cols, rows;
-    calculateButtons( size.width(), m_actions.count(), m_buttonSize.width(), cols, rows );
-
-    size.setHeight(20 + ( int )m_header->size().height() + 10 + ((m_buttonSize.height()+4)*rows) + 4 + m_buttonMore->height() + 10 + h + 20);
-    return size;
+    calculateButtons( width, m_actions.count(), m_buttonSize.width(), cols, rows );
+    int height = MARGIN +
+                 m_header->size().toSize().height() +
+                 HEADER_BUTTON_SPACING +
+                 ( ( m_buttonSize.height() + BUTTON_SPACING ) * rows ) + m_buttonMore->height() +
+                 HEADER_BUTTON_SPACING + h + MARGIN;
+    return height;
 }
 
 
 void K3b::WelcomeWidget::resizeEvent( QResizeEvent* e )
 {
-    m_infoText->setTextWidth( width() - 20 );
+    m_infoText->setTextWidth( width() - MARGIN );
     QWidget::resizeEvent(e);
     repositionButtons();
     if( e->size() != m_bgPixmap.size() )
@@ -253,6 +263,7 @@ void K3b::WelcomeWidget::slotThemeChanged()
     m_header->setHtml( "<html><body align=\"center\">" + i18n("Welcome to K3b - The CD and DVD Kreator") + "</body></html>" );
     m_infoText->setHtml( QString::fromUtf8("<html><body align=\"center\">K3b %1 &copy; 1999&ndash;2010 Sebastian Trüg et al.</body></html>")
                          .arg(KGlobal::mainComponent().aboutData()->version()) );
+    setMinimumWidth( 2*MARGIN + qMax(( int )m_header->idealWidth(), m_buttonSize.width()) );
     updateBgPix();
     update();
 }
@@ -297,27 +308,27 @@ void K3b::WelcomeWidget::paintEvent( QPaintEvent* )
         p.drawTiledPixmap( rect(), m_bgPixmap );
 
         // rect around the header
-        QRect rect( 10, 10, qMax( ( int )m_header->idealWidth() + 20, width() - 20 ), ( int )m_header->size().height() + 20 );
+        QRect rect( 10, 10, qMax( ( int )m_header->idealWidth() + MARGIN, width() - MARGIN ), ( int )m_header->size().height() + MARGIN );
         p.fillRect( rect, theme->backgroundColor() );
         p.drawRect( rect );
 
         // big rect around the whole thing
-        p.drawRect( 10, 10, width()-20, height()-20 );
+        p.drawRect( 10, 10, width()-MARGIN, height()-MARGIN );
 
         // draw the header text
-        int pos = 20;
-        pos += qMax( (width()-40-( int )m_header->idealWidth())/2, 0 );
+        int pos = MARGIN;
+        pos += qMax( (width()-2*MARGIN-( int )m_header->idealWidth())/2, 0 );
         p.save();
-        p.translate( pos, 20 );
+        p.translate( pos, MARGIN );
         m_header->drawContents( &p );
         p.restore();
 
         // draw the info box
-        //    int boxWidth = 20 + m_infoText->widthUsed();
+        //    int boxWidth = MARGIN + m_infoText->widthUsed();
         int boxHeight = 10 + ( int )m_infoText->size().height();
-        QRect infoBoxRect( 10/*qMax( (width()-20-m_infoText->widthUsed())/2, 10 )*/,
+        QRect infoBoxRect( 10/*qMax( (width()-MARGIN-m_infoText->widthUsed())/2, 10 )*/,
                            height()-10-boxHeight,
-                           width()-20/*boxWidth*/,
+                           width()-MARGIN/*boxWidth*/,
                            boxHeight );
         p.fillRect( infoBoxRect, theme->backgroundColor() );
         p.drawRect( infoBoxRect );

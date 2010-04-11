@@ -48,7 +48,7 @@ namespace K3b {
         void loadConfig( const KConfigGroup& c );
         void saveConfig( KConfigGroup c );
 
-        virtual QSize minimumSizeHint() const;
+        virtual int heightForWidth( int width ) const;
 
         void addAction( QAction* );
         void removeAction( QAction* );
