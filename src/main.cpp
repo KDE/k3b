@@ -49,7 +49,7 @@ int main( int argc, char* argv[] )
 {
     KAboutData aboutData( "k3b",0, ki18n("K3b"),
                           LIBK3B_VERSION, ki18n(description), KAboutData::License_GPL,
-                          ki18n("(C) 1998-2009 Sebastian Trüg"), KLocalizedString(), I18N_NOOP("http://www.k3b.org" ));
+                          ki18n("(C) 1998-2010 Sebastian Trüg\n(C) 2009-2010 Michał Małek"), KLocalizedString(), I18N_NOOP("http://www.k3b.org" ));
 
     aboutData.addAuthor(ki18n("Sebastian Trüg"),ki18n("Maintainer and Lead Developer"), "trueg@k3b.org");
     aboutData.addAuthor(ki18n("Michał Małek"),ki18n("Developer"), "michalm@jabster.pl");
