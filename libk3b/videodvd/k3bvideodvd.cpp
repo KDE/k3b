@@ -102,13 +102,17 @@ bool K3b::VideoDVD::VideoDVD::open( K3b::Device::Device* dev )
     // Read volume id
     //
     char v[33];
-    if( DVDUDFVolumeInfo( dvdReaderT, v, 33, 0, 0 ) != 0 &&
-        DVDISOVolumeInfo( dvdReaderT, v, 33, 0, 0 ) != 0 ) {
+    if( DVDUDFVolumeInfo( dvdReaderT, v, 32, 0, 0 ) == 0 ) {
+        m_volumeIdentifier = QString::fromLatin1( v, 31 );
+    }
+    else if ( DVDISOVolumeInfo( dvdReaderT, v, 33, 0, 0 ) == 0 ) {
+        m_volumeIdentifier = QString::fromLatin1( v, 32 );
+    }
+    else {
         kDebug() << "(K3b::VideoDVD) Could not read volume info.";
         DVDClose( dvdReaderT );
         return false;
     }
-    m_volumeIdentifier = QString::fromLatin1( v, 32 );
 
     //
     // Open the VMG info
