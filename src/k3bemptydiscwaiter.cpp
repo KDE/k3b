@@ -599,7 +599,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
 
     // /////////////////////////////////////////////////////////////
     //
-    // CD handling (and DVD-R and DVD+R)
+    // All the non-rewritable media types are handled here
     //
     // /////////////////////////////////////////////////////////////
 
