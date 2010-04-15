@@ -46,6 +46,7 @@ Description[nb]=En kioslave som tillater at filer blir kopiert fra en video-DVD 
 Description[nds]=En In-/Utgaavmoduul, mit dat sik Dateien vun en Video-DVD koperen laat (ok mit Opslöteln)
 Description[ne]=भिडियो डीभीडीबाट फाइल प्रतिलिपि गर्न अनुमति दिने एउटा किओस्लेभ (गुप्तिकरण उल्टाउने समाविष्ट)
 Description[nl]=Een kioslave waarmee u bestanden van een video-dvd kunt kopiëren (inclusief versleuteling)
+Description[nn]=KIO-slave som gjer det mogleg å kopiera (krypterte) filer frå video-DVD-ar
 Description[pl]=Wtyczka protokołu pozwalająca kopiować pliki z płyt DVD Video (łącznie z odszyfrowywaniem)
 Description[pt]=Um 'kioslave' que permite copiar ficheiros de um DVD Vídeo (incluindo decifrar)
 Description[pt_BR]=Um kioslave que permite que arquivos sejam copiados de um DVD de vídeo (incluindo a quebra da proteção)
