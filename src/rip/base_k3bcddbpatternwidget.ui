@@ -1,166 +1,174 @@
-<ui version="4.0" stdsetdef="1" >
-  <author></author>
-  <comment></comment>
-  <exportmacro></exportmacro>
-  <class>base_K3bCddbPatternWidget</class>
-  <widget class="QWidget" name="base_K3bPatternOptionTab" >
-    <property name="geometry" >
-      <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>344</width>
-        <height>139</height>
-      </rect>
-    </property>
-    <property name="windowTitle" >
-      <string>Ripping Pattern</string>
-    </property>
-    <layout class="QGridLayout" >
-      <property name="margin" >
-        <number>11</number>
-      </property>
-      <property name="spacing" >
-        <number>6</number>
-      </property>
-      <item rowspan="1" row="3" column="0" colspan="2" >
-        <layout class="QHBoxLayout" >
-          <item>
-            <widget class="QCheckBox" name="m_checkBlankReplace" >
-              <property name="text" >
-                <string>Replace all blan&amp;ks with:</string>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="KLineEdit" name="m_editBlankReplace" >
-              <property name="enabled" >
-                <bool>false</bool>
-              </property>
-              <property name="text" >
-                <string>_</string>
-              </property>
-            </widget>
-          </item>
-        </layout>
-      </item>
-      <item row="1" column="0" >
-        <widget class="QLabel" name="textLabel2" >
-          <property name="text" >
-            <string>Playlist pattern:</string>
-          </property>
-          <property name="wordWrap" >
-            <bool>false</bool>
-          </property>
-        </widget>
-      </item>
-      <item row="1" column="1" >
-        <widget class="KComboBox" name="m_comboPlaylistPattern" >
-          <property name="sizePolicy" >
-            <sizepolicy>
-              <hsizetype>1</hsizetype>
-              <vsizetype>0</vsizetype>
-              <horstretch>1</horstretch>
-              <verstretch>0</verstretch>
-            </sizepolicy>
-          </property>
-          <property name="editable" >
-            <bool>true</bool>
-          </property>
-        </widget>
-      </item>
-      <item row="0" column="0" >
-        <widget class="QLabel" name="textLabel1" >
-          <property name="text" >
-            <string>Ripped files pattern:</string>
-          </property>
-          <property name="wordWrap" >
-            <bool>false</bool>
-          </property>
-        </widget>
-      </item>
-      <item row="0" column="1" >
-        <widget class="KComboBox" name="m_comboFilenamePattern" >
-          <property name="sizePolicy" >
-            <sizepolicy>
-              <hsizetype>1</hsizetype>
-              <vsizetype>0</vsizetype>
-              <horstretch>1</horstretch>
-              <verstretch>0</verstretch>
-            </sizepolicy>
-          </property>
-          <property name="editable" >
-            <bool>true</bool>
-          </property>
-          <property name="toolTip" stdset="0" >
-            <string>Insert your custom pattern here</string>
-          </property>
-        </widget>
-      </item>
-      <item rowspan="1" row="2" column="0" colspan="2" >
-        <layout class="QHBoxLayout" >
-          <item>
-            <spacer name="spacer1" >
-              <property name="sizeHint" >
-                <size>
-                  <width>31</width>
-                  <height>2</height>
-                </size>
-              </property>
-              <property name="sizeType" >
-                <enum>QSizePolicy::Expanding</enum>
-              </property>
-              <property name="orientation" >
-                <enum>Qt::Horizontal</enum>
-              </property>
-            </spacer>
-          </item>
-          <item>
-            <widget class="KUrlLabel" name="m_specialStringsLabel" >
-              <property name="text" >
-                <string>See special strings</string>
-              </property>
-              <property name="alignment" >
-                <set>Qt::AlignVCenter|Qt::AlignRight</set>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="KUrlLabel" name="m_conditionalInclusionLabel" >
-              <property name="text" >
-                <string>About conditional inclusion</string>
-              </property>
-              <property name="alignment" >
-                <set>Qt::AlignVCenter|Qt::AlignRight</set>
-              </property>
-            </widget>
-          </item>
-        </layout>
-      </item>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>base_K3bCddbPatternWidget</class>
+ <widget class="QWidget" name="base_K3bCddbPatternWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>344</width>
+    <height>139</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Ripping Pattern</string>
+  </property>
+  <layout class="QGridLayout">
+   <item row="3" column="0" colspan="2">
+    <layout class="QHBoxLayout">
+     <item>
+      <widget class="QCheckBox" name="m_checkBlankReplace">
+       <property name="text">
+        <string>Replace all blan&amp;ks with:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KLineEdit" name="m_editBlankReplace">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>_</string>
+       </property>
+      </widget>
+     </item>
     </layout>
-  </widget>
-  <layoutdefault spacing="6" margin="11" />
-    <customwidgets>
-    <customwidget>
-      <class>KComboBox</class>
-      <extends>QComboBox</extends>
-      <header location="global" >kcombobox.h</header>
-    </customwidget>
-  </customwidgets>
-  <tabstops>
-    <tabstop>m_comboFilenamePattern</tabstop>
-    <tabstop>m_comboPlaylistPattern</tabstop>
-    <tabstop>m_checkBlankReplace</tabstop>
-    <tabstop>m_editBlankReplace</tabstop>
-  </tabstops>
-  <includes>
-    <include location="local" >kurllabel.h</include>
-  </includes>
-  <connections>
-    <connection>
-      <sender>m_checkBlankReplace</sender>
-      <signal>toggled(bool)</signal>
-      <receiver>m_editBlankReplace</receiver>
-      <slot>setEnabled(bool)</slot>
-    </connection>
-  </connections>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="textLabel2">
+     <property name="text">
+      <string>Playlist pattern:</string>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="KComboBox" name="m_comboPlaylistPattern">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>1</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="textLabel1">
+     <property name="text">
+      <string>Ripped files pattern:</string>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="KComboBox" name="m_comboFilenamePattern">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>1</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip">
+      <string>Insert your custom pattern here</string>
+     </property>
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <layout class="QHBoxLayout">
+     <item>
+      <spacer name="spacer1">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>31</width>
+         <height>2</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="KUrlLabel" name="m_specialStringsLabel">
+       <property name="text">
+        <string>See special strings</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KUrlLabel" name="m_conditionalInclusionLabel">
+       <property name="text">
+        <string>About conditional inclusion</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KUrlLabel</class>
+   <extends>QLabel</extends>
+   <header>kurllabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>m_comboFilenamePattern</tabstop>
+  <tabstop>m_comboPlaylistPattern</tabstop>
+  <tabstop>m_checkBlankReplace</tabstop>
+  <tabstop>m_editBlankReplace</tabstop>
+ </tabstops>
+ <includes>
+  <include location="local">kurllabel.h</include>
+ </includes>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>m_checkBlankReplace</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_editBlankReplace</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

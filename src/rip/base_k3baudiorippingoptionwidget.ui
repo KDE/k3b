@@ -2,7 +2,7 @@
 <ui version="4.0">
  <author>Sebastian Trueg</author>
  <class>base_K3bAudioRippingOptionWidget</class>
- <widget class="QWidget" name="Form1">
+ <widget class="QWidget" name="base_K3bAudioRippingOptionWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -75,7 +75,7 @@ which can be used with programs like Amarok or JuK.
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>16</height>
+            <height>1</height>
            </size>
           </property>
          </spacer>
@@ -131,7 +131,7 @@ file will contain all tracks one after the other.
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>16</height>
+            <height>1</height>
            </size>
           </property>
          </spacer>
@@ -153,6 +153,19 @@ file will contain all tracks one after the other.
          </widget>
         </item>
        </layout>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>1</width>
+          <height>1</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </widget>
@@ -223,7 +236,6 @@ file will contain all tracks one after the other.
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
    <class>KUrlRequester</class>

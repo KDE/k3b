@@ -137,13 +137,13 @@ void K3b::AudioRippingDialog::setupGui()
     QWidget *frame = mainWidget();
     QGridLayout* Form1Layout = new QGridLayout( frame );
     Form1Layout->setMargin( 0 );
-    
+
     QTreeWidgetItem* header = new QTreeWidgetItem;
     header->setText( 0, i18n( "Filename") );
     header->setText( 1, i18n( "Length") );
     header->setText( 2, i18n( "File Size") );
     header->setText( 3, i18n( "Type") );
-    
+
     d->viewTracks = new QTreeWidget( frame );
     d->viewTracks->setSortingEnabled( false );
     d->viewTracks->setAllColumnsShowFocus( true );
