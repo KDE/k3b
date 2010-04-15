@@ -2334,6 +2334,8 @@ K3b::Device::DiskInfo K3b::Device::Device::diskInfo() const
                             inf.d->usedCapacity = from4Byte( data+8 );
                         else if( data[7] & 0x1 )
                             inf.d->usedCapacity = from4Byte( data+12 );
+                        else
+                            inf.d->usedCapacity = inf.d->capacity;
                         delete [] data;
                     }
                 }
