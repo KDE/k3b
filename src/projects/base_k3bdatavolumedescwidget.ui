@@ -334,7 +334,6 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>m_editVolumeName</tabstop>
   <tabstop>m_editVolumeSetName</tabstop>

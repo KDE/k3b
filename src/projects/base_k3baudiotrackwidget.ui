@@ -251,7 +251,6 @@ This does not mean that K3b adds an additional gap of silence to the track. This
       </item>
     </layout>
   </widget>
-  <layoutdefault spacing="6" margin="11" />
   <customwidgets>
     <customwidget>
       <class>K3b::MsfEdit</class>

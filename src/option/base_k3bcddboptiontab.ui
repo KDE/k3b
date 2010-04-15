@@ -549,7 +549,6 @@
     <tabstop>m_checkManualCgiPath</tabstop>
     <tabstop>m_editManualCgiPath</tabstop>
 </tabstops>
-<layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>k3listview.h</includehint>
 </includehints>
