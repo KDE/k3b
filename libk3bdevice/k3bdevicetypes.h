@@ -141,73 +141,138 @@ namespace K3b {
         Q_DECLARE_FLAGS( BackGroundFormattingStates, BackGroundFormattingState )
 
         /**
-         * Defines the different media types as retured by
-         * Device::cdMediaType() and Device::dvdMediaType()
+         * Defines the media types used throughout K3b.
+         * For all groups of media a flag is defined like MEDIA_REWRITABLE_DVD.
+         *
+         * None of the flags is defines as 0 so we can actually include things like
+         * MEDIA_NONE in flag combinations. This is important when specifying sets
+         * of supported media or the like.
          */
         enum MediaType {
-            MEDIA_UNKNOWN = 0x1,                           /**< Represents an unknown media type (when an error occurred) */
-            MEDIA_NONE = 0x2,                              /**< No medium is inserted */
-            MEDIA_DVD_ROM = 0x4,                           /**< */
-            MEDIA_DVD_R = 0x8,                             /**< */
-            MEDIA_DVD_R_SEQ = 0x10,                        /**< */
-            MEDIA_DVD_R_DL = 0x20,                         /**< Dual Layer DVD-R media. */
-            MEDIA_DVD_R_DL_SEQ = 0x40,                     /**< */
-            MEDIA_DVD_R_DL_JUMP = 0x80,                    /**< */
-            MEDIA_DVD_RAM = 0x100,                         /**< */
-            MEDIA_DVD_RW = 0x200,                          /**< */
-            MEDIA_DVD_RW_OVWR = 0x400,                     /**< DVD-RW media formatted in Restricted Overwrite mode. */
-            MEDIA_DVD_RW_SEQ = 0x800,                      /**< DVD-RW media formatted in Incremental Sequential mode. */
-            MEDIA_DVD_PLUS_RW = 0x1000,                    /**< */
-            MEDIA_DVD_PLUS_R = 0x2000,                     /**< */
-            MEDIA_DVD_PLUS_R_DL = 0x4000,                  /**< Double Layer DVD+R media. */
-            MEDIA_DVD_PLUS_RW_DL = 0x8000,                 /**< Double Layer DVD+RW media. */
-            MEDIA_CD_ROM = 0x10000,                        /**< */
-            MEDIA_CD_R = 0x20000,                          /**< */
-            MEDIA_CD_RW = 0x40000,                         /**< */
-            MEDIA_HD_DVD_ROM = 0x80000,                    /**< */
-            MEDIA_HD_DVD_R = 0x100000,                     /**< */
-            MEDIA_HD_DVD_RAM = 0x200000,                   /**< */
-            MEDIA_BD_ROM = 0x400000,                       /**< Read-only Blu-ray Disc (BD) */
-            MEDIA_BD_R = 0x800000,                         /**< Writable Blu-ray Disc (BD-R) */
-            MEDIA_BD_R_SRM = 0x1000000,                    /**< Writable Blu-ray Disc (BD-R) */
-            MEDIA_BD_R_SRM_POW = 0x2000000,                /**< Writable Blu-ray Disc (BD-R) */
-            MEDIA_BD_R_RRM = 0x4000000,                    /**< Writable Blu-ray Disc (BD-R) */
-            MEDIA_BD_RE = 0x8000000,                       /**< Rewritable Blu-ray Disc (BD-RE) */
-            MEDIA_WRITABLE_CD = MEDIA_CD_R |               /**< This is a bitwise or of media types representing all writable CD media.*/
+            /** Represents an unknown media type (when an error occurred) */
+            MEDIA_UNKNOWN = 0x1,
+
+            /** No medium is inserted. */
+            MEDIA_NONE = 0x2,
+
+            /** DVD-ROM media */
+            MEDIA_DVD_ROM = 0x4,
+
+            MEDIA_DVD_R = 0x8,
+
+            MEDIA_DVD_R_SEQ = 0x10,
+
+            /** Dual Layer DVD-R media. */
+            MEDIA_DVD_R_DL = 0x20,
+
+            MEDIA_DVD_R_DL_SEQ = 0x40,
+
+            MEDIA_DVD_R_DL_JUMP = 0x80,
+
+            MEDIA_DVD_RAM = 0x100,
+
+            MEDIA_DVD_RW = 0x200,
+
+            /** DVD-RW media formatted in Restricted Overwrite mode. */
+            MEDIA_DVD_RW_OVWR = 0x400,
+
+            /** DVD-RW media formatted in Incremental Sequential mode. */
+            MEDIA_DVD_RW_SEQ = 0x800,
+
+            MEDIA_DVD_PLUS_RW = 0x1000,
+
+            MEDIA_DVD_PLUS_R = 0x2000,
+
+            /** Double Layer DVD+R media. */
+            MEDIA_DVD_PLUS_R_DL = 0x4000,
+
+            /** Double Layer DVD+RW media. */
+            MEDIA_DVD_PLUS_RW_DL = 0x8000,
+
+            MEDIA_CD_ROM = 0x10000,
+            MEDIA_CD_R = 0x20000,
+            MEDIA_CD_RW = 0x40000,
+            MEDIA_HD_DVD_ROM = 0x80000,
+            MEDIA_HD_DVD_R = 0x100000,
+            MEDIA_HD_DVD_RAM = 0x200000,
+
+            /** Read-only Blu-ray Disc (BD) */
+            MEDIA_BD_ROM = 0x400000,
+
+            /** Writable Blu-ray Disc (BD-R) */
+            MEDIA_BD_R = 0x800000,
+
+            /** Writable Blu-ray Disc (BD-R) */
+            MEDIA_BD_R_SRM = 0x1000000,
+
+            /** Writable Blu-ray Disc (BD-R) */
+            MEDIA_BD_R_SRM_POW = 0x2000000,
+
+            /** Writable Blu-ray Disc (BD-R) */
+            MEDIA_BD_R_RRM = 0x4000000,
+
+            /** Rewritable Blu-ray Disc (BD-RE) */
+            MEDIA_BD_RE = 0x8000000,
+
+            /** This is a bitwise or of media types representing all writable CD media.*/
+            MEDIA_WRITABLE_CD = MEDIA_CD_R |
             MEDIA_CD_RW,
+
             MEDIA_CD_ALL = MEDIA_WRITABLE_CD |
             MEDIA_CD_ROM,
-            MEDIA_WRITABLE_DVD_SL = MEDIA_DVD_R |          /**< This is a bitwise or of media types representing all writable single layer DVD media.*/
+
+            MEDIA_REWRITABLE_DVD_SL = MEDIA_DVD_RW |
+            MEDIA_DVD_RW_OVWR |
+            MEDIA_DVD_RW_SEQ |
+            MEDIA_DVD_PLUS_RW,
+
+            MEDIA_REWRITABLE_DVD_DL = MEDIA_DVD_PLUS_RW_DL,
+
+            MEDIA_REWRITABLE_DVD = MEDIA_REWRITABLE_DVD_SL |
+            MEDIA_DVD_PLUS_RW_DL,
+
+            /** This is a bitwise or of media types representing all writable single layer DVD media. */
+            MEDIA_WRITABLE_DVD_SL = MEDIA_REWRITABLE_DVD_SL |
+            MEDIA_DVD_R |
             MEDIA_DVD_R_SEQ |
             MEDIA_DVD_RW |
             MEDIA_DVD_RW_OVWR |
             MEDIA_DVD_RW_SEQ |
             MEDIA_DVD_PLUS_RW |
             MEDIA_DVD_PLUS_R,
-            MEDIA_WRITABLE_DVD_DL = MEDIA_DVD_R_DL |       /**< This is a bitwise or of media types representing all writable double layer DVD media.*/
+
+            /** This is a bitwise or of media types representing all writable double layer DVD media. */
+            MEDIA_WRITABLE_DVD_DL = MEDIA_REWRITABLE_DVD_DL |
+            MEDIA_DVD_R_DL |
             MEDIA_DVD_R_DL_SEQ |
             MEDIA_DVD_R_DL_JUMP |
             MEDIA_DVD_PLUS_R_DL |
             MEDIA_DVD_PLUS_RW_DL,
-            MEDIA_WRITABLE_DVD = MEDIA_WRITABLE_DVD_SL |   /**< This is a bitwise or of media types representing all writable DVD media.*/
+
+            /** This is a bitwise or of media types representing all writable DVD media. */
+            MEDIA_WRITABLE_DVD = MEDIA_WRITABLE_DVD_SL |
             MEDIA_WRITABLE_DVD_DL,
-            MEDIA_REWRITABLE_DVD =  MEDIA_DVD_RW |
-            MEDIA_DVD_RW_OVWR |
-            MEDIA_DVD_RW_SEQ |
-            MEDIA_DVD_PLUS_RW_DL |
-            MEDIA_DVD_PLUS_RW,
-            MEDIA_WRITABLE_BD = MEDIA_BD_R |               /**< This is a bitwise or of media types representing all writable BD media.*/
+
+            MEDIA_REWRITABLE_BD = MEDIA_BD_RE,
+
+            /** This is a bitwise or of media types representing all writable BD media. */
+            MEDIA_WRITABLE_BD = MEDIA_REWRITABLE_BD |
+            MEDIA_BD_R |
             MEDIA_BD_R_SRM |
             MEDIA_BD_R_SRM_POW |
-            MEDIA_BD_R_RRM |
-            MEDIA_BD_RE,
-            MEDIA_WRITABLE = MEDIA_WRITABLE_CD |           /**< This is a bitwise or of media types representing all writable media.*/
+            MEDIA_BD_R_RRM,
+
+            /** This is a bitwise or of media types representing all writable media. */
+            MEDIA_WRITABLE = MEDIA_WRITABLE_CD |
             MEDIA_WRITABLE_DVD |
             MEDIA_WRITABLE_BD,
+
             MEDIA_REWRITABLE = MEDIA_CD_RW |
             MEDIA_REWRITABLE_DVD |
-            MEDIA_BD_RE,
-            MEDIA_DVD_MINUS_ALL = MEDIA_DVD_R |            /**< This is a bitwise or of media types representing all DVD-R/W media.*/
+            MEDIA_REWRITABLE_BD,
+
+            /** This is a bitwise or of media types representing all DVD-R/W media. */
+            MEDIA_DVD_MINUS_ALL = MEDIA_DVD_R |
             MEDIA_DVD_R_SEQ |
             MEDIA_DVD_RW |
             MEDIA_DVD_RW_OVWR |
@@ -215,14 +280,19 @@ namespace K3b {
             MEDIA_DVD_R_DL |
             MEDIA_DVD_R_DL_SEQ |
             MEDIA_DVD_R_DL_JUMP,
-            MEDIA_DVD_PLUS_ALL = MEDIA_DVD_PLUS_RW |       /**< This is a bitwise or of media types representing all DVD+R/W media.*/
+
+            /** This is a bitwise or of media types representing all DVD+R/W media. */
+            MEDIA_DVD_PLUS_ALL = MEDIA_DVD_PLUS_RW |
             MEDIA_DVD_PLUS_R |
             MEDIA_DVD_PLUS_R_DL |
             MEDIA_DVD_PLUS_RW_DL,
+
             MEDIA_DVD_ALL = MEDIA_WRITABLE_DVD |
             MEDIA_DVD_ROM,
+
             MEDIA_BD_ALL = MEDIA_WRITABLE_BD |
             MEDIA_BD_ROM,
+
             MEDIA_ALL = MEDIA_CD_ALL |
             MEDIA_DVD_ALL |
             MEDIA_BD_ALL
@@ -257,11 +327,7 @@ namespace K3b {
         }
 
         inline bool isRewritableMedia( MediaTypes mediaType ) {
-            return ( mediaType == MEDIA_DVD_RW ||
-                     mediaType == MEDIA_DVD_RW_OVWR ||
-                     mediaType == MEDIA_DVD_RW_SEQ ||
-                     mediaType == MEDIA_DVD_PLUS_RW ||
-                     mediaType == MEDIA_CD_RW );
+            return ( mediaType & MEDIA_REWRITABLE );
         }
     }
 }
