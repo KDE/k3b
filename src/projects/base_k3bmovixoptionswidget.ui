@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>Sebastian trueg</author>
- <class>Form1</class>
- <widget class="QWidget" name="Form1">
+ <class>base_K3bMovixOptionsWidget</class>
+ <widget class="QWidget" name="base_K3bMovixOptionsWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
