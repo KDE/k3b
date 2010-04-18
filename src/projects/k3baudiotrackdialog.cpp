@@ -3,7 +3,7 @@
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,29 +13,18 @@
  */
 
 #include "k3baudiotrackdialog.h"
-#include "k3baudioeditorwidget.h"
 #include "k3baudiotrackwidget.h"
 #include "k3baudiotrack.h"
-#include "k3bvalidators.h"
 #include "k3bmsf.h"
-#include "k3bcdtextvalidator.h"
-#include "k3baudiodecoder.h"
 #include "k3bmsfedit.h"
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <QGridLayout>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QLabel>
+#include <QVBoxLayout>
 
-#include <kiconloader.h>
-#include <klocale.h>
-#include <knuminput.h>
-#include <kmimetype.h>
-#include <kurl.h>
+#include <KLocale>
 #include <kio/global.h>
-#include <klineedit.h>
-#include <kvbox.h>
 
 
 // TODO: three modes:
@@ -60,10 +49,9 @@ K3b::AudioTrackDialog::AudioTrackDialog( const QList<K3b::AudioTrack*>& tracks, 
     connect(this,SIGNAL(okClicked()), this, SLOT(slotOk()));
     connect(this,SIGNAL(applyClicked()),this,SLOT(slotApply()));
 
-
     setupGui();
-    setupConnections();
 }
+
 
 K3b::AudioTrackDialog::~AudioTrackDialog()
 {
@@ -80,7 +68,6 @@ void K3b::AudioTrackDialog::slotOk()
 void K3b::AudioTrackDialog::slotApply()
 {
     m_audioTrackWidget->save();
-
 }
 
 
@@ -89,16 +76,11 @@ void K3b::AudioTrackDialog::setupGui()
     QFrame* frame = new QFrame();
     setMainWidget( frame );
 
-
-    QGridLayout* mainLayout = new QGridLayout( frame );
-    mainLayout->setMargin( 0 );
+    QVBoxLayout* mainLayout = new QVBoxLayout( frame );
+    mainLayout->setContentsMargins( 0, 0, 0, 0 );
 
     m_audioTrackWidget = new K3b::AudioTrackWidget( m_tracks, frame );
-    mainLayout->addWidget( m_audioTrackWidget, 0, 0 );
-}
-
-void K3b::AudioTrackDialog::setupConnections()
-{
+    mainLayout->addWidget( m_audioTrackWidget );
 }
 
 
