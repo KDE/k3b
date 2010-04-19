@@ -128,6 +128,7 @@ X-KDE-ServiceTypes=KCModule
 X-KDE-Library=kcm_k3bsetup
 X-KDE-ParentApp=kcontrol
 X-KDE-System-Settings-Parent-Category=system
+X-KDE-System-Settings-Parent-Category-V2=permissions
 X-KDE-Keywords=k3b,k3bsetup,cd,dvd
 Categories=Application;System;X-KDE-System;
 
