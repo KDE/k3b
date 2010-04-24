@@ -25,13 +25,13 @@
 #include <QStyle>
 #include <QStyleOptionSpinBox>
 
-#include <KDebug>
-
+#include <cmath>
 
 class K3b::MsfEdit::Private
 {
 public:
     void _k_editingFinished();
+    QString stringValue() const;
 
     Msf value;
     Msf minimum;
@@ -39,12 +39,22 @@ public:
     MsfEdit* q;
     
     QSize cachedSizeHint;
+    int minutesWidth;
 };
 
 
 void K3b::MsfEdit::Private::_k_editingFinished()
 {
     q->setValue( Msf::fromString( q->lineEdit()->text() ) );
+}
+
+
+QString K3b::MsfEdit::Private::stringValue() const
+{
+    return QString( "%1:%2:%3" )
+        .arg( QString::number( value.minutes() ).rightJustified( minutesWidth, QLatin1Char( '0' ) ) )
+        .arg( QString::number( value.seconds() ).rightJustified( 2, QLatin1Char( '0' ) ) )
+        .arg( QString::number( value.frames() ).rightJustified( 2, QLatin1Char( '0' ) ) );
 }
 
 
@@ -56,9 +66,8 @@ K3b::MsfEdit::MsfEdit( QWidget* parent )
 
     // some very high value (10000 minutes)
     setMaximum( 10000*60*75 );
-    
-    lineEdit()->setInputMask( "99:99:99" );
-    lineEdit()->setText( d->value.toString() );
+
+    lineEdit()->setText( d->stringValue() );
 
     connect( this, SIGNAL(editingFinished()),
              this, SLOT(_k_editingFinished()) );
@@ -75,25 +84,23 @@ void K3b::MsfEdit::stepBy( int steps )
 {
     // look if we are currently editing minutes or seconds
     QString text = lineEdit()->text();
-    if( text.length() == 8 ) {
-        const int pos = lineEdit()->cursorPosition();
-        text = text.mid( pos );
-        int num = text.count( ':' );
-        
-        Msf newValue = d->value;
-        if( num == 1 ) {
-            newValue.addSeconds( steps );
-        }
-        else if( num == 2 ) {
-            newValue.addMinutes( steps );
-        }
-        else {
-            newValue.addFrames( steps );
-        }
-        
-        setValue( newValue );
-        lineEdit()->setCursorPosition( pos );
+    const int pos = lineEdit()->cursorPosition();
+    text = text.mid( pos );
+    int num = text.count( ':' );
+    
+    Msf newValue = d->value;
+    if( num == 1 ) {
+        newValue.addSeconds( steps );
     }
+    else if( num == 2 ) {
+        newValue.addMinutes( steps );
+    }
+    else {
+        newValue.addFrames( steps );
+    }
+    
+    setValue( newValue );
+    lineEdit()->setCursorPosition( pos );
 }
 
 
@@ -163,6 +170,13 @@ void K3b::MsfEdit::setMaximum( const Msf& max )
         d->value = d->maximum;
     if( d->minimum > d->maximum )
         d->minimum = d->maximum;
+
+    // Compute number of allowed positions for given maximum
+    d->minutesWidth = static_cast<int>( std::log10( static_cast<float>( d->maximum.minutes() ) ) ) + 1;
+    QString inputMask( ":99:99" );
+    for( int i = 0; i < d->minutesWidth; ++i )
+        inputMask.prepend( '9' );
+    lineEdit()->setInputMask( inputMask );
 }
 
 
@@ -175,7 +189,7 @@ void K3b::MsfEdit::setValue( const K3b::Msf& value )
         else if( d->value > d->maximum )
             d->value = d->maximum;
         
-        lineEdit()->setText( d->value.toString() );
+        lineEdit()->setText( d->stringValue() );
         emit valueChanged( d->value );
     }
 }
