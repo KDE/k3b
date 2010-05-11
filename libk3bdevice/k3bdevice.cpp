@@ -2773,7 +2773,7 @@ void K3b::Device::Device::checkFeatures()
             if( header[8+8] || header[8+9] || header[8+10] || header[8+11] || header[8+12] || header[8+13] || header[8+14] || header[8+15] )
                 d->writeCapabilities |= MEDIA_BD_RE;
             if( header[8+16] || header[8+17] || header[8+18] || header[8+19] || header[8+20] || header[8+21] || header[8+22] || header[8+23] ) {
-                d->writeCapabilities |= MEDIA_BD_R;
+                d->writeCapabilities |= (MEDIA_BD_R|MEDIA_BD_R_SRM);
                 d->writeModes |= WRITINGMODE_SRM;
 
                 cmd[2] = FEATURE_BD_PSEUDO_OVERWRITE>>8;
@@ -2782,6 +2782,7 @@ void K3b::Device::Device::checkFeatures()
                 if( !cmd.transport( TR_DIR_READ, header, 8+8 ) ) {
                     unsigned int len = from4Byte( header );
                     if( len >= 4+8 ) {
+                        d->writeCapabilities |= MEDIA_BD_R_SRM_POW;
                         d->writeModes |= WRITINGMODE_SRM_POW;
                     }
                 }
@@ -2792,6 +2793,7 @@ void K3b::Device::Device::checkFeatures()
                 if( !cmd.transport( TR_DIR_READ, header, 8+16 ) ) {
                     unsigned int len = from4Byte( header );
                     if( len >= 4+16 ) {
+                        d->writeCapabilities |= MEDIA_BD_R_RRM;
                         d->writeModes |= WRITINGMODE_RRM;
                     }
                 }
