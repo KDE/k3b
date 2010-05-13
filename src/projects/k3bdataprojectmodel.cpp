@@ -148,11 +148,16 @@ K3b::DataProjectModel::DataProjectModel( K3b::DataDoc* doc, QObject* parent )
 {
     d->project = doc;
 
-    connect( doc, SIGNAL( aboutToAddItem(K3b::DirItem*, K3b::DataItem*) ), this, SLOT( _k_aboutToAddItem(K3b::DirItem*, K3b::DataItem*) ) );
-    connect( doc, SIGNAL( aboutToRemoveItem(K3b::DataItem*) ), this, SLOT( _k_aboutToRemoveItem(K3b::DataItem*) ) );
-    connect( doc, SIGNAL( itemAdded(K3b::DataItem*) ), this, SLOT( _k_itemAdded(K3b::DataItem*) ) );
-    connect( doc, SIGNAL( itemRemoved(K3b::DataItem*) ), this, SLOT( _k_itemRemoved(K3b::DataItem*) ) );
-    connect( doc, SIGNAL( volumeIdChanged() ), this, SLOT( _k_volumeIdChanged() ) );
+    connect( doc, SIGNAL( aboutToAddItem(K3b::DirItem*, K3b::DataItem*) ),
+             this, SLOT( _k_aboutToAddItem(K3b::DirItem*, K3b::DataItem*) ), Qt::DirectConnection );
+    connect( doc, SIGNAL( aboutToRemoveItem(K3b::DataItem*) ),
+             this, SLOT( _k_aboutToRemoveItem(K3b::DataItem*) ), Qt::DirectConnection );
+    connect( doc, SIGNAL( itemAdded(K3b::DataItem*) ),
+             this, SLOT( _k_itemAdded(K3b::DataItem*) ), Qt::DirectConnection );
+    connect( doc, SIGNAL( itemRemoved(K3b::DataItem*) ),
+             this, SLOT( _k_itemRemoved(K3b::DataItem*) ), Qt::DirectConnection );
+    connect( doc, SIGNAL( volumeIdChanged() ),
+             this, SLOT( _k_volumeIdChanged() ), Qt::DirectConnection );
 }
 
 
@@ -211,7 +216,7 @@ QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
             else
                 return 0;
         }
-        
+
         switch( index.column() ) {
         case FilenameColumn:
             if( role == Qt::DisplayRole ||
@@ -403,7 +408,7 @@ QMimeData* K3b::DataProjectModel::mimeData( const QModelIndexList& indexes ) con
     foreach( const QModelIndex& index, indexes ) {
         K3b::DataItem* item = itemForIndex( index );
         items << item;
-        
+
         KUrl url( item->localPath() );
         if ( item->isFile() && !urls.contains(url) ) {
             urls << url;

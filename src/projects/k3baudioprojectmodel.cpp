@@ -127,23 +127,24 @@ K3b::AudioProjectModel::AudioProjectModel( K3b::AudioDoc* doc, QObject* parent )
       d( new Private( doc, this ) )
 {
     setSupportedDragActions( Qt::MoveAction );
-    
-    connect( doc, SIGNAL( changed() ), this, SLOT( _k_docChanged() ) );
+
+    connect( doc, SIGNAL( changed() ),
+             this, SLOT( _k_docChanged() ), Qt::DirectConnection );
     connect( doc, SIGNAL( aboutToRemoveTrack( K3b::AudioTrack* ) ),
-             this, SLOT( _k_aboutToRemoveTrack( K3b::AudioTrack* ) ) );
+             this, SLOT( _k_aboutToRemoveTrack( K3b::AudioTrack* ) ), Qt::DirectConnection );
     connect( doc, SIGNAL( aboutToAddTrack( int ) ),
-             this, SLOT( _k_aboutToAddTrack( int ) ) );
+             this, SLOT( _k_aboutToAddTrack( int ) ), Qt::DirectConnection );
     connect( doc, SIGNAL( trackAdded( K3b::AudioTrack* ) ),
-             this, SLOT( _k_trackAdded( K3b::AudioTrack* ) ) );
+             this, SLOT( _k_trackAdded( K3b::AudioTrack* ) ), Qt::DirectConnection );
 
     connect( doc, SIGNAL( aboutToAddSource( K3b::AudioTrack*, int ) ),
-             this, SLOT( _k_aboutToAddSource( K3b::AudioTrack*, int ) ) );
+             this, SLOT( _k_aboutToAddSource( K3b::AudioTrack*, int ) ), Qt::DirectConnection );
     connect( doc, SIGNAL( sourceAdded( K3b::AudioTrack*, int ) ),
-             this, SLOT( _k_sourceAdded( K3b::AudioTrack*, int ) ) );
+             this, SLOT( _k_sourceAdded( K3b::AudioTrack*, int ) ), Qt::DirectConnection );
     connect( doc, SIGNAL( aboutToRemoveSource( K3b::AudioTrack*, int ) ),
-             this, SLOT( _k_aboutToRemoveSource( K3b::AudioTrack*, int ) ) );
+             this, SLOT( _k_aboutToRemoveSource( K3b::AudioTrack*, int ) ), Qt::DirectConnection );
     connect( doc, SIGNAL( sourceRemoved( K3b::AudioTrack* ) ),
-             this, SLOT( _k_sourceRemoved( K3b::AudioTrack* ) ) );
+             this, SLOT( _k_sourceRemoved( K3b::AudioTrack* ) ), Qt::DirectConnection );
 }
 
 
@@ -354,7 +355,7 @@ QModelIndex K3b::AudioProjectModel::index( int row, int column, const QModelInde
     if ( !hasIndex( row, column, parent ) ) {
         return QModelIndex();
     }
-    
+
     // source
     else if ( parent.isValid() && parent.column() == 0 ) {
         if ( K3b::AudioTrack* track = trackForIndex( parent ) ) {

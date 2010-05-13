@@ -66,13 +66,15 @@ VcdProjectModel::VcdProjectModel( VcdDoc* doc, QObject* parent )
 {
     d->doc = doc;
 
-    connect(doc, SIGNAL(aboutToAddVCDTracks(int, int)),
-            this, SLOT(_k_aboutToAddRows(int, int)));
-    connect(doc, SIGNAL(addedVCDTracks()), this, SLOT(_k_addedRows()));
-    connect(doc, SIGNAL(aboutToRemoveVCDTracks(int, int)),
-            this, SLOT(_k_aboutToRemoveRows(int, int)));
-    connect(doc, SIGNAL(removedVCDTracks()), this, SLOT(_k_removedRows()));
-    
+    connect( doc, SIGNAL(aboutToAddVCDTracks(int, int)),
+             this, SLOT(_k_aboutToAddRows(int, int)), Qt::DirectConnection );
+    connect( doc, SIGNAL(addedVCDTracks()),
+             this, SLOT(_k_addedRows()), Qt::DirectConnection );
+    connect( doc, SIGNAL(aboutToRemoveVCDTracks(int, int)),
+             this, SLOT(_k_aboutToRemoveRows(int, int)), Qt::DirectConnection );
+    connect( doc, SIGNAL(removedVCDTracks()),
+             this, SLOT(_k_removedRows()), Qt::DirectConnection );
+
     setSupportedDragActions( Qt::MoveAction );
 }
 
@@ -337,14 +339,14 @@ bool VcdProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction action
     }
     else if( data->hasFormat( "application/x-k3bvcdtrack" ) ) {
         VcdTrack* before;
-        if( parent.isValid() ) 
+        if( parent.isValid() )
             row = parent.row();
-        
+
         if( row >= 0 && row < d->doc->numOfTracks() )
             before = d->doc->at( row );
         else
             before = 0;
-        
+
         QByteArray trackData = data->data( "application/x-k3bvcdtrack" );
         QDataStream trackDataStream( trackData );
         while ( !trackDataStream.atEnd() )
@@ -359,9 +361,9 @@ bool VcdProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction action
     }
     else if( KUrl::List::canDecode( data ) ) {
         int pos;
-        if( parent.isValid() ) 
+        if( parent.isValid() )
             row = parent.row();
-        
+
         if( row >= 0 )
             pos = row;
         else

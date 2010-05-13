@@ -85,22 +85,24 @@ MovixProjectModel::MovixProjectModel( K3b::MovixDoc* doc, QObject* parent )
     d->project = doc;
 
     // item handling
-    connect(doc, SIGNAL(aboutToAddMovixItems(int, int)),
-            this, SLOT(_k_aboutToAddRows(int, int)));
+    connect( doc, SIGNAL(aboutToAddMovixItems(int, int)),
+             this, SLOT(_k_aboutToAddRows(int, int)), Qt::DirectConnection );
 
-    connect(doc, SIGNAL(addedMovixItems()), this, SLOT(_k_addedRows()));
+    connect( doc, SIGNAL(addedMovixItems()),
+             this, SLOT(_k_addedRows()), Qt::DirectConnection );
 
-    connect(doc, SIGNAL(aboutToRemoveMovixItems(int, int)),
-            this, SLOT(_k_aboutToRemoveRows(int, int)));
+    connect( doc, SIGNAL(aboutToRemoveMovixItems(int, int)),
+             this, SLOT(_k_aboutToRemoveRows(int, int)), Qt::DirectConnection );
 
-    connect(doc, SIGNAL(removedMovixItems()), this, SLOT(_k_removedRows()));
+    connect( doc, SIGNAL(removedMovixItems()),
+             this, SLOT(_k_removedRows()), Qt::DirectConnection );
 
     // subtitle handling
-    connect(doc, SIGNAL(subTitleItemAdded(K3b::MovixFileItem*)),
-            this, SLOT(_k_subTitleAdded(K3b::MovixFileItem*)));
+    connect( doc, SIGNAL(subTitleItemAdded(K3b::MovixFileItem*)),
+             this, SLOT(_k_subTitleAdded(K3b::MovixFileItem*)), Qt::DirectConnection );
 
-    connect(doc, SIGNAL(subTitleItemRemoved(K3b::MovixFileItem*)),
-            this, SLOT(_k_subTitleRemoved(K3b::MovixFileItem*)));
+    connect( doc, SIGNAL(subTitleItemRemoved(K3b::MovixFileItem*)),
+             this, SLOT(_k_subTitleRemoved(K3b::MovixFileItem*)), Qt::DirectConnection );
 }
 
 MovixProjectModel::~MovixProjectModel()
