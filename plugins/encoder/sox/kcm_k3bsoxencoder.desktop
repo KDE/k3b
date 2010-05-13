@@ -24,6 +24,7 @@ Name[sr@ijekavianlatin]=Modul za podešavanje SoXovog kodera za K3b
 Name[sr@latin]=Modul za podešavanje SoXovog kodera za K3b
 Name[sv]=Inställningsmodul för K3b Sox ljudkodare
 Name[th]=K3b - มอดูลปรับแต่งตัวเข้ารหัสเสียง SoX
+Name[tr]=K3b SoX Kodlayıcısı Yapılandırma Parçacığı
 Name[uk]=Модуль налаштування аудіокодувальника SoX K3b
 Name[x-test]=xxK3b SoX Audio Encoder Config Modulexx
 Type=Service
