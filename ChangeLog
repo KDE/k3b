@@ -18,7 +18,7 @@ Changes (since 1.0.5):
  * Support for DVD and Blu-Ray writing via cdrecord
  * New audio ripping pattern %e which is replaced by the file extension
  * Better support for RTL languages
- 
+
 2.0-rc3 (1.92)
 ==============
 Bugfixes:
@@ -29,7 +29,10 @@ Bugfixes:
  * Error window at the start when a place on the left pane is not accessible (230194)
  * Incorrect minimum size of welcome widget (231939)
  * Hangs while ripping AudioCD with data tracks (231174)
- 
+ * Crash when auto-removing non-existing files from a project before the burning (236005)
+ * Empty Blu-ray medium not detected properly (236069)
+ * eMovix project cannot be burned (236823)
+
 2.0-rc2 (1.91)
 ==============
 Bugfixes:

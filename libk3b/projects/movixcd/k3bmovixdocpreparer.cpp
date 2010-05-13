@@ -17,7 +17,6 @@
 #include "k3bmovixprogram.h"
 #include "k3bmovixfileitem.h"
 
-
 #include "k3bcore.h"
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
@@ -25,13 +24,14 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bisoimager.h"
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <ktemporaryfile.h>
+#include <KLocale>
+#include <KDebug>
+#include <KTemporaryFile>
 #include <kio/global.h>
 
-#include <qtextstream.h>
-#include <qdir.h>
+#include <QTextStream>
+#include <QDir>
+#include <QStack>
 
 
 class K3b::MovixDocPreparer::Private
@@ -61,7 +61,7 @@ public:
     K3b::DirItem* mplayerDir;
     K3b::FileItem* playlistFileItem;
 
-    QList<K3b::DataItem*> newMovixItems;
+    QStack<K3b::DataItem*> newMovixItems;
 
     bool structuresCreated;
 };
@@ -152,8 +152,9 @@ void K3b::MovixDocPreparer::removeMovixStructures()
     d->mplayerDir = 0;
     d->playlistFileItem = 0;
 
-    qDeleteAll( d->newMovixItems );
-    d->newMovixItems.clear();
+    while( !d->newMovixItems.empty() ) {
+        delete d->newMovixItems.pop();
+    }
 
     // remove all the temp files
     delete d->playlistFile;
@@ -436,7 +437,7 @@ K3b::FileItem* K3b::MovixDocPreparer::createItem( const QString& localPath, cons
 
     // remember the item to remove it becasue the dir cannot be removed
     if( dir == d->doc->root() )
-        d->newMovixItems.append( item );
+        d->newMovixItems.push( item );
 
     return item;
 }
@@ -444,7 +445,7 @@ K3b::FileItem* K3b::MovixDocPreparer::createItem( const QString& localPath, cons
 
 K3b::DirItem* K3b::MovixDocPreparer::createDir( const QString& docPath )
 {
-    QStringList docPathSections = docPath.split( '/' );
+    QStringList docPathSections = docPath.split( '/', QString::SkipEmptyParts );
     K3b::DirItem* dir = d->doc->root();
     for( QStringList::ConstIterator it = docPathSections.constBegin(); it != docPathSections.constEnd(); ++it ) {
         K3b::DataItem* next = dir->find( *it );
@@ -464,7 +465,7 @@ K3b::DirItem* K3b::MovixDocPreparer::createDir( const QString& docPath )
         while( delDir->parent() != d->doc->root() )
             delDir = delDir->parent();
         if( d->newMovixItems.lastIndexOf( delDir ) == -1 )
-            d->newMovixItems.append( delDir );
+            d->newMovixItems.push( delDir );
     }
 
     return dir;

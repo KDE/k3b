@@ -335,7 +335,7 @@ QStringList K3b::MovixBin::files( const QString& kbd,
 
     p.start();
     if( p.waitForFinished( -1 ) )
-        return QString(p.readAll()).split( '\n' );
+        return QString(p.readAll()).split( '\n', QString::SkipEmptyParts );
     else
         return QStringList();
 }
