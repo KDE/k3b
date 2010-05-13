@@ -484,9 +484,6 @@
                   <property name="text" >
                     <string>&amp;2-pass encoding</string>
                   </property>
-                  <property name="shortcut" >
-                    <string>Alt+2</string>
-                  </property>
                   <property name="checked" >
                     <bool>true</bool>
                   </property>
@@ -522,9 +519,6 @@
                 <widget class="QCheckBox" name="m_checkAudioResampling" >
                   <property name="text" >
                     <string>Resample Audio to &amp;44.1 KHz</string>
-                  </property>
-                  <property name="shortcut" >
-                    <string>Alt+4</string>
                   </property>
                   <property name="checked" >
                     <bool>true</bool>
