@@ -279,7 +279,7 @@ void K3b::AudioDoc::addTracks( const KUrl::List& urls, int position )
 KUrl::List K3b::AudioDoc::extractUrlList( const KUrl::List& urls )
 {
     KUrl::List files;
-    
+
     Q_FOREACH( const KUrl& url, urls ) {
 
         QFileInfo fi( url.toLocalFile() );
@@ -287,7 +287,7 @@ KUrl::List K3b::AudioDoc::extractUrlList( const KUrl::List& urls )
         if( fi.isDir() ) {
             // add all files in the dir
             QDir dir( fi.filePath() );
-            
+
             const QStringList entries = dir.entryList( QDir::Files, QDir::Name | QDir::LocaleAware );
             Q_FOREACH( const QString& entry, entries )
             {
@@ -311,6 +311,8 @@ KUrl::List K3b::AudioDoc::extractUrlList( const KUrl::List& urls )
 
 bool K3b::AudioDoc::readPlaylistFile( const KUrl& url, KUrl::List& playlist )
 {
+    const QDir playlistDirectory( url.directory() );
+
     // check if the file is a m3u playlist
     // and if so add all listed files
 
@@ -335,7 +337,7 @@ bool K3b::AudioDoc::readPlaylistFile( const KUrl& url, KUrl::List& playlist )
             KUrl mp3url;
             QFileInfo pathInfo(line);
             if (pathInfo.isRelative())
-                mp3url.setPath( url.directory(false) + line );
+                mp3url.setPath( QDir::cleanPath( playlistDirectory.filePath( line ) ) );
             else
                 mp3url.setPath( line );
 
@@ -520,7 +522,7 @@ K3b::AudioTrack* K3b::AudioDoc::getTrack( int trackNum )
 void K3b::AudioDoc::addTrack( K3b::AudioTrack* track, int position )
 {
     kDebug() << "(" << track << "," << position << ")";
-    
+
     track->m_parent = this;
     if( !d->firstTrack )
         d->firstTrack = d->lastTrack = track;
