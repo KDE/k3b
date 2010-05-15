@@ -32,6 +32,7 @@ Bugfixes:
  * Crash when auto-removing non-existing files from a project before the burning (236005)
  * Empty Blu-ray medium not detected properly (236069)
  * eMovix project cannot be burned (236823)
+ * M3U playlist not read properly (237654)
 
 2.0-rc2 (1.91)
 ==============
