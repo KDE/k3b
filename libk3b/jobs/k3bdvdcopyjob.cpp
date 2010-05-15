@@ -328,6 +328,11 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
                 emit infoMessage( i18n("Writing image file to %1.",m_imagePath), MessageInfo );
                 emit newSubTask( i18n("Reading source medium.") );
             }
+            else {
+                jobFinished(false);
+                d->running = false;
+                return;
+            }
 
             //
             // check free temp space
