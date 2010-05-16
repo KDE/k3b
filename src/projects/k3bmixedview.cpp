@@ -48,7 +48,7 @@ K3b::MixedView::MixedView( K3b::MixedDoc* doc, QWidget* parent )
     connect( this, SIGNAL(activated(QModelIndex)), SLOT(slotItemActivated(QModelIndex)) );
     connect( m_dataViewImpl, SIGNAL(setCurrentRoot(QModelIndex)),
              this, SLOT(slotSetCurrentRoot(QModelIndex)) );
-    
+
     // Connect audio actions
     connect( actionCollection()->action( "track_add_silence" ), SIGNAL( triggered() ),
              this, SLOT(slotAddSilence()) );
@@ -68,7 +68,7 @@ K3b::MixedView::MixedView( K3b::MixedDoc* doc, QWidget* parent )
              this, SLOT(slotItemProperties()) );
     connect( actionCollection()->action( "track_remove" ), SIGNAL( triggered() ),
              this, SLOT(slotRemove()) );
-    
+
     // Connect data actions
     connect( actionCollection()->action( "new_dir" ), SIGNAL( triggered() ),
              this, SLOT(slotNewDir()) );
@@ -84,7 +84,7 @@ K3b::MixedView::MixedView( K3b::MixedDoc* doc, QWidget* parent )
              this, SLOT(slotOpen()) );
 
     setModel(m_model);
-    
+
     // Setup toolbar
     toolBox()->addAction( actionCollection()->action( "parent_dir" ) );
     toolBox()->addSeparator();
@@ -122,7 +122,7 @@ void K3b::MixedView::slotBurn()
 {
     if( m_doc->audioDoc()->numOfTracks() == 0 || m_doc->dataDoc()->size() == 0 ) {
         KMessageBox::information( this, i18n("Please add files and audio titles to your project first."),
-                                  i18n("No Data to Burn"), QString(), false );
+                                  i18n("No Data to Burn") );
     }
     else {
         K3b::ProjectBurnDialog* dlg = newBurnDialog( this );
@@ -235,7 +235,7 @@ void K3b::MixedView::slotItemProperties()
 {
     QModelIndexList selection;
     mapToSubModel( selection, currentSelection() );
-    
+
     if( currentSubModel() == m_model->dataModel() ) {
         m_dataViewImpl->properties( selection );
     }
@@ -261,7 +261,7 @@ void K3b::MixedView::slotCurrentRootChanged( const QModelIndex& newRoot )
     if( currentSubModel != 0 ) {
         m_model->setSupportedDragActions( currentSubModel->supportedDragActions() );
     }
-    
+
     if( currentSubModel == m_model->dataModel() ) {
         m_dataViewImpl->slotCurrentRootChanged( m_model->mapToSubModel( newRoot ) );
     }
@@ -304,7 +304,7 @@ void K3b::MixedView::selectionChanged( const QModelIndexList& indexes )
 {
     QModelIndexList selection;
     mapToSubModel( selection, indexes );
-    
+
     if( currentSubModel() == m_model->dataModel() ) {
         m_dataViewImpl->slotSelectionChanged( selection );
     }

@@ -50,7 +50,7 @@ K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
              m_dataViewImpl, SLOT(slotItemActivated(QModelIndex)) );
     connect( m_dataViewImpl, SIGNAL(setCurrentRoot(QModelIndex)),
              this, SLOT(setCurrentRoot(QModelIndex)) );
-    
+
     // Connect data actions
     connect( actionCollection()->action( "new_dir" ), SIGNAL( triggered() ),
              this, SLOT(slotNewDir()) );
@@ -64,7 +64,7 @@ K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
              this, SLOT(slotItemProperties()) );
     connect( actionCollection()->action( "open" ), SIGNAL( triggered() ),
              this, SLOT(slotOpen()) );
-    
+
     // Setup toolbar
     toolBox()->addAction( actionCollection()->action( "project_data_import_session" ) );
     toolBox()->addAction( actionCollection()->action( "project_data_clear_imported_session" ) );
@@ -75,10 +75,10 @@ K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
     addPluginButtons();
     toolBox()->addSeparator();
     toolBox()->addWidget( new VolumeNameWidget( m_doc, toolBox() ) );
-    
+
     // set the model for the StandardView's views
     setModel(m_model);
-    
+
     // Show first-level directories directories by default
     dirView()->expandToDepth( 1 );
 
@@ -131,7 +131,7 @@ void K3b::DataView::slotBurn()
 {
     if( m_doc->burningSize() == 0 ) {
         KMessageBox::information( this, i18n("Please add files to your project first."),
-                                  i18n("No Data to Burn"), QString(), false );
+                                  i18n("No Data to Burn") );
     }
     else {
         ProjectBurnDialog* dlg = newBurnDialog( this );

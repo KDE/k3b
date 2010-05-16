@@ -40,11 +40,11 @@ K3b::View::View( K3b::Doc* pDoc, QWidget *parent )
 {
     m_toolBox = new KToolBar( this );
     m_fillStatusDisplay = new K3b::FillStatusDisplay( m_doc, this );
-    
+
     QVBoxLayout* fillStatusDisplayLayout = new QVBoxLayout;
     fillStatusDisplayLayout->addWidget( m_fillStatusDisplay );
     fillStatusDisplayLayout->setContentsMargins( 0, 5, 0, 0 );
-    
+
     m_layout = new QVBoxLayout( this );
     m_layout->addWidget( m_toolBox );
     m_layout->addLayout( fillStatusDisplayLayout );
@@ -89,7 +89,7 @@ void K3b::View::slotBurn()
 {
     if( m_doc->numOfTracks() == 0 || m_doc->size() == 0 ) {
         KMessageBox::information( this, i18n("Please add files to your project first."),
-                                  i18n("No Data to Burn"), QString(), false );
+                                  i18n("No Data to Burn") );
     }
     else {
         K3b::ProjectBurnDialog* dlg = newBurnDialog( this );
