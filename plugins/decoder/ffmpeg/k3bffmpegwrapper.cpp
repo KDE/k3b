@@ -17,6 +17,13 @@
 #include <config-k3b.h>
 
 extern "C" {
+/*
+ Recent versions of FFmepg uses C99 constant macros which are not presebt in C++ standard.
+ The macro __STDC_CONSTANT_MACROS allow C++ to use these macros. Altough it's not defined by C++ standard
+ it's supported by many implementations.
+ See bug 236036 and discussion: http://lists.mplayerhq.hu/pipermail/ffmpeg-devel/2010-May/088074.html
+ */
+#define __STDC_CONSTANT_MACROS
 #ifdef NEWFFMPEGAVCODECPATH
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
@@ -42,8 +49,8 @@ K3bFFMpegWrapper* K3bFFMpegWrapper::s_instance = 0;
 class K3bFFMpegFile::Private
 {
 public:
-    AVFormatContext* formatContext;
-    AVCodec* codec;
+    ::AVFormatContext* formatContext;
+    ::AVCodec* codec;
 
     K3b::Msf length;
 
@@ -51,7 +58,7 @@ public:
     char outputBuffer[AVCODEC_MAX_AUDIO_FRAME_SIZE];
     char* outputBufferPos;
     int outputBufferSize;
-    AVPacket packet;
+    ::AVPacket packet;
     quint8* packetData;
     int packetSize;
 };
@@ -78,14 +85,14 @@ bool K3bFFMpegFile::open()
     close();
 
     // open the file
-    int err = av_open_input_file( &d->formatContext, m_filename.toLocal8Bit(), 0, 0, 0 );
+    int err = ::av_open_input_file( &d->formatContext, m_filename.toLocal8Bit(), 0, 0, 0 );
     if( err < 0 ) {
         kDebug() << "(K3bFFMpegFile) unable to open " << m_filename << " with error " << err;
         return false;
     }
 
     // analyze the streams
-    av_find_stream_info( d->formatContext );
+    ::av_find_stream_info( d->formatContext );
 
     // we only handle files containing one audio stream
     if( d->formatContext->nb_streams != 1 ) {
@@ -95,9 +102,9 @@ bool K3bFFMpegFile::open()
 
     // urgh... ugly
 #ifdef FFMPEG_BUILD_PRE_4629
-    AVCodecContext* codecContext =  &d->formatContext->streams[0]->codec;
+    ::AVCodecContext* codecContext =  &d->formatContext->streams[0]->codec;
 #else
-    AVCodecContext* codecContext =  d->formatContext->streams[0]->codec;
+    ::AVCodecContext* codecContext =  d->formatContext->streams[0]->codec;
 #endif
     if( codecContext->codec_type != CODEC_TYPE_AUDIO ) {
         kDebug() << "(K3bFFMpegFile) not a simple audio stream: " << m_filename;
@@ -105,7 +112,7 @@ bool K3bFFMpegFile::open()
     }
 
     // get the codec
-    d->codec = avcodec_find_decoder(codecContext->codec_id);
+    d->codec = ::avcodec_find_decoder(codecContext->codec_id);
     if( !d->codec ) {
         kDebug() << "(K3bFFMpegFile) no codec found for " << m_filename;
         return false;
@@ -113,7 +120,7 @@ bool K3bFFMpegFile::open()
 
     // open the codec on our context
     kDebug() << "(K3bFFMpegFile) found codec for " << m_filename;
-    if( avcodec_open( codecContext, d->codec ) < 0 ) {
+    if( ::avcodec_open( codecContext, d->codec ) < 0 ) {
         kDebug() << "(K3bFFMpegDecoderFactory) could not open codec.";
         return false;
     }
@@ -127,7 +134,7 @@ bool K3bFFMpegFile::open()
     }
 
     // dump some debugging info
-    dump_format( d->formatContext, 0, m_filename.toLocal8Bit(), 0 );
+    ::dump_format( d->formatContext, 0, m_filename.toLocal8Bit(), 0 );
 
     return true;
 }
@@ -141,15 +148,15 @@ void K3bFFMpegFile::close()
 
     if( d->codec ) {
 #ifdef FFMPEG_BUILD_PRE_4629
-        avcodec_close( &d->formatContext->streams[0]->codec );
+        ::avcodec_close( &d->formatContext->streams[0]->codec );
 #else
-        avcodec_close( d->formatContext->streams[0]->codec );
+        ::avcodec_close( d->formatContext->streams[0]->codec );
 #endif
         d->codec = 0;
     }
 
     if( d->formatContext ) {
-        av_close_input_file( d->formatContext );
+        ::av_close_input_file( d->formatContext );
         d->formatContext = 0;
     }
 }
@@ -268,9 +275,9 @@ int K3bFFMpegFile::read( char* buf, int bufLen )
 int K3bFFMpegFile::readPacket()
 {
     if( d->packetSize <= 0 ) {
-        av_init_packet( &d->packet );
+        ::av_init_packet( &d->packet );
 
-        if( av_read_frame( d->formatContext, &d->packet ) < 0 ) {
+        if( ::av_read_frame( d->formatContext, &d->packet ) < 0 ) {
             return 0;
         }
 
@@ -296,9 +303,9 @@ int K3bFFMpegFile::fillOutputBuffer()
         d->outputBufferPos = d->outputBuffer;
 
 #if LIBAVCODEC_VERSION_MAJOR < 52
-        int len = avcodec_decode_audio(
+        int len = ::avcodec_decode_audio(
 #else
-        int len = avcodec_decode_audio2(
+        int len = ::avcodec_decode_audio2(
 #endif
 #ifdef FFMPEG_BUILD_PRE_4629
             &d->formatContext->streams[0]->codec,
@@ -313,7 +320,7 @@ int K3bFFMpegFile::fillOutputBuffer()
         d->packetData += len;
 
         if( d->packetSize <= 0  )
-            av_free_packet( &d->packet );
+            ::av_free_packet( &d->packet );
     }
 
     // if it is still empty try again
@@ -334,9 +341,9 @@ bool K3bFFMpegFile::seek( const K3b::Msf& msf )
 
     // FIXME: do we really need the start_time and why?
 #if LIBAVFORMAT_BUILD >= 4619
-    return ( av_seek_frame( d->formatContext, -1, timestamp + d->formatContext->start_time, 0 ) >= 0 );
+    return ( ::av_seek_frame( d->formatContext, -1, timestamp + d->formatContext->start_time, 0 ) >= 0 );
 #else
-    return ( av_seek_frame( d->formatContext, -1, timestamp + d->formatContext->start_time ) >= 0 );
+    return ( ::av_seek_frame( d->formatContext, -1, timestamp + d->formatContext->start_time ) >= 0 );
 #endif
 }
 
@@ -347,7 +354,7 @@ bool K3bFFMpegFile::seek( const K3b::Msf& msf )
 
 K3bFFMpegWrapper::K3bFFMpegWrapper()
 {
-    av_register_all();
+    ::av_register_all();
 }
 
 

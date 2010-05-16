@@ -21,6 +21,13 @@
 #include <kdebug.h>
 
 extern "C" {
+/*
+ Recent versions of FFmepg uses C99 constant macros which are not presebt in C++ standard.
+ The macro __STDC_CONSTANT_MACROS allow C++ to use these macros. Altough it's not defined by C++ standard
+ it's supported by many implementations.
+ See bug 236036 and discussion: http://lists.mplayerhq.hu/pipermail/ffmpeg-devel/2010-May/088074.html
+ */
+#define __STDC_CONSTANT_MACROS
 #ifdef NEWFFMPEGAVCODECPATH
 #include <libavcodec/avcodec.h>
 #else
