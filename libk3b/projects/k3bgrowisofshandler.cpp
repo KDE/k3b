@@ -273,7 +273,7 @@ void K3b::GrowisofsHandler::handleExit( int exitCode )
             // for now we just emit a message with the error
             // in the future when I know more about what kinds of errors may occur
             // we will enhance this
-            emit infoMessage( i18n("Fatal error at startup: %1",strerror(exitCode-128)),
+            emit infoMessage( i18n( "Fatal error at startup: %1", QString::fromLocal8Bit( ::strerror( exitCode-128 ) ) ),
                               K3b::Job::MessageError );
         }
         else if( exitCode == 1 ) {
@@ -285,7 +285,7 @@ void K3b::GrowisofsHandler::handleExit( int exitCode )
             emit infoMessage( i18n("Most likely mkisofs failed in some way."), K3b::Job::MessageError );
         }
         else {
-            emit infoMessage( i18n("Fatal error during recording: %1",strerror(exitCode)),
+            emit infoMessage( i18n( "Fatal error during recording: %1", QString::fromLocal8Bit( ::strerror(exitCode) ) ),
                               K3b::Job::MessageError );
         }
     }

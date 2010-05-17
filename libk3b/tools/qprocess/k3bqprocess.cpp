@@ -699,7 +699,7 @@ bool K3bQProcessPrivate::_q_processDied()
         if (!_q_startupNotification())
             return true;
     }
-    
+
     return _q_notifyProcessDied();
 }
 
@@ -730,7 +730,7 @@ bool K3bQProcessPrivate::_q_notifyProcessDied()
         return true;
     }
     dying = true;
-    
+
     // in case there is data in the pipe line and this slot by chance
     // got called before the read notifications, call these two slots
     // so the data is made available before the process dies.

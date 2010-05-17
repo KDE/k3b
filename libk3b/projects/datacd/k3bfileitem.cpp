@@ -71,17 +71,17 @@ K3b::FileItem::FileItem( const QString& filePath, K3b::DataDoc* doc, K3b::DirIte
         }
         else {
             init( filePath, k3bName, doc, &statBuf, 0 );
-            kError() << "(KFileItem) stat failed: " << strerror(errno) << endl;
+            kError() << "(KFileItem) stat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << endl;
         }
     }
     else {
-        kError() << "(KFileItem) lstat failed: " << strerror(errno) << endl;
+        kError() << "(KFileItem) lstat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << endl;
         if( k3b_stat( QFile::encodeName(filePath), &followedStatBuf ) == 0 ) {
             init( filePath, k3bName, doc, 0, &followedStatBuf );
         }
         else {
             init( filePath, k3bName, doc, 0, 0 );
-            kError() << "(KFileItem) stat failed: " << strerror(errno) << endl;
+            kError() << "(KFileItem) stat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << endl;
         }
     }
 }
@@ -258,7 +258,7 @@ void K3b::FileItem::init( const QString& filePath,
         m_size = (KIO::filesize_t)stat->st_size;
         if( S_ISLNK(stat->st_mode) )
             setFlags( flags() | SYMLINK );
-        
+
         //
         // integrate the device number into the inode since files on different
         // devices may have the same inode number!

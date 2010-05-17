@@ -187,7 +187,7 @@ K3b::Device::Device::Handle K3b::Device::openDevice( const char* name, bool writ
     if( fd < 0 ) {
         kDebug() << "(K3b::Device::Device) could not open device "
                  << name << ( write ? " for writing" : " for reading" ) << endl;
-        kDebug() << "                    (" << strerror(errno) << ")";
+        kDebug() << "                    (" << QString::fromLocal8Bit( ::strerror(errno) ) << ")";
         fd = HANDLE_DEFAULT_VALUE;
 
         // at least open it read-only (which is sufficient for kernels < 2.6.8 anyway)
