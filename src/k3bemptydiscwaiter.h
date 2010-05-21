@@ -20,12 +20,7 @@
 #include "k3bjobhandler.h"
 
 #include "k3bdiskinfo.h"
-//Added by qt3to4:
-#include <QCloseEvent>
-
-namespace Device {
-    class Device;
-}
+#include <QtGui/QCloseEvent>
 
 
 /**
@@ -36,6 +31,11 @@ namespace Device {
  * @author Sebastian Trueg
  */
 namespace K3b {
+
+    namespace Device {
+        class Device;
+    }
+
     class EmptyDiscWaiter : public KDialog, public JobHandler
     {
         Q_OBJECT
@@ -85,9 +85,9 @@ namespace K3b {
          *
          * \param mediaState a bitwise combination of the Device::State enum
          * \param mediaType a bitwise combination of the Device::MediaType enum
-         * \return the found MediaType on success, 0 if forced and -1 if canceled
+         * \return the found MediaType on success, MEDIA_UNKNOWN if canceled
          */
-        static Device::MediaType wait( Device::Device*,
+        static Device::MediaType wait( Device::Device* device,
                                        Device::MediaStates mediaState,
                                        Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
                                        const K3b::Msf& minMediaSize = K3b::Msf(),

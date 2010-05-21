@@ -27,22 +27,23 @@
 #include "k3bprogressdialog.h"
 #include "k3bdvdformattingjob.h"
 
-#include <qtimer.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qtooltip.h>
-#include <qpushbutton.h>
-#include <qapplication.h>
-#include <qeventloop.h>
-#include <qfont.h>
+#include <QApplication>
+#include <QLabel>
+#include <QLayout>
+#include <QEventLoop>
+#include <QFont>
 #include <QGridLayout>
+#include <QPushButton>
+#include <QTimer>
+#include <QToolTip>
 
-#include <klocale.h>
-#include <kconfig.h>
-#include <kiconloader.h>
-#include <kmessagebox.h>
-#include <k3activelabel.h>
+
+#include <KConfig>
+#include <KIconLoader>
+#include <KLocale>
+#include <KMessageBox>
 #include <KNotification>
+
 
 class K3b::EmptyDiscWaiter::Private
 {
@@ -710,10 +711,15 @@ void K3b::EmptyDiscWaiter::slotErasingFinished( bool success )
 
 K3b::Device::MediaType K3b::EmptyDiscWaiter::wait( K3b::Device::Device* device, bool appendable, Device::MediaTypes mediaType, QWidget* parent )
 {
-    K3b::EmptyDiscWaiter d( device, parent ? parent : qApp->activeWindow() );
-    Device::MediaStates mediaState = K3b::Device::STATE_EMPTY;
-    if( appendable ) mediaState |= K3b::Device::STATE_INCOMPLETE;
-    return d.waitForDisc( mediaState, mediaType );
+    if( device != 0 ) {
+        K3b::EmptyDiscWaiter d( device, parent ? parent : qApp->activeWindow() );
+        Device::MediaStates mediaState = K3b::Device::STATE_EMPTY;
+        if( appendable ) mediaState |= K3b::Device::STATE_INCOMPLETE;
+        return d.waitForDisc( mediaState, mediaType );
+    }
+    else {
+        return Device::MEDIA_UNKNOWN;
+    }
 }
 
 
@@ -724,8 +730,13 @@ K3b::Device::MediaType K3b::EmptyDiscWaiter::wait( K3b::Device::Device* device,
                                                    const QString& message,
                                                    QWidget* parent )
 {
-    K3b::EmptyDiscWaiter d( device, parent ? parent : qApp->activeWindow() );
-    return d.waitForDisc( mediaState, mediaType, minMediaSize, message );
+    if( device != 0 ) {
+        K3b::EmptyDiscWaiter d( device, parent ? parent : qApp->activeWindow() );
+        return d.waitForDisc( mediaState, mediaType, minMediaSize, message );
+    }
+    else {
+        return Device::MEDIA_UNKNOWN;
+    }
 }
 
 

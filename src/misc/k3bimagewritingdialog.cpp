@@ -112,11 +112,11 @@ public:
     int tempPathTabIndex;
 
     bool imageForced;
-    
+
     QColor infoTextColor;
     QColor negativeTextColor;
     QColor normalTextColor;
-    
+
     static KIO::filesize_t volumeSpaceSize( const Iso9660& iso );
 };
 
@@ -659,17 +659,17 @@ void K3b::ImageWritingDialog::createIso9660InfoItems( K3b::Iso9660* isoF )
 
     const KIO::filesize_t size = K3b::filesize( KUrl(isoF->fileName()) );
     const KIO::filesize_t volumeSpaceSize = Private::volumeSpaceSize( *isoF );
-    
+
     K3b::ListViewItem* item = new K3b::ListViewItem( isoRootItem, m_infoView->lastItem(),
                                                 i18n("Filesize:"),
                                                 ( size < volumeSpaceSize )
                                                 ? i18n("%1 (different than declared volume size)", KIO::convertSize( size ))
                                                 : KIO::convertSize( size ) );
     item->setForegroundColor( 0, d->infoTextColor );
-    
+
     if( size < volumeSpaceSize ) {
         item->setForegroundColor( 1, d->negativeTextColor );
-        
+
         item = new ListViewItem( isoRootItem,
                                 m_infoView->lastItem(),
                                 i18n("Volume Size:"),
@@ -829,11 +829,6 @@ void K3b::ImageWritingDialog::createAudioCueItems( const K3b::CueFileParser& cp 
 
 void K3b::ImageWritingDialog::toggleAll()
 {
-    // enable the Write-Button if we found a valid image or the user forced an image type
-    setButtonEnabled( START_BUTTON, m_writerSelectionWidget->writerDevice()
-                      && currentImageType() != IMAGE_UNKNOWN
-                      && QFile::exists( imagePath() ) );
-
     K3b::Medium medium = k3bappcore->mediaCache()->medium( m_writerSelectionWidget->writerDevice() );
 
     // set usable writing apps
@@ -882,6 +877,11 @@ void K3b::ImageWritingDialog::toggleAll()
     else
         m_writingModeWidget->setSupportedModes( K3b::WritingModeSao );
 
+
+    // enable the Write-Button if we found a valid image or the user forced an image type
+    setButtonEnabled( START_BUTTON, m_writerSelectionWidget->writerDevice()
+                      && currentImageType() != IMAGE_UNKNOWN
+                      && QFile::exists( imagePath() ) );
 
     // some stuff is only available for iso images
     if( currentImageType() == IMAGE_ISO ) {
