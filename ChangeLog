@@ -35,6 +35,7 @@ Bugfixes:
  * M3U playlist not read properly (237654)
  * K3b overwrites iso ignoring user choice on dvd copy with option "only create image" checked (185251)
  * Compilation fails with FFmpeg version SVN-r23001 (236036)
+ * Crash when waiting for reload the medium
 
 2.0-rc2 (1.91)
 ==============

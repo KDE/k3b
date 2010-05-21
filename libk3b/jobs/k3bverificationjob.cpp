@@ -266,7 +266,7 @@ void K3b::VerificationJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
         if( it->trackNumber == 0 )
             it->trackNumber = d->toc.count();
 
-        if( d->toc.count() < it->trackNumber ) {
+        if( it->trackNumber <= 0 || it->trackNumber > d->toc.count() ) {
             if ( d->mediumHasBeenReloaded ) {
                 emit infoMessage( i18n("Internal Error: Verification job improperly initialized (%1)",
                                        i18n("specified track number '%1' not found on medium", it->trackNumber) ), MessageError );
