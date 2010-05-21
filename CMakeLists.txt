@@ -6,7 +6,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 ##################  K3b version  ################################
 set(K3B_VERSION_MAJOR   1)
-set(K3B_VERSION_MINOR  91)
+set(K3B_VERSION_MINOR  92)
 set(K3B_VERSION_RELEASE 0)
 set(K3B_VERSION_STRING "${K3B_VERSION_MAJOR}.${K3B_VERSION_MINOR}.${K3B_VERSION_RELEASE}")
 
@@ -84,13 +84,13 @@ if(K3B_ENABLE_MUSICBRAINZ)
   macro_log_feature( MUSICBRAINZ_FOUND "Musicbrainz"
     "Provide information about the CD, about the artist or about related information"
     "http://musicbrainz.org/"
-    FALSE "1.1" "") 
+    FALSE "1.1" "")
 endif(K3B_ENABLE_MUSICBRAINZ)
 
 find_package(Kcddb)
 macro_log_feature( KCDDB_FOUND "KCddb"
-  "KCddb is used to retrieve audio CD meta data from the internet." 
-  "http://multimedia.kde.org" 
+  "KCddb is used to retrieve audio CD meta data from the internet."
+  "http://multimedia.kde.org"
   TRUE "" "")
 
 if(K3B_BUILD_FFMPEG_DECODER_PLUGIN)
@@ -257,7 +257,7 @@ endif(K3B_BUILD_API_DOCS)
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
-include_directories( 
+include_directories(
   ${k3b_BINARY_DIR}
   ${k3b_SOURCE_DIR}/libk3bdevice
   ${k3b_SOURCE_DIR}/libk3b/core
