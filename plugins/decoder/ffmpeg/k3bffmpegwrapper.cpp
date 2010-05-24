@@ -54,8 +54,9 @@ public:
 
     K3b::Msf length;
 
-    // for decoding
-    char outputBuffer[AVCODEC_MAX_AUDIO_FRAME_SIZE];
+    // for decoding. ffmpeg requires 16-byte alignment.
+    char outputBuffer[AVCODEC_MAX_AUDIO_FRAME_SIZE + 15];
+    char* alignedOutputBuffer;
     char* outputBufferPos;
     int outputBufferSize;
     ::AVPacket packet;
@@ -70,6 +71,8 @@ K3bFFMpegFile::K3bFFMpegFile( const QString& filename )
     d = new Private;
     d->formatContext = 0;
     d->codec = 0;
+    int offset = 0x10 - (reinterpret_cast<intptr_t>(&d->outputBuffer) & 0xf);
+    d->alignedOutputBuffer = &d->outputBuffer[offset];
 }
 
 
@@ -251,23 +254,24 @@ QString K3bFFMpegFile::comment() const
 
 int K3bFFMpegFile::read( char* buf, int bufLen )
 {
-    if( fillOutputBuffer() > 0 ) {
-        int len = qMin(bufLen, d->outputBufferSize);
-        ::memcpy( buf, d->outputBufferPos, len );
-
-        // TODO: only swap if needed
-        for( int i = 0; i < len-1; i+=2 ) {
-            char a = buf[i];
-            buf[i] = buf[i+1];
-            buf[i+1] = a;
-        }
-
-        d->outputBufferPos += len;
-        d->outputBufferSize -= len;
-        return len;
+    int ret = fillOutputBuffer();
+    if (ret <= 0) {
+        return ret;
     }
-    else
-        return 0;
+
+    int len = qMin(bufLen, d->outputBufferSize);
+    ::memcpy( buf, d->outputBufferPos, len );
+
+    // TODO: only swap if needed
+    for( int i = 0; i < len-1; i+=2 ) {
+        char a = buf[i];
+        buf[i] = buf[i+1];
+        buf[i+1] = a;
+    }
+
+    d->outputBufferPos += len;
+    d->outputBufferSize -= len;
+    return len;
 }
 
 
@@ -280,7 +284,6 @@ int K3bFFMpegFile::readPacket()
         if( ::av_read_frame( d->formatContext, &d->packet ) < 0 ) {
             return 0;
         }
-
         d->packetSize = d->packet.size;
         d->packetData = d->packet.data;
     }
@@ -300,7 +303,8 @@ int K3bFFMpegFile::fillOutputBuffer()
             return 0;
         }
 
-        d->outputBufferPos = d->outputBuffer;
+        d->outputBufferPos = d->alignedOutputBuffer;
+        d->outputBufferSize = AVCODEC_MAX_AUDIO_FRAME_SIZE;
 
 #if LIBAVCODEC_VERSION_MAJOR < 52
         int len = ::avcodec_decode_audio(
@@ -312,15 +316,19 @@ int K3bFFMpegFile::fillOutputBuffer()
 #else
             d->formatContext->streams[0]->codec,
 #endif
-            (short*)d->outputBuffer,
+            (short*)d->alignedOutputBuffer,
             &d->outputBufferSize,
             d->packetData, d->packetSize );
 
+        if( d->packetSize <= 0 || len < 0 )
+            ::av_free_packet( &d->packet );
+        if( len < 0 ) {
+            kDebug() << "(K3bFFMpegFile) decoding failed for " << m_filename;
+            return -1;
+        }
+
         d->packetSize -= len;
         d->packetData += len;
-
-        if( d->packetSize <= 0  )
-            ::av_free_packet( &d->packet );
     }
 
     // if it is still empty try again
