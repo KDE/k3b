@@ -2,7 +2,7 @@
 Type=Application
 Exec=k3b %U
 Icon=k3b
-X-DocPath=k3b/index.html
+X-DocPath=http://userbase.kde.org/K3b
 GenericName=Disk Burning
 GenericName[ca]=Gravació de disc
 GenericName[ca@valencia]=Gravació de disc
