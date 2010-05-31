@@ -111,7 +111,7 @@ namespace K3b {
         QString m_name;
         QStringList m_userParameters;
         QList<const ExternalBin*> m_bins;
-        const ExternalBin* m_defaultBin;
+        QString m_defaultBin;
     };
 
 

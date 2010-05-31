@@ -135,7 +135,17 @@ const K3b::ExternalBin* K3b::ExternalProgram::mostRecentBin() const
 
 const K3b::ExternalBin* K3b::ExternalProgram::defaultBin() const
 {
-    return m_defaultBin;
+    if( m_bins.size() == 1 ) {
+        return m_bins.first();
+    }
+    else {
+        for( QList<const K3b::ExternalBin*>::const_iterator it = m_bins.constBegin(); it != m_bins.constEnd(); ++it ) {
+            if( ( *it )->path == m_defaultBin ) {
+                return *it;
+            }
+        }
+        return 0;
+    }
 }
 
 
@@ -148,8 +158,9 @@ void K3b::ExternalProgram::addBin( K3b::ExternalBin* bin )
         // so we default to using the newest one
         qSort( m_bins.begin(), m_bins.end(), compareVersions );
 
-        if ( !m_defaultBin || bin->version > m_defaultBin->version ) {
-            m_defaultBin = bin;
+        const ExternalBin* defBin = defaultBin();
+        if ( !defBin || bin->version > defBin->version ) {
+            setDefault( bin );
         }
     }
 }
@@ -157,20 +168,18 @@ void K3b::ExternalProgram::addBin( K3b::ExternalBin* bin )
 
 void K3b::ExternalProgram::setDefault( const K3b::ExternalBin* bin )
 {
-    if ( bin ) {
-        m_defaultBin = bin;
+    for( QList<const K3b::ExternalBin*>::const_iterator it = m_bins.constBegin(); it != m_bins.constEnd(); ++it ) {
+        if( *it == bin ) {
+            m_defaultBin = (*it)->path;
+            break;
+        }
     }
 }
 
 
 void K3b::ExternalProgram::setDefault( const QString& path )
 {
-    for( QList<const K3b::ExternalBin*>::const_iterator it = m_bins.constBegin(); it != m_bins.constEnd(); ++it ) {
-        if( ( *it )->path == path ) {
-            setDefault( *it );
-            return;
-        }
-    }
+    m_defaultBin = path;
 }
 
 
