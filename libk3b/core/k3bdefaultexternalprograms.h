@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -31,14 +32,16 @@ namespace K3b {
     {
     public:
         AbstractCdrtoolsProgram( const QString& program, const QString& cdrkitAlternative );
+        ~AbstractCdrtoolsProgram();
 
     protected:
-        QString getProgramPath( const QString& dir );
-        bool usingCdrkit() const { return m_usingCdrkit; }
-
+        bool usingCdrkit( const ExternalBin& bin ) const;
+        virtual QString getProgramPath( const QString& dir ) const;
+        virtual QString versionIdentifier( const ExternalBin& bin ) const;
+        
     private:
-        QString m_cdrkitAlt;
-        bool m_usingCdrkit;
+        class Private;
+        Private* d;
     };
 
     class LIBK3B_EXPORT CdrecordProgram : public AbstractCdrtoolsProgram
@@ -46,8 +49,8 @@ namespace K3b {
     public:
         CdrecordProgram();
 
-    private:
-        void parseFeatures( const QString& output, ExternalBin* bin );
+    protected:
+        virtual void parseFeatures( const QString& output, ExternalBin& bin ) const;
     };
 
 
@@ -56,8 +59,8 @@ namespace K3b {
     public:
         MkisofsProgram();
 
-    private:
-        void parseFeatures( const QString& output, ExternalBin* bin );
+    protected:
+        virtual void parseFeatures( const QString& output, ExternalBin& bin ) const;
     };
 
 
@@ -66,8 +69,8 @@ namespace K3b {
     public:
         ReadcdProgram();
 
-    private:
-        void parseFeatures( const QString& output, ExternalBin* bin );
+    protected:
+        virtual void parseFeatures( const QString& output, ExternalBin& bin ) const;
     };
 
 
@@ -76,8 +79,8 @@ namespace K3b {
     public:
         Cdda2wavProgram();
 
-    private:
-        void parseFeatures( const QString& output, ExternalBin* bin );
+    protected:
+        virtual void parseFeatures( const QString& output, ExternalBin& bin ) const;
     };
 
 
@@ -87,7 +90,8 @@ namespace K3b {
         CdrdaoProgram();
 
     protected:
-        bool scanFeatures( ExternalBin* bin );
+        virtual QString versionIdentifier( const ExternalBin& bin ) const;
+        virtual bool scanFeatures( ExternalBin& bin ) const;
     };
 
 
@@ -97,10 +101,11 @@ namespace K3b {
         TranscodeProgram( const QString& transcodeProgram );
 
         // no user parameters (yet)
-        bool supportsUserParameters() const { return false; }
+        virtual bool supportsUserParameters() const { return false; }
 
     protected:
-        bool scanFeatures( ExternalBin* bin );
+        virtual QString versionIdentifier( const ExternalBin& bin ) const;
+        virtual bool scanFeatures( ExternalBin& bin ) const;
     };
 
 
@@ -108,6 +113,9 @@ namespace K3b {
     {
     public:
         VcdbuilderProgram( const QString& );
+        
+    protected:
+        virtual QString versionIdentifier( const ExternalBin& bin ) const;
     };
 
 
@@ -124,7 +132,7 @@ namespace K3b {
         GrowisofsProgram();
 
     protected:
-        bool scanFeatures( ExternalBin* bin );
+        virtual bool scanFeatures( ExternalBin& bin ) const;
     };
 
 
@@ -134,8 +142,8 @@ namespace K3b {
         DvdformatProgram();
 
     protected:
-        Version parseVersion( const QString& output );
-        QString parseCopyright( const QString& );
+        virtual Version parseVersion( const QString& output, const ExternalBin& bin ) const;
+        virtual QString parseCopyright( const QString& output, const ExternalBin& bin ) const;
     };
 
 
@@ -145,8 +153,8 @@ namespace K3b {
         DvdBooktypeProgram();
 
     protected:
-        Version parseVersion( const QString& output );
-        QString parseCopyright( const QString& );
+        virtual Version parseVersion( const QString& output, const ExternalBin& bin ) const;
+        virtual QString parseCopyright( const QString& output, const ExternalBin& bin ) const;
     };
 }
 

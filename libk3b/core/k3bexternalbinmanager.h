@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -125,7 +126,7 @@ namespace K3b {
         SimpleExternalProgram( const QString& name );
         virtual ~SimpleExternalProgram();
 
-        bool scan( const QString& path );
+        virtual bool scan( const QString& path );
 
         /**
          * Parses a version starting at \p pos by looking for the first digit
@@ -138,41 +139,45 @@ namespace K3b {
          * Build the program's path. The default implementation simply calls
          * buildProgramPath on the program's name and the given path.
          */
-        virtual QString getProgramPath( const QString& dir );
+        virtual QString getProgramPath( const QString& dir ) const;
 
         /**
          * Scan the version. The default implementation calls the program with
          * parameter --version and then calls parseVersion and parseCopyright.
          */
-        virtual bool scanVersion( ExternalBin* bin );
+        virtual bool scanVersion( ExternalBin& bin ) const;
 
         /**
          * Scan for features. The default implementation checks for suidroot and
          * calls the program with parameter --help and then calls parseFeatures.
          */
-        virtual bool scanFeatures( ExternalBin* bin );
+        virtual bool scanFeatures( ExternalBin& bin ) const;
 
         /**
          * Determine the version from the program's version output.
          * The default implementation searches for the program's name
          * and parses the version from there.
          */
-        virtual Version parseVersion( const QString& output );
+        virtual Version parseVersion( const QString& output, const ExternalBin& bin ) const;
 
         /**
          * Determine the copyright statement from the program's version output.
          * The default implementation looks for "(C)" and uses the rest of the line
          * from there.
          */
-        virtual QString parseCopyright( const QString& output );
+        virtual QString parseCopyright( const QString& output, const ExternalBin& bin ) const;
 
         /**
          * Parse the features from the \p output of --help and add them to the \p bin.
          * The default implementation does nothing.
          */
-        virtual void parseFeatures( const QString& output, ExternalBin* bin );
+        virtual void parseFeatures( const QString& output, ExternalBin& bin ) const;
 
-        void setVersionIdentifier( const QString& );
+        /**
+         * @return the string preceeding the actual version string, used by
+         *         parseVersion() method. Default implementation returns name().
+         */
+        virtual QString versionIdentifier( const ExternalBin& bin ) const;
 
     private:
         class Private;

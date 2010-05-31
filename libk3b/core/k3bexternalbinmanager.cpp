@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -210,7 +211,6 @@ QString K3b::ExternalProgram::buildProgramPath( const QString& dir, const QStrin
 class K3b::SimpleExternalProgram::Private
 {
 public:
-    QString versionIdentifier;
 };
 
 
@@ -227,7 +227,7 @@ K3b::SimpleExternalProgram::~SimpleExternalProgram()
 }
 
 
-QString K3b::SimpleExternalProgram::getProgramPath( const QString& dir )
+QString K3b::SimpleExternalProgram::getProgramPath( const QString& dir ) const
 {
     return buildProgramPath( dir, name() );
 }
@@ -244,13 +244,13 @@ bool K3b::SimpleExternalProgram::scan( const QString& p )
         K3b::ExternalBin* bin = new ExternalBin( this );
         bin->path = path;
 
-        if ( !scanVersion( bin ) ||
-             !scanFeatures( bin ) ) {
+        if ( !scanVersion( *bin ) ||
+             !scanFeatures( *bin ) ) {
             delete bin;
             return false;
         }
 
-        addBin(bin);
+        addBin( bin );
         return true;
     }
     else {
@@ -259,37 +259,37 @@ bool K3b::SimpleExternalProgram::scan( const QString& p )
 }
 
 
-bool K3b::SimpleExternalProgram::scanVersion( ExternalBin* bin )
+bool K3b::SimpleExternalProgram::scanVersion( ExternalBin& bin ) const
 {
     // probe version
     KProcess vp;
     vp.setOutputChannelMode( KProcess::MergedChannels );
-    vp << bin->path << "--version";
+    vp << bin.path << "--version";
     if( vp.execute( EXECUTE_TIMEOUT ) < 0 )
         return false;
 
     QString s = QString::fromLocal8Bit( vp.readAll() );
-    bin->version = parseVersion( s );
-    bin->copyright = parseCopyright( s );
-    return bin->version.isValid();
+    bin.version = parseVersion( s, bin );
+    bin.copyright = parseCopyright( s, bin );
+    return bin.version.isValid();
 }
 
 
-bool K3b::SimpleExternalProgram::scanFeatures( ExternalBin* bin )
+bool K3b::SimpleExternalProgram::scanFeatures( ExternalBin& bin ) const
 {
 #ifndef Q_OS_WIN32
     // check if we run as root
     struct stat s;
-    if( !::stat( QFile::encodeName(bin->path), &s ) ) {
+    if( !::stat( QFile::encodeName(bin.path), &s ) ) {
         if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
-            bin->addFeature( "suidroot" );
+            bin.addFeature( "suidroot" );
     }
 #endif
 
     // probe features
     KProcess fp;
     fp.setOutputChannelMode( KProcess::MergedChannels );
-    fp << bin->path << "--help";
+    fp << bin.path << "--help";
     if( fp.execute( EXECUTE_TIMEOUT ) < 0 )
         return false;
 
@@ -298,11 +298,11 @@ bool K3b::SimpleExternalProgram::scanFeatures( ExternalBin* bin )
 }
 
 
-K3b::Version K3b::SimpleExternalProgram::parseVersion( const QString& out )
+K3b::Version K3b::SimpleExternalProgram::parseVersion( const QString& out, const ExternalBin& bin ) const
 {
     // we first look for the program name with first upper char so we do not catch
     // the warning messages on stderr (cdrecord sometimes produces those)
-    QString programName = d->versionIdentifier.isEmpty() ? name() : d->versionIdentifier;
+    QString programName = versionIdentifier( bin );
     QString programNameCap = programName[0].toUpper() + programName.mid( 1 );
     int pos = out.indexOf( programNameCap );
     if ( pos < 0 )
@@ -315,26 +315,20 @@ K3b::Version K3b::SimpleExternalProgram::parseVersion( const QString& out )
 }
 
 
-QString K3b::SimpleExternalProgram::parseCopyright( const QString& out )
+QString K3b::SimpleExternalProgram::parseCopyright( const QString& output, const ExternalBin& /*bin*/ ) const
 {
-    int pos = out.indexOf( "(C)", 0 );
+    int pos = output.indexOf( "(C)", 0 );
     if ( pos < 0 )
         return QString();
     pos += 4;
-    int endPos = out.indexOf( '\n', pos );
-    return out.mid( pos, endPos-pos );
+    int endPos = output.indexOf( '\n', pos );
+    return output.mid( pos, endPos-pos );
 }
 
 
-void K3b::SimpleExternalProgram::parseFeatures( const QString&, ExternalBin* )
+void K3b::SimpleExternalProgram::parseFeatures( const QString& /*output*/, ExternalBin& /*bin*/ ) const
 {
     // do nothing
-}
-
-
-void K3b::SimpleExternalProgram::setVersionIdentifier( const QString& s )
-{
-    d->versionIdentifier = s;
 }
 
 
@@ -350,6 +344,12 @@ K3b::Version K3b::SimpleExternalProgram::parseVersionAt( const QString& data, in
         return Version();
 
     return data.mid( sPos, endPos - sPos );
+}
+
+
+QString K3b::SimpleExternalProgram::versionIdentifier( const ExternalBin& bin ) const
+{
+    return name();
 }
 
 
