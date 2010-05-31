@@ -447,13 +447,13 @@ bool K3b::unmount( K3b::Device::Device* dev )
 
     Solid::StorageAccess *sa = dev->solidStorage();
     if ( sa && sa->teardown() ){
-	    return true;
+        return true;
     }
 
     QString mntDev = dev->blockDeviceName();
 
     // first try to unmount it the standard way
-    if( KIO::NetAccess::synchronousRun( KIO::unmount( mntDev, false ), 0 ) )
+    if( KIO::NetAccess::synchronousRun( KIO::unmount( mntDev ), 0 ) )
         return true;
 
     QString mntPath;
@@ -499,7 +499,7 @@ bool K3b::mount( K3b::Device::Device* dev )
     QString mntDev = dev->blockDeviceName();
 
     // first try to mount it the standard way
-    if( KIO::NetAccess::synchronousRun( KIO::mount( true, 0, mntDev, false ), 0 ) )
+    if( KIO::NetAccess::synchronousRun( KIO::mount( true, QByteArray(), mntDev, QString() ), 0 ) )
         return true;
 
     Solid::StorageAccess* sa = dev->solidStorage();
