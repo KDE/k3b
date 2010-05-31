@@ -111,8 +111,7 @@ K3b::ExternalProgram* K3b::ExternalBin::program() const
 
 
 K3b::ExternalProgram::ExternalProgram( const QString& name )
-    : m_name( name ),
-      m_defaultBin( 0 )
+    : m_name( name )
 {
 }
 
