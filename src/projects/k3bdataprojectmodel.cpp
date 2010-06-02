@@ -87,6 +87,10 @@ K3b::DataItem* K3b::DataProjectModel::Private::getChild( K3b::DirItem* dir, int 
 
 int K3b::DataProjectModel::Private::findChildIndex( K3b::DataItem* item )
 {
+    if (!item) {
+        return 0;
+    }
+
     K3b::DirItem* dir = item->parent();
     if ( dir ) {
         QList<K3b::DataItem*> cl = dir->children();
