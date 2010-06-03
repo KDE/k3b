@@ -380,6 +380,15 @@ QMimeData* K3b::AudioTrackModel::mimeData( const QModelIndexList& indexes ) cons
 }
 
 
+QModelIndex K3b::AudioTrackModel::buddy( const QModelIndex& index ) const
+{
+    if( index.isValid() && index.column() != TrackNumberColumn )
+        return AudioTrackModel::index( index.row(), TrackNumberColumn );
+    else
+        return index;
+}
+
+
 void K3b::AudioTrackModel::checkAll()
 {
     for ( int i = 0; i < d->medium.toc().count(); ++i ) {

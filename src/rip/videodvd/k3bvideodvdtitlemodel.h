@@ -19,13 +19,13 @@
 
 
 namespace K3b {
-    
+
 namespace VideoDVD { class VideoDVD; }
 
 class VideoDVDTitleModel : public QAbstractTableModel
 {
     Q_OBJECT
-    
+
 public:
     VideoDVDTitleModel( QObject* parent = 0 );
     ~VideoDVDTitleModel();
@@ -47,22 +47,23 @@ public:
         SubpictureStreamsRole,          // returns QStringList
         LengthRole
     };
-    
+
     void setVideoDVD( const VideoDVD::VideoDVD& dvd );
     QList<int> selectedTitles() const;
-    
+
     virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
     virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-    
+    virtual QModelIndex buddy( const QModelIndex& index ) const;
+
 public Q_SLOTS:
     void checkAll();
     void uncheckAll();
     void stopPreviewGen();
-    
+
 private Q_SLOTS:
     void slotPreviewDone( bool success );
 

@@ -19,6 +19,16 @@ Changes (since 1.0.5):
  * New audio ripping pattern %e which is replaced by the file extension
  * Better support for RTL languages
 
+2.0-rc4 (1.93)
+==============
+Changes:
+ * Moved K3b Handbook to http://userbase.kde.org/K3b
+ * Improved checking/unchecking items using Space key. Previously to do that the current item had to be in first column.
+
+Bugfixes:
+ * Cannot choose between cdrecord when both cdrecord and wodim are installed (239861)
+ * Crash when files have been removed right before burning the project (240398)
+
 2.0-rc3 (1.92)
 ==============
 Bugfixes:

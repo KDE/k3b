@@ -42,7 +42,7 @@ const unsigned int TOOLTIP_MAX_LINES = 9999;
 QStringList audioStreamString( const K3b::VideoDVD::Title& title )
 {
     QStringList list;
-    
+
     if( title.numAudioStreams() > 0 ) {
         for( unsigned int i = 0; i < qMin( title.numAudioStreams(), MAX_LINES ); ++i ) {
             list << QString::number(i+1) + ": "
@@ -90,7 +90,7 @@ QString audioStreamStringToolTip( const K3b::VideoDVD::Title& title )
 QStringList subpictureStreamString( const K3b::VideoDVD::Title& title )
 {
     QStringList list;
-    
+
     if( title.numSubPictureStreams() > 0 ) {
         for( unsigned int i = 0; i < qMin( title.numSubPictureStreams(), MAX_LINES ); ++i ) {
             list << QString::number(i+1) + ": "
@@ -135,7 +135,7 @@ QString subpictureStreamStringToolTip( const K3b::VideoDVD::Title& title )
 
     return s;
 }
-    
+
 } // namespace
 
 
@@ -144,7 +144,7 @@ class VideoDVDTitleModel::Private
 public:
     typedef QSet<int> Titles;
     typedef QHash<const VideoDVD::Title*,QPixmap> Previews;
-    
+
     VideoDVD::VideoDVD dvd;
     Titles selectedTitles;
     Previews previews;
@@ -212,32 +212,32 @@ QVariant VideoDVDTitleModel::data( const QModelIndex& index, int role ) const
 {
     if( !index.isValid() || index.row() >= static_cast<int>( d->dvd.numTitles() ) )
         return QVariant();
-    
+
     const VideoDVD::Title& title = d->dvd.title( index.row() );
-    
+
     if( Qt::DisplayRole == role || Qt::EditRole == role ) {
         switch( index.column() ) {
             case TitleColumn:
                 return i18n( "Title %1 (%2)",
                         QString::number( title.titleNumber() ).rightJustified( 2 ),
                         title.playbackTime().toString( false ) );
-                        
+
             case VideoColumn:
                 return QString("%1 %2x%3")
                     .arg( title.videoStream().mpegVersion() == 0 ? i18n("MPEG1") : i18n("MPEG2") )
                     .arg( title.videoStream().pictureWidth() )
                     .arg( title.videoStream().pictureHeight() );
-            
+
             case AudioColumn:
                 return audioStreamString( title ).join( ", " );
-                
+
             case SubpictureColumn:
                 return subpictureStreamString( title ).join( "," );
-                
+
             default:
                 break;
         }
-        
+
     }
     else if( Qt::ToolTipRole == role ) {
         if( AudioColumn == index.column() && title.numAudioStreams() > 0 ) {
@@ -284,14 +284,14 @@ bool VideoDVDTitleModel::setData( const QModelIndex& index, const QVariant& valu
 {
     if( !index.isValid() || index.row() >= static_cast<int>( d->dvd.numTitles() ) || role != Qt::CheckStateRole )
         return false;
-    
+
     const VideoDVD::Title& title = d->dvd.title( index.row() );
-    
+
     if( value.toInt() == Qt::Checked )
         d->selectedTitles.insert( title.titleNumber() );
     else
         d->selectedTitles.remove( title.titleNumber() );
-    
+
     emit dataChanged( index, index );
     return true;
 }
@@ -300,7 +300,7 @@ bool VideoDVDTitleModel::setData( const QModelIndex& index, const QVariant& valu
 QVariant VideoDVDTitleModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     Q_UNUSED( orientation );
-    
+
     if( Qt::DisplayRole == role ) {
         switch( section ) {
             case TitleColumn:
@@ -337,6 +337,15 @@ int VideoDVDTitleModel::columnCount( const QModelIndex& parent ) const
 }
 
 
+QModelIndex VideoDVDTitleModel::buddy( const QModelIndex& index ) const
+{
+    if( index.isValid() && index.column() != TitleColumn )
+        return QAbstractTableModel::index( index.row(), TitleColumn );
+    else
+        return index;
+}
+
+
 void VideoDVDTitleModel::checkAll()
 {
     if( d->dvd.valid() ) {
@@ -367,12 +376,12 @@ void VideoDVDTitleModel::stopPreviewGen()
 void VideoDVDTitleModel::slotPreviewDone( bool success )
 {
     const VideoDVD::Title& title = d->dvd.title( d->currentPreviewTitle );
-    
+
     if( success )
         d->previews.insert( &title, QPixmap::fromImage( d->previewGen->preview() ) );
     else
         d->previews.remove( &title );
-    
+
     emit dataChanged( index(d->currentPreviewTitle,PreviewColumn), index(d->currentPreviewTitle,PreviewColumn) );
 
     // cancel if we previously stopped preview generation or if the medium changed.
