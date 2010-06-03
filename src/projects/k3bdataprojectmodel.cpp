@@ -434,7 +434,7 @@ QMimeData* K3b::DataProjectModel::mimeData( const QModelIndexList& indexes ) con
 
 Qt::DropActions K3b::DataProjectModel::supportedDropActions() const
 {
-    return Qt::CopyAction | Qt::MoveAction;
+    return Qt::CopyAction;
 }
 
 
