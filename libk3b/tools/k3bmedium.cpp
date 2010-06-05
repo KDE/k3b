@@ -271,7 +271,7 @@ void K3b::Medium::analyseContent()
                      << ": '" << d->isoDesc.volumeId << "'" ;
 
             if( const Iso9660Directory* firstDirEntry = iso.firstIsoDirEntry() ) {
-                if( diskInfo().isDvdMedia() ) {
+                if( Device::isDvdMedia( diskInfo().mediaType() ) ) {
                     // Every VideoDVD needs to have a VIDEO_TS.IFO file
                     if( firstDirEntry->entry( "VIDEO_TS/VIDEO_TS.IFO" ) != 0 )
                         d->content |= ContentVideoDVD;

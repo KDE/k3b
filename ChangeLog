@@ -28,6 +28,7 @@ Changes:
 Bugfixes:
  * Cannot choose between cdrecord when both cdrecord and wodim are installed (239861)
  * Crash when files have been removed right before burning the project (240398)
+ * Crash when moving a file into a directory with shift key pressed (239075)
 
 2.0-rc3 (1.92)
 ==============

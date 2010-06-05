@@ -127,7 +127,7 @@ void K3b::MsInfoFetcher::getMsInfo()
 void K3b::MsInfoFetcher::slotMediaDetectionFinished( K3b::Device::DeviceHandler* h )
 {
     if( h->success() ) {
-        m_dvd = h->diskInfo().isDvdMedia();
+        m_dvd = Device::isDvdMedia( h->diskInfo().mediaType() );
     }
     else {
         // for now we just default to cd and go on with the detecting

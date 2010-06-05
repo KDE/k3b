@@ -295,7 +295,7 @@ QString K3b::DiskInfoView::createMediaInfoItems( const K3b::Medium& medium )
     else
         typeStr = i18n("Unknown (probably CD-ROM)");
     s += tableRow( i18n( "Type:" ), typeStr );
-    if( info.isDvdMedia() )
+    if( Device::isDvdMedia( info.mediaType() ) )
         s += tableRow( i18n("Media ID:"), !info.mediaId().isEmpty() ? QString::fromLatin1( info.mediaId() ) : i18n("unknown") );
     s += tableRow( i18n("Capacity:"), i18n("%1 min",info.capacity().toString()) + " (" + KIO::convertSize(info.capacity().mode1Bytes()) + ')' );
     if( !info.empty() )

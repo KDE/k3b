@@ -24,25 +24,23 @@
 #include "k3bcore.h"
 #include "k3bintmapcombobox.h"
 
-#include <klocale.h>
-#include <kdialog.h>
-#include <kconfig.h>
-#include <kcombobox.h>
-#include <kmessagebox.h>
-#include <kiconloader.h>
-#include <kinputdialog.h>
+#include <KConfig>
+#include <KComboBox>
+#include <KDialog>
+#include <KInputDialog>
+#include <KLocale>
+#include <KMessageBox>
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qgroupbox.h>
-#include <qtooltip.h>
-#include <qtoolbutton.h>
+#include <QApplication>
+#include <QCursor>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLayout>
+#include <QToolButton>
+#include <QToolTip>
 
-#include <qcursor.h>
-#include <qapplication.h>
-
-
-#include <stdlib.h>
+#include <cstdlib>
 
 
 namespace {
@@ -270,7 +268,7 @@ void K3b::WriterSelectionWidget::slotRefreshWriterSpeeds()
         clearSpeedCombo();
 
         m_comboSpeed->insertItem( s_autoSpeedValue, i18n("Auto") );
-        if( k3bappcore->mediaCache()->diskInfo( writerDevice() ).isDvdMedia() ) {
+        if( Device::isDvdMedia( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() ) ) {
             m_comboSpeed->insertItem( s_ignoreSpeedValue, i18n("Ignore") );
             d->haveIgnoreSpeed = true;
         }
@@ -288,10 +286,10 @@ void K3b::WriterSelectionWidget::slotRefreshWriterSpeeds()
                 //
                 int i = 1;
                 int x1Speed = K3b::Device::SPEED_FACTOR_CD;
-                if ( k3bappcore->mediaCache()->diskInfo( writerDevice() ).isDvdMedia() ) {
+                if( Device::isDvdMedia( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() ) ) {
                     x1Speed = K3b::Device::SPEED_FACTOR_DVD;
                 }
-                else if ( K3b::Device::isBdMedia( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() ) ) {
+                else if( Device::isBdMedia( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() ) ) {
                     x1Speed = K3b::Device::SPEED_FACTOR_BD;
                 }
                 int max = writerDevice()->maxWriteSpeed();
@@ -508,11 +506,11 @@ void K3b::WriterSelectionWidget::setSupportedWritingApps( K3b::WritingApps i )
 void K3b::WriterSelectionWidget::slotRefreshWritingApps()
 {
     K3b::WritingApps i = 0;
-    
+
     int lastSelected = m_comboWritingApp->selectedValue();
 
     // select the ones that make sense
-    if( k3bappcore->mediaCache()->diskInfo( writerDevice() ).isDvdMedia() )
+    if( Device::isDvdMedia( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() ) )
         i = K3b::WritingAppGrowisofs|K3b::WritingAppDvdRwFormat|K3b::WritingAppCdrecord;
     else if ( K3b::Device::isBdMedia( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() ) )
         i = K3b::WritingAppGrowisofs|K3b::WritingAppCdrecord;
@@ -533,7 +531,7 @@ void K3b::WriterSelectionWidget::slotRefreshWritingApps()
         m_comboWritingApp->insertItem( K3b::WritingAppGrowisofs, "growisofs" );
     if( i & K3b::WritingAppDvdRwFormat )
         m_comboWritingApp->insertItem( K3b::WritingAppDvdRwFormat, "dvd+rw-format" );
-    
+
     m_comboWritingApp->setSelectedValue( lastSelected );
 
     m_comboWritingApp->setEnabled( writerDevice() != 0 );
@@ -619,10 +617,10 @@ void K3b::WriterSelectionWidget::slotManualSpeed()
     // is only used for copy anyway we simply reply on the inserted medium's type.
     //
     int speedFactor = K3b::Device::SPEED_FACTOR_CD;
-    if( k3bappcore->mediaCache()->diskInfo( writerDevice() ).isDvdMedia() ) {
+    if( Device::isDvdMedia( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() ) ) {
         speedFactor = K3b::Device::SPEED_FACTOR_DVD;
     }
-    else if ( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() & K3b::Device::MEDIA_BD_ALL ) {
+    else if( Device::isBdMedia( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() ) ) {
         speedFactor = K3b::Device::SPEED_FACTOR_BD;
     }
 

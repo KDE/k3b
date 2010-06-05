@@ -55,7 +55,7 @@ extern "C"
         kDebug(7101) << "*** kio_videodvd Done";
         return 0;
     }
-    
+
     bool isRootDirectory( const KUrl& url )
     {
         QString path = url.path();
@@ -147,7 +147,7 @@ K3b::Iso9660* kio_videodvdProtocol::openIso( const KUrl& url, QString& plainIsoP
         // we search for a DVD with a single track.
         // this time let K3b::Iso9660 decide if we need dvdcss or not
         // FIXME: check for encryption and libdvdcss and report an error
-        if( di.isDvdMedia() && di.numTracks() == 1 ) {
+        if( K3b::Device::isDvdMedia( di.mediaType() ) && di.numTracks() == 1 ) {
             K3b::Iso9660* iso = new K3b::Iso9660( dev );
             iso->setPlainIso9660( true );
             if( iso->open() /*&& iso->primaryDescriptor().volumeId == volumeId*/ ) {
@@ -212,8 +212,8 @@ void kio_videodvdProtocol::listDir( const KUrl& url )
 {
     if( isRootDirectory( url ) ) {
 #ifdef Q_OS_WIN32
-    kDebug() << "fix of root path required"; 
-#endif    
+    kDebug() << "fix of root path required";
+#endif
         listVideoDVDs();
     }
     else {
@@ -260,7 +260,7 @@ void kio_videodvdProtocol::listVideoDVDs()
         K3b::Device::DiskInfo di = dev->diskInfo();
 
         // we search for a DVD with a single track.
-        if( di.isDvdMedia() && di.numTracks() == 1 ) {
+        if( K3b::Device::isDvdMedia( di.mediaType() ) && di.numTracks() == 1 ) {
             //
             // now do a quick check for VideoDVD.
             // - no dvdcss for speed
@@ -270,7 +270,7 @@ void kio_videodvdProtocol::listVideoDVDs()
             iso.setPlainIso9660( true );
             if( iso.open() && iso.firstIsoDirEntry()->entry( "VIDEO_TS" ) != 0 ) {
                 // FIXME: cache the entry for speedup
-                
+
                 UDSEntry uds;
                 uds.insert( KIO::UDSEntry::UDS_NAME,iso.primaryDescriptor().volumeId );
                 uds.insert( KIO::UDSEntry::UDS_FILE_TYPE, S_IFDIR );
@@ -298,7 +298,7 @@ void kio_videodvdProtocol::stat( const KUrl& url )
     if( isRootDirectory( url ) ) {
 #ifdef Q_OS_WIN32
     kDebug() << "fix root path detection";
-#endif    
+#endif
         //
         // stat the root path
         //

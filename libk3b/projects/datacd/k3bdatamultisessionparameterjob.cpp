@@ -205,7 +205,7 @@ K3b::DataDoc::MultiSessionMode K3b::DataMultiSessionParameterJob::determineMulti
             d->doc->writingMode() == K3b::WritingModeSao ) {
             return K3b::DataDoc::NONE;
         }
-        else if( info.isDvdMedia() &&
+        else if( Device::isDvdMedia( info.mediaType() ) &&
                  info.capacity() < 2621440 /* ~ 5 GB */ &&
                  d->doc->length() + 11400 /* used size + project size + session gap */ > 2097152 /* 4 GB */ ) {
             return K3b::DataDoc::NONE;

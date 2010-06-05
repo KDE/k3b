@@ -91,12 +91,6 @@ K3b::Device::MediaType K3b::Device::DiskInfo::mediaType() const
 }
 
 
-bool K3b::Device::DiskInfo::isDvdMedia() const
-{
-    return K3b::Device::isDvdMedia( mediaType() );
-}
-
-
 int K3b::Device::DiskInfo::currentProfile() const
 {
     return d->currentProfile;
@@ -129,7 +123,7 @@ int K3b::Device::DiskInfo::numTracks() const
 
 int K3b::Device::DiskInfo::numLayers() const
 {
-    if( isDvdMedia() )
+    if( isDvdMedia( mediaType() ) )
         return d->numLayers;
     else
         return 1;

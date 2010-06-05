@@ -30,7 +30,7 @@ namespace K3b {
         class DiskInfoPrivate;
 
         /**
-         * This class is directly accociated to a strcuture from 
+         * This class is directly accociated to a strcuture from
          * the MMC draft READ_DISK_INFO.
          * It also holds some additional data.
          * This class' data will be retrieved by K3b::Device::Device.
@@ -98,12 +98,6 @@ namespace K3b {
              * Sequential and Restricted Overwrite.
              */
             int currentProfile() const;
-
-            /**
-             * Just for easy implementation since there are so many
-             * different DVD formats.
-             */
-            bool isDvdMedia() const;
 
             /**
              * The number of sessions on the disk.
