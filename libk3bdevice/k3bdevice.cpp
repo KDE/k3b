@@ -103,11 +103,11 @@ namespace {
         //
         // Some writers report their speeds in 1000 bytes per second instead of 1024.
         //
-        if( speed % 1385 == 0 )
+        if( speed % K3b::Device::SPEED_FACTOR_DVD == 0 )
             return speed;
 
         else if( speed % 1352 == 0 )
-            return speed*1385/1352;
+            return speed*K3b::Device::SPEED_FACTOR_DVD/1352;
 
         // has to be 2.4x speed
         else

@@ -284,7 +284,6 @@ void K3b::WriterSelectionWidget::slotRefreshWriterSpeeds()
                 // But we need to know if it will be a CD or DVD medium. Since the override device
                 // is only used for CD/DVD copy anyway we simply reply on the inserted medium's type.
                 //
-                int i = 1;
                 int x1Speed = K3b::Device::SPEED_FACTOR_CD;
                 if( Device::isDvdMedia( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() ) ) {
                     x1Speed = K3b::Device::SPEED_FACTOR_DVD;
@@ -292,13 +291,13 @@ void K3b::WriterSelectionWidget::slotRefreshWriterSpeeds()
                 else if( Device::isBdMedia( k3bappcore->mediaCache()->diskInfo( writerDevice() ).mediaType() ) ) {
                     x1Speed = K3b::Device::SPEED_FACTOR_BD;
                 }
-                int max = writerDevice()->maxWriteSpeed();
-                while( i*x1Speed <= max ) {
+
+                const int max = writerDevice()->maxWriteSpeed();
+                for( int i = 1; i*x1Speed <= max; i = ( i == 1 ? 2 : i+2 ) ) {
                     insertSpeedItem( i*x1Speed );
                     // a little hack to handle the stupid 2.4x DVD speed
                     if( i == 2 && x1Speed == K3b::Device::SPEED_FACTOR_DVD )
                         insertSpeedItem( (int)(2.4*( double )K3b::Device::SPEED_FACTOR_DVD) );
-                    i = ( i == 1 ? 2 : i+2 );
                 }
             }
             else {
@@ -357,14 +356,14 @@ void K3b::WriterSelectionWidget::insertSpeedItem( int speed )
         //
         // AFAIK there is only one strange DVD burning speed like 2.4
         //
-        int xs = ( int )( 1385.0*2.4 );
-        if ( abs( speed - xs ) < 1385/2 )
+        int xs = int( double( Device::SPEED_FACTOR_DVD ) * 2.4 );
+        if ( abs( speed - xs ) < Device::SPEED_FACTOR_DVD/2 )
             speed = xs;
         else
-            speed = ( ( speed+692 )/1385 )*1385;
+            speed = ( ( speed+692 )/Device::SPEED_FACTOR_DVD )*Device::SPEED_FACTOR_DVD;
     }
     else if ( K3b::Device::isBdMedia( mediaType ) ) {
-        speed = ( ( speed+2250 )/4496 )*4496;
+        speed = ( ( speed+2250 )/Device::SPEED_FACTOR_BD )*Device::SPEED_FACTOR_BD;
     }
     else {
         speed = ( ( speed + ( K3b::Device::SPEED_FACTOR_CD/2 ) )/K3b::Device::SPEED_FACTOR_CD )*K3b::Device::SPEED_FACTOR_CD;
@@ -373,8 +372,8 @@ void K3b::WriterSelectionWidget::insertSpeedItem( int speed )
     if( !m_comboSpeed->hasValue( speed ) ) {
         if( K3b::Device::isDvdMedia( mediaType ) ) {
             m_comboSpeed->insertItem( speed,
-                                      ( speed%1385 > 0
-                                        ? QString::number( (float)speed/1385.0, 'f', 1 )  // example: DVD+R(W): 2.4x
+                                      ( speed%Device::SPEED_FACTOR_DVD > 0
+                                        ? QString::number( float(speed)/float(Device::SPEED_FACTOR_DVD), 'f', 1 )  // example: DVD+R(W): 2.4x
                                         : QString::number( speed/K3b::Device::SPEED_FACTOR_DVD ) )
                                       + "x",
                                       QString(),

@@ -176,7 +176,7 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
         double speed = line.mid( pos, endPos-pos ).toDouble(&ok);
         if( ok )
             emit infoMessage( i18n("Writing speed: %1 KB/s (%2x)",
-                                   (int)(speed*1385.0)
+                                   int( speed * double( Device::SPEED_FACTOR_DVD ) )
                                    ,KGlobal::locale()->formatNumber(speed)), K3b::Job::MessageInfo );
         else
             kDebug() << "(K3b::GrowisofsHandler) parsing error: '" << line.mid( pos, endPos-pos ) << "'";
