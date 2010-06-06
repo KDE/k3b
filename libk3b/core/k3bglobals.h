@@ -18,10 +18,10 @@
 
 #include <config-k3b.h>
 
-#include <qstring.h>
-#include <qfile.h>
+#include <QtCore/QFile>
+#include <QtCore/QString>
 #include <kio/global.h>
-#include <kurl.h>
+#include <KUrl>
 
 #include "k3bdevicetypes.h"
 #include "k3b_export.h"
@@ -276,17 +276,29 @@ namespace K3b {
     LIBK3B_EXPORT K3b::Device::SpeedMultiplicator speedMultiplicatorForMediaType( K3b::Device::MediaType mediaType );
 
     /**
+     * Describes format of writing speed produced by formatWritingSpeedFactor function.
+     * \sa K3b::formatWritingSpeedFactor
+     */
+    enum SpeedFormat {
+        SpeedFormatInteger, /**< Format as integer number */
+        SpeedFormatReal     /**< Format as real number (integer or fraction) */
+    };
+
+    /**
      * Create a string representation of the speed factor to be used in command line
      * commands like cdrecord and growisofs.
      *
      * \param speed The speed in KB/s
      * \param mediaType The media type that is going to be written. This is used to
      * determine the multiplicator factor.
+     * \param speedFormat specifies format of speed value. E.g. cdrecord only accepts
+     * integral speed values, in that case SpeedFormatInteger can be used.
      *
      * This method takes small variances into account and rounds them properly. Also
      * the "weird" burn speeds like 2.4 are handled.
      */
-    LIBK3B_EXPORT QString formatWritingSpeedFactor( int speed, K3b::Device::MediaType mediaType );
+    LIBK3B_EXPORT QString
+    formatWritingSpeedFactor( int speed, K3b::Device::MediaType mediaType, SpeedFormat speedFormat = SpeedFormatReal );
 
     QDebug& operator<<( QDebug& dbg, WritingMode );
     QDebug& operator<<( QDebug& dbg, WritingModes );

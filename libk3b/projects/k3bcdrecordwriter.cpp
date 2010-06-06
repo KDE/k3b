@@ -240,7 +240,7 @@ bool K3b::CdrecordWriter::prepareProcess()
     }
 
     if( d->usedSpeed != 0 )
-        d->process << QString("speed=%1").arg( K3b::formatWritingSpeedFactor( d->usedSpeed, d->burnedMediaType ) );
+        d->process << QString("speed=%1").arg( formatWritingSpeedFactor( d->usedSpeed, d->burnedMediaType, SpeedFormatInteger ) );
 
 
     if ( K3b::Device::isBdMedia( d->burnedMediaType ) ) {
@@ -456,32 +456,24 @@ void K3b::CdrecordWriter::start()
         jobFinished(false);
     }
     else {
+        const QString formattedSpeed = formatWritingSpeedFactor( d->usedSpeed, d->burnedMediaType, SpeedFormatInteger );
+        const QString formattedMode = writingModeString( d->writingMode );
         // FIXME: these messages should also take DVD into account.
         if( simulate() ) {
             emit newTask( i18n("Simulating") );
             if ( d->burnedMediaType & Device::MEDIA_DVD_PLUS_ALL )
                 // xgettext: no-c-format
-                emit infoMessage( i18n("Starting simulation at %1x speed...",
-                                       K3b::formatWritingSpeedFactor( d->usedSpeed, d->burnedMediaType ) ),
-                                  K3b::Job::MessageInfo );
+                emit infoMessage( i18n("Starting simulation at %1x speed...", formattedSpeed ), Job::MessageInfo );
             else
-                emit infoMessage( i18n("Starting %1 simulation at %2x speed...",
-                                       K3b::writingModeString(d->writingMode),
-                                       K3b::formatWritingSpeedFactor( d->usedSpeed, d->burnedMediaType ) ),
-                                  K3b::Job::MessageInfo );
+                emit infoMessage( i18n("Starting %1 simulation at %2x speed...", formattedMode, formattedSpeed ), Job::MessageInfo );
         }
         else {
             emit newTask( i18n("Writing") );
             if ( d->burnedMediaType & Device::MEDIA_DVD_PLUS_ALL )
                 // xgettext: no-c-format
-                emit infoMessage( i18n("Starting writing at %1x speed...",
-                                       K3b::formatWritingSpeedFactor( d->usedSpeed, d->burnedMediaType ) ),
-                                  K3b::Job::MessageInfo );
+                emit infoMessage( i18n("Starting writing at %1x speed...", formattedSpeed ), Job::MessageInfo );
             else
-                emit infoMessage( i18n("Starting %1 writing at %2x speed...",
-                                       K3b::writingModeString(d->writingMode),
-                                       K3b::formatWritingSpeedFactor( d->usedSpeed, d->burnedMediaType ) ),
-                                  K3b::Job::MessageInfo );
+                emit infoMessage( i18n("Starting %1 writing at %2x speed...", formattedMode, formattedSpeed ), Job::MessageInfo );
         }
     }
 }
@@ -635,7 +627,7 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
         else if( errStr.startsWith("Bad Option") ) {
             d->cdrecordError = BAD_OPTION;
             // parse option
-            int pos = line.indexOf( "Bad Option" ) + 13;
+            int pos = line.indexOf( "Bad Option" ) + 12;
             int len = line.length() - pos - 1;
             emit infoMessage( i18n("No valid %1 option: %2",d->cdrecordBinObject->name(),line.mid(pos, len)),
                               MessageError );
@@ -693,7 +685,7 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
         int speed = K3b::speedMultiplicatorForMediaType( d->burnedMediaType ) * line.mid( pos+9, pos2-pos-10 ).toDouble();  // cdrecord-dvd >= 2.01a25 uses 8.0 and stuff
         if( speed > 0 && qAbs( speed - d->usedSpeed ) > 5 ) {
             // xgettext: no-c-format
-            emit infoMessage( i18n("Medium or burner does not support writing at %1x speed", K3b::formatWritingSpeedFactor( d->usedSpeed, d->burnedMediaType ) ),
+            emit infoMessage( i18n("Medium or burner does not support writing at %1x speed", formatWritingSpeedFactor( d->usedSpeed, d->burnedMediaType, SpeedFormatInteger ) ),
                               K3b::Job::MessageWarning );
             if( speed > d->usedSpeed )
                 // xgettext: no-c-format
@@ -856,7 +848,7 @@ void K3b::CdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus 
                 emit infoMessage( i18n("OPC failed. Probably the writer does not like the medium."), MessageError );
                 break;
             case CANNOT_SET_SPEED:
-                emit infoMessage( i18n("Unable to set write speed to %1.",K3b::formatWritingSpeedFactor( d->usedSpeed, d->burnedMediaType ) ), MessageError );
+                emit infoMessage( i18n("Unable to set write speed to %1.",formatWritingSpeedFactor( d->usedSpeed, d->burnedMediaType, SpeedFormatInteger ) ), MessageError );
                 emit infoMessage( i18n("Probably this is lower than your writer's lowest writing speed."), MessageError );
                 break;
             case CANNOT_SEND_CUE_SHEET:

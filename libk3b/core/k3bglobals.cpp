@@ -563,7 +563,7 @@ K3b::Device::SpeedMultiplicator K3b::speedMultiplicatorForMediaType( K3b::Device
 }
 
 
-QString K3b::formatWritingSpeedFactor( int speed, K3b::Device::MediaType mediaType )
+QString K3b::formatWritingSpeedFactor( int speed, K3b::Device::MediaType mediaType, SpeedFormat speedFormat )
 {
     const int speedFactor = speedMultiplicatorForMediaType( mediaType );
     int normalizedSpeed = speed;
@@ -575,7 +575,8 @@ QString K3b::formatWritingSpeedFactor( int speed, K3b::Device::MediaType mediaTy
 
     // speed may be a float number. example: DVD+R(W): 2.4x
     if ( mediaType & K3b::Device::MEDIA_DVD_ALL &&
-         normalizedSpeed%speedFactor > 0 ) {
+         normalizedSpeed%speedFactor > 0 &&
+         speedFormat != SpeedFormatInteger ) {
          return QString::number( ( float )normalizedSpeed/( float )speedFactor, 'f', 1 );
     }
     else {
