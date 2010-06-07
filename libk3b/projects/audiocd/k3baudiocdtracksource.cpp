@@ -212,9 +212,11 @@ bool K3b::AudioCdTrackSource::seek( const K3b::Msf& msf )
 
     m_position = msf;
 
-    if( m_cdParanoiaLib )
-        m_cdParanoiaLib->initReading( m_toc[m_cdTrackNumber-1].firstSector().lba() + startOffset().lba() + m_position.lba(),
-                                      m_toc[m_cdTrackNumber-1].firstSector().lba() + lastSector().lba() );
+    if( m_cdParanoiaLib && m_cdTrackNumber > 0 && m_cdTrackNumber <= m_toc.size() ) {
+        const int trackFirstSector = m_toc.at( m_cdTrackNumber-1 ).firstSector().lba();
+        m_cdParanoiaLib->initReading( trackFirstSector + startOffset().lba() + m_position.lba(),
+                                      trackFirstSector + lastSector().lba() );
+    }
 
     return true;
 }
