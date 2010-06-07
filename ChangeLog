@@ -31,6 +31,7 @@ Bugfixes:
  * Crash when moving a file into a directory with Shift key pressed (239075)
  * Invalid parameter to cdrecord for non-integer burning speed (240310)
  * Crash when burning CD Audio project with tracks from another CD (240450)
+ * Crash when turning off the drive (235743)
 
 2.0-rc3 (1.92)
 ==============

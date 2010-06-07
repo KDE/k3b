@@ -37,7 +37,7 @@ namespace {
         Node()
             : parent( 0 ),
               m_place( 0 ) {
-        
+
         }
 
         virtual ~Node() {
@@ -132,7 +132,7 @@ namespace {
         if ( children.isEmpty() ) {
             // TODO: this is kind of evil since indexes store pointers to the nodes
             //kDebug() << "resizing children from" << children.size() << "to" << rows;
-            
+
             int rows = model()->rowCount( originalModelIndex );
             for ( int i = 0; i < rows; ++i ) {
                 Node *node = new Node();
@@ -179,7 +179,7 @@ namespace {
 
         Q_ASSERT( index.isValid() );
 
-        // all the node mapping is done on the first col, so make sure we use 
+        // all the node mapping is done on the first col, so make sure we use
         // an index on the first col
         QModelIndex firstColIndex = index.model()->index(index.row(), 0, index.parent());
         Node* node = findNodeForOriginalIndex( firstColIndex );
@@ -197,7 +197,7 @@ namespace {
         qDeleteAll(children);
         children.clear();
     }
-    
+
     bool Node::supportsMimeData( const QMimeData* data ) const
     {
         QStringList supportedFormats = model()->mimeTypes();
@@ -216,7 +216,7 @@ namespace {
 class K3b::MetaItemModel::Private
 {
 public:
-    QList<Place> places;
+    Private( MetaItemModel* model ) : q( model ) {}
 
     Place* placeForModel( const QAbstractItemModel* model ) {
         for ( int i = 0; i < places.count(); ++i ) {
@@ -303,10 +303,10 @@ public:
     Node* nodeForIndex( const QModelIndex &index )
     {
         // all indexes store the node in their internal pointers
-        if (!index.isValid())
+        if( index.isValid() && index.model() == q )
+            return static_cast<Node*>(index.internalPointer());
+        else
             return 0;
-
-        return static_cast<Node*>(index.internalPointer());
     }
 
     /**
@@ -320,13 +320,16 @@ public:
 
         return node->model()->index( node->originalModelIndex.row(), index.column(), node->originalModelIndex.parent() );
     }
+
+    QList<Place> places;
+    MetaItemModel* q;
 };
 
 
 
 K3b::MetaItemModel::MetaItemModel( QObject* parent )
     : QAbstractItemModel( parent ),
-      d( new Private() )
+      d( new Private( this ) )
 {
 }
 
@@ -349,15 +352,10 @@ QModelIndex K3b::MetaItemModel::indexForSubModel( QAbstractItemModel* model ) co
 
 QAbstractItemModel* K3b::MetaItemModel::subModelForIndex( const QModelIndex& index ) const
 {
-    if ( index.isValid() ) {
-        Q_ASSERT( index.model() == this );
-
-        Node* node = d->nodeForIndex( index );
+    if( Node* node = d->nodeForIndex( index ) )
         return node->model();
-    }
-    else {
+    else
         return 0;
-    }
 }
 
 
@@ -379,7 +377,7 @@ QModelIndex K3b::MetaItemModel::mapFromSubModel( const QModelIndex& index ) cons
         Place *place = d->placeForModel( index.model() );
         Node* node = place->createNodeForOriginalIndex( index );
         Q_ASSERT( node );
-        
+
         // if the place is not flat, or the parent index is valid
         // we just have to return the index for the row and column
         if ( !place->flat || index.parent().isValid() )
@@ -485,7 +483,7 @@ QModelIndex K3b::MetaItemModel::parent( const QModelIndex& index ) const
     Q_ASSERT( node->parent );
     Q_ASSERT( node->place() );
     Q_ASSERT( node->model() );
-    
+
 
     QModelIndex origIndex = mapToSubModel( index ).parent();
 
@@ -628,7 +626,7 @@ bool K3b::MetaItemModel::dropMimeData( const QMimeData* data, Qt::DropAction act
 
     if ( parent.isValid() ) {
         Node* parentNode = d->nodeForIndex( parent );
-        
+
         if( !parentNode->supportsMimeData( data ) ) {
             return false;
         }
@@ -644,7 +642,7 @@ bool K3b::MetaItemModel::dropMimeData( const QMimeData* data, Qt::DropAction act
             return false;
         }
         else if (node->isPlace()) {
-            // if the node is place, threat it like if it was being dropped on an empty space of the 
+            // if the node is place, threat it like if it was being dropped on an empty space of the
             // original model
             return node->model()->dropMimeData(data, action, -1, column, QModelIndex());
         }
@@ -768,7 +766,7 @@ void K3b::MetaItemModel::removeSubModel( QAbstractItemModel* model )
 
     // and simply remove the place from the list
     int end = row;
-    
+
     if ( it->flat ) {
         end += it->children.count() - 1;
     }
@@ -793,7 +791,7 @@ void K3b::MetaItemModel::slotRowsAboutToBeInserted( const QModelIndex& parent, i
 {
     Place* place = d->placeForModel( qobject_cast<QAbstractItemModel*>( sender() ) );
     Q_ASSERT( place != 0 );
-    
+
     QModelIndex newParent;
     int targetStart = start, targetEnd = end;
 
@@ -871,7 +869,7 @@ void K3b::MetaItemModel::slotRowsAboutToBeRemoved( const QModelIndex& parent, in
 
     Place* place = d->placeForModel( qobject_cast<QAbstractItemModel*>( sender() ) );
     Q_ASSERT( place != 0 );
-    
+
     QModelIndex newParent;
     int targetStart = start, targetEnd = end;
 
@@ -893,16 +891,16 @@ void K3b::MetaItemModel::slotRowsAboutToBeRemoved( const QModelIndex& parent, in
     beginRemoveRows( newParent, targetStart, targetEnd );
 
     Node* parentNode;
-   
+
     if ( parent.isValid() )
         parentNode = place->createNodeForOriginalIndex( parent );
     else
         parentNode = place;
-    
+
     // remove the contents of pointers
     for (int i = start; i <= end; ++i)
         delete parentNode->children[i];
-    
+
     // and remove the pointers themselves
     parentNode->children.remove( start, (end - start + 1) );
 }
