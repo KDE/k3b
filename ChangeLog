@@ -32,6 +32,7 @@ Bugfixes:
  * Invalid parameter to cdrecord for non-integer burning speed (240310)
  * Crash when burning CD Audio project with tracks from another CD (240450)
  * Crash when turning off the drive (235743)
+ * Crash when importing previous session (235734)
 
 2.0-rc3 (1.92)
 ==============

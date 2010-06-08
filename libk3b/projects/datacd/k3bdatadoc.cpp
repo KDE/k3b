@@ -1320,40 +1320,41 @@ void K3b::DataDoc::createSessionImportItems( const K3b::Iso9660Directory* import
     entries.removeAll( ".." );
     for( QStringList::const_iterator it = entries.constBegin();
          it != entries.constEnd(); ++it ) {
-        const K3b::Iso9660Entry* entry = importDir->entry( *it );
-        K3b::DataItem* oldItem = parent->find( entry->name() );
-        if( entry->isDirectory() ) {
-            K3b::DirItem* dir = 0;
-            if( oldItem && oldItem->isDir() ) {
-                dir = (K3b::DirItem*)oldItem;
+        if( const K3b::Iso9660Entry* entry = importDir->entry( *it ) ) {
+            K3b::DataItem* oldItem = parent->find( entry->name() );
+            if( entry->isDirectory() ) {
+                K3b::DirItem* dir = 0;
+                if( oldItem && oldItem->isDir() ) {
+                    dir = (K3b::DirItem*)oldItem;
+                }
+                else {
+                    // we overwrite without warning!
+                    if( oldItem )
+                        removeItem( oldItem );
+                    dir = new K3b::DirItem( entry->name(), this, parent );
+                }
+
+                dir->setRemoveable(false);
+                dir->setRenameable(false);
+                dir->setMoveable(false);
+                dir->setHideable(false);
+                dir->setWriteToCd(false);
+                dir->setExtraInfo( i18n("From previous session") );
+                d->oldSession.append( dir );
+
+                createSessionImportItems( static_cast<const K3b::Iso9660Directory*>(entry), dir );
             }
             else {
+                const K3b::Iso9660File* file = static_cast<const K3b::Iso9660File*>(entry);
+
                 // we overwrite without warning!
                 if( oldItem )
                     removeItem( oldItem );
-                dir = new K3b::DirItem( entry->name(), this, parent );
+
+                K3b::SessionImportItem* item = new K3b::SessionImportItem( file, this, parent );
+                item->setExtraInfo( i18n("From previous session") );
+                d->oldSession.append( item );
             }
-
-            dir->setRemoveable(false);
-            dir->setRenameable(false);
-            dir->setMoveable(false);
-            dir->setHideable(false);
-            dir->setWriteToCd(false);
-            dir->setExtraInfo( i18n("From previous session") );
-            d->oldSession.append( dir );
-
-            createSessionImportItems( static_cast<const K3b::Iso9660Directory*>(entry), dir );
-        }
-        else {
-            const K3b::Iso9660File* file = static_cast<const K3b::Iso9660File*>(entry);
-
-            // we overwrite without warning!
-            if( oldItem )
-                removeItem( oldItem );
-
-            K3b::SessionImportItem* item = new K3b::SessionImportItem( file, this, parent );
-            item->setExtraInfo( i18n("From previous session") );
-            d->oldSession.append( item );
         }
     }
 }
