@@ -63,7 +63,7 @@ bool K3b::MovixDoc::newDocument()
 
 int K3b::MovixDoc::indexOf( K3b::MovixFileItem* item )
 {
-    return m_movixFiles.lastIndexOf(item)+1;
+    return m_movixFiles.lastIndexOf(item);
 }
 
 
@@ -84,21 +84,17 @@ void K3b::MovixDoc::addUrlsAt( const KUrl::List& urls, int pos )
             continue;
 
         QString newName = f.fileName();
-        if( nameAlreadyInDir( newName, root() ) )
-        {
-            bool ok = true;
-            do
-            {
-                newName = KInputDialog::getText( i18n("Enter New Filename"),
-                                                 i18n("A file with that name already exists. Please enter a new name:"),
-                                                 newName, &ok, 0 );
-            } while( ok && nameAlreadyInDir( newName, root() ) );
 
-            if( !ok )
-                continue;
+        bool ok = true;
+        while( ok && nameAlreadyInDir( newName, root() ) ) {
+            newName = KInputDialog::getText( i18n("Enter New Filename"),
+                                             i18n("A file with that name already exists. Please enter a new name:"),
+                                             newName, &ok, view() );
         }
 
-        items.append(new MovixFileItem( f.absoluteFilePath(), this, root(), newName ));
+        if( ok ) {
+            items.append( new MovixFileItem( f.absoluteFilePath(), this, root(), newName ) );
+        }
     }
 
     addMovixItems( items, pos );
@@ -107,32 +103,34 @@ void K3b::MovixDoc::addUrlsAt( const KUrl::List& urls, int pos )
 
 void K3b::MovixDoc::addMovixItems( QList<K3b::MovixFileItem*>& items, int pos )
 {
-    if( pos < 0 || pos > (int)m_movixFiles.count() )
-        pos = m_movixFiles.count();
+    if( !items.isEmpty() ) {
+        if( pos < 0 || pos > m_movixFiles.count() )
+            pos = m_movixFiles.count();
 
-    emit aboutToAddMovixItems( pos, items.count());
+        emit itemsAboutToBeInserted( pos, items.count() );
 
-    foreach (K3b::MovixFileItem* newItem, items)
-    {
-        m_movixFiles.insert( pos, newItem );
-        pos++;
+        Q_FOREACH( K3b::MovixFileItem* newItem, items )
+        {
+            m_movixFiles.insert( pos, newItem );
+            pos++;
+        }
+
+        emit itemsInserted();
     }
-
-    emit addedMovixItems();
 }
 
-void K3b::MovixDoc::removeMovixItem( K3b::MovixFileItem* item)
+void K3b::MovixDoc::removeMovixItem( K3b::MovixFileItem* item )
 {
     while( m_movixFiles.contains( item ) )
     {
         int removedPos = m_movixFiles.lastIndexOf( item );
 
-        emit aboutToRemoveMovixItems( removedPos, 1);
+        emit itemsAboutToBeRemoved( removedPos, 1 );
 
         K3b::MovixFileItem *removedItem = m_movixFiles.takeAt( removedPos );
         delete removedItem;
 
-        emit removedMovixItems();
+        emit itemsRemoved();
     }
 }
 
@@ -145,20 +143,20 @@ void K3b::MovixDoc::moveMovixItem( K3b::MovixFileItem* item, K3b::MovixFileItem*
     // take the current item
     int removedPos = m_movixFiles.lastIndexOf( item );
 
-    emit aboutToRemoveMovixItems( removedPos, 1);
+    emit itemsAboutToBeRemoved( removedPos, 1 );
 
     item = m_movixFiles.takeAt( removedPos );
 
-    emit removedMovixItems();
+    emit itemsRemoved();
 
     // if after == 0 lastIndexOf returnes -1
     int pos = m_movixFiles.lastIndexOf( itemAfter ) + 1;
 
-    emit aboutToAddMovixItems( pos, 1 );
+    emit itemsAboutToBeInserted( pos, 1 );
 
     m_movixFiles.insert( pos, item );
 
-    emit addedMovixItems();
+    emit itemsInserted();
 
     setModified(true);
 }
@@ -166,6 +164,9 @@ void K3b::MovixDoc::moveMovixItem( K3b::MovixFileItem* item, K3b::MovixFileItem*
 
 void K3b::MovixDoc::addSubTitleItem( K3b::MovixFileItem* item, const KUrl& url )
 {
+    if( !item )
+        return;
+
     QFileInfo f( url.toLocalFile() );
     if( !f.isFile() || !url.isLocalFile() )
         return;
@@ -181,10 +182,12 @@ void K3b::MovixDoc::addSubTitleItem( K3b::MovixFileItem* item, const KUrl& url )
         return;
     }
 
+    emit subTitleAboutToBeInserted( item );
+
     K3b::MovixSubtitleItem* subItem = new K3b::MovixSubtitleItem( f.absoluteFilePath(), this, root(), item, name );
     item->setSubTitleItem( subItem );
 
-    emit subTitleItemAdded( item );
+    emit subTitleInserted();
 
     setModified(true);
 }
@@ -193,10 +196,12 @@ void K3b::MovixDoc::addSubTitleItem( K3b::MovixFileItem* item, const KUrl& url )
 void K3b::MovixDoc::removeSubTitleItem( K3b::MovixFileItem* item )
 {
     if( item->subTitleItem() ) {
-        emit subTitleItemRemoved( item );
+        emit subTitleAboutToBeRemoved( item );
 
         delete item->subTitleItem();
         item->setSubTitleItem(0);
+
+        emit subTitleRemoved();
 
         setModified(true);
     }
@@ -318,7 +323,7 @@ bool K3b::MovixDoc::loadDocumentData( QDomElement* rootElem )
             }
 
             // emit the signal telling the item is going to be added
-            emit aboutToAddMovixItems( m_movixFiles.count(), 1 );
+            emit itemsAboutToBeInserted( m_movixFiles.count(), 1 );
 
             // create the item
             K3b::MovixFileItem* newK3bItem = new K3b::MovixFileItem( urlElem.text(),
@@ -328,7 +333,7 @@ bool K3b::MovixDoc::loadDocumentData( QDomElement* rootElem )
             m_movixFiles.append( newK3bItem );
 
             // tell the item was already added
-            emit addedMovixItems();
+            emit itemsInserted();
 
             // subtitle file?
             QDomElement subTitleElem = e.childNodes().item(1).toElement();
@@ -340,10 +345,13 @@ bool K3b::MovixDoc::loadDocumentData( QDomElement* rootElem )
                 }
 
                 QString name = K3b::MovixFileItem::subTitleFileName( newK3bItem->k3bName() );
+
+                emit subTitleAboutToBeInserted( newK3bItem );
+
                 K3b::MovixSubtitleItem* subItem = new K3b::MovixSubtitleItem( urlElem.text(), this, root(), newK3bItem, name );
                 newK3bItem->setSubTitleItem( subItem );
 
-                emit subTitleItemAdded( newK3bItem );
+                emit subTitleInserted();
             }
         }
         else {

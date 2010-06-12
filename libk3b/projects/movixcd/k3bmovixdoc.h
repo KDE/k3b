@@ -44,7 +44,7 @@ namespace K3b {
 
         QList<MovixFileItem*> movixFileItems() const { return m_movixFiles; }
 
-        int indexOf( MovixFileItem* );
+        int indexOf( MovixFileItem* item );
 
         virtual BurnJob* newBurnJob( JobHandler* hdl, QObject* parent );
 
@@ -92,12 +92,14 @@ namespace K3b {
         bool noDma() const { return m_noDma; }
 
     Q_SIGNALS:
-        void aboutToAddMovixItems( int pos, int count );
-        void addedMovixItems();
-        void aboutToRemoveMovixItems( int pos, int count );
-        void removedMovixItems();
-        void subTitleItemAdded( K3b::MovixFileItem* );
-        void subTitleItemRemoved( K3b::MovixFileItem* );
+        void itemsAboutToBeInserted( int pos, int count );
+        void itemsInserted();
+        void itemsAboutToBeRemoved( int pos, int count );
+        void itemsRemoved();
+        void subTitleAboutToBeInserted( K3b::MovixFileItem* parent );
+        void subTitleInserted();
+        void subTitleAboutToBeRemoved( K3b::MovixFileItem* parent );
+        void subTitleRemoved();
 
     public Q_SLOTS:
         void addUrls( const KUrl::List& urls );

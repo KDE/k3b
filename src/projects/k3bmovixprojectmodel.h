@@ -1,7 +1,8 @@
 /*
  * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
- *           (C) 2009 Arthur Renato Mello <arthur@mandriva.com>
- *           (C) 2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ * Copyright (C) 2009 Arthur Renato Mello <arthur@mandriva.com>
+ * Copyright (C) 2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -22,9 +23,7 @@ namespace K3b {
     class MovixDoc;
     class MovixFileItem;
     class MovixSubtitleItem;
-}
 
-namespace K3b {
     class MovixProjectModel : public QAbstractItemModel
     {
         Q_OBJECT
@@ -49,42 +48,34 @@ namespace K3b {
             QModelIndex indexForItem( MovixFileItem* track ) const;
 
             MovixSubtitleItem* subtitleForIndex( const QModelIndex& index ) const;
-            QModelIndex indexForSubtitle( MovixSubtitleItem* track ) const;
+            QModelIndex indexForSubtitle( MovixSubtitleItem* item ) const;
 
-            QModelIndex index(int row, int column,
-                const QModelIndex& parent = QModelIndex()) const;
-            QModelIndex parent(const QModelIndex& index) const;
-            int rowCount(const QModelIndex& parent = QModelIndex()) const;
-            int columnCount(const QModelIndex& parent = QModelIndex()) const;
-            QVariant data(const QModelIndex& index,
-                int role = Qt::DisplayRole) const;
-            bool setData( const QModelIndex& index, const QVariant& value,
-                int role = Qt::EditRole );
-            QVariant headerData(int section, Qt::Orientation orientation,
-                int role) const;
-            Qt::ItemFlags flags( const QModelIndex& index ) const;
-
-            Qt::DropActions supportedDropActions() const;
-
-            QMimeData* mimeData( const QModelIndexList& indexes ) const;
-            QStringList mimeTypes() const;
-            bool dropMimeData( const QMimeData* data,
-                Qt::DropAction action, int row, int column,
-                const QModelIndex& parent );
-
+            virtual QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
+            virtual QModelIndex parent( const QModelIndex& index ) const;
+            virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
+            virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
+            virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
+            virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
+            virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
+            virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
+            virtual Qt::DropActions supportedDropActions() const;
+            virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
+            virtual QStringList mimeTypes() const;
+            virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
             virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
 
     private:
         class Private;
         Private* const d;
 
-        Q_PRIVATE_SLOT( d, void _k_aboutToAddRows(int, int))
-        Q_PRIVATE_SLOT( d, void _k_addedRows())
-        Q_PRIVATE_SLOT( d, void _k_aboutToRemoveRows(int, int))
-        Q_PRIVATE_SLOT( d, void _k_removedRows())
-        Q_PRIVATE_SLOT( d, void _k_subTitleAdded(K3b::MovixFileItem*))
-        Q_PRIVATE_SLOT( d, void _k_subTitleRemoved(K3b::MovixFileItem*))
-
+        Q_PRIVATE_SLOT( d, void _k_itemsAboutToBeInserted(int, int) )
+        Q_PRIVATE_SLOT( d, void _k_itemsInserted() )
+        Q_PRIVATE_SLOT( d, void _k_itemsAboutToBeRemoved(int, int) )
+        Q_PRIVATE_SLOT( d, void _k_itemsRemoved() )
+        Q_PRIVATE_SLOT( d, void _k_subTitleAboutToBeInserted(K3b::MovixFileItem*) )
+        Q_PRIVATE_SLOT( d, void _k_subTitleInserted() )
+        Q_PRIVATE_SLOT( d, void _k_subTitleAboutToBeRemoved(K3b::MovixFileItem*) )
+        Q_PRIVATE_SLOT( d, void _k_subTitleRemoved() )
     };
 }
 

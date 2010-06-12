@@ -1,7 +1,8 @@
 /*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
- *           (C) 2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ * Copyright (C) 2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -24,7 +25,7 @@ K3b::MovixSubtitleItem::MovixSubtitleItem( const QString& fileName,
                                            K3b::DirItem* dir,
                                            K3b::MovixFileItem* parent,
                                            const QString& k3bName )
-    : K3b::MovixFileItem( fileName, doc, dir, k3bName ), 
+    : K3b::MovixFileItem( fileName, doc, dir, k3bName ),
       m_parent( parent )
 {
 }
@@ -46,8 +47,10 @@ K3b::MovixFileItem::MovixFileItem( const QString& fileName,
 
 K3b::MovixFileItem::~MovixFileItem()
 {
-    if( m_subTitleItem )
-        m_doc->removeSubTitleItem( this );
+    if( m_subTitleItem ) {
+        delete m_subTitleItem;
+        m_subTitleItem = 0;
+    }
 
     // remove this from parentdir
     // it is important to do it here and not
