@@ -75,6 +75,7 @@ namespace K3b {
         void setGrownSessionSize( const Msf& );
 
     private Q_SLOTS:
+        void slotMediaLoaded();
         void slotDiskInfoReady( K3b::Device::DeviceHandler* dh );
         void readTrack();
         void slotReaderProgress( int p );

@@ -236,6 +236,21 @@ void K3b::VerificationJob::start()
     emit newTask( i18n("Checking medium") );
 
     d->mediumHasBeenReloaded = false;
+    connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::CommandLoad, d->device ),
+             SIGNAL(finished(K3b::Device::DeviceHandler*)),
+             this,
+             SLOT(slotMediaLoaded()) );
+}
+
+
+void K3b::VerificationJob::slotMediaLoaded()
+{
+    // we always need to wait for the medium. Otherwise the diskinfo below
+    // may run before the drive is ready!
+    waitForMedium( d->device,
+                   K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE,
+                   K3b::Device::MEDIA_WRITABLE );
+
     connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::CommandMediaInfo, d->device ),
              SIGNAL(finished(K3b::Device::DeviceHandler*)),
              this,
