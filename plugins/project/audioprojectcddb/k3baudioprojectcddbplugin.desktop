@@ -35,6 +35,7 @@ Name[th]=ส่วนเสริมฐานข้อมูลเสียง -
 Name[tr]=K3b Cddb Ses Eklentisi
 Name[uk]=Додаток для роботи з CDDB у K3b
 Name[x-test]=xxK3b Cddb Audio Pluginxx
+Name[zh_CN]=k3b Cddb 音频插件
 Name[zh_TW]=K3b Cddb 音效外掛程式
 Comment=Plugin to query a cddb server for information about an audio project.
 Comment[bg]=Приставка за търсене на информация в CDDB .
