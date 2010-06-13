@@ -1,24 +1,17 @@
 Q: Compiling K3b fails with errors like this:
-   base_k3badvanceddataimagesettings.cpp:185: invalid use of undefined type 
+   base_k3badvanceddataimagesettings.cpp:185: invalid use of undefined type
    `struct KComboBox'
-   base_k3badvanceddataimagesettings.h:17: forward declaration of `struct 
+   base_k3badvanceddataimagesettings.h:17: forward declaration of `struct
    KComboBox'
-A: The QTDesigner tool 'uic' is not able to find the kde widget plugins. 
-   To solve this run 'qtconfig' and add '$KDEDIR/lib/kde3/plugins' to the plugin search path 
+A: The QTDesigner tool 'uic' is not able to find the kde widget plugins.
+   To solve this run 'qtconfig' and add '$KDEDIR/lib/kde3/plugins' to the plugin search path
    (replace $KDEDIR with your kde base dir).
 
 
-Q: K3b thinks my SCSI device is IDE.
-A: If you are using the rpm from SuSE your version of K3bSetup is not able to set the
-   permissions that K3b needs the devices to have. The SuSE guys seem to think messing with 
-   permissions is too dangerous. It is recommended to always compile from source to have all 
-   K3b features.
-
-
 Q: Where has all the fancy graphic gone?
-A: Most likely you installed K3b in the wrong directory. All KDE programs are installed in the 
-   KDE dirtree (SuSE: /opt/kde3, RedHat: /usr). If you compile K3b from source it defaults 
-   to either $KDEDIR or /usr/local. To install in the correct directory you need to specify the prefix 
+A: Most likely you installed K3b in the wrong directory. All KDE programs are installed in the
+   KDE dirtree (SuSE: /opt/kde3, RedHat: /usr). If you compile K3b from source it defaults
+   to either $KDEDIR or /usr/local. To install in the correct directory you need to specify the prefix
    to configure like this:
      ./configure --prefix=`kde-config --prefix`
    That will install K3b relative to the correct path.
@@ -35,9 +28,9 @@ A: K3bSetup2 is a KControlCenter Module. You can find it in the System Administr
 
 
 Q: My writer supports writing at speed X but K3b shows Y as a max.
-A: K3b determined the maximum writing speed the first time you start it. Since the speed reported by the 
-   writer always depends on the mounted medium this may not be the real max. 
-   To manually change it open the K3b settings in the device section and click on the value. You will 
+A: K3b determined the maximum writing speed the first time you start it. Since the speed reported by the
+   writer always depends on the mounted medium this may not be the real max.
+   To manually change it open the K3b settings in the device section and click on the value. You will
    be presented with a spinbox which allows to change the speed.
 
 
