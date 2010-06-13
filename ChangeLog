@@ -7,15 +7,15 @@ Changes (since 1.0.5):
  * Merged CD and DVD copy dialogs
  * Merged CD and DVD image burning dialogs
  * Merged CD-RW erasing and DVD formatting dialogs
- * Merged Data CD and Data DVD projects into one plain data project with Blu-Ray support
+ * Merged Data CD and Data DVD projects into one plain data project with Blu-ray support
  * Merged eMovix CD and eMovix DVD projects
  * Removed CD copy option "prefere CD-Text". K3b will now ask individually (there is no need to do this if no mounting is involved.)
  * Allow importing of arbitrary sessions into a data project, thus continuing other than the last session.
  * "Clear" project" now only clears the added data but leaves the settings as they were (bug 147838)
  * Support files bigger than 4GB via mkisofs 2.01.01a32 and above
  * Do only reload the medium for verification if necessary (depends on the writer)
- * Support for Blu-Ray writing
- * Support for DVD and Blu-Ray writing via cdrecord
+ * Support for Blu-ray writing
+ * Support for DVD and Blu-ray writing via cdrecord
  * New audio ripping pattern %e which is replaced by the file extension
  * Better support for RTL languages
 
