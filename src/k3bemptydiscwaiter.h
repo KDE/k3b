@@ -118,7 +118,7 @@ namespace K3b {
         /**
          * Nobody closes this dialog but itself!
          */
-        void closeEvent( QCloseEvent* ) {}
+        void closeEvent( QCloseEvent *e ) { e->ignore(); }
 
     Q_SIGNALS:
         void leaveModality();
